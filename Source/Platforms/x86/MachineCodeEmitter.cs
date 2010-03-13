@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -496,8 +496,9 @@ namespace Mosa.Platforms.x86
 						imm = LittleEndianBitConverter.GetBytes(Convert.ToSingle(co.Value));
 						break;
 					case CilElementType.R8: goto default;
+					case CilElementType.Object: goto case CilElementType.I;
 					default:
-						throw new NotSupportedException();
+						throw new NotSupportedException(String.Format(@"CilElementType.{0} is not supported.", op.Type.Type));
 				}
 			}
 			else if (op is RegisterOperand) {

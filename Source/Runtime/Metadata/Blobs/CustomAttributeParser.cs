@@ -256,7 +256,7 @@ namespace Mosa.Runtime.Metadata.Blobs
 				case CilElementType.ValueType: {
 						ValueTypeSigType vtSigType = sigType as ValueTypeSigType;
 						ITypeSystem ts = RuntimeBase.Instance.TypeLoader;
-						RuntimeType type = ts.GetType(module, vtSigType.Token);
+						RuntimeType type = ts.GetType(DefaultSignatureContext.Instance, module, vtSigType.Token);
 						RuntimeType baseType = type.BaseType;
 						if (@"System" == baseType.Namespace && "Enum" == baseType.Name) {
 							// Retrieve the value__ field to get the enums integer type

@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -50,9 +50,11 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			// Load the _stackFrameIndex token from the immediate
 			TokenTypes token;
 			decoder.Decode(out token);
+			
+			//Console.WriteLine("Stfld used in {0}.{1}", decoder.Method.DeclaringType.FullName, decoder.Method.Name);
 
 			Debug.Assert(TokenTypes.Field == (TokenTypes.TableMask & token) || TokenTypes.MemberRef == (TokenTypes.TableMask & token), @"Invalid token type.");
-			ctx.RuntimeField = RuntimeBase.Instance.TypeLoader.GetField(decoder.Compiler.Assembly, token);
+			ctx.RuntimeField = RuntimeBase.Instance.TypeLoader.GetField(decoder.Method, decoder.Method.Module, token);
 		}
 
 		/// <summary>

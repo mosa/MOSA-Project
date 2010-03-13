@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -51,7 +51,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			decoder.Decode(out arrayEType);
             ctx.Token = arrayEType;
 
-            Mosa.Runtime.Vm.RuntimeType type = RuntimeBase.Instance.TypeLoader.GetType(decoder.Compiler.Assembly, arrayEType);
+            Mosa.Runtime.Vm.RuntimeType type = RuntimeBase.Instance.TypeLoader.GetType(decoder.Method, decoder.Compiler.Assembly, arrayEType);
             //ctx.Result = 
 			/*
 				TypeReference eType = MetadataTypeReference.FromToken(decoder.Metadata, arrayEType);

@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -24,6 +24,8 @@ namespace Mosa.Tools.Compiler
 	public sealed class MapFileGeneratorWrapper : IAssemblyCompilerStage, IHasOptions, IPipelineStage
     {
         #region Data Members
+		
+		private AssemblyCompiler compiler;
 
         /// <summary>
         /// Holds the name of the map file to generate.
@@ -50,12 +52,16 @@ namespace Mosa.Tools.Compiler
 		#endregion // IPipelineStage members
 
         #region IAssemblyCompilerStage Members
+		
+		public void Setup(AssemblyCompiler compiler)
+		{
+			this.compiler = compiler;
+		}
 
 		/// <summary>
         /// Performs stage specific processing on the compiler context.
         /// </summary>
-        /// <param name="compiler">The compiler context to perform processing in.</param>
-        public void Run(AssemblyCompiler compiler)
+        public void Run()
         {
             if (this.mapFile != null)
             {
@@ -65,7 +71,8 @@ namespace Mosa.Tools.Compiler
                     using (StreamWriter writer = new StreamWriter(fs, Encoding.UTF8))
                     {
                         MapFileGenerationStage mapGenerator = new MapFileGenerationStage(writer);
-                        mapGenerator.Run(compiler);
+						mapGenerator.Setup(this.compiler);
+                        mapGenerator.Run();
                     }
                 }
                 catch (Exception x)

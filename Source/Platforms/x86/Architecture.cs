@@ -194,13 +194,22 @@ namespace Mosa.Platforms.x86
 		/// <exception cref="System.NotSupportedException"><paramref name="callingConvention"/> is not a supported calling convention.</exception>
 		public override ICallingConvention GetCallingConvention(CallingConvention callingConvention)
 		{
+            ICallingConvention result;
+
 			switch (callingConvention) {
 				case CallingConvention.Default:
-					return new DefaultCallingConvention(this);
+                    result = new DefaultCallingConvention(this);
+                    break;
+
+                case CallingConvention.Generic:
+                    result = new DefaultCallingConvention(this);
+                    break;
 
 				default:
-					throw new NotSupportedException();
+					throw new NotSupportedException(@"Architecture (x86) does not support CallingConvention." + callingConvention);
 			}
+
+            return result;
 		}
 
 		/// <summary>

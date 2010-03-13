@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -46,7 +46,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
             // Load the _stackFrameIndex token From the immediate
             TokenTypes token;
             decoder.Decode(out token);
-            ctx.RuntimeField = RuntimeBase.Instance.TypeLoader.GetField(decoder.Compiler.Assembly, token);
+            ctx.RuntimeField = RuntimeBase.Instance.TypeLoader.GetField(decoder.Method, decoder.Method.Module, token);
             //ctx.Result = new Operands.ObjectFieldOperand (ctx.Operand1, ctx.RuntimeField);
             ctx.Result = decoder.Compiler.CreateTemporary(ctx.RuntimeField.Type);
 /*

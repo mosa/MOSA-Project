@@ -23,9 +23,14 @@ namespace Mosa.Runtime.Vm
     /// <summary>
     /// Base class for the runtime representation of methods.
     /// </summary>
-    public abstract class RuntimeMethod : RuntimeMember, IEquatable<RuntimeMethod>
+    public abstract class RuntimeMethod : RuntimeMember, IEquatable<RuntimeMethod>, ISignatureContext
     {
         #region Data members
+
+        /// <summary>
+        /// Holds the generic arguments of the method.
+        /// </summary>
+        private GenericArgument[] genericArguments;
 
         /// <summary>
         /// The implementation attributes of the method.
@@ -89,8 +94,7 @@ namespace Mosa.Runtime.Vm
         /// </value>
         public bool IsGeneric
         {
-            // FIXME:
-            get { return false; }
+            get { return this.genericArguments != null; }
         }
 
         /// <summary>
@@ -137,6 +141,11 @@ namespace Mosa.Runtime.Vm
 
                 return this.signature;
             }
+			
+			protected set
+			{
+				this.signature = value;
+			}
         }
 
         /// <summary>
@@ -166,6 +175,7 @@ namespace Mosa.Runtime.Vm
         public void SetGenericParameter(List<GenericParamRow> gprs)
         {
             // TODO: Implement this method
+            this.genericArguments = new GenericArgument[gprs.Count];
         }
 
         #endregion // Methods
@@ -220,5 +230,15 @@ namespace Mosa.Runtime.Vm
         }
 
         #endregion // Object Overrides
-    }
+		
+        public virtual SigType GetGenericMethodArgument(int index)
+        {
+			return DefaultSignatureContext.Instance.GetGenericMethodArgument(index);
+        }
+        
+        public virtual SigType GetGenericTypeArgument(int index)
+        {
+			return this.DeclaringType.GetGenericTypeArgument(index);
+        }
+	}
 }

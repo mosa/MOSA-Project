@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -91,7 +91,9 @@ namespace Mosa.Runtime.Metadata.Runtime
         /// <returns>The method signature.</returns>
         protected override MethodSignature GetMethodSignature()
         {
-            return MethodSignature.Parse(this.Module.Metadata, this.signatureBlobIdx);
+			MethodSignature signature = new MethodSignature();
+			signature.LoadSignature(this, this.Module.Metadata, this.signatureBlobIdx);
+			return signature;
         }
 
         /// <summary>

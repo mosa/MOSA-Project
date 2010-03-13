@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -50,7 +50,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			// Read the _stackFrameIndex From the code
 			TokenTypes token;
 			decoder.Decode(out token);
-            RuntimeField field = RuntimeBase.Instance.TypeLoader.GetField (decoder.Method.Module, token);
+            RuntimeField field = RuntimeBase.Instance.TypeLoader.GetField (decoder.Method, decoder.Method.Module, token);
             ctx.RuntimeField = field;
             ctx.Result = decoder.Compiler.CreateTemporary(new Mosa.Runtime.Metadata.Signatures.SigType(CilElementType.Ptr));
 		}

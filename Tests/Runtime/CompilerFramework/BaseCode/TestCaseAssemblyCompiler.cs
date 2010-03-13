@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -25,10 +25,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 			CompilerPipeline pipeline = this.Pipeline;
 			pipeline.AddRange(new IAssemblyCompilerStage[] {
                 new TypeLayoutStage(),
-                new MethodCompilerBuilderStage(),
-                new MethodCompilerRunnerStage(),
-                // __grover, 01/02/2009: No object files in test!
-                // new ObjectFileLayoutStage()
+                new AssemblyMemberCompilationSchedulerStage(),
+                new MethodCompilerSchedulerStage(),
                 new TestAssemblyLinker(),
             });
 			architecture.ExtendAssemblyCompilerPipeline(pipeline);
@@ -40,11 +38,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 			new TestCaseAssemblyCompiler(architecture, module).Compile();
 		}
 
-		public override MethodCompilerBase CreateMethodCompiler(RuntimeType type, RuntimeMethod method)
-		{
-			MethodCompilerBase mc = new TestCaseMethodCompiler(this.Pipeline.FindFirst<IAssemblyLinker>(), this.Architecture, this.Assembly, type, method);
-			this.Architecture.ExtendMethodCompilerPipeline(mc.Pipeline);
-			return mc;
-		}
-	}
+        public override MethodCompilerBase CreateMethodCompiler(ICompilationSchedulerStage schedulerStage, RuntimeType type, RuntimeMethod method)
+        {
+            MethodCompilerBase mc = new TestCaseMethodCompiler(this.Pipeline.FindFirst<IAssemblyLinker>(), this.Architecture, schedulerStage, this.Assembly, type, method);
+            this.Architecture.ExtendMethodCompilerPipeline(mc.Pipeline);
+            return mc;
+        }
+    }
 }

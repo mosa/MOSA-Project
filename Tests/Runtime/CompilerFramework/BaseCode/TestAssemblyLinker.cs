@@ -249,8 +249,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
         /// <summary>
         /// Performs stage specific processing on the compiler context.
         /// </summary>
-        /// <param name="compiler">The compiler context to perform processing in.</param>
-        public override void Run(AssemblyCompiler compiler)
+        public override void Run()
         {
             // Adjust the symbol addresses
             // __grover, 01/02/2009: Copied from ObjectFileLayoutStage
@@ -262,7 +261,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
             }
 
             // Now run the linker
-            base.Run(compiler);
+            base.Run();
         }
 
         #endregion // AssemblyLinkerStageBase Overrides

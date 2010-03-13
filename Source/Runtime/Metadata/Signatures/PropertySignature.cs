@@ -23,7 +23,7 @@ namespace Mosa.Runtime.Metadata.Signatures
         /// </summary>
         /// <param name="buffer">The buffer.</param>
         /// <param name="index">The index.</param>
-        protected override void ParseSignature(byte[] buffer, ref int index)
+        protected override void ParseSignature(ISignatureContext context, byte[] buffer, ref int index)
         {
             throw new Exception("The method or operation is not implemented.");
         }

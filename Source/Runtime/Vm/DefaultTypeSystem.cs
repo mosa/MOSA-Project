@@ -264,7 +264,7 @@ namespace Mosa.Runtime.Vm
             throw new TypeLoadException();
         }
 
-        RuntimeType ITypeSystem.GetType(IMetadataModule module, TokenTypes token)
+        public RuntimeType GetType(ISignatureContext context, IMetadataModule module, TokenTypes token)
         {
             TokenTypes table = (TokenTypes.TableMask & token);
             if (TokenTypes.TypeRef == table)
@@ -278,20 +278,22 @@ namespace Mosa.Runtime.Vm
                 if (row == 0)
                     return null;
 
+				RuntimeType result = null;
                 if (table == TokenTypes.TypeDef)
                 {
                     typeIdx += row - 2;
+					result = this._types[typeIdx];
                 }
                 else if (table == TokenTypes.TypeSpec)
                 {
-                    typeIdx += (int)(module.Metadata.GetMaxTokenValue(TokenTypes.TypeDef) & TokenTypes.RowIndexMask) + row;
+                    result = this.ResolveTypeSpec(context, module, token);
                 }
                 else
                 {
                     throw new ArgumentException(@"Not a type token.", @"token");
                 }
 
-                return _types[typeIdx];
+                return result;
             }
         }
 
@@ -355,51 +357,126 @@ namespace Mosa.Runtime.Vm
             return result;
         }
 
-        RuntimeField ITypeSystem.GetField(IMetadataModule scope, TokenTypes token)
+        public RuntimeField GetField(ISignatureContext context, IMetadataModule module, TokenTypes token)
         {
-            if (null == scope)
-                throw new ArgumentNullException(@"scope");
+			//Console.WriteLine(@"Retrieving field {0:x} in {1}", token, module.Name);
+            if (null == module)
+                throw new ArgumentNullException(@"module");
             if (TokenTypes.Field != (TokenTypes.TableMask & token) && TokenTypes.MemberRef != (TokenTypes.TableMask & token))
                 throw new ArgumentException(@"Invalid field token.");
+			
+			RuntimeField result;
 
 			if (TokenTypes.MemberRef == (TokenTypes.TableMask & token))
 			{
-				return GetFieldForMemberReference(scope, token);
+				result = GetFieldForMemberReference(context, module, token);
 			}
 			else
 			{
-				ModuleOffsets offsets = GetModuleOffset(scope);
+				ModuleOffsets offsets = GetModuleOffset(module);
 				int fieldIndex = (int)(token & TokenTypes.RowIndexMask) - 1;
-				RuntimeField result = _fields[offsets.FieldOffset + fieldIndex];
-				return result;
+				result = _fields[offsets.FieldOffset + fieldIndex];
 			}
-        }
-
-		protected RuntimeField GetFieldForMemberReference(IMetadataModule scope, TokenTypes token)
+			
+			return result;
+		}
+		
+		protected RuntimeField GetFieldForMemberReference(ISignatureContext context, IMetadataModule module, TokenTypes token)
 		{
 			MemberRefRow row;
-			scope.Metadata.Read(token, out row);
-
-			if (TokenTypes.TypeSpec == (TokenTypes.TableMask & row.ClassTableIdx))
+			IMetadataProvider metadata = module.Metadata;
+			metadata.Read(token, out row);
+			
+			RuntimeType ownerType;
+			
+			switch (row.ClassTableIdx & TokenTypes.TableMask)
+			{
+			case TokenTypes.TypeSpec:
+				ownerType = this.ResolveTypeSpec(context, module, row.ClassTableIdx);
+				break;
+				
+			case TokenTypes.TypeDef: goto case TokenTypes.TypeRef;
+				
+			case TokenTypes.TypeRef:
+				ownerType = this.GetType(context, module, row.ClassTableIdx);
+				break;
+				
+			default:
+				throw new NotSupportedException(String.Format(@"DefaultTypeSystem.GetFieldForMemberReference does not support Token table {0}", row.ClassTableIdx & TokenTypes.TableMask));
+			}
+			
+			if (ownerType == null)
+				throw new InvalidOperationException(	String.Format(@"Failed to retrieve owner type for Token {0:x} (Table {1}) in {2}", row.ClassTableIdx, row.ClassTableIdx & TokenTypes.TableMask, module.Name));
+			
+			string fieldName;
+			metadata.Read(row.NameStringIdx, out fieldName);
+			
+			foreach (RuntimeField field in ownerType.Fields)
+			{
+				if (field.Name == fieldName)
+				{
+					return field;
+				}
+			}
+			
+			throw new InvalidOperationException(String.Format(@"Failed to locate field {0}.{1}", ownerType.FullName, fieldName));
+		}
+		
+		private RuntimeType ResolveTypeSpec(ISignatureContext context, IMetadataModule module, TokenTypes typeSpecToken)
+		{
+			ModuleOffsets offsets = this._moduleOffsets[module.LoadOrder];
+			int typeDefs = (int)(module.Metadata.GetMaxTokenValue(TokenTypes.TypeDef) & TokenTypes.RowIndexMask) - 2;
+			int typeSpecIndex = (int)(typeSpecToken & TokenTypes.RowIndexMask);
+			
+			int typeIndex = offsets.TypeOffset + typeDefs + typeSpecIndex;
+			//Console.WriteLine(@"TypeSpec type index {0} is {1}", typeIndex, this._types[typeIndex]);
+			if (this._types[typeIndex] == null)
 			{
 				TypeSpecRow typeSpec;
-				byte[] blob;
-				scope.Metadata.Read(row.ClassTableIdx, out typeSpec);
-				TokenTypes signatureToken = scope.Metadata.Read(typeSpec.SignatureBlobIdx, out blob);
-				TokenTypes type = DecodeTypeIndex(blob[2]);
-				TypeDefRow typeDef;
-				scope.Metadata.Read(type, out typeDef);
-				ModuleOffsets offset = GetModuleOffset(scope);
-				token = typeDef.FieldList;
-
-				ModuleOffsets offsets = GetModuleOffset(scope);
-				int fieldIndex = (int)(token & TokenTypes.RowIndexMask) - 1;
-				RuntimeField result = _fields[offsets.FieldOffset + fieldIndex];
-				result.Type = new SigType(GetElementType(blob, offsets.FieldOffset));
-				return result;
+				module.Metadata.Read(typeSpecToken, out typeSpec);
+				
+				TypeSpecSignature signature = new TypeSpecSignature();
+				signature.LoadSignature(context, module.Metadata, typeSpec.SignatureBlobIdx);
+				
+				this._types[typeIndex] = this.ResolveSignatureType(context, module, signature.Type);
 			}
+			
+			return this._types[typeIndex];	
+		}
+		
+		private RuntimeType ResolveSignatureType(ISignatureContext context, IMetadataModule module, SigType sigType)
+		{
+			RuntimeType result = null;
+			
+			switch (sigType.Type)
+			{
+			case CilElementType.Class:
+				{
+					TypeSigType typeSigType = (TypeSigType)sigType;
+					result = this.GetType(context, module, typeSigType.Token);
+					//Console.WriteLine(@"TypeSpec (Class/ValueType) {0} resolves to {1}", sigType, result);
+				}
+				break;
+				
+			case CilElementType.ValueType: 
+				goto case CilElementType.Class;
+				
+			case CilElementType.GenericInst:
+				{
+					GenericInstSigType genericSigType = (GenericInstSigType)sigType;
 
-			return null;
+					RuntimeType baseType = this.GetType(context, module, genericSigType.BaseType.Token);				
+					//Console.WriteLine(@"TypeSpec (GenericInst) {0} resolves to base type {1}", sigType, baseType);
+
+					result = new CilGenericType(baseType, module, genericSigType, context);
+				}
+				break;
+				
+			default:
+				throw new NotSupportedException(String.Format(@"ResolveSignatureType does not support CilElementType.{0}", sigType.Type));
+			}
+			
+			return result;
 		}
 
 		protected TokenTypes DecodeTypeIndex(byte signature)
@@ -421,8 +498,10 @@ namespace Mosa.Runtime.Vm
 			return (CilElementType)(blob[4 + index]);
 		}
 
-        RuntimeMethod ITypeSystem.GetMethod(IMetadataModule scope, TokenTypes token)
+        public RuntimeMethod GetMethod(ISignatureContext context, IMetadataModule scope, TokenTypes token)
         {
+            RuntimeMethod result = null;
+
             if (null == scope)
                 throw new ArgumentNullException(@"scope");
 
@@ -431,34 +510,61 @@ namespace Mosa.Runtime.Vm
                 case TokenTypes.MethodDef:
                     {
                         ModuleOffsets offsets = GetModuleOffset(scope);
-                        return _methods[offsets.MethodOffset + (int)(TokenTypes.RowIndexMask & token) - 1];
+                        result = _methods[offsets.MethodOffset + (int)(TokenTypes.RowIndexMask & token) - 1];
                     }
+                    break;
 
                 case TokenTypes.MemberRef:
                     {
                         MemberRefRow row;
                         scope.Metadata.Read(token, out row);
-                        RuntimeType type = this.ResolveTypeRef(scope, row.ClassTableIdx);
+                        RuntimeType type = this.GetType(context, scope, row.ClassTableIdx);
                         string nameString;
                         scope.Metadata.Read(row.NameStringIdx, out nameString);
-                        MethodSignature sig = (MethodSignature)Signature.FromMemberRefSignatureToken(scope.Metadata, row.SignatureBlobIdx);
+                        MethodSignature sig = (MethodSignature)Signature.FromMemberRefSignatureToken(type, scope.Metadata, row.SignatureBlobIdx);
                         foreach (RuntimeMethod method in type.Methods)
                         {
                             if (method.Name != nameString)
                                 continue;
                             if (!method.Signature.Matches(sig))
                                 continue;
-                            return method;
+                            
+                            result = method;
+                            break;
                         }
-                        throw new MissingMethodException(type.Name, nameString);
+
+                        if (result == null)
+                        {
+                            throw new MissingMethodException(type.Name, nameString);
+                        }
                     }
+                    break;
 
                 case TokenTypes.MethodSpec:
-                    throw new NotImplementedException();
+                    result = this.DecodeMethodSpec(context, scope, token);
+                    break;
 
                 default:
-                    throw new NotSupportedException();
+                    throw new NotSupportedException(@"Can't get method for token " + token.ToString("x"));
             }
+
+            return result;
+        }
+
+        private RuntimeMethod DecodeMethodSpec(ISignatureContext context, IMetadataModule scope, TokenTypes token)
+        {
+            MethodSpecRow methodSpec;
+            scope.Metadata.Read(token, out methodSpec);
+
+            CilRuntimeMethod genericMethod = (CilRuntimeMethod)this.GetMethod(context, scope, methodSpec.MethodTableIdx);
+            
+            MethodSpecSignature specSignature = new MethodSpecSignature(context);
+            specSignature.LoadSignature(context, scope.Metadata, methodSpec.InstantiationBlobIdx);
+
+            MethodSignature signature = new MethodSignature();
+            signature.LoadSignature(specSignature, genericMethod.Module.Metadata, genericMethod.Signature.Token);
+
+            return new CilGenericMethod(genericMethod, signature, specSignature);
         }
 
         #endregion // ITypeSystem Members
@@ -782,7 +888,9 @@ namespace Mosa.Runtime.Vm
         /// <param name="methodOffset">The module offsets structure.</param>
         private void LoadGenerics(IMetadataModule module, int typeOffset, int methodOffset)
         {
-            IMetadataProvider md = module.Metadata;
+			//Debug.WriteLine("Loading generic parameters... {0}", module.Name);
+
+			IMetadataProvider md = module.Metadata;
             TokenTypes token, maxGeneric = md.GetMaxTokenValue(TokenTypes.GenericParam), owner = 0;
             GenericParamRow gpr;
             List<GenericParamRow> gprs = new List<GenericParamRow>();
@@ -791,6 +899,9 @@ namespace Mosa.Runtime.Vm
             methodOffset--;
 
             token = TokenTypes.GenericParam + 1;
+
+			//Debug.WriteLine("\tFrom {0:x} to {1:x}", token, maxGeneric);
+
             while (token <= maxGeneric)
             {
                 md.Read(token++, out gpr);
@@ -807,10 +918,8 @@ namespace Mosa.Runtime.Vm
 
                     owner = gpr.OwnerTableIdx;
                 }
-                else
-                {
-                    gprs.Add(gpr);
-                }
+
+				gprs.Add(gpr);
             }
 
             // Set the generic parameters of the last type, if we have them
@@ -829,10 +938,11 @@ namespace Mosa.Runtime.Vm
         /// <param name="methodOffset">The method offset for the metadata module.</param>
         private void SetGenericParameters(List<GenericParamRow> gprs, TokenTypes owner, int typeOffset, int methodOffset)
         {
+			//Debug.WriteLine("Setting generic parameters on owner {0:x}...", owner);
             switch (owner & TokenTypes.TableMask)
             {
                 case TokenTypes.TypeDef:
-                    _types[typeOffset + (int)(TokenTypes.RowIndexMask & owner)].SetGenericParameter(gprs);
+                    _types[typeOffset + (int)(TokenTypes.RowIndexMask & owner) - 1].SetGenericParameter(gprs);
                     break;
 
                 case TokenTypes.MethodDef:
@@ -914,7 +1024,7 @@ namespace Mosa.Runtime.Vm
                     // AttributeTargets.Enum
                     // AttributeTargets.Interface
                     // AttributeTargets.Struct
-                    RuntimeType type = ts.GetType(module, owner);
+                    RuntimeType type = ts.GetType(DefaultSignatureContext.Instance, module, owner);
                     type.SetAttributes(ra);
                     if (rtCallTypeAttribute != null)
                     {
@@ -928,7 +1038,7 @@ namespace Mosa.Runtime.Vm
                 case TokenTypes.MethodDef:
                     // AttributeTargets.Constructor
                     // AttributeTargets.Method
-                    RuntimeMethod method = ts.GetMethod(module, owner);
+                    RuntimeMethod method = ts.GetMethod(DefaultSignatureContext.Instance, module, owner);
                     method.SetAttributes(ra);
                     break;
 

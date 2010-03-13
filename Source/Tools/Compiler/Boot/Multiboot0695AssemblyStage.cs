@@ -90,6 +90,10 @@ namespace Mosa.Tools.Compiler.Boot
 		#endregion // Constants
 
 		#region Data members
+		
+		private AssemblyCompiler compiler;
+		
+		private IAssemblyLinker linker;
 
 		/// <summary>
 		/// Holds the multiboot video mode.
@@ -145,26 +149,29 @@ namespace Mosa.Tools.Compiler.Boot
 		#endregion // IPipelineStage Members
 
 		#region IAssemblyCompilerStage Members
+		
+		public void Setup(AssemblyCompiler compiler)
+		{
+			if (compiler == null)
+				throw new ArgumentNullException(@"compiler");
+			
+			this.compiler = compiler;
+			this.linker = compiler.Pipeline.FindFirst<IAssemblyLinker>();
+			Debug.Assert(linker != null, @"No linker??");
+		}
 
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		/// <param name="compiler">The compiler context to perform processing in.</param>
-		public void Run(AssemblyCompiler compiler)
+		public void Run()
 		{
-			if (compiler == null)
-				throw new ArgumentNullException(@"compiler");
-
-			IAssemblyLinker linker = compiler.Pipeline.FindFirst<IAssemblyLinker>();
-			Debug.Assert(linker != null, @"No linker??");
-
 			if (!secondStage) {
-				IntPtr entryPoint = WriteMultibootEntryPoint(linker);
-				WriteMultibootHeader(compiler, linker, entryPoint);
+				IntPtr entryPoint = WriteMultibootEntryPoint();
+				WriteMultibootHeader(entryPoint);
 				secondStage = true;
 			}
 			else {
-				TypeInitializerSchedulerStage typeInitializerSchedulerStage = compiler.Pipeline.FindFirst<TypeInitializerSchedulerStage>();
+				TypeInitializerSchedulerStage typeInitializerSchedulerStage = this.compiler.Pipeline.FindFirst<TypeInitializerSchedulerStage>();
 
 				SigType I4 = new SigType(CilElementType.I4);
 				RegisterOperand ecx = new RegisterOperand(I4, GeneralPurposeRegister.ECX);
@@ -180,8 +187,8 @@ namespace Mosa.Tools.Compiler.Boot
 				ctx.AppendInstruction(IR.Instruction.CallInstruction, typeInitializerSchedulerStage.Method);
 				ctx.AppendInstruction(CPUx86.Instruction.RetInstruction);
 
-				CompilerGeneratedMethod method = LinkTimeCodeGenerator.Compile(compiler, @"MultibootInit", instructionSet);
-				linker.EntryPoint = linker.GetSymbol(method);
+				CompilerGeneratedMethod method = LinkTimeCodeGenerator.Compile(this.compiler, @"MultibootInit", instructionSet);
+				this.linker.EntryPoint = this.linker.GetSymbol(method);
 			}
 		}
 
@@ -192,9 +199,8 @@ namespace Mosa.Tools.Compiler.Boot
 		/// <summary>
 		/// Writes the multiboot entry point.
 		/// </summary>
-		/// <param name="linker">The linker.</param>
 		/// <returns>The virtualAddress of the real entry point.</returns>
-		private IntPtr WriteMultibootEntryPoint(IAssemblyLinker linker)
+		private IntPtr WriteMultibootEntryPoint()
 		{
 			/*
 			 * FIXME:
@@ -216,14 +222,12 @@ namespace Mosa.Tools.Compiler.Boot
 		/// <summary>
 		/// Writes the multiboot _header.
 		/// </summary>
-		/// <param name="compiler">The assembly compiler.</param>
-		/// <param name="linker">The linker.</param>
 		/// <param name="entryPoint">The virtualAddress of the multiboot compliant entry point.</param>
-		private void WriteMultibootHeader(AssemblyCompiler compiler, IAssemblyLinker linker, IntPtr entryPoint)
+		private void WriteMultibootHeader(IntPtr entryPoint)
 		{
 			// HACK: According to the multiboot specification this _header must be within the first 8K of the
 			// kernel binary. Since the text section is always first, this should take care of the problem.
-			using (Stream stream = linker.Allocate(MultibootHeaderSymbolName, SectionKind.Text, 64, 4))
+			using (Stream stream = this.linker.Allocate(MultibootHeaderSymbolName, SectionKind.Text, 64, 4))
 			using (BinaryWriter bw = new BinaryWriter(stream, Encoding.ASCII)) {
 				// flags - multiboot flags
 				uint flags = /*HEADER_MB_FLAG_VIDEO_MODES_REQUIRED | */HEADER_MB_FLAG_MEMORY_INFO_REQUIRED | HEADER_MB_FLAG_MODULES_PAGE_ALIGNED;
@@ -241,16 +245,16 @@ namespace Mosa.Tools.Compiler.Boot
 				uint entry_point = (uint)entryPoint.ToInt32();
 
 				// Are we linking an ELF binary?
-				if (!(linker is Elf32Linker || linker is Elf64Linker)) {
+				if (!(this.linker is Elf32Linker || this.linker is Elf64Linker)) {
 					// Check the linker layout settings
-					if (linker.LoadSectionAlignment != linker.VirtualSectionAlignment)
+					if (this.linker.LoadSectionAlignment != this.linker.VirtualSectionAlignment)
 						throw new LinkerException(@"Load and virtual section alignment must be identical if you are booting non-ELF binaries with a multiboot bootloader.");
 
 					// No, special multiboot treatment required
 					flags |= HEADER_MB_FLAG_NON_ELF_BINARY;
 
-					header_addr = (uint)(linker.GetSection(SectionKind.Text).VirtualAddress.ToInt64() + linker.GetSymbol(MultibootHeaderSymbolName).SectionAddress);
-					load_addr = (uint)linker.BaseAddress;
+					header_addr = (uint)(this.linker.GetSection(SectionKind.Text).VirtualAddress.ToInt64() + this.linker.GetSymbol(MultibootHeaderSymbolName).SectionAddress);
+					load_addr = (uint)this.linker.BaseAddress;
 					load_end_addr = 0;
 					bss_end_addr = 0;
 				}
@@ -267,7 +271,7 @@ namespace Mosa.Tools.Compiler.Boot
 				bw.Write(bss_end_addr);
 
 				// HACK: Symbol has been hacked. What's the correct way to do this?
-				linker.Link(LinkType.AbsoluteAddress | LinkType.I4, MultibootHeaderSymbolName, (int)stream.Position, 0, @"Mosa.Tools.Compiler.LinkerGenerated.<$>MultibootInit()", IntPtr.Zero);
+				this.linker.Link(LinkType.AbsoluteAddress | LinkType.I4, MultibootHeaderSymbolName, (int)stream.Position, 0, @"Mosa.Tools.Compiler.LinkerGenerated.<$>MultibootInit()", IntPtr.Zero);
 
 				bw.Write(videoMode);
 				bw.Write(videoWidth);

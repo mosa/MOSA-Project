@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -125,7 +125,7 @@ namespace Mosa.Runtime.Metadata.Runtime
         protected override RuntimeType GetBaseType()
         {
             ITypeSystem typeSystem = RuntimeBase.Instance.TypeLoader;
-            return typeSystem.GetType(this.Module, this.baseTypeToken);
+            return typeSystem.GetType(this, this.Module, this.baseTypeToken);
         }
 
         /// <summary>

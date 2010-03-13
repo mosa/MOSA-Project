@@ -51,8 +51,7 @@ namespace Mosa.Runtime.Metadata.Tables
         /// <param name="flags">The flags.</param>
         /// <param name="ownerTableIdx">The owner table idx.</param>
         /// <param name="nameStringIdx">The name string idx.</param>
-        public GenericParamRow(ushort number, GenericParamAttributes flags, TokenTypes ownerTableIdx, 
-            TokenTypes nameStringIdx)
+        public GenericParamRow(ushort number, GenericParamAttributes flags, TokenTypes ownerTableIdx, TokenTypes nameStringIdx)
         {
             _number = number;
             _flags = flags;

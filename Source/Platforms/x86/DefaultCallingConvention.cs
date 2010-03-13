@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -61,7 +61,7 @@ namespace Mosa.Platforms.x86
 		/// <returns>
 		/// A single instruction or an array of instructions, which appropriately represent the method call.
 		/// </returns>
-		void ICallingConvention.Expand(Context ctx, IMetadataProvider metadata)
+		void ICallingConvention.Expand(ISignatureContext context, Context ctx, IMetadataProvider metadata)
 		{
 			/*
 			 * Calling convention is right-to-left, pushed on the stack. Return value in EAX for integral
@@ -82,7 +82,7 @@ namespace Mosa.Platforms.x86
 
 			SigType I = new SigType(CilElementType.I);
 			RegisterOperand esp = new RegisterOperand(I, GeneralPurposeRegister.ESP);
-			int stackSize = CalculateStackSizeForParameters(operands, invokeTarget.Signature.HasThis, metadata);
+			int stackSize = CalculateStackSizeForParameters(context, operands, invokeTarget.Signature.HasThis, metadata);
 
 			ctx.SetInstruction(CPUx86.Instruction.NopInstruction);
 			if (stackSize != 0) 
@@ -93,7 +93,7 @@ namespace Mosa.Platforms.x86
 				Stack<Operand> operandStack = GetOperandStackFromInstruction(operands, operandCount, invokeTarget.Signature.HasThis);
 
 				int space = stackSize;
-				CalculateRemainingSpace(ctx, operandStack, ref space, metadata);
+				CalculateRemainingSpace(context, ctx, operandStack, ref space, metadata);
 			}
 
 			if (invokeTarget.Signature.HasThis) 
@@ -149,7 +149,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		/// <param name="operandStack">The operand stack.</param>
 		/// <param name="space">The space.</param>
-		private void CalculateRemainingSpace(Context ctx, Stack<Operand> operandStack, ref int space, IMetadataProvider metadata)
+		private void CalculateRemainingSpace(ISignatureContext context, Context ctx, Stack<Operand> operandStack, ref int space, IMetadataProvider metadata)
 		{
 			while (operandStack.Count != 0) {
 				Operand operand = operandStack.Pop();
@@ -158,7 +158,7 @@ namespace Mosa.Platforms.x86
 				architecture.GetTypeRequirements(operand.Type, out size, out alignment);
 
                 if (operand.Type.Type == CilElementType.ValueType)
-                    size = ObjectModelUtility.ComputeTypeSize((operand.Type as ValueTypeSigType).Token, metadata, architecture);
+                    size = ObjectModelUtility.ComputeTypeSize(context, (operand.Type as ValueTypeSigType).Token, metadata, architecture);
 
 				space -= size;
 				Push(ctx, operand, space, size);
@@ -275,9 +275,9 @@ namespace Mosa.Platforms.x86
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <returns></returns>
-		private int CalculateStackSizeForParameters(Context ctx, IMetadataProvider metadata)
+		private int CalculateStackSizeForParameters(ISignatureContext context, Context ctx, IMetadataProvider metadata)
 		{
-            return CalculateStackSizeForParameters(ctx.Operands, ctx.InvokeTarget.Signature.HasThis, metadata);
+            return CalculateStackSizeForParameters(context, ctx.Operands, ctx.InvokeTarget.Signature.HasThis, metadata);
 		}
 
 		/// <summary>
@@ -287,7 +287,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="hasThis">if set to <c>true</c> [has this].</param>
 		/// <param name="metadata">The metadata.</param>
 		/// <returns></returns>
-		private int CalculateStackSizeForParameters(IEnumerable<Operand> operands, bool hasThis, IMetadataProvider metadata)
+		private int CalculateStackSizeForParameters(ISignatureContext context, IEnumerable<Operand> operands, bool hasThis, IMetadataProvider metadata)
 		{
 			int result = (hasThis ? 0 : 0);
 			int size, alignment;
@@ -297,7 +297,7 @@ namespace Mosa.Platforms.x86
 
                 if (op.Type.Type == CilElementType.ValueType)
                 {
-                    size = ObjectModelUtility.ComputeTypeSize((op.Type as Runtime.Metadata.Signatures.ValueTypeSigType).Token, metadata, architecture);
+                    size = ObjectModelUtility.ComputeTypeSize(context, (op.Type as Runtime.Metadata.Signatures.ValueTypeSigType).Token, metadata, architecture);
                 }
 
 				result += size;
