@@ -446,5 +446,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Not(Context context);
-	}
+
+        void SseRound(Context context);
+    }
 }

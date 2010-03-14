@@ -322,6 +322,13 @@ namespace Mosa.Platforms.x86
 				return;
 			}
 			else if (8 == size && (operand.Type.Type == CilElementType.R4 || operand.Type.Type == CilElementType.R8)) {
+
+                if (!(operand is MemoryOperand))
+                {
+                    // Move the operand to memory by prepending an instruction
+                }
+
+                // BUG: Return values are in FP0, not XMM#0
 				ctx.SetInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(operand.Type, SSE2Register.XMM0), operand);
 				return;
 			}

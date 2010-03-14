@@ -309,29 +309,52 @@ namespace Mosa.Platforms.x86
 		{
 			Operand result = ctx.Result;
 			Operand operand = ctx.Operand1;
-			RegisterOperand eax = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EAX);
-			RegisterOperand ecx = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.ECX);
-			RegisterOperand eaxSource = new RegisterOperand(result.Type, GeneralPurposeRegister.EAX);
-			RegisterOperand ecxSource = new RegisterOperand(operand.Type, GeneralPurposeRegister.ECX);
 
-			ctx.SetInstruction(CPUx86.Instruction.MovInstruction, eaxSource, result);
-			if (IsUnsigned(result))
-				ctx.AppendInstruction(IR.Instruction.ZeroExtendedMoveInstruction, eax, eaxSource);
-			else
-				ctx.AppendInstruction(IR.Instruction.SignExtendedMoveInstruction, eax, eaxSource);
+            if (ctx.Operand1.StackType != StackTypeCode.F)
+            {
+                RegisterOperand eax = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EAX);
+                RegisterOperand ecx = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.ECX);
+                RegisterOperand eaxSource = new RegisterOperand(result.Type, GeneralPurposeRegister.EAX);
+                RegisterOperand ecxSource = new RegisterOperand(operand.Type, GeneralPurposeRegister.ECX);
 
-			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, ecxSource, operand);
-			if (IsUnsigned(operand))
-				ctx.AppendInstruction(IR.Instruction.ZeroExtendedMoveInstruction, ecx, ecxSource);
-			else
-				ctx.AppendInstruction(IR.Instruction.SignExtendedMoveInstruction, ecx, ecxSource);
+                ctx.SetInstruction(CPUx86.Instruction.MovInstruction, eaxSource, result);
+                if (IsUnsigned(result))
+                    ctx.AppendInstruction(IR.Instruction.ZeroExtendedMoveInstruction, eax, eaxSource);
+                else
+                    ctx.AppendInstruction(IR.Instruction.SignExtendedMoveInstruction, eax, eaxSource);
 
-			if (IsUnsigned(result) && IsUnsigned(operand))
-				ctx.AppendInstruction(CPUx86.Instruction.UDivInstruction, eax, ecx);
-			else
-				ctx.AppendInstruction(CPUx86.Instruction.DivInstruction, eax, ecx);
+                ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, ecxSource, operand);
+                if (IsUnsigned(operand))
+                    ctx.AppendInstruction(IR.Instruction.ZeroExtendedMoveInstruction, ecx, ecxSource);
+                else
+                    ctx.AppendInstruction(IR.Instruction.SignExtendedMoveInstruction, ecx, ecxSource);
 
-			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, result, new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EDX));
+                if (IsUnsigned(result) && IsUnsigned(operand))
+                    ctx.AppendInstruction(CPUx86.Instruction.UDivInstruction, eax, ecx);
+                else
+                    ctx.AppendInstruction(CPUx86.Instruction.DivInstruction, eax, ecx);
+
+                ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, result, new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EDX));
+            }
+            else
+            {
+                HandleNonCommutativeOperation(ctx, CPUx86.Instruction.SseDivInstruction);
+                ExtendToR8(ctx);
+
+                Operand destination = ctx.Result;
+                Operand source = ctx.Operand1;
+
+                RegisterOperand xmm5 = new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM5);
+                Context before = ctx.InsertBefore();
+                before.SetInstruction(CPUx86.Instruction.MovInstruction, xmm5, destination);
+
+                // Round towards zero
+                ctx.AppendInstruction(CPUx86.Instruction.SseRoundInstruction, destination, destination, new ConstantOperand(BuiltInSigType.Byte, 0x03));
+
+                ctx.AppendInstruction(CPUx86.Instruction.SseMulInstruction, destination, source);
+                ctx.AppendInstruction(CPUx86.Instruction.SseSubInstruction, xmm5, destination);
+                ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, destination, xmm5);
+            }
 		}
 
 		#endregion // Members
