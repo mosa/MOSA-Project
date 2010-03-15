@@ -658,6 +658,8 @@ namespace Mosa.Platforms.x86
 		/// <param name="context">The context.</param>
 		void CPUx86.IX86Visitor.Not(Context context) { }
 
+        void CPUx86.IX86Visitor.SseRound(Context context) { }
+
 		#endregion // IX86Visitor - Unused
 
 	}
