@@ -229,6 +229,10 @@
     <Compile Include="Loader\PE\StreamHeader.cs" />
     <Compile Include="Memory\IMemoryPageManager.cs" />
     <Compile Include="Memory\PageAccessFlags.cs" />
+    <Compile Include="Metadata\Signatures\BuiltInSigType.cs" />
+    <Compile Include="Metadata\Signatures\DefaultSignatureContext.cs" />
+    <Compile Include="Metadata\Signatures\ISignatureContext.cs" />
+    <Compile Include="Metadata\Signatures\TypeSigType.cs" />
     <Compile Include="Metadata\Symbol.cs" />
     <Compile Include="IJitService.cs">
       <SubType>Code</SubType>
