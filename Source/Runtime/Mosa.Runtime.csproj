@@ -58,6 +58,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CompilerFramework\AssemblyMemberCompilationSchedulerStage.cs" />
     <Compile Include="CompilerFramework\BaseInstruction.cs" />
     <Compile Include="CompilerFramework\BasicBlockBuilderStage.cs" />
     <Compile Include="CompilerFramework\CIL\AddInstruction.cs" />
@@ -78,6 +79,8 @@
     <Compile Include="CompilerFramework\CIL\DecodingStage.cs" />
     <Compile Include="CompilerFramework\CIL\BreakInstruction.cs" />
     <Compile Include="CompilerFramework\GenericsResolverStage.cs" />
+    <Compile Include="CompilerFramework\ICompilationSchedulerStage.cs" />
+    <Compile Include="CompilerFramework\MethodCompilerSchedulerStage.cs" />
     <Compile Include="CompilerFramework\ObjectModelUtility.cs" />
     <Compile Include="CompilerFramework\Operands\SymbolOperand.cs" />
     <Compile Include="CompilerFramework\PlatformStubStage.cs" />
@@ -229,6 +232,13 @@
     <Compile Include="Loader\PE\StreamHeader.cs" />
     <Compile Include="Memory\IMemoryPageManager.cs" />
     <Compile Include="Memory\PageAccessFlags.cs" />
+    <Compile Include="Metadata\Runtime\CilGenericField.cs" />
+    <Compile Include="Metadata\Runtime\CilGenericMethod.cs" />
+    <Compile Include="Metadata\Runtime\CilGenericType.cs" />
+    <Compile Include="Metadata\Signatures\BuiltInSigType.cs" />
+    <Compile Include="Metadata\Signatures\DefaultSignatureContext.cs" />
+    <Compile Include="Metadata\Signatures\ISignatureContext.cs" />
+    <Compile Include="Metadata\Signatures\TypeSigType.cs" />
     <Compile Include="Metadata\Symbol.cs" />
     <Compile Include="IJitService.cs">
       <SubType>Code</SubType>
@@ -270,9 +280,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CompilerFramework\CompilerPipeline.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompilerFramework\CompilerScheduler.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CompilerFramework\CompilerSupport.cs">
@@ -366,12 +373,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CompilerFramework\MethodCompilerBase.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompilerFramework\MethodCompilerBuilderStage.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompilerFramework\MethodCompilerRunnerStage.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CompilerFramework\NakedAttribute.cs">
