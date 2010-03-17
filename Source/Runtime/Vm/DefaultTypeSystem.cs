@@ -444,7 +444,7 @@ namespace Mosa.Runtime.Vm
 			return this._types[typeIndex];	
 		}
 		
-		private RuntimeType ResolveSignatureType(ISignatureContext context, IMetadataModule module, SigType sigType)
+		public RuntimeType ResolveSignatureType(ISignatureContext context, IMetadataModule module, SigType sigType)
 		{
 			RuntimeType result = null;
 			

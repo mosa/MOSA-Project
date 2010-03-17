@@ -15,6 +15,7 @@ using Mosa.Runtime.CompilerFramework.IR;
 using Mosa.Runtime.Linker;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Vm;
+using Mosa.Tools.Compiler.Stages;
 
 namespace Mosa.Tools.Compiler
 {
@@ -50,6 +51,7 @@ namespace Mosa.Tools.Compiler
 				new BasicBlockBuilderStage(),
 				new InstructionLogger(),
 				new OperandDeterminationStage(),
+                StaticAllocationResolutionStageWrapper.Instance,
 				new InstructionLogger(),
 				new CILTransformationStage(),
 				new InstructionLogger(),

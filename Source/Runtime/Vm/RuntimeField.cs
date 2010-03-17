@@ -98,13 +98,22 @@ namespace Mosa.Runtime.Vm
 		/// Gets or sets the type.
 		/// </summary>
 		/// <value>The type.</value>
-		public SigType Type
+		public SigType SignatureType
 		{
 			get
 			{
 				return this.Signature.Type;
 			}
 		}
+
+        public RuntimeType Type
+        {
+            get
+            {
+                // HACK: Generic fields -- is this right?
+                return RuntimeBase.Instance.TypeLoader.ResolveSignatureType(DefaultSignatureContext.Instance, this.Module, this.SignatureType);
+            }
+        }
 
 		#endregion // Properties
 
@@ -128,7 +137,7 @@ namespace Mosa.Runtime.Vm
 		/// </returns>
 		public override string ToString()
 		{
-			return DeclaringType.ToString() + '.' + Name + " [Type: " + Type.ToString() + ']';
+			return DeclaringType.ToString() + '.' + Name + " [Type: " + SignatureType.ToString() + ']';
 		}
 
 		#endregion // Object Overrides

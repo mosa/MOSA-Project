@@ -21,6 +21,7 @@ using NDesk.Options;
 using Mosa.Runtime.Linker;
 using Mosa.Tools.Compiler.Symbols.Pdb;
 using System.Diagnostics;
+using Mosa.Tools.Compiler.Stages;
 
 namespace Mosa.Tools.Compiler
 {
@@ -145,6 +146,8 @@ namespace Mosa.Tools.Compiler
 			this.bootFormatStage.AddOptions(optionSet);
 			this.architectureSelector.AddOptions(optionSet);
 			this.mapFileWrapper.AddOptions(optionSet);
+
+            StaticAllocationResolutionStageWrapper.Instance.AddOptions(optionSet);
 		}
 
 		#endregion Constructors
@@ -315,6 +318,7 @@ namespace Mosa.Tools.Compiler
                         new AssemblyMemberCompilationSchedulerStage(),
 						//new GenericsResolverStage(),
                         new MethodCompilerSchedulerStage(),
+                        new FakeSystemObjectGenerationStage(),
                         new TypeInitializers.TypeInitializerSchedulerStage(),
 						bootFormatStage,
 						new Metadata.MetadataBuilderStage(),

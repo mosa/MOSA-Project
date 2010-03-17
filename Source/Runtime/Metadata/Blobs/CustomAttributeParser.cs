@@ -263,7 +263,7 @@ namespace Mosa.Runtime.Metadata.Blobs
 							Debug.Assert(type.Fields.Count == 1, @"More than one field in the enum.");
 							RuntimeField value = type.Fields[0];
 							Debug.Assert(value.Name == @"value__", @"First field of enum not named value__");
-							result = ParseElem(module, reader, value.Type);
+							result = ParseElem(module, reader, value.SignatureType);
 							Type enumType = Type.GetType(type.Namespace + "." + type.Name);
 							result = Enum.ToObject(enumType, result);
 						}

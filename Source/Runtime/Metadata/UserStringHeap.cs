@@ -57,7 +57,7 @@ namespace Mosa.Runtime.Metadata {
 			// Validate the offset & calculate the real offset
 			int realOffset = ValidateOffset(offset);
 			int length = CalculatePrefixLength(ref realOffset);
-			Debug.Assert(1 == (length & 1));
+			Debug.Assert(1 == (length & 1), @"Invalid string length read from metadata - corrupt string?");
             token = (TokenTypes)((int)TokenTypes.UserString | realOffset + length - this._offset);
             if (0 == length)
 				return String.Empty;

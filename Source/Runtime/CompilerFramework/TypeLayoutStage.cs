@@ -116,7 +116,7 @@ namespace Mosa.Runtime.CompilerFramework
 				else {
 					int size;
 					int alignment;
-					_architecture.GetTypeRequirements(field.Type, out size, out alignment);
+					_architecture.GetTypeRequirements(field.SignatureType, out size, out alignment);
 
 					// Pad the field in the type
 					if (0 != packingSize) {
@@ -164,10 +164,10 @@ namespace Mosa.Runtime.CompilerFramework
 
 			// Determine the size of the type & alignment requirements
 			int size, alignment;
-			_architecture.GetTypeRequirements(field.Type, out size, out alignment);
+			_architecture.GetTypeRequirements(field.SignatureType, out size, out alignment);
 
-            if (field.Type.Type == CilElementType.ValueType)
-                size = ObjectModelUtility.ComputeTypeSize(field.DeclaringType, (field.Type as Metadata.Signatures.ValueTypeSigType).Token, this.compiler.Metadata, _architecture);
+            if (field.SignatureType.Type == CilElementType.ValueType)
+                size = ObjectModelUtility.ComputeTypeSize(field.DeclaringType, (field.SignatureType as Metadata.Signatures.ValueTypeSigType).Token, this.compiler.Metadata, _architecture);
 
 			// Retrieve the linker
 			IAssemblyLinker linker = this.compiler.Pipeline.FindFirst<IAssemblyLinker>();

@@ -18,19 +18,25 @@ using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Vm;
 using Mosa.Runtime.CompilerFramework.CIL;
 using Mosa.Runtime.CompilerFramework.IR;
+using Mosa.Tools.Compiler;
 
 namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 {
     class TestCaseMethodCompiler : MethodCompilerBase
     {
-        public TestCaseMethodCompiler(IAssemblyLinker linker, IArchitecture architecture, ICompilationSchedulerStage compilationScheduler, IMetadataModule module, RuntimeType type, RuntimeMethod method) :
+        private readonly TestCaseAssemblyCompiler assemblyCompiler;
+
+        public TestCaseMethodCompiler(TestCaseAssemblyCompiler assemblyCompiler, IAssemblyLinker linker, IArchitecture architecture, ICompilationSchedulerStage compilationScheduler, IMetadataModule module, RuntimeType type, RuntimeMethod method) :
             base(linker, architecture, compilationScheduler, module, type, method)
         {
+            this.assemblyCompiler = assemblyCompiler;
+
             // Populate the pipeline
             this.Pipeline.AddRange(new IMethodCompilerStage[] {
                 new DecodingStage(),
                 new BasicBlockBuilderStage(),
 				new OperandDeterminationStage(),
+                new StaticAllocationResolutionStage(),
                 new InstructionLogger(),
                 //new ConstantFoldingStage(),
                 new CILTransformationStage(),
@@ -54,8 +60,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
             });
         }
 
-        private delegate void CCtor();
-
         public override Stream RequestCodeStream()
         {
             LinkerStream stream = base.RequestCodeStream() as LinkerStream;
@@ -75,11 +79,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
             if ((this.Method.Attributes & attrs) == attrs && this.Method.Name == ".cctor")
             {
                 CCtor cctor = (CCtor)Marshal.GetDelegateForFunctionPointer(this.Method.Address, typeof(CCtor));
-                cctor();
+                this.assemblyCompiler.QueueCCtorForInvocationAfterCompilation(cctor);
             }
 
             base.EndCompile();
-            //InstructionStatisticsStage.Instance.PrintStatistics();
         }
     }
 }
