@@ -117,6 +117,8 @@ namespace Mosa.Runtime.Vm
         /// <returns>The method currently represented by the internal call.</returns>
         RuntimeMethod GetImplementationForInternalCall(RuntimeMethod internalMethod);
 
+        RuntimeType ResolveSignatureType(ISignatureContext context, IMetadataModule module, SigType sigType);
+
         #endregion // Methods
     }
 }

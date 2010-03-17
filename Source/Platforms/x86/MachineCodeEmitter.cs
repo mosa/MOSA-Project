@@ -316,14 +316,37 @@ namespace Mosa.Platforms.x86
 		/// <param name="target">The target.</param>
 		public void Call(RuntimeMethod target)
 		{
-			_linker.Link(
+            // HACK: Prevent endless recursion in Object constructor.
+            // FIXME: Method does not obey identity rules - why?
+            if (_compiler.Method.DeclaringType.FullName == @"System.Object" &&
+                _compiler.Method.Name == @".ctor" &&
+                target.DeclaringType.FullName == @"System.Object" &&
+                target.Name == @".ctor")
+            {
+                this._codeStream.Position -= 1;
+                return;
+            }
+
+            long address = _linker.Link(
 				LinkType.RelativeOffset | LinkType.I4,
 				_compiler.Method,
-				(int)(_codeStream.Position - _codeStreamBasePosition) - 4,
 				(int)(_codeStream.Position - _codeStreamBasePosition),
+				(int)(_codeStream.Position - _codeStreamBasePosition) + 4,
 				target,
 				IntPtr.Zero
 			);
+
+            if (address == 0L)
+            {
+                this.WriteByte(0);
+                this.WriteByte(0);
+                this.WriteByte(0);
+                this.WriteByte(0);
+            }
+            else
+            {
+                this._codeStream.Position += 4;
+            }
 		}
 
 		/// <summary>

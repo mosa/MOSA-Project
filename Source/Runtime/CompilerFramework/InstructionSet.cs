@@ -271,7 +271,9 @@ namespace Mosa.Runtime.CompilerFramework
 			if (index == -1)
 				return CreateRoot();
 
-			Debug.Assert(index > 0);
+            // FIXME: Asserts without a message or a comment are not useful to figure out.
+            // I don't see a reason this should not be valid??
+			//Debug.Assert(index > 0);
 
 			int free = GetFree();
 

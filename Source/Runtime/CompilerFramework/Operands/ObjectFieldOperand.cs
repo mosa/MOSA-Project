@@ -25,7 +25,7 @@ namespace Mosa.Runtime.CompilerFramework.Operands
         /// <param name="objectInstance">The operand, representing the object instance.</param>
         /// <param name="field">The referenced field.</param>
         public ObjectFieldOperand(Operand objectInstance, RuntimeField field) :
-            base(field.Type, null, field.Address)
+            base(field.SignatureType, null, field.Address)
         {
         }
 

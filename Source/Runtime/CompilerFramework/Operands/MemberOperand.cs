@@ -37,7 +37,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// <param name="field">The runtime field to reference.</param>
         /// <exception cref="System.ArgumentNullException"><paramref name="field"/> is null.</exception>
         public MemberOperand(RuntimeField field) :
-            base(field.Type, null, IntPtr.Zero)
+            base(field.SignatureType, null, IntPtr.Zero)
         {
             if (field == null)
                 throw new ArgumentNullException(@"field");

@@ -48,7 +48,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			ctx.RuntimeField = RuntimeBase.Instance.TypeLoader.GetField(decoder.Method, decoder.Method.Module, token);
 
 			Debug.Assert((ctx.RuntimeField.Attributes & FieldAttributes.Static) == FieldAttributes.Static, @"Static field access on non-static field.");
-			ctx.Result = decoder.Compiler.CreateTemporary(ctx.RuntimeField.Type);
+			ctx.Result = decoder.Compiler.CreateTemporary(ctx.RuntimeField.SignatureType);
 		}
 
 		/// <summary>

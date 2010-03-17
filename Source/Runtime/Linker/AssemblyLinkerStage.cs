@@ -336,15 +336,8 @@ namespace Mosa.Runtime.Linker
 			if (!IsValid(target))
 				throw new ArgumentException(@"RuntimeMember is not a static field or method.", @"member");
 
-			long address;
-			if (!IsResolved(target, out address)) {
-				address = Link(linkType, method, methodOffset, methodRelativeBase, CreateSymbolName(target), offset);
-			}
-			else {
-				address += offset.ToInt64();
-			}
-
-			return address;
+            string symbolName = CreateSymbolName(target);
+			return Link(linkType, method, methodOffset, methodRelativeBase, symbolName, offset);
 		}
 
 		/// <summary>

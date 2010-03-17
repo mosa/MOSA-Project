@@ -11,6 +11,9 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
+using Mosa.Runtime.Metadata.Signatures;
+using Mosa.Runtime.Metadata;
+using Mosa.Runtime.Vm;
 
 namespace Mosa.Runtime.CompilerFramework.CIL
 {
@@ -98,15 +101,26 @@ namespace Mosa.Runtime.CompilerFramework.CIL
              * 
              */
 
-			// Remove the this parameter
-			// FIXME: _operands = new Operand[_operands.Length-1];
+            // Remove the this argument from the invocation, it's not on the stack yet.
+            ctx.OperandCount--;
 
-			// Set the return value, even though constructors return void
-			throw new NotImplementedException();
+            // Get the type to allocate
+            SigType sigType = this.CreateSignatureTypeFor(ctx.InvokeTarget.DeclaringType);
 
-			//SetResult(0, null);
-			//CreateResultOperand(_invokeTarget.DeclaringType)	
+            // Set a return value according to the type of the object allocated
+            ctx.Result = decoder.Compiler.CreateTemporary(sigType);
+            ctx.ResultCount = 1;
 		}
+
+        private SigType CreateSignatureTypeFor(RuntimeType declaringType)
+        {
+            if (declaringType.BaseType.FullName == @"System.ValueType")
+            {
+                return new ValueTypeSigType((TokenTypes)declaringType.Token);
+            }
+
+            return new ClassSigType((TokenTypes)declaringType.Token);
+        }
 
 		/// <summary>
 		/// Validates the instruction operands and creates a matching variable for the result.
@@ -115,17 +129,12 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <param name="compiler">The compiler.</param>
 		public override void Validate(Context ctx, IMethodCompiler compiler)
 		{
-			base.Validate(ctx, compiler);
-
 			if (compiler == null)
 				throw new ArgumentNullException(@"compiler");
 
-			// HACK: Don't validate the base class - it still assumes a method call without the this ptr required
-			// for constructors.
-			//base.Validate(compiler);
-
 			// Validate the operands...
-			Debug.Assert(ctx.OperandCount == ctx.InvokeTarget.Parameters.Count - 1, @"Operand count doesn't match parameter count.");
+            int offset = (ctx.InvokeTarget.Signature.HasExplicitThis ? 1 : 0);
+			Debug.Assert(ctx.OperandCount == ctx.InvokeTarget.Parameters.Count - offset, @"Operand count doesn't match parameter count.");
 			for (int i = 0; i < ctx.OperandCount; i++) {
 				/* FIXME: Check implicit conversions
 					if (ops[i] != null) {

@@ -34,12 +34,17 @@ namespace Mosa.Tools.Compiler
 		protected MethodCompilerStageWrapper()
 		{
 			this.wrapped = new WrappedType();
+            this.Enabled = true;
 		}
 
 		/// <summary>
 		/// Set whether this stage will be executed or not.
 		/// </summary>
-		protected bool Enabled = true;
+		protected bool Enabled
+        {
+            get;
+            set;
+        }
 
 		/// <summary>
 		/// Gets the wrapped method compiler stage.
@@ -56,7 +61,7 @@ namespace Mosa.Tools.Compiler
 		/// <value>The name of the compilation stage.</value>
 		string IPipelineStage.Name
 		{
-			get { return ((IPipelineStage)wrapped).Name + (Enabled ? String.Empty : " (Disabled)"); }
+			get { return ((IPipelineStage)this.wrapped).Name + (this.Enabled ? String.Empty : " (Disabled)"); }
 		}
 
 		/// <summary>
@@ -64,7 +69,7 @@ namespace Mosa.Tools.Compiler
 		/// </summary>
 		public void Run()
 		{
-			if (Enabled) {
+			if (this.Enabled) {
 				wrapped.Setup(MethodCompiler);
 				wrapped.Run();
 			}

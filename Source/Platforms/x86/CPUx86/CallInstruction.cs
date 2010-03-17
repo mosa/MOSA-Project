@@ -34,10 +34,6 @@ namespace Mosa.Platforms.x86.CPUx86
 		protected override void Emit(Context ctx, MachineCodeEmitter emitter)
 		{
 			emitter.WriteByte(0xE8);
-			emitter.WriteByte(0x00);
-			emitter.WriteByte(0x00);
-			emitter.WriteByte(0x00);
-			emitter.WriteByte(0x00);
 			emitter.Call(ctx.InvokeTarget);
 		}
 
