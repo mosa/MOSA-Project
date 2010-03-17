@@ -154,6 +154,9 @@
     <Compile Include="LinkTimeCodeGeneration\LinkTimeCodeGenerator.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Stages\FakeSystemObjectGenerationStage.cs" />
+    <Compile Include="Stages\StaticAllocationResolutionStageWrapper.cs" />
+    <Compile Include="StaticAllocationResolutionStage.cs" />
     <Compile Include="Symbols\Pdb\CvEntryType.cs" />
     <Compile Include="Symbols\Pdb\CvFunctionSymbol3.cs" />
     <Compile Include="Symbols\Pdb\CvGlobalSymbolEnumerator.cs" />

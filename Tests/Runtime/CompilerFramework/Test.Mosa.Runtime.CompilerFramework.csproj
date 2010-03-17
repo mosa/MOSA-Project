@@ -123,6 +123,7 @@
     <Compile Include="CodeDomTestRunner.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Compiler\StaticAllocationFixture.cs" />
     <Compile Include="IL\ConditionalOperator.cs" />
     <Compile Include="IL\Stind.cs" />
     <Compile Include="IL\While.cs" />
