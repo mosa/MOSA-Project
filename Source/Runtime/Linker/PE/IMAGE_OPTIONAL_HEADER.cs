@@ -75,12 +75,12 @@ namespace Mosa.Runtime.Linker.PE
 		public uint AddressOfEntryPoint;
 
         /// <summary>
-        /// The offset From the load address, where the code section starts.
+        /// The offset from the load address, where the code section starts.
         /// </summary>
 		public uint BaseOfCode;
 
         /// <summary>
-        /// The offset From the load address, where the data section starts.
+        /// The offset from the load address, where the data section starts.
         /// </summary>
 		public uint BaseOfData;
 
@@ -203,7 +203,7 @@ namespace Mosa.Runtime.Linker.PE
 		#region Methods
 
         /// <summary>
-        /// Loads the _header From the reader.
+        /// Loads the _header from the reader.
         /// </summary>
         /// <param name="reader">The reader.</param>
 		public void Read(BinaryReader reader)

@@ -290,7 +290,7 @@ namespace Mosa.Runtime.Vm
         /// <param name="c">The type to compare with the current type.</param>
         /// <returns>
         /// <c>true</c> if the Type represented by the c parameter and the current Type represent classes, and the 
-        /// class represented by the current Type derives From the class represented by c; otherwise, <c>false</c>. 
+        /// class represented by the current Type derives from the class represented by c; otherwise, <c>false</c>. 
         /// This method also returns <c>false</c> if c and the current Type represent the same class.
         /// </returns>
         public bool IsSubclassOf(RuntimeType c)

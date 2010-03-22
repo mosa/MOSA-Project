@@ -34,7 +34,7 @@ namespace Mosa.Runtime.CompilerFramework
         }
 
         /// <summary>
-        /// Copies bytes From the source to destination.
+        /// Copies bytes from the source to destination.
         /// </summary>
         /// <param name="destination">The destination.</param>
         /// <param name="source">The source.</param>

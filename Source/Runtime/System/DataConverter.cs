@@ -71,7 +71,7 @@ namespace System
     {
 
         // Disables the warning: CLS compliance checking will not be performed on
-        //  `XXXX' because it is not visible From outside this assembly
+        //  `XXXX' because it is not visible from outside this assembly
 #pragma warning disable  3019
 #endif
         static DataConverter SwapConv = new SwapConverter();
@@ -80,74 +80,74 @@ namespace System
         /// <summary>
         /// Indicates whether or not the current platform is Little Endian
         /// </summary>
-        // NOTE: Renamed From the Mono implemention to not interfere with instance properties
+        // NOTE: Renamed from the Mono implemention to not interfere with instance properties
         public static readonly bool NativeIsLittleEndian = BitConverter.IsLittleEndian;
 
         /// <summary>
-        /// Decodes a System.Double From the given bytes, using this instance's Endianness
+        /// Decodes a System.Double from the given bytes, using this instance's Endianness
         /// </summary>
         /// <param name="data">The array of bytes containing the source data</param>
         /// <param name="index">The index within the array of bytes that the source data originates at</param>
-        /// <returns>A System.Double decoded From the given bytes</returns>
+        /// <returns>A System.Double decoded from the given bytes</returns>
         /// 
         public abstract double GetDouble(byte[] data, int index);
 
         /// <summary>
-        /// Decodes a System.Float From the given bytes, using this instance's Endianness
+        /// Decodes a System.Float from the given bytes, using this instance's Endianness
         /// </summary>
         /// <param name="data">The array of bytes containing the source data</param>
         /// <param name="index">The index within the array of bytes that the source data originates at</param>
-        /// <returns>A System.Float decoded From the given bytes</returns>
+        /// <returns>A System.Float decoded from the given bytes</returns>
         public abstract float GetFloat(byte[] data, int index);
 
         /// <summary>
-        /// Decodes a System.Int64 From the given bytes, using this instance's Endianness
+        /// Decodes a System.Int64 from the given bytes, using this instance's Endianness
         /// </summary>
         /// <param name="data">The array of bytes containing the source data</param>
         /// <param name="index">The index within the array of bytes that the source data originates at</param>
-        /// <returns>A System.Int64 decoded From the given bytes</returns>
+        /// <returns>A System.Int64 decoded from the given bytes</returns>
         public abstract long GetInt64(byte[] data, int index);
 
         /// <summary>
-        /// Decodes a System.Int32 From the given bytes, using this instance's Endianness
+        /// Decodes a System.Int32 from the given bytes, using this instance's Endianness
         /// </summary>
         /// <param name="data">The array of bytes containing the source data</param>
         /// <param name="index">The index within the array of bytes that the source data originates at</param>
-        /// <returns>A System.Int32 decoded From the given bytes</returns>
+        /// <returns>A System.Int32 decoded from the given bytes</returns>
         public abstract int GetInt32(byte[] data, int index);
 
         /// <summary>
-        /// Decodes a System.Int16 From the given bytes, using this instance's Endianness
+        /// Decodes a System.Int16 from the given bytes, using this instance's Endianness
         /// </summary>
         /// <param name="data">The array of bytes containing the source data</param>
         /// <param name="index">The index within the array of bytes that the source data originates at</param>
-        /// <returns>A System.Int16 decoded From the given bytes</returns>
+        /// <returns>A System.Int16 decoded from the given bytes</returns>
         public abstract short GetInt16(byte[] data, int index);
 
         /// <summary>
-        /// Decodes a System.UInt32 From the given bytes, using this instance's Endianness
+        /// Decodes a System.UInt32 from the given bytes, using this instance's Endianness
         /// </summary>
         /// <param name="data">The array of bytes containing the source data</param>
         /// <param name="index">The index within the array of bytes that the source data originates at</param>
-        /// <returns>A System.UInt32 decoded From the given bytes</returns>
+        /// <returns>A System.UInt32 decoded from the given bytes</returns>
         [CLSCompliant(false)]
         public abstract uint GetUInt32(byte[] data, int index);
         
         /// <summary>
-        /// Decodes a System.UInt16 From the given bytes, using this instance's Endianness
+        /// Decodes a System.UInt16 from the given bytes, using this instance's Endianness
         /// </summary>
         /// <param name="data">The array of bytes containing the source data</param>
         /// <param name="index">The index within the array of bytes that the source data originates at</param>
-        /// <returns>A System.UInt16 decoded From the given bytes</returns>
+        /// <returns>A System.UInt16 decoded from the given bytes</returns>
         [CLSCompliant(false)]
         public abstract ushort GetUInt16(byte[] data, int index);
         
         /// <summary>
-        /// Decodes a System.UInt64 From the given bytes, using this instance's Endianness
+        /// Decodes a System.UInt64 from the given bytes, using this instance's Endianness
         /// </summary>
         /// <param name="data">The array of bytes containing the source data</param>
         /// <param name="index">The index within the array of bytes that the source data originates at</param>
-        /// <returns>A System.UInt64 decoded From the given bytes</returns>
+        /// <returns>A System.UInt64 decoded from the given bytes</returns>
         [CLSCompliant(false)]
         public abstract ulong GetUInt64(byte[] data, int index);
 
@@ -598,7 +598,7 @@ namespace System
         // Packs one datum `oarg' into the buffer `b', using the string format
         // in `description' at position `i'
         //
-        // Returns: true if we must pick the next object From the list
+        // Returns: true if we must pick the next object from the list
         //
         static bool PackOne(PackContext b, object oarg)
         {

@@ -54,7 +54,7 @@ namespace Mosa.Runtime.CompilerFramework
         int OffsetOfFirstLocal { get; }
 
         /// <summary>
-        /// Retrieves the offset of the first parameter From the stack frame start.
+        /// Retrieves the offset of the first parameter from the stack frame start.
         /// </summary>
         int OffsetOfFirstParameter { get; }
     }

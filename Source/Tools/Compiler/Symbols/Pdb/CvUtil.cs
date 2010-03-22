@@ -44,7 +44,7 @@ namespace Mosa.Tools.Compiler.Symbols.Pdb
 
             do
             {
-                // Read additional bytes From the buffer
+                // Read additional bytes from the buffer
                 reader.Read(chars, offset, size - oldSize);
 
                 // Determine the index of the \0

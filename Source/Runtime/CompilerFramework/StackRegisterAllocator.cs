@@ -169,7 +169,7 @@ namespace Mosa.Runtime.CompilerFramework
 				return;
 			}
 
-			// If the instruction has operands, these are popped From the IL stack.
+			// If the instruction has operands, these are popped from the IL stack.
 			int pops = PopOperands(ctx);
 
 			// If an instruction has a result, it is pushed onto the evaluation stack.
@@ -200,7 +200,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Synchronizes the eval stack after an instruction.
 		/// </summary>
-		/// <param name="entries">The number of stack entries to retrieve From the processor stack.</param>
+		/// <param name="entries">The number of stack entries to retrieve from the processor stack.</param>
 		private void SyncEvalStack(int entries)
 		{
 		}

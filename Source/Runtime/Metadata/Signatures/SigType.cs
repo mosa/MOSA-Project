@@ -467,7 +467,7 @@ namespace Mosa.Runtime.Metadata.Signatures
         #endregion // IEquatable<SigType> Members
 
         /// <summary>
-        /// Expresses the signature element information in a string form differentiating it From other signature
+        /// Expresses the signature element information in a string form differentiating it from other signature
         /// elements expressed the same way
         /// </summary>
         /// <remarks>Sub-classes should override this method completely and not call it. If the subclass is in this same library, and there is a preliminary implementation in this

@@ -14,7 +14,7 @@ using System.Text;
 namespace Mosa.Runtime.CompilerFramework.IR
 {
 	/// <summary>
-	/// Intermediate representation of a pop operation, that removes the topmost element From the stack and
+	/// Intermediate representation of a pop operation, that removes the topmost element from the stack and
 	/// places it in the destination operand.
 	/// </summary>
 	public sealed class PopInstruction : BaseInstruction

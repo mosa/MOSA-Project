@@ -166,7 +166,7 @@ namespace Mosa.Runtime.CompilerFramework
 				Context instr = new Context(InstructionSet, index);
 
 				if (instr.Offset <= lr.Start) {
-					// A use on instr.Offset == lr.Start is one From a previous definition!!
+					// A use on instr.Offset == lr.Start is one from a previous definition!!
 				}
 				else if (instr.Offset <= lr.End) {
 					opIdx = 0;

@@ -354,7 +354,7 @@
 //                        block.NextBlocks[0].PreviousBlocks.Add(previousBlock);
 //                }
 
-//                // Remove this block From all the next Blocks
+//                // Remove this block from all the next Blocks
 //                while (block.NextBlocks[0].PreviousBlocks.Remove(block)) ;
 
 //                // Clear out this block
@@ -390,13 +390,13 @@
 //                    // Remove last instruction of current block
 //                    block.Instructions.RemoveAt(block.Instructions.Count - 1);
 
-//                    // Copy instructions From next block into the current block
+//                    // Copy instructions from next block into the current block
 //                    foreach (LegacyInstruction instruction in nextBlock.Instructions) {
 //                        instruction.Block = block.Index;
 //                        block.Instructions.Add(instruction);
 //                    }
 
-//                    // Copy block list From next block to the current block
+//                    // Copy block list from next block to the current block
 //                    block.NextBlocks.Clear();
 //                    foreach (BasicBlock next in nextBlock.NextBlocks) {
 //                        if (!block.NextBlocks.Contains(next))
@@ -437,7 +437,7 @@
 //        {
 //            if ((block.NextBlocks.Count == 1) && (block != prologue)) {
 //                if ((block.NextBlocks[0].Instructions.Count == 1) && (block.NextBlocks[0] != epilogue)) {
-//                    // Copy instruction From next block into current block
+//                    // Copy instruction from next block into current block
 
 //                    // Sanity check, last instruction must have an IBranchInstruction interface
 //                    Debug.Assert(block.NextBlocks[0].LastInstruction is IBranchInstruction);
@@ -463,14 +463,14 @@
 //                    // Add the cloned instruction to the this block
 //                    block.Instructions.Add(clonedInstruction);
 
-//                    // Remove this block From the next block
+//                    // Remove this block from the next block
 //                    block.NextBlocks[0].PreviousBlocks.Remove(block);
 
 //                    // Add the next block's next block list to this block
 //                    foreach (BasicBlock nextBlock in block.NextBlocks[0].NextBlocks) 
 //                        block.NextBlocks.Add(nextBlock);
 
-//                    // Remove next block From this block
+//                    // Remove next block from this block
 //                    block.NextBlocks.Remove(block.NextBlocks[0]);
 
 //                    return true;

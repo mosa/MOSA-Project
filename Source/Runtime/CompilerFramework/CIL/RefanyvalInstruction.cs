@@ -47,7 +47,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			// Decode base classes first
 			base.Decode(ctx, decoder);
 
-			// Retrieve a type reference From the immediate argument
+			// Retrieve a type reference from the immediate argument
 			// FIXME: Limit the token types
 			TokenTypes token;
 			decoder.Decode(out token);

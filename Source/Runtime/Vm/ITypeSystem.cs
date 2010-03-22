@@ -22,7 +22,7 @@ namespace Mosa.Runtime.Vm
     /// </summary>
     /// <remarks>
     /// The type system is responsible for loading assembly metadata and building
-    /// runtime accessible management structures From those.
+    /// runtime accessible management structures from those.
     /// </remarks>
     public interface ITypeSystem
     {

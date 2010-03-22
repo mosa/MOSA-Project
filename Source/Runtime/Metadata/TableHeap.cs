@@ -302,7 +302,7 @@ namespace Mosa.Runtime.Metadata {
 		}
 
 		/// <summary>
-		/// Read and decode an index value From the reader.
+		/// Read and decode an index value from the reader.
 		/// </summary>
 		/// <param name="reader">The reader to read From.</param>
 		/// <param name="index">The index type to read.</param>
@@ -347,7 +347,7 @@ namespace Mosa.Runtime.Metadata {
 		}
 
 		/// <summary>
-		/// Read and decode an index value From the reader.
+		/// Read and decode an index value from the reader.
 		/// </summary>
 		/// <param name="reader">The reader to read From.</param>
 		/// <param name="table">The index type to read.</param>

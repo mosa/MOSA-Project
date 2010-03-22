@@ -321,7 +321,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			/* FIXME:
 			 * 
 			 * - Newobj is actually three things at once:
-			 *   - Find the type From the token
+			 *   - Find the type from the token
 			 *   - Allocate memory for the found type
 			 *   - Invoke the ctor with the arguments
 			 * - We're rewriting it exactly as specified above, e.g. first we find

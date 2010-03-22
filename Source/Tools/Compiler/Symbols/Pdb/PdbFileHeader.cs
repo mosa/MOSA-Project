@@ -73,7 +73,7 @@ namespace Mosa.Tools.Compiler.Symbols.Pdb
         #region Methods
 
         /// <summary>
-        /// Reads the PDB file _header From the given reader.
+        /// Reads the PDB file _header from the given reader.
         /// </summary>
         /// <param name="reader">The reader to read From.</param>
         /// <param name="header">The _header to populate.</param>

@@ -93,7 +93,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			base.Decode(ctx, decoder);
 
 			/*
-             * HACK: We need to remove the this parameter From the operand list, as it
+             * HACK: We need to remove the this parameter from the operand list, as it
              * is not available yet. It is implicitly created by newobj and appropriately
              * passed. So we do as if it doesn't exist. Upon instruction expansion a call
              * to the allocator is inserted and its result is the this pointer passed. This

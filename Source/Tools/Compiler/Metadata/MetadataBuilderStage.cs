@@ -241,7 +241,7 @@ namespace Mosa.Tools.Compiler.Metadata
         }
 
         /// <summary>
-        /// Retrieves the assembly linker From compiler.
+        /// Retrieves the assembly linker from compiler.
         /// </summary>
         /// <returns>The retrieved assembly linker.</returns>
         private IAssemblyLinker RetrieveAssemblyLinkerFromCompiler()

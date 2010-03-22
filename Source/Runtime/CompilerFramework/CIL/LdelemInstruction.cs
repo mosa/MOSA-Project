@@ -96,7 +96,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
             // Do we have a type?
             if (_typeRef == null)
             {
-                // No, retrieve a type reference From the immediate argument
+                // No, retrieve a type reference from the immediate argument
                 TokenTypes token;
                 decoder.Decode(out token);
                 throw new NotImplementedException();

@@ -34,7 +34,7 @@ namespace Mosa.Runtime.Linker.PE
 		#region Methods
 
         /// <summary>
-        /// Loads the IMAGE_DATA_DIRECTORY From the reader.
+        /// Loads the IMAGE_DATA_DIRECTORY from the reader.
         /// </summary>
         /// <param name="reader">The reader.</param>
 		public void Read(BinaryReader reader)

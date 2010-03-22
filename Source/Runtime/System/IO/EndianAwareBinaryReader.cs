@@ -118,7 +118,7 @@ namespace System.IO
         }
 
         /// <summary>
-        /// Reads the next available character From the stream and advances the stream appropriately
+        /// Reads the next available character from the stream and advances the stream appropriately
         /// </summary>
         /// <returns>The next available character, or -1 if none are available</returns>
         public override int Read()
@@ -127,12 +127,12 @@ namespace System.IO
         }
 
         /// <summary>
-        /// Reads the given number of bytes From the underlying stream into the given buffer
+        /// Reads the given number of bytes from the underlying stream into the given buffer
         /// at the given index
         /// </summary>
         /// <param name="buffer">The buffer to read data into</param>
         /// <param name="index">The index within the buffer to begin writing into</param>
-        /// <param name="count">The number of bytes to read From the underlying stream</param>
+        /// <param name="count">The number of bytes to read from the underlying stream</param>
         /// <returns>The actual number of bytes written into the buffer</returns>
         public override int Read(byte[] buffer, int index, int count)
         {
@@ -140,12 +140,12 @@ namespace System.IO
         }
 
         /// <summary>
-        /// Reads the given number of characters From the underlying stream into the given buffer
+        /// Reads the given number of characters from the underlying stream into the given buffer
         /// at the given index
         /// </summary>
         /// <param name="buffer">The buffer to read data into</param>
         /// <param name="index">The index within the buffer to begin writing into</param>
-        /// <param name="count">The number of characters to read From the underlying stream</param>
+        /// <param name="count">The number of characters to read from the underlying stream</param>
         /// <returns>The actual number of characters written into the buffer</returns>
         public override int Read(char[] buffer, int index, int count)
         {
@@ -153,16 +153,16 @@ namespace System.IO
         }
 
         /// <summary>
-        /// Reads a boolean From the stream in the form of a single byte
+        /// Reads a boolean from the stream in the form of a single byte
         /// </summary>
-        /// <returns>The boolean value read From the stream</returns>
+        /// <returns>The boolean value read from the stream</returns>
         public override bool ReadBoolean()
         {
             return base.ReadBoolean();
         }
 
         /// <summary>
-        /// Reads a single byte From the stream
+        /// Reads a single byte from the stream
         /// </summary>
         /// <returns>The byte that was read</returns>
         public override byte ReadByte()
@@ -171,38 +171,38 @@ namespace System.IO
         }
 
         /// <summary>
-        /// Reads the given number of bytes From the stream
+        /// Reads the given number of bytes from the stream
         /// </summary>
-        /// <param name="count">The number of bytes to read From the stream</param>
-        /// <returns>A byte array containing the bytes read From the stream</returns>
+        /// <param name="count">The number of bytes to read from the stream</param>
+        /// <returns>A byte array containing the bytes read from the stream</returns>
         public override byte[] ReadBytes(int count)
         {
             return base.ReadBytes(count);
         }
 
         /// <summary>
-        /// Reads a single character From the stream
+        /// Reads a single character from the stream
         /// </summary>
-        /// <returns>The character read From the stream</returns>
+        /// <returns>The character read from the stream</returns>
         public override char ReadChar()
         {
             return base.ReadChar();
         }
 
         /// <summary>
-        /// Reads the given number of characters From the stream
+        /// Reads the given number of characters from the stream
         /// </summary>
-        /// <param name="count">The number of characters to read From the stream</param>
-        /// <returns>An array of characters read From the stream</returns>
+        /// <param name="count">The number of characters to read from the stream</param>
+        /// <returns>An array of characters read from the stream</returns>
         public override char[] ReadChars(int count)
         {
             return base.ReadChars(count);
         }
 
         /// <summary>
-        /// Reads a decimal value From the stream
+        /// Reads a decimal value from the stream
         /// </summary>
-        /// <returns>The decimal value read From the stream</returns>
+        /// <returns>The decimal value read from the stream</returns>
         public override decimal ReadDecimal()
         {
             // NOTE: I couldn't find a reason this needs to be effected by Endianness (BMarkham 1/13/09)
@@ -210,9 +210,9 @@ namespace System.IO
         }
 
         /// <summary>
-        /// Reads a double-precision floating point value From the stream
+        /// Reads a double-precision floating point value from the stream
         /// </summary>
-        /// <returns>The System.Double that was read From the stream</returns>
+        /// <returns>The System.Double that was read from the stream</returns>
         public override double ReadDouble()
         {
             const int bytesInDouble = 8;
@@ -220,45 +220,45 @@ namespace System.IO
         }
 
         /// <summary>
-        /// Reads a System.Int16 From the stream
+        /// Reads a System.Int16 from the stream
         /// </summary>
-        /// <returns>The System.Int16 read From the stream</returns>
+        /// <returns>The System.Int16 read from the stream</returns>
         public override short ReadInt16()
         {
             return _DataConverter.GetInt16(base.ReadBytes(2), 0);
         }
 
         /// <summary>
-        /// Reads a System.Int32 From the stream
+        /// Reads a System.Int32 from the stream
         /// </summary>
-        /// <returns>The System.Int32 read From the stream</returns>
+        /// <returns>The System.Int32 read from the stream</returns>
         public override int ReadInt32()
         {
             return _DataConverter.GetInt32(base.ReadBytes(4), 0);
         }
 
         /// <summary>
-        /// Reads a System.Int64 From the stream
+        /// Reads a System.Int64 from the stream
         /// </summary>
-        /// <returns>The System.Int64 read From the stream</returns>
+        /// <returns>The System.Int64 read from the stream</returns>
         public override long ReadInt64()
         {
             return _DataConverter.GetInt64(base.ReadBytes(8), 0);
         }
 
         /// <summary>
-        /// Reads a System.SByte From the stream
+        /// Reads a System.SByte from the stream
         /// </summary>
-        /// <returns>The System.SByte read From the stream</returns>
+        /// <returns>The System.SByte read from the stream</returns>
         public override sbyte ReadSByte()
         {
             return base.ReadSByte();
         }
 
         /// <summary>
-        /// Reads a System.Single From the stream
+        /// Reads a System.Single from the stream
         /// </summary>
-        /// <returns>The System.Single read From the stream</returns>
+        /// <returns>The System.Single read from the stream</returns>
         public override float ReadSingle()
         {
             const int bytesInFloat = 4;
@@ -266,36 +266,36 @@ namespace System.IO
         }
 
         /// <summary>
-        /// Reads a length-prefixed string From the stream
+        /// Reads a length-prefixed string from the stream
         /// </summary>
-        /// <returns>The string read From the stream</returns>
+        /// <returns>The string read from the stream</returns>
         public override string ReadString()
         {
             return base.ReadString();
         }
 
         /// <summary>
-        /// Reads a System.UInt16 From the stream
+        /// Reads a System.UInt16 from the stream
         /// </summary>
-        /// <returns>The System.UInt16 read From the stream</returns>
+        /// <returns>The System.UInt16 read from the stream</returns>
         public override ushort ReadUInt16()
         {
             return _DataConverter.GetUInt16(base.ReadBytes(2), 0);
         }
 
         /// <summary>
-        /// Reads a System.UInt32 From the stream
+        /// Reads a System.UInt32 from the stream
         /// </summary>
-        /// <returns>The System.UInt32 read From the stream</returns>
+        /// <returns>The System.UInt32 read from the stream</returns>
         public override uint ReadUInt32()
         {
             return _DataConverter.GetUInt32(base.ReadBytes(4), 0);
         }
 
         /// <summary>
-        /// Reads a System.UInt64 From the stream
+        /// Reads a System.UInt64 from the stream
         /// </summary>
-        /// <returns>The System.UInt64 read From the stream</returns>
+        /// <returns>The System.UInt64 read from the stream</returns>
         public override ulong ReadUInt64()
         {
             return _DataConverter.GetUInt64(base.ReadBytes(8), 0);

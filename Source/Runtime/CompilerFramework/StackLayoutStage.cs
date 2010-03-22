@@ -67,7 +67,7 @@ namespace Mosa.Runtime.CompilerFramework
 			ICallingConvention cc = Architecture.GetCallingConvention(MethodCompiler.Method.Signature.CallingConvention);
 			Debug.Assert(null != cc, @"Failed to retrieve the calling convention of the method.");
 
-			// Iterate all Blocks and collect locals From all Blocks
+			// Iterate all Blocks and collect locals from all Blocks
 			foreach (BasicBlock block in BasicBlocks)
 				CollectLocalVariables(locals, block);
 

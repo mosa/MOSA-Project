@@ -58,7 +58,7 @@ namespace Mosa.Runtime.Vm
         /// </summary>
         /// <remarks>
         /// The memcpy method is similar to the memcpy function in C runtime libraries. It copies the
-        /// specified number of bytes From a source to a destination block.
+        /// specified number of bytes from a source to a destination block.
         /// </remarks>
         Memcpy,
 

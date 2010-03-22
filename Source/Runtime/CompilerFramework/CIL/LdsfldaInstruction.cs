@@ -47,7 +47,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			// Decode base classes first
 			base.Decode(ctx, decoder);
 
-			// Read the _stackFrameIndex From the code
+			// Read the _stackFrameIndex from the code
 			TokenTypes token;
 			decoder.Decode(out token);
             RuntimeField field = RuntimeBase.Instance.TypeLoader.GetField (decoder.Method, decoder.Method.Module, token);

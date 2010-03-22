@@ -139,7 +139,7 @@ namespace System.IO
         }
 
         /// <summary>
-        /// Writes bytes From the given byte array to the underlying stream,
+        /// Writes bytes from the given byte array to the underlying stream,
         /// using the given source index and length for the source array
         /// </summary>
         /// <param name="buffer">An array of bytes containing the bytes to be written</param>
@@ -169,12 +169,12 @@ namespace System.IO
         }
 
         /// <summary>
-        /// Writes characters From the given character array to the stream, in their
+        /// Writes characters from the given character array to the stream, in their
         /// binary format
         /// </summary>
         /// <param name="chars">The character array containing the characters to write</param>
         /// <param name="index">The starting index of the characters to write</param>
-        /// <param name="count">The number of characters From the source array to write</param>
+        /// <param name="count">The number of characters from the source array to write</param>
         public override void Write(char[] chars, int index, int count)
         {
             base.Write(this.AssumedEffectiveEncoding.GetBytes(chars, index, count));

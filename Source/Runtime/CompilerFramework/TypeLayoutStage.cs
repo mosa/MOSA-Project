@@ -147,7 +147,7 @@ namespace Mosa.Runtime.CompilerFramework
 					CreateStaticField(field);
 				}
 				else {
-					// Explicit layout assigns a physical offset From the start of the structure
+					// Explicit layout assigns a physical offset from the start of the structure
 					// to the field. We just assign this offset.
 					Debug.Assert(field.Address.ToInt64() != 0, @"Non-static field doesn't have layout!");
 				}

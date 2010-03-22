@@ -7,7 +7,7 @@ using System.IO;
 namespace Mosa.Tools.Compiler.Symbols.Pdb 
 {
 	/// <summary>
-	/// Wraps a stream to prevent it From being disposed by a reader/writer.
+	/// Wraps a stream to prevent it from being disposed by a reader/writer.
 	/// </summary>
 	class CvStream : Stream 
 	{
@@ -117,7 +117,7 @@ namespace Mosa.Tools.Compiler.Symbols.Pdb
 		/// A long value representing the length of the stream in bytes.
 		/// </returns>
 		/// <exception cref="T:System.NotSupportedException">
-		/// A class derived From Stream does not support seeking.
+		/// A class derived from Stream does not support seeking.
 		/// </exception>
 		/// <exception cref="T:System.ObjectDisposedException">
 		/// Methods were called after the stream was closed.
@@ -162,11 +162,11 @@ namespace Mosa.Tools.Compiler.Symbols.Pdb
 		}
 
 		/// <summary>
-		/// When overridden in a derived class, reads a sequence of bytes From the current stream and advances the position within the stream by the number of bytes read.
+		/// When overridden in a derived class, reads a sequence of bytes from the current stream and advances the position within the stream by the number of bytes read.
 		/// </summary>
-		/// <param name="buffer">An array of bytes. When this method returns, the buffer contains the specified byte array with the values between <paramref name="offset"/> and (<paramref name="offset"/> + <paramref name="count"/> - 1) replaced by the bytes read From the current source.</param>
-		/// <param name="offset">The zero-based byte offset in <paramref name="buffer"/> at which to begin storing the data read From the current stream.</param>
-		/// <param name="count">The maximum number of bytes to be read From the current stream.</param>
+		/// <param name="buffer">An array of bytes. When this method returns, the buffer contains the specified byte array with the values between <paramref name="offset"/> and (<paramref name="offset"/> + <paramref name="count"/> - 1) replaced by the bytes read from the current source.</param>
+		/// <param name="offset">The zero-based byte offset in <paramref name="buffer"/> at which to begin storing the data read from the current stream.</param>
+		/// <param name="count">The maximum number of bytes to be read from the current stream.</param>
 		/// <returns>
 		/// The total number of bytes read into the buffer. This can be less than the number of bytes requested if that many bytes are not currently available, or zero (0) if the end of the stream has been reached.
 		/// </returns>
@@ -206,7 +206,7 @@ namespace Mosa.Tools.Compiler.Symbols.Pdb
 		/// An I/O error occurs.
 		/// </exception>
 		/// <exception cref="T:System.NotSupportedException">
-		/// The stream does not support seeking, such as if the stream is constructed From a pipe or console output.
+		/// The stream does not support seeking, such as if the stream is constructed from a pipe or console output.
 		/// </exception>
 		/// <exception cref="T:System.ObjectDisposedException">
 		/// Methods were called after the stream was closed.
@@ -225,7 +225,7 @@ namespace Mosa.Tools.Compiler.Symbols.Pdb
 		/// An I/O error occurs.
 		/// </exception>
 		/// <exception cref="T:System.NotSupportedException">
-		/// The stream does not support both writing and seeking, such as if the stream is constructed From a pipe or console output.
+		/// The stream does not support both writing and seeking, such as if the stream is constructed from a pipe or console output.
 		/// </exception>
 		/// <exception cref="T:System.ObjectDisposedException">
 		/// Methods were called after the stream was closed.
@@ -239,7 +239,7 @@ namespace Mosa.Tools.Compiler.Symbols.Pdb
 		/// <summary>
 		/// When overridden in a derived class, writes a sequence of bytes to the current stream and advances the current position within this stream by the number of bytes written.
 		/// </summary>
-		/// <param name="buffer">An array of bytes. This method copies <paramref name="count"/> bytes From <paramref name="buffer"/> to the current stream.</param>
+		/// <param name="buffer">An array of bytes. This method copies <paramref name="count"/> bytes from <paramref name="buffer"/> to the current stream.</param>
 		/// <param name="offset">The zero-based byte offset in <paramref name="buffer"/> at which to begin copying bytes to the current stream.</param>
 		/// <param name="count">The number of bytes to be written to the current stream.</param>
 		/// <exception cref="T:System.ArgumentException">

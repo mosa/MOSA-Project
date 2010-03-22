@@ -60,7 +60,7 @@ namespace Mosa.Runtime.Metadata.Blobs
 			// The blob data
 			byte[] blob = null;
 
-			// Try to load the blob From the module
+			// Try to load the blob from the module
 			module.Metadata.Read(attributeBlob, out blob);
 			if (null != blob) {
 				if (0 != blob.Length) {
@@ -143,7 +143,7 @@ namespace Mosa.Runtime.Metadata.Blobs
 		/// Parses an SZArray attribute value.
 		/// </summary>
 		/// <param name="module">The metadata module, which contains the attribute blob.</param>
-		/// <param name="reader">The binary reader used to read From the attribute blob.</param>
+		/// <param name="reader">The binary reader used to read from the attribute blob.</param>
 		/// <param name="sigType">Type of the SZArray.</param>
 		/// <returns>An Array, which represents the SZArray definition.</returns>
 		private static object ParseSZArrayArg(IMetadataModule module, BinaryReader reader, SZArraySigType sigType)
@@ -174,7 +174,7 @@ namespace Mosa.Runtime.Metadata.Blobs
 		/// <param name="module">The metadata module, which contains the attribute blob.</param>
 		/// <param name="reader">The binary reader to read data From.</param>
 		/// <param name="sigType">The signature type of the field, parameter or property to read.</param>
-		/// <returns>An object, which represents the value read From the attribute blob.</returns>
+		/// <returns>An object, which represents the value read from the attribute blob.</returns>
 		/// <exception cref="System.NotSupportedException"><paramref name="sigType"/> is not yet supported.</exception>
 		private static object ParseElem(IMetadataModule module, BinaryReader reader, SigType sigType)
 		{
@@ -303,7 +303,7 @@ namespace Mosa.Runtime.Metadata.Blobs
 		}
 
 		/// <summary>
-		/// Gets the type From the signature type.
+		/// Gets the type from the signature type.
 		/// </summary>
 		/// <param name="sigType">The signature type.</param>
 		/// <returns>The System.Type represented by the signature type.</returns>

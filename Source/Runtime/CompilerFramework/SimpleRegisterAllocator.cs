@@ -277,7 +277,7 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
-		/// Allocates a free register From the given register set.
+		/// Allocates a free register from the given register set.
 		/// </summary>
 		/// <param name="regs">The regs.</param>
 		/// <param name="op">The res.</param>
@@ -302,7 +302,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="ctx">The context.</param>
 		/// <param name="type">The signature type of the resulting operand.</param>
 		/// <param name="regs">The instruction compatible subset of the register set.</param>
-		/// <returns>A register From the given set.</returns>
+		/// <returns>A register from the given set.</returns>
 		private RegisterOperand SpillRegister(Context ctx, SigType type, Register[] regs)
 		{
 			// FIXME: Find the oldest reg from the set. Always use the oldest one.

@@ -39,7 +39,7 @@ namespace Mosa.Runtime.CompilerFramework.Operands
 		/// </summary>
 		/// <param name="type">The signature type of the operand data.</param>
 		/// <param name="baseRegister">The base register for label offsets.</param>
-		/// <param name="offset">The default offset From the base register.</param>
+		/// <param name="offset">The default offset from the base register.</param>
 		/// <param name="label">The additional offset as indicated by a label.</param>
 		public LabelOperand(SigType type, Register baseRegister, int offset, int label) :
 			base(type, baseRegister, new IntPtr(offset))

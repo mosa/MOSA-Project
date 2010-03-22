@@ -47,7 +47,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			base.Decode(ctx, decoder);
 
 			TokenTypes token;
-			// Retrieve the token From the code stream
+			// Retrieve the token from the code stream
 			decoder.Decode(out token);
 
 			ctx.Token = token;

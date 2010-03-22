@@ -43,7 +43,7 @@ namespace Pictor.Transform
            tx =(m[6]); ty =(m[7]); w2=(m[8]);
         }
 
-        // From affine
+        // from affine
         public Perspective(Affine a)
         {
             sx = (a.sx); shy = (a.shy); w0 = (0);
@@ -51,7 +51,7 @@ namespace Pictor.Transform
             tx = (a.tx); ty = (a.ty); w2 = (1);
         }
 
-        // From trans_perspective
+        // from trans_perspective
         public Perspective(Perspective a)
         {
             sx = (a.sx); shy = (a.shy); w0 = a.w0;

@@ -60,7 +60,7 @@ namespace Mosa.Runtime.CompilerFramework.Operands
         }
 
         /// <summary>
-        /// Retrieves the offset From the base register, or the absolute address if base is null.
+        /// Retrieves the offset from the base register, or the absolute address if base is null.
         /// </summary>
         public IntPtr Offset
         {

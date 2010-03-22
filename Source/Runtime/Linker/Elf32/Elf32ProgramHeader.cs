@@ -11,7 +11,7 @@ namespace Mosa.Runtime.Linker.Elf32
         /// </summary>
         public Elf32ProgramHeaderType Type;
         /// <summary>
-        /// This member gives the offset From the beginning of the file at which the first byte 
+        /// This member gives the offset from the beginning of the file at which the first byte 
         /// of the segment resides.
         /// </summary>
         public uint Offset;

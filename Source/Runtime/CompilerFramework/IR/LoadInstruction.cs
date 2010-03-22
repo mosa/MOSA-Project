@@ -16,7 +16,7 @@ using System.Diagnostics;
 namespace Mosa.Runtime.CompilerFramework.IR
 {
     /// <summary>
-    /// Loads a value From a memory pointer.
+    /// Loads a value from a memory pointer.
     /// </summary>
     /// <remarks>
     /// The load instruction is used to load a value From
