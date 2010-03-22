@@ -86,6 +86,14 @@ namespace Mosa.Runtime.CompilerFramework
 		Operand CreateResultOperand(SigType type, int label, int index);
 
 		/// <summary>
+		/// Factory method for virtual registers.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <param name="index">The index.</param>
+		/// <returns></returns>
+		Operand CreateVirtualRegister(SigType type, int index);
+
+		/// <summary>
 		/// Gets the type memory requirements.
 		/// </summary>
 		/// <param name="type">The signature type.</param>

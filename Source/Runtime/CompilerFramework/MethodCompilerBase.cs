@@ -26,7 +26,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// </summary>
 	/// <remarks>
 	/// A _method compiler is responsible for compiling a single function
-	/// of an object. There are various classes derived From MethodCompilerBase,
+	/// of an object. There are various classes derived from MethodCompilerBase,
 	/// which provide specific features, such as jit compilation, runtime
 	/// optimized jitting and others. MethodCompilerBase instances are usually
 	/// created by invoking CreateMethodCompiler on a specific compiler
@@ -77,6 +77,11 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Holds the next free stack slot index.
 		/// </summary>
 		protected int _nextStackSlot;
+
+		/// <summary>
+		/// Holds the next virtual register slot
+		/// </summary>
+		protected int _nextVirtualRegisterSlot;
 
 		/// <summary>
 		/// Holds the _type, which owns the _method.
@@ -244,6 +249,16 @@ namespace Mosa.Runtime.CompilerFramework
 				return _architecture.CreateResultOperand(type, _nextStackSlot, _nextStackSlot++);
 			}
 			return CreateTemporary(type);
+		}
+
+		/// <summary>
+		/// Creates a virtual register operand for an instruction.
+		/// </summary>
+		/// <param name="type">The signature type of the operand to be created.</param>
+		/// <returns>A new virtual register operand.</returns>
+		public Operand CreateVirtualRegister(SigType type)
+		{
+			return _architecture.CreateVirtualRegister(type, _nextVirtualRegisterSlot++);
 		}
 
 		/// <summary>
@@ -441,7 +456,7 @@ namespace Mosa.Runtime.CompilerFramework
 		#region IBasicBlockProvider members
 
 		/// <summary>
-		/// Retrieves a basic block From its label.
+		/// Retrieves a basic block from its label.
 		/// </summary>
 		/// <param name="label">The label of the basic block.</param>
 		/// <returns>

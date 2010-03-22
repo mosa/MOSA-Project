@@ -113,6 +113,17 @@ namespace Mosa.Runtime.CompilerFramework
         }
 
 		/// <summary>
+		/// Factory method for virtual registers.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <param name="index">The index.</param>
+		/// <returns></returns>
+		public Operand CreateVirtualRegister(SigType type, int index)
+		{
+			return new VirtualRegisterOperand(type, index);
+		}
+
+		/// <summary>
 		/// Gets the intrinsics instruction by type
 		/// </summary>
 		/// <param name="type">The type.</param>
