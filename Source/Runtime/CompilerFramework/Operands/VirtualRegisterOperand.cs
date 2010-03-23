@@ -26,11 +26,11 @@ namespace Mosa.Runtime.CompilerFramework.Operands
 
         #region Construction
 
-        /// <summary>
-        /// Initializes a new <see cref="RegisterOperand"/>.
-        /// </summary>
-        /// <param name="type">The signature type of the value the register holds.</param>
-        /// <param name="register">The machine specific register used.</param>
+		/// <summary>
+		/// Initializes a new instance of the <see cref="VirtualRegisterOperand"/> class.
+		/// </summary>
+		/// <param name="type">The signature type of the value the register holds.</param>
+		/// <param name="index">The index.</param>
 		public VirtualRegisterOperand(SigType type, int index) :
             base(type)
         {
