@@ -113,11 +113,11 @@ namespace Mosa.Runtime.CompilerFramework {
 		#region Stream Overrides
 
         /// <summary>
-        /// Ruft beim Überschreiben in einer abgeleiteten Klasse einen Wert ab, der angibt, ob der aktuelle Stream Lesevorgänge unterstützt.
+		/// Returns true if the current stream is able to read
         /// </summary>
         /// <value></value>
         /// <returns>
-        /// true, wenn der Stream Lesevorgänge unterstützt, andernfalls false.
+		/// True if the current stream is able to read, false otherwise
         /// </returns>
 		public override bool CanRead
 		{
@@ -125,11 +125,11 @@ namespace Mosa.Runtime.CompilerFramework {
 		}
 
         /// <summary>
-        /// Ruft beim Überschreiben in einer abgeleiteten Klasse einen Wert ab, der angibt, ob der aktuelle Stream Suchvorgänge unterstützt.
+		/// Returns true if the current stream is able to seek
         /// </summary>
         /// <value></value>
         /// <returns>
-        /// true, wenn der Stream Suchvorgänge unterstützt, andernfalls false.
+		/// Returns true if the current stream is able to seek
         /// </returns>
 		public override bool CanSeek
 		{
@@ -160,17 +160,17 @@ namespace Mosa.Runtime.CompilerFramework {
 		}
 
         /// <summary>
-        /// Ruft beim Überschreiben in einer abgeleiteten Klasse die Länge des Streams in Bytes ab.
+		/// Gets the stream's length in bytes.
         /// </summary>
         /// <value></value>
         /// <returns>
-        /// Ein Long-Wert, der die Länge des Streams in Bytes darstellt.
+		/// The stream's length in bytes.
         /// </returns>
         /// <exception cref="T:System.NotSupportedException">
-        /// Eine aus Stream abgeleitete Klasse unterstützt keine Suchvorgänge.
+		/// A class derived from Stream does not support searching.
         /// </exception>
         /// <exception cref="T:System.ObjectDisposedException">
-        /// Es wurden Methoden aufgerufen, nachdem der Stream geschlossen wurde.
+		/// Methods have been called after the stream has been closed.
         /// </exception>
 		public override long Length
 		{
@@ -178,20 +178,20 @@ namespace Mosa.Runtime.CompilerFramework {
 		}
 
         /// <summary>
-        /// Ruft beim Überschreiben in einer abgeleiteten Klasse die Position im aktuellen Stream ab oder legt diese fest.
+		/// Gets the stream's current position or sets it.
         /// </summary>
         /// <value></value>
         /// <returns>
-        /// Die aktuelle Position innerhalb des Streams.
+        /// The current position in the stream.
         /// </returns>
         /// <exception cref="T:System.IO.IOException">
-        /// Ein E/A-Fehler tritt auf.
+        /// IOException
         /// </exception>
         /// <exception cref="T:System.NotSupportedException">
-        /// Der Stream unterstützt keine Suchvorgänge.
+        /// The stream does not support searching.
         /// </exception>
         /// <exception cref="T:System.ObjectDisposedException">
-        /// Es wurden Methoden aufgerufen, nachdem der Stream geschlossen wurde.
+		/// Methods have been called after the stream has been closed.
         /// </exception>
 		public override long Position
 		{
