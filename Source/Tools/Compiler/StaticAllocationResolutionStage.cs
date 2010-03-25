@@ -80,7 +80,7 @@ namespace Mosa.Tools.Compiler
             allocation.ReplaceInstructionOnly(Instruction.Get(OpCode.Call));
         }
 
-        private Operand InsertLoadBeforeInstruction(Context context, string symbolName, SigType type)
+        private static Operand InsertLoadBeforeInstruction(Context context, string symbolName, SigType type)
         {
             Context before = context.InsertBefore();
             Operand op = new SymbolOperand(type, symbolName);
@@ -108,7 +108,7 @@ namespace Mosa.Tools.Compiler
 			}
 		}
 		
-		private Context SeekAssignmentOfAllocatedObject(Context allocation)
+		private static Context SeekAssignmentOfAllocatedObject(Context allocation)
 		{
             Context next = allocation.Next;
             if (next.EndOfInstruction == true || !(next.Instruction is StsfldInstruction))
@@ -119,7 +119,7 @@ namespace Mosa.Tools.Compiler
             return next;
 		}
 		
-		private bool CheckAssignmentForCompliance(Context allocation, Context assignment)
+		private static bool CheckAssignmentForCompliance(Context allocation, Context assignment)
 		{
 			// Only direct assignment without any casts is compliant. We can't perform casts or anything alike here,
 			// as that is hard to complete at this point of time.
