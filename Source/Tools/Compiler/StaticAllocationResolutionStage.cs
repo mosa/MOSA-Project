@@ -42,9 +42,9 @@ namespace Mosa.Tools.Compiler
 		{
 			foreach (Context allocation in this.ScanForOperatorNew())
 			{
-				Context assignment = this.SeekAssignmentOfAllocatedObject(allocation);
+				Context assignment = SeekAssignmentOfAllocatedObject(allocation);
 				
-				if (assignment != null && this.CheckAssignmentForCompliance(allocation, assignment))
+				if (assignment != null && CheckAssignmentForCompliance(allocation, assignment))
 				{
 					Debug.WriteLine(@"StaticAllocationResolutionStage: Static allocation of object possible.");
                     this.PerformStaticAllocationOf(allocation, assignment);
