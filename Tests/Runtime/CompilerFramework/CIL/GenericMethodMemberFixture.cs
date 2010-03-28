@@ -34,7 +34,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
                     {
                         return value == GenericMethod(value);
                     }
-                }";
+                }" + Code.ObjectClassDefinition;
         }
 
         private delegate bool B_B(bool value);

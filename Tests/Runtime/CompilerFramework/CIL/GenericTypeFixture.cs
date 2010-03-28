@@ -15,7 +15,6 @@ using MbUnit.Framework;
 namespace Test.Mosa.Runtime.CompilerFramework
 {
     [TestFixture]
-    [Parallelizable]
 	public class GenericTypeFixture : CodeDomTestRunner
 	{
         private static string CreateTestCode(string type)
@@ -35,7 +34,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
                     {
                         return value == GenericType<" + type + @">.StaticMethodInGenericType(value);
                     }
-                }";
+                }" + Code.ObjectClassDefinition;
         }
 
         private delegate bool B_B(bool value);

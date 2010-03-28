@@ -115,7 +115,7 @@ namespace Mosa.Runtime.Linker
 				sb.AppendLine(@"Unresolved symbols:");
 				foreach (string member in _linkRequests.Keys)
 				{
-					sb.AppendFormat("\t{0}", member);
+					sb.AppendFormat("\t{0}\r\n", member);
 				}
 				
 				throw new LinkerException(sb.ToString());
@@ -336,8 +336,9 @@ namespace Mosa.Runtime.Linker
 			if (!IsValid(target))
 				throw new ArgumentException(@"RuntimeMember is not a static field or method.", @"member");
 
-            string symbolName = CreateSymbolName(target);
-			return Link(linkType, method, methodOffset, methodRelativeBase, symbolName, offset);
+            string symbolName = this.CreateSymbolName(method);
+            string targetSymbolName = CreateSymbolName(target);
+            return this.Link(linkType, symbolName, methodOffset, methodRelativeBase, targetSymbolName, offset);
 		}
 
 		/// <summary>
@@ -347,43 +348,44 @@ namespace Mosa.Runtime.Linker
 		/// <param name="method">The method the patched code belongs to.</param>
 		/// <param name="methodOffset">The offset inside the method where the patch is placed.</param>
 		/// <param name="methodRelativeBase">The base virtualAddress, if a relative link is required.</param>
-		/// <param name="symbol">The linker symbol to link against.</param>
+		/// <param name="targetSymbolName">The linker symbol to link against.</param>
 		/// <param name="offset">The offset to apply to the symbol to link against.</param>
 		/// <returns>
 		/// The return value is the preliminary virtualAddress to place in the generated machine
 		/// code. On 32-bit systems, only the lower 32 bits are valid. The above are not used. An implementation of
 		/// IAssemblyLinker may not rely on 64-bits being stored in the memory defined by position.
 		/// </returns>
-		public virtual long Link(LinkType linkType, RuntimeMethod method, int methodOffset, int methodRelativeBase, string symbol, IntPtr offset)
+		public virtual long Link(LinkType linkType, RuntimeMethod method, int methodOffset, int methodRelativeBase, string targetSymbolName, IntPtr offset)
 		{
-			Debug.Assert(null != symbol, @"Symbol can't be null.");
-			if (null == symbol)
+			Debug.Assert(null != targetSymbolName, @"Symbol can't be null.");
+			if (null == targetSymbolName)
 				throw new ArgumentNullException(@"symbol");
 
-			long result = 0;
-			if (IsResolved(symbol, out result)) {
-				List<LinkRequest> patchList;
-				if (!_linkRequests.TryGetValue(symbol, out patchList)) {
-					patchList = new List<LinkRequest>(1);
-					patchList.Add(new LinkRequest(linkType, CreateSymbolName(method), methodOffset, methodRelativeBase, symbol, offset));
-				}
-
-				PatchRequests(result, patchList);
-				result += offset.ToInt64();
-			}
-			else {
-				// FIXME: Make this thread safe
-				List<LinkRequest> list;
-				if (!_linkRequests.TryGetValue(symbol, out list)) {
-					list = new List<LinkRequest>();
-					_linkRequests.Add(symbol, list);
-				}
-
-				list.Add(new LinkRequest(linkType, CreateSymbolName(method), methodOffset, methodRelativeBase, symbol, offset));
-			}
-
-			return result;
+            string symbolName = this.CreateSymbolName(method);
+			return this.Link(linkType, symbolName, methodOffset, methodRelativeBase, targetSymbolName, offset);
 		}
+
+        /// <summary>
+        /// Issues a linker request for the given runtime method.
+        /// </summary>
+        /// <param name="linkType">The type of link required.</param>
+        /// <param name="symbolName">The method the patched code belongs to.</param>
+        /// <param name="methodOffset">The offset inside the method where the patch is placed.</param>
+        /// <param name="methodRelativeBase">The base virtualAddress, if a relative link is required.</param>
+        /// <param name="target">The method or static field to link against.</param>
+        /// <param name="offset">An offset to apply to the link target.</param>
+        public virtual long Link(LinkType linkType, string symbolName, int methodOffset, int methodRelativeBase, RuntimeMember target, IntPtr offset)
+        {
+            Debug.Assert(IsValid(target), @"Invalid RuntimeMember passed to IAssemblyLinker.Link");
+            if (!IsValid(target))
+                throw new ArgumentException(@"RuntimeMember is not a static field or method.", @"member");
+            Debug.Assert(null != symbolName, @"Symbol can't be null.");
+            if (null == symbolName)
+                throw new ArgumentNullException(@"symbol");
+
+            string targetSymbolName = CreateSymbolName(target);
+            return Link(linkType, symbolName, methodOffset, methodRelativeBase, targetSymbolName, offset);
+        }
 
 		/// <summary>
 		/// Issues a linker request for the given runtime method.
@@ -405,29 +407,15 @@ namespace Mosa.Runtime.Linker
 			if (null == symbolName)
 				throw new ArgumentNullException(@"symbol");
 
-			long result = 0;
-			if (IsResolved(symbolName, out result)) {
-				List<LinkRequest> patchList;
-				if (!_linkRequests.TryGetValue(targetSymbol, out patchList)) {
-					patchList = new List<LinkRequest>(1);
-					patchList.Add(new LinkRequest(linkType, symbolName, methodOffset, methodRelativeBase, targetSymbol, offset));
-				}
-
-				PatchRequests(result, patchList);
-				result += offset.ToInt64();
-			}
-			else {
-				// FIXME: Make this thread safe
-				List<LinkRequest> list;
-				if (!_linkRequests.TryGetValue(targetSymbol, out list)) {
-					list = new List<LinkRequest>();
-					_linkRequests.Add(targetSymbol, list);
-				}
-
-				list.Add(new LinkRequest(linkType, symbolName, methodOffset, methodRelativeBase, targetSymbol, offset));
+			List<LinkRequest> list;
+			if (!_linkRequests.TryGetValue(targetSymbol, out list)) {
+				list = new List<LinkRequest>();
+				_linkRequests.Add(targetSymbol, list);
 			}
 
-			return result;
+			list.Add(new LinkRequest(linkType, symbolName, methodOffset, methodRelativeBase, targetSymbol, offset));
+
+			return 0;
 		}
 
 		#endregion // IAssemblyLinker Members

@@ -29,6 +29,8 @@ namespace Mosa.Tools.Compiler
         /// </summary>
         private string name;
 
+        private MethodSignature signature;
+
         #endregion // Data Members
 
         #region Construction
@@ -46,6 +48,7 @@ namespace Mosa.Tools.Compiler
                 throw new ArgumentNullException(@"name");
 
             this.name = name;
+            this.signature = new MethodSignature(new SigType(CilElementType.Void), new SigType[0]);
             this.Parameters = new List<RuntimeParameter>();
         }
 
@@ -68,9 +71,14 @@ namespace Mosa.Tools.Compiler
         /// <returns>The method signature.</returns>
         protected override MethodSignature GetMethodSignature()
         {
-            return new MethodSignature(new SigType(CilElementType.Void), new SigType[0]);
+            return this.signature;
         }
 
         #endregion // RuntimeMethod Overrides
+
+        public void SetSignature(MethodSignature signature)
+        {
+            this.signature = signature;
+        }
     }
 }

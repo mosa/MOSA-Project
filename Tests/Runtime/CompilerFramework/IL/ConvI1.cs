@@ -45,7 +45,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
                     { 
                         return expect == (sbyte)a; 
                     } 
-                }";
+                }" + Code.ObjectClassDefinition;
             Assert.IsTrue((bool)Run<Native_ConvI1_I1>("", "Test", "ConvI1_I1", a, a));
         }
 
@@ -70,7 +70,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
                     { 
                         return expect == (sbyte)a; 
                     }
-                }";
+                }" + Code.ObjectClassDefinition;
             Assert.IsTrue((bool)Run<Native_ConvI1_I2>("", "Test", "ConvI1_I2", ((sbyte)a), a));
         }
 
@@ -95,7 +95,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
                     { 
                         return expect == (sbyte)a; 
                     } 
-                }";
+                }" + Code.ObjectClassDefinition;
             Assert.IsTrue((bool)Run<Native_ConvI1_I4>("", "Test", "ConvI1_I4", ((sbyte)a), a));
         }
 
@@ -120,7 +120,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
                     { 
                         return expect == (sbyte)a; 
                     } 
-                }";
+                }" + Code.ObjectClassDefinition;
             Assert.IsTrue((bool)Run<Native_ConvI1_I8>("", "Test", "ConvI1_I8", ((sbyte)a), a));
         }
 
@@ -145,7 +145,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
                     { 
                         return expect == (sbyte)a; 
                     } 
-                }";
+                }" + Code.ObjectClassDefinition;
             Assert.IsTrue((bool)Run<Native_ConvI1_R4>("", "Test", "ConvI1_R4", ((sbyte)a), a));
         }
 
@@ -170,7 +170,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
                     { 
                         return expect == (sbyte)a;
                     } 
-                }";
+                }" + Code.ObjectClassDefinition;
             Assert.IsTrue((bool)Run<Native_ConvI1_R8>("", "Test", "ConvI1_R8", ((sbyte)a), a));
         }
     }

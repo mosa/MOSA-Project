@@ -19,7 +19,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
                     return (value == s_fld);
                 }
             }
-        ";
+        " + Code.ObjectClassDefinition;
 
 
         private delegate bool B_B(bool value);

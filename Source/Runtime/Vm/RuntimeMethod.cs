@@ -57,6 +57,8 @@ namespace Mosa.Runtime.Vm
         /// </summary>
         private uint rva;
 
+        private int methodTableSlot;
+
         #endregion // Data members
 
         #region Construction
@@ -240,5 +242,18 @@ namespace Mosa.Runtime.Vm
         {
 			return this.DeclaringType.GetGenericTypeArgument(index);
         }
-	}
+
+        public int MethodTableSlot 
+        {
+            get
+            {
+                return this.methodTableSlot;
+            }
+
+            set
+            {
+                this.methodTableSlot = value;
+            }
+        }
+    }
 }

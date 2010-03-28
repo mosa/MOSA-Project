@@ -59,7 +59,13 @@ namespace Mosa.Runtime.CompilerFramework
 		
 		private void CompileType(RuntimeType type)
 		{
-			Console.WriteLine(@"Compiling type " + type.FullName);
+            if (type.IsDelegate)
+            {
+                Console.WriteLine(@"Skipping delegate type " + type);
+                return;
+            }
+
+            Console.WriteLine(@"Compiling type " + type.FullName);
             Debug.WriteLine(@"Compiling type " + type.FullName);
             foreach (RuntimeMethod method in type.Methods)
             {

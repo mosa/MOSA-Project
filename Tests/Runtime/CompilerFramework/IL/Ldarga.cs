@@ -51,7 +51,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
                     {
                         return expect == a;
                     }
-                }";
+                }" + Code.ObjectClassDefinition;
             Assert.IsTrue((bool)Run<I1_I1>("", "Test", "LdargaI1_CheckValue", a, a));
         }
 
@@ -82,7 +82,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
                     {
                         return expect == a;
                     }
-                }";
+                }" + Code.ObjectClassDefinition;
             Assert.IsTrue((bool)Run<U1_U1>("", "Test", "LdargaU1_CheckValue", a, a));
         }
 
@@ -113,7 +113,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
                     {
                         return expect == a;
                     }
-                }";
+                }" + Code.ObjectClassDefinition;
             Assert.IsTrue((bool)Run<I2_I2>("", "Test", "LdargaI2_CheckValue", a, a));
         }
 
@@ -144,7 +144,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
                     {
                         return expect == a;
                     }
-                }";
+                }" + Code.ObjectClassDefinition;
             Assert.IsTrue((bool)Run<U2_U2>("", "Test", "LdargaU2_CheckValue", a, a));
         }
         
@@ -175,7 +175,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
                     {
                         return expect == a;
                     }
-                }";
+                }" + Code.ObjectClassDefinition;
             Assert.IsTrue((bool)Run<I4_I4>("", "Test", "LdargaI4_CheckValue", a, a));
         }
 
@@ -206,7 +206,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
                     {
                         return expect == a;
                     }
-                }";
+                }" + Code.ObjectClassDefinition;
             Assert.IsTrue((bool)Run<U4_U4>("", "Test", "LdargaU4_CheckValue", a, a));
         }
 
@@ -237,7 +237,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
                     {
                         return expect == a;
                     }
-                }";
+                }" + Code.ObjectClassDefinition;
             Assert.IsTrue((bool)Run<I8_I8>("", "Test", "LdargaI8_CheckValue", a, a));
         }
 
@@ -268,7 +268,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
                     {
                         return expect == a;
                     }
-                }";
+                }" + Code.ObjectClassDefinition;
             Assert.IsTrue((bool)Run<U8_U8>("", "Test", "LdargaU8_CheckValue", a, a));
         }
         
@@ -299,7 +299,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
                     {
                         return expect == a;
                     }
-                }";
+                }" + Code.ObjectClassDefinition;
             Assert.IsTrue((bool)Run<R4_R4>("", "Test", "LdargaR4_CheckValue", a, a));
         }
 
@@ -330,7 +330,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
                     {
                         return expect == a;
                     }
-                }";
+                }" + Code.ObjectClassDefinition;
             Assert.IsTrue((bool)Run<R8_R8>("", "Test", "LdargaR8_CheckValue", a, a));
         }
         
@@ -368,7 +368,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
                     {
                         a = expect;
                     }
-                }";
+                }" + Code.ObjectClassDefinition;
             Assert.IsTrue((bool)Run<B_I1_I1>("", "Test", "LdargaI1_ChangeValue", newValue, oldValue));
         }
         
@@ -387,7 +387,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void LdargaI2_ChangeValue(short newValue, short oldValue)
         {
-            CodeSource = "static class Test { static void LdargaI2_ChangeValue(short value, ref short a) { a = value; } }";
+            CodeSource = "static class Test { static void LdargaI2_ChangeValue(short value, ref short a) { a = value; } }" + Code.ObjectClassDefinition;
             object[] args = new object[] { newValue, oldValue };
             Run<V_I2_I2>("", "Test", "LdargaI2_ChangeValue", args);
             Console.WriteLine("{0} {1} {2}", newValue, args[0], args[1]);
@@ -409,7 +409,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void LdargaI4_ChangeValue(int newValue, int oldValue)
         {
-            CodeSource = @"static class Test { static void LdargaI4_ChangeValue(int value, ref int a) { a = value; } }";
+            CodeSource = @"static class Test { static void LdargaI4_ChangeValue(int value, ref int a) { a = value; } }" + Code.ObjectClassDefinition;
             object[] args = new object[] { newValue, oldValue };
             Run<V_I4_I4>("", "Test", "LdargaI4_ChangeValue", args);
             Console.WriteLine("{0} {1} {2}", newValue, args[0], args[1]);
@@ -431,7 +431,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void LdargaI8_ChangeValue(long newValue, long oldValue)
         {
-            CodeSource = "static class Test { static void LdargaI8_ChangeValue(long value, ref long a) { a = value; } }";
+            CodeSource = "static class Test { static void LdargaI8_ChangeValue(long value, ref long a) { a = value; } }" + Code.ObjectClassDefinition;
             object[] args = new object[] { newValue, oldValue };
             Run<V_I8_I8>("", "Test", "LdargaI8_ChangeValue", args);
             Console.WriteLine("{0} {1} {2}", newValue, args[0], args[1]);
@@ -453,7 +453,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void LdargaR4_ChangeValue(float newValue, float oldValue)
         {
-            CodeSource = "static class Test { static void LdargaR4_ChangeValue(float value, ref float a) { a = value; } }";
+            CodeSource = "static class Test { static void LdargaR4_ChangeValue(float value, ref float a) { a = value; } }" + Code.ObjectClassDefinition;
             object[] args = new object[] { newValue, oldValue };
             Run<V_R4_R4>("", "Test", "LdargaR4_ChangeValue", args);
             Console.WriteLine("{0} {1} {2}", newValue, args[0], args[1]);
@@ -475,7 +475,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void LdargaR8_ChangeValue(double newValue, double oldValue)
         {
-            CodeSource = "static class Test { static void LdargaR8_ChangeValue(double value, ref double a) { a = value; } }";
+            CodeSource = "static class Test { static void LdargaR8_ChangeValue(double value, ref double a) { a = value; } }" + Code.ObjectClassDefinition;
             object[] args = new object[] { newValue, oldValue };
             Run<V_R8_R8>("", "Test", "LdargaR8_ChangeValue", args);
             Console.WriteLine("{0} {1} {2}", newValue, args[0], args[1]);

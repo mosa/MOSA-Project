@@ -65,6 +65,11 @@ namespace Mosa.Tools.Compiler
             using (var stream = this.linker.Allocate(symbolName, SectionKind.BSS, allocatedType.Size, 4))
             {
                 // FIXME: Do we have to initialize this?
+                string methodTableSymbol = this.GetMethodTableForType(allocatedType);
+                if (methodTableSymbol != null)
+                {
+                    this.linker.Link(LinkType.AbsoluteAddress | LinkType.I4, symbolName, 0, 0, methodTableSymbol, IntPtr.Zero);
+                }
             }
 
             // Issue a load request before the newobj and before the assignment.
@@ -78,6 +83,17 @@ namespace Mosa.Tools.Compiler
             allocation.OperandCount++;
             allocation.ResultCount = 0;
             allocation.ReplaceInstructionOnly(Instruction.Get(OpCode.Call));
+        }
+
+        private string GetMethodTableForType(RuntimeType allocatedType)
+        {
+            string result = null;
+            if (allocatedType.IsValueType == false)
+            {
+                result = allocatedType.FullName + @"$mtable";
+            }
+
+            return result;
         }
 
         private Operand InsertLoadBeforeInstruction(Context context, string symbolName, SigType type)

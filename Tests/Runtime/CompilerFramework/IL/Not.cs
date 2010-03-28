@@ -22,7 +22,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
     /// 
     /// </summary>
     [TestFixture]
-    public class Not : CodeDomTestRunner
+    public class NotFixture : CodeDomTestRunner
     {
         private static string CreateTestCode(string name, string typeIn, string typeOut)
         {
@@ -33,7 +33,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
                     {
                         return expect == (~a);
                     }
-                }";
+                }" + Code.ObjectClassDefinition;
         }
         
         #region C

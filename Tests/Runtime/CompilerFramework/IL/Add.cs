@@ -17,14 +17,12 @@ using Gallio.Framework;
 using MbUnit.Framework;
 using Test.Mosa.Runtime.CompilerFramework.BaseCode;
 
-[assembly: DegreeOfParallelism(2)]
 namespace Test.Mosa.Runtime.CompilerFramework.IL
 {
     /// <summary>
     /// Testcase for the AddInstruction
     /// </summary>
     [TestFixture]
-    [Parallelizable]
     public class Add : CodeDomTestRunner
     {        
         private static string CreateTestCode(string name, string typeIn, string typeOut)
@@ -36,7 +34,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
                     {
                         return expect == (a + b);
                     }
-                }";
+                }" + Code.ObjectClassDefinition;
         }
     
         private static string CreateConstantTestCode(string name, string typeIn, string typeOut, string constLeft, string constRight)
@@ -50,7 +48,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
                         {
                             return expect == (" + constLeft + @" + x);
                         }
-                    }";
+                    }" + Code.ObjectClassDefinition;
             }
             else if (String.IsNullOrEmpty(constLeft))
             {
@@ -61,7 +59,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
                         {
                             return expect == (x + " + constRight + @");
                         }
-                    }";
+                    }" + Code.ObjectClassDefinition;
             }
             else
             {
@@ -249,7 +247,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("rootnode")]
         public void AddConstantI1Right(sbyte a)
         {
-            CodeSource = "static class Test { static bool AddConstantI1Right(int expect, sbyte a) { return expect == (a + 1); } }";
+            CodeSource = "static class Test { static bool AddConstantI1Right(int expect, sbyte a) { return expect == (a + 1); } }" + Code.ObjectClassDefinition;
             Assert.IsTrue((bool)Run<I4_I1_C>("", "Test", "AddConstantI1Right", a + 1, a));
         }
         #endregion
@@ -1080,8 +1078,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void AddR8(double a, double b)
         {
-            CodeSource = CreateTestCode("AddR8", "double", "double");
-            CodeSource = "static class Test { static bool AddR8(double expect, double a, double b) { return expect == (a + b); } }";
+            CodeSource = "static class Test { static bool AddR8(double expect, double a, double b) { return expect == (a + b); } }" + Code.ObjectClassDefinition;
             Assert.IsTrue((bool)Run<R8_R8_R8>("", "Test", "AddR8", (a + b), a, b));
         }
         
