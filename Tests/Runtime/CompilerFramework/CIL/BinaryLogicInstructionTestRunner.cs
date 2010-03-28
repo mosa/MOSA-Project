@@ -41,6 +41,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
                 codeBuilder.Append(TestCodeShr);
             codeBuilder.Append(TestCodeFooter);
 
+            codeBuilder.Append(Code.ObjectClassDefinition);
+
             codeBuilder
                 .Replace(@"[[typename]]", typeName)
                 .Replace(@"[[expectedType]]", expectedType)

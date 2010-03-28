@@ -23,7 +23,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
     /// 
     /// </summary>
     [TestFixture]
-    public class Or : CodeDomTestRunner
+    public class OrFixture : CodeDomTestRunner
     {
         private static string CreateTestCode(string name, string typeIn, string typeOut)
         {
@@ -34,7 +34,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
                     {
                         return expect == (a | b);
                     }
-                }";
+                }" + Code.ObjectClassDefinition;
         }
         
         private static string CreateConstantTestCode(string name, string typeIn, string typeOut, string constLeft, string constRight)
@@ -48,7 +48,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
                         {
                             return expect == (" + constLeft + @" | x);
                         }
-                    }";
+                    }" + Code.ObjectClassDefinition;
             }
             else if (String.IsNullOrEmpty(constLeft))
             {
@@ -59,7 +59,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
                         {
                             return expect == (x | " + constRight + @");
                         }
-                    }";
+                    }" + Code.ObjectClassDefinition;
             }
             else
             {

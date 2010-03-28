@@ -21,7 +21,6 @@ namespace Mosa.Runtime.CompilerFramework
 	/// </summary>
 	public sealed class InstructionLogger : BaseStage, IMethodCompilerStage, IPipelineStage
 	{
-
 		#region IPipelineStage
 
 		/// <summary>

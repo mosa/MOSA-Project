@@ -77,48 +77,9 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Call(Context ctx)
 		{
-			HandleInvokeInstruction(ctx);
-
-			return;
-
-			// FIXME PG
-
-			// Move the this pointer to the right place, if this is an object instance
-			//RuntimeMethod method = ctx.InvokeTarget;
-			//if (method.Signature.HasThis) {
-			//    // FIXME PG - 
-			//    //_codeEmitter.Mov(new RegisterOperand(new SigType(Mosa.Runtime.Metadata.CilElementType.Object), GeneralPurposeRegister.ECX), instruction.ThisReference);
-			//    //ctx.SetInstruction(CPUx86.Instruction.MoveInstruction, new RegisterOperand(new SigType(Mosa.Runtime.Metadata.CilElementType.Object), GeneralPurposeRegister.ECX), instruction.ThisReference);
-
-			//    throw new NotImplementedException();
-			//}
-
-			/*
-			 * HINT: Microsoft seems not to use vtables/itables in .NET v2/v3/v3.5 anymore. They allocate
-			 * trampolines for virtual calls and rewrite them without indirect lookups if the object type
-			 * changes. This way they don't perform indirect lookups and the performance is drastically
-			 * improved.
-			 * 
-			 */
-
-			// Do we need to emit a call with vtable lookup?
-			//Debug.Assert(MethodAttributes.Virtual != (MethodAttributes.Virtual & method.Attributes), @"call to a virtual function?");
-
-			// A static call to the right address :)
-
-			//_codeEmitter.Call(method); // FIXME PG
-
-			// This is what is in Call method above
-			//_codeStream.WriteByte(0xE8);
-			//_codeStream.Write(new byte[4], 0, 4);
-			//long address = _linker.Link(
-			//    LinkType.RelativeOffset | LinkType.I4,
-			//    _compiler.Method,
-			//    (int)(_codeStream.Position - _codeStreamBasePosition) - 4,
-			//    (int)(_codeStream.Position - _codeStreamBasePosition),
-			//    target,
-			//    IntPtr.Zero
-			//);
+            ICallingConvention cc = Architecture.GetCallingConvention(ctx.InvokeTarget.Signature.CallingConvention);
+            Debug.Assert(null != cc, @"Failed to retrieve the calling convention.");
+            cc.MakeCall(ctx, this.MethodCompiler.Method, MethodCompiler.Assembly.Metadata);
 		}
 
 		/// <summary>
@@ -230,8 +191,20 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Callvirt(Context ctx)
 		{
-			HandleInvokeInstruction(ctx);
-		}
+            ICallingConvention cc = Architecture.GetCallingConvention(ctx.InvokeTarget.Signature.CallingConvention);
+            Debug.Assert(null != cc, @"Failed to retrieve the calling convention.");
+
+            if ((ctx.InvokeTarget.Attributes & MethodAttributes.Virtual) == MethodAttributes.Virtual)
+            {
+                cc.MakeVirtualCall(ctx, this.MethodCompiler.Method, this.MethodCompiler.Assembly.Metadata);
+            }
+            else
+            {
+                // FIXME: Callvirt imposes a null-check. For virtual calls this is done implicitly, but for non-virtual calls
+                // we have to make this explicitly somehow.
+                cc.MakeCall(ctx, this.MethodCompiler.Method, this.MethodCompiler.Assembly.Metadata);
+            }
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.BinaryComparison"/>.
@@ -787,7 +760,7 @@ namespace Mosa.Platforms.x86
 		{
 			ICallingConvention cc = Architecture.GetCallingConvention(ctx.InvokeTarget.Signature.CallingConvention);
 			Debug.Assert(null != cc, @"Failed to retrieve the calling convention.");
-			cc.Expand(this.MethodCompiler.Method, ctx, MethodCompiler.Assembly.Metadata);
+			cc.MakeCall(ctx, this.MethodCompiler.Method, MethodCompiler.Assembly.Metadata);
 		}
 
 		#endregion // Internals

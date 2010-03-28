@@ -349,6 +349,24 @@ namespace Mosa.Platforms.x86
             }
 		}
 
+        public void Emit(OpCode opCode, Operand dest)
+        {
+            byte? sib, modRM;
+            Operand displacement;
+
+            // Write the opcode
+            _codeStream.Write(opCode.Code, 0, opCode.Code.Length);
+
+            // Write the mod R/M byte
+            modRM = CalculateModRM(opCode.RegField, dest, null, out sib, out displacement);
+            if (modRM != null)
+            {
+                _codeStream.WriteByte(modRM.Value);
+                if (sib.HasValue)
+                    _codeStream.WriteByte(sib.Value);
+            }
+        }
+
 		/// <summary>
 		/// Emits the given code.
 		/// </summary>

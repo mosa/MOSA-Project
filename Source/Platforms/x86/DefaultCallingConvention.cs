@@ -19,6 +19,7 @@ using Mosa.Runtime.Metadata;
 using CPUx86 = Mosa.Platforms.x86.CPUx86;
 using CIL = Mosa.Runtime.CompilerFramework.CIL;
 using IR = Mosa.Runtime.CompilerFramework.IR;
+using Mosa.Runtime.Vm;
 
 namespace Mosa.Platforms.x86
 {
@@ -61,7 +62,7 @@ namespace Mosa.Platforms.x86
 		/// <returns>
 		/// A single instruction or an array of instructions, which appropriately represent the method call.
 		/// </returns>
-		void ICallingConvention.Expand(ISignatureContext context, Context ctx, IMetadataProvider metadata)
+        public void MakeCall(Context ctx, ISignatureContext context, IMetadataProvider metadata)
 		{
 			/*
 			 * Calling convention is right-to-left, pushed on the stack. Return value in EAX for integral
@@ -70,53 +71,109 @@ namespace Mosa.Platforms.x86
 			 * 
 			 */
 
-			Mosa.Runtime.Vm.RuntimeMethod invokeTarget = ctx.InvokeTarget;
-			Operand result = ctx.Result;
-			Operand operand1 = ctx.Operand1;
+            RuntimeMethod invokeTarget = ctx.InvokeTarget;
+            Operand result = ctx.Result;
+            Stack<Operand> operands;
 
-			List<Operand> operands = new List<Operand>();
-			operands.AddRange(ctx.Operands);
+            ctx.ReplaceInstructionOnly(CPUx86.Instruction.NopInstruction);
 
-			int resultCount = ctx.ResultCount;
-			int operandCount = ctx.OperandCount;
-
-			SigType I = new SigType(CilElementType.I);
-			RegisterOperand esp = new RegisterOperand(I, GeneralPurposeRegister.ESP);
-			int stackSize = CalculateStackSizeForParameters(context, operands, invokeTarget.Signature.HasThis, metadata);
-
-			ctx.SetInstruction(CPUx86.Instruction.NopInstruction);
-			if (stackSize != 0) 
+            int stackSize = this.ReserveStackSizeForCall(ctx, metadata, context, out operands);
+            if (stackSize != 0)
             {
-				ctx.AppendInstruction(CPUx86.Instruction.SubInstruction, esp, new ConstantOperand(I, stackSize));
-				ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(architecture.NativeType, GeneralPurposeRegister.EDX), esp);
+                this.PushOperands(context, ctx, operands, stackSize, metadata);
+            }
 
-				Stack<Operand> operandStack = GetOperandStackFromInstruction(operands, operandCount, invokeTarget.Signature.HasThis);
+            ctx.AppendInstruction(CPUx86.Instruction.CallInstruction, invokeTarget);
 
-				int space = stackSize;
-				CalculateRemainingSpace(context, ctx, operandStack, ref space, metadata);
-			}
-
-			if (invokeTarget.Signature.HasThis) 
+            if (stackSize != 0)
             {
-				RegisterOperand ecx = new RegisterOperand(I, GeneralPurposeRegister.ECX);
-                RegisterOperand eax = new RegisterOperand(I, GeneralPurposeRegister.EAX);
-				//ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, eax, operand1);
-                //ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, new MemoryOperand (new SigType(CilElementType.Ptr), GeneralPurposeRegister.EDX, new IntPtr(0)), eax);
-			}
+                this.FreeStackAfterCall(ctx, stackSize);
+            }
 
-			ctx.AppendInstruction(IR.Instruction.CallInstruction, invokeTarget);
-
-			if (stackSize != 0)
-				ctx.AppendInstruction(CPUx86.Instruction.AddInstruction, esp, new ConstantOperand(I, stackSize));
-
-			if (resultCount > 0)
-				if (result.StackType == StackTypeCode.Int64)
-					MoveReturnValueTo64Bit(result, ctx);
-				else
-					MoveReturnValueTo32Bit(result, ctx);
-
-			//ctx.Remove();
+            this.CleanupReturnValue(ctx, invokeTarget, result);
 		}
+
+        public void MakeVirtualCall(Context ctx, ISignatureContext signatureContext, IMetadataProvider metadata)
+        {
+            Stack<Operand> operands;
+
+            RuntimeMethod invokeTarget = ctx.InvokeTarget;
+            Operand result = ctx.Result;
+            ctx.ReplaceInstructionOnly(CPUx86.Instruction.NopInstruction);
+
+            int stackSize = this.ReserveStackSizeForCall(ctx, metadata, signatureContext, out operands);
+            if (stackSize != 0)
+            {
+                this.PushOperands(signatureContext, ctx, operands, stackSize, metadata);
+            }
+
+            int size, alignment;
+            Operand thisPtr = ctx.Operand1;
+            RegisterOperand eax = new RegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.EAX);
+            RegisterOperand ecx = new RegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.ECX);
+            
+            int slot = invokeTarget.MethodTableSlot;
+            Debug.Assert(slot != 0, @"Method Table Slot not initialized.");
+
+            this.architecture.GetTypeRequirements(BuiltInSigType.IntPtr, out size, out alignment);
+
+            ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, ecx, thisPtr);
+            ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, eax, new MemoryOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.ECX, IntPtr.Zero));
+            ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, eax, new MemoryOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.EAX, new IntPtr(size + (size * slot))));
+            ctx.AppendInstruction(CPUx86.Instruction.CallInstruction, eax);
+
+            if (stackSize != 0)
+            {
+                this.FreeStackAfterCall(ctx, stackSize);
+            }
+
+            this.CleanupReturnValue(ctx, invokeTarget, result);
+        }
+
+        private int ReserveStackSizeForCall(Context ctx, IMetadataProvider metadata, ISignatureContext signatureContext, out Stack<Operand> operands)
+        {
+            RuntimeMethod invokeTarget = ctx.InvokeTarget;
+            RegisterOperand esp = new RegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.ESP);
+
+            List<Operand> ops = new List<Operand>();
+            ops.AddRange(ctx.Operands);
+
+            int stackSize = CalculateStackSizeForParameters(signatureContext, ops, invokeTarget.Signature.HasThis, metadata);
+            if (stackSize != 0)
+            {
+                ctx.AppendInstruction(CPUx86.Instruction.SubInstruction, esp, new ConstantOperand(esp.Type, stackSize));
+                ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(architecture.NativeType, GeneralPurposeRegister.EDX), esp);
+
+			    int operandCount = ctx.OperandCount;
+				operands = GetOperandStackFromInstruction(ops, operandCount, invokeTarget.Signature.HasThis);
+            }
+            else
+            {
+                operands = null;
+            }
+
+            return stackSize;
+        }
+
+        private void FreeStackAfterCall(Context ctx, int stackSize)
+        {
+            RegisterOperand esp = new RegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.ESP);
+            if (stackSize != 0)
+            {
+                ctx.AppendInstruction(CPUx86.Instruction.AddInstruction, esp, new ConstantOperand(BuiltInSigType.IntPtr, stackSize));
+            }
+        }
+
+        private void CleanupReturnValue(Context ctx, RuntimeMethod invokeTarget, Operand result)
+        {
+            if (invokeTarget.Signature.ReturnType.Type != CilElementType.Void)
+            {
+                if (result.StackType == StackTypeCode.Int64)
+                    this.MoveReturnValueTo64Bit(result, ctx);
+                else
+                    this.MoveReturnValueTo32Bit(result, ctx);
+            }
+        }
 
 		/// <summary>
 		/// Gets the operand stack from instruction.
@@ -149,9 +206,10 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		/// <param name="operandStack">The operand stack.</param>
 		/// <param name="space">The space.</param>
-		private void CalculateRemainingSpace(ISignatureContext context, Context ctx, Stack<Operand> operandStack, ref int space, IMetadataProvider metadata)
+		private void PushOperands(ISignatureContext context, Context ctx, Stack<Operand> operandStack, int space, IMetadataProvider metadata)
 		{
-			while (operandStack.Count != 0) {
+			while (operandStack.Count != 0) 
+            {
 				Operand operand = operandStack.Pop();
 				int size, alignment;
 
@@ -311,7 +369,7 @@ namespace Mosa.Platforms.x86
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <param name="operand">The operand, that's holding the return value.</param>
-		void ICallingConvention.MoveReturnValue(Context ctx, Operand operand)
+		public void MoveReturnValue(Context ctx, Operand operand)
 		{
 			int size, alignment;
 			this.architecture.GetTypeRequirements(operand.Type, out size, out alignment);
@@ -350,14 +408,14 @@ namespace Mosa.Platforms.x86
 			}
 		}
 
-		void ICallingConvention.GetStackRequirements(StackOperand stackOperand, out int size, out int alignment)
+		public void GetStackRequirements(StackOperand stackOperand, out int size, out int alignment)
 		{
 			// Special treatment for some stack types
 			// FIXME: Handle the size and alignment requirements of value types
 			this.architecture.GetTypeRequirements(stackOperand.Type, out size, out alignment);
 		}
 
-		int ICallingConvention.OffsetOfFirstLocal
+		public int OffsetOfFirstLocal
 		{
 			get
 			{
@@ -379,7 +437,7 @@ namespace Mosa.Platforms.x86
 		}
 
 
-		int ICallingConvention.OffsetOfFirstParameter
+		public int OffsetOfFirstParameter
 		{
 			get
 			{

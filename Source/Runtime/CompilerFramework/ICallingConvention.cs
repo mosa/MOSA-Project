@@ -10,6 +10,7 @@
 using Mosa.Runtime.CompilerFramework.CIL;
 using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Runtime.Metadata.Signatures;
+using Mosa.Runtime.Metadata;
 
 namespace Mosa.Runtime.CompilerFramework
 {
@@ -20,13 +21,20 @@ namespace Mosa.Runtime.CompilerFramework
     public interface ICallingConvention
     {
 		/// <summary>
-		/// Expands the given invoke instruction to perform the method call.
+		/// Expands method call instruction represented by the context to perform the method call.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		/// <returns>
-		/// A single instruction or an array of instructions, which appropriately represent the method call.
-		/// </returns>
-		void Expand(ISignatureContext signatureContext, Context context, Metadata.IMetadataProvider metadata);
+        /// <param name="signatureContext">The method signature context.</param>
+        /// <param name="metadata">The metadata of the caller.</param>
+        void MakeCall(Context context, ISignatureContext signatureContext, IMetadataProvider metadata);
+
+        /// <summary>
+        /// Expands virtual method call instruction represented by the context to perform the method call.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="signatureContext">The method signature context.</param>
+        /// <param name="metadata">The metadata of the caller.</param>
+        void MakeVirtualCall(Context context, ISignatureContext signatureContext, IMetadataProvider metadata);
 
         /// <summary>
         /// Retrieves the stack requirements of a stack operand.
@@ -54,7 +62,7 @@ namespace Mosa.Runtime.CompilerFramework
         int OffsetOfFirstLocal { get; }
 
         /// <summary>
-        /// Retrieves the offset of the first parameter from the stack frame start.
+        /// Retrieves the offset of the first parameter From the stack frame start.
         /// </summary>
         int OffsetOfFirstParameter { get; }
     }

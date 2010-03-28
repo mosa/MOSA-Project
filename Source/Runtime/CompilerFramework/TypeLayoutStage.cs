@@ -14,6 +14,8 @@ using System.IO;
 using Mosa.Runtime.Linker;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Vm;
+using Mosa.Runtime.Metadata.Signatures;
+using System.Collections.Generic;
 
 namespace Mosa.Runtime.CompilerFramework
 {
@@ -33,6 +35,12 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Holds the assembly Compiler.
 		/// </summary>
 		private AssemblyCompiler compiler;
+
+        private IAssemblyLinker linker;
+
+        private int nativePointerAlignment;
+
+        private int nativePointerSize;
 
 		/// <summary>
 		/// Holds the current type system during compilation.
@@ -57,14 +65,15 @@ namespace Mosa.Runtime.CompilerFramework
 		
 		public void Setup(AssemblyCompiler compiler)
 		{
-			// Save the Compiler
 			this.compiler = compiler;
+			this._architecture = compiler.Architecture;
+            this.linker = compiler.Pipeline.FindFirst<IAssemblyLinker>();
+            this._typeSystem = RuntimeBase.Instance.TypeLoader;
 
-			// The compilation target Architecture
-			_architecture = compiler.Architecture;
+            Debug.Assert(this.linker != null, @"Failed to retrieve linker from assembly compiler.");
 			
-			// The type system
-			_typeSystem = RuntimeBase.Instance.TypeLoader;
+
+            this._architecture.GetTypeRequirements(BuiltInSigType.IntPtr, out this.nativePointerSize, out this.nativePointerAlignment);
 		}
 		
 		public void Run()
@@ -73,23 +82,125 @@ namespace Mosa.Runtime.CompilerFramework
 			ReadOnlyRuntimeTypeListView types = _typeSystem.GetTypesFromModule(this.compiler.Assembly);
 			foreach (RuntimeType type in types) 
 			{
-				if (type.IsGeneric == true)
+				if (type.IsGeneric == true || type.IsDelegate == true)
 					continue;
 				
 				switch (type.Attributes & TypeAttributes.LayoutMask) 
 				{
-					case TypeAttributes.AutoLayout: goto case TypeAttributes.SequentialLayout;
+					case TypeAttributes.AutoLayout:
+                        this.CreateSequentialLayout(type);
+                        break;
 
 					case TypeAttributes.SequentialLayout:
-						CreateSequentialLayout(type);
+						this.CreateSequentialLayout(type);
 						break;
 
 					case TypeAttributes.ExplicitLayout:
-						CreateExplicitLayout(type);
+						this.CreateExplicitLayout(type);
 						break;
 				}
+
+                this.BuildMethodTable(type);
 			}
 		}
+
+        private void BuildMethodTable(RuntimeType type)
+        {
+            IList<RuntimeMethod> methodTable = this.CreateMethodTable(type);
+            this.AskLinkerToCreateMethodTable(type, methodTable);
+        }
+
+        private List<RuntimeMethod> CreateMethodTable(RuntimeType type)
+        {
+            List<RuntimeMethod> methodTable = this.CreateMethodTableList(type);
+
+            foreach (RuntimeMethod method in type.Methods)
+            {
+                MethodAttributes attributes = method.Attributes;
+                if ((attributes & MethodAttributes.Virtual) == MethodAttributes.Virtual)
+                {
+                    int slot = methodTable.Count;
+
+                    if ((attributes & MethodAttributes.NewSlot) != MethodAttributes.NewSlot)
+                    {
+                        slot = FindOverrideSlot(methodTable, method);
+                    }
+
+                    method.MethodTableSlot = slot;
+                    if (slot == methodTable.Count)
+                    {
+                        methodTable.Add(method);
+                    }
+                    else
+                    {
+                        methodTable[slot] = method;
+                    }
+                }                
+            }
+
+            return methodTable;
+        }
+
+        private int FindOverrideSlot(List<RuntimeMethod> methodTable, RuntimeMethod method)
+        {
+            int slot = methodTable.Count;
+
+            foreach (RuntimeMethod baseMethod in methodTable)
+            {
+                if (baseMethod.Name.Equals(method.Name) && baseMethod.Signature.Matches(method.Signature))
+                {
+                    slot = baseMethod.MethodTableSlot;
+                    break;
+                }
+            }
+
+            return slot;
+        }
+
+        private List<RuntimeMethod> CreateMethodTableList(RuntimeType type)
+        {
+            List<RuntimeMethod> methodTable;
+
+            if (type.BaseType == null)
+            {
+                methodTable = new List<RuntimeMethod>();
+            }
+            else
+            {
+                IList<RuntimeMethod> baseMethodTable = type.BaseType.MethodTable;
+                if (baseMethodTable == null)
+                {
+                    baseMethodTable = this.CreateMethodTable(type.BaseType);
+                }
+
+                methodTable = new List<RuntimeMethod>(baseMethodTable);
+            }
+
+            type.MethodTable = methodTable;
+            return methodTable;
+        }
+
+        private void AskLinkerToCreateMethodTable(RuntimeType type, IList<RuntimeMethod> methodTable)
+        {
+            // HINT: The method table is offset by a single pointer, which contains the type information 
+            // pointer. Used to realize object.GetType()
+
+            string methodTableSymbolName = type.FullName + @"$mtable";
+            int methodTableSize = this.nativePointerSize + methodTable.Count * this.nativePointerSize;
+
+            using (Stream stream = this.linker.Allocate(methodTableSymbolName, SectionKind.Text, methodTableSize, this.nativePointerAlignment))
+            {
+                stream.Position = methodTableSize;
+            }
+
+            int offset = this.nativePointerSize;
+
+            foreach (RuntimeMethod method in methodTable)
+            {
+                this.linker.Link(LinkType.AbsoluteAddress | LinkType.I4, methodTableSymbolName, offset, 0, method, IntPtr.Zero);
+                offset += this.nativePointerSize;
+            }
+        }
 
 		/// <summary>
 		/// Performs a sequential layout of the type.
@@ -105,18 +216,24 @@ namespace Mosa.Runtime.CompilerFramework
 			int typeSize = 0;
 
 			RuntimeType baseType = type.BaseType;
-			if (null != baseType)
-				typeSize = baseType.Size;
+            if (null != baseType)
+            {
+                typeSize = baseType.Size;
+            }
+            else
+            {
+                typeSize = CalculateInitialFieldOffset(type);
+            }
 
 			foreach (RuntimeField field in type.Fields) {
 				if ((field.Attributes & FieldAttributes.Static) == FieldAttributes.Static) {
 					// Assign a memory slot to the static & initialize it, if there's initial data set
-					CreateStaticField(field);
+                    this.CreateStaticField(field);
 				}
 				else {
 					int size;
 					int alignment;
-					_architecture.GetTypeRequirements(field.SignatureType, out size, out alignment);
+                    this._architecture.GetTypeRequirements(field.SignatureType, out size, out alignment);
 
 					// Pad the field in the type
 					if (0 != packingSize) {
@@ -133,6 +250,21 @@ namespace Mosa.Runtime.CompilerFramework
 			type.Size = typeSize;
 		}
 
+        private int CalculateInitialFieldOffset(RuntimeType type)
+        {
+            int offset = 0;
+            if (type.IsValueType == false)
+            {
+                //
+                // We make 8 bytes room at the start of an object to accomodate the method table pointer
+                // and a ptr to runtime/GC data.
+                //
+                offset = 2 * this.nativePointerSize;
+            }
+
+            return offset;
+        }
+
 		/// <summary>
 		/// Applies the explicit layout to the given type.
 		/// </summary>
@@ -144,7 +276,7 @@ namespace Mosa.Runtime.CompilerFramework
 			foreach (RuntimeField field in type.Fields) {
 				if ((field.Attributes & FieldAttributes.Static) == FieldAttributes.Static) {
 					// Assign a memory slot to the static & initialize it, if there's initial data set
-					CreateStaticField(field);
+                    this.CreateStaticField(field);
 				}
 				else {
 					// Explicit layout assigns a physical offset from the start of the structure
@@ -164,13 +296,11 @@ namespace Mosa.Runtime.CompilerFramework
 
 			// Determine the size of the type & alignment requirements
 			int size, alignment;
-			_architecture.GetTypeRequirements(field.SignatureType, out size, out alignment);
+            this._architecture.GetTypeRequirements(field.SignatureType, out size, out alignment);
 
             if (field.SignatureType.Type == CilElementType.ValueType)
                 size = ObjectModelUtility.ComputeTypeSize(field.DeclaringType, (field.SignatureType as Metadata.Signatures.ValueTypeSigType).Token, this.compiler.Metadata, _architecture);
 
-			// Retrieve the linker
-			IAssemblyLinker linker = this.compiler.Pipeline.FindFirst<IAssemblyLinker>();
 			// The linker section to move this field into
 			SectionKind section;
 			// Does this field have an RVA?
@@ -183,16 +313,20 @@ namespace Mosa.Runtime.CompilerFramework
 				section = SectionKind.BSS;
 			}
 
-			AllocateSpace(linker, field, section, size, alignment);
+			this.AllocateSpace(field, section, size, alignment);
 		}
 
-		private void AllocateSpace(IAssemblyLinker linker, RuntimeField field, SectionKind section, int size, int alignment)
+		private void AllocateSpace(RuntimeField field, SectionKind section, int size, int alignment)
 		{
-			using (Stream stream = linker.Allocate(field, section, size, alignment)) {
-				if (IntPtr.Zero != field.RVA)
-					InitializeStaticValueFromRVA(stream, size, field);
-				else
-					WriteDummyBytes(stream, size);
+			using (Stream stream = this.linker.Allocate(field, section, size, alignment)) {
+                if (IntPtr.Zero != field.RVA)
+                {
+                    this.InitializeStaticValueFromRVA(stream, size, field);
+                }
+                else
+                {
+                    WriteDummyBytes(stream, size);
+                }
 			}
 		}
 

@@ -31,7 +31,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
                     {
                         return expect == ((a " + condition + @" b) ? c : d);
                     }
-                }";
+                }" + Code.ObjectClassDefinition;
 		}
 
 		delegate bool I1(sbyte expect, sbyte a, sbyte b, sbyte c, sbyte d);

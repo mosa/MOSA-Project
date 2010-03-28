@@ -39,7 +39,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void ConvI8_I1(sbyte a)
         {
-            CodeSource = "static class Test { static bool ConvI8_I1(long expect, sbyte a) { return expect == ((long)a); } }";
+            CodeSource = "static class Test { static bool ConvI8_I1(long expect, sbyte a) { return expect == ((long)a); } }" + Code.ObjectClassDefinition;
             Assert.IsTrue((bool)Run<Native_ConvI8_I1>("", "Test", "ConvI8_I1", ((long)a), a));
         }
 
@@ -58,7 +58,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void ConvI8_I2(short a)
         {
-            CodeSource = "static class Test { static bool ConvI8_I2(long expect, short a) { return expect == ((long)a); } }";
+            CodeSource = "static class Test { static bool ConvI8_I2(long expect, short a) { return expect == ((long)a); } }" + Code.ObjectClassDefinition;
             Assert.IsTrue((bool)Run<Native_ConvI8_I2>("", "Test", "ConvI8_I2", ((long)a), a));
         }
 
@@ -77,7 +77,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void ConvI8_I4(int a)
         {
-            CodeSource = "static class Test { static bool ConvI8_I4(long expect, int a) { return expect == ((long)a); } }";
+            CodeSource = "static class Test { static bool ConvI8_I4(long expect, int a) { return expect == ((long)a); } }" + Code.ObjectClassDefinition;
             Assert.IsTrue((bool)Run<Native_ConvI8_I4>("", "Test", "ConvI8_I4", ((long)a), a));
         }
 
@@ -96,7 +96,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void ConvI8_I8(long a)
         {
-            CodeSource = "static class Test { static bool ConvI8_I8(long expect, long a) { return expect == ((long)a); } }";
+            CodeSource = "static class Test { static bool ConvI8_I8(long expect, long a) { return expect == ((long)a); } }" + Code.ObjectClassDefinition;
             Assert.IsTrue((bool)Run<Native_ConvI8_I8>("", "Test", "ConvI8_I8", ((long)a), a));
         }
 
@@ -115,7 +115,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void ConvI8_R4(float a)
         {
-            CodeSource = "static class Test { static bool ConvI1_R4(int expect, float a) { return expect == ((int)a); } }";
+            CodeSource = "static class Test { static bool ConvI1_R4(int expect, float a) { return expect == ((int)a); } }" + Code.ObjectClassDefinition;
             Assert.IsTrue((bool)Run<Native_ConvI4_R4>("", "Test", "ConvI1_R4", ((int)a), a));
         }
 
@@ -134,7 +134,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
         public void ConvI8_R8(double a)
         {
-            CodeSource = "static class Test { static bool ConvI1_R8(int expect, double a) { return expect == ((int)a); } }";
+            CodeSource = "static class Test { static bool ConvI1_R8(int expect, double a) { return expect == ((int)a); } }" + Code.ObjectClassDefinition;
             Assert.IsTrue((bool)Run<Native_ConvI4_R8>("", "Test", "ConvI1_R8", ((int)a), a));
         }
     }

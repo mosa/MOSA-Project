@@ -38,16 +38,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.Compiler
                     return allocatedObject.dataField;
                 }                
             }
-
-            namespace System
-            {
-                public class Object
-                {
-                    public Object()
-                    {
-                    }
-                }
-            }
-        ";
+        " + Code.ObjectClassDefinition;
     }
 }
