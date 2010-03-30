@@ -96,6 +96,8 @@ namespace Mosa.Runtime.Linker
 		{
 			long address;
 
+            this.AddVmCalls(this._symbols);
+
 			// Check if we have unresolved requests and try to link them
 			List<string> members = new List<string>(_linkRequests.Keys);
 			foreach (string member in members) {
@@ -135,6 +137,10 @@ namespace Mosa.Runtime.Linker
 		/// <param name="methodRelativeBase">The method relative base.</param>
 		/// <param name="targetAddress">The position in code, where it should be patched.</param>
 		protected abstract void ApplyPatch(LinkType linkType, long methodAddress, long methodOffset, long methodRelativeBase, long targetAddress);
+
+        protected virtual void AddVmCalls(IDictionary<string, LinkerSymbol> virtualMachineCalls)
+        {
+        }
 
 		#endregion // Methods
 
@@ -428,8 +434,6 @@ namespace Mosa.Runtime.Linker
 			}
 		}
 		
-		
-
 		#region Internals
 
 		#region CreateSymbolName
@@ -554,12 +558,6 @@ namespace Mosa.Runtime.Linker
 		protected bool IsResolved(RuntimeMember member, out long virtualAddress)
 		{
 			// Is this a method?
-			RuntimeMethod method = member as RuntimeMethod;
-			if (null != method && method.ImplAttributes == MethodImplAttributes.InternalCall) {
-				virtualAddress = ResolveInternalCall(method);
-				return (0 != virtualAddress);
-			}
-
 			return IsResolved(CreateSymbolName(member), out virtualAddress);
 		}
 
@@ -573,21 +571,6 @@ namespace Mosa.Runtime.Linker
 		protected bool IsValid(RuntimeMember member)
 		{
 			return (member is RuntimeMethod || (member is RuntimeField && FieldAttributes.Static == (FieldAttributes.Static & ((RuntimeField)member).Attributes)));
-		}
-
-		/// <summary>
-		/// Special resolution for internal calls.
-		/// </summary>
-		/// <param name="method">The internal call method to resolve.</param>
-		/// <returns>The virtualAddress </returns>
-		protected virtual long ResolveInternalCall(RuntimeMethod method)
-		{
-			long address = 0;
-			ITypeSystem ts = RuntimeBase.Instance.TypeLoader;
-			RuntimeMethod internalImpl = ts.GetImplementationForInternalCall(method);
-			if (internalImpl != null)
-				address = internalImpl.Address.ToInt64();
-			return address;
 		}
 
 		/// <summary>

@@ -19,6 +19,10 @@ namespace Mosa.Runtime.CompilerFramework.IR
 	/// </summary>
 	public static class Instruction
 	{
+        /// <summary>
+        /// 
+        /// </summary>
+        public static AddInstruction AddInstruction = new AddInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
@@ -79,7 +83,11 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// 
 		/// </summary>
 		public static MoveInstruction MoveInstruction = new MoveInstruction();
-		/// <summary>
+        /// <summary>
+        /// 
+        /// </summary>
+        public static MulInstruction MulInstruction = new MulInstruction();
+        /// <summary>
 		/// 
 		/// </summary>
 		public static PhiInstruction PhiInstruction = new PhiInstruction();

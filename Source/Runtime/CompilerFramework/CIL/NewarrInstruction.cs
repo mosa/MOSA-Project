@@ -13,6 +13,8 @@ using System.Diagnostics;
 using System.Text;
 
 using Mosa.Runtime.Metadata;
+using Mosa.Runtime.Vm;
+using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Runtime.CompilerFramework.CIL
 {
@@ -47,24 +49,15 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			base.Decode(ctx, decoder);
 
 			// Read the type specification
-			TokenTypes arrayEType;
-			decoder.Decode(out arrayEType);
-            ctx.Token = arrayEType;
+			TokenTypes arrayElementType;
+			decoder.Decode(out arrayElementType);
 
-            Mosa.Runtime.Vm.RuntimeType type = RuntimeBase.Instance.TypeLoader.GetType(decoder.Method, decoder.Compiler.Assembly, arrayEType);
-            //ctx.Result = 
-			/*
-				TypeReference eType = MetadataTypeReference.FromToken(decoder.Metadata, arrayEType);
-
-				// FIXME: If _operands[0] is an integral constant, we can infer the maximum size of the array
-				// and instantiate an ArrayTypeSpecification with max. sizes. This way we could eliminate bounds
-				// checks in an optimization stage later on, if we find that a value never exceeds the array 
-				// bounds.
-
-				// Build a type specification
-				ArrayTypeSpecification typeRef = new ArrayTypeSpecification(eType);
-				_results[0] = CreateResultOperand(typeRef);
-			 */
+            // FIXME: If ctx.Operands1 is an integral constant, we can infer the maximum size of the array
+            // and instantiate an ArrayTypeSpecification with max. sizes. This way we could eliminate bounds
+            // checks in an optimization stage later on, if we find that a value never exceeds the array 
+            // bounds.
+            var resultType = new SZArraySigType(null, new ClassSigType(arrayElementType));
+            ctx.Result = decoder.Compiler.CreateTemporary(resultType);
 		}
 
 		/// <summary>

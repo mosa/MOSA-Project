@@ -48,7 +48,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// Visitation function for <see cref="ICILVisitor.Ldarg"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.Ldarg(Context ctx)
+		public void Ldarg(Context ctx)
 		{
 			ProcessLoadInstruction(ctx);
 		}
@@ -57,17 +57,16 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// Visitation function for <see cref="ICILVisitor.Ldarga"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.Ldarga(Context ctx)
+		public void Ldarga(Context ctx)
 		{
 			ctx.ReplaceInstructionOnly(IR.Instruction.AddressOfInstruction);
-			//ctx.SetInstruction(IR.Instruction.AddressOfInstruction, ctx.Result, ctx.Operand1);
 		}
 
 		/// <summary>
 		/// Visitation function for <see cref="ICILVisitor.Ldloc"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.Ldloc(Context ctx)
+		public void Ldloc(Context ctx)
 		{
 			ProcessLoadInstruction(ctx);
 		}
@@ -76,7 +75,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// Visitation function for <see cref="ICILVisitor.Ldloca"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.Ldloca(Context ctx)
+		public void Ldloca(Context ctx)
 		{
 			//ctx.SetInstruction(IR.Instruction.AddressOfInstruction(ctx.Result, ctx.Operand1));
 			//ctx.SetInstruction(IR.Instruction.AddressOfInstruction, new Regis, ctx.Operand1);
@@ -86,7 +85,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// Visitation function for <see cref="ICILVisitor.Ldc"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.Ldc(Context ctx)
+		public void Ldc(Context ctx)
 		{
 			ProcessLoadInstruction(ctx);
 		}
@@ -95,17 +94,17 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// Visitation function for <see cref="ICILVisitor.Ldobj"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.Ldobj(Context ctx)
+		public void Ldobj(Context ctx)
 		{
 			// This is actually ldind.* and ldobj - the opcodes have the same meanings
-			ctx.SetInstruction(IR.Instruction.LoadInstruction, ctx.Result, ctx.Operand1);
+			ctx.SetInstruction(IR.Instruction.LoadInstruction, ctx.Result, ctx.Operand1, ConstantOperand.FromValue(0));
 		}
 
 		/// <summary>
 		/// Visitation function for <see cref="ICILVisitor.Ldsfld"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.Ldsfld(Context ctx)
+		public void Ldsfld(Context ctx)
 		{
 			ctx.SetInstruction(IR.Instruction.MoveInstruction, ctx.Result, new MemberOperand(ctx.RuntimeField));
 		}
@@ -114,7 +113,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// Visitation function for <see cref="ICILVisitor.Ldsflda"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.Ldsflda(Context ctx)
+		public void Ldsflda(Context ctx)
 		{
 			//ctx.SetInstruction(IR.Instruction.AddressOfInstruction, ctx.Result, new MemberOperand (ctx.RuntimeField));
             //ctx.SetInstruction(IR.Instruction.MoveInstruction, ctx.Result, ctx.Operand1);
@@ -172,7 +171,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		void ICILVisitor.Stobj(Context ctx)
 		{
 			// This is actually stind.* and stobj - the opcodes have the same meanings
-			ctx.SetInstruction(IR.Instruction.StoreInstruction, ctx.Operand1, ctx.Operand2);
+			ctx.SetInstruction(IR.Instruction.StoreInstruction, ctx.Operand1, ConstantOperand.FromValue(0), ctx.Operand2);
 		}
 
 		/// <summary>
@@ -386,9 +385,18 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// Visitation function for <see cref="ICILVisitor.Newarr"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.Newarr(Context ctx)
+		public void Newarr(Context ctx)
 		{
-			ReplaceWithInternalCall(ctx, VmCall.Allocate);
+            SZArraySigType arrayType = (SZArraySigType)ctx.Result.Type;
+            ClassSigType elementType = arrayType.ElementType as ClassSigType;
+            Debug.Assert(elementType != null, @"Newarr didn't specify class signature?");
+
+			ReplaceWithInternalCall(ctx, VmCall.AllocateArray);
+
+            ctx.Operand3 = ctx.Operand1;
+            ctx.Operand1 = new ConstantOperand(BuiltInSigType.Int32, this.MethodCompiler.Assembly.LoadOrder);
+            ctx.Operand2 = new ConstantOperand(BuiltInSigType.IntPtr, elementType.Token);
+            ctx.OperandCount = 3;
 		}
 
 		/// <summary>
@@ -531,7 +539,14 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// Visitation function for <see cref="ICILVisitor.Ldlen"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.Ldlen(Context ctx) { }
+		public void Ldlen(Context ctx) 
+        {
+            Operand array = ctx.Operand1;
+            Operand arrayLength = ctx.Result;
+            ConstantOperand constantOffset = ConstantOperand.FromValue(8);
+
+            ctx.SetInstruction(IR.Instruction.LoadInstruction, arrayLength, array, constantOffset);
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="ICILVisitor.Ldelema"/>.
@@ -543,13 +558,70 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// Visitation function for <see cref="ICILVisitor.Ldelem"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.Ldelem(Context ctx) { }
+		public void Ldelem(Context ctx) 
+        {
+            // Array data start at offset 12 from the array pointer.
+            Operand arrayOperand = ctx.Operand1;
+            Operand arrayIndexOperand = ctx.Operand2;
+            Operand result = ctx.Result;
+
+            SZArraySigType arraySigType = (SZArraySigType)arrayOperand.Type;
+
+            int elementSizeInBytes = 0, alignment = 0;
+            this.Architecture.GetTypeRequirements(arraySigType.ElementType, out elementSizeInBytes, out alignment);
+
+            //
+            // The sequence we're emitting is:
+            //
+            //      offset = arrayIndexOperand * elementSize
+            //      temp = offset + 12
+            //      result = *(arrayOperand * temp)
+            //
+
+            Operand offset = this.MethodCompiler.CreateTemporary(BuiltInSigType.Int32);
+            Operand elementSizeOperand = new ConstantOperand(BuiltInSigType.Int32, elementSizeInBytes);
+            ctx.SetInstruction(IR.Instruction.MulInstruction, offset, arrayIndexOperand, elementSizeOperand);
+
+            Operand temp = this.MethodCompiler.CreateTemporary(BuiltInSigType.Int32);
+            Operand fixedOffset = new ConstantOperand(BuiltInSigType.Int32, 12);
+            ctx.AppendInstruction(IR.Instruction.AddInstruction, temp, offset, fixedOffset);
+
+            ctx.AppendInstruction(IR.Instruction.LoadInstruction, result, arrayOperand, temp);
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="ICILVisitor.Stelem"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.Stelem(Context ctx) { }
+		public void Stelem(Context ctx) 
+        {
+            // Array data start at offset 12 from the array pointer.
+            Operand arrayOperand = ctx.Operand1;
+            Operand arrayIndexOperand = ctx.Operand2;
+            Operand value = ctx.Operand3;
+
+            SZArraySigType arraySigType = (SZArraySigType)arrayOperand.Type;
+            int elementSizeInBytes = 0, alignment = 0;
+            this.Architecture.GetTypeRequirements(arraySigType.ElementType, out elementSizeInBytes, out alignment);
+
+            //
+            // The sequence we're emitting is:
+            //
+            //      offset = arrayIndexOperand * elementSize
+            //      temp = offset + 12
+            //      result = *(arrayOperand * temp)
+            //
+
+            Operand offset = this.MethodCompiler.CreateTemporary(BuiltInSigType.Int32);
+            Operand elementSizeOperand = new ConstantOperand(BuiltInSigType.Int32, elementSizeInBytes);
+            ctx.SetInstruction(IR.Instruction.MulInstruction, offset, arrayIndexOperand, elementSizeOperand);
+
+            Operand temp = this.MethodCompiler.CreateTemporary(BuiltInSigType.Int32);
+            Operand fixedOffset = new ConstantOperand(BuiltInSigType.Int32, 12);
+            ctx.AppendInstruction(IR.Instruction.AddInstruction, temp, offset, fixedOffset);
+
+            ctx.AppendInstruction(IR.Instruction.StoreInstruction, arrayOperand, temp, value);
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="ICILVisitor.UnboxAny"/>.
@@ -638,7 +710,10 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// Visitation function for <see cref="ICILVisitor.Add"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.Add(Context ctx) { }
+		public void Add(Context ctx) 
+        {
+            ctx.ReplaceInstructionOnly(Instruction.AddInstruction);
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="ICILVisitor.Sub"/>.
@@ -650,7 +725,10 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// Visitation function for <see cref="ICILVisitor.Mul"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.Mul(Context ctx) { }
+		public void Mul(Context ctx) 
+        {
+            ctx.ReplaceInstructionOnly(Instruction.MulInstruction);
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="ICILVisitor.Div"/>.

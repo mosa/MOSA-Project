@@ -19,10 +19,9 @@ namespace Mosa.Runtime.CompilerFramework.IR
     /// Loads a value From a memory pointer.
     /// </summary>
     /// <remarks>
-    /// The load instruction is used to load a value From
-    /// a memory pointer. The types must be compatible.
+    /// The load instruction is used to load a value from a memory pointer and an offset. The types must be compatible.
     /// </remarks>
-    public sealed class LoadInstruction : TwoOperandInstruction
+    public sealed class LoadInstruction : ThreeOperandInstruction
     {
         #region Construction
 

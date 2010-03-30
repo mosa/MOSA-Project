@@ -109,16 +109,6 @@ namespace Mosa.Runtime.Linker.Elf64
         }
 
         /// <summary>
-        /// Special resolution for internal calls.
-        /// </summary>
-        /// <param name="method">The internal call method to resolve.</param>
-        /// <returns>The virtualAddress</returns>
-        protected override long ResolveInternalCall(Mosa.Runtime.Vm.RuntimeMethod method)
-        {
-            return base.ResolveInternalCall(method);
-        }
-
-        /// <summary>
         /// Allocates a symbol of the given name in the specified section.
         /// </summary>
         /// <param name="section">The executable section to allocate From.</param>

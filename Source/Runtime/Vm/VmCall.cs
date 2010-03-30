@@ -19,9 +19,14 @@ namespace Mosa.Runtime.Vm
     public enum VmCall
     {
         /// <summary>
-        /// Allocates memory for a new array or object instance.
+        /// Allocates memory for a new object instance.
         /// </summary>
-        Allocate,
+        AllocateObject,
+
+        /// <summary>
+        /// Allocates and initializes a new array.
+        /// </summary>
+        AllocateArray,
 
         /// <summary>
         /// Boxes a value type.

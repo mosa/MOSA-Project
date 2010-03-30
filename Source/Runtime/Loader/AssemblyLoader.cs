@@ -73,6 +73,11 @@ namespace Mosa.Runtime.Loader
 			_privatePaths.Add(path);
 		}
 
+        public IMetadataModule GetModule(int loadIndex)
+        {
+            return this._loadedImages[loadIndex];
+        }
+
 		/// <summary>
 		/// Resolves the given assembly reference and loads the associated IMetadataModule.
 		/// </summary>
