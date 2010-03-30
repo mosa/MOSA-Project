@@ -195,5 +195,9 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void NopInstruction(Context context);
-	}
+
+        void AddInstruction(Context context);
+
+        void MulInstruction(Context context);
+    }
 }

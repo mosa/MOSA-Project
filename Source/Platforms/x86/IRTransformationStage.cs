@@ -30,7 +30,6 @@ namespace Mosa.Platforms.x86
 	/// </remarks>
 	public sealed class IRTransformationStage : BaseTransformationStage, IR.IIRVisitor, IMethodCompilerStage, IPlatformStage, IPipelineStage
 	{
-
 		#region IPipelineStage Members
 
 		/// <summary>
@@ -43,11 +42,22 @@ namespace Mosa.Platforms.x86
 
 		#region IIRVisitor
 
+        public void AddInstruction(Context ctx)
+        {
+            if (ctx.Operand1.StackType == StackTypeCode.F)
+            {
+                HandleCommutativeOperation(ctx, CPUx86.Instruction.SseAddInstruction);
+                ExtendToR8(ctx);
+            }
+            else
+                HandleCommutativeOperation(ctx, CPUx86.Instruction.AddInstruction);
+        }
+
 		/// <summary>
 		/// Visitation function for <see cref="IR.IIRVisitor.AddressOfInstruction"/> instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.AddressOfInstruction(Context ctx)
+		public void AddressOfInstruction(Context ctx)
 		{
 			Operand opRes = ctx.Result;
 			RegisterOperand eax = new RegisterOperand(opRes.Type, GeneralPurposeRegister.EAX);
@@ -61,7 +71,7 @@ namespace Mosa.Platforms.x86
 		/// Visitation function for <see cref="IR.IIRVisitor.ArithmeticShiftRightInstruction"/> instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.ArithmeticShiftRightInstruction(Context ctx)
+		public void ArithmeticShiftRightInstruction(Context ctx)
 		{
 			HandleShiftOperation(ctx, CPUx86.Instruction.SarInstruction);
 		}
@@ -70,7 +80,7 @@ namespace Mosa.Platforms.x86
 		/// Visitation function for <see cref="IR.IIRVisitor.EpilogueInstruction"/> instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.EpilogueInstruction(Context ctx)
+		public void EpilogueInstruction(Context ctx)
 		{
 			SigType I = new SigType(CilElementType.I);
 			RegisterOperand ebp = new RegisterOperand(I, GeneralPurposeRegister.EBP);
@@ -103,7 +113,7 @@ namespace Mosa.Platforms.x86
 		/// Floatings the point compare instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.FloatingPointCompareInstruction(Context ctx)
+		public void FloatingPointCompareInstruction(Context ctx)
 		{
 			Operand op0 = ctx.Result;
 			Operand left = EmitConstant(ctx.Operand1);
@@ -211,7 +221,7 @@ namespace Mosa.Platforms.x86
 		/// Visitation function for <see cref="IR.IIRVisitor.IntegerCompareInstruction"/> instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.IntegerCompareInstruction(Context ctx)
+		public void IntegerCompareInstruction(Context ctx)
 		{
 			EmitOperandConstants(ctx);
 
@@ -234,7 +244,7 @@ namespace Mosa.Platforms.x86
 		/// Visitation function for <see cref="IR.IIRVisitor.JmpInstruction"/> instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.JmpInstruction(Context ctx)
+		public void JmpInstruction(Context ctx)
 		{
 			ctx.ReplaceInstructionOnly(CPUx86.Instruction.JmpInstruction);
 		}
@@ -243,22 +253,32 @@ namespace Mosa.Platforms.x86
 		/// Visitation function for <see cref="IR.IIRVisitor.LoadInstruction"/> instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.LoadInstruction(Context ctx)
+		public void LoadInstruction(Context ctx)
 		{
-			//RegisterOperand eax = new RegisterOperand(Architecture.NativeType, GeneralPurposeRegister.EAX);
 			RegisterOperand eax = new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EAX);
 			Operand result = ctx.Result;
 			Operand operand = ctx.Operand1;
+            Operand offset = ctx.Operand2;
+            ConstantOperand constantOffset = offset as ConstantOperand;
+
 			ctx.SetInstruction(CPUx86.Instruction.MovInstruction, eax, operand);
-			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, eax, new MemoryOperand(result.Type, GeneralPurposeRegister.EAX, IntPtr.Zero));
-			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, result, eax);
+            if (constantOffset != null)
+            {
+                IntPtr offsetPtr = new IntPtr(Convert.ToInt64(constantOffset.Value));
+                ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, result, new MemoryOperand(result.Type, GeneralPurposeRegister.EAX, offsetPtr));
+            }
+            else
+            {
+                ctx.AppendInstruction(CPUx86.Instruction.AddInstruction, eax, offset);
+                ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, result, new MemoryOperand(result.Type, GeneralPurposeRegister.EAX, IntPtr.Zero));
+            }
 		}
 
 		/// <summary>
 		/// Visitation function for <see cref="IR.IIRVisitor.LogicalAndInstruction"/> instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.LogicalAndInstruction(Context ctx)
+		public void LogicalAndInstruction(Context ctx)
 		{
 			ctx.ReplaceInstructionOnly(CPUx86.Instruction.AndInstruction);
 		}
@@ -267,7 +287,7 @@ namespace Mosa.Platforms.x86
 		/// Visitation function for <see cref="IR.IIRVisitor.LogicalOrInstruction"/> instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.LogicalOrInstruction(Context ctx)
+		public void LogicalOrInstruction(Context ctx)
 		{
 			ctx.ReplaceInstructionOnly(CPUx86.Instruction.OrInstruction);
 		}
@@ -276,7 +296,7 @@ namespace Mosa.Platforms.x86
 		/// Visitation function for <see cref="IR.IIRVisitor.LogicalXorInstruction"/> instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.LogicalXorInstruction(Context ctx)
+		public void LogicalXorInstruction(Context ctx)
 		{
 			ctx.ReplaceInstructionOnly(CPUx86.Instruction.XorInstruction);
 		}
@@ -285,7 +305,7 @@ namespace Mosa.Platforms.x86
 		/// Visitation function for <see cref="IR.IIRVisitor.LogicalNotInstruction"/> instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.LogicalNotInstruction(Context ctx)
+		public void LogicalNotInstruction(Context ctx)
 		{
 			Operand dest = ctx.Result;
 
@@ -303,7 +323,7 @@ namespace Mosa.Platforms.x86
 		/// Visitation function for <see cref="IR.IIRVisitor.MoveInstruction"/> instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.MoveInstruction(Context ctx)
+		public void MoveInstruction(Context ctx)
 		{
 			Operand result = ctx.Result;
 			Operand operand = ctx.Operand1;
@@ -340,11 +360,22 @@ namespace Mosa.Platforms.x86
 			ctx.AppendInstruction(instruction, result, xmm0);
 		}
 
+        public void MulInstruction(Context ctx)
+        {
+            if (ctx.Operand1.StackType == StackTypeCode.F)
+            {
+                HandleCommutativeOperation(ctx, CPUx86.Instruction.SseMulInstruction);
+                ExtendToR8(ctx);
+            }
+            else
+                HandleCommutativeOperation(ctx, CPUx86.Instruction.MulInstruction);
+        }
+
 		/// <summary>
 		/// Visitation function for <see cref="IR.IIRVisitor.PrologueInstruction"/> instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.PrologueInstruction(Context ctx)
+		public void PrologueInstruction(Context ctx)
 		{
 			SigType I = new SigType(CilElementType.I4);
 			RegisterOperand eax = new RegisterOperand(I, GeneralPurposeRegister.EAX);
@@ -406,7 +437,7 @@ namespace Mosa.Platforms.x86
 		/// Visitation function for <see cref="IR.IIRVisitor.ReturnInstruction"/> instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.ReturnInstruction(Context ctx)
+		public void ReturnInstruction(Context ctx)
 		{
 			Operand op = ctx.Operand1;
 
@@ -426,7 +457,7 @@ namespace Mosa.Platforms.x86
 		/// Visitation function for <see cref="IR.IIRVisitor.ShiftLeftInstruction"/> instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.ShiftLeftInstruction(Context ctx)
+		public void ShiftLeftInstruction(Context ctx)
 		{
 			HandleShiftOperation(ctx, CPUx86.Instruction.ShlInstruction);
 		}
@@ -435,7 +466,7 @@ namespace Mosa.Platforms.x86
 		/// Visitation function for <see cref="IR.IIRVisitor.ShiftRightInstruction"/> instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.ShiftRightInstruction(Context ctx)
+		public void ShiftRightInstruction(Context ctx)
 		{
 			HandleShiftOperation(ctx, CPUx86.Instruction.ShrInstruction);
 		}
@@ -444,23 +475,37 @@ namespace Mosa.Platforms.x86
 		/// Visitation function for <see cref="IR.IIRVisitor.StoreInstruction"/> instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.StoreInstruction(Context ctx)
+		public void StoreInstruction(Context ctx)
 		{
-			Operand operand1 = ctx.Operand1;
-			Operand result = ctx.Result;
+            Operand value = ctx.Operand2;
+            Operand result = ctx.Result;
+            
+            Operand offset = ctx.Operand1;
+            ConstantOperand constantOffset = offset as ConstantOperand;
 
 			RegisterOperand eax = new RegisterOperand(result.Type, GeneralPurposeRegister.EAX);
-			RegisterOperand edx = new RegisterOperand(operand1.Type, GeneralPurposeRegister.EDX);
+			RegisterOperand edx = new RegisterOperand(value.Type, GeneralPurposeRegister.EDX);
+
 			ctx.SetInstruction(CPUx86.Instruction.MovInstruction, eax, result);
-			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, edx, operand1);
-			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, new MemoryOperand(operand1.Type, GeneralPurposeRegister.EAX, IntPtr.Zero), edx);
+			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, edx, value);
+
+            if (constantOffset != null)
+            {
+                IntPtr offsetPtr = new IntPtr(Convert.ToInt64(constantOffset.Value));
+                ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, new MemoryOperand(value.Type, GeneralPurposeRegister.EAX, offsetPtr), edx);
+            }
+            else
+            {
+                ctx.AppendInstruction(CPUx86.Instruction.AddInstruction, eax, offset);
+                ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, new MemoryOperand(value.Type, GeneralPurposeRegister.EAX, IntPtr.Zero), edx);
+            }
 		}
 
 		/// <summary>
 		/// Visitation function for <see cref="IR.IIRVisitor.UDivInstruction"/> instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.UDivInstruction(Context ctx)
+		public void UDivInstruction(Context ctx)
 		{
 			ctx.ReplaceInstructionOnly(CPUx86.Instruction.UDivInstruction);
 		}
@@ -469,7 +514,7 @@ namespace Mosa.Platforms.x86
 		/// Visitation function for <see cref="IR.IIRVisitor.URemInstruction"/> instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.URemInstruction(Context ctx)
+		public void URemInstruction(Context ctx)
 		{
 			Operand result = ctx.Result;
 			Operand operand = ctx.Operand1;
@@ -488,7 +533,7 @@ namespace Mosa.Platforms.x86
 		/// Visitation function for <see cref="IR.IIRVisitor.NopInstruction"/> instructions.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.NopInstruction(Context ctx)
+		public void NopInstruction(Context ctx)
 		{
 			ctx.ReplaceInstructionOnly(CPUx86.Instruction.NopInstruction);
 		}
@@ -497,7 +542,7 @@ namespace Mosa.Platforms.x86
 		/// Visitation function for <see cref="IR.IIRVisitor.SignExtendedMoveInstruction"/> instructions.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.SignExtendedMoveInstruction(Context ctx)
+		public void SignExtendedMoveInstruction(Context ctx)
 		{
 			ctx.ReplaceInstructionOnly(CPUx86.Instruction.MovsxInstruction);
 		}
@@ -506,16 +551,18 @@ namespace Mosa.Platforms.x86
 		/// Visitation function for <see cref="IR.IIRVisitor.CallInstruction"/> instructions.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.CallInstruction(Context ctx)
+		public void CallInstruction(Context ctx)
 		{
-			ctx.ReplaceInstructionOnly(CPUx86.Instruction.CallInstruction);
-		}
+            ICallingConvention cc = Architecture.GetCallingConvention(ctx.InvokeTarget.Signature.CallingConvention);
+            Debug.Assert(null != cc, @"Failed to retrieve the calling convention.");
+            cc.MakeCall(ctx, this.MethodCompiler.Method, MethodCompiler.Assembly.Metadata);
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="IR.IIRVisitor.ZeroExtendedMoveInstruction"/> instructions.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.ZeroExtendedMoveInstruction(Context ctx)
+		public void ZeroExtendedMoveInstruction(Context ctx)
 		{
 			switch (ctx.Operand1.Type.Type) {
 				case CilElementType.I1:
@@ -547,7 +594,7 @@ namespace Mosa.Platforms.x86
 		/// Visitation function for <see cref="IR.IIRVisitor.BranchInstruction"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.BranchInstruction(Context context)
+		public void BranchInstruction(Context context)
 		{
 			context.ReplaceInstructionOnly(CPUx86.Instruction.BranchInstruction);
 		}
@@ -556,7 +603,7 @@ namespace Mosa.Platforms.x86
 		/// Visitation function for <see cref="IR.IIRVisitor.FloatingPointToIntegerConversionInstruction"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.FloatingPointToIntegerConversionInstruction(Context context)
+		public void FloatingPointToIntegerConversionInstruction(Context context)
 		{
 			Operand source = context.Operand1;
 			Operand destination = context.Result;
@@ -583,7 +630,7 @@ namespace Mosa.Platforms.x86
 		/// Visitation function for <see cref="IR.IIRVisitor.PopInstruction"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.PopInstruction(Context context)
+		public void PopInstruction(Context context)
 		{
 			context.ReplaceInstructionOnly(CPUx86.Instruction.PopInstruction);
 		}
@@ -592,7 +639,7 @@ namespace Mosa.Platforms.x86
 		/// Visitation function for <see cref="IR.IIRVisitor.PushInstruction"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.PushInstruction(Context context)
+		public void PushInstruction(Context context)
 		{
 			context.ReplaceInstructionOnly(CPUx86.Instruction.PushInstruction);
 		}
@@ -623,7 +670,46 @@ namespace Mosa.Platforms.x86
 
 		#region Internals
 
-		/// <summary>
+        /// <summary>
+        /// Extends to r8.
+        /// </summary>
+        /// <param name="ctx">The context.</param>
+        private static void ExtendToR8(Context ctx)
+        {
+            RegisterOperand xmm5 = new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM5);
+            RegisterOperand xmm6 = new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM6);
+            Context before = ctx.InsertBefore();
+
+            if (ctx.Result.Type.Type == CilElementType.R4)
+            {
+                before.SetInstruction(CPUx86.Instruction.Cvtss2sdInstruction, xmm5, ctx.Result);
+                ctx.Result = xmm5;
+            }
+
+            if (ctx.Operand1.Type.Type == CilElementType.R4)
+            {
+                before.SetInstruction(CPUx86.Instruction.Cvtss2sdInstruction, xmm6, ctx.Operand1);
+                ctx.Operand1 = xmm6;
+            }
+        }
+
+        /// <summary>
+        /// Special handling for commutative operations.
+        /// </summary>
+        /// <param name="ctx">The transformation context.</param>
+        /// <param name="instruction">The instruction.</param>
+        /// <remarks>
+        /// Commutative operations are reordered by moving the constant to the second operand,
+        /// which allows the instruction selection in the code generator to use a instruction
+        /// format with an immediate operand.
+        /// </remarks>
+        private void HandleCommutativeOperation(Context ctx, IInstruction instruction)
+        {
+            EmitOperandConstants(ctx);
+            ctx.ReplaceInstructionOnly(instruction);
+        }
+
+        /// <summary>
 		/// Special handling for shift operations, which require the shift amount in the ECX or as a constant register.
 		/// </summary>
 		/// <param name="ctx">The transformation context.</param>

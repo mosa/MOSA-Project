@@ -16,13 +16,12 @@ using System.Diagnostics;
 namespace Mosa.Runtime.CompilerFramework.IR
 {
     /// <summary>
-    /// Loads a value from a memory pointer.
+    /// Loads a value From a memory pointer.
     /// </summary>
     /// <remarks>
-    /// The load instruction is used to load a value From
-    /// a memory pointer. The types must be compatible.
+    /// The load instruction is used to load a value from a memory pointer and an offset. The types must be compatible.
     /// </remarks>
-    public sealed class LoadInstruction : TwoOperandInstruction
+    public sealed class LoadInstruction : ThreeOperandInstruction
     {
         #region Construction
 
@@ -50,3 +49,4 @@ namespace Mosa.Runtime.CompilerFramework.IR
         #endregion // TwoOperandInstruction Overrides
     }
 }
+

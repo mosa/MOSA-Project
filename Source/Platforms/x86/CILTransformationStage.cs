@@ -222,12 +222,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Add(Context ctx)
 		{
-			if (ctx.Operand1.StackType == StackTypeCode.F) {
-				HandleCommutativeOperation(ctx, CPUx86.Instruction.SseAddInstruction);
-				ExtendToR8(ctx);
-			}
-			else
-				HandleCommutativeOperation(ctx, CPUx86.Instruction.AddInstruction);
+            //throw new InvalidOperationException(@"Add should've been handled by IRTransformationStage.");
 		}
 
 		/// <summary>
@@ -250,12 +245,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Mul(Context ctx)
 		{
-			if (ctx.Operand1.StackType == StackTypeCode.F) {
-				HandleCommutativeOperation(ctx, CPUx86.Instruction.SseMulInstruction);
-				ExtendToR8(ctx);
-			}
-			else
-				HandleCommutativeOperation(ctx, CPUx86.Instruction.MulInstruction);
+            //throw new InvalidOperationException(@"Multiplication should've been handled in the IRTransformationStage.");
 		}
 
 		/// <summary>
@@ -556,13 +546,17 @@ namespace Mosa.Platforms.x86
 		/// Visitation function for <see cref="CIL.ICILVisitor.Newarr"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Newarr(Context ctx) { }
+		void CIL.ICILVisitor.Newarr(Context ctx) 
+        {
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Ldlen"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Ldlen(Context ctx) { }
+		public void Ldlen(Context ctx) 
+        {
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Ldelema"/>.

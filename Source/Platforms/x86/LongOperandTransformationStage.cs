@@ -1424,15 +1424,18 @@ namespace Mosa.Platforms.x86
         {
             Operand op0 = ctx.Result;
             Operand op1 = ctx.Operand1;
+            Operand offsetOperand = ctx.Operand2;
             Debug.Assert(op0 != null && op1 != null, @"Operands to I8 LoadInstruction are not MemoryOperand.");
 
             SigType I4 = new SigType(CilElementType.I4);
             Operand op0L, op0H;
             SplitLongOperand(op0, out op0L, out op0H);
+
             RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
             RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
 
             ctx.SetInstruction(CPUx86.Instruction.MovInstruction, eax, op1);
+            ctx.AppendInstruction(CPUx86.Instruction.AddInstruction, eax, offsetOperand);
             ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, edx, new MemoryOperand(op0L.Type, GeneralPurposeRegister.EAX, IntPtr.Zero));
             ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, op0L, edx);
             ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, edx, new MemoryOperand(op0H.Type, GeneralPurposeRegister.EAX, new IntPtr(4)));
@@ -1446,17 +1449,22 @@ namespace Mosa.Platforms.x86
         private void ExpandStore(Context ctx)
         {
             MemoryOperand op0 = ctx.Result as MemoryOperand;
-            MemoryOperand op1 = ctx.Operand1 as MemoryOperand;
-            Debug.Assert(op0 != null && op1 != null, @"Operands to I8 LoadInstruction are not MemoryOperand.");
+            Operand offsetOperand = ctx.Operand1;
+            MemoryOperand op2 = ctx.Operand2 as MemoryOperand;
+            Debug.Assert(op0 != null && op2 != null, @"Operands to I8 LoadInstruction are not MemoryOperand.");
 
             SigType I4 = new SigType(CilElementType.I4);
             SigType U4 = new SigType(CilElementType.U4);
             Operand op1L, op1H;
-            SplitLongOperand(op1, out op1L, out op1H);
+            SplitLongOperand(op2, out op1L, out op1H);
             RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
             RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
 
             ctx.SetInstruction(CPUx86.Instruction.MovInstruction, edx, op0);
+
+            // Fortunately in 32-bit mode, we can't have 64-bit offsets, so this plain add should suffice.
+            ctx.AppendInstruction(CPUx86.Instruction.AddInstruction, edx, offsetOperand);
+
             ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, eax, op1L);
             ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, new MemoryOperand(U4, GeneralPurposeRegister.EDX, IntPtr.Zero), eax);
             ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, eax, op1H);
@@ -1679,6 +1687,21 @@ namespace Mosa.Platforms.x86
             LinkBlocks(newBlocks[3], nextBlock);
         }
 
+        public static bool IsInt64(Operand op)
+        {
+            return op.StackType == StackTypeCode.Int64;
+        }
+
+        public static bool IsDouble(Operand op)
+        {
+            return op.Type.Matches(BuiltInSigType.Double);
+        }
+
+        public static bool IsDoubleOrInt64(Operand op)
+        {
+            return IsInt64(op) || IsDouble(op);
+        }
+
         #endregion // Utility Methods
 
         #region IIRVisitor
@@ -1689,8 +1712,10 @@ namespace Mosa.Platforms.x86
         /// <param name="ctx">The context.</param>
         void IR.IIRVisitor.ArithmeticShiftRightInstruction(Context ctx)
         {
-            if (ctx.Operand1.StackType == StackTypeCode.Int64)
-                ExpandArithmeticShiftRight(ctx);
+            if (IsInt64(ctx.Operand1) == true)
+            {
+                this.ExpandArithmeticShiftRight(ctx);
+            }
         }
 
         /// <summary>
@@ -1699,8 +1724,10 @@ namespace Mosa.Platforms.x86
         /// <param name="ctx">The context.</param>
         void IR.IIRVisitor.IntegerCompareInstruction(Context ctx)
         {
-            if (ctx.Operand1.StackType == StackTypeCode.Int64)
+            if (IsInt64(ctx.Operand1) == true)
+            {
                 ExpandComparison(ctx);
+            }
         }
 
         /// <summary>
@@ -1709,8 +1736,10 @@ namespace Mosa.Platforms.x86
         /// <param name="ctx">The context.</param>
         void IR.IIRVisitor.LoadInstruction(Context ctx)
         {
-            if (ctx.Operand1.StackType == StackTypeCode.Int64 || ctx.Result.StackType == StackTypeCode.Int64)
-                ExpandLoad(ctx);
+            if (IsInt64(ctx.Operand1) == true || IsInt64(ctx.Result) == true)
+            {
+                this.ExpandLoad(ctx);
+            }
         }
 
         /// <summary>
@@ -1719,8 +1748,10 @@ namespace Mosa.Platforms.x86
         /// <param name="ctx">The context.</param>
         void IR.IIRVisitor.LogicalAndInstruction(Context ctx)
         {
-            if (ctx.Operand1.StackType == StackTypeCode.Int64)
-                ExpandAnd(ctx);
+            if (IsInt64(ctx.Operand1) == true)
+            {
+                this.ExpandAnd(ctx);
+            }
         }
 
         /// <summary>
@@ -1729,8 +1760,10 @@ namespace Mosa.Platforms.x86
         /// <param name="ctx">The context.</param>
         void IR.IIRVisitor.LogicalOrInstruction(Context ctx)
         {
-            if (ctx.Operand1.StackType == StackTypeCode.Int64)
-                ExpandOr(ctx);
+            if (IsInt64(ctx.Operand1) == true)
+            {
+                this.ExpandOr(ctx);
+            }
         }
 
         /// <summary>
@@ -1739,8 +1772,10 @@ namespace Mosa.Platforms.x86
         /// <param name="ctx">The context.</param>
         void IR.IIRVisitor.LogicalXorInstruction(Context ctx)
         {
-            if (ctx.Operand1.StackType == StackTypeCode.Int64)
-                ExpandXor(ctx);
+            if (IsInt64(ctx.Operand1) == true)
+            {
+                this.ExpandXor(ctx);
+            }
         }
 
         /// <summary>
@@ -1749,8 +1784,10 @@ namespace Mosa.Platforms.x86
         /// <param name="ctx">The context.</param>
         void IR.IIRVisitor.LogicalNotInstruction(Context ctx)
         {
-            if (ctx.Operand1.StackType == StackTypeCode.Int64)
-                ExpandNot(ctx);
+            if (IsInt64(ctx.Operand1) == true)
+            {
+                this.ExpandNot(ctx);
+            }
         }
 
         /// <summary>
@@ -1759,8 +1796,11 @@ namespace Mosa.Platforms.x86
         /// <param name="ctx">The context.</param>
         void IR.IIRVisitor.MoveInstruction(Context ctx)
         {
-            if (ctx.Operand1.StackType == StackTypeCode.Int64)
-                ExpandMove(ctx);
+            // FIXME: Why aren't we doing an SSE2 move for int64?
+            if (IsInt64(ctx.Operand1) == true)
+            {
+                this.ExpandMove(ctx);
+            }
         }
 
         /// <summary>
@@ -1769,8 +1809,10 @@ namespace Mosa.Platforms.x86
         /// <param name="ctx">The context.</param>
         void IR.IIRVisitor.PopInstruction(Context ctx)
         {
-            if (ctx.Operand1.StackType == StackTypeCode.Int64)
-                ExpandPop(ctx);
+            if (IsInt64(ctx.Operand1) == true)
+            {
+                this.ExpandPop(ctx);
+            }
         }
 
         /// <summary>
@@ -1779,8 +1821,10 @@ namespace Mosa.Platforms.x86
         /// <param name="ctx">The context.</param>
         void IR.IIRVisitor.PushInstruction(Context ctx)
         {
-            if (ctx.Operand1.StackType == StackTypeCode.Int64)
-                ExpandPush(ctx);
+            if (IsInt64(ctx.Operand1) == true)
+            {
+               this.ExpandPush(ctx);
+            }
         }
 
         /// <summary>
@@ -1789,8 +1833,10 @@ namespace Mosa.Platforms.x86
         /// <param name="ctx">The context.</param>
         void IR.IIRVisitor.ShiftLeftInstruction(Context ctx)
         {
-            if (ctx.Operand1.StackType == StackTypeCode.Int64)
-                ExpandShiftLeft(ctx);
+            if (IsInt64(ctx.Operand1) == true)
+            {
+                this.ExpandShiftLeft(ctx);
+            }
         }
 
         /// <summary>
@@ -1799,8 +1845,10 @@ namespace Mosa.Platforms.x86
         /// <param name="ctx">The context.</param>
         void IR.IIRVisitor.ShiftRightInstruction(Context ctx)
         {
-            if (ctx.Operand1.StackType == StackTypeCode.Int64)
-                ExpandShiftRight(ctx);
+            if (IsInt64(ctx.Operand1) == true)
+            {
+                this.ExpandShiftRight(ctx);
+            }
         }
 
         /// <summary>
@@ -1809,8 +1857,10 @@ namespace Mosa.Platforms.x86
         /// <param name="ctx">The context.</param>
         void IR.IIRVisitor.SignExtendedMoveInstruction(Context ctx)
         {
-            if (ctx.Operand1.StackType == StackTypeCode.Int64 || ctx.Result.StackType == StackTypeCode.Int64)
-                ExpandSignedMove(ctx);
+            if (IsInt64(ctx.Operand1) == true || IsInt64(ctx.Result) == true)
+            {
+                this.ExpandSignedMove(ctx);
+            }
         }
 
         /// <summary>
@@ -1819,8 +1869,10 @@ namespace Mosa.Platforms.x86
         /// <param name="ctx">The context.</param>
         void IR.IIRVisitor.StoreInstruction(Context ctx)
         {
-            if (ctx.Operand1.StackType == StackTypeCode.Int64)
-                ExpandStore(ctx);
+            if (IsInt64(ctx.Operand2) == true)
+            {
+                this.ExpandStore(ctx);
+            }
         }
 
         /// <summary>
@@ -1829,8 +1881,10 @@ namespace Mosa.Platforms.x86
         /// <param name="ctx">The context.</param>
         void IR.IIRVisitor.UDivInstruction(Context ctx)
         {
-            if (ctx.Operand1.StackType == StackTypeCode.Int64)
-                ExpandUDiv(ctx);
+            if (IsInt64(ctx.Operand1) == true)
+            {
+                this.ExpandUDiv(ctx);
+            }
         }
 
         /// <summary>
@@ -1839,8 +1893,10 @@ namespace Mosa.Platforms.x86
         /// <param name="ctx">The context.</param>
         void IR.IIRVisitor.URemInstruction(Context ctx)
         {
-            if (ctx.Operand1.StackType == StackTypeCode.Int64)
-                ExpandURem(ctx);
+            if (IsInt64(ctx.Operand1) == true)
+            {
+                this.ExpandURem(ctx);
+            }
         }
 
         /// <summary>
@@ -1849,8 +1905,10 @@ namespace Mosa.Platforms.x86
         /// <param name="ctx">The context.</param>
         void IR.IIRVisitor.ZeroExtendedMoveInstruction(Context ctx)
         {
-            if (ctx.Result.StackType == StackTypeCode.Int64)
+            if (IsInt64(ctx.Result) == true)
+            {
                 ExpandUnsignedMove(ctx);
+            }
         }
 
         #endregion // IIRVisitor
@@ -1945,8 +2003,10 @@ namespace Mosa.Platforms.x86
         /// <param name="ctx">The context.</param>
         void CIL.ICILVisitor.UnaryBranch(Context ctx)
         {
-            if (ctx.Operand1.StackType == StackTypeCode.Int64)
-                ExpandUnaryBranch(ctx);
+            if (IsInt64(ctx.Operand1) == true)
+            {
+                this.ExpandUnaryBranch(ctx);
+            }
         }
 
         /// <summary>
@@ -1955,8 +2015,10 @@ namespace Mosa.Platforms.x86
         /// <param name="ctx">The context.</param>
         void CIL.ICILVisitor.BinaryBranch(Context ctx)
         {
-            if (ctx.Operand1.StackType == StackTypeCode.Int64)
-                ExpandBinaryBranch(ctx);
+            if (IsInt64(ctx.Operand1) == true)
+            {
+                this.ExpandBinaryBranch(ctx);
+            }
         }
 
         /// <summary>
@@ -1965,8 +2027,10 @@ namespace Mosa.Platforms.x86
         /// <param name="ctx">The context.</param>
         void CIL.ICILVisitor.Neg(Context ctx)
         {
-            if (ctx.Operand1.StackType == StackTypeCode.Int64)
+            if (IsInt64(ctx.Operand1) == true)
+            {
                 ExpandNeg(ctx);
+            }
         }
 
         /// <summary>
@@ -1996,14 +2060,24 @@ namespace Mosa.Platforms.x86
             throw new NotSupportedException();
         }
 
+        void CIL.ICILVisitor.Add(Context ctx)
+        {
+            if (IsInt64(ctx.Operand1) == true)
+            {
+                this.ExpandAdd(ctx);
+            }
+        }
+
         /// <summary>
         /// Visitation function for <see cref="CIL.ICILVisitor.Add"/>.
         /// </summary>
         /// <param name="ctx">The context.</param>
-        void CIL.ICILVisitor.Add(Context ctx)
+        public void AddInstruction(Context ctx)
         {
-            if (ctx.Operand1.StackType == StackTypeCode.Int64)
-                ExpandAdd(ctx);
+            if (IsInt64(ctx.Operand1) == true)
+            {
+                this.ExpandAdd(ctx);
+            }
         }
 
         /// <summary>
@@ -2012,8 +2086,10 @@ namespace Mosa.Platforms.x86
         /// <param name="ctx">The context.</param>
         void CIL.ICILVisitor.Sub(Context ctx)
         {
-            if (ctx.Operand1.StackType == StackTypeCode.Int64)
-                ExpandSub(ctx);
+            if (IsInt64(ctx.Operand1) == true)
+            {
+                this.ExpandSub(ctx);
+            }
             else
             {
                 if (ctx.Operand2 is ConstantOperand && ctx.Operand1.Type.Type == CilElementType.Char)
@@ -2025,14 +2101,24 @@ namespace Mosa.Platforms.x86
             }
         }
 
+        void CIL.ICILVisitor.Mul(Context ctx)
+        {
+            if (IsInt64(ctx.Operand1) == true)
+            {
+                this.ExpandMul(ctx);
+            }
+        }
+
         /// <summary>
         /// Visitation function for <see cref="CIL.ICILVisitor.Mul"/>.
         /// </summary>
         /// <param name="ctx">The context.</param>
-        void CIL.ICILVisitor.Mul(Context ctx)
+        public void MulInstruction(Context ctx)
         {
-            if (ctx.Operand1.StackType == StackTypeCode.Int64)
-                ExpandMul(ctx);
+            if (IsInt64(ctx.Operand1) == true)
+            {
+                this.ExpandMul(ctx);
+            }
         }
 
         /// <summary>
@@ -2041,8 +2127,10 @@ namespace Mosa.Platforms.x86
         /// <param name="ctx">The context.</param>
         void CIL.ICILVisitor.Div(Context ctx)
         {
-            if (ctx.Operand1.StackType == StackTypeCode.Int64)
-                ExpandDiv(ctx);
+            if (IsInt64(ctx.Operand1) == true)
+            {
+                this.ExpandDiv(ctx);
+            }
         }
 
         /// <summary>
@@ -2051,8 +2139,10 @@ namespace Mosa.Platforms.x86
         /// <param name="ctx">The context.</param>
         void CIL.ICILVisitor.Rem(Context ctx)
         {
-            if (ctx.Operand1.StackType == StackTypeCode.Int64)
-                ExpandRem(ctx);
+            if (IsInt64(ctx.Operand1) == true)
+            {
+                this.ExpandRem(ctx);
+            }
         }
 
         #endregion // Members
