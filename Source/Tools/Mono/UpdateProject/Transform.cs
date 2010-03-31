@@ -30,12 +30,22 @@ namespace Mosa.Tools.Mono.UpdateProject
 		/// Processes the specified file.
 		/// </summary>
 		/// <param name="file">The file.</param>
-		internal static void Process(string file)
+		internal static void ProcessProject(string project)
 		{
-			List<string> files = Transform.GetProjectFiles(file);
+			List<string> files = Transform.GetProjectFiles(project);
 
-			foreach (string project in files)
-				Process(project, Path.GetDirectoryName(file));
+			string root = Path.GetDirectoryName(project);
+
+			foreach (string file in files)
+				Process(Path.GetFileName(file), Path.GetDirectoryName(Path.Combine(root, file)));
+		}
+
+		/// Processes the specified file.
+		/// </summary>
+		/// <param name="file">The file.</param>
+		internal static void ProcessFile(string file)
+		{
+			Process(Path.GetFileName(file), Path.GetDirectoryName(file));
 		}
 
 		/// <summary>
@@ -43,7 +53,7 @@ namespace Mosa.Tools.Mono.UpdateProject
 		/// </summary>
 		/// <param name="file">The file.</param>
 		/// <returns></returns>
-		static internal List<string> GetProjectFiles(string file)
+		static public List<string> GetProjectFiles(string file)
 		{
 			List<string> list = new List<string>();
 
@@ -57,8 +67,12 @@ namespace Mosa.Tools.Mono.UpdateProject
 			foreach (XmlNode compileNode in compileNodes)
 				foreach (XmlNode attribute in compileNode.Attributes)
 					if (attribute.Name.Equals("Include"))
-						if ((attribute.Value.EndsWith(".cs")) && ((!attribute.Value.Contains(".Partial."))))
-							list.Add(attribute.Value);
+						if ((attribute.Value.EndsWith(".cs")) && ((!attribute.Value.Contains(".Partial.")))) {
+							if (attribute.Value.EndsWith(".Original.cs"))
+								list.Add(attribute.Value.Replace(".Original.cs", ".cs"));
+							else
+								list.Add(attribute.Value);
+						}
 
 			return list;
 		}
@@ -75,8 +89,19 @@ namespace Mosa.Tools.Mono.UpdateProject
 			if (!File.Exists(Path.Combine(root, file)))
 				return;
 
+			string originalFile = Path.Combine(root, Path.GetFileNameWithoutExtension(file) + ".Original.cs");
+
+			string[] lines;
+			bool createOriginal = true;
+
 			// Load file into string array
-			string[] lines = File.ReadAllLines(Path.Combine(root, file));
+			if (!File.Exists(originalFile))
+				lines = File.ReadAllLines(Path.Combine(root, file));
+			else {
+				// Load file marked ".Original.cs" instead
+				lines = File.ReadAllLines(originalFile);
+				createOriginal = false;
+			}
 
 			ClassNode rootNode = new ClassNode();
 			List<ClassNode> classNodes = new List<ClassNode>();
@@ -86,13 +111,10 @@ namespace Mosa.Tools.Mono.UpdateProject
 			List<int> usings = new List<int>();
 
 			ClassNode currentNode = rootNode;
-
 			bool incomment = false;
+
 			// Analyze File
 			for (int linenbr = 0; linenbr < lines.Length; linenbr++) {
-				if (lines[linenbr].StartsWith("#if MOSAPROJECT"))
-					return; // abort... already done
-
 				string trim = GetLine(lines, linenbr, ref incomment).Replace('\t', ' ');
 
 				if (incomment)
@@ -115,6 +137,7 @@ namespace Mosa.Tools.Mono.UpdateProject
 				}
 				else if (trim.StartsWith("using ") && trim.Contains(";")) {
 					usings.Add(linenbr);
+
 				}
 				else if (trim.StartsWith("namespace ")) {
 					namespaces.Add(linenbr);
@@ -167,13 +190,22 @@ namespace Mosa.Tools.Mono.UpdateProject
 
 			// Create partial file
 			if (methodNodes.Count != 0) {
-				string partialFile = Path.Combine(root, file.Insert(file.Length - 2, "Partial."));
-				//Console.WriteLine(partialFile);
-				CreatePartialFile(lines, rootNode, usings, namespaces, partialFile);
-			}
+				if (createOriginal)
+					File.Copy(Path.Combine(root, file), originalFile);
 
-			// Modify source file
-			CreateModifiedFile(lines, classNodes, methodNodes, Path.Combine(root, file));
+				ExpandUsing(lines, usings);
+
+				string partialMosaFile = Path.Combine(root, file.Insert(file.Length - 2, "Mosa.Partial."));
+				Console.WriteLine(">" + Path.GetFileName(partialMosaFile));
+				CreatePartialFileForMosa(lines, rootNode, usings, namespaces, partialMosaFile);
+
+				string partialMonoFile = Path.Combine(root, file.Insert(file.Length - 2, "Partial."));
+				Console.WriteLine(">" + Path.GetFileName(partialMonoFile));
+				CreatePartialFileForMono(lines, rootNode, usings, namespaces, partialMonoFile);
+
+				// Modify source file
+				CreateModifiedFile(lines, classNodes, methodNodes, Path.Combine(root, file));
+			}
 		}
 
 		/// <summary>
@@ -243,13 +275,11 @@ namespace Mosa.Tools.Mono.UpdateProject
 
 			// Insert conditions
 			foreach (MethodNode method in methodNodes) {
-				lines[method.Start] = "#if !MOSAPROJECT\n" + lines[method.Start];
-				lines[method.End] = lines[method.End] + "\n#endif";
+				for (int i = method.Start; i <= method.End; i++)
+					lines[i] = null;
 			}
 
-			for (int i = 0; i < lines.Length; i++)
-				if (lines[i].Contains("[assembly: AssemblyKeyFile"))
-					lines[i] = "#if !MOSAPROJECT\n" + lines[i] + "\n#endif";
+			RemoveExtraBlankLines(lines);
 
 			// Write modified source files
 			using (TextWriter writer = new StreamWriter(filename)) {
@@ -261,25 +291,72 @@ namespace Mosa.Tools.Mono.UpdateProject
 			}
 		}
 
+		public static void RemoveExtraBlankLines(string[] lines)
+		{
+			// Remove consequentive blank lines
+			bool blank = false;
+			for (int i = 0; i < lines.Length; i++)
+				if (lines[i] != null)
+					if (lines[i].Trim(trimchars).Length > 0)
+						blank = false;
+					else
+						if (!blank)
+							blank = true;
+						else
+							lines[i] = null;
+		}
+
+		public static void RemoveExtraBlankLines(List<string> lines)
+		{
+			// Remove consequentive blank lines
+			bool blank = false;
+			for (int i = 0; i < lines.Count; i++)
+				if (lines[i] != null)
+					if (lines[i].Trim(trimchars).Length > 0)
+						blank = false;
+					else
+						if (!blank)
+							blank = true;
+						else
+							lines[i] = null;
+		}
+
 		/// <summary>
-		/// Creates the partial file.
+		/// Creates the partial file for MOSA.
 		/// </summary>
 		/// <param name="lines">The lines.</param>
 		/// <param name="rootNode">The root node.</param>
 		/// <param name="usings">The usings.</param>
 		/// <param name="namespaces">The namespaces.</param>
 		/// <param name="filename">The filename.</param>
-		private static void CreatePartialFile(string[] lines, ClassNode rootNode, List<int> usings, List<int> namespaces,
+		private static void CreatePartialFileForMosa(string[] lines, ClassNode rootNode, List<int> usings, List<int> namespaces,
 											  string filename)
 		{
 			List<string> output = new List<string>();
 
-			output.Add("#if MOSAPROJECT");
+			output.Add("/*");
+			output.Add(" * (c) 2010 MOSA - The Managed Operating System Alliance");
+			output.Add(" *");
+			output.Add(" * Licensed under the terms of the New BSD License.");
+			output.Add(" *");
+			output.Add(" * Authors:");
+			output.Add(" *  Phil Garcia (tgiphil) <phil@thinkedge.com>");
+			output.Add(" *");
+			output.Add(" */");
+
 			output.Add(string.Empty);
 
 			// Write "using" lines
-			foreach (int i in usings)
-				output.Add(lines[i].Trim(trimchars2) + ";");
+			foreach (int i in usings) {
+				string line = lines[i];
+				if (line.Contains("using"))
+					output.Add(line.Trim(trimchars2) + ";");
+				else if (line.Contains("#"))
+					output.Add(line.Trim(trimchars));
+				else if (string.IsNullOrEmpty(line))
+					output.Add(string.Empty);
+			}
+
 			output.Add(string.Empty);
 
 			// Write "namespace" lines
@@ -290,12 +367,11 @@ namespace Mosa.Tools.Mono.UpdateProject
 			output.Add("{");
 
 			foreach (ClassNode child in rootNode.Children)
-				WriteClass(lines, child, output, 0);
+				WriteClassForMosa(lines, child, output, 0);
 
 			output.Add("}");
 
-			output.Add("");
-			output.Add("#endif");
+			RemoveExtraBlankLines(output);
 
 			using (TextWriter writer = new StreamWriter(filename)) {
 				foreach (string line in output)
@@ -306,18 +382,129 @@ namespace Mosa.Tools.Mono.UpdateProject
 		}
 
 		/// <summary>
-		/// Writes the class.
+		/// Copies the header comment.
+		/// </summary>
+		/// <param name="lines">The lines.</param>
+		/// <param name="comments">The comments.</param>
+		private static int CopyHeaderComment(string[] lines, List<string> comments)
+		{
+			int maxlines = Math.Min(200, lines.Length);
+			bool inComment = false;
+
+			for (int i = 0; i < maxlines; i++) {
+				string line = lines[i];
+				if (line.StartsWith("//") || string.IsNullOrEmpty(line)) {
+					inComment = true;
+					comments.Add(line);
+				}
+				else
+					if (inComment)
+						return i - 1;
+			}
+
+			return maxlines;
+		}
+
+		/// <summary>
+		/// Expands the using.
+		/// </summary>
+		/// <param name="lines">The lines.</param>
+		/// <param name="usings">The usings.</param>
+		public static void ExpandUsing(string[] lines, List<int> usings)
+		{
+			Stack<int> stack = new Stack<int>(usings.Count);
+
+			foreach (int l in usings)
+				stack.Push(l);
+
+			while (stack.Count != 0) {
+				int linenbr = stack.Pop();
+				string line = lines[linenbr];
+
+				if (linenbr >= 1) {
+					string prev = lines[linenbr - 1];
+					if (prev.Contains("#if") || prev.Contains("#else") || prev.Contains("#endif") || string.IsNullOrEmpty(prev.Trim(trimchars)))
+						if (!usings.Contains(linenbr - 1)) {
+							usings.Add(linenbr - 1);
+							stack.Push(linenbr - 1);
+						}
+				}
+
+				if (linenbr < lines.Length) {
+					string next = lines[linenbr + 1];
+					if (next.Contains("#if") || next.Contains("#else") || next.Contains("#endif") || string.IsNullOrEmpty(next.Trim(trimchars)))
+						if (!usings.Contains(linenbr + 1)) {
+							usings.Add(linenbr + 1);
+							stack.Push(linenbr + 1);
+						}
+				}
+			}
+
+			usings.Sort();
+		}
+
+		/// <summary>
+		/// Creates the partial file for mono.
+		/// </summary>
+		/// <param name="lines">The lines.</param>
+		/// <param name="rootNode">The root node.</param>
+		/// <param name="usings">The usings.</param>
+		/// <param name="namespaces">The namespaces.</param>
+		/// <param name="filename">The filename.</param>
+		private static void CreatePartialFileForMono(string[] lines, ClassNode rootNode, List<int> usings, List<int> namespaces, string filename)
+		{
+			List<string> output = new List<string>();
+
+			int headerEnd = CopyHeaderComment(lines, output);
+
+			// Write "using" lines
+			foreach (int i in usings) {
+				string line = lines[i];
+				if (line.Contains("using"))
+					output.Add(line.Trim(trimchars2) + ";");
+				else if (line.Contains("#"))
+					output.Add(line.Trim(trimchars));
+				else if (string.IsNullOrEmpty(line))
+					output.Add(string.Empty);
+			}
+
+			output.Add(string.Empty);
+
+			// Write "namespace" lines
+			if (namespaces.Count != 1)
+				return; // problem, more than one namespace
+
+			output.Add(lines[namespaces[0]].Trim(trimchars3));
+			output.Add("{");
+
+			foreach (ClassNode child in rootNode.Children)
+				WriteClassForMono(lines, child, output, 0);
+
+			output.Add("}");
+
+			RemoveExtraBlankLines(output);
+
+			using (TextWriter writer = new StreamWriter(filename)) {
+				foreach (string line in output)
+					if (line != null)
+						writer.WriteLine(line);
+				writer.Close();
+			}
+		}
+
+		/// <summary>
+		/// Writes the class for Mosa.
 		/// </summary>
 		/// <param name="lines">The lines.</param>
 		/// <param name="currentNode">The current node.</param>
 		/// <param name="output">The output.</param>
 		/// <param name="depth">The depth.</param>
-		private static void WriteClass(string[] lines, ClassNode currentNode, List<string> output, int depth)
+		private static void WriteClassForMosa(string[] lines, ClassNode currentNode, List<string> output, int depth)
 		{
 			if (!currentNode.Partial)
 				return;
 
-			string tabs = "\t\t\t\t\t\t\t\t\t\t\t\t\t\t".Substring(0, depth + 1);
+			string tabs = "".PadLeft(20, '\t').Substring(0, depth + 1);
 
 			// Write class declaration
 			output.Add(tabs + GetDeclaration(lines, currentNode.Start, currentNode.Declare));
@@ -367,7 +554,61 @@ namespace Mosa.Tools.Mono.UpdateProject
 			output.Add(string.Empty);
 
 			foreach (ClassNode child in currentNode.Children)
-				WriteClass(lines, child, output, depth + 1);
+				WriteClassForMosa(lines, child, output, depth + 1);
+
+			output.Add(tabs + "}");
+		}
+
+		/// <summary>
+		/// Writes the class for mono.
+		/// </summary>
+		/// <param name="lines">The lines.</param>
+		/// <param name="currentNode">The current node.</param>
+		/// <param name="output">The output.</param>
+		/// <param name="depth">The depth.</param>
+		private static void WriteClassForMono(string[] lines, ClassNode currentNode, List<string> output, int depth)
+		{
+			if (!currentNode.Partial)
+				return;
+
+			string tabs = "".PadLeft(20, '\t').Substring(0, depth + 1);
+
+			// Write class declaration
+			output.Add(tabs + GetDeclaration(lines, currentNode.Start, currentNode.Declare));
+			output.Add(tabs + "{");
+
+			// Write method declarations
+			foreach (MethodNode method in currentNode.Methods) {
+				string extra = string.Empty;
+				bool endif = false;
+
+				for (int i = method.Start; i <= method.End; i++) {
+					string line = lines[i];
+
+					string trim = line.TrimStart(trimchars);
+
+					if (trim.StartsWith("//"))
+						continue;
+
+					if (trim.StartsWith("#")) {
+						if (trim.Contains("#endif"))
+							endif = false;
+						else
+							if (trim.Contains("#if"))
+								endif = true;
+						output.Add(trim);
+					}
+					else
+						output.Add(tabs + '\t' + trim);
+				}
+				//if (endif)
+				//    output.Add("#endif");
+			}
+
+			output.Add(string.Empty);
+
+			foreach (ClassNode child in currentNode.Children)
+				WriteClassForMono(lines, child, output, depth + 1);
 
 			output.Add(tabs + "}");
 		}
@@ -413,7 +654,7 @@ namespace Mosa.Tools.Mono.UpdateProject
 			if (insert < 0)
 				insert = lines[line].Replace('\t', ' ').IndexOf("struct ");
 
-			lines[line] = lines[line].Insert(insert, "\n#if MOSAPROJECT\n\tpartial\n#endif\n");
+			lines[line] = lines[line].Insert(insert, "partial ");
 		}
 
 		/// <summary>
