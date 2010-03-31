@@ -1,9 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Gallio.Framework;
+﻿/*
+ * (c) 2008 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Michael Fröhlich (aka grover, <mailto:sharpos@michaelruck.de>)
+ *  
+ */
+
+using System;
+
 using MbUnit.Framework;
-using MbUnit.Framework.ContractVerifiers;
 
 namespace Test.Mosa.Runtime.CompilerFramework.CLI
 {
@@ -23,6 +30,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
         };
 
         private readonly ComparisonInstructionTestRunner<uint> comparisonTests = new ComparisonInstructionTestRunner<uint>
+        {
+            TypeName = @"uint"
+        };
+
+        private readonly SZArrayInstructionTestRunner<uint> arrayTests = new SZArrayInstructionTestRunner<uint>
         {
             TypeName = @"uint"
         };
@@ -221,5 +233,76 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
         }
 
         #endregion // Rem
+
+        #region Newarr
+
+        [Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
+        public void Newarr()
+        {
+            this.arrayTests.Newarr();
+        }
+
+        #endregion // Newarr
+
+        #region Ldlen
+
+        [Row(0)]
+        [Row(1)]
+        [Row(10)]
+        [Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
+        public void Ldlen(int length)
+        {
+            this.arrayTests.Ldlen(length);
+        }
+
+        #endregion // Ldlen
+
+        #region Stelem
+
+        [Row(0, UInt32.MinValue)]
+        [Row(0, 1)]
+        [Row(0, UInt32.MaxValue)]
+        [Row(3, UInt32.MinValue)]
+        [Row(6, 1)]
+        [Row(2, UInt32.MaxValue)]
+        [Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
+        public void Stelem(int index, uint value)
+        {
+            this.arrayTests.Stelem(index, value);
+        }
+
+        #endregion // Stelem
+
+        #region Ldelem
+
+        [Row(0, UInt32.MinValue)]
+        [Row(0, 1)]
+        [Row(0, UInt32.MaxValue)]
+        [Row(3, UInt32.MinValue)]
+        [Row(6, 1)]
+        [Row(2, UInt32.MaxValue)]
+        [Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
+        public void Ldelem(int index, uint value)
+        {
+            this.arrayTests.Ldelem(index, value);
+        }
+
+        #endregion // Ldelem
+
+        #region Ldelema
+
+        [Row(0, UInt32.MinValue)]
+        [Row(0, 1)]
+        [Row(0, UInt32.MaxValue)]
+        [Row(3, UInt32.MinValue)]
+        [Row(6, 1)]
+        [Row(2, UInt32.MaxValue)]
+        [Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
+        public void Ldelema(int index, uint value)
+        {
+            this.arrayTests.Ldelema(index, value);
+        }
+
+        #endregion // Ldelema
     }
 }
