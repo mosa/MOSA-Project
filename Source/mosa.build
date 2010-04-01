@@ -9,7 +9,7 @@
 	<property name="debug" value="none" overwrite="false"/>
 	
 	<!-- Speaks for itself, I should hope -->
-	<property name="outputDirectory" value="${project::get-base-directory()}/../Bin"/>
+	<property name="outputDirectory" value="${project::get-base-directory()}/../bin"/>
 	
 	<!-- Remove output directory -->
 	<target name="clean">

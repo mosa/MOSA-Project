@@ -8,7 +8,7 @@
 	<property name="debug" value="none" overwrite="false"/>
 	
 	<!-- Speaks for itself, I should hope -->
-	<property name="outputDirectory" value="../../Bin" overwrite="false"/>
+	<property name="outputDirectory" value="../../bin" overwrite="false"/>
 	
 	<!-- Main build target -->
 	<target name="build">
