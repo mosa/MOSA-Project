@@ -118,6 +118,7 @@
     <Compile Include="CIL\Int64Fixture.cs" />
     <Compile Include="CIL\SByteFixture.cs" />
     <Compile Include="CIL\SingleFixture.cs" />
+    <Compile Include="CIL\SZArrayInstructionTestRunner.cs" />
     <Compile Include="CIL\UInt16Fixture.cs" />
     <Compile Include="CIL\UInt32Fixture.cs" />
     <Compile Include="CIL\UInt64Fixture.cs" />
