@@ -21,7 +21,7 @@ namespace Mosa.Tools.Mono.UpdateProject
 	/// Program class for Mono.UpdateProject
 	/// </summary>
 	internal class Add
-	{		
+	{
 		/// <summary>
 		/// Processes the specified file.
 		/// </summary>
@@ -29,6 +29,8 @@ namespace Mosa.Tools.Mono.UpdateProject
 		internal static void Process(string file)
 		{
 			string root = Path.GetDirectoryName(file);
+
+			List<string> files = Transform.GetProjectFiles(file);
 
 			// New nodes (new node, parent node)
 			List<KeyValuePair<XmlNode, XmlNode>> newNodes = new List<KeyValuePair<XmlNode, XmlNode>>();
@@ -46,13 +48,14 @@ namespace Mosa.Tools.Mono.UpdateProject
 						if ((attribute.Value.EndsWith(".cs")) && ((!attribute.Value.Contains(".Mosa.Partial.")))) {
 							string partialfile = attribute.Value.Insert(attribute.Value.Length - 2, "Mosa.Partial."); ;
 
-							if (File.Exists(Path.Combine(root, partialfile))) {
-								XmlNode newCompileNode = xmlDocument.CreateElement("Compile", string.Empty);
-								XmlAttribute newCompileNodeAttribute = xmlDocument.CreateAttribute("Include");
-								newCompileNodeAttribute.Value = partialfile;
-								newCompileNode.Attributes.Append(newCompileNodeAttribute);
-								newNodes.Add(new KeyValuePair<XmlNode, XmlNode>(newCompileNode, compileNode.ParentNode));
-							}
+							if (File.Exists(Path.Combine(root, partialfile)))
+								if (!files.Contains(partialfile)) {
+									XmlNode newCompileNode = xmlDocument.CreateElement("Compile", string.Empty);
+									XmlAttribute newCompileNodeAttribute = xmlDocument.CreateAttribute("Include");
+									newCompileNodeAttribute.Value = partialfile;
+									newCompileNode.Attributes.Append(newCompileNodeAttribute);
+									newNodes.Add(new KeyValuePair<XmlNode, XmlNode>(newCompileNode, compileNode.ParentNode));
+								}
 						}
 
 			if (newNodes.Count == 0)

@@ -35,11 +35,11 @@ namespace Mosa.Tools.Mono.UpdateProject
 			try {
 
 				if (args[0].Contains(".csproj")) {
-					Transform2.ProcessProject(args[0]);
+					Transform.ProcessProject(args[0]);
 					Add.Process(args[0]);
 				}
 				else {
-					Transform2.ProcessFile(args[0]);
+					Transform.ProcessFile(args[0]);
 				}
 			}
 			catch (Exception e) {
