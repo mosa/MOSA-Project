@@ -1,9 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Gallio.Framework;
+﻿/*
+ * (c) 2008 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Michael Fröhlich (aka grover, <mailto:sharpos@michaelruck.de>)
+ *  
+ */
+
+using System;
+
 using MbUnit.Framework;
-using MbUnit.Framework.ContractVerifiers;
 
 namespace Test.Mosa.Runtime.CompilerFramework.CLI
 {
@@ -30,6 +37,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
             TypeName = @"char"
         };
 
+        private readonly SZArrayInstructionTestRunner<char> arrayTests = new SZArrayInstructionTestRunner<char>
+        {
+            TypeName = @"char"
+        };
 
         #region Add
 
@@ -136,5 +147,76 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
         }
 
         #endregion // Ceq
+
+        #region Newarr
+
+        [Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
+        public void Newarr()
+        {
+            this.arrayTests.Newarr();
+        }
+
+        #endregion // Newarr
+
+        #region Ldlen
+
+        [Row(0)]
+        [Row(1)]
+        [Row(10)]
+        [Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
+        public void Ldlen(int length)
+        {
+            this.arrayTests.Ldlen(length);
+        }
+
+        #endregion // Ldlen
+
+        #region Stelem
+
+        [Row(0, Char.MinValue)]
+        [Row(0, 1)]
+        [Row(0, Char.MaxValue)]
+        [Row(3, Char.MinValue)]
+        [Row(6, 1)]
+        [Row(2, Char.MaxValue)]
+        [Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
+        public void Stelem(int index, char value)
+        {
+            this.arrayTests.Stelem(index, value);
+        }
+
+        #endregion // Stelem
+
+        #region Ldelem
+
+        [Row(0, Char.MinValue)]
+        [Row(0, 1)]
+        [Row(0, Char.MaxValue)]
+        [Row(3, Char.MinValue)]
+        [Row(6, 1)]
+        [Row(2, Char.MaxValue)]
+        [Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
+        public void Ldelem(int index, char value)
+        {
+            this.arrayTests.Ldelem(index, value);
+        }
+
+        #endregion // Ldelem
+
+        #region Ldelema
+
+        [Row(0, Char.MinValue)]
+        [Row(0, 1)]
+        [Row(0, Char.MaxValue)]
+        [Row(3, Char.MinValue)]
+        [Row(6, 1)]
+        [Row(2, Char.MaxValue)]
+        [Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
+        public void Ldelema(int index, char value)
+        {
+            this.arrayTests.Ldelema(index, value);
+        }
+
+        #endregion // Ldelema
     }
 }

@@ -20,7 +20,7 @@ namespace Mosa.Runtime.Vm
         /// Allocates the type.
         /// </summary>
         /// <returns></returns>
-        [VmCallAttribute(VmCall.Allocate)]
+        [VmCallAttribute(VmCall.AllocateObject)]
         public static object AllocateType(RuntimeType type, int additionalSize)
         {
             return null;

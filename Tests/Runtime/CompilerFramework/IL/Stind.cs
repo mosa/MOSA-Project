@@ -130,20 +130,20 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [Row(int.MinValue)]
-        [Row(-1)]
-        [Row(0)]
-        [Row(1)]
-        [Row(int.MaxValue)]
+        [Row(long.MinValue)]
+        [Row(-1L)]
+        [Row(0L)]
+        [Row(1L)]
+        [Row(long.MaxValue)]
         [Test, Author("illuminus", "illuminus86@gmail.com")]
         public unsafe void DereffedVoidPtrAssign_I8(long a)
         {
-            CodeSource = CreateDereferencedVoidPointerAssignmentTestCode("long","I8");
+            CodeSource = CreateDereferencedVoidPointerAssignmentTestCode("long", "I8");
             UnsafeCode = true;
 
             void* address = (void*)Marshal.AllocHGlobal(sizeof(long));
             bool runResult = (bool)Run<I8>("", "Test", "DereffedVoidPtrAssign_I8", a, (IntPtr)address);
-            bool success = (*(int*)address == a);
+            bool success = (*(long*)address == a);
             Marshal.FreeHGlobal((IntPtr)address);
 
             Assert.IsTrue(success, "DereffedVoidPtrAssign_I8");
@@ -245,7 +245,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// </summary>
         /// <param name="a"></param>
         [Row(ulong.MinValue)]
-        [Row((ulong.MaxValue / 2)+1)]
+        [Row((ulong.MaxValue / 2) + 1)]
         [Row(ulong.MaxValue)]
         [Test, Author("illuminus", "illuminus86@gmail.com")]
         public unsafe void DereffedVoidPtrAssign_U8(ulong a)

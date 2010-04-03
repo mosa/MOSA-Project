@@ -20,7 +20,6 @@ namespace Mosa.Runtime.CompilerFramework.IR
 	/// </summary>
 	public sealed class IRConstantFoldingStage : CodeTransformationStage, IR.IIRVisitor, IPipelineStage
     {
-
         #region IPipelineStage
 
         /// <summary>
@@ -33,11 +32,19 @@ namespace Mosa.Runtime.CompilerFramework.IR
 
 		#region IIRVisitor
 
+        public void AddInstruction(Context ctx)
+        {
+        }
+
+        public void MulInstruction(Context ctx)
+        {
+        }
+
 		/// <summary>
 		/// Folds logical ANDs with 2 constants
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.LogicalAndInstruction(Context ctx)
+		public void LogicalAndInstruction(Context ctx)
 		{
 			if (ctx.Operand2 is ConstantOperand && ctx.Operand3 is ConstantOperand) {
 				int result = 0;
@@ -73,12 +80,11 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			}
 		}
 
-
 		/// <summary>
 		/// Folds logical ORs with 2 constants
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.LogicalOrInstruction(Context ctx)
+		public void LogicalOrInstruction(Context ctx)
 		{
 			if (ctx.Operand2 is ConstantOperand && ctx.Operand3 is ConstantOperand) {
 				int result = 0;
@@ -118,7 +124,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// Folds logical XORs with 2 constants
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.LogicalXorInstruction(Context ctx)
+		public void LogicalXorInstruction(Context ctx)
 		{
 			if (ctx.Operand2 is ConstantOperand && ctx.Operand3 is ConstantOperand) {
 				int result = 0;

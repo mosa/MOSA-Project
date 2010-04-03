@@ -46,9 +46,10 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		{
 			base.Validate(ctx, compiler);
 
-			Mosa.Runtime.Metadata.Signatures.ArraySigType a = ctx.Operand1.Type as Mosa.Runtime.Metadata.Signatures.ArraySigType;
-			if (null == a || 1 != a.Rank)
+			Mosa.Runtime.Metadata.Signatures.SZArraySigType arrayType = ctx.Operand1.Type as Mosa.Runtime.Metadata.Signatures.SZArraySigType;
+			if (arrayType == null)
 				throw new InvalidProgramException(@"Operand to ldlen is not a vector.");
+
 			ctx.Result = compiler.CreateTemporary(new SigType(CilElementType.I));
 		}
 
