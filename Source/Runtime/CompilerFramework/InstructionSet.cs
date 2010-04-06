@@ -108,7 +108,7 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			_size = size;
 			_next = new int[size];
-			_prev = new int[size];
+			_prev = new int[size + 2];
 			Data = new InstructionData[size];
 			Clear();
 		}
@@ -123,11 +123,12 @@ namespace Mosa.Runtime.CompilerFramework
 
 			// setup free list
 			for (int i = 0; i < _size; i++) {
-				_next[i] = i + 1;
-				_prev[i] = i - 1;	// might not be necessary
+				_next[i] = _prev[i + 2] = i + 1;
 			}
 
-			_prev[0] = -1;
+            _prev[0] = -1;
+            _prev[1] = 0;
+
 			_next[_size - 1] = -1;
 		}
 
@@ -138,7 +139,7 @@ namespace Mosa.Runtime.CompilerFramework
 		public void Resize(int newsize)
 		{
 			int[] newNext = new int[newsize];
-			int[] newPrev = new int[newsize];
+			int[] newPrev = new int[newsize + 2];
 			InstructionData[] newInstructions = new InstructionData[newsize];
 
 			_next.CopyTo(newNext, 0);
