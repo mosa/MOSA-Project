@@ -255,7 +255,7 @@ namespace Mosa.Tools.Compiler.Metadata
         private void WriteMetadata()
         {
             ReserveSpaceForMetadataRoot();
-            WriteHeaps();
+            //WriteHeaps();
             WriteTableStream();
             WriteMosaTables();
             WriteMetadataRoot();
