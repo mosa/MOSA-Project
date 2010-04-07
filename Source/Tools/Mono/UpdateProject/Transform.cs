@@ -67,7 +67,7 @@ namespace Mosa.Tools.Mono.UpdateProject
 			foreach (XmlNode compileNode in compileNodes)
 				foreach (XmlNode attribute in compileNode.Attributes)
 					if (attribute.Name.Equals("Include"))
-						if ((attribute.Value.EndsWith(".cs")) && ((!attribute.Value.Contains(".Partial.")))) {
+						if ((attribute.Value.EndsWith(".cs")) && ((!attribute.Value.Contains(".Internal.")))) {
 							if (attribute.Value.EndsWith(".Original.cs"))
 								list.Add(attribute.Value.Replace(".Original.cs", ".cs"));
 							else
@@ -195,11 +195,11 @@ namespace Mosa.Tools.Mono.UpdateProject
 
 				ExpandUsing(lines, usings);
 
-				string partialMosaFile = Path.Combine(root, file.Insert(file.Length - 2, "Mosa.Partial."));
+				string partialMosaFile = Path.Combine(root, file.Insert(file.Length - 2, "Mosa.Internal."));
 				Console.WriteLine(">" + Path.GetFileName(partialMosaFile));
 				CreatePartialFileForMosa(lines, rootNode, usings, namespaces, partialMosaFile);
 
-				string partialMonoFile = Path.Combine(root, file.Insert(file.Length - 2, "Partial."));
+				string partialMonoFile = Path.Combine(root, file.Insert(file.Length - 2, "Internal."));
 				Console.WriteLine(">" + Path.GetFileName(partialMonoFile));
 				CreatePartialFileForMono(lines, rootNode, usings, namespaces, partialMonoFile);
 
