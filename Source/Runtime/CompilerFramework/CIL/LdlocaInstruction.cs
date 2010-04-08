@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 
+using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
 
@@ -58,8 +59,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 				decoder.Decode(out locIdx);
 			}
 
-			ctx.Operand1  = decoder.Compiler.GetLocalOperand(locIdx);
-			ctx.Result = decoder.Compiler.CreateTemporary(new RefSigType(ctx.Operand1.Type));
+		    Operand localVariableOperand = decoder.Compiler.GetLocalOperand(locIdx);
+		    ctx.Operand1  = localVariableOperand;
+            ctx.Result = decoder.Compiler.CreateTemporary(new RefSigType(localVariableOperand.Type));
 		}
 
 		/// <summary>

@@ -85,12 +85,12 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			base.Decode(ctx, decoder);
 
 			// Do we have a type?
-			if (_typeRef == null) {
-				// No, retrieve a type reference from the immediate argument
+			if (_typeRef == null) 
+            {
+				// No, retrieve a type reference From the immediate argument
 				TokenTypes token;
 				decoder.Decode(out token);
-				throw new NotImplementedException();
-				//_typeRef = MetadataTypeReference.FromToken(decoder.Metadata, token);
+                _typeRef = new ClassSigType(token);
 			}
 		}
 

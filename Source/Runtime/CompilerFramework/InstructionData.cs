@@ -25,7 +25,6 @@ namespace Mosa.Runtime.CompilerFramework
 	/// </summary>
 	public struct InstructionData
 	{
-
 		#region Data members
 
 		/// <summary>

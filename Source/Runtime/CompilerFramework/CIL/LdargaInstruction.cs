@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 
+using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
 
@@ -28,7 +29,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// Initializes a new instance of the <see cref="LdargaInstruction"/> class.
 		/// </summary>
 		public LdargaInstruction(OpCode opCode)
-			: base(opCode, 1)
+			: base(opCode)
 		{
 		}
 
@@ -58,8 +59,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 				decoder.Decode(out argIdx);
 			}
 
-			ctx.Operand1 = decoder.Compiler.GetParameterOperand(argIdx);
-			ctx.Result = decoder.Compiler.CreateTemporary(new RefSigType(ctx.Operand1.Type));
+		    Operand parameterOperand = decoder.Compiler.GetParameterOperand(argIdx);
+		    ctx.Operand1 = parameterOperand;
+			ctx.Result = decoder.Compiler.CreateTemporary(new RefSigType(parameterOperand.Type));
 		}
 
 		/// <summary>

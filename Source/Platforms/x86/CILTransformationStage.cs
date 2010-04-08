@@ -53,9 +53,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Ldarga(Context ctx)
 		{
-			Operand result = ctx.Result;
-			ctx.SetInstruction(CPUx86.Instruction.MovInstruction, result, new RegisterOperand(new SigType(CilElementType.Ptr), GeneralPurposeRegister.EBP));
-			ctx.AppendInstruction(CPUx86.Instruction.AddInstruction, result, new ConstantOperand(new SigType(CilElementType.Ptr), ctx.Label));
+            throw new NotSupportedException();
 		}
 
 		/// <summary>
@@ -77,9 +75,6 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Call(Context ctx)
 		{
-            ICallingConvention cc = Architecture.GetCallingConvention(ctx.InvokeTarget.Signature.CallingConvention);
-            Debug.Assert(null != cc, @"Failed to retrieve the calling convention.");
-            cc.MakeCall(ctx, this.MethodCompiler.Method, MethodCompiler.Assembly.Metadata);
 		}
 
 		/// <summary>
@@ -110,7 +105,6 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Branch(Context ctx)
 		{
-			ctx.ReplaceInstructionOnly(CPUx86.Instruction.JmpInstruction);
 		}
 
 		/// <summary>
@@ -164,16 +158,6 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Switch(Context ctx)
 		{
-			IBranch branch = ctx.Branch;
-			Operand operand = ctx.Operand1;
-
-			ctx.Remove();
-
-			for (int i = 0; i < branch.Targets.Length - 1; ++i) {
-				ctx.AppendInstruction(CPUx86.Instruction.CmpInstruction, operand, new ConstantOperand(new SigType(CilElementType.I), i));
-				ctx.AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.Equal);
-				ctx.SetBranch(branch.Targets[i]);
-			}
 		}
 
 		/// <summary>
@@ -231,12 +215,6 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Sub(Context ctx)
 		{
-			if (ctx.Operand1.StackType == StackTypeCode.F) {
-				HandleNonCommutativeOperation(ctx, CPUx86.Instruction.SseSubInstruction);
-				ExtendToR8(ctx);
-			}
-			else
-				HandleNonCommutativeOperation(ctx, CPUx86.Instruction.SubInstruction);
 		}
 
 		/// <summary>
@@ -245,7 +223,6 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Mul(Context ctx)
 		{
-            //throw new InvalidOperationException(@"Multiplication should've been handled in the IRTransformationStage.");
 		}
 
 		/// <summary>
@@ -254,14 +231,6 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Div(Context ctx)
 		{
-			if (IsUnsigned(ctx.Operand1) || IsUnsigned(ctx.Result))
-				HandleNonCommutativeOperation(ctx, CPUx86.Instruction.UDivInstruction);
-			else if (ctx.Operand1.StackType == StackTypeCode.F) {
-				HandleNonCommutativeOperation(ctx, CPUx86.Instruction.SseDivInstruction);
-				ExtendToR8(ctx);
-			}
-			else
-				HandleNonCommutativeOperation(ctx, CPUx86.Instruction.DivInstruction);
 		}
 
 		/// <summary>
@@ -270,54 +239,6 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Rem(Context ctx)
 		{
-			Operand result = ctx.Result;
-			Operand operand = ctx.Operand1;
-
-            if (ctx.Operand1.StackType != StackTypeCode.F)
-            {
-                RegisterOperand eax = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EAX);
-                RegisterOperand ecx = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.ECX);
-                RegisterOperand eaxSource = new RegisterOperand(result.Type, GeneralPurposeRegister.EAX);
-                RegisterOperand ecxSource = new RegisterOperand(operand.Type, GeneralPurposeRegister.ECX);
-
-                ctx.SetInstruction(CPUx86.Instruction.MovInstruction, eaxSource, result);
-                if (IsUnsigned(result))
-                    ctx.AppendInstruction(IR.Instruction.ZeroExtendedMoveInstruction, eax, eaxSource);
-                else
-                    ctx.AppendInstruction(IR.Instruction.SignExtendedMoveInstruction, eax, eaxSource);
-
-                ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, ecxSource, operand);
-                if (IsUnsigned(operand))
-                    ctx.AppendInstruction(IR.Instruction.ZeroExtendedMoveInstruction, ecx, ecxSource);
-                else
-                    ctx.AppendInstruction(IR.Instruction.SignExtendedMoveInstruction, ecx, ecxSource);
-
-                if (IsUnsigned(result) && IsUnsigned(operand))
-                    ctx.AppendInstruction(CPUx86.Instruction.UDivInstruction, eax, ecx);
-                else
-                    ctx.AppendInstruction(CPUx86.Instruction.DivInstruction, eax, ecx);
-
-                ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, result, new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EDX));
-            }
-            else
-            {
-                HandleNonCommutativeOperation(ctx, CPUx86.Instruction.SseDivInstruction);
-                ExtendToR8(ctx);
-
-                Operand destination = ctx.Result;
-                Operand source = ctx.Operand1;
-
-                RegisterOperand xmm5 = new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM5);
-                Context before = ctx.InsertBefore();
-                before.SetInstruction(CPUx86.Instruction.MovInstruction, xmm5, destination);
-
-                // Round towards zero
-                ctx.AppendInstruction(CPUx86.Instruction.SseRoundInstruction, destination, destination, new ConstantOperand(BuiltInSigType.Byte, 0x03));
-
-                ctx.AppendInstruction(CPUx86.Instruction.SseMulInstruction, destination, source);
-                ctx.AppendInstruction(CPUx86.Instruction.SseSubInstruction, xmm5, destination);
-                ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, destination, xmm5);
-            }
 		}
 
 		#endregion // Members

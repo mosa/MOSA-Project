@@ -24,7 +24,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
         {
             ExpectedTypeName = @"float",
             TypeName = @"float",
-            IncludeNeg = false
+            ////IncludeAdd = false,
+            ////IncludeDiv = false,
+            ////IncludeMul = false,
+            IncludeNeg = false,
+            ////IncludeRem = false,
+            ////IncludeSub = false
         };
 
         private readonly ComparisonInstructionTestRunner<float> comparisonTests = new ComparisonInstructionTestRunner<float>

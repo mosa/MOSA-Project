@@ -23,7 +23,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
         private readonly ArithmeticInstructionTestRunner<ulong, ulong> arithmeticTests = new ArithmeticInstructionTestRunner<ulong, ulong>
         {
             ExpectedTypeName = @"ulong",
-            TypeName = @"ulong"
+            TypeName = @"ulong",
+            IncludeNeg = false
         };
 
         private readonly BinaryLogicInstructionTestRunner<ulong, ulong> logicTests = new BinaryLogicInstructionTestRunner<ulong, ulong>

@@ -244,7 +244,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
         [Test]
         public void Neg(byte first)
         {
-            this.arithmeticTests.Neg(~first, first);
+            this.arithmeticTests.Neg(-first, first);
         }
 
         #endregion Neg

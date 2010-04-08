@@ -83,7 +83,8 @@ namespace Mosa.Platforms.x86.CPUx86
                     return R_C_16;
                 return R_C;
             }
-            throw new ArgumentException(@"No opcode for operand type.");
+
+            throw new ArgumentException(String.Format(@"x86.CmpInstruction: No opcode for operand types {0} and {1}.", destination, source));
         }
 
 		/// <summary>

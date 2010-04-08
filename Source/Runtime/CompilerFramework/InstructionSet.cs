@@ -31,10 +31,6 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// 
 		/// </summary>
-		private int _high;
-		/// <summary>
-		/// 
-		/// </summary>
 		private int[] _next;
 		/// <summary>
 		/// 
@@ -83,7 +79,6 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			_low = MINSETUP;
 			_allocated = Math.Max(size, _low);
-			_high = Math.Min(size, _low); ;
 
 			_next = new int[_allocated];
 			_prev = new int[_allocated];
@@ -151,7 +146,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns></returns>
 		public int Next(int index)
 		{
-			Debug.Assert(index < _high);
+			Debug.Assert(index < _low);
 			Debug.Assert(index >= 0);
 
 			if (_used == 0)
@@ -167,7 +162,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns></returns>
 		public int Previous(int index)
 		{
-			Debug.Assert(index < _high);
+			Debug.Assert(index < _low);
 			Debug.Assert(index >= 0);
 
 			if (_used == 0)

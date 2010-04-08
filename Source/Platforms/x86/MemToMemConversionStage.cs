@@ -73,21 +73,45 @@ namespace Mosa.Platforms.x86
 
 			Debug.Assert(destination is MemoryOperand && source is MemoryOperand);
 
-            RegisterOperand temporaryRegister = this.AllocateRegister(destination.Type);
-            ctx.Operand1 = temporaryRegister;
+		    SigType destinationSigType = destination.Type;
 
-            IInstruction moveInstruction = this.GetMoveInstruction(destination.Type);
+            if (this.RequiresSseOperation(destinationSigType))
+            {
+                IInstruction moveInstruction = this.GetMoveInstruction(destinationSigType);
+                RegisterOperand destinationRegister = this.AllocateRegister(destinationSigType);
 
-            Context before = ctx.InsertBefore();
-            before.SetInstruction(moveInstruction, temporaryRegister, source);
-		}
+                ctx.Result = destinationRegister;
+                ctx.AppendInstruction(moveInstruction, destination, destinationRegister);                
+            }
+            else
+            {
+                SigType sourceSigType = ctx.Operand1.Type;
+                IInstruction moveInstruction = this.GetMoveInstruction(sourceSigType);
+                RegisterOperand sourceRegister = this.AllocateRegister(sourceSigType);
+
+                ctx.Operand1 = sourceRegister;
+
+                ctx.InsertBefore().SetInstruction(moveInstruction, sourceRegister, source);
+            }
+        }
 
         private IInstruction GetMoveInstruction(SigType sigType)
         {
             IInstruction moveInstruction;
             if (this.RequiresSseOperation(sigType) == false)
             {
-                moveInstruction = CPUx86.Instruction.MovInstruction;
+                if (MustSignExtendOnLoad(sigType.Type) == true)
+                {
+                    moveInstruction = CPUx86.Instruction.MovsxInstruction;
+                }
+                else if (MustZeroExtendOnLoad(sigType.Type) == true)
+                {
+                    moveInstruction = CPUx86.Instruction.MovzxInstruction;
+                }
+                else
+                {
+                    moveInstruction = CPUx86.Instruction.MovInstruction;
+                }
             }
             else if (sigType.Type == CilElementType.R8)
             {
@@ -103,20 +127,33 @@ namespace Mosa.Platforms.x86
 
         private RegisterOperand AllocateRegister(SigType sigType)
         {
+            RegisterOperand result;
             if (RequiresSseOperation(sigType))
             {
-                return new RegisterOperand(sigType, SSE2Register.XMM0);
+                result = new RegisterOperand(sigType, SSE2Register.XMM6);
             }
             else
             {
-                return new RegisterOperand(sigType, GeneralPurposeRegister.EDX);
+                result = new RegisterOperand(sigType, GeneralPurposeRegister.EDX);
             }
+
+            return result;
         }
 
         private bool RequiresSseOperation(SigType sigType)
         {
             return sigType.Type == CilElementType.R4 
                 || sigType.Type == CilElementType.R8;
+        }
+
+        private static bool MustSignExtendOnLoad(CilElementType elementType)
+        {
+            return (elementType == CilElementType.I1 || elementType == CilElementType.I2);
+        }
+
+        private static bool MustZeroExtendOnLoad(CilElementType elementType)
+        {
+            return (elementType == CilElementType.U1 || elementType == CilElementType.U2 || elementType == CilElementType.Char);
         }
 	}
 }
