@@ -8,7 +8,10 @@
  */
 
 using System.Diagnostics;
+
+using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Runtime.Metadata;
+using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Runtime.CompilerFramework.CIL
 {
@@ -42,13 +45,14 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			// Decode base classes first
 			base.Decode(ctx, decoder);
 
-			// Read the _stackFrameIndex From the code
 			TokenTypes token;
 			decoder.Decode(out token);
 			ctx.RuntimeField = RuntimeBase.Instance.TypeLoader.GetField(decoder.Method, decoder.Method.Module, token);
 
+		    SigType sigType = ctx.RuntimeField.SignatureType;
+
 			Debug.Assert((ctx.RuntimeField.Attributes & FieldAttributes.Static) == FieldAttributes.Static, @"Static field access on non-static field.");
-			ctx.Result = decoder.Compiler.CreateTemporary(ctx.RuntimeField.SignatureType);
+		    ctx.Result = LoadInstruction.CreateResultOperand(decoder, Operand.StackTypeFromSigType(sigType), sigType);
 		}
 
 		/// <summary>

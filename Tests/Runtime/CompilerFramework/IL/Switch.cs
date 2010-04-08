@@ -79,7 +79,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
                             break;
                     }
                 }
-            }";
+            }" + Code.ObjectClassDefinition;
             Assert.AreEqual(a, Run<I1_I1>("", "Test", "SwitchI1", a, a));
         }
 
@@ -128,7 +128,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
                             break;
                     }
                 }
-            }";
+            }" + Code.ObjectClassDefinition;
             Assert.IsTrue((bool)Run<U1_U1>("", "Test", "SwitchU1", a, a));
         }
         
@@ -192,7 +192,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
                             break;
                     }
                 }
-            }";
+            }" + Code.ObjectClassDefinition;
             Assert.IsTrue((bool)Run<I2_I2>("", "Test", "SwitchI2", a, a));
         }
 
@@ -245,7 +245,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
                             break;
                     }
                 }
-            }";
+            }" + Code.ObjectClassDefinition;
             Assert.IsTrue((bool)Run<U2_U2>("", "Test", "SwitchU2", a, a));
         }
 
@@ -309,7 +309,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
                             break;
                     }
                 }
-            }";
+            }" + Code.ObjectClassDefinition;
             Assert.IsTrue((bool)Run<I4_I4>("", "Test", "SwitchI4", a, a));
         }
 
@@ -362,7 +362,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
                             break;
                     }
                 }
-            }";
+            }" + Code.ObjectClassDefinition;
             Assert.IsTrue((bool)Run<U4_U4>("", "Test", "SwitchU4", a, a));
         }
 
@@ -427,7 +427,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
                             break;
                     }
                 }
-            }";
+            }" + Code.ObjectClassDefinition;
             Assert.AreEqual(a, (long)Run<I8_I8_R>("", "Test", "SwitchI8", a, a));
         }
 
@@ -480,7 +480,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
                             break;
                     }
                 }
-            }";
+            }" + Code.ObjectClassDefinition;
             Assert.IsTrue((bool)Run<U8_U8>("", "Test", "SwitchU8", a, a));
         }
     }

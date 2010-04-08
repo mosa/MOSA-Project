@@ -39,6 +39,21 @@ namespace Mosa.Runtime.Metadata.Signatures
         /// </summary>
         /// <param name="customMods">The custom mods.</param>
         /// <param name="type">The type.</param>
+        public PtrSigType(SigType type)
+            : base(CilElementType.Ptr)
+        {
+            if (null == type)
+                throw new ArgumentNullException(@"type");
+
+            this.customMods = null;
+            this.elementType = type;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PtrSigType"/> class.
+        /// </summary>
+        /// <param name="customMods">The custom mods.</param>
+        /// <param name="type">The type.</param>
         public PtrSigType(CustomMod[] customMods, SigType type)
             : base(CilElementType.Ptr)
         {

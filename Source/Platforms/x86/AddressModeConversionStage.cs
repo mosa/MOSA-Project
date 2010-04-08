@@ -56,7 +56,8 @@ namespace Mosa.Platforms.x86
 			Operand op1 = ctx.Operand1;
 			Operand op2 = ctx.Operand2;
 
-            if (ctx.Instruction is IR.FloatingPointCompareInstruction 
+            if (ctx.Instruction is IR.IntegerCompareInstruction
+                || ctx.Instruction is IR.FloatingPointCompareInstruction 
                 || ctx.Instruction is IR.LoadInstruction 
                 || ctx.Instruction is IR.StoreInstruction)
             {

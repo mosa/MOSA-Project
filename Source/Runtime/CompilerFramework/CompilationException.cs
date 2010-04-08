@@ -16,7 +16,7 @@ namespace Mosa.Runtime.CompilerFramework
     /// Base class for all compiler and linker exceptions.
     /// </summary>
     [Serializable]
-    public abstract class CompilationException : Exception
+    public class CompilationException : Exception
     {
         #region Construction
 

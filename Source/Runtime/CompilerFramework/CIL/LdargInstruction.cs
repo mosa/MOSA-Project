@@ -9,6 +9,8 @@
 
 using System;
 
+using Mosa.Runtime.CompilerFramework.Operands;
+
 namespace Mosa.Runtime.CompilerFramework.CIL
 {
 	/// <summary>
@@ -80,9 +82,12 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			}
 
 			// Push the loaded value onto the evaluation stack
-			ctx.Result = decoder.Compiler.GetParameterOperand(argIdx);
-			//ctx.Ignore = true;
-		}
+            Operand parameterOperand = decoder.Compiler.GetParameterOperand(argIdx);
+            Operand result = LoadInstruction.CreateResultOperand(decoder, parameterOperand.StackType, parameterOperand.Type);
+
+            ctx.Operand1 = parameterOperand;
+		    ctx.Result = result;
+        }
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.

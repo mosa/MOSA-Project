@@ -162,6 +162,54 @@ namespace Mosa.Runtime.CompilerFramework.Operands
             return result;
         }
 
+        public int Precision
+        {
+            get
+            {
+                switch (this.Type.Type)
+                {
+                    case CilElementType.I1:
+                        return 8;
+
+                    case CilElementType.U1:
+                        return 8;
+
+                    case CilElementType.I2:
+                        return 16;
+
+                    case CilElementType.U2:
+                        return 16;
+
+                    case CilElementType.I4:
+                        return 32;
+
+                    case CilElementType.U4:
+                        return 32;
+
+                    case CilElementType.I8:
+                        return 64;
+
+                    case CilElementType.U8:
+                        return 64;
+
+                    case CilElementType.R4:
+                        return 32;
+
+                    case CilElementType.R8:
+                        return 64;
+
+                    case CilElementType.Boolean:
+                        return 32;
+
+                    case CilElementType.Char:
+                        return 16;
+
+                    default:
+                        return 32;
+                }
+            }
+        }
+
         /// <summary>
         /// Returns the type of the operand.
         /// </summary>
@@ -195,26 +243,35 @@ namespace Mosa.Runtime.CompilerFramework.Operands
             int opIdx;
 
             // Iterate all definition sites first
-            foreach (int index in Definitions) {
-                Context def = new Context(instructionSet, index);
+            foreach (int instructionIndex in this.Definitions.ToArray())
+            {
+                Context def = new Context(instructionSet, instructionIndex);
                 opIdx = 0;
-                foreach (Operand r in def.Results) {
+                foreach (Operand r in def.Results)
+                {
                     // Is this the operand?
                     if (ReferenceEquals(r, this))
+                    {
                         def.SetResult(opIdx, replacement);
+                    }
 
                     opIdx++;
                 }
             }
 
             // Iterate all use sites
-            foreach (int index in Uses) {
-                Context instr = new Context(instructionSet, index);
+            foreach (int instructionIndex in this.Uses.ToArray())
+            {
+                Context instr = new Context(instructionSet, instructionIndex);
+                
                 opIdx = 0;
-                foreach (Operand r in instr.Operands) {
+                foreach (Operand r in instr.Operands) 
+                {
                     // Is this the operand?
                     if (ReferenceEquals(r, this))
+                    {
                         instr.SetOperand(opIdx, replacement);
+                    }
 
                     opIdx++;
                 }

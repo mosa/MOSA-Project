@@ -1,9 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Gallio.Framework;
+﻿/*
+ * (c) 2008 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Michael Fröhlich (aka grover, <mailto:sharpos@michaelruck.de>)
+ *  
+ */
+
+using System;
+
 using MbUnit.Framework;
-using MbUnit.Framework.ContractVerifiers;
 
 namespace Test.Mosa.Runtime.CompilerFramework.CLI
 {
@@ -17,10 +24,20 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
         {
             ExpectedTypeName = @"float",
             TypeName = @"float",
-            IncludeNeg = false
+            ////IncludeAdd = false,
+            ////IncludeDiv = false,
+            ////IncludeMul = false,
+            IncludeNeg = false,
+            ////IncludeRem = false,
+            ////IncludeSub = false
         };
 
         private readonly ComparisonInstructionTestRunner<float> comparisonTests = new ComparisonInstructionTestRunner<float>
+        {
+            TypeName = @"float"
+        };
+
+        private readonly SZArrayInstructionTestRunner<float> arrayTests = new SZArrayInstructionTestRunner<float>
         {
             TypeName = @"float"
         };
@@ -235,5 +252,88 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
         }
 
         #endregion // Ceq
+
+        #region Newarr
+
+        [Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
+        public void Newarr()
+        {
+            this.arrayTests.Newarr();
+        }
+
+        #endregion // Newarr
+
+        #region Ldlen
+
+        [Row(0)]
+        [Row(1)]
+        [Row(10)]
+        [Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
+        public void Ldlen(int length)
+        {
+            this.arrayTests.Ldlen(length);
+        }
+
+        #endregion // Ldlen
+
+        #region Stelem
+
+        [Row(0, Single.MinValue)]
+        [Row(0, -1f)]
+        [Row(0, 0f)]
+        [Row(0, 1f)]
+        [Row(0, Single.MaxValue)]
+        [Row(3, Single.MinValue)]
+        [Row(7, -1f)]
+        [Row(9, 0f)]
+        [Row(6, 1f)]
+        [Row(2, Single.MaxValue)]
+        [Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
+        public void Stelem(int index, float value)
+        {
+            this.arrayTests.Stelem(index, value);
+        }
+
+        #endregion // Stelem
+
+        #region Ldelem
+
+        [Row(0, Single.MinValue)]
+        [Row(0, -1f)]
+        [Row(0, 0f)]
+        [Row(0, 1f)]
+        [Row(0, Single.MaxValue)]
+        [Row(3, Single.MinValue)]
+        [Row(7, -1f)]
+        [Row(9, 0f)]
+        [Row(6, 1f)]
+        [Row(2, Single.MaxValue)]
+        [Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
+        public void Ldelem(int index, float value)
+        {
+            this.arrayTests.Ldelem(index, value);
+        }
+
+        #endregion // Ldelem
+
+        #region Ldelema
+
+        [Row(0, Single.MinValue)]
+        [Row(0, -1f)]
+        [Row(0, 0f)]
+        [Row(0, 1f)]
+        [Row(0, Single.MaxValue)]
+        [Row(3, Single.MinValue)]
+        [Row(7, -1f)]
+        [Row(9, 0f)]
+        [Row(6, 1f)]
+        [Row(2, Single.MaxValue)]
+        [Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
+        public void Ldelema(int index, float value)
+        {
+            this.arrayTests.Ldelema(index, value);
+        }
+
+        #endregion // Ldelema
     }
 }
