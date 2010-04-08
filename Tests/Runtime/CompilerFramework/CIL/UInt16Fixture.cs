@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -37,7 +37,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 
         private readonly SZArrayInstructionTestRunner<ushort> arrayTests = new SZArrayInstructionTestRunner<ushort>
         {
-            TypeName = @"ushort",
+            TypeName = @"ushort"
         };
 
         #region Add
@@ -197,36 +197,36 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 
 		#region Rem
 
-        ////[Row(1, 2)]
-        ////[Row(23, 21)]
-        ////[Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
-        ////// And reverse
-        ////[Row(2, 1)]
-        ////[Row(21, 23)]
-        ////// (MinValue, X) Cases
-        ////[Row(ushort.MinValue, 0, ExpectedException = typeof(DivideByZeroException))]
-        ////[Row(ushort.MinValue, 1)]
-        ////[Row(ushort.MinValue, 17)]
-        ////[Row(ushort.MinValue, 123)]
-        ////// (MaxValue, X) Cases
-        ////[Row(ushort.MaxValue, 0, ExpectedException = typeof(DivideByZeroException))]
-        ////[Row(ushort.MaxValue, 1)]
-        ////[Row(ushort.MaxValue, 17)]
-        ////[Row(ushort.MaxValue, 123)]
-        ////// (X, MinValue) Cases
-        ////[Row(0, ushort.MinValue, ExpectedException = typeof(DivideByZeroException))]
-        ////[Row(1, ushort.MinValue, ExpectedException = typeof(DivideByZeroException))]
-        ////[Row(17, ushort.MinValue, ExpectedException = typeof(DivideByZeroException))]
-        ////[Row(123, ushort.MinValue, ExpectedException = typeof(DivideByZeroException))]
-        ////// (X, MaxValue) Cases
-        ////[Row(0, ushort.MaxValue)]
-        [Row(1, ushort.MaxValue)]
-        ////[Row(17, ushort.MaxValue)]
-        ////[Row(123, ushort.MaxValue)]
-        ////// Extremvaluecases
-        ////[Row(ushort.MinValue, ushort.MaxValue)]
-        ////[Row(ushort.MaxValue, ushort.MinValue, ExpectedException = typeof(DivideByZeroException))]
-        ////[Row(1, 0, ExpectedException = typeof(DivideByZeroException))]
+		[Row(1, 2)]
+		[Row(23, 21)]
+		[Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
+		// And reverse
+		[Row(2, 1)]
+		[Row(21, 23)]
+		// (MinValue, X) Cases
+		[Row(ushort.MinValue, 0, ExpectedException = typeof(DivideByZeroException))]
+		[Row(ushort.MinValue, 1)]
+		[Row(ushort.MinValue, 17)]
+		[Row(ushort.MinValue, 123)]
+		// (MaxValue, X) Cases
+		[Row(ushort.MaxValue, 0, ExpectedException = typeof(DivideByZeroException))]
+		[Row(ushort.MaxValue, 1)]
+		[Row(ushort.MaxValue, 17)]
+		[Row(ushort.MaxValue, 123)]
+		// (X, MinValue) Cases
+		[Row(0, ushort.MinValue, ExpectedException = typeof(DivideByZeroException))]
+		[Row(1, ushort.MinValue, ExpectedException = typeof(DivideByZeroException))]
+		[Row(17, ushort.MinValue, ExpectedException = typeof(DivideByZeroException))]
+		[Row(123, ushort.MinValue, ExpectedException = typeof(DivideByZeroException))]
+		// (X, MaxValue) Cases
+		[Row(0, ushort.MaxValue)]
+		[Row(1, ushort.MaxValue)]
+		[Row(17, ushort.MaxValue)]
+		[Row(123, ushort.MaxValue)]
+		// Extremvaluecases
+		[Row(ushort.MinValue, ushort.MaxValue)]
+		[Row(ushort.MaxValue, ushort.MinValue, ExpectedException = typeof(DivideByZeroException))]
+		[Row(1, 0, ExpectedException = typeof(DivideByZeroException))]
 		[Test, Author("rootnode", "rootnode@mosa-project.org")]
 		public void Rem(ushort a, ushort b)
 		{
@@ -244,7 +244,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Test]
 		public void Neg(ushort first)
 		{
-			this.arithmeticTests.Neg(-first, first);
+			this.arithmeticTests.Neg(~first, first);
 		}
 
 		#endregion Neg
