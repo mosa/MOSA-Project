@@ -21,8 +21,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.FileSystem", "FileSyst
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.DeviceSystem", "DeviceSystem\Mosa.DeviceSystem.csproj", "{6509477A-7360-4937-A1B9-26FED0A75CDA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Kernel", "Kernel\Mosa.Kernel.csproj", "{FF099D48-3FA5-4ED6-BBA0-1497D734962A}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Emulator", "Emulator\Mosa.Emulator.csproj", "{65D89ED3-D999-4E8F-BB82-F470F7EC06E4}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.EmulatedDevices", "EmulatedDevices\Mosa.EmulatedDevices.csproj", "{4BCC3783-8374-4E44-A843-22C0C5624C92}"
@@ -40,6 +38,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Tools.CreateBootImage", "Tools\CreateBootImage\Mosa.Tools.CreateBootImage.csproj", "{BE9A5A27-22C4-4664-A8BD-388B30B5972C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Test.Mosa.Runtime.CompilerFramework", "..\Tests\Runtime\CompilerFramework\Test.Mosa.Runtime.CompilerFramework.csproj", "{AD653B6B-EBB7-4E69-93F7-FADA40462648}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Kernel", "Kernel\Mosa.Kernel.csproj", "{FF099D48-3FA5-4ED6-BBA0-1497D734962A}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -87,10 +87,6 @@ Global
 		{6509477A-7360-4937-A1B9-26FED0A75CDA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6509477A-7360-4937-A1B9-26FED0A75CDA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6509477A-7360-4937-A1B9-26FED0A75CDA}.Release|Any CPU.Build.0 = Release|Any CPU
-		{FF099D48-3FA5-4ED6-BBA0-1497D734962A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{FF099D48-3FA5-4ED6-BBA0-1497D734962A}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{FF099D48-3FA5-4ED6-BBA0-1497D734962A}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{FF099D48-3FA5-4ED6-BBA0-1497D734962A}.Release|Any CPU.Build.0 = Release|Any CPU
 		{65D89ED3-D999-4E8F-BB82-F470F7EC06E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{65D89ED3-D999-4E8F-BB82-F470F7EC06E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{65D89ED3-D999-4E8F-BB82-F470F7EC06E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -127,6 +123,10 @@ Global
 		{AD653B6B-EBB7-4E69-93F7-FADA40462648}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AD653B6B-EBB7-4E69-93F7-FADA40462648}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AD653B6B-EBB7-4E69-93F7-FADA40462648}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FF099D48-3FA5-4ED6-BBA0-1497D734962A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FF099D48-3FA5-4ED6-BBA0-1497D734962A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FF099D48-3FA5-4ED6-BBA0-1497D734962A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FF099D48-3FA5-4ED6-BBA0-1497D734962A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

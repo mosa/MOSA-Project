@@ -2,7 +2,7 @@
 <project name="Mosa" default="build" basedir=".">
 	
 	<!-- Comma-separated list of warnings that should be surpressed in all modules. Warning: no spaces allowed! -->
-	<property name="suppresswarnings" value="0414,0103,0219,0169,0162,0168"/>
+	<property name="suppresswarnings" value="0414,0219,0169,0162,0168"/>
 	
 	<!-- Toggle debug output by setting this to true (nant -D:debug=true) -->
 	<property name="debug" value="none" overwrite="false"/>
@@ -48,7 +48,6 @@
 		</sources>
 		
 		<references>
-			<include name="${outputDirectory}/Mosa.Kernel.dll"/>
 			<include name="${outputDirectory}/Mosa.Platform.x86.dll"/>
 			<include name="${outputDirectory}/Mosa.Runtime.dll"/>
 			<include name="System.dll"/>

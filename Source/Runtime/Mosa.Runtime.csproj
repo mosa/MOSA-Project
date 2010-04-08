@@ -1,8 +1,8 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.21022</ProductVersion>
+    <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{75A12A8A-8C8F-4D1E-801B-689D8F781BF4}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -14,7 +14,7 @@
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
     <DelaySign>false</DelaySign>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <OutputType>Library</OutputType>
     <RootNamespace>Mosa.Runtime</RootNamespace>
   </PropertyGroup>
@@ -76,12 +76,68 @@
     <Compile Include="CompilerFramework\CIL\CallInstruction.cs" />
     <Compile Include="CompilerFramework\CIL\CallvirtInstruction.cs" />
     <Compile Include="CompilerFramework\CIL\CastclassInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\CILLeakGuardStage.cs" />
     <Compile Include="CompilerFramework\CIL\DecodingStage.cs" />
     <Compile Include="CompilerFramework\CIL\BreakInstruction.cs" />
     <Compile Include="CompilerFramework\GenericsResolverStage.cs" />
     <Compile Include="CompilerFramework\ICompilationSchedulerStage.cs" />
-    <Compile Include="CompilerFramework\IR\AddInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\MulInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\AddFInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\AddressOfInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\AddSInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\AddUInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\ArithmeticShiftRightInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\BaseInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\BranchInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\CallInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\CILTransformationStage.cs" />
+    <Compile Include="CompilerFramework\IR\ConditionCode.cs" />
+    <Compile Include="CompilerFramework\IR\ConstantFoldingStage.cs" />
+    <Compile Include="CompilerFramework\IR\DivFInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\DivSInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\DivUInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\EpilogueInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\FloatingPointCompareInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\FloatingPointToIntegerConversionInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\IConditionalInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\IIRInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\IIRVisitor.cs" />
+    <Compile Include="CompilerFramework\IR\Instruction.cs" />
+    <Compile Include="CompilerFramework\IR\IntegerCompareInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\IntegerToFloatingPointConversionInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\JmpInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\LiteralData.cs" />
+    <Compile Include="CompilerFramework\IR\LiteralInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\LoadInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\LogicalAndInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\LogicalNotInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\LogicalOrInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\LogicalXorInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\MoveInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\MulFInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\MulSInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\MulUInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\NopInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\OneOperandInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\PhiData.cs" />
+    <Compile Include="CompilerFramework\IR\PhiInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\PopInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\PrologueInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\PushInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\RemFInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\RemSInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\RemUInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\ReturnInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\ShiftLeftInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\ShiftRightInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\SignExtendedMoveInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\StoreInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\SubFInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\SubSInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\SubUInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\SwitchInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\ThreeOperandInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\TwoOperandInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\ZeroExtendedMoveInstruction.cs" />
     <Compile Include="CompilerFramework\MethodCompilerSchedulerStage.cs" />
     <Compile Include="CompilerFramework\ObjectModelUtility.cs" />
     <Compile Include="CompilerFramework\Operands\VirtualRegisterOperand.cs" />
@@ -90,7 +146,6 @@
     <Compile Include="CompilerFramework\IIntrinsicInstruction.cs" />
     <Compile Include="CompilerFramework\IBlockOrderStage.cs" />
     <Compile Include="CompilerFramework\IPipelineStage.cs" />
-    <Compile Include="CompilerFramework\IR\CILTransformationStage.cs" />
     <Compile Include="CompilerFramework\CIL\ConstrainedPrefixInstruction.cs" />
     <Compile Include="CompilerFramework\CIL\ConversionInstruction.cs" />
     <Compile Include="CompilerFramework\CIL\Instruction.cs" />
@@ -169,48 +224,6 @@
     <Compile Include="CompilerFramework\Context.cs" />
     <Compile Include="CompilerFramework\BaseStage.cs" />
     <Compile Include="CompilerFramework\ICodeEmitter.cs" />
-    <Compile Include="CompilerFramework\IR\AddressOfInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\ArithmeticShiftRightInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\BranchInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\CallInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\ConditionCode.cs" />
-    <Compile Include="CompilerFramework\IR\NopInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\IConditionalInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\LiteralData.cs" />
-    <Compile Include="CompilerFramework\IR\Instruction.cs" />
-    <Compile Include="CompilerFramework\IR\EpilogueInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\FloatingPointCompareInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\FloatingPointToIntegerConversionInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\IIRInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\IIRVisitor.cs" />
-    <Compile Include="CompilerFramework\IR\IntegerCompareInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\IntegerToFloatingPointConversionInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\BaseInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\JmpInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\LiteralInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\LoadInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\LogicalAndInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\LogicalNotInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\LogicalOrInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\LogicalXorInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\MoveInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\OneOperandInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\PhiData.cs" />
-    <Compile Include="CompilerFramework\IR\PhiInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\PopInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\PrologueInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\PushInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\ReturnInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\ShiftLeftInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\ShiftRightInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\SignExtendedMoveInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\StoreInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\ThreeOperandInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\TwoOperandInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\UDivInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\URemInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\ZeroExtendedMoveInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\ConstantFoldingStage.cs" />
     <Compile Include="CompilerFramework\IVisitor.cs" />
     <Compile Include="CompilerFramework\IBranch.cs" />
     <Compile Include="CompilerFramework\IIRnstruction.cs" />
@@ -979,7 +992,7 @@
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
