@@ -110,7 +110,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Expands this instance.
 		/// </summary>
-		public int Expand()
+		private int Expand()
 		{
 			if (_low == _allocated)
 				Resize(_allocated * 2);
