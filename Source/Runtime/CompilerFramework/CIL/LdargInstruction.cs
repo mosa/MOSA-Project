@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -8,6 +8,8 @@
  */
 
 using System;
+
+using Mosa.Runtime.CompilerFramework.Operands;
 
 namespace Mosa.Runtime.CompilerFramework.CIL
 {
@@ -37,7 +39,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
 		/// <remarks>
 		/// This method is used by instructions to retrieve immediate operands
-		/// from the instruction stream.
+		/// From the instruction stream.
 		/// </remarks>
 		public override void Decode(Context ctx, IInstructionDecoder decoder)
 		{
@@ -80,9 +82,12 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			}
 
 			// Push the loaded value onto the evaluation stack
-			ctx.Result = decoder.Compiler.GetParameterOperand(argIdx);
-			//ctx.Ignore = true;
-		}
+            Operand parameterOperand = decoder.Compiler.GetParameterOperand(argIdx);
+            Operand result = LoadInstruction.CreateResultOperand(decoder, parameterOperand.StackType, parameterOperand.Type);
+
+            ctx.Operand1 = parameterOperand;
+		    ctx.Result = result;
+        }
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.

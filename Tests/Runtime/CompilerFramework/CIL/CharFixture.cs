@@ -20,9 +20,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
     [Description(@"Tests support for the basic type System.Char")]
     public class CharFixture : RuntimeFixture
     {
-        private readonly ArithmeticInstructionTestRunner<char, char> arithmeticTests = new ArithmeticInstructionTestRunner<char, char>
+        private readonly ArithmeticInstructionTestRunner<int, char> arithmeticTests = new ArithmeticInstructionTestRunner<int, char>
         {
-            ExpectedTypeName = @"char",
+            ExpectedTypeName = @"int",
             TypeName = @"char"
         };
 
@@ -66,7 +66,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
         [Test, Author("boddlnagg", "kpreisert@googlemail.com")]
         public void Sub(char a, char b)
         {
-            this.arithmeticTests.Sub((char)(a - b), a, b);
+            int expected = a - b;
+            this.arithmeticTests.Sub(expected, a, b);
         }
 
         #endregion // Sub

@@ -14,6 +14,7 @@ using System.Diagnostics;
 using System.IO;
 
 using Mosa.Runtime.CompilerFramework;
+using Mosa.Runtime.CompilerFramework.IR;
 using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Runtime.Linker;
 using Mosa.Runtime.Metadata;
@@ -42,18 +43,34 @@ namespace Mosa.Platforms.x86
 
 		#region IIRVisitor
 
-        public void AddInstruction(Context ctx)
+        public void AddSInstruction(Context context)
         {
-            if (ctx.Operand1.StackType == StackTypeCode.F)
-            {
-                HandleCommutativeOperation(ctx, CPUx86.Instruction.SseAddInstruction);
-                ExtendToR8(ctx);
-            }
-            else
-                HandleCommutativeOperation(ctx, CPUx86.Instruction.AddInstruction);
+            this.HandleCommutativeOperation(context, CPUx86.Instruction.AddInstruction);
         }
 
-		/// <summary>
+	    public void AddUInstruction(Context context)
+	    {
+            this.HandleCommutativeOperation(context, CPUx86.Instruction.AddInstruction);
+        }
+
+	    public void AddFInstruction(Context context)
+	    {
+            this.HandleCommutativeOperation(context, CPUx86.Instruction.SseAddInstruction);
+            ExtendToR8(context);
+	    }
+
+	    public void DivFInstruction(Context context)
+	    {
+            this.HandleNonCommutativeOperation(context, CPUx86.Instruction.SseDivInstruction);
+            ExtendToR8(context);
+        }
+
+	    public void DivSInstruction(Context context)
+	    {
+            this.HandleNonCommutativeOperation(context, CPUx86.Instruction.DivInstruction);
+        }
+
+	    /// <summary>
 		/// Visitation function for <see cref="IR.IIRVisitor.AddressOfInstruction"/> instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
@@ -83,31 +100,33 @@ namespace Mosa.Platforms.x86
 		public void EpilogueInstruction(Context ctx)
 		{
 			SigType I = new SigType(CilElementType.I);
-			RegisterOperand ebp = new RegisterOperand(I, GeneralPurposeRegister.EBP);
+            RegisterOperand ebx = new RegisterOperand(I, GeneralPurposeRegister.EBX);
+            RegisterOperand edx = new RegisterOperand(I, GeneralPurposeRegister.EDX);
+            RegisterOperand ebp = new RegisterOperand(I, GeneralPurposeRegister.EBP);
 			RegisterOperand esp = new RegisterOperand(I, GeneralPurposeRegister.ESP);
 			int stackSize = (int)ctx.Other;
 
-			if (MethodCompiler.Method.Signature.ReturnType.Type == CilElementType.I8 ||
-				MethodCompiler.Method.Signature.ReturnType.Type == CilElementType.U8) {
+			if (MethodCompiler.Method.Signature.ReturnType.Type == CilElementType.I8 
+                || MethodCompiler.Method.Signature.ReturnType.Type == CilElementType.U8) 
+            {
+                // pop ebx
+                ctx.SetInstruction(CPUx86.Instruction.PopInstruction, ebx);
+			}
+			else
+			{
+			    // pop edx
+			    ctx.SetInstruction(CPUx86.Instruction.PopInstruction, edx);
+                // pop ebx
+                ctx.AppendInstruction(CPUx86.Instruction.PopInstruction, ebx);
+            }
 
-				// add esp, -localsSize
-				ctx.SetInstruction(CPUx86.Instruction.AddInstruction, esp, new ConstantOperand(I, -stackSize));
-				// pop ebp
-				ctx.AppendInstruction(CPUx86.Instruction.PopInstruction, ebp);
-				// ret
-				ctx.AppendInstruction(CPUx86.Instruction.RetInstruction);
-			}
-			else {
-				// pop edx
-				ctx.SetInstruction(CPUx86.Instruction.PopInstruction, new RegisterOperand(I, GeneralPurposeRegister.EDX));
-				// add esp, -localsSize
-				ctx.AppendInstruction(CPUx86.Instruction.AddInstruction, esp, new ConstantOperand(I, -stackSize));
-				// pop ebp
-				ctx.AppendInstruction(CPUx86.Instruction.PopInstruction, ebp);
-				// ret
-				ctx.AppendInstruction(CPUx86.Instruction.RetInstruction); // Change to Return
-			}
-		}
+		    // add esp, -localsSize
+            ctx.AppendInstruction(CPUx86.Instruction.AddInstruction, esp, new ConstantOperand(I, -stackSize));
+            // pop ebp
+            ctx.AppendInstruction(CPUx86.Instruction.PopInstruction, ebp);
+            // ret
+            ctx.AppendInstruction(CPUx86.Instruction.RetInstruction);
+        }
 
 		/// <summary>
 		/// Floatings the point compare instruction.
@@ -115,7 +134,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		public void FloatingPointCompareInstruction(Context ctx)
 		{
-			Operand op0 = ctx.Result;
+			Operand resultOperand = ctx.Result;
 			Operand left = EmitConstant(ctx.Operand1);
 			Operand right = EmitConstant(ctx.Operand2);
 			//ctx.Remove();
@@ -208,13 +227,9 @@ namespace Mosa.Platforms.x86
 			}
 
 			// Determine the result
-			ctx.AppendInstruction(CPUx86.Instruction.SetccInstruction, setcc, op0);
-
-			// Extend this to the full register, if we're storing it in a register
-			if (op0 is RegisterOperand) {
-				RegisterOperand rop = new RegisterOperand(new SigType(CilElementType.U1), ((RegisterOperand)op0).Register);
-				ctx.AppendInstruction(CPUx86.Instruction.MovzxInstruction, op0, rop);
-			}
+            RegisterOperand eax = new RegisterOperand(BuiltInSigType.Byte, GeneralPurposeRegister.EAX);
+            ctx.AppendInstruction(CPUx86.Instruction.SetccInstruction, setcc, eax);
+			ctx.AppendInstruction(CPUx86.Instruction.MovzxInstruction, resultOperand, eax);
 		}
 
 		/// <summary>
@@ -225,19 +240,22 @@ namespace Mosa.Platforms.x86
 		{
 			EmitOperandConstants(ctx);
 
-			IR.ConditionCode condition = ctx.ConditionCode;
+            ConditionCode condition = ctx.ConditionCode;
+            Operand resultOperand = ctx.Result;
 
-			ctx.SetInstruction(CPUx86.Instruction.CmpInstruction, ctx.Result, ctx.Operand1);
+			ctx.SetInstruction(CPUx86.Instruction.CmpInstruction, ctx.Operand1, ctx.Operand2);
 
-			if (IsUnsigned(ctx.Operand1) || IsUnsigned(ctx.Result))
-				ctx.AppendInstruction(CPUx86.Instruction.SetccInstruction, GetUnsignedConditionCode(condition), ctx.Result);
-			else
-				ctx.AppendInstruction(CPUx86.Instruction.SetccInstruction, condition, ctx.Result);
+            if (resultOperand != null)
+            {
+                RegisterOperand eax = new RegisterOperand(BuiltInSigType.Byte, GeneralPurposeRegister.EAX);
 
-			if (ctx.Result is RegisterOperand) {
-				RegisterOperand rop = new RegisterOperand(new SigType(CilElementType.U1), ((RegisterOperand)ctx.Result).Register);
-				ctx.AppendInstruction(CPUx86.Instruction.MovzxInstruction, rop, rop);
-			}
+                if (IsUnsigned(resultOperand))
+                    ctx.AppendInstruction(CPUx86.Instruction.SetccInstruction, GetUnsignedConditionCode(condition), eax);
+                else
+                    ctx.AppendInstruction(CPUx86.Instruction.SetccInstruction, condition, eax);
+
+                ctx.AppendInstruction(CPUx86.Instruction.MovzxInstruction, resultOperand, eax);
+            }
 		}
 
 		/// <summary>
@@ -260,18 +278,19 @@ namespace Mosa.Platforms.x86
 			Operand operand = ctx.Operand1;
             Operand offset = ctx.Operand2;
             ConstantOperand constantOffset = offset as ConstantOperand;
+		    IntPtr offsetPtr = IntPtr.Zero;
 
 			ctx.SetInstruction(CPUx86.Instruction.MovInstruction, eax, operand);
             if (constantOffset != null)
             {
-                IntPtr offsetPtr = new IntPtr(Convert.ToInt64(constantOffset.Value));
-                ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, result, new MemoryOperand(result.Type, GeneralPurposeRegister.EAX, offsetPtr));
+                offsetPtr = new IntPtr(Convert.ToInt64(constantOffset.Value));
             }
             else
             {
                 ctx.AppendInstruction(CPUx86.Instruction.AddInstruction, eax, offset);
-                ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, result, new MemoryOperand(result.Type, GeneralPurposeRegister.EAX, IntPtr.Zero));
             }
+
+            ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, result, new MemoryOperand(eax.Type, GeneralPurposeRegister.EAX, offsetPtr));
 		}
 
 		/// <summary>
@@ -328,27 +347,45 @@ namespace Mosa.Platforms.x86
 			Operand result = ctx.Result;
 			Operand operand = ctx.Operand1;
 			ctx.Operand1 = EmitConstant(ctx.Operand1);
-			if (ctx.Result.Type.Type == CilElementType.R4)
-				MoveFloatingPoint(ctx, CPUx86.Instruction.MovssInstruction);
-			else if (ctx.Result.Type.Type == CilElementType.R8)
-				MoveFloatingPoint(ctx, CPUx86.Instruction.MovsdInstruction);
-			else {
-				if (ctx.Result is MemoryOperand && ctx.Operand1 is MemoryOperand) {
-					RegisterOperand load = new RegisterOperand(new SigType(CilElementType.I), GeneralPurposeRegister.EDX);
-					RegisterOperand store = new RegisterOperand(operand.Type, GeneralPurposeRegister.EDX);
 
-					if (!Is32Bit(operand) && IsSigned(operand))
-						ctx.SetInstruction(CPUx86.Instruction.MovsxInstruction, load, operand);
-					else if (!Is32Bit(operand) && IsUnsigned(operand))
-						ctx.SetInstruction(CPUx86.Instruction.MovzxInstruction, load, operand);
-					else
-						ctx.SetInstruction(CPUx86.Instruction.MovInstruction, load, operand);
+            if (ctx.Result.StackType == StackTypeCode.F)
+            {
+                Debug.Assert(ctx.Operand1.StackType == StackTypeCode.F, @"Move can't convert to floating point type.");
+                if (ctx.Result.Type.Type == ctx.Operand1.Type.Type)
+                {
+                    if (ctx.Result.Type.Type == CilElementType.R4)
+                        MoveFloatingPoint(ctx, CPUx86.Instruction.MovssInstruction);
+                    else if (ctx.Result.Type.Type == CilElementType.R8)
+                        MoveFloatingPoint(ctx, CPUx86.Instruction.MovsdInstruction);
+                }
+                else if (ctx.Result.Type.Type == CilElementType.R8)
+                {
+                    ctx.SetInstruction(CPUx86.Instruction.Cvtss2sdInstruction, ctx.Result, ctx.Operand1, ctx.Operand2);
+                }
+                else if (ctx.Result.Type.Type == CilElementType.R4)
+                {
+                    ctx.SetInstruction(CPUx86.Instruction.Cvtsd2ssInstruction, ctx.Result, ctx.Operand1, ctx.Operand2);
+                }
+            }
+            else
+            {
+                if (ctx.Result is MemoryOperand && ctx.Operand1 is MemoryOperand)
+                {
+                    RegisterOperand load = new RegisterOperand(new SigType(CilElementType.I), GeneralPurposeRegister.EDX);
+                    RegisterOperand store = new RegisterOperand(operand.Type, GeneralPurposeRegister.EDX);
 
-					ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, result, store);
-				}
-				else
-					ctx.ReplaceInstructionOnly(CPUx86.Instruction.MovInstruction);
-			}
+                    if (!Is32Bit(operand) && IsSigned(operand))
+                        ctx.SetInstruction(CPUx86.Instruction.MovsxInstruction, load, operand);
+                    else if (!Is32Bit(operand) && IsUnsigned(operand))
+                        ctx.SetInstruction(CPUx86.Instruction.MovzxInstruction, load, operand);
+                    else
+                        ctx.SetInstruction(CPUx86.Instruction.MovInstruction, load, operand);
+
+                    ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, result, store);
+                }
+                else
+                    ctx.ReplaceInstructionOnly(CPUx86.Instruction.MovInstruction);
+            }
 		}
 
 		private void MoveFloatingPoint(Context ctx, CPUx86.BaseInstruction instruction)
@@ -360,17 +397,6 @@ namespace Mosa.Platforms.x86
 			ctx.AppendInstruction(instruction, result, xmm0);
 		}
 
-        public void MulInstruction(Context ctx)
-        {
-            if (ctx.Operand1.StackType == StackTypeCode.F)
-            {
-                HandleCommutativeOperation(ctx, CPUx86.Instruction.SseMulInstruction);
-                ExtendToR8(ctx);
-            }
-            else
-                HandleCommutativeOperation(ctx, CPUx86.Instruction.MulInstruction);
-        }
-
 		/// <summary>
 		/// Visitation function for <see cref="IR.IIRVisitor.PrologueInstruction"/> instruction.
 		/// </summary>
@@ -379,7 +405,8 @@ namespace Mosa.Platforms.x86
 		{
 			SigType I = new SigType(CilElementType.I4);
 			RegisterOperand eax = new RegisterOperand(I, GeneralPurposeRegister.EAX);
-			RegisterOperand ecx = new RegisterOperand(I, GeneralPurposeRegister.ECX);
+            RegisterOperand ebx = new RegisterOperand(I, GeneralPurposeRegister.EBX);
+            RegisterOperand ecx = new RegisterOperand(I, GeneralPurposeRegister.ECX);
 			RegisterOperand ebp = new RegisterOperand(I, GeneralPurposeRegister.EBP);
 			RegisterOperand esp = new RegisterOperand(I, GeneralPurposeRegister.ESP);
 			RegisterOperand edi = new RegisterOperand(I, GeneralPurposeRegister.EDI);
@@ -387,11 +414,11 @@ namespace Mosa.Platforms.x86
 			Debug.Assert((stackSize % 4) == 0, @"Stack size of method can't be divided by 4!!");
 
 			/* If you want to stop at the _header of an emitted function, just uncomment
-				 * the following line. It will issue a breakpoint instruction. Note that if
-				 * you debug using visual studio you must enable unmanaged code debugging, 
-				 * otherwise the function will never return and the breakpoint will never
-				 * appear.
-				 */
+			 * the following line. It will issue a breakpoint instruction. Note that if
+			 * you debug using visual studio you must enable unmanaged code debugging, 
+			 * otherwise the function will never return and the breakpoint will never
+			 * appear.
+			 */
 			// int 3
 			//ctx.SetInstruction(CPUx86.Instruction.BreakInstruction);
 			//ctx.AppendInstruction(CPUx86.Instruction.PushInstruction, null, ebp);
@@ -406,11 +433,13 @@ namespace Mosa.Platforms.x86
 			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, ebp, esp);
 			// sub esp, localsSize
 			ctx.AppendInstruction(CPUx86.Instruction.SubInstruction, esp, new ConstantOperand(I, -stackSize));
+		    ctx.AppendInstruction(CPUx86.Instruction.PushInstruction, null, ebx);
+
 			// Initialize all locals to zero
 			ctx.AppendInstruction(CPUx86.Instruction.PushInstruction, null, edi);
 			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, edi, esp);
 			ctx.AppendInstruction(CPUx86.Instruction.PushInstruction, null, ecx);
-			ctx.AppendInstruction(CPUx86.Instruction.AddInstruction, edi, new ConstantOperand(I, 4));
+			ctx.AppendInstruction(CPUx86.Instruction.AddInstruction, edi, new ConstantOperand(I, 8));
 			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, ecx, new ConstantOperand(I, -(int)(stackSize >> 2)));
 			ctx.AppendInstruction(CPUx86.Instruction.XorInstruction, eax, eax);
 			ctx.AppendInstruction(CPUx86.Instruction.RepInstruction);
@@ -477,59 +506,142 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		public void StoreInstruction(Context ctx)
 		{
-            Operand value = ctx.Operand2;
-            Operand result = ctx.Result;
-            
+            Operand destination = ctx.Result;
             Operand offset = ctx.Operand1;
+            Operand value = ctx.Operand2;
+            
             ConstantOperand constantOffset = offset as ConstantOperand;
 
-			RegisterOperand eax = new RegisterOperand(result.Type, GeneralPurposeRegister.EAX);
+			RegisterOperand eax = new RegisterOperand(destination.Type, GeneralPurposeRegister.EAX);
 			RegisterOperand edx = new RegisterOperand(value.Type, GeneralPurposeRegister.EDX);
 
-			ctx.SetInstruction(CPUx86.Instruction.MovInstruction, eax, result);
+			ctx.SetInstruction(CPUx86.Instruction.MovInstruction, eax, destination);
 			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, edx, value);
 
+            IntPtr offsetPtr = IntPtr.Zero;
             if (constantOffset != null)
             {
-                IntPtr offsetPtr = new IntPtr(Convert.ToInt64(constantOffset.Value));
-                ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, new MemoryOperand(value.Type, GeneralPurposeRegister.EAX, offsetPtr), edx);
+                offsetPtr = new IntPtr(Convert.ToInt64(constantOffset.Value));
             }
             else
             {
                 ctx.AppendInstruction(CPUx86.Instruction.AddInstruction, eax, offset);
-                ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, new MemoryOperand(value.Type, GeneralPurposeRegister.EAX, IntPtr.Zero), edx);
             }
-		}
 
-		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.UDivInstruction"/> instruction.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		public void UDivInstruction(Context ctx)
+            ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, new MemoryOperand(value.Type, GeneralPurposeRegister.EAX, offsetPtr), edx);
+        }
+
+		public void DivUInstruction(Context ctx)
 		{
 			ctx.ReplaceInstructionOnly(CPUx86.Instruction.UDivInstruction);
 		}
 
-		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.URemInstruction"/> instruction.
+	    public void MulSInstruction(Context context)
+	    {
+            HandleCommutativeOperation(context, CPUx86.Instruction.MulInstruction);
+        }
+
+	    public void MulFInstruction(Context context)
+	    {
+            HandleCommutativeOperation(context, CPUx86.Instruction.SseMulInstruction);
+            ExtendToR8(context);
+        }
+
+	    public void MulUInstruction(Context context)
+	    {
+            HandleCommutativeOperation(context, CPUx86.Instruction.MulInstruction);
+        }
+
+	    public void SubFInstruction(Context context)
+	    {
+            HandleNonCommutativeOperation(context, CPUx86.Instruction.SseSubInstruction);
+            ExtendToR8(context);
+        }
+
+	    public void SubSInstruction(Context context)
+	    {
+            HandleNonCommutativeOperation(context, CPUx86.Instruction.SubInstruction);
+        }
+
+	    public void SubUInstruction(Context context)
+	    {
+            HandleNonCommutativeOperation(context, CPUx86.Instruction.SubInstruction);
+        }
+
+	    public void RemFInstruction(Context context)
+	    {
+            HandleNonCommutativeOperation(context, CPUx86.Instruction.SseDivInstruction);
+            ExtendToR8(context);
+
+            Operand destination = context.Result;
+            Operand source = context.Operand1;
+
+            RegisterOperand xmm5 = new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM5);
+            Context before = context.InsertBefore();
+            before.SetInstruction(CPUx86.Instruction.MovInstruction, xmm5, destination);
+
+            // Round towards zero
+            context.AppendInstruction(CPUx86.Instruction.SseRoundInstruction, destination, destination, new ConstantOperand(BuiltInSigType.Byte, 0x03));
+
+            context.AppendInstruction(CPUx86.Instruction.SseMulInstruction, destination, source);
+            context.AppendInstruction(CPUx86.Instruction.SseSubInstruction, xmm5, destination);
+            context.AppendInstruction(CPUx86.Instruction.MovInstruction, destination, xmm5);
+        }
+
+	    public void RemSInstruction(Context context)
+	    {
+            Operand result = context.Result;
+            Operand operand = context.Operand1;
+            RegisterOperand eax = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EAX);
+            RegisterOperand ecx = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.ECX);
+            RegisterOperand eaxSource = new RegisterOperand(result.Type, GeneralPurposeRegister.EAX);
+            RegisterOperand ecxSource = new RegisterOperand(operand.Type, GeneralPurposeRegister.ECX);
+
+            context.SetInstruction(CPUx86.Instruction.MovInstruction, eaxSource, result);
+            context.AppendInstruction(IR.Instruction.SignExtendedMoveInstruction, eax, eaxSource);
+            context.AppendInstruction(CPUx86.Instruction.MovInstruction, ecxSource, operand);
+            context.AppendInstruction(IR.Instruction.SignExtendedMoveInstruction, ecx, ecxSource);
+            context.AppendInstruction(CPUx86.Instruction.DivInstruction, eax, ecx);
+            context.AppendInstruction(CPUx86.Instruction.MovInstruction, result, new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EDX));
+        }
+
+	    /// <summary>
+		/// Visitation function for <see cref="IIRVisitor.RemUInstruction"/> instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		public void URemInstruction(Context ctx)
+		public void RemUInstruction(Context context)
 		{
-			Operand result = ctx.Result;
-			Operand operand = ctx.Operand1;
-			RegisterOperand eax = new RegisterOperand(new SigType(CilElementType.U4), GeneralPurposeRegister.EAX);
-			RegisterOperand ecx = new RegisterOperand(new SigType(CilElementType.U4), GeneralPurposeRegister.ECX);
-			RegisterOperand eaxSource = new RegisterOperand(result.Type, GeneralPurposeRegister.EAX);
-			RegisterOperand ecxSource = new RegisterOperand(operand.Type, GeneralPurposeRegister.ECX);
+            Operand result = context.Result;
+            Operand operand = context.Operand1;
+            RegisterOperand eax = new RegisterOperand(new SigType(CilElementType.U4), GeneralPurposeRegister.EAX);
+            RegisterOperand ecx = new RegisterOperand(new SigType(CilElementType.U4), GeneralPurposeRegister.ECX);
+            RegisterOperand eaxSource = new RegisterOperand(result.Type, GeneralPurposeRegister.EAX);
+            RegisterOperand ecxSource = new RegisterOperand(operand.Type, GeneralPurposeRegister.ECX);
 
-			ctx.SetInstruction(CPUx86.Instruction.MovInstruction, eax, result);
-			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, ecx, operand);
-			ctx.AppendInstruction(CPUx86.Instruction.UDivInstruction, eax, ecx);
-			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, result, new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EDX));
-		}
+            context.SetInstruction(CPUx86.Instruction.MovInstruction, eaxSource, result);
+            context.AppendInstruction(IR.Instruction.ZeroExtendedMoveInstruction, eax, eaxSource);
+            context.AppendInstruction(CPUx86.Instruction.MovInstruction, ecxSource, operand);
+            context.AppendInstruction(IR.Instruction.ZeroExtendedMoveInstruction, ecx, ecxSource);
+            context.AppendInstruction(CPUx86.Instruction.UDivInstruction, eax, ecx);
+            context.AppendInstruction(CPUx86.Instruction.MovInstruction, result, new RegisterOperand(new SigType(CilElementType.U4), GeneralPurposeRegister.EDX));
+        }
 
-		/// <summary>
+	    public void SwitchInstruction(Context context)
+	    {
+            IBranch branch = context.Branch;
+            Operand operand = context.Operand1;
+
+            context.Remove();
+
+            for (int i = 0; i < branch.Targets.Length - 1; ++i)
+            {
+                context.AppendInstruction(CPUx86.Instruction.CmpInstruction, operand, new ConstantOperand(new SigType(CilElementType.I), i));
+                context.AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.Equal);
+                context.SetBranch(branch.Targets[i]);
+            }	        
+	    }
+
+	    /// <summary>
 		/// Visitation function for <see cref="IR.IIRVisitor.NopInstruction"/> instructions.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
@@ -544,10 +656,52 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		public void SignExtendedMoveInstruction(Context ctx)
 		{
-			ctx.ReplaceInstructionOnly(CPUx86.Instruction.MovsxInstruction);
+            Operand offset = ctx.Operand2;
+            if (offset != null)
+            {
+                RegisterOperand eax = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.EAX);
+                Operand destination = ctx.Result;
+                MemoryOperand source = (MemoryOperand)ctx.Operand1;
+                SigType elementType = GetElementType(source.Type);
+                ConstantOperand constantOffset = offset as ConstantOperand;
+                IntPtr offsetPtr = IntPtr.Zero;
+
+                ctx.SetInstruction(CPUx86.Instruction.MovInstruction, eax, source);
+                if (constantOffset != null)
+                {
+                    offsetPtr = new IntPtr(Convert.ToInt64(constantOffset.Value));
+                }
+                else
+                {
+                    ctx.AppendInstruction(CPUx86.Instruction.AddInstruction, eax, offset);
+                }
+
+                ctx.AppendInstruction(CPUx86.Instruction.MovsxInstruction, destination, new MemoryOperand(elementType, GeneralPurposeRegister.EAX, offsetPtr));
+            }
+            else
+            {
+                ctx.ReplaceInstructionOnly(CPUx86.Instruction.MovsxInstruction);
+            }
 		}
 
-		/// <summary>
+	    private static SigType GetElementType(SigType sigType)
+	    {
+            PtrSigType pointerType = sigType as PtrSigType;
+            if (pointerType != null)
+            {
+                return pointerType.ElementType;                
+            }
+
+            RefSigType referenceType = sigType as RefSigType;
+            if (referenceType != null)
+            {
+                return referenceType.ElementType;
+            }
+
+            return sigType;
+	    }
+
+	    /// <summary>
 		/// Visitation function for <see cref="IR.IIRVisitor.CallInstruction"/> instructions.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
@@ -564,30 +718,29 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		public void ZeroExtendedMoveInstruction(Context ctx)
 		{
-			switch (ctx.Operand1.Type.Type) {
-				case CilElementType.I1:
-					ctx.ReplaceInstructionOnly(CPUx86.Instruction.MovzxInstruction);
-					break;
-				case CilElementType.I2: goto case CilElementType.I1;
-				case CilElementType.I4: goto case CilElementType.I1;
-				case CilElementType.I8: throw new NotSupportedException();
-				case CilElementType.U1: goto case CilElementType.I1;
-				case CilElementType.U2: goto case CilElementType.I1;
-				case CilElementType.U4: goto case CilElementType.I1;
-				case CilElementType.U8: goto case CilElementType.I8;
-				case CilElementType.Char: goto case CilElementType.I2;
-				default: throw new NotSupportedException();
-			}
+            Operand offset = ctx.Operand2;
+            if (offset != null)
+            {
+                RegisterOperand eax = new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.EAX);
+                Operand result = ctx.Result;
+                Operand source = ctx.Operand1;
+                SigType elementType = GetElementType(source.Type);
+                ConstantOperand constantOffset = offset as ConstantOperand;
+                IntPtr offsetPtr = IntPtr.Zero;
 
-			if ((ctx.Result is RegisterOperand))
-				return;
+                ctx.SetInstruction(CPUx86.Instruction.MovInstruction, eax, source);
+                if (constantOffset != null)
+                {
+                    offsetPtr = new IntPtr(Convert.ToInt64(constantOffset.Value));
+                }
 
-			Operand result = ctx.Result;
-			Operand source = ctx.Operand1;
-			RegisterOperand ebx = new RegisterOperand(result.Type, GeneralPurposeRegister.EBX);
-			ctx.Result = ebx;
-
-			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, result, ebx);
+                ctx.AppendInstruction(CPUx86.Instruction.AddInstruction, eax, offset);
+                ctx.AppendInstruction(CPUx86.Instruction.MovzxInstruction, result, new MemoryOperand(elementType, GeneralPurposeRegister.EAX, offsetPtr));
+            }
+            else
+            {
+                ctx.ReplaceInstructionOnly(CPUx86.Instruction.MovzxInstruction);
+            }
 		}
 
 		/// <summary>
@@ -705,6 +858,18 @@ namespace Mosa.Platforms.x86
         /// </remarks>
         private void HandleCommutativeOperation(Context ctx, IInstruction instruction)
         {
+            EmitOperandConstants(ctx);
+            ctx.ReplaceInstructionOnly(instruction);
+        }
+
+        /// <summary>
+        /// Handles the non commutative operation.
+        /// </summary>
+        /// <param name="ctx">The context.</param>
+        /// <param name="instruction">The instruction.</param>
+        private void HandleNonCommutativeOperation(Context ctx, IInstruction instruction)
+        {
+            EmitResultConstants(ctx);
             EmitOperandConstants(ctx);
             ctx.ReplaceInstructionOnly(instruction);
         }

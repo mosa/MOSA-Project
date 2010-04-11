@@ -40,6 +40,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
         /// </summary>
         private List<LinkerSection> _sections;
 
+        private readonly AllocateDelegate allocateArrayHandler;
+
         #endregion // Data members
 
         #region Construction
@@ -53,6 +55,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
             _sections = new List<LinkerSection>(maxSections);
             for (int i = 0; i < maxSections; i++)
                 _sections.Add(new TestLinkerSection((SectionKind)i, String.Empty, IntPtr.Zero));
+            allocateArrayHandler = new AllocateDelegate(RuntimeBase.AllocateArray);
         }
 
         #endregion // Construction
@@ -218,10 +221,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
         protected override void AddVmCalls(IDictionary<string, LinkerSymbol> virtualMachineCalls)
         {
             Trace.WriteLine(@"TestAssemblyLinker adding VM calls:");
-            long baseAddress = this._sections[(int)SectionKind.Text].VirtualAddress.ToInt64();
 
-            AllocateDelegate handler = new AllocateDelegate(RuntimeBase.AllocateArray);
-            IntPtr allocate = Marshal.GetFunctionPointerForDelegate(handler);
+            IntPtr allocate = Marshal.GetFunctionPointerForDelegate(this.allocateArrayHandler);
 
             const string allocateMethod = @"Mosa.Runtime.RuntimeBase.AllocateArray(I4 moduleLoadIndex,ValueType token,I4 elements)";
             long virtualAddress = allocate.ToInt64();

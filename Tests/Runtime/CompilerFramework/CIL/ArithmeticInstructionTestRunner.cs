@@ -209,7 +209,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
         private const string TestCodeNeg = @"
                 public static bool NegTest([[expectedType]] expectedValue, [[typename]] first)
                 {
-                    return expectedValue == (~first);
+                    return expectedValue == (-first);
                 }
             ";
 

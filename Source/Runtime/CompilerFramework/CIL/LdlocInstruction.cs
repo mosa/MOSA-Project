@@ -12,6 +12,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 
+using Mosa.Runtime.CompilerFramework.Operands;
+
 namespace Mosa.Runtime.CompilerFramework.CIL
 {
 	/// <summary>
@@ -78,8 +80,11 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			}
 
 			// Push the loaded value onto the evaluation stack
-			ctx.Result = decoder.Compiler.GetLocalOperand(locIdx);
-			ctx.Ignore = true;
+			Operand localVariableOperand = decoder.Compiler.GetLocalOperand(locIdx);
+		    Operand result = LoadInstruction.CreateResultOperand(decoder, localVariableOperand.StackType, localVariableOperand.Type);
+
+		    ctx.Operand1 = localVariableOperand;
+		    ctx.Result = result;
 		}
 
 		/// <summary>

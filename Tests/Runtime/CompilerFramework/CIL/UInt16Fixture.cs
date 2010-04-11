@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -17,11 +17,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 	[TestFixture]
 	public class UInt16Fixture : RuntimeFixture
 	{
-		private readonly ArithmeticInstructionTestRunner<int, ushort> arithmeticTests = new ArithmeticInstructionTestRunner<int, ushort>
-		{
-			ExpectedTypeName = @"int",
-			TypeName = @"ushort"
-		};
+        private readonly ArithmeticInstructionTestRunner<int, ushort> arithmeticTests = new ArithmeticInstructionTestRunner<int, ushort>
+        {
+            ExpectedTypeName = @"int",
+            TypeName = @"ushort"
+        };
 
 		private readonly BinaryLogicInstructionTestRunner<int, ushort> logicTests = new BinaryLogicInstructionTestRunner<int, ushort>
 		{

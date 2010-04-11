@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 
+using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
 
@@ -27,7 +28,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// A fixed typeref for ldind.* instructions.
 		/// </summary>
-		private SigType _typeRef;
+		private SigType typeRef;
 
 		#endregion // Data members
 
@@ -42,37 +43,37 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		{
 			switch (opcode) {
 				case OpCode.Ldind_i1:
-					_typeRef = new SigType(CilElementType.I1);
+                    this.typeRef = BuiltInSigType.SByte;
 					break;
 				case OpCode.Ldind_i2:
-					_typeRef = new SigType(CilElementType.I2);
+                    this.typeRef = BuiltInSigType.Int16;
 					break;
 				case OpCode.Ldind_i4:
-					_typeRef = new SigType(CilElementType.I4);
+                    this.typeRef = BuiltInSigType.Int32;
 					break;
 				case OpCode.Ldind_i8:
-					_typeRef = new SigType(CilElementType.I8);
+                    this.typeRef = BuiltInSigType.Int64;
 					break;
 				case OpCode.Ldind_u1:
-					_typeRef = new SigType(CilElementType.U1);
+                    this.typeRef = BuiltInSigType.Byte;
 					break;
 				case OpCode.Ldind_u2:
-					_typeRef = new SigType(CilElementType.U2);
+                    this.typeRef = BuiltInSigType.UInt16;
 					break;
 				case OpCode.Ldind_u4:
-					_typeRef = new SigType(CilElementType.U4);
+                    this.typeRef = BuiltInSigType.UInt32;
 					break;
 				case OpCode.Ldind_i:
-					_typeRef = new SigType(CilElementType.I);
+                    this.typeRef = BuiltInSigType.IntPtr;
 					break;
 				case OpCode.Ldind_r4:
-					_typeRef = new SigType(CilElementType.R4);
+                    this.typeRef = BuiltInSigType.Single;
 					break;
 				case OpCode.Ldind_r8:
-					_typeRef = new SigType(CilElementType.R8);
+                    this.typeRef = BuiltInSigType.Double;
 					break;
 				case OpCode.Ldind_ref: // FIXME: Really object?
-					_typeRef = new SigType(CilElementType.Object);
+                    this.typeRef = BuiltInSigType.Object;
 					break;
 				default:
 					throw new NotImplementedException();
@@ -94,15 +95,16 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			base.Decode(ctx, decoder);
 
 			// Do we have a type?
-			if (_typeRef == null) {
-				// No, retrieve a type reference from the immediate argument
+            if (this.typeRef == null)
+            {
+				// No, retrieve a type reference From the immediate argument
 				TokenTypes token;
 				decoder.Decode(out token);
-				//_typeRef = MetadataTypeReference.FromToken(decoder.Metadata, token);
+                this.typeRef = new ClassSigType(token);
 			}
 
 			// Push the loaded value
-			ctx.Result = decoder.Compiler.CreateTemporary(_typeRef);
+            ctx.Result = LoadInstruction.CreateResultOperand(decoder, Operand.StackTypeFromSigType(this.typeRef), this.typeRef);
 		}
 
 		/// <summary>
@@ -115,14 +117,16 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			base.Validate(ctx, compiler);
 
 			// If we're ldind.i8, fix an IL deficiency that the result may be U8
-			if (_opcode == OpCode.Ldind_i8 && _typeRef.Type == CilElementType.I8) {
+            if (_opcode == OpCode.Ldind_i8 && this.typeRef.Type == CilElementType.I8)
+            {
 				SigType opType = ctx.Operand1.Type;
 				RefSigType rst = opType as RefSigType;
 				PtrSigType ptr = opType as PtrSigType;
 
-				if (rst != null && rst.ElementType.Type == CilElementType.U8 ||
-					ptr != null && ptr.ElementType.Type == CilElementType.U8) {
-					ctx.Result = compiler.CreateTemporary(new SigType(CilElementType.U8));
+				if (rst != null && rst.ElementType.Type == CilElementType.U8 
+                    || ptr != null && ptr.ElementType.Type == CilElementType.U8) 
+                {
+					ctx.Result = compiler.CreateTemporary(BuiltInSigType.UInt64);
 				}
 			}
 		}

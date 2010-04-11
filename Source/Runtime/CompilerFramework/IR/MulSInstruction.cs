@@ -7,6 +7,8 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
+using System;
+
 namespace Mosa.Runtime.CompilerFramework.IR
 {
     /// <summary>
@@ -20,12 +22,12 @@ namespace Mosa.Runtime.CompilerFramework.IR
     /// is statically or dynamically equal to or larger than the number of bits in the first
     /// operand, the result is undefined.
     /// </remarks>
-    public sealed class MulInstruction : ThreeOperandInstruction
+    public sealed class MulSInstruction : ThreeOperandInstruction
     {
         /// <summary>
-        /// Initializes a new instance of the <see cref="MulInstruction"/>.
+        /// Initializes a new instance of the <see cref="MulSInstruction"/>.
         /// </summary>
-        public MulInstruction()
+        public MulSInstruction()
         {
         }
 
@@ -36,7 +38,19 @@ namespace Mosa.Runtime.CompilerFramework.IR
         /// <param name="context">The context.</param>
         public override void Visit(IIRVisitor visitor, Context context)
         {
-            visitor.MulInstruction(context);
+            visitor.MulSInstruction(context);
+        }
+
+        /// <summary>
+        /// Returns a <see cref="System.String"/> that represents this instance.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <returns>
+        /// A <see cref="System.String"/> that represents this instance.
+        /// </returns>
+        public override string ToString(Context context)
+        {
+            return String.Format(@"IR mul.s{0} {1} = {2} * {3}", context.Result.Precision, context.Result, context.Operand1, context.Operand2);
         }
     }
 }

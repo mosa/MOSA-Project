@@ -500,7 +500,7 @@ namespace Mosa.Platforms.x86
 							imm = LittleEndianBitConverter.GetBytes(Convert.ToInt32(co.Value));
 						}
 						catch (OverflowException) {
-							imm = LittleEndianBitConverter.GetBytes(Convert.ToUInt32(co.Value));
+							imm = LittleEndianBitConverter.GetBytes(Convert.ToUInt64(co.Value));
 						}
 						break;
 
@@ -521,11 +521,11 @@ namespace Mosa.Platforms.x86
 					case CilElementType.Char:
 						goto case CilElementType.U2;
 					case CilElementType.U2:
-						imm = LittleEndianBitConverter.GetBytes(Convert.ToUInt16(co.Value));
+                        imm = LittleEndianBitConverter.GetBytes((ushort)Convert.ToUInt64(co.Value));
 						break;
 					case CilElementType.Ptr:
 					case CilElementType.U4:
-						imm = LittleEndianBitConverter.GetBytes(Convert.ToUInt32(co.Value));
+						imm = LittleEndianBitConverter.GetBytes((uint)Convert.ToUInt64(co.Value));
 						break;
 					case CilElementType.I8:
 						imm = LittleEndianBitConverter.GetBytes(Convert.ToInt64(co.Value));

@@ -34,12 +34,17 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
             // Populate the pipeline
             this.Pipeline.AddRange(new IMethodCompilerStage[] {
                 new DecodingStage(),
+                new InstructionLogger(),
                 new BasicBlockBuilderStage(),
+                new InstructionLogger(),
 				new OperandDeterminationStage(),
+                new InstructionLogger(),
                 new StaticAllocationResolutionStage(),
                 new InstructionLogger(),
                 //new ConstantFoldingStage(),
                 new CILTransformationStage(),
+                new InstructionLogger(),
+                new CILLeakGuardStage() { MustThrowCompilationException = true },
                 //new InstructionLogger(),
 				//InstructionStatisticsStage.Instance,
                 //new DominanceCalculationStage(),
