@@ -27,81 +27,31 @@ namespace Mosa.Tools.Mono.UpdateProject
 		private static readonly char[] trimchars4 = { ' ', '\t', ':' };
 
 		/// <summary>
-		/// Processes the specified file.
-		/// </summary>
-		/// <param name="file">The file.</param>
-		internal static void ProcessProject(string project)
-		{
-			List<string> files = Transform.GetProjectFiles(project);
-
-			string root = Path.GetDirectoryName(project);
-
-			foreach (string file in files)
-				Process(Path.GetFileName(file), Path.GetDirectoryName(Path.Combine(root, file)));
-		}
-
-		/// Processes the specified file.
-		/// </summary>
-		/// <param name="file">The file.</param>
-		internal static void ProcessFile(string file)
-		{
-			Process(Path.GetFileName(file), Path.GetDirectoryName(file));
-		}
-
-		/// <summary>
-		/// Gets the project filenames.
-		/// </summary>
-		/// <param name="file">The file.</param>
-		/// <returns></returns>
-		static public List<string> GetProjectFiles(string file)
-		{
-			List<string> list = new List<string>();
-
-			XmlDocument xmlDocument = new XmlDocument();
-			xmlDocument.Load(file);
-
-			XmlNamespaceManager mgr = new XmlNamespaceManager(xmlDocument.NameTable);
-			mgr.AddNamespace("x", "http://schemas.microsoft.com/developer/msbuild/2003");
-
-			XmlNodeList compileNodes = xmlDocument.SelectNodes("/x:Project/x:ItemGroup/x:Compile", mgr);
-			foreach (XmlNode compileNode in compileNodes)
-				foreach (XmlNode attribute in compileNode.Attributes)
-					if (attribute.Name.Equals("Include"))
-						if ((attribute.Value.EndsWith(".cs")) && ((!attribute.Value.Contains(".Internal.")))) {
-							if (attribute.Value.EndsWith(".Original.cs"))
-								list.Add(attribute.Value.Replace(".Original.cs", ".cs"));
-							else
-								list.Add(attribute.Value);
-						}
-
-			return list;
-		}
-
-		/// <summary>
 		/// Processes the specified root.
 		/// </summary>
 		/// <param name="file">The filename.</param>
 		/// <param name="root">The root.</param>
-		internal static void Process(string file, string root)
+		internal static void Process(Options options, string source)
 		{
-			Console.WriteLine(file);
+			string filename = Path.GetFileName(source);
 
-			if (!File.Exists(Path.Combine(root, file)))
+			string originalFile = source.Insert(source.Length - 3, ".Original");
+			bool same = CompareFile.Compare(Path.Combine(options.Source, source), Path.Combine(options.Destination, originalFile));
+
+			//Console.WriteLine("# " + filename);
+
+			if (!File.Exists(Path.Combine(options.Source, source))) {
+				Console.WriteLine("0> " + filename);
+
+				if (options.UpdateOnChange) {
+					File.Delete(Path.Combine(options.Destination, source));
+					File.Delete(Path.Combine(options.Destination, originalFile));
+				}
+
 				return;
-
-			string originalFile = Path.Combine(root, Path.GetFileNameWithoutExtension(file) + ".Original.cs");
-
-			string[] lines;
-			bool createOriginal = true;
-
-			// Load file into string array
-			if (!File.Exists(originalFile))
-				lines = File.ReadAllLines(Path.Combine(root, file));
-			else {
-				// Load file marked ".Original.cs" instead
-				lines = File.ReadAllLines(originalFile);
-				createOriginal = false;
 			}
+
+			string[] lines = File.ReadAllLines(Path.Combine(options.Source, source));
 
 			ClassNode rootNode = new ClassNode();
 			List<ClassNode> classNodes = new List<ClassNode>();
@@ -188,23 +138,46 @@ namespace Mosa.Tools.Mono.UpdateProject
 					} while (upNode != upNode.Parent);
 				}
 
-			// Create partial file
+			Directory.CreateDirectory(Path.GetDirectoryName(Path.Combine(options.Destination, source)));
+
 			if (methodNodes.Count != 0) {
-				if (createOriginal)
-					File.Copy(Path.Combine(root, file), originalFile);
+				if (options.CreateOriginalFile && !same) {
+					Console.WriteLine("1> " + originalFile);
+					File.Copy(Path.Combine(options.Source, source), Path.Combine(options.Destination, originalFile), true);
+				}
 
 				ExpandUsing(lines, usings);
 
-				string partialMosaFile = Path.Combine(root, file.Insert(file.Length - 2, "Mosa.Internal."));
-				Console.WriteLine(">" + Path.GetFileName(partialMosaFile));
-				CreatePartialFileForMosa(lines, rootNode, usings, namespaces, partialMosaFile);
+				if (options.CreateMosaFile) {
+					string mosaFile = source.Insert(source.Length - 3, ".Mosa");
 
-				string partialMonoFile = Path.Combine(root, file.Insert(file.Length - 2, "Internal."));
-				Console.WriteLine(">" + Path.GetFileName(partialMonoFile));
-				CreatePartialFileForMono(lines, rootNode, usings, namespaces, partialMonoFile);
+					if (!File.Exists(Path.Combine(options.Destination, mosaFile)) || (options.UpdateOnChange && !same)) {
+						Console.WriteLine("2> " + mosaFile);
+						CreatePartialFileForMosa(lines, rootNode, usings, namespaces, Path.Combine(options.Destination, mosaFile));
+					}
+				}
 
-				// Modify source file
-				CreateModifiedFile(lines, classNodes, methodNodes, Path.Combine(root, file));
+				if (options.CreateMonoFile) {
+					string monoFile = source.Insert(source.Length - 3, ".Internal");
+
+					if (!File.Exists(Path.Combine(options.Destination, monoFile)) || (options.UpdateOnChange && !same)) {
+						Console.WriteLine("3> " + monoFile);
+						CreatePartialFileForMono(lines, rootNode, usings, namespaces, Path.Combine(options.Destination, monoFile));
+					}
+				}
+
+				if (options.UpdateOnChange && !same) {
+					Console.WriteLine("4> " + source);
+					CreateModifiedFile(lines, classNodes, methodNodes, Path.Combine(options.Destination, source));
+				}
+			}
+			else {
+				same = CompareFile.Compare(Path.Combine(options.Source, source), Path.Combine(options.Destination, source));
+
+				if (options.UpdateOnChange && !same) {
+					Console.WriteLine("5> " + source);
+					File.Copy(Path.Combine(options.Source, source), Path.Combine(options.Destination, source), true);
+				}
 			}
 		}
 
@@ -1008,6 +981,32 @@ namespace Mosa.Tools.Mono.UpdateProject
 
 			return line;
 		}
+
+		/// <summary>
+		/// Gets the project filenames.
+		/// </summary>
+		/// <param name="file">The file.</param>
+		/// <returns></returns>
+		static public List<string> GetProjectFiles(string file)
+		{
+			List<string> list = new List<string>();
+
+			XmlDocument xmlDocument = new XmlDocument();
+			xmlDocument.Load(file);
+
+			XmlNamespaceManager mgr = new XmlNamespaceManager(xmlDocument.NameTable);
+			mgr.AddNamespace("x", "http://schemas.microsoft.com/developer/msbuild/2003");
+
+			XmlNodeList compileNodes = xmlDocument.SelectNodes("/x:Project/x:ItemGroup/x:Compile", mgr);
+			foreach (XmlNode compileNode in compileNodes)
+				foreach (XmlNode attribute in compileNode.Attributes)
+					if (attribute.Name.Equals("Include"))
+						if (attribute.Value.EndsWith(".cs"))
+							list.Add(attribute.Value);
+
+			return list;
+		}
+
 		#region Nested type: ClassNode
 
 		/// <summary>

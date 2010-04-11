@@ -559,7 +559,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		public void UnaryBranch(Context ctx)
 		{
             IBranch branch = ctx.Branch;
-            BasicBlock branchTarget = this.FindBlock(branch.Targets[0]);
+            //BasicBlock branchTarget = this.FindBlock(branch.Targets[0]);
             ConditionCode cc;
             OpCode opcode = ((ICILInstruction)ctx.Instruction).OpCode;
             if (opcode == OpCode.Brtrue || opcode == OpCode.Brtrue_s)
