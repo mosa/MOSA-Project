@@ -36,6 +36,9 @@ namespace Mosa.Tools.Mono.UpdateProject
 			string filename = Path.GetFileName(source);
 
 			string originalFile = source.Insert(source.Length - 3, ".Original");
+			string mosaFile = source.Insert(source.Length - 3, ".Mosa");
+			string monoFile = source.Insert(source.Length - 3, ".Internal");
+
 			bool same = CompareFile.Compare(Path.Combine(options.Source, source), Path.Combine(options.Destination, originalFile));
 
 			//Console.WriteLine("# " + filename);
@@ -46,6 +49,8 @@ namespace Mosa.Tools.Mono.UpdateProject
 				if (options.UpdateOnChange) {
 					File.Delete(Path.Combine(options.Destination, source));
 					File.Delete(Path.Combine(options.Destination, originalFile));
+					File.Delete(Path.Combine(options.Destination, mosaFile));
+					File.Delete(Path.Combine(options.Destination, monoFile));
 				}
 
 				return;
@@ -149,8 +154,6 @@ namespace Mosa.Tools.Mono.UpdateProject
 				ExpandUsing(lines, usings);
 
 				if (options.CreateMosaFile) {
-					string mosaFile = source.Insert(source.Length - 3, ".Mosa");
-
 					if (!File.Exists(Path.Combine(options.Destination, mosaFile)) || (options.UpdateOnChange && !same)) {
 						Console.WriteLine("2> " + mosaFile);
 						CreatePartialFileForMosa(lines, rootNode, usings, namespaces, Path.Combine(options.Destination, mosaFile));
@@ -158,8 +161,6 @@ namespace Mosa.Tools.Mono.UpdateProject
 				}
 
 				if (options.CreateMonoFile) {
-					string monoFile = source.Insert(source.Length - 3, ".Internal");
-
 					if (!File.Exists(Path.Combine(options.Destination, monoFile)) || (options.UpdateOnChange && !same)) {
 						Console.WriteLine("3> " + monoFile);
 						CreatePartialFileForMono(lines, rootNode, usings, namespaces, Path.Combine(options.Destination, monoFile));
@@ -177,6 +178,9 @@ namespace Mosa.Tools.Mono.UpdateProject
 				if (options.UpdateOnChange && !same) {
 					Console.WriteLine("5> " + source);
 					File.Copy(Path.Combine(options.Source, source), Path.Combine(options.Destination, source), true);
+					File.Delete(Path.Combine(options.Destination, originalFile));
+					File.Delete(Path.Combine(options.Destination, mosaFile));
+					File.Delete(Path.Combine(options.Destination, monoFile));
 				}
 			}
 		}
