@@ -8,6 +8,8 @@
  */
 
 using System.Collections.Generic;
+using System.Diagnostics;
+
 using Mosa.Runtime.CompilerFramework.CIL;
 using Mosa.Runtime.CompilerFramework.Operands;
 
@@ -63,6 +65,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="block">The block.</param>
         private void AssignOperands(BasicBlock block)
         {
+		    Debug.WriteLine(@"OperandDeterminationStage: Assigning operands to block " + block);
             if (block.InitialStack != null)
                 foreach (Operand operand in block.InitialStack)
                     _operandStack.Push(operand);
