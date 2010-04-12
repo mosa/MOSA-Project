@@ -608,7 +608,7 @@ namespace Mosa.Platforms.x86
 	    /// <summary>
 		/// Visitation function for <see cref="IIRVisitor.RemUInstruction"/> instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+        /// <param name="context">The context.</param>
 		public void RemUInstruction(Context context)
 		{
             Operand result = context.Result;

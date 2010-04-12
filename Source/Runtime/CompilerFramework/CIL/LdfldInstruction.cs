@@ -18,7 +18,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public sealed class LdfldInstruction : UnaryInstruction
+	public sealed class LdfldInstruction : BaseInstruction
 	{
 		#region Construction
 
@@ -27,7 +27,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </summary>
 		/// <param name="opcode">The opcode.</param>
 		public LdfldInstruction(OpCode opcode)
-			: base(opcode)
+			: base(opcode, 1, 1)
 		{
 		}
 

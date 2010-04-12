@@ -126,8 +126,10 @@ namespace Mosa.Runtime.CompilerFramework
 						Context prev = ctx.Previous;
 						flow = prev.Instruction.FlowControl;
 						if (flow == FlowControl.Next || flow == FlowControl.Call || flow == FlowControl.ConditionalBranch || flow == FlowControl.Switch) {
-							//prev.AppendInstruction(IR.Instruction.JmpInstruction);
-							//prev.SetBranch(ctx.Label);
+                            // This jump joins fall-through blocks, by giving them a proper end.
+							prev.AppendInstruction(CIL.Instruction.Get(CIL.OpCode.Br));
+							prev.SetBranch(ctx.Label);
+
 							prev.SliceAfter();
 						}
 					}

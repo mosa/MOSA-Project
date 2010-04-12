@@ -2133,7 +2133,7 @@ namespace Mosa.Platforms.x86
         /// <summary>
         /// Visitation function for <see cref="CIL.ICILVisitor.Add"/>.
         /// </summary>
-        /// <param name="ctx">The context.</param>
+        /// <param name="context">The context.</param>
         public void AddSInstruction(Context context)
         {
             if (IsInt64(context.Operand1) == true)

@@ -37,7 +37,6 @@ namespace Mosa.Runtime.Metadata.Signatures
         /// <summary>
         /// Initializes a new instance of the <see cref="PtrSigType"/> class.
         /// </summary>
-        /// <param name="customMods">The custom mods.</param>
         /// <param name="type">The type.</param>
         public PtrSigType(SigType type)
             : base(CilElementType.Ptr)

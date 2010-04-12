@@ -42,9 +42,9 @@ namespace Mosa.Tools.Compiler
 		{
 			foreach (Context allocation in this.ScanForOperatorNew())
 			{
-				Context assignment = SeekAssignmentOfAllocatedObject(allocation);
+				Context assignment = this.SeekAssignmentOfAllocatedObject(allocation);
 				
-				if (assignment != null && CheckAssignmentForCompliance(allocation, assignment))
+				if (assignment != null && this.CheckAssignmentForCompliance(allocation, assignment))
 				{
 					Debug.WriteLine(@"StaticAllocationResolutionStage: Static allocation of object possible.");
                     this.PerformStaticAllocationOf(allocation, assignment);
@@ -99,11 +99,12 @@ namespace Mosa.Tools.Compiler
         private Operand InsertLoadBeforeInstruction(Context context, string symbolName, SigType type)
         {
             Context before = context.InsertBefore();
+            Operand result = this.MethodCompiler.CreateTemporary(type);
             Operand op = new SymbolOperand(type, symbolName);
 
-            before.SetInstruction(Instruction.Get(OpCode.Ldc_i4), op);
+            before.SetInstruction(Instruction.Get(OpCode.Ldc_i4), result, op);
 
-            return op;
+            return result;
         }
 		
 		private IEnumerable<Context> ScanForOperatorNew()
@@ -124,7 +125,7 @@ namespace Mosa.Tools.Compiler
 			}
 		}
 		
-		private static Context SeekAssignmentOfAllocatedObject(Context allocation)
+		private Context SeekAssignmentOfAllocatedObject(Context allocation)
 		{
             Context next = allocation.Next;
             if (next.EndOfInstruction == true || !(next.Instruction is StsfldInstruction))
@@ -135,7 +136,7 @@ namespace Mosa.Tools.Compiler
             return next;
 		}
 		
-		private static bool CheckAssignmentForCompliance(Context allocation, Context assignment)
+		private bool CheckAssignmentForCompliance(Context allocation, Context assignment)
 		{
 			// Only direct assignment without any casts is compliant. We can't perform casts or anything alike here,
 			// as that is hard to complete at this point of time.
