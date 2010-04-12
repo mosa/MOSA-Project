@@ -22,12 +22,15 @@ namespace Mosa.Runtime.CompilerFramework
 	{
 		#region Data Members
 
-		private const int MINSETUP = 16;
-
 		/// <summary>
 		/// 
 		/// </summary>
 		public InstructionData[] Data;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		private int _size;
 		/// <summary>
 		/// 
 		/// </summary>
@@ -44,29 +47,55 @@ namespace Mosa.Runtime.CompilerFramework
 		/// 
 		/// </summary>
 		private int _free;
-		/// <summary>
-		/// 
-		/// </summary>
-		private int _low;
-		/// <summary>
-		/// 
-		/// </summary>
-		private int _allocated;
 
 		#endregion // Data Members
-
+		
 		#region Properties
-
+		
 		/// <summary>
 		/// 
 		/// </summary>
-		public int Size { get { return _allocated; } }
-
+		public int Size
+		{
+			get
+			{
+				return _size;
+			}
+		}
+		
 		/// <summary>
 		/// 
 		/// </summary>
-		public int Used { get { return _used; } }
-
+		public int Used
+		{
+			get
+			{
+				return _used;
+			}
+		}
+		
+		/// <summary>
+		/// 
+		/// </summary>
+		public int[] NextArray
+		{
+			get
+			{
+				return _next;
+			}
+		}
+		
+		/// <summary>
+		/// 
+		/// </summary>
+		public int[] PrevArray
+		{
+			get
+			{
+				return _prev;
+			}
+		}
+		
 		#endregion
 
 		#region Methods
@@ -77,14 +106,10 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="size">The size.</param>
 		public InstructionSet(int size)
 		{
-			_low = MINSETUP;
-			_allocated = Math.Max(size, _low);
-
-			_next = new int[_allocated];
-			_prev = new int[_allocated];
-
-			Data = new InstructionData[_allocated];
-
+			_size = size;
+			_next = new int[size];
+			_prev = new int[size + 2];
+			Data = new InstructionData[size];
 			Clear();
 		}
 
@@ -95,27 +120,16 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			_used = 0;
 			_free = 0;
-			_low = MINSETUP;
 
 			// setup free list
-			for (int i = 0; i < _low; i++) {
-				_next[i] = i + 1;
-				_prev[i] = i - 1;	// might not be necessary
+			for (int i = 0; i < _size; i++) {
+				_next[i] = _prev[i + 2] = i + 1;
 			}
 
-			_prev[0] = -1;
-			_next[_low - 1] = -1;
-		}
+            _prev[0] = -1;
+            _prev[1] = 0;
 
-		/// <summary>
-		/// Expands this instance.
-		/// </summary>
-		private int Expand()
-		{
-			if (_low == _allocated)
-				Resize(_allocated * 2);
-
-			return _low++;
+			_next[_size - 1] = -1;
 		}
 
 		/// <summary>
@@ -124,18 +138,26 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="newsize">The newsize.</param>
 		public void Resize(int newsize)
 		{
-			_allocated = newsize;
-
-			int[] newNext = new int[_allocated];
-			int[] newPrev = new int[_allocated];
-			InstructionData[] newInstructions = new InstructionData[_allocated];
+			int[] newNext = new int[newsize];
+			int[] newPrev = new int[newsize + 2];
+			InstructionData[] newInstructions = new InstructionData[newsize];
 
 			_next.CopyTo(newNext, 0);
 			_prev.CopyTo(newPrev, 0);
-
+			
+			for (int i = _size; i < newsize; ++i)
+			{
+				newNext[i] = i + 1;
+				newPrev[i] = i - 1;
+			}
+			newNext[newsize - 1] = -1;
+			newPrev[_size] = -1;
 			Data.CopyTo(newInstructions, 0);
+
+			_free = _size;
 			_next = newNext;
 			_prev = newPrev;
+			_size = newsize;
 			Data = newInstructions;
 		}
 
@@ -146,7 +168,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns></returns>
 		public int Next(int index)
 		{
-			Debug.Assert(index < _low);
+			Debug.Assert(index < _size);
 			Debug.Assert(index >= 0);
 
 			if (_used == 0)
@@ -162,7 +184,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns></returns>
 		public int Previous(int index)
 		{
-			Debug.Assert(index < _low);
+			Debug.Assert(index < _size);
 			Debug.Assert(index >= 0);
 
 			if (_used == 0)
@@ -177,17 +199,17 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns></returns>
 		public int GetFree()
 		{
-			int free;
-
+			//	if (_used + 1 == _size)
 			if (_free == -1)
-				free = Expand();
-			else {
-				free = _free;
-				_free = _next[free];
-			}
+				Resize(_size * 2);
 
+			int free = _free;
+
+			_free = _next[free];
+			//_prev[_free] = -1;
 			Data[free].Ignore = true;
 			_used++;
+
 			return free;
 		}
 
@@ -250,8 +272,8 @@ namespace Mosa.Runtime.CompilerFramework
 			if (index == -1)
 				return CreateRoot();
 
-			// FIXME: Asserts without a message or a comment are not useful to figure out.
-			// I don't see a reason this should not be valid??
+            // FIXME: Asserts without a message or a comment are not useful to figure out.
+            // I don't see a reason this should not be valid??
 			//Debug.Assert(index > 0);
 
 			int free = GetFree();
@@ -274,13 +296,15 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="index">The index.</param>
 		public void Remove(int index)
 		{
-			if (_next[index] < 0) {
+			if (_next[index] < 0) 
+			{
 				if (_prev[index] >= 0)
 					_next[_prev[index]] = -1;
 				AddFree(index);
 				return;
 			}
-			if (_prev[index] < 0) {
+			if (_prev[index] < 0) 
+			{
 				_prev[_next[index]] = -1;
 				AddFree(index);
 				return;
