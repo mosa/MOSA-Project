@@ -49,21 +49,29 @@ namespace Mosa.Runtime.CompilerFramework
 
 			Debug.WriteLine(String.Format("IR representation of method {0} after stage {1}", MethodCompiler.Method, prevStage.Name));
 
-			foreach (BasicBlock block in BasicBlocks) {
-				Debug.WriteLine(String.Format("Block #{0} - label L_{1:X4}", index, block.Label));
+            if (this.BasicBlocks.Count > 0)
+            {
+                foreach (BasicBlock block in BasicBlocks)
+                {
+                    Debug.WriteLine(String.Format("Block #{0} - label L_{1:X4}", index, block.Label));
 
-				foreach (BasicBlock prev in block.PreviousBlocks)
-					Debug.WriteLine(String.Format("  Prev: L_{0:X4}", prev.Label));
+                    foreach (BasicBlock prev in block.PreviousBlocks)
+                        Debug.WriteLine(String.Format("  Prev: L_{0:X4}", prev.Label));
 
-				Debug.Indent();
-				LogInstructions(new Context(InstructionSet, block));
-				Debug.Unindent();
+                    Debug.Indent();
+                    LogInstructions(new Context(InstructionSet, block));
+                    Debug.Unindent();
 
-				foreach (BasicBlock next in block.NextBlocks)
-					Debug.WriteLine(String.Format("  Next: L_{0:X4}", next.Label));
+                    foreach (BasicBlock next in block.NextBlocks)
+                        Debug.WriteLine(String.Format("  Next: L_{0:X4}", next.Label));
 
-				index++;
-			}
+                    index++;
+                }
+            }
+            else
+            {
+                LogInstructions(new Context(InstructionSet, 0));
+            }
 		}
 
 		#endregion // IMethodCompilerStage Members

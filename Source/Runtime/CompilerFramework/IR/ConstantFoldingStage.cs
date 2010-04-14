@@ -20,7 +20,6 @@ namespace Mosa.Runtime.CompilerFramework.IR
 	/// </summary>
 	public sealed class IRConstantFoldingStage : CodeTransformationStage, IR.IIRVisitor, IPipelineStage
     {
-
         #region IPipelineStage
 
         /// <summary>
@@ -33,11 +32,31 @@ namespace Mosa.Runtime.CompilerFramework.IR
 
 		#region IIRVisitor
 
+        public void AddSInstruction(Context ctx)
+        {
+        }
+
+	    public void AddUInstruction(Context context)
+	    {
+	    }
+
+	    public void AddFInstruction(Context context)
+	    {
+	    }
+
+	    public void DivFInstruction(Context context)
+	    {
+	    }
+
+	    public void DivSInstruction(Context context)
+	    {
+	    }
+
 		/// <summary>
 		/// Folds logical ANDs with 2 constants
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.LogicalAndInstruction(Context ctx)
+		public void LogicalAndInstruction(Context ctx)
 		{
 			if (ctx.Operand2 is ConstantOperand && ctx.Operand3 is ConstantOperand) {
 				int result = 0;
@@ -73,12 +92,11 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			}
 		}
 
-
 		/// <summary>
 		/// Folds logical ORs with 2 constants
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.LogicalOrInstruction(Context ctx)
+		public void LogicalOrInstruction(Context ctx)
 		{
 			if (ctx.Operand2 is ConstantOperand && ctx.Operand3 is ConstantOperand) {
 				int result = 0;
@@ -118,7 +136,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// Folds logical XORs with 2 constants
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.LogicalXorInstruction(Context ctx)
+		public void LogicalXorInstruction(Context ctx)
 		{
 			if (ctx.Operand2 is ConstantOperand && ctx.Operand3 is ConstantOperand) {
 				int result = 0;
@@ -297,28 +315,68 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		void IR.IIRVisitor.StoreInstruction(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.UDivInstruction"/> instructions.
+		/// Visitation function for <see cref="IR.IIRVisitor.DivUInstruction"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.UDivInstruction(Context context) { }
+		public void DivUInstruction(Context context)
+		{
+		}
 
-		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.URemInstruction"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.URemInstruction(Context context) { }
+	    public void MulSInstruction(Context context)
+	    {
+	    }
 
-		/// <summary>
+	    public void MulFInstruction(Context context)
+	    {
+	    }
+
+	    public void MulUInstruction(Context context)
+	    {
+	    }
+
+	    public void SubFInstruction(Context context)
+	    {
+	    }
+
+	    public void SubSInstruction(Context context)
+	    {
+	    }
+
+	    public void SubUInstruction(Context context)
+	    {
+	    }
+
+	    public void RemFInstruction(Context context)
+	    {
+	    }
+
+	    public void RemSInstruction(Context context)
+	    {
+	    }
+
+		public void RemUInstruction(Context context)
+		{
+		}
+
+	    public void SwitchInstruction(Context context)
+	    {
+	    }
+
+	    /// <summary>
 		/// Visitation function for <see cref="IR.IIRVisitor.ZeroExtendedMoveInstruction"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.ZeroExtendedMoveInstruction(Context context) { }
+		public void ZeroExtendedMoveInstruction(Context context)
+	    {
+	    }
 
 		/// <summary>
 		/// Visitation function for <see cref="IR.IIRVisitor.NopInstruction"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.NopInstruction(Context context) { }
+		public void NopInstruction(Context context)
+		{
+		}
 
 		#endregion // IIRVisitor - Unused
 

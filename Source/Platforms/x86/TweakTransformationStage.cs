@@ -178,7 +178,7 @@ namespace Mosa.Platforms.x86
 				Operand result = context.Result;
 				if (!(result is RegisterOperand)) {
 					RegisterOperand ecx = new RegisterOperand(context.Result.Type, GeneralPurposeRegister.ECX);
-					context.SetInstruction(CPUx86.Instruction.MovsxInstruction, ecx, context.Operand1);
+					context.SetInstruction(CPUx86.Instruction.MovzxInstruction, ecx, context.Operand1);
 					context.AppendInstruction(CPUx86.Instruction.MovInstruction, result, ecx);
 				}
 			}

@@ -126,8 +126,10 @@ namespace Mosa.Runtime.CompilerFramework
 						Context prev = ctx.Previous;
 						flow = prev.Instruction.FlowControl;
 						if (flow == FlowControl.Next || flow == FlowControl.Call || flow == FlowControl.ConditionalBranch || flow == FlowControl.Switch) {
-							prev.AppendInstruction(IR.Instruction.JmpInstruction);
+                            // This jump joins fall-through blocks, by giving them a proper end.
+							prev.AppendInstruction(CIL.Instruction.Get(CIL.OpCode.Br));
 							prev.SetBranch(ctx.Label);
+
 							prev.SliceAfter();
 						}
 					}
@@ -167,21 +169,21 @@ namespace Mosa.Runtime.CompilerFramework
 					case FlowControl.Throw: goto case FlowControl.Branch;
 					case FlowControl.Switch: goto case FlowControl.ConditionalBranch;
 					case FlowControl.Branch: {
-							BasicBlock next = FindBlock(ctx.Branch.Targets[0]);
-							if (!block.NextBlocks.Contains(next)) {
-								LinkBlocks(block, next);
-								BuildBlockLinks(next);
-							}
+                            FindAndLinkBlock(block, ctx.Branch.Targets[0]);
 							return;
 						}
 					case FlowControl.ConditionalBranch:
 						foreach (int target in ctx.Branch.Targets) {
-							BasicBlock next = FindBlock(target);
-							if (!block.NextBlocks.Contains(next)) {
-								LinkBlocks(block, next);
-								BuildBlockLinks(next);
-							}
+							FindAndLinkBlock(block, target);
 						}
+
+                        // Conditional blocks are at least two way branches. The old way of adding jumps didn't properly
+                        // resolve operands under certain circumstances. This does.
+				        int nextIndex = ctx.Index + 1;
+                        if (nextIndex < this.InstructionSet.Used)
+                        {
+                            FindAndLinkBlock(block, this.InstructionSet.Data[nextIndex].Label);
+                        }
 						continue;
 					default:
 						Debug.Assert(false);
@@ -190,7 +192,16 @@ namespace Mosa.Runtime.CompilerFramework
 			}
 		}
 
-		/// <summary>
+	    private void FindAndLinkBlock(BasicBlock block, int target)
+	    {
+	        BasicBlock next = this.FindBlock(target);
+	        if (!block.NextBlocks.Contains(next)) {
+	            this.LinkBlocks(block, next);
+	            this.BuildBlockLinks(next);
+	        }
+	    }
+
+	    /// <summary>
 		/// Links the Blocks.
 		/// </summary>
 		/// <param name="caller">The caller.</param>

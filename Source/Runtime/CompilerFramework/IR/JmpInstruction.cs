@@ -7,16 +7,12 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-
 namespace Mosa.Runtime.CompilerFramework.IR
 {
     /// <summary>
     /// Intermediate representation of an unconditional branch context.
     /// </summary>
-    public sealed class JmpInstruction : BaseInstruction, CIL.IBranchInstruction
+    public sealed class JmpInstruction : BaseInstruction
     {
         #region Construction
 
@@ -29,33 +25,15 @@ namespace Mosa.Runtime.CompilerFramework.IR
 
         #endregion // Construction
 
-		#region Properties
-
-		/// <summary>
-		/// Determines flow behavior of this instruction.
-		/// </summary>
-		/// <value></value>
-		/// <remarks>
-		/// Knowledge of control flow is required for correct basic block
-		/// building. Any instruction that alters the control flow must override
-		/// this property and correctly identify its control flow modifications.
-		/// </remarks>
-		public override FlowControl FlowControl
-		{
-			get { return FlowControl.Branch; }
-		}
-
-        /// <summary>
-        /// 
-        /// </summary>
-        public bool IsConditional
-        {
-            get { return false; }
-        }
-
-		#endregion // Properties
-
 		#region IRInstruction Overrides
+
+        public override FlowControl FlowControl
+        {
+            get
+            {
+                return FlowControl.Branch;
+            }
+        }
 
 		/// <summary>
 		/// Visits the specified visitor.

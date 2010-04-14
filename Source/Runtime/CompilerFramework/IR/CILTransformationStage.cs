@@ -48,7 +48,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// Visitation function for <see cref="ICILVisitor.Ldarg"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.Ldarg(Context ctx)
+		public void Ldarg(Context ctx)
 		{
 			ProcessLoadInstruction(ctx);
 		}
@@ -57,36 +57,41 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// Visitation function for <see cref="ICILVisitor.Ldarga"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.Ldarga(Context ctx)
+		public void Ldarga(Context ctx)
 		{
 			ctx.ReplaceInstructionOnly(IR.Instruction.AddressOfInstruction);
-			//ctx.SetInstruction(IR.Instruction.AddressOfInstruction, ctx.Result, ctx.Operand1);
 		}
 
 		/// <summary>
 		/// Visitation function for <see cref="ICILVisitor.Ldloc"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.Ldloc(Context ctx)
+		public void Ldloc(Context ctx)
 		{
-			ProcessLoadInstruction(ctx);
+            if (ctx.Ignore == true)
+            {
+                ctx.Remove();
+            }
+            else
+            {
+                this.ProcessLoadInstruction(ctx);
+            }
 		}
 
 		/// <summary>
 		/// Visitation function for <see cref="ICILVisitor.Ldloca"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.Ldloca(Context ctx)
+		public void Ldloca(Context ctx)
 		{
-			//ctx.SetInstruction(IR.Instruction.AddressOfInstruction(ctx.Result, ctx.Operand1));
-			//ctx.SetInstruction(IR.Instruction.AddressOfInstruction, new Regis, ctx.Operand1);
+			ctx.ReplaceInstructionOnly(Instruction.AddressOfInstruction);
 		}
 
 		/// <summary>
 		/// Visitation function for <see cref="ICILVisitor.Ldc"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.Ldc(Context ctx)
+		public void Ldc(Context ctx)
 		{
 			ProcessLoadInstruction(ctx);
 		}
@@ -95,26 +100,54 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// Visitation function for <see cref="ICILVisitor.Ldobj"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.Ldobj(Context ctx)
+		public void Ldobj(Context ctx)
 		{
+            IInstruction loadInstruction = Instruction.LoadInstruction;
+            Operand destination = ctx.Result;
+		    Operand source = ctx.Operand1;
+            RefSigType refSigType = (RefSigType)source.Type;
+
 			// This is actually ldind.* and ldobj - the opcodes have the same meanings
-			ctx.SetInstruction(IR.Instruction.LoadInstruction, ctx.Result, ctx.Operand1);
+            if (MustSignExtendOnLoad(refSigType.ElementType.Type))
+            {
+                loadInstruction = Instruction.SignExtendedMoveInstruction;
+            }
+            else if (MustZeroExtendOnLoad(refSigType.ElementType.Type))
+            {
+                loadInstruction = Instruction.ZeroExtendedMoveInstruction;                
+            }
+
+		    ctx.SetInstruction(loadInstruction, destination, source, ConstantOperand.FromValue(0));
 		}
 
 		/// <summary>
 		/// Visitation function for <see cref="ICILVisitor.Ldsfld"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.Ldsfld(Context ctx)
+		public void Ldsfld(Context ctx)
 		{
-			ctx.SetInstruction(IR.Instruction.MoveInstruction, ctx.Result, new MemberOperand(ctx.RuntimeField));
+		    SigType sigType = ctx.RuntimeField.SignatureType;
+		    Operand source = new MemberOperand(ctx.RuntimeField);
+		    Operand destination = ctx.Result;
+
+            IInstruction loadInstruction = Instruction.MoveInstruction;
+            if (MustSignExtendOnLoad(sigType.Type))
+            {
+                loadInstruction = Instruction.SignExtendedMoveInstruction;
+            }
+            else if (MustZeroExtendOnLoad(sigType.Type))
+            {
+                loadInstruction = Instruction.ZeroExtendedMoveInstruction;
+            }
+
+            ctx.SetInstruction(loadInstruction, destination, source);
 		}
 
 		/// <summary>
 		/// Visitation function for <see cref="ICILVisitor.Ldsflda"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.Ldsflda(Context ctx)
+		public void Ldsflda(Context ctx)
 		{
 			//ctx.SetInstruction(IR.Instruction.AddressOfInstruction, ctx.Result, new MemberOperand (ctx.RuntimeField));
             //ctx.SetInstruction(IR.Instruction.MoveInstruction, ctx.Result, ctx.Operand1);
@@ -151,7 +184,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// Visitation function for <see cref="ICILVisitor.Stloc"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.Stloc(Context ctx)
+		public void Stloc(Context ctx)
 		{
 			ProcessStoreInstruction(ctx);
 		}
@@ -172,7 +205,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		void ICILVisitor.Stobj(Context ctx)
 		{
 			// This is actually stind.* and stobj - the opcodes have the same meanings
-			ctx.SetInstruction(IR.Instruction.StoreInstruction, ctx.Operand1, ctx.Operand2);
+			ctx.SetInstruction(IR.Instruction.StoreInstruction, ctx.Operand1, ConstantOperand.FromValue(0), ctx.Operand2);
 		}
 
 		/// <summary>
@@ -239,10 +272,10 @@ namespace Mosa.Runtime.CompilerFramework.IR
 					ctx.SetInstruction(IR.Instruction.LogicalXorInstruction, ctx.Result, ctx.Operand1, ctx.Operand2);
 					break;
 				case OpCode.Div_un:
-					ctx.SetInstruction(IR.Instruction.UDivInstruction, ctx.Result, ctx.Operand1, ctx.Operand2);
+					ctx.SetInstruction(IR.Instruction.DivUInstruction, ctx.Result, ctx.Operand1, ctx.Operand2);
 					break;
 				case OpCode.Rem_un:
-					ctx.SetInstruction(IR.Instruction.URemInstruction, ctx.Result, ctx.Operand1, ctx.Operand2);
+					ctx.SetInstruction(IR.Instruction.RemUInstruction, ctx.Result, ctx.Operand1, ctx.Operand2);
 					break;
 				default:
 					throw new NotSupportedException();
@@ -275,16 +308,20 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// Visitation function for <see cref="ICILVisitor.Neg"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.Neg(Context ctx)
+		public void Neg(Context ctx)
 		{
-			if (ctx.Operand1.Type.Type == CilElementType.I8)
-				ctx.SetInstruction(CIL.Instruction.Get(OpCode.Sub), ctx.Result, new ConstantOperand(ctx.Operand1.Type, (long)0), ctx.Operand1);
-			else if (ctx.Operand1.Type.Type == CilElementType.U8)
-				ctx.SetInstruction(CIL.Instruction.Get(OpCode.Sub), ctx.Result, new ConstantOperand(ctx.Operand1.Type, (ulong)0), ctx.Operand1);
-			else
-				ctx.SetInstruction(CIL.Instruction.Get(OpCode.Sub), ctx.Result, new ConstantOperand(new SigType(CilElementType.I4), (int)0), ctx.Operand1);
+            if (IsUnsigned(ctx.Operand1))
+            {
+                ConstantOperand zero = new ConstantOperand(ctx.Operand1.Type, 0UL);
+                ctx.SetInstruction(Instruction.SubUInstruction, ctx.Result, zero, ctx.Operand1);
+            }
+            else
+            {
+                ConstantOperand minusOne = new ConstantOperand(ctx.Operand1.Type, -1L);
+                ctx.SetInstruction(Instruction.MulSInstruction, ctx.Result, minusOne, ctx.Operand1);
+            }
 		}
-
+         
 		/// <summary>
 		/// Visitation function for <see cref="ICILVisitor.Not"/>.
 		/// </summary>
@@ -321,7 +358,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			/* FIXME:
 			 * 
 			 * - Newobj is actually three things at once:
-			 *   - Find the type from the token
+			 *   - Find the type From the token
 			 *   - Allocate memory for the found type
 			 *   - Invoke the ctor with the arguments
 			 * - We're rewriting it exactly as specified above, e.g. first we find
@@ -386,16 +423,25 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// Visitation function for <see cref="ICILVisitor.Newarr"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.Newarr(Context ctx)
+		public void Newarr(Context ctx)
 		{
-			ReplaceWithInternalCall(ctx, VmCall.Allocate);
+            SZArraySigType arrayType = (SZArraySigType)ctx.Result.Type;
+            ClassSigType elementType = arrayType.ElementType as ClassSigType;
+            Debug.Assert(elementType != null, @"Newarr didn't specify class signature?");
+
+			ReplaceWithInternalCall(ctx, VmCall.AllocateArray);
+
+            ctx.Operand3 = ctx.Operand1;
+            ctx.Operand1 = new ConstantOperand(BuiltInSigType.Int32, this.MethodCompiler.Assembly.LoadOrder);
+            ctx.Operand2 = new ConstantOperand(BuiltInSigType.IntPtr, elementType.Token);
+            ctx.OperandCount = 3;
 		}
 
 		/// <summary>
 		/// Visitation function for <see cref="ICILVisitor.BinaryComparison"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.BinaryComparison(Context ctx)
+		public void BinaryComparison(Context ctx)
 		{
 			IR.ConditionCode code = ConvertCondition((ctx.Instruction as CIL.BaseInstruction).OpCode);
 
@@ -475,20 +521,49 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// Visitation function for <see cref="ICILVisitor.Ldfld"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.Ldfld(Context ctx) { }
+		public void Ldfld(Context ctx)
+		{
+            Operand resultOperand = ctx.Result;
+            Operand objectOperand = ctx.Operand1;
+
+		    RuntimeField field = ctx.RuntimeField;
+		    IntPtr address = field.Address;
+            ConstantOperand offsetOperand = new ConstantOperand(BuiltInSigType.IntPtr, address.ToInt64());
+
+		    IInstruction loadInstruction = Instruction.LoadInstruction;
+            if (MustSignExtendOnLoad(field.SignatureType.Type))
+            {
+                loadInstruction = Instruction.SignExtendedMoveInstruction;
+            }
+            else if (MustZeroExtendOnLoad(field.SignatureType.Type))
+            {
+                loadInstruction = Instruction.ZeroExtendedMoveInstruction;
+            }
+
+            ctx.SetInstruction(loadInstruction, resultOperand, objectOperand, offsetOperand);
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="ICILVisitor.Ldflda"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.Ldflda(Context ctx) { }
+		public void Ldflda(Context ctx)
+		{
+		}
 
 		/// <summary>
 		/// Visitation function for <see cref="ICILVisitor.Stfld"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.Stfld(Context ctx) 
+		public void Stfld(Context ctx) 
         {
+            Operand objectOperand = ctx.Operand1;
+            Operand valueOperand = ctx.Operand2;
+
+            IntPtr address = ctx.RuntimeField.Address;
+            ConstantOperand offsetOperand = new ConstantOperand(BuiltInSigType.IntPtr, address.ToInt64());
+
+            ctx.SetInstruction(Instruction.StoreInstruction, objectOperand, offsetOperand, valueOperand);
         }
 
 		/// <summary>
@@ -501,25 +576,81 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// Visitation function for <see cref="ICILVisitor.Branch"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.Branch(Context ctx) { }
+		public void Branch(Context ctx)
+		{
+		    ctx.ReplaceInstructionOnly(Instruction.JmpInstruction);
+		}
 
 		/// <summary>
 		/// Visitation function for <see cref="ICILVisitor.UnaryBranch"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.UnaryBranch(Context ctx) { }
+		public void UnaryBranch(Context ctx)
+		{
+            IBranch branch = ctx.Branch;
+
+            ConditionCode cc;
+            Operand first = ctx.Operand1;
+            Operand second = new ConstantOperand(BuiltInSigType.Int32, 0UL);
+
+		    OpCode opcode = ((ICILInstruction)ctx.Instruction).OpCode;
+            if (opcode == OpCode.Brtrue || opcode == OpCode.Brtrue_s)
+            {
+                cc = ConditionCode.NotEqual;
+            }
+            else if (opcode == OpCode.Brfalse || opcode == OpCode.Brfalse_s)
+            {
+                cc = ConditionCode.Equal;
+            }
+            else
+            {
+                throw new NotSupportedException(@"CILTransformationStage.UnaryBranch doesn't support CIL opcode " + opcode);
+            }
+
+            Operand comparisonResult = this.MethodCompiler.CreateTemporary(BuiltInSigType.Int32);
+            ctx.SetInstruction(Instruction.IntegerCompareInstruction, comparisonResult, first, second);
+            ctx.ConditionCode = cc;
+
+            ctx.AppendInstruction(Instruction.BranchInstruction, comparisonResult);
+		    ctx.ConditionCode = cc;
+            ctx.SetBranch(branch.Targets[0]);
+		}
 
 		/// <summary>
 		/// Visitation function for <see cref="ICILVisitor.BinaryBranch"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.BinaryBranch(Context ctx) { }
+		public void BinaryBranch(Context ctx)
+		{
+		    IBranch branch = ctx.Branch;
+
+		    ConditionCode cc = ConvertCondition(((ICILInstruction)ctx.Instruction).OpCode);
+		    Operand first = ctx.Operand1;
+		    Operand second = ctx.Operand2;
+
+		    IInstruction comparisonInstruction = Instruction.IntegerCompareInstruction;
+            if (first.StackType == StackTypeCode.F)
+            {
+                comparisonInstruction = Instruction.FloatingPointCompareInstruction;
+            }
+
+            Operand comparisonResult = this.MethodCompiler.CreateTemporary(BuiltInSigType.Int32);
+            ctx.SetInstruction(comparisonInstruction, comparisonResult, first, second);
+            ctx.ConditionCode = cc;
+		    
+            ctx.AppendInstruction(Instruction.BranchInstruction, comparisonResult);
+		    ctx.ConditionCode = cc;
+            ctx.SetBranch(branch.Targets[0]);
+		}
 
 		/// <summary>
 		/// Visitation function for <see cref="ICILVisitor.Switch"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.Switch(Context ctx) { }
+		public void Switch(Context ctx)
+		{
+		    ctx.ReplaceInstructionOnly(Instruction.SwitchInstruction);
+		}
 
 		/// <summary>
 		/// Visitation function for <see cref="ICILVisitor.Cpobj"/>.
@@ -531,25 +662,119 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// Visitation function for <see cref="ICILVisitor.Ldlen"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.Ldlen(Context ctx) { }
+		public void Ldlen(Context ctx) 
+        {
+            Operand arrayOperand = ctx.Operand1;
+            Operand arrayLength = ctx.Result;
+            ConstantOperand constantOffset = ConstantOperand.FromValue(8);
+
+            Operand arrayAddress = this.MethodCompiler.CreateTemporary(new PtrSigType(BuiltInSigType.Int32));
+		    ctx.SetInstruction(Instruction.MoveInstruction, arrayAddress, arrayOperand);
+            ctx.AppendInstruction(IR.Instruction.LoadInstruction, arrayLength, arrayAddress, constantOffset);
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="ICILVisitor.Ldelema"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.Ldelema(Context ctx) { }
+		public void Ldelema(Context ctx)
+		{
+            Operand result = ctx.Result;
+            Operand arrayOperand = ctx.Operand1;
+            Operand arrayIndexOperand = ctx.Operand2;
 
-		/// <summary>
+            SZArraySigType arraySigType = arrayOperand.Type as SZArraySigType;
+            if (arraySigType == null)
+            {
+                throw new CompilationException(@"Array operation performed on non-array operand.");
+            }
+
+            Operand arrayAddress = this.LoadArrayBaseAddress(ctx, arraySigType, arrayOperand);
+            Operand elementOffset = this.CalculateArrayElementOffset(ctx, arraySigType, arrayIndexOperand);
+            ctx.AppendInstruction(IR.Instruction.AddSInstruction, result, arrayAddress, elementOffset);
+        }
+
+	    private Operand CalculateArrayElementOffset(Context ctx, SZArraySigType arraySignatureType, Operand arrayIndexOperand)
+	    {
+	        int elementSizeInBytes = 0, alignment = 0;
+            this.Architecture.GetTypeRequirements(arraySignatureType.ElementType, out elementSizeInBytes, out alignment);
+
+	        //
+	        // The sequence we're emitting is:
+	        //
+	        //      offset = arrayIndexOperand * elementSize
+	        //      temp = offset + 12
+	        //      result = *(arrayOperand * temp)
+	        //
+	        // The array data starts at offset 12 from the array object itself. The 12 is a hardcoded assumption
+	        // of x86, which might change for other platforms. We need to refactor this into some helper classes.
+	        //
+
+	        Operand elementOffset = this.MethodCompiler.CreateTemporary(BuiltInSigType.Int32);
+	        Operand elementSizeOperand = new ConstantOperand(BuiltInSigType.Int32, elementSizeInBytes);
+	        ctx.AppendInstruction(IR.Instruction.MulSInstruction, elementOffset, arrayIndexOperand, elementSizeOperand);
+
+	        return elementOffset;
+        }
+
+	    private Operand LoadArrayBaseAddress(Context ctx, SZArraySigType arraySignatureType, Operand arrayOperand)
+	    {
+	        Operand arrayAddress = this.MethodCompiler.CreateTemporary(new PtrSigType(arraySignatureType.ElementType));
+	        Operand fixedOffset = new ConstantOperand(BuiltInSigType.Int32, 12);
+	        ctx.SetInstruction(Instruction.AddSInstruction, arrayAddress, arrayOperand, fixedOffset);
+	        return arrayAddress;
+	    }
+
+	    /// <summary>
 		/// Visitation function for <see cref="ICILVisitor.Ldelem"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.Ldelem(Context ctx) { }
+		public void Ldelem(Context ctx) 
+        {
+	        IInstruction loadInstruction = Instruction.LoadInstruction;
+            Operand result = ctx.Result;
+            MemoryOperand arrayOperand = (MemoryOperand)ctx.Operand1;
+	        Operand arrayIndexOperand = ctx.Operand2;
+
+            SZArraySigType arraySigType = arrayOperand.Type as SZArraySigType;
+            if (arraySigType == null)
+            {
+                throw new CompilationException(@"Array operation performed on non-array operand.");
+            }
+
+            if (MustSignExtendOnLoad(arraySigType.ElementType.Type) == true)
+            {
+                loadInstruction = Instruction.SignExtendedMoveInstruction;
+            }
+            else if (MustZeroExtendOnLoad(arraySigType.ElementType.Type) == true)
+            {
+                loadInstruction = Instruction.ZeroExtendedMoveInstruction;
+            }
+
+            Operand arrayAddress = this.LoadArrayBaseAddress(ctx, arraySigType, arrayOperand);
+            Operand elementOffset = this.CalculateArrayElementOffset(ctx, arraySigType, arrayIndexOperand);
+            ctx.AppendInstruction(loadInstruction, result, arrayAddress, elementOffset);
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="ICILVisitor.Stelem"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.Stelem(Context ctx) { }
+		public void Stelem(Context ctx) 
+        {
+            Operand arrayOperand = ctx.Operand1;
+		    Operand arrayIndexOperand = ctx.Operand2;
+            Operand value = ctx.Operand3;
+            SZArraySigType arraySigType = arrayOperand.Type as SZArraySigType;
+            if (arraySigType == null)
+            {
+                throw new CompilationException(@"Array operation performed on non-array operand.");
+            }
+
+		    Operand arrayAddress = this.LoadArrayBaseAddress(ctx, arraySigType, arrayOperand);
+            Operand elementOffset = this.CalculateArrayElementOffset(ctx, arraySigType, arrayIndexOperand);
+            ctx.AppendInstruction(Instruction.StoreInstruction, arrayAddress, elementOffset, value);
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="ICILVisitor.UnboxAny"/>.
@@ -638,35 +863,86 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// Visitation function for <see cref="ICILVisitor.Add"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.Add(Context ctx) { }
+		public void Add(Context ctx) 
+        {
+            Replace(ctx, Instruction.AddFInstruction, Instruction.AddSInstruction, Instruction.AddUInstruction);
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="ICILVisitor.Sub"/>.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void ICILVisitor.Sub(Context ctx) { }
-
-		/// <summary>
+        /// <param name="context">The context.</param>
+		public void Sub(Context context)
+		{
+		    Replace(context, Instruction.SubFInstruction, Instruction.SubSInstruction, Instruction.SubUInstruction);
+		}
+	    /// <summary>
 		/// Visitation function for <see cref="ICILVisitor.Mul"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.Mul(Context ctx) { }
+		public void Mul(Context ctx) 
+        {
+            Replace(ctx, Instruction.MulFInstruction, Instruction.MulSInstruction, Instruction.MulUInstruction);
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="ICILVisitor.Div"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.Div(Context ctx) { }
+		public void Div(Context ctx)
+		{
+		    Replace(ctx, Instruction.DivFInstruction, Instruction.DivSInstruction, Instruction.DivUInstruction);
+		}
 
 		/// <summary>
 		/// Visitation function for <see cref="ICILVisitor.Rem"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.Rem(Context ctx) { }
+		public void Rem(Context ctx)
+		{
+		    Replace(ctx, Instruction.RemFInstruction, Instruction.RemSInstruction, Instruction.RemUInstruction);
+		}
 
 		#endregion // ICILVisitor
 
 		#region Internals
+
+        private static void Replace(Context context, IIRInstruction floatingPointInstruction, IIRInstruction signedInstruction, IIRInstruction unsignedInstruction)
+        {
+            if (IsFloatingPoint(context))
+            {
+                context.ReplaceInstructionOnly(floatingPointInstruction);
+            }
+            else if (IsUnsigned(context))
+            {
+                context.ReplaceInstructionOnly(unsignedInstruction);
+            }
+            else
+            {
+                context.ReplaceInstructionOnly(signedInstruction);
+            }
+        }
+
+        private static bool IsUnsigned(Context context)
+        {
+            Operand operand = context.Result;
+            return IsUnsigned(operand);
+        }
+
+	    private static bool IsUnsigned(Operand operand)
+	    {
+	        CilElementType type = operand.Type.Type;
+	        return type == CilElementType.U
+	               || type == CilElementType.U1
+	               || type == CilElementType.U2
+	               || type == CilElementType.U4
+	               || type == CilElementType.U8;
+	    }
+
+	    private static bool IsFloatingPoint(Context context)
+        {
+            return context.Result.StackType == StackTypeCode.F;
+        }
 
 		/// <summary>
 		/// Determines if a store is silently truncating the value.
@@ -699,16 +975,30 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <returns>True if the given operand should be loaded with its sign extended.</returns>
 		private static bool IsSignExtending(Operand source)
 		{
-			bool result = false;
-			CilElementType cet = source.Type.Type;
-
-			if (cet == CilElementType.I1 || cet == CilElementType.I2)
-				result = true;
-
-			return result;
+		    return MustSignExtendOnLoad(source.Type.Type);
 		}
 
-		/// <summary>
+	    private static bool MustSignExtendOnLoad(CilElementType elementType)
+	    {
+	        return (elementType == CilElementType.I1 || elementType == CilElementType.I2);
+	    }
+
+	    /// <summary>
+        /// Determines if the load should sign extend the given source operand.
+        /// </summary>
+        /// <param name="source">The source operand to determine sign extension for.</param>
+        /// <returns>True if the given operand should be loaded with its sign extended.</returns>
+        private static bool IsZeroExtending(Operand source)
+        {
+	        return MustZeroExtendOnLoad(source.Type.Type);
+        }
+
+	    private static bool MustZeroExtendOnLoad(CilElementType elementType)
+	    {
+	        return (elementType == CilElementType.U1 || elementType == CilElementType.U2 || elementType == CilElementType.Char);
+	    }
+
+	    /// <summary>
 		/// Determines the implicit result type of the load instruction.
 		/// </summary>
 		/// <param name="sigType">The signature type of the source operand.</param>
@@ -1146,52 +1436,46 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <param name="ctx">The transformation context.</param>
 		private void ProcessInvokeInstruction(Context ctx)
 		{
-			/* FIXME: Check for IntrinsicAttribute and replace the invoke instruction with the intrinsic,
-			 * if necessary.
-			 */
+            ctx.ReplaceInstructionOnly(Instruction.CallInstruction);
 		}
 
 		/// <summary>
 		/// Replaces the IL load instruction by an appropriate IR move instruction or removes it entirely, if
 		/// it is a native size.
 		/// </summary>
-		/// <param name="ctx">Provides the transformation context.</param>
-		private void ProcessLoadInstruction(Context ctx)
+        /// <param name="context">Provides the transformation context.</param>
+        private void ProcessLoadInstruction(Context context)
 		{
-			// We don't need to rewire the source/destination yet, its already there. :(
-			//Remove(ctx);
-			ctx.Remove();
+		    IInstruction extension = null;
+		    SigType extendedType = null;
+            Operand source = context.Operand1;
+		    Operand destination = context.Result;
 
-			/* FIXME: This is only valid with reg alloc!
-			Type type = null;
+            // Is this a sign or zero-extending move?
+            if (source != null)
+            {
+                if (IsSignExtending(source))
+                {
+                    extension = Instruction.SignExtendedMoveInstruction;
+                    extendedType = BuiltInSigType.Int32;
+                }
+                else if (IsZeroExtending(source))
+                {
+                    extension = Instruction.ZeroExtendedMoveInstruction;
+                    extendedType = BuiltInSigType.UInt32;
+                }
+            }
 
-			load = load as LoadInstruction;
-
-			// Is this a sign or zero-extending move?
-			if (IsSignExtending(load.Source))
-			{
-				type = typeof(IR.SignExtendedMoveInstruction);
-			}
-			else if (IsZeroExtending(load.Source))
-			{
-				type = typeof(IR.ZeroExtendedMoveInstruction);
-			}
-
-			// Do we have a move replacement?
-			if (null == type)
-			{
-				// No, we can safely drop the load instruction and can rewire the operands.
-				/*if (1 == load.Destination.Definitions.Count && 1 == load.Destination.Uses.Count)
-				{
-					load.Destination.Replace(load.Source);
-					Remove(ctx);
-				}
-				return;
-			}
-			else
-			{
-				Replace(ctx, Architecture.CreateInstruction(type, load.Destination, load.Source));
-			}*/
+		    if (extension != null)
+            {
+                Operand temp = this.MethodCompiler.CreateTemporary(extendedType);
+                destination.Replace(temp, context.InstructionSet);
+                context.SetInstruction(extension, temp, source);
+            }
+            else
+            {
+                context.ReplaceInstructionOnly(Instruction.MoveInstruction);
+            }
 		}
 
 		/// <summary>
@@ -1200,25 +1484,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <param name="ctx">Provides the transformation context.</param>
 		private void ProcessStoreInstruction(Context ctx)
 		{
-			// Do we need to truncate the value?
-			if (IsTruncating(ctx.Result, ctx.Operand1)) {
-				// Replace it with a truncating move...
-				// FIXME: Implement proper truncation as specified in the CIL spec
-				//Debug.Assert(false);
-				if (IsSignExtending(ctx.Operand1))
-					ctx.SetInstruction(IR.Instruction.SignExtendedMoveInstruction, ctx.Result, ctx.Operand1);
-				else
-					ctx.SetInstruction(IR.Instruction.ZeroExtendedMoveInstruction, ctx.Result, ctx.Operand1);
-				return;
-			}
-			// FIXME PG - below seems like an optimization; ignoring it for now
-			//if (ctx.Operand1.Definitions.Count == 1 && ctx.Operand1.Uses.Count == 1) {
-			//    //ctx.Operand1.Replace(ctx.Result); // FIXME PG
-			//    ctx.Remove();
-			//    return;
-			//}
-
-			ctx.SetInstruction(IR.Instruction.MoveInstruction, ctx.Result, ctx.Operand1);
+            ctx.SetInstruction(IR.Instruction.MoveInstruction, ctx.Result, ctx.Operand1);
 		}
 
 		/// <summary>

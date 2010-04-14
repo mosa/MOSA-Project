@@ -19,6 +19,7 @@ using Mosa.Runtime;
 using Mosa.Runtime.Linker;
 using Mosa.Runtime.Vm;
 using Mosa.Runtime.CompilerFramework;
+using Mosa.Runtime.Metadata;
 
 namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 {
@@ -39,6 +40,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
         /// </summary>
         private List<LinkerSection> _sections;
 
+        private readonly AllocateDelegate allocateArrayHandler;
+
         #endregion // Data members
 
         #region Construction
@@ -52,6 +55,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
             _sections = new List<LinkerSection>(maxSections);
             for (int i = 0; i < maxSections; i++)
                 _sections.Add(new TestLinkerSection((SectionKind)i, String.Empty, IntPtr.Zero));
+            allocateArrayHandler = new AllocateDelegate(RuntimeBase.AllocateArray);
         }
 
         #endregion // Construction
@@ -211,39 +215,22 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
             *pAddress = (int)value;
         }
 
-        private Dictionary<RuntimeMethod, Delegate> resolvedInternals = new Dictionary<RuntimeMethod, Delegate>();
+        [UnmanagedFunctionPointer(System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private delegate IntPtr AllocateDelegate(int module, TokenTypes token, int count);
 
-        /// <summary>
-        /// Special resolution for internal calls.
-        /// </summary>
-        /// <param name="method">The internal call method to resolve.</param>
-        /// <returns>The virtualAddress</returns>
-        protected unsafe override long ResolveInternalCall(RuntimeMethod method)
+        protected override void AddVmCalls(IDictionary<string, LinkerSymbol> virtualMachineCalls)
         {
-            Delegate methodDelegate = null;
-            if (false == this.resolvedInternals.TryGetValue(method, out methodDelegate))
-            {
-                ITypeSystem ts = RuntimeBase.Instance.TypeLoader;
-                RuntimeMethod internalImpl = ts.GetImplementationForInternalCall(method);
-                if (null != internalImpl)
-                {
-                    // Find the .NET counterpart for this method (we're not really compiling or using trampolines just yet.)
-                    string typeName = String.Format(@"{0}.{1}, {2}",
-                        internalImpl.DeclaringType.Namespace,
-                        internalImpl.DeclaringType.Name,
-                        internalImpl.Module.Name);
-                    Type type = Type.GetType(typeName);
-                    MethodInfo mi = type.GetMethod(internalImpl.Name);
+            Trace.WriteLine(@"TestAssemblyLinker adding VM calls:");
 
-                    methodDelegate = BuildDelegateForMethodInfo(mi);
-                    this.resolvedInternals.Add(method, methodDelegate);
-                }
-            }
+            IntPtr allocate = Marshal.GetFunctionPointerForDelegate(this.allocateArrayHandler);
 
-            if (null == methodDelegate)
-                throw new NotImplementedException(@"InternalCall implementation not loaded.");
+            const string allocateMethod = @"Mosa.Runtime.RuntimeBase.AllocateArray(I4 moduleLoadIndex,ValueType token,I4 elements)";
+            long virtualAddress = allocate.ToInt64();
+            Trace.WriteLine(String.Format("\t{0} at 0x{1:x08}", allocateMethod, virtualAddress));
 
-            return Marshal.GetFunctionPointerForDelegate(methodDelegate).ToInt64();
+            LinkerSymbol symbol = new LinkerSymbol(allocateMethod, SectionKind.Text, virtualAddress);
+            symbol.VirtualAddress = new IntPtr(symbol.SectionAddress);
+            virtualMachineCalls.Add(allocateMethod, symbol);
         }
 
         /// <summary>
@@ -265,46 +252,5 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
         }
 
         #endregion // AssemblyLinkerStageBase Overrides
-
-        /// <summary>
-        /// Builds the delegate for the given method info.
-        /// </summary>
-        /// <param name="mi">The method to build a delegate for.</param>
-        /// <returns>The created delegate instance.</returns>
-        private Delegate BuildDelegateForMethodInfo(MethodInfo mi)
-        {
-            AssemblyName assemblyName = new AssemblyName(mi.Name + "DynamicDelegate");
-            AssemblyBuilder builder = AppDomain.CurrentDomain.DefineDynamicAssembly(assemblyName, AssemblyBuilderAccess.Run);
-            ModuleBuilder moduleBuilder = builder.DefineDynamicModule(assemblyName.Name);
-
-            TypeBuilder typeBuilder = moduleBuilder.DefineType(mi.Name + "Delegate", TypeAttributes.Class | TypeAttributes.Public | TypeAttributes.Sealed | TypeAttributes.AnsiClass | TypeAttributes.AutoClass, typeof(MulticastDelegate));
-            CustomAttributeBuilder cab = CreateUnmanagedCallingConvention();
-            typeBuilder.SetCustomAttribute(cab);
-
-            ConstructorBuilder ctorBuilder = typeBuilder.DefineConstructor(MethodAttributes.RTSpecialName | MethodAttributes.HideBySig | MethodAttributes.Public, CallingConventions.Standard, new Type[] { typeof(object), typeof(IntPtr) });
-            ctorBuilder.SetImplementationFlags(MethodImplAttributes.Runtime | MethodImplAttributes.Managed);
-
-            // Create the invoke method
-            ParameterInfo[] parameters = mi.GetParameters();
-            Type[] paramTypes = new Type[parameters.Length];
-            for (int i = 0; i < parameters.Length; i++)
-            {
-                paramTypes[i] = parameters[i].ParameterType;
-            }
-
-            // Define the Invoke method for the delegate
-            MethodBuilder methodBuilder = typeBuilder.DefineMethod("Invoke", MethodAttributes.Public | MethodAttributes.HideBySig | MethodAttributes.NewSlot | MethodAttributes.Virtual, CallingConventions.Standard, mi.ReturnType, paramTypes);
-            methodBuilder.SetImplementationFlags(MethodImplAttributes.Runtime | MethodImplAttributes.Managed);
-
-            Type fullType = typeBuilder.CreateType();
-            return Delegate.CreateDelegate(fullType, mi);
-        }
-
-        private CustomAttributeBuilder CreateUnmanagedCallingConvention()
-        {
-            Type ufpa = typeof(UnmanagedFunctionPointerAttribute);
-            ConstructorInfo ci = ufpa.GetConstructor(new Type[] { typeof(System.Runtime.InteropServices.CallingConvention) });
-            return new CustomAttributeBuilder(ci, new object[] { System.Runtime.InteropServices.CallingConvention.Cdecl });
-        }
     }
 }

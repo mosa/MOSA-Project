@@ -1,20 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Gallio.Framework;
+/*
+ * (c) 2008 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Michael Fröhlich (aka grover, <mailto:sharpos@michaelruck.de>)
+ *  
+ */
+
+using System;
+
 using MbUnit.Framework;
-using MbUnit.Framework.ContractVerifiers;
 
 namespace Test.Mosa.Runtime.CompilerFramework.CLI
 {
 	[TestFixture]
 	public class UInt16Fixture : RuntimeFixture
 	{
-		private readonly ArithmeticInstructionTestRunner<int, ushort> arithmeticTests = new ArithmeticInstructionTestRunner<int, ushort>
-		{
-			ExpectedTypeName = @"int",
-			TypeName = @"ushort"
-		};
+        private readonly ArithmeticInstructionTestRunner<int, ushort> arithmeticTests = new ArithmeticInstructionTestRunner<int, ushort>
+        {
+            ExpectedTypeName = @"int",
+            TypeName = @"ushort"
+        };
 
 		private readonly BinaryLogicInstructionTestRunner<int, ushort> logicTests = new BinaryLogicInstructionTestRunner<int, ushort>
 		{
@@ -28,7 +35,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 			TypeName = @"ushort"
 		};
 
-		#region Add
+        private readonly SZArrayInstructionTestRunner<ushort> arrayTests = new SZArrayInstructionTestRunner<ushort>
+        {
+            TypeName = @"ushort"
+        };
+
+        #region Add
 
 		[Row(1, 2)]
 		[Row(23, 21)]
@@ -232,11 +244,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Test]
 		public void Neg(ushort first)
 		{
-			this.arithmeticTests.Neg(~first, first);
+			this.arithmeticTests.Neg(-first, first);
 		}
 
 		#endregion Neg
-
 
 		#region Ret
 
@@ -252,7 +263,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		}
 
 		#endregion Ret
-
 
 		#region Ceq
 
@@ -273,8 +283,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		}
 
 		#endregion // Ceq
-
-
 
 		#region And
 
@@ -347,5 +355,76 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		}
 
 		#endregion // Shr
-	}
+
+        #region Newarr
+
+        [Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
+        public void Newarr()
+        {
+            this.arrayTests.Newarr();
+        }
+
+        #endregion // Newarr
+
+        #region Ldlen
+
+        [Row(0)]
+        [Row(1)]
+        [Row(10)]
+        [Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
+        public void Ldlen(int length)
+        {
+            this.arrayTests.Ldlen(length);
+        }
+
+        #endregion // Ldlen
+
+        #region Stelem
+
+        [Row(0, UInt16.MinValue)]
+        [Row(0, 1)]
+        [Row(0, UInt16.MaxValue)]
+        [Row(3, UInt16.MinValue)]
+        [Row(6, 1)]
+        [Row(2, UInt16.MaxValue)]
+        [Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
+        public void Stelem(int index, ushort value)
+        {
+            this.arrayTests.Stelem(index, value);
+        }
+
+        #endregion // Stelem
+
+        #region Ldelem
+
+        [Row(0, UInt16.MinValue)]
+        [Row(0, 1)]
+        [Row(0, UInt16.MaxValue)]
+        [Row(3, UInt16.MinValue)]
+        [Row(6, 1)]
+        [Row(2, UInt16.MaxValue)]
+        [Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
+        public void Ldelem(int index, ushort value)
+        {
+            this.arrayTests.Ldelem(index, value);
+        }
+
+        #endregion // Ldelem
+
+        #region Ldelema
+
+        [Row(0, UInt16.MinValue)]
+        [Row(0, 1)]
+        [Row(0, UInt16.MaxValue)]
+        [Row(3, UInt16.MinValue)]
+        [Row(6, 1)]
+        [Row(2, UInt16.MaxValue)]
+        [Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
+        public void Ldelema(int index, ushort value)
+        {
+            this.arrayTests.Ldelema(index, value);
+        }
+
+        #endregion // Ldelema
+    }
 }

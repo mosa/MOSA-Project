@@ -46,39 +46,114 @@ namespace Mosa.Platforms.x86
 		/// </summary>
 		public override void Run()
 		{
-			foreach (BasicBlock block in BasicBlocks)
-				for (Context ctx = CreateContext(block); !ctx.EndOfInstruction; ctx.GotoNext())
-					if (ctx.Instruction != null)
-						if (!ctx.Ignore && ctx.Instruction is CPUx86.IX86Instruction)
-							if (ctx.Result is MemoryOperand && ctx.Operand1 is MemoryOperand)
-								HandleMemoryToMemoryOperation(ctx, null, false);
+            foreach (BasicBlock block in BasicBlocks)
+            {
+                for (Context ctx = CreateContext(block); !ctx.EndOfInstruction; ctx.GotoNext())
+                {
+                    if (ctx.Instruction != null)
+                    {
+                        if (!ctx.Ignore && ctx.Instruction is CPUx86.IX86Instruction)
+                        {
+                            if (ctx.Result is MemoryOperand && ctx.Operand1 is MemoryOperand)
+                            {
+                                this.HandleMemoryToMemoryOperation(ctx);
+                            }
+                        }
+                    }
+                }
+            }
 		}
 
 		#endregion // IMethodCompilerStage Members
 
-		private void HandleMemoryToMemoryOperation(Context ctx, Operand register, bool useStack)
+		private void HandleMemoryToMemoryOperation(Context ctx)
 		{
 			Operand destination = ctx.Result;
 			Operand source = ctx.Operand1;
 
 			Debug.Assert(destination is MemoryOperand && source is MemoryOperand);
 
-			if (register == null)
-				register = new RegisterOperand(destination.Type, GeneralPurposeRegister.EDX);
+		    SigType destinationSigType = destination.Type;
 
-			ctx.Operand1 = register;
+            if (this.RequiresSseOperation(destinationSigType))
+            {
+                IInstruction moveInstruction = this.GetMoveInstruction(destinationSigType);
+                RegisterOperand destinationRegister = this.AllocateRegister(destinationSigType);
 
-			Context before = ctx.InsertBefore();
+                ctx.Result = destinationRegister;
+                ctx.AppendInstruction(moveInstruction, destination, destinationRegister);                
+            }
+            else
+            {
+                SigType sourceSigType = ctx.Operand1.Type;
+                IInstruction moveInstruction = this.GetMoveInstruction(sourceSigType);
+                RegisterOperand sourceRegister = this.AllocateRegister(sourceSigType);
 
-			if (useStack) {
-				before.SetInstruction(CPUx86.Instruction.PushInstruction, null, register);
-				before.AppendInstruction(CPUx86.Instruction.MovInstruction, register, source);
-			}
-			else
-				before.SetInstruction(CPUx86.Instruction.MovInstruction, register, source);
+                ctx.Operand1 = sourceRegister;
 
-			if (useStack)
-				ctx.AppendInstruction(CPUx86.Instruction.PopInstruction, register);
-		}
+                ctx.InsertBefore().SetInstruction(moveInstruction, sourceRegister, source);
+            }
+        }
+
+        private IInstruction GetMoveInstruction(SigType sigType)
+        {
+            IInstruction moveInstruction;
+            if (this.RequiresSseOperation(sigType) == false)
+            {
+                if (MustSignExtendOnLoad(sigType.Type) == true)
+                {
+                    moveInstruction = CPUx86.Instruction.MovsxInstruction;
+                }
+                else if (MustZeroExtendOnLoad(sigType.Type) == true)
+                {
+                    moveInstruction = CPUx86.Instruction.MovzxInstruction;
+                }
+                else
+                {
+                    moveInstruction = CPUx86.Instruction.MovInstruction;
+                }
+            }
+            else if (sigType.Type == CilElementType.R8)
+            {
+                moveInstruction = CPUx86.Instruction.MovsdInstruction;
+            }
+            else
+            {
+                moveInstruction = CPUx86.Instruction.MovssInstruction;
+            }
+
+            return moveInstruction;
+        }
+
+        private RegisterOperand AllocateRegister(SigType sigType)
+        {
+            RegisterOperand result;
+            if (RequiresSseOperation(sigType))
+            {
+                result = new RegisterOperand(sigType, SSE2Register.XMM6);
+            }
+            else
+            {
+                result = new RegisterOperand(sigType, GeneralPurposeRegister.EDX);
+            }
+
+            return result;
+        }
+
+        private bool RequiresSseOperation(SigType sigType)
+        {
+            return sigType.Type == CilElementType.R4 
+                || sigType.Type == CilElementType.R8;
+        }
+
+        private static bool MustSignExtendOnLoad(CilElementType elementType)
+        {
+            return (elementType == CilElementType.I1 || elementType == CilElementType.I2);
+        }
+
+        private static bool MustZeroExtendOnLoad(CilElementType elementType)
+        {
+            return (elementType == CilElementType.U1 || elementType == CilElementType.U2 || elementType == CilElementType.Char);
+        }
 	}
 }

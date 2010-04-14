@@ -35,9 +35,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [Column(0, 1, sbyte.MinValue, sbyte.MaxValue)]
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
-        public void LdargaI1_CheckValue(sbyte a)
+        public void LdargaI1_CheckValue([Column(0, 1, sbyte.MinValue, sbyte.MaxValue)] sbyte a)
         {
             CodeSource = @"
                 static class Test
@@ -66,9 +65,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [Column(0, 1, byte.MinValue, byte.MaxValue)]
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
-        public void LdargaU1_CheckValue(byte a)
+        public void LdargaU1_CheckValue([Column(0, 1, byte.MinValue, byte.MaxValue)] byte a)
         {
             CodeSource = @"
                 static class Test
@@ -97,9 +95,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// 
         /// </summary>
         /// <param name="a"></param>
-        [Column(0, 1, short.MinValue, short.MaxValue)]
+        [Row(0)]
+        [Row(1)]
+        [Row(short.MinValue)]
+        [Row(short.MaxValue)]
         [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
-        public void LdargaI2_CheckValue(short a)
+        public void LdargaI2_CheckValue( short a)
         {
             CodeSource = @"
                 static class Test

@@ -173,18 +173,6 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		void StoreInstruction(Context context);
 
 		/// <summary>
-		/// Visitation function for <see cref="UDivInstruction"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void UDivInstruction(Context context);
-
-		/// <summary>
-		/// Visitation function for <see cref="URemInstruction"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void URemInstruction(Context context);
-
-		/// <summary>
 		/// Visitation function for <see cref="ZeroExtendedMoveInstruction"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
@@ -195,5 +183,37 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void NopInstruction(Context context);
+
+        void AddSInstruction(Context context);
+
+        void AddUInstruction(Context context);
+
+        void AddFInstruction(Context context);
+
+        void DivFInstruction(Context context);
+
+        void DivSInstruction(Context context);
+
+        void DivUInstruction(Context context);
+
+        void MulSInstruction(Context context);
+
+	    void MulFInstruction(Context context);
+
+	    void MulUInstruction(Context context);
+
+	    void SubFInstruction(Context context);
+
+	    void SubSInstruction(Context context);
+
+	    void SubUInstruction(Context context);
+
+	    void RemFInstruction(Context context);
+
+	    void RemSInstruction(Context context);
+
+        void RemUInstruction(Context context);
+
+	    void SwitchInstruction(Context context);
 	}
 }

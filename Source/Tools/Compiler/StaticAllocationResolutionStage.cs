@@ -99,11 +99,12 @@ namespace Mosa.Tools.Compiler
         private Operand InsertLoadBeforeInstruction(Context context, string symbolName, SigType type)
         {
             Context before = context.InsertBefore();
+            Operand result = this.MethodCompiler.CreateTemporary(type);
             Operand op = new SymbolOperand(type, symbolName);
 
-            before.SetInstruction(Instruction.Get(OpCode.Ldc_i4), op);
+            before.SetInstruction(Instruction.Get(OpCode.Ldc_i4), result, op);
 
-            return op;
+            return result;
         }
 		
 		private IEnumerable<Context> ScanForOperatorNew()

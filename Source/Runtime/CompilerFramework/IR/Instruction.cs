@@ -19,7 +19,22 @@ namespace Mosa.Runtime.CompilerFramework.IR
 	/// </summary>
 	public static class Instruction
 	{
-		/// <summary>
+        /// <summary>
+        /// 
+        /// </summary>
+        public static readonly AddFInstruction AddFInstruction = new AddFInstruction();
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static readonly AddSInstruction AddSInstruction = new AddSInstruction();
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static readonly AddUInstruction AddUInstruction = new AddUInstruction();
+        
+        /// <summary>
 		/// 
 		/// </summary>
 		public static AddressOfInstruction AddressOfInstruction = new AddressOfInstruction();
@@ -31,7 +46,14 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// 
 		/// </summary>
 		public static BranchInstruction BranchInstruction = new BranchInstruction();
-		/// <summary>
+
+        public static readonly DivFInstruction DivFInstruction = new DivFInstruction();
+
+        public static readonly DivSInstruction DivSInstruction = new DivSInstruction();
+
+        public static readonly DivUInstruction DivUInstruction = new DivUInstruction();
+        
+        /// <summary>
 		/// 
 		/// </summary>
 		public static EpilogueInstruction EpilogueInstruction = new EpilogueInstruction();
@@ -79,7 +101,23 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// 
 		/// </summary>
 		public static MoveInstruction MoveInstruction = new MoveInstruction();
-		/// <summary>
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static MulFInstruction MulFInstruction = new MulFInstruction();
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static MulSInstruction MulSInstruction = new MulSInstruction();
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static MulUInstruction MulUInstruction = new MulUInstruction();
+
+        /// <summary>
 		/// 
 		/// </summary>
 		public static PhiInstruction PhiInstruction = new PhiInstruction();
@@ -95,7 +133,14 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// 
 		/// </summary>
 		public static PushInstruction PushInstruction = new PushInstruction();
-		/// <summary>
+
+        public static readonly RemFInstruction RemFInstruction = new RemFInstruction();
+
+        public static readonly RemSInstruction RemSInstruction = new RemSInstruction();
+
+        public static readonly RemUInstruction RemUInstruction = new RemUInstruction();
+        
+        /// <summary>
 		/// 
 		/// </summary>
 		public static ReturnInstruction ReturnInstruction = new ReturnInstruction();
@@ -110,19 +155,18 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <summary>
 		/// 
 		/// </summary>
-		public static SignExtendedMoveInstruction SignExtendedMoveInstruction = new SignExtendedMoveInstruction();
+		public static readonly SignExtendedMoveInstruction SignExtendedMoveInstruction = new SignExtendedMoveInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
 		public static StoreInstruction StoreInstruction = new StoreInstruction();
-		/// <summary>
-		/// 
-		/// </summary>
-		public static UDivInstruction UDivInstruction = new UDivInstruction();
-		/// <summary>
-		/// 
-		/// </summary>
-		public static URemInstruction URemInstruction = new URemInstruction();
+
+        public static readonly SubFInstruction SubFInstruction = new SubFInstruction();
+
+        public static readonly SubSInstruction SubSInstruction = new SubSInstruction();
+
+        public static readonly SubUInstruction SubUInstruction = new SubUInstruction();
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -135,5 +179,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// 
 		/// </summary>
 		public static NopInstruction NopInstruction = new NopInstruction();
+
+	    public static readonly SwitchInstruction SwitchInstruction = new SwitchInstruction();
 	}
 }

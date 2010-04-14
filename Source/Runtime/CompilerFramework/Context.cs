@@ -1075,12 +1075,18 @@ namespace Mosa.Runtime.CompilerFramework
 		public void SetResult(int index, Operand result)
 		{
 			switch (index) {
-				case 0: Result = result; break;
-				case 1: Result2 = result; break;
-				default: break;
-			}
+				case 0: 
+                    this.Result = result; 
+                    break;
 
-			Debug.Assert(false, @"No index");
+                case 1: 
+                    this.Result2 = result; 
+                    break;
+
+				default: 
+        			Debug.Assert(false, @"No index");
+                    break;
+			}
 		}
 
 		/// <summary>

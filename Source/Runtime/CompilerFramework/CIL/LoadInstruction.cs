@@ -5,7 +5,12 @@
  *
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ *  Michael Fröhlich (aka grover, Michael Ruck) <sharpos@michaelruck.de>
+ *  
  */
+
+using Mosa.Runtime.CompilerFramework.Operands;
+using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Runtime.CompilerFramework.CIL
 {
@@ -21,7 +26,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </summary>
 		/// <param name="opCode">The op code.</param>
 		public LoadInstruction(OpCode opCode)
-			: base(opCode, 0, 1)
+			: base(opCode, 1, 1)
 		{
 		}
 
@@ -37,5 +42,20 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 		#endregion // Construction
 
+        public static Operand CreateResultOperand(IInstructionDecoder decoder, StackTypeCode operandType, SigType operandSigType)
+        {
+            Operand result;
+
+            if (operandType == StackTypeCode.O || operandType == StackTypeCode.Ptr || operandType == StackTypeCode.F)
+            {
+                result = decoder.Compiler.CreateTemporary(operandSigType);
+            }
+            else
+            {
+                result = decoder.Compiler.CreateTemporary(Operand.SigTypeFromStackType(operandType));
+            }
+
+            return result;
+        }
 	}
 }

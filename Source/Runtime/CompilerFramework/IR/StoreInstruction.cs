@@ -19,9 +19,10 @@ namespace Mosa.Runtime.CompilerFramework.IR
     /// Stores a value to a memory pointer.
     /// </summary>
     /// <remarks>
-    /// The store instruction stores the value in the given memory pointer.
+    /// The store instruction stores the value in the given memory pointer with offset. The first operand is the memory base pointer,
+    /// the second an additional offset value and the third is the value to store.
     /// </remarks>
-    public sealed class StoreInstruction : TwoOperandInstruction
+    public sealed class StoreInstruction : ThreeOperandInstruction
     {
         #region Construction
 

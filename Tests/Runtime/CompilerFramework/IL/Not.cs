@@ -103,7 +103,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="expect"></param>
         /// <param name="a"></param>
         /// <returns></returns>
-        delegate bool U1_U1(byte expect, byte a);
+        delegate bool I_U1(int expect, byte a);
         /// <summary>
         /// 
         /// </summary>
@@ -120,8 +120,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("rootnode", "rootnode@mosa-project.org")]
         public void NotU1(byte a)
         {
-            CodeSource = CreateTestCode("NotU1", "byte", "byte");
-            Assert.IsTrue((bool)Run<U1_U1>("", "Test", "NotU1", (byte)~(byte)a, a));
+            CodeSource = CreateTestCode("NotU1", "byte", "int");
+            Assert.IsTrue((bool)Run<I_U1>("", "Test", "NotU1", (~a), a));
         }
         #endregion
 
@@ -168,7 +168,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         /// <param name="expect"></param>
         /// <param name="a"></param>
         /// <returns></returns>
-        delegate bool U2_U2(ushort expect, ushort a);
+        delegate bool I_U2(int expect, ushort a);
         /// <summary>
         /// 
         /// </summary>
@@ -185,8 +185,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
         [Test, Author("rootnode", "rootnode@mosa-project.org")]
         public void NotU2(ushort a)
         {
-            CodeSource = CreateTestCode("NotU2", "ushort", "ushort");
-            Assert.IsTrue((bool)Run<U2_U2>("", "Test", "NotU2", (ushort)~(ushort)a, (ushort)a));
+            CodeSource = CreateTestCode("NotU2", "ushort", "int");
+            Assert.IsTrue((bool)Run<I_U2>("", "Test", "NotU2", (~a), a));
         }
         #endregion
         

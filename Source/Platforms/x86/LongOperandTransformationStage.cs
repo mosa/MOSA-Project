@@ -1424,15 +1424,18 @@ namespace Mosa.Platforms.x86
         {
             Operand op0 = ctx.Result;
             Operand op1 = ctx.Operand1;
+            Operand offsetOperand = ctx.Operand2;
             Debug.Assert(op0 != null && op1 != null, @"Operands to I8 LoadInstruction are not MemoryOperand.");
 
             SigType I4 = new SigType(CilElementType.I4);
             Operand op0L, op0H;
             SplitLongOperand(op0, out op0L, out op0H);
+
             RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
             RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
 
             ctx.SetInstruction(CPUx86.Instruction.MovInstruction, eax, op1);
+            ctx.AppendInstruction(CPUx86.Instruction.AddInstruction, eax, offsetOperand);
             ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, edx, new MemoryOperand(op0L.Type, GeneralPurposeRegister.EAX, IntPtr.Zero));
             ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, op0L, edx);
             ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, edx, new MemoryOperand(op0H.Type, GeneralPurposeRegister.EAX, new IntPtr(4)));
@@ -1446,17 +1449,22 @@ namespace Mosa.Platforms.x86
         private void ExpandStore(Context ctx)
         {
             MemoryOperand op0 = ctx.Result as MemoryOperand;
-            MemoryOperand op1 = ctx.Operand1 as MemoryOperand;
-            Debug.Assert(op0 != null && op1 != null, @"Operands to I8 LoadInstruction are not MemoryOperand.");
+            Operand offsetOperand = ctx.Operand1;
+            MemoryOperand op2 = ctx.Operand2 as MemoryOperand;
+            Debug.Assert(op0 != null && op2 != null, @"Operands to I8 LoadInstruction are not MemoryOperand.");
 
             SigType I4 = new SigType(CilElementType.I4);
             SigType U4 = new SigType(CilElementType.U4);
             Operand op1L, op1H;
-            SplitLongOperand(op1, out op1L, out op1H);
+            SplitLongOperand(op2, out op1L, out op1H);
             RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
             RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
 
             ctx.SetInstruction(CPUx86.Instruction.MovInstruction, edx, op0);
+
+            // Fortunately in 32-bit mode, we can't have 64-bit offsets, so this plain add should suffice.
+            ctx.AppendInstruction(CPUx86.Instruction.AddInstruction, edx, offsetOperand);
+
             ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, eax, op1L);
             ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, new MemoryOperand(U4, GeneralPurposeRegister.EDX, IntPtr.Zero), eax);
             ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, eax, op1H);
@@ -1679,6 +1687,21 @@ namespace Mosa.Platforms.x86
             LinkBlocks(newBlocks[3], nextBlock);
         }
 
+        public static bool IsInt64(Operand op)
+        {
+            return op.StackType == StackTypeCode.Int64;
+        }
+
+        public static bool IsDouble(Operand op)
+        {
+            return op.Type.Matches(BuiltInSigType.Double);
+        }
+
+        public static bool IsDoubleOrInt64(Operand op)
+        {
+            return IsInt64(op) || IsDouble(op);
+        }
+
         #endregion // Utility Methods
 
         #region IIRVisitor
@@ -1687,170 +1710,270 @@ namespace Mosa.Platforms.x86
         /// Arithmetics the shift right instruction.
         /// </summary>
         /// <param name="ctx">The context.</param>
-        void IR.IIRVisitor.ArithmeticShiftRightInstruction(Context ctx)
+        public void ArithmeticShiftRightInstruction(Context ctx)
         {
-            if (ctx.Operand1.StackType == StackTypeCode.Int64)
-                ExpandArithmeticShiftRight(ctx);
+            if (IsInt64(ctx.Operand1) == true)
+            {
+                this.ExpandArithmeticShiftRight(ctx);
+            }
         }
 
         /// <summary>
         /// Integers the compare instruction.
         /// </summary>
         /// <param name="ctx">The context.</param>
-        void IR.IIRVisitor.IntegerCompareInstruction(Context ctx)
+        public void IntegerCompareInstruction(Context ctx)
         {
-            if (ctx.Operand1.StackType == StackTypeCode.Int64)
+            if (IsInt64(ctx.Operand1) == true)
+            {
                 ExpandComparison(ctx);
+            }
         }
 
         /// <summary>
         /// Loads the instruction.
         /// </summary>
         /// <param name="ctx">The context.</param>
-        void IR.IIRVisitor.LoadInstruction(Context ctx)
+        public void LoadInstruction(Context ctx)
         {
-            if (ctx.Operand1.StackType == StackTypeCode.Int64 || ctx.Result.StackType == StackTypeCode.Int64)
-                ExpandLoad(ctx);
+            if (IsInt64(ctx.Operand1) == true || IsInt64(ctx.Result) == true)
+            {
+                this.ExpandLoad(ctx);
+            }
         }
 
         /// <summary>
         /// Logicals the and instruction.
         /// </summary>
         /// <param name="ctx">The context.</param>
-        void IR.IIRVisitor.LogicalAndInstruction(Context ctx)
+        public void LogicalAndInstruction(Context ctx)
         {
-            if (ctx.Operand1.StackType == StackTypeCode.Int64)
-                ExpandAnd(ctx);
+            if (IsInt64(ctx.Operand1) == true)
+            {
+                this.ExpandAnd(ctx);
+            }
         }
 
         /// <summary>
         /// Logicals the or instruction.
         /// </summary>
         /// <param name="ctx">The context.</param>
-        void IR.IIRVisitor.LogicalOrInstruction(Context ctx)
+        public void LogicalOrInstruction(Context ctx)
         {
-            if (ctx.Operand1.StackType == StackTypeCode.Int64)
-                ExpandOr(ctx);
+            if (IsInt64(ctx.Operand1) == true)
+            {
+                this.ExpandOr(ctx);
+            }
         }
 
         /// <summary>
         /// Logicals the xor instruction.
         /// </summary>
         /// <param name="ctx">The context.</param>
-        void IR.IIRVisitor.LogicalXorInstruction(Context ctx)
+        public void LogicalXorInstruction(Context ctx)
         {
-            if (ctx.Operand1.StackType == StackTypeCode.Int64)
-                ExpandXor(ctx);
+            if (IsInt64(ctx.Operand1) == true)
+            {
+                this.ExpandXor(ctx);
+            }
         }
 
         /// <summary>
         /// Logicals the not instruction.
         /// </summary>
         /// <param name="ctx">The context.</param>
-        void IR.IIRVisitor.LogicalNotInstruction(Context ctx)
+        public void LogicalNotInstruction(Context ctx)
         {
-            if (ctx.Operand1.StackType == StackTypeCode.Int64)
-                ExpandNot(ctx);
+            if (IsInt64(ctx.Operand1) == true)
+            {
+                this.ExpandNot(ctx);
+            }
         }
 
         /// <summary>
         /// Moves the instruction.
         /// </summary>
         /// <param name="ctx">The context.</param>
-        void IR.IIRVisitor.MoveInstruction(Context ctx)
+        public void MoveInstruction(Context ctx)
         {
-            if (ctx.Operand1.StackType == StackTypeCode.Int64)
-                ExpandMove(ctx);
+            // FIXME: Why aren't we doing an SSE2 move for int64?
+            if (IsInt64(ctx.Operand1) == true)
+            {
+                this.ExpandMove(ctx);
+            }
         }
 
         /// <summary>
         /// Pops the instruction.
         /// </summary>
         /// <param name="ctx">The context.</param>
-        void IR.IIRVisitor.PopInstruction(Context ctx)
+        public void PopInstruction(Context ctx)
         {
-            if (ctx.Operand1.StackType == StackTypeCode.Int64)
-                ExpandPop(ctx);
+            if (IsInt64(ctx.Operand1) == true)
+            {
+                this.ExpandPop(ctx);
+            }
         }
 
         /// <summary>
         /// Pushes the instruction.
         /// </summary>
         /// <param name="ctx">The context.</param>
-        void IR.IIRVisitor.PushInstruction(Context ctx)
+        public void PushInstruction(Context ctx)
         {
-            if (ctx.Operand1.StackType == StackTypeCode.Int64)
-                ExpandPush(ctx);
+            if (IsInt64(ctx.Operand1) == true)
+            {
+               this.ExpandPush(ctx);
+            }
         }
 
         /// <summary>
         /// Shifts the left instruction.
         /// </summary>
         /// <param name="ctx">The context.</param>
-        void IR.IIRVisitor.ShiftLeftInstruction(Context ctx)
+        public void ShiftLeftInstruction(Context ctx)
         {
-            if (ctx.Operand1.StackType == StackTypeCode.Int64)
-                ExpandShiftLeft(ctx);
+            if (IsInt64(ctx.Operand1) == true)
+            {
+                this.ExpandShiftLeft(ctx);
+            }
         }
 
         /// <summary>
         /// Shifts the right instruction.
         /// </summary>
         /// <param name="ctx">The context.</param>
-        void IR.IIRVisitor.ShiftRightInstruction(Context ctx)
+        public void ShiftRightInstruction(Context ctx)
         {
-            if (ctx.Operand1.StackType == StackTypeCode.Int64)
-                ExpandShiftRight(ctx);
+            if (IsInt64(ctx.Operand1) == true)
+            {
+                this.ExpandShiftRight(ctx);
+            }
         }
 
         /// <summary>
         /// Signs the extended move instruction.
         /// </summary>
         /// <param name="ctx">The context.</param>
-        void IR.IIRVisitor.SignExtendedMoveInstruction(Context ctx)
+        public void SignExtendedMoveInstruction(Context ctx)
         {
-            if (ctx.Operand1.StackType == StackTypeCode.Int64 || ctx.Result.StackType == StackTypeCode.Int64)
-                ExpandSignedMove(ctx);
+            if (IsInt64(ctx.Operand1) == true || IsInt64(ctx.Result) == true)
+            {
+                this.ExpandSignedMove(ctx);
+            }
         }
 
         /// <summary>
         /// Stores the instruction.
         /// </summary>
         /// <param name="ctx">The context.</param>
-        void IR.IIRVisitor.StoreInstruction(Context ctx)
+        public void StoreInstruction(Context ctx)
         {
-            if (ctx.Operand1.StackType == StackTypeCode.Int64)
-                ExpandStore(ctx);
+            if (IsInt64(ctx.Operand2) == true)
+            {
+                this.ExpandStore(ctx);
+            }
         }
 
-        /// <summary>
-        /// Us the div instruction.
-        /// </summary>
-        /// <param name="ctx">The context.</param>
-        void IR.IIRVisitor.UDivInstruction(Context ctx)
+        public void DivSInstruction(Context context)
         {
-            if (ctx.Operand1.StackType == StackTypeCode.Int64)
-                ExpandUDiv(ctx);
+            if (IsInt64(context.Operand1) == true)
+            {
+                this.ExpandDiv(context);
+            }
         }
 
-        /// <summary>
-        /// Us the rem instruction.
-        /// </summary>
-        /// <param name="ctx">The context.</param>
-        void IR.IIRVisitor.URemInstruction(Context ctx)
+        public void DivUInstruction(Context ctx)
         {
-            if (ctx.Operand1.StackType == StackTypeCode.Int64)
-                ExpandURem(ctx);
+            if (IsInt64(ctx.Operand1) == true)
+            {
+                this.ExpandUDiv(ctx);
+            }
+        }
+
+        public void MulSInstruction(Context context)
+        {
+            if (IsInt64(context.Operand1) == true)
+            {
+                this.ExpandMul(context);
+            }
+        }
+
+        public void MulFInstruction(Context context)
+        {
+        }
+
+        public void MulUInstruction(Context context)
+        {
+            if (IsInt64(context.Operand1) == true)
+            {
+                this.ExpandMul(context);
+            }
+        }
+
+        public void SubFInstruction(Context context)
+        {
+        }
+
+        public void SubSInstruction(Context context)
+        {
+            if (IsInt64(context.Operand1) == true)
+            {
+                this.ExpandSub(context);
+            }
+            else
+            {
+                if (context.Operand2 is ConstantOperand && context.Operand1.Type.Type == CilElementType.Char)
+                {
+                    RegisterOperand ecx = new RegisterOperand(context.Operand1.Type, GeneralPurposeRegister.ECX);
+                    context.InsertBefore().SetInstruction(CPUx86.Instruction.MovInstruction, ecx, context.Operand2);
+                    context.Operand2 = ecx;
+                }
+            }
+        }
+
+        public void SubUInstruction(Context context)
+        {
+            if (IsInt64(context.Operand1) == true)
+            {
+                this.ExpandSub(context);
+            }
+        }
+
+        public void RemFInstruction(Context context)
+        {
+        }
+
+        public void RemSInstruction(Context context)
+        {
+            if (IsInt64(context.Operand1) == true)
+            {
+                this.ExpandRem(context);
+            }
+        }
+
+        public void RemUInstruction(Context context)
+        {
+            if (IsInt64(context.Operand1) == true)
+            {
+                this.ExpandURem(context);
+            }
+        }
+
+        public void SwitchInstruction(Context context)
+        {
         }
 
         /// <summary>
         /// Zeroes the extended move instruction.
         /// </summary>
         /// <param name="ctx">The context.</param>
-        void IR.IIRVisitor.ZeroExtendedMoveInstruction(Context ctx)
+        public void ZeroExtendedMoveInstruction(Context ctx)
         {
-            if (ctx.Result.StackType == StackTypeCode.Int64)
+            if (IsInt64(ctx.Result) == true)
+            {
                 ExpandUnsignedMove(ctx);
+            }
         }
 
         #endregion // IIRVisitor
@@ -1945,8 +2068,10 @@ namespace Mosa.Platforms.x86
         /// <param name="ctx">The context.</param>
         void CIL.ICILVisitor.UnaryBranch(Context ctx)
         {
-            if (ctx.Operand1.StackType == StackTypeCode.Int64)
-                ExpandUnaryBranch(ctx);
+            if (IsInt64(ctx.Operand1) == true)
+            {
+                this.ExpandUnaryBranch(ctx);
+            }
         }
 
         /// <summary>
@@ -1955,8 +2080,10 @@ namespace Mosa.Platforms.x86
         /// <param name="ctx">The context.</param>
         void CIL.ICILVisitor.BinaryBranch(Context ctx)
         {
-            if (ctx.Operand1.StackType == StackTypeCode.Int64)
-                ExpandBinaryBranch(ctx);
+            if (IsInt64(ctx.Operand1) == true)
+            {
+                this.ExpandBinaryBranch(ctx);
+            }
         }
 
         /// <summary>
@@ -1965,8 +2092,10 @@ namespace Mosa.Platforms.x86
         /// <param name="ctx">The context.</param>
         void CIL.ICILVisitor.Neg(Context ctx)
         {
-            if (ctx.Operand1.StackType == StackTypeCode.Int64)
+            if (IsInt64(ctx.Operand1) == true)
+            {
                 ExpandNeg(ctx);
+            }
         }
 
         /// <summary>
@@ -1996,14 +2125,37 @@ namespace Mosa.Platforms.x86
             throw new NotSupportedException();
         }
 
+        void CIL.ICILVisitor.Add(Context ctx)
+        {
+            throw new NotSupportedException();
+        }
+
         /// <summary>
         /// Visitation function for <see cref="CIL.ICILVisitor.Add"/>.
         /// </summary>
-        /// <param name="ctx">The context.</param>
-        void CIL.ICILVisitor.Add(Context ctx)
+        /// <param name="context">The context.</param>
+        public void AddSInstruction(Context context)
         {
-            if (ctx.Operand1.StackType == StackTypeCode.Int64)
-                ExpandAdd(ctx);
+            if (IsInt64(context.Operand1) == true)
+            {
+                this.ExpandAdd(context);
+            }
+        }
+
+        public void AddUInstruction(Context context)
+        {
+            if (IsInt64(context.Operand1) == true)
+            {
+                this.ExpandAdd(context);
+            }
+        }
+
+        public void AddFInstruction(Context context)
+        {
+        }
+
+        public void DivFInstruction(Context context)
+        {
         }
 
         /// <summary>
@@ -2012,27 +2164,12 @@ namespace Mosa.Platforms.x86
         /// <param name="ctx">The context.</param>
         void CIL.ICILVisitor.Sub(Context ctx)
         {
-            if (ctx.Operand1.StackType == StackTypeCode.Int64)
-                ExpandSub(ctx);
-            else
-            {
-                if (ctx.Operand2 is ConstantOperand && ctx.Operand1.Type.Type == CilElementType.Char)
-                {
-                    RegisterOperand ecx = new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.ECX);
-                    ctx.InsertBefore().SetInstruction(CPUx86.Instruction.MovInstruction, ecx, ctx.Operand2);
-                    ctx.Operand2 = ecx;
-                }
-            }
+            throw new NotSupportedException();
         }
 
-        /// <summary>
-        /// Visitation function for <see cref="CIL.ICILVisitor.Mul"/>.
-        /// </summary>
-        /// <param name="ctx">The context.</param>
         void CIL.ICILVisitor.Mul(Context ctx)
         {
-            if (ctx.Operand1.StackType == StackTypeCode.Int64)
-                ExpandMul(ctx);
+            throw new NotSupportedException();
         }
 
         /// <summary>
@@ -2041,8 +2178,7 @@ namespace Mosa.Platforms.x86
         /// <param name="ctx">The context.</param>
         void CIL.ICILVisitor.Div(Context ctx)
         {
-            if (ctx.Operand1.StackType == StackTypeCode.Int64)
-                ExpandDiv(ctx);
+            throw new NotSupportedException();
         }
 
         /// <summary>
@@ -2051,8 +2187,7 @@ namespace Mosa.Platforms.x86
         /// <param name="ctx">The context.</param>
         void CIL.ICILVisitor.Rem(Context ctx)
         {
-            if (ctx.Operand1.StackType == StackTypeCode.Int64)
-                ExpandRem(ctx);
+            throw new NotSupportedException();
         }
 
         #endregion // Members

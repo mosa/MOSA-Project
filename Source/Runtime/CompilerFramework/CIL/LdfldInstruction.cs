@@ -8,14 +8,17 @@
  */
 
 using System;
+
+using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Runtime.Metadata;
+using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Runtime.CompilerFramework.CIL
 {
 	/// <summary>
 	/// 
 	/// </summary>
-	public sealed class LdfldInstruction : UnaryInstruction
+	public sealed class LdfldInstruction : BaseInstruction
 	{
 		#region Construction
 
@@ -24,7 +27,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </summary>
 		/// <param name="opcode">The opcode.</param>
 		public LdfldInstruction(OpCode opcode)
-			: base(opcode)
+			: base(opcode, 1, 1)
 		{
 		}
 
@@ -42,22 +45,13 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			// Decode base classes first
 			base.Decode(ctx, decoder);
 
-			
-            // Load the _stackFrameIndex token from the immediate
             TokenTypes token;
             decoder.Decode(out token);
             ctx.RuntimeField = RuntimeBase.Instance.TypeLoader.GetField(decoder.Method, decoder.Method.Module, token);
-            //ctx.Result = new Operands.ObjectFieldOperand (ctx.Operand1, ctx.RuntimeField);
-            ctx.Result = decoder.Compiler.CreateTemporary(ctx.RuntimeField.SignatureType);
-/*
-            Debug.Assert(TokenTypes.Field == (TokenTypes.TableMask & token) || 
-                         TokenTypes.MemberRef == (TokenTypes.TableMask & token), @"Invalid token type.");
-            MemberDefinition memberDef = MetadataMemberReference.FromToken(decoder.Metadata, token).Resolve();
 
-            _field = memberDef as FieldDefinition;          
-            _results[0] = CreateResultOperand(_field.Type);
- */
-		}
+            SigType sigType = ctx.RuntimeField.SignatureType;
+            ctx.Result = LoadInstruction.CreateResultOperand(decoder, Operand.StackTypeFromSigType(sigType), sigType);
+        }
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.

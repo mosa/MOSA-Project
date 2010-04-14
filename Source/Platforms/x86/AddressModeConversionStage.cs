@@ -56,16 +56,23 @@ namespace Mosa.Platforms.x86
 			Operand op1 = ctx.Operand1;
 			Operand op2 = ctx.Operand2;
 
-            if (ctx.Instruction is IR.FloatingPointCompareInstruction)
+            if (ctx.Instruction is IR.IntegerCompareInstruction
+                || ctx.Instruction is IR.FloatingPointCompareInstruction 
+                || ctx.Instruction is IR.LoadInstruction 
+                || ctx.Instruction is IR.StoreInstruction)
+            {
                 return;
+            }
 
-            if (ctx.Instruction is CIL.MulInstruction /*|| ctx.Instruction is CIL.DivInstruction*/)
+            if (ctx.Instruction is CIL.MulInstruction)
+            {
                 if (!(op1 is ConstantOperand) && (op2 is ConstantOperand))
                 {
                     Operand temp = op1;
                     op1 = op2;
                     op2 = temp;
                 }
+            }
 
 			// Create registers for different data types
             RegisterOperand eax = new RegisterOperand(op1.Type, op1.StackType == StackTypeCode.F ? (Register)SSE2Register.XMM0 : GeneralPurposeRegister.EAX);
@@ -93,15 +100,20 @@ namespace Mosa.Platforms.x86
                     if (op1 is ConstantOperand)
                     {
                         Context before = ctx.InsertBefore();
-						before.SetInstruction(CPUx86.Instruction.MovInstruction, eax, op1);
+                        before.SetInstruction(CPUx86.Instruction.MovInstruction, eax, op1);
                         before.AppendInstruction(CPUx86.Instruction.Cvtss2sdInstruction, eax, eax);
                     }
                     else
+                    {
                         ctx.InsertBefore().SetInstruction(CPUx86.Instruction.Cvtss2sdInstruction, eax, op1);
+                    }
                 }
                 else
-					ctx.InsertBefore().SetInstruction(CPUx86.Instruction.MovInstruction, eax, op1);
+                {
+                    ctx.InsertBefore().SetInstruction(CPUx86.Instruction.MovInstruction, eax, op1);
+                }
             }
+
             ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, result, eax);
 		}
 

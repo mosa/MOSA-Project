@@ -53,9 +53,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Ldarga(Context ctx)
 		{
-			Operand result = ctx.Result;
-			ctx.SetInstruction(CPUx86.Instruction.MovInstruction, result, new RegisterOperand(new SigType(CilElementType.Ptr), GeneralPurposeRegister.EBP));
-			ctx.AppendInstruction(CPUx86.Instruction.AddInstruction, result, new ConstantOperand(new SigType(CilElementType.Ptr), ctx.Label));
+            throw new NotSupportedException();
 		}
 
 		/// <summary>
@@ -64,12 +62,8 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Ldloca(Context ctx)
 		{
-			Operand result = ctx.Result;
-			//ctx.SetInstruction(IR.Instruction.MoveInstruction, result, new RegisterOperand(ctx.Result.Type, GeneralPurposeRegister.EBP));
-			//ctx.AppendInstruction(CPUx86.Instruction.AddInstruction, result, new ConstantOperand(ctx.Result.Type, ctx.Label));
-            ctx.SetInstruction(IR.Instruction.AddressOfInstruction, new RegisterOperand (new SigType(CilElementType.I4), GeneralPurposeRegister.EAX), ctx.Operand1);
-			ctx.AppendInstruction(IR.Instruction.MoveInstruction, result, new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EAX));
-		}
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Call"/>.
@@ -77,10 +71,8 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Call(Context ctx)
 		{
-            ICallingConvention cc = Architecture.GetCallingConvention(ctx.InvokeTarget.Signature.CallingConvention);
-            Debug.Assert(null != cc, @"Failed to retrieve the calling convention.");
-            cc.MakeCall(ctx, this.MethodCompiler.Method, MethodCompiler.Assembly.Metadata);
-		}
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Ret"/>.
@@ -88,7 +80,9 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Ret(Context ctx)
 		{
-			bool eax = false;
+            throw new NotSupportedException();
+/*            
+            bool eax = false;
 
 			if (ctx.OperandCount != 0 && ctx.Operand1 != null) {
 				Operand retval = ctx.Operand1;
@@ -102,6 +96,7 @@ namespace Mosa.Platforms.x86
 				if (!eax)
 					ctx.SetInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(new SigType(CilElementType.I), GeneralPurposeRegister.EAX), retval);
 			}
+ */
 		}
 
 		/// <summary>
@@ -110,8 +105,8 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Branch(Context ctx)
 		{
-			ctx.ReplaceInstructionOnly(CPUx86.Instruction.JmpInstruction);
-		}
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.UnaryBranch"/>.
@@ -119,22 +114,8 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.UnaryBranch(Context ctx)
 		{
-			IBranch branch = ctx.Branch;
-			CIL.OpCode opcode = (ctx.Instruction as CIL.ICILInstruction).OpCode;
-			Operand op = ctx.Operand1;
-
-			ctx.SetInstruction(CPUx86.Instruction.CmpInstruction, ctx.Operand1, new ConstantOperand(new SigType(CilElementType.I4), 0));
-
-			if (opcode == CIL.OpCode.Brtrue || opcode == CIL.OpCode.Brtrue_s)
-				ctx.AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.NotEqual);
-			else
-				if (opcode == CIL.OpCode.Brfalse || opcode == CIL.OpCode.Brfalse_s)
-					ctx.AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.Equal);
-				else
-					throw new NotImplementedException();
-
-			ctx.SetBranch(branch.Targets[0]);
-		}
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.BinaryBranch"/>.
@@ -142,21 +123,8 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.BinaryBranch(Context ctx)
 		{
-			bool swap = ctx.Operand1 is ConstantOperand;
-			IBranch branch = ctx.Branch;
-			IR.ConditionCode conditionCode = ConvertCondition((ctx.Instruction as CIL.BinaryBranchInstruction).OpCode);
-
-			if (swap) {
-				ctx.SetInstruction(CPUx86.Instruction.CmpInstruction, ctx.Operand2, ctx.Operand1);
-				ctx.AppendInstruction(CPUx86.Instruction.BranchInstruction, GetOppositeConditionCode(conditionCode));
-			}
-			else {
-				ctx.SetInstruction(CPUx86.Instruction.CmpInstruction, ctx.Operand1, ctx.Operand2);
-				ctx.AppendInstruction(CPUx86.Instruction.BranchInstruction, conditionCode);
-			}
-
-			ctx.SetBranch(branch.Targets[0]);
-		}
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Switch"/>.
@@ -164,17 +132,8 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Switch(Context ctx)
 		{
-			IBranch branch = ctx.Branch;
-			Operand operand = ctx.Operand1;
-
-			ctx.Remove();
-
-			for (int i = 0; i < branch.Targets.Length - 1; ++i) {
-				ctx.AppendInstruction(CPUx86.Instruction.CmpInstruction, operand, new ConstantOperand(new SigType(CilElementType.I), i));
-				ctx.AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.Equal);
-				ctx.SetBranch(branch.Targets[i]);
-			}
-		}
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Calli"/>.
@@ -182,8 +141,8 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Calli(Context ctx)
 		{
-			HandleInvokeInstruction(ctx);
-		}
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Callvirt"/>.
@@ -191,6 +150,8 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Callvirt(Context ctx)
 		{
+            throw new NotSupportedException();
+/*
             ICallingConvention cc = Architecture.GetCallingConvention(ctx.InvokeTarget.Signature.CallingConvention);
             Debug.Assert(null != cc, @"Failed to retrieve the calling convention.");
 
@@ -204,6 +165,7 @@ namespace Mosa.Platforms.x86
                 // we have to make this explicitly somehow.
                 cc.MakeCall(ctx, this.MethodCompiler.Method, this.MethodCompiler.Assembly.Metadata);
             }
+ */
         }
 
 		/// <summary>
@@ -213,7 +175,6 @@ namespace Mosa.Platforms.x86
 		void CIL.ICILVisitor.BinaryComparison(Context ctx)
 		{
 			throw new NotSupportedException();
-			//HandleComparisonInstruction(ctx, instruction);
 		}
 
 		/// <summary>
@@ -222,13 +183,8 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Add(Context ctx)
 		{
-			if (ctx.Operand1.StackType == StackTypeCode.F) {
-				HandleCommutativeOperation(ctx, CPUx86.Instruction.SseAddInstruction);
-				ExtendToR8(ctx);
-			}
-			else
-				HandleCommutativeOperation(ctx, CPUx86.Instruction.AddInstruction);
-		}
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Sub"/>.
@@ -236,13 +192,8 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Sub(Context ctx)
 		{
-			if (ctx.Operand1.StackType == StackTypeCode.F) {
-				HandleNonCommutativeOperation(ctx, CPUx86.Instruction.SseSubInstruction);
-				ExtendToR8(ctx);
-			}
-			else
-				HandleNonCommutativeOperation(ctx, CPUx86.Instruction.SubInstruction);
-		}
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Mul"/>.
@@ -250,13 +201,8 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Mul(Context ctx)
 		{
-			if (ctx.Operand1.StackType == StackTypeCode.F) {
-				HandleCommutativeOperation(ctx, CPUx86.Instruction.SseMulInstruction);
-				ExtendToR8(ctx);
-			}
-			else
-				HandleCommutativeOperation(ctx, CPUx86.Instruction.MulInstruction);
-		}
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Div"/>.
@@ -264,15 +210,8 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Div(Context ctx)
 		{
-			if (IsUnsigned(ctx.Operand1) || IsUnsigned(ctx.Result))
-				HandleNonCommutativeOperation(ctx, CPUx86.Instruction.UDivInstruction);
-			else if (ctx.Operand1.StackType == StackTypeCode.F) {
-				HandleNonCommutativeOperation(ctx, CPUx86.Instruction.SseDivInstruction);
-				ExtendToR8(ctx);
-			}
-			else
-				HandleNonCommutativeOperation(ctx, CPUx86.Instruction.DivInstruction);
-		}
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Rem"/>.
@@ -280,55 +219,8 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Rem(Context ctx)
 		{
-			Operand result = ctx.Result;
-			Operand operand = ctx.Operand1;
-
-            if (ctx.Operand1.StackType != StackTypeCode.F)
-            {
-                RegisterOperand eax = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EAX);
-                RegisterOperand ecx = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.ECX);
-                RegisterOperand eaxSource = new RegisterOperand(result.Type, GeneralPurposeRegister.EAX);
-                RegisterOperand ecxSource = new RegisterOperand(operand.Type, GeneralPurposeRegister.ECX);
-
-                ctx.SetInstruction(CPUx86.Instruction.MovInstruction, eaxSource, result);
-                if (IsUnsigned(result))
-                    ctx.AppendInstruction(IR.Instruction.ZeroExtendedMoveInstruction, eax, eaxSource);
-                else
-                    ctx.AppendInstruction(IR.Instruction.SignExtendedMoveInstruction, eax, eaxSource);
-
-                ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, ecxSource, operand);
-                if (IsUnsigned(operand))
-                    ctx.AppendInstruction(IR.Instruction.ZeroExtendedMoveInstruction, ecx, ecxSource);
-                else
-                    ctx.AppendInstruction(IR.Instruction.SignExtendedMoveInstruction, ecx, ecxSource);
-
-                if (IsUnsigned(result) && IsUnsigned(operand))
-                    ctx.AppendInstruction(CPUx86.Instruction.UDivInstruction, eax, ecx);
-                else
-                    ctx.AppendInstruction(CPUx86.Instruction.DivInstruction, eax, ecx);
-
-                ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, result, new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EDX));
-            }
-            else
-            {
-                HandleNonCommutativeOperation(ctx, CPUx86.Instruction.SseDivInstruction);
-                ExtendToR8(ctx);
-
-                Operand destination = ctx.Result;
-                Operand source = ctx.Operand1;
-
-                RegisterOperand xmm5 = new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM5);
-                Context before = ctx.InsertBefore();
-                before.SetInstruction(CPUx86.Instruction.MovInstruction, xmm5, destination);
-
-                // Round towards zero
-                ctx.AppendInstruction(CPUx86.Instruction.SseRoundInstruction, destination, destination, new ConstantOperand(BuiltInSigType.Byte, 0x03));
-
-                ctx.AppendInstruction(CPUx86.Instruction.SseMulInstruction, destination, source);
-                ctx.AppendInstruction(CPUx86.Instruction.SseSubInstruction, xmm5, destination);
-                ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, destination, xmm5);
-            }
-		}
+            throw new NotSupportedException();
+        }
 
 		#endregion // Members
 
@@ -338,31 +230,46 @@ namespace Mosa.Platforms.x86
 		/// Visitation function for <see cref="CIL.ICILVisitor.Ldarg"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Ldarg(Context ctx) { }
+		void CIL.ICILVisitor.Ldarg(Context ctx)
+		{
+            throw new NotSupportedException();		    
+		}
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Ldloc"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Ldloc(Context ctx) { }
+		void CIL.ICILVisitor.Ldloc(Context ctx)
+		{
+            throw new NotSupportedException();
+		}
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Ldc"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Ldc(Context ctx) { }
+		void CIL.ICILVisitor.Ldc(Context ctx)
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Ldobj"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Ldobj(Context ctx) { }
+        void CIL.ICILVisitor.Ldobj(Context ctx)
+		{
+		    throw new NotSupportedException();
+		}
 
-		/// <summary>
+	    /// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Ldstr"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Ldstr(Context ctx) { }
+		void CIL.ICILVisitor.Ldstr(Context ctx)
+	    {
+            throw new NotSupportedException();	        
+	    }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Ldfld"/>.
@@ -370,25 +277,26 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Ldfld(Context ctx) 
         {
-            Operand op1 = ctx.Operand1;
-            Operand result = ctx.Result;
-            IntPtr address = ctx.RuntimeField.Address;
-            ctx.SetInstruction(IR.Instruction.MoveInstruction, new RegisterOperand(op1.Type, GeneralPurposeRegister.EAX), op1);
-            ctx.AppendInstruction(IR.Instruction.MoveInstruction, result, new MemoryOperand(result.Type, GeneralPurposeRegister.EAX, address));
-           // ctx.SetInstruction(CPUx86.Instruction.MovInstruction, ctx.Result, new MemoryOperand(ctx.RuntimeField.Type, new RegisterOperand(new SigType(CilElementType.Ptr), GeneralPurposeRegister.EAX).Register, ctx.RuntimeField.Address));
+            throw new NotSupportedException();
         }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Ldflda"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Ldflda(Context ctx) { }
+		void CIL.ICILVisitor.Ldflda(Context ctx)
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Ldsfld"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Ldsfld(Context ctx) { }
+		void CIL.ICILVisitor.Ldsfld(Context ctx)
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Ldsflda"/>.
@@ -396,47 +304,62 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Ldsflda(Context ctx) 
         {
-            Runtime.Linker.LinkerSymbol symbol = MethodCompiler.Linker.GetSymbol(ctx.RuntimeField);
-            //Operand eax = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EAX);
-            Operand address = new ConstantOperand(new SigType(CilElementType.I4), (int)MethodCompiler.Linker.BaseAddress + symbol.SectionAddress);
-            ctx.SetInstruction(CPUx86.Instruction.MovInstruction, ctx.Result, address);
+            throw new NotSupportedException();
         }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Ldftn"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Ldftn(Context ctx) { }
+		void CIL.ICILVisitor.Ldftn(Context ctx)
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Ldvirtftn"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Ldvirtftn(Context ctx) { }
+		void CIL.ICILVisitor.Ldvirtftn(Context ctx)
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Ldtoken"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Ldtoken(Context ctx) { }
+		void CIL.ICILVisitor.Ldtoken(Context ctx)
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Stloc"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Stloc(Context ctx) { }
+		void CIL.ICILVisitor.Stloc(Context ctx)
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Starg"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Starg(Context ctx) { }
+		void CIL.ICILVisitor.Starg(Context ctx)
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Stobj"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Stobj(Context ctx) { }
+		void CIL.ICILVisitor.Stobj(Context ctx)
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Stfld"/>.
@@ -444,313 +367,362 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Stfld(Context ctx) 
         {
-            //if (ctx.Operand1.Type.Type == CilElementType.Class)
-            //{
-                Operand op1 = ctx.Operand1;
-                Operand op2 = ctx.Operand2;
-                IntPtr address = ctx.RuntimeField.Address;
-                ctx.SetInstruction(IR.Instruction.MoveInstruction, new RegisterOperand(op1.Type, GeneralPurposeRegister.EAX), op1);
-                ctx.AppendInstruction(IR.Instruction.MoveInstruction, new MemoryOperand(op2.Type, GeneralPurposeRegister.EAX, address), op2);
-            //}
-            //else
-            //    ctx.SetInstruction(IR.Instruction.MoveInstruction, new MemoryOperand(ctx.RuntimeField.Type, new RegisterOperand(new SigType(CilElementType.Ptr), GeneralPurposeRegister.EAX).Register, ctx.RuntimeField.Address), ctx.Operand2);
+            throw new NotSupportedException();
         }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Stsfld"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Stsfld(Context ctx) { }
+		void CIL.ICILVisitor.Stsfld(Context ctx)
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Dup"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Dup(Context ctx) { }
+		void CIL.ICILVisitor.Dup(Context ctx)
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Pop"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Pop(Context ctx) { }
+		void CIL.ICILVisitor.Pop(Context ctx)
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Jmp"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Jmp(Context ctx) { }
+		void CIL.ICILVisitor.Jmp(Context ctx)
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.BinaryLogic"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.BinaryLogic(Context ctx) { }
+		void CIL.ICILVisitor.BinaryLogic(Context ctx)
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Shift"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Shift(Context ctx) { }
+		void CIL.ICILVisitor.Shift(Context ctx)
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Neg"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Neg(Context ctx) { }
+		void CIL.ICILVisitor.Neg(Context ctx)
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Not"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Not(Context ctx) { }
+		void CIL.ICILVisitor.Not(Context ctx)
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Conversion"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Conversion(Context ctx) { }
+		void CIL.ICILVisitor.Conversion(Context ctx)
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Cpobj"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Cpobj(Context ctx) { }
+		void CIL.ICILVisitor.Cpobj(Context ctx)
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Newobj"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Newobj(Context ctx) { }
+		void CIL.ICILVisitor.Newobj(Context ctx)
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Castclass"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Castclass(Context ctx) { }
+		void CIL.ICILVisitor.Castclass(Context ctx)
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Isinst"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Isinst(Context ctx) { }
+		void CIL.ICILVisitor.Isinst(Context ctx)
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Unbox"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Unbox(Context ctx) { }
+		void CIL.ICILVisitor.Unbox(Context ctx)
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Throw"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Throw(Context ctx) { }
+		void CIL.ICILVisitor.Throw(Context ctx)
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Box"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Box(Context ctx) { }
+		void CIL.ICILVisitor.Box(Context ctx)
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Newarr"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Newarr(Context ctx) { }
+		void CIL.ICILVisitor.Newarr(Context ctx)
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Ldlen"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Ldlen(Context ctx) { }
+		public void Ldlen(Context ctx)
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Ldelema"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Ldelema(Context ctx) { }
+		void CIL.ICILVisitor.Ldelema(Context ctx)
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Ldelem"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Ldelem(Context ctx) { }
+		void CIL.ICILVisitor.Ldelem(Context ctx)
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Stelem"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Stelem(Context ctx) { }
+		void CIL.ICILVisitor.Stelem(Context ctx)
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.UnboxAny"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.UnboxAny(Context ctx) { }
+		void CIL.ICILVisitor.UnboxAny(Context ctx)
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Refanyval"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Refanyval(Context ctx) { }
+		void CIL.ICILVisitor.Refanyval(Context ctx)
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.UnaryArithmetic"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.UnaryArithmetic(Context ctx) { }
+		void CIL.ICILVisitor.UnaryArithmetic(Context ctx)
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Mkrefany(Context ctx) { }
+		void CIL.ICILVisitor.Mkrefany(Context ctx)
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.ArithmeticOverflow"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.ArithmeticOverflow(Context ctx) { }
+		void CIL.ICILVisitor.ArithmeticOverflow(Context ctx)
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Endfinally"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Endfinally(Context ctx) { }
+		void CIL.ICILVisitor.Endfinally(Context ctx)
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Leave"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Leave(Context ctx) { }
+		void CIL.ICILVisitor.Leave(Context ctx)
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Arglist"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Arglist(Context ctx) { }
+		void CIL.ICILVisitor.Arglist(Context ctx)
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Localalloc"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Localalloc(Context ctx) { }
+		void CIL.ICILVisitor.Localalloc(Context ctx)
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Endfilter"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Endfilter(Context ctx) { }
+		void CIL.ICILVisitor.Endfilter(Context ctx)
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.InitObj"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.InitObj(Context ctx) { }
+		void CIL.ICILVisitor.InitObj(Context ctx)
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Cpblk"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Cpblk(Context ctx) { }
+		void CIL.ICILVisitor.Cpblk(Context ctx)
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Initblk"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Initblk(Context ctx) { }
+		void CIL.ICILVisitor.Initblk(Context ctx)
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Prefix"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Prefix(Context ctx) { }
+		void CIL.ICILVisitor.Prefix(Context ctx)
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Rethrow"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Rethrow(Context ctx) { }
+		void CIL.ICILVisitor.Rethrow(Context ctx)
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Sizeof"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Sizeof(Context ctx) { }
+		void CIL.ICILVisitor.Sizeof(Context ctx)
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Refanytype"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Refanytype(Context ctx) { }
+		void CIL.ICILVisitor.Refanytype(Context ctx)
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Nop"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Nop(Context ctx) { }
+		void CIL.ICILVisitor.Nop(Context ctx)
+        {
+            throw new NotSupportedException();
+        }
 
 		#endregion // ICILVisitor - Unused
 
 		#region Internals
-
-		/// <summary>
-		/// Extends to r8.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		private static void ExtendToR8(Context ctx)
-		{
-			RegisterOperand xmm5 = new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM5);
-			RegisterOperand xmm6 = new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM6);
-			Context before = ctx.InsertBefore();
-
-			if (ctx.Result.Type.Type == CilElementType.R4) {
-				before.SetInstruction(CPUx86.Instruction.Cvtss2sdInstruction, xmm5, ctx.Result);
-				ctx.Result = xmm5;
-			}
-
-			if (ctx.Operand1.Type.Type == CilElementType.R4) {
-				before.SetInstruction(CPUx86.Instruction.Cvtss2sdInstruction, xmm6, ctx.Operand1);
-				ctx.Operand1 = xmm6;
-			}
-		}
-
-		/// <summary>
-		/// Special handling for commutative operations.
-		/// </summary>
-		/// <param name="ctx">The transformation context.</param>
-		/// <param name="instruction">The instruction.</param>
-		/// <remarks>
-		/// Commutative operations are reordered by moving the constant to the second operand,
-		/// which allows the instruction selection in the code generator to use a instruction
-		/// format with an immediate operand.
-		/// </remarks>
-		private void HandleCommutativeOperation(Context ctx, IInstruction instruction)
-		{
-			EmitOperandConstants(ctx);
-			ctx.ReplaceInstructionOnly(instruction);
-		}
-
-		/// <summary>
-		/// Handles the non commutative operation.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		/// <param name="instruction">The instruction.</param>
-		private void HandleNonCommutativeOperation(Context ctx, IInstruction instruction)
-		{
-			EmitResultConstants(ctx);
-			EmitOperandConstants(ctx);
-			ctx.ReplaceInstructionOnly(instruction);
-		}
-
-		/// <summary>
-		/// Special handling for shift operations, which require the shift amount in the ECX or as a constant register.
-		/// </summary>
-		/// <param name="ctx">The transformation context.</param>
-		/// <param name="instruction">The instruction to transform.</param>
-		private void HandleShiftOperation(Context ctx, IInstruction instruction)
-		{
-			EmitOperandConstants(ctx);
-		}
 
 		/// <summary>
 		/// Processes a method call instruction.
