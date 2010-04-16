@@ -25,7 +25,7 @@ namespace Mosa.Tools.MakeIsoImage
 		private static int Main(string[] args)
 		{
 			Console.WriteLine("MakeIsoImage v0.9 [www.mosa-project.org]");
-			Console.WriteLine("Copyright 2009. New BSD License.");
+			Console.WriteLine("Copyright 2010. New BSD License.");
 			Console.WriteLine("Written by Royce Mitchell III (royce3@gmail.com)");
 			Console.WriteLine();
 

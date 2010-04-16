@@ -521,49 +521,20 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// Visitation function for <see cref="ICILVisitor.Ldfld"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		public void Ldfld(Context ctx)
-		{
-            Operand resultOperand = ctx.Result;
-            Operand objectOperand = ctx.Operand1;
-
-		    RuntimeField field = ctx.RuntimeField;
-		    IntPtr address = field.Address;
-            ConstantOperand offsetOperand = new ConstantOperand(BuiltInSigType.IntPtr, address.ToInt64());
-
-		    IInstruction loadInstruction = Instruction.LoadInstruction;
-            if (MustSignExtendOnLoad(field.SignatureType.Type))
-            {
-                loadInstruction = Instruction.SignExtendedMoveInstruction;
-            }
-            else if (MustZeroExtendOnLoad(field.SignatureType.Type))
-            {
-                loadInstruction = Instruction.ZeroExtendedMoveInstruction;
-            }
-
-            ctx.SetInstruction(loadInstruction, resultOperand, objectOperand, offsetOperand);
-        }
+		void ICILVisitor.Ldfld(Context ctx) { }
 
 		/// <summary>
 		/// Visitation function for <see cref="ICILVisitor.Ldflda"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		public void Ldflda(Context ctx)
-		{
-		}
+		void ICILVisitor.Ldflda(Context ctx) { }
 
 		/// <summary>
 		/// Visitation function for <see cref="ICILVisitor.Stfld"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		public void Stfld(Context ctx) 
+		void ICILVisitor.Stfld(Context ctx) 
         {
-            Operand objectOperand = ctx.Operand1;
-            Operand valueOperand = ctx.Operand2;
-
-            IntPtr address = ctx.RuntimeField.Address;
-            ConstantOperand offsetOperand = new ConstantOperand(BuiltInSigType.IntPtr, address.ToInt64());
-
-            ctx.SetInstruction(Instruction.StoreInstruction, objectOperand, offsetOperand, valueOperand);
         }
 
 		/// <summary>
@@ -588,12 +559,9 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		public void UnaryBranch(Context ctx)
 		{
             IBranch branch = ctx.Branch;
-
+            BasicBlock branchTarget = this.FindBlock(branch.Targets[0]);
             ConditionCode cc;
-            Operand first = ctx.Operand1;
-            Operand second = new ConstantOperand(BuiltInSigType.Int32, 0UL);
-
-		    OpCode opcode = ((ICILInstruction)ctx.Instruction).OpCode;
+            OpCode opcode = ((ICILInstruction)ctx.Instruction).OpCode;
             if (opcode == OpCode.Brtrue || opcode == OpCode.Brtrue_s)
             {
                 cc = ConditionCode.NotEqual;
@@ -607,12 +575,9 @@ namespace Mosa.Runtime.CompilerFramework.IR
                 throw new NotSupportedException(@"CILTransformationStage.UnaryBranch doesn't support CIL opcode " + opcode);
             }
 
-            Operand comparisonResult = this.MethodCompiler.CreateTemporary(BuiltInSigType.Int32);
-            ctx.SetInstruction(Instruction.IntegerCompareInstruction, comparisonResult, first, second);
-            ctx.ConditionCode = cc;
-
-            ctx.AppendInstruction(Instruction.BranchInstruction, comparisonResult);
+            ctx.SetInstruction(Instruction.IntegerCompareInstruction, null, ctx.Operand1, new ConstantOperand(BuiltInSigType.Int32, 0UL));
 		    ctx.ConditionCode = cc;
+            ctx.AppendInstruction(Instruction.BranchInstruction, cc);
             ctx.SetBranch(branch.Targets[0]);
 		}
 
@@ -624,23 +589,12 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		{
 		    IBranch branch = ctx.Branch;
 
-		    ConditionCode cc = ConvertCondition(((ICILInstruction)ctx.Instruction).OpCode);
-		    Operand first = ctx.Operand1;
-		    Operand second = ctx.Operand2;
+            this.BinaryComparison(ctx);
+		    ConditionCode cc = ctx.ConditionCode;
 
-		    IInstruction comparisonInstruction = Instruction.IntegerCompareInstruction;
-            if (first.StackType == StackTypeCode.F)
-            {
-                comparisonInstruction = Instruction.FloatingPointCompareInstruction;
-            }
-
-            Operand comparisonResult = this.MethodCompiler.CreateTemporary(BuiltInSigType.Int32);
-            ctx.SetInstruction(comparisonInstruction, comparisonResult, first, second);
-            ctx.ConditionCode = cc;
-		    
-            ctx.AppendInstruction(Instruction.BranchInstruction, comparisonResult);
+		    BasicBlock branchTarget = this.FindBlock(branch.Targets[0]);
+            ctx.AppendInstruction(Instruction.BranchInstruction, branchTarget);
 		    ctx.ConditionCode = cc;
-            ctx.SetBranch(branch.Targets[0]);
 		}
 
 		/// <summary>
@@ -1443,7 +1397,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// Replaces the IL load instruction by an appropriate IR move instruction or removes it entirely, if
 		/// it is a native size.
 		/// </summary>
-        /// <param name="context">Provides the transformation context.</param>
+		/// <param name="context">The context.</param>
         private void ProcessLoadInstruction(Context context)
 		{
 		    IInstruction extension = null;

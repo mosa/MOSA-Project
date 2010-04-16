@@ -24,7 +24,7 @@ namespace Mosa.Platforms.x86.CPUx86
 	/// </summary>
 	public sealed class CallInstruction : BaseInstruction
 	{
-        private static readonly OpCode RegCall = new OpCode(new byte[] { 0xFF }, 2);
+		private static readonly OpCode RegCall = new OpCode(new byte[] { 0xFF }, 2);
 
 		#region Methods
 
@@ -35,15 +35,29 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context ctx, MachineCodeEmitter emitter)
 		{
-            if (ctx.InvokeTarget != null)
-            {
-                emitter.WriteByte(0xE8);
-                emitter.Call(ctx.InvokeTarget);
-            }
-            else if (ctx.Result is RegisterOperand)
-            {
-                emitter.Emit(RegCall, ctx.Result);
-            }
+			if (ctx.InvokeTarget != null) {
+				emitter.WriteByte(0xE8);
+				emitter.Call(ctx.InvokeTarget);
+			}
+			else if (ctx.Result is RegisterOperand) {
+				emitter.Emit(RegCall, ctx.Result);
+			}
+			else if (ctx.Other is int) {
+				int offset = (int)ctx.Other;
+
+				// TODO: remove constraint below
+				if (offset != 5)
+					throw new ArgumentException(@"Only support 5 offset right now.");
+
+				emitter.WriteByte(0xE8);
+				emitter.WriteByte(0x00);
+				emitter.WriteByte(0x00);
+				emitter.WriteByte(0x00);
+				emitter.WriteByte(0x00);
+			}
+			else
+				throw new ArgumentException(@"No opcode for operand type.");
+
 		}
 
 		/// <summary>

@@ -306,4 +306,3 @@ namespace Mosa.Runtime.CompilerFramework.Operands
     }
 }
 
-

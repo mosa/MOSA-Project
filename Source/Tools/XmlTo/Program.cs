@@ -18,24 +18,23 @@ namespace Mosa.Tools.XmlTo
 	{
 		static int Main(string[] args)
 		{
+			Console.WriteLine();
 			Console.WriteLine("XMLTo v0.1 [www.mosa-project.org]");
-			Console.WriteLine("Copyright 2009 by the MOSA Project. Licensed under the New BSD License.");
+			Console.WriteLine("Copyright 2010. New BSD License.");
 			Console.WriteLine("Written by Philipp Garcia (phil@thinkedge.com)");
 			Console.WriteLine();
-			Console.WriteLine("Usage: XMLTo <xml file> <xsl file> <output file>");
-			Console.WriteLine();
 
-			if (args.Length < 3)
-			 {
+			if (args.Length < 3) {
+				Console.WriteLine("Usage: XMLTo <xml file> <xsl file> <output file>");
 				Console.Error.WriteLine("ERROR: Missing arguments");
 				return -1;
 			}
 
 			try {
-				XPathDocument myXPathDoc = new XPathDocument(args[0]); 
+				XPathDocument myXPathDoc = new XPathDocument(args[0]);
 				XslCompiledTransform myXslTrans = new XslCompiledTransform();
 				myXslTrans.Load(args[1]);
-				XmlTextWriter myWriter = new XmlTextWriter(args[2], null); 
+				XmlTextWriter myWriter = new XmlTextWriter(args[2], null);
 				myXslTrans.Transform(myXPathDoc, null, myWriter);
 
 				return 0;

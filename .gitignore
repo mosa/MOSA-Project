@@ -9,10 +9,12 @@
 *.cache
 *.bak
 *.swp
-/bin/*
-/Bin/*
-Thumbs.db
+*.pidb
+*.userprefs
 *.FileListAbsolute.txt
 *.Cache
-/tmp
+Thumbs.db
 build.force
+/bin/*
+/Bin/*
+/tmp
