@@ -49,3 +49,4 @@ namespace Mosa.Runtime.CompilerFramework.IR
         #endregion // TwoOperandInstruction Overrides
     }
 }
+

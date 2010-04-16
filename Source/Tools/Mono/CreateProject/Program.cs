@@ -26,14 +26,14 @@ namespace Mosa.Tools.Mono.CreateProject
 		/// <returns></returns>
 		private static int Main(string[] args)
 		{
-			Console.WriteLine("CreateProjects v0.1 [www.mosa-project.org]");
-			Console.WriteLine("Copyright 2009. New BSD License.");
-			Console.WriteLine("Written by Philipp Garcia (phil@thinkedge.com)");
 			Console.WriteLine();
-			Console.WriteLine("Usage: CreateProject <project name> [-s source file] [-x exclude file] [-c conditions] [-project project dependency] [-path path prefix]");
+			Console.WriteLine("CreateProject v0.1 [www.mosa-project.org]");
+			Console.WriteLine("Copyright 2010. New BSD License.");
+			Console.WriteLine("Written by Philipp Garcia (phil@thinkedge.com)");
 			Console.WriteLine();
 
 			if (args.Length < 2) {
+				Console.WriteLine("Usage: CreateProject <project name> [-s source file] [-x exclude file] [-c conditions] [-ref project dependency] [-path path prefix]");
 				Console.Error.WriteLine("ERROR: Missing argument");
 				return -1;
 			}
@@ -49,7 +49,11 @@ namespace Mosa.Tools.Mono.CreateProject
 						case "-s": project.ReadSourceFile(args[i + 1]); break;
 						case "-x": project.ReadExcludeFile(args[i + 1]); break;
 						case "-c": project.Conditions.Add(args[i + 1]); break;
-						case "-ref": if (!string.IsNullOrEmpty(args[i + 1])) project.ProjectReferences.Add(args[i + 1]); break;
+						case "-ref": if (!string.IsNullOrEmpty(args[i + 1])) {
+								foreach (string split in args[i + 1].Split(new char[] { ';' }))
+									project.ProjectReferences.Add(split);
+							}
+							break;
 						case "-path": project.PathPrefix = args[i + 1] + System.IO.Path.DirectorySeparatorChar; break;
 						default:
 							Console.Error.WriteLine("ERROR: Invalid argument");
@@ -166,7 +170,7 @@ namespace Mosa.Tools.Mono.CreateProject
 					if (ProjectReferences.Count > 0) {
 						writer.WriteLine("\t<ItemGroup>");
 						foreach (string project in ProjectReferences) {
-							writer.WriteLine("\t\t<ProjectReference Include=\"" + project + ".csproj\">");
+							writer.WriteLine("\t\t<ProjectReference Include=\"..\\" + System.IO.Path.GetFileNameWithoutExtension(project) + "\\" + project + ".csproj\">");
 							writer.WriteLine("\t\t\t<Name>" + System.IO.Path.GetFileNameWithoutExtension(project) + "</Name>");
 							writer.WriteLine("\t\t</ProjectReference>");
 						}
