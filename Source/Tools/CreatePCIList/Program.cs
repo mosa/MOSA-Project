@@ -16,14 +16,14 @@ namespace Mosa.Tools.CreatePCIList
 	{
 		static int Main(string[] args)
 		{
-			Console.WriteLine("CreatePCIList v0.1 [www.mosa-project.org]");
-			Console.WriteLine("Copyright 2009 by the MOSA Project. Licensed under the New BSD License.");
-			Console.WriteLine("Written by Philipp Garcia (phil@thinkedge.com)");
 			Console.WriteLine();
-			Console.WriteLine("Usage: CreatePCIList <pci.ids file> <destination>");
+			Console.WriteLine("CreatePCIList v0.1 [www.mosa-project.org]");
+			Console.WriteLine("Copyright 2010. New BSD License.");
+			Console.WriteLine("Written by Philipp Garcia (phil@thinkedge.com)");
 			Console.WriteLine();
 
 			if (args.Length < 2) {
+				Console.WriteLine("Usage: CreatePCIList <pci.ids file> <destination>");
 				Console.Error.WriteLine("ERROR: Missing arguments");
 				return -1;
 			}

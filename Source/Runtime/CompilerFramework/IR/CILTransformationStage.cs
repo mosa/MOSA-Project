@@ -1397,7 +1397,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// Replaces the IL load instruction by an appropriate IR move instruction or removes it entirely, if
 		/// it is a native size.
 		/// </summary>
-		/// <param name="ctx">Provides the transformation context.</param>
+		/// <param name="context">The context.</param>
         private void ProcessLoadInstruction(Context context)
 		{
 		    IInstruction extension = null;

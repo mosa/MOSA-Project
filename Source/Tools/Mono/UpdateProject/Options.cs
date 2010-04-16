@@ -32,8 +32,8 @@ namespace Mosa.Tools.Mono.UpdateProject
 				if (opt.ToLower().Equals("-mosa")) CreateMosaFile = false;
 				else if (opt.ToLower().Equals("+mosa")) CreateMosaFile = true;
 
-				if (opt.ToLower().Equals("-mono")) CreateMosaFile = false;
-				else if (opt.ToLower().Equals("+mono")) CreateMosaFile = true;
+				if (opt.ToLower().Equals("-mono")) CreateMonoFile = false;
+				else if (opt.ToLower().Equals("+mono")) CreateMonoFile = true;
 
 				if (opt.ToLower().Equals("-original")) CreateOriginalFile = false;
 				else if (opt.ToLower().Equals("+original")) CreateOriginalFile = true;
