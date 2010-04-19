@@ -50,8 +50,11 @@ namespace Mosa.Tools.Mono.CreateProject
 						case "-x": project.ReadExcludeFile(args[i + 1]); break;
 						case "-c": project.Conditions.Add(args[i + 1]); break;
 						case "-ref": if (!string.IsNullOrEmpty(args[i + 1])) {
-								foreach (string split in args[i + 1].Split(new char[] { ';' }))
-									project.ProjectReferences.Add(split);
+								foreach (string split in args[i + 1].Split(new char[] { ';' })) {
+									string proj = split.Trim();
+									if (!string.IsNullOrEmpty(proj))
+										project.ProjectReferences.Add(proj);
+								}
 							}
 							break;
 						case "-path": project.PathPrefix = args[i + 1] + System.IO.Path.DirectorySeparatorChar; break;
@@ -170,8 +173,8 @@ namespace Mosa.Tools.Mono.CreateProject
 					if (ProjectReferences.Count > 0) {
 						writer.WriteLine("\t<ItemGroup>");
 						foreach (string project in ProjectReferences) {
-							writer.WriteLine("\t\t<ProjectReference Include=\"..\\" + System.IO.Path.GetFileNameWithoutExtension(project) + "\\" + project + ".csproj\">");
-							writer.WriteLine("\t\t\t<Name>" + System.IO.Path.GetFileNameWithoutExtension(project) + "</Name>");
+							writer.WriteLine("\t\t<ProjectReference Include=\".." + Path.DirectorySeparatorChar + project + Path.DirectorySeparatorChar + project + ".csproj\">");
+							writer.WriteLine("\t\t\t<Name>" + project + "</Name>");
 							writer.WriteLine("\t\t</ProjectReference>");
 						}
 						writer.WriteLine("\t</ItemGroup>");
