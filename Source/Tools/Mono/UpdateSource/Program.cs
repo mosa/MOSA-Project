@@ -27,7 +27,7 @@ namespace Mosa.Tools.Mono.UpdateSource
 		private static int Main(string[] args)
 		{
 			Console.WriteLine();
-			Console.WriteLine("CreateProject v0.1 [www.mosa-project.org]");
+			Console.WriteLine("UpdateSource v0.2 [www.mosa-project.org]");
 			Console.WriteLine("Copyright 2010. New BSD License.");
 			Console.WriteLine("Written by Philipp Garcia (phil@thinkedge.com)");
 			Console.WriteLine();

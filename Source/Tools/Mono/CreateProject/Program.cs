@@ -27,13 +27,13 @@ namespace Mosa.Tools.Mono.CreateProject
 		private static int Main(string[] args)
 		{
 			Console.WriteLine();
-			Console.WriteLine("CreateProject v0.1 [www.mosa-project.org]");
+			Console.WriteLine("CreateProject v0.2 [www.mosa-project.org]");
 			Console.WriteLine("Copyright 2010. New BSD License.");
 			Console.WriteLine("Written by Philipp Garcia (phil@thinkedge.com)");
 			Console.WriteLine();
 
 			if (args.Length < 2) {
-				Console.WriteLine("Usage: CreateProject <project name> [-s source file] [-x exclude file] [-c conditions] [-ref project dependency] [-path path prefix]");
+				Console.WriteLine("Usage: CreateProject <project name> [-s:source file] [-x:exclude file] [-c:conditions] [-ref:project dependencies] [-path:path]");
 				Console.Error.WriteLine("ERROR: Missing argument");
 				return -1;
 			}
@@ -41,26 +41,31 @@ namespace Mosa.Tools.Mono.CreateProject
 			try {
 				Project project = new Project();
 
-				project.Name = System.IO.Path.GetFileNameWithoutExtension(args[0]);
+				project.Name = Path.GetFileNameWithoutExtension(args[0]);
 				project.ProjectFile = args[0];
+				bool first = true;
 
-				for (int i = 1; i < args.Length; i = i + 2) {
-					switch (args[i]) {
-						case "-s": project.ReadSourceFile(args[i + 1]); break;
-						case "-x": project.ReadExcludeFile(args[i + 1]); break;
-						case "-c": project.Conditions.Add(args[i + 1]); break;
-						case "-ref": if (!string.IsNullOrEmpty(args[i + 1])) {
-								foreach (string split in args[i + 1].Split(new char[] { ';' })) {
-									string proj = split.Trim();
-									if (!string.IsNullOrEmpty(proj))
-										project.ProjectReferences.Add(proj);
-								}
-							}
-							break;
-						case "-path": project.PathPrefix = args[i + 1] + System.IO.Path.DirectorySeparatorChar; break;
-						default:
-							Console.Error.WriteLine("ERROR: Invalid argument");
-							return -1;
+				foreach (string opt in args) {
+					if (first) first = false;
+					else if (opt.ToLower().StartsWith("-s:"))
+						project.ReadSourceFile(opt.Substring(3));
+					else if (opt.ToLower().StartsWith("-x:"))
+						project.ReadExcludeFile(opt.Substring(3));
+					else if (opt.ToLower().StartsWith("-c:"))
+						project.Conditions.Add(opt.Substring(3));
+					else if (opt.ToLower().StartsWith("-ref:")) {
+						foreach (string split in opt.Substring(5).Split(new char[] { ';' })) {
+							string proj = split.Trim();
+							if (!string.IsNullOrEmpty(proj))
+								if (!proj.ToLower().Equals("none"))
+									project.ProjectReferences.Add(proj);
+						}
+					}
+					else if (opt.ToLower().StartsWith("-path:"))
+						project.PathPrefix = opt.Substring(5) + Path.DirectorySeparatorChar;
+					else {
+						Console.Error.WriteLine("ERROR: Invalid argument: " + opt);
+						return -1;
 					}
 				}
 
@@ -141,7 +146,7 @@ namespace Mosa.Tools.Mono.CreateProject
 					writer.WriteLine("\t\t<DebugSymbols>true</DebugSymbols>");
 					writer.WriteLine("\t\t<DebugType>full</DebugType>");
 					writer.WriteLine("\t\t<Optimize>false</Optimize>");
-					writer.WriteLine("\t\t<OutputPath>bin\\Debug\\</OutputPath>");
+					writer.WriteLine("\t\t<OutputPath>bin" + Path.DirectorySeparatorChar + "Debug" + Path.DirectorySeparatorChar + "</OutputPath>");
 
 					StringBuilder conditions = new StringBuilder();
 					foreach (string file in Conditions)
@@ -156,7 +161,7 @@ namespace Mosa.Tools.Mono.CreateProject
 					writer.WriteLine("\t<PropertyGroup Condition=\" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' \">");
 					writer.WriteLine("\t\t<DebugType>pdbonly</DebugType>");
 					writer.WriteLine("\t\t<Optimize>true</Optimize>");
-					writer.WriteLine("\t\t<OutputPath>bin\\Release\\</OutputPath>");
+					writer.WriteLine("\t\t<OutputPath>bin" + Path.DirectorySeparatorChar + "Release" + Path.DirectorySeparatorChar + "</OutputPath>");
 					writer.WriteLine("\t\t<DefineConstants>" + conditions + "</DefineConstants>");
 					writer.WriteLine("\t\t<ErrorReport>prompt</ErrorReport>");
 					writer.WriteLine("\t\t<WarningLevel>4</WarningLevel>");
@@ -173,7 +178,11 @@ namespace Mosa.Tools.Mono.CreateProject
 					if (ProjectReferences.Count > 0) {
 						writer.WriteLine("\t<ItemGroup>");
 						foreach (string project in ProjectReferences) {
-							writer.WriteLine("\t\t<ProjectReference Include=\".." + Path.DirectorySeparatorChar + project + Path.DirectorySeparatorChar + project + ".csproj\">");
+							string fixedproject = project;
+
+							if (fixedproject.Equals("mscorlib")) fixedproject = "corlib"; // hack
+
+							writer.WriteLine("\t\t<ProjectReference Include=\".." + Path.DirectorySeparatorChar + fixedproject + Path.DirectorySeparatorChar + project + ".csproj\">");
 							writer.WriteLine("\t\t\t<Name>" + project + "</Name>");
 							writer.WriteLine("\t\t</ProjectReference>");
 						}
