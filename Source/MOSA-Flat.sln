@@ -1,6 +1,6 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual Studio 2008
+# Visual C# Express 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Tools.Compiler", "Tools\Compiler\Mosa.Tools.Compiler.csproj", "{B69C2F31-5161-47BB-9FD3-2F2F2BCBF659}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Platforms.x86", "Platforms\x86\Mosa.Platforms.x86.csproj", "{56CA38E7-0883-4461-A10E-386D0C58DBF9}"

@@ -64,7 +64,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 			StackTypeCode result = _opTable[(int)ctx.Operand1.StackType][(int)ctx.Operand2.StackType];
 			if (result == StackTypeCode.Unknown)
-				throw new ExecutionEngineException(@"Invalid stack result of instruction.");
+                throw new InvalidOperationException(@"Invalid stack result of instruction.");
 
 			ctx.Result = compiler.CreateTemporary(Operand.SigTypeFromStackType(result));
 		}

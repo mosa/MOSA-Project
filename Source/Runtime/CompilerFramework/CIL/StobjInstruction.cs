@@ -109,7 +109,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 			Debug.Assert(destType is PtrSigType || destType is RefSigType, @"Destination operand not a pointer or reference.");
 			if (!(destType is PtrSigType || destType is RefSigType))
-				throw new ExecutionEngineException(@"Invalid operand.");
+                throw new InvalidOperationException(@"Invalid operand.");
 		}
 
 		/// <summary>

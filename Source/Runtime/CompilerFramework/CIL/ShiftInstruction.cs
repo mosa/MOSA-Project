@@ -64,7 +64,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			StackTypeCode result = _operandTable[(int)ctx.Operand1.StackType][(int)ctx.Operand2.StackType];
 			Debug.Assert(StackTypeCode.Unknown != result, @"Can't shift with the given stack operands.");
 			if (StackTypeCode.Unknown == result)
-				throw new ExecutionEngineException(@"Invalid stack state.");
+                throw new InvalidOperationException(@"Invalid stack state.");
 
 			ctx.Result = compiler.CreateTemporary(Operand.SigTypeFromStackType(result));
 		}
