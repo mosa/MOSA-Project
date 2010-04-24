@@ -13,6 +13,7 @@
 *.userprefs
 *.FileListAbsolute.txt
 *.Cache
+*.tlog
 Thumbs.db
 build.force
 /bin/*

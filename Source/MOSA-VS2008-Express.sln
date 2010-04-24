@@ -47,6 +47,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Tools.Mono.UpdateSourc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Tools.StageVisualizer", "Tools\StageVisualizer\Mosa.Tools.StageVisualizer.csproj", "{93FC3B7E-2B95-46D5-B7D1-5E64085E41D3}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Korlib", "Korlib\Korlib.csproj", "{631BC4F3-E2D8-4319-814C-13904CAA17CE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -145,6 +147,10 @@ Global
 		{93FC3B7E-2B95-46D5-B7D1-5E64085E41D3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{93FC3B7E-2B95-46D5-B7D1-5E64085E41D3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{93FC3B7E-2B95-46D5-B7D1-5E64085E41D3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{631BC4F3-E2D8-4319-814C-13904CAA17CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{631BC4F3-E2D8-4319-814C-13904CAA17CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{631BC4F3-E2D8-4319-814C-13904CAA17CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{631BC4F3-E2D8-4319-814C-13904CAA17CE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
