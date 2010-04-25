@@ -7,10 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
 using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
@@ -28,7 +24,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// Initializes a new instance of the <see cref="LdcInstruction"/> class.
 		/// </summary>
 		public LdcInstruction(OpCode opCode)
-			: base(opCode)
+			: base(opCode, 0)
 		{
 		}
 
@@ -130,7 +126,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
                     break;
 
 				default:
-					throw new NotImplementedException();
+					throw new System.NotImplementedException();
 			}
 
 		    ctx.Operand1 = constantValueOperand;
