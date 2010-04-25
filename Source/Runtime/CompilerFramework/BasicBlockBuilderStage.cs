@@ -82,16 +82,15 @@ namespace Mosa.Runtime.CompilerFramework
 			targets.Add(index, -1);
 
 			// Find out all targets labels
-			for (Context ctx = new Context(InstructionSet, index); !ctx.EndOfInstruction; ctx.GotoNext()) {
-				switch (ctx.Instruction.FlowControl) {
+			for (Context ctx = new Context(InstructionSet, index); !ctx.EndOfInstruction; ctx.GotoNext())
+			{
+				switch (ctx.Instruction.FlowControl)
+				{
 					case FlowControl.Next: continue;
 					case FlowControl.Call: continue;
-					case FlowControl.Break:
-						goto case FlowControl.Branch;
-					case FlowControl.Return:
-						continue;
-					case FlowControl.Throw:
-						goto case FlowControl.Branch;
+					case FlowControl.Break: goto case FlowControl.Branch;
+					case FlowControl.Return: continue;
+					case FlowControl.Throw: goto case FlowControl.Branch;
 					case FlowControl.Branch:
 						// Unconditional branch 
 						Debug.Assert(ctx.Branch.Targets.Length == 1);
@@ -116,17 +115,21 @@ namespace Mosa.Runtime.CompilerFramework
 
 			bool slice = false;
 
-			for (Context ctx = new Context(InstructionSet, index); !ctx.EndOfInstruction; ctx.GotoNext()) {
+			for (Context ctx = new Context(InstructionSet, index); !ctx.EndOfInstruction; ctx.GotoNext())
+			{
 				FlowControl flow;
 
-				if (targets.ContainsKey(ctx.Label)) {
+				if (targets.ContainsKey(ctx.Label))
+				{
 					CreateBlock(ctx.Label, ctx.Index);
 
-					if (!ctx.IsFirstInstruction) {
+					if (!ctx.IsFirstInstruction)
+					{
 						Context prev = ctx.Previous;
 						flow = prev.Instruction.FlowControl;
-						if (flow == FlowControl.Next || flow == FlowControl.Call || flow == FlowControl.ConditionalBranch || flow == FlowControl.Switch) {
-                            // This jump joins fall-through blocks, by giving them a proper end.
+						if (flow == FlowControl.Next || flow == FlowControl.Call || flow == FlowControl.ConditionalBranch || flow == FlowControl.Switch)
+						{
+							// This jump joins fall-through blocks, by giving them a proper end.
 							prev.AppendInstruction(CIL.Instruction.Get(CIL.OpCode.Br));
 							prev.SetBranch(ctx.Label);
 
@@ -157,8 +160,10 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="block">The current block.</param>
 		private void BuildBlockLinks(BasicBlock block)
 		{
-			for (Context ctx = CreateContext(block); !ctx.EndOfInstruction; ctx.GotoNext()) {
-				switch (ctx.Instruction.FlowControl) {
+			for (Context ctx = CreateContext(block); !ctx.EndOfInstruction; ctx.GotoNext())
+			{
+				switch (ctx.Instruction.FlowControl)
+				{
 					case FlowControl.Next: continue;
 					case FlowControl.Call: continue;
 					case FlowControl.Return:
@@ -168,22 +173,24 @@ namespace Mosa.Runtime.CompilerFramework
 					case FlowControl.Break: goto case FlowControl.Branch;
 					case FlowControl.Throw: goto case FlowControl.Branch;
 					case FlowControl.Switch: goto case FlowControl.ConditionalBranch;
-					case FlowControl.Branch: {
-                            FindAndLinkBlock(block, ctx.Branch.Targets[0]);
+					case FlowControl.Branch:
+						{
+							FindAndLinkBlock(block, ctx.Branch.Targets[0]);
 							return;
 						}
 					case FlowControl.ConditionalBranch:
-						foreach (int target in ctx.Branch.Targets) {
+						foreach (int target in ctx.Branch.Targets)
+						{
 							FindAndLinkBlock(block, target);
 						}
 
-                        // Conditional blocks are at least two way branches. The old way of adding jumps didn't properly
-                        // resolve operands under certain circumstances. This does.
-				        int nextIndex = ctx.Index + 1;
-                        if (nextIndex < this.InstructionSet.Used)
-                        {
-                            FindAndLinkBlock(block, this.InstructionSet.Data[nextIndex].Label);
-                        }
+						// Conditional blocks are at least two way branches. The old way of adding jumps didn't properly
+						// resolve operands under certain circumstances. This does.
+						int nextIndex = ctx.Index + 1;
+						if (nextIndex < this.InstructionSet.Used)
+						{
+							FindAndLinkBlock(block, this.InstructionSet.Data[nextIndex].Label);
+						}
 						continue;
 					default:
 						Debug.Assert(false);
@@ -192,16 +199,17 @@ namespace Mosa.Runtime.CompilerFramework
 			}
 		}
 
-	    private void FindAndLinkBlock(BasicBlock block, int target)
-	    {
-	        BasicBlock next = this.FindBlock(target);
-	        if (!block.NextBlocks.Contains(next)) {
-	            this.LinkBlocks(block, next);
-	            this.BuildBlockLinks(next);
-	        }
-	    }
+		private void FindAndLinkBlock(BasicBlock block, int target)
+		{
+			BasicBlock next = this.FindBlock(target);
+			if (!block.NextBlocks.Contains(next))
+			{
+				this.LinkBlocks(block, next);
+				this.BuildBlockLinks(next);
+			}
+		}
 
-	    /// <summary>
+		/// <summary>
 		/// Links the Blocks.
 		/// </summary>
 		/// <param name="caller">The caller.</param>

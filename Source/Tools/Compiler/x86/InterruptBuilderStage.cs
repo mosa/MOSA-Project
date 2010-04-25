@@ -18,7 +18,6 @@ using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Tools.Compiler.LinkTimeCodeGeneration;
 using Mosa.Runtime.Linker;
-
 using Mosa.Platforms.x86;
 using IR = Mosa.Runtime.CompilerFramework.IR;
 using CPUx86 = Mosa.Platforms.x86.CPUx86;
@@ -32,7 +31,7 @@ namespace Mosa.Tools.Compiler.x86
 	public sealed class InterruptBuilderStage : IAssemblyCompilerStage, IPipelineStage
 	{
 		#region Data Members
-		
+
 		private AssemblyCompiler compiler;
 
 		private IAssemblyLinker linker;
@@ -50,7 +49,7 @@ namespace Mosa.Tools.Compiler.x86
 		#endregion // IPipelineStage Members
 
 		#region IAssemblyCompilerStage Members
-		
+
 		public void Setup(AssemblyCompiler compiler)
 		{
 			this.compiler = compiler;
@@ -105,7 +104,8 @@ namespace Mosa.Tools.Compiler.x86
 
 			RegisterOperand esp = new RegisterOperand(I4, GeneralPurposeRegister.ESP);
 
-			for (int i = 0; i <= 255; i++) {
+			for (int i = 0; i <= 255; i++)
+			{
 				InstructionSet set = new InstructionSet(100);
 				Context ctx = new Context(set, -1);
 
