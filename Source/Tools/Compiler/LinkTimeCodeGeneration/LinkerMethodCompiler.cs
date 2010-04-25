@@ -12,6 +12,8 @@ using System;
 using System.Collections.Generic;
 
 using Mosa.Runtime.CompilerFramework;
+using Mosa.Runtime.CompilerFramework.CIL;
+using Mosa.Runtime.CompilerFramework.IR;
 using Mosa.Runtime.Linker;
 using Mosa.Runtime.Vm;
 
@@ -34,6 +36,7 @@ namespace Mosa.Tools.Compiler.LinkTimeCodeGeneration
 			InstructionSet = instructionSet;
 			this.Pipeline.AddRange(new IMethodCompilerStage[] {
 				new BasicBlockBuilderStage(),
+                new CILTransformationStage(),
 				new PlatformStubStage(),
 				new SimpleTraceBlockOrderStage(),
 				new CodeGenerationStage(),

@@ -16,17 +16,24 @@ using IR = Mosa.Runtime.CompilerFramework.IR;
 
 using Mosa.Runtime.CompilerFramework;
 
-
 namespace Mosa.Platforms.x86.CPUx86
 {
-    /// <summary>
-    /// Representations the x86 iretd instruction.
-    /// </summary>
-    public sealed class IRetdInstruction : BaseInstruction
-    {
- 
-        #region Methods
+	/// <summary>
+	/// Representations the x86 iretd instruction.
+	/// </summary>
+	public sealed class IRetdInstruction : BaseInstruction
+	{
 
+		/// <summary>
+		/// Gets the flow control.
+		/// </summary>
+		/// <value>The flow control.</value>
+		public override FlowControl FlowControl
+		{
+			get { return FlowControl.Return; }
+		}
+
+		#region Methods
 
 		/// <summary>
 		/// Emits the specified platform instruction.
@@ -48,6 +55,6 @@ namespace Mosa.Platforms.x86.CPUx86
 			visitor.Iretd(context);
 		}
 
-        #endregion // Methods
-    }
+		#endregion // Methods
+	}
 }

@@ -18,7 +18,7 @@ using System.Xml.XPath;
 namespace Mosa.Tools.Mono.UpdateProject
 {
 	/// <summary>
-	/// Program class for Mono.UpdateProject
+	/// 
 	/// </summary>
 	internal class Add
 	{
