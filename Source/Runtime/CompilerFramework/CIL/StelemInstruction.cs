@@ -1,8 +1,4 @@
-<<<<<<< HEAD
 /*
-=======
-﻿/*
->>>>>>> bb277735e0487df818cc9b65f7194436d0191265
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
