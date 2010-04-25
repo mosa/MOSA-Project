@@ -51,8 +51,8 @@ namespace Mosa.Runtime.CompilerFramework
 			// Create the prologue block
 			Context ctx = new Context(InstructionSet, -1);
 			// Add a jump instruction to the first block from the prologue
-			//ctx.InsertInstructionAfter(IR.Instruction.JmpInstruction);
-			ctx.AppendInstruction(CIL.Instruction.Get(CIL.OpCode.Br));
+            ctx.AppendInstruction(IR.Instruction.JmpInstruction);
+			//ctx.AppendInstruction(CIL.Instruction.Get(CIL.OpCode.Br));
 			ctx.SetBranch(0);
 			ctx.Label = -1;
 			_prologue = CreateBlock(-1, ctx.Index);

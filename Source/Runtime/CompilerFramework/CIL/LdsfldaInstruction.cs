@@ -7,11 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
-
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Vm;
 
@@ -29,7 +24,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </summary>
 		/// <param name="opcode">The opcode.</param>
 		public LdsfldaInstruction(OpCode opcode)
-			: base(opcode)
+			: base(opcode, 0)
 		{
 		}
 
@@ -52,7 +47,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			decoder.Decode(out token);
             RuntimeField field = RuntimeBase.Instance.TypeLoader.GetField (decoder.Method, decoder.Method.Module, token);
             ctx.RuntimeField = field;
-            ctx.Result = decoder.Compiler.CreateTemporary(new Mosa.Runtime.Metadata.Signatures.SigType(CilElementType.Ptr));
+            ctx.Result = decoder.Compiler.CreateTemporary(new Metadata.Signatures.SigType(CilElementType.Ptr));
 		}
 
 		/// <summary>

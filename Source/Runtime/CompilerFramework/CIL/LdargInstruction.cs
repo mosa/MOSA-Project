@@ -7,8 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-
 using Mosa.Runtime.CompilerFramework.Operands;
 
 namespace Mosa.Runtime.CompilerFramework.CIL
@@ -24,7 +22,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// Initializes a new instance of the <see cref="LdargInstruction"/> class.
 		/// </summary>
 		public LdargInstruction(OpCode opCode)
-			: base(opCode)
+			: base(opCode, 0)
 		{
 		}
 
@@ -78,7 +76,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 					break;
 
 				default:
-					throw new NotImplementedException();
+					throw new System.NotImplementedException();
 			}
 
 			// Push the loaded value onto the evaluation stack
