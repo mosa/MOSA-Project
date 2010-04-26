@@ -34,18 +34,18 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
             // Populate the pipeline
             this.Pipeline.AddRange(new IMethodCompilerStage[] {
                 new DecodingStage(),
-                new InstructionLogger(),
+                InstructionLogger.Instance,
                 new BasicBlockBuilderStage(),
-                new InstructionLogger(),
+                InstructionLogger.Instance,
 				new OperandDeterminationStage(),
-                new InstructionLogger(),
+                InstructionLogger.Instance,
                 new StaticAllocationResolutionStage(),
-                new InstructionLogger(),
+                InstructionLogger.Instance,
                 //new ConstantFoldingStage(),
                 new CILTransformationStage(),
-                new InstructionLogger(),
+                InstructionLogger.Instance,
                 new CILLeakGuardStage() { MustThrowCompilationException = true },
-                //new InstructionLogger(),
+                //InstructionLogger.Instance,
 				//InstructionStatisticsStage.Instance,
                 //new DominanceCalculationStage(),
                 //new EnterSSA(),
@@ -54,14 +54,14 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
                 //new LeaveSSA(),
 				new StackLayoutStage(),
 				new PlatformStubStage(),
-                new InstructionLogger(),
+                InstructionLogger.Instance,
 				//new BlockReductionStage(),
 				new LoopAwareBlockOrderStage(),
 				//new SimpleTraceBlockOrderStage(),
 				//new ReverseBlockOrderStage(),  // reverse all the basic blocks and see if it breaks anything
 				//new BasicBlockOrderStage()	
 				new CodeGenerationStage(),
-                //new InstructionLogger(),
+                //InstructionLogger.Instance,
             });
         }
 
