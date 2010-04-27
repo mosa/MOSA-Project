@@ -162,20 +162,60 @@ namespace Mosa.Platforms.x86
 		public static void BochsDebug() { ThrowPlatformNotSupported(); return; }
 
 		/// <summary>
-		/// Sets the control register.
+		/// Sets the control register 0.
 		/// </summary>
-		/// <param name="register">The control register</param>
 		/// <param name="status">The status.</param>
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.SetControlRegister))]
-		public static void SetControlRegister(byte register, uint status) { ThrowPlatformNotSupported(); }
+		[Intrinsic(typeof(Architecture), typeof(Intrinsic.SetCR0))]
+		public static void SetCR0(uint status) { ThrowPlatformNotSupported(); }
 
 		/// <summary>
-		/// Gets the control register.
+		/// Sets the control register 2.
 		/// </summary>
-		/// <param name="register">The pagedirectory.</param>
+		/// <param name="status">The status.</param>
+		[Intrinsic(typeof(Architecture), typeof(Intrinsic.SetCR2))]
+		public static void SetCR2(uint status) { ThrowPlatformNotSupported(); }
+
+		/// <summary>
+		/// Sets the control register 3.
+		/// </summary>
+		/// <param name="status">The status.</param>
+		[Intrinsic(typeof(Architecture), typeof(Intrinsic.SetCR3))]
+		public static void SetCR3(uint status) { ThrowPlatformNotSupported(); }
+
+		/// <summary>
+		/// Sets the control register 4.
+		/// </summary>
+		/// <param name="status">The status.</param>
+		[Intrinsic(typeof(Architecture), typeof(Intrinsic.SetCR4))]
+		public static void SetCR4(uint status) { ThrowPlatformNotSupported(); }
+
+		/// <summary>
+		/// Gets the control register 0.
+		/// </summary>
 		/// <returns></returns>
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.GetControlRegister))]
-		public static uint GetControlRegister(byte register) { ThrowPlatformNotSupported(); return 0; }
+		[Intrinsic(typeof(Architecture), typeof(Intrinsic.GetCR0))]
+		public static uint GetCR0() { ThrowPlatformNotSupported(); return 0; }
+
+		/// <summary>
+		/// Gets the control register 2.
+		/// </summary>
+		/// <returns></returns>
+		[Intrinsic(typeof(Architecture), typeof(Intrinsic.GetCR2))]
+		public static uint GetCR2() { ThrowPlatformNotSupported(); return 0; }
+
+		/// <summary>
+		/// Gets the control register 3.
+		/// </summary>
+		/// <returns></returns>
+		[Intrinsic(typeof(Architecture), typeof(Intrinsic.GetCR3))]
+		public static uint GetCR3() { ThrowPlatformNotSupported(); return 0; }
+
+		/// <summary>
+		/// Gets the control register 4.
+		/// </summary>
+		/// <returns></returns>
+		[Intrinsic(typeof(Architecture), typeof(Intrinsic.GetCR4))]
+		public static uint GetCR4() { ThrowPlatformNotSupported(); return 0; }
 
 		/// <summary>
 		/// Jumps the global interrupt handler.

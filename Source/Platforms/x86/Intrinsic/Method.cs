@@ -56,8 +56,14 @@ namespace Mosa.Platforms.x86.Intrinsic
 			map.Add(typeof(Nop), new Nop());
 			map.Add(typeof(Cli), new Cli());
 			map.Add(typeof(Sti), new Sti());
-			map.Add(typeof(SetControlRegister), new SetControlRegister());
-			map.Add(typeof(GetControlRegister), new GetControlRegister());
+			map.Add(typeof(SetCR0), new SetCR0());
+			map.Add(typeof(SetCR2), new SetCR2());
+			map.Add(typeof(SetCR3), new SetCR3());
+			map.Add(typeof(SetCR4), new SetCR4());
+			map.Add(typeof(GetCR0), new GetCR0());
+			map.Add(typeof(GetCR2), new GetCR2());
+			map.Add(typeof(GetCR3), new GetCR3());
+			map.Add(typeof(GetCR4), new GetCR4());
 			map.Add(typeof(GetIDTJumpLocation), new GetIDTJumpLocation());
 			map.Add(typeof(CpuIdEax), new CpuIdEax());
 			map.Add(typeof(CpuIdEbx), new CpuIdEbx());

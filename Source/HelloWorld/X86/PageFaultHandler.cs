@@ -23,7 +23,7 @@ namespace Mosa.Kernel.X86
 		/// <param name="errorCode">The error code.</param>
 		public static void Fault(uint errorCode)
 		{
-			uint virtualpage = Native.GetControlRegister(2);
+			uint virtualpage = Native.GetCR2();
 
 			if (virtualpage == 0x0) {
 				Panic.Now(2);	// Can't map null! what happened?

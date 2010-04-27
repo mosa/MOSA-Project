@@ -83,6 +83,16 @@
     <Compile Include="CPUx86\FarJmpInstruction.cs" />
     <Compile Include="CPUx86\SseRoundInstruction.cs" />
     <Compile Include="Intrinsic\Cli.cs" />
+    <Compile Include="Intrinsic\GetCR2.cs" />
+    <Compile Include="Intrinsic\GetCR3.cs" />
+    <Compile Include="Intrinsic\GetCR4.cs" />
+    <Compile Include="Intrinsic\GetCR0.cs" />
+    <Compile Include="Intrinsic\GetControlRegisterBase.cs" />
+    <Compile Include="Intrinsic\SetCR2.cs" />
+    <Compile Include="Intrinsic\SetCR3.cs" />
+    <Compile Include="Intrinsic\SetCR4.cs" />
+    <Compile Include="Intrinsic\SetCR0.cs" />
+    <Compile Include="Intrinsic\SetControlRegisterBase.cs" />
     <Compile Include="Intrinsic\SwitchTask.cs" />
     <Compile Include="Intrinsic\Get.cs" />
     <Compile Include="Intrinsic\Hlt.cs" />
@@ -109,10 +119,8 @@
     <Compile Include="CPUx86\Cvttss2si.cs" />
     <Compile Include="CPUx86\DirectCompareInstruction.cs" />
     <Compile Include="CPUx86\DirectDivisionInstruction.cs" />
-    <Compile Include="Intrinsic\GetControlRegister.cs" />
     <Compile Include="CPUx86\JmpInstruction.cs" />
     <Compile Include="CPUx86\LeaInstruction.cs" />
-    <Compile Include="Intrinsic\SetControlRegister.cs" />
     <Compile Include="CPUx86\UDivInstruction.cs" />
     <Compile Include="SimplePeepholeOptimizationStage.cs" />
     <Compile Include="MemToMemConversionStage.cs" />

@@ -651,6 +651,11 @@ namespace Mosa.Platforms.x86
         {
             Operand destinationOperand = context.Operand1;
 
+			if (destinationOperand == null)
+			{
+				return;
+			}
+
             if (destinationOperand is SymbolOperand)
             {
                 return;
