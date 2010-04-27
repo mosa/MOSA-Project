@@ -88,7 +88,7 @@ namespace Mosa.Runtime.CompilerFramework
         /// </summary>
         /// <param name="cc">The CIL calling convention to translate.</param>
         /// <returns>A calling convention implementation.</returns>
-        public abstract ICallingConvention GetCallingConvention(CallingConvention cc);
+        public abstract ICallingConvention GetCallingConvention();
 
         /// <summary>
         /// Gets the type memory requirements.

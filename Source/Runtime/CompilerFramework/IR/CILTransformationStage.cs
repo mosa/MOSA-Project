@@ -234,7 +234,20 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Call(Context ctx)
 		{
-			ProcessRedirectableInvokeInstruction(ctx);
+            if (this.CanSkipDueToRecursiveSystemObjectCtorCall(ctx) == true)
+            {
+                ctx.Remove();
+                return;
+            }
+		    
+            if (this.ProcessIntrinsicCall(ctx) == false)
+            {
+                // Create a symbol operand for the invocation target
+                RuntimeMethod invokeTarget = ctx.InvokeTarget;
+                SymbolOperand symbolOperand = SymbolOperand.FromMethod(invokeTarget);
+
+                this.ProcessInvokeInstruction(ctx, symbolOperand, ctx.Result, new List<Operand>(ctx.Operands));
+            }
 		}
 
 		/// <summary>
@@ -243,7 +256,10 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Calli(Context ctx)
 		{
-			ProcessInvokeInstruction(ctx);
+		    Operand destinationOperand = ctx.GetOperand(ctx.OperandCount - 1);
+		    ctx.OperandCount -= 1;
+
+			this.ProcessInvokeInstruction(ctx, destinationOperand, ctx.Result, new List<Operand>(ctx.Operands));
 		}
 
 		/// <summary>
@@ -346,10 +362,53 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Callvirt(Context ctx)
 		{
-			ProcessInvokeInstruction(ctx);
+		    RuntimeMethod invokeTarget = ctx.InvokeTarget;
+
+		    Operand resultOperand = ctx.Result;
+		    var operands = new List<Operand>(ctx.Operands);
+
+		    if ((invokeTarget.Attributes & MethodAttributes.Virtual) == MethodAttributes.Virtual)
+            {
+                Operand thisPtr = ctx.Operand1;
+
+                Operand methodTable = this.MethodCompiler.CreateTemporary(BuiltInSigType.IntPtr);
+                Operand methodPtr = this.MethodCompiler.CreateTemporary(BuiltInSigType.IntPtr);
+
+                int methodTableOffset = CalculateMethodTableOffset(invokeTarget);
+
+                ctx.SetInstruction(Instruction.NopInstruction);
+                //ctx.AppendInstruction(Instruction.BreakInstruction);
+                ctx.AppendInstruction(Instruction.LoadInstruction, methodTable, thisPtr, ConstantOperand.FromValue(0));
+                ctx.AppendInstruction(Instruction.LoadInstruction, methodPtr, methodTable, new ConstantOperand(BuiltInSigType.Int32, methodTableOffset));
+
+                // HACK: This nop will be overwritten in ProcessInvokeInstruction
+                ctx.AppendInstruction(Instruction.NopInstruction);
+                this.ProcessInvokeInstruction(ctx, methodPtr, resultOperand, operands);
+            }
+            else
+            {
+                // FIXME: Callvirt imposes a null-check. For virtual calls this is done implicitly, but for non-virtual calls
+                // we have to make this explicitly somehow.
+
+                // Create a symbol operand for the invocation target
+                SymbolOperand symbolOperand = SymbolOperand.FromMethod(invokeTarget);
+                this.ProcessInvokeInstruction(ctx, symbolOperand, resultOperand, operands);
+            }
 		}
 
-		/// <summary>
+	    private int CalculateMethodTableOffset(RuntimeMethod invokeTarget)
+	    {
+	        int size;
+	        int alignment;
+
+	        this.Architecture.GetTypeRequirements(BuiltInSigType.IntPtr, out size, out alignment);
+	        int slot = invokeTarget.MethodTableSlot;
+	        Debug.Assert(slot != 0, @"Method Table Slot not initialized.");
+
+	        return size + (size * slot);
+	    }
+
+	    /// <summary>
 		/// Visitation function for <see cref="ICILVisitor.Newobj"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
@@ -429,12 +488,14 @@ namespace Mosa.Runtime.CompilerFramework.IR
             ClassSigType elementType = arrayType.ElementType as ClassSigType;
             Debug.Assert(elementType != null, @"Newarr didn't specify class signature?");
 
+            Operand lengthOperand = ctx.Operand1;
+
 			ReplaceWithInternalCall(ctx, VmCall.AllocateArray);
 
-            ctx.Operand3 = ctx.Operand1;
-            ctx.Operand1 = new ConstantOperand(BuiltInSigType.Int32, this.MethodCompiler.Assembly.LoadOrder);
-            ctx.Operand2 = new ConstantOperand(BuiltInSigType.IntPtr, elementType.Token);
-            ctx.OperandCount = 3;
+            ctx.SetOperand(1, new ConstantOperand(BuiltInSigType.Int32, this.MethodCompiler.Assembly.LoadOrder));
+            ctx.SetOperand(2, new ConstantOperand(BuiltInSigType.IntPtr, elementType.Token));
+		    ctx.SetOperand(3, lengthOperand);
+            ctx.OperandCount = 4;
 		}
 
 		/// <summary>
@@ -1387,59 +1448,88 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		}
 
 		/// <summary>
-		/// Processes redirectable method call instructions.
+		/// Processes intrinsic method calls.
 		/// </summary>
 		/// <param name="ctx">The transformation context.</param>
+		/// <returns><c>true</c> if the method was replaced by an intrinsic; <c>false</c> otherwise.</returns>
 		/// <remarks>
 		/// This method checks if the call target has an Intrinsic-Attribute applied with
 		/// the current architecture. If it has, the method call is replaced by the specified
 		/// native instruction.
 		/// </remarks>
-		private void ProcessRedirectableInvokeInstruction(Context ctx)
+	    private bool ProcessIntrinsicCall(Context ctx)
+	    {
+	        RuntimeMethod rm = ctx.InvokeTarget;
+	        Debug.Assert(rm != null, @"Call doesn't have a target.");
+	        // Retrieve the runtime type
+	        RuntimeType rt = RuntimeBase.Instance.TypeLoader.GetType(@"Mosa.Runtime.CompilerFramework.IntrinsicAttribute, Mosa.Runtime");
+
+	        if (rm.IsDefined(rt)) {
+	            // FIXME: Change this to a GetCustomAttributes call, once we can do that :)
+	            foreach (RuntimeAttribute ra in rm.CustomAttributes) {
+	                if (ra.Type == rt) {
+	                    // Get the intrinsic attribute
+	                    IntrinsicAttribute ia = (IntrinsicAttribute)ra.GetAttribute();
+	                    if (ia.Architecture.IsInstanceOfType(this.Architecture)) {
+	                        // Found a replacement for the call...
+	                        try {
+	                            IIntrinsicMethod instrinsic = this.Architecture.GetIntrinsicMethod(ia.InstructionType);
+	                            instrinsic.ReplaceIntrinsicCall(ctx);
+	                            return true;
+	                        }
+	                        catch (Exception e) {
+	                            string message = "Failed to replace intrinsic call with its instruction: " + ia.InstructionType.ToString();
+	                            Trace.WriteLine(message);
+	                            Trace.WriteLine(e);
+
+	                            throw new CompilationException(message, e);
+	                        }
+	                    }
+	                }
+	            }
+	        }
+
+	        return false;
+	    }
+
+	    /// <summary>
+	    /// Processes a method call instruction.
+	    /// </summary>
+	    /// <param name="ctx">The transformation context.</param>
+	    /// <param name="destinationOperand">The operand, which holds the call destination.</param>
+	    /// <param name="resultOperand"></param>
+	    /// <param name="operands"></param>
+	    private void ProcessInvokeInstruction(Context ctx, Operand destinationOperand, Operand resultOperand, List<Operand> operands)
 		{
-			// Retrieve the invocation target
-			RuntimeMethod rm = ctx.InvokeTarget;
-			Debug.Assert(rm != null, @"Call doesn't have a target.");
-			// Retrieve the runtime type
-			RuntimeType rt = RuntimeBase.Instance.TypeLoader.GetType(@"Mosa.Runtime.CompilerFramework.IntrinsicAttribute, Mosa.Runtime");
+	        ctx.SetInstruction(Instruction.CallInstruction, (byte)(operands.Count + 1), (byte)(resultOperand != null ? 1 : 0));
+            ctx.SetResult(resultOperand);
 
-			if (rm.IsDefined(rt)) {
-				// FIXME: Change this to a GetCustomAttributes call, once we can do that :)
-				foreach (RuntimeAttribute ra in rm.CustomAttributes) {
-					if (ra.Type == rt) {
-						// Get the intrinsic attribute
-						IntrinsicAttribute ia = (IntrinsicAttribute)ra.GetAttribute();
-						if (ia.Architecture.IsInstanceOfType(Architecture)) {
-							// Found a replacement for the call...
-							try {
-								IIntrinsicMethod instrinsic = Architecture.GetIntrinsicMethod(ia.InstructionType);
-
-								instrinsic.ReplaceIntrinsicCall(ctx);
-
-								return;
-							}
-							catch (Exception e) {
-								Trace.WriteLine("Failed to replace intrinsic call with its instruction: " + ia.InstructionType.ToString());
-								Trace.WriteLine(e);
-							}
-						}
-					}
-				}
-			}
-
-			ProcessInvokeInstruction(ctx);
+		    int operandIndex = 0;
+            ctx.SetOperand(operandIndex++, destinationOperand);
+            foreach (Operand op in operands)
+            {
+                ctx.SetOperand(operandIndex++, op);
+            }
 		}
 
-		/// <summary>
-		/// Processes a method call instruction.
-		/// </summary>
-		/// <param name="ctx">The transformation context.</param>
-		private void ProcessInvokeInstruction(Context ctx)
-		{
-            ctx.ReplaceInstructionOnly(Instruction.CallInstruction);
-		}
+	    private bool CanSkipDueToRecursiveSystemObjectCtorCall(Context ctx)
+	    {
+	        RuntimeMethod currentMethod = this.MethodCompiler.Method;
+	        RuntimeMethod invokeTarget = ctx.InvokeTarget;
 
-		/// <summary>
+	        // Skip recursive System.Object ctor calls.
+	        if (currentMethod.DeclaringType.FullName == @"System.Object" &&
+	            currentMethod.Name == @".ctor" &&
+	            invokeTarget.DeclaringType.FullName == @"System.Object" &&
+	            invokeTarget.Name == @".ctor")
+	        {
+	            return true;
+	        }
+
+	        return false;
+	    }
+
+	    /// <summary>
 		/// Replaces the IL load instruction by an appropriate IR move instruction or removes it entirely, if
 		/// it is a native size.
 		/// </summary>
@@ -1498,7 +1588,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			RuntimeMethod callTarget = FindMethod(rt, internalCallTarget.ToString());
 
 			ctx.ReplaceInstructionOnly(IR.Instruction.CallInstruction);
-			ctx.InvokeTarget = callTarget;
+			ctx.SetOperand(0, SymbolOperand.FromMethod(callTarget));
 		}
 
 		/// <summary>

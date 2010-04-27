@@ -215,5 +215,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
         void RemUInstruction(Context context);
 
 	    void SwitchInstruction(Context context);
+
+	    void BreakInstruction(Context context);
 	}
 }

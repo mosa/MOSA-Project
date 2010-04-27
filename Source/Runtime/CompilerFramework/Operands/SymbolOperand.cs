@@ -9,6 +9,7 @@
 
 using System;
 using Mosa.Runtime.Metadata.Signatures;
+using Mosa.Runtime.Vm;
 
 namespace Mosa.Runtime.CompilerFramework.Operands
 {
@@ -17,16 +18,10 @@ namespace Mosa.Runtime.CompilerFramework.Operands
 	/// </summary>
 	public sealed class SymbolOperand : Operand
 	{
-		#region Data members
-
 		/// <summary>
 		/// Holds the name of the label.
 		/// </summary>
-		private string _name;
-
-		#endregion // Data members
-
-		#region Construction
+		private string name;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SymbolOperand"/> class.
@@ -36,12 +31,8 @@ namespace Mosa.Runtime.CompilerFramework.Operands
 		public SymbolOperand(SigType type, string name)
 			: base(type)
 		{
-			this._name = name;
+			this.name = name;
 		}
-
-		#endregion // Construction
-
-		#region Properties
 
 		/// <summary>
 		/// Gets the name.
@@ -49,12 +40,8 @@ namespace Mosa.Runtime.CompilerFramework.Operands
 		/// <value>The name.</value>
 		public string Name
 		{
-			get { return this._name; }
+			get { return this.name; }
 		}
-
-		#endregion // Properties
-
-		#region Object Overrides
 
 		/// <summary>
 		/// Compares with the given operand for equality.
@@ -68,10 +55,10 @@ namespace Mosa.Runtime.CompilerFramework.Operands
 			if (lop == null || lop.Type != Type)
 				return false;
 
-			if (_name == null && lop._name == null)
+			if (this.name == null && lop.name == null)
 				return true;
-			else
-				return _name == lop._name;
+
+            return this.name == lop.name;
 		}
 
 		/// <summary>
@@ -80,10 +67,30 @@ namespace Mosa.Runtime.CompilerFramework.Operands
 		/// <returns>A string representation of the operand.</returns>
 		public override string ToString()
 		{
-			return _name + " " + base.ToString();
+			return this.name + " " + base.ToString();
 		}
 
-		#endregion // Object Overrides
+        /// <summary>
+        /// Creates a symbol operand for the given method.
+        /// </summary>
+        /// <param name="method">The method to create a symbol operand for.</param>
+        /// <returns>The created symbol operand.</returns>
+        public static SymbolOperand FromMethod(RuntimeMethod method)
+        {
+            string symbolName = method.ToString();
+
+            return new SymbolOperand(BuiltInSigType.IntPtr, symbolName);
+        }
+
+        /// <summary>
+        /// Creates a new SymbolOperand for the given runtime field.
+        /// </summary>
+        /// <param name="runtimeField">The field to create a symbol operand for.</param>
+        /// <returns>The created symbol operand.</returns>
+        public static SymbolOperand FromField(RuntimeField runtimeField)
+	    {
+	        return new SymbolOperand(runtimeField.SignatureType, runtimeField.ToString());
+	    }
 	}
 }
 

@@ -54,7 +54,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <param name="cc">The CIL calling convention to translate.</param>
 		/// <returns>A calling convention implementation.</returns>
-		ICallingConvention GetCallingConvention(CallingConvention cc);
+		ICallingConvention GetCallingConvention();
 
 		/// <summary>
 		/// Requests the architecture to add architecture specific compilation stages to the assembly compiler 

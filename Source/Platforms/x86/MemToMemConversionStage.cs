@@ -54,7 +54,7 @@ namespace Mosa.Platforms.x86
                     {
                         if (!ctx.Ignore && ctx.Instruction is CPUx86.IX86Instruction)
                         {
-                            if (ctx.Result is MemoryOperand && ctx.Operand1 is MemoryOperand)
+                            if (IsMemoryOperand(ctx.Result) && IsMemoryOperand(ctx.Operand1))
                             {
                                 this.HandleMemoryToMemoryOperation(ctx);
                             }
@@ -65,6 +65,11 @@ namespace Mosa.Platforms.x86
 		}
 
 		#endregion // IMethodCompilerStage Members
+
+        private bool IsMemoryOperand(Operand op)
+        {
+            return op is MemoryOperand;
+        }
 
 		private void HandleMemoryToMemoryOperation(Context ctx)
 		{

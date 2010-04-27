@@ -163,15 +163,15 @@ namespace Mosa.Platforms.x86
                 {
 					new InstructionLogger(),
                     new LongOperandTransformationStage(),
-					new InstructionLogger(),
+					//new InstructionLogger(),
                     new AddressModeConversionStage(),
-					new InstructionLogger(),
+					//new InstructionLogger(),
                     new CILTransformationStage(),
-					new InstructionLogger(),
+					//new InstructionLogger(),
                     new IRTransformationStage(),
-					new InstructionLogger(),
+					//new InstructionLogger(),
 					new TweakTransformationStage(),
-					new InstructionLogger(),
+					//new InstructionLogger(),
 					new MemToMemConversionStage(),
 					new InstructionLogger(),
                 });
@@ -180,7 +180,7 @@ namespace Mosa.Platforms.x86
 				new IMethodCompilerStage[]
                 {                   
                     new SimplePeepholeOptimizationStage(),
-					new InstructionLogger(),
+					//new InstructionLogger(),
                 });
 
 			//FlowGraphVisualizationStage.Instance,
@@ -192,24 +192,9 @@ namespace Mosa.Platforms.x86
 		/// <param name="callingConvention">One of the defined calling conventions.</param>
 		/// <returns>An instance of <see cref="ICallingConvention"/>.</returns>
 		/// <exception cref="System.NotSupportedException"><paramref name="callingConvention"/> is not a supported calling convention.</exception>
-		public override ICallingConvention GetCallingConvention(CallingConvention callingConvention)
+		public override ICallingConvention GetCallingConvention()
 		{
-            ICallingConvention result;
-
-			switch (callingConvention) {
-				case CallingConvention.Default:
-                    result = new DefaultCallingConvention(this);
-                    break;
-
-                case CallingConvention.Generic:
-                    result = new DefaultCallingConvention(this);
-                    break;
-
-				default:
-					throw new NotSupportedException(@"Architecture (x86) does not support CallingConvention." + callingConvention);
-			}
-
-            return result;
+            return new DefaultCallingConvention(this);
 		}
 
 		/// <summary>

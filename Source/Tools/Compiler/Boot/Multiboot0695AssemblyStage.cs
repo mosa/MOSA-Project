@@ -188,7 +188,7 @@ namespace Mosa.Tools.Compiler.Boot
 				ctx.AppendInstruction(CPUx86.Instruction.RetInstruction);
 
 				CompilerGeneratedMethod method = LinkTimeCodeGenerator.Compile(this.compiler, @"MultibootInit", instructionSet);
-				this.linker.EntryPoint = this.linker.GetSymbol(method);
+				this.linker.EntryPoint = this.linker.GetSymbol(method.ToString());
 			}
 		}
 

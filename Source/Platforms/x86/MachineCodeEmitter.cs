@@ -314,25 +314,14 @@ namespace Mosa.Platforms.x86
 		/// Calls the specified target.
 		/// </summary>
 		/// <param name="target">The target.</param>
-		public void Call(RuntimeMethod target)
+		public void Call(SymbolOperand symbolOperand)
 		{
-            // HACK: Prevent endless recursion in Object constructor.
-            // FIXME: Method does not obey identity rules - why?
-            if (_compiler.Method.DeclaringType.FullName == @"System.Object" &&
-                _compiler.Method.Name == @".ctor" &&
-                target.DeclaringType.FullName == @"System.Object" &&
-                target.Name == @".ctor")
-            {
-                this._codeStream.Position -= 1;
-                return;
-            }
-
             long address = _linker.Link(
 				LinkType.RelativeOffset | LinkType.I4,
 				_compiler.Method,
 				(int)(_codeStream.Position - _codeStreamBasePosition),
 				(int)(_codeStream.Position - _codeStreamBasePosition) + 4,
-				target,
+				symbolOperand.Name,
 				IntPtr.Zero
 			);
 
@@ -458,7 +447,7 @@ namespace Mosa.Platforms.x86
 			}
 			else if (member != null) {
 				int pos = (int)(_codeStream.Position - _codeStreamBasePosition);
-				disp = LittleEndianBitConverter.GetBytes((uint)_linker.Link(LinkType.AbsoluteAddress | LinkType.I4, _compiler.Method, pos, 0, member.Member, member.Offset));
+				disp = LittleEndianBitConverter.GetBytes((uint)_linker.Link(LinkType.AbsoluteAddress | LinkType.I4, _compiler.Method, pos, 0, member.Member.ToString(), member.Offset));
 			}
 			else if (symbol != null) {
 				int pos = (int)(_codeStream.Position - _codeStreamBasePosition);

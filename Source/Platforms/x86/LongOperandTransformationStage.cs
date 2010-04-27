@@ -1706,6 +1706,10 @@ namespace Mosa.Platforms.x86
 
         #region IIRVisitor
 
+        public void BreakInstruction(Context context)
+        {          
+        }
+
         /// <summary>
         /// Arithmetics the shift right instruction.
         /// </summary>

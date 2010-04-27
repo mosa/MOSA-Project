@@ -137,7 +137,19 @@ namespace Mosa.Runtime.Vm
 		/// </returns>
 		public override string ToString()
 		{
-			return DeclaringType.ToString() + '.' + Name + " [Type: " + SignatureType.ToString() + ']';
+            string name;
+            RuntimeType declaringType = this.DeclaringType;
+            if (declaringType != null)
+            {
+                string declaringTypeSymbolName = declaringType.ToString();
+                name = String.Format("{0}.{1}", declaringTypeSymbolName, this.Name);
+            }
+            else
+            {
+                name = this.Name;
+            }
+
+		    return name;
 		}
 
 		#endregion // Object Overrides

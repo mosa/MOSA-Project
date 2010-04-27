@@ -721,20 +721,5 @@ namespace Mosa.Platforms.x86
         }
 
 		#endregion // ICILVisitor - Unused
-
-		#region Internals
-
-		/// <summary>
-		/// Processes a method call instruction.
-		/// </summary>
-		/// <param name="ctx">The transformation context.</param>
-		private void HandleInvokeInstruction(Context ctx)
-		{
-			ICallingConvention cc = Architecture.GetCallingConvention(ctx.InvokeTarget.Signature.CallingConvention);
-			Debug.Assert(null != cc, @"Failed to retrieve the calling convention.");
-			cc.MakeCall(ctx, this.MethodCompiler.Method, MethodCompiler.Assembly.Metadata);
-		}
-
-		#endregion // Internals
 	}
 }

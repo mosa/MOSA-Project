@@ -642,11 +642,31 @@ namespace Mosa.Platforms.x86
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void CPUx86.IX86Visitor.Jump(Context context) { }
-		/// <summary>
+		
+        /// <summary>
 		/// Visitation function for <see cref="CPUx86.IX86Visitor.Call"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CPUx86.IX86Visitor.Call(Context context) { }
+		void CPUx86.IX86Visitor.Call(Context context)
+        {
+            Operand destinationOperand = context.Operand1;
+
+            if (destinationOperand is SymbolOperand)
+            {
+                return;
+            }
+
+            if (!(destinationOperand is RegisterOperand))
+            {
+                Context before = context.InsertBefore();
+                RegisterOperand eax = new RegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.EAX);
+
+                before.SetInstruction(CPUx86.Instruction.MovInstruction, eax, destinationOperand);
+                context.Operand1 = eax;
+            }
+            
+        }
+
 		/// <summary>
 		/// Visitation function for <see cref="CPUx86.IX86Visitor.Branch"/> instructions.
 		/// </summary>

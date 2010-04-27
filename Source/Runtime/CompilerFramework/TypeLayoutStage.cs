@@ -197,7 +197,9 @@ namespace Mosa.Runtime.CompilerFramework
 
             foreach (RuntimeMethod method in methodTable)
             {
-                this.linker.Link(LinkType.AbsoluteAddress | LinkType.I4, methodTableSymbolName, offset, 0, method, IntPtr.Zero);
+                string methodSymbol = method.ToString();
+
+                this.linker.Link(LinkType.AbsoluteAddress | LinkType.I4, methodTableSymbolName, offset, 0, methodSymbol, IntPtr.Zero);
                 offset += this.nativePointerSize;
             }
         }
@@ -318,7 +320,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 		private void AllocateSpace(RuntimeField field, SectionKind section, int size, int alignment)
 		{
-			using (Stream stream = this.linker.Allocate(field, section, size, alignment)) {
+			using (Stream stream = this.linker.Allocate(field.ToString(), section, size, alignment)) {
                 if (IntPtr.Zero != field.RVA)
                 {
                     this.InitializeStaticValueFromRVA(stream, size, field);

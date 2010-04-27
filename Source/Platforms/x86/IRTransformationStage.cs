@@ -460,6 +460,8 @@ namespace Mosa.Platforms.x86
 				// push edx
 				ctx.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new RegisterOperand(I, GeneralPurposeRegister.EDX));
 			}
+
+            //ctx.AppendInstruction(CPUx86.Instruction.BreakInstruction);
 		}
 
 		/// <summary>
@@ -471,7 +473,7 @@ namespace Mosa.Platforms.x86
 			Operand op = ctx.Operand1;
 
 			if (op != null) {
-				ICallingConvention cc = Architecture.GetCallingConvention(MethodCompiler.Method.Signature.CallingConvention);
+				ICallingConvention cc = Architecture.GetCallingConvention();
 				cc.MoveReturnValue(ctx, op);
 				ctx.AppendInstruction(CPUx86.Instruction.JmpInstruction);
 				ctx.SetBranch(Int32.MaxValue);
@@ -641,6 +643,11 @@ namespace Mosa.Platforms.x86
             }	        
 	    }
 
+	    public void BreakInstruction(Context context)
+	    {
+	        context.ReplaceInstructionOnly(CPUx86.Instruction.BreakInstruction);
+	    }
+
 	    /// <summary>
 		/// Visitation function for <see cref="IR.IIRVisitor.NopInstruction"/> instructions.
 		/// </summary>
@@ -707,7 +714,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		public void CallInstruction(Context ctx)
 		{
-            ICallingConvention cc = Architecture.GetCallingConvention(ctx.InvokeTarget.Signature.CallingConvention);
+            ICallingConvention cc = Architecture.GetCallingConvention();
             Debug.Assert(null != cc, @"Failed to retrieve the calling convention.");
             cc.MakeCall(ctx, this.MethodCompiler.Method, MethodCompiler.Assembly.Metadata);
         }

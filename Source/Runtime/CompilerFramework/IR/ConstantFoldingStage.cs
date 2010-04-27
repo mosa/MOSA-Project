@@ -362,6 +362,10 @@ namespace Mosa.Runtime.CompilerFramework.IR
 	    {
 	    }
 
+	    public void BreakInstruction(Context context)
+	    {
+	    }
+
 	    /// <summary>
 		/// Visitation function for <see cref="IR.IIRVisitor.ZeroExtendedMoveInstruction"/> instructions.
 		/// </summary>

@@ -35,14 +35,18 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context ctx, MachineCodeEmitter emitter)
 		{
-            if (ctx.InvokeTarget != null)
+		    Operand destinationOperand = ctx.Operand1;
+		    SymbolOperand destinationSymbol = destinationOperand as SymbolOperand;
+
+            if (destinationSymbol != null)
             {
                 emitter.WriteByte(0xE8);
-                emitter.Call(ctx.InvokeTarget);
+                emitter.Call(destinationSymbol);
             }
-            else if (ctx.Result is RegisterOperand)
+            else
             {
-                emitter.Emit(RegCall, ctx.Result);
+                RegisterOperand registerOperand = destinationOperand as RegisterOperand;
+                emitter.Emit(RegCall, registerOperand);
             }
 		}
 
