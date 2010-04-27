@@ -64,13 +64,6 @@ namespace Mosa.Runtime.CompilerFramework
         /// </remarks>
         Operand CreateTemporary(SigType type);
 
-		/// <summary>
-		/// Creates a virtual register operand for an instruction.
-		/// </summary>
-		/// <param name="type">The signature type of the operand to be created.</param>
-		/// <returns>A new virtual register operand.</returns>
-		Operand CreateVirtualRegister(SigType type);
-
         /// <summary>
         /// Provides access to the instructions of the method.
         /// </summary>

@@ -197,7 +197,9 @@ namespace Mosa.Runtime.CompilerFramework
 
             foreach (RuntimeMethod method in methodTable)
             {
-                this.linker.Link(LinkType.AbsoluteAddress | LinkType.I4, methodTableSymbolName, offset, 0, method, IntPtr.Zero);
+                string methodSymbol = method.ToString();
+
+                this.linker.Link(LinkType.AbsoluteAddress | LinkType.I4, methodTableSymbolName, offset, 0, methodSymbol, IntPtr.Zero);
                 offset += this.nativePointerSize;
             }
         }
@@ -279,7 +281,7 @@ namespace Mosa.Runtime.CompilerFramework
                     this.CreateStaticField(field);
 				}
 				else {
-					// Explicit layout assigns a physical offset from the start of the structure
+					// Explicit layout assigns a physical offset From the start of the structure
 					// to the field. We just assign this offset.
 					Debug.Assert(field.Address.ToInt64() != 0, @"Non-static field doesn't have layout!");
 				}
@@ -318,7 +320,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 		private void AllocateSpace(RuntimeField field, SectionKind section, int size, int alignment)
 		{
-			using (Stream stream = this.linker.Allocate(field, section, size, alignment)) {
+			using (Stream stream = this.linker.Allocate(field.ToString(), section, size, alignment)) {
                 if (IntPtr.Zero != field.RVA)
                 {
                     this.InitializeStaticValueFromRVA(stream, size, field);

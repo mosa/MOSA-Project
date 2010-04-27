@@ -92,6 +92,7 @@
     <Compile Include="CompilerFramework\IR\ArithmeticShiftRightInstruction.cs" />
     <Compile Include="CompilerFramework\IR\BaseInstruction.cs" />
     <Compile Include="CompilerFramework\IR\BranchInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\BreakInstruction.cs" />
     <Compile Include="CompilerFramework\IR\CallInstruction.cs" />
     <Compile Include="CompilerFramework\IR\CILTransformationStage.cs" />
     <Compile Include="CompilerFramework\IR\ConditionCode.cs" />

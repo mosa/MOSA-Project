@@ -83,12 +83,11 @@ namespace Mosa.Runtime.CompilerFramework
         /// <param name="methodPipeline">The pipeline of the method compiler to add architecture specific compilation stages to.</param>
         public abstract void ExtendMethodCompilerPipeline(CompilerPipeline methodPipeline);
 
-        /// <summary>
-        /// Retrieves an object, that is able to translate the CIL calling convention into appropriate native code.
-        /// </summary>
-        /// <param name="cc">The CIL calling convention to translate.</param>
-        /// <returns>A calling convention implementation.</returns>
-        public abstract ICallingConvention GetCallingConvention(CallingConvention cc);
+		/// <summary>
+		/// Retrieves an object, that is able to translate the CIL calling convention into appropriate native code.
+		/// </summary>
+		/// <returns>A calling convention implementation.</returns>
+        public abstract ICallingConvention GetCallingConvention();
 
         /// <summary>
         /// Gets the type memory requirements.
@@ -111,17 +110,6 @@ namespace Mosa.Runtime.CompilerFramework
         {
             return new TemporaryOperand(label, type, StackFrameRegister, index);
         }
-
-		/// <summary>
-		/// Factory method for virtual registers.
-		/// </summary>
-		/// <param name="type">The type.</param>
-		/// <param name="index">The index.</param>
-		/// <returns></returns>
-		public Operand CreateVirtualRegister(SigType type, int index)
-		{
-			return new VirtualRegisterOperand(type, index);
-		}
 
 		/// <summary>
 		/// Gets the intrinsics instruction by type

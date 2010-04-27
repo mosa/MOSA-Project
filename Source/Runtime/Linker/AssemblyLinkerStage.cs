@@ -224,24 +224,6 @@ namespace Mosa.Runtime.Linker
 		}
 
 		/// <summary>
-		/// Allocates memory in the specified section.
-		/// </summary>
-		/// <param name="member">The metadata member to allocate space for.</param>
-		/// <param name="section">The executable section to allocate From.</param>
-		/// <param name="size">The number of bytes to allocate. If zero, indicates an unknown amount of memory is required.</param>
-		/// <param name="alignment">The alignment. A value of zero indicates the use of a default alignment for the section.</param>
-		/// <returns>A stream, which can be used to populate the section.</returns>
-		public virtual Stream Allocate(RuntimeMember member, SectionKind section, int size, int alignment)
-		{
-			// Create a canonical symbol name
-			string name = CreateSymbolName(member);
-            Debug.WriteLine(@"Allocating stream for symbol " + name);
-
-			// Create a stream
-			return Allocate(name, section, size, alignment);
-		}
-
-		/// <summary>
 		/// Allocates a symbol of the given name in the specified section.
 		/// </summary>
 		/// <param name="name">The name of the symbol.</param>
@@ -290,25 +272,7 @@ namespace Mosa.Runtime.Linker
 		/// <returns>The section of the requested kind.</returns>
 		public abstract LinkerSection GetSection(SectionKind sectionKind);
 
-		/// <summary>
-		/// Retrieves a linker symbol.
-		/// </summary>
-		/// <param name="member">The runtime member to retrieve a symbol for.</param>
-		/// <returns>
-		/// A linker symbol, which represents the runtime member.
-		/// </returns>
-		/// <exception cref="System.ArgumentNullException"><paramref name="member"/> is null.</exception>
-		/// <exception cref="System.ArgumentException">There's no symbol of the given name.</exception>
-		public LinkerSymbol GetSymbol(RuntimeMember member)
-		{
-			if (member == null)
-				throw new ArgumentNullException(@"member");
-
-			string symbolName = CreateSymbolName(member);
-			return GetSymbol(symbolName);
-		}
-
-		/// <summary>
+        /// <summary>
 		/// Retrieves a linker symbol.
 		/// </summary>
 		/// <param name="symbolName">The name of the symbol to retrieve.</param>
@@ -334,26 +298,6 @@ namespace Mosa.Runtime.Linker
 		/// <param name="method">The method the patched code belongs to.</param>
 		/// <param name="methodOffset">The offset inside the method where the patch is placed.</param>
 		/// <param name="methodRelativeBase">The base virtualAddress, if a relative link is required.</param>
-		/// <param name="target">The method or static field to link against.</param>
-		/// <param name="offset">An offset to apply to the link target.</param>
-		public virtual long Link(LinkType linkType, RuntimeMethod method, int methodOffset, int methodRelativeBase, RuntimeMember target, IntPtr offset)
-		{
-			Debug.Assert(IsValid(target), @"Invalid RuntimeMember passed to IAssemblyLinker.Link");
-			if (!IsValid(target))
-				throw new ArgumentException(@"RuntimeMember is not a static field or method.", @"member");
-
-            string symbolName = this.CreateSymbolName(method);
-            string targetSymbolName = CreateSymbolName(target);
-            return this.Link(linkType, symbolName, methodOffset, methodRelativeBase, targetSymbolName, offset);
-		}
-
-		/// <summary>
-		/// Issues a linker request for the given runtime method.
-		/// </summary>
-		/// <param name="linkType">The type of link required.</param>
-		/// <param name="method">The method the patched code belongs to.</param>
-		/// <param name="methodOffset">The offset inside the method where the patch is placed.</param>
-		/// <param name="methodRelativeBase">The base virtualAddress, if a relative link is required.</param>
 		/// <param name="targetSymbolName">The linker symbol to link against.</param>
 		/// <param name="offset">The offset to apply to the symbol to link against.</param>
 		/// <returns>
@@ -367,31 +311,9 @@ namespace Mosa.Runtime.Linker
 			if (null == targetSymbolName)
 				throw new ArgumentNullException(@"symbol");
 
-            string symbolName = this.CreateSymbolName(method);
+		    string symbolName = method.ToString();
 			return this.Link(linkType, symbolName, methodOffset, methodRelativeBase, targetSymbolName, offset);
 		}
-
-        /// <summary>
-        /// Issues a linker request for the given runtime method.
-        /// </summary>
-        /// <param name="linkType">The type of link required.</param>
-        /// <param name="symbolName">The method the patched code belongs to.</param>
-        /// <param name="methodOffset">The offset inside the method where the patch is placed.</param>
-        /// <param name="methodRelativeBase">The base virtualAddress, if a relative link is required.</param>
-        /// <param name="target">The method or static field to link against.</param>
-        /// <param name="offset">An offset to apply to the link target.</param>
-        public virtual long Link(LinkType linkType, string symbolName, int methodOffset, int methodRelativeBase, RuntimeMember target, IntPtr offset)
-        {
-            Debug.Assert(IsValid(target), @"Invalid RuntimeMember passed to IAssemblyLinker.Link");
-            if (!IsValid(target))
-                throw new ArgumentException(@"RuntimeMember is not a static field or method.", @"member");
-            Debug.Assert(null != symbolName, @"Symbol can't be null.");
-            if (null == symbolName)
-                throw new ArgumentNullException(@"symbol");
-
-            string targetSymbolName = CreateSymbolName(target);
-            return Link(linkType, symbolName, methodOffset, methodRelativeBase, targetSymbolName, offset);
-        }
 
 		/// <summary>
 		/// Issues a linker request for the given runtime method.
@@ -436,99 +358,6 @@ namespace Mosa.Runtime.Linker
 		
 		#region Internals
 
-		#region CreateSymbolName
-
-		/// <summary>
-		/// Creates a symbol name.
-		/// </summary>
-		/// <param name="symbol">The symbol name.</param>
-		/// <returns>A string, which represents the symbol name.</returns>
-		public string CreateSymbolName(RuntimeMember symbol)
-		{
-			if (symbol == null)
-				throw new ArgumentNullException(@"symbol");
-
-			if (symbol is RuntimeMethod)
-				return CreateSymbolName(symbol as RuntimeMethod);
-			else if (symbol is RuntimeType)
-				return CreateSymbolName(symbol as RuntimeType);
-			else {
-				string name;
-				RuntimeType declaringType = symbol.DeclaringType;
-				if (declaringType != null) {
-					string declaringTypeSymbolName = CreateSymbolName(declaringType);
-					name = String.Format("{0}.{1}", declaringTypeSymbolName, symbol.Name);
-				}
-				else {
-					name = symbol.Name;
-				}
-
-				return name;
-			}
-		}
-
-		private string CreateSymbolName(RuntimeMethod symbol)
-		{
-            //if (symbol == null)
-            //    throw new ArgumentNullException("symbol");
-
-            //// TODO: If it is a generic method instance, then the symbol name needs to be carefully constructed. ~BMarkham,2/18/09
-            //if (symbol.IsGeneric)
-            //    throw new NotImplementedException();
-
-            //StringBuilder sb = new StringBuilder();
-            //sb.Append(CreateSymbolName(symbol.DeclaringType));
-            //sb.Append('.');
-            //sb.Append(symbol.Name);
-            //sb.Append('(');
-            //bool hasEmittedSignaturePart = false;
-            //foreach (SigType parameterSignatureType in symbol.Signature.Parameters) {
-            //    if (hasEmittedSignaturePart)
-            //        sb.Append(',');
-            //    sb.Append(parameterSignatureType.ToSymbolPart()); // FIXME : This obviously doesn't work! We need to emit class names.
-            //    hasEmittedSignaturePart = true;
-            //}
-            //sb.Append(')');
-            //return sb.ToString();
-
-            string symbolName = symbol.ToString();
-            return symbolName;
-		}
-
-		private string CreateSymbolName(RuntimeType symbol)
-		{
-            //if (symbol == null)
-            //    throw new ArgumentNullException("symbol");
-            //if (symbol.IsGeneric)
-            //    throw new NotImplementedException();
-            //StringBuilder sb = new StringBuilder();
-            //if (symbol.DeclaringType != null) {
-            //    sb.Append(CreateSymbolName(symbol.DeclaringType));
-            //    sb.Append('+');
-            //}
-            //else {
-            //    if (!string.IsNullOrEmpty(symbol.Namespace)) {
-            //        sb.Append(symbol.Namespace);
-            //        sb.Append('.');
-            //    }
-            //}
-            //sb.Append(symbol.Name);
-            //return sb.ToString();
-
-
-            string symbolName = symbol.ToString();
-            return symbolName;
-        }
-
-		private string CreateSymbolName(SigType signatureType)
-		{
-			if (signatureType == null)
-				throw new ArgumentNullException("signatureType");
-			return signatureType.ToSymbolPart();
-		}
-
-		#endregion
-
 		/// <summary>
 		/// Determines whether the specified symbol is resolved.
 		/// </summary>
@@ -545,20 +374,6 @@ namespace Mosa.Runtime.Linker
 				virtualAddress = linkerSymbol.VirtualAddress.ToInt64();
 			}
 			return (0 != virtualAddress);
-		}
-
-		/// <summary>
-		/// Determines if the given runtime member can be resolved immediately.
-		/// </summary>
-		/// <param name="member">The runtime member to determine resolution of.</param>
-		/// <param name="virtualAddress">Receives the determined virtualAddress of the runtime member.</param>
-		/// <returns>
-		/// The method returns true, when it was successfully resolved.
-		/// </returns>
-		protected bool IsResolved(RuntimeMember member, out long virtualAddress)
-		{
-			// Is this a method?
-			return IsResolved(CreateSymbolName(member), out virtualAddress);
 		}
 
 		/// <summary>
