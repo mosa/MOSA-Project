@@ -24,6 +24,7 @@ namespace Mosa.HelloWorld
 			Kernel.Setup();
 			Screen.GotoTop();
 			Screen.Color = 0x0E;
+			Screen.Write('M');
 			Screen.Write('O');
 			Screen.Write('S');
 			Screen.Write('A');
