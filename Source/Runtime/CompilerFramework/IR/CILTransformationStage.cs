@@ -149,8 +149,8 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <param name="ctx">The context.</param>
 		public void Ldsflda(Context ctx)
 		{
-			//ctx.SetInstruction(IR.Instruction.AddressOfInstruction, ctx.Result, new MemberOperand (ctx.RuntimeField));
-            //ctx.SetInstruction(IR.Instruction.MoveInstruction, ctx.Result, ctx.Operand1);
+			ctx.SetInstruction(Instruction.AddressOfInstruction, ctx.Result, new MemberOperand(ctx.RuntimeField));
+            ctx.SetInstruction(Instruction.MoveInstruction, ctx.Result, ctx.Operand1);
 		}
 
 		/// <summary>

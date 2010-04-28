@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
+using Mosa.Runtime;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Loader;
 using Mosa.Tools.Compiler.Boot;
@@ -213,10 +214,10 @@ namespace Mosa.Tools.Compiler
 			{
 				Compile();
 			}
-			catch (LinkerException e)
-			{
-				Console.WriteLine("\n\n{0}\n\n", e.Message);
-			}
+            catch (CompilationException ce)
+            {
+                this.ShowError(ce.Message);
+            }
 		}
 
 		/// <summary>
@@ -241,104 +242,47 @@ namespace Mosa.Tools.Compiler
 
 		private void Compile()
 		{
-			using (CompilationRuntime runtime = new CompilationRuntime()) {
+			using (CompilationRuntime runtime = new CompilationRuntime()) 
+            {
+                runtime.InitializePrivatePaths(this.GetInputFileNames());
 
-				// Append the paths of the folder to the loader path
-				List<string> paths = new List<string>();
-				foreach (FileInfo assembly in this.inputFiles) {
-
-					string path = Path.GetDirectoryName(assembly.FullName);
-					if (!paths.Contains(path))
-						paths.Add(path);
-				}
-
-				// Append the search paths
-				foreach (string path in paths)
-					runtime.AssemblyLoader.AppendPrivatePath(path);
-				paths = null;
-
-				/* FIXME: This only compiles the very first assembly, but we want to
-				 * potentially merge multiple assemblies into our kernel. This will
-				 * need an extension/modification of the assembly compiler method.
-				 * 
-				// Load all input assemblies
-				foreach (FileInfo assembly in this.inputFiles)
-				{
-					IMetadataModule module = runtime.AssemblyLoader.Load(assembly.FullName);
-				}
-				 */
-
-				IMetadataModule assemblyModule;
-				FileInfo file = null;
-
-				try {
-					file = this.inputFiles[0];
-					assemblyModule = runtime.AssemblyLoader.Load(file.FullName);
-
-					// Try to load debug information for the compilation
-					string dbgFile;
-					dbgFile = Path.Combine(Path.GetDirectoryName(file.FullName), Path.GetFileNameWithoutExtension(file.FullName) + ".pdb") + "!!";
-					//dbgFile = Path.Combine(Path.GetDirectoryName(file.FullName), "mosacl.pdb");
-					if (File.Exists(dbgFile)) {
-						using (FileStream fileStream = new FileStream(dbgFile, FileMode.Open, FileAccess.Read, FileShare.Read)) {
-							using (PdbReader reader = new PdbReader(fileStream)) {
-								Debug.WriteLine(@"Global symbols:");
-								foreach (CvSymbol symbol in reader.GlobalSymbols) {
-									Debug.WriteLine("\t" + symbol.ToString());
-								}
-
-								Debug.WriteLine(@"Types:");
-								foreach (PdbType type in reader.Types) {
-									Debug.WriteLine("\t" + type.Name);
-									Debug.WriteLine("\t\tSymbols:");
-									foreach (CvSymbol symbol in type.Symbols) {
-										Debug.WriteLine("\t\t\t" + symbol.ToString());
-									}
-
-									Debug.WriteLine("\t\tLines:");
-									foreach (CvLine line in type.LineNumbers) {
-										Debug.WriteLine("\t\t\t" + line.ToString());
-									}
-								}
-							}
-						}
-					}
-				}
-				catch (BadImageFormatException) {
-					ShowError(String.Format("Couldn't load input file {0} (invalid format).", file.FullName));
-					return;
-				}
-
-				// Create the compiler
-				using (AotCompiler aot = new AotCompiler(this.architectureSelector.Architecture, assemblyModule)) {
-					aot.Pipeline.AddRange(new IAssemblyCompilerStage[] {
-                        bootFormatStage,
-                        new TypeLayoutStage(),
+                // Create the compiler
+                using (AotCompiler aot = new AotCompiler(this.architectureSelector.Architecture, this.GetMainAssembly()))
+                {
+                    aot.Pipeline.AddRange(
+                        new IAssemblyCompilerStage[] 
+                    {
+                        this.bootFormatStage,
 						new x86.InterruptBuilderStage(),
-                        new AssemblyMemberCompilationSchedulerStage(),
-						//new GenericsResolverStage(),
-                        new MethodCompilerSchedulerStage(),
+                        new AssemblyCompilationStage(this.GetInputFileNames()),
                         new FakeSystemObjectGenerationStage(),
+                        new MethodCompilerSchedulerStage(),
                         new TypeInitializers.TypeInitializerSchedulerStage(),
-						bootFormatStage,
+						this.bootFormatStage,
 						new Metadata.MetadataBuilderStage(),
 						new CilHeaderBuilderStage(),
                         new ObjectFileLayoutStage(),
-                        linkerStage,
-                        mapFileWrapper
+                        this.linkerStage,
+                        this.mapFileWrapper
                     });
 
-					aot.Run();
-				}
+                    aot.Run();
+                }
 			}
 		}
 
-		/// <summary>
+	    private IMetadataModule GetMainAssembly()
+	    {
+	        string firstAssembly = this.inputFiles[0].FullName;
+	        return RuntimeBase.Instance.AssemblyLoader.Load(firstAssembly);
+	    }
+
+	    /// <summary>
 		/// Gets a list of input file names.
 		/// </summary>
 		private IEnumerable<string> GetInputFileNames()
 		{
-			foreach (FileInfo file in inputFiles) {
+			foreach (FileInfo file in this.inputFiles) {
 				yield return file.FullName;
 			}
 		}

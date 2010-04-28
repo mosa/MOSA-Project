@@ -31,14 +31,17 @@ namespace Mosa.Platforms.x86.Intrinsic
         /// <param name="context">The context.</param>
         public void ReplaceIntrinsicCall(Context context)
         {
-			if (!(context.Operand1 is ConstantOperand))
-				throw new InvalidOperationException();
+            Context loadContext = new Context(context.InstructionSet, context.Operand1.Definitions[0]);
+            ConstantOperand op1 = loadContext.Operand1 as ConstantOperand;
 
+            if (op1 == null)
+                throw new InvalidOperationException();
+            
             Operand result = context.Result;
 
 			ControlRegister control;
 
-			switch ((int)(context.Operand1 as ConstantOperand).Value) {
+			switch ((int)op1.Value) {
 				case 0: control = ControlRegister.CR0; break;
 				case 2: control = ControlRegister.CR2; break;
 				case 3: control = ControlRegister.CR3; break;

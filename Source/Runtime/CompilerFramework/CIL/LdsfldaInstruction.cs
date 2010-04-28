@@ -7,11 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
-
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Vm;
 
@@ -20,22 +15,16 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public sealed class LdsfldaInstruction : LoadInstruction
+	public sealed class LdsfldaInstruction : BaseInstruction
 	{
-		#region Construction
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LdsfldaInstruction"/> class.
 		/// </summary>
 		/// <param name="opcode">The opcode.</param>
 		public LdsfldaInstruction(OpCode opcode)
-			: base(opcode)
+			: base(opcode, 0, 1)
 		{
 		}
-
-		#endregion // Construction
-
-		#region Methods
 
 		/// <summary>
 		/// Decodes the specified instruction.
@@ -64,9 +53,5 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		{
 			visitor.Ldsflda(context);
 		}
-
-		#endregion Methods
-
-
 	}
 }

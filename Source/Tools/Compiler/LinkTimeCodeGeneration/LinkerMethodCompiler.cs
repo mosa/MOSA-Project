@@ -31,11 +31,12 @@ namespace Mosa.Tools.Compiler.LinkTimeCodeGeneration
 		public LinkerMethodCompiler(AssemblyCompiler compiler, ICompilationSchedulerStage compilationScheduler, RuntimeMethod method, InstructionSet instructionSet) :
 			base(compiler.Pipeline.FindFirst<IAssemblyLinker>(), compiler.Architecture, compilationScheduler, compiler.Assembly, method.DeclaringType, method)
 		{
-			InstructionSet = instructionSet;
+			this.InstructionSet = instructionSet;
+		    this.CreateBlock(-1, 0);
+
 			this.Pipeline.AddRange(new IMethodCompilerStage[] {
-				new BasicBlockBuilderStage(),
+                new SimpleTraceBlockOrderStage(),
 				new PlatformStubStage(),
-				new SimpleTraceBlockOrderStage(),
 				new CodeGenerationStage(),
             });
 			compiler.Architecture.ExtendMethodCompilerPipeline(this.Pipeline);
