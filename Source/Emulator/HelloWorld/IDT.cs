@@ -363,18 +363,24 @@ namespace Mosa.Kernel.X86
 			uint r = Screen.Row;
 			byte col = Screen.Color;
 
-			Screen.Column = 32;
+			Screen.Column = 30;
 			Screen.Row = 0;
 			Screen.Color = 3;
 
 			_counter++;
 			Screen.Write(_counter, 10, 8);
+			Screen.Write(':');
+			Screen.Write(interrupt, 16, 2);
 
 			if (interrupt == 14) {
 				// Page Fault!
 				PageFaultHandler.Fault(errorCode);
 			}
-			else if (interrupt != 0x20) {
+			if (interrupt == 0x20) {
+				// Timer Interrupt! Switch Tasks!
+				
+			}
+			else {
 				Screen.Write(':');
 				Screen.Write(_counter, 10, 8);
 				Screen.Write(':');

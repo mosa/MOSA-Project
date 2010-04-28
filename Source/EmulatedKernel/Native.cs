@@ -138,7 +138,8 @@ namespace Mosa.Platforms.x86
 		/// </summary>
 		public static int CpuIdEax(uint function)
 		{
-			switch (function) {
+			switch (function)
+			{
 				case 1: return 0x01020304;
 				case 2147483650: return 0x41534F4D;
 				case 2147483651: return 0x0;
@@ -219,29 +220,52 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Sets the control register.
 		/// </summary>
-		/// <param name="register">The control register</param>
 		/// <param name="status">The status.</param>
-		public static void SetControlRegister(byte register, uint status)
+		public static void SetCR0(uint status)
 		{
-			switch (register) {
-				case 0: Mosa.EmulatedKernel.MemoryDispatch.CR0 = status; return;
-				case 3: Mosa.EmulatedKernel.MemoryDispatch.CR3 = status; return;
-				default: return;
-			}
+			Mosa.EmulatedKernel.MemoryDispatch.CR0 = status;
+		}
+
+		/// <summary>
+		/// Sets the control register.
+		/// </summary>
+		public static void SetCR2(uint status)
+		{
+			//Mosa.EmulatedKernel.MemoryDispatch.CR2 = status;
+		}
+		/// <summary>
+		/// Sets the control register.
+		/// </summary>
+		public static void SetCR3(uint status)
+		{
+			Mosa.EmulatedKernel.MemoryDispatch.CR3 = status;
 		}
 
 		/// <summary>
 		/// Gets the control register.
 		/// </summary>
-		/// <param name="register">The pagedirectory.</param>
 		/// <returns></returns>
-		public static uint GetControlRegister(byte register)
+		public static uint GetCR0()
 		{
-			switch (register) {
-				case 0: return Mosa.EmulatedKernel.MemoryDispatch.CR0;
-				case 3: return Mosa.EmulatedKernel.MemoryDispatch.CR3;
-				default: return 0;
-			}
+			return Mosa.EmulatedKernel.MemoryDispatch.CR0;
+		}
+
+		/// <summary>
+		/// Gets the control register.
+		/// </summary>
+		/// <returns></returns>
+		public static uint GetCR2()
+		{
+			return 0;// Mosa.EmulatedKernel.MemoryDispatch.CR2;
+		}
+
+		/// <summary>
+		/// Gets the control register.
+		/// </summary>
+		/// <returns></returns>
+		public static uint GetCR3()
+		{
+			return Mosa.EmulatedKernel.MemoryDispatch.CR3;
 		}
 
 		/// <summary>
@@ -252,6 +276,14 @@ namespace Mosa.Platforms.x86
 		public static uint GetIDTJumpLocation(uint irq)
 		{
 			return 0;
+		}
+
+		/// <summary>
+		/// Switches the task.
+		/// </summary>
+		/// <param name="esp">The esp.</param>
+		public static void SwitchTask(uint esp)
+		{
 		}
 
 	}
