@@ -18,6 +18,7 @@ using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Tools.Compiler.LinkTimeCodeGeneration;
 using Mosa.Runtime.Linker;
+
 using Mosa.Platforms.x86;
 using IR = Mosa.Runtime.CompilerFramework.IR;
 using CPUx86 = Mosa.Platforms.x86.CPUx86;
@@ -31,7 +32,7 @@ namespace Mosa.Tools.Compiler.x86
 	public sealed class InterruptBuilderStage : IAssemblyCompilerStage, IPipelineStage
 	{
 		#region Data Members
-
+		
 		private AssemblyCompiler compiler;
 
 		private IAssemblyLinker linker;
@@ -49,7 +50,7 @@ namespace Mosa.Tools.Compiler.x86
 		#endregion // IPipelineStage Members
 
 		#region IAssemblyCompilerStage Members
-
+		
 		public void Setup(AssemblyCompiler compiler)
 		{
 			this.compiler = compiler;
@@ -95,17 +96,17 @@ namespace Mosa.Tools.Compiler.x86
 				return;
 
 			RuntimeMethod InterruptMethod = FindMethod(rt, "InterruptHandler");
-
 			if (InterruptMethod == null)
 				return;
 
-			SigType I1 = new SigType(CilElementType.I1);
+            SymbolOperand interruptMethod = SymbolOperand.FromMethod(InterruptMethod);
+
+            SigType I1 = new SigType(CilElementType.I1);
 			SigType I4 = new SigType(CilElementType.I4);
 
 			RegisterOperand esp = new RegisterOperand(I4, GeneralPurposeRegister.ESP);
 
-			for (int i = 0; i <= 255; i++)
-			{
+			for (int i = 0; i <= 255; i++) {
 				InstructionSet set = new InstructionSet(100);
 				Context ctx = new Context(set, -1);
 
@@ -114,7 +115,7 @@ namespace Mosa.Tools.Compiler.x86
 					ctx.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new ConstantOperand(I1, 0x0));
 				ctx.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new ConstantOperand(I1, (byte)i));
 				ctx.AppendInstruction(CPUx86.Instruction.PushadInstruction);
-				ctx.AppendInstruction(CPUx86.Instruction.CallInstruction, InterruptMethod);
+				ctx.AppendInstruction(CPUx86.Instruction.CallInstruction, null, interruptMethod);
 				ctx.AppendInstruction(CPUx86.Instruction.PopadInstruction);
 				ctx.AppendInstruction(CPUx86.Instruction.AddInstruction, esp, new ConstantOperand(I4, 0x08));
 				ctx.AppendInstruction(CPUx86.Instruction.StiInstruction);

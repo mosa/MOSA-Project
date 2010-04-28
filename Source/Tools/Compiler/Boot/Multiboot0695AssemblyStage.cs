@@ -171,7 +171,7 @@ namespace Mosa.Tools.Compiler.Boot
 				secondStage = true;
 			}
 			else {
-				TypeInitializerSchedulerStage typeInitializerSchedulerStage = this.compiler.Pipeline.FindFirst<TypeInitializerSchedulerStage>();
+				var typeInitializerSchedulerStage = this.compiler.Pipeline.FindFirst<ITypeInitializerSchedulerStage>();
 
 				SigType I4 = new SigType(CilElementType.I4);
 				RegisterOperand ecx = new RegisterOperand(I4, GeneralPurposeRegister.ECX);
@@ -184,7 +184,10 @@ namespace Mosa.Tools.Compiler.Boot
 				ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, ecx, new ConstantOperand(I4, 0x200000));
 				ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, new MemoryOperand(I4, ecx.Register, new IntPtr(0x0)), eax);
 				ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, new MemoryOperand(I4, ecx.Register, new IntPtr(0x4)), ebx);
-				ctx.AppendInstruction(IR.Instruction.CallInstruction, typeInitializerSchedulerStage.Method);
+
+			    SymbolOperand entryPoint = SymbolOperand.FromMethod(typeInitializerSchedulerStage.Method);
+
+				ctx.AppendInstruction(CPUx86.Instruction.CallInstruction, null, entryPoint);
 				ctx.AppendInstruction(CPUx86.Instruction.RetInstruction);
 
 				CompilerGeneratedMethod method = LinkTimeCodeGenerator.Compile(this.compiler, @"MultibootInit", instructionSet);

@@ -75,7 +75,10 @@
       <Project>{75A12A8A-8C8F-4D1E-801B-689D8F781BF4}</Project>
       <Name>Mosa.Runtime</Name>
     </ProjectReference>
+    <Compile Include="AotAssemblyCompiler.cs" />
+    <Compile Include="AssemblyCompilationStage.cs" />
     <Compile Include="ConstantFoldingWrapper.cs" />
+    <Compile Include="Linkers\LinkerProxy.cs" />
     <Compile Include="Metadata\MetadataBuilderStage.cs" />
     <Compile Include="Metadata\MetadataStreamHeader.cs" />
     <Compile Include="Metadata\MetadataTableCodedIndexWriter.cs" />
@@ -177,9 +180,11 @@
     <Compile Include="Symbols\Pdb\PdbSymbolRangeEx.cs" />
     <Compile Include="Symbols\Pdb\PdbType.cs" />
     <Compile Include="Symbols\Pdb\PdbTypesHeader.cs" />
+    <Compile Include="TypeInitializers\ITypeInitializerSchedulerStage.cs" />
     <Compile Include="TypeInitializers\TypeInitializerSchedulerStage.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="TypeInitializers\TypeInitializerSchedulerStageProxy.cs" />
     <Compile Include="x86\InterruptBuilderStage.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
