@@ -19,6 +19,7 @@ namespace Mosa.Kernel.X86
 		private static uint _defaultStackSize = 1024 * 1024 * 4; // 4MB
 		private static uint _slots = 4096 * 8;
 		private static uint _table;
+		private static uint _currenttask; // Not SMP 
 		//private static uint _lock = 0;
 
 		#region Data members
@@ -36,13 +37,14 @@ namespace Mosa.Kernel.X86
 			public static readonly uint Status = 0;
 			public static readonly uint ProcessID = 4;
 			public static readonly uint TaskID = 8;
-			public static readonly uint StackTop = 12;
-			public static readonly uint StackBottom = 16;
+			public static readonly uint StackBottom = 12;
+			public static readonly uint StackTop = 16;
 			public static readonly uint TickCounter = 20;
 			public static readonly uint LastCounter = 24;
 			public static readonly uint Priority = 28;
 			public static readonly uint Lock = 32;
-			public static readonly uint TotalSize = 36;
+			public static readonly uint ESP = 36;
+			public static readonly uint TotalSize = 40;
 		}
 
 		internal struct StackSetupOffset
@@ -60,6 +62,7 @@ namespace Mosa.Kernel.X86
 			public static readonly uint EBP = 40;
 			public static readonly uint ESI = 44;
 			public static readonly uint EDI = 48;
+			public static readonly uint InitialSize = 54;
 		}
 
 		#endregion
@@ -76,13 +79,16 @@ namespace Mosa.Kernel.X86
 
 			// Create idle task
 			CreateTask(0, 0);
+
+			// Set current stack
+			_currenttask = 0;
 		}
 
 		/// <summary>
 		/// Creates the task.
 		/// </summary>
 		/// <returns></returns>
-		public static uint CreateTask(uint processid)
+		public static uint CreateTask(uint processid, uint eip)
 		{
 			// TODO: Lock
 
@@ -91,7 +97,7 @@ namespace Mosa.Kernel.X86
 			if (slot == 0)
 				Panic.Now(5);
 
-			CreateTask(processid, slot);
+			CreateTask(processid, slot, eip);
 
 			// TODO: Unlock
 
@@ -102,36 +108,37 @@ namespace Mosa.Kernel.X86
 		/// Creates the task.
 		/// </summary>
 		/// <returns></returns>
-		private static uint CreateTask(uint processid, uint slot)
+		private static uint CreateTask(uint processid, uint slot, uint eip)
 		{
 			// TODO: Lock
 
 			uint task = GetTaskLocation(slot);
 			uint stack = ProcessManager.AllocateMemory(processid, _defaultStackSize);
-
+			uint stacktop = stack + _defaultStackSize;
 			// TODO: Add guard pages before and after stack
 
 			// Setup Task Entry
 			Native.Set32(task + Offset.Status, Status.Running);
 			Native.Set32(task + Offset.ProcessID, processid);
 			Native.Set32(task + Offset.TaskID, slot);
-			Native.Set32(task + Offset.StackTop, stack + _defaultStackSize);
 			Native.Set32(task + Offset.StackBottom, stack);
+			Native.Set32(task + Offset.StackTop, stacktop);
+			Native.Set32(task + Offset.ESP, stack + StackSetupOffset.InitialSize); // TODO
 
 			// Setup Stack
-			Native.Set32(stack + StackSetupOffset.EFLAG, 0);	// TODO
-			Native.Set32(stack + StackSetupOffset.CS, 0);	// TODO
-			Native.Set32(stack + StackSetupOffset.EIP, 0);	// TODO
-			Native.Set32(stack + StackSetupOffset.ErrorCode, 0);
-			Native.Set32(stack + StackSetupOffset.IRQ, 0);
-			Native.Set32(stack + StackSetupOffset.EAX, 0);
-			Native.Set32(stack + StackSetupOffset.ECX, 0);
-			Native.Set32(stack + StackSetupOffset.EDX, 0);
-			Native.Set32(stack + StackSetupOffset.EBX, 0);
-			Native.Set32(stack + StackSetupOffset.ESP, stack);
-			Native.Set32(stack + StackSetupOffset.EBP, stack);
-			Native.Set32(stack + StackSetupOffset.ESI, 0);
-			Native.Set32(stack + StackSetupOffset.EDI, 0);
+			Native.Set32(stacktop - StackSetupOffset.EFLAG, 0);
+			Native.Set32(stacktop - StackSetupOffset.CS, 0);
+			Native.Set32(stacktop - StackSetupOffset.EIP, eip);
+			Native.Set32(stacktop - StackSetupOffset.ErrorCode, 0);
+			Native.Set32(stacktop - StackSetupOffset.IRQ, 0);
+			Native.Set32(stacktop - StackSetupOffset.EAX, 0);
+			Native.Set32(stacktop - StackSetupOffset.ECX, 0);
+			Native.Set32(stacktop - StackSetupOffset.EDX, 0);
+			Native.Set32(stacktop - StackSetupOffset.EBX, 0);
+			Native.Set32(stacktop - StackSetupOffset.ESP, stacktop);
+			Native.Set32(stacktop - StackSetupOffset.EBP, stacktop);
+			Native.Set32(stacktop - StackSetupOffset.ESI, 0);
+			Native.Set32(stacktop - StackSetupOffset.EDI, 0);
 
 			// TODO: Unlock
 
@@ -172,6 +179,38 @@ namespace Mosa.Kernel.X86
 		private static uint GetTaskLocation(uint slot)
 		{
 			return (uint)(_table + (Offset.TotalSize * slot));
+		}
+
+		public static void ThreadOut(uint esp)
+		{
+			// Get Stack Slot Location
+			uint task = GetTaskLocation(_currenttask);
+
+			// Save Stack location
+			Native.Set32(task + Offset.ESP, esp);
+		}
+
+		/// <summary>
+		/// Switches the specified esp.
+		/// </summary>
+		/// <param name="esp">The esp.</param>
+		public static void Switch(uint nexttask)
+		{
+			PIC.SendEndOfInterrupt(0x20);
+
+			// Update current task
+			_currenttask = nexttask;
+
+			// Get Stack Slot Location
+			uint task = GetTaskLocation(_currenttask);
+
+			// Get Stack location
+			uint esp = Native.Get32(task + Offset.ESP);
+
+			// Switch task
+			Native.SwitchTask(esp);
+
+			// will never reach here
 		}
 	}
 }

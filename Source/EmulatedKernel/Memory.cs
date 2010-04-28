@@ -188,23 +188,5 @@ namespace Mosa.EmulatedKernel
 			}
 		}
 
-		/// <summary>
-		/// Gets or sets the Control Register 0.
-		/// </summary>
-		/// <value>The CR0.</value>
-		public static uint CR0
-		{
-			get { return Native.GetControlRegister(0); }
-			set { Native.SetControlRegister(0, value); }
-		}
-
-		/// <summary>
-		/// Sets the Control Register 3.
-		/// </summary>
-		/// <value>The CR3.</value>
-		public static uint CR3
-		{
-			set { Native.SetControlRegister(3, value); }
-		}
 	}
 }
