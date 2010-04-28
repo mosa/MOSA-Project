@@ -82,7 +82,7 @@ namespace Mosa.Tools.Compiler.Boot
 
 		/// <summary>
 		/// Multiboot flag, which indicates a non-elf binary to boot and that
-		/// settings for the executable file should be read from the boot _header
+		/// settings for the executable file should be read From the boot _header
 		/// instead of the executable _header.
 		/// </summary>
 		private const uint HEADER_MB_FLAG_NON_ELF_BINARY = 0x00010000U;
@@ -171,7 +171,7 @@ namespace Mosa.Tools.Compiler.Boot
 				secondStage = true;
 			}
 			else {
-				TypeInitializerSchedulerStage typeInitializerSchedulerStage = this.compiler.Pipeline.FindFirst<TypeInitializerSchedulerStage>();
+				var typeInitializerSchedulerStage = this.compiler.Pipeline.FindFirst<ITypeInitializerSchedulerStage>();
 
 				SigType I4 = new SigType(CilElementType.I4);
 				RegisterOperand ecx = new RegisterOperand(I4, GeneralPurposeRegister.ECX);
@@ -184,11 +184,14 @@ namespace Mosa.Tools.Compiler.Boot
 				ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, ecx, new ConstantOperand(I4, 0x200000));
 				ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, new MemoryOperand(I4, ecx.Register, new IntPtr(0x0)), eax);
 				ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, new MemoryOperand(I4, ecx.Register, new IntPtr(0x4)), ebx);
-				ctx.AppendInstruction(IR.Instruction.CallInstruction, typeInitializerSchedulerStage.Method);
+
+			    SymbolOperand entryPoint = SymbolOperand.FromMethod(typeInitializerSchedulerStage.Method);
+
+				ctx.AppendInstruction(CPUx86.Instruction.CallInstruction, null, entryPoint);
 				ctx.AppendInstruction(CPUx86.Instruction.RetInstruction);
 
 				CompilerGeneratedMethod method = LinkTimeCodeGenerator.Compile(this.compiler, @"MultibootInit", instructionSet);
-				this.linker.EntryPoint = this.linker.GetSymbol(method);
+				this.linker.EntryPoint = this.linker.GetSymbol(method.ToString());
 			}
 		}
 
@@ -237,7 +240,7 @@ namespace Mosa.Tools.Compiler.Boot
 				uint header_addr = 0;
 				// load_addr is the base virtualAddress of the binary in memory
 				uint load_addr = 0;
-				// load_end_addr holds the virtualAddress past the last byte to load from the image
+				// load_end_addr holds the virtualAddress past the last byte to load From the image
 				uint load_end_addr = 0;
 				// bss_end_addr is the virtualAddress of the last byte to be zeroed out
 				uint bss_end_addr = 0;

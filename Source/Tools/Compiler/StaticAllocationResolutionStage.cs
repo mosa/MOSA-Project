@@ -61,7 +61,7 @@ namespace Mosa.Tools.Compiler
             RuntimeType allocatedType = allocation.InvokeTarget.DeclaringType;
 
             // Allocate a linker symbol to refer to for this allocation. Use the destination field name as the linker symbol name.
-            string symbolName = this.linker.CreateSymbolName(assignment.RuntimeField) + @"<<$cctor";
+            string symbolName = assignment.RuntimeField.ToString() + @"<<$cctor";
             using (var stream = this.linker.Allocate(symbolName, SectionKind.BSS, allocatedType.Size, 4))
             {
                 // FIXME: Do we have to initialize this?

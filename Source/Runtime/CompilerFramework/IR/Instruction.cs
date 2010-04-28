@@ -47,6 +47,8 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// </summary>
 		public static BranchInstruction BranchInstruction = new BranchInstruction();
 
+        public static BreakInstruction BreakInstruction = new BreakInstruction();
+
         public static readonly DivFInstruction DivFInstruction = new DivFInstruction();
 
         public static readonly DivSInstruction DivSInstruction = new DivSInstruction();

@@ -21,6 +21,8 @@ namespace Mosa.Runtime.CompilerFramework
 	/// </summary>
 	public sealed class InstructionLogger : BaseStage, IMethodCompilerStage, IPipelineStage
 	{
+		public static readonly InstructionLogger Instance = new InstructionLogger();
+
 		#region IPipelineStage
 
 		/// <summary>

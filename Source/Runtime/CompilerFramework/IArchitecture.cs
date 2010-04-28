@@ -52,9 +52,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Retrieves an object, that is able to translate the CIL calling convention into appropriate native code.
 		/// </summary>
-		/// <param name="cc">The CIL calling convention to translate.</param>
 		/// <returns>A calling convention implementation.</returns>
-		ICallingConvention GetCallingConvention(CallingConvention cc);
+		ICallingConvention GetCallingConvention();
 
 		/// <summary>
 		/// Requests the architecture to add architecture specific compilation stages to the assembly compiler 
@@ -84,14 +83,6 @@ namespace Mosa.Runtime.CompilerFramework
 		/// The operand, which holds the instruction result.
 		/// </returns>
 		Operand CreateResultOperand(SigType type, int label, int index);
-
-		/// <summary>
-		/// Factory method for virtual registers.
-		/// </summary>
-		/// <param name="type">The type.</param>
-		/// <param name="index">The index.</param>
-		/// <returns></returns>
-		Operand CreateVirtualRegister(SigType type, int index);
 
 		/// <summary>
 		/// Gets the type memory requirements.

@@ -20,7 +20,7 @@ using Mosa.Tools.Compiler.Stages;
 namespace Mosa.Tools.Compiler
 {
     /// <summary>
-    /// Specializes <see cref="MethodCompilerBase"/> for AOT purposes.
+    /// Specializes <see cref="AotMethodCompiler"/> for AOT purposes.
     /// </summary>
     public sealed class AotMethodCompiler : MethodCompilerBase
     {
@@ -29,7 +29,7 @@ namespace Mosa.Tools.Compiler
         /// <summary>
         /// Holds the aot compiler, which started this method compiler.
         /// </summary>
-        private AotCompiler aotCompiler;
+        private readonly AssemblyCompiler assemblyCompiler;
 
         #endregion // Data Members
 
@@ -38,46 +38,45 @@ namespace Mosa.Tools.Compiler
         /// <summary>
         /// Initializes a new instance of the <see cref="AotMethodCompiler"/> class.
         /// </summary>
-        /// <param name="compiler">The AOT assembly compiler.</param>
-        /// <param name="type">The type.</param>
-        /// <param name="method">The method.</param>
-        public AotMethodCompiler(AotCompiler compiler, ICompilationSchedulerStage compilationScheduler, RuntimeType type, RuntimeMethod method)
+        public AotMethodCompiler(AssemblyCompiler compiler, ICompilationSchedulerStage compilationScheduler, RuntimeType type, RuntimeMethod method)
             : base(compiler.Pipeline.FindFirst<IAssemblyLinker>(), compiler.Architecture, compilationScheduler, compiler.Assembly, type, method)
         {
-            aotCompiler = compiler;
-            Pipeline.AddRange(new IMethodCompilerStage[] {
-				new DecodingStage(),
-				new InstructionLogger(),
-				new BasicBlockBuilderStage(),
-				new InstructionLogger(),
-				new OperandDeterminationStage(),
-                StaticAllocationResolutionStageWrapper.Instance,
-				new InstructionLogger(),
-				new CILTransformationStage(),
-				new InstructionLogger(),
-				//InstructionStatisticsStage.Instance,
-				//new DominanceCalculationStage(),
-				//new InstructionLogger(),
-				//new EnterSSA(),
-				//new InstructionLogger(),
-				//new ConstantPropagationStage(),
-				//new InstructionLogger(),
-				//new ConstantFoldingStage(),
-				//new StrengthReductionStage(),
-				//new InstructionLogger(),
-				//new LeaveSSA(),
-				//new InstructionLogger(),
-				new StackLayoutStage(),
-				new PlatformStubStage(),
-				//new InstructionLogger(),
-				//new BlockReductionStage(),
-				new LoopAwareBlockOrderStage(),
-				new InstructionLogger(),
-				//new SimpleTraceBlockOrderStage(),
-				//new ReverseBlockOrderStage(),	
-				//new LocalCSE(),
-				new CodeGenerationStage(),
-            });
+            this.assemblyCompiler = compiler;
+            this.Pipeline.AddRange(
+                new IMethodCompilerStage[] 
+                {
+    				new DecodingStage(),
+    				new InstructionLogger(),
+    				new BasicBlockBuilderStage(),
+    				new InstructionLogger(),
+    				new OperandDeterminationStage(),
+                    StaticAllocationResolutionStageWrapper.Instance,
+    				new InstructionLogger(),
+    				new CILTransformationStage(),
+    				new InstructionLogger(),
+    				//InstructionStatisticsStage.Instance,
+    				//new DominanceCalculationStage(),
+    				//new InstructionLogger(),
+    				//new EnterSSA(),
+    				//new InstructionLogger(),
+    				//new ConstantPropagationStage(),
+    				//new InstructionLogger(),
+    				//new ConstantFoldingStage(),
+    				//new StrengthReductionStage(),
+    				//new InstructionLogger(),
+    				//new LeaveSSA(),
+    				//new InstructionLogger(),
+    				new StackLayoutStage(),
+    				new PlatformStubStage(),
+    				//new InstructionLogger(),
+    				//new BlockReductionStage(),
+    				new LoopAwareBlockOrderStage(),
+    				new InstructionLogger(),
+    				//new SimpleTraceBlockOrderStage(),
+    				//new ReverseBlockOrderStage(),	
+    				//new LocalCSE(),
+    				new CodeGenerationStage(),
+                });
         }
 
         #endregion // Construction
@@ -90,10 +89,10 @@ namespace Mosa.Tools.Compiler
         protected override void EndCompile()
         {
             // If we're compiling a type initializer, run it immediately.
-            MethodAttributes attrs = MethodAttributes.SpecialName | MethodAttributes.RTSpecialName | MethodAttributes.Static;
+            const MethodAttributes attrs = MethodAttributes.SpecialName | MethodAttributes.RTSpecialName | MethodAttributes.Static;
             if ((Method.Attributes & attrs) == attrs && Method.Name == ".cctor")
             {
-                TypeInitializers.TypeInitializerSchedulerStage tiss = aotCompiler.Pipeline.FindFirst<TypeInitializers.TypeInitializerSchedulerStage>();
+                var tiss = this.assemblyCompiler.Pipeline.FindFirst<TypeInitializers.ITypeInitializerSchedulerStage>();
                 tiss.Schedule(Method);
             }
 

@@ -109,21 +109,6 @@ namespace Mosa.Jit.SimpleJit
 			throw new NotImplementedException();
 		}
 
-		/// <summary>
-		/// Issues a linker request for the given runtime method.
-		/// </summary>
-		/// <param name="linkType">The type of link required.</param>
-		/// <param name="method">The method the patched code belongs to.</param>
-		/// <param name="methodOffset">The offset inside the method where the patch is placed.</param>
-		/// <param name="methodRelativeBase">The base virtualAddress, if a relative link is required.</param>
-		/// <param name="target">The method or static field to link against.</param>
-		/// <param name="offset">An offset to apply to the link target.</param>
-		/// <returns></returns>
-		public override long Link(LinkType linkType, RuntimeMethod method, int methodOffset, int methodRelativeBase, RuntimeMember target, IntPtr offset)
-		{
-			return base.Link(linkType, method, methodOffset, methodRelativeBase, target, offset);
-		}
-
 		#endregion // AssemblyLinkerStageBase Overrides
 	}
 }

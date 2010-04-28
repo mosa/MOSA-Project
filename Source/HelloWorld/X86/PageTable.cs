@@ -36,10 +36,10 @@ namespace Mosa.Kernel.X86
 				Native.Set32((uint)(_pageTable + (index * 4)), (uint)(index * 4096) | 0x04 | 0x02 | 0x01);
 
 			// Set CR3 register on processor - sets page directory
-			Native.SetControlRegister(3, _pageDirectory);
+			Native.SetCR3(_pageDirectory);
 
 			// Set CR0 register on processor - turns on virtual memory
-			Native.SetControlRegister(0, Native.GetControlRegister(0) | 0x80000000);
+			Native.SetCR0(Native.GetCR0() | 0x80000000);
 		}
 
 		/// <summary>

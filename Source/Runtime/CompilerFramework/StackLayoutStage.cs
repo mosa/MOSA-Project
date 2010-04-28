@@ -64,10 +64,10 @@ namespace Mosa.Runtime.CompilerFramework
 			List<StackOperand> locals = new List<StackOperand>();
 
 			// Retrieve the calling convention of the method
-			ICallingConvention cc = Architecture.GetCallingConvention(MethodCompiler.Method.Signature.CallingConvention);
+			ICallingConvention cc = Architecture.GetCallingConvention();
 			Debug.Assert(null != cc, @"Failed to retrieve the calling convention of the method.");
 
-			// Iterate all Blocks and collect locals from all Blocks
+			// Iterate all Blocks and collect locals From all Blocks
 			foreach (BasicBlock block in BasicBlocks)
 				CollectLocalVariables(locals, block);
 

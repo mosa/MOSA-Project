@@ -29,12 +29,15 @@ namespace Mosa.Platforms.x86.Intrinsic
 		/// <param name="context">The context.</param>
 		public void ReplaceIntrinsicCall(Context context)
 		{
-			if (!(context.Operand1 is ConstantOperand))
+            Context loadContext = new Context(context.InstructionSet, context.Operand1.Definitions[0]);
+		    ConstantOperand op1 = loadContext.Operand1 as ConstantOperand;
+
+			if (op1 == null)
 				throw new InvalidOperationException();
 
 			int irq = -1;
 
-			object obj = (context.Operand1 as ConstantOperand).Value;
+			object obj = op1.Value;
 
 			if ((obj is int) || (obj is uint))
 				irq = (int)obj;

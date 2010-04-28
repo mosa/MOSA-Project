@@ -117,7 +117,7 @@ namespace Mosa.Tools.Compiler.Linkers
             RuntimeMethod entryPoint = this.compiler.Assembly.EntryPoint;
             if (this.implementation.EntryPoint == null && entryPoint != null)
             {
-                this.implementation.EntryPoint = GetSymbol(entryPoint);
+                this.implementation.EntryPoint = this.GetSymbol(entryPoint.ToString());
             }
 
             // Run the real linker
@@ -298,26 +298,6 @@ namespace Mosa.Tools.Compiler.Linkers
         /// <param name="method">The method the patched code belongs to.</param>
         /// <param name="methodOffset">The offset inside the method where the patch is placed.</param>
         /// <param name="methodRelativeBase">The base virtualAddress, if a relative link is required.</param>
-        /// <param name="target">The method or static field to link against.</param>
-        /// <param name="offset">An offset to apply to the link target.</param>
-        /// <returns>
-        /// The return value is the preliminary virtualAddress to place in the generated machine
-        /// code. On 32-bit systems, only the lower 32 bits are valid. The above are not used. An implementation of
-        /// IAssemblyLinker may not rely on 64-bits being stored in the memory defined by position.
-        /// </returns>
-        public long Link(LinkType linkType, RuntimeMethod method, int methodOffset, int methodRelativeBase, RuntimeMember target, IntPtr offset)
-        {
-            CheckImplementation();
-            return this.implementation.Link(linkType, method, methodOffset, methodRelativeBase, target, offset);
-        }
-
-        /// <summary>
-        /// Issues a linker request for the given runtime method.
-        /// </summary>
-        /// <param name="linkType">The type of link required.</param>
-        /// <param name="method">The method the patched code belongs to.</param>
-        /// <param name="methodOffset">The offset inside the method where the patch is placed.</param>
-        /// <param name="methodRelativeBase">The base virtualAddress, if a relative link is required.</param>
         /// <param name="symbol">The linker symbol to link against.</param>
         /// <param name="offset">The offset.</param>
         /// <returns>
@@ -329,26 +309,6 @@ namespace Mosa.Tools.Compiler.Linkers
         {
             CheckImplementation();
             return this.implementation.Link(linkType, method, methodOffset, methodRelativeBase, symbol, offset);
-        }
-
-        /// <summary>
-        /// Issues a linker request for the given runtime method.
-        /// </summary>
-        /// <param name="linkType">The type of link required.</param>
-        /// <param name="symbolName">The method the patched code belongs to.</param>
-        /// <param name="methodOffset">The offset inside the method where the patch is placed.</param>
-        /// <param name="methodRelativeBase">The base virtualAddress, if a relative link is required.</param>
-        /// <param name="target">The linker symbol to link against.</param>
-        /// <param name="offset">The offset.</param>
-        /// <returns>
-        /// The return value is the preliminary virtualAddress to place in the generated machine
-        /// code. On 32-bit systems, only the lower 32 bits are valid. The above are not used. An implementation of
-        /// IAssemblyLinker may not rely on 64-bits being stored in the memory defined by position.
-        /// </returns>
-        public long Link(LinkType linkType, string symbolName, int methodOffset, int methodRelativeBase, RuntimeMember target, IntPtr offset)
-        {
-            CheckImplementation();
-            return this.implementation.Link(linkType, symbolName, methodOffset, methodRelativeBase, target, offset);
         }
 
         /// <summary>
@@ -371,20 +331,6 @@ namespace Mosa.Tools.Compiler.Linkers
             return this.implementation.Link(linkType, symbolName, methodOffset, methodRelativeBase, targetSymbolName, offset);
         }
         
-        /// <summary>
-        /// Allocates memory in the specified section.
-        /// </summary>
-        /// <param name="symbol">The metadata member to allocate space for.</param>
-        /// <param name="section">The executable section to allocate From.</param>
-        /// <param name="size">The number of bytes to allocate. If zero, indicates an unknown amount of memory is required.</param>
-        /// <param name="alignment">The alignment. A value of zero indicates the use of a default alignment for the section.</param>
-        /// <returns>A stream, which can be used to populate the section.</returns>
-        public Stream Allocate(RuntimeMember symbol, SectionKind section, int size, int alignment)
-        {
-            CheckImplementation();
-            return this.implementation.Allocate(symbol, section, size, alignment);
-        }
-
         /// <summary>
         /// Allocates a symbol of the given name in the specified section.
         /// </summary>
@@ -413,19 +359,6 @@ namespace Mosa.Tools.Compiler.Linkers
         /// <summary>
         /// Retrieves a linker symbol.
         /// </summary>
-        /// <param name="member">The runtime member to retrieve a symbol for.</param>
-        /// <returns>
-        /// A linker symbol, which represents the runtime member.
-        /// </returns>
-        public LinkerSymbol GetSymbol(RuntimeMember member)
-        {
-            CheckImplementation();
-            return this.implementation.GetSymbol(member);
-        }
-
-        /// <summary>
-        /// Retrieves a linker symbol.
-        /// </summary>
         /// <param name="symbolName">The name of the symbol to retrieve.</param>
         /// <returns>The named linker symbol.</returns>
         /// <exception cref="System.ArgumentNullException"><paramref name="symbolName"/> is null.</exception>
@@ -434,17 +367,6 @@ namespace Mosa.Tools.Compiler.Linkers
         {
             CheckImplementation();
             return this.implementation.GetSymbol(symbolName);
-        }
-
-        /// <summary>
-        /// Creates a canonical symbol name for the given runtime member
-        /// </summary>
-        /// <param name="member">The runtime member to create a symbol name for</param>
-        /// <returns>A string containing the canonical symbol name for the given runtime member</returns>
-        public string CreateSymbolName(RuntimeMember member)
-        {
-            CheckImplementation();
-            return this.implementation.CreateSymbolName(member);
         }
 
         #endregion // IAssemblyLinker Members

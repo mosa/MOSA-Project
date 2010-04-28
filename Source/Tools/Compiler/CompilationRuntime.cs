@@ -9,6 +9,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 
 using Mosa.Runtime;
@@ -27,53 +28,43 @@ namespace Mosa.Tools.Compiler
     /// </remarks>
     public class CompilationRuntime : RuntimeBase
     {
-        #region Data members
-
         /// <summary>
         /// The assembly loader of this runtime.
         /// </summary>
-        private IAssemblyLoader _assemblyLoader;
+        private IAssemblyLoader assemblyLoader;
 
         /// <summary>
         /// The type loader of this runtime.
         /// </summary>
-        private ITypeSystem _typeLoader;
+        private ITypeSystem typeLoader;
 
         /// <summary>
         /// The memory page manager of this runtime.
         /// </summary>
-        private IMemoryPageManager _memoryManager;
+        private IMemoryPageManager memoryManager;
 
         /// <summary>
         /// The jit service of this runtime.
         /// </summary>
-        private IJitService _jitService;
-
-        #endregion // Data members
-
-        #region Construction
+        private IJitService jitService;
 
         /// <summary>
         /// Initializes a new instance of <see cref="CompilationRuntime"/>.
         /// </summary>
         public CompilationRuntime()
         {
-            _typeLoader = new DefaultTypeSystem();
-            _assemblyLoader = new AssemblyLoader(_typeLoader);
-            _memoryManager = new MockMemoryPageManager();
-            _jitService = new MockJitService();
+            this.typeLoader = new DefaultTypeSystem();
+            this.assemblyLoader = new AssemblyLoader(this.typeLoader);
+            this.memoryManager = new MockMemoryPageManager();
+            this.jitService = new MockJitService();
         }
-
-        #endregion // Construction
-
-        #region RuntimeBase Overrides
 
         /// <summary>
         /// 
         /// </summary>
         public override IMemoryPageManager MemoryManager
         {
-            get { return _memoryManager; }
+            get { return this.memoryManager; }
         }
 
         /// <summary>
@@ -81,7 +72,7 @@ namespace Mosa.Tools.Compiler
         /// </summary>
         public override ITypeSystem TypeLoader
         {
-            get { return _typeLoader; }
+            get { return this.typeLoader; }
         }
 
         /// <summary>
@@ -89,17 +80,37 @@ namespace Mosa.Tools.Compiler
         /// </summary>
         public override IAssemblyLoader AssemblyLoader
         {
-            get { return _assemblyLoader; }
+            get { return this.assemblyLoader; }
         }
 
         /// <summary>
         /// 
         /// </summary>
-        public override Mosa.Runtime.IJitService JitService
+        public override IJitService JitService
         {
-            get { return _jitService; }
+            get { return this.jitService; }
         }
 
-        #endregion // RuntimeBase Overrides
+        public void InitializePrivatePaths(IEnumerable<string> assemblyPaths)
+        {
+            // Append the paths of the folder to the loader path);
+            foreach (string path in this.FindPrivatePaths(assemblyPaths))
+            {
+                this.assemblyLoader.AppendPrivatePath(path);
+            }
+        }
+
+        private IEnumerable<string> FindPrivatePaths(IEnumerable<string> assemblyPaths)
+        {
+            List<string> privatePaths = new List<string>();
+            foreach (string assembly in assemblyPaths)
+            {
+                string path = Path.GetDirectoryName(assembly);
+                if (!privatePaths.Contains(path))
+                    privatePaths.Add(path);
+            }
+
+            return privatePaths;
+        }
     }
 }

@@ -161,26 +161,26 @@ namespace Mosa.Platforms.x86
 			methodCompilerPipeline.InsertAfter<PlatformStubStage>(
 				new IMethodCompilerStage[]
                 {
-					new InstructionLogger(),
+					InstructionLogger.Instance,
                     new LongOperandTransformationStage(),
-					new InstructionLogger(),
+					//InstructionLogger.Instance,
                     new AddressModeConversionStage(),
-					new InstructionLogger(),
+					//InstructionLogger.Instance,
                     new CILTransformationStage(),
-					new InstructionLogger(),
+					//InstructionLogger.Instance,
                     new IRTransformationStage(),
-					new InstructionLogger(),
+					//InstructionLogger.Instance,
 					new TweakTransformationStage(),
-					new InstructionLogger(),
+					//InstructionLogger.Instance,
 					new MemToMemConversionStage(),
-					new InstructionLogger(),
+					InstructionLogger.Instance,
                 });
 
 			methodCompilerPipeline.InsertAfter<IBlockOrderStage>(
 				new IMethodCompilerStage[]
                 {                   
                     new SimplePeepholeOptimizationStage(),
-					new InstructionLogger(),
+					//InstructionLogger.Instance,
                 });
 
 			//FlowGraphVisualizationStage.Instance,
@@ -189,27 +189,12 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Retrieves a calling convention object for the requested calling convention.
 		/// </summary>
-		/// <param name="callingConvention">One of the defined calling conventions.</param>
-		/// <returns>An instance of <see cref="ICallingConvention"/>.</returns>
-		/// <exception cref="System.NotSupportedException"><paramref name="callingConvention"/> is not a supported calling convention.</exception>
-		public override ICallingConvention GetCallingConvention(CallingConvention callingConvention)
+		/// <returns>
+		/// An instance of <see cref="ICallingConvention"/>.
+		/// </returns>
+		public override ICallingConvention GetCallingConvention()
 		{
-            ICallingConvention result;
-
-			switch (callingConvention) {
-				case CallingConvention.Default:
-                    result = new DefaultCallingConvention(this);
-                    break;
-
-                case CallingConvention.Generic:
-                    result = new DefaultCallingConvention(this);
-                    break;
-
-				default:
-					throw new NotSupportedException(@"Architecture (x86) does not support CallingConvention." + callingConvention);
-			}
-
-            return result;
+            return new DefaultCallingConvention(this);
 		}
 
 		/// <summary>

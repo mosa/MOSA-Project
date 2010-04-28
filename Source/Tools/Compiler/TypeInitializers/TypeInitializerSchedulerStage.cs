@@ -10,6 +10,7 @@
 using System.Collections.Generic;
 
 using Mosa.Runtime.CompilerFramework;
+using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Runtime.Vm;
 using Mosa.Tools.Compiler.LinkTimeCodeGeneration;
 using Mosa.Runtime.Linker;
@@ -18,7 +19,7 @@ using IR = Mosa.Runtime.CompilerFramework.IR;
 
 namespace Mosa.Tools.Compiler.TypeInitializers
 {
-	/// <summary>
+    /// <summary>
 	/// Schedules type initializers and creates a hidden mosacl_main method,
 	/// which runs all type initializers in sequence.
 	/// </summary>
@@ -27,8 +28,8 @@ namespace Mosa.Tools.Compiler.TypeInitializers
 	/// by the high-level language compiler by placing cctors in some order in
 	/// metadata.
 	/// </remarks>
-	public sealed class TypeInitializerSchedulerStage : BaseStage, IAssemblyCompilerStage, IPipelineStage
-	{
+	public sealed class TypeInitializerSchedulerStage : BaseStage, IAssemblyCompilerStage, IPipelineStage, ITypeInitializerSchedulerStage
+    {
 		#region Data Members
 		
 		private AssemblyCompiler compiler;
@@ -95,7 +96,8 @@ namespace Mosa.Tools.Compiler.TypeInitializers
 		/// <param name="method">The method.</param>
 		public void Schedule(RuntimeMethod method)
 		{
-			_ctx.AppendInstruction(IR.Instruction.CallInstruction, method);
+		    SymbolOperand symbolOperand = SymbolOperand.FromMethod(method);
+			_ctx.AppendInstruction(IR.Instruction.CallInstruction, null, symbolOperand);
 		}
 
 		#endregion // Methods
@@ -112,7 +114,7 @@ namespace Mosa.Tools.Compiler.TypeInitializers
 		/// </summary>
 		public void Run()
 		{
-			_ctx.AppendInstruction(IR.Instruction.CallInstruction, this.compiler.Assembly.EntryPoint);
+            this.Schedule(this.compiler.Assembly.EntryPoint);
 			_ctx.AppendInstruction(IR.Instruction.EpilogueInstruction);
 			_ctx.Other = 0;
 
