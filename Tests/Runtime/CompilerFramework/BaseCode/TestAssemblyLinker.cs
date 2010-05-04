@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -40,7 +40,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
         /// </summary>
         private List<LinkerSection> _sections;
 
-        private readonly AllocateDelegate allocateArrayHandler;
+        private readonly AllocateArrayDelegate allocateArrayHandler;
+
+        private readonly AllocateObjectDelegate allocateObjectHandler;
 
         #endregion // Data members
 
@@ -55,7 +57,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
             _sections = new List<LinkerSection>(maxSections);
             for (int i = 0; i < maxSections; i++)
                 _sections.Add(new TestLinkerSection((SectionKind)i, String.Empty, IntPtr.Zero));
-            allocateArrayHandler = new AllocateDelegate(RuntimeBase.AllocateArray);
+
+            this.allocateArrayHandler = new AllocateArrayDelegate(RuntimeBase.AllocateArray);
+            this.allocateObjectHandler = new AllocateObjectDelegate(RuntimeBase.AllocateObject);
         }
 
         #endregion // Construction
@@ -183,7 +187,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
         }
 
         [UnmanagedFunctionPointer(System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        private delegate IntPtr AllocateDelegate(int module, TokenTypes token, int count);
+        private delegate IntPtr AllocateObjectDelegate(int module, TokenTypes token);
+
+        [UnmanagedFunctionPointer(System.Runtime.InteropServices.CallingConvention.Cdecl)]
+        private delegate IntPtr AllocateArrayDelegate(int module, TokenTypes token, int count);
 
         protected override void AddVmCalls(IDictionary<string, LinkerSymbol> virtualMachineCalls)
         {
@@ -191,13 +198,23 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 
             IntPtr allocate = Marshal.GetFunctionPointerForDelegate(this.allocateArrayHandler);
 
-            const string allocateMethod = @"Mosa.Runtime.RuntimeBase.AllocateArray(I4 moduleLoadIndex,ValueType token,I4 elements)";
+            const string allocateArrayMethod = @"Mosa.Runtime.RuntimeBase.AllocateArray(I4 moduleLoadIndex,ValueType token,I4 elements)";
             long virtualAddress = allocate.ToInt64();
-            Trace.WriteLine(String.Format("\t{0} at 0x{1:x08}", allocateMethod, virtualAddress));
+            Trace.WriteLine(String.Format("\t{0} at 0x{1:x08}", allocateArrayMethod, virtualAddress));
 
-            LinkerSymbol symbol = new LinkerSymbol(allocateMethod, SectionKind.Text, virtualAddress);
+            LinkerSymbol symbol = new LinkerSymbol(allocateArrayMethod, SectionKind.Text, virtualAddress);
             symbol.VirtualAddress = new IntPtr(symbol.SectionAddress);
-            virtualMachineCalls.Add(allocateMethod, symbol);
+            virtualMachineCalls.Add(allocateArrayMethod, symbol);
+
+            IntPtr allocateObject = Marshal.GetFunctionPointerForDelegate(this.allocateObjectHandler);
+
+            const string allocateObjectMethod = @"Mosa.Runtime.RuntimeBase.AllocateObject(I4 moduleLoadIndex,ValueType token)";
+            virtualAddress = allocateObject.ToInt64();
+            Trace.WriteLine(String.Format("\t{0} at 0x{1:x08}", allocateObjectMethod, virtualAddress));
+
+            symbol = new LinkerSymbol(allocateObjectMethod, SectionKind.Text, virtualAddress);
+            symbol.VirtualAddress = new IntPtr(symbol.SectionAddress);
+            virtualMachineCalls.Add(allocateObjectMethod, symbol);        
         }
 
         /// <summary>
