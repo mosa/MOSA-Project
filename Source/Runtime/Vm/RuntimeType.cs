@@ -68,6 +68,8 @@ namespace Mosa.Runtime.Vm
         /// </summary>
         private IList<RuntimeField> fields;
 
+        private bool isCompiled;
+
         #endregion // Data members
 
         #region Construction
@@ -395,6 +397,19 @@ namespace Mosa.Runtime.Vm
             {
                 RuntimeType delegateType = RuntimeBase.Instance.TypeLoader.GetType(@"System.Delegate, mscorlib");
                 return this.IsSubclassOf(delegateType);
+            }
+        }
+
+        public bool IsCompiled
+        {
+            get
+            {
+                return this.isCompiled;
+            }
+
+            set
+            {
+                this.isCompiled = value;
             }
         }
     }

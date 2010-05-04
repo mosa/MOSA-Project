@@ -124,6 +124,11 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			if (type == null)
 				throw new ArgumentNullException(@"type");
+
+            if (type.IsCompiled == true)
+            {
+                return;
+            }
 			
 			if (type.IsGeneric == false)
 			{
@@ -131,6 +136,7 @@ namespace Mosa.Runtime.CompilerFramework
                 Console.WriteLine(String.Format(@"Scheduling type {0} for compilation.", type.FullName));
 
                 this.typeQueue.Enqueue(type);
+			    type.IsCompiled = true;
 			}
 		}
 

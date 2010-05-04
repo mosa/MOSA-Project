@@ -412,26 +412,65 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// Visitation function for <see cref="ICILVisitor.Newobj"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.Newobj(Context ctx)
+		public void Newobj(Context ctx)
 		{
-			/* FIXME:
-			 * 
-			 * - Newobj is actually three things at once:
-			 *   - Find the type From the token
-			 *   - Allocate memory for the found type
-			 *   - Invoke the ctor with the arguments
-			 * - We're rewriting it exactly as specified above, e.g. first we find
-			 *   the type handle (similar to ldtoken), we pass that to an internal
-			 *   call to allocate the memory and finally we call the ctor on the
-			 *   allocated object.
-			 * - We don't have to check the allocation result, if it fails, the 
-			 *   allocator will happily throw the OutOfMemoryException.
-			 * - We do need to find the right ctor to invoke though.
-			 * 
-			 */
-		}
+            ClassSigType classType = ctx.Result.Type as ClassSigType;
+            Debug.Assert(classType != null, @"Newobj didn't specify class signature?");
+	        Operand thisReference = ctx.Result;
 
-		/// <summary>
+            List<Operand> ctorOperands = new List<Operand>(ctx.Operands);
+
+	        Context before = ctx.InsertBefore();
+	        before.SetInstruction(Instruction.NopInstruction);
+
+            ReplaceWithInternalCall(before, VmCall.AllocateObject);
+
+            before.SetOperand(1, new ConstantOperand(BuiltInSigType.Int32, this.MethodCompiler.Assembly.LoadOrder));
+            before.SetOperand(2, new ConstantOperand(BuiltInSigType.IntPtr, classType.Token));
+            before.OperandCount = 2;
+	        before.Result = thisReference;
+
+            // Result is the this pointer, now invoke the real constructor
+	        RuntimeMethod ctorMethod = this.FindConstructor(classType, ctorOperands);
+            SymbolOperand symbolOperand = SymbolOperand.FromMethod(ctorMethod);
+
+            ctorOperands.Insert(0, thisReference);
+            this.ProcessInvokeInstruction(ctx, symbolOperand, null, ctorOperands);
+        }
+
+	    private RuntimeMethod FindConstructor(ClassSigType classType, List<Operand> ctorOperands)
+	    {
+	        RuntimeType objectType = RuntimeBase.Instance.TypeLoader.GetType(this.MethodCompiler.Method, this.MethodCompiler.Assembly, classType.Token);
+	        foreach (RuntimeMethod method in objectType.Methods)
+	        {
+	            if (method.Name == @".ctor" && this.DoCtorParametersMatch(method, ctorOperands))
+	            {
+	                return method;
+	            }
+	        }
+
+            throw new CompilationException(@"Failed to find constructor matching given argument list.");
+	    }
+
+	    private bool DoCtorParametersMatch(RuntimeMethod method, List<Operand> ctorOperands)
+	    {
+	        bool result = false;
+
+            if (method.Parameters.Count == ctorOperands.Count)
+            {
+                result = true;
+
+                for (int index = 0; result == true && index < ctorOperands.Count; index++)
+                {
+                    result = ctorOperands[index].Type.Matches(method.Signature.Parameters[index]);
+                }
+            }
+
+	        return result;
+	    }
+	
+
+	    /// <summary>
 		/// Visitation function for <see cref="ICILVisitor.Castclass"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
