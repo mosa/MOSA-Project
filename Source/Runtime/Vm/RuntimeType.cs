@@ -39,7 +39,6 @@ namespace Mosa.Runtime.Vm
         /// <summary>
         /// Holds the type flag.
         /// </summary>
-
         private TypeAttributes flags;
 
         private IList<RuntimeMethod> methodTable;
@@ -126,48 +125,6 @@ namespace Mosa.Runtime.Vm
         {
             get { return (this.arguments != null && this.arguments.Length != 0); }
         }
-        #endregion // Construction
-
-        #region Properties
-
-        /// <summary>
-        /// Gets the attributes.
-        /// </summary>
-        /// <value>The attributes.</value>
-        public TypeAttributes Attributes
-        {
-            get { return this.flags; }
-            protected set { this.flags = value; }
-        }
-
-        /// <summary>
-        /// Retrieves the base class of the represented type.
-        /// </summary>
-        /// <value>The extends.</value>
-        public RuntimeType BaseType
-        {
-            get
-            {
-                if (this.baseType == null)
-                {
-                    this.baseType = GetBaseType();
-                }
-
-                return this.baseType;
-            }
-        }
-
-        /// <summary>
-        /// Determines if the type has generic arguments.
-        /// </summary>
-        /// <value>
-        /// 	<c>true</c> if this instance is generic; otherwise, <c>false</c>.
-        /// </value>
-        public bool IsGeneric
-        {
-            get { return (this.arguments != null && this.arguments.Length != 0); }
-        }
-
 
         public bool IsValueType
         {
@@ -177,6 +134,7 @@ namespace Mosa.Runtime.Vm
                 return this.IsSubclassOf(valueType);
             }
         }
+
         /// <summary>
         /// Returns the fields of the type.
         /// </summary>
@@ -257,7 +215,6 @@ namespace Mosa.Runtime.Vm
             }
         }
 
-
         public IList<RuntimeMethod> MethodTable
         {
             get { return this.methodTable; }
@@ -265,8 +222,9 @@ namespace Mosa.Runtime.Vm
             {
                 Debug.Assert(value != null, @"Assigning null method table.");
                 this.methodTable = value;
-			return DefaultSignatureContext.Instance.GetGenericTypeArgument(index);
+            }
         }
+
         /// <summary>
         /// Gets the packing of type fields.
         /// </summary>
@@ -432,7 +390,6 @@ namespace Mosa.Runtime.Vm
         {
 			return DefaultSignatureContext.Instance.GetGenericTypeArgument(index);
         }
-
 
         public bool IsDelegate 
         {
