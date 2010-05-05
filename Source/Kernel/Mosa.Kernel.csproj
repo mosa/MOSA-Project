@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
     <ProductVersion>9.0.30729</ProductVersion>
@@ -19,6 +19,10 @@
     <AppDesignerFolder>
     </AppDesignerFolder>
     <RootNamespace>Mosa.Kernel</RootNamespace>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -62,6 +66,23 @@
     <Compile Include="Boot.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="X86\CMOS.cs" />
+    <Compile Include="X86\GDT.cs" />
+    <Compile Include="X86\IdleTask.cs" />
+    <Compile Include="X86\IDT.cs" />
+    <Compile Include="X86\Kernel.cs" />
+    <Compile Include="X86\Keyboard.cs" />
+    <Compile Include="X86\Memory.cs" />
+    <Compile Include="X86\Multiboot.cs" />
+    <Compile Include="X86\PageFaultHandler.cs" />
+    <Compile Include="X86\PageFrameAllocator.cs" />
+    <Compile Include="X86\PageTable.cs" />
+    <Compile Include="X86\Panic.cs" />
+    <Compile Include="X86\PIC.cs" />
+    <Compile Include="X86\ProcessManager.cs" />
+    <Compile Include="X86\Screen.cs" />
+    <Compile Include="X86\TaskManager.cs" />
+    <Compile Include="X86\VirtualPageAllocator.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Platforms\x86\Mosa.Platforms.x86.csproj">

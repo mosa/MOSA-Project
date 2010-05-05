@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
     <ProductVersion>9.0.21022</ProductVersion>
@@ -17,6 +17,10 @@
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <OutputType>Library</OutputType>
     <RootNamespace>Mosa.Runtime</RootNamespace>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -76,10 +80,28 @@
     <Compile Include="CompilerFramework\CIL\CallInstruction.cs" />
     <Compile Include="CompilerFramework\CIL\CallvirtInstruction.cs" />
     <Compile Include="CompilerFramework\CIL\CastclassInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\CILLeakGuardStage.cs" />
     <Compile Include="CompilerFramework\CIL\DecodingStage.cs" />
     <Compile Include="CompilerFramework\CIL\BreakInstruction.cs" />
     <Compile Include="CompilerFramework\GenericsResolverStage.cs" />
     <Compile Include="CompilerFramework\ICompilationSchedulerStage.cs" />
+    <Compile Include="CompilerFramework\IR\AddFInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\AddSInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\AddUInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\BreakInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\DivFInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\DivSInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\DivUInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\MulFInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\MulSInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\MulUInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\RemFInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\RemSInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\RemUInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\SubFInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\SubSInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\SubUInstruction.cs" />
+    <Compile Include="CompilerFramework\IR\SwitchInstruction.cs" />
     <Compile Include="CompilerFramework\MethodCompilerSchedulerStage.cs" />
     <Compile Include="CompilerFramework\ObjectModelUtility.cs" />
     <Compile Include="CompilerFramework\Operands\SymbolOperand.cs" />
@@ -204,8 +226,6 @@
     <Compile Include="CompilerFramework\IR\StoreInstruction.cs" />
     <Compile Include="CompilerFramework\IR\ThreeOperandInstruction.cs" />
     <Compile Include="CompilerFramework\IR\TwoOperandInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\UDivInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\URemInstruction.cs" />
     <Compile Include="CompilerFramework\IR\ZeroExtendedMoveInstruction.cs" />
     <Compile Include="CompilerFramework\IR\ConstantFoldingStage.cs" />
     <Compile Include="CompilerFramework\IVisitor.cs" />

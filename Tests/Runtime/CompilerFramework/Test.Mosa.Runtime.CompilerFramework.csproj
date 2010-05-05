@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="3.5">
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
     <ProductVersion>9.0.21022</ProductVersion>
@@ -14,7 +14,7 @@
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
     <DelaySign>false</DelaySign>
-    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>
     </AppDesignerFolder>
@@ -31,6 +31,7 @@
     </SccProvider>
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation />
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -106,7 +107,9 @@
   <ItemGroup>
     <Compile Include="CIL\ArithmeticInstructionTestRunner.cs" />
     <Compile Include="CIL\BinaryLogicInstructionTestRunner.cs" />
+    <Compile Include="CIL\BooleanFixture.cs" />
     <Compile Include="CIL\ByteFixture.cs" />
+    <Compile Include="CIL\CallvirtFixture.cs" />
     <Compile Include="CIL\CharFixture.cs" />
     <Compile Include="CIL\ComparisonInstructionTestRunner.cs" />
     <Compile Include="CIL\DoubleFixture.cs" />
@@ -115,16 +118,21 @@
     <Compile Include="CIL\Int16Fixture.cs" />
     <Compile Include="CIL\Int32Fixture.cs" />
     <Compile Include="CIL\Int64Fixture.cs" />
+    <Compile Include="CIL\ObjectFixture.cs" />
     <Compile Include="CIL\SByteFixture.cs" />
     <Compile Include="CIL\SingleFixture.cs" />
+    <Compile Include="CIL\SZArrayInstructionTestRunner.cs" />
     <Compile Include="CIL\UInt16Fixture.cs" />
     <Compile Include="CIL\UInt32Fixture.cs" />
     <Compile Include="CIL\UInt64Fixture.cs" />
+    <Compile Include="Code.cs" />
     <Compile Include="CodeDomTestRunner.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Compiler\StaticAllocationFixture.cs" />
     <Compile Include="IL\ConditionalOperator.cs" />
     <Compile Include="IL\Stind.cs" />
+    <Compile Include="IL\Switch.cs" />
     <Compile Include="IL\While.cs" />
     <Compile Include="MosaCompilerTestRunner.cs">
       <SubType>Code</SubType>
