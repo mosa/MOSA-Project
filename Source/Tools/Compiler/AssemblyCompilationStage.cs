@@ -23,7 +23,7 @@ namespace Mosa.Tools.Compiler
 {
     public class AssemblyCompilationStage : IAssemblyCompilerStage
     {
-        private readonly List<string> inputFileNames;
+        private readonly List<IMetadataModule> inputAssemblies;
 
         private AssemblyCompiler outputAssemblyCompiler;
 
@@ -33,7 +33,12 @@ namespace Mosa.Tools.Compiler
 
         public AssemblyCompilationStage(IEnumerable<string> inputFileNames)
         {
-            this.inputFileNames = new List<string>(inputFileNames);
+            this.inputAssemblies = new List<IMetadataModule>();
+            foreach (string inputFileName in inputFileNames)
+            {
+                IMetadataModule assembly = this.LoadAssembly(RuntimeBase.Instance, inputFileName);
+                this.inputAssemblies.Add(assembly);
+            }
         }
 
         public string Name
@@ -46,10 +51,8 @@ namespace Mosa.Tools.Compiler
 
         public void Run()
         {
-            foreach (string assemblyFileName in this.inputFileNames)
+            foreach (IMetadataModule assembly in this.inputAssemblies)
             {
-                IMetadataModule assembly = this.LoadAssembly(RuntimeBase.Instance, assemblyFileName);
-
                 this.CompileAssembly(assembly);
             }
         }
