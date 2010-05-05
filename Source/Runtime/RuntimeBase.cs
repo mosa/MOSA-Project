@@ -100,6 +100,37 @@ namespace Mosa.Runtime {
 
         #region Internal Call Prototypes
 
+        [VmCall(VmCall.AllocateObject)]
+        public static unsafe IntPtr AllocateObject(int moduleLoadIndex, TokenTypes token)
+        {
+            IMetadataModule module = Instance.AssemblyLoader.GetModule(moduleLoadIndex);
+            RuntimeType classType = Instance.TypeLoader.GetType(DefaultSignatureContext.Instance, module, token);
+
+            // HACK: Add compiler architecture to the runtime
+            uint nativeIntSize = 4;
+
+            //
+            // An object has the following memory layout:
+            //   - IntPtr MTable
+            //   - IntPtr SyncBlock
+            //   - 0 .. n object data fields
+            //
+            ulong allocationSize = (ulong)((2 * nativeIntSize) + classType.Size);
+
+            IntPtr memory = Instance.MemoryManager.Allocate(IntPtr.Zero, allocationSize, PageProtectionFlags.Read | PageProtectionFlags.Write | PageProtectionFlags.WriteCombine);
+            if (memory == IntPtr.Zero)
+            {
+                throw new OutOfMemoryException();
+            }
+
+            int* destination = (int*)memory.ToInt32();
+            Memset((byte*)destination, 0, (int)allocationSize);
+            destination[0] = 0; // FIXME: Insert method table of the class here.
+            destination[1] = 0; // No sync block initially
+
+            return memory;            
+        }
+
         /// <summary>
         /// This function requests allocation of a specific runtime type.
         /// </summary>
