@@ -14,7 +14,7 @@
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
     <DelaySign>false</DelaySign>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>
     </AppDesignerFolder>
@@ -103,21 +103,20 @@
     <Compile Include="HelloWorld\Boot.cs" />
     <Compile Include="HelloWorld\CMOS.cs" />
     <Compile Include="HelloWorld\GDT.cs" />
-    <Compile Include="HelloWorld\IdleTask.cs" />
     <Compile Include="HelloWorld\IDT.cs" />
     <Compile Include="HelloWorld\Kernel.cs" />
     <Compile Include="HelloWorld\Keyboard.cs" />
     <Compile Include="HelloWorld\Memory.cs" />
-    <Compile Include="HelloWorld\Multiboot.cs" />
     <Compile Include="HelloWorld\PageFaultHandler.cs" />
     <Compile Include="HelloWorld\PageFrameAllocator.cs" />
-    <Compile Include="HelloWorld\PageTable.cs" />
     <Compile Include="HelloWorld\Panic.cs" />
     <Compile Include="HelloWorld\PIC.cs" />
     <Compile Include="HelloWorld\ProcessManager.cs" />
-    <Compile Include="HelloWorld\Screen.cs" />
     <Compile Include="HelloWorld\TaskManager.cs" />
     <Compile Include="HelloWorld\VirtualPageAllocator.cs" />
+    <Compile Include="HelloWorld\Multiboot.cs" />
+    <Compile Include="HelloWorld\PageTable.cs" />
+    <Compile Include="HelloWorld\Screen.cs" />
     <Compile Include="MemoryForm.cs">
       <SubType>Form</SubType>
     </Compile>

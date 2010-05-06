@@ -356,7 +356,7 @@ namespace Mosa.Kernel.X86
 		/// <param name="ecx">The ecx.</param>
 		/// <param name="eax">The eax.</param>
 		/// <param name="interrupt">The interrupt.</param>
-		/// <param name="errorcode">The errorcode.</param>
+		/// <param name="errorCode">The error code.</param>
 		private static void InterruptHandler(uint edi, uint esi, uint ebp, uint esp, uint ebx, uint edx, uint ecx, uint eax, uint interrupt, uint errorCode)
 		{
 			uint c = Screen.Column;
