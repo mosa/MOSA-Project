@@ -51,7 +51,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
         /// <summary>
         /// Initializes a new instance of the <see cref="TestAssemblyLinker"/> class.
         /// </summary>
-        public TestAssemblyLinker()
+        public unsafe TestAssemblyLinker()
         {
             int maxSections = (int)SectionKind.Max;
             _sections = new List<LinkerSection>(maxSections);
@@ -187,18 +187,18 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
         }
 
         [UnmanagedFunctionPointer(System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        private delegate IntPtr AllocateObjectDelegate(int module, TokenTypes token);
+        private unsafe delegate void* AllocateObjectDelegate(void* methodTable, uint classSize);
 
         [UnmanagedFunctionPointer(System.Runtime.InteropServices.CallingConvention.Cdecl)]
-        private delegate IntPtr AllocateArrayDelegate(int module, TokenTypes token, int count);
+        private unsafe delegate void* AllocateArrayDelegate(void* methodTable, uint elementSize, uint elements);
 
-        protected override void AddVmCalls(IDictionary<string, LinkerSymbol> virtualMachineCalls)
+        protected override unsafe void AddVmCalls(IDictionary<string, LinkerSymbol> virtualMachineCalls)
         {
             Trace.WriteLine(@"TestAssemblyLinker adding VM calls:");
 
             IntPtr allocate = Marshal.GetFunctionPointerForDelegate(this.allocateArrayHandler);
 
-            const string allocateArrayMethod = @"Mosa.Runtime.RuntimeBase.AllocateArray(I4 moduleLoadIndex,ValueType token,I4 elements)";
+            const string allocateArrayMethod = @"Mosa.Runtime.RuntimeBase.AllocateArray(Ptr methodTable,U4 elementSize,U4 elements)";
             long virtualAddress = allocate.ToInt64();
             Trace.WriteLine(String.Format("\t{0} at 0x{1:x08}", allocateArrayMethod, virtualAddress));
 
@@ -208,7 +208,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 
             IntPtr allocateObject = Marshal.GetFunctionPointerForDelegate(this.allocateObjectHandler);
 
-            const string allocateObjectMethod = @"Mosa.Runtime.RuntimeBase.AllocateObject(I4 moduleLoadIndex,ValueType token)";
+            const string allocateObjectMethod = @"Mosa.Runtime.RuntimeBase.AllocateObject(Ptr methodTable,U4 classSize)";
             virtualAddress = allocateObject.ToInt64();
             Trace.WriteLine(String.Format("\t{0} at 0x{1:x08}", allocateObjectMethod, virtualAddress));
 

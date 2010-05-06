@@ -59,13 +59,13 @@
     <DebugType>none</DebugType>
   </PropertyGroup>
   <ItemGroup>
-  </ItemGroup>
-  <ItemGroup>
+    <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Boot.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="RuntimeBase.cs" />
     <Compile Include="X86\CMOS.cs" />
     <Compile Include="X86\GDT.cs" />
     <Compile Include="X86\IdleTask.cs" />

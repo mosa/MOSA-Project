@@ -215,6 +215,8 @@ namespace Mosa.Runtime.Vm
             }
         }
 
+        // FIXME: This list of methods is pretty specific to type loading/compilation. I don't think
+        // we need to keep it around as long as we do it right now.
         public IList<RuntimeMethod> MethodTable
         {
             get { return this.methodTable; }

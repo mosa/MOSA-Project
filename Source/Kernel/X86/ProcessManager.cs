@@ -46,10 +46,10 @@ namespace Mosa.Kernel.X86
 		/// <summary>
 		/// Setups the process manager.
 		/// </summary>
-		public static void Setup()
+		public static unsafe void Setup()
 		{
 			// Allocate memory for the process table
-			_table = VirtualPageAllocator.Reserve((uint)(_slots * Offset.TotalSize));
+			_table = (uint)VirtualPageAllocator.Reserve((uint)(_slots * Offset.TotalSize));
 
 			// Create idle process
 			CreateProcess(0);
@@ -79,13 +79,13 @@ namespace Mosa.Kernel.X86
 		/// Creates the process.
 		/// </summary>
 		/// <returns></returns>
-		private static uint CreateProcess(uint slot)
+		private static unsafe uint CreateProcess(uint slot)
 		{
 			uint process = GetProcessLocation(slot);
 
 			Native.Set32(process + Offset.Status, Status.Running);
 			Native.Set32(process + Offset.ProcessID, slot);
-			Native.Set32(process + Offset.MemoryMap, VirtualPageAllocator.Reserve(32 * 4096));
+			Native.Set32(process + Offset.MemoryMap, (uint)VirtualPageAllocator.Reserve(32U * 4096U));
 			Native.Set32(process + Offset.Lock, 0);
 
 			return slot;
@@ -110,9 +110,9 @@ namespace Mosa.Kernel.X86
 		/// <param name="process">The process.</param>
 		/// <param name="size">The size.</param>
 		/// <returns></returns>
-		public static uint AllocateMemory(uint process, uint size)
+		public static unsafe uint AllocateMemory(uint process, uint size)
 		{
-			uint address = VirtualPageAllocator.Reserve(size);
+			uint address = (uint)VirtualPageAllocator.Reserve(size);
 
 			UpdateMemoryBitMap(process, address, size, false);
 

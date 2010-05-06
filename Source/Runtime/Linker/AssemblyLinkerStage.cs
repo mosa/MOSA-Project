@@ -235,23 +235,26 @@ namespace Mosa.Runtime.Linker
 		/// </returns>
 		public virtual Stream Allocate(string name, SectionKind section, int size, int alignment)
 		{
-			Stream stream = Allocate(section, size, alignment);
+		    Stream result;
+			Stream baseStream = Allocate(section, size, alignment);
 
-			try {
+			try 
+            {
 				// Create a linker symbol for the name
-				LinkerSymbol symbol = new LinkerSymbol(name, section, stream.Position);
+				LinkerSymbol symbol = new LinkerSymbol(name, section, baseStream.Position);
 
 				// Save the symbol for later use
 				_symbols.Add(symbol.Name, symbol);
 
 				// Wrap the stream to catch premature disposal
-				stream = new LinkerStream(symbol, stream, size);
+				result = new LinkerStream(symbol, baseStream, size);
 			}
-			catch (ArgumentException argx) {
+			catch (ArgumentException argx) 
+            {
 				throw new LinkerException(String.Format(@"Symbol {0} defined multiple times.", name), argx);
 			}
 
-			return stream;
+			return result;
 		}
 
 		/// <summary>

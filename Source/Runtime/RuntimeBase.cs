@@ -101,11 +101,8 @@ namespace Mosa.Runtime {
         #region Internal Call Prototypes
 
         [VmCall(VmCall.AllocateObject)]
-        public static unsafe IntPtr AllocateObject(int moduleLoadIndex, TokenTypes token)
+        public static unsafe void* AllocateObject(void* methodTable, uint classSize)
         {
-            IMetadataModule module = Instance.AssemblyLoader.GetModule(moduleLoadIndex);
-            RuntimeType classType = Instance.TypeLoader.GetType(DefaultSignatureContext.Instance, module, token);
-
             // HACK: Add compiler architecture to the runtime
             uint nativeIntSize = 4;
 
@@ -115,27 +112,27 @@ namespace Mosa.Runtime {
             //   - IntPtr SyncBlock
             //   - 0 .. n object data fields
             //
-            ulong allocationSize = (ulong)((2 * nativeIntSize) + classType.Size);
+            ulong allocationSize = (ulong)((2 * nativeIntSize) + classSize);
 
-            IntPtr memory = Instance.MemoryManager.Allocate(IntPtr.Zero, allocationSize, PageProtectionFlags.Read | PageProtectionFlags.Write | PageProtectionFlags.WriteCombine);
-            if (memory == IntPtr.Zero)
+            void* memory = Instance.MemoryManager.Allocate(IntPtr.Zero, allocationSize, PageProtectionFlags.Read | PageProtectionFlags.Write | PageProtectionFlags.WriteCombine).ToPointer();
+            if (memory == null)
             {
                 throw new OutOfMemoryException();
             }
 
-            int* destination = (int*)memory.ToInt32();
+            uint* destination = (uint*)memory;
             Memset((byte*)destination, 0, (int)allocationSize);
-            destination[0] = 0; // FIXME: Insert method table of the class here.
+            destination[0] = (uint)methodTable;
             destination[1] = 0; // No sync block initially
 
             return memory;            
         }
 
         /// <summary>
-        /// This function requests allocation of a specific runtime type.
+        /// This function requests allocation of an array.
         /// </summary>
-        /// <param name="moduleLoadIndex">The load index of the module providing the scope for the token to allocate.</param>
-        /// <param name="token">The token of the type to allocate.</param>
+        /// <param name="methodTable">Pointer to the array method table.</param>
+        /// <param name="elementSize">The size of a single element in the method table.</param>
         /// <param name="elements">The number of elements to allocate of the type.</param>
         /// <returns>A ptr to the allocated memory.</returns>
         /// <remarks>
@@ -144,35 +141,15 @@ namespace Mosa.Runtime {
         /// has been set.
         /// </remarks>
         [VmCall(VmCall.AllocateArray)]
-        public static unsafe IntPtr AllocateArray(int moduleLoadIndex, TokenTypes token, int elements)
+        public static unsafe void* AllocateArray(void* methodTable, uint elementSize, uint elements)
         {
             if (elements < 0)
             {
                 throw new OverflowException();
             }
 
-            IMetadataModule module = Instance.AssemblyLoader.GetModule(moduleLoadIndex);
-            RuntimeType elementType = Instance.TypeLoader.GetType(DefaultSignatureContext.Instance, module, token);
-
             // HACK: Add compiler architecture to the runtime
             uint nativeIntSize = 4;
-
-            uint elementSize;
-            if (elementType.IsValueType == true)
-            {
-                elementSize = (uint)elementType.Size;
-
-                // HACK: Can't retrieve the size of value types deterministically right now, type layout must be done by the runtime.
-                // Things like System.Int32 don't provide a size right now.
-                if (elementSize == 0)
-                {
-                    elementSize = 16;
-                }
-            }
-            else
-            {
-                elementSize = nativeIntSize;
-            }
 
             //
             // An array has the following memory layout:
@@ -181,18 +158,12 @@ namespace Mosa.Runtime {
             //   - int length
             //   - ElementType[length] elements
             //
-            ulong allocationSize = (ulong)((3 * nativeIntSize) + (elements * elementSize));
+            uint allocationSize = (uint)(nativeIntSize + (elements * elementSize));
 
-            IntPtr memory = Instance.MemoryManager.Allocate(IntPtr.Zero, allocationSize, PageProtectionFlags.Read | PageProtectionFlags.Write | PageProtectionFlags.WriteCombine);
-            if (memory == IntPtr.Zero)
-            {
-                throw new OutOfMemoryException();
-            }
+            void* memory = AllocateObject(methodTable, allocationSize);
 
-            int* destination = (int*)memory.ToInt32();
+            uint* destination = (uint*)memory;
             Memset((byte*)(destination + 3), 0, (int)allocationSize);
-            destination[0] = 0; // FIXME: Insert method table of Array here.
-            destination[1] = 0; // No sync block initially
             destination[2] = elements;
 
             return memory;

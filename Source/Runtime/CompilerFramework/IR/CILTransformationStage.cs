@@ -408,15 +408,48 @@ namespace Mosa.Runtime.CompilerFramework.IR
 	        return size + (size * slot);
 	    }
 
+        /// <summary>
+        /// Visitation function for <see cref="ICILVisitor.Newarr"/>.
+        /// </summary>
+        /// <param name="ctx">The context.</param>
+        public void Newarr(Context ctx)
+        {
+            Operand thisReference = ctx.Result;
+            Debug.Assert(thisReference != null, @"Newobj didn't specify class signature?");
+
+            SZArraySigType arrayType = (SZArraySigType)ctx.Result.Type;
+            ClassSigType elementSigType = arrayType.ElementType as ClassSigType;
+            RuntimeType elementType = RuntimeBase.Instance.TypeLoader.GetType(this.MethodCompiler.Method, this.MethodCompiler.Assembly, elementSigType.Token);
+            Debug.Assert(elementType != null, @"Newarr didn't specify class signature?");
+
+            Operand lengthOperand = ctx.Operand1;
+            int elementSize = elementType.Size;
+
+            // HACK: If we can't determine the size now, assume 16 bytes per array element.
+            if (elementSize == 0)
+            {
+                elementSize = 16;
+            }
+
+            ReplaceWithInternalCall(ctx, VmCall.AllocateArray);
+
+            ctx.SetOperand(1, new ConstantOperand(BuiltInSigType.IntPtr, 0));
+            ctx.SetOperand(2, new ConstantOperand(BuiltInSigType.Int32, elementSize));
+            ctx.SetOperand(3, lengthOperand);
+            ctx.OperandCount = 4;
+        }
+
 	    /// <summary>
 		/// Visitation function for <see cref="ICILVisitor.Newobj"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		public void Newobj(Context ctx)
 		{
-            ClassSigType classType = ctx.Result.Type as ClassSigType;
-            Debug.Assert(classType != null, @"Newobj didn't specify class signature?");
-	        Operand thisReference = ctx.Result;
+            Operand thisReference = ctx.Result;
+            Debug.Assert(thisReference != null, @"Newobj didn't specify class signature?");
+
+            ClassSigType classSigType = (ClassSigType)thisReference.Type;
+            RuntimeType classType = RuntimeBase.Instance.TypeLoader.GetType(this.MethodCompiler.Method, this.MethodCompiler.Assembly, classSigType.Token);
 
             List<Operand> ctorOperands = new List<Operand>(ctx.Operands);
 
@@ -425,8 +458,10 @@ namespace Mosa.Runtime.CompilerFramework.IR
 
             ReplaceWithInternalCall(before, VmCall.AllocateObject);
 
-            before.SetOperand(1, new ConstantOperand(BuiltInSigType.Int32, this.MethodCompiler.Assembly.LoadOrder));
-            before.SetOperand(2, new ConstantOperand(BuiltInSigType.IntPtr, classType.Token));
+            SymbolOperand methodTableSymbol = this.GetMethodTableSymbol(classType);
+
+            before.SetOperand(1, methodTableSymbol);
+            before.SetOperand(2, new ConstantOperand(BuiltInSigType.Int32, classType.Size));
             before.OperandCount = 2;
 	        before.Result = thisReference;
 
@@ -438,10 +473,15 @@ namespace Mosa.Runtime.CompilerFramework.IR
             this.ProcessInvokeInstruction(ctx, symbolOperand, null, ctorOperands);
         }
 
-	    private RuntimeMethod FindConstructor(ClassSigType classType, List<Operand> ctorOperands)
+        private SymbolOperand GetMethodTableSymbol(RuntimeType runtimeType)
+        {
+            Debug.Assert(runtimeType.MethodTable != null, @"Type doesn't have a method table yet.");
+            return new SymbolOperand(BuiltInSigType.IntPtr, runtimeType.FullName + @"$mtable");
+        }
+
+	    private RuntimeMethod FindConstructor(RuntimeType classType, List<Operand> ctorOperands)
 	    {
-	        RuntimeType objectType = RuntimeBase.Instance.TypeLoader.GetType(this.MethodCompiler.Method, this.MethodCompiler.Assembly, classType.Token);
-	        foreach (RuntimeMethod method in objectType.Methods)
+	        foreach (RuntimeMethod method in classType.Methods)
 	        {
 	            if (method.Name == @".ctor" && this.DoCtorParametersMatch(method, ctorOperands))
 	            {
@@ -515,26 +555,6 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		void ICILVisitor.Box(Context ctx)
 		{
 			ReplaceWithInternalCall(ctx, VmCall.Box);
-		}
-
-		/// <summary>
-		/// Visitation function for <see cref="ICILVisitor.Newarr"/>.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		public void Newarr(Context ctx)
-		{
-            SZArraySigType arrayType = (SZArraySigType)ctx.Result.Type;
-            ClassSigType elementType = arrayType.ElementType as ClassSigType;
-            Debug.Assert(elementType != null, @"Newarr didn't specify class signature?");
-
-            Operand lengthOperand = ctx.Operand1;
-
-			ReplaceWithInternalCall(ctx, VmCall.AllocateArray);
-
-            ctx.SetOperand(1, new ConstantOperand(BuiltInSigType.Int32, this.MethodCompiler.Assembly.LoadOrder));
-            ctx.SetOperand(2, new ConstantOperand(BuiltInSigType.IntPtr, elementType.Token));
-		    ctx.SetOperand(3, lengthOperand);
-            ctx.OperandCount = 4;
 		}
 
 		/// <summary>
