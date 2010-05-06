@@ -14,7 +14,7 @@
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
     <DelaySign>false</DelaySign>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>
     </AppDesignerFolder>
@@ -59,22 +59,33 @@
     <DebugType>none</DebugType>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="RuntimeBase.cs" />
+    <Compile Include="X86\CMOS.cs" />
+    <Compile Include="X86\GDT.cs" />
+    <Compile Include="X86\IdleTask.cs" />
+    <Compile Include="X86\IDT.cs" />
+    <Compile Include="X86\Kernel.cs" />
+    <Compile Include="X86\Keyboard.cs" />
+    <Compile Include="X86\Memory.cs" />
+    <Compile Include="X86\Multiboot.cs" />
+    <Compile Include="X86\PageFaultHandler.cs" />
+    <Compile Include="X86\PageFrameAllocator.cs" />
+    <Compile Include="X86\PageTable.cs" />
+    <Compile Include="X86\Panic.cs" />
+    <Compile Include="X86\PIC.cs" />
+    <Compile Include="X86\ProcessManager.cs" />
+    <Compile Include="X86\Screen.cs" />
+    <Compile Include="X86\TaskManager.cs" />
+    <Compile Include="X86\VirtualPageAllocator.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Platforms\x86\Mosa.Platforms.x86.csproj">
       <Project>{56CA38E7-0883-4461-A10E-386D0C58DBF9}</Project>
       <Name>Mosa.Platforms.x86</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Boot.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <PropertyGroup>

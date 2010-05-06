@@ -9,6 +9,11 @@ using Mosa.Platforms.x86;
 
 namespace Mosa.Kernel.X86
 {
+    public struct Cursor
+    {
+        public uint Column;
+        public uint Row;
+    }
 
 	/// <summary>
 	/// 
@@ -18,13 +23,7 @@ namespace Mosa.Kernel.X86
         /// <summary>
         /// 
         /// </summary>
-		public static uint Column;
-
-		/// <summary>
-		/// 
-		/// </summary>
-		public static uint Row;
-
+        public static Cursor Cursor;
 		/// <summary>
 		/// 
 		/// </summary>
@@ -39,7 +38,25 @@ namespace Mosa.Kernel.X86
 		/// 
 		/// </summary>
 		public const uint Rows = 40;
-		
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static uint Column
+        {
+            get { return Cursor.Column; }
+            set { Cursor.Column = value; }
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public static uint Row
+        {
+            get { return Cursor.Row; }
+            set { Cursor.Row = value; }
+        }
+
 		/// <summary>
 		/// Gets the address.
 		/// </summary>

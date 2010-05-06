@@ -10,7 +10,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Mosa.Tools.CreateBootImage</RootNamespace>
     <AssemblyName>Mosa.Tools.CreateBootImage</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <StartupObject>Mosa.Tools.CreateBootImage.Program</StartupObject>
     <FileUpgradeFlags>

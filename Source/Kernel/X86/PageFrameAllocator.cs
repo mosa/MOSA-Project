@@ -117,7 +117,7 @@ namespace Mosa.Kernel.X86
 		/// <summary>
 		/// Releases a page to the free list
 		/// </summary>
-		/// <param name="page">The page.</param>
+		/// <param name="address">The address.</param>
 		public static void Free(uint address)
 		{
 			_totalUsedPages--;
