@@ -19,6 +19,7 @@
 		
 		<references>
 			<include name="System.dll"/>
+			<include name="${outputDirectory}/Mosa.Kernel.dll"/>
 			<include name="${outputDirectory}/Mosa.Platform.x86.dll"/>
 		</references>
 		

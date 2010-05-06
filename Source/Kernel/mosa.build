@@ -16,7 +16,10 @@
 		<sources>
 			<include name="**/*.cs"/>
 		</sources>
-		
+
+		<references>
+			<include name="${outputDirectory}/Mosa.Platform.x86.dll"/>
+		</references>
 		<!-- supress warnings -->
 		<nowarn><warning number="${suppresswarnings}"/></nowarn>
 	    </csc>

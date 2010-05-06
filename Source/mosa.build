@@ -28,13 +28,13 @@
 	<target name="filesystem" depends="init, classlib, devicesystem"><nant buildfile="FileSystem/mosa.build"/></target>
 	<target name="emulatedkernel" depends="init, classlib, devicesystem"><nant buildfile="EmulatedKernel/mosa.build"/></target>
 	<target name="emulateddevices" depends="init, classlib, devicesystem, emulatedkernel"><nant buildfile="EmulatedDevices/mosa.build"/></target>
-	<target name="kernel" depends="init"><nant buildfile="Kernel/mosa.build"/></target>
+	<target name="kernel" depends="init,platforms"><nant buildfile="Kernel/mosa.build"/></target>
 	<target name="pictor" depends="init"><nant buildfile="Pictor/mosa.build"/></target>
 	<target name="pictor.ui" depends="init, pictor"><nant buildfile="Pictor.UI/mosa.build"/></target>
 	<target name="platforms" depends="init, runtime"><nant buildfile="Platforms/mosa.build"/></target>
-	<target name="runtime" depends="init, kernel"><nant buildfile="Runtime/mosa.build"/></target>
+	<target name="runtime" depends="init"><nant buildfile="Runtime/mosa.build"/></target>
 	<target name="tools" depends="init, classlib, devicesystem, devicedrivers, filesystem, emulateddevices, kernel, platforms, runtime"><nant buildfile="Tools/mosa.build"/></target>
-	<target name="helloworld" depends="init"><nant buildfile="HelloWorld/mosa.build"/></target>
+	<target name="helloworld" depends="init,kernel"><nant buildfile="HelloWorld/mosa.build"/></target>
 	<target name="emulator" depends="init, devicesystem, devicedrivers, emulatedkernel, filesystem, emulateddevices, classlib, pictor, pictor.ui"><nant buildfile="Emulator/mosa.build"/></target>
 	<!-- meta target -->
 	<target name="all" depends="classlib, devicesystem, devicedrivers, filesystem, emulatedkernel, emulateddevices, kernel, pictor, pictor.ui, platforms, runtime, tools, helloworld, emulator"/>
