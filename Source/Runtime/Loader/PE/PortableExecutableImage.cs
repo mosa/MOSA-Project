@@ -79,6 +79,7 @@ namespace Mosa.Runtime.Loader.PE
 		/// Metadata of the assembly
 		/// </summary>
 		private byte[] _metadata;
+        private string codeBase;
 
         #endregion // Data members
 
@@ -89,8 +90,10 @@ namespace Mosa.Runtime.Loader.PE
         /// </summary>
         /// <param name="loadOrder">The load order.</param>
         /// <param name="stream">The stream.</param>
-        private PortableExecutableImage(int loadOrder, Stream stream)
+        private PortableExecutableImage(int loadOrder, Stream stream, string codeBase)
         {
+            this.codeBase = codeBase;
+
             _assemblyStream = stream;
             _assemblyReader = new BinaryReader(stream);
 
@@ -126,6 +129,14 @@ namespace Mosa.Runtime.Loader.PE
         #endregion // Construction
 
         #region Properties
+
+        public string CodeBase
+        {
+            get
+            {
+                return this.codeBase;
+            }
+        }
 
         /// <summary>
         /// Gets the entry point of the module.
@@ -238,14 +249,14 @@ namespace Mosa.Runtime.Loader.PE
         /// <param name="loadOrder">The load order.</param>
         /// <param name="stream">The stream.</param>
         /// <returns></returns>
-        public static PortableExecutableImage Load(int loadOrder, Stream stream)
+        public static PortableExecutableImage Load(int loadOrder, Stream stream, string codeBase)
         {
             // Check preconditions
             if (null == stream)
                 throw new ArgumentNullException("stream");
 
             // Create a new assembly instance
-            return new PortableExecutableImage(loadOrder, stream);
+            return new PortableExecutableImage(loadOrder, stream, codeBase);
         }
 
         /// <summary>

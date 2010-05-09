@@ -475,7 +475,6 @@ namespace Mosa.Runtime.CompilerFramework.IR
 
         private SymbolOperand GetMethodTableSymbol(RuntimeType runtimeType)
         {
-            Debug.Assert(runtimeType.MethodTable != null, @"Type doesn't have a method table yet.");
             return new SymbolOperand(BuiltInSigType.IntPtr, runtimeType.FullName + @"$mtable");
         }
 

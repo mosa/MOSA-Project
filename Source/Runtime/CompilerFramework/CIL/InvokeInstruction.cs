@@ -152,7 +152,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	    /// <param name="ctx">The context.</param>
 	    /// <param name="decoder">The IL decoder, which provides decoding functionality.</param>
 	    /// <param name="flags">Flags, which control the</param>
-	    protected static void DecodeInvocationTarget(Context ctx, IInstructionDecoder decoder, InvokeSupportFlags flags)
+	    protected static TokenTypes DecodeInvocationTarget(Context ctx, IInstructionDecoder decoder, InvokeSupportFlags flags)
 		{
 			// Holds the token of the call target
 			TokenTypes callTarget, targetType;
@@ -189,6 +189,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			}
 
 			SetInvokeTarget(ctx, decoder.Compiler, method);
+
+            return callTarget;
 		}
 
         private static RuntimeMethod DecodeMethodSpecification(IInstructionDecoder decoder, TokenTypes callTarget)

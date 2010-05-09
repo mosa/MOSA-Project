@@ -24,10 +24,11 @@ namespace Mosa.Runtime.Loader
 	{
 		#region Data members
 
-		private string[] _searchPath;
-		private List<string> _privatePaths = new List<string>();
-		private List<IMetadataModule> _loadedImages = new List<IMetadataModule>();
-		private ITypeSystem _typeLoader;
+		private string[] searchPath;
+		private List<string> privatePaths = new List<string>();
+		private List<IMetadataModule> loadedImages = new List<IMetadataModule>();
+		private ITypeSystem typeLoader;
+        private object loaderLock = new object();
 
 		#endregion // Data members
 
@@ -42,13 +43,13 @@ namespace Mosa.Runtime.Loader
 			// HACK: I can't figure out an easier way to get the framework dir right now...
             string frameworkDir = System.Runtime.InteropServices.RuntimeEnvironment.GetRuntimeDirectory();
             string frameworkDir32 = frameworkDir.Contains("Framework64") ? frameworkDir.Replace("Framework64", "Framework") : frameworkDir;
-			_searchPath = new[] {
+			this.searchPath = new[] {
                 AppDomain.CurrentDomain.BaseDirectory,
                 frameworkDir,
                 frameworkDir32
             };
 
-			_typeLoader = typeLoader;
+			this.typeLoader = typeLoader;
 		}
 
 		#endregion // Construction
@@ -61,7 +62,7 @@ namespace Mosa.Runtime.Loader
 		/// <value></value>
 		public IEnumerable<IMetadataModule> Modules
 		{
-			get { return _loadedImages; }
+			get { return this.loadedImages; }
 		}
 
 		/// <summary>
@@ -70,12 +71,18 @@ namespace Mosa.Runtime.Loader
 		/// <param name="path">The path to append to the assembly search path.</param>
 		public void AppendPrivatePath(string path)
 		{
-			_privatePaths.Add(path);
+            lock (this.loaderLock)
+            {
+                this.privatePaths.Add(path);
+            }
 		}
 
         public IMetadataModule GetModule(int loadIndex)
         {
-            return this._loadedImages[loadIndex];
+            lock (this.loaderLock)
+            {
+                return this.loadedImages[loadIndex];
+            }
         }
 
 		/// <summary>
@@ -109,7 +116,8 @@ namespace Mosa.Runtime.Loader
 		{
 		    if (Path.IsPathRooted(file) == false)
 				return DoLoadAssembly(Path.GetFileName(file));
-		    return LoadAssembly(file);
+		    
+            return LoadAssembly(file);
 		}
 
 	    /// <summary>
@@ -119,8 +127,10 @@ namespace Mosa.Runtime.Loader
 		public void Unload(IMetadataModule module)
 		{
 			IDisposable disp = module as IDisposable;
-			if (null != disp)
-				disp.Dispose();
+            if (null != disp)
+            {
+                disp.Dispose();
+            }
 		}
 
 		#endregion // IAssemblyLoader Members
@@ -129,36 +139,75 @@ namespace Mosa.Runtime.Loader
 
 		private IMetadataModule LoadAssembly(string file)
 		{
-			if (!File.Exists(file))
-				return null;
+            IMetadataModule result;
+            string codeBase = this.CreateFileCodeBase(file);
 
-			IMetadataModule result = PortableExecutableImage.Load(_loadedImages.Count, new FileStream(file, FileMode.Open, FileAccess.Read));
-			if (null != result) {
-				lock (_loadedImages) {
-					_loadedImages.Add(result);
-				}
+            result = this.FindLoadedModule(codeBase);
+            if (result == null)
+            {
+                if (!File.Exists(file))
+                    return null;
 
-				_typeLoader.AssemblyLoaded(result);
-			}
+                lock (this.loaderLock)
+                {
+                    result = PortableExecutableImage.Load(this.loadedImages.Count, new FileStream(file, FileMode.Open, FileAccess.Read), codeBase);
+                    if (result != null)
+                    {
+                        this.loadedImages.Add(result);
+
+                        this.typeLoader.AssemblyLoaded(result);
+                    }
+                }
+            }
 
 			return result;
 		}
 
+        private IMetadataModule FindLoadedModule(string codeBase)
+        {
+            foreach (IMetadataModule module in this.loadedImages)
+            {
+                if (module.CodeBase.Equals(codeBase) == true)
+                {
+                    return module;
+                }
+            }
+
+            return null;
+        }
+
+        private string CreateFileCodeBase(string file)
+        {
+            return @"file://" + file.Replace('\\', '/');
+        }
+
 		private IMetadataModule GetLoadedAssembly(string name)
 		{
 			IMetadataModule result = null;
-			foreach (IMetadataModule image in _loadedImages) {
-				if (name.Equals(image.Name)) {
-					result = image;
-					break;
-				}
-			}
+
+            lock (this.loaderLock)
+            {
+                foreach (IMetadataModule image in this.loadedImages)
+                {
+                    if (name.Equals(image.Name))
+                    {
+                        result = image;
+                        break;
+                    }
+                }
+            }
+
 			return result;
 		}
 
 		private IMetadataModule DoLoadAssembly(string name)
 		{
-			IMetadataModule result = DoLoadAssemblyFromPaths(name, _privatePaths) ?? DoLoadAssemblyFromPaths(name, _searchPath);
+            IMetadataModule result = null;
+
+            lock (this.loaderLock)
+            {
+                result = DoLoadAssemblyFromPaths(name, this.privatePaths) ?? DoLoadAssemblyFromPaths(name, this.searchPath);
+            }
 
 		    return result;
 		}

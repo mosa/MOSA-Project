@@ -21,6 +21,12 @@ namespace Mosa.Runtime.Loader
     public interface IMetadataModule
     {
         /// <summary>
+        /// Gets the code base of the module.
+        /// </summary>
+        /// <value>The code base of the module.</value>
+        string CodeBase { get; }
+
+        /// <summary>
         /// Gets the entry point of the module.
         /// </summary>
         /// <value>The entry point.</value>
