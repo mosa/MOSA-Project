@@ -14,8 +14,6 @@ namespace Mosa.Kernel.X86
 	/// </summary>
 	public class CMOS
 	{
-        public static readonly CMOS Instance = new CMOS();
-
 		/// <summary>
 		/// Gets the specified index.
 		/// </summary>
