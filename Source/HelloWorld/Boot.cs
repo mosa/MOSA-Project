@@ -273,7 +273,8 @@ namespace Mosa.HelloWorld
 				Screen.Write((char)205);
 
 			Screen.NextLine();
-
+			
+			CpuInfo cpuInfo = new CpuInfo();
 			#region Vendor
 			Screen.Color = 0x0A;
 			Screen.Write('V');
@@ -288,17 +289,7 @@ namespace Mosa.HelloWorld
 			Screen.Write(' ');
 			Screen.Color = 0x0F;
 
-			int identifier = Platforms.x86.Native.CpuIdEbx(0);
-			for (int i = 0; i < 4; ++i)
-				Screen.Write((char)((identifier >> (i * 8)) & 0xFF));
-
-			identifier = Platforms.x86.Native.CpuIdEdx(0);
-			for (int i = 0; i < 4; ++i)
-				Screen.Write((char)((identifier >> (i * 8)) & 0xFF));
-
-			identifier = Platforms.x86.Native.CpuIdEcx(0);
-			for (int i = 0; i < 4; ++i)
-				Screen.Write((char)((identifier >> (i * 8)) & 0xFF));
+			cpuInfo.PrintVendorString();
 
 			Screen.NextLine();
 			#endregion
@@ -316,14 +307,10 @@ namespace Mosa.HelloWorld
 			Screen.Write(' ');
 			Screen.Write(' ');
 			Screen.Color = 0x0F;
-
-			PrintBrand((uint)2147483650);
-			PrintBrand((uint)2147483651);
-			PrintBrand((uint)2147483652);
+			cpuInfo.PrintBrandString();
 			Screen.NextLine();
 			#endregion
 
-			int info = Platforms.x86.Native.CpuIdEax(1);
 			#region Stepping
 			Screen.Color = 0x0A;
 			Screen.Write('S');
@@ -337,7 +324,7 @@ namespace Mosa.HelloWorld
 			Screen.Write(':');
 			Screen.Write(' ');
 			Screen.Color = 0x0F;
-			Screen.Write((ulong)(info & 0xF), 16, 2);
+			Screen.Write(cpuInfo.Stepping, 16, 2);
 			#endregion
 
 			#region Model
@@ -351,7 +338,7 @@ namespace Mosa.HelloWorld
 			Screen.Write(':');
 			Screen.Write(' ');
 			Screen.Color = 0x0F;
-			Screen.Write((ulong)((info & 0xF0) >> 4), 16, 2);
+			Screen.Write(cpuInfo.Model, 16, 2);
 			#endregion
 
 			#region Family
@@ -366,7 +353,7 @@ namespace Mosa.HelloWorld
 			Screen.Write(':');
 			Screen.Write(' ');
 			Screen.Color = 0x0F;
-			Screen.Write((ulong)((info & 0xF00) >> 8), 16, 2);
+			Screen.Write(cpuInfo.Family, 16, 2);
 			#endregion
 
 			#region Type
@@ -380,7 +367,7 @@ namespace Mosa.HelloWorld
 			Screen.Write(' ');
 			Screen.Color = 0x0F;
 
-			Screen.Write((ulong)((info & 0x3000) >> 12), 16, 2);
+			Screen.Write(cpuInfo.Type, 16, 2);
 			Screen.NextLine();
             Screen.Color = 0x0A;
             Screen.Write('C');
@@ -394,9 +381,7 @@ namespace Mosa.HelloWorld
             Screen.Write(' ');
             Screen.Write(' ');
             Screen.Color = 0x0F;
-            
-            info = Platforms.x86.Native.CpuIdEax(4);
-            Screen.Write((ulong)((info >> 26) + 1), 16, 2);
+            Screen.Write(cpuInfo.NumberOfCores, 16, 2);
 			#endregion
 
 			//Multiboot.Dump(4,53);
