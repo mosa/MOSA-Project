@@ -7,6 +7,7 @@
  *  Michael Fröhlich (grover) <michael.ruck@michaelruck.de>
  */
 
+using Mosa.Kernel;
 using Mosa.Kernel.X86;
 
 namespace Mosa.Runtime
@@ -26,7 +27,7 @@ namespace Mosa.Runtime
             //
             uint allocationSize = ((2 * nativeIntSize) + classSize);
 
-            void* memory = VirtualPageAllocator.Reserve(allocationSize);
+            void* memory = (void *) KernelGCMemory.AllocateMemory(allocationSize);
 
             uint* destination = (uint*)memory;
             // FIXME: Memset((byte*)destination, 0, (int)allocationSize);
