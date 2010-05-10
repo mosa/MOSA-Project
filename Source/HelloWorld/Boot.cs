@@ -447,15 +447,15 @@ namespace Mosa.HelloWorld
 			CMOS cmos = new CMOS();
 
 			while (true) {
-				CMOS.Instance.Dump(2, 65);
-				DisplayTime();
+				cmos.Dump(2, 65);
+				DisplayTime(cmos);
 			}
 		}
 
 		/// <summary>
 		/// Displays the seconds.
 		/// </summary>
-		private static void DisplayTime()
+		private static void DisplayTime(CMOS cmos)
 		{
 			Screen.SetCursor(24, 52);
 			Screen.Color = 0x0A;
@@ -468,34 +468,34 @@ namespace Mosa.HelloWorld
 
 			byte bcd = 10;
 
-            if (CMOS.Instance.BCD)
+            if (cmos.BCD)
 				bcd = 16;
 
 			Screen.Color = 0x0F;
-            Screen.Write(CMOS.Instance.Hour, bcd, 2);
+            Screen.Write(cmos.Hour, bcd, 2);
 			Screen.Color = 0x07;
 			Screen.Write(':');
 			Screen.Color = 0x0F;
-            Screen.Write(CMOS.Instance.Minute, bcd, 2);
+            Screen.Write(cmos.Minute, bcd, 2);
 			Screen.Color = 0x07;
 			Screen.Write(':');
 			Screen.Color = 0x0F;
-            Screen.Write(CMOS.Instance.Second, bcd, 2);
+            Screen.Write(cmos.Second, bcd, 2);
 			Screen.Write(' ');
 			Screen.Color = 0x07;
 			Screen.Write('(');
 			Screen.Color = 0x0F;
-            Screen.Write(CMOS.Instance.Month, bcd, 2);
+            Screen.Write(cmos.Month, bcd, 2);
 			Screen.Color = 0x07;
 			Screen.Write('/');
 			Screen.Color = 0x0F;
-            Screen.Write(CMOS.Instance.Day, bcd, 2);
+            Screen.Write(cmos.Day, bcd, 2);
 			Screen.Color = 0x07;
 			Screen.Write('/');
 			Screen.Color = 0x0F;
 			Screen.Write('2');
 			Screen.Write('0');
-            Screen.Write(CMOS.Instance.Year, bcd, 2);
+            Screen.Write(cmos.Year, bcd, 2);
 			Screen.Color = 0x07;
 			Screen.Write(')');
 		}
