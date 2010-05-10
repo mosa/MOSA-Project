@@ -14,6 +14,8 @@ using System.Text;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Vm;
+using Mosa.Runtime.Loader;
+using Mosa.Runtime.Metadata.Tables;
 
 namespace Mosa.Runtime.CompilerFramework.CIL
 {
@@ -89,8 +91,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
 		public override void Decode(Context ctx, IInstructionDecoder decoder)
 		{
-			// Decode base classes first
-			base.Decode(ctx, decoder);
+            TokenTypes ctor = DecodeInvocationTarget(ctx, decoder, this.InvokeSupport);
 
 			/*
              * HACK: We need to remove the this parameter from the operand list, as it
@@ -105,21 +106,40 @@ namespace Mosa.Runtime.CompilerFramework.CIL
             ctx.OperandCount--;
 
             // Get the type to allocate
-            SigType sigType = this.CreateSignatureTypeFor(ctx.InvokeTarget.DeclaringType);
+            SigType sigType = this.CreateSignatureTypeFor(decoder.Compiler.Assembly, ctor, ctx.InvokeTarget.DeclaringType);
 
             // Set a return value according to the type of the object allocated
             ctx.Result = decoder.Compiler.CreateTemporary(sigType);
             ctx.ResultCount = 1;
 		}
 
-        private SigType CreateSignatureTypeFor(RuntimeType declaringType)
+        private SigType CreateSignatureTypeFor(IMetadataModule module, TokenTypes ctorToken, RuntimeType declaringType)
         {
-            if (declaringType.BaseType.FullName == @"System.ValueType")
+            TokenTypes typeToken = (TokenTypes)declaringType.Token;
+            if (IsMemberRef(ctorToken) == true)
             {
-                return new ValueTypeSigType((TokenTypes)declaringType.Token);
+                typeToken = GetLocalTypeRefToken(module, ctorToken);
             }
 
-            return new ClassSigType((TokenTypes)declaringType.Token);
+
+            if (declaringType.BaseType.FullName == @"System.ValueType")
+            {
+                return new ValueTypeSigType(typeToken);
+            }
+
+            return new ClassSigType(typeToken);
+        }
+
+        private static TokenTypes GetLocalTypeRefToken(IMetadataModule module, TokenTypes ctorToken)
+        {
+            MemberRefRow memberRef = new MemberRefRow();
+            module.Metadata.Read(ctorToken, out memberRef);
+            return memberRef.ClassTableIdx;
+        }
+
+        private static bool IsMemberRef(TokenTypes ctorToken)
+        {
+            return (ctorToken & TokenTypes.MemberRef) == TokenTypes.MemberRef;
         }
 
 		/// <summary>
