@@ -110,9 +110,9 @@ namespace Mosa.Kernel.X86
 		/// <param name="process">The process.</param>
 		/// <param name="size">The size.</param>
 		/// <returns></returns>
-		public static unsafe uint AllocateMemory(uint process, uint size)
+		public static uint AllocateMemory(uint process, uint size)
 		{
-			uint address = (uint)VirtualPageAllocator.Reserve(size);
+			uint address = VirtualPageAllocator.Reserve(size);
 
 			UpdateMemoryBitMap(process, address, size, false);
 

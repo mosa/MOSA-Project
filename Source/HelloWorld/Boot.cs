@@ -444,6 +444,8 @@ namespace Mosa.HelloWorld
 			Screen.Write('r');
 			Screen.Write('g');
 
+			CMOS cmos = new CMOS();
+
 			while (true) {
 				CMOS.Instance.Dump(2, 65);
 				DisplayTime();

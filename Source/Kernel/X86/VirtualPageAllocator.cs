@@ -86,7 +86,7 @@ namespace Mosa.Kernel.X86
 		/// </summary>
 		/// <param name="size">The size.</param>
 		/// <returns></returns>
-		public static unsafe void* Reserve(uint size)
+		public static uint Reserve(uint size)
 		{
 			uint first = 0xFFFFFFFF; // Marker
 			uint pages = ((size - 1) / PageFrameAllocator.PageSize) + 1;
@@ -101,14 +101,14 @@ namespace Mosa.Kernel.X86
 						for (uint index = 0; index < pages; index++)
 							SetPageStatus(first + index, false);
 
-						return (void*)((first * PageFrameAllocator.PageSize) + PageFrameAllocator.ReserveMemory);
+						return ((first * PageFrameAllocator.PageSize) + PageFrameAllocator.ReserveMemory);
 					}
 				}
 				else
 					first = 0xFFFFFFFF;
 			}
 
-			return null;
+			return 0;
 		}
 
 		/// <summary>

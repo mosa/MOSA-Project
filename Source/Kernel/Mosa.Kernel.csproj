@@ -62,6 +62,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="KernelGCMemory.cs" />
     <Compile Include="RuntimeBase.cs" />
     <Compile Include="X86\CMOS.cs" />
     <Compile Include="X86\GDT.cs" />
