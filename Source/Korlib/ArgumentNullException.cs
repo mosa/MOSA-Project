@@ -18,7 +18,7 @@ namespace System
 		/// Initializes a new instance of the <see cref="ArgumentNullException"/> class.
 		/// </summary>
         public ArgumentNullException()
-            : this("Argument cannot be null.")
+            : this(null) //("Argument cannot be null.")
         {}
 
 		/// <summary>

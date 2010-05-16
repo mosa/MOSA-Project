@@ -79,30 +79,31 @@ namespace Mosa.Runtime.CompilerFramework
 		public void Run()
 		{
 			// Enumerate all types and do an appropriate type layout
-			ReadOnlyRuntimeTypeListView types = _typeSystem.GetTypesFromModule(this.compiler.Assembly);
+			ReadOnlyRuntimeTypeListView types = this._typeSystem.GetTypesFromModule(this.compiler.Assembly);
 			foreach (RuntimeType type in types) 
 			{
-				if (type.IsGeneric == true || type.IsDelegate == true)
+				if (type.IsGeneric == true || type.IsDelegate == true || type.IsInterface == true)
 					continue;
-				
-				switch (type.Attributes & TypeAttributes.LayoutMask) 
-				{
-					case TypeAttributes.AutoLayout:
-                        this.CreateSequentialLayout(type);
-                        break;
 
-					case TypeAttributes.SequentialLayout:
-						this.CreateSequentialLayout(type);
-						break;
-
-					case TypeAttributes.ExplicitLayout:
-						this.CreateExplicitLayout(type);
-						break;
-				}
+                if (IsExplicitLayoutRequestedByType(type) == false)
+                {
+                    this.CreateSequentialLayout(type);
+                }
+                else
+                {
+                    this.CreateExplicitLayout(type);
+                }
 
                 this.BuildMethodTable(type);
+
+                this.AllocateStaticFields(type);
 			}
 		}
+
+        private bool IsExplicitLayoutRequestedByType(RuntimeType type)
+        {
+            return (type.Attributes & TypeAttributes.LayoutMask) == TypeAttributes.ExplicitLayout;
+        }
 
         private void BuildMethodTable(RuntimeType type)
         {
@@ -197,11 +198,19 @@ namespace Mosa.Runtime.CompilerFramework
 
             foreach (RuntimeMethod method in methodTable)
             {
-                string methodSymbol = method.ToString();
+                if (IsAbstract(method) == false)
+                {
+                    string methodSymbol = method.ToString();
+                    this.linker.Link(LinkType.AbsoluteAddress | LinkType.I4, methodTableSymbolName, offset, 0, methodSymbol, IntPtr.Zero);
+                }
 
-                this.linker.Link(LinkType.AbsoluteAddress | LinkType.I4, methodTableSymbolName, offset, 0, methodSymbol, IntPtr.Zero);
                 offset += this.nativePointerSize;
             }
+        }
+
+        private bool IsAbstract(RuntimeMethod method)
+        {
+            return (method.Attributes & MethodAttributes.Abstract) == MethodAttributes.Abstract;
         }
 
 		/// <summary>
@@ -217,6 +226,9 @@ namespace Mosa.Runtime.CompilerFramework
 			// Instance size
 			int typeSize = 0;
 
+            int fieldSize;
+			int typeAlignment;
+
 			RuntimeType baseType = type.BaseType;
             if (null != baseType)
             {
@@ -227,30 +239,34 @@ namespace Mosa.Runtime.CompilerFramework
                 typeSize = CalculateInitialFieldOffset(type);
             }
 
-			foreach (RuntimeField field in type.Fields) {
-				if ((field.Attributes & FieldAttributes.Static) == FieldAttributes.Static) {
-					// Assign a memory slot to the static & initialize it, if there's initial data set
-                    this.CreateStaticField(field);
-				}
-				else {
-					int size;
-					int alignment;
-                    this._architecture.GetTypeRequirements(field.SignatureType, out size, out alignment);
+			foreach (RuntimeField field in type.Fields) 
+            {
+                this._architecture.GetTypeRequirements(field.SignatureType, out fieldSize, out typeAlignment);
 
-					// Pad the field in the type
-					if (0 != packingSize) {
-						int padding = (typeSize % packingSize);
-						typeSize += padding;
-					}
-
-					// Set the field address
-					field.Address = new IntPtr(typeSize);
-					typeSize += size;
+				// Pad the field in the type
+				if (0 != packingSize) 
+                {
+					int padding = (typeSize % packingSize);
+					typeSize += padding;
 				}
+
+				// Set the field address
+				field.Address = new IntPtr(typeSize);
+				typeSize += fieldSize;
 			}
 
 			type.Size = typeSize;
 		}
+
+        private bool IsLiteralField(RuntimeField field)
+        {
+            return (field.Attributes & FieldAttributes.Literal) == FieldAttributes.Literal;
+        }
+
+        private bool IsStaticField(RuntimeField field)
+        {
+            return (field.Attributes & FieldAttributes.Static) == FieldAttributes.Static;
+        }
 
         private int CalculateInitialFieldOffset(RuntimeType type)
         {
@@ -275,18 +291,26 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			Debug.Assert(type != null, @"No type given.");
 			Debug.Assert(type.BaseType.Size != 0, @"Type size not set for explicit layout.");
-			foreach (RuntimeField field in type.Fields) {
-				if ((field.Attributes & FieldAttributes.Static) == FieldAttributes.Static) {
-					// Assign a memory slot to the static & initialize it, if there's initial data set
-                    this.CreateStaticField(field);
-				}
-				else {
-					// Explicit layout assigns a physical offset From the start of the structure
-					// to the field. We just assign this offset.
-					Debug.Assert(field.Address.ToInt64() != 0, @"Non-static field doesn't have layout!");
-				}
+			
+            foreach (RuntimeField field in type.Fields) 
+            {
+				// Explicit layout assigns a physical offset From the start of the structure
+				// to the field. We just assign this offset.
+				Debug.Assert(field.Address.ToInt64() != 0, @"Non-static field doesn't have layout!");
 			}
 		}
+
+        private void AllocateStaticFields(RuntimeType type)
+        {
+            foreach (RuntimeField field in type.Fields)
+            {
+                if (IsStaticField(field) == true && IsLiteralField(field) == false)
+                {
+                    // Assign a memory slot to the static & initialize it, if there's initial data set
+                    this.CreateStaticField(field);
+                }
+            }
+        }
 
 		/// <summary>
 		/// Allocates memory for the static field and initializes it.

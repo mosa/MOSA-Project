@@ -110,13 +110,6 @@ namespace Mosa.Runtime.Vm
         /// <param name="token">The token of the method to retrieve.</param>
         RuntimeMethod GetMethod(ISignatureContext context, IMetadataModule module, TokenTypes token);
 
-        /// <summary>
-        /// Retrieves the method for the named internal call.
-        /// </summary>
-        /// <param name="internalMethod">The internal method to retrieve the implementation for.</param>
-        /// <returns>The method currently represented by the internal call.</returns>
-        RuntimeMethod GetImplementationForInternalCall(RuntimeMethod internalMethod);
-
         RuntimeType ResolveSignatureType(ISignatureContext context, IMetadataModule module, SigType sigType);
 
         #endregion // Methods

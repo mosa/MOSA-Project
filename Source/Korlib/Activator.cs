@@ -21,7 +21,7 @@ namespace System
 		/// <returns></returns>
         public object CreateInstance(Type t)
         {
-            return CreateInstance(t, new object[] { 0 });
+            return CreateInstance(t, new object[] { });
         }
 
 		/// <summary>

@@ -72,6 +72,7 @@ namespace Mosa.Runtime.Vm
         public RuntimeMethod(int token, IMetadataModule module, RuntimeType declaringType) :
             base(token, module, declaringType, null)
         {
+            this.methodTableSlot = -1;
         }
 
         #endregion // Construction
@@ -247,6 +248,7 @@ namespace Mosa.Runtime.Vm
         {
             get
             {
+                Debug.Assert(this.methodTableSlot != -1, @"Method Table Slot not initialized.");
                 return this.methodTableSlot;
             }
 
