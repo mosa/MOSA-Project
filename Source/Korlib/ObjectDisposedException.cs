@@ -18,7 +18,7 @@ namespace System
 		/// Initializes a new instance of the <see cref="ObjectDisposedException"/> class.
 		/// </summary>
         public ObjectDisposedException()
-            : this("The object was used after being disposed.")
+            : this(null) //("The object was used after being disposed.")
         {}
 
 		/// <summary>

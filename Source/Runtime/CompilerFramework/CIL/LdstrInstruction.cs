@@ -20,7 +20,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public sealed class LdstrInstruction : LoadInstruction
+    public sealed class LdstrInstruction : BaseInstruction
 	{
 		#region Construction
 
@@ -29,7 +29,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </summary>
 		/// <param name="opCode">The op code.</param>
 		public LdstrInstruction(OpCode opCode)
-			: base(opCode)
+			: base(opCode, 0, 1)
 		{
 			return;
 		}

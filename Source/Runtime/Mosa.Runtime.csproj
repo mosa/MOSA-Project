@@ -302,15 +302,6 @@
     <Compile Include="CompilerFramework\CompilerPipeline.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\CompilerSupport.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompilerFramework\CompilerSupportAttribute.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompilerFramework\CompilerSupportFunction.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="CompilerFramework\CIL\ConstantFoldingStage.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -929,12 +920,6 @@
     <Compile Include="Vm\DefaultTypeSystem.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Vm\InternalCallImplAttribute.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Vm\InternalCallTypeAttribute.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Vm\IRuntimeAttributable.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -981,9 +966,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Vm\RuntimeParameter.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Vm\RuntimeSupport.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Vm\RuntimeType.cs">

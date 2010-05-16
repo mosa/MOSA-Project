@@ -40,6 +40,151 @@ namespace Test.Mosa.Runtime.CompilerFramework
                     {
                     }
                 }
+
+                public class ValueType : Object
+                {
+                }
+
+                public class Enum : ValueType
+                {
+                }
+
+                public class Delegate : Object
+                {
+                }
+            }
+        ";
+
+        public const string NoStdLibDefinitions = @"
+            namespace System
+            {
+                public struct SByte
+                {
+                }
+
+                public struct Byte
+                {
+                }
+
+                public struct Int16
+                {
+                }
+
+                public struct Int32
+                {
+                }
+
+                public struct Int64
+                {
+                }   
+
+                public struct UInt16
+                {
+                }
+
+                public struct UInt32
+                {
+                }
+
+                public struct UInt64
+                {
+                }   
+
+                public struct Single
+                {
+                }
+
+                public struct Double
+                {
+                }
+
+                public struct Char
+                {
+                }
+
+                public struct Boolean
+                {
+                }
+
+                public struct IntPtr
+                {
+                }
+
+                public struct UIntPtr
+                {
+                }
+
+                public class String
+                {
+                }
+
+                public class MulticastDelegate : Delegate
+                {
+                }
+
+                public class Array
+                {
+                }
+
+                public class Exception
+                {
+                }
+
+                public class Type
+                {
+                }
+
+                public class Attribute
+                {
+                }
+
+                public class ParamArrayAttribute : Attribute
+                {
+                }
+
+                public struct RuntimeTypeHandle
+                {
+                }
+
+                public struct RuntimeFieldHandle
+                {
+                }
+
+                public interface IDisposable
+                {
+                }
+
+                public struct Void
+                {
+                }
+
+                namespace Runtime
+                {
+                    namespace InteropServices
+                    {
+                        public class OutAttribute : Attribute
+                        {
+                        }
+                    }
+                }
+
+                namespace Reflection
+                {
+                    public class DefaultMemberAttribute : Attribute
+                    {
+                    }
+                }
+
+                namespace Collections
+                {
+                    public interface IEnumerable
+                    {
+                    }
+
+                    public interface IEnumerator
+                    {
+                    }
+                }
             }
         ";
     }

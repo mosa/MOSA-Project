@@ -109,6 +109,7 @@
     <Compile Include="CIL\CharFixture.cs" />
     <Compile Include="CIL\ComparisonInstructionTestRunner.cs" />
     <Compile Include="CIL\DoubleFixture.cs" />
+    <Compile Include="CIL\EnumFixture.cs" />
     <Compile Include="CIL\GenericMethodMemberFixture.cs" />
     <Compile Include="CIL\GenericTypeFixture.cs" />
     <Compile Include="CIL\Int16Fixture.cs" />

@@ -255,7 +255,7 @@ namespace Mosa.Tools.Compiler
                         this.bootFormatStage,
 						new x86.InterruptBuilderStage(),
                         new AssemblyCompilationStage(this.GetInputFileNames()),
-                        new FakeSystemObjectGenerationStage(),
+                        //new FakeSystemObjectGenerationStage(),
                         new MethodCompilerSchedulerStage(),
                         new TypeInitializers.TypeInitializerSchedulerStage(),
 						this.bootFormatStage,

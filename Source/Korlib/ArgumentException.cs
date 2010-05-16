@@ -23,7 +23,7 @@ namespace System
 		/// Initializes a new instance of the <see cref="ArgumentException"/> class.
 		/// </summary>
         public ArgumentException()
-            : this("Value does not fall within the expected range.")
+            : this(null) //("Value does not fall within the expected range.")
         {}
 
 		/// <summary>

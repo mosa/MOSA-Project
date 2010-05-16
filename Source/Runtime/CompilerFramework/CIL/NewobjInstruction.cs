@@ -121,8 +121,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
                 typeToken = GetLocalTypeRefToken(module, ctorToken);
             }
 
-
-            if (declaringType.BaseType.FullName == @"System.ValueType")
+            RuntimeType baseType = declaringType.BaseType;
+            if (baseType != null && baseType.FullName == @"System.ValueType")
             {
                 return new ValueTypeSigType(typeToken);
             }

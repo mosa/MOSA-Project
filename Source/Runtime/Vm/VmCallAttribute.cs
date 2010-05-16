@@ -16,14 +16,15 @@ namespace Mosa.Runtime.Vm
     /// <summary>
     /// Used to mark a method with the <see cref="VmCall"/> to invoke.
     /// </summary>
-    public sealed class VmCallAttribute : InternalCallImplAttribute
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
+    public sealed class VmCallAttribute : Attribute
     {
         #region Data members
 
         /// <summary>
         /// Holds the runtime call represented by this attribute.
         /// </summary>
-        private VmCall runtimeCall;
+        private VmCall vmCall;
 
         #endregion // Data members
 
@@ -32,10 +33,10 @@ namespace Mosa.Runtime.Vm
         /// <summary>
         /// Initializes a new instance of the <see cref="VmCallAttribute"/> class.
         /// </summary>
-        /// <param name="runtimeCall">The runtime call.</param>
-        public VmCallAttribute(VmCall runtimeCall)
+        /// <param name="vmCall">The runtime call.</param>
+        public VmCallAttribute(VmCall vmCall)
         {
-            this.runtimeCall = runtimeCall;
+            this.vmCall = vmCall;
         }
 
         #endregion // Construction
@@ -46,28 +47,14 @@ namespace Mosa.Runtime.Vm
         /// Gets the runtime call represented by this attribute.
         /// </summary>
         /// <value>The runtime call of this attribute.</value>
-        public VmCall RuntimeCall
+        public VmCall VmCall
         {
-            get { return this.runtimeCall; }
+            get 
+            { 
+                return this.vmCall; 
+            }
         }
 
         #endregion // Properties
-
-        #region InternalCallImplAttribute Overrides
-
-        /// <summary>
-        /// Checks if this attribute matches the specified attribute.
-        /// </summary>
-        /// <param name="call">The call attribute.</param>
-        /// <returns>
-        /// 	<c>true</c> if they match; otherwise <c>false</c>.
-        /// </returns>
-        public sealed override bool Match(InternalCallImplAttribute call)
-        {
-            VmCallAttribute vmCall = call as VmCallAttribute;
-            return (vmCall != null && vmCall.RuntimeCall == this.RuntimeCall);
-        }
-
-        #endregion // InternalCallImplAttribute Overrides
     }
 }
