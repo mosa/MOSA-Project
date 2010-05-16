@@ -164,7 +164,17 @@ namespace Test.Mosa.Runtime.CompilerFramework
 				else
 					throw new NotSupportedException();
 			}
+            
+            if (this.DoNotReferenceMsCorlib)
+            {
+                if (this.Language == "C#")
+                    parameters.CompilerOptions = parameters.CompilerOptions + " /nostdlib";
+                else
+                    throw new NotSupportedException();
+            }
+
 			parameters.GenerateInMemory = false;
+
 			if (CodeSource != null) {
 				Console.Write("From Source: ");
 				Console.WriteLine(new string('-', 40 - 13));
@@ -196,5 +206,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		}
 
 		#endregion // MosaCompilerTestRunner Overrides
-	}
+
+        public bool DoNotReferenceMsCorlib { get; set; }
+    }
 }

@@ -130,7 +130,7 @@ namespace Mosa.Runtime.Vm
         {
             get
             {
-                RuntimeType valueType = RuntimeBase.Instance.TypeLoader.GetType(@"System.ValueType");
+                RuntimeType valueType = RuntimeBase.Instance.TypeLoader.GetType(@"System.ValueType, mscorlib");
                 return this.IsSubclassOf(valueType);
             }
         }
@@ -397,8 +397,25 @@ namespace Mosa.Runtime.Vm
         {
             get
             {
-                RuntimeType delegateType = RuntimeBase.Instance.TypeLoader.GetType(@"System.Delegate, mscorlib");
+                RuntimeType delegateType = RuntimeBase.Instance.TypeLoader.GetType(@"System.Delegate");
                 return this.IsSubclassOf(delegateType);
+            }
+        }
+
+        public bool IsEnum
+        {
+            get
+            {
+                RuntimeType enumType = RuntimeBase.Instance.TypeLoader.GetType(@"System.Enum");
+                return ReferenceEquals(this.BaseType, enumType);
+            }
+        }
+
+        public bool IsInterface
+        {
+            get
+            {
+                return (this.Attributes & TypeAttributes.Interface) == TypeAttributes.Interface;
             }
         }
 

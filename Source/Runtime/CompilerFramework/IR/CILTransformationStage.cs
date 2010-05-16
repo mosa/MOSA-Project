@@ -403,7 +403,6 @@ namespace Mosa.Runtime.CompilerFramework.IR
 
 	        this.Architecture.GetTypeRequirements(BuiltInSigType.IntPtr, out size, out alignment);
 	        int slot = invokeTarget.MethodTableSlot;
-	        Debug.Assert(slot != 0, @"Method Table Slot not initialized.");
 
 	        return size + (size * slot);
 	    }

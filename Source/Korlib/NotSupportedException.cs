@@ -18,7 +18,7 @@ namespace System
 		/// Initializes a new instance of the <see cref="NotSupportedException"/> class.
 		/// </summary>
         public NotSupportedException() :
-            this("Operation is not supported.")
+            this(null) //("Operation is not supported.")
         {
         }
 
