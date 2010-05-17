@@ -26,8 +26,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
     {
         private readonly TestCaseAssemblyCompiler assemblyCompiler;
 
-        public TestCaseMethodCompiler(TestCaseAssemblyCompiler assemblyCompiler, IAssemblyLinker linker, IArchitecture architecture, ICompilationSchedulerStage compilationScheduler, IMetadataModule module, RuntimeType type, RuntimeMethod method) :
-            base(linker, architecture, compilationScheduler, module, type, method)
+        public TestCaseMethodCompiler(TestCaseAssemblyCompiler assemblyCompiler, IAssemblyLinker linker, IArchitecture architecture, ICompilationSchedulerStage compilationScheduler, RuntimeType type, RuntimeMethod method) :
+            base(linker, architecture, compilationScheduler, type, method)
         {
             this.assemblyCompiler = assemblyCompiler;
 
@@ -38,7 +38,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
                 new BasicBlockBuilderStage(),
                 //new InstructionLogger(),
 				new OperandDeterminationStage(),
-                //new InstructionLogger(),
+                new InstructionLogger(),
                 new StaticAllocationResolutionStage(),
                 //new InstructionLogger(),
                 //new ConstantFoldingStage(),

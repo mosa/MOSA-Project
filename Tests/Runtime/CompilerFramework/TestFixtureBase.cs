@@ -256,25 +256,12 @@ namespace Test.Mosa.Runtime.CompilerFramework
             return address;
         }
 
-        private void CompileTestCodeIfNecessary()
+        protected void CompileTestCodeIfNecessary()
         {
             // Do we need to compile the code?
             if (this.needCompile == true)
             {
-                if (module != null)
-                {
-                    RuntimeBase.Instance.AssemblyLoader.Unload(module);
-                }
-
-                if (this.loadedAssembly != null)
-                {
-                    this.loadedAssembly = null;
-                }
-
-                this.assembly = this.CompileTestCode();
-
-                Console.WriteLine("Executing MOSA compiler...");
-                module = RunMosaCompiler(this.assembly);
+                this.CompileTestCode();
 
                 this.needCompile = false;
             }
@@ -306,7 +293,25 @@ namespace Test.Mosa.Runtime.CompilerFramework
             throw new MissingMethodException(ns + @"." + type, method);
         }
 
-        protected string CompileTestCode()
+        protected void CompileTestCode()
+        {
+            if (module != null)
+            {
+                RuntimeBase.Instance.AssemblyLoader.Unload(module);
+            }
+
+            if (this.loadedAssembly != null)
+            {
+                this.loadedAssembly = null;
+            }
+
+            this.assembly = this.RunCodeDomCompiler();
+
+            Console.WriteLine("Executing MOSA compiler...");
+            module = RunMosaCompiler(this.assembly);
+        }
+
+        private string RunCodeDomCompiler()
         {
             CodeDomProvider provider;
             Console.WriteLine("Executing {0} compiler...", this.Language);
@@ -348,6 +353,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
                 }
                 throw new Exception(sb.ToString());
             }
+
             return compileResults.PathToAssembly;
         }
 

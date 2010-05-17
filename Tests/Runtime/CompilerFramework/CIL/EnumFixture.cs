@@ -48,6 +48,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.CIL
             this.CodeSource = CreateTestCode();
             this.DoNotReferenceMsCorlib = true;
 
+            // Due to Code.NoStdLibDefinitions... :(
+            this.UnsafeCode = true;
+
             Assert.IsTrue((bool)Run<B_V>("", "TestClass", "AMustBe5"));
         }
     }
