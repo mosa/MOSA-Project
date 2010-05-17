@@ -62,6 +62,15 @@ namespace Mosa.HelloWorld
 			}
 		}
 		
+		public bool SupportsBrandString
+		{
+			get
+			{
+				int identifier = Platforms.x86.Native.CpuIdEax(0x80000000);
+				return identifier >= 0x80000004;
+			}
+		}
+		
 		public void PrintVendorString()
 		{
 			int identifier = Platforms.x86.Native.CpuIdEbx(0);
@@ -79,9 +88,35 @@ namespace Mosa.HelloWorld
 		
 		public void PrintBrandString()
 		{
-			PrintBrand((uint)2147483650);
-			PrintBrand((uint)2147483651);
-			PrintBrand((uint)2147483652);
+			if (SupportsBrandString)
+			{
+				PrintBrand((uint)0x80000002);
+				PrintBrand((uint)0x80000003);
+				PrintBrand((uint)0x80000004);
+				return;
+			}
+			
+			Screen.Write ('U');
+			Screen.Write ('n');
+			Screen.Write ('k');
+			Screen.Write ('n');
+			Screen.Write ('o');
+			Screen.Write ('w');
+			Screen.Write ('n');
+			Screen.Write (' ');
+			Screen.Write ('(');
+			Screen.Write ('G');
+			Screen.Write ('e');
+			Screen.Write ('n');
+			Screen.Write ('e');
+			Screen.Write ('r');
+			Screen.Write ('i');
+			Screen.Write ('c');
+			Screen.Write (' ');
+			Screen.Write ('x');
+			Screen.Write ('8');
+			Screen.Write ('6');
+			Screen.Write (')');
 		}
 		
 		private void PrintBrand(uint param)

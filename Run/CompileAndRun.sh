@@ -1,2 +1,2 @@
-exec CompileHelloWorld.sh
-exec CreateVirtualDisks.sh
+exec ./CompileHelloWorld.sh
+exec ./CreateVirtualDisks.sh
