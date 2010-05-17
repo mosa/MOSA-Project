@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
@@ -25,6 +25,7 @@
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation />
     <TargetFrameworkProfile />
+    <NoStdLib>True</NoStdLib>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -70,6 +71,10 @@
     <ProjectReference Include="..\Kernel\Mosa.Kernel.csproj">
       <Project>{FF099D48-3FA5-4ED6-BBA0-1497D734962A}</Project>
       <Name>Mosa.Kernel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Korlib\Korlib.csproj">
+      <Project>{631BC4F3-E2D8-4319-814C-13904CAA17CE}</Project>
+      <Name>Korlib</Name>
     </ProjectReference>
     <ProjectReference Include="..\Platforms\x86\Mosa.Platforms.x86.csproj">
       <Project>{56CA38E7-0883-4461-A10E-386D0C58DBF9}</Project>
