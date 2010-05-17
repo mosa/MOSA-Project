@@ -369,6 +369,17 @@ namespace Mosa.Tools.Compiler.Linkers
             return this.implementation.GetSymbol(symbolName);
         }
 
+        /// <summary>
+        /// Determines if a given symbol name is already in use by the linker.
+        /// </summary>
+        /// <param name="symbolName">The symbol name.</param>
+        /// <returns><c>true</c> if the symbol name is already used; <c>false</c> otherwise.</returns>
+        public bool HasSymbol(string symbolName)
+        {
+            this.CheckImplementation();
+            return this.implementation.HasSymbol(symbolName);
+        }
+
         #endregion // IAssemblyLinker Members
 
         #region Internals

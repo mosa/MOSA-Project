@@ -17,6 +17,10 @@ namespace System
     [Serializable]
     public class Object
     {
+        private IntPtr methodTablePtr;
+
+        private IntPtr syncBlock;
+
         /// <summary>
         /// Initializes a new instance of the System.Object class.
         /// </summary>

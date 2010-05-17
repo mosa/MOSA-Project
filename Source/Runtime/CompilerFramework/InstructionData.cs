@@ -158,16 +158,6 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
-		/// Gets or sets the string.
-		/// </summary>
-		/// <value>The string.</value>
-		public string String
-		{
-			get { return Other as string; }
-			set { Other = value; }
-		}
-
-		/// <summary>
 		/// Gets or sets the runtime field.
 		/// </summary>
 		/// <value>The runtime field.</value>

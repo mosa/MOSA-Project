@@ -299,16 +299,6 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
-		/// Gets or sets the string.
-		/// </summary>
-		/// <value>The string.</value>
-		public string String
-		{
-			get { return _instructionSet.Data[_index].String; }
-			set { _instructionSet.Data[_index].String = value; }
-		}
-
-		/// <summary>
 		/// Gets or sets the runtime field.
 		/// </summary>
 		/// <value>The runtime field.</value>

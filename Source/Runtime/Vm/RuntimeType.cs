@@ -106,11 +106,7 @@ namespace Mosa.Runtime.Vm
         {
             get
             {
-                if (this.baseType == null)
-                {
-                    this.baseType = GetBaseType();
-                }
-
+                this.AssertBaseTypeIsLoaded();
                 return this.baseType;
             }
         }
@@ -130,7 +126,9 @@ namespace Mosa.Runtime.Vm
         {
             get
             {
-                RuntimeType valueType = RuntimeBase.Instance.TypeLoader.GetType(@"System.ValueType, mscorlib");
+                this.AssertBaseTypeIsLoaded();
+
+                RuntimeType valueType = RuntimeBase.Instance.TypeLoader.GetType(@"System.ValueType");
                 return this.IsSubclassOf(valueType);
             }
         }
@@ -397,6 +395,8 @@ namespace Mosa.Runtime.Vm
         {
             get
             {
+                this.AssertBaseTypeIsLoaded();
+
                 RuntimeType delegateType = RuntimeBase.Instance.TypeLoader.GetType(@"System.Delegate");
                 return this.IsSubclassOf(delegateType);
             }
@@ -406,6 +406,8 @@ namespace Mosa.Runtime.Vm
         {
             get
             {
+                this.AssertBaseTypeIsLoaded();
+
                 RuntimeType enumType = RuntimeBase.Instance.TypeLoader.GetType(@"System.Enum");
                 return ReferenceEquals(this.BaseType, enumType);
             }
@@ -429,6 +431,15 @@ namespace Mosa.Runtime.Vm
             set
             {
                 this.isCompiled = value;
+            }
+        }
+
+
+        private void AssertBaseTypeIsLoaded()
+        {
+            if (this.baseType == null)
+            {
+                this.baseType = GetBaseType();
             }
         }
     }

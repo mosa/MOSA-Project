@@ -109,6 +109,13 @@ namespace Mosa.Runtime.Linker
         LinkerSymbol GetSymbol(string symbolName);
 
         /// <summary>
+        /// Determines if a given symbol name is already in use by the linker.
+        /// </summary>
+        /// <param name="symbolName">The symbol name.</param>
+        /// <returns><c>true</c> if the symbol name is already used; <c>false</c> otherwise.</returns>
+        bool HasSymbol(string symbolName);
+
+        /// <summary>
         /// Issues a linker request for the given runtime method.
         /// </summary>
         /// <param name="linkType">The type of link required.</param>

@@ -14,6 +14,10 @@ namespace System
     /// </summary>
     [Serializable]
     public struct IntPtr
-    {       
+    {
+        /// <summary>
+        /// This is 32-bit specific :(
+        /// </summary>
+        private int value;
     }
 }

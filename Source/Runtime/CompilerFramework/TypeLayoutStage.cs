@@ -234,10 +234,6 @@ namespace Mosa.Runtime.CompilerFramework
             {
                 typeSize = baseType.Size;
             }
-            else
-            {
-                typeSize = CalculateInitialFieldOffset(type);
-            }
 
 			foreach (RuntimeField field in type.Fields) 
             {
@@ -266,21 +262,6 @@ namespace Mosa.Runtime.CompilerFramework
         private bool IsStaticField(RuntimeField field)
         {
             return (field.Attributes & FieldAttributes.Static) == FieldAttributes.Static;
-        }
-
-        private int CalculateInitialFieldOffset(RuntimeType type)
-        {
-            int offset = 0;
-            if (type.IsValueType == false)
-            {
-                //
-                // We make 8 bytes room at the start of an object to accomodate the method table pointer
-                // and a ptr to runtime/GC data.
-                //
-                offset = 2 * this.nativePointerSize;
-            }
-
-            return offset;
         }
 
 		/// <summary>
