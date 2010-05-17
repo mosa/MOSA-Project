@@ -64,36 +64,36 @@ namespace Mosa.HelloWorld
 			Screen.NextLine();
 			Screen.NextLine();
 
-			Screen.Color = 0x0A;
+			Screen.Color = Colors.Green;
 			Screen.Write(@"Size of Memory:   ");
-			Screen.Color = 0x07;
+			Screen.Color = Colors.Gray;
 			Screen.Write((Multiboot.MemoryLower + Multiboot.MemoryUpper) / 1024, 10, -1);
 			Screen.Write(@" MB (");
 			Screen.Write(Multiboot.MemoryLower + Multiboot.MemoryUpper, 10, -1);
 			Screen.Write(@" KB)");
 			Screen.NextLine();
 
-			Screen.Color = 0x0F;
+			Screen.Color = Colors.White;
 			for (uint index = 0; index < 60; index++)
 				Screen.Write((char)205);
 
 			Screen.NextLine();
 
-			Screen.Color = 0x0A;
+			Screen.Color = Colors.Green;
 			Screen.Write(@"Memory-Map:");
 			Screen.NextLine();
 
 			for (uint index = 0; index < Multiboot.MemoryMapCount; index++) {
-				Screen.Color = 0x0F;
+				Screen.Color = Colors.White;
 				Screen.Write(Multiboot.GetMemoryMapBase(index), 16, 10);
 				Screen.Write(@" - ");
 				Screen.Write(Multiboot.GetMemoryMapBase(index) + Multiboot.GetMemoryMapLength(index) - 1, 16, 10);
 				Screen.Write(@" (");
-				Screen.Color = 0x07;
+				Screen.Color = Colors.Gray;
 				Screen.Write(Multiboot.GetMemoryMapLength(index), 16, 10);
-				Screen.Color = 0x0F;
+				Screen.Color = Colors.White;
 				Screen.Write(@") ");
-				Screen.Color = 0x07;
+				Screen.Color = Colors.Gray;
 				Screen.Write(@"Type: ");
 				Screen.Write(Multiboot.GetMemoryMapType(index), 16, 1);
 				Screen.NextLine();
@@ -109,9 +109,9 @@ namespace Mosa.HelloWorld
 			
 			CpuInfo cpuInfo = new CpuInfo();
 			#region Vendor
-			Screen.Color = 0x0A;
+			Screen.Color = Colors.Green;
 			Screen.Write(@"Vendor:   ");
-			Screen.Color = 0x0F;
+			Screen.Color = Colors.White;
 
 			cpuInfo.PrintVendorString();
 
@@ -119,44 +119,44 @@ namespace Mosa.HelloWorld
 			#endregion
 
 			#region Brand
-			Screen.Color = 0x0A;
+			Screen.Color = Colors.Green;
 			Screen.Write(@"Brand:    ");
-			Screen.Color = 0x0F;
+			Screen.Color = Colors.White;
 			cpuInfo.PrintBrandString();
 			Screen.NextLine();
 			#endregion
 
 			#region Stepping
-			Screen.Color = 0x0A;
+			Screen.Color = Colors.Green;
 			Screen.Write(@"Stepping: ");
-			Screen.Color = 0x0F;
+			Screen.Color = Colors.White;
 			Screen.Write(cpuInfo.Stepping, 16, 2);
 			#endregion
 
 			#region Model
-			Screen.Color = 0x0A;
+			Screen.Color = Colors.Green;
 			Screen.Write(@" Model: ");
-			Screen.Color = 0x0F;
+			Screen.Color = Colors.White;
 			Screen.Write(cpuInfo.Model, 16, 2);
 			#endregion
 
 			#region Family
-			Screen.Color = 0x0A;
+			Screen.Color = Colors.Green;
 			Screen.Write(@" Family: ");
-			Screen.Color = 0x0F;
+			Screen.Color = Colors.White;
 			Screen.Write(cpuInfo.Family, 16, 2);
 			#endregion
 
 			#region Type
-			Screen.Color = 0x0A;
+			Screen.Color = Colors.Green;
 			Screen.Write(@" Type: ");
-			Screen.Color = 0x0F;
+			Screen.Color = Colors.White;
 
 			Screen.Write(cpuInfo.Type, 16, 2);
 			Screen.NextLine();
-            Screen.Color = 0x0A;
+            Screen.Color = Colors.Green;
 			Screen.Write(@"Cores:    ");
-            Screen.Color = 0x0F;
+            Screen.Color = Colors.White;
             Screen.Write(cpuInfo.NumberOfCores, 16, 2);
 			#endregion
 
@@ -172,7 +172,7 @@ namespace Mosa.HelloWorld
 				Screen.Column = 60;
 				Screen.Row = index;
 
-				Screen.Color = 0x0F;
+				Screen.Color = Colors.White;
 				if (index == 7)
 					Screen.Write((char)185);
 				else if (index == 18)
@@ -184,7 +184,7 @@ namespace Mosa.HelloWorld
 			}
 
 			Screen.SetCursor(24, 29);
-			Screen.Color = 0x0E;
+			Screen.Color = Colors.Yellow;
 			Screen.Write(@"www.mosa-project.org");
 
 			CMOS cmos = new CMOS();
@@ -201,7 +201,7 @@ namespace Mosa.HelloWorld
 		private static void DisplayTime(CMOS cmos)
 		{
 			Screen.SetCursor(24, 52);
-			Screen.Color = 0x0A;
+			Screen.Color = Colors.Green;
 			Screen.Write(@"Time: ");
 
 			byte bcd = 10;
@@ -209,61 +209,33 @@ namespace Mosa.HelloWorld
             if (cmos.BCD)
 				bcd = 16;
 
-			Screen.Color = 0x0F;
+			Screen.Color = Colors.White;
             Screen.Write(cmos.Hour, bcd, 2);
-			Screen.Color = 0x07;
+			Screen.Color = Colors.Gray;
 			Screen.Write(':');
-			Screen.Color = 0x0F;
+			Screen.Color = Colors.White;
             Screen.Write(cmos.Minute, bcd, 2);
-			Screen.Color = 0x07;
+			Screen.Color = Colors.Gray;
 			Screen.Write(':');
-			Screen.Color = 0x0F;
+			Screen.Color = Colors.White;
             Screen.Write(cmos.Second, bcd, 2);
 			Screen.Write(' ');
-			Screen.Color = 0x07;
+			Screen.Color = Colors.Gray;
 			Screen.Write('(');
-			Screen.Color = 0x0F;
+			Screen.Color = Colors.White;
             Screen.Write(cmos.Month, bcd, 2);
-			Screen.Color = 0x07;
+			Screen.Color = Colors.Gray;
 			Screen.Write('/');
-			Screen.Color = 0x0F;
+			Screen.Color = Colors.White;
             Screen.Write(cmos.Day, bcd, 2);
-			Screen.Color = 0x07;
+			Screen.Color = Colors.Gray;
 			Screen.Write('/');
-			Screen.Color = 0x0F;
+			Screen.Color = Colors.White;
 			Screen.Write('2');
 			Screen.Write('0');
             Screen.Write(cmos.Year, bcd, 2);
-			Screen.Color = 0x07;
+			Screen.Color = Colors.Gray;
 			Screen.Write(')');
 		}
-
-		/// <summary>
-		/// Prints the brand.
-		/// </summary>
-		/// <param name="param">The param.</param>
-		private static void PrintBrand(uint param)
-		{
-			int identifier = Platforms.x86.Native.CpuIdEax(param);
-			if (identifier != 0x20202020)
-				for (int i = 0; i < 4; ++i)
-					Screen.Write((char)((identifier >> (i * 8)) & 0xFF));
-
-			identifier = Platforms.x86.Native.CpuIdEbx(param);
-			if (identifier != 0x20202020)
-				for (int i = 0; i < 4; ++i)
-					Screen.Write((char)((identifier >> (i * 8)) & 0xFF));
-
-			identifier = Platforms.x86.Native.CpuIdEcx(param);
-			if (identifier != 0x20202020)
-				for (int i = 0; i < 4; ++i)
-					Screen.Write((char)((identifier >> (i * 8)) & 0xFF));
-
-			identifier = Platforms.x86.Native.CpuIdEdx(param);
-			if (identifier != 0x20202020)
-				for (int i = 0; i < 4; ++i)
-					Screen.Write((char)((identifier >> (i * 8)) & 0xFF));
-		}
-
 	}
 }

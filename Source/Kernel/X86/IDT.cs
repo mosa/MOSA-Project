@@ -365,7 +365,7 @@ namespace Mosa.Kernel.X86
 
 			Screen.Column = 30;
 			Screen.Row = 0;
-			Screen.Color = 3;
+			Screen.Color = Colors.Cyan;
 
 			_counter++;
 			Screen.Write(_counter, 10, 8);
