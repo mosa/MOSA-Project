@@ -15,27 +15,24 @@ namespace Test.Mosa.Runtime.CompilerFramework.CIL
     [TestFixture]
     [Importance(Importance.Critical)]
     [Category(@"Basic types")]
-    [Description(@"Tests support for the basic type System.Enum")]
-    public class EnumFixture : CodeDomTestRunner
+    [Description(@"Tests support for the basic type System.String")]
+    public class StringFixture : CodeDomTestRunner
     {
-        private static string CreateTestCode()
+        private static string CreateTestCode(string value)
         {
             return @"
-                public enum TestEnum
-                {
-                    ItemA = 5,
-                    ItemB
-                }
-
                 public class TestClass
                 {
-                    public static bool AMustBe5()
+                    public static string valueA = @""" + value + @""";
+                    public static string valueB = @""" + value + @""";
+
+                    public static bool LengthMustMatch()
                     {
-                        return 5 == (int)TestEnum.ItemA;
+                        return " + value.Length + @" == valueA.Length;
                     }
                 }
 
-            " 
+            "
             + Code.ObjectClassDefinition
             + Code.NoStdLibDefinitions;
         }
@@ -43,12 +40,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.CIL
         private delegate bool B_V();
 
         [Test]
-        public void ItemAMustEqual5()
+        public void MustProperlyCompileLdstrAndLengthMustMatch()
         {
-            this.CodeSource = CreateTestCode();
+            this.CodeSource = CreateTestCode(@"Foo");
             this.DoNotReferenceMsCorlib = true;
 
-            Assert.IsTrue((bool)Run<B_V>("", "TestClass", "AMustBe5"));
+            Assert.IsTrue((bool)Run<B_V>("", "TestClass", "LengthMustMatch"));
         }
     }
 }

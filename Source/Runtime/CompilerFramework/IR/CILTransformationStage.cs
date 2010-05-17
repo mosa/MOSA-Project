@@ -21,6 +21,9 @@ using Mosa.Runtime.CompilerFramework.CIL;
 
 using IR = Mosa.Runtime.CompilerFramework.IR;
 using CIL = Mosa.Runtime.CompilerFramework.CIL;
+using Mosa.Runtime.Linker;
+using System.IO;
+using System.Text;
 
 namespace Mosa.Runtime.CompilerFramework.IR
 {
@@ -630,9 +633,53 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// Visitation function for <see cref="ICILVisitor.Ldstr"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.Ldstr(Context ctx) 
+		public void Ldstr(Context ctx) 
         {
-            return;
+            /*
+             * This requires a special memory layout for strings as they are interned by the compiler
+             * into the generated image. This won't work this way forever: As soon as we'll support
+             * a real AppDomain and real string interning, this code will have to go away and will
+             * be replaced by a proper VM call.
+             * 
+             */
+
+            IAssemblyLinker linker = this.MethodCompiler.Linker;
+
+            string referencedString;
+            this.MethodCompiler.Assembly.Metadata.Read(ctx.Token, out referencedString);
+
+            string symbolName = @"$ldstr$String" + ctx.Token.ToString(@"x");
+
+            if (linker.HasSymbol(symbolName) == false)
+            {
+                const int nativePtrSize = 4;
+                const int nativePtrAlignment = 4;
+
+                int stringHeaderLength = nativePtrSize * 3;
+                int stringDataLength = referencedString.Length * 2;
+
+                using (Stream stream = linker.Allocate(symbolName, SectionKind.ROData, stringHeaderLength + stringDataLength, nativePtrAlignment))
+                {
+                    // Method table and sync block
+                    stream.Write(new byte[8], 0, 8);
+                    
+                    // String length field
+                    stream.Write(BitConverter.GetBytes(referencedString.Length), 0, nativePtrSize);
+
+                    // String data
+                    byte[] stringData = Encoding.Unicode.GetBytes(referencedString);
+                    Debug.Assert(stringData.Length == stringDataLength, @"Byte array of string data doesn't match expected string data length");
+                    stream.Write(stringData, 0, stringData.Length);
+                }
+
+                string stringMethodTableSymbol = @"System.String$mtable";
+                linker.Link(LinkType.AbsoluteAddress | LinkType.I4, symbolName, 0, 0, stringMethodTableSymbol, IntPtr.Zero);
+            }
+
+            Operand source = new SymbolOperand(BuiltInSigType.String, symbolName);
+            Operand destination = ctx.Result;
+
+            ctx.SetInstruction(Instruction.MoveInstruction, destination, source);
         }
 
 		/// <summary>

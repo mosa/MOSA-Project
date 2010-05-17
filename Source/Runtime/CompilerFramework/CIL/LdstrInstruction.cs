@@ -49,20 +49,13 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			base.Decode(ctx, decoder);
 
 			// Load the string value, it's a token
-			IMetadataProvider metadata = decoder.Compiler.Assembly.Metadata;
 			TokenTypes token;
 			decoder.Decode(out token);
 			token |= TokenTypes.UserString;
 
-			string value;
-			metadata.Read(token, out value);
-
 			// Set the result
-			ctx.String = value;
-			ctx.Result = decoder.Compiler.CreateTemporary(new SigType(CilElementType.String));
-
-			// TODO: Add it to the linker (here? or in later stage?)
-			// TODO: Re-use static strings
+			ctx.Token = token;
+			ctx.Result = decoder.Compiler.CreateTemporary(BuiltInSigType.String);
 		}
 
 		/// <summary>
@@ -74,7 +67,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </returns>
 		public override string ToString(Context context)
 		{
-			return base.ToString(context) + " \"" + context.String + "\"";
+			return base.ToString(context) + " <- 0x" + context.Token.ToString(@"x");
 		}
 
 		/// <summary>

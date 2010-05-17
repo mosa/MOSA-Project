@@ -17,6 +17,9 @@ namespace Test.Mosa.Runtime.CompilerFramework
             {
                 public class Object
                 {
+                    private int methodTablePtr;
+                    private int syncBlock;
+
                     public Object()
                     {
                     }
@@ -40,7 +43,12 @@ namespace Test.Mosa.Runtime.CompilerFramework
                     {
                     }
                 }
+            }
+        ";
 
+        public const string NoStdLibDefinitions = @"
+            namespace System
+            {
                 public class ValueType : Object
                 {
                 }
@@ -52,12 +60,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
                 public class Delegate : Object
                 {
                 }
-            }
-        ";
 
-        public const string NoStdLibDefinitions = @"
-            namespace System
-            {
                 public struct SByte
                 {
                 }
@@ -114,8 +117,13 @@ namespace Test.Mosa.Runtime.CompilerFramework
                 {
                 }
 
+                public struct Decimal
+                {
+                }
+
                 public class String
                 {
+                    public int Length;
                 }
 
                 public class MulticastDelegate : Delegate

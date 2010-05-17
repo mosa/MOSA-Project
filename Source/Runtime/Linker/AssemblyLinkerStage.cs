@@ -39,22 +39,22 @@ namespace Mosa.Runtime.Linker
 		/// <summary>
 		/// Holds the entry point of the compiled binary.
 		/// </summary>
-		private LinkerSymbol _entryPoint;
+		private LinkerSymbol entryPoint;
 
 		/// <summary>
 		/// Holds all unresolved link requests.
 		/// </summary>
-		private readonly Dictionary<string, List<LinkRequest>> _linkRequests;
+		private readonly Dictionary<string, List<LinkRequest>> linkRequests;
 
 		/// <summary>
 		/// Holds the output file of the linker.
 		/// </summary>
-		private string _outputFile;
+		private string outputFile;
 
 		/// <summary>
 		/// A dictionary containing all symbol seen in the assembly.
 		/// </summary>
-		private readonly Dictionary<string, LinkerSymbol> _symbols;
+		private readonly Dictionary<string, LinkerSymbol> symbols;
 
 		#endregion // Data members
 
@@ -66,8 +66,8 @@ namespace Mosa.Runtime.Linker
 		protected AssemblyLinkerStageBase()
 		{
 			this.baseAddress = 0x00400000; // Use the Win32 default for now, FIXME
-			_linkRequests = new Dictionary<string, List<LinkRequest>>();
-			_symbols = new Dictionary<string, LinkerSymbol>();
+			this.linkRequests = new Dictionary<string, List<LinkRequest>>();
+			this.symbols = new Dictionary<string, LinkerSymbol>();
 		}
 
 		#endregion // Construction
@@ -96,26 +96,26 @@ namespace Mosa.Runtime.Linker
 		{
 			long address;
 
-            this.AddVmCalls(this._symbols);
+            this.AddVmCalls(this.symbols);
 
 			// Check if we have unresolved requests and try to link them
-			List<string> members = new List<string>(_linkRequests.Keys);
+			List<string> members = new List<string>(this.linkRequests.Keys);
 			foreach (string member in members) {
 				// Is the runtime member resolved?
 				if (IsResolved(member, out address)) {
 					// Yes, patch up the method
-					List<LinkRequest> link = _linkRequests[member];
+					List<LinkRequest> link = this.linkRequests[member];
 					PatchRequests(address, link);
-					_linkRequests.Remove(member);
+					this.linkRequests.Remove(member);
 				}
 			}
 
-			Debug.Assert(_linkRequests.Count == 0, @"AssemblyLinker has found unresolved _symbols.");
-			if (_linkRequests.Count != 0)
+			Debug.Assert(this.linkRequests.Count == 0, @"AssemblyLinker has found unresolved _symbols.");
+			if (this.linkRequests.Count != 0)
 			{
 				StringBuilder sb = new StringBuilder();
 				sb.AppendLine(@"Unresolved symbols:");
-				foreach (string member in _linkRequests.Keys)
+				foreach (string member in this.linkRequests.Keys)
 				{
 					sb.AppendFormat("\t{0}\r\n", member);
 				}
@@ -161,8 +161,8 @@ namespace Mosa.Runtime.Linker
 		/// <value>The entry point symbol.</value>
 		public LinkerSymbol EntryPoint
 		{
-			get { return this._entryPoint; }
-			set { this._entryPoint = value; }
+			get { return this.entryPoint; }
+			set { this.entryPoint = value; }
 		}
 
 		/// <summary>
@@ -180,10 +180,14 @@ namespace Mosa.Runtime.Linker
 		/// <value>The output file.</value>
 		public string OutputFile
 		{
-			get { return _outputFile; }
+			get 
+            { 
+                return this.outputFile; 
+            }
+
 			set
 			{
-				_outputFile = value;
+				this.outputFile = value;
 			}
 		}
 
@@ -211,7 +215,7 @@ namespace Mosa.Runtime.Linker
 		/// <value>The symbol collection.</value>
 		public ICollection<LinkerSymbol> Symbols
 		{
-			get { return _symbols.Values; }
+			get { return this.symbols.Values; }
 		}
 
 		/// <summary>
@@ -244,7 +248,7 @@ namespace Mosa.Runtime.Linker
 				LinkerSymbol symbol = new LinkerSymbol(name, section, baseStream.Position);
 
 				// Save the symbol for later use
-				_symbols.Add(symbol.Name, symbol);
+				this.symbols.Add(symbol.Name, symbol);
 
 				// Wrap the stream to catch premature disposal
 				result = new LinkerStream(symbol, baseStream, size);
@@ -288,11 +292,21 @@ namespace Mosa.Runtime.Linker
 				throw new ArgumentNullException(@"symbolName");
 
 			LinkerSymbol result;
-			if (!_symbols.TryGetValue(symbolName, out result))
+			if (!this.symbols.TryGetValue(symbolName, out result))
 				throw new ArgumentException(@"Symbol not compiled.", @"member");
 
 			return result;
 		}
+
+        /// <summary>
+        /// Determines if a given symbol name is already in use by the linker.
+        /// </summary>
+        /// <param name="symbolName">The symbol name.</param>
+        /// <returns><c>true</c> if the symbol name is already used; <c>false</c> otherwise.</returns>
+        public bool HasSymbol(string symbolName)
+        {
+            return this.symbols.ContainsKey(symbolName);
+        }
 
 		/// <summary>
 		/// Issues a linker request for the given runtime method.
@@ -339,9 +353,10 @@ namespace Mosa.Runtime.Linker
 				throw new ArgumentNullException(@"symbol");
 
 			List<LinkRequest> list;
-			if (!_linkRequests.TryGetValue(targetSymbol, out list)) {
+			if (!this.linkRequests.TryGetValue(targetSymbol, out list)) 
+            {
 				list = new List<LinkRequest>();
-				_linkRequests.Add(targetSymbol, list);
+				this.linkRequests.Add(targetSymbol, list);
 			}
 
 			list.Add(new LinkRequest(linkType, symbolName, methodOffset, methodRelativeBase, targetSymbol, offset));
@@ -373,9 +388,11 @@ namespace Mosa.Runtime.Linker
 		{
 			virtualAddress = 0;
 			LinkerSymbol linkerSymbol;
-			if (this._symbols.TryGetValue(symbol, out linkerSymbol)) {
+			if (this.symbols.TryGetValue(symbol, out linkerSymbol)) 
+            {
 				virtualAddress = linkerSymbol.VirtualAddress.ToInt64();
 			}
+
 			return (0 != virtualAddress);
 		}
 
@@ -400,7 +417,8 @@ namespace Mosa.Runtime.Linker
 		{
 			long methodAddress;
 
-			foreach (LinkRequest request in requests) {
+			foreach (LinkRequest request in requests) 
+            {
 				if (IsResolved(request.LinkSymbol, out methodAddress) == false)
 					throw new InvalidOperationException(@"Method not compiled - but making link requests??");
 
@@ -416,5 +434,5 @@ namespace Mosa.Runtime.Linker
 		}
 
 		#endregion // Internals
-	}
+    }
 }
