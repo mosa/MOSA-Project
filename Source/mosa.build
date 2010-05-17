@@ -36,8 +36,9 @@
 	<target name="tools" depends="init, classlib, devicesystem, devicedrivers, filesystem, emulateddevices, kernel, platforms, runtime"><nant buildfile="Tools/mosa.build"/></target>
 	<target name="helloworld" depends="init,kernel"><nant buildfile="HelloWorld/mosa.build"/></target>
 	<target name="emulator" depends="init, devicesystem, devicedrivers, emulatedkernel, filesystem, emulateddevices, classlib, pictor, pictor.ui"><nant buildfile="Emulator/mosa.build"/></target>
+	<target name="korlib" depends="init"><nant buildfile="Korlib/mosa.build"/></target>
 	<!-- meta target -->
-	<target name="all" depends="classlib, devicesystem, devicedrivers, filesystem, emulatedkernel, emulateddevices, kernel, pictor, pictor.ui, platforms, runtime, tools, helloworld, emulator"/>
+	<target name="all" depends="classlib, devicesystem, devicedrivers, filesystem, emulatedkernel, emulateddevices, kernel, pictor, pictor.ui, platforms, runtime, tools, helloworld, emulator, korlib"/>
 
 		
 </project>
