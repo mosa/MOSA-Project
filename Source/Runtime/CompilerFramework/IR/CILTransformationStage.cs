@@ -24,6 +24,7 @@ using CIL = Mosa.Runtime.CompilerFramework.CIL;
 using Mosa.Runtime.Linker;
 using System.IO;
 using System.Text;
+using Mosa.Runtime.Loader;
 
 namespace Mosa.Runtime.CompilerFramework.IR
 {
@@ -108,20 +109,34 @@ namespace Mosa.Runtime.CompilerFramework.IR
             IInstruction loadInstruction = Instruction.LoadInstruction;
             Operand destination = ctx.Result;
 		    Operand source = ctx.Operand1;
-            RefSigType refSigType = (RefSigType)source.Type;
+
+            SigType elementType = GetElementTypeFromSigType(source.Type);
 
 			// This is actually ldind.* and ldobj - the opcodes have the same meanings
-            if (MustSignExtendOnLoad(refSigType.ElementType.Type))
+            if (MustSignExtendOnLoad(elementType.Type))
             {
                 loadInstruction = Instruction.SignExtendedMoveInstruction;
             }
-            else if (MustZeroExtendOnLoad(refSigType.ElementType.Type))
+            else if (MustZeroExtendOnLoad(elementType.Type))
             {
                 loadInstruction = Instruction.ZeroExtendedMoveInstruction;                
             }
 
 		    ctx.SetInstruction(loadInstruction, destination, source, ConstantOperand.FromValue(0));
 		}
+
+        private SigType GetElementTypeFromSigType(SigType sigType)
+        {
+            RefSigType refSigType = sigType as RefSigType;
+            if (refSigType != null)
+                return refSigType.ElementType;
+
+            PtrSigType ptrSigType = sigType as PtrSigType;
+            if (ptrSigType != null)
+                return ptrSigType.ElementType;
+
+            throw new NotSupportedException(@"Invalid signature type: " + sigType.GetType());
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="ICILVisitor.Ldsfld"/>.
@@ -644,11 +659,12 @@ namespace Mosa.Runtime.CompilerFramework.IR
              */
 
             IAssemblyLinker linker = this.MethodCompiler.Linker;
+            IMetadataModule assembly = this.MethodCompiler.Assembly;
 
             string referencedString;
-            this.MethodCompiler.Assembly.Metadata.Read(ctx.Token, out referencedString);
+            assembly.Metadata.Read(ctx.Token, out referencedString);
 
-            string symbolName = @"$ldstr$String" + ctx.Token.ToString(@"x");
+            string symbolName = @"$ldstr$" + assembly.Name + "$String" + ctx.Token.ToString(@"x");
 
             if (linker.HasSymbol(symbolName) == false)
             {
@@ -658,7 +674,8 @@ namespace Mosa.Runtime.CompilerFramework.IR
                 int stringHeaderLength = nativePtrSize * 3;
                 int stringDataLength = referencedString.Length * 2;
 
-                using (Stream stream = linker.Allocate(symbolName, SectionKind.ROData, stringHeaderLength + stringDataLength, nativePtrAlignment))
+                // HACK: These strings should actually go into .rodata, but we can't link that right now.
+                using (Stream stream = linker.Allocate(symbolName, SectionKind.Text, stringHeaderLength + stringDataLength, nativePtrAlignment))
                 {
                     // Method table and sync block
                     stream.Write(new byte[8], 0, 8);
@@ -714,6 +731,11 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <param name="ctx">The context.</param>
 		public void Ldflda(Context ctx)
 		{
+            Operand fieldAddress = ctx.Result;
+            Operand objectOperand = ctx.Operand1;
+            
+            Operand fixedOffset = new ConstantOperand(BuiltInSigType.Int32, ctx.RuntimeField.Address.ToInt32());
+            ctx.SetInstruction(Instruction.AddUInstruction, fieldAddress, objectOperand, fixedOffset);
 		}
 
 		/// <summary>
@@ -1242,6 +1264,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 				case CilElementType.I: return ConvType.I;
 				case CilElementType.U: return ConvType.U;
 				case CilElementType.Ptr: return ConvType.Ptr;
+                case CilElementType.ByRef: return ConvType.Ptr;
 			}
 
 			// Requested CilElementType is not supported

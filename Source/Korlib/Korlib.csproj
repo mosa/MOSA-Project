@@ -1,141 +1,141 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
-	<PropertyGroup>
-		<ProjectType>Local</ProjectType>
-		<ProductVersion>9.0.30729</ProductVersion>
-		<SchemaVersion>2.0</SchemaVersion>
-		<ProjectGuid>{631BC4F3-E2D8-4319-814C-13904CAA17CE}</ProjectGuid>
-		<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-		<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-		<ApplicationIcon>
-		</ApplicationIcon>
-		<AssemblyKeyContainerName>
-		</AssemblyKeyContainerName>
-		<AssemblyName>mscorlib</AssemblyName>
-		<DefaultClientScript>JScript</DefaultClientScript>
-		<DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
-		<DefaultTargetSchema>IE50</DefaultTargetSchema>
-		<DelaySign>false</DelaySign>
-		<TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-		<OutputType>Library</OutputType>
-		<AppDesignerFolder>
-		</AppDesignerFolder>
-		<RootNamespace>System</RootNamespace>
-		<FileUpgradeFlags>
-		</FileUpgradeFlags>
-		<OldToolsVersion>3.5</OldToolsVersion>
-		<UpgradeBackupLocation />
-		<TargetFrameworkProfile />
-	</PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-		<AllowUnsafeBlocks>False</AllowUnsafeBlocks>
-		<BaseAddress>285212672</BaseAddress>
-		<CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
-		<ConfigurationOverrideFile>
-		</ConfigurationOverrideFile>
-		<DefineConstants>NET_2_0</DefineConstants>
-		<DocumentationFile>
-		</DocumentationFile>
-		<DebugSymbols>True</DebugSymbols>
-		<FileAlignment>4096</FileAlignment>
-		<Optimize>False</Optimize>
-		<OutputPath>..\..\bin\</OutputPath>
-		<RegisterForComInterop>False</RegisterForComInterop>
-		<RemoveIntegerChecks>False</RemoveIntegerChecks>
-		<TreatWarningsAsErrors>True</TreatWarningsAsErrors>
-		<WarningLevel>4</WarningLevel>
-		<NoStdLib>True</NoStdLib>
-		<NoWarn>
-		</NoWarn>
-	</PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-		<AllowUnsafeBlocks>False</AllowUnsafeBlocks>
-		<BaseAddress>285212672</BaseAddress>
-		<CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
-		<ConfigurationOverrideFile>
-		</ConfigurationOverrideFile>
-		<DefineConstants>NET_2_0</DefineConstants>
-		<DocumentationFile>
-		</DocumentationFile>
-		<DebugSymbols>False</DebugSymbols>
-		<FileAlignment>4096</FileAlignment>
-		<Optimize>True</Optimize>
-		<OutputPath>..\..\bin\</OutputPath>
-		<RegisterForComInterop>False</RegisterForComInterop>
-		<RemoveIntegerChecks>False</RemoveIntegerChecks>
-		<TreatWarningsAsErrors>True</TreatWarningsAsErrors>
-		<WarningLevel>2</WarningLevel>
-		<NoStdLib>True</NoStdLib>
-		<NoWarn>
-		</NoWarn>
-	</PropertyGroup>
-	<ItemGroup>
-		<Compile Include="Activator.cs" />
-		<Compile Include="ArgumentException.cs" />
-		<Compile Include="ArgumentNullException.cs" />
-		<Compile Include="ArgumentOutOfRangeException.cs" />
-		<Compile Include="Attribute.cs" />
-		<Compile Include="AttributeTarget.cs" />
-		<Compile Include="AttributeUsageAttribute.cs" />
-		<Compile Include="Delegate.cs" />
-		<Compile Include="Exception.cs" />
-		<Compile Include="FlagsAttribute.cs" />
-		<Compile Include="IDisposable.cs" />
-		<Compile Include="InvalidOperationException.cs" />
-		<Compile Include="MulticastDelegate.cs" />
-		<Compile Include="NotSupportedException.cs" />
-		<Compile Include="ObjectDisposedException.cs" />
-		<Compile Include="ParamArrayAttribute.cs" />
-		<Compile Include="RuntimeFieldHandle.cs" />
-		<Compile Include="RuntimeTypeHandle.cs" />
-		<Compile Include="Serializable.cs" />
-		<Compile Include="Type.cs" />
-		<Compile Include="Collections\ICollection.cs" />
-		<Compile Include="Collections\IEnumerable.cs" />
-		<Compile Include="Collections\IEnumerator.cs" />
-		<Compile Include="Collections\IEqualityComparer.cs" />
-		<Compile Include="Collections\IList.cs" />
-		<Compile Include="Collections\Generic\ICollection.cs" />
-		<Compile Include="Collections\Generic\IComparer.cs" />
-		<Compile Include="Collections\Generic\IEnumerable.cs" />
-		<Compile Include="Collections\Generic\IEnumerator.cs" />
-		<Compile Include="Collections\Generic\IEqualityComparer.cs" />
-		<Compile Include="Collections\Generic\IList.cs" />
-		<Compile Include="IO\FileAccess.cs" />
-		<Compile Include="IO\FileShare.cs" />
-		<Compile Include="IO\Path.cs" />
-		<Compile Include="IO\SeekOrigin.cs" />
-		<Compile Include="IO\Stream.cs" />
-		<Compile Include="Primitives\Array.cs" />
-		<Compile Include="Primitives\Boolean.cs" />
-		<Compile Include="Primitives\Byte.cs" />
-		<Compile Include="Primitives\Char.cs" />
-		<Compile Include="Primitives\Double.cs" />
-		<Compile Include="Primitives\Enum.cs" />
-		<Compile Include="Primitives\Int16.cs" />
-		<Compile Include="Primitives\Int32.cs" />
-		<Compile Include="Primitives\Int64.cs" />
-		<Compile Include="Primitives\IntPtr.cs" />
-		<Compile Include="Primitives\Object.cs" />
-		<Compile Include="Primitives\SByte.cs" />
-		<Compile Include="Primitives\Single.cs" />
-		<Compile Include="Primitives\String.cs" />
-		<Compile Include="Primitives\UInt16.cs" />
-		<Compile Include="Primitives\UInt32.cs" />
-		<Compile Include="Primitives\UInt64.cs" />
-		<Compile Include="Primitives\UIntPtr.cs" />
-		<Compile Include="Primitives\ValueType.cs" />
-		<Compile Include="Primitives\Void.cs" />
-		<Compile Include="Reflection\DefaultMemberAttribute.cs" />
-		<Compile Include="Runtime\CompilerServices\CompilerGeneratedAttribute.cs" />
-		<Compile Include="Runtime\InteropServices\ComVisible.cs" />
-		<Compile Include="Runtime\InteropServices\OutAttribute.cs" />
-	</ItemGroup>
-	<Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
-	<PropertyGroup>
-		<PreBuildEvent>
-		</PreBuildEvent>
-		<PostBuildEvent>
-		</PostBuildEvent>
-	</PropertyGroup>
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{631BC4F3-E2D8-4319-814C-13904CAA17CE}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ApplicationIcon>
+    </ApplicationIcon>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>mscorlib</AssemblyName>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>
+    </AppDesignerFolder>
+    <RootNamespace>System</RootNamespace>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>NET_2_0</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>True</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <Optimize>False</Optimize>
+    <OutputPath>..\..\bin\</OutputPath>
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <RemoveIntegerChecks>False</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <NoStdLib>True</NoStdLib>
+    <NoWarn>0169;0649</NoWarn>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <AllowUnsafeBlocks>False</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <CheckForOverflowUnderflow>False</CheckForOverflowUnderflow>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>NET_2_0</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>False</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <Optimize>True</Optimize>
+    <OutputPath>..\..\bin\</OutputPath>
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <RemoveIntegerChecks>False</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>True</TreatWarningsAsErrors>
+    <WarningLevel>2</WarningLevel>
+    <NoStdLib>True</NoStdLib>
+    <NoWarn>
+    </NoWarn>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Activator.cs" />
+    <Compile Include="ArgumentException.cs" />
+    <Compile Include="ArgumentNullException.cs" />
+    <Compile Include="ArgumentOutOfRangeException.cs" />
+    <Compile Include="Attribute.cs" />
+    <Compile Include="AttributeTarget.cs" />
+    <Compile Include="AttributeUsageAttribute.cs" />
+    <Compile Include="Delegate.cs" />
+    <Compile Include="Exception.cs" />
+    <Compile Include="FlagsAttribute.cs" />
+    <Compile Include="IDisposable.cs" />
+    <Compile Include="InvalidOperationException.cs" />
+    <Compile Include="MulticastDelegate.cs" />
+    <Compile Include="NotSupportedException.cs" />
+    <Compile Include="ObjectDisposedException.cs" />
+    <Compile Include="ParamArrayAttribute.cs" />
+    <Compile Include="RuntimeFieldHandle.cs" />
+    <Compile Include="RuntimeTypeHandle.cs" />
+    <Compile Include="Runtime\CompilerServices\IndexerNameAttribute.cs" />
+    <Compile Include="Serializable.cs" />
+    <Compile Include="Type.cs" />
+    <Compile Include="Collections\ICollection.cs" />
+    <Compile Include="Collections\IEnumerable.cs" />
+    <Compile Include="Collections\IEnumerator.cs" />
+    <Compile Include="Collections\IEqualityComparer.cs" />
+    <Compile Include="Collections\IList.cs" />
+    <Compile Include="Collections\Generic\ICollection.cs" />
+    <Compile Include="Collections\Generic\IComparer.cs" />
+    <Compile Include="Collections\Generic\IEnumerable.cs" />
+    <Compile Include="Collections\Generic\IEnumerator.cs" />
+    <Compile Include="Collections\Generic\IEqualityComparer.cs" />
+    <Compile Include="Collections\Generic\IList.cs" />
+    <Compile Include="IO\FileAccess.cs" />
+    <Compile Include="IO\FileShare.cs" />
+    <Compile Include="IO\Path.cs" />
+    <Compile Include="IO\SeekOrigin.cs" />
+    <Compile Include="IO\Stream.cs" />
+    <Compile Include="Primitives\Array.cs" />
+    <Compile Include="Primitives\Boolean.cs" />
+    <Compile Include="Primitives\Byte.cs" />
+    <Compile Include="Primitives\Char.cs" />
+    <Compile Include="Primitives\Double.cs" />
+    <Compile Include="Primitives\Enum.cs" />
+    <Compile Include="Primitives\Int16.cs" />
+    <Compile Include="Primitives\Int32.cs" />
+    <Compile Include="Primitives\Int64.cs" />
+    <Compile Include="Primitives\IntPtr.cs" />
+    <Compile Include="Primitives\Object.cs" />
+    <Compile Include="Primitives\SByte.cs" />
+    <Compile Include="Primitives\Single.cs" />
+    <Compile Include="Primitives\String.cs" />
+    <Compile Include="Primitives\UInt16.cs" />
+    <Compile Include="Primitives\UInt32.cs" />
+    <Compile Include="Primitives\UInt64.cs" />
+    <Compile Include="Primitives\UIntPtr.cs" />
+    <Compile Include="Primitives\ValueType.cs" />
+    <Compile Include="Primitives\Void.cs" />
+    <Compile Include="Reflection\DefaultMemberAttribute.cs" />
+    <Compile Include="Runtime\CompilerServices\CompilerGeneratedAttribute.cs" />
+    <Compile Include="Runtime\InteropServices\ComVisible.cs" />
+    <Compile Include="Runtime\InteropServices\OutAttribute.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
 </Project>

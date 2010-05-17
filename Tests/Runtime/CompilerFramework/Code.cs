@@ -17,8 +17,8 @@ namespace Test.Mosa.Runtime.CompilerFramework
             {
                 public class Object
                 {
-                    private int methodTablePtr;
-                    private int syncBlock;
+                    private IntPtr methodTablePtr;
+                    private IntPtr syncBlock;
 
                     public Object()
                     {
@@ -111,6 +111,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
 
                 public struct IntPtr
                 {
+                    private int value;
                 }
 
                 public struct UIntPtr
@@ -123,7 +124,37 @@ namespace Test.Mosa.Runtime.CompilerFramework
 
                 public class String
                 {
-                    public int Length;
+                    private int length;
+
+                    public int Length
+                    {
+                        get
+                        {
+                            return this.length;
+                        }
+                    }
+
+                    public unsafe char this[int index]
+                    {
+                        get
+                        {
+                            /*
+                             * HACK: This is not GC safe. Once we have GCHandle and the other structures,
+                             * we need to wrap this in fixed-Block.
+                             * 
+                             */
+
+                            char result;
+
+                            fixed (int *pLength = &this.length)
+                            {
+                                char* pChars = (char*)(pLength + 1);
+                                result = *(pChars + index);
+                            }
+
+                            return result;
+                        }
+                    }
                 }
 
                 public class MulticastDelegate : Delegate
@@ -180,6 +211,9 @@ namespace Test.Mosa.Runtime.CompilerFramework
                 {
                     public class DefaultMemberAttribute : Attribute
                     {
+                        public DefaultMemberAttribute(string name)
+                        {
+                        }
                     }
                 }
 

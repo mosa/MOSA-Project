@@ -14,6 +14,8 @@ using System.Text;
 
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Vm;
+using Mosa.Runtime.Metadata.Signatures;
+using Mosa.Runtime.CompilerFramework.Operands;
 
 namespace Mosa.Runtime.CompilerFramework.CIL
 {
@@ -44,22 +46,14 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
 		public override void Decode(Context ctx, IInstructionDecoder decoder)
 		{
-			// Decode base classes first
 			base.Decode(ctx, decoder);
 
-
-			// Load the _stackFrameIndex token from the immediate
 			TokenTypes token;
 			decoder.Decode(out token);
-			throw new NotImplementedException();
-			/*
-				Debug.Assert(TokenTypes.Field == (TokenTypes.TableMask & token) ||
-							 TokenTypes.MemberRef == (TokenTypes.TableMask & token), @"Invalid token type.");
-				MemberDefinition memberDef = MetadataMemberReference.FromToken(decoder.Metadata, token).Resolve();
+            ctx.RuntimeField = RuntimeBase.Instance.TypeLoader.GetField(decoder.Method, decoder.Method.Module, token);
 
-				_field = memberDef as FieldDefinition;
-				_results[0] = CreateResultOperand(new ReferenceTypeSpecification(_field.Type));
-			 */
+            SigType sigType = new RefSigType(ctx.RuntimeField.SignatureType);
+            ctx.Result = LoadInstruction.CreateResultOperand(decoder, Operand.StackTypeFromSigType(sigType), sigType);
 		}
 
 		/// <summary>

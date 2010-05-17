@@ -12,7 +12,7 @@
 	
 	<!-- Main build target -->
 	<target name="build">
-	    <csc target="library" output="${outputDirectory}/mscorlib.dll" debug="${debug}" nostdlib="true">
+	    <csc target="library" unsafe="true" output="${outputDirectory}/mscorlib.dll" debug="${debug}" nostdlib="true">
 		<sources>
 			<include name="**/*.cs"/>
 		</sources>

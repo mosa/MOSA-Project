@@ -6,6 +6,7 @@
  */
 
 using Mosa.Platforms.x86;
+using Mosa.Kernel;
 using Mosa.Kernel.X86;
 
 namespace Mosa.HelloWorld
@@ -23,89 +24,14 @@ namespace Mosa.HelloWorld
 		{
 			Kernel.Setup();
 			Screen.GotoTop();
-			Screen.Color = 0x0E;
-			Screen.Write('M');
-			Screen.Write('O');
-			Screen.Write('S');
-			Screen.Write('A');
-			Screen.Write(' ');
-			Screen.Write('O');
-			Screen.Write('S');
-			Screen.Write(' ');
-			Screen.Write('V');
-			Screen.Write('e');
-			Screen.Write('r');
-			Screen.Write('s');
-			Screen.Write('i');
-			Screen.Write('o');
-			Screen.Write('n');
-			Screen.Write(' ');
-			Screen.Write('0');
-			Screen.Write('.');
-			Screen.Write('6');
-			Screen.Write(' ');
-			Screen.Write('\'');
-			Screen.Color = 0x0C;
-			Screen.Write('M');
-			Screen.Write('a');
-			Screen.Write('m');
-			Screen.Write('m');
-			Screen.Write('o');
-			Screen.Write('t');
-			Screen.Write('h');
-			Screen.Color = 0x0E;
-			Screen.Write('\'');
-			Screen.Write(' ');
-			Screen.Write(' ');
-			Screen.Write(' ');
-			Screen.Write(' ');
-			Screen.Write(' ');
-			Screen.Write(' ');
-			Screen.Write(' ');
-			Screen.Write(' ');
-			Screen.Write(' ');
-			Screen.Write(' ');
-			Screen.Write(' ');
-			Screen.Write(' ');
-			Screen.Write(' ');
-			Screen.Write(' ');
-			Screen.Write(' ');
-			Screen.Write(' ');
-			Screen.Write(' ');
-			Screen.Write(' ');
-			Screen.Write(' ');
-			Screen.Write(' ');
-			Screen.Write(' ');
-			Screen.Write(' ');
-			Screen.Write(' ');
-			Screen.Write(' ');
-			Screen.Write(' ');
-			Screen.Write(' ');
-			Screen.Write(' ');
-			Screen.Write(' ');
-			Screen.Write(' ');
-			Screen.Write(' ');
-			Screen.Write(' ');
-			Screen.Color = 0x0E;
-			Screen.Write('C');
-			Screen.Write('o');
-			Screen.Write('p');
-			Screen.Write('y');
-			Screen.Write('r');
-			Screen.Write('i');
-			Screen.Write('g');
-			Screen.Write('h');
-			Screen.Write('t');
-			Screen.Write(' ');
-			Screen.Write('2');
-			Screen.Write('0');
-			Screen.Write('0');
-			Screen.Write('8');
-			Screen.Write('-');
-			Screen.Write('2');
-			Screen.Write('0');
-			Screen.Write('1');
-			Screen.Write('0');
+			Screen.Color = Colors.Yellow;
+
+            Native.BochsDebug();
+            Screen.Write(@"MOSA OS Version 0.6 '");
+			Screen.Color = Colors.Red;
+            Screen.Write(@"Mammoth");
+			Screen.Color = Colors.Yellow;
+			Screen.Write(@"'                               Copyright 2008-2010");
 			Screen.NextLine();
 
 			Screen.Color = 0x0F;
@@ -118,107 +44,33 @@ namespace Mosa.HelloWorld
 			Screen.NextLine();
 
 			Screen.SetCursor(2, 0);
-			Screen.Color = 0x0A;
-			Screen.Write('M');
-			Screen.Write('u');
-			Screen.Write('l');
-			Screen.Write('t');
-			Screen.Write('i');
-			Screen.Write('b');
-			Screen.Write('o');
-			Screen.Write('o');
-			Screen.Write('t');
-			Screen.Write('a');
-			Screen.Write('d');
-			Screen.Write('d');
-			Screen.Write('r');
-			Screen.Write('e');
-			Screen.Write('s');
-			Screen.Write('s');
-			Screen.Write(':');
-			Screen.Write(' ');
-			Screen.Color = 0x07;
+			Screen.Color = Colors.Green;
+			Screen.Write(@"Multibootaddress: ");
+			Screen.Color = Colors.Gray;
 			Screen.Write(Native.Get32(0x200004), 16, 8);
 
 			Screen.NextLine();
-			Screen.Color = 0x0A;
-			Screen.Write('M');
-			Screen.Write('a');
-			Screen.Write('g');
-			Screen.Write('i');
-			Screen.Write('c');
-			Screen.Write(' ');
-			Screen.Write('n');
-			Screen.Write('u');
-			Screen.Write('m');
-			Screen.Write('b');
-			Screen.Write('e');
-			Screen.Write('r');
-			Screen.Write(':');
-			Screen.Write(' ');
-			Screen.Write(' ');
-			Screen.Write(' ');
-			Screen.Write(' ');
-			Screen.Write(' ');
+			Screen.Color = Colors.Green;
+			Screen.Write(@"Magic number:     ");
+			Screen.Color = Colors.Gray;
 			Screen.Color = 0x07;
 			Screen.Write(Native.Get32(0x200000), 16, 8);
 
 			Screen.NextLine();
-			Screen.Color = 0x0A;
-			Screen.Write('M');
-			Screen.Write('u');
-			Screen.Write('l');
-			Screen.Write('t');
-			Screen.Write('i');
-			Screen.Write('b');
-			Screen.Write('o');
-			Screen.Write('o');
-			Screen.Write('t');
-			Screen.Write('-');
-			Screen.Write('F');
-			Screen.Write('l');
-			Screen.Write('a');
-			Screen.Write('g');
-			Screen.Write('s');
-			Screen.Write(':');
-			Screen.Write(' ');
-			Screen.Write(' ');
-			Screen.Color = 0x07;
+			Screen.Color = Colors.Green;
+			Screen.Write(@"Multiboot-Flags:  ");
+			Screen.Color = Colors.Gray;
 			Screen.Write(Multiboot.Flags, 2, 32);
 			Screen.NextLine();
 			Screen.NextLine();
 
 			Screen.Color = 0x0A;
-			Screen.Write('S');
-			Screen.Write('i');
-			Screen.Write('z');
-			Screen.Write('e');
-			Screen.Write(' ');
-			Screen.Write('o');
-			Screen.Write('f');
-			Screen.Write(' ');
-			Screen.Write('M');
-			Screen.Write('e');
-			Screen.Write('m');
-			Screen.Write('o');
-			Screen.Write('r');
-			Screen.Write('y');
-			Screen.Write(':');
-			Screen.Write(' ');
-			Screen.Write(' ');
-			Screen.Write(' ');
+			Screen.Write(@"Size of Memory:   ");
 			Screen.Color = 0x07;
 			Screen.Write((Multiboot.MemoryLower + Multiboot.MemoryUpper) / 1024, 10, -1);
-			Screen.Write(' ');
-			Screen.Write('M');
-			Screen.Write('B');
-			Screen.Write(' ');
-			Screen.Write('(');
+			Screen.Write(@" MB (");
 			Screen.Write(Multiboot.MemoryLower + Multiboot.MemoryUpper, 10, -1);
-			Screen.Write(' ');
-			Screen.Write('K');
-			Screen.Write('B');
-			Screen.Write(')');
+			Screen.Write(@" KB)");
 			Screen.NextLine();
 
 			Screen.Color = 0x0F;
@@ -228,40 +80,21 @@ namespace Mosa.HelloWorld
 			Screen.NextLine();
 
 			Screen.Color = 0x0A;
-			Screen.Write('M');
-			Screen.Write('e');
-			Screen.Write('m');
-			Screen.Write('o');
-			Screen.Write('r');
-			Screen.Write('y');
-			Screen.Write('-');
-			Screen.Write('M');
-			Screen.Write('a');
-			Screen.Write('p');
-			Screen.Write(':');
+			Screen.Write(@"Memory-Map:");
 			Screen.NextLine();
 
 			for (uint index = 0; index < Multiboot.MemoryMapCount; index++) {
 				Screen.Color = 0x0F;
 				Screen.Write(Multiboot.GetMemoryMapBase(index), 16, 10);
-				Screen.Write(' ');
-				Screen.Write('-');
-				Screen.Write(' ');
+				Screen.Write(@" - ");
 				Screen.Write(Multiboot.GetMemoryMapBase(index) + Multiboot.GetMemoryMapLength(index) - 1, 16, 10);
-				Screen.Write(' ');
-				Screen.Write('(');
+				Screen.Write(@" (");
 				Screen.Color = 0x07;
 				Screen.Write(Multiboot.GetMemoryMapLength(index), 16, 10);
 				Screen.Color = 0x0F;
-				Screen.Write(')');
-				Screen.Write(' ');
+				Screen.Write(@") ");
 				Screen.Color = 0x07;
-				Screen.Write('T');
-				Screen.Write('y');
-				Screen.Write('p');
-				Screen.Write('e');
-				Screen.Write(':');
-				Screen.Write(' ');
+				Screen.Write(@"Type: ");
 				Screen.Write(Multiboot.GetMemoryMapType(index), 16, 1);
 				Screen.NextLine();
 			}
@@ -277,16 +110,7 @@ namespace Mosa.HelloWorld
 			CpuInfo cpuInfo = new CpuInfo();
 			#region Vendor
 			Screen.Color = 0x0A;
-			Screen.Write('V');
-			Screen.Write('e');
-			Screen.Write('n');
-			Screen.Write('d');
-			Screen.Write('o');
-			Screen.Write('r');
-			Screen.Write(':');
-			Screen.Write(' ');
-			Screen.Write(' ');
-			Screen.Write(' ');
+			Screen.Write(@"Vendor:   ");
 			Screen.Color = 0x0F;
 
 			cpuInfo.PrintVendorString();
@@ -296,16 +120,7 @@ namespace Mosa.HelloWorld
 
 			#region Brand
 			Screen.Color = 0x0A;
-			Screen.Write('B');
-			Screen.Write('r');
-			Screen.Write('a');
-			Screen.Write('n');
-			Screen.Write('d');
-			Screen.Write(':');
-			Screen.Write(' ');
-			Screen.Write(' ');
-			Screen.Write(' ');
-			Screen.Write(' ');
+			Screen.Write(@"Brand:    ");
 			Screen.Color = 0x0F;
 			cpuInfo.PrintBrandString();
 			Screen.NextLine();
@@ -313,73 +128,34 @@ namespace Mosa.HelloWorld
 
 			#region Stepping
 			Screen.Color = 0x0A;
-			Screen.Write('S');
-			Screen.Write('t');
-			Screen.Write('e');
-			Screen.Write('p');
-			Screen.Write('p');
-			Screen.Write('i');
-			Screen.Write('n');
-			Screen.Write('g');
-			Screen.Write(':');
-			Screen.Write(' ');
+			Screen.Write(@"Stepping: ");
 			Screen.Color = 0x0F;
 			Screen.Write(cpuInfo.Stepping, 16, 2);
 			#endregion
 
 			#region Model
 			Screen.Color = 0x0A;
-			Screen.Write(' ');
-			Screen.Write('M');
-			Screen.Write('o');
-			Screen.Write('d');
-			Screen.Write('e');
-			Screen.Write('l');
-			Screen.Write(':');
-			Screen.Write(' ');
+			Screen.Write(@" Model: ");
 			Screen.Color = 0x0F;
 			Screen.Write(cpuInfo.Model, 16, 2);
 			#endregion
 
 			#region Family
 			Screen.Color = 0x0A;
-			Screen.Write(' ');
-			Screen.Write('F');
-			Screen.Write('a');
-			Screen.Write('m');
-			Screen.Write('i');
-			Screen.Write('l');
-			Screen.Write('y');
-			Screen.Write(':');
-			Screen.Write(' ');
+			Screen.Write(@" Family: ");
 			Screen.Color = 0x0F;
 			Screen.Write(cpuInfo.Family, 16, 2);
 			#endregion
 
 			#region Type
 			Screen.Color = 0x0A;
-			Screen.Write(' ');
-			Screen.Write('T');
-			Screen.Write('y');
-			Screen.Write('p');
-			Screen.Write('e');
-			Screen.Write(':');
-			Screen.Write(' ');
+			Screen.Write(@" Type: ");
 			Screen.Color = 0x0F;
 
 			Screen.Write(cpuInfo.Type, 16, 2);
 			Screen.NextLine();
             Screen.Color = 0x0A;
-            Screen.Write('C');
-            Screen.Write('o');
-            Screen.Write('r');
-            Screen.Write('e');
-            Screen.Write('s');
-            Screen.Write(':');
-            Screen.Write(' ');
-            Screen.Write(' ');
-            Screen.Write(' ');
-            Screen.Write(' ');
+			Screen.Write(@"Cores:    ");
             Screen.Color = 0x0F;
             Screen.Write(cpuInfo.NumberOfCores, 16, 2);
 			#endregion
@@ -409,26 +185,7 @@ namespace Mosa.HelloWorld
 
 			Screen.SetCursor(24, 29);
 			Screen.Color = 0x0E;
-			Screen.Write('w');
-			Screen.Write('w');
-			Screen.Write('w');
-			Screen.Write('.');
-			Screen.Write('m');
-			Screen.Write('o');
-			Screen.Write('s');
-			Screen.Write('a');
-			Screen.Write('-');
-			Screen.Write('p');
-			Screen.Write('r');
-			Screen.Write('o');
-			Screen.Write('j');
-			Screen.Write('e');
-			Screen.Write('c');
-			Screen.Write('t');
-			Screen.Write('.');
-			Screen.Write('o');
-			Screen.Write('r');
-			Screen.Write('g');
+			Screen.Write(@"www.mosa-project.org");
 
 			CMOS cmos = new CMOS();
 
@@ -445,12 +202,7 @@ namespace Mosa.HelloWorld
 		{
 			Screen.SetCursor(24, 52);
 			Screen.Color = 0x0A;
-			Screen.Write('T');
-			Screen.Write('i');
-			Screen.Write('m');
-			Screen.Write('e');
-			Screen.Write(':');
-			Screen.Write(' ');
+			Screen.Write(@"Time: ");
 
 			byte bcd = 10;
 

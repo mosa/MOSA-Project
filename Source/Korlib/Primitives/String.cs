@@ -9,6 +9,8 @@
 
 namespace System
 {
+    using System.Runtime.CompilerServices;
+
 	/// <summary>
 	/// Implementation of the "System.String" class
 	/// </summary>
@@ -46,6 +48,23 @@ namespace System
             get
             {
                 return this.length;
+            }
+        }
+
+        [IndexerName("Chars")]
+        public unsafe char this[int index]
+        {
+            get
+            {
+                char result;
+
+                fixed (int *pLength = &this.length)
+                {
+                    char* pChars = (char*)(pLength + 1);
+                    result = *(pChars + index);
+                }
+
+                return result;
             }
         }
     }

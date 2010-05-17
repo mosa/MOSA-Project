@@ -149,11 +149,7 @@ namespace Mosa.Kernel.X86
 			Screen.Row = row;
 			Screen.Column = col;
 			Screen.Color = 0x0A;
-			Screen.Write('C');
-			Screen.Write('M');
-			Screen.Write('O');
-			Screen.Write('S');
-			Screen.Write(':');
+			Screen.Write(@"CMOS:");
 			Screen.NextLine();
 
 			for (byte i = 0; i < 19; i++) {

@@ -58,16 +58,7 @@ namespace Mosa.Kernel.X86
 			Screen.Row = row;
 			Screen.Column = col;
 			Screen.Color = 0x0A;
-			Screen.Write('M');
-			Screen.Write('e');
-			Screen.Write('m');
-			Screen.Write('o');
-			Screen.Write('r');
-			Screen.Write('y');
-			Screen.Write('d');
-			Screen.Write('u');
-			Screen.Write('m');
-			Screen.Write('p');
+			Screen.Write(@"Memorydump");
 			Screen.NextLine();
 			Screen.NextLine();
 

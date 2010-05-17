@@ -6,6 +6,7 @@
  */
 
 using Mosa.Platforms.x86;
+using Mosa.Kernel;
 
 namespace Mosa.Kernel.X86
 {
@@ -103,10 +104,23 @@ namespace Mosa.Kernel.X86
 			Next();
 		}
 
-		/// <summary>
-		/// Goto the top.
-		/// </summary>
-		public static void GotoTop()
+        /// <summary>
+        /// Writes the string to the screen.
+        /// </summary>
+        /// <param name="value">The string value to write to the screen.</param>
+        public static void Write(string value)
+        {
+            for (int index = 0; index < value.Length; index++)
+            {
+                char chr = value[index];
+                Write(chr);
+            }
+        }
+
+        /// <summary>
+        /// Goto the top.
+        /// </summary>
+        public static void GotoTop()
 		{
 			Column = 0;
 			Row = 0;

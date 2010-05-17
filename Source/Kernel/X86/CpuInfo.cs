@@ -76,7 +76,7 @@ namespace Mosa.HelloWorld
 			get
 			{
 				uint identifier = (uint)Platforms.x86.Native.CpuIdEax(0x80000000);
-				return SupportsExtendedCpuid && (identifier >= 0x80000004);
+				return identifier >= 0x80000004U;
 			}
 		}
 		
@@ -104,28 +104,8 @@ namespace Mosa.HelloWorld
 				PrintBrand((uint)0x80000004);
 				return;
 			}
-			
-			Screen.Write ('U');
-			Screen.Write ('n');
-			Screen.Write ('k');
-			Screen.Write ('n');
-			Screen.Write ('o');
-			Screen.Write ('w');
-			Screen.Write ('n');
-			Screen.Write (' ');
-			Screen.Write ('(');
-			Screen.Write ('G');
-			Screen.Write ('e');
-			Screen.Write ('n');
-			Screen.Write ('e');
-			Screen.Write ('r');
-			Screen.Write ('i');
-			Screen.Write ('c');
-			Screen.Write (' ');
-			Screen.Write ('x');
-			Screen.Write ('8');
-			Screen.Write ('6');
-			Screen.Write (')');
+
+            Screen.Write(@"Unknown (Generic x86)");
 		}
 		
 		private void PrintBrand(uint param)

@@ -116,6 +116,7 @@
     <Compile Include="CIL\Int32Fixture.cs" />
     <Compile Include="CIL\Int64Fixture.cs" />
     <Compile Include="CIL\ObjectFixture.cs" />
+    <Compile Include="CIL\PinnedFixture.cs" />
     <Compile Include="CIL\SByteFixture.cs" />
     <Compile Include="CIL\SingleFixture.cs" />
     <Compile Include="CIL\StringFixture.cs" />

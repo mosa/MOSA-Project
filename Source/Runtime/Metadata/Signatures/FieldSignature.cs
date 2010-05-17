@@ -12,35 +12,8 @@ namespace Mosa.Runtime.Metadata.Signatures
     /// <summary>
     /// 
     /// </summary>
-    public sealed class FieldSignature : Signature
+    public sealed class FieldSignature : VariableSignature
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        private CustomMod[] _customMods;
-        /// <summary>
-        /// 
-        /// </summary>
-        private SigType _type;
-
-        /// <summary>
-        /// Gets the custom mods.
-        /// </summary>
-        /// <value>The custom mods.</value>
-        public CustomMod[] CustomMods
-        {
-            get { return _customMods; }
-        }
-
-        /// <summary>
-        /// Gets the type.
-        /// </summary>
-        /// <value>The type.</value>
-        public SigType Type
-        {
-            get { return _type; }
-        }
-
 
         /// <summary>
         /// Parses the signature.
@@ -53,8 +26,8 @@ namespace Mosa.Runtime.Metadata.Signatures
                 return;
 
             index++;
-            _customMods = CustomMod.ParseCustomMods(buffer, ref index);
-            _type = SigType.ParseTypeSignature(context, buffer, ref index);
+
+            base.ParseSignature(context, buffer, ref index);
         }
 
         /// <summary>

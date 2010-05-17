@@ -23,12 +23,12 @@ namespace Mosa.Runtime.Metadata.Signatures
         /// <summary>
         /// Holds the signature types of all local variables in order of definition.
         /// </summary>
-        private SigType[] types;
+        private VariableSignature[] locals;
 
         /// <summary>
         /// A shared empty array for those signatures, who do not have local variables.
         /// </summary>
-        private static SigType[] Empty = new SigType[0];
+        private static VariableSignature[] Empty = new VariableSignature[0];
 
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace Mosa.Runtime.Metadata.Signatures
         /// </summary>
         public LocalVariableSignature()
         {
-            this.types = LocalVariableSignature.Empty;
+            this.locals = LocalVariableSignature.Empty;
         }
 
 
@@ -44,11 +44,11 @@ namespace Mosa.Runtime.Metadata.Signatures
         /// Gets the types.
         /// </summary>
         /// <value>The types.</value>
-        public SigType[] Types
+        public VariableSignature[] Locals
         {
             get 
-			{ 
-				return this.types; 
+			{
+                return this.locals; 
 			}
         }
 
@@ -67,10 +67,10 @@ namespace Mosa.Runtime.Metadata.Signatures
             int count = Utilities.ReadCompressedInt32(buffer, ref index);
             if (0 != count)
             {
-                this.types = new SigType[count];
+                this.locals = new VariableSignature[count];
                 for (int i = 0; i < count; i++)
                 {
-                    this.types[i] = SigType.ParseTypeSignature(context, buffer, ref index);
+                    this.locals[i] = new VariableSignature(context, buffer, ref index);
                 }
             }
         }

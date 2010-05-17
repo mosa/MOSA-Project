@@ -69,11 +69,6 @@ namespace Mosa.Runtime.CompilerFramework
 		private RuntimeMethod _method;
 
 		/// <summary>
-		/// The metadata _module, that contains the _method.
-		/// </summary>
-		private IMetadataModule _module;
-
-		/// <summary>
 		/// Holds the next free stack slot index.
 		/// </summary>
 		protected int _nextStackSlot;
@@ -102,14 +97,12 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <param name="linker">The _linker.</param>
 		/// <param name="architecture">The target compilation Architecture.</param>
-		/// <param name="module">The metadata module, that contains the type.</param>
 		/// <param name="type">The type, which owns the _method to compile.</param>
 		/// <param name="method">The method to compile by this instance.</param>
 		protected MethodCompilerBase(
 			IAssemblyLinker linker,
 			IArchitecture architecture,
 		    ICompilationSchedulerStage compilationScheduler,
-			IMetadataModule module,
 			RuntimeType type,
 			RuntimeMethod method)
 		{
@@ -126,7 +119,6 @@ namespace Mosa.Runtime.CompilerFramework
 			_architecture = architecture;
 			this.compilationScheduler = compilationScheduler;
 			_method = method;
-			_module = module;
 			_parameters = new List<Operand>(new Operand[_method.Parameters.Count]);
 			_type = type;
 			_nextStackSlot = 0;
@@ -151,7 +143,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public IMetadataModule Assembly
 		{
-			get { return _module; }
+			get { return this._method.Module; }
 		}
 
 		/// <summary>
@@ -278,7 +270,6 @@ namespace Mosa.Runtime.CompilerFramework
 			_architecture = null;
 			_linker = null;
 			_method = null;
-			_module = null;
 			_type = null;
 			_instructionSet = null;
 			_basicBlocks = null;
@@ -306,8 +297,8 @@ namespace Mosa.Runtime.CompilerFramework
 			// stage to a different memory location, it should actually be a new one so sharing object
 			// only saves runtime space/perf.
 			Debug.Assert(_localsSig != null, @"Method doesn't have _locals.");
-			Debug.Assert(index < _localsSig.Types.Length, @"Invalid local index requested.");
-			if (_localsSig == null || _localsSig.Types.Length < index)
+			Debug.Assert(index < _localsSig.Locals.Length, @"Invalid local index requested.");
+			if (_localsSig == null || _localsSig.Locals.Length < index)
 				throw new ArgumentOutOfRangeException(@"index", index, @"Invalid parameter index");
 
 			Operand local = null;
@@ -316,10 +307,10 @@ namespace Mosa.Runtime.CompilerFramework
 
 			if (local == null) {
 				
-				SigType signatureType = _localsSig.Types[index];
-				this.ScheduleDependencyForCompilation(signatureType);
+				VariableSignature localVariable = _localsSig.Locals[index];
+				this.ScheduleDependencyForCompilation(localVariable.Type);
 								
-				local = new LocalVariableOperand(_architecture.StackFrameRegister, String.Format("L_{0}", index), index, signatureType);
+				local = new LocalVariableOperand(_architecture.StackFrameRegister, String.Format("L_{0}", index), index, localVariable.Type);
 				_locals[index] = local;
 			}
 
@@ -416,7 +407,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 			_localsSig = localVariableSignature;
 			
-			int count = _localsSig.Types.Length;
+			int count = _localsSig.Locals.Length;
 			this._locals = new List<Operand>(count);
 			for (int index = 0; index < count; index++)
 				this._locals.Add(null);
