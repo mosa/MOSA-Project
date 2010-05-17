@@ -62,12 +62,21 @@ namespace Mosa.HelloWorld
 			}
 		}
 		
+		public bool SupportsExtendedCpuid
+		{
+			get
+			{
+				uint identifier = (uint)Platforms.x86.Native.CpuIdEax(0x80000000);
+				return (identifier & 0x80000000) != 0;
+			}
+		}
+		
 		public bool SupportsBrandString
 		{
 			get
 			{
-				int identifier = Platforms.x86.Native.CpuIdEax(0x80000000);
-				return identifier >= 0x80000004;
+				uint identifier = (uint)Platforms.x86.Native.CpuIdEax(0x80000000);
+				return SupportsExtendedCpuid && (identifier >= 0x80000004);
 			}
 		}
 		
