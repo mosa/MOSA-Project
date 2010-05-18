@@ -161,7 +161,7 @@ namespace Mosa.Platforms.x86
 			methodCompilerPipeline.InsertAfter<PlatformStubStage>(
 				new IMethodCompilerStage[]
                 {
-					InstructionLogger.Instance,
+					//InstructionLogger.Instance,
                     new LongOperandTransformationStage(),
 					//InstructionLogger.Instance,
                     new AddressModeConversionStage(),
@@ -173,7 +173,7 @@ namespace Mosa.Platforms.x86
 					new TweakTransformationStage(),
 					//InstructionLogger.Instance,
 					new MemToMemConversionStage(),
-					InstructionLogger.Instance,
+					//InstructionLogger.Instance,
                 });
 
 			methodCompilerPipeline.InsertAfter<IBlockOrderStage>(

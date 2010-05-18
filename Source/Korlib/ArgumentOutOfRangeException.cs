@@ -18,7 +18,7 @@ namespace System
 		/// Initializes a new instance of the <see cref="ArgumentOutOfRangeException"/> class.
 		/// </summary>
         public ArgumentOutOfRangeException()
-            : this(null) //("Argument is out of range.")
+            : this("Argument is out of range.")
         {}
 
 		/// <summary>

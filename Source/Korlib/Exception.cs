@@ -20,7 +20,7 @@ namespace System
 		/// Initializes a new instance of the <see cref="Exception"/> class.
 		/// </summary>
         public Exception()
-            : this(null) //("An exception was thrown.")
+            : this("An exception was thrown.")
         {}
 
 		/// <summary>

@@ -18,7 +18,7 @@ namespace System
         /// Initializes a new instance of the <see cref="InvalidOperationException"/> class.
         /// </summary>
         public InvalidOperationException()
-            : this(null) //("The requested operation cannot be performed.")
+            : this("The requested operation cannot be performed.")
         {}
 
 		/// <summary>
