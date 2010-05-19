@@ -260,7 +260,6 @@ namespace Mosa.Runtime.Metadata.Blobs
 						RuntimeType baseType = type.BaseType;
 						if (@"System" == baseType.Namespace && "Enum" == baseType.Name) {
 							// Retrieve the value__ field to get the enums integer type
-							Debug.Assert(type.Fields.Count == 1, @"More than one field in the enum.");
 							RuntimeField value = type.Fields[0];
 							Debug.Assert(value.Name == @"value__", @"First field of enum not named value__");
 							result = ParseElem(module, reader, value.SignatureType);

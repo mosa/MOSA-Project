@@ -10,6 +10,7 @@
 namespace System
 {
     using System.Runtime.CompilerServices;
+    using Mosa.Runtime.Vm;
 
 	/// <summary>
 	/// Implementation of the "System.String" class
@@ -67,5 +68,77 @@ namespace System
                 return result;
             }
         }
+
+        // FIXME: These should be char,int instead of int,int; but that doesn't compile in MOSA for type matching reasons
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        public extern String(int c, int count);
+
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        public extern String(char[] value);
+
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        public extern String(char[] value, int startIndex, int length);
+
+        ////[MethodImplAttribute(MethodImplOptions.InternalCall)]
+        ////public unsafe extern String(sbyte* value);
+
+        ////[MethodImplAttribute(MethodImplOptions.InternalCall)]
+        ////public unsafe extern String(sbyte* value, int startIndex, int length);
+
+        ////[MethodImplAttribute(MethodImplOptions.InternalCall)]
+        ////public unsafe extern String(sbyte* value, int startIndex, int length, Encoding enc);
+
+        ////[MethodImplAttribute(MethodImplOptions.InternalCall)]
+        ////public unsafe extern String(char* value);
+
+        ////[MethodImplAttribute(MethodImplOptions.InternalCall)]
+        ////public unsafe extern String(char* value, int startIndex, int length);
+
+        private static unsafe string CreateString(int c, int count)
+        {
+            String result = InternalAllocateString(count);
+            char ch = (char)c;
+
+            fixed (int* pLength = &result.length)
+            {
+                char* pChars = (char*)(pLength + 1);
+                
+                while (count > 0)
+                {
+                    *pChars = ch;
+                    count--;
+                    pChars++;
+                }
+            }
+
+            return result;
+        }
+
+        private static string CreateString(char[] value)
+        {
+            return CreateString(value, 0, value.Length);
+        }
+
+        private static unsafe string CreateString(char[] value, int startIndex, int length)
+        {
+            String result = InternalAllocateString(length);
+
+            fixed (int* pLength = &result.length)
+            {
+                char* pChars = (char*)(pLength + 1);
+
+                for (int index = startIndex; index < startIndex + length; index++)
+                {
+                    *pChars = value[index];
+                    pChars++;
+                }
+            }
+
+            return result;
+        }
+
+        [VmCall(VmCall.AllocateString)]
+        [MethodImplAttribute(MethodImplOptions.InternalCall)]
+        private static extern string InternalAllocateString(int length);
     }
 }

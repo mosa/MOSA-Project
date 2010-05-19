@@ -14,6 +14,16 @@ namespace System
 	/// </summary>
 	public class Array
 	{
+        private int length;
+
+        public int Length
+        {
+            get
+            {
+                return this.length;
+            }
+        }
+
 		/// <summary>
 		/// 
 		/// </summary>

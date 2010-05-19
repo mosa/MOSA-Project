@@ -177,7 +177,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Ldftn(Context ctx)
 		{
-			ReplaceWithInternalCall(ctx, VmCall.GetFunctionPtr);
+			ReplaceWithVmCall(ctx, VmCall.GetFunctionPtr);
 		}
 
 		/// <summary>
@@ -186,7 +186,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Ldvirtftn(Context ctx)
 		{
-			ReplaceWithInternalCall(ctx, VmCall.GetVirtualFunctionPtr);
+			ReplaceWithVmCall(ctx, VmCall.GetVirtualFunctionPtr);
 		}
 
 		/// <summary>
@@ -195,7 +195,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Ldtoken(Context ctx)
 		{
-			ReplaceWithInternalCall(ctx, VmCall.GetHandleForToken);
+			ReplaceWithVmCall(ctx, VmCall.GetHandleForToken);
 		}
 
 		/// <summary>
@@ -258,7 +258,8 @@ namespace Mosa.Runtime.CompilerFramework.IR
                 return;
             }
 		    
-            if (this.ProcessIntrinsicCall(ctx) == false)
+            if (this.ProcessVmCall(ctx) == false 
+                && this.ProcessIntrinsicCall(ctx) == false)
             {
                 // Create a symbol operand for the invocation target
                 RuntimeMethod invokeTarget = ctx.InvokeTarget;
@@ -380,37 +381,40 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Callvirt(Context ctx)
 		{
-		    RuntimeMethod invokeTarget = ctx.InvokeTarget;
-
-		    Operand resultOperand = ctx.Result;
-		    var operands = new List<Operand>(ctx.Operands);
-
-		    if ((invokeTarget.Attributes & MethodAttributes.Virtual) == MethodAttributes.Virtual)
+            if (this.ProcessVmCall(ctx) == false)
             {
-                Operand thisPtr = ctx.Operand1;
+                RuntimeMethod invokeTarget = ctx.InvokeTarget;
 
-                Operand methodTable = this.MethodCompiler.CreateTemporary(BuiltInSigType.IntPtr);
-                Operand methodPtr = this.MethodCompiler.CreateTemporary(BuiltInSigType.IntPtr);
+                Operand resultOperand = ctx.Result;
+                var operands = new List<Operand>(ctx.Operands);
 
-                int methodTableOffset = CalculateMethodTableOffset(invokeTarget);
+                if ((invokeTarget.Attributes & MethodAttributes.Virtual) == MethodAttributes.Virtual)
+                {
+                    Operand thisPtr = ctx.Operand1;
 
-                ctx.SetInstruction(Instruction.NopInstruction);
-                //ctx.AppendInstruction(Instruction.BreakInstruction);
-                ctx.AppendInstruction(Instruction.LoadInstruction, methodTable, thisPtr, ConstantOperand.FromValue(0));
-                ctx.AppendInstruction(Instruction.LoadInstruction, methodPtr, methodTable, new ConstantOperand(BuiltInSigType.Int32, methodTableOffset));
+                    Operand methodTable = this.MethodCompiler.CreateTemporary(BuiltInSigType.IntPtr);
+                    Operand methodPtr = this.MethodCompiler.CreateTemporary(BuiltInSigType.IntPtr);
 
-                // HACK: This nop will be overwritten in ProcessInvokeInstruction
-                ctx.AppendInstruction(Instruction.NopInstruction);
-                this.ProcessInvokeInstruction(ctx, methodPtr, resultOperand, operands);
-            }
-            else
-            {
-                // FIXME: Callvirt imposes a null-check. For virtual calls this is done implicitly, but for non-virtual calls
-                // we have to make this explicitly somehow.
+                    int methodTableOffset = CalculateMethodTableOffset(invokeTarget);
 
-                // Create a symbol operand for the invocation target
-                SymbolOperand symbolOperand = SymbolOperand.FromMethod(invokeTarget);
-                this.ProcessInvokeInstruction(ctx, symbolOperand, resultOperand, operands);
+                    ctx.SetInstruction(Instruction.NopInstruction);
+                    //ctx.AppendInstruction(Instruction.BreakInstruction);
+                    ctx.AppendInstruction(Instruction.LoadInstruction, methodTable, thisPtr, ConstantOperand.FromValue(0));
+                    ctx.AppendInstruction(Instruction.LoadInstruction, methodPtr, methodTable, new ConstantOperand(BuiltInSigType.Int32, methodTableOffset));
+
+                    // HACK: This nop will be overwritten in ProcessInvokeInstruction
+                    ctx.AppendInstruction(Instruction.NopInstruction);
+                    this.ProcessInvokeInstruction(ctx, methodPtr, resultOperand, operands);
+                }
+                else
+                {
+                    // FIXME: Callvirt imposes a null-check. For virtual calls this is done implicitly, but for non-virtual calls
+                    // we have to make this explicitly somehow.
+
+                    // Create a symbol operand for the invocation target
+                    SymbolOperand symbolOperand = SymbolOperand.FromMethod(invokeTarget);
+                    this.ProcessInvokeInstruction(ctx, symbolOperand, resultOperand, operands);
+                }
             }
 		}
 
@@ -448,7 +452,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
                 elementSize = 16;
             }
 
-            ReplaceWithInternalCall(ctx, VmCall.AllocateArray);
+            ReplaceWithVmCall(ctx, VmCall.AllocateArray);
 
             ctx.SetOperand(1, new ConstantOperand(BuiltInSigType.IntPtr, 0));
             ctx.SetOperand(2, new ConstantOperand(BuiltInSigType.Int32, elementSize));
@@ -469,25 +473,28 @@ namespace Mosa.Runtime.CompilerFramework.IR
             RuntimeType classType = RuntimeBase.Instance.TypeLoader.GetType(this.MethodCompiler.Method, this.MethodCompiler.Assembly, classSigType.Token);
 
             List<Operand> ctorOperands = new List<Operand>(ctx.Operands);
+            RuntimeMethod ctorMethod = this.FindConstructor(classType, ctorOperands);
 
-	        Context before = ctx.InsertBefore();
-	        before.SetInstruction(Instruction.NopInstruction);
+            if (ReplaceWithInternalCall(ctx, ctorMethod) == false)
+            {
+    	        Context before = ctx.InsertBefore();
+    	        before.SetInstruction(Instruction.NopInstruction);
 
-            ReplaceWithInternalCall(before, VmCall.AllocateObject);
+                ReplaceWithVmCall(before, VmCall.AllocateObject);
 
-            SymbolOperand methodTableSymbol = this.GetMethodTableSymbol(classType);
+                SymbolOperand methodTableSymbol = this.GetMethodTableSymbol(classType);
 
-            before.SetOperand(1, methodTableSymbol);
-            before.SetOperand(2, new ConstantOperand(BuiltInSigType.Int32, classType.Size));
-            before.OperandCount = 2;
-	        before.Result = thisReference;
+                before.SetOperand(1, methodTableSymbol);
+                before.SetOperand(2, new ConstantOperand(BuiltInSigType.Int32, classType.Size));
+                before.OperandCount = 2;
+    	        before.Result = thisReference;
 
-            // Result is the this pointer, now invoke the real constructor
-	        RuntimeMethod ctorMethod = this.FindConstructor(classType, ctorOperands);
-            SymbolOperand symbolOperand = SymbolOperand.FromMethod(ctorMethod);
+                // Result is the this pointer, now invoke the real constructor
+                SymbolOperand symbolOperand = SymbolOperand.FromMethod(ctorMethod);
 
-            ctorOperands.Insert(0, thisReference);
-            this.ProcessInvokeInstruction(ctx, symbolOperand, null, ctorOperands);
+                ctorOperands.Insert(0, thisReference);
+                this.ProcessInvokeInstruction(ctx, symbolOperand, null, ctorOperands);
+            }
         }
 
         private SymbolOperand GetMethodTableSymbol(RuntimeType runtimeType)
@@ -534,7 +541,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		{
 			// We don't need to check the result, if the icall fails, it'll happily throw
 			// the InvalidCastException.
-			ReplaceWithInternalCall(ctx, VmCall.Castclass);
+			ReplaceWithVmCall(ctx, VmCall.Castclass);
 		}
 
 		/// <summary>
@@ -543,7 +550,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Isinst(Context ctx)
 		{
-			ReplaceWithInternalCall(ctx, VmCall.IsInstanceOfType);
+			ReplaceWithVmCall(ctx, VmCall.IsInstanceOfType);
 		}
 
 		/// <summary>
@@ -552,7 +559,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Unbox(Context ctx)
 		{
-			ReplaceWithInternalCall(ctx, VmCall.Unbox);
+			ReplaceWithVmCall(ctx, VmCall.Unbox);
 		}
 
 		/// <summary>
@@ -561,7 +568,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Throw(Context ctx)
 		{
-			ReplaceWithInternalCall(ctx, VmCall.Throw);
+			ReplaceWithVmCall(ctx, VmCall.Throw);
 		}
 
 		/// <summary>
@@ -570,7 +577,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Box(Context ctx)
 		{
-			ReplaceWithInternalCall(ctx, VmCall.Box);
+			ReplaceWithVmCall(ctx, VmCall.Box);
 		}
 
 		/// <summary>
@@ -595,7 +602,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Cpblk(Context ctx)
 		{
-			ReplaceWithInternalCall(ctx, VmCall.Memcpy);
+			ReplaceWithVmCall(ctx, VmCall.Memcpy);
 		}
 
 		/// <summary>
@@ -604,7 +611,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Initblk(Context ctx)
 		{
-			ReplaceWithInternalCall(ctx, VmCall.Memset);
+			ReplaceWithVmCall(ctx, VmCall.Memset);
 		}
 
 		/// <summary>
@@ -613,7 +620,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Rethrow(Context ctx)
 		{
-			ReplaceWithInternalCall(ctx, VmCall.Rethrow);
+			ReplaceWithVmCall(ctx, VmCall.Rethrow);
 		}
 
 		/// <summary>
@@ -1704,12 +1711,45 @@ namespace Mosa.Runtime.CompilerFramework.IR
             ctx.SetInstruction(IR.Instruction.MoveInstruction, ctx.Result, ctx.Operand1);
 		}
 
+        /// <summary>
+        /// Processes virtual machine internal method calls.
+        /// </summary>
+        /// <param name="ctx">The transformation context.</param>
+        /// <returns><c>true</c> if the method was replaced by an vm call; <c>false</c> otherwise.</returns>
+        /// <remarks>
+        /// This method checks if the call target has an VmCallAttribute applied to it. If it has, 
+        /// the method call is replaced by the specified virtual machine call.
+        /// </remarks>
+        private bool ProcessVmCall(Context ctx)
+        {
+            RuntimeMethod rm = ctx.InvokeTarget;
+            Debug.Assert(rm != null, @"Call doesn't have a target.");
+
+            // Retrieve the runtime type
+            RuntimeType rt = RuntimeBase.Instance.TypeLoader.GetType(@"Mosa.Runtime.Vm.VmCallAttribute");
+            if (rm.IsDefined(rt) == true)
+            {
+                foreach (RuntimeAttribute ra in rm.CustomAttributes)
+                {
+                    if (ra.Type == rt)
+                    {
+                        // Get the intrinsic attribute
+                        VmCallAttribute vmCallAttribute = (VmCallAttribute)ra.GetAttribute();
+                        this.ReplaceWithVmCall(ctx, vmCallAttribute.VmCall);
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
 		/// <summary>
 		/// Replaces the instruction with an internal call.
 		/// </summary>
 		/// <param name="ctx">The transformation context.</param>
 		/// <param name="internalCallTarget">The internal call target.</param>
-		private void ReplaceWithInternalCall(Context ctx, VmCall internalCallTarget)
+		private void ReplaceWithVmCall(Context ctx, VmCall internalCallTarget)
 		{
 			RuntimeType rt = RuntimeBase.Instance.TypeLoader.GetType(@"Mosa.Runtime.RuntimeBase");
 			RuntimeMethod callTarget = FindMethod(rt, internalCallTarget.ToString());
@@ -1717,6 +1757,40 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			ctx.ReplaceInstructionOnly(IR.Instruction.CallInstruction);
 			ctx.SetOperand(0, SymbolOperand.FromMethod(callTarget));
 		}
+
+        private bool ReplaceWithInternalCall(Context ctx, RuntimeMethod method)
+        {
+            bool internalCall = ((method.ImplAttributes & MethodImplAttributes.InternalCall) == MethodImplAttributes.InternalCall);
+            if (internalCall == true)
+            {
+                string replacementMethod = this.BuildInternalCallName(method);
+
+                method = this.FindMethod(method.DeclaringType, replacementMethod);
+                ctx.InvokeTarget = method;
+
+                Operand result = ctx.Result;
+                List<Operand> operands = new List<Operand>(ctx.Operands);
+
+                this.ProcessInvokeInstruction(ctx, SymbolOperand.FromMethod(method), result, operands);
+            }
+
+            return internalCall;
+        }
+
+        private string BuildInternalCallName(RuntimeMethod method)
+        {
+            string name = method.Name;
+            if (name == @".ctor")
+            {
+                name = @"Create" + method.DeclaringType.Name;
+            }
+            else
+            {
+                name = @"Internal" + name;
+            }
+
+            return name;
+        }
 
 		/// <summary>
 		/// Finds the method.

@@ -57,5 +57,10 @@ namespace Mosa.Runtime
 
             return memory;
         }
+
+        public static unsafe void* AllocateString(void* methodTable, uint length)
+        {
+            return AllocateArray(null, 2, length);
+        }
     }
 }

@@ -81,6 +81,8 @@
     <Compile Include="FlagsAttribute.cs" />
     <Compile Include="IDisposable.cs" />
     <Compile Include="InvalidOperationException.cs" />
+    <Compile Include="Mosa\Runtime\Vm\VmCall.cs" />
+    <Compile Include="Mosa\Runtime\Vm\VmCallAttribute.cs" />
     <Compile Include="MulticastDelegate.cs" />
     <Compile Include="NotSupportedException.cs" />
     <Compile Include="ObjectDisposedException.cs" />
@@ -88,6 +90,8 @@
     <Compile Include="RuntimeFieldHandle.cs" />
     <Compile Include="RuntimeTypeHandle.cs" />
     <Compile Include="Runtime\CompilerServices\IndexerNameAttribute.cs" />
+    <Compile Include="Runtime\CompilerServices\MethodImplAttribute.cs" />
+    <Compile Include="Runtime\CompilerServices\MethodImplOptions.cs" />
     <Compile Include="Serializable.cs" />
     <Compile Include="Type.cs" />
     <Compile Include="Collections\ICollection.cs" />
@@ -130,6 +134,9 @@
     <Compile Include="Runtime\CompilerServices\CompilerGeneratedAttribute.cs" />
     <Compile Include="Runtime\InteropServices\ComVisible.cs" />
     <Compile Include="Runtime\InteropServices\OutAttribute.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <PropertyGroup>
