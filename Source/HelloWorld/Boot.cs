@@ -8,6 +8,7 @@
 using Mosa.Platforms.x86;
 using Mosa.Kernel;
 using Mosa.Kernel.X86;
+using System;
 
 namespace Mosa.HelloWorld
 {
@@ -26,7 +27,6 @@ namespace Mosa.HelloWorld
 			Screen.GotoTop();
 			Screen.Color = Colors.Yellow;
 
-            Native.BochsDebug();
             Screen.Write(@"MOSA OS Version 0.6 '");
 			Screen.Color = Colors.Red;
             Screen.Write(@"Mammoth");
@@ -35,12 +35,9 @@ namespace Mosa.HelloWorld
 			Screen.NextLine();
 
 			Screen.Color = 0x0F;
-			for (uint index = 0; index < 80; index++) {
-				if (index == 60)
-					Screen.Write((char)203);
-				else
-					Screen.Write((char)205);
-			}
+            Screen.Write(new String((char)205, 60));
+			Screen.Write((char)203);
+            Screen.Write(new String((char)205, 19));
 			Screen.NextLine();
 
 			Screen.SetCursor(2, 0);

@@ -81,8 +81,6 @@
     <Compile Include="FlagsAttribute.cs" />
     <Compile Include="IDisposable.cs" />
     <Compile Include="InvalidOperationException.cs" />
-    <Compile Include="Mosa\Runtime\Vm\VmCall.cs" />
-    <Compile Include="Mosa\Runtime\Vm\VmCallAttribute.cs" />
     <Compile Include="MulticastDelegate.cs" />
     <Compile Include="NotSupportedException.cs" />
     <Compile Include="ObjectDisposedException.cs" />
@@ -137,6 +135,12 @@
   </ItemGroup>
   <ItemGroup>
     <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Runtime\Mosa.Runtime.csproj">
+      <Project>{75A12A8A-8C8F-4D1E-801B-689D8F781BF4}</Project>
+      <Name>Mosa.Runtime</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <PropertyGroup>

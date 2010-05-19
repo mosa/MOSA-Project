@@ -85,6 +85,7 @@
     <Compile Include="CompilerFramework\CIL\BreakInstruction.cs" />
     <Compile Include="CompilerFramework\GenericsResolverStage.cs" />
     <Compile Include="CompilerFramework\ICompilationSchedulerStage.cs" />
+    <Compile Include="CompilerFramework\Intrinsics\InternalAllocateString.cs" />
     <Compile Include="CompilerFramework\IR\AddFInstruction.cs" />
     <Compile Include="CompilerFramework\IR\AddSInstruction.cs" />
     <Compile Include="CompilerFramework\IR\AddUInstruction.cs" />
@@ -106,7 +107,7 @@
     <Compile Include="CompilerFramework\ObjectModelUtility.cs" />
     <Compile Include="CompilerFramework\Operands\SymbolOperand.cs" />
     <Compile Include="CompilerFramework\PlatformStubStage.cs" />
-    <Compile Include="CompilerFramework\IIntrinsicInstruction.cs" />
+    <Compile Include="CompilerFramework\IIntrinsicMethod.cs" />
     <Compile Include="CompilerFramework\IBlockOrderStage.cs" />
     <Compile Include="CompilerFramework\IPipelineStage.cs" />
     <Compile Include="CompilerFramework\IR\CILTransformationStage.cs" />

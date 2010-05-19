@@ -9,6 +9,7 @@
 
 using Mosa.Kernel;
 using Mosa.Kernel.X86;
+using Mosa.Platforms.x86;
 
 namespace Mosa.Runtime
 {
@@ -60,7 +61,8 @@ namespace Mosa.Runtime
 
         public static unsafe void* AllocateString(void* methodTable, uint length)
         {
-            return AllocateArray(null, 2, length);
+            void* result = AllocateArray(methodTable, 2, length);
+            return result;
         }
     }
 }

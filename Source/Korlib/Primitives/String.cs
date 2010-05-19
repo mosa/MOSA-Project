@@ -10,7 +10,9 @@
 namespace System
 {
     using System.Runtime.CompilerServices;
-    using Mosa.Runtime.Vm;
+
+    using Mosa.Runtime.CompilerFramework;
+    using Mosa.Runtime.CompilerFramework.Intrinsics;
 
 	/// <summary>
 	/// Implementation of the "System.String" class
@@ -137,8 +139,11 @@ namespace System
             return result;
         }
 
-        [VmCall(VmCall.AllocateString)]
-        [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        private static extern string InternalAllocateString(int length);
+        [Intrinsic(typeof(InternalAllocateString))]
+        private static string InternalAllocateString(int length)
+        {
+            //throw new NotSupportedException(@"Can't run this code outside of MOSA.");
+            return null;
+        }
     }
 }

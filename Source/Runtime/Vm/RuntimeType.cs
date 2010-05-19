@@ -442,5 +442,18 @@ namespace Mosa.Runtime.Vm
                 this.baseType = GetBaseType();
             }
         }
+
+        public RuntimeMethod FindMethod(string name)
+        {
+            foreach (RuntimeMethod method in this.Methods)
+            {
+                if (name == method.Name)
+                {
+                    return method;
+                }
+            }
+
+            throw new MissingMethodException(this.Name, name);
+        }
     }
 }

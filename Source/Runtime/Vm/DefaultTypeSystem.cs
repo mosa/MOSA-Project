@@ -152,7 +152,7 @@ namespace Mosa.Runtime.Vm
         /// </summary>
         /// <param name="module">The module.</param>
         /// <returns></returns>
-        ReadOnlyRuntimeTypeListView ITypeSystem.GetTypesFromModule(IMetadataModule module)
+        public ReadOnlyRuntimeTypeListView GetTypesFromModule(IMetadataModule module)
         {
             if (null == module)
                 throw new ArgumentNullException(@"module");
@@ -315,22 +315,14 @@ namespace Mosa.Runtime.Vm
                 name = typeName.Substring(lastDot + 1);
             }
 
-            /* FIXME: Typename could be a fully formatted type name, make sure
-             * we support this one day, so we could use the assembly information
-             * to reduce the lookup times.
-             */
-            result = FindType(ns, name, _types);
-            if (2 <= names.Length && null == result)
+            if (names.Length > 1)
             {
-                try
-                {
-                    IMetadataModule module = RuntimeBase.Instance.AssemblyLoader.Load(names[1].Trim() + ".dll");
-                    ITypeSystem ts = (ITypeSystem)this;
-                    result = FindType(ns, name, ts.GetTypesFromModule(module));
-                }
-                catch
-                {
-                }
+                IMetadataModule module2 = RuntimeBase.Instance.AssemblyLoader.Load(names[1].Trim());
+                result = FindType(ns, name, this.GetTypesFromModule(module2));
+            }
+            else
+            {
+                result = FindType(ns, name, this._types);
             }
 
             return result;

@@ -114,10 +114,22 @@ namespace Mosa.Runtime.Loader
 		/// </returns>
 		public IMetadataModule Load(string file)
 		{
-		    if (Path.IsPathRooted(file) == false)
-				return DoLoadAssembly(Path.GetFileName(file));
-		    
-            return LoadAssembly(file);
+            IMetadataModule result;
+
+            if (Path.IsPathRooted(file) == false)
+            {
+                result = this.GetLoadedAssembly(file);
+                if (result == null)
+                {
+                    result = DoLoadAssembly(Path.GetFileName(file) + @".dll");
+                }
+            }
+            else
+            {
+                result = LoadAssembly(file);
+            }
+
+            return result;
 		}
 
 	    /// <summary>
@@ -181,7 +193,7 @@ namespace Mosa.Runtime.Loader
             return @"file://" + file.Replace('\\', '/');
         }
 
-		private IMetadataModule GetLoadedAssembly(string name)
+		public IMetadataModule GetLoadedAssembly(string name)
 		{
 			IMetadataModule result = null;
 

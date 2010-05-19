@@ -90,7 +90,7 @@ namespace Mosa.Runtime.CompilerFramework
 					case FlowControl.Call: continue;
 					case FlowControl.Break: goto case FlowControl.Branch;
 					case FlowControl.Return: continue;
-					case FlowControl.Throw: goto case FlowControl.Branch;
+					// FIXME: case FlowControl.Throw: goto case FlowControl.Branch;
 					case FlowControl.Branch:
 						// Unconditional branch 
 						Debug.Assert(ctx.Branch.Targets.Length == 1);
@@ -171,7 +171,7 @@ namespace Mosa.Runtime.CompilerFramework
 							LinkBlocks(block, _epilogue);
 						return;
 					case FlowControl.Break: goto case FlowControl.Branch;
-					case FlowControl.Throw: goto case FlowControl.Branch;
+					// FIXME: case FlowControl.Throw: goto case FlowControl.Branch;
 					case FlowControl.Switch: goto case FlowControl.ConditionalBranch;
 					case FlowControl.Branch:
 						{

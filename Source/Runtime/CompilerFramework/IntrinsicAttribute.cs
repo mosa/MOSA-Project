@@ -28,12 +28,12 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// The architecture of the intrinsic implementation.
 		/// </summary>
-		private Type _architecture;
+		private readonly Type architecture;
 
 		/// <summary>
 		/// The IR type of this instruction.
 		/// </summary>
-		private Type _instructionType;
+		private readonly Type instructionType;
 
 		#endregion // Data members
 
@@ -46,20 +46,41 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="instructionType">The type of the IR instruction, which generates appropriate native code.</param>
 		public IntrinsicAttribute(Type architecture, Type instructionType)
 		{
-			_architecture = architecture;
-			_instructionType = instructionType;
+			this.architecture = architecture;
+			this.instructionType = instructionType;
 		}
 
-		#endregion // Construction
+		/// <summary>
+		/// Initializes a new instance of the IntrinsicAttribute type.
+		/// </summary>
+		/// <param name="instructionType">The type used to build the architecture neutral intrinsic.</param>
+		public IntrinsicAttribute(Type instructionType)
+		{
+			this.architecture = null;
+			this.instructionType = instructionType;
+		}
+
+        /// <summary>
+        /// Initializes a new instance of the IntrinsicAttribute type.
+        /// </summary>
+        /// <param name="instructionType">The type used to build the architecture neutral intrinsic.</param>
+        public IntrinsicAttribute(string instructionType)
+        {
+            this.architecture = null;
+            this.instructionType = Type.GetType(instructionType, true);
+        }
+
+        #endregion // Construction
 
 		#region Properties
 
 		/// <summary>
 		/// Returns the architecture, which has support for an intrinsic implementation.
 		/// </summary>
+        /// <value><c>null</c> if the intrinsic is architecture neutral; otherwise a reference to the type of the Architecture.</value>
 		public Type Architecture
 		{
-			get { return _architecture; }
+			get { return this.architecture; }
 		}
 
 		/// <summary>
@@ -67,7 +88,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public Type InstructionType
 		{
-			get { return _instructionType; }
+			get { return this.instructionType; }
 		}
 
 		#endregion // Properties

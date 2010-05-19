@@ -290,7 +290,7 @@ namespace Mosa.Runtime.Metadata.Blobs
 		private static string ParseSerString(BinaryReader reader)
 		{
 			// Read the length
-			byte packedLen = reader.ReadByte();
+			int packedLen = DecodePackedLen(reader);
 			if (ATTRIBUTE_NULL_STRING_LEN == packedLen)
 				return null;
 			if (ATTRIBUTE_EMPTY_STRING_LEN == packedLen)
@@ -300,6 +300,38 @@ namespace Mosa.Runtime.Metadata.Blobs
 			char[] buffer = reader.ReadChars(packedLen);
 			return new String(buffer);
 		}
+
+        private static int DecodePackedLen(BinaryReader reader)
+        {
+            int result, offset;
+            byte value = reader.ReadByte();
+
+            if (0xC0 == (value & 0xC0))
+            {
+                // A 4 byte length...
+                result = ((value & 0x1F) << 24);
+                offset = 16;
+            }
+            else if (0x80 == (value & 0x80))
+            {
+                // A 2 byte length...
+                result = ((value & 0x3F) << 8);
+                offset = 0;
+            }
+            else
+            {
+                result = value & 0x7F;
+                offset = -8;
+            }
+
+            while (offset != -8)
+            {
+                result |= (reader.ReadByte() << offset);
+                offset -= 8;
+            }
+
+            return result;
+        }
 
 		/// <summary>
 		/// Gets the type from the signature type.

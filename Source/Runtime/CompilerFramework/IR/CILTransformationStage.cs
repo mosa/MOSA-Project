@@ -1602,9 +1602,18 @@ namespace Mosa.Runtime.CompilerFramework.IR
 	            // FIXME: Change this to a GetCustomAttributes call, once we can do that :)
 	            foreach (RuntimeAttribute ra in rm.CustomAttributes) {
 	                if (ra.Type == rt) {
-	                    // Get the intrinsic attribute
+	                    
+                        // Get the intrinsic attribute
 	                    IntrinsicAttribute ia = (IntrinsicAttribute)ra.GetAttribute();
-	                    if (ia.Architecture.IsInstanceOfType(this.Architecture)) {
+	                    
+                        if (ia.Architecture == null)
+                        {
+                            IIntrinsicMethod instrinsic = (IIntrinsicMethod)Activator.CreateInstance(ia.InstructionType, true);
+                            instrinsic.ReplaceIntrinsicCall(ctx);
+                            return true;
+                        }
+                        else if (ia.Architecture.IsInstanceOfType(this.Architecture)) 
+                        {
 	                        // Found a replacement for the call...
 	                        try {
 	                            IIntrinsicMethod instrinsic = this.Architecture.GetIntrinsicMethod(ia.InstructionType);
@@ -1726,7 +1735,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
             Debug.Assert(rm != null, @"Call doesn't have a target.");
 
             // Retrieve the runtime type
-            RuntimeType rt = RuntimeBase.Instance.TypeLoader.GetType(@"Mosa.Runtime.Vm.VmCallAttribute");
+            RuntimeType rt = RuntimeBase.Instance.TypeLoader.GetType(@"Mosa.Runtime.Vm.VmCallAttribute, Mosa.Runtime");
             if (rm.IsDefined(rt) == true)
             {
                 foreach (RuntimeAttribute ra in rm.CustomAttributes)
@@ -1752,7 +1761,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		private void ReplaceWithVmCall(Context ctx, VmCall internalCallTarget)
 		{
 			RuntimeType rt = RuntimeBase.Instance.TypeLoader.GetType(@"Mosa.Runtime.RuntimeBase");
-			RuntimeMethod callTarget = FindMethod(rt, internalCallTarget.ToString());
+            RuntimeMethod callTarget = rt.FindMethod(internalCallTarget.ToString());
 
 			ctx.ReplaceInstructionOnly(IR.Instruction.CallInstruction);
 			ctx.SetOperand(0, SymbolOperand.FromMethod(callTarget));
@@ -1765,7 +1774,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
             {
                 string replacementMethod = this.BuildInternalCallName(method);
 
-                method = this.FindMethod(method.DeclaringType, replacementMethod);
+                method = method.DeclaringType.FindMethod(replacementMethod);
                 ctx.InvokeTarget = method;
 
                 Operand result = ctx.Result;
@@ -1791,21 +1800,6 @@ namespace Mosa.Runtime.CompilerFramework.IR
 
             return name;
         }
-
-		/// <summary>
-		/// Finds the method.
-		/// </summary>
-		/// <param name="rt">The runtime type.</param>
-		/// <param name="name">The name.</param>
-		/// <returns></returns>
-		private RuntimeMethod FindMethod(RuntimeType rt, string name)
-		{
-			foreach (RuntimeMethod method in rt.Methods) 
-				if (name == method.Name) 
-					return method;
-
-			throw new MissingMethodException(rt.Name, name);
-		}
 
 		#endregion // Internals
 	}
