@@ -12,6 +12,8 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
+
 using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
@@ -25,6 +27,7 @@ using Mosa.Runtime.Linker;
 using System.IO;
 using System.Text;
 using Mosa.Runtime.Loader;
+using System.Reflection;
 
 namespace Mosa.Runtime.CompilerFramework.IR
 {
@@ -258,8 +261,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
                 return;
             }
 		    
-            if (this.ProcessVmCall(ctx) == false 
-                && this.ProcessIntrinsicCall(ctx) == false)
+            if (this.ProcessVmCall(ctx) == false && this.ProcessIntrinsicCall(ctx) == false)
             {
                 // Create a symbol operand for the invocation target
                 RuntimeMethod invokeTarget = ctx.InvokeTarget;
@@ -388,7 +390,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
                 Operand resultOperand = ctx.Result;
                 var operands = new List<Operand>(ctx.Operands);
 
-                if ((invokeTarget.Attributes & MethodAttributes.Virtual) == MethodAttributes.Virtual)
+                if ((invokeTarget.Attributes & Mosa.Runtime.Metadata.MethodAttributes.Virtual) == Mosa.Runtime.Metadata.MethodAttributes.Virtual)
                 {
                     Operand thisPtr = ctx.Operand1;
 
@@ -1581,6 +1583,8 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			}
 		}
 
+        private RuntimeType[] intrinsicAttributeTypes = null;
+
 		/// <summary>
 		/// Processes intrinsic method calls.
 		/// </summary>
@@ -1593,47 +1597,75 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// </remarks>
 	    private bool ProcessIntrinsicCall(Context ctx)
 	    {
-	        RuntimeMethod rm = ctx.InvokeTarget;
-	        Debug.Assert(rm != null, @"Call doesn't have a target.");
-	        // Retrieve the runtime type
-	        RuntimeType rt = RuntimeBase.Instance.TypeLoader.GetType(@"Mosa.Runtime.CompilerFramework.IntrinsicAttribute, Mosa.Runtime");
+            // HACK: This allows us to resolve IntrinsicAttribute from Korlib without directly referencing it. It is slower, but works.
+            if (intrinsicAttributeTypes == null)
+            {
 
-	        if (rm.IsDefined(rt)) {
-	            // FIXME: Change this to a GetCustomAttributes call, once we can do that :)
-	            foreach (RuntimeAttribute ra in rm.CustomAttributes) {
-	                if (ra.Type == rt) {
-	                    
-                        // Get the intrinsic attribute
-	                    IntrinsicAttribute ia = (IntrinsicAttribute)ra.GetAttribute();
-	                    
-                        if (ia.Architecture == null)
-                        {
-                            IIntrinsicMethod instrinsic = (IIntrinsicMethod)Activator.CreateInstance(ia.InstructionType, true);
-                            instrinsic.ReplaceIntrinsicCall(ctx);
-                            return true;
-                        }
-                        else if (ia.Architecture.IsInstanceOfType(this.Architecture)) 
-                        {
-	                        // Found a replacement for the call...
-	                        try {
-	                            IIntrinsicMethod instrinsic = this.Architecture.GetIntrinsicMethod(ia.InstructionType);
-	                            instrinsic.ReplaceIntrinsicCall(ctx);
-	                            return true;
-	                        }
-	                        catch (Exception e) {
-	                            string message = "Failed to replace intrinsic call with its instruction: " + ia.InstructionType.ToString();
-	                            Trace.WriteLine(message);
-	                            Trace.WriteLine(e);
+                if (RuntimeBase.Instance.AssemblyLoader.Modules.FirstOrDefault(item => item.Name == @"mscorlib") != null)
+                {
+                    intrinsicAttributeTypes = new RuntimeType[2];
+                    intrinsicAttributeTypes[1] = RuntimeBase.Instance.TypeLoader.GetType(@"Mosa.Runtime.CompilerFramework.IntrinsicAttribute, mscorlib");
+                }
+                else
+                {
+                    intrinsicAttributeTypes = new RuntimeType[2];
+                }
 
-	                            throw new CompilationException(message, e);
-	                        }
-	                    }
-	                }
-	            }
+                intrinsicAttributeTypes[0] = RuntimeBase.Instance.TypeLoader.GetType(@"Mosa.Runtime.CompilerFramework.IntrinsicAttribute, Mosa.Runtime");
+            }
+
+	        
+            // Retrieve the runtime type
+            object attribute = this.FindIntrinsicAttributeInstance(ctx);
+            if (attribute != null)
+            {
+                Type attributeType = attribute.GetType();
+                Type architecture = (Type)attributeType.InvokeMember(@"Architecture", BindingFlags.Public|BindingFlags.GetProperty|BindingFlags.Instance, null, attribute, null);
+                Type instructionType = (Type)attributeType.InvokeMember(@"InstructionType", BindingFlags.Public|BindingFlags.GetProperty|BindingFlags.Instance, null, attribute, null);
+
+                if (architecture == null)
+                {
+                    IIntrinsicMethod instrinsic = (IIntrinsicMethod)Activator.CreateInstance(instructionType, true);
+                    instrinsic.ReplaceIntrinsicCall(ctx);
+                    return true;
+                }
+                else if (architecture.IsInstanceOfType(this.Architecture)) 
+                {
+                    // Found a replacement for the call...
+                    try {
+                        IIntrinsicMethod instrinsic = this.Architecture.GetIntrinsicMethod(instructionType);
+                        instrinsic.ReplaceIntrinsicCall(ctx);
+                        return true;
+                    }
+                    catch (Exception e) {
+                        string message = "Failed to replace intrinsic call with its instruction: " + instructionType.ToString();
+                        Trace.WriteLine(message);
+                        Trace.WriteLine(e);
+
+                        throw new CompilationException(message, e);
+                    }
+                }
 	        }
 
 	        return false;
 	    }
+
+        private object FindIntrinsicAttributeInstance(Context ctx)
+        {
+	        RuntimeMethod rm = ctx.InvokeTarget;
+	        Debug.Assert(rm != null, @"Call doesn't have a target.");
+
+            foreach (RuntimeType intrinsicAttributeType in this.intrinsicAttributeTypes)
+            {
+                object[] attributes = rm.GetCustomAttributes(intrinsicAttributeType);
+                if (attributes != null && attributes.Length > 0)
+                {
+                    return attributes[0];
+                }
+            }
+
+            return null;
+        }
 
 	    /// <summary>
 	    /// Processes a method call instruction.
@@ -1769,7 +1801,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 
         private bool ReplaceWithInternalCall(Context ctx, RuntimeMethod method)
         {
-            bool internalCall = ((method.ImplAttributes & MethodImplAttributes.InternalCall) == MethodImplAttributes.InternalCall);
+            bool internalCall = ((method.ImplAttributes & Mosa.Runtime.Metadata.MethodImplAttributes.InternalCall) == Mosa.Runtime.Metadata.MethodImplAttributes.InternalCall);
             if (internalCall == true)
             {
                 string replacementMethod = this.BuildInternalCallName(method);

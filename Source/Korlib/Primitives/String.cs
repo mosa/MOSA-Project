@@ -12,7 +12,6 @@ namespace System
     using System.Runtime.CompilerServices;
 
     using Mosa.Runtime.CompilerFramework;
-    using Mosa.Runtime.CompilerFramework.Intrinsics;
 
 	/// <summary>
 	/// Implementation of the "System.String" class
@@ -139,7 +138,7 @@ namespace System
             return result;
         }
 
-        [Intrinsic(typeof(InternalAllocateString))]
+        [Intrinsic(@"Mosa.Runtime.CompilerFramework.Intrinsics.InternalAllocateString, Mosa.Runtime")]
         private static string InternalAllocateString(int length)
         {
             //throw new NotSupportedException(@"Can't run this code outside of MOSA.");
