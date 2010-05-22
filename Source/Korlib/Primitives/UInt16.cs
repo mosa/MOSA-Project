@@ -14,5 +14,10 @@ namespace System
 	/// </summary>
     public struct UInt16
     {
+		public const ushort MaxValue = 0xffff;
+		public const ushort MinValue = 0;
+
+		internal ushort m_value;
+
     }
 }
