@@ -473,7 +473,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
             RuntimeType classType = RuntimeBase.Instance.TypeLoader.GetType(this.MethodCompiler.Method, this.MethodCompiler.Assembly, classSigType.Token);
 
             List<Operand> ctorOperands = new List<Operand>(ctx.Operands);
-            RuntimeMethod ctorMethod = this.FindConstructor(classType, ctorOperands);
+            RuntimeMethod ctorMethod = ctx.InvokeTarget; //this.FindConstructor(classType, ctorOperands);
 
             if (ReplaceWithInternalCall(ctx, ctorMethod) == false)
             {

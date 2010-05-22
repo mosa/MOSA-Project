@@ -73,7 +73,7 @@ namespace System
 
         // FIXME: These should be char,int instead of int,int; but that doesn't compile in MOSA for type matching reasons
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
-        public extern String(int c, int count);
+        public extern String(char c, int count);
 
         [MethodImplAttribute(MethodImplOptions.InternalCall)]
         public extern String(char[] value);

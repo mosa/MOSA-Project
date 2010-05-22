@@ -12,11 +12,15 @@
 	
 	<!-- Main build target -->
 	<target name="build">
-	    <csc target="library" unsafe="true" output="${outputDirectory}/mscorlib.dll" debug="${debug}" nostdlib="true">
+	    <csc target="library" unsafe="true" output="${outputDirectory}/mscorlib.dll" debug="${debug}" nostdlib="true" noconfig="true">
 		<sources>
 			<include name="**/*.cs"/>
 		</sources>
 		
+   		<references>
+			<include name="${outputDirectory}/Mosa.Runtime.dll"/>
+        </references>
+        
 		<!-- supress warnings -->
 		<nowarn><warning number="${suppresswarnings}"/></nowarn>
 	    </csc>

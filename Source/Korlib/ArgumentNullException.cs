@@ -37,7 +37,7 @@ namespace System
         public ArgumentNullException(string message, string paramName)
             : base(message)
         {
-            this.paramName = this.paramName;
+            this.paramName = paramName;
         }
     }
 }
