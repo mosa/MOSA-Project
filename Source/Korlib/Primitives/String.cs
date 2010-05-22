@@ -44,7 +44,7 @@ namespace System
 		/// <summary>
 		/// Length
 		/// </summary>
-		private int length;
+		internal int length;
 		//private char start_char;
 
 		public int Length
@@ -55,7 +55,7 @@ namespace System
 			}
 		}
 
-		public string Empty = "";
+		public static string Empty = "";
 
 		[IndexerName("Chars")]
 		public unsafe char this[int index]
@@ -154,7 +154,7 @@ namespace System
 		}
 
 		[Intrinsic(typeof(InternalAllocateString))]
-		private static string InternalAllocateString(int length)
+		internal static string InternalAllocateString(int length)
 		{
 			//throw new NotSupportedException(@"Can't run this code outside of MOSA.");
 			return null;
