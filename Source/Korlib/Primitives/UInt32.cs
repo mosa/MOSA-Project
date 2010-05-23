@@ -14,5 +14,9 @@ namespace System
 	/// </summary>
     public struct UInt32
     {
+		public const uint MaxValue = 0xffffffff;
+		public const uint MinValue = 0;
+
+		internal uint m_value;
     }
 }

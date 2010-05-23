@@ -14,5 +14,9 @@ namespace System
 	/// </summary>
     public struct Int16
     {
+		public const short MaxValue = 32767;
+		public const short MinValue = -32768;
+
+		internal short m_value;
     }
 }
