@@ -45,7 +45,7 @@ namespace Mosa.HelloWorld
 			Screen.Write(@"Multibootaddress: ");
 			Screen.Color = Colors.Gray;
 			Screen.Write(Native.Get32(0x200004), 16, 8);
-
+			
 			Screen.NextLine();
 			Screen.Color = Colors.Green;
 			Screen.Write(@"Magic number:     ");
@@ -183,14 +183,7 @@ namespace Mosa.HelloWorld
 			Screen.SetCursor(24, 29);
 			Screen.Color = Colors.Yellow;
 
-			string part1 = "www.";
-			string part2 = "mosa-project";
-			string part3 = ".org";
-
-			string all = string.Concat(part1, part2, part3);
-
-			//Screen.Write(@"www.mosa-project.org");
-			Screen.Write(all);
+			Screen.Write(@"www.mosa-project.org");
 
 			CMOS cmos = new CMOS();
 

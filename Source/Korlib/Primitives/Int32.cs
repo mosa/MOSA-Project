@@ -21,10 +21,10 @@ namespace System
 
 		public override string ToString()
 		{
-		    return CreateString((uint)m_value, true, false);
+			return CreateString((uint)m_value, true, false);
 		}
 
-		unsafe static string CreateString(uint value, bool signed, bool hex)
+		unsafe internal static string CreateString(uint value, bool signed, bool hex)
 		{
 			int offset = 0;
 
@@ -54,28 +54,25 @@ namespace System
 			length = count;
 			String result = String.InternalAllocateString(length);
 
-			fixed (int* len = &result.length)
+			char* chars = result.first_char;
+
+			if (negative)
 			{
-				char* chars = (char*)(len + 1);
+				*(chars + offset) = '-';
+				offset++;
+				count--;
+			}
 
-				if (negative)
-				{
-					*(chars + offset) = '-';
-					offset++;
-					count--;
-				}
+			for (int i = 0; i < count; i++)
+			{
+				uint remainder = uvalue % divisor;
 
-				for (int i = 0; i < count; i++)
-				{
-					uint remainder = uvalue % divisor;
+				if (remainder < 10)
+					*(chars + offset + count - 1 - i) = (char)('0' + remainder);
+				else
+					*(chars + offset + count - 1 - i) = (char)('A' + remainder - 10);
 
-					if (remainder < 10)
-						*(chars + offset + count - 1 - i) = (char)('0' + remainder);
-					else
-						*(chars + offset + count - 1 - i) = (char)('A' + remainder - 10);
-
-					uvalue /= divisor;
-				}
+				uvalue /= divisor;
 			}
 
 			return result;

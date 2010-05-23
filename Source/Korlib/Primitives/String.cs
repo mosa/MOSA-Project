@@ -56,7 +56,7 @@ namespace System
 
 		public static string Empty = "";
 
-		private unsafe char* first_char
+		internal unsafe char* first_char
 		{
 			get
 			{
