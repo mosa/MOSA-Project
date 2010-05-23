@@ -113,7 +113,8 @@ namespace Mosa.Runtime.CompilerFramework.IR
             Operand destination = ctx.Result;
 		    Operand source = ctx.Operand1;
 
-            SigType elementType = GetElementTypeFromSigType(source.Type);
+            LdobjInstruction instruction = (LdobjInstruction)ctx.Instruction;
+            SigType elementType = instruction.TypeReference;
 
 			// This is actually ldind.* and ldobj - the opcodes have the same meanings
             if (MustSignExtendOnLoad(elementType.Type))
@@ -475,7 +476,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
             RuntimeType classType = RuntimeBase.Instance.TypeLoader.GetType(this.MethodCompiler.Method, this.MethodCompiler.Assembly, classSigType.Token);
 
             List<Operand> ctorOperands = new List<Operand>(ctx.Operands);
-            RuntimeMethod ctorMethod = ctx.InvokeTarget; //this.FindConstructor(classType, ctorOperands);
+            RuntimeMethod ctorMethod = ctx.InvokeTarget;
 
             if (ReplaceWithInternalCall(ctx, ctorMethod) == false)
             {
@@ -651,7 +652,10 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// Visitation function for <see cref="ICILVisitor.Break"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.Break(Context ctx) { }
+		public void Break(Context ctx) 
+        {
+            ctx.ReplaceInstructionOnly(Instruction.BreakInstruction);
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="ICILVisitor.Ldstr"/>.
@@ -766,7 +770,10 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// Visitation function for <see cref="ICILVisitor.Jmp"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.Jmp(Context ctx) { }
+        void ICILVisitor.Jmp(Context ctx)
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="ICILVisitor.Branch"/>.
@@ -852,7 +859,10 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// Visitation function for <see cref="ICILVisitor.Cpobj"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.Cpobj(Context ctx) { }
+        void ICILVisitor.Cpobj(Context ctx)
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="ICILVisitor.Ldlen"/>.
@@ -976,84 +986,126 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// Visitation function for <see cref="ICILVisitor.UnboxAny"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.UnboxAny(Context ctx) { }
+		void ICILVisitor.UnboxAny(Context ctx) 
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="ICILVisitor.Refanyval"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.Refanyval(Context ctx) { }
+		void ICILVisitor.Refanyval(Context ctx) 
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="ICILVisitor.UnaryArithmetic"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.UnaryArithmetic(Context ctx) { }
+		void ICILVisitor.UnaryArithmetic(Context ctx) 
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.Mkrefany(Context ctx) { }
+		void ICILVisitor.Mkrefany(Context ctx)
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="ICILVisitor.ArithmeticOverflow"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.ArithmeticOverflow(Context ctx) { }
+        void ICILVisitor.ArithmeticOverflow(Context ctx)
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="ICILVisitor.Endfinally"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.Endfinally(Context ctx) { }
+        void ICILVisitor.Endfinally(Context ctx)
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="ICILVisitor.Leave"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.Leave(Context ctx) { }
+        void ICILVisitor.Leave(Context ctx)
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="ICILVisitor.Arglist"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.Arglist(Context ctx) { }
+        void ICILVisitor.Arglist(Context ctx)
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="ICILVisitor.Localalloc"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.Localalloc(Context ctx) { }
+        void ICILVisitor.Localalloc(Context ctx)
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="ICILVisitor.Endfilter"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.Endfilter(Context ctx) { }
+        void ICILVisitor.Endfilter(Context ctx)
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="ICILVisitor.InitObj"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.InitObj(Context ctx) { }
+        void ICILVisitor.InitObj(Context ctx)
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="ICILVisitor.Prefix"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.Prefix(Context ctx) { }
+        void ICILVisitor.Prefix(Context ctx)
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="ICILVisitor.Sizeof"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.Sizeof(Context ctx) { }
+        void ICILVisitor.Sizeof(Context ctx)
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="ICILVisitor.Refanytype"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.Refanytype(Context ctx) { }
+        void ICILVisitor.Refanytype(Context ctx)
+        {
+            throw new NotSupportedException();
+        }
 
 		/// <summary>
 		/// Visitation function for <see cref="ICILVisitor.Add"/>.
@@ -1608,7 +1660,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
                 }
                 else
                 {
-                    intrinsicAttributeTypes = new RuntimeType[2];
+                    intrinsicAttributeTypes = new RuntimeType[1];
                 }
 
                 intrinsicAttributeTypes[0] = RuntimeBase.Instance.TypeLoader.GetType(@"Mosa.Runtime.CompilerFramework.IntrinsicAttribute, Mosa.Runtime");

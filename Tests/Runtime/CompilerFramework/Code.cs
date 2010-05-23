@@ -125,6 +125,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
                 public class String
                 {
                     private int length;
+                    private char first_char;
 
                     public int Length
                     {
@@ -146,10 +147,9 @@ namespace Test.Mosa.Runtime.CompilerFramework
 
                             char result;
 
-                            fixed (int *pLength = &this.length)
+                            fixed (char *pChars = &this.first_char)
                             {
-                                char* pChars = (char*)(pLength + 1);
-                                result = *(pChars + index);
+                                result = pChars[index];
                             }
 
                             return result;

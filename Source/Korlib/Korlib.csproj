@@ -86,6 +86,7 @@
     <Compile Include="NotSupportedException.cs" />
     <Compile Include="ObjectDisposedException.cs" />
     <Compile Include="ParamArrayAttribute.cs" />
+    <Compile Include="Primitives\Decimal.cs" />
     <Compile Include="RuntimeFieldHandle.cs" />
     <Compile Include="RuntimeTypeHandle.cs" />
     <Compile Include="Runtime\CompilerServices\IndexerNameAttribute.cs" />

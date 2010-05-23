@@ -23,16 +23,10 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// </summary>
 	public sealed class LdobjInstruction : UnaryInstruction
 	{
-		#region Data members
-
 		/// <summary>
 		/// A fixed typeref for ldind.* instructions.
 		/// </summary>
 		private SigType typeRef;
-
-		#endregion // Data members
-
-		#region Construction
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LdobjInstruction"/> class.
@@ -80,9 +74,10 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			}
 		}
 
-		#endregion // Construction
-
-		#region Methods
+        public SigType TypeReference
+        {
+            get { return this.typeRef; }
+        }
 
 		/// <summary>
 		/// Decodes the specified instruction.
@@ -140,8 +135,5 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		{
 			visitor.Ldobj(context);
 		}
-
-		#endregion Methods
-
 	}
 }
