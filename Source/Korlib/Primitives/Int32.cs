@@ -19,10 +19,10 @@ namespace System
 
 		internal int m_value;
 
-		//public override string ToString()
-		//{
-		//    return CreateString((uint)m_value, true, false);
-		//}
+		public override string ToString()
+		{
+		    return CreateString((uint)m_value, true, false);
+		}
 
 		unsafe static string CreateString(uint value, bool signed, bool hex)
 		{
