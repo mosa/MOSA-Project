@@ -182,9 +182,19 @@ namespace Mosa.HelloWorld
 
 			Screen.SetCursor(24, 29);
 			Screen.Color = Colors.Yellow;
-			Screen.Write(@"www.mosa-project.org");
+
+			string part1 = "www.";
+			string part2 = "mosa-project";
+			string part3 = ".org";
+
+			string all = string.Concat(part1, part2, part3);
+
+			//Screen.Write(@"www.mosa-project.org");
+			Screen.Write(all);
 
 			CMOS cmos = new CMOS();
+
+			Mosa.HelloWorld.Tests.StringTest.Test();
 
 			while (true) {
 				cmos.Dump(2, 65);

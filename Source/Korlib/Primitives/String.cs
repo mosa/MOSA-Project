@@ -56,39 +56,38 @@ namespace System
 
 		public static string Empty = "";
 
+		private unsafe char* first_char
+		{
+			get
+			{
+				char* result;
+
+				fixed (char* c = &start_char)
+				{
+					result = c;
+				}
+
+				return result;
+			}
+		}
+
 		[IndexerName("Chars")]
-        ////public unsafe char this[int index]
-        ////{
-        ////    get
-        ////    {
-        ////        char result;
+		public unsafe char this[int index]
+		{
+			get
+			{
+				if (index < 0 || index >= length)
+					return (char)0; // throw new IndexOutOfRangeException();
 
-        ////        fixed (int* len = &this.length)
-        ////        {
-        ////            char* chars = (char*)(len + 1);
-        ////            result = *(chars + index);
-        ////        }
+				char result = (char)0;
+				fixed (char* c = &start_char)
+				{
+					result = c[index];
+				}
 
-        ////        return result;
-        ////    }
-        ////}
-
-        public unsafe char this[int index]
-        {
-            get
-            {
-                if (index < 0 || index >= length)
-                    return (char)0; // throw new IndexOutOfRangeException();
-
-                char result = (char)0;
-                fixed (char* c = &start_char)
-                {
-                    result = c[index];
-                }
-
-                return result;
-            }
-        }
+				return result;
+			}
+		}
 
 		// FIXME: These should be char,int instead of int,int; but that doesn't compile in MOSA for type matching reasons
 		[MethodImplAttribute(MethodImplOptions.InternalCall)]
@@ -115,21 +114,25 @@ namespace System
 		////[MethodImplAttribute(MethodImplOptions.InternalCall)]
 		////public unsafe extern String(char* value, int startIndex, int length);
 
+		[Intrinsic(@"Mosa.Runtime.CompilerFramework.Intrinsics.InternalAllocateString, Mosa.Runtime")]
+		internal static string InternalAllocateString(int length)
+		{
+			//throw new NotSupportedException(@"Can't run this code outside of MOSA.");
+			return null;
+		}
+
 		private static unsafe string CreateString(char c, int count)
 		{
 			String result = InternalAllocateString(count);
 			char ch = (char)c;
 
-			fixed (int* len = &result.length)
-			{
-				char* pChars = (char*)(len + 1);
+			char* chars = result.first_char;
 
-				while (count > 0)
-				{
-					*pChars = ch;
-					count--;
-					pChars++;
-				}
+			while (count > 0)
+			{
+				*chars = ch;
+				count--;
+				chars++;
 			}
 
 			return result;
@@ -144,46 +147,75 @@ namespace System
 		{
 			String result = InternalAllocateString(length);
 
-			fixed (int* len = &result.length)
-			{
-				char* chars = (char*)(len + 1);
+			char* chars = result.first_char;
 
-				for (int index = startIndex; index < startIndex + length; index++)
-				{
-					*chars = value[index];
-					chars++;
-				}
+			for (int index = startIndex; index < startIndex + length; index++)
+			{
+				*chars = value[index];
+				chars++;
 			}
 
 			return result;
 		}
 
-        [Intrinsic(@"Mosa.Runtime.CompilerFramework.Intrinsics.InternalAllocateString, Mosa.Runtime")]
-		internal static string InternalAllocateString(int length)
+		public static bool operator ==(String a, String b)
 		{
-			//throw new NotSupportedException(@"Can't run this code outside of MOSA.");
-			return null;
+			return String.Equals(a, b);
+		}
+
+		public static bool operator !=(String a, String b)
+		{
+			return !(a == b);
+		}
+
+		//public bool Equals(System.String i)
+		//{
+		//    return ((String)(object)i) == this;
+		//}
+
+		//public override bool Equals(object o)
+		//{
+		//    //if (!(o is String))
+		//    //	return false;
+
+		//    String other = (String)o;
+		//    return other == this;
+		//}
+
+		public static unsafe bool Equals(String a, String b)
+		{
+			if (a == null || b == null)
+				return false;
+
+			if (a.length != b.length)
+				return false;
+
+			char* pa = a.first_char;
+			char* pb = b.first_char;
+
+			for (int i = 0; i < a.Length; ++i)
+				if (pa[i] != pb[i])
+					return false;
+
+			return true;
 		}
 
 		public unsafe static string Concat(String a, String b)
 		{
 			String result = InternalAllocateString(a.length + b.length);
 
-			fixed (int* len = &result.length)
+			char* chars = result.first_char;
+
+			for (int index = 0; index < a.length; index++)
 			{
-				char* chars = (char*)(len + 1);
+				*chars = a[index];
+				chars++;
+			}
 
-				for (int index = 0; index < a.length; index++)
-				{
-					*chars = a[index];
-					chars++;
-				}
-
-				for (int index = 0; index < b.length; index++)
-				{
-					*chars = b[index];
-					chars++;
-				}
+			for (int index = 0; index < b.length; index++)
+			{
+				*chars = b[index];
+				chars++;
 			}
 
 			return result;
@@ -193,27 +225,24 @@ namespace System
 		{
 			String result = InternalAllocateString(a.length + b.length + c.length);
 
-			fixed (int* len = &result.length)
+			char* chars = result.first_char;
+
+			for (int index = 0; index < a.length; index++)
 			{
-				char* chars = (char*)(len + 1);
+				*chars = a[index];
+				chars++;
+			}
 
-				for (int index = 0; index < a.length; index++)
-				{
-					*chars = a[index];
-					chars++;
-				}
+			for (int index = 0; index < b.length; index++)
+			{
+				*chars = b[index];
+				chars++;
+			}
 
-				for (int index = 0; index < b.length; index++)
-				{
-					*chars = b[index];
-					chars++;
-				}
-
-				for (int index = 0; index < c.length; index++)
-				{
-					*chars = c[index];
-					chars++;
-				}
+			for (int index = 0; index < c.length; index++)
+			{
+				*chars = c[index];
+				chars++;
 			}
 
 			return result;
@@ -223,33 +252,30 @@ namespace System
 		{
 			String result = InternalAllocateString(a.length + b.length + c.length + d.length);
 
-			fixed (int* len = &result.length)
+			char* chars = result.first_char;
+
+			for (int index = 0; index < a.length; index++)
 			{
-				char* chars = (char*)(len + 1);
+				*chars = a[index];
+				chars++;
+			}
 
-				for (int index = 0; index < a.length; index++)
-				{
-					*chars = a[index];
-					chars++;
-				}
+			for (int index = 0; index < b.length; index++)
+			{
+				*chars = b[index];
+				chars++;
+			}
 
-				for (int index = 0; index < b.length; index++)
-				{
-					*chars = b[index];
-					chars++;
-				}
+			for (int index = 0; index < c.length; index++)
+			{
+				*chars = c[index];
+				chars++;
+			}
 
-				for (int index = 0; index < c.length; index++)
-				{
-					*chars = c[index];
-					chars++;
-				}
-
-				for (int index = 0; index < d.length; index++)
-				{
-					*chars = d[index];
-					chars++;
-				}
+			for (int index = 0; index < d.length; index++)
+			{
+				*chars = d[index];
+				chars++;
 			}
 
 			return result;
@@ -266,46 +292,40 @@ namespace System
 			int newlen = this.length - startIndex;
 			String result = InternalAllocateString(newlen);
 
-			fixed (int* len = &result.length)
-			{
-				char* chars = (char*)(len + 1);
+			char* chars = result.first_char;
 
-				for (int index = 0; index < newlen; index++)
-				{
-					*chars = this[startIndex + index];
-					chars++;
-				}
+			for (int index = 0; index < newlen; index++)
+			{
+				*chars = this[startIndex + index];
+				chars++;
 			}
 
 			return result;
 		}
 
-        ////public unsafe string Substring(int startIndex, int length)
-        ////{
-        ////    if (length < 0)
-        ////        return Empty; //throw new System.ArgumentOutOfRangeException("length", "< 0");
+		public unsafe string Substring(int startIndex, int length)
+		{
+			if (length < 0)
+				return Empty; //throw new System.ArgumentOutOfRangeException("length", "< 0");
 
-        ////    if (startIndex == 0)
-        ////        return Empty;
+			if (startIndex == 0)
+				return Empty;
 
-        ////    if (startIndex < 0 || startIndex > this.length)
-        ////        return Empty; //throw new System.ArgumentOutOfRangeException("startIndex");
+			if (startIndex < 0 || startIndex > this.length)
+				return Empty; //throw new System.ArgumentOutOfRangeException("startIndex");
 
-        ////    String result = InternalAllocateString(length);
+			String result = InternalAllocateString(length);
 
-        ////    fixed (int* len = &result.length)
-        ////    {
-        ////        char* chars = (char*)(len + 1);
+			char* chars = result.first_char;
 
-        ////        for (int index = 0; index < length; index++)
-        ////        {
-        ////            *chars = this[startIndex + index];
-        ////            chars++;
-        ////        }
-        ////    }
+			for (int index = 0; index < length; index++)
+			{
+				*chars = this[startIndex + index];
+				chars++;
+			}
 
-        ////    return result;
-        ////}
+			return result;
+		}
 
 		public static bool IsNullOrEmpty(string value)
 		{
@@ -477,6 +497,6 @@ namespace System
 
 			return -1;
 		}
-	
+
 	}
 }
