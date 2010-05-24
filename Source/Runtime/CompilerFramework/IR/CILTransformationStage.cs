@@ -1655,10 +1655,15 @@ namespace Mosa.Runtime.CompilerFramework.IR
 
                 if (RuntimeBase.Instance.AssemblyLoader.Modules.FirstOrDefault(item => item.Name == @"mscorlib") != null)
                 {
-                    intrinsicAttributeTypes = new RuntimeType[2];
-                    intrinsicAttributeTypes[1] = RuntimeBase.Instance.TypeLoader.GetType(@"Mosa.Runtime.CompilerFramework.IntrinsicAttribute, mscorlib");
+                    RuntimeType attributeType = RuntimeBase.Instance.TypeLoader.GetType(@"Mosa.Runtime.CompilerFramework.IntrinsicAttribute, mscorlib");
+                    if (attributeType != null)
+                    {
+                        intrinsicAttributeTypes = new RuntimeType[2];
+                        intrinsicAttributeTypes[1] = attributeType;
+                    }
                 }
-                else
+
+                if (intrinsicAttributeTypes == null)
                 {
                     intrinsicAttributeTypes = new RuntimeType[1];
                 }

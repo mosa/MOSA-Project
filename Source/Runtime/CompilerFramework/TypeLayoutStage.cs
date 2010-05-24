@@ -13,6 +13,7 @@ using System.IO;
 
 using Mosa.Runtime.Linker;
 using Mosa.Runtime.Metadata;
+using Mosa.Runtime.Metadata.Tables;
 using Mosa.Runtime.Vm;
 using Mosa.Runtime.Metadata.Signatures;
 using System.Collections.Generic;
@@ -82,19 +83,31 @@ namespace Mosa.Runtime.CompilerFramework
 			ReadOnlyRuntimeTypeListView types = this._typeSystem.GetTypesFromModule(this.compiler.Assembly);
 			foreach (RuntimeType type in types) 
 			{
-				if (type.IsGeneric == true || type.IsDelegate == true || type.IsInterface == true)
+				if (type.IsGeneric == true || type.IsDelegate == true)
 					continue;
 
-                if (IsExplicitLayoutRequestedByType(type) == false)
+                if (type.IsInterface == true)
                 {
-                    this.CreateSequentialLayout(type);
+                    this.CreateInterfaceMethodTable(type);
                 }
                 else
                 {
-                    this.CreateExplicitLayout(type);
-                }
+                    if (IsExplicitLayoutRequestedByType(type) == false)
+                    {
+                        this.CreateSequentialLayout(type);
+                    }
+                    else
+                    {
+                        this.CreateExplicitLayout(type);
+                    }
 
-                this.BuildMethodTable(type);
+                    this.BuildMethodTable(type);
+
+                    foreach (RuntimeType interfaceType in type.Interfaces)
+                    {
+                        this.BuildInterfaceTable(type, interfaceType);
+                    }
+                }
 
                 this.AllocateStaticFields(type);
 			}
@@ -104,11 +117,94 @@ namespace Mosa.Runtime.CompilerFramework
         {
             return (type.Attributes & TypeAttributes.LayoutMask) == TypeAttributes.ExplicitLayout;
         }
+        
+        private void BuildInterfaceTable(RuntimeType type, RuntimeType interfaceType)
+        {           
+            List<RuntimeMethod> interfaceMethods = new List<RuntimeMethod>(interfaceType.Methods);
+            List<RuntimeMethod> methodTable = new List<RuntimeMethod>(interfaceMethods.Count);
+            while (methodTable.Count < methodTable.Capacity)
+            {
+                methodTable.Add(null);
+            }
+            
+            this.ScanExplicitInterfaceImplementations(type, methodTable, interfaceMethods);
+            this.AddImplicitInterfaceImplementations(type, methodTable, interfaceMethods);            
+                                                
+            this.AskLinkerToCreateMethodTable(type.FullName + "$" + interfaceType.FullName, methodTable);
+        }
+        
+        private void ScanExplicitInterfaceImplementations(RuntimeType type, IList<RuntimeMethod> methodTable, IList<RuntimeMethod> interfaceMethods)
+        {
+            MethodImplRow row;
+            IMetadataProvider metadata = type.Module.Metadata;
+            TokenTypes maxToken = metadata.GetMaxTokenValue(TokenTypes.MethodImpl);            
+            for (TokenTypes token = TokenTypes.MethodImpl + 1; token <= maxToken; token++)
+            {
+                metadata.Read(token, out row);
+                if (row.ClassTableIdx == (TokenTypes)type.Token)
+                {
+                    int interfaceSlot = -1;
+                    
+                    foreach (RuntimeMethod interfaceMethod in interfaceMethods)
+                    {
+                        interfaceSlot++;
+                        
+                        if (interfaceMethod != null && (TokenTypes)interfaceMethod.Token == row.MethodDeclarationTableIdx)
+                        {
+                            methodTable[interfaceSlot] = this.FindMethodByToken(type, row.MethodBodyTableIdx);
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+        
+        private RuntimeMethod FindMethodByToken(RuntimeType type, TokenTypes methodToken)
+        {
+            foreach (RuntimeMethod method in type.Methods)
+            {
+                if ((TokenTypes)method.Token == methodToken)
+                {
+                    return method;
+                }
+            }
+            
+            throw new InvalidOperationException(@"Failed to find explicit interface method implementation.");
+        }
+        
+        private void AddImplicitInterfaceImplementations(RuntimeType type, IList<RuntimeMethod> methodTable, IList<RuntimeMethod> interfaceMethods)
+        {
+            for (int slot = 0; slot < methodTable.Count; slot++)
+            {
+                if (methodTable[slot] == null)
+                {
+                    methodTable[slot] = this.FindInterfaceMethod(type, interfaceMethods[slot]);
+                }
+            }
+        }
+        
+        private RuntimeMethod FindInterfaceMethod(RuntimeType type, RuntimeMethod interfaceMethod)
+        {
+            foreach (RuntimeMethod method in type.Methods)
+            {
+                if (interfaceMethod.Name.Equals(method.Name) && interfaceMethod.Signature.Matches(method.Signature))
+                {
+                    return method;
+                }
+            }
+            
+            throw new InvalidOperationException(@"Failed to find implicit interface implementation.");
+        }
 
         private void BuildMethodTable(RuntimeType type)
         {
             IList<RuntimeMethod> methodTable = this.CreateMethodTable(type);
-            this.AskLinkerToCreateMethodTable(type, methodTable);
+            this.AskLinkerToCreateMethodTable(type.FullName, methodTable);
+        }
+
+        private void CreateInterfaceMethodTable(RuntimeType type)
+        {
+            this.CreateMethodTable(type);
         }
 
         private List<RuntimeMethod> CreateMethodTable(RuntimeType type)
@@ -181,12 +277,12 @@ namespace Mosa.Runtime.CompilerFramework
             return methodTable;
         }
 
-        private void AskLinkerToCreateMethodTable(RuntimeType type, IList<RuntimeMethod> methodTable)
+        private void AskLinkerToCreateMethodTable(string name, IList<RuntimeMethod> methodTable)
         {
             // HINT: The method table is offset by a single pointer, which contains the type information 
             // pointer. Used to realize object.GetType()
 
-            string methodTableSymbolName = type.FullName + @"$mtable";
+            string methodTableSymbolName = name + @"$mtable";
             int methodTableSize = this.nativePointerSize + methodTable.Count * this.nativePointerSize;
 
             using (Stream stream = this.linker.Allocate(methodTableSymbolName, SectionKind.Text, methodTableSize, this.nativePointerAlignment))

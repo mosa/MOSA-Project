@@ -43,7 +43,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
                 //new InstructionLogger(),
                 //new ConstantFoldingStage(),
                 new CILTransformationStage(),
-                //new InstructionLogger(),
+                new InstructionLogger(),
                 new CILLeakGuardStage() { MustThrowCompilationException = true },
                 //new InstructionLogger(),
 				//InstructionStatisticsStage.Instance,

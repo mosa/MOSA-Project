@@ -14,6 +14,7 @@ using System.Text;
 using Mosa.Runtime.Vm;
 using Mosa.Runtime.Loader;
 using Mosa.Runtime.Metadata.Tables;
+using Mosa.Runtime.Metadata.Signatures;
 using System.Diagnostics;
 
 namespace Mosa.Runtime.Metadata.Runtime
@@ -188,6 +189,37 @@ namespace Mosa.Runtime.Metadata.Runtime
 				return false;
 			}
 		}
+        
+        protected override IList<RuntimeType> LoadInterfaces()
+        {
+            List<RuntimeType> result = null;
+            IMetadataProvider metadata = this.module.Metadata;
+            InterfaceImplRow row;
+            
+            TokenTypes maxToken = metadata.GetMaxTokenValue(TokenTypes.InterfaceImpl);
+            for (TokenTypes token = TokenTypes.InterfaceImpl+1; token <= maxToken; token++)
+            {
+                metadata.Read(token, out row);
+                if (row.ClassTableIdx == (TokenTypes)this.Token)
+                {
+                    RuntimeType interfaceType = RuntimeBase.Instance.TypeLoader.GetType(DefaultSignatureContext.Instance, this.module, row.InterfaceTableIdx);
+                    
+                    if (result == null)
+                    {
+                        result = new List<RuntimeType>();
+                    }
+                    
+                    result.Add(interfaceType);
+                }
+            }
+            
+            if (result != null)
+            {
+                return result;
+            }
+            
+            return NoInterfaces;
+        }
 
         #endregion // Methods
     }

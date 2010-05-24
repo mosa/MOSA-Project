@@ -39,7 +39,7 @@ namespace Mosa.Tools.Compiler.Metadata
             {
                 if (table != TokenTypes.MaxTable)
                 {
-                    TokenTypes lastToken = this._metadataSource.GetMaxTokenValue(table);
+                    TokenTypes lastToken = this.metadataSource.GetMaxTokenValue(table);
                     if (lastToken - token > encodingWidthBoundary)
                     {
                         wide = true;
@@ -60,11 +60,11 @@ namespace Mosa.Tools.Compiler.Metadata
 
             if (wide == true)
             {
-                this._metadataWriter.Write(encodedToken);
+                this.metadataWriter.Write(encodedToken);
             }
             else
             {
-                this._metadataWriter.Write((ushort)encodedToken);
+                this.metadataWriter.Write((ushort)encodedToken);
             }
         }
 

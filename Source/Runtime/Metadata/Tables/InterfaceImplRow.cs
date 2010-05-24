@@ -24,12 +24,12 @@ namespace Mosa.Runtime.Metadata.Tables
         /// <summary>
         /// 
         /// </summary>
-        private TokenTypes _classTableIdx;
+        private TokenTypes classTableIdx;
 
         /// <summary>
         /// 
         /// </summary>
-        private TokenTypes _interfaceTableIdx;
+        private TokenTypes interfaceTableIdx;
 
 		#endregion // Data members
 
@@ -42,8 +42,8 @@ namespace Mosa.Runtime.Metadata.Tables
         /// <param name="interfaceTableIdx">The interface table idx.</param>
         public InterfaceImplRow(TokenTypes classTableIdx, TokenTypes interfaceTableIdx)
         {
-            _classTableIdx = classTableIdx;
-            _interfaceTableIdx = interfaceTableIdx;
+            this.classTableIdx = classTableIdx;
+            this.interfaceTableIdx = interfaceTableIdx;
         }
 
         #endregion // Construction
@@ -56,7 +56,7 @@ namespace Mosa.Runtime.Metadata.Tables
         /// <value>The class table idx.</value>
         public TokenTypes ClassTableIdx
         {
-            get { return _classTableIdx; }
+            get { return this.classTableIdx; }
         }
 
         /// <summary>
@@ -65,7 +65,7 @@ namespace Mosa.Runtime.Metadata.Tables
         /// <value>The interface table idx.</value>
         public TokenTypes InterfaceTableIdx
         {
-            get { return _interfaceTableIdx; }
+            get { return this.interfaceTableIdx; }
         }
 
         #endregion // Properties

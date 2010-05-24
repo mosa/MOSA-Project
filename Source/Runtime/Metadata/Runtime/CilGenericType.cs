@@ -164,5 +164,10 @@ namespace Mosa.Runtime.Metadata.Runtime
 			this.ProcessSignature();
 			return this.genericArguments[index];
 		}
+        
+        protected override IList<RuntimeType> LoadInterfaces()
+        {
+            return NoInterfaces;
+        }
 	}
 }

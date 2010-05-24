@@ -682,7 +682,7 @@ namespace Mosa.Runtime.Vm
                     }
 
                     Debug.Assert(offset < _methods.Length, @"Invalid method index.");
-                    _methods[offset++] = new CilRuntimeMethod(offset, module, ref methodDef, maxParam, declaringType);
+                    _methods[offset++] = new CilRuntimeMethod((int)token, module, ref methodDef, maxParam, declaringType);
                     methodDef = nextMethodDef;
                 }
             }

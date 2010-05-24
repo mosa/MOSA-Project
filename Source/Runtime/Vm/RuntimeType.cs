@@ -25,6 +25,11 @@ namespace Mosa.Runtime.Vm
     public abstract class RuntimeType : RuntimeMember, IEquatable<RuntimeType>, ISignatureContext
     {
         #region Data members
+        
+        /// <summary>
+        /// An array used to describe types, which do not implement any interface.
+        /// </summary>
+        public static readonly RuntimeType[] NoInterfaces = new RuntimeType[0];
 
         /// <summary>
         /// Holds the generic arguments of the type.
@@ -67,6 +72,11 @@ namespace Mosa.Runtime.Vm
         /// Holds the fields of this type.
         /// </summary>
         private IList<RuntimeField> fields;
+        
+        /// <summary>
+        /// Holds the interfaces of this type.
+        /// </summary>
+        private IList<RuntimeType> interfaces;
 
         private bool isCompiled;
 
@@ -148,6 +158,23 @@ namespace Mosa.Runtime.Vm
                     throw new InvalidOperationException();
 
                 this.fields = value;
+            }
+        }
+        
+        /// <summary>
+        /// Returns the interfaces implemented by this type.
+        /// </summary>
+        /// <value>A list of interfaces.</value>
+        public IList<RuntimeType> Interfaces
+        {
+            get
+            {
+                if (this.interfaces == null)
+                {
+                    this.interfaces = this.LoadInterfaces();
+                }
+                
+                return this.interfaces;
             }
         }
 
@@ -397,7 +424,7 @@ namespace Mosa.Runtime.Vm
             {
                 this.AssertBaseTypeIsLoaded();
 
-                RuntimeType delegateType = RuntimeBase.Instance.TypeLoader.GetType(@"System.Delegate");
+                RuntimeType delegateType = RuntimeBase.Instance.TypeLoader.GetType(@"System.Delegate, mscorlib");
                 return this.IsSubclassOf(delegateType);
             }
         }
@@ -455,5 +482,10 @@ namespace Mosa.Runtime.Vm
 
             throw new MissingMethodException(this.Name, name);
         }
+        
+        /// <summary>
+        /// Loads the interfaces implemented by a type.
+        /// </summary>
+        protected abstract IList<RuntimeType> LoadInterfaces();
     }
 }

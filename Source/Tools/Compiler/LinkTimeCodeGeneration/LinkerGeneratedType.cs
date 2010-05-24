@@ -76,6 +76,11 @@ namespace Mosa.Tools.Compiler
 		{
 			return this.Namespace;
 		}
+        
+        protected override IList<RuntimeType> LoadInterfaces()
+        {
+            return NoInterfaces;
+        }
 
 		#endregion // RuntimeType Overrides
 
