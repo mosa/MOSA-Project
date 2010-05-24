@@ -19,5 +19,10 @@ namespace System
 
 		internal ushort m_value;
 
+		public override string ToString()
+		{
+			return Int32.CreateString(m_value, false, false);
+		}
+
     }
 }

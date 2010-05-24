@@ -65,8 +65,8 @@ namespace Mosa.Runtime.CompilerFramework
                 return;
             }
 
-            Console.WriteLine(@"Compiling type " + type.FullName);
-            Debug.WriteLine(@"Compiling type " + type.FullName);
+            Console.WriteLine(@"Compiling " + type.FullName);
+            Debug.WriteLine(@"Compiling " + type.FullName);
             foreach (RuntimeMethod method in type.Methods)
             {
                 if (method.IsGeneric)
@@ -100,8 +100,8 @@ namespace Mosa.Runtime.CompilerFramework
 		
 		private void CompileMethod(RuntimeMethod method)
 		{
-			Console.WriteLine(@"Compiling method " + method.Name);
-            Debug.WriteLine(@"Compiling method " + method.Name);
+			Console.WriteLine(@"Compiling " + method.ToString());
+			Debug.WriteLine(@"Compiling " + method.ToString());
             using (IMethodCompiler mc = this.compiler.CreateMethodCompiler(this, method.DeclaringType, method))
 			{
 				try 
@@ -132,8 +132,8 @@ namespace Mosa.Runtime.CompilerFramework
 			
 			if (type.IsGeneric == false)
 			{
-				Console.WriteLine(@"Scheduling type {0} for compilation.", type.FullName);
-                Console.WriteLine(String.Format(@"Scheduling type {0} for compilation.", type.FullName));
+				Console.WriteLine(@"Scheduling {0}", type.FullName);
+                Console.WriteLine(String.Format(@"Scheduling {0}", type.FullName));
 
                 this.typeQueue.Enqueue(type);
 			    type.IsCompiled = true;
@@ -147,8 +147,8 @@ namespace Mosa.Runtime.CompilerFramework
 
             if (method.IsGeneric == false)
             {
-                Console.WriteLine(@"Scheduling method {1}.{0} for compilation.", method.Name, method.DeclaringType.FullName);
-                Debug.WriteLine(String.Format(@"Scheduling method {1}.{0} for compilation.", method.Name, method.DeclaringType.FullName));
+                Console.WriteLine(@"Scheduling {1}.{0}", method.Name, method.DeclaringType.FullName);
+                Debug.WriteLine(String.Format(@"Scheduling {1}.{0}", method.Name, method.DeclaringType.FullName));
                 
                 this.methodQueue.Enqueue(method);
             }

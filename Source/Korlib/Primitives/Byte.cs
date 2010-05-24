@@ -18,5 +18,11 @@ namespace System
 		public const byte MaxValue = 255;
 
 		internal byte m_value;
+
+		public override string ToString()
+		{
+			return Int32.CreateString(m_value, false, false);
+		}
+
     }
 }

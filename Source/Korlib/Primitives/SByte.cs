@@ -18,5 +18,10 @@ namespace System
 		public const sbyte MaxValue = 127;
 
 		internal sbyte m_value;
+
+		public override string ToString()
+		{
+			return Int32.CreateString((uint)m_value, true, false);
+		}
     }
 }
