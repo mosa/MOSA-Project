@@ -158,15 +158,15 @@ namespace System
 			return result;
 		}
 
-		public static bool operator ==(String a, String b)
-		{
-			return String.Equals(a, b);
-		}
+		//public static bool operator ==(String a, String b)
+		//{
+		//    return String.Equals(a, b);
+		//}
 
-		public static bool operator !=(String a, String b)
-		{
-			return !(a == b);
-		}
+		//public static bool operator !=(String a, String b)
+		//{
+		//    return !(a == b);
+		//}
 
 		//public bool Equals(System.String i)
 		//{
