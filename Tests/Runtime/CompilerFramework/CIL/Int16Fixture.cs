@@ -23,10 +23,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 			TypeName = @"short"
 		};
 
-		private readonly BinaryLogicInstructionTestRunner<int, short> logicTests = new BinaryLogicInstructionTestRunner<int, short>
+		private readonly BinaryLogicInstructionTestRunner<int, short, short> logicTests = new BinaryLogicInstructionTestRunner<int, short, short>
 		{
 			ExpectedTypeName = @"int",
 			TypeName = @"short",
+			ShiftTypeName = @"short",
 			IncludeNot = false
 		};
 

@@ -26,11 +26,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
             TypeName = @"char"
         };
 
-        private readonly BinaryLogicInstructionTestRunner<char, char> logicTests = new BinaryLogicInstructionTestRunner<char, char>
-        {
-            ExpectedTypeName = @"int",
-            TypeName = @"char"
-        };
+		private readonly BinaryLogicInstructionTestRunner<char, char, char> logicTests = new BinaryLogicInstructionTestRunner<char, char, char>
+		{
+			ExpectedTypeName = @"int",
+			TypeName = @"char",
+			ShiftTypeName = "char"
+		};
 
         private readonly ComparisonInstructionTestRunner<char> comparisonTests = new ComparisonInstructionTestRunner<char>
         {

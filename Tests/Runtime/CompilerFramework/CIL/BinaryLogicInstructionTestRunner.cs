@@ -14,7 +14,7 @@ using MbUnit.Framework;
 
 namespace Test.Mosa.Runtime.CompilerFramework.CLI
 {
-    public class BinaryLogicInstructionTestRunner<R, T> : TestFixtureBase
+    public class BinaryLogicInstructionTestRunner<R, T, S> : TestFixtureBase
     {
         private const string TestClassName = @"BinaryLogicTestClass";
 
@@ -28,7 +28,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
             this.IncludeShr = true;
         }
 
-        private void SetTestCode(string expectedType, string typeName)
+        private void SetTestCode(string expectedType, string typeName, string shiftTypeName)
         {
             string marshalType = this.CreateMarshalAttribute(String.Empty, typeName);
             string returnMarshalType = this.CreateMarshalAttribute(@"return:", typeName);
@@ -52,8 +52,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 
             codeBuilder.Append(Code.ObjectClassDefinition);
 
+			if (string.IsNullOrEmpty(shiftTypeName))
+				shiftTypeName = typeName;
+
             codeBuilder
                 .Replace(@"[[typename]]", typeName)
+				.Replace(@"[[shifttypename]]", shiftTypeName)
                 .Replace(@"[[expectedType]]", expectedType)
                 .Replace(@"[[returnmarshal-typename]]", returnMarshalType)
                 .Replace(@"[[marshal-typename]]", marshalType)
@@ -88,6 +92,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 
         public string ExpectedTypeName { get; set; }
         public string TypeName { get; set; }
+		public string ShiftTypeName { get; set; }
 
         public bool IncludeAnd { get; set; }
         public bool IncludeOr { get; set; }
@@ -124,14 +129,14 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
             Assert.IsTrue(result);
         }
 
-        public void Shl(R expectedValue, T first, T second)
+        public void Shl(R expectedValue, T first, S second)
         {
             this.EnsureCodeSourceIsSet();
             bool result = this.Run<bool>(TestClassName, @"ShiftLeftTest", expectedValue, first, second);
             Assert.IsTrue(result);
         }
 
-        public void Shr(R expectedValue, T first, T second)
+        public void Shr(R expectedValue, T first, S second)
         {
             this.EnsureCodeSourceIsSet();
             bool result = this.Run<bool>(TestClassName, @"ShiftRightTest", expectedValue, first, second);
@@ -142,7 +147,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
         {
             if (this.CodeSource == null)
             {
-                this.SetTestCode(this.ExpectedTypeName, this.TypeName);
+                this.SetTestCode(this.ExpectedTypeName, this.TypeName, this.ShiftTypeName);
             }
         }
 
@@ -186,14 +191,14 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
         ";
 
         private const string TestCodeShl = @"
-                public static bool ShiftLeftTest([[expectedType]] expectedValue, [[typename]] first, [[typename]] second)
+                public static bool ShiftLeftTest([[expectedType]] expectedValue, [[typename]] first, [[shifttypename]] second)
                 {
                     return expectedValue == (first << second);
                 }
         ";
 
         private const string TestCodeShr = @"
-                public static bool ShiftRightTest([[expectedType]] expectedValue, [[typename]] first, [[typename]] second)
+                public static bool ShiftRightTest([[expectedType]] expectedValue, [[typename]] first, [[shifttypename]] second)
                 {
                     return expectedValue == (first >> second);
                 }

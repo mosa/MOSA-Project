@@ -27,11 +27,13 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
             IncludeNeg = false
         };
 
-        private readonly BinaryLogicInstructionTestRunner<ulong, ulong> logicTests = new BinaryLogicInstructionTestRunner<ulong, ulong>
-        {
-            ExpectedTypeName = @"ulong",
-            TypeName = @"ulong"
-        };
+		private readonly BinaryLogicInstructionTestRunner<ulong, ulong, int> logicTests = new BinaryLogicInstructionTestRunner<ulong, ulong, int>
+		{
+			ExpectedTypeName = @"ulong",
+			TypeName = @"ulong",
+			IncludeNot = false,
+			ShiftTypeName = @"int"
+		};
 
         private readonly ComparisonInstructionTestRunner<ulong> comparisonTests = new ComparisonInstructionTestRunner<ulong>
         {

@@ -26,11 +26,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
             TypeName = @"sbyte"
         };
 
-        private readonly BinaryLogicInstructionTestRunner<sbyte, sbyte> logicTests = new BinaryLogicInstructionTestRunner<sbyte, sbyte>
-        {
-            ExpectedTypeName = @"sbyte",
-            TypeName = @"sbyte"
-        };
+		private readonly BinaryLogicInstructionTestRunner<sbyte, sbyte, sbyte> logicTests = new BinaryLogicInstructionTestRunner<sbyte, sbyte, sbyte>
+		{
+			ExpectedTypeName = @"sbyte",
+			TypeName = @"sbyte",
+			ShiftTypeName = @"sbyte"
+		};
 
         private readonly ComparisonInstructionTestRunner<sbyte> comparisonTests = new ComparisonInstructionTestRunner<sbyte>
         {
