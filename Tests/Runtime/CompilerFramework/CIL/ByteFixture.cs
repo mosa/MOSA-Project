@@ -41,229 +41,626 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
             TypeName = @"byte"
         };
 
-        #region Add
+		#region Add
 
-        [Row(1, 2)]
-        [Row(23, 21)]
-        [Row(0, 0)]
-        // And reverse
-        [Row(2, 1)]
-        [Row(21, 23)]
-        // (MinValue, X) Cases
-        [Row(byte.MinValue, 0)]
-        [Row(byte.MinValue, 1)]
-        [Row(byte.MinValue, 17)]
-        [Row(byte.MinValue, 123)]
-        // (MaxValue, X) Cases
-        [Row(byte.MaxValue, 0)]
-        [Row(byte.MaxValue, 1)]
-        [Row(byte.MaxValue, 17)]
-        [Row(byte.MaxValue, 123)]
-        // (X, MinValue) Cases
-        [Row(0, byte.MinValue)]
-        [Row(1, byte.MinValue)]
-        [Row(17, byte.MinValue)]
-        [Row(123, byte.MinValue)]
-        // (X, MaxValue) Cases
-        [Row(0, byte.MaxValue)]
-        [Row(1, byte.MaxValue)]
-        [Row(17, byte.MaxValue)]
-        [Row(123, byte.MaxValue)]
-        // Extremvaluecases
-        [Row(byte.MinValue, byte.MaxValue)]
-        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
-        public void Add(byte a, byte b)
-        {
-            this.arithmeticTests.Add((a + b), a, b);
-        }
+		[Row(0, 0)]
+		[Row(0, 1)]
+		[Row(0, 2)]
+		[Row(0, byte.MaxValue)]
+		[Row(0, byte.MaxValue - 1)]
+		[Row(0, 17)]
+		[Row(0, 123)]
+		[Row(1, 0)]
+		[Row(1, 1)]
+		[Row(1, 2)]
+		[Row(1, byte.MaxValue)]
+		[Row(1, byte.MaxValue - 1)]
+		[Row(1, 17)]
+		[Row(1, 123)]
+		[Row(2, 0)]
+		[Row(2, 1)]
+		[Row(2, 2)]
+		[Row(2, byte.MaxValue)]
+		[Row(2, byte.MaxValue - 1)]
+		[Row(2, 17)]
+		[Row(2, 123)]
+		[Row(byte.MaxValue, 0)]
+		[Row(byte.MaxValue, 1)]
+		[Row(byte.MaxValue, 2)]
+		[Row(byte.MaxValue, byte.MaxValue)]
+		[Row(byte.MaxValue, byte.MaxValue - 1)]
+		[Row(byte.MaxValue, 17)]
+		[Row(byte.MaxValue, 123)]
+		[Row(byte.MaxValue - 1, 0)]
+		[Row(byte.MaxValue - 1, 1)]
+		[Row(byte.MaxValue - 1, 2)]
+		[Row(byte.MaxValue - 1, byte.MaxValue)]
+		[Row(byte.MaxValue - 1, byte.MaxValue - 1)]
+		[Row(byte.MaxValue - 1, 17)]
+		[Row(byte.MaxValue - 1, 123)]
+		[Row(17, 0)]
+		[Row(17, 1)]
+		[Row(17, 2)]
+		[Row(17, byte.MaxValue)]
+		[Row(17, byte.MaxValue - 1)]
+		[Row(17, 17)]
+		[Row(17, 123)]
+		[Row(123, 0)]
+		[Row(123, 1)]
+		[Row(123, 2)]
+		[Row(123, byte.MaxValue)]
+		[Row(123, byte.MaxValue - 1)]
+		[Row(123, 17)]
+		[Row(123, 123)]
+		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		public void Add(byte a, byte b)
+		{
+			this.arithmeticTests.Add((a + b), a, b);
+		}
 
-        #endregion // Add
+		#endregion // Add
 
-        #region Sub
+		#region Sub
 
-        [Row(1, 2)]
-        [Row(23, 21)]
-        [Row(0, 0)]
-        // And reverse
-        [Row(2, 1)]
-        [Row(21, 23)]
-        // (MinValue, X) Cases
-        [Row(byte.MinValue, 0)]
-        [Row(byte.MinValue, 1)]
-        [Row(byte.MinValue, 17)]
-        [Row(byte.MinValue, 123)]
-        // (MaxValue, X) Cases
-        [Row(byte.MaxValue, 0)]
-        [Row(byte.MaxValue, 1)]
-        [Row(byte.MaxValue, 17)]
-        [Row(byte.MaxValue, 123)]
-        // (X, MinValue) Cases
-        [Row(0, byte.MinValue)]
-        [Row(1, byte.MinValue)]
-        [Row(17, byte.MinValue)]
-        [Row(123, byte.MinValue)]
-        // (X, MaxValue) Cases
-        [Row(0, byte.MaxValue)]
-        [Row(1, byte.MaxValue)]
-        [Row(17, byte.MaxValue)]
-        [Row(123, byte.MaxValue)]
-        // Extremvaluecases
-        [Row(byte.MinValue, byte.MaxValue)]
-        [Test, Author("rootnode", "rootnode@mosa-project.org")]
-        public void Sub(byte a, byte b)
-        {
-            this.arithmeticTests.Sub((a - b), a, b);
-        }
+		[Row(0, 0)]
+		[Row(0, 1)]
+		[Row(0, 2)]
+		[Row(0, byte.MaxValue)]
+		[Row(0, byte.MaxValue - 1)]
+		[Row(0, 17)]
+		[Row(0, 123)]
+		[Row(1, 0)]
+		[Row(1, 1)]
+		[Row(1, 2)]
+		[Row(1, byte.MaxValue)]
+		[Row(1, byte.MaxValue - 1)]
+		[Row(1, 17)]
+		[Row(1, 123)]
+		[Row(2, 0)]
+		[Row(2, 1)]
+		[Row(2, 2)]
+		[Row(2, byte.MaxValue)]
+		[Row(2, byte.MaxValue - 1)]
+		[Row(2, 17)]
+		[Row(2, 123)]
+		[Row(byte.MaxValue, 0)]
+		[Row(byte.MaxValue, 1)]
+		[Row(byte.MaxValue, 2)]
+		[Row(byte.MaxValue, byte.MaxValue)]
+		[Row(byte.MaxValue, byte.MaxValue - 1)]
+		[Row(byte.MaxValue, 17)]
+		[Row(byte.MaxValue, 123)]
+		[Row(byte.MaxValue - 1, 0)]
+		[Row(byte.MaxValue - 1, 1)]
+		[Row(byte.MaxValue - 1, 2)]
+		[Row(byte.MaxValue - 1, byte.MaxValue)]
+		[Row(byte.MaxValue - 1, byte.MaxValue - 1)]
+		[Row(byte.MaxValue - 1, 17)]
+		[Row(byte.MaxValue - 1, 123)]
+		[Row(17, 0)]
+		[Row(17, 1)]
+		[Row(17, 2)]
+		[Row(17, byte.MaxValue)]
+		[Row(17, byte.MaxValue - 1)]
+		[Row(17, 17)]
+		[Row(17, 123)]
+		[Row(123, 0)]
+		[Row(123, 1)]
+		[Row(123, 2)]
+		[Row(123, byte.MaxValue)]
+		[Row(123, byte.MaxValue - 1)]
+		[Row(123, 17)]
+		[Row(123, 123)]
+		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		public void Sub(byte a, byte b)
+		{
+			this.arithmeticTests.Sub((a - b), a, b);
+		}
 
-        #endregion // Sub
+		#endregion // Sub
 
-        #region Mul
+		#region Mul
 
-        [Row(1, 2)]
-        [Row(23, 21)]
-        [Row(0, 0)]
-        // And reverse
-        [Row(2, 1)]
-        [Row(21, 23)]
-        // (MinValue, X) Cases
-        [Row(byte.MinValue, 0)]
-        [Row(byte.MinValue, 1)]
-        [Row(byte.MinValue, 17)]
-        [Row(byte.MinValue, 123)]
-        // (MaxValue, X) Cases
-        [Row(byte.MaxValue, 0)]
-        [Row(byte.MaxValue, 1)]
-        [Row(byte.MaxValue, 17)]
-        [Row(byte.MaxValue, 123)]
-        // (X, MinValue) Cases
-        [Row(0, byte.MinValue)]
-        [Row(1, byte.MinValue)]
-        [Row(17, byte.MinValue)]
-        [Row(123, byte.MinValue)]
-        // (X, MaxValue) Cases
-        [Row(0, byte.MaxValue)]
-        [Row(1, byte.MaxValue)]
-        [Row(17, byte.MaxValue)]
-        [Row(123, byte.MaxValue)]
-        // Extremvaluecases
-        [Row(byte.MinValue, byte.MaxValue)]
-        [Row(byte.MaxValue, byte.MinValue)]
-        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
-        public void Mul(byte a, byte b)
-        {
-            this.arithmeticTests.Mul((a * b), a, b);
-        }
+		[Row(0, 0)]
+		[Row(0, 1)]
+		[Row(0, 2)]
+		[Row(0, byte.MaxValue)]
+		[Row(0, byte.MaxValue - 1)]
+		[Row(0, 17)]
+		[Row(0, 123)]
+		[Row(1, 0)]
+		[Row(1, 1)]
+		[Row(1, 2)]
+		[Row(1, byte.MaxValue)]
+		[Row(1, byte.MaxValue - 1)]
+		[Row(1, 17)]
+		[Row(1, 123)]
+		[Row(2, 0)]
+		[Row(2, 1)]
+		[Row(2, 2)]
+		[Row(2, byte.MaxValue)]
+		[Row(2, byte.MaxValue - 1)]
+		[Row(2, 17)]
+		[Row(2, 123)]
+		[Row(byte.MaxValue, 0)]
+		[Row(byte.MaxValue, 1)]
+		[Row(byte.MaxValue, 2)]
+		[Row(byte.MaxValue, byte.MaxValue)]
+		[Row(byte.MaxValue, byte.MaxValue - 1)]
+		[Row(byte.MaxValue, 17)]
+		[Row(byte.MaxValue, 123)]
+		[Row(byte.MaxValue - 1, 0)]
+		[Row(byte.MaxValue - 1, 1)]
+		[Row(byte.MaxValue - 1, 2)]
+		[Row(byte.MaxValue - 1, byte.MaxValue)]
+		[Row(byte.MaxValue - 1, byte.MaxValue - 1)]
+		[Row(byte.MaxValue - 1, 17)]
+		[Row(byte.MaxValue - 1, 123)]
+		[Row(17, 0)]
+		[Row(17, 1)]
+		[Row(17, 2)]
+		[Row(17, byte.MaxValue)]
+		[Row(17, byte.MaxValue - 1)]
+		[Row(17, 17)]
+		[Row(17, 123)]
+		[Row(123, 0)]
+		[Row(123, 1)]
+		[Row(123, 2)]
+		[Row(123, byte.MaxValue)]
+		[Row(123, byte.MaxValue - 1)]
+		[Row(123, 17)]
+		[Row(123, 123)]
+		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		public void Mul(byte a, byte b)
+		{
+			this.arithmeticTests.Mul((a * b), a, b);
+		}
 
-        #endregion // Mul
+		#endregion // Mul
 
-        #region Div
+		#region Div
 
-        [Row(1, 2)]
-        [Row(23, 21)]
-        [Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
-        // And reverse
-        [Row(2, 1)]
-        [Row(21, 23)]
-        // (MinValue, X) Cases
-        [Row(byte.MinValue, 0, ExpectedException = typeof(DivideByZeroException))]
-        [Row(byte.MinValue, 1)]
-        [Row(byte.MinValue, 17)]
-        [Row(byte.MinValue, 123)]
-        // (MaxValue, X) Cases
-        [Row(byte.MaxValue, 0, ExpectedException = typeof(DivideByZeroException))]
-        [Row(byte.MaxValue, 1)]
-        [Row(byte.MaxValue, 17)]
-        [Row(byte.MaxValue, 123)]
-        // (X, MinValue) Cases
-        [Row(0, byte.MinValue, ExpectedException = typeof(DivideByZeroException))]
-        [Row(1, byte.MinValue, ExpectedException = typeof(DivideByZeroException))]
-        [Row(17, byte.MinValue, ExpectedException = typeof(DivideByZeroException))]
-        [Row(123, byte.MinValue, ExpectedException = typeof(DivideByZeroException))]
-        // (X, MaxValue) Cases
-        [Row(0, byte.MaxValue)]
-        [Row(1, byte.MaxValue)]
-        [Row(17, byte.MaxValue)]
-        [Row(123, byte.MaxValue)]
-        // Extremvaluecases
-        [Row(byte.MinValue, byte.MaxValue)]
-        [Row(byte.MaxValue, byte.MinValue, ExpectedException = typeof(DivideByZeroException))]
-        [Row(1, 0, ExpectedException = typeof(DivideByZeroException))]
-        [Test, Author("alyman", "mail.alex.lyman@gmail.com")]
-        public void Div(byte a, byte b)
-        {
-            this.arithmeticTests.Div((a / b), a, b);
-        }
+		[Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
+		[Row(0, 1)]
+		[Row(0, 2)]
+		[Row(0, byte.MaxValue)]
+		[Row(0, byte.MaxValue - 1)]
+		[Row(0, 17)]
+		[Row(0, 123)]
+		[Row(1, 0, ExpectedException = typeof(DivideByZeroException))]
+		[Row(1, 1)]
+		[Row(1, 2)]
+		[Row(1, byte.MaxValue)]
+		[Row(1, byte.MaxValue - 1)]
+		[Row(1, 17)]
+		[Row(1, 123)]
+		[Row(2, 0, ExpectedException = typeof(DivideByZeroException))]
+		[Row(2, 1)]
+		[Row(2, 2)]
+		[Row(2, byte.MaxValue)]
+		[Row(2, byte.MaxValue - 1)]
+		[Row(2, 17)]
+		[Row(2, 123)]
+		[Row(byte.MaxValue, 0, ExpectedException = typeof(DivideByZeroException))]
+		[Row(byte.MaxValue, 1)]
+		[Row(byte.MaxValue, 2)]
+		[Row(byte.MaxValue, byte.MaxValue)]
+		[Row(byte.MaxValue, byte.MaxValue - 1)]
+		[Row(byte.MaxValue, 17)]
+		[Row(byte.MaxValue, 123)]
+		[Row(byte.MaxValue - 1, 0, ExpectedException = typeof(DivideByZeroException))]
+		[Row(byte.MaxValue - 1, 1)]
+		[Row(byte.MaxValue - 1, 2)]
+		[Row(byte.MaxValue - 1, byte.MaxValue)]
+		[Row(byte.MaxValue - 1, byte.MaxValue - 1)]
+		[Row(byte.MaxValue - 1, 17)]
+		[Row(byte.MaxValue - 1, 123)]
+		[Row(17, 0, ExpectedException = typeof(DivideByZeroException))]
+		[Row(17, 1)]
+		[Row(17, 2)]
+		[Row(17, byte.MaxValue)]
+		[Row(17, byte.MaxValue - 1)]
+		[Row(17, 17)]
+		[Row(17, 123)]
+		[Row(123, 0, ExpectedException = typeof(DivideByZeroException))]
+		[Row(123, 1)]
+		[Row(123, 2)]
+		[Row(123, byte.MaxValue)]
+		[Row(123, byte.MaxValue - 1)]
+		[Row(123, 17)]
+		[Row(123, 123)]
+		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		public void Div(byte a, byte b)
+		{
+			this.arithmeticTests.Div((a / b), a, b);
+		}
 
-        #endregion // Div
+		#endregion // Div
 
-        #region Rem
+		#region Rem
 
-        [Row(1, 2)]
-        [Row(23, 21)]
-        [Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
-        // And reverse
-        [Row(2, 1)]
-        [Row(21, 23)]
-        // (MinValue, X) Cases
-        [Row(byte.MinValue, 0, ExpectedException = typeof(DivideByZeroException))]
-        [Row(byte.MinValue, 1)]
-        [Row(byte.MinValue, 17)]
-        [Row(byte.MinValue, 123)]
-        // (MaxValue, X) Cases
-        [Row(byte.MaxValue, 0, ExpectedException = typeof(DivideByZeroException))]
-        [Row(byte.MaxValue, 1)]
-        [Row(byte.MaxValue, 17)]
-        [Row(byte.MaxValue, 123)]
-        // (X, MinValue) Cases
-        [Row(0, byte.MinValue, ExpectedException = typeof(DivideByZeroException))]
-        [Row(1, byte.MinValue, ExpectedException = typeof(DivideByZeroException))]
-        [Row(17, byte.MinValue, ExpectedException = typeof(DivideByZeroException))]
-        [Row(123, byte.MinValue, ExpectedException = typeof(DivideByZeroException))]
-        // (X, MaxValue) Cases
-        [Row(0, byte.MaxValue)]
-        [Row(1, byte.MaxValue)]
-        [Row(17, byte.MaxValue)]
-        [Row(123, byte.MaxValue)]
-        // Extremvaluecases
-        [Row(byte.MinValue, byte.MaxValue)]
-        [Row(byte.MaxValue, byte.MinValue, ExpectedException = typeof(DivideByZeroException))]
-        [Row(1, 0, ExpectedException = typeof(DivideByZeroException))]
-        [Test, Author("rootnode", "rootnode@mosa-project.org")]
-        public void Rem(byte a, byte b)
-        {
-            this.arithmeticTests.Rem((a % b), a, b);
-        }
+		[Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
+		[Row(0, 1)]
+		[Row(0, 2)]
+		[Row(0, byte.MaxValue)]
+		[Row(0, byte.MaxValue - 1)]
+		[Row(0, 17)]
+		[Row(0, 123)]
+		[Row(1, 0, ExpectedException = typeof(DivideByZeroException))]
+		[Row(1, 1)]
+		[Row(1, 2)]
+		[Row(1, byte.MaxValue)]
+		[Row(1, byte.MaxValue - 1)]
+		[Row(1, 17)]
+		[Row(1, 123)]
+		[Row(2, 0, ExpectedException = typeof(DivideByZeroException))]
+		[Row(2, 1)]
+		[Row(2, 2)]
+		[Row(2, byte.MaxValue)]
+		[Row(2, byte.MaxValue - 1)]
+		[Row(2, 17)]
+		[Row(2, 123)]
+		[Row(byte.MaxValue, 0, ExpectedException = typeof(DivideByZeroException))]
+		[Row(byte.MaxValue, 1)]
+		[Row(byte.MaxValue, 2)]
+		[Row(byte.MaxValue, byte.MaxValue)]
+		[Row(byte.MaxValue, byte.MaxValue - 1)]
+		[Row(byte.MaxValue, 17)]
+		[Row(byte.MaxValue, 123)]
+		[Row(byte.MaxValue - 1, 0, ExpectedException = typeof(DivideByZeroException))]
+		[Row(byte.MaxValue - 1, 1)]
+		[Row(byte.MaxValue - 1, 2)]
+		[Row(byte.MaxValue - 1, byte.MaxValue)]
+		[Row(byte.MaxValue - 1, byte.MaxValue - 1)]
+		[Row(byte.MaxValue - 1, 17)]
+		[Row(byte.MaxValue - 1, 123)]
+		[Row(17, 0, ExpectedException = typeof(DivideByZeroException))]
+		[Row(17, 1)]
+		[Row(17, 2)]
+		[Row(17, byte.MaxValue)]
+		[Row(17, byte.MaxValue - 1)]
+		[Row(17, 17)]
+		[Row(17, 123)]
+		[Row(123, 0, ExpectedException = typeof(DivideByZeroException))]
+		[Row(123, 1)]
+		[Row(123, 2)]
+		[Row(123, byte.MaxValue)]
+		[Row(123, byte.MaxValue - 1)]
+		[Row(123, 17)]
+		[Row(123, 123)]
+		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		public void Rem(byte a, byte b)
+		{
+			this.arithmeticTests.Rem((a % b), a, b);
+		}
 
-        #endregion // Rem
+		#endregion // Rem
 
-        #region Neg
+		#region Ret
 
-        [Row(0)]
-        [Row(1)]
-        [Row(byte.MinValue)]
-        [Row(byte.MaxValue)]
-        [Test]
-        public void Neg(byte first)
-        {
-            this.arithmeticTests.Neg(-first, first);
-        }
+		[Row(0)]
+		[Row(1)]
+		[Row(2)]
+		[Row(byte.MaxValue)]
+		[Row(byte.MaxValue - 1)]
+		[Row(17)]
+		[Row(123)]
+		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		public void Ret(byte value)
+		{
+			this.arithmeticTests.Ret(value);
+		}
 
-        #endregion Neg
+		#endregion // Ret
 
-        #region Ret
+		#region And
 
-        [Row(0)]
-        [Row(1)]
-        [Row(128)]
-        [Row(Byte.MaxValue)]
-        [Row(Byte.MinValue)]
-        [Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de"), Importance(Importance.Critical)]
-        public void Ret(byte value)
-        {
-            this.arithmeticTests.Ret(value);
-        }
+		[Row(0, 0)]
+		[Row(0, 1)]
+		[Row(0, 2)]
+		[Row(0, byte.MaxValue)]
+		[Row(0, byte.MaxValue - 1)]
+		[Row(0, 17)]
+		[Row(0, 123)]
+		[Row(1, 0)]
+		[Row(1, 1)]
+		[Row(1, 2)]
+		[Row(1, byte.MaxValue)]
+		[Row(1, byte.MaxValue - 1)]
+		[Row(1, 17)]
+		[Row(1, 123)]
+		[Row(2, 0)]
+		[Row(2, 1)]
+		[Row(2, 2)]
+		[Row(2, byte.MaxValue)]
+		[Row(2, byte.MaxValue - 1)]
+		[Row(2, 17)]
+		[Row(2, 123)]
+		[Row(byte.MaxValue, 0)]
+		[Row(byte.MaxValue, 1)]
+		[Row(byte.MaxValue, 2)]
+		[Row(byte.MaxValue, byte.MaxValue)]
+		[Row(byte.MaxValue, byte.MaxValue - 1)]
+		[Row(byte.MaxValue, 17)]
+		[Row(byte.MaxValue, 123)]
+		[Row(byte.MaxValue - 1, 0)]
+		[Row(byte.MaxValue - 1, 1)]
+		[Row(byte.MaxValue - 1, 2)]
+		[Row(byte.MaxValue - 1, byte.MaxValue)]
+		[Row(byte.MaxValue - 1, byte.MaxValue - 1)]
+		[Row(byte.MaxValue - 1, 17)]
+		[Row(byte.MaxValue - 1, 123)]
+		[Row(17, 0)]
+		[Row(17, 1)]
+		[Row(17, 2)]
+		[Row(17, byte.MaxValue)]
+		[Row(17, byte.MaxValue - 1)]
+		[Row(17, 17)]
+		[Row(17, 123)]
+		[Row(123, 0)]
+		[Row(123, 1)]
+		[Row(123, 2)]
+		[Row(123, byte.MaxValue)]
+		[Row(123, byte.MaxValue - 1)]
+		[Row(123, 17)]
+		[Row(123, 123)]
+		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		public void And(byte first, byte second)
+		{
+			this.logicTests.And((first & second), first, second);
+		}
 
-        #endregion Ret
+		#endregion // And
+
+		#region Or
+
+		[Row(0, 0)]
+		[Row(0, 1)]
+		[Row(0, 2)]
+		[Row(0, byte.MaxValue)]
+		[Row(0, byte.MaxValue - 1)]
+		[Row(0, 17)]
+		[Row(0, 123)]
+		[Row(1, 0)]
+		[Row(1, 1)]
+		[Row(1, 2)]
+		[Row(1, byte.MaxValue)]
+		[Row(1, byte.MaxValue - 1)]
+		[Row(1, 17)]
+		[Row(1, 123)]
+		[Row(2, 0)]
+		[Row(2, 1)]
+		[Row(2, 2)]
+		[Row(2, byte.MaxValue)]
+		[Row(2, byte.MaxValue - 1)]
+		[Row(2, 17)]
+		[Row(2, 123)]
+		[Row(byte.MaxValue, 0)]
+		[Row(byte.MaxValue, 1)]
+		[Row(byte.MaxValue, 2)]
+		[Row(byte.MaxValue, byte.MaxValue)]
+		[Row(byte.MaxValue, byte.MaxValue - 1)]
+		[Row(byte.MaxValue, 17)]
+		[Row(byte.MaxValue, 123)]
+		[Row(byte.MaxValue - 1, 0)]
+		[Row(byte.MaxValue - 1, 1)]
+		[Row(byte.MaxValue - 1, 2)]
+		[Row(byte.MaxValue - 1, byte.MaxValue)]
+		[Row(byte.MaxValue - 1, byte.MaxValue - 1)]
+		[Row(byte.MaxValue - 1, 17)]
+		[Row(byte.MaxValue - 1, 123)]
+		[Row(17, 0)]
+		[Row(17, 1)]
+		[Row(17, 2)]
+		[Row(17, byte.MaxValue)]
+		[Row(17, byte.MaxValue - 1)]
+		[Row(17, 17)]
+		[Row(17, 123)]
+		[Row(123, 0)]
+		[Row(123, 1)]
+		[Row(123, 2)]
+		[Row(123, byte.MaxValue)]
+		[Row(123, byte.MaxValue - 1)]
+		[Row(123, 17)]
+		[Row(123, 123)]
+		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		public void Or(byte first, byte second)
+		{
+			this.logicTests.Or((first | second), first, second);
+		}
+
+		#endregion // Or
+
+		#region Xor
+
+		[Row(0, 0)]
+		[Row(0, 1)]
+		[Row(0, 2)]
+		[Row(0, byte.MaxValue)]
+		[Row(0, byte.MaxValue - 1)]
+		[Row(0, 17)]
+		[Row(0, 123)]
+		[Row(1, 0)]
+		[Row(1, 1)]
+		[Row(1, 2)]
+		[Row(1, byte.MaxValue)]
+		[Row(1, byte.MaxValue - 1)]
+		[Row(1, 17)]
+		[Row(1, 123)]
+		[Row(2, 0)]
+		[Row(2, 1)]
+		[Row(2, 2)]
+		[Row(2, byte.MaxValue)]
+		[Row(2, byte.MaxValue - 1)]
+		[Row(2, 17)]
+		[Row(2, 123)]
+		[Row(byte.MaxValue, 0)]
+		[Row(byte.MaxValue, 1)]
+		[Row(byte.MaxValue, 2)]
+		[Row(byte.MaxValue, byte.MaxValue)]
+		[Row(byte.MaxValue, byte.MaxValue - 1)]
+		[Row(byte.MaxValue, 17)]
+		[Row(byte.MaxValue, 123)]
+		[Row(byte.MaxValue - 1, 0)]
+		[Row(byte.MaxValue - 1, 1)]
+		[Row(byte.MaxValue - 1, 2)]
+		[Row(byte.MaxValue - 1, byte.MaxValue)]
+		[Row(byte.MaxValue - 1, byte.MaxValue - 1)]
+		[Row(byte.MaxValue - 1, 17)]
+		[Row(byte.MaxValue - 1, 123)]
+		[Row(17, 0)]
+		[Row(17, 1)]
+		[Row(17, 2)]
+		[Row(17, byte.MaxValue)]
+		[Row(17, byte.MaxValue - 1)]
+		[Row(17, 17)]
+		[Row(17, 123)]
+		[Row(123, 0)]
+		[Row(123, 1)]
+		[Row(123, 2)]
+		[Row(123, byte.MaxValue)]
+		[Row(123, byte.MaxValue - 1)]
+		[Row(123, 17)]
+		[Row(123, 123)]
+		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		public void Xor(byte first, byte second)
+		{
+			this.logicTests.Xor((first ^ second), first, second);
+		}
+
+		#endregion // Xor
+
+		#region Shl
+
+		[Row(0, 0)]
+		[Row(0, 1)]
+		[Row(0, 2)]
+		[Row(0, 3)]
+		[Row(0, 4)]
+		[Row(0, 5)]
+		[Row(0, 6)]
+		[Row(0, 7)]
+		[Row(1, 0)]
+		[Row(1, 1)]
+		[Row(1, 2)]
+		[Row(1, 3)]
+		[Row(1, 4)]
+		[Row(1, 5)]
+		[Row(1, 6)]
+		[Row(1, 7)]
+		[Row(2, 0)]
+		[Row(2, 1)]
+		[Row(2, 2)]
+		[Row(2, 3)]
+		[Row(2, 4)]
+		[Row(2, 5)]
+		[Row(2, 6)]
+		[Row(2, 7)]
+		[Row(byte.MaxValue, 0)]
+		[Row(byte.MaxValue, 1)]
+		[Row(byte.MaxValue, 2)]
+		[Row(byte.MaxValue, 3)]
+		[Row(byte.MaxValue, 4)]
+		[Row(byte.MaxValue, 5)]
+		[Row(byte.MaxValue, 6)]
+		[Row(byte.MaxValue, 7)]
+		[Row(byte.MaxValue - 1, 0)]
+		[Row(byte.MaxValue - 1, 1)]
+		[Row(byte.MaxValue - 1, 2)]
+		[Row(byte.MaxValue - 1, 3)]
+		[Row(byte.MaxValue - 1, 4)]
+		[Row(byte.MaxValue - 1, 5)]
+		[Row(byte.MaxValue - 1, 6)]
+		[Row(byte.MaxValue - 1, 7)]
+		[Row(17, 0)]
+		[Row(17, 1)]
+		[Row(17, 2)]
+		[Row(17, 3)]
+		[Row(17, 4)]
+		[Row(17, 5)]
+		[Row(17, 6)]
+		[Row(17, 7)]
+		[Row(123, 0)]
+		[Row(123, 1)]
+		[Row(123, 2)]
+		[Row(123, 3)]
+		[Row(123, 4)]
+		[Row(123, 5)]
+		[Row(123, 6)]
+		[Row(123, 7)]
+		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		public void Shl(byte first, byte second)
+		{
+			this.logicTests.Shl((first << second), first, second);
+		}
+
+		#endregion // Shl
+
+		#region Shr
+
+		[Row(0, 0)]
+		[Row(0, 1)]
+		[Row(0, 2)]
+		[Row(0, 3)]
+		[Row(0, 4)]
+		[Row(0, 5)]
+		[Row(0, 6)]
+		[Row(0, 7)]
+		[Row(1, 0)]
+		[Row(1, 1)]
+		[Row(1, 2)]
+		[Row(1, 3)]
+		[Row(1, 4)]
+		[Row(1, 5)]
+		[Row(1, 6)]
+		[Row(1, 7)]
+		[Row(2, 0)]
+		[Row(2, 1)]
+		[Row(2, 2)]
+		[Row(2, 3)]
+		[Row(2, 4)]
+		[Row(2, 5)]
+		[Row(2, 6)]
+		[Row(2, 7)]
+		[Row(byte.MaxValue, 0)]
+		[Row(byte.MaxValue, 1)]
+		[Row(byte.MaxValue, 2)]
+		[Row(byte.MaxValue, 3)]
+		[Row(byte.MaxValue, 4)]
+		[Row(byte.MaxValue, 5)]
+		[Row(byte.MaxValue, 6)]
+		[Row(byte.MaxValue, 7)]
+		[Row(byte.MaxValue - 1, 0)]
+		[Row(byte.MaxValue - 1, 1)]
+		[Row(byte.MaxValue - 1, 2)]
+		[Row(byte.MaxValue - 1, 3)]
+		[Row(byte.MaxValue - 1, 4)]
+		[Row(byte.MaxValue - 1, 5)]
+		[Row(byte.MaxValue - 1, 6)]
+		[Row(byte.MaxValue - 1, 7)]
+		[Row(17, 0)]
+		[Row(17, 1)]
+		[Row(17, 2)]
+		[Row(17, 3)]
+		[Row(17, 4)]
+		[Row(17, 5)]
+		[Row(17, 6)]
+		[Row(17, 7)]
+		[Row(123, 0)]
+		[Row(123, 1)]
+		[Row(123, 2)]
+		[Row(123, 3)]
+		[Row(123, 4)]
+		[Row(123, 5)]
+		[Row(123, 6)]
+		[Row(123, 7)]
+		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		public void Shr(byte first, byte second)
+		{
+			this.logicTests.Shr((first >> second), first, second);
+		}
+
+		#endregion // Shr
 
         #region Ceq
 
@@ -284,78 +681,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
         }
 
         #endregion // Ceq
-
-        #region And
-
-        [Row(1, 1)]
-        [Row(0, byte.MaxValue)]
-        [Row(1, 0)]
-        [Row(byte.MaxValue, 1)]
-        [Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
-        public void And(byte first, byte second)
-        {
-            this.logicTests.And((first & second), first, second);
-        }
-
-        #endregion // And
-
-        #region Or
-
-        [Row(0, 1)]
-        [Row(0, byte.MaxValue)]
-        [Row(1, 0)]
-        [Row(byte.MaxValue, 0)]
-        [Row(0, 128)]
-        [Row(128, 0)]
-        [Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
-        public void Or(byte first, byte second)
-        {
-            this.logicTests.Or((first | second), first, second);
-        }
-
-        #endregion // Or
-
-        #region Xor
-
-        [Row(0, 1)]
-        [Row(1, byte.MaxValue)]
-        [Row(1, 1)]
-        [Row(byte.MaxValue, 0)]
-        [Row(128, 128)]
-        [Row(128, 0)]
-        [Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
-        public void Xor(byte first, byte second)
-        {
-            this.logicTests.Xor((first ^ second), first, second);
-        }
-
-        #endregion // Xor
-
-        #region Shl
-
-        [Row(4, 1)]
-        [Row(8, 2)]
-        [Row(4, 3)]
-        [Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
-        public void Shl(byte first, byte second)
-        {
-            this.logicTests.Shl((first << second), first, second);
-        }
-
-        #endregion // Shl
-
-        #region Shr
-
-        [Row(4, 1)]
-        [Row(8, 2)]
-        [Row(128, 3)]
-        [Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
-        public void Shr(byte first, byte second)
-        {
-            this.logicTests.Shr((first >> second), first, second);
-        }
-
-        #endregion // Shr
 
         #region Newarr
 
