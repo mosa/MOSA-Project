@@ -26,6 +26,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
             this.IncludeNot = true;
             this.IncludeShl = true;
             this.IncludeShr = true;
+			this.IncludeComp = true;
         }
 
         private void SetTestCode(string expectedType, string typeName, string shiftTypeName)
@@ -44,6 +45,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
                 codeBuilder.Append(TestCodeXor);
             if (this.IncludeNot)
                 codeBuilder.Append(TestCodeNot);
+			if (this.IncludeComp)
+				codeBuilder.Append(TestCodeComp);
             if (this.IncludeShl)
                 codeBuilder.Append(TestCodeShl);
             if (this.IncludeShr)
@@ -52,8 +55,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 
             codeBuilder.Append(Code.ObjectClassDefinition);
 
-			if (string.IsNullOrEmpty(shiftTypeName))
-				shiftTypeName = typeName;
+			//if (string.IsNullOrEmpty(shiftTypeName))
+			//    shiftTypeName = typeName;
 
             codeBuilder
                 .Replace(@"[[typename]]", typeName)
@@ -100,7 +103,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
         public bool IncludeNot { get; set; }
         public bool IncludeShl { get; set; }
         public bool IncludeShr { get; set; }
-
+		public bool IncludeComp { get; set; }
+		
         public void And(R expectedValue, T first, T second)
         {
             this.EnsureCodeSourceIsSet();
@@ -128,6 +132,13 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
             bool result = this.Run<bool>(TestClassName, @"NotTest", expectedValue, first);
             Assert.IsTrue(result);
         }
+
+		public void Comp(R expectedValue, T first)
+		{
+			this.EnsureCodeSourceIsSet();
+			bool result = this.Run<bool>(TestClassName, @"CompTest", expectedValue, first);
+			Assert.IsTrue(result);
+		}
 
         public void Shl(R expectedValue, T first, S second)
         {
@@ -187,6 +198,13 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
                 public static bool NotTest([[expectedType]] expectedValue, [[typename]] first)
                 {
                     return expectedValue == (!first);
+                }
+        ";
+
+		private const string TestCodeComp = @"
+                public static bool CompTest([[expectedType]] expectedValue, [[typename]] first)
+                {
+                    return expectedValue == (~first);
                 }
         ";
 

@@ -25,7 +25,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.CIL
 			ExpectedTypeName = @"bool",
 			TypeName = @"bool",
 			IncludeShl = false,
-			IncludeShr = false
+			IncludeShr = false,
+			IncludeComp = false
 		};
 
         private readonly ComparisonInstructionTestRunner<bool> comparisonTests = new ComparisonInstructionTestRunner<bool>

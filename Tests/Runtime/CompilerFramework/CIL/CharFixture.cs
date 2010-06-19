@@ -30,7 +30,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		{
 			ExpectedTypeName = @"int",
 			TypeName = @"char",
-			ShiftTypeName = "char"
+			ShiftTypeName = @"char",
+			IncludeComp = false
 		};
 
         private readonly ComparisonInstructionTestRunner<char> comparisonTests = new ComparisonInstructionTestRunner<char>
