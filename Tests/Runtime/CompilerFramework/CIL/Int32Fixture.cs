@@ -715,7 +715,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(Int32.MinValue, Int32.MaxValue - 1)]
 		[Row(Int32.MinValue, 17)]
 		[Row(Int32.MinValue, 123)]
-		[Row(Int32.MinValue, -1)]
+		[Row(Int32.MinValue, -1, ExpectedException = typeof(OverflowException))] // Note: Manual edit to add overflow exception
 		[Row(Int32.MinValue, -2)]
 		[Row(Int32.MinValue, Int32.MinValue + 2)]
 		[Row(Int32.MinValue, -17)]
