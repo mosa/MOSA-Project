@@ -211,14 +211,14 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
         private const string TestCodeShl = @"
                 public static bool ShiftLeftTest([[expectedType]] expectedValue, [[typename]] first, [[shifttypename]] second)
                 {
-                    return expectedValue == (first << second);
+                    return expectedValue == ([[expectedType]])(first << second);
                 }
         ";
 
         private const string TestCodeShr = @"
                 public static bool ShiftRightTest([[expectedType]] expectedValue, [[typename]] first, [[shifttypename]] second)
                 {
-                    return expectedValue == (first >> second);
+                    return expectedValue == ([[expectedType]])(first >> second);
                 }
         ";
 

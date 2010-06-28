@@ -14,12 +14,12 @@ using Test.Mosa.Runtime.CompilerFramework.CLI;
 
 namespace Test.Mosa.Runtime.CompilerFramework.CIL
 {
-    [TestFixture]
-    [Importance(Importance.Critical)]
-    [Category(@"Basic types")]
-    [Description(@"Tests support for the basic type System.Boolean")]
-    public class BooleanFixture : RuntimeFixture
-    {
+	[TestFixture]
+	[Importance(Importance.Critical)]
+	[Category(@"Basic types")]
+	[Description(@"Tests support for the basic type System.Boolean")]
+	public class BooleanFixture : RuntimeFixture
+	{
 		private readonly BinaryLogicInstructionTestRunner<bool, bool, bool> logicTests = new BinaryLogicInstructionTestRunner<bool, bool, bool>
 		{
 			ExpectedTypeName = @"bool",
@@ -29,157 +29,157 @@ namespace Test.Mosa.Runtime.CompilerFramework.CIL
 			IncludeComp = false
 		};
 
-        private readonly ComparisonInstructionTestRunner<bool> comparisonTests = new ComparisonInstructionTestRunner<bool>
-        {
-            TypeName = @"bool",
-            IncludeCge = false,
-            IncludeCgt = false,
-            IncludeCle = false,
-            IncludeClt = false
-        };
+		private readonly ComparisonInstructionTestRunner<bool> comparisonTests = new ComparisonInstructionTestRunner<bool>
+		{
+			TypeName = @"bool",
+			IncludeCge = false,
+			IncludeCgt = false,
+			IncludeCle = false,
+			IncludeClt = false
+		};
 
-        private readonly SZArrayInstructionTestRunner<bool> arrayTests = new SZArrayInstructionTestRunner<bool>
-        {
-            TypeName = @"bool"
-        };
+		private readonly SZArrayInstructionTestRunner<bool> arrayTests = new SZArrayInstructionTestRunner<bool>
+		{
+			TypeName = @"bool"
+		};
 
-        #region And
+		#region And
 
-        [Row(true, true)]
-        [Row(true, false)]
-        [Row(false, true)]
-        [Row(false, false)]
-        [Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
-        public void And(bool first, bool second)
-        {
-            this.logicTests.And((first & second), first, second);
-        }
+		[Row(true, true)]
+		[Row(true, false)]
+		[Row(false, true)]
+		[Row(false, false)]
+		[Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
+		public void And(bool first, bool second)
+		{
+			this.logicTests.And((first & second), first, second);
+		}
 
-        #endregion // And
+		#endregion // And
 
-        #region Or
+		#region Or
 
-        [Row(true, true)]
-        [Row(true, false)]
-        [Row(false, true)]
-        [Row(false, false)]
-        [Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
-        public void Or(bool first, bool second)
-        {
-            this.logicTests.Or((first | second), first, second);
-        }
+		[Row(true, true)]
+		[Row(true, false)]
+		[Row(false, true)]
+		[Row(false, false)]
+		[Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
+		public void Or(bool first, bool second)
+		{
+			this.logicTests.Or((first | second), first, second);
+		}
 
-        #endregion // Or
+		#endregion // Or
 
-        #region Xor
+		#region Xor
 
-        [Row(true, true)]
-        [Row(true, false)]
-        [Row(false, true)]
-        [Row(false, false)]
-        [Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
-        public void Xor(bool first, bool second)
-        {
-            this.logicTests.Xor((first ^ second), first, second);
-        }
+		[Row(true, true)]
+		[Row(true, false)]
+		[Row(false, true)]
+		[Row(false, false)]
+		[Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
+		public void Xor(bool first, bool second)
+		{
+			this.logicTests.Xor((first ^ second), first, second);
+		}
 
-        #endregion // Xor
+		#endregion // Xor
 
-        #region Not
+		#region Not
 
-        [Row(true)]
-        [Row(false)]
-        [Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
-        public void Not(bool value)
-        {
-            this.logicTests.Not(!value, value);
-        }
+		[Row(true)]
+		[Row(false)]
+		[Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
+		public void Not(bool value)
+		{
+			this.logicTests.Not(!value, value);
+		}
 
-        #endregion // Not
+		#endregion // Not
 
-        #region Ceq
+		#region Ceq
 
-        [Row(true, true, true)]
-        [Row(false, true, false)]
-        [Row(false, false, true)]
-        [Row(true, false, false)]
-        [Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
-        public void Ceq(bool expectedValue, bool first, bool second)
-        {
-            this.comparisonTests.Ceq(expectedValue, first, second);
-        }
+		[Row(true, true, true)]
+		[Row(false, true, false)]
+		[Row(false, false, true)]
+		[Row(true, false, false)]
+		[Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
+		public void Ceq(bool expectedValue, bool first, bool second)
+		{
+			this.comparisonTests.Ceq((first == second), first, second);
+		}
 
-        #endregion // Ceq
+		#endregion // Ceq
 
-        #region Newarr
+		#region Newarr
 
-        [Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
-        public void Newarr()
-        {
-            this.arrayTests.Newarr();
-        }
+		[Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
+		public void Newarr()
+		{
+			this.arrayTests.Newarr();
+		}
 
-        #endregion // Newarr
+		#endregion // Newarr
 
-        #region Ldlen
+		#region Ldlen
 
-        [Row(0)]
-        [Row(1)]
-        [Row(10)]
-        [Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
-        public void Ldlen(int length)
-        {
-            this.arrayTests.Ldlen(length);
-        }
+		[Row(0)]
+		[Row(1)]
+		[Row(10)]
+		[Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
+		public void Ldlen(int length)
+		{
+			this.arrayTests.Ldlen(length);
+		}
 
-        #endregion // Ldlen
+		#endregion // Ldlen
 
-        #region Stelem
+		#region Stelem
 
-        [Row(0, true)]
-        [Row(0, false)]
-        [Row(3, true)]
-        [Row(7, false)]
-        [Row(9, true)]
-        [Row(6, false)]
-        [Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
-        public void Stelem(int index, bool value)
-        {
-            this.arrayTests.Stelem(index, value);
-        }
+		[Row(0, true)]
+		[Row(0, false)]
+		[Row(3, true)]
+		[Row(7, false)]
+		[Row(9, true)]
+		[Row(6, false)]
+		[Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
+		public void Stelem(int index, bool value)
+		{
+			this.arrayTests.Stelem(index, value);
+		}
 
-        #endregion // Stelem
+		#endregion // Stelem
 
-        #region Ldelem
+		#region Ldelem
 
-        [Row(0, true)]
-        [Row(0, false)]
-        [Row(3, true)]
-        [Row(7, false)]
-        [Row(9, true)]
-        [Row(6, false)]
-        [Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
-        public void Ldelem(int index, bool value)
-        {
-            this.arrayTests.Ldelem(index, value);
-        }
+		[Row(0, true)]
+		[Row(0, false)]
+		[Row(3, true)]
+		[Row(7, false)]
+		[Row(9, true)]
+		[Row(6, false)]
+		[Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
+		public void Ldelem(int index, bool value)
+		{
+			this.arrayTests.Ldelem(index, value);
+		}
 
-        #endregion // Ldelem
+		#endregion // Ldelem
 
-        #region Ldelema
+		#region Ldelema
 
-        [Row(0, true)]
-        [Row(0, false)]
-        [Row(3, true)]
-        [Row(7, false)]
-        [Row(9, true)]
-        [Row(6, false)]
-        [Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
-        public void Ldelema(int index, bool value)
-        {
-            this.arrayTests.Ldelema(index, value);
-        }
+		[Row(0, true)]
+		[Row(0, false)]
+		[Row(3, true)]
+		[Row(7, false)]
+		[Row(9, true)]
+		[Row(6, false)]
+		[Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
+		public void Ldelema(int index, bool value)
+		{
+			this.arrayTests.Ldelema(index, value);
+		}
 
-        #endregion // Ldelema
-    }
+		#endregion // Ldelema
+	}
 }
