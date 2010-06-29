@@ -55,9 +55,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 
             codeBuilder.Append(Code.ObjectClassDefinition);
 
-			//if (string.IsNullOrEmpty(shiftTypeName))
-			//    shiftTypeName = typeName;
-
             codeBuilder
                 .Replace(@"[[typename]]", typeName)
 				.Replace(@"[[shifttypename]]", shiftTypeName)
