@@ -34,16 +34,6 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		#region ThreeOperandInstruction Overrides
 
 		/// <summary>
-		/// Gets the instruction modifier.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <returns></returns>
-		protected override string GetModifier(Context context)
-		{
-			return GetConditionString(context.ConditionCode);
-		}
-
-		/// <summary>
 		/// Abstract visitor method for intermediate representation visitors.
 		/// </summary>
 		/// <param name="visitor">The visitor object.</param>
