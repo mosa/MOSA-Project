@@ -24,7 +24,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// Initializes a new instance of the <see cref="LdcInstruction"/> class.
 		/// </summary>
 		public LdcInstruction(OpCode opCode)
-			: base(opCode, 0)
+			: base(opCode, 1)
 		{
 		}
 
@@ -41,44 +41,50 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		{
 			// Decode base classes first
 			base.Decode(ctx, decoder);
-			
-		    ConstantOperand constantValueOperand;
+
+			ConstantOperand constantValueOperand;
 
 			// Opcode specific handling
-			switch (_opcode) {
-				case OpCode.Ldc_i4: {
+			switch (_opcode)
+			{
+				case OpCode.Ldc_i4:
+					{
 						int i;
 						decoder.Decode(out i);
-                        constantValueOperand = new ConstantOperand(new SigType(CilElementType.I4), i);
+						constantValueOperand = new ConstantOperand(new SigType(CilElementType.I4), i);
 					}
 					break;
 
-				case OpCode.Ldc_i4_s: {
+				case OpCode.Ldc_i4_s:
+					{
 						sbyte sb;
 						decoder.Decode(out sb);
-                        constantValueOperand = new ConstantOperand(new SigType(CilElementType.I4), sb);
-                }
+						constantValueOperand = new ConstantOperand(new SigType(CilElementType.I4), sb);
+					}
 					break;
 
-				case OpCode.Ldc_i8: {
+				case OpCode.Ldc_i8:
+					{
 						long l;
 						decoder.Decode(out l);
-                        constantValueOperand = new ConstantOperand(new SigType(CilElementType.I8), l);
-                }
+						constantValueOperand = new ConstantOperand(new SigType(CilElementType.I8), l);
+					}
 					break;
 
-				case OpCode.Ldc_r4: {
+				case OpCode.Ldc_r4:
+					{
 						float f;
 						decoder.Decode(out f);
-                        constantValueOperand = new ConstantOperand(new SigType(CilElementType.R4), f);
-                    }
+						constantValueOperand = new ConstantOperand(new SigType(CilElementType.R4), f);
+					}
 					break;
 
-				case OpCode.Ldc_r8: {
+				case OpCode.Ldc_r8:
+					{
 						double d;
 						decoder.Decode(out d);
-                        constantValueOperand = new ConstantOperand(new SigType(CilElementType.R8), d);
-                    }
+						constantValueOperand = new ConstantOperand(new SigType(CilElementType.R8), d);
+					}
 					break;
 
 				case OpCode.Ldnull:
@@ -86,51 +92,51 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 					break;
 
 				case OpCode.Ldc_i4_0:
-                    constantValueOperand = ConstantOperand.FromValue(0);
-                    break;
+					constantValueOperand = ConstantOperand.FromValue(0);
+					break;
 
 				case OpCode.Ldc_i4_1:
-                    constantValueOperand = ConstantOperand.FromValue(1);
-                    break;
+					constantValueOperand = ConstantOperand.FromValue(1);
+					break;
 
 				case OpCode.Ldc_i4_2:
-                    constantValueOperand = ConstantOperand.FromValue(2);
-                    break;
+					constantValueOperand = ConstantOperand.FromValue(2);
+					break;
 
 				case OpCode.Ldc_i4_3:
-                    constantValueOperand = ConstantOperand.FromValue(3);
-                    break;
+					constantValueOperand = ConstantOperand.FromValue(3);
+					break;
 
 				case OpCode.Ldc_i4_4:
-                    constantValueOperand = ConstantOperand.FromValue(4);
-                    break;
+					constantValueOperand = ConstantOperand.FromValue(4);
+					break;
 
 				case OpCode.Ldc_i4_5:
-                    constantValueOperand = ConstantOperand.FromValue(5);
-                    break;
+					constantValueOperand = ConstantOperand.FromValue(5);
+					break;
 
 				case OpCode.Ldc_i4_6:
-                    constantValueOperand = ConstantOperand.FromValue(6);
-                    break;
+					constantValueOperand = ConstantOperand.FromValue(6);
+					break;
 
 				case OpCode.Ldc_i4_7:
-                    constantValueOperand = ConstantOperand.FromValue(7);
-                    break;
+					constantValueOperand = ConstantOperand.FromValue(7);
+					break;
 
 				case OpCode.Ldc_i4_8:
-                    constantValueOperand = ConstantOperand.FromValue(8);
-                    break;
+					constantValueOperand = ConstantOperand.FromValue(8);
+					break;
 
 				case OpCode.Ldc_i4_m1:
-                    constantValueOperand = ConstantOperand.FromValue(-1);
-                    break;
+					constantValueOperand = ConstantOperand.FromValue(-1);
+					break;
 
 				default:
 					throw new System.NotImplementedException();
 			}
 
-		    ctx.Operand1 = constantValueOperand;
-		    ctx.Result = decoder.Compiler.CreateTemporary(constantValueOperand.Type);
+			ctx.Operand1 = constantValueOperand;
+			ctx.Result = decoder.Compiler.CreateTemporary(constantValueOperand.Type);
 		}
 
 		/// <summary>
