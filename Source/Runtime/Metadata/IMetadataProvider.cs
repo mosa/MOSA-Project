@@ -53,273 +53,273 @@ namespace Mosa.Runtime.Metadata
 		/// Reads a module row from provider.
 		/// </summary>
 		/// <param name="token">The module row token.</param>
-		/// <param name="result">Receives the read module row.</param>
-		void Read(TokenTypes token, out ModuleRow result);
+		/// <returns></returns>
+		ModuleRow ReadModuleRow(TokenTypes token);
 
 		/// <summary>
 		/// Reads a type reference row from provider.
 		/// </summary>
 		/// <param name="token">The type reference row token.</param>
-		/// <param name="result">Receives the read type reference row.</param>
-		void Read(TokenTypes token, out TypeRefRow result);
+		/// <returns></returns>
+		TypeRefRow ReadTypeRefRow(TokenTypes token);
 
 		/// <summary>
 		/// Reads a type definition row from provider.
 		/// </summary>
 		/// <param name="token">The type definition row token.</param>
-		/// <param name="result">Receives the read type definition row.</param>
-		void Read(TokenTypes token, out TypeDefRow result);
+		/// <returns></returns>
+		TypeDefRow ReadTypeDefRow(TokenTypes token);
 
 		/// <summary>
 		/// Reads a _stackFrameIndex definition row from provider.
 		/// </summary>
 		/// <param name="token">The _stackFrameIndex definition row token.</param>
-		/// <param name="result">Receives the read _stackFrameIndex definition row.</param>
-		void Read(TokenTypes token, out FieldRow result);
+		/// <returns></returns>
+		FieldRow ReadFieldRow(TokenTypes token);
 
 		/// <summary>
 		/// Reads a method definition row from provider.
 		/// </summary>
 		/// <param name="token">The method definition row token.</param>
-		/// <param name="result">Receives the read method definition row.</param>
-		void Read(TokenTypes token, out MethodDefRow result);
+		/// <returns></returns>
+		MethodDefRow ReadMethodDefRow(TokenTypes token);
 
 		/// <summary>
 		/// Reads a parameter row from provider.
 		/// </summary>
 		/// <param name="token">The parameter row token.</param>
-		/// <param name="result">Receives the read parameter row.</param>
-		void Read(TokenTypes token, out ParamRow result);
+		/// <returns></returns>
+		ParamRow ReadParamRow(TokenTypes token);
 
 		/// <summary>
 		/// Reads an interface implementation row from provider.
 		/// </summary>
 		/// <param name="token">The interface implementation row token.</param>
-		/// <param name="result">Receives the read interface implementation row.</param>
-		void Read(TokenTypes token, out InterfaceImplRow result);
+		/// <returns></returns>
+		InterfaceImplRow ReadInterfaceImplRow(TokenTypes token);
 
 		/// <summary>
 		/// Reads an member reference row from provider.
 		/// </summary>
 		/// <param name="token">The member reference row token.</param>
-		/// <param name="result">Receives the read member reference row.</param>
-		void Read(TokenTypes token, out MemberRefRow result);
+		/// <returns></returns>
+		MemberRefRow ReadMemberRefRow(TokenTypes token);
 
 		/// <summary>
 		/// Reads a constant row from provider.
 		/// </summary>
 		/// <param name="token">The constant row token.</param>
-		/// <param name="result">Receives the read constant row.</param>
-		void Read(TokenTypes token, out ConstantRow result);
+		/// <returns></returns>
+		ConstantRow ReadConstantRow(TokenTypes token);
 
 		/// <summary>
 		/// Reads a constant row from provider.
 		/// </summary>
 		/// <param name="token">The constant row token.</param>
-		/// <param name="result">Receives the read constant row.</param>
-		void Read(TokenTypes token, out CustomAttributeRow result);
+		/// <returns></returns>
+		CustomAttributeRow ReadCustomAttributeRow(TokenTypes token);
 
 		/// <summary>
 		/// Reads a _stackFrameIndex marshal row from provider.
 		/// </summary>
 		/// <param name="token">The _stackFrameIndex marshal row token.</param>
-		/// <param name="result">Receives the read _stackFrameIndex marshal row.</param>
-		void Read(TokenTypes token, out FieldMarshalRow result);
+		/// <returns></returns>
+		FieldMarshalRow ReadFieldMarshalRow(TokenTypes token);
 
 		/// <summary>
 		/// Reads a declarative security row from provider.
 		/// </summary>
 		/// <param name="token">The declarative security row token.</param>
-		/// <param name="result">Receives the read declarative security row.</param>
-		void Read(TokenTypes token, out DeclSecurityRow result);
+		/// <returns></returns>
+		DeclSecurityRow ReadDeclSecurityRow(TokenTypes token);
 
 		/// <summary>
 		/// Reads a class layout row from provider.
 		/// </summary>
 		/// <param name="token">The class layout row token.</param>
-		/// <param name="result">Receives the read class layout row.</param>
-		void Read(TokenTypes token, out ClassLayoutRow result);
+		/// <returns></returns>
+		ClassLayoutRow ReadClassLayoutRow(TokenTypes token);
 
 		/// <summary>
 		/// Reads a _stackFrameIndex layout row from provider.
 		/// </summary>
 		/// <param name="token">The _stackFrameIndex layout row token.</param>
-		/// <param name="result">Receives the read _stackFrameIndex layout row.</param>
-		void Read(TokenTypes token, out FieldLayoutRow result);
+		/// <returns></returns>
+		FieldLayoutRow ReadFieldLayoutRow(TokenTypes token);
 
 		/// <summary>
 		/// Reads a standalone signature row from provider.
 		/// </summary>
 		/// <param name="token">The standalone signature row token.</param>
-		/// <param name="result">Receives the read standalone signature row.</param>
-		void Read(TokenTypes token, out StandAloneSigRow result);
+		/// <returns></returns>
+		StandAloneSigRow ReadStandAloneSigRow(TokenTypes token);
 
 		/// <summary>
 		/// Reads a event map row from provider.
 		/// </summary>
 		/// <param name="token">The event map row token.</param>
-		/// <param name="result">Receives the read event map row.</param>
-		void Read(TokenTypes token, out EventMapRow result);
+		/// <returns></returns>
+		EventMapRow ReadEventMapRow(TokenTypes token);
 
 		/// <summary>
 		/// Reads a event row from provider.
 		/// </summary>
 		/// <param name="token">The event row token.</param>
-		/// <param name="result">Receives the read event row.</param>
-		void Read(TokenTypes token, out EventRow result);
+		/// <returns></returns>
+		EventRow ReadEventRow(TokenTypes token);
 
 		/// <summary>
 		/// Reads a property map row from provider.
 		/// </summary>
 		/// <param name="token">The property map row token.</param>
-		/// <param name="result">Receives the read property map row.</param>
-		void Read(TokenTypes token, out PropertyMapRow result);
+		/// <returns></returns>
+		PropertyMapRow ReadPropertyMapRow(TokenTypes token);
 
 		/// <summary>
 		/// Reads a property row from provider.
 		/// </summary>
 		/// <param name="token">The property row token.</param>
-		/// <param name="result">Receives the read property row.</param>
-		void Read(TokenTypes token, out PropertyRow result);
+		/// <returns></returns>
+		PropertyRow ReadPropertyRow(TokenTypes token);
 
 		/// <summary>
 		/// Reads a method semantics row from provider.
 		/// </summary>
 		/// <param name="token">The method semantics row token.</param>
-		/// <param name="result">Receives the read method semantics row.</param>
-		void Read(TokenTypes token, out MethodSemanticsRow result);
+		/// <returns></returns>
+		MethodSemanticsRow ReadMethodSemanticsRow(TokenTypes token);
 
 		/// <summary>
 		/// Reads a method impl row from provider.
 		/// </summary>
 		/// <param name="token">The method impl row token.</param>
-		/// <param name="result">Receives the read method impl row.</param>
-		void Read(TokenTypes token, out MethodImplRow result);
+		/// <returns></returns>
+		MethodImplRow ReadMethodImplRow(TokenTypes token);
 
 		/// <summary>
 		/// Reads a module ref row from provider.
 		/// </summary>
 		/// <param name="token">The module ref row token.</param>
-		/// <param name="result">Receives the read module ref row.</param>
-		void Read(TokenTypes token, out ModuleRefRow result);
+		/// <returns></returns>
+		ModuleRefRow ReadModuleRefRow(TokenTypes token);
 
 		/// <summary>
 		/// Reads a typespec row from provider.
 		/// </summary>
 		/// <param name="token">The typespec row token.</param>
-		/// <param name="result">Receives the read typespec row.</param>
-		void Read(TokenTypes token, out TypeSpecRow result);
+		/// <returns></returns>
+		TypeSpecRow ReadTypeSpecRow(TokenTypes token);
 
 		/// <summary>
 		/// Reads a implementation map row from provider.
 		/// </summary>
 		/// <param name="token">The implementation map row token.</param>
-		/// <param name="result">Receives the read implementation map row.</param>
-		void Read(TokenTypes token, out ImplMapRow result);
+		/// <returns></returns>
+		ImplMapRow ReadImplMapRow(TokenTypes token);
 
 		/// <summary>
 		/// Reads a _stackFrameIndex rva row from provider.
 		/// </summary>
 		/// <param name="token">The _stackFrameIndex rva row token.</param>
-		/// <param name="result">Receives the read _stackFrameIndex rva row.</param>
-		void Read(TokenTypes token, out FieldRVARow result);
+		/// <returns></returns>
+		FieldRVARow ReadFieldRVARow(TokenTypes token);
 
 		/// <summary>
 		/// Reads a assembly row from provider.
 		/// </summary>
 		/// <param name="token">The assembly row token.</param>
-		/// <param name="result">Receives the read assembly row.</param>
-		void Read(TokenTypes token, out AssemblyRow result);
+		/// <returns></returns>
+		AssemblyRow ReadAssemblyRow(TokenTypes token);
 
 		/// <summary>
 		/// Reads a assembly processor row from provider.
 		/// </summary>
 		/// <param name="token">The assembly processor row token.</param>
-		/// <param name="result">Receives the read assembly processor row.</param>
-		void Read(TokenTypes token, out AssemblyProcessorRow result);
+		/// <returns></returns>
+		AssemblyProcessorRow ReadAssemblyProcessorRow(TokenTypes token);
 
 		/// <summary>
 		/// Reads a assembly os row from provider.
 		/// </summary>
 		/// <param name="token">The assembly os row token.</param>
-		/// <param name="result">Receives the read assembly os row.</param>
-		void Read(TokenTypes token, out AssemblyOSRow result);
+		/// <returns></returns>
+		AssemblyOSRow ReadAssemblyOSRow(TokenTypes token);
 
 		/// <summary>
 		/// Reads a assembly reference row from provider.
 		/// </summary>
 		/// <param name="token">The assembly reference row token.</param>
-		/// <param name="result">Receives the read assembly reference row.</param>
-		void Read(TokenTypes token, out AssemblyRefRow result);
+		/// <returns></returns>
+		AssemblyRefRow ReadAssemblyRefRow(TokenTypes token);
 
 		/// <summary>
 		/// Reads a assembly reference processor row from provider.
 		/// </summary>
 		/// <param name="token">The assembly reference processor row token.</param>
-		/// <param name="result">Receives the read assembly reference processor row.</param>
-		void Read(TokenTypes token, out AssemblyRefProcessorRow result);
+		/// <returns></returns>
+		AssemblyRefProcessorRow ReadAssemblyRefProcessorRow(TokenTypes token);
 
 		/// <summary>
 		/// Reads a assembly reference os row from provider.
 		/// </summary>
 		/// <param name="token">The assembly reference os row token.</param>
-		/// <param name="result">Receives the read assembly reference os row.</param>
-		void Read(TokenTypes token, out AssemblyRefOSRow result);
+		/// <returns></returns>
+		AssemblyRefOSRow ReadAssemblyRefOSRow(TokenTypes token);
 
 		/// <summary>
 		/// Reads a file row from provider.
 		/// </summary>
 		/// <param name="token">The file row token.</param>
-		/// <param name="result">Receives the read file row.</param>
-		void Read(TokenTypes token, out FileRow result);
+		/// <returns></returns>
+		FileRow ReadFileRow(TokenTypes token);
 
 		/// <summary>
 		/// Reads an exported type row from provider.
 		/// </summary>
 		/// <param name="token">The exported type row token.</param>
-		/// <param name="result">Receives the read exported type row.</param>
-		void Read(TokenTypes token, out ExportedTypeRow result);
+		/// <returns></returns>
+		ExportedTypeRow ReadExportedTypeRow(TokenTypes token);
 
 		/// <summary>
 		/// Reads a manifest resource row from provider.
 		/// </summary>
 		/// <param name="token">The manifest resource row token.</param>
-		/// <param name="result">Receives the read manifest resource row.</param>
-		void Read(TokenTypes token, out ManifestResourceRow result);
+		/// <returns></returns>
+		ManifestResourceRow ReadManifestResourceRow(TokenTypes token);
 
 		/// <summary>
 		/// Reads a manifest resource row from provider.
 		/// </summary>
 		/// <param name="token">The manifest resource row token.</param>
-		/// <param name="result">Receives the read manifest resource row.</param>
-		void Read(TokenTypes token, out NestedClassRow result);
+		/// <returns></returns>
+		NestedClassRow ReadNestedClassRow(TokenTypes token);
 
 		/// <summary>
 		/// Reads a generic parameter row from provider.
 		/// </summary>
 		/// <param name="token">The generic parameter row token.</param>
-		/// <param name="result">Receives the read generic parameter row.</param>
-		void Read(TokenTypes token, out GenericParamRow result);
+		/// <returns></returns>
+		GenericParamRow ReadGenericParamRow(TokenTypes token);
 
 		/// <summary>
 		/// Reads a method specification row from provider.
 		/// </summary>
 		/// <param name="token">The method specification row token.</param>
-		/// <param name="result">Receives the read method specification row.</param>
-		void Read(TokenTypes token, out MethodSpecRow result);
+		/// <returns></returns>
+		MethodSpecRow ReadMethodSpecRow(TokenTypes token);
 
 		/// <summary>
 		/// Reads a generic parameter constraint row from provider.
 		/// </summary>
 		/// <param name="token">The generic parameter constraint row token.</param>
-		/// <param name="result">Receives the read generic parameter constraint row.</param>
-		void Read(TokenTypes token, out GenericParamConstraintRow result);
+		/// <returns></returns>
+		GenericParamConstraintRow ReadGenericParamConstraintRow(TokenTypes token);
 
 		/// <summary>
 		/// Reads the specified token.
 		/// </summary>
 		/// <param name="token">The generic parameter constraint row token.</param>
-		/// <param name="result">Receives the read generic parameter constraint row.</param>
-		void Read(TokenTypes token, out FieldRow[] result);
+		/// <returns></returns>
+		FieldRow[] ReadFieldRows(TokenTypes token);
 	}
 }

@@ -248,238 +248,238 @@ namespace Mosa.Runtime.Loader.PE
 			}
 		}
 
-		void IMetadataProvider.Read(TokenTypes token, out ModuleRow result)
+		ModuleRow IMetadataProvider.ReadModuleRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
-			theap.Read(token, out result);
+			return theap.ReadModuleRow(token);
 		}
 
-		void IMetadataProvider.Read(TokenTypes token, out TypeRefRow result)
+		TypeRefRow IMetadataProvider.ReadTypeRefRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
-			theap.Read(token, out result);
+			return theap.ReadTypeRefRow(token);
 		}
 
-		void IMetadataProvider.Read(TokenTypes token, out TypeDefRow result)
+		TypeDefRow IMetadataProvider.ReadTypeDefRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
-			theap.Read(token, out result);
+			return theap.ReadTypeDefRow(token);
 		}
 
-		void IMetadataProvider.Read(TokenTypes token, out FieldRow result)
+		FieldRow IMetadataProvider.ReadFieldRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
-			theap.Read(token, out result);
+			return theap.ReadFieldRow(token);
 		}
 
-		void IMetadataProvider.Read(TokenTypes token, out MethodDefRow result)
+		MethodDefRow IMetadataProvider.ReadMethodDefRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
-			theap.Read(token, out result);
+			return theap.ReadMethodDefRow(token);
 		}
 
-		void IMetadataProvider.Read(TokenTypes token, out ParamRow result)
+		ParamRow IMetadataProvider.ReadParamRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
-			theap.Read(token, out result);
+			return theap.ReadParamRow(token);
 		}
 
-		void IMetadataProvider.Read(TokenTypes token, out InterfaceImplRow result)
+		InterfaceImplRow IMetadataProvider.ReadInterfaceImplRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
-			theap.Read(token, out result);
+			return theap.ReadInterfaceImplRow(token);
 		}
 
-		void IMetadataProvider.Read(TokenTypes token, out MemberRefRow result)
+		MemberRefRow IMetadataProvider.ReadMemberRefRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
-			theap.Read(token, out result);
+			return theap.ReadMemberRefRow(token);
 		}
 
-		void IMetadataProvider.Read(TokenTypes token, out ConstantRow result)
+		ConstantRow IMetadataProvider.ReadConstantRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
-			theap.Read(token, out result);
+			return theap.ReadConstantRow(token);
 		}
 
-		void IMetadataProvider.Read(TokenTypes token, out CustomAttributeRow result)
+		CustomAttributeRow IMetadataProvider.ReadCustomAttributeRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
-			theap.Read(token, out result);
+			return theap.ReadCustomAttributeRow(token);
 		}
 
-		void IMetadataProvider.Read(TokenTypes token, out FieldMarshalRow result)
+		FieldMarshalRow IMetadataProvider.ReadFieldMarshalRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
-			theap.Read(token, out result);
+			return theap.ReadFieldMarshalRow(token);
 		}
 
-		void IMetadataProvider.Read(TokenTypes token, out DeclSecurityRow result)
+		DeclSecurityRow IMetadataProvider.ReadDeclSecurityRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
-			theap.Read(token, out result);
+			return theap.ReadDeclSecurityRow(token);
 		}
 
-		void IMetadataProvider.Read(TokenTypes token, out ClassLayoutRow result)
+		ClassLayoutRow IMetadataProvider.ReadClassLayoutRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
-			theap.Read(token, out result);
+			return theap.ReadClassLayoutRow(token);
 		}
 
-		void IMetadataProvider.Read(TokenTypes token, out FieldLayoutRow result)
+		FieldLayoutRow IMetadataProvider.ReadFieldLayoutRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
-			theap.Read(token, out result);
+			return theap.ReadFieldLayoutRow(token);
 		}
 
-		void IMetadataProvider.Read(TokenTypes token, out StandAloneSigRow result)
+		StandAloneSigRow IMetadataProvider.ReadStandAloneSigRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
-			theap.Read(token, out result);
+			return theap.ReadStandAloneSigRow(token);
 		}
 
-		void IMetadataProvider.Read(TokenTypes token, out EventMapRow result)
+		EventMapRow IMetadataProvider.ReadEventMapRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
-			theap.Read(token, out result);
+			return theap.ReadEventMapRow(token);
 		}
 
-		void IMetadataProvider.Read(TokenTypes token, out EventRow result)
+		EventRow IMetadataProvider.ReadEventRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
-			theap.Read(token, out result);
+			return theap.ReadEventRow(token);
 		}
 
-		void IMetadataProvider.Read(TokenTypes token, out PropertyMapRow result)
+		PropertyMapRow IMetadataProvider.ReadPropertyMapRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
-			theap.Read(token, out result);
+			return theap.ReadPropertyMapRow(token);
 		}
 
-		void IMetadataProvider.Read(TokenTypes token, out PropertyRow result)
+		PropertyRow IMetadataProvider.ReadPropertyRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
-			theap.Read(token, out result);
+			return theap.ReadPropertyRow(token);
 		}
 
-		void IMetadataProvider.Read(TokenTypes token, out MethodSemanticsRow result)
+		MethodSemanticsRow IMetadataProvider.ReadMethodSemanticsRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
-			theap.Read(token, out result);
+			return theap.ReadMethodSemanticsRow(token);
 		}
 
-		void IMetadataProvider.Read(TokenTypes token, out MethodImplRow result)
+		MethodImplRow IMetadataProvider.ReadMethodImplRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
-			theap.Read(token, out result);
+			return theap.ReadMethodImplRow(token);
 		}
 
-		void IMetadataProvider.Read(TokenTypes token, out ModuleRefRow result)
+		ModuleRefRow IMetadataProvider.ReadModuleRefRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
-			theap.Read(token, out result);
+			return theap.ReadModuleRefRow(token);
 		}
 
-		void IMetadataProvider.Read(TokenTypes token, out TypeSpecRow result)
+		TypeSpecRow IMetadataProvider.ReadTypeSpecRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
-			theap.Read(token, out result);
+			return theap.ReadTypeSpecRow(token);
 		}
 
-		void IMetadataProvider.Read(TokenTypes token, out ImplMapRow result)
+		ImplMapRow IMetadataProvider.ReadImplMapRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
-			theap.Read(token, out result);
+			return theap.ReadImplMapRow(token);
 		}
 
-		void IMetadataProvider.Read(TokenTypes token, out FieldRVARow result)
+		FieldRVARow IMetadataProvider.ReadFieldRVARow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
-			theap.Read(token, out result);
+			return theap.ReadFieldRVARow(token);
 		}
 
-		void IMetadataProvider.Read(TokenTypes token, out AssemblyRow result)
+		AssemblyRow IMetadataProvider.ReadAssemblyRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
-			theap.Read(token, out result);
+			return theap.ReadAssemblyRow(token);
 		}
 
-		void IMetadataProvider.Read(TokenTypes token, out AssemblyProcessorRow result)
+		AssemblyProcessorRow IMetadataProvider.ReadAssemblyProcessorRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
-			theap.Read(token, out result);
+			return theap.ReadAssemblyProcessorRow(token);
 		}
 
-		void IMetadataProvider.Read(TokenTypes token, out AssemblyOSRow result)
+		AssemblyOSRow IMetadataProvider.ReadAssemblyOSRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
-			theap.Read(token, out result);
+			return theap.ReadAssemblyOSRow(token);
 		}
 
-		void IMetadataProvider.Read(TokenTypes token, out AssemblyRefRow result)
+		AssemblyRefRow IMetadataProvider.ReadAssemblyRefRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
-			theap.Read(token, out result);
+			return theap.ReadAssemblyRefRow(token);
 		}
 
-		void IMetadataProvider.Read(TokenTypes token, out AssemblyRefProcessorRow result)
+		AssemblyRefProcessorRow IMetadataProvider.ReadAssemblyRefProcessorRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
-			theap.Read(token, out result);
+			return theap.ReadAssemblyRefProcessorRow(token);
 		}
 
-		void IMetadataProvider.Read(TokenTypes token, out AssemblyRefOSRow result)
+		AssemblyRefOSRow IMetadataProvider.ReadAssemblyRefOSRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
-			theap.Read(token, out result);
+			return theap.ReadAssemblyRefOSRow(token);
 		}
 
-		void IMetadataProvider.Read(TokenTypes token, out FileRow result)
+		FileRow IMetadataProvider.ReadFileRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
-			theap.Read(token, out result);
+			return theap.ReadFileRow(token);
 		}
 
-		void IMetadataProvider.Read(TokenTypes token, out ExportedTypeRow result)
+		ExportedTypeRow IMetadataProvider.ReadExportedTypeRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
-			theap.Read(token, out result);
+			return theap.ReadExportedTypeRow(token);
 		}
 
-		void IMetadataProvider.Read(TokenTypes token, out ManifestResourceRow result)
+		ManifestResourceRow IMetadataProvider.ReadManifestResourceRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
-			theap.Read(token, out result);
+			return theap.ReadManifestResourceRow(token);
 		}
 
-		void IMetadataProvider.Read(TokenTypes token, out NestedClassRow result)
+		NestedClassRow IMetadataProvider.ReadNestedClassRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
-			theap.Read(token, out result);
+			return theap.ReadNestedClassRow(token);
 		}
 
-		void IMetadataProvider.Read(TokenTypes token, out GenericParamRow result)
+		GenericParamRow IMetadataProvider.ReadGenericParamRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
-			theap.Read(token, out result);
+			return theap.ReadGenericParamRow(token);
 		}
 
-		void IMetadataProvider.Read(TokenTypes token, out MethodSpecRow result)
+		MethodSpecRow IMetadataProvider.ReadMethodSpecRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
-			theap.Read(token, out result);
+			return theap.ReadMethodSpecRow(token);
 		}
 
-		void IMetadataProvider.Read(TokenTypes token, out GenericParamConstraintRow result)
+		GenericParamConstraintRow IMetadataProvider.ReadGenericParamConstraintRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
-			theap.Read(token, out result);
+			return theap.ReadGenericParamConstraintRow(token);
 		}
 
-		void IMetadataProvider.Read(TokenTypes token, out FieldRow[] result)
+		FieldRow[] IMetadataProvider.ReadFieldRows(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
-			theap.Read(token, out result);
+			return theap.ReadFieldRows(token);
 		}
 
 		#endregion // IMetadataProvider members

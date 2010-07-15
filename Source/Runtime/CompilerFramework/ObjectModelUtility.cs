@@ -3,11 +3,11 @@ using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Runtime.CompilerFramework
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public static class ObjectModelUtility
-    {
+	/// <summary>
+	/// 
+	/// </summary>
+	public static class ObjectModelUtility
+	{
 		/// <summary>
 		/// Computes the size of the type.
 		/// </summary>
@@ -15,27 +15,26 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="metadataProvider">The metadata provider.</param>
 		/// <param name="architecture">The architecture.</param>
 		/// <returns></returns>
-        public static int ComputeTypeSize(ISignatureContext context, TokenTypes token, IMetadataProvider metadataProvider, IArchitecture architecture)
-        {
-            Metadata.Tables.TypeDefRow typeDefinition;
-            Metadata.Tables.TypeDefRow followingTypeDefinition = new Mosa.Runtime.Metadata.Tables.TypeDefRow();
-            metadataProvider.Read(token, out typeDefinition);
-            try
-            {
-                metadataProvider.Read(token + 1, out followingTypeDefinition);
-            }
-            catch (System.Exception)
-            {
-            }
+		public static int ComputeTypeSize(ISignatureContext context, TokenTypes token, IMetadataProvider metadataProvider, IArchitecture architecture)
+		{
+			Metadata.Tables.TypeDefRow followingTypeDefinition = new Mosa.Runtime.Metadata.Tables.TypeDefRow();
+			Metadata.Tables.TypeDefRow typeDefinition = metadataProvider.ReadTypeDefRow(token);
+			try
+			{
+				followingTypeDefinition = metadataProvider.ReadTypeDefRow(token + 1);
+			}
+			catch (System.Exception)
+			{
+			}
 
-            int result = 0;
-            TokenTypes fieldList = typeDefinition.FieldList;
-            TokenTypes last = metadataProvider.GetMaxTokenValue(TokenTypes.Field);
-            while (fieldList != followingTypeDefinition.FieldList && fieldList != last)
-                result += FieldSize(context, fieldList++, metadataProvider, architecture);
+			int result = 0;
+			TokenTypes fieldList = typeDefinition.FieldList;
+			TokenTypes last = metadataProvider.GetMaxTokenValue(TokenTypes.Field);
+			while (fieldList != followingTypeDefinition.FieldList && fieldList != last)
+				result += FieldSize(context, fieldList++, metadataProvider, architecture);
 
-            return result;
-        }
+			return result;
+		}
 
 		/// <summary>
 		/// Fields the size.
@@ -44,23 +43,22 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="metadataProvider">The metadata provider.</param>
 		/// <param name="architecture">The architecture.</param>
 		/// <returns></returns>
-        public static int FieldSize(ISignatureContext context, TokenTypes field, IMetadataProvider metadataProvider, IArchitecture architecture)
-        {
-            Metadata.Tables.FieldRow fieldRow;
-            metadataProvider.Read(field, out fieldRow);
-            FieldSignature signature = Signature.FromMemberRefSignatureToken(context, metadataProvider, fieldRow.SignatureBlobIdx) as FieldSignature;
+		public static int FieldSize(ISignatureContext context, TokenTypes field, IMetadataProvider metadataProvider, IArchitecture architecture)
+		{
+			Metadata.Tables.FieldRow fieldRow = metadataProvider.ReadFieldRow(field);
+			FieldSignature signature = Signature.FromMemberRefSignatureToken(context, metadataProvider, fieldRow.SignatureBlobIdx) as FieldSignature;
 
-            // If the field is another struct, we have to dig down and compute its size too.
-            if (signature.Type.Type == CilElementType.ValueType)
-            {
-                TokenTypes valueTypeSig = ValueTokenTypeFromSignature(metadataProvider, fieldRow.SignatureBlobIdx);
-                return ComputeTypeSize(context, valueTypeSig, metadataProvider, architecture);
-            }
+			// If the field is another struct, we have to dig down and compute its size too.
+			if (signature.Type.Type == CilElementType.ValueType)
+			{
+				TokenTypes valueTypeSig = ValueTokenTypeFromSignature(metadataProvider, fieldRow.SignatureBlobIdx);
+				return ComputeTypeSize(context, valueTypeSig, metadataProvider, architecture);
+			}
 
-            int size, alignment;
-            architecture.GetTypeRequirements(signature.Type, out size, out alignment);
-            return size;
-        }
+			int size, alignment;
+			architecture.GetTypeRequirements(signature.Type, out size, out alignment);
+			return size;
+		}
 
 		/// <summary>
 		/// Values the token type from signature.
@@ -68,17 +66,17 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="metadata">The metadata.</param>
 		/// <param name="signatureToken">The signature token.</param>
 		/// <returns></returns>
-        public static TokenTypes ValueTokenTypeFromSignature(IMetadataProvider metadata, TokenTypes signatureToken)
-        {
-            int index = 1;
-            byte[] buffer = metadata.ReadBlob(signatureToken);
+		public static TokenTypes ValueTokenTypeFromSignature(IMetadataProvider metadata, TokenTypes signatureToken)
+		{
+			int index = 1;
+			byte[] buffer = metadata.ReadBlob(signatureToken);
 
-            // Jump over custom mods
-            CustomMod.ParseCustomMods(buffer, ref index);
-            index++;
+			// Jump over custom mods
+			CustomMod.ParseCustomMods(buffer, ref index);
+			index++;
 
-            return SigType.ReadTypeDefOrRefEncoded(buffer, ref index);
-        }
+			return SigType.ReadTypeDefOrRefEncoded(buffer, ref index);
+		}
 
 		/// <summary>
 		/// Computes the field offset.
@@ -87,19 +85,17 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="metadataProvider">The metadata provider.</param>
 		/// <param name="architecture">The architecture.</param>
 		/// <returns></returns>
-        public static int ComputeFieldOffset(ISignatureContext context, TokenTypes token, IMetadataProvider metadataProvider, IArchitecture architecture)
-        {
-            Metadata.Tables.TypeDefRow typeDefinition;
-            Metadata.Tables.TypeDefRow followingTypeDefinition;
-            metadataProvider.Read(token, out typeDefinition);
-            metadataProvider.Read(token + 1, out followingTypeDefinition);
+		public static int ComputeFieldOffset(ISignatureContext context, TokenTypes token, IMetadataProvider metadataProvider, IArchitecture architecture)
+		{
+			Metadata.Tables.TypeDefRow typeDefinition = metadataProvider.ReadTypeDefRow(token);
+			Metadata.Tables.TypeDefRow followingTypeDefinition = metadataProvider.ReadTypeDefRow(token + 1);
 
-            int result = 0;
-            TokenTypes fieldList = typeDefinition.FieldList;
-            while (fieldList != token)
-                result += FieldSize(context, fieldList++, metadataProvider, architecture);
+			int result = 0;
+			TokenTypes fieldList = typeDefinition.FieldList;
+			while (fieldList != token)
+				result += FieldSize(context, fieldList++, metadataProvider, architecture);
 
-            return result;
-        }
-    }
+			return result;
+		}
+	}
 }

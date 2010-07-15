@@ -149,9 +149,8 @@ namespace Mosa.Runtime.Metadata.Runtime
 			string @namespace;
 			if (IsNested)
 			{
-				TypeDefRow typeDef;
 				TokenTypes enclosingType = GetEnclosingType(Token);
-				this.module.Metadata.Read(enclosingType, out typeDef);
+				TypeDefRow typeDef = this.module.Metadata.ReadTypeDefRow(enclosingType);
 
 				string @enclosingNamespace = this.module.Metadata.ReadString(typeDef.TypeNamespaceIdx);
 				string @enclosingTypeName = this.module.Metadata.ReadString(typeDef.TypeNameIdx);
@@ -170,7 +169,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 			NestedClassRow row;
 			for (int i = 1; ; ++i)
 			{
-				this.module.Metadata.Read(TokenTypes.NestedClass + i, out row);
+				row = this.module.Metadata.ReadNestedClassRow(TokenTypes.NestedClass + i);
 				if (row.NestedClassTableIdx == (TokenTypes)token)
 					break;
 			}
@@ -192,12 +191,11 @@ namespace Mosa.Runtime.Metadata.Runtime
 		{
 			List<RuntimeType> result = null;
 			IMetadataProvider metadata = this.module.Metadata;
-			InterfaceImplRow row;
 
 			TokenTypes maxToken = metadata.GetMaxTokenValue(TokenTypes.InterfaceImpl);
 			for (TokenTypes token = TokenTypes.InterfaceImpl + 1; token <= maxToken; token++)
 			{
-				metadata.Read(token, out row);
+				InterfaceImplRow row = metadata.ReadInterfaceImplRow(token);
 				if (row.ClassTableIdx == (TokenTypes)this.Token)
 				{
 					RuntimeType interfaceType = RuntimeBase.Instance.TypeLoader.GetType(DefaultSignatureContext.Instance, this.module, row.InterfaceTableIdx);
