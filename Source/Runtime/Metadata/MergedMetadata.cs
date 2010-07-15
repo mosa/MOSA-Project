@@ -208,7 +208,14 @@ namespace Mosa.Runtime.Metadata
 			TokenTypes originalToken = GetOriginalToken(token, out module);
 
 			TypeDefRow row = modules[module].Metadata.ReadTypeDefRow(originalToken);
-			return row;
+			return new TypeDefRow(
+				row.Flags,
+				GetNewToken(module, row.TypeNameIdx),
+				GetNewToken(module, row.TypeNamespaceIdx),
+				GetNewToken(module, row.Extends),
+				GetNewToken(module, row.FieldList),
+				GetNewToken(module, row.MethodList)
+			);
 		}
 
 		FieldRow IMetadataProvider.ReadFieldRow(TokenTypes token)
@@ -217,7 +224,11 @@ namespace Mosa.Runtime.Metadata
 			TokenTypes originalToken = GetOriginalToken(token, out module);
 
 			FieldRow row = modules[module].Metadata.ReadFieldRow(originalToken);
-			return row;
+			return new FieldRow(
+				row.Flags,
+				GetNewToken(module, row.NameStringIdx),
+				GetNewToken(module, row.SignatureBlobIdx)
+				);
 		}
 
 		MethodDefRow IMetadataProvider.ReadMethodDefRow(TokenTypes token)
@@ -226,7 +237,14 @@ namespace Mosa.Runtime.Metadata
 			TokenTypes originalToken = GetOriginalToken(token, out module);
 
 			MethodDefRow row = modules[module].Metadata.ReadMethodDefRow(originalToken);
-			return row;
+			return new MethodDefRow(
+				row.Rva,
+				row.ImplFlags,
+				row.Flags,
+				GetNewToken(module, row.NameStringIdx),
+				GetNewToken(module, row.SignatureBlobIdx),
+				GetNewToken(module, row.ParamList)
+			);
 		}
 
 		ParamRow IMetadataProvider.ReadParamRow(TokenTypes token)
@@ -235,7 +253,11 @@ namespace Mosa.Runtime.Metadata
 			TokenTypes originalToken = GetOriginalToken(token, out module);
 
 			ParamRow row = modules[module].Metadata.ReadParamRow(originalToken);
-			return row;
+			return new ParamRow(
+				row.Flags,
+				row.Sequence,
+				GetNewToken(module, row.NameIdx)
+			);
 		}
 
 		InterfaceImplRow IMetadataProvider.ReadInterfaceImplRow(TokenTypes token)
@@ -244,7 +266,10 @@ namespace Mosa.Runtime.Metadata
 			TokenTypes originalToken = GetOriginalToken(token, out module);
 
 			InterfaceImplRow row = modules[module].Metadata.ReadInterfaceImplRow(originalToken);
-			return row;
+			return new InterfaceImplRow(
+				GetNewToken(module, row.ClassTableIdx),
+				GetNewToken(module, row.InterfaceTableIdx)
+			);
 		}
 
 		MemberRefRow IMetadataProvider.ReadMemberRefRow(TokenTypes token)
@@ -253,7 +278,11 @@ namespace Mosa.Runtime.Metadata
 			TokenTypes originalToken = GetOriginalToken(token, out module);
 
 			MemberRefRow row = modules[module].Metadata.ReadMemberRefRow(originalToken);
-			return row;
+			return new MemberRefRow(
+				GetNewToken(module, row.ClassTableIdx),
+				GetNewToken(module, row.NameStringIdx),
+				GetNewToken(module, row.SignatureBlobIdx)
+			);
 		}
 
 		ConstantRow IMetadataProvider.ReadConstantRow(TokenTypes token)
@@ -262,7 +291,11 @@ namespace Mosa.Runtime.Metadata
 			TokenTypes originalToken = GetOriginalToken(token, out module);
 
 			ConstantRow row = modules[module].Metadata.ReadConstantRow(originalToken);
-			return row;
+			return new ConstantRow(
+				row.Type,
+				GetNewToken(module, row.Parent),
+				GetNewToken(module, row.ValueBlobIdx)
+			);
 		}
 
 		CustomAttributeRow IMetadataProvider.ReadCustomAttributeRow(TokenTypes token)
@@ -271,7 +304,11 @@ namespace Mosa.Runtime.Metadata
 			TokenTypes originalToken = GetOriginalToken(token, out module);
 
 			CustomAttributeRow row = modules[module].Metadata.ReadCustomAttributeRow(originalToken);
-			return row;
+			return new CustomAttributeRow(
+				GetNewToken(module, row.ParentTableIdx),
+				GetNewToken(module, row.TypeIdx),
+				GetNewToken(module, row.ValueBlobIdx)
+			);
 		}
 
 		FieldMarshalRow IMetadataProvider.ReadFieldMarshalRow(TokenTypes token)
@@ -280,7 +317,10 @@ namespace Mosa.Runtime.Metadata
 			TokenTypes originalToken = GetOriginalToken(token, out module);
 
 			FieldMarshalRow row = modules[module].Metadata.ReadFieldMarshalRow(originalToken);
-			return row;
+			return new FieldMarshalRow(
+				GetNewToken(module, row.ParentTableIdx),
+				GetNewToken(module, row.NativeTypeBlobIdx)
+			);
 		}
 
 		DeclSecurityRow IMetadataProvider.ReadDeclSecurityRow(TokenTypes token)
@@ -289,7 +329,11 @@ namespace Mosa.Runtime.Metadata
 			TokenTypes originalToken = GetOriginalToken(token, out module);
 
 			DeclSecurityRow row = modules[module].Metadata.ReadDeclSecurityRow(originalToken);
-			return row;
+			return new DeclSecurityRow(
+				row.Action,
+				GetNewToken(module, row.ParentTableIdx),
+				GetNewToken(module, row.PermissionSetBlobIdx)
+			);
 		}
 
 		ClassLayoutRow IMetadataProvider.ReadClassLayoutRow(TokenTypes token)
@@ -298,7 +342,11 @@ namespace Mosa.Runtime.Metadata
 			TokenTypes originalToken = GetOriginalToken(token, out module);
 
 			ClassLayoutRow row = modules[module].Metadata.ReadClassLayoutRow(originalToken);
-			return row;
+			return new ClassLayoutRow(
+				row.PackingSize,
+				row.ClassSize,
+				GetNewToken(module, row.ParentTypeDefIdx)
+			);
 		}
 
 		FieldLayoutRow IMetadataProvider.ReadFieldLayoutRow(TokenTypes token)
@@ -307,7 +355,10 @@ namespace Mosa.Runtime.Metadata
 			TokenTypes originalToken = GetOriginalToken(token, out module);
 
 			FieldLayoutRow row = modules[module].Metadata.ReadFieldLayoutRow(originalToken);
-			return row;
+			return new FieldLayoutRow(
+				row.Offset,
+				GetNewToken(module, row.Field)
+			);
 		}
 
 		StandAloneSigRow IMetadataProvider.ReadStandAloneSigRow(TokenTypes token)
@@ -316,7 +367,9 @@ namespace Mosa.Runtime.Metadata
 			TokenTypes originalToken = GetOriginalToken(token, out module);
 
 			StandAloneSigRow row = modules[module].Metadata.ReadStandAloneSigRow(originalToken);
-			return row;
+			return new StandAloneSigRow(
+				GetNewToken(module, row.SignatureBlobIdx)
+			);
 		}
 
 		EventMapRow IMetadataProvider.ReadEventMapRow(TokenTypes token)
@@ -325,7 +378,10 @@ namespace Mosa.Runtime.Metadata
 			TokenTypes originalToken = GetOriginalToken(token, out module);
 
 			EventMapRow row = modules[module].Metadata.ReadEventMapRow(originalToken);
-			return row;
+			return new EventMapRow(
+				GetNewToken(module, row.TypeDefTableIdx),
+				GetNewToken(module, row.EventListTableIdx)
+			);
 		}
 
 		EventRow IMetadataProvider.ReadEventRow(TokenTypes token)
@@ -334,7 +390,11 @@ namespace Mosa.Runtime.Metadata
 			TokenTypes originalToken = GetOriginalToken(token, out module);
 
 			EventRow row = modules[module].Metadata.ReadEventRow(originalToken);
-			return row;
+			return new EventRow(
+				row.Flags,
+				GetNewToken(module, row.NameStringIdx),
+				GetNewToken(module, row.EventTypeTableIdx)
+			);
 		}
 
 		PropertyMapRow IMetadataProvider.ReadPropertyMapRow(TokenTypes token)
@@ -343,7 +403,10 @@ namespace Mosa.Runtime.Metadata
 			TokenTypes originalToken = GetOriginalToken(token, out module);
 
 			PropertyMapRow row = modules[module].Metadata.ReadPropertyMapRow(originalToken);
-			return row;
+			return new PropertyMapRow(
+				GetNewToken(module, row.ParentTableIdx),
+				GetNewToken(module, row.PropertyTableIdx)
+			);
 		}
 
 		PropertyRow IMetadataProvider.ReadPropertyRow(TokenTypes token)
@@ -352,7 +415,11 @@ namespace Mosa.Runtime.Metadata
 			TokenTypes originalToken = GetOriginalToken(token, out module);
 
 			PropertyRow row = modules[module].Metadata.ReadPropertyRow(originalToken);
-			return row;
+			return new PropertyRow(
+				row.Flags,
+				GetNewToken(module, row.NameStringIdx),
+				GetNewToken(module, row.TypeBlobIdx)
+			);
 		}
 
 		MethodSemanticsRow IMetadataProvider.ReadMethodSemanticsRow(TokenTypes token)
@@ -361,7 +428,11 @@ namespace Mosa.Runtime.Metadata
 			TokenTypes originalToken = GetOriginalToken(token, out module);
 
 			MethodSemanticsRow row = modules[module].Metadata.ReadMethodSemanticsRow(originalToken);
-			return row;
+			return new MethodSemanticsRow(
+				row.Semantics,
+			GetNewToken(module, row.MethodTableIdx),
+			GetNewToken(module, row.AssociationTableIdx)
+			);
 		}
 
 		MethodImplRow IMetadataProvider.ReadMethodImplRow(TokenTypes token)
@@ -370,7 +441,11 @@ namespace Mosa.Runtime.Metadata
 			TokenTypes originalToken = GetOriginalToken(token, out module);
 
 			MethodImplRow row = modules[module].Metadata.ReadMethodImplRow(originalToken);
-			return row;
+			return new MethodImplRow(
+				GetNewToken(module,row.ClassTableIdx),
+				GetNewToken(module, row.MethodBodyTableIdx),
+				GetNewToken(module, row.MethodDeclarationTableIdx)
+			);
 		}
 
 		ModuleRefRow IMetadataProvider.ReadModuleRefRow(TokenTypes token)
@@ -379,7 +454,9 @@ namespace Mosa.Runtime.Metadata
 			TokenTypes originalToken = GetOriginalToken(token, out module);
 
 			ModuleRefRow row = modules[module].Metadata.ReadModuleRefRow(originalToken);
-			return row;
+			return new ModuleRefRow(
+				GetNewToken(module, row.NameStringIdx)
+			);
 		}
 
 		TypeSpecRow IMetadataProvider.ReadTypeSpecRow(TokenTypes token)
@@ -388,7 +465,9 @@ namespace Mosa.Runtime.Metadata
 			TokenTypes originalToken = GetOriginalToken(token, out module);
 
 			TypeSpecRow row = modules[module].Metadata.ReadTypeSpecRow(originalToken);
-			return row;
+			return new TypeSpecRow(
+				GetNewToken(module, row.SignatureBlobIdx)
+			);
 		}
 
 		ImplMapRow IMetadataProvider.ReadImplMapRow(TokenTypes token)
@@ -397,7 +476,12 @@ namespace Mosa.Runtime.Metadata
 			TokenTypes originalToken = GetOriginalToken(token, out module);
 
 			ImplMapRow row = modules[module].Metadata.ReadImplMapRow(originalToken);
-			return row;
+			return new ImplMapRow(
+				row.MappingFlags,
+			GetNewToken(module, row.MemberForwardedTableIdx),
+			GetNewToken(module, row.ImportNameStringIdx),
+			GetNewToken(module, row.ImportScopeTableIdx)
+			);
 		}
 
 		FieldRVARow IMetadataProvider.ReadFieldRVARow(TokenTypes token)
@@ -406,7 +490,10 @@ namespace Mosa.Runtime.Metadata
 			TokenTypes originalToken = GetOriginalToken(token, out module);
 
 			FieldRVARow row = modules[module].Metadata.ReadFieldRVARow(originalToken);
-			return row;
+			return new FieldRVARow(
+				row.Rva,
+				GetNewToken(module, row.FieldTableIdx)
+			);
 		}
 
 		AssemblyRow IMetadataProvider.ReadAssemblyRow(TokenTypes token)
@@ -415,7 +502,17 @@ namespace Mosa.Runtime.Metadata
 			TokenTypes originalToken = GetOriginalToken(token, out module);
 
 			AssemblyRow row = modules[module].Metadata.ReadAssemblyRow(originalToken);
-			return row;
+			return new AssemblyRow(
+				row.HashAlgId,
+				row.MajorVersion,
+				row.MinorVersion,
+				row.BuildNumber,
+				row.Revision,
+				row.Flags,
+				GetNewToken(module, row.PublicKeyIdx),
+				GetNewToken(module, row.NameIdx),
+				GetNewToken(module, row.CultureIdx)
+			);
 		}
 
 		AssemblyProcessorRow IMetadataProvider.ReadAssemblyProcessorRow(TokenTypes token)
@@ -424,7 +521,7 @@ namespace Mosa.Runtime.Metadata
 			TokenTypes originalToken = GetOriginalToken(token, out module);
 
 			AssemblyProcessorRow row = modules[module].Metadata.ReadAssemblyProcessorRow(originalToken);
-			return row;
+			return row; // no change
 		}
 
 		AssemblyOSRow IMetadataProvider.ReadAssemblyOSRow(TokenTypes token)
@@ -433,7 +530,7 @@ namespace Mosa.Runtime.Metadata
 			TokenTypes originalToken = GetOriginalToken(token, out module);
 
 			AssemblyOSRow row = modules[module].Metadata.ReadAssemblyOSRow(originalToken);
-			return row;
+			return row; // no change
 		}
 
 		AssemblyRefRow IMetadataProvider.ReadAssemblyRefRow(TokenTypes token)
@@ -442,7 +539,17 @@ namespace Mosa.Runtime.Metadata
 			TokenTypes originalToken = GetOriginalToken(token, out module);
 
 			AssemblyRefRow row = modules[module].Metadata.ReadAssemblyRefRow(originalToken);
-			return row;
+			return new AssemblyRefRow(
+				row.MajorVersion,
+				row.MinorVersion,
+				row.BuildNumber,
+				row.Revision,
+				row.Flags,
+				GetNewToken(module, row.PublicKeyOrTokenIdx),
+				GetNewToken(module, row.NameIdx),
+				GetNewToken(module, row.CultureIdx),
+				GetNewToken(module, row.HashValueIdx)
+			);
 		}
 
 		AssemblyRefProcessorRow IMetadataProvider.ReadAssemblyRefProcessorRow(TokenTypes token)
@@ -451,7 +558,10 @@ namespace Mosa.Runtime.Metadata
 			TokenTypes originalToken = GetOriginalToken(token, out module);
 
 			AssemblyRefProcessorRow row = modules[module].Metadata.ReadAssemblyRefProcessorRow(originalToken);
-			return row;
+			return new AssemblyRefProcessorRow(
+				row.Processor,
+			GetNewToken(module, row.AssemblyRef)
+			);
 		}
 
 		AssemblyRefOSRow IMetadataProvider.ReadAssemblyRefOSRow(TokenTypes token)
@@ -460,7 +570,12 @@ namespace Mosa.Runtime.Metadata
 			TokenTypes originalToken = GetOriginalToken(token, out module);
 
 			AssemblyRefOSRow row = modules[module].Metadata.ReadAssemblyRefOSRow(originalToken);
-			return row;
+			return new AssemblyRefOSRow(
+				row.PlatformId,
+				row.MajorVersion,
+				row.MinorVersion,
+				GetNewToken(module, row.AssemblyRefIdx)
+			);
 		}
 
 		FileRow IMetadataProvider.ReadFileRow(TokenTypes token)
@@ -469,7 +584,11 @@ namespace Mosa.Runtime.Metadata
 			TokenTypes originalToken = GetOriginalToken(token, out module);
 
 			FileRow row = modules[module].Metadata.ReadFileRow(originalToken);
-			return row;
+			return new FileRow(
+				row.Flags,
+				GetNewToken(module, row.NameStringIdx),
+				GetNewToken(module, row.HashValueBlobIdx)
+			);
 		}
 
 		ExportedTypeRow IMetadataProvider.ReadExportedTypeRow(TokenTypes token)
@@ -478,7 +597,13 @@ namespace Mosa.Runtime.Metadata
 			TokenTypes originalToken = GetOriginalToken(token, out module);
 
 			ExportedTypeRow row = modules[module].Metadata.ReadExportedTypeRow(originalToken);
-			return row;
+			return new ExportedTypeRow(
+				row.Flags,
+				GetNewToken(module, row.TypeDefTableIdx),
+				GetNewToken(module, row.TypeNameStringIdx),
+				GetNewToken(module, row.TypeNamespaceStringIdx),
+				GetNewToken(module, row.ImplementationTableIdx)
+			);
 		}
 
 		ManifestResourceRow IMetadataProvider.ReadManifestResourceRow(TokenTypes token)
@@ -487,7 +612,12 @@ namespace Mosa.Runtime.Metadata
 			TokenTypes originalToken = GetOriginalToken(token, out module);
 
 			ManifestResourceRow row = modules[module].Metadata.ReadManifestResourceRow(originalToken);
-			return row;
+			return new ManifestResourceRow(
+				row.Offset,
+				row.Flags,
+				GetNewToken(module, row.NameStringIdx),
+				GetNewToken(module, row.ImplementationTableIdx)
+			);
 		}
 
 		NestedClassRow IMetadataProvider.ReadNestedClassRow(TokenTypes token)
@@ -496,7 +626,10 @@ namespace Mosa.Runtime.Metadata
 			TokenTypes originalToken = GetOriginalToken(token, out module);
 
 			NestedClassRow row = modules[module].Metadata.ReadNestedClassRow(originalToken);
-			return row;
+			return new NestedClassRow(
+				GetNewToken(module, row.NestedClassTableIdx),
+				GetNewToken(module, row.EnclosingClassTableIdx)
+			);
 		}
 
 		GenericParamRow IMetadataProvider.ReadGenericParamRow(TokenTypes token)
@@ -505,7 +638,12 @@ namespace Mosa.Runtime.Metadata
 			TokenTypes originalToken = GetOriginalToken(token, out module);
 
 			GenericParamRow row = modules[module].Metadata.ReadGenericParamRow(originalToken);
-			return row;
+			return new GenericParamRow(
+				row.Number,
+				row.Flags,
+				GetNewToken(module, row.OwnerTableIdx),
+				GetNewToken(module, row.NameStringIdx)
+			);
 		}
 
 		MethodSpecRow IMetadataProvider.ReadMethodSpecRow(TokenTypes token)
@@ -514,7 +652,10 @@ namespace Mosa.Runtime.Metadata
 			TokenTypes originalToken = GetOriginalToken(token, out module);
 
 			MethodSpecRow row = modules[module].Metadata.ReadMethodSpecRow(originalToken);
-			return row;
+			return new MethodSpecRow(
+				GetNewToken(module, row.MethodTableIdx),
+				GetNewToken(module, row.InstantiationBlobIdx)
+			);
 		}
 
 		GenericParamConstraintRow IMetadataProvider.ReadGenericParamConstraintRow(TokenTypes token)
@@ -523,16 +664,10 @@ namespace Mosa.Runtime.Metadata
 			TokenTypes originalToken = GetOriginalToken(token, out module);
 
 			GenericParamConstraintRow row = modules[module].Metadata.ReadGenericParamConstraintRow(originalToken);
-			return row;
-		}
-
-		FieldRow[] IMetadataProvider.ReadFieldRows(TokenTypes token)
-		{
-			int module;
-			TokenTypes originalToken = GetOriginalToken(token, out module);
-
-			FieldRow[] row = modules[module].Metadata.ReadFieldRows(originalToken);
-			return row;
+			return new GenericParamConstraintRow(
+				GetNewToken(module, row.OwnerTableIdx),
+				GetNewToken(module, row.ConstraintTableIdx)
+			);
 		}
 
 		#endregion // IMetadataProvider members

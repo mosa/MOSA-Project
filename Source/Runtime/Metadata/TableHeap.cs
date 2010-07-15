@@ -488,28 +488,6 @@ namespace Mosa.Runtime.Metadata
 		/// </summary>
 		/// <param name="token">The token.</param>
 		/// <param name="result">The result.</param>
-		public FieldRow[] ReadFieldRows(TokenTypes token)
-		{
-			if ((token & TokenTypes.TableMask) != TokenTypes.Field)
-				throw new ArgumentException("Invalid token type for FieldRow.", @"token");
-
-			using (BinaryReader reader = CreateReaderForToken(token))
-			{
-				/*
-				return new FieldRow(
-					(FieldAttributes)reader.ReadUInt16(),
-					ReadIndexValue(reader, IndexType.StringHeap),
-					ReadIndexValue(reader, IndexType.BlobHeap)
-				);*/
-			}
-			return null;
-		}
-
-		/// <summary>
-		/// Reads the specified token.
-		/// </summary>
-		/// <param name="token">The token.</param>
-		/// <param name="result">The result.</param>
 		public MethodDefRow ReadMethodDefRow(TokenTypes token)
 		{
 			if ((token & TokenTypes.TableMask) != TokenTypes.MethodDef)

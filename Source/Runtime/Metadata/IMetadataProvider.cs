@@ -315,11 +315,5 @@ namespace Mosa.Runtime.Metadata
 		/// <returns></returns>
 		GenericParamConstraintRow ReadGenericParamConstraintRow(TokenTypes token);
 
-		/// <summary>
-		/// Reads the specified token.
-		/// </summary>
-		/// <param name="token">The generic parameter constraint row token.</param>
-		/// <returns></returns>
-		FieldRow[] ReadFieldRows(TokenTypes token);
 	}
 }

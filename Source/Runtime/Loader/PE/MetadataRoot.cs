@@ -476,12 +476,6 @@ namespace Mosa.Runtime.Loader.PE
 			return theap.ReadGenericParamConstraintRow(token);
 		}
 
-		FieldRow[] IMetadataProvider.ReadFieldRows(TokenTypes token)
-		{
-			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
-			return theap.ReadFieldRows(token);
-		}
-
 		#endregion // IMetadataProvider members
 	}
 }

@@ -82,7 +82,7 @@ namespace Mosa.Runtime.Metadata.Tables
         /// Retrieves the parameter sequence number.
         /// </summary>
         /// <value>The sequence.</value>
-        public int Sequence
+		public short Sequence
         {
             get { return _sequence; }
         }
