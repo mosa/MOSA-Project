@@ -61,7 +61,7 @@ namespace Mosa.Runtime.Metadata
 		#endregion // Data members
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="MetadataRoot"/> class.
+		/// Initializes a new instance of the <see cref="MergedMetadata"/> class.
 		/// </summary>
 		public MergedMetadata(IList<IMetadataModule> modules)
 		{

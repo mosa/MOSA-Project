@@ -402,7 +402,7 @@ namespace Mosa.Runtime.Metadata
 		/// Reads the specified token.
 		/// </summary>
 		/// <param name="token">The token.</param>
-		/// <param name="result">The result.</param>
+		/// <returns></returns>
 		public ModuleRow ReadModuleRow(TokenTypes token)
 		{
 			if ((token & TokenTypes.TableMask) != TokenTypes.Module)
@@ -424,7 +424,7 @@ namespace Mosa.Runtime.Metadata
 		/// Reads the specified token.
 		/// </summary>
 		/// <param name="token">The token.</param>
-		/// <param name="result">The result.</param>
+		/// <returns></returns>
 		public TypeRefRow ReadTypeRefRow(TokenTypes token)
 		{
 			if ((token & TokenTypes.TableMask) != TokenTypes.TypeRef)
@@ -444,7 +444,7 @@ namespace Mosa.Runtime.Metadata
 		/// Reads the specified token.
 		/// </summary>
 		/// <param name="token">The token.</param>
-		/// <param name="result">The result.</param>
+		/// <returns></returns>
 		public TypeDefRow ReadTypeDefRow(TokenTypes token)
 		{
 			if ((token & TokenTypes.TableMask) != TokenTypes.TypeDef)
@@ -467,7 +467,7 @@ namespace Mosa.Runtime.Metadata
 		/// Reads the specified token.
 		/// </summary>
 		/// <param name="token">The token.</param>
-		/// <param name="result">The result.</param>
+		/// <returns></returns>
 		public FieldRow ReadFieldRow(TokenTypes token)
 		{
 			if ((token & TokenTypes.TableMask) != TokenTypes.Field)
@@ -487,7 +487,7 @@ namespace Mosa.Runtime.Metadata
 		/// Reads the specified token.
 		/// </summary>
 		/// <param name="token">The token.</param>
-		/// <param name="result">The result.</param>
+		/// <returns></returns>
 		public MethodDefRow ReadMethodDefRow(TokenTypes token)
 		{
 			if ((token & TokenTypes.TableMask) != TokenTypes.MethodDef)
@@ -510,7 +510,7 @@ namespace Mosa.Runtime.Metadata
 		/// Reads the specified token.
 		/// </summary>
 		/// <param name="token">The token.</param>
-		/// <param name="result">The result.</param>
+		/// <returns></returns>
 		public ParamRow ReadParamRow(TokenTypes token)
 		{
 			if ((token & TokenTypes.TableMask) != TokenTypes.Param)
@@ -530,7 +530,7 @@ namespace Mosa.Runtime.Metadata
 		/// Reads the specified token.
 		/// </summary>
 		/// <param name="token">The token.</param>
-		/// <param name="result">The result.</param>
+		/// <returns></returns>
 		public InterfaceImplRow ReadInterfaceImplRow(TokenTypes token)
 		{
 			if ((token & TokenTypes.TableMask) != TokenTypes.InterfaceImpl)
@@ -549,7 +549,7 @@ namespace Mosa.Runtime.Metadata
 		/// Reads the specified token.
 		/// </summary>
 		/// <param name="token">The token.</param>
-		/// <param name="result">The result.</param>
+		/// <returns></returns>
 		public MemberRefRow ReadMemberRefRow(TokenTypes token)
 		{
 			if ((token & TokenTypes.TableMask) != TokenTypes.MemberRef)
@@ -569,7 +569,7 @@ namespace Mosa.Runtime.Metadata
 		/// Reads the specified token.
 		/// </summary>
 		/// <param name="token">The token.</param>
-		/// <param name="result">The result.</param>
+		/// <returns></returns>
 		public ConstantRow ReadConstantRow(TokenTypes token)
 		{
 			if ((token & TokenTypes.TableMask) != TokenTypes.Constant)
@@ -592,7 +592,7 @@ namespace Mosa.Runtime.Metadata
 		/// Reads the specified token.
 		/// </summary>
 		/// <param name="token">The token.</param>
-		/// <param name="result">The result.</param>
+		/// <returns></returns>
 		public CustomAttributeRow ReadCustomAttributeRow(TokenTypes token)
 		{
 			if ((token & TokenTypes.TableMask) != TokenTypes.CustomAttribute)
@@ -612,7 +612,7 @@ namespace Mosa.Runtime.Metadata
 		/// Reads the specified token.
 		/// </summary>
 		/// <param name="token">The token.</param>
-		/// <param name="result">The result.</param>
+		/// <returns></returns>
 		public FieldMarshalRow ReadFieldMarshalRow(TokenTypes token)
 		{
 			if ((token & TokenTypes.TableMask) != TokenTypes.FieldMarshal)
@@ -631,7 +631,7 @@ namespace Mosa.Runtime.Metadata
 		/// Reads the specified token.
 		/// </summary>
 		/// <param name="token">The token.</param>
-		/// <param name="result">The result.</param>
+		/// <returns></returns>
 		public DeclSecurityRow ReadDeclSecurityRow(TokenTypes token)
 		{
 			if ((token & TokenTypes.TableMask) != TokenTypes.DeclSecurity)
@@ -651,7 +651,7 @@ namespace Mosa.Runtime.Metadata
 		/// Reads the specified token.
 		/// </summary>
 		/// <param name="token">The token.</param>
-		/// <param name="result">The result.</param>
+		/// <returns></returns>
 		public ClassLayoutRow ReadClassLayoutRow(TokenTypes token)
 		{
 			if ((token & TokenTypes.TableMask) != TokenTypes.ClassLayout)
@@ -671,7 +671,7 @@ namespace Mosa.Runtime.Metadata
 		/// Reads the specified token.
 		/// </summary>
 		/// <param name="token">The token.</param>
-		/// <param name="result">The result.</param>
+		/// <returns></returns>
 		public FieldLayoutRow ReadFieldLayoutRow(TokenTypes token)
 		{
 			if ((token & TokenTypes.TableMask) != TokenTypes.FieldLayout)
@@ -690,7 +690,7 @@ namespace Mosa.Runtime.Metadata
 		/// Reads the specified token.
 		/// </summary>
 		/// <param name="token">The token.</param>
-		/// <param name="result">The result.</param>
+		/// <returns></returns>
 		public StandAloneSigRow ReadStandAloneSigRow(TokenTypes token)
 		{
 			if ((token & TokenTypes.TableMask) != TokenTypes.StandAloneSig)
@@ -708,7 +708,7 @@ namespace Mosa.Runtime.Metadata
 		/// Reads the specified token.
 		/// </summary>
 		/// <param name="token">The token.</param>
-		/// <param name="result">The result.</param>
+		/// <returns></returns>
 		public EventMapRow ReadEventMapRow(TokenTypes token)
 		{
 			if ((token & TokenTypes.TableMask) != TokenTypes.EventMap)
@@ -727,7 +727,7 @@ namespace Mosa.Runtime.Metadata
 		/// Reads the specified token.
 		/// </summary>
 		/// <param name="token">The token.</param>
-		/// <param name="result">The result.</param>
+		/// <returns></returns>
 		public EventRow ReadEventRow(TokenTypes token)
 		{
 			if ((token & TokenTypes.TableMask) != TokenTypes.Event)
@@ -747,7 +747,7 @@ namespace Mosa.Runtime.Metadata
 		/// Reads the specified token.
 		/// </summary>
 		/// <param name="token">The token.</param>
-		/// <param name="result">The result.</param>
+		/// <returns></returns>
 		public PropertyMapRow ReadPropertyMapRow(TokenTypes token)
 		{
 			if ((token & TokenTypes.TableMask) != TokenTypes.PropertyMap)
@@ -766,7 +766,7 @@ namespace Mosa.Runtime.Metadata
 		/// Reads the specified token.
 		/// </summary>
 		/// <param name="token">The token.</param>
-		/// <param name="result">The result.</param>
+		/// <returns></returns>
 		public PropertyRow ReadPropertyRow(TokenTypes token)
 		{
 			if ((token & TokenTypes.TableMask) != TokenTypes.Property)
@@ -786,7 +786,7 @@ namespace Mosa.Runtime.Metadata
 		/// Reads the specified token.
 		/// </summary>
 		/// <param name="token">The token.</param>
-		/// <param name="result">The result.</param>
+		/// <returns></returns>
 		public MethodSemanticsRow ReadMethodSemanticsRow(TokenTypes token)
 		{
 			using (BinaryReader reader = CreateReaderForToken(token))
@@ -806,7 +806,7 @@ namespace Mosa.Runtime.Metadata
 		/// Reads the specified token.
 		/// </summary>
 		/// <param name="token">The token.</param>
-		/// <param name="result">The result.</param>
+		/// <returns></returns>
 		public MethodImplRow ReadMethodImplRow(TokenTypes token)
 		{
 			if ((token & TokenTypes.TableMask) != TokenTypes.MethodImpl)
@@ -826,7 +826,7 @@ namespace Mosa.Runtime.Metadata
 		/// Reads the specified token.
 		/// </summary>
 		/// <param name="token">The token.</param>
-		/// <param name="result">The result.</param>
+		/// <returns></returns>
 		public ModuleRefRow ReadModuleRefRow(TokenTypes token)
 		{
 			if ((token & TokenTypes.TableMask) != TokenTypes.ModuleRef)
@@ -844,7 +844,7 @@ namespace Mosa.Runtime.Metadata
 		/// Reads the specified token.
 		/// </summary>
 		/// <param name="token">The token.</param>
-		/// <param name="result">The result.</param>
+		/// <returns></returns>
 		public TypeSpecRow ReadTypeSpecRow(TokenTypes token)
 		{
 			if ((token & TokenTypes.TableMask) != TokenTypes.TypeSpec)
@@ -862,7 +862,7 @@ namespace Mosa.Runtime.Metadata
 		/// Reads the specified token.
 		/// </summary>
 		/// <param name="token">The token.</param>
-		/// <param name="result">The result.</param>
+		/// <returns></returns>
 		public ImplMapRow ReadImplMapRow(TokenTypes token)
 		{
 			if ((token & TokenTypes.TableMask) != TokenTypes.ImplMap)
@@ -883,7 +883,7 @@ namespace Mosa.Runtime.Metadata
 		/// Reads the specified token.
 		/// </summary>
 		/// <param name="token">The token.</param>
-		/// <param name="result">The result.</param>
+		/// <returns></returns>
 		public FieldRVARow ReadFieldRVARow(TokenTypes token)
 		{
 			if ((token & TokenTypes.TableMask) != TokenTypes.FieldRVA)
@@ -902,7 +902,7 @@ namespace Mosa.Runtime.Metadata
 		/// Reads the specified token.
 		/// </summary>
 		/// <param name="token">The token.</param>
-		/// <param name="result">The result.</param>
+		/// <returns></returns>
 		public AssemblyRow ReadAssemblyRow(TokenTypes token)
 		{
 			if ((token & TokenTypes.TableMask) != TokenTypes.Assembly)
@@ -928,7 +928,7 @@ namespace Mosa.Runtime.Metadata
 		/// Reads the specified token.
 		/// </summary>
 		/// <param name="token">The token.</param>
-		/// <param name="result">The result.</param>
+		/// <returns></returns>
 		public AssemblyProcessorRow ReadAssemblyProcessorRow(TokenTypes token)
 		{
 			if ((token & TokenTypes.TableMask) != TokenTypes.AssemblyProcessor)
@@ -946,7 +946,7 @@ namespace Mosa.Runtime.Metadata
 		/// Reads the specified token.
 		/// </summary>
 		/// <param name="token">The token.</param>
-		/// <param name="result">The result.</param>
+		/// <returns></returns>
 		public AssemblyOSRow ReadAssemblyOSRow(TokenTypes token)
 		{
 			if ((token & TokenTypes.TableMask) != TokenTypes.AssemblyOS)
@@ -966,7 +966,7 @@ namespace Mosa.Runtime.Metadata
 		/// Reads the specified token.
 		/// </summary>
 		/// <param name="token">The token.</param>
-		/// <param name="result">The result.</param>
+		/// <returns></returns>
 		public AssemblyRefRow ReadAssemblyRefRow(TokenTypes token)
 		{
 			if ((token & TokenTypes.TableMask) != TokenTypes.AssemblyRef)
@@ -992,7 +992,7 @@ namespace Mosa.Runtime.Metadata
 		/// Reads the specified token.
 		/// </summary>
 		/// <param name="token">The token.</param>
-		/// <param name="result">The result.</param>
+		/// <returns></returns>
 		public AssemblyRefProcessorRow ReadAssemblyRefProcessorRow(TokenTypes token)
 		{
 			if ((token & TokenTypes.TableMask) != TokenTypes.AssemblyRefProcessor)
@@ -1011,7 +1011,7 @@ namespace Mosa.Runtime.Metadata
 		/// Reads the specified token.
 		/// </summary>
 		/// <param name="token">The token.</param>
-		/// <param name="result">The result.</param>
+		/// <returns></returns>
 		public AssemblyRefOSRow ReadAssemblyRefOSRow(TokenTypes token)
 		{
 			if ((token & TokenTypes.TableMask) != TokenTypes.AssemblyRefOS)
@@ -1032,7 +1032,7 @@ namespace Mosa.Runtime.Metadata
 		/// Reads the specified token.
 		/// </summary>
 		/// <param name="token">The token.</param>
-		/// <param name="result">The result.</param>
+		/// <returns></returns>
 		public FileRow ReadFileRow(TokenTypes token)
 		{
 			if ((token & TokenTypes.TableMask) != TokenTypes.File)
@@ -1052,7 +1052,7 @@ namespace Mosa.Runtime.Metadata
 		/// Reads the specified token.
 		/// </summary>
 		/// <param name="token">The token.</param>
-		/// <param name="result">The result.</param>
+		/// <returns></returns>
 		public ExportedTypeRow ReadExportedTypeRow(TokenTypes token)
 		{
 			if ((token & TokenTypes.TableMask) != TokenTypes.ExportedType)
@@ -1074,7 +1074,7 @@ namespace Mosa.Runtime.Metadata
 		/// Reads the specified token.
 		/// </summary>
 		/// <param name="token">The token.</param>
-		/// <param name="result">The result.</param>
+		/// <returns></returns>
 		public ManifestResourceRow ReadManifestResourceRow(TokenTypes token)
 		{
 			if ((token & TokenTypes.TableMask) != TokenTypes.ManifestResource)
@@ -1095,7 +1095,7 @@ namespace Mosa.Runtime.Metadata
 		/// Reads the specified token.
 		/// </summary>
 		/// <param name="token">The token.</param>
-		/// <param name="result">The result.</param>
+		/// <returns></returns>
 		public NestedClassRow ReadNestedClassRow(TokenTypes token)
 		{
 			if ((token & TokenTypes.TableMask) != TokenTypes.NestedClass)
@@ -1114,7 +1114,7 @@ namespace Mosa.Runtime.Metadata
 		/// Reads the specified token.
 		/// </summary>
 		/// <param name="token">The token.</param>
-		/// <param name="result">The result.</param>
+		/// <returns></returns>
 		public GenericParamRow ReadGenericParamRow(TokenTypes token)
 		{
 			if ((token & TokenTypes.TableMask) != TokenTypes.GenericParam)
@@ -1135,7 +1135,7 @@ namespace Mosa.Runtime.Metadata
 		/// Reads the specified token.
 		/// </summary>
 		/// <param name="token">The token.</param>
-		/// <param name="result">The result.</param>
+		/// <returns></returns>
 		public MethodSpecRow ReadMethodSpecRow(TokenTypes token)
 		{
 			if ((token & TokenTypes.TableMask) != TokenTypes.MethodSpec)

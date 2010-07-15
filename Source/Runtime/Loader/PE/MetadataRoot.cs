@@ -175,6 +175,11 @@ namespace Mosa.Runtime.Loader.PE
 
 		#region IMetadataProvider members
 
+		/// <summary>
+		/// Gets the max token value.
+		/// </summary>
+		/// <param name="tokenType">Type of the token.</param>
+		/// <returns></returns>
 		TokenTypes IMetadataProvider.GetMaxTokenValue(TokenTypes tokenType)
 		{
 			TokenTypes result = 0;
@@ -203,6 +208,11 @@ namespace Mosa.Runtime.Loader.PE
 			return result;
 		}
 
+		/// <summary>
+		/// Reads a string heap or user string heap entry.
+		/// </summary>
+		/// <param name="token">The token of the string to read.</param>
+		/// <returns></returns>
 		string IMetadataProvider.ReadString(TokenTypes token)
 		{
 			switch ((TokenTypes.TableMask & token))
@@ -222,6 +232,11 @@ namespace Mosa.Runtime.Loader.PE
 			}
 		}
 
+		/// <summary>
+		/// Reads a guid heap entry.
+		/// </summary>
+		/// <param name="token">The token of the guid heap entry to read.</param>
+		/// <returns></returns>
 		Guid IMetadataProvider.ReadGuid(TokenTypes token)
 		{
 			if ((TokenTypes.TableMask & token) == TokenTypes.Guid)
@@ -235,6 +250,11 @@ namespace Mosa.Runtime.Loader.PE
 			}
 		}
 
+		/// <summary>
+		/// Reads a blob heap entry.
+		/// </summary>
+		/// <param name="token">The token of the blob heap entry to read.</param>
+		/// <returns></returns>
 		byte[] IMetadataProvider.ReadBlob(TokenTypes token)
 		{
 			if (TokenTypes.Blob == (TokenTypes.TableMask & token))
@@ -248,228 +268,418 @@ namespace Mosa.Runtime.Loader.PE
 			}
 		}
 
+		/// <summary>
+		/// Reads a module row from provider.
+		/// </summary>
+		/// <param name="token">The module row token.</param>
+		/// <returns></returns>
 		ModuleRow IMetadataProvider.ReadModuleRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadModuleRow(token);
 		}
 
+		/// <summary>
+		/// Reads a type reference row from provider.
+		/// </summary>
+		/// <param name="token">The type reference row token.</param>
+		/// <returns></returns>
 		TypeRefRow IMetadataProvider.ReadTypeRefRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadTypeRefRow(token);
 		}
 
+		/// <summary>
+		/// Reads a type definition row from provider.
+		/// </summary>
+		/// <param name="token">The type definition row token.</param>
+		/// <returns></returns>
 		TypeDefRow IMetadataProvider.ReadTypeDefRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadTypeDefRow(token);
 		}
 
+		/// <summary>
+		/// Reads a _stackFrameIndex definition row from provider.
+		/// </summary>
+		/// <param name="token">The _stackFrameIndex definition row token.</param>
+		/// <returns></returns>
 		FieldRow IMetadataProvider.ReadFieldRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadFieldRow(token);
 		}
 
+		/// <summary>
+		/// Reads a method definition row from provider.
+		/// </summary>
+		/// <param name="token">The method definition row token.</param>
+		/// <returns></returns>
 		MethodDefRow IMetadataProvider.ReadMethodDefRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadMethodDefRow(token);
 		}
 
+		/// <summary>
+		/// Reads a parameter row from provider.
+		/// </summary>
+		/// <param name="token">The parameter row token.</param>
+		/// <returns></returns>
 		ParamRow IMetadataProvider.ReadParamRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadParamRow(token);
 		}
 
+		/// <summary>
+		/// Reads an interface implementation row from provider.
+		/// </summary>
+		/// <param name="token">The interface implementation row token.</param>
+		/// <returns></returns>
 		InterfaceImplRow IMetadataProvider.ReadInterfaceImplRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadInterfaceImplRow(token);
 		}
 
+		/// <summary>
+		/// Reads an member reference row from provider.
+		/// </summary>
+		/// <param name="token">The member reference row token.</param>
+		/// <returns></returns>
 		MemberRefRow IMetadataProvider.ReadMemberRefRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadMemberRefRow(token);
 		}
 
+		/// <summary>
+		/// Reads a constant row from provider.
+		/// </summary>
+		/// <param name="token">The constant row token.</param>
+		/// <returns></returns>
 		ConstantRow IMetadataProvider.ReadConstantRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadConstantRow(token);
 		}
 
+		/// <summary>
+		/// Reads a constant row from provider.
+		/// </summary>
+		/// <param name="token">The constant row token.</param>
+		/// <returns></returns>
 		CustomAttributeRow IMetadataProvider.ReadCustomAttributeRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadCustomAttributeRow(token);
 		}
 
+		/// <summary>
+		/// Reads a _stackFrameIndex marshal row from provider.
+		/// </summary>
+		/// <param name="token">The _stackFrameIndex marshal row token.</param>
+		/// <returns></returns>
 		FieldMarshalRow IMetadataProvider.ReadFieldMarshalRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadFieldMarshalRow(token);
 		}
 
+		/// <summary>
+		/// Reads a declarative security row from provider.
+		/// </summary>
+		/// <param name="token">The declarative security row token.</param>
+		/// <returns></returns>
 		DeclSecurityRow IMetadataProvider.ReadDeclSecurityRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadDeclSecurityRow(token);
 		}
 
+		/// <summary>
+		/// Reads a class layout row from provider.
+		/// </summary>
+		/// <param name="token">The class layout row token.</param>
+		/// <returns></returns>
 		ClassLayoutRow IMetadataProvider.ReadClassLayoutRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadClassLayoutRow(token);
 		}
 
+		/// <summary>
+		/// Reads a _stackFrameIndex layout row from provider.
+		/// </summary>
+		/// <param name="token">The _stackFrameIndex layout row token.</param>
+		/// <returns></returns>
 		FieldLayoutRow IMetadataProvider.ReadFieldLayoutRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadFieldLayoutRow(token);
 		}
 
+		/// <summary>
+		/// Reads a standalone signature row from provider.
+		/// </summary>
+		/// <param name="token">The standalone signature row token.</param>
+		/// <returns></returns>
 		StandAloneSigRow IMetadataProvider.ReadStandAloneSigRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadStandAloneSigRow(token);
 		}
 
+		/// <summary>
+		/// Reads a event map row from provider.
+		/// </summary>
+		/// <param name="token">The event map row token.</param>
+		/// <returns></returns>
 		EventMapRow IMetadataProvider.ReadEventMapRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadEventMapRow(token);
 		}
 
+		/// <summary>
+		/// Reads a event row from provider.
+		/// </summary>
+		/// <param name="token">The event row token.</param>
+		/// <returns></returns>
 		EventRow IMetadataProvider.ReadEventRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadEventRow(token);
 		}
 
+		/// <summary>
+		/// Reads a property map row from provider.
+		/// </summary>
+		/// <param name="token">The property map row token.</param>
+		/// <returns></returns>
 		PropertyMapRow IMetadataProvider.ReadPropertyMapRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadPropertyMapRow(token);
 		}
 
+		/// <summary>
+		/// Reads a property row from provider.
+		/// </summary>
+		/// <param name="token">The property row token.</param>
+		/// <returns></returns>
 		PropertyRow IMetadataProvider.ReadPropertyRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadPropertyRow(token);
 		}
 
+		/// <summary>
+		/// Reads a method semantics row from provider.
+		/// </summary>
+		/// <param name="token">The method semantics row token.</param>
+		/// <returns></returns>
 		MethodSemanticsRow IMetadataProvider.ReadMethodSemanticsRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadMethodSemanticsRow(token);
 		}
 
+		/// <summary>
+		/// Reads a method impl row from provider.
+		/// </summary>
+		/// <param name="token">The method impl row token.</param>
+		/// <returns></returns>
 		MethodImplRow IMetadataProvider.ReadMethodImplRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadMethodImplRow(token);
 		}
 
+		/// <summary>
+		/// Reads a module ref row from provider.
+		/// </summary>
+		/// <param name="token">The module ref row token.</param>
+		/// <returns></returns>
 		ModuleRefRow IMetadataProvider.ReadModuleRefRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadModuleRefRow(token);
 		}
 
+		/// <summary>
+		/// Reads a typespec row from provider.
+		/// </summary>
+		/// <param name="token">The typespec row token.</param>
+		/// <returns></returns>
 		TypeSpecRow IMetadataProvider.ReadTypeSpecRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadTypeSpecRow(token);
 		}
 
+		/// <summary>
+		/// Reads a implementation map row from provider.
+		/// </summary>
+		/// <param name="token">The implementation map row token.</param>
+		/// <returns></returns>
 		ImplMapRow IMetadataProvider.ReadImplMapRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadImplMapRow(token);
 		}
 
+		/// <summary>
+		/// Reads a _stackFrameIndex rva row from provider.
+		/// </summary>
+		/// <param name="token">The _stackFrameIndex rva row token.</param>
+		/// <returns></returns>
 		FieldRVARow IMetadataProvider.ReadFieldRVARow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadFieldRVARow(token);
 		}
 
+		/// <summary>
+		/// Reads a assembly row from provider.
+		/// </summary>
+		/// <param name="token">The assembly row token.</param>
+		/// <returns></returns>
 		AssemblyRow IMetadataProvider.ReadAssemblyRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadAssemblyRow(token);
 		}
 
+		/// <summary>
+		/// Reads a assembly processor row from provider.
+		/// </summary>
+		/// <param name="token">The assembly processor row token.</param>
+		/// <returns></returns>
 		AssemblyProcessorRow IMetadataProvider.ReadAssemblyProcessorRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadAssemblyProcessorRow(token);
 		}
 
+		/// <summary>
+		/// Reads a assembly os row from provider.
+		/// </summary>
+		/// <param name="token">The assembly os row token.</param>
+		/// <returns></returns>
 		AssemblyOSRow IMetadataProvider.ReadAssemblyOSRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadAssemblyOSRow(token);
 		}
 
+		/// <summary>
+		/// Reads a assembly reference row from provider.
+		/// </summary>
+		/// <param name="token">The assembly reference row token.</param>
+		/// <returns></returns>
 		AssemblyRefRow IMetadataProvider.ReadAssemblyRefRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadAssemblyRefRow(token);
 		}
 
+		/// <summary>
+		/// Reads a assembly reference processor row from provider.
+		/// </summary>
+		/// <param name="token">The assembly reference processor row token.</param>
+		/// <returns></returns>
 		AssemblyRefProcessorRow IMetadataProvider.ReadAssemblyRefProcessorRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadAssemblyRefProcessorRow(token);
 		}
 
+		/// <summary>
+		/// Reads a assembly reference os row from provider.
+		/// </summary>
+		/// <param name="token">The assembly reference os row token.</param>
+		/// <returns></returns>
 		AssemblyRefOSRow IMetadataProvider.ReadAssemblyRefOSRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadAssemblyRefOSRow(token);
 		}
 
+		/// <summary>
+		/// Reads a file row from provider.
+		/// </summary>
+		/// <param name="token">The file row token.</param>
+		/// <returns></returns>
 		FileRow IMetadataProvider.ReadFileRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadFileRow(token);
 		}
 
+		/// <summary>
+		/// Reads an exported type row from provider.
+		/// </summary>
+		/// <param name="token">The exported type row token.</param>
+		/// <returns></returns>
 		ExportedTypeRow IMetadataProvider.ReadExportedTypeRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadExportedTypeRow(token);
 		}
 
+		/// <summary>
+		/// Reads a manifest resource row from provider.
+		/// </summary>
+		/// <param name="token">The manifest resource row token.</param>
+		/// <returns></returns>
 		ManifestResourceRow IMetadataProvider.ReadManifestResourceRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadManifestResourceRow(token);
 		}
 
+		/// <summary>
+		/// Reads a manifest resource row from provider.
+		/// </summary>
+		/// <param name="token">The manifest resource row token.</param>
+		/// <returns></returns>
 		NestedClassRow IMetadataProvider.ReadNestedClassRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadNestedClassRow(token);
 		}
 
+		/// <summary>
+		/// Reads a generic parameter row from provider.
+		/// </summary>
+		/// <param name="token">The generic parameter row token.</param>
+		/// <returns></returns>
 		GenericParamRow IMetadataProvider.ReadGenericParamRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadGenericParamRow(token);
 		}
 
+		/// <summary>
+		/// Reads a method specification row from provider.
+		/// </summary>
+		/// <param name="token">The method specification row token.</param>
+		/// <returns></returns>
 		MethodSpecRow IMetadataProvider.ReadMethodSpecRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadMethodSpecRow(token);
 		}
 
+		/// <summary>
+		/// Reads a generic parameter constraint row from provider.
+		/// </summary>
+		/// <param name="token">The generic parameter constraint row token.</param>
+		/// <returns></returns>
 		GenericParamConstraintRow IMetadataProvider.ReadGenericParamConstraintRow(TokenTypes token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
