@@ -57,11 +57,9 @@ namespace Mosa.Runtime.Metadata.Blobs
 		{
 			// Return value
 			object result;
-			// The blob data
-			byte[] blob = null;
 
 			// Try to load the blob from the module
-			module.Metadata.Read(attributeBlob, out blob);
+			byte[] blob = module.Metadata.ReadBlob(attributeBlob);
 			if (null != blob) {
 				if (0 != blob.Length) {
 					// Create a binary reader for the blob

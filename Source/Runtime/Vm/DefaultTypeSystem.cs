@@ -245,9 +245,9 @@ namespace Mosa.Runtime.Vm
         private int ResolveAssemblyRef(IMetadataModule module, ref TypeRefRow typeRef)
         {
             AssemblyRefRow arr;
-            string ns, name;
-            module.Metadata.Read(typeRef.TypeNameIdx, out name);
-            module.Metadata.Read(typeRef.TypeNamespaceIdx, out ns);
+            
+            string name = module.Metadata.ReadString(typeRef.TypeNameIdx);
+			string ns = module.Metadata.ReadString(typeRef.TypeNamespaceIdx);
             module.Metadata.Read(typeRef.ResolutionScopeIdx, out arr);
             IAssemblyLoader loader = RuntimeBase.Instance.AssemblyLoader;
             IMetadataModule dependency = loader.Resolve(module.Metadata, arr);
@@ -400,8 +400,7 @@ namespace Mosa.Runtime.Vm
 			if (ownerType == null)
 				throw new InvalidOperationException(	String.Format(@"Failed to retrieve owner type for Token {0:x} (Table {1}) in {2}", row.ClassTableIdx, row.ClassTableIdx & TokenTypes.TableMask, module.Name));
 			
-			string fieldName;
-			metadata.Read(row.NameStringIdx, out fieldName);
+			string fieldName = metadata.ReadString(row.NameStringIdx);
 			
 			foreach (RuntimeField field in ownerType.Fields)
 			{
@@ -511,8 +510,7 @@ namespace Mosa.Runtime.Vm
                         MemberRefRow row;
                         scope.Metadata.Read(token, out row);
                         RuntimeType type = this.GetType(context, scope, row.ClassTableIdx);
-                        string nameString;
-                        scope.Metadata.Read(row.NameStringIdx, out nameString);
+                        string nameString = scope.Metadata.ReadString(row.NameStringIdx);
                         MethodSignature sig = (MethodSignature)Signature.FromMemberRefSignatureToken(type, scope.Metadata, row.SignatureBlobIdx);
                         foreach (RuntimeMethod method in type.Methods)
                         {
@@ -995,9 +993,8 @@ namespace Mosa.Runtime.Vm
                 case TokenTypes.AssemblyRef:
                     AssemblyRefRow asmRefRow;
                     module.Metadata.Read(row.ResolutionScopeIdx, out asmRefRow);
-                    string typeNamespace, typeName;
-                    module.Metadata.Read(row.TypeNameIdx, out typeName);
-                    module.Metadata.Read(row.TypeNamespaceIdx, out typeNamespace);
+					string typeName = module.Metadata.ReadString(row.TypeNameIdx);
+					string typeNamespace = module.Metadata.ReadString(row.TypeNamespaceIdx);
                     IMetadataModule resolvedModule = RuntimeBase.Instance.AssemblyLoader.Resolve(module.Metadata, asmRefRow);
 
                     // HACK: If there's an easier way to do this without all those string comparisons, I'm all for it

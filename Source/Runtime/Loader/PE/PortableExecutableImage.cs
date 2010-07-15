@@ -170,11 +170,9 @@ namespace Mosa.Runtime.Loader.PE
         {
             get
             {
-                string result;
                 AssemblyRow arow;
                 _metadataRoot.Read(TokenTypes.Assembly + 1, out arow);
-                _metadataRoot.Read(arow.NameIdx, out result);
-                return result;
+                return _metadataRoot.ReadString(arow.NameIdx);
             }
         }
 

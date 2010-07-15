@@ -95,8 +95,7 @@ namespace Mosa.Runtime.Loader
 		/// </returns>
 		public IMetadataModule Resolve(IMetadataProvider provider, AssemblyRefRow assemblyRef)
 		{
-		    string name;
-			provider.Read(assemblyRef.NameIdx, out name);
+		    string name = provider.ReadString(assemblyRef.NameIdx);
 
 			IMetadataModule result = GetLoadedAssembly(name) ?? DoLoadAssembly(name + ".dll");
 		    if (result == null)

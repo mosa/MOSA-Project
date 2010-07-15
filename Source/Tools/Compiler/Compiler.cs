@@ -249,8 +249,7 @@ namespace Mosa.Tools.Compiler
                 // Create the compiler
                 using (AotCompiler aot = new AotCompiler(this.architectureSelector.Architecture, this.GetMainAssembly()))
                 {
-                    aot.Pipeline.AddRange(
-                        new IAssemblyCompilerStage[] 
+                    aot.Pipeline.AddRange(new IAssemblyCompilerStage[] 
                     {
                         this.bootFormatStage,
 						new x86.InterruptBuilderStage(),

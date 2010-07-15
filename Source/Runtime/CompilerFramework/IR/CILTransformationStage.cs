@@ -674,8 +674,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
             IAssemblyLinker linker = this.MethodCompiler.Linker;
             IMetadataModule assembly = this.MethodCompiler.Assembly;
 
-            string referencedString;
-            assembly.Metadata.Read(ctx.Token, out referencedString);
+            string referencedString = assembly.Metadata.ReadString(ctx.Token);
 
             string symbolName = @"$ldstr$" + assembly.Name + "$String" + ctx.Token.ToString(@"x");
 

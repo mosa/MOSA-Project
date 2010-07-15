@@ -50,10 +50,10 @@ namespace Mosa.Runtime.Loader.PE
 		/// </summary>
 		private ushort MinorVersion;
 
-        /// <summary>
-        /// Reserved, always 0 (according to ISO/IEC 23271:2006 (E), §24.1)
-        /// </summary>
-	    private uint Reserved;
+		/// <summary>
+		/// Reserved, always 0 (according to ISO/IEC 23271:2006 (E), §24.1)
+		/// </summary>
+		private uint Reserved;
 
 		/// <summary>
 		/// UTF8-encoded version string of the provider format.
@@ -70,7 +70,12 @@ namespace Mosa.Runtime.Loader.PE
 		/// </summary>
 		private Heap[] _streams = new Heap[(int)HeapType.MaxType];
 
-	    #endregion // Data members
+		/// <summary>
+		/// Metadata binary byte array.
+		/// </summary>	
+		byte[] metadata;
+
+		#endregion // Data members
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MetadataRoot"/> class.
@@ -90,12 +95,12 @@ namespace Mosa.Runtime.Loader.PE
 		/// <returns>True, if the stream contains a valid and supported provider format.</returns>
 		public void Initialize(byte[] metadata)
 		{
-			Metadata = metadata;
+			this.metadata = metadata;
 			MemoryStream ms = new MemoryStream(metadata);
 			BinaryReader reader = new BinaryReader(ms);
-		    string name;
+			string name;
 
-		    uint signature = reader.ReadUInt32();
+			uint signature = reader.ReadUInt32();
 			if (MetadataRootSignature != signature)
 				throw new ArgumentException(@"Invalid provider format.", @"provider");
 
@@ -112,29 +117,36 @@ namespace Mosa.Runtime.Loader.PE
 			ushort streams = reader.ReadUInt16();
 
 			// Read stream headers
-			for (ushort i = 0; i < streams; i++) {
+			for (ushort i = 0; i < streams; i++)
+			{
 				int offset = reader.ReadInt32();
 				int size = reader.ReadInt32();
 				int position = (int)reader.BaseStream.Position;
 				length = Array.IndexOf<byte>(metadata, 0, position, 32);
 				name = Encoding.ASCII.GetString(metadata, position, length - position);
-			    HeapType kind;
-			    if (name.Equals("#Strings")) {
+				HeapType kind;
+				if (name.Equals("#Strings"))
+				{
 					kind = HeapType.String;
 				}
-				else if (name.Equals("#US")) {
+				else if (name.Equals("#US"))
+				{
 					kind = HeapType.UserString;
 				}
-				else if (name.Equals("#Blob")) {
+				else if (name.Equals("#Blob"))
+				{
 					kind = HeapType.Blob;
 				}
-				else if (name.Equals("#GUID")) {
+				else if (name.Equals("#GUID"))
+				{
 					kind = HeapType.Guid;
 				}
-				else if (name.Equals("#~")) {
+				else if (name.Equals("#~"))
+				{
 					kind = HeapType.Tables;
 				}
-				else {
+				else
+				{
 					throw new NotSupportedException();
 				}
 
@@ -163,17 +175,11 @@ namespace Mosa.Runtime.Loader.PE
 
 		#region IMetadataProvider members
 
-		IMetadataModule IMetadataProvider.Assembly { get { return _assemblyImage; } }
-
-	    /// <summary>
-	    /// Retrieves the metadata binary byte array .
-	    /// </summary>
-	    public byte[] Metadata { get; private set; }
-
-	    TokenTypes IMetadataProvider.GetMaxTokenValue(TokenTypes tokenType)
+		TokenTypes IMetadataProvider.GetMaxTokenValue(TokenTypes tokenType)
 		{
 			TokenTypes result = 0;
-			switch ((tokenType & TokenTypes.TableMask)) {
+			switch ((tokenType & TokenTypes.TableMask))
+			{
 				case TokenTypes.String: // String heap size
 					result = TokenTypes.String | (TokenTypes)((Heap)_streams[(int)HeapType.String]).Size;
 					break;
@@ -197,57 +203,49 @@ namespace Mosa.Runtime.Loader.PE
 			return result;
 		}
 
-		TokenTypes IMetadataProvider.Read(TokenTypes token, out string result)
+		string IMetadataProvider.ReadString(TokenTypes token)
 		{
-		    switch ((TokenTypes.TableMask & token))
-		    {
-		        case TokenTypes.String:
-		            {
-		                StringHeap sheap = (StringHeap)_streams[(int)HeapType.String];
-		                result = sheap.ReadString(ref token);
-		            }
-		            break;
-		        case TokenTypes.UserString:
-		            {
-		                UserStringHeap usheap = (UserStringHeap)_streams[(int)HeapType.UserString];
-		                result = usheap.ReadString(ref token);
-		            }
-		            break;
-		        default:
-		            throw new ArgumentException(@"Invalid token for a string.", @"token");
-		    }
-
-		    return token;
+			switch ((TokenTypes.TableMask & token))
+			{
+				case TokenTypes.String:
+					{
+						StringHeap sheap = (StringHeap)_streams[(int)HeapType.String];
+						return sheap.ReadString(ref token);
+					}
+				case TokenTypes.UserString:
+					{
+						UserStringHeap usheap = (UserStringHeap)_streams[(int)HeapType.UserString];
+						return usheap.ReadString(ref token);
+					}
+				default:
+					throw new ArgumentException(@"Invalid token for a string.", @"token");
+			}
 		}
 
-	    TokenTypes IMetadataProvider.Read(TokenTypes token, out Guid result)
+		Guid IMetadataProvider.ReadGuid(TokenTypes token)
 		{
-            if ((TokenTypes.TableMask & token) == TokenTypes.Guid)
-            {
+			if ((TokenTypes.TableMask & token) == TokenTypes.Guid)
+			{
 				GuidHeap gheap = (GuidHeap)_streams[(int)HeapType.Guid];
-				result = gheap.ReadGuid(ref token);
+				return gheap.ReadGuid(ref token);
 			}
-			else 
-            {
+			else
+			{
 				throw new ArgumentException(@"Invalid token for a guid.", @"token");
 			}
-
-            return token;
 		}
 
-		TokenTypes IMetadataProvider.Read(TokenTypes token, out byte[] result)
+		byte[] IMetadataProvider.ReadBlob(TokenTypes token)
 		{
-			if (TokenTypes.Blob == (TokenTypes.TableMask & token)) 
-            {
+			if (TokenTypes.Blob == (TokenTypes.TableMask & token))
+			{
 				BlobHeap bheap = (BlobHeap)_streams[(int)HeapType.Blob];
-				result = bheap.ReadBlob(ref token);
+				return bheap.ReadBlob(ref token);
 			}
-			else 
-            {
+			else
+			{
 				throw new ArgumentException(@"Invalid token for a blob.", @"token");
 			}
-
-            return token;
 		}
 
 		void IMetadataProvider.Read(TokenTypes token, out ModuleRow result)
@@ -478,11 +476,11 @@ namespace Mosa.Runtime.Loader.PE
 			theap.Read(token, out result);
 		}
 
-        void IMetadataProvider.Read(TokenTypes token, out FieldRow[] result)
-        {
-            TableHeap theap = (TableHeap) _streams[(int) HeapType.Tables];
-            theap.Read(token, out result);
-        }
+		void IMetadataProvider.Read(TokenTypes token, out FieldRow[] result)
+		{
+			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
+			theap.Read(token, out result);
+		}
 
 		#endregion // IMetadataProvider members
 	}

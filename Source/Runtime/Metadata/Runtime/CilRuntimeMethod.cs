@@ -102,8 +102,7 @@ namespace Mosa.Runtime.Metadata.Runtime
         /// <returns>The name of the type.</returns>
         protected override string GetName()
         {
-            string name;
-            this.Module.Metadata.Read(this.nameIdx, out name);
+			string name = this.Module.Metadata.ReadString(this.nameIdx);
             Debug.Assert(name != null, @"Failed to retrieve CilRuntimeMethod name.");
             return name;
         }

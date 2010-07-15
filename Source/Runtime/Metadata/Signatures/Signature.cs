@@ -37,8 +37,7 @@ namespace Mosa.Runtime.Metadata.Signatures
         /// <param name="token">The token.</param>
 		public void LoadSignature(ISignatureContext context, IMetadataProvider provider, TokenTypes token)
 		{
-			byte[] buffer;
-			provider.Read(token, out buffer);
+			byte[] buffer = provider.ReadBlob(token);
 
 			int index = 0;
 			this.ParseSignature(context, buffer, ref index);
@@ -64,8 +63,7 @@ namespace Mosa.Runtime.Metadata.Signatures
         {
             Signature result;
             int index = 0;
-            byte[] buffer;
-            provider.Read(token, out buffer);
+            byte[] buffer = provider.ReadBlob(token);
 
             if (0x06 == buffer[0])
             {

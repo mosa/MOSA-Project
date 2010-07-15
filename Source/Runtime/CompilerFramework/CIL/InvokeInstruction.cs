@@ -133,7 +133,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			// Validate the operands...
 			Debug.Assert(ctx.OperandCount == paramCount, @"Operand count doesn't match parameter count.");
 
-			for (int i = 0; i < ctx.OperandCount; i++) {
+			for (int i = 0; i < ctx.OperandCount; i++)
+			{
 				/* FIXME: Check implicit conversions
 				// if (ops[i] != null) {
 					Debug.Assert(_operands[i].Type == _parameterTypes[i]);
@@ -146,13 +147,13 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			}
 		}
 
-	    /// <summary>
-	    /// Decodes the invocation target.
-	    /// </summary>
-	    /// <param name="ctx">The context.</param>
-	    /// <param name="decoder">The IL decoder, which provides decoding functionality.</param>
-	    /// <param name="flags">Flags, which control the</param>
-	    protected static TokenTypes DecodeInvocationTarget(Context ctx, IInstructionDecoder decoder, InvokeSupportFlags flags)
+		/// <summary>
+		/// Decodes the invocation target.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		/// <param name="decoder">The IL decoder, which provides decoding functionality.</param>
+		/// <param name="flags">Flags, which control the</param>
+		protected static TokenTypes DecodeInvocationTarget(Context ctx, IInstructionDecoder decoder, InvokeSupportFlags flags)
 		{
 			// Holds the token of the call target
 			TokenTypes callTarget, targetType;
@@ -166,22 +167,23 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			if (!IsCallTargetSupported(targetType, flags))
 				throw new InvalidOperationException(@"Invalid IL call target specification.");
 
-			switch (targetType) {
+			switch (targetType)
+			{
 				case TokenTypes.MethodDef:
 					method = RuntimeBase.Instance.TypeLoader.GetMethod(decoder.Method, decoder.Method.Module, callTarget);
 					break;
 
 				case TokenTypes.MemberRef:
 					method = RuntimeBase.Instance.TypeLoader.GetMethod(decoder.Method, decoder.Method.Module, callTarget);
-                    if (method.DeclaringType.IsGeneric == true)
-                    {
-                        ScheduleMethodForCompilation(decoder, method);
-                    }
+					if (method.DeclaringType.IsGeneric == true)
+					{
+						ScheduleMethodForCompilation(decoder, method);
+					}
 					break;
 
 				case TokenTypes.MethodSpec:
-                    method = DecodeMethodSpecification(decoder, callTarget);
-                    break;
+					method = DecodeMethodSpecification(decoder, callTarget);
+					break;
 
 				default:
 					Debug.Assert(false, @"Should never reach this!");
@@ -190,24 +192,24 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 			SetInvokeTarget(ctx, decoder.Compiler, method);
 
-            return callTarget;
+			return callTarget;
 		}
 
-        private static RuntimeMethod DecodeMethodSpecification(IInstructionDecoder decoder, TokenTypes callTarget)
-        {
-            RuntimeMethod method = RuntimeBase.Instance.TypeLoader.GetMethod(decoder.Method, decoder.Compiler.Assembly, callTarget);
+		private static RuntimeMethod DecodeMethodSpecification(IInstructionDecoder decoder, TokenTypes callTarget)
+		{
+			RuntimeMethod method = RuntimeBase.Instance.TypeLoader.GetMethod(decoder.Method, decoder.Compiler.Assembly, callTarget);
 
-            ScheduleMethodForCompilation(decoder, method);
+			ScheduleMethodForCompilation(decoder, method);
 
-            return method;
-        }
+			return method;
+		}
 
-        private static void ScheduleMethodForCompilation(IInstructionDecoder decoder, RuntimeMethod method)
-        {
-            ICompilationSchedulerStage compilationScheduler = decoder.Compiler.Scheduler;
-            compilationScheduler.ScheduleMethodForCompilation(method);
+		private static void ScheduleMethodForCompilation(IInstructionDecoder decoder, RuntimeMethod method)
+		{
+			ICompilationSchedulerStage compilationScheduler = decoder.Compiler.Scheduler;
+			compilationScheduler.ScheduleMethodForCompilation(method);
 
-        }
+		}
 
 		/// <summary>
 		/// Sets the invoke target.
@@ -221,9 +223,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 				throw new ArgumentNullException(@"method");
 
 			// Signature of the call target
-		    // Number of parameters required for the call
+			// Number of parameters required for the call
 
-		    ctx.InvokeTarget = method;
+			ctx.InvokeTarget = method;
 
 			// Retrieve the target signature
 			MethodSignature signature = ctx.InvokeTarget.Signature;
@@ -234,7 +236,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 				paramCount++;
 
 			// Setup operands for parameters and the return value
-			if (signature.ReturnType.Type != CilElementType.Void) {
+			if (signature.ReturnType.Type != CilElementType.Void)
+			{
 				ctx.ResultCount = 1;
 				ctx.Result = compiler.CreateTemporary(signature.ReturnType);
 			}
@@ -322,11 +325,11 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </returns>
 		private bool IsSameSignature(IMetadataProvider metadata, TokenTypes sig1, TokenTypes sig2)
 		{
-			byte[] src, dst;
-			metadata.Read(sig1, out src);
-			metadata.Read(sig2, out dst);
+			byte[] src = metadata.ReadBlob(sig1);
+			byte[] dst = metadata.ReadBlob(sig2);
 			bool result = (src.Length == dst.Length);
-			if (result) {
+			if (result)
+			{
 				for (int i = 0; result && i < src.Length; i++)
 					result = (src[i] == dst[i]);
 			}
