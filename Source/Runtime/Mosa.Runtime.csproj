@@ -631,7 +631,7 @@
     <Compile Include="Loader\GenericArgument.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Loader\IAssemblyImage.cs">
+    <Compile Include="Loader\IMetadataModule.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Loader\IAssemblyLoader.cs">
