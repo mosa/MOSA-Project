@@ -13,9 +13,9 @@ using System.Collections.Generic;
 using System.Text;
 
 using Mosa.Runtime.Loader; // ?
-
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Tables;
+using Mosa.Runtime.Vm;
 
 namespace Mosa.Runtime.Metadata
 {
@@ -23,7 +23,7 @@ namespace Mosa.Runtime.Metadata
 	/// <summary>
 	/// Metadata root structure according to ISO/IEC 23271:2006 (E), §24.2.1
 	/// </summary>
-	public class MergedMetadata : IMetadataProvider
+	public class MergedMetadata : IMetadataProvider, IMetadataModule
 	{
 		#region Constants
 
@@ -57,6 +57,10 @@ namespace Mosa.Runtime.Metadata
 
 		protected IMetadataModule[] modules;
 		protected ModuleOffset[][] moduleOffset;
+		protected string codeBase;
+		protected RuntimeMethod entryPoint;
+		protected ModuleType moduleType;
+		protected string name;
 
 		#endregion // Data members
 
@@ -68,13 +72,25 @@ namespace Mosa.Runtime.Metadata
 			Initialize(modules);
 		}
 
+		#region IMetadataModule members
+
+		/// <summary>
+		/// Provides access to the provider contained in the assembly.
+		/// </summary>
+		IMetadataProvider IMetadataModule.Metadata { get { return this; } }
+
+		/// <summary>
+		/// Retrieves the name of the module.
+		/// </summary>
+		string IMetadataModule.Name { get { return name; } }
+
 		/// <summary>
 		/// Provides access to the sequence of IL opcodes for a relative
 		/// virtual address.
 		/// </summary>
 		/// <param name="rva">The relative virtual address to retrieve a stream for.</param>
 		/// <returns>A stream, which represents the relative virtual address.</returns>
-		Stream GetInstructionStream(long rva)
+		Stream IMetadataModule.GetInstructionStream(long rva)
 		{
 			uint module;
 			ulong originalrva = (ulong)rva;
@@ -89,7 +105,7 @@ namespace Mosa.Runtime.Metadata
 		/// </summary>
 		/// <param name="rva">The rva.</param>
 		/// <returns>A stream into the data section, pointed to the requested RVA.</returns>
-		Stream GetDataSection(long rva)
+		Stream IMetadataModule.GetDataSection(long rva)
 		{
 			uint module;
 			ulong originalrva = (ulong)rva;
@@ -99,12 +115,40 @@ namespace Mosa.Runtime.Metadata
 			return modules[module].GetInstructionStream((long)originalrva);
 		}
 
+		/// <summary>
+		/// Gets the code base of the module.
+		/// </summary>
+		/// <value>The code base of the module.</value>
+		string IMetadataModule.CodeBase { get { return codeBase; } }
+
+		/// <summary>
+		/// Gets the entry point of the module.
+		/// </summary>
+		/// <value>The entry point.</value>
+		RuntimeMethod IMetadataModule.EntryPoint { get { return entryPoint; } }
+
+		/// <summary>
+		/// Retrieves the load order index of the module.
+		/// </summary>
+		int IMetadataModule.LoadOrder { get { return 0; } }
+
+		/// <summary>
+		/// Gets the type of the module.
+		/// </summary>
+		/// <value>The type of the module.</value>
+		ModuleType IMetadataModule.ModuleType { get { return moduleType; } }
+
+		#endregion // IMetadataModule members
+
 		#region Methods
 
 		protected void Initialize(IList<IMetadataModule> modules)
 		{
 			this.modules = new IMetadataModule[modules.Count];
 			moduleOffset = new ModuleOffset[modules.Count][];
+			moduleType = Loader.ModuleType.Library;
+			codeBase = modules[0].CodeBase;
+			name = modules[0].CodeBase;
 
 			for (int mod = 0; mod < modules.Count; mod++)
 			{
@@ -121,7 +165,20 @@ namespace Mosa.Runtime.Metadata
 
 					moduleOffset[mod][table] = new ModuleOffset(previous, (uint)(TokenTypes.RowIndexMask & entries));
 				}
+
+				if (module.ModuleType == Loader.ModuleType.Executable)
+				{
+					moduleType = Loader.ModuleType.Executable;
+					codeBase = module.CodeBase;
+					name = module.Name;
+				}
+
+				if (entryPoint != null)
+				{
+					entryPoint = module.EntryPoint;
+				}
 			}
+
 		}
 
 		protected int GetModuleIndex(IMetadataModule module)
