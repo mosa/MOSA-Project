@@ -217,7 +217,7 @@ namespace Mosa.Tools.Compiler.Metadata
 			{
 				MethodDefRow row = metadataSource.ReadMethodDefRow(token);
 
-				metadataWriter.Write(row.Rva);
+				metadataWriter.Write((uint)row.Rva);
 				metadataWriter.Write((ushort)row.ImplFlags);
 				metadataWriter.Write((ushort)row.Flags);
 				metadataWriter.Write(row.NameStringIdx);
