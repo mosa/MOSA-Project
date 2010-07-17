@@ -8,6 +8,7 @@
  */
 
 using System;
+using System.IO;
 using Mosa.Runtime.Loader;
 using Mosa.Runtime.Metadata.Tables;
 
@@ -48,6 +49,21 @@ namespace Mosa.Runtime.Metadata
 		/// </summary>
 		/// <param name="token">The token of the blob heap entry to read.</param>
 		byte[] ReadBlob(TokenTypes token);
+
+		///// <summary>
+		///// Provides access to the sequence of IL opcodes for a relative
+		///// virtual address.
+		///// </summary>
+		///// <param name="rva">The relative virtual address to retrieve a stream for.</param>
+		///// <returns>A stream, which represents the relative virtual address.</returns>
+		//Stream GetInstructionStream(long rva);
+
+		///// <summary>
+		///// Gets a stream into the data section, beginning at the specified RVA.
+		///// </summary>
+		///// <param name="rva">The rva.</param>
+		///// <returns>A stream into the data section, pointed to the requested RVA.</returns>
+		//Stream GetDataSection(long rva);
 
 		/// <summary>
 		/// Reads a module row from provider.

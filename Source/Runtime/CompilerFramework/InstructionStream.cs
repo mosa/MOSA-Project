@@ -90,7 +90,6 @@ namespace Mosa.Runtime.CompilerFramework {
 
 		#region Construction
 
-
         /// <summary>
         /// Initializes a new instance of the <see cref="InstructionStream"/> class.
         /// </summary>
@@ -136,24 +135,23 @@ namespace Mosa.Runtime.CompilerFramework {
 			get { return true; }
 		}
 
-        /// <summary>
-        /// Ruft beim Überschreiben in einer abgeleiteten Klasse einen Wert ab, der angibt, ob der aktuelle Stream Schreibvorgänge unterstützt.
-        /// </summary>
-        /// <value></value>
-        /// <returns>
-        /// true, wenn der Stream Schreibvorgänge unterstützt, andernfalls false.
-        /// </returns>
+		/// <summary>
+		/// When overridden in a derived class, gets a value indicating whether the current stream supports writing.
+		/// </summary>
+		/// <value></value>
+		/// <returns>true if the stream supports writing; otherwise, false.
+		/// </returns>
 		public override bool CanWrite
 		{
 			get { return false; }
 		}
 
-        /// <summary>
-        /// Löscht beim Überschreiben in einer abgeleiteten Klasse alle Puffer für diesen Stream und veranlasst die Ausgabe aller gepufferten Daten an das zugrunde liegende Gerät.
-        /// </summary>
-        /// <exception cref="T:System.IO.IOException">
-        /// Ein E/A-Fehler tritt auf.
-        /// </exception>
+		/// <summary>
+		/// When overridden in a derived class, clears all buffers for this stream and causes any buffered data to be written to the underlying device.
+		/// </summary>
+		/// <exception cref="T:System.IO.IOException">
+		/// An I/O error occurs.
+		/// </exception>
 		public override void Flush()
 		{
 			// Do nothing. We can not flush.
@@ -208,33 +206,33 @@ namespace Mosa.Runtime.CompilerFramework {
 			}
 		}
 
-        /// <summary>
-        /// Liest beim Überschreiben in einer abgeleiteten Klasse eine Folge von Bytes aus dem aktuellen Stream und erhöht die Position im Stream um die Anzahl der gelesenen Bytes.
-        /// </summary>
-        /// <param name="buffer">Ein Bytearray. Nach dem Beenden dieser Methode enthält der Puffer das angegebene Bytearray mit den Werten zwischen <paramref name="offset"/> und (<paramref name="offset"/> + <paramref name="count"/> - 1), die durch aus der aktuellen Quelle gelesene Bytes ersetzt wurden.</param>
-        /// <param name="offset">Der nullbasierte Byteoffset im <paramref name="buffer"/>, ab dem die aus dem aktuellen Stream gelesenen Daten gespeichert werden.</param>
-        /// <param name="count">Die maximale Anzahl an Bytes, die aus dem aktuellen Stream gelesen werden sollen.</param>
-        /// <returns>
-        /// Die Gesamtanzahl der in den Puffer gelesenen Bytes. Dies kann weniger als die Anzahl der angeforderten Bytes sein, wenn diese Anzahl an Bytes derzeit nicht verfügbar ist, oder 0, wenn das Ende des Streams erreicht ist.
-        /// </returns>
-        /// <exception cref="T:System.ArgumentException">
-        /// Die Summe aus <paramref name="offset"/> und <paramref name="count"/> ist größer als die Pufferlänge.
-        /// </exception>
-        /// <exception cref="T:System.ArgumentNullException">
-        /// 	<paramref name="buffer"/> ist null.
-        /// </exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
-        /// 	<paramref name="offset"/> oder <paramref name="count"/> ist negativ.
-        /// </exception>
-        /// <exception cref="T:System.IO.IOException">
-        /// Ein E/A-Fehler tritt auf.
-        /// </exception>
-        /// <exception cref="T:System.NotSupportedException">
-        /// Der Stream unterstützt keine Lesevorgänge.
-        /// </exception>
-        /// <exception cref="T:System.ObjectDisposedException">
-        /// Es wurden Methoden aufgerufen, nachdem der Stream geschlossen wurde.
-        /// </exception>
+		/// <summary>
+		/// When overridden in a derived class, reads a sequence of bytes from the current stream and advances the position within the stream by the number of bytes read.
+		/// </summary>
+		/// <param name="buffer">An array of bytes. When this method returns, the buffer contains the specified byte array with the values between <paramref name="offset"/> and (<paramref name="offset"/> + <paramref name="count"/> - 1) replaced by the bytes read from the current source.</param>
+		/// <param name="offset">The zero-based byte offset in <paramref name="buffer"/> at which to begin storing the data read from the current stream.</param>
+		/// <param name="count">The maximum number of bytes to be read from the current stream.</param>
+		/// <returns>
+		/// The total number of bytes read into the buffer. This can be less than the number of bytes requested if that many bytes are not currently available, or zero (0) if the end of the stream has been reached.
+		/// </returns>
+		/// <exception cref="T:System.ArgumentException">
+		/// The sum of <paramref name="offset"/> and <paramref name="count"/> is larger than the buffer length.
+		/// </exception>
+		/// <exception cref="T:System.ArgumentNullException">
+		/// 	<paramref name="buffer"/> is null.
+		/// </exception>
+		/// <exception cref="T:System.ArgumentOutOfRangeException">
+		/// 	<paramref name="offset"/> or <paramref name="count"/> is negative.
+		/// </exception>
+		/// <exception cref="T:System.IO.IOException">
+		/// An I/O error occurs.
+		/// </exception>
+		/// <exception cref="T:System.NotSupportedException">
+		/// The stream does not support reading.
+		/// </exception>
+		/// <exception cref="T:System.ObjectDisposedException">
+		/// Methods were called after the stream was closed.
+		/// </exception>
 		public override int Read(byte[] buffer, int offset, int count)
 		{
 			// Check preconditions
@@ -244,71 +242,71 @@ namespace Mosa.Runtime.CompilerFramework {
 			return _stream.Read(buffer, offset, count);
 		}
 
-        /// <summary>
-        /// Legt beim Überschreiben in einer abgeleiteten Klasse die Position im aktuellen Stream fest.
-        /// </summary>
-        /// <param name="offset">Ein Byteoffset relativ zum <paramref name="origin"/>-Parameter.</param>
-        /// <param name="origin">Ein Wert vom Typ <see cref="T:System.IO.SeekOrigin"/>, der den Bezugspunkt angibt, von dem aus die neue Position ermittelt wird.</param>
-        /// <returns>
-        /// Die neue Position innerhalb des aktuellen Streams.
-        /// </returns>
-        /// <exception cref="T:System.IO.IOException">
-        /// Ein E/A-Fehler tritt auf.
-        /// </exception>
-        /// <exception cref="T:System.NotSupportedException">
-        /// Der Stream unterstützt keine Suchvorgänge. Dies ist beispielsweise der Fall, wenn der Stream aus einer Pipe- oder Konsolenausgabe erstellt wird.
-        /// </exception>
-        /// <exception cref="T:System.ObjectDisposedException">
-        /// Es wurden Methoden aufgerufen, nachdem der Stream geschlossen wurde.
-        /// </exception>
+		/// <summary>
+		/// When overridden in a derived class, sets the position within the current stream.
+		/// </summary>
+		/// <param name="offset">A byte offset relative to the <paramref name="origin"/> parameter.</param>
+		/// <param name="origin">A value of type <see cref="T:System.IO.SeekOrigin"/> indicating the reference point used to obtain the new position.</param>
+		/// <returns>
+		/// The new position within the current stream.
+		/// </returns>
+		/// <exception cref="T:System.IO.IOException">
+		/// An I/O error occurs.
+		/// </exception>
+		/// <exception cref="T:System.NotSupportedException">
+		/// The stream does not support seeking, such as if the stream is constructed from a pipe or console output.
+		/// </exception>
+		/// <exception cref="T:System.ObjectDisposedException">
+		/// Methods were called after the stream was closed.
+		/// </exception>
 		public override long Seek(long offset, SeekOrigin origin)
 		{
 			// FIXME: Fix the seeking...
 			return _stream.Seek(offset, origin);
 		}
 
-        /// <summary>
-        /// Legt beim Überschreiben in einer abgeleiteten Klasse die Länge des aktuellen Streams fest.
-        /// </summary>
-        /// <param name="value">Die gewünschte Länge des aktuellen Streams in Bytes.</param>
-        /// <exception cref="T:System.IO.IOException">
-        /// Ein E/A-Fehler tritt auf.
-        /// </exception>
-        /// <exception cref="T:System.NotSupportedException">
-        /// Der Stream unterstützt nicht sowohl Lese- als auch Schreibvorgänge. Dies ist beispielsweise der Fall, wenn der Stream aus einer Pipe- oder Konsolenausgabe erstellt wird.
-        /// </exception>
-        /// <exception cref="T:System.ObjectDisposedException">
-        /// Es wurden Methoden aufgerufen, nachdem der Stream geschlossen wurde.
-        /// </exception>
+		/// <summary>
+		/// When overridden in a derived class, sets the length of the current stream.
+		/// </summary>
+		/// <param name="value">The desired length of the current stream in bytes.</param>
+		/// <exception cref="T:System.IO.IOException">
+		/// An I/O error occurs.
+		/// </exception>
+		/// <exception cref="T:System.NotSupportedException">
+		/// The stream does not support both writing and seeking, such as if the stream is constructed from a pipe or console output.
+		/// </exception>
+		/// <exception cref="T:System.ObjectDisposedException">
+		/// Methods were called after the stream was closed.
+		/// </exception>
 		public override void SetLength(long value)
 		{
 			throw new NotSupportedException();
 		}
 
-        /// <summary>
-        /// Schreibt beim Überschreiben in einer abgeleiteten Klasse eine Folge von Bytes in den aktuellen Stream und erhöht die aktuelle Position im Stream um die Anzahl der geschriebenen Bytes.
-        /// </summary>
-        /// <param name="buffer">Ein Bytearray. Diese Methode kopiert <paramref name="count"/> Bytes aus dem <paramref name="buffer"/> in den aktuellen Stream.</param>
-        /// <param name="offset">Der nullbasierte Byteoffset im <paramref name="buffer"/>, ab dem Bytes in den aktuellen Stream kopiert werden.</param>
-        /// <param name="count">Die Anzahl an Bytes, die in den aktuellen Stream geschrieben werden sollen.</param>
-        /// <exception cref="T:System.ArgumentException">
-        /// Die Summe aus <paramref name="offset"/> und <paramref name="count"/> ist größer als die Pufferlänge.
-        /// </exception>
-        /// <exception cref="T:System.ArgumentNullException">
-        /// 	<paramref name="buffer"/> ist null.
-        /// </exception>
-        /// <exception cref="T:System.ArgumentOutOfRangeException">
-        /// 	<paramref name="offset"/> oder <paramref name="count"/> ist negativ.
-        /// </exception>
-        /// <exception cref="T:System.IO.IOException">
-        /// Ein E/A-Fehler tritt auf.
-        /// </exception>
-        /// <exception cref="T:System.NotSupportedException">
-        /// Der Stream unterstützt keine Schreibvorgänge.
-        /// </exception>
-        /// <exception cref="T:System.ObjectDisposedException">
-        /// Es wurden Methoden aufgerufen, nachdem der Stream geschlossen wurde.
-        /// </exception>
+		/// <summary>
+		/// When overridden in a derived class, writes a sequence of bytes to the current stream and advances the current position within this stream by the number of bytes written.
+		/// </summary>
+		/// <param name="buffer">An array of bytes. This method copies <paramref name="count"/> bytes from <paramref name="buffer"/> to the current stream.</param>
+		/// <param name="offset">The zero-based byte offset in <paramref name="buffer"/> at which to begin copying bytes to the current stream.</param>
+		/// <param name="count">The number of bytes to be written to the current stream.</param>
+		/// <exception cref="T:System.ArgumentException">
+		/// The sum of <paramref name="offset"/> and <paramref name="count"/> is greater than the buffer length.
+		/// </exception>
+		/// <exception cref="T:System.ArgumentNullException">
+		/// 	<paramref name="buffer"/> is null.
+		/// </exception>
+		/// <exception cref="T:System.ArgumentOutOfRangeException">
+		/// 	<paramref name="offset"/> or <paramref name="count"/> is negative.
+		/// </exception>
+		/// <exception cref="T:System.IO.IOException">
+		/// An I/O error occurs.
+		/// </exception>
+		/// <exception cref="T:System.NotSupportedException">
+		/// The stream does not support writing.
+		/// </exception>
+		/// <exception cref="T:System.ObjectDisposedException">
+		/// Methods were called after the stream was closed.
+		/// </exception>
 		public override void Write(byte[] buffer, int offset, int count)
 		{
 			throw new NotSupportedException();

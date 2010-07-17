@@ -121,9 +121,7 @@ namespace Mosa.Runtime.Loader.PE
 			_assemblyReader.BaseStream.Position = position;
 			_metadata = _assemblyReader.ReadBytes(_cliHeader.Metadata.Size);
 
-			MetadataRoot mdr = new MetadataRoot(this);
-			mdr.Initialize(_metadata);
-			_metadataRoot = mdr;
+			_metadataRoot = new MetadataRoot(_metadata);
 		}
 
 		#endregion // Construction
@@ -219,7 +217,7 @@ namespace Mosa.Runtime.Loader.PE
 		#region Methods
 
 		/// <summary>
-		/// Retrieves an instruction for the specified relative virtual virtualAddress.
+		/// Retrieves an instruction for the specified relative virtual address.
 		/// </summary>
 		/// <param name="rva">The method to retrieve the instruction stream for.</param>
 		/// <returns>A new instance of CILInstructionStream, which represents the stream.</returns>

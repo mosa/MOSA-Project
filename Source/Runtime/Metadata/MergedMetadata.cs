@@ -43,11 +43,11 @@ namespace Mosa.Runtime.Metadata
 
 		protected struct ModuleOffset
 		{
-			public int Start;
-			public int End;
-			public int Count;
+			public long Start;
+			public long End;
+			public long Count;
 
-			public ModuleOffset(int start, int count)
+			public ModuleOffset(long start, long count)
 			{
 				Start = start;
 				End = start + count;
@@ -57,6 +57,7 @@ namespace Mosa.Runtime.Metadata
 
 		protected IMetadataModule[] modules;
 		protected ModuleOffset[][] moduleOffset;
+		protected ModuleOffset[] RVAOffsets;
 
 		#endregion // Data members
 
@@ -68,12 +69,42 @@ namespace Mosa.Runtime.Metadata
 			Initialize(modules);
 		}
 
+		/// <summary>
+		/// Provides access to the sequence of IL opcodes for a relative
+		/// virtual address.
+		/// </summary>
+		/// <param name="rva">The relative virtual address to retrieve a stream for.</param>
+		/// <returns>A stream, which represents the relative virtual address.</returns>
+		Stream GetInstructionStream(long rva)
+		{
+			int module;
+
+			GetModuleRVAOffset(out module, ref rva);
+
+			return modules[module].GetDataSection(rva);
+		}
+
+		/// <summary>
+		/// Gets a stream into the data section, beginning at the specified RVA.
+		/// </summary>
+		/// <param name="rva">The rva.</param>
+		/// <returns>A stream into the data section, pointed to the requested RVA.</returns>
+		Stream GetDataSection(long rva)
+		{
+			int module;
+
+			GetModuleRVAOffset(out module, ref rva);
+
+			return modules[module].GetInstructionStream(rva);
+		}
+
 		#region Methods
 
 		protected void Initialize(IList<IMetadataModule> modules)
 		{
 			this.modules = new IMetadataModule[modules.Count];
 			moduleOffset = new ModuleOffset[modules.Count][];
+			RVAOffsets = new ModuleOffset[modules.Count];
 
 			for (int mod = 0; mod < modules.Count; mod++)
 			{
@@ -84,7 +115,7 @@ namespace Mosa.Runtime.Metadata
 
 				for (int table = 0; table < MaxTables; table++)
 				{
-					int previous = (mod == 0 ? 0 : moduleOffset[mod - 1][table].End);
+					long previous = (mod == 0 ? 0 : moduleOffset[mod - 1][table].End);
 
 					TokenTypes entries = module.Metadata.GetMaxTokenValue((TokenTypes)(table << TableTokenTypeShift));
 
@@ -102,17 +133,30 @@ namespace Mosa.Runtime.Metadata
 			throw new ArgumentException(@"Unable to locate module.", @"module");
 		}
 
-		protected bool GetModuleOffset(TokenTypes token, out int module, out int index)
+		protected void GetModuleOffset(TokenTypes token, out int module, out long index)
 		{
 			int table = ((int)(token & TokenTypes.TableMask) >> TableTokenTypeShift);
-			int rowindex = (int)(token & TokenTypes.RowIndexMask);
+			long rowindex = (int)(token & TokenTypes.RowIndexMask);
 
 			for (int mod = 0; mod < modules.Length; mod++)
 				if ((rowindex > moduleOffset[mod][table].Start) & (rowindex < moduleOffset[mod][table].End))
 				{
 					module = mod;
 					index = rowindex - moduleOffset[mod][table].Start;
-					return true;
+					return;
+				}
+
+			throw new ArgumentException(@"Not a valid tokentype.", @"token");
+		}
+
+		protected void GetModuleRVAOffset(out int module, ref long rva)
+		{
+			for (int mod = 0; mod < modules.Length; mod++)
+				if ((rva > RVAOffsets[mod].Start) & (rva < RVAOffsets[mod].End))
+				{
+					module = mod;
+					rva = rva - RVAOffsets[mod].Start;
+					return;
 				}
 
 			throw new ArgumentException(@"Not a valid tokentype.", @"token");
@@ -120,20 +164,19 @@ namespace Mosa.Runtime.Metadata
 
 		protected TokenTypes GetOriginalToken(TokenTypes token, out int module)
 		{
-			int index;
+			long index;
 
-			if (GetModuleOffset(token, out module, out index))
-				return (TokenTypes)((token & TokenTypes.RowIndexMask) + index);
+			GetModuleOffset(token, out module, out index);
 
-			throw new ArgumentException(@"Not a valid tokentype.", @"token");
+			return (TokenTypes)((token & TokenTypes.RowIndexMask) + (int)index);
 		}
 
 		protected TokenTypes GetNewToken(int module, TokenTypes token)
 		{
 			int table = ((int)(token & TokenTypes.TableMask) >> TableTokenTypeShift);
-			int offset = moduleOffset[module][table].Start;
+			long offset = moduleOffset[module][table].Start;
 
-			return (TokenTypes)(token + offset);
+			return (TokenTypes)(token + (int)offset);
 		}
 
 		#endregion // Methods
@@ -142,7 +185,7 @@ namespace Mosa.Runtime.Metadata
 
 		public int GetMaxTokenCount(TokenTypes token)
 		{
-			return moduleOffset[modules.Length - 1][((uint)token) >> TableTokenTypeShift].End;
+			return (int)(moduleOffset[modules.Length - 1][((uint)token) >> TableTokenTypeShift].End);
 		}
 
 		TokenTypes IMetadataProvider.GetMaxTokenValue(TokenTypes token)
@@ -238,7 +281,7 @@ namespace Mosa.Runtime.Metadata
 
 			MethodDefRow row = modules[module].Metadata.ReadMethodDefRow(originalToken);
 			return new MethodDefRow(
-				row.Rva,
+				row.Rva,			// *** FIXME *** //
 				row.ImplFlags,
 				row.Flags,
 				GetNewToken(module, row.NameStringIdx),
@@ -442,7 +485,7 @@ namespace Mosa.Runtime.Metadata
 
 			MethodImplRow row = modules[module].Metadata.ReadMethodImplRow(originalToken);
 			return new MethodImplRow(
-				GetNewToken(module,row.ClassTableIdx),
+				GetNewToken(module, row.ClassTableIdx),
 				GetNewToken(module, row.MethodBodyTableIdx),
 				GetNewToken(module, row.MethodDeclarationTableIdx)
 			);
@@ -491,7 +534,7 @@ namespace Mosa.Runtime.Metadata
 
 			FieldRVARow row = modules[module].Metadata.ReadFieldRVARow(originalToken);
 			return new FieldRVARow(
-				row.Rva,
+				row.Rva,		// *** FIXME *** //
 				GetNewToken(module, row.FieldTableIdx)
 			);
 		}

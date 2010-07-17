@@ -36,11 +36,6 @@ namespace Mosa.Runtime.Loader.PE
 		#region Data members
 
 		/// <summary>
-		/// Holds the assembly of this provider root.
-		/// </summary>
-		private readonly IMetadataModule _assemblyImage;
-
-		/// <summary>
 		/// Major version, 1 (ignore on read).
 		/// </summary>
 		private ushort MajorVersion;
@@ -80,10 +75,10 @@ namespace Mosa.Runtime.Loader.PE
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MetadataRoot"/> class.
 		/// </summary>
-		/// <param name="assemblyImage">The assembly image.</param>
-		public MetadataRoot(IMetadataModule assemblyImage)
+		/// <param name="metadata">Byte array, which holds the (uint)</param>
+		public MetadataRoot(byte[] metadata)
 		{
-			_assemblyImage = assemblyImage;
+			Initialize(metadata);
 		}
 
 		#region Methods
@@ -93,7 +88,7 @@ namespace Mosa.Runtime.Loader.PE
 		/// </summary>
 		/// <param name="metadata">Byte array, which holds the (uint)</param>
 		/// <returns>True, if the stream contains a valid and supported provider format.</returns>
-		public void Initialize(byte[] metadata)
+		protected void Initialize(byte[] metadata)
 		{
 			this.metadata = metadata;
 			MemoryStream ms = new MemoryStream(metadata);
