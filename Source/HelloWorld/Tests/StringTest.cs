@@ -12,10 +12,10 @@ namespace Mosa.HelloWorld.Tests
 			Screen.SetCursor(23, 0);
 			Screen.Write("String Test: ");
 
-			PrintResult (1, ConcatTest1 ());
-			PrintResult (2, ConcatTest2 ());
-			PrintResult (3, SubStringTest ());
-			PrintResult (4, IndexOfTest ());
+			PrintResult (ConcatTest1 ());
+			PrintResult (ConcatTest2 ());
+			PrintResult (SubStringTest ());
+			PrintResult (IndexOfTest ());
 		}
 		
 		public static bool ConcatTest1 ()
@@ -53,24 +53,19 @@ namespace Mosa.HelloWorld.Tests
 			return main.IndexOf('c') == 2;
 		}
 		
-		public static void PrintResult (int num, bool flag)
+		public static void PrintResult (bool flag)
 		{
 			byte color = Screen.Color;
-			Screen.Color = Colors.White;
-			Screen.Write((ulong)num, 10, 1);
-			Screen.Color = Colors.Gray;
-			Screen.Write(":");
 			if (flag)
 			{
 				Screen.Color = Colors.Green;
-				Screen.Write("S");
+				Screen.Write("+");
 			}
 			else
 			{
 				Screen.Color = Colors.Red;
-				Screen.Write("F");
+				Screen.Write("X");
 			}
-			Screen.Write(" ");
 			Screen.Color = color;
 		}
 	}
