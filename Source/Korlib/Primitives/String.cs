@@ -205,18 +205,11 @@ namespace System
 			String result = InternalAllocateString(a.length + b.length);
 
 			char* chars = result.first_char;
-
-			for (int index = 0; index < a.length; index++)
-			{
-				*chars = a[index];
-				chars++;
-			}
-
-			for (int index = 0; index < b.length; index++)
-			{
-				*chars = b[index];
-				chars++;
-			}
+			
+			foreach (char character in a)
+				*chars++ = character;
+			foreach (char character in b)
+				*chars++ = character;
 
 			return result;
 		}
@@ -227,23 +220,12 @@ namespace System
 
 			char* chars = result.first_char;
 
-			for (int index = 0; index < a.length; index++)
-			{
-				*chars = a[index];
-				chars++;
-			}
-
-			for (int index = 0; index < b.length; index++)
-			{
-				*chars = b[index];
-				chars++;
-			}
-
-			for (int index = 0; index < c.length; index++)
-			{
-				*chars = c[index];
-				chars++;
-			}
+			foreach (char character in a)
+				*chars++ = character;
+			foreach (char character in b)
+				*chars++ = character;
+			foreach (char character in c)
+				*chars++ = character;
 
 			return result;
 		}
@@ -254,29 +236,14 @@ namespace System
 
 			char* chars = result.first_char;
 
-			for (int index = 0; index < a.length; index++)
-			{
-				*chars = a[index];
-				chars++;
-			}
-
-			for (int index = 0; index < b.length; index++)
-			{
-				*chars = b[index];
-				chars++;
-			}
-
-			for (int index = 0; index < c.length; index++)
-			{
-				*chars = c[index];
-				chars++;
-			}
-
-			for (int index = 0; index < d.length; index++)
-			{
-				*chars = d[index];
-				chars++;
-			}
+			foreach (char character in a)
+				*chars++ = character;
+			foreach (char character in b)
+				*chars++ = character;
+			foreach (char character in c)
+				*chars++ = character;
+			foreach (char character in d)
+				*chars++ = character;
 
 			return result;
 		}
