@@ -1,10 +1,10 @@
 /*
- * (c) 2008 MOSA - The Managed Operating System Alliance
+ * (c) 2010 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using System;
@@ -30,7 +30,7 @@ namespace Mosa.Runtime.Metadata
 		/// <summary>
 		/// Signature constant of the provider root.
 		/// </summary>
-		private const uint MaxTables = 64;
+		private const uint MaxTables = 45;
 
 		/// <summary>
 		/// Shift value for tables in TokenTypes Enum
@@ -173,7 +173,7 @@ namespace Mosa.Runtime.Metadata
 					name = module.Name;
 				}
 
-				if (entryPoint != null)
+				if (module.EntryPoint != null)
 				{
 					entryPoint = module.EntryPoint;
 				}
