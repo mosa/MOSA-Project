@@ -110,6 +110,13 @@ namespace Mosa.Runtime.Vm
         /// <param name="token">The token of the method to retrieve.</param>
         RuntimeMethod GetMethod(ISignatureContext context, IMetadataModule module, TokenTypes token);
 
+		/// <summary>
+		/// Resolves the type of the signature.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="module">The module.</param>
+		/// <param name="sigType">Type of the signature.</param>
+		/// <returns></returns>
         RuntimeType ResolveSignatureType(ISignatureContext context, IMetadataModule module, SigType sigType);
 
         #endregion // Methods

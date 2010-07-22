@@ -430,6 +430,13 @@ namespace Mosa.Runtime.Vm
 			return this._types[typeIndex];
 		}
 
+		/// <summary>
+		/// Resolves the type of the signature.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="module">The module.</param>
+		/// <param name="sigType">Type of the signature.</param>
+		/// <returns></returns>
 		public RuntimeType ResolveSignatureType(ISignatureContext context, IMetadataModule module, SigType sigType)
 		{
 			RuntimeType result = null;

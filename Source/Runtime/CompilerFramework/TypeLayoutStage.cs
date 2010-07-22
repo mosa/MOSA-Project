@@ -23,14 +23,14 @@ namespace Mosa.Runtime.CompilerFramework
 	/// <summary>
 	/// Performs memory layout of a type for compilation.
 	/// </summary>
-	public sealed class TypeLayoutStage : IAssemblyCompilerStage, IPipelineStage
+	public sealed class TypeLayoutStage : IAssemblyCompilerStage
 	{
 		#region Data members
 
 		/// <summary>
 		/// Holds the Architecture during compilation.
 		/// </summary>
-		private IArchitecture _architecture;
+		private IArchitecture architecture;
 
 		/// <summary>
 		/// Holds the assembly Compiler.
@@ -46,7 +46,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Holds the current type system during compilation.
 		/// </summary>
-		private ITypeSystem _typeSystem;
+		private ITypeSystem typeSystem;
 
 		#endregion // Data members
 
@@ -56,52 +56,50 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
 		/// <value>The name of the compilation stage.</value>
-		public string Name
-		{
-			get
-			{
-				return @"Type Layout";
-			}
-		}
+		string IPipelineStage.Name { get { return @"Type Layout"; } }
 
-		public void Setup(AssemblyCompiler compiler)
+		#endregion // IAssemblyCompilerStage
+
+		#region IAssemblyCompilerStage members
+
+		void IAssemblyCompilerStage.Setup(AssemblyCompiler compiler)
 		{
 			this.compiler = compiler;
-			this._architecture = compiler.Architecture;
-			this.linker = compiler.Pipeline.FindFirst<IAssemblyLinker>();
-			this._typeSystem = RuntimeBase.Instance.TypeLoader;
+			architecture = compiler.Architecture;
+			linker = compiler.Pipeline.FindFirst<IAssemblyLinker>();
+			typeSystem = RuntimeBase.Instance.TypeLoader;
 
 			Debug.Assert(this.linker != null, @"Failed to retrieve linker from assembly compiler.");
 
-
-			this._architecture.GetTypeRequirements(BuiltInSigType.IntPtr, out this.nativePointerSize, out this.nativePointerAlignment);
+			architecture.GetTypeRequirements(BuiltInSigType.IntPtr, out nativePointerSize, out nativePointerAlignment);
 		}
 
-		public void Run()
+		void IAssemblyCompilerStage.Run()
 		{
 			// Enumerate all types and do an appropriate type layout
-			ReadOnlyRuntimeTypeListView types = this._typeSystem.GetTypesFromModule(this.compiler.Assembly);
+			ReadOnlyRuntimeTypeListView types = typeSystem.GetTypesFromModule(this.compiler.Assembly);
+
 			foreach (RuntimeType type in types)
 			{
-				if (type.IsGeneric == true || type.IsDelegate == true)
+				if (type.IsGeneric|| type.IsDelegate)
 					continue;
 
-				if (type.IsInterface == true)
+				if (type.IsInterface)
 				{
 					this.CreateInterfaceMethodTable(type);
 				}
 				else
 				{
-					if (IsExplicitLayoutRequestedByType(type) == false)
+					if (!IsExplicitLayoutRequestedByType(type))
 					{
-						this.CreateSequentialLayout(type);
+						CreateSequentialLayout(type);
 					}
 					else
 					{
-						this.CreateExplicitLayout(type);
+						CreateExplicitLayout(type);
 					}
 
-					this.BuildMethodTable(type);
+					BuildMethodTable(type);
 
 					foreach (RuntimeType interfaceType in type.Interfaces)
 					{
@@ -109,9 +107,11 @@ namespace Mosa.Runtime.CompilerFramework
 					}
 				}
 
-				this.AllocateStaticFields(type);
+				AllocateStaticFields(type);
 			}
 		}
+
+		#endregion // IAssemblyCompilerStage members
 
 		private bool IsExplicitLayoutRequestedByType(RuntimeType type)
 		{
@@ -127,10 +127,10 @@ namespace Mosa.Runtime.CompilerFramework
 				methodTable.Add(null);
 			}
 
-			this.ScanExplicitInterfaceImplementations(type, methodTable, interfaceMethods);
-			this.AddImplicitInterfaceImplementations(type, methodTable, interfaceMethods);
+			ScanExplicitInterfaceImplementations(type, methodTable, interfaceMethods);
+			AddImplicitInterfaceImplementations(type, methodTable, interfaceMethods);
 
-			this.AskLinkerToCreateMethodTable(type.FullName + "$" + interfaceType.FullName, methodTable);
+			AskLinkerToCreateMethodTable(type.FullName + "$" + interfaceType.FullName, methodTable);
 		}
 
 		private void ScanExplicitInterfaceImplementations(RuntimeType type, IList<RuntimeMethod> methodTable, IList<RuntimeMethod> interfaceMethods)
@@ -332,7 +332,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 			foreach (RuntimeField field in type.Fields)
 			{
-				this._architecture.GetTypeRequirements(field.SignatureType, out fieldSize, out typeAlignment);
+				this.architecture.GetTypeRequirements(field.SignatureType, out fieldSize, out typeAlignment);
 
 				// Pad the field in the type
 				if (0 != packingSize)
@@ -398,10 +398,10 @@ namespace Mosa.Runtime.CompilerFramework
 
 			// Determine the size of the type & alignment requirements
 			int size, alignment;
-			this._architecture.GetTypeRequirements(field.SignatureType, out size, out alignment);
+			this.architecture.GetTypeRequirements(field.SignatureType, out size, out alignment);
 
 			if (field.SignatureType.Type == CilElementType.ValueType)
-				size = ObjectModelUtility.ComputeTypeSize(field.DeclaringType, (field.SignatureType as Metadata.Signatures.ValueTypeSigType).Token, this.compiler.Metadata, _architecture);
+				size = ObjectModelUtility.ComputeTypeSize(field.DeclaringType, (field.SignatureType as Metadata.Signatures.ValueTypeSigType).Token, this.compiler.Metadata, architecture);
 
 			// The linker section to move this field into
 			SectionKind section;
@@ -450,6 +450,5 @@ namespace Mosa.Runtime.CompilerFramework
 			stream.Write(new byte[size], 0, size);
 		}
 
-		#endregion // IAssemblyCompilerStage members
 	}
 }

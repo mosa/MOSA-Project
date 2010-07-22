@@ -21,109 +21,121 @@ using Mosa.Tools.Compiler.TypeInitializers;
 
 namespace Mosa.Tools.Compiler
 {
-    public class AssemblyCompilationStage : IAssemblyCompilerStage
-    {
-        private readonly List<IMetadataModule> inputAssemblies;
+	public class AssemblyCompilationStage : IAssemblyCompilerStage
+	{
+		private readonly List<IMetadataModule> inputAssemblies;
 
-        private AssemblyCompiler outputAssemblyCompiler;
+		private AssemblyCompiler outputAssemblyCompiler;
 
-        private IAssemblyLinker linker;
+		private IAssemblyLinker linker;
 
-        private ITypeInitializerSchedulerStage typeInitializerSchedulerStage;
+		private ITypeInitializerSchedulerStage typeInitializerSchedulerStage;
 
-        public AssemblyCompilationStage(IEnumerable<string> inputFileNames)
-        {
-            this.inputAssemblies = new List<IMetadataModule>();
-            foreach (string inputFileName in inputFileNames)
-            {
-                IMetadataModule assembly = this.LoadAssembly(RuntimeBase.Instance, inputFileName);
-                this.inputAssemblies.Add(assembly);
-            }
-        }
+		public AssemblyCompilationStage(IEnumerable<string> inputFileNames)
+		{
+			inputAssemblies = new List<IMetadataModule>();
 
-        public string Name
-        {
-            get
-            {
-                return @"AssemblyCompilationStage";
-            }
-        }
+			//List<IMetadataModule> modules = new List<IMetadataModule>();
 
-        public void Run()
-        {
-            foreach (IMetadataModule assembly in this.inputAssemblies)
-            {
-                this.CompileAssembly(assembly);
-            }
-        }
+			foreach (string inputFileName in inputFileNames)
+			{
+				IMetadataModule assembly = LoadAssembly(RuntimeBase.Instance, inputFileName);
+				inputAssemblies.Add(assembly);
 
-        public void Setup(AssemblyCompiler compiler)
-        {
-            this.outputAssemblyCompiler = compiler;
-            this.typeInitializerSchedulerStage = compiler.Pipeline.FindFirst<ITypeInitializerSchedulerStage>();
-            this.linker = compiler.Pipeline.FindFirst<IAssemblyLinker>();
-        }
+				//modules.Add(assembly);
+			}
 
-        private IMetadataModule LoadAssembly(RuntimeBase runtime, string assemblyFileName)
-        {
-            try
-            {
-                IMetadataModule assemblyModule = runtime.AssemblyLoader.Load(assemblyFileName);
+			//Mosa.Runtime.Metadata.MergedMetadata merged = new Runtime.Metadata.MergedMetadata(modules);
+			//inputAssemblies.Add(merged);
+		}
 
-                // Try to load debug information for the compilation
-                this.LoadAssemblyDebugInfo(assemblyFileName);
+		#region IPipelineStage members
 
-                return assemblyModule;
-            }
-            catch (BadImageFormatException bife)
-            {
-                throw new CompilationException(String.Format("Couldn't load input file {0} (invalid format).", assemblyFileName), bife);
-            }
-        }
+		/// <summary>
+		/// Retrieves the name of the compilation stage.
+		/// </summary>
+		/// <value>The name of the compilation stage.</value>
+		string IPipelineStage.Name { get { return @"AssemblyCompilationStage"; } }
 
-        private void LoadAssemblyDebugInfo(string assemblyFileName)
-        {
-            string dbgFile;
-            dbgFile = Path.Combine(Path.GetDirectoryName(assemblyFileName), Path.GetFileNameWithoutExtension(assemblyFileName) + ".pdb") + "!!";
-            if (File.Exists(dbgFile))
-            {
-                using (FileStream fileStream = new FileStream(dbgFile, FileMode.Open, FileAccess.Read, FileShare.Read))
-                {
-                    using (PdbReader reader = new PdbReader(fileStream))
-                    {
-                        Debug.WriteLine(@"Global symbols:");
-                        foreach (CvSymbol symbol in reader.GlobalSymbols)
-                        {
-                            Debug.WriteLine("\t" + symbol.ToString());
-                        }
+		#endregion // IPipelineStage
 
-                        Debug.WriteLine(@"Types:");
-                        foreach (PdbType type in reader.Types)
-                        {
-                            Debug.WriteLine("\t" + type.Name);
-                            Debug.WriteLine("\t\tSymbols:");
-                            foreach (CvSymbol symbol in type.Symbols)
-                            {
-                                Debug.WriteLine("\t\t\t" + symbol.ToString());
-                            }
+		#region IAssemblyCompilerStage
 
-                            Debug.WriteLine("\t\tLines:");
-                            foreach (CvLine line in type.LineNumbers)
-                            {
-                                Debug.WriteLine("\t\t\t" + line.ToString());
-                            }
-                        }
-                    }
-                }
-            }
-        }
+		void IAssemblyCompilerStage.Run()
+		{
+			foreach (IMetadataModule assembly in inputAssemblies)
+				CompileAssembly(assembly);
+		}
 
-        private void CompileAssembly(IMetadataModule assembly)
-        {
-            using (AotAssemblyCompiler assemblyCompiler = new AotAssemblyCompiler(this.outputAssemblyCompiler.Architecture, assembly, this.typeInitializerSchedulerStage, this.linker))
-            {
-                assemblyCompiler.Run();
-            }
-        }
-    }
+		void IAssemblyCompilerStage.Setup(AssemblyCompiler compiler)
+		{
+			outputAssemblyCompiler = compiler;
+			typeInitializerSchedulerStage = compiler.Pipeline.FindFirst<ITypeInitializerSchedulerStage>();
+			linker = compiler.Pipeline.FindFirst<IAssemblyLinker>();
+		}
+
+		#endregion IAssemblyCompilerStage
+
+		private IMetadataModule LoadAssembly(RuntimeBase runtime, string assemblyFileName)
+		{
+			try
+			{
+				IMetadataModule assemblyModule = runtime.AssemblyLoader.Load(assemblyFileName);
+
+				// Try to load debug information for the compilation
+				LoadAssemblyDebugInfo(assemblyFileName);
+
+				return assemblyModule;
+			}
+			catch (BadImageFormatException bife)
+			{
+				throw new CompilationException(String.Format("Couldn't load input file {0} (invalid format).", assemblyFileName), bife);
+			}
+		}
+
+		private void LoadAssemblyDebugInfo(string assemblyFileName)
+		{
+			string dbgFile = Path.Combine(Path.GetDirectoryName(assemblyFileName), Path.GetFileNameWithoutExtension(assemblyFileName) + ".pdb") + "!!";
+
+			if (File.Exists(dbgFile))
+			{
+				using (FileStream fileStream = new FileStream(dbgFile, FileMode.Open, FileAccess.Read, FileShare.Read))
+				{
+					using (PdbReader reader = new PdbReader(fileStream))
+					{
+						Debug.WriteLine(@"Global symbols:");
+						foreach (CvSymbol symbol in reader.GlobalSymbols)
+						{
+							Debug.WriteLine("\t" + symbol.ToString());
+						}
+
+						Debug.WriteLine(@"Types:");
+						foreach (PdbType type in reader.Types)
+						{
+							Debug.WriteLine("\t" + type.Name);
+							Debug.WriteLine("\t\tSymbols:");
+							foreach (CvSymbol symbol in type.Symbols)
+							{
+								Debug.WriteLine("\t\t\t" + symbol.ToString());
+							}
+
+							Debug.WriteLine("\t\tLines:");
+							foreach (CvLine line in type.LineNumbers)
+							{
+								Debug.WriteLine("\t\t\t" + line.ToString());
+							}
+						}
+					}
+				}
+			}
+		}
+
+		private void CompileAssembly(IMetadataModule assembly)
+		{
+			using (AotAssemblyCompiler assemblyCompiler = new AotAssemblyCompiler(outputAssemblyCompiler.Architecture, assembly, typeInitializerSchedulerStage, linker))
+			{
+				assemblyCompiler.Run();
+			}
+		}
+	}
 }

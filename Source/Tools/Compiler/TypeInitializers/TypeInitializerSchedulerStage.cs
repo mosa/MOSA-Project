@@ -88,6 +88,27 @@ namespace Mosa.Tools.Compiler.TypeInitializers
 
 		#endregion // IPipelineStage Members
 
+		#region IAssemblyCompilerStage Members
+		
+		public void Setup(AssemblyCompiler compiler)
+		{
+			this.compiler = compiler;
+		}
+
+		/// <summary>
+		/// Performs stage specific processing on the compiler context.
+		/// </summary>
+		public void Run()
+		{
+            Schedule(compiler.Assembly.EntryPoint);
+			_ctx.AppendInstruction(IR.Instruction.EpilogueInstruction);
+			_ctx.Other = 0;
+
+			_method = LinkTimeCodeGenerator.Compile(compiler, @"AssemblyInit", InstructionSet);
+		}
+
+		#endregion // IAssemblyCompilerStage Members
+
 		#region Methods
 
 		/// <summary>
@@ -102,25 +123,5 @@ namespace Mosa.Tools.Compiler.TypeInitializers
 
 		#endregion // Methods
 
-		#region IAssemblyCompilerStage Members
-		
-		public void Setup(AssemblyCompiler compiler)
-		{
-			this.compiler = compiler;
-		}
-
-		/// <summary>
-		/// Performs stage specific processing on the compiler context.
-		/// </summary>
-		public void Run()
-		{
-            this.Schedule(this.compiler.Assembly.EntryPoint);
-			_ctx.AppendInstruction(IR.Instruction.EpilogueInstruction);
-			_ctx.Other = 0;
-
-			_method = LinkTimeCodeGenerator.Compile(this.compiler, @"AssemblyInit", InstructionSet);
-		}
-
-		#endregion // IAssemblyCompilerStage Members
 	}
 }
