@@ -24,7 +24,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// <summary>
 	/// Base class for code transformation stages.
 	/// </summary>
-	public abstract class CodeTransformationStage : BaseStage, IMethodCompilerStage, IVisitor, IPipelineStage
+	public abstract class CodeTransformationStage : BaseMethodCompilerStage, IMethodCompilerStage, IVisitor, IPipelineStage
 	{
 
 		#region Data members

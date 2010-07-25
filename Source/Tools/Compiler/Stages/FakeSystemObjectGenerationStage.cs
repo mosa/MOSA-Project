@@ -13,7 +13,7 @@ using Mosa.Runtime.Metadata;
 
 namespace Mosa.Tools.Compiler.Stages
 {
-    public class FakeSystemObjectGenerationStage : BaseStage, IAssemblyCompilerStage, IPipelineStage
+    public class FakeSystemObjectGenerationStage : BaseMethodCompilerStage, IAssemblyCompilerStage, IPipelineStage
     {
         private AssemblyCompiler compiler;
 

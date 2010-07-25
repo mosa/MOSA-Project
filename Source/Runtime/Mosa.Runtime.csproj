@@ -188,7 +188,7 @@
     <Compile Include="CompilerFramework\CIL\UnboxInstruction.cs" />
     <Compile Include="CompilerFramework\Branch.cs" />
     <Compile Include="CompilerFramework\Context.cs" />
-    <Compile Include="CompilerFramework\BaseStage.cs" />
+    <Compile Include="CompilerFramework\BaseMethodCompilerStage.cs" />
     <Compile Include="CompilerFramework\ICodeEmitter.cs" />
     <Compile Include="CompilerFramework\IR\AddressOfInstruction.cs" />
     <Compile Include="CompilerFramework\IR\ArithmeticShiftRightInstruction.cs" />

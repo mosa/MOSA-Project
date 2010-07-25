@@ -16,7 +16,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// This stage just saves statistics about the code we're compiling, for example
 	/// ratio of IL to IR code, number of compiled instructions, etc.
 	/// </summary>
-	public class InstructionStatisticsStage : BaseStage, IMethodCompilerStage, IPipelineStage
+	public class InstructionStatisticsStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
 	{
 		/// <summary>
 		/// 

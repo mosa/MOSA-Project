@@ -20,7 +20,7 @@ namespace Mosa.Tools.Compiler
 	/// 
 	/// TODO: put this selector stage somewhere in the actual pipeline.
 	/// </summary>
-	public class RegisterAllocatorSelector : BaseStage, IMethodCompilerStage, IPipelineStage
+	public class RegisterAllocatorSelector : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
 	{
 		/// <summary>
 		/// The linear register allocator.

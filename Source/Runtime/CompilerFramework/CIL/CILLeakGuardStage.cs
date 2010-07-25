@@ -15,7 +15,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
     /// <summary>
     /// Logs CIL instruction, which leak past IR transformation.
     /// </summary>
-    public class CILLeakGuardStage : BaseStage, IMethodCompilerStage
+    public class CILLeakGuardStage : BaseMethodCompilerStage, IMethodCompilerStage
     {
         public CILLeakGuardStage()
         {

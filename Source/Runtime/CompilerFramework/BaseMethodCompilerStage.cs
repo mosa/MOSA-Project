@@ -21,7 +21,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// <summary>
 	/// Basic base class for pipeline stages
 	/// </summary>
-	public abstract class BaseStage
+	public abstract class BaseMethodCompilerStage
 	{
 		#region Data members
 
@@ -178,7 +178,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <param name="conditionCode">The condition code to get an unsigned form from.</param>
 		/// <returns>The unsigned form of the given condition code.</returns>
-		protected IR.ConditionCode GetUnsignedConditionCode(IR.ConditionCode conditionCode)
+		protected static IR.ConditionCode GetUnsignedConditionCode(IR.ConditionCode conditionCode)
 		{
 			switch (conditionCode) {
 				case IR.ConditionCode.Equal: break;
@@ -202,7 +202,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <param name="conditionCode">The condition code.</param>
 		/// <returns></returns>
-		protected IR.ConditionCode GetOppositeConditionCode(IR.ConditionCode conditionCode)
+		protected static IR.ConditionCode GetOppositeConditionCode(IR.ConditionCode conditionCode)
 		{
 			switch (conditionCode) {
 				case IR.ConditionCode.Equal: return IR.ConditionCode.NotEqual;
@@ -221,6 +221,7 @@ namespace Mosa.Runtime.CompilerFramework
 			}
 
 		}
+
 		#endregion // Utility Methods
 
 	}

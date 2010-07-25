@@ -26,7 +26,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// representation. The instructions are grouped into basic Blocks
 	/// for easier local optimizations in later compiler stages.
 	/// </remarks>
-	public sealed class DecodingStage : BaseStage, IMethodCompilerStage, IInstructionDecoder, IPipelineStage
+	public sealed class DecodingStage : BaseMethodCompilerStage, IMethodCompilerStage, IInstructionDecoder, IPipelineStage
 	{
 		private readonly DataConverter LittleEndianBitConverter = DataConverter.LittleEndian;
 

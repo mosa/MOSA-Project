@@ -24,7 +24,7 @@ namespace Mosa.Runtime.CompilerFramework
     /// The minimal form only inserts the really required PHI functions in order to reduce the 
     /// number of live registers used by register allocation.
     /// </remarks>
-    public sealed class EnterSSA : BaseStage, IMethodCompilerStage, IPipelineStage
+    public sealed class EnterSSA : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
     {
         #region Tracing
 

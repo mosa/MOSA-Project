@@ -28,7 +28,7 @@ namespace Mosa.Tools.Compiler.TypeInitializers
 	/// by the high-level language compiler by placing cctors in some order in
 	/// metadata.
 	/// </remarks>
-	public sealed class TypeInitializerSchedulerStage : BaseStage, IAssemblyCompilerStage, IPipelineStage, ITypeInitializerSchedulerStage
+	public sealed class TypeInitializerSchedulerStage : BaseMethodCompilerStage, IAssemblyCompilerStage, IPipelineStage, ITypeInitializerSchedulerStage
     {
 		#region Data Members
 		

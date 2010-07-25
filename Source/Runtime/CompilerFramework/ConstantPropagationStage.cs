@@ -25,7 +25,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// <para/>
 	/// It is only safe to use this stage on an instruction stream in SSA form.
 	/// </remarks>
-	public sealed class ConstantPropagationStage : BaseStage, IMethodCompilerStage, IPipelineStage
+	public sealed class ConstantPropagationStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
     {
         #region IPipelineStage Members
 
