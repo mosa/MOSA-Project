@@ -50,7 +50,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 		#endregion // Data members
 
-		#region IAssemblyCompilerStage members
+		#region IPipelineStage members
 
 		/// <summary>
 		/// Retrieves the name of the compilation stage.
@@ -58,7 +58,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value>The name of the compilation stage.</value>
 		string IPipelineStage.Name { get { return @"Type Layout"; } }
 
-		#endregion // IAssemblyCompilerStage
+		#endregion // IPipelineStage
 
 		#region IAssemblyCompilerStage members
 

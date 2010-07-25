@@ -23,7 +23,7 @@ namespace Mosa.Platforms.x86
 	public sealed class AddressModeConversionStage : BaseTransformationStage, IPipelineStage
 	{
 
-		#region IMethodCompilerStage Members
+		#region IPipelineStage Members
 
 		/// <summary>
 		/// Retrieves the name of the compilation stage.
@@ -31,7 +31,9 @@ namespace Mosa.Platforms.x86
 		/// <value>The name of the compilation stage.</value>
 		string IPipelineStage.Name { get { return @"X86.AddressModeConversionStage"; } }
 
-		#endregion // IMethodCompilerStage Members
+		#endregion // IPipelineStage Members
+
+		#region IMethodCompilerStage Members
 
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
@@ -45,7 +47,9 @@ namespace Mosa.Platforms.x86
 							if (ctx.Instruction is CIL.ArithmeticInstruction || ctx.Instruction is IR.ThreeOperandInstruction)
 								ThreeTwoAddressConversion(ctx);
 		}
-
+		
+		#endregion // IMethodCompilerStage Members
+		
 		/// <summary>
 		/// Converts the given instruction from three address format to a two address format.
 		/// </summary>

@@ -23,12 +23,6 @@ namespace Mosa.Tools.Compiler.Metadata
 	public sealed partial class MetadataBuilderStage
 	{
 
-		#region IPipelineStage members
-
-		string IPipelineStage.Name { get { return @"MetadataBuilderStage"; } }
-
-		#endregion // IPipelineStage members
-
 		/// <summary>
 		/// Holds the token types of all tables supported.
 		/// </summary>
