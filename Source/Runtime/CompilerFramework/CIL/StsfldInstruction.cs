@@ -42,16 +42,16 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(Context ctx, IInstructionDecoder decoder)
+		public override void Decode(Context ctx, IInstructionDecoder decoder, ITypeSystem typeSystem)
 		{
 			// Decode base classes first
-			base.Decode(ctx, decoder);
+			base.Decode(ctx, decoder, typeSystem);
 
 			// Read the field from the code
 			TokenTypes token;
 			decoder.Decode(out token);
 
-			ctx.RuntimeField = RuntimeBase.Instance.TypeLoader.GetField(decoder.Method, decoder.Method.Module, token);
+			ctx.RuntimeField = typeSystem.GetField(decoder.Method, decoder.Method.Module, token);
 			Debug.Assert((ctx.RuntimeField.Attributes & FieldAttributes.Static) == FieldAttributes.Static, @"Static field access on non-static field.");
 		}
 

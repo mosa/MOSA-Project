@@ -109,10 +109,10 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		#region Internals
 
 		/// <summary>
-		/// Reads the method _header from the instruction stream.
+		/// Reads the method header from the instruction stream.
 		/// </summary>
 		/// <param name="reader">The reader used to decode the instruction stream.</param>
-		/// <param name="header">The method _header structure to populate.</param>
+		/// <param name="header">The method header structure to populate.</param>
 		private void ReadMethodHeader(BinaryReader reader, ref MethodHeader header)
 		{
 			header.flags = (MethodFlags)reader.ReadByte();
@@ -229,7 +229,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 				// Create and initialize the corresponding instruction
 				ctx.AppendInstruction(instruction);
-				instruction.Decode(ctx, this);
+				instruction.Decode(ctx, this, Runtime.TypeLoader);	
 				ctx.Label = instOffset;
 				//ctx.Prefix = prefix;
 

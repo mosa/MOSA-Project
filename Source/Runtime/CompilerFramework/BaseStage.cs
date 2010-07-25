@@ -12,6 +12,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
+using Mosa.Runtime.Vm;
+
 using CIL = Mosa.Runtime.CompilerFramework.CIL;
 
 namespace Mosa.Runtime.CompilerFramework
@@ -43,6 +45,11 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		protected List<BasicBlock> BasicBlocks;
 
+		/// <summary>
+		/// Holds the runtime base
+		/// </summary>
+		protected RuntimeBase Runtime;
+
 		#endregion // Data members
 
 		#region IMethodCompilerStage members
@@ -60,6 +67,8 @@ namespace Mosa.Runtime.CompilerFramework
 			InstructionSet = compiler.InstructionSet;
 			BasicBlocks = compiler.BasicBlocks;
 			Architecture = compiler.Architecture;
+
+			Runtime = Mosa.Runtime.RuntimeBase.Instance; // FIXME: RuntimeBase
 		}
 
 		#endregion

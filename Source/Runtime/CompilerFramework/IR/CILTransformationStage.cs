@@ -443,7 +443,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 
             SZArraySigType arrayType = (SZArraySigType)ctx.Result.Type;
             ClassSigType elementSigType = arrayType.ElementType as ClassSigType;
-            RuntimeType elementType = RuntimeBase.Instance.TypeLoader.GetType(this.MethodCompiler.Method, this.MethodCompiler.Assembly, elementSigType.Token);
+            RuntimeType elementType = Runtime.TypeLoader.GetType(this.MethodCompiler.Method, this.MethodCompiler.Assembly, elementSigType.Token);
             Debug.Assert(elementType != null, @"Newarr didn't specify class signature?");
 
             Operand lengthOperand = ctx.Operand1;
@@ -473,7 +473,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
             Debug.Assert(thisReference != null, @"Newobj didn't specify class signature?");
 
             ClassSigType classSigType = (ClassSigType)thisReference.Type;
-            RuntimeType classType = RuntimeBase.Instance.TypeLoader.GetType(this.MethodCompiler.Method, this.MethodCompiler.Assembly, classSigType.Token);
+            RuntimeType classType = Runtime.TypeLoader.GetType(this.MethodCompiler.Method, this.MethodCompiler.Assembly, classSigType.Token);
 
             List<Operand> ctorOperands = new List<Operand>(ctx.Operands);
             RuntimeMethod ctorMethod = ctx.InvokeTarget;
@@ -1652,9 +1652,9 @@ namespace Mosa.Runtime.CompilerFramework.IR
             if (intrinsicAttributeTypes == null)
             {
 
-                if (RuntimeBase.Instance.AssemblyLoader.Modules.FirstOrDefault(item => item.Name == @"mscorlib") != null)
+                if (Runtime.AssemblyLoader.Modules.FirstOrDefault(item => item.Name == @"mscorlib") != null)
                 {
-                    RuntimeType attributeType = RuntimeBase.Instance.TypeLoader.GetType(@"Mosa.Runtime.CompilerFramework.IntrinsicAttribute, mscorlib");
+                    RuntimeType attributeType = Runtime.TypeLoader.GetType(@"Mosa.Runtime.CompilerFramework.IntrinsicAttribute, mscorlib");
                     if (attributeType != null)
                     {
                         intrinsicAttributeTypes = new RuntimeType[2];
@@ -1667,7 +1667,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
                     intrinsicAttributeTypes = new RuntimeType[1];
                 }
 
-                intrinsicAttributeTypes[0] = RuntimeBase.Instance.TypeLoader.GetType(@"Mosa.Runtime.CompilerFramework.IntrinsicAttribute, Mosa.Runtime");
+                intrinsicAttributeTypes[0] = Runtime.TypeLoader.GetType(@"Mosa.Runtime.CompilerFramework.IntrinsicAttribute, Mosa.Runtime");
             }
 
 	        
@@ -1823,7 +1823,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
             Debug.Assert(rm != null, @"Call doesn't have a target.");
 
             // Retrieve the runtime type
-            RuntimeType rt = RuntimeBase.Instance.TypeLoader.GetType(@"Mosa.Runtime.Vm.VmCallAttribute, Mosa.Runtime");
+            RuntimeType rt = Runtime.TypeLoader.GetType(@"Mosa.Runtime.Vm.VmCallAttribute, Mosa.Runtime");
             if (rm.IsDefined(rt) == true)
             {
                 foreach (RuntimeAttribute ra in rm.CustomAttributes)
@@ -1848,7 +1848,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <param name="internalCallTarget">The internal call target.</param>
 		private void ReplaceWithVmCall(Context ctx, VmCall internalCallTarget)
 		{
-			RuntimeType rt = RuntimeBase.Instance.TypeLoader.GetType(@"Mosa.Runtime.RuntimeBase");
+			RuntimeType rt = Runtime.TypeLoader.GetType(@"Mosa.Runtime.RuntimeBase");
             RuntimeMethod callTarget = rt.FindMethod(internalCallTarget.ToString());
 
 			ctx.ReplaceInstructionOnly(IR.Instruction.CallInstruction);
