@@ -15,7 +15,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// This is not a real register allocator. It ensures that operations with register
 	/// constraints are executed properly, but does not assign variables to fixed registers.
 	/// </remarks>
-	public class LinearRegisterAllocator : BaseStage, IMethodCompilerStage, IPipelineStage
+	public class LinearRegisterAllocator : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
 	{
 		#region Types
 

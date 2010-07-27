@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// <summary>
 	/// Base class for code generation stages.
 	/// </summary>
-	public class CodeGenerationStage : BaseStage, ICodeGenerationStage, IMethodCompilerStage, IPipelineStage
+	public class CodeGenerationStage : BaseMethodCompilerStage, ICodeGenerationStage, IMethodCompilerStage, IPipelineStage
 	{
 
 		#region Data members

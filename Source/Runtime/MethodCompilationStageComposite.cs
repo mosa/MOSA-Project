@@ -15,7 +15,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// MethodCompilationStageComposite composes several MethodCompilerStages into 
 	/// one stage and forwards calls to the stage to multiple _stages.
 	/// </summary>
-	public class MethodCompilationStageComposite : BaseStage, IMethodCompilerStage, IPipelineStage
+	public class MethodCompilationStageComposite : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
 	{
 		/// <summary>
 		/// List of _stages

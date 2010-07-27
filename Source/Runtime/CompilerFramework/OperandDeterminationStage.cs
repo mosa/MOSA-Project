@@ -18,7 +18,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// <summary>
 	/// The Operand Determination Stage determines the operands for each instructions.
 	/// </summary>
-    public class OperandDeterminationStage : BaseStage, IMethodCompilerStage
+    public class OperandDeterminationStage : BaseMethodCompilerStage, IMethodCompilerStage
     {
         #region Data members
 

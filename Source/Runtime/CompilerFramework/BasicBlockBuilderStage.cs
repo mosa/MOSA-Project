@@ -20,7 +20,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// This compilation stage is used by method compilers after the
 	/// IL decoding stage to build basic Blocks out of the instruction list.
 	/// </summary>
-	public sealed class BasicBlockBuilderStage : BaseStage, IMethodCompilerStage, IPipelineStage
+	public sealed class BasicBlockBuilderStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
 	{
 		#region Data members
 

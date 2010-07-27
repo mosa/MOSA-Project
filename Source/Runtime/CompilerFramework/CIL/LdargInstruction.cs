@@ -8,6 +8,7 @@
  */
 
 using Mosa.Runtime.CompilerFramework.Operands;
+using Mosa.Runtime.Vm;
 
 namespace Mosa.Runtime.CompilerFramework.CIL
 {
@@ -35,14 +36,15 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
+		/// <param name="typeSystem">The type system.</param>
 		/// <remarks>
 		/// This method is used by instructions to retrieve immediate operands
 		/// From the instruction stream.
 		/// </remarks>
-		public override void Decode(Context ctx, IInstructionDecoder decoder)
+		public override void Decode(Context ctx, IInstructionDecoder decoder, ITypeSystem typeSystem)
 		{
 			// Decode base classes first
-			base.Decode(ctx, decoder);
+			base.Decode(ctx, decoder, typeSystem);
 
 			ushort argIdx;
 

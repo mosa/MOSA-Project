@@ -111,9 +111,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(Context ctx, IInstructionDecoder decoder)
+		public override void Decode(Context ctx, IInstructionDecoder decoder, ITypeSystem typeSystem)
 		{
-			DecodeInvocationTarget(ctx, decoder, this.InvokeSupport);
+			DecodeInvocationTarget(ctx, decoder, InvokeSupport, typeSystem);
 		}
 
 		/// <summary>
@@ -153,7 +153,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <param name="ctx">The context.</param>
 		/// <param name="decoder">The IL decoder, which provides decoding functionality.</param>
 		/// <param name="flags">Flags, which control the</param>
-		protected static TokenTypes DecodeInvocationTarget(Context ctx, IInstructionDecoder decoder, InvokeSupportFlags flags)
+		protected static TokenTypes DecodeInvocationTarget(Context ctx, IInstructionDecoder decoder, InvokeSupportFlags flags, ITypeSystem typeSystem)
 		{
 			// Holds the token of the call target
 			TokenTypes callTarget, targetType;
@@ -170,11 +170,11 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			switch (targetType)
 			{
 				case TokenTypes.MethodDef:
-					method = RuntimeBase.Instance.TypeLoader.GetMethod(decoder.Method, decoder.Method.Module, callTarget);
+					method = typeSystem.GetMethod(decoder.Method, decoder.Method.Module, callTarget);
 					break;
 
 				case TokenTypes.MemberRef:
-					method = RuntimeBase.Instance.TypeLoader.GetMethod(decoder.Method, decoder.Method.Module, callTarget);
+					method = typeSystem.GetMethod(decoder.Method, decoder.Method.Module, callTarget);
 					if (method.DeclaringType.IsGeneric == true)
 					{
 						ScheduleMethodForCompilation(decoder, method);
@@ -182,7 +182,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 					break;
 
 				case TokenTypes.MethodSpec:
-					method = DecodeMethodSpecification(decoder, callTarget);
+					method = DecodeMethodSpecification(decoder, callTarget, typeSystem);
 					break;
 
 				default:
@@ -195,9 +195,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			return callTarget;
 		}
 
-		private static RuntimeMethod DecodeMethodSpecification(IInstructionDecoder decoder, TokenTypes callTarget)
+		private static RuntimeMethod DecodeMethodSpecification(IInstructionDecoder decoder, TokenTypes callTarget, ITypeSystem typeSystem)
 		{
-			RuntimeMethod method = RuntimeBase.Instance.TypeLoader.GetMethod(decoder.Method, decoder.Compiler.Assembly, callTarget);
+			RuntimeMethod method = typeSystem.GetMethod(decoder.Method, decoder.Compiler.Assembly, callTarget);
 
 			ScheduleMethodForCompilation(decoder, method);
 

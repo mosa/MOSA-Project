@@ -18,7 +18,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// according to Steven S. Muchnick, Advanced Compiler Design 
 	/// and Implementation (Morgan Kaufmann, 1997) pp. 378-396
 	/// </summary>
-	public class LocalCSE : BaseStage, IMethodCompilerStage, IPipelineStage
+	public class LocalCSE : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
 	{
 		/// <summary>
 		/// 

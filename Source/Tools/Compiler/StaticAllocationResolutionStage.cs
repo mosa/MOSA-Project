@@ -12,7 +12,7 @@ using Mosa.Runtime.CompilerFramework.Operands;
 
 namespace Mosa.Tools.Compiler
 {
-	public class StaticAllocationResolutionStage : BaseStage, IMethodCompilerStage
+	public class StaticAllocationResolutionStage : BaseMethodCompilerStage, IMethodCompilerStage
 	{
         private IAssemblyLinker linker;
 

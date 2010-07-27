@@ -18,7 +18,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// <summary>
 	/// The FlowGraph Visualization Stage emits flowgraphs for graphviz.
 	/// </summary>
-	public class FlowGraphVisualizationStage : BaseStage, IMethodCompilerStage, IPipelineStage
+	public class FlowGraphVisualizationStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
 	{
 		#region Data members
 

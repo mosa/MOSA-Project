@@ -51,7 +51,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// <para />
 	/// - EAX and ECX are not touched for floating point. They keep their last state.
 	/// </remarks>
-	public class StackRegisterAllocator : BaseStage, IMethodCompilerStage, IPipelineStage
+	public class StackRegisterAllocator : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
 	{
 		/// <summary>
 		/// Holds the number of registers used for the evaluation stack.

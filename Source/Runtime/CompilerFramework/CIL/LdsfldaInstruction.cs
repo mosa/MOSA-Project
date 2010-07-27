@@ -31,17 +31,17 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(Context ctx, IInstructionDecoder decoder)
+		public override void Decode(Context ctx, IInstructionDecoder decoder, ITypeSystem typeSystem)
 		{
 			// Decode base classes first
-			base.Decode(ctx, decoder);
+			base.Decode(ctx, decoder, typeSystem);
 
 			// Read the _stackFrameIndex From the code
 			TokenTypes token;
 			decoder.Decode(out token);
-            RuntimeField field = RuntimeBase.Instance.TypeLoader.GetField (decoder.Method, decoder.Method.Module, token);
-            ctx.RuntimeField = field;
-            ctx.Result = decoder.Compiler.CreateTemporary(new Mosa.Runtime.Metadata.Signatures.SigType(CilElementType.Ptr));
+			RuntimeField field = typeSystem.GetField(decoder.Method, decoder.Method.Module, token);
+			ctx.RuntimeField = field;
+			ctx.Result = decoder.Compiler.CreateTemporary(new Mosa.Runtime.Metadata.Signatures.SigType(CilElementType.Ptr));
 		}
 
 		/// <summary>

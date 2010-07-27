@@ -42,10 +42,10 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(Context ctx, IInstructionDecoder decoder)
+		public override void Decode(Context ctx, IInstructionDecoder decoder, ITypeSystem typeSystem)
 		{
 			// Decode base classes first
-			base.Decode(ctx, decoder);
+			base.Decode(ctx, decoder, typeSystem);
 
 			TokenTypes token;
 			decoder.Decode(out token);

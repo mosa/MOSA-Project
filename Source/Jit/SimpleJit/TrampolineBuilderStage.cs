@@ -18,7 +18,7 @@ namespace Mosa.Jit.SimpleJit
     /// <summary>
     /// The first stage in a method compiler building the call trampoline.
     /// </summary>
-    sealed class TrampolineBuilderStage : BaseStage, IMethodCompilerStage
+    sealed class TrampolineBuilderStage : BaseMethodCompilerStage, IMethodCompilerStage
     {
 
         #region IMethodCompilerStage Members
