@@ -33,13 +33,13 @@ namespace Mosa.Runtime.CompilerFramework
         /// Called when an methods's compilation begins
         /// </summary>
         /// <param name="compiler">The compiler</param>
-        public virtual void OnMethodCompileBegin(MethodCompilerBase compiler) { }
+		public virtual void OnMethodCompileBegin(IMethodCompiler compiler) { }
 
         /// <summary>
         /// Called when an methods's compilation ends
         /// </summary>
         /// <param name="compiler">The compiler</param>
-        public virtual void OnMethodCompileEnd(MethodCompilerBase compiler) { }
+		public virtual void OnMethodCompileEnd(IMethodCompiler compiler) { }
 
         /// <summary>
         /// Allocates the specified member.

@@ -55,13 +55,15 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		#region IMethodCompilerBuilder
-		IEnumerable<MethodCompilerBase> IMethodCompilerBuilder.Scheduled
+
+		IEnumerable<IMethodCompiler> IMethodCompilerBuilder.Scheduled
 		{
 			get
 			{
 				return null;
 			}
 		}
+
 		#endregion
 
 		#region IPipelineStage

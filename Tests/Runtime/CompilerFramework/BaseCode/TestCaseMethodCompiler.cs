@@ -22,7 +22,7 @@ using Mosa.Tools.Compiler;
 
 namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 {
-    class TestCaseMethodCompiler : MethodCompilerBase
+    class TestCaseMethodCompiler : BaseMethodCompiler
     {
         private readonly TestCaseAssemblyCompiler assemblyCompiler;
 

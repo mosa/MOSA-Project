@@ -25,28 +25,34 @@ namespace Mosa.Runtime.CompilerFramework
 	/// Base class of a method compiler.
 	/// </summary>
 	/// <remarks>
-	/// A _method compiler is responsible for compiling a single function
+	/// A method compiler is responsible for compiling a single function
 	/// of an object. There are various classes derived From MethodCompilerBase,
 	/// which provide specific features, such as jit compilation, runtime
 	/// optimized jitting and others. MethodCompilerBase instances are usually
 	/// created by invoking CreateMethodCompiler on a specific compiler
 	/// instance.
 	/// </remarks>
-	public class MethodCompilerBase : CompilerBase, IMethodCompiler, IDisposable
+	public class BaseMethodCompiler : IMethodCompiler, IDisposable
 	{
+
 		#region Data Members
 
 		/// <summary>
-		/// Holds a list of operands, which represent _method _parameters.
+		/// Holds the pipeline of the compiler.
+		/// </summary>
+		protected CompilerPipeline pipeline;
+
+		/// <summary>
+		/// Holds a list of operands, which represent method parameters.
 		/// </summary>
 		private readonly List<Operand> _parameters;
 
 		private readonly ICompilationSchedulerStage compilationScheduler;
-		
+
 		/// <summary>
 		/// The Architecture of the compilation target.
 		/// </summary>
-		private IArchitecture _architecture;		
+		private IArchitecture _architecture;
 
 		/// <summary>
 		/// Holds the _linker used to resolve external symbols.
@@ -93,16 +99,16 @@ namespace Mosa.Runtime.CompilerFramework
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="MethodCompilerBase"/> class.
+		/// Initializes a new instance of the <see cref="BaseMethodCompiler"/> class.
 		/// </summary>
 		/// <param name="linker">The _linker.</param>
 		/// <param name="architecture">The target compilation Architecture.</param>
 		/// <param name="type">The type, which owns the _method to compile.</param>
 		/// <param name="method">The method to compile by this instance.</param>
-		protected MethodCompilerBase(
+		protected BaseMethodCompiler(
 			IAssemblyLinker linker,
 			IArchitecture architecture,
-		    ICompilationSchedulerStage compilationScheduler,
+			ICompilationSchedulerStage compilationScheduler,
 			RuntimeType type,
 			RuntimeMethod method)
 		{
@@ -111,7 +117,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 			if (linker == null)
 				throw new ArgumentNullException(@"linker");
-			
+
 			if (compilationScheduler == null)
 				throw new ArgumentNullException(@"compilationScheduler");
 
@@ -124,6 +130,9 @@ namespace Mosa.Runtime.CompilerFramework
 			_nextStackSlot = 0;
 			_basicBlocks = new List<BasicBlock>();
 			_instructionSet = null; // this will be set later
+
+			pipeline = new CompilerPipeline();
+
 		}
 
 		#endregion // Construction
@@ -139,7 +148,7 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
-		/// Gets the assembly, which contains the _method.
+		/// Gets the assembly, which contains the method.
 		/// </summary>
 		public IMetadataModule Assembly
 		{
@@ -163,7 +172,7 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
-		/// Gets the owner _type of the _method.
+		/// Gets the owner type of the method.
 		/// </summary>
 		public RuntimeType Type
 		{
@@ -190,10 +199,18 @@ namespace Mosa.Runtime.CompilerFramework
 			set { _basicBlocks = value; }
 		}
 
-        public ICompilationSchedulerStage Scheduler
-        {
-            get { return this.compilationScheduler; }
-        }
+		public ICompilationSchedulerStage Scheduler
+		{
+			get { return this.compilationScheduler; }
+		}
+
+		/// <summary>
+		/// Provides access to the pipeline of this compiler.
+		/// </summary>
+		public CompilerPipeline Pipeline
+		{
+			get { return pipeline; }
+		}
 
 		#endregion // Properties
 
@@ -232,7 +249,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns>A new temporary result operand.</returns>
 		public Operand CreateResultOperand(SigType type)
 		{
-			if (type.Type != CilElementType.I8 && type.Type != CilElementType.U8) {
+			if (type.Type != CilElementType.I8 && type.Type != CilElementType.U8)
+			{
 				return _architecture.CreateResultOperand(type, _nextStackSlot, _nextStackSlot++);
 			}
 			return CreateTemporary(type);
@@ -255,17 +273,18 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public void Dispose()
 		{
-			if (_pipeline == null)
+			if (pipeline == null)
 				throw new ObjectDisposedException(@"MethodCompilerBase");
 
-			foreach (IMethodCompilerStage mcs in _pipeline) {
+			foreach (IMethodCompilerStage mcs in pipeline)
+			{
 				IDisposable d = mcs as IDisposable;
 				if (null != d)
 					d.Dispose();
 			}
 
-			_pipeline.Clear();
-			_pipeline = null;
+			pipeline.Clear();
+			pipeline = null;
 
 			_architecture = null;
 			_linker = null;
@@ -305,11 +324,12 @@ namespace Mosa.Runtime.CompilerFramework
 			if (_locals.Count > index)
 				local = _locals[index];
 
-			if (local == null) {
-				
+			if (local == null)
+			{
+
 				VariableSignature localVariable = _localsSig.Locals[index];
 				this.ScheduleDependencyForCompilation(localVariable.Type);
-								
+
 				local = new LocalVariableOperand(_architecture.StackFrameRegister, String.Format("L_{0}", index), index, localVariable.Type);
 				_locals[index] = local;
 			}
@@ -330,10 +350,10 @@ namespace Mosa.Runtime.CompilerFramework
 			// stage to a different memory location, it should actually be a new one so sharing object
 			// only saves runtime space/perf.
 			MethodSignature sig = _method.Signature;
-			if (sig.HasThis || sig.HasExplicitThis) 
-            {
-                if (index == 0) 
-                {
+			if (sig.HasThis || sig.HasExplicitThis)
+			{
+				if (index == 0)
+				{
 					return new ParameterOperand(
 						_architecture.StackFrameRegister,
 						new RuntimeParameter(_method.Module, @"this", 2, ParameterAttributes.In),
@@ -354,20 +374,20 @@ namespace Mosa.Runtime.CompilerFramework
 			if (_parameters.Count > index)
 				param = _parameters[index];
 
-			if (param == null) 
+			if (param == null)
 			{
-				SigType parameterType = sig.Parameters[index];			
+				SigType parameterType = sig.Parameters[index];
 				param = new ParameterOperand(_architecture.StackFrameRegister, parameters[index], parameterType);
 				_parameters[index] = param;
 			}
 
 			return param;
 		}
-		
+
 		private void ScheduleDependencyForCompilation(SigType signatureType)
 		{
 			RuntimeType runtimeType = null;
-			
+
 			TypeSigType typeSigType = signatureType as TypeSigType;
 			if (typeSigType != null)
 			{
@@ -380,17 +400,17 @@ namespace Mosa.Runtime.CompilerFramework
 				{
 					RuntimeType genericType = this.LoadDependentType(genericSignatureType.BaseType.Token);
 					Console.WriteLine(@"Loaded generic type {0}", genericType.FullName);
-					
+
 					runtimeType = new CilGenericType(genericType, this.Assembly, genericSignatureType, this.Method);
-				} 
+				}
 			}
-			
+
 			if (runtimeType != null)
 			{
 				this.compilationScheduler.ScheduleTypeForCompilation(runtimeType);
 			}
 		}
-		
+
 		private RuntimeType LoadDependentType(TokenTypes tokenType)
 		{
 			return RuntimeBase.Instance.TypeLoader.GetType(this.Method, this.Assembly, tokenType);
@@ -406,30 +426,65 @@ namespace Mosa.Runtime.CompilerFramework
 				throw new ArgumentNullException(@"localVariableSignature");
 
 			_localsSig = localVariableSignature;
-			
+
 			int count = _localsSig.Locals.Length;
 			this._locals = new List<Operand>(count);
 			for (int index = 0; index < count; index++)
 				this._locals.Add(null);
-			
+
 			_nextStackSlot = _locals.Count + 1;
 		}
 
 		/// <summary>
-		/// Called before the _method compiler begins compiling the method.
+		/// Called before the method compiler begins compiling the method.
 		/// </summary>
 		protected virtual void BeginCompile()
 		{
 		}
 
 		/// <summary>
-		/// Called after the _method compiler has finished compiling the method.
+		/// Called after the method compiler has finished compiling the method.
 		/// </summary>
 		protected virtual void EndCompile()
 		{
 		}
 
-		#region IBasicBlockProvider members
+		/// <summary>
+		/// Gets the previous stage.
+		/// </summary>
+		/// <param name="stage">The stage.</param>
+		/// <returns>
+		/// The previous compilation stage supporting the requested type or null.
+		/// </returns>
+		public IPipelineStage GetPreviousStage(IPipelineStage stage)
+		{
+			return GetPreviousStage(typeof(IPipelineStage));
+		}
+
+		/// <summary>
+		/// Finds a stage, which ran before the current one and supports the specified type.
+		/// </summary>
+		/// <param name="stageType">The (interface) type to look for.</param>
+		/// <returns>The previous compilation stage supporting the requested type.</returns>
+		/// <remarks>
+		/// This method is used by stages to access the results of a previous compilation stage.
+		/// </remarks>
+		public IPipelineStage GetPreviousStage(Type stageType)
+		{
+			IPipelineStage result = null;
+
+			for (int stage = pipeline.CurrentStage - 1; -1 != stage; stage--)
+			{
+				IPipelineStage temp = pipeline[stage];
+				if (stageType.IsInstanceOfType(temp))
+				{
+					result = temp;
+					break;
+				}
+			}
+
+			return result;
+		}
 
 		/// <summary>
 		/// Retrieves a basic block From its label.
@@ -455,12 +510,10 @@ namespace Mosa.Runtime.CompilerFramework
 		public BasicBlock CreateBlock(int label, int index)
 		{
 			// HACK: BasicBlock.Count for the sequence works for now since blocks are not removed
-			BasicBlock basicBlock = new BasicBlock(BasicBlocks.Count, label, index);
-			BasicBlocks.Add(basicBlock);
+			BasicBlock basicBlock = new BasicBlock(_basicBlocks.Count, label, index);
+			_basicBlocks.Add(basicBlock);
 			return basicBlock;
 		}
-
-		#endregion // IBasicBlockProvider members
 
 		#endregion // Methods
 

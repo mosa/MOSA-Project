@@ -18,7 +18,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 	/// Performs IR constant folding of arithmetic instructions to optimize
 	/// the code down to fewer calculations.
 	/// </summary>
-	public sealed class IRConstantFoldingStage : CodeTransformationStage, IR.IIRVisitor, IPipelineStage
+	public sealed class IRConstantFoldingStage : BaseCodeTransformationStage, IR.IIRVisitor, IPipelineStage
     {
         #region IPipelineStage
 

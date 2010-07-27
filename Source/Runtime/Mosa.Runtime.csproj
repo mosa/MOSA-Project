@@ -294,13 +294,10 @@
     <Compile Include="CompilerFramework\CodeGenerationStage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\CodeTransformationStage.cs">
+    <Compile Include="CompilerFramework\BaseCodeTransformationStage.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CompilerFramework\CompilationException.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompilerFramework\CompilerBase.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CompilerFramework\CompilerPipeline.cs">
@@ -384,7 +381,7 @@
     <Compile Include="CompilerFramework\Operands\MemoryOperand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\MethodCompilerBase.cs">
+    <Compile Include="CompilerFramework\BaseMethodCompiler.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CompilerFramework\NakedAttribute.cs">
@@ -978,6 +975,9 @@
     <Compile Include="Vm\VmCallAttribute.cs">
       <SubType>Code</SubType>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ClassDiagram1.cd" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <PropertyGroup>

@@ -35,13 +35,17 @@ namespace Mosa.Runtime.CompilerFramework
 
 		#endregion // Data members
 
-		#region IMethodCompilerStage members
+		#region IPipelineStage members
 
 		/// <summary>
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
 		/// <value></value>
 		string IPipelineStage.Name { get { return @"BasicBlockBuilderStage"; } }
+
+		#endregion // IPipelineStage Members
+
+		#region IMethodCompilerStage members
 
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
@@ -70,6 +74,8 @@ namespace Mosa.Runtime.CompilerFramework
 			// Link all the blocks together
 			BuildBlockLinks(_prologue);
 		}
+
+		#endregion // IMethodCompilerStage members
 
 		/// <summary>
 		/// Finds all targets.
@@ -218,8 +224,6 @@ namespace Mosa.Runtime.CompilerFramework
 			caller.NextBlocks.Add(callee);
 			callee.PreviousBlocks.Add(caller);
 		}
-
-		#endregion // IMethodCompilerStage members
 
 	}
 }

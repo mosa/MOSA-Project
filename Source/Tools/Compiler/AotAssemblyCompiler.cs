@@ -41,9 +41,9 @@ namespace Mosa.Tools.Compiler
             Compile();            
         }
 
-        public override MethodCompilerBase CreateMethodCompiler(ICompilationSchedulerStage compilationScheduler, RuntimeType type, RuntimeMethod method)
+		public override IMethodCompiler CreateMethodCompiler(ICompilationSchedulerStage compilationScheduler, RuntimeType type, RuntimeMethod method)
         {
-            MethodCompilerBase mc = new AotMethodCompiler(
+			IMethodCompiler mc = new AotMethodCompiler(
                 this,
                 compilationScheduler,
                 type,
