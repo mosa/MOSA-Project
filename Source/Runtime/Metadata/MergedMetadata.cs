@@ -67,6 +67,7 @@ namespace Mosa.Runtime.Metadata
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MergedMetadata"/> class.
 		/// </summary>
+		/// <param name="modules">The modules.</param>
 		public MergedMetadata(IList<IMetadataModule> modules)
 		{
 			Initialize(modules);
