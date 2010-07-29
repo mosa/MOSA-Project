@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.IO;
+using System.Diagnostics;
 
 using Mosa.Runtime.CompilerFramework;
 
@@ -19,7 +20,7 @@ namespace Mosa.Runtime.Linker
     /// <summary>
     /// An assembly compilation stage, which generates a map file of the built binary file.
     /// </summary>
-	public sealed class MapFileGenerationStage : IAssemblyCompilerStage, IPipelineStage
+	public sealed class MapFileGenerationStage : BaseAssemblyCompilerStage, IAssemblyCompilerStage, IPipelineStage
     {
         #region Data members
 		
@@ -54,16 +55,22 @@ namespace Mosa.Runtime.Linker
 		#endregion // IPipelineStage members
 
         #region IAssemblyCompilerStage Members
-		
-		public void Setup(AssemblyCompiler compiler)
+
+		void IAssemblyCompilerStage.Setup(AssemblyCompiler compiler)
 		{
+			base.Setup(compiler);
+
 			this.linker = compiler.Pipeline.FindFirst<IAssemblyLinker>();
+
+			if (linker == null)
+				throw new InvalidOperationException(@"MapFileGenerationStage needs a linker.");
+
 		}
 
         /// <summary>
         /// Performs stage specific processing on the compiler context.
         /// </summary>
-        public void Run()
+		public void Run()
         {
             // Emit map file _header
             _writer.WriteLine(linker.OutputFile);

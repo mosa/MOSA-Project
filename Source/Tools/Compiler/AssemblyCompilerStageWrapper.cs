@@ -69,8 +69,7 @@ namespace Mosa.Tools.Compiler
 		{
 			this.wrapped.Setup(compiler);
 		}
-
-
+		
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>

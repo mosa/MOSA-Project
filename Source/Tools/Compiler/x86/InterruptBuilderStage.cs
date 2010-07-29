@@ -29,17 +29,15 @@ namespace Mosa.Tools.Compiler.x86
 	/// <summary>
 	/// 
 	/// </summary>
-	public sealed class InterruptBuilderStage : IAssemblyCompilerStage, IPipelineStage
+	public sealed class InterruptBuilderStage : BaseAssemblyCompilerStage, IAssemblyCompilerStage, IPipelineStage
 	{
 		#region Data Members
-		
-		private AssemblyCompiler compiler;
 
 		private IAssemblyLinker linker;
 
 		#endregion // Data Members
 
-		#region IPipelineStage
+		#region IPipelineStage Members
 
 		/// <summary>
 		/// Retrieves the name of the compilation stage.
@@ -50,17 +48,18 @@ namespace Mosa.Tools.Compiler.x86
 		#endregion // IPipelineStage Members
 
 		#region IAssemblyCompilerStage Members
-		
-		public void Setup(AssemblyCompiler compiler)
+
+		void IAssemblyCompilerStage.Setup(AssemblyCompiler compiler)
 		{
-			this.compiler = compiler;
-			this.linker = compiler.Pipeline.FindFirst<IAssemblyLinker>();
+			base.Setup(compiler);
+
+			linker = compiler.Pipeline.FindFirst<IAssemblyLinker>();
 		}
 
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		public void Run()
+		void IAssemblyCompilerStage.Run()
 		{
 			CreateISRMethods();
 		}
@@ -91,23 +90,24 @@ namespace Mosa.Tools.Compiler.x86
 		{
 			// Get RuntimeMethod for the Mosa.Kernel.X86.IDT.InterruptHandler
 			RuntimeType rt = RuntimeBase.Instance.TypeLoader.GetType(@"Mosa.Kernel.X86.IDT");
-            if (rt == null)
-            {
-                throw new CompilationException(@"Failed to locate Mosa.Kernel.X86.IDT while building ISRs for the kernel.");
-            }
+			if (rt == null)
+			{
+				throw new CompilationException(@"Failed to locate Mosa.Kernel.X86.IDT while building ISRs for the kernel.");
+			}
 
-		    RuntimeMethod InterruptMethod = FindMethod(rt, "InterruptHandler");
+			RuntimeMethod InterruptMethod = FindMethod(rt, "InterruptHandler");
 			if (InterruptMethod == null)
 				return;
 
-            SymbolOperand interruptMethod = SymbolOperand.FromMethod(InterruptMethod);
+			SymbolOperand interruptMethod = SymbolOperand.FromMethod(InterruptMethod);
 
-            SigType I1 = new SigType(CilElementType.I1);
+			SigType I1 = new SigType(CilElementType.I1);
 			SigType I4 = new SigType(CilElementType.I4);
 
 			RegisterOperand esp = new RegisterOperand(I4, GeneralPurposeRegister.ESP);
 
-			for (int i = 0; i <= 255; i++) {
+			for (int i = 0; i <= 255; i++)
+			{
 				InstructionSet set = new InstructionSet(100);
 				Context ctx = new Context(set, -1);
 

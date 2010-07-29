@@ -26,7 +26,7 @@ namespace Mosa.Tools.Compiler.Metadata
 	/// an additional metadata heap, which contains tables similar to the CLI metadata tables. This additional
 	/// heap maps the compiled code to the CLI metadata.
 	/// </remarks>
-	public sealed partial class MetadataBuilderStage : IAssemblyCompilerStage, IPipelineStage
+	public sealed partial class MetadataBuilderStage : BaseAssemblyCompilerStage, IAssemblyCompilerStage, IPipelineStage
 	{
 		/// <summary>
 		/// Holds the signature of the metadata.
@@ -132,8 +132,6 @@ namespace Mosa.Tools.Compiler.Metadata
             @"#MOSA"
         };
 
-		private AssemblyCompiler compiler;
-
 		private IAssemblyLinker linker;
 
 		/// <summary>
@@ -188,13 +186,12 @@ namespace Mosa.Tools.Compiler.Metadata
 
 		void IAssemblyCompilerStage.Setup(AssemblyCompiler compiler)
 		{
-			this.compiler = compiler;
+			base.Setup(compiler);
 
 			linker = RetrieveAssemblyLinkerFromCompiler();
+
 			if (linker == null)
-			{
 				throw new InvalidOperationException(@"Can't build metadata without a linker.");
-			}
 		}
 
 		/// <summary>

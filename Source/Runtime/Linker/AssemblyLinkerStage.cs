@@ -25,7 +25,7 @@ namespace Mosa.Runtime.Linker
 	/// This compilation stage links all external labels together, which
 	/// were previously registered.
 	/// </summary>
-	public abstract class AssemblyLinkerStageBase : IAssemblyCompilerStage, IAssemblyLinker
+	public abstract class AssemblyLinkerStageBase : BaseAssemblyCompilerStage, IAssemblyCompilerStage, IAssemblyLinker
 	{
 		#region Data members
 
@@ -33,8 +33,6 @@ namespace Mosa.Runtime.Linker
 		/// Holds the base virtualAddress of the link result.
 		/// </summary>
 		private long baseAddress;
-		
-		private AssemblyCompiler compiler;
 
 		/// <summary>
 		/// Holds the entry point of the compiled binary.
@@ -84,11 +82,6 @@ namespace Mosa.Runtime.Linker
 
 		#region IAssemblyCompilerStage Members
 		
-		public virtual void Setup(AssemblyCompiler compiler)
-		{
-			this.compiler = compiler;
-		}
-
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>

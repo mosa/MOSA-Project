@@ -21,11 +21,9 @@ using Mosa.Tools.Compiler.TypeInitializers;
 
 namespace Mosa.Tools.Compiler
 {
-	public class AssemblyCompilationStage : IAssemblyCompilerStage
+	public class AssemblyCompilationStage : BaseAssemblyCompilerStage, IAssemblyCompilerStage
 	{
 		private readonly List<IMetadataModule> inputAssemblies;
-
-		private AssemblyCompiler outputAssemblyCompiler;
 
 		private IAssemblyLinker linker;
 
@@ -69,9 +67,18 @@ namespace Mosa.Tools.Compiler
 
 		void IAssemblyCompilerStage.Setup(AssemblyCompiler compiler)
 		{
-			outputAssemblyCompiler = compiler;
+			base.Setup(compiler);
+
 			typeInitializerSchedulerStage = compiler.Pipeline.FindFirst<ITypeInitializerSchedulerStage>();
+
+			if (typeInitializerSchedulerStage == null)
+				throw new InvalidOperationException(@"AssemblyCompilationStage needs a ITypeInitializerSchedulerStage.");
+
 			linker = compiler.Pipeline.FindFirst<IAssemblyLinker>();
+
+			if (linker == null)
+				throw new InvalidOperationException(@"AssemblyCompilationStage needs a linker.");
+
 		}
 
 		#endregion IAssemblyCompilerStage
@@ -132,7 +139,8 @@ namespace Mosa.Tools.Compiler
 
 		private void CompileAssembly(IMetadataModule assembly)
 		{
-			using (AotAssemblyCompiler assemblyCompiler = new AotAssemblyCompiler(outputAssemblyCompiler.Architecture, assembly, typeInitializerSchedulerStage, linker))
+			
+			using (AotAssemblyCompiler assemblyCompiler = new AotAssemblyCompiler(architecture, assembly, typeInitializerSchedulerStage, linker))
 			{
 				assemblyCompiler.Run();
 			}

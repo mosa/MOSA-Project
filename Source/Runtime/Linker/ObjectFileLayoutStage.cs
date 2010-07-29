@@ -8,7 +8,7 @@ namespace Mosa.Runtime.Linker
 	/// <summary>
 	/// Lays out sections and symbols sequentially in an object file.
 	/// </summary>
-	public class ObjectFileLayoutStage : IAssemblyCompilerStage, IPipelineStage
+	public class ObjectFileLayoutStage : BaseAssemblyCompilerStage, IAssemblyCompilerStage, IPipelineStage
 	{
 		private IAssemblyLinker linker;
 		
@@ -80,10 +80,13 @@ namespace Mosa.Runtime.Linker
 		#endregion // IPipelineStage members
 
 		#region IAssemblyCompilerStage Overrides
-		
-		public void Setup(AssemblyCompiler compiler)
+
+		void IAssemblyCompilerStage.Setup(AssemblyCompiler compiler)
 		{
+			base.Setup(compiler);
+
 			this.linker = compiler.Pipeline.FindFirst<IAssemblyLinker>();
+
 			if (linker == null)
 				throw new InvalidOperationException(@"ObjectFileLayoutStage needs a linker.");
 		}
@@ -91,7 +94,7 @@ namespace Mosa.Runtime.Linker
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		public void Run()
+		void IAssemblyCompilerStage.Run()
 		{
 			LayoutSections();
 			LayoutSymbols();

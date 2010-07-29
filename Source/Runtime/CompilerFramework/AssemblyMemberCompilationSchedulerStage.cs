@@ -43,6 +43,7 @@ namespace Mosa.Runtime.CompilerFramework
 			base.Setup(compiler);
 
 			ICompilationSchedulerStage scheduler = compiler.Pipeline.FindFirst<ICompilationSchedulerStage>();
+
 			if (scheduler == null)
 				throw new InvalidOperationException(@"No compilation scheduler found in the assembly compiler pipeline.");
 
