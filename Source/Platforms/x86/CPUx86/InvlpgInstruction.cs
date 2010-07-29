@@ -7,6 +7,7 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
+using Mosa.Runtime;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.CompilerFramework.Operands;
 
@@ -49,7 +50,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// Replaces the instrinsic call site
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public void ReplaceIntrinsicCall(Context context)
+		public void ReplaceIntrinsicCall(Context context, RuntimeBase runtime)
 		{
 			context.SetInstruction(CPUx86.Instruction.InvlpgInstruction, null, context.Operand1);
 		}

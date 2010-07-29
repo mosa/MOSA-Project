@@ -22,6 +22,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Replaces the instrinsic call site
 		/// </summary>
 		/// <param name="context">The context.</param>
-		 void ReplaceIntrinsicCall(Context context);
+		/// <param name="runtime">The runtime.</param>
+		void ReplaceIntrinsicCall(Context context, RuntimeBase runtime);
 	}
 }

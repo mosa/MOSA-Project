@@ -10,6 +10,7 @@
 
 using System;
 
+using Mosa.Runtime;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Runtime.Metadata;
@@ -37,7 +38,7 @@ namespace Mosa.Platforms.x86.Intrinsic
 		/// Replaces the instrinsic call site
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public void ReplaceIntrinsicCall(Context context)
+		public void ReplaceIntrinsicCall(Context context, RuntimeBase runtime)
 		{
 			Operand operand1 = context.Operand1;
 

@@ -1682,7 +1682,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
                 if (architecture == null)
                 {
                     IIntrinsicMethod instrinsic = (IIntrinsicMethod)Activator.CreateInstance(instructionType, true);
-                    instrinsic.ReplaceIntrinsicCall(ctx);
+                    instrinsic.ReplaceIntrinsicCall(ctx, Runtime);
                     return true;
                 }
                 else if (architecture.IsInstanceOfType(this.Architecture)) 
@@ -1690,7 +1690,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
                     // Found a replacement for the call...
                     try {
                         IIntrinsicMethod instrinsic = this.Architecture.GetIntrinsicMethod(instructionType);
-                        instrinsic.ReplaceIntrinsicCall(ctx);
+						instrinsic.ReplaceIntrinsicCall(ctx, Runtime);
                         return true;
                     }
                     catch (Exception e) {

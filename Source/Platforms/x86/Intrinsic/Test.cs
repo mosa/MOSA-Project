@@ -8,6 +8,8 @@
  */
 
 using System;
+
+using Mosa.Runtime;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.CompilerFramework.Operands;
 
@@ -25,7 +27,7 @@ namespace Mosa.Platforms.x86.Intrinsic
 		/// Replaces the instrinsic call site
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public void ReplaceIntrinsicCall(Context context)
+		public void ReplaceIntrinsicCall(Context context, RuntimeBase runtime)
 		{
 			context.SetInstruction(CPUx86.Instruction.MovInstruction, context.Result, context.Operand1);
 		}
