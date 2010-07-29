@@ -38,7 +38,7 @@ namespace Mosa.Runtime {
 		/// </summary>
 		protected RuntimeBase()
 		{
-			_instance = this;
+			_instance = this;	// FIXME
 		}
 
 		#endregion // Construction

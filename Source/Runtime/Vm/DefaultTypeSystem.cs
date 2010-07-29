@@ -461,7 +461,7 @@ namespace Mosa.Runtime.Vm
 						RuntimeType baseType = this.GetType(context, module, genericSigType.BaseType.Token);
 						//Console.WriteLine(@"TypeSpec (GenericInst) {0} resolves to base type {1}", sigType, baseType);
 
-						result = new CilGenericType(baseType, module, genericSigType, context);
+						result = new CilGenericType(baseType, module, genericSigType, context, RuntimeBase.Instance.TypeLoader);  // FIXME
 					}
 					break;
 

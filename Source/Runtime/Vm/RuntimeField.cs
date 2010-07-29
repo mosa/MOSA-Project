@@ -106,14 +106,14 @@ namespace Mosa.Runtime.Vm
 			}
 		}
 
-        public RuntimeType Type
-        {
-            get
-            {
-                // HACK: Generic fields -- is this right?
-                return RuntimeBase.Instance.TypeLoader.ResolveSignatureType(DefaultSignatureContext.Instance, this.Module, this.SignatureType);
-            }
-        }
+		public RuntimeType Type
+		{
+			get
+			{
+				// HACK: Generic fields -- is this right?
+				return RuntimeBase.Instance.TypeLoader.ResolveSignatureType(DefaultSignatureContext.Instance, this.Module, this.SignatureType);
+			}
+		}
 
 		#endregion // Properties
 
@@ -137,19 +137,19 @@ namespace Mosa.Runtime.Vm
 		/// </returns>
 		public override string ToString()
 		{
-            string name;
-            RuntimeType declaringType = this.DeclaringType;
-            if (declaringType != null)
-            {
-                string declaringTypeSymbolName = declaringType.ToString();
-                name = String.Format("{0}.{1}", declaringTypeSymbolName, this.Name);
-            }
-            else
-            {
-                name = this.Name;
-            }
+			string name;
+			RuntimeType declaringType = this.DeclaringType;
+			if (declaringType != null)
+			{
+				string declaringTypeSymbolName = declaringType.ToString();
+				name = String.Format("{0}.{1}", declaringTypeSymbolName, this.Name);
+			}
+			else
+			{
+				name = this.Name;
+			}
 
-		    return name;
+			return name;
 		}
 
 		#endregion // Object Overrides

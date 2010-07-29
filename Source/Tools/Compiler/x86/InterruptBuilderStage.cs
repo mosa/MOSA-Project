@@ -89,7 +89,7 @@ namespace Mosa.Tools.Compiler.x86
 		private void CreateISRMethods()
 		{
 			// Get RuntimeMethod for the Mosa.Kernel.X86.IDT.InterruptHandler
-			RuntimeType rt = RuntimeBase.Instance.TypeLoader.GetType(@"Mosa.Kernel.X86.IDT");
+			RuntimeType rt = typeSystem.GetType(@"Mosa.Kernel.X86.IDT");
 			if (rt == null)
 			{
 				throw new CompilationException(@"Failed to locate Mosa.Kernel.X86.IDT while building ISRs for the kernel.");

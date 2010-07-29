@@ -29,22 +29,15 @@ namespace Mosa.Tools.Compiler
 
 		private ITypeInitializerSchedulerStage typeInitializerSchedulerStage;
 
-		public AssemblyCompilationStage(IEnumerable<string> inputFileNames)
+		public AssemblyCompilationStage(IEnumerable<string> inputFileNames, RuntimeBase runtimeBase)
 		{
 			inputAssemblies = new List<IMetadataModule>();
 
-			//List<IMetadataModule> modules = new List<IMetadataModule>();
-
 			foreach (string inputFileName in inputFileNames)
 			{
-				IMetadataModule assembly = LoadAssembly(RuntimeBase.Instance, inputFileName);
+				IMetadataModule assembly = LoadAssembly(runtimeBase, inputFileName);
 				inputAssemblies.Add(assembly);
-
-				//modules.Add(assembly);
 			}
-
-			//Mosa.Runtime.Metadata.MergedMetadata merged = new Runtime.Metadata.MergedMetadata(modules);
-			//inputAssemblies.Add(merged);
 		}
 
 		#region IPipelineStage members
@@ -58,12 +51,6 @@ namespace Mosa.Tools.Compiler
 		#endregion // IPipelineStage
 
 		#region IAssemblyCompilerStage
-
-		void IAssemblyCompilerStage.Run()
-		{
-			foreach (IMetadataModule assembly in inputAssemblies)
-				CompileAssembly(assembly);
-		}
 
 		void IAssemblyCompilerStage.Setup(AssemblyCompiler compiler)
 		{
@@ -79,6 +66,12 @@ namespace Mosa.Tools.Compiler
 			if (linker == null)
 				throw new InvalidOperationException(@"AssemblyCompilationStage needs a linker.");
 
+		}
+
+		void IAssemblyCompilerStage.Run()
+		{
+			foreach (IMetadataModule assembly in inputAssemblies)
+				CompileAssembly(assembly);
 		}
 
 		#endregion IAssemblyCompilerStage

@@ -147,7 +147,7 @@ namespace Mosa.Runtime.Loader.PE
 				if (_cliHeader.EntryPointToken == 0)
 					return null;
 
-				return RuntimeBase.Instance.TypeLoader.GetMethod(DefaultSignatureContext.Instance, this, (TokenTypes)_cliHeader.EntryPointToken);
+				return RuntimeBase.Instance.TypeLoader.GetMethod(DefaultSignatureContext.Instance, this, (TokenTypes)_cliHeader.EntryPointToken); // FIXME: RuntimeBase
 			}
 		}
 
