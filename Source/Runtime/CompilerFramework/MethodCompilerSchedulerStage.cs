@@ -19,19 +19,11 @@ namespace Mosa.Runtime.CompilerFramework
 	/// <summary>
 	/// Schedules compilation of types/methods.
 	/// </summary>
-	public class MethodCompilerSchedulerStage : IAssemblyCompilerStage, ICompilationSchedulerStage, IPipelineStage
+	public class MethodCompilerSchedulerStage : BaseAssemblyCompilerStage, IAssemblyCompilerStage, ICompilationSchedulerStage, IPipelineStage
 	{
 		private readonly Queue<RuntimeMethod> methodQueue;
 
 		private readonly Queue<RuntimeType> typeQueue;
-
-		private AssemblyCompiler compiler;
-
-		public MethodCompilerSchedulerStage()
-		{
-			this.methodQueue = new Queue<RuntimeMethod>();
-			this.typeQueue = new Queue<RuntimeType>();
-		}
 
 		#region IPipelineStage
 
@@ -39,12 +31,13 @@ namespace Mosa.Runtime.CompilerFramework
 
 		#endregion // IPipelineStage
 
-		#region IAssemblyCompilerStage
-
-		void IAssemblyCompilerStage.Setup(AssemblyCompiler compiler)
+		public MethodCompilerSchedulerStage()
 		{
-			this.compiler = compiler;
+			this.methodQueue = new Queue<RuntimeMethod>();
+			this.typeQueue = new Queue<RuntimeType>();
 		}
+
+		#region IAssemblyCompilerStage members
 
 		void IAssemblyCompilerStage.Run()
 		{
@@ -57,7 +50,7 @@ namespace Mosa.Runtime.CompilerFramework
 			CompilePendingMethods();
 		}
 
-		#endregion // IAssemblyCompilerStage
+		#endregion // IAssemblyCompilerStage members
 
 		private void CompileType(RuntimeType type)
 		{

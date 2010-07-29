@@ -94,6 +94,11 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		private List<BasicBlock> _basicBlocks;
 
+		/// <summary>
+		/// Holds the runtime base
+		/// </summary>
+		protected RuntimeBase Runtime;
+
 		#endregion // Data Members
 
 		#region Construction
@@ -133,6 +138,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 			pipeline = new CompilerPipeline();
 
+			Runtime = Mosa.Runtime.RuntimeBase.Instance; // FIXME: RuntimeBase
 		}
 
 		#endregion // Construction
@@ -413,7 +419,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 		private RuntimeType LoadDependentType(TokenTypes tokenType)
 		{
-			return RuntimeBase.Instance.TypeLoader.GetType(this.Method, this.Assembly, tokenType);
+			return Runtime.TypeLoader.GetType(this.Method, this.Assembly, tokenType);
 		}
 
 		/// <summary>

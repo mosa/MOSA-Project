@@ -23,30 +23,15 @@ namespace Mosa.Runtime.CompilerFramework
 	/// <summary>
 	/// Performs memory layout of a type for compilation.
 	/// </summary>
-	public sealed class TypeLayoutStage : IAssemblyCompilerStage
+	public sealed class TypeLayoutStage : BaseAssemblyCompilerStage, IAssemblyCompilerStage
 	{
 		#region Data members
-
-		/// <summary>
-		/// Holds the Architecture during compilation.
-		/// </summary>
-		private IArchitecture architecture;
-
-		/// <summary>
-		/// Holds the assembly Compiler.
-		/// </summary>
-		private AssemblyCompiler compiler;
 
 		private IAssemblyLinker linker;
 
 		private int nativePointerAlignment;
 
 		private int nativePointerSize;
-
-		/// <summary>
-		/// Holds the current type system during compilation.
-		/// </summary>
-		private ITypeSystem typeSystem;
 
 		#endregion // Data members
 
@@ -64,10 +49,9 @@ namespace Mosa.Runtime.CompilerFramework
 
 		void IAssemblyCompilerStage.Setup(AssemblyCompiler compiler)
 		{
-			this.compiler = compiler;
-			architecture = compiler.Architecture;
+			base.Setup(compiler);
+
 			linker = compiler.Pipeline.FindFirst<IAssemblyLinker>();
-			typeSystem = RuntimeBase.Instance.TypeLoader;
 
 			Debug.Assert(this.linker != null, @"Failed to retrieve linker from assembly compiler.");
 

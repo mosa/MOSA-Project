@@ -18,21 +18,34 @@ namespace Mosa.Runtime.CompilerFramework
 	/// <summary>
 	/// Schedules all types of an assembly for compilation.
 	/// </summary>
-	public class AssemblyMemberCompilationSchedulerStage : IAssemblyCompilerStage, IPipelineStage
+	public class AssemblyMemberCompilationSchedulerStage : BaseAssemblyCompilerStage, IAssemblyCompilerStage, IPipelineStage
 	{
-		private AssemblyCompiler compiler;
+		#region Data members
 
 		private ICompilationSchedulerStage scheduler;
 
+		#endregion // Data members
+
+		#region IPipelineStage members
+
+		/// <summary>
+		/// Retrieves the name of the compilation stage.
+		/// </summary>
+		/// <value>The name of the compilation stage.</value>
 		string IPipelineStage.Name { get { return @"Method Compiler Builder"; } }
+
+		#endregion // IPipelineStage
+
+		#region IAssemblyCompilerStage members
 
 		void IAssemblyCompilerStage.Setup(AssemblyCompiler compiler)
 		{
+			base.Setup(compiler);
+
 			ICompilationSchedulerStage scheduler = compiler.Pipeline.FindFirst<ICompilationSchedulerStage>();
 			if (scheduler == null)
 				throw new InvalidOperationException(@"No compilation scheduler found in the assembly compiler pipeline.");
 
-			this.compiler = compiler;
 			this.scheduler = scheduler;
 		}
 
@@ -49,5 +62,8 @@ namespace Mosa.Runtime.CompilerFramework
 				scheduler.ScheduleTypeForCompilation(type);
 			}
 		}
+
+		#endregion IAssemblyCompilerStage members
+
 	}
 }

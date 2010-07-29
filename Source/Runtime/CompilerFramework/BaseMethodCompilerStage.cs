@@ -19,7 +19,7 @@ using CIL = Mosa.Runtime.CompilerFramework.CIL;
 namespace Mosa.Runtime.CompilerFramework
 {
 	/// <summary>
-	/// Basic base class for pipeline stages
+	/// Basic base class for method compiler pipeline stages
 	/// </summary>
 	public abstract class BaseMethodCompilerStage
 	{
@@ -71,7 +71,7 @@ namespace Mosa.Runtime.CompilerFramework
 			Runtime = Mosa.Runtime.RuntimeBase.Instance; // FIXME: RuntimeBase
 		}
 
-		#endregion
+		#endregion // IMethodCompilerStage members
 
 		#region Methods
 
