@@ -461,7 +461,7 @@ namespace Mosa.Runtime.Vm
 						RuntimeType baseType = this.GetType(context, module, genericSigType.BaseType.Token);
 						//Console.WriteLine(@"TypeSpec (GenericInst) {0} resolves to base type {1}", sigType, baseType);
 
-						result = new CilGenericType(baseType, module, genericSigType, context, RuntimeBase.Instance.TypeLoader);  // FIXME
+						result = new CilGenericType(baseType, module, genericSigType, context, this);
 					}
 					break;
 
@@ -638,7 +638,7 @@ namespace Mosa.Runtime.Vm
 				}
 
 				// Create and populate the runtime type
-				rt = new CilRuntimeType(token, module, ref typeDefRow, maxField, maxMethod, packing, size);
+				rt = new CilRuntimeType(token, module, ref typeDefRow, maxField, maxMethod, packing, size, this);
 				LoadMethods(module, rt, typeDefRow.MethodList, maxMethod, ref methodOffset);
 				LoadFields(module, rt, typeDefRow.FieldList, maxField, ref fieldOffset);
 				_types[typeOffset++] = rt;
@@ -680,7 +680,7 @@ namespace Mosa.Runtime.Vm
 					}
 
 					Debug.Assert(offset < _methods.Length, @"Invalid method index.");
-					_methods[offset++] = new CilRuntimeMethod(offset, module, ref methodDef, maxParam, declaringType);
+					_methods[offset++] = new CilRuntimeMethod(offset, module, ref methodDef, maxParam, declaringType, this);
 					methodDef = nextMethodDef;
 				}
 			}

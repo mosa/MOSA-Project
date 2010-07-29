@@ -407,7 +407,7 @@ namespace Mosa.Runtime.CompilerFramework
 					RuntimeType genericType = this.LoadDependentType(genericSignatureType.BaseType.Token);
 					Console.WriteLine(@"Loaded generic type {0}", genericType.FullName);
 
-					runtimeType = new CilGenericType(genericType, this.Assembly, genericSignatureType, this.Method, RuntimeBase.Instance.TypeLoader); // FIXME
+					runtimeType = new CilGenericType(genericType, this.Assembly, genericSignatureType, this.Method, Runtime.TypeLoader);
 				}
 			}
 

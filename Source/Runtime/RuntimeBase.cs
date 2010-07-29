@@ -103,29 +103,7 @@ namespace Mosa.Runtime {
 		[VmCall(VmCall.AllocateObject)]
 		public static unsafe void* AllocateObject(void* methodTable, uint classSize)
 		{
-			// HACK: Add compiler architecture to the runtime
-			uint nativeIntSize = 4;
-
-			//
-			// An object has the following memory layout:
-			//   - IntPtr MTable
-			//   - IntPtr SyncBlock
-			//   - 0 .. n object data fields
-			//
-			ulong allocationSize = (ulong)((2 * nativeIntSize) + classSize);
-
-			void* memory = Instance.MemoryManager.Allocate(IntPtr.Zero, allocationSize, PageProtectionFlags.Read | PageProtectionFlags.Write | PageProtectionFlags.WriteCombine).ToPointer();
-			if (memory == null)
-			{
-				throw new OutOfMemoryException();
-			}
-
-			uint* destination = (uint*)memory;
-			Memset((byte*)destination, 0, (int)allocationSize);
-			destination[0] = (uint)methodTable;
-			destination[1] = 0; // No sync block initially
-
-			return memory;            
+			throw new NotImplementedException();           
 		}
 
 		/// <summary>
@@ -143,30 +121,7 @@ namespace Mosa.Runtime {
 		[VmCall(VmCall.AllocateArray)]
 		public static unsafe void* AllocateArray(void* methodTable, uint elementSize, uint elements)
 		{
-			if (elements < 0)
-			{
-				throw new OverflowException();
-			}
-
-			// HACK: Add compiler architecture to the runtime
-			uint nativeIntSize = 4;
-
-			//
-			// An array has the following memory layout:
-			//   - IntPtr MTable
-			//   - IntPtr SyncBlock
-			//   - int length
-			//   - ElementType[length] elements
-			//
-			uint allocationSize = (uint)(nativeIntSize + (elements * elementSize));
-
-			void* memory = AllocateObject(methodTable, allocationSize);
-
-			uint* destination = (uint*)memory;
-			Memset((byte*)(destination + 3), 0, (int)allocationSize);
-			destination[2] = elements;
-
-			return memory;
+			throw new NotImplementedException();
 		}
 
 		/// <summary>
