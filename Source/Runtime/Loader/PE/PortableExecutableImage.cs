@@ -136,21 +136,17 @@ namespace Mosa.Runtime.Loader.PE
 			}
 		}
 
-		/// <summary>
-		/// Gets the entry point of the module.
-		/// </summary>
-		/// <value>The entry point.</value>
-		public RuntimeMethod EntryPoint
+		public TokenTypes EntryPoint
 		{
 			get
 			{
 				if (_cliHeader.EntryPointToken == 0)
-					return null;
+					return 0;
 
-				return RuntimeBase.Instance.TypeLoader.GetMethod(DefaultSignatureContext.Instance, this, (TokenTypes)_cliHeader.EntryPointToken); // FIXME: RuntimeBase
+				return  (TokenTypes)_cliHeader.EntryPointToken; 
 			}
 		}
-
+		
 		/// <summary>
 		/// Retrieves the load order index of the module.
 		/// </summary>

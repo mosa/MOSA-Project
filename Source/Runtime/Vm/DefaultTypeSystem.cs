@@ -246,7 +246,7 @@ namespace Mosa.Runtime.Vm
 			string name = module.Metadata.ReadString(typeRef.TypeNameIdx);
 			string ns = module.Metadata.ReadString(typeRef.TypeNamespaceIdx);
 			AssemblyRefRow arr = module.Metadata.ReadAssemblyRefRow(typeRef.ResolutionScopeIdx);
-			IAssemblyLoader loader = RuntimeBase.Instance.AssemblyLoader;
+			IAssemblyLoader loader = RuntimeBase.Instance.AssemblyLoader; // FIXME
 			IMetadataModule dependency = loader.Resolve(module.Metadata, arr);
 
 			for (int i = GetModuleOffset(dependency).TypeOffset; i < _types.Length; i++)

@@ -58,7 +58,7 @@ namespace Mosa.Runtime.Metadata
 		protected IMetadataModule[] modules;
 		protected ModuleOffset[][] moduleOffset;
 		protected string codeBase;
-		protected RuntimeMethod entryPoint;
+		protected TokenTypes entryPoint;
 		protected ModuleType moduleType;
 		protected string name;
 
@@ -126,7 +126,7 @@ namespace Mosa.Runtime.Metadata
 		/// Gets the entry point of the module.
 		/// </summary>
 		/// <value>The entry point.</value>
-		RuntimeMethod IMetadataModule.EntryPoint { get { return entryPoint; } }
+		TokenTypes IMetadataModule.EntryPoint { get { return entryPoint; } }
 
 		/// <summary>
 		/// Retrieves the load order index of the module.
@@ -174,7 +174,7 @@ namespace Mosa.Runtime.Metadata
 					name = module.Name;
 				}
 
-				if (module.EntryPoint != null)
+				if (module.EntryPoint != 0)
 				{
 					entryPoint = module.EntryPoint;
 				}

@@ -16,6 +16,8 @@ using System.IO;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Linker;
 using Mosa.Runtime.Vm;
+using Mosa.Runtime.Metadata;
+using Mosa.Runtime.Metadata.Signatures;
 
 using NDesk.Options;
 
@@ -112,11 +114,12 @@ namespace Mosa.Tools.Compiler.Linkers
 		{
 			CheckImplementation();
 
+			RuntimeMethod entrypoint = typeSystem.GetMethod(DefaultSignatureContext.Instance, compiler.Assembly, compiler.Assembly.EntryPoint);
+
 			// Set the default entry point in the linker, if no previous stage has replaced it.
-			RuntimeMethod entryPoint = this.compiler.Assembly.EntryPoint;
-			if (this.implementation.EntryPoint == null && entryPoint != null)
+			if (this.implementation.EntryPoint == null && entrypoint != null)
 			{
-				this.implementation.EntryPoint = this.GetSymbol(entryPoint.ToString());
+				this.implementation.EntryPoint = this.GetSymbol(entrypoint.ToString());
 			}
 
 			// Run the real linker

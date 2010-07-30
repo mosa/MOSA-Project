@@ -29,13 +29,13 @@ namespace Mosa.Tools.Compiler
 
 		private ITypeInitializerSchedulerStage typeInitializerSchedulerStage;
 
-		public AssemblyCompilationStage(IEnumerable<string> inputFileNames, RuntimeBase runtimeBase)
+		public AssemblyCompilationStage(IEnumerable<string> inputFileNames, IAssemblyLoader assemblyLoader)
 		{
 			inputAssemblies = new List<IMetadataModule>();
 
 			foreach (string inputFileName in inputFileNames)
 			{
-				IMetadataModule assembly = LoadAssembly(runtimeBase, inputFileName);
+				IMetadataModule assembly = LoadAssembly(assemblyLoader, inputFileName);
 				inputAssemblies.Add(assembly);
 			}
 		}
@@ -76,11 +76,11 @@ namespace Mosa.Tools.Compiler
 
 		#endregion IAssemblyCompilerStage
 
-		private IMetadataModule LoadAssembly(RuntimeBase runtime, string assemblyFileName)
+		private IMetadataModule LoadAssembly(IAssemblyLoader assemblyLoader, string assemblyFileName)
 		{
 			try
 			{
-				IMetadataModule assemblyModule = runtime.AssemblyLoader.Load(assemblyFileName);
+				IMetadataModule assemblyModule = assemblyLoader.Load(assemblyFileName);
 
 				// Try to load debug information for the compilation
 				LoadAssemblyDebugInfo(assemblyFileName);
@@ -132,7 +132,6 @@ namespace Mosa.Tools.Compiler
 
 		private void CompileAssembly(IMetadataModule assembly)
 		{
-			
 			using (AotAssemblyCompiler assemblyCompiler = new AotAssemblyCompiler(architecture, assembly, typeInitializerSchedulerStage, linker))
 			{
 				assemblyCompiler.Run();

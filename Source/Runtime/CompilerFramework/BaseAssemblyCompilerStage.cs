@@ -10,13 +10,14 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Collections.Generic;
 
 using Mosa.Runtime.Linker;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Tables;
 using Mosa.Runtime.Vm;
 using Mosa.Runtime.Metadata.Signatures;
-using System.Collections.Generic;
+using Mosa.Runtime.Loader;
 
 namespace Mosa.Runtime.CompilerFramework
 {
@@ -40,7 +41,13 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Holds the current type system during compilation.
 		/// </summary>
-		protected ITypeSystem TypeSystem;
+		protected ITypeSystem typeSystem;
+
+		/// <summary>
+		/// Holds the assembly loader.
+		/// </summary>
+		/// <value>The assembly loader.</value>
+		protected IAssemblyLoader assemblyLoader;
 
 		#endregion // Data members
 
@@ -50,8 +57,8 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			this.compiler = compiler;
 			architecture = compiler.Architecture;
-			TypeSystem = Mosa.Runtime.RuntimeBase.Instance.TypeLoader; // FIXME
-			//AssemblyLoader = Mosa.Runtime.RuntimeBase.Instance.AssemblyLoader; // FIXME
+			typeSystem = Mosa.Runtime.RuntimeBase.Instance.TypeLoader; // FIXME
+			assemblyLoader = Mosa.Runtime.RuntimeBase.Instance.AssemblyLoader; // FIXME
 		}
 
 		#endregion // IAssemblyCompilerStage members

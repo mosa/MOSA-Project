@@ -14,7 +14,8 @@ using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Runtime.Vm;
 using Mosa.Tools.Compiler.LinkTimeCodeGeneration;
 using Mosa.Runtime.Linker;
-
+using Mosa.Runtime.Metadata;
+using Mosa.Runtime.Metadata.Signatures;
 using IR = Mosa.Runtime.CompilerFramework.IR;
 
 namespace Mosa.Tools.Compiler.TypeInitializers
@@ -28,36 +29,36 @@ namespace Mosa.Tools.Compiler.TypeInitializers
 	/// by the high-level language compiler by placing cctors in some order in
 	/// metadata.
 	/// </remarks>
-	public sealed class TypeInitializerSchedulerStage : BaseMethodCompilerStage, IAssemblyCompilerStage, IPipelineStage, ITypeInitializerSchedulerStage
+	public sealed class TypeInitializerSchedulerStage : BaseAssemblyCompilerStage, IAssemblyCompilerStage, IPipelineStage, ITypeInitializerSchedulerStage
 	{
 		#region Data Members
 		
-		private AssemblyCompiler compiler;
+		private InstructionSet instructionSet;
 
 		/// <summary>
 		/// Hold the current context
 		/// </summary>
-		private Context _ctx;
+		private Context ctx;
 
 		/// <summary>
 		/// Holds the method for the type initalizer
 		/// </summary>
-		private CompilerGeneratedMethod _method;
+		private CompilerGeneratedMethod method;
 
 		#endregion // Data Members
 
 		#region Construction
-
+		
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TypeInitializerSchedulerStage"/> class.
 		/// </summary>
 		public TypeInitializerSchedulerStage()
 		{
-			InstructionSet = new InstructionSet(1024);
-			_ctx = CreateContext(-1);
+			instructionSet = new InstructionSet(1024);
+			ctx = new Context(instructionSet, -1); 
 
-			_ctx.AppendInstruction(IR.Instruction.PrologueInstruction);
-			_ctx.Other = 0; // stacksize
+			ctx.AppendInstruction(IR.Instruction.PrologueInstruction);
+			ctx.Other = 0; // stacksize
 		}
 
 		#endregion // Construction
@@ -72,7 +73,7 @@ namespace Mosa.Tools.Compiler.TypeInitializers
 		{
 			get
 			{
-				return _method;
+				return method;
 			}
 		}
 
@@ -89,22 +90,26 @@ namespace Mosa.Tools.Compiler.TypeInitializers
 		#endregion // IPipelineStage Members
 
 		#region IAssemblyCompilerStage Members
-		
-		public void Setup(AssemblyCompiler compiler)
+
+		void IAssemblyCompilerStage.Setup(AssemblyCompiler compiler)
 		{
+			base.Setup(compiler);
+
 			this.compiler = compiler;
 		}
 
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		public void Run()
+		void IAssemblyCompilerStage.Run()
 		{
-			Schedule(compiler.Assembly.EntryPoint);
-			_ctx.AppendInstruction(IR.Instruction.EpilogueInstruction);
-			_ctx.Other = 0;
+			RuntimeMethod entrypoint = typeSystem.GetMethod(DefaultSignatureContext.Instance, compiler.Assembly, compiler.Assembly.EntryPoint);
 
-			_method = LinkTimeCodeGenerator.Compile(compiler, @"AssemblyInit", InstructionSet);
+			Schedule(entrypoint);
+			ctx.AppendInstruction(IR.Instruction.EpilogueInstruction);
+			ctx.Other = 0;
+
+			method = LinkTimeCodeGenerator.Compile(compiler, @"AssemblyInit", instructionSet);
 		}
 
 		#endregion // IAssemblyCompilerStage Members
@@ -118,7 +123,7 @@ namespace Mosa.Tools.Compiler.TypeInitializers
 		public void Schedule(RuntimeMethod method)
 		{
 			SymbolOperand symbolOperand = SymbolOperand.FromMethod(method);
-			_ctx.AppendInstruction(IR.Instruction.CallInstruction, null, symbolOperand);
+			ctx.AppendInstruction(IR.Instruction.CallInstruction, null, symbolOperand);
 		}
 
 		#endregion // Methods
