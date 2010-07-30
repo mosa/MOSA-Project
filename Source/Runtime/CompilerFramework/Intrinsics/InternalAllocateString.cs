@@ -6,32 +6,39 @@
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
+
+using Mosa.Runtime.CompilerFramework.Operands;
+using Mosa.Runtime.Metadata.Signatures;
+using Mosa.Runtime.Vm;
+
 namespace Mosa.Runtime.CompilerFramework.Intrinsics
 {
-    using Mosa.Runtime.CompilerFramework.Operands;
-    using Mosa.Runtime.Metadata.Signatures;
-    using Mosa.Runtime.Vm;
 
-    public sealed class InternalAllocateString : IIntrinsicMethod
-    {
-        private const string StringClassMethodTableSymbolName = @"System.String$mtable";
+	public sealed class InternalAllocateString : IIntrinsicMethod
+	{
+		private const string StringClassMethodTableSymbolName = @"System.String$mtable";
 
-        public void ReplaceIntrinsicCall(Context context)
-        {
-            SymbolOperand callTargetOperand = this.GetInternalAllocateStringCallTarget();
-            SymbolOperand methodTableOperand = new SymbolOperand(BuiltInSigType.IntPtr, StringClassMethodTableSymbolName);
-            Operand lengthOperand = context.Operand1;
-            Operand result = context.Result;
+		/// <summary>
+		/// Replaces the instrinsic call site
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="typeSystem">The type system.</param>
+		public void ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem)
+		{
+			SymbolOperand callTargetOperand = this.GetInternalAllocateStringCallTarget(typeSystem);
+			SymbolOperand methodTableOperand = new SymbolOperand(BuiltInSigType.IntPtr, StringClassMethodTableSymbolName);
+			Operand lengthOperand = context.Operand1;
+			Operand result = context.Result;
 
-            context.SetInstruction(IR.Instruction.CallInstruction, result, callTargetOperand, methodTableOperand, lengthOperand);
-        }
+			context.SetInstruction(IR.Instruction.CallInstruction, result, callTargetOperand, methodTableOperand, lengthOperand);
+		}
 
-        private SymbolOperand GetInternalAllocateStringCallTarget()
-        {
-            RuntimeType runtimeType = RuntimeBase.Instance.TypeLoader.GetType(@"Mosa.Runtime.RuntimeBase");
-            RuntimeMethod callTarget = runtimeType.FindMethod(@"AllocateString");
+		private SymbolOperand GetInternalAllocateStringCallTarget(ITypeSystem typeSystem)
+		{
+			RuntimeType runtimeType = typeSystem.GetType(@"Mosa.Runtime.RuntimeBase");
+			RuntimeMethod callTarget = runtimeType.FindMethod(@"AllocateString");
 
-            return SymbolOperand.FromMethod(callTarget);
-        }
-    }
+			return SymbolOperand.FromMethod(callTarget);
+		}
+	}
 }

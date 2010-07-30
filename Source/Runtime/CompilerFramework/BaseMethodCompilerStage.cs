@@ -12,14 +12,16 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
+using Mosa.Runtime.Vm;
+using Mosa.Runtime.Loader;
 using CIL = Mosa.Runtime.CompilerFramework.CIL;
 
 namespace Mosa.Runtime.CompilerFramework
 {
 	/// <summary>
-	/// Basic base class for pipeline stages
+	/// Basic base class for method compiler pipeline stages
 	/// </summary>
-	public abstract class BaseStage
+	public abstract class BaseMethodCompilerStage
 	{
 		#region Data members
 
@@ -43,6 +45,18 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		protected List<BasicBlock> BasicBlocks;
 
+		/// <summary>
+		/// Holds the type loader 
+		/// </summary>
+		/// <value>The type loader.</value>
+		protected ITypeSystem typeSystem;
+
+		/// <summary>
+		/// Holds the assembly loader.
+		/// </summary>
+		/// <value>The assembly loader.</value>
+		protected IAssemblyLoader assemblyLoader;
+
 		#endregion // Data members
 
 		#region IMethodCompilerStage members
@@ -60,9 +74,12 @@ namespace Mosa.Runtime.CompilerFramework
 			InstructionSet = compiler.InstructionSet;
 			BasicBlocks = compiler.BasicBlocks;
 			Architecture = compiler.Architecture;
+
+			typeSystem = Mosa.Runtime.RuntimeBase.Instance.TypeLoader; // FIXME
+			assemblyLoader = Mosa.Runtime.RuntimeBase.Instance.AssemblyLoader; // FIXME
 		}
 
-		#endregion
+		#endregion // IMethodCompilerStage members
 
 		#region Methods
 
@@ -169,7 +186,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <param name="conditionCode">The condition code to get an unsigned form from.</param>
 		/// <returns>The unsigned form of the given condition code.</returns>
-		protected IR.ConditionCode GetUnsignedConditionCode(IR.ConditionCode conditionCode)
+		protected static IR.ConditionCode GetUnsignedConditionCode(IR.ConditionCode conditionCode)
 		{
 			switch (conditionCode) {
 				case IR.ConditionCode.Equal: break;
@@ -193,7 +210,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <param name="conditionCode">The condition code.</param>
 		/// <returns></returns>
-		protected IR.ConditionCode GetOppositeConditionCode(IR.ConditionCode conditionCode)
+		protected static IR.ConditionCode GetOppositeConditionCode(IR.ConditionCode conditionCode)
 		{
 			switch (conditionCode) {
 				case IR.ConditionCode.Equal: return IR.ConditionCode.NotEqual;
@@ -212,6 +229,7 @@ namespace Mosa.Runtime.CompilerFramework
 			}
 
 		}
+
 		#endregion // Utility Methods
 
 	}

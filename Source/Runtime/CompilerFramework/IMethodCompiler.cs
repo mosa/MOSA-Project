@@ -18,72 +18,72 @@ using Mosa.Runtime.Linker;
 
 namespace Mosa.Runtime.CompilerFramework
 {
-    /// <summary>
-    /// Interface provided by method compilers.
-    /// </summary>
-    public interface IMethodCompiler : IDisposable
-    {
-        /// <summary>
-        /// Retrieves the architecture to compile for.
-        /// </summary>
-        /// <value>The compilation target architecture. This may differ from the current execution architecture.</value>
-        IArchitecture Architecture { get; }
+	/// <summary>
+	/// Interface provided by method compilers.
+	/// </summary>
+	public interface IMethodCompiler : IDisposable
+	{
+		/// <summary>
+		/// Retrieves the architecture to compile for.
+		/// </summary>
+		/// <value>The compilation target architecture. This may differ from the current execution architecture.</value>
+		IArchitecture Architecture { get; }
 
-        /// <summary>
-        /// Gets the metadata module being compiled.
-        /// </summary>
-        /// <value>The currently compiled module.</value>
-        IMetadataModule Assembly { get; }
+		/// <summary>
+		/// Gets the metadata module being compiled.
+		/// </summary>
+		/// <value>The currently compiled module.</value>
+		IMetadataModule Assembly { get; }
 
-        /// <summary>
-        /// Retrieves the linker used to resolve external symbols.
-        /// </summary>
-        IAssemblyLinker Linker { get; }
+		/// <summary>
+		/// Retrieves the linker used to resolve external symbols.
+		/// </summary>
+		IAssemblyLinker Linker { get; }
 
-        /// <summary>
-        /// Retrieves the method being compiled.
-        /// </summary>
-        /// <value>The method being compiled.</value>
-        RuntimeMethod Method { get; }
+		/// <summary>
+		/// Retrieves the method being compiled.
+		/// </summary>
+		/// <value>The method being compiled.</value>
+		RuntimeMethod Method { get; }
 
-        /// <summary>
-        /// Retrieves the compilation scheduler.
-        /// </summary>
-        /// <value>The compilation scheduler.</value>
-        ICompilationSchedulerStage Scheduler { get; }
+		/// <summary>
+		/// Retrieves the compilation scheduler.
+		/// </summary>
+		/// <value>The compilation scheduler.</value>
+		ICompilationSchedulerStage Scheduler { get; }
 
-        /// <summary>
-        /// Creates a new temporary variable operand.
-        /// </summary>
-        /// <param name="type">The signature type of the temporary.</param>
-        /// <returns>An operand, which represents the temporary.</returns>
-        /// <remarks>
-        /// Later optimization stages attempt to optimize, reduce or remove the usage
-        /// of temporaries in a program. Temporaries may be allocated to physical
-        /// registers as part of register allocation strategies.
-        /// </remarks>
-        Operand CreateTemporary(SigType type);
+		/// <summary>
+		/// Creates a new temporary variable operand.
+		/// </summary>
+		/// <param name="type">The signature type of the temporary.</param>
+		/// <returns>An operand, which represents the temporary.</returns>
+		/// <remarks>
+		/// Later optimization stages attempt to optimize, reduce or remove the usage
+		/// of temporaries in a program. Temporaries may be allocated to physical
+		/// registers as part of register allocation strategies.
+		/// </remarks>
+		Operand CreateTemporary(SigType type);
 
-        /// <summary>
-        /// Provides access to the instructions of the method.
-        /// </summary>
-        /// <returns>A stream, which represents the IL of the method.</returns>
-        Stream GetInstructionStream();
+		/// <summary>
+		/// Provides access to the instructions of the method.
+		/// </summary>
+		/// <returns>A stream, which represents the IL of the method.</returns>
+		Stream GetInstructionStream();
 
-        /// <summary>
-        /// Retrieves the local stack operand at the specified <paramref name="index"/>.
-        /// </summary>
-        /// <param name="index">The index of the local variable to retrieve.</param>
-        /// <returns>The operand at the specified index.</returns>
-        /// <exception cref="System.ArgumentOutOfRangeException">The <paramref name="index"/> is not valid.</exception>
-        Operand GetLocalOperand(int index);
+		/// <summary>
+		/// Retrieves the local stack operand at the specified <paramref name="index"/>.
+		/// </summary>
+		/// <param name="index">The index of the local variable to retrieve.</param>
+		/// <returns>The operand at the specified index.</returns>
+		/// <exception cref="System.ArgumentOutOfRangeException">The <paramref name="index"/> is not valid.</exception>
+		Operand GetLocalOperand(int index);
 
-        /// <summary>
-        /// Creates a new temporary local variable operand.
-        /// </summary>
-        /// <param name="index">The index of the parameter to retrieve.</param>
-        /// <returns>An operand, which represents the temporary.</returns>
-        Operand GetParameterOperand(int index);
+		/// <summary>
+		/// Creates a new temporary local variable operand.
+		/// </summary>
+		/// <param name="index">The index of the parameter to retrieve.</param>
+		/// <returns>An operand, which represents the temporary.</returns>
+		Operand GetParameterOperand(int index);
 
 		/// <summary>
 		/// Finds a stage, which ran before the current one and supports the specified type.
@@ -95,23 +95,23 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </remarks>
 		IPipelineStage GetPreviousStage(Type stageType);
 
-        /// <summary>
-        /// Requests a stream to emit native instructions to.
-        /// </summary>
-        /// <returns>A stream object, which can be used to store emitted instructions.</returns>
-        Stream RequestCodeStream();
+		/// <summary>
+		/// Requests a stream to emit native instructions to.
+		/// </summary>
+		/// <returns>A stream object, which can be used to store emitted instructions.</returns>
+		Stream RequestCodeStream();
 
-        /// <summary>
-        /// Sets the signature of local variables in the method.
-        /// </summary>
-        /// <param name="localVariableSignature">The local variable signature of the method.</param>
-        void SetLocalVariableSignature(LocalVariableSignature localVariableSignature);
+		/// <summary>
+		/// Sets the signature of local variables in the method.
+		/// </summary>
+		/// <param name="localVariableSignature">The local variable signature of the method.</param>
+		void SetLocalVariableSignature(LocalVariableSignature localVariableSignature);
 
 		/// <summary>
 		/// Gets the instruction set.
 		/// </summary>
 		/// <value>The instruction set.</value>
-		InstructionSet InstructionSet { get; set;  }
+		InstructionSet InstructionSet { get; set; }
 
 		/// <summary>
 		/// Gets the basic Blocks.
@@ -133,7 +133,15 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="index">The index.</param>
 		/// <returns></returns>
 		BasicBlock CreateBlock(int label, int index);
-		
+
+		/// <summary>
+		/// Provides access to the pipeline of this compiler.
+		/// </summary>
+		CompilerPipeline Pipeline { get; }
+
+		/// <summary>
+		/// Compiles the method.
+		/// </summary>
 		void Compile();
-    }
+	}
 }

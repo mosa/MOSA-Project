@@ -20,6 +20,6 @@ namespace Mosa.Runtime.CompilerFramework
         /// Gets the scheduled method builders.
         /// </summary>
         /// <value>A collection of the scheduled methods.</value>
-        IEnumerable<MethodCompilerBase> Scheduled { get; }
+		IEnumerable<IMethodCompiler> Scheduled { get; }
     }
 }

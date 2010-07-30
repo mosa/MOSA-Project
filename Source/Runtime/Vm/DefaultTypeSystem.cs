@@ -246,7 +246,7 @@ namespace Mosa.Runtime.Vm
 			string name = module.Metadata.ReadString(typeRef.TypeNameIdx);
 			string ns = module.Metadata.ReadString(typeRef.TypeNamespaceIdx);
 			AssemblyRefRow arr = module.Metadata.ReadAssemblyRefRow(typeRef.ResolutionScopeIdx);
-			IAssemblyLoader loader = RuntimeBase.Instance.AssemblyLoader;
+			IAssemblyLoader loader = RuntimeBase.Instance.AssemblyLoader; // FIXME
 			IMetadataModule dependency = loader.Resolve(module.Metadata, arr);
 
 			for (int i = GetModuleOffset(dependency).TypeOffset; i < _types.Length; i++)
@@ -430,6 +430,13 @@ namespace Mosa.Runtime.Vm
 			return this._types[typeIndex];
 		}
 
+		/// <summary>
+		/// Resolves the type of the signature.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="module">The module.</param>
+		/// <param name="sigType">Type of the signature.</param>
+		/// <returns></returns>
 		public RuntimeType ResolveSignatureType(ISignatureContext context, IMetadataModule module, SigType sigType)
 		{
 			RuntimeType result = null;
@@ -454,7 +461,7 @@ namespace Mosa.Runtime.Vm
 						RuntimeType baseType = this.GetType(context, module, genericSigType.BaseType.Token);
 						//Console.WriteLine(@"TypeSpec (GenericInst) {0} resolves to base type {1}", sigType, baseType);
 
-						result = new CilGenericType(baseType, module, genericSigType, context);
+						result = new CilGenericType(baseType, module, genericSigType, context, this);
 					}
 					break;
 
@@ -631,7 +638,7 @@ namespace Mosa.Runtime.Vm
 				}
 
 				// Create and populate the runtime type
-				rt = new CilRuntimeType(token, module, ref typeDefRow, maxField, maxMethod, packing, size);
+				rt = new CilRuntimeType(token, module, ref typeDefRow, maxField, maxMethod, packing, size, this);
 				LoadMethods(module, rt, typeDefRow.MethodList, maxMethod, ref methodOffset);
 				LoadFields(module, rt, typeDefRow.FieldList, maxField, ref fieldOffset);
 				_types[typeOffset++] = rt;
@@ -673,7 +680,7 @@ namespace Mosa.Runtime.Vm
 					}
 
 					Debug.Assert(offset < _methods.Length, @"Invalid method index.");
-					_methods[offset++] = new CilRuntimeMethod(offset, module, ref methodDef, maxParam, declaringType);
+					_methods[offset++] = new CilRuntimeMethod(offset, module, ref methodDef, maxParam, declaringType, this);
 					methodDef = nextMethodDef;
 				}
 			}

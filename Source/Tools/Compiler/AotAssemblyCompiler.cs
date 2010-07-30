@@ -35,15 +35,15 @@ namespace Mosa.Tools.Compiler
         public void Run()
         {
             // Build the default assembly compiler pipeline
-            this.Architecture.ExtendAssemblyCompilerPipeline(this.Pipeline);
+            Architecture.ExtendAssemblyCompilerPipeline(this.Pipeline);
 
             // Run the compiler
-            this.Compile();            
+            Compile();            
         }
 
-        public override MethodCompilerBase CreateMethodCompiler(ICompilationSchedulerStage compilationScheduler, RuntimeType type, RuntimeMethod method)
+		public override IMethodCompiler CreateMethodCompiler(ICompilationSchedulerStage compilationScheduler, RuntimeType type, RuntimeMethod method)
         {
-            MethodCompilerBase mc = new AotMethodCompiler(
+			IMethodCompiler mc = new AotMethodCompiler(
                 this,
                 compilationScheduler,
                 type,

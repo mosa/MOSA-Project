@@ -118,7 +118,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="type">The type.</param>
 		/// <param name="method">The method to compile.</param>
 		/// <returns>An instance of a MethodCompilerBase for the given type/method pair.</returns>
-		public abstract MethodCompilerBase CreateMethodCompiler(ICompilationSchedulerStage schedulerStage, RuntimeType type, RuntimeMethod method);
+		public abstract IMethodCompiler CreateMethodCompiler(ICompilationSchedulerStage schedulerStage, RuntimeType type, RuntimeMethod method);
 
 		/// <summary>
 		/// Executes the compiler using the configured stages.

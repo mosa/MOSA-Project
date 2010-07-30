@@ -60,7 +60,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CompilerFramework\AssemblyMemberCompilationSchedulerStage.cs" />
@@ -84,6 +83,7 @@
     <Compile Include="CompilerFramework\CIL\CILLeakGuardStage.cs" />
     <Compile Include="CompilerFramework\CIL\DecodingStage.cs" />
     <Compile Include="CompilerFramework\CIL\BreakInstruction.cs" />
+    <Compile Include="CompilerFramework\BaseAssemblyCompilerStage.cs" />
     <Compile Include="CompilerFramework\GenericsResolverStage.cs" />
     <Compile Include="CompilerFramework\ICompilationSchedulerStage.cs" />
     <Compile Include="CompilerFramework\IntrinsicAttribute.cs" />
@@ -189,7 +189,7 @@
     <Compile Include="CompilerFramework\CIL\UnboxInstruction.cs" />
     <Compile Include="CompilerFramework\Branch.cs" />
     <Compile Include="CompilerFramework\Context.cs" />
-    <Compile Include="CompilerFramework\BaseStage.cs" />
+    <Compile Include="CompilerFramework\BaseMethodCompilerStage.cs" />
     <Compile Include="CompilerFramework\ICodeEmitter.cs" />
     <Compile Include="CompilerFramework\IR\AddressOfInstruction.cs" />
     <Compile Include="CompilerFramework\IR\ArithmeticShiftRightInstruction.cs" />
@@ -295,13 +295,10 @@
     <Compile Include="CompilerFramework\CodeGenerationStage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\CodeTransformationStage.cs">
+    <Compile Include="CompilerFramework\BaseCodeTransformationStage.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CompilerFramework\CompilationException.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompilerFramework\CompilerBase.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CompilerFramework\CompilerPipeline.cs">
@@ -385,7 +382,7 @@
     <Compile Include="CompilerFramework\Operands\MemoryOperand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\MethodCompilerBase.cs">
+    <Compile Include="CompilerFramework\BaseMethodCompiler.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CompilerFramework\NakedAttribute.cs">
@@ -980,6 +977,7 @@
       <SubType>Code</SubType>
     </Compile>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <PropertyGroup>
     <PreBuildEvent>

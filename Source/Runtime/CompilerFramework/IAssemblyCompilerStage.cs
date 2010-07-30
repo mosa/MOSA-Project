@@ -9,16 +9,11 @@
 
 namespace Mosa.Runtime.CompilerFramework
 {
-    /// <summary>
-    /// This interface represents a stage of compilation of an assembly.
-    /// </summary>
-    public interface IAssemblyCompilerStage : IPipelineStage
-    {
-        /// <summary>
-        /// Performs stage specific processing on the compiler context.
-        /// </summary>
-        void Run();
-		
+	/// <summary>
+	/// This interface represents a stage of compilation of an assembly.
+	/// </summary>
+	public interface IAssemblyCompilerStage : IPipelineStage
+	{
 		/// <summary>
 		/// Sets up the assembly compiler stage.
 		/// </summary>
@@ -26,5 +21,10 @@ namespace Mosa.Runtime.CompilerFramework
 		/// A <see cref="AssemblyCompiler"/> using the stage.
 		/// </param>
 		void Setup(AssemblyCompiler compiler);
-    }
+
+		/// <summary>
+		/// Performs stage specific processing on the compiler context.
+		/// </summary>
+		void Run();
+	}
 }

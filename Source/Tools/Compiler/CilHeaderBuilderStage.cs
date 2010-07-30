@@ -23,18 +23,16 @@ namespace Mosa.Tools.Compiler
 	/// <summary>
 	///  Writes the cil _header into the generated binary.
 	/// </summary>
-	public sealed class CilHeaderBuilderStage : IAssemblyCompilerStage, IPipelineStage
+	public sealed class CilHeaderBuilderStage : BaseAssemblyCompilerStage, IAssemblyCompilerStage, IPipelineStage
 	{
 
 		#region Data members
-		
-		private AssemblyCompiler compiler;
-		
+
 		private IAssemblyLinker linker;
 
 		private CLI_HEADER _cliHeader;
 
-		#endregion // Data members		
+		#endregion // Data members
 
 		#region IPipelineStage members
 
@@ -43,10 +41,11 @@ namespace Mosa.Tools.Compiler
 		#endregion // IPipelineStage members
 
 		#region IAssemblyCompilerStage Members
-		
-		public void Setup(AssemblyCompiler compiler)
+
+		void IAssemblyCompilerStage.Setup(AssemblyCompiler compiler)
 		{
-			this.compiler = compiler;
+			base.Setup(compiler);
+
 			this.linker = compiler.Pipeline.FindFirst<IAssemblyLinker>();
 			Debug.Assert(linker != null, @"No linker??");
 		}
@@ -54,7 +53,7 @@ namespace Mosa.Tools.Compiler
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		public void Run()
+		void IAssemblyCompilerStage.Run()
 		{
 			_cliHeader.Cb = 0x48;
 			_cliHeader.MajorRuntimeVersion = 2;
@@ -79,7 +78,8 @@ namespace Mosa.Tools.Compiler
 		private void WriteCilHeader()
 		{
 			using (Stream stream = this.linker.Allocate(CLI_HEADER.SymbolName, SectionKind.Text, CLI_HEADER.Length, 4))
-			using (BinaryWriter bw = new BinaryWriter(stream, Encoding.ASCII)) {
+			using (BinaryWriter bw = new BinaryWriter(stream, Encoding.ASCII))
+			{
 				_cliHeader.Write(bw);
 			}
 		}

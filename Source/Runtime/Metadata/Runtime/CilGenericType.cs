@@ -21,8 +21,10 @@ namespace Mosa.Runtime.Metadata.Runtime
 		private RuntimeType genericType;
 		
 		private SigType[] genericArguments;
-		
-		public CilGenericType(RuntimeType type, IMetadataModule referencingModule, GenericInstSigType genericTypeInstanceSignature, ISignatureContext signatureContext) :
+
+		private ITypeSystem typeSystem;
+
+		public CilGenericType(RuntimeType type, IMetadataModule referencingModule, GenericInstSigType genericTypeInstanceSignature, ISignatureContext signatureContext, ITypeSystem typeSystem) :
 			base(type.Token, type.Module)
 		{
 			this.signature = genericTypeInstanceSignature;
@@ -31,6 +33,8 @@ namespace Mosa.Runtime.Metadata.Runtime
 			
 			this.Methods = this.GetMethods();
 			this.Fields = this.GetFields();
+
+			this.typeSystem = typeSystem;
 		}
 		
 		public SigType[] GenericArguments
@@ -96,8 +100,8 @@ namespace Mosa.Runtime.Metadata.Runtime
 			List<RuntimeField> fields = new List<RuntimeField>();
 			foreach (CilRuntimeField field in this.genericType.Fields)
 			{
-	            FieldSignature fsig = new FieldSignature();
-    		        fsig.LoadSignature(this, this.genericType.Module.Metadata, field.Signature.Token);
+				FieldSignature fsig = new FieldSignature();
+					fsig.LoadSignature(this, this.genericType.Module.Metadata, field.Signature.Token);
 				
 				CilGenericField genericInstanceField = new CilGenericField(this, field, fsig);
 				fields.Add(genericInstanceField);
@@ -110,7 +114,6 @@ namespace Mosa.Runtime.Metadata.Runtime
 		{
 			if (this.genericType == null)
 			{
-				ITypeSystem typeSystem = RuntimeBase.Instance.TypeLoader;
 				SigType[] signatureArguments = this.signature.GenericArguments;
 				
 				this.genericType = typeSystem.GetType(DefaultSignatureContext.Instance, this.signatureModule, this.signature.BaseType.Token);
@@ -121,7 +124,6 @@ namespace Mosa.Runtime.Metadata.Runtime
 		private RuntimeType GetRuntimeTypeForSigType(SigType sigType)
 		{
 			RuntimeType result = null;
-			ITypeSystem typeSystem = RuntimeBase.Instance.TypeLoader;
 			
 			switch (sigType.Type)
 			{
@@ -164,10 +166,10 @@ namespace Mosa.Runtime.Metadata.Runtime
 			this.ProcessSignature();
 			return this.genericArguments[index];
 		}
-        
-        protected override IList<RuntimeType> LoadInterfaces()
-        {
-            return NoInterfaces;
-        }
+		
+		protected override IList<RuntimeType> LoadInterfaces()
+		{
+			return NoInterfaces;
+		}
 	}
 }

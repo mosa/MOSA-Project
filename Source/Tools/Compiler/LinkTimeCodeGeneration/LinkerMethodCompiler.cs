@@ -17,7 +17,7 @@ using Mosa.Runtime.Vm;
 
 namespace Mosa.Tools.Compiler.LinkTimeCodeGeneration
 {
-	sealed class LinkerMethodCompiler : MethodCompilerBase
+	sealed class LinkerMethodCompiler : BaseMethodCompiler
 	{
 		#region Construction
 

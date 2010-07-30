@@ -21,18 +21,20 @@ namespace Mosa.Runtime.CompilerFramework
 	/// For every type instantiation, a new method is created with the
 	/// generic parameter substituted with the corresponding type.
 	/// </summary>
-	public class GenericsResolverStage : IAssemblyCompilerStage, IMethodCompilerBuilder, IPipelineStage
+	public class GenericsResolverStage : BaseAssemblyCompilerStage, IAssemblyCompilerStage, IMethodCompilerBuilder, IPipelineStage
 	{
-		private AssemblyCompiler compiler;
-		
-		public void Setup(AssemblyCompiler compiler)
+
+		#region IPipelineStage members
+
+		string IPipelineStage.Name { get { return @"Generics Resolver"; } }
+
+		#endregion IPipelineStage members
+
+		#region IAssemblyCompilerStage members
+
+		void IAssemblyCompilerStage.Run()
 		{
-			this.compiler = compiler;
-		}
-		
-		public void Run()
-		{
-			ReadOnlyRuntimeTypeListView types = RuntimeBase.Instance.TypeLoader.GetTypesFromModule(this.compiler.Assembly);
+			ReadOnlyRuntimeTypeListView types = typeSystem.GetTypesFromModule(this.compiler.Assembly);
 			foreach (RuntimeType type in types)
 			{
 				foreach (RuntimeMethod method in type.Methods)
@@ -54,25 +56,13 @@ namespace Mosa.Runtime.CompilerFramework
 			}
 		}
 
-		#region IMethodCompilerBuilder
-		IEnumerable<MethodCompilerBase> IMethodCompilerBuilder.Scheduled
-		{
-			get
-			{
-				return null;
-			}
-		}
-		#endregion
+		#endregion IAssemblyCompilerStage members
 
-		#region IPipelineStage
-		string IPipelineStage.Name
-		{
-			get
-			{
-				return @"Generics Resolver";
-			}
-		}
-		#endregion
+		#region IMethodCompilerBuilder members
+
+		IEnumerable<IMethodCompiler> IMethodCompilerBuilder.Scheduled { get { return null; } }
+
+		#endregion IMethodCompilerBuilder members
 
 		/// <summary>
 		/// Determines if the given method is a method 
@@ -80,7 +70,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <param name="method">The method to check</param>
 		/// <returns>True if the method relies upon generic parameters</returns>
-		public static bool HasGenericParameters (RuntimeMethod method)
+		public static bool HasGenericParameters(RuntimeMethod method)
 		{
 			// Check return type
 			if (IsGenericParameter(method.Signature.ReturnType))
@@ -116,7 +106,7 @@ namespace Mosa.Runtime.CompilerFramework
 			throw new NotImplementedException();
 		}
 
-		private static void ReinsertMethods (List<RuntimeMethod> methods, RuntimeMethod method, RuntimeType type)
+		private static void ReinsertMethods(List<RuntimeMethod> methods, RuntimeMethod method, RuntimeType type)
 		{
 			throw new NotImplementedException();
 		}

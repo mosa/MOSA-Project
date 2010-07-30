@@ -32,7 +32,7 @@ namespace Mosa.Tools.Compiler
 	public class Compiler
 	{
 		#region Fields
-		
+
 		/// <summary>
 		/// Holds the stage responsible for the architecture.
 		/// </summary>
@@ -68,9 +68,9 @@ namespace Mosa.Tools.Compiler
 		/// </summary>
 		private OptionSet optionSet;
 
-        private readonly int majorVersion = 0;
-        private readonly int minorVersion = 6;
-        private readonly string codeName = @"Tanigawa";
+		private readonly int majorVersion = 0;
+		private readonly int minorVersion = 6;
+		private readonly string codeName = @"Tanigawa";
 
 		/// <summary>
 		/// A string holding a simple usage description.
@@ -101,7 +101,8 @@ namespace Mosa.Tools.Compiler
 				"Display version information.",
 				delegate(string v)
 				{
-					if (v != null) {
+					if (v != null)
+					{
 						// only show _header and exit
 						Environment.Exit(0);
 					}
@@ -112,7 +113,8 @@ namespace Mosa.Tools.Compiler
 				"Display the full set of available options.",
 				delegate(string v)
 				{
-					if (v != null) {
+					if (v != null)
+					{
 						this.ShowHelp();
 						Environment.Exit(0);
 					}
@@ -124,13 +126,16 @@ namespace Mosa.Tools.Compiler
 				"Input files.",
 				delegate(string v)
 				{
-					if (!File.Exists(v)) {
+					if (!File.Exists(v))
+					{
 						throw new OptionException(String.Format("Input file or option '{0}' doesn't exist.", v), String.Empty);
 					}
 
 					FileInfo file = new FileInfo(v);
-					if (file.Extension.ToLower() == ".exe") {
-						if (isExecutable) {
+					if (file.Extension.ToLower() == ".exe")
+					{
+						if (isExecutable)
+						{
 							// there are more than one exe files in the list
 							throw new OptionException("Multiple executables aren't allowed.", String.Empty);
 						}
@@ -148,7 +153,7 @@ namespace Mosa.Tools.Compiler
 			this.architectureSelector.AddOptions(optionSet);
 			this.mapFileWrapper.AddOptions(optionSet);
 
-            StaticAllocationResolutionStageWrapper.Instance.AddOptions(optionSet);
+			StaticAllocationResolutionStageWrapper.Instance.AddOptions(optionSet);
 		}
 
 		#endregion Constructors
@@ -167,8 +172,10 @@ namespace Mosa.Tools.Compiler
 			Console.WriteLine("Copyright 2008 by Novell. NDesk.Options is released under the MIT/X11 license.");
 			Console.WriteLine();
 
-			try {
-				if (args == null || args.Length == 0) {
+			try
+			{
+				if (args == null || args.Length == 0)
+				{
 					// no arguments are specified
 					ShowShortHelp();
 					return;
@@ -176,32 +183,38 @@ namespace Mosa.Tools.Compiler
 
 				optionSet.Parse(args);
 
-				if (inputFiles.Count == 0) {
+				if (inputFiles.Count == 0)
+				{
 					throw new OptionException("No input file(s) specified.", String.Empty);
 				}
 
 				// Process boot format:
 				// Boot format only matters if it's an executable
 				// Process this only now, because input files must be known
-				if (isExecutable == false && bootFormatStage.IsConfigured == true) {
+				if (isExecutable == false && bootFormatStage.IsConfigured == true)
+				{
 					Console.WriteLine("Warning: Ignoring boot format, because target is not an executable.");
 					Console.WriteLine();
 				}
 
 				// Check for missing options
-				if (!linkerStage.IsConfigured) {
+				if (!linkerStage.IsConfigured)
+				{
 					throw new OptionException("No binary format specified.", "Architecture");
 				}
 
-				if (String.IsNullOrEmpty(this.linkerStage.OutputFile)) {
+				if (String.IsNullOrEmpty(this.linkerStage.OutputFile))
+				{
 					throw new OptionException("No output file specified.", "o");
 				}
 
-				if (!architectureSelector.IsConfigured) {
+				if (!architectureSelector.IsConfigured)
+				{
 					throw new OptionException("No architecture specified.", "Architecture");
 				}
 			}
-			catch (OptionException e) {
+			catch (OptionException e)
+			{
 				ShowError(e.Message);
 				return;
 			}
@@ -214,10 +227,10 @@ namespace Mosa.Tools.Compiler
 			{
 				Compile();
 			}
-            catch (CompilationException ce)
-            {
-                this.ShowError(ce.Message);
-            }
+			catch (CompilationException ce)
+			{
+				this.ShowError(ce.Message);
+			}
 		}
 
 		/// <summary>
@@ -242,18 +255,18 @@ namespace Mosa.Tools.Compiler
 
 		private void Compile()
 		{
-			using (CompilationRuntime runtime = new CompilationRuntime()) 
-            {
-                runtime.InitializePrivatePaths(this.GetInputFileNames());
+			using (CompilationRuntime runtime = new CompilationRuntime())
+			{
+				runtime.InitializePrivatePaths(this.GetInputFileNames());
 
-                // Create the compiler
-                using (AotCompiler aot = new AotCompiler(this.architectureSelector.Architecture, this.GetMainAssembly()))
-                {
-                    aot.Pipeline.AddRange(new IAssemblyCompilerStage[] 
+				// Create the compiler
+				using (AotCompiler aot = new AotCompiler(this.architectureSelector.Architecture, this.GetMainAssembly(runtime.AssemblyLoader)))
+				{
+					aot.Pipeline.AddRange(new IAssemblyCompilerStage[] 
                     {
                         this.bootFormatStage,
 						new x86.InterruptBuilderStage(),
-                        new AssemblyCompilationStage(this.GetInputFileNames()),
+                        new AssemblyCompilationStage(this.GetInputFileNames(), runtime.AssemblyLoader), 
                         //new FakeSystemObjectGenerationStage(),
                         new MethodCompilerSchedulerStage(),
                         new TypeInitializers.TypeInitializerSchedulerStage(),
@@ -265,25 +278,24 @@ namespace Mosa.Tools.Compiler
                         this.mapFileWrapper
                     });
 
-                    aot.Run();
-                }
+					aot.Run();
+				}
 			}
 		}
 
-	    private IMetadataModule GetMainAssembly()
-	    {
-	        string firstAssembly = this.inputFiles[0].FullName;
-	        return RuntimeBase.Instance.AssemblyLoader.Load(firstAssembly);
-	    }
+		private IMetadataModule GetMainAssembly(IAssemblyLoader assemblyLoader)
+		{
+			string firstAssembly = this.inputFiles[0].FullName;
+			return assemblyLoader.Load(firstAssembly);
+		}
 
-	    /// <summary>
+		/// <summary>
 		/// Gets a list of input file names.
 		/// </summary>
 		private IEnumerable<string> GetInputFileNames()
 		{
-			foreach (FileInfo file in this.inputFiles) {
+			foreach (FileInfo file in this.inputFiles)
 				yield return file.FullName;
-			}
 		}
 
 		/// <summary>

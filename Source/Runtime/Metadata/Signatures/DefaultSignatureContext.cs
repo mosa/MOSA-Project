@@ -19,13 +19,13 @@ namespace Mosa.Runtime.Metadata.Signatures
 
 		public SigType GetGenericMethodArgument(int index)
 		{
-            return new MVarSigType(index);
+			return new MVarSigType(index);
 		}
 		
 		
 		public SigType GetGenericTypeArgument(int index)
 		{
-            return new VarSigType(index);
+			return new VarSigType(index);
 		}
 	}
 }

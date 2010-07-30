@@ -17,7 +17,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// <summary>
 	/// Base class for code generation stages.
 	/// </summary>
-	public class CodeGenerationStage : BaseStage, ICodeGenerationStage, IMethodCompilerStage, IPipelineStage
+	public class CodeGenerationStage : BaseMethodCompilerStage, ICodeGenerationStage, IMethodCompilerStage, IPipelineStage
 	{
 
 		#region Data members
@@ -25,7 +25,12 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Holds the stream, where code is emitted to.
 		/// </summary>
-		protected static Stream _codeStream;
+		protected static Stream codeStream;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		protected ICodeEmitter codeEmitter;
 
 		#endregion // Data members
 
@@ -42,23 +47,18 @@ namespace Mosa.Runtime.CompilerFramework
 		#region Methods
 
 		/// <summary>
-		/// 
-		/// </summary>
-		protected ICodeEmitter _codeEmitter;
-
-		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
 		public void Run()
 		{
 
 			// Retrieve a stream to place the code into
-			using (_codeStream = MethodCompiler.RequestCodeStream()) {
+			using (codeStream = MethodCompiler.RequestCodeStream()) {
 				// HINT: We need seeking to resolve labels.
-				Debug.Assert(_codeStream.CanSeek, @"Can't seek code output stream.");
-				Debug.Assert(_codeStream.CanWrite, @"Can't write to code output stream.");
+				Debug.Assert(codeStream.CanSeek, @"Can't seek code output stream.");
+				Debug.Assert(codeStream.CanWrite, @"Can't write to code output stream.");
 
-				if (!_codeStream.CanSeek || !_codeStream.CanWrite)
+				if (!codeStream.CanSeek || !codeStream.CanWrite)
 					throw new NotSupportedException(@"Code stream doesn't support seeking or writing.");
 
 				// Emit method prologue
@@ -85,7 +85,7 @@ namespace Mosa.Runtime.CompilerFramework
 						if (!ctx.Ignore) {
 							IPlatformInstruction instruction = ctx.Instruction as IPlatformInstruction;
 							if (instruction != null)
-								instruction.Emit(ctx, _codeEmitter);
+								instruction.Emit(ctx, codeEmitter);
 							else
 								Debug.WriteLine("Missing Code Transformation: " + ctx.ToString());
 						}
@@ -99,8 +99,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		protected virtual void BeginGenerate()
 		{
-			_codeEmitter = Architecture.GetCodeEmitter();
-			_codeEmitter.Initialize(MethodCompiler, _codeStream, MethodCompiler.Linker);
+			codeEmitter = Architecture.GetCodeEmitter();
+			codeEmitter.Initialize(MethodCompiler, codeStream, MethodCompiler.Linker);
 		}
 
 		/// <summary>
@@ -109,7 +109,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="block">The started block.</param>
 		protected virtual void BlockStart(BasicBlock block)
 		{
-			_codeEmitter.Label(block.Label);
+			codeEmitter.Label(block.Label);
 		}
 
 		/// <summary>
@@ -125,8 +125,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		protected virtual void EndGenerate()
 		{
-			_codeEmitter.Dispose();
-			_codeEmitter = null;
+			codeEmitter.Dispose();
+			codeEmitter = null;
 		}
 
 		#endregion // Methods

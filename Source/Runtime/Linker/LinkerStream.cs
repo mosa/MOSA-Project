@@ -51,15 +51,15 @@ namespace Mosa.Runtime.Linker
         /// <param name="length">The length of the symbol. Set to zero, if length is unknown.</param>
         public LinkerStream(LinkerSymbol symbol, Stream stream, long length)
         {
-            if (null == symbol)
+            if (symbol == null)
                 throw new ArgumentNullException(@"symbol");
-            if (null == stream)
+			if (stream == null)
                 throw new ArgumentNullException(@"stream");
 
             this.length = length;
-            this.start = stream.Position;
-            this.symbol = symbol;
-            this.stream = stream;
+			this.start = stream.Position;
+			this.symbol = symbol;
+			this.stream = stream;
         }
 
         #endregion // Construction
@@ -74,10 +74,10 @@ namespace Mosa.Runtime.Linker
         {
             get 
             {
-                if (this.stream == null)
+                if (stream == null)
                     throw new ObjectDisposedException(@"LinkerStream");
 
-                return this.stream; 
+                return stream; 
             }
         }
 
@@ -90,10 +90,10 @@ namespace Mosa.Runtime.Linker
         {
             get
             {
-                if (this.stream == null)
+                if (stream == null)
                     throw new ObjectDisposedException(@"LinkerStream");
 
-                return this.stream.CanRead; 
+                return stream.CanRead; 
             }
         }
 
@@ -106,10 +106,10 @@ namespace Mosa.Runtime.Linker
         {
             get
             {
-                if (this.stream == null)
+                if (stream == null)
                     throw new ObjectDisposedException(@"LinkerStream");
 
-                return this.stream.CanSeek; 
+                return stream.CanSeek; 
             }
         }
 
@@ -122,10 +122,10 @@ namespace Mosa.Runtime.Linker
         {
             get 
             {
-                if (this.stream == null)
+                if (stream == null)
                     throw new ObjectDisposedException(@"LinkerStream");
 
-                return this.stream.CanWrite; 
+                return stream.CanWrite; 
             }
         }
 
@@ -138,10 +138,10 @@ namespace Mosa.Runtime.Linker
         {
             get
             {
-                if (null == this.stream)
+                if (stream == null)
                     throw new ObjectDisposedException(@"LinkerStream");
 
-                return this.stream.CanTimeout;
+                return stream.CanTimeout;
             }
         }
 
@@ -155,18 +155,18 @@ namespace Mosa.Runtime.Linker
         {
             get
             {
-                if (null == this.stream)
+                if (stream == null)
                     throw new ObjectDisposedException(@"LinkerStream");
 
-                return this.stream.ReadTimeout;
+                return stream.ReadTimeout;
             }
 
             set
             {
-                if (null == this.stream)
+                if (stream == null)
                     throw new ObjectDisposedException(@"LinkerStream");
 
-                this.stream.ReadTimeout = value;
+                stream.ReadTimeout = value;
             }
         }
 
@@ -180,17 +180,17 @@ namespace Mosa.Runtime.Linker
         {
             get
             {
-                if (null == this.stream)
+                if (stream == null)
                     throw new ObjectDisposedException(@"LinkerStream");
 
-                return this.stream.WriteTimeout;
+                return stream.WriteTimeout;
             }
             set
             {
-                if (null == this.stream)
+                if (stream == null)
                     throw new ObjectDisposedException(@"LinkerStream");
 
-                this.stream.WriteTimeout = value;
+                stream.WriteTimeout = value;
             }
         }
 
@@ -200,14 +200,14 @@ namespace Mosa.Runtime.Linker
         /// <param name="disposing">true to release both managed and unmanaged resources; false to release only unmanaged resources.</param>
         protected override void Dispose(bool disposing)
         {
-            if (this.stream != null && this.symbol != null)
+            if (stream != null && symbol != null)
             {
                 // Fix the linker symbol size
-                this.symbol.Length = this.Position;
+                symbol.Length = Position;
 
                 // Clear the stream & symbol
-                this.stream = null;
-                this.symbol = null;
+                stream = null;
+                symbol = null;
             }
 
             base.Dispose(disposing);
@@ -219,9 +219,9 @@ namespace Mosa.Runtime.Linker
         /// <exception cref="T:System.IO.IOException">An I/O error occurs. </exception>
         public override void Flush()
         {
-            if (this.stream == null)
+            if (stream == null)
                 throw new ObjectDisposedException(@"LinkerStream");
-            this.stream.Flush();
+            stream.Flush();
         }
 
         /// <summary>
@@ -235,12 +235,12 @@ namespace Mosa.Runtime.Linker
         {
             get 
             {
-                if (this.stream == null)
+                if (stream == null)
                     throw new ObjectDisposedException(@"LinkerStream");
-                if (0 == this.length)
+                if (0 == length)
                     throw new System.NotSupportedException();
 
-                return this.length;
+                return length;
             }
         }
 
@@ -256,19 +256,19 @@ namespace Mosa.Runtime.Linker
         {
             get 
             {
-                if (this.stream == null)
+                if (stream == null)
                     throw new ObjectDisposedException(@"LinkerStream");
 
-                return this.stream.Position - this.start; 
+                return stream.Position - start; 
             }
             set
             {
-                if (this.stream == null)
+                if (stream == null)
                     throw new ObjectDisposedException(@"LinkerStream");
-                if (value < 0 || (0 != this.length && value > this.length))
+                if (value < 0 || (0 != length && value > length))
                     throw new ArgumentOutOfRangeException(@"value", value, @"Value must be equal to or larger than zero and less than the length of the stream.");
 
-                this.stream.Position = (this.start + value);
+                stream.Position = (start + value);
             }
         }
 
@@ -291,7 +291,7 @@ namespace Mosa.Runtime.Linker
         /// <exception cref="T:System.ObjectDisposedException">Methods were called after the stream was closed. </exception>
         public override int Read(byte[] buffer, int offset, int count)
         {
-            if (null == this.stream)
+            if (stream == null)
                 throw new ObjectDisposedException(@"LinkerStream");
             if (buffer == null)
                 throw new ArgumentNullException(@"buffer");
@@ -303,11 +303,11 @@ namespace Mosa.Runtime.Linker
                 throw new ArgumentException(@"Buffer too small.", @"buffer");
 
             // Guard for the symbol size
-            if (this.length != 0 && this.Position + count > this.length)
-                count = (int)(this.length - this.Position);
+            if (length != 0 && Position + count > length)
+                count = (int)(length - Position);
 
             if (count != 0)
-                count = this.stream.Read(buffer, offset, count);
+                count = stream.Read(buffer, offset, count);
 
             return count;
         }
@@ -322,14 +322,14 @@ namespace Mosa.Runtime.Linker
         /// <exception cref="T:System.ObjectDisposedException">Methods were called after the stream was closed. </exception>
         public override int ReadByte()
         {
-            if (null == this.stream)
+            if (stream == null)
                 throw new ObjectDisposedException(@"LinkerStream");
 
-            // Check that we're not writing past the end of our stream
-            if (0 != this.length && this.Position + 1 < this.Length)
+            // Check that we're not reading past the end of our stream
+            if (0 != length && Position + 1 < Length)
                 return -1;
 
-            return this.stream.ReadByte();
+            return stream.ReadByte();
         }
 
         /// <summary>
@@ -346,34 +346,34 @@ namespace Mosa.Runtime.Linker
         /// <exception cref="T:System.ObjectDisposedException">Methods were called after the stream was closed. </exception>
         public override long Seek(long offset, SeekOrigin origin)
         {
-            if (null == this.stream)
+            if (stream == null)
                 throw new ObjectDisposedException(@"LinkerStream");
 
             // FIXME: Guard for the symbol size
             switch (origin)
             {
                 case SeekOrigin.Begin:
-                    offset += this.start;
+                    offset += start;
                     break;
 
                 case SeekOrigin.End:
-                    if (0 == this.length)
+                    if (0 == length)
                         throw new ArgumentException(@"Can't seek from end, symbol doesn't have a fixed size.", @"origin");
-                    offset = (this.length - offset);
+                    offset = (length - offset);
                     if (offset < 0)
                         offset = 0;
                     break;
 
                 case SeekOrigin.Current:
-                    offset += this.Position;
+                    offset += Position;
                     if (offset < 0)
                         offset = 0;
-                    if (offset > this.length)
-                        offset = this.length - 1;
+                    if (offset > length)
+                        offset = length - 1;
                     break;
             }
 
-            return this.stream.Seek(offset, SeekOrigin.Begin) - this.start;
+            return stream.Seek(offset, SeekOrigin.Begin) - start;
         }
 
         /// <summary>
@@ -385,7 +385,7 @@ namespace Mosa.Runtime.Linker
         /// <exception cref="T:System.ObjectDisposedException">Methods were called after the stream was closed. </exception>
         public override void SetLength(long value)
         {
-            if (null == this.stream)
+            if (stream == null)
                 throw new ObjectDisposedException(@"LinkerStream");
             throw new NotSupportedException();
         }
@@ -406,7 +406,7 @@ namespace Mosa.Runtime.Linker
         /// <exception cref="T:System.ObjectDisposedException">Methods were called after the stream was closed. </exception>
         public override void Write(byte[] buffer, int offset, int count)
         {
-            if (this.stream == null)
+            if (stream == null)
                 throw new ObjectDisposedException(@"LinkerStream");
             if (buffer == null)
                 throw new ArgumentNullException(@"buffer");
@@ -418,10 +418,10 @@ namespace Mosa.Runtime.Linker
                 throw new ArgumentException(@"Buffer too small.", @"buffer");
 
             // Check that we're not writing past the end of our stream
-            if (this.length != 0 && count + this.Position > this.Length)
+            if (length != 0 && count + Position > Length)
                 throw new IOException(@"Can't fit buffer in the remaining space for the current symbol.");
 
-            this.stream.Write(buffer, offset, count);
+            stream.Write(buffer, offset, count);
         }
 
         /// <summary>
@@ -433,14 +433,14 @@ namespace Mosa.Runtime.Linker
         /// <exception cref="T:System.ObjectDisposedException">Methods were called after the stream was closed. </exception>
         public override void WriteByte(byte value)
         {
-            if (null == this.stream)
+            if (stream == null)
                 throw new ObjectDisposedException(@"LinkerStream");
 
             // Check that we're not writing past the end of our stream
-            if (0 != this.length && this.Position + 1 > this.Length)
+            if (0 != length && Position + 1 > Length)
                 throw new IOException(@"Can't fit value in the remaining space for the current symbol.");
 
-            this.stream.WriteByte(value);
+            stream.WriteByte(value);
         }
 
         #endregion // Stream Overrides

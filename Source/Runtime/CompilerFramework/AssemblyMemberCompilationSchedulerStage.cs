@@ -16,43 +16,55 @@ namespace Mosa.Runtime.CompilerFramework
 	using Mosa.Runtime.Vm;
 
 	/// <summary>
-    /// Schedules all types of an assembly for compilation.
-    /// </summary>
-	public class AssemblyMemberCompilationSchedulerStage : IAssemblyCompilerStage, IPipelineStage
-    {	
-		private AssemblyCompiler compiler;
-		
+	/// Schedules all types of an assembly for compilation.
+	/// </summary>
+	public class AssemblyMemberCompilationSchedulerStage : BaseAssemblyCompilerStage, IAssemblyCompilerStage, IPipelineStage
+	{
+		#region Data members
+
 		private ICompilationSchedulerStage scheduler;
-		
-		public string Name 
-		{ 
-			get 
-			{ 
-				return @"Method Compiler Builder"; 
-			} 
-		}
-		
-		public void Setup(AssemblyCompiler compiler)
+
+		#endregion // Data members
+
+		#region IPipelineStage members
+
+		/// <summary>
+		/// Retrieves the name of the compilation stage.
+		/// </summary>
+		/// <value>The name of the compilation stage.</value>
+		string IPipelineStage.Name { get { return @"Method Compiler Builder"; } }
+
+		#endregion // IPipelineStage
+
+		#region IAssemblyCompilerStage members
+
+		void IAssemblyCompilerStage.Setup(AssemblyCompiler compiler)
 		{
+			base.Setup(compiler);
+
 			ICompilationSchedulerStage scheduler = compiler.Pipeline.FindFirst<ICompilationSchedulerStage>();
+
 			if (scheduler == null)
 				throw new InvalidOperationException(@"No compilation scheduler found in the assembly compiler pipeline.");
-			
-			this.compiler = compiler;
+
 			this.scheduler = scheduler;
 		}
 
-		public void Run()
-        {		
-            ReadOnlyRuntimeTypeListView types = RuntimeBase.Instance.TypeLoader.GetTypesFromModule(this.compiler.Assembly);
-            foreach (RuntimeType type in types)
-            {
-                // Do not schedule generic types, they're scheduled on demand.
-                if (type.IsGeneric)
-                    continue;
-				
-				this.scheduler.ScheduleTypeForCompilation(type);
-            }
-        }
-    }
+		void IAssemblyCompilerStage.Run()
+		{
+			ReadOnlyRuntimeTypeListView types = typeSystem.GetTypesFromModule(compiler.Assembly);
+
+			foreach (RuntimeType type in types)
+			{
+				// Do not schedule generic types, they're scheduled on demand.
+				if (type.IsGeneric)
+					continue;
+
+				scheduler.ScheduleTypeForCompilation(type);
+			}
+		}
+
+		#endregion IAssemblyCompilerStage members
+
+	}
 }

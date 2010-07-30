@@ -18,7 +18,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// <summary>
 	/// The FlowGraph Visualization Stage emits flowgraphs for graphviz.
 	/// </summary>
-	public class FlowGraphVisualizationStage : BaseStage, IMethodCompilerStage, IPipelineStage
+	public class FlowGraphVisualizationStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
 	{
 		#region Data members
 
@@ -49,18 +49,15 @@ namespace Mosa.Runtime.CompilerFramework
 
 		#endregion // Data members
 
-		#region IPipelineStage
+		#region IPipelineStage Members
 
 		/// <summary>
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
 		/// <value>The name of the compilation stage.</value>
-		string IPipelineStage.Name
-		{
-			get { return @"FlowGraph Visualization Stage"; }
-		}
+		string IPipelineStage.Name { get { return @"FlowGraph Visualization Stage"; } }
 
-		#endregion // IPipelineStage
+		#endregion // IPipelineStage Members
 
 		#region IMethodCompilerStage Members
 
@@ -86,70 +83,70 @@ namespace Mosa.Runtime.CompilerFramework
 			workList.Push(firstBlock);
 			workArray = new BitArray(BasicBlocks.Count);
 
-            string methodName = MethodCompiler.Method.Name;
-            methodName = methodName.Replace("<", "");
-            methodName = methodName.Replace(">", "");
-            methodName = methodName.Replace("$", "");
-            methodName = methodName.Replace(".", "");
+			string methodName = MethodCompiler.Method.Name;
+			methodName = methodName.Replace("<", "");
+			methodName = methodName.Replace(">", "");
+			methodName = methodName.Replace("$", "");
+			methodName = methodName.Replace(".", "");
 			IPipelineStage previousStage = MethodCompiler.GetPreviousStage(typeof(IMethodCompilerStage));
-            dotFile.WriteLine("subgraph cluster" + methodName + "_FlowGraph {");
-            dotFile.WriteLine("label = \"Method: " + methodName + "(" + MethodCompiler.Method.Signature + ") after " + previousStage.Name + "\"");
+			dotFile.WriteLine("subgraph cluster" + methodName + "_FlowGraph {");
+			dotFile.WriteLine("label = \"Method: " + methodName + "(" + MethodCompiler.Method.Signature + ") after " + previousStage.Name + "\"");
 			//dotFile.WriteLine("graph [rankdir = \"TB\"];");
 
 			string nodes = string.Empty;
 			string edges = string.Empty;
 
-            foreach (BasicBlock block in BasicBlocks)
-            {
-                string nodeName = string.Empty;
-                string nodeContent = string.Empty;
-                string nextNode = string.Empty;
+			foreach (BasicBlock block in BasicBlocks)
+			{
+				string nodeName = string.Empty;
+				string nodeContent = string.Empty;
+				string nextNode = string.Empty;
 
-                nodeName = methodName + "_" + block.ToString();
-                //nodeName = nodeName.Replace("-", "_");
+				nodeName = methodName + "_" + block.ToString();
+				//nodeName = nodeName.Replace("-", "_");
 
-                nodeContent += "<tr><td bgcolor=\"black\" align=\"center\" colspan=\"4\"><font face=\"Courier\" color=\"white\">L_" + block.Label.ToString("x4") + "</font></td></tr>";
+				nodeContent += "<tr><td bgcolor=\"black\" align=\"center\" colspan=\"4\"><font face=\"Courier\" color=\"white\">L_" + block.Label.ToString("x4") + "</font></td></tr>";
 
-                int field = 0;
-                int i = 0;
+				int field = 0;
+				int i = 0;
 
-                for (Context ctx = new Context(InstructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
-                {
-                    if (ctx.Instruction == null)
-                        continue;
+				for (Context ctx = new Context(InstructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
+				{
+					if (ctx.Instruction == null)
+						continue;
 
-                    string color;
-                    string inst = ctx.Instruction.ToString(ctx).Replace("&", "&amp;");
-                    inst = inst.Replace("<", "&lt;");
-                    inst = inst.Replace(">", "&gt;");
+					string color;
+					string inst = ctx.Instruction.ToString(ctx).Replace("&", "&amp;");
+					inst = inst.Replace("<", "&lt;");
+					inst = inst.Replace(">", "&gt;");
 
-                    if (inst.StartsWith("IL") || inst.StartsWith("T_"))
-                        color = "#0000ff5f";
-                    else if (inst.StartsWith("IR"))
-                        color = "#ff00005f";
-                    else
-                        color = "#CFD6CEff";
-
-
-                    nodeContent += "<tr height=\"20\"><td bgcolor=\"white\" align=\"right\" width=\"20\"><img src=\"icon.png\"/></td><td bgcolor=\"white\" align=\"right\">" + (i++) + "</td><td bgcolor=\"" + color + "\" align=\"center\" colspan=\"2\"><font face=\"Courier\">" + inst + "</font></td></tr>";
-
-                    ++field;
-                }
-
-                if (nodeContent != string.Empty && nodeContent[nodeContent.Length - 1] == '|')
-                    nodeContent = nodeContent.Substring(0, nodeContent.Length - 2);
-
-                if (nodeContent != string.Empty)
-                    nodes += "\"" + nodeName + "\" [label = <<table border=\"1\" cellborder=\"0\" cellpadding=\"3\" bgcolor=\"white\">" + nodeContent + "</table>> shape = \"Mrecord\"];\r\n";
+					if (inst.StartsWith("IL") || inst.StartsWith("T_"))
+						color = "#0000ff5f";
+					else if (inst.StartsWith("IR"))
+						color = "#ff00005f";
+					else
+						color = "#CFD6CEff";
 
 
-                foreach (BasicBlock nextBlock in block.NextBlocks)
-                {
-                    nextNode = methodName + "_" + nextBlock.ToString();
+					nodeContent += "<tr height=\"20\"><td bgcolor=\"white\" align=\"right\" width=\"20\"><img src=\"icon.png\"/></td><td bgcolor=\"white\" align=\"right\">" + (i++) + "</td><td bgcolor=\"" + color + "\" align=\"center\" colspan=\"2\"><font face=\"Courier\">" + inst + "</font></td></tr>";
 
-                    edges += "\"" + nodeName + "\"" + " -> " + "\"" + nextNode + "\";\r\n";
-                }
-            }
+					++field;
+				}
+
+				if (nodeContent != string.Empty && nodeContent[nodeContent.Length - 1] == '|')
+					nodeContent = nodeContent.Substring(0, nodeContent.Length - 2);
+
+				if (nodeContent != string.Empty)
+					nodes += "\"" + nodeName + "\" [label = <<table border=\"1\" cellborder=\"0\" cellpadding=\"3\" bgcolor=\"white\">" + nodeContent + "</table>> shape = \"Mrecord\"];\r\n";
+
+
+				foreach (BasicBlock nextBlock in block.NextBlocks)
+				{
+					nextNode = methodName + "_" + nextBlock.ToString();
+
+					edges += "\"" + nodeName + "\"" + " -> " + "\"" + nextNode + "\";\r\n";
+				}
+			}
 
 			dotFile.WriteLine(nodes);
 			dotFile.WriteLine(edges);
@@ -161,13 +158,15 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public void Open()
 		{
-			try {
+			try
+			{
 				//dotFile = new System.IO.StreamWriter("dotGraph_" + compiler.Method.Name + "_" + methodCount[compiler.Method.Name] + ".dot");
 				dotFile = new System.IO.StreamWriter("dotGraph.dot");
-                dotFile.WriteLine("digraph \"\" {");
-                dotFile.WriteLine("label = \"" + MethodCompiler.Assembly.Name + "\"");
+				dotFile.WriteLine("digraph \"\" {");
+				dotFile.WriteLine("label = \"" + MethodCompiler.Assembly.Name + "\"");
 			}
-			catch (System.Exception) {
+			catch (System.Exception)
+			{
 				return;
 			}
 		}
@@ -177,7 +176,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public void Close()
 		{
-            dotFile.WriteLine("}");
+			dotFile.WriteLine("}");
 			dotFile.Close();
 		}
 

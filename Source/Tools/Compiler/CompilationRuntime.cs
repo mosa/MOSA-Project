@@ -59,33 +59,37 @@ namespace Mosa.Tools.Compiler
             this.jitService = new MockJitService();
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// Retrieves the memory manager.
+		/// </summary>
+		/// <value>The memory manager.</value>
         public override IMemoryPageManager MemoryManager
         {
             get { return this.memoryManager; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// Retrieves the type loader of the runtime.
+		/// </summary>
+		/// <value>The type loader.</value>
         public override ITypeSystem TypeLoader
         {
             get { return this.typeLoader; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// Gets the assembly loader.
+		/// </summary>
+		/// <value>The assembly loader.</value>
         public override IAssemblyLoader AssemblyLoader
         {
             get { return this.assemblyLoader; }
         }
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// Gets the JIT service.
+		/// </summary>
+		/// <value>The JIT service.</value>
         public override IJitService JitService
         {
             get { return this.jitService; }
@@ -100,6 +104,11 @@ namespace Mosa.Tools.Compiler
             }
         }
 
+		/// <summary>
+		/// Finds the private paths.
+		/// </summary>
+		/// <param name="assemblyPaths">The assembly paths.</param>
+		/// <returns></returns>
         private IEnumerable<string> FindPrivatePaths(IEnumerable<string> assemblyPaths)
         {
             List<string> privatePaths = new List<string>();

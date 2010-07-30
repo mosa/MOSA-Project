@@ -1,10 +1,10 @@
 /*
- * (c) 2008 MOSA - The Managed Operating System Alliance
+ * (c) 2010 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using System;
@@ -30,7 +30,7 @@ namespace Mosa.Runtime.Metadata
 		/// <summary>
 		/// Signature constant of the provider root.
 		/// </summary>
-		private const uint MaxTables = 64;
+		private const uint MaxTables = 45;
 
 		/// <summary>
 		/// Shift value for tables in TokenTypes Enum
@@ -58,7 +58,7 @@ namespace Mosa.Runtime.Metadata
 		protected IMetadataModule[] modules;
 		protected ModuleOffset[][] moduleOffset;
 		protected string codeBase;
-		protected RuntimeMethod entryPoint;
+		protected TokenTypes entryPoint;
 		protected ModuleType moduleType;
 		protected string name;
 
@@ -67,6 +67,7 @@ namespace Mosa.Runtime.Metadata
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MergedMetadata"/> class.
 		/// </summary>
+		/// <param name="modules">The modules.</param>
 		public MergedMetadata(IList<IMetadataModule> modules)
 		{
 			Initialize(modules);
@@ -125,7 +126,7 @@ namespace Mosa.Runtime.Metadata
 		/// Gets the entry point of the module.
 		/// </summary>
 		/// <value>The entry point.</value>
-		RuntimeMethod IMetadataModule.EntryPoint { get { return entryPoint; } }
+		TokenTypes IMetadataModule.EntryPoint { get { return entryPoint; } }
 
 		/// <summary>
 		/// Retrieves the load order index of the module.
@@ -173,7 +174,7 @@ namespace Mosa.Runtime.Metadata
 					name = module.Name;
 				}
 
-				if (entryPoint != null)
+				if (module.EntryPoint != 0)
 				{
 					entryPoint = module.EntryPoint;
 				}

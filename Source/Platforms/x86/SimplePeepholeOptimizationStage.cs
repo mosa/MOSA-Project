@@ -26,21 +26,21 @@ namespace Mosa.Platforms.x86
     /// 
     /// </summary>
     public sealed class SimplePeepholeOptimizationStage : BaseTransformationStage, IMethodCompilerStage, IPlatformStage, IPipelineStage
-    {
+	{
 
-        #region IMethodCompilerStage Members
+		#region IPipelineStage Members
 
-        /// <summary>
+		/// <summary>
         /// Retrieves the name of the compilation stage.
         /// </summary>
         /// <value>The name of the compilation stage.</value>
         string IPipelineStage.Name { get { return @"X86.SimplePeepholeOptimizationStage"; } }
 
-        #endregion // IMethodCompilerStage Members
+		#endregion // IPipelineStage Members
 
-        #region Window Class
+		#region Window Class
 
-        /// <summary>
+		/// <summary>
         /// Window Class
         /// </summary>
         public class Window
@@ -164,10 +164,12 @@ namespace Mosa.Platforms.x86
 
         #endregion  // Windows Class
 
-        /// <summary>
+		#region IMethodCompilerStage Members
+
+		/// <summary>
         /// Performs stage specific processing on the compiler context.
         /// </summary>
-        public override void Run()
+		public override void Run()
         {
             Window window = new Window(5);
 
@@ -183,7 +185,9 @@ namespace Mosa.Platforms.x86
                     }
         }
 
-        /// <summary>
+		#endregion // IMethodCompilerStage Members
+		
+		/// <summary>
         /// Remove multiple occuring stores, for e.g. before:
         /// <code>
         /// mov eax, operand

@@ -18,7 +18,7 @@ namespace Mosa.Runtime.CompilerFramework
     /// <summary>
     /// The Loop Aware Block Ordering Stage reorders blocks to optimize loops and reduce the distance of jumps and branches.
     /// </summary>
-    public class LoopAwareBlockOrderStage : BaseStage, IMethodCompilerStage, IPipelineStage, IBlockOrderStage
+    public class LoopAwareBlockOrderStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage, IBlockOrderStage
     {
         #region Data members
 

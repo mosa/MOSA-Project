@@ -239,15 +239,15 @@ namespace Mosa.Runtime.Metadata.Blobs
 
 				case CilElementType.Class: {
 						string typeName = ParseSerString(reader);
-                        string[] type = typeName.Split(',');
-                        if (type.Length > 1)
-                        {
-                            result = Type.GetType(typeName);
-                        }
-                        else
-                        {
-                            result = Type.GetType(typeName + ", " + module.Name);
-                        }
+						string[] type = typeName.Split(',');
+						if (type.Length > 1)
+						{
+							result = Type.GetType(typeName);
+						}
+						else
+						{
+							result = Type.GetType(typeName + ", " + module.Name);
+						}
 					}
 					break;
 
@@ -299,37 +299,37 @@ namespace Mosa.Runtime.Metadata.Blobs
 			return new String(buffer);
 		}
 
-        private static int DecodePackedLen(BinaryReader reader)
-        {
-            int result, offset;
-            byte value = reader.ReadByte();
+		private static int DecodePackedLen(BinaryReader reader)
+		{
+			int result, offset;
+			byte value = reader.ReadByte();
 
-            if (0xC0 == (value & 0xC0))
-            {
-                // A 4 byte length...
-                result = ((value & 0x1F) << 24);
-                offset = 16;
-            }
-            else if (0x80 == (value & 0x80))
-            {
-                // A 2 byte length...
-                result = ((value & 0x3F) << 8);
-                offset = 0;
-            }
-            else
-            {
-                result = value & 0x7F;
-                offset = -8;
-            }
+			if (0xC0 == (value & 0xC0))
+			{
+				// A 4 byte length...
+				result = ((value & 0x1F) << 24);
+				offset = 16;
+			}
+			else if (0x80 == (value & 0x80))
+			{
+				// A 2 byte length...
+				result = ((value & 0x3F) << 8);
+				offset = 0;
+			}
+			else
+			{
+				result = value & 0x7F;
+				offset = -8;
+			}
 
-            while (offset != -8)
-            {
-                result |= (reader.ReadByte() << offset);
-                offset -= 8;
-            }
+			while (offset != -8)
+			{
+				result |= (reader.ReadByte() << offset);
+				offset -= 8;
+			}
 
-            return result;
-        }
+			return result;
+		}
 
 		/// <summary>
 		/// Gets the type from the signature type.

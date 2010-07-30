@@ -20,26 +20,26 @@ namespace Mosa.Runtime.Jit.SimpleJit
     /// <summary>
     /// The simple jit method compiler
     /// </summary>
-    sealed class MethodCompiler : MethodCompilerBase
+    sealed class SimpleJitMethodCompiler : BaseMethodCompiler
     {
         #region Data members
 
         /// <summary>
         /// The code stream, where the final code is emitted to.
         /// </summary>
-        private Stream _codeStream;
+        private Stream codeStream;
 
         #endregion // Data members
 
         #region Construction
 
-        public MethodCompiler(IAssemblyLinker linker, IArchitecture architecture, ICompilationSchedulerStage compilationScheduler, RuntimeType type, RuntimeMethod method, Stream codeStream) :
+        public SimpleJitMethodCompiler(IAssemblyLinker linker, IArchitecture architecture, ICompilationSchedulerStage compilationScheduler, RuntimeType type, RuntimeMethod method, Stream codeStream) :
             base(linker, architecture, compilationScheduler, type, method)
         {
             if (null == codeStream)
                 throw new ArgumentNullException(@"codeStream");
 
-            _codeStream = codeStream;
+            this.codeStream = codeStream;
         }
 
         #endregion // Construction

@@ -12,42 +12,57 @@ using Mosa.Runtime.Vm;
 
 namespace Mosa.Tools.Compiler.TypeInitializers
 {
-    public class TypeInitializerSchedulerStageProxy : ITypeInitializerSchedulerStage, IAssemblyCompilerStage
-    {
-        private readonly ITypeInitializerSchedulerStage realStage;
+	public class TypeInitializerSchedulerStageProxy : BaseAssemblyCompilerStage, ITypeInitializerSchedulerStage, IAssemblyCompilerStage
+	{
+		private readonly ITypeInitializerSchedulerStage realStage;
 
-        public TypeInitializerSchedulerStageProxy(ITypeInitializerSchedulerStage realStage)
-        {
-            this.realStage = realStage;
-        }
+		#region IPipelineStage
 
-        public CompilerGeneratedMethod Method
-        {
-            get
-            {
-                return this.realStage.Method;
-            }
-        }
+		/// <summary>
+		/// Retrieves the name of the compilation stage.
+		/// </summary>
+		/// <value>The name of the compilation stage.</value>
+		public string Name { get { return @"TypeInitializerSchedulerStageProxy"; } }
 
-        public void Schedule(RuntimeMethod method)
-        {
-            this.realStage.Schedule(method);
-        }
+		#endregion // IPipelineStage Members
 
-        public string Name
-        {
-            get
-            {
-                return @"TypeInitializerSchedulerStageProxy";
-            }
-        }
+		#region IAssemblyCompilerStage Members
 
-        public void Run()
-        {
-        }
+		/// <summary>
+		/// Performs stage specific processing on the compiler context.
+		/// </summary>
+		public void Run()
+		{
 
-        public void Setup(AssemblyCompiler compiler)
-        {
-        }
-    }
+		}
+
+		#endregion // IAssemblyCompilerStage Members
+		public TypeInitializerSchedulerStageProxy(ITypeInitializerSchedulerStage realStage)
+		{
+			this.realStage = realStage;
+		}
+
+		/// <summary>
+		/// Gets the intializer method.
+		/// </summary>
+		/// <value>The method.</value>
+		public CompilerGeneratedMethod Method
+		{
+			get
+			{
+				return this.realStage.Method;
+			}
+		}
+
+		/// <summary>
+		/// Schedules the specified method for invocation in the main.
+		/// </summary>
+		/// <param name="method">The method.</param>
+		public void Schedule(RuntimeMethod method)
+		{
+			this.realStage.Schedule(method);
+		}
+
+
+	}
 }

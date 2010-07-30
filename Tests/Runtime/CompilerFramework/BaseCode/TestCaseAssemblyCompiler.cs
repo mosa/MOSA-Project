@@ -44,9 +44,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 			new TestCaseAssemblyCompiler(architecture, module).Compile();
 		}
 
-        public override MethodCompilerBase CreateMethodCompiler(ICompilationSchedulerStage schedulerStage, RuntimeType type, RuntimeMethod method)
+		public override IMethodCompiler CreateMethodCompiler(ICompilationSchedulerStage schedulerStage, RuntimeType type, RuntimeMethod method)
         {
-            MethodCompilerBase mc = new TestCaseMethodCompiler(this, this.Pipeline.FindFirst<IAssemblyLinker>(), this.Architecture, schedulerStage, type, method);
+			IMethodCompiler mc = new TestCaseMethodCompiler(this, this.Pipeline.FindFirst<IAssemblyLinker>(), this.Architecture, schedulerStage, type, method);
             this.Architecture.ExtendMethodCompilerPipeline(mc.Pipeline);
             return mc;
         }

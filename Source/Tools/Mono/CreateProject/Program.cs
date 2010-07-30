@@ -127,7 +127,7 @@ namespace Mosa.Tools.Mono.CreateProject
 
 					writer.WriteLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
 					writer.WriteLine(
-						"<Project ToolsVersion=\"3.5\" DefaultTargets=\"Build\" xmlns=\"http://schemas.microsoft.com/developer/msbuild/2003\">");
+						"<Project ToolsVersion=\"4.0\" DefaultTargets=\"Build\" xmlns=\"http://schemas.microsoft.com/developer/msbuild/2003\">");
 					writer.WriteLine("\t<PropertyGroup>");
 					writer.WriteLine("\t\t<Configuration Condition=\" '$(Configuration)' == '' \">Debug</Configuration>");
 					writer.WriteLine("\t\t<Platform Condition=\" '$(Platform)' == '' \">AnyCPU</Platform>");
@@ -138,9 +138,10 @@ namespace Mosa.Tools.Mono.CreateProject
 					writer.WriteLine("\t\t<AppDesignerFolder>Properties</AppDesignerFolder>");
 					writer.WriteLine("\t\t<RootNamespace>" + Name + "</RootNamespace>");
 					writer.WriteLine("\t\t<AssemblyName>" + Name + "</AssemblyName>");
-					writer.WriteLine("\t\t<TargetFrameworkVersion>v3.5</TargetFrameworkVersion>");
+					writer.WriteLine("\t\t<TargetFrameworkVersion>v3.0</TargetFrameworkVersion>");
 					writer.WriteLine("\t\t<FileAlignment>512</FileAlignment>");
 					writer.WriteLine("\t\t<NoStdLib>True</NoStdLib>");
+					writer.WriteLine("\t\t<NoConfig>True</NoConfig>");
 					writer.WriteLine("\t</PropertyGroup>");
 					writer.WriteLine("\t<PropertyGroup Condition=\" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' \">");
 					writer.WriteLine("\t\t<DebugSymbols>true</DebugSymbols>");
@@ -156,7 +157,7 @@ namespace Mosa.Tools.Mono.CreateProject
 					writer.WriteLine("\t\t<ErrorReport>prompt</ErrorReport>");
 					writer.WriteLine("\t\t<WarningLevel>4</WarningLevel>");
 					writer.WriteLine("\t\t<AllowUnsafeBlocks>true</AllowUnsafeBlocks>");
-					writer.WriteLine("\t\t<NoStdLib>True</NoStdLib>");
+					//writer.WriteLine("\t\t<NoStdLib>True</NoStdLib>");
 					writer.WriteLine("\t</PropertyGroup>");
 					writer.WriteLine("\t<PropertyGroup Condition=\" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' \">");
 					writer.WriteLine("\t\t<DebugType>pdbonly</DebugType>");

@@ -8,10 +8,13 @@
  */
 
 using System;
+
+using Mosa.Runtime;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
+using Mosa.Runtime.Vm;
 
 namespace Mosa.Platforms.x86.Intrinsic
 {
@@ -27,7 +30,8 @@ namespace Mosa.Platforms.x86.Intrinsic
 		/// Replaces the instrinsic call site
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public void ReplaceIntrinsicCall(Context context)
+		/// <param name="typeSystem">The type system.</param>
+		public void ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem)
 		{
 			// xchg	bx, bx 
 			context.SetInstruction(CPUx86.Instruction.XchgInstruction, new RegisterOperand(new SigType(CilElementType.U2), GeneralPurposeRegister.EBX), new RegisterOperand(new SigType(CilElementType.U2), GeneralPurposeRegister.EBX));

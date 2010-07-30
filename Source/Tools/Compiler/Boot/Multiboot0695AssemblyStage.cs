@@ -53,7 +53,7 @@ namespace Mosa.Tools.Compiler.Boot
 	/// the specification at 
 	/// http://www.gnu.org/software/grub/manual/multiboot/multiboot.html.
 	/// </remarks>
-	public sealed class Multiboot0695AssemblyStage : IAssemblyCompilerStage, IHasOptions, IPipelineStage
+	public sealed class Multiboot0695AssemblyStage : BaseAssemblyCompilerStage, IAssemblyCompilerStage, IHasOptions, IPipelineStage
 	{
 		#region Constants
 
@@ -90,8 +90,6 @@ namespace Mosa.Tools.Compiler.Boot
 		#endregion // Constants
 
 		#region Data members
-		
-		private AssemblyCompiler compiler;
 		
 		private IAssemblyLinker linker;
 
@@ -149,13 +147,11 @@ namespace Mosa.Tools.Compiler.Boot
 		#endregion // IPipelineStage Members
 
 		#region IAssemblyCompilerStage Members
-		
-		public void Setup(AssemblyCompiler compiler)
+
+		void IAssemblyCompilerStage.Setup(AssemblyCompiler compiler)
 		{
-			if (compiler == null)
-				throw new ArgumentNullException(@"compiler");
-			
-			this.compiler = compiler;
+			base.Setup(compiler);
+
 			this.linker = compiler.Pipeline.FindFirst<IAssemblyLinker>();
 			Debug.Assert(linker != null, @"No linker??");
 		}
@@ -163,7 +159,7 @@ namespace Mosa.Tools.Compiler.Boot
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		public void Run()
+		void IAssemblyCompilerStage.Run()
 		{
 			if (!secondStage) {
 				IntPtr entryPoint = WriteMultibootEntryPoint();

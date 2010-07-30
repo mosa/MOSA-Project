@@ -25,7 +25,7 @@ namespace Mosa.Runtime.CompilerFramework
     /// The implementation is based on "A Simple, Fast Dominance Algorithm" by Keith D. Cooper, 
     /// Timothy J. Harvey, and Ken Kennedy, Rice University in Houston, Texas, USA.
     /// </remarks>
-    public sealed class DominanceCalculationStage : BaseStage, IMethodCompilerStage, IDominanceProvider, IPipelineStage
+    public sealed class DominanceCalculationStage : BaseMethodCompilerStage, IMethodCompilerStage, IDominanceProvider, IPipelineStage
     {
         #region Data members
 

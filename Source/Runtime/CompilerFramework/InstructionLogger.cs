@@ -19,7 +19,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// <summary>
 	/// Logs all incoming instructions and forwards them to the next compiler stage.
 	/// </summary>
-	public sealed class InstructionLogger : BaseStage, IMethodCompilerStage, IPipelineStage
+	public sealed class InstructionLogger : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
 	{
 		public static readonly InstructionLogger Instance = new InstructionLogger();
 

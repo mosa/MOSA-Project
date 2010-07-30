@@ -20,7 +20,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// This transformation simplifies and expands all PHI functions and
 	/// unifies variable version.
 	/// </remarks>
-	public sealed class LeaveSSA : BaseStage, IMethodCompilerStage, IPipelineStage
+	public sealed class LeaveSSA : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
 	{
 
 		#region IPipelineStage Members

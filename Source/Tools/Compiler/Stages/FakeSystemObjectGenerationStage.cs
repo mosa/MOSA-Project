@@ -13,7 +13,7 @@ using Mosa.Runtime.Metadata;
 
 namespace Mosa.Tools.Compiler.Stages
 {
-    public class FakeSystemObjectGenerationStage : BaseStage, IAssemblyCompilerStage, IPipelineStage
+    public class FakeSystemObjectGenerationStage : BaseMethodCompilerStage, IAssemblyCompilerStage, IPipelineStage
     {
         private AssemblyCompiler compiler;
 
@@ -74,13 +74,13 @@ namespace Mosa.Tools.Compiler.Stages
 
         private void Compile(RuntimeMethod method)
         {
-            var methodCompiler = new LinkerMethodCompiler(this.compiler, this.compiler.Pipeline.FindFirst<ICompilationSchedulerStage>(), method, this.InstructionSet);
+			LinkerMethodCompiler methodCompiler = new LinkerMethodCompiler(this.compiler, this.compiler.Pipeline.FindFirst<ICompilationSchedulerStage>(), method, this.InstructionSet);
             methodCompiler.Compile();
         }
 
         private void CompileObjectEquals(string typeName)
         {
-            var type = new CompilerGeneratedType(compiler.Assembly, @"System", typeName);
+			CompilerGeneratedType type = new CompilerGeneratedType(compiler.Assembly, @"System", typeName);
 
             // Create the method
             CompilerGeneratedMethod method = new CompilerGeneratedMethod(compiler.Assembly, @"Equals", type);

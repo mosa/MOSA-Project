@@ -253,7 +253,14 @@ namespace System
 			if (startIndex == 0)
 				return Empty;
 
-			if (startIndex < 0 || startIndex > this.length)
+			// FIXME: Following line does not compile correctly
+			//if (startIndex < 0 || startIndex > this.length)
+			//    return Empty; //throw new System.ArgumentOutOfRangeException("startIndex");
+
+			if (startIndex < 0)
+				return Empty; //throw new System.ArgumentOutOfRangeException("startIndex");
+
+			if (startIndex > this.length)
 				return Empty; //throw new System.ArgumentOutOfRangeException("startIndex");
 
 			int newlen = this.length - startIndex;
@@ -263,8 +270,7 @@ namespace System
 
 			for (int index = 0; index < newlen; index++)
 			{
-				*chars = this[startIndex + index];
-				chars++;
+				*chars++ = this[startIndex + index];
 			}
 
 			return result;

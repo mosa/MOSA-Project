@@ -50,6 +50,11 @@ namespace Mosa.Runtime.Loader
         /// </summary>
         IEnumerable<IMetadataModule> Modules { get; }
 
-        IMetadataModule GetModule(int loadIndex);
+		/// <summary>
+		/// Gets the module.
+		/// </summary>
+		/// <param name="index">The index.</param>
+		/// <returns></returns>
+		IMetadataModule GetModule(int index);
     }
 }

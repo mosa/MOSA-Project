@@ -46,6 +46,8 @@ namespace Mosa.Runtime.Metadata.Runtime
 		/// </summary>
 		private TokenTypes namespaceIdx;
 
+		private ITypeSystem typeSystem;
+
 		#endregion // Data Members
 
 		#region Construction
@@ -60,13 +62,15 @@ namespace Mosa.Runtime.Metadata.Runtime
 		/// <param name="maxMethod">The max method.</param>
 		/// <param name="packing">The packing.</param>
 		/// <param name="size">The size.</param>
-		public CilRuntimeType(TokenTypes token, IMetadataModule module, ref TypeDefRow typeDefRow, TokenTypes maxField, TokenTypes maxMethod, int packing, int size) :
+		public CilRuntimeType(TokenTypes token, IMetadataModule module, ref TypeDefRow typeDefRow, TokenTypes maxField, TokenTypes maxMethod, int packing, int size, ITypeSystem typeSystem) :
 			base((int)token, module)
 		{
 			this.baseTypeToken = typeDefRow.Extends;
 			this.module = module;
 			this.nameIdx = typeDefRow.TypeNameIdx;
 			this.namespaceIdx = typeDefRow.TypeNamespaceIdx;
+
+			this.typeSystem = typeSystem;
 
 			base.Attributes = typeDefRow.Flags;
 			base.Pack = packing;
@@ -76,7 +80,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 			int members = maxField - typeDefRow.FieldList;
 			if (0 < members)
 			{
-				int i = (int)(typeDefRow.FieldList & TokenTypes.RowIndexMask) - 1 + RuntimeBase.Instance.TypeLoader.GetModuleOffset(module).FieldOffset;
+				int i = (int)(typeDefRow.FieldList & TokenTypes.RowIndexMask) - 1 + typeSystem.GetModuleOffset(module).FieldOffset;
 				base.Fields = new ReadOnlyRuntimeFieldListView(i, members);
 			}
 			else
@@ -88,7 +92,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 			members = maxMethod - typeDefRow.MethodList;
 			if (0 < members)
 			{
-				int i = (int)(typeDefRow.MethodList & TokenTypes.RowIndexMask) - 1 + RuntimeBase.Instance.TypeLoader.GetModuleOffset(module).MethodOffset;
+				int i = (int)(typeDefRow.MethodList & TokenTypes.RowIndexMask) - 1 + typeSystem.GetModuleOffset(module).MethodOffset;
 				base.Methods = new ReadOnlyRuntimeMethodListView(i, members);
 			}
 			else
@@ -125,7 +129,6 @@ namespace Mosa.Runtime.Metadata.Runtime
 		/// <returns>The base type.</returns>
 		protected override RuntimeType GetBaseType()
 		{
-			ITypeSystem typeSystem = RuntimeBase.Instance.TypeLoader;
 			return typeSystem.GetType(this, this.Module, this.baseTypeToken);
 		}
 
@@ -198,7 +201,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 				InterfaceImplRow row = metadata.ReadInterfaceImplRow(token);
 				if (row.ClassTableIdx == (TokenTypes)this.Token)
 				{
-					RuntimeType interfaceType = RuntimeBase.Instance.TypeLoader.GetType(DefaultSignatureContext.Instance, this.module, row.InterfaceTableIdx);
+					RuntimeType interfaceType = typeSystem.GetType(DefaultSignatureContext.Instance, this.module, row.InterfaceTableIdx);
 
 					if (result == null)
 					{

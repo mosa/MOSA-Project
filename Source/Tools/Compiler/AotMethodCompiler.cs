@@ -22,7 +22,7 @@ namespace Mosa.Tools.Compiler
     /// <summary>
     /// Specializes <see cref="AotMethodCompiler"/> for AOT purposes.
     /// </summary>
-    public sealed class AotMethodCompiler : MethodCompilerBase
+    public sealed class AotMethodCompiler : BaseMethodCompiler
     {
         #region Data Members
 

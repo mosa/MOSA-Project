@@ -21,7 +21,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// <para/>
 	/// The simple register allocator requires register constraints for all instructions it finds.
 	/// </remarks>
-	public sealed class SimpleRegisterAllocator : BaseStage, IMethodCompilerStage, IPipelineStage
+	public sealed class SimpleRegisterAllocator : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
 	{
 		#region Tracing Switch
 
