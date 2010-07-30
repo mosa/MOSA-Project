@@ -11,6 +11,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
+using Mosa.Runtime.CompilerFramework;
+using Mosa.Runtime.Vm;
+
 namespace Mosa.Runtime.CompilerFramework
 {
 	/// <summary>
@@ -22,7 +25,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Replaces the instrinsic call site
 		/// </summary>
 		/// <param name="context">The context.</param>
-		/// <param name="runtime">The runtime.</param>
-		void ReplaceIntrinsicCall(Context context, RuntimeBase runtime);
+		/// <param name="typeSystem">The type system.</param>
+		void ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem);
 	}
 }

@@ -10,13 +10,13 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+
 using Mosa.Runtime.Loader;
 using Mosa.Runtime.Metadata;
+using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Runtime.Vm
 {
-	using Mosa.Runtime.Metadata.Signatures;
-	
     /// <summary>
     /// The interface of the type system.
     /// </summary>

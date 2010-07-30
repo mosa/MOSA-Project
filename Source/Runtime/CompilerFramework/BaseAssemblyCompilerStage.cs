@@ -40,7 +40,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Holds the current type system during compilation.
 		/// </summary>
-		protected ITypeSystem typeSystem;
+		protected ITypeSystem TypeSystem;
 
 		#endregion // Data members
 
@@ -50,7 +50,8 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			this.compiler = compiler;
 			architecture = compiler.Architecture;
-			typeSystem = RuntimeBase.Instance.TypeLoader; // FIXME: RuntimeBase
+			TypeSystem = Mosa.Runtime.RuntimeBase.Instance.TypeLoader; // FIXME
+			//AssemblyLoader = Mosa.Runtime.RuntimeBase.Instance.AssemblyLoader; // FIXME
 		}
 
 		#endregion // IAssemblyCompilerStage members

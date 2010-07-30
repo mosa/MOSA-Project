@@ -95,9 +95,14 @@ namespace Mosa.Runtime.CompilerFramework
 		private List<BasicBlock> _basicBlocks;
 
 		/// <summary>
-		/// Holds the runtime base
+		/// Holds the assembly Compiler.
 		/// </summary>
-		protected RuntimeBase Runtime;
+		protected AssemblyCompiler compiler;
+
+		/// <summary>
+		/// Holds the current type system during compilation.
+		/// </summary>
+		protected ITypeSystem typeSystem;
 
 		#endregion // Data Members
 
@@ -138,7 +143,8 @@ namespace Mosa.Runtime.CompilerFramework
 
 			pipeline = new CompilerPipeline();
 
-			Runtime = Mosa.Runtime.RuntimeBase.Instance; // FIXME: RuntimeBase
+			typeSystem = Mosa.Runtime.RuntimeBase.Instance.TypeLoader; // FIXME
+			//AssemblyLoader = Mosa.Runtime.RuntimeBase.Instance.AssemblyLoader; // FIXME
 		}
 
 		#endregion // Construction
@@ -407,7 +413,7 @@ namespace Mosa.Runtime.CompilerFramework
 					RuntimeType genericType = this.LoadDependentType(genericSignatureType.BaseType.Token);
 					Console.WriteLine(@"Loaded generic type {0}", genericType.FullName);
 
-					runtimeType = new CilGenericType(genericType, this.Assembly, genericSignatureType, this.Method, Runtime.TypeLoader);
+					runtimeType = new CilGenericType(genericType, this.Assembly, genericSignatureType, this.Method, typeSystem);
 				}
 			}
 
@@ -419,7 +425,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 		private RuntimeType LoadDependentType(TokenTypes tokenType)
 		{
-			return Runtime.TypeLoader.GetType(this.Method, this.Assembly, tokenType);
+			return typeSystem.GetType(this.Method, this.Assembly, tokenType);
 		}
 
 		/// <summary>

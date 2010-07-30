@@ -10,13 +10,14 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Diagnostics;
 
 using Mosa.Runtime;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.CompilerFramework.Operands;
+using Mosa.Runtime.Vm;
 using CIL = Mosa.Runtime.CompilerFramework.CIL;
 using IR = Mosa.Runtime.CompilerFramework.IR;
-using System.Diagnostics;
 
 namespace Mosa.Platforms.x86.Intrinsic
 {
@@ -32,7 +33,8 @@ namespace Mosa.Platforms.x86.Intrinsic
 		/// Replaces the instrinsic call site
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public void ReplaceIntrinsicCall(Context context, RuntimeBase runtime)
+		/// <param name="typeSystem">The type system.</param>
+		public void ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem)
 		{
 			Operand result = context.Result;
 

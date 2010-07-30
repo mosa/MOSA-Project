@@ -10,6 +10,7 @@
 using Mosa.Runtime;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.CompilerFramework.Operands;
+using Mosa.Runtime.Vm;
 
 namespace Mosa.Platforms.x86.CPUx86
 {
@@ -50,7 +51,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// Replaces the instrinsic call site
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public void ReplaceIntrinsicCall(Context context, RuntimeBase runtime)
+		public void ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem)
 		{
 			context.SetInstruction(CPUx86.Instruction.InvlpgInstruction, null, context.Operand1);
 		}

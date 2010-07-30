@@ -62,7 +62,7 @@ namespace Mosa.Runtime.CompilerFramework
 		void IAssemblyCompilerStage.Run()
 		{
 			// Enumerate all types and do an appropriate type layout
-			ReadOnlyRuntimeTypeListView types = typeSystem.GetTypesFromModule(this.compiler.Assembly);
+			ReadOnlyRuntimeTypeListView types = TypeSystem.GetTypesFromModule(this.compiler.Assembly);
 
 			foreach (RuntimeType type in types)
 			{

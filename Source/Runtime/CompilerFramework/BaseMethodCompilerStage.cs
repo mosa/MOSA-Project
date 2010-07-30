@@ -13,7 +13,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 
 using Mosa.Runtime.Vm;
-
+using Mosa.Runtime.Loader;
 using CIL = Mosa.Runtime.CompilerFramework.CIL;
 
 namespace Mosa.Runtime.CompilerFramework
@@ -46,9 +46,16 @@ namespace Mosa.Runtime.CompilerFramework
 		protected List<BasicBlock> BasicBlocks;
 
 		/// <summary>
-		/// Holds the runtime base
+		/// Holds the type loader 
 		/// </summary>
-		protected RuntimeBase Runtime;
+		/// <value>The type loader.</value>
+		protected ITypeSystem typeSystem;
+
+		/// <summary>
+		/// Holds the assembly loader.
+		/// </summary>
+		/// <value>The assembly loader.</value>
+		protected IAssemblyLoader assemblyLoader;
 
 		#endregion // Data members
 
@@ -68,7 +75,8 @@ namespace Mosa.Runtime.CompilerFramework
 			BasicBlocks = compiler.BasicBlocks;
 			Architecture = compiler.Architecture;
 
-			Runtime = Mosa.Runtime.RuntimeBase.Instance; // FIXME: RuntimeBase
+			typeSystem = Mosa.Runtime.RuntimeBase.Instance.TypeLoader; // FIXME
+			assemblyLoader = Mosa.Runtime.RuntimeBase.Instance.AssemblyLoader; // FIXME
 		}
 
 		#endregion // IMethodCompilerStage members

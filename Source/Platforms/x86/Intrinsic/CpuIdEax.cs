@@ -16,6 +16,7 @@ using Mosa.Runtime;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Runtime.CompilerFramework;
+using Mosa.Runtime.Vm;
 
 namespace Mosa.Platforms.x86.Intrinsic
 {
@@ -31,7 +32,8 @@ namespace Mosa.Platforms.x86.Intrinsic
 		/// Replaces the instrinsic call site
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public void ReplaceIntrinsicCall(Context context, RuntimeBase runtime)
+		/// <param name="typeSystem">The type system.</param>
+		public void ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem)
 		{
             Operand result = context.Result;
             Operand operand = context.Operand1;
