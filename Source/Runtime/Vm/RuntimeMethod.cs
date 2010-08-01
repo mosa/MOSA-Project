@@ -69,8 +69,8 @@ namespace Mosa.Runtime.Vm
         /// <param name="token">The token.</param>
         /// <param name="module">The module.</param>
         /// <param name="declaringType">The type, which declared this method.</param>
-        public RuntimeMethod(int token, IMetadataModule module, RuntimeType declaringType) :
-            base(token, module, declaringType, null)
+        public RuntimeMethod(int token, IMetadataModule module, RuntimeType declaringType, ITypeSystem typeSystem) :
+			base(token, module, declaringType, null, typeSystem)
         {
             this.methodTableSlot = -1;
         }

@@ -48,7 +48,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 		/// <param name="maxParam">The max param.</param>
 		/// <param name="declaringType">Type of the declaring.</param>
 		public CilRuntimeMethod(int token, IMetadataModule module, ref MethodDefRow method, TokenTypes maxParam, RuntimeType declaringType, ITypeSystem typeSystem) :
-			base((int)token, module, declaringType)
+			base((int)token, module, declaringType, typeSystem)
 		{
 			this.nameIdx = method.NameStringIdx;
 			this.signatureBlobIdx = method.SignatureBlobIdx;
@@ -60,7 +60,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 			{
 				int count = maxParam - method.ParamList;
 				int p = (int)(method.ParamList & TokenTypes.RowIndexMask) - 1 + typeSystem.GetModuleOffset(module).ParameterOffset;
-				base.Parameters = new ReadOnlyRuntimeParameterListView(p, count);
+				base.Parameters = new ReadOnlyRuntimeParameterListView(p, count, typeSystem);
 			}
 			else
 			{

@@ -49,11 +49,11 @@ namespace Mosa.Runtime.Vm
 		/// </summary>
 		/// <param name="module">The module the field belongs to.</param>
 		/// <param name="declaringType">Specifies the type, which contains this field.</param>
-		public RuntimeField(IMetadataModule module, RuntimeType declaringType) :
-			base(0, module, declaringType, null)
+		public RuntimeField(IMetadataModule module, RuntimeType declaringType, ITypeSystem typeSystem) :
+			base(0, module, declaringType, null, typeSystem)
 		{
 		}
-		
+
 		#endregion // Construction
 
 		#region Properties
@@ -77,17 +77,17 @@ namespace Mosa.Runtime.Vm
 			get { return rva; }
 			protected set { this.rva = value; }
 		}
-		
+
 		public FieldSignature Signature
 		{
 			get
 			{
 				if (this.signature == null)
 					this.signature = this.GetSignature();
-				
+
 				return this.signature;
 			}
-			
+
 			protected set
 			{
 				this.signature = value;
@@ -111,7 +111,7 @@ namespace Mosa.Runtime.Vm
 			get
 			{
 				// HACK: Generic fields -- is this right?
-				return RuntimeBase.Instance.TypeLoader.ResolveSignatureType(DefaultSignatureContext.Instance, this.Module, this.SignatureType);
+				return typeSystem.ResolveSignatureType(DefaultSignatureContext.Instance, this.Module, this.SignatureType);
 			}
 		}
 

@@ -9,9 +9,9 @@ namespace Mosa.Runtime
 	public class CilGenericField : RuntimeField
 	{
 		private readonly RuntimeField genericField;
-			
-		public CilGenericField(RuntimeType declaringType, RuntimeField genericField, FieldSignature signature) :
-			base(declaringType.Module, declaringType)
+
+		public CilGenericField(RuntimeType declaringType, RuntimeField genericField, FieldSignature signature, ITypeSystem typeSystem) :
+			base(declaringType.Module, declaringType, typeSystem)
 		{
 			this.genericField = genericField;
 			this.Signature = signature;

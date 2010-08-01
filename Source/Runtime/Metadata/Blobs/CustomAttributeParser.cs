@@ -252,23 +252,23 @@ namespace Mosa.Runtime.Metadata.Blobs
 					break;
 
 				case CilElementType.ValueType: {
-						ValueTypeSigType vtSigType = sigType as ValueTypeSigType;
-						ITypeSystem ts = RuntimeBase.Instance.TypeLoader;
-						RuntimeType type = ts.GetType(DefaultSignatureContext.Instance, module, vtSigType.Token);
-						RuntimeType baseType = type.BaseType;
-						if (@"System" == baseType.Namespace && "Enum" == baseType.Name) {
-							// Retrieve the value__ field to get the enums integer type
-							RuntimeField value = type.Fields[0];
-							Debug.Assert(value.Name == @"value__", @"First field of enum not named value__");
-							result = ParseElem(module, reader, value.SignatureType);
-							Type enumType = Type.GetType(type.Namespace + "." + type.Name);
-							result = Enum.ToObject(enumType, result);
-						}
-						else {
+						//ValueTypeSigType vtSigType = sigType as ValueTypeSigType;
+						//ITypeSystem ts = RuntimeBase.Instance.TypeSystem;
+						//RuntimeType type = ts.GetType(DefaultSignatureContext.Instance, module, vtSigType.Token);
+						//RuntimeType baseType = type.BaseType;
+						//if (@"System" == baseType.Namespace && "Enum" == baseType.Name) {
+						//    // Retrieve the value field to get the enums integer type
+						//    RuntimeField value = type.Fields[0];
+						//    Debug.Assert(value.Name == @"value", @"First field of enum not named value");
+						//    result = ParseElem(module, reader, value.SignatureType);
+						//    Type enumType = Type.GetType(type.Namespace + "." + type.Name);
+						//    result = Enum.ToObject(enumType, result);
+						//}
+						//else {
 							throw new NotSupportedException();
-						}
+						//}
 					}
-					break;
+					//break;
 
 				case CilElementType.Object:
 					throw new NotSupportedException();

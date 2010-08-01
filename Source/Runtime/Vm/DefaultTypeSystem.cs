@@ -51,6 +51,8 @@ namespace Mosa.Runtime.Vm
 		/// </summary>
 		private ModuleOffsets[] _moduleOffsets;
 
+		private RuntimeBase runtimeBase;
+
 		#endregion // Data members
 
 		#region Construction
@@ -58,8 +60,9 @@ namespace Mosa.Runtime.Vm
 		/// <summary>
 		/// Initializes static data members of the type loader.
 		/// </summary>
-		public DefaultTypeSystem()
+		public DefaultTypeSystem(RuntimeBase runtimeBase)
 		{
+			this.runtimeBase = runtimeBase;
 			_methods = new RuntimeMethod[0];
 			_fields = new RuntimeField[0];
 			_types = new RuntimeType[0];
@@ -164,7 +167,7 @@ namespace Mosa.Runtime.Vm
 			int count = ((int)(TokenTypes.RowIndexMask & module.Metadata.GetMaxTokenValue(TokenTypes.TypeDef)) - 1 + 0);
 			// FIXME: (int)(TokenTypes.RowIndexMask & module.Metadata.GetMaxTokenValue(TokenTypes.TypeSpec)));
 
-			return new ReadOnlyRuntimeTypeListView(offsets.TypeOffset, count);
+			return new ReadOnlyRuntimeTypeListView(offsets.TypeOffset, count, this);
 		}
 
 		/// <summary>
@@ -246,7 +249,7 @@ namespace Mosa.Runtime.Vm
 			string name = module.Metadata.ReadString(typeRef.TypeNameIdx);
 			string ns = module.Metadata.ReadString(typeRef.TypeNamespaceIdx);
 			AssemblyRefRow arr = module.Metadata.ReadAssemblyRefRow(typeRef.ResolutionScopeIdx);
-			IAssemblyLoader loader = RuntimeBase.Instance.AssemblyLoader; // FIXME
+			IAssemblyLoader loader = runtimeBase.AssemblyLoader; 
 			IMetadataModule dependency = loader.Resolve(module.Metadata, arr);
 
 			for (int i = GetModuleOffset(dependency).TypeOffset; i < _types.Length; i++)
@@ -314,7 +317,7 @@ namespace Mosa.Runtime.Vm
 
 			if (names.Length > 1)
 			{
-				IMetadataModule module2 = RuntimeBase.Instance.AssemblyLoader.Load(names[1].Trim());
+				IMetadataModule module2 = runtimeBase.AssemblyLoader.Load(names[1].Trim());
 				result = FindType(ns, name, this.GetTypesFromModule(module2));
 			}
 			else
@@ -554,7 +557,7 @@ namespace Mosa.Runtime.Vm
 			MethodSignature signature = new MethodSignature();
 			signature.LoadSignature(specSignature, genericMethod.Module.Metadata, genericMethod.Signature.Token);
 
-			return new CilGenericMethod(genericMethod, signature, specSignature);
+			return new CilGenericMethod(genericMethod, signature, specSignature, this);
 		}
 
 		#endregion // ITypeSystem Members
@@ -781,7 +784,7 @@ namespace Mosa.Runtime.Vm
 				}
 
 				// Load the field metadata
-				_fields[offset++] = new CilRuntimeField(module, ref field, layout, rva, declaringType);
+				_fields[offset++] = new CilRuntimeField(module, ref field, layout, rva, declaringType, this);
 			}
 
 			/* FIXME:
@@ -919,7 +922,7 @@ namespace Mosa.Runtime.Vm
 			// Convert the custom attribute rows to RuntimeAttribute instances
 			RuntimeAttribute[] ra = new RuntimeAttribute[attributes.Count];
 			for (int i = 0; i < attributes.Count; i++)
-				ra[i] = new RuntimeAttribute(module, attributes[i]);
+				ra[i] = new RuntimeAttribute(module, attributes[i], this);
 
 			// The following switch matches the AttributeTargets enumeration against
 			// metadata tables, which make valid targets for an attribute.
@@ -993,7 +996,7 @@ namespace Mosa.Runtime.Vm
 					AssemblyRefRow asmRefRow = module.Metadata.ReadAssemblyRefRow(row.ResolutionScopeIdx);
 					string typeName = module.Metadata.ReadString(row.TypeNameIdx);
 					string typeNamespace = module.Metadata.ReadString(row.TypeNamespaceIdx);
-					IMetadataModule resolvedModule = RuntimeBase.Instance.AssemblyLoader.Resolve(module.Metadata, asmRefRow);
+					IMetadataModule resolvedModule = runtimeBase.AssemblyLoader.Resolve(module.Metadata, asmRefRow);
 
 					// HACK: If there's an easier way to do this without all those string comparisons, I'm all for it
 					foreach (RuntimeType type in ((ITypeSystem)this).GetTypesFromModule(resolvedModule))

@@ -41,8 +41,8 @@ namespace Mosa.Tools.Compiler
         /// <param name="module">The module.</param>
         /// <param name="name">The name of the method.</param>
         /// <param name="declaringType">Type of the declaring.</param>
-        public CompilerGeneratedMethod(IMetadataModule module, string name, RuntimeType declaringType) :
-            base(0, module, declaringType)
+		public CompilerGeneratedMethod(IMetadataModule module, string name, RuntimeType declaringType, ITypeSystem typeSystem) :
+            base(0, module, declaringType, typeSystem)
         {
             if (name == null)
                 throw new ArgumentNullException(@"name");

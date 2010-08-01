@@ -14,52 +14,52 @@ using Mosa.Runtime.Metadata;
 
 namespace Mosa.Runtime.Vm
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public sealed class ReadOnlyRuntimeParameterListView :
-        ReadOnlyRuntimeListView<RuntimeParameter>
-    {
-        #region Static members
+	/// <summary>
+	/// 
+	/// </summary>
+	public sealed class ReadOnlyRuntimeParameterListView :
+		ReadOnlyRuntimeListView<RuntimeParameter>
+	{
+		#region Static members
 
-        /// <summary>
-        /// Provides an empty list definition.
-        /// </summary>
-        public static readonly ReadOnlyRuntimeParameterListView Empty = new ReadOnlyRuntimeParameterListView();
+		/// <summary>
+		/// Provides an empty list definition.
+		/// </summary>
+		public static readonly ReadOnlyRuntimeParameterListView Empty = new ReadOnlyRuntimeParameterListView();
 
-        #endregion // Static members
+		#endregion // Static members
 
-        #region Construction
+		#region Construction
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ReadOnlyRuntimeParameterListView"/> class.
-        /// </summary>
-        private ReadOnlyRuntimeParameterListView()
-        {
-        }
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ReadOnlyRuntimeParameterListView"/> class.
+		/// </summary>
+		private ReadOnlyRuntimeParameterListView()
+		{
+		}
 
-        /// <summary>
-        /// Initializes a new instance of <see cref="ReadOnlyRuntimeFieldListView"/>.
-        /// </summary>
-        /// <param name="firstIndex">The first index of the list view.</param>
-        /// <param name="count">The number of elements in the list view.</param>
-        public ReadOnlyRuntimeParameterListView(int firstIndex, int count)
-            : base(firstIndex, count)
-        {
-        }
+		/// <summary>
+		/// Initializes a new instance of <see cref="ReadOnlyRuntimeFieldListView"/>.
+		/// </summary>
+		/// <param name="firstIndex">The first index of the list view.</param>
+		/// <param name="count">The number of elements in the list view.</param>
+		public ReadOnlyRuntimeParameterListView(int firstIndex, int count, ITypeSystem typeSystem)
+			: base(firstIndex, count, typeSystem)
+		{
+		}
 
-        #endregion // Construction
+		#endregion // Construction
 
-        #region Overrides
+		#region Overrides
 
-        /// <summary>
-        /// Returns the fields array, which is viewed by this collection.
-        /// </summary>
-        protected override RuntimeParameter[] Items
-        {
-            get { return RuntimeBase.Instance.TypeLoader.Parameters; }
-        }
+		/// <summary>
+		/// Returns the fields array, which is viewed by this collection.
+		/// </summary>
+		protected override RuntimeParameter[] Items
+		{
+			get { if (typeSystem == null) return null; else return typeSystem.Parameters; }
+		}
 
-        #endregion // Overrides
-    }
+		#endregion // Overrides
+	}
 }

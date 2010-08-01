@@ -40,9 +40,9 @@ namespace Mosa.Tools.Compiler.LinkTimeCodeGeneration
 		/// <returns></returns>
 		/// <exception cref="System.ArgumentNullException"><paramref name="compiler"/> or <paramref name="methodName"/>  is null.</exception>
 		/// <exception cref="System.ArgumentException"><paramref name="methodName"/> is invalid.</exception>
-		public static CompilerGeneratedMethod Compile(AssemblyCompiler compiler, string methodName)
+		public static CompilerGeneratedMethod Compile(AssemblyCompiler compiler, string methodName, ITypeSystem typeSystem)
 		{
-			return Compile(compiler, methodName, null);
+			return Compile(compiler, methodName, null, typeSystem);
 		}
 
 		/// <summary>
@@ -54,7 +54,7 @@ namespace Mosa.Tools.Compiler.LinkTimeCodeGeneration
 		/// <returns></returns>
 		/// <exception cref="System.ArgumentNullException"><paramref name="compiler"/>, <paramref name="methodName"/> or <paramref name="instructionSet"/> is null.</exception>
 		/// <exception cref="System.ArgumentException"><paramref name="methodName"/> is invalid.</exception>
-		public static CompilerGeneratedMethod Compile(AssemblyCompiler compiler, string methodName, InstructionSet instructionSet)
+		public static CompilerGeneratedMethod Compile(AssemblyCompiler compiler, string methodName, InstructionSet instructionSet, ITypeSystem typeSystem)
 		{
 			if (compiler == null)
 				throw new ArgumentNullException(@"compiler");
@@ -65,11 +65,11 @@ namespace Mosa.Tools.Compiler.LinkTimeCodeGeneration
 
 			// Create the type if we need to.
 			if (compilerGeneratedType == null)
-				compilerGeneratedType = new CompilerGeneratedType(compiler.Assembly, @"Mosa.Tools.Compiler", @"LinkerGenerated");
+				compilerGeneratedType = new CompilerGeneratedType(compiler.Assembly, @"Mosa.Tools.Compiler", @"LinkerGenerated", typeSystem);
 
 			// Create the method
 			// HACK: <$> prevents the method from being called from CIL
-			CompilerGeneratedMethod method = new CompilerGeneratedMethod(compiler.Assembly, "<$>" + methodName, compilerGeneratedType);
+			CompilerGeneratedMethod method = new CompilerGeneratedMethod(compiler.Assembly, "<$>" + methodName, compilerGeneratedType, typeSystem);
 			compilerGeneratedType.AddMethod(method);
 
 			LinkerMethodCompiler methodCompiler = new LinkerMethodCompiler(compiler, compiler.Pipeline.FindFirst<ICompilationSchedulerStage>(), method, instructionSet);

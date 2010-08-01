@@ -188,7 +188,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		/// <returns>An instance of <see cref="RuntimeMethod"/>.</returns>
 		private RuntimeMethod FindMethod(string ns, string type, string method)
 		{
-			foreach (RuntimeType t in runtime.TypeLoader.GetTypesFromModule(module))
+			foreach (RuntimeType t in runtime.TypeSystem.GetTypesFromModule(module))
 			{
 				if (t.Namespace != ns || t.Name != type)
 					continue;

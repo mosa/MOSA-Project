@@ -46,8 +46,8 @@ namespace Mosa.Runtime.Metadata.Runtime
         /// <param name="offset">The offset.</param>
         /// <param name="rva">The rva.</param>
         /// <param name="declaringType">Type of the declaring.</param>
-        public CilRuntimeField(IMetadataModule module, ref FieldRow field, IntPtr offset, IntPtr rva, RuntimeType declaringType) :
-            base(module, declaringType)
+        public CilRuntimeField(IMetadataModule module, ref FieldRow field, IntPtr offset, IntPtr rva, RuntimeType declaringType, ITypeSystem typeSystem) :
+			base(module, declaringType, typeSystem)
         {
             this.nameIdx = field.NameStringIdx;
             this.signature = field.SignatureBlobIdx;
@@ -56,8 +56,8 @@ namespace Mosa.Runtime.Metadata.Runtime
             //base.Offset = offset; ?
         }
 
-		public CilRuntimeField(RuntimeField genericField, IMetadataModule module, FieldSignature signature) :
-			base(module, genericField.DeclaringType)
+		public CilRuntimeField(RuntimeField genericField, IMetadataModule module, FieldSignature signature, ITypeSystem typeSystem) :
+			base(module, genericField.DeclaringType, typeSystem)
 		{
 			this.Name = genericField.Name;
 			this.Attributes = genericField.Attributes;

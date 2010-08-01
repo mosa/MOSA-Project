@@ -58,8 +58,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
             for (int i = 0; i < maxSections; i++)
                 _sections.Add(new TestLinkerSection((SectionKind)i, String.Empty, IntPtr.Zero));
 
-            this.allocateArrayHandler = new AllocateArrayDelegate(RuntimeBase.AllocateArray);
-            this.allocateObjectHandler = new AllocateObjectDelegate(RuntimeBase.AllocateObject);
+            this.allocateArrayHandler = new AllocateArrayDelegate(Runtime.AllocateArray);
+            this.allocateObjectHandler = new AllocateObjectDelegate(Runtime.AllocateObject);
         }
 
         #endregion // Construction
