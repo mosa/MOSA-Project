@@ -26,17 +26,17 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// The compiler target architecture.
 		/// </summary>
-		private IArchitecture _architecture;
+		private IArchitecture architecture;
 
 		/// <summary>
 		/// The assembly of this compiler.
 		/// </summary>
-		private IMetadataModule _assembly;
+		private IMetadataModule assembly;
 
 		/// <summary>
 		/// The pipeline of the assembly compiler.
 		/// </summary>
-		private CompilerPipeline _pipeline;
+		private CompilerPipeline pipeline;
 
 		/// <summary>
 		/// Holds the current type system during compilation.
@@ -66,9 +66,9 @@ namespace Mosa.Runtime.CompilerFramework
 			if (architecture == null)
 				throw new ArgumentNullException(@"architecture");
 
-			_architecture = architecture;
-			_assembly = assembly;
-			_pipeline = new CompilerPipeline();
+			this.architecture = architecture;
+			this.assembly = assembly;
+			this.pipeline = new CompilerPipeline();
 			this.typeSystem = typeSystem;
 			this.assemblyLoader = assemblyLoader;
 		}
@@ -93,7 +93,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public IArchitecture Architecture
 		{
-			get { return _architecture; }
+			get { return architecture; }
 		}
 
 		/// <summary>
@@ -102,7 +102,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value>The assembly.</value>
 		public IMetadataModule Assembly
 		{
-			get { return _assembly; }
+			get { return assembly; }
 		}
 
 		/// <summary>
@@ -111,7 +111,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value>The metadata.</value>
 		public virtual IMetadataProvider Metadata
 		{
-			get { return _assembly.Metadata; }
+			get { return assembly.Metadata; }
 		}
 
 		/// <summary>
@@ -120,7 +120,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value>The pipeline.</value>
 		public CompilerPipeline Pipeline
 		{
-			get { return _pipeline; }
+			get { return pipeline; }
 		}
 
 		/// <summary>

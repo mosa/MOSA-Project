@@ -236,6 +236,7 @@
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Runtime.cs" />
     <Compile Include="RuntimeFixture.cs" />
     <Compile Include="TestFixtureBase.cs" />
   </ItemGroup>

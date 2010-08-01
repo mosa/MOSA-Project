@@ -154,10 +154,10 @@ namespace Test.Mosa.Runtime.CompilerFramework
 			if (this.needCompile == true)
 			{
 				if (module != null)
-					RuntimeBase.Instance.AssemblyLoader.Unload(module);	// FIXME
+					Runtime.AssemblyLoader.Unload(module);	// FIXME
 				this.assembly = this.CompileTestCode<TDelegate>(ns, type, method);
 				Console.WriteLine("Executing MOSA compiler...");
-				module = RunMosaCompiler(this.assembly, RuntimeBase.Instance.TypeLoader, RuntimeBase.Instance.AssemblyLoader); // FIXME
+				module = RunMosaCompiler(this.assembly, Runtime.TypeLoader, Runtime.AssemblyLoader); // FIXME
 				this.needCompile = false;
 			}
 
@@ -221,10 +221,10 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		/// <returns>The metadata module, which represents the loaded assembly.</returns>
 		private IMetadataModule RunMosaCompiler(string assemblyFile, ITypeSystem typeSystem, IAssemblyLoader assemblyLoader)
 		{
-			IMetadataModule rtModule = RuntimeBase.Instance.AssemblyLoader.Load(
+			IMetadataModule rtModule = Runtime.AssemblyLoader.Load(
 				typeof(RuntimeBase).Module.FullyQualifiedName
 			);
-			IMetadataModule module = RuntimeBase.Instance.AssemblyLoader.Load(
+			IMetadataModule module = Runtime.AssemblyLoader.Load(
 				assemblyFile
 			);
 			TestCaseAssemblyCompiler.Compile(module, typeSystem, assemblyLoader);

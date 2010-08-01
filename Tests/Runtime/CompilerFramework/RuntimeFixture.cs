@@ -14,23 +14,23 @@ using Test.Mosa.Runtime.CompilerFramework.BaseCode;
 
 namespace Test.Mosa.Runtime.CompilerFramework
 {
-    public abstract class RuntimeFixture
-    {
-        /// <summary>
-        /// The test runtime.
-        /// </summary>
-        private TestRuntime runtime;
+	public abstract class RuntimeFixture
+	{
+		/// <summary>
+		/// The test runtime.
+		/// </summary>
+		private TestRuntime runtime;
 
-        [FixtureSetUp]
-        public void FixtureSetup()
-        {
-            runtime = new TestRuntime();
-        }
+		[FixtureSetUp]
+		public void FixtureSetup()
+		{
+			runtime = new TestRuntime();
+		}
 
-        [FixtureTearDown]
-        public void FixtureTearDown()
-        {
-            runtime.Dispose();
-        }
-    }
+		[FixtureTearDown]
+		public void FixtureTearDown()
+		{
+			runtime.Dispose();
+		}
+	}
 }
