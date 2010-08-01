@@ -25,7 +25,7 @@ namespace Mosa.Runtime.Vm
 	public abstract class RuntimeType : RuntimeMember, IEquatable<RuntimeType>, ISignatureContext
 	{
 		#region Data members
-		
+
 		/// <summary>
 		/// An array used to describe types, which do not implement any interface.
 		/// </summary>
@@ -72,7 +72,7 @@ namespace Mosa.Runtime.Vm
 		/// Holds the fields of this type.
 		/// </summary>
 		private IList<RuntimeField> fields;
-		
+
 		/// <summary>
 		/// Holds the interfaces of this type.
 		/// </summary>
@@ -89,8 +89,8 @@ namespace Mosa.Runtime.Vm
 		/// </summary>
 		/// <param name="token">The token of the type.</param>
 		/// <param name="module">The module.</param>
-		public RuntimeType(int token, IMetadataModule module) :
-			base(token, module, null, null)
+		public RuntimeType(int token, IMetadataModule module, ITypeSystem typeSystem) :
+			base(token, module, null, null, typeSystem)
 		{
 		}
 
@@ -138,7 +138,7 @@ namespace Mosa.Runtime.Vm
 			{
 				this.AssertBaseTypeIsLoaded();
 
-				RuntimeType valueType = RuntimeBase.Instance.TypeLoader.GetType(@"System.ValueType");
+				RuntimeType valueType = typeSystem.GetType(@"System.ValueType");
 				return this.IsSubclassOf(valueType);
 			}
 		}
@@ -160,7 +160,7 @@ namespace Mosa.Runtime.Vm
 				this.fields = value;
 			}
 		}
-		
+
 		/// <summary>
 		/// Returns the interfaces implemented by this type.
 		/// </summary>
@@ -173,7 +173,7 @@ namespace Mosa.Runtime.Vm
 				{
 					this.interfaces = this.LoadInterfaces();
 				}
-				
+
 				return this.interfaces;
 			}
 		}
@@ -284,7 +284,7 @@ namespace Mosa.Runtime.Vm
 			get
 			{
 				RuntimeMethod result = null;
-				MethodAttributes attrs = MethodAttributes.SpecialName|MethodAttributes.RTSpecialName|MethodAttributes.Static;
+				MethodAttributes attrs = MethodAttributes.SpecialName | MethodAttributes.RTSpecialName | MethodAttributes.Static;
 				foreach (RuntimeMethod method in this.Methods)
 				{
 					if ((method.Attributes & attrs) == attrs && method.Name == ".cctor")
@@ -298,7 +298,7 @@ namespace Mosa.Runtime.Vm
 				return result;
 			}
 		}
-		
+
 		#endregion // Properties
 
 		#region Methods
@@ -406,25 +406,25 @@ namespace Mosa.Runtime.Vm
 		}
 
 		#endregion // Object Overrides
-		
+
 		public SigType GetGenericMethodArgument(int index)
 		{
 			return DefaultSignatureContext.Instance.GetGenericMethodArgument(index);
 		}
-		
-		
+
+
 		public virtual SigType GetGenericTypeArgument(int index)
 		{
 			return DefaultSignatureContext.Instance.GetGenericTypeArgument(index);
 		}
 
-		public bool IsDelegate 
+		public bool IsDelegate
 		{
 			get
 			{
 				this.AssertBaseTypeIsLoaded();
 
-				RuntimeType delegateType = RuntimeBase.Instance.TypeLoader.GetType(@"System.Delegate, mscorlib");
+				RuntimeType delegateType = typeSystem.GetType(@"System.Delegate, mscorlib");
 				return this.IsSubclassOf(delegateType);
 			}
 		}
@@ -435,7 +435,7 @@ namespace Mosa.Runtime.Vm
 			{
 				this.AssertBaseTypeIsLoaded();
 
-				RuntimeType enumType = RuntimeBase.Instance.TypeLoader.GetType(@"System.Enum");
+				RuntimeType enumType = typeSystem.GetType(@"System.Enum");
 				return ReferenceEquals(this.BaseType, enumType);
 			}
 		}
@@ -482,7 +482,7 @@ namespace Mosa.Runtime.Vm
 
 			throw new MissingMethodException(this.Name, name);
 		}
-		
+
 		/// <summary>
 		/// Loads the interfaces implemented by a type.
 		/// </summary>

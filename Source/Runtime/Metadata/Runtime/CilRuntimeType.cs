@@ -46,8 +46,6 @@ namespace Mosa.Runtime.Metadata.Runtime
 		/// </summary>
 		private TokenTypes namespaceIdx;
 
-		private ITypeSystem typeSystem;
-
 		#endregion // Data Members
 
 		#region Construction
@@ -63,14 +61,12 @@ namespace Mosa.Runtime.Metadata.Runtime
 		/// <param name="packing">The packing.</param>
 		/// <param name="size">The size.</param>
 		public CilRuntimeType(TokenTypes token, IMetadataModule module, ref TypeDefRow typeDefRow, TokenTypes maxField, TokenTypes maxMethod, int packing, int size, ITypeSystem typeSystem) :
-			base((int)token, module)
+			base((int)token, module, typeSystem)
 		{
 			this.baseTypeToken = typeDefRow.Extends;
 			this.module = module;
 			this.nameIdx = typeDefRow.TypeNameIdx;
 			this.namespaceIdx = typeDefRow.TypeNamespaceIdx;
-
-			this.typeSystem = typeSystem;
 
 			base.Attributes = typeDefRow.Flags;
 			base.Pack = packing;
@@ -81,7 +77,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 			if (0 < members)
 			{
 				int i = (int)(typeDefRow.FieldList & TokenTypes.RowIndexMask) - 1 + typeSystem.GetModuleOffset(module).FieldOffset;
-				base.Fields = new ReadOnlyRuntimeFieldListView(i, members);
+				base.Fields = new ReadOnlyRuntimeFieldListView(i, members, typeSystem);
 			}
 			else
 			{
@@ -93,7 +89,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 			if (0 < members)
 			{
 				int i = (int)(typeDefRow.MethodList & TokenTypes.RowIndexMask) - 1 + typeSystem.GetModuleOffset(module).MethodOffset;
-				base.Methods = new ReadOnlyRuntimeMethodListView(i, members);
+				base.Methods = new ReadOnlyRuntimeMethodListView(i, members, typeSystem);
 			}
 			else
 			{

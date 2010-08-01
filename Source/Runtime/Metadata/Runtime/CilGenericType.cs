@@ -22,10 +22,8 @@ namespace Mosa.Runtime.Metadata.Runtime
 		
 		private SigType[] genericArguments;
 
-		private ITypeSystem typeSystem;
-
 		public CilGenericType(RuntimeType type, IMetadataModule referencingModule, GenericInstSigType genericTypeInstanceSignature, ISignatureContext signatureContext, ITypeSystem typeSystem) :
-			base(type.Token, type.Module)
+			base(type.Token, type.Module, typeSystem)
 		{
 			this.signature = genericTypeInstanceSignature;
 			this.signatureContext = signatureContext;
@@ -33,8 +31,6 @@ namespace Mosa.Runtime.Metadata.Runtime
 			
 			this.Methods = this.GetMethods();
 			this.Fields = this.GetFields();
-
-			this.typeSystem = typeSystem;
 		}
 		
 		public SigType[] GenericArguments
@@ -86,7 +82,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 				MethodSignature signature = new MethodSignature();
 				signature.LoadSignature(this, method.Module.Metadata, method.Signature.Token);
 					
-				RuntimeMethod genericInstanceMethod = new CilGenericMethod(method, signature, this);
+				RuntimeMethod genericInstanceMethod = new CilGenericMethod(method, signature, this, typeSystem);
 				methods.Add(genericInstanceMethod);
 			}
 			
@@ -103,7 +99,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 				FieldSignature fsig = new FieldSignature();
 					fsig.LoadSignature(this, this.genericType.Module.Metadata, field.Signature.Token);
 				
-				CilGenericField genericInstanceField = new CilGenericField(this, field, fsig);
+				CilGenericField genericInstanceField = new CilGenericField(this, field, fsig, typeSystem);
 				fields.Add(genericInstanceField);
 			}
 			

@@ -13,309 +13,334 @@ using System.Collections.Generic;
 
 namespace Mosa.Runtime.Vm
 {
-    /// <summary>
-    /// Provides a read-only view of fields in a type.
-    /// </summary>
-    /// <remarks>
-    /// This list is a read-only view of the this.Items list.
-    /// </remarks>
-    public abstract class ReadOnlyRuntimeListView<TItemType> :
-        IList<TItemType>, IList where TItemType: IEquatable<TItemType>
-    {
-        #region Data members
+	/// <summary>
+	/// Provides a read-only view of fields in a type.
+	/// </summary>
+	/// <remarks>
+	/// This list is a read-only view of the this.Items list.
+	/// </remarks>
+	public abstract class ReadOnlyRuntimeListView<TItemType> :
+		IList<TItemType>, IList where TItemType : IEquatable<TItemType>
+	{
+		#region Data members
 
-        /// <summary>
-        /// Holds the total number of fields in this list.
-        /// </summary>
-        private int _count;
+		/// <summary>
+		/// Holds the total number of fields in this list.
+		/// </summary>
+		private int count;
 
-        /// <summary>
-        /// Holds the index of the first _stackFrameIndex in this list.
-        /// </summary>
-        private int _firstItem;
+		/// <summary>
+		/// Holds the index of the first _stackFrameIndex in this list.
+		/// </summary>
+		private int firstItem;
 
-        #endregion // Data members
+		/// <summary>
+		/// Holds the static instance of the runtime.
+		/// </summary>
+		protected ITypeSystem typeSystem;
 
-        #region Construction
+		#endregion // Data members
 
-        /// <summary>
-        /// Used to initialize RuntimeFieldList.Empty.
-        /// </summary>
-        protected ReadOnlyRuntimeListView()
-        {
-        }
+		#region Construction
 
+		/// <summary>
+		/// Used to initialize RuntimeFieldList.Empty.
+		/// </summary>
+		protected ReadOnlyRuntimeListView()
+		{
+		}
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ReadOnlyRuntimeListView{TItemType}"/> class.
-        /// </summary>
-        /// <param name="firstField">The index of the first _stackFrameIndex. May not be negative.</param>
-        /// <param name="count">The number of fields in the list. Must be larger than zero.</param>
-        public ReadOnlyRuntimeListView(int firstField, int count)
-        {
-            if (0 > firstField)
-                throw new ArgumentOutOfRangeException(@"firstField", firstField, @"May not be negative.");
-            if (0 > count)
-                throw new ArgumentOutOfRangeException(@"count", count, @"Must be larger than zero.");
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ReadOnlyRuntimeListView{TItemType}"/> class.
+		/// </summary>
+		/// <param name="firstField">The index of the first _stackFrameIndex. May not be negative.</param>
+		/// <param name="count">The number of fields in the list. Must be larger than zero.</param>
+		public ReadOnlyRuntimeListView(int firstField, int count, ITypeSystem typeSystem)
+		{
+			if (0 > firstField)
+				throw new ArgumentOutOfRangeException(@"firstField", firstField, @"May not be negative.");
+			if (0 > count)
+				throw new ArgumentOutOfRangeException(@"count", count, @"Must be larger than zero.");
 
-            _firstItem = firstField;
-            _count = count;
-        }
+			firstItem = firstField;
+			this.count = count;
+			this.typeSystem = typeSystem;
 
-        #endregion // Construction
+			System.Diagnostics.Debug.Assert(typeSystem != null);
+		}
 
-        #region Properties
+		#endregion // Construction
 
-        /// <summary>
-        /// Retrieves the items of the list.
-        /// </summary>
-        protected abstract TItemType[] Items { get; }
+		#region Properties
 
-        #endregion // Properties
+		/// <summary>
+		/// Retrieves the items of the list.
+		/// </summary>
+		protected abstract TItemType[] Items { get; }
 
-        #region IList<TItemType> Members
+		#endregion // Properties
 
-        int IList<TItemType>.IndexOf(TItemType item)
-        {
-            TItemType[] items = Items;
-            for (int i = 0; i < _count; i++)
-            {
-                if (item.Equals(items[_firstItem + i]))
-                    return i;
-            }
+		#region IList<TItemType> Members
 
-            return -1;
-        }
+		int IList<TItemType>.IndexOf(TItemType item)
+		{
+			TItemType[] items = Items;
 
-        void IList<TItemType>.Insert(int index, TItemType item)
-        {
-            throw new NotSupportedException();
-        }
+			if (items == null)
+				return -1;
 
-        void IList<TItemType>.RemoveAt(int index)
-        {
-            throw new NotSupportedException();
-        }
+			for (int i = 0; i < count; i++)
+			{
+				if (item.Equals(items[firstItem + i]))
+					return i;
+			}
 
-        TItemType IList<TItemType>.this[int index]
-        {
-            get
-            {
-                if (0 > index || index >= _count)
-                    throw new ArgumentOutOfRangeException(@"index");
+			return -1;
+		}
 
-                return Items[_firstItem + index];
-            }
-            set
-            {
-                throw new NotSupportedException();
-            }
-        }
+		void IList<TItemType>.Insert(int index, TItemType item)
+		{
+			throw new NotSupportedException();
+		}
 
-        #endregion // IList<TItemType> Members
+		void IList<TItemType>.RemoveAt(int index)
+		{
+			throw new NotSupportedException();
+		}
 
-        #region ICollection<TItemType> Members
+		TItemType IList<TItemType>.this[int index]
+		{
+			get
+			{
+				if (0 > index || index >= count)
+					throw new ArgumentOutOfRangeException(@"index");
 
-        void ICollection<TItemType>.Add(TItemType item)
-        {
-            throw new NotSupportedException();
-        }
+				return Items[firstItem + index];
+			}
+			set
+			{
+				throw new NotSupportedException();
+			}
+		}
 
-        void ICollection<TItemType>.Clear()
-        {
-            throw new NotSupportedException();
-        }
+		#endregion // IList<TItemType> Members
 
-        bool ICollection<TItemType>.Contains(TItemType item)
-        {
-            TItemType[] items = Items;
-            for (int i = 0; i < _count; i++)
-            {
-                if (item.Equals(items[_firstItem + i]))
-                    return true;
-            }
+		#region ICollection<TItemType> Members
 
-            return false;
-        }
+		void ICollection<TItemType>.Add(TItemType item)
+		{
+			throw new NotSupportedException();
+		}
 
-        void ICollection<TItemType>.CopyTo(TItemType[] array, int arrayIndex)
-        {
-            if (null == array)
-                throw new ArgumentNullException(@"array");
-            if (arrayIndex + _count > array.Length)
-                throw new ArgumentException(@"Insufficient array space.");
+		void ICollection<TItemType>.Clear()
+		{
+			throw new NotSupportedException();
+		}
 
-            TItemType[] items = Items;
-            for (int i = 0; i < _count; i++)
-            {
-                array[arrayIndex+i] = items[_firstItem + i];
-            }
-        }
+		bool ICollection<TItemType>.Contains(TItemType item)
+		{
+			TItemType[] items = Items;
 
-        int ICollection<TItemType>.Count
-        {
-            get { return _count; }
-        }
+			if (items == null)
+				return false;
 
-        bool ICollection<TItemType>.IsReadOnly
-        {
-            get { return true; }
-        }
+			for (int i = 0; i < count; i++)
+			{
+				if (item.Equals(items[firstItem + i]))
+					return true;
+			}
 
-        bool ICollection<TItemType>.Remove(TItemType item)
-        {
-            throw new NotSupportedException();
-        }
+			return false;
+		}
 
-        #endregion // ICollection<RuntimeField> Members
+		void ICollection<TItemType>.CopyTo(TItemType[] array, int arrayIndex)
+		{
+			if (null == array)
+				throw new ArgumentNullException(@"array");
+			if (arrayIndex + count > array.Length)
+				throw new ArgumentException(@"Insufficient array space.");
 
-        #region IEnumerable<TItemType> Members
+			TItemType[] items = Items;
+			for (int i = 0; i < count; i++)
+			{
+				array[arrayIndex + i] = items[firstItem + i];
+			}
+		}
 
-        IEnumerator<TItemType> IEnumerable<TItemType>.GetEnumerator()
-        {
-            TItemType[] items = Items;
-            for (int i = 0; i < _count; i++)
-            {
-                yield return items[_firstItem + i];
-            }
-        }
+		int ICollection<TItemType>.Count
+		{
+			get { return count; }
+		}
 
-        #endregion // IEnumerable<RuntimeField> Members
+		bool ICollection<TItemType>.IsReadOnly
+		{
+			get { return true; }
+		}
 
-        #region IEnumerable Members
+		bool ICollection<TItemType>.Remove(TItemType item)
+		{
+			throw new NotSupportedException();
+		}
 
-        IEnumerator IEnumerable.GetEnumerator()
-        {
-            TItemType[] items = Items;
-            for (int i = 0; i < _count; i++)
-            {
-                yield return items[_firstItem + i];
-            }
-        }
+		#endregion // ICollection<RuntimeField> Members
 
-        #endregion // IEnumerable Members
+		#region IEnumerable<TItemType> Members
 
-        #region IList Members
+		IEnumerator<TItemType> IEnumerable<TItemType>.GetEnumerator()
+		{
+			TItemType[] items = Items;
+			if (items != null)
+			{
+				for (int i = 0; i < count; i++)
+				{
+					yield return items[firstItem + i];
+				}
+			}
+		}
 
-        int IList.Add(object value)
-        {
-            throw new NotSupportedException();
-        }
+		#endregion // IEnumerable<RuntimeField> Members
 
-        void IList.Clear()
-        {
-            throw new NotSupportedException();
-        }
+		#region IEnumerable Members
 
-        bool IList.Contains(object value)
-        {
-            if (null == value)
-                throw new ArgumentNullException(@"value");
-            if (!(value is TItemType))
-                throw new ArgumentException(@"Wrong value type.", @"value");
+		IEnumerator IEnumerable.GetEnumerator()
+		{
+			TItemType[] items = Items;
+			if (items != null)
+			{
+				for (int i = 0; i < count; i++)
+				{
+					yield return items[firstItem + i];
+				}
+			}
+		}
 
-            TItemType item = (TItemType)value;
-            TItemType[] items = Items;
-            for (int i = 0; i < _count; i++)
-            {
-                if (item.Equals(items[_firstItem + i]))
-                    return true;
-            }
+		#endregion // IEnumerable Members
 
-            return false;
-        }
+		#region IList Members
 
-        int IList.IndexOf(object value)
-        {
-            if (null == value)
-                throw new ArgumentNullException(@"value");
-            if (!(value is TItemType))
-                throw new ArgumentException(@"Wrong value type.", @"value");
+		int IList.Add(object value)
+		{
+			throw new NotSupportedException();
+		}
 
-            TItemType item = (TItemType)value;
-            TItemType[] items = Items;
-            for (int i = 0; i < _count; i++)
-            {
-                if (item.Equals(items[_firstItem + i]))
-                    return i;
-            }
+		void IList.Clear()
+		{
+			throw new NotSupportedException();
+		}
 
-            return -1;
-        }
+		bool IList.Contains(object value)
+		{
+			if (null == value)
+				throw new ArgumentNullException(@"value");
+			if (!(value is TItemType))
+				throw new ArgumentException(@"Wrong value type.", @"value");
 
-        void IList.Insert(int index, object value)
-        {
-            throw new NotSupportedException();
-        }
+			TItemType item = (TItemType)value;
+			TItemType[] items = Items;
 
-        bool IList.IsFixedSize
-        {
-            get { return true; }
-        }
+			if (items == null)
+				return false;
 
-        bool IList.IsReadOnly
-        {
-            get { return true; }
-        }
+			for (int i = 0; i < count; i++)
+				if (item.Equals(items[firstItem + i]))
+					return true;
 
-        void IList.Remove(object value)
-        {
-            throw new NotSupportedException();
-        }
+			return false;
+		}
 
-        void IList.RemoveAt(int index)
-        {
-            throw new NotSupportedException();
-        }
+		int IList.IndexOf(object value)
+		{
+			if (null == value)
+				throw new ArgumentNullException(@"value");
+			if (!(value is TItemType))
+				throw new ArgumentException(@"Wrong value type.", @"value");
 
-        object IList.this[int index]
-        {
-            get
-            {
-                return Items[_firstItem + index];
-            }
-            set
-            {
-                throw new NotSupportedException();
-            }
-        }
+			TItemType item = (TItemType)value;
+			TItemType[] items = Items;
 
-        #endregion // IList Members
+			if (items == null)
+				return -1;
 
-        #region ICollection Members
+			for (int i = 0; i < count; i++)
+				if (item.Equals(items[firstItem + i]))
+					return i;
 
-        void ICollection.CopyTo(Array array, int index)
-        {
-            if (null == array)
-                throw new ArgumentNullException(@"array");
-            if (index + _count > array.Length)
-                throw new ArgumentException(@"Insufficient array space.");
+			return -1;
+		}
 
-            TItemType[] results = array as TItemType[];
-            TItemType[] items = Items;
-            if (null == results)
-                throw new ArgumentException(@"Wrong array type.");
-            for (int i = 0; i < _count; i++)
-            {
-                results[index+i] = items[_firstItem + i];
-            }
-        }
+		void IList.Insert(int index, object value)
+		{
+			throw new NotSupportedException();
+		}
 
-        int ICollection.Count
-        {
-            get { return _count; }
-        }
+		bool IList.IsFixedSize
+		{
+			get { return true; }
+		}
 
-        bool ICollection.IsSynchronized
-        {
-            get { return Items.IsSynchronized; }
-        }
+		bool IList.IsReadOnly
+		{
+			get { return true; }
+		}
 
-        object ICollection.SyncRoot
-        {
-            get { return Items.SyncRoot; }
-        }
+		void IList.Remove(object value)
+		{
+			throw new NotSupportedException();
+		}
 
-        #endregion // ICollection Members
-    }
+		void IList.RemoveAt(int index)
+		{
+			throw new NotSupportedException();
+		}
+
+		object IList.this[int index]
+		{
+			get
+			{
+				return Items[firstItem + index];
+			}
+			set
+			{
+				throw new NotSupportedException();
+			}
+		}
+
+		#endregion // IList Members
+
+		#region ICollection Members
+
+		void ICollection.CopyTo(Array array, int index)
+		{
+			if (array == null)
+				throw new ArgumentNullException(@"array");
+			if (index + count > array.Length)
+				throw new ArgumentException(@"Insufficient array space.");
+
+			TItemType[] results = array as TItemType[];
+			TItemType[] items = Items;
+			if (null == results)
+				throw new ArgumentException(@"Wrong array type.");
+			for (int i = 0; i < count; i++)
+			{
+				results[index + i] = items[firstItem + i];
+			}
+		}
+
+		int ICollection.Count
+		{
+			get { return count; }
+		}
+
+		bool ICollection.IsSynchronized
+		{
+			get { return Items.IsSynchronized; }
+		}
+
+		object ICollection.SyncRoot
+		{
+			get { return Items.SyncRoot; }
+		}
+
+		#endregion // ICollection Members
+	}
 }

@@ -53,8 +53,8 @@ namespace Mosa.Tools.Compiler
 		/// </summary>
 		public CompilationRuntime()
 		{
-			this.typeLoader = new DefaultTypeSystem();
-			this.assemblyLoader = new AssemblyLoader(this.typeLoader);
+			this.typeLoader = new DefaultTypeSystem(this);
+			this.assemblyLoader = new AssemblyLoader(this);
 			this.memoryManager = new MockMemoryPageManager();
 			this.jitService = new MockJitService();
 		}
@@ -72,7 +72,7 @@ namespace Mosa.Tools.Compiler
 		/// Retrieves the type loader of the runtime.
 		/// </summary>
 		/// <value>The type loader.</value>
-		public override ITypeSystem TypeLoader
+		public override ITypeSystem TypeSystem
 		{
 			get { return this.typeLoader; }
 		}

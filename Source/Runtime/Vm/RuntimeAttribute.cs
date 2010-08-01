@@ -18,13 +18,13 @@ using Mosa.Runtime.Metadata.Blobs;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Metadata.Tables;
 
-namespace Mosa.Runtime.Vm 
+namespace Mosa.Runtime.Vm
 {
 	/// <summary>
 	/// Represents an attribute in runtime type information.
 	/// </summary>
 	public class RuntimeAttribute
-    {
+	{
 		#region Data members
 
 		/// <summary>
@@ -32,48 +32,54 @@ namespace Mosa.Runtime.Vm
 		/// </summary>
 		private object _attribute;
 
-        /// <summary>
-        /// Specifies the blob, which contains the attribute initialization.
-        /// </summary>
-        private TokenTypes _attributeBlob;
+		/// <summary>
+		/// Specifies the blob, which contains the attribute initialization.
+		/// </summary>
+		private TokenTypes _attributeBlob;
 
-        /// <summary>
+		/// <summary>
 		/// Holds the ctor of the attribute type to invoke.
 		/// </summary>
 		private TokenTypes _ctor;
 
-        /// <summary>
-        /// Holds the ctor method of the attribute type.
-        /// </summary>
-        private RuntimeMethod _ctorMethod;
+		/// <summary>
+		/// Holds the ctor method of the attribute type.
+		/// </summary>
+		private RuntimeMethod _ctorMethod;
 
-        /// <summary>
-        /// Holds the metadata module defining the attribute instance.
-        /// </summary>
-        private IMetadataModule _module;
+		/// <summary>
+		/// Holds the metadata module defining the attribute instance.
+		/// </summary>
+		private IMetadataModule _module;
+
+		/// <summary>
+		/// Holds the static instance of the runtime.
+		/// </summary>
+		protected ITypeSystem typeSystem;
 
 		#endregion // Data members
 
-        #region Construction
+		#region Construction
 
-        /// <summary>
-        /// Populates the <see cref="RuntimeAttribute"/> with the values in <paramref name="car"/>.
-        /// </summary>
-        /// <param name="module">The metadata module, which defines the attribute.</param>
-        /// <param name="car">The custom attribute row from metadata.</param>
-        public RuntimeAttribute(IMetadataModule module, CustomAttributeRow car)
-        {
-            _attribute = null;
-            _attributeBlob = car.ValueBlobIdx;
-            _ctor = car.TypeIdx;
-            _module = module;
-        }
+		/// <summary>
+		/// Populates the <see cref="RuntimeAttribute"/> with the values in <paramref name="car"/>.
+		/// </summary>
+		/// <param name="module">The metadata module, which defines the attribute.</param>
+		/// <param name="car">The custom attribute row from metadata.</param>
+		public RuntimeAttribute(IMetadataModule module, CustomAttributeRow car, ITypeSystem typeSystem)
+		{
+			_attribute = null;
+			_attributeBlob = car.ValueBlobIdx;
+			_ctor = car.TypeIdx;
+			_module = module;
+			this.typeSystem = typeSystem;
+		}
 
-        #endregion // Construction
+		#endregion // Construction
 
-        #region Methods
+		#region Methods
 
-        /// <summary>
+		/// <summary>
 		/// Retrieves the attribute.
 		/// </summary>
 		/// <returns>An instance of the attribute.</returns>
@@ -83,45 +89,45 @@ namespace Mosa.Runtime.Vm
 			if (null != _attribute)
 				return _attribute;
 
-            // Retrieve the attribute type
-            _attribute = CustomAttributeParser.Parse(_module, _attributeBlob, _ctorMethod);
-            Debug.Assert(null != _attribute, @"Failed to load the attribute.");
+			// Retrieve the attribute type
+			_attribute = CustomAttributeParser.Parse(_module, _attributeBlob, _ctorMethod);
+			Debug.Assert(null != _attribute, @"Failed to load the attribute.");
 
 			return _attribute;
 		}
 
 		#endregion // Methods
 
-        #region Properties
+		#region Properties
 
-        /// <summary>
-        /// Gets the attribute type.
-        /// </summary>
-        /// <value>The attribute type.</value>
-        public RuntimeType Type
-        {
-            get 
-            {
-                if (null == _ctorMethod)
-                    LocateAttributeCtorMethod();
+		/// <summary>
+		/// Gets the attribute type.
+		/// </summary>
+		/// <value>The attribute type.</value>
+		public RuntimeType Type
+		{
+			get
+			{
+				if (null == _ctorMethod)
+					LocateAttributeCtorMethod();
 
-                return _ctorMethod.DeclaringType; 
-            }
-        }
+				return _ctorMethod.DeclaringType;
+			}
+		}
 
-        #endregion // Properties
+		#endregion // Properties
 
-        #region Internals
+		#region Internals
 
-        /// <summary>
-        /// Locates the attribute ctor method.
-        /// </summary>
-        private void LocateAttributeCtorMethod()
-        {
-            _ctorMethod = RuntimeBase.Instance.TypeLoader.GetMethod(DefaultSignatureContext.Instance, _module, _ctor);
-            Debug.Assert(null != _ctorMethod);
-        }
+		/// <summary>
+		/// Locates the attribute ctor method.
+		/// </summary>
+		private void LocateAttributeCtorMethod()
+		{
+			_ctorMethod = typeSystem.GetMethod(DefaultSignatureContext.Instance, _module, _ctor);
+			Debug.Assert(null != _ctorMethod);
+		}
 
-        #endregion // Internals
-    }
+		#endregion // Internals
+	}
 }

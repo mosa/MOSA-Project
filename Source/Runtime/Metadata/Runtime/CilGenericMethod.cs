@@ -13,8 +13,8 @@ namespace Mosa.Runtime.Metadata.Runtime
 
         private readonly ISignatureContext signatureContext;
 				
-		public CilGenericMethod(CilRuntimeMethod method, MethodSignature signature, ISignatureContext signatureContext) :
-			base(method.Token, method.Module, method.DeclaringType)
+		public CilGenericMethod(CilRuntimeMethod method, MethodSignature signature, ISignatureContext signatureContext, ITypeSystem typeSystem) :
+			base(method.Token, method.Module, method.DeclaringType, typeSystem)
 		{
 			this.genericMethod = method;
             this.signatureContext = signatureContext;

@@ -27,8 +27,8 @@ namespace Mosa.Runtime.Loader
 		private string[] searchPath;
 		private List<string> privatePaths = new List<string>();
 		private List<IMetadataModule> loadedImages = new List<IMetadataModule>();
-		private ITypeSystem typeLoader;
 		private object loaderLock = new object();
+		private RuntimeBase runtimeBase;
 
 		#endregion // Data members
 
@@ -37,19 +37,20 @@ namespace Mosa.Runtime.Loader
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AssemblyLoader"/> class.
 		/// </summary>
-		/// <param name="typeLoader">The type loader.</param>
-		public AssemblyLoader(ITypeSystem typeLoader)
+		/// <param name="runtimeBase">The runtime base.</param>
+		public AssemblyLoader(RuntimeBase runtimeBase)
 		{
+			this.runtimeBase = runtimeBase;
+
 			// HACK: I can't figure out an easier way to get the framework dir right now...
 			string frameworkDir = System.Runtime.InteropServices.RuntimeEnvironment.GetRuntimeDirectory();
 			string frameworkDir32 = frameworkDir.Contains("Framework64") ? frameworkDir.Replace("Framework64", "Framework") : frameworkDir;
 			searchPath = new[] {
-                AppDomain.CurrentDomain.BaseDirectory,
-                frameworkDir,
-                frameworkDir32
-            };
+				AppDomain.CurrentDomain.BaseDirectory,
+				frameworkDir,
+				frameworkDir32
+			};
 
-			this.typeLoader = typeLoader;
 		}
 
 		#endregion // Construction
@@ -176,7 +177,7 @@ namespace Mosa.Runtime.Loader
 					{
 						loadedImages.Add(result);
 
-						typeLoader.AssemblyLoaded(result);
+						runtimeBase.TypeSystem.AssemblyLoaded(result);
 					}
 				}
 			}

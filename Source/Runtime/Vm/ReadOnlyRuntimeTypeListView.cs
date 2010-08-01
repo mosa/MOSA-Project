@@ -43,8 +43,8 @@ namespace Mosa.Runtime.Vm
         /// </summary>
         /// <param name="firstIndex">The first index of the list view.</param>
         /// <param name="count">The number of elements in the list view.</param>
-        public ReadOnlyRuntimeTypeListView(int firstIndex, int count)
-            : base(firstIndex, count)
+        public ReadOnlyRuntimeTypeListView(int firstIndex, int count, ITypeSystem typeSystem)
+			: base(firstIndex, count, typeSystem)
         {
         }
 
@@ -57,7 +57,7 @@ namespace Mosa.Runtime.Vm
         /// </summary>
         protected override RuntimeType[] Items
         {
-            get { return RuntimeBase.Instance.TypeLoader.Types; }
+			get { if (typeSystem == null) return null; else return typeSystem.Types; }
         }
 
         #endregion // Overrides

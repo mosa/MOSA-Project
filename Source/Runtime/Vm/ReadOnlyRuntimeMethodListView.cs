@@ -13,50 +13,50 @@ using System.Text;
 
 namespace Mosa.Runtime.Vm
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public sealed class ReadOnlyRuntimeMethodListView :
-        ReadOnlyRuntimeListView<RuntimeMethod>
-    {
-        #region Static members
+	/// <summary>
+	/// 
+	/// </summary>
+	public sealed class ReadOnlyRuntimeMethodListView :
+		ReadOnlyRuntimeListView<RuntimeMethod>
+	{
+		#region Static members
 
-        /// <summary>
-        /// Provides an empty list definition.
-        /// </summary>
-        public static readonly ReadOnlyRuntimeMethodListView Empty = new ReadOnlyRuntimeMethodListView();
+		/// <summary>
+		/// Provides an empty list definition.
+		/// </summary>
+		public static readonly ReadOnlyRuntimeMethodListView Empty = new ReadOnlyRuntimeMethodListView();
 
-        #endregion // Static members
+		#endregion // Static members
 
-        #region Construction
+		#region Construction
 
-        private ReadOnlyRuntimeMethodListView()
-        {
-        }
+		private ReadOnlyRuntimeMethodListView()
+		{
+		}
 
-        /// <summary>
-        /// Initializes a new instance of <see cref="ReadOnlyRuntimeFieldListView"/>.
-        /// </summary>
-        /// <param name="firstIndex">The first index of the list view.</param>
-        /// <param name="count">The number of elements in the list view.</param>
-        public ReadOnlyRuntimeMethodListView(int firstIndex, int count)
-            : base(firstIndex, count)
-        {
-        }
+		/// <summary>
+		/// Initializes a new instance of <see cref="ReadOnlyRuntimeFieldListView"/>.
+		/// </summary>
+		/// <param name="firstIndex">The first index of the list view.</param>
+		/// <param name="count">The number of elements in the list view.</param>
+		public ReadOnlyRuntimeMethodListView(int firstIndex, int count, ITypeSystem typeSystem)
+			: base(firstIndex, count, typeSystem)
+		{
+		}
 
-        #endregion // Construction
+		#endregion // Construction
 
-        #region Overrides
+		#region Overrides
 
-        /// <summary>
-        /// Returns the methods array, which is viewed by this collection.
-        /// </summary>
-        /// <value></value>
-        protected override RuntimeMethod[] Items
-        {
-            get { return RuntimeBase.Instance.TypeLoader.Methods; }
-        }
+		/// <summary>
+		/// Returns the methods array, which is viewed by this collection.
+		/// </summary>
+		/// <value></value>
+		protected override RuntimeMethod[] Items
+		{
+			get { if (typeSystem == null) return null; else return typeSystem.Methods; }
+		}
 
-        #endregion // Overrides
-    }
+		#endregion // Overrides
+	}
 }

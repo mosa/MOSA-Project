@@ -18,78 +18,78 @@ using Mosa.Jit.SimpleJit;
 
 namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 {
-    /// <summary>
-    /// An implementation of the MOSA runtime for test purposes.
-    /// </summary>
-    /// <remarks>
-    /// Specifically this runtime uses Win32 virtual memory as a memory page 
-    /// manager and it uses the default type system, default assembly loader
-    /// and simple jit compiler.
-    /// </remarks>
-    sealed class TestRuntime : RuntimeBase
-    {
-        #region Data members
+	/// <summary>
+	/// An implementation of the MOSA runtime for test purposes.
+	/// </summary>
+	/// <remarks>
+	/// Specifically this runtime uses Win32 virtual memory as a memory page 
+	/// manager and it uses the default type system, default assembly loader
+	/// and simple jit compiler.
+	/// </remarks>
+	sealed class TestRuntime : RuntimeBase
+	{
+		#region Data members
 
-        /// <summary>
-        /// The memory page manager of this runtime.
-        /// </summary>
-        private IMemoryPageManager _memoryPageManager;
+		/// <summary>
+		/// The memory page manager of this runtime.
+		/// </summary>
+		private IMemoryPageManager _memoryPageManager;
 
-        /// <summary>
-        /// The type loader of this runtime.
-        /// </summary>
-        private ITypeSystem _typeLoader;
+		/// <summary>
+		/// The type loader of this runtime.
+		/// </summary>
+		private ITypeSystem _typeLoader;
 
-        /// <summary>
-        /// The assembly loader of this runtime.
-        /// </summary>
-        private IAssemblyLoader _assemblyLoader;
+		/// <summary>
+		/// The assembly loader of this runtime.
+		/// </summary>
+		private IAssemblyLoader _assemblyLoader;
 
-        /// <summary>
-        /// The jit service of this runtime.
-        /// </summary>
-        private IJitService _jitService;
+		/// <summary>
+		/// The jit service of this runtime.
+		/// </summary>
+		private IJitService _jitService;
 
-        #endregion // Data members
+		#endregion // Data members
 
-        #region Construction
+		#region Construction
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="TestRuntime"/>.
-        /// </summary>
-        public TestRuntime()
-        {
-            _memoryPageManager = new Win32MemoryPageManager();
-            _typeLoader = new DefaultTypeSystem();
-            _assemblyLoader = new AssemblyLoader(_typeLoader);
-            _jitService = new SimpleJitService();
+		/// <summary>
+		/// Initializes a new instance of the <see cref="TestRuntime"/>.
+		/// </summary>
+		public TestRuntime()
+		{
+			_memoryPageManager = new Win32MemoryPageManager();
+			_typeLoader = new DefaultTypeSystem(this);
+			_assemblyLoader = new AssemblyLoader(this);
+			_jitService = new SimpleJitService();
 			Runtime.RuntimeBase = this; // HACK
-        }
+		}
 
-        #endregion // Construction
+		#endregion // Construction
 
-        #region RuntimeBase Overrides
+		#region RuntimeBase Overrides
 
-        public override IMemoryPageManager MemoryManager
-        {
-            get { return _memoryPageManager; }
-        }
+		public override IMemoryPageManager MemoryManager
+		{
+			get { return _memoryPageManager; }
+		}
 
-        public override ITypeSystem TypeLoader
-        {
-            get { return _typeLoader; }
-        }
+		public override ITypeSystem TypeSystem
+		{
+			get { return _typeLoader; }
+		}
 
-        public override IAssemblyLoader AssemblyLoader
-        {
-            get { return _assemblyLoader; }
-        }
+		public override IAssemblyLoader AssemblyLoader
+		{
+			get { return _assemblyLoader; }
+		}
 
-        public override IJitService JitService
-        {
-            get { return _jitService; }
-        }
+		public override IJitService JitService
+		{
+			get { return _jitService; }
+		}
 
-        #endregion // RuntimeBase Overrides
-    }
+		#endregion // RuntimeBase Overrides
+	}
 }

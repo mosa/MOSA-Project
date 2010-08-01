@@ -109,7 +109,7 @@ namespace Mosa.Tools.Compiler.TypeInitializers
 			ctx.AppendInstruction(IR.Instruction.EpilogueInstruction);
 			ctx.Other = 0;
 
-			method = LinkTimeCodeGenerator.Compile(compiler, @"AssemblyInit", instructionSet);
+			method = LinkTimeCodeGenerator.Compile(compiler, @"AssemblyInit", instructionSet, typeSystem);
 		}
 
 		#endregion // IAssemblyCompilerStage Members

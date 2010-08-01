@@ -30,8 +30,8 @@ namespace Mosa.Tools.Compiler
 		/// <param name="module">The metadata module owning the type.</param>
 		/// <param name="namespace">The namespace.</param>
 		/// <param name="name">The name.</param>
-		public CompilerGeneratedType(IMetadataModule module, string @namespace, string name) :
-			base(0, module)
+		public CompilerGeneratedType(IMetadataModule module, string @namespace, string name, ITypeSystem typeSystem) :
+			base(0, module, typeSystem)
 		{
 			if (@namespace == null)
 				throw new ArgumentNullException(@"namespace");
