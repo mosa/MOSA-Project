@@ -95,14 +95,14 @@ namespace Mosa.Runtime.CompilerFramework
 		private List<BasicBlock> _basicBlocks;
 
 		/// <summary>
-		/// Holds the assembly Compiler.
-		/// </summary>
-		protected AssemblyCompiler compiler;
-
-		/// <summary>
-		/// Holds the current type system during compilation.
+		/// Holds the type system during compilation.
 		/// </summary>
 		protected ITypeSystem typeSystem;
+
+		/// <summary>
+		/// Holds the assembly loader
+		/// </summary>
+		protected IAssemblyLoader assemblyLoader;
 
 		#endregion // Data Members
 
@@ -120,7 +120,9 @@ namespace Mosa.Runtime.CompilerFramework
 			IArchitecture architecture,
 			ICompilationSchedulerStage compilationScheduler,
 			RuntimeType type,
-			RuntimeMethod method)
+			RuntimeMethod method,
+			ITypeSystem typeSystem,
+			IAssemblyLoader assemblyLoader)
 		{
 			if (architecture == null)
 				throw new ArgumentNullException(@"architecture");
@@ -143,8 +145,8 @@ namespace Mosa.Runtime.CompilerFramework
 
 			pipeline = new CompilerPipeline();
 
-			typeSystem = Mosa.Runtime.RuntimeBase.Instance.TypeLoader; // FIXME
-			//AssemblyLoader = Mosa.Runtime.RuntimeBase.Instance.AssemblyLoader; // FIXME
+			this.typeSystem = typeSystem;
+			this.assemblyLoader = assemblyLoader;
 		}
 
 		#endregion // Construction
@@ -223,6 +225,18 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			get { return pipeline; }
 		}
+
+		/// <summary>
+		/// Gets the type system.
+		/// </summary>
+		/// <value>The type system.</value>
+		public ITypeSystem TypeSystem { get { return typeSystem; } }
+
+		/// <summary>
+		/// Gets the assembly loader.
+		/// </summary>
+		/// <value>The assembly loader.</value>
+		public IAssemblyLoader AssemblyLoader { get { return assemblyLoader; } }
 
 		#endregion // Properties
 

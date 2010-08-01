@@ -57,8 +57,8 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			this.compiler = compiler;
 			architecture = compiler.Architecture;
-			typeSystem = Mosa.Runtime.RuntimeBase.Instance.TypeLoader; // FIXME
-			assemblyLoader = Mosa.Runtime.RuntimeBase.Instance.AssemblyLoader; // FIXME
+			typeSystem = compiler.TypeSystem; 
+			assemblyLoader = compiler.AssemblyLoader; 
 		}
 
 		#endregion // IAssemblyCompilerStage members

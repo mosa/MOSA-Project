@@ -260,23 +260,23 @@ namespace Mosa.Tools.Compiler
 				runtime.InitializePrivatePaths(this.GetInputFileNames());
 
 				// Create the compiler
-				using (AotCompiler aot = new AotCompiler(this.architectureSelector.Architecture, this.GetMainAssembly(runtime.AssemblyLoader)))
+				using (AotCompiler aot = new AotCompiler(this.architectureSelector.Architecture, this.GetMainAssembly(runtime.AssemblyLoader), runtime.TypeLoader, runtime.AssemblyLoader))
 				{
 					aot.Pipeline.AddRange(new IAssemblyCompilerStage[] 
-                    {
-                        this.bootFormatStage,
+					{
+						this.bootFormatStage,
 						new x86.InterruptBuilderStage(),
-                        new AssemblyCompilationStage(this.GetInputFileNames(), runtime.AssemblyLoader), 
-                        //new FakeSystemObjectGenerationStage(),
-                        new MethodCompilerSchedulerStage(),
-                        new TypeInitializers.TypeInitializerSchedulerStage(),
+						new AssemblyCompilationStage(this.GetInputFileNames(), runtime.AssemblyLoader), 
+						//new FakeSystemObjectGenerationStage(),
+						new MethodCompilerSchedulerStage(),
+						new TypeInitializers.TypeInitializerSchedulerStage(),
 						this.bootFormatStage,
 						new Metadata.MetadataBuilderStage(),
 						new CilHeaderBuilderStage(),
-                        new ObjectFileLayoutStage(),
-                        this.linkerStage,
-                        this.mapFileWrapper
-                    });
+						new ObjectFileLayoutStage(),
+						this.linkerStage,
+						this.mapFileWrapper
+					});
 
 					aot.Run();
 				}

@@ -85,7 +85,7 @@ namespace Mosa.Runtime {
 		/// Gets the instance of the runtime.
 		/// </summary>
 		/// <value>The instance.</value>
-		public static RuntimeBase Instance
+		public static RuntimeBase Instance // FIXME!
 		{
 			get
 			{

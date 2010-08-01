@@ -10,6 +10,8 @@
 using System;
 using System.Collections.Generic;
 
+using Mosa.Runtime.Loader;
+using Mosa.Runtime.Vm;
 using Mosa.Runtime.CompilerFramework;
 
 namespace Mosa.Tools.Compiler.LinkTimeCodeGeneration

@@ -38,6 +38,17 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		private CompilerPipeline _pipeline;
 
+		/// <summary>
+		/// Holds the current type system during compilation.
+		/// </summary>
+		protected ITypeSystem typeSystem;
+
+		/// <summary>
+		/// Holds the assembly loader.
+		/// </summary>
+		/// <value>The assembly loader.</value>
+		protected IAssemblyLoader assemblyLoader;
+
 		#endregion // Data members
 
 		#region Construction
@@ -47,8 +58,10 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <param name="architecture">The compiler target architecture.</param>
 		/// <param name="assembly">The assembly of this compiler.</param>
+		/// <param name="typeSystem">The type system.</param>
+		/// <param name="assemblyLoader">The assembly loader.</param>
 		/// <exception cref="System.ArgumentNullException">Either <paramref name="architecture"/> or <paramref name="assembly"/> is null.</exception>
-		protected AssemblyCompiler(IArchitecture architecture, IMetadataModule assembly)
+		protected AssemblyCompiler(IArchitecture architecture, IMetadataModule assembly, ITypeSystem typeSystem, IAssemblyLoader assemblyLoader)
 		{
 			if (architecture == null)
 				throw new ArgumentNullException(@"architecture");
@@ -56,6 +69,8 @@ namespace Mosa.Runtime.CompilerFramework
 			_architecture = architecture;
 			_assembly = assembly;
 			_pipeline = new CompilerPipeline();
+			this.typeSystem = typeSystem;
+			this.assemblyLoader = assemblyLoader;
 		}
 
 		#endregion // Construction
@@ -108,6 +123,24 @@ namespace Mosa.Runtime.CompilerFramework
 			get { return _pipeline; }
 		}
 
+		/// <summary>
+		/// Gets the type system.
+		/// </summary>
+		/// <value>The type system.</value>
+		public ITypeSystem TypeSystem
+		{
+			get { return typeSystem; }
+		}
+
+		/// <summary>
+		/// Gets the assembly loader.
+		/// </summary>
+		/// <value>The assembly loader.</value>
+		public IAssemblyLoader AssemblyLoader
+		{
+			get { return assemblyLoader; }
+		}
+
 		#endregion // Properties
 
 		#region Methods
@@ -139,7 +172,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Called when compilation is about to begin.
 		/// </summary>
-		protected virtual void BeginCompile() 
+		protected virtual void BeginCompile()
 		{
 			Pipeline.Execute<IAssemblyCompilerStage>(stage => stage.Setup(this));
 		}

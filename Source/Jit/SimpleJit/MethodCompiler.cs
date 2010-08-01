@@ -17,35 +17,35 @@ using Mosa.Runtime.Vm;
 
 namespace Mosa.Runtime.Jit.SimpleJit
 {
-    /// <summary>
-    /// The simple jit method compiler
-    /// </summary>
-    sealed class SimpleJitMethodCompiler : BaseMethodCompiler
-    {
-        #region Data members
+	/// <summary>
+	/// The simple jit method compiler
+	/// </summary>
+	sealed class SimpleJitMethodCompiler : BaseMethodCompiler
+	{
+		#region Data members
 
-        /// <summary>
-        /// The code stream, where the final code is emitted to.
-        /// </summary>
-        private Stream codeStream;
+		/// <summary>
+		/// The code stream, where the final code is emitted to.
+		/// </summary>
+		private Stream codeStream;
 
-        #endregion // Data members
+		#endregion // Data members
 
-        #region Construction
+		#region Construction
 
-        public SimpleJitMethodCompiler(IAssemblyLinker linker, IArchitecture architecture, ICompilationSchedulerStage compilationScheduler, RuntimeType type, RuntimeMethod method, Stream codeStream) :
-            base(linker, architecture, compilationScheduler, type, method)
-        {
-            if (null == codeStream)
-                throw new ArgumentNullException(@"codeStream");
+		public SimpleJitMethodCompiler(IAssemblyLinker linker, IArchitecture architecture, ICompilationSchedulerStage compilationScheduler, RuntimeType type, RuntimeMethod method, Stream codeStream, ITypeSystem typeSystem, IAssemblyLoader assemblyLoader) :
+			base(linker, architecture, compilationScheduler, type, method, typeSystem, assemblyLoader)
+		{
+			if (codeStream == null)
+				throw new ArgumentNullException(@"codeStream");
 
-            this.codeStream = codeStream;
-        }
+			this.codeStream = codeStream;
+		}
 
-        #endregion // Construction
+		#endregion // Construction
 
-        #region MethodCompilerBase Overrides
+		#region MethodCompilerBase Overrides
 
-        #endregion // MethodCompilerBase Overrides
-    }
+		#endregion // MethodCompilerBase Overrides
+	}
 }
