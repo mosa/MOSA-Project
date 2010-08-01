@@ -8,47 +8,49 @@
  *  
  */
 
+using MbUnit.Framework;
+using Test.Mosa.Runtime.CompilerFramework.BaseCode;
+
 namespace Test.Mosa.Runtime.CompilerFramework.CIL
 {
-    using MbUnit.Framework;
-    using Test.Mosa.Runtime.CompilerFramework.BaseCode;
 
-    [TestFixture]
-    [Importance(Importance.Critical)]
-    [Category(@"Memory Model")]
-    [Description(@"Tests support for pinning variables in memory.")]
-    public class PinnedFixture : TestFixtureBase
-    {
-        private static string CreateTestCode()
-        {
-            return @"
-                public class PinsAMemberClass
-                {
-                    private int length;
 
-                    public unsafe void PinsAVariable()
-                    {
-                        fixed (int *pLength = &this.length)
-                        {
-                            char* pChars = (char*)(pLength + 1);
-                            *(pChars) = (char)0;
-                        }
-                    }
-                }
-            "
-            + Code.ObjectClassDefinition;
-        }
+	[TestFixture]
+	[Importance(Importance.Critical)]
+	[Category(@"Memory Model")]
+	[Description(@"Tests support for pinning variables in memory.")]
+	public class PinnedFixture : TestFixtureBase
+	{
+		private static string CreateTestCode()
+		{
+			return @"
+				public class PinsAMemberClass
+				{
+					private int length;
 
-        [Test]
-        public void MustCompileCodePinningVariables()
-        {
-            this.CodeSource = CreateTestCode();
-            this.UnsafeCode = true;
+					public unsafe void PinsAVariable()
+					{
+						fixed (int *pLength = &this.length)
+						{
+							char* pChars = (char*)(pLength + 1);
+							*(pChars) = (char)0;
+						}
+					}
+				}
+			"
+			+ Code.ObjectClassDefinition;
+		}
 
-            using (TestRuntime runtime = new TestRuntime())
-            {
-                Assert.DoesNotThrow(() => this.CompileTestCode());
-            }
-        }
-    }
+		[Test]
+		public void MustCompileCodePinningVariables()
+		{
+			this.CodeSource = CreateTestCode();
+			this.UnsafeCode = true;
+
+			using (TestRuntime runtime = new TestRuntime())
+			{
+				Assert.DoesNotThrow(() => this.CompileTestCode());
+			}
+		}
+	}
 }

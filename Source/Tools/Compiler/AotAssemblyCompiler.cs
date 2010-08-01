@@ -16,41 +16,41 @@ using Mosa.Tools.Compiler.TypeInitializers;
 
 namespace Mosa.Tools.Compiler
 {
-    public class AotAssemblyCompiler : AssemblyCompiler
-    {
-        public AotAssemblyCompiler(IArchitecture architecture, IMetadataModule assembly, ITypeInitializerSchedulerStage typeInitializerSchedulerStage, IAssemblyLinker linker)
-            : base(architecture, assembly)
-        {
-                this.Pipeline.AddRange(
-                    new IAssemblyCompilerStage[] 
-                    {
-                        new TypeLayoutStage(),
-                        new AssemblyMemberCompilationSchedulerStage(),
-                        new MethodCompilerSchedulerStage(),
-                        new TypeInitializerSchedulerStageProxy(typeInitializerSchedulerStage),
-                        new LinkerProxy(linker)
-                    });
-        }
+	public class AotAssemblyCompiler : AssemblyCompiler
+	{
+		public AotAssemblyCompiler(IArchitecture architecture, IMetadataModule assembly, ITypeInitializerSchedulerStage typeInitializerSchedulerStage, IAssemblyLinker linker, ITypeSystem typeSystem, IAssemblyLoader assemblyLoader)
+			: base(architecture, assembly, typeSystem, assemblyLoader)
+		{
+			this.Pipeline.AddRange(
+				new IAssemblyCompilerStage[] 
+					{
+						new TypeLayoutStage(),
+						new AssemblyMemberCompilationSchedulerStage(),
+						new MethodCompilerSchedulerStage(),
+						new TypeInitializerSchedulerStageProxy(typeInitializerSchedulerStage),
+						new LinkerProxy(linker)
+					});
+		}
 
-        public void Run()
-        {
-            // Build the default assembly compiler pipeline
-            Architecture.ExtendAssemblyCompilerPipeline(this.Pipeline);
+		public void Run()
+		{
+			// Build the default assembly compiler pipeline
+			Architecture.ExtendAssemblyCompilerPipeline(this.Pipeline);
 
-            // Run the compiler
-            Compile();            
-        }
+			// Run the compiler
+			Compile();
+		}
 
 		public override IMethodCompiler CreateMethodCompiler(ICompilationSchedulerStage compilationScheduler, RuntimeType type, RuntimeMethod method)
-        {
+		{
 			IMethodCompiler mc = new AotMethodCompiler(
-                this,
-                compilationScheduler,
-                type,
-                method
-            );
-            this.Architecture.ExtendMethodCompilerPipeline(mc.Pipeline);
-            return mc;            
-        }
-    }
+				this,
+				compilationScheduler,
+				type,
+				method
+			);
+			this.Architecture.ExtendMethodCompilerPipeline(mc.Pipeline);
+			return mc;
+		}
+	}
 }

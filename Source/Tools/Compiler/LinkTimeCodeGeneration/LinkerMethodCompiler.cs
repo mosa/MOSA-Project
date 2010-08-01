@@ -13,6 +13,7 @@ using System.Collections.Generic;
 
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Linker;
+using Mosa.Runtime.Loader;
 using Mosa.Runtime.Vm;
 
 namespace Mosa.Tools.Compiler.LinkTimeCodeGeneration
@@ -29,16 +30,16 @@ namespace Mosa.Tools.Compiler.LinkTimeCodeGeneration
 		/// <param name="instructionSet">The instruction set.</param>
 		/// <exception cref="System.ArgumentNullException"><paramref name="compiler"/>, <paramref name="method"/> or <paramref name="instructionSet"/> is null.</exception>
 		public LinkerMethodCompiler(AssemblyCompiler compiler, ICompilationSchedulerStage compilationScheduler, RuntimeMethod method, InstructionSet instructionSet) :
-			base(compiler.Pipeline.FindFirst<IAssemblyLinker>(), compiler.Architecture, compilationScheduler, method.DeclaringType, method)
+			base(compiler.Pipeline.FindFirst<IAssemblyLinker>(), compiler.Architecture, compilationScheduler, method.DeclaringType, method, compiler.TypeSystem, compiler.AssemblyLoader)
 		{
 			this.InstructionSet = instructionSet;
-		    this.CreateBlock(-1, 0);
+			this.CreateBlock(-1, 0);
 
 			this.Pipeline.AddRange(new IMethodCompilerStage[] {
-                new SimpleTraceBlockOrderStage(),
+				new SimpleTraceBlockOrderStage(),
 				new PlatformStubStage(),
 				new CodeGenerationStage(),
-            });
+			});
 			compiler.Architecture.ExtendMethodCompilerPipeline(this.Pipeline);
 		}
 

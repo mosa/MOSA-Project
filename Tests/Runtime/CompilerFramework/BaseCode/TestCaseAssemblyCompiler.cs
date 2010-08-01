@@ -18,53 +18,53 @@ using x86 = Mosa.Platforms.x86;
 
 namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 {
-    public delegate void CCtor();
+	public delegate void CCtor();
 
 	class TestCaseAssemblyCompiler : AssemblyCompiler
 	{
-        private readonly Queue<CCtor> cctorQueue = new Queue<CCtor>();
+		private readonly Queue<CCtor> cctorQueue = new Queue<CCtor>();
 
-		private TestCaseAssemblyCompiler(IArchitecture architecture, IMetadataModule module) :
-			base(architecture, module)
+		private TestCaseAssemblyCompiler(IArchitecture architecture, IMetadataModule module, ITypeSystem typeSystem, IAssemblyLoader assemblyLoader) :
+			base(architecture, module, typeSystem, assemblyLoader)
 		{
 			// Build the assembly compiler pipeline
 			CompilerPipeline pipeline = this.Pipeline;
 			pipeline.AddRange(new IAssemblyCompilerStage[] {
-                new TypeLayoutStage(),
-                new AssemblyMemberCompilationSchedulerStage(),
-                new MethodCompilerSchedulerStage(),
-                new TestAssemblyLinker(),
-            });
+				new TypeLayoutStage(),
+				new AssemblyMemberCompilationSchedulerStage(),
+				new MethodCompilerSchedulerStage(),
+				new TestAssemblyLinker(),
+			});
 			architecture.ExtendAssemblyCompilerPipeline(pipeline);
 		}
 
-		public static void Compile(IMetadataModule module)
+		public static void Compile(IMetadataModule module, ITypeSystem typeSystem, IAssemblyLoader assemblyLoader)
 		{
 			IArchitecture architecture = x86.Architecture.CreateArchitecture(x86.ArchitectureFeatureFlags.AutoDetect);
-			new TestCaseAssemblyCompiler(architecture, module).Compile();
+			new TestCaseAssemblyCompiler(architecture, module, typeSystem, assemblyLoader).Compile();
 		}
 
 		public override IMethodCompiler CreateMethodCompiler(ICompilationSchedulerStage schedulerStage, RuntimeType type, RuntimeMethod method)
-        {
+		{
 			IMethodCompiler mc = new TestCaseMethodCompiler(this, this.Pipeline.FindFirst<IAssemblyLinker>(), this.Architecture, schedulerStage, type, method);
-            this.Architecture.ExtendMethodCompilerPipeline(mc.Pipeline);
-            return mc;
-        }
+			this.Architecture.ExtendMethodCompilerPipeline(mc.Pipeline);
+			return mc;
+		}
 
-        protected override void EndCompile()
-        {
-            base.EndCompile();
+		protected override void EndCompile()
+		{
+			base.EndCompile();
 
-            while (this.cctorQueue.Count > 0)
-            {
-                CCtor cctor = this.cctorQueue.Dequeue();
-                cctor();
-            }
-        }
+			while (this.cctorQueue.Count > 0)
+			{
+				CCtor cctor = this.cctorQueue.Dequeue();
+				cctor();
+			}
+		}
 
-        public void QueueCCtorForInvocationAfterCompilation(CCtor cctor)
-        {
-            this.cctorQueue.Enqueue(cctor);
-        }
-    }
+		public void QueueCCtorForInvocationAfterCompilation(CCtor cctor)
+		{
+			this.cctorQueue.Enqueue(cctor);
+		}
+	}
 }

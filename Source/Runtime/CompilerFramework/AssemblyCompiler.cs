@@ -26,17 +26,28 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// The compiler target architecture.
 		/// </summary>
-		private IArchitecture _architecture;
+		private IArchitecture architecture;
 
 		/// <summary>
 		/// The assembly of this compiler.
 		/// </summary>
-		private IMetadataModule _assembly;
+		private IMetadataModule assembly;
 
 		/// <summary>
 		/// The pipeline of the assembly compiler.
 		/// </summary>
-		private CompilerPipeline _pipeline;
+		private CompilerPipeline pipeline;
+
+		/// <summary>
+		/// Holds the current type system during compilation.
+		/// </summary>
+		protected ITypeSystem typeSystem;
+
+		/// <summary>
+		/// Holds the assembly loader.
+		/// </summary>
+		/// <value>The assembly loader.</value>
+		protected IAssemblyLoader assemblyLoader;
 
 		#endregion // Data members
 
@@ -47,15 +58,19 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <param name="architecture">The compiler target architecture.</param>
 		/// <param name="assembly">The assembly of this compiler.</param>
+		/// <param name="typeSystem">The type system.</param>
+		/// <param name="assemblyLoader">The assembly loader.</param>
 		/// <exception cref="System.ArgumentNullException">Either <paramref name="architecture"/> or <paramref name="assembly"/> is null.</exception>
-		protected AssemblyCompiler(IArchitecture architecture, IMetadataModule assembly)
+		protected AssemblyCompiler(IArchitecture architecture, IMetadataModule assembly, ITypeSystem typeSystem, IAssemblyLoader assemblyLoader)
 		{
 			if (architecture == null)
 				throw new ArgumentNullException(@"architecture");
 
-			_architecture = architecture;
-			_assembly = assembly;
-			_pipeline = new CompilerPipeline();
+			this.architecture = architecture;
+			this.assembly = assembly;
+			this.pipeline = new CompilerPipeline();
+			this.typeSystem = typeSystem;
+			this.assemblyLoader = assemblyLoader;
 		}
 
 		#endregion // Construction
@@ -78,7 +93,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public IArchitecture Architecture
 		{
-			get { return _architecture; }
+			get { return architecture; }
 		}
 
 		/// <summary>
@@ -87,7 +102,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value>The assembly.</value>
 		public IMetadataModule Assembly
 		{
-			get { return _assembly; }
+			get { return assembly; }
 		}
 
 		/// <summary>
@@ -96,7 +111,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value>The metadata.</value>
 		public virtual IMetadataProvider Metadata
 		{
-			get { return _assembly.Metadata; }
+			get { return assembly.Metadata; }
 		}
 
 		/// <summary>
@@ -105,7 +120,25 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value>The pipeline.</value>
 		public CompilerPipeline Pipeline
 		{
-			get { return _pipeline; }
+			get { return pipeline; }
+		}
+
+		/// <summary>
+		/// Gets the type system.
+		/// </summary>
+		/// <value>The type system.</value>
+		public ITypeSystem TypeSystem
+		{
+			get { return typeSystem; }
+		}
+
+		/// <summary>
+		/// Gets the assembly loader.
+		/// </summary>
+		/// <value>The assembly loader.</value>
+		public IAssemblyLoader AssemblyLoader
+		{
+			get { return assemblyLoader; }
 		}
 
 		#endregion // Properties
@@ -139,7 +172,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Called when compilation is about to begin.
 		/// </summary>
-		protected virtual void BeginCompile() 
+		protected virtual void BeginCompile()
 		{
 			Pipeline.Execute<IAssemblyCompilerStage>(stage => stage.Setup(this));
 		}

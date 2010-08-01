@@ -70,9 +70,9 @@ namespace Mosa.Tools.Compiler
                     using (FileStream fs = new FileStream(this.mapFile, FileMode.Create, FileAccess.Write, FileShare.Read))
                     using (StreamWriter writer = new StreamWriter(fs, Encoding.UTF8))
                     {
-                        MapFileGenerationStage mapGenerator = new MapFileGenerationStage(writer);
+						IAssemblyCompilerStage mapGenerator = new MapFileGenerationStage(writer);
 						mapGenerator.Setup(this.compiler);
-                        mapGenerator.Run();
+						mapGenerator.Run();
                     }
                 }
                 catch (Exception x)

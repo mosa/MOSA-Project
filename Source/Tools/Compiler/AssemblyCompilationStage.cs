@@ -132,7 +132,7 @@ namespace Mosa.Tools.Compiler
 
 		private void CompileAssembly(IMetadataModule assembly)
 		{
-			using (AotAssemblyCompiler assemblyCompiler = new AotAssemblyCompiler(architecture, assembly, typeInitializerSchedulerStage, linker))
+			using (AotAssemblyCompiler assemblyCompiler = new AotAssemblyCompiler(architecture, assembly, typeInitializerSchedulerStage, linker, typeSystem, assemblyLoader))
 			{
 				assemblyCompiler.Run();
 			}

@@ -13,92 +13,92 @@ using Mosa.Runtime.Metadata;
 
 namespace Mosa.Tools.Compiler.Stages
 {
-    public class FakeSystemObjectGenerationStage : BaseMethodCompilerStage, IAssemblyCompilerStage, IPipelineStage
-    {
-        private AssemblyCompiler compiler;
+	public class FakeSystemObjectGenerationStage : BaseMethodCompilerStage, IAssemblyCompilerStage, IPipelineStage
+	{
+		private AssemblyCompiler compiler;
 
-        private struct FakeEntry
-        {
-            public string Namespace { get; set; }
-            public string TypeName { get; set; }
-            public string Method { get; set; }
-            public List<RuntimeParameter> Parameters { get; set; }
-        }
+		private struct FakeEntry
+		{
+			public string Namespace { get; set; }
+			public string TypeName { get; set; }
+			public string Method { get; set; }
+			public List<RuntimeParameter> Parameters { get; set; }
+		}
 
-        private static readonly List<FakeEntry> fakeEntries = new List<FakeEntry>
-        {
-            // System.Object
-            new FakeEntry { Namespace=@"System", TypeName=@"Object", Method=@".ctor" },
-            new FakeEntry { Namespace=@"System", TypeName=@"Object", Method=@"ToString" },
-            new FakeEntry { Namespace=@"System", TypeName=@"Object", Method=@"GetHashCode" },
-            new FakeEntry { Namespace=@"System", TypeName=@"Object", Method=@"Finalize" },
+		private static readonly List<FakeEntry> fakeEntries = new List<FakeEntry>
+		{
+			// System.Object
+			new FakeEntry { Namespace=@"System", TypeName=@"Object", Method=@".ctor" },
+			new FakeEntry { Namespace=@"System", TypeName=@"Object", Method=@"ToString" },
+			new FakeEntry { Namespace=@"System", TypeName=@"Object", Method=@"GetHashCode" },
+			new FakeEntry { Namespace=@"System", TypeName=@"Object", Method=@"Finalize" },
 
-            // System.ValueType
-            new FakeEntry { Namespace=@"System", TypeName=@"ValueType", Method=@"ToString" },
-            new FakeEntry { Namespace=@"System", TypeName=@"ValueType", Method=@"GetHashCode" },
-        };
+			// System.ValueType
+			new FakeEntry { Namespace=@"System", TypeName=@"ValueType", Method=@"ToString" },
+			new FakeEntry { Namespace=@"System", TypeName=@"ValueType", Method=@"GetHashCode" },
+		};
 
-        public void Run()
-        {
-            foreach (FakeEntry entry in fakeEntries)
-            {
-                RuntimeMethod method = this.GenerateMethod(entry.Namespace, entry.TypeName, entry.Method);
-                this.GenerateInstructionSet();
+		public void Run()
+		{
+			foreach (FakeEntry entry in fakeEntries)
+			{
+				RuntimeMethod method = this.GenerateMethod(entry.Namespace, entry.TypeName, entry.Method);
+				this.GenerateInstructionSet();
 
-                this.Compile(method);
-            }
+				this.Compile(method);
+			}
 
-            // Special case for Object.Equals, ValueType.Equals :(
-            this.CompileObjectEquals(@"Object");
-            this.CompileObjectEquals(@"ValueType");
-        }
+			// Special case for Object.Equals, ValueType.Equals :(
+			this.CompileObjectEquals(@"Object");
+			this.CompileObjectEquals(@"ValueType");
+		}
 
-        private void GenerateInstructionSet()
-        {
-            this.InstructionSet = new InstructionSet(1);
+		private void GenerateInstructionSet()
+		{
+			this.InstructionSet = new InstructionSet(1);
 
-            Context ctx = this.CreateContext(-1);
-            ctx.AppendInstruction(Mosa.Platforms.x86.CPUx86.Instruction.RetInstruction);
-        }
+			Context ctx = this.CreateContext(-1);
+			ctx.AppendInstruction(Mosa.Platforms.x86.CPUx86.Instruction.RetInstruction);
+		}
 
-        private RuntimeMethod GenerateMethod(string @namespace, string typeName, string methodName)
-        {
-            var type = new CompilerGeneratedType(compiler.Assembly, @namespace, typeName);
+		private RuntimeMethod GenerateMethod(string @namespace, string typeName, string methodName)
+		{
+			var type = new CompilerGeneratedType(compiler.Assembly, @namespace, typeName);
 
-            // Create the method
-            CompilerGeneratedMethod method = new CompilerGeneratedMethod(compiler.Assembly, methodName, type);
-            type.AddMethod(method);
+			// Create the method
+			CompilerGeneratedMethod method = new CompilerGeneratedMethod(compiler.Assembly, methodName, type);
+			type.AddMethod(method);
 
-            return method;
-        }
+			return method;
+		}
 
-        private void Compile(RuntimeMethod method)
-        {
+		private void Compile(RuntimeMethod method)
+		{
 			LinkerMethodCompiler methodCompiler = new LinkerMethodCompiler(this.compiler, this.compiler.Pipeline.FindFirst<ICompilationSchedulerStage>(), method, this.InstructionSet);
-            methodCompiler.Compile();
-        }
+			methodCompiler.Compile();
+		}
 
-        private void CompileObjectEquals(string typeName)
-        {
+		private void CompileObjectEquals(string typeName)
+		{
 			CompilerGeneratedType type = new CompilerGeneratedType(compiler.Assembly, @"System", typeName);
 
-            // Create the method
-            CompilerGeneratedMethod method = new CompilerGeneratedMethod(compiler.Assembly, @"Equals", type);
-            method.Parameters.Add(new RuntimeParameter(null, @"obj", 0, ParameterAttributes.In));
-            method.SetSignature(new MethodSignature(BuiltInSigType.Boolean, new SigType[] { BuiltInSigType.Object }));
-            type.AddMethod(method);
+			// Create the method
+			CompilerGeneratedMethod method = new CompilerGeneratedMethod(compiler.Assembly, @"Equals", type);
+			method.Parameters.Add(new RuntimeParameter(null, @"obj", 0, ParameterAttributes.In));
+			method.SetSignature(new MethodSignature(BuiltInSigType.Boolean, new SigType[] { BuiltInSigType.Object }));
+			type.AddMethod(method);
 
-            this.Compile(method);
-        }
+			this.Compile(method);
+		}
 
-        public void Setup(AssemblyCompiler compiler)
-        {
-            this.compiler = compiler;
-        }
+		public void Setup(AssemblyCompiler compiler)
+		{
+			this.compiler = compiler;
+		}
 
-        public string Name
-        {
-            get { return @"FakeCoreTypeGenerationStage"; }
-        }
-    }
+		public string Name
+		{
+			get { return @"FakeCoreTypeGenerationStage"; }
+		}
+	}
 }

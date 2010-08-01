@@ -75,8 +75,8 @@ namespace Mosa.Runtime.CompilerFramework
 			BasicBlocks = compiler.BasicBlocks;
 			Architecture = compiler.Architecture;
 
-			typeSystem = Mosa.Runtime.RuntimeBase.Instance.TypeLoader; // FIXME
-			assemblyLoader = Mosa.Runtime.RuntimeBase.Instance.AssemblyLoader; // FIXME
+			typeSystem = compiler.TypeSystem;
+			assemblyLoader = compiler.AssemblyLoader; 
 		}
 
 		#endregion // IMethodCompilerStage members

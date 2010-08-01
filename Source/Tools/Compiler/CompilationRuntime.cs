@@ -19,107 +19,107 @@ using Mosa.Runtime.Loader;
 
 namespace Mosa.Tools.Compiler
 {
-    /// <summary>
-    /// Implementation of the Mosa runtime for Ahead-Of-Time compilation.
-    /// </summary>
-    /// <remarks>
-    /// This runtime implementation uses various mock services and the default
-    /// type system and assembly loader.
-    /// </remarks>
-    public class CompilationRuntime : RuntimeBase
-    {
-        /// <summary>
-        /// The assembly loader of this runtime.
-        /// </summary>
-        private IAssemblyLoader assemblyLoader;
+	/// <summary>
+	/// Implementation of the Mosa runtime for Ahead-Of-Time compilation.
+	/// </summary>
+	/// <remarks>
+	/// This runtime implementation uses various mock services and the default
+	/// type system and assembly loader.
+	/// </remarks>
+	public class CompilationRuntime : RuntimeBase
+	{
+		/// <summary>
+		/// The assembly loader of this runtime.
+		/// </summary>
+		private IAssemblyLoader assemblyLoader;
 
-        /// <summary>
-        /// The type loader of this runtime.
-        /// </summary>
-        private ITypeSystem typeLoader;
+		/// <summary>
+		/// The type loader of this runtime.
+		/// </summary>
+		private ITypeSystem typeLoader;
 
-        /// <summary>
-        /// The memory page manager of this runtime.
-        /// </summary>
-        private IMemoryPageManager memoryManager;
+		/// <summary>
+		/// The memory page manager of this runtime.
+		/// </summary>
+		private IMemoryPageManager memoryManager;
 
-        /// <summary>
-        /// The jit service of this runtime.
-        /// </summary>
-        private IJitService jitService;
+		/// <summary>
+		/// The jit service of this runtime.
+		/// </summary>
+		private IJitService jitService;
 
-        /// <summary>
-        /// Initializes a new instance of <see cref="CompilationRuntime"/>.
-        /// </summary>
-        public CompilationRuntime()
-        {
-            this.typeLoader = new DefaultTypeSystem();
-            this.assemblyLoader = new AssemblyLoader(this.typeLoader);
-            this.memoryManager = new MockMemoryPageManager();
-            this.jitService = new MockJitService();
-        }
+		/// <summary>
+		/// Initializes a new instance of <see cref="CompilationRuntime"/>.
+		/// </summary>
+		public CompilationRuntime()
+		{
+			this.typeLoader = new DefaultTypeSystem();
+			this.assemblyLoader = new AssemblyLoader(this.typeLoader);
+			this.memoryManager = new MockMemoryPageManager();
+			this.jitService = new MockJitService();
+		}
 
 		/// <summary>
 		/// Retrieves the memory manager.
 		/// </summary>
 		/// <value>The memory manager.</value>
-        public override IMemoryPageManager MemoryManager
-        {
-            get { return this.memoryManager; }
-        }
+		public override IMemoryPageManager MemoryManager
+		{
+			get { return this.memoryManager; }
+		}
 
 		/// <summary>
 		/// Retrieves the type loader of the runtime.
 		/// </summary>
 		/// <value>The type loader.</value>
-        public override ITypeSystem TypeLoader
-        {
-            get { return this.typeLoader; }
-        }
+		public override ITypeSystem TypeLoader
+		{
+			get { return this.typeLoader; }
+		}
 
 		/// <summary>
 		/// Gets the assembly loader.
 		/// </summary>
 		/// <value>The assembly loader.</value>
-        public override IAssemblyLoader AssemblyLoader
-        {
-            get { return this.assemblyLoader; }
-        }
+		public override IAssemblyLoader AssemblyLoader
+		{
+			get { return this.assemblyLoader; }
+		}
 
 		/// <summary>
 		/// Gets the JIT service.
 		/// </summary>
 		/// <value>The JIT service.</value>
-        public override IJitService JitService
-        {
-            get { return this.jitService; }
-        }
+		public override IJitService JitService
+		{
+			get { return this.jitService; }
+		}
 
-        public void InitializePrivatePaths(IEnumerable<string> assemblyPaths)
-        {
-            // Append the paths of the folder to the loader path);
-            foreach (string path in this.FindPrivatePaths(assemblyPaths))
-            {
-                this.assemblyLoader.AppendPrivatePath(path);
-            }
-        }
+		public void InitializePrivatePaths(IEnumerable<string> assemblyPaths)
+		{
+			// Append the paths of the folder to the loader path);
+			foreach (string path in this.FindPrivatePaths(assemblyPaths))
+			{
+				this.assemblyLoader.AppendPrivatePath(path);
+			}
+		}
 
 		/// <summary>
 		/// Finds the private paths.
 		/// </summary>
 		/// <param name="assemblyPaths">The assembly paths.</param>
 		/// <returns></returns>
-        private IEnumerable<string> FindPrivatePaths(IEnumerable<string> assemblyPaths)
-        {
-            List<string> privatePaths = new List<string>();
-            foreach (string assembly in assemblyPaths)
-            {
-                string path = Path.GetDirectoryName(assembly);
-                if (!privatePaths.Contains(path))
-                    privatePaths.Add(path);
-            }
+		private IEnumerable<string> FindPrivatePaths(IEnumerable<string> assemblyPaths)
+		{
+			List<string> privatePaths = new List<string>();
+			foreach (string assembly in assemblyPaths)
+			{
+				string path = Path.GetDirectoryName(assembly);
+				if (!privatePaths.Contains(path))
+					privatePaths.Add(path);
+			}
 
-            return privatePaths;
-        }
-    }
+			return privatePaths;
+		}
+	}
 }

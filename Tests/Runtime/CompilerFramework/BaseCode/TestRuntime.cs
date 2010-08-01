@@ -63,6 +63,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
             _typeLoader = new DefaultTypeSystem();
             _assemblyLoader = new AssemblyLoader(_typeLoader);
             _jitService = new SimpleJitService();
+			Runtime.RuntimeBase = this; // HACK
         }
 
         #endregion // Construction
