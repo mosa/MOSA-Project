@@ -40,7 +40,7 @@ namespace Mosa.Runtime.Linker
         /// </summary>
         public MapFileGenerationStage(TextWriter writer)
         {
-            if (null == writer)
+            if (writer == null)
                 throw new ArgumentNullException(@"writer");
 
             _writer = writer;
@@ -70,7 +70,7 @@ namespace Mosa.Runtime.Linker
         /// <summary>
         /// Performs stage specific processing on the compiler context.
         /// </summary>
-		public void Run()
+		void IAssemblyCompilerStage.Run()
         {
             // Emit map file _header
             _writer.WriteLine(linker.OutputFile);
