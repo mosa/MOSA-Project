@@ -277,7 +277,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		/// <returns>An instance of <see cref="RuntimeMethod"/>.</returns>
 		private RuntimeMethod FindMethod(string ns, string type, string method)
 		{
-			foreach (RuntimeType t in Runtime.TypeLoader.GetTypesFromModule(module))
+			foreach (RuntimeType t in StaticRuntime.TypeLoader.GetTypesFromModule(module))
 			{
 				if (t.Namespace != ns || t.Name != type)
 					continue;
@@ -297,7 +297,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		{
 			if (module != null)
 			{
-				Runtime.AssemblyLoader.Unload(module);
+				StaticRuntime.AssemblyLoader.Unload(module);
 			}
 
 			if (this.loadedAssembly != null)
@@ -359,13 +359,13 @@ namespace Test.Mosa.Runtime.CompilerFramework
 
 		private IMetadataModule RunMosaCompiler(string assemblyFile)
 		{
-			IMetadataModule rtModule = Runtime.AssemblyLoader.Load(
-				typeof(RuntimeBase).Module.FullyQualifiedName
+			IMetadataModule rtModule = StaticRuntime.AssemblyLoader.Load(
+				typeof(BaseRuntime).Module.FullyQualifiedName
 			);
-			IMetadataModule module = Runtime.AssemblyLoader.Load(
+			IMetadataModule module = StaticRuntime.AssemblyLoader.Load(
 				assemblyFile
 			);
-			TestCaseAssemblyCompiler.Compile(module, Runtime.TypeLoader, Runtime.AssemblyLoader);
+			TestCaseAssemblyCompiler.Compile(module, StaticRuntime.TypeLoader, StaticRuntime.AssemblyLoader);
 			return module;
 		}
 

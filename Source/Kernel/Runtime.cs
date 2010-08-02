@@ -13,7 +13,7 @@ using Mosa.Platforms.x86;
 
 namespace Mosa.Runtime
 {
-    public static class RuntimeBase
+    public static class Runtime
     {
         public static unsafe void* AllocateObject(void* methodTable, uint classSize)
         {

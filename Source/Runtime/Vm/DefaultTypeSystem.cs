@@ -51,7 +51,7 @@ namespace Mosa.Runtime.Vm
 		/// </summary>
 		private ModuleOffsets[] _moduleOffsets;
 
-		private RuntimeBase runtimeBase;
+		private BaseRuntime baseRuntime;
 
 		#endregion // Data members
 
@@ -60,9 +60,9 @@ namespace Mosa.Runtime.Vm
 		/// <summary>
 		/// Initializes static data members of the type loader.
 		/// </summary>
-		public DefaultTypeSystem(RuntimeBase runtimeBase)
+		public DefaultTypeSystem(BaseRuntime baseRuntime)
 		{
-			this.runtimeBase = runtimeBase;
+			this.baseRuntime = baseRuntime;
 			_methods = new RuntimeMethod[0];
 			_fields = new RuntimeField[0];
 			_types = new RuntimeType[0];
@@ -249,7 +249,7 @@ namespace Mosa.Runtime.Vm
 			string name = module.Metadata.ReadString(typeRef.TypeNameIdx);
 			string ns = module.Metadata.ReadString(typeRef.TypeNamespaceIdx);
 			AssemblyRefRow arr = module.Metadata.ReadAssemblyRefRow(typeRef.ResolutionScopeIdx);
-			IAssemblyLoader loader = runtimeBase.AssemblyLoader; 
+			IAssemblyLoader loader = baseRuntime.AssemblyLoader; 
 			IMetadataModule dependency = loader.Resolve(module.Metadata, arr);
 
 			for (int i = GetModuleOffset(dependency).TypeOffset; i < _types.Length; i++)
@@ -317,7 +317,7 @@ namespace Mosa.Runtime.Vm
 
 			if (names.Length > 1)
 			{
-				IMetadataModule module2 = runtimeBase.AssemblyLoader.Load(names[1].Trim());
+				IMetadataModule module2 = baseRuntime.AssemblyLoader.Load(names[1].Trim());
 				result = FindType(ns, name, this.GetTypesFromModule(module2));
 			}
 			else
@@ -996,7 +996,7 @@ namespace Mosa.Runtime.Vm
 					AssemblyRefRow asmRefRow = module.Metadata.ReadAssemblyRefRow(row.ResolutionScopeIdx);
 					string typeName = module.Metadata.ReadString(row.TypeNameIdx);
 					string typeNamespace = module.Metadata.ReadString(row.TypeNamespaceIdx);
-					IMetadataModule resolvedModule = runtimeBase.AssemblyLoader.Resolve(module.Metadata, asmRefRow);
+					IMetadataModule resolvedModule = baseRuntime.AssemblyLoader.Resolve(module.Metadata, asmRefRow);
 
 					// HACK: If there's an easier way to do this without all those string comparisons, I'm all for it
 					foreach (RuntimeType type in ((ITypeSystem)this).GetTypesFromModule(resolvedModule))

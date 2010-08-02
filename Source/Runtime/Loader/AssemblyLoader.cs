@@ -28,7 +28,7 @@ namespace Mosa.Runtime.Loader
 		private List<string> privatePaths = new List<string>();
 		private List<IMetadataModule> loadedImages = new List<IMetadataModule>();
 		private object loaderLock = new object();
-		private RuntimeBase runtimeBase;
+		private BaseRuntime BaseRuntime;
 
 		#endregion // Data members
 
@@ -37,10 +37,10 @@ namespace Mosa.Runtime.Loader
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AssemblyLoader"/> class.
 		/// </summary>
-		/// <param name="runtimeBase">The runtime base.</param>
-		public AssemblyLoader(RuntimeBase runtimeBase)
+		/// <param name="baseRuntime">The runtime base.</param>
+		public AssemblyLoader(BaseRuntime baseRuntime)
 		{
-			this.runtimeBase = runtimeBase;
+			this.BaseRuntime = baseRuntime;
 
 			// HACK: I can't figure out an easier way to get the framework dir right now...
 			string frameworkDir = System.Runtime.InteropServices.RuntimeEnvironment.GetRuntimeDirectory();
@@ -177,7 +177,7 @@ namespace Mosa.Runtime.Loader
 					{
 						loadedImages.Add(result);
 
-						runtimeBase.TypeSystem.AssemblyLoaded(result);
+						BaseRuntime.TypeSystem.AssemblyLoaded(result);
 					}
 				}
 			}

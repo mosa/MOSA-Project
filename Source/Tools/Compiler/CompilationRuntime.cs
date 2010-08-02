@@ -26,7 +26,7 @@ namespace Mosa.Tools.Compiler
 	/// This runtime implementation uses various mock services and the default
 	/// type system and assembly loader.
 	/// </remarks>
-	public class CompilationRuntime : RuntimeBase
+	public class CompilationRuntime : BaseRuntime
 	{
 		/// <summary>
 		/// The assembly loader of this runtime.

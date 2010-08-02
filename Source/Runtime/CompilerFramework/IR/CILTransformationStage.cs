@@ -123,7 +123,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			}
 			else if (MustZeroExtendOnLoad(elementType.Type))
 			{
-				loadInstruction = Instruction.ZeroExtendedMoveInstruction;                
+				loadInstruction = Instruction.ZeroExtendedMoveInstruction;
 			}
 
 			ctx.SetInstruction(loadInstruction, destination, source, ConstantOperand.FromValue(0));
@@ -261,7 +261,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 				ctx.Remove();
 				return;
 			}
-			
+
 			if (this.ProcessVmCall(ctx) == false && this.ProcessIntrinsicCall(ctx) == false)
 			{
 				// Create a symbol operand for the invocation target
@@ -299,7 +299,8 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.BinaryLogic(Context ctx)
 		{
-			switch ((ctx.Instruction as CIL.BaseInstruction).OpCode) {
+			switch ((ctx.Instruction as CIL.BaseInstruction).OpCode)
+			{
 				case OpCode.And:
 					ctx.SetInstruction(IR.Instruction.LogicalAndInstruction, ctx.Result, ctx.Operand1, ctx.Operand2);
 					break;
@@ -327,7 +328,8 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Shift(Context ctx)
 		{
-			switch ((ctx.Instruction as CIL.BaseInstruction).OpCode) {
+			switch ((ctx.Instruction as CIL.BaseInstruction).OpCode)
+			{
 				case OpCode.Shl:
 					ctx.SetInstruction(IR.Instruction.ShiftLeftInstruction, ctx.Result, ctx.Operand1, ctx.Operand2);
 					break;
@@ -359,7 +361,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 				ctx.SetInstruction(Instruction.MulSInstruction, ctx.Result, minusOne, ctx.Operand1);
 			}
 		}
-		 
+
 		/// <summary>
 		/// Visitation function for <see cref="ICILVisitor.Not"/>.
 		/// </summary>
@@ -534,7 +536,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 
 			return result;
 		}
-	
+
 
 		/// <summary>
 		/// Visitation function for <see cref="ICILVisitor.Castclass"/>.
@@ -652,7 +654,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// Visitation function for <see cref="ICILVisitor.Break"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		public void Break(Context ctx) 
+		public void Break(Context ctx)
 		{
 			ctx.ReplaceInstructionOnly(Instruction.BreakInstruction);
 		}
@@ -661,7 +663,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// Visitation function for <see cref="ICILVisitor.Ldstr"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		public void Ldstr(Context ctx) 
+		public void Ldstr(Context ctx)
 		{
 			/*
 			 * This requires a special memory layout for strings as they are interned by the compiler
@@ -691,7 +693,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 				{
 					// Method table and sync block
 					stream.Write(new byte[8], 0, 8);
-					
+
 					// String length field
 					stream.Write(BitConverter.GetBytes(referencedString.Length), 0, nativePtrSize);
 
@@ -745,7 +747,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		{
 			Operand fieldAddress = ctx.Result;
 			Operand objectOperand = ctx.Operand1;
-			
+
 			Operand fixedOffset = new ConstantOperand(BuiltInSigType.Int32, ctx.RuntimeField.Address.ToInt32());
 			ctx.SetInstruction(Instruction.AddUInstruction, fieldAddress, objectOperand, fixedOffset);
 		}
@@ -754,7 +756,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// Visitation function for <see cref="ICILVisitor.Stfld"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		public void Stfld(Context ctx) 
+		public void Stfld(Context ctx)
 		{
 			Operand objectOperand = ctx.Operand1;
 			Operand valueOperand = ctx.Operand2;
@@ -839,7 +841,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			Operand comparisonResult = this.MethodCompiler.CreateTemporary(BuiltInSigType.Int32);
 			ctx.SetInstruction(comparisonInstruction, comparisonResult, first, second);
 			ctx.ConditionCode = cc;
-			
+
 			ctx.AppendInstruction(Instruction.BranchInstruction, comparisonResult);
 			ctx.ConditionCode = cc;
 			ctx.SetBranch(branch.Targets[0]);
@@ -867,7 +869,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// Visitation function for <see cref="ICILVisitor.Ldlen"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		public void Ldlen(Context ctx) 
+		public void Ldlen(Context ctx)
 		{
 			Operand arrayOperand = ctx.Operand1;
 			Operand arrayLength = ctx.Result;
@@ -934,7 +936,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// Visitation function for <see cref="ICILVisitor.Ldelem"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		public void Ldelem(Context ctx) 
+		public void Ldelem(Context ctx)
 		{
 			IInstruction loadInstruction = Instruction.LoadInstruction;
 			Operand result = ctx.Result;
@@ -965,7 +967,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// Visitation function for <see cref="ICILVisitor.Stelem"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		public void Stelem(Context ctx) 
+		public void Stelem(Context ctx)
 		{
 			Operand arrayOperand = ctx.Operand1;
 			Operand arrayIndexOperand = ctx.Operand2;
@@ -985,7 +987,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// Visitation function for <see cref="ICILVisitor.UnboxAny"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.UnboxAny(Context ctx) 
+		void ICILVisitor.UnboxAny(Context ctx)
 		{
 			throw new NotSupportedException();
 		}
@@ -994,7 +996,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// Visitation function for <see cref="ICILVisitor.Refanyval"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.Refanyval(Context ctx) 
+		void ICILVisitor.Refanyval(Context ctx)
 		{
 			throw new NotSupportedException();
 		}
@@ -1003,7 +1005,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// Visitation function for <see cref="ICILVisitor.UnaryArithmetic"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		void ICILVisitor.UnaryArithmetic(Context ctx) 
+		void ICILVisitor.UnaryArithmetic(Context ctx)
 		{
 			throw new NotSupportedException();
 		}
@@ -1110,7 +1112,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// Visitation function for <see cref="ICILVisitor.Add"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		public void Add(Context ctx) 
+		public void Add(Context ctx)
 		{
 			Replace(ctx, Instruction.AddFInstruction, Instruction.AddSInstruction, Instruction.AddUInstruction);
 		}
@@ -1127,7 +1129,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// Visitation function for <see cref="ICILVisitor.Mul"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		public void Mul(Context ctx) 
+		public void Mul(Context ctx)
 		{
 			Replace(ctx, Instruction.MulFInstruction, Instruction.MulSInstruction, Instruction.MulUInstruction);
 		}
@@ -1202,13 +1204,16 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			CilElementType cetDest = dest.Type.Type;
 			CilElementType cetSource = source.Type.Type;
 
-			if (cetDest == CilElementType.I4 || cetDest == CilElementType.U4) {
+			if (cetDest == CilElementType.I4 || cetDest == CilElementType.U4)
+			{
 				return (cetSource == CilElementType.I8 || cetSource == CilElementType.U8);
 			}
-			if (cetDest == CilElementType.I2 || cetDest == CilElementType.U2 || cetDest == CilElementType.Char) {
+			if (cetDest == CilElementType.I2 || cetDest == CilElementType.U2 || cetDest == CilElementType.Char)
+			{
 				return (cetSource == CilElementType.I8 || cetSource == CilElementType.U8 || cetSource == CilElementType.I4 || cetSource == CilElementType.U4);
 			}
-			if (cetDest == CilElementType.I1 || cetDest == CilElementType.U1) {
+			if (cetDest == CilElementType.I1 || cetDest == CilElementType.U1)
+			{
 				return (cetSource == CilElementType.I8 || cetSource == CilElementType.U8 || cetSource == CilElementType.I4 || cetSource == CilElementType.U4 || cetSource == CilElementType.I2 || cetSource == CilElementType.U2 || cetSource == CilElementType.U2);
 			}
 
@@ -1258,7 +1263,8 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		{
 			SigType result;
 
-			switch (sigType.Type) {
+			switch (sigType.Type)
+			{
 				case CilElementType.I1: goto case CilElementType.I2;
 				case CilElementType.I2:
 					result = new SigType(CilElementType.I4);
@@ -1309,7 +1315,8 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <exception cref="T:System.NotSupportedException"><paramref name="cet"/> can't be converted.</exception>
 		private ConvType ConvTypeFromCilType(CilElementType cet)
 		{
-			switch (cet) {
+			switch (cet)
+			{
 				case CilElementType.Char: return ConvType.U2;
 				case CilElementType.I1: return ConvType.I1;
 				case CilElementType.I2: return ConvType.I2;
@@ -1553,7 +1560,8 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			uint mask = 0xFFFFFFFF;
 			IInstruction instruction = ComputeExtensionTypeAndMask(ctDest, ref mask);
 
-			if (type == IR.Instruction.LogicalAndInstruction || mask != 0) {
+			if (type == IR.Instruction.LogicalAndInstruction || mask != 0)
+			{
 				Debug.Assert(mask != 0, @"Conversion is an AND, but no mask given.");
 
 				if (type != IR.Instruction.LogicalAndInstruction)
@@ -1569,7 +1577,8 @@ namespace Mosa.Runtime.CompilerFramework.IR
 
 		private IInstruction ComputeExtensionTypeAndMask(ConvType destinationType, ref uint mask)
 		{
-			switch (destinationType) {
+			switch (destinationType)
+			{
 				case ConvType.I1:
 					mask = 0xFF;
 					return IR.Instruction.SignExtendedMoveInstruction;
@@ -1618,7 +1627,8 @@ namespace Mosa.Runtime.CompilerFramework.IR
 
 		private void ProcessSingleTypeTruncation(Context ctx, IInstruction instruction, uint mask, Operand destinationOperand, Operand sourceOperand)
 		{
-			if (sourceOperand.Type.Type == CilElementType.I8 || sourceOperand.Type.Type == CilElementType.U8) {
+			if (sourceOperand.Type.Type == CilElementType.I8 || sourceOperand.Type.Type == CilElementType.U8)
+			{
 				ctx.SetInstruction(IR.Instruction.MoveInstruction, destinationOperand, sourceOperand);
 				ctx.AppendInstruction(instruction, destinationOperand, sourceOperand, new ConstantOperand(new SigType(CilElementType.U4), mask));
 			}
@@ -1628,7 +1638,8 @@ namespace Mosa.Runtime.CompilerFramework.IR
 
 		private void ExtendAndTruncateResult(Context ctx, IInstruction instruction, Operand destinationOperand)
 		{
-			if (instruction != null && destinationOperand is RegisterOperand) {
+			if (instruction != null && destinationOperand is RegisterOperand)
+			{
 				RegisterOperand resultOperand = new RegisterOperand(new SigType(CilElementType.I4), ((RegisterOperand)destinationOperand).Register);
 				ctx.AppendInstruction(instruction, resultOperand, destinationOperand);
 			}
@@ -1670,14 +1681,14 @@ namespace Mosa.Runtime.CompilerFramework.IR
 				intrinsicAttributeTypes[0] = typeSystem.GetType(@"Mosa.Runtime.CompilerFramework.IntrinsicAttribute, Mosa.Runtime");
 			}
 
-			
+
 			// Retrieve the runtime type
 			object attribute = this.FindIntrinsicAttributeInstance(ctx);
 			if (attribute != null)
 			{
 				Type attributeType = attribute.GetType();
-				Type architecture = (Type)attributeType.InvokeMember(@"Architecture", BindingFlags.Public|BindingFlags.GetProperty|BindingFlags.Instance, null, attribute, null);
-				Type instructionType = (Type)attributeType.InvokeMember(@"InstructionType", BindingFlags.Public|BindingFlags.GetProperty|BindingFlags.Instance, null, attribute, null);
+				Type architecture = (Type)attributeType.InvokeMember(@"Architecture", BindingFlags.Public | BindingFlags.GetProperty | BindingFlags.Instance, null, attribute, null);
+				Type instructionType = (Type)attributeType.InvokeMember(@"InstructionType", BindingFlags.Public | BindingFlags.GetProperty | BindingFlags.Instance, null, attribute, null);
 
 				if (architecture == null)
 				{
@@ -1685,15 +1696,17 @@ namespace Mosa.Runtime.CompilerFramework.IR
 					instrinsic.ReplaceIntrinsicCall(ctx, typeSystem);
 					return true;
 				}
-				else if (architecture.IsInstanceOfType(this.Architecture)) 
+				else if (architecture.IsInstanceOfType(this.Architecture))
 				{
 					// Found a replacement for the call...
-					try {
+					try
+					{
 						IIntrinsicMethod instrinsic = this.Architecture.GetIntrinsicMethod(instructionType);
 						instrinsic.ReplaceIntrinsicCall(ctx, typeSystem);
 						return true;
 					}
-					catch (Exception e) {
+					catch (Exception e)
+					{
 						string message = "Failed to replace intrinsic call with its instruction: " + instructionType.ToString();
 						Trace.WriteLine(message);
 						Trace.WriteLine(e);
@@ -1848,9 +1861,9 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <param name="internalCallTarget">The internal call target.</param>
 		private void ReplaceWithVmCall(Context ctx, VmCall internalCallTarget)
 		{
-			RuntimeType rt = typeSystem.GetType(@"Mosa.Runtime.RuntimeBase");
+			RuntimeType rt = typeSystem.GetType(@"Mosa.Runtime.Runtime");
 			RuntimeMethod callTarget = rt.FindMethod(internalCallTarget.ToString());
-
+			
 			ctx.ReplaceInstructionOnly(IR.Instruction.CallInstruction);
 			ctx.SetOperand(0, SymbolOperand.FromMethod(callTarget));
 		}

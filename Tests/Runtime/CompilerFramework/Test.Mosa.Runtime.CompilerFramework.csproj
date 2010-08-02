@@ -130,6 +130,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Compiler\StaticAllocationFixture.cs" />
+    <Compile Include="StaticRuntime.cs" />
     <Compile Include="IL\ConditionalOperator.cs" />
     <Compile Include="IL\Stind.cs" />
     <Compile Include="IL\Switch.cs" />
