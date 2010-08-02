@@ -15,6 +15,7 @@ using Mosa.Runtime;
 using Mosa.Runtime.Loader;
 using Mosa.Runtime.Vm;
 using Mosa.Jit.SimpleJit;
+using Test.Mosa.Runtime.CompilerFramework;
 
 namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 {
@@ -26,7 +27,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 	/// manager and it uses the default type system, default assembly loader
 	/// and simple jit compiler.
 	/// </remarks>
-	sealed class TestRuntime : RuntimeBase
+	sealed class TestRuntime : BaseRuntime
 	{
 		#region Data members
 
@@ -63,12 +64,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 			_typeLoader = new DefaultTypeSystem(this);
 			_assemblyLoader = new AssemblyLoader(this);
 			_jitService = new SimpleJitService();
-			Runtime.RuntimeBase = this; // HACK
+			StaticRuntime.BaseRuntime = this; // HACK
 		}
 
 		#endregion // Construction
 
-		#region RuntimeBase Overrides
+		#region BaseRuntime Overrides
 
 		public override IMemoryPageManager MemoryManager
 		{
@@ -90,6 +91,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 			get { return _jitService; }
 		}
 
-		#endregion // RuntimeBase Overrides
+		#endregion // BaseRuntime Overrides
 	}
 }

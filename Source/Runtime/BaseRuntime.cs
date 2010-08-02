@@ -20,15 +20,15 @@ namespace Mosa.Runtime {
 	/// <summary>
 	/// Provides central runtime entry points for various features.
 	/// </summary>
-	public abstract class RuntimeBase : IDisposable
+	public abstract class BaseRuntime : IDisposable
 	{
 
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="RuntimeBase"/> class.
+		/// Initializes a new instance of the <see cref="BaseRuntime"/> class.
 		/// </summary>
-		protected RuntimeBase()
+		protected BaseRuntime()
 		{
 		}
 

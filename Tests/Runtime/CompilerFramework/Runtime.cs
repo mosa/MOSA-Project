@@ -15,9 +15,9 @@ using Mosa.Runtime.Memory;
 using Mosa.Runtime.Loader;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
-using Mosa.Runtime;
+using Test.Mosa.Runtime.CompilerFramework;
 
-namespace Test.Mosa.Runtime.CompilerFramework
+namespace Mosa.Runtime
 {
 
 	/// <summary>
@@ -25,43 +25,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
 	/// </summary>
 	public static class Runtime
 	{
-		#region Static data members
-
-		/// <summary>
-		/// Holds the static instance of the runtime.
-		/// </summary>
-		public static RuntimeBase RuntimeBase;
-
-		#endregion // Static data members
-
-		#region Properties
-
-		/// <summary>
-		/// Retrieves the memory manager.
-		/// </summary>
-		/// <value>The memory manager.</value>
-		public static IMemoryPageManager MemoryManager { get { return RuntimeBase.MemoryManager; } }
-
-		/// <summary>
-		/// Retrieves the type loader of the runtime.
-		/// </summary>
-		/// <value>The type loader.</value>
-		public static ITypeSystem TypeLoader { get { return RuntimeBase.TypeSystem; } }
-		/// <summary>
-		/// Gets the assembly loader.
-		/// </summary>
-		/// <value>The assembly loader.</value>
-		public static IAssemblyLoader AssemblyLoader { get { return RuntimeBase.AssemblyLoader; } }
-
-		/// <summary>
-		/// Gets the JIT service.
-		/// </summary>
-		/// <value>The JIT service.</value>
-		public static IJitService JitService { get { return RuntimeBase.JitService; } }
-
-		#endregion // Properties
-
-
+		
 		#region Internal Call Prototypes
 
 		[VmCall(VmCall.AllocateObject)]
@@ -78,7 +42,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
 			//
 			ulong allocationSize = (ulong)((2 * nativeIntSize) + classSize);
 
-			void* memory = MemoryManager.Allocate(IntPtr.Zero, allocationSize, PageProtectionFlags.Read | PageProtectionFlags.Write | PageProtectionFlags.WriteCombine).ToPointer();
+			void* memory = StaticRuntime.MemoryManager.Allocate(IntPtr.Zero, allocationSize, PageProtectionFlags.Read | PageProtectionFlags.Write | PageProtectionFlags.WriteCombine).ToPointer();
 			if (memory == null)
 			{
 				throw new OutOfMemoryException();
@@ -227,7 +191,6 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		}
 
 		#endregion // Virtual Machine Call Prototypes
-
 
 	}
 }

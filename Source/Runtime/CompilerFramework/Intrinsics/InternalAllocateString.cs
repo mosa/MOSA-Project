@@ -35,7 +35,7 @@ namespace Mosa.Runtime.CompilerFramework.Intrinsics
 
 		private SymbolOperand GetInternalAllocateStringCallTarget(ITypeSystem typeSystem)
 		{
-			RuntimeType runtimeType = typeSystem.GetType(@"Mosa.Runtime.RuntimeBase");
+			RuntimeType runtimeType = typeSystem.GetType(@"Mosa.Runtime.Runtime");
 			RuntimeMethod callTarget = runtimeType.FindMethod(@"AllocateString");
 
 			return SymbolOperand.FromMethod(callTarget);
