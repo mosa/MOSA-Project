@@ -79,6 +79,7 @@
     <Compile Include="AssemblyCompilationStage.cs" />
     <Compile Include="ConstantFoldingWrapper.cs" />
     <Compile Include="Linkers\LinkerProxy.cs" />
+    <Compile Include="Metadata\MergedMetadata.cs" />
     <Compile Include="Metadata\MetadataBuilderStage.cs" />
     <Compile Include="Metadata\MetadataStreamHeader.cs" />
     <Compile Include="Metadata\MetadataTableCodedIndexWriter.cs" />

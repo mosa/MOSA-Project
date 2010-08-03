@@ -12,16 +12,16 @@ using System.IO;
 using System.Collections.Generic;
 using System.Text;
 
-using Mosa.Runtime.Loader; // ?
+using Mosa.Runtime.Loader;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Tables;
 using Mosa.Runtime.Vm;
 
-namespace Mosa.Runtime.Metadata
+namespace Mosa.Tools.Compiler.Metadata
 {
 
 	/// <summary>
-	/// Metadata root structure according to ISO/IEC 23271:2006 (E), §24.2.1
+	/// The MergedMetadata class consolidates multiple IMetadataModule provides into a single IMetadataModule view. 
 	/// </summary>
 	public class MergedMetadata : IMetadataProvider, IMetadataModule
 	{
@@ -147,7 +147,7 @@ namespace Mosa.Runtime.Metadata
 		{
 			this.modules = new IMetadataModule[modules.Count];
 			moduleOffset = new ModuleOffset[modules.Count][];
-			moduleType = Loader.ModuleType.Library;
+			moduleType = ModuleType.Library;
 			codeBase = modules[0].CodeBase;
 			name = modules[0].CodeBase;
 
@@ -167,9 +167,9 @@ namespace Mosa.Runtime.Metadata
 					moduleOffset[mod][table] = new ModuleOffset(previous, (uint)(TokenTypes.RowIndexMask & entries));
 				}
 
-				if (module.ModuleType == Loader.ModuleType.Executable)
+				if (module.ModuleType == ModuleType.Executable)
 				{
-					moduleType = Loader.ModuleType.Executable;
+					moduleType = ModuleType.Executable;
 					codeBase = module.CodeBase;
 					name = module.Name;
 				}
@@ -235,14 +235,14 @@ namespace Mosa.Runtime.Metadata
 			return (TokenTypes)(token + (int)offset);
 		}
 
-		#endregion // Methods
-
-		#region IMetadataProvider members
-
-		public int GetMaxTokenCount(TokenTypes token)
+		protected int GetMaxTokenCount(TokenTypes token)
 		{
 			return (int)(moduleOffset[modules.Length - 1][((uint)token) >> TableTokenTypeShift].End);
 		}
+
+		#endregion // Methods
+
+		#region IMetadataProvider members
 
 		TokenTypes IMetadataProvider.GetMaxTokenValue(TokenTypes token)
 		{

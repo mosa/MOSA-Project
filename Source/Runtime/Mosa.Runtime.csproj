@@ -255,7 +255,6 @@
     <Compile Include="Loader\PE\StreamHeader.cs" />
     <Compile Include="Memory\IMemoryPageManager.cs" />
     <Compile Include="Memory\PageAccessFlags.cs" />
-    <Compile Include="Metadata\MergedMetadata.cs" />
     <Compile Include="Metadata\Runtime\CilGenericField.cs" />
     <Compile Include="Metadata\Runtime\CilGenericMethod.cs" />
     <Compile Include="Metadata\Runtime\CilGenericType.cs" />

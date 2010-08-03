@@ -14,7 +14,7 @@ using Mosa.Runtime.Metadata;
 namespace Mosa.Runtime.Loader
 {
 	/// <summary>
-	/// 
+	/// Interface to the assembly loader.
 	/// </summary>
 	public interface IAssemblyLoader
 	{

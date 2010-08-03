@@ -11,17 +11,16 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Diagnostics;
+using NDesk.Options;
 
 using Mosa.Runtime;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Loader;
 using Mosa.Tools.Compiler.Boot;
 using Mosa.Tools.Compiler.Linkers;
-
-using NDesk.Options;
 using Mosa.Runtime.Linker;
 using Mosa.Tools.Compiler.Symbols.Pdb;
-using System.Diagnostics;
 using Mosa.Tools.Compiler.Stages;
 
 namespace Mosa.Tools.Compiler

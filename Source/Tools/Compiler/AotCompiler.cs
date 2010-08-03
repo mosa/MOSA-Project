@@ -32,7 +32,6 @@ namespace Mosa.Tools.Compiler
 	public sealed class AotCompiler : AssemblyCompiler
 	{
 
-
 		#region Construction
 
 		/// <summary>

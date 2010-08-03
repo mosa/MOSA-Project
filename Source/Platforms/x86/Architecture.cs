@@ -30,48 +30,48 @@ namespace Mosa.Platforms.x86
 		/// Defines the register set of the target architecture.
 		/// </summary>
 		private static readonly Register[] Registers = new Register[]
-        {
-            ////////////////////////////////////////////////////////
-            // 32-bit general purpose registers
-            ////////////////////////////////////////////////////////
-            GeneralPurposeRegister.EAX,
-            GeneralPurposeRegister.ECX,
-            GeneralPurposeRegister.EDX,
-            GeneralPurposeRegister.EBX,
-            GeneralPurposeRegister.ESI,
-            GeneralPurposeRegister.EDI,
+		{
+			////////////////////////////////////////////////////////
+			// 32-bit general purpose registers
+			////////////////////////////////////////////////////////
+			GeneralPurposeRegister.EAX,
+			GeneralPurposeRegister.ECX,
+			GeneralPurposeRegister.EDX,
+			GeneralPurposeRegister.EBX,
+			GeneralPurposeRegister.ESI,
+			GeneralPurposeRegister.EDI,
 
-            ////////////////////////////////////////////////////////
-            // 128-bit floating point registers
-            ////////////////////////////////////////////////////////
-            SSE2Register.XMM0,
-            SSE2Register.XMM1,
-            SSE2Register.XMM2,
-            SSE2Register.XMM3,
-            SSE2Register.XMM4,
-            SSE2Register.XMM5,
-            SSE2Register.XMM6,
-            SSE2Register.XMM7
-        };
+			////////////////////////////////////////////////////////
+			// 128-bit floating point registers
+			////////////////////////////////////////////////////////
+			SSE2Register.XMM0,
+			SSE2Register.XMM1,
+			SSE2Register.XMM2,
+			SSE2Register.XMM3,
+			SSE2Register.XMM4,
+			SSE2Register.XMM5,
+			SSE2Register.XMM6,
+			SSE2Register.XMM7
+		};
 
 		/// <summary>
 		/// Maps constraints to an instruction. Deprecated.
 		/// </summary>
 		private static readonly Dictionary<Type, Type> Constraints = new Dictionary<Type, Type>
-        {
-            { typeof(CPUx86.AddInstruction), typeof(GPRConstraint) },
-            { typeof(CPUx86.AdcInstruction), typeof(GPRConstraint) },
-            { typeof(CPUx86.DivInstruction), typeof(DivConstraint) },
-            { typeof(CPUx86.AndInstruction), typeof(LogicalAndConstraint) },
-            { typeof(CPUx86.OrInstruction), typeof(LogicalOrConstraint) },
-            { typeof(CPUx86.XorInstruction), typeof(LogicalXorConstraint) },
-            { typeof(CPUx86.MovInstruction), typeof(MoveConstraint) },
-            { typeof(CPUx86.MulInstruction), typeof(MulConstraint) },
-            { typeof(CPUx86.SarInstruction), typeof(ShiftConstraint) },
-            { typeof(CPUx86.ShlInstruction), typeof(ShiftConstraint) },
-            { typeof(CPUx86.ShrInstruction), typeof(ShiftConstraint) },
-            { typeof(CPUx86.SubInstruction), typeof(GPRConstraint) },
-        };
+		{
+			{ typeof(CPUx86.AddInstruction), typeof(GPRConstraint) },
+			{ typeof(CPUx86.AdcInstruction), typeof(GPRConstraint) },
+			{ typeof(CPUx86.DivInstruction), typeof(DivConstraint) },
+			{ typeof(CPUx86.AndInstruction), typeof(LogicalAndConstraint) },
+			{ typeof(CPUx86.OrInstruction), typeof(LogicalOrConstraint) },
+			{ typeof(CPUx86.XorInstruction), typeof(LogicalXorConstraint) },
+			{ typeof(CPUx86.MovInstruction), typeof(MoveConstraint) },
+			{ typeof(CPUx86.MulInstruction), typeof(MulConstraint) },
+			{ typeof(CPUx86.SarInstruction), typeof(ShiftConstraint) },
+			{ typeof(CPUx86.ShlInstruction), typeof(ShiftConstraint) },
+			{ typeof(CPUx86.ShrInstruction), typeof(ShiftConstraint) },
+			{ typeof(CPUx86.SubInstruction), typeof(GPRConstraint) },
+		};
 
 		/// <summary>
 		/// Specifies the architecture features to use in generated code.
@@ -160,28 +160,28 @@ namespace Mosa.Platforms.x86
 			// and packed operations available with MMX/SSE extensions
 			methodCompilerPipeline.InsertAfter<PlatformStubStage>(
 				new IMethodCompilerStage[]
-                {
-					//InstructionLogger.Instance,
-                    new LongOperandTransformationStage(),
-					//InstructionLogger.Instance,
-                    new AddressModeConversionStage(),
-					//InstructionLogger.Instance,
-                    new CILTransformationStage(),
-					//InstructionLogger.Instance,
-                    new IRTransformationStage(),
-					//InstructionLogger.Instance,
+				{
+					InstructionLogger.Instance,
+					new LongOperandTransformationStage(),
+					InstructionLogger.Instance,
+					new AddressModeConversionStage(),
+					InstructionLogger.Instance,
+					new CILTransformationStage(),
+					InstructionLogger.Instance,
+					new IRTransformationStage(),
+					InstructionLogger.Instance,
 					new TweakTransformationStage(),
-					//InstructionLogger.Instance,
+					InstructionLogger.Instance,
 					new MemToMemConversionStage(),
-					//InstructionLogger.Instance,
-                });
+					InstructionLogger.Instance,
+				});
 
 			methodCompilerPipeline.InsertAfter<IBlockOrderStage>(
 				new IMethodCompilerStage[]
-                {                   
-                    new SimplePeepholeOptimizationStage(),
+				{                   
+					new SimplePeepholeOptimizationStage(),
 					//InstructionLogger.Instance,
-                });
+				});
 
 			//FlowGraphVisualizationStage.Instance,
 		}
@@ -194,7 +194,7 @@ namespace Mosa.Platforms.x86
 		/// </returns>
 		public override ICallingConvention GetCallingConvention()
 		{
-            return new DefaultCallingConvention(this);
+			return new DefaultCallingConvention(this);
 		}
 
 		/// <summary>
@@ -212,11 +212,11 @@ namespace Mosa.Platforms.x86
 				case CilElementType.U1: memorySize = alignment = 4; break;
 				case CilElementType.U2: memorySize = alignment = 4; break;
 				case CilElementType.U4: memorySize = alignment = 4; break;
-                case CilElementType.U8: memorySize = 8; alignment = 4; break;
+				case CilElementType.U8: memorySize = 8; alignment = 4; break;
 				case CilElementType.I1: memorySize = alignment = 4; break;
 				case CilElementType.I2: memorySize = alignment = 4; break;
 				case CilElementType.I4: memorySize = alignment = 4; break;
-                case CilElementType.I8: memorySize = 8; alignment = 4; break;
+				case CilElementType.I8: memorySize = 8; alignment = 4; break;
 				case CilElementType.R4: memorySize = alignment = 4; break;
 				case CilElementType.R8: memorySize = alignment = 8; break;
 				case CilElementType.Boolean: memorySize = alignment = 4; break;
