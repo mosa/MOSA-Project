@@ -76,7 +76,7 @@ namespace Mosa.Tools.Compiler
 
 		#endregion IAssemblyCompilerStage
 
-		private IMetadataModule LoadAssembly(IAssemblyLoader assemblyLoader, string assemblyFileName)
+		private static IMetadataModule LoadAssembly(IAssemblyLoader assemblyLoader, string assemblyFileName)
 		{
 			try
 			{
@@ -93,7 +93,7 @@ namespace Mosa.Tools.Compiler
 			}
 		}
 
-		private void LoadAssemblyDebugInfo(string assemblyFileName)
+		private static void LoadAssemblyDebugInfo(string assemblyFileName)
 		{
 			string dbgFile = Path.Combine(Path.GetDirectoryName(assemblyFileName), Path.GetFileNameWithoutExtension(assemblyFileName) + ".pdb") + "!!";
 

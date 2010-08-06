@@ -64,8 +64,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Boot.cs" />
-    <Compile Include="TaskB.cs" />
-    <Compile Include="TaskA.cs" />
     <Compile Include="Tests\StringTest.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -81,9 +79,6 @@
       <Project>{56CA38E7-0883-4461-A10E-386D0C58DBF9}</Project>
       <Name>Mosa.Platforms.x86</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="System" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <PropertyGroup>

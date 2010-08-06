@@ -215,12 +215,12 @@ namespace Mosa.Runtime.Loader.PE
 				case TokenTypes.String:
 					{
 						StringHeap sheap = (StringHeap)_streams[(int)HeapType.String];
-						return sheap.ReadString(ref token);
+						return sheap.ReadString(token);
 					}
 				case TokenTypes.UserString:
 					{
 						UserStringHeap usheap = (UserStringHeap)_streams[(int)HeapType.UserString];
-						return usheap.ReadString(ref token);
+						return usheap.ReadString(token);
 					}
 				default:
 					throw new ArgumentException(@"Invalid token for a string.", @"token");
@@ -237,7 +237,7 @@ namespace Mosa.Runtime.Loader.PE
 			if ((TokenTypes.TableMask & token) == TokenTypes.Guid)
 			{
 				GuidHeap gheap = (GuidHeap)_streams[(int)HeapType.Guid];
-				return gheap.ReadGuid(ref token);
+				return gheap.ReadGuid(token);
 			}
 			else
 			{
@@ -255,7 +255,7 @@ namespace Mosa.Runtime.Loader.PE
 			if (TokenTypes.Blob == (TokenTypes.TableMask & token))
 			{
 				BlobHeap bheap = (BlobHeap)_streams[(int)HeapType.Blob];
-				return bheap.ReadBlob(ref token);
+				return bheap.ReadBlob(token);
 			}
 			else
 			{

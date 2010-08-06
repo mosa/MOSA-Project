@@ -43,7 +43,7 @@ namespace Mosa.Runtime.Metadata
 		/// </summary>
 		/// <param name="token">The Guid token, of the guid to retrieve.</param>
 		/// <returns>The GUID at the specified location.</returns>
-		public Guid ReadGuid(ref TokenTypes token)
+		public Guid ReadGuid(TokenTypes token)
 		{
 			Debug.Assert((TokenTypes.TableMask & token) == TokenTypes.Guid);
 			if ((TokenTypes.TableMask & token) != TokenTypes.Guid)
@@ -56,7 +56,7 @@ namespace Mosa.Runtime.Metadata
 			// Validate the offset & calculate the real offset
 			int realOffset = ValidateOffset(index * 16);
 			byte[] buffer = this.Buffer;
-			token = (TokenTypes)((int)TokenTypes.Guid | index + 1);
+			//token = (TokenTypes)((int)TokenTypes.Guid | index + 1);
 			return new Guid(BitConverter.ToInt32(buffer, realOffset), BitConverter.ToInt16(buffer, realOffset + 4), BitConverter.ToInt16(buffer, realOffset + 6), buffer[realOffset + 8], buffer[realOffset + 9], buffer[realOffset + 10], buffer[realOffset + 11], buffer[realOffset + 12], buffer[realOffset + 13], buffer[realOffset + 14], buffer[realOffset + 8]);
 		}
 

@@ -16,7 +16,7 @@ using Mosa.Runtime.Vm;
 namespace Mosa.Runtime.Loader
 {
 	/// <summary>
-	/// Interface of an executable image loaded by a file loader.
+	/// Interface to the metadata loaded by a file loader.
 	/// </summary>
 	public interface IMetadataModule
 	{

@@ -249,7 +249,7 @@ namespace Mosa.Runtime.Vm
 			string name = module.Metadata.ReadString(typeRef.TypeNameIdx);
 			string ns = module.Metadata.ReadString(typeRef.TypeNamespaceIdx);
 			AssemblyRefRow arr = module.Metadata.ReadAssemblyRefRow(typeRef.ResolutionScopeIdx);
-			IAssemblyLoader loader = baseRuntime.AssemblyLoader; 
+			IAssemblyLoader loader = baseRuntime.AssemblyLoader;
 			IMetadataModule dependency = loader.Resolve(module.Metadata, arr);
 
 			for (int i = GetModuleOffset(dependency).TypeOffset; i < _types.Length; i++)
@@ -281,7 +281,7 @@ namespace Mosa.Runtime.Vm
 				RuntimeType result = null;
 				if (table == TokenTypes.TypeDef)
 				{
-					typeIdx += row - 2;
+					typeIdx += row - 1; // ??? typeIdx += row - 2;
 					result = this._types[typeIdx];
 				}
 				else if (table == TokenTypes.TypeSpec)
@@ -604,29 +604,40 @@ namespace Mosa.Runtime.Vm
 
 			maxTypeDef = md.GetMaxTokenValue(TokenTypes.TypeDef);
 			maxLayout = md.GetMaxTokenValue(TokenTypes.ClassLayout);
+			maxMethod = md.GetMaxTokenValue(TokenTypes.MethodDef);
+			maxField = md.GetMaxTokenValue(TokenTypes.Field);
 
 			if (TokenTypes.ClassLayout < maxLayout)
 				layoutRow = md.ReadClassLayoutRow(tokenLayout);
 
-			TokenTypes token = TokenTypes.TypeDef + 2;
+			TokenTypes token = TokenTypes.TypeDef + 1;
 			typeDefRow = md.ReadTypeDefRow(token);
-			do
+
+			for (; token <= maxTypeDef; token++)
 			{
-				/*
-							  string name;
-							  md.Read(typeDefRow.TypeNameIdx, out name);
-							  Debug.WriteLine(name);
-				 */
+				TokenTypes maxNextMethod, maxNextField;
+				string name = md.ReadString(typeDefRow.TypeNameIdx);
+
+				Debug.Write(((uint)token).ToString("X") + ": ");
+				Debug.Write(typeDefRow.TypeNameIdx.ToString("X") + ": ");
+				Debug.WriteLine(md.ReadString(typeDefRow.TypeNameIdx));
+
 				if (token < maxTypeDef)
 				{
 					nextTypeDefRow = md.ReadTypeDefRow(token + 1);
-					maxField = nextTypeDefRow.FieldList;
-					maxMethod = nextTypeDefRow.MethodList;
+					maxNextField = nextTypeDefRow.FieldList;
+					maxNextMethod = nextTypeDefRow.MethodList;
+
+					// Crazy!
+					if (maxNextMethod > maxMethod)
+						maxNextMethod = maxMethod + 1;
+					if (maxNextField > maxField)
+						maxNextField = maxField + 1;
 				}
 				else
 				{
-					maxMethod = md.GetMaxTokenValue(TokenTypes.MethodDef) + 1;
-					maxField = md.GetMaxTokenValue(TokenTypes.Field) + 1;
+					maxNextMethod = maxMethod + 1;
+					maxNextField = maxField + 1;
 				}
 
 				// Is this our layout info?
@@ -640,16 +651,16 @@ namespace Mosa.Runtime.Vm
 						layoutRow = md.ReadClassLayoutRow(tokenLayout);
 				}
 
+
 				// Create and populate the runtime type
-				rt = new CilRuntimeType(token, module, ref typeDefRow, maxField, maxMethod, packing, size, this);
-				LoadMethods(module, rt, typeDefRow.MethodList, maxMethod, ref methodOffset);
-				LoadFields(module, rt, typeDefRow.FieldList, maxField, ref fieldOffset);
+				rt = new CilRuntimeType(token, module, ref typeDefRow, maxNextField, maxNextMethod, packing, size, this);
+				LoadMethods(module, rt, typeDefRow.MethodList, maxNextMethod, ref methodOffset);
+				LoadFields(module, rt, typeDefRow.FieldList, maxNextField, ref fieldOffset);
 				_types[typeOffset++] = rt;
 
 				packing = size = 0;
 				typeDefRow = nextTypeDefRow;
 			}
-			while (token++ < maxTypeDef);
 
 		}
 
@@ -663,30 +674,36 @@ namespace Mosa.Runtime.Vm
 		/// <param name="offset">The offset into the method table to start loading methods From.</param>
 		private void LoadMethods(IMetadataModule module, RuntimeType declaringType, TokenTypes first, TokenTypes last, ref int offset)
 		{
+			if (first >= last)
+				return;
+
 			IMetadataProvider md = module.Metadata;
 			MethodDefRow methodDef, nextMethodDef = new MethodDefRow();
 			TokenTypes maxParam, maxMethod = md.GetMaxTokenValue(TokenTypes.MethodDef);
 
-			if (first < last)
+			methodDef = md.ReadMethodDefRow(first);
+			for (TokenTypes token = first; token < last; token++)
 			{
-				methodDef = md.ReadMethodDefRow(first);
-				for (TokenTypes token = first; token < last; token++)
+				if (token < maxMethod)
 				{
-					if (token < maxMethod)
-					{
-						nextMethodDef = md.ReadMethodDefRow(token + 1);
-						maxParam = nextMethodDef.ParamList;
-					}
-					else
-					{
-						maxParam = md.GetMaxTokenValue(TokenTypes.Param) + 1;
-					}
-
-					Debug.Assert(offset < _methods.Length, @"Invalid method index.");
-					_methods[offset++] = new CilRuntimeMethod(offset, module, ref methodDef, maxParam, declaringType, this);
-					methodDef = nextMethodDef;
+					nextMethodDef = md.ReadMethodDefRow(token + 1);
+					maxParam = nextMethodDef.ParamList;
 				}
+				else
+				{
+					maxParam = md.GetMaxTokenValue(TokenTypes.Param) + 1;
+				}
+
+				Debug.Assert(offset < _methods.Length, @"Invalid method index.");
+				_methods[offset++] = new CilRuntimeMethod(offset, module, methodDef, maxParam, declaringType, this);
+
+				Debug.Write("-> " + ((uint)token).ToString("X") + ": ");
+				Debug.Write(methodDef.NameStringIdx.ToString("X") + ": ");
+				Debug.WriteLine(md.ReadString(methodDef.NameStringIdx));
+
+				methodDef = nextMethodDef;
 			}
+
 		}
 
 		/// <summary>
@@ -735,7 +752,7 @@ namespace Mosa.Runtime.Vm
 
 			for (TokenTypes token = first; token < last; token++)
 			{
-				// Read the _stackFrameIndex
+				// Read the stackFrameIndex
 				field = md.ReadFieldRow(token);
 				layout = rva = IntPtr.Zero;
 

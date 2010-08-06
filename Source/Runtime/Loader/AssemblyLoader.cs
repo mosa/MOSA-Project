@@ -203,7 +203,7 @@ namespace Mosa.Runtime.Loader
 			return null;
 		}
 
-		private string CreateFileCodeBase(string file)
+		private static string CreateFileCodeBase(string file)
 		{
 			return @"file://" + file.Replace('\\', '/');
 		}

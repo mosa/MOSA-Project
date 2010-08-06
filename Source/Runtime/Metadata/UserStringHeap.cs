@@ -23,7 +23,7 @@ namespace Mosa.Runtime.Metadata {
 		/// <summary>
 		/// Initializes a new instance of the UserStringHeap.
 		/// </summary>
-        /// <param name="metadata">The provider buffer, which contains the heap.</param>
+		/// <param name="metadata">The provider buffer, which contains the heap.</param>
 		/// <param name="offset">The offset into the buffer, where the heap starts.</param>
 		/// <param name="size">The size of the heap in bytes.</param>
 		public UserStringHeap(byte[] metadata, int offset, int size)
@@ -34,32 +34,32 @@ namespace Mosa.Runtime.Metadata {
 		#endregion // Construction
 
 		#region Methods
-        
-        /// <summary>
+		
+		/// <summary>
 		/// Retrieves the string at the requested offset.
 		/// </summary>
-        /// <param name="token">The offset into the heap, where the string starts.</param>
+		/// <param name="token">The offset into the heap, where the string starts.</param>
 		/// <returns>The string at the given offset.</returns>
-		public string ReadString(ref TokenTypes token)
+		public string ReadString(TokenTypes token)
 		{
-            Debug.Assert((TokenTypes.TableMask & token) == TokenTypes.UserString);
-            if ((TokenTypes.TableMask & token) != TokenTypes.UserString)
-                throw new ArgumentException(@"Invalid token value.", @"token");
+			Debug.Assert((TokenTypes.TableMask & token) == TokenTypes.UserString);
+			if ((TokenTypes.TableMask & token) != TokenTypes.UserString)
+				throw new ArgumentException(@"Invalid token value.", @"token");
 
-            int offset = (int)(token & TokenTypes.RowIndexMask);
+			int offset = (int)(token & TokenTypes.RowIndexMask);
 			// Argument checks
-            if (0 == offset)
-            {
-                token += 1;
-                return String.Empty;
-            }
+			if (0 == offset)
+			{
+				token += 1;
+				return String.Empty;
+			}
 
 			// Validate the offset & calculate the real offset
 			int realOffset = ValidateOffset(offset);
 			int length = CalculatePrefixLength(ref realOffset);
 			Debug.Assert(1 == (length & 1), @"Invalid string length read from metadata - corrupt string?");
-            token = (TokenTypes)((int)TokenTypes.UserString | realOffset + length - this._offset);
-            if (0 == length)
+			//token = (TokenTypes)((int)TokenTypes.UserString | realOffset + length - this._offset);
+			if (0 == length)
 				return String.Empty;
 			byte[] buffer = this.Buffer;
 			return Encoding.Unicode.GetString(buffer, realOffset, length-1);

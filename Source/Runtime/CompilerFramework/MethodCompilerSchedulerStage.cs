@@ -99,15 +99,17 @@ namespace Mosa.Runtime.CompilerFramework
 			Debug.WriteLine(@"Compiling " + method.ToString());
 			using (IMethodCompiler mc = compiler.CreateMethodCompiler(this, method.DeclaringType, method))
 			{
-				try
-				{
-					mc.Compile();
-				}
-				catch (Exception e)
-				{
-					HandleCompilationException(e);
-					throw;
-				}
+				mc.Compile();
+
+				//try
+				//{
+				//    mc.Compile();
+				//}
+				//catch (Exception e)
+				//{
+				//    HandleCompilationException(e);
+				//    throw;
+				//}
 			}
 		}
 
