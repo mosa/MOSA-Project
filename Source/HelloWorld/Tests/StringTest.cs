@@ -43,9 +43,10 @@ namespace Mosa.HelloWorld.Tests
 		public static bool SubStringTest()
 		{
 			string main = "abcdefghi";
-			string sub = main.Substring(6);
-			
-			return string.Equals("ghi", sub);
+			string sub1 = main.Substring(6);
+			string sub2 = main.Substring(0, 3);
+
+			return string.Equals("ghi", sub1) && string.Equals("abc", sub2);
 		}
 
 		public static bool IndexOfTest()

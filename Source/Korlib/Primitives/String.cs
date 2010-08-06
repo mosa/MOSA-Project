@@ -158,29 +158,29 @@ namespace System
 			return result;
 		}
 
-		//public static bool operator ==(String a, String b)
-		//{
-		//    return String.Equals(a, b);
-		//}
+		/*public static bool operator ==(String a, String b)
+		{
+		    return String.Equals(a, b);
+		}
 
-		//public static bool operator !=(String a, String b)
-		//{
-		//    return !(a == b);
-		//}
+		public static bool operator !=(String a, String b)
+		{
+		    return !(a == b);
+		}
 
-		//public bool Equals(System.String i)
-		//{
-		//    return ((String)(object)i) == this;
-		//}
+		public bool Equals(System.String i)
+		{
+		    return i == this;
+		}
 
-		//public override bool Equals(object o)
-		//{
-		//    //if (!(o is String))
-		//    //	return false;
+		public override bool Equals(object o)
+		{
+		    if (!(o is String))
+		    	return false;
 
-		//    String other = (String)o;
-		//    return other == this;
-		//}
+		    String other = (String)o;
+		    return other == this;
+		}*/
 
 		public static unsafe bool Equals(String a, String b)
 		{
@@ -250,9 +250,6 @@ namespace System
 
 		public unsafe string Substring(int startIndex)
 		{
-			if (startIndex == 0)
-				return Empty;
-
 			if (startIndex < 0 || startIndex > this.length)
 			    return Empty; //throw new System.ArgumentOutOfRangeException("startIndex");
 
@@ -272,9 +269,6 @@ namespace System
 		    if (length < 0)
 		        return Empty; //throw new System.ArgumentOutOfRangeException("length", "< 0");
 
-		    if (startIndex == 0)
-		        return Empty;
-
 		    if (startIndex < 0 || startIndex > this.length)
 		        return Empty; //throw new System.ArgumentOutOfRangeException("startIndex");
 
@@ -283,10 +277,7 @@ namespace System
 		    char* chars = result.first_char;
 
 		    for (int index = 0; index < length; index++)
-		    {
-		        *chars = this[startIndex + index];
-		        chars++;
-		    }
+		        *chars++ = this[startIndex + index];
 
 		    return result;
 		}
