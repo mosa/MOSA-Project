@@ -181,7 +181,7 @@ namespace Mosa.Platforms.x86
 
                         //RemoveMultipleStores(window);
                         RemoveSingleLineJump(window);
-                        ImproveBranchAndJump(window);
+                        //ImproveBranchAndJump(window);
                     }
         }
 
