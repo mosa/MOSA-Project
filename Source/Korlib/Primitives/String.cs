@@ -253,15 +253,8 @@ namespace System
 			if (startIndex == 0)
 				return Empty;
 
-			// FIXME: Following line does not compile correctly
 			if (startIndex < 0 || startIndex > this.length)
 			    return Empty; //throw new System.ArgumentOutOfRangeException("startIndex");
-
-			/*if (startIndex < 0)
-				return Empty; //throw new System.ArgumentOutOfRangeException("startIndex");
-
-			if (startIndex > this.length)
-				return Empty; //throw new System.ArgumentOutOfRangeException("startIndex");*/
 
 			int newlen = this.length - startIndex;
 			String result = InternalAllocateString(newlen);
@@ -269,37 +262,34 @@ namespace System
 			char* chars = result.first_char;
 
 			for (int index = 0; index < newlen; index++)
-			{
 				*chars++ = this[startIndex + index];
-			}
 
 			return result;
 		}
 
-		//TODO: Following crashes the compiler
-		//public unsafe string Substring(int startIndex, int length)
-		//{
-		//    if (length < 0)
-		//        return Empty; //throw new System.ArgumentOutOfRangeException("length", "< 0");
+		public unsafe string Substring(int startIndex, int length)
+		{
+		    if (length < 0)
+		        return Empty; //throw new System.ArgumentOutOfRangeException("length", "< 0");
 
-		//    if (startIndex == 0)
-		//        return Empty;
+		    if (startIndex == 0)
+		        return Empty;
 
-		//    if (startIndex < 0 || startIndex > this.length)
-		//        return Empty; //throw new System.ArgumentOutOfRangeException("startIndex");
+		    if (startIndex < 0 || startIndex > this.length)
+		        return Empty; //throw new System.ArgumentOutOfRangeException("startIndex");
 
-		//    String result = InternalAllocateString(length);
+    		String result = InternalAllocateString(length);
 
-		//    char* chars = result.first_char;
+		    char* chars = result.first_char;
 
-		//    for (int index = 0; index < length; index++)
-		//    {
-		//        *chars = this[startIndex + index];
-		//        chars++;
-		//    }
+		    for (int index = 0; index < length; index++)
+		    {
+		        *chars = this[startIndex + index];
+		        chars++;
+		    }
 
-		//    return result;
-		//}
+		    return result;
+		}
 
 		public static bool IsNullOrEmpty(string value)
 		{
