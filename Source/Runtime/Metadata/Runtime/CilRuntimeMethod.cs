@@ -47,7 +47,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 		/// <param name="method">The method.</param>
 		/// <param name="maxParam">The max param.</param>
 		/// <param name="declaringType">Type of the declaring.</param>
-		public CilRuntimeMethod(int token, IMetadataModule module, ref MethodDefRow method, TokenTypes maxParam, RuntimeType declaringType, ITypeSystem typeSystem) :
+		public CilRuntimeMethod(int token, IMetadataModule module, MethodDefRow method, TokenTypes maxParam, RuntimeType declaringType, ITypeSystem typeSystem) :
 			base((int)token, module, declaringType, typeSystem)
 		{
 			this.nameIdx = method.NameStringIdx;

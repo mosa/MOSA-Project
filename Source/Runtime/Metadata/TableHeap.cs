@@ -370,7 +370,7 @@ namespace Mosa.Runtime.Metadata
 				throw new ArgumentException(@"Invalid table specified in token.", @"token");
 			if (token > GetMaxTokenValue(table))
 				throw new ArgumentException(@"Row is out of bounds.", @"token");
-			if (0 == row)
+			if (row == 0)
 				throw new ArgumentException(@"Invalid row index.", @"token");
 			int tableIdx = (int)(table) >> 24;
 			int tableOffset = _tableOffsets[tableIdx] + ((int)row - 1) * _recordSize[tableIdx];

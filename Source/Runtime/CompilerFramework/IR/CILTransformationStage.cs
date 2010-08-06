@@ -1837,7 +1837,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 
 			// Retrieve the runtime type
 			RuntimeType rt = typeSystem.GetType(@"Mosa.Runtime.Vm.VmCallAttribute, Mosa.Runtime");
-			if (rm.IsDefined(rt) == true)
+			if (rm.IsDefined(rt))
 			{
 				foreach (RuntimeAttribute ra in rm.CustomAttributes)
 				{

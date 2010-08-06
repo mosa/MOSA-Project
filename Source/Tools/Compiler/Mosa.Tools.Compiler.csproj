@@ -78,7 +78,9 @@
     <Compile Include="AotAssemblyCompiler.cs" />
     <Compile Include="AssemblyCompilationStage.cs" />
     <Compile Include="ConstantFoldingWrapper.cs" />
+    <Compile Include="AssemblyCompilationStage2.cs" />
     <Compile Include="Linkers\LinkerProxy.cs" />
+    <Compile Include="Metadata\MergedAssemblyLoader.cs" />
     <Compile Include="Metadata\MergedMetadata.cs" />
     <Compile Include="Metadata\MetadataBuilderStage.cs" />
     <Compile Include="Metadata\MetadataStreamHeader.cs" />
@@ -186,7 +188,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="TypeInitializers\TypeInitializerSchedulerStageProxy.cs" />
-    <Compile Include="x86\InterruptBuilderStage.cs" />
+    <Compile Include="Stages\InterruptBuilderStage.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <PropertyGroup>

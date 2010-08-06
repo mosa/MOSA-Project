@@ -44,19 +44,26 @@ namespace Mosa.Tools.Compiler.Metadata
 		protected struct ModuleOffset
 		{
 			public uint Start;
-			public uint End;
 			public uint Count;
+
+			public uint End { get { return Start + Count; } }
 
 			public ModuleOffset(uint start, uint count)
 			{
 				Start = start;
-				End = start + count;
 				Count = count;
 			}
+
+			public bool IsWithin(uint value)
+			{
+				return ((value >= Start) && (value < End));
+			}
+
 		}
 
 		protected IMetadataModule[] modules;
 		protected ModuleOffset[][] moduleOffset;
+		protected ModuleOffset[][] moduleStreamOffset;
 		protected string codeBase;
 		protected TokenTypes entryPoint;
 		protected ModuleType moduleType;
@@ -96,7 +103,7 @@ namespace Mosa.Tools.Compiler.Metadata
 			uint module;
 			ulong originalrva = (ulong)rva;
 
-			GettOriginalRVA(out module, ref originalrva);
+			GetOriginalRVA(out module, ref originalrva);
 
 			return modules[module].GetDataSection((long)originalrva);
 		}
@@ -111,7 +118,7 @@ namespace Mosa.Tools.Compiler.Metadata
 			uint module;
 			ulong originalrva = (ulong)rva;
 
-			GettOriginalRVA(out module, ref originalrva);
+			GetOriginalRVA(out module, ref originalrva);
 
 			return modules[module].GetInstructionStream((long)originalrva);
 		}
@@ -147,24 +154,35 @@ namespace Mosa.Tools.Compiler.Metadata
 		{
 			this.modules = new IMetadataModule[modules.Count];
 			moduleOffset = new ModuleOffset[modules.Count][];
+			moduleStreamOffset = new ModuleOffset[4][];
 			moduleType = ModuleType.Library;
 			codeBase = modules[0].CodeBase;
 			name = modules[0].CodeBase;
 
-			for (int mod = 0; mod < modules.Count; mod++)
+			for (uint mod = 0; mod < modules.Count; mod++)
 			{
-				IMetadataModule module = modules[mod];
+				IMetadataModule module = modules[(int)mod];
 				this.modules[mod] = module;
 
 				moduleOffset[mod] = new ModuleOffset[MaxTables];
+				moduleStreamOffset[mod] = new ModuleOffset[4];
 
 				for (int table = 0; table < MaxTables; table++)
 				{
-					uint previous = (mod == 0 ? 0 : moduleOffset[mod - 1][table].End);
+					uint previous = (mod == 0 ? 1 : moduleOffset[mod - 1][table].End);
 
 					TokenTypes entries = module.Metadata.GetMaxTokenValue((TokenTypes)(table << TableTokenTypeShift));
 
 					moduleOffset[mod][table] = new ModuleOffset(previous, (uint)(TokenTypes.RowIndexMask & entries));
+				}
+
+				for (int table = 0; table < 4; table++)
+				{
+					uint previous = (mod == 0 ? 0 : moduleStreamOffset[mod - 1][table].Start + moduleStreamOffset[mod - 1][table].Count);
+
+					TokenTypes entries = module.Metadata.GetMaxTokenValue((TokenTypes)((table << TableTokenTypeShift) + TokenTypes.UserString));
+
+					moduleStreamOffset[mod][table] = new ModuleOffset(previous, (uint)(TokenTypes.RowIndexMask & entries));
 				}
 
 				if (module.ModuleType == ModuleType.Executable)
@@ -176,10 +194,103 @@ namespace Mosa.Tools.Compiler.Metadata
 
 				if (module.EntryPoint != 0)
 				{
-					entryPoint = module.EntryPoint;
+					//entryPoint = module.EntryPoint;
+					entryPoint = GetNewToken(mod, module.EntryPoint);
 				}
 			}
 
+		}
+
+		protected void GetModuleOffset(TokenTypes token, out uint module, out uint index)
+		{
+			if (token < TokenTypes.MaxTable)
+			{
+				uint table = ((uint)(token & TokenTypes.TableMask) >> TableTokenTypeShift);
+				uint rowindex = (uint)(token & TokenTypes.RowIndexMask);
+
+				for (uint mod = 0; mod < modules.Length; mod++)
+					if (moduleOffset[mod][table].IsWithin(rowindex))
+					{
+						module = mod;
+						index = rowindex - moduleOffset[mod][table].Start + 1;
+						return;
+					}
+			}
+			else if (token >= TokenTypes.UserString && token < TokenTypes.MaxHeap)
+			{
+				uint table = ((uint)((token & TokenTypes.TableMask) - TokenTypes.UserString) >> TableTokenTypeShift);
+				uint rowindex = (uint)(token & TokenTypes.RowIndexMask);
+
+				for (uint mod = 0; mod < modules.Length; mod++)
+					if (moduleStreamOffset[mod][table].IsWithin(rowindex))
+					{
+						module = mod;
+						index = rowindex - moduleStreamOffset[mod][table].Start;
+						return;
+					}
+			}
+
+			throw new ArgumentException(@"Not a valid tokentype.", @"token");
+		}
+
+		protected TokenTypes GetOriginalToken(TokenTypes token, out uint module)
+		{
+			uint index;
+
+			GetModuleOffset(token, out module, out index);
+
+			return (TokenTypes)((token & TokenTypes.TableMask) + (int)index);
+		}
+
+		protected TokenTypes GetNewToken(uint module, TokenTypes token)
+		{
+			if (token < TokenTypes.MaxTable)
+			{
+				if ((uint)(token & TokenTypes.RowIndexMask) == 0)
+					return (token & TokenTypes.TableMask);
+
+				uint table = ((uint)(token & TokenTypes.TableMask) >> TableTokenTypeShift);
+				ulong offset = moduleOffset[module][table].Start;
+
+				return (TokenTypes)(token + (int)offset - 1);
+			}
+			else if (token >= TokenTypes.UserString && token < TokenTypes.MaxHeap)
+			{
+				if ((uint)(token & TokenTypes.RowIndexMask) == 0)
+					return (token & TokenTypes.TableMask);
+
+				uint table = ((uint)((token & TokenTypes.TableMask) - TokenTypes.UserString) >> TableTokenTypeShift);
+				ulong offset = moduleStreamOffset[module][table].Start;
+
+				return (TokenTypes)(token + (int)offset);
+			}
+
+			throw new ArgumentException(@"Not a valid tokentype.", @"token");
+		}
+
+		protected uint GetMaxTokenCount(TokenTypes token)
+		{
+			if (token < TokenTypes.MaxTable)
+			{
+				return (uint)(moduleOffset[modules.Length - 1][((uint)token) >> TableTokenTypeShift].End);
+			}
+			else if (token >= TokenTypes.UserString && token <= TokenTypes.Guid)
+			{
+				return (uint)(moduleStreamOffset[modules.Length - 1][((uint)((token & TokenTypes.TableMask) - TokenTypes.UserString) >> TableTokenTypeShift)].End);
+			}
+
+			throw new ArgumentException(@"Not a valid tokentype.", @"token");
+		}
+
+		protected void GetOriginalRVA(out uint module, ref ulong rva)
+		{
+			module = (uint)(rva >> 32);
+			rva = rva & 0xFFFFFFFF;
+		}
+
+		protected ulong GetNewRVA(uint module, ulong rva)
+		{
+			return (module << 32) | rva;
 		}
 
 		protected int GetModuleIndex(IMetadataModule module)
@@ -191,62 +302,13 @@ namespace Mosa.Tools.Compiler.Metadata
 			throw new ArgumentException(@"Unable to locate module.", @"module");
 		}
 
-		protected void GetModuleOffset(TokenTypes token, out uint module, out uint index)
-		{
-			uint table = ((uint)(token & TokenTypes.TableMask) >> TableTokenTypeShift);
-			uint rowindex = (uint)(token & TokenTypes.RowIndexMask);
-
-			for (uint mod = 0; mod < modules.Length; mod++)
-				if ((rowindex > moduleOffset[mod][table].Start) & (rowindex < moduleOffset[mod][table].End))
-				{
-					module = mod;
-					index = rowindex - moduleOffset[mod][table].Start;
-					return;
-				}
-
-			throw new ArgumentException(@"Not a valid tokentype.", @"token");
-		}
-
-		protected void GettOriginalRVA(out uint module, ref ulong rva)
-		{
-			module = (uint)(rva >> 32);
-			rva = rva & 0xFFFFFFFF;
-		}
-
-		protected ulong GetNewRVA(uint module, ulong rva)
-		{
-			return (module << 32) | rva;
-		}
-
-		protected TokenTypes GetOriginalToken(TokenTypes token, out uint module)
-		{
-			uint index;
-
-			GetModuleOffset(token, out module, out index);
-
-			return (TokenTypes)((token & TokenTypes.RowIndexMask) + (int)index);
-		}
-
-		protected TokenTypes GetNewToken(uint module, TokenTypes token)
-		{
-			int table = ((int)(token & TokenTypes.TableMask) >> TableTokenTypeShift);
-			long offset = moduleOffset[module][table].Start;
-
-			return (TokenTypes)(token + (int)offset);
-		}
-
-		protected int GetMaxTokenCount(TokenTypes token)
-		{
-			return (int)(moduleOffset[modules.Length - 1][((uint)token) >> TableTokenTypeShift].End);
-		}
-
 		#endregion // Methods
 
 		#region IMetadataProvider members
 
 		TokenTypes IMetadataProvider.GetMaxTokenValue(TokenTypes token)
 		{
-			return (TokenTypes)GetMaxTokenCount(token);
+			return (TokenTypes)(GetMaxTokenCount(token) - 1) | (token & TokenTypes.TableMask);
 		}
 
 		string IMetadataProvider.ReadString(TokenTypes token)
@@ -770,5 +832,7 @@ namespace Mosa.Tools.Compiler.Metadata
 		}
 
 		#endregion // IMetadataProvider members
+
+
 	}
 }

@@ -222,14 +222,16 @@ namespace Mosa.Tools.Compiler
 
 			Console.WriteLine("Compiling ...");
 
-			try
-			{
-				Compile();
-			}
-			catch (CompilationException ce)
-			{
-				this.ShowError(ce.Message);
-			}
+			Compile();
+
+			//try
+			//{
+			//    Compile();
+			//}
+			//catch (CompilationException ce)
+			//{
+			//    this.ShowError(ce.Message);
+			//}
 		}
 
 		/// <summary>
@@ -258,14 +260,21 @@ namespace Mosa.Tools.Compiler
 			{
 				runtime.InitializePrivatePaths(this.GetInputFileNames());
 
+				Metadata.MergedAssemblyLoader assemblyLoader = new Metadata.MergedAssemblyLoader(this.GetInputFileNames(), runtime.TypeSystem);
+				runtime.AssemblyLoader = assemblyLoader;
+
+				List<IMetadataModule> modules = new List<IMetadataModule>();
+				modules.Add(assemblyLoader.MetadataModule);
+
 				// Create the compiler
 				using (AotCompiler aot = new AotCompiler(this.architectureSelector.Architecture, this.GetMainAssembly(runtime.AssemblyLoader), runtime.TypeSystem, runtime.AssemblyLoader))
 				{
 					aot.Pipeline.AddRange(new IAssemblyCompilerStage[] 
 					{
 						this.bootFormatStage,
-						new x86.InterruptBuilderStage(),
-						new AssemblyCompilationStage(this.GetInputFileNames(), runtime.AssemblyLoader), 
+						new InterruptBuilderStage(),						
+						//new AssemblyCompilationStage(this.GetInputFileNames(), runtime.AssemblyLoader), 
+						new AssemblyCompilationStage2(modules), 
 						//new FakeSystemObjectGenerationStage(),
 						new MethodCompilerSchedulerStage(),
 						new TypeInitializers.TypeInitializerSchedulerStage(),

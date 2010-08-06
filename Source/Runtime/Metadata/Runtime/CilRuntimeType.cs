@@ -125,7 +125,9 @@ namespace Mosa.Runtime.Metadata.Runtime
 		/// <returns>The base type.</returns>
 		protected override RuntimeType GetBaseType()
 		{
-			return typeSystem.GetType(this, this.Module, this.baseTypeToken);
+			//return typeSystem.GetType(this, this.Module, this.baseTypeToken);
+			RuntimeType runtimeType = typeSystem.GetType(this, this.Module, this.baseTypeToken);
+			return runtimeType;
 		}
 
 		/// <summary>

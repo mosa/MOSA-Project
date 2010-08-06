@@ -33,32 +33,32 @@ namespace Mosa.Runtime.Metadata {
 
 		#endregion // Construction
 
-        #region Methods
+		#region Methods
 
-        /// <summary>
-        /// Reads the string.
-        /// </summary>
-        /// <param name="token">The token.</param>
-        /// <returns></returns>
-        public string ReadString(ref TokenTypes token)
-        {
-            Debug.Assert((TokenTypes.TableMask & token) == TokenTypes.String);
-            if ((TokenTypes.TableMask & token) != TokenTypes.String)
-                throw new ArgumentException(@"Invalid token value.", @"token");
+		/// <summary>
+		/// Reads the string.
+		/// </summary>
+		/// <param name="token">The token.</param>
+		/// <returns></returns>
+		public string ReadString(TokenTypes token)
+		{
+			Debug.Assert((TokenTypes.TableMask & token) == TokenTypes.String);
+			if ((TokenTypes.TableMask & token) != TokenTypes.String)
+				throw new ArgumentException(@"Invalid token value.", @"token");
 
-            // Offset of the requested string
-            int offset = (int)(token & TokenTypes.RowIndexMask);
-            if (0 == offset)
-                return String.Empty;
+			// Offset of the requested string
+			int offset = (int)(token & TokenTypes.RowIndexMask);
+			if (0 == offset)
+				return String.Empty;
 
-            // Validate the offset & calculate the real offset
-            int realOffset = ValidateOffset(offset);
-            byte[] buffer = this.Buffer;
-            int endOffset = Array.IndexOf<byte>(buffer, 0, realOffset);
-            token = (TokenTypes)((int)TokenTypes.String | endOffset - this._offset);
-            return Encoding.UTF8.GetString(buffer, realOffset, endOffset - realOffset);
-        }
+			// Validate the offset & calculate the real offset
+			int realOffset = ValidateOffset(offset);
+			byte[] buffer = this.Buffer;
+			int endOffset = Array.IndexOf<byte>(buffer, 0, realOffset);
+			//token = (TokenTypes)((int)TokenTypes.String | endOffset - this._offset);
+			return Encoding.UTF8.GetString(buffer, realOffset, endOffset - realOffset);
+		}
 
-        #endregion // Methods
-    }
+		#endregion // Methods
+	}
 }

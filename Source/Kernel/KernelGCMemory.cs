@@ -34,7 +34,7 @@ namespace Mosa.Kernel
 			}
 						
 			uint at = _heap + _used;
-			_used = _used + _size;
+			_used = _used + size;
 			return at;
 		}
 

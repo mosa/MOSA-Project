@@ -89,7 +89,7 @@ namespace Mosa.Runtime.Linker
 		{
 			long address;
 
-            this.AddVmCalls(this.symbols);
+			this.AddVmCalls(this.symbols);
 
 			// Check if we have unresolved requests and try to link them
 			List<string> members = new List<string>(this.linkRequests.Keys);
@@ -131,9 +131,9 @@ namespace Mosa.Runtime.Linker
 		/// <param name="targetAddress">The position in code, where it should be patched.</param>
 		protected abstract void ApplyPatch(LinkType linkType, long methodAddress, long methodOffset, long methodRelativeBase, long targetAddress);
 
-        protected virtual void AddVmCalls(IDictionary<string, LinkerSymbol> virtualMachineCalls)
-        {
-        }
+		protected virtual void AddVmCalls(IDictionary<string, LinkerSymbol> virtualMachineCalls)
+		{
+		}
 
 		#endregion // Methods
 
@@ -174,9 +174,9 @@ namespace Mosa.Runtime.Linker
 		public string OutputFile
 		{
 			get 
-            { 
-                return this.outputFile; 
-            }
+			{ 
+				return this.outputFile; 
+			}
 
 			set
 			{
@@ -232,11 +232,11 @@ namespace Mosa.Runtime.Linker
 		/// </returns>
 		public virtual Stream Allocate(string name, SectionKind section, int size, int alignment)
 		{
-		    Stream result;
+			Stream result;
 			Stream baseStream = Allocate(section, size, alignment);
 
 			try 
-            {
+			{
 				// Create a linker symbol for the name
 				LinkerSymbol symbol = new LinkerSymbol(name, section, baseStream.Position);
 
@@ -247,7 +247,7 @@ namespace Mosa.Runtime.Linker
 				result = new LinkerStream(symbol, baseStream, size);
 			}
 			catch (ArgumentException argx) 
-            {
+			{
 				throw new LinkerException(String.Format(@"Symbol {0} defined multiple times.", name), argx);
 			}
 
@@ -272,7 +272,7 @@ namespace Mosa.Runtime.Linker
 		/// <returns>The section of the requested kind.</returns>
 		public abstract LinkerSection GetSection(SectionKind sectionKind);
 
-        /// <summary>
+		/// <summary>
 		/// Retrieves a linker symbol.
 		/// </summary>
 		/// <param name="symbolName">The name of the symbol to retrieve.</param>
@@ -291,15 +291,15 @@ namespace Mosa.Runtime.Linker
 			return result;
 		}
 
-        /// <summary>
-        /// Determines if a given symbol name is already in use by the linker.
-        /// </summary>
-        /// <param name="symbolName">The symbol name.</param>
-        /// <returns><c>true</c> if the symbol name is already used; <c>false</c> otherwise.</returns>
-        public bool HasSymbol(string symbolName)
-        {
-            return this.symbols.ContainsKey(symbolName);
-        }
+		/// <summary>
+		/// Determines if a given symbol name is already in use by the linker.
+		/// </summary>
+		/// <param name="symbolName">The symbol name.</param>
+		/// <returns><c>true</c> if the symbol name is already used; <c>false</c> otherwise.</returns>
+		public bool HasSymbol(string symbolName)
+		{
+			return this.symbols.ContainsKey(symbolName);
+		}
 
 		/// <summary>
 		/// Issues a linker request for the given runtime method.
@@ -321,7 +321,7 @@ namespace Mosa.Runtime.Linker
 			if (null == targetSymbolName)
 				throw new ArgumentNullException(@"symbol");
 
-		    string symbolName = method.ToString();
+			string symbolName = method.ToString();
 			return this.Link(linkType, symbolName, methodOffset, methodRelativeBase, targetSymbolName, offset);
 		}
 
@@ -347,7 +347,7 @@ namespace Mosa.Runtime.Linker
 
 			List<LinkRequest> list;
 			if (!this.linkRequests.TryGetValue(targetSymbol, out list)) 
-            {
+			{
 				list = new List<LinkRequest>();
 				this.linkRequests.Add(targetSymbol, list);
 			}
@@ -382,7 +382,7 @@ namespace Mosa.Runtime.Linker
 			virtualAddress = 0;
 			LinkerSymbol linkerSymbol;
 			if (this.symbols.TryGetValue(symbol, out linkerSymbol)) 
-            {
+			{
 				virtualAddress = linkerSymbol.VirtualAddress.ToInt64();
 			}
 
@@ -411,7 +411,7 @@ namespace Mosa.Runtime.Linker
 			long methodAddress;
 
 			foreach (LinkRequest request in requests) 
-            {
+			{
 				if (IsResolved(request.LinkSymbol, out methodAddress) == false)
 					throw new InvalidOperationException(@"Method not compiled - but making link requests??");
 
@@ -427,5 +427,5 @@ namespace Mosa.Runtime.Linker
 		}
 
 		#endregion // Internals
-    }
+	}
 }
