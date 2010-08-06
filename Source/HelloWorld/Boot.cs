@@ -27,11 +27,11 @@ namespace Mosa.HelloWorld
 			Screen.GotoTop();
 			Screen.Color = Colors.Yellow;
 
-            Screen.Write(@"MOSA OS Version 0.6 '");
+            Screen.Write(@"MOSA OS Version 0.7 '");
 			Screen.Color = Colors.Red;
-            Screen.Write(@"Mammoth");
+			Screen.Write(@"Malibu");
 			Screen.Color = Colors.Yellow;
-			Screen.Write(@"'                               Copyright 2008-2010");
+			Screen.Write(@"'                              Copyright 2008-2010");
 			Screen.NextLine();
 
 			Screen.Color = 0x0F;
@@ -96,7 +96,7 @@ namespace Mosa.HelloWorld
 				Screen.NextLine();
 			}
 
-			Screen.SetCursor(18, 0);
+			Screen.SetCursor(17, 0);
 
 			Screen.Color = 0x0F;
 			for (uint index = 0; index < 60; index++)
@@ -159,22 +159,22 @@ namespace Mosa.HelloWorld
 
 			//Multiboot.Dump(4,53);
 
-			Screen.Row = 23;
+			Screen.Row = 22;
 			for (uint index = 0; index < 80; index++) {
 				Screen.Column = index;
 				Screen.Write((char)205);
 			}
 
-			for (uint index = 2; index < 24; index++) {
+			for (uint index = 2; index < 23; index++) {
 				Screen.Column = 60;
 				Screen.Row = index;
 
 				Screen.Color = Colors.White;
 				if (index == 7)
 					Screen.Write((char)185);
-				else if (index == 18)
+				else if (index == 17)
 					Screen.Write((char)185);
-				else if (index == 23)
+				else if (index == 22)
 					Screen.Write((char)202);
 				else
 					Screen.Write((char)186);
