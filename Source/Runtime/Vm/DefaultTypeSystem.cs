@@ -654,9 +654,8 @@ namespace Mosa.Runtime.Vm
 						layoutRow = md.ReadClassLayoutRow(tokenLayout);
 				}
 
-
 				// Create and populate the runtime type
-				rt = new CilRuntimeType(token, module, ref typeDefRow, maxNextField, maxNextMethod, packing, size, this);
+				rt = new CilRuntimeType(token, module, typeDefRow, maxNextField, maxNextMethod, packing, size, this);
 				LoadMethods(module, rt, typeDefRow.MethodList, maxNextMethod, ref methodOffset);
 				LoadFields(module, rt, typeDefRow.FieldList, maxNextField, ref fieldOffset);
 				_types[typeOffset++] = rt;

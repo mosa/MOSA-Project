@@ -326,7 +326,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns>A stream, which represents the IL of the method.</returns>
 		public Stream GetInstructionStream()
 		{
-			return _method.Module.GetInstructionStream(_method.Rva);
+			return _method.Module.GetInstructionStream((long)_method.Rva);
 		}
 
 		/// <summary>

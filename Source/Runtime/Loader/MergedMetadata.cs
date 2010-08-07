@@ -295,7 +295,10 @@ namespace Mosa.Runtime.Loader
 
 		protected ulong GetNewRVA(uint module, ulong rva)
 		{
-			return (module << 32) | rva;
+			ulong newrva = module;
+			newrva = newrva << 32;
+			newrva = newrva | rva;
+			return newrva;
 		}
 
 		protected int GetModuleIndex(IMetadataModule module)
