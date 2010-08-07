@@ -678,7 +678,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 
 			string referencedString = assembly.Metadata.ReadString(ctx.Token);
 
-			string symbolName = @"$ldstr$" + assembly.Name + "$String" + ctx.Token.ToString(@"x");
+			string symbolName = @"$ldstr$" + assembly.Names[0] + "$String" + ctx.Token.ToString(@"x");
 
 			if (linker.HasSymbol(symbolName) == false)
 			{
@@ -1663,7 +1663,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			if (intrinsicAttributeTypes == null)
 			{
 
-				if (assemblyLoader.Modules.FirstOrDefault(item => item.Name == @"mscorlib") != null)
+				if (assemblyLoader.Modules.FirstOrDefault(item => item.Names[0] == @"mscorlib") != null) // ????PG????
 				{
 					RuntimeType attributeType = typeSystem.GetType(@"Mosa.Runtime.CompilerFramework.IntrinsicAttribute, mscorlib");
 					if (attributeType != null)

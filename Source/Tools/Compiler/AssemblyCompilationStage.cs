@@ -23,21 +23,15 @@ namespace Mosa.Tools.Compiler
 {
 	public class AssemblyCompilationStage : BaseAssemblyCompilerStage, IAssemblyCompilerStage
 	{
-		private readonly List<IMetadataModule> inputAssemblies;
+		private readonly List<IMetadataModule> inputAssemblies = new List<IMetadataModule>();
 
 		private IAssemblyLinker linker;
 
 		private ITypeInitializerSchedulerStage typeInitializerSchedulerStage;
 
-		public AssemblyCompilationStage(IEnumerable<string> inputFileNames, IAssemblyLoader assemblyLoader)
+		public AssemblyCompilationStage(IAssemblyLoader assemblyLoader)
 		{
-			inputAssemblies = new List<IMetadataModule>();
-
-			foreach (string inputFileName in inputFileNames)
-			{
-				IMetadataModule assembly = LoadAssembly(assemblyLoader, inputFileName);
-				inputAssemblies.Add(assembly);
-			}
+			this.assemblyLoader = assemblyLoader;
 		}
 
 		#region IPipelineStage members
@@ -70,32 +64,14 @@ namespace Mosa.Tools.Compiler
 
 		void IAssemblyCompilerStage.Run()
 		{
-			foreach (IMetadataModule assembly in inputAssemblies)
-				CompileAssembly(assembly);
+			CompileAssembly(assemblyLoader.GetModule(0));
 		}
 
 		#endregion IAssemblyCompilerStage
 
-		private static IMetadataModule LoadAssembly(IAssemblyLoader assemblyLoader, string assemblyFileName)
-		{
-			try
-			{
-				IMetadataModule assemblyModule = assemblyLoader.Load(assemblyFileName);
-
-				// Try to load debug information for the compilation
-				LoadAssemblyDebugInfo(assemblyFileName);
-
-				return assemblyModule;
-			}
-			catch (BadImageFormatException bife)
-			{
-				throw new CompilationException(String.Format("Couldn't load input file {0} (invalid format).", assemblyFileName), bife);
-			}
-		}
-
 		private static void LoadAssemblyDebugInfo(string assemblyFileName)
 		{
-			string dbgFile = Path.Combine(Path.GetDirectoryName(assemblyFileName), Path.GetFileNameWithoutExtension(assemblyFileName) + ".pdb") + "!!";
+			string dbgFile = Path.Combine(Path.GetDirectoryName(assemblyFileName), Path.GetFileNameWithoutExtension(assemblyFileName) + ".pdb");
 
 			if (File.Exists(dbgFile))
 			{

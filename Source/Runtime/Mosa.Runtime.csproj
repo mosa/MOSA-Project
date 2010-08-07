@@ -252,6 +252,7 @@
     <Compile Include="CompilerFramework\LoopAwareBlockOrderStage.cs" />
     <Compile Include="CompilerFramework\LocalCSE.cs" />
     <Compile Include="CompilerFramework\IMethodCompiler.cs" />
+    <Compile Include="Loader\MergedMetadata.cs" />
     <Compile Include="Loader\PE\StreamHeader.cs" />
     <Compile Include="Memory\IMemoryPageManager.cs" />
     <Compile Include="Memory\PageAccessFlags.cs" />

@@ -100,7 +100,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Gets the assembly.
 		/// </summary>
 		/// <value>The assembly.</value>
-		public IMetadataModule Assembly
+		public IMetadataModule MainAssembly
 		{
 			get { return assembly; }
 		}

@@ -116,10 +116,13 @@ namespace Mosa.Runtime.Vm
 		/// <param name="module">The loaded module.</param>
 		void ITypeSystem.AssemblyLoaded(IMetadataModule module)
 		{
-			Debug.Assert(null != module && ((null == _moduleOffsets && 0 == module.LoadOrder) || _moduleOffsets.Length == module.LoadOrder));
-			if (null == module)
-				throw new ArgumentNullException(@"result");
-			if ((null == _moduleOffsets && 0 != module.LoadOrder) || (null != _moduleOffsets && module.LoadOrder < _moduleOffsets.Length))
+			Debug.Assert(module != null);
+			Debug.Assert((_moduleOffsets == null && module.LoadOrder == 0) || _moduleOffsets.Length == module.LoadOrder);
+
+			if (module == null)
+				throw new ArgumentNullException(@"module");
+
+			if ((_moduleOffsets == null && module.LoadOrder != 0) || (_moduleOffsets != null && module.LoadOrder < _moduleOffsets.Length))
 				throw new ArgumentException(@"Module is late?");
 
 			IMetadataProvider md = module.Metadata;
@@ -249,8 +252,8 @@ namespace Mosa.Runtime.Vm
 			string name = module.Metadata.ReadString(typeRef.TypeNameIdx);
 			string ns = module.Metadata.ReadString(typeRef.TypeNamespaceIdx);
 			AssemblyRefRow arr = module.Metadata.ReadAssemblyRefRow(typeRef.ResolutionScopeIdx);
-			IAssemblyLoader loader = baseRuntime.AssemblyLoader;
-			IMetadataModule dependency = loader.Resolve(module.Metadata, arr);
+
+			IMetadataModule dependency = baseRuntime.AssemblyLoader.Load(module.Metadata.ReadString(arr.NameIdx));
 
 			for (int i = GetModuleOffset(dependency).TypeOffset; i < _types.Length; i++)
 			{
@@ -397,7 +400,7 @@ namespace Mosa.Runtime.Vm
 			}
 
 			if (ownerType == null)
-				throw new InvalidOperationException(String.Format(@"Failed to retrieve owner type for Token {0:x} (Table {1}) in {2}", row.ClassTableIdx, row.ClassTableIdx & TokenTypes.TableMask, module.Name));
+				throw new InvalidOperationException(String.Format(@"Failed to retrieve owner type for Token {0:x} (Table {1}) in {2}", row.ClassTableIdx, row.ClassTableIdx & TokenTypes.TableMask, module.Names[0]));
 
 			string fieldName = metadata.ReadString(row.NameStringIdx);
 
@@ -1013,7 +1016,8 @@ namespace Mosa.Runtime.Vm
 					AssemblyRefRow asmRefRow = module.Metadata.ReadAssemblyRefRow(row.ResolutionScopeIdx);
 					string typeName = module.Metadata.ReadString(row.TypeNameIdx);
 					string typeNamespace = module.Metadata.ReadString(row.TypeNamespaceIdx);
-					IMetadataModule resolvedModule = baseRuntime.AssemblyLoader.Resolve(module.Metadata, asmRefRow);
+
+					IMetadataModule resolvedModule = baseRuntime.AssemblyLoader.Load(module.Metadata.ReadString(asmRefRow.NameIdx));
 
 					// HACK: If there's an easier way to do this without all those string comparisons, I'm all for it
 					foreach (RuntimeType type in ((ITypeSystem)this).GetTypesFromModule(resolvedModule))

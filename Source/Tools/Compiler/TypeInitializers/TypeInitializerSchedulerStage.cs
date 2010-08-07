@@ -103,7 +103,7 @@ namespace Mosa.Tools.Compiler.TypeInitializers
 		/// </summary>
 		void IAssemblyCompilerStage.Run()
 		{
-			RuntimeMethod entrypoint = typeSystem.GetMethod(DefaultSignatureContext.Instance, compiler.Assembly, compiler.Assembly.EntryPoint);
+			RuntimeMethod entrypoint = typeSystem.GetMethod(DefaultSignatureContext.Instance, compiler.MainAssembly, compiler.MainAssembly.EntryPoint);
 
 			Schedule(entrypoint);
 			ctx.AppendInstruction(IR.Instruction.EpilogueInstruction);

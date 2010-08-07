@@ -67,7 +67,6 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 			using (Stream code = MethodCompiler.GetInstructionStream())
 			{
-
 				// Initalize the instruction, setting the initalize size to 10 times the code stream
 				MethodCompiler.InstructionSet = new InstructionSet((int)code.Length * 10);
 
@@ -81,7 +80,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 					_codeReader = reader;
 
 					ReadMethodHeader(reader, ref header);
-					//Debug.WriteLine("Decoding " + compiler.Method.ToString());
+					Debug.WriteLine("Decoding " + _compiler.Method.ToString());
 
 					if (0 != header.localsSignature)
 					{
@@ -133,7 +132,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 					break;
 
 				default:
-					throw new InvalidDataException(@"Invalid method _header.");
+					throw new InvalidDataException(@"Invalid method header.");
 			}
 
 			// Are there sections following the code?
@@ -229,7 +228,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 				// Create and initialize the corresponding instruction
 				ctx.AppendInstruction(instruction);
-				instruction.Decode(ctx, this, typeSystem);	
+				instruction.Decode(ctx, this, typeSystem);
 				ctx.Label = instOffset;
 				//ctx.Prefix = prefix;
 

@@ -63,10 +63,10 @@ namespace Mosa.Tools.Compiler.Stages
 
 		private RuntimeMethod GenerateMethod(string @namespace, string typeName, string methodName)
 		{
-			var type = new CompilerGeneratedType(compiler.Assembly, @namespace, typeName, typeSystem);
+			var type = new CompilerGeneratedType(compiler.MainAssembly, @namespace, typeName, typeSystem);
 
 			// Create the method
-			CompilerGeneratedMethod method = new CompilerGeneratedMethod(compiler.Assembly, methodName, type, typeSystem);
+			CompilerGeneratedMethod method = new CompilerGeneratedMethod(compiler.MainAssembly, methodName, type, typeSystem);
 			type.AddMethod(method);
 
 			return method;
@@ -80,10 +80,10 @@ namespace Mosa.Tools.Compiler.Stages
 
 		private void CompileObjectEquals(string typeName)
 		{
-			CompilerGeneratedType type = new CompilerGeneratedType(compiler.Assembly, @"System", typeName, typeSystem);
+			CompilerGeneratedType type = new CompilerGeneratedType(compiler.MainAssembly, @"System", typeName, typeSystem);
 
 			// Create the method
-			CompilerGeneratedMethod method = new CompilerGeneratedMethod(compiler.Assembly, @"Equals", type, typeSystem);
+			CompilerGeneratedMethod method = new CompilerGeneratedMethod(compiler.MainAssembly, @"Equals", type, typeSystem);
 			method.Parameters.Add(new RuntimeParameter(null, @"obj", 0, ParameterAttributes.In));
 			method.SetSignature(new MethodSignature(BuiltInSigType.Boolean, new SigType[] { BuiltInSigType.Object }));
 			type.AddMethod(method);
