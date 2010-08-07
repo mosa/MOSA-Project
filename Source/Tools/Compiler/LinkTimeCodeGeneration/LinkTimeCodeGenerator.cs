@@ -65,11 +65,11 @@ namespace Mosa.Tools.Compiler.LinkTimeCodeGeneration
 
 			// Create the type if we need to.
 			if (compilerGeneratedType == null)
-				compilerGeneratedType = new CompilerGeneratedType(compiler.Assembly, @"Mosa.Tools.Compiler", @"LinkerGenerated", typeSystem);
+				compilerGeneratedType = new CompilerGeneratedType(compiler.MainAssembly, @"Mosa.Tools.Compiler", @"LinkerGenerated", typeSystem);
 
 			// Create the method
 			// HACK: <$> prevents the method from being called from CIL
-			CompilerGeneratedMethod method = new CompilerGeneratedMethod(compiler.Assembly, "<$>" + methodName, compilerGeneratedType, typeSystem);
+			CompilerGeneratedMethod method = new CompilerGeneratedMethod(compiler.MainAssembly, "<$>" + methodName, compilerGeneratedType, typeSystem);
 			compilerGeneratedType.AddMethod(method);
 
 			LinkerMethodCompiler methodCompiler = new LinkerMethodCompiler(compiler, compiler.Pipeline.FindFirst<ICompilationSchedulerStage>(), method, instructionSet);

@@ -260,21 +260,16 @@ namespace Mosa.Tools.Compiler
 			{
 				runtime.InitializePrivatePaths(this.GetInputFileNames());
 
-				Metadata.MergedAssemblyLoader assemblyLoader = new Metadata.MergedAssemblyLoader(this.GetInputFileNames(), runtime.TypeSystem);
-				runtime.AssemblyLoader = assemblyLoader;
-
-				List<IMetadataModule> modules = new List<IMetadataModule>();
-				modules.Add(assemblyLoader.MetadataModule);
+				IMetadataModule assemblyModule = runtime.AssemblyLoader.MergeLoad(this.GetInputFileNames());
 
 				// Create the compiler
-				using (AotCompiler aot = new AotCompiler(this.architectureSelector.Architecture, this.GetMainAssembly(runtime.AssemblyLoader), runtime.TypeSystem, runtime.AssemblyLoader))
+				using (AotCompiler aot = new AotCompiler(this.architectureSelector.Architecture, assemblyModule, runtime.TypeSystem, runtime.AssemblyLoader))
 				{
 					aot.Pipeline.AddRange(new IAssemblyCompilerStage[] 
 					{
 						this.bootFormatStage,
 						new InterruptBuilderStage(),						
-						//new AssemblyCompilationStage(this.GetInputFileNames(), runtime.AssemblyLoader), 
-						new AssemblyCompilationStage2(modules), 
+						new AssemblyCompilationStage(runtime.AssemblyLoader), 
 						//new FakeSystemObjectGenerationStage(),
 						new MethodCompilerSchedulerStage(),
 						new TypeInitializers.TypeInitializerSchedulerStage(),
@@ -291,11 +286,11 @@ namespace Mosa.Tools.Compiler
 			}
 		}
 
-		private IMetadataModule GetMainAssembly(IAssemblyLoader assemblyLoader)
-		{
-			string firstAssembly = this.inputFiles[0].FullName;
-			return assemblyLoader.Load(firstAssembly);
-		}
+		//private IMetadataModule GetMainAssembly(IAssemblyLoader assemblyLoader)
+		//{
+		//    string firstAssembly = this.inputFiles[0].FullName;
+		//    return assemblyLoader.Load(firstAssembly);
+		//}
 
 		/// <summary>
 		/// Gets a list of input file names.

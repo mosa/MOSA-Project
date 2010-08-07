@@ -114,7 +114,7 @@ namespace Mosa.Tools.Compiler.Linkers
 		{
 			CheckImplementation();
 
-			RuntimeMethod entrypoint = typeSystem.GetMethod(DefaultSignatureContext.Instance, compiler.Assembly, compiler.Assembly.EntryPoint);
+			RuntimeMethod entrypoint = typeSystem.GetMethod(DefaultSignatureContext.Instance, compiler.MainAssembly, compiler.MainAssembly.EntryPoint);
 
 			// Set the default entry point in the linker, if no previous stage has replaced it.
 			if (this.implementation.EntryPoint == null && entrypoint != null)

@@ -38,7 +38,9 @@ namespace Mosa.Runtime.Loader.PE
 
 		#region Data members
 
-		private int _loadOrder;
+		private int _loadOrder =  -1;
+
+		private IList<string> names;
 
 		/// <summary>
 		/// The stream, which provides the assembly data.
@@ -79,7 +81,7 @@ namespace Mosa.Runtime.Loader.PE
 		/// Metadata of the assembly
 		/// </summary>
 		private byte[] _metadata;
-		private string codeBase;
+		private IList<string> codeBases;
 
 		#endregion // Data members
 
@@ -90,14 +92,13 @@ namespace Mosa.Runtime.Loader.PE
 		/// </summary>
 		/// <param name="loadOrder">The load order.</param>
 		/// <param name="stream">The stream.</param>
-		private PortableExecutableImage(int loadOrder, Stream stream, string codeBase)
+		private PortableExecutableImage(Stream stream, string codeBase)
 		{
-			this.codeBase = codeBase;
+			codeBases = new List<string>();
+			codeBases.Add(codeBase);
 
 			_assemblyStream = stream;
 			_assemblyReader = new BinaryReader(stream);
-
-			_loadOrder = loadOrder;
 
 			// Load all headers by visiting them sequentially
 			_dosHeader.Read(_assemblyReader);
@@ -128,44 +129,40 @@ namespace Mosa.Runtime.Loader.PE
 
 		#region Properties
 
-		public string CodeBase
-		{
-			get
-			{
-				return this.codeBase;
-			}
-		}
+		IList<string> IMetadataModule.CodeBases { get { return this.codeBases; } }
 
-		public TokenTypes EntryPoint
+		TokenTypes IMetadataModule.EntryPoint
 		{
 			get
 			{
 				if (_cliHeader.EntryPointToken == 0)
 					return 0;
 
-				return  (TokenTypes)_cliHeader.EntryPointToken; 
+				return (TokenTypes)_cliHeader.EntryPointToken;
 			}
 		}
-		
+
 		/// <summary>
 		/// Retrieves the load order index of the module.
 		/// </summary>
 		/// <value></value>
-		public int LoadOrder
-		{
-			get { return _loadOrder; }
-		}
+		int IMetadataModule.LoadOrder { get { return _loadOrder; } set { _loadOrder = value; } }
 
 		/// <summary>
 		/// Retrieves the name of the module.
 		/// </summary>
 		/// <value></value>
-		public string Name
+		IList<string> IMetadataModule.Names
 		{
 			get
 			{
-				AssemblyRow arow = _metadataRoot.ReadAssemblyRow(TokenTypes.Assembly + 1);
-				return _metadataRoot.ReadString(arow.NameIdx);
+				if (names == null)
+				{
+					names = new List<string>(1);
+					AssemblyRow arow = _metadataRoot.ReadAssemblyRow(TokenTypes.Assembly + 1);
+					names.Add(_metadataRoot.ReadString(arow.NameIdx));
+				}
+				return names;
 			}
 		}
 
@@ -173,19 +170,13 @@ namespace Mosa.Runtime.Loader.PE
 		/// Provides access to the provider contained in the assembly.
 		/// </summary>
 		/// <value></value>
-		public IMetadataProvider Metadata
-		{
-			get
-			{
-				return _metadataRoot;
-			}
-		}
+		IMetadataProvider IMetadataModule.Metadata { get { return _metadataRoot; } }
 
 		/// <summary>
 		/// Gets the type of the module.
 		/// </summary>
 		/// <value>The type of the module.</value>
-		public ModuleType ModuleType
+		ModuleType IMetadataModule.ModuleType
 		{
 			get
 			{
@@ -200,13 +191,7 @@ namespace Mosa.Runtime.Loader.PE
 		/// Provides access to the metadata binary array.
 		/// </summary>
 		/// <value></value>
-		public byte[] MetadataBinary
-		{
-			get
-			{
-				return _metadata;
-			}
-		}
+		public byte[] MetadataBinary { get { return _metadata; } }
 
 		#endregion // Properties
 
@@ -217,7 +202,7 @@ namespace Mosa.Runtime.Loader.PE
 		/// </summary>
 		/// <param name="rva">The method to retrieve the instruction stream for.</param>
 		/// <returns>A new instance of CILInstructionStream, which represents the stream.</returns>
-		public Stream GetInstructionStream(long rva)
+		Stream IMetadataModule.GetInstructionStream(long rva)
 		{
 			return new InstructionStream(_assemblyStream, ResolveVirtualAddress(rva));
 		}
@@ -229,7 +214,7 @@ namespace Mosa.Runtime.Loader.PE
 		/// <returns>
 		/// A stream into the data section, pointed to the requested RVA.
 		/// </returns>
-		public Stream GetDataSection(long rva)
+		Stream IMetadataModule.GetDataSection(long rva)
 		{
 			return new InstructionStream(_assemblyStream, ResolveVirtualAddress(rva));
 		}
@@ -240,14 +225,14 @@ namespace Mosa.Runtime.Loader.PE
 		/// <param name="loadOrder">The load order.</param>
 		/// <param name="stream">The stream.</param>
 		/// <returns></returns>
-		public static PortableExecutableImage Load(int loadOrder, Stream stream, string codeBase)
+		public static PortableExecutableImage Load(Stream stream, string codeBase)
 		{
 			// Check preconditions
 			if (null == stream)
 				throw new ArgumentNullException("stream");
 
 			// Create a new assembly instance
-			return new PortableExecutableImage(loadOrder, stream, codeBase);
+			return new PortableExecutableImage(stream, codeBase);
 		}
 
 		/// <summary>

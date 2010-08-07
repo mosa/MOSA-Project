@@ -17,7 +17,7 @@ using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Tables;
 using Mosa.Runtime.Vm;
 
-namespace Mosa.Tools.Compiler.Metadata
+namespace Mosa.Runtime.Loader
 {
 
 	/// <summary>
@@ -64,10 +64,11 @@ namespace Mosa.Tools.Compiler.Metadata
 		protected IMetadataModule[] modules;
 		protected ModuleOffset[][] moduleOffset;
 		protected ModuleOffset[][] moduleStreamOffset;
-		protected string codeBase;
+		protected List<string> codeBases;
 		protected TokenTypes entryPoint;
 		protected ModuleType moduleType;
-		protected string name;
+		protected List<string> names;
+		protected int loadOrder = -1;
 
 		#endregion // Data members
 
@@ -90,7 +91,7 @@ namespace Mosa.Tools.Compiler.Metadata
 		/// <summary>
 		/// Retrieves the name of the module.
 		/// </summary>
-		string IMetadataModule.Name { get { return name; } }
+		IList<string> IMetadataModule.Names { get { return names; } }
 
 		/// <summary>
 		/// Provides access to the sequence of IL opcodes for a relative
@@ -127,7 +128,7 @@ namespace Mosa.Tools.Compiler.Metadata
 		/// Gets the code base of the module.
 		/// </summary>
 		/// <value>The code base of the module.</value>
-		string IMetadataModule.CodeBase { get { return codeBase; } }
+		IList<string> IMetadataModule.CodeBases { get { return codeBases; } }
 
 		/// <summary>
 		/// Gets the entry point of the module.
@@ -138,7 +139,7 @@ namespace Mosa.Tools.Compiler.Metadata
 		/// <summary>
 		/// Retrieves the load order index of the module.
 		/// </summary>
-		int IMetadataModule.LoadOrder { get { return 0; } }
+		int IMetadataModule.LoadOrder { get { return loadOrder; } set { loadOrder = value; } }
 
 		/// <summary>
 		/// Gets the type of the module.
@@ -156,13 +157,19 @@ namespace Mosa.Tools.Compiler.Metadata
 			moduleOffset = new ModuleOffset[modules.Count][];
 			moduleStreamOffset = new ModuleOffset[4][];
 			moduleType = ModuleType.Library;
-			codeBase = modules[0].CodeBase;
-			name = modules[0].CodeBase;
+			codeBases = new List<string>();
+			names = new List<string>();
 
 			for (uint mod = 0; mod < modules.Count; mod++)
 			{
 				IMetadataModule module = modules[(int)mod];
 				this.modules[mod] = module;
+
+				foreach (string code in module.CodeBases)
+					codeBases.Add(code);
+
+				foreach (string name in module.Names)
+					names.Add(name);
 
 				moduleOffset[mod] = new ModuleOffset[MaxTables];
 				moduleStreamOffset[mod] = new ModuleOffset[4];
@@ -188,8 +195,6 @@ namespace Mosa.Tools.Compiler.Metadata
 				if (module.ModuleType == ModuleType.Executable)
 				{
 					moduleType = ModuleType.Executable;
-					codeBase = module.CodeBase;
-					name = module.Name;
 				}
 
 				if (module.EntryPoint != 0)
@@ -832,7 +837,6 @@ namespace Mosa.Tools.Compiler.Metadata
 		}
 
 		#endregion // IMetadataProvider members
-
 
 	}
 }

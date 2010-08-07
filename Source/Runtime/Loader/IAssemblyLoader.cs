@@ -25,19 +25,18 @@ namespace Mosa.Runtime.Loader
 		void AppendPrivatePath(string path);
 
 		/// <summary>
-		/// Resolves the given assembly reference and loads the associated IMetadataModule.
-		/// </summary>
-		/// <param name="provider">The metadata provider, which contained the assembly reference.</param>
-		/// <param name="assemblyRef">The assembly reference to resolve.</param>
-		/// <returns>An instance of IMetadataModule representing the resolved assembly.</returns>
-		IMetadataModule Resolve(IMetadataProvider provider, AssemblyRefRow assemblyRef);
-
-		/// <summary>
 		/// Loads the named assembly.
 		/// </summary>
 		/// <param name="file">The file path of the assembly to load.</param>
 		/// <returns>The assembly image of the loaded assembly.</returns>
 		IMetadataModule Load(string file);
+
+		/// <summary>
+		/// Loads the named assemblies (as a merged assembly)
+		/// </summary>
+		/// <param name="file">The file paths of the assemblies to load.</param>
+		/// <returns>The assembly image of the loaded assembly.</returns>
+		IMetadataModule MergeLoad(IEnumerable<string> files);
 
 		/// <summary>
 		/// Unloads the given module.

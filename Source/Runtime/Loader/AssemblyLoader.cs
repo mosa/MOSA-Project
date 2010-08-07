@@ -26,9 +26,9 @@ namespace Mosa.Runtime.Loader
 
 		private string[] searchPath;
 		private List<string> privatePaths = new List<string>();
-		private List<IMetadataModule> loadedImages = new List<IMetadataModule>();
+		private List<IMetadataModule> modules = new List<IMetadataModule>();
 		private object loaderLock = new object();
-		private BaseRuntime BaseRuntime;
+		private ITypeSystem typeSystem;
 
 		#endregion // Data members
 
@@ -38,9 +38,9 @@ namespace Mosa.Runtime.Loader
 		/// Initializes a new instance of the <see cref="AssemblyLoader"/> class.
 		/// </summary>
 		/// <param name="baseRuntime">The runtime base.</param>
-		public AssemblyLoader(BaseRuntime baseRuntime)
+		public AssemblyLoader(ITypeSystem typeSystem)
 		{
-			this.BaseRuntime = baseRuntime;
+			this.typeSystem = typeSystem;
 
 			// HACK: I can't figure out an easier way to get the framework dir right now...
 			string frameworkDir = System.Runtime.InteropServices.RuntimeEnvironment.GetRuntimeDirectory();
@@ -63,7 +63,7 @@ namespace Mosa.Runtime.Loader
 		/// <value></value>
 		public IEnumerable<IMetadataModule> Modules
 		{
-			get { return loadedImages; }
+			get { return modules; }
 		}
 
 		/// <summary>
@@ -87,27 +87,8 @@ namespace Mosa.Runtime.Loader
 		{
 			lock (loaderLock)
 			{
-				return loadedImages[index];
+				return modules[index];
 			}
-		}
-
-		/// <summary>
-		/// Resolves the given assembly reference and loads the associated IMetadataModule.
-		/// </summary>
-		/// <param name="provider">The metadata provider, which contained the assembly reference.</param>
-		/// <param name="assemblyRef">The assembly reference to resolve.</param>
-		/// <returns>
-		/// An instance of IMetadataModule representing the resolved assembly.
-		/// </returns>
-		IMetadataModule IAssemblyLoader.Resolve(IMetadataProvider provider, AssemblyRefRow assemblyRef)
-		{
-			string name = provider.ReadString(assemblyRef.NameIdx);
-
-			IMetadataModule result = GetLoadedAssembly(name) ?? DoLoadAssembly(name + ".dll");
-			if (result == null)
-				throw new TypeLoadException();
-
-			return result;
 		}
 
 		/// <summary>
@@ -119,24 +100,57 @@ namespace Mosa.Runtime.Loader
 		/// </returns>
 		IMetadataModule IAssemblyLoader.Load(string file)
 		{
-			IMetadataModule result;
-
-			if (Path.IsPathRooted(file) == false)
+			lock (loaderLock)
 			{
-				result = GetLoadedAssembly(file);
-				if (result == null)
+				IMetadataModule module = LoadAssembly(file);
+
+				if (module != null)
 				{
-					result = DoLoadAssembly(Path.GetFileName(file) + @".dll");
-				}
-			}
-			else
-			{
-				result = LoadAssembly(file);
-			}
 
-			return result;
+					if (module.LoadOrder < 0)
+					{
+						module.LoadOrder = modules.Count;
+						modules.Add(module);
+						typeSystem.AssemblyLoaded(module);
+					}
+				}
+
+				return module;
+			}
 		}
 
+		/// <summary>
+		/// Loads the named assemblies (as a merged assembly)
+		/// </summary>
+		/// <param name="files"></param>
+		/// <returns>
+		/// The assembly image of the loaded assembly.
+		/// </returns>
+		IMetadataModule IAssemblyLoader.MergeLoad(IEnumerable<string> files)
+		{
+			lock (loaderLock)
+			{
+				List<IMetadataModule> mods = new List<IMetadataModule>();
+
+				foreach (string file in files)
+				{
+					IMetadataModule result = DoLoadAssembly(file);
+
+					if (result != null)
+					{
+						mods.Add(result);
+					}
+				}
+
+				IMetadataModule merged = new MergedMetadata(mods);
+
+				merged.LoadOrder = modules.Count;
+				modules.Add(merged);
+				typeSystem.AssemblyLoaded(merged);
+
+				return merged;
+			}
+		}
 		/// <summary>
 		/// Unloads the given module.
 		/// </summary>
@@ -154,36 +168,47 @@ namespace Mosa.Runtime.Loader
 
 		#region Internals
 
+		private IMetadataModule LoadAssembly(string file)
+		{
+			IMetadataModule result = null;
+
+			if (!Path.IsPathRooted(file))
+			{
+				result = GetLoadedAssembly(file);
+
+				if (result == null)
+				{
+					result = DoLoadAssembly(Path.GetFileName(file) + @".dll");
+				}
+			}
+			else
+			{
+				result = LoadAssembly2(file);
+			}
+
+			return result;
+		}
+
 		/// <summary>
 		/// Loads the assembly.
 		/// </summary>
 		/// <param name="file">The file.</param>
 		/// <returns></returns>
-		private IMetadataModule LoadAssembly(string file)
+		private IMetadataModule LoadAssembly2(string file)
 		{
-			IMetadataModule result;
 			string codeBase = CreateFileCodeBase(file);
 
-			result = FindLoadedModule(codeBase);
-			if (result == null)
-			{
-				if (!File.Exists(file))
-					return null;
+			IMetadataModule result = FindLoadedModule(codeBase);
 
-				lock (loaderLock)
-				{
-					result = PortableExecutableImage.Load(loadedImages.Count, new FileStream(file, FileMode.Open, FileAccess.Read), codeBase);
-					if (result != null)
-					{
-						loadedImages.Add(result);
+			if (result != null)
+				return result;
 
-						BaseRuntime.TypeSystem.AssemblyLoaded(result);
-					}
-				}
-			}
+			if (!File.Exists(file))
+				return null;
 
-			return result;
+			return PortableExecutableImage.Load(new FileStream(file, FileMode.Open, FileAccess.Read), codeBase);
 		}
+
 
 		/// <summary>
 		/// Finds the loaded module.
@@ -192,11 +217,14 @@ namespace Mosa.Runtime.Loader
 		/// <returns></returns>
 		private IMetadataModule FindLoadedModule(string codeBase)
 		{
-			foreach (IMetadataModule module in loadedImages)
+			foreach (IMetadataModule module in modules)
 			{
-				if (module.CodeBase.Equals(codeBase))
+				foreach (string code in module.CodeBases)
 				{
-					return module;
+					if (code.Equals(codeBase))
+					{
+						return module;
+					}
 				}
 			}
 
@@ -215,21 +243,18 @@ namespace Mosa.Runtime.Loader
 		/// <returns></returns>
 		private IMetadataModule GetLoadedAssembly(string name)
 		{
-			IMetadataModule result = null;
-
-			lock (loaderLock)
+			foreach (IMetadataModule module in modules)
 			{
-				foreach (IMetadataModule image in loadedImages)
+				foreach (string modname in module.Names)
 				{
-					if (name.Equals(image.Name))
+					if (name.Equals(modname))
 					{
-						result = image;
-						break;
+						return module;
 					}
 				}
 			}
 
-			return result;
+			return null;
 		}
 
 		/// <summary>
@@ -239,14 +264,7 @@ namespace Mosa.Runtime.Loader
 		/// <returns></returns>
 		private IMetadataModule DoLoadAssembly(string name)
 		{
-			IMetadataModule result = null;
-
-			lock (loaderLock)
-			{
-				result = DoLoadAssemblyFromPaths(name, privatePaths) ?? DoLoadAssemblyFromPaths(name, searchPath);
-			}
-
-			return result;
+			return DoLoadAssemblyFromPaths(name, privatePaths) ?? DoLoadAssemblyFromPaths(name, searchPath);
 		}
 
 		/// <summary>

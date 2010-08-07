@@ -123,14 +123,14 @@ namespace Mosa.Tools.Compiler.Metadata
 		/// Contains the names of the metadata streams emitted by this stage.
 		/// </summary>
 		private static readonly string[] MetadataStreamNames = new[] 
-        {
-            @"#Strings",
-            @"#US",
-            @"#Blob",
-            @"#GUID",
-            @"#~",
-            @"#MOSA"
-        };
+		{
+			@"#Strings",
+			@"#US",
+			@"#Blob",
+			@"#GUID",
+			@"#~",
+			@"#MOSA"
+		};
 
 		private IAssemblyLinker linker;
 

@@ -9,6 +9,7 @@
 
 using System;
 using System.IO;
+using System.Collections.Generic;
 
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Vm;
@@ -21,10 +22,10 @@ namespace Mosa.Runtime.Loader
 	public interface IMetadataModule
 	{
 		/// <summary>
-		/// Gets the code base of the module.
+		/// Gets the code bases of the module.
 		/// </summary>
-		/// <value>The code base of the module.</value>
-		string CodeBase { get; }
+		/// <value>The code bases of the module.</value>
+		IList<string> CodeBases { get; }
 
 		/// <summary>
 		/// Gets the entry point of the module.
@@ -35,12 +36,12 @@ namespace Mosa.Runtime.Loader
 		/// <summary>
 		/// Retrieves the load order index of the module.
 		/// </summary>
-		int LoadOrder { get; }
+		int LoadOrder { get; set; }
 
 		/// <summary>
 		/// Retrieves the name of the module.
 		/// </summary>
-		string Name { get; }
+		IList<string> Names { get; }
 
 		/// <summary>
 		/// Provides access to the provider contained in the assembly.

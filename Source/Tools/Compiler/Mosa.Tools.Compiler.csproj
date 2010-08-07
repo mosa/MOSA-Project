@@ -78,10 +78,7 @@
     <Compile Include="AotAssemblyCompiler.cs" />
     <Compile Include="AssemblyCompilationStage.cs" />
     <Compile Include="ConstantFoldingWrapper.cs" />
-    <Compile Include="AssemblyCompilationStage2.cs" />
     <Compile Include="Linkers\LinkerProxy.cs" />
-    <Compile Include="Metadata\MergedAssemblyLoader.cs" />
-    <Compile Include="Metadata\MergedMetadata.cs" />
     <Compile Include="Metadata\MetadataBuilderStage.cs" />
     <Compile Include="Metadata\MetadataStreamHeader.cs" />
     <Compile Include="Metadata\MetadataTableCodedIndexWriter.cs" />

@@ -62,7 +62,7 @@ namespace Mosa.Runtime.CompilerFramework
 		void IAssemblyCompilerStage.Run()
 		{
 			// Enumerate all types and do an appropriate type layout
-			ReadOnlyRuntimeTypeListView types = typeSystem.GetTypesFromModule(this.compiler.Assembly);
+			ReadOnlyRuntimeTypeListView types = typeSystem.GetTypesFromModule(this.compiler.MainAssembly);
 
 			foreach (RuntimeType type in types)
 			{
@@ -425,7 +425,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 		private void InitializeStaticValueFromRVA(Stream stream, int size, RuntimeField field)
 		{
-			using (Stream source = this.compiler.Assembly.GetDataSection(field.RVA.ToInt64()))
+			using (Stream source = this.compiler.MainAssembly.GetDataSection(field.RVA.ToInt64()))
 			{
 				byte[] data = new byte[size];
 				source.Read(data, 0, size);

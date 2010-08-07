@@ -36,7 +36,7 @@ namespace Mosa.Tools.Compiler
 		/// <summary>
 		/// The type loader of this runtime.
 		/// </summary>
-		private ITypeSystem typeLoader;
+		private ITypeSystem typeSystem;
 
 		/// <summary>
 		/// The memory page manager of this runtime.
@@ -53,8 +53,8 @@ namespace Mosa.Tools.Compiler
 		/// </summary>
 		public CompilationRuntime()
 		{
-			this.typeLoader = new DefaultTypeSystem(this);
-			this.assemblyLoader = new AssemblyLoader(this);
+			this.typeSystem = new DefaultTypeSystem(this);
+			this.assemblyLoader = new AssemblyLoader(typeSystem);
 			this.memoryManager = new MockMemoryPageManager();
 			this.jitService = new MockJitService();
 		}
@@ -74,7 +74,7 @@ namespace Mosa.Tools.Compiler
 		/// <value>The type loader.</value>
 		public override ITypeSystem TypeSystem
 		{
-			get { return this.typeLoader; }
+			get { return this.typeSystem; }
 		}
 
 		/// <summary>
