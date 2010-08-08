@@ -170,7 +170,8 @@ namespace Mosa.Tools.Compiler
 			Console.WriteLine("Copyright 2009 by the MOSA Project. Licensed under the New BSD License.");
 			Console.WriteLine("Copyright 2008 by Novell. NDesk.Options is released under the MIT/X11 license.");
 			Console.WriteLine();
-
+			Console.WriteLine("Parsing options...");
+			
 			try
 			{
 				if (args == null || args.Length == 0)
@@ -222,7 +223,13 @@ namespace Mosa.Tools.Compiler
 
 			Console.WriteLine("Compiling ...");
 
+			DateTime start = DateTime.Now;
 			Compile();
+			DateTime end = DateTime.Now;
+			
+			TimeSpan time = end - start;
+			Console.WriteLine ();
+			Console.WriteLine ("Compilation time: " + time);
 
 			//try
 			//{
@@ -241,12 +248,12 @@ namespace Mosa.Tools.Compiler
 		public override string ToString()
 		{
 			StringBuilder sb = new StringBuilder();
-			sb.Append("Output file: ").AppendLine(this.linkerStage.OutputFile);
-			sb.Append("Input file(s): ").AppendLine(String.Join(", ", new List<string>(GetInputFileNames()).ToArray()));
-			sb.Append("Architecture: ").AppendLine(architectureSelector.Architecture.GetType().FullName);
-			sb.Append("Binary format: ").AppendLine(((IPipelineStage)linkerStage).Name);
-			sb.Append("Boot format: ").AppendLine(((IPipelineStage)bootFormatStage).Name);
-			sb.Append("Is executable: ").AppendLine(isExecutable.ToString());
+			sb.Append(" > Output file: ").AppendLine(this.linkerStage.OutputFile);
+			sb.Append(" > Input file(s): ").AppendLine(String.Join(", ", new List<string>(GetInputFileNames()).ToArray()));
+			sb.Append(" > Architecture: ").AppendLine(architectureSelector.Architecture.GetType().FullName);
+			sb.Append(" > Binary format: ").AppendLine(((IPipelineStage)linkerStage).Name);
+			sb.Append(" > Boot format: ").AppendLine(((IPipelineStage)bootFormatStage).Name);
+			sb.Append(" > Is executable: ").AppendLine(isExecutable.ToString());
 			return sb.ToString();
 		}
 
