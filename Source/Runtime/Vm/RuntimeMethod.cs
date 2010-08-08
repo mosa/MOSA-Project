@@ -105,7 +105,7 @@ namespace Mosa.Runtime.Vm
 		/// </summary>
 		public bool IsNative
 		{
-			get { return 0 == Rva; }
+			get { return (Rva & 0x0FFFFFFFFFFFFFFF) == 0; }
 		}
 
 		/// <summary>
@@ -134,7 +134,7 @@ namespace Mosa.Runtime.Vm
 		/// <value>The signature.</value>
 		public MethodSignature Signature
 		{
-			get 
+			get
 			{
 				if (this.signature == null)
 				{
@@ -144,7 +144,7 @@ namespace Mosa.Runtime.Vm
 
 				return this.signature;
 			}
-			
+
 			protected set
 			{
 				this.signature = value;
@@ -233,18 +233,18 @@ namespace Mosa.Runtime.Vm
 		}
 
 		#endregion // Object Overrides
-		
+
 		public virtual SigType GetGenericMethodArgument(int index)
 		{
 			return DefaultSignatureContext.Instance.GetGenericMethodArgument(index);
 		}
-		
+
 		public virtual SigType GetGenericTypeArgument(int index)
 		{
 			return this.DeclaringType.GetGenericTypeArgument(index);
 		}
 
-		public int MethodTableSlot 
+		public int MethodTableSlot
 		{
 			get
 			{
