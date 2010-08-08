@@ -681,6 +681,11 @@ namespace Mosa.Runtime.Loader.PE
 			return theap.ReadGenericParamConstraintRow(token);
 		}
 
+		TokenTypes IMetadataProvider.ApplyTokenTypeAdjustment(TokenTypes token, ulong rva)
+		{
+			return token;
+		}
+
 		#endregion // IMetadataProvider members
 	}
 }

@@ -13,25 +13,19 @@ namespace Mosa.QuickTest
 	/// </summary>
 	public static class App
 	{
-		public delegate void Test();
+		public static int Sum(int a, int b)
+		{
+			return a + b;
+		}
 
 		/// <summary>
 		/// Main
 		/// </summary>
 		public static void Main()
 		{
-			Execute(MyTest);
+			int c = Sum(10, 20);
 		}
 
-		public static void MyTest()
-		{
-			// DO NOTHING
-		}
-
-		public static void Execute(Test a)
-		{
-			a();
-		}
 
 	}
 }

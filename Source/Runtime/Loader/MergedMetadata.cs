@@ -839,6 +839,15 @@ namespace Mosa.Runtime.Loader
 			);
 		}
 
+		TokenTypes IMetadataProvider.ApplyTokenTypeAdjustment(TokenTypes token, ulong rva)
+		{
+			uint module = (uint)(rva >> 32);
+
+			TokenTypes newToken = GetNewToken(module, token);
+
+			return newToken;
+		}
+
 		#endregion // IMetadataProvider members
 
 	}

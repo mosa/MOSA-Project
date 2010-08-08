@@ -92,7 +92,8 @@ namespace Mosa.Tools.Compiler.Stages
 			RuntimeType rt = typeSystem.GetType(@"Mosa.Kernel.X86.IDT");
 			if (rt == null)
 			{
-				throw new CompilationException(@"Failed to locate Mosa.Kernel.X86.IDT while building ISRs for the kernel.");
+				return;
+				//throw new CompilationException(@"Failed to locate Mosa.Kernel.X86.IDT while building ISRs for the kernel.");
 			}
 
 			RuntimeMethod InterruptMethod = FindMethod(rt, "InterruptHandler");

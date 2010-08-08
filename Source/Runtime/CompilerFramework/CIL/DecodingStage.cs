@@ -82,7 +82,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 					Debug.WriteLine("Decoding " + _compiler.Method.ToString());
 					ReadMethodHeader(reader, ref header);
 
-					if (0 != header.localsSignature)
+					if (header.localsSignature != 0)
 					{
 						IMetadataProvider md = _method.Module.Metadata;
 						StandAloneSigRow row = md.ReadStandAloneSigRow(header.localsSignature);
@@ -357,6 +357,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		void IInstructionDecoder.Decode(out TokenTypes value)
 		{
 			value = (TokenTypes)_codeReader.ReadInt32();
+
+			value = _method.Module.Metadata.ApplyTokenTypeAdjustment(value, _method.Rva);
 		}
 
 		#endregion
