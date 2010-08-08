@@ -34,8 +34,10 @@ namespace Mosa.Runtime.Loader
 		/// <summary>
 		/// Loads the named assemblies (as a merged assembly)
 		/// </summary>
-		/// <param name="file">The file paths of the assemblies to load.</param>
-		/// <returns>The assembly image of the loaded assembly.</returns>
+		/// <param name="files">The files.</param>
+		/// <returns>
+		/// The assembly image of the loaded assembly.
+		/// </returns>
 		IMetadataModule MergeLoad(IEnumerable<string> files);
 
 		/// <summary>

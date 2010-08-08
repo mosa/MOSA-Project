@@ -54,7 +54,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 			this.signatureBlobIdx = method.SignatureBlobIdx;
 			base.Attributes = method.Flags;
 			base.ImplAttributes = method.ImplFlags;
-			base.Rva = (uint)method.Rva;
+			base.Rva = method.Rva;
 
 			if (method.ParamList < maxParam)
 			{

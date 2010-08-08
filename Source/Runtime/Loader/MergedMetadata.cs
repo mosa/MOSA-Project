@@ -106,7 +106,7 @@ namespace Mosa.Runtime.Loader
 
 			GetOriginalRVA(out module, ref originalrva);
 
-			return modules[module].GetDataSection((long)originalrva);
+			return modules[module].GetInstructionStream((long)originalrva);
 		}
 
 		/// <summary>
@@ -121,7 +121,7 @@ namespace Mosa.Runtime.Loader
 
 			GetOriginalRVA(out module, ref originalrva);
 
-			return modules[module].GetInstructionStream((long)originalrva);
+			return modules[module].GetDataSection((long)originalrva);
 		}
 
 		/// <summary>
@@ -289,13 +289,16 @@ namespace Mosa.Runtime.Loader
 
 		protected void GetOriginalRVA(out uint module, ref ulong rva)
 		{
-			module = (uint)(rva >> 32);
-			rva = rva & 0xFFFFFFFF;
+			module = (uint)(rva >> 60);
+			rva = rva & 0x0FFFFFFFFFFFFFFF;
 		}
 
 		protected ulong GetNewRVA(uint module, ulong rva)
 		{
-			return (module << 32) | rva;
+			ulong newrva = module;
+			newrva = newrva << 60;
+			newrva = newrva | rva;
+			return newrva;
 		}
 
 		protected int GetModuleIndex(IMetadataModule module)
@@ -834,6 +837,15 @@ namespace Mosa.Runtime.Loader
 				GetNewToken(module, row.OwnerTableIdx),
 				GetNewToken(module, row.ConstraintTableIdx)
 			);
+		}
+
+		TokenTypes IMetadataProvider.ApplyTokenTypeAdjustment(TokenTypes token, ulong rva)
+		{
+			uint module = (uint)(rva >> 60);
+
+			TokenTypes newToken = GetNewToken(module, token);
+
+			return newToken;
 		}
 
 		#endregion // IMetadataProvider members

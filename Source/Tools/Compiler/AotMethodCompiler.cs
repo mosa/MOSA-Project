@@ -49,7 +49,7 @@ namespace Mosa.Tools.Compiler
 					new DecodingStage(),
 					//InstructionLogger.Instance,
 					new BasicBlockBuilderStage(),
-					//InstructionLogger.Instance,
+					InstructionLogger.Instance,
 					new OperandDeterminationStage(),
 					StaticAllocationResolutionStageWrapper.Instance,
 					InstructionLogger.Instance,

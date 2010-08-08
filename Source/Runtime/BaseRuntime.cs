@@ -61,7 +61,6 @@ namespace Mosa.Runtime {
 		public abstract IAssemblyLoader AssemblyLoader
 		{
 			get;
-			set; // HACK
 		}
 
 		/// <summary>

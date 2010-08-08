@@ -167,8 +167,7 @@ namespace Mosa.Runtime.Vm
 			ModuleOffsets offsets = GetModuleOffset(module);
 
 			// Calculate the number of types defined in this module
-			int count = ((int)(TokenTypes.RowIndexMask & module.Metadata.GetMaxTokenValue(TokenTypes.TypeDef)) - 1 + 0);
-			// FIXME: (int)(TokenTypes.RowIndexMask & module.Metadata.GetMaxTokenValue(TokenTypes.TypeSpec)));
+			int count = ((int)(TokenTypes.RowIndexMask & module.Metadata.GetMaxTokenValue(TokenTypes.TypeDef)));
 
 			return new ReadOnlyRuntimeTypeListView(offsets.TypeOffset, count, this);
 		}
@@ -654,9 +653,8 @@ namespace Mosa.Runtime.Vm
 						layoutRow = md.ReadClassLayoutRow(tokenLayout);
 				}
 
-
 				// Create and populate the runtime type
-				rt = new CilRuntimeType(token, module, ref typeDefRow, maxNextField, maxNextMethod, packing, size, this);
+				rt = new CilRuntimeType(token, module, typeDefRow, maxNextField, maxNextMethod, packing, size, this);
 				LoadMethods(module, rt, typeDefRow.MethodList, maxNextMethod, ref methodOffset);
 				LoadFields(module, rt, typeDefRow.FieldList, maxNextField, ref fieldOffset);
 				_types[typeOffset++] = rt;
@@ -1006,6 +1004,7 @@ namespace Mosa.Runtime.Vm
 		{
 			// MR, 2008-08-26, patch by Alex Lyman (thanks!)
 			TypeRefRow row = module.Metadata.ReadTypeRefRow(tokenTypes);
+
 			switch (row.ResolutionScopeIdx & TokenTypes.TableMask)
 			{
 				case TokenTypes.Module:
@@ -1013,10 +1012,10 @@ namespace Mosa.Runtime.Vm
 				case TokenTypes.TypeRef:
 					throw new NotImplementedException();
 				case TokenTypes.AssemblyRef:
-					AssemblyRefRow asmRefRow = module.Metadata.ReadAssemblyRefRow(row.ResolutionScopeIdx);
 					string typeName = module.Metadata.ReadString(row.TypeNameIdx);
 					string typeNamespace = module.Metadata.ReadString(row.TypeNamespaceIdx);
 
+					AssemblyRefRow asmRefRow = module.Metadata.ReadAssemblyRefRow(row.ResolutionScopeIdx);
 					IMetadataModule resolvedModule = baseRuntime.AssemblyLoader.Load(module.Metadata.ReadString(asmRefRow.NameIdx));
 
 					// HACK: If there's an easier way to do this without all those string comparisons, I'm all for it

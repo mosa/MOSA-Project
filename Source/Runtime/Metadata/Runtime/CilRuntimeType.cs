@@ -60,7 +60,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 		/// <param name="maxMethod">The max method.</param>
 		/// <param name="packing">The packing.</param>
 		/// <param name="size">The size.</param>
-		public CilRuntimeType(TokenTypes token, IMetadataModule module, ref TypeDefRow typeDefRow, TokenTypes maxField, TokenTypes maxMethod, int packing, int size, ITypeSystem typeSystem) :
+		public CilRuntimeType(TokenTypes token, IMetadataModule module, TypeDefRow typeDefRow, TokenTypes maxField, TokenTypes maxMethod, int packing, int size, ITypeSystem typeSystem) :
 			base((int)token, module, typeSystem)
 		{
 			this.baseTypeToken = typeDefRow.Extends;

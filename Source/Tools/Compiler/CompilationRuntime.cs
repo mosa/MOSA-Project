@@ -84,7 +84,6 @@ namespace Mosa.Tools.Compiler
 		public override IAssemblyLoader AssemblyLoader
 		{
 			get { return this.assemblyLoader; }
-			set { this.assemblyLoader = value; } // HACK
 		}
 
 		/// <summary>

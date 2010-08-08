@@ -122,12 +122,12 @@ namespace Mosa.Runtime.CompilerFramework
 			if (type == null)
 				throw new ArgumentNullException(@"type");
 
-			if (type.IsCompiled == true)
+			if (type.IsCompiled)
 			{
 				return;
 			}
 
-			if (type.IsGeneric == false)
+			if (!type.IsGeneric)
 			{
 				Console.WriteLine(@"Scheduling {0}", type.FullName);
 				Console.WriteLine(String.Format(@"Scheduling {0}", type.FullName));
@@ -142,7 +142,7 @@ namespace Mosa.Runtime.CompilerFramework
 			if (method == null)
 				throw new ArgumentNullException(@"method");
 
-			if (method.IsGeneric == false)
+			if (!method.IsGeneric)
 			{
 				Console.WriteLine(@"Scheduling {1}.{0}", method.Name, method.DeclaringType.FullName);
 				Debug.WriteLine(String.Format(@"Scheduling {1}.{0}", method.Name, method.DeclaringType.FullName));

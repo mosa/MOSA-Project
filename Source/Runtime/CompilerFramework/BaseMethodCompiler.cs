@@ -326,7 +326,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns>A stream, which represents the IL of the method.</returns>
 		public Stream GetInstructionStream()
 		{
-			return _method.Module.GetInstructionStream(_method.Rva);
+			return _method.Module.GetInstructionStream((long)_method.Rva);
 		}
 
 		/// <summary>
@@ -341,8 +341,9 @@ namespace Mosa.Runtime.CompilerFramework
 			// which represent the same memory location. If we need to move a variable in an optimization
 			// stage to a different memory location, it should actually be a new one so sharing object
 			// only saves runtime space/perf.
-			Debug.Assert(_localsSig != null, @"Method doesn't have _locals.");
+			Debug.Assert(_localsSig != null, @"Method doesn't have locals.");
 			Debug.Assert(index < _localsSig.Locals.Length, @"Invalid local index requested.");
+
 			if (_localsSig == null || _localsSig.Locals.Length < index)
 				throw new ArgumentOutOfRangeException(@"index", index, @"Invalid parameter index");
 
@@ -352,7 +353,6 @@ namespace Mosa.Runtime.CompilerFramework
 
 			if (local == null)
 			{
-
 				VariableSignature localVariable = _localsSig.Locals[index];
 				this.ScheduleDependencyForCompilation(localVariable.Type);
 
