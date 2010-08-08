@@ -39,7 +39,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 		/// <summary>
 		/// The type loader of this runtime.
 		/// </summary>
-		private ITypeSystem _typeLoader;
+		private ITypeSystem _typeSystem;
 
 		/// <summary>
 		/// The assembly loader of this runtime.
@@ -61,8 +61,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 		public TestRuntime()
 		{
 			_memoryPageManager = new Win32MemoryPageManager();
-			_typeLoader = new DefaultTypeSystem(this);
-			_assemblyLoader = new AssemblyLoader(this);
+			_typeSystem = new DefaultTypeSystem(this);
+			_assemblyLoader = new AssemblyLoader(_typeSystem);
 			_jitService = new SimpleJitService();
 			StaticRuntime.BaseRuntime = this; // HACK
 		}
@@ -78,7 +78,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 
 		public override ITypeSystem TypeSystem
 		{
-			get { return _typeLoader; }
+			get { return _typeSystem; }
 		}
 
 		public override IAssemblyLoader AssemblyLoader

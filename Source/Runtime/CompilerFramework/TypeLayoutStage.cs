@@ -66,7 +66,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 			foreach (RuntimeType type in types)
 			{
-				if (type.FullName.Equals(".<Module>")) // HACK
+				if (type.Name.Equals("<Module>") && type.Namespace.Length == 0) // HACK
 					continue;
 
 				if (type.IsGeneric|| type.IsDelegate)

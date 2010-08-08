@@ -37,7 +37,7 @@ namespace Mosa.Runtime.Loader
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AssemblyLoader"/> class.
 		/// </summary>
-		/// <param name="baseRuntime">The runtime base.</param>
+		/// <param name="typeSystem">The type system.</param>
 		public AssemblyLoader(ITypeSystem typeSystem)
 		{
 			this.typeSystem = typeSystem;

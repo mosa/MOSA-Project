@@ -90,8 +90,8 @@ namespace Mosa.Runtime.Loader.PE
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PortableExecutableImage"/> class.
 		/// </summary>
-		/// <param name="loadOrder">The load order.</param>
 		/// <param name="stream">The stream.</param>
+		/// <param name="codeBase">The code base.</param>
 		private PortableExecutableImage(Stream stream, string codeBase)
 		{
 			codeBases = new List<string>();
@@ -222,8 +222,8 @@ namespace Mosa.Runtime.Loader.PE
 		/// <summary>
 		/// Loads the specified load order.
 		/// </summary>
-		/// <param name="loadOrder">The load order.</param>
 		/// <param name="stream">The stream.</param>
+		/// <param name="codeBase">The code base.</param>
 		/// <returns></returns>
 		public static PortableExecutableImage Load(Stream stream, string codeBase)
 		{
