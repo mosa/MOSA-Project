@@ -8,6 +8,7 @@
  */
 
 using Mosa.Kernel.X86;
+using Mosa.Kernel.X86.Smbios;
 
 namespace Mosa.HelloWorld
 {
@@ -19,7 +20,7 @@ namespace Mosa.HelloWorld
 
 		public static void Setup()
 		{
-			Smbios.Setup ();
+			SmbiosManager.Setup ();
 			Screen.Clear();
 			Screen.Color = 0x0E;
 			Screen.SetCursor(24, 0);

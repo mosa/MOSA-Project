@@ -8,6 +8,7 @@
 using Mosa.Platforms.x86;
 using Mosa.Kernel;
 using Mosa.Kernel.X86;
+using Mosa.Kernel.X86.Smbios;
 using System;
 
 namespace Mosa.HelloWorld
@@ -31,7 +32,7 @@ namespace Mosa.HelloWorld
 			Screen.Color = Colors.Red;
 			Screen.Write(@"Malibu");
 			Screen.Color = Colors.Yellow;
-			Screen.Write(@"'                              Copyright 2008-2010");
+			Screen.Write(@"'                                Copyright 2008-2010");
 			Screen.NextLine();
 
 			Screen.Color = 0x0F;
@@ -76,7 +77,7 @@ namespace Mosa.HelloWorld
 
 			Screen.NextLine();
 
-			Screen.Color = Colors.Green;
+			/*Screen.Color = Colors.Green;
 			Screen.Write(@"Memory-Map:");
 			Screen.NextLine();
 
@@ -94,6 +95,68 @@ namespace Mosa.HelloWorld
 				Screen.Write(@"Type: ");
 				Screen.Write(Multiboot.GetMemoryMapType(index), 16, 1);
 				Screen.NextLine();
+			}*/
+			
+			Screen.Color = Colors.Green;
+			Screen.Write (@"Smbios Info:");
+			Screen.NextLine ();
+			if (SmbiosManager.IsAvailable)
+			{
+				Screen.Color = Colors.White;
+				Screen.Write (@"Entry:                 ");
+				Screen.Color = Colors.Gray;
+				Screen.Write (SmbiosManager.EntryPoint, 16, -1);
+				Screen.NextLine ();
+				Screen.Color = Colors.White;
+				Screen.Write (@"Length:                ");
+				Screen.Color = Colors.Gray;
+				Screen.Write (SmbiosManager.TableLength, 16, -1);
+				Screen.NextLine ();
+				Screen.Color = Colors.White;
+				Screen.Write (@"Address:               ");
+				Screen.Color = Colors.Gray;
+				Screen.Write (SmbiosManager.TableAddress, 16, -1);
+				Screen.NextLine ();
+				Screen.Color = Colors.White;
+				Screen.Write (@"Number of structures:  ");
+				Screen.Color = Colors.Gray;
+				Screen.Write (SmbiosManager.NumberOfStructures, 10, -1);
+				Screen.NextLine ();
+				uint cpuAddress = SmbiosManager.GetStructureOfType (4);
+				Screen.Color = Colors.White;
+				Screen.Write (@"Cpu Structure Address: ");
+				Screen.Color = Colors.Gray;
+				Screen.Write (cpuAddress, 16, -1);
+				Screen.NextLine ();
+				
+				uint clockFrequency = Native.Get16 (cpuAddress + 0x12u);
+				Screen.Color = Colors.White;
+				Screen.Write (@"Ext. Clock Frequency:  ");
+				Screen.Color = Colors.Gray;
+				Screen.Write (clockFrequency, 10, -1);
+				Screen.Write (@" MHz");
+				Screen.NextLine ();
+			
+				uint maxSpeed = Native.Get16 (cpuAddress + 0x14u);
+				Screen.Color = Colors.White;
+				Screen.Write (@"Max. Cpu Speed:        ");
+				Screen.Color = Colors.Gray;
+				Screen.Write (maxSpeed, 10, -1);
+				Screen.Write (@" MHz");
+				Screen.NextLine ();
+			
+				uint currentSpeed = Native.Get16 (cpuAddress + 0x16u);
+				Screen.Color = Colors.White;
+				Screen.Write (@"Current Cpu Speed:     ");
+				Screen.Color = Colors.Gray;
+				Screen.Write (currentSpeed, 10, -1);
+				Screen.Write (@" MHz");
+				Screen.NextLine ();
+			}
+			else
+			{
+				Screen.Color = Colors.Red;
+				Screen.Write (@"No SMBIOS available on this system!");
 			}
 
 			Screen.SetCursor(17, 0);
