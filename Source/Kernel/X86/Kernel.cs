@@ -20,8 +20,9 @@ namespace Mosa.HelloWorld
 
 		public static void Setup()
 		{
-			SmbiosManager.Setup ();
 			Screen.Clear();
+			Screen.SetCursor(24, 10);
+			SmbiosManager.Setup ();
 			Screen.Color = 0x0E;
 			Screen.SetCursor(24, 0);
 			Screen.Write('1');

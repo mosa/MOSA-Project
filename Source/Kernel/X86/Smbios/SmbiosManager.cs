@@ -29,14 +29,9 @@ namespace Mosa.Kernel.X86.Smbios
 		}
 		
 		/// <summary>
-		///
+		///		Holds the smbios entry point
 		/// </summary>
 		private static uint entryPoint = 0u;
-		
-		/// <summary>
-		///
-		/// </summary>
-		private static uint entryPointLength = 0u;
 		
 		/// <summary>
 		///
@@ -54,6 +49,16 @@ namespace Mosa.Kernel.X86.Smbios
 		private static uint numberOfStructures = 0u;
 		
 		/// <summary>
+		///
+		/// </summary>
+		private static uint majorVersion = 0u;
+		
+		/// <summary>
+		///
+		/// </summary>
+		private static uint minorVersion = 0u;
+		
+		/// <summary>
 		///		Checks if SMBIOS is available
 		/// </summary>
 		public static bool IsAvailable
@@ -62,9 +67,9 @@ namespace Mosa.Kernel.X86.Smbios
 		}
 		
 		/// <summary>
-		///
+		///		Gets the table's entry point
 		/// </summary>
-		public static uint EntryPoint
+		public static uint EntryPoint 
 		{
 			get { return entryPoint; }
 		}
@@ -72,13 +77,21 @@ namespace Mosa.Kernel.X86.Smbios
 		/// <summary>
 		///
 		/// </summary>
-		public static uint EntryPointLength
+		public static uint MajorVersion
 		{
-			get { return entryPointLength; }
+			get { return majorVersion; }
+		}
+
+		/// <summary>
+		///
+		/// </summary>
+		public static uint MinorVersion
+		{
+			get { return minorVersion; }
 		}
 		
 		/// <summary>
-		///
+		///		Gets the table's length
 		/// </summary>
 		public static uint TableLength
 		{
@@ -86,7 +99,7 @@ namespace Mosa.Kernel.X86.Smbios
 		}
 		
 		/// <summary>
-		///
+		///		Gets the entry address for smbios structures
 		/// </summary>
 		public static uint TableAddress
 		{
@@ -94,7 +107,7 @@ namespace Mosa.Kernel.X86.Smbios
 		}
 		
 		/// <summary>
-		///
+		///		Gets the total number of available structures
 		/// </summary>
 		public static uint NumberOfStructures
 		{
@@ -106,19 +119,20 @@ namespace Mosa.Kernel.X86.Smbios
 		/// </summary>
 		public static void Setup ()
 		{
-			entryPoint = LocateEntryPoint ();
+			LocateEntryPoint ();
 			
 			if (!IsAvailable)
 				return;
-				
-			entryPointLength = GetEntryPointLength ();
-			tableAddress = GetTableAddress ();
-			tableLength = GetTableLength ();
-			numberOfStructures = GetNumberOfStructures ();
+			
+			GetTableAddress ();
+			GetTableLength ();
+			GetNumberOfStructures ();
+			GetMajorVersion ();
+			GetMinorVersion ();
 		}
 		
 		/// <summary>
-		///
+		///		
 		/// </summary>
 		public static uint GetStructureOfType (byte type)
 		{
@@ -159,63 +173,67 @@ namespace Mosa.Kernel.X86.Smbios
 		/// <returns>
 		///
 		/// </returns>
-		private static uint LocateEntryPoint ()
+		private static void LocateEntryPoint ()
 		{
 			uint memory = 0xF0000u;
-			byte checksum = 0;
 			
 			while (memory < 0x100000u)
 			{
-				byte a = Native.Get8 (memory);
-				byte b = Native.Get8 (memory + 1u);
-				byte c = Native.Get8 (memory + 2u);
-				byte d = Native.Get8 (memory + 3u);
+				char a = (char)Native.Get8 (memory);
+				char s = (char)Native.Get8 (memory + 1u);
+				char m = (char)Native.Get8 (memory + 2u);
+				char b = (char)Native.Get8 (memory + 3u);
 				
-				if (a == 0x5F && b == 0x53 && c == 0x4D && d == 0x5F)
+				if (a == '_' && s == 'S' && m == 'M' && b == '_')
 				{
-					byte length = Native.Get8 (memory + 5);
-					
-					for (uint i = 0; i < length; ++i)
-						checksum += Native.Get8 (memory + i);
-					if (checksum == 0)
-						return memory;
+					entryPoint = memory;
+					return;
 				}
-				memory += 16;
+
+				memory += 0x10u;
 			}
 			
-			return memory;
+			entryPoint = memory;
 		}
 		
 		/// <summary>
 		///
 		/// </summary>
-		private static byte GetEntryPointLength ()
+		private static void GetMajorVersion ()
 		{
-			return Native.Get8 (EntryPoint + 0x5);
+			majorVersion = Native.Get8 (EntryPoint + 0x06u);
 		}
 		
 		/// <summary>
 		///
 		/// </summary>
-		private static uint GetTableAddress ()
+		private static void GetMinorVersion ()
 		{
-			return Native.Get32 (EntryPoint + 0x18);
+			minorVersion = Native.Get8 (EntryPoint + 0x07u);
 		}
 		
 		/// <summary>
 		///
 		/// </summary>
-		private static uint GetTableLength ()
+		private static void GetTableAddress ()
 		{
-			return Native.Get16 (EntryPoint + 0x16);
+			tableAddress = Native.Get32 (EntryPoint + 0x18u);
 		}
 		
 		/// <summary>
 		///
 		/// </summary>
-		private static uint GetNumberOfStructures ()
+		private static void GetTableLength ()
 		{
-			return Native.Get16 (EntryPoint + 0x1C);
+			tableLength = Native.Get16 (EntryPoint + 0x16u);
+		}
+		
+		/// <summary>
+		///
+		/// </summary>
+		private static void GetNumberOfStructures ()
+		{
+			numberOfStructures = Native.Get16 (EntryPoint + 0x1Cu);
 		}
 	}
 }

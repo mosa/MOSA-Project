@@ -98,10 +98,19 @@ namespace Mosa.HelloWorld
 			}*/
 			
 			Screen.Color = Colors.Green;
-			Screen.Write (@"Smbios Info:");
-			Screen.NextLine ();
+			Screen.Write (@"Smbios Info: ");
 			if (SmbiosManager.IsAvailable)
 			{
+				Screen.Color = Colors.White;
+				Screen.Write (@"[");
+				Screen.Color = Colors.Gray;
+				Screen.Write (@"Version ");
+				Screen.Write (SmbiosManager.MajorVersion, 10, -1);
+				Screen.Write (@".");
+				Screen.Write (SmbiosManager.MinorVersion, 10, -1);
+				Screen.Color = Colors.White;
+				Screen.Write (@"]");
+				Screen.NextLine ();
 				Screen.Color = Colors.White;
 				Screen.Write (@"Entry:                 ");
 				Screen.Color = Colors.Gray;
@@ -122,7 +131,10 @@ namespace Mosa.HelloWorld
 				Screen.Color = Colors.Gray;
 				Screen.Write (SmbiosManager.NumberOfStructures, 10, -1);
 				Screen.NextLine ();
+				
 				uint cpuAddress = SmbiosManager.GetStructureOfType (4);
+//				CpuStructure cpuStruct = new CpuStructure (cpuAddress);
+				
 				Screen.Color = Colors.White;
 				Screen.Write (@"Cpu Structure Address: ");
 				Screen.Color = Colors.Gray;
