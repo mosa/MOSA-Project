@@ -131,39 +131,6 @@ namespace Mosa.HelloWorld
 				Screen.Color = Colors.Gray;
 				Screen.Write (SmbiosManager.NumberOfStructures, 10, -1);
 				Screen.NextLine ();
-				
-				uint cpuAddress = SmbiosManager.GetStructureOfType (4);
-//				CpuStructure cpuStruct = new CpuStructure (cpuAddress);
-				
-				Screen.Color = Colors.White;
-				Screen.Write (@"Cpu Structure Address: ");
-				Screen.Color = Colors.Gray;
-				Screen.Write (cpuAddress, 16, -1);
-				Screen.NextLine ();
-				
-				uint clockFrequency = Native.Get16 (cpuAddress + 0x12u);
-				Screen.Color = Colors.White;
-				Screen.Write (@"Ext. Clock Frequency:  ");
-				Screen.Color = Colors.Gray;
-				Screen.Write (clockFrequency, 10, -1);
-				Screen.Write (@" MHz");
-				Screen.NextLine ();
-			
-				uint maxSpeed = Native.Get16 (cpuAddress + 0x14u);
-				Screen.Color = Colors.White;
-				Screen.Write (@"Max. Cpu Speed:        ");
-				Screen.Color = Colors.Gray;
-				Screen.Write (maxSpeed, 10, -1);
-				Screen.Write (@" MHz");
-				Screen.NextLine ();
-			
-				uint currentSpeed = Native.Get16 (cpuAddress + 0x16u);
-				Screen.Color = Colors.White;
-				Screen.Write (@"Current Cpu Speed:     ");
-				Screen.Color = Colors.Gray;
-				Screen.Write (currentSpeed, 10, -1);
-				Screen.Write (@" MHz");
-				Screen.NextLine ();
 			}
 			else
 			{

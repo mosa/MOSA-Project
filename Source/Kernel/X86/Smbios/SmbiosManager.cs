@@ -6,28 +6,7 @@ namespace Mosa.Kernel.X86.Smbios
 	///
 	/// </summary>
 	public static class SmbiosManager
-	{
-		/// <summary>
-		///
-		/// </summary>
-		public struct StructureHeader
-		{
-			/// <summary>
-			///		Specifies the type of structure.
-			/// </summary>
-			public byte Type;
-			/// <summary>
-			///		Specifies the length of the formatted area of the structure,
-			///		starting at the Type field. The length of the structure's
-			///		string-set is not included.
-			/// </summary>
-			public byte Length;
-			/// <summary>
-			///		Specifies the structure's handle.
-			/// </summary>
-			public ushort Handle;
-		}
-		
+	{	
 		/// <summary>
 		///		Holds the smbios entry point
 		/// </summary>
@@ -136,15 +115,19 @@ namespace Mosa.Kernel.X86.Smbios
 		/// </summary>
 		public static uint GetStructureOfType (byte type)
 		{
-			uint address = tableAddress;
-			for (int i = 0; i < NumberOfStructures; ++i)
+			uint address = TableAddress;
+			while (GetType (address) != 127u)
 			{
+				Screen.Write (" [");
+				Screen.Write (address, 16, -1);
+				Screen.Write ("] ");
+				Screen.Write (GetType (address), 10, -1);
 				if (GetType (address) == type)
 					return address;
 				address = GetAddressOfNextStructure (address);
 			}
 			
-			return 0;
+			return 0xFFFFu;
 		}
 		
 		/// <summary>
@@ -160,11 +143,13 @@ namespace Mosa.Kernel.X86.Smbios
 		/// </summary>
 		private static uint GetAddressOfNextStructure (uint address)
 		{
-			uint endOfFormattedArea = Native.Get8 (address + 1) + address;
+			byte length = Native.Get8 (address + 0x01u);
+			uint endOfFormattedArea = address + length;
 			
-			while (Native.Get8 (endOfFormattedArea) != 0x00 && Native.Get8 (endOfFormattedArea) != 0x00)
+			while (Native.Get16 (endOfFormattedArea) != 0x0000u)
 				++endOfFormattedArea;
-			return endOfFormattedArea + 2;
+			endOfFormattedArea += 0x02u;
+			return endOfFormattedArea;
 		}
 		
 		/// <summary>
