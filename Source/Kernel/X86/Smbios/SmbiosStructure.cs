@@ -8,11 +8,11 @@ namespace Mosa.Kernel.X86.Smbios
 	public class SmbiosStructure
 	{
 		/// <summary>
-		///
+		///		The structure's type
 		/// </summary>
 		protected uint type = 0;
 		/// <summary>
-		///
+		///		
 		/// </summary>
 		protected uint length = 0;
 		/// <summary>

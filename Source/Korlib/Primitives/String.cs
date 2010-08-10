@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -250,8 +250,18 @@ namespace System
 
 		public unsafe string Substring(int startIndex)
 		{
-			if (startIndex < 0 || startIndex > this.length)
-			    return Empty; //throw new System.ArgumentOutOfRangeException("startIndex");
+			if (startIndex == 0)
+				return Empty;
+
+			// FIXME: Following line does not compile correctly
+			//if (startIndex < 0 || startIndex > this.length)
+			//    return Empty; //throw new System.ArgumentOutOfRangeException("startIndex");
+
+			if (startIndex < 0)
+				return Empty; //throw new System.ArgumentOutOfRangeException("startIndex");
+
+			if (startIndex > this.length)
+				return Empty; //throw new System.ArgumentOutOfRangeException("startIndex");
 
 			int newlen = this.length - startIndex;
 			String result = InternalAllocateString(newlen);
