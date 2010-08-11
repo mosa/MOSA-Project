@@ -80,10 +80,14 @@ namespace Mosa.Runtime.CompilerFramework.Operands
         /// </summary>
         /// <returns>A string representation of the operand.</returns>
         public sealed override string ToString()
-        {
-            string tmp = base.ToString();
-            return String.Format(@"{0} {1}", this.Name, tmp.Insert(tmp.Length-1, String.Format(", SSA Version: {0}", _ssaVersion)));
-        }
+		{
+			string tmp = base.ToString();
+			//return String.Format(@"{0} {1}", this.Name, tmp.Insert(tmp.Length - 1, String.Format(", SSA Version: {0}", _ssaVersion)));
+			if (_ssaVersion == 0)
+				return String.Format(@"{0}", this.Name);
+			else
+				return String.Format(@"{0} {1}", this.Name, tmp.Insert(tmp.Length - 1, String.Format(" #{0}", _ssaVersion)));
+		}
 
         #endregion // Operand Overrides
 

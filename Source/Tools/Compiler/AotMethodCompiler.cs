@@ -19,41 +19,41 @@ using Mosa.Tools.Compiler.Stages;
 
 namespace Mosa.Tools.Compiler
 {
-    /// <summary>
-    /// Specializes <see cref="AotMethodCompiler"/> for AOT purposes.
-    /// </summary>
-    public sealed class AotMethodCompiler : MethodCompilerBase
-    {
-        #region Data Members
+	/// <summary>
+	/// Specializes <see cref="AotMethodCompiler"/> for AOT purposes.
+	/// </summary>
+	public sealed class AotMethodCompiler : MethodCompilerBase
+	{
+		#region Data Members
 
-        /// <summary>
-        /// Holds the aot compiler, which started this method compiler.
-        /// </summary>
-        private readonly AssemblyCompiler assemblyCompiler;
+		/// <summary>
+		/// Holds the aot compiler, which started this method compiler.
+		/// </summary>
+		private readonly AssemblyCompiler assemblyCompiler;
 
-        #endregion // Data Members
+		#endregion // Data Members
 
-        #region Construction
+		#region Construction
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AotMethodCompiler"/> class.
-        /// </summary>
-        public AotMethodCompiler(AssemblyCompiler compiler, ICompilationSchedulerStage compilationScheduler, RuntimeType type, RuntimeMethod method)
-            : base(compiler.Pipeline.FindFirst<IAssemblyLinker>(), compiler.Architecture, compilationScheduler, type, method)
-        {
-            this.assemblyCompiler = compiler;
-            this.Pipeline.AddRange(
-                new IMethodCompilerStage[] 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="AotMethodCompiler"/> class.
+		/// </summary>
+		public AotMethodCompiler(AssemblyCompiler compiler, ICompilationSchedulerStage compilationScheduler, RuntimeType type, RuntimeMethod method)
+			: base(compiler.Pipeline.FindFirst<IAssemblyLinker>(), compiler.Architecture, compilationScheduler, type, method)
+		{
+			this.assemblyCompiler = compiler;
+			this.Pipeline.AddRange(
+				new IMethodCompilerStage[] 
                 {
     				new DecodingStage(),
     				//InstructionLogger.Instance,
     				new BasicBlockBuilderStage(),
-    				//InstructionLogger.Instance,
+					//InstructionLogger.Instance,
     				new OperandDeterminationStage(),
                     StaticAllocationResolutionStageWrapper.Instance,
-    				//InstructionLogger.Instance,
+					InstructionLogger.Instance,
     				new CILTransformationStage(),
-    				//InstructionLogger.Instance,
+					//InstructionLogger.Instance,
     				//InstructionStatisticsStage.Instance,
     				//new DominanceCalculationStage(),
     				//InstructionLogger.Instance,
@@ -65,40 +65,41 @@ namespace Mosa.Tools.Compiler
     				//new StrengthReductionStage(),
     				//InstructionLogger.Instance,
     				//new LeaveSSA(),
-    				//InstructionLogger.Instance,
+    				InstructionLogger.Instance,
     				new StackLayoutStage(),
+					//InstructionLogger.Instance,
     				new PlatformStubStage(),
-    				//InstructionLogger.Instance,
+    				InstructionLogger.Instance,
     				//new BlockReductionStage(),
     				new LoopAwareBlockOrderStage(),
-    				//InstructionLogger.Instance,
+    				InstructionLogger.Instance,
     				//new SimpleTraceBlockOrderStage(),
     				//new ReverseBlockOrderStage(),	
     				//new LocalCSE(),
     				new CodeGenerationStage(),
                 });
-        }
+		}
 
-        #endregion // Construction
+		#endregion // Construction
 
-        #region MethodCompilerBase Overrides
+		#region MethodCompilerBase Overrides
 
-        /// <summary>
-        /// Called after the method compiler has finished compiling the method.
-        /// </summary>
-        protected override void EndCompile()
-        {
-            // If we're compiling a type initializer, run it immediately.
-            const MethodAttributes attrs = MethodAttributes.SpecialName | MethodAttributes.RTSpecialName | MethodAttributes.Static;
-            if ((Method.Attributes & attrs) == attrs && Method.Name == ".cctor")
-            {
-                var tiss = this.assemblyCompiler.Pipeline.FindFirst<TypeInitializers.ITypeInitializerSchedulerStage>();
-                tiss.Schedule(Method);
-            }
+		/// <summary>
+		/// Called after the method compiler has finished compiling the method.
+		/// </summary>
+		protected override void EndCompile()
+		{
+			// If we're compiling a type initializer, run it immediately.
+			const MethodAttributes attrs = MethodAttributes.SpecialName | MethodAttributes.RTSpecialName | MethodAttributes.Static;
+			if ((Method.Attributes & attrs) == attrs && Method.Name == ".cctor")
+			{
+				var tiss = this.assemblyCompiler.Pipeline.FindFirst<TypeInitializers.ITypeInitializerSchedulerStage>();
+				tiss.Schedule(Method);
+			}
 
-            base.EndCompile();
-        }
+			base.EndCompile();
+		}
 
-        #endregion // MethodCompilerBase Overrides
-    }
+		#endregion // MethodCompilerBase Overrides
+	}
 }

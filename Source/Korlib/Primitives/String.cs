@@ -206,17 +206,10 @@ namespace System
 
 			char* chars = result.first_char;
 
-			for (int index = 0; index < a.length; index++)
-			{
-				*chars = a[index];
-				chars++;
-			}
-
-			for (int index = 0; index < b.length; index++)
-			{
-				*chars = b[index];
-				chars++;
-			}
+			foreach (char character in a)
+				*chars++ = character;
+			foreach (char character in b)
+				*chars++ = character;
 
 			return result;
 		}
@@ -227,23 +220,12 @@ namespace System
 
 			char* chars = result.first_char;
 
-			for (int index = 0; index < a.length; index++)
-			{
-				*chars = a[index];
-				chars++;
-			}
-
-			for (int index = 0; index < b.length; index++)
-			{
-				*chars = b[index];
-				chars++;
-			}
-
-			for (int index = 0; index < c.length; index++)
-			{
-				*chars = c[index];
-				chars++;
-			}
+			foreach (char character in a)
+				*chars++ = character;
+			foreach (char character in b)
+				*chars++ = character;
+			foreach (char character in c)
+				*chars++ = character;
 
 			return result;
 		}
@@ -254,29 +236,14 @@ namespace System
 
 			char* chars = result.first_char;
 
-			for (int index = 0; index < a.length; index++)
-			{
-				*chars = a[index];
-				chars++;
-			}
-
-			for (int index = 0; index < b.length; index++)
-			{
-				*chars = b[index];
-				chars++;
-			}
-
-			for (int index = 0; index < c.length; index++)
-			{
-				*chars = c[index];
-				chars++;
-			}
-
-			for (int index = 0; index < d.length; index++)
-			{
-				*chars = d[index];
-				chars++;
-			}
+			foreach (char character in a)
+				*chars++ = character;
+			foreach (char character in b)
+				*chars++ = character;
+			foreach (char character in c)
+				*chars++ = character;
+			foreach (char character in d)
+				*chars++ = character;
 
 			return result;
 		}
@@ -303,36 +270,36 @@ namespace System
 
 			for (int index = 0; index < newlen; index++)
 			{
-				*chars = this[startIndex + index];
-				chars++;
+				*chars++ = this[startIndex + index];
 			}
 
 			return result;
 		}
 
-		public unsafe string Substring(int startIndex, int length)
-		{
-			if (length < 0)
-				return Empty; //throw new System.ArgumentOutOfRangeException("length", "< 0");
+		//TODO: Following crashes the compiler
+		//public unsafe string Substring(int startIndex, int length)
+		//{
+		//    if (length < 0)
+		//        return Empty; //throw new System.ArgumentOutOfRangeException("length", "< 0");
 
-			if (startIndex == 0)
-				return Empty;
+		//    if (startIndex == 0)
+		//        return Empty;
 
-			if (startIndex < 0 || startIndex > this.length)
-				return Empty; //throw new System.ArgumentOutOfRangeException("startIndex");
+		//    if (startIndex < 0 || startIndex > this.length)
+		//        return Empty; //throw new System.ArgumentOutOfRangeException("startIndex");
 
-			String result = InternalAllocateString(length);
+		//    String result = InternalAllocateString(length);
 
-			char* chars = result.first_char;
+		//    char* chars = result.first_char;
 
-			for (int index = 0; index < length; index++)
-			{
-				*chars = this[startIndex + index];
-				chars++;
-			}
+		//    for (int index = 0; index < length; index++)
+		//    {
+		//        *chars = this[startIndex + index];
+		//        chars++;
+		//    }
 
-			return result;
-		}
+		//    return result;
+		//}
 
 		public static bool IsNullOrEmpty(string value)
 		{

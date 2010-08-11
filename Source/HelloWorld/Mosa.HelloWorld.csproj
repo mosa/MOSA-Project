@@ -64,8 +64,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Boot.cs" />
-    <Compile Include="TaskB.cs" />
-    <Compile Include="TaskA.cs" />
     <Compile Include="Tests\StringTest.cs" />
   </ItemGroup>
   <ItemGroup>

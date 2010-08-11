@@ -29,7 +29,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
         /// Initializes a new instance of <see cref="ThreeOperandInstruction"/>.
         /// </summary>
         public TwoOperandInstruction() :
-            base(1, 1)
+            base(2, 1)
         {
         }
 
