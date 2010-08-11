@@ -11,31 +11,38 @@ namespace Mosa.Kernel.X86.Smbios
 		///		Holds the smbios entry point
 		/// </summary>
 		private static uint entryPoint = 0u;
-		
 		/// <summary>
 		///
 		/// </summary>
 		private static uint tableAddress = 0u;
-		
 		/// <summary>
 		///
 		/// </summary>
 		private static uint tableLength = 0u;
-		
 		/// <summary>
 		///
 		/// </summary>
 		private static uint numberOfStructures = 0u;
-		
 		/// <summary>
 		///
 		/// </summary>
 		private static uint majorVersion = 0u;
-		
 		/// <summary>
 		///
 		/// </summary>
 		private static uint minorVersion = 0u;
+		/// <summary>
+		///
+		/// </summary>
+		private static uint currentSpeed = 0;
+		/// <summary>
+		///
+		/// </summary>
+		private static uint maxSpeed = 0;
+		/// <summary>
+		///
+		/// </summary>
+		private static uint clockFrequency = 0;
 		
 		/// <summary>
 		///		Checks if SMBIOS is available
@@ -96,6 +103,30 @@ namespace Mosa.Kernel.X86.Smbios
 		/// <summary>
 		///
 		/// </summary>
+		public static uint MaxSpeed
+		{
+			get { return maxSpeed; }
+		}
+		
+		/// <summary>
+		///
+		/// </summary>
+		public static uint CurrentSpeed
+		{
+			get { return currentSpeed; }
+		}
+		
+		/// <summary>
+		///
+		/// </summary>
+		public static uint ClockFrequency
+		{
+			get { return clockFrequency; }
+		}
+		
+		/// <summary>
+		///
+		/// </summary>
 		public static void Setup ()
 		{
 			LocateEntryPoint ();
@@ -108,20 +139,28 @@ namespace Mosa.Kernel.X86.Smbios
 			GetNumberOfStructures ();
 			GetMajorVersion ();
 			GetMinorVersion ();
+			ReadCpuTable ();
 		}
 		
 		/// <summary>
 		///		
 		/// </summary>
-		public static uint GetStructureOfType (byte type)
+		public static void ReadCpuTable ()
+		{
+			uint cpuTableAddress = GetStructureOfType (0x04);
+			currentSpeed = Native.Get16 (cpuTableAddress + 0x16u);
+			maxSpeed = Native.Get16 (cpuTableAddress + 0x14u);
+			clockFrequency = Native.Get16 (cpuTableAddress + 0x12u);
+		}
+		
+		/// <summary>
+		///		
+		/// </summary>
+		private static uint GetStructureOfType (byte type)
 		{
 			uint address = TableAddress;
 			while (GetType (address) != 127u)
 			{
-				Screen.Write (" [");
-				Screen.Write (address, 16, -1);
-				Screen.Write ("] ");
-				Screen.Write (GetType (address), 10, -1);
 				if (GetType (address) == type)
 					return address;
 				address = GetAddressOfNextStructure (address);
