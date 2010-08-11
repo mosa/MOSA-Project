@@ -30,16 +30,16 @@ namespace Mosa.Platforms.x86
 		/// Defines the register set of the target architecture.
 		/// </summary>
 		private static readonly Register[] Registers = new Register[]
-        {
-            ////////////////////////////////////////////////////////
-            // 32-bit general purpose registers
-            ////////////////////////////////////////////////////////
-            GeneralPurposeRegister.EAX,
-            GeneralPurposeRegister.ECX,
-            GeneralPurposeRegister.EDX,
-            GeneralPurposeRegister.EBX,
-            GeneralPurposeRegister.ESI,
-            GeneralPurposeRegister.EDI,
+		{
+			////////////////////////////////////////////////////////
+			// 32-bit general purpose registers
+			////////////////////////////////////////////////////////
+			GeneralPurposeRegister.EAX,
+			GeneralPurposeRegister.ECX,
+			GeneralPurposeRegister.EDX,
+			GeneralPurposeRegister.EBX,
+			GeneralPurposeRegister.ESI,
+			GeneralPurposeRegister.EDI,
 
 			////////////////////////////////////////////////////////
 			// 128-bit floating point registers
@@ -160,15 +160,15 @@ namespace Mosa.Platforms.x86
 			// and packed operations available with MMX/SSE extensions
 			methodCompilerPipeline.InsertAfter<PlatformStubStage>(
 				new IMethodCompilerStage[]
-                {
-					//InstructionLogger.Instance,
-                    new LongOperandTransformationStage(),
-					//InstructionLogger.Instance,
-                    new AddressModeConversionStage(),
-					//InstructionLogger.Instance,
-                    new CILTransformationStage(),
+				{
 					InstructionLogger.Instance,
-                    new IRTransformationStage(),
+					new LongOperandTransformationStage(),
+					InstructionLogger.Instance,
+					new AddressModeConversionStage(),
+					InstructionLogger.Instance,
+					new CILTransformationStage(),
+					InstructionLogger.Instance,
+					new IRTransformationStage(),
 					InstructionLogger.Instance,
 					new TweakTransformationStage(),
 					InstructionLogger.Instance,

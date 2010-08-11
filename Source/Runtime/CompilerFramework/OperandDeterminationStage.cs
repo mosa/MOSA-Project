@@ -18,7 +18,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// <summary>
 	/// The Operand Determination Stage determines the operands for each instructions.
 	/// </summary>
-    public class OperandDeterminationStage : BaseStage, IMethodCompilerStage
+    public class OperandDeterminationStage : BaseMethodCompilerStage, IMethodCompilerStage
     {
         #region Data members
 
@@ -64,7 +64,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="block">The block.</param>
         private void AssignOperands(BasicBlock block)
         {
-		    //Debug.WriteLine(@"OperandDeterminationStage: Assigning operands to block " + block);
+			//Debug.WriteLine(@"OperandDeterminationStage: Assigning operands to block " + block);
             if (block.InitialStack != null)
                 foreach (Operand operand in block.InitialStack)
                     _operandStack.Push(operand);
