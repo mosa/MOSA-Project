@@ -15,7 +15,6 @@ using Mosa.Runtime.CompilerFramework.IR;
 using Mosa.Runtime.Linker;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Vm;
-using Mosa.Runtime.Loader;
 using Mosa.Tools.Compiler.Stages;
 
 namespace Mosa.Tools.Compiler
@@ -23,7 +22,7 @@ namespace Mosa.Tools.Compiler
 	/// <summary>
 	/// Specializes <see cref="AotMethodCompiler"/> for AOT purposes.
 	/// </summary>
-	public sealed class AotMethodCompiler : BaseMethodCompiler
+	public sealed class AotMethodCompiler : MethodCompilerBase
 	{
 		#region Data Members
 
@@ -40,45 +39,45 @@ namespace Mosa.Tools.Compiler
 		/// Initializes a new instance of the <see cref="AotMethodCompiler"/> class.
 		/// </summary>
 		public AotMethodCompiler(AssemblyCompiler compiler, ICompilationSchedulerStage compilationScheduler, RuntimeType type, RuntimeMethod method)
-			: base(compiler.Pipeline.FindFirst<IAssemblyLinker>(), compiler.Architecture, compilationScheduler, type, method, compiler.TypeSystem, compiler.AssemblyLoader)
+			: base(compiler.Pipeline.FindFirst<IAssemblyLinker>(), compiler.Architecture, compilationScheduler, type, method)
 		{
 			this.assemblyCompiler = compiler;
 			this.Pipeline.AddRange(
 				new IMethodCompilerStage[] 
-				{
-					new DecodingStage(),
+                {
+    				new DecodingStage(),
+    				//InstructionLogger.Instance,
+    				new BasicBlockBuilderStage(),
 					//InstructionLogger.Instance,
-					new BasicBlockBuilderStage(),
+    				new OperandDeterminationStage(),
+                    StaticAllocationResolutionStageWrapper.Instance,
 					InstructionLogger.Instance,
-					new OperandDeterminationStage(),
-					StaticAllocationResolutionStageWrapper.Instance,
-					InstructionLogger.Instance,
-					new CILTransformationStage(),
-					InstructionLogger.Instance,
-					//InstructionStatisticsStage.Instance,
-					//new DominanceCalculationStage(),
+    				new CILTransformationStage(),
 					//InstructionLogger.Instance,
-					//new EnterSSA(),
+    				//InstructionStatisticsStage.Instance,
+    				//new DominanceCalculationStage(),
+    				//InstructionLogger.Instance,
+    				//new EnterSSA(),
+    				//InstructionLogger.Instance,
+    				//new ConstantPropagationStage(),
+    				//InstructionLogger.Instance,
+    				//new ConstantFoldingStage(),
+    				//new StrengthReductionStage(),
+    				//InstructionLogger.Instance,
+    				//new LeaveSSA(),
+    				InstructionLogger.Instance,
+    				new StackLayoutStage(),
 					//InstructionLogger.Instance,
-					//new ConstantPropagationStage(),
-					//InstructionLogger.Instance,
-					//new ConstantFoldingStage(),
-					//new StrengthReductionStage(),
-					//InstructionLogger.Instance,
-					//new LeaveSSA(),
-					//InstructionLogger.Instance,
-					new StackLayoutStage(),
-					//InstructionLogger.Instance,
-					new PlatformStubStage(),
-					//InstructionLogger.Instance,
-					//new BlockReductionStage(),
-					new LoopAwareBlockOrderStage(),
-					//InstructionLogger.Instance,
-					//new SimpleTraceBlockOrderStage(),
-					//new ReverseBlockOrderStage(),	
-					//new LocalCSE(),
-					new CodeGenerationStage(),
-				});
+    				new PlatformStubStage(),
+    				InstructionLogger.Instance,
+    				//new BlockReductionStage(),
+    				new LoopAwareBlockOrderStage(),
+    				InstructionLogger.Instance,
+    				//new SimpleTraceBlockOrderStage(),
+    				//new ReverseBlockOrderStage(),	
+    				//new LocalCSE(),
+    				new CodeGenerationStage(),
+                });
 		}
 
 		#endregion // Construction

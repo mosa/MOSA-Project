@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -13,12 +13,12 @@ using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Runtime.CompilerFramework.Operands
 {
-	/// <summary>
-	/// Represents an operand, that is located on the relative to the current stack frame.
-	/// </summary>
-	public abstract class StackOperand : MemoryOperand, ICloneable
-	{
-		#region Data members
+    /// <summary>
+    /// Represents an operand, that is located on the relative to the current stack frame.
+    /// </summary>
+    public abstract class StackOperand : MemoryOperand, ICloneable
+    {
+        #region Data members
 
 		/// <summary>
 		/// Holds the SSA version of the stack operand.
@@ -75,11 +75,11 @@ namespace Mosa.Runtime.CompilerFramework.Operands
 			return (null != sop && sop.Type == this.Type && sop.Offset == this.Offset && sop.Base == this.Base && sop.Version == this.Version);
 		}
 
-		/// <summary>
-		/// Returns a string representation of <see cref="Operand"/>.
-		/// </summary>
-		/// <returns>A string representation of the operand.</returns>
-		public sealed override string ToString()
+        /// <summary>
+        /// Returns a string representation of <see cref="Operand"/>.
+        /// </summary>
+        /// <returns>A string representation of the operand.</returns>
+        public sealed override string ToString()
 		{
 			string tmp = base.ToString();
 			//return String.Format(@"{0} {1}", this.Name, tmp.Insert(tmp.Length - 1, String.Format(", SSA Version: {0}", _ssaVersion)));

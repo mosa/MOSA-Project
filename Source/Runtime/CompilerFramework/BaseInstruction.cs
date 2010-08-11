@@ -161,7 +161,8 @@ namespace Mosa.Runtime.CompilerFramework
 			else
 				s = s.TrimEnd(',');
 
-			if (context.Branch != null) {
+			if (context.Branch != null)
+			{
 				for (int i = 0; (i < 2) && (i < context.Branch.Targets.Length); i++)
 					s = s + String.Format(@" L_{0:X4},", context.Branch.Targets[i]);
 
