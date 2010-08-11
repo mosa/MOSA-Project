@@ -1663,7 +1663,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			if (intrinsicAttributeTypes == null)
 			{
 
-				if (assemblyLoader.Modules.FirstOrDefault(item => item.Names[0] == @"mscorlib") != null) // ????PG????
+				//if (assemblyLoader.Modules.FirstOrDefault(item => item.Names[0] == @"mscorlib") != null) // ????PG????
 				{
 					RuntimeType attributeType = typeSystem.GetType(@"Mosa.Runtime.CompilerFramework.IntrinsicAttribute, mscorlib");
 					if (attributeType != null)
@@ -1863,7 +1863,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		{
 			RuntimeType rt = typeSystem.GetType(@"Mosa.Runtime.Runtime");
 			RuntimeMethod callTarget = rt.FindMethod(internalCallTarget.ToString());
-			
+
 			ctx.ReplaceInstructionOnly(IR.Instruction.CallInstruction);
 			ctx.SetOperand(0, SymbolOperand.FromMethod(callTarget));
 		}

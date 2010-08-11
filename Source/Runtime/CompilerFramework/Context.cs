@@ -1066,16 +1066,16 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			switch (index) {
 				case 0: 
-                    this.Result = result; 
-                    break;
+					this.Result = result; 
+					break;
 
-                case 1: 
-                    this.Result2 = result; 
-                    break;
+				case 1: 
+					this.Result2 = result; 
+					break;
 
 				default: 
-        			Debug.Assert(false, @"No index");
-                    break;
+					Debug.Assert(false, @"No index");
+					break;
 			}
 		}
 

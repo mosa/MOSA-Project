@@ -107,7 +107,7 @@ namespace Mosa.Runtime.CompilerFramework.Operands
         /// <returns>A string representation of the operand.</returns>
         public override string ToString()
         {
-            return String.Format("const {0} [Type: {1}]", _value, _type);
+            return String.Format("const {0} [{1}]", _value, _type);
         }
 
         #endregion // Operand Overrides
