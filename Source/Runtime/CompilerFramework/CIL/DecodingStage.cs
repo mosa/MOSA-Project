@@ -79,7 +79,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 					_method = MethodCompiler.Method;
 					_codeReader = reader;
 
-					Debug.WriteLine("Decoding " + _compiler.Method.ToString());
+					//Debug.WriteLine("Decoding " + _compiler.Method.ToString());
 					ReadMethodHeader(reader, ref header);
 
 					if (header.localsSignature != 0)

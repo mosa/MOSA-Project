@@ -622,7 +622,7 @@ namespace Mosa.Runtime.Vm
 
 				Debug.Write(((uint)token).ToString("X") + ": ");
 				Debug.Write(typeDefRow.TypeNameIdx.ToString("X") + ": ");
-				Debug.WriteLine(md.ReadString(typeDefRow.TypeNameIdx));
+				Debug.Write(md.ReadString(typeDefRow.TypeNameIdx));
 
 				if (token < maxTypeDef)
 				{
@@ -643,15 +643,18 @@ namespace Mosa.Runtime.Vm
 				}
 
 				// Is this our layout info?
-				if ((layoutRow.ParentTypeDefIdx + 1) == token)
+				if (layoutRow.ParentTypeDefIdx == token)
 				{
 					size = layoutRow.ClassSize;
 					packing = layoutRow.PackingSize;
+
+					Debug.Write(" [Size: " + size.ToString()+"]");
 
 					tokenLayout++;
 					if (tokenLayout <= maxLayout)
 						layoutRow = md.ReadClassLayoutRow(tokenLayout);
 				}
+				Debug.WriteLine(string.Empty);
 
 				// Create and populate the runtime type
 				rt = new CilRuntimeType(token, module, typeDefRow, maxNextField, maxNextMethod, packing, size, this);
@@ -698,9 +701,9 @@ namespace Mosa.Runtime.Vm
 				Debug.Assert(offset < _methods.Length, @"Invalid method index.");
 				_methods[offset++] = new CilRuntimeMethod(offset, module, methodDef, maxParam, declaringType, this);
 
-				Debug.Write("-> " + ((uint)token).ToString("X") + ": ");
-				Debug.Write(methodDef.NameStringIdx.ToString("X") + ": ");
-				Debug.WriteLine(md.ReadString(methodDef.NameStringIdx));
+				//Debug.Write("-> " + ((uint)token).ToString("X") + ": ");
+				//Debug.Write(methodDef.NameStringIdx.ToString("X") + ": ");
+				//Debug.WriteLine(md.ReadString(methodDef.NameStringIdx));
 
 				methodDef = nextMethodDef;
 			}

@@ -217,7 +217,7 @@ namespace Mosa.Runtime.CompilerFramework
 				case IR.ConditionCode.NotEqual: return IR.ConditionCode.Equal;
 				case IR.ConditionCode.GreaterOrEqual: return IR.ConditionCode.LessThan;
 				case IR.ConditionCode.GreaterThan: return IR.ConditionCode.LessOrEqual;
-				case IR.ConditionCode.LessOrEqual: return IR.ConditionCode.UnsignedLessOrEqual;
+				case IR.ConditionCode.LessOrEqual: return IR.ConditionCode.GreaterThan;
 				case IR.ConditionCode.LessThan: return IR.ConditionCode.GreaterOrEqual;
 				case IR.ConditionCode.UnsignedGreaterOrEqual: return IR.ConditionCode.UnsignedLessThan;
 				case IR.ConditionCode.UnsignedGreaterThan: return IR.ConditionCode.UnsignedLessOrEqual;

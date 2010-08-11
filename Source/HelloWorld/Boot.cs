@@ -18,6 +18,11 @@ namespace Mosa.HelloWorld
 	/// </summary>
 	public static class Boot
 	{
+		public static void Test()
+		{
+			CMOS cmos = new CMOS();
+		}
+
 		/// <summary>
 		/// Mains this instance.
 		/// </summary>
@@ -27,17 +32,17 @@ namespace Mosa.HelloWorld
 			Screen.GotoTop();
 			Screen.Color = Colors.Yellow;
 
-            Screen.Write(@"MOSA OS Version 0.6 '");
+			Screen.Write(@"MOSA OS Version 0.6 '");
 			Screen.Color = Colors.Red;
-            Screen.Write(@"Mammoth");
+			Screen.Write(@"Mammoth");
 			Screen.Color = Colors.Yellow;
 			Screen.Write(@"'                               Copyright 2008-2010");
 			Screen.NextLine();
 
 			Screen.Color = 0x0F;
-            Screen.Write(new String((char)205, 60));
+			Screen.Write(new String((char)205, 60));
 			Screen.Write((char)203);
-            Screen.Write(new String((char)205, 19));
+			Screen.Write(new String((char)205, 19));
 			Screen.NextLine();
 
 			Screen.SetCursor(2, 0);
@@ -151,10 +156,10 @@ namespace Mosa.HelloWorld
 
 			Screen.Write(cpuInfo.Type, 16, 2);
 			Screen.NextLine();
-            Screen.Color = Colors.Green;
+			Screen.Color = Colors.Green;
 			Screen.Write(@"Cores:    ");
-            Screen.Color = Colors.White;
-            Screen.Write(cpuInfo.NumberOfCores, 16, 2);
+			Screen.Color = Colors.White;
+			Screen.Write(cpuInfo.NumberOfCores, 16, 2);
 			#endregion
 
 			//Multiboot.Dump(4,53);
@@ -206,34 +211,34 @@ namespace Mosa.HelloWorld
 
 			byte bcd = 10;
 
-            if (cmos.BCD)
+			if (cmos.BCD)
 				bcd = 16;
 
 			Screen.Color = Colors.White;
-            Screen.Write(cmos.Hour, bcd, 2);
+			Screen.Write(cmos.Hour, bcd, 2);
 			Screen.Color = Colors.Gray;
 			Screen.Write(':');
 			Screen.Color = Colors.White;
-            Screen.Write(cmos.Minute, bcd, 2);
+			Screen.Write(cmos.Minute, bcd, 2);
 			Screen.Color = Colors.Gray;
 			Screen.Write(':');
 			Screen.Color = Colors.White;
-            Screen.Write(cmos.Second, bcd, 2);
+			Screen.Write(cmos.Second, bcd, 2);
 			Screen.Write(' ');
 			Screen.Color = Colors.Gray;
 			Screen.Write('(');
 			Screen.Color = Colors.White;
-            Screen.Write(cmos.Month, bcd, 2);
+			Screen.Write(cmos.Month, bcd, 2);
 			Screen.Color = Colors.Gray;
 			Screen.Write('/');
 			Screen.Color = Colors.White;
-            Screen.Write(cmos.Day, bcd, 2);
+			Screen.Write(cmos.Day, bcd, 2);
 			Screen.Color = Colors.Gray;
 			Screen.Write('/');
 			Screen.Color = Colors.White;
 			Screen.Write('2');
 			Screen.Write('0');
-            Screen.Write(cmos.Year, bcd, 2);
+			Screen.Write(cmos.Year, bcd, 2);
 			Screen.Color = Colors.Gray;
 			Screen.Write(')');
 		}
