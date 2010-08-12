@@ -98,6 +98,9 @@ namespace System
 
 		[MethodImplAttribute(MethodImplOptions.InternalCall)]
 		public extern String(char[] value, int startIndex, int length);
+		
+		[MethodImplAttribute(MethodImplOptions.InternalCall)]
+		public extern unsafe String(sbyte* value, int startIndex, int length);
 
 		////[MethodImplAttribute(MethodImplOptions.InternalCall)]
 		////public unsafe extern String(sbyte* value);
@@ -155,6 +158,20 @@ namespace System
 				chars++;
 			}
 
+			return result;
+		}
+		
+		private static unsafe string CreateString(sbyte* value, int startIndex, int length)
+		{
+			String result = InternalAllocateString(length);
+			
+			char* chars = result.first_char;
+			
+			value += startIndex;
+			
+			for (int index = 0; index < length; index++)
+				*chars++ = (char)*value++;
+			
 			return result;
 		}
 

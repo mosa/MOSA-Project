@@ -222,14 +222,11 @@ namespace Mosa.Kernel.X86.Smbios
 			while (Native.Get8 (++stringEnd) != 0x00u)
 				;
 			
-			Screen.Write ("<");
 			int stringLength = (int)(stringEnd - stringStart);
 			string result = string.Empty;
-			
+
 			for (uint i = 0; i < stringLength; ++i)
 				result = string.Concat (result, new string ((char)Native.Get8 (stringStart + i), 1));
-					
-			Screen.Write (">");
 			
 			return result;
 		}

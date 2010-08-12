@@ -47,7 +47,7 @@ namespace Mosa.HelloWorld.Tests
 			string combined = "abc";
 			
 			for (int i = 0; i < 5; ++i)
-				combined = string.Concat(combined, new string ('d', 1));
+				combined = string.Concat(part1, new string ('d', 1));
 
 			return String.Equals(combined, abcde);
 		}

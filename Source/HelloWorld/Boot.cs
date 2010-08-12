@@ -137,6 +137,11 @@ namespace Mosa.HelloWorld
 				Screen.Write (SmbiosManager.NumberOfStructures, 10, -1);
 				Screen.NextLine ();
 				Screen.Color = Colors.White;
+				Screen.Write (@"Bios Vendor:           ");
+				Screen.Color = Colors.Gray;
+				Screen.Write (SmbiosManager.BiosVendor);
+				Screen.NextLine ();
+				Screen.Color = Colors.White;
 				Screen.Write (@"Max. Clock Frequency:  ");
 				Screen.Color = Colors.Gray;
 				Screen.Write (SmbiosManager.ClockFrequency, 10, -1);

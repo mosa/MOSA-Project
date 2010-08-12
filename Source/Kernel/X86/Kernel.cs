@@ -21,8 +21,6 @@ namespace Mosa.HelloWorld
 		public static void Setup()
 		{
 			Screen.Clear();
-			Screen.SetCursor(24, 10);
-			SmbiosManager.Setup ();
 			Screen.Color = 0x0E;
 			Screen.SetCursor(24, 0);
 			Screen.Write('1');
@@ -54,6 +52,7 @@ namespace Mosa.HelloWorld
 			TaskManager.Setup();
 			Screen.Write('A');
 			Screen.SetCursor(24, 10);
+			SmbiosManager.Setup ();
 		}
 	}
 }
