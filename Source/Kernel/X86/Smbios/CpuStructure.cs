@@ -10,15 +10,13 @@ namespace Mosa.Kernel.X86.Smbios
 		/// <summary>
 		///
 		/// </summary>
-		private uint currentSpeed = 0;
-		/// <summary>
-		///
-		/// </summary>
 		private uint maxSpeed = 0;
 		/// <summary>
 		///
 		/// </summary>
 		private uint clockFrequency = 0;
+		private uint dummy = 0;
+		private string vendor = null;
 		
 		/// <summary>
 		///
@@ -27,7 +25,8 @@ namespace Mosa.Kernel.X86.Smbios
 		{
 			clockFrequency = Native.Get16 (address + 0x12u);
 			maxSpeed = Native.Get16 (address + 0x14u);
-			currentSpeed = Native.Get16 (address + 0x16u);
+			vendor = GetStringFromIndex (Native.Get8 (address + 0x07u));
+			dummy = Native.Get16 (address + 0x16u);
 		}
 		
 		/// <summary>
@@ -41,17 +40,17 @@ namespace Mosa.Kernel.X86.Smbios
 		/// <summary>
 		///
 		/// </summary>
-		public uint CurrentSpeed
+		public uint ClockFrequency
 		{
-			get { return this.currentSpeed; }
+			get { return this.clockFrequency; }
 		}
 		
 		/// <summary>
 		///
 		/// </summary>
-		public uint ClockFrequency
+		public string Vendor
 		{
-			get { return this.clockFrequency; }
+			get { return this.vendor; }
 		}
 	}
 }

@@ -116,53 +116,48 @@ namespace Mosa.HelloWorld
 				Screen.Color = Colors.White;
 				Screen.Write (@"]");
 				Screen.NextLine ();
+				
+				Screen.Color = Colors.Yellow;
+				Screen.Write (@"[Bios]");
 				Screen.Color = Colors.White;
-				Screen.Write (@"Entry:                 ");
-				Screen.Color = Colors.Gray;
-				Screen.Write (SmbiosManager.EntryPoint, 16, -1);
-				Screen.NextLine ();
-				Screen.Color = Colors.White;
-				Screen.Write (@"Length:                ");
-				Screen.Color = Colors.Gray;
-				Screen.Write (SmbiosManager.TableLength, 16, -1);
-				Screen.NextLine ();
-				Screen.Color = Colors.White;
-				Screen.Write (@"Address:               ");
-				Screen.Color = Colors.Gray;
-				Screen.Write (SmbiosManager.TableAddress, 16, -1);
-				Screen.NextLine ();
-				Screen.Color = Colors.White;
-				Screen.Write (@"Number of structures:  ");
-				Screen.Color = Colors.Gray;
-				Screen.Write (SmbiosManager.NumberOfStructures, 10, -1);
 				Screen.NextLine ();
 				
 				BiosInformationStructure biosInformation = new BiosInformationStructure ();
 				Screen.Color = Colors.White;
-				Screen.Write (@"Bios Vendor:           ");
+				Screen.Write (@"Vendor: ");
 				Screen.Color = Colors.Gray;
 				Screen.Write (biosInformation.BiosVendor);
 				Screen.NextLine ();
 				
+				Screen.Color = Colors.Yellow;
+				Screen.Row = 9;
+				Screen.Column = 25;
+				Screen.Write (@"[Cpu]");
+				Screen.Color = Colors.White;
+				Screen.NextLine ();
+				Screen.Column = 25;
+				
 				CpuStructure cpuStructure = new CpuStructure ();
 				Screen.Color = Colors.White;
-				Screen.Write (@"Max. Clock Frequency:  ");
+				Screen.Write (@"Vendor: ");
+				Screen.Color = Colors.Gray;
+				Screen.Write (cpuStructure.Vendor);
+				Screen.NextLine ();
+				Screen.Column = 25;
+				Screen.Color = Colors.White;
+				Screen.Write (@"Clock Freq.: ");
 				Screen.Color = Colors.Gray;
 				Screen.Write (cpuStructure.ClockFrequency, 10, -1);
 				Screen.Write (@" MHz");
 				Screen.NextLine ();
+				Screen.Column = 25;
 				Screen.Color = Colors.White;
-				Screen.Write (@"Max. CPU Speed:        ");
+				Screen.Write (@"Max. Speed: ");
 				Screen.Color = Colors.Gray;
 				Screen.Write (cpuStructure.MaxSpeed, 10, -1);
 				Screen.Write (@" MHz");
 				Screen.NextLine ();
-				Screen.Color = Colors.White;
-				Screen.Write (@"Current CPU Speed:     ");
-				Screen.Color = Colors.Gray;
-				Screen.Write (cpuStructure.CurrentSpeed, 10, -1);
-				Screen.Write (@" MHz");
-				Screen.NextLine ();
+				Screen.Column = 25;
 			}
 			else
 			{
