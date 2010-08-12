@@ -44,6 +44,8 @@ namespace Mosa.Kernel.X86.Smbios
 		/// </summary>
 		private static uint clockFrequency = 0;
 		
+		private static string biosVendor = string.Empty;
+		
 		/// <summary>
 		///		Checks if SMBIOS is available
 		/// </summary>
@@ -124,6 +126,11 @@ namespace Mosa.Kernel.X86.Smbios
 			get { return clockFrequency; }
 		}
 		
+		public static string BiosVendor
+		{
+			get { return biosVendor; }
+		}
+		
 		/// <summary>
 		///
 		/// </summary>
@@ -139,7 +146,14 @@ namespace Mosa.Kernel.X86.Smbios
 			GetNumberOfStructures ();
 			GetMajorVersion ();
 			GetMinorVersion ();
+			ReadBiosTable ();
 			ReadCpuTable ();
+		}
+		
+		public static void ReadBiosTable ()
+		{
+			uint biosTableAddress = GetStructureOfType (0x00);
+			biosVendor = GetStringFromIndex (biosTableAddress, Native.Get8 (biosTableAddress + 0x04u));
 		}
 		
 		/// <summary>
@@ -189,6 +203,35 @@ namespace Mosa.Kernel.X86.Smbios
 				++endOfFormattedArea;
 			endOfFormattedArea += 0x02u;
 			return endOfFormattedArea;
+		}
+		
+		private static string GetStringFromIndex (uint address, byte index)
+		{
+			if (index == 0)
+				return string.Empty;
+				
+			byte length = Native.Get8 (address + 0x01u);
+			uint stringStart = address + length;
+			int count = 1;
+
+			while (count++ != index)
+				while (Native.Get8 (stringStart++) != 0x00u)
+					;
+
+			uint stringEnd = stringStart;
+			while (Native.Get8 (++stringEnd) != 0x00u)
+				;
+			
+			Screen.Write ("<");
+			int stringLength = (int)(stringEnd - stringStart);
+			string result = string.Empty;
+			
+			for (uint i = 0; i < stringLength; ++i)
+				result = string.Concat (result, new string ((char)Native.Get8 (stringStart + i), 1));
+					
+			Screen.Write (">");
+			
+			return result;
 		}
 		
 		/// <summary>
