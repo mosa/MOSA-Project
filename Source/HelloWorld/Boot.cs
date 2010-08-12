@@ -136,27 +136,31 @@ namespace Mosa.HelloWorld
 				Screen.Color = Colors.Gray;
 				Screen.Write (SmbiosManager.NumberOfStructures, 10, -1);
 				Screen.NextLine ();
+				
+				BiosInformationStructure biosInformation = new BiosInformationStructure ();
 				Screen.Color = Colors.White;
 				Screen.Write (@"Bios Vendor:           ");
 				Screen.Color = Colors.Gray;
-				Screen.Write (SmbiosManager.BiosVendor);
+				Screen.Write (biosInformation.BiosVendor);
 				Screen.NextLine ();
+				
+				CpuStructure cpuStructure = new CpuStructure ();
 				Screen.Color = Colors.White;
 				Screen.Write (@"Max. Clock Frequency:  ");
 				Screen.Color = Colors.Gray;
-				Screen.Write (SmbiosManager.ClockFrequency, 10, -1);
+				Screen.Write (cpuStructure.ClockFrequency, 10, -1);
 				Screen.Write (@" MHz");
 				Screen.NextLine ();
 				Screen.Color = Colors.White;
 				Screen.Write (@"Max. CPU Speed:        ");
 				Screen.Color = Colors.Gray;
-				Screen.Write (SmbiosManager.MaxSpeed, 10, -1);
+				Screen.Write (cpuStructure.MaxSpeed, 10, -1);
 				Screen.Write (@" MHz");
 				Screen.NextLine ();
 				Screen.Color = Colors.White;
 				Screen.Write (@"Current CPU Speed:     ");
 				Screen.Color = Colors.Gray;
-				Screen.Write (SmbiosManager.CurrentSpeed, 10, -1);
+				Screen.Write (cpuStructure.CurrentSpeed, 10, -1);
 				Screen.Write (@" MHz");
 				Screen.NextLine ();
 			}
