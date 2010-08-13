@@ -389,7 +389,7 @@ namespace Mosa.Runtime.CompilerFramework
 			this.architecture.GetTypeRequirements(field.SignatureType, out size, out alignment);
 
 			if (field.SignatureType.Type == CilElementType.ValueType)
-				size = ObjectModelUtility.ComputeTypeSize(field.DeclaringType, (field.SignatureType as Metadata.Signatures.ValueTypeSigType).Token, this.compiler.Metadata, architecture);
+				size = ObjectModelUtility.ComputeTypeSize(field.DeclaringType, (field.SignatureType as Metadata.Signatures.ValueTypeSigType).Token, this.compiler.MainAssembly.Metadata, architecture);
 
 			// The linker section to move this field into
 			SectionKind section;

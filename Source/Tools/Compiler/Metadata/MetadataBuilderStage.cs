@@ -219,7 +219,7 @@ namespace Mosa.Tools.Compiler.Metadata
 		{
 			metadataStream = AllocateMetadataStream();
 			metadataWriter = new BinaryWriter(metadataStream, Encoding.UTF8);
-			metadataSource = compiler.Metadata;
+			metadataSource = compiler.MainAssembly.Metadata;
 		}
 
 		/// <summary>
