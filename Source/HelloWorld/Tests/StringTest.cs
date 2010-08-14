@@ -15,6 +15,7 @@ namespace Mosa.HelloWorld.Tests
 			PrintResult(ConcatTest1());
 			PrintResult(ConcatTest2());
 			PrintResult(ConcatTest3());
+			PrintResult(ConcatTest4());
 			PrintResult(SubStringTest());
 			PrintResult(IndexOfTest());
 			PrintResult(LengthTest());
@@ -48,6 +49,18 @@ namespace Mosa.HelloWorld.Tests
 			
 			for (int i = 0; i < 5; ++i)
 				combined = string.Concat(combined, new string ('d', 1));
+
+			return String.Equals(combined, abcde);
+		}
+		
+		public static bool ConcatTest4()
+		{
+			string abcde = "zzzzzzzzzz";
+			string combined = string.Empty;
+			char c = 'z';
+
+			for (int i = 0; i < 10; ++i)
+				combined = string.Concat(combined, new string(c, 1));
 
 			return String.Equals(combined, abcde);
 		}

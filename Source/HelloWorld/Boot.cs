@@ -19,11 +19,7 @@ namespace Mosa.HelloWorld
 	/// </summary>
 	public static class Boot
 	{
-		public static void Test()
-		{
-			CMOS cmos = new CMOS();
-		}
-
+		
 		/// <summary>
 		/// Mains this instance.
 		/// </summary>

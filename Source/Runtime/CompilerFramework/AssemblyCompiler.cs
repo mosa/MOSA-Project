@@ -104,16 +104,7 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			get { return assembly; }
 		}
-
-		/// <summary>
-		/// Gets the metadata.
-		/// </summary>
-		/// <value>The metadata.</value>
-		public virtual IMetadataProvider Metadata
-		{
-			get { return assembly.Metadata; }
-		}
-
+		
 		/// <summary>
 		/// Gets the pipeline.
 		/// </summary>

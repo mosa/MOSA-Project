@@ -27,91 +27,91 @@ namespace Mosa.Tools.Compiler.Metadata
 		/// Holds the token types of all tables supported.
 		/// </summary>
 		private static readonly TokenTypes[] MetadataTableTokens = new[]
-        {
-            TokenTypes.Module,
-            TokenTypes.TypeRef,
-            TokenTypes.TypeDef,
-            TokenTypes.Field,
-            TokenTypes.MethodDef,
-            TokenTypes.Param,
-            TokenTypes.InterfaceImpl,
-            TokenTypes.MemberRef,
-            TokenTypes.Constant,
-            TokenTypes.CustomAttribute,
-            TokenTypes.FieldMarshal,
-            TokenTypes.DeclSecurity,
-            TokenTypes.ClassLayout,
-            TokenTypes.FieldLayout,
-            TokenTypes.StandAloneSig,
-            TokenTypes.EventMap,
-            TokenTypes.Event,
-            TokenTypes.PropertyMap,
-            TokenTypes.Property,
-            TokenTypes.MethodSemantics,
-            TokenTypes.MethodImpl,
-            TokenTypes.ModuleRef,
-            TokenTypes.TypeSpec,
-            TokenTypes.ImplMap,
-            TokenTypes.FieldRVA,
-            TokenTypes.Assembly,
-            TokenTypes.AssemblyProcessor,
-            TokenTypes.AssemblyOS,
-            TokenTypes.AssemblyRef,
-            TokenTypes.AssemblyRefProcessor,
-            TokenTypes.AssemblyRefOS,
-            TokenTypes.File,
-            TokenTypes.ExportedType,
-            TokenTypes.ManifestResource,
-            TokenTypes.NestedClass,
-            TokenTypes.GenericParam,
-            TokenTypes.MethodSpec,
-            TokenTypes.GenericParamConstraint
-        };
+		{
+			TokenTypes.Module,
+			TokenTypes.TypeRef,
+			TokenTypes.TypeDef,
+			TokenTypes.Field,
+			TokenTypes.MethodDef,
+			TokenTypes.Param,
+			TokenTypes.InterfaceImpl,
+			TokenTypes.MemberRef,
+			TokenTypes.Constant,
+			TokenTypes.CustomAttribute,
+			TokenTypes.FieldMarshal,
+			TokenTypes.DeclSecurity,
+			TokenTypes.ClassLayout,
+			TokenTypes.FieldLayout,
+			TokenTypes.StandAloneSig,
+			TokenTypes.EventMap,
+			TokenTypes.Event,
+			TokenTypes.PropertyMap,
+			TokenTypes.Property,
+			TokenTypes.MethodSemantics,
+			TokenTypes.MethodImpl,
+			TokenTypes.ModuleRef,
+			TokenTypes.TypeSpec,
+			TokenTypes.ImplMap,
+			TokenTypes.FieldRVA,
+			TokenTypes.Assembly,
+			TokenTypes.AssemblyProcessor,
+			TokenTypes.AssemblyOS,
+			TokenTypes.AssemblyRef,
+			TokenTypes.AssemblyRefProcessor,
+			TokenTypes.AssemblyRefOS,
+			TokenTypes.File,
+			TokenTypes.ExportedType,
+			TokenTypes.ManifestResource,
+			TokenTypes.NestedClass,
+			TokenTypes.GenericParam,
+			TokenTypes.MethodSpec,
+			TokenTypes.GenericParamConstraint
+		};
 
 		/// <summary>
 		/// Holds all metadata table handlers in order of execution.
 		/// </summary>
 		private static readonly Action<IMetadataProvider, MetadataBuilderStage>[] MetadataTableHandlers = new Action<IMetadataProvider, MetadataBuilderStage>[]
-        {
-            WriteModuleTable,                   // 0x00
-            WriteTypeRefTable,                  // 0x01
-            WriteTypeDefTable,                  // 0x02
-            WriteFieldTable,                    // 0x04
-            WriteMethodDefTable,                // 0x06
-            WriteParamTable,                    // 0x08
-            WriteInterfaceImplTable,            // 0x09
-            WriteMemberRefTable,                // 0x0A
-            WriteConstantTable,                 // 0x0B
-            WriteCustomAttributeTable,          // 0x0C
-            WriteFieldMarshalTable,             // 0x0D
-            WriteDeclSecurityTable,             // 0x0E
-            WriteClassLayoutTable,              // 0x0F
-            WriteFieldLayoutTable,              // 0x10
-            WriteStandaloneSigTable,            // 0x11
-            WriteEventMapTable,                 // 0x12
-            WriteEventTable,                    // 0x14
-            WritePropertyMapTable,              // 0x15
-            WritePropertyTable,                 // 0x17
-            WriteMethodSemanticsTable,          // 0x18
-            WriteMethodImplTable,               // 0x19
-            WriteModuleRefTable,                // 0x1A
-            WriteTypeSpecTable,                 // 0x1B
-            WriteImplMapTable,                  // 0x1C
-            WriteFieldRVATable,                 // 0x1D
-            WriteAssemblyTable,                 // 0x20
-            WriteAssemblyProcessorTable,        // 0x21
-            WriteAssemblyOSTable,               // 0x22
-            WriteAssemblyRefTable,              // 0x23
-            WriteAssemblyRefProcessorTable,     // 0x24
-            WriteAssemblyRefOSTable,            // 0x25
-            WriteFileTable,                     // 0x26
-            WriteExportedTypeTable,             // 0x27
-            WriteManifestResourceTable,         // 0x28
-            WriteNestedClassTable,              // 0x29
-            WriteGenericParamTable,             // 0x2A
-            WriteMethodSpecTable,               // 0x2B
-            WriteGenericParamConstraintTable,   // 0x2C
-        };
+		{
+			WriteModuleTable,                   // 0x00
+			WriteTypeRefTable,                  // 0x01
+			WriteTypeDefTable,                  // 0x02
+			WriteFieldTable,                    // 0x04
+			WriteMethodDefTable,                // 0x06
+			WriteParamTable,                    // 0x08
+			WriteInterfaceImplTable,            // 0x09
+			WriteMemberRefTable,                // 0x0A
+			WriteConstantTable,                 // 0x0B
+			WriteCustomAttributeTable,          // 0x0C
+			WriteFieldMarshalTable,             // 0x0D
+			WriteDeclSecurityTable,             // 0x0E
+			WriteClassLayoutTable,              // 0x0F
+			WriteFieldLayoutTable,              // 0x10
+			WriteStandaloneSigTable,            // 0x11
+			WriteEventMapTable,                 // 0x12
+			WriteEventTable,                    // 0x14
+			WritePropertyMapTable,              // 0x15
+			WritePropertyTable,                 // 0x17
+			WriteMethodSemanticsTable,          // 0x18
+			WriteMethodImplTable,               // 0x19
+			WriteModuleRefTable,                // 0x1A
+			WriteTypeSpecTable,                 // 0x1B
+			WriteImplMapTable,                  // 0x1C
+			WriteFieldRVATable,                 // 0x1D
+			WriteAssemblyTable,                 // 0x20
+			WriteAssemblyProcessorTable,        // 0x21
+			WriteAssemblyOSTable,               // 0x22
+			WriteAssemblyRefTable,              // 0x23
+			WriteAssemblyRefProcessorTable,     // 0x24
+			WriteAssemblyRefOSTable,            // 0x25
+			WriteFileTable,                     // 0x26
+			WriteExportedTypeTable,             // 0x27
+			WriteManifestResourceTable,         // 0x28
+			WriteNestedClassTable,              // 0x29
+			WriteGenericParamTable,             // 0x2A
+			WriteMethodSpecTable,               // 0x2B
+			WriteGenericParamConstraintTable,   // 0x2C
+		};
 
 		/// <summary>
 		/// Writes an entire metadata table.
