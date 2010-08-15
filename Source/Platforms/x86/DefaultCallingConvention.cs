@@ -70,9 +70,7 @@ namespace Mosa.Platforms.x86
             Operand result = ctx.Result;
             Stack<Operand> operands = this.BuildOperandStack(ctx);
 
-            ctx.ReplaceInstructionOnly(CPUx86.Instruction.NopInstruction);
-		    ctx.OperandCount = 0;
-		    ctx.Result = null;
+            ctx.SetInstruction(CPUx86.Instruction.NopInstruction);
 
             int stackSize = this.ReserveStackSizeForCall(ctx, metadata, context, operands);
             if (stackSize != 0)

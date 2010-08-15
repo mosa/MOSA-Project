@@ -33,7 +33,7 @@ namespace Mosa.Runtime.Vm
 		/// <summary>
 		/// Holds the relative virtual address of the field.
 		/// </summary>
-		private IntPtr rva;
+		private ulong rva;
 
 		/// <summary>
 		/// Holds the type of the field.
@@ -72,7 +72,7 @@ namespace Mosa.Runtime.Vm
 		/// Gets the RVA of the initialization data.
 		/// </summary>
 		/// <value>The RVA of the initialization data.</value>
-		public IntPtr RVA
+		public ulong RVA
 		{
 			get { return rva; }
 			protected set { this.rva = value; }

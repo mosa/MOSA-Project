@@ -69,7 +69,7 @@ namespace Mosa.Runtime.CompilerFramework
 				if (type.Name.Equals("<Module>") && type.Namespace.Length == 0) // HACK
 					continue;
 
-				if (type.IsGeneric|| type.IsDelegate)
+				if (type.IsGeneric || type.IsDelegate)
 					continue;
 
 				if (type.IsInterface)
@@ -394,7 +394,7 @@ namespace Mosa.Runtime.CompilerFramework
 			// The linker section to move this field into
 			SectionKind section;
 			// Does this field have an RVA?
-			if (IntPtr.Zero != field.RVA)
+			if (field.RVA != 0)
 			{
 				// FIXME: Move a static field into ROData, if it is read-only and can be initialized
 				// using static analysis
@@ -412,7 +412,7 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			using (Stream stream = this.linker.Allocate(field.ToString(), section, size, alignment))
 			{
-				if (IntPtr.Zero != field.RVA)
+				if (field.RVA != 0)
 				{
 					this.InitializeStaticValueFromRVA(stream, size, field);
 				}
@@ -425,7 +425,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 		private void InitializeStaticValueFromRVA(Stream stream, int size, RuntimeField field)
 		{
-			using (Stream source = this.compiler.MainAssembly.GetDataSection(field.RVA.ToInt64()))
+			using (Stream source = this.compiler.MainAssembly.GetDataSection((long)field.RVA))
 			{
 				byte[] data = new byte[size];
 				source.Read(data, 0, size);

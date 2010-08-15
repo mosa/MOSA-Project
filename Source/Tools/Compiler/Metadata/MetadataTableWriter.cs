@@ -545,7 +545,7 @@ namespace Mosa.Tools.Compiler.Metadata
 			{
 				FieldRVARow row = metadataSource.ReadFieldRVARow(token);
 
-				metadataWriter.Write(row.Rva);
+				metadataWriter.Write((uint)row.Rva);
 				metadataWriter.Write(row.FieldTableIdx);
 			});
 		}

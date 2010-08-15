@@ -166,8 +166,6 @@ namespace Mosa.Platforms.x86
 					//InstructionLogger.Instance,
 					new AddressModeConversionStage(),
 					//InstructionLogger.Instance,
-					new CILTransformationStage(),
-					//InstructionLogger.Instance,
 					new IRTransformationStage(),
 					//InstructionLogger.Instance,
 					new TweakTransformationStage(),

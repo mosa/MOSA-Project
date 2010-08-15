@@ -646,7 +646,7 @@ namespace Mosa.Platforms.x86
 
 		public void BreakInstruction(Context context)
 		{
-			context.ReplaceInstructionOnly(CPUx86.Instruction.BreakInstruction);
+			context.SetInstruction(CPUx86.Instruction.BreakInstruction);
 		}
 
 		/// <summary>
@@ -655,7 +655,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		public void NopInstruction(Context ctx)
 		{
-			ctx.ReplaceInstructionOnly(CPUx86.Instruction.NopInstruction);
+			ctx.SetInstruction(CPUx86.Instruction.NopInstruction);
 		}
 
 		/// <summary>

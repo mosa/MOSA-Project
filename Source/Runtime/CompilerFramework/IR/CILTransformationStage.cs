@@ -634,7 +634,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Nop(Context ctx)
 		{
-			ctx.ReplaceInstructionOnly(IR.Instruction.NopInstruction);
+			ctx.SetInstruction(IR.Instruction.NopInstruction);
 		}
 
 		/// <summary>
@@ -656,7 +656,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <param name="ctx">The context.</param>
 		public void Break(Context ctx)
 		{
-			ctx.ReplaceInstructionOnly(Instruction.BreakInstruction);
+			ctx.SetInstruction(IR.Instruction.BreakInstruction);
 		}
 
 		/// <summary>

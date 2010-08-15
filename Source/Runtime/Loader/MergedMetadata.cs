@@ -660,7 +660,7 @@ namespace Mosa.Runtime.Loader
 
 			FieldRVARow row = modules[module].Metadata.ReadFieldRVARow(originalToken);
 			return new FieldRVARow(
-				row.Rva,		// *** FIXME *** //
+				GetNewRVA(module, row.Rva), 
 				GetNewToken(module, row.FieldTableIdx)
 			);
 		}

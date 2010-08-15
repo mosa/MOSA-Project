@@ -616,6 +616,10 @@ namespace Mosa.Runtime.CompilerFramework
 			ResultCount = resultCount;
 			Ignore = false;
 			Label = label;
+			Operand1 = null;
+			Operand2 = null;
+			Operand3 = null;
+			Result = null;
 		}
 
 		/// <summary>
