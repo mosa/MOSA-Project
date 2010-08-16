@@ -199,7 +199,6 @@ namespace Mosa.Runtime.Loader
 
 				if (module.EntryPoint != 0)
 				{
-					//entryPoint = module.EntryPoint;
 					entryPoint = GetNewToken(mod, module.EntryPoint);
 				}
 			}
@@ -660,7 +659,7 @@ namespace Mosa.Runtime.Loader
 
 			FieldRVARow row = modules[module].Metadata.ReadFieldRVARow(originalToken);
 			return new FieldRVARow(
-				GetNewRVA(module, row.Rva), 
+				GetNewRVA(module, row.Rva),
 				GetNewToken(module, row.FieldTableIdx)
 			);
 		}
@@ -846,6 +845,22 @@ namespace Mosa.Runtime.Loader
 			TokenTypes newToken = GetNewToken(module, token);
 
 			return newToken;
+		}
+
+		/// <summary>
+		/// Gets the heaps of a specified type
+		/// </summary>
+		/// <param name="heapType">Type of the heap.</param>
+		/// <returns></returns>
+		IList<Heap> IMetadataProvider.GetHeaps(HeapType heapType)
+		{
+			List<Heap> list = new List<Heap>();
+
+			foreach (IMetadataModule module in modules)
+				foreach (Heap heap in module.Metadata.GetHeaps(heapType))
+					list.Add(heap);
+
+			return list;
 		}
 
 		#endregion // IMetadataProvider members

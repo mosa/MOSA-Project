@@ -55,7 +55,6 @@ namespace Mosa.Runtime.Metadata {
 			int realOffset = ValidateOffset(offset);
 			byte[] buffer = this.Buffer;
 			int endOffset = Array.IndexOf<byte>(buffer, 0, realOffset);
-			//token = (TokenTypes)((int)TokenTypes.String | endOffset - this._offset);
 			return Encoding.UTF8.GetString(buffer, realOffset, endOffset - realOffset);
 		}
 

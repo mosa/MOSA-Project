@@ -211,7 +211,7 @@ namespace Mosa.Tools.Compiler.Metadata
 			{
 				MethodDefRow row = metadataSource.ReadMethodDefRow(token);
 
-				metadataWriter.Write((uint)row.Rva);
+				metadataWriter.Write((uint)row.Rva); // FIXME: Point to actual location of compiled method
 				metadataWriter.Write((ushort)row.ImplFlags);
 				metadataWriter.Write((ushort)row.Flags);
 				metadataWriter.Write(row.NameStringIdx);
@@ -545,7 +545,7 @@ namespace Mosa.Tools.Compiler.Metadata
 			{
 				FieldRVARow row = metadataSource.ReadFieldRVARow(token);
 
-				metadataWriter.Write((uint)row.Rva);
+				metadataWriter.Write((uint)row.Rva); // this pointer is invalid
 				metadataWriter.Write(row.FieldTableIdx);
 			});
 		}

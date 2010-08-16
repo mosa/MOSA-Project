@@ -60,7 +60,6 @@ namespace Mosa.Runtime.Metadata {
 			int length = CalculatePrefixLength(ref realOffset);
 			byte[] result = new byte[length];
 			Array.Copy(this.Buffer, realOffset, result, 0, length);
-			//token = (TokenTypes)((int)TokenTypes.Blob | (realOffset + length - this._offset));
 			return result;
 		}
 

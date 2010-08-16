@@ -9,6 +9,8 @@
 
 using System;
 using System.IO;
+using System.Collections.Generic;
+
 using Mosa.Runtime.Loader;
 using Mosa.Runtime.Metadata.Tables;
 
@@ -219,9 +221,9 @@ namespace Mosa.Runtime.Metadata
 		ImplMapRow ReadImplMapRow(TokenTypes token);
 
 		/// <summary>
-		/// Reads a _stackFrameIndex rva row from provider.
+		/// Reads a field rva row from provider.
 		/// </summary>
-		/// <param name="token">The _stackFrameIndex rva row token.</param>
+		/// <param name="token">The field rva row token.</param>
 		/// <returns></returns>
 		FieldRVARow ReadFieldRVARow(TokenTypes token);
 
@@ -324,5 +326,11 @@ namespace Mosa.Runtime.Metadata
 		/// <returns></returns>
 		TokenTypes ApplyTokenTypeAdjustment(TokenTypes token, ulong rva);
 
+		/// <summary>
+		/// Gets the heaps of a specified type
+		/// </summary>
+		/// <param name="heapType">Type of the heap.</param>
+		/// <returns></returns>
+		IList<Heap> GetHeaps(HeapType heapType);
 	}
 }

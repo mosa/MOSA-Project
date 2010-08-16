@@ -11,6 +11,7 @@ using System;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
+using System.Collections.Generic;
 
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Tables;
@@ -681,9 +682,27 @@ namespace Mosa.Runtime.Loader.PE
 			return theap.ReadGenericParamConstraintRow(token);
 		}
 
+		/// <summary>
+		/// Applies the token type adjustment. This is necesary when assembly modules are virtually merged.
+		/// </summary>
+		/// <param name="token">The token.</param>
+		/// <param name="rva">The rva.</param>
+		/// <returns></returns>
 		TokenTypes IMetadataProvider.ApplyTokenTypeAdjustment(TokenTypes token, ulong rva)
 		{
 			return token;
+		}
+
+		/// <summary>
+		/// Gets the heaps of a specified type
+		/// </summary>
+		/// <param name="heapType">Type of the heap.</param>
+		/// <returns></returns>
+		IList<Heap> IMetadataProvider.GetHeaps(HeapType heapType)
+		{
+			List<Heap> list = new List<Heap>();
+			list.Add(_streams[(int)heapType]);
+			return list;
 		}
 
 		#endregion // IMetadataProvider members
