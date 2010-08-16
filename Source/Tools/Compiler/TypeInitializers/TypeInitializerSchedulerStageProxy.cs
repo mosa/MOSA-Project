@@ -37,6 +37,7 @@ namespace Mosa.Tools.Compiler.TypeInitializers
 		}
 
 		#endregion // IAssemblyCompilerStage Members
+
 		public TypeInitializerSchedulerStageProxy(ITypeInitializerSchedulerStage realStage)
 		{
 			this.realStage = realStage;

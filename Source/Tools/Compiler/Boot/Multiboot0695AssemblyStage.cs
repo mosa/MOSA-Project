@@ -152,8 +152,7 @@ namespace Mosa.Tools.Compiler.Boot
 		{
 			base.Setup(compiler);
 
-			this.linker = compiler.Pipeline.FindFirst<IAssemblyLinker>();
-			Debug.Assert(linker != null, @"No linker??");
+			linker = RetrieveAssemblyLinkerFromCompiler();
 		}
 
 		/// <summary>

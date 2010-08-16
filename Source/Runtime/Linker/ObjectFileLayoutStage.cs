@@ -85,10 +85,7 @@ namespace Mosa.Runtime.Linker
 		{
 			base.Setup(compiler);
 
-			this.linker = compiler.Pipeline.FindFirst<IAssemblyLinker>();
-
-			if (linker == null)
-				throw new InvalidOperationException(@"ObjectFileLayoutStage needs a linker.");
+			linker = RetrieveAssemblyLinkerFromCompiler();
 		}
 
 		/// <summary>

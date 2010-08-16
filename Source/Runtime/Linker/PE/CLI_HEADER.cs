@@ -15,17 +15,17 @@ using System.IO;
 
 namespace Mosa.Runtime.Linker.PE
 {
-    /// <summary>
-    /// The CLI _header embedded into a portable executable file.
-    /// </summary>
+	/// <summary>
+	/// The CLI _header embedded into a portable executable file.
+	/// </summary>
 	public struct CLI_HEADER 
-    {
+	{
 		#region Constants
 
 		/// <summary>
 		/// Size of the CLI Header
 		/// </summary>
-    	public static int Length = 0x250 - 0x208;
+		public static int Length = 0x250 - 0x208;
 		
 		/// <summary>
 		/// Name for symbol
@@ -36,65 +36,65 @@ namespace Mosa.Runtime.Linker.PE
 
 		#region Data members
 
-        /// <summary>
-        /// The size of the CLI _header in bytes.
-        /// </summary>
+		/// <summary>
+		/// The size of the CLI _header in bytes.
+		/// </summary>
 		public uint Cb;
 
-        /// <summary>
-        /// The major runtime version needed to execute the image.
-        /// </summary>
-        public ushort MajorRuntimeVersion;
+		/// <summary>
+		/// The major runtime version needed to execute the image.
+		/// </summary>
+		public ushort MajorRuntimeVersion;
 
-        /// <summary>
-        /// The minor runtime version needed to execute the image.
-        /// </summary>
+		/// <summary>
+		/// The minor runtime version needed to execute the image.
+		/// </summary>
 		public ushort MinorRuntimeVersion;
 
-        /// <summary>
-        /// The metadata data directory.
-        /// </summary>
-        public IMAGE_DATA_DIRECTORY Metadata;
+		/// <summary>
+		/// The metadata data directory.
+		/// </summary>
+		public IMAGE_DATA_DIRECTORY Metadata;
 
-        /// <summary>
-        /// Flags for the entire image.
-        /// </summary>
-        public RuntimeImageFlags Flags;
+		/// <summary>
+		/// Flags for the entire image.
+		/// </summary>
+		public RuntimeImageFlags Flags;
 
-        /// <summary>
-        /// The token of the method, that represents the entry point.
-        /// </summary>
+		/// <summary>
+		/// The token of the method, that represents the entry point.
+		/// </summary>
 		public uint EntryPointToken;
 
-        /// <summary>
-        /// Data directory of the resources.
-        /// </summary>
+		/// <summary>
+		/// Data directory of the resources.
+		/// </summary>
 		public IMAGE_DATA_DIRECTORY Resources;
 
-        /// <summary>
-        /// The data directory of the strong name signature.
-        /// </summary>
-        public IMAGE_DATA_DIRECTORY StrongNameSignature;
+		/// <summary>
+		/// The data directory of the strong name signature.
+		/// </summary>
+		public IMAGE_DATA_DIRECTORY StrongNameSignature;
 
-        /// <summary>
-        /// The data directory of the code manager table.
-        /// </summary>
-        public IMAGE_DATA_DIRECTORY CodeManagerTable;
+		/// <summary>
+		/// The data directory of the code manager table.
+		/// </summary>
+		public IMAGE_DATA_DIRECTORY CodeManagerTable;
 
-        /// <summary>
-        /// The data directory of vtable fixups.
-        /// </summary>
+		/// <summary>
+		/// The data directory of vtable fixups.
+		/// </summary>
 		public IMAGE_DATA_DIRECTORY VTableFixups;
 
-        /// <summary>
-        /// The data directory of export addresses.
-        /// </summary>
-        public IMAGE_DATA_DIRECTORY ExportAddressTableJumps;
+		/// <summary>
+		/// The data directory of export addresses.
+		/// </summary>
+		public IMAGE_DATA_DIRECTORY ExportAddressTableJumps;
 
-        /// <summary>
-        /// The data directory of the managed native _header.
-        /// </summary>
-        public IMAGE_DATA_DIRECTORY ManagedNativeHeader;
+		/// <summary>
+		/// The data directory of the managed native _header.
+		/// </summary>
+		public IMAGE_DATA_DIRECTORY ManagedNativeHeader;
 
 		// FIXME: public byte[] ImageHash;
 
@@ -102,10 +102,10 @@ namespace Mosa.Runtime.Linker.PE
 
 		#region Methods
 
-        /// <summary>
-        /// Loads the CLI_HEADER from the reader.
-        /// </summary>
-        /// <param name="reader">The reader.</param>
+		/// <summary>
+		/// Loads the CLI_HEADER from the reader.
+		/// </summary>
+		/// <param name="reader">The reader.</param>
 		public void Read(BinaryReader reader)
 		{
 			Cb = reader.ReadUInt32();
@@ -123,10 +123,10 @@ namespace Mosa.Runtime.Linker.PE
 		}
 
 		/// <summary>
-		/// Writes the _header to the given binary writer.
+		/// Writes the header to the given binary writer.
 		/// </summary>
 		/// <param name="writer">The binary writer to write to.</param>
-		public void Write(BinaryWriter writer)
+		public void WriteTo(BinaryWriter writer)
 		{
 			writer.Write(Cb);
 			writer.Write(MajorRuntimeVersion);

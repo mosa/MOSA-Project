@@ -53,7 +53,7 @@ namespace Mosa.Tools.Compiler.Stages
 		{
 			base.Setup(compiler);
 
-			linker = compiler.Pipeline.FindFirst<IAssemblyLinker>();
+			linker = RetrieveAssemblyLinkerFromCompiler();
 		}
 
 		/// <summary>
@@ -93,12 +93,13 @@ namespace Mosa.Tools.Compiler.Stages
 			if (rt == null)
 			{
 				return;
-				//throw new CompilationException(@"Failed to locate Mosa.Kernel.X86.IDT while building ISRs for the kernel.");
 			}
 
 			RuntimeMethod InterruptMethod = FindMethod(rt, "InterruptHandler");
 			if (InterruptMethod == null)
+			{
 				return;
+			}
 
 			SymbolOperand interruptMethod = SymbolOperand.FromMethod(InterruptMethod);
 

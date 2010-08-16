@@ -57,11 +57,29 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			this.compiler = compiler;
 			architecture = compiler.Architecture;
-			typeSystem = compiler.TypeSystem; 
-			assemblyLoader = compiler.AssemblyLoader; 
+			typeSystem = compiler.TypeSystem;
+			assemblyLoader = compiler.AssemblyLoader;
 		}
 
 		#endregion // IAssemblyCompilerStage members
+
+		#region Methods
+
+		/// <summary>
+		/// Retrieves the assembly linker from compiler.
+		/// </summary>
+		/// <returns>The retrieved assembly linker.</returns>
+		protected IAssemblyLinker RetrieveAssemblyLinkerFromCompiler()
+		{
+			IAssemblyLinker linker = compiler.Pipeline.FindFirst<IAssemblyLinker>();
+
+			if (linker == null)
+				throw new InvalidOperationException(@"A linker is required.");
+
+			return linker;
+		}
+
+		#endregion // Methods
 
 	}
 }

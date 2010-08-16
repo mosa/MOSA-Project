@@ -46,8 +46,7 @@ namespace Mosa.Tools.Compiler
 		{
 			base.Setup(compiler);
 
-			this.linker = compiler.Pipeline.FindFirst<IAssemblyLinker>();
-			Debug.Assert(linker != null, @"No linker??");
+			linker = RetrieveAssemblyLinkerFromCompiler();
 		}
 
 		/// <summary>
@@ -80,7 +79,7 @@ namespace Mosa.Tools.Compiler
 			using (Stream stream = this.linker.Allocate(CLI_HEADER.SymbolName, SectionKind.Text, CLI_HEADER.Length, 4))
 			using (BinaryWriter bw = new BinaryWriter(stream, Encoding.ASCII))
 			{
-				_cliHeader.Write(bw);
+				_cliHeader.WriteTo(bw);
 			}
 		}
 
