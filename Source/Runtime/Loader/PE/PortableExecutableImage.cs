@@ -81,6 +81,7 @@ namespace Mosa.Runtime.Loader.PE
 		/// Metadata of the assembly
 		/// </summary>
 		private byte[] _metadata;
+
 		private IList<string> codeBases;
 
 		#endregion // Data members
@@ -228,7 +229,7 @@ namespace Mosa.Runtime.Loader.PE
 		public static PortableExecutableImage Load(Stream stream, string codeBase)
 		{
 			// Check preconditions
-			if (null == stream)
+			if (stream == null)
 				throw new ArgumentNullException("stream");
 
 			// Create a new assembly instance
@@ -242,7 +243,7 @@ namespace Mosa.Runtime.Loader.PE
 		/// <returns></returns>
 		internal long ResolveVirtualAddress(long address)
 		{
-			if (null == _sections)
+			if (_sections == null)
 			{
 				return ((address / _ntHeader.OptionalHeader.SectionAlignment) * _ntHeader.OptionalHeader.FileAlignment) + (address % _ntHeader.OptionalHeader.SectionAlignment);
 			}

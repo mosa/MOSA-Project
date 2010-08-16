@@ -16,7 +16,7 @@ namespace Mosa.Tools.Compiler.Metadata
         public long Position;
 
         /// <summary>
-        /// Holds the size of the stream in byes.
+        /// Holds the size of the stream in bytes.
         /// </summary>
         public long Size;
     }

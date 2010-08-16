@@ -136,7 +136,6 @@
     <Compile Include="ConstantRemovalStage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CILTransformationStage.cs" />
     <Compile Include="TweakTransformationStage.cs" />
     <Compile Include="CPUx86\AdcInstruction.cs" />
     <Compile Include="CPUx86\AddInstruction.cs" />

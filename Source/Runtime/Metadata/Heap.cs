@@ -41,7 +41,7 @@ namespace Mosa.Runtime.Metadata {
 		/// <summary>
 		/// Initializes a new instance of <see cref="Mosa.Runtime.Metadata.Heap"/>.
 		/// </summary>
-        /// <param name="metadata">The byte array, which holds the provider.</param>
+		/// <param name="metadata">The byte array, which holds the provider.</param>
 		/// <param name="offset">The offset into the byte array, where the heap starts.</param>
 		/// <param name="size">The size of the heap in bytes.</param>
 		public Heap(byte[] metadata, int offset, int size)
@@ -138,20 +138,29 @@ namespace Mosa.Runtime.Metadata {
 			return result;
 		}
 
+		/// <summary>
+		/// Writes the heap to the specified writer.
+		/// </summary>
+		/// <param name="writer">The writer.</param>
+		public void WriteTo(BinaryWriter writer)
+		{
+			writer.Write(_metadata, _offset, _size);
+		}
+
 		#endregion // Methods
 
 		#region Static methods
 
-        /// <summary>
-        /// Creates an instance of a specific heap type.
-        /// </summary>
-        /// <param name="provider">The provider buffer, which contains the heap.</param>
-        /// <param name="type">The type of the heap to create.</param>
-        /// <param name="metadata">The metadata.</param>
-        /// <param name="offset">The offset into the buffer, where the heap starts.</param>
-        /// <param name="size">The size of the heap in bytes.</param>
-        /// <returns>An instance of the requested heap type.</returns>
-        /// <exception cref="System.ArgumentException">An invalid heap type was requested.</exception>
+		/// <summary>
+		/// Creates an instance of a specific heap type.
+		/// </summary>
+		/// <param name="provider">The provider buffer, which contains the heap.</param>
+		/// <param name="type">The type of the heap to create.</param>
+		/// <param name="metadata">The metadata.</param>
+		/// <param name="offset">The offset into the buffer, where the heap starts.</param>
+		/// <param name="size">The size of the heap in bytes.</param>
+		/// <returns>An instance of the requested heap type.</returns>
+		/// <exception cref="System.ArgumentException">An invalid heap type was requested.</exception>
 		public static Heap CreateHeap(IMetadataProvider provider, HeapType type, byte[] metadata, int offset, int size)
 		{
 			switch (type)

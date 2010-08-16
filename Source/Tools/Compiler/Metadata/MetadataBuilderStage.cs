@@ -258,7 +258,7 @@ namespace Mosa.Tools.Compiler.Metadata
 		{
 			ReserveSpaceForMetadataRoot();
 
-			//WriteHeaps();
+			WriteHeaps();
 			WriteTableStream();
 			WriteMosaTables();
 			WriteMetadataRoot();
@@ -332,7 +332,7 @@ namespace Mosa.Tools.Compiler.Metadata
 		}
 
 		/// <summary>
-		/// Writes the metadata root _header.
+		/// Writes the metadata root header.
 		/// </summary>
 		private void WriteMetadataRootHeader()
 		{
@@ -406,17 +406,9 @@ namespace Mosa.Tools.Compiler.Metadata
 			// Notify that we're starting to write a stream
 			StartWritingStream(StringStream);
 
-			const byte zero = 0;
-			TokenTypes lastToken = metadataSource.GetMaxTokenValue(TokenTypes.String);
-			for (TokenTypes token = TokenTypes.String; token < lastToken; token++)
+			foreach (Heap heap in metadataSource.GetHeaps(HeapType.String))
 			{
-				string value = metadataSource.ReadString(token);
-
-				byte[] valueInUtf8Format = Encoding.UTF8.GetBytes(value);
-				metadataWriter.Write(valueInUtf8Format);
-				metadataWriter.Write(zero);
-
-				token += valueInUtf8Format.Length;
+				heap.WriteTo(metadataWriter);
 			}
 
 			// Notify that we've completed writing the stream
@@ -431,17 +423,10 @@ namespace Mosa.Tools.Compiler.Metadata
 			// Notify that we're starting to write a stream
 			StartWritingStream(UserStringStream);
 
-			//TODO
-			//string value;
-			//TokenTypes lastToken = metadataSource.GetMaxTokenValue(TokenTypes.UserString);
-			//for (TokenTypes token = TokenTypes.UserString; token < lastToken; )
-			//{
-			//    token = metadataSource.Read(token, out value);
-
-			//    // Convert the user string to a UTF-16 BLOB
-			//    byte[] blob = new byte[Encoding.Unicode.GetByteCount(value) + 1];
-			//    Encoding.Unicode.GetBytes(value, 0, value.Length, blob, 0);
-			//}
+			foreach (Heap heap in metadataSource.GetHeaps(HeapType.UserString))
+			{
+				heap.WriteTo(metadataWriter);
+			}
 
 			// Notify that we've completed writing the stream
 			StoppedWritingStream(UserStringStream);
@@ -455,14 +440,10 @@ namespace Mosa.Tools.Compiler.Metadata
 			// Notify that we're starting to write a stream
 			StartWritingStream(BlobStream);
 
-			//TODO
-			//byte[] value;
-			//TokenTypes lastToken = metadataSource.GetMaxTokenValue(TokenTypes.Blob);
-			//for (TokenTypes token = TokenTypes.Blob; token < lastToken; )
-			//{
-			//    token = metadataSource.ReadBlob(token, out value);
-			//    WriteBlobRow(value);
-			//}
+			foreach (Heap heap in metadataSource.GetHeaps(HeapType.Blob))
+			{
+				heap.WriteTo(metadataWriter);
+			}
 
 			// Notify that we've completed writing the stream
 			StoppedWritingStream(BlobStream);
@@ -514,13 +495,16 @@ namespace Mosa.Tools.Compiler.Metadata
 			// Notify that we're starting to write a stream
 			StartWritingStream(GuidStream);
 
-			//TODO
-			//Guid value;
+			foreach (Heap heap in metadataSource.GetHeaps(HeapType.Guid))
+			{
+				heap.WriteTo(metadataWriter);
+			}
+
 			//TokenTypes lastToken = metadataSource.GetMaxTokenValue(TokenTypes.Guid);
 			//for (TokenTypes token = TokenTypes.Guid; token < lastToken; token++)
 			//{
-			//    metadataSource.Read(token, out value);
-			//    metadataWriter.Write(value.ToByteArray());
+			//    Guid guid = metadataSource.ReadGuid(token);
+			//    metadataWriter.Write(guid.ToByteArray());
 			//}
 
 			// Notify that we've completed writing the stream

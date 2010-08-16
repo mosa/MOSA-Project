@@ -747,7 +747,7 @@ namespace Mosa.Runtime.Vm
 			FieldRow field;
 			FieldRVARow fieldRVA = new FieldRVARow();
 			FieldLayoutRow fieldLayout = new FieldLayoutRow();
-			IntPtr rva, layout;
+			ulong rva, layout;
 
 			if (TokenTypes.FieldRVA < maxRVA)
 				fieldRVA = md.ReadFieldRVARow(tokenRva);
@@ -758,7 +758,7 @@ namespace Mosa.Runtime.Vm
 			{
 				// Read the stackFrameIndex
 				field = md.ReadFieldRow(token);
-				layout = rva = IntPtr.Zero;
+				layout = rva = 0;
 
 				// Static fields have an optional RVA, non-static may have a layout assigned
 				if ((field.Flags & FieldAttributes.HasFieldRVA) == FieldAttributes.HasFieldRVA)
@@ -770,7 +770,7 @@ namespace Mosa.Runtime.Vm
 					// Does this field have an RVA?
 					if (token == fieldRVA.FieldTableIdx && tokenRva <= maxRVA)
 					{
-						rva = new IntPtr(fieldRVA.Rva);
+						rva = fieldRVA.Rva;
 						tokenRva++;
 						if (tokenRva < maxRVA)
 						{
@@ -795,7 +795,7 @@ namespace Mosa.Runtime.Vm
 					// Does this field have layout?
 					if (token == fieldLayout.Field && tokenLayout <= maxLayout)
 					{
-						layout = new IntPtr(fieldLayout.Offset);
+						layout = fieldLayout.Offset;
 						tokenLayout++;
 						if (tokenLayout < maxLayout)
 						{
