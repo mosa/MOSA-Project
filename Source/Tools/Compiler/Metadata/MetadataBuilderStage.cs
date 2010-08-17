@@ -189,9 +189,6 @@ namespace Mosa.Tools.Compiler.Metadata
 			base.Setup(compiler);
 
 			linker = RetrieveAssemblyLinkerFromCompiler();
-
-			if (linker == null)
-				throw new InvalidOperationException(@"Can't build metadata without a linker.");
 		}
 
 		/// <summary>
@@ -240,15 +237,6 @@ namespace Mosa.Tools.Compiler.Metadata
 		private Stream AllocateMetadataStream()
 		{
 			return linker.Allocate(Symbol.Name, SectionKind.Text, 0, 0);
-		}
-
-		/// <summary>
-		/// Retrieves the assembly linker from compiler.
-		/// </summary>
-		/// <returns>The retrieved assembly linker.</returns>
-		private IAssemblyLinker RetrieveAssemblyLinkerFromCompiler()
-		{
-			return compiler.Pipeline.FindFirst<IAssemblyLinker>();
 		}
 
 		/// <summary>

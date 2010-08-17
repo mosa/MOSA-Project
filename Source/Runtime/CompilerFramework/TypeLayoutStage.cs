@@ -51,10 +51,7 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			base.Setup(compiler);
 
-			linker = compiler.Pipeline.FindFirst<IAssemblyLinker>();
-
-			if (linker == null)
-				throw new InvalidOperationException(@"TypeLayoutStage needs a linker.");
+			linker = RetrieveAssemblyLinkerFromCompiler();
 
 			architecture.GetTypeRequirements(BuiltInSigType.IntPtr, out nativePointerSize, out nativePointerAlignment);
 		}
