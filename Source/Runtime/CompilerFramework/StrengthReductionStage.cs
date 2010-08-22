@@ -49,19 +49,22 @@ namespace Mosa.Runtime.CompilerFramework
 				if (IsValueZero(ctx.Result.Type.Type, ctx.Operand2 as ConstantOperand))
 					multiplyByZero = true;
 
-			if (multiplyByZero) {
+			if (multiplyByZero)
+			{
 				ctx.SetInstruction(IR.Instruction.MoveInstruction, ctx.Result, new ConstantOperand(ctx.Result.Type, 0));
 				return;
 			}
 
 			if (ctx.Operand1 is ConstantOperand)
-				if (IsValueOne(ctx.Result.Type.Type, ctx.Operand1 as ConstantOperand)) {
+				if (IsValueOne(ctx.Result.Type.Type, ctx.Operand1 as ConstantOperand))
+				{
 					ctx.SetInstruction(IR.Instruction.MoveInstruction, ctx.Result, ctx.Operand2);
 					return;
 				}
 
 			if (ctx.Operand2 is ConstantOperand)
-				if (IsValueOne(ctx.Result.Type.Type, ctx.Operand2 as ConstantOperand)) {
+				if (IsValueOne(ctx.Result.Type.Type, ctx.Operand2 as ConstantOperand))
+				{
 					ctx.SetInstruction(IR.Instruction.MoveInstruction, ctx.Result, ctx.Operand1);
 					return;
 				}
@@ -77,7 +80,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </returns>
 		private static bool IsValueZero(Metadata.CilElementType cilElementType, ConstantOperand constantOperand)
 		{
-			switch (cilElementType) {
+			switch (cilElementType)
+			{
 				case Metadata.CilElementType.Char: goto case Metadata.CilElementType.U2;
 				case Metadata.CilElementType.U1: return (byte)(constantOperand.Value) == 0;
 				case Metadata.CilElementType.U2: return (ushort)(constantOperand.Value) == 0;
@@ -103,7 +107,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </returns>
 		private static bool IsValueOne(Metadata.CilElementType cilElementType, ConstantOperand constantOperand)
 		{
-			switch (cilElementType) {
+			switch (cilElementType)
+			{
 				case Metadata.CilElementType.Char: goto case Metadata.CilElementType.U2;
 				case Metadata.CilElementType.U1: return (byte)(constantOperand.Value) == 1;
 				case Metadata.CilElementType.U2: return (ushort)(constantOperand.Value) == 1;

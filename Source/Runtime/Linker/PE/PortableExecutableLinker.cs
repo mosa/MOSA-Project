@@ -188,12 +188,14 @@ namespace Mosa.Runtime.Linker.PE
 			// Calculate the patch offset
 			long offset = (methodAddress - text.VirtualAddress.ToInt64()) + methodOffset;
 
-			if ((linkType & LinkType.KindMask) == LinkType.AbsoluteAddress) {
+			if ((linkType & LinkType.KindMask) == LinkType.AbsoluteAddress)
+			{
 				// FIXME: Need a .reloc section with a relocation entry if the module is moved in virtual memory
 				// the runtime loader must patch this link request, we'll fail it until we can do relocations.
 				//throw new NotSupportedException(@".reloc section not supported.");
 			}
-			else {
+			else
+			{
 				// Change the absolute into a relative offset
 				targetAddress = targetAddress - (methodAddress + methodRelativeBase);
 			}
@@ -297,15 +299,18 @@ namespace Mosa.Runtime.Linker.PE
 		{
 			// Open the output file
 			using (FileStream fs = new FileStream(this.OutputFile, FileMode.Create, FileAccess.ReadWrite, FileShare.Read))
-			using (BinaryWriter writer = new BinaryWriter(fs, Encoding.Unicode)) {
+			using (BinaryWriter writer = new BinaryWriter(fs, Encoding.Unicode))
+			{
 				// Write the PE headers
 				WriteDosHeader(writer);
 				WritePEHeader(writer);
 
 				// Iterate all sections and store their data
 				long position = writer.BaseStream.Position;
-				foreach (PortableExecutableLinkerSection section in this.sections.Values) {
-					if (section.Length > 0) {
+				foreach (PortableExecutableLinkerSection section in this.sections.Values)
+				{
+					if (section.Length > 0)
+					{
 						// Write the section
 						section.Write(writer);
 
@@ -317,7 +322,8 @@ namespace Mosa.Runtime.Linker.PE
 				}
 
 				// Do we need to set the checksum?
-				if (this.setChecksum) {
+				if (this.setChecksum)
+				{
 					// Flush all data to disk
 					writer.Flush();
 
@@ -464,8 +470,10 @@ namespace Mosa.Runtime.Linker.PE
 
 			// Write the section headers
 			uint address = this.fileAlignment;
-			foreach (LinkerSection section in this.sections.Values) {
-				if (section.Length > 0) {
+			foreach (LinkerSection section in this.sections.Values)
+			{
+				if (section.Length > 0)
+				{
 					IMAGE_SECTION_HEADER ish = new IMAGE_SECTION_HEADER();
 					ish.Name = section.Name;
 					ish.VirtualSize = (uint)section.Length;
@@ -480,7 +488,8 @@ namespace Mosa.Runtime.Linker.PE
 					ish.NumberOfRelocations = 0;
 					ish.NumberOfLinenumbers = 0;
 
-					switch (section.SectionKind) {
+					switch (section.SectionKind)
+					{
 						case SectionKind.BSS:
 							ish.Characteristics = 0x40000000 | 0x80000000 | 0x00000080;
 							break;
@@ -515,7 +524,8 @@ namespace Mosa.Runtime.Linker.PE
 		private ushort CountSections()
 		{
 			ushort sections = 0;
-			foreach (LinkerSection ls in this.sections.Values) {
+			foreach (LinkerSection ls in this.sections.Values)
+			{
 				if (ls.Length > 0)
 					sections++;
 			}
@@ -528,9 +538,11 @@ namespace Mosa.Runtime.Linker.PE
 			uint virtualSizeOfImage = this.sectionAlignment, sectionEnd;
 
 			// Move all sections to their right positions
-			foreach (LinkerSection ls in this.sections.Values) {
+			foreach (LinkerSection ls in this.sections.Values)
+			{
 				// Only use a section with something inside
-				if (ls.Length > 0) {
+				if (ls.Length > 0)
+				{
 					sectionEnd = (uint)(ls.VirtualAddress.ToInt32() + AlignValue(ls.Length, this.sectionAlignment));
 					if (sectionEnd > virtualSizeOfImage)
 						virtualSizeOfImage = sectionEnd;
@@ -543,7 +555,8 @@ namespace Mosa.Runtime.Linker.PE
 		private long GetSectionAddress(SectionKind sectionKind)
 		{
 			LinkerSection section;
-			if (this.sections.TryGetValue(sectionKind, out section) == true && section.Length > 0) {
+			if (this.sections.TryGetValue(sectionKind, out section) == true && section.Length > 0)
+			{
 				return (uint)section.VirtualAddress.ToInt64();
 			}
 
@@ -586,7 +599,8 @@ namespace Mosa.Runtime.Linker.PE
 		{
 			long position = writer.BaseStream.Position;
 			Debug.Assert(position <= address, @"Passed the address.");
-			if (position < address) {
+			if (position < address)
+			{
 				writer.Write(new byte[address - position]);
 			}
 		}
@@ -596,11 +610,14 @@ namespace Mosa.Runtime.Linker.PE
 			uint csum = 0;
 
 			using (FileStream stream = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-			using (BinaryReader reader = new BinaryReader(stream)) {
+			using (BinaryReader reader = new BinaryReader(stream))
+			{
 				uint l = (uint)stream.Length;
-				for (uint p = 0; p < l; p += 2) {
+				for (uint p = 0; p < l; p += 2)
+				{
 					csum += reader.ReadUInt16();
-					if (csum > 0x0000FFFF) {
+					if (csum > 0x0000FFFF)
+					{
 						csum = (csum & 0xFFFF) + (csum >> 16);
 					}
 				}

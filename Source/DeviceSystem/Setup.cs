@@ -72,7 +72,8 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		static public void StartPCIDevices()
 		{
-			foreach (IDevice device in deviceManager.GetDevices(new FindDevice.IsPCIDevice(), new FindDevice.IsAvailable())) {
+			foreach (IDevice device in deviceManager.GetDevices(new FindDevice.IsPCIDevice(), new FindDevice.IsAvailable()))
+			{
 				StartDevice(device as IPCIDevice);
 			}
 		}
@@ -85,7 +86,8 @@ namespace Mosa.DeviceSystem
 		{
 			DeviceDriver deviceDriver = deviceDriverRegistry.FindDriver(pciDevice);
 
-			if (deviceDriver == null) {
+			if (deviceDriver == null)
+			{
 				pciDevice.SetNoDriverFound();
 				return;
 			}
@@ -99,25 +101,29 @@ namespace Mosa.DeviceSystem
 			LinkedList<IMemoryRegion> memoryRegions = new LinkedList<IMemoryRegion>();
 
 			foreach (BaseAddress pciBaseAddress in pciDevice.BaseAddresses)
-				switch (pciBaseAddress.Region) {
+				switch (pciBaseAddress.Region)
+				{
 					case AddressType.IO: ioPortRegions.Add(new IOPortRegion((ushort)pciBaseAddress.Address, (ushort)pciBaseAddress.Size)); break;
 					case AddressType.Memory: memoryRegions.Add(new MemoryRegion(pciBaseAddress.Address, pciBaseAddress.Size)); break;
 					default: break;
 				}
 
 			foreach (DeviceDriverPhysicalMemoryAttribute memoryAttribute in deviceDriver.MemoryAttributes)
-				if (memoryAttribute.MemorySize > 0) {
+				if (memoryAttribute.MemorySize > 0)
+				{
 					IMemory memory = HAL.RequestPhysicalMemory(memoryAttribute.MemorySize, memoryAttribute.MemoryAlignment);
 					memoryRegions.Add(new MemoryRegion(memory.Address, memory.Size));
 				}
 
 			HardwareResources hardwareResources = new HardwareResources(resourceManager, ioPortRegions.ToArray(), memoryRegions.ToArray(), new InterruptHandler(resourceManager.InterruptManager, pciDevice.IRQ, hardwareDevice), pciDevice as IDeviceResource);
 
-			if (resourceManager.ClaimResources(hardwareResources)) {
+			if (resourceManager.ClaimResources(hardwareResources))
+			{
 				hardwareResources.EnableIRQ();
 				if (hardwareDevice.Start() == DeviceDriverStartStatus.Started)
 					pciDevice.SetDeviceOnline();
-				else {
+				else
+				{
 					hardwareResources.DisableIRQ();
 					resourceManager.ReleaseResources(hardwareResources);
 				}
@@ -143,7 +149,8 @@ namespace Mosa.DeviceSystem
 		{
 			ISADeviceDriverAttribute driverAtttribute = deviceDriver.Attribute as ISADeviceDriverAttribute;
 
-			if (driverAtttribute.AutoLoad) {
+			if (driverAtttribute.AutoLoad)
+			{
 				IHardwareDevice hardwareDevice = System.Activator.CreateInstance(deviceDriver.DriverType) as IHardwareDevice;
 				ISADeviceDriverAttribute attribute = deviceDriver.Attribute as ISADeviceDriverAttribute;
 
@@ -159,7 +166,8 @@ namespace Mosa.DeviceSystem
 					memoryRegions.Add(new MemoryRegion(driverAtttribute.BaseAddress, driverAtttribute.AddressRange));
 
 				foreach (DeviceDriverPhysicalMemoryAttribute memoryAttribute in deviceDriver.MemoryAttributes)
-					if (memoryAttribute.MemorySize > 0) {
+					if (memoryAttribute.MemorySize > 0)
+					{
 						IMemory memory = HAL.RequestPhysicalMemory(memoryAttribute.MemorySize, memoryAttribute.MemoryAlignment);
 						memoryRegions.Add(new MemoryRegion(memory.Address, memory.Size));
 					}
@@ -168,11 +176,13 @@ namespace Mosa.DeviceSystem
 
 				hardwareDevice.Setup(hardwareResources);
 
-				if (resourceManager.ClaimResources(hardwareResources)) {
+				if (resourceManager.ClaimResources(hardwareResources))
+				{
 					hardwareResources.EnableIRQ();
 					if (hardwareDevice.Start() == DeviceDriverStartStatus.Started)
 						deviceManager.Add(hardwareDevice);
-					else {
+					else
+					{
 						hardwareResources.DisableIRQ();
 						resourceManager.ReleaseResources(hardwareResources);
 					}

@@ -8,19 +8,19 @@
  */
 namespace Pictor.VertexSource
 {
-    ///<summary>
-    ///</summary>
-    public interface IVertexSource
-    {
-        ///<summary>
-        ///</summary>
-        ///<param name="pathId"></param>
-        void Rewind(uint pathId);
-        ///<summary>
-        ///</summary>
-        ///<param name="x"></param>
-        ///<param name="y"></param>
-        ///<returns></returns>
-        uint Vertex(out double x, out double y);
-    };
+	///<summary>
+	///</summary>
+	public interface IVertexSource
+	{
+		///<summary>
+		///</summary>
+		///<param name="pathId"></param>
+		void Rewind(uint pathId);
+		///<summary>
+		///</summary>
+		///<param name="x"></param>
+		///<param name="y"></param>
+		///<returns></returns>
+		uint Vertex(out double x, out double y);
+	};
 }

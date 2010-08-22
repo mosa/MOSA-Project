@@ -11,9 +11,9 @@ using Mosa.ClassLib;
 
 namespace Mosa.DeviceSystem
 {
-    /// <summary>
-    /// 
-    /// </summary>
+	/// <summary>
+	/// 
+	/// </summary>
 	public interface IDeviceManager
 	{
 		/// <summary>

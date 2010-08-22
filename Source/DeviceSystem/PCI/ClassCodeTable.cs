@@ -21,7 +21,8 @@ namespace Mosa.DeviceSystem.PCI
 		/// <returns></returns>
 		public static string Lookup(byte classCode)
 		{
-			switch (classCode) {
+			switch (classCode)
+			{
 				case 0x00: return "Pre PCI 2.0 device";
 				case 0x01: return "Mass storage controller";
 				case 0x02: return "Network controller";

@@ -1,6 +1,6 @@
 namespace System.Security.Permissions
 {
-	public enum SecurityAction 
+	public enum SecurityAction
 	{
 		RequestMinimum
 	}

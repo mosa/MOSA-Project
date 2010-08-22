@@ -206,7 +206,8 @@ namespace Mosa.Platforms.x86
 			if (signatureType == null)
 				throw new ArgumentNullException("signatureType");
 
-			switch (signatureType.Type) {
+			switch (signatureType.Type)
+			{
 				case CilElementType.U1: memorySize = alignment = 4; break;
 				case CilElementType.U2: memorySize = alignment = 4; break;
 				case CilElementType.U4: memorySize = alignment = 4; break;

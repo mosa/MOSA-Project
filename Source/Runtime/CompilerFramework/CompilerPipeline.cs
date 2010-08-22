@@ -100,9 +100,11 @@ namespace Mosa.Runtime.CompilerFramework
 			if (stage == null)
 				throw new ArgumentNullException(@"stage");
 
-			for (int i = _pipeline.Count - 1; i >= 0; i--) {
+			for (int i = _pipeline.Count - 1; i >= 0; i--)
+			{
 				StageType result = _pipeline[i] as StageType;
-				if (result != null) {
+				if (result != null)
+				{
 					_pipeline.Insert(i, stage);
 					return;
 				}
@@ -116,14 +118,16 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <typeparam name="StageType">The type of stage.</typeparam>
 		/// <param name="stages">The stages.</param>
-		public void InsertAfter<StageType>(IEnumerable<IPipelineStage> stages) where StageType : class, IPipelineStage 
+		public void InsertAfter<StageType>(IEnumerable<IPipelineStage> stages) where StageType : class, IPipelineStage
 		{
 			if (stages == null)
 				throw new ArgumentNullException(@"stage");
 
-			for (int i = _pipeline.Count - 1; i >= 0; i--) {
+			for (int i = _pipeline.Count - 1; i >= 0; i--)
+			{
 				StageType result = _pipeline[i] as StageType;
-				if (result != null) {
+				if (result != null)
+				{
 					_pipeline.InsertRange(i + 1, stages);
 					return;
 				}
@@ -142,9 +146,11 @@ namespace Mosa.Runtime.CompilerFramework
 			if (stage == null)
 				throw new ArgumentNullException(@"stage");
 
-			for (int i = 0; i < _pipeline.Count; i++) {
+			for (int i = 0; i < _pipeline.Count; i++)
+			{
 				StageType result = _pipeline[i] as StageType;
-				if (result != null) {
+				if (result != null)
+				{
 					_pipeline.Insert(i, stage);
 					return;
 				}
@@ -192,7 +198,8 @@ namespace Mosa.Runtime.CompilerFramework
 		public void Execute<T>(Action<T> action)
 		{
 			_currentStage = 0;
-			foreach (T stage in _pipeline) {
+			foreach (T stage in _pipeline)
+			{
 				action(stage);
 				_currentStage++;
 			}
@@ -223,7 +230,8 @@ namespace Mosa.Runtime.CompilerFramework
 		public StageType FindFirst<StageType>() where StageType : class
 		{
 			StageType result = default(StageType);
-			foreach (object o in _pipeline) {
+			foreach (object o in _pipeline)
+			{
 				result = o as StageType;
 				if (result != null)
 					break;

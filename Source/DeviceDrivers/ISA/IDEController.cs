@@ -192,7 +192,8 @@ namespace Mosa.DeviceDrivers.ISA
 			CommandPort = base.hardwareResources.GetIOPort(0, 7);
 			StatusPort = base.hardwareResources.GetIOPort(0, 7);
 
-			for (int drive = 0; drive < DrivesPerConroller; drive++) {
+			for (int drive = 0; drive < DrivesPerConroller; drive++)
+			{
 				driveInfo[drive].Present = false;
 				driveInfo[drive].MaxLBA = 0;
 			}
@@ -250,7 +251,8 @@ namespace Mosa.DeviceDrivers.ISA
 		/// <returns></returns>
 		protected bool WaitForReqisterReady()
 		{
-			while (true) {
+			while (true)
+			{
 				uint status = StatusPort.Read8();
 
 				if ((status & 0x08) == 0x08)
@@ -312,11 +314,13 @@ namespace Mosa.DeviceDrivers.ISA
 			BinaryFormat sector = new BinaryFormat(data);
 
 			//TODO: Don't use PIO
-			if (operation == SectorOperation.Read) {
+			if (operation == SectorOperation.Read)
+			{
 				for (uint index = 0; index < 256; index++)
 					sector.SetUShort(offset + (index * 2), DataPort.Read16());
 			}
-			else {
+			else
+			{
 				for (uint index = 0; index < 256; index++)
 					DataPort.Write16(sector.GetUShort(offset + (index * 2)));
 			}
@@ -366,11 +370,13 @@ namespace Mosa.DeviceDrivers.ISA
 			BinaryFormat sector = new BinaryFormat(data);
 
 			//TODO: Don't use PIO
-			if (operation == SectorOperation.Read) {
+			if (operation == SectorOperation.Read)
+			{
 				for (uint index = 0; index < 256; index++)
 					sector.SetUShort(offset + (index * 2), DataPort.Read16());
 			}
-			else {
+			else
+			{
 				for (uint index = 0; index < 256; index++)
 					DataPort.Write16(sector.GetUShort(offset + (index * 2)));
 
@@ -449,7 +455,7 @@ namespace Mosa.DeviceDrivers.ISA
 		public uint GetTotalSectors(uint drive)
 		{
 			if (drive > MaximunDriveCount)
-				return 0; 
+				return 0;
 
 			return driveInfo[drive].MaxLBA;
 		}
@@ -478,19 +484,22 @@ namespace Mosa.DeviceDrivers.ISA
 		{
 			if (drive > MaximunDriveCount)
 				return false;
-			
+
 			if (data.Length < count * 512)
 				return false;
 
-			try {
+			try
+			{
 				spinLock.Enter();
-				for (uint index = 0; index < count; index++) {
+				for (uint index = 0; index < count; index++)
+				{
 					if (!PerformLBA28(SectorOperation.Read, drive, block + index, data, index * 512))
 						return false;
 				}
 				return true;
 			}
-			finally {
+			finally
+			{
 				spinLock.Exit();
 			}
 		}
@@ -511,15 +520,18 @@ namespace Mosa.DeviceDrivers.ISA
 			if (data.Length < count * 512)
 				return false;
 
-			try {
+			try
+			{
 				spinLock.Enter();
-				for (uint index = 0; index < count; index++) {
+				for (uint index = 0; index < count; index++)
+				{
 					if (!PerformLBA28(SectorOperation.Write, drive, block + index, data, index * 512))
 						return false;
 				}
 				return true;
 			}
-			finally {
+			finally
+			{
 				spinLock.Exit();
 			}
 		}

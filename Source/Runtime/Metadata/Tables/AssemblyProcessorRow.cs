@@ -14,44 +14,44 @@ using System.IO;
 
 namespace Mosa.Runtime.Metadata.Tables
 {
-    /// <summary>
-    /// 
-    /// </summary>
-	public struct AssemblyProcessorRow 
-    {
+	/// <summary>
+	/// 
+	/// </summary>
+	public struct AssemblyProcessorRow
+	{
 		#region Data members
 
-        /// <summary>
-        /// 
-        /// </summary>
-        private uint _processor;
+		/// <summary>
+		/// 
+		/// </summary>
+		private uint _processor;
 
 		#endregion // Data members
 
-        #region Construction
+		#region Construction
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="AssemblyProcessorRow"/> struct.
-        /// </summary>
-        /// <param name="processor">The processor.</param>
-        public AssemblyProcessorRow(uint processor)
-        {
-            _processor = processor;
-        }
+		/// <summary>
+		/// Initializes a new instance of the <see cref="AssemblyProcessorRow"/> struct.
+		/// </summary>
+		/// <param name="processor">The processor.</param>
+		public AssemblyProcessorRow(uint processor)
+		{
+			_processor = processor;
+		}
 
-        #endregion // Construction
+		#endregion // Construction
 
-        #region Properties
+		#region Properties
 
-        /// <summary>
-        /// Gets the processor.
-        /// </summary>
-        /// <value>The processor.</value>
-        public uint Processor
-        {
-            get { return _processor; }
-        }
+		/// <summary>
+		/// Gets the processor.
+		/// </summary>
+		/// <value>The processor.</value>
+		public uint Processor
+		{
+			get { return _processor; }
+		}
 
-        #endregion // Properties
+		#endregion // Properties
 	}
 }

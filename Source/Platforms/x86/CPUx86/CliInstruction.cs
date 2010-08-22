@@ -14,11 +14,11 @@ using Mosa.Runtime.CompilerFramework;
 
 namespace Mosa.Platforms.x86.CPUx86
 {
-    /// <summary>
-    /// Representations the x86 cli instruction.
-    /// </summary>
+	/// <summary>
+	/// Representations the x86 cli instruction.
+	/// </summary>
 	public sealed class CliInstruction : BaseInstruction
-    {
+	{
 		#region Properties
 
 		/// <summary>
@@ -37,9 +37,9 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <param name="ctx">The context.</param>
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context ctx, MachineCodeEmitter emitter)
-        {
+		{
 			emitter.WriteByte(0xFA);
-        }
+		}
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
@@ -51,6 +51,6 @@ namespace Mosa.Platforms.x86.CPUx86
 			visitor.Cli(context);
 		}
 
-        #endregion // Methods
-    }
+		#endregion // Methods
+	}
 }

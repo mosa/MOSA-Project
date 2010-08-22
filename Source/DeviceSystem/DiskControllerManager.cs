@@ -36,8 +36,10 @@ namespace Mosa.DeviceSystem
 		{
 			LinkedList<IDevice> devices = new LinkedList<IDevice>();
 
-			for (uint drive = 0; drive < diskControllerDevice.MaximunDriveCount; drive++) {
-				if (diskControllerDevice.Open(drive)) {
+			for (uint drive = 0; drive < diskControllerDevice.MaximunDriveCount; drive++)
+			{
+				if (diskControllerDevice.Open(drive))
+				{
 					IDiskDevice diskDevice = new DiskDevice(diskControllerDevice, drive, false);
 					devices.Add(diskDevice as IDevice);
 				}
@@ -57,7 +59,8 @@ namespace Mosa.DeviceSystem
 			LinkedList<IDevice> devices = deviceManager.GetDevices(new FindDevice.IsDiskControllerDevice(), new FindDevice.IsOnline());
 
 			// For each controller
-			foreach (IDevice device in devices) {
+			foreach (IDevice device in devices)
+			{
 				IDiskControllerDevice controller = device as IDiskControllerDevice;
 
 				// Create disk devices

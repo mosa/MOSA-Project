@@ -18,13 +18,13 @@ using Mosa.Runtime.CompilerFramework;
 
 namespace Mosa.Platforms.x86.CPUx86
 {
-    /// <summary>
-    /// Representations the x86 pause instruction.
-    /// </summary>
-    public sealed class PauseInstruction : BaseInstruction
-    {
+	/// <summary>
+	/// Representations the x86 pause instruction.
+	/// </summary>
+	public sealed class PauseInstruction : BaseInstruction
+	{
 
-        #region Methods
+		#region Methods
 
 		/// <summary>
 		/// Emits the specified CTX.
@@ -47,7 +47,7 @@ namespace Mosa.Platforms.x86.CPUx86
 			visitor.Pause(context);
 		}
 
-        #endregion // Methods
+		#endregion // Methods
 
-    }
+	}
 }

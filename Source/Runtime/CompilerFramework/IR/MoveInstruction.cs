@@ -13,34 +13,34 @@ using System.Text;
 
 namespace Mosa.Runtime.CompilerFramework.IR
 {
-    /// <summary>
-    /// Intermediate representation of an arbitrary move context.
-    /// </summary>
-    public sealed class MoveInstruction : TwoOperandInstruction
-    {
-        #region Construction
+	/// <summary>
+	/// Intermediate representation of an arbitrary move context.
+	/// </summary>
+	public sealed class MoveInstruction : TwoOperandInstruction
+	{
+		#region Construction
 
-        /// <summary>
-        /// Initializes a new instance of <see cref="MoveInstruction"/>.
-        /// </summary>
-        public MoveInstruction()
-        {
-        }
+		/// <summary>
+		/// Initializes a new instance of <see cref="MoveInstruction"/>.
+		/// </summary>
+		public MoveInstruction()
+		{
+		}
 
-        #endregion // Construction
+		#endregion // Construction
 
-        #region TwoOperandInstruction Overrides
+		#region TwoOperandInstruction Overrides
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
 		/// </summary>
 		/// <param name="visitor">The visitor object.</param>
 		/// <param name="context">The context.</param>
-        public override void Visit(IIRVisitor visitor, Context context)
-        {
+		public override void Visit(IIRVisitor visitor, Context context)
+		{
 			visitor.MoveInstruction(context);
-        }
+		}
 
-        #endregion // TwoOperandInstruction Overrides
-    }
+		#endregion // TwoOperandInstruction Overrides
+	}
 }

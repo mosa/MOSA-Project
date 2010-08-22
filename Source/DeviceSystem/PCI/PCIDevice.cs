@@ -154,10 +154,12 @@ namespace Mosa.DeviceSystem.PCI
 			ioPortRegionCount = memoryRegionCount = 0;
 			this.baseAddresses = new BaseAddress[8];
 
-			for (byte i = 0; i < 6; i++) {
+			for (byte i = 0; i < 6; i++)
+			{
 				uint address = pciController.ReadConfig32(bus, slot, fun, (byte)(16 + (i * 4)));
 
-				if (address != 0) {
+				if (address != 0)
+				{
 					HAL.DisableAllInterrupts();
 
 					pciController.WriteConfig32(bus, slot, fun, (byte)(16 + (i * 4)), 0xFFFFFFFF);
@@ -173,7 +175,8 @@ namespace Mosa.DeviceSystem.PCI
 				}
 			}
 
-			if ((ClassCode == 0x03) && (SubClassCode == 0x00) && (ProgIF == 0x00)) {
+			if ((ClassCode == 0x03) && (SubClassCode == 0x00) && (ProgIF == 0x00))
+			{
 				// Special case for generic VGA
 				this.baseAddresses[6] = new BaseAddress(AddressType.Memory, 0xA0000, 0x1FFFF, false);
 				this.baseAddresses[7] = new BaseAddress(AddressType.IO, 0x3B0, 0x0F, false);
@@ -181,7 +184,8 @@ namespace Mosa.DeviceSystem.PCI
 
 			foreach (BaseAddress baseAddress in this.baseAddresses)
 				if (baseAddress != null)
-					switch (baseAddress.Region) {
+					switch (baseAddress.Region)
+					{
 						case AddressType.IO: ioPortRegionCount++; break;
 						case AddressType.Memory: memoryRegionCount++; break;
 					}
@@ -212,7 +216,7 @@ namespace Mosa.DeviceSystem.PCI
 		/// </summary>
 		public void EnableDevice()
 		{
-            CommandRegister = (ushort)(CommandRegister | (((ioPortRegionCount > 0) ? PCICommand.IO : (ushort)0) | PCICommand.Master | ((memoryRegionCount > 0) ? PCICommand.Memort : (ushort)0)));
+			CommandRegister = (ushort)(CommandRegister | (((ioPortRegionCount > 0) ? PCICommand.IO : (ushort)0) | PCICommand.Master | ((memoryRegionCount > 0) ? PCICommand.Memort : (ushort)0)));
 		}
 
 		/// <summary>

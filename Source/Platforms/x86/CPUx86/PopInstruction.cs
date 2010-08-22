@@ -38,9 +38,11 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context ctx, MachineCodeEmitter emitter)
 		{
-			if (ctx.Result is RegisterOperand) {
+			if (ctx.Result is RegisterOperand)
+			{
 				if ((ctx.Result as RegisterOperand).Register is SegmentRegister)
-					switch (((ctx.Result as RegisterOperand).Register as SegmentRegister).Segment) {
+					switch (((ctx.Result as RegisterOperand).Register as SegmentRegister).Segment)
+					{
 						case SegmentRegister.SegmentType.DS: emitter.Emit(POP_DS, null, null); return;
 						case SegmentRegister.SegmentType.ES: emitter.Emit(POP_ES, null, null); return;
 						case SegmentRegister.SegmentType.FS: emitter.Emit(POP_FS, null, null); return;

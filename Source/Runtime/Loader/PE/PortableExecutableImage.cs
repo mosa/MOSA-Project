@@ -38,7 +38,7 @@ namespace Mosa.Runtime.Loader.PE
 
 		#region Data members
 
-		private int _loadOrder =  -1;
+		private int _loadOrder = -1;
 
 		private IList<string> names;
 

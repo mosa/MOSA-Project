@@ -63,7 +63,7 @@ namespace Mosa.DeviceSystem
 			binaryFooter.SetString(VHDFooterOffset.CreatorApplication, "MOSA", 4);
 			binaryFooter.SetUIntReversed(VHDFooterOffset.CreatorVersion, 0x00050000);
 			binaryFooter.SetUIntReversed(VHDFooterOffset.CreatorHostOS, 0x5769326B); // Windows
-			binaryFooter.SetULongReversed(VHDFooterOffset.OriginalSize, blocks*512);
+			binaryFooter.SetULongReversed(VHDFooterOffset.OriginalSize, blocks * 512);
 			binaryFooter.SetULongReversed(VHDFooterOffset.CurrentSize, blocks * 512);
 			binaryFooter.SetUShortReversed(VHDFooterOffset.DiskGeometryCylinders, diskGeometry.Cylinders);
 			binaryFooter.SetByte(VHDFooterOffset.DiskGeometryHeads, diskGeometry.Heads);

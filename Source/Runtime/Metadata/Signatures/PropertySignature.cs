@@ -13,19 +13,19 @@ using System.Text;
 
 namespace Mosa.Runtime.Metadata.Signatures
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public class PropertySignature : Signature
-    {
-        /// <summary>
-        /// Parses the signature.
-        /// </summary>
-        /// <param name="buffer">The buffer.</param>
-        /// <param name="index">The index.</param>
-        protected override void ParseSignature(ISignatureContext context, byte[] buffer, ref int index)
-        {
-            throw new Exception("The method or operation is not implemented.");
-        }
-    }
+	/// <summary>
+	/// 
+	/// </summary>
+	public class PropertySignature : Signature
+	{
+		/// <summary>
+		/// Parses the signature.
+		/// </summary>
+		/// <param name="buffer">The buffer.</param>
+		/// <param name="index">The index.</param>
+		protected override void ParseSignature(ISignatureContext context, byte[] buffer, ref int index)
+		{
+			throw new Exception("The method or operation is not implemented.");
+		}
+	}
 }

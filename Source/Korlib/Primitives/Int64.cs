@@ -12,7 +12,7 @@ namespace System
 	/// <summary>
 	/// 
 	/// </summary>
-    public struct Int64
-    {
-    }
+	public struct Int64
+	{
+	}
 }

@@ -13,34 +13,34 @@ using System.Text;
 
 namespace Mosa.Runtime.CompilerFramework.IR
 {
-    /// <summary>
-    /// Intermediate representation of the exclusive-or operation.
-    /// </summary>
-    public sealed class LogicalXorInstruction : ThreeOperandInstruction
-    {
-        #region Construction
+	/// <summary>
+	/// Intermediate representation of the exclusive-or operation.
+	/// </summary>
+	public sealed class LogicalXorInstruction : ThreeOperandInstruction
+	{
+		#region Construction
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="LogicalXorInstruction"/> class.
-        /// </summary>
-        public LogicalXorInstruction()
-        {
-        }
+		/// <summary>
+		/// Initializes a new instance of the <see cref="LogicalXorInstruction"/> class.
+		/// </summary>
+		public LogicalXorInstruction()
+		{
+		}
 
-        #endregion // Construction
+		#endregion // Construction
 
-        #region ThreeOperandInstruction Overrides
+		#region ThreeOperandInstruction Overrides
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
 		/// </summary>
 		/// <param name="visitor">The visitor object.</param>
 		/// <param name="context">The context.</param>
-        public override void Visit(IIRVisitor visitor, Context context)
-        {
+		public override void Visit(IIRVisitor visitor, Context context)
+		{
 			visitor.LogicalXorInstruction(context);
-        }
+		}
 
-        #endregion // ThreeOperandInstruction Overrides
-    }
+		#endregion // ThreeOperandInstruction Overrides
+	}
 }

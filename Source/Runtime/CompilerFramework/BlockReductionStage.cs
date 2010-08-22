@@ -95,7 +95,7 @@
 
 //                workArray.Set(block.Index, false);
 //            }
-			
+
 //            // Pass Two
 //            while (workList.Count != 0) {
 //                BasicBlock block = workList.Pop();
@@ -192,7 +192,7 @@
 //            if (self)
 //                MarkBlockForReview(block);
 //        }
-		
+
 //        /// <summary>
 //        /// Tries to remove unused Blocks.
 //        /// </summary>

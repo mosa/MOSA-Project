@@ -49,7 +49,8 @@ namespace Mosa.DeviceSystem
 			LinkedList<IDevice> devices = deviceManager.GetDevices(new FindDevice.IsPCIController(), new FindDevice.IsOnline());
 
 			// For each controller
-			foreach (IDevice device in devices) {
+			foreach (IDevice device in devices)
+			{
 				IPCIController pciController = device as IPCIController;
 
 				for (byte bus = 0; bus < 255; bus++)

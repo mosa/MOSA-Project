@@ -64,12 +64,12 @@ namespace Mosa.Tools.Compiler
 		{
 			get { return ((IPipelineStage)wrapped).Name; }
 		}
-		
+
 		public void Setup(AssemblyCompiler compiler)
 		{
 			this.wrapped.Setup(compiler);
 		}
-		
+
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>

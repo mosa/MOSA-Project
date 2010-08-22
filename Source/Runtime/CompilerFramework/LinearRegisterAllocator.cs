@@ -113,7 +113,8 @@ namespace Mosa.Runtime.CompilerFramework
 			List<LiveRange> active = new List<LiveRange>();
 			_registers = FillRegisterList();
 
-			for (int i = 0; i < _liveRanges.Count; i++) {
+			for (int i = 0; i < _liveRanges.Count; i++)
+			{
 				LiveRange lr = _liveRanges[i];
 				ExpireOldRanges(lr.Start, active);
 
@@ -145,11 +146,14 @@ namespace Mosa.Runtime.CompilerFramework
 			int opIdx;
 
 			// Iterate all definition sites first
-			foreach (int index in lr.Op.Definitions.ToArray()) {
+			foreach (int index in lr.Op.Definitions.ToArray())
+			{
 				Context def = new Context(InstructionSet, index);
-				if (def.Offset == lr.Start) {
+				if (def.Offset == lr.Start)
+				{
 					opIdx = 0;
-					foreach (Operand r in def.Results) {
+					foreach (Operand r in def.Results)
+					{
 						// Is this the operand?
 						if (object.ReferenceEquals(r, lr.Op))
 							def.SetResult(opIdx, replacement);
@@ -162,15 +166,19 @@ namespace Mosa.Runtime.CompilerFramework
 			}
 
 			// Iterate all use sites
-			foreach (int index in lr.Op.Uses.ToArray()) {
+			foreach (int index in lr.Op.Uses.ToArray())
+			{
 				Context instr = new Context(InstructionSet, index);
 
-				if (instr.Offset <= lr.Start) {
+				if (instr.Offset <= lr.Start)
+				{
 					// A use on instr.Offset == lr.Start is one from a previous definition!!
 				}
-				else if (instr.Offset <= lr.End) {
+				else if (instr.Offset <= lr.End)
+				{
 					opIdx = 0;
-					foreach (Operand r in instr.Operands) {
+					foreach (Operand r in instr.Operands)
+					{
 						// Is this the operand?
 						if (object.ReferenceEquals(r, lr.Op))
 							instr.SetOperand(opIdx, replacement);
@@ -178,7 +186,8 @@ namespace Mosa.Runtime.CompilerFramework
 						opIdx++;
 					}
 				}
-				else {
+				else
+				{
 					break;
 				}
 			}
@@ -192,9 +201,11 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns></returns>
 		private Register SpillRegister(List<LiveRange> active, LiveRange current)
 		{
-			foreach (LiveRange lr in active) {
+			foreach (LiveRange lr in active)
+			{
 				// Does it make sense to spill this register?
-				if (lr.Reg.IsValidSigType(current.Op.Type)) {
+				if (lr.Reg.IsValidSigType(current.Op.Type))
+				{
 					// Yes, spill it back to its operand
 					RegisterOperand rop = new RegisterOperand(lr.Op.Type, lr.Reg);
 
@@ -226,8 +237,10 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns></returns>
 		private Register AllocateRegister(Operand operand)
 		{
-			foreach (Register r in _registers) {
-				if (r.IsValidSigType(operand.Type)) {
+			foreach (Register r in _registers)
+			{
+				if (r.IsValidSigType(operand.Type))
+				{
 					_registers.Remove(r);
 					return r;
 				}
@@ -243,7 +256,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="active">The active.</param>
 		private void ExpireOldRanges(int position, List<LiveRange> active)
 		{
-			for (int i = 0; i < active.Count; i++) {
+			for (int i = 0; i < active.Count; i++)
+			{
 				LiveRange lr = active[i];
 				if (lr.End > position)
 					break;
@@ -261,8 +275,10 @@ namespace Mosa.Runtime.CompilerFramework
 		private void ReinsertSpilledRange(LiveRange lr)
 		{
 			int index = 0;
-			foreach (LiveRange item in _liveRanges) {
-				if (item.Start > lr.Start) {
+			foreach (LiveRange item in _liveRanges)
+			{
+				if (item.Start > lr.Start)
+				{
 					_liveRanges.Insert(index, lr);
 					break;
 				}
@@ -343,17 +359,21 @@ namespace Mosa.Runtime.CompilerFramework
 			// Find the next definition after defLine
 			int ubound = Int32.MaxValue;
 
-			foreach (int index in op.Definitions) {
+			foreach (int index in op.Definitions)
+			{
 				Context ctx = CreateContext(index);
-				if (ctx.Offset > defLine) {
+				if (ctx.Offset > defLine)
+				{
 					ubound = ctx.Offset;
 					break;
 				}
 			}
 
-			foreach (int index in op.Uses) {
+			foreach (int index in op.Uses)
+			{
 				Context ctx = CreateContext(index);
-				if (ctx.Offset > defLine && ctx.Offset < ubound) {
+				if (ctx.Offset > defLine && ctx.Offset < ubound)
+				{
 					result = ctx.Offset;
 				}
 			}
@@ -373,7 +393,8 @@ namespace Mosa.Runtime.CompilerFramework
 			int result = -1;
 
 			// Now find the last use between defLine and ubound
-			foreach (int index in op.Uses) {
+			foreach (int index in op.Uses)
+			{
 				Context ctx = CreateContext(index);
 				if (ctx.Offset > line && ctx.Offset < end)
 					result = ctx.Offset;

@@ -52,7 +52,8 @@ namespace Mosa.Kernel.X86
 				return;
 
 			uint cnt = 0;
-			for (uint index = 0; index < Multiboot.MemoryMapCount; index++) {
+			for (uint index = 0; index < Multiboot.MemoryMapCount; index++)
+			{
 				byte value = Multiboot.GetMemoryMapType(index);
 
 				ulong start = Multiboot.GetMemoryMapBase(index);
@@ -80,7 +81,8 @@ namespace Mosa.Kernel.X86
 			uint normsize = (uint)(normend - normstart);
 
 			// Adjust if memory below is reserved
-			if (normstart < ReserveMemory) {
+			if (normstart < ReserveMemory)
+			{
 				normsize = (normstart + normsize) - ReserveMemory;
 				normstart = ReserveMemory;
 

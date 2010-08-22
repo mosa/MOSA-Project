@@ -25,7 +25,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// Initializes a new instance of the <see cref="NopInstruction"/> class.
 		/// </summary>
 		public DupInstruction(OpCode opcode)
-			: base(opcode,2)
+			: base(opcode, 2)
 		{
 		}
 

@@ -148,7 +148,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Gets the type system.
 		/// </summary>
 		/// <value>The type system.</value>
-		ITypeSystem TypeSystem { get;  }
+		ITypeSystem TypeSystem { get; }
 
 		/// <summary>
 		/// Gets the assembly loader.

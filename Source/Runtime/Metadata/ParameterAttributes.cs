@@ -11,39 +11,41 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Mosa.Runtime.Metadata {
-    /// <summary>
-    /// 
-    /// </summary>
-    [Flags]
-	public enum ParameterAttributes : ushort {
-        /// <summary>
-        /// 
-        /// </summary>
+namespace Mosa.Runtime.Metadata
+{
+	/// <summary>
+	/// 
+	/// </summary>
+	[Flags]
+	public enum ParameterAttributes : ushort
+	{
+		/// <summary>
+		/// 
+		/// </summary>
 		None = 0x0000,
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		In = 0x0001,
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		Out = 0x0002,
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		Optional = 0x0010,
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		HasDefault = 0x1000,
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		HasFieldMarshal = 0x2000,
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		Unused = 0xcfe0
 	}
 }

@@ -19,7 +19,7 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		/// <value>The width.</value>
 		uint Width { get; }
-		
+
 		/// <summary>
 		/// Gets the height.
 		/// </summary>

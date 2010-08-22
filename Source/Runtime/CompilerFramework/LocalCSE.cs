@@ -124,28 +124,33 @@ namespace Mosa.Runtime.CompilerFramework
 
 			AEBinExp aeb;
 
-			for (; !ctx.EndOfInstruction; ctx.GotoNext()) {
+			for (; !ctx.EndOfInstruction; ctx.GotoNext())
+			{
 				IInstruction instruction = ctx.Instruction; // block.Instructions[i];
 				RegisterOperand temp = null;
 				bool found = false;
 
-				if ((instruction is CIL.ArithmeticInstruction) && (instruction is CIL.BinaryInstruction)) {
+				if ((instruction is CIL.ArithmeticInstruction) && (instruction is CIL.BinaryInstruction))
+				{
 					tmp = new List<AEBinExp>(AEB);
 
-					while (tmp.Count > 0) {
+					while (tmp.Count > 0)
+					{
 						aeb = tmp[0];
 						tmp.RemoveAt(0);
 
 						// Match current instruction's expression against those
 						// in AEB, including commutativity
-						if (IsCommutative(instruction)) {
+						if (IsCommutative(instruction))
+						{
 							//int position = aeb.Position;
 							found = true;
 
 							// If no variable in tuple, create a new temporary and
 							// insert an instruction evaluating the expression
 							// and assigning it to the temporary
-							if (aeb.Var == null) {
+							if (aeb.Var == null)
+							{
 								// new_tmp()
 								AEB.Remove(aeb);
 								AEB.Add(new AEBinExp(aeb.Position, aeb.Operand1, aeb.Operator, aeb.Operand2, temp));
@@ -153,7 +158,8 @@ namespace Mosa.Runtime.CompilerFramework
 								// Insert new assignment to instruction stream in block
 								Context inserted = ctx.InsertBefore();
 
-								switch (aeb.Operator) {
+								switch (aeb.Operator)
+								{
 									case Operation.Add:
 										inserted.SetInstruction(CIL.Instruction.Get(CIL.OpCode.Add), temp, aeb.Operand1, aeb.Operand2);
 										break;
@@ -183,7 +189,8 @@ namespace Mosa.Runtime.CompilerFramework
 								// ctx.Result = block.Instructions[position].Results[0]; // FIXME PG
 								ctx.Operand1 = temp;
 							}
-							else {
+							else
+							{
 								temp = (RegisterOperand)aeb.Var;
 							}
 
@@ -192,7 +199,8 @@ namespace Mosa.Runtime.CompilerFramework
 						}
 					}
 
-					if (!found) {
+					if (!found)
+					{
 						Operation opr = Operation.None;
 
 						if (instruction is CIL.AddInstruction)
@@ -209,7 +217,8 @@ namespace Mosa.Runtime.CompilerFramework
 					// the current instruction
 					tmp = new List<AEBinExp>(AEB);
 
-					while (tmp.Count > 0) {
+					while (tmp.Count > 0)
+					{
 						aeb = tmp[0];
 						tmp.RemoveAt(0);
 

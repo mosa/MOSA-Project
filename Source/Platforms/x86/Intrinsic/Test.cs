@@ -21,7 +21,7 @@ namespace Mosa.Platforms.x86.Intrinsic
 	/// </summary>
 	public sealed class Test : IIntrinsicMethod
 	{
-	
+
 		#region Methods
 
 		/// <summary>

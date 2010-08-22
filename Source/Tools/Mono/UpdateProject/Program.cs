@@ -26,13 +26,15 @@ namespace Mosa.Tools.Mono.UpdateProject
 			Console.WriteLine("Written by Philipp Garcia (phil@thinkedge.com)");
 			Console.WriteLine();
 
-			if (args.Length < 1) {
+			if (args.Length < 1)
+			{
 				Console.WriteLine("Usage: UpdateProject <options>");
 				Console.Error.WriteLine("ERROR: Missing arguments");
 				return -1;
 			}
 
-			try {
+			try
+			{
 				Options options = new Options(args);
 
 				foreach (string file in options.Files)
@@ -43,7 +45,8 @@ namespace Mosa.Tools.Mono.UpdateProject
 						Add.Process(project);
 
 			}
-			catch (Exception e) {
+			catch (Exception e)
+			{
 				Console.Error.WriteLine("Error: " + e);
 				return -1;
 			}

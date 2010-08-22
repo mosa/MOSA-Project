@@ -13,48 +13,48 @@ using System.Text;
 
 namespace Mosa.Runtime.Vm
 {
-    /// <summary>
-    /// Used to mark a method with the <see cref="VmCall"/> to invoke.
-    /// </summary>
-    [AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
-    public sealed class VmCallAttribute : Attribute
-    {
-        #region Data members
+	/// <summary>
+	/// Used to mark a method with the <see cref="VmCall"/> to invoke.
+	/// </summary>
+	[AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
+	public sealed class VmCallAttribute : Attribute
+	{
+		#region Data members
 
-        /// <summary>
-        /// Holds the runtime call represented by this attribute.
-        /// </summary>
-        private VmCall vmCall;
+		/// <summary>
+		/// Holds the runtime call represented by this attribute.
+		/// </summary>
+		private VmCall vmCall;
 
-        #endregion // Data members
+		#endregion // Data members
 
-        #region Construction
+		#region Construction
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="VmCallAttribute"/> class.
-        /// </summary>
-        /// <param name="vmCall">The runtime call.</param>
-        public VmCallAttribute(VmCall vmCall)
-        {
-            this.vmCall = vmCall;
-        }
+		/// <summary>
+		/// Initializes a new instance of the <see cref="VmCallAttribute"/> class.
+		/// </summary>
+		/// <param name="vmCall">The runtime call.</param>
+		public VmCallAttribute(VmCall vmCall)
+		{
+			this.vmCall = vmCall;
+		}
 
-        #endregion // Construction
+		#endregion // Construction
 
-        #region Properties
+		#region Properties
 
-        /// <summary>
-        /// Gets the runtime call represented by this attribute.
-        /// </summary>
-        /// <value>The runtime call of this attribute.</value>
-        public VmCall VmCall
-        {
-            get 
-            { 
-                return this.vmCall; 
-            }
-        }
+		/// <summary>
+		/// Gets the runtime call represented by this attribute.
+		/// </summary>
+		/// <value>The runtime call of this attribute.</value>
+		public VmCall VmCall
+		{
+			get
+			{
+				return this.vmCall;
+			}
+		}
 
-        #endregion // Properties
-    }
+		#endregion // Properties
+	}
 }

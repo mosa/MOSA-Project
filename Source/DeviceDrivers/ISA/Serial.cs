@@ -489,7 +489,8 @@ namespace Mosa.DeviceDrivers.ISA
 		/// <param name="ch">The ch.</param>
 		public void Write(byte ch)
 		{
-			try {
+			try
+			{
 				spinLock.Enter();
 
 				while (!CanTransmit())
@@ -497,7 +498,8 @@ namespace Mosa.DeviceDrivers.ISA
 
 				thrBase.Write8(ch);
 			}
-			finally {
+			finally
+			{
 				spinLock.Exit();
 			}
 		}
@@ -518,14 +520,16 @@ namespace Mosa.DeviceDrivers.ISA
 		/// </summary>
 		protected void ReadSerial()
 		{
-			try {
+			try
+			{
 				spinLock.Enter();
 
 				if (!IsFIFOFull())
 					while (CanRead())
 						AddToFIFO(rbrBase.Read8());
 			}
-			finally {
+			finally
+			{
 				spinLock.Exit();
 			}
 		}
@@ -556,7 +560,8 @@ namespace Mosa.DeviceDrivers.ISA
 		/// <returns></returns>
 		public int ReadByte()
 		{
-			try {
+			try
+			{
 				spinLock.Enter();
 
 				if (!IsFIFODataAvailable())
@@ -564,7 +569,8 @@ namespace Mosa.DeviceDrivers.ISA
 
 				return GetFromFIFO();
 			}
-			finally {
+			finally
+			{
 				spinLock.Exit();
 			}
 		}

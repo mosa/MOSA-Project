@@ -12,12 +12,14 @@ using System.IO;
 using System.Text;
 using System.Diagnostics;
 
-namespace Mosa.Runtime.Metadata {
+namespace Mosa.Runtime.Metadata
+{
 
 	/// <summary>
 	/// Provides a access to the strings in the .NET provider string heap.
 	/// </summary>
-	public sealed class StringHeap : Heap {
+	public sealed class StringHeap : Heap
+	{
 		#region Construction
 
 		/// <summary>

@@ -372,15 +372,18 @@ namespace Mosa.Kernel.X86
 			Screen.Write(':');
 			Screen.Write(interrupt, 16, 2);
 
-			if (interrupt == 14) {
+			if (interrupt == 14)
+			{
 				// Page Fault!
 				PageFaultHandler.Fault(errorCode);
 			}
-			if (interrupt == 0x20) {
+			if (interrupt == 0x20)
+			{
 				// Timer Interrupt! Switch Tasks!
-				
+
 			}
-			else {
+			else
+			{
 				Screen.Write(':');
 				Screen.Write(_counter, 10, 8);
 				Screen.Write(':');
@@ -388,7 +391,8 @@ namespace Mosa.Kernel.X86
 				Screen.Write('-');
 				Screen.Write(errorCode, 16, 2);
 
-				if (interrupt == 0x21) {
+				if (interrupt == 0x21)
+				{
 					byte scancode = Keyboard.ReadScanCode();
 					Screen.Write('-');
 					Screen.Write(scancode, 16, 2);

@@ -11,34 +11,36 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Mosa.Runtime.Metadata {
-    /// <summary>
-    /// 
-    /// </summary>
-	public enum AssemblyFlags {
-        /// <summary>
-        /// 
-        /// </summary>
+namespace Mosa.Runtime.Metadata
+{
+	/// <summary>
+	/// 
+	/// </summary>
+	public enum AssemblyFlags
+	{
+		/// <summary>
+		/// 
+		/// </summary>
 		SideBySideCompatible = 0x0000,
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		PublicKey = 0x0001,
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		Reserved = 0x0030,
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		Retargetable = 0x0100,
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		EnableJITcompileTracking = 0x8000,
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		DisableJITcompileOptimizer = 0x4000
 	}
 }

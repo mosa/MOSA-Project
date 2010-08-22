@@ -23,27 +23,29 @@ namespace System.Collections.Generic
 		/// </summary>
 		/// <param name="item">The item.</param>
 		/// <returns></returns>
-		int IndexOf (T item);
+		int IndexOf(T item);
 
 		/// <summary>
 		/// Inserts the specified index.
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <param name="item">The item.</param>
-		void Insert (int index, T item);
+		void Insert(int index, T item);
 
 		/// <summary>
 		/// Removes at.
 		/// </summary>
 		/// <param name="index">The index.</param>
-		void RemoveAt (int index);
+		void RemoveAt(int index);
 
 		/// <summary>
 		/// Gets or sets the T at the specified index.
 		/// </summary>
 		/// <value></value>
-		T this [int index] {
-			get; set;
+		T this[int index]
+		{
+			get;
+			set;
 		}
 	}
 }

@@ -15,8 +15,9 @@ using System.Runtime.CompilerServices;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
 
-namespace Mosa.Runtime {
-	
+namespace Mosa.Runtime
+{
+
 	/// <summary>
 	/// Provides central runtime entry points for various features.
 	/// </summary>

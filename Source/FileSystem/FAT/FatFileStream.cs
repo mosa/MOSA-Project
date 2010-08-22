@@ -210,7 +210,7 @@ namespace Mosa.FileSystem.FAT
 				return;
 
 			fs.WriteCluster(currentCluster, data);
-			SetLength(length);			
+			SetLength(length);
 
 			dirty = false;
 		}
@@ -307,7 +307,8 @@ namespace Mosa.FileSystem.FAT
 
 			long newposition = position;
 
-			switch (origin) {
+			switch (origin)
+			{
 				case System.IO.SeekOrigin.Begin: newposition = offset; break;
 				case System.IO.SeekOrigin.Current: newposition = position + offset; break;
 				case System.IO.SeekOrigin.End: newposition = length + offset; break;
@@ -320,16 +321,19 @@ namespace Mosa.FileSystem.FAT
 
 			uint newCluster = 0;
 
-			if (newNthCluster == currentNthCluster) {
+			if (newNthCluster == currentNthCluster)
+			{
 				newCluster = currentCluster;
 			}
 			else
-				if (newNthCluster > currentNthCluster) {
+				if (newNthCluster > currentNthCluster)
+				{
 					newCluster = fs.FindNthCluster(currentCluster, (uint)diff);
 					currentNthCluster = currentNthCluster + (uint)diff;
 				}
 				else
-					if (newNthCluster < currentNthCluster) {
+					if (newNthCluster < currentNthCluster)
+					{
 						newCluster = fs.FindNthCluster(this.startCluster, newNthCluster);
 						currentNthCluster = newNthCluster;
 					}
@@ -366,8 +370,10 @@ namespace Mosa.FileSystem.FAT
 
 			uint newcluster = 0;
 
-			if (currentCluster == 0) {
-				if (startCluster == 0) {
+			if (currentCluster == 0)
+			{
+				if (startCluster == 0)
+				{
 					uint newCluster = fs.AllocateFirstCluster(directorySector, directorySectorIndex);
 
 					if (newCluster == 0)
@@ -386,10 +392,12 @@ namespace Mosa.FileSystem.FAT
 
 				newcluster = startCluster;
 			}
-			else {
+			else
+			{
 				newcluster = fs.GetNextCluster(currentCluster);
 
-				if (newcluster == 0) {
+				if (newcluster == 0)
+				{
 					uint newCluster = fs.AddCluster(currentCluster);
 
 					if (newCluster == 0)

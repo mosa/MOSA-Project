@@ -73,15 +73,15 @@ namespace Mosa.Runtime.CompilerFramework
 			if (!destination.PreviousBlocks.Contains(source))
 				destination.PreviousBlocks.Add(source);
 		}
-        /// <summary>
-        /// Links the blocks.
-        /// </summary>
-        /// <param name="source">The source.</param>
-        /// <param name="destination">The destination.</param>
-        protected void LinkBlocks(Context source, BasicBlock destination)
-        {
-            LinkBlocks(source.BasicBlock, destination);
-        }
+		/// <summary>
+		/// Links the blocks.
+		/// </summary>
+		/// <param name="source">The source.</param>
+		/// <param name="destination">The destination.</param>
+		protected void LinkBlocks(Context source, BasicBlock destination)
+		{
+			LinkBlocks(source.BasicBlock, destination);
+		}
 
 		/// <summary>
 		/// Links the blocks.
@@ -166,12 +166,12 @@ namespace Mosa.Runtime.CompilerFramework
 			return result;
 		}
 
-        /// <summary>
-        /// Splits the block.
-        /// </summary>
-        /// <param name="ctx">The context.</param>
-        /// <param name="addJump">if set to <c>true</c> [add jump].</param>
-        /// <returns></returns>
+		/// <summary>
+		/// Splits the block.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		/// <param name="addJump">if set to <c>true</c> [add jump].</param>
+		/// <returns></returns>
 		protected Context SplitContext(Context ctx, bool addJump)
 		{
 			Context current = ctx.Clone();
@@ -185,25 +185,27 @@ namespace Mosa.Runtime.CompilerFramework
 
 			current.BasicBlock.NextBlocks.Clear();
 
-            if (addJump)
-            {
-                current.BasicBlock.NextBlocks.Add(nextBlock);
-                nextBlock.PreviousBlocks.Add(ctx.BasicBlock);
-            }
+			if (addJump)
+			{
+				current.BasicBlock.NextBlocks.Add(nextBlock);
+				nextBlock.PreviousBlocks.Add(ctx.BasicBlock);
+			}
 
-			if (current.IsLastInstruction) {
+			if (current.IsLastInstruction)
+			{
 				current.AppendInstruction(null);
 				current.Ignore = true;
 				nextBlock.Index = current.Index;
 				current.SliceBefore();
 			}
-			else {
+			else
+			{
 				nextBlock.Index = current.Next.Index;
 				current.SliceAfter();
 			}
 
-            if (addJump)
-    			current.AppendInstruction(IR.Instruction.JmpInstruction, nextBlock);
+			if (addJump)
+				current.AppendInstruction(IR.Instruction.JmpInstruction, nextBlock);
 
 			return CreateContext(nextBlock);
 		}
@@ -253,15 +255,18 @@ namespace Mosa.Runtime.CompilerFramework
 		protected Operand EmitConstant(Operand op)
 		{
 			ConstantOperand cop = op as ConstantOperand;
-			if (cop != null && (cop.StackType == StackTypeCode.F || cop.StackType == StackTypeCode.Int64)) {
+			if (cop != null && (cop.StackType == StackTypeCode.F || cop.StackType == StackTypeCode.Int64))
+			{
 				int size, alignment;
 				Architecture.GetTypeRequirements(cop.Type, out size, out alignment);
 
 				string name = String.Format("C_{0}", Guid.NewGuid());
-				using (Stream stream = MethodCompiler.Linker.Allocate(name, SectionKind.ROData, size, alignment)) {
+				using (Stream stream = MethodCompiler.Linker.Allocate(name, SectionKind.ROData, size, alignment))
+				{
 					byte[] buffer;
 
-					switch (cop.Type.Type) {
+					switch (cop.Type.Type)
+					{
 						case CilElementType.R4:
 							buffer = LittleEndianBitConverter.GetBytes((float)cop.Value);
 							break;
@@ -270,13 +275,13 @@ namespace Mosa.Runtime.CompilerFramework
 							buffer = LittleEndianBitConverter.GetBytes((double)cop.Value);
 							break;
 
-                        case CilElementType.I8:
-                            buffer = LittleEndianBitConverter.GetBytes((long)cop.Value);
-                            break;
+						case CilElementType.I8:
+							buffer = LittleEndianBitConverter.GetBytes((long)cop.Value);
+							break;
 
-                        case CilElementType.U8:
-                            buffer = LittleEndianBitConverter.GetBytes((ulong)cop.Value);
-                            break;
+						case CilElementType.U8:
+							buffer = LittleEndianBitConverter.GetBytes((ulong)cop.Value);
+							break;
 						default:
 							throw new NotSupportedException();
 					}

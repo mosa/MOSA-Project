@@ -83,7 +83,7 @@ namespace Mosa.Runtime.Vm
 		/// Gets the name.
 		/// </summary>
 		/// <value>The name.</value>
-		public string Name 
+		public string Name
 		{
 			get
 			{
@@ -116,8 +116,9 @@ namespace Mosa.Runtime.Vm
 		/// Gets or sets the address.
 		/// </summary>
 		/// <value>The address.</value>
-		public IntPtr Address { 
-			get { return _address; } 
+		public IntPtr Address
+		{
+			get { return _address; }
 			set { _address = value; }
 		}
 
@@ -169,7 +170,7 @@ namespace Mosa.Runtime.Vm
 			{
 				foreach (RuntimeAttribute attribute in this.attributes)
 				{
-					if (attribute.Type.Equals(attributeType) == true || 
+					if (attribute.Type.Equals(attributeType) == true ||
 						attribute.Type.IsSubclassOf(attributeType) == true)
 					{
 						result = true;

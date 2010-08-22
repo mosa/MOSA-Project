@@ -13,13 +13,14 @@ using System.Text;
 
 namespace Mosa.Runtime.CompilerFramework
 {
-    /// <summary>
-    /// Specifies the CLI stack type of a type reference.
-    /// </summary>
-	public enum StackTypeCode {
-        /// <summary>
-        /// Unknown stack type. This most likely hasn't been processed yet.
-        /// </summary>
+	/// <summary>
+	/// Specifies the CLI stack type of a type reference.
+	/// </summary>
+	public enum StackTypeCode
+	{
+		/// <summary>
+		/// Unknown stack type. This most likely hasn't been processed yet.
+		/// </summary>
 		Unknown = 0,
 
 		/// <summary>

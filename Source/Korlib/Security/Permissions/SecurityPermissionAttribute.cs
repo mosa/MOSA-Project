@@ -5,7 +5,7 @@ namespace System.Security.Permissions
 		public SecurityPermissionAttribute(SecurityAction action)
 		{
 		}
-		
+
 		public bool SkipVerification
 		{
 			get
@@ -14,7 +14,7 @@ namespace System.Security.Permissions
 			}
 			set
 			{
-				
+
 			}
 		}
 	}

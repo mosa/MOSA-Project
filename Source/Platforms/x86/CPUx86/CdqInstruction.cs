@@ -11,12 +11,12 @@ using Mosa.Runtime.CompilerFramework;
 
 namespace Mosa.Platforms.x86.CPUx86
 {
-    /// <summary>
-    /// Representations the x86 cdq instruction.
-    /// </summary>
-    public sealed class CdqInstruction : BaseInstruction
-    {
-        #region Methods
+	/// <summary>
+	/// Representations the x86 cdq instruction.
+	/// </summary>
+	public sealed class CdqInstruction : BaseInstruction
+	{
+		#region Methods
 
 		/// <summary>
 		/// Emits the specified platform instruction.
@@ -24,9 +24,9 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <param name="ctx">The context.</param>
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context ctx, MachineCodeEmitter emitter)
-        {
+		{
 			emitter.WriteByte(0x99);
-        }
+		}
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
@@ -38,6 +38,6 @@ namespace Mosa.Platforms.x86.CPUx86
 			visitor.Cdq(context);
 		}
 
-        #endregion //  Methods
-    }
+		#endregion //  Methods
+	}
 }

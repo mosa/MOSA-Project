@@ -18,13 +18,13 @@ using System.Diagnostics;
 
 namespace Mosa.Platforms.x86.CPUx86
 {
-    /// <summary>
-    /// Intermediate represenation of the x86 stosd instruction.
-    /// </summary>
-    public sealed class StosdInstruction : BaseInstruction
-    {
+	/// <summary>
+	/// Intermediate represenation of the x86 stosd instruction.
+	/// </summary>
+	public sealed class StosdInstruction : BaseInstruction
+	{
 
-        #region Methods
+		#region Methods
 
 		/// <summary>
 		/// Emits the specified platform instruction.
@@ -46,6 +46,6 @@ namespace Mosa.Platforms.x86.CPUx86
 			visitor.Stosd(context);
 		}
 
-        #endregion // Methods
-    }
+		#endregion // Methods
+	}
 }

@@ -12,7 +12,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 	public class DefaultSignatureContext : ISignatureContext
 	{
 		public static readonly ISignatureContext Instance = new DefaultSignatureContext();
-		
+
 		private DefaultSignatureContext()
 		{
 		}
@@ -21,8 +21,8 @@ namespace Mosa.Runtime.Metadata.Signatures
 		{
 			return new MVarSigType(index);
 		}
-		
-		
+
+
 		public SigType GetGenericTypeArgument(int index)
 		{
 			return new VarSigType(index);

@@ -11,9 +11,9 @@ using Mosa.DeviceSystem;
 
 namespace Mosa.DeviceSystem
 {
-    /// <summary>
-    /// 
-    /// </summary>
+	/// <summary>
+	/// 
+	/// </summary>
 	public interface IScanCodeMap
 	{
 		/// <summary>

@@ -49,7 +49,7 @@ namespace Mosa.DeviceSystem
 		/// <param name="x">The x.</param>
 		/// <param name="y">The y.</param>
 		/// <returns></returns>
-        public override uint GetPixel(uint x, uint y)
+		public override uint GetPixel(uint x, uint y)
 		{
 			return memory.Read16(GetOffset(x, y));
 		}

@@ -104,7 +104,7 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			get { return assembly; }
 		}
-		
+
 		/// <summary>
 		/// Gets the pipeline.
 		/// </summary>

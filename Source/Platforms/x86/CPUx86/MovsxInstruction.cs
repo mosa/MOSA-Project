@@ -43,15 +43,17 @@ namespace Mosa.Platforms.x86.CPUx86
 			if (source is ConstantOperand)
 				throw new ArgumentException(@"Source must not be ConstantOperand.", @"source");
 
-			switch (source.Type.Type) {
-                case CilElementType.Boolean: goto case CilElementType.I1;
+			switch (source.Type.Type)
+			{
+				case CilElementType.Boolean: goto case CilElementType.I1;
 				case CilElementType.U1: goto case CilElementType.I1;
-				case CilElementType.I1: {
+				case CilElementType.I1:
+					{
 						if ((destination is RegisterOperand) && (source is RegisterOperand)) return R_X8;
 						if ((destination is RegisterOperand) && (source is MemoryOperand)) return R_X8;
 					}
 					break;
-                case CilElementType.Char: goto case CilElementType.U2;
+				case CilElementType.Char: goto case CilElementType.U2;
 				case CilElementType.U2: goto case CilElementType.I2;
 				case CilElementType.I2:
 					if ((destination is RegisterOperand) && (source is RegisterOperand)) return R_X16;

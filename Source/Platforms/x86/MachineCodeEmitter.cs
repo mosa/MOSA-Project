@@ -165,16 +165,19 @@ namespace Mosa.Platforms.x86
 			// Relative branch offset
 			int relOffset;
 
-			if (_labels.TryGetValue(label, out pos)) {
+			if (_labels.TryGetValue(label, out pos))
+			{
 				//				Debug.Assert(pos == currentPosition);
 				if (pos != currentPosition)
 					throw new ArgumentException(@"Label already defined for another code point.", @"label");
 			}
-			else {
+			else
+			{
 				// Check if this label has forward references on it...
 				_patches.RemoveAll(delegate(Patch p)
 				{
-					if (p.label == label) {
+					if (p.label == label)
+					{
 						// Set new position
 						_codeStream.Position = p.position;
 						// Compute relative offset
@@ -236,7 +239,8 @@ namespace Mosa.Platforms.x86
 			// Check if this label has forward references on it...
 			emit = (0 != _literals.RemoveAll(delegate(Patch p)
 			{
-				if (p.label == label) {
+				if (p.label == label)
+				{
 					_codeStream.Position = p.position;
 					// HACK: We can't do PIC right now
 					//relOffset = (int)currentPosition - ((int)p.position + 4);
@@ -248,9 +252,11 @@ namespace Mosa.Platforms.x86
 				return false;
 			}));
 
-			if (emit) {
+			if (emit)
+			{
 				_codeStream.Position = currentPosition;
-				switch (LiteralData.Type.Type) {
+				switch (LiteralData.Type.Type)
+				{
 					case CilElementType.I8:
 						bytes = LittleEndianBitConverter.GetBytes((long)LiteralData.Data);
 						break;
@@ -316,7 +322,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="symbolOperand">The symbol operand.</param>
 		public void Call(SymbolOperand symbolOperand)
 		{
-            long address = _linker.Link(
+			long address = _linker.Link(
 				LinkType.RelativeOffset | LinkType.I4,
 				_compiler.Method,
 				(int)(_codeStream.Position - _codeStreamBasePosition),
@@ -325,36 +331,36 @@ namespace Mosa.Platforms.x86
 				IntPtr.Zero
 			);
 
-            if (address == 0L)
-            {
-                this.WriteByte(0);
-                this.WriteByte(0);
-                this.WriteByte(0);
-                this.WriteByte(0);
-            }
-            else
-            {
-                this._codeStream.Position += 4;
-            }
+			if (address == 0L)
+			{
+				this.WriteByte(0);
+				this.WriteByte(0);
+				this.WriteByte(0);
+				this.WriteByte(0);
+			}
+			else
+			{
+				this._codeStream.Position += 4;
+			}
 		}
 
-        public void Emit(OpCode opCode, Operand dest)
-        {
-            byte? sib, modRM;
-            Operand displacement;
+		public void Emit(OpCode opCode, Operand dest)
+		{
+			byte? sib, modRM;
+			Operand displacement;
 
-            // Write the opcode
-            _codeStream.Write(opCode.Code, 0, opCode.Code.Length);
+			// Write the opcode
+			_codeStream.Write(opCode.Code, 0, opCode.Code.Length);
 
-            // Write the mod R/M byte
-            modRM = CalculateModRM(opCode.RegField, dest, null, out sib, out displacement);
-            if (modRM != null)
-            {
-                _codeStream.WriteByte(modRM.Value);
-                if (sib.HasValue)
-                    _codeStream.WriteByte(sib.Value);
-            }
-        }
+			// Write the mod R/M byte
+			modRM = CalculateModRM(opCode.RegField, dest, null, out sib, out displacement);
+			if (modRM != null)
+			{
+				_codeStream.WriteByte(modRM.Value);
+				if (sib.HasValue)
+					_codeStream.WriteByte(sib.Value);
+			}
+		}
 
 		/// <summary>
 		/// Emits the given code.
@@ -375,7 +381,8 @@ namespace Mosa.Platforms.x86
 
 			// Write the mod R/M byte
 			modRM = CalculateModRM(opCode.RegField, dest, src, out sib, out displacement);
-			if (modRM != null) {
+			if (modRM != null)
+			{
 				_codeStream.WriteByte(modRM.Value);
 				if (sib.HasValue)
 					_codeStream.WriteByte(sib.Value);
@@ -414,7 +421,8 @@ namespace Mosa.Platforms.x86
 
 			// Write the mod R/M byte
 			modRM = CalculateModRM(opCode.RegField, dest, src, out sib, out displacement);
-			if (modRM != null) {
+			if (modRM != null)
+			{
 				_codeStream.WriteByte(modRM.Value);
 				if (sib.HasValue)
 					_codeStream.WriteByte(sib.Value);
@@ -441,19 +449,22 @@ namespace Mosa.Platforms.x86
 			LabelOperand label = displacement as LabelOperand;
 			SymbolOperand symbol = displacement as SymbolOperand;
 
-			if (label != null) {
+			if (label != null)
+			{
 				int pos = (int)(_codeStream.Position - _codeStreamBasePosition);
 				disp = LittleEndianBitConverter.GetBytes((uint)_linker.Link(LinkType.AbsoluteAddress | LinkType.I4, _compiler.Method, pos, 0, label.Name, IntPtr.Zero));
 			}
-			else if (member != null) {
+			else if (member != null)
+			{
 				int pos = (int)(_codeStream.Position - _codeStreamBasePosition);
 				disp = LittleEndianBitConverter.GetBytes((uint)_linker.Link(LinkType.AbsoluteAddress | LinkType.I4, _compiler.Method, pos, 0, member.Member.ToString(), member.Offset));
 			}
-			else if (symbol != null) {
+			else if (symbol != null)
+			{
 				int pos = (int)(_codeStream.Position - _codeStreamBasePosition);
 				disp = LittleEndianBitConverter.GetBytes((uint)_linker.Link(LinkType.AbsoluteAddress | LinkType.I4, _compiler.Method, pos, 0, symbol.Name, IntPtr.Zero));
 			}
-			else 
+			else
 				disp = LittleEndianBitConverter.GetBytes((displacement as MemoryOperand).Offset.ToInt32());
 
 			_codeStream.Write(disp, 0, disp.Length);
@@ -466,29 +477,36 @@ namespace Mosa.Platforms.x86
 		private void WriteImmediate(Operand op)
 		{
 			byte[] imm = null;
-			if (op is LocalVariableOperand) {
+			if (op is LocalVariableOperand)
+			{
 				// Add the displacement
 				StackOperand so = (StackOperand)op;
 				imm = LittleEndianBitConverter.GetBytes(so.Offset.ToInt32());
 			}
-			else if (op is LabelOperand) {
+			else if (op is LabelOperand)
+			{
 				_literals.Add(new Patch((op as LabelOperand).Label, _codeStream.Position));
 				imm = new byte[4];
 			}
-			else if (op is MemoryOperand) {
+			else if (op is MemoryOperand)
+			{
 				// Add the displacement
 				MemoryOperand mo = (MemoryOperand)op;
 				imm = LittleEndianBitConverter.GetBytes(mo.Offset.ToInt32());
 			}
-			else if (op is ConstantOperand) {
+			else if (op is ConstantOperand)
+			{
 				// Add the immediate
 				ConstantOperand co = (ConstantOperand)op;
-				switch (op.Type.Type) {
+				switch (op.Type.Type)
+				{
 					case CilElementType.I:
-						try {
+						try
+						{
 							imm = LittleEndianBitConverter.GetBytes(Convert.ToInt32(co.Value));
 						}
-						catch (OverflowException) {
+						catch (OverflowException)
+						{
 							imm = LittleEndianBitConverter.GetBytes(Convert.ToUInt64(co.Value));
 						}
 						break;
@@ -510,7 +528,7 @@ namespace Mosa.Platforms.x86
 					case CilElementType.Char:
 						goto case CilElementType.U2;
 					case CilElementType.U2:
-                        imm = LittleEndianBitConverter.GetBytes((ushort)Convert.ToUInt64(co.Value));
+						imm = LittleEndianBitConverter.GetBytes((ushort)Convert.ToUInt64(co.Value));
 						break;
 					case CilElementType.Ptr:
 					case CilElementType.U4:
@@ -531,10 +549,12 @@ namespace Mosa.Platforms.x86
 						throw new NotSupportedException(String.Format(@"CilElementType.{0} is not supported.", op.Type.Type));
 				}
 			}
-			else if (op is RegisterOperand) {
+			else if (op is RegisterOperand)
+			{
 				// Nothing to do...
 			}
-			else {
+			else
+			{
 				throw new NotImplementedException();
 			}
 
@@ -555,11 +575,13 @@ namespace Mosa.Platforms.x86
 			long position;
 
 			// Did we see the label?
-			if (_labels.TryGetValue(label, out position)) {
+			if (_labels.TryGetValue(label, out position))
+			{
 				// Yes, calculate the relative offset
 				relOffset = (int)position - ((int)_codeStream.Position + 4);
 			}
-			else {
+			else
+			{
 				// Forward jump, we can't resolve yet - store a patch
 				_patches.Add(new Patch(label, _codeStream.Position));
 			}
@@ -595,29 +617,36 @@ namespace Mosa.Platforms.x86
 		public void EmitImmediate(Operand op)
 		{
 			byte[] imm = null;
-			if (op is LocalVariableOperand) {
+			if (op is LocalVariableOperand)
+			{
 				// Add the displacement
 				StackOperand so = (StackOperand)op;
 				imm = LittleEndianBitConverter.GetBytes(so.Offset.ToInt32());
 			}
-			else if (op is LabelOperand) {
+			else if (op is LabelOperand)
+			{
 				_literals.Add(new Patch((op as LabelOperand).Label, _codeStream.Position));
 				imm = new byte[4];
 			}
-			else if (op is MemoryOperand) {
+			else if (op is MemoryOperand)
+			{
 				// Add the displacement
 				MemoryOperand mo = (MemoryOperand)op;
 				imm = LittleEndianBitConverter.GetBytes(mo.Offset.ToInt32());
 			}
-			else if (op is ConstantOperand) {
+			else if (op is ConstantOperand)
+			{
 				// Add the immediate
 				ConstantOperand co = (ConstantOperand)op;
-				switch (op.Type.Type) {
+				switch (op.Type.Type)
+				{
 					case CilElementType.I:
-						try {
+						try
+						{
 							imm = LittleEndianBitConverter.GetBytes(Convert.ToInt32(co.Value));
 						}
-						catch (OverflowException) {
+						catch (OverflowException)
+						{
 							imm = LittleEndianBitConverter.GetBytes(Convert.ToUInt32(co.Value));
 						}
 						break;
@@ -658,10 +687,12 @@ namespace Mosa.Platforms.x86
 						throw new NotSupportedException();
 				}
 			}
-			else if (op is RegisterOperand) {
+			else if (op is RegisterOperand)
+			{
 				// Nothing to do...
 			}
-			else {
+			else
+			{
 				throw new NotImplementedException();
 			}
 
@@ -692,7 +723,8 @@ namespace Mosa.Platforms.x86
 			MemoryOperand mop1 = op1 as MemoryOperand, mop2 = op2 as MemoryOperand;
 
 			// Normalize the operand order
-			if (rop1 == null && rop2 != null) {
+			if (rop1 == null && rop2 != null)
+			{
 				// Swap the memory operands
 				rop1 = rop2; rop2 = null;
 				mop2 = mop1; mop1 = null;
@@ -701,40 +733,46 @@ namespace Mosa.Platforms.x86
 			if (regField != null)
 				modRM = (byte)(regField.Value << 3);
 
-			if (rop1 != null && rop2 != null) {
+			if (rop1 != null && rop2 != null)
+			{
 				// mod = 11b, reg = rop1, r/m = rop2
 				modRM = (byte)((3 << 6) | (rop1.Register.RegisterCode << 3) | rop2.Register.RegisterCode);
 			}
 			// Check for register/memory combinations
-			else if (mop2 != null && mop2.Base != null) {
+			else if (mop2 != null && mop2.Base != null)
+			{
 				// mod = 10b, reg = rop1, r/m = mop2
 				modRM = (byte)(modRM.GetValueOrDefault() | (2 << 6) | (byte)mop2.Base.RegisterCode);
 				if (rop1 != null)
 					modRM |= (byte)(rop1.Register.RegisterCode << 3);
 				displacement = mop2;
 			}
-			else if (mop2 != null) {
+			else if (mop2 != null)
+			{
 				// mod = 10b, r/m = mop1, reg = rop2
 				modRM = (byte)(modRM.GetValueOrDefault() | 5);
 				if (rop1 != null)
 					modRM |= (byte)(rop1.Register.RegisterCode << 3);
 				displacement = mop2;
 			}
-			else if (mop1 != null && mop1.Base != null) {
+			else if (mop1 != null && mop1.Base != null)
+			{
 				// mod = 10b, r/m = mop1, reg = rop2
 				modRM = (byte)(modRM.GetValueOrDefault() | (2 << 6) | mop1.Base.RegisterCode);
 				if (rop2 != null)
 					modRM |= (byte)(rop2.Register.RegisterCode << 3);
 				displacement = mop1;
 			}
-			else if (mop1 != null) {
+			else if (mop1 != null)
+			{
 				// mod = 10b, r/m = mop1, reg = rop2
 				modRM = (byte)(modRM.GetValueOrDefault() | 5);
 				if (rop2 != null)
 					modRM |= (byte)(rop2.Register.RegisterCode << 3);
 				displacement = mop1;
 			}
-			else if (rop1 != null) {
+			else if (rop1 != null)
+			{
 				modRM = (byte)(modRM.GetValueOrDefault() | (3 << 6) | rop1.Register.RegisterCode);
 				//if (op2 is SymbolOperand)
 				//    displacement = op2;

@@ -43,10 +43,12 @@ namespace Mosa.Tools.Mono.UpdateProject
 
 			//Console.WriteLine("# " + filename);
 
-			if (!File.Exists(Path.Combine(options.Source, source))) {
+			if (!File.Exists(Path.Combine(options.Source, source)))
+			{
 				Console.WriteLine("0> " + filename);
 
-				if (options.UpdateOnChange) {
+				if (options.UpdateOnChange)
+				{
 					File.Delete(Path.Combine(options.Destination, source));
 					File.Delete(Path.Combine(options.Destination, originalFile));
 					File.Delete(Path.Combine(options.Destination, mosaFile));
@@ -69,7 +71,8 @@ namespace Mosa.Tools.Mono.UpdateProject
 			bool incomment = false;
 
 			// Analyze File
-			for (int linenbr = 0; linenbr < lines.Length; linenbr++) {
+			for (int linenbr = 0; linenbr < lines.Length; linenbr++)
+			{
 				string trim = GetLine(lines, linenbr, ref incomment).Replace('\t', ' ');
 
 				if (incomment)
@@ -83,29 +86,34 @@ namespace Mosa.Tools.Mono.UpdateProject
 					continue;
 				else if (trim.StartsWith("#"))
 					continue;
-				else if ((trim.StartsWith("extern ") || (trim.Contains(" extern "))) && !trim.Contains(" alias ")) {
+				else if ((trim.StartsWith("extern ") || (trim.Contains(" extern "))) && !trim.Contains(" alias "))
+				{
 					int start = GetPreviousBlockEnd(lines, linenbr);
 					skip = GetNumberOfMethodDeclarationLines(lines, linenbr, false);
 					MethodNode node = new MethodNode(currentNode, start, linenbr + skip, linenbr);
 					methodNodes.Add(node);
 					currentNode.Methods.Add(node);
 				}
-				else if (trim.StartsWith("using ") && trim.Contains(";")) {
+				else if (trim.StartsWith("using ") && trim.Contains(";"))
+				{
 					usings.Add(linenbr);
 
 				}
-				else if (trim.StartsWith("namespace ")) {
+				else if (trim.StartsWith("namespace "))
+				{
 					namespaces.Add(linenbr);
 				}
 				else if (trim.Contains(" class ") || (trim.StartsWith("class ")) ||
-						 trim.Contains(" struct ") || (trim.StartsWith("struct "))) {
+						 trim.Contains(" struct ") || (trim.StartsWith("struct ")))
+				{
 					// Search backwards for the start of the class definition (might not be on the same line as class keyword)
 					int start = GetPreviousBlockEnd(lines, linenbr);
 
 					string className = GetClassName(lines, start, linenbr);
 
 					// Attempt to handle #else class definitions
-					if (className == currentNode.Name) {
+					if (className == currentNode.Name)
+					{
 						currentNode.OtherDeclare.Add(linenbr);
 						continue;
 					}
@@ -134,10 +142,12 @@ namespace Mosa.Tools.Mono.UpdateProject
 
 			// Mark all partial nodes
 			foreach (ClassNode node in classNodes)
-				if (node.Methods.Count != 0) {
+				if (node.Methods.Count != 0)
+				{
 					node.Partial = true;
 					ClassNode upNode = node;
-					do {
+					do
+					{
 						upNode.Parent.Partial = true;
 						upNode = upNode.Parent;
 					} while (upNode != upNode.Parent);
@@ -145,37 +155,46 @@ namespace Mosa.Tools.Mono.UpdateProject
 
 			Directory.CreateDirectory(Path.GetDirectoryName(Path.Combine(options.Destination, source)));
 
-			if (methodNodes.Count != 0) {
-				if (options.CreateOriginalFile && !same) {
+			if (methodNodes.Count != 0)
+			{
+				if (options.CreateOriginalFile && !same)
+				{
 					Console.WriteLine("1> " + originalFile);
 					File.Copy(Path.Combine(options.Source, source), Path.Combine(options.Destination, originalFile), true);
 				}
 
 				ExpandUsing(lines, usings);
 
-				if (options.CreateMosaFile) {
-					if (!File.Exists(Path.Combine(options.Destination, mosaFile)) || (options.UpdateOnChange && !same)) {
+				if (options.CreateMosaFile)
+				{
+					if (!File.Exists(Path.Combine(options.Destination, mosaFile)) || (options.UpdateOnChange && !same))
+					{
 						Console.WriteLine("2> " + mosaFile);
 						CreatePartialFileForMosa(lines, rootNode, usings, namespaces, Path.Combine(options.Destination, mosaFile));
 					}
 				}
 
-				if (options.CreateMonoFile) {
-					if (!File.Exists(Path.Combine(options.Destination, monoFile)) || (options.UpdateOnChange && !same)) {
+				if (options.CreateMonoFile)
+				{
+					if (!File.Exists(Path.Combine(options.Destination, monoFile)) || (options.UpdateOnChange && !same))
+					{
 						Console.WriteLine("3> " + monoFile);
 						CreatePartialFileForMono(lines, rootNode, usings, namespaces, Path.Combine(options.Destination, monoFile));
 					}
 				}
 
-				if (options.UpdateOnChange && !same) {
+				if (options.UpdateOnChange && !same)
+				{
 					Console.WriteLine("4> " + source);
 					CreateModifiedFile(lines, classNodes, methodNodes, Path.Combine(options.Destination, source));
 				}
 			}
-			else {
+			else
+			{
 				same = CompareFile.Compare(Path.Combine(options.Source, source), Path.Combine(options.Destination, source));
 
-				if (options.UpdateOnChange && !same) {
+				if (options.UpdateOnChange && !same)
+				{
 					Console.WriteLine("5> " + source);
 					File.Copy(Path.Combine(options.Source, source), Path.Combine(options.Destination, source), true);
 					File.Delete(Path.Combine(options.Destination, originalFile));
@@ -196,8 +215,10 @@ namespace Mosa.Tools.Mono.UpdateProject
 											   string filename)
 		{
 			// Insert partial
-			foreach (ClassNode classNode in classNodes) {
-				if (classNode.Partial) {
+			foreach (ClassNode classNode in classNodes)
+			{
+				if (classNode.Partial)
+				{
 					AddPartialToClassName(ref lines, classNode.Declare);
 
 					foreach (int line in classNode.OtherDeclare)
@@ -205,18 +226,21 @@ namespace Mosa.Tools.Mono.UpdateProject
 				}
 			}
 
-			foreach (MethodNode method in methodNodes) {
+			foreach (MethodNode method in methodNodes)
+			{
 				int start = method.Declare;
 				int cnt = 0;
 
-				for (int at = method.Declare; at >= method.Start; at--) {
+				for (int at = method.Declare; at >= method.Start; at--)
+				{
 					string line = lines[at].Trim(trimchars);
 
 					if (string.IsNullOrEmpty(line) || line.StartsWith("//"))
 						continue;
 					else if (line.StartsWith("#endif"))
 						cnt++;
-					else if (line.StartsWith("#if")) {
+					else if (line.StartsWith("#if"))
+					{
 						if (cnt < 0)
 							break;
 						if (cnt > 0) start = at;
@@ -236,10 +260,12 @@ namespace Mosa.Tools.Mono.UpdateProject
 
 				method.Start = start;
 
-				while (true) {
+				while (true)
+				{
 					string line = lines[method.End].Trim(trimchars);
 
-					if ((string.IsNullOrEmpty(line)) || line.StartsWith("#") || line.StartsWith("//")) {
+					if ((string.IsNullOrEmpty(line)) || line.StartsWith("#") || line.StartsWith("//"))
+					{
 						method.End--;
 
 						if (method.Start == method.End)
@@ -251,7 +277,8 @@ namespace Mosa.Tools.Mono.UpdateProject
 			}
 
 			// Insert conditions
-			foreach (MethodNode method in methodNodes) {
+			foreach (MethodNode method in methodNodes)
+			{
 				for (int i = method.Start; i <= method.End; i++)
 					lines[i] = null;
 			}
@@ -259,7 +286,8 @@ namespace Mosa.Tools.Mono.UpdateProject
 			RemoveExtraBlankLines(lines);
 
 			// Write modified source files
-			using (TextWriter writer = new StreamWriter(filename)) {
+			using (TextWriter writer = new StreamWriter(filename))
+			{
 				foreach (string line in lines)
 					if (line != null)
 						writer.WriteLine(line);
@@ -324,7 +352,8 @@ namespace Mosa.Tools.Mono.UpdateProject
 			output.Add(string.Empty);
 
 			// Write "using" lines
-			foreach (int i in usings) {
+			foreach (int i in usings)
+			{
 				string line = lines[i];
 				if (line.Contains("using"))
 					output.Add(line.Trim(trimchars2) + ";");
@@ -350,7 +379,8 @@ namespace Mosa.Tools.Mono.UpdateProject
 
 			RemoveExtraBlankLines(output);
 
-			using (TextWriter writer = new StreamWriter(filename)) {
+			using (TextWriter writer = new StreamWriter(filename))
+			{
 				foreach (string line in output)
 					if (line != null)
 						writer.WriteLine(line);
@@ -368,9 +398,11 @@ namespace Mosa.Tools.Mono.UpdateProject
 			int maxlines = Math.Min(200, lines.Length);
 			bool inComment = false;
 
-			for (int i = 0; i < maxlines; i++) {
+			for (int i = 0; i < maxlines; i++)
+			{
 				string line = lines[i];
-				if (line.StartsWith("//") || string.IsNullOrEmpty(line)) {
+				if (line.StartsWith("//") || string.IsNullOrEmpty(line))
+				{
 					inComment = true;
 					comments.Add(line);
 				}
@@ -394,23 +426,28 @@ namespace Mosa.Tools.Mono.UpdateProject
 			foreach (int l in usings)
 				stack.Push(l);
 
-			while (stack.Count != 0) {
+			while (stack.Count != 0)
+			{
 				int linenbr = stack.Pop();
 				string line = lines[linenbr];
 
-				if (linenbr >= 1) {
+				if (linenbr >= 1)
+				{
 					string prev = lines[linenbr - 1];
 					if (prev.Contains("#if") || prev.Contains("#else") || prev.Contains("#endif") || string.IsNullOrEmpty(prev.Trim(trimchars)))
-						if (!usings.Contains(linenbr - 1)) {
+						if (!usings.Contains(linenbr - 1))
+						{
 							usings.Add(linenbr - 1);
 							stack.Push(linenbr - 1);
 						}
 				}
 
-				if (linenbr < lines.Length) {
+				if (linenbr < lines.Length)
+				{
 					string next = lines[linenbr + 1];
 					if (next.Contains("#if") || next.Contains("#else") || next.Contains("#endif") || string.IsNullOrEmpty(next.Trim(trimchars)))
-						if (!usings.Contains(linenbr + 1)) {
+						if (!usings.Contains(linenbr + 1))
+						{
 							usings.Add(linenbr + 1);
 							stack.Push(linenbr + 1);
 						}
@@ -435,7 +472,8 @@ namespace Mosa.Tools.Mono.UpdateProject
 			int headerEnd = CopyHeaderComment(lines, output);
 
 			// Write "using" lines
-			foreach (int i in usings) {
+			foreach (int i in usings)
+			{
 				string line = lines[i];
 				if (line.Contains("using"))
 					output.Add(line.Trim(trimchars2) + ";");
@@ -461,7 +499,8 @@ namespace Mosa.Tools.Mono.UpdateProject
 
 			RemoveExtraBlankLines(output);
 
-			using (TextWriter writer = new StreamWriter(filename)) {
+			using (TextWriter writer = new StreamWriter(filename))
+			{
 				foreach (string line in output)
 					if (line != null)
 						writer.WriteLine(line);
@@ -488,10 +527,12 @@ namespace Mosa.Tools.Mono.UpdateProject
 			output.Add(tabs + "{");
 
 			// Write method declarations
-			foreach (MethodNode method in currentNode.Methods) {
+			foreach (MethodNode method in currentNode.Methods)
+			{
 				string extra = string.Empty;
 
-				for (int i = method.Declare; i <= method.End; i++) {
+				for (int i = method.Declare; i <= method.End; i++)
+				{
 					string line = lines[i];
 
 					string trim = line.TrimStart(trimchars);
@@ -515,11 +556,13 @@ namespace Mosa.Tools.Mono.UpdateProject
 					if ((line == "get") || (line == "set"))
 						extra = "\t";
 
-					if (!string.IsNullOrEmpty(line)) {
+					if (!string.IsNullOrEmpty(line))
+					{
 						output.Add(tabs + extra + "\t" + line);
 					}
 
-					if (semicolon) {
+					if (semicolon)
+					{
 						output.Add(tabs + extra + "\t{");
 						output.Add(tabs + extra + "\t\tthrow new System.NotImplementedException();");
 						output.Add(tabs + extra + "\t}");
@@ -555,11 +598,13 @@ namespace Mosa.Tools.Mono.UpdateProject
 			output.Add(tabs + "{");
 
 			// Write method declarations
-			foreach (MethodNode method in currentNode.Methods) {
+			foreach (MethodNode method in currentNode.Methods)
+			{
 				string extra = string.Empty;
 				bool endif = false;
 
-				for (int i = method.Start; i <= method.End; i++) {
+				for (int i = method.Start; i <= method.End; i++)
+				{
 					string line = lines[i];
 
 					string trim = line.TrimStart(trimchars);
@@ -567,7 +612,8 @@ namespace Mosa.Tools.Mono.UpdateProject
 					if (trim.StartsWith("//"))
 						continue;
 
-					if (trim.StartsWith("#")) {
+					if (trim.StartsWith("#"))
+					{
 						if (trim.Contains("#endif"))
 							endif = false;
 						else
@@ -646,7 +692,8 @@ namespace Mosa.Tools.Mono.UpdateProject
 			List<string> tokens = new List<string>();
 			bool incomment = false;
 
-			for (int i = start; i <= declare; i++) {
+			for (int i = start; i <= declare; i++)
+			{
 				string line = GetLine(lines, i, ref incomment);
 
 				if (incomment)
@@ -700,12 +747,14 @@ namespace Mosa.Tools.Mono.UpdateProject
 			// Determine attribute (public, private, protected)
 			string attribute = string.Empty;
 
-			for (int i = 0; i < line; i++) {
+			for (int i = 0; i < line; i++)
+			{
 				string token = tokens[i];
 
 				bool accept = false;
 
-				switch (token) {
+				switch (token)
+				{
 					case "public":
 						accept = true;
 						break;
@@ -759,7 +808,8 @@ namespace Mosa.Tools.Mono.UpdateProject
 
 			bool incomment = false;
 
-			for (; at < lines.Length; at++) {
+			for (; at < lines.Length; at++)
+			{
 				string line = GetLine(lines, at, ref incomment).Replace("'{'", string.Empty).Replace("'}'", string.Empty);
 
 				line = StripWithInDoubleQuotes(line);
@@ -791,7 +841,8 @@ namespace Mosa.Tools.Mono.UpdateProject
 		/// <returns></returns>
 		private static int GetPreviousBlockEnd(string[] lines, int at)
 		{
-			for (at--; at >= 0; at--) {
+			for (at--; at >= 0; at--)
+			{
 				if ((lines[at].Contains("#endregion")) || (lines[at].Contains("#region")))
 					return at + 1;
 
@@ -815,7 +866,8 @@ namespace Mosa.Tools.Mono.UpdateProject
 			string line = StripDoubleComment(lines[linenbr]);
 			int comment = -1;
 
-			if (incomment) {
+			if (incomment)
+			{
 				comment = line.IndexOf("*/");
 
 				if (comment < 0)
@@ -826,7 +878,8 @@ namespace Mosa.Tools.Mono.UpdateProject
 			}
 
 			// strip /* comments */
-			while (true) {
+			while (true)
+			{
 				comment = line.IndexOf("/*");
 
 				if (comment < 0)
@@ -834,7 +887,8 @@ namespace Mosa.Tools.Mono.UpdateProject
 
 				int endcomment = line.IndexOf("*/");
 
-				if (endcomment < 0) {
+				if (endcomment < 0)
+				{
 					incomment = true;
 					line = string.Empty;
 					break;
@@ -863,10 +917,12 @@ namespace Mosa.Tools.Mono.UpdateProject
 			bool inescape = false;
 			bool first = false;
 
-			for (int i = 0; i < line.Length; i++) {
+			for (int i = 0; i < line.Length; i++)
+			{
 				char c = line[i];
 
-				if (inescape) {
+				if (inescape)
+				{
 					inescape = false;
 					continue;
 				}
@@ -884,7 +940,8 @@ namespace Mosa.Tools.Mono.UpdateProject
 					if (c == '/')
 						if (first)
 							return line.Substring(0, i - 1);
-						else {
+						else
+						{
 							first = true;
 							continue;
 						}
@@ -910,8 +967,10 @@ namespace Mosa.Tools.Mono.UpdateProject
 			bool inquotes = false;
 			bool inescape = false;
 
-			foreach (char c in line) {
-				if (inescape) {
+			foreach (char c in line)
+			{
+				if (inescape)
+				{
 					inescape = false;
 					continue;
 				}
@@ -919,7 +978,8 @@ namespace Mosa.Tools.Mono.UpdateProject
 				if (c == '"')
 					if (!inquotes)
 						inquotes = true;
-					else {
+					else
+					{
 						newline.Append(c);
 						inquotes = false;
 					}
@@ -941,7 +1001,8 @@ namespace Mosa.Tools.Mono.UpdateProject
 		/// <returns></returns>
 		private static string StripBrackets(string line)
 		{
-			while (true) {
+			while (true)
+			{
 				int bracketstart = line.IndexOf("[");
 
 				if (bracketstart < 0)
@@ -949,7 +1010,8 @@ namespace Mosa.Tools.Mono.UpdateProject
 
 				int bracketend = line.IndexOf("]");
 
-				if (bracketend < 0) {
+				if (bracketend < 0)
+				{
 					line = string.Empty;
 					break;
 				}
@@ -967,7 +1029,8 @@ namespace Mosa.Tools.Mono.UpdateProject
 		/// <returns></returns>
 		private static string StripDLLBrackets(string line)
 		{
-			while (true) {
+			while (true)
+			{
 				int bracketstart = line.IndexOf("[DllImport");
 
 				if (bracketstart < 0)
@@ -975,7 +1038,8 @@ namespace Mosa.Tools.Mono.UpdateProject
 
 				int bracketend = line.IndexOf("]");
 
-				if (bracketend < 0) {
+				if (bracketend < 0)
+				{
 					line = string.Empty;
 					break;
 				}

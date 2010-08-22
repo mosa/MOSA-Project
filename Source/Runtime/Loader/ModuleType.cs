@@ -9,19 +9,19 @@
 
 namespace Mosa.Runtime.Loader
 {
-    /// <summary>
-    /// Specifies the type of the module.
-    /// </summary>
-    public enum ModuleType
-    {
-        /// <summary>
-        /// The module is an executable file.
-        /// </summary>
-        Executable,
+	/// <summary>
+	/// Specifies the type of the module.
+	/// </summary>
+	public enum ModuleType
+	{
+		/// <summary>
+		/// The module is an executable file.
+		/// </summary>
+		Executable,
 
-        /// <summary>
-        /// The module is a library.
-        /// </summary>
-        Library
-    }
+		/// <summary>
+		/// The module is a library.
+		/// </summary>
+		Library
+	}
 }

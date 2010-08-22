@@ -69,20 +69,24 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 			// Read the branch target
 			// Is this a short branch target?
-			if (_opcode == OpCode.Brfalse_s || _opcode == OpCode.Brtrue_s) {
+			if (_opcode == OpCode.Brfalse_s || _opcode == OpCode.Brtrue_s)
+			{
 				sbyte target;
 				decoder.Decode(out target);
 				ctx.SetBranch(target);
 			}
-			else if (_opcode == OpCode.Brfalse || _opcode == OpCode.Brtrue) {
+			else if (_opcode == OpCode.Brfalse || _opcode == OpCode.Brtrue)
+			{
 				int target;
 				decoder.Decode(out target);
 				ctx.SetBranch(target);
 			}
-			else if (_opcode == OpCode.Switch) {
+			else if (_opcode == OpCode.Switch)
+			{
 				// Don't do anything, the derived class will do everything
 			}
-			else {
+			else
+			{
 				throw new NotSupportedException(@"Invalid opcode " + _opcode.ToString() + " specified for UnaryBranchInstruction.");
 			}
 		}
@@ -104,13 +108,14 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <returns></returns>
 		protected override string GetModifier(Context context)
 		{
-            OpCode opCode = ((context.Instruction) as CIL.ICILInstruction).OpCode;
-			switch (opCode) {
+			OpCode opCode = ((context.Instruction) as CIL.ICILInstruction).OpCode;
+			switch (opCode)
+			{
 				case OpCode.Brtrue: return @"true";
 				case OpCode.Brtrue_s: return @"true";
 				case OpCode.Brfalse: return @"false";
 				case OpCode.Brfalse_s: return @"false";
-                case OpCode.Switch: return @"switch";
+				case OpCode.Switch: return @"switch";
 				default: throw new InvalidOperationException(@"Opcode not set.");
 			}
 		}

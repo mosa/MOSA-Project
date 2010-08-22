@@ -20,13 +20,13 @@ using Mosa.Runtime.Vm;
 
 namespace Mosa.Platforms.x86.Intrinsic
 {
-    /// <summary>
-    /// Representations the x86 CPUID instruction.
-    /// </summary>
+	/// <summary>
+	/// Representations the x86 CPUID instruction.
+	/// </summary>
 	public sealed class CpuIdEax : IIntrinsicMethod
-    {
-	
-        #region Methods
+	{
+
+		#region Methods
 
 		/// <summary>
 		/// Replaces the instrinsic call site
@@ -35,18 +35,18 @@ namespace Mosa.Platforms.x86.Intrinsic
 		/// <param name="typeSystem">The type system.</param>
 		public void ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem)
 		{
-            Operand result = context.Result;
-            Operand operand = context.Operand1;
-            RegisterOperand eax = new RegisterOperand(new SigType(Mosa.Runtime.Metadata.CilElementType.I4), GeneralPurposeRegister.EAX);
-            RegisterOperand ecx = new RegisterOperand(new SigType(Mosa.Runtime.Metadata.CilElementType.I4), GeneralPurposeRegister.ECX);
-            RegisterOperand reg = new RegisterOperand(new SigType(Mosa.Runtime.Metadata.CilElementType.I4), GeneralPurposeRegister.EAX);
-            context.SetInstruction(CPUx86.Instruction.MovInstruction, eax, operand);
-            context.AppendInstruction(CPUx86.Instruction.XorInstruction, ecx, ecx);
-            context.AppendInstruction(CPUx86.Instruction.CpuIdEaxInstruction);
-            context.AppendInstruction(CPUx86.Instruction.MovInstruction, result, reg);
+			Operand result = context.Result;
+			Operand operand = context.Operand1;
+			RegisterOperand eax = new RegisterOperand(new SigType(Mosa.Runtime.Metadata.CilElementType.I4), GeneralPurposeRegister.EAX);
+			RegisterOperand ecx = new RegisterOperand(new SigType(Mosa.Runtime.Metadata.CilElementType.I4), GeneralPurposeRegister.ECX);
+			RegisterOperand reg = new RegisterOperand(new SigType(Mosa.Runtime.Metadata.CilElementType.I4), GeneralPurposeRegister.EAX);
+			context.SetInstruction(CPUx86.Instruction.MovInstruction, eax, operand);
+			context.AppendInstruction(CPUx86.Instruction.XorInstruction, ecx, ecx);
+			context.AppendInstruction(CPUx86.Instruction.CpuIdEaxInstruction);
+			context.AppendInstruction(CPUx86.Instruction.MovInstruction, result, reg);
 		}
 
-        #endregion // Methods
+		#endregion // Methods
 
-    }
+	}
 }

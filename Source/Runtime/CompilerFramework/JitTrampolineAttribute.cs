@@ -9,7 +9,8 @@
 
 using System;
 
-namespace Mosa.Runtime.CompilerFramework {
+namespace Mosa.Runtime.CompilerFramework
+{
 
 	/// <summary>
 	/// Marks a method as a jit trampoline.
@@ -22,7 +23,8 @@ namespace Mosa.Runtime.CompilerFramework {
 	/// <para/>
 	/// The method, which was marked with the attribute must be static.
 	/// </remarks>
-	[ AttributeUsage(AttributeTargets.Method, AllowMultiple=false, Inherited=false)]
-	public sealed class JitTrampolineAttribute : Attribute {
+	[AttributeUsage(AttributeTargets.Method, AllowMultiple = false, Inherited = false)]
+	public sealed class JitTrampolineAttribute : Attribute
+	{
 	}
 }

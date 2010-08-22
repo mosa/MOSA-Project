@@ -14,12 +14,12 @@ using Mosa.Runtime.Vm;
 
 namespace Mosa.Platforms.x86.Intrinsic
 {
-    /// <summary>
-    /// Representations the x86 Lgdt instruction.
-    /// </summary>
+	/// <summary>
+	/// Representations the x86 Lgdt instruction.
+	/// </summary>
 	public sealed class Lgdt : IIntrinsicMethod
-    {
-		
+	{
+
 		#region Methods
 
 		/// <summary>
@@ -33,12 +33,12 @@ namespace Mosa.Platforms.x86.Intrinsic
 			context.SetInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.Ptr), GeneralPurposeRegister.EAX), context.Operand1);
 			context.AppendInstruction(CPUx86.Instruction.LgdtInstruction, null, operand);
 
-			RegisterOperand ax = new RegisterOperand (new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.I2), GeneralPurposeRegister.EAX);
-			RegisterOperand ds = new RegisterOperand (new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.I2), SegmentRegister.DS);
-			RegisterOperand es = new RegisterOperand (new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.I2), SegmentRegister.ES);
-			RegisterOperand fs = new RegisterOperand (new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.I2), SegmentRegister.FS);
-			RegisterOperand gs = new RegisterOperand (new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.I2), SegmentRegister.GS);
-			RegisterOperand ss = new RegisterOperand (new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.I2), SegmentRegister.SS);
+			RegisterOperand ax = new RegisterOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.I2), GeneralPurposeRegister.EAX);
+			RegisterOperand ds = new RegisterOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.I2), SegmentRegister.DS);
+			RegisterOperand es = new RegisterOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.I2), SegmentRegister.ES);
+			RegisterOperand fs = new RegisterOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.I2), SegmentRegister.FS);
+			RegisterOperand gs = new RegisterOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.I2), SegmentRegister.GS);
+			RegisterOperand ss = new RegisterOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.I2), SegmentRegister.SS);
 
 			context.AppendInstruction(CPUx86.Instruction.MovInstruction, ax, new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.I4), (int)0x00000010));
 			context.AppendInstruction(CPUx86.Instruction.MovInstruction, ds, ax);
@@ -53,5 +53,5 @@ namespace Mosa.Platforms.x86.Intrinsic
 
 		#endregion // Methods
 
-    }
+	}
 }

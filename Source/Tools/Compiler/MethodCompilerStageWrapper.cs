@@ -34,17 +34,17 @@ namespace Mosa.Tools.Compiler
 		protected MethodCompilerStageWrapper()
 		{
 			this.wrapped = new WrappedType();
-            this.Enabled = true;
+			this.Enabled = true;
 		}
 
 		/// <summary>
 		/// Set whether this stage will be executed or not.
 		/// </summary>
 		protected bool Enabled
-        {
-            get;
-            set;
-        }
+		{
+			get;
+			set;
+		}
 
 		/// <summary>
 		/// Gets the wrapped method compiler stage.
@@ -69,7 +69,8 @@ namespace Mosa.Tools.Compiler
 		/// </summary>
 		public void Run()
 		{
-			if (this.Enabled) {
+			if (this.Enabled)
+			{
 				wrapped.Setup(MethodCompiler);
 				wrapped.Run();
 			}

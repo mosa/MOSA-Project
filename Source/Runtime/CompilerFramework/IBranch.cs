@@ -9,22 +9,23 @@
 
 namespace Mosa.Runtime.CompilerFramework
 {
-    /// <summary>
-    /// Base interface for CIL branch instructions.
-    /// </summary>
-    public interface IBranch {
-		
+	/// <summary>
+	/// Base interface for CIL branch instructions.
+	/// </summary>
+	public interface IBranch
+	{
+
 		#region Properties
 
-        /// <summary>
-        /// Retrieves the instruction offset.
-        /// </summary>
-        int Offset { get; }
+		/// <summary>
+		/// Retrieves the instruction offset.
+		/// </summary>
+		int Offset { get; }
 
 		/// <summary>
 		/// Returns the branch targets instruction index.
 		/// </summary>
-        int[] Targets { get; set; }
+		int[] Targets { get; set; }
 
 		#endregion // Properties
 	}

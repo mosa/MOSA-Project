@@ -69,19 +69,22 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			// FIXME: Remove unary branch instructions from this list.
 			if (_opcode == OpCode.Beq_s || _opcode == OpCode.Bge_s || _opcode == OpCode.Bge_un_s || _opcode == OpCode.Bgt_s ||
 				_opcode == OpCode.Bgt_un_s || _opcode == OpCode.Ble_s || _opcode == OpCode.Ble_un_s || _opcode == OpCode.Blt_s ||
-				_opcode == OpCode.Blt_un_s || _opcode == OpCode.Bne_un_s) {
+				_opcode == OpCode.Blt_un_s || _opcode == OpCode.Bne_un_s)
+			{
 				sbyte target;
 				decoder.Decode(out target);
 				ctx.SetBranch(target);
 			}
 			else if (_opcode == OpCode.Beq || _opcode == OpCode.Bge || _opcode == OpCode.Bge_un || _opcode == OpCode.Bgt ||
 				_opcode == OpCode.Bgt_un || _opcode == OpCode.Ble || _opcode == OpCode.Ble_un || _opcode == OpCode.Blt ||
-				_opcode == OpCode.Blt_un || _opcode == OpCode.Bne_un) {
+				_opcode == OpCode.Blt_un || _opcode == OpCode.Bne_un)
+			{
 				int target;
 				decoder.Decode(out target);
 				ctx.SetBranch(target);
 			}
-			else {
+			else
+			{
 				throw new NotSupportedException(@"Invalid branch opcode specified for BinaryBranchInstruction");
 			}
 		}
@@ -104,7 +107,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <returns></returns>
 		protected override string GetModifier(Context context)
 		{
-			switch (((context.Instruction) as CIL.ICILInstruction).OpCode) {
+			switch (((context.Instruction) as CIL.ICILInstruction).OpCode)
+			{
 				case OpCode.Beq_s: return @"==";
 				case OpCode.Beq: return @"==";
 				case OpCode.Bge_s: return @">=";

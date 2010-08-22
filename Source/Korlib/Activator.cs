@@ -9,20 +9,20 @@
 
 namespace System
 {
-    /// <summary>
-    /// Implementation of the "Activator" class.
-    /// </summary>
-    public class Activator
-    {
+	/// <summary>
+	/// Implementation of the "Activator" class.
+	/// </summary>
+	public class Activator
+	{
 		/// <summary>
 		/// Creates the instance.
 		/// </summary>
 		/// <param name="t">The t.</param>
 		/// <returns></returns>
-        public object CreateInstance(Type t)
-        {
-            return CreateInstance(t, new object[] { });
-        }
+		public object CreateInstance(Type t)
+		{
+			return CreateInstance(t, new object[] { });
+		}
 
 		/// <summary>
 		/// Creates the instance.
@@ -30,10 +30,10 @@ namespace System
 		/// <param name="t">The t.</param>
 		/// <param name="args">The args.</param>
 		/// <returns></returns>
-        public object CreateInstance(Type t, params object[] args)
-        {
+		public object CreateInstance(Type t, params object[] args)
+		{
 			// TODO
-            return null;
-        }
-    }
+			return null;
+		}
+	}
 }

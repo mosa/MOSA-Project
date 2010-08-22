@@ -18,7 +18,7 @@ namespace Mosa.HelloWorld
 	/// </summary>
 	public static class Boot
 	{
-		
+
 		/// <summary>
 		/// Mains this instance.
 		/// </summary>
@@ -46,7 +46,7 @@ namespace Mosa.HelloWorld
 			Screen.Write(@"Multibootaddress: ");
 			Screen.Color = Colors.Gray;
 			Screen.Write(Native.Get32(0x200004), 16, 8);
-			
+
 			Screen.NextLine();
 			Screen.Color = Colors.Green;
 			Screen.Write(@"Magic number:     ");
@@ -81,7 +81,8 @@ namespace Mosa.HelloWorld
 			Screen.Write(@"Memory-Map:");
 			Screen.NextLine();
 
-			for (uint index = 0; index < Multiboot.MemoryMapCount; index++) {
+			for (uint index = 0; index < Multiboot.MemoryMapCount; index++)
+			{
 				Screen.Color = Colors.White;
 				Screen.Write(Multiboot.GetMemoryMapBase(index), 16, 10);
 				Screen.Write(@" - ");
@@ -104,7 +105,7 @@ namespace Mosa.HelloWorld
 				Screen.Write((char)205);
 
 			Screen.NextLine();
-			
+
 			CpuInfo cpuInfo = new CpuInfo();
 			#region Vendor
 			Screen.Color = Colors.Green;
@@ -161,12 +162,14 @@ namespace Mosa.HelloWorld
 			//Multiboot.Dump(4,53);
 
 			Screen.Row = 23;
-			for (uint index = 0; index < 80; index++) {
+			for (uint index = 0; index < 80; index++)
+			{
 				Screen.Column = index;
 				Screen.Write((char)205);
 			}
 
-			for (uint index = 2; index < 24; index++) {
+			for (uint index = 2; index < 24; index++)
+			{
 				Screen.Column = 60;
 				Screen.Row = index;
 
@@ -190,7 +193,8 @@ namespace Mosa.HelloWorld
 
 			Mosa.HelloWorld.Tests.StringTest.Test();
 
-			while (true) {
+			while (true)
+			{
 				cmos.Dump(2, 65);
 				DisplayTime(cmos);
 			}

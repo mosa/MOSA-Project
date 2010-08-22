@@ -16,12 +16,12 @@ namespace System.Collections.Generic
 	/// 
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
-    public interface IEnumerable<T> : IEnumerable
-    {
+	public interface IEnumerable<T> : IEnumerable
+	{
 		/// <summary>
 		/// Gets the enumerator.
 		/// </summary>
 		/// <returns></returns>
-        new IEnumerator<T> GetEnumerator();
-    }
+		new IEnumerator<T> GetEnumerator();
+	}
 }

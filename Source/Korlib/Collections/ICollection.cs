@@ -15,13 +15,13 @@ namespace System.Collections
 	/// <summary>
 	/// 
 	/// </summary>
-    public interface ICollection : IEnumerable
-    {
+	public interface ICollection : IEnumerable
+	{
 		/// <summary>
 		/// Gets the count.
 		/// </summary>
 		/// <value>The count.</value>
-        int Count { get; }
+		int Count { get; }
 
 		/// <summary>
 		/// Gets a value indicating whether this instance is synchronized.
@@ -43,5 +43,5 @@ namespace System.Collections
 		/// <param name="array">The array.</param>
 		/// <param name="index">The index.</param>
 		void CopyTo(Array array, int index);
-    }
+	}
 }

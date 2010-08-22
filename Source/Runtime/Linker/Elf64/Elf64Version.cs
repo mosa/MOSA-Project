@@ -13,18 +13,18 @@ using System.Text;
 
 namespace Mosa.Runtime.Linker.Elf64
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public enum Elf64Version : uint
-    {
-        /// <summary>
-        /// Invalid version
-        /// </summary>
-        None    = 0x00,
-        /// <summary>
-        /// Currrent version
-        /// </summary>
-        Current = 0x01,
-    }
+	/// <summary>
+	/// 
+	/// </summary>
+	public enum Elf64Version : uint
+	{
+		/// <summary>
+		/// Invalid version
+		/// </summary>
+		None = 0x00,
+		/// <summary>
+		/// Currrent version
+		/// </summary>
+		Current = 0x01,
+	}
 }

@@ -26,7 +26,7 @@ namespace System.Collections
 		/// 	<c>true</c> if the specified <see cref="System.Object"/> is equal to this instance; otherwise, <c>false</c>.
 		/// </returns>
 		bool Equals(object x, object y);
-		
+
 		/// <summary>
 		/// Returns a hash code for this instance.
 		/// </summary>

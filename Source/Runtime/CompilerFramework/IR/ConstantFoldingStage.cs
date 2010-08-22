@@ -19,38 +19,38 @@ namespace Mosa.Runtime.CompilerFramework.IR
 	/// the code down to fewer calculations.
 	/// </summary>
 	public sealed class IRConstantFoldingStage : BaseCodeTransformationStage, IR.IIRVisitor, IPipelineStage
-    {
-        #region IPipelineStage
+	{
+		#region IPipelineStage
 
-        /// <summary>
+		/// <summary>
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
 		/// <value>The name of the compilation stage.</value>
-        string IPipelineStage.Name { get { return @"IR.ConstantFoldingStage"; } }
+		string IPipelineStage.Name { get { return @"IR.ConstantFoldingStage"; } }
 
 		#endregion
 
 		#region IIRVisitor
 
-        public void AddSInstruction(Context ctx)
-        {
-        }
+		public void AddSInstruction(Context ctx)
+		{
+		}
 
-	    public void AddUInstruction(Context context)
-	    {
-	    }
+		public void AddUInstruction(Context context)
+		{
+		}
 
-	    public void AddFInstruction(Context context)
-	    {
-	    }
+		public void AddFInstruction(Context context)
+		{
+		}
 
-	    public void DivFInstruction(Context context)
-	    {
-	    }
+		public void DivFInstruction(Context context)
+		{
+		}
 
-	    public void DivSInstruction(Context context)
-	    {
-	    }
+		public void DivSInstruction(Context context)
+		{
+		}
 
 		/// <summary>
 		/// Folds logical ANDs with 2 constants
@@ -58,9 +58,11 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <param name="ctx">The context.</param>
 		public void LogicalAndInstruction(Context ctx)
 		{
-			if (ctx.Operand2 is ConstantOperand && ctx.Operand3 is ConstantOperand) {
+			if (ctx.Operand2 is ConstantOperand && ctx.Operand3 is ConstantOperand)
+			{
 				int result = 0;
-				switch (ctx.Result.Type.Type) {
+				switch (ctx.Result.Type.Type)
+				{
 					case Metadata.CilElementType.Char:
 						goto case Metadata.CilElementType.U2;
 					case Metadata.CilElementType.U1:
@@ -98,9 +100,11 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <param name="ctx">The context.</param>
 		public void LogicalOrInstruction(Context ctx)
 		{
-			if (ctx.Operand2 is ConstantOperand && ctx.Operand3 is ConstantOperand) {
+			if (ctx.Operand2 is ConstantOperand && ctx.Operand3 is ConstantOperand)
+			{
 				int result = 0;
-				switch (ctx.Result.Type.Type) {
+				switch (ctx.Result.Type.Type)
+				{
 					case Mosa.Runtime.Metadata.CilElementType.Char:
 						goto case Mosa.Runtime.Metadata.CilElementType.U2;
 					case Mosa.Runtime.Metadata.CilElementType.U1:
@@ -138,9 +142,11 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <param name="ctx">The context.</param>
 		public void LogicalXorInstruction(Context ctx)
 		{
-			if (ctx.Operand2 is ConstantOperand && ctx.Operand3 is ConstantOperand) {
+			if (ctx.Operand2 is ConstantOperand && ctx.Operand3 is ConstantOperand)
+			{
 				int result = 0;
-				switch (ctx.Result.Type.Type) {
+				switch (ctx.Result.Type.Type)
+				{
 					case Mosa.Runtime.Metadata.CilElementType.Char:
 						goto case Mosa.Runtime.Metadata.CilElementType.U2;
 					case Mosa.Runtime.Metadata.CilElementType.U1:
@@ -322,57 +328,57 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		{
 		}
 
-	    public void MulSInstruction(Context context)
-	    {
-	    }
+		public void MulSInstruction(Context context)
+		{
+		}
 
-	    public void MulFInstruction(Context context)
-	    {
-	    }
+		public void MulFInstruction(Context context)
+		{
+		}
 
-	    public void MulUInstruction(Context context)
-	    {
-	    }
+		public void MulUInstruction(Context context)
+		{
+		}
 
-	    public void SubFInstruction(Context context)
-	    {
-	    }
+		public void SubFInstruction(Context context)
+		{
+		}
 
-	    public void SubSInstruction(Context context)
-	    {
-	    }
+		public void SubSInstruction(Context context)
+		{
+		}
 
-	    public void SubUInstruction(Context context)
-	    {
-	    }
+		public void SubUInstruction(Context context)
+		{
+		}
 
-	    public void RemFInstruction(Context context)
-	    {
-	    }
+		public void RemFInstruction(Context context)
+		{
+		}
 
-	    public void RemSInstruction(Context context)
-	    {
-	    }
+		public void RemSInstruction(Context context)
+		{
+		}
 
 		public void RemUInstruction(Context context)
 		{
 		}
 
-	    public void SwitchInstruction(Context context)
-	    {
-	    }
+		public void SwitchInstruction(Context context)
+		{
+		}
 
-	    public void BreakInstruction(Context context)
-	    {
-	    }
+		public void BreakInstruction(Context context)
+		{
+		}
 
-	    /// <summary>
+		/// <summary>
 		/// Visitation function for <see cref="IR.IIRVisitor.ZeroExtendedMoveInstruction"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		public void ZeroExtendedMoveInstruction(Context context)
-	    {
-	    }
+		{
+		}
 
 		/// <summary>
 		/// Visitation function for <see cref="IR.IIRVisitor.NopInstruction"/> instructions.

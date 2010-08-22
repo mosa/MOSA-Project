@@ -20,16 +20,16 @@ namespace Mosa.Runtime.Metadata.Signatures
 	public abstract class Signature
 	{
 		private TokenTypes token;
-		
-		public TokenTypes Token 
+
+		public TokenTypes Token
 		{
-				get 
+			get
 			{
-					return token;
-				}
+				return token;
 			}
-				
-		
+		}
+
+
 		/// <summary>
 		/// Loads the signature.
 		/// </summary>
@@ -42,7 +42,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 			int index = 0;
 			this.ParseSignature(context, buffer, ref index);
 			Debug.Assert(index == buffer.Length, @"Signature parser didn't complete.");
-			
+
 			this.token = token;
 		}
 

@@ -11,18 +11,18 @@ using Mosa.Runtime.Vm;
 
 namespace Mosa.Tools.Compiler.TypeInitializers
 {
-    public interface ITypeInitializerSchedulerStage
-    {
-        /// <summary>
-        /// Gets the intializer method.
-        /// </summary>
-        /// <value>The method.</value>
-        CompilerGeneratedMethod Method { get; }
+	public interface ITypeInitializerSchedulerStage
+	{
+		/// <summary>
+		/// Gets the intializer method.
+		/// </summary>
+		/// <value>The method.</value>
+		CompilerGeneratedMethod Method { get; }
 
-        /// <summary>
-        /// Schedules the specified method for invocation in the main.
-        /// </summary>
-        /// <param name="method">The method.</param>
-        void Schedule(RuntimeMethod method);
-    }
+		/// <summary>
+		/// Schedules the specified method for invocation in the main.
+		/// </summary>
+		/// <param name="method">The method.</param>
+		void Schedule(RuntimeMethod method);
+	}
 }

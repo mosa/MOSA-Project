@@ -11,18 +11,18 @@ using Mosa.ClassLib;
 
 namespace Mosa.DeviceSystem
 {
-    /// <summary>
-    /// 
-    /// </summary>
+	/// <summary>
+	/// 
+	/// </summary>
 	public interface IFindDevice
 	{
-        /// <summary>
-        /// Determines whether the specified device is match.
-        /// </summary>
-        /// <param name="device">The device.</param>
-        /// <returns>
-        /// 	<c>true</c> if the specified device is match; otherwise, <c>false</c>.
-        /// </returns>
+		/// <summary>
+		/// Determines whether the specified device is match.
+		/// </summary>
+		/// <param name="device">The device.</param>
+		/// <returns>
+		/// 	<c>true</c> if the specified device is match; otherwise, <c>false</c>.
+		/// </returns>
 		bool IsMatch(IDevice device);
 	}
 }

@@ -58,7 +58,7 @@ namespace Mosa.Runtime.CompilerFramework.Operands
 			if (this.name == null && lop.name == null)
 				return true;
 
-            return this.name == lop.name;
+			return this.name == lop.name;
 		}
 
 		/// <summary>
@@ -70,27 +70,27 @@ namespace Mosa.Runtime.CompilerFramework.Operands
 			return this.name + " " + base.ToString();
 		}
 
-        /// <summary>
-        /// Creates a symbol operand for the given method.
-        /// </summary>
-        /// <param name="method">The method to create a symbol operand for.</param>
-        /// <returns>The created symbol operand.</returns>
-        public static SymbolOperand FromMethod(RuntimeMethod method)
-        {
-            string symbolName = method.ToString();
+		/// <summary>
+		/// Creates a symbol operand for the given method.
+		/// </summary>
+		/// <param name="method">The method to create a symbol operand for.</param>
+		/// <returns>The created symbol operand.</returns>
+		public static SymbolOperand FromMethod(RuntimeMethod method)
+		{
+			string symbolName = method.ToString();
 
-            return new SymbolOperand(BuiltInSigType.IntPtr, symbolName);
-        }
+			return new SymbolOperand(BuiltInSigType.IntPtr, symbolName);
+		}
 
-        /// <summary>
-        /// Creates a new SymbolOperand for the given runtime field.
-        /// </summary>
-        /// <param name="runtimeField">The field to create a symbol operand for.</param>
-        /// <returns>The created symbol operand.</returns>
-        public static SymbolOperand FromField(RuntimeField runtimeField)
-	    {
-	        return new SymbolOperand(runtimeField.SignatureType, runtimeField.ToString());
-	    }
+		/// <summary>
+		/// Creates a new SymbolOperand for the given runtime field.
+		/// </summary>
+		/// <param name="runtimeField">The field to create a symbol operand for.</param>
+		/// <returns>The created symbol operand.</returns>
+		public static SymbolOperand FromField(RuntimeField runtimeField)
+		{
+			return new SymbolOperand(runtimeField.SignatureType, runtimeField.ToString());
+		}
 	}
 }
 

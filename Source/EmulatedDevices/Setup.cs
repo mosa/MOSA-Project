@@ -47,7 +47,7 @@ namespace Mosa.EmulatedDevices
 
 			// Add CMOS
 			IOPortDispatch.RegisterDevice(new CMOS(CMOS.StandardIOBase));
-			
+
 			// Add VGA Controller
 			IOPortDispatch.RegisterDevice(new VGAConsole(PrimaryDisplayForm));
 

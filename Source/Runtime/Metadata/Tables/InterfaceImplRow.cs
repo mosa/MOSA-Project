@@ -12,62 +12,62 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 
-namespace Mosa.Runtime.Metadata.Tables 
+namespace Mosa.Runtime.Metadata.Tables
 {
-    /// <summary>
-    /// 
-    /// </summary>
-	public struct InterfaceImplRow 
-    {
+	/// <summary>
+	/// 
+	/// </summary>
+	public struct InterfaceImplRow
+	{
 		#region Data members
 
-        /// <summary>
-        /// 
-        /// </summary>
-        private TokenTypes classTableIdx;
+		/// <summary>
+		/// 
+		/// </summary>
+		private TokenTypes classTableIdx;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        private TokenTypes interfaceTableIdx;
+		/// <summary>
+		/// 
+		/// </summary>
+		private TokenTypes interfaceTableIdx;
 
 		#endregion // Data members
 
-        #region Construction
+		#region Construction
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="InterfaceImplRow"/> struct.
-        /// </summary>
-        /// <param name="classTableIdx">The class table idx.</param>
-        /// <param name="interfaceTableIdx">The interface table idx.</param>
-        public InterfaceImplRow(TokenTypes classTableIdx, TokenTypes interfaceTableIdx)
-        {
-            this.classTableIdx = classTableIdx;
-            this.interfaceTableIdx = interfaceTableIdx;
-        }
+		/// <summary>
+		/// Initializes a new instance of the <see cref="InterfaceImplRow"/> struct.
+		/// </summary>
+		/// <param name="classTableIdx">The class table idx.</param>
+		/// <param name="interfaceTableIdx">The interface table idx.</param>
+		public InterfaceImplRow(TokenTypes classTableIdx, TokenTypes interfaceTableIdx)
+		{
+			this.classTableIdx = classTableIdx;
+			this.interfaceTableIdx = interfaceTableIdx;
+		}
 
-        #endregion // Construction
+		#endregion // Construction
 
-        #region Properties
+		#region Properties
 
-        /// <summary>
-        /// Gets the class table idx.
-        /// </summary>
-        /// <value>The class table idx.</value>
-        public TokenTypes ClassTableIdx
-        {
-            get { return this.classTableIdx; }
-        }
+		/// <summary>
+		/// Gets the class table idx.
+		/// </summary>
+		/// <value>The class table idx.</value>
+		public TokenTypes ClassTableIdx
+		{
+			get { return this.classTableIdx; }
+		}
 
-        /// <summary>
-        /// Gets the interface table idx.
-        /// </summary>
-        /// <value>The interface table idx.</value>
-        public TokenTypes InterfaceTableIdx
-        {
-            get { return this.interfaceTableIdx; }
-        }
+		/// <summary>
+		/// Gets the interface table idx.
+		/// </summary>
+		/// <value>The interface table idx.</value>
+		public TokenTypes InterfaceTableIdx
+		{
+			get { return this.interfaceTableIdx; }
+		}
 
-        #endregion // Properties
+		#endregion // Properties
 	}
 }

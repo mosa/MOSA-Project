@@ -17,13 +17,13 @@ using Mosa.Runtime.Metadata;
 
 namespace Mosa.Platforms.x86.CPUx86
 {
-    /// <summary>
-    /// Representations the x86 cvtsi2sd instruction.
-    /// </summary>
-    public sealed class Cvtsi2sdInstruction : TwoOperandInstruction
-    {
+	/// <summary>
+	/// Representations the x86 cvtsi2sd instruction.
+	/// </summary>
+	public sealed class Cvtsi2sdInstruction : TwoOperandInstruction
+	{
 
-        #region Methods
+		#region Methods
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
@@ -35,6 +35,6 @@ namespace Mosa.Platforms.x86.CPUx86
 			visitor.Cvtsi2sd(context);
 		}
 
-        #endregion // Methods
-    }
+		#endregion // Methods
+	}
 }

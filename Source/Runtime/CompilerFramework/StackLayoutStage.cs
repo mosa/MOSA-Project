@@ -76,7 +76,8 @@ namespace Mosa.Runtime.CompilerFramework
 
 			// Now we assign increasing stack offsets to each variable
 			_localsSize = LayoutVariables(locals, cc, cc.OffsetOfFirstLocal, 1);
-			if (TRACING.TraceInfo == true) {
+			if (TRACING.TraceInfo == true)
+			{
 				Trace.WriteLine(String.Format(@"Stack layout for method {0}", MethodCompiler.Method));
 				LogOperands(locals);
 			}
@@ -115,9 +116,11 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="block">The block.</param>
 		private void CollectLocalVariables(List<StackOperand> locals, BasicBlock block)
 		{
-			for (Context ctx = new Context(InstructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext()) {
+			for (Context ctx = new Context(InstructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
+			{
 				// Does this instruction define a new stack variable?
-				foreach (Operand op in ctx.Results) {
+				foreach (Operand op in ctx.Results)
+				{
 					// The instruction list may not be in SSA form, so we have to check existence again here unfortunately.
 					// FIXME: Allow us to detect the state of blocks
 					LocalVariableOperand lvop = op as LocalVariableOperand;
@@ -136,16 +139,16 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			List<StackOperand> paramOps = new List<StackOperand>();
 
-            int offset = 0;
-            if (compiler.Method.Signature.HasThis || compiler.Method.Signature.HasExplicitThis)
-                ++offset;
+			int offset = 0;
+			if (compiler.Method.Signature.HasThis || compiler.Method.Signature.HasExplicitThis)
+				++offset;
 			for (int i = 0; i < compiler.Method.Parameters.Count + offset; ++i)
 				paramOps.Add((StackOperand)compiler.GetParameterOperand(i));
 
-            /*if (compiler.Method.Signature.HasThis || compiler.Method.Signature.HasExplicitThis)
-			    LayoutVariables(paramOps, cc, cc.OffsetOfFirstParameter + 4, -1);
-            else*/
-                LayoutVariables(paramOps, cc, cc.OffsetOfFirstParameter, -1);
+			/*if (compiler.Method.Signature.HasThis || compiler.Method.Signature.HasExplicitThis)
+				LayoutVariables(paramOps, cc, cc.OffsetOfFirstParameter + 4, -1);
+			else*/
+			LayoutVariables(paramOps, cc, cc.OffsetOfFirstParameter, -1);
 
 			if (TRACING.TraceInfo)
 				LogOperands(paramOps);
@@ -163,7 +166,8 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			int offset = offsetOfFirst;
 
-			foreach (StackOperand lvo in locals) {
+			foreach (StackOperand lvo in locals)
+			{
 				// Does the offset fit the alignment requirement?
 				int alignment;
 				int size;
@@ -171,12 +175,14 @@ namespace Mosa.Runtime.CompilerFramework
 				int thisOffset;
 
 				cc.GetStackRequirements(lvo, out size, out alignment);
-				if (1 == direction) {
+				if (1 == direction)
+				{
 					padding = (offset % alignment);
 					offset -= (padding + size);
 					thisOffset = offset;
 				}
-				else {
+				else
+				{
 					padding = (offset % alignment);
 					if (0 != padding)
 						padding = alignment - padding;

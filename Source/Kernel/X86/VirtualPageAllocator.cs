@@ -91,12 +91,15 @@ namespace Mosa.Kernel.X86
 			uint first = 0xFFFFFFFF; // Marker
 			uint pages = ((size - 1) / PageFrameAllocator.PageSize) + 1;
 
-			for (uint at = 0; at < _pages; at++) {
-				if (GetPageStatus(at)) {
+			for (uint at = 0; at < _pages; at++)
+			{
+				if (GetPageStatus(at))
+				{
 					if (first == 0xFFFFFFFF)
 						first = at;
 
-					if (at - first == pages) {
+					if (at - first == pages)
+					{
 
 						for (uint index = 0; index < pages; index++)
 							SetPageStatus(first + index, false);

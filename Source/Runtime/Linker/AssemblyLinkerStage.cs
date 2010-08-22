@@ -81,7 +81,7 @@ namespace Mosa.Runtime.Linker
 		#endregion //  IPipelineStage Members
 
 		#region IAssemblyCompilerStage Members
-		
+
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
@@ -93,9 +93,11 @@ namespace Mosa.Runtime.Linker
 
 			// Check if we have unresolved requests and try to link them
 			List<string> members = new List<string>(this.linkRequests.Keys);
-			foreach (string member in members) {
+			foreach (string member in members)
+			{
 				// Is the runtime member resolved?
-				if (IsResolved(member, out address)) {
+				if (IsResolved(member, out address))
+				{
 					// Yes, patch up the method
 					List<LinkRequest> link = this.linkRequests[member];
 					PatchRequests(address, link);
@@ -112,7 +114,7 @@ namespace Mosa.Runtime.Linker
 				{
 					sb.AppendFormat("\t{0}\r\n", member);
 				}
-				
+
 				throw new LinkerException(sb.ToString());
 			}
 		}
@@ -173,9 +175,9 @@ namespace Mosa.Runtime.Linker
 		/// <value>The output file.</value>
 		public string OutputFile
 		{
-			get 
-			{ 
-				return this.outputFile; 
+			get
+			{
+				return this.outputFile;
 			}
 
 			set
@@ -235,7 +237,7 @@ namespace Mosa.Runtime.Linker
 			Stream result;
 			Stream baseStream = Allocate(section, size, alignment);
 
-			try 
+			try
 			{
 				// Create a linker symbol for the name
 				LinkerSymbol symbol = new LinkerSymbol(name, section, baseStream.Position);
@@ -246,7 +248,7 @@ namespace Mosa.Runtime.Linker
 				// Wrap the stream to catch premature disposal
 				result = new LinkerStream(symbol, baseStream, size);
 			}
-			catch (ArgumentException argx) 
+			catch (ArgumentException argx)
 			{
 				throw new LinkerException(String.Format(@"Symbol {0} defined multiple times.", name), argx);
 			}
@@ -346,7 +348,7 @@ namespace Mosa.Runtime.Linker
 				throw new ArgumentNullException(@"symbol");
 
 			List<LinkRequest> list;
-			if (!this.linkRequests.TryGetValue(targetSymbol, out list)) 
+			if (!this.linkRequests.TryGetValue(targetSymbol, out list))
 			{
 				list = new List<LinkRequest>();
 				this.linkRequests.Add(targetSymbol, list);
@@ -358,15 +360,15 @@ namespace Mosa.Runtime.Linker
 		}
 
 		#endregion // IAssemblyLinker Members
-		
-		public AssemblyCompiler Compiler 
+
+		public AssemblyCompiler Compiler
 		{
-			get 
+			get
 			{
 				return this.compiler;
 			}
 		}
-		
+
 		#region Internals
 
 		/// <summary>
@@ -381,7 +383,7 @@ namespace Mosa.Runtime.Linker
 		{
 			virtualAddress = 0;
 			LinkerSymbol linkerSymbol;
-			if (this.symbols.TryGetValue(symbol, out linkerSymbol)) 
+			if (this.symbols.TryGetValue(symbol, out linkerSymbol))
 			{
 				virtualAddress = linkerSymbol.VirtualAddress.ToInt64();
 			}
@@ -410,7 +412,7 @@ namespace Mosa.Runtime.Linker
 		{
 			long methodAddress;
 
-			foreach (LinkRequest request in requests) 
+			foreach (LinkRequest request in requests)
 			{
 				if (IsResolved(request.LinkSymbol, out methodAddress) == false)
 					throw new InvalidOperationException(@"Method not compiled - but making link requests??");

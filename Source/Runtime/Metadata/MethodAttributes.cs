@@ -10,13 +10,15 @@
 
 using System;
 
-namespace Mosa.Runtime.Metadata {
+namespace Mosa.Runtime.Metadata
+{
 
 	/// <summary>
 	/// Method attributes according to ISO/IEC 23271:2006 (E), Partition II, §23.1.8 as used in method definition provider. 
 	/// </summary>
 	[Flags]
-	public enum MethodAttributes : ushort {
+	public enum MethodAttributes : ushort
+	{
 		/// <summary>
 		/// These 3 bits contain one of the following values: CompilerControlled, Private, FamAndAssem, Assem, Family, FamilyOrAssem, Public.
 		/// </summary>

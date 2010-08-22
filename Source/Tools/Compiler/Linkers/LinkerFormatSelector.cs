@@ -29,7 +29,7 @@ namespace Mosa.Tools.Compiler.Linkers
 	public sealed class LinkerFormatSelector : BaseAssemblyCompilerStage, IAssemblyLinker, IAssemblyCompilerStage, IHasOptions, IPipelineStage
 	{
 		#region Data Members
-		
+
 		/// <summary>
 		/// Holds the real linker implementation to use.
 		/// </summary>
@@ -73,7 +73,7 @@ namespace Mosa.Tools.Compiler.Linkers
 		#endregion // Construction
 
 		#region Properties
-		
+
 		/// <summary>
 		/// Gets a value indicating wheter an implementation has been selected.
 		/// </summary>
@@ -130,7 +130,7 @@ namespace Mosa.Tools.Compiler.Linkers
 				acs.Run();
 			}
 		}
-		
+
 		/// <summary>
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
@@ -174,8 +174,8 @@ namespace Mosa.Tools.Compiler.Linkers
 				{
 					this.outputFile =
 						peLinker.Wrapped.OutputFile =
-						elf32Linker.Wrapped.OutputFile = 
-						elf64Linker.Wrapped.OutputFile = 
+						elf32Linker.Wrapped.OutputFile =
+						elf64Linker.Wrapped.OutputFile =
 							file;
 				}
 			);
@@ -234,10 +234,10 @@ namespace Mosa.Tools.Compiler.Linkers
 		/// <value>The file section alignment.</value>
 		public long LoadSectionAlignment
 		{
-			get 
+			get
 			{
 				CheckImplementation();
-				return this.implementation.LoadSectionAlignment; 
+				return this.implementation.LoadSectionAlignment;
 			}
 		}
 
@@ -332,7 +332,7 @@ namespace Mosa.Tools.Compiler.Linkers
 			CheckImplementation();
 			return this.implementation.Link(linkType, symbolName, methodOffset, methodRelativeBase, targetSymbolName, offset);
 		}
-		
+
 		/// <summary>
 		/// Allocates a symbol of the given name in the specified section.
 		/// </summary>

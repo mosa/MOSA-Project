@@ -18,6 +18,6 @@ namespace Mosa.Runtime.CompilerFramework
 	/// </summary>
 	public interface IIRInstruction
 	{
-		
+
 	}
 }

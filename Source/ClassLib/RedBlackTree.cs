@@ -115,7 +115,8 @@ namespace Mosa.ClassLib
 		{
 			RedBlackTreeNode<K, T> cur = root;
 
-			while (cur != null) {
+			while (cur != null)
+			{
 				int cmp = key.CompareTo(cur.key);
 				//int cmp = (cur.key == key) ? 0 : (cur.key < key ? -1, 1);
 
@@ -178,7 +179,8 @@ namespace Mosa.ClassLib
 		{
 			RedBlackTreeNode<K, T> cur = root;
 
-			while (cur != null) {
+			while (cur != null)
+			{
 				int cmp = key.CompareTo(cur.key);
 
 				if (cmp == 0)
@@ -202,8 +204,10 @@ namespace Mosa.ClassLib
 		{
 			int cmp = newnode.key.CompareTo(parent.key);
 
-			if (cmp < 0) /* less than */ {
-				if (parent.left == null) {
+			if (cmp < 0) /* less than */
+			{
+				if (parent.left == null)
+				{
 					newnode.parent = parent;
 					parent.left = newnode;
 				}
@@ -211,7 +215,8 @@ namespace Mosa.ClassLib
 					Insert(parent.left, newnode);
 			}
 			else
-				if (parent.right == null) {
+				if (parent.right == null)
+				{
 					newnode.parent = parent;
 					parent.right = newnode;
 				}
@@ -360,14 +365,16 @@ namespace Mosa.ClassLib
 			RedBlackTreeNode<K, T> u = GetUncle(n);
 			RedBlackTreeNode<K, T> g;
 
-			if ((u != null) && (u.color == Color.Red)) {
+			if ((u != null) && (u.color == Color.Red))
+			{
 				n.parent.color = Color.Black;
 				u.color = Color.Black;
 				g = GetGrandparent(n);
 				g.color = Color.Red;
 				InsertCase1(g);
 			}
-			else {
+			else
+			{
 				InsertCase4(n);
 			}
 		}
@@ -380,11 +387,13 @@ namespace Mosa.ClassLib
 		{
 			RedBlackTreeNode<K, T> g = GetGrandparent(n);
 
-			if ((n == n.parent.right) && (n.parent == g.left)) {
+			if ((n == n.parent.right) && (n.parent == g.left))
+			{
 				RotateLeft(n.parent);
 				n = n.left;
 			}
-			else if ((n == n.parent.left) && (n.parent == g.right)) {
+			else if ((n == n.parent.left) && (n.parent == g.right))
+			{
 				RotateRight(n.parent);
 				n = n.right;
 			}
@@ -401,10 +410,12 @@ namespace Mosa.ClassLib
 
 			n.parent.color = Color.Black;
 			g.color = Color.Red;
-			if ((n == n.parent.left) && (n.parent == g.left)) {
+			if ((n == n.parent.left) && (n.parent == g.left))
+			{
 				RotateRight(g);
 			}
-			else {
+			else
+			{
 				RotateLeft(g);
 			}
 		}
@@ -431,7 +442,8 @@ namespace Mosa.ClassLib
 			RedBlackTreeNode<K, T> child = IsLeaf(n.right) ? n.left : n.right;
 
 			ReplaceNode(n, child);
-			if (n.color == Color.Black) {
+			if (n.color == Color.Black)
+			{
 				if (child.color == Color.Red)
 					child.color = Color.Black;
 				else
@@ -457,7 +469,8 @@ namespace Mosa.ClassLib
 		{
 			RedBlackTreeNode<K, T> s = GetSibling(n);
 
-			if (s.color == Color.Red) {
+			if (s.color == Color.Red)
+			{
 				n.parent.color = Color.Red;
 				s.color = Color.Black;
 				if (n == n.parent.left)
@@ -479,7 +492,8 @@ namespace Mosa.ClassLib
 			if ((n.parent.color == Color.Black) &&
 				(s.color == Color.Black) &&
 				(s.left.color == Color.Black) &&
-				(s.right.color == Color.Black)) {
+				(s.right.color == Color.Black))
+			{
 				s.color = Color.Red;
 				DeleteCase1(n.parent);
 			}
@@ -498,7 +512,8 @@ namespace Mosa.ClassLib
 			if ((n.parent.color == Color.Red) &&
 				(s.color == Color.Black) &&
 				(s.left.color == Color.Black) &&
-				(s.right.color == Color.Black)) {
+				(s.right.color == Color.Black))
+			{
 				s.color = Color.Red;
 				n.parent.color = Color.Black;
 			}
@@ -517,7 +532,8 @@ namespace Mosa.ClassLib
 			if ((n == n.parent.left) &&
 				(s.color == Color.Black) &&
 				(s.left.color == Color.Red) &&
-				(s.right.color == Color.Black)) {
+				(s.right.color == Color.Black))
+			{
 				s.color = Color.Red;
 				s.left.color = Color.Black;
 				RotateRight(s);
@@ -525,7 +541,8 @@ namespace Mosa.ClassLib
 			else if ((n == n.parent.right) &&
 					   (s.color == Color.Black) &&
 					   (s.right.color == Color.Red) &&
-					   (s.left.color == Color.Black)) {
+					   (s.left.color == Color.Black))
+			{
 				s.color = Color.Red;
 				s.right.color = Color.Black;
 				RotateLeft(s);
@@ -543,11 +560,13 @@ namespace Mosa.ClassLib
 
 			s.color = n.parent.color;
 			n.parent.color = Color.Black;
-			if (n == n.parent.left) {
+			if (n == n.parent.left)
+			{
 				s.right.color = Color.Black;
 				RotateLeft(n.parent);
 			}
-			else {
+			else
+			{
 				s.left.color = Color.Black;
 				RotateRight(n.parent);
 			}

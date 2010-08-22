@@ -13,16 +13,16 @@ using Mosa.Runtime.CompilerFramework.Operands;
 
 namespace Mosa.Platforms.x86.CPUx86
 {
-    /// <summary>
-    /// Representations the x86 xchg instruction.
-    /// </summary>
-    public sealed class XchgInstruction : TwoOperandInstruction
+	/// <summary>
+	/// Representations the x86 xchg instruction.
+	/// </summary>
+	public sealed class XchgInstruction : TwoOperandInstruction
 	{
 		#region Data Members
 
 		private static readonly OpCode R_M = new OpCode(new byte[] { 0x87 });
-        private static readonly OpCode R_R = new OpCode(new byte[] { 0x87 });
-        private static readonly OpCode M_R = new OpCode(new byte[] { 0x87 });
+		private static readonly OpCode R_R = new OpCode(new byte[] { 0x87 });
+		private static readonly OpCode M_R = new OpCode(new byte[] { 0x87 });
 		private static readonly OpCode R_R_16 = new OpCode(new byte[] { 0x66, 0x87 });
 
 		#endregion // Data Members
@@ -37,8 +37,8 @@ namespace Mosa.Platforms.x86.CPUx86
 
 		#endregion // Properties
 
-        #region Methods
-	
+		#region Methods
+
 		/// <summary>
 		/// Computes the opcode.
 		/// </summary>
@@ -46,16 +46,16 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <param name="source">The source operand.</param>
 		/// <param name="third">The third operand.</param>
 		/// <returns></returns>
-        protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
-        {
+		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
+		{
 			if (IsShort(destination) && IsShort(source))
 				if ((destination is RegisterOperand) && (source is RegisterOperand)) return R_R_16;
-            if ((destination is RegisterOperand) && (source is MemoryOperand)) return R_M;
-            if ((destination is RegisterOperand) && (source is RegisterOperand)) return R_R;
-            if ((destination is MemoryOperand) && (source is RegisterOperand)) return M_R;
-            
-			throw new ArgumentException(@"No opcode for operand type."); 
-        }
+			if ((destination is RegisterOperand) && (source is MemoryOperand)) return R_M;
+			if ((destination is RegisterOperand) && (source is RegisterOperand)) return R_R;
+			if ((destination is MemoryOperand) && (source is RegisterOperand)) return M_R;
+
+			throw new ArgumentException(@"No opcode for operand type.");
+		}
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
@@ -67,6 +67,6 @@ namespace Mosa.Platforms.x86.CPUx86
 			visitor.Xchg(context);
 		}
 
-        #endregion // Methods
-    }
+		#endregion // Methods
+	}
 }

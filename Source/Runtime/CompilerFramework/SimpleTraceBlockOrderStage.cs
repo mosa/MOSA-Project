@@ -60,10 +60,12 @@ namespace Mosa.Runtime.CompilerFramework
 			// Start worklist with first block
 			workList.Push(first);
 
-			while (workList.Count != 0) {
+			while (workList.Count != 0)
+			{
 				BasicBlock block = workList.Pop();
 
-				if (!referenced.ContainsKey(block)) {
+				if (!referenced.ContainsKey(block))
+				{
 					referenced.Add(block, 0);
 					_ordered[orderBlockCnt++] = block;
 

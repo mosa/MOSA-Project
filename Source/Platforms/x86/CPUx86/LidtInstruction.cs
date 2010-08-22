@@ -12,11 +12,11 @@ using Mosa.Runtime.CompilerFramework.Operands;
 
 namespace Mosa.Platforms.x86.CPUx86
 {
-    /// <summary>
-    /// Representations the x86 Lidt instruction.
-    /// </summary>
+	/// <summary>
+	/// Representations the x86 Lidt instruction.
+	/// </summary>
 	public sealed class LidtInstruction : OneOperandInstruction
-    {
+	{
 		#region Data Members
 
 		private static readonly OpCode opcode = new OpCode(new byte[] { 0x0F, 0x01 }, 3);
@@ -47,5 +47,5 @@ namespace Mosa.Platforms.x86.CPUx86
 
 		#endregion // Methods
 
-    }
+	}
 }

@@ -11,34 +11,36 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Mosa.Runtime.Metadata {
-    /// <summary>
-    /// 
-    /// </summary>
-	public enum HeapType {
-        /// <summary>
-        /// 
-        /// </summary>
+namespace Mosa.Runtime.Metadata
+{
+	/// <summary>
+	/// 
+	/// </summary>
+	public enum HeapType
+	{
+		/// <summary>
+		/// 
+		/// </summary>
 		String = 0,
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		UserString = 1,
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		Blob = 2,
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		Guid = 3,
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		Tables = 4,
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		MaxType = 5
 	}
 }

@@ -12,12 +12,12 @@ using Mosa.Runtime.CompilerFramework;
 
 namespace Mosa.Platforms.x86.CPUx86
 {
-    /// <summary>
-    /// Representations the x86 rep instruction.
-    /// </summary>
-    public sealed class RepInstruction : BaseInstruction
-    {
-        #region Methods
+	/// <summary>
+	/// Representations the x86 rep instruction.
+	/// </summary>
+	public sealed class RepInstruction : BaseInstruction
+	{
+		#region Methods
 
 		/// <summary>
 		/// Emits the specified CTX.
@@ -25,9 +25,9 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <param name="ctx">The CTX.</param>
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context ctx, MachineCodeEmitter emitter)
-        {
+		{
 			emitter.WriteByte(0xF3);
-        }
+		}
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
@@ -39,6 +39,6 @@ namespace Mosa.Platforms.x86.CPUx86
 			visitor.Rep(context);
 		}
 
-        #endregion // Methods
-    }
+		#endregion // Methods
+	}
 }

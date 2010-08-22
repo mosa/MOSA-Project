@@ -41,7 +41,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		public StelemInstruction(OpCode opcode)
 			: base(opcode, 3)
 		{
-			switch (opcode) {
+			switch (opcode)
+			{
 				case OpCode.Stelem_i1:
 					_typeRef = new SigType(CilElementType.I1);
 					break;
@@ -86,12 +87,12 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			base.Decode(ctx, decoder, typeSystem);
 
 			// Do we have a type?
-			if (_typeRef == null) 
-            {
+			if (_typeRef == null)
+			{
 				// No, retrieve a type reference From the immediate argument
 				TokenTypes token;
 				decoder.Decode(out token);
-                _typeRef = new ClassSigType(token);
+				_typeRef = new ClassSigType(token);
 			}
 		}
 

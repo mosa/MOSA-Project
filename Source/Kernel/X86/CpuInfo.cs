@@ -16,12 +16,12 @@ namespace Mosa.HelloWorld
 		{
 			Setup();
 		}
-		
-		public void Setup() 
+
+		public void Setup()
 		{
-			
+
 		}
-		
+
 		public ulong NumberOfCores
 		{
 			get
@@ -29,7 +29,7 @@ namespace Mosa.HelloWorld
 				return (ulong)((Platforms.x86.Native.CpuIdEax(4) >> 26) + 1);
 			}
 		}
-		
+
 		public ulong Type
 		{
 			get
@@ -37,7 +37,7 @@ namespace Mosa.HelloWorld
 				return (ulong)((Platforms.x86.Native.CpuIdEax(1) & 0x3000) >> 12);
 			}
 		}
-		
+
 		public ulong Stepping
 		{
 			get
@@ -45,7 +45,7 @@ namespace Mosa.HelloWorld
 				return (ulong)(Platforms.x86.Native.CpuIdEax(1) & 0xF);
 			}
 		}
-		
+
 		public ulong Model
 		{
 			get
@@ -53,7 +53,7 @@ namespace Mosa.HelloWorld
 				return (ulong)((Platforms.x86.Native.CpuIdEax(1) & 0xF0) >> 4);
 			}
 		}
-		
+
 		public ulong Family
 		{
 			get
@@ -61,7 +61,7 @@ namespace Mosa.HelloWorld
 				return (ulong)((Platforms.x86.Native.CpuIdEax(1) & 0xF00) >> 8);
 			}
 		}
-		
+
 		public bool SupportsExtendedCpuid
 		{
 			get
@@ -70,7 +70,7 @@ namespace Mosa.HelloWorld
 				return (identifier & 0x80000000) != 0;
 			}
 		}
-		
+
 		public bool SupportsBrandString
 		{
 			get
@@ -79,7 +79,7 @@ namespace Mosa.HelloWorld
 				return identifier >= 0x80000004U;
 			}
 		}
-		
+
 		public void PrintVendorString()
 		{
 			int identifier = Platforms.x86.Native.CpuIdEbx(0);
@@ -94,7 +94,7 @@ namespace Mosa.HelloWorld
 			for (int i = 0; i < 4; ++i)
 				Screen.Write((char)((identifier >> (i * 8)) & 0xFF));
 		}
-		
+
 		public void PrintBrandString()
 		{
 			if (SupportsBrandString)
@@ -105,9 +105,9 @@ namespace Mosa.HelloWorld
 				return;
 			}
 
-            Screen.Write(@"Unknown (Generic x86)");
+			Screen.Write(@"Unknown (Generic x86)");
 		}
-		
+
 		private void PrintBrand(uint param)
 		{
 			int identifier = Platforms.x86.Native.CpuIdEax(param);
@@ -115,7 +115,7 @@ namespace Mosa.HelloWorld
 			if (identifier != 0x20202020)
 				for (int i = 0; i < 4; ++i)
 					PrintBrandPart(identifier, i, ref whitespace);
-					
+
 
 			identifier = Platforms.x86.Native.CpuIdEbx(param);
 			if (identifier != 0x20202020)
@@ -132,11 +132,11 @@ namespace Mosa.HelloWorld
 				for (int i = 0; i < 4; ++i)
 					PrintBrandPart(identifier, i, ref whitespace);
 		}
-		
+
 		private void PrintBrandPart(int identifier, int i, ref bool whitespace)
 		{
 			char character = (char)((identifier >> (i * 8)) & 0xFF);
-			
+
 			if (whitespace && character == ' ')
 				return;
 			if (whitespace && character != ' ')

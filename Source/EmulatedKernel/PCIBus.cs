@@ -47,7 +47,7 @@ namespace Mosa.EmulatedKernel
 		{
 			if (devices.Count > index)
 				return devices[(int)index];
-			else 
+			else
 				return null;
 		}
 	}

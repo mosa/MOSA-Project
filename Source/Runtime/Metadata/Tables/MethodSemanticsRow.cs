@@ -14,76 +14,77 @@ using System.IO;
 
 namespace Mosa.Runtime.Metadata.Tables
 {
-    /// <summary>
-    /// 
-    /// </summary>
-	public struct MethodSemanticsRow {
+	/// <summary>
+	/// 
+	/// </summary>
+	public struct MethodSemanticsRow
+	{
 		#region Data members
 
-        /// <summary>
-        /// 
-        /// </summary>
-        private MethodSemanticsAttributes _semantics;
+		/// <summary>
+		/// 
+		/// </summary>
+		private MethodSemanticsAttributes _semantics;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        private TokenTypes _methodTableIdx;
+		/// <summary>
+		/// 
+		/// </summary>
+		private TokenTypes _methodTableIdx;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        private TokenTypes _associationTableIdx;
+		/// <summary>
+		/// 
+		/// </summary>
+		private TokenTypes _associationTableIdx;
 
-        #endregion // Data members
+		#endregion // Data members
 
-        #region Construction
+		#region Construction
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MethodSemanticsRow"/> struct.
-        /// </summary>
-        /// <param name="semantics">The semantics.</param>
-        /// <param name="methodTableIdx">The method table idx.</param>
-        /// <param name="associationTableIdx">The association table idx.</param>
-        public MethodSemanticsRow(MethodSemanticsAttributes semantics, TokenTypes methodTableIdx,
-                                    TokenTypes associationTableIdx)
-        {
-            _semantics = semantics;
-            _methodTableIdx = methodTableIdx;
-            _associationTableIdx = associationTableIdx;
-        }
+		/// <summary>
+		/// Initializes a new instance of the <see cref="MethodSemanticsRow"/> struct.
+		/// </summary>
+		/// <param name="semantics">The semantics.</param>
+		/// <param name="methodTableIdx">The method table idx.</param>
+		/// <param name="associationTableIdx">The association table idx.</param>
+		public MethodSemanticsRow(MethodSemanticsAttributes semantics, TokenTypes methodTableIdx,
+									TokenTypes associationTableIdx)
+		{
+			_semantics = semantics;
+			_methodTableIdx = methodTableIdx;
+			_associationTableIdx = associationTableIdx;
+		}
 
-        #endregion // Construction
+		#endregion // Construction
 
-        #region Properties
+		#region Properties
 
-        /// <summary>
-        /// Gets the semantics.
-        /// </summary>
-        /// <value>The semantics.</value>
-        public MethodSemanticsAttributes Semantics
-        {
-            get { return _semantics; }
-        }
+		/// <summary>
+		/// Gets the semantics.
+		/// </summary>
+		/// <value>The semantics.</value>
+		public MethodSemanticsAttributes Semantics
+		{
+			get { return _semantics; }
+		}
 
-        /// <summary>
-        /// Gets the method table idx.
-        /// </summary>
-        /// <value>The method table idx.</value>
-        public TokenTypes MethodTableIdx
-        {
-            get { return _methodTableIdx; }
-        }
+		/// <summary>
+		/// Gets the method table idx.
+		/// </summary>
+		/// <value>The method table idx.</value>
+		public TokenTypes MethodTableIdx
+		{
+			get { return _methodTableIdx; }
+		}
 
-        /// <summary>
-        /// Gets the association table idx.
-        /// </summary>
-        /// <value>The association table idx.</value>
-        public TokenTypes AssociationTableIdx
-        {
-            get { return _associationTableIdx; }
-        }
+		/// <summary>
+		/// Gets the association table idx.
+		/// </summary>
+		/// <value>The association table idx.</value>
+		public TokenTypes AssociationTableIdx
+		{
+			get { return _associationTableIdx; }
+		}
 
-        #endregion // Properties
+		#endregion // Properties
 	}
 }

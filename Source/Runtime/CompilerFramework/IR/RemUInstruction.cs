@@ -9,40 +9,40 @@
 
 namespace Mosa.Runtime.CompilerFramework.IR
 {
-    using System;
+	using System;
 
-    /// <summary>
-    /// Intermediate representation of the unsigned remainder operation.
-    /// </summary>
-    public sealed class RemUInstruction : ThreeOperandInstruction
-    {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="RemUInstruction"/> class.
-        /// </summary>
-        public RemUInstruction()
-        {
-        }
+	/// <summary>
+	/// Intermediate representation of the unsigned remainder operation.
+	/// </summary>
+	public sealed class RemUInstruction : ThreeOperandInstruction
+	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="RemUInstruction"/> class.
+		/// </summary>
+		public RemUInstruction()
+		{
+		}
 
 		/// <summary>
 		/// Abstract visitor method for intermediate representation visitors.
 		/// </summary>
 		/// <param name="visitor">The visitor.</param>
 		/// <param name="context">The context.</param>
-        public override void Visit(IIRVisitor visitor, Context context)
-        {
+		public override void Visit(IIRVisitor visitor, Context context)
+		{
 			visitor.RemUInstruction(context);
-        }
+		}
 
-        /// <summary>
-        /// Returns a <see cref="System.String"/> that represents this instance.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <returns>
-        /// A <see cref="System.String"/> that represents this instance.
-        /// </returns>
-        public override string ToString(Context context)
-        {
-            return String.Format(@"IR rem.u{0} {1} = {2} % {3}", context.Result.Precision, context.Result, context.Operand1, context.Operand2);
-        }
-    }
+		/// <summary>
+		/// Returns a <see cref="System.String"/> that represents this instance.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <returns>
+		/// A <see cref="System.String"/> that represents this instance.
+		/// </returns>
+		public override string ToString(Context context)
+		{
+			return String.Format(@"IR rem.u{0} {1} = {2} % {3}", context.Result.Precision, context.Result, context.Operand1, context.Operand2);
+		}
+	}
 }

@@ -45,11 +45,13 @@ namespace Mosa.Tools.Mono.UpdateProject
 			foreach (XmlNode compileNode in compileNodes)
 				foreach (XmlNode attribute in compileNode.Attributes)
 					if (attribute.Name.Equals("Include"))
-						if (attribute.Value.EndsWith(".cs") && (!attribute.Value.EndsWith(".Internal.cs") && (!attribute.Value.EndsWith(".Mosa.cs")))) {
+						if (attribute.Value.EndsWith(".cs") && (!attribute.Value.EndsWith(".Internal.cs") && (!attribute.Value.EndsWith(".Mosa.cs"))))
+						{
 							string partialfile = attribute.Value.Insert(attribute.Value.Length - 2, "Mosa."); ;
 
 							if (File.Exists(Path.Combine(root, partialfile)))
-								if (!files.Contains(partialfile)) {
+								if (!files.Contains(partialfile))
+								{
 									XmlNode newCompileNode = xmlDocument.CreateElement("Compile", string.Empty);
 									XmlAttribute newCompileNodeAttribute = xmlDocument.CreateAttribute("Include");
 									newCompileNodeAttribute.Value = partialfile;

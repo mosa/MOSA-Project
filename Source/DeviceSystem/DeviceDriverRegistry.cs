@@ -47,11 +47,15 @@ namespace Mosa.DeviceSystem
 			DeviceDriver bestDeviceDriver = null;
 			int bestPriority = System.Int32.MaxValue;
 
-			foreach (DeviceDriver deviceDriver in deviceDrivers) {
-				if (deviceDriver.Attribute is PCIDeviceDriverAttribute) {
+			foreach (DeviceDriver deviceDriver in deviceDrivers)
+			{
+				if (deviceDriver.Attribute is PCIDeviceDriverAttribute)
+				{
 					PCIDeviceDriverAttribute pciDeviceDriverAttribute = deviceDriver.Attribute as PCIDeviceDriverAttribute;
-					if ((pciDeviceDriverAttribute.Priority != 0) && (pciDeviceDriverAttribute.Priority < bestPriority)) {
-						if (pciDeviceDriverAttribute.CompareTo(pciDevice)) {
+					if ((pciDeviceDriverAttribute.Priority != 0) && (pciDeviceDriverAttribute.Priority < bestPriority))
+					{
+						if (pciDeviceDriverAttribute.CompareTo(pciDevice))
+						{
 							bestDeviceDriver = deviceDriver;
 							bestPriority = pciDeviceDriverAttribute.Priority;
 						}
@@ -94,11 +98,13 @@ namespace Mosa.DeviceSystem
 		{
 			System.Type[] types = assemblyInfo.GetTypes();
 
-			foreach (System.Type type in types) {
+			foreach (System.Type type in types)
+			{
 				object[] attributes = type.GetCustomAttributes(typeof(IDeviceDriver), false);
 
 				foreach (object attribute in attributes)
-					if (((attribute as IDeviceDriver).Platforms & platformArchitecture) != 0) {
+					if (((attribute as IDeviceDriver).Platforms & platformArchitecture) != 0)
+					{
 						DeviceDriver deviceDriver = new DeviceDriver(attribute as IDeviceDriver, type);
 
 						object[] memAttributes = type.GetCustomAttributes(typeof(DeviceDriverPhysicalMemoryAttribute), false);

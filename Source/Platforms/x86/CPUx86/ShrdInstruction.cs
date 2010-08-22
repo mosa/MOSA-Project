@@ -13,16 +13,16 @@ using Mosa.Runtime.CompilerFramework.Operands;
 
 namespace Mosa.Platforms.x86.CPUx86
 {
-    /// <summary>
-    /// Representations the x86 shrd instruction.
-    /// </summary>
-    public class ShrdInstruction : ThreeOperandInstruction
-    {
-        #region Data Members
-        
-		private static readonly OpCode Register = new OpCode( new byte[] { 0x0F, 0xAD }, 4);
-        private static readonly OpCode Constant = new OpCode(new byte[] { 0x0F, 0xAC }, 4);
-		
+	/// <summary>
+	/// Representations the x86 shrd instruction.
+	/// </summary>
+	public class ShrdInstruction : ThreeOperandInstruction
+	{
+		#region Data Members
+
+		private static readonly OpCode Register = new OpCode(new byte[] { 0x0F, 0xAD }, 4);
+		private static readonly OpCode Constant = new OpCode(new byte[] { 0x0F, 0xAC }, 4);
+
 		#endregion // Data Members
 
 		#region Methods
@@ -34,32 +34,32 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <param name="source">The source operand.</param>
 		/// <param name="third">The third operand.</param>
 		/// <returns></returns>
-        protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
-        {
+		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
+		{
 			if (third is RegisterOperand)
-                return Register;
+				return Register;
 			if (third is ConstantOperand)
-                return Constant;
-            throw new ArgumentException(@"No opcode for operand type.");
-        }
+				return Constant;
+			throw new ArgumentException(@"No opcode for operand type.");
+		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="ctx"></param>
-        /// <param name="emitter"></param>
-        protected override void Emit(Context ctx, MachineCodeEmitter emitter)
-        {
-            OpCode opCode = ComputeOpCode(ctx.Result, ctx.Operand1, ctx.Operand2);
-            if (ctx.Operand2 is ConstantOperand)
-            {
-                ConstantOperand op = ctx.Operand2 as ConstantOperand;
-                op = new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.U1), op.Value);
-                emitter.Emit(opCode, ctx.Result, ctx.Operand1, op);
-            }
-            else
-                emitter.Emit(opCode, ctx.Result, ctx.Operand1, ctx.Operand2);
-        }
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="ctx"></param>
+		/// <param name="emitter"></param>
+		protected override void Emit(Context ctx, MachineCodeEmitter emitter)
+		{
+			OpCode opCode = ComputeOpCode(ctx.Result, ctx.Operand1, ctx.Operand2);
+			if (ctx.Operand2 is ConstantOperand)
+			{
+				ConstantOperand op = ctx.Operand2 as ConstantOperand;
+				op = new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.U1), op.Value);
+				emitter.Emit(opCode, ctx.Result, ctx.Operand1, op);
+			}
+			else
+				emitter.Emit(opCode, ctx.Result, ctx.Operand1, ctx.Operand2);
+		}
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
@@ -71,6 +71,6 @@ namespace Mosa.Platforms.x86.CPUx86
 			visitor.Shrd(context);
 		}
 
-        #endregion // Methods
-    }
+		#endregion // Methods
+	}
 }

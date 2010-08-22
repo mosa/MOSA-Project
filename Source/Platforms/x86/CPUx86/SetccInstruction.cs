@@ -58,7 +58,8 @@ namespace Mosa.Platforms.x86.CPUx86
 		{
 			OpCode opcode;
 
-			switch (ctx.ConditionCode) {
+			switch (ctx.ConditionCode)
+			{
 				case IR.ConditionCode.Equal: opcode = E; break;
 				case IR.ConditionCode.LessThan: opcode = LT; break;
 				case IR.ConditionCode.LessOrEqual: opcode = LE; break;

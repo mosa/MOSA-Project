@@ -15,7 +15,7 @@ namespace System.Collections.Generic
 	/// <summary>
 	/// 
 	/// </summary>
-    class IEqualityComparer
-    {
-    }
+	class IEqualityComparer
+	{
+	}
 }

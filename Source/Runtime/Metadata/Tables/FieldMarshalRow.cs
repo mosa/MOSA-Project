@@ -12,61 +12,62 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 
-namespace Mosa.Runtime.Metadata.Tables 
+namespace Mosa.Runtime.Metadata.Tables
 {
-    /// <summary>
-    /// 
-    /// </summary>
-	public struct FieldMarshalRow {
+	/// <summary>
+	/// 
+	/// </summary>
+	public struct FieldMarshalRow
+	{
 		#region Data members
 
-        /// <summary>
-        /// 
-        /// </summary>
-        private TokenTypes _parentTableIdx;
+		/// <summary>
+		/// 
+		/// </summary>
+		private TokenTypes _parentTableIdx;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        private TokenTypes _nativeTypeBlobIdx;
+		/// <summary>
+		/// 
+		/// </summary>
+		private TokenTypes _nativeTypeBlobIdx;
 
 		#endregion // Data members
 
-        #region Construction
+		#region Construction
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="FieldMarshalRow"/> struct.
-        /// </summary>
-        /// <param name="parentTableIdx">The parent table idx.</param>
-        /// <param name="nativeTypeBlobIdx">The native type BLOB idx.</param>
-        public FieldMarshalRow(TokenTypes parentTableIdx, TokenTypes nativeTypeBlobIdx)
-        {
-            _parentTableIdx = parentTableIdx;
-            _nativeTypeBlobIdx = nativeTypeBlobIdx;
-        }
+		/// <summary>
+		/// Initializes a new instance of the <see cref="FieldMarshalRow"/> struct.
+		/// </summary>
+		/// <param name="parentTableIdx">The parent table idx.</param>
+		/// <param name="nativeTypeBlobIdx">The native type BLOB idx.</param>
+		public FieldMarshalRow(TokenTypes parentTableIdx, TokenTypes nativeTypeBlobIdx)
+		{
+			_parentTableIdx = parentTableIdx;
+			_nativeTypeBlobIdx = nativeTypeBlobIdx;
+		}
 
-        #endregion // Construction
+		#endregion // Construction
 
-        #region Properties
+		#region Properties
 
-        /// <summary>
-        /// Gets the parent table idx.
-        /// </summary>
-        /// <value>The parent table idx.</value>
-        public TokenTypes ParentTableIdx
-        {
-            get { return _parentTableIdx; }
-        }
+		/// <summary>
+		/// Gets the parent table idx.
+		/// </summary>
+		/// <value>The parent table idx.</value>
+		public TokenTypes ParentTableIdx
+		{
+			get { return _parentTableIdx; }
+		}
 
-        /// <summary>
-        /// Gets the native type BLOB idx.
-        /// </summary>
-        /// <value>The native type BLOB idx.</value>
-        public TokenTypes NativeTypeBlobIdx
-        {
-            get { return _nativeTypeBlobIdx; }
-        }
+		/// <summary>
+		/// Gets the native type BLOB idx.
+		/// </summary>
+		/// <value>The native type BLOB idx.</value>
+		public TokenTypes NativeTypeBlobIdx
+		{
+			get { return _nativeTypeBlobIdx; }
+		}
 
-        #endregion // Properties
+		#endregion // Properties
 	}
 }

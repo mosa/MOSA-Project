@@ -19,28 +19,28 @@ using Mosa.Runtime.CompilerFramework;
 
 namespace Mosa.Platforms.x86.CPUx86
 {
-    /// <summary>
-    /// Representations the x86 CPUID instruction.
-    /// </summary>
+	/// <summary>
+	/// Representations the x86 CPUID instruction.
+	/// </summary>
 	public sealed class CpuIdEaxInstruction : TwoOperandInstruction
-    {
+	{
 		#region Data Members
 
 		private static readonly OpCode opcode = new OpCode(new byte[] { 0x0F, 0xA2 }); // Move imm32 to r/m32
 
 		#endregion // Data Members
 
-        #region Methods
+		#region Methods
 
 		/// <summary>
 		/// Emits the specified platform instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <param name="emitter">The emitter.</param>
-        protected override void Emit(Context ctx, MachineCodeEmitter emitter)
-        {
+		protected override void Emit(Context ctx, MachineCodeEmitter emitter)
+		{
 			emitter.Emit(opcode, null, null);
-        }
+		}
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
@@ -52,6 +52,6 @@ namespace Mosa.Platforms.x86.CPUx86
 			visitor.CpuIdEax(context);
 		}
 
-        #endregion // Methods
-    }
+		#endregion // Methods
+	}
 }

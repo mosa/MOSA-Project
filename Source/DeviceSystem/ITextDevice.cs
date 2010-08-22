@@ -51,7 +51,7 @@ namespace Mosa.DeviceSystem
 		/// Gets the height.
 		/// </summary>
 		/// <value>The height.</value>
-		byte Height { get; } 
+		byte Height { get; }
 	}
 
 	/// <summary>

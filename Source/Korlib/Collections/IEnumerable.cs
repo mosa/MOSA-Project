@@ -12,12 +12,12 @@ namespace System.Collections
 	/// <summary>
 	/// 
 	/// </summary>
-    public interface IEnumerable
-    {
+	public interface IEnumerable
+	{
 		/// <summary>
 		/// Gets the enumerator.
 		/// </summary>
 		/// <returns></returns>
-        IEnumerator GetEnumerator();
-    }
+		IEnumerator GetEnumerator();
+	}
 }

@@ -26,46 +26,54 @@ namespace Mosa.Runtime.CompilerFramework
 	/// It is only safe to use this stage on an instruction stream in SSA form.
 	/// </remarks>
 	public sealed class ConstantPropagationStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
-    {
-        #region IPipelineStage Members
+	{
+		#region IPipelineStage Members
 
-        /// <summary>
+		/// <summary>
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
 		/// <value>The name of the compilation stage.</value>
-	    string IPipelineStage.Name { get { return @"ConstantPropagationStage"; } }
+		string IPipelineStage.Name { get { return @"ConstantPropagationStage"; } }
 
-        #endregion // IPipelineStage Members
+		#endregion // IPipelineStage Members
 
-        #region IMethodCompilerStage Members
+		#region IMethodCompilerStage Members
 
-        /// <summary>
+		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
 		public void Run()
 		{
 			bool remove = false;
 
-			foreach (BasicBlock block in BasicBlocks) {
-				for (Context ctx = new Context(InstructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext()) {
-					if (ctx.Instruction is IR.MoveInstruction || ctx.Instruction is CIL.StlocInstruction) {
-						if (ctx.Operand1 is ConstantOperand) {
+			foreach (BasicBlock block in BasicBlocks)
+			{
+				for (Context ctx = new Context(InstructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
+				{
+					if (ctx.Instruction is IR.MoveInstruction || ctx.Instruction is CIL.StlocInstruction)
+					{
+						if (ctx.Operand1 is ConstantOperand)
+						{
 							// HACK: We can't track a constant through a register, so we keep those moves
-							if (ctx.Result is StackOperand) {
+							if (ctx.Result is StackOperand)
+							{
 								Debug.Assert(ctx.Result.Definitions.Count == 1, @"Operand defined multiple times. Instruction stream not in SSA form!");
 								ctx.Result.Replace(ctx.Operand1, InstructionSet);
 								remove = true;
 							}
 						}
 					}
-					else if (ctx.Instruction is IR.PhiInstruction) {
+					else if (ctx.Instruction is IR.PhiInstruction)
+					{
 						IR.PhiInstruction phi = (IR.PhiInstruction)ctx.Instruction;
 						ConstantOperand co = ctx.Operand2 as ConstantOperand;
 						List<BasicBlock> blocks = ctx.Other as List<BasicBlock>;	// FIXME PG / ctx has moved
-						if (co != null && blocks.Count == 1) {
+						if (co != null && blocks.Count == 1)
+						{
 							// We can remove the phi, as it is only defined once
 							// HACK: We can't track a constant through a register, so we keep those moves
-							if (!ctx.Result.IsRegister) {
+							if (!ctx.Result.IsRegister)
+							{
 								Debug.Assert(ctx.Result.Definitions.Count == 1, @"Operand defined multiple times. Instruction stream not in SSA form!");
 								ctx.Result.Replace(co, InstructionSet);
 								remove = true;
@@ -74,7 +82,8 @@ namespace Mosa.Runtime.CompilerFramework
 					}
 
 					// Shall we remove this instruction?
-					if (remove) {
+					if (remove)
+					{
 						ctx.Remove();
 						remove = false;
 					}

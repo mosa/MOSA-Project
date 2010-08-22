@@ -147,25 +147,30 @@ namespace Mosa.FileSystem.VFS
 			AccessCheck.Perform(currentDirectory, AccessMode.Traverse, AccessCheckFlags.None);
 
 			// Do not resolve the last name, if we want the parent directory.
-			if (PathResolutionFlags.RetrieveParent == (flags & PathResolutionFlags.RetrieveParent)) {
+			if (PathResolutionFlags.RetrieveParent == (flags & PathResolutionFlags.RetrieveParent))
+			{
 				path = dirs[dirs.Length - 1];
 				max--;
 			}
 
 			// Check if this is an absolute path?
-			if (dirs[0].Length == 0) {
+			if (dirs[0].Length == 0)
+			{
 				// Yes, replace the current directory
 				currentDirectory = rootDirectory;
 				index++;
 			}
 
 			// Iterate over the remaining path components
-			while ((currentDirectory != null) && (index < max)) {
+			while ((currentDirectory != null) && (index < max))
+			{
 				item = dirs[index];
 				entry = null;
-				if (currentDirectory.Node.NodeType == VfsNodeType.SymbolicLink) {
+				if (currentDirectory.Node.NodeType == VfsNodeType.SymbolicLink)
+				{
 					SymbolicLinkNode link = (SymbolicLinkNode)currentDirectory.Node;
-					if (0 != depth--) {
+					if (0 != depth--)
+					{
 						// The symlink stores a relative path, use it for a current relative lookup.
 						string target = link.Target;
 
@@ -173,8 +178,10 @@ namespace Mosa.FileSystem.VFS
 						PathResolutionFlags symflags = (flags & PathResolutionFlags.SymLinkLookupSafe);
 						entry = Resolve(ref target, symflags);
 					}
-					else {
-						if (PathResolutionFlags.DoNotThrowNotFoundException != (PathResolutionFlags.DoNotThrowNotFoundException & flags)) {
+					else
+					{
+						if (PathResolutionFlags.DoNotThrowNotFoundException != (PathResolutionFlags.DoNotThrowNotFoundException & flags))
+						{
 							// FIXME: Provide a MUI resource string for the exception
 #if VFS_EXCEPTIONS
 							throw new PathTooLongException();
@@ -182,14 +189,17 @@ namespace Mosa.FileSystem.VFS
 						}
 					}
 				}
-				else {
+				else
+				{
 					// Pass the lookup to the DirectoryEntry (and ultimately to the inode itself.)
 					entry = currentDirectory.Lookup(item);
 
 					// If lookup in the directory entry failed, ask the real INode to perform the lookup.
-					if (entry == null) {
+					if (entry == null)
+					{
 						IVfsNode node = currentDirectory.Node.Lookup(item);
-						if (node != null) {
+						if (node != null)
+						{
 							entry = DirectoryEntry.Allocate(currentDirectory, item, node);
 						}
 					}
@@ -199,7 +209,8 @@ namespace Mosa.FileSystem.VFS
 				index++;
 
 				// Check if we have a new path component?
-				if ((entry == null) && (PathResolutionFlags.DoNotThrowNotFoundException != (PathResolutionFlags.DoNotThrowNotFoundException & flags))) {
+				if ((entry == null) && (PathResolutionFlags.DoNotThrowNotFoundException != (PathResolutionFlags.DoNotThrowNotFoundException & flags)))
+				{
 					// FIXME: Move exception messages to MUI resources
 #if VFS_EXCEPTIONS
 					if (index == max)

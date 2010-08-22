@@ -21,7 +21,8 @@ namespace Mosa.DeviceSystem.PCI
 		/// <returns></returns>
 		public static string Lookup(ushort vendorID)
 		{
-			switch (vendorID) {
+			switch (vendorID)
+			{
 				case 0x0000: return "Gammagraphx, Inc. (or missing ID)";
 				case 0x0010: return "Allied Telesyn International";
 				case 0x001A: return "Ascend Communications, Inc.";
@@ -2028,7 +2029,8 @@ namespace Mosa.DeviceSystem.PCI
 		/// <returns></returns>
 		public static string Lookup(ushort vendorID, ushort deviceID)
 		{
-			switch ((uint)(((uint)vendorID << 16) | (uint)deviceID)) {
+			switch ((uint)(((uint)vendorID << 16) | (uint)deviceID))
+			{
 				case 0x00108139: return "AT-2500TX V3 Ethernet";
 				case 0x001C0001: return "PCAN-PCI CAN-Bus controller";
 				case 0x00700003: return "WinTV PVR-250";
@@ -10307,7 +10309,8 @@ namespace Mosa.DeviceSystem.PCI
 		/// <returns></returns>
 		public static string Lookup(ushort vendorID, ushort deviceID, ushort subSystem, ushort subVendor)
 		{
-			switch ((((ulong)vendorID << 48) | ((ulong)deviceID << 32) | ((ulong)subSystem << 16) | subVendor)) {
+			switch ((((ulong)vendorID << 48) | ((ulong)deviceID << 32) | ((ulong)subSystem << 16) | subVendor))
+			{
 #if !MONO
 				case 0x0E1100460E114091: return "Smart Array 6i";
 				case 0x0E1100460E11409A: return "Smart Array 641";

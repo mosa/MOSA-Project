@@ -222,7 +222,8 @@ namespace Mosa.DeviceDrivers.ISA
 			IWriteOnlyIOPort dmaPage;
 			IMemory memory;
 
-			switch (channel) {
+			switch (channel)
+			{
 				case 0: dmaAddress = channel0Address; dmaCount = channel0Count; dmaPage = channel0Page; memory = memory0; break;
 				case 1: dmaAddress = channel1Address; dmaCount = channel1Count; dmaPage = channel1Page; memory = memory1; break;
 				case 2: dmaAddress = channel2Address; dmaCount = channel2Count; dmaPage = channel2Page; memory = memory2; break;
@@ -262,7 +263,8 @@ namespace Mosa.DeviceDrivers.ISA
 			else
 				value = (byte)(value | DMAModeValue.WriteToMemory);
 
-			switch (type) {
+			switch (type)
+			{
 				case DMATransferType.Block: value = (byte)(value | DMATransferTypeValue.Block); break;
 				case DMATransferType.CascadeMode: value = (byte)(value | DMATransferTypeValue.CascadeMode); break;
 				case DMATransferType.OnDemand: value = (byte)(value | DMATransferTypeValue.OnDemand); break;
@@ -286,7 +288,8 @@ namespace Mosa.DeviceDrivers.ISA
 		/// <returns></returns>
 		protected IMemory GetTranserAddress(byte channel)
 		{
-			switch (channel) {
+			switch (channel)
+			{
 				case 0: return memory0;
 				case 1: return memory1;
 				case 2: return memory2;

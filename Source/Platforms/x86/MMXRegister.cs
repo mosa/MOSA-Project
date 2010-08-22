@@ -13,128 +13,128 @@ using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Platforms.x86
 {
-    /// <summary>
-    /// Represents an MMX register.
-    /// </summary>
-    public sealed class MMXRegister : GenericX86Register
-    {
-        #region Static data members
+	/// <summary>
+	/// Represents an MMX register.
+	/// </summary>
+	public sealed class MMXRegister : GenericX86Register
+	{
+		#region Static data members
 
-        /// <summary>
-        /// Represents the MMX register MM0.
-        /// </summary>
-        public static readonly MMXRegister MM0 = new MMXRegister(8, 0);
+		/// <summary>
+		/// Represents the MMX register MM0.
+		/// </summary>
+		public static readonly MMXRegister MM0 = new MMXRegister(8, 0);
 
-        /// <summary>
-        /// Represents the MMX register MM1.
-        /// </summary>
-        public static readonly MMXRegister MM1 = new MMXRegister(9, 1);
+		/// <summary>
+		/// Represents the MMX register MM1.
+		/// </summary>
+		public static readonly MMXRegister MM1 = new MMXRegister(9, 1);
 
-        /// <summary>
-        /// Represents the MMX register MM2.
-        /// </summary>
-        public static readonly MMXRegister MM2 = new MMXRegister(10, 2);
+		/// <summary>
+		/// Represents the MMX register MM2.
+		/// </summary>
+		public static readonly MMXRegister MM2 = new MMXRegister(10, 2);
 
-        /// <summary>
-        /// Represents the MMX register MM3.
-        /// </summary>
-        public static readonly MMXRegister MM3 = new MMXRegister(11, 3);
+		/// <summary>
+		/// Represents the MMX register MM3.
+		/// </summary>
+		public static readonly MMXRegister MM3 = new MMXRegister(11, 3);
 
-        /// <summary>
-        /// Represents the MMX register MM4.
-        /// </summary>
-        public static readonly MMXRegister MM4 = new MMXRegister(12, 4);
+		/// <summary>
+		/// Represents the MMX register MM4.
+		/// </summary>
+		public static readonly MMXRegister MM4 = new MMXRegister(12, 4);
 
-        /// <summary>
-        /// Represents the MMX register MM5.
-        /// </summary>
-        public static readonly MMXRegister MM5 = new MMXRegister(13, 5);
+		/// <summary>
+		/// Represents the MMX register MM5.
+		/// </summary>
+		public static readonly MMXRegister MM5 = new MMXRegister(13, 5);
 
-        /// <summary>
-        /// Represents the MMX register MM6.
-        /// </summary>
-        public static readonly MMXRegister MM6 = new MMXRegister(14, 6);
+		/// <summary>
+		/// Represents the MMX register MM6.
+		/// </summary>
+		public static readonly MMXRegister MM6 = new MMXRegister(14, 6);
 
-        /// <summary>
-        /// Represents the MMX register MM7.
-        /// </summary>
-        public static readonly MMXRegister MM7 = new MMXRegister(15, 7);
+		/// <summary>
+		/// Represents the MMX register MM7.
+		/// </summary>
+		public static readonly MMXRegister MM7 = new MMXRegister(15, 7);
 
-        #endregion // Static data members
+		#endregion // Static data members
 
-        #region Data members
+		#region Data members
 
-        /// <summary>
-        /// The register index.
-        /// </summary>
-        private int _registerCode;
+		/// <summary>
+		/// The register index.
+		/// </summary>
+		private int _registerCode;
 
-        #endregion // Data members
+		#endregion // Data members
 
-        #region Construction
+		#region Construction
 
-        /// <summary>
-        /// Initializes a new instance of the MMX register.
-        /// </summary>
-        /// <param name="index"></param>
-        /// <param name="registerCode">The MMX register index.</param>
-        private MMXRegister(int index, int registerCode) :
-            base(index, false)
-        {
-            _registerCode = registerCode;
-        }
+		/// <summary>
+		/// Initializes a new instance of the MMX register.
+		/// </summary>
+		/// <param name="index"></param>
+		/// <param name="registerCode">The MMX register index.</param>
+		private MMXRegister(int index, int registerCode) :
+			base(index, false)
+		{
+			_registerCode = registerCode;
+		}
 
-        #endregion // Construction
+		#endregion // Construction
 
-        #region Properties
+		#region Properties
 
-        /// <summary>
-        /// MMX registers do not support fp operation.
-        /// </summary>
-        public override bool IsFloatingPoint
-        {
-            get { return false; }
-        }
+		/// <summary>
+		/// MMX registers do not support fp operation.
+		/// </summary>
+		public override bool IsFloatingPoint
+		{
+			get { return false; }
+		}
 
-        /// <summary>
-        /// Retrieves the register index.
-        /// </summary>
-        public override int RegisterCode
-        {
-            get { return _registerCode; }
-        }
+		/// <summary>
+		/// Retrieves the register index.
+		/// </summary>
+		public override int RegisterCode
+		{
+			get { return _registerCode; }
+		}
 
-        /// <summary>
-        /// Returns the width of MMX registers.
-        /// </summary>
-        public override int Width
-        {
-            get { return 64; }
-        }
+		/// <summary>
+		/// Returns the width of MMX registers.
+		/// </summary>
+		public override int Width
+		{
+			get { return 64; }
+		}
 
-        #endregion // Properties
+		#endregion // Properties
 
-        #region Methods
+		#region Methods
 
-        /// <summary>
-        /// Determines if the signature type fits into the register.
-        /// </summary>
-        /// <param name="type">The signature type to check.</param>
-        /// <returns>True if the signature type fits.</returns>
-        public override bool IsValidSigType(SigType type)
-        {
-            return (type.Type == CilElementType.I8 || type.Type == CilElementType.U8);
-        }
+		/// <summary>
+		/// Determines if the signature type fits into the register.
+		/// </summary>
+		/// <param name="type">The signature type to check.</param>
+		/// <returns>True if the signature type fits.</returns>
+		public override bool IsValidSigType(SigType type)
+		{
+			return (type.Type == CilElementType.I8 || type.Type == CilElementType.U8);
+		}
 
-        /// <summary>
-        /// Returns the string representation of the register.
-        /// </summary>
-        /// <returns>The string representation of the register.</returns>
-        public override string ToString()
-        {
-            return String.Format("MM{0}", _registerCode);
-        }
+		/// <summary>
+		/// Returns the string representation of the register.
+		/// </summary>
+		/// <returns>The string representation of the register.</returns>
+		public override string ToString()
+		{
+			return String.Format("MM{0}", _registerCode);
+		}
 
-        #endregion // Methods
-    }
+		#endregion // Methods
+	}
 }

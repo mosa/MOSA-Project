@@ -93,7 +93,8 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			StringBuilder text = new StringBuilder();
 
-			for (; !ctx.EndOfInstruction; ctx.GotoNext()) {
+			for (; !ctx.EndOfInstruction; ctx.GotoNext())
+			{
 
 				text.Length = 0;
 

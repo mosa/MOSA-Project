@@ -10,7 +10,7 @@ using Mosa.Kernel.X86;
 
 namespace Mosa.HelloWorld
 {
- 
+
 	/// <summary>
 	/// 
 	/// </summary>
@@ -109,7 +109,8 @@ namespace Mosa.HelloWorld
 			Screen.NextLine();
 
 			Screen.Color = 0x0F;
-			for (uint index = 0; index < 80; index++) {
+			for (uint index = 0; index < 80; index++)
+			{
 				if (index == 60)
 					Screen.Write((char)203);
 				else
@@ -241,7 +242,8 @@ namespace Mosa.HelloWorld
 			Screen.Write(':');
 			Screen.NextLine();
 
-			for (uint index = 0; index < Multiboot.MemoryMapCount; index++) {
+			for (uint index = 0; index < Multiboot.MemoryMapCount; index++)
+			{
 				Screen.Color = 0x0F;
 				Screen.Write(Multiboot.GetMemoryMapBase(index), 16, 10);
 				Screen.Write(' ');
@@ -382,32 +384,34 @@ namespace Mosa.HelloWorld
 
 			Screen.Write((ulong)((info & 0x3000) >> 12), 16, 2);
 			Screen.NextLine();
-            Screen.Color = 0x0A;
-            Screen.Write('C');
-            Screen.Write('o');
-            Screen.Write('r');
-            Screen.Write('e');
-            Screen.Write('s');
-            Screen.Write(':');
-            Screen.Write(' ');
-            Screen.Write(' ');
-            Screen.Write(' ');
-            Screen.Write(' ');
-            Screen.Color = 0x0F;
-            
-            info = Platforms.x86.Native.CpuIdEax(4);
-            Screen.Write((ulong)((info >> 26) + 1), 16, 2);
+			Screen.Color = 0x0A;
+			Screen.Write('C');
+			Screen.Write('o');
+			Screen.Write('r');
+			Screen.Write('e');
+			Screen.Write('s');
+			Screen.Write(':');
+			Screen.Write(' ');
+			Screen.Write(' ');
+			Screen.Write(' ');
+			Screen.Write(' ');
+			Screen.Color = 0x0F;
+
+			info = Platforms.x86.Native.CpuIdEax(4);
+			Screen.Write((ulong)((info >> 26) + 1), 16, 2);
 			#endregion
 
 			//Multiboot.Dump(4,53);
 
 			Screen.Row = 23;
-			for (uint index = 0; index < 80; index++) {
+			for (uint index = 0; index < 80; index++)
+			{
 				Screen.Column = index;
 				Screen.Write((char)205);
 			}
 
-			for (uint index = 2; index < 24; index++) {
+			for (uint index = 2; index < 24; index++)
+			{
 				Screen.Column = 60;
 				Screen.Row = index;
 
@@ -445,7 +449,8 @@ namespace Mosa.HelloWorld
 			Screen.Write('r');
 			Screen.Write('g');
 
-			while (true) {
+			while (true)
+			{
 				CMOS.Instance.Dump(2, 65);
 				DisplayTime();
 			}

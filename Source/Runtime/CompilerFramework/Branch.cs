@@ -39,9 +39,9 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Returns the branch targets instruction index.
 		/// </summary>
 		public int[] Targets { get { return _branchTargets; } set { _branchTargets = value; } }
-		
+
 		#endregion // Properties
-		
+
 		#region Construction
 
 		/// <summary>

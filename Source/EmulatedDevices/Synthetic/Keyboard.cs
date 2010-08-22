@@ -85,7 +85,8 @@ namespace Mosa.EmulatedDevices.Synthetic
 
 			key.KeyType = KeyType.RegularKey;
 
-			switch (keyInfo.Key) {
+			switch (keyInfo.Key)
+			{
 				case ConsoleKey.Home: key.KeyType = KeyType.Home; break;
 				case ConsoleKey.UpArrow: key.KeyType = KeyType.UpArrow; break;
 				case ConsoleKey.PageUp: key.KeyType = KeyType.PageUp; break;

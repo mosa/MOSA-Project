@@ -32,19 +32,23 @@ namespace Mosa.Tools.Mono.UpdateSource
 			Console.WriteLine("Written by Philipp Garcia (phil@thinkedge.com)");
 			Console.WriteLine();
 
-			if (args.Length < 1) {
+			if (args.Length < 1)
+			{
 				Console.WriteLine("Usage: UpdateSource [source files]");
 				Console.Error.WriteLine("ERROR: Missing argument");
 				return -1;
 			}
 
-			try {
-				foreach (string source in args) {
+			try
+			{
+				foreach (string source in args)
+				{
 					string root = Path.GetDirectoryName(source);
 
 					List<string> lines = new List<string>();
 
-					foreach (string file in System.IO.File.ReadAllLines(source)) {
+					foreach (string file in System.IO.File.ReadAllLines(source))
+					{
 						if (file.Contains(".Internal.cs")) continue;
 
 						lines.Add(file);
@@ -54,7 +58,8 @@ namespace Mosa.Tools.Mono.UpdateSource
 
 						string other = file.Insert(file.Length - 3, ".Internal");
 
-						if (File.Exists(Path.Combine(root, other))) {
+						if (File.Exists(Path.Combine(root, other)))
+						{
 							Console.WriteLine(other);
 							lines.Add(other);
 						}
@@ -64,7 +69,8 @@ namespace Mosa.Tools.Mono.UpdateSource
 				}
 
 			}
-			catch (Exception e) {
+			catch (Exception e)
+			{
 				Console.Error.WriteLine("Error: " + e.ToString());
 				return -1;
 			}

@@ -62,7 +62,7 @@ namespace Mosa.DeviceSystem
 		/// <param name="y">The y.</param>
 		public override void SetPixel(uint color, uint x, uint y)
 		{
-			memory.Write8(GetOffset(x, y), (byte) color);
+			memory.Write8(GetOffset(x, y), (byte)color);
 		}
 	}
 

@@ -71,15 +71,18 @@ namespace Mosa.Tools.MakeIsoImage
 		{
 			IsoFolder f = this.isoRoot;
 			string[] ar = NormalizePath(path).Split('/');
-			for (int i = 0; i < ar.Length; i++) {
+			for (int i = 0; i < ar.Length; i++)
+			{
 				string key = ar[i].Trim().ToLower();
-				if (!f.entries.ContainsKey(key)) {
+				if (!f.entries.ContainsKey(key))
+				{
 					var subf = new IsoFolder();
 					subf.Name = ar[i].Trim();
 					f.entries[key] = subf;
 				}
 				IsoEntry e = f.entries[key];
-				if (e.IsFile) {
+				if (e.IsFile)
+				{
 					//throw new Exception("cannot create directory \"" + ar[i].Trim() + "\", a file by that Name already exists");
 					return; // already exists - silently fail for now
 				}
@@ -138,7 +141,8 @@ namespace Mosa.Tools.MakeIsoImage
 
 			this.generator = new Generator(this.pedantic);
 			GenerateIso(); // 1st pass to calculate offsets
-			using (FileStream stream = File.OpenWrite(isoFileName)) {
+			using (FileStream stream = File.OpenWrite(isoFileName))
+			{
 				this.generator.ResetWithFileStream(stream);
 				GenerateIso(); // 2nd pass to actually write the data
 			}
@@ -178,15 +182,18 @@ namespace Mosa.Tools.MakeIsoImage
 			string[] ar = NormalizePath(path).Split('/');
 			int i;
 			IsoFolder f = this.isoRoot;
-			for (i = 0; i < ar.Length - 1; i++) {
+			for (i = 0; i < ar.Length - 1; i++)
+			{
 				key = ar[i].Trim().ToLower();
-				if (!f.entries.ContainsKey(key)) {
+				if (!f.entries.ContainsKey(key))
+				{
 					var subf = new IsoFolder();
 					subf.Name = ar[i].Trim();
 					f.entries[key] = subf;
 				}
 				IsoEntry e = f.entries[key];
-				if (e.IsFile) {
+				if (e.IsFile)
+				{
 					throw new Exception("cannot create directory \"" + ar[i].Trim() + "\", a file by that Name already exists");
 					//return;
 				}
@@ -195,7 +202,8 @@ namespace Mosa.Tools.MakeIsoImage
 			var x = new IsoFile(fileInfo);
 			x.Name = ar[i].Trim();
 			key = ar[i].Trim().ToLower();
-			if (f.entries.ContainsKey(key)) {
+			if (f.entries.ContainsKey(key))
+			{
 				//throw new Exception("file or folder by that Name already exists");
 				return (IsoFile)f.entries[key]; // just don't add it for now...
 			}
@@ -378,11 +386,13 @@ namespace Mosa.Tools.MakeIsoImage
 			byte[] b_di = this.generator.IsoName(thisFolder.Name, true);
 			di.Byte((byte)b_di.Length, 1);
 			di.Byte(0, 2); // Extended Attribute Record Length
-			if (lsb) {
+			if (lsb)
+			{
 				di.IntLSB(thisFolder.DataBlock, 3, 6); // Location of Extent
 				di.ShortLSB(parentFolder.PathTableEntry, 7, 8); // Parent Directory Number
 			}
-			else {
+			else
+			{
 				di.IntMSB(thisFolder.DataBlock, 3, 6); // Location of Extent
 				di.ShortMSB(parentFolder.PathTableEntry, 7, 8); // Parent Directory Number
 			}
@@ -462,7 +472,8 @@ namespace Mosa.Tools.MakeIsoImage
 			byte[] fileName = this.generator.IsoName(name, true);
 			string cont = DirectoryRecordEx(fileName, name, e, root, false);
 #if ROCKRIDGE
-			while (cont.Length > 0) {
+			while (cont.Length > 0)
+			{
 				cont = DirectoryRecordEx(fileName, cont, e, 0, true);
 			}
 #endif
@@ -492,7 +503,7 @@ namespace Mosa.Tools.MakeIsoImage
 			byte LEN_SU = 0;
 #if ROCKRIDGE
 			if (root != 1) // don't generate susp on PVD's root entry...
-            {
+			{
 				b_su = Susp(ref realName, e, root == 2, secondPass, (byte)(255 - LEN_DR));
 				if (b_su.Length > 255)
 					throw new NotImplementedException("can't yet handle SUSP > 255 bytes");
@@ -511,16 +522,18 @@ namespace Mosa.Tools.MakeIsoImage
 			// in this test - I round the data length up to the next multiple of 2048, didn't help fix my booting problem though...
 			dr.IntLSBMSB(((e.DataLength - 1) / 2048 + 1) * 2048, 11, 18); // Data Length ( 9.1.4 )
 #else
-            dr.IntLSBMSB(e.DataLength, 11, 18); // Data Length ( 9.1.4 )
+			dr.IntLSBMSB(e.DataLength, 11, 18); // Data Length ( 9.1.4 )
 #endif
 			dr.BinaryDateTime(System.DateTime.Now, 19, 25); // Recording Date and Time ( 9.1.5 )
 			byte flags = 0;
-			if (e.IsFile) {
+			if (e.IsFile)
+			{
 				IsoFile f = (IsoFile)e;
 				if ((f.fileInfo.Attributes & FileAttributes.Hidden) != 0)
 					flags |= 1; // hidden
 			}
-			else {
+			else
+			{
 				// TODO FIXME - not supporting hidden folders right now
 				//IsoFolder f = (IsoFolder)e;
 				//if ((f.dirInfo.Attributes & DirectoryAttributes.Hidden) != 0)
@@ -529,8 +542,8 @@ namespace Mosa.Tools.MakeIsoImage
 			if (e.IsFolder)
 				flags |= 2; // directory
 #if false // I'm disabling this because analysing of a working ISO never sets this bit...
-            if (real_name.Length == 0)
-                flags |= 128; // final
+			if (real_name.Length == 0)
+				flags |= 128; // final
 #endif
 			dr.Byte(flags, 26); // flags ( 9.1.6 )
 			dr.Byte(0, 27); // File Unit Size ( 9.1.7 )
@@ -549,8 +562,10 @@ namespace Mosa.Tools.MakeIsoImage
 			MemoryStream m = new MemoryStream();
 			bool dots = (name == "." || name == "..");
 
-			if (!secondPass) {
-				if (root) {
+			if (!secondPass)
+			{
+				if (root)
+				{
 					susp_base_sp(m);
 					susp_base_ce(m);
 				}
@@ -623,7 +638,8 @@ namespace Mosa.Tools.MakeIsoImage
 				flags |= 2;
 			else if (name == "..")
 				flags |= 4;
-			else if (name.Length > (available - 5)) {
+			else if (name.Length > (available - 5))
+			{
 				flags |= 1; // need another entry...
 				cont = name.Substring(available - 5);
 				name = name.Substring(0, available - 5);

@@ -11,7 +11,7 @@ namespace Mosa.Runtime.Linker
 	public class ObjectFileLayoutStage : BaseAssemblyCompilerStage, IAssemblyCompilerStage, IPipelineStage
 	{
 		private IAssemblyLinker linker;
-		
+
 		#region Methods
 
 		/// <summary>
@@ -27,10 +27,10 @@ namespace Mosa.Runtime.Linker
 			long fileSizeOfImage = fileAlignment;
 
 			// Move all sections to their right positions
-			foreach (LinkerSection ls in this.linker.Sections) 
+			foreach (LinkerSection ls in this.linker.Sections)
 			{
 				// Only use a section with something inside
-				if (ls.Length > 0) 
+				if (ls.Length > 0)
 				{
 					// Set the section virtualAddress
 					ls.VirtualAddress = new IntPtr(this.linker.BaseAddress + virtualSizeOfImage);
@@ -53,7 +53,8 @@ namespace Mosa.Runtime.Linker
 		protected virtual void LayoutSymbols()
 		{
 			// Adjust the symbol addresses
-			foreach (LinkerSymbol symbol in this.linker.Symbols) {
+			foreach (LinkerSymbol symbol in this.linker.Symbols)
+			{
 				LinkerSection ls = linker.GetSection(symbol.Section);
 				symbol.Offset = ls.Offset + symbol.SectionAddress;
 				symbol.VirtualAddress = new IntPtr(ls.VirtualAddress.ToInt64() + symbol.SectionAddress);

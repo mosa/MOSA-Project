@@ -42,11 +42,13 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Mul(Context ctx)
 		{
-			if (ctx.Operand1 is ConstantOperand && ctx.Operand2 is ConstantOperand) {
+			if (ctx.Operand1 is ConstantOperand && ctx.Operand2 is ConstantOperand)
+			{
 				int result = 0;
 				float fresult = 0.0f; ;
 				double dresult = 0.0;
-				switch (ctx.Result.Type.Type) {
+				switch (ctx.Result.Type.Type)
+				{
 					case Mosa.Runtime.Metadata.CilElementType.Char:
 						goto case Mosa.Runtime.Metadata.CilElementType.U2;
 					case Mosa.Runtime.Metadata.CilElementType.U1:
@@ -95,11 +97,13 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Div(Context ctx)
 		{
-			if (ctx.Operand1 is ConstantOperand && ctx.Operand2 is ConstantOperand) {
+			if (ctx.Operand1 is ConstantOperand && ctx.Operand2 is ConstantOperand)
+			{
 				int result = 0;
 				float fresult = 0.0f; ;
 				double dresult = 0.0;
-				switch (ctx.Result.Type.Type) {
+				switch (ctx.Result.Type.Type)
+				{
 					case Mosa.Runtime.Metadata.CilElementType.Char:
 						goto case Mosa.Runtime.Metadata.CilElementType.U2;
 					case Mosa.Runtime.Metadata.CilElementType.U1:
@@ -148,11 +152,13 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Rem(Context ctx)
 		{
-			if (ctx.Operand1 is ConstantOperand && ctx.Operand2 is ConstantOperand) {
+			if (ctx.Operand1 is ConstantOperand && ctx.Operand2 is ConstantOperand)
+			{
 				int result = 0;
 				float fresult = 0.0f; ;
 				double dresult = 0.0;
-				switch (ctx.Result.Type.Type) {
+				switch (ctx.Result.Type.Type)
+				{
 					case Mosa.Runtime.Metadata.CilElementType.Char:
 						goto case Mosa.Runtime.Metadata.CilElementType.U2;
 					case Mosa.Runtime.Metadata.CilElementType.U1:
@@ -201,11 +207,13 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Add(Context ctx)
 		{
-			if (ctx.Operand1 is ConstantOperand && ctx.Operand2 is ConstantOperand) {
+			if (ctx.Operand1 is ConstantOperand && ctx.Operand2 is ConstantOperand)
+			{
 				int result = 0;
 				float fresult = 0.0f; ;
 				double dresult = 0.0;
-				switch (ctx.Result.Type.Type) {
+				switch (ctx.Result.Type.Type)
+				{
 					case Mosa.Runtime.Metadata.CilElementType.Char:
 						goto case Mosa.Runtime.Metadata.CilElementType.U2;
 					case Mosa.Runtime.Metadata.CilElementType.U1:
@@ -255,11 +263,13 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Sub(Context ctx)
 		{
-			if (ctx.Operand1 is ConstantOperand && ctx.Operand2 is ConstantOperand) {
+			if (ctx.Operand1 is ConstantOperand && ctx.Operand2 is ConstantOperand)
+			{
 				int result = 0;
 				float fresult = 0.0f; ;
 				double dresult = 0.0;
-				switch (ctx.Result.Type.Type) {
+				switch (ctx.Result.Type.Type)
+				{
 					case Mosa.Runtime.Metadata.CilElementType.Char:
 						goto case Mosa.Runtime.Metadata.CilElementType.U2;
 					case Mosa.Runtime.Metadata.CilElementType.U1:

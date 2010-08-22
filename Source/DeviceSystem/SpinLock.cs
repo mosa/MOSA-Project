@@ -20,7 +20,7 @@ namespace Mosa.DeviceSystem
 		/// Enters spinlock
 		/// </summary>
 		public void Enter() { }
-		
+
 		/// <summary>
 		/// Exits spinlock
 		/// </summary>

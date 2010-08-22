@@ -18,13 +18,13 @@ using Mosa.Runtime.CompilerFramework;
 
 namespace Mosa.Platforms.x86.CPUx86
 {
-    /// <summary>
-    /// Representations the x86 cli instruction.
-    /// </summary>
+	/// <summary>
+	/// Representations the x86 cli instruction.
+	/// </summary>
 	public sealed class PushadInstruction : BaseInstruction
-    {
+	{
 
-        #region Methods
+		#region Methods
 
 		/// <summary>
 		/// Emits the specified platform instruction.
@@ -46,6 +46,6 @@ namespace Mosa.Platforms.x86.CPUx86
 			visitor.Pushad(context);
 		}
 
-        #endregion // Methods
-    }
+		#endregion // Methods
+	}
 }

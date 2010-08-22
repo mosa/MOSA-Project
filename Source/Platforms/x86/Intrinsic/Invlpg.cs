@@ -14,11 +14,11 @@ using Mosa.Runtime.Vm;
 
 namespace Mosa.Platforms.x86.Intrinsic
 {
-    /// <summary>
+	/// <summary>
 	/// Representations the x86 Invlpg instruction.
-    /// </summary>
+	/// </summary>
 	public sealed class Invlpg : IIntrinsicMethod
-    {
+	{
 
 		#region Methods
 
@@ -32,6 +32,6 @@ namespace Mosa.Platforms.x86.Intrinsic
 			context.SetInstruction(CPUx86.Instruction.InvlpgInstruction, null, context.Operand1);
 		}
 
-        #endregion // Methods
-    }
+		#endregion // Methods
+	}
 }

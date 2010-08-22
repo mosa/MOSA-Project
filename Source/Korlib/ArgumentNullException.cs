@@ -9,35 +9,35 @@
 
 namespace System
 {
-    /// <summary>
-    /// Implementation of the "System.ArgumentNullException" class
-    /// </summary>
-    public class ArgumentNullException : ArgumentException
-    {
+	/// <summary>
+	/// Implementation of the "System.ArgumentNullException" class
+	/// </summary>
+	public class ArgumentNullException : ArgumentException
+	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ArgumentNullException"/> class.
 		/// </summary>
-        public ArgumentNullException()
-            : this("Argument cannot be null.")
-        {}
+		public ArgumentNullException()
+			: this("Argument cannot be null.")
+		{ }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ArgumentNullException"/> class.
 		/// </summary>
 		/// <param name="message">The message.</param>
-        public ArgumentNullException(string message)
-            : base(message)
-        {}
+		public ArgumentNullException(string message)
+			: base(message)
+		{ }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ArgumentNullException"/> class.
 		/// </summary>
 		/// <param name="message">The message.</param>
 		/// <param name="paramName">Name of the param.</param>
-        public ArgumentNullException(string message, string paramName)
-            : base(message)
-        {
-            this.paramName = paramName;
-        }
-    }
+		public ArgumentNullException(string message, string paramName)
+			: base(message)
+		{
+			this.paramName = paramName;
+		}
+	}
 }

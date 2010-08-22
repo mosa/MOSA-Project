@@ -44,12 +44,14 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 			// Opcode specific handling
 			ushort locIdx;
-			switch (_opcode) {
+			switch (_opcode)
+			{
 				case OpCode.Ldloc:
 					decoder.Decode(out locIdx);
 					break;
 
-				case OpCode.Ldloc_s: {
+				case OpCode.Ldloc_s:
+					{
 						byte loc;
 						decoder.Decode(out loc);
 						locIdx = loc;
@@ -78,10 +80,10 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 			// Push the loaded value onto the evaluation stack
 			Operand localVariableOperand = decoder.Compiler.GetLocalOperand(locIdx);
-		    Operand result = LoadInstruction.CreateResultOperand(decoder, localVariableOperand.StackType, localVariableOperand.Type);
+			Operand result = LoadInstruction.CreateResultOperand(decoder, localVariableOperand.StackType, localVariableOperand.Type);
 
-		    ctx.Operand1 = localVariableOperand;
-		    ctx.Result = result;
+			ctx.Operand1 = localVariableOperand;
+			ctx.Result = result;
 		}
 
 		/// <summary>

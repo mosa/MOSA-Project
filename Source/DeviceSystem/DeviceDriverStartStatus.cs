@@ -29,7 +29,7 @@ namespace Mosa.DeviceSystem
 		/// <summary>
 		/// Failed
 		/// </summary>
-		Failed		
+		Failed
 	}
 
 }

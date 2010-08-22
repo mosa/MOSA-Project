@@ -11,24 +11,24 @@ using Mosa.FileSystem.VFS;
 
 namespace Mosa.FileSystem.FAT
 {
-    /// <summary>
-    /// 
-    /// </summary>
+	/// <summary>
+	/// 
+	/// </summary>
 	public class VfsFileSystem : IFileSystemService, IFileSystem
 	{
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected FatFileSystem fat;
 
 		/// <summary>
 		/// Gets the FAT.
 		/// </summary>
 		/// <value>The FAT.</value>
-		public FatFileSystem FAT 
-        { 
-            get { return fat; } 
-        }
+		public FatFileSystem FAT
+		{
+			get { return fat; }
+		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="VfsFileSystem"/> class.
@@ -77,10 +77,10 @@ namespace Mosa.FileSystem.FAT
 		/// <summary>
 		/// </summary>
 		/// <value></value>
-		public bool IsReadOnly 
-        { 
-            get { return fat.IsReadOnly; } 
-        }
+		public bool IsReadOnly
+		{
+			get { return fat.IsReadOnly; }
+		}
 
 		/// <summary>
 		/// 

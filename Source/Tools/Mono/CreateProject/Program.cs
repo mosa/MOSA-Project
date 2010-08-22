@@ -32,20 +32,23 @@ namespace Mosa.Tools.Mono.CreateProject
 			Console.WriteLine("Written by Philipp Garcia (phil@thinkedge.com)");
 			Console.WriteLine();
 
-			if (args.Length < 2) {
+			if (args.Length < 2)
+			{
 				Console.WriteLine("Usage: CreateProject <project name> [-s:source file] [-x:exclude file] [-c:conditions] [-ref:project dependencies] [-path:path]");
 				Console.Error.WriteLine("ERROR: Missing argument");
 				return -1;
 			}
 
-			try {
+			try
+			{
 				Project project = new Project();
 
 				project.Name = Path.GetFileNameWithoutExtension(args[0]);
 				project.ProjectFile = args[0];
 				bool first = true;
 
-				foreach (string opt in args) {
+				foreach (string opt in args)
+				{
 					if (first) first = false;
 					else if (opt.ToLower().StartsWith("-s:"))
 						project.ReadSourceFile(opt.Substring(3));
@@ -53,8 +56,10 @@ namespace Mosa.Tools.Mono.CreateProject
 						project.ReadExcludeFile(opt.Substring(3));
 					else if (opt.ToLower().StartsWith("-c:"))
 						project.Conditions.Add(opt.Substring(3));
-					else if (opt.ToLower().StartsWith("-ref:")) {
-						foreach (string split in opt.Substring(5).Split(new char[] { ';' })) {
+					else if (opt.ToLower().StartsWith("-ref:"))
+					{
+						foreach (string split in opt.Substring(5).Split(new char[] { ';' }))
+						{
 							string proj = split.Trim();
 							if (!string.IsNullOrEmpty(proj))
 								if (!proj.ToLower().Equals("none"))
@@ -63,7 +68,8 @@ namespace Mosa.Tools.Mono.CreateProject
 					}
 					else if (opt.ToLower().StartsWith("-path:"))
 						project.PathPrefix = opt.Substring(5) + Path.DirectorySeparatorChar;
-					else {
+					else
+					{
 						Console.Error.WriteLine("ERROR: Invalid argument: " + opt);
 						return -1;
 					}
@@ -71,7 +77,8 @@ namespace Mosa.Tools.Mono.CreateProject
 
 				project.Write();
 			}
-			catch (Exception e) {
+			catch (Exception e)
+			{
 				Console.Error.WriteLine("Error: " + e.ToString());
 				return -1;
 			}
@@ -123,7 +130,8 @@ namespace Mosa.Tools.Mono.CreateProject
 			/// </summary>
 			public void Write()
 			{
-				using (TextWriter writer = new StreamWriter(ProjectFile)) {
+				using (TextWriter writer = new StreamWriter(ProjectFile))
+				{
 
 					writer.WriteLine("<?xml version=\"1.0\" encoding=\"utf-8\"?>");
 					writer.WriteLine(
@@ -176,9 +184,11 @@ namespace Mosa.Tools.Mono.CreateProject
 
 					writer.WriteLine("\t</ItemGroup>");
 
-					if (ProjectReferences.Count > 0) {
+					if (ProjectReferences.Count > 0)
+					{
 						writer.WriteLine("\t<ItemGroup>");
-						foreach (string project in ProjectReferences) {
+						foreach (string project in ProjectReferences)
+						{
 							string fixedproject = project;
 
 							if (fixedproject.Equals("mscorlib")) fixedproject = "corlib"; // hack

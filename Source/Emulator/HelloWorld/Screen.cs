@@ -15,9 +15,9 @@ namespace Mosa.Kernel.X86
 	/// </summary>
 	public static class Screen
 	{
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		public static uint Column;
 
 		/// <summary>
@@ -39,7 +39,7 @@ namespace Mosa.Kernel.X86
 		/// 
 		/// </summary>
 		public const uint Rows = 40;
-		
+
 		/// <summary>
 		/// Gets the address.
 		/// </summary>
@@ -56,7 +56,8 @@ namespace Mosa.Kernel.X86
 		{
 			Column++;
 
-			if (Column >= Columns) {
+			if (Column >= Columns)
+			{
 				Column = 0;
 				Row++;
 			}
@@ -152,7 +153,8 @@ namespace Mosa.Kernel.X86
 			uint count = 0;
 			ulong temp = val;
 
-			do {
+			do
+			{
 				temp /= digits;
 				count++;
 			} while (temp != 0);
@@ -163,7 +165,8 @@ namespace Mosa.Kernel.X86
 			uint x = Column;
 			uint y = Row;
 
-			for (uint i = 0; i < count; i++) {
+			for (uint i = 0; i < count; i++)
+			{
 				uint digit = (uint)(val % digits);
 				Column = x;
 				Row = y;

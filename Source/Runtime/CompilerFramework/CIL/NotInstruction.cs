@@ -25,17 +25,17 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// Operand table according to ISO/IEC 23271:2006 (E), Partition III, 1.5, Table 5.
 		/// </summary>
 		private static readonly StackTypeCode[] _opTable = new StackTypeCode[] {
-            StackTypeCode.Unknown,
-            StackTypeCode.Int32,   
-            StackTypeCode.Int64, 
-            StackTypeCode.N,
-            StackTypeCode.Unknown, 
-            StackTypeCode.Unknown, 
-            StackTypeCode.Unknown
-        };
+			StackTypeCode.Unknown,
+			StackTypeCode.Int32,   
+			StackTypeCode.Int64, 
+			StackTypeCode.N,
+			StackTypeCode.Unknown, 
+			StackTypeCode.Unknown, 
+			StackTypeCode.Unknown
+		};
 
 		#endregion // Operand Table
-		
+
 		#region Construction
 
 		/// <summary>

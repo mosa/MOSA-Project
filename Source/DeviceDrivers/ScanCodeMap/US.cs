@@ -40,8 +40,10 @@ namespace Mosa.DeviceDrivers.ScanCodeMap
 			if (scancode == 0)
 				return key;
 
-			if (keyState == KeyState.Normal) {
-				if (scancode == 0xE0) {
+			if (keyState == KeyState.Normal)
+			{
+				if (scancode == 0xE0)
+				{
 					keyState = KeyState.Escaped;
 					return key;
 				}
@@ -53,7 +55,8 @@ namespace Mosa.DeviceDrivers.ScanCodeMap
 
 				key.KeyType = KeyType.RegularKey;
 
-				switch (scancode) {
+				switch (scancode)
+				{
 					case 1: key.Character = (char)27; break;
 					case 2: key.Character = '1'; break;
 					case 3: key.Character = '2'; break;
@@ -231,8 +234,10 @@ namespace Mosa.DeviceDrivers.ScanCodeMap
 				keyState = KeyState.Normal;
 				return key;
 			}
-			else if ((keyState == KeyState.Escaped) || (keyState == KeyState.EscapeBreak)) {
-				if (scancode == 0xE0) {
+			else if ((keyState == KeyState.Escaped) || (keyState == KeyState.EscapeBreak))
+			{
+				if (scancode == 0xE0)
+				{
 
 					key.KeyType = KeyType.RegularKey;
 
@@ -241,12 +246,14 @@ namespace Mosa.DeviceDrivers.ScanCodeMap
 					else
 						key.KeyPress = KeyEvent.Press.Make;
 
-					if (scancode == 0xF0) {
+					if (scancode == 0xF0)
+					{
 						keyState = KeyState.EscapeBreak;
 						return key;
 					}
 
-					switch (scancode) {
+					switch (scancode)
+					{
 						case 0x1C: key.Character = '\n'; break;
 						case 0x1D: key.KeyType = KeyType.LeftControl; break;
 						case 0x2A: key.KeyType = KeyType.LeftShift; break;
@@ -283,7 +290,8 @@ namespace Mosa.DeviceDrivers.ScanCodeMap
 					keyState = KeyState.Normal;
 					return key;
 				}
-				else if (keyState == KeyState.Espaced2) {
+				else if (keyState == KeyState.Espaced2)
+				{
 					keyState = KeyState.Normal;
 					return key;
 				}

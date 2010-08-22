@@ -47,7 +47,8 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CPUx86.IX86Visitor.Mov(Context ctx)
 		{
-			if (ctx.Result is ConstantOperand) {
+			if (ctx.Result is ConstantOperand)
+			{
 				ctx.SetInstruction(CPUx86.Instruction.NopInstruction);
 				return;
 			}
@@ -69,18 +70,19 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CPUx86.IX86Visitor.Mul(Context ctx)
 		{
-			if (ctx.Operand1 is ConstantOperand) {
+			if (ctx.Operand1 is ConstantOperand)
+			{
 				RegisterOperand ecx = new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.ECX);
-                Context before = ctx.InsertBefore();
-                before.SetInstruction(CPUx86.Instruction.PushInstruction, null, ecx);
+				Context before = ctx.InsertBefore();
+				before.SetInstruction(CPUx86.Instruction.PushInstruction, null, ecx);
 				before.AppendInstruction(CPUx86.Instruction.MovInstruction, ecx, ctx.Operand1);
 
 				ctx.Operand1 = ecx;
-                ctx.AppendInstruction(CPUx86.Instruction.PopInstruction, ecx);
+				ctx.AppendInstruction(CPUx86.Instruction.PopInstruction, ecx);
 			}
 
-            if (ctx.Operand1 == null || ctx.Result == null)
-                return;
+			if (ctx.Operand1 == null || ctx.Result == null)
+				return;
 		}
 
 		/// <summary>
@@ -102,7 +104,8 @@ namespace Mosa.Platforms.x86
 			Operand result = ctx.Result;
 			RegisterOperand register = new RegisterOperand(result.Type, GeneralPurposeRegister.EAX);
 
-			if (!(result is RegisterOperand)) {
+			if (!(result is RegisterOperand))
+			{
 				ctx.Result = register;
 				ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, result, register);
 			}
@@ -117,7 +120,8 @@ namespace Mosa.Platforms.x86
 			Operand result = ctx.Result;
 			RegisterOperand register = new RegisterOperand(result.Type, GeneralPurposeRegister.EAX);
 
-			if (!(result is RegisterOperand)) {
+			if (!(result is RegisterOperand))
+			{
 				ctx.Result = register;
 				ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, result, register);
 			}
@@ -139,32 +143,34 @@ namespace Mosa.Platforms.x86
 		{
 			if (Is32Bit(context.Operand1))
 				context.ReplaceInstructionOnly(CPUx86.Instruction.MovInstruction);
-			else {
+			else
+			{
 				Operand result = context.Result;
-				if (!(result is RegisterOperand)) {
+				if (!(result is RegisterOperand))
+				{
 					RegisterOperand ecx = new RegisterOperand(context.Result.Type, GeneralPurposeRegister.ECX);
-                    context.Result = ecx;
+					context.Result = ecx;
 					//context.SetInstruction(CPUx86.Instruction.MovsxInstruction, ecx, context.Operand1);
 					context.AppendInstruction(CPUx86.Instruction.MovInstruction, result, ecx);
 				}
 			}
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="context"></param>
-        void CPUx86.IX86Visitor.Movss(Context context)
-        {
-        }
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="context"></param>
+		void CPUx86.IX86Visitor.Movss(Context context)
+		{
+		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="context"></param>
-        void CPUx86.IX86Visitor.Movsd(Context context)
-        {
-        }
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="context"></param>
+		void CPUx86.IX86Visitor.Movsd(Context context)
+		{
+		}
 
 		/// <summary>
 		/// Visitation function for <see cref="CPUx86.IX86Visitor.Movzx"/> instructions.
@@ -174,9 +180,11 @@ namespace Mosa.Platforms.x86
 		{
 			if (Is32Bit(context.Operand1))
 				context.ReplaceInstructionOnly(CPUx86.Instruction.MovInstruction);
-			else {
+			else
+			{
 				Operand result = context.Result;
-				if (!(result is RegisterOperand)) {
+				if (!(result is RegisterOperand))
+				{
 					RegisterOperand ecx = new RegisterOperand(context.Result.Type, GeneralPurposeRegister.ECX);
 					context.SetInstruction(CPUx86.Instruction.MovzxInstruction, ecx, context.Operand1);
 					context.AppendInstruction(CPUx86.Instruction.MovInstruction, result, ecx);
@@ -192,7 +200,8 @@ namespace Mosa.Platforms.x86
 		{
 			Operand op = ctx.Operand1;
 
-			if (op is ConstantOperand) {
+			if (op is ConstantOperand)
+			{
 				RegisterOperand ebx = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EBX);
 				ctx.SetInstruction(CPUx86.Instruction.PushInstruction, null, ebx);
 				ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, ebx, op);
@@ -209,30 +218,30 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		void CPUx86.IX86Visitor.Cmp(Context ctx)
 		{
-            Operand left = ctx.Result;
-            Operand right = ctx.Operand1;
+			Operand left = ctx.Result;
+			Operand right = ctx.Operand1;
 
-            if (left is ConstantOperand)
-            {
-                RegisterOperand ecx = new RegisterOperand(left.Type, GeneralPurposeRegister.ECX);
-                Context before = ctx.InsertBefore();
-                before.SetInstruction(CPUx86.Instruction.PushInstruction, null, ecx);
-                before.AppendInstruction(CPUx86.Instruction.MovInstruction, ecx, left);
-                ctx.Result = ecx;
-                ctx.AppendInstruction(CPUx86.Instruction.PopInstruction, ecx);
-            }
-            if (right is ConstantOperand && !Is32Bit(left))
-            {
-                RegisterOperand edx = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EBX);
-                Context before = ctx.InsertBefore();
-                before.SetInstruction(CPUx86.Instruction.PushInstruction, null, edx);
-                if (IsSigned(left))
-                    before.AppendInstruction(CPUx86.Instruction.MovsxInstruction, edx, left);
-                else
-                    before.AppendInstruction(CPUx86.Instruction.MovzxInstruction, edx, left);
-                ctx.Result = edx;
-                ctx.AppendInstruction(CPUx86.Instruction.PopInstruction, edx);
-            }
+			if (left is ConstantOperand)
+			{
+				RegisterOperand ecx = new RegisterOperand(left.Type, GeneralPurposeRegister.ECX);
+				Context before = ctx.InsertBefore();
+				before.SetInstruction(CPUx86.Instruction.PushInstruction, null, ecx);
+				before.AppendInstruction(CPUx86.Instruction.MovInstruction, ecx, left);
+				ctx.Result = ecx;
+				ctx.AppendInstruction(CPUx86.Instruction.PopInstruction, ecx);
+			}
+			if (right is ConstantOperand && !Is32Bit(left))
+			{
+				RegisterOperand edx = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EBX);
+				Context before = ctx.InsertBefore();
+				before.SetInstruction(CPUx86.Instruction.PushInstruction, null, edx);
+				if (IsSigned(left))
+					before.AppendInstruction(CPUx86.Instruction.MovsxInstruction, edx, left);
+				else
+					before.AppendInstruction(CPUx86.Instruction.MovzxInstruction, edx, left);
+				ctx.Result = edx;
+				ctx.AppendInstruction(CPUx86.Instruction.PopInstruction, edx);
+			}
 		}
 
 		/// <summary>
@@ -244,7 +253,8 @@ namespace Mosa.Platforms.x86
 			Context before = context.InsertBefore();
 			before.SetInstruction(CPUx86.Instruction.CdqInstruction);
 
-			if (context.Operand1 is ConstantOperand) {
+			if (context.Operand1 is ConstantOperand)
+			{
 				RegisterOperand ecx = new RegisterOperand(context.Operand1.Type, GeneralPurposeRegister.ECX);
 				before.AppendInstruction(CPUx86.Instruction.MovInstruction, ecx, context.Operand1);
 				context.Operand1 = ecx;
@@ -261,7 +271,8 @@ namespace Mosa.Platforms.x86
 			Context before = context.InsertBefore();
 			before.SetInstruction(CPUx86.Instruction.XorInstruction, edx, edx);
 
-			if (context.Operand1 is ConstantOperand) {
+			if (context.Operand1 is ConstantOperand)
+			{
 				RegisterOperand ecx = new RegisterOperand(context.Operand1.Type, GeneralPurposeRegister.ECX);
 				before.AppendInstruction(CPUx86.Instruction.MovInstruction, ecx, context.Operand1);
 				context.Operand1 = ecx;
@@ -642,35 +653,35 @@ namespace Mosa.Platforms.x86
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void CPUx86.IX86Visitor.Jump(Context context) { }
-		
-        /// <summary>
+
+		/// <summary>
 		/// Visitation function for <see cref="CPUx86.IX86Visitor.Call"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void CPUx86.IX86Visitor.Call(Context context)
-        {
-            Operand destinationOperand = context.Operand1;
+		{
+			Operand destinationOperand = context.Operand1;
 
 			if (destinationOperand == null)
 			{
 				return;
 			}
 
-            if (destinationOperand is SymbolOperand)
-            {
-                return;
-            }
+			if (destinationOperand is SymbolOperand)
+			{
+				return;
+			}
 
-            if (!(destinationOperand is RegisterOperand))
-            {
-                Context before = context.InsertBefore();
-                RegisterOperand eax = new RegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.EAX);
+			if (!(destinationOperand is RegisterOperand))
+			{
+				Context before = context.InsertBefore();
+				RegisterOperand eax = new RegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.EAX);
 
-                before.SetInstruction(CPUx86.Instruction.MovInstruction, eax, destinationOperand);
-                context.Operand1 = eax;
-            }
-            
-        }
+				before.SetInstruction(CPUx86.Instruction.MovInstruction, eax, destinationOperand);
+				context.Operand1 = eax;
+			}
+
+		}
 
 		/// <summary>
 		/// Visitation function for <see cref="CPUx86.IX86Visitor.Branch"/> instructions.
@@ -683,7 +694,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="context">The context.</param>
 		void CPUx86.IX86Visitor.Not(Context context) { }
 
-        void CPUx86.IX86Visitor.SseRound(Context context) { }
+		void CPUx86.IX86Visitor.SseRound(Context context) { }
 
 		#endregion // IX86Visitor - Unused
 

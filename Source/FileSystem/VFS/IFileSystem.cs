@@ -10,19 +10,19 @@
 
 namespace Mosa.FileSystem.VFS
 {
-    /// <summary>
-    /// 
-    /// </summary>
+	/// <summary>
+	/// 
+	/// </summary>
 	public interface IFileSystem
 	{
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		bool IsReadOnly { get; }
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		IVfsNode Root { get; }
 	}
 }

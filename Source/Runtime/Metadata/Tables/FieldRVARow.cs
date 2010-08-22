@@ -12,12 +12,13 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 
-namespace Mosa.Runtime.Metadata.Tables 
+namespace Mosa.Runtime.Metadata.Tables
 {
 	/// <summary>
 	/// 
 	/// </summary>
-	public struct FieldRVARow {
+	public struct FieldRVARow
+	{
 		#region Data members
 
 		/// <summary>

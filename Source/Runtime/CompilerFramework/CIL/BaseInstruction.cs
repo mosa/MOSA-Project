@@ -88,7 +88,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		public virtual void Decode(Context ctx, IInstructionDecoder decoder, ITypeSystem typeSystem)
 		{
 			ctx.SetInstruction(this, DefaultOperandCount, DefaultResultCount);
-//			ctx.Ignore = false;
+			//			ctx.Ignore = false;
 		}
 
 		/// <summary>

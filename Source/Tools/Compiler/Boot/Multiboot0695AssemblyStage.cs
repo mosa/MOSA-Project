@@ -90,7 +90,7 @@ namespace Mosa.Tools.Compiler.Boot
 		#endregion // Constants
 
 		#region Data members
-		
+
 		private IAssemblyLinker linker;
 
 		/// <summary>
@@ -160,12 +160,14 @@ namespace Mosa.Tools.Compiler.Boot
 		/// </summary>
 		void IAssemblyCompilerStage.Run()
 		{
-			if (!secondStage) {
+			if (!secondStage)
+			{
 				IntPtr entryPoint = WriteMultibootEntryPoint();
 				WriteMultibootHeader(entryPoint);
 				secondStage = true;
 			}
-			else {
+			else
+			{
 				var typeInitializerSchedulerStage = this.compiler.Pipeline.FindFirst<ITypeInitializerSchedulerStage>();
 
 				SigType I4 = new SigType(CilElementType.I4);
@@ -180,7 +182,7 @@ namespace Mosa.Tools.Compiler.Boot
 				ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, new MemoryOperand(I4, ecx.Register, new IntPtr(0x0)), eax);
 				ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, new MemoryOperand(I4, ecx.Register, new IntPtr(0x4)), ebx);
 
-			    SymbolOperand entryPoint = SymbolOperand.FromMethod(typeInitializerSchedulerStage.Method);
+				SymbolOperand entryPoint = SymbolOperand.FromMethod(typeInitializerSchedulerStage.Method);
 
 				ctx.AppendInstruction(CPUx86.Instruction.CallInstruction, null, entryPoint);
 				ctx.AppendInstruction(CPUx86.Instruction.RetInstruction);
@@ -226,7 +228,8 @@ namespace Mosa.Tools.Compiler.Boot
 			// HACK: According to the multiboot specification this _header must be within the first 8K of the
 			// kernel binary. Since the text section is always first, this should take care of the problem.
 			using (Stream stream = this.linker.Allocate(MultibootHeaderSymbolName, SectionKind.Text, 64, 4))
-			using (BinaryWriter bw = new BinaryWriter(stream, Encoding.ASCII)) {
+			using (BinaryWriter bw = new BinaryWriter(stream, Encoding.ASCII))
+			{
 				// flags - multiboot flags
 				uint flags = /*HEADER_MB_FLAG_VIDEO_MODES_REQUIRED | */HEADER_MB_FLAG_MEMORY_INFO_REQUIRED | HEADER_MB_FLAG_MODULES_PAGE_ALIGNED;
 				// The multiboot _header checksum 
@@ -243,7 +246,8 @@ namespace Mosa.Tools.Compiler.Boot
 				uint entry_point = (uint)entryPoint.ToInt32();
 
 				// Are we linking an ELF binary?
-				if (!(this.linker is Elf32Linker || this.linker is Elf64Linker)) {
+				if (!(this.linker is Elf32Linker || this.linker is Elf64Linker))
+				{
 					// Check the linker layout settings
 					if (this.linker.LoadSectionAlignment != this.linker.VirtualSectionAlignment)
 						throw new LinkerException(@"Load and virtual section alignment must be identical if you are booting non-ELF binaries with a multiboot bootloader.");
@@ -292,7 +296,8 @@ namespace Mosa.Tools.Compiler.Boot
 				"Specify the video mode for multiboot [{text|graphics}].",
 				delegate(string v)
 				{
-					switch (v.ToLower()) {
+					switch (v.ToLower())
+					{
 						case "text":
 							videoMode = 1;
 							break;
@@ -310,11 +315,13 @@ namespace Mosa.Tools.Compiler.Boot
 				delegate(string v)
 				{
 					uint val;
-					if (uint.TryParse(v, out val)) {
+					if (uint.TryParse(v, out val))
+					{
 						// TODO: this probably needs further validation
 						videoWidth = val;
 					}
-					else {
+					else
+					{
 						throw new OptionException("Invalid value for multiboot video width: " + v, "multiboot-video-width");
 					}
 				});
@@ -325,11 +332,13 @@ namespace Mosa.Tools.Compiler.Boot
 				delegate(string v)
 				{
 					uint val;
-					if (uint.TryParse(v, out val)) {
+					if (uint.TryParse(v, out val))
+					{
 						// TODO: this probably needs further validation
 						videoHeight = val;
 					}
-					else {
+					else
+					{
 						throw new OptionException("Invalid value for multiboot video height: " + v, "multiboot-video-height");
 					}
 				});
@@ -340,11 +349,13 @@ namespace Mosa.Tools.Compiler.Boot
 				delegate(string v)
 				{
 					uint val;
-					if (uint.TryParse(v, out val)) {
+					if (uint.TryParse(v, out val))
+					{
 						// TODO: this probably needs further validation
 						videoDepth = val;
 					}
-					else {
+					else
+					{
 						throw new OptionException("Invalid value for multiboot video depth: " + v, "multiboot-video-depth");
 					}
 				});

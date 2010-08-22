@@ -1,33 +1,33 @@
 ﻿namespace Mosa.Tools.StageVisualizer
 {
-    partial class frmMain
-    {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
-        private System.ComponentModel.IContainer components = null;
+	partial class frmMain
+	{
+		/// <summary>
+		/// Required designer variable.
+		/// </summary>
+		private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
-        protected override void Dispose(bool disposing)
-        {
-            if (disposing && (components != null))
-            {
-                components.Dispose();
-            }
-            base.Dispose(disposing);
-        }
+		/// <summary>
+		/// Clean up any resources being used.
+		/// </summary>
+		/// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
+		protected override void Dispose(bool disposing)
+		{
+			if (disposing && (components != null))
+			{
+				components.Dispose();
+			}
+			base.Dispose(disposing);
+		}
 
-        #region Windows Form Designer generated code
+		#region Windows Form Designer generated code
 
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
-        private void InitializeComponent()
-        {
+		/// <summary>
+		/// Required method for Designer support - do not modify
+		/// the contents of this method with the code editor.
+		/// </summary>
+		private void InitializeComponent()
+		{
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
 			this.panel1 = new System.Windows.Forms.Panel();
 			this.cbStage = new System.Windows.Forms.CheckBox();
@@ -318,31 +318,31 @@
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
-        }
+		}
 
-        #endregion
+		#endregion
 
-        private System.Windows.Forms.Panel panel1;
-        private System.Windows.Forms.ComboBox cbMethods;
-        private System.Windows.Forms.Button btnLoad;
-        private System.Windows.Forms.ComboBox cbStages;
-        private System.Windows.Forms.Button btnUpdate;
-        private System.Windows.Forms.Label label2;
-        private System.Windows.Forms.CheckBox cbLabel;
-        private System.Windows.Forms.ComboBox cbLabels;
-        private System.Windows.Forms.CheckBox cbStage;
-        private System.Windows.Forms.CheckBox cbBlock;
-        private System.Windows.Forms.ComboBox cbBlocks;
-        private System.Windows.Forms.TabControl tabControl1;
-        private System.Windows.Forms.TabPage Result;
-        private System.Windows.Forms.TabPage Source;
-        private System.Windows.Forms.RichTextBox tbSource;
-        private System.Windows.Forms.RichTextBox tbResult;
-        private System.Windows.Forms.OpenFileDialog openFileDialog1;
-        private System.Windows.Forms.StatusStrip statusStrip1;
-        private System.Windows.Forms.ToolStripStatusLabel lbStatus;
+		private System.Windows.Forms.Panel panel1;
+		private System.Windows.Forms.ComboBox cbMethods;
+		private System.Windows.Forms.Button btnLoad;
+		private System.Windows.Forms.ComboBox cbStages;
+		private System.Windows.Forms.Button btnUpdate;
+		private System.Windows.Forms.Label label2;
+		private System.Windows.Forms.CheckBox cbLabel;
+		private System.Windows.Forms.ComboBox cbLabels;
+		private System.Windows.Forms.CheckBox cbStage;
+		private System.Windows.Forms.CheckBox cbBlock;
+		private System.Windows.Forms.ComboBox cbBlocks;
+		private System.Windows.Forms.TabControl tabControl1;
+		private System.Windows.Forms.TabPage Result;
+		private System.Windows.Forms.TabPage Source;
+		private System.Windows.Forms.RichTextBox tbSource;
+		private System.Windows.Forms.RichTextBox tbResult;
+		private System.Windows.Forms.OpenFileDialog openFileDialog1;
+		private System.Windows.Forms.StatusStrip statusStrip1;
+		private System.Windows.Forms.ToolStripStatusLabel lbStatus;
 		private System.Windows.Forms.CheckBox cbRemoveNextPrev;
 		private System.Windows.Forms.CheckBox cbSpace;
-    }
+	}
 }
 

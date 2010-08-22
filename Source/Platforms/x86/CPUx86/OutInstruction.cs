@@ -37,11 +37,13 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand empty, Operand destination, Operand source)
 		{
-			if (IsByte(source)) {
+			if (IsByte(source))
+			{
 				if ((destination is ConstantOperand) && (source is RegisterOperand)) return C_R_8;
 				if ((destination is RegisterOperand) && (source is RegisterOperand)) return R_R_8;
 			}
-			else {
+			else
+			{
 				if ((destination is ConstantOperand) && (source is RegisterOperand)) return C_R_32;
 				if ((destination is RegisterOperand) && (source is RegisterOperand)) return R_R_32;
 			}
@@ -53,10 +55,10 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="emitter">The emitter.</param>
-        protected override void Emit(Context context, MachineCodeEmitter emitter)
-        {
-            emitter.Emit(new OpCode(new byte[] { 0xEE }), null, null);
-        }
+		protected override void Emit(Context context, MachineCodeEmitter emitter)
+		{
+			emitter.Emit(new OpCode(new byte[] { 0xEE }), null, null);
+		}
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.

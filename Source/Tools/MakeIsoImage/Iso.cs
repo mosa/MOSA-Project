@@ -48,7 +48,8 @@ namespace Mosa.Tools.MakeIsoImage
 		public void AddEntry(string path, IsoEntry e)
 		{
 			var tmp = path.IndexOf('/');
-			if (tmp >= 0) {
+			if (tmp >= 0)
+			{
 				string subpath = path.Substring(tmp + 1).Trim();
 				path = path.Substring(0, tmp).Trim();
 			}

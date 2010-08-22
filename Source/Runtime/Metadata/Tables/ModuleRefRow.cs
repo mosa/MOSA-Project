@@ -14,43 +14,44 @@ using System.IO;
 
 namespace Mosa.Runtime.Metadata.Tables
 {
-    /// <summary>
-    /// 
-    /// </summary>
-	public struct ModuleRefRow {
+	/// <summary>
+	/// 
+	/// </summary>
+	public struct ModuleRefRow
+	{
 		#region Data members
 
-        /// <summary>
-        /// 
-        /// </summary>
-        private TokenTypes _nameStringIdx;
+		/// <summary>
+		/// 
+		/// </summary>
+		private TokenTypes _nameStringIdx;
 
 		#endregion // Data members
 
-        #region Construction
+		#region Construction
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ModuleRefRow"/> struct.
-        /// </summary>
-        /// <param name="nameStringIdx">The name string idx.</param>
-        public ModuleRefRow(TokenTypes nameStringIdx)
-        {
-            _nameStringIdx = nameStringIdx;
-        }
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ModuleRefRow"/> struct.
+		/// </summary>
+		/// <param name="nameStringIdx">The name string idx.</param>
+		public ModuleRefRow(TokenTypes nameStringIdx)
+		{
+			_nameStringIdx = nameStringIdx;
+		}
 
-        #endregion // Construction
+		#endregion // Construction
 
-        #region Properties
+		#region Properties
 
-        /// <summary>
-        /// Gets the name string idx.
-        /// </summary>
-        /// <value>The name string idx.</value>
-        public TokenTypes NameStringIdx
-        {
-            get { return _nameStringIdx; }
-        }
+		/// <summary>
+		/// Gets the name string idx.
+		/// </summary>
+		/// <value>The name string idx.</value>
+		public TokenTypes NameStringIdx
+		{
+			get { return _nameStringIdx; }
+		}
 
-        #endregion // Properties
+		#endregion // Properties
 	}
 }

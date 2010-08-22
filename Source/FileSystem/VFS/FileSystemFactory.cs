@@ -10,9 +10,9 @@
 
 namespace Mosa.FileSystem.VFS
 {
-    /// <summary>
-    /// 
-    /// </summary>
+	/// <summary>
+	/// 
+	/// </summary>
 	public sealed class FileSystemFactory
 	{
 		/// <summary>

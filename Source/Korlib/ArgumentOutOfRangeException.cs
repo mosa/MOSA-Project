@@ -9,35 +9,35 @@
 
 namespace System
 {
-    /// <summary>
-    /// Implementation of the "System.ArgumentOutOfRangeException" class
-    /// </summary>
-    public class ArgumentOutOfRangeException : ArgumentException
-    {
+	/// <summary>
+	/// Implementation of the "System.ArgumentOutOfRangeException" class
+	/// </summary>
+	public class ArgumentOutOfRangeException : ArgumentException
+	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ArgumentOutOfRangeException"/> class.
 		/// </summary>
-        public ArgumentOutOfRangeException()
-            : this("Argument is out of range.")
-        {}
+		public ArgumentOutOfRangeException()
+			: this("Argument is out of range.")
+		{ }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ArgumentOutOfRangeException"/> class.
 		/// </summary>
 		/// <param name="message">The message.</param>
-        public ArgumentOutOfRangeException(string message)
-            : base(message)
-        {}
+		public ArgumentOutOfRangeException(string message)
+			: base(message)
+		{ }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ArgumentOutOfRangeException"/> class.
 		/// </summary>
 		/// <param name="message">The message.</param>
 		/// <param name="paramName">Name of the param.</param>
-        public ArgumentOutOfRangeException(string message, string paramName)
-            : base(message)
-        {
-            this.paramName = paramName;
-        }
-    }
+		public ArgumentOutOfRangeException(string message, string paramName)
+			: base(message)
+		{
+			this.paramName = paramName;
+		}
+	}
 }

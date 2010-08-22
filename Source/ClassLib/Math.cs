@@ -35,7 +35,7 @@ namespace Mosa.ClassLib
 		{
 			if (a >= b) return a; else return b;
 		}
-		
+
 		/// <summary>
 		/// Returns the lowest value
 		/// </summary>

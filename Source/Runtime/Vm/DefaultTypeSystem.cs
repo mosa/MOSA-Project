@@ -648,7 +648,7 @@ namespace Mosa.Runtime.Vm
 					size = layoutRow.ClassSize;
 					packing = layoutRow.PackingSize;
 
-					Debug.Write(" [Size: " + size.ToString()+"]");
+					Debug.Write(" [Size: " + size.ToString() + "]");
 
 					tokenLayout++;
 					if (tokenLayout <= maxLayout)

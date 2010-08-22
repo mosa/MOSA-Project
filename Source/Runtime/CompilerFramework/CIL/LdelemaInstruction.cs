@@ -52,7 +52,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			TokenTypes token;
 			decoder.Decode(out token);
 
-            ctx.Result = decoder.Compiler.CreateTemporary(new ClassSigType(token));
+			ctx.Result = decoder.Compiler.CreateTemporary(new ClassSigType(token));
 		}
 
 		/// <summary>

@@ -19,22 +19,22 @@ using IR = Mosa.Runtime.CompilerFramework.IR;
 
 namespace Mosa.Platforms.x86.Intrinsic
 {
-    /// <summary>
-    /// Representations a jump to the global interrupt handler.
-    /// </summary>
+	/// <summary>
+	/// Representations a jump to the global interrupt handler.
+	/// </summary>
 	public sealed class JumpGlobalInterruptHandler : IIntrinsicMethod
-    {
-        #region Methods
+	{
+		#region Methods
 
-        /// <summary>
-        /// Replaces the instrinsic call site
-        /// </summary>
-        /// <param name="context">The context.</param>
-        public void ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem)
-        {
-//			context.SetInstruction(IR.Instruction.JmpInstruction, );
+		/// <summary>
+		/// Replaces the instrinsic call site
+		/// </summary>
+		/// <param name="context">The context.</param>
+		public void ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem)
+		{
+			//			context.SetInstruction(IR.Instruction.JmpInstruction, );
 		}
 
-        #endregion // Methods
-    }
+		#endregion // Methods
+	}
 }

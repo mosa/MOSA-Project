@@ -23,7 +23,8 @@ namespace Mosa.DeviceSystem.PCI
 		/// <returns></returns>
 		public static string Lookup(byte classCode, byte subClassCode, byte progIF)
 		{
-			switch ((classCode << 16) | (subClassCode << 8) | (progIF)) {
+			switch ((classCode << 16) | (subClassCode << 8) | (progIF))
+			{
 				case 0x000000: return "Non-VGA Device";
 				case 0x000001: return "VGA Device";
 

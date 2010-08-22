@@ -50,10 +50,10 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			decoder.Decode(out token);
 			ctx.RuntimeField = typeSystem.GetField(decoder.Method, decoder.Method.Module, token);
 
-		    SigType sigType = ctx.RuntimeField.SignatureType;
+			SigType sigType = ctx.RuntimeField.SignatureType;
 
 			Debug.Assert((ctx.RuntimeField.Attributes & FieldAttributes.Static) == FieldAttributes.Static, @"Static field access on non-static field.");
-		    ctx.Result = LoadInstruction.CreateResultOperand(decoder, Operand.StackTypeFromSigType(sigType), sigType);
+			ctx.Result = LoadInstruction.CreateResultOperand(decoder, Operand.StackTypeFromSigType(sigType), sigType);
 		}
 
 		/// <summary>

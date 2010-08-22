@@ -46,7 +46,7 @@ namespace Mosa.HelloWorld.Tests
 		{
 			string main = "abcdefghi";
 			string sub = main.Substring(6);
-			
+
 			return string.Equals("ghi", sub);
 		}
 

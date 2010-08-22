@@ -106,7 +106,8 @@ namespace Mosa.Runtime.CompilerFramework.Operands
 		public static StackTypeCode StackTypeFromSigType(SigType type)
 		{
 			StackTypeCode result = StackTypeCode.Unknown;
-			switch (type.Type) {
+			switch (type.Type)
+			{
 				case CilElementType.Void:
 					break;
 
@@ -150,7 +151,8 @@ namespace Mosa.Runtime.CompilerFramework.Operands
 		public static SigType SigTypeFromStackType(StackTypeCode typeCode)
 		{
 			SigType result = null;
-			switch (typeCode) {
+			switch (typeCode)
+			{
 				case StackTypeCode.Int32: result = new SigType(CilElementType.I4); break;
 				case StackTypeCode.Int64: result = new SigType(CilElementType.I8); break;
 				case StackTypeCode.F: result = new SigType(CilElementType.R8); break;
@@ -263,9 +265,9 @@ namespace Mosa.Runtime.CompilerFramework.Operands
 			foreach (int instructionIndex in this.Uses.ToArray())
 			{
 				Context instr = new Context(instructionSet, instructionIndex);
-				
+
 				opIdx = 0;
-				foreach (Operand r in instr.Operands) 
+				foreach (Operand r in instr.Operands)
 				{
 					// Is this the operand?
 					if (ReferenceEquals(r, this))

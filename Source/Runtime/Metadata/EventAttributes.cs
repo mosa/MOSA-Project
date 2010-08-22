@@ -9,18 +9,18 @@
 
 namespace Mosa.Runtime.Metadata
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public enum EventAttributes
-    {
-        /// <summary>
-        /// 
-        /// </summary>
-        SpecialName = 0x0200,
-        /// <summary>
-        /// 
-        /// </summary>
-        RTSpecialName = 0x0400
-    }
+	/// <summary>
+	/// 
+	/// </summary>
+	public enum EventAttributes
+	{
+		/// <summary>
+		/// 
+		/// </summary>
+		SpecialName = 0x0200,
+		/// <summary>
+		/// 
+		/// </summary>
+		RTSpecialName = 0x0400
+	}
 }

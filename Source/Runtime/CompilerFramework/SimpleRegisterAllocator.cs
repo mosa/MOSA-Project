@@ -74,7 +74,8 @@ namespace Mosa.Runtime.CompilerFramework
 			_activeOpLastUse = new Context[_registerSet.Length];
 
 			// Iterate basic Blocks
-			foreach (BasicBlock block in BasicBlocks) {
+			foreach (BasicBlock block in BasicBlocks)
+			{
 
 				// Iterate all instructions in the block
 				// Assign registers to all operands, where this needs to be done
@@ -93,8 +94,10 @@ namespace Mosa.Runtime.CompilerFramework
 		private void SpillActiveOperands(BasicBlock block)
 		{
 			int regIdx = 0;
-			foreach (Operand op in _activeOperands) {
-				if (op != null && op is MemoryOperand) {
+			foreach (Operand op in _activeOperands)
+			{
+				if (op != null && op is MemoryOperand)
+				{
 
 					Context ctx = new Context(InstructionSet, block);
 					ctx.GotoLast();
@@ -123,7 +126,8 @@ namespace Mosa.Runtime.CompilerFramework
 				Trace.WriteLine(String.Format(@"Failed to get register constraints for instruction {0}!", ctx.Instruction.ToString(ctx)));
 
 			// Only process the instruction, if we have constraints...
-			if (rc != null) {
+			if (rc != null)
+			{
 				/* FIXME: Spill used registers, if they are in use :(
 				 * It is not as simple as it sounds, as the register may be used by the instruction itself,
 				 * but dirty afterwards anyways. So we need to decide this at some later point depending on
@@ -136,9 +140,11 @@ namespace Mosa.Runtime.CompilerFramework
 
 				Context at = ctx.Clone();
 
-				foreach (Operand op in ctx.Operands) {
+				foreach (Operand op in ctx.Operands)
+				{
 					// Only allocate registers, if we really have to.
-					if (!rc.IsValidOperand(opIdx, op)) {
+					if (!rc.IsValidOperand(opIdx, op))
+					{
 						// The register operand allocated
 						RegisterOperand rop;
 						// List of compatible registers
@@ -148,23 +154,27 @@ namespace Mosa.Runtime.CompilerFramework
 
 						// Is this operand in a register?
 						rop = GetRegisterOfOperand(op);
-						if (rop != null && Array.IndexOf(regs, rop.Register) == -1) {
+						if (rop != null && Array.IndexOf(regs, rop.Register) == -1)
+						{
 							// Spill the register...
 							SpillRegister(ctx, op, rop);
 							rop = null;
 						}
 
 						// Attempt to allocate a free register
-						if (rop == null) {
+						if (rop == null)
+						{
 							rop = AllocateRegister(regs, op);
-							if (rop != null) {
+							if (rop != null)
+							{
 								// We need to place a load here... :(
 								InsertMove(ctx, rop, op);
 							}
 						}
 
 						// Still failed to get one? Spill!
-						if (rop == null) {
+						if (rop == null)
+						{
 							// Darn, need to spill one... Always use the first one.
 							rop = SpillRegister(at, op.Type, regs);
 
@@ -182,9 +192,11 @@ namespace Mosa.Runtime.CompilerFramework
 				}
 
 				opIdx = 0;
-				foreach (Operand res in ctx.Results) {
+				foreach (Operand res in ctx.Results)
+				{
 					// FIXME: Check support first, spill if register is target and in use
-					if (!rc.IsValidResult(opIdx, res)) {
+					if (!rc.IsValidResult(opIdx, res))
+					{
 						// Is this operand in a register?
 						RegisterOperand rop = GetRegisterOfOperand(res);
 						if (rop == null && !rc.IsValidResult(opIdx, res) && res.Uses.Count == 0)
@@ -195,7 +207,8 @@ namespace Mosa.Runtime.CompilerFramework
 						Register[] regs = rc.GetRegistersForResult(opIdx);
 
 						// Do we already have a register?
-						if (rop != null && Array.IndexOf(regs, rop.Register) == -1) {
+						if (rop != null && Array.IndexOf(regs, rop.Register) == -1)
+						{
 							// Hmm, current register doesn't match, release it - since we're overwriting the operand,
 							// we don't need to spill. This should be safe.
 							_activeOperands[rop.Register.Index] = null;
@@ -206,7 +219,8 @@ namespace Mosa.Runtime.CompilerFramework
 							rop = AllocateRegister(regs, res);
 
 						// Do we need to spill?
-						if (rop == null) {
+						if (rop == null)
+						{
 							// Darn, need to spill one...
 							rop = SpillRegister(at, res.Type, regs);
 							// We don't need to place a load here, as we're defining the register...
@@ -217,7 +231,8 @@ namespace Mosa.Runtime.CompilerFramework
 						AssignRegister(rop, res, at);
 						ctx.SetResult(opIdx, rop); // FIXME PG - same
 					}
-					else {
+					else
+					{
 						RegisterOperand rop = res as RegisterOperand;
 						if (rop != null)
 							SpillRegisterIfInUse(ctx, rop);
@@ -237,7 +252,8 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			int regIdx = rop.Register.Index;
 			Operand op = _activeOperands[regIdx];
-			if (op != null) {
+			if (op != null)
+			{
 				InsertMove(ctx, op, rop);
 				_activeOperands[regIdx] = null;
 				_activeOpLastUse[regIdx] = null;
@@ -265,8 +281,10 @@ namespace Mosa.Runtime.CompilerFramework
 		private RegisterOperand GetRegisterOfOperand(Operand op)
 		{
 			int regIdx = 0;
-			foreach (Operand activeOp in _activeOperands) {
-				if (activeOp == op) {
+			foreach (Operand activeOp in _activeOperands)
+			{
+				if (activeOp == op)
+				{
 					return new RegisterOperand(op.Type, _registerSet[regIdx]);
 				}
 
@@ -284,9 +302,11 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns>The allocated RegisterOperand or null, if no register is free.</returns>
 		private RegisterOperand AllocateRegister(Register[] regs, Operand op)
 		{
-			foreach (Register reg in regs) {
+			foreach (Register reg in regs)
+			{
 				// Is the register in use?
-				if (_activeOperands[reg.Index] == null) {
+				if (_activeOperands[reg.Index] == null)
+				{
 					// No, use it...
 					_activeOperands[reg.Index] = op;
 					return new RegisterOperand(op.Type, reg);

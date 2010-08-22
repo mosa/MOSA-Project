@@ -170,13 +170,15 @@ namespace Mosa.DeviceDrivers.ISA
 
 			colorMode = ((miscellaneousOutput.Read8() & 1) == 1);
 
-			if (colorMode) {
+			if (colorMode)
+			{
 				offset = 0x8000;
 				bytePerChar = 2;
 				activeControllerIndex = crtControllerIndexColor;
 				activeControllerData = crtControllerDataColor;
 			}
-			else {
+			else
+			{
 				offset = 0x0;
 				bytePerChar = 1;
 				activeControllerIndex = crtControllerIndex;
@@ -258,12 +260,14 @@ namespace Mosa.DeviceDrivers.ISA
 		/// <param name="background">The background color.</param>
 		public void WriteChar(ushort x, ushort y, char c, TextColor foreground, TextColor background)
 		{
-			if (colorMode) {
+			if (colorMode)
+			{
 				uint index = (ushort)(offset + (((y * width) + x) * 2));
 				memory[index] = (byte)c;
 				memory[index + 1] = (byte)((byte)foreground | ((byte)background << 4));
 			}
-			else {
+			else
+			{
 				uint index = (ushort)(offset + (y * width) + x);
 				index = index + x;
 				memory[index] = (byte)c;
@@ -291,7 +295,8 @@ namespace Mosa.DeviceDrivers.ISA
 			uint size = (uint)(height * width);
 
 			if (bytePerChar == 2)
-				for (int i = 0; i < size; i = i + bytePerChar) {
+				for (int i = 0; i < size; i = i + bytePerChar)
+				{
 					memory[(uint)(index + i)] = 0;
 					memory[(uint)(index + i + 1)] = (byte)defaultBackground;
 				}
@@ -327,7 +332,8 @@ namespace Mosa.DeviceDrivers.ISA
 			miscellaneousOutputWrite.Write8(settings[0]);
 
 			// Write SEQUENCER regs
-			for (byte i = 0; i < 5; i++) {
+			for (byte i = 0; i < 5; i++)
+			{
 				sequencerAddress.Write8(i);
 				sequencerData.Write8(settings[1 + i]);
 			}
@@ -343,19 +349,22 @@ namespace Mosa.DeviceDrivers.ISA
 			settings[0x11] = (byte)(settings[0x11] & ~0x80);
 
 			// Write CRTC regs 
-			for (byte i = 0; i < 25; i++) {
+			for (byte i = 0; i < 25; i++)
+			{
 				crtControllerIndexColor.Write8(i);
 				crtControllerDataColor.Write8(settings[6 + i]);
 			}
 
 			// Write GRAPHICS CONTROLLER regs 
-			for (byte i = 0; i < 9; i++) {
+			for (byte i = 0; i < 9; i++)
+			{
 				graphicsControllerAddress.Write8(i);
 				graphicsControllerData.Write8(settings[31 + i]);
 			}
 
 			// Write ATTRIBUTE CONTROLLER regs 
-			for (byte i = 0; i < 21; i++) {
+			for (byte i = 0; i < 21; i++)
+			{
 				inputStatus1ReadB.Read8();
 				attributeAddress.Write8(i);
 				attributeAddress.Write8(settings[40 + i]); // TODO: Double check
@@ -367,7 +376,7 @@ namespace Mosa.DeviceDrivers.ISA
 		}
 
 		#region Modes
-		
+
 		private static byte[] VGAText80x25 = new byte[] {
 		/* MISC */
 			0x67,
@@ -386,7 +395,7 @@ namespace Mosa.DeviceDrivers.ISA
 			0x38, 0x39, 0x3A, 0x3B, 0x3C, 0x3D, 0x3E, 0x3F,
 			0x0C, 0x00, 0x0F, 0x08, 0x00
 		};
-		
+
 		#endregion
 
 	}

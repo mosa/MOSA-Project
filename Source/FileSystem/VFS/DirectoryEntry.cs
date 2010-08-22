@@ -10,9 +10,9 @@
 
 namespace Mosa.FileSystem.VFS
 {
-    /// <summary>
-    /// 
-    /// </summary>
+	/// <summary>
+	/// 
+	/// </summary>
 	public sealed class DirectoryEntry
 	{
 
@@ -55,9 +55,9 @@ namespace Mosa.FileSystem.VFS
 
 		#region Construction
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		public DirectoryEntry()
 		{
 		}
@@ -65,9 +65,9 @@ namespace Mosa.FileSystem.VFS
 		#endregion // Construction
 
 		#region Properties
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		public string Name
 		{
 			get
@@ -76,9 +76,9 @@ namespace Mosa.FileSystem.VFS
 			}
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		public IVfsNode Node
 		{
 			get
@@ -87,9 +87,9 @@ namespace Mosa.FileSystem.VFS
 			}
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		public DirectoryEntry Parent
 		{
 			get
@@ -102,11 +102,11 @@ namespace Mosa.FileSystem.VFS
 
 		#region Methods
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="name"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="name"></param>
+		/// <returns></returns>
 		public DirectoryEntry Lookup(string name)
 		{
 			/*
@@ -149,12 +149,12 @@ namespace Mosa.FileSystem.VFS
 			return e;
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="parent"></param>
-        /// <param name="name"></param>
-        /// <param name="node"></param>
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="parent"></param>
+		/// <param name="name"></param>
+		/// <param name="node"></param>
 		private void Setup(DirectoryEntry parent, string name, IVfsNode node)
 		{
 			if (!System.Object.ReferenceEquals(this, parent))
@@ -188,10 +188,10 @@ namespace Mosa.FileSystem.VFS
 
 		#region Child list functions
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="child"></param>
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="child"></param>
 		private void InsertChild(DirectoryEntry child)
 		{
 			/*
@@ -227,17 +227,19 @@ namespace Mosa.FileSystem.VFS
 			this.child = child;
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="child"></param>
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="child"></param>
 		private void RemoveChild(DirectoryEntry child)
 		{
 			// FIXME: Thread safety
-			if (System.Object.ReferenceEquals(this.child, child)) {
+			if (System.Object.ReferenceEquals(this.child, child))
+			{
 				this.child = child.next;
 			}
-			else {
+			else
+			{
 				DirectoryEntry e = this.child;
 				while (!System.Object.ReferenceEquals(e.next, child))
 					e = e.next;
@@ -253,14 +255,15 @@ namespace Mosa.FileSystem.VFS
 
 		#region Static methods
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		public static DirectoryEntry CurrentDirectoryEntry
 		{
 			get
 			{
-				if (currentDirectory == null) {
+				if (currentDirectory == null)
+				{
 					// FIXME: Use the process root instead of this in order to put processes in a jail.
 					currentDirectory = VirtualFileSystem.RootDirectoryEntry;
 				}

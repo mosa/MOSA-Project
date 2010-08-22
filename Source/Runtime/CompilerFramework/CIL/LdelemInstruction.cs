@@ -36,39 +36,40 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		public LdelemInstruction(OpCode opcode)
 			: base(opcode)
 		{
-			switch (opcode) {
+			switch (opcode)
+			{
 				case OpCode.Ldelem_i1:
-			        this.elementType = BuiltInSigType.SByte;
+					this.elementType = BuiltInSigType.SByte;
 					break;
 				case OpCode.Ldelem_i2:
-			        this.elementType = BuiltInSigType.Int16;
+					this.elementType = BuiltInSigType.Int16;
 					break;
 				case OpCode.Ldelem_i4:
-			        this.elementType = BuiltInSigType.Int32;
+					this.elementType = BuiltInSigType.Int32;
 					break;
 				case OpCode.Ldelem_i8:
-			        this.elementType = BuiltInSigType.Int64;
+					this.elementType = BuiltInSigType.Int64;
 					break;
 				case OpCode.Ldelem_u1:
-			        this.elementType = BuiltInSigType.Byte;
+					this.elementType = BuiltInSigType.Byte;
 					break;
 				case OpCode.Ldelem_u2:
-			        this.elementType = BuiltInSigType.UInt16;
+					this.elementType = BuiltInSigType.UInt16;
 					break;
 				case OpCode.Ldelem_u4:
-			        this.elementType = BuiltInSigType.UInt32;
+					this.elementType = BuiltInSigType.UInt32;
 					break;
 				case OpCode.Ldelem_i:
-			        this.elementType = BuiltInSigType.IntPtr;
+					this.elementType = BuiltInSigType.IntPtr;
 					break;
 				case OpCode.Ldelem_r4:
-			        this.elementType = BuiltInSigType.Single;
+					this.elementType = BuiltInSigType.Single;
 					break;
 				case OpCode.Ldelem_r8:
-			        this.elementType = BuiltInSigType.Double;
+					this.elementType = BuiltInSigType.Double;
 					break;
 				case OpCode.Ldelem_ref: // FIXME: Really object?
-			        this.elementType = BuiltInSigType.Object;
+					this.elementType = BuiltInSigType.Object;
 					break;
 				default:
 					throw new NotImplementedException();
@@ -85,19 +86,19 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			// Decode base classes first
 			base.Decode(ctx, decoder, typeSystem);
 
-            // Do we have a type?
-            if (this.elementType == null)
-            {
-                // No, retrieve a type reference from the immediate argument
-                TokenTypes token;
-                decoder.Decode(out token);
-                this.elementType = new ClassSigType(token);
-            }
+			// Do we have a type?
+			if (this.elementType == null)
+			{
+				// No, retrieve a type reference from the immediate argument
+				TokenTypes token;
+				decoder.Decode(out token);
+				this.elementType = new ClassSigType(token);
+			}
 
-		    StackTypeCode stackType = Operand.StackTypeFromSigType(this.elementType);
-		    Operand result = LoadInstruction.CreateResultOperand(decoder, stackType, this.elementType);
+			StackTypeCode stackType = Operand.StackTypeFromSigType(this.elementType);
+			Operand result = LoadInstruction.CreateResultOperand(decoder, stackType, this.elementType);
 
-		    ctx.Result = result;
+			ctx.Result = result;
 		}
 
 		/// <summary>

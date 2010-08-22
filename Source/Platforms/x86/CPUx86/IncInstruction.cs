@@ -26,8 +26,8 @@ namespace Mosa.Platforms.x86.CPUx86
 		#region Data Members
 
 		private static readonly OpCode INC8 = new OpCode(new byte[] { 0xFE }, 0);
-        private static readonly OpCode INC16 = new OpCode(new byte[] { 0x66, 0xFF }, 0);
-        private static readonly OpCode INC32 = new OpCode(new byte[] { 0xFF }, 0);
+		private static readonly OpCode INC16 = new OpCode(new byte[] { 0x66, 0xFF }, 0);
+		private static readonly OpCode INC32 = new OpCode(new byte[] { 0xFF }, 0);
 
 		#endregion // Data Members
 

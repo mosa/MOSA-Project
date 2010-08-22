@@ -12,50 +12,50 @@ using System.IO;
 
 namespace Mosa.Runtime.Linker.PE
 {
-    /// <summary>
-    /// Represents a data directory in a portable executable image.
-    /// </summary>
+	/// <summary>
+	/// Represents a data directory in a portable executable image.
+	/// </summary>
 	public struct IMAGE_DATA_DIRECTORY
-    {
+	{
 		#region Data members
 
-        /// <summary>
-        /// The virtual address of the data.
-        /// </summary>
+		/// <summary>
+		/// The virtual address of the data.
+		/// </summary>
 		public uint VirtualAddress;
 
-        /// <summary>
-        /// The size of the data.
-        /// </summary>
-        public int Size;
+		/// <summary>
+		/// The size of the data.
+		/// </summary>
+		public int Size;
 
 		#endregion // Data members
 
 		#region Methods
 
-        /// <summary>
-        /// Loads the IMAGE_DATA_DIRECTORY from the reader.
-        /// </summary>
-        /// <param name="reader">The reader.</param>
+		/// <summary>
+		/// Loads the IMAGE_DATA_DIRECTORY from the reader.
+		/// </summary>
+		/// <param name="reader">The reader.</param>
 		public void Read(BinaryReader reader)
 		{
 			this.VirtualAddress = reader.ReadUInt32();
 			this.Size = reader.ReadInt32();
 		}
 
-        /// <summary>
-        /// Writes the structure to the given writer.
-        /// </summary>
-        /// <param name="writer">The writer.</param>
-        public void Write(BinaryWriter writer)
-        {
-            if (writer == null)
-                throw new ArgumentNullException(@"writer");
+		/// <summary>
+		/// Writes the structure to the given writer.
+		/// </summary>
+		/// <param name="writer">The writer.</param>
+		public void Write(BinaryWriter writer)
+		{
+			if (writer == null)
+				throw new ArgumentNullException(@"writer");
 
-            writer.Write(this.VirtualAddress);
-            writer.Write(this.Size);
-        }
+			writer.Write(this.VirtualAddress);
+			writer.Write(this.Size);
+		}
 
-        #endregion // Methods
-    }
+		#endregion // Methods
+	}
 }

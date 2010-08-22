@@ -12,7 +12,7 @@ namespace System
 	/// <summary>
 	/// 
 	/// </summary>
-    public struct RuntimeFieldHandle
-    {
-    }
+	public struct RuntimeFieldHandle
+	{
+	}
 }

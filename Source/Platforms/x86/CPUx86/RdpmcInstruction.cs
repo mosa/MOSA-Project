@@ -18,13 +18,13 @@ using Mosa.Runtime.CompilerFramework;
 
 namespace Mosa.Platforms.x86.CPUx86
 {
-    /// <summary>
-    /// Representations the x86 pause instruction.
-    /// </summary>
-    public sealed class RdpmcInstruction : TwoOperandInstruction
-    {
-      
-        #region Methods
+	/// <summary>
+	/// Representations the x86 pause instruction.
+	/// </summary>
+	public sealed class RdpmcInstruction : TwoOperandInstruction
+	{
+
+		#region Methods
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
@@ -36,6 +36,6 @@ namespace Mosa.Platforms.x86.CPUx86
 			visitor.Rdpmc(context);
 		}
 
-        #endregion // Methods
-    }
+		#endregion // Methods
+	}
 }

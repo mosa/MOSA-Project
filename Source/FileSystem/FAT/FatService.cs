@@ -13,9 +13,9 @@ using Mosa.FileSystem.VFS;
 
 namespace Mosa.FileSystem.FAT
 {
-    /// <summary>
-    /// 
-    /// </summary>
+	/// <summary>
+	/// 
+	/// </summary>
 	public class FatService : Device, IDevice, IFileSystemDevice
 	{
 		/// <summary>

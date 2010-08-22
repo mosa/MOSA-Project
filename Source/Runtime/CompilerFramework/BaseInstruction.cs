@@ -207,7 +207,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns></returns>
 		protected string GetConditionString(IR.ConditionCode conditioncode)
 		{
-			switch (conditioncode) {
+			switch (conditioncode)
+			{
 				case IR.ConditionCode.Equal: return @"equal";
 				case IR.ConditionCode.GreaterOrEqual: return @"greater or equal";
 				case IR.ConditionCode.GreaterThan: return @"greater";

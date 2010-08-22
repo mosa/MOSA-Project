@@ -64,7 +64,7 @@ namespace Mosa.DeviceSystem
 		/// 
 		/// </summary>
 		protected SpinLock receiveLock;
-		
+
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="NetworkDevicePacketBuffer"/> class.
@@ -109,7 +109,8 @@ namespace Mosa.DeviceSystem
 		/// <returns></returns>
 		public bool SendPacketToDevice(byte[] data)
 		{
-			try {
+			try
+			{
 				transmitLock.Enter();
 				if (transmitQueue.Count >= maxTransmitQueue)
 					return false;
@@ -119,7 +120,8 @@ namespace Mosa.DeviceSystem
 
 				return true;
 			}
-			finally {
+			finally
+			{
 				transmitLock.Exit();
 			}
 		}
@@ -130,7 +132,8 @@ namespace Mosa.DeviceSystem
 		/// <returns></returns>
 		public byte[] GetPacketFromDevice()
 		{
-			try {
+			try
+			{
 				receiveLock.Enter();
 
 				if (receiveQueue.Count == 0)
@@ -141,7 +144,8 @@ namespace Mosa.DeviceSystem
 
 				return data;
 			}
-			finally {
+			finally
+			{
 				receiveLock.Exit();
 			}
 		}
@@ -153,10 +157,12 @@ namespace Mosa.DeviceSystem
 		/// <returns></returns>
 		public bool QueuePacketForStack(byte[] data)
 		{
-			try {
+			try
+			{
 				receiveLock.Enter();
 
-				if (receiveQueue.Count > maxReceiveQueue) {
+				if (receiveQueue.Count > maxReceiveQueue)
+				{
 					discardedReceivePackets++;
 					return false;
 				}
@@ -166,7 +172,8 @@ namespace Mosa.DeviceSystem
 
 				return true;
 			}
-			finally {
+			finally
+			{
 				receiveLock.Exit();
 			}
 		}
@@ -185,10 +192,12 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		protected void SendPackets()
 		{
-			try {
+			try
+			{
 				receiveLock.Enter();
 
-				while (receiveQueue.Count != 0) {
+				while (receiveQueue.Count != 0)
+				{
 					byte[] data = receiveQueue.First.value;
 
 					if (networkDevice.SendPacket(data))
@@ -197,7 +206,8 @@ namespace Mosa.DeviceSystem
 						return;
 				}
 			}
-			finally {
+			finally
+			{
 				receiveLock.Exit();
 			}
 		}

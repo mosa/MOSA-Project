@@ -9,15 +9,15 @@
 
 namespace System
 {
-    /// <summary>
-    /// A platform-specific type that is used to represent a pointer or a handle.
-    /// </summary>
-    [Serializable]
-    public struct IntPtr
-    {
-        /// <summary>
-        /// This is 32-bit specific :(
-        /// </summary>
-        private int value;
-    }
+	/// <summary>
+	/// A platform-specific type that is used to represent a pointer or a handle.
+	/// </summary>
+	[Serializable]
+	public struct IntPtr
+	{
+		/// <summary>
+		/// This is 32-bit specific :(
+		/// </summary>
+		private int value;
+	}
 }
