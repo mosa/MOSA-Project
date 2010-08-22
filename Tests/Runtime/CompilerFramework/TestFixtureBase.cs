@@ -360,7 +360,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		private IMetadataModule RunMosaCompiler(string assemblyFile)
 		{
 			IMetadataModule rtModule = StaticRuntime.AssemblyLoader.Load(
-				typeof(BaseRuntime).Module.FullyQualifiedName
+				typeof(global::Mosa.Runtime.Runtime).Module.FullyQualifiedName
 			);
 			IMetadataModule module = StaticRuntime.AssemblyLoader.Load(
 				assemblyFile

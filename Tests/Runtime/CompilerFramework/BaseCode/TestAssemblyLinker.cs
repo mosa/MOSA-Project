@@ -197,7 +197,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 
 			IntPtr allocate = Marshal.GetFunctionPointerForDelegate(this.allocateArrayHandler);
 
-			const string allocateArrayMethod = @"Test.Mosa.Runtime.CompilerFramework.Runtime.AllocateArray(Ptr methodTable,U4 elementSize,U4 elements)";
+			const string allocateArrayMethod = @"Mosa.Runtime.Runtime.AllocateArray(Ptr methodTable,U4 elementSize,U4 elements)";
 			long virtualAddress = allocate.ToInt64();
 			Trace.WriteLine(String.Format("\t{0} at 0x{1:x08}", allocateArrayMethod, virtualAddress));
 
@@ -207,7 +207,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 
 			IntPtr allocateObject = Marshal.GetFunctionPointerForDelegate(this.allocateObjectHandler);
 
-			const string allocateObjectMethod = @"Test.Mosa.Runtime.CompilerFramework.Runtime.AllocateObject(Ptr methodTable,U4 classSize)";
+			const string allocateObjectMethod = @"Mosa.Runtime.Runtime.AllocateObject(Ptr methodTable,U4 classSize)";
 			virtualAddress = allocateObject.ToInt64();
 			Trace.WriteLine(String.Format("\t{0} at 0x{1:x08}", allocateObjectMethod, virtualAddress));
 
