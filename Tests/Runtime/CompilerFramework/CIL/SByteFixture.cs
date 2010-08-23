@@ -14,17 +14,17 @@ using MbUnit.Framework;
 
 namespace Test.Mosa.Runtime.CompilerFramework.CLI
 {
-    [TestFixture]
-    [Importance(Importance.Critical)]
-    [Category(@"Basic types")]
-    [Description(@"Tests support for the basic type System.SByte")]
-    public class SByteFixture : RuntimeFixture
-    {
-        private readonly ArithmeticInstructionTestRunner<int, sbyte> arithmeticTests = new ArithmeticInstructionTestRunner<int, sbyte>
-        {
-            ExpectedTypeName = @"int",
-            TypeName = @"sbyte"
-        };
+	[TestFixture]
+	[Importance(Importance.Critical)]
+	[Category(@"Basic types")]
+	[Description(@"Tests support for the basic type System.SByte")]
+	public class SByteFixture : RuntimeFixture
+	{
+		private readonly ArithmeticInstructionTestRunner<int, sbyte> arithmeticTests = new ArithmeticInstructionTestRunner<int, sbyte>
+		{
+			ExpectedTypeName = @"int",
+			TypeName = @"sbyte"
+		};
 
 		private readonly BinaryLogicInstructionTestRunner<int, sbyte, sbyte> logicTests = new BinaryLogicInstructionTestRunner<int, sbyte, sbyte>
 		{
@@ -35,15 +35,15 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 			IncludeComp = false
 		};
 
-        private readonly ComparisonInstructionTestRunner<sbyte> comparisonTests = new ComparisonInstructionTestRunner<sbyte>
-        {
-            TypeName = @"sbyte"
-        };
+		private readonly ComparisonInstructionTestRunner<sbyte> comparisonTests = new ComparisonInstructionTestRunner<sbyte>
+		{
+			TypeName = @"sbyte"
+		};
 
-        private readonly SZArrayInstructionTestRunner<sbyte> arrayTests = new SZArrayInstructionTestRunner<sbyte>
-        {
-            TypeName = @"sbyte"
-        };
+		private readonly SZArrayInstructionTestRunner<sbyte> arrayTests = new SZArrayInstructionTestRunner<sbyte>
+		{
+			TypeName = @"sbyte"
+		};
 
 		#region Add
 
@@ -3015,87 +3015,87 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 
 		#endregion // Cle
 
-        #region Newarr
+		#region Newarr
 
-        [Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
-        public void Newarr()
-        {
-            this.arrayTests.Newarr();
-        }
+		[Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
+		public void Newarr()
+		{
+			this.arrayTests.Newarr();
+		}
 
-        #endregion // Newarr
+		#endregion // Newarr
 
-        #region Ldlen
+		#region Ldlen
 
-        [Row(0)]
-        [Row(1)]
-        [Row(10)]
-        [Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
-        public void Ldlen(int length)
-        {
-            this.arrayTests.Ldlen(length);
-        }
+		[Row(0)]
+		[Row(1)]
+		[Row(10)]
+		[Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
+		public void Ldlen(int length)
+		{
+			this.arrayTests.Ldlen(length);
+		}
 
-        #endregion // Ldlen
+		#endregion // Ldlen
 
-        #region Stelem
+		#region Stelem
 
-        [Row(0, SByte.MinValue)]
-        [Row(0, -1)]
-        [Row(0, 0)]
-        [Row(0, 1)]
-        [Row(0, SByte.MaxValue)]
-        [Row(3, SByte.MinValue)]
-        [Row(7, -1)]
-        [Row(9, 0)]
-        [Row(6, 1)]
-        [Row(2, SByte.MaxValue)]
-        [Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
-        public void Stelem(int index, sbyte value)
-        {
-            this.arrayTests.Stelem(index, value);
-        }
+		[Row(0, SByte.MinValue)]
+		[Row(0, -1)]
+		[Row(0, 0)]
+		[Row(0, 1)]
+		[Row(0, SByte.MaxValue)]
+		[Row(3, SByte.MinValue)]
+		[Row(7, -1)]
+		[Row(9, 0)]
+		[Row(6, 1)]
+		[Row(2, SByte.MaxValue)]
+		[Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
+		public void Stelem(int index, sbyte value)
+		{
+			this.arrayTests.Stelem(index, value);
+		}
 
-        #endregion // Stelem
+		#endregion // Stelem
 
-        #region Ldelem
+		#region Ldelem
 
-        [Row(0, SByte.MinValue)]
-        [Row(0, -1)]
-        [Row(0, 0)]
-        [Row(0, 1)]
-        [Row(0, SByte.MaxValue)]
-        [Row(3, SByte.MinValue)]
-        [Row(7, -1)]
-        [Row(9, 0)]
-        [Row(6, 1)]
-        [Row(2, SByte.MaxValue)]
-        [Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
-        public void Ldelem(int index, sbyte value)
-        {
-            this.arrayTests.Ldelem(index, value);
-        }
+		[Row(0, SByte.MinValue)]
+		[Row(0, -1)]
+		[Row(0, 0)]
+		[Row(0, 1)]
+		[Row(0, SByte.MaxValue)]
+		[Row(3, SByte.MinValue)]
+		[Row(7, -1)]
+		[Row(9, 0)]
+		[Row(6, 1)]
+		[Row(2, SByte.MaxValue)]
+		[Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
+		public void Ldelem(int index, sbyte value)
+		{
+			this.arrayTests.Ldelem(index, value);
+		}
 
-        #endregion // Ldelem
+		#endregion // Ldelem
 
-        #region Ldelema
+		#region Ldelema
 
-        [Row(0, SByte.MinValue)]
-        [Row(0, -1)]
-        [Row(0, 0)]
-        [Row(0, 1)]
-        [Row(0, SByte.MaxValue)]
-        [Row(3, SByte.MinValue)]
-        [Row(7, -1)]
-        [Row(9, 0)]
-        [Row(6, 1)]
-        [Row(2, SByte.MaxValue)]
-        [Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
-        public void Ldelema(int index, sbyte value)
-        {
-            this.arrayTests.Ldelema(index, value);
-        }
+		[Row(0, SByte.MinValue)]
+		[Row(0, -1)]
+		[Row(0, 0)]
+		[Row(0, 1)]
+		[Row(0, SByte.MaxValue)]
+		[Row(3, SByte.MinValue)]
+		[Row(7, -1)]
+		[Row(9, 0)]
+		[Row(6, 1)]
+		[Row(2, SByte.MaxValue)]
+		[Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
+		public void Ldelema(int index, sbyte value)
+		{
+			this.arrayTests.Ldelema(index, value);
+		}
 
-        #endregion // Ldelema
-    }
+		#endregion // Ldelema
+	}
 }

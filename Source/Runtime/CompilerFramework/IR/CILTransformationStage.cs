@@ -1862,7 +1862,10 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		private void ReplaceWithVmCall(Context ctx, VmCall internalCallTarget)
 		{
 			RuntimeType rt = typeSystem.GetType(@"Mosa.Runtime.Runtime");
+			Debug.Assert(rt != null, "@rt / @callTarget=" + internalCallTarget.ToString());
+			
 			RuntimeMethod callTarget = rt.FindMethod(internalCallTarget.ToString());
+			Debug.Assert(callTarget != null, "@callTarget=" + internalCallTarget.ToString());
 
 			ctx.ReplaceInstructionOnly(IR.Instruction.CallInstruction);
 			ctx.SetOperand(0, SymbolOperand.FromMethod(callTarget));

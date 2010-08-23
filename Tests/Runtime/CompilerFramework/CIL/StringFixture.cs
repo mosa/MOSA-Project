@@ -10,79 +10,79 @@
 
 namespace Test.Mosa.Runtime.CompilerFramework.CIL
 {
-    using MbUnit.Framework;
+	using MbUnit.Framework;
 
-    [TestFixture]
-    [Importance(Importance.Critical)]
-    [Category(@"Basic types")]
-    [Description(@"Tests support for the basic type System.String")]
-    public class StringFixture : CodeDomTestRunner
-    {
-        private static string CreateTestCode(string value)
-        {
-            return @"
-                public class TestClass
-                {
-                    public static string valueA = @""" + value + @""";
-                    public static string valueB = @""" + value + @""";
+	[TestFixture]
+	[Importance(Importance.Critical)]
+	[Category(@"Basic types")]
+	[Description(@"Tests support for the basic type System.String")]
+	public class StringFixture : CodeDomTestRunner
+	{
+		private static string CreateTestCode(string value)
+		{
+			return @"
+				public class TestClass
+				{
+					public static string valueA = @""" + value + @""";
+					public static string valueB = @""" + value + @""";
 
-                    public static bool LengthMustMatch()
-                    {
-                        return " + value.Length + @" == valueA.Length;
-                    }
+					public static bool LengthMustMatch()
+					{
+						return " + value.Length + @" == valueA.Length;
+					}
 
-                    public static bool FirstCharacterMustMatch()
-                    {
-                        return '" + value[0] + @"' == valueA[0];
-                    }
+					public static bool FirstCharacterMustMatch()
+					{
+						return '" + value[0] + @"' == valueA[0];
+					}
 
-                    public static bool LastCharacterMustMatch()
-                    {
-                        char ch = '\0';
-                        for (int index = 0; index < valueA.Length; index++)
-                        {
-                            ch = valueA[index];
-                        }
+					public static bool LastCharacterMustMatch()
+					{
+						char ch = '\0';
+						for (int index = 0; index < valueA.Length; index++)
+						{
+							ch = valueA[index];
+						}
 
-                        return '" + value[value.Length - 1] + @"' == ch;
-                    }
-                }
+						return '" + value[value.Length - 1] + @"' == ch;
+					}
+				}
 
-            "
-            + Code.ObjectClassDefinition
-            + Code.NoStdLibDefinitions;
-        }
+			"
+			+ Code.ObjectClassDefinition
+			+ Code.NoStdLibDefinitions;
+		}
 
-        private delegate bool B_V();
+		private delegate bool B_V();
 
-        [Test]
-        public void MustProperlyCompileLdstrAndLengthMustMatch()
-        {
-            this.CodeSource = CreateTestCode(@"Foo");
-            this.DoNotReferenceMsCorlib = true;
-            this.UnsafeCode = true;
+		[Test]
+		public void MustProperlyCompileLdstrAndLengthMustMatch()
+		{
+			this.CodeSource = CreateTestCode(@"Foo");
+			this.DoNotReferenceMsCorlib = true;
+			this.UnsafeCode = true;
 
-            Assert.IsTrue((bool)Run<B_V>("", "TestClass", "LengthMustMatch"));
-        }
-        
-        [Test]
-        public void FirstCharacterMustMatchInStrings()
-        {
-            this.CodeSource = CreateTestCode(@"Foo");
-            this.DoNotReferenceMsCorlib = true;
-            this.UnsafeCode = true;
+			Assert.IsTrue((bool)Run<B_V>("", "TestClass", "LengthMustMatch"));
+		}
 
-            Assert.IsTrue((bool)Run<B_V>("", "TestClass", "FirstCharacterMustMatch"));
-        }
+		[Test]
+		public void FirstCharacterMustMatchInStrings()
+		{
+			this.CodeSource = CreateTestCode(@"Foo");
+			this.DoNotReferenceMsCorlib = true;
+			this.UnsafeCode = true;
 
-        [Test]
-        public void LastCharacterMustMatchInStrings()
-        {
-            this.CodeSource = CreateTestCode(@"Foo");
-            this.DoNotReferenceMsCorlib = true;
-            this.UnsafeCode = true;
+			Assert.IsTrue((bool)Run<B_V>("", "TestClass", "FirstCharacterMustMatch"));
+		}
 
-            Assert.IsTrue((bool)Run<B_V>("", "TestClass", "LastCharacterMustMatch"));
-        }
-    }
+		[Test]
+		public void LastCharacterMustMatchInStrings()
+		{
+			this.CodeSource = CreateTestCode(@"Foo");
+			this.DoNotReferenceMsCorlib = true;
+			this.UnsafeCode = true;
+
+			Assert.IsTrue((bool)Run<B_V>("", "TestClass", "LastCharacterMustMatch"));
+		}
+	}
 }

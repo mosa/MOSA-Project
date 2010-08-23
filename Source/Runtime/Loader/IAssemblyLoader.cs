@@ -10,6 +10,7 @@
 using System.Collections.Generic;
 using Mosa.Runtime.Metadata.Tables;
 using Mosa.Runtime.Metadata;
+using Mosa.Runtime.Vm;
 
 namespace Mosa.Runtime.Loader
 {
@@ -29,7 +30,7 @@ namespace Mosa.Runtime.Loader
 		/// </summary>
 		/// <param name="file">The file path of the assembly to load.</param>
 		/// <returns>The assembly image of the loaded assembly.</returns>
-		IMetadataModule Load(string file);
+		IMetadataModule Load(ITypeSystem typesystem, string file);
 
 		/// <summary>
 		/// Loads the named assemblies (as a merged assembly)
@@ -38,7 +39,7 @@ namespace Mosa.Runtime.Loader
 		/// <returns>
 		/// The assembly image of the loaded assembly.
 		/// </returns>
-		IMetadataModule MergeLoad(IEnumerable<string> files);
+		IMetadataModule MergeLoad(ITypeSystem typesystem, IEnumerable<string> files);
 
 		/// <summary>
 		/// Unloads the given module.

@@ -10,48 +10,48 @@
 
 namespace Test.Mosa.Runtime.CompilerFramework.CIL
 {
-    using MbUnit.Framework;
+	using MbUnit.Framework;
 
-    [TestFixture]
-    [Importance(Importance.Critical)]
-    [Category(@"Basic types")]
-    [Description(@"Tests support for the basic type System.Enum")]
-    public class EnumFixture : CodeDomTestRunner
-    {
-        private static string CreateTestCode()
-        {
-            return @"
-                public enum TestEnum
-                {
-                    ItemA = 5,
-                    ItemB
-                }
+	[TestFixture]
+	[Importance(Importance.Critical)]
+	[Category(@"Basic types")]
+	[Description(@"Tests support for the basic type System.Enum")]
+	public class EnumFixture : CodeDomTestRunner
+	{
+		private static string CreateTestCode()
+		{
+			return @"
+				public enum TestEnum
+				{
+					ItemA = 5,
+					ItemB
+				}
 
-                public class TestClass
-                {
-                    public static bool AMustBe5()
-                    {
-                        return 5 == (int)TestEnum.ItemA;
-                    }
-                }
+				public class TestClass
+				{
+					public static bool AMustBe5()
+					{
+						return 5 == (int)TestEnum.ItemA;
+					}
+				}
 
-            " 
-            + Code.ObjectClassDefinition
-            + Code.NoStdLibDefinitions;
-        }
+			"
+			+ Code.ObjectClassDefinition
+			+ Code.NoStdLibDefinitions;
+		}
 
-        private delegate bool B_V();
+		private delegate bool B_V();
 
-        [Test]
-        public void ItemAMustEqual5()
-        {
-            this.CodeSource = CreateTestCode();
-            this.DoNotReferenceMsCorlib = true;
+		[Test]
+		public void ItemAMustEqual5()
+		{
+			this.CodeSource = CreateTestCode();
+			this.DoNotReferenceMsCorlib = true;
 
-            // Due to Code.NoStdLibDefinitions... :(
-            this.UnsafeCode = true;
+			// Due to Code.NoStdLibDefinitions... :(
+			this.UnsafeCode = true;
 
-            Assert.IsTrue((bool)Run<B_V>("", "TestClass", "AMustBe5"));
-        }
-    }
+			Assert.IsTrue((bool)Run<B_V>("", "TestClass", "AMustBe5"));
+		}
+	}
 }

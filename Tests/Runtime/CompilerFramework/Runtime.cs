@@ -25,7 +25,7 @@ namespace Mosa.Runtime
 	/// </summary>
 	public static class Runtime
 	{
-		
+
 		#region Internal Call Prototypes
 
 		[VmCall(VmCall.AllocateObject)]
