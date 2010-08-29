@@ -46,7 +46,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		/// Retrieves the type loader of the runtime.
 		/// </summary>
 		/// <value>The type loader.</value>
-		public static ITypeSystem TypeLoader { get { return BaseRuntime.TypeSystem; } }
+		public static ITypeSystem TypeSystem { get { return BaseRuntime.TypeSystem; } }
 		/// <summary>
 		/// Gets the assembly loader.
 		/// </summary>

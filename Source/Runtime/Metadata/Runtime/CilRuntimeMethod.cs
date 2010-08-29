@@ -59,7 +59,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 			if (method.ParamList < maxParam)
 			{
 				int count = maxParam - method.ParamList;
-				int p = (int)(method.ParamList & TokenTypes.RowIndexMask) - 1 + typeSystem.GetModuleOffset(module).ParameterOffset;
+				int p = (int)(method.ParamList & TokenTypes.RowIndexMask) + typeSystem.GetModuleOffset(module).ParameterOffset;
 				base.Parameters = new ReadOnlyRuntimeParameterListView(p, count, typeSystem);
 			}
 			else

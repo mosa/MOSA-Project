@@ -68,14 +68,14 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns></returns>
 		public static TokenTypes ValueTokenTypeFromSignature(IMetadataProvider metadata, TokenTypes signatureToken)
 		{
-			int index = 1;
-			byte[] buffer = metadata.ReadBlob(signatureToken);
+			SignatureReader reader = new SignatureReader(metadata.ReadBlob(signatureToken));
+            reader.SkipByte();
 
 			// Jump over custom mods
-			CustomMod.ParseCustomMods(buffer, ref index);
-			index++;
+			CustomMod.ParseCustomMods(reader);
+            reader.SkipByte();
 
-			return SigType.ReadTypeDefOrRefEncoded(buffer, ref index);
+			return SigType.ReadTypeDefOrRefEncoded(reader);
 		}
 
 		/// <summary>

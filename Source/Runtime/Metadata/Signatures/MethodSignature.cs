@@ -178,46 +178,46 @@ namespace Mosa.Runtime.Metadata.Signatures
 			return result;
 		}
 
-		/// <summary>
-		/// Parses the signature.
-		/// </summary>
-		/// <param name="buffer">The buffer.</param>
-		/// <param name="index">The index.</param>
-		protected sealed override void ParseSignature(ISignatureContext context, byte[] buffer, ref int index)
+        /// <summary>
+        /// Parses the signature.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="reader">The reader.</param>
+		protected sealed override void ParseSignature(ISignatureContext context, SignatureReader reader)
 		{
 			// Check for instance signature
-			if (HAS_THIS == (buffer[index] & HAS_THIS))
+            if (HAS_THIS == (reader.PeekByte() & HAS_THIS))
 			{
 				_hasThis = true;
 			}
-			if (HAS_EXPLICIT_THIS == (buffer[index] & HAS_EXPLICIT_THIS))
+            if (HAS_EXPLICIT_THIS == (reader.PeekByte() & HAS_EXPLICIT_THIS))
 				_hasExplicitThis = true;
-			if (GENERIC == (buffer[index] & GENERIC))
+            if (GENERIC == (reader.PeekByte() & GENERIC))
 			{
 				_callingConvention = CallingConvention.Generic;
-				_genericParameterCount = Utilities.ReadCompressedInt32(buffer, ref index);
+				_genericParameterCount = reader.ReadCompressedInt32();
 			}
-			else if (VARARG == (buffer[index] & VARARG))
+            else if (VARARG == (reader.PeekByte() & VARARG))
 			{
 				_callingConvention = CallingConvention.Vararg;
 			}
-			else if (0x00 != (buffer[index] & 0x1F))
+            else if (0x00 != (reader.PeekByte() & 0x1F))
 			{
 				throw new InvalidOperationException(@"Invalid method definition signature.");
 			}
 
-			index++;
+            reader.SkipByte();
 
 			// Number of parameters
-			int paramCount = Utilities.ReadCompressedInt32(buffer, ref index);
+            int paramCount = reader.ReadCompressedInt32();
 			_parameters = new SigType[paramCount];
 
 			// Read the return type
-			_returnType = SigType.ParseTypeSignature(context, buffer, ref index);
+            _returnType = SigType.ParseTypeSignature(context, reader);
 
 			// Read all parameters
 			for (int i = 0; i < paramCount; i++)
-				_parameters[i] = SigType.ParseTypeSignature(context, buffer, ref index);
+                _parameters[i] = SigType.ParseTypeSignature(context, reader);
 		}
 
 		/// <summary>

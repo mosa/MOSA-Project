@@ -37,21 +37,20 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// <param name="token">The token.</param>
 		public void LoadSignature(ISignatureContext context, IMetadataProvider provider, TokenTypes token)
 		{
-			byte[] buffer = provider.ReadBlob(token);
+            SignatureReader reader = new SignatureReader(provider.ReadBlob(token));
 
-			int index = 0;
-			this.ParseSignature(context, buffer, ref index);
-			Debug.Assert(index == buffer.Length, @"Signature parser didn't complete.");
+            this.ParseSignature(context, reader);
+            Debug.Assert(reader.Index == reader.Length, @"Signature parser didn't complete.");
 
 			this.token = token;
 		}
 
-		/// <summary>
-		/// Parses the signature.
-		/// </summary>
-		/// <param name="buffer">The buffer.</param>
-		/// <param name="index">The index.</param>
-		protected abstract void ParseSignature(ISignatureContext context, byte[] buffer, ref int index);
+        /// <summary>
+        /// Parses the signature.
+        /// </summary>
+        /// <param name="context">The context.</param>
+        /// <param name="reader">The reader.</param>
+		protected abstract void ParseSignature(ISignatureContext context, SignatureReader reader);
 
 		/// <summary>
 		/// Froms the member ref signature token.
@@ -62,20 +61,21 @@ namespace Mosa.Runtime.Metadata.Signatures
 		public static Signature FromMemberRefSignatureToken(ISignatureContext context, IMetadataProvider provider, TokenTypes token)
 		{
 			Signature result;
-			int index = 0;
-			byte[] buffer = provider.ReadBlob(token);
 
-			if (0x06 == buffer[0])
+            SignatureReader reader = new SignatureReader(provider.ReadBlob(token));
+
+			if (reader[0] == 0x06)
 			{
 				result = new FieldSignature();
-				result.ParseSignature(context, buffer, ref index);
+                result.ParseSignature(context, reader);
 			}
 			else
 			{
 				result = new MethodSignature();
-				result.ParseSignature(context, buffer, ref index);
+                result.ParseSignature(context, reader);
 			}
-			Debug.Assert(index == buffer.Length, @"Not all signature bytes read.");
+            Debug.Assert(reader.Index == reader.Length, @"Not all signature bytes read.");
+
 			return result;
 		}
 	}
