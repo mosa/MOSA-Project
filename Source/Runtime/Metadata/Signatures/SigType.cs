@@ -291,7 +291,7 @@ namespace Mosa.Runtime.Metadata.Signatures
         /// <returns></returns>
 		private static TypeSigType ParseValueType(ISignatureContext context, SignatureReader reader)
 		{
-			TokenTypes token = ReadTypeDefOrRefEncoded(reader);
+            TokenTypes token = reader.ReadEncodedTypeDefOrRef();
 			return new ValueTypeSigType(token);
 		}
 
@@ -374,7 +374,7 @@ namespace Mosa.Runtime.Metadata.Signatures
         /// <returns></returns>
         private static SigType ParseFunctionPointer(ISignatureContext context, SignatureReader reader)
 		{
-            TokenTypes token = (TokenTypes)reader.ReadCompressedInt32();
+            TokenTypes token = reader.ReadEncodedToken();
 			return new FnptrSigType(token);
 		}
 
@@ -386,7 +386,7 @@ namespace Mosa.Runtime.Metadata.Signatures
         /// <returns></returns>
 		private static TypeSigType ParseClassSignature(ISignatureContext context, SignatureReader reader)
 		{
-			TokenTypes token = ReadTypeDefOrRefEncoded(reader);
+            TokenTypes token = reader.ReadEncodedTypeDefOrRef();
 			return new ClassSigType(token);
 		}
 
@@ -429,23 +429,6 @@ namespace Mosa.Runtime.Metadata.Signatures
 			return new SZArraySigType(customMods, elementType);
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		private static readonly TokenTypes[] _typeDefOrRefEncodedTables = new TokenTypes[] { TokenTypes.TypeDef, TokenTypes.TypeRef, TokenTypes.TypeSpec };
-
-        /// <summary>
-        /// Reads the type def or ref encoded.
-        /// </summary>
-        /// <param name="reader">The reader.</param>
-        /// <returns></returns>
-		public static TokenTypes ReadTypeDefOrRefEncoded(SignatureReader reader)
-		{
-			int value = reader.ReadCompressedInt32();
-			Debug.Assert(0 != (value & 0xFFFFFFFC), @"Invalid TypeDefOrRefEncoded index value.");
-			TokenTypes token = (TokenTypes)((value >> 2) | (int)_typeDefOrRefEncodedTables[value & 0x03]);
-			return token;
-		}
 
 		#endregion // Static methods
 

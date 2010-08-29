@@ -19,25 +19,18 @@ namespace Mosa.Runtime.Metadata
     {
         protected byte[] buffer = null;
         protected int index = 0;
-        protected int tokenoffset = 0;
 
         public int Index { get { return index; } }
         public int Length { get { return buffer.Length; } }
         public byte this[int index] { get { return buffer[index]; } }
 
-        public SignatureReader(byte[] buffer, int tokenoffset)
+        public SignatureReader(byte[] buffer)
         {
             if (buffer == null)
                 throw new ArgumentNullException(@"buffer");
 
             this.buffer = buffer;
             this.index = 0;
-            this.tokenoffset = tokenoffset;
-        }
-
-        public SignatureReader(byte[] buffer)
-            : this(buffer, 0)
-        {
         }
 
         /// <summary>
@@ -119,7 +112,7 @@ namespace Mosa.Runtime.Metadata
             if (result)
             {
                 index++;
-                ReadTypeDefOrRefEncoded();
+                ReadEncodedTypeDefOrRef();
                 Debug.WriteLine("Skipping CilElementType.Required or CilElementType.Optional.");
             }
             return result;
@@ -134,12 +127,22 @@ namespace Mosa.Runtime.Metadata
         /// Reads the type def or ref encoded.
         /// </summary>
         /// <returns></returns>
-        public TokenTypes ReadTypeDefOrRefEncoded()
+        public TokenTypes ReadEncodedTypeDefOrRef()
         {
             int value = ReadCompressedInt32();
             Debug.Assert(0 != (value & 0xFFFFFFFC), @"Invalid TypeDefOrRefEncoded index value.");
             TokenTypes token = (TokenTypes)((value >> 2) | (int)_typeDefOrRefEncodedTables[value & 0x03]);
             return token;
+        }
+
+        /// <summary>
+        /// Reads the encoded token.
+        /// </summary>
+        /// <returns></returns>
+        public TokenTypes ReadEncodedToken()
+        {
+            int value = ReadCompressedInt32();
+            return (TokenTypes)value;
         }
 
         /// <summary>

@@ -75,7 +75,7 @@ namespace Mosa.Runtime.CompilerFramework
 			CustomMod.ParseCustomMods(reader);
             reader.SkipByte();
 
-			return SigType.ReadTypeDefOrRefEncoded(reader);
+            return reader.ReadEncodedTypeDefOrRef(); ;
 		}
 
 		/// <summary>

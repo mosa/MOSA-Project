@@ -14,69 +14,62 @@ using System.Text;
 
 namespace Mosa.Runtime.Metadata.Signatures
 {
-	/// <summary>
-	/// 
-	/// </summary>
-	public abstract class Signature
-	{
-		private TokenTypes token;
+    /// <summary>
+    /// 
+    /// </summary>
+    public abstract class Signature
+    {
+        private TokenTypes token;
 
-		public TokenTypes Token
-		{
-			get
-			{
-				return token;
-			}
-		}
-
-
-		/// <summary>
-		/// Loads the signature.
-		/// </summary>
-		/// <param name="provider">The provider.</param>
-		/// <param name="token">The token.</param>
-		public void LoadSignature(ISignatureContext context, IMetadataProvider provider, TokenTypes token)
-		{
+        public TokenTypes Token { get { return token; } }
+        
+        /// <summary>
+        /// Loads the signature.
+        /// </summary>
+        /// <param name="provider">The provider.</param>
+        /// <param name="token">The token.</param>
+        public void LoadSignature(ISignatureContext context, IMetadataProvider provider, TokenTypes token)
+        {
             SignatureReader reader = new SignatureReader(provider.ReadBlob(token));
 
             this.ParseSignature(context, reader);
             Debug.Assert(reader.Index == reader.Length, @"Signature parser didn't complete.");
 
-			this.token = token;
-		}
+            this.token = token;
+        }
 
         /// <summary>
         /// Parses the signature.
         /// </summary>
         /// <param name="context">The context.</param>
         /// <param name="reader">The reader.</param>
-		protected abstract void ParseSignature(ISignatureContext context, SignatureReader reader);
+        protected abstract void ParseSignature(ISignatureContext context, SignatureReader reader);
 
-		/// <summary>
-		/// Froms the member ref signature token.
-		/// </summary>
-		/// <param name="provider">The provider.</param>
-		/// <param name="token">The token.</param>
-		/// <returns></returns>
-		public static Signature FromMemberRefSignatureToken(ISignatureContext context, IMetadataProvider provider, TokenTypes token)
-		{
-			Signature result;
+        /// <summary>
+        /// Froms the member ref signature token.
+        /// </summary>
+        /// <param name="provider">The provider.</param>
+        /// <param name="token">The token.</param>
+        /// <returns></returns>
+        public static Signature FromMemberRefSignatureToken(ISignatureContext context, IMetadataProvider provider, TokenTypes token)
+        {
+            Signature result;
 
             SignatureReader reader = new SignatureReader(provider.ReadBlob(token));
 
-			if (reader[0] == 0x06)
-			{
-				result = new FieldSignature();
+            if (reader[0] == 0x06)
+            {
+                result = new FieldSignature();
                 result.ParseSignature(context, reader);
-			}
-			else
-			{
-				result = new MethodSignature();
+            }
+            else
+            {
+                result = new MethodSignature();
                 result.ParseSignature(context, reader);
-			}
+            }
             Debug.Assert(reader.Index == reader.Length, @"Not all signature bytes read.");
 
-			return result;
-		}
-	}
+            return result;
+        }
+    }
 }

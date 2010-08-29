@@ -102,7 +102,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 
                 reader.SkipByte();
 
-                TokenTypes modType = SigType.ReadTypeDefOrRefEncoded(reader);
+                TokenTypes modType = reader.ReadEncodedTypeDefOrRef(); 
 				mods.Add(new CustomMod((CustomModType)(type - CilElementType.Required + 1), modType));
 			}
 
