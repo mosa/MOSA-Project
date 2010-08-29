@@ -16,13 +16,13 @@ using Mosa.Runtime.Vm;
 
 namespace Mosa.Platforms.x86.Intrinsic
 {
-    /// <summary>
-    /// Representations the x86 sti instruction.
-    /// </summary>
+	/// <summary>
+	/// Representations the x86 sti instruction.
+	/// </summary>
 	public sealed class Sti : IIntrinsicMethod
-    {
+	{
 
-        #region Methods
+		#region Methods
 
 		/// <summary>
 		/// Replaces the instrinsic call site
@@ -34,7 +34,7 @@ namespace Mosa.Platforms.x86.Intrinsic
 			context.SetInstruction(CPUx86.Instruction.StiInstruction);
 		}
 
-        #endregion // Methods
+		#endregion // Methods
 
-    }
+	}
 }

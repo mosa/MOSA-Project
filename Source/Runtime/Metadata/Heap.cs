@@ -11,12 +11,14 @@ using System;
 using System.IO;
 using System.Text;
 
-namespace Mosa.Runtime.Metadata {
+namespace Mosa.Runtime.Metadata
+{
 
 	/// <summary>
 	/// Base class for provider heaps.
 	/// </summary>
-	public abstract class Heap {
+	public abstract class Heap
+	{
 		#region Data members
 
 		/// <summary>
@@ -48,7 +50,7 @@ namespace Mosa.Runtime.Metadata {
 		{
 			if (null == metadata)
 				throw new ArgumentNullException(@"provider");
-			
+
 			_metadata = metadata;
 			_offset = offset;
 			_size = size;

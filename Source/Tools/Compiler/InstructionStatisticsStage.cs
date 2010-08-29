@@ -109,7 +109,8 @@ namespace Mosa.Runtime.CompilerFramework
 			writer.WriteLine("Namespace statistics:");
 			writer.WriteLine("---------------------");
 			writer.WriteLine("  - Number of instructions visited in namespace:");
-			foreach (string name in _namespaces.Keys) {
+			foreach (string name in _namespaces.Keys)
+			{
 				string n = name.Substring(name.LastIndexOf('.') + 1, name.Length - name.LastIndexOf('.') - 1);
 				string percentage = string.Format("{00:.00}%", (double)((double)_namespaces[name] / (double)_numberOfInstructions) * 100);
 				writer.WriteLine("    + {0}\t: {1}\t[{2}]", n, _namespaces[name], percentage.Substring(1));

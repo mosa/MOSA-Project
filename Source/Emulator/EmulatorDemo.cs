@@ -126,12 +126,14 @@ namespace Mosa.Emulator
 			Pictor.VertexSource.RoundedRect r = new Pictor.VertexSource.RoundedRect(m_x[0] + d, m_y[0] + d, m_x[1] + d, m_y[1] + d, radius.Value());
 			r.NormalizeRadius();
 
-			if (border.Status()) {
+			if (border.Status())
+			{
 				Pictor.VertexSource.StrokeConverter p = new Pictor.VertexSource.StrokeConverter(r);
 				p.Width(1.0);
 				ras.AddPath(p);
 			}
-			else {
+			else
+			{
 				ras.AddPath(r);
 			}
 
@@ -158,11 +160,14 @@ namespace Mosa.Emulator
 
 		public override void OnMouseDown(Pictor.UI.MouseEventArgs mouseEvent)
 		{
-			if (mouseEvent.Button == Pictor.UI.MouseButtons.Left) {
-				for (int i = 0; i < 2; i++) {
+			if (mouseEvent.Button == Pictor.UI.MouseButtons.Left)
+			{
+				for (int i = 0; i < 2; i++)
+				{
 					double x = mouseEvent.X;
 					double y = mouseEvent.Y;
-					if (System.Math.Sqrt((x - m_x[i]) * (x - m_x[i]) + (y - m_y[i]) * (y - m_y[i])) < 5.0) {
+					if (System.Math.Sqrt((x - m_x[i]) * (x - m_x[i]) + (y - m_y[i]) * (y - m_y[i])) < 5.0)
+					{
 						m_dx = x - m_x[i];
 						m_dy = y - m_y[i];
 						m_idx = i;
@@ -177,8 +182,10 @@ namespace Mosa.Emulator
 
 		public override void OnMouseMove(Pictor.UI.MouseEventArgs mouseEvent)
 		{
-			if (mouseEvent.Button == Pictor.UI.MouseButtons.Left) {
-				if (m_idx >= 0) {
+			if (mouseEvent.Button == Pictor.UI.MouseButtons.Left)
+			{
+				if (m_idx >= 0)
+				{
 					m_x[m_idx] = mouseEvent.X - m_dx;
 					m_y[m_idx] = mouseEvent.Y - m_dy;
 					ForceRedraw();
@@ -199,7 +206,8 @@ namespace Mosa.Emulator
 			EmulatorDemo app = new EmulatorDemo(Pictor.UI.PlatformSupportAbstract.PixelFormats.Rgba32, Pictor.UI.PlatformSupportAbstract.ERenderOrigin.OriginBottomLeft);
 			app.Caption = "MOSA :: Emulator :: Pictor Demonstration";
 
-			if (app.Init(600, 400, (uint)Pictor.UI.PlatformSupportAbstract.EWindowFlags.Risizeable)) {
+			if (app.Init(600, 400, (uint)Pictor.UI.PlatformSupportAbstract.EWindowFlags.Risizeable))
+			{
 				app.Run();
 			}
 		}

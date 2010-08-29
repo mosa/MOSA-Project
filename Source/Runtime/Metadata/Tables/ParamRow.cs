@@ -14,79 +14,79 @@ using System.IO;
 
 namespace Mosa.Runtime.Metadata.Tables
 {
-    /// <summary>
-    /// 
-    /// </summary>
-	public struct ParamRow 
-    {
+	/// <summary>
+	/// 
+	/// </summary>
+	public struct ParamRow
+	{
 		#region Data members
 
-        /// <summary>
-        /// Holds the flags of the parameter.
-        /// </summary>
+		/// <summary>
+		/// Holds the flags of the parameter.
+		/// </summary>
 		private ParameterAttributes _flags;
 
-        /// <summary>
-        /// The token holding the name of the parameter.
-        /// </summary>
-        private TokenTypes _nameIdx;
+		/// <summary>
+		/// The token holding the name of the parameter.
+		/// </summary>
+		private TokenTypes _nameIdx;
 
-        /// <summary>
-        /// Holds the sequence index of the parameter.
-        /// </summary>
+		/// <summary>
+		/// Holds the sequence index of the parameter.
+		/// </summary>
 		private short _sequence;
 
 		#endregion // Data members
 
-        #region Construction
+		#region Construction
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ParamRow"/> struct.
-        /// </summary>
-        /// <param name="flags">The flags.</param>
-        /// <param name="sequence">The sequence.</param>
-        /// <param name="nameIdx">The name idx.</param>
-        public ParamRow(ParameterAttributes flags, short sequence, TokenTypes nameIdx)
-        {
-            _nameIdx = nameIdx;
-            _sequence = sequence;
-            _flags = flags;
-        }
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ParamRow"/> struct.
+		/// </summary>
+		/// <param name="flags">The flags.</param>
+		/// <param name="sequence">The sequence.</param>
+		/// <param name="nameIdx">The name idx.</param>
+		public ParamRow(ParameterAttributes flags, short sequence, TokenTypes nameIdx)
+		{
+			_nameIdx = nameIdx;
+			_sequence = sequence;
+			_flags = flags;
+		}
 
-        #endregion // Construction
+		#endregion // Construction
 
-        #region Properties
+		#region Properties
 
-        /// <summary>
-        /// Returns the attributes of this parameter.
-        /// </summary>
-        /// <value>The flags.</value>
-        public ParameterAttributes Flags
-        {
-            get { return _flags; }
-        }
+		/// <summary>
+		/// Returns the attributes of this parameter.
+		/// </summary>
+		/// <value>The flags.</value>
+		public ParameterAttributes Flags
+		{
+			get { return _flags; }
+		}
 
-        /// <summary>
-        /// Retrieves the token of the parameter name.
-        /// </summary>
-        /// <value>The name idx.</value>
-        public TokenTypes NameIdx
-        {
-            get
-            {
-                return _nameIdx;
-            }
-        }
+		/// <summary>
+		/// Retrieves the token of the parameter name.
+		/// </summary>
+		/// <value>The name idx.</value>
+		public TokenTypes NameIdx
+		{
+			get
+			{
+				return _nameIdx;
+			}
+		}
 
-        /// <summary>
-        /// Retrieves the parameter sequence number.
-        /// </summary>
-        /// <value>The sequence.</value>
+		/// <summary>
+		/// Retrieves the parameter sequence number.
+		/// </summary>
+		/// <value>The sequence.</value>
 		public short Sequence
-        {
-            get { return _sequence; }
-        }
+		{
+			get { return _sequence; }
+		}
 
-        #endregion // Properties
+		#endregion // Properties
 	}
 }

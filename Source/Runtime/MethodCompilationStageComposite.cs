@@ -46,7 +46,8 @@ namespace Mosa.Runtime.CompilerFramework
 		public MethodCompilationStageComposite(IEnumerable<IMethodCompilerStage> stages)
 		{
 			// Walk through enumeration and copy _stages
-			foreach (IMethodCompilerStage stage in stages) {
+			foreach (IMethodCompilerStage stage in stages)
+			{
 				Stages.Add(stage);
 			}
 		}
@@ -78,7 +79,8 @@ namespace Mosa.Runtime.CompilerFramework
 		public void Run()
 		{
 			// Call Run on every stage
-			foreach (IMethodCompilerStage stage in Stages) {
+			foreach (IMethodCompilerStage stage in Stages)
+			{
 				stage.Setup(MethodCompiler);
 				stage.Run();
 			}

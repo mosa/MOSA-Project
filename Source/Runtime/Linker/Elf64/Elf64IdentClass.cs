@@ -13,22 +13,22 @@ using System.Text;
 
 namespace Mosa.Runtime.Linker.Elf64
 {
-    /// <summary>
-    /// Identifies the file's class, or capacity.
-    /// </summary>
-    public enum Elf64IdentClass : byte
-    {
-        /// <summary>
-        /// Invalid class
-        /// </summary>
-        ClassNone   = 0x00,
-        /// <summary>
-        /// 32-bit objects
-        /// </summary>
-        Class32     = 0x01,
-        /// <summary>
-        /// 64-bit objects
-        /// </summary>
-        Class64     = 0x02,
-    }
+	/// <summary>
+	/// Identifies the file's class, or capacity.
+	/// </summary>
+	public enum Elf64IdentClass : byte
+	{
+		/// <summary>
+		/// Invalid class
+		/// </summary>
+		ClassNone = 0x00,
+		/// <summary>
+		/// 32-bit objects
+		/// </summary>
+		Class32 = 0x01,
+		/// <summary>
+		/// 64-bit objects
+		/// </summary>
+		Class64 = 0x02,
+	}
 }

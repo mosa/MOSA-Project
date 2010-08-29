@@ -23,7 +23,7 @@ namespace Mosa.Runtime.Linker
 	public sealed class MapFileGenerationStage : BaseAssemblyCompilerStage, IAssemblyCompilerStage, IPipelineStage
 	{
 		#region Data members
-		
+
 		private IAssemblyLinker linker;
 
 		/// <summary>

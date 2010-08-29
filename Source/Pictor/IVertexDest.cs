@@ -8,16 +8,16 @@
  */
 namespace Pictor
 {
-    public interface IVertexDest
-    {
-        void RemoveAll();
+	public interface IVertexDest
+	{
+		void RemoveAll();
 
-        uint Size();
-        void Add(PointD vertex);
+		uint Size();
+		void Add(PointD vertex);
 
-        PointD this[int i]
-        {
-            get;
-        }
-    };
+		PointD this[int i]
+		{
+			get;
+		}
+	};
 }

@@ -51,7 +51,7 @@ namespace Mosa.Runtime.Vm
 		/// </summary>
 		private ModuleOffsets[] _moduleOffsets;
 
-		private BaseRuntime baseRuntime;
+		private IAssemblyLoader _assemblyLoader;
 
 		#endregion // Data members
 
@@ -60,9 +60,9 @@ namespace Mosa.Runtime.Vm
 		/// <summary>
 		/// Initializes static data members of the type loader.
 		/// </summary>
-		public DefaultTypeSystem(BaseRuntime baseRuntime)
+		public DefaultTypeSystem(IAssemblyLoader assemblyLoader)
 		{
-			this.baseRuntime = baseRuntime;
+			_assemblyLoader = assemblyLoader;
 			_methods = new RuntimeMethod[0];
 			_fields = new RuntimeField[0];
 			_types = new RuntimeType[0];
@@ -252,7 +252,7 @@ namespace Mosa.Runtime.Vm
 			string ns = module.Metadata.ReadString(typeRef.TypeNamespaceIdx);
 			AssemblyRefRow arr = module.Metadata.ReadAssemblyRefRow(typeRef.ResolutionScopeIdx);
 
-			IMetadataModule dependency = baseRuntime.AssemblyLoader.Load(module.Metadata.ReadString(arr.NameIdx));
+			IMetadataModule dependency = _assemblyLoader.Load(this, module.Metadata.ReadString(arr.NameIdx));
 
 			for (int i = GetModuleOffset(dependency).TypeOffset; i < _types.Length; i++)
 			{
@@ -319,7 +319,7 @@ namespace Mosa.Runtime.Vm
 
 			if (names.Length > 1)
 			{
-				IMetadataModule module2 = baseRuntime.AssemblyLoader.Load(names[1].Trim());
+				IMetadataModule module2 = _assemblyLoader.Load(this, names[1].Trim());
 				result = FindType(ns, name, this.GetTypesFromModule(module2));
 			}
 			else
@@ -620,9 +620,9 @@ namespace Mosa.Runtime.Vm
 				TokenTypes maxNextMethod, maxNextField;
 				string name = md.ReadString(typeDefRow.TypeNameIdx);
 
-				Debug.Write(((uint)token).ToString("X") + ": ");
-				Debug.Write(typeDefRow.TypeNameIdx.ToString("X") + ": ");
-				Debug.Write(md.ReadString(typeDefRow.TypeNameIdx));
+				//Debug.Write(((uint)token).ToString("X") + ": ");
+				//Debug.Write(typeDefRow.TypeNameIdx.ToString("X") + ": ");
+				//Debug.Write(md.ReadString(typeDefRow.TypeNameIdx));
 
 				if (token < maxTypeDef)
 				{
@@ -648,13 +648,13 @@ namespace Mosa.Runtime.Vm
 					size = layoutRow.ClassSize;
 					packing = layoutRow.PackingSize;
 
-					Debug.Write(" [Size: " + size.ToString()+"]");
+					//Debug.Write(" [Size: " + size.ToString() + "]");
 
 					tokenLayout++;
 					if (tokenLayout <= maxLayout)
 						layoutRow = md.ReadClassLayoutRow(tokenLayout);
 				}
-				Debug.WriteLine(string.Empty);
+				//Debug.WriteLine(string.Empty);
 
 				// Create and populate the runtime type
 				rt = new CilRuntimeType(token, module, typeDefRow, maxNextField, maxNextMethod, packing, size, this);
@@ -1019,7 +1019,7 @@ namespace Mosa.Runtime.Vm
 					string typeNamespace = module.Metadata.ReadString(row.TypeNamespaceIdx);
 
 					AssemblyRefRow asmRefRow = module.Metadata.ReadAssemblyRefRow(row.ResolutionScopeIdx);
-					IMetadataModule resolvedModule = baseRuntime.AssemblyLoader.Load(module.Metadata.ReadString(asmRefRow.NameIdx));
+					IMetadataModule resolvedModule = _assemblyLoader.Load(this, module.Metadata.ReadString(asmRefRow.NameIdx));
 
 					// HACK: If there's an easier way to do this without all those string comparisons, I'm all for it
 					foreach (RuntimeType type in ((ITypeSystem)this).GetTypesFromModule(resolvedModule))

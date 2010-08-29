@@ -13,25 +13,25 @@ using System.Text;
 
 namespace Mosa.Runtime.Linker.Elf64
 {
-    /// <summary>
-    /// Specifies the data encoding of the 
-    /// processor-specific data in the object file. 
-    /// </summary>
-    public enum Elf64IdentData : byte
-    {
-        /// <summary>
-        /// Invalid data encoding
-        /// </summary>
-        DataNone    = 0x00,
-        /// <summary>
-        /// Encoding Data2LSB specifies 2's complement values, with the least significant byte 
-        /// occupying the lowest virtualAddress. 
-        /// </summary>
-        Data2LSB    = 0x01,
-        /// <summary>
-        /// Encoding Data2MSB specifies 2's complement values, with the most significant byte 
-        /// occupying the lowest virtualAddress. 
-        /// </summary>
-        Data2MSB    = 0x02,
-    }
+	/// <summary>
+	/// Specifies the data encoding of the 
+	/// processor-specific data in the object file. 
+	/// </summary>
+	public enum Elf64IdentData : byte
+	{
+		/// <summary>
+		/// Invalid data encoding
+		/// </summary>
+		DataNone = 0x00,
+		/// <summary>
+		/// Encoding Data2LSB specifies 2's complement values, with the least significant byte 
+		/// occupying the lowest virtualAddress. 
+		/// </summary>
+		Data2LSB = 0x01,
+		/// <summary>
+		/// Encoding Data2MSB specifies 2's complement values, with the most significant byte 
+		/// occupying the lowest virtualAddress. 
+		/// </summary>
+		Data2MSB = 0x02,
+	}
 }

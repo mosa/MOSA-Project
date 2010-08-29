@@ -32,8 +32,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 		#endregion // Construction
 
-		#region Methods 
-		
+		#region Methods
+
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
 		/// </summary>
@@ -44,7 +44,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			visitor.Sub(context);
 		}
 
-		#endregion // Methods 
+		#endregion // Methods
 
 	}
 }

@@ -1,4 +1,13 @@
-﻿using System;
+﻿/*
+ * (c) 2008 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,26 +15,26 @@ using System.IO;
 
 namespace Mosa.Tools.Compiler.Symbols.Pdb
 {
-    /// <summary>
-    /// Base class for CodeView symbols, that are stored in a PDB file.
-    /// </summary>
-    public class CvSymbol
-    {
-        #region Data Members
+	/// <summary>
+	/// Base class for CodeView symbols, that are stored in a PDB file.
+	/// </summary>
+	public class CvSymbol
+	{
+		#region Data Members
 
-        /// <summary>
-        /// Holds the length of the symbol on disk.
-        /// </summary>
-        private readonly ushort length;
+		/// <summary>
+		/// Holds the length of the symbol on disk.
+		/// </summary>
+		private readonly ushort length;
 
 		/// <summary>
 		/// Holds the codeview entry type.
 		/// </summary>
-        private readonly CvEntryType type;
+		private readonly CvEntryType type;
 
-        #endregion // Data Members
+		#endregion // Data Members
 
-        #region Construction
+		#region Construction
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CvSymbol"/> class.
@@ -38,41 +47,41 @@ namespace Mosa.Tools.Compiler.Symbols.Pdb
 			this.type = type;
 		}
 
-        #endregion // Construction
+		#endregion // Construction
 
-        #region Properties
+		#region Properties
 
-        /// <summary>
-        /// Gets the length.
-        /// </summary>
-        /// <value>The length.</value>
-        public ushort Length
-        {
-            get { return this.length; }
-        }
+		/// <summary>
+		/// Gets the length.
+		/// </summary>
+		/// <value>The length.</value>
+		public ushort Length
+		{
+			get { return this.length; }
+		}
 
-        /// <summary>
-        /// Gets the type.
-        /// </summary>
-        /// <value>The type.</value>
-        public CvEntryType Type
-        {
-            get { return this.type; }
-        }
+		/// <summary>
+		/// Gets the type.
+		/// </summary>
+		/// <value>The type.</value>
+		public CvEntryType Type
+		{
+			get { return this.type; }
+		}
 
-        #endregion // Properties
+		#endregion // Properties
 
-        #region Methods
+		#region Methods
 
-        /// <summary>
-        /// Reads the specified reader.
-        /// </summary>
-        /// <param name="reader">The reader.</param>
-        public static CvSymbol Read(BinaryReader reader)
-        {
+		/// <summary>
+		/// Reads the specified reader.
+		/// </summary>
+		/// <param name="reader">The reader.</param>
+		public static CvSymbol Read(BinaryReader reader)
+		{
 			CvSymbol result;
-            ushort len = reader.ReadUInt16();
-            CvEntryType type = (CvEntryType)reader.ReadUInt16();
+			ushort len = reader.ReadUInt16();
+			CvEntryType type = (CvEntryType)reader.ReadUInt16();
 
 			switch (type)
 			{
@@ -90,7 +99,7 @@ namespace Mosa.Tools.Compiler.Symbols.Pdb
 			}
 
 			return result;
-        }
+		}
 
 		/// <summary>
 		/// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.

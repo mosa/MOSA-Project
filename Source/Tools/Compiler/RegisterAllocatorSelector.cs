@@ -49,7 +49,8 @@ namespace Mosa.Tools.Compiler
 
 		private IMethodCompilerStage SelectImplementation(string name)
 		{
-			switch (name.ToLower()) {
+			switch (name.ToLower())
+			{
 				case "linear":
 					return linearRegisterAllocator;
 				case "stack":

@@ -17,7 +17,8 @@ namespace Mosa.Tools.Mono.UpdateProject
 			FileStream first = new FileStream(file1, FileMode.Open);
 			FileStream second = new FileStream(file2, FileMode.Open);
 
-			if (first.Length != second.Length) {
+			if (first.Length != second.Length)
+			{
 				first.Close();
 				second.Close();
 				return false;
@@ -26,7 +27,8 @@ namespace Mosa.Tools.Mono.UpdateProject
 			int byte1;
 			int byte2;
 
-			do {
+			do
+			{
 				byte1 = first.ReadByte();
 				byte2 = second.ReadByte();
 			}

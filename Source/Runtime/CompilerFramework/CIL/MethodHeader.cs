@@ -14,26 +14,26 @@ using Mosa.Runtime.Metadata;
 
 namespace Mosa.Runtime.CompilerFramework.CIL
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public struct MethodHeader
-    {
-        /// <summary>
-        /// Header flags 
-        /// </summary>
-        public MethodFlags flags;
-        /// <summary>
-        /// Maximum stack size 
-        /// </summary>
-        public ushort maxStack;
-        /// <summary>
-        /// Size of the code in bytes 
-        /// </summary>
-        public uint codeSize;
-        /// <summary>
-        /// Local variable signature token 
-        /// </summary>
-        public TokenTypes localsSignature;
-    }
+	/// <summary>
+	/// 
+	/// </summary>
+	public struct MethodHeader
+	{
+		/// <summary>
+		/// Header flags 
+		/// </summary>
+		public MethodFlags flags;
+		/// <summary>
+		/// Maximum stack size 
+		/// </summary>
+		public ushort maxStack;
+		/// <summary>
+		/// Size of the code in bytes 
+		/// </summary>
+		public uint codeSize;
+		/// <summary>
+		/// Local variable signature token 
+		/// </summary>
+		public TokenTypes localsSignature;
+	}
 }

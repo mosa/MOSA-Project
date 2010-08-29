@@ -14,28 +14,28 @@ using Mosa.Runtime.Vm;
 
 namespace Mosa.Platforms.x86.CPUx86
 {
-    /// <summary>
+	/// <summary>
 	/// Representations the x86 Invlpg instruction.
-    /// </summary>
+	/// </summary>
 	public sealed class InvlpgInstruction : OneOperandInstruction
-    {
+	{
 		#region Data Members
 
 		private static readonly OpCode INVLPG = new OpCode(new byte[] { 0x0F, 0x01 }, 7);
 
 		#endregion // Data Members
 
-        #region Methods
+		#region Methods
 
 		/// <summary>
 		/// Emits the specified platform instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <param name="emitter">The emitter.</param>
-        protected override void Emit(Context ctx, MachineCodeEmitter emitter)
-        {
+		protected override void Emit(Context ctx, MachineCodeEmitter emitter)
+		{
 			emitter.Emit(INVLPG, ctx.Operand1, null);
-        }
+		}
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
@@ -56,6 +56,6 @@ namespace Mosa.Platforms.x86.CPUx86
 			context.SetInstruction(CPUx86.Instruction.InvlpgInstruction, null, context.Operand1);
 		}
 
-        #endregion // Methods
-    }
+		#endregion // Methods
+	}
 }

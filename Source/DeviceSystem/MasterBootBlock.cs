@@ -102,7 +102,8 @@ namespace Mosa.DeviceSystem
 			}
 			set
 			{
-				if (value == null) {
+				if (value == null)
+				{
 					code = null;
 					return;
 				}
@@ -147,7 +148,8 @@ namespace Mosa.DeviceSystem
 
 			diskSignature = masterboot.GetUInt(MBR.DiskSignature);
 
-			for (uint index = 0; index < MaxMBRPartitions; index++) {
+			for (uint index = 0; index < MaxMBRPartitions; index++)
+			{
 				uint offset = MBR.FirstPartition + (index * MBRConstant.PartitionSize);
 
 				GenericPartition partition = new GenericPartition(index);
@@ -188,7 +190,8 @@ namespace Mosa.DeviceSystem
 					masterboot.SetByte(index, code[index]);
 
 			for (uint index = 0; index < MaxMBRPartitions; index++)
-				if (Partitions[index].TotalBlocks != 0) {
+				if (Partitions[index].TotalBlocks != 0)
+				{
 					uint offset = MBR.FirstPartition + (index * 16);
 					masterboot.SetByte(offset + PartitionRecord.Status, (byte)(Partitions[index].Bootable ? 0x80 : 0x00));
 					masterboot.SetByte(offset + PartitionRecord.PartitionType, Partitions[index].PartitionType);

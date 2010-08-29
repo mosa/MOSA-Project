@@ -9,30 +9,30 @@
 
 namespace Mosa.Runtime.Metadata.Signatures
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public sealed class FieldSignature : VariableSignature
-    {
+	/// <summary>
+	/// 
+	/// </summary>
+	public sealed class FieldSignature : VariableSignature
+	{
 
-        /// <summary>
-        /// Parses the signature.
-        /// </summary>
-        /// <param name="buffer">The buffer.</param>
-        /// <param name="index">The index.</param>
-        protected override void ParseSignature(ISignatureContext context, byte[] buffer, ref int index)
-        {
-            if (Field != buffer[index]) 
-                return;
+		/// <summary>
+		/// Parses the signature.
+		/// </summary>
+		/// <param name="buffer">The buffer.</param>
+		/// <param name="index">The index.</param>
+		protected override void ParseSignature(ISignatureContext context, byte[] buffer, ref int index)
+		{
+			if (Field != buffer[index])
+				return;
 
-            index++;
+			index++;
 
-            base.ParseSignature(context, buffer, ref index);
-        }
+			base.ParseSignature(context, buffer, ref index);
+		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        private const int Field = 0x06;
-    }
+		/// <summary>
+		/// 
+		/// </summary>
+		private const int Field = 0x06;
+	}
 }

@@ -42,20 +42,20 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 		#endregion // Construction
 
-        public static Operand CreateResultOperand(IInstructionDecoder decoder, StackTypeCode operandType, SigType operandSigType)
-        {
-            Operand result;
+		public static Operand CreateResultOperand(IInstructionDecoder decoder, StackTypeCode operandType, SigType operandSigType)
+		{
+			Operand result;
 
-            if (operandType == StackTypeCode.O || operandType == StackTypeCode.Ptr || operandType == StackTypeCode.F)
-            {
-                result = decoder.Compiler.CreateTemporary(operandSigType);
-            }
-            else
-            {
-                result = decoder.Compiler.CreateTemporary(Operand.SigTypeFromStackType(operandType));
-            }
+			if (operandType == StackTypeCode.O || operandType == StackTypeCode.Ptr || operandType == StackTypeCode.F)
+			{
+				result = decoder.Compiler.CreateTemporary(operandSigType);
+			}
+			else
+			{
+				result = decoder.Compiler.CreateTemporary(Operand.SigTypeFromStackType(operandType));
+			}
 
-            return result;
-        }
+			return result;
+		}
 	}
 }

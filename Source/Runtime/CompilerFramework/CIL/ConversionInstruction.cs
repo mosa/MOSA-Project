@@ -58,7 +58,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			// Validate the typecode & determine the resulting stack type
 			SigType resultType;
 
-			switch (_opcode) {
+			switch (_opcode)
+			{
 				case OpCode.Conv_u: goto case OpCode.Conv_i;
 				case OpCode.Conv_i:
 					resultType = compiler.Architecture.NativeType;

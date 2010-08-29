@@ -39,11 +39,11 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Call(Context context);
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="context"></param>
-        void DirectCompare(Context context);
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="context"></param>
+		void DirectCompare(Context context);
 		/// <summary>
 		/// Or the specified context.
 		/// </summary>
@@ -159,16 +159,16 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Cvtss2sd(Context context);
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="context"></param>
-        void Cvttsd2si(Context context);
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="context"></param>
-        void Cvttss2si(Context context);
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="context"></param>
+		void Cvttsd2si(Context context);
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="context"></param>
+		void Cvttss2si(Context context);
 		/// <summary>
 		/// Setccs the specified context.
 		/// </summary>
@@ -216,10 +216,10 @@ namespace Mosa.Platforms.x86.CPUx86
 		void Jns(Context context);
 
 		/// <summary>
-        /// X86 branch instruction
+		/// X86 branch instruction
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void Branch(Context context);		
+		void Branch(Context context);
 
 		/// <summary>
 		/// Jumps the specified context.
@@ -306,11 +306,11 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Iretd(Context context);
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="context"></param>
-        void Lea(Context context);
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="context"></param>
+		void Lea(Context context);
 		/// <summary>
 		/// Load global descriptor table
 		/// </summary>
@@ -341,16 +341,16 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Movsx(Context context);
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="context"></param>
-        void Movss(Context context);
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="context"></param>
-        void Movsd(Context context);
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="context"></param>
+		void Movss(Context context);
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="context"></param>
+		void Movsd(Context context);
 		/// <summary>
 		/// Move with Zero-Extension
 		/// </summary>
@@ -447,6 +447,6 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <param name="context">The context.</param>
 		void Not(Context context);
 
-        void SseRound(Context context);
-    }
+		void SseRound(Context context);
+	}
 }

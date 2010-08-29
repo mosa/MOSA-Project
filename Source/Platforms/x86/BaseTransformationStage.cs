@@ -33,10 +33,10 @@ namespace Mosa.Platforms.x86
 		/// <returns></returns>
 		protected static bool Is32Bit(Operand operand)
 		{
-			return (operand.Type.Type == CilElementType.U4) 
-                || (operand.Type.Type == CilElementType.I4) 
-                || IsPointer(operand) 
-                || IsObject(operand);
+			return (operand.Type.Type == CilElementType.U4)
+				|| (operand.Type.Type == CilElementType.I4)
+				|| IsPointer(operand)
+				|| IsObject(operand);
 		}
 
 		/// <summary>
@@ -171,19 +171,19 @@ namespace Mosa.Platforms.x86
 			return (operand.Type.Type == CilElementType.U4);
 		}
 
-        /// <summary>
-        /// Determines whether the specified operand is an object reference.
-        /// </summary>
-        /// <param name="operand">The operand.</param>
-        /// <returns>
-        /// 	<c>true</c> if the specified operand is an object reference; otherwise, <c>false</c>.
-        /// </returns>
-        private static bool IsObject(Operand operand)
-        {
-            return operand.StackType == StackTypeCode.O;
-        }
+		/// <summary>
+		/// Determines whether the specified operand is an object reference.
+		/// </summary>
+		/// <param name="operand">The operand.</param>
+		/// <returns>
+		/// 	<c>true</c> if the specified operand is an object reference; otherwise, <c>false</c>.
+		/// </returns>
+		private static bool IsObject(Operand operand)
+		{
+			return operand.StackType == StackTypeCode.O;
+		}
 
-        /// <summary>
+		/// <summary>
 		/// Determines whether the specified operand is a pointer.
 		/// </summary>
 		/// <param name="operand">The operand.</param>

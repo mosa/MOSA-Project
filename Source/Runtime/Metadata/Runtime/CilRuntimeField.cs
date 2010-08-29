@@ -63,7 +63,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 			this.Attributes = genericField.Attributes;
 			this.RVA = genericField.RVA;
 			this.Signature = signature;
-			
+
 			this.SetAttributes(genericField.CustomAttributes);
 		}
 
@@ -82,9 +82,9 @@ namespace Mosa.Runtime.Metadata.Runtime
 		public override bool Equals(RuntimeField other)
 		{
 			CilRuntimeField crf = other as CilRuntimeField;
-			return (crf != null && 
-					this.nameIdx == crf.nameIdx && 
-					this.signature == crf.signature && 
+			return (crf != null &&
+					this.nameIdx == crf.nameIdx &&
+					this.signature == crf.signature &&
 					base.Equals(other) == true);
 		}
 

@@ -16,66 +16,66 @@ namespace Mosa.DeviceSystem
 	/// </summary>
 	public class Keyboard : IKeyboard
 	{
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected IKeyboardDevice keyboardDevice;
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected IScanCodeMap scanCodeMap;
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected bool scrollLock;
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected bool capLock;
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected bool numLock;
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected bool leftControl;
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected bool rightControl;
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected bool leftAlt;
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected bool rightAlt;
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected bool leftShift;
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected bool rightShift;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Keyboard"/> class.
-        /// </summary>
-        /// <param name="keyboardDevice">The keyboard device.</param>
-        /// <param name="scanCodeMap">The scan code map.</param>
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Keyboard"/> class.
+		/// </summary>
+		/// <param name="keyboardDevice">The keyboard device.</param>
+		/// <param name="scanCodeMap">The scan code map.</param>
 		public Keyboard(IKeyboardDevice keyboardDevice, IScanCodeMap scanCodeMap)
 		{
 			this.keyboardDevice = keyboardDevice;
@@ -98,13 +98,16 @@ namespace Mosa.DeviceSystem
 		/// <returns></returns>
 		public Key GetKeyPressed()
 		{
-			for (; ; ) {
+			for (; ; )
+			{
 				byte scanCode = keyboardDevice.GetScanCode();
 
 				KeyEvent keyEvent = scanCodeMap.ConvertScanCode(scanCode);
 
-				if (keyEvent.KeyType == KeyType.RegularKey) {
-					if (keyEvent.KeyPress == KeyEvent.Press.Make) {
+				if (keyEvent.KeyType == KeyType.RegularKey)
+				{
+					if (keyEvent.KeyPress == KeyEvent.Press.Make)
+					{
 						Key key = new Key();
 						key.KeyType = KeyType.RegularKey;
 						key.Character = keyEvent.Character;

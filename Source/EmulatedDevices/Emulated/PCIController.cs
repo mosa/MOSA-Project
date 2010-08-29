@@ -83,7 +83,8 @@ namespace Mosa.EmulatedDevices.Emulated
 		/// <returns></returns>
 		public byte Read8(ushort port)
 		{
-			switch (port - ioBase) {
+			switch (port - ioBase)
+			{
 				case 0: return 0xFF;
 				case 4: return ReadConfig8();
 				default: return 0xFF;
@@ -97,7 +98,8 @@ namespace Mosa.EmulatedDevices.Emulated
 		/// <returns></returns>
 		public ushort Read16(ushort port)
 		{
-			switch (port - ioBase) {
+			switch (port - ioBase)
+			{
 				case 0: return 0xFF;
 				case 4: return ReadConfig16();
 				default: return 0xFFFF;
@@ -111,7 +113,8 @@ namespace Mosa.EmulatedDevices.Emulated
 		/// <returns></returns>
 		public uint Read32(ushort port)
 		{
-			switch (port - ioBase) {
+			switch (port - ioBase)
+			{
 				case 0: return address;
 				case 4: return ReadConfig32();
 				default: return 0xFFFFFFFF;
@@ -143,7 +146,8 @@ namespace Mosa.EmulatedDevices.Emulated
 		/// <param name="data">The data.</param>
 		public void Write32(ushort port, uint data)
 		{
-			switch (port - ioBase) {
+			switch (port - ioBase)
+			{
 				case 0: address = data; return;
 				case 4: WriteConfig32(data); return;
 				default: return;

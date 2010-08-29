@@ -12,7 +12,8 @@ namespace System.IO
 	/// <summary>
 	/// 
 	/// </summary>
-	public enum FileShare {
+	public enum FileShare
+	{
 		/// <summary>
 		/// None
 		/// </summary>

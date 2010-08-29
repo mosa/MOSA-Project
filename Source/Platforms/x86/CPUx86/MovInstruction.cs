@@ -67,17 +67,20 @@ namespace Mosa.Platforms.x86.CPUx86
 			if ((destination is RegisterOperand) && (source is SymbolOperand)) return R_C;
 			if ((destination is MemoryOperand) && (source is SymbolOperand)) return M_C;
 
-			if ((destination is RegisterOperand) && (source is RegisterOperand)) {
+			if ((destination is RegisterOperand) && (source is RegisterOperand))
+			{
 				if (IsByte(source) || IsByte(destination)) return R_R_U8;
 				if (IsChar(source) || IsChar(destination) || IsShort(source) || IsShort(destination)) return R_R_16;
 				return R_R;
 			}
-			if ((destination is RegisterOperand) && (source is MemoryOperand)) {
+			if ((destination is RegisterOperand) && (source is MemoryOperand))
+			{
 				if (IsByte(destination)) return R_M_U8;
 				if (IsChar(destination) || IsShort(destination)) return R_M_16;
 				return R_M;
 			}
-			if ((destination is MemoryOperand) && (source is RegisterOperand)) {
+			if ((destination is MemoryOperand) && (source is RegisterOperand))
+			{
 				if (IsByte(destination)) return M_R_U8;
 				if (IsChar(destination) || IsShort(destination)) return M_R_16;
 				return M_R;

@@ -19,22 +19,22 @@ namespace Mosa.Runtime.CompilerFramework.IR
 	/// </summary>
 	public static class Instruction
 	{
-        /// <summary>
-        /// 
-        /// </summary>
-        public static readonly AddFInstruction AddFInstruction = new AddFInstruction();
+		/// <summary>
+		/// 
+		/// </summary>
+		public static readonly AddFInstruction AddFInstruction = new AddFInstruction();
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public static readonly AddSInstruction AddSInstruction = new AddSInstruction();
+		/// <summary>
+		/// 
+		/// </summary>
+		public static readonly AddSInstruction AddSInstruction = new AddSInstruction();
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public static readonly AddUInstruction AddUInstruction = new AddUInstruction();
-        
-        /// <summary>
+		/// <summary>
+		/// 
+		/// </summary>
+		public static readonly AddUInstruction AddUInstruction = new AddUInstruction();
+
+		/// <summary>
 		/// 
 		/// </summary>
 		public static AddressOfInstruction AddressOfInstruction = new AddressOfInstruction();
@@ -47,15 +47,15 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// </summary>
 		public static BranchInstruction BranchInstruction = new BranchInstruction();
 
-        public static BreakInstruction BreakInstruction = new BreakInstruction();
+		public static BreakInstruction BreakInstruction = new BreakInstruction();
 
-        public static readonly DivFInstruction DivFInstruction = new DivFInstruction();
+		public static readonly DivFInstruction DivFInstruction = new DivFInstruction();
 
-        public static readonly DivSInstruction DivSInstruction = new DivSInstruction();
+		public static readonly DivSInstruction DivSInstruction = new DivSInstruction();
 
-        public static readonly DivUInstruction DivUInstruction = new DivUInstruction();
-        
-        /// <summary>
+		public static readonly DivUInstruction DivUInstruction = new DivUInstruction();
+
+		/// <summary>
 		/// 
 		/// </summary>
 		public static EpilogueInstruction EpilogueInstruction = new EpilogueInstruction();
@@ -104,22 +104,22 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// </summary>
 		public static MoveInstruction MoveInstruction = new MoveInstruction();
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public static MulFInstruction MulFInstruction = new MulFInstruction();
+		/// <summary>
+		/// 
+		/// </summary>
+		public static MulFInstruction MulFInstruction = new MulFInstruction();
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public static MulSInstruction MulSInstruction = new MulSInstruction();
+		/// <summary>
+		/// 
+		/// </summary>
+		public static MulSInstruction MulSInstruction = new MulSInstruction();
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public static MulUInstruction MulUInstruction = new MulUInstruction();
+		/// <summary>
+		/// 
+		/// </summary>
+		public static MulUInstruction MulUInstruction = new MulUInstruction();
 
-        /// <summary>
+		/// <summary>
 		/// 
 		/// </summary>
 		public static PhiInstruction PhiInstruction = new PhiInstruction();
@@ -136,13 +136,13 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// </summary>
 		public static PushInstruction PushInstruction = new PushInstruction();
 
-        public static readonly RemFInstruction RemFInstruction = new RemFInstruction();
+		public static readonly RemFInstruction RemFInstruction = new RemFInstruction();
 
-        public static readonly RemSInstruction RemSInstruction = new RemSInstruction();
+		public static readonly RemSInstruction RemSInstruction = new RemSInstruction();
 
-        public static readonly RemUInstruction RemUInstruction = new RemUInstruction();
-        
-        /// <summary>
+		public static readonly RemUInstruction RemUInstruction = new RemUInstruction();
+
+		/// <summary>
 		/// 
 		/// </summary>
 		public static ReturnInstruction ReturnInstruction = new ReturnInstruction();
@@ -163,11 +163,11 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// </summary>
 		public static StoreInstruction StoreInstruction = new StoreInstruction();
 
-        public static readonly SubFInstruction SubFInstruction = new SubFInstruction();
+		public static readonly SubFInstruction SubFInstruction = new SubFInstruction();
 
-        public static readonly SubSInstruction SubSInstruction = new SubSInstruction();
+		public static readonly SubSInstruction SubSInstruction = new SubSInstruction();
 
-        public static readonly SubUInstruction SubUInstruction = new SubUInstruction();
+		public static readonly SubUInstruction SubUInstruction = new SubUInstruction();
 
 		/// <summary>
 		/// 
@@ -182,6 +182,6 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// </summary>
 		public static NopInstruction NopInstruction = new NopInstruction();
 
-	    public static readonly SwitchInstruction SwitchInstruction = new SwitchInstruction();
+		public static readonly SwitchInstruction SwitchInstruction = new SwitchInstruction();
 	}
 }

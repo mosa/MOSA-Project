@@ -11,74 +11,74 @@ using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Runtime.CompilerFramework
 {
-    /// <summary>
-    /// Represents a machine specific abstract register.
-    /// </summary>
-    public abstract class Register
-    {
-        #region Data members
+	/// <summary>
+	/// Represents a machine specific abstract register.
+	/// </summary>
+	public abstract class Register
+	{
+		#region Data members
 
-        /// <summary>
-        /// Holds the register index.
-        /// </summary>
-        private int _index;
+		/// <summary>
+		/// Holds the register index.
+		/// </summary>
+		private int _index;
 
-        #endregion // Data members
+		#endregion // Data members
 
-        #region Construction
+		#region Construction
 
-        /// <summary>
-        /// Initializes a new instance of <see cref="Register"/>.
-        /// </summary>
-        /// <param name="index">The numeric index of the register.</param>
-        protected Register(int index)
-        {
-            _index = index;
-        }
+		/// <summary>
+		/// Initializes a new instance of <see cref="Register"/>.
+		/// </summary>
+		/// <param name="index">The numeric index of the register.</param>
+		protected Register(int index)
+		{
+			_index = index;
+		}
 
-        #endregion // Construction
+		#endregion // Construction
 
-        #region Properties
+		#region Properties
 
-        /// <summary>
-        /// Retrieves the numeric index of this register in its architecture.
-        /// </summary>
-        public int Index
-        {
-            get { return _index; }
-        }
+		/// <summary>
+		/// Retrieves the numeric index of this register in its architecture.
+		/// </summary>
+		public int Index
+		{
+			get { return _index; }
+		}
 
-        /// <summary>
-        /// Determines if this register is caller saved.
-        /// </summary>
-        public abstract bool IsCallerSaved { get; }
+		/// <summary>
+		/// Determines if this register is caller saved.
+		/// </summary>
+		public abstract bool IsCallerSaved { get; }
 
-        /// <summary>
-        /// Determines if this is a floating point register.
-        /// </summary>
-        public abstract bool IsFloatingPoint { get; }
+		/// <summary>
+		/// Determines if this is a floating point register.
+		/// </summary>
+		public abstract bool IsFloatingPoint { get; }
 
-        /// <summary>
-        /// Holds the machine specific index or code of the register.
-        /// </summary>
-        public abstract int RegisterCode { get; }
+		/// <summary>
+		/// Holds the machine specific index or code of the register.
+		/// </summary>
+		public abstract int RegisterCode { get; }
 
-        /// <summary>
-        /// Returns the width of the register in bits.
-        /// </summary>
-        public abstract int Width { get; }
+		/// <summary>
+		/// Returns the width of the register in bits.
+		/// </summary>
+		public abstract int Width { get; }
 
-        #endregion // Properties
+		#endregion // Properties
 
-        #region Methods
+		#region Methods
 
-        /// <summary>
-        /// Determines if the given signature type can be stored in this register.
-        /// </summary>
-        /// <param name="type">The signature type to check.</param>
-        /// <returns>The return value is true if <paramref name="type"/> can be stored in this register.</returns>
-        public abstract bool IsValidSigType(SigType type);
+		/// <summary>
+		/// Determines if the given signature type can be stored in this register.
+		/// </summary>
+		/// <param name="type">The signature type to check.</param>
+		/// <returns>The return value is true if <paramref name="type"/> can be stored in this register.</returns>
+		public abstract bool IsValidSigType(SigType type);
 
-        #endregion // Methods
-    }
+		#endregion // Methods
+	}
 }

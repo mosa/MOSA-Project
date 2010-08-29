@@ -76,7 +76,7 @@ namespace Mosa.EmulatedDevices.Synthetic
 		/// <returns></returns>
 		public byte[] ReadBlock(uint block, uint count)
 		{
-			byte[] data = new byte[count  * 512];
+			byte[] data = new byte[count * 512];
 			ReadBlock(block, count, data);
 			return data;
 		}
@@ -91,7 +91,7 @@ namespace Mosa.EmulatedDevices.Synthetic
 		public bool ReadBlock(uint block, uint count, byte[] data)
 		{
 			diskFile.Seek((block + BlockOffset) * 512, SeekOrigin.Begin);
-			diskFile.Read(data, 0, (int)(count*512));
+			diskFile.Read(data, 0, (int)(count * 512));
 			return true;
 		}
 
@@ -105,7 +105,7 @@ namespace Mosa.EmulatedDevices.Synthetic
 		public bool WriteBlock(uint block, uint count, byte[] data)
 		{
 			diskFile.Seek((block + BlockOffset) * 512, SeekOrigin.Begin);
-			diskFile.Write(data, 0, (int)(count*512));
+			diskFile.Write(data, 0, (int)(count * 512));
 			return true;
 		}
 	}

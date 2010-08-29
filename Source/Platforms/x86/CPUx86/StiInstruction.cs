@@ -13,12 +13,12 @@ using Mosa.Runtime.CompilerFramework;
 
 namespace Mosa.Platforms.x86.CPUx86
 {
-    /// <summary>
-    /// Representations the x86 sti instruction.
-    /// </summary>
+	/// <summary>
+	/// Representations the x86 sti instruction.
+	/// </summary>
 	public sealed class StiInstruction : BaseInstruction
-    {
-        #region Methods
+	{
+		#region Methods
 
 		/// <summary>
 		/// Emits the specified platform instruction.
@@ -26,9 +26,9 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <param name="ctx">The context.</param>
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context ctx, MachineCodeEmitter emitter)
-        {
+		{
 			emitter.WriteByte(0xFB);
-        }
+		}
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
@@ -40,6 +40,6 @@ namespace Mosa.Platforms.x86.CPUx86
 			visitor.Sti(context);
 		}
 
-        #endregion // Methods
-    }
+		#endregion // Methods
+	}
 }

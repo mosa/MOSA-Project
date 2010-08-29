@@ -11,9 +11,9 @@ using Mosa.DeviceSystem;
 
 namespace Mosa.EmulatedKernel
 {
-    /// <summary>
-    /// 
-    /// </summary>
+	/// <summary>
+	/// 
+	/// </summary>
 	public class IOPort : IReadWriteIOPort
 	{
 		private ushort port;

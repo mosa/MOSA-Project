@@ -59,7 +59,8 @@ namespace Mosa.EmulatedDevices
 			MemoryDispatch.Write32(mem + 92, 0x0);	// vbe_interface_len
 
 			mem = mem + 96;
-			foreach (MemoryHandler segment in MemoryDispatch.MemorySegments) {
+			foreach (MemoryHandler segment in MemoryDispatch.MemorySegments)
+			{
 				MemoryDispatch.Write32(mem + 0, 20);		// Size
 				MemoryDispatch.Write32(mem + 4, segment.Address);	// base_addr_low
 				MemoryDispatch.Write32(mem + 8, 0x00);	// base_addr_high

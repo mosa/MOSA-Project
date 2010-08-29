@@ -106,8 +106,8 @@ namespace Mosa.Platforms.x86
 			RegisterOperand esp = new RegisterOperand(I, GeneralPurposeRegister.ESP);
 			int stackSize = (int)ctx.Other;
 
-			if (MethodCompiler.Method.Signature.ReturnType.Type == CilElementType.I8 
-				|| MethodCompiler.Method.Signature.ReturnType.Type == CilElementType.U8) 
+			if (MethodCompiler.Method.Signature.ReturnType.Type == CilElementType.I8
+				|| MethodCompiler.Method.Signature.ReturnType.Type == CilElementType.U8)
 			{
 				// pop ebx
 				ctx.SetInstruction(CPUx86.Instruction.PopInstruction, ebx);
@@ -143,7 +143,8 @@ namespace Mosa.Platforms.x86
 
 
 			// Swap the operands if necessary...
-			if (left is MemoryOperand && right is RegisterOperand) {
+			if (left is MemoryOperand && right is RegisterOperand)
+			{
 				SwapComparisonOperands(ctx);
 				left = ctx.Operand1;
 				right = ctx.Operand2;
@@ -155,7 +156,8 @@ namespace Mosa.Platforms.x86
 			ctx.SetInstruction(CPUx86.Instruction.NopInstruction);
 
 			// x86 is messed up :(
-			switch (code) {
+			switch (code)
+			{
 				case IR.ConditionCode.Equal: break;
 				case IR.ConditionCode.NotEqual: break;
 				case IR.ConditionCode.UnsignedGreaterOrEqual: setcc = IR.ConditionCode.GreaterOrEqual; break;
@@ -168,7 +170,8 @@ namespace Mosa.Platforms.x86
 				case IR.ConditionCode.LessThan: setcc = IR.ConditionCode.UnsignedLessThan; break;
 			}
 
-			if (!(left is RegisterOperand)) {
+			if (!(left is RegisterOperand))
+			{
 				RegisterOperand xmm2 = new RegisterOperand(left.Type, SSE2Register.XMM2);
 				if (left.Type.Type == CilElementType.R4)
 					ctx.AppendInstruction(CPUx86.Instruction.MovssInstruction, xmm2, left);
@@ -178,19 +181,23 @@ namespace Mosa.Platforms.x86
 			}
 
 			// Compare using the smallest precision
-			if (left.Type.Type == CilElementType.R4 && right.Type.Type == CilElementType.R8) {
+			if (left.Type.Type == CilElementType.R4 && right.Type.Type == CilElementType.R8)
+			{
 				RegisterOperand rop = new RegisterOperand(new SigType(CilElementType.R4), SSE2Register.XMM4);
 				ctx.AppendInstruction(CPUx86.Instruction.Cvtsd2ssInstruction, rop, right);
 				right = rop;
 			}
-			if (left.Type.Type == CilElementType.R8 && right.Type.Type == CilElementType.R4) {
+			if (left.Type.Type == CilElementType.R8 && right.Type.Type == CilElementType.R4)
+			{
 				RegisterOperand rop = new RegisterOperand(new SigType(CilElementType.R4), SSE2Register.XMM3);
 				ctx.AppendInstruction(CPUx86.Instruction.Cvtsd2ssInstruction, rop, left);
 				left = rop;
 			}
 
-			if (left.Type.Type == CilElementType.R4) {
-				switch (code) {
+			if (left.Type.Type == CilElementType.R4)
+			{
+				switch (code)
+				{
 					case IR.ConditionCode.Equal:
 						ctx.AppendInstruction(CPUx86.Instruction.UcomissInstruction, left, right);
 						break;
@@ -207,8 +214,10 @@ namespace Mosa.Platforms.x86
 					case IR.ConditionCode.LessThan: goto case IR.ConditionCode.GreaterOrEqual;
 				}
 			}
-			else {
-				switch (code) {
+			else
+			{
+				switch (code)
+				{
 					case IR.ConditionCode.Equal:
 						ctx.AppendInstruction(CPUx86.Instruction.UcomisdInstruction, left, right);
 						break;
@@ -457,7 +466,8 @@ namespace Mosa.Platforms.x86
 
 			// Do not save EDX for non-int64 return values
 			if (MethodCompiler.Method.Signature.ReturnType.Type != CilElementType.I8 &&
-				MethodCompiler.Method.Signature.ReturnType.Type != CilElementType.U8) {
+				MethodCompiler.Method.Signature.ReturnType.Type != CilElementType.U8)
+			{
 				// push edx
 				ctx.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new RegisterOperand(I, GeneralPurposeRegister.EDX));
 			}
@@ -473,13 +483,15 @@ namespace Mosa.Platforms.x86
 		{
 			Operand op = ctx.Operand1;
 
-			if (op != null) {
+			if (op != null)
+			{
 				ICallingConvention cc = Architecture.GetCallingConvention();
 				cc.MoveReturnValue(ctx, op);
 				ctx.AppendInstruction(CPUx86.Instruction.JmpInstruction);
 				ctx.SetBranch(Int32.MaxValue);
 			}
-			else {
+			else
+			{
 				ctx.SetInstruction(CPUx86.Instruction.JmpInstruction);
 				ctx.SetBranch(Int32.MaxValue);
 			}
@@ -512,7 +524,7 @@ namespace Mosa.Platforms.x86
 			Operand destination = ctx.Result;
 			Operand offset = ctx.Operand1;
 			Operand value = ctx.Operand2;
-			
+
 			ConstantOperand constantOffset = offset as ConstantOperand;
 
 			RegisterOperand eax = new RegisterOperand(destination.Type, GeneralPurposeRegister.EAX);
@@ -641,7 +653,7 @@ namespace Mosa.Platforms.x86
 				context.AppendInstruction(CPUx86.Instruction.CmpInstruction, operand, new ConstantOperand(new SigType(CilElementType.I), i));
 				context.AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.Equal);
 				context.SetBranch(branch.Targets[i]);
-			}	        
+			}
 		}
 
 		public void BreakInstruction(Context context)
@@ -697,7 +709,7 @@ namespace Mosa.Platforms.x86
 			PtrSigType pointerType = sigType as PtrSigType;
 			if (pointerType != null)
 			{
-				return pointerType.ElementType;                
+				return pointerType.ElementType;
 			}
 
 			RefSigType referenceType = sigType as RefSigType;
@@ -768,7 +780,8 @@ namespace Mosa.Platforms.x86
 		{
 			Operand source = context.Operand1;
 			Operand destination = context.Result;
-			switch (destination.Type.Type) {
+			switch (destination.Type.Type)
+			{
 				case CilElementType.I1: goto case CilElementType.I4;
 				case CilElementType.I2: goto case CilElementType.I4;
 				case CilElementType.I4:
@@ -904,7 +917,8 @@ namespace Mosa.Platforms.x86
 			ctx.Operand2 = op1;
 
 			// Negate the condition code if necessary...
-			switch (ctx.ConditionCode) {
+			switch (ctx.ConditionCode)
+			{
 				case IR.ConditionCode.Equal: break;
 				case IR.ConditionCode.GreaterOrEqual: ctx.ConditionCode = IR.ConditionCode.LessThan; break;
 				case IR.ConditionCode.GreaterThan: ctx.ConditionCode = IR.ConditionCode.LessOrEqual; break;

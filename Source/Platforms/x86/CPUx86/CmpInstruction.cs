@@ -13,30 +13,30 @@ using Mosa.Runtime.CompilerFramework.Operands;
 
 namespace Mosa.Platforms.x86.CPUx86
 {
-    /// <summary>
-    /// Representations the x86 cmp instruction.
-    /// </summary>
-    public sealed class CmpInstruction : TwoOperandInstruction
-    {
-        #region Data Member
+	/// <summary>
+	/// Representations the x86 cmp instruction.
+	/// </summary>
+	public sealed class CmpInstruction : TwoOperandInstruction
+	{
+		#region Data Member
 
-        private static readonly OpCode M_R = new OpCode(new byte[] { 0x39 });
-        private static readonly OpCode R_M = new OpCode(new byte[] { 0x3B });
-        private static readonly OpCode R_R = new OpCode(new byte[] { 0x3B });
-        private static readonly OpCode M_C = new OpCode(new byte[] { 0x81 }, 7);
-        private static readonly OpCode R_C = new OpCode(new byte[] { 0x81 }, 7);
-        private static readonly OpCode R_C_8 = new OpCode(new byte[] { 0x80 }, 7);
-        private static readonly OpCode R_C_16 = new OpCode(new byte[] { 0x66, 0x81 }, 7);
-        private static readonly OpCode M_R_8 = new OpCode(new byte[] { 0x38 });
-        private static readonly OpCode R_M_8 = new OpCode(new byte[] { 0x3A });
-        private static readonly OpCode M_R_16 = new OpCode(new byte[] { 0x66, 0x39 });
-        private static readonly OpCode R_M_16 = new OpCode(new byte[] { 0x66, 0x3B });
+		private static readonly OpCode M_R = new OpCode(new byte[] { 0x39 });
+		private static readonly OpCode R_M = new OpCode(new byte[] { 0x3B });
+		private static readonly OpCode R_R = new OpCode(new byte[] { 0x3B });
+		private static readonly OpCode M_C = new OpCode(new byte[] { 0x81 }, 7);
+		private static readonly OpCode R_C = new OpCode(new byte[] { 0x81 }, 7);
+		private static readonly OpCode R_C_8 = new OpCode(new byte[] { 0x80 }, 7);
+		private static readonly OpCode R_C_16 = new OpCode(new byte[] { 0x66, 0x81 }, 7);
+		private static readonly OpCode M_R_8 = new OpCode(new byte[] { 0x38 });
+		private static readonly OpCode R_M_8 = new OpCode(new byte[] { 0x3A });
+		private static readonly OpCode M_R_16 = new OpCode(new byte[] { 0x66, 0x39 });
+		private static readonly OpCode R_M_16 = new OpCode(new byte[] { 0x66, 0x3B });
 
-        #endregion
+		#endregion
 
-        #region Properties
+		#region Properties
 
-        /// <summary>
+		/// <summary>
 		/// Gets the instruction latency.
 		/// </summary>
 		/// <value>The latency.</value>
@@ -44,7 +44,7 @@ namespace Mosa.Platforms.x86.CPUx86
 
 		#endregion // Properties
 
-        #region Methods
+		#region Methods
 
 		/// <summary>
 		/// Computes the opcode.
@@ -53,39 +53,39 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <param name="source">The source operand.</param>
 		/// <param name="third">The third operand.</param>
 		/// <returns></returns>
-        protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
-        {
+		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
+		{
 			if ((destination is MemoryOperand) && (source is RegisterOperand))
-            {
+			{
 				if (IsByte(destination) || IsByte(source))
-                    return M_R_8;
+					return M_R_8;
 				if (IsChar(destination) || IsChar(source))
-                    return M_R_16;
-                return M_R;
-            }
+					return M_R_16;
+				return M_R;
+			}
 
 			if ((destination is RegisterOperand) && (source is MemoryOperand))
-            {
+			{
 				if (IsByte(source) || IsByte(destination))
-                    return R_M_8;
+					return R_M_8;
 				if (IsChar(source) || IsShort(source))
-                    return R_M_16;
-                return R_M;
-            }
+					return R_M_16;
+				return R_M;
+			}
 
 			if ((destination is RegisterOperand) && (source is RegisterOperand)) return R_R;
 			if ((destination is MemoryOperand) && (source is ConstantOperand)) return M_C;
 			if ((destination is RegisterOperand) && (source is ConstantOperand))
-            {
+			{
 				if (IsByte(source) || IsByte(destination))
-                    return R_C_8;
-                if (IsChar(source) || IsShort(source))
-                    return R_C_16;
-                return R_C;
-            }
+					return R_C_8;
+				if (IsChar(source) || IsShort(source))
+					return R_C_16;
+				return R_C;
+			}
 
-            throw new ArgumentException(String.Format(@"x86.CmpInstruction: No opcode for operand types {0} and {1}.", destination, source));
-        }
+			throw new ArgumentException(String.Format(@"x86.CmpInstruction: No opcode for operand types {0} and {1}.", destination, source));
+		}
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
@@ -97,6 +97,6 @@ namespace Mosa.Platforms.x86.CPUx86
 			visitor.Cmp(context);
 		}
 
-        #endregion // Methods
-    }
+		#endregion // Methods
+	}
 }

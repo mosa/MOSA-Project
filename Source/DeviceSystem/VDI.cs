@@ -80,7 +80,7 @@ namespace Mosa.DeviceSystem
 			binaryHeader.SetUInt(VHIHeaderOffset.BlocksAllocated, (uint)((blocks * 512) / 0x100000));
 			binaryHeader.SetBytes(VHIHeaderOffset.UUID, guid, 0, 16);
 			binaryHeader.SetBytes(VHIHeaderOffset.UUIDLastSnap, lastSnapGuid, 0, 16);
-			
+
 
 			return binaryHeader.Data;
 		}

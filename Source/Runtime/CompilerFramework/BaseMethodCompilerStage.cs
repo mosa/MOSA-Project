@@ -76,7 +76,7 @@ namespace Mosa.Runtime.CompilerFramework
 			Architecture = compiler.Architecture;
 
 			typeSystem = compiler.TypeSystem;
-			assemblyLoader = compiler.AssemblyLoader; 
+			assemblyLoader = compiler.AssemblyLoader;
 		}
 
 		#endregion // IMethodCompilerStage members
@@ -145,7 +145,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns></returns>
 		public static IR.ConditionCode ConvertCondition(CIL.OpCode opcode)
 		{
-			switch (opcode) {
+			switch (opcode)
+			{
 				// Signed
 				case CIL.OpCode.Beq_s: return IR.ConditionCode.Equal;
 				case CIL.OpCode.Bge_s: return IR.ConditionCode.GreaterOrEqual;
@@ -188,7 +189,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns>The unsigned form of the given condition code.</returns>
 		protected static IR.ConditionCode GetUnsignedConditionCode(IR.ConditionCode conditionCode)
 		{
-			switch (conditionCode) {
+			switch (conditionCode)
+			{
 				case IR.ConditionCode.Equal: break;
 				case IR.ConditionCode.NotEqual: break;
 				case IR.ConditionCode.GreaterOrEqual: return IR.ConditionCode.UnsignedGreaterOrEqual;
@@ -212,7 +214,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns></returns>
 		protected static IR.ConditionCode GetOppositeConditionCode(IR.ConditionCode conditionCode)
 		{
-			switch (conditionCode) {
+			switch (conditionCode)
+			{
 				case IR.ConditionCode.Equal: return IR.ConditionCode.NotEqual;
 				case IR.ConditionCode.NotEqual: return IR.ConditionCode.Equal;
 				case IR.ConditionCode.GreaterOrEqual: return IR.ConditionCode.LessThan;

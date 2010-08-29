@@ -16,12 +16,12 @@ namespace System.Collections.Generic
 	/// 
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
-    public interface IEnumerator<T> : IDisposable, IEnumerator
-    {
+	public interface IEnumerator<T> : IDisposable, IEnumerator
+	{
 		/// <summary>
 		/// Gets the current.
 		/// </summary>
 		/// <value>The current.</value>
 		new T Current { get; }
-    }
+	}
 }

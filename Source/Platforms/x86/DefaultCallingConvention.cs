@@ -57,7 +57,7 @@ namespace Mosa.Platforms.x86
 		/// <returns>
 		/// A single instruction or an array of instructions, which appropriately represent the method call.
 		/// </returns>
-        public void MakeCall(Context ctx, ISignatureContext context, IMetadataProvider metadata)
+		public void MakeCall(Context ctx, ISignatureContext context, IMetadataProvider metadata)
 		{
 			/*
 			 * Calling convention is right-to-left, pushed on the stack. Return value in EAX for integral
@@ -66,77 +66,77 @@ namespace Mosa.Platforms.x86
 			 * 
 			 */
 
-            Operand invokeTarget = ctx.Operand1;
-            Operand result = ctx.Result;
-            Stack<Operand> operands = this.BuildOperandStack(ctx);
+			Operand invokeTarget = ctx.Operand1;
+			Operand result = ctx.Result;
+			Stack<Operand> operands = this.BuildOperandStack(ctx);
 
-            ctx.SetInstruction(CPUx86.Instruction.NopInstruction);
+			ctx.SetInstruction(CPUx86.Instruction.NopInstruction);
 
-            int stackSize = this.ReserveStackSizeForCall(ctx, metadata, context, operands);
-            if (stackSize != 0)
-            {
-                this.PushOperands(context, ctx, operands, stackSize, metadata);
-            }
+			int stackSize = this.ReserveStackSizeForCall(ctx, metadata, context, operands);
+			if (stackSize != 0)
+			{
+				this.PushOperands(context, ctx, operands, stackSize, metadata);
+			}
 
-            ctx.AppendInstruction(CPUx86.Instruction.CallInstruction, null, invokeTarget);
+			ctx.AppendInstruction(CPUx86.Instruction.CallInstruction, null, invokeTarget);
 
-            if (stackSize != 0)
-            {
-                this.FreeStackAfterCall(ctx, stackSize);
-            }
+			if (stackSize != 0)
+			{
+				this.FreeStackAfterCall(ctx, stackSize);
+			}
 
-            this.CleanupReturnValue(ctx, result);
+			this.CleanupReturnValue(ctx, result);
 		}
 
-	    private Stack<Operand> BuildOperandStack(Context ctx)
-	    {
-            Stack<Operand> operandStack = new Stack<Operand>(ctx.OperandCount);
-	        int index = 0;
+		private Stack<Operand> BuildOperandStack(Context ctx)
+		{
+			Stack<Operand> operandStack = new Stack<Operand>(ctx.OperandCount);
+			int index = 0;
 
-            foreach (Operand operand in ctx.Operands)
-            {
-                if (index++ > 0)
-                {
-                    operandStack.Push(operand);
-                }
-            }
+			foreach (Operand operand in ctx.Operands)
+			{
+				if (index++ > 0)
+				{
+					operandStack.Push(operand);
+				}
+			}
 
-            return operandStack;
-        }
+			return operandStack;
+		}
 
-        private int ReserveStackSizeForCall(Context ctx, IMetadataProvider metadata, ISignatureContext signatureContext, IEnumerable<Operand> operands)
-        {
-            int stackSize = CalculateStackSizeForParameters(signatureContext, operands, metadata);
-            if (stackSize != 0)
-            {
-                RegisterOperand esp = new RegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.ESP);
+		private int ReserveStackSizeForCall(Context ctx, IMetadataProvider metadata, ISignatureContext signatureContext, IEnumerable<Operand> operands)
+		{
+			int stackSize = CalculateStackSizeForParameters(signatureContext, operands, metadata);
+			if (stackSize != 0)
+			{
+				RegisterOperand esp = new RegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.ESP);
 
-                ctx.AppendInstruction(CPUx86.Instruction.SubInstruction, esp, new ConstantOperand(esp.Type, stackSize));
-                ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(architecture.NativeType, GeneralPurposeRegister.EDX), esp);
-            }
+				ctx.AppendInstruction(CPUx86.Instruction.SubInstruction, esp, new ConstantOperand(esp.Type, stackSize));
+				ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(architecture.NativeType, GeneralPurposeRegister.EDX), esp);
+			}
 
-            return stackSize;
-        }
+			return stackSize;
+		}
 
-        private void FreeStackAfterCall(Context ctx, int stackSize)
-        {
-            RegisterOperand esp = new RegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.ESP);
-            if (stackSize != 0)
-            {
-                ctx.AppendInstruction(CPUx86.Instruction.AddInstruction, esp, new ConstantOperand(BuiltInSigType.IntPtr, stackSize));
-            }
-        }
+		private void FreeStackAfterCall(Context ctx, int stackSize)
+		{
+			RegisterOperand esp = new RegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.ESP);
+			if (stackSize != 0)
+			{
+				ctx.AppendInstruction(CPUx86.Instruction.AddInstruction, esp, new ConstantOperand(BuiltInSigType.IntPtr, stackSize));
+			}
+		}
 
-        private void CleanupReturnValue(Context ctx, Operand result)
-        {
-            if (result != null)
-            {
-                if (result.StackType == StackTypeCode.Int64)
-                    this.MoveReturnValueTo64Bit(result, ctx);
-                else
-                    this.MoveReturnValueTo32Bit(result, ctx);
-            }
-        }
+		private void CleanupReturnValue(Context ctx, Operand result)
+		{
+			if (result != null)
+			{
+				if (result.StackType == StackTypeCode.Int64)
+					this.MoveReturnValueTo64Bit(result, ctx);
+				else
+					this.MoveReturnValueTo32Bit(result, ctx);
+			}
+		}
 
 		/// <summary>
 		/// Calculates the remaining space.
@@ -146,15 +146,15 @@ namespace Mosa.Platforms.x86
 		/// <param name="space">The space.</param>
 		private void PushOperands(ISignatureContext context, Context ctx, Stack<Operand> operandStack, int space, IMetadataProvider metadata)
 		{
-			while (operandStack.Count != 0) 
-            {
+			while (operandStack.Count != 0)
+			{
 				Operand operand = operandStack.Pop();
 				int size, alignment;
 
 				architecture.GetTypeRequirements(operand.Type, out size, out alignment);
 
-                if (operand.Type.Type == CilElementType.ValueType)
-                    size = ObjectModelUtility.ComputeTypeSize(context, (operand.Type as ValueTypeSigType).Token, metadata, architecture);
+				if (operand.Type.Type == CilElementType.ValueType)
+					size = ObjectModelUtility.ComputeTypeSize(context, (operand.Type as ValueTypeSigType).Token, metadata, architecture);
 
 				space -= size;
 				Push(ctx, operand, space, size);
@@ -203,17 +203,19 @@ namespace Mosa.Platforms.x86
 		/// <param name="stackSize">Size of the stack.</param>
 		private void Push(Context ctx, Operand op, int stackSize, int parameterSize)
 		{
-			if (op is MemoryOperand) {
-                if (op.Type.Type == CilElementType.ValueType)
-                {
-                    for (int i = 0; i < parameterSize; i += 4)
-                        ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, new MemoryOperand(op.Type, GeneralPurposeRegister.EDX, new IntPtr(stackSize + i)), new MemoryOperand(op.Type, (op as MemoryOperand).Base, new IntPtr((op as MemoryOperand).Offset.ToInt64() + i)));
+			if (op is MemoryOperand)
+			{
+				if (op.Type.Type == CilElementType.ValueType)
+				{
+					for (int i = 0; i < parameterSize; i += 4)
+						ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, new MemoryOperand(op.Type, GeneralPurposeRegister.EDX, new IntPtr(stackSize + i)), new MemoryOperand(op.Type, (op as MemoryOperand).Base, new IntPtr((op as MemoryOperand).Offset.ToInt64() + i)));
 
-                    return;
-                }
+					return;
+				}
 
 				RegisterOperand rop;
-				switch (op.StackType) {
+				switch (op.StackType)
+				{
 					case StackTypeCode.O: goto case StackTypeCode.N;
 					case StackTypeCode.Ptr: goto case StackTypeCode.N;
 					case StackTypeCode.Int32: goto case StackTypeCode.N;
@@ -225,7 +227,8 @@ namespace Mosa.Platforms.x86
 						rop = new RegisterOperand(op.Type, SSE2Register.XMM0);
 						break;
 
-					case StackTypeCode.Int64: {
+					case StackTypeCode.Int64:
+						{
 							SigType I4 = new SigType(CilElementType.I4);
 							MemoryOperand mop = op as MemoryOperand;
 							Debug.Assert(null != mop, @"I8/U8 arg is not in a memory operand.");
@@ -249,7 +252,8 @@ namespace Mosa.Platforms.x86
 				ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, rop, op);
 				op = rop;
 			}
-			else if (op is ConstantOperand && op.StackType == StackTypeCode.Int64) {
+			else if (op is ConstantOperand && op.StackType == StackTypeCode.Int64)
+			{
 				Operand opL, opH;
 				SigType I4 = new SigType(CilElementType.I4);
 				RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
@@ -277,13 +281,14 @@ namespace Mosa.Platforms.x86
 			int result = 0;
 			int size, alignment;
 
-			foreach (Operand op in operands) {
+			foreach (Operand op in operands)
+			{
 				this.architecture.GetTypeRequirements(op.Type, out size, out alignment);
 
-                if (op.Type.Type == CilElementType.ValueType)
-                {
-                    size = ObjectModelUtility.ComputeTypeSize(context, (op.Type as Runtime.Metadata.Signatures.ValueTypeSigType).Token, metadata, architecture);
-                }
+				if (op.Type.Type == CilElementType.ValueType)
+				{
+					size = ObjectModelUtility.ComputeTypeSize(context, (op.Type as Runtime.Metadata.Signatures.ValueTypeSigType).Token, metadata, architecture);
+				}
 
 				result += size;
 			}
@@ -302,23 +307,26 @@ namespace Mosa.Platforms.x86
 			this.architecture.GetTypeRequirements(operand.Type, out size, out alignment);
 
 			// FIXME: Do not issue a move, if the operand is already the destination register
-			if (4 == size || 2 == size || 1 == size) {
+			if (4 == size || 2 == size || 1 == size)
+			{
 				ctx.SetInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(operand.Type, GeneralPurposeRegister.EAX), operand);
 				return;
 			}
-			else if (8 == size && (operand.Type.Type == CilElementType.R4 || operand.Type.Type == CilElementType.R8)) {
+			else if (8 == size && (operand.Type.Type == CilElementType.R4 || operand.Type.Type == CilElementType.R8))
+			{
 
-                if (!(operand is MemoryOperand))
-                {
-                    // Move the operand to memory by prepending an instruction
-                }
+				if (!(operand is MemoryOperand))
+				{
+					// Move the operand to memory by prepending an instruction
+				}
 
-                // BUG: Return values are in FP0, not XMM#0
+				// BUG: Return values are in FP0, not XMM#0
 				ctx.SetInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(operand.Type, SSE2Register.XMM0), operand);
 				return;
 			}
-			else if (8 == size && (operand.Type.Type == CilElementType.I8 || operand.Type.Type == CilElementType.U8)) {
-                SigType HighType = (operand.Type.Type == CilElementType.I8) ? new SigType(CilElementType.I4) : new SigType(CilElementType.U4);
+			else if (8 == size && (operand.Type.Type == CilElementType.I8 || operand.Type.Type == CilElementType.U8))
+			{
+				SigType HighType = (operand.Type.Type == CilElementType.I8) ? new SigType(CilElementType.I4) : new SigType(CilElementType.U4);
 				SigType U4 = new SigType(CilElementType.U4);
 
 				Operand opL, opH;
@@ -330,7 +338,8 @@ namespace Mosa.Platforms.x86
 
 				return;
 			}
-			else {
+			else
+			{
 				throw new NotSupportedException();
 			}
 		}

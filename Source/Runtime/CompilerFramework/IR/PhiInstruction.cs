@@ -76,7 +76,8 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		{
 			PhiData phiData = ctx.Other as PhiData;
 
-			if (phiData == null) {
+			if (phiData == null)
+			{
 				phiData = new PhiData();
 				ctx.Other = phiData;
 			}

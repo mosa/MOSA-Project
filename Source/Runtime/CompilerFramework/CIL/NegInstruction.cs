@@ -36,7 +36,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		};
 
 		#endregion // Data members
-		
+
 		#region Construction
 
 		/// <summary>

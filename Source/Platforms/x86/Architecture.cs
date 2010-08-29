@@ -161,17 +161,17 @@ namespace Mosa.Platforms.x86
 			methodCompilerPipeline.InsertAfter<PlatformStubStage>(
 				new IMethodCompilerStage[]
 				{
-					//InstructionLogger.Instance,
+					InstructionLogger.Instance,
 					new LongOperandTransformationStage(),
-					//InstructionLogger.Instance,
+					InstructionLogger.Instance,
 					new AddressModeConversionStage(),
-					//InstructionLogger.Instance,
+					InstructionLogger.Instance,
 					new IRTransformationStage(),
-					//InstructionLogger.Instance,
+					InstructionLogger.Instance,
 					new TweakTransformationStage(),
-					//InstructionLogger.Instance,
+					InstructionLogger.Instance,
 					new MemToMemConversionStage(),
-					//InstructionLogger.Instance,
+					InstructionLogger.Instance,
 				});
 
 			methodCompilerPipeline.InsertAfter<IBlockOrderStage>(
@@ -206,7 +206,8 @@ namespace Mosa.Platforms.x86
 			if (signatureType == null)
 				throw new ArgumentNullException("signatureType");
 
-			switch (signatureType.Type) {
+			switch (signatureType.Type)
+			{
 				case CilElementType.U1: memorySize = alignment = 4; break;
 				case CilElementType.U2: memorySize = alignment = 4; break;
 				case CilElementType.U4: memorySize = alignment = 4; break;

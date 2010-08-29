@@ -16,18 +16,18 @@ using IR = Mosa.Runtime.CompilerFramework.IR;
 
 namespace Mosa.Platforms.x86.CPUx86
 {
-    /// <summary>
-    /// Intermediate representation for the x86 ucomisd instruction.
-    /// </summary>
-    public class UcomisdInstruction : TwoOperandInstruction
-    {
+	/// <summary>
+	/// Intermediate representation for the x86 ucomisd instruction.
+	/// </summary>
+	public class UcomisdInstruction : TwoOperandInstruction
+	{
 		#region Data Members
 
 		private static readonly OpCode opcode = new OpCode(new byte[] { 0x66, 0x0F, 0x2E });
 
 		#endregion // Data Members
 
-        #region Methods
+		#region Methods
 
 		/// <summary>
 		/// Computes the opcode.
@@ -36,10 +36,10 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <param name="source">The source operand.</param>
 		/// <param name="third">The third operand.</param>
 		/// <returns></returns>
-        protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
-        {
+		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
+		{
 			return opcode;
-        }
+		}
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
 		/// </summary>
@@ -50,6 +50,6 @@ namespace Mosa.Platforms.x86.CPUx86
 			visitor.Ucomisd(context);
 		}
 
-        #endregion // Methods
-    }
+		#endregion // Methods
+	}
 }

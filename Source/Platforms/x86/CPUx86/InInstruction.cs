@@ -44,26 +44,28 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand empty)
 		{
-			if (IsByte(source)) {
+			if (IsByte(source))
+			{
 				if ((destination is RegisterOperand) && (source is ConstantOperand)) return R_C_8;
 				if ((destination is RegisterOperand) && (source is RegisterOperand)) return R_R_8;
 			}
-			else {
+			else
+			{
 				if ((destination is RegisterOperand) && (source is ConstantOperand)) return R_C_32;
 				if ((destination is RegisterOperand) && (source is RegisterOperand)) return R_R_32;
 			}
 			throw new ArgumentException(@"No opcode for operand type.");
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="ctx"></param>
-        /// <param name="emitter"></param>
-        protected override void Emit(Context ctx, MachineCodeEmitter emitter)
-        {
-            emitter.Emit(new OpCode(new byte[] { 0xEC }), null, null);
-        }
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="ctx"></param>
+		/// <param name="emitter"></param>
+		protected override void Emit(Context ctx, MachineCodeEmitter emitter)
+		{
+			emitter.Emit(new OpCode(new byte[] { 0xEC }), null, null);
+		}
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.

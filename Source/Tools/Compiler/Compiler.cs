@@ -267,7 +267,7 @@ namespace Mosa.Tools.Compiler
 			{
 				runtime.InitializePrivatePaths(this.GetInputFileNames());
 
-				IMetadataModule assemblyModule = runtime.AssemblyLoader.MergeLoad(this.GetInputFileNames());
+				IMetadataModule assemblyModule = runtime.AssemblyLoader.MergeLoad(runtime.TypeSystem, this.GetInputFileNames());
 
 				// Create the compiler
 				using (AotCompiler aot = new AotCompiler(this.architectureSelector.Architecture, assemblyModule, runtime.TypeSystem, runtime.AssemblyLoader))

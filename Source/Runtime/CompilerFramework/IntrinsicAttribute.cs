@@ -60,24 +60,24 @@ namespace Mosa.Runtime.CompilerFramework
 			this.instructionType = instructionType;
 		}
 
-        /// <summary>
-        /// Initializes a new instance of the IntrinsicAttribute type.
-        /// </summary>
-        /// <param name="instructionType">The type used to build the architecture neutral intrinsic.</param>
-        public IntrinsicAttribute(string instructionType)
-        {
-            this.architecture = null;
-            this.instructionType = Type.GetType(instructionType, true);
-        }
+		/// <summary>
+		/// Initializes a new instance of the IntrinsicAttribute type.
+		/// </summary>
+		/// <param name="instructionType">The type used to build the architecture neutral intrinsic.</param>
+		public IntrinsicAttribute(string instructionType)
+		{
+			this.architecture = null;
+			this.instructionType = Type.GetType(instructionType, true);
+		}
 
-        #endregion // Construction
+		#endregion // Construction
 
 		#region Properties
 
 		/// <summary>
 		/// Returns the architecture, which has support for an intrinsic implementation.
 		/// </summary>
-        /// <value><c>null</c> if the intrinsic is architecture neutral; otherwise a reference to the type of the Architecture.</value>
+		/// <value><c>null</c> if the intrinsic is architecture neutral; otherwise a reference to the type of the Architecture.</value>
 		public Type Architecture
 		{
 			get { return this.architecture; }

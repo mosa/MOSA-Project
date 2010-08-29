@@ -12,7 +12,7 @@ namespace System
 	/// <summary>
 	/// 
 	/// </summary>
-    public class Enum
-    {
-    }
+	public class Enum
+	{
+	}
 }

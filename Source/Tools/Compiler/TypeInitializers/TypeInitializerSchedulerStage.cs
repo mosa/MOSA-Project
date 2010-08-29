@@ -32,7 +32,7 @@ namespace Mosa.Tools.Compiler.TypeInitializers
 	public sealed class TypeInitializerSchedulerStage : BaseAssemblyCompilerStage, IAssemblyCompilerStage, IPipelineStage, ITypeInitializerSchedulerStage
 	{
 		#region Data Members
-		
+
 		private InstructionSet instructionSet;
 
 		/// <summary>
@@ -48,14 +48,14 @@ namespace Mosa.Tools.Compiler.TypeInitializers
 		#endregion // Data Members
 
 		#region Construction
-		
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TypeInitializerSchedulerStage"/> class.
 		/// </summary>
 		public TypeInitializerSchedulerStage()
 		{
 			instructionSet = new InstructionSet(1024);
-			ctx = new Context(instructionSet, -1); 
+			ctx = new Context(instructionSet, -1);
 
 			ctx.AppendInstruction(IR.Instruction.PrologueInstruction);
 			ctx.Other = 0; // stacksize

@@ -97,7 +97,7 @@ namespace Mosa.Runtime.Linker.Elf32
 			_nullSection = new Elf32NullSection();
 			_stringTableSection = new Elf32StringTableSection();
 		}
-		
+
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
@@ -185,12 +185,14 @@ namespace Mosa.Runtime.Linker.Elf32
 			// Calculate the patch offset
 			long offset = (methodAddress - text.VirtualAddress.ToInt64()) + methodOffset;
 
-			if ((linkType & LinkType.KindMask) == LinkType.AbsoluteAddress) {
+			if ((linkType & LinkType.KindMask) == LinkType.AbsoluteAddress)
+			{
 				// FIXME: Need a .reloc section with a relocation entry if the module is moved in virtual memory
 				// the runtime loader must patch this link request, we'll fail it until we can do relocations.
 				//throw new NotSupportedException(@".reloc section not supported.");
 			}
-			else {
+			else
+			{
 				// Change the absolute into a relative offset
 				targetAddress = targetAddress - (methodAddress + methodRelativeBase);
 			}
@@ -229,7 +231,8 @@ namespace Mosa.Runtime.Linker.Elf32
 		/// <param name="compiler">The compiler.</param>
 		private void CreateElf32File(CompilerFramework.AssemblyCompiler compiler)
 		{
-			using (System.IO.FileStream fs = new System.IO.FileStream(OutputFile, System.IO.FileMode.Create, System.IO.FileAccess.Write, System.IO.FileShare.None)) {
+			using (System.IO.FileStream fs = new System.IO.FileStream(OutputFile, System.IO.FileMode.Create, System.IO.FileAccess.Write, System.IO.FileShare.None))
+			{
 				Elf32Header header = new Elf32Header();
 				header.Type = Elf32FileType.Executable;
 				header.Machine = Elf32MachineType.Intel386;
@@ -240,7 +243,8 @@ namespace Mosa.Runtime.Linker.Elf32
 
 				// Calculate the concatenated size of all section's data
 				uint offset = 0;
-				foreach (Elf32Section section in Sections) {
+				foreach (Elf32Section section in Sections)
+				{
 					offset += (uint)section.Length;
 				}
 				offset += (uint)_nullSection.Length;

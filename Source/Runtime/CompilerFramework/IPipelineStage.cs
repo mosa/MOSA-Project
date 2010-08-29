@@ -13,7 +13,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
 		/// <value>The name of the compilation stage.</value>
-		string Name { get; }	
-		
+		string Name { get; }
+
 	}
 }

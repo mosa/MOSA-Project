@@ -59,7 +59,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <returns></returns>
 		protected override string GetModifier(Context context)
 		{
-			switch (((context.Instruction) as CIL.ICILInstruction).OpCode) {
+			switch (((context.Instruction) as CIL.ICILInstruction).OpCode)
+			{
 				case OpCode.Ceq: return @"==";
 				case OpCode.Cgt: return @">";
 				case OpCode.Cgt_un: return @"> unordered";

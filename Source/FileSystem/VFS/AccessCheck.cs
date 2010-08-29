@@ -28,9 +28,9 @@ namespace Mosa.FileSystem.VFS
 		NoThrow = 0x00000001
 	}
 
-    /// <summary>
-    /// 
-    /// </summary>
+	/// <summary>
+	/// 
+	/// </summary>
 	public sealed class AccessCheck
 	{
 		/// <summary>

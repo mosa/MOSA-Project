@@ -10,65 +10,69 @@
 using System;
 using System.IO;
 
-namespace Mosa.Runtime.CompilerFramework {
-    /// <summary>
-    /// 
-    /// </summary>
-	public sealed class InstructionStream : Stream {
+namespace Mosa.Runtime.CompilerFramework
+{
+	/// <summary>
+	/// 
+	/// </summary>
+	public sealed class InstructionStream : Stream
+	{
 
 		#region Types
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		[Flags]
-		enum MethodFlags : ushort {
-            /// <summary>
-            /// 
-            /// </summary>
+		enum MethodFlags : ushort
+		{
+			/// <summary>
+			/// 
+			/// </summary>
 			TinyFormat = 0x02,
-            /// <summary>
-            /// 
-            /// </summary>
+			/// <summary>
+			/// 
+			/// </summary>
 			FatFormat = 0x03,
-            /// <summary>
-            /// 
-            /// </summary>
+			/// <summary>
+			/// 
+			/// </summary>
 			MoreSections = 0x08,
-            /// <summary>
-            /// 
-            /// </summary>
+			/// <summary>
+			/// 
+			/// </summary>
 			InitLocals = 0x10,
-            /// <summary>
-            /// 
-            /// </summary>
+			/// <summary>
+			/// 
+			/// </summary>
 			CodeSizeMask = 0xF000,
-            /// <summary>
-            /// 
-            /// </summary>
+			/// <summary>
+			/// 
+			/// </summary>
 			HeaderMask = 0x0003
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		[Flags]
-		enum MethodDataSectionType {
-            /// <summary>
-            /// 
-            /// </summary>
+		enum MethodDataSectionType
+		{
+			/// <summary>
+			/// 
+			/// </summary>
 			EHTable = 0x01,
-            /// <summary>
-            /// 
-            /// </summary>
+			/// <summary>
+			/// 
+			/// </summary>
 			OptIL = 0x02,
-            /// <summary>
-            /// 
-            /// </summary>
+			/// <summary>
+			/// 
+			/// </summary>
 			FatFormat = 0x40,
-            /// <summary>
-            /// 
-            /// </summary>
+			/// <summary>
+			/// 
+			/// </summary>
 			MoreSections = 0x80
 		}
 
@@ -90,11 +94,11 @@ namespace Mosa.Runtime.CompilerFramework {
 
 		#region Construction
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="InstructionStream"/> class.
-        /// </summary>
-        /// <param name="assemblyStream">The stream, which represents the IL assembly.</param>
-        /// <param name="offset">The offset, where the IL stream starts.</param>
+		/// <summary>
+		/// Initializes a new instance of the <see cref="InstructionStream"/> class.
+		/// </summary>
+		/// <param name="assemblyStream">The stream, which represents the IL assembly.</param>
+		/// <param name="offset">The offset, where the IL stream starts.</param>
 		public InstructionStream(Stream assemblyStream, long offset)
 		{
 			// Check preconditions
@@ -111,25 +115,25 @@ namespace Mosa.Runtime.CompilerFramework {
 
 		#region Stream Overrides
 
-        /// <summary>
+		/// <summary>
 		/// Returns true if the current stream is able to read
-        /// </summary>
-        /// <value></value>
-        /// <returns>
+		/// </summary>
+		/// <value></value>
+		/// <returns>
 		/// True if the current stream is able to read, false otherwise
-        /// </returns>
+		/// </returns>
 		public override bool CanRead
 		{
 			get { return true; }
 		}
 
-        /// <summary>
+		/// <summary>
 		/// Returns true if the current stream is able to seek
-        /// </summary>
-        /// <value></value>
-        /// <returns>
+		/// </summary>
+		/// <value></value>
+		/// <returns>
 		/// Returns true if the current stream is able to seek
-        /// </returns>
+		/// </returns>
 		public override bool CanSeek
 		{
 			get { return true; }
@@ -157,40 +161,40 @@ namespace Mosa.Runtime.CompilerFramework {
 			// Do nothing. We can not flush.
 		}
 
-        /// <summary>
+		/// <summary>
 		/// Gets the stream's length in bytes.
-        /// </summary>
-        /// <value></value>
-        /// <returns>
+		/// </summary>
+		/// <value></value>
+		/// <returns>
 		/// The stream's length in bytes.
-        /// </returns>
-        /// <exception cref="T:System.NotSupportedException">
+		/// </returns>
+		/// <exception cref="T:System.NotSupportedException">
 		/// A class derived from Stream does not support searching.
-        /// </exception>
-        /// <exception cref="T:System.ObjectDisposedException">
+		/// </exception>
+		/// <exception cref="T:System.ObjectDisposedException">
 		/// Methods have been called after the stream has been closed.
-        /// </exception>
+		/// </exception>
 		public override long Length
 		{
 			get { return _stream.Length; }
 		}
 
-        /// <summary>
+		/// <summary>
 		/// Gets the stream's current position or sets it.
-        /// </summary>
-        /// <value></value>
-        /// <returns>
-        /// The current position in the stream.
-        /// </returns>
-        /// <exception cref="T:System.IO.IOException">
-        /// IOException
-        /// </exception>
-        /// <exception cref="T:System.NotSupportedException">
-        /// The stream does not support searching.
-        /// </exception>
-        /// <exception cref="T:System.ObjectDisposedException">
+		/// </summary>
+		/// <value></value>
+		/// <returns>
+		/// The current position in the stream.
+		/// </returns>
+		/// <exception cref="T:System.IO.IOException">
+		/// IOException
+		/// </exception>
+		/// <exception cref="T:System.NotSupportedException">
+		/// The stream does not support searching.
+		/// </exception>
+		/// <exception cref="T:System.ObjectDisposedException">
 		/// Methods have been called after the stream has been closed.
-        /// </exception>
+		/// </exception>
 		public override long Position
 		{
 			get

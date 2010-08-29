@@ -13,19 +13,19 @@ using System.Text;
 
 namespace Mosa.Runtime.Linker.Elf64.Sections
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public class Elf64DataSection : Elf64Section
-    {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Elf64DataSection"/> class.
-        /// </summary>
-        public Elf64DataSection()
-            : base(Mosa.Runtime.Linker.SectionKind.Data, @".data", IntPtr.Zero)
-        {
-            header.Type = Elf64SectionType.ProgBits;
-            header.Flags = Elf64SectionAttribute.Alloc | Elf64SectionAttribute.Write;
-        }
-    }
+	/// <summary>
+	/// 
+	/// </summary>
+	public class Elf64DataSection : Elf64Section
+	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Elf64DataSection"/> class.
+		/// </summary>
+		public Elf64DataSection()
+			: base(Mosa.Runtime.Linker.SectionKind.Data, @".data", IntPtr.Zero)
+		{
+			header.Type = Elf64SectionType.ProgBits;
+			header.Flags = Elf64SectionAttribute.Alloc | Elf64SectionAttribute.Write;
+		}
+	}
 }

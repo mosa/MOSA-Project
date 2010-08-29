@@ -49,12 +49,14 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			ushort argIdx;
 
 			// Opcode specific handling
-			switch (_opcode) {
+			switch (_opcode)
+			{
 				case OpCode.Ldarg:
 					decoder.Decode(out argIdx);
 					break;
 
-				case OpCode.Ldarg_s: {
+				case OpCode.Ldarg_s:
+					{
 						byte arg;
 						decoder.Decode(out arg);
 						argIdx = arg;
@@ -82,12 +84,12 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			}
 
 			// Push the loaded value onto the evaluation stack
-            Operand parameterOperand = decoder.Compiler.GetParameterOperand(argIdx);
-            Operand result = LoadInstruction.CreateResultOperand(decoder, parameterOperand.StackType, parameterOperand.Type);
+			Operand parameterOperand = decoder.Compiler.GetParameterOperand(argIdx);
+			Operand result = LoadInstruction.CreateResultOperand(decoder, parameterOperand.StackType, parameterOperand.Type);
 
-            ctx.Operand1 = parameterOperand;
-		    ctx.Result = result;
-        }
+			ctx.Operand1 = parameterOperand;
+			ctx.Result = result;
+		}
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.

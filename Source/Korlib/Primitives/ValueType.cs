@@ -12,7 +12,7 @@ namespace System
 	/// <summary>
 	/// 
 	/// </summary>
-    public class ValueType : Object
-    {
-    }
+	public class ValueType : Object
+	{
+	}
 }

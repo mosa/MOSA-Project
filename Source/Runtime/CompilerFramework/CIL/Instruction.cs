@@ -30,16 +30,16 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 		private static ICILInstruction[] _opcodeMap = Initialize();
 
-        /// <summary>
-        /// 
-        /// </summary>
-	    public static ICILInstruction[] Instructions
-	    {
-	        get
-	        {
-	            return _opcodeMap;
-	        }
-	    }
+		/// <summary>
+		/// 
+		/// </summary>
+		public static ICILInstruction[] Instructions
+		{
+			get
+			{
+				return _opcodeMap;
+			}
+		}
 
 		#endregion // Static Data
 

@@ -13,33 +13,33 @@ using System.Text;
 
 namespace Mosa.Runtime.Metadata.Signatures
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public class TypeSpecSignature : Signature
-    {
-        /// <summary>
-        /// 
-        /// </summary>
-        private SigType _type;
+	/// <summary>
+	/// 
+	/// </summary>
+	public class TypeSpecSignature : Signature
+	{
+		/// <summary>
+		/// 
+		/// </summary>
+		private SigType _type;
 
-        /// <summary>
-        /// Gets the type.
-        /// </summary>
-        /// <value>The type.</value>
-        public SigType Type
-        {
-            get { return _type; }
-        }
+		/// <summary>
+		/// Gets the type.
+		/// </summary>
+		/// <value>The type.</value>
+		public SigType Type
+		{
+			get { return _type; }
+		}
 
-        /// <summary>
-        /// Parses the signature.
-        /// </summary>
-        /// <param name="buffer">The buffer.</param>
-        /// <param name="index">The index.</param>
-        protected override void ParseSignature(ISignatureContext context, byte[] buffer, ref int index)
-        {
-            _type = SigType.ParseTypeSignature(context, buffer, ref index);
-        }
-    }
+		/// <summary>
+		/// Parses the signature.
+		/// </summary>
+		/// <param name="buffer">The buffer.</param>
+		/// <param name="index">The index.</param>
+		protected override void ParseSignature(ISignatureContext context, byte[] buffer, ref int index)
+		{
+			_type = SigType.ParseTypeSignature(context, buffer, ref index);
+		}
+	}
 }

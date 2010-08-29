@@ -49,7 +49,8 @@ namespace Mosa.EmulatedDevices.Synthetic
 		/// <param name="y">The y.</param>
 		public void WritePixel(Color color, ushort x, ushort y)
 		{
-			lock (displayform.bitmap) {
+			lock (displayform.bitmap)
+			{
 				displayform.bitmap.SetPixel(x, y, System.Drawing.Color.FromArgb(color.Red, color.Green, color.Blue));
 			}
 			displayform.Changed = true;
@@ -63,7 +64,8 @@ namespace Mosa.EmulatedDevices.Synthetic
 		/// <param name="y">The y.</param>
 		public void WritePixelFast(Color color, ushort x, ushort y)
 		{
-			unsafe {
+			unsafe
+			{
 				byte* row = (byte*)bitmapData.Scan0 + (y * bitmapData.Stride);
 				row[x * 3 + 2] = color.Red;
 				row[x * 3 + 1] = color.Green;
@@ -98,7 +100,8 @@ namespace Mosa.EmulatedDevices.Synthetic
 		public Color ReadPixel(ushort x, ushort y)
 		{
 			System.Drawing.Color color;
-			lock (displayform.bitmap) {
+			lock (displayform.bitmap)
+			{
 				color = displayform.bitmap.GetPixel(x, y);
 			}
 

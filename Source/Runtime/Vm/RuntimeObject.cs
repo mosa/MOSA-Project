@@ -13,43 +13,43 @@ using System.Text;
 
 namespace Mosa.Runtime.Vm
 {
-    /// <summary>
-    /// Base class of all runtime type system objects.
-    /// </summary>
-    public abstract class RuntimeObject
-    {
-        #region Data members
+	/// <summary>
+	/// Base class of all runtime type system objects.
+	/// </summary>
+	public abstract class RuntimeObject
+	{
+		#region Data members
 
-        /// <summary>
-        /// Holds the token of the object.
-        /// </summary>
-        private int _token;
+		/// <summary>
+		/// Holds the token of the object.
+		/// </summary>
+		private int _token;
 
-        #endregion // Data members
+		#endregion // Data members
 
-        #region Construction
+		#region Construction
 
-        /// <summary>
-        /// Initializes a new instance of <see cref="RuntimeObject"/>.
-        /// </summary>
-        /// <param name="token">The runtime token of this metadata.</param>
-        protected RuntimeObject(int token)
-        {
-            _token = token;
-        }
+		/// <summary>
+		/// Initializes a new instance of <see cref="RuntimeObject"/>.
+		/// </summary>
+		/// <param name="token">The runtime token of this metadata.</param>
+		protected RuntimeObject(int token)
+		{
+			_token = token;
+		}
 
-        #endregion // Construction
+		#endregion // Construction
 
-        #region Properties
+		#region Properties
 
-        /// <summary>
-        /// Retrieves the token of the object.
-        /// </summary>
-        public int Token
-        {
-            get { return _token; }
-        }
+		/// <summary>
+		/// Retrieves the token of the object.
+		/// </summary>
+		public int Token
+		{
+			get { return _token; }
+		}
 
-        #endregion // Properties
-    }
+		#endregion // Properties
+	}
 }

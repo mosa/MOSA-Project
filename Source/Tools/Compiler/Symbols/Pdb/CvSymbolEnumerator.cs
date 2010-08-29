@@ -1,4 +1,13 @@
-﻿using System;
+﻿/*
+ * (c) 2008 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -6,19 +15,19 @@ using System.IO;
 
 namespace Mosa.Tools.Compiler.Symbols.Pdb
 {
-    /// <summary>
-    /// Enumerator for CodeView symbols in a PDB file.
-    /// </summary>
-    abstract class CvSymbolEnumerator : IEnumerable<CvSymbol>
-    {
-        #region Data Members
+	/// <summary>
+	/// Enumerator for CodeView symbols in a PDB file.
+	/// </summary>
+	abstract class CvSymbolEnumerator : IEnumerable<CvSymbol>
+	{
+		#region Data Members
 
 		/// <summary>
 		/// Holds the pdb stream, that contains the symbol information.
 		/// </summary>
-        private PdbStream stream;
+		private PdbStream stream;
 
-        #endregion // Data Members
+		#endregion // Data Members
 
 		#region Construction
 
@@ -37,44 +46,44 @@ namespace Mosa.Tools.Compiler.Symbols.Pdb
 
 		#endregion // Construction
 
-        #region Methods
+		#region Methods
 
-        protected abstract bool IsComplete(object state);
+		protected abstract bool IsComplete(object state);
 
-        protected abstract object Prepare(BinaryReader reader);
+		protected abstract object Prepare(BinaryReader reader);
 
-        #endregion // Methods
+		#endregion // Methods
 
-        #region IEnumerable<CvSymbol> Members
+		#region IEnumerable<CvSymbol> Members
 
-        public IEnumerator<CvSymbol> GetEnumerator()
+		public IEnumerator<CvSymbol> GetEnumerator()
 		{
 			CvStream cvStream = new CvStream(this.stream);
 			using (BinaryReader reader = new BinaryReader(cvStream))
 			{
-                object state = Prepare(reader);
+				object state = Prepare(reader);
 
-                do
-                {
-                    // Read the len+id of the symbol
+				do
+				{
+					// Read the len+id of the symbol
 					long startPos = cvStream.Position;
 					CvSymbol symbol = CvSymbol.Read(reader);
 					yield return symbol;
 
-                    // Skip to the next 4 byte boundary
-                    CvUtil.PadToBoundary(reader, 4);
+					// Skip to the next 4 byte boundary
+					CvUtil.PadToBoundary(reader, 4);
 
 					long nextPos = startPos + symbol.Length + 2;
 					if (nextPos < cvStream.Length)
-                    {
-                        // Move to the next symbol
+					{
+						// Move to the next symbol
 						cvStream.Seek(nextPos, SeekOrigin.Begin);
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
+					}
+					else
+					{
+						break;
+					}
+				}
 				while (IsComplete(state) == false);
 			}
 		}

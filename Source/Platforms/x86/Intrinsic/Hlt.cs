@@ -18,7 +18,7 @@ namespace Mosa.Platforms.x86.Intrinsic
 	/// </summary>
 	public class Hlt : IIntrinsicMethod
 	{
-	
+
 		#region Methods
 
 		/// <summary>

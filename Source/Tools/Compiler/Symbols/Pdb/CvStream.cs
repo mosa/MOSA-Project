@@ -1,15 +1,24 @@
+/*
+ * (c) 2008 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ */
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.IO;
 
-namespace Mosa.Tools.Compiler.Symbols.Pdb 
+namespace Mosa.Tools.Compiler.Symbols.Pdb
 {
 	/// <summary>
 	/// Wraps a stream to prevent it from being disposed by a reader/writer.
 	/// </summary>
-	class CvStream : Stream 
+	class CvStream : Stream
 	{
 		#region Data Members
 
@@ -46,10 +55,10 @@ namespace Mosa.Tools.Compiler.Symbols.Pdb
 		/// </returns>
 		public override bool CanRead
 		{
-			get 
+			get
 			{
 				ThrowIfDisposed();
-				return this.stream.CanRead; 
+				return this.stream.CanRead;
 			}
 		}
 
@@ -61,10 +70,10 @@ namespace Mosa.Tools.Compiler.Symbols.Pdb
 		/// </returns>
 		public override bool CanSeek
 		{
-			get 
+			get
 			{
 				ThrowIfDisposed();
-				return this.stream.CanSeek; 
+				return this.stream.CanSeek;
 			}
 		}
 
@@ -76,10 +85,10 @@ namespace Mosa.Tools.Compiler.Symbols.Pdb
 		/// </returns>
 		public override bool CanWrite
 		{
-			get 
+			get
 			{
 				ThrowIfDisposed();
-				return this.stream.CanWrite; 
+				return this.stream.CanWrite;
 			}
 		}
 
@@ -124,10 +133,10 @@ namespace Mosa.Tools.Compiler.Symbols.Pdb
 		/// </exception>
 		public override long Length
 		{
-			get 
+			get
 			{
 				ThrowIfDisposed();
-				return this.stream.Length; 
+				return this.stream.Length;
 			}
 		}
 

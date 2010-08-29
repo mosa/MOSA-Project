@@ -28,7 +28,7 @@ namespace Mosa.Platforms.x86.Intrinsic
 
 		private ControlRegister _control;
 
-		protected SetControlRegisterBase(ControlRegister control) 
+		protected SetControlRegisterBase(ControlRegister control)
 		{
 			_control = control;
 		}

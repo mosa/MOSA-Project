@@ -19,11 +19,11 @@ using Mosa.Runtime.CompilerFramework;
 
 namespace Mosa.Platforms.x86.CPUx86
 {
-    /// <summary>
-    /// Representations the x86 CPUID instruction.
-    /// </summary>
-    public sealed class CpuIdEdxInstruction : TwoOperandInstruction
-    {
+	/// <summary>
+	/// Representations the x86 CPUID instruction.
+	/// </summary>
+	public sealed class CpuIdEdxInstruction : TwoOperandInstruction
+	{
 
 		#region Data Members
 
@@ -31,28 +31,28 @@ namespace Mosa.Platforms.x86.CPUx86
 
 		#endregion // Data Members
 
-        #region Methods
+		#region Methods
 
 		/// <summary>
 		/// Emits the specified platform instruction.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <param name="emitter">The emitter.</param>
-        protected override void Emit(Context ctx, MachineCodeEmitter emitter)
-        {
+		protected override void Emit(Context ctx, MachineCodeEmitter emitter)
+		{
 			emitter.Emit(opcode, null, null);
-        }
+		}
 
-        /// <summary>
-        /// Allows visitor based dispatch for this instruction object.
-        /// </summary>
-        /// <param name="visitor">The visitor object.</param>
-        /// <param name="context">The context.</param>
-        public override void Visit(IX86Visitor visitor, Context context)
-        {
-            visitor.CpuIdEax(context);
-        }
+		/// <summary>
+		/// Allows visitor based dispatch for this instruction object.
+		/// </summary>
+		/// <param name="visitor">The visitor object.</param>
+		/// <param name="context">The context.</param>
+		public override void Visit(IX86Visitor visitor, Context context)
+		{
+			visitor.CpuIdEax(context);
+		}
 
-        #endregion // Methods
-    }
+		#endregion // Methods
+	}
 }

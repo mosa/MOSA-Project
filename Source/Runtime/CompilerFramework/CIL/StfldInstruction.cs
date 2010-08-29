@@ -50,7 +50,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			// Load the _stackFrameIndex token from the immediate
 			TokenTypes token;
 			decoder.Decode(out token);
-			
+
 			//Console.WriteLine("Stfld used in {0}.{1}", decoder.Method.DeclaringType.FullName, decoder.Method.Name);
 
 			Debug.Assert(TokenTypes.Field == (TokenTypes.TableMask & token) || TokenTypes.MemberRef == (TokenTypes.TableMask & token), @"Invalid token type.");

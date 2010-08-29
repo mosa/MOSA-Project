@@ -110,7 +110,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns>The number of operands popped.</returns>
 		private int PopOperands(Context ctx)
 		{
-			for (int i = ctx.OperandCount - 1; i > -1; i--) {
+			for (int i = ctx.OperandCount - 1; i > -1; i--)
+			{
 				Operand op = ctx.GetOperand(i);
 				Operand evalOp = evaluationStack.Pop();
 				Debug.Assert(ReferenceEquals(evalOp, op), @"Operand's are not equal?");
@@ -137,22 +138,28 @@ namespace Mosa.Runtime.CompilerFramework
 			int iregs = 0, fpregs = 0;
 
 			// Enumerate all registers, until we've found all needed registers
-			foreach (Register reg in registerSet) {
-				if (reg.IsFloatingPoint == false) {
+			foreach (Register reg in registerSet)
+			{
+				if (reg.IsFloatingPoint == false)
+				{
 					// A general purpose register. Do we need to allocate a stack register?
-					if (iregs < RegisterStackSize) {
+					if (iregs < RegisterStackSize)
+					{
 						this.stackRegistersI[iregs++] = new RegisterOperand(i, reg);
 					}
 				}
-				else {
+				else
+				{
 					// A floating point register. Do we need to allocate a stack register?
-					if (fpregs < RegisterStackSize) {
+					if (fpregs < RegisterStackSize)
+					{
 						this.stackRegistersFp[fpregs++] = new RegisterOperand(fp, reg);
 					}
 				}
 
 				// If we've allocated all registers, break the loop
-				if (iregs == RegisterStackSize && fpregs == RegisterStackSize) {
+				if (iregs == RegisterStackSize && fpregs == RegisterStackSize)
+				{
 					break;
 				}
 			}
@@ -164,7 +171,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="ctx">The context.</param>
 		private void ProcessInstruction(Context ctx)
 		{
-			if (ctx.Instruction is IR.MoveInstruction) {
+			if (ctx.Instruction is IR.MoveInstruction)
+			{
 				evaluationStack.Push(ctx.Result);
 				return;
 			}
@@ -189,7 +197,8 @@ namespace Mosa.Runtime.CompilerFramework
 			Debug.Assert(ctx.ResultCount == 1, @"Not tested for more than one result. Which order should they take?");
 
 			// Enumerate the result operands
-			foreach (Operand result in ctx.Results) {
+			foreach (Operand result in ctx.Results)
+			{
 				// Move the result to the top of the eval stack
 				this.evaluationStack.Push(result);
 			}

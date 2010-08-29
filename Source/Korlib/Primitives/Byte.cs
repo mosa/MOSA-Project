@@ -12,8 +12,8 @@ namespace System
 	/// <summary>
 	/// 
 	/// </summary>
-    public struct Byte
-    {
+	public struct Byte
+	{
 		public const byte MinValue = 0;
 		public const byte MaxValue = 255;
 
@@ -24,5 +24,5 @@ namespace System
 			return Int32.CreateString(m_value, false, false);
 		}
 
-    }
+	}
 }

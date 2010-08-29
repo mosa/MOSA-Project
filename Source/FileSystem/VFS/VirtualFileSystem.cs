@@ -60,9 +60,9 @@ namespace Mosa.FileSystem.VFS
 		// FIXME: This is not a good idea and should be removed (using by DirectoryEntry.CurrentDirectory, if no one is set) once
 		// we have a process structure supporting jails.
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		public static DirectoryEntry RootDirectoryEntry
 		{
 			get
@@ -79,12 +79,13 @@ namespace Mosa.FileSystem.VFS
 		/// Checks if the caller has access to the inode 
 		/// </summary>
 		/// <param name="path">The resource to check permissions for.</param>
-        /// <param name="mode"></param>
+		/// <param name="mode"></param>
 		/// <returns>True if the requested access mode combination is available to the immediate caller. If any one requested access mode is not available, the result is false.</returns>
 		public static bool Access(string path, AccessMode mode)
 		{
 			DirectoryEntry entry = PathResolver.Resolve(rootNode, ref path, PathResolutionFlags.DoNotThrowNotFoundException);
-			if (null != entry) {
+			if (null != entry)
+			{
 				return AccessCheck.Perform(entry, mode, AccessCheckFlags.NoThrow);
 			}
 
@@ -140,7 +141,8 @@ namespace Mosa.FileSystem.VFS
 		public static void Delete(string path)
 		{
 			DirectoryEntry entry = PathResolver.Resolve(rootNode, ref path, PathResolutionFlags.DoNotThrowNotFoundException);
-			if (null != entry) {
+			if (null != entry)
+			{
 				AccessCheck.Perform(entry, AccessMode.Delete, AccessCheckFlags.None);
 				//entry.Node.Delete();
 				entry.Parent.Node.Delete(entry.Node, entry);
@@ -170,13 +172,13 @@ namespace Mosa.FileSystem.VFS
 			DirectoryEntry.Allocate(parent, path.Last, root.Root);
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="path"></param>
-        /// <param name="access"></param>
-        /// <param name="share"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="path"></param>
+		/// <param name="access"></param>
+		/// <param name="share"></param>
+		/// <returns></returns>
 		public static object Open(string path, System.IO.FileAccess access, System.IO.FileShare share)
 		{
 			DirectoryEntry entry = PathResolver.Resolve(rootNode, ref path);
@@ -200,7 +202,8 @@ namespace Mosa.FileSystem.VFS
 
 			// FIXME: Perform access checks on the DirectoryEntry/IVfsNode.
 			AccessMode modeFlags = AccessMode.Exists;
-			switch (access) {
+			switch (access)
+			{
 				case System.IO.FileAccess.Read:
 					modeFlags = AccessMode.Read;
 					break;
@@ -217,11 +220,11 @@ namespace Mosa.FileSystem.VFS
 			return entry.Node.Open(access, share);
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="old"></param>
-        /// <param name="newname"></param>
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="old"></param>
+		/// <param name="newname"></param>
 		public static void Rename(string old, string newname)
 		{
 			// FIXME: 

@@ -493,7 +493,8 @@ namespace Mosa.Runtime.CompilerFramework
 			if (_index < 0)
 				return;
 
-			for (; ; ) {
+			for (; ; )
+			{
 				int next = _instructionSet.Next(_index);
 				if (next < 0)
 					break;
@@ -527,7 +528,8 @@ namespace Mosa.Runtime.CompilerFramework
 			int label = Label;
 			int index = -1;
 
-			if (IsFirstInstruction) {
+			if (IsFirstInstruction)
+			{
 				Debug.Assert(BasicBlock != null, @"Cannot insert before first instruction without basic block");
 				Debug.Assert(BasicBlock.Index == _index, @"Cannot be first instruction since basic block does not start here");
 				index = _instructionSet.InsertBefore(_index);
@@ -606,7 +608,8 @@ namespace Mosa.Runtime.CompilerFramework
 
 			if (_index == -1)
 				_index = _instructionSet.CreateRoot();
-			else {
+			else
+			{
 				label = Label;
 				Clear();
 			}
@@ -758,7 +761,8 @@ namespace Mosa.Runtime.CompilerFramework
 
 			if (_index == -1)
 				_index = _instructionSet.InsertAfter(_index);
-			else {
+			else
+			{
 				label = Label;
 				if (Instruction != null)
 					_index = _instructionSet.InsertAfter(_index);
@@ -999,7 +1003,8 @@ namespace Mosa.Runtime.CompilerFramework
 			if (Branch == null)
 				Branch = new Branch(2);
 			else
-				if (Branch.Targets.Length < 2) {
+				if (Branch.Targets.Length < 2)
+				{
 					Branch newBranch = new Branch(2);
 					newBranch.Targets[0] = Branch.Targets[0];
 					Branch = newBranch;
@@ -1016,7 +1021,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns></returns>
 		public Operand GetOperand(int index)
 		{
-			switch (index) {
+			switch (index)
+			{
 				case 0: return Operand1;
 				case 1: return Operand2;
 				case 2: return Operand3;
@@ -1031,11 +1037,13 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="operand">The operand.</param>
 		public void SetOperand(int index, Operand operand)
 		{
-			switch (index) {
+			switch (index)
+			{
 				case 0: Operand1 = operand; return;
 				case 1: Operand2 = operand; return;
 				case 2: Operand3 = operand; return;
-				default: {
+				default:
+					{
 						Operand current = _instructionSet.Data[_index].GetAdditionalOperand(index);
 						if (current != null) current.Uses.Remove(_index);
 						if (operand != null) operand.Uses.Add(_index);
@@ -1052,7 +1060,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns></returns>
 		public Operand GetResult(int index)
 		{
-			switch (index) {
+			switch (index)
+			{
 				case 0: return Result;
 				case 1: return Result2;
 				default: break;
@@ -1068,16 +1077,17 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="result">The result operand.</param>
 		public void SetResult(int index, Operand result)
 		{
-			switch (index) {
-				case 0: 
-					this.Result = result; 
+			switch (index)
+			{
+				case 0:
+					this.Result = result;
 					break;
 
-				case 1: 
-					this.Result2 = result; 
+				case 1:
+					this.Result2 = result;
 					break;
 
-				default: 
+				default:
 					Debug.Assert(false, @"No index");
 					break;
 			}

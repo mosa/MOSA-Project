@@ -46,15 +46,18 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			// Decode base classes first
 			base.Decode(ctx, decoder, typeSystem);
 
-			switch (_opcode) {
-				case OpCode.Leave_s: {
+			switch (_opcode)
+			{
+				case OpCode.Leave_s:
+					{
 						sbyte sb;
 						decoder.Decode(out sb);
 						ctx.SetBranch(sb);
 					}
 					break;
 
-				case OpCode.Leave: {
+				case OpCode.Leave:
+					{
 						int sb;
 						decoder.Decode(out sb);
 						ctx.SetBranch(sb);

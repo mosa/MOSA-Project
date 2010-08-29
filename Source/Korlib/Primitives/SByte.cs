@@ -12,8 +12,8 @@ namespace System
 	/// <summary>
 	/// 
 	/// </summary>
-    public struct SByte
-    {
+	public struct SByte
+	{
 		public const sbyte MinValue = -128;
 		public const sbyte MaxValue = 127;
 
@@ -23,5 +23,5 @@ namespace System
 		{
 			return Int32.CreateString((uint)m_value, true, false);
 		}
-    }
+	}
 }

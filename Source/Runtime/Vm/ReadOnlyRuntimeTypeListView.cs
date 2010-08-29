@@ -14,52 +14,52 @@ using Mosa.Runtime.Metadata;
 
 namespace Mosa.Runtime.Vm
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public sealed class ReadOnlyRuntimeTypeListView :
-        ReadOnlyRuntimeListView<RuntimeType>
-    {
-        #region Static members
+	/// <summary>
+	/// 
+	/// </summary>
+	public sealed class ReadOnlyRuntimeTypeListView :
+		ReadOnlyRuntimeListView<RuntimeType>
+	{
+		#region Static members
 
-        /// <summary>
-        /// Provides an empty list definition.
-        /// </summary>
-        public static readonly ReadOnlyRuntimeTypeListView Empty = new ReadOnlyRuntimeTypeListView();
+		/// <summary>
+		/// Provides an empty list definition.
+		/// </summary>
+		public static readonly ReadOnlyRuntimeTypeListView Empty = new ReadOnlyRuntimeTypeListView();
 
-        #endregion // Static members
+		#endregion // Static members
 
-        #region Construction
+		#region Construction
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="ReadOnlyRuntimeTypeListView"/> class.
-        /// </summary>
-        private ReadOnlyRuntimeTypeListView()
-        {
-        }
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ReadOnlyRuntimeTypeListView"/> class.
+		/// </summary>
+		private ReadOnlyRuntimeTypeListView()
+		{
+		}
 
-        /// <summary>
-        /// Initializes a new instance of <see cref="ReadOnlyRuntimeFieldListView"/>.
-        /// </summary>
-        /// <param name="firstIndex">The first index of the list view.</param>
-        /// <param name="count">The number of elements in the list view.</param>
-        public ReadOnlyRuntimeTypeListView(int firstIndex, int count, ITypeSystem typeSystem)
+		/// <summary>
+		/// Initializes a new instance of <see cref="ReadOnlyRuntimeFieldListView"/>.
+		/// </summary>
+		/// <param name="firstIndex">The first index of the list view.</param>
+		/// <param name="count">The number of elements in the list view.</param>
+		public ReadOnlyRuntimeTypeListView(int firstIndex, int count, ITypeSystem typeSystem)
 			: base(firstIndex, count, typeSystem)
-        {
-        }
+		{
+		}
 
-        #endregion // Construction
+		#endregion // Construction
 
-        #region Overrides
+		#region Overrides
 
-        /// <summary>
-        /// Returns the fields array, which is viewed by this collection.
-        /// </summary>
-        protected override RuntimeType[] Items
-        {
+		/// <summary>
+		/// Returns the fields array, which is viewed by this collection.
+		/// </summary>
+		protected override RuntimeType[] Items
+		{
 			get { if (typeSystem == null) return null; else return typeSystem.Types; }
-        }
+		}
 
-        #endregion // Overrides
-    }
+		#endregion // Overrides
+	}
 }

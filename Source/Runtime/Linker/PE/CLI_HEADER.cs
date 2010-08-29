@@ -18,7 +18,7 @@ namespace Mosa.Runtime.Linker.PE
 	/// <summary>
 	/// The CLI _header embedded into a portable executable file.
 	/// </summary>
-	public struct CLI_HEADER 
+	public struct CLI_HEADER
 	{
 		#region Constants
 
@@ -26,7 +26,7 @@ namespace Mosa.Runtime.Linker.PE
 		/// Size of the CLI Header
 		/// </summary>
 		public static int Length = 0x250 - 0x208;
-		
+
 		/// <summary>
 		/// Name for symbol
 		/// </summary>

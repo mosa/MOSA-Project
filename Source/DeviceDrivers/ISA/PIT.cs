@@ -15,45 +15,45 @@ using Mosa.DeviceSystem;
 
 namespace Mosa.DeviceDrivers.ISA
 {
-    /// <summary>
+	/// <summary>
 	/// Programmable Interval Timer (PIT) Device Driver
-    /// </summary>
+	/// </summary>
 	[ISADeviceDriver(AutoLoad = true, BasePort = 0x40, PortRange = 4, IRQ = 0, Platforms = PlatformArchitecture.X86AndX64)]
 	public class PIT : HardwareDevice, IDevice, IHardwareDevice
 	{
 		#region Definitions
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		private const byte SquareWave = 0x36;
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		private const uint Frequency = 1193182;
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		private const ushort Hz = 100;
 
 		#endregion
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected IReadWriteIOPort modeControlPort;
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected IReadWriteIOPort counter0Divisor;
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected uint tickCount;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PIT"/> class.
-        /// </summary>
+		/// <summary>
+		/// Initializes a new instance of the <see cref="PIT"/> class.
+		/// </summary>
 		public PIT() { }
 
 		/// <summary>
@@ -100,10 +100,10 @@ namespace Mosa.DeviceDrivers.ISA
 			return true;
 		}
 
-        /// <summary>
-        /// Gets the tick count.
-        /// </summary>
-        /// <returns></returns>
+		/// <summary>
+		/// Gets the tick count.
+		/// </summary>
+		/// <returns></returns>
 		public uint GetTickCount()
 		{
 			return tickCount;

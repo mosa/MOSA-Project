@@ -61,8 +61,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 		public TestRuntime()
 		{
 			_memoryPageManager = new Win32MemoryPageManager();
-			_typeSystem = new DefaultTypeSystem(this);
-			_assemblyLoader = new AssemblyLoader(_typeSystem);
+			_assemblyLoader = new AssemblyLoader();
+			_typeSystem = new DefaultTypeSystem(_assemblyLoader);
 			_jitService = new SimpleJitService();
 			StaticRuntime.BaseRuntime = this; // HACK
 		}

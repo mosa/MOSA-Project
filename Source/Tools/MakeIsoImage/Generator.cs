@@ -50,7 +50,8 @@ namespace Mosa.Tools.MakeIsoImage
 		/// <returns>the iso9660-compatible version of the file Name</returns>
 		public byte[] IsoName(string name, bool folder)
 		{
-			if (folder) {
+			if (folder)
+			{
 				if (name == ".")
 					return new byte[] { 0 };
 				if (name == "..")
@@ -65,7 +66,8 @@ namespace Mosa.Tools.MakeIsoImage
 #endif
 			string ext = "";
 			int dot = name.LastIndexOf('.');
-			if (dot >= 0) {
+			if (dot >= 0)
+			{
 				ext = name.Substring(dot);
 				name = name.Substring(0, dot);
 			}
@@ -73,22 +75,22 @@ namespace Mosa.Tools.MakeIsoImage
 			name = name.Substring(0, System.Math.Min(name.Length, 8)).Replace('.', '_').Replace(' ', '_');
 			ext = ext.Substring(0, System.Math.Min(ext.Length, 4));
 #else
-                // make sure Name isn't too long, 1st pass ( trying to preserve extension )
-                int total = name.Length + ext.Length;
-                const int max_length = (256 - 34);
-                if (total > max_length)
-                {
-                    int new_length = name.Length - (total - max_length);
-                    if ( new_length >= 0 )
-                        name = name.Substring ( 0, new_length );
-                }
+				// make sure Name isn't too long, 1st pass ( trying to preserve extension )
+				int total = name.Length + ext.Length;
+				const int max_length = (256 - 34);
+				if (total > max_length)
+				{
+					int new_length = name.Length - (total - max_length);
+					if ( new_length >= 0 )
+						name = name.Substring ( 0, new_length );
+				}
 #endif
 			name += ext;
 
 #if !ROCKRIDGE
-                // make sure Name isn't too long, 2nd pass ( if 1st pass failed, then extension is too long - sacrifice it now )
-                if (name.Length > max_length)
-                    name = name.Substring(0, max_length);
+				// make sure Name isn't too long, 2nd pass ( if 1st pass failed, then extension is too long - sacrifice it now )
+				if (name.Length > max_length)
+					name = name.Substring(0, max_length);
 #endif
 
 			return this.Ascii.GetBytes(name);
@@ -138,7 +140,8 @@ namespace Mosa.Tools.MakeIsoImage
 				throw new NotImplementedException(">4G files not implemented");
 
 			int bytes = (int)f.fileInfo.Length;
-			if (this.fs == null) {
+			if (this.fs == null)
+			{
 				this.Index += bytes;
 				return;
 			}
@@ -146,12 +149,14 @@ namespace Mosa.Tools.MakeIsoImage
 			// TODO FIXME - create smaller reusable buffer and read fixed-size chunks at a time...
 			byte[] b = new byte[bytes];
 
-			using (FileStream stream = f.fileInfo.OpenRead()) {
+			using (FileStream stream = f.fileInfo.OpenRead())
+			{
 				if (bytes != stream.Read(b, 0, bytes))
 					throw new Exception("number of bytes read from file != reported length of file: " + f.fileInfo.Name);
 			}
 
-			if (f.BootInfoTable) {
+			if (f.BootInfoTable)
+			{
 				// TODO FIXME - this is TERRIBLE. This should be implemented at a higher level, and
 				// doing it here requires passing the primaryVolumeDescriptor to every call of WriteFile()
 				// The reason it is here is because this is the only place where the file actually gets

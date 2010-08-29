@@ -33,7 +33,8 @@ namespace Mosa.DeviceSystem
 			// FIXME: Do not create multiple partition devices if this method executed more than once
 
 			// Find all online disk devices
-			foreach (IDevice device in deviceManager.GetDevices(new FindDevice.IsDiskDevice(), new FindDevice.IsOnline())) {
+			foreach (IDevice device in deviceManager.GetDevices(new FindDevice.IsDiskDevice(), new FindDevice.IsOnline()))
+			{
 				IDiskDevice diskDevice = device as IDiskDevice;
 
 				MasterBootBlock mbr = new MasterBootBlock(diskDevice);

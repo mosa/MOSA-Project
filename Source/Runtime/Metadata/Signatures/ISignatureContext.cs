@@ -6,7 +6,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 	public interface ISignatureContext
 	{
 		SigType GetGenericMethodArgument(int index);
-		
-		SigType GetGenericTypeArgument(int index);		
+
+		SigType GetGenericTypeArgument(int index);
 	}
 }

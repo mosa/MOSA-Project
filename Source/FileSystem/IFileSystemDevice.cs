@@ -11,9 +11,9 @@ using Mosa.DeviceSystem;
 
 namespace Mosa.FileSystem
 {
-    /// <summary>
-    /// 
-    /// </summary>
+	/// <summary>
+	/// 
+	/// </summary>
 	public interface IFileSystemDevice
 	{
 		/// <summary>

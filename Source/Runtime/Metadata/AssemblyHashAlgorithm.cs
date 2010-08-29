@@ -11,22 +11,24 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Mosa.Runtime.Metadata {
-    /// <summary>
-    /// 
-    /// </summary>
-	public enum AssemblyHashAlgorithm {
-        /// <summary>
-        /// 
-        /// </summary>
+namespace Mosa.Runtime.Metadata
+{
+	/// <summary>
+	/// 
+	/// </summary>
+	public enum AssemblyHashAlgorithm
+	{
+		/// <summary>
+		/// 
+		/// </summary>
 		None,
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		ReservedMD5 = 0x8003,
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		SHA1 = 0x8004
 	}
 }

@@ -24,7 +24,8 @@ namespace Mosa.FileSystem.VFS
 
 		protected void MarkSeperators()
 		{
-			if (path.Length == 0) {
+			if (path.Length == 0)
+			{
 				length = 0;
 				seperators = new int[0];
 				return;
@@ -37,7 +38,8 @@ namespace Mosa.FileSystem.VFS
 
 			seperators = new int[count];
 
-			if (count == 0) {
+			if (count == 0)
+			{
 				length = 1;
 				return;
 			}
@@ -99,7 +101,8 @@ namespace Mosa.FileSystem.VFS
 
 		public int FindFirst(string path)
 		{
-			for (int i = 0; i < length; i++) {
+			for (int i = 0; i < length; i++)
+			{
 				if (GetPath(i) == path)
 					return i;
 			}

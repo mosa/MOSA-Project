@@ -21,9 +21,9 @@ using Mosa.DeviceSystem;
 
 namespace Mosa.DeviceDrivers.ISA
 {
-    /// <summary>
-    /// Floppy Disk Controller (FDC) Device Driver
-    /// </summary>
+	/// <summary>
+	/// Floppy Disk Controller (FDC) Device Driver
+	/// </summary>
 	[ISADeviceDriver(AutoLoad = false, BasePort = 0x03F0, PortRange = 8, IRQ = 6, Platforms = PlatformArchitecture.X86AndX64)]
 	[ISADeviceDriver(AutoLoad = false, BasePort = 0x0370, PortRange = 8, IRQ = 5, ForceOption = "fdc2", Platforms = PlatformArchitecture.X86AndX64)]
 	public class FloppyDiskController : HardwareDevice, IDevice, IHardwareDevice, IDiskControllerDevice
@@ -76,170 +76,170 @@ namespace Mosa.DeviceDrivers.ISA
 
 		#endregion
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		public enum FloppyDriveType
 		{
-            /// <summary>
-            /// 
-            /// </summary>
+			/// <summary>
+			/// 
+			/// </summary>
 			None,
-            /// <summary>
-            /// 
-            /// </summary>
+			/// <summary>
+			/// 
+			/// </summary>
 			Floppy_5_25,
-            /// <summary>
-            /// 
-            /// </summary>
+			/// <summary>
+			/// 
+			/// </summary>
 			Floppy_3_5,
-            /// <summary>
-            /// 
-            /// </summary>
+			/// <summary>
+			/// 
+			/// </summary>
 			Unknown
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		public struct FloppyDriveInfo
 		{
-            /// <summary>
-            /// 
-            /// </summary>
+			/// <summary>
+			/// 
+			/// </summary>
 			public FloppyDriveType Type;
-            /// <summary>
-            /// 
-            /// </summary>
+			/// <summary>
+			/// 
+			/// </summary>
 			public uint KiloByteSize;
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		public struct FloppyMediaInfo
 		{
-            /// <summary>
-            /// 
-            /// </summary>
+			/// <summary>
+			/// 
+			/// </summary>
 			public uint SectorsPerTrack;
-            /// <summary>
-            /// 
-            /// </summary>
+			/// <summary>
+			/// 
+			/// </summary>
 			public uint TotalTracks;
-            /// <summary>
-            /// 
-            /// </summary>
+			/// <summary>
+			/// 
+			/// </summary>
 			public byte Gap1Length;
-            /// <summary>
-            /// 
-            /// </summary>
+			/// <summary>
+			/// 
+			/// </summary>
 			public byte Gap2Length;
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected struct LastSeek
 		{
-            /// <summary>
-            /// 
-            /// </summary>
+			/// <summary>
+			/// 
+			/// </summary>
 			public bool calibrated;
-            /// <summary>
-            /// 
-            /// </summary>
+			/// <summary>
+			/// 
+			/// </summary>
 			public uint drive;
-            /// <summary>
-            /// 
-            /// </summary>
+			/// <summary>
+			/// 
+			/// </summary>
 			public byte track;
-            /// <summary>
-            /// 
-            /// </summary>
+			/// <summary>
+			/// 
+			/// </summary>
 			public byte head;
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected struct TrackCache
 		{
-            /// <summary>
-            /// 
-            /// </summary>
+			/// <summary>
+			/// 
+			/// </summary>
 			public byte[] buffer;
-            /// <summary>
-            /// 
-            /// </summary>
+			/// <summary>
+			/// 
+			/// </summary>
 			public bool valid;
-            /// <summary>
-            /// 
-            /// </summary>
+			/// <summary>
+			/// 
+			/// </summary>
 			public byte track;
-            /// <summary>
-            /// 
-            /// </summary>
+			/// <summary>
+			/// 
+			/// </summary>
 			public byte head;
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected SpinLock spinLock;
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected bool enchancedController = false;
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		public const uint DrivesPerController = 2; // the maximum supported
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected FloppyDriveInfo[] floppyDrives;
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected FloppyMediaInfo[] floppyMedia;
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected TrackCache[] trackCache;
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected LastSeek[] lastSeek;
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected IReadWriteIOPort commandPort;
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected IReadWriteIOPort dataPort;
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected IReadWriteIOPort configPort;
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected IReadWriteIOPort statusPort;
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected IDMAChannel floppyDMA;
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected bool interruptSet = false;
 
 		//protected enum OperationPending
@@ -254,9 +254,9 @@ namespace Mosa.DeviceDrivers.ISA
 
 		//protected OperationPending pendingOperation;
 
-        /// <summary>
+		/// <summary>
 		/// Initializes a new instance of the <see cref="FloppyDiskController"/> class.
-        /// </summary>
+		/// </summary>
 		public FloppyDiskController()
 		{
 			floppyDrives = new FloppyDriveInfo[DrivesPerController];
@@ -296,7 +296,8 @@ namespace Mosa.DeviceDrivers.ISA
 		/// <returns></returns>
 		public override DeviceDriverStartStatus Start()
 		{
-			for (int drive = 0; drive < DrivesPerController; drive++) {
+			for (int drive = 0; drive < DrivesPerController; drive++)
+			{
 				trackCache[drive].valid = false;
 				lastSeek[drive].calibrated = false;
 
@@ -367,7 +368,8 @@ namespace Mosa.DeviceDrivers.ISA
 			byte[] temp = new byte[FDC.BytesPerSector];
 			spinLock.Enter();
 
-			try {
+			try
+			{
 				//TODO: check drive type first
 
 				// attempt to read 2.88MB/2880KB
@@ -412,7 +414,8 @@ namespace Mosa.DeviceDrivers.ISA
 
 				return false;
 			}
-			finally {
+			finally
+			{
 				spinLock.Exit();
 			}
 
@@ -475,14 +478,15 @@ namespace Mosa.DeviceDrivers.ISA
 			return true;
 		}
 
-        /// <summary>
-        /// Waits for reqister ready.
-        /// </summary>
-        /// <returns></returns>
+		/// <summary>
+		/// Waits for reqister ready.
+		/// </summary>
+		/// <returns></returns>
 		protected bool WaitForReqisterReady()
 		{
 			// wait for RQM data register to be ready
-			while (true) {
+			while (true)
+			{
 				uint status = statusPort.Read8();
 
 				if ((status & 0x80) == 0x80)
@@ -494,39 +498,39 @@ namespace Mosa.DeviceDrivers.ISA
 			//return false;
 		}
 
-        /// <summary>
-        /// Sends the byte.
-        /// </summary>
-        /// <param name="command">The command.</param>
+		/// <summary>
+		/// Sends the byte.
+		/// </summary>
+		/// <param name="command">The command.</param>
 		protected void SendByte(byte command)
 		{
 			WaitForReqisterReady();
 			dataPort.Write8(command);
 		}
 
-        /// <summary>
-        /// Gets the byte.
-        /// </summary>
-        /// <returns></returns>
+		/// <summary>
+		/// Gets the byte.
+		/// </summary>
+		/// <returns></returns>
 		protected byte GetByte()
 		{
 			WaitForReqisterReady();
 			return dataPort.Read8();
 		}
 
-        /// <summary>
-        /// Clears the interrupt.
-        /// </summary>
+		/// <summary>
+		/// Clears the interrupt.
+		/// </summary>
 		protected void ClearInterrupt()
 		{
 			interruptSet = false;
 		}
 
-        /// <summary>
-        /// Waits for interrupt.
-        /// </summary>
-        /// <param name="milliseconds">The milliseconds.</param>
-        /// <returns></returns>
+		/// <summary>
+		/// Waits for interrupt.
+		/// </summary>
+		/// <param name="milliseconds">The milliseconds.</param>
+		/// <returns></returns>
 		protected bool WaitForInterrupt(uint milliseconds)
 		{
 			while (!interruptSet) ;
@@ -534,9 +538,9 @@ namespace Mosa.DeviceDrivers.ISA
 			return true;
 		}
 
-        /// <summary>
-        /// Resets the controller.
-        /// </summary>
+		/// <summary>
+		/// Resets the controller.
+		/// </summary>
 		protected void ResetController()
 		{
 			ClearInterrupt();
@@ -550,16 +554,17 @@ namespace Mosa.DeviceDrivers.ISA
 			WaitForInterrupt(3000);
 		}
 
-        /// <summary>
-        /// Determines the type of the by.
-        /// </summary>
-        /// <param name="type">The type.</param>
-        /// <returns></returns>
+		/// <summary>
+		/// Determines the type of the by.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <returns></returns>
 		protected static FloppyDriveInfo DetermineByType(byte type)
 		{
 			FloppyDriveInfo floppy = new FloppyDriveInfo();
 
-			switch (type) {
+			switch (type)
+			{
 				case 0: { floppy.Type = FloppyDriveType.None; floppy.KiloByteSize = 0; break; }
 				case 1: { floppy.Type = FloppyDriveType.Floppy_5_25; floppy.KiloByteSize = 360; break; }
 				case 2: { floppy.Type = FloppyDriveType.Floppy_5_25; floppy.KiloByteSize = 1200; break; }
@@ -572,9 +577,9 @@ namespace Mosa.DeviceDrivers.ISA
 			return floppy;
 		}
 
-        /// <summary>
-        /// Detects the drives.
-        /// </summary>
+		/// <summary>
+		/// Detects the drives.
+		/// </summary>
 		protected void DetectDrives()
 		{
 			// TODO - connect to CMOS driver and request this information
@@ -596,40 +601,42 @@ namespace Mosa.DeviceDrivers.ISA
 			floppyDrives[1].KiloByteSize = 0;
 		}
 
-        /// <summary>
-        /// Turns the off motor.
-        /// </summary>
-        /// <param name="drive">The drive.</param>
+		/// <summary>
+		/// Turns the off motor.
+		/// </summary>
+		/// <param name="drive">The drive.</param>
 		protected void TurnOffMotor(uint drive)
 		{
 			commandPort.Write8((byte)(DORFlags.EnableDMA | DORFlags.EnableController | drive));
 		}
 
-        /// <summary>
-        /// Turns the on motor.
-        /// </summary>
-        /// <param name="drive">The drive.</param>
+		/// <summary>
+		/// Turns the on motor.
+		/// </summary>
+		/// <param name="drive">The drive.</param>
 		protected void TurnOnMotor(uint drive)
 		{
 			byte reg = commandPort.Read8();
 			byte bits = (byte)(DORFlags.MotorShift << (byte)drive | DORFlags.EnableDMA | DORFlags.EnableController | (byte)drive);
 
-			if (reg != bits) {
+			if (reg != bits)
+			{
 				commandPort.Write8(bits);
 				HAL.Sleep(500); // 500 msec
 			}
 		}
 
-        /// <summary>
-        /// Recalibrates the specified drive.
-        /// </summary>
-        /// <param name="drive">The drive.</param>
-        /// <returns></returns>
+		/// <summary>
+		/// Recalibrates the specified drive.
+		/// </summary>
+		/// <param name="drive">The drive.</param>
+		/// <returns></returns>
 		protected bool Recalibrate(uint drive)
 		{
 			lastSeek[drive].calibrated = false;
 
-			for (int i = 0; i < 5; i++) {
+			for (int i = 0; i < 5; i++)
+			{
 				TurnOnMotor(drive);
 
 				ClearInterrupt();
@@ -643,7 +650,8 @@ namespace Mosa.DeviceDrivers.ISA
 				byte sr0 = GetByte();
 				byte fdc_track = GetByte();
 
-				if (((sr0 & 0xC0) == 0x00) && (fdc_track == 0)) {
+				if (((sr0 & 0xC0) == 0x00) && (fdc_track == 0))
+				{
 					lastSeek[drive].calibrated = true;
 					lastSeek[drive].track = 0;
 					lastSeek[drive].head = 2;	// invalid head (required)
@@ -656,13 +664,13 @@ namespace Mosa.DeviceDrivers.ISA
 			return false;
 		}
 
-        /// <summary>
-        /// Seeks the specified drive.
-        /// </summary>
-        /// <param name="drive">The drive.</param>
-        /// <param name="track">The track.</param>
-        /// <param name="head">The head.</param>
-        /// <returns></returns>
+		/// <summary>
+		/// Seeks the specified drive.
+		/// </summary>
+		/// <param name="drive">The drive.</param>
+		/// <param name="track">The track.</param>
+		/// <param name="head">The head.</param>
+		/// <returns></returns>
 		protected bool Seek(uint drive, byte track, byte head)
 		{
 			TurnOnMotor(drive);
@@ -674,7 +682,8 @@ namespace Mosa.DeviceDrivers.ISA
 			if ((lastSeek[drive].calibrated) && (lastSeek[drive].track == track) && (lastSeek[drive].head == head))
 				return true;
 
-			for (int i = 0; i < 5; i++) {
+			for (int i = 0; i < 5; i++)
+			{
 				ClearInterrupt();
 
 				lastSeek[drive].calibrated = false;
@@ -692,7 +701,8 @@ namespace Mosa.DeviceDrivers.ISA
 				byte sr0 = GetByte();
 				byte trk = GetByte();
 
-				if ((sr0 == (0x20 + ((byte)drive | (head << 2)))) && (trk == track)) {
+				if ((sr0 == (0x20 + ((byte)drive | (head << 2)))) && (trk == track))
+				{
 					lastSeek[drive].calibrated = true;
 					lastSeek[drive].track = track;
 					lastSeek[drive].head = head;
@@ -704,114 +714,120 @@ namespace Mosa.DeviceDrivers.ISA
 			return false;
 		}
 
-        /// <summary>
-        /// LBAs to track.
-        /// </summary>
-        /// <param name="drive">The drive.</param>
-        /// <param name="lba">The lba.</param>
-        /// <returns></returns>
+		/// <summary>
+		/// LBAs to track.
+		/// </summary>
+		/// <param name="drive">The drive.</param>
+		/// <param name="lba">The lba.</param>
+		/// <returns></returns>
 		protected byte LBAToTrack(uint drive, uint lba)
 		{
 			return (byte)(lba / (floppyMedia[drive].SectorsPerTrack * 2));
 		}
 
-        /// <summary>
-        /// LBAs to head.
-        /// </summary>
-        /// <param name="drive">The drive.</param>
-        /// <param name="lba">The lba.</param>
-        /// <returns></returns>
+		/// <summary>
+		/// LBAs to head.
+		/// </summary>
+		/// <param name="drive">The drive.</param>
+		/// <param name="lba">The lba.</param>
+		/// <returns></returns>
 		protected byte LBAToHead(uint drive, uint lba)
 		{
 			return (byte)((lba % (floppyMedia[drive].SectorsPerTrack * 2)) / floppyMedia[drive].SectorsPerTrack);
 		}
 
-        /// <summary>
-        /// LBAs to sector.
-        /// </summary>
-        /// <param name="drive">The drive.</param>
-        /// <param name="lba">The lba.</param>
-        /// <returns></returns>
+		/// <summary>
+		/// LBAs to sector.
+		/// </summary>
+		/// <param name="drive">The drive.</param>
+		/// <param name="lba">The lba.</param>
+		/// <returns></returns>
 		protected byte LBAToSector(uint drive, uint lba)
 		{
 			return (byte)((lba % (floppyMedia[drive].SectorsPerTrack * 2)) % floppyMedia[drive].SectorsPerTrack);
 		}
 
-        /// <summary>
-        /// CHSs to LBA.
-        /// </summary>
-        /// <param name="drive">The drive.</param>
-        /// <param name="cylinder">The cylinder.</param>
-        /// <param name="head">The head.</param>
-        /// <param name="sector">The sector.</param>
-        /// <returns></returns>
+		/// <summary>
+		/// CHSs to LBA.
+		/// </summary>
+		/// <param name="drive">The drive.</param>
+		/// <param name="cylinder">The cylinder.</param>
+		/// <param name="head">The head.</param>
+		/// <param name="sector">The sector.</param>
+		/// <returns></returns>
 		protected uint CHSToLBA(uint drive, uint cylinder, uint head, uint sector)
 		{
 			return ((cylinder * 2 + head) * floppyMedia[drive].SectorsPerTrack) + sector - 1;
 		}
 
-        /// <summary>
-        /// Reads the block.
-        /// </summary>
-        /// <param name="drive">The drive NBR.</param>
-        /// <param name="block">The block.</param>
-        /// <param name="count">The count.</param>
-        /// <param name="data">The data.</param>
-        /// <returns></returns>
+		/// <summary>
+		/// Reads the block.
+		/// </summary>
+		/// <param name="drive">The drive NBR.</param>
+		/// <param name="block">The block.</param>
+		/// <param name="count">The count.</param>
+		/// <param name="data">The data.</param>
+		/// <returns></returns>
 		public bool ReadBlock(uint drive, uint block, uint count, byte[] data)
 		{
 			if (data.Length < count * 512)
 				return false;
 
-			try {
+			try
+			{
 				spinLock.Enter();
-				for (uint index = 0; index < count; index++) {
+				for (uint index = 0; index < count; index++)
+				{
 					if (!ReadBlock2(drive, block + index, data, index * FDC.BytesPerSector))
 						return false;
 				}
 				return true;
 			}
-			finally {
+			finally
+			{
 				TurnOffMotor(drive);	//TODO: create timer to turn off drive motors after 1 sec.
 				spinLock.Exit();
 			}
 		}
 
-        /// <summary>
-        /// Writes the block.
-        /// </summary>
-        /// <param name="drive">The drive NBR.</param>
-        /// <param name="block">The block.</param>
-        /// <param name="count">The count.</param>
-        /// <param name="data">The data.</param>
-        /// <returns></returns>
+		/// <summary>
+		/// Writes the block.
+		/// </summary>
+		/// <param name="drive">The drive NBR.</param>
+		/// <param name="block">The block.</param>
+		/// <param name="count">The count.</param>
+		/// <param name="data">The data.</param>
+		/// <returns></returns>
 		public bool WriteBlock(uint drive, uint block, uint count, byte[] data)
 		{
 			if (data.Length < count * 512)
 				return false;
 
-			try {
+			try
+			{
 				spinLock.Enter();
-				for (uint index = 0; index < count; index++) {
+				for (uint index = 0; index < count; index++)
+				{
 					if (!WriteBlock2(drive, block + index, 1, data, index * FDC.BytesPerSector))
 						return false;
 				}
 				return true;
 			}
-			finally {
+			finally
+			{
 				TurnOffMotor(drive);	//TODO: create timer to turn off drive motors after 1 sec.
 				spinLock.Exit();
 			}
 		}
 
-        /// <summary>
-        /// Reads the block2.
-        /// </summary>
-        /// <param name="drive">The drive.</param>
-        /// <param name="lba">The lba.</param>
-        /// <param name="data">The data.</param>
-        /// <param name="offset">The offset.</param>
-        /// <returns></returns>
+		/// <summary>
+		/// Reads the block2.
+		/// </summary>
+		/// <param name="drive">The drive.</param>
+		/// <param name="lba">The lba.</param>
+		/// <param name="data">The data.</param>
+		/// <param name="offset">The offset.</param>
+		/// <returns></returns>
 		protected bool ReadBlock2(uint drive, uint lba, byte[] data, uint offset)
 		{
 			if (drive > MaximunDriveCount)
@@ -821,7 +837,8 @@ namespace Mosa.DeviceDrivers.ISA
 			byte head = LBAToHead(drive, lba);
 			byte sector = LBAToSector(drive, lba);
 
-			if (!((trackCache[drive].valid) && (trackCache[drive].track == track) && (trackCache[drive].head == head))) {
+			if (!((trackCache[drive].valid) && (trackCache[drive].track == track) && (trackCache[drive].head == head)))
+			{
 				trackCache[drive].valid = false;
 
 				if (!PerformIO(SectorOperation.Read, drive, 0, track, head, floppyMedia[drive].SectorsPerTrack, trackCache[drive].buffer, 0))
@@ -838,20 +855,20 @@ namespace Mosa.DeviceDrivers.ISA
 			return true;
 		}
 
-        /// <summary>
-        /// Writes the block.
-        /// </summary>
-        /// <param name="drive">The drive.</param>
-        /// <param name="lba">The lba.</param>
-        /// <param name="count">The count.</param>
-        /// <param name="data">The data.</param>
-        /// <param name="offset">The offset.</param>
-        /// <returns></returns>
+		/// <summary>
+		/// Writes the block.
+		/// </summary>
+		/// <param name="drive">The drive.</param>
+		/// <param name="lba">The lba.</param>
+		/// <param name="count">The count.</param>
+		/// <param name="data">The data.</param>
+		/// <param name="offset">The offset.</param>
+		/// <returns></returns>
 		protected bool WriteBlock2(uint drive, uint lba, uint count, byte[] data, uint offset)
 		{
 			if (drive > MaximunDriveCount)
 				return false;
-			
+
 			byte track = LBAToTrack(drive, lba);
 			byte head = LBAToHead(drive, lba);
 			byte sector = LBAToSector(drive, lba);
@@ -859,7 +876,8 @@ namespace Mosa.DeviceDrivers.ISA
 			if (sector + count > floppyMedia[drive].SectorsPerTrack)
 				return false;
 
-			if ((trackCache[drive].track == track) && (trackCache[drive].head == head)) {
+			if ((trackCache[drive].track == track) && (trackCache[drive].head == head))
+			{
 				// updated track cache
 				for (uint i = 0; i < count * FDC.BytesPerSector; i++)
 					trackCache[drive].buffer[(sector * FDC.BytesPerSector) + i] = data[offset + i];
@@ -871,44 +889,47 @@ namespace Mosa.DeviceDrivers.ISA
 			return true;
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected enum SectorOperation
 		{
-            /// <summary>
-            /// 
-            /// </summary>
+			/// <summary>
+			/// 
+			/// </summary>
 			Read,
-            /// <summary>
-            /// 
-            /// </summary>
+			/// <summary>
+			/// 
+			/// </summary>
 			Write
 		}
 
-        /// <summary>
-        /// Performs the IO.
-        /// </summary>
-        /// <param name="operation">The operation.</param>
-        /// <param name="drive">The drive.</param>
-        /// <param name="sector">The sector.</param>
-        /// <param name="track">The track.</param>
-        /// <param name="head">The head.</param>
-        /// <param name="count">The count.</param>
-        /// <param name="data">The data.</param>
-        /// <param name="offset">The offset.</param>
-        /// <returns></returns>
+		/// <summary>
+		/// Performs the IO.
+		/// </summary>
+		/// <param name="operation">The operation.</param>
+		/// <param name="drive">The drive.</param>
+		/// <param name="sector">The sector.</param>
+		/// <param name="track">The track.</param>
+		/// <param name="head">The head.</param>
+		/// <param name="count">The count.</param>
+		/// <param name="data">The data.</param>
+		/// <param name="offset">The offset.</param>
+		/// <returns></returns>
 		protected bool PerformIO(SectorOperation operation, uint drive, byte sector, byte track, byte head, uint count, byte[] data, uint offset)
 		{
-			for (int i = 0; i < 5; i++) {
+			for (int i = 0; i < 5; i++)
+			{
 				int error = 0;
 
 				TurnOnMotor(drive);
 
 				//TODO: Check for disk change
 
-				if (Seek(drive, track, head)) {
-					if (operation == SectorOperation.Write) {
+				if (Seek(drive, track, head))
+				{
+					if (operation == SectorOperation.Write)
+					{
 						floppyDMA.TransferIn(count * FDC.BytesPerSector, data, offset);
 						floppyDMA.SetupChannel(DMAMode.ReadFromMemory, DMATransferType.Single, false, count * FDC.BytesPerSector);
 					}
@@ -944,76 +965,94 @@ namespace Mosa.DeviceDrivers.ISA
 					GetByte(); // sector number
 					byte bps = GetByte();	// bytes per sector
 
-					if ((st0 & 0xC0) != 0x0) {
+					if ((st0 & 0xC0) != 0x0)
+					{
 						//if (verbose) TextMode.WriteLine ("FloppyDiskController: error");
 						error = 1;
 					}
-					if (trk != track + 1) {
+					if (trk != track + 1)
+					{
 						//if (verbose) TextMode.WriteLine ("FloppyDiskController: wrong track: ", trk - 1);
 						error = 1;
 					}
-					if (rhe != head) {
+					if (rhe != head)
+					{
 						//if (verbose) TextMode.WriteLine ("FloppyDiskController: wrong track: ", trk - 1);
 						error = 1;
 					}
-					if ((st1 & 0x80) != 0x0) {
+					if ((st1 & 0x80) != 0x0)
+					{
 						//if (verbose) TextMode.WriteLine ("FloppyDiskController: end of cylinder");
 						error = 1;
 					}
-					if ((st0 & 0x08) != 0x0) {
+					if ((st0 & 0x08) != 0x0)
+					{
 						//if (verbose) TextMode.WriteLine ("FloppyDiskController: drive not ready");
 						error = 1;
 					}
-					if ((st1 & 0x20) != 0x0) {
+					if ((st1 & 0x20) != 0x0)
+					{
 						//if (verbose) TextMode.WriteLine ("FloppyDiskController: CRC error");
 						error = 1;
 					}
-					if ((st1 & 0x10) != 0x0) {
+					if ((st1 & 0x10) != 0x0)
+					{
 						//if (verbose) TextMode.WriteLine ("FloppyDiskController: controller timeout");
 						error = 1;
 					}
-					if ((st1 & 0x04) != 0x0) {
+					if ((st1 & 0x04) != 0x0)
+					{
 						//if (verbose) TextMode.WriteLine ("FloppyDiskController: no data found");
 						error = 1;
 					}
-					if (((st1 | st2) & 0x01) != 0x0) {
+					if (((st1 | st2) & 0x01) != 0x0)
+					{
 						//if (verbose) TextMode.WriteLine ("FloppyDiskController: no address mark found");
 						error = 1;
 					}
-					if ((st2 & 0x40) != 0x0) {
+					if ((st2 & 0x40) != 0x0)
+					{
 						//if (verbose) TextMode.WriteLine ("FloppyDiskController: deleted address mark");
 						error = 1;
 					}
-					if ((st2 & 0x20) != 0x0) {
+					if ((st2 & 0x20) != 0x0)
+					{
 						//if (verbose) TextMode.WriteLine ("FloppyDiskController: CRC error in data");
 						error = 1;
 					}
-					if ((st2 & 0x10) != 0x0) {
+					if ((st2 & 0x10) != 0x0)
+					{
 						//if (verbose) TextMode.WriteLine ("FloppyDiskController: wrong cylinder");
 						error = 1;
 					}
-					if ((st2 & 0x04) != 0x0) {
+					if ((st2 & 0x04) != 0x0)
+					{
 						//if (verbose) TextMode.WriteLine ("FloppyDiskController: sector not found");
 						error = 1;
 					}
-					if ((st2 & 0x02) != 0x0) {
+					if ((st2 & 0x02) != 0x0)
+					{
 						//if (verbose) TextMode.WriteLine ("FloppyDiskController: bad cylinder");
 						error = 1;
 					}
-					if (bps != 0x02) {
+					if (bps != 0x02)
+					{
 						//if (verbose) TextMode.WriteLine ("FloppyDiskController: wanted 512B/sector, got something else: ", (int)bps);
 						error = 1;
 					}
-					if ((st1 & 0x02) != 0x0) {
+					if ((st1 & 0x02) != 0x0)
+					{
 						//if (verbose) TextMode.WriteLine ("FloppyDiskController: not writable");
 						error = 2;
 					}
 				}
-				else {
+				else
+				{
 					error = 1; // seek failed
 				}
 
-				if (error == 0) {
+				if (error == 0)
+				{
 					if (operation == SectorOperation.Write)
 						return true;
 					else
@@ -1025,7 +1064,8 @@ namespace Mosa.DeviceDrivers.ISA
 
 				lastSeek[drive].calibrated = false;	// will force recalibration
 
-				if (error > 1) {
+				if (error > 1)
+				{
 					TurnOffMotor(drive);
 					break;
 				}

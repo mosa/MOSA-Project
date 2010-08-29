@@ -9,11 +9,13 @@
 
 using System;
 
-namespace Mosa.Runtime.Metadata {
-    /// <summary>
-    /// 
-    /// </summary>
-	public enum IndexType {
+namespace Mosa.Runtime.Metadata
+{
+	/// <summary>
+	/// 
+	/// </summary>
+	public enum IndexType
+	{
 		/// <summary>
 		/// Index into TypeDef, TypeRef or TypeSpec tables.
 		/// </summary>

@@ -53,8 +53,8 @@ namespace Mosa.Tools.Compiler
 		/// </summary>
 		public CompilationRuntime()
 		{
-			this.typeSystem = new DefaultTypeSystem(this);
-			this.assemblyLoader = new AssemblyLoader(typeSystem);
+			this.assemblyLoader = new AssemblyLoader();
+			this.typeSystem = new DefaultTypeSystem(assemblyLoader);
 			this.memoryManager = new MockMemoryPageManager();
 			this.jitService = new MockJitService();
 		}

@@ -53,12 +53,14 @@ namespace Mosa.DeviceSystem
 			if (lba > 65535 * 16 * 255)
 				lba = 65535 * 16 * 255;
 
-			if (lba >= 65535 * 16 * 63) {
+			if (lba >= 65535 * 16 * 63)
+			{
 				SectorsPerTrack = 255;
 				Heads = 16;
 				cylinderTimesHeads = (uint)(lba / SectorsPerTrack);
 			}
-			else {
+			else
+			{
 				SectorsPerTrack = 17;
 				cylinderTimesHeads = (uint)(lba / SectorsPerTrack);
 
@@ -67,13 +69,15 @@ namespace Mosa.DeviceSystem
 				if (Heads < 4)
 					Heads = 4;
 
-				if (cylinderTimesHeads >= (Heads * 1024) || Heads > 16) {
+				if (cylinderTimesHeads >= (Heads * 1024) || Heads > 16)
+				{
 					SectorsPerTrack = 31;
 					Heads = 16;
 					cylinderTimesHeads = (uint)(lba / SectorsPerTrack);
 				}
 
-				if (cylinderTimesHeads >= (Heads * 1024)) {
+				if (cylinderTimesHeads >= (Heads * 1024))
+				{
 					SectorsPerTrack = 63;
 					Heads = 16;
 					cylinderTimesHeads = (uint)(lba / SectorsPerTrack);

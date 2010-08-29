@@ -13,17 +13,17 @@ using System.Text;
 
 namespace Mosa.Runtime.Metadata.Signatures
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public class MethodReferenceSignature : MethodSignature
-    {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MethodReferenceSignature"/> class.
-        /// </summary>
-        public MethodReferenceSignature() :
-            base()
-        {
-        }
-    }
+	/// <summary>
+	/// 
+	/// </summary>
+	public class MethodReferenceSignature : MethodSignature
+	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="MethodReferenceSignature"/> class.
+		/// </summary>
+		public MethodReferenceSignature() :
+			base()
+		{
+		}
+	}
 }

@@ -15,15 +15,15 @@ using Mosa.Runtime.Vm;
 
 namespace Mosa.Runtime
 {
-    /// <summary>
-    /// Allows the loader parts of the runtime to access specific jit compiler services.
-    /// </summary>
-    public interface IJitService
-    {
-        /// <summary>
-        /// Sets up the jit service for the given runtime method representation.
-        /// </summary>
-        /// <param name="method">The method to setup jitting for.</param>
-        void SetupJit(RuntimeMethod method);
-    }
+	/// <summary>
+	/// Allows the loader parts of the runtime to access specific jit compiler services.
+	/// </summary>
+	public interface IJitService
+	{
+		/// <summary>
+		/// Sets up the jit service for the given runtime method representation.
+		/// </summary>
+		/// <param name="method">The method to setup jitting for.</param>
+		void SetupJit(RuntimeMethod method);
+	}
 }

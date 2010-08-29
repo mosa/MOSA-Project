@@ -32,7 +32,7 @@ namespace Mosa.Kernel
 				_heap = X86.ProcessManager.AllocateMemory(0, _size);
 				_used = 0;
 			}
-						
+
 			uint at = _heap + _used;
 			_used = _used + size;
 			return at;

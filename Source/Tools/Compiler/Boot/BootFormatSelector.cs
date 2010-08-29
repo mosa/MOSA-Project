@@ -21,7 +21,7 @@ namespace Mosa.Tools.Compiler.Boot
 	public class BootFormatSelector : IAssemblyCompilerStage, IHasOptions, IPipelineStage
 	{
 		#region Data Members
-		
+
 		/// <summary>
 		/// Holds the real stage implementation to use.
 		/// </summary>
@@ -104,7 +104,7 @@ namespace Mosa.Tools.Compiler.Boot
 				return ((IPipelineStage)implementation).Name;
 			}
 		}
-		
+
 		public void Setup(AssemblyCompiler compiler)
 		{
 			if (this.implementation != null)
@@ -131,7 +131,8 @@ namespace Mosa.Tools.Compiler.Boot
 		/// <returns></returns>
 		private IAssemblyCompilerStage SelectImplementation(string format)
 		{
-			switch (format.ToLower()) {
+			switch (format.ToLower())
+			{
 				case "multiboot-0.7":
 				case "mb0.7":
 					return this.multiboot07Stage;

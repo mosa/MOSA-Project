@@ -48,7 +48,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		{
 			// Decode base classes first
 			base.Decode(ctx, decoder, typeSystem);
-			
+
 			// Retrieve the type token
 			TokenTypes token;
 			decoder.Decode(out token);

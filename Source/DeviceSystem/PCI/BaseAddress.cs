@@ -11,44 +11,44 @@ using Mosa.DeviceSystem;
 
 namespace Mosa.DeviceSystem.PCI
 {
-    /// <summary>
-    /// 
-    /// </summary>
+	/// <summary>
+	/// 
+	/// </summary>
 	public class BaseAddress
 	{
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected uint address;
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected uint size;
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected AddressType region;
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected bool prefetchable;
 
-        /// <summary>
-        /// Gets the address.
-        /// </summary>
-        /// <value>The address.</value>
+		/// <summary>
+		/// Gets the address.
+		/// </summary>
+		/// <value>The address.</value>
 		public uint Address { get { return address; } }
-        
+
 		/// <summary>
-        /// Gets the size.
-        /// </summary>
-        /// <value>The size.</value>		
+		/// Gets the size.
+		/// </summary>
+		/// <value>The size.</value>		
 		public uint Size { get { return size; } }
-        
+
 		/// <summary>
-        /// Gets the region.
-        /// </summary>
-        /// <value>The region.</value>		
+		/// Gets the region.
+		/// </summary>
+		/// <value>The region.</value>		
 		public AddressType Region { get { return region; } }
 
 		/// <summary>

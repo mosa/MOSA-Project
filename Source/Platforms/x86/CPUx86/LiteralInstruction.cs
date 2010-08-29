@@ -18,11 +18,11 @@ using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Platforms.x86.CPUx86
 {
-    /// <summary>
-    /// Intermediate representation of the literal instruction.
-    /// </summary>
+	/// <summary>
+	/// Intermediate representation of the literal instruction.
+	/// </summary>
 	public sealed class LiteralInstruction : BaseInstruction
-    {
+	{
 
 		#region Methods
 

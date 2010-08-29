@@ -12,12 +12,14 @@ using System.IO;
 using System.Text;
 using System.Diagnostics;
 
-namespace Mosa.Runtime.Metadata {
+namespace Mosa.Runtime.Metadata
+{
 
 	/// <summary>
 	/// Provides a access to the strings in the .NET provider user string heap.
 	/// </summary>
-	public sealed class UserStringHeap : Heap {
+	public sealed class UserStringHeap : Heap
+	{
 		#region Construction
 
 		/// <summary>
@@ -34,7 +36,7 @@ namespace Mosa.Runtime.Metadata {
 		#endregion // Construction
 
 		#region Methods
-		
+
 		/// <summary>
 		/// Retrieves the string at the requested offset.
 		/// </summary>
@@ -62,7 +64,7 @@ namespace Mosa.Runtime.Metadata {
 			if (0 == length)
 				return String.Empty;
 			byte[] buffer = this.Buffer;
-			return Encoding.Unicode.GetString(buffer, realOffset, length-1);
+			return Encoding.Unicode.GetString(buffer, realOffset, length - 1);
 		}
 
 		#endregion // Methods

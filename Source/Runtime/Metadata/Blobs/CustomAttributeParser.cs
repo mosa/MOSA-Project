@@ -60,10 +60,13 @@ namespace Mosa.Runtime.Metadata.Blobs
 
 			// Try to load the blob from the module
 			byte[] blob = module.Metadata.ReadBlob(attributeBlob);
-			if (null != blob) {
-				if (0 != blob.Length) {
+			if (null != blob)
+			{
+				if (0 != blob.Length)
+				{
 					// Create a binary reader for the blob
-					using (BinaryReader reader = new BinaryReader(new MemoryStream(blob), Encoding.UTF8)) {
+					using (BinaryReader reader = new BinaryReader(new MemoryStream(blob), Encoding.UTF8))
+					{
 						ushort prologue = reader.ReadUInt16();
 						Debug.Assert(ATTRIBUTE_BLOB_PROLOGUE == prologue, @"Attribute prologue doesn't match.");
 						if (prologue != ATTRIBUTE_BLOB_PROLOGUE)
@@ -81,17 +84,20 @@ namespace Mosa.Runtime.Metadata.Blobs
 
 						// Are there any named args?
 						ushort numNamed = reader.ReadUInt16();
-						for (ushort idx = 0; idx < numNamed; idx++) {
+						for (ushort idx = 0; idx < numNamed; idx++)
+						{
 							// FIXME: Process the named arguments
 							Trace.WriteLine(@"Skipping named argument of an attribute.");
 						}
 					}
 				}
-				else {
+				else
+				{
 					result = CreateAttribute(attributeCtor, null);
 				}
 			}
-			else {
+			else
+			{
 				throw new ArgumentException(@"Invalid attribute blob token.", @"attributeBlob");
 			}
 
@@ -158,7 +164,8 @@ namespace Mosa.Runtime.Metadata.Blobs
 			Type elementType = GetTypeFromSigType(sigType);
 			Debug.Assert(null != elementType, @"Failed to get System.Type for SigType.");
 			result = Array.CreateInstance(elementType, numElements);
-			for (int idx = 0; idx < numElements; idx++) {
+			for (int idx = 0; idx < numElements; idx++)
+			{
 				object item = ParseElem(module, reader, sigType.ElementType);
 				result.SetValue(item, idx);
 			}
@@ -178,7 +185,8 @@ namespace Mosa.Runtime.Metadata.Blobs
 		{
 			object result;
 
-			switch (sigType.Type) {
+			switch (sigType.Type)
+			{
 				case CilElementType.Boolean:
 					result = (1 == reader.ReadByte());
 					break;
@@ -231,13 +239,15 @@ namespace Mosa.Runtime.Metadata.Blobs
 					result = ParseSerString(reader);
 					break;
 
-				case CilElementType.Type: {
+				case CilElementType.Type:
+					{
 						string typeName = ParseSerString(reader);
 						result = Type.GetType(typeName);
 					}
 					break;
 
-				case CilElementType.Class: {
+				case CilElementType.Class:
+					{
 						string typeName = ParseSerString(reader);
 						string[] type = typeName.Split(',');
 						if (type.Length > 1)
@@ -251,7 +261,8 @@ namespace Mosa.Runtime.Metadata.Blobs
 					}
 					break;
 
-				case CilElementType.ValueType: {
+				case CilElementType.ValueType:
+					{
 						//ValueTypeSigType vtSigType = sigType as ValueTypeSigType;
 						//ITypeSystem ts = RuntimeBase.Instance.TypeSystem;
 						//RuntimeType type = ts.GetType(DefaultSignatureContext.Instance, module, vtSigType.Token);
@@ -265,10 +276,10 @@ namespace Mosa.Runtime.Metadata.Blobs
 						//    result = Enum.ToObject(enumType, result);
 						//}
 						//else {
-							throw new NotSupportedException();
+						throw new NotSupportedException();
 						//}
 					}
-					//break;
+				//break;
 
 				case CilElementType.Object:
 					throw new NotSupportedException();
@@ -340,7 +351,8 @@ namespace Mosa.Runtime.Metadata.Blobs
 		{
 			Type result = null;
 
-			switch (sigType.Type) {
+			switch (sigType.Type)
+			{
 				case CilElementType.I: result = typeof(IntPtr); break;
 				case CilElementType.I1: result = typeof(SByte); break;
 				case CilElementType.I2: result = typeof(Int16); break;

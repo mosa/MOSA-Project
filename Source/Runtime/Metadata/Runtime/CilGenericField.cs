@@ -2,7 +2,7 @@
 namespace Mosa.Runtime
 {
 	using System;
-	
+
 	using Mosa.Runtime.Metadata.Signatures;
 	using Mosa.Runtime.Vm;
 
@@ -20,12 +20,12 @@ namespace Mosa.Runtime
 			this.Attributes = genericField.Attributes;
 			this.SetAttributes(genericField.CustomAttributes);
 		}
-		
+
 		protected override FieldSignature GetSignature()
 		{
 			throw new NotImplementedException();
 		}
-		
+
 		protected override string GetName()
 		{
 			return this.genericField.Name;

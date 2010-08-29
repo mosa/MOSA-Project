@@ -13,153 +13,153 @@ using System.Text;
 
 namespace Pictor
 {
-    public class QuickSortAntiAliasedCell
-    {
-        public QuickSortAntiAliasedCell()
-        {
-        }
+	public class QuickSortAntiAliasedCell
+	{
+		public QuickSortAntiAliasedCell()
+		{
+		}
 
-        public void Sort(AntiAliasingCell[] dataToSort)
-        {
-            Sort(dataToSort, 0, (uint)(dataToSort.Length- 1));
-        }
+		public void Sort(AntiAliasingCell[] dataToSort)
+		{
+			Sort(dataToSort, 0, (uint)(dataToSort.Length - 1));
+		}
 
-        public void Sort(AntiAliasingCell[] dataToSort, uint beg, uint end)
-        {
-            if (end == beg)
-            {
-                return;
-            }
-            else
-            {
-                uint pivot = GetPivotPoint(dataToSort, beg, end);
-                if (pivot > beg)
-                {
-                    Sort(dataToSort, beg, pivot - 1);
-                }
+		public void Sort(AntiAliasingCell[] dataToSort, uint beg, uint end)
+		{
+			if (end == beg)
+			{
+				return;
+			}
+			else
+			{
+				uint pivot = GetPivotPoint(dataToSort, beg, end);
+				if (pivot > beg)
+				{
+					Sort(dataToSort, beg, pivot - 1);
+				}
 
-                if (pivot < end)
-                {
-                    Sort(dataToSort, pivot + 1, end);
-                }
-            }
-        }
+				if (pivot < end)
+				{
+					Sort(dataToSort, pivot + 1, end);
+				}
+			}
+		}
 
-        private uint GetPivotPoint(AntiAliasingCell[] dataToSort, uint begPoint, uint endPoint)
-        {
-            uint pivot = begPoint;
-            uint m = begPoint+1;
-            uint n = endPoint;
-            while ((m < endPoint)
-                && dataToSort[pivot].x >= dataToSort[m].x)
-            {
-                m++;
-            }
+		private uint GetPivotPoint(AntiAliasingCell[] dataToSort, uint begPoint, uint endPoint)
+		{
+			uint pivot = begPoint;
+			uint m = begPoint + 1;
+			uint n = endPoint;
+			while ((m < endPoint)
+				&& dataToSort[pivot].x >= dataToSort[m].x)
+			{
+				m++;
+			}
 
-            while ((n > begPoint) && (dataToSort[pivot].x <= dataToSort[n].x))
-            {
-                n--;
-            }
-            while (m < n)
-            {
-                AntiAliasingCell temp = dataToSort[m];
-                dataToSort[m] = dataToSort[n];
-                dataToSort[n] = temp;
+			while ((n > begPoint) && (dataToSort[pivot].x <= dataToSort[n].x))
+			{
+				n--;
+			}
+			while (m < n)
+			{
+				AntiAliasingCell temp = dataToSort[m];
+				dataToSort[m] = dataToSort[n];
+				dataToSort[n] = temp;
 
-                while ((m < endPoint) && (dataToSort[pivot].x >= dataToSort[m].x))
-                {
-                    m++;
-                }
+				while ((m < endPoint) && (dataToSort[pivot].x >= dataToSort[m].x))
+				{
+					m++;
+				}
 
-                while ((n > begPoint) && (dataToSort[pivot].x <= dataToSort[n].x))
-                {
-                    n--;
-                }
+				while ((n > begPoint) && (dataToSort[pivot].x <= dataToSort[n].x))
+				{
+					n--;
+				}
 
-            }
-            if (pivot != n)
-            {
-                AntiAliasingCell temp2 = dataToSort[n];
-                dataToSort[n] = dataToSort[pivot];
-                dataToSort[pivot] = temp2;
-                
-            }
-            return n;
-        }
-    }
+			}
+			if (pivot != n)
+			{
+				AntiAliasingCell temp2 = dataToSort[n];
+				dataToSort[n] = dataToSort[pivot];
+				dataToSort[pivot] = temp2;
 
-    public class QuickSortRangeAdaptorUint
-    {
-        public QuickSortRangeAdaptorUint()
-        {
-        }
+			}
+			return n;
+		}
+	}
 
-        public void Sort(VectorPOD_RangeAdaptor dataToSort)
-        {
-            Sort(dataToSort, 0, (uint)(dataToSort.Size() - 1));
-        }
+	public class QuickSortRangeAdaptorUint
+	{
+		public QuickSortRangeAdaptorUint()
+		{
+		}
 
-        public void Sort(VectorPOD_RangeAdaptor dataToSort, uint beg, uint end)
-        {
-            if (end == beg)
-            {
-                return;
-            }
-            else
-            {
-                uint pivot = GetPivotPoint(dataToSort, beg, end);
-                if (pivot > beg)
-                {
-                    Sort(dataToSort, beg, pivot - 1);
-                }
+		public void Sort(VectorPOD_RangeAdaptor dataToSort)
+		{
+			Sort(dataToSort, 0, (uint)(dataToSort.Size() - 1));
+		}
 
-                if (pivot < end)
-                {
-                    Sort(dataToSort, pivot + 1, end);
-                }
-            }
-        }
+		public void Sort(VectorPOD_RangeAdaptor dataToSort, uint beg, uint end)
+		{
+			if (end == beg)
+			{
+				return;
+			}
+			else
+			{
+				uint pivot = GetPivotPoint(dataToSort, beg, end);
+				if (pivot > beg)
+				{
+					Sort(dataToSort, beg, pivot - 1);
+				}
 
-        private uint GetPivotPoint(VectorPOD_RangeAdaptor dataToSort, uint begPoint, uint endPoint)
-        {
-            uint pivot = begPoint;
-            uint m = begPoint + 1;
-            uint n = endPoint;
-            while ((m < endPoint)
-                && dataToSort[pivot] >= dataToSort[m])
-            {
-                m++;
-            }
+				if (pivot < end)
+				{
+					Sort(dataToSort, pivot + 1, end);
+				}
+			}
+		}
 
-            while ((n > begPoint) && (dataToSort[pivot] <= dataToSort[n]))
-            {
-                n--;
-            }
-            while (m < n)
-            {
-                uint temp = dataToSort[m];
-                dataToSort[m] = dataToSort[n];
-                dataToSort[n] = temp;
+		private uint GetPivotPoint(VectorPOD_RangeAdaptor dataToSort, uint begPoint, uint endPoint)
+		{
+			uint pivot = begPoint;
+			uint m = begPoint + 1;
+			uint n = endPoint;
+			while ((m < endPoint)
+				&& dataToSort[pivot] >= dataToSort[m])
+			{
+				m++;
+			}
 
-                while ((m < endPoint) && (dataToSort[pivot] >= dataToSort[m]))
-                {
-                    m++;
-                }
+			while ((n > begPoint) && (dataToSort[pivot] <= dataToSort[n]))
+			{
+				n--;
+			}
+			while (m < n)
+			{
+				uint temp = dataToSort[m];
+				dataToSort[m] = dataToSort[n];
+				dataToSort[n] = temp;
 
-                while ((n > begPoint) && (dataToSort[pivot] <= dataToSort[n]))
-                {
-                    n--;
-                }
+				while ((m < endPoint) && (dataToSort[pivot] >= dataToSort[m]))
+				{
+					m++;
+				}
 
-            }
-            if (pivot != n)
-            {
-                uint temp2 = dataToSort[n];
-                dataToSort[n] = dataToSort[pivot];
-                dataToSort[pivot] = temp2;
+				while ((n > begPoint) && (dataToSort[pivot] <= dataToSort[n]))
+				{
+					n--;
+				}
 
-            }
-            return n;
-        }
-    }
+			}
+			if (pivot != n)
+			{
+				uint temp2 = dataToSort[n];
+				dataToSort[n] = dataToSort[pivot];
+				dataToSort[pivot] = temp2;
+
+			}
+			return n;
+		}
+	}
 }

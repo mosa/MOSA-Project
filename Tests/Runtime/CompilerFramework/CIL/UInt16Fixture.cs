@@ -17,11 +17,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 	[TestFixture]
 	public class UInt16Fixture : RuntimeFixture
 	{
-        private readonly ArithmeticInstructionTestRunner<int, ushort> arithmeticTests = new ArithmeticInstructionTestRunner<int, ushort>
-        {
-            ExpectedTypeName = @"int",
-            TypeName = @"ushort"
-        };
+		private readonly ArithmeticInstructionTestRunner<int, ushort> arithmeticTests = new ArithmeticInstructionTestRunner<int, ushort>
+		{
+			ExpectedTypeName = @"int",
+			TypeName = @"ushort"
+		};
 
 		private readonly BinaryLogicInstructionTestRunner<int, ushort, ushort> logicTests = new BinaryLogicInstructionTestRunner<int, ushort, ushort>
 		{
@@ -37,10 +37,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 			TypeName = @"ushort"
 		};
 
-        private readonly SZArrayInstructionTestRunner<ushort> arrayTests = new SZArrayInstructionTestRunner<ushort>
-        {
-            TypeName = @"ushort"
-        };
+		private readonly SZArrayInstructionTestRunner<ushort> arrayTests = new SZArrayInstructionTestRunner<ushort>
+		{
+			TypeName = @"ushort"
+		};
 
 		#region Add
 
@@ -1070,75 +1070,75 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 
 		#endregion // Cle
 
-        #region Newarr
+		#region Newarr
 
-        [Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
-        public void Newarr()
-        {
-            this.arrayTests.Newarr();
-        }
+		[Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
+		public void Newarr()
+		{
+			this.arrayTests.Newarr();
+		}
 
-        #endregion // Newarr
+		#endregion // Newarr
 
-        #region Ldlen
+		#region Ldlen
 
-        [Row(0)]
-        [Row(1)]
-        [Row(10)]
-        [Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
-        public void Ldlen(int length)
-        {
-            this.arrayTests.Ldlen(length);
-        }
+		[Row(0)]
+		[Row(1)]
+		[Row(10)]
+		[Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
+		public void Ldlen(int length)
+		{
+			this.arrayTests.Ldlen(length);
+		}
 
-        #endregion // Ldlen
+		#endregion // Ldlen
 
-        #region Stelem
+		#region Stelem
 
-        [Row(0, UInt16.MinValue)]
-        [Row(0, 1)]
-        [Row(0, UInt16.MaxValue)]
-        [Row(3, UInt16.MinValue)]
-        [Row(6, 1)]
-        [Row(2, UInt16.MaxValue)]
-        [Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
-        public void Stelem(int index, ushort value)
-        {
-            this.arrayTests.Stelem(index, value);
-        }
+		[Row(0, UInt16.MinValue)]
+		[Row(0, 1)]
+		[Row(0, UInt16.MaxValue)]
+		[Row(3, UInt16.MinValue)]
+		[Row(6, 1)]
+		[Row(2, UInt16.MaxValue)]
+		[Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
+		public void Stelem(int index, ushort value)
+		{
+			this.arrayTests.Stelem(index, value);
+		}
 
-        #endregion // Stelem
+		#endregion // Stelem
 
-        #region Ldelem
+		#region Ldelem
 
-        [Row(0, UInt16.MinValue)]
-        [Row(0, 1)]
-        [Row(0, UInt16.MaxValue)]
-        [Row(3, UInt16.MinValue)]
-        [Row(6, 1)]
-        [Row(2, UInt16.MaxValue)]
-        [Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
-        public void Ldelem(int index, ushort value)
-        {
-            this.arrayTests.Ldelem(index, value);
-        }
+		[Row(0, UInt16.MinValue)]
+		[Row(0, 1)]
+		[Row(0, UInt16.MaxValue)]
+		[Row(3, UInt16.MinValue)]
+		[Row(6, 1)]
+		[Row(2, UInt16.MaxValue)]
+		[Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
+		public void Ldelem(int index, ushort value)
+		{
+			this.arrayTests.Ldelem(index, value);
+		}
 
-        #endregion // Ldelem
+		#endregion // Ldelem
 
-        #region Ldelema
+		#region Ldelema
 
-        [Row(0, UInt16.MinValue)]
-        [Row(0, 1)]
-        [Row(0, UInt16.MaxValue)]
-        [Row(3, UInt16.MinValue)]
-        [Row(6, 1)]
-        [Row(2, UInt16.MaxValue)]
-        [Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
-        public void Ldelema(int index, ushort value)
-        {
-            this.arrayTests.Ldelema(index, value);
-        }
+		[Row(0, UInt16.MinValue)]
+		[Row(0, 1)]
+		[Row(0, UInt16.MaxValue)]
+		[Row(3, UInt16.MinValue)]
+		[Row(6, 1)]
+		[Row(2, UInt16.MaxValue)]
+		[Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
+		public void Ldelema(int index, ushort value)
+		{
+			this.arrayTests.Ldelema(index, value);
+		}
 
-        #endregion // Ldelema
-    }
+		#endregion // Ldelema
+	}
 }

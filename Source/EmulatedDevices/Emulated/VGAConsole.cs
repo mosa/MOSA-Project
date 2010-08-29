@@ -143,7 +143,7 @@ namespace Mosa.EmulatedDevices.Emulated
 			cursorPosition = 0;
 			lastCommand = 0;
 
-			font = new Font("Lucida Console", 9, FontStyle.Regular);	
+			font = new Font("Lucida Console", 9, FontStyle.Regular);
 			fontWidth = (int)font.SizeInPoints;
 			fontHeight = (int)font.SizeInPoints + 5;
 			palette = Mosa.DeviceSystem.ColorPalette.CreateStandard16ColorPalette();
@@ -182,7 +182,8 @@ namespace Mosa.EmulatedDevices.Emulated
 		/// <returns></returns>
 		public byte Read8(ushort port)
 		{
-			switch (port - ioBase) {
+			switch (port - ioBase)
+			{
 				case 0x04: return ReadIndex();
 				case 0x1C: return miscellaneous;
 				case 0x25: return ReadIndexColor();
@@ -217,7 +218,8 @@ namespace Mosa.EmulatedDevices.Emulated
 		/// <param name="data"></param>
 		public void Write8(ushort port, byte data)
 		{
-			switch (port - ioBase) {
+			switch (port - ioBase)
+			{
 				case 0x04: WriteCommand(data); return;
 				case 0x05: WriteIndex(data); return;
 				case 0x1C: miscellaneous = data; return;
@@ -276,7 +278,8 @@ namespace Mosa.EmulatedDevices.Emulated
 			Brush color = new SolidBrush(Color.FromArgb(palettecolor.Red, palettecolor.Green, palettecolor.Blue));
 			Brush background = new SolidBrush(Color.FromArgb(palettebackground.Red, palettebackground.Green, palettebackground.Blue));
 
-			lock (dislayForm.bitmap) {
+			lock (dislayForm.bitmap)
+			{
 				dislayForm.graphic.FillRectangle(background, new Rectangle(x * fontWidth, y * fontHeight, fontWidth + 1, fontHeight + 1));
 				dislayForm.graphic.DrawString(c.ToString(), font, color, x * fontWidth, y * fontHeight);
 			}
@@ -335,7 +338,8 @@ namespace Mosa.EmulatedDevices.Emulated
 		/// <param name="data">The data.</param>
 		protected void WriteCommand(byte data)
 		{
-			switch (data) {
+			switch (data)
+			{
 				case CRTCommands.HorizontalDisplayEnableEnd: crtControllerData = (byte)(width); break;
 				case CRTCommands.VerticalDisplayEnableEnd: crtControllerData = height; break;
 				default: break;
@@ -350,7 +354,8 @@ namespace Mosa.EmulatedDevices.Emulated
 		/// <param name="data">The data.</param>
 		protected void WriteCommandColor(byte data)
 		{
-			switch (data) {
+			switch (data)
+			{
 				case CRTCommands.HorizontalDisplayEnableEnd: crtControllerDataColor = (byte)(width * 2); break;
 				case CRTCommands.VerticalDisplayEnableEnd: crtControllerDataColor = height; break;
 				default: break;
@@ -365,7 +370,8 @@ namespace Mosa.EmulatedDevices.Emulated
 		/// <param name="data">The data.</param>
 		protected void WriteIndex(byte data)
 		{
-			switch (lastCommand) {
+			switch (lastCommand)
+			{
 				case CRTCommands.CursorLocationHigh: cursorPosition = (ushort)(((cursorPosition & 0x00FF) | (data << 8))); SetCursor(); break;
 				case CRTCommands.CursorLocationLow: cursorPosition = (ushort)(((cursorPosition & 0xFF00) | data)); SetCursor(); break;
 				default: break;
@@ -378,7 +384,8 @@ namespace Mosa.EmulatedDevices.Emulated
 		/// <returns></returns>
 		protected byte ReadIndex()
 		{
-			switch (lastCommand) {
+			switch (lastCommand)
+			{
 				case CRTCommands.HorizontalDisplayEnableEnd: return (byte)(width - 1);
 				case CRTCommands.VerticalDisplayEnableEnd: return (byte)(height - 1);
 				default: return 0xFF;
@@ -391,7 +398,8 @@ namespace Mosa.EmulatedDevices.Emulated
 		/// <returns></returns>
 		protected byte ReadIndexColor()
 		{
-			switch (lastCommand) {
+			switch (lastCommand)
+			{
 				case CRTCommands.HorizontalDisplayEnableEnd: return (byte)(width * 2 - 1);
 				case CRTCommands.VerticalDisplayEnableEnd: return (byte)(height - 1);
 				default: return 0xFF;

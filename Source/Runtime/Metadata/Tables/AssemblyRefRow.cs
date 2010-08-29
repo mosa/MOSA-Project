@@ -17,7 +17,7 @@ namespace Mosa.Runtime.Metadata.Tables
 	/// <summary>
 	/// 
 	/// </summary>
-	public struct AssemblyRefRow 
+	public struct AssemblyRefRow
 	{
 		#region Data members
 
@@ -82,8 +82,8 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <param name="nameIdx">The name idx.</param>
 		/// <param name="cultureIdx">The culture idx.</param>
 		/// <param name="hashValueIdx">The hash value idx.</param>
-		public AssemblyRefRow(ushort majorVersion, ushort minorVersion, ushort buildNumber, ushort revisionNumber, 
-								AssemblyFlags flags, TokenTypes publicKeyOrTokenIdx, TokenTypes nameIdx, 
+		public AssemblyRefRow(ushort majorVersion, ushort minorVersion, ushort buildNumber, ushort revisionNumber,
+								AssemblyFlags flags, TokenTypes publicKeyOrTokenIdx, TokenTypes nameIdx,
 								TokenTypes cultureIdx, TokenTypes hashValueIdx)
 		{
 			_majorVersion = majorVersion;

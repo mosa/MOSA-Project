@@ -9,33 +9,33 @@
 
 namespace System
 {
-    /// <summary>
-    /// Implementation of the "System.Exception" class
-    /// </summary>
-    public class Exception
-    {
-        private readonly string message;
+	/// <summary>
+	/// Implementation of the "System.Exception" class
+	/// </summary>
+	public class Exception
+	{
+		private readonly string message;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Exception"/> class.
 		/// </summary>
-        public Exception()
-            : this("An exception was thrown.")
-        {}
+		public Exception()
+			: this("An exception was thrown.")
+		{ }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Exception"/> class.
 		/// </summary>
 		/// <param name="message">The message.</param>
-        public Exception(string message) { this.message = message; }
+		public Exception(string message) { this.message = message; }
 
 		/// <summary>
 		/// Gets the message.
 		/// </summary>
 		/// <value>The message.</value>
-        public virtual string Message
-        {
-            get { return message; }
-        }
-    }
+		public virtual string Message
+		{
+			get { return message; }
+		}
+	}
 }

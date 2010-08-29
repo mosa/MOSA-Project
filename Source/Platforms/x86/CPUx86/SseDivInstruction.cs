@@ -18,11 +18,11 @@ using IR = Mosa.Runtime.CompilerFramework.IR;
 
 namespace Mosa.Platforms.x86.CPUx86
 {
-    /// <summary>
-    /// Intermediate representation of the SSE division instruction.
-    /// </summary>
+	/// <summary>
+	/// Intermediate representation of the SSE division instruction.
+	/// </summary>
 	public sealed class SseDivInstruction : TwoOperandInstruction
-    {
+	{
 		#region Data Members
 
 		private static readonly OpCode F = new OpCode(new byte[] { 0xF3, 0x0F, 0x5E });
@@ -40,7 +40,7 @@ namespace Mosa.Platforms.x86.CPUx86
 
 		#endregion // Properties
 
-        #region Methods
+		#region Methods
 
 		/// <summary>
 		/// Computes the opcode.
@@ -49,13 +49,13 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <param name="source">The source operand.</param>
 		/// <param name="third">The third operand.</param>
 		/// <returns></returns>
-        protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
-        {
-            if (source.Type.Type == Mosa.Runtime.Metadata.CilElementType.R4)
-                return F;
+		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
+		{
+			if (source.Type.Type == Mosa.Runtime.Metadata.CilElementType.R4)
+				return F;
 
-            return I; 
-        }
+			return I;
+		}
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
@@ -67,6 +67,6 @@ namespace Mosa.Platforms.x86.CPUx86
 			visitor.SseDiv(context);
 		}
 
-        #endregion // Methods
-    }
+		#endregion // Methods
+	}
 }

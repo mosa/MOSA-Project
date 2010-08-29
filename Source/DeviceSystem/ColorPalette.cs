@@ -80,14 +80,16 @@ namespace Mosa.DeviceSystem
 			byte bestIndex = 0;
 			int bestDiff = 255 * 255 * 3 + 1;
 
-			for (byte i = 0; i < entries; i++) {
+			for (byte i = 0; i < entries; i++)
+			{
 				if (colors[i].IsEqual(color))
 					return i;
 
 				// very simple implementation
 				int dist = (colors[i].Red * color.Red) + (colors[i].Green * color.Green) + (colors[i].Blue * color.Blue);
 
-				if (dist < bestDiff) {
+				if (dist < bestDiff)
+				{
 					bestIndex = i;
 					bestDiff = dist;
 				}

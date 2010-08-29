@@ -309,7 +309,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 					}
 				}
-    
+	
 				return result;
 			 */
 		}

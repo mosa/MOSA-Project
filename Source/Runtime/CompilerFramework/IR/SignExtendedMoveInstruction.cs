@@ -13,37 +13,37 @@ using System.Text;
 
 namespace Mosa.Runtime.CompilerFramework.IR
 {
-    /// <summary>
-    /// Intermediate representation of a signed conversion context.
-    /// </summary>
-    /// <remarks>
-    /// This instruction takes the source operand and converts to the request size maintaining its sign.
-    /// </remarks>
-    public sealed class SignExtendedMoveInstruction : TwoOperandInstruction
-    {
-        #region Construction
+	/// <summary>
+	/// Intermediate representation of a signed conversion context.
+	/// </summary>
+	/// <remarks>
+	/// This instruction takes the source operand and converts to the request size maintaining its sign.
+	/// </remarks>
+	public sealed class SignExtendedMoveInstruction : TwoOperandInstruction
+	{
+		#region Construction
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="SignExtendedMoveInstruction"/>.
-        /// </summary>
-        public SignExtendedMoveInstruction()
-        {
-        }
+		/// <summary>
+		/// Initializes a new instance of the <see cref="SignExtendedMoveInstruction"/>.
+		/// </summary>
+		public SignExtendedMoveInstruction()
+		{
+		}
 
-        #endregion // Construction
+		#endregion // Construction
 
-        #region TwoOperandInstruction Overrides
+		#region TwoOperandInstruction Overrides
 
 		/// <summary>
 		/// Implementation of the visitor pattern.
 		/// </summary>
 		/// <param name="visitor">The visitor.</param>
 		/// <param name="context">The context.</param>
-        public override void Visit(IIRVisitor visitor, Context context)
-        {
+		public override void Visit(IIRVisitor visitor, Context context)
+		{
 			visitor.SignExtendedMoveInstruction(context);
-        }
+		}
 
-        #endregion // TwoOperandInstruction Overrides
-    }
+		#endregion // TwoOperandInstruction Overrides
+	}
 }

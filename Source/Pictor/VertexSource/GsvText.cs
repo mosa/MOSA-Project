@@ -10,348 +10,348 @@ using System;
 
 namespace Pictor.VertexSource
 {
-    public sealed class GsvText : IVertexSource
-    {
-        enum EStatus
-        {
-            initial,
-            next_char,
-            start_glyph,
-            glyph
-        };
+	public sealed class GsvText : IVertexSource
+	{
+		enum EStatus
+		{
+			initial,
+			next_char,
+			start_glyph,
+			glyph
+		};
 
-        double m_StartX;
-        double m_CurrentX;
-        double m_CurrentY;
-        double m_WidthRatioOfHeight;
-        double m_FontSize;
-        double m_SpaceBetweenCharacters;
-        double m_SpaceBetweenLines;
-        string m_Text;
-        int m_CurrentCharacterIndex;
-        byte[] m_font;
-        EStatus m_status;
-        bool m_big_endian;
-        int m_StartOfIndicesIndex;
-        int m_StartOfGlyphsIndex;
-        int m_BeginGlyphIndex;
-        int m_EndGlyphIndex;
-        double m_WidthScaleRatio;
-        double m_HeightScaleRatio;
+		double m_StartX;
+		double m_CurrentX;
+		double m_CurrentY;
+		double m_WidthRatioOfHeight;
+		double m_FontSize;
+		double m_SpaceBetweenCharacters;
+		double m_SpaceBetweenLines;
+		string m_Text;
+		int m_CurrentCharacterIndex;
+		byte[] m_font;
+		EStatus m_status;
+		bool m_big_endian;
+		int m_StartOfIndicesIndex;
+		int m_StartOfGlyphsIndex;
+		int m_BeginGlyphIndex;
+		int m_EndGlyphIndex;
+		double m_WidthScaleRatio;
+		double m_HeightScaleRatio;
 
-        public double AscenderHeight
-        {
-            get
-            {
-                return m_FontSize * .15;
-            }
-        }
-        public double DescenderHeight
-        {
-            get
-            {
-                return m_FontSize * .2;
-            }
-        }
+		public double AscenderHeight
+		{
+			get
+			{
+				return m_FontSize * .15;
+			}
+		}
+		public double DescenderHeight
+		{
+			get
+			{
+				return m_FontSize * .2;
+			}
+		}
 
-        public GsvText()
-        {
-            m_CurrentX = 0.0;
-            m_CurrentY = 0.0;
-            m_StartX = 0.0;
-            m_WidthRatioOfHeight = 1;
-            m_FontSize = 0.0;
-            m_SpaceBetweenCharacters = 0.0;
-            m_font = CGSVDefaultFont.gsv_default_font;
-            m_status = EStatus.initial;
-            m_big_endian = false;
+		public GsvText()
+		{
+			m_CurrentX = 0.0;
+			m_CurrentY = 0.0;
+			m_StartX = 0.0;
+			m_WidthRatioOfHeight = 1;
+			m_FontSize = 0.0;
+			m_SpaceBetweenCharacters = 0.0;
+			m_font = CGSVDefaultFont.gsv_default_font;
+			m_status = EStatus.initial;
+			m_big_endian = false;
 
-            m_SpaceBetweenLines = 0.0;
+			m_SpaceBetweenLines = 0.0;
 
-            int t = 1;
-            unsafe
-            {
-                if (*(byte*)&t == 0) m_big_endian = true;
-            }
-        }
+			int t = 1;
+			unsafe
+			{
+				if (*(byte*)&t == 0) m_big_endian = true;
+			}
+		}
 
-        /*
-        public void font(void* font)
-        {
-            m_font = font;
-            if(m_font == 0) m_font = &m_loaded_font[0];
-        }
-         */
+		/*
+		public void font(void* font)
+		{
+			m_font = font;
+			if(m_font == 0) m_font = &m_loaded_font[0];
+		}
+		 */
 
-        public void LoadFont(string file)
-        {
-            throw new System.NotImplementedException();
-            /*
-            m_loaded_font.resize(0);
-            FILE* fd = fopen(file, "rb");
-            if(fd)
-            {
-                uint len;
+		public void LoadFont(string file)
+		{
+			throw new System.NotImplementedException();
+			/*
+			m_loaded_font.resize(0);
+			FILE* fd = fopen(file, "rb");
+			if(fd)
+			{
+				uint len;
 
-                fseek(fd, 0l, SEEK_END);
-                len = ftell(fd);
-                fseek(fd, 0l, SEEK_SET);
-                if(len > 0)
-                {
-                    m_loaded_font.resize(len);
-                    fread(&m_loaded_font[0], 1, len, fd);
-                    m_font = &m_loaded_font[0];
-                }
-                fclose(fd);
-            }
-             */
-        }
+				fseek(fd, 0l, SEEK_END);
+				len = ftell(fd);
+				fseek(fd, 0l, SEEK_SET);
+				if(len > 0)
+				{
+					m_loaded_font.resize(len);
+					fread(&m_loaded_font[0], 1, len, fd);
+					m_font = &m_loaded_font[0];
+				}
+				fclose(fd);
+			}
+			 */
+		}
 
-        // This will Set the desired Height.  NOTE: The font may not render At the Size that you say.
-        // It depends on the way the font was originally created.  A 24 Point font may not actually be 24 points high
-        public void SetFontSize(double fontSize)
-        {
-            SetFontSizeAndWidthRatio(fontSize, 1.0);
-        }
+		// This will Set the desired Height.  NOTE: The font may not render At the Size that you say.
+		// It depends on the way the font was originally created.  A 24 Point font may not actually be 24 points high
+		public void SetFontSize(double fontSize)
+		{
+			SetFontSizeAndWidthRatio(fontSize, 1.0);
+		}
 
-        public void SetFontSizeAndWidthRatio(double fontSize, double widthRatioOfHeight)
-        {
-            if (fontSize == 0 || widthRatioOfHeight == 0)
-            {
-                throw new System.Exception("You can't have a font with 0 Width or Height.  Nothing will render.");
-            }
+		public void SetFontSizeAndWidthRatio(double fontSize, double widthRatioOfHeight)
+		{
+			if (fontSize == 0 || widthRatioOfHeight == 0)
+			{
+				throw new System.Exception("You can't have a font with 0 Width or Height.  Nothing will render.");
+			}
 
-            m_FontSize = fontSize;
-            m_WidthRatioOfHeight = widthRatioOfHeight;
+			m_FontSize = fontSize;
+			m_WidthRatioOfHeight = widthRatioOfHeight;
 
-            m_SpaceBetweenLines = m_FontSize * 1.5;
-        }
+			m_SpaceBetweenLines = m_FontSize * 1.5;
+		}
 
-        public void SetSpaceBetweenCharacters(double spaceBetweenCharacters)
-        {
-            m_SpaceBetweenCharacters = spaceBetweenCharacters;
-        }
+		public void SetSpaceBetweenCharacters(double spaceBetweenCharacters)
+		{
+			m_SpaceBetweenCharacters = spaceBetweenCharacters;
+		}
 
-        public void LineSpace(double spaceBetweenLines)
-        {
-            m_SpaceBetweenLines = spaceBetweenLines;
-        }
+		public void LineSpace(double spaceBetweenLines)
+		{
+			m_SpaceBetweenLines = spaceBetweenLines;
+		}
 
-        public void StartPoint(double x, double y)
-        {
-            m_CurrentX = m_StartX = x;
-            m_CurrentY = y;
-        }
+		public void StartPoint(double x, double y)
+		{
+			m_CurrentX = m_StartX = x;
+			m_CurrentY = y;
+		}
 
-        public string Text
-        {
-            get
-            {
-                return m_Text;
-            }
-            set
-            {
-                m_Text = value;
-            }
-        }
+		public string Text
+		{
+			get
+			{
+				return m_Text;
+			}
+			set
+			{
+				m_Text = value;
+			}
+		}
 
-        private ushort Value(int indicesIndex)
-        {
-            ushort v;
-            if (m_big_endian)
-            {
-                v = (ushort)(m_font[indicesIndex + 0] << 8);
-                v |= m_font[indicesIndex + 1];
-            }
-            else
-            {
-                v = m_font[indicesIndex + 0];
-                v |= (ushort)(m_font[indicesIndex + 1] << 8);
-            }
-            return v;
-        }
+		private ushort Value(int indicesIndex)
+		{
+			ushort v;
+			if (m_big_endian)
+			{
+				v = (ushort)(m_font[indicesIndex + 0] << 8);
+				v |= m_font[indicesIndex + 1];
+			}
+			else
+			{
+				v = m_font[indicesIndex + 0];
+				v |= (ushort)(m_font[indicesIndex + 1] << 8);
+			}
+			return v;
+		}
 
-        public void Rewind(uint nothing)
-        {
-            m_status = EStatus.initial;
-            if (m_font == null) return;
+		public void Rewind(uint nothing)
+		{
+			m_status = EStatus.initial;
+			if (m_font == null) return;
 
-            m_StartOfIndicesIndex = Value(0);
+			m_StartOfIndicesIndex = Value(0);
 
-            double base_height = Value(4);
-            m_StartOfGlyphsIndex = m_StartOfIndicesIndex + 257 * 2; // one for x one for y
-            m_HeightScaleRatio = m_FontSize / base_height;
-            m_WidthScaleRatio = m_HeightScaleRatio * m_WidthRatioOfHeight;
-            m_CurrentCharacterIndex = 0;
-        }
+			double base_height = Value(4);
+			m_StartOfGlyphsIndex = m_StartOfIndicesIndex + 257 * 2; // one for x one for y
+			m_HeightScaleRatio = m_FontSize / base_height;
+			m_WidthScaleRatio = m_HeightScaleRatio * m_WidthRatioOfHeight;
+			m_CurrentCharacterIndex = 0;
+		}
 
-        private void GetSize(char characterToMeasure, out double width, out double height)
-        {
-            width = 0;
-            height = 0;
-            if (m_font == null)
-            {
-                return;
-            }
+		private void GetSize(char characterToMeasure, out double width, out double height)
+		{
+			width = 0;
+			height = 0;
+			if (m_font == null)
+			{
+				return;
+			}
 
-            int maskedChracter = (int)(characterToMeasure & 0xFF);
-            if (maskedChracter == '\r' || maskedChracter == '\n')
-            {
-                height -= (m_FontSize + m_SpaceBetweenLines);
-                return;
-            }
+			int maskedChracter = (int)(characterToMeasure & 0xFF);
+			if (maskedChracter == '\r' || maskedChracter == '\n')
+			{
+				height -= (m_FontSize + m_SpaceBetweenLines);
+				return;
+			}
 
-            int maskedChracterGlyphIndex = maskedChracter * 2; // we have an x and y in the array so it's * 2.
-            int BeginGlyphIndex = m_StartOfGlyphsIndex + Value(m_StartOfIndicesIndex + maskedChracterGlyphIndex);
-            int EndGlyphIndex = m_StartOfGlyphsIndex + Value(m_StartOfIndicesIndex + maskedChracterGlyphIndex + 2);
+			int maskedChracterGlyphIndex = maskedChracter * 2; // we have an x and y in the array so it's * 2.
+			int BeginGlyphIndex = m_StartOfGlyphsIndex + Value(m_StartOfIndicesIndex + maskedChracterGlyphIndex);
+			int EndGlyphIndex = m_StartOfGlyphsIndex + Value(m_StartOfIndicesIndex + maskedChracterGlyphIndex + 2);
 
-            do
-            {
-                if (BeginGlyphIndex >= EndGlyphIndex)
-                {
-                    return; // the character has no glyph
-                }
+			do
+			{
+				if (BeginGlyphIndex >= EndGlyphIndex)
+				{
+					return; // the character has no glyph
+				}
 
-                unsafe
-                {
-                    unchecked
-                    {
-                        fixed (byte* pFont = m_font)
-                        {
-                            sbyte* pFontSByte = (sbyte*)pFont;
-                            int DeltaX = (int)(pFontSByte[BeginGlyphIndex++]);
-                            sbyte yc = pFontSByte[BeginGlyphIndex++];
-                            yc <<= 1;
-                            yc >>= 1;
-                            int DeltaY = (int)(yc);
-                            width += (double)(DeltaX) * m_WidthScaleRatio;
-                            height += (double)(DeltaY) * m_HeightScaleRatio;
-                        }
-                    }
-                }
-            } while (true);
-        }
+				unsafe
+				{
+					unchecked
+					{
+						fixed (byte* pFont = m_font)
+						{
+							sbyte* pFontSByte = (sbyte*)pFont;
+							int DeltaX = (int)(pFontSByte[BeginGlyphIndex++]);
+							sbyte yc = pFontSByte[BeginGlyphIndex++];
+							yc <<= 1;
+							yc >>= 1;
+							int DeltaY = (int)(yc);
+							width += (double)(DeltaX) * m_WidthScaleRatio;
+							height += (double)(DeltaY) * m_HeightScaleRatio;
+						}
+					}
+				}
+			} while (true);
+		}
 
-        public void GetSize(int characterToMeasureStartIndexInclusive, int characterToMeasureEndIndexInclusive, out PointD offset)
-        {
-            offset.x = 0;
-            offset.y = 0;
-            if (m_Text.Length > 0)
-            {
-                characterToMeasureStartIndexInclusive = Math.Max(0, Math.Min(characterToMeasureStartIndexInclusive, m_Text.Length - 1));
-                characterToMeasureEndIndexInclusive = Math.Max(0, Math.Min(characterToMeasureEndIndexInclusive, m_Text.Length - 1));
-                for (int i = characterToMeasureStartIndexInclusive; i <= characterToMeasureEndIndexInclusive; i++)
-                {
-                    char singleChar = m_Text[i];
-                    if (singleChar == '\r' || singleChar == '\n')
-                    {
-                        offset.x = 0;
-                        offset.y -= m_FontSize + m_SpaceBetweenLines;
-                    }
-                    else
-                    {
-                        double sigleWidth;
-                        double sigleHeight;
-                        GetSize(singleChar, out sigleWidth, out sigleHeight);
-                        offset.x += sigleWidth + m_SpaceBetweenCharacters;
-                        offset.y += sigleHeight;
-                    }
-                }
-            }
-        }
+		public void GetSize(int characterToMeasureStartIndexInclusive, int characterToMeasureEndIndexInclusive, out PointD offset)
+		{
+			offset.x = 0;
+			offset.y = 0;
+			if (m_Text.Length > 0)
+			{
+				characterToMeasureStartIndexInclusive = Math.Max(0, Math.Min(characterToMeasureStartIndexInclusive, m_Text.Length - 1));
+				characterToMeasureEndIndexInclusive = Math.Max(0, Math.Min(characterToMeasureEndIndexInclusive, m_Text.Length - 1));
+				for (int i = characterToMeasureStartIndexInclusive; i <= characterToMeasureEndIndexInclusive; i++)
+				{
+					char singleChar = m_Text[i];
+					if (singleChar == '\r' || singleChar == '\n')
+					{
+						offset.x = 0;
+						offset.y -= m_FontSize + m_SpaceBetweenLines;
+					}
+					else
+					{
+						double sigleWidth;
+						double sigleHeight;
+						GetSize(singleChar, out sigleWidth, out sigleHeight);
+						offset.x += sigleWidth + m_SpaceBetweenCharacters;
+						offset.y += sigleHeight;
+					}
+				}
+			}
+		}
 
-        public uint Vertex(out double x, out double y)
-        {
-            x = 0;
-            y = 0;
-            bool quit = false;
+		public uint Vertex(out double x, out double y)
+		{
+			x = 0;
+			y = 0;
+			bool quit = false;
 
-            while (!quit)
-            {
-                switch (m_status)
-                {
-                    case EStatus.initial:
-                        if (m_font == null)
-                        {
-                            quit = true;
-                            break;
-                        }
-                        m_status = EStatus.next_char;
-                        goto case EStatus.next_char;
+			while (!quit)
+			{
+				switch (m_status)
+				{
+					case EStatus.initial:
+						if (m_font == null)
+						{
+							quit = true;
+							break;
+						}
+						m_status = EStatus.next_char;
+						goto case EStatus.next_char;
 
-                    case EStatus.next_char:
-                        if (m_CurrentCharacterIndex == m_Text.Length)
-                        {
-                            quit = true;
-                            break;
-                        }
-                        int maskedChracter = (int)((m_Text[m_CurrentCharacterIndex++]) & 0xFF);
-                        if (maskedChracter == '\r' || maskedChracter == '\n')
-                        {
-                            m_CurrentX = m_StartX;
-                            m_CurrentY -= m_FontSize + m_SpaceBetweenLines;
-                            break;
-                        }
-                        int maskedChracterGlyphIndex = maskedChracter * 2; // we have an x and y in the array so it's * 2.
-                        m_BeginGlyphIndex = m_StartOfGlyphsIndex + Value(m_StartOfIndicesIndex + maskedChracterGlyphIndex);
-                        m_EndGlyphIndex = m_StartOfGlyphsIndex + Value(m_StartOfIndicesIndex + maskedChracterGlyphIndex + 2);
-                        m_status = EStatus.start_glyph;
-                        goto case EStatus.start_glyph;
+					case EStatus.next_char:
+						if (m_CurrentCharacterIndex == m_Text.Length)
+						{
+							quit = true;
+							break;
+						}
+						int maskedChracter = (int)((m_Text[m_CurrentCharacterIndex++]) & 0xFF);
+						if (maskedChracter == '\r' || maskedChracter == '\n')
+						{
+							m_CurrentX = m_StartX;
+							m_CurrentY -= m_FontSize + m_SpaceBetweenLines;
+							break;
+						}
+						int maskedChracterGlyphIndex = maskedChracter * 2; // we have an x and y in the array so it's * 2.
+						m_BeginGlyphIndex = m_StartOfGlyphsIndex + Value(m_StartOfIndicesIndex + maskedChracterGlyphIndex);
+						m_EndGlyphIndex = m_StartOfGlyphsIndex + Value(m_StartOfIndicesIndex + maskedChracterGlyphIndex + 2);
+						m_status = EStatus.start_glyph;
+						goto case EStatus.start_glyph;
 
-                    case EStatus.start_glyph:
-                        x = m_CurrentX;
-                        y = m_CurrentY;
-                        m_status = EStatus.glyph;
-                        return (uint)Path.EPathCommands.MoveTo;
+					case EStatus.start_glyph:
+						x = m_CurrentX;
+						y = m_CurrentY;
+						m_status = EStatus.glyph;
+						return (uint)Path.EPathCommands.MoveTo;
 
-                    case EStatus.glyph:
-                        if (m_BeginGlyphIndex >= m_EndGlyphIndex)
-                        {
-                            m_status = EStatus.next_char;
-                            m_CurrentX += m_SpaceBetweenCharacters;
-                            break;
-                        }
+					case EStatus.glyph:
+						if (m_BeginGlyphIndex >= m_EndGlyphIndex)
+						{
+							m_status = EStatus.next_char;
+							m_CurrentX += m_SpaceBetweenCharacters;
+							break;
+						}
 
-                        sbyte IsAMoveTo_Flag;
-                        unsafe
-                        {
-                            unchecked
-                            {
-                                sbyte yc;
-                                fixed (byte* pFont = m_font)
-                                {
-                                    sbyte* pFontSByte = (sbyte*)pFont;
-                                    int DeltaX = (int)(pFontSByte[m_BeginGlyphIndex++]);
-                                    IsAMoveTo_Flag = (sbyte)((yc = pFontSByte[m_BeginGlyphIndex++]) & 0x80);
-                                    yc <<= 1;
-                                    yc >>= 1;
-                                    int DeltaY = (int)(yc);
-                                    m_CurrentX += (double)(DeltaX) * m_WidthScaleRatio;
-                                    m_CurrentY += (double)(DeltaY) * m_HeightScaleRatio;
-                                }
-                            }
-                        }
-                        x = m_CurrentX;
-                        y = m_CurrentY;
-                        if (IsAMoveTo_Flag != 0)
-                        {
-                            return (uint)Path.EPathCommands.MoveTo;
-                        }
+						sbyte IsAMoveTo_Flag;
+						unsafe
+						{
+							unchecked
+							{
+								sbyte yc;
+								fixed (byte* pFont = m_font)
+								{
+									sbyte* pFontSByte = (sbyte*)pFont;
+									int DeltaX = (int)(pFontSByte[m_BeginGlyphIndex++]);
+									IsAMoveTo_Flag = (sbyte)((yc = pFontSByte[m_BeginGlyphIndex++]) & 0x80);
+									yc <<= 1;
+									yc >>= 1;
+									int DeltaY = (int)(yc);
+									m_CurrentX += (double)(DeltaX) * m_WidthScaleRatio;
+									m_CurrentY += (double)(DeltaY) * m_HeightScaleRatio;
+								}
+							}
+						}
+						x = m_CurrentX;
+						y = m_CurrentY;
+						if (IsAMoveTo_Flag != 0)
+						{
+							return (uint)Path.EPathCommands.MoveTo;
+						}
 
-                        return (uint)Path.EPathCommands.LineTo;
+						return (uint)Path.EPathCommands.LineTo;
 
-                    default:
-                        throw new System.Exception("Unknown Status");
-                }
-            }
+					default:
+						throw new System.Exception("Unknown Status");
+				}
+			}
 
-            return (uint)Path.EPathCommands.Stop;
-        }
-    };
+			return (uint)Path.EPathCommands.Stop;
+		}
+	};
 
-    internal static class CGSVDefaultFont
-    {
-        static public byte[] gsv_default_font = 
+	internal static class CGSVDefaultFont
+	{
+		static public byte[] gsv_default_font = 
 		{
 			0x40,0x00,0x6c,0x0f,0x15,0x00,0x0e,0x00,0xf9,0xff,
 			0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00,
@@ -807,5 +807,5 @@ namespace Pictor.VertexSource
 			0xf7,0x00,0xff,0x7e,0x00,0x7b,0x01,0x7e,0x09,0x00,
 			0xf6,0xfa,0x04,0x06,0x08,0xfa
 		};
-    };
+	};
 }

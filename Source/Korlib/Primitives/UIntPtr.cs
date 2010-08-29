@@ -12,7 +12,7 @@ namespace System
 	/// <summary>
 	/// 
 	/// </summary>
-    public struct UIntPtr
-    {
-    }
+	public struct UIntPtr
+	{
+	}
 }

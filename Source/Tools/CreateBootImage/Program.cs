@@ -52,7 +52,8 @@ namespace Mosa.Tools.CreateBootImage
 			if (valid)
 				valid = System.IO.File.Exists(args[0]);
 
-			if (valid) {
+			if (valid)
+			{
 				Console.WriteLine("Usage: CreateBootImage <boot.config file> <image name>");
 				Console.Error.WriteLine("ERROR: Missing arguments");
 				return -1;
@@ -60,11 +61,13 @@ namespace Mosa.Tools.CreateBootImage
 
 			Console.WriteLine("Building image...");
 
-			try {
+			try
+			{
 
 				StreamReader reader = File.OpenText(args[0]);
 
-				while (true) {
+				while (true)
+				{
 					string line = reader.ReadLine();
 					if (line == null) break;
 
@@ -73,7 +76,8 @@ namespace Mosa.Tools.CreateBootImage
 
 					string[] parts = line.Split('\t');
 
-					switch (parts[0].Trim()) {
+					switch (parts[0].Trim())
+					{
 						case "-mbr": mbrOption = true; mbrFilename = (parts.Length > 1) ? parts[1] : null; break;
 						case "-boot": fatcodeFilename = (parts.Length > 1) ? parts[1] : null; break;
 						case "-vhd": imageFormat = ImageFormat.VHD; break;
@@ -105,7 +109,8 @@ namespace Mosa.Tools.CreateBootImage
 				// Create disk image file
 				Mosa.EmulatedDevices.Synthetic.DiskDevice diskDevice = new Mosa.EmulatedDevices.Synthetic.DiskDevice(args[1]);
 
-				if (imageFormat == ImageFormat.VDI) {
+				if (imageFormat == ImageFormat.VDI)
+				{
 					// Create header
 					byte[] header = Mosa.DeviceSystem.VDI.CreateHeader(
 						blockCount,
@@ -129,7 +134,8 @@ namespace Mosa.Tools.CreateBootImage
 				// Create partition device
 				PartitionDevice partitionDevice;
 
-				if (mbrOption) {
+				if (mbrOption)
+				{
 					// Create master boot block record
 					MasterBootBlock mbr = new MasterBootBlock(diskDevice);
 
@@ -139,7 +145,8 @@ namespace Mosa.Tools.CreateBootImage
 					mbr.Partitions[0].StartLBA = diskGeometry.SectorsPerTrack;
 					mbr.Partitions[0].TotalBlocks = blockCount - mbr.Partitions[0].StartLBA;
 
-					switch (fileSystem) {
+					switch (fileSystem)
+					{
 						case FileSystem.FAT12: mbr.Partitions[0].PartitionType = PartitionType.FAT12; break;
 						case FileSystem.FAT16: mbr.Partitions[0].PartitionType = PartitionType.FAT16; break;
 						case FileSystem.FAT32: mbr.Partitions[0].PartitionType = PartitionType.FAT32; break;
@@ -153,14 +160,16 @@ namespace Mosa.Tools.CreateBootImage
 
 					partitionDevice = new PartitionDevice(diskDevice, mbr.Partitions[0], false);
 				}
-				else {
+				else
+				{
 					partitionDevice = new PartitionDevice(diskDevice, false);
 				}
 
 				// Set FAT settings
 				FatSettings fatSettings = new FatSettings();
 
-				switch (fileSystem) {
+				switch (fileSystem)
+				{
 					case FileSystem.FAT12: fatSettings.FATType = FatType.FAT12; break;
 					case FileSystem.FAT16: fatSettings.FATType = FatType.FAT16; break;
 					case FileSystem.FAT32: fatSettings.FATType = FatType.FAT32; break;
@@ -182,7 +191,8 @@ namespace Mosa.Tools.CreateBootImage
 
 				fat.SetVolumeName(volumeLabel);
 
-				foreach (IncludeFile includeFile in includeFiles) {
+				foreach (IncludeFile includeFile in includeFiles)
+				{
 					string filename = includeFile.Filename;
 
 					Mosa.FileSystem.FAT.FatFileAttributes fileAttributes = new Mosa.FileSystem.FAT.FatFileAttributes();
@@ -203,14 +213,16 @@ namespace Mosa.Tools.CreateBootImage
 					fatFileStream.Flush();
 				}
 
-				if (patchSyslinuxOption) {
+				if (patchSyslinuxOption)
+				{
 					// Locate ldlinux.sys file for patching
 					string filename = "ldlinux.sys";
 					string name = (Path.GetFileNameWithoutExtension(filename) + Path.GetExtension(filename).PadRight(3).Substring(0, 4)).ToUpper();
 
 					FatFileLocation location = fat.FindEntry(new Mosa.FileSystem.FAT.Find.WithName(name), 0);
 
-					if (location.Valid) {
+					if (location.Valid)
+					{
 						// Read boot sector
 						Mosa.ClassLib.BinaryFormat bootSector = new Mosa.ClassLib.BinaryFormat(partitionDevice.ReadBlock(0, 1));
 
@@ -231,7 +243,8 @@ namespace Mosa.Tools.CreateBootImage
 						uint nsec = 0;
 
 						// Create list of the first 65 sectors of the file
-						for (uint cluster = location.FirstCluster; ((cluster != 0) & (nsec <= 64)); cluster = fat.GetNextCluster(cluster)) {
+						for (uint cluster = location.FirstCluster; ((cluster != 0) & (nsec <= 64)); cluster = fat.GetNextCluster(cluster))
+						{
 							uint sec = fat.GetSectorByCluster(cluster);
 							for (uint s = 0; s < fat.SectorsPerCluster; s++)
 								sectors[nsec++] = sec + s;
@@ -247,7 +260,8 @@ namespace Mosa.Tools.CreateBootImage
 
 						patchArea = patchArea + 8;
 
-						if (patchArea < fat.ClusterSizeInBytes) {
+						if (patchArea < fat.ClusterSizeInBytes)
+						{
 							// Set up the totals 
 							firstCluster.SetUShort(patchArea, (ushort)(fileSize >> 2));
 							firstCluster.SetUShort(patchArea + 2, (ushort)(sectorCount - 1));
@@ -269,7 +283,8 @@ namespace Mosa.Tools.CreateBootImage
 							FatFileStream file = new FatFileStream(fat, location);
 
 							uint csum = 0x3EB202FE;
-							for (uint index = 0; index < (file.Length >> 2); index++) {
+							for (uint index = 0; index < (file.Length >> 2); index++)
+							{
 								uint value = (uint)file.ReadByte() | ((uint)file.ReadByte() << 8) | ((uint)file.ReadByte() << 16) | ((uint)file.ReadByte() << 24);
 								csum -= value;
 							}
@@ -284,7 +299,8 @@ namespace Mosa.Tools.CreateBootImage
 					}
 				}
 
-				if (imageFormat == ImageFormat.VHD) {
+				if (imageFormat == ImageFormat.VHD)
+				{
 					// Create footer
 					byte[] footer = Mosa.DeviceSystem.VHD.CreateFooter(
 						blockCount,
@@ -298,7 +314,8 @@ namespace Mosa.Tools.CreateBootImage
 
 				Console.WriteLine("Completed!");
 			}
-			catch (Exception e) {
+			catch (Exception e)
+			{
 				Console.Error.WriteLine("Error: " + e.ToString());
 				return -1;
 			}

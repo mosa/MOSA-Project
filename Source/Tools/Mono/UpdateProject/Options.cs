@@ -27,7 +27,8 @@ namespace Mosa.Tools.Mono.UpdateProject
 
 		public void Process(string[] args)
 		{
-			foreach (string opt in args) {
+			foreach (string opt in args)
+			{
 
 				if (opt.ToLower().Equals("-mosa")) CreateMosaFile = false;
 				else if (opt.ToLower().Equals("+mosa")) CreateMosaFile = true;
@@ -47,7 +48,8 @@ namespace Mosa.Tools.Mono.UpdateProject
 				else if (opt.ToLower().StartsWith("-source:")) Source = opt.Substring(8);
 				else if (opt.ToLower().StartsWith("-destination:")) Destination = opt.Substring(13);
 
-				else if (opt.ToLower().EndsWith(".csproj")) {
+				else if (opt.ToLower().EndsWith(".csproj"))
+				{
 					Projects.Add(opt);
 					foreach (string file in Transform.GetProjectFiles(opt))
 						if (!file.EndsWith(".Internal.cs") && !file.EndsWith(".Mosa.cs"))

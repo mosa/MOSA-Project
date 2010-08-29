@@ -13,19 +13,19 @@ using Mosa.Runtime.CompilerFramework.Operands;
 
 namespace Mosa.Platforms.x86.CPUx86
 {
-    /// <summary>
-    /// Intermediate representation of the arithmetic shift right instruction.
-    /// </summary>
+	/// <summary>
+	/// Intermediate representation of the arithmetic shift right instruction.
+	/// </summary>
 	public sealed class SalInstruction : TwoOperandInstruction
-    {
-        #region Data Members
+	{
+		#region Data Members
 
-        private static readonly OpCode RM = new OpCode(new byte[] { 0xD3 }, 4);
-        private static readonly OpCode RMC = new OpCode(new byte[] { 0xC1 }, 4);
-        
+		private static readonly OpCode RM = new OpCode(new byte[] { 0xD3 }, 4);
+		private static readonly OpCode RMC = new OpCode(new byte[] { 0xC1 }, 4);
+
 		#endregion
 
-        #region Methods
+		#region Methods
 
 
 		/// <summary>
@@ -35,13 +35,13 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <param name="source">The source operand.</param>
 		/// <param name="third">The third operand.</param>
 		/// <returns></returns>
-        protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
-        {
+		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
+		{
 			if ((destination is RegisterOperand || destination is MemoryOperand) && (source is ConstantOperand)) return RMC;
 			if (destination is RegisterOperand || destination is MemoryOperand) return RM;
-            
+
 			throw new ArgumentException(@"No opcode for operand type.");
-        }
+		}
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
@@ -53,6 +53,6 @@ namespace Mosa.Platforms.x86.CPUx86
 			visitor.Sal(context);
 		}
 
-        #endregion // Methods
-    }
+		#endregion // Methods
+	}
 }

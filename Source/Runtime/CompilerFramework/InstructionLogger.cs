@@ -23,7 +23,8 @@ namespace Mosa.Runtime.CompilerFramework
 	{
 		public static readonly InstructionLogger Instance = new InstructionLogger();
 
-		public static bool output = false;
+		public static bool output = true;
+		public static string classfilter = "Mosa.HelloWorld.xxTest"; 
 
 		#region IPipelineStage
 
@@ -46,6 +47,9 @@ namespace Mosa.Runtime.CompilerFramework
 				return;
 
 			if (MethodCompiler.Method.Name.Contains("<$>"))
+				return;
+
+			if (!MethodCompiler.Method.DeclaringType.FullName.Contains(classfilter))
 				return;
 
 			// Previous stage
@@ -93,7 +97,8 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			StringBuilder text = new StringBuilder();
 
-			for (; !ctx.EndOfInstruction; ctx.GotoNext()) {
+			for (; !ctx.EndOfInstruction; ctx.GotoNext())
+			{
 
 				text.Length = 0;
 

@@ -153,12 +153,14 @@ namespace Mosa.Emulator
 
 			// Print them 
 			screen.WriteLine("Devices: ");
-			foreach (IDevice device in devices) {
+			foreach (IDevice device in devices)
+			{
 
 				screen.Write(device.Name);
 				screen.Write(" [");
 
-				switch (device.Status) {
+				switch (device.Status)
+				{
 					case DeviceStatus.Online: screen.Write("Online"); break;
 					case DeviceStatus.Available: screen.Write("Available"); break;
 					case DeviceStatus.Initializing: screen.Write("Initializing"); break;
@@ -167,18 +169,22 @@ namespace Mosa.Emulator
 				}
 				screen.Write("]");
 
-				if (device.Parent != null) {
+				if (device.Parent != null)
+				{
 					screen.Write(" - Parent: ");
 					screen.Write(device.Parent.Name);
 				}
 				screen.WriteLine();
 
-				if (device is IPartitionDevice) {
+				if (device is IPartitionDevice)
+				{
 					FileSystem.FAT.FatFileSystem fat = new Mosa.FileSystem.FAT.FatFileSystem(device as IPartitionDevice);
 
 					screen.Write("  File System: ");
-					if (fat.IsValid) {
-						switch (fat.FATType) {
+					if (fat.IsValid)
+					{
+						switch (fat.FATType)
+						{
 							case FatType.FAT12: screen.WriteLine("FAT12"); break;
 							case FatType.FAT16: screen.WriteLine("FAT16"); break;
 							case FatType.FAT32: screen.WriteLine("FAT32"); break;
@@ -190,7 +196,8 @@ namespace Mosa.Emulator
 						screen.WriteLine("Unknown");
 				}
 
-				if (device is PCIDevice) {
+				if (device is PCIDevice)
+				{
 					PCIDevice pciDevice = (device as PCIDevice);
 
 					screen.Write("  Vendor:0x");
@@ -222,7 +229,8 @@ namespace Mosa.Emulator
 					//					screen.Write("  ");
 					//					screen.WriteLine(DeviceTable.Lookup(pciDevice.VendorID, pciDevice.DeviceID, pciDevice.SubDeviceID, pciDevice.SubVendorID));
 
-					foreach (BaseAddress address in pciDevice.BaseAddresses) {
+					foreach (BaseAddress address in pciDevice.BaseAddresses)
+					{
 						if (address == null)
 							continue;
 
@@ -240,11 +248,13 @@ namespace Mosa.Emulator
 
 						screen.Write(" [size=");
 
-						if ((address.Size & 0xFFFFF) == 0) {
+						if ((address.Size & 0xFFFFF) == 0)
+						{
 							screen.Write((address.Size >> 20).ToString());
 							screen.Write("M");
 						}
-						else if ((address.Size & 0x3FF) == 0) {
+						else if ((address.Size & 0x3FF) == 0)
+						{
 							screen.Write((address.Size >> 10).ToString());
 							screen.Write("K");
 						}
@@ -254,12 +264,13 @@ namespace Mosa.Emulator
 						screen.Write("]");
 
 						if (address.Prefetchable)
-							screen.Write("(prefetchable)");	
+							screen.Write("(prefetchable)");
 
 						screen.WriteLine();
 					}
 
-					if (pciDevice.IRQ != 0) {
+					if (pciDevice.IRQ != 0)
+					{
 						screen.Write("    ");
 						screen.Write("IRQ at ");
 						screen.Write(pciDevice.IRQ.ToString());

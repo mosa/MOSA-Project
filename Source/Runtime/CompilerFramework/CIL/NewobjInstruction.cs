@@ -94,13 +94,13 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			TokenTypes ctor = DecodeInvocationTarget(ctx, decoder, InvokeSupport, typeSystem);
 
 			/*
-             * HACK: We need to remove the this parameter from the operand list, as it
-             * is not available yet. It is implicitly created by newobj and appropriately
-             * passed. So we do as if it doesn't exist. Upon instruction expansion a call
-             * to the allocator is inserted and its result is the this pointer passed. This
-             * must be done by expansion though...
-             * 
-             */
+			 * HACK: We need to remove the this parameter from the operand list, as it
+			 * is not available yet. It is implicitly created by newobj and appropriately
+			 * passed. So we do as if it doesn't exist. Upon instruction expansion a call
+			 * to the allocator is inserted and its result is the this pointer passed. This
+			 * must be done by expansion though...
+			 * 
+			 */
 
 			// Remove the this argument from the invocation, it's not on the stack yet.
 			ctx.OperandCount--;

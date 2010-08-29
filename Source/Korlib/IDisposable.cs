@@ -12,11 +12,11 @@ namespace System
 	/// <summary>
 	/// Interface for "System.IDisposable"
 	/// </summary>
-    public interface IDisposable
-    {
+	public interface IDisposable
+	{
 		/// <summary>
 		/// Releases unmanaged and - optionally - managed resources
 		/// </summary>
-        void Dispose();
-    }
+		void Dispose();
+	}
 }

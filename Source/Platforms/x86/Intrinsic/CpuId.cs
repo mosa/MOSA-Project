@@ -19,13 +19,13 @@ using IR = Mosa.Runtime.CompilerFramework.IR;
 
 namespace Mosa.Platforms.x86.Intrinsic
 {
-    /// <summary>
-    /// Representations the x86 CPUID instruction.
-    /// </summary>
+	/// <summary>
+	/// Representations the x86 CPUID instruction.
+	/// </summary>
 	public sealed class CpuId : IIntrinsicMethod
-    {
- 
-        #region Methods
+	{
+
+		#region Methods
 
 		/// <summary>
 		/// Replaces the instrinsic call site
@@ -37,7 +37,7 @@ namespace Mosa.Platforms.x86.Intrinsic
 			context.SetInstruction(CPUx86.Instruction.CpuIdInstruction, context.Result, context.Operand1);
 		}
 
-        #endregion // Methods
+		#endregion // Methods
 
-    }
+	}
 }

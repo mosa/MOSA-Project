@@ -91,14 +91,14 @@ namespace Mosa.Runtime.CompilerFramework
 			set { if (value) _packed = _packed | 0x01; else _packed = (uint)(_packed & ~0x1); }
 		}
 
-        /// <summary>
-        /// Gets or sets the branch hint (true means branch likely)
-        /// </summary>
-        public bool BranchHint
-        {
-            get { return (_packed & 0x04) == 0x04; }
-            set { if (value) _packed = _packed | 0x04; else _packed = (uint)(_packed & ~0x04); }
-        }
+		/// <summary>
+		/// Gets or sets the branch hint (true means branch likely)
+		/// </summary>
+		public bool BranchHint
+		{
+			get { return (_packed & 0x04) == 0x04; }
+			set { if (value) _packed = _packed | 0x04; else _packed = (uint)(_packed & ~0x04); }
+		}
 
 		/// <summary>
 		/// Gets or sets the number of operand results
@@ -216,7 +216,7 @@ namespace Mosa.Runtime.CompilerFramework
 			this._packed = 0;
 			this.Branch = null;
 			this.Other = null;
-            this.BranchHint = false;
+			this.BranchHint = false;
 		}
 
 		/// <summary>
@@ -280,7 +280,8 @@ namespace Mosa.Runtime.CompilerFramework
 			if (Label >= 0)
 				str = Label.ToString() + ": " + str;
 
-			if (Branch != null) {
+			if (Branch != null)
+			{
 				str = str + " (";
 				foreach (int branch in Branch.Targets)
 					str = str + branch.ToString() + ",";

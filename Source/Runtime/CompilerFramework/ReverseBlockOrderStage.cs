@@ -36,7 +36,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public void Run()
 		{
-			for (int i = 1; i <= BasicBlocks.Count / 2; i++) {
+			for (int i = 1; i <= BasicBlocks.Count / 2; i++)
+			{
 				BasicBlock temp = BasicBlocks[i];
 				BasicBlocks[i] = BasicBlocks[BasicBlocks.Count - i];
 				BasicBlocks[BasicBlocks.Count - i] = temp;

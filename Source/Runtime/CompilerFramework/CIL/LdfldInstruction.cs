@@ -46,13 +46,13 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			// Decode base classes first
 			base.Decode(ctx, decoder, typeSystem);
 
-            TokenTypes token;
-            decoder.Decode(out token);
+			TokenTypes token;
+			decoder.Decode(out token);
 			ctx.RuntimeField = typeSystem.GetField(decoder.Method, decoder.Method.Module, token);
 
-            SigType sigType = ctx.RuntimeField.SignatureType;
-            ctx.Result = LoadInstruction.CreateResultOperand(decoder, Operand.StackTypeFromSigType(sigType), sigType);
-        }
+			SigType sigType = ctx.RuntimeField.SignatureType;
+			ctx.Result = LoadInstruction.CreateResultOperand(decoder, Operand.StackTypeFromSigType(sigType), sigType);
+		}
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.

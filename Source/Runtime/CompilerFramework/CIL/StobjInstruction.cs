@@ -41,7 +41,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		public StobjInstruction(OpCode opcode)
 			: base(opcode)
 		{
-			switch (opcode) {
+			switch (opcode)
+			{
 				case OpCode.Stind_i1:
 					_valueType = new SigType(CilElementType.I1);
 					break;
@@ -86,7 +87,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			base.Decode(ctx, decoder, typeSystem);
 
 			// Do we have a type?
-			if (_valueType == null) {
+			if (_valueType == null)
+			{
 				// No, retrieve a type reference from the immediate argument
 				TokenTypes token;
 				decoder.Decode(out token);
@@ -110,7 +112,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 			Debug.Assert(destType is PtrSigType || destType is RefSigType, @"Destination operand not a pointer or reference.");
 			if (!(destType is PtrSigType || destType is RefSigType))
-                throw new InvalidOperationException(@"Invalid operand.");
+				throw new InvalidOperationException(@"Invalid operand.");
 		}
 
 		/// <summary>

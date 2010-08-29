@@ -258,10 +258,12 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 		/// <param name="y">The y.</param>
 		public void WritePixel(byte colorIndex, ushort x, ushort y)
 		{
-			if (writeMethod == WriteMethod.Pixel8) {
+			if (writeMethod == WriteMethod.Pixel8)
+			{
 				memory.Write8((uint)(y * 320 + x), colorIndex);
 			}
-			if (writeMethod == WriteMethod.Pixel2) { // ???
+			if (writeMethod == WriteMethod.Pixel2)
+			{ // ???
 				uint address = (uint)(y * 320 + x / 2);
 				colorIndex = (byte)(colorIndex & 0xF);
 
@@ -281,7 +283,8 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 		/// <returns></returns>
 		public byte ReadPixel(ushort x, ushort y)
 		{
-			if (writeMethod == WriteMethod.Pixel8) {
+			if (writeMethod == WriteMethod.Pixel8)
+			{
 				return memory.Read8((uint)(y * 320 + x));
 			}
 			// TODO: Support more video modes
@@ -362,7 +365,8 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 			miscellaneousOutputWrite.Write8(settings[0]);
 
 			// Write SEQUENCER regs
-			for (byte i = 0; i < 5; i++) {
+			for (byte i = 0; i < 5; i++)
+			{
 				sequencerAddress.Write8(i);
 				sequencerData.Write8(settings[1 + i]);
 			}
@@ -378,19 +382,22 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 			settings[0x11] = (byte)(settings[0x11] & ~0x80);
 
 			// Write CRTC regs 
-			for (byte i = 0; i < 25; i++) {
+			for (byte i = 0; i < 25; i++)
+			{
 				crtControllerIndexColor.Write8(i);
 				crtControllerDataColor.Write8(settings[6 + i]);
 			}
 
 			// Write GRAPHICS CONTROLLER regs 
-			for (byte i = 0; i < 9; i++) {
+			for (byte i = 0; i < 9; i++)
+			{
 				graphicsControllerAddress.Write8(i);
 				graphicsControllerData.Write8(settings[31 + i]);
 			}
 
 			// Write ATTRIBUTE CONTROLLER regs 
-			for (byte i = 0; i < 21; i++) {
+			for (byte i = 0; i < 21; i++)
+			{
 				inputStatus1ReadB.Read8();
 				attributeAddress.Write8(i);
 				attributeAddress.Write8(settings[52 + i]);
@@ -408,7 +415,8 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 		/// <returns></returns>
 		public bool SetMode(byte mode)
 		{
-			switch (mode) {
+			switch (mode)
+			{
 				case 4: { WriteSettings(VGA320x200x4); width = 320; height = 200; colors = 4; writeMethod = WriteMethod.Pixel2; return true; }
 				case 5: { WriteSettings(VGA320x200x4); width = 320; height = 200; colors = 4; writeMethod = WriteMethod.Pixel2; return true; }
 				//case 11: { WriteSettings(VGA640x480x2); width = 640; height = 480; colors = 2; writeMethod = WriteMethod.xxx; return true; }

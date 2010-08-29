@@ -46,11 +46,11 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		{
 			// Decode base classes first
 			base.Decode(ctx, decoder, typeSystem);
-			
+
 			// Retrieve the provider token to check against
 			TokenTypes token;
 			decoder.Decode(out token);
-			
+
 			throw new NotImplementedException();
 
 			//TypeReference targetType = MetadataTypeReference.FromToken(decoder.Metadata, token);

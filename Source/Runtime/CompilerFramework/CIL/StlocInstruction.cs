@@ -56,12 +56,14 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			ushort locIdx;
 
 			// Destination depends on the opcode
-			switch (_opcode) {
+			switch (_opcode)
+			{
 				case OpCode.Stloc:
 					decoder.Decode(out locIdx);
 					break;
 
-				case OpCode.Stloc_s: {
+				case OpCode.Stloc_s:
+					{
 						byte loc;
 						decoder.Decode(out loc);
 						locIdx = loc;

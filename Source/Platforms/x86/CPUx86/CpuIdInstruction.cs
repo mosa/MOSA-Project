@@ -17,13 +17,13 @@ using Mosa.Runtime.CompilerFramework;
 
 namespace Mosa.Platforms.x86.CPUx86
 {
-    /// <summary>
-    /// Representations the x86 CPUID instruction.
-    /// </summary>
-    public sealed class CpuIdInstruction : TwoOperandInstruction
-    {
- 
-        #region Methods
+	/// <summary>
+	/// Representations the x86 CPUID instruction.
+	/// </summary>
+	public sealed class CpuIdInstruction : TwoOperandInstruction
+	{
+
+		#region Methods
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
@@ -35,6 +35,6 @@ namespace Mosa.Platforms.x86.CPUx86
 			visitor.CpuId(context);
 		}
 
-        #endregion // Methods
-    }
+		#endregion // Methods
+	}
 }

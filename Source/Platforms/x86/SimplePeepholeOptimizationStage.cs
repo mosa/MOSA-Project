@@ -186,7 +186,7 @@ namespace Mosa.Platforms.x86
 		}
 
 		#endregion // IMethodCompilerStage Members
-		
+
 		/// <summary>
 		/// Remove multiple occuring stores, for e.g. before:
 		/// <code>

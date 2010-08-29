@@ -10,9 +10,9 @@
 
 namespace Mosa.FileSystem.VFS
 {
-    /// <summary>
-    /// 
-    /// </summary>
+	/// <summary>
+	/// 
+	/// </summary>
 	public sealed class SymbolicLinkNode : NodeBase
 	{
 		#region Data members
@@ -25,11 +25,11 @@ namespace Mosa.FileSystem.VFS
 		#endregion // Data members
 
 		#region Construction
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="fs"></param>
-        /// <param name="target"></param>
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="fs"></param>
+		/// <param name="target"></param>
 		public SymbolicLinkNode(IFileSystem fs, string target)
 			: base(fs, VfsNodeType.SymbolicLink)
 		{
@@ -54,13 +54,13 @@ namespace Mosa.FileSystem.VFS
 		#endregion // Properties
 
 		#region IVfsNode Members
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="name"></param>
-        /// <param name="type"></param>
-        /// <param name="settings"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="name"></param>
+		/// <param name="type"></param>
+		/// <param name="settings"></param>
+		/// <returns></returns>
 		public override IVfsNode Create(string name, VfsNodeType type, object settings)
 		{
 			// Pass this request to the link target node.
@@ -68,12 +68,12 @@ namespace Mosa.FileSystem.VFS
 			return null;
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="access"></param>
-        /// <param name="sharing"></param>
-        /// <returns></returns>
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="access"></param>
+		/// <param name="sharing"></param>
+		/// <returns></returns>
 		public override object Open(System.IO.FileAccess access, System.IO.FileShare sharing)
 		{
 			// FIXME:
@@ -83,11 +83,11 @@ namespace Mosa.FileSystem.VFS
 			return null;
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="child"></param>
-        /// <param name="dentry"></param>
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="child"></param>
+		/// <param name="dentry"></param>
 		public override void Delete(IVfsNode child, DirectoryEntry dentry)
 		{
 			// FIXME: Delete the symbolic link from the filesystem, after all names have been dropped.

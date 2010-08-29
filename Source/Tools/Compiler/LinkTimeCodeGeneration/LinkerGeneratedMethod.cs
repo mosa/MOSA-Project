@@ -17,68 +17,68 @@ using Mosa.Runtime.Loader;
 
 namespace Mosa.Tools.Compiler
 {
-    /// <summary>
-    /// Represents compiler generated methods.
-    /// </summary>
-    public sealed class CompilerGeneratedMethod : RuntimeMethod
-    {
-        #region Data Members
+	/// <summary>
+	/// Represents compiler generated methods.
+	/// </summary>
+	public sealed class CompilerGeneratedMethod : RuntimeMethod
+	{
+		#region Data Members
 
-        /// <summary>
-        /// Holds the name of the compiler generated method.
-        /// </summary>
-        private string name;
+		/// <summary>
+		/// Holds the name of the compiler generated method.
+		/// </summary>
+		private string name;
 
-        private MethodSignature signature;
+		private MethodSignature signature;
 
-        #endregion // Data Members
+		#endregion // Data Members
 
-        #region Construction
+		#region Construction
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="CompilerGeneratedMethod"/> class.
-        /// </summary>
-        /// <param name="module">The module.</param>
-        /// <param name="name">The name of the method.</param>
-        /// <param name="declaringType">Type of the declaring.</param>
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CompilerGeneratedMethod"/> class.
+		/// </summary>
+		/// <param name="module">The module.</param>
+		/// <param name="name">The name of the method.</param>
+		/// <param name="declaringType">Type of the declaring.</param>
 		public CompilerGeneratedMethod(IMetadataModule module, string name, RuntimeType declaringType, ITypeSystem typeSystem) :
-            base(0, module, declaringType, typeSystem)
-        {
-            if (name == null)
-                throw new ArgumentNullException(@"name");
+			base(0, module, declaringType, typeSystem)
+		{
+			if (name == null)
+				throw new ArgumentNullException(@"name");
 
-            this.name = name;
-            this.signature = new MethodSignature(new SigType(CilElementType.Void), new SigType[0]);
-            this.Parameters = new List<RuntimeParameter>();
-        }
+			this.name = name;
+			this.signature = new MethodSignature(new SigType(CilElementType.Void), new SigType[0]);
+			this.Parameters = new List<RuntimeParameter>();
+		}
 
-        #endregion // Construction
+		#endregion // Construction
 
-        #region RuntimeMethod Overrides
+		#region RuntimeMethod Overrides
 
-        /// <summary>
-        /// Called to retrieve the name of the type.
-        /// </summary>
-        /// <returns>The name of the type.</returns>
-        protected override string GetName()
-        {
-            return this.name;
-        }
+		/// <summary>
+		/// Called to retrieve the name of the type.
+		/// </summary>
+		/// <returns>The name of the type.</returns>
+		protected override string GetName()
+		{
+			return this.name;
+		}
 
-        /// <summary>
-        /// Gets the method signature.
-        /// </summary>
-        /// <returns>The method signature.</returns>
-        protected override MethodSignature GetMethodSignature()
-        {
-            return this.signature;
-        }
+		/// <summary>
+		/// Gets the method signature.
+		/// </summary>
+		/// <returns>The method signature.</returns>
+		protected override MethodSignature GetMethodSignature()
+		{
+			return this.signature;
+		}
 
-        #endregion // RuntimeMethod Overrides
+		#endregion // RuntimeMethod Overrides
 
-        public void SetSignature(MethodSignature signature)
-        {
-            this.signature = signature;
-        }
-    }
+		public void SetSignature(MethodSignature signature)
+		{
+			this.signature = signature;
+		}
+	}
 }

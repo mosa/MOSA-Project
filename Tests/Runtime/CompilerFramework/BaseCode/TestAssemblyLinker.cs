@@ -213,7 +213,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 
 			symbol = new LinkerSymbol(allocateObjectMethod, SectionKind.Text, virtualAddress);
 			symbol.VirtualAddress = new IntPtr(symbol.SectionAddress);
-			virtualMachineCalls.Add(allocateObjectMethod, symbol);        
+			virtualMachineCalls.Add(allocateObjectMethod, symbol);
 		}
 
 		/// <summary>

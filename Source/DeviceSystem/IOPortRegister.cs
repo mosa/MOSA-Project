@@ -41,7 +41,8 @@ namespace Mosa.DeviceSystem
 		/// <param name="bit">The bit.</param>
 		protected void SetBit(byte bit)
 		{
-			switch (bits) {
+			switch (bits)
+			{
 				case 8: ioPort.Write8(SetBit(ioPort.Read8(), bit)); break;
 				case 16: ioPort.Write16(SetBit(ioPort.Read16(), bit)); break;
 				case 32: ioPort.Write32(SetBit(ioPort.Read32(), bit)); break;
@@ -54,7 +55,8 @@ namespace Mosa.DeviceSystem
 		/// <param name="bit">The bit.</param>
 		protected void ClearBit(byte bit)
 		{
-			switch (bits) {
+			switch (bits)
+			{
 				case 8: ioPort.Write8(ClearBit(ioPort.Read8(), bit)); break;
 				case 16: ioPort.Write16(ClearBit(ioPort.Read16(), bit)); break;
 				case 32: ioPort.Write32(ClearBit(ioPort.Read32(), bit)); break;
@@ -78,7 +80,8 @@ namespace Mosa.DeviceSystem
 		/// <returns></returns>
 		protected bool GetBit(byte bit)
 		{
-			switch (bits) {
+			switch (bits)
+			{
 				case 8: return ((ioPort.Read8() & (1 << bit)) != 0);
 				case 16: return ((ioPort.Read16() & (1 << bit)) != 0);
 				case 32: return ((ioPort.Read32() & (1 << bit)) != 0);
@@ -256,12 +259,13 @@ namespace Mosa.DeviceSystem
 
 			uint value = 0;
 
-			switch (bits) {
+			switch (bits)
+			{
 				case 8: value = ioPort.Read8(); break;
 				case 16: value = ioPort.Read16(); break;
 				case 32: value = ioPort.Read32(); break;
 			}
-			
+
 			return (uint)((value >> startbit) & ((1 << bits) - 1));
 		}
 	}

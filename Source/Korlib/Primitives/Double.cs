@@ -12,7 +12,7 @@ namespace System
 	/// <summary>
 	/// 
 	/// </summary>
-    public struct Double
-    {
-    }
+	public struct Double
+	{
+	}
 }

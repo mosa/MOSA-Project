@@ -9,9 +9,9 @@
 
 namespace Mosa.DeviceSystem
 {
-    /// <summary>
-    /// 
-    /// </summary>
+	/// <summary>
+	/// 
+	/// </summary>
 	public interface IDiskDevice
 	{
 		/// <summary>

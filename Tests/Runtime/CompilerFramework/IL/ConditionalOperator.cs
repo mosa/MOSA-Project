@@ -25,13 +25,13 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		private static string CreateTestCode(string name, string condition, string typeIn, string typeOut)
 		{
 			return @"
-                static class Test
-                {
-                    static bool " + name + "(" + typeOut + " expect, " + typeIn + " a, " + typeIn + @" b, " + typeIn + @" c, " + typeIn + @" d)
-                    {
-                        return expect == ((a " + condition + @" b) ? c : d);
-                    }
-                }" + Code.ObjectClassDefinition;
+				static class Test
+				{
+					static bool " + name + "(" + typeOut + " expect, " + typeIn + " a, " + typeIn + @" b, " + typeIn + @" c, " + typeIn + @" d)
+					{
+						return expect == ((a " + condition + @" b) ? c : d);
+					}
+				}" + Code.ObjectClassDefinition;
 		}
 
 		delegate bool I1(sbyte expect, sbyte a, sbyte b, sbyte c, sbyte d);

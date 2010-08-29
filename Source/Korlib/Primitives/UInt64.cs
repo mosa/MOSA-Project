@@ -12,7 +12,7 @@ namespace System
 	/// <summary>
 	/// 
 	/// </summary>
-    public struct UInt64
-    {
-    }
+	public struct UInt64
+	{
+	}
 }

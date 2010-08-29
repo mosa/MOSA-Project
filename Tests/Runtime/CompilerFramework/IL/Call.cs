@@ -28,19 +28,19 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		private static string CreateTestCode(string name, string type)
 		{
 			return @"
-                static class Test {
-                    static bool " + name + "(" + type + " value) { return value == " + name + @"_Target(value); } 
-                    static " + type + " " + name + "_Target(" + type + @" value) { return value; }
-                }" + Code.ObjectClassDefinition;
+				static class Test {
+					static bool " + name + "(" + type + " value) { return value == " + name + @"_Target(value); } 
+					static " + type + " " + name + "_Target(" + type + @" value) { return value; }
+				}" + Code.ObjectClassDefinition;
 		}
 
 		private static string CreateConstantTestCode(string name, string type, string constant)
 		{
 			return @"
-                static class Test {
-                    static bool " + name + "(" + type + " value) { return value == " + name + "_Target(" + constant + @"); } 
-                    static " + type + " " + name + "_Target(" + type + @" value) { return value; }
-                }" + Code.ObjectClassDefinition;
+				static class Test {
+					static bool " + name + "(" + type + " value) { return value == " + name + "_Target(" + constant + @"); } 
+					static " + type + " " + name + "_Target(" + type + @" value) { return value; }
+				}" + Code.ObjectClassDefinition;
 		}
 
 		/// <summary>
@@ -54,10 +54,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void CallEmpty()
 		{
 			CodeSource = @"
-                static class Test { 
-                    static void CallEmpty() { CallEmpty_Target(); } 
-                    static void CallEmpty_Target() { }
-                }" + Code.ObjectClassDefinition;
+				static class Test { 
+					static void CallEmpty() { CallEmpty_Target(); } 
+					static void CallEmpty_Target() { }
+				}" + Code.ObjectClassDefinition;
 			Run<V>("", "Test", "CallEmpty");
 		}
 
@@ -533,12 +533,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void CallOrderI4()
 		{
 			CodeSource = @"
-                static class Test {
-                    static bool CallOrderI4(int a, int b, int c, int d) {
-                        return (a == 1 && b == 2 && c == 3 && d == 4);
-                    }
-                }
-            " + Code.ObjectClassDefinition;
+				static class Test {
+					static bool CallOrderI4(int a, int b, int c, int d) {
+						return (a == 1 && b == 2 && c == 3 && d == 4);
+					}
+				}
+			" + Code.ObjectClassDefinition;
 
 			Assert.IsTrue((bool)Run<B_I4_I4_I4_I4>(@"", @"Test", @"CallOrderI4", 1, 2, 3, 4));
 		}
@@ -555,12 +555,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void CallOrderU8()
 		{
 			CodeSource = @"
-                static class Test {
-                    static bool CallOrderU8(ulong a, ulong b, ulong c, ulong d) {
-                        return (a == 1 && b == 2 && c == 3 && d == 4);
-                    }
-                }
-            " + Code.ObjectClassDefinition;
+				static class Test {
+					static bool CallOrderU8(ulong a, ulong b, ulong c, ulong d) {
+						return (a == 1 && b == 2 && c == 3 && d == 4);
+					}
+				}
+			" + Code.ObjectClassDefinition;
 
 			Assert.IsTrue((bool)Run<B_U8_U8_U8_U8>(@"", @"Test", @"CallOrderU8", (ulong)1, (ulong)2, (ulong)3, (ulong)4));
 		}
@@ -577,12 +577,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void CallOrderU4_U8_U8_U8()
 		{
 			CodeSource = @"
-                static class Test {
-                    static bool CallOrderU4_U8_U8_U8(uint a, ulong b, ulong c, ulong d) {
-                        return (a == 1 && b == 2 && c == 3 && d == 4);
-                    }
-                }
-            " + Code.ObjectClassDefinition;
+				static class Test {
+					static bool CallOrderU4_U8_U8_U8(uint a, ulong b, ulong c, ulong d) {
+						return (a == 1 && b == 2 && c == 3 && d == 4);
+					}
+				}
+			" + Code.ObjectClassDefinition;
 
 			Assert.IsTrue((bool)Run<B_U4_U8_U8_U8>(@"", @"Test", @"CallOrderU4_U8_U8_U8", (uint)1, (ulong)2, (ulong)3, (ulong)4));
 		}
@@ -599,22 +599,22 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void CallIntrinsic(int arg)
 		{
 			CodeSource = @"
-                static class Test {
-                    static bool CallIntrinsic(int arg) {
-                        return (arg == CallIntrinsicTest(arg));
-                    }
+				static class Test {
+					static bool CallIntrinsic(int arg) {
+						return (arg == CallIntrinsicTest(arg));
+					}
 
-                    [Mosa.Runtime.CompilerFramework.IntrinsicAttribute(typeof(Mosa.Platforms.x86.Architecture), typeof(Mosa.Platforms.x86.Intrinsic.Test))]
-                    static int CallIntrinsicTest(int arg) {
-                        return 0;
-                    }
-                }
-            " + Code.ObjectClassDefinition;
+					[Mosa.Runtime.CompilerFramework.IntrinsicAttribute(typeof(Mosa.Platforms.x86.Architecture), typeof(Mosa.Platforms.x86.Intrinsic.Test))]
+					static int CallIntrinsicTest(int arg) {
+						return 0;
+					}
+				}
+			" + Code.ObjectClassDefinition;
 
 			this.References = new string[] {
-                @"Mosa.Runtime.dll",
-                @"Mosa.Platforms.x86.dll"
-            };
+				@"Mosa.Runtime.dll",
+				@"Mosa.Platforms.x86.dll"
+			};
 			Assert.IsTrue((bool)Run<B_I4>(@"", @"Test", @"CallIntrinsic", arg));
 		}
 	}

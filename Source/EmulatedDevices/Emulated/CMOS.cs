@@ -70,7 +70,8 @@ namespace Mosa.EmulatedDevices.Emulated
 		/// <returns></returns>
 		public byte Read8(ushort port)
 		{
-			switch (port - ioBase) {
+			switch (port - ioBase)
+			{
 				case 1: return ReadCMOS(index);
 				default: return 0xFF;
 			}
@@ -103,7 +104,8 @@ namespace Mosa.EmulatedDevices.Emulated
 		/// <param name="data"></param>
 		public void Write8(ushort port, byte data)
 		{
-			switch (port - ioBase) {
+			switch (port - ioBase)
+			{
 				case 0: index = data; return;
 				default: return;
 			}
@@ -148,7 +150,8 @@ namespace Mosa.EmulatedDevices.Emulated
 		/// <returns></returns>
 		protected byte ReadCMOS(byte index)
 		{
-			switch (index & 0x1F) {  // mask out last three bits
+			switch (index & 0x1F)
+			{  // mask out last three bits
 				case 0x00: return (byte)DateTime.Now.Second;
 				case 0x01: return 0;
 				case 0x02: return (byte)DateTime.Now.Minute;

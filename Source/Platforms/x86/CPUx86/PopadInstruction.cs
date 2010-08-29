@@ -18,13 +18,13 @@ using Mosa.Runtime.CompilerFramework;
 
 namespace Mosa.Platforms.x86.CPUx86
 {
-    /// <summary>
-    /// Representations the x86 popad instruction.
-    /// </summary>
+	/// <summary>
+	/// Representations the x86 popad instruction.
+	/// </summary>
 	public sealed class PopadInstruction : BaseInstruction
-    {
+	{
 
-        #region Methods
+		#region Methods
 
 		/// <summary>
 		/// Emits the specified platform instruction.

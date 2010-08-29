@@ -145,7 +145,7 @@ namespace Mosa.Runtime.Linker
 		public override string ToString()
 		{
 			return this.name;
-		} 
+		}
 
 		#endregion // Properties
 	}

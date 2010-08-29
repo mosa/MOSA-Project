@@ -15,18 +15,18 @@ using Mosa.Runtime.CompilerFramework.Operands;
 
 namespace Mosa.Platforms.x86.CPUx86
 {
-    /// <summary>
-    /// Intermediate representation for the x86 cvtsd2ss instruction.
-    /// </summary>
-    public class Cvtss2sdInstruction : TwoOperandInstruction
-    {
-        #region Data Members
-       
+	/// <summary>
+	/// Intermediate representation for the x86 cvtsd2ss instruction.
+	/// </summary>
+	public class Cvtss2sdInstruction : TwoOperandInstruction
+	{
+		#region Data Members
+
 		private static readonly OpCode opcode = new OpCode(new byte[] { 0xF3, 0x0F, 0x5A });
 
 		#endregion
 
-        #region Methods
+		#region Methods
 
 		/// <summary>
 		/// Computes the opcode.
@@ -35,24 +35,24 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <param name="source">The source operand.</param>
 		/// <param name="third">The third operand.</param>
 		/// <returns></returns>
-        protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
-        {
+		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
+		{
 			if ((destination is RegisterOperand) && (source is LabelOperand)) return opcode;
 			if ((destination is RegisterOperand) && (source is RegisterOperand)) return opcode;
 			if ((destination is RegisterOperand) && (source is MemoryOperand)) return opcode;
-            throw new ArgumentException(@"No opcode for operand type.");
-        }
+			throw new ArgumentException(@"No opcode for operand type.");
+		}
 
-        /// <summary>
-        /// Allows visitor based dispatch for this instruction object.
-        /// </summary>
-        /// <param name="visitor">The visitor object.</param>
-        /// <param name="context">The context.</param>
-        public override void Visit(IX86Visitor visitor, Context context)
-        {
-            visitor.Cvtss2sd(context);
-        }
+		/// <summary>
+		/// Allows visitor based dispatch for this instruction object.
+		/// </summary>
+		/// <param name="visitor">The visitor object.</param>
+		/// <param name="context">The context.</param>
+		public override void Visit(IX86Visitor visitor, Context context)
+		{
+			visitor.Cvtss2sd(context);
+		}
 
-        #endregion // Methods
-    }
+		#endregion // Methods
+	}
 }

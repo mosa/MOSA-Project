@@ -28,7 +28,6 @@ namespace Mosa.Runtime.Loader
 		private List<string> privatePaths = new List<string>();
 		private List<IMetadataModule> modules = new List<IMetadataModule>();
 		private object loaderLock = new object();
-		private ITypeSystem typeSystem;
 
 		#endregion // Data members
 
@@ -38,10 +37,8 @@ namespace Mosa.Runtime.Loader
 		/// Initializes a new instance of the <see cref="AssemblyLoader"/> class.
 		/// </summary>
 		/// <param name="typeSystem">The type system.</param>
-		public AssemblyLoader(ITypeSystem typeSystem)
+		public AssemblyLoader()
 		{
-			this.typeSystem = typeSystem;
-
 			// HACK: I can't figure out an easier way to get the framework dir right now...
 			string frameworkDir = System.Runtime.InteropServices.RuntimeEnvironment.GetRuntimeDirectory();
 			string frameworkDir32 = frameworkDir.Contains("Framework64") ? frameworkDir.Replace("Framework64", "Framework") : frameworkDir;
@@ -50,7 +47,6 @@ namespace Mosa.Runtime.Loader
 				frameworkDir,
 				frameworkDir32
 			};
-
 		}
 
 		#endregion // Construction
@@ -98,7 +94,7 @@ namespace Mosa.Runtime.Loader
 		/// <returns>
 		/// The assembly image of the loaded assembly.
 		/// </returns>
-		IMetadataModule IAssemblyLoader.Load(string file)
+		IMetadataModule IAssemblyLoader.Load(ITypeSystem typeSystem, string file)
 		{
 			lock (loaderLock)
 			{
@@ -126,7 +122,7 @@ namespace Mosa.Runtime.Loader
 		/// <returns>
 		/// The assembly image of the loaded assembly.
 		/// </returns>
-		IMetadataModule IAssemblyLoader.MergeLoad(IEnumerable<string> files)
+		IMetadataModule IAssemblyLoader.MergeLoad(ITypeSystem typeSystem, IEnumerable<string> files)
 		{
 			lock (loaderLock)
 			{

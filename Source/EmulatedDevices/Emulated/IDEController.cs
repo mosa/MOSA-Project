@@ -127,7 +127,8 @@ namespace Mosa.EmulatedDevices.Emulated
 			bufferIndex = 0;
 			status = DeviceStatus.Ready;
 
-			for (int i = 0; i < numDrives; i++) {
+			for (int i = 0; i < numDrives; i++)
+			{
 				driveFiles[i] = new FileStream(filenames[i], FileMode.Open);
 			}
 
@@ -165,7 +166,8 @@ namespace Mosa.EmulatedDevices.Emulated
 		/// <returns></returns>
 		public byte Read8(ushort port)
 		{
-			switch (port - ioBase) {
+			switch (port - ioBase)
+			{
 				case 0: return ReadData();
 				case 1: return featureAndError;
 				case 2: return sectorCount;
@@ -205,7 +207,8 @@ namespace Mosa.EmulatedDevices.Emulated
 		/// <param name="data"></param>
 		public void Write8(ushort port, byte data)
 		{
-			switch (port - ioBase) {
+			switch (port - ioBase)
+			{
 				case 0: return; // TODO
 				case 1: featureAndError = data; return;
 				case 2: sectorCount = data; return;
@@ -268,9 +271,9 @@ namespace Mosa.EmulatedDevices.Emulated
 			deviceHead = (byte)(data | 0xA0 & ~0x40);    // force bits to 101xxxxx
 
 			if ((deviceHead & 0x10) == 0x10) // check for selecting 2nd drive
-            {
+			{
 				if (numDrives == 1) // only one drive in system
-                {
+				{
 					commandStatus = (byte)(commandStatus & ~0x40);  // so clear drive ready status bit
 					return;
 				}
@@ -330,12 +333,15 @@ namespace Mosa.EmulatedDevices.Emulated
 
 			byte data = bufferData[bufferIndex++];
 
-			if (bufferIndex == 512) {
+			if (bufferIndex == 512)
+			{
 				if (status == DeviceStatus.IdentifyDrive)
 					bufferIndex = 0;
-				else {
+				else
+				{
 					sectorCount = (byte)(sectorCount - 1);
-					if (sectorCount != 0) {
+					if (sectorCount != 0)
+					{
 						ReadLBA28IntoBuffer();
 						SetLBA28(GetLBA28() + 1);
 					}
@@ -390,7 +396,8 @@ namespace Mosa.EmulatedDevices.Emulated
 		/// <param name="data">The data.</param>
 		protected void WriteCommand(byte data)
 		{
-			switch (data) {
+			switch (data)
+			{
 				case 0x20: // lba28 read w/ retry                         
 					ReadLBA28IntoBuffer();
 					break;

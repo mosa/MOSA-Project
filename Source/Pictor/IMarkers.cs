@@ -9,9 +9,9 @@
 
 namespace Pictor
 {
-    public interface IMarkers
-    {
-        void RemoveAll();
-        void AddVertex(double x, double y, uint unknown);
-    };
+	public interface IMarkers
+	{
+		void RemoveAll();
+		void AddVertex(double x, double y, uint unknown);
+	};
 }

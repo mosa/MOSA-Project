@@ -102,25 +102,25 @@ namespace Mosa.EmulatedKernel
 			MemoryDispatch.Write16((uint)(_address + index), value);
 		}
 
-        /// <summary>
-        /// Reads the specified index.
-        /// </summary>
-        /// <param name="index">The index.</param>
-        /// <returns></returns>
+		/// <summary>
+		/// Reads the specified index.
+		/// </summary>
+		/// <param name="index">The index.</param>
+		/// <returns></returns>
 		public uint Read24(uint index)
-        {
-            return MemoryDispatch.Read24((uint)(_address + index));
-        }
+		{
+			return MemoryDispatch.Read24((uint)(_address + index));
+		}
 
-        /// <summary>
-        /// Writes the specified index.
-        /// </summary>
-        /// <param name="index">The index.</param>
-        /// <param name="value">The value.</param>
+		/// <summary>
+		/// Writes the specified index.
+		/// </summary>
+		/// <param name="index">The index.</param>
+		/// <param name="value">The value.</param>
 		public void Write24(uint index, uint value)
-        {
-            MemoryDispatch.Write24((uint)(_address + index), value);
-        }
+		{
+			MemoryDispatch.Write24((uint)(_address + index), value);
+		}
 
 		/// <summary>
 		/// Reads the specified index.
@@ -156,7 +156,8 @@ namespace Mosa.EmulatedKernel
 			if (count == 1)
 				return MemoryDispatch.Read8(offset);
 
-			while (count > 0) {
+			while (count > 0)
+			{
 				value = (value >> 8) | MemoryDispatch.Read8(offset);
 				count--;
 				offset++;
@@ -175,12 +176,14 @@ namespace Mosa.EmulatedKernel
 		{
 			uint offset = _address + index;
 
-			if (count == 1) {
+			if (count == 1)
+			{
 				MemoryDispatch.Write8(offset, (byte)value);
 				return;
 			}
 
-			while (count > 0) {
+			while (count > 0)
+			{
 				MemoryDispatch.Write8(offset, (byte)(value & 0xFF));
 				value = value >> 8;
 				count--;

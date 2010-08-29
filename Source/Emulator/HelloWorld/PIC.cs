@@ -33,7 +33,7 @@ namespace Mosa.Kernel.X86
 		private const byte PIC2_Command = 0xA0;
 		private const byte PIC1_Data = 0x21;
 		private const byte PIC2_Data = 0xA1;
-	
+
 		private const byte EOI = 0x20;
 
 		public static void Setup()
@@ -46,7 +46,7 @@ namespace Mosa.Kernel.X86
 			// ICW2 - interrupt offset 
 			Native.Out8(PIC1_Data, ICW2_MasterOffset);
 			// ICW3
-			Native.Out8(PIC1_Data, 4);	
+			Native.Out8(PIC1_Data, 4);
 			// ICW4 - Set 8086 Mode
 			Native.Out8(PIC1_Data, ICW4_8086);
 			// OCW1
@@ -57,7 +57,7 @@ namespace Mosa.Kernel.X86
 			// ICW2 - interrupt offset 
 			Native.Out8(PIC2_Data, ICW2_SlaveOffset);
 			// ICW3
-			Native.Out8(PIC2_Data, 2); 
+			Native.Out8(PIC2_Data, 2);
 			// ICW4 - Set 8086 Mode
 			Native.Out8(PIC2_Data, ICW4_8086);
 			// OCW1

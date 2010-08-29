@@ -134,7 +134,8 @@ namespace Mosa.ClassLib
 		{
 			LinkedListNode<T> cur = first;
 
-			while (cur != null) {
+			while (cur != null)
+			{
 				if (cur.value.Equals(value))
 					return cur;
 				cur = cur.next;
@@ -164,7 +165,8 @@ namespace Mosa.ClassLib
 			LinkedListNode<T> found = null;
 			LinkedListNode<T> cur = first;
 
-			while (cur != null) {
+			while (cur != null)
+			{
 				if (cur.value.Equals(value))
 					found = cur;
 				cur = cur.next;
@@ -199,11 +201,13 @@ namespace Mosa.ClassLib
 		/// <returns></returns>
 		public LinkedListNode<T> AddLast(LinkedListNode<T> node)
 		{
-			if (first == null) {
+			if (first == null)
+			{
 				first = node;
 				last = node;
 			}
-			else {
+			else
+			{
 				node.previous.next = node;
 				last = node;
 			}
@@ -354,7 +358,7 @@ namespace Mosa.ClassLib
 
 			if (last.previous != null)
 				last.previous.next = null;
-			
+
 			count--;
 		}
 
@@ -383,7 +387,8 @@ namespace Mosa.ClassLib
 
 			LinkedListNode<T> cur = First;
 
-			while (cur != null) {
+			while (cur != null)
+			{
 				array[arrayIndex++] = cur.value;
 				cur = cur.next;
 			}
@@ -400,7 +405,8 @@ namespace Mosa.ClassLib
 			LinkedListNode<T> cur = First;
 			uint index = 0;
 
-			while (cur != null) {
+			while (cur != null)
+			{
 				array[index++] = cur.value;
 				cur = cur.next;
 			}

@@ -41,7 +41,7 @@ namespace Mosa.HelloWorld.Tests
 
 			return String.Equals(combined, abc);
 		}
-		
+
 		public static bool ConcatTest3()
 		{
 			string abcde = "abcddddd";

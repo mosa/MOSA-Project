@@ -10,10 +10,10 @@
 using Mosa.DeviceSystem;
 
 namespace Mosa.EmulatedKernel
-{    
-    /// <summary>
-    /// 
-    /// </summary>
+{
+	/// <summary>
+	/// 
+	/// </summary>
 	public static class IOPortDispatch
 	{
 		/// <summary>

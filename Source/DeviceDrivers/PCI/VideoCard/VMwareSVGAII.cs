@@ -310,7 +310,8 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 			SendCommand(Register.GuestID, 0x5010); // ??
 			bytesPerLine = GetValue(Register.BytesPerLine);
 
-			switch (bitsPerPixel) {
+			switch (bitsPerPixel)
+			{
 				case 8: frameBuffer = new FrameBuffer8bpp(memory, width, height, offset, bytesPerLine); break;
 				case 16: frameBuffer = new FrameBuffer16bpp(memory, width, height, offset, bytesPerLine); break;
 				case 24: frameBuffer = new FrameBuffer24bpp(memory, width, height, offset, bytesPerLine); break;
@@ -367,7 +368,8 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 		{
 			SendCommand(Register.Sync, 1);
 
-			while (GetValue(Register.Busy) != 0) {
+			while (GetValue(Register.Busy) != 0)
+			{
 				HAL.Sleep(10);
 			}
 		}
@@ -421,7 +423,8 @@ namespace Mosa.DeviceDrivers.PCI.VideoCard
 
 			byte count = 0;
 
-			while ((mask & 1) == 0) {
+			while ((mask & 1) == 0)
+			{
 				count++;
 				mask = mask >> 1;
 			}

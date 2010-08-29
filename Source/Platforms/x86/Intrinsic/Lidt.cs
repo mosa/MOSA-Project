@@ -14,12 +14,12 @@ using Mosa.Runtime.Vm;
 
 namespace Mosa.Platforms.x86.Intrinsic
 {
-    /// <summary>
-    /// Representations the x86 Lidt instruction.
-    /// </summary>
+	/// <summary>
+	/// Representations the x86 Lidt instruction.
+	/// </summary>
 	public sealed class Lidt : IIntrinsicMethod
-    {
-	
+	{
+
 		#region Methods
 
 		/// <summary>
@@ -36,5 +36,5 @@ namespace Mosa.Platforms.x86.Intrinsic
 
 		#endregion // Methods
 
-    }
+	}
 }

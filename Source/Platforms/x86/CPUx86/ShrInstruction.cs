@@ -52,23 +52,23 @@ namespace Mosa.Platforms.x86.CPUx86
 			throw new ArgumentException(@"No opcode for operand type.");
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="ctx"></param>
-        /// <param name="emitter"></param>
-        protected override void Emit(Context ctx, MachineCodeEmitter emitter)
-        {
-            OpCode opCode = ComputeOpCode(ctx.Result, ctx.Operand1, ctx.Operand2);
-            if (ctx.Operand1 is ConstantOperand)
-            {
-                ConstantOperand op = ctx.Operand1 as ConstantOperand;
-                op = new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(CilElementType.U1), op.Value);
-                emitter.Emit(opCode, ctx.Result, op);
-            }
-            else
-                emitter.Emit(opCode, ctx.Operand1, null);
-        }
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="ctx"></param>
+		/// <param name="emitter"></param>
+		protected override void Emit(Context ctx, MachineCodeEmitter emitter)
+		{
+			OpCode opCode = ComputeOpCode(ctx.Result, ctx.Operand1, ctx.Operand2);
+			if (ctx.Operand1 is ConstantOperand)
+			{
+				ConstantOperand op = ctx.Operand1 as ConstantOperand;
+				op = new ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(CilElementType.U1), op.Value);
+				emitter.Emit(opCode, ctx.Result, op);
+			}
+			else
+				emitter.Emit(opCode, ctx.Operand1, null);
+		}
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.

@@ -52,7 +52,7 @@ namespace Mosa.DeviceSystem
 		/// <param name="index">The index.</param>
 		/// <returns></returns>
 		ushort Read16(uint index);
-		
+
 		/// <summary>
 		/// Writes the specified index.
 		/// </summary>
@@ -60,27 +60,27 @@ namespace Mosa.DeviceSystem
 		/// <param name="value">The value.</param>
 		void Write24(uint index, uint value);
 
-        /// <summary>
-        /// Reads the specified index.
-        /// </summary>
-        /// <param name="index">The index.</param>
-        /// <returns></returns>
-        uint Read24(uint index);
+		/// <summary>
+		/// Reads the specified index.
+		/// </summary>
+		/// <param name="index">The index.</param>
+		/// <returns></returns>
+		uint Read24(uint index);
 
-        /// <summary>
-        /// Writes the specified index.
-        /// </summary>
-        /// <param name="index">The index.</param>
-        /// <param name="value">The value.</param>
-        void Write16(uint index, ushort value);
-		
+		/// <summary>
+		/// Writes the specified index.
+		/// </summary>
+		/// <param name="index">The index.</param>
+		/// <param name="value">The value.</param>
+		void Write16(uint index, ushort value);
+
 		/// <summary>
 		/// Reads the specified index.
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <returns></returns>
 		uint Read32(uint index);
-		
+
 		/// <summary>
 		/// Writes the specified index.
 		/// </summary>

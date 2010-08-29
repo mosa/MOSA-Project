@@ -11,15 +11,15 @@ using System.Collections.Generic;
 
 namespace Mosa.Runtime.CompilerFramework
 {
-    /// <summary>
-    /// Interface provided by method compiler builder stages.
-    /// </summary>
-    public interface IMethodCompilerBuilder
-    {
-        /// <summary>
-        /// Gets the scheduled method builders.
-        /// </summary>
-        /// <value>A collection of the scheduled methods.</value>
+	/// <summary>
+	/// Interface provided by method compiler builder stages.
+	/// </summary>
+	public interface IMethodCompilerBuilder
+	{
+		/// <summary>
+		/// Gets the scheduled method builders.
+		/// </summary>
+		/// <value>A collection of the scheduled methods.</value>
 		IEnumerable<IMethodCompiler> Scheduled { get; }
-    }
+	}
 }

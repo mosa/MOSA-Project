@@ -18,32 +18,32 @@ using NDesk.Options;
 
 namespace Mosa.Tools.Compiler
 {
-    /// <summary>
-    /// Wraps the map file generation stage and adds options to configure it.
-    /// </summary>
+	/// <summary>
+	/// Wraps the map file generation stage and adds options to configure it.
+	/// </summary>
 	public sealed class MapFileGeneratorWrapper : IAssemblyCompilerStage, IHasOptions, IPipelineStage
-    {
-        #region Data Members
-		
+	{
+		#region Data Members
+
 		private AssemblyCompiler compiler;
 
-        /// <summary>
-        /// Holds the name of the map file to generate.
-        /// </summary>
-        private string mapFile;
+		/// <summary>
+		/// Holds the name of the map file to generate.
+		/// </summary>
+		private string mapFile;
 
-        #endregion // Data Members
+		#endregion // Data Members
 
-        #region Construction
+		#region Construction
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="MapFileGenerationStage"/> class.
-        /// </summary>
-        public MapFileGeneratorWrapper()
-        {
-        }
+		/// <summary>
+		/// Initializes a new instance of the <see cref="MapFileGenerationStage"/> class.
+		/// </summary>
+		public MapFileGeneratorWrapper()
+		{
+		}
 
-        #endregion // Construction
+		#endregion // Construction
 
 		#region IPipelineStage members
 
@@ -51,58 +51,58 @@ namespace Mosa.Tools.Compiler
 
 		#endregion // IPipelineStage members
 
-        #region IAssemblyCompilerStage Members
-		
+		#region IAssemblyCompilerStage Members
+
 		public void Setup(AssemblyCompiler compiler)
 		{
 			this.compiler = compiler;
 		}
 
 		/// <summary>
-        /// Performs stage specific processing on the compiler context.
-        /// </summary>
-        public void Run()
-        {
-            if (this.mapFile != null)
-            {
-                try
-                {
-                    using (FileStream fs = new FileStream(this.mapFile, FileMode.Create, FileAccess.Write, FileShare.Read))
-                    using (StreamWriter writer = new StreamWriter(fs, Encoding.UTF8))
-                    {
+		/// Performs stage specific processing on the compiler context.
+		/// </summary>
+		public void Run()
+		{
+			if (this.mapFile != null)
+			{
+				try
+				{
+					using (FileStream fs = new FileStream(this.mapFile, FileMode.Create, FileAccess.Write, FileShare.Read))
+					using (StreamWriter writer = new StreamWriter(fs, Encoding.UTF8))
+					{
 						IAssemblyCompilerStage mapGenerator = new MapFileGenerationStage(writer);
 						mapGenerator.Setup(this.compiler);
 						mapGenerator.Run();
-                    }
-                }
-                catch (Exception x)
-                {
-                    Console.WriteLine(@"Failed to generate map file.");
-                    Console.WriteLine(x);
-                }
-            }
-        }
+					}
+				}
+				catch (Exception x)
+				{
+					Console.WriteLine(@"Failed to generate map file.");
+					Console.WriteLine(x);
+				}
+			}
+		}
 
-        #endregion // IAssemblyCompilerStage Members
+		#endregion // IAssemblyCompilerStage Members
 
-        #region IHasOptions Members
+		#region IHasOptions Members
 
-        /// <summary>
-        /// Adds the additional options for the parsing process to the given OptionSet.
-        /// </summary>
-        /// <param name="optionSet">A given OptionSet to add the options to.</param>
-        public void AddOptions(OptionSet optionSet)
-        {
-            optionSet.Add(
-                "map=",
-                "Generate a map {file} of the produced binary.",
-                delegate(string file)
-                {
-                    this.mapFile = file;
-                }
-               );
-        }
+		/// <summary>
+		/// Adds the additional options for the parsing process to the given OptionSet.
+		/// </summary>
+		/// <param name="optionSet">A given OptionSet to add the options to.</param>
+		public void AddOptions(OptionSet optionSet)
+		{
+			optionSet.Add(
+				"map=",
+				"Generate a map {file} of the produced binary.",
+				delegate(string file)
+				{
+					this.mapFile = file;
+				}
+			   );
+		}
 
-        #endregion // IHasOptions Members
-    }
+		#endregion // IHasOptions Members
+	}
 }

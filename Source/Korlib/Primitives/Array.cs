@@ -14,15 +14,15 @@ namespace System
 	/// </summary>
 	public class Array
 	{
-        private int length;
+		private int length;
 
-        public int Length
-        {
-            get
-            {
-                return this.length;
-            }
-        }
+		public int Length
+		{
+			get
+			{
+				return this.length;
+			}
+		}
 
 		/// <summary>
 		/// 
@@ -46,7 +46,8 @@ namespace System
 		/// </summary>
 		public static void Copy(Array sourceArray, int sourceIndex, Array destinationArray, int destinationIndex, int length)
 		{
-			for (int s = 0, d = destinationIndex; s < length; s++, d++) {
+			for (int s = 0, d = destinationIndex; s < length; s++, d++)
+			{
 				sourceArray.SetValue(destinationArray.GetValue(d), s + sourceIndex);
 			}
 		}

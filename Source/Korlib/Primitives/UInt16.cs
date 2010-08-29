@@ -12,8 +12,8 @@ namespace System
 	/// <summary>
 	/// 
 	/// </summary>
-    public struct UInt16
-    {
+	public struct UInt16
+	{
 		public const ushort MaxValue = 0xffff;
 		public const ushort MinValue = 0;
 
@@ -24,5 +24,5 @@ namespace System
 			return Int32.CreateString(m_value, false, false);
 		}
 
-    }
+	}
 }

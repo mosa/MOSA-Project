@@ -53,7 +53,8 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 
 			// Retrieve a stream to place the code into
-			using (codeStream = MethodCompiler.RequestCodeStream()) {
+			using (codeStream = MethodCompiler.RequestCodeStream())
+			{
 				// HINT: We need seeking to resolve labels.
 				Debug.Assert(codeStream.CanSeek, @"Can't seek code output stream.");
 				Debug.Assert(codeStream.CanWrite, @"Can't write to code output stream.");
@@ -77,12 +78,14 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		protected virtual void EmitInstructions()
 		{
-			foreach (BasicBlock block in BasicBlocks) {
+			foreach (BasicBlock block in BasicBlocks)
+			{
 				BlockStart(block);
 
 				for (Context ctx = new Context(InstructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
 					if (ctx.Instruction != null)
-						if (!ctx.Ignore) {
+						if (!ctx.Ignore)
+						{
 							IPlatformInstruction instruction = ctx.Instruction as IPlatformInstruction;
 							if (instruction != null)
 								instruction.Emit(ctx, codeEmitter);

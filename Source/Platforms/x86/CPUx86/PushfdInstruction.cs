@@ -18,13 +18,13 @@ using Mosa.Runtime.CompilerFramework;
 
 namespace Mosa.Platforms.x86.CPUx86
 {
-    /// <summary>
-    /// Representations the x86 pushfd instruction.
-    /// </summary>
-    public sealed class PushfdInstruction : BaseInstruction
-    {
+	/// <summary>
+	/// Representations the x86 pushfd instruction.
+	/// </summary>
+	public sealed class PushfdInstruction : BaseInstruction
+	{
 
-        #region Methods
+		#region Methods
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
@@ -36,6 +36,6 @@ namespace Mosa.Platforms.x86.CPUx86
 			visitor.Pushfd(context);
 		}
 
-        #endregion // Methods
-    }
+		#endregion // Methods
+	}
 }

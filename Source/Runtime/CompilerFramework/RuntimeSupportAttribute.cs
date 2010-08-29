@@ -25,8 +25,9 @@ namespace Mosa.Runtime.CompilerFramework
 	/// support, such as newobj, newarr. The jit and aot compilers require attributed methods to 
 	/// successfully generate native code.
 	/// </remarks>
-	[AttributeUsage(AttributeTargets.Method, AllowMultiple=true)]
-	public sealed class RuntimeSupportAttribute : Attribute {
+	[AttributeUsage(AttributeTargets.Method, AllowMultiple = true)]
+	public sealed class RuntimeSupportAttribute : Attribute
+	{
 		#region Data members
 
 		/// <summary>

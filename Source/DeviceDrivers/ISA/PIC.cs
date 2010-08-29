@@ -18,64 +18,64 @@ using Mosa.DeviceSystem;
 
 namespace Mosa.DeviceDrivers.ISA
 {
-    /// <summary>
+	/// <summary>
 	/// Programmable Interrupt Controller (PIC) Device Driver
-    /// </summary>
+	/// </summary>
 	[ISADeviceDriver(AutoLoad = true, BasePort = 0x20, PortRange = 2, AltBasePort = 0xA0, AltPortRange = 2, Platforms = PlatformArchitecture.X86AndX64)]
 	public class PIC : HardwareDevice, IDevice, IHardwareDevice
 	{
 		#region Definitions
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected const byte IRQBaseSize = 0x08;
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected const byte MasterIRQBase = 0x20;
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected const byte SlaveIRQBase = MasterIRQBase + IRQBaseSize;
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected const byte EOI = 0x20;
 
 		#endregion
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected IReadWriteIOPort masterCommandPort;
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected IReadWriteIOPort masterDataPort;
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected IReadWriteIOPort slaveCommandPort;
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected IReadWriteIOPort slaveDataPort;
 
 		// Interrupt masks must be tracked via the driver
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected byte masterInterruptMask;
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		protected byte slaveInterruptMask;
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="PIC"/> class.
-        /// </summary>
+		/// <summary>
+		/// Initializes a new instance of the <see cref="PIC"/> class.
+		/// </summary>
 		public PIC() { }
 
 		/// <summary>
@@ -85,7 +85,7 @@ namespace Mosa.DeviceDrivers.ISA
 		/// <returns></returns>
 		public override bool Setup(IHardwareResources hardwareResources)
 		{
-			this.hardwareResources = hardwareResources;				
+			this.hardwareResources = hardwareResources;
 			base.name = "PIC_0x" + base.hardwareResources.GetIOPort(0, 0).Address.ToString("X");
 
 			masterCommandPort = base.hardwareResources.GetIOPort(0, 0);
@@ -144,10 +144,10 @@ namespace Mosa.DeviceDrivers.ISA
 		/// <returns></returns>
 		public override bool OnInterrupt() { return false; }
 
-        /// <summary>
-        /// Sends the end of interrupt.
-        /// </summary>
-        /// <param name="irq">The irq.</param>
+		/// <summary>
+		/// Sends the end of interrupt.
+		/// </summary>
+		/// <param name="irq">The irq.</param>
 		public void SendEndOfInterrupt(byte irq)
 		{
 			if (irq >= 8)
@@ -156,9 +156,9 @@ namespace Mosa.DeviceDrivers.ISA
 			masterCommandPort.Write8(EOI);
 		}
 
-        /// <summary>
+		/// <summary>
 		/// Disables the IRQs.
-        /// </summary>
+		/// </summary>
 		public void DisableIRQs()
 		{
 			masterInterruptMask = 0xFF;
@@ -206,7 +206,8 @@ namespace Mosa.DeviceDrivers.ISA
 		/// <param name="irq">The irq.</param>
 		public void EnableIRQ(byte irq)
 		{
-			if ((irq >= MasterIRQBase) && (irq < SlaveIRQBase + IRQBaseSize)) {
+			if ((irq >= MasterIRQBase) && (irq < SlaveIRQBase + IRQBaseSize))
+			{
 				if (irq < SlaveIRQBase)
 					EnableMasterIRQ((byte)(irq - MasterIRQBase));
 				else
@@ -252,7 +253,8 @@ namespace Mosa.DeviceDrivers.ISA
 		/// <param name="irq">The irq.</param>
 		public void DisableIRQ(byte irq)
 		{
-			if ((irq >= MasterIRQBase) && (irq < SlaveIRQBase + IRQBaseSize)) {
+			if ((irq >= MasterIRQBase) && (irq < SlaveIRQBase + IRQBaseSize))
+			{
 				if (irq < SlaveIRQBase)
 					DisableMasterIRQ((byte)(irq - MasterIRQBase));
 				else

@@ -11,19 +11,19 @@ using System;
 
 namespace Mosa.Runtime.Linker.Elf32.Sections
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public class Elf32BssSection : Elf32Section
-    {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Elf32BssSection"/> class.
-        /// </summary>
-        public Elf32BssSection()
-            : base(SectionKind.BSS, @".bss", IntPtr.Zero)
-        {
-            _header.Type = Elf32SectionType.NoBits;
-            _header.Flags = Elf32SectionAttribute.Alloc | Elf32SectionAttribute.Write;
-        }
-    }
+	/// <summary>
+	/// 
+	/// </summary>
+	public class Elf32BssSection : Elf32Section
+	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Elf32BssSection"/> class.
+		/// </summary>
+		public Elf32BssSection()
+			: base(SectionKind.BSS, @".bss", IntPtr.Zero)
+		{
+			_header.Type = Elf32SectionType.NoBits;
+			_header.Flags = Elf32SectionAttribute.Alloc | Elf32SectionAttribute.Write;
+		}
+	}
 }

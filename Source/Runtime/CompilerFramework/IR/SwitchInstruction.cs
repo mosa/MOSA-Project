@@ -9,11 +9,11 @@
 
 namespace Mosa.Runtime.CompilerFramework.IR
 {
-    public class SwitchInstruction : BaseInstruction
-    {
-        public override void Visit(IIRVisitor visitor, Context context)
-        {
-            visitor.SwitchInstruction(context);
-        }
-    }
+	public class SwitchInstruction : BaseInstruction
+	{
+		public override void Visit(IIRVisitor visitor, Context context)
+		{
+			visitor.SwitchInstruction(context);
+		}
+	}
 }

@@ -80,7 +80,8 @@ namespace Test.Mosa.Runtime.CompilerFramework
 			get { return this.language; }
 			set
 			{
-				if (this.language != value) {
+				if (this.language != value)
+				{
 					this.language = value;
 					this.NeedCompile = true;
 				}
@@ -96,7 +97,8 @@ namespace Test.Mosa.Runtime.CompilerFramework
 			get { return this.codeFilename; }
 			set
 			{
-				if (this.codeFilename != value) {
+				if (this.codeFilename != value)
+				{
 					this.codeFilename = value;
 					this.NeedCompile = true;
 				}
@@ -112,7 +114,8 @@ namespace Test.Mosa.Runtime.CompilerFramework
 			get { return this.codeSource; }
 			set
 			{
-				if (this.codeSource != value) {
+				if (this.codeSource != value)
+				{
 					this.codeSource = value;
 					this.NeedCompile = true;
 				}
@@ -128,7 +131,8 @@ namespace Test.Mosa.Runtime.CompilerFramework
 			get { return this.unsafeCode; }
 			set
 			{
-				if (this.unsafeCode != value) {
+				if (this.unsafeCode != value)
+				{
 					this.unsafeCode = value;
 					this.NeedCompile = true;
 				}
@@ -158,24 +162,26 @@ namespace Test.Mosa.Runtime.CompilerFramework
 			CompilerParameters parameters = new CompilerParameters(this.References, Path.GetTempFileName());
 			parameters.CompilerOptions = "/optimize- /debug+ /debug:full";
 
-			if (this.unsafeCode) {
+			if (this.unsafeCode)
+			{
 				if (this.Language == "C#")
 					parameters.CompilerOptions = parameters.CompilerOptions + " /unsafe+";
 				else
 					throw new NotSupportedException();
 			}
-            
-            if (this.DoNotReferenceMsCorlib)
-            {
-                if (this.Language == "C#")
-                    parameters.CompilerOptions = parameters.CompilerOptions + " /nostdlib";
-                else
-                    throw new NotSupportedException();
-            }
+
+			if (this.DoNotReferenceMsCorlib)
+			{
+				if (this.Language == "C#")
+					parameters.CompilerOptions = parameters.CompilerOptions + " /nostdlib";
+				else
+					throw new NotSupportedException();
+			}
 
 			parameters.GenerateInMemory = false;
 
-			if (CodeSource != null) {
+			if (CodeSource != null)
+			{
 				Console.Write("From Source: ");
 				Console.WriteLine(new string('-', 40 - 13));
 				Console.WriteLine(codeSource);
@@ -185,7 +191,8 @@ namespace Test.Mosa.Runtime.CompilerFramework
 					codeSource
 				);
 			}
-			else if (CodeFilename != null) {
+			else if (CodeFilename != null)
+			{
 				Console.WriteLine("From File: {0}", codeFilename);
 				compileResults = provider.CompileAssemblyFromFile(
 					parameters,
@@ -194,10 +201,12 @@ namespace Test.Mosa.Runtime.CompilerFramework
 			}
 			else
 				throw new NotSupportedException();
-			if (compileResults.Errors.HasErrors) {
+			if (compileResults.Errors.HasErrors)
+			{
 				StringBuilder sb = new StringBuilder();
 				sb.AppendLine("Code compile errors:");
-				foreach (CompilerError error in compileResults.Errors) {
+				foreach (CompilerError error in compileResults.Errors)
+				{
 					sb.AppendLine(error.ToString());
 				}
 				throw new Exception(sb.ToString());
@@ -207,6 +216,6 @@ namespace Test.Mosa.Runtime.CompilerFramework
 
 		#endregion // MosaCompilerTestRunner Overrides
 
-        public bool DoNotReferenceMsCorlib { get; set; }
-    }
+		public bool DoNotReferenceMsCorlib { get; set; }
+	}
 }

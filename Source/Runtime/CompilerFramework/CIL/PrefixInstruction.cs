@@ -29,7 +29,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		{
 			get
 			{
-				switch (OpCode) {
+				switch (OpCode)
+				{
 					case OpCode.PreConstrained: return Prefix.Constrained;
 					case OpCode.PreNo: return Prefix.No;
 					case OpCode.PreReadOnly: return Prefix.ReadOnly;

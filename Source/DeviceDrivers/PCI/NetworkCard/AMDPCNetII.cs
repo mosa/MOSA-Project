@@ -114,7 +114,8 @@ namespace Mosa.DeviceDrivers.PCI.NetworkCard
 			uint len = (ushort)(~bufferSize);
 			len = (len + 1) & 0x0FFF | 0x8000F000;
 
-			for (uint index = 0; index < 16; index++) {
+			for (uint index = 0; index < 16; index++)
+			{
 				uint offset = index * 4;
 				rxDescriptor.Write32((offset + 1) * 4, len);
 				rxDescriptor.Write32((offset + 2) * 4, buffers.Address + (bufferSize * index));
@@ -213,7 +214,8 @@ namespace Mosa.DeviceDrivers.PCI.NetworkCard
 			uint offset = txd * 4;
 
 			// check if (oldest) descriptor is available (Bit 31/OWN = 0 available)
-			if ((txDescriptor.Read32(offset + 1) & 0x80000000) == 0) {
+			if ((txDescriptor.Read32(offset + 1) & 0x80000000) == 0)
+			{
 
 				for (uint i = 0; i < data.Length; i++)
 					buffers.Write8((txd * bufferSize) + i, data[i]);
@@ -236,13 +238,15 @@ namespace Mosa.DeviceDrivers.PCI.NetworkCard
 		protected void RetrievePackets()
 		{
 			// Check all descriptors
-			for (uint rxd = 0; rxd < 16; rxd++) {
+			for (uint rxd = 0; rxd < 16; rxd++)
+			{
 				uint offset = rxd * 4;
 
 				uint status = rxDescriptor.Read32(offset + 1);
 
 				// Check is 31/OWN bit is not set
-				if ((status & 0x80000000) == 0) {
+				if ((status & 0x80000000) == 0)
+				{
 
 					ushort length = (ushort)(rxDescriptor.Read16(offset + 0) & 0xFFF);
 					byte[] data = new byte[length];

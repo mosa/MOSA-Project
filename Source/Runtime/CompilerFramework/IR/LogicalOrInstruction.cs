@@ -13,34 +13,34 @@ using System.Text;
 
 namespace Mosa.Runtime.CompilerFramework.IR
 {
-    /// <summary>
-    /// Intermediate representation of the or context.
-    /// </summary>
-    public sealed class LogicalOrInstruction : ThreeOperandInstruction
-    {
-        #region Construction
+	/// <summary>
+	/// Intermediate representation of the or context.
+	/// </summary>
+	public sealed class LogicalOrInstruction : ThreeOperandInstruction
+	{
+		#region Construction
 
-        /// <summary>
-        /// Initializes a new instance of the <see cref="LogicalOrInstruction"/> class.
-        /// </summary>
-        public LogicalOrInstruction()
-        {
-        }
+		/// <summary>
+		/// Initializes a new instance of the <see cref="LogicalOrInstruction"/> class.
+		/// </summary>
+		public LogicalOrInstruction()
+		{
+		}
 
-        #endregion // Construction
+		#endregion // Construction
 
-        #region ThreeOperandInstruction Overrides
+		#region ThreeOperandInstruction Overrides
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
 		/// </summary>
 		/// <param name="visitor">The visitor object.</param>
 		/// <param name="context">The context.</param>
-        public override void Visit(IIRVisitor visitor, Context context)
-        {
+		public override void Visit(IIRVisitor visitor, Context context)
+		{
 			visitor.LogicalOrInstruction(context);
-        }
+		}
 
-        #endregion // ThreeOperandInstruction Overrides
-    }
+		#endregion // ThreeOperandInstruction Overrides
+	}
 }

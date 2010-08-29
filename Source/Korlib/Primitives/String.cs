@@ -222,7 +222,7 @@ namespace System
 			String result = InternalAllocateString(a.length + b.length);
 
 			char* chars = result.first_char;
-			
+
 			foreach (char character in a)
 				*chars++ = character;
 			foreach (char character in b)

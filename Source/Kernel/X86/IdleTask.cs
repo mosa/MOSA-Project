@@ -10,7 +10,7 @@ using Mosa.Kernel.X86;
 
 namespace Mosa.Platforms.x86.Intrinsic
 {
-	
+
 	/// <summary>
 	/// 
 	/// </summary>
@@ -23,7 +23,8 @@ namespace Mosa.Platforms.x86.Intrinsic
 		/// </summary>
 		public static void Run()
 		{
-			while (true) {
+			while (true)
+			{
 				_counter++;
 				Native.Hlt();	// wait for interrupt
 			}

@@ -31,20 +31,23 @@ namespace Mosa.Tools.MakeIsoImage
 
 			// TODO FIXME - support remappings something like -map boot/boot.bin=c:/muos/build/debug/bin/iso9660_boot.bin
 #if false
-            var test = new Mosa.MakeIsoImage.Iso9660Generator(false);
-            test.AddFile("Long File Name.txt",new System.IO.FileInfo("C:\\cvs\\mosa\\Mosa\\Tools\\MakeIsoImage\\bin\\Debug\\Long File Name.txt"));
-            test.Generate("Iso9660Generator.iso");
-            return;
+			var test = new Mosa.MakeIsoImage.Iso9660Generator(false);
+			test.AddFile("Long File Name.txt",new System.IO.FileInfo("C:\\cvs\\mosa\\Mosa\\Tools\\MakeIsoImage\\bin\\Debug\\Long File Name.txt"));
+			test.Generate("Iso9660Generator.iso");
+			return;
 #endif
 
-			try {
+			try
+			{
 				Iso9660Generator iso = new Iso9660Generator(false);
 				int i;
 
-				for (i = 0; i < args.Length; i++) {
+				for (i = 0; i < args.Length; i++)
+				{
 					if (args[i].Trim()[0] != '-')
 						break;
-					switch (args[i].Trim()) {
+					switch (args[i].Trim())
+					{
 						case "-boot":
 							i++;
 							iso.AddBootFile(args[i], new System.IO.FileInfo(args[i]));
@@ -67,7 +70,8 @@ namespace Mosa.Tools.MakeIsoImage
 				}
 
 				// at this point, args[i] should be our iso image name
-				if (i >= args.Length) {
+				if (i >= args.Length)
+				{
 					Console.Error.Write("Missing iso file name");
 					return -1;
 				}
@@ -75,7 +79,8 @@ namespace Mosa.Tools.MakeIsoImage
 				string isoFileName = args[i++];
 
 				// now args[i] is root folder
-				if (i >= args.Length) {
+				if (i >= args.Length)
+				{
 					Console.Error.Write("Missing root folder");
 					return -1;
 				}
@@ -88,7 +93,8 @@ namespace Mosa.Tools.MakeIsoImage
 				Console.WriteLine("Completed!");
 			}
 
-			catch (Exception e) {
+			catch (Exception e)
+			{
 				Console.Error.WriteLine("Error: " + e.ToString());
 				return -1;
 			}
@@ -98,15 +104,16 @@ namespace Mosa.Tools.MakeIsoImage
 
 		static private void AddDirectoryTree(Iso9660Generator iso, string root, string virtualPrepend)
 		{
-			if(Environment.OSVersion.Platform == PlatformID.Win32Windows || Environment.OSVersion.Platform == PlatformID.Win32NT)
+			if (Environment.OSVersion.Platform == PlatformID.Win32Windows || Environment.OSVersion.Platform == PlatformID.Win32NT)
 				root = root.Replace('/', '\\');
-			
+
 			DirectoryInfo dirinfo = new DirectoryInfo(root);
 
 			foreach (FileInfo file in dirinfo.GetFiles())
 				iso.AddFile(virtualPrepend + file.Name, file);
 
-			foreach (DirectoryInfo dir in dirinfo.GetDirectories()) {
+			foreach (DirectoryInfo dir in dirinfo.GetDirectories())
+			{
 				iso.MkDir(virtualPrepend + dir.Name);
 				AddDirectoryTree(iso, root + '/' + dir.Name, virtualPrepend + dir.Name + '/');
 			}

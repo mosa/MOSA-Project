@@ -64,9 +64,11 @@ namespace Mosa.Tools.StageVisualizer
 
 			Sections.Clear();
 
-			for (int i = 0; i < Lines.Length; i++) {
+			for (int i = 0; i < Lines.Length; i++)
+			{
 				string line = Lines[i];
-				if (line.StartsWith(method1)) {
+				if (line.StartsWith(method1))
+				{
 					end = i - 1;
 					NewSection(method, stage, block, label, start, end);
 					start = i; // +1;
@@ -79,7 +81,8 @@ namespace Mosa.Tools.StageVisualizer
 					label = string.Empty;
 				}
 				else
-					if (line.StartsWith(block1)) {
+					if (line.StartsWith(block1))
+					{
 						end = i - 1;
 						NewSection(method, stage, block, label, start, end);
 						start = i;
@@ -165,8 +168,10 @@ namespace Mosa.Tools.StageVisualizer
 			foreach (Section section in Sections)
 				if (section.Method == method
 					&& (section.Stage == stage || string.IsNullOrEmpty(stage))
-					&& (section.Label == label || string.IsNullOrEmpty(label))) {
-					for (int i = section.Start; i <= section.End; i++) {
+					&& (section.Label == label || string.IsNullOrEmpty(label)))
+				{
+					for (int i = section.Start; i <= section.End; i++)
+					{
 						bool include = true;
 
 						if (hideNextPrev)

@@ -12,13 +12,15 @@ using System.IO;
 using System.Text;
 using System.Diagnostics;
 
-namespace Mosa.Runtime.Metadata {
+namespace Mosa.Runtime.Metadata
+{
 
 	/// <summary>
 	/// Provides access to binary blobs in the .NET provider blob heap.
 	/// </summary>
-	public sealed class BlobHeap : Heap {
-		
+	public sealed class BlobHeap : Heap
+	{
+
 		#region Construction
 
 		/// <summary>

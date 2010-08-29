@@ -25,7 +25,8 @@ namespace Mosa.Kernel.X86
 		{
 			uint virtualpage = Native.GetCR2();
 
-			if (virtualpage == 0x0) {
+			if (virtualpage == 0x0)
+			{
 				Panic.Now(2);	// Can't map null! what happened?
 			}
 

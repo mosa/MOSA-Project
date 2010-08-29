@@ -12,7 +12,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 		{
 			this.token = token;
 		}
-		
+
 		public TokenTypes Token
 		{
 			get

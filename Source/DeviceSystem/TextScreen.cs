@@ -102,10 +102,12 @@ namespace Mosa.DeviceSystem
 			textDevice.WriteChar(cursorX, cursorY, character, foreground, background);
 			cursorX++;
 
-			if (cursorX == width) {
+			if (cursorX == width)
+			{
 				cursorY++;
 
-				if (cursorY == height) {
+				if (cursorY == height)
+				{
 					textDevice.ScrollUp();
 					cursorY--;
 				}
@@ -121,9 +123,9 @@ namespace Mosa.DeviceSystem
 		/// <param name="text">The text.</param>
 		public void Write(string text)
 		{
-			foreach (char c in text) 
+			foreach (char c in text)
 				InternalWrite(c);
-			
+
 			SetCursor();
 		}
 
@@ -144,7 +146,8 @@ namespace Mosa.DeviceSystem
 		{
 			cursorY++;
 
-			if (cursorY == height) {
+			if (cursorY == height)
+			{
 				textDevice.ScrollUp();
 				cursorY--;
 			}

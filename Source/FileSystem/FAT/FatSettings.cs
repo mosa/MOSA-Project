@@ -48,13 +48,14 @@ namespace Mosa.FileSystem.FAT
 			}
 			set
 			{
-				if (value == null) {
+				if (value == null)
+				{
 					osBootCode = null;
 					return;
 				}
 
 				osBootCode = new byte[value.Length];
-				value.CopyTo(osBootCode, 0);				
+				value.CopyTo(osBootCode, 0);
 			}
 		}
 

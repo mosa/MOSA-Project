@@ -11,19 +11,19 @@ using System;
 
 namespace Mosa.Runtime.Linker.Elf32.Sections
 {
-    /// <summary>
-    /// 
-    /// </summary>
-    public class Elf32RoDataSection : Elf32Section
-    {
-        /// <summary>
-        /// Initializes a new instance of the <see cref="Elf32RoDataSection"/> class.
-        /// </summary>
-        public Elf32RoDataSection()
-            : base(SectionKind.ROData, @".rodata", IntPtr.Zero)
-        {
-            _header.Type = Elf32SectionType.ProgBits;
-            _header.Flags = Elf32SectionAttribute.Alloc;
-        }
-    }
+	/// <summary>
+	/// 
+	/// </summary>
+	public class Elf32RoDataSection : Elf32Section
+	{
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Elf32RoDataSection"/> class.
+		/// </summary>
+		public Elf32RoDataSection()
+			: base(SectionKind.ROData, @".rodata", IntPtr.Zero)
+		{
+			_header.Type = Elf32SectionType.ProgBits;
+			_header.Flags = Elf32SectionAttribute.Alloc;
+		}
+	}
 }

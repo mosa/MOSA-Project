@@ -121,11 +121,11 @@ namespace System.IO
 			get
 			{
 				//throw new InvalidOperationException("Timeouts are not supported on this stream.");
-                return -1;
+				return -1;
 			}
 			set
 			{
-                //throw new InvalidOperationException("Timeouts are not supported on this stream.");
+				//throw new InvalidOperationException("Timeouts are not supported on this stream.");
 			}
 		}
 
@@ -137,11 +137,11 @@ namespace System.IO
 			get
 			{
 				//throw new InvalidOperationException("Timeouts are not supported on this stream.");
-                return -1;
+				return -1;
 			}
 			set
 			{
-                //throw new InvalidOperationException("Timeouts are not supported on this stream.");
+				//throw new InvalidOperationException("Timeouts are not supported on this stream.");
 			}
 		}
 
@@ -151,7 +151,7 @@ namespace System.IO
 		public static Stream Synchronized(Stream stream)
 		{
 			//throw new NotSupportedException();
-            return null;
+			return null;
 		}
 
 
@@ -160,8 +160,8 @@ namespace System.IO
 		/// </summary>
 		public virtual IAsyncResult BeginRead(byte[] buffer, int offset, int count, AsyncCallback cback, object state)
 		{
-            //throw new NotSupportedException("This stream does not support async");
-            return null;
+			//throw new NotSupportedException("This stream does not support async");
+			return null;
 		}
 
 		/// <summary>
@@ -170,7 +170,7 @@ namespace System.IO
 		public virtual IAsyncResult BeginWrite(byte[] buffer, int offset, int count, AsyncCallback cback, object state)
 		{
 			//throw new NotSupportedException("This stream does not support async");
-            return null;
+			return null;
 		}
 
 		/// <summary>
@@ -179,7 +179,7 @@ namespace System.IO
 		public virtual int EndRead(IAsyncResult async_result)
 		{
 			//throw new NotSupportedException("This stream does not support async");
-            return -1;
+			return -1;
 		}
 
 		/// <summary>

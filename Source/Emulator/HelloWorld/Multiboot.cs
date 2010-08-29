@@ -71,7 +71,8 @@ namespace Mosa.Kernel.X86
 			Screen.NextLine();
 			Screen.NextLine();
 
-			for (uint i = 0; i < 80; i = i + 8) {
+			for (uint i = 0; i < 80; i = i + 8)
+			{
 				Screen.Column = col;
 				Screen.Color = 0x0F;
 				Screen.Write(i, 10, 2);
@@ -91,7 +92,8 @@ namespace Mosa.Kernel.X86
 			uint location = MemoryMapStart;
 
 			Screen.Row = row;
-			for (uint i = 0; i < 80; i = i + 4) {
+			for (uint i = 0; i < 80; i = i + 4)
+			{
 				Screen.Column = col;
 				Screen.Write(i, 10, 2);
 				Screen.Write(':');
@@ -249,7 +251,8 @@ namespace Mosa.Kernel.X86
 			_memoryMapCount = 0;
 			uint location = MemoryMapStart;
 
-			while (location < (MemoryMapStart + MemoryMapLength)) {
+			while (location < (MemoryMapStart + MemoryMapLength))
+			{
 				_memoryMapCount++;
 				location = Native.Get32(location) + location + 4;
 			}

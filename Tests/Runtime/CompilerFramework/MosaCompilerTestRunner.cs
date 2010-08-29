@@ -222,12 +222,9 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		/// <returns>The metadata module, which represents the loaded assembly.</returns>
 		private IMetadataModule RunMosaCompiler(string assemblyFile, ITypeSystem typeSystem, IAssemblyLoader assemblyLoader)
 		{
-			IMetadataModule rtModule = StaticRuntime.AssemblyLoader.Load(
-				typeof(BaseRuntime).Module.FullyQualifiedName
-			);
-			IMetadataModule module = StaticRuntime.AssemblyLoader.Load(
-				assemblyFile
-			);
+			IMetadataModule rtModule = StaticRuntime.AssemblyLoader.Load(typeSystem, typeof(global::Mosa.Runtime.Runtime).Module.FullyQualifiedName);
+			IMetadataModule module = StaticRuntime.AssemblyLoader.Load(typeSystem, assemblyFile);
+
 			TestCaseAssemblyCompiler.Compile(module, typeSystem, assemblyLoader);
 			return module;
 		}

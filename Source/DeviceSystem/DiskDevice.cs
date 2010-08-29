@@ -11,19 +11,19 @@ using Mosa.ClassLib;
 
 namespace Mosa.DeviceSystem
 {
-    /// <summary>
-    /// 
-    /// </summary>
+	/// <summary>
+	/// 
+	/// </summary>
 	public class DiskDevice : Device, IDiskDevice, IDevice
 	{
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		private IDiskControllerDevice diskController;
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		private uint driveNbr;
 
 		/// <summary>
@@ -31,9 +31,9 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		private uint totalSectors;
 
-        /// <summary>
-        /// 
-        /// </summary>
+		/// <summary>
+		/// 
+		/// </summary>
 		private bool readOnly;
 
 		/// <summary>

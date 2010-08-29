@@ -9,10 +9,10 @@
 
 namespace Mosa.DeviceSystem
 {
-    /// <summary>
-    /// Interface to Serial Device
-    /// </summary>
-    /// TODO: Add API to set Serial settings, like baud rate, parity, etc.
+	/// <summary>
+	/// Interface to Serial Device
+	/// </summary>
+	/// TODO: Add API to set Serial settings, like baud rate, parity, etc.
 	public interface ISerialDevice
 	{
 		/// <summary>
@@ -20,10 +20,10 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		/// <param name="c">The character.</param>
 		void Write(byte c);
-        /// <summary>
-        /// Reads the byte.
-        /// </summary>
-        /// <returns></returns>
+		/// <summary>
+		/// Reads the byte.
+		/// </summary>
+		/// <returns></returns>
 		int ReadByte();
 	}
 }

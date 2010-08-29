@@ -49,9 +49,9 @@ namespace Mosa.Runtime.CompilerFramework
 		private int _free;
 
 		#endregion // Data Members
-		
+
 		#region Properties
-		
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -62,7 +62,7 @@ namespace Mosa.Runtime.CompilerFramework
 				return _size;
 			}
 		}
-		
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -73,7 +73,7 @@ namespace Mosa.Runtime.CompilerFramework
 				return _used;
 			}
 		}
-		
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -84,7 +84,7 @@ namespace Mosa.Runtime.CompilerFramework
 				return _next;
 			}
 		}
-		
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -95,7 +95,7 @@ namespace Mosa.Runtime.CompilerFramework
 				return _prev;
 			}
 		}
-		
+
 		#endregion
 
 		#region Methods
@@ -122,12 +122,13 @@ namespace Mosa.Runtime.CompilerFramework
 			_free = 0;
 
 			// setup free list
-			for (int i = 0; i < _size; i++) {
+			for (int i = 0; i < _size; i++)
+			{
 				_next[i] = _prev[i + 2] = i + 1;
 			}
 
-            _prev[0] = -1;
-            _prev[1] = 0;
+			_prev[0] = -1;
+			_prev[1] = 0;
 
 			_next[_size - 1] = -1;
 		}
@@ -144,7 +145,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 			_next.CopyTo(newNext, 0);
 			_prev.CopyTo(newPrev, 0);
-			
+
 			for (int i = _size; i < newsize; ++i)
 			{
 				newNext[i] = i + 1;
@@ -272,8 +273,8 @@ namespace Mosa.Runtime.CompilerFramework
 			if (index == -1)
 				return CreateRoot();
 
-            // FIXME: Asserts without a message or a comment are not useful to figure out.
-            // I don't see a reason this should not be valid??
+			// FIXME: Asserts without a message or a comment are not useful to figure out.
+			// I don't see a reason this should not be valid??
 			//Debug.Assert(index > 0);
 
 			int free = GetFree();
@@ -296,14 +297,14 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="index">The index.</param>
 		public void Remove(int index)
 		{
-			if (_next[index] < 0) 
+			if (_next[index] < 0)
 			{
 				if (_prev[index] >= 0)
 					_next[_prev[index]] = -1;
 				AddFree(index);
 				return;
 			}
-			if (_prev[index] < 0) 
+			if (_prev[index] < 0)
 			{
 				_prev[_next[index]] = -1;
 				AddFree(index);

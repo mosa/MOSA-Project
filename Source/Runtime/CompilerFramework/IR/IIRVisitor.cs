@@ -184,38 +184,38 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <param name="context">The context.</param>
 		void NopInstruction(Context context);
 
-        void AddSInstruction(Context context);
+		void AddSInstruction(Context context);
 
-        void AddUInstruction(Context context);
+		void AddUInstruction(Context context);
 
-        void AddFInstruction(Context context);
+		void AddFInstruction(Context context);
 
-        void DivFInstruction(Context context);
+		void DivFInstruction(Context context);
 
-        void DivSInstruction(Context context);
+		void DivSInstruction(Context context);
 
-        void DivUInstruction(Context context);
+		void DivUInstruction(Context context);
 
-        void MulSInstruction(Context context);
+		void MulSInstruction(Context context);
 
-	    void MulFInstruction(Context context);
+		void MulFInstruction(Context context);
 
-	    void MulUInstruction(Context context);
+		void MulUInstruction(Context context);
 
-	    void SubFInstruction(Context context);
+		void SubFInstruction(Context context);
 
-	    void SubSInstruction(Context context);
+		void SubSInstruction(Context context);
 
-	    void SubUInstruction(Context context);
+		void SubUInstruction(Context context);
 
-	    void RemFInstruction(Context context);
+		void RemFInstruction(Context context);
 
-	    void RemSInstruction(Context context);
+		void RemSInstruction(Context context);
 
-        void RemUInstruction(Context context);
+		void RemUInstruction(Context context);
 
-	    void SwitchInstruction(Context context);
+		void SwitchInstruction(Context context);
 
-	    void BreakInstruction(Context context);
+		void BreakInstruction(Context context);
 	}
 }

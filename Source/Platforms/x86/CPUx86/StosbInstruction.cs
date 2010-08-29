@@ -18,13 +18,13 @@ using System.Diagnostics;
 
 namespace Mosa.Platforms.x86.CPUx86
 {
-    /// <summary>
-    /// Representations the x86 stosb instruction.
-    /// </summary>
-    public sealed class StosbInstruction : BaseInstruction
-    {
-      
-        #region Methods
+	/// <summary>
+	/// Representations the x86 stosb instruction.
+	/// </summary>
+	public sealed class StosbInstruction : BaseInstruction
+	{
+
+		#region Methods
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
@@ -36,6 +36,6 @@ namespace Mosa.Platforms.x86.CPUx86
 			visitor.Stosb(context);
 		}
 
-        #endregion // Methods
-    }
+		#endregion // Methods
+	}
 }

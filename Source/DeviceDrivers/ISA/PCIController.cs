@@ -81,11 +81,13 @@ namespace Mosa.DeviceDrivers.ISA
 		/// <returns></returns>
 		public override DeviceDriverStartStatus Start()
 		{
-			if (Probe()) {
+			if (Probe())
+			{
 				base.deviceStatus = DeviceStatus.Online;
 				return DeviceDriverStartStatus.Started;
 			}
-			else {
+			else
+			{
 				base.deviceStatus = DeviceStatus.NotFound;
 				return DeviceDriverStartStatus.NotFound;
 			}
