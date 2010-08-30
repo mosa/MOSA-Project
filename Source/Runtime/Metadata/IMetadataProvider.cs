@@ -319,12 +319,20 @@ namespace Mosa.Runtime.Metadata
 		GenericParamConstraintRow ReadGenericParamConstraintRow(TokenTypes token);
 
 		/// <summary>
-		/// Applies the token type adjustment. This is necesary when assembly modules are virtually merged.
+		/// Applies the token type adjustment by RVA. This is necesary when assembly modules are virtually merged.
 		/// </summary>
 		/// <param name="token">The token.</param>
 		/// <param name="rva">The rva.</param>
 		/// <returns></returns>
-		TokenTypes ApplyTokenTypeAdjustment(TokenTypes token, ulong rva);
+		TokenTypes ApplyTokenTypeAdjustmentByRVA(TokenTypes token, ulong rva);
+
+        /// <summary>
+        /// Applies the token type adjustment by BLOB token.  This is necesary when assembly modules are virtually merged.
+        /// </summary>
+        /// <param name="token">The token.</param>
+        /// <param name="blob">The BLOB.</param>
+        /// <returns></returns>
+        TokenTypes ApplyTokenTypeAdjustmentByBlobToken(TokenTypes token, TokenTypes blob);
 
 		/// <summary>
 		/// Gets the heaps of a specified type

@@ -148,127 +148,97 @@ namespace Mosa.Runtime.Metadata.Signatures
         /// <returns></returns>
 		public static SigType ParseTypeSignature(ISignatureContext context, SignatureReader reader)
 		{
-			SigType result;
 			CilElementType type = (CilElementType)reader.ReadByte();
 			switch (type)
 			{
 				case CilElementType.Void:
-					result = BuiltInSigType.Void;
-					break;
+					return BuiltInSigType.Void;
 
 				case CilElementType.Boolean:
-					result = BuiltInSigType.Boolean;
-					break;
+					return BuiltInSigType.Boolean;
 
 				case CilElementType.Char:
-					result = BuiltInSigType.Char;
-					break;
+					return BuiltInSigType.Char;
 
 				case CilElementType.I1:
-					result = BuiltInSigType.SByte;
-					break;
+					return BuiltInSigType.SByte;
 
 				case CilElementType.U1:
-					result = BuiltInSigType.Byte;
-					break;
+					return BuiltInSigType.Byte;
 
 				case CilElementType.I2:
-					result = BuiltInSigType.Int16;
-					break;
+					return BuiltInSigType.Int16;
 
 				case CilElementType.U2:
-					result = BuiltInSigType.UInt16;
-					break;
+					return BuiltInSigType.UInt16;
 
 				case CilElementType.I4:
-					result = BuiltInSigType.Int32;
-					break;
+					return BuiltInSigType.Int32;
 
 				case CilElementType.U4:
-					result = BuiltInSigType.UInt32;
-					break;
+					return BuiltInSigType.UInt32;
 
 				case CilElementType.I8:
-					result = BuiltInSigType.Int64;
-					break;
+					return BuiltInSigType.Int64;
 
 				case CilElementType.U8:
-					result = BuiltInSigType.UInt64;
-					break;
+					return BuiltInSigType.UInt64;
 
 				case CilElementType.R4:
-					result = BuiltInSigType.Single;
-					break;
+					return BuiltInSigType.Single;
 
 				case CilElementType.R8:
-					result = BuiltInSigType.Double;
-					break;
+					return BuiltInSigType.Double;
 
 				case CilElementType.String:
-					result = BuiltInSigType.String;
-					break;
+					return BuiltInSigType.String;
 
 				case CilElementType.Object:
-					result = BuiltInSigType.Object;
-					break;
+					return BuiltInSigType.Object;
 
 				case CilElementType.I:
-					result = BuiltInSigType.IntPtr;
-					break;
+					return BuiltInSigType.IntPtr;
 
 				case CilElementType.U:
-					result = BuiltInSigType.UIntPtr;
-					break;
+					return BuiltInSigType.UIntPtr;
 
 				case CilElementType.TypedByRef:
-					result = BuiltInSigType.TypedByRef;
-					break;
+					return BuiltInSigType.TypedByRef;
 
 				case CilElementType.Array:
-					result = ParseArraySignature(context, reader);
-					break;
+					return ParseArraySignature(context, reader);
 
 				case CilElementType.Class:
-					result = ParseClassSignature(context, reader);
-					break;
+					return ParseClassSignature(context, reader);
 
 				case CilElementType.FunctionPtr:
-					result = ParseFunctionPointer(context, reader);
-					break;
+					return ParseFunctionPointer(context, reader);
 
 				case CilElementType.GenericInst:
-					result = ParseGenericInstance(context, reader);
-					break;
+					return ParseGenericInstance(context, reader);
 
 				case CilElementType.MVar:
-					result = ParseMVar(context, reader);
-					break;
+					return ParseMVar(context, reader);
 
 				case CilElementType.Ptr:
-					result = ParsePointer(context, reader);
-					break;
+					return ParsePointer(context, reader);
 
 				case CilElementType.SZArray:
-					result = ParseSZArraySignature(context, reader);
-					break;
+					return ParseSZArraySignature(context, reader);
 
 				case CilElementType.ValueType:
-					result = ParseValueType(context, reader);
-					break;
+					return ParseValueType(context, reader);
 
 				case CilElementType.Var:
-					result = ParseVar(context, reader);
-					break;
+					return ParseVar(context, reader);
 
 				case CilElementType.ByRef:
-					result = ParseReference(context, reader);
-					break;
+					return ParseReference(context, reader);
 
 				default:
 					throw new NotSupportedException(@"Unsupported CIL element type: " + type);
 			}
 
-			return result;
 		}
 
         /// <summary>

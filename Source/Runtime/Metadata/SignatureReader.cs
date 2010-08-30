@@ -20,10 +20,17 @@ namespace Mosa.Runtime.Metadata
         protected byte[] buffer = null;
         protected int index = 0;
 
+        protected IMetadataProvider provider;
+        protected TokenTypes blob;
+
         public int Index { get { return index; } }
         public int Length { get { return buffer.Length; } }
         public byte this[int index] { get { return buffer[index]; } }
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SignatureReader"/> class.
+        /// </summary>
+        /// <param name="buffer">The buffer.</param>
         public SignatureReader(byte[] buffer)
         {
             if (buffer == null)
@@ -31,6 +38,18 @@ namespace Mosa.Runtime.Metadata
 
             this.buffer = buffer;
             this.index = 0;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="SignatureReader"/> class.
+        /// </summary>
+        /// <param name="buffer">The buffer.</param>
+        /// <param name="blob">The BLOB.</param>
+        public SignatureReader(byte[] buffer, IMetadataProvider provider, TokenTypes blob)
+            : this(buffer)
+        {
+            this.provider = provider;
+            this.blob = blob;
         }
 
         /// <summary>
@@ -132,7 +151,10 @@ namespace Mosa.Runtime.Metadata
             int value = ReadCompressedInt32();
             Debug.Assert(0 != (value & 0xFFFFFFFC), @"Invalid TypeDefOrRefEncoded index value.");
             TokenTypes token = (TokenTypes)((value >> 2) | (int)_typeDefOrRefEncodedTables[value & 0x03]);
-            return token;
+
+            TokenTypes newtoken = provider.ApplyTokenTypeAdjustmentByBlobToken(token, blob);
+
+           return newtoken;
         }
 
         /// <summary>
@@ -141,8 +163,11 @@ namespace Mosa.Runtime.Metadata
         /// <returns></returns>
         public TokenTypes ReadEncodedToken()
         {
-            int value = ReadCompressedInt32();
-            return (TokenTypes)value;
+            TokenTypes token = (TokenTypes)ReadCompressedInt32();
+
+            TokenTypes newtoken = provider.ApplyTokenTypeAdjustmentByBlobToken(token, blob);
+
+            return newtoken;
         }
 
         /// <summary>

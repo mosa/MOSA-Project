@@ -682,16 +682,27 @@ namespace Mosa.Runtime.Loader.PE
 			return theap.ReadGenericParamConstraintRow(token);
 		}
 
-		/// <summary>
-		/// Applies the token type adjustment. This is necesary when assembly modules are virtually merged.
-		/// </summary>
-		/// <param name="token">The token.</param>
-		/// <param name="rva">The rva.</param>
-		/// <returns></returns>
-		TokenTypes IMetadataProvider.ApplyTokenTypeAdjustment(TokenTypes token, ulong rva)
+        /// <summary>
+        /// Applies the token type adjustment. This is necesary when assembly modules are virtually merged.
+        /// </summary>
+        /// <param name="token">The token.</param>
+        /// <param name="rva">The rva.</param>
+        /// <returns></returns>
+		TokenTypes IMetadataProvider.ApplyTokenTypeAdjustmentByRVA(TokenTypes token, ulong rva)
 		{
 			return token;
 		}
+
+        /// <summary>
+        /// Applies the token type adjustment by BLOB token.  This is necesary when assembly modules are virtually merged.
+        /// </summary>
+        /// <param name="token">The token.</param>
+        /// <param name="blob">The BLOB.</param>
+        /// <returns></returns>
+        TokenTypes IMetadataProvider.ApplyTokenTypeAdjustmentByBlobToken(TokenTypes token, TokenTypes blob)
+        {
+            return token;
+        }
 
 		/// <summary>
 		/// Gets the heaps of a specified type
