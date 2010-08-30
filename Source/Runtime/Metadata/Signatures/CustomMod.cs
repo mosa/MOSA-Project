@@ -86,23 +86,23 @@ namespace Mosa.Runtime.Metadata.Signatures
 
 		#region Static methods
 
-		/// <summary>
-		/// Parses the custom mods.
-		/// </summary>
-		/// <param name="buffer">The buffer.</param>
-		/// <param name="index">The index.</param>
-		/// <returns></returns>
-		public static CustomMod[] ParseCustomMods(byte[] buffer, ref int index)
+        /// <summary>
+        /// Parses the custom mods.
+        /// </summary>
+        /// <param name="reader">The reader.</param>
+        /// <returns></returns>
+        public static CustomMod[] ParseCustomMods(SignatureReader reader)
 		{
 			List<CustomMod> mods = new List<CustomMod>();
-			for (int i = index; i < buffer.Length; i++)
+            while (reader.Index != reader.Length)
 			{
-				CilElementType type = (CilElementType)buffer[i++];
+                CilElementType type = (CilElementType)reader.PeekByte();
 				if (type != CilElementType.Optional && type != CilElementType.Required)
 					break;
 
-				index++;
-				TokenTypes modType = SigType.ReadTypeDefOrRefEncoded(buffer, ref index);
+                reader.SkipByte();
+
+                TokenTypes modType = reader.ReadEncodedTypeDefOrRef(); 
 				mods.Add(new CustomMod((CustomModType)(type - CilElementType.Required + 1), modType));
 			}
 

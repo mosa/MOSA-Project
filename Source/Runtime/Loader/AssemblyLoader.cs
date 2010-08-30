@@ -33,10 +33,9 @@ namespace Mosa.Runtime.Loader
 
 		#region Construction
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="AssemblyLoader"/> class.
-		/// </summary>
-		/// <param name="typeSystem">The type system.</param>
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AssemblyLoader"/> class.
+        /// </summary>
 		public AssemblyLoader()
 		{
 			// HACK: I can't figure out an easier way to get the framework dir right now...

@@ -367,7 +367,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <param name="value">Receives the decoded value from the instruction stream.</param>
 		private TokenTypes ApplyTokenTypeAdjustment(TokenTypes value)
 		{
-			return _method.Module.Metadata.ApplyTokenTypeAdjustment(value, _method.Rva);
+			return _method.Module.Metadata.ApplyTokenTypeAdjustmentByRVA(value, _method.Rva);
 		}
 	}
 }

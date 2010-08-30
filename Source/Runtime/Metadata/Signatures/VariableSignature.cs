@@ -21,9 +21,9 @@ namespace Mosa.Runtime.Metadata.Signatures
 		{
 		}
 
-		public VariableSignature(ISignatureContext context, byte[] buffer, ref int index)
+		public VariableSignature(ISignatureContext context, SignatureReader reader)
 		{
-			this.ParseSignature(context, buffer, ref index);
+            this.ParseSignature(context, reader);
 		}
 
 		/// <summary>
@@ -49,21 +49,21 @@ namespace Mosa.Runtime.Metadata.Signatures
 			get { return this.type; }
 		}
 
-		protected override void ParseSignature(ISignatureContext context, byte[] buffer, ref int index)
+		protected override void ParseSignature(ISignatureContext context, SignatureReader reader)
 		{
-			this.ParseModifier(buffer, ref index);
+            this.ParseModifier(reader);
 
-			this.customMods = CustomMod.ParseCustomMods(buffer, ref index);
-			this.type = SigType.ParseTypeSignature(context, buffer, ref index);
+            this.customMods = CustomMod.ParseCustomMods(reader);
+            this.type = SigType.ParseTypeSignature(context, reader);
 		}
 
-		private void ParseModifier(byte[] buffer, ref int index)
+        private void ParseModifier(SignatureReader reader)
 		{
-			CilElementType value = (CilElementType)buffer[index];
+			CilElementType value = (CilElementType)reader.PeekByte();
 			if (value == CilElementType.Pinned)
 			{
 				this.modifier = value;
-				index++;
+                reader.SkipByte();
 			}
 		}
 	}

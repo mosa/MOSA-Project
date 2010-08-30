@@ -838,7 +838,7 @@ namespace Mosa.Runtime.Loader
 			);
 		}
 
-		TokenTypes IMetadataProvider.ApplyTokenTypeAdjustment(TokenTypes token, ulong rva)
+		TokenTypes IMetadataProvider.ApplyTokenTypeAdjustmentByRVA(TokenTypes token, ulong rva)
 		{
 			uint module = (uint)(rva >> 60);
 
@@ -846,6 +846,16 @@ namespace Mosa.Runtime.Loader
 
 			return newToken;
 		}
+
+        TokenTypes IMetadataProvider.ApplyTokenTypeAdjustmentByBlobToken(TokenTypes token, TokenTypes blob)
+        {
+            uint module;
+			TokenTypes originalToken = GetOriginalToken(token, out module);
+
+            TokenTypes newToken = GetNewToken(module, token);
+
+            return newToken;
+        }
 
 		/// <summary>
 		/// Gets the heaps of a specified type

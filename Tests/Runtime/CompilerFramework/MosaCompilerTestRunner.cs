@@ -158,7 +158,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
 					StaticRuntime.AssemblyLoader.Unload(module);	// FIXME
 				this.assembly = this.CompileTestCode<TDelegate>(ns, type, method);
 				Console.WriteLine("Executing MOSA compiler...");
-				module = RunMosaCompiler(this.assembly, StaticRuntime.TypeLoader, StaticRuntime.AssemblyLoader); // FIXME
+				module = RunMosaCompiler(this.assembly, StaticRuntime.TypeSystem, StaticRuntime.AssemblyLoader); // FIXME
 				this.needCompile = false;
 			}
 
