@@ -140,12 +140,12 @@ namespace Mosa.Runtime.Metadata.Signatures
 			return result;
 		}
 
-        /// <summary>
-        /// Parses the type signature.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="reader">The reader.</param>
-        /// <returns></returns>
+		/// <summary>
+		/// Parses the type signature.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="reader">The reader.</param>
+		/// <returns></returns>
 		public static SigType ParseTypeSignature(ISignatureContext context, SignatureReader reader)
 		{
 			CilElementType type = (CilElementType)reader.ReadByte();
@@ -241,73 +241,73 @@ namespace Mosa.Runtime.Metadata.Signatures
 
 		}
 
-        /// <summary>
-        /// Parses the var.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="reader">The reader.</param>
-        /// <returns></returns>
+		/// <summary>
+		/// Parses the var.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="reader">The reader.</param>
+		/// <returns></returns>
 		private static SigType ParseVar(ISignatureContext context, SignatureReader reader)
 		{
 			int typeVariableIndex = reader.ReadCompressedInt32();
 			return context.GetGenericTypeArgument(typeVariableIndex);
 		}
 
-        /// <summary>
-        /// Parses the type of the value.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="reader">The reader.</param>
-        /// <returns></returns>
+		/// <summary>
+		/// Parses the type of the value.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="reader">The reader.</param>
+		/// <returns></returns>
 		private static TypeSigType ParseValueType(ISignatureContext context, SignatureReader reader)
 		{
-            TokenTypes token = reader.ReadEncodedTypeDefOrRef();
+			TokenTypes token = reader.ReadEncodedTypeDefOrRef();
 			return new ValueTypeSigType(token);
 		}
 
-        /// <summary>
-        /// Parses the pointer.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="reader">The reader.</param>
-        /// <returns></returns>
+		/// <summary>
+		/// Parses the pointer.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="reader">The reader.</param>
+		/// <returns></returns>
 		private static SigType ParsePointer(ISignatureContext context, SignatureReader reader)
 		{
-            CustomMod[] mods = CustomMod.ParseCustomMods(reader);
+			CustomMod[] mods = CustomMod.ParseCustomMods(reader);
 			SigType type = ParseTypeSignature(context, reader);
 			return new PtrSigType(mods, type);
 		}
 
-        /// <summary>
-        /// Parses the reference.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="reader">The reader.</param>
-        /// <returns></returns>
+		/// <summary>
+		/// Parses the reference.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="reader">The reader.</param>
+		/// <returns></returns>
 		private static SigType ParseReference(ISignatureContext context, SignatureReader reader)
 		{
 			SigType type = ParseTypeSignature(context, reader);
 			return new RefSigType(type);
 		}
 
-        /// <summary>
-        /// Parses the M var.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="reader">The reader.</param>
-        /// <returns></returns>
+		/// <summary>
+		/// Parses the M var.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="reader">The reader.</param>
+		/// <returns></returns>
 		private static SigType ParseMVar(ISignatureContext context, SignatureReader reader)
 		{
-            int methodVariableIndex = reader.ReadCompressedInt32();
+			int methodVariableIndex = reader.ReadCompressedInt32();
 			return context.GetGenericMethodArgument(methodVariableIndex);
 		}
 
-        /// <summary>
-        /// Parses the generic instance.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="reader">The reader.</param>
-        /// <returns></returns>
+		/// <summary>
+		/// Parses the generic instance.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="reader">The reader.</param>
+		/// <returns></returns>
 		private static SigType ParseGenericInstance(ISignatureContext context, SignatureReader reader)
 		{
 			TypeSigType originalType;
@@ -326,7 +326,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 					throw new InvalidOperationException(@"Invalid signature type.");
 			}
 
-            int genArgCount = reader.ReadCompressedInt32();
+			int genArgCount = reader.ReadCompressedInt32();
 			SigType[] genArgs = new SigType[genArgCount];
 			for (int i = 0; i < genArgCount; i++)
 			{
@@ -336,36 +336,36 @@ namespace Mosa.Runtime.Metadata.Signatures
 			return new GenericInstSigType(originalType, genArgs);
 		}
 
-        /// <summary>
-        /// Parses the function pointer.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="reader">The reader.</param>
-        /// <returns></returns>
-        private static SigType ParseFunctionPointer(ISignatureContext context, SignatureReader reader)
+		/// <summary>
+		/// Parses the function pointer.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="reader">The reader.</param>
+		/// <returns></returns>
+		private static SigType ParseFunctionPointer(ISignatureContext context, SignatureReader reader)
 		{
-            TokenTypes token = reader.ReadEncodedToken();
+			TokenTypes token = reader.ReadEncodedToken();
 			return new FnptrSigType(token);
 		}
 
-        /// <summary>
-        /// Parses the class signature.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="reader">The reader.</param>
-        /// <returns></returns>
+		/// <summary>
+		/// Parses the class signature.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="reader">The reader.</param>
+		/// <returns></returns>
 		private static TypeSigType ParseClassSignature(ISignatureContext context, SignatureReader reader)
 		{
-            TokenTypes token = reader.ReadEncodedTypeDefOrRef();
+			TokenTypes token = reader.ReadEncodedTypeDefOrRef();
 			return new ClassSigType(token);
 		}
 
-        /// <summary>
-        /// Parses the array signature.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="reader">The reader.</param>
-        /// <returns></returns>
+		/// <summary>
+		/// Parses the array signature.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="reader">The reader.</param>
+		/// <returns></returns>
 		private static SigType ParseArraySignature(ISignatureContext context, SignatureReader reader)
 		{
 			SigType elementType = ParseTypeSignature(context, reader);
@@ -386,12 +386,12 @@ namespace Mosa.Runtime.Metadata.Signatures
 			return new ArraySigType(elementType, rank, sizes, lowerBounds);
 		}
 
-        /// <summary>
-        /// Parses the SZ array signature.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="reader">The reader.</param>
-        /// <returns></returns>
+		/// <summary>
+		/// Parses the SZ array signature.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="reader">The reader.</param>
+		/// <returns></returns>
 		private static SigType ParseSZArraySignature(ISignatureContext context, SignatureReader reader)
 		{
 			CustomMod[] customMods = CustomMod.ParseCustomMods(reader);

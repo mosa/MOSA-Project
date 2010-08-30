@@ -60,12 +60,12 @@ namespace Mosa.Runtime.CompilerFramework
 			return size;
 		}
 
-		/// <summary>
-		/// Values the token type from signature.
-		/// </summary>
-		/// <param name="metadata">The metadata.</param>
-		/// <param name="signatureToken">The signature token.</param>
-		/// <returns></returns>
+        /// <summary>
+        /// Values the token type from signature.
+        /// </summary>
+        /// <param name="provider">The provider.</param>
+        /// <param name="signatureToken">The signature token.</param>
+        /// <returns></returns>
         public static TokenTypes ValueTokenTypeFromSignature(IMetadataProvider provider, TokenTypes signatureToken)
 		{
             SignatureReader reader = new SignatureReader(provider.ReadBlob(signatureToken), provider, signatureToken);
