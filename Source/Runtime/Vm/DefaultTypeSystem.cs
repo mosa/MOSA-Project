@@ -417,7 +417,7 @@ namespace Mosa.Runtime.Vm
 		private RuntimeType ResolveTypeSpec(ISignatureContext context, IMetadataModule module, TokenTypes typeSpecToken)
 		{
 			ModuleOffsets offsets = this._moduleOffsets[module.LoadOrder];
-			int typeDefs = (int)(module.Metadata.GetMaxTokenValue(TokenTypes.TypeDef) & TokenTypes.RowIndexMask) - 2;
+			int typeDefs = (int)(module.Metadata.GetMaxTokenValue(TokenTypes.TypeDef) & TokenTypes.RowIndexMask) - 1;
 			int typeSpecIndex = (int)(typeSpecToken & TokenTypes.RowIndexMask);
 
 			int typeIndex = offsets.TypeOffset + typeDefs + typeSpecIndex;
