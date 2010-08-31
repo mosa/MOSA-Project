@@ -878,7 +878,7 @@ namespace Mosa.Runtime.Vm
 			switch (owner & TokenTypes.TableMask)
 			{
 				case TokenTypes.TypeDef:
-					_types[typeOffset + (int)(TokenTypes.RowIndexMask & owner) - 1].SetGenericParameter(gprs);
+					_types[typeOffset + (int)(TokenTypes.RowIndexMask & owner)].SetGenericParameter(gprs);
 					break;
 
 				case TokenTypes.MethodDef:
