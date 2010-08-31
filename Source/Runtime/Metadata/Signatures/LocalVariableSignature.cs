@@ -52,19 +52,19 @@ namespace Mosa.Runtime.Metadata.Signatures
 			}
 		}
 
-        /// <summary>
-        /// Parses the signature.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="reader">The reader.</param>
-        protected override void ParseSignature(ISignatureContext context, SignatureReader reader)
+		/// <summary>
+		/// Parses the signature.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="reader">The reader.</param>
+		protected override void ParseSignature(ISignatureContext context, SignatureReader reader)
 		{
 			// Check signature identifier
-            if (reader.ReadByte() != 0x07)
+			if (reader.ReadByte() != 0x07)
 				throw new ArgumentException(@"Token doesn't represent a local variable signature.", @"token");
 
 			// Retrieve the number of locals
-            int count = reader.ReadCompressedInt32();
+			int count = reader.ReadCompressedInt32();
 			if (count != 0)
 			{
 				this.locals = new VariableSignature[count];

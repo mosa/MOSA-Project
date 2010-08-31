@@ -21,7 +21,7 @@ namespace Mosa.Runtime.Loader
 {
 
 	/// <summary>
-	/// The MergedMetadata class consolidates multiple IMetadataModule provides into a single IMetadataModule view. 
+	/// The MergedMetadata class consolidates multiple IMetadataModule provides into a single IMetadataModule view.
 	/// </summary>
 	public class MergedMetadata : IMetadataProvider, IMetadataModule
 	{
@@ -847,15 +847,15 @@ namespace Mosa.Runtime.Loader
 			return newToken;
 		}
 
-        TokenTypes IMetadataProvider.ApplyTokenTypeAdjustmentByBlobToken(TokenTypes token, TokenTypes blob)
-        {
-            uint module;
+		TokenTypes IMetadataProvider.ApplyTokenTypeAdjustmentByBlobToken(TokenTypes token, TokenTypes blob)
+		{
+			uint module;
 			TokenTypes originalToken = GetOriginalToken(token, out module);
 
-            TokenTypes newToken = GetNewToken(module, token);
+			TokenTypes newToken = GetNewToken(module, token);
 
-            return newToken;
-        }
+			return newToken;
+		}
 
 		/// <summary>
 		/// Gets the heaps of a specified type

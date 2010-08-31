@@ -32,11 +32,11 @@ namespace Mosa.Runtime.Metadata.Signatures
 			get { return _type; }
 		}
 
-        /// <summary>
-        /// Parses the signature.
-        /// </summary>
-        /// <param name="context"></param>
-        /// <param name="reader"></param>
+		/// <summary>
+		/// Parses the signature.
+		/// </summary>
+		/// <param name="context"></param>
+		/// <param name="reader"></param>
 		protected override void ParseSignature(ISignatureContext context, SignatureReader reader)
 		{
 			_type = SigType.ParseTypeSignature(context, reader);

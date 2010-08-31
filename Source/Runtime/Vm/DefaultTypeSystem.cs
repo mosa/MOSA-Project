@@ -515,8 +515,8 @@ namespace Mosa.Runtime.Vm
 				case TokenTypes.MemberRef:
 					{
 						MemberRefRow row = scope.Metadata.ReadMemberRefRow(token);
-						RuntimeType type = this.GetType(context, scope, row.ClassTableIdx);
 						string nameString = scope.Metadata.ReadString(row.NameStringIdx);
+						RuntimeType type = this.GetType(context, scope, row.ClassTableIdx);
 						MethodSignature sig = (MethodSignature)Signature.FromMemberRefSignatureToken(type, scope.Metadata, row.SignatureBlobIdx);
 						foreach (RuntimeMethod method in type.Methods)
 						{

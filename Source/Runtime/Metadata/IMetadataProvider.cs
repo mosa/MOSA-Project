@@ -146,7 +146,7 @@ namespace Mosa.Runtime.Metadata
 		/// <summary>
 		/// Reads a _stackFrameIndex layout row from provider.
 		/// </summary>
-		/// <param name="token">The _stackFrameIndex layout row token.</param>
+		/// <param name="token">The field layout row token.</param>
 		/// <returns></returns>
 		FieldLayoutRow ReadFieldLayoutRow(TokenTypes token);
 
@@ -326,13 +326,13 @@ namespace Mosa.Runtime.Metadata
 		/// <returns></returns>
 		TokenTypes ApplyTokenTypeAdjustmentByRVA(TokenTypes token, ulong rva);
 
-        /// <summary>
-        /// Applies the token type adjustment by BLOB token.  This is necesary when assembly modules are virtually merged.
-        /// </summary>
-        /// <param name="token">The token.</param>
-        /// <param name="blob">The BLOB.</param>
-        /// <returns></returns>
-        TokenTypes ApplyTokenTypeAdjustmentByBlobToken(TokenTypes token, TokenTypes blob);
+		/// <summary>
+		/// Applies the token type adjustment by BLOB token.  This is necesary when assembly modules are virtually merged.
+		/// </summary>
+		/// <param name="token">The token.</param>
+		/// <param name="blob">The BLOB.</param>
+		/// <returns></returns>
+		TokenTypes ApplyTokenTypeAdjustmentByBlobToken(TokenTypes token, TokenTypes blob);
 
 		/// <summary>
 		/// Gets the heaps of a specified type

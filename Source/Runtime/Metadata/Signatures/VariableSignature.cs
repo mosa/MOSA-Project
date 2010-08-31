@@ -23,7 +23,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 
 		public VariableSignature(ISignatureContext context, SignatureReader reader)
 		{
-            this.ParseSignature(context, reader);
+			this.ParseSignature(context, reader);
 		}
 
 		/// <summary>
@@ -51,19 +51,19 @@ namespace Mosa.Runtime.Metadata.Signatures
 
 		protected override void ParseSignature(ISignatureContext context, SignatureReader reader)
 		{
-            this.ParseModifier(reader);
+			this.ParseModifier(reader);
 
-            this.customMods = CustomMod.ParseCustomMods(reader);
-            this.type = SigType.ParseTypeSignature(context, reader);
+			this.customMods = CustomMod.ParseCustomMods(reader);
+			this.type = SigType.ParseTypeSignature(context, reader);
 		}
 
-        private void ParseModifier(SignatureReader reader)
+		private void ParseModifier(SignatureReader reader)
 		{
 			CilElementType value = (CilElementType)reader.PeekByte();
 			if (value == CilElementType.Pinned)
 			{
 				this.modifier = value;
-                reader.SkipByte();
+				reader.SkipByte();
 			}
 		}
 	}
