@@ -5,21 +5,21 @@
  *
  */
 
-//namespace Mosa.HelloWorld.xxTest
-//{
-//    class GenericType<T>
-//    {
-//        public static T StaticMethodInGenericType(T value)
-//        {
-//            return value;
-//        }
-//    }
+namespace Mosa.HelloWorld.xxTest
+{
+	class GenericType<T>
+	{
+		public static T StaticMethodInGenericType(T value)
+		{
+			return value;
+		}
+	}
 
-//    static class Test
-//    {
-//        public static bool TestCallStaticMethodInGenericTypeWith(bool value)
-//        {
-//            return value == GenericType<bool>.StaticMethodInGenericType(value);
-//        }
-//    }
-//}
+	static class Test
+	{
+		public static bool TestCallStaticMethodInGenericTypeWith(bool value)
+		{
+			return value == GenericType<bool>.StaticMethodInGenericType(value);
+		}
+	}
+}

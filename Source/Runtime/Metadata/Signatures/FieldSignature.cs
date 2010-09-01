@@ -15,17 +15,17 @@ namespace Mosa.Runtime.Metadata.Signatures
 	public sealed class FieldSignature : VariableSignature
 	{
 
-        /// <summary>
-        /// Parses the signature.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="reader">The reader.</param>
+		/// <summary>
+		/// Parses the signature.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="reader">The reader.</param>
 		protected override void ParseSignature(ISignatureContext context, SignatureReader reader)
 		{
 			if (Field != reader.PeekByte())
 				return;
 
-            reader.SkipByte();
+			reader.SkipByte();
 
 			base.ParseSignature(context, reader);
 		}

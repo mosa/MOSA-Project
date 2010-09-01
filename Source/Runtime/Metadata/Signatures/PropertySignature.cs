@@ -18,12 +18,12 @@ namespace Mosa.Runtime.Metadata.Signatures
 	/// </summary>
 	public class PropertySignature : Signature
 	{
-        /// <summary>
-        /// Parses the signature.
-        /// </summary>
-        /// <param name="context"></param>
-        /// <param name="reader"></param>
-        protected override void ParseSignature(ISignatureContext context, SignatureReader reader)
+		/// <summary>
+		/// Parses the signature.
+		/// </summary>
+		/// <param name="context"></param>
+		/// <param name="reader"></param>
+		protected override void ParseSignature(ISignatureContext context, SignatureReader reader)
 		{
 			throw new Exception("The method or operation is not implemented.");
 		}

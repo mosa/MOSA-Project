@@ -417,7 +417,7 @@ namespace Mosa.Runtime.Vm
 		private RuntimeType ResolveTypeSpec(ISignatureContext context, IMetadataModule module, TokenTypes typeSpecToken)
 		{
 			ModuleOffsets offsets = this._moduleOffsets[module.LoadOrder];
-			int typeDefs = (int)(module.Metadata.GetMaxTokenValue(TokenTypes.TypeDef) & TokenTypes.RowIndexMask) - 2;
+			int typeDefs = (int)(module.Metadata.GetMaxTokenValue(TokenTypes.TypeDef) & TokenTypes.RowIndexMask) - 1;
 			int typeSpecIndex = (int)(typeSpecToken & TokenTypes.RowIndexMask);
 
 			int typeIndex = offsets.TypeOffset + typeDefs + typeSpecIndex;
@@ -515,8 +515,8 @@ namespace Mosa.Runtime.Vm
 				case TokenTypes.MemberRef:
 					{
 						MemberRefRow row = scope.Metadata.ReadMemberRefRow(token);
-						RuntimeType type = this.GetType(context, scope, row.ClassTableIdx);
 						string nameString = scope.Metadata.ReadString(row.NameStringIdx);
+						RuntimeType type = this.GetType(context, scope, row.ClassTableIdx);
 						MethodSignature sig = (MethodSignature)Signature.FromMemberRefSignatureToken(type, scope.Metadata, row.SignatureBlobIdx);
 						foreach (RuntimeMethod method in type.Methods)
 						{
@@ -878,7 +878,7 @@ namespace Mosa.Runtime.Vm
 			switch (owner & TokenTypes.TableMask)
 			{
 				case TokenTypes.TypeDef:
-					_types[typeOffset + (int)(TokenTypes.RowIndexMask & owner) - 1].SetGenericParameter(gprs);
+					_types[typeOffset + (int)(TokenTypes.RowIndexMask & owner)].SetGenericParameter(gprs);
 					break;
 
 				case TokenTypes.MethodDef:
