@@ -618,11 +618,11 @@ namespace Mosa.Runtime.Vm
 			for (; token <= maxTypeDef; token++)
 			{
 				TokenTypes maxNextMethod, maxNextField;
-				string name = md.ReadString(typeDefRow.TypeNameIdx);
+				//string name = md.ReadString(typeDefRow.TypeNameIdx);
 
-				Debug.Write(((uint)token).ToString("X") + ": ");
-				Debug.Write(typeDefRow.TypeNameIdx.ToString("X") + ": ");
-				Debug.Write(md.ReadString(typeDefRow.TypeNameIdx));
+				//Debug.Write(((uint)token).ToString("X") + ": ");
+				//Debug.Write(typeDefRow.TypeNameIdx.ToString("X") + ": ");
+				//Debug.Write(md.ReadString(typeDefRow.TypeNameIdx));
 
 				if (token < maxTypeDef)
 				{
@@ -648,13 +648,13 @@ namespace Mosa.Runtime.Vm
 					size = layoutRow.ClassSize;
 					packing = layoutRow.PackingSize;
 
-					Debug.Write(" [Size: " + size.ToString() + "]");
+					//Debug.Write(" [Size: " + size.ToString() + "]");
 
 					tokenLayout++;
 					if (tokenLayout <= maxLayout)
 						layoutRow = md.ReadClassLayoutRow(tokenLayout);
 				}
-				Debug.WriteLine(string.Empty);
+				//Debug.WriteLine(string.Empty);
 
 				// Create and populate the runtime type
 				rt = new CilRuntimeType(token, module, typeDefRow, maxNextField, maxNextMethod, packing, size, this);
@@ -698,13 +698,13 @@ namespace Mosa.Runtime.Vm
 					maxParam = md.GetMaxTokenValue(TokenTypes.Param) + 1;
 				}
 
-				Debug.Assert(offset < _methods.Length, @"Invalid method index.");
+				//Debug.Assert(offset < _methods.Length, @"Invalid method index.");
 				_methods[offset++] = new CilRuntimeMethod(offset, module, methodDef, maxParam, declaringType, this);
 
-				Debug.Write("-> " + ((uint)token).ToString("X") + ": ");
-				Debug.Write(methodDef.NameStringIdx.ToString("X") + ": ");
-				Debug.Write(md.ReadString(methodDef.NameStringIdx));
-				Debug.WriteLine(" -  " + methodDef.SignatureBlobIdx.ToString());
+				//Debug.Write("-> " + ((uint)token).ToString("X") + ": ");
+				//Debug.Write(methodDef.NameStringIdx.ToString("X") + ": ");
+				//Debug.Write(md.ReadString(methodDef.NameStringIdx));
+				//Debug.WriteLine(" -  " + methodDef.SignatureBlobIdx.ToString());
 
 				methodDef = nextMethodDef;
 			}

@@ -107,6 +107,7 @@ namespace Mosa.HelloWorld
 			Screen.NextLine();
 
 			CpuInfo cpuInfo = new CpuInfo();
+
 			#region Vendor
 			Screen.Color = Colors.Green;
 			Screen.Write(@"Vendor:   ");
@@ -192,6 +193,7 @@ namespace Mosa.HelloWorld
 			CMOS cmos = new CMOS();
 
 			Mosa.HelloWorld.Tests.StringTest.Test();
+			Mosa.HelloWorld.Tests.InterfaceTest.Test();
 
 			while (true)
 			{

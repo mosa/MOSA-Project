@@ -22,4 +22,5 @@ namespace Mosa.HelloWorld.xxTest
 			return value == GenericType<bool>.StaticMethodInGenericType(value);
 		}
 	}
+
 }

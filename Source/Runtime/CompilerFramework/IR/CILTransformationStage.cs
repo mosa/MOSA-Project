@@ -480,7 +480,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			List<Operand> ctorOperands = new List<Operand>(ctx.Operands);
 			RuntimeMethod ctorMethod = ctx.InvokeTarget;
 
-			if (ReplaceWithInternalCall(ctx, ctorMethod) == false)
+			if (!ReplaceWithInternalCall(ctx, ctorMethod))
 			{
 				Context before = ctx.InsertBefore();
 				before.SetInstruction(Instruction.NopInstruction);
