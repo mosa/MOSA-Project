@@ -47,13 +47,12 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			switch (_opcode)
 			{
 				case OpCode.Ldloc:
-					decoder.Decode(out locIdx);
+					locIdx = decoder.DecodeUShort( );
 					break;
 
 				case OpCode.Ldloc_s:
 					{
-						byte loc;
-						decoder.Decode(out loc);
+						byte loc=decoder.DecodeByte( );
 						locIdx = loc;
 					}
 					break;

@@ -22,7 +22,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// </summary>
 	/// <remarks>
 	/// The IL decoding stage takes a stream of bytes and decodes the
-	/// instructions represented into an MSIL based intermediate 
+	/// instructions represented into an MSIL based intermediate
 	/// representation. The instructions are grouped into basic Blocks
 	/// for easier local optimizations in later compiler stages.
 	/// </remarks>
@@ -270,93 +270,93 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		}
 
 		/// <summary>
-		/// Decodes <paramref name="value"/> from the instruction stream.
+		/// Decodes the byte value from the instruction stream
 		/// </summary>
-		/// <param name="value">Receives the decoded value from the instruction stream.</param>
-		void IInstructionDecoder.Decode(out byte value)
+		/// <returns></returns>
+		byte IInstructionDecoder.DecodeByte()
 		{
-			value = _codeReader.ReadByte();
+			return _codeReader.ReadByte();
 		}
 
 		/// <summary>
-		/// Decodes <paramref name="value"/> from the instruction stream.
+		/// Decodes the sbyte value from the instruction stream
 		/// </summary>
-		/// <param name="value">Receives the decoded value from the instruction stream.</param>
-		void IInstructionDecoder.Decode(out sbyte value)
+		/// <returns></returns>
+		sbyte IInstructionDecoder.DecodeSByte()
 		{
-			value = _codeReader.ReadSByte();
+			return _codeReader.ReadSByte();
 		}
 
 		/// <summary>
-		/// Decodes <paramref name="value"/> from the instruction stream.
+		/// Decodes the short value from the instruction stream
 		/// </summary>
-		/// <param name="value">Receives the decoded value from the instruction stream.</param>
-		void IInstructionDecoder.Decode(out short value)
+		/// <returns></returns>
+		short IInstructionDecoder.DecodeShort()
 		{
-			value = _codeReader.ReadInt16();
+			return _codeReader.ReadInt16();
 		}
 
 		/// <summary>
-		/// Decodes <paramref name="value"/> from the instruction stream.
+		/// Decodes the ushort value from the instruction stream
 		/// </summary>
-		/// <param name="value">Receives the decoded value from the instruction stream.</param>
-		void IInstructionDecoder.Decode(out ushort value)
+		/// <returns></returns>
+		ushort IInstructionDecoder.DecodeUShort()
 		{
-			value = _codeReader.ReadUInt16();
+			return _codeReader.ReadUInt16();
 		}
 
 		/// <summary>
-		/// Decodes <paramref name="value"/> from the instruction stream.
+		/// Decodes the int value from the instruction stream
 		/// </summary>
-		/// <param name="value">Receives the decoded value from the instruction stream.</param>
-		void IInstructionDecoder.Decode(out int value)
+		/// <returns></returns>
+		int IInstructionDecoder.DecodeInt()
 		{
-			value = _codeReader.ReadInt32();
+			return _codeReader.ReadInt32();
 		}
 
 		/// <summary>
-		/// Decodes <paramref name="value"/> from the instruction stream.
+		/// Decodes the uint value from the instruction stream
 		/// </summary>
-		/// <param name="value">Receives the decoded value from the instruction stream.</param>
-		void IInstructionDecoder.Decode(out uint value)
+		/// <returns></returns>
+		uint IInstructionDecoder.DecodeUInt()
 		{
-			value = _codeReader.ReadUInt32();
+			return _codeReader.ReadUInt32();
 		}
 
 		/// <summary>
-		/// Decodes <paramref name="value"/> from the instruction stream.
+		/// Decodes the long value from the instruction stream
 		/// </summary>
-		/// <param name="value">Receives the decoded value from the instruction stream.</param>
-		void IInstructionDecoder.Decode(out long value)
+		/// <returns></returns>
+		long IInstructionDecoder.DecodeLong()
 		{
-			value = _codeReader.ReadInt64();
+			return _codeReader.ReadInt64();
 		}
 
 		/// <summary>
-		/// Decodes <paramref name="value"/> from the instruction stream.
+		/// Decodes the float value from the instruction stream
 		/// </summary>
-		/// <param name="value">Receives the decoded value from the instruction stream.</param>
-		void IInstructionDecoder.Decode(out float value)
+		/// <returns></returns>
+		float IInstructionDecoder.DecodeFloat()
 		{
-			value = _codeReader.ReadSingle();
+			return _codeReader.ReadSingle();
 		}
 
 		/// <summary>
-		/// Decodes <paramref name="value"/> from the instruction stream.
+		/// Decodes the double value from the instruction stream
 		/// </summary>
-		/// <param name="value">Receives the decoded value from the instruction stream.</param>
-		void IInstructionDecoder.Decode(out double value)
+		/// <returns></returns>
+		double IInstructionDecoder.DecodeDouble()
 		{
-			value = _codeReader.ReadDouble();
+			return _codeReader.ReadDouble();
 		}
 
 		/// <summary>
-		/// Decodes <paramref name="value"/> from the instruction stream.
+		/// Decodes the tokentype from the instruction stream
 		/// </summary>
-		/// <param name="value">Receives the decoded value from the instruction stream.</param>
-		void IInstructionDecoder.Decode(out TokenTypes value)
+		/// <returns></returns>
+		TokenTypes IInstructionDecoder.DecodeTokenType()
 		{
-			value = ApplyTokenTypeAdjustment((TokenTypes)_codeReader.ReadInt32());
+			return ApplyTokenTypeAdjustment((TokenTypes)_codeReader.ReadInt32());
 		}
 
 		#endregion

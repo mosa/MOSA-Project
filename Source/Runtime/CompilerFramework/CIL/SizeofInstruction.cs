@@ -42,6 +42,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
+		/// <param name="typeSystem">The type system.</param>
 		public override void Decode(Context ctx, IInstructionDecoder decoder, ITypeSystem typeSystem)
 		{
 			// Decode base classes first
@@ -49,8 +50,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 			// Get the size type
 			// Load the _stackFrameIndex token from the immediate
-			TokenTypes token;
-			decoder.Decode(out token);
+			TokenTypes token = decoder.DecodeTokenType();
+
 			//throw new NotImplementedException();
 			uint size = (uint)ObjectModelUtility.ComputeTypeSize(decoder.Method, token, decoder.Compiler.Assembly.Metadata, decoder.Compiler.Architecture);
 			ctx.Result = new Operands.ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(CilElementType.U4), size);

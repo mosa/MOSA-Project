@@ -59,20 +59,20 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
+		/// <param name="typeSystem">The type system.</param>
 		public override void Decode(Context ctx, IInstructionDecoder decoder, ITypeSystem typeSystem)
 		{
 			// Decode base classes first
 			base.Decode(ctx, decoder, typeSystem);
 
 			// Retrieve the number of branch targets
-			uint count;
-			decoder.Decode(out count);
+			uint count = decoder.DecodeUInt();
 
 			ctx.Branch = new Branch(count + 1);
 
 			// Populate the array
 			for (uint i = 0; i < count; i++)
-				decoder.Decode(out ctx.Branch.Targets[i]);
+				ctx.Branch.Targets[i] = decoder.DecodeInt();
 		}
 
 		/// <summary>

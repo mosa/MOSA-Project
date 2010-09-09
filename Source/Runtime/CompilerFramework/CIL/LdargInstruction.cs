@@ -52,13 +52,12 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			switch (_opcode)
 			{
 				case OpCode.Ldarg:
-					decoder.Decode(out argIdx);
+					argIdx = decoder.DecodeUShort();
 					break;
 
 				case OpCode.Ldarg_s:
 					{
-						byte arg;
-						decoder.Decode(out arg);
+						byte arg = decoder.DecodeByte();
 						argIdx = arg;
 					}
 					break;

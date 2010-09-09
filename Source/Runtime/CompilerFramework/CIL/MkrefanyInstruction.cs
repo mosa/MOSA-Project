@@ -51,8 +51,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 			// Retrieve a type reference from the immediate argument
 			// FIXME: Limit the token types
-			TokenTypes token;
-			decoder.Decode(out token);
+			TokenTypes token = decoder.DecodeTokenType();
+
 			throw new NotImplementedException();
 			/*
 				_typeRef = MetadataTypeReference.FromToken(decoder.Metadata, token);

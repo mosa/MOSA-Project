@@ -43,6 +43,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
+		/// <param name="typeSystem">The type system.</param>
 		public override void Decode(Context ctx, IInstructionDecoder decoder, ITypeSystem typeSystem)
 		{
 			// Decode base classes first
@@ -53,13 +54,12 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			// Opcode specific handling 
 			if (_opcode == OpCode.Ldloca_s)
 			{
-				byte loc;
-				decoder.Decode(out loc);
+				byte loc = decoder.DecodeByte();
 				locIdx = loc;
 			}
 			else
 			{
-				decoder.Decode(out locIdx);
+				locIdx = decoder.DecodeUShort();
 			}
 
 			Operand localVariableOperand = decoder.Compiler.GetLocalOperand(locIdx);

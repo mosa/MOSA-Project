@@ -43,6 +43,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
+		/// <param name="typeSystem">The type system.</param>
 		public override void Decode(Context ctx, IInstructionDecoder decoder, ITypeSystem typeSystem)
 		{
 			// Decode base classes first
@@ -50,8 +51,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 			// Retrieve a type reference from the immediate argument
 			// FIXME: Limit the token types
-			TokenTypes token;
-			decoder.Decode(out token);
+			TokenTypes token = decoder.DecodeTokenType();
+
 			throw new NotImplementedException();
 			//_typeRef = MetadataTypeReference.FromToken(decoder.Metadata, token);
 		}

@@ -111,6 +111,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
+		/// <param name="typeSystem">The type system.</param>
 		public override void Decode(Context ctx, IInstructionDecoder decoder, ITypeSystem typeSystem)
 		{
 			DecodeInvocationTarget(ctx, decoder, InvokeSupport, typeSystem);
@@ -155,17 +156,15 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <param name="flags">Flags, which control the</param>
 		protected static TokenTypes DecodeInvocationTarget(Context ctx, IInstructionDecoder decoder, InvokeSupportFlags flags, ITypeSystem typeSystem)
 		{
-			// Holds the token of the call target
-			TokenTypes callTarget, targetType;
-			// Method
-			RuntimeMethod method = null;
-
 			// Retrieve the immediate argument - it contains the token
 			// of the methoddef, methodref, methodspec or callsite to call.
-			decoder.Decode(out callTarget);
-			targetType = (TokenTypes.TableMask & callTarget);
+			TokenTypes callTarget = decoder.DecodeTokenType();
+			TokenTypes targetType = (TokenTypes.TableMask & callTarget);
+
 			if (!IsCallTargetSupported(targetType, flags))
 				throw new InvalidOperationException(@"Invalid IL call target specification.");
+
+			RuntimeMethod method = null;
 
 			switch (targetType)
 			{

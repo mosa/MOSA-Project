@@ -59,6 +59,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
+		/// <param name="typeSystem">The type system.</param>
 		public override void Decode(Context ctx, IInstructionDecoder decoder, ITypeSystem typeSystem)
 		{
 			// Decode bases first
@@ -68,16 +69,14 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			{
 				case OpCode.Br_s:
 					{
-						sbyte target;
-						decoder.Decode(out target);
+						sbyte target = decoder.DecodeSByte();
 						ctx.SetBranch(target);
 					}
 					break;
 
 				case OpCode.Br:
 					{
-						int target;
-						decoder.Decode(out target);
+						int target = decoder.DecodeInt();
 						ctx.SetBranch(target);
 						break;
 					}

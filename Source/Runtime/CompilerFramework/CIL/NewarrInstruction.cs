@@ -43,20 +43,20 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
+		/// <param name="typeSystem">The type system.</param>
 		public override void Decode(Context ctx, IInstructionDecoder decoder, ITypeSystem typeSystem)
 		{
 			// Decode base classes first
 			base.Decode(ctx, decoder, typeSystem);
 
 			// Read the type specification
-			TokenTypes arrayElementType;
-			decoder.Decode(out arrayElementType);
+			TokenTypes token = decoder.DecodeTokenType();
 
 			// FIXME: If ctx.Operands1 is an integral constant, we can infer the maximum size of the array
 			// and instantiate an ArrayTypeSpecification with max. sizes. This way we could eliminate bounds
 			// checks in an optimization stage later on, if we find that a value never exceeds the array 
 			// bounds.
-			var resultType = new SZArraySigType(null, new ClassSigType(arrayElementType));
+			var resultType = new SZArraySigType(null, new ClassSigType(token));
 			ctx.Result = decoder.Compiler.CreateTemporary(resultType);
 		}
 
