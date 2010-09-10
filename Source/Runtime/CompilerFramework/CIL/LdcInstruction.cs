@@ -38,11 +38,10 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		/// <param name="typeSystem">The type system.</param>
-		public override void Decode(Context ctx, IInstructionDecoder decoder, ITypeSystem typeSystem)
+		public override void Decode(Context ctx, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
-			base.Decode(ctx, decoder, typeSystem);
+			base.Decode(ctx, decoder);
 
 			ConstantOperand constantValueOperand;
 
@@ -51,40 +50,35 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			{
 				case OpCode.Ldc_i4:
 					{
-						int i;
-						decoder.Decode(out i);
+						int i = decoder.DecodeInt();
 						constantValueOperand = new ConstantOperand(new SigType(CilElementType.I4), i);
 					}
 					break;
 
 				case OpCode.Ldc_i4_s:
 					{
-						sbyte sb;
-						decoder.Decode(out sb);
+						sbyte sb = decoder.DecodeSByte();
 						constantValueOperand = new ConstantOperand(new SigType(CilElementType.I4), sb);
 					}
 					break;
 
 				case OpCode.Ldc_i8:
 					{
-						long l;
-						decoder.Decode(out l);
+						long l = decoder.DecodeLong();
 						constantValueOperand = new ConstantOperand(new SigType(CilElementType.I8), l);
 					}
 					break;
 
 				case OpCode.Ldc_r4:
 					{
-						float f;
-						decoder.Decode(out f);
+						float f = decoder.DecodeFloat();
 						constantValueOperand = new ConstantOperand(new SigType(CilElementType.R4), f);
 					}
 					break;
 
 				case OpCode.Ldc_r8:
 					{
-						double d;
-						decoder.Decode(out d);
+						double d = decoder.DecodeDouble();
 						constantValueOperand = new ConstantOperand(new SigType(CilElementType.R8), d);
 					}
 					break;

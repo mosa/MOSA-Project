@@ -10,8 +10,9 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Mosa.Runtime.Loader;
 using System.Diagnostics;
+
+using Mosa.Runtime.Loader;
 
 namespace Mosa.Runtime.Vm
 {
@@ -38,11 +39,6 @@ namespace Mosa.Runtime.Vm
 		private string name;
 
 		/// <summary>
-		/// Holds the module, which owns the method.
-		/// </summary>
-		private IMetadataModule module;
-
-		/// <summary>
 		/// Holds the static instance of the runtime.
 		/// </summary>
 		protected ITypeSystem typeSystem;
@@ -59,9 +55,8 @@ namespace Mosa.Runtime.Vm
 		/// <param name="declaringType">The declaring type of the member.</param>
 		/// <param name="attributes">Holds the attributes of the member.</param>
 		protected RuntimeMember(int token, IMetadataModule module, RuntimeType declaringType, RuntimeAttribute[] attributes, ITypeSystem typeSystem) :
-			base(token)
+			base(module, token)
 		{
-			this.module = module;
 			this.declaringType = declaringType;
 			this.attributes = attributes;
 			this.typeSystem = typeSystem;
@@ -122,13 +117,6 @@ namespace Mosa.Runtime.Vm
 			set { _address = value; }
 		}
 
-		/// <summary>
-		/// Retrieves the module, which holds this member.
-		/// </summary>
-		public IMetadataModule Module
-		{
-			get { return this.module; }
-		}
 
 		#endregion // Properties
 

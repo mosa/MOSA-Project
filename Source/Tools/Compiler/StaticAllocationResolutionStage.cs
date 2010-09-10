@@ -96,7 +96,7 @@ namespace Mosa.Tools.Compiler
 		private string GetMethodTableForType(RuntimeType allocatedType)
 		{
 			string result = null;
-			if (allocatedType.IsValueType == false)
+			if (!allocatedType.IsValueType)
 			{
 				result = allocatedType.FullName + @"$mtable";
 			}
@@ -120,7 +120,7 @@ namespace Mosa.Tools.Compiler
 			foreach (BasicBlock block in this.BasicBlocks)
 			{
 				Context context = new Context(InstructionSet, block);
-				while (context.EndOfInstruction == false)
+				while (!context.EndOfInstruction)
 				{
 					if (context.Instruction is NewobjInstruction || context.Instruction is NewarrInstruction)
 					{
@@ -136,7 +136,7 @@ namespace Mosa.Tools.Compiler
 		private Context SeekAssignmentOfAllocatedObject(Context allocation)
 		{
 			Context next = allocation.Next;
-			if (next.EndOfInstruction == true || !(next.Instruction is StsfldInstruction))
+			if (next.EndOfInstruction || !(next.Instruction is StsfldInstruction))
 			{
 				next = null;
 			}

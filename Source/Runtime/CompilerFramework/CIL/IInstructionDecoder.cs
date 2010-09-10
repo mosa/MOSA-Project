@@ -18,7 +18,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	public interface IInstructionDecoder
 	{
 		/// <summary>
-		/// Gets the compiler, that is currently executing.
+		/// Gets the method compiler that is currently executing.
 		/// </summary>
 		IMethodCompiler Compiler { get; }
 
@@ -28,63 +28,69 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		RuntimeMethod Method { get; }
 
 		/// <summary>
-		/// Decodes <paramref name="value"/> from the instruction stream.
+		/// Gets the type system.
 		/// </summary>
-		/// <param name="value">Receives the decoded value from the instruction stream.</param>
-		void Decode(out byte value);
+		/// <value>The type system.</value>
+		ITypeSystem TypeSystem { get;  }
 
 		/// <summary>
-		/// Decodes <paramref name="value"/> from the instruction stream.
+		/// Decodes the byte value from the instruction stream
 		/// </summary>
-		/// <param name="value">Receives the decoded value from the instruction stream.</param>
-		void Decode(out sbyte value);
+		/// <returns></returns>
+		byte DecodeByte();
 
 		/// <summary>
-		/// Decodes <paramref name="value"/> from the instruction stream.
+		/// Decodes the sbyte value from the instruction stream
 		/// </summary>
-		/// <param name="value">Receives the decoded value from the instruction stream.</param>
-		void Decode(out short value);
+		/// <returns></returns>
+		sbyte DecodeSByte();
 
 		/// <summary>
-		/// Decodes <paramref name="value"/> from the instruction stream.
+		/// Decodes the short value from the instruction stream
 		/// </summary>
-		/// <param name="value">Receives the decoded value from the instruction stream.</param>
-		void Decode(out ushort value);
+		/// <returns></returns>
+		short DecodeShort();
 
 		/// <summary>
-		/// Decodes <paramref name="value"/> from the instruction stream.
+		/// Decodes the ushort value from the instruction stream
 		/// </summary>
-		/// <param name="value">Receives the decoded value from the instruction stream.</param>
-		void Decode(out int value);
+		/// <returns></returns>
+		ushort DecodeUShort();
 
 		/// <summary>
-		/// Decodes <paramref name="value"/> from the instruction stream.
+		/// Decodes the int value from the instruction stream
 		/// </summary>
-		/// <param name="value">Receives the decoded value from the instruction stream.</param>
-		void Decode(out uint value);
+		/// <returns></returns>
+		int DecodeInt();
 
 		/// <summary>
-		/// Decodes <paramref name="value"/> from the instruction stream.
+		/// Decodes the uint value from the instruction stream
 		/// </summary>
-		/// <param name="value">Receives the decoded value from the instruction stream.</param>
-		void Decode(out long value);
+		/// <returns></returns>
+		uint DecodeUInt();
 
 		/// <summary>
-		/// Decodes <paramref name="value"/> from the instruction stream.
+		/// Decodes the long value from the instruction stream
 		/// </summary>
-		/// <param name="value">Receives the decoded value from the instruction stream.</param>
-		void Decode(out float value);
+		/// <returns></returns>
+		long DecodeLong();
 
 		/// <summary>
-		/// Decodes <paramref name="value"/> from the instruction stream.
+		/// Decodes the float value from the instruction stream
 		/// </summary>
-		/// <param name="value">Receives the decoded value from the instruction stream.</param>
-		void Decode(out double value);
+		/// <returns></returns>
+		float DecodeFloat();
 
 		/// <summary>
-		/// Decodes <paramref name="value"/> from the instruction stream.
+		/// Decodes the double value from the instruction stream
 		/// </summary>
-		/// <param name="value">Receives the decoded value from the instruction stream.</param>
-		void Decode(out TokenTypes value);
+		/// <returns></returns>
+		double DecodeDouble();
+
+		/// <summary>
+		/// Decodes the tokentype from the instruction stream
+		/// </summary>
+		/// <returns></returns>
+		TokenTypes DecodeTokenType();
 	}
 }

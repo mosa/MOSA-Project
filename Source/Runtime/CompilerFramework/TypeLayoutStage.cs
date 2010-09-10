@@ -278,7 +278,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 			foreach (RuntimeMethod method in methodTable)
 			{
-				if (IsAbstract(method) == false)
+				if (!IsAbstract(method))
 				{
 					string methodSymbol = method.ToString();
 					this.linker.Link(LinkType.AbsoluteAddress | LinkType.I4, methodTableSymbolName, offset, 0, methodSymbol, IntPtr.Zero);

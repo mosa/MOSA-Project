@@ -59,10 +59,10 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(Context ctx, IInstructionDecoder decoder, ITypeSystem typeSystem)
+		public override void Decode(Context ctx, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
-			base.Decode(ctx, decoder, typeSystem);
+			base.Decode(ctx, decoder);
 
 			// Read the branch target
 			// Is this a short branch target?
@@ -71,16 +71,14 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 				_opcode == OpCode.Bgt_un_s || _opcode == OpCode.Ble_s || _opcode == OpCode.Ble_un_s || _opcode == OpCode.Blt_s ||
 				_opcode == OpCode.Blt_un_s || _opcode == OpCode.Bne_un_s)
 			{
-				sbyte target;
-				decoder.Decode(out target);
+				sbyte target = decoder.DecodeSByte();
 				ctx.SetBranch(target);
 			}
 			else if (_opcode == OpCode.Beq || _opcode == OpCode.Bge || _opcode == OpCode.Bge_un || _opcode == OpCode.Bgt ||
 				_opcode == OpCode.Bgt_un || _opcode == OpCode.Ble || _opcode == OpCode.Ble_un || _opcode == OpCode.Blt ||
 				_opcode == OpCode.Blt_un || _opcode == OpCode.Bne_un)
 			{
-				int target;
-				decoder.Decode(out target);
+				int target = decoder.DecodeInt();
 				ctx.SetBranch(target);
 			}
 			else

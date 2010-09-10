@@ -66,6 +66,7 @@
     <Compile Include="Boot.cs" />
     <Compile Include="Test.cs" />
     <Compile Include="Tests\StringTest.cs" />
+    <Compile Include="Tests\InterfaceTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Kernel\Mosa.Kernel.csproj">

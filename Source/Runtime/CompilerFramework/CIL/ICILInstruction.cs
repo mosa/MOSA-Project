@@ -26,8 +26,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		/// <param name="typeSystem">The type system.</param>
-		void Decode(Context ctx, IInstructionDecoder decoder, ITypeSystem typeSystem);
+		void Decode(Context ctx, IInstructionDecoder decoder);
 
 		/// <summary>
 		/// Validates the instruction operands and creates a matching variable for the result.

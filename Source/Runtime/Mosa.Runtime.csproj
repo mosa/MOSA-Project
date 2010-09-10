@@ -629,7 +629,7 @@
     <Compile Include="Loader\AssemblyLoader.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Loader\GenericArgument.cs">
+    <Compile Include="Vm\GenericArgument.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Loader\IMetadataModule.cs">

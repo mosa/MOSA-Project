@@ -13,7 +13,7 @@ namespace Mosa.Runtime.CompilerFramework
 {
 	/// <summary>
 	/// MethodCompilationStageComposite composes several MethodCompilerStages into 
-	/// one stage and forwards calls to the stage to multiple _stages.
+	/// one stage and forwards calls to the stage to multiple stages.
 	/// </summary>
 	public class MethodCompilationStageComposite : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
 	{
@@ -40,12 +40,12 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
-		/// Takes the enumeration and copies all _stages into the list
+		/// Takes the enumeration and copies all stages into the list
 		/// </summary>
 		/// <param name="stages"></param>
 		public MethodCompilationStageComposite(IEnumerable<IMethodCompilerStage> stages)
 		{
-			// Walk through enumeration and copy _stages
+			// Walk through enumeration and copy stages
 			foreach (IMethodCompilerStage stage in stages)
 			{
 				Stages.Add(stage);

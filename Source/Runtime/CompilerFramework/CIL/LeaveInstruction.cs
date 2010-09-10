@@ -39,27 +39,25 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
-		/// <param name="ctx"></param>
+		/// <param name="ctx">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(Context ctx, IInstructionDecoder decoder, ITypeSystem typeSystem)
+		public override void Decode(Context ctx, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
-			base.Decode(ctx, decoder, typeSystem);
+			base.Decode(ctx, decoder);
 
 			switch (_opcode)
 			{
 				case OpCode.Leave_s:
 					{
-						sbyte sb;
-						decoder.Decode(out sb);
+						sbyte sb=decoder.DecodeSByte( );
 						ctx.SetBranch(sb);
 					}
 					break;
 
 				case OpCode.Leave:
 					{
-						int sb;
-						decoder.Decode(out sb);
+						int sb=decoder.DecodeInt( );
 						ctx.SetBranch(sb);
 						break;
 					}

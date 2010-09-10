@@ -42,19 +42,18 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(Context ctx, IInstructionDecoder decoder, ITypeSystem typeSystem)
+		public override void Decode(Context ctx, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
-			base.Decode(ctx, decoder, typeSystem);
+			base.Decode(ctx, decoder);
 
 			// Load the _stackFrameIndex token from the immediate
-			TokenTypes token;
-			decoder.Decode(out token);
+			TokenTypes token = decoder.DecodeTokenType();
 
 			//Console.WriteLine("Stfld used in {0}.{1}", decoder.Method.DeclaringType.FullName, decoder.Method.Name);
 
 			Debug.Assert(TokenTypes.Field == (TokenTypes.TableMask & token) || TokenTypes.MemberRef == (TokenTypes.TableMask & token), @"Invalid token type.");
-			ctx.RuntimeField = typeSystem.GetField(decoder.Method, decoder.Method.Module, token);
+			ctx.RuntimeField = decoder.TypeSystem.GetField(decoder.Method, decoder.Method.Module, token);
 		}
 
 		/// <summary>

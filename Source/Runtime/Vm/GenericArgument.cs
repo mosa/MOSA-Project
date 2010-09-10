@@ -7,7 +7,7 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-namespace Mosa.Runtime.Loader
+namespace Mosa.Runtime.Vm
 {
 	/// <summary>
 	/// 

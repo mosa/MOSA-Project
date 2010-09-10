@@ -46,6 +46,9 @@ namespace Mosa.Runtime.Vm
 		/// </summary>
 		private TypeAttributes flags;
 
+		/// <summary>
+		/// 
+		/// </summary>
 		private IList<RuntimeMethod> methodTable;
 
 		/// <summary>
@@ -411,7 +414,6 @@ namespace Mosa.Runtime.Vm
 		{
 			return DefaultSignatureContext.Instance.GetGenericMethodArgument(index);
 		}
-
 
 		public virtual SigType GetGenericTypeArgument(int index)
 		{

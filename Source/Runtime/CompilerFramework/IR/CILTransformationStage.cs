@@ -480,7 +480,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			List<Operand> ctorOperands = new List<Operand>(ctx.Operands);
 			RuntimeMethod ctorMethod = ctx.InvokeTarget;
 
-			if (ReplaceWithInternalCall(ctx, ctorMethod) == false)
+			if (!ReplaceWithInternalCall(ctx, ctorMethod))
 			{
 				Context before = ctx.InsertBefore();
 				before.SetInstruction(Instruction.NopInstruction);
@@ -680,7 +680,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 
 			string symbolName = @"$ldstr$" + assembly.Names[0] + "$String" + ctx.Token.ToString(@"x");
 
-			if (linker.HasSymbol(symbolName) == false)
+			if (!linker.HasSymbol(symbolName))
 			{
 				const int nativePtrSize = 4;
 				const int nativePtrAlignment = 4;

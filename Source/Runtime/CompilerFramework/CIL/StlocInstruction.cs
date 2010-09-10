@@ -48,10 +48,10 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(Context ctx, IInstructionDecoder decoder, ITypeSystem typeSystem)
+		public override void Decode(Context ctx, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
-			base.Decode(ctx, decoder, typeSystem);
+			base.Decode(ctx, decoder);
 
 			ushort locIdx;
 
@@ -59,16 +59,16 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			switch (_opcode)
 			{
 				case OpCode.Stloc:
-					decoder.Decode(out locIdx);
+					locIdx = decoder.DecodeUShort();
 					break;
 
 				case OpCode.Stloc_s:
 					{
-						byte loc;
-						decoder.Decode(out loc);
+						byte loc = decoder.DecodeByte();
 						locIdx = loc;
+						break;
 					}
-					break;
+
 
 				case OpCode.Stloc_0:
 					locIdx = 0;
