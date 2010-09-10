@@ -228,7 +228,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 				// Create and initialize the corresponding instruction
 				ctx.AppendInstruction(instruction);
-				instruction.Decode(ctx, this, typeSystem);
+				instruction.Decode(ctx, this);
 				ctx.Label = instOffset;
 				//ctx.Prefix = prefix;
 
@@ -267,6 +267,15 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		RuntimeMethod IInstructionDecoder.Method
 		{
 			get { return _method; }
+		}
+
+		/// <summary>
+		/// Gets the type system.
+		/// </summary>
+		/// <value>The type system.</value>
+		ITypeSystem IInstructionDecoder.TypeSystem
+		{
+			get { return typeSystem; }
 		}
 
 		/// <summary>

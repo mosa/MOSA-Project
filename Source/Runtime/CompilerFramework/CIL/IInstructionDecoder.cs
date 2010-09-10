@@ -28,6 +28,12 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		RuntimeMethod Method { get; }
 
 		/// <summary>
+		/// Gets the type system.
+		/// </summary>
+		/// <value>The type system.</value>
+		ITypeSystem TypeSystem { get;  }
+
+		/// <summary>
 		/// Decodes the byte value from the instruction stream
 		/// </summary>
 		/// <returns></returns>
