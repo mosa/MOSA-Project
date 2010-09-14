@@ -43,12 +43,6 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		protected ITypeSystem typeSystem;
 
-		/// <summary>
-		/// Holds the assembly loader.
-		/// </summary>
-		/// <value>The assembly loader.</value>
-		protected IAssemblyLoader assemblyLoader;
-
 		#endregion // Data members
 
 		#region IAssemblyCompilerStage members
@@ -58,7 +52,6 @@ namespace Mosa.Runtime.CompilerFramework
 			this.compiler = compiler;
 			architecture = compiler.Architecture;
 			typeSystem = compiler.TypeSystem;
-			assemblyLoader = compiler.AssemblyLoader;
 		}
 
 		#endregion // IAssemblyCompilerStage members

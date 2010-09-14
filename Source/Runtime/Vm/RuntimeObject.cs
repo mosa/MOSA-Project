@@ -25,12 +25,12 @@ namespace Mosa.Runtime.Vm
 		/// <summary>
 		/// Holds the token of the object.
 		/// </summary>
-		private int _token;
+		private int token;
 
 		/// <summary>
 		/// Holds the module, which owns the member.
 		/// </summary>
-		private IMetadataModule _module;
+		protected IModuleTypeSystem moduleTypeSystem;
 
 		#endregion // Data members
 
@@ -40,10 +40,10 @@ namespace Mosa.Runtime.Vm
 		/// Initializes a new instance of <see cref="RuntimeObject"/>.
 		/// </summary>
 		/// <param name="token">The runtime token of this metadata.</param>
-		protected RuntimeObject(IMetadataModule module, int token)
+		protected RuntimeObject(IModuleTypeSystem moduleTypeSystem, int token)
 		{
-			_token = token;
-			_module = module;
+			this.token = token;
+			this.moduleTypeSystem = moduleTypeSystem;
 		}
 
 		#endregion // Construction
@@ -55,15 +55,23 @@ namespace Mosa.Runtime.Vm
 		/// </summary>
 		public int Token
 		{
-			get { return _token; }
+			get { return token; }
 		}
 
 		/// <summary>
 		/// Retrieves the module, which holds this member.
 		/// </summary>
-		public IMetadataModule Module
+		public IMetadataModule MetadataModule
 		{
-			get { return _module; }
+			get { return moduleTypeSystem.MetadataModule; }
+		}
+
+		/// <summary>
+		/// Retrieves the module, which holds this member.
+		/// </summary>
+		public IModuleTypeSystem ModuleTypeSystem
+		{
+			get { return moduleTypeSystem; }
 		}
 
 		#endregion // Properties

@@ -48,11 +48,6 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		private string[] references;
 
 		/// <summary>
-		/// The metadata module of the test case.
-		/// </summary>
-		private IMetadataModule module;
-
-		/// <summary>
 		/// The source text of the test code to compile.
 		/// </summary>
 		private string codeSource;
@@ -277,7 +272,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		/// <returns>An instance of <see cref="RuntimeMethod"/>.</returns>
 		private RuntimeMethod FindMethod(string ns, string type, string method)
 		{
-			foreach (RuntimeType t in StaticRuntime.TypeSystem.GetTypesFromModule(module))
+			foreach (RuntimeType t in StaticRuntime.TypeSystem.GetCompiledTypes())
 			{
 				if (t.Namespace != ns || t.Name != type)
 					continue;
@@ -295,11 +290,6 @@ namespace Test.Mosa.Runtime.CompilerFramework
 
 		protected void CompileTestCode()
 		{
-			if (module != null)
-			{
-				StaticRuntime.AssemblyLoader.Unload(module);
-			}
-
 			if (this.loadedAssembly != null)
 			{
 				this.loadedAssembly = null;
@@ -308,7 +298,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
 			this.assembly = this.RunCodeDomCompiler();
 
 			Console.WriteLine("Executing MOSA compiler...");
-			module = RunMosaCompiler(this.assembly);
+			RunMosaCompiler(this.assembly);
 		}
 
 		private string RunCodeDomCompiler()
@@ -357,13 +347,19 @@ namespace Test.Mosa.Runtime.CompilerFramework
 			return compileResults.PathToAssembly;
 		}
 
-		private IMetadataModule RunMosaCompiler(string assemblyFile)
+		private void RunMosaCompiler(string assemblyFile)
 		{
-			IMetadataModule rtModule = StaticRuntime.AssemblyLoader.Load(StaticRuntime.TypeSystem,typeof(global::Mosa.Runtime.Runtime).Module.FullyQualifiedName);
-			IMetadataModule module = StaticRuntime.AssemblyLoader.Load(StaticRuntime.TypeSystem, assemblyFile);
+			//IMetadataModule rtModule = StaticRuntime.AssemblyLoader.Load(StaticRuntime.TypeSystem,typeof(global::Mosa.Runtime.Runtime).Module.FullyQualifiedName);
+			//IMetadataModule module = StaticRuntime.AssemblyLoader.Load(StaticRuntime.TypeSystem, assemblyFile);
 
-			TestCaseAssemblyCompiler.Compile(module, StaticRuntime.TypeSystem, StaticRuntime.AssemblyLoader);
-			return module;
+			List<string> files = new List<string>();
+
+			files.Add(assemblyFile);
+			files.Add(typeof(global::Mosa.Runtime.Runtime).Module.FullyQualifiedName);
+
+			StaticRuntime.TypeSystem.LoadModules(files);
+
+			TestCaseAssemblyCompiler.Compile(StaticRuntime.TypeSystem, StaticRuntime.AssemblyLoader);
 		}
 
 		public void Dispose()

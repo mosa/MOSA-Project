@@ -30,7 +30,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		[FixtureTearDown]
 		public void FixtureTearDown()
 		{
-			runtime.Dispose();
+			//runtime.Dispose();
 		}
 	}
 }

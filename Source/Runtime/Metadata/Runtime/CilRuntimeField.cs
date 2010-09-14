@@ -41,13 +41,13 @@ namespace Mosa.Runtime.Metadata.Runtime
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CilRuntimeField"/> class.
 		/// </summary>
-		/// <param name="module">The module.</param>
+		/// <param name="moduleTypeSystem">The module type system.</param>
 		/// <param name="field">The field.</param>
 		/// <param name="offset">The offset.</param>
 		/// <param name="rva">The rva.</param>
 		/// <param name="declaringType">Type of the declaring.</param>
-		public CilRuntimeField(IMetadataModule module, ref FieldRow field, ulong offset, ulong rva, RuntimeType declaringType, ITypeSystem typeSystem) :
-			base(module, declaringType, typeSystem)
+		public CilRuntimeField(IModuleTypeSystem moduleTypeSystem, ref FieldRow field, ulong offset, ulong rva, RuntimeType declaringType) :
+			base(moduleTypeSystem, declaringType)
 		{
 			this.nameIdx = field.NameStringIdx;
 			this.signature = field.SignatureBlobIdx;
@@ -56,8 +56,8 @@ namespace Mosa.Runtime.Metadata.Runtime
 			//base.Offset = offset; ?
 		}
 
-		public CilRuntimeField(RuntimeField genericField, IMetadataModule module, FieldSignature signature, ITypeSystem typeSystem) :
-			base(module, genericField.DeclaringType, typeSystem)
+		public CilRuntimeField(IModuleTypeSystem moduleTypeSystem, RuntimeField genericField, FieldSignature signature) :
+			base(moduleTypeSystem, genericField.DeclaringType)
 		{
 			this.Name = genericField.Name;
 			this.Attributes = genericField.Attributes;
@@ -95,7 +95,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 		protected override FieldSignature GetSignature()
 		{
 			FieldSignature fsig = new FieldSignature();
-			fsig.LoadSignature(this.DeclaringType, this.Module.Metadata, this.signature);
+			fsig.LoadSignature(this.DeclaringType, this.MetadataModule.Metadata, this.signature);
 			return fsig;
 		}
 
@@ -105,7 +105,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 		/// <returns>The name of the type.</returns>
 		protected override string GetName()
 		{
-			string name = this.Module.Metadata.ReadString(this.nameIdx);
+			string name = this.MetadataModule.Metadata.ReadString(this.nameIdx);
 			Debug.Assert(name != null, @"Failed to retrieve CilRuntimeMethod name.");
 			return name;
 		}

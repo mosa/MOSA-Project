@@ -21,14 +21,6 @@ namespace Mosa.Tools.Compiler.LinkTimeCodeGeneration
 	/// </summary>
 	public sealed class LinkTimeCodeGenerator
 	{
-		#region Data Members
-
-		/// <summary>
-		/// Holds the compiler generated type.
-		/// </summary>
-		private static CompilerGeneratedType compilerGeneratedType;
-
-		#endregion // Data Members
 
 		#region Methods
 
@@ -40,7 +32,7 @@ namespace Mosa.Tools.Compiler.LinkTimeCodeGeneration
 		/// <returns></returns>
 		/// <exception cref="System.ArgumentNullException"><paramref name="compiler"/> or <paramref name="methodName"/>  is null.</exception>
 		/// <exception cref="System.ArgumentException"><paramref name="methodName"/> is invalid.</exception>
-		public static CompilerGeneratedMethod Compile(AssemblyCompiler compiler, string methodName, ITypeSystem typeSystem)
+		public static LinkerGeneratedMethod Compile(AssemblyCompiler compiler, string methodName, ITypeSystem typeSystem)
 		{
 			return Compile(compiler, methodName, null, typeSystem);
 		}
@@ -54,7 +46,7 @@ namespace Mosa.Tools.Compiler.LinkTimeCodeGeneration
 		/// <returns></returns>
 		/// <exception cref="System.ArgumentNullException"><paramref name="compiler"/>, <paramref name="methodName"/> or <paramref name="instructionSet"/> is null.</exception>
 		/// <exception cref="System.ArgumentException"><paramref name="methodName"/> is invalid.</exception>
-		public static CompilerGeneratedMethod Compile(AssemblyCompiler compiler, string methodName, InstructionSet instructionSet, ITypeSystem typeSystem)
+		public static LinkerGeneratedMethod Compile(AssemblyCompiler compiler, string methodName, InstructionSet instructionSet, ITypeSystem typeSystem)
 		{
 			if (compiler == null)
 				throw new ArgumentNullException(@"compiler");
@@ -63,13 +55,18 @@ namespace Mosa.Tools.Compiler.LinkTimeCodeGeneration
 			if (methodName.Length == 0)
 				throw new ArgumentException(@"Invalid method name.");
 
+			LinkerGeneratedType compilerGeneratedType = typeSystem.InternalModuleTypeSystem.GetType(@"Mosa.Tools.Compiler", @"LinkerGenerated") as LinkerGeneratedType;
+
 			// Create the type if we need to.
 			if (compilerGeneratedType == null)
-				compilerGeneratedType = new CompilerGeneratedType(compiler.MainAssembly, @"Mosa.Tools.Compiler", @"LinkerGenerated", typeSystem);
+			{
+				compilerGeneratedType = new LinkerGeneratedType(typeSystem.InternalModuleTypeSystem, @"Mosa.Tools.Compiler", @"LinkerGenerated");
+				typeSystem.AddInternalType(compilerGeneratedType);
+			}
 
 			// Create the method
 			// HACK: <$> prevents the method from being called from CIL
-			CompilerGeneratedMethod method = new CompilerGeneratedMethod(compiler.MainAssembly, "<$>" + methodName, compilerGeneratedType, typeSystem);
+			LinkerGeneratedMethod method = new LinkerGeneratedMethod(typeSystem.InternalModuleTypeSystem, "<$>" + methodName, compilerGeneratedType);
 			compilerGeneratedType.AddMethod(method);
 
 			LinkerMethodCompiler methodCompiler = new LinkerMethodCompiler(compiler, compiler.Pipeline.FindFirst<ICompilationSchedulerStage>(), method, instructionSet);

@@ -26,67 +26,24 @@ namespace Mosa.Runtime.Vm
 	/// </remarks>
 	public interface ITypeSystem
 	{
-		#region Properties
 
 		/// <summary>
-		/// Returns an array of all fields loaded in the type system.
+		/// Loads the modules.
 		/// </summary>
-		RuntimeField[] Fields { get; }
+		/// <param name="files">The files.</param>
+		void LoadModules(IEnumerable<string> files);
 
 		/// <summary>
-		/// Returns an array of all methods in the type system.
+		/// Adds the module reference.
 		/// </summary>
-		RuntimeMethod[] Methods { get; }
+		/// <param name="file">The file.</param>
+		IModuleTypeSystem ResolveModuleReference(string file);
 
 		/// <summary>
-		/// Returns an array of all parameters in the type system.
+		/// Gets the main module type system.
 		/// </summary>
-		RuntimeParameter[] Parameters { get; }
-
-		/// <summary>
-		/// Returns an array of all types in the type system.
-		/// </summary>
-		RuntimeType[] Types { get; }
-
-		#endregion // Properties
-
-		#region Methods
-
-		/// <summary>
-		/// Notifies the type system that a CIL module was loaded.
-		/// </summary>
-		/// <param name="module">The loaded module.</param>
-		void AssemblyLoaded(IMetadataModule module);
-
-		/// <summary>
-		/// Gets the types from module.
-		/// </summary>
-		/// <param name="module">The module.</param>
 		/// <returns></returns>
-		ReadOnlyRuntimeTypeListView GetTypesFromModule(IMetadataModule module);
-
-		/// <summary>
-		/// Gets the module offset.
-		/// </summary>
-		/// <param name="module">The module.</param>
-		/// <returns></returns>
-		ModuleOffsets GetModuleOffset(IMetadataModule module);
-
-		/// <summary>
-		/// Finds the type index from token.
-		/// </summary>
-		/// <param name="module">The module.</param>
-		/// <param name="token">The token.</param>
-		/// <returns></returns>
-		int FindTypeIndexFromToken(IMetadataModule module, TokenTypes token);
-
-		/// <summary>
-		/// Retrieves the runtime type for a given metadata token.
-		/// </summary>
-		/// <param name="module">The module, which owns the token.</param>
-		/// <param name="token">The token of the type to load. This can represent a typeref, typedef or typespec token.</param>
-		/// <returns>The runtime type of the specified token.</returns>
-		RuntimeType GetType(ISignatureContext context, IMetadataModule module, TokenTypes token);
+		IModuleTypeSystem GetMainModuleTypeSystem();
 
 		/// <summary>
 		/// Retrieves the runtime type for a given type name.
@@ -96,29 +53,22 @@ namespace Mosa.Runtime.Vm
 		RuntimeType GetType(string typeName);
 
 		/// <summary>
-		/// Retrieves the _stackFrameIndex definition identified by the given token in the scope.
+		/// Gets the compiled types.
 		/// </summary>
-		/// <param name="context">The generic parameter resolution context.</param>
-		/// <param name="module">The module of the token definition.</param>
-		/// <param name="token">The token of the _stackFrameIndex to retrieve.</param>
-		RuntimeField GetField(ISignatureContext context, IMetadataModule module, TokenTypes token);
-
-		/// <summary>
-		/// Retrieves the method definition identified by the given token in the scope.
-		/// </summary>
-		/// <param name="module">The scope of the token definition.</param>
-		/// <param name="token">The token of the method to retrieve.</param>
-		RuntimeMethod GetMethod(ISignatureContext context, IMetadataModule module, TokenTypes token);
-
-		/// <summary>
-		/// Resolves the type of the signature.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="module">The module.</param>
-		/// <param name="sigType">Type of the signature.</param>
 		/// <returns></returns>
-		RuntimeType ResolveSignatureType(ISignatureContext context, IMetadataModule module, SigType sigType);
+		IEnumerable<RuntimeType> GetCompiledTypes();
 
-		#endregion // Methods
+		/// <summary>
+		/// Gets the internal module type system.
+		/// </summary>
+		/// <value>The internal module type system.</value>
+		IModuleTypeSystem InternalModuleTypeSystem { get; }
+
+		/// <summary>
+		/// Adds the internal compiler defined type to the type system
+		/// </summary>
+		/// <param name="type">The type.</param>
+		void AddInternalType(RuntimeType type);
+
 	}
 }

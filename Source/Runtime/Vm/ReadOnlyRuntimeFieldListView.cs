@@ -37,23 +37,22 @@ namespace Mosa.Runtime.Vm
 		/// <summary>
 		/// Initializes a new instance of <see cref="ReadOnlyRuntimeFieldListView"/>.
 		/// </summary>
-		/// <param name="firstIndex">The first index of the list view.</param>
+		/// <param name="start">The first index of the list view.</param>
 		/// <param name="count">The number of elements in the list view.</param>
-		public ReadOnlyRuntimeFieldListView(int firstIndex, int count, ITypeSystem typeSystem)
-			: base(firstIndex, count, typeSystem)
+		public ReadOnlyRuntimeFieldListView(IModuleTypeSystem moduleTypeSystem, int start, int count)
+			: base(moduleTypeSystem, start, count)
 		{
 		}
 
 		#endregion // Construction
 
 		#region Overrides
-
 		/// <summary>
 		/// Returns the fields array, which is viewed by this collection.
 		/// </summary>
 		protected override RuntimeField[] Items
 		{
-			get { if (typeSystem == null) return null; else return typeSystem.Fields; }
+			get { if (moduleTypeSystem == null) return null; else return moduleTypeSystem.Fields; }
 		}
 
 		#endregion // Overrides

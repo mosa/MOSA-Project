@@ -54,7 +54,7 @@ namespace Mosa.Runtime.Vm
 		/// <summary>
 		/// Holds the (cached) namespace of the type.
 		/// </summary>
-		private string @namespace;
+		private string nameSpace;
 
 		/// <summary>
 		/// Holds the calculated native size of the type.
@@ -90,10 +90,10 @@ namespace Mosa.Runtime.Vm
 		/// <summary>
 		/// Initializes a new instance of the <see cref="RuntimeType"/> class.
 		/// </summary>
+		/// <param name="moduleTypeSystem"></param>
 		/// <param name="token">The token of the type.</param>
-		/// <param name="module">The module.</param>
-		public RuntimeType(int token, IMetadataModule module, ITypeSystem typeSystem) :
-			base(token, module, null, null, typeSystem)
+		public RuntimeType(IModuleTypeSystem moduleTypeSystem, int token) :
+			base(moduleTypeSystem, token, null, null)
 		{
 		}
 
@@ -141,7 +141,7 @@ namespace Mosa.Runtime.Vm
 			{
 				this.AssertBaseTypeIsLoaded();
 
-				RuntimeType valueType = typeSystem.GetType(@"System.ValueType");
+				RuntimeType valueType = moduleTypeSystem.TypeSystem.GetType(@"System.ValueType");
 				return this.IsSubclassOf(valueType);
 			}
 		}
@@ -207,23 +207,23 @@ namespace Mosa.Runtime.Vm
 		{
 			get
 			{
-				if (this.@namespace == null)
+				if (this.nameSpace == null)
 				{
-					this.@namespace = GetNamespace();
-					Debug.Assert(this.@namespace != null, @"GetNamespace() failed");
+					this.nameSpace = GetNamespace();
+					Debug.Assert(this.nameSpace != null, @"GetNamespace() failed");
 				}
 
-				return this.@namespace;
+				return this.nameSpace;
 			}
 
 			set
 			{
 				if (value == null)
 					throw new ArgumentNullException(@"value");
-				if (this.@namespace != null)
+				if (this.nameSpace != null)
 					throw new InvalidOperationException();
 
-				this.@namespace = value;
+				this.nameSpace = value;
 			}
 		}
 
@@ -426,7 +426,7 @@ namespace Mosa.Runtime.Vm
 			{
 				this.AssertBaseTypeIsLoaded();
 
-				RuntimeType delegateType = typeSystem.GetType(@"System.Delegate, mscorlib");
+				RuntimeType delegateType = moduleTypeSystem.TypeSystem.GetType(@"System.Delegate, mscorlib");
 				return this.IsSubclassOf(delegateType);
 			}
 		}
@@ -437,7 +437,7 @@ namespace Mosa.Runtime.Vm
 			{
 				this.AssertBaseTypeIsLoaded();
 
-				RuntimeType enumType = typeSystem.GetType(@"System.Enum");
+				RuntimeType enumType = moduleTypeSystem.TypeSystem.GetType(@"System.Enum");
 				return ReferenceEquals(this.BaseType, enumType);
 			}
 		}

@@ -19,8 +19,8 @@ namespace Mosa.Runtime.Vm
 	/// <remarks>
 	/// This list is a read-only view of the this.Items list.
 	/// </remarks>
-	public abstract class ReadOnlyRuntimeListView<TItemType> :
-		IList<TItemType>, IList where TItemType : IEquatable<TItemType>
+	public abstract class ReadOnlyRuntimeListView<T> :
+		IList<T>, IList where T : IEquatable<T>
 	{
 		#region Data members
 
@@ -32,12 +32,12 @@ namespace Mosa.Runtime.Vm
 		/// <summary>
 		/// Holds the index of the first _stackFrameIndex in this list.
 		/// </summary>
-		private int firstItem;
+		private int start;
 
 		/// <summary>
 		/// Holds the static instance of the runtime.
 		/// </summary>
-		protected ITypeSystem typeSystem;
+		protected IModuleTypeSystem moduleTypeSystem;
 
 		#endregion // Data members
 
@@ -51,22 +51,21 @@ namespace Mosa.Runtime.Vm
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="ReadOnlyRuntimeListView{TItemType}"/> class.
+		/// Initializes a new instance of the <see cref="ReadOnlyRuntimeListView&lt;T&gt;"/> class.
 		/// </summary>
-		/// <param name="firstField">The index of the first _stackFrameIndex. May not be negative.</param>
+		/// <param name="moduleTypeSystem">The module type system.</param>
+		/// <param name="start">The index of the first _stackFrameIndex. May not be negative.</param>
 		/// <param name="count">The number of fields in the list. Must be larger than zero.</param>
-		public ReadOnlyRuntimeListView(int firstField, int count, ITypeSystem typeSystem)
+		public ReadOnlyRuntimeListView(IModuleTypeSystem moduleTypeSystem, int start, int count)
 		{
-			if (0 > firstField)
-				throw new ArgumentOutOfRangeException(@"firstField", firstField, @"May not be negative.");
+			if (0 > start)
+				throw new ArgumentOutOfRangeException(@"firstField", start, @"May not be negative.");
 			if (0 > count)
 				throw new ArgumentOutOfRangeException(@"count", count, @"Must be larger than zero.");
 
-			firstItem = firstField;
+			this.start = start;
 			this.count = count;
-			this.typeSystem = typeSystem;
-
-			System.Diagnostics.Debug.Assert(typeSystem != null);
+			this.moduleTypeSystem = moduleTypeSystem;
 		}
 
 		#endregion // Construction
@@ -76,46 +75,46 @@ namespace Mosa.Runtime.Vm
 		/// <summary>
 		/// Retrieves the items of the list.
 		/// </summary>
-		protected abstract TItemType[] Items { get; }
+		protected abstract T[] Items { get; }
 
 		#endregion // Properties
 
 		#region IList<TItemType> Members
 
-		int IList<TItemType>.IndexOf(TItemType item)
+		int IList<T>.IndexOf(T item)
 		{
-			TItemType[] items = Items;
+			T[] items = Items;
 
 			if (items == null)
 				return -1;
 
 			for (int i = 0; i < count; i++)
 			{
-				if (item.Equals(items[firstItem + i]))
+				if (item.Equals(items[start + i]))
 					return i;
 			}
 
 			return -1;
 		}
 
-		void IList<TItemType>.Insert(int index, TItemType item)
+		void IList<T>.Insert(int index, T item)
 		{
 			throw new NotSupportedException();
 		}
 
-		void IList<TItemType>.RemoveAt(int index)
+		void IList<T>.RemoveAt(int index)
 		{
 			throw new NotSupportedException();
 		}
 
-		TItemType IList<TItemType>.this[int index]
+		T IList<T>.this[int index]
 		{
 			get
 			{
 				if (0 > index || index >= count)
 					throw new ArgumentOutOfRangeException(@"index");
 
-				return Items[firstItem + index];
+				return Items[start + index];
 			}
 			set
 			{
@@ -127,57 +126,57 @@ namespace Mosa.Runtime.Vm
 
 		#region ICollection<TItemType> Members
 
-		void ICollection<TItemType>.Add(TItemType item)
+		void ICollection<T>.Add(T item)
 		{
 			throw new NotSupportedException();
 		}
 
-		void ICollection<TItemType>.Clear()
+		void ICollection<T>.Clear()
 		{
 			throw new NotSupportedException();
 		}
 
-		bool ICollection<TItemType>.Contains(TItemType item)
+		bool ICollection<T>.Contains(T item)
 		{
-			TItemType[] items = Items;
+			T[] items = Items;
 
 			if (items == null)
 				return false;
 
 			for (int i = 0; i < count; i++)
 			{
-				if (item.Equals(items[firstItem + i]))
+				if (item.Equals(items[start + i]))
 					return true;
 			}
 
 			return false;
 		}
 
-		void ICollection<TItemType>.CopyTo(TItemType[] array, int arrayIndex)
+		void ICollection<T>.CopyTo(T[] array, int arrayIndex)
 		{
 			if (null == array)
 				throw new ArgumentNullException(@"array");
 			if (arrayIndex + count > array.Length)
 				throw new ArgumentException(@"Insufficient array space.");
 
-			TItemType[] items = Items;
+			T[] items = Items;
 			for (int i = 0; i < count; i++)
 			{
-				array[arrayIndex + i] = items[firstItem + i];
+				array[arrayIndex + i] = items[start + i];
 			}
 		}
 
-		int ICollection<TItemType>.Count
+		int ICollection<T>.Count
 		{
 			get { return count; }
 		}
 
-		bool ICollection<TItemType>.IsReadOnly
+		bool ICollection<T>.IsReadOnly
 		{
 			get { return true; }
 		}
 
-		bool ICollection<TItemType>.Remove(TItemType item)
+		bool ICollection<T>.Remove(T item)
 		{
 			throw new NotSupportedException();
 		}
@@ -186,14 +185,14 @@ namespace Mosa.Runtime.Vm
 
 		#region IEnumerable<TItemType> Members
 
-		IEnumerator<TItemType> IEnumerable<TItemType>.GetEnumerator()
+		IEnumerator<T> IEnumerable<T>.GetEnumerator()
 		{
-			TItemType[] items = Items;
+			T[] items = Items;
 			if (items != null)
 			{
 				for (int i = 0; i < count; i++)
 				{
-					yield return items[firstItem + i];
+					yield return items[start + i];
 				}
 			}
 		}
@@ -204,12 +203,12 @@ namespace Mosa.Runtime.Vm
 
 		IEnumerator IEnumerable.GetEnumerator()
 		{
-			TItemType[] items = Items;
+			T[] items = Items;
 			if (items != null)
 			{
 				for (int i = 0; i < count; i++)
 				{
-					yield return items[firstItem + i];
+					yield return items[start + i];
 				}
 			}
 		}
@@ -232,17 +231,17 @@ namespace Mosa.Runtime.Vm
 		{
 			if (null == value)
 				throw new ArgumentNullException(@"value");
-			if (!(value is TItemType))
+			if (!(value is T))
 				throw new ArgumentException(@"Wrong value type.", @"value");
 
-			TItemType item = (TItemType)value;
-			TItemType[] items = Items;
+			T item = (T)value;
+			T[] items = Items;
 
 			if (items == null)
 				return false;
 
 			for (int i = 0; i < count; i++)
-				if (item.Equals(items[firstItem + i]))
+				if (item.Equals(items[start + i]))
 					return true;
 
 			return false;
@@ -252,17 +251,17 @@ namespace Mosa.Runtime.Vm
 		{
 			if (null == value)
 				throw new ArgumentNullException(@"value");
-			if (!(value is TItemType))
+			if (!(value is T))
 				throw new ArgumentException(@"Wrong value type.", @"value");
 
-			TItemType item = (TItemType)value;
-			TItemType[] items = Items;
+			T item = (T)value;
+			T[] items = Items;
 
 			if (items == null)
 				return -1;
 
 			for (int i = 0; i < count; i++)
-				if (item.Equals(items[firstItem + i]))
+				if (item.Equals(items[start + i]))
 					return i;
 
 			return -1;
@@ -297,7 +296,7 @@ namespace Mosa.Runtime.Vm
 		{
 			get
 			{
-				return Items[firstItem + index];
+				return Items[start + index];
 			}
 			set
 			{
@@ -316,13 +315,13 @@ namespace Mosa.Runtime.Vm
 			if (index + count > array.Length)
 				throw new ArgumentException(@"Insufficient array space.");
 
-			TItemType[] results = array as TItemType[];
-			TItemType[] items = Items;
+			T[] results = array as T[];
+			T[] items = Items;
 			if (null == results)
 				throw new ArgumentException(@"Wrong array type.");
 			for (int i = 0; i < count; i++)
 			{
-				results[index + i] = items[firstItem + i];
+				results[index + i] = items[start + i];
 			}
 		}
 

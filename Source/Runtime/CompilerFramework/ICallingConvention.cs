@@ -10,6 +10,7 @@
 using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Metadata;
+using Mosa.Runtime.Vm;
 
 namespace Mosa.Runtime.CompilerFramework
 {
@@ -24,8 +25,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="signatureContext">The method signature context.</param>
-		/// <param name="metadata">The metadata of the caller.</param>
-		void MakeCall(Context context, ISignatureContext signatureContext, IMetadataProvider metadata);
+		/// <param name="moduleTypeSystem">The module type system.</param>
+		void MakeCall(Context context, ISignatureContext signatureContext, IModuleTypeSystem moduleTypeSystem);
 
 		/// <summary>
 		/// Retrieves the stack requirements of a stack operand.

@@ -32,11 +32,6 @@ namespace Mosa.Runtime.Metadata.Runtime
 		private TokenTypes baseTypeToken;
 
 		/// <summary>
-		/// The metadata module, which owns this type.
-		/// </summary>
-		private IMetadataModule module;
-
-		/// <summary>
 		/// The name index of the defined type.
 		/// </summary>
 		private TokenTypes nameIdx;
@@ -53,18 +48,17 @@ namespace Mosa.Runtime.Metadata.Runtime
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CilRuntimeType"/> class.
 		/// </summary>
+		/// <param name="moduleTypeSystem">The module type system.</param>
 		/// <param name="token">The token.</param>
-		/// <param name="module">The module.</param>
 		/// <param name="typeDefRow">The type def row.</param>
 		/// <param name="maxField">The max field.</param>
 		/// <param name="maxMethod">The max method.</param>
 		/// <param name="packing">The packing.</param>
 		/// <param name="size">The size.</param>
-		public CilRuntimeType(TokenTypes token, IMetadataModule module, TypeDefRow typeDefRow, TokenTypes maxField, TokenTypes maxMethod, int packing, int size, ITypeSystem typeSystem) :
-			base((int)token, module, typeSystem)
+		public CilRuntimeType(IModuleTypeSystem moduleTypeSystem, TokenTypes token, TypeDefRow typeDefRow, TokenTypes maxField, TokenTypes maxMethod, int packing, int size) :
+			base(moduleTypeSystem, (int)token)
 		{
 			this.baseTypeToken = typeDefRow.Extends;
-			this.module = module;
 			this.nameIdx = typeDefRow.TypeNameIdx;
 			this.namespaceIdx = typeDefRow.TypeNamespaceIdx;
 
@@ -76,8 +70,8 @@ namespace Mosa.Runtime.Metadata.Runtime
 			int members = maxField - typeDefRow.FieldList;
 			if (0 < members)
 			{
-				int i = (int)(typeDefRow.FieldList & TokenTypes.RowIndexMask) - 1 + typeSystem.GetModuleOffset(module).FieldOffset;
-				base.Fields = new ReadOnlyRuntimeFieldListView(i, members, typeSystem);
+				int i = (int)(typeDefRow.FieldList & TokenTypes.RowIndexMask) - 1 ;
+				base.Fields = new ReadOnlyRuntimeFieldListView(moduleTypeSystem,i, members);
 			}
 			else
 			{
@@ -88,8 +82,8 @@ namespace Mosa.Runtime.Metadata.Runtime
 			members = maxMethod - typeDefRow.MethodList;
 			if (0 < members)
 			{
-				int i = (int)(typeDefRow.MethodList & TokenTypes.RowIndexMask) - 1 + typeSystem.GetModuleOffset(module).MethodOffset;
-				base.Methods = new ReadOnlyRuntimeMethodListView(i, members, typeSystem);
+				int i = (int)(typeDefRow.MethodList & TokenTypes.RowIndexMask) - 1;
+				base.Methods = new ReadOnlyRuntimeMethodListView(moduleTypeSystem, i, members);
 			}
 			else
 			{
@@ -112,7 +106,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 		{
 			CilRuntimeType crt = other as CilRuntimeType;
 			return (crt != null &&
-					this.module == crt.module &&
+					this.moduleTypeSystem == crt.moduleTypeSystem &&
 					this.nameIdx == crt.nameIdx &&
 					this.namespaceIdx == crt.namespaceIdx &&
 					this.baseTypeToken == crt.baseTypeToken &&
@@ -125,7 +119,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 		/// <returns>The base type.</returns>
 		protected override RuntimeType GetBaseType()
 		{
-			return typeSystem.GetType(this, this.Module, this.baseTypeToken);
+			return moduleTypeSystem.GetType(this, this.baseTypeToken);
 		}
 
 		/// <summary>
@@ -134,7 +128,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 		/// <returns>The name of the type.</returns>
 		protected override string GetName()
 		{
-			string name = module.Metadata.ReadString(this.nameIdx);
+			string name = moduleTypeSystem.MetadataModule.Metadata.ReadString(this.nameIdx);
 			Debug.Assert(name != null, @"Failed to retrieve CilRuntimeMethod name.");
 			return name;
 		}
@@ -145,22 +139,22 @@ namespace Mosa.Runtime.Metadata.Runtime
 		/// <returns>The namespace of the type.</returns>
 		protected override string GetNamespace()
 		{
-			string @namespace;
+			string nameSpace;
 			if (IsNested)
 			{
 				TokenTypes enclosingType = GetEnclosingType(Token);
-				TypeDefRow typeDef = this.module.Metadata.ReadTypeDefRow(enclosingType);
+				TypeDefRow typeDef = moduleTypeSystem.MetadataModule.Metadata.ReadTypeDefRow(enclosingType);
 
-				string @enclosingNamespace = this.module.Metadata.ReadString(typeDef.TypeNamespaceIdx);
-				string @enclosingTypeName = this.module.Metadata.ReadString(typeDef.TypeNameIdx);
-				@namespace = enclosingNamespace + "." + enclosingTypeName;
+				string @enclosingNamespace = moduleTypeSystem.MetadataModule.Metadata.ReadString(typeDef.TypeNamespaceIdx);
+				string @enclosingTypeName = moduleTypeSystem.MetadataModule.Metadata.ReadString(typeDef.TypeNameIdx);
+				nameSpace = enclosingNamespace + "." + enclosingTypeName;
 			}
 			else
 			{
-				@namespace = this.module.Metadata.ReadString(this.namespaceIdx);
+				nameSpace = moduleTypeSystem.MetadataModule.Metadata.ReadString(this.namespaceIdx);
 			}
-			Debug.Assert(@namespace != null, @"Failed to retrieve CilRuntimeMethod name.");
-			return @namespace;
+			Debug.Assert(nameSpace != null, @"Failed to retrieve CilRuntimeMethod name.");
+			return nameSpace;
 		}
 
 		private TokenTypes GetEnclosingType(int token)
@@ -168,7 +162,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 			NestedClassRow row;
 			for (int i = 1; ; ++i)
 			{
-				row = this.module.Metadata.ReadNestedClassRow(TokenTypes.NestedClass + i);
+				row = moduleTypeSystem.MetadataModule.Metadata.ReadNestedClassRow(TokenTypes.NestedClass + i);
 				if (row.NestedClassTableIdx == (TokenTypes)token)
 					break;
 			}
@@ -189,7 +183,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 		protected override IList<RuntimeType> LoadInterfaces()
 		{
 			List<RuntimeType> result = null;
-			IMetadataProvider metadata = this.module.Metadata;
+			IMetadataProvider metadata = moduleTypeSystem.MetadataModule.Metadata;
 
 			TokenTypes maxToken = metadata.GetMaxTokenValue(TokenTypes.InterfaceImpl);
 			for (TokenTypes token = TokenTypes.InterfaceImpl + 1; token <= maxToken; token++)
@@ -197,7 +191,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 				InterfaceImplRow row = metadata.ReadInterfaceImplRow(token);
 				if (row.ClassTableIdx == (TokenTypes)this.Token)
 				{
-					RuntimeType interfaceType = typeSystem.GetType(DefaultSignatureContext.Instance, this.module, row.InterfaceTableIdx);
+					RuntimeType interfaceType = moduleTypeSystem.GetType(DefaultSignatureContext.Instance, row.InterfaceTableIdx);
 
 					if (result == null)
 					{

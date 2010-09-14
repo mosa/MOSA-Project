@@ -15,6 +15,7 @@ using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Metadata;
+using Mosa.Runtime.Vm;
 
 namespace Mosa.Platforms.x86
 {
@@ -57,7 +58,7 @@ namespace Mosa.Platforms.x86
 		/// <returns>
 		/// A single instruction or an array of instructions, which appropriately represent the method call.
 		/// </returns>
-		public void MakeCall(Context ctx, ISignatureContext context, IMetadataProvider metadata)
+		void ICallingConvention.MakeCall(Context ctx, ISignatureContext context, IModuleTypeSystem moduleTypeSystem)
 		{
 			/*
 			 * Calling convention is right-to-left, pushed on the stack. Return value in EAX for integral
@@ -72,10 +73,10 @@ namespace Mosa.Platforms.x86
 
 			ctx.SetInstruction(CPUx86.Instruction.NopInstruction);
 
-			int stackSize = this.ReserveStackSizeForCall(ctx, metadata, context, operands);
+			int stackSize = this.ReserveStackSizeForCall(ctx, moduleTypeSystem, context, operands);
 			if (stackSize != 0)
 			{
-				this.PushOperands(context, ctx, operands, stackSize, metadata);
+				this.PushOperands(context, ctx, operands, stackSize, moduleTypeSystem);
 			}
 
 			ctx.AppendInstruction(CPUx86.Instruction.CallInstruction, null, invokeTarget);
@@ -104,9 +105,9 @@ namespace Mosa.Platforms.x86
 			return operandStack;
 		}
 
-		private int ReserveStackSizeForCall(Context ctx, IMetadataProvider metadata, ISignatureContext signatureContext, IEnumerable<Operand> operands)
+		private int ReserveStackSizeForCall(Context ctx, IModuleTypeSystem moduleTypeSystem, ISignatureContext signatureContext, IEnumerable<Operand> operands)
 		{
-			int stackSize = CalculateStackSizeForParameters(signatureContext, operands, metadata);
+			int stackSize = CalculateStackSizeForParameters(signatureContext, operands, moduleTypeSystem);
 			if (stackSize != 0)
 			{
 				RegisterOperand esp = new RegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.ESP);
@@ -144,7 +145,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		/// <param name="operandStack">The operand stack.</param>
 		/// <param name="space">The space.</param>
-		private void PushOperands(ISignatureContext context, Context ctx, Stack<Operand> operandStack, int space, IMetadataProvider metadata)
+		private void PushOperands(ISignatureContext context, Context ctx, Stack<Operand> operandStack, int space, IModuleTypeSystem moduleTypeSystem)
 		{
 			while (operandStack.Count != 0)
 			{
@@ -154,7 +155,7 @@ namespace Mosa.Platforms.x86
 				architecture.GetTypeRequirements(operand.Type, out size, out alignment);
 
 				if (operand.Type.Type == CilElementType.ValueType)
-					size = ObjectModelUtility.ComputeTypeSize(context, (operand.Type as ValueTypeSigType).Token, metadata, architecture);
+					size = ObjectModelUtility.ComputeTypeSize(context, (operand.Type as ValueTypeSigType).Token, moduleTypeSystem, architecture);
 
 				space -= size;
 				Push(ctx, operand, space, size);
@@ -273,10 +274,11 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Calculates the stack size for parameters.
 		/// </summary>
+		/// <param name="context">The context.</param>
 		/// <param name="operands">The operands.</param>
-		/// <param name="metadata">The metadata.</param>
+		/// <param name="moduleTypeSystem">The module type system.</param>
 		/// <returns></returns>
-		private int CalculateStackSizeForParameters(ISignatureContext context, IEnumerable<Operand> operands, IMetadataProvider metadata)
+		private int CalculateStackSizeForParameters(ISignatureContext context, IEnumerable<Operand> operands, IModuleTypeSystem moduleTypeSystem)
 		{
 			int result = 0;
 			int size, alignment;
@@ -287,7 +289,7 @@ namespace Mosa.Platforms.x86
 
 				if (op.Type.Type == CilElementType.ValueType)
 				{
-					size = ObjectModelUtility.ComputeTypeSize(context, (op.Type as Runtime.Metadata.Signatures.ValueTypeSigType).Token, metadata, architecture);
+					size = ObjectModelUtility.ComputeTypeSize(context, (op.Type as Runtime.Metadata.Signatures.ValueTypeSigType).Token, moduleTypeSystem, architecture);
 				}
 
 				result += size;
@@ -301,7 +303,7 @@ namespace Mosa.Platforms.x86
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <param name="operand">The operand, that's holding the return value.</param>
-		public void MoveReturnValue(Context ctx, Operand operand)
+		void ICallingConvention.MoveReturnValue(Context ctx, Operand operand)
 		{
 			int size, alignment;
 			this.architecture.GetTypeRequirements(operand.Type, out size, out alignment);
@@ -344,14 +346,14 @@ namespace Mosa.Platforms.x86
 			}
 		}
 
-		public void GetStackRequirements(StackOperand stackOperand, out int size, out int alignment)
+		void ICallingConvention.GetStackRequirements(StackOperand stackOperand, out int size, out int alignment)
 		{
 			// Special treatment for some stack types
 			// FIXME: Handle the size and alignment requirements of value types
 			this.architecture.GetTypeRequirements(stackOperand.Type, out size, out alignment);
 		}
 
-		public int OffsetOfFirstLocal
+		int ICallingConvention.OffsetOfFirstLocal
 		{
 			get
 			{
@@ -372,8 +374,7 @@ namespace Mosa.Platforms.x86
 			}
 		}
 
-
-		public int OffsetOfFirstParameter
+		int ICallingConvention.OffsetOfFirstParameter
 		{
 			get
 			{

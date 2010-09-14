@@ -150,10 +150,5 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value>The type system.</value>
 		ITypeSystem TypeSystem { get; }
 
-		/// <summary>
-		/// Gets the assembly loader.
-		/// </summary>
-		/// <value>The assembly loader.</value>
-		IAssemblyLoader AssemblyLoader { get; }
 	}
 }

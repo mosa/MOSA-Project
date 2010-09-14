@@ -729,7 +729,7 @@ namespace Mosa.Platforms.x86
 		{
 			ICallingConvention cc = Architecture.GetCallingConvention();
 			Debug.Assert(null != cc, @"Failed to retrieve the calling convention.");
-			cc.MakeCall(ctx, this.MethodCompiler.Method, MethodCompiler.Assembly.Metadata);
+			cc.MakeCall(ctx, this.MethodCompiler.Method, this.MethodCompiler.Method.ModuleTypeSystem);
 		}
 
 		/// <summary>

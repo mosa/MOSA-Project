@@ -48,7 +48,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 			ctx.Token = token;
 
-			Mosa.Runtime.Vm.RuntimeType type = decoder.TypeSystem.GetType(decoder.Method, decoder.Compiler.Assembly, token);
+			Mosa.Runtime.Vm.RuntimeType type = decoder.ModuleTypeSystem.GetType(decoder.Method, token);
 		}
 
 		/// <summary>

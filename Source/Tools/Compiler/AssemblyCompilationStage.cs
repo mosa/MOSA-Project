@@ -29,9 +29,8 @@ namespace Mosa.Tools.Compiler
 
 		private ITypeInitializerSchedulerStage typeInitializerSchedulerStage;
 
-		public AssemblyCompilationStage(IAssemblyLoader assemblyLoader)
+		public AssemblyCompilationStage()
 		{
-			this.assemblyLoader = assemblyLoader;
 		}
 
 		#region IPipelineStage members
@@ -60,7 +59,7 @@ namespace Mosa.Tools.Compiler
 
 		void IAssemblyCompilerStage.Run()
 		{
-			CompileAssembly(assemblyLoader.GetModule(0));
+			CompileAssembly();
 		}
 
 		#endregion IAssemblyCompilerStage
@@ -102,9 +101,9 @@ namespace Mosa.Tools.Compiler
 			}
 		}
 
-		private void CompileAssembly(IMetadataModule assembly)
+		private void CompileAssembly()
 		{
-			using (AotAssemblyCompiler assemblyCompiler = new AotAssemblyCompiler(architecture, assembly, typeInitializerSchedulerStage, linker, typeSystem, assemblyLoader))
+			using (AotAssemblyCompiler assemblyCompiler = new AotAssemblyCompiler(architecture, typeInitializerSchedulerStage, linker, typeSystem))
 			{
 				assemblyCompiler.Run();
 			}

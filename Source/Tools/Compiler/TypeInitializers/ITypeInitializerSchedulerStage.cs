@@ -17,7 +17,7 @@ namespace Mosa.Tools.Compiler.TypeInitializers
 		/// Gets the intializer method.
 		/// </summary>
 		/// <value>The method.</value>
-		CompilerGeneratedMethod Method { get; }
+		LinkerGeneratedMethod Method { get; }
 
 		/// <summary>
 		/// Schedules the specified method for invocation in the main.

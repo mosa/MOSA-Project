@@ -42,13 +42,13 @@ namespace Mosa.Runtime.Metadata.Runtime
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CilRuntimeMethod"/> class.
 		/// </summary>
+		/// <param name="moduleTypeSystem">The module type system.</param>
 		/// <param name="token">The token.</param>
-		/// <param name="module">The module.</param>
 		/// <param name="method">The method.</param>
 		/// <param name="maxParam">The max param.</param>
 		/// <param name="declaringType">Type of the declaring.</param>
-		public CilRuntimeMethod(int token, IMetadataModule module, MethodDefRow method, TokenTypes maxParam, RuntimeType declaringType, ITypeSystem typeSystem) :
-			base((int)token, module, declaringType, typeSystem)
+		public CilRuntimeMethod(IModuleTypeSystem moduleTypeSystem, int token, MethodDefRow method, TokenTypes maxParam, RuntimeType declaringType) :
+			base(moduleTypeSystem, (int)token, declaringType)
 		{
 			this.nameIdx = method.NameStringIdx;
 			this.signatureBlobIdx = method.SignatureBlobIdx;
@@ -59,8 +59,8 @@ namespace Mosa.Runtime.Metadata.Runtime
 			if (method.ParamList < maxParam)
 			{
 				int count = maxParam - method.ParamList;
-				int p = (int)(method.ParamList & TokenTypes.RowIndexMask) - 1 + typeSystem.GetModuleOffset(module).ParameterOffset;
-				base.Parameters = new ReadOnlyRuntimeParameterListView(p, count, typeSystem);
+				int start = (int)(method.ParamList & TokenTypes.RowIndexMask) - 1;
+				base.Parameters = new ReadOnlyRuntimeParameterListView(moduleTypeSystem, start, count);
 			}
 			else
 			{
@@ -92,7 +92,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 		protected override MethodSignature GetMethodSignature()
 		{
 			MethodSignature signature = new MethodSignature();
-			signature.LoadSignature(this, this.Module.Metadata, this.signatureBlobIdx);
+			signature.LoadSignature(this, this.MetadataModule.Metadata, this.signatureBlobIdx);
 			return signature;
 		}
 
@@ -102,7 +102,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 		/// <returns>The name of the type.</returns>
 		protected override string GetName()
 		{
-			string name = this.Module.Metadata.ReadString(this.nameIdx);
+			string name = this.MetadataModule.Metadata.ReadString(this.nameIdx);
 			Debug.Assert(name != null, @"Failed to retrieve CilRuntimeMethod name.");
 			return name;
 		}

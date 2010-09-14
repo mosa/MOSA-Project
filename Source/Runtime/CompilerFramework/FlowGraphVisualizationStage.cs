@@ -163,7 +163,7 @@ namespace Mosa.Runtime.CompilerFramework
 				//dotFile = new System.IO.StreamWriter("dotGraph_" + compiler.Method.Name + "_" + methodCount[compiler.Method.Name] + ".dot");
 				dotFile = new System.IO.StreamWriter("dotGraph.dot");
 				dotFile.WriteLine("digraph \"\" {");
-				dotFile.WriteLine("label = \"" + MethodCompiler.Assembly.Names[0] + "\"");
+				dotFile.WriteLine("label = \"" + MethodCompiler.Assembly.Name + "\"");
 			}
 			catch (System.Exception)
 			{

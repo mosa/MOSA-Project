@@ -199,7 +199,7 @@ namespace Mosa.Tools.Compiler.Metadata
 			Initialize();
 			try
 			{
-				WriteMetadata();
+				//WriteMetadata();  // FIXME
 			}
 			finally
 			{
@@ -216,7 +216,6 @@ namespace Mosa.Tools.Compiler.Metadata
 		{
 			metadataStream = AllocateMetadataStream();
 			metadataWriter = new BinaryWriter(metadataStream, Encoding.UTF8);
-			metadataSource = compiler.MainAssembly.Metadata;
 		}
 
 		/// <summary>

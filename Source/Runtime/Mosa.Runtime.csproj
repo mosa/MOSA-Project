@@ -255,7 +255,6 @@
     <Compile Include="CompilerFramework\LoopAwareBlockOrderStage.cs" />
     <Compile Include="CompilerFramework\LocalCSE.cs" />
     <Compile Include="CompilerFramework\IMethodCompiler.cs" />
-    <Compile Include="Loader\MergedMetadata.cs" />
     <Compile Include="Loader\PE\StreamHeader.cs" />
     <Compile Include="Memory\IMemoryPageManager.cs" />
     <Compile Include="Memory\PageAccessFlags.cs" />
@@ -629,6 +628,8 @@
     <Compile Include="Loader\AssemblyLoader.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Vm\DefaultModuleTypeSystem.cs" />
+    <Compile Include="Vm\IModuleTypeSystem.cs" />
     <Compile Include="Vm\GenericArgument.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -927,9 +928,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Vm\MethodTable.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Vm\ModuleOffsets.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Vm\Object.cs">

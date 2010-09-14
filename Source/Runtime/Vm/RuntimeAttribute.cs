@@ -48,14 +48,9 @@ namespace Mosa.Runtime.Vm
 		private RuntimeMethod _ctorMethod;
 
 		/// <summary>
-		/// Holds the metadata module defining the attribute instance.
-		/// </summary>
-		private IMetadataModule _module;
-
-		/// <summary>
 		/// Holds the static instance of the runtime.
 		/// </summary>
-		protected ITypeSystem typeSystem;
+		protected IModuleTypeSystem moduleTypeSystem;
 
 		#endregion // Data members
 
@@ -64,15 +59,14 @@ namespace Mosa.Runtime.Vm
 		/// <summary>
 		/// Populates the <see cref="RuntimeAttribute"/> with the values in <paramref name="car"/>.
 		/// </summary>
-		/// <param name="module">The metadata module, which defines the attribute.</param>
+		/// <param name="moduleTypeSystem">The module type system.</param>
 		/// <param name="car">The custom attribute row from metadata.</param>
-		public RuntimeAttribute(IMetadataModule module, CustomAttributeRow car, ITypeSystem typeSystem)
+		public RuntimeAttribute(IModuleTypeSystem moduleTypeSystem, CustomAttributeRow car)
 		{
 			_attribute = null;
 			_attributeBlob = car.ValueBlobIdx;
 			_ctor = car.TypeIdx;
-			_module = module;
-			this.typeSystem = typeSystem;
+			this.moduleTypeSystem = moduleTypeSystem;
 		}
 
 		#endregion // Construction
@@ -90,7 +84,7 @@ namespace Mosa.Runtime.Vm
 				return _attribute;
 
 			// Retrieve the attribute type
-			_attribute = CustomAttributeParser.Parse(_module, _attributeBlob, _ctorMethod);
+			_attribute = CustomAttributeParser.Parse(moduleTypeSystem.MetadataModule, _attributeBlob, _ctorMethod);
 			Debug.Assert(null != _attribute, @"Failed to load the attribute.");
 
 			return _attribute;
@@ -124,7 +118,7 @@ namespace Mosa.Runtime.Vm
 		/// </summary>
 		private void LocateAttributeCtorMethod()
 		{
-			_ctorMethod = typeSystem.GetMethod(DefaultSignatureContext.Instance, _module, _ctor);
+			_ctorMethod = moduleTypeSystem.GetMethod(DefaultSignatureContext.Instance, _ctor);
 			Debug.Assert(null != _ctorMethod);
 		}
 

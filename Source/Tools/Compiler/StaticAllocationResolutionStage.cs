@@ -95,13 +95,12 @@ namespace Mosa.Tools.Compiler
 
 		private string GetMethodTableForType(RuntimeType allocatedType)
 		{
-			string result = null;
 			if (!allocatedType.IsValueType)
 			{
-				result = allocatedType.FullName + @"$mtable";
+				return allocatedType.FullName + @"$mtable";
 			}
 
-			return result;
+			return null;
 		}
 
 		private Operand InsertLoadBeforeInstruction(Context context, string symbolName, SigType type)

@@ -256,20 +256,19 @@ namespace Mosa.Tools.Compiler
 
 		private void Compile()
 		{
-			using (CompilationRuntime runtime = new CompilationRuntime())
+			CompilationRuntime runtime = new CompilationRuntime();
+
+			runtime.AssemblyLoader.InitializePrivatePaths(this.GetInputFileNames());
+			runtime.TypeSystem.LoadModules(this.GetInputFileNames());
+
+			// Create the compiler
+			using (AotCompiler aot = new AotCompiler(this.architectureSelector.Architecture, runtime.TypeSystem))
 			{
-				runtime.InitializePrivatePaths(this.GetInputFileNames());
-
-				IMetadataModule assemblyModule = runtime.AssemblyLoader.MergeLoad(runtime.TypeSystem, this.GetInputFileNames());
-
-				// Create the compiler
-				using (AotCompiler aot = new AotCompiler(this.architectureSelector.Architecture, assemblyModule, runtime.TypeSystem, runtime.AssemblyLoader))
-				{
-					aot.Pipeline.AddRange(new IAssemblyCompilerStage[] 
+				aot.Pipeline.AddRange(new IAssemblyCompilerStage[] 
 					{
 						this.bootFormatStage,
 						new InterruptBuilderStage(),						
-						new AssemblyCompilationStage(runtime.AssemblyLoader), 
+						new AssemblyCompilationStage(), 
 						//new FakeSystemObjectGenerationStage(),
 						new MethodCompilerSchedulerStage(),
 						new TypeInitializers.TypeInitializerSchedulerStage(),
@@ -281,8 +280,7 @@ namespace Mosa.Tools.Compiler
 						this.mapFileWrapper
 					});
 
-					aot.Run();
-				}
+				aot.Run();
 			}
 		}
 

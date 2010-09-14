@@ -20,7 +20,7 @@ namespace Mosa.Tools.Compiler
 	/// <summary>
 	/// Represents compiler generated methods.
 	/// </summary>
-	public sealed class CompilerGeneratedMethod : RuntimeMethod
+	public sealed class LinkerGeneratedMethod : RuntimeMethod
 	{
 		#region Data Members
 
@@ -36,13 +36,13 @@ namespace Mosa.Tools.Compiler
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="CompilerGeneratedMethod"/> class.
+		/// Initializes a new instance of the <see cref="LinkerGeneratedMethod"/> class.
 		/// </summary>
-		/// <param name="module">The module.</param>
+		/// <param name="typeSystem">The type system.</param>
 		/// <param name="name">The name of the method.</param>
 		/// <param name="declaringType">Type of the declaring.</param>
-		public CompilerGeneratedMethod(IMetadataModule module, string name, RuntimeType declaringType, ITypeSystem typeSystem) :
-			base(0, module, declaringType, typeSystem)
+		public LinkerGeneratedMethod(IModuleTypeSystem typeSystem, string name, RuntimeType declaringType) :
+			base(typeSystem, 0, declaringType)
 		{
 			if (name == null)
 				throw new ArgumentNullException(@"name");

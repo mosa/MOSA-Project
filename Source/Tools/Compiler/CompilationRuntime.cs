@@ -95,31 +95,5 @@ namespace Mosa.Tools.Compiler
 			get { return this.jitService; }
 		}
 
-		public void InitializePrivatePaths(IEnumerable<string> assemblyPaths)
-		{
-			// Append the paths of the folder to the loader path);
-			foreach (string path in this.FindPrivatePaths(assemblyPaths))
-			{
-				this.assemblyLoader.AppendPrivatePath(path);
-			}
-		}
-
-		/// <summary>
-		/// Finds the private paths.
-		/// </summary>
-		/// <param name="assemblyPaths">The assembly paths.</param>
-		/// <returns></returns>
-		private IEnumerable<string> FindPrivatePaths(IEnumerable<string> assemblyPaths)
-		{
-			List<string> privatePaths = new List<string>();
-			foreach (string assembly in assemblyPaths)
-			{
-				string path = Path.GetDirectoryName(assembly);
-				if (!privatePaths.Contains(path))
-					privatePaths.Add(path);
-			}
-
-			return privatePaths;
-		}
 	}
 }

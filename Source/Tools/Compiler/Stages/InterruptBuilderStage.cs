@@ -124,7 +124,7 @@ namespace Mosa.Tools.Compiler.Stages
 				ctx.AppendInstruction(CPUx86.Instruction.StiInstruction);
 				ctx.AppendInstruction(CPUx86.Instruction.IRetdInstruction);
 
-				CompilerGeneratedMethod method = LinkTimeCodeGenerator.Compile(this.compiler, @"InterruptISR" + i.ToString(), set, typeSystem);
+				LinkerGeneratedMethod method = LinkTimeCodeGenerator.Compile(this.compiler, @"InterruptISR" + i.ToString(), set, typeSystem);
 			}
 		}
 

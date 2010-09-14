@@ -66,11 +66,11 @@ namespace Mosa.Runtime.Vm
 		/// <summary>
 		/// Initializes a new instance of the <see cref="RuntimeMethod"/> class.
 		/// </summary>
+		/// <param name="moduleTypeSystem">The module type system.</param>
 		/// <param name="token">The token.</param>
-		/// <param name="module">The module.</param>
 		/// <param name="declaringType">The type, which declared this method.</param>
-		public RuntimeMethod(int token, IMetadataModule module, RuntimeType declaringType, ITypeSystem typeSystem) :
-			base(token, module, declaringType, null, typeSystem)
+		public RuntimeMethod(IModuleTypeSystem moduleTypeSystem, int token, RuntimeType declaringType) :
+			base(moduleTypeSystem, token, declaringType, null)
 		{
 			this.methodTableSlot = -1;
 		}
@@ -105,7 +105,7 @@ namespace Mosa.Runtime.Vm
 		/// </summary>
 		public bool IsNative
 		{
-			get { return (Rva & 0x0FFFFFFFFFFFFFFF) == 0; }
+			get { return Rva == 0; }
 		}
 
 		/// <summary>
@@ -194,7 +194,7 @@ namespace Mosa.Runtime.Vm
 		/// </returns>
 		public virtual bool Equals(RuntimeMethod other)
 		{
-			return (base.Equals(other) == true && Module == other.Module);
+			return (base.Equals(other) == true && MetadataModule == other.MetadataModule);
 		}
 
 		#endregion // IEquatable<RuntimeMethod> Members

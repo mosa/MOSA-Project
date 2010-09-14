@@ -169,11 +169,11 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			switch (targetType)
 			{
 				case TokenTypes.MethodDef:
-					method = decoder.TypeSystem.GetMethod(decoder.Method, decoder.Method.Module, callTarget);
+					method = decoder.ModuleTypeSystem.GetMethod(decoder.Method, callTarget);
 					break;
 
 				case TokenTypes.MemberRef:
-					method = decoder.TypeSystem.GetMethod(decoder.Method, decoder.Method.Module, callTarget);
+					method = decoder.ModuleTypeSystem.GetMethod(decoder.Method, callTarget);
 					if (method.DeclaringType.IsGeneric == true)
 					{
 						ScheduleMethodForCompilation(decoder, method);
@@ -196,7 +196,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 		private static RuntimeMethod DecodeMethodSpecification(IInstructionDecoder decoder, TokenTypes callTarget)
 		{
-			RuntimeMethod method = decoder.TypeSystem.GetMethod(decoder.Method, decoder.Compiler.Assembly, callTarget);
+			RuntimeMethod method = decoder.ModuleTypeSystem.GetMethod(decoder.Method, callTarget);
 
 			ScheduleMethodForCompilation(decoder, method);
 
