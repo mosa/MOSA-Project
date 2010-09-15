@@ -84,7 +84,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 					if (header.localsSignature != 0)
 					{
-						IMetadataProvider md = _method.Module.Metadata;
+						IMetadataProvider md = _method.MetadataModule.Metadata;
 						StandAloneSigRow row = md.ReadStandAloneSigRow(header.localsSignature);
 
 						LocalVariableSignature localsSignature = new LocalVariableSignature();
@@ -128,7 +128,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 						throw new InvalidDataException(@"Invalid method _header.");
 					header.maxStack = reader.ReadUInt16();
 					header.codeSize = reader.ReadUInt32();
-					header.localsSignature = ApplyTokenTypeAdjustment((TokenTypes)reader.ReadUInt32());
+					header.localsSignature = (TokenTypes)reader.ReadUInt32();
 					break;
 
 				default:
@@ -273,9 +273,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// Gets the type system.
 		/// </summary>
 		/// <value>The type system.</value>
-		ITypeSystem IInstructionDecoder.TypeSystem
+		IModuleTypeSystem IInstructionDecoder.ModuleTypeSystem
 		{
-			get { return typeSystem; }
+			get { return moduleTypeSystem; }
 		}
 
 		/// <summary>
@@ -365,18 +365,10 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <returns></returns>
 		TokenTypes IInstructionDecoder.DecodeTokenType()
 		{
-			return ApplyTokenTypeAdjustment((TokenTypes)_codeReader.ReadInt32());
+			return (TokenTypes)_codeReader.ReadInt32();
 		}
 
 		#endregion
 
-		/// <summary>
-		/// Decodes <paramref name="value"/> from the instruction stream.
-		/// </summary>
-		/// <param name="value">Receives the decoded value from the instruction stream.</param>
-		private TokenTypes ApplyTokenTypeAdjustment(TokenTypes value)
-		{
-			return _method.Module.Metadata.ApplyTokenTypeAdjustmentByRVA(value, _method.Rva);
-		}
 	}
 }

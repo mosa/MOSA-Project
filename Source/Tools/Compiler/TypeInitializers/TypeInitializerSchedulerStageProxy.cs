@@ -47,7 +47,7 @@ namespace Mosa.Tools.Compiler.TypeInitializers
 		/// Gets the intializer method.
 		/// </summary>
 		/// <value>The method.</value>
-		public CompilerGeneratedMethod Method
+		public LinkerGeneratedMethod Method
 		{
 			get
 			{

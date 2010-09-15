@@ -17,9 +17,10 @@ using NDesk.Options;
 using Mosa.Runtime;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Loader;
+using Mosa.Runtime.Vm;
+using Mosa.Runtime.Linker;
 using Mosa.Tools.Compiler.Boot;
 using Mosa.Tools.Compiler.Linkers;
-using Mosa.Runtime.Linker;
 using Mosa.Tools.Compiler.Symbols.Pdb;
 using Mosa.Tools.Compiler.Stages;
 
@@ -263,20 +264,20 @@ namespace Mosa.Tools.Compiler
 
 		private void Compile()
 		{
-			using (CompilationRuntime runtime = new CompilationRuntime())
+			IAssemblyLoader assemblyLoader = new AssemblyLoader();
+			assemblyLoader.InitializePrivatePaths(this.GetInputFileNames());
+
+			ITypeSystem typeSystem = new DefaultTypeSystem(assemblyLoader);
+			typeSystem.LoadModules(this.GetInputFileNames());
+
+			// Create the compiler
+			using (AotCompiler aot = new AotCompiler(this.architectureSelector.Architecture, typeSystem))
 			{
-				runtime.InitializePrivatePaths(this.GetInputFileNames());
-
-				IMetadataModule assemblyModule = runtime.AssemblyLoader.MergeLoad(runtime.TypeSystem, this.GetInputFileNames());
-
-				// Create the compiler
-				using (AotCompiler aot = new AotCompiler(this.architectureSelector.Architecture, assemblyModule, runtime.TypeSystem, runtime.AssemblyLoader))
-				{
-					aot.Pipeline.AddRange(new IAssemblyCompilerStage[] 
+				aot.Pipeline.AddRange(new IAssemblyCompilerStage[] 
 					{
 						this.bootFormatStage,
 						new InterruptBuilderStage(),						
-						new AssemblyCompilationStage(runtime.AssemblyLoader), 
+						new AssemblyCompilationStage(), 
 						//new FakeSystemObjectGenerationStage(),
 						new MethodCompilerSchedulerStage(),
 						new TypeInitializers.TypeInitializerSchedulerStage(),
@@ -288,8 +289,7 @@ namespace Mosa.Tools.Compiler
 						this.mapFileWrapper
 					});
 
-					aot.Run();
-				}
+				aot.Run();
 			}
 		}
 

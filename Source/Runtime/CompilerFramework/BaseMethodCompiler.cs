@@ -100,10 +100,10 @@ namespace Mosa.Runtime.CompilerFramework
 		protected ITypeSystem typeSystem;
 
 		/// <summary>
-		/// Holds the assembly loader
+		/// Holds the modules type system
 		/// </summary>
-		protected IAssemblyLoader assemblyLoader;
-
+		protected IModuleTypeSystem moduleTypeSystem;
+		
 		#endregion // Data Members
 
 		#region Construction
@@ -121,8 +121,7 @@ namespace Mosa.Runtime.CompilerFramework
 			ICompilationSchedulerStage compilationScheduler,
 			RuntimeType type,
 			RuntimeMethod method,
-			ITypeSystem typeSystem,
-			IAssemblyLoader assemblyLoader)
+			ITypeSystem typeSystem)
 		{
 			if (architecture == null)
 				throw new ArgumentNullException(@"architecture");
@@ -135,7 +134,6 @@ namespace Mosa.Runtime.CompilerFramework
 
 			_linker = linker;
 			_architecture = architecture;
-			this.compilationScheduler = compilationScheduler;
 			_method = method;
 			_parameters = new List<Operand>(new Operand[_method.Parameters.Count]);
 			_type = type;
@@ -145,8 +143,9 @@ namespace Mosa.Runtime.CompilerFramework
 
 			pipeline = new CompilerPipeline();
 
+			this.compilationScheduler = compilationScheduler;
+			this.moduleTypeSystem = method.ModuleTypeSystem;
 			this.typeSystem = typeSystem;
-			this.assemblyLoader = assemblyLoader;
 		}
 
 		#endregion // Construction
@@ -166,7 +165,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public IMetadataModule Assembly
 		{
-			get { return this._method.Module; }
+			get { return this._method.MetadataModule; }
 		}
 
 		/// <summary>
@@ -231,12 +230,6 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <value>The type system.</value>
 		public ITypeSystem TypeSystem { get { return typeSystem; } }
-
-		/// <summary>
-		/// Gets the assembly loader.
-		/// </summary>
-		/// <value>The assembly loader.</value>
-		public IAssemblyLoader AssemblyLoader { get { return assemblyLoader; } }
 
 		#endregion // Properties
 
@@ -326,7 +319,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns>A stream, which represents the IL of the method.</returns>
 		public Stream GetInstructionStream()
 		{
-			return _method.Module.GetInstructionStream((long)_method.Rva);
+			return _method.MetadataModule.GetInstructionStream((long)_method.Rva);
 		}
 
 		/// <summary>
@@ -382,7 +375,7 @@ namespace Mosa.Runtime.CompilerFramework
 				{
 					return new ParameterOperand(
 						_architecture.StackFrameRegister,
-						new RuntimeParameter(_method.Module, @"this", 2, ParameterAttributes.In),
+						new RuntimeParameter(_method.MetadataModule, @"this", 2, ParameterAttributes.In),
 						new ClassSigType((TokenTypes)_type.Token));
 				}
 				// Decrement the index, as the caller actually wants a real parameter
@@ -427,7 +420,7 @@ namespace Mosa.Runtime.CompilerFramework
 					RuntimeType genericType = this.LoadDependentType(genericSignatureType.BaseType.Token);
 					Console.WriteLine(@"Loaded generic type {0}", genericType.FullName);
 
-					runtimeType = new CilGenericType(genericType, this.Assembly, genericSignatureType, this.Method, typeSystem);
+					runtimeType = new CilGenericType(moduleTypeSystem, genericType, genericSignatureType, this.Method);
 				}
 			}
 
@@ -439,7 +432,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 		private RuntimeType LoadDependentType(TokenTypes tokenType)
 		{
-			return typeSystem.GetType(this.Method, this.Assembly, tokenType);
+			return moduleTypeSystem.GetType(this.Method, tokenType);
 		}
 
 		/// <summary>

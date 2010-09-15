@@ -1,11 +1,12 @@
+using System;
+
+using Mosa.Runtime.Metadata.Signatures;
+using Mosa.Runtime.Vm;
+using System.Diagnostics;
 
 namespace Mosa.Runtime.Metadata.Runtime
 {
-	using System;
 
-	using Mosa.Runtime.Metadata.Signatures;
-	using Mosa.Runtime.Vm;
-	using System.Diagnostics;
 
 	internal class CilGenericMethod : RuntimeMethod
 	{
@@ -13,8 +14,8 @@ namespace Mosa.Runtime.Metadata.Runtime
 
 		private readonly ISignatureContext signatureContext;
 
-		public CilGenericMethod(CilRuntimeMethod method, MethodSignature signature, ISignatureContext signatureContext, ITypeSystem typeSystem) :
-			base(method.Token, method.Module, method.DeclaringType, typeSystem)
+		public CilGenericMethod(IModuleTypeSystem moduleTypeSystem, CilRuntimeMethod method, MethodSignature signature, ISignatureContext signatureContext) :
+			base(moduleTypeSystem, method.Token, method.DeclaringType)
 		{
 			this.genericMethod = method;
 			this.signatureContext = signatureContext;

@@ -52,6 +52,11 @@ namespace Mosa.Runtime.CompilerFramework
 		protected ITypeSystem typeSystem;
 
 		/// <summary>
+		/// Holds the modules type system
+		/// </summary>
+		protected IModuleTypeSystem moduleTypeSystem; 
+
+		/// <summary>
 		/// Holds the assembly loader.
 		/// </summary>
 		/// <value>The assembly loader.</value>
@@ -74,9 +79,8 @@ namespace Mosa.Runtime.CompilerFramework
 			InstructionSet = compiler.InstructionSet;
 			BasicBlocks = compiler.BasicBlocks;
 			Architecture = compiler.Architecture;
-
+			moduleTypeSystem = compiler.Method.ModuleTypeSystem;
 			typeSystem = compiler.TypeSystem;
-			assemblyLoader = compiler.AssemblyLoader;
 		}
 
 		#endregion // IMethodCompilerStage members

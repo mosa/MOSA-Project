@@ -40,7 +40,7 @@ namespace Mosa.Runtime.Loader.PE
 
 		private int _loadOrder = -1;
 
-		private IList<string> names;
+		private string name;
 
 		/// <summary>
 		/// The stream, which provides the assembly data.
@@ -82,7 +82,7 @@ namespace Mosa.Runtime.Loader.PE
 		/// </summary>
 		private byte[] _metadata;
 
-		private IList<string> codeBases;
+		private string codeBase;
 
 		#endregion // Data members
 
@@ -95,8 +95,7 @@ namespace Mosa.Runtime.Loader.PE
 		/// <param name="codeBase">The code base.</param>
 		private PortableExecutableImage(Stream stream, string codeBase)
 		{
-			codeBases = new List<string>();
-			codeBases.Add(codeBase);
+			this.codeBase = codeBase;
 
 			_assemblyStream = stream;
 			_assemblyReader = new BinaryReader(stream);
@@ -130,7 +129,7 @@ namespace Mosa.Runtime.Loader.PE
 
 		#region Properties
 
-		IList<string> IMetadataModule.CodeBases { get { return this.codeBases; } }
+		string IMetadataModule.CodeBase { get { return this.codeBase; } }
 
 		TokenTypes IMetadataModule.EntryPoint
 		{
@@ -153,17 +152,17 @@ namespace Mosa.Runtime.Loader.PE
 		/// Retrieves the name of the module.
 		/// </summary>
 		/// <value></value>
-		IList<string> IMetadataModule.Names
+		string IMetadataModule.Name
 		{
 			get
 			{
-				if (names == null)
+				if (name == null)
 				{
-					names = new List<string>(1);
 					AssemblyRow arow = _metadataRoot.ReadAssemblyRow(TokenTypes.Assembly + 1);
-					names.Add(_metadataRoot.ReadString(arow.NameIdx));
+					name = _metadataRoot.ReadString(arow.NameIdx);
 				}
-				return names;
+
+				return name;
 			}
 		}
 
@@ -277,5 +276,10 @@ namespace Mosa.Runtime.Loader.PE
 		}
 
 		#endregion // IDisposable Members
+
+		public override string ToString()
+		{
+			return ((IMetadataModule)this).Name;
+		}
 	}
 }

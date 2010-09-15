@@ -39,12 +39,13 @@ namespace Mosa.Runtime.Vm
 		}
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="ReadOnlyRuntimeFieldListView"/>.
+		/// Initializes a new instance of the <see cref="ReadOnlyRuntimeParameterListView"/> class.
 		/// </summary>
-		/// <param name="firstIndex">The first index of the list view.</param>
+		/// <param name="moduleTypeSystem">The module type system.</param>
+		/// <param name="start">The first index of the list view.</param>
 		/// <param name="count">The number of elements in the list view.</param>
-		public ReadOnlyRuntimeParameterListView(int firstIndex, int count, ITypeSystem typeSystem)
-			: base(firstIndex, count, typeSystem)
+		public ReadOnlyRuntimeParameterListView(IModuleTypeSystem moduleTypeSystem, int start, int count)
+			: base(moduleTypeSystem, start, count)
 		{
 		}
 
@@ -57,7 +58,7 @@ namespace Mosa.Runtime.Vm
 		/// </summary>
 		protected override RuntimeParameter[] Items
 		{
-			get { if (typeSystem == null) return null; else return typeSystem.Parameters; }
+			get { if (moduleTypeSystem == null) return null; else return moduleTypeSystem.Parameters; }
 		}
 
 		#endregion // Overrides

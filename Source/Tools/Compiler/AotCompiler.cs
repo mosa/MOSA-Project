@@ -38,9 +38,9 @@ namespace Mosa.Tools.Compiler
 		/// Initializes a new instance of the <see cref="AotCompiler"/> class.
 		/// </summary>
 		/// <param name="architecture">The target compilation architecture.</param>
-		/// <param name="assembly">The assembly to compile.</param>
-		public AotCompiler(IArchitecture architecture, IMetadataModule assembly, ITypeSystem typeSystem, IAssemblyLoader assemblyLoader) :
-			base(architecture, assembly, typeSystem, assemblyLoader)
+		/// <param name="typeSystem">The type system.</param>
+		public AotCompiler(IArchitecture architecture, ITypeSystem typeSystem) :
+			base(architecture, typeSystem)
 		{
 		}
 

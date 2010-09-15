@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using System;
@@ -26,7 +27,6 @@ namespace Mosa.Runtime.Loader
 
 		private string[] searchPath;
 		private List<string> privatePaths = new List<string>();
-		private List<IMetadataModule> modules = new List<IMetadataModule>();
 		private object loaderLock = new object();
 
 		#endregion // Data members
@@ -53,15 +53,6 @@ namespace Mosa.Runtime.Loader
 		#region IAssemblyLoader
 
 		/// <summary>
-		/// Gets an enumerable collection of loaded modules.
-		/// </summary>
-		/// <value></value>
-		public IEnumerable<IMetadataModule> Modules
-		{
-			get { return modules; }
-		}
-
-		/// <summary>
 		/// Appends the given path to the assembly search path.
 		/// </summary>
 		/// <param name="path">The path to append to the assembly search path.</param>
@@ -69,21 +60,21 @@ namespace Mosa.Runtime.Loader
 		{
 			lock (loaderLock)
 			{
-				privatePaths.Add(path);
+				string p = Path.GetDirectoryName(path);
+
+				if (!privatePaths.Contains(p))
+					privatePaths.Add(p);
 			}
 		}
 
 		/// <summary>
-		/// Gets the module.
+		/// Initializes the private paths.
 		/// </summary>
-		/// <param name="index">The index.</param>
-		/// <returns></returns>
-		IMetadataModule IAssemblyLoader.GetModule(int index)
+		/// <param name="assemblyPaths">The assembly paths.</param>
+		void IAssemblyLoader.InitializePrivatePaths(IEnumerable<string> assemblyPaths)
 		{
-			lock (loaderLock)
-			{
-				return modules[index];
-			}
+			foreach (string path in FindPrivatePaths(assemblyPaths))
+				((IAssemblyLoader)this).AppendPrivatePath(path);
 		}
 
 		/// <summary>
@@ -93,69 +84,13 @@ namespace Mosa.Runtime.Loader
 		/// <returns>
 		/// The assembly image of the loaded assembly.
 		/// </returns>
-		IMetadataModule IAssemblyLoader.Load(ITypeSystem typeSystem, string file)
+		IMetadataModule IAssemblyLoader.LoadModule(string file)
 		{
 			lock (loaderLock)
 			{
 				IMetadataModule module = LoadAssembly(file);
 
-				if (module != null)
-				{
-
-					if (module.LoadOrder < 0)
-					{
-						module.LoadOrder = modules.Count;
-						modules.Add(module);
-						typeSystem.AssemblyLoaded(module);
-					}
-				}
-
 				return module;
-			}
-		}
-
-		/// <summary>
-		/// Loads the named assemblies (as a merged assembly)
-		/// </summary>
-		/// <param name="files"></param>
-		/// <returns>
-		/// The assembly image of the loaded assembly.
-		/// </returns>
-		IMetadataModule IAssemblyLoader.MergeLoad(ITypeSystem typeSystem, IEnumerable<string> files)
-		{
-			lock (loaderLock)
-			{
-				List<IMetadataModule> mods = new List<IMetadataModule>();
-
-				foreach (string file in files)
-				{
-					IMetadataModule result = DoLoadAssembly(file);
-
-					if (result != null)
-					{
-						mods.Add(result);
-					}
-				}
-
-				IMetadataModule merged = new MergedMetadata(mods);
-
-				merged.LoadOrder = modules.Count;
-				modules.Add(merged);
-				typeSystem.AssemblyLoaded(merged);
-
-				return merged;
-			}
-		}
-		/// <summary>
-		/// Unloads the given module.
-		/// </summary>
-		/// <param name="module">The module to unload.</param>
-		void IAssemblyLoader.Unload(IMetadataModule module)
-		{
-			IDisposable disp = module as IDisposable;
-			if (null != disp)
-			{
-				disp.Dispose();
 			}
 		}
 
@@ -163,18 +98,18 @@ namespace Mosa.Runtime.Loader
 
 		#region Internals
 
+		public static string CreateFileCodeBase(string file)
+		{
+			return @"file://" + file.Replace('\\', '/');
+		}
+
 		private IMetadataModule LoadAssembly(string file)
 		{
 			IMetadataModule result = null;
 
 			if (!Path.IsPathRooted(file))
 			{
-				result = GetLoadedAssembly(file);
-
-				if (result == null)
-				{
-					result = DoLoadAssembly(Path.GetFileName(file) + @".dll");
-				}
+				result = DoLoadAssembly(Path.GetFileName(file) + @".dll");
 			}
 			else
 			{
@@ -193,63 +128,10 @@ namespace Mosa.Runtime.Loader
 		{
 			string codeBase = CreateFileCodeBase(file);
 
-			IMetadataModule result = FindLoadedModule(codeBase);
-
-			if (result != null)
-				return result;
-
 			if (!File.Exists(file))
 				return null;
 
 			return PortableExecutableImage.Load(new FileStream(file, FileMode.Open, FileAccess.Read), codeBase);
-		}
-
-
-		/// <summary>
-		/// Finds the loaded module.
-		/// </summary>
-		/// <param name="codeBase">The code base.</param>
-		/// <returns></returns>
-		private IMetadataModule FindLoadedModule(string codeBase)
-		{
-			foreach (IMetadataModule module in modules)
-			{
-				foreach (string code in module.CodeBases)
-				{
-					if (code.Equals(codeBase))
-					{
-						return module;
-					}
-				}
-			}
-
-			return null;
-		}
-
-		private static string CreateFileCodeBase(string file)
-		{
-			return @"file://" + file.Replace('\\', '/');
-		}
-
-		/// <summary>
-		/// Gets the loaded assembly.
-		/// </summary>
-		/// <param name="name">The name.</param>
-		/// <returns></returns>
-		private IMetadataModule GetLoadedAssembly(string name)
-		{
-			foreach (IMetadataModule module in modules)
-			{
-				foreach (string modname in module.Names)
-				{
-					if (name.Equals(modname))
-					{
-						return module;
-					}
-				}
-			}
-
-			return null;
 		}
 
 		/// <summary>
@@ -270,17 +152,14 @@ namespace Mosa.Runtime.Loader
 		/// <returns></returns>
 		private IMetadataModule DoLoadAssemblyFromPaths(string name, IEnumerable<string> paths)
 		{
-			IMetadataModule result = null;
-			string fullName;
-
 			foreach (string path in paths)
 			{
-				fullName = Path.Combine(path, name);
+				string fullName = Path.Combine(path, name);
 				try
 				{
-					result = LoadAssembly(fullName);
+					IMetadataModule result = LoadAssembly(fullName);
 					if (result != null)
-						break;
+						return result;
 				}
 				catch
 				{
@@ -288,9 +167,29 @@ namespace Mosa.Runtime.Loader
 				}
 			}
 
-			return result;
+			return null;
+		}
+
+		/// <summary>
+		/// Finds the private paths.
+		/// </summary>
+		/// <param name="assemblyPaths">The assembly paths.</param>
+		/// <returns></returns>
+		private IEnumerable<string> FindPrivatePaths(IEnumerable<string> assemblyPaths)
+		{
+			List<string> privatePaths = new List<string>();
+			foreach (string assembly in assemblyPaths)
+			{
+				string path = Path.GetDirectoryName(assembly);
+				if (!privatePaths.Contains(path))
+					privatePaths.Add(path);
+			}
+
+			return privatePaths;
+
 		}
 
 		#endregion // Internals
+
 	}
 }

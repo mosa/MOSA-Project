@@ -31,7 +31,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// Gets the type system.
 		/// </summary>
 		/// <value>The type system.</value>
-		ITypeSystem TypeSystem { get;  }
+		IModuleTypeSystem ModuleTypeSystem { get; }
 
 		/// <summary>
 		/// Decodes the byte value from the instruction stream

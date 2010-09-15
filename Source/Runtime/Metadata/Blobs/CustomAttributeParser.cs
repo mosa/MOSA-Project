@@ -256,7 +256,7 @@ namespace Mosa.Runtime.Metadata.Blobs
 						}
 						else
 						{
-							result = Type.GetType(typeName + ", " + module.Names[0]);
+							result = Type.GetType(typeName + ", " + module.Name);
 						}
 					}
 					break;

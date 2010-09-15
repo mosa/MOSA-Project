@@ -18,31 +18,32 @@ namespace Mosa.Tools.Compiler
 	/// <summary>
 	/// Represents a compiler generated type.
 	/// </summary>
-	public sealed class CompilerGeneratedType : RuntimeType
+	public sealed class LinkerGeneratedType : RuntimeType
 	{
 		private readonly List<RuntimeMethod> methods;
 
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="CompilerGeneratedType"/> class.
+		/// Initializes a new instance of the <see cref="LinkerGeneratedType"/> class.
 		/// </summary>
-		/// <param name="module">The metadata module owning the type.</param>
-		/// <param name="namespace">The namespace.</param>
+		/// <param name="moduleTypeSystem">The module type system.</param>
+		/// <param name="nameSpace">The name space.</param>
 		/// <param name="name">The name.</param>
-		public CompilerGeneratedType(IMetadataModule module, string @namespace, string name, ITypeSystem typeSystem) :
-			base(0, module, typeSystem)
+		public LinkerGeneratedType(IModuleTypeSystem moduleTypeSystem, string nameSpace, string name) :
+			base(moduleTypeSystem, 0)
 		{
-			if (@namespace == null)
+			if (nameSpace == null)
 				throw new ArgumentNullException(@"namespace");
 			if (name == null)
 				throw new ArgumentNullException(@"name");
 
 			this.methods = new List<RuntimeMethod>();
 
-			base.Namespace = @namespace;
+			base.Namespace = nameSpace;
 			base.Name = name;
 			base.Methods = this.methods;
+			base.Fields = new List<RuntimeField>();
 		}
 
 		#endregion // Construction

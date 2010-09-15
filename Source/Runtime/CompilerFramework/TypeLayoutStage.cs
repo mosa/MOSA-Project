@@ -59,10 +59,10 @@ namespace Mosa.Runtime.CompilerFramework
 		void IAssemblyCompilerStage.Run()
 		{
 			// Enumerate all types and do an appropriate type layout
-			ReadOnlyRuntimeTypeListView types = typeSystem.GetTypesFromModule(this.compiler.MainAssembly);
-
-			foreach (RuntimeType type in types)
+			foreach (RuntimeType type in typeSystem.GetCompiledTypes())
 			{
+				Debug.WriteLine("TypeLayout: " + type.FullName);
+
 				if (type.Name.Equals("<Module>") && type.Namespace.Length == 0) // HACK
 					continue;
 
@@ -120,7 +120,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 		private void ScanExplicitInterfaceImplementations(RuntimeType type, IList<RuntimeMethod> methodTable, IList<RuntimeMethod> interfaceMethods)
 		{
-			IMetadataProvider metadata = type.Module.Metadata;
+			IMetadataProvider metadata = type.MetadataModule.Metadata;
 			TokenTypes maxToken = metadata.GetMaxTokenValue(TokenTypes.MethodImpl);
 			for (TokenTypes token = TokenTypes.MethodImpl + 1; token <= maxToken; token++)
 			{
@@ -386,7 +386,7 @@ namespace Mosa.Runtime.CompilerFramework
 			this.architecture.GetTypeRequirements(field.SignatureType, out size, out alignment);
 
 			if (field.SignatureType.Type == CilElementType.ValueType)
-				size = ObjectModelUtility.ComputeTypeSize(field.DeclaringType, (field.SignatureType as Metadata.Signatures.ValueTypeSigType).Token, this.compiler.MainAssembly.Metadata, architecture);
+				size = ObjectModelUtility.ComputeTypeSize(field.DeclaringType, (field.SignatureType as Metadata.Signatures.ValueTypeSigType).Token, field.ModuleTypeSystem, architecture);
 
 			// The linker section to move this field into
 			SectionKind section;
@@ -422,7 +422,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 		private void InitializeStaticValueFromRVA(Stream stream, int size, RuntimeField field)
 		{
-			using (Stream source = this.compiler.MainAssembly.GetDataSection((long)field.RVA))
+			using (Stream source = field.MetadataModule.GetDataSection((long)field.RVA))
 			{
 				byte[] data = new byte[size];
 				source.Read(data, 0, size);

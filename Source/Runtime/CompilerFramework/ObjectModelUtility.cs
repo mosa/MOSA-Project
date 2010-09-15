@@ -1,5 +1,6 @@
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
+using Mosa.Runtime.Vm;
 
 namespace Mosa.Runtime.CompilerFramework
 {
@@ -11,17 +12,18 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Computes the size of the type.
 		/// </summary>
+		/// <param name="context">The context.</param>
 		/// <param name="token">The token.</param>
-		/// <param name="metadataProvider">The metadata provider.</param>
+		/// <param name="moduleTypeSystem">The module type system.</param>
 		/// <param name="architecture">The architecture.</param>
 		/// <returns></returns>
-		public static int ComputeTypeSize(ISignatureContext context, TokenTypes token, IMetadataProvider metadataProvider, IArchitecture architecture)
+		public static int ComputeTypeSize(ISignatureContext context, TokenTypes token, IModuleTypeSystem moduleTypeSystem, IArchitecture architecture)
 		{
 			Metadata.Tables.TypeDefRow followingTypeDefinition = new Mosa.Runtime.Metadata.Tables.TypeDefRow();
-			Metadata.Tables.TypeDefRow typeDefinition = metadataProvider.ReadTypeDefRow(token);
+			Metadata.Tables.TypeDefRow typeDefinition = moduleTypeSystem.MetadataModule.Metadata.ReadTypeDefRow(token);
 			try
 			{
-				followingTypeDefinition = metadataProvider.ReadTypeDefRow(token + 1);
+				followingTypeDefinition =  moduleTypeSystem.MetadataModule.Metadata.ReadTypeDefRow(token + 1);
 			}
 			catch (System.Exception)
 			{
@@ -29,9 +31,9 @@ namespace Mosa.Runtime.CompilerFramework
 
 			int result = 0;
 			TokenTypes fieldList = typeDefinition.FieldList;
-			TokenTypes last = metadataProvider.GetMaxTokenValue(TokenTypes.Field);
+			TokenTypes last =  moduleTypeSystem.MetadataModule.Metadata.GetMaxTokenValue(TokenTypes.Field);
 			while (fieldList != followingTypeDefinition.FieldList && fieldList != last)
-				result += FieldSize(context, fieldList++, metadataProvider, architecture);
+				result += FieldSize(context, fieldList++, moduleTypeSystem, architecture);
 
 			return result;
 		}
@@ -39,20 +41,21 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Fields the size.
 		/// </summary>
+		/// <param name="context">The context.</param>
 		/// <param name="field">The field.</param>
-		/// <param name="metadataProvider">The metadata provider.</param>
+		/// <param name="moduleTypeSystem">The module type system.</param>
 		/// <param name="architecture">The architecture.</param>
 		/// <returns></returns>
-		public static int FieldSize(ISignatureContext context, TokenTypes field, IMetadataProvider metadataProvider, IArchitecture architecture)
+		public static int FieldSize(ISignatureContext context, TokenTypes field, IModuleTypeSystem moduleTypeSystem, IArchitecture architecture)
 		{
-			Metadata.Tables.FieldRow fieldRow = metadataProvider.ReadFieldRow(field);
-			FieldSignature signature = Signature.FromMemberRefSignatureToken(context, metadataProvider, fieldRow.SignatureBlobIdx) as FieldSignature;
+			Metadata.Tables.FieldRow fieldRow = moduleTypeSystem.MetadataModule.Metadata.ReadFieldRow(field);
+			FieldSignature signature = Signature.FromMemberRefSignatureToken(context, moduleTypeSystem.MetadataModule.Metadata, fieldRow.SignatureBlobIdx) as FieldSignature;
 
 			// If the field is another struct, we have to dig down and compute its size too.
 			if (signature.Type.Type == CilElementType.ValueType)
 			{
-				TokenTypes valueTypeSig = ValueTokenTypeFromSignature(metadataProvider, fieldRow.SignatureBlobIdx);
-				return ComputeTypeSize(context, valueTypeSig, metadataProvider, architecture);
+				TokenTypes valueTypeSig = ValueTokenTypeFromSignature(moduleTypeSystem, fieldRow.SignatureBlobIdx);
+				return ComputeTypeSize(context, valueTypeSig, moduleTypeSystem, architecture);
 			}
 
 			int size, alignment;
@@ -63,12 +66,12 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Values the token type from signature.
 		/// </summary>
-		/// <param name="provider">The provider.</param>
+		/// <param name="moduleTypeSystem">The module type system.</param>
 		/// <param name="signatureToken">The signature token.</param>
 		/// <returns></returns>
-		public static TokenTypes ValueTokenTypeFromSignature(IMetadataProvider provider, TokenTypes signatureToken)
+		public static TokenTypes ValueTokenTypeFromSignature(IModuleTypeSystem moduleTypeSystem, TokenTypes signatureToken)
 		{
-			SignatureReader reader = new SignatureReader(provider.ReadBlob(signatureToken), provider, signatureToken);
+			SignatureReader reader = new SignatureReader(moduleTypeSystem.MetadataModule.Metadata.ReadBlob(signatureToken), signatureToken);
 			reader.SkipByte();
 
 			// Jump over custom mods
@@ -81,19 +84,20 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Computes the field offset.
 		/// </summary>
+		/// <param name="context">The context.</param>
 		/// <param name="token">The token.</param>
-		/// <param name="metadataProvider">The metadata provider.</param>
+		/// <param name="moduleTypeSystem">The module type system.</param>
 		/// <param name="architecture">The architecture.</param>
 		/// <returns></returns>
-		public static int ComputeFieldOffset(ISignatureContext context, TokenTypes token, IMetadataProvider metadataProvider, IArchitecture architecture)
+		public static int ComputeFieldOffset(ISignatureContext context, TokenTypes token, IModuleTypeSystem moduleTypeSystem, IArchitecture architecture)
 		{
-			Metadata.Tables.TypeDefRow typeDefinition = metadataProvider.ReadTypeDefRow(token);
-			Metadata.Tables.TypeDefRow followingTypeDefinition = metadataProvider.ReadTypeDefRow(token + 1);
+			Metadata.Tables.TypeDefRow typeDefinition = moduleTypeSystem.MetadataModule.Metadata.ReadTypeDefRow(token);
+			Metadata.Tables.TypeDefRow followingTypeDefinition = moduleTypeSystem.MetadataModule.Metadata.ReadTypeDefRow(token + 1);
 
 			int result = 0;
 			TokenTypes fieldList = typeDefinition.FieldList;
 			while (fieldList != token)
-				result += FieldSize(context, fieldList++, metadataProvider, architecture);
+				result += FieldSize(context, fieldList++, moduleTypeSystem, architecture);
 
 			return result;
 		}

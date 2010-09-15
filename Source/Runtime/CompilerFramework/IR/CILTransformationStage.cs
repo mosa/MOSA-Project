@@ -445,7 +445,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 
 			SZArraySigType arrayType = (SZArraySigType)ctx.Result.Type;
 			ClassSigType elementSigType = arrayType.ElementType as ClassSigType;
-			RuntimeType elementType = typeSystem.GetType(this.MethodCompiler.Method, this.MethodCompiler.Assembly, elementSigType.Token);
+			RuntimeType elementType = moduleTypeSystem.GetType(this.MethodCompiler.Method, elementSigType.Token);
 			Debug.Assert(elementType != null, @"Newarr didn't specify class signature?");
 
 			Operand lengthOperand = ctx.Operand1;
@@ -475,7 +475,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			Debug.Assert(thisReference != null, @"Newobj didn't specify class signature?");
 
 			ClassSigType classSigType = (ClassSigType)thisReference.Type;
-			RuntimeType classType = typeSystem.GetType(this.MethodCompiler.Method, this.MethodCompiler.Assembly, classSigType.Token);
+			RuntimeType classType = moduleTypeSystem.GetType(this.MethodCompiler.Method, classSigType.Token);
 
 			List<Operand> ctorOperands = new List<Operand>(ctx.Operands);
 			RuntimeMethod ctorMethod = ctx.InvokeTarget;
@@ -678,7 +678,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 
 			string referencedString = assembly.Metadata.ReadString(ctx.Token);
 
-			string symbolName = @"$ldstr$" + assembly.Names[0] + "$String" + ctx.Token.ToString(@"x");
+			string symbolName = @"$ldstr$" + assembly.Name + "$String" + ctx.Token.ToString(@"x");
 
 			if (!linker.HasSymbol(symbolName))
 			{

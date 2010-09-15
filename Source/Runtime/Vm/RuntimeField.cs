@@ -47,10 +47,10 @@ namespace Mosa.Runtime.Vm
 		/// <summary>
 		/// Initializes a new instance of <see cref="RuntimeField"/>.
 		/// </summary>
-		/// <param name="module">The module the field belongs to.</param>
+		/// <param name="moduleTypeSystem">The module type system.</param>
 		/// <param name="declaringType">Specifies the type, which contains this field.</param>
-		public RuntimeField(IMetadataModule module, RuntimeType declaringType, ITypeSystem typeSystem) :
-			base(0, module, declaringType, null, typeSystem)
+		public RuntimeField(IModuleTypeSystem moduleTypeSystem, RuntimeType declaringType) :
+			base(moduleTypeSystem, 0, declaringType, null)
 		{
 		}
 
@@ -111,7 +111,7 @@ namespace Mosa.Runtime.Vm
 			get
 			{
 				// HACK: Generic fields -- is this right?
-				return typeSystem.ResolveSignatureType(DefaultSignatureContext.Instance, this.Module, this.SignatureType);
+				return moduleTypeSystem.ResolveSignatureType(DefaultSignatureContext.Instance, this.SignatureType);
 			}
 		}
 
@@ -165,7 +165,7 @@ namespace Mosa.Runtime.Vm
 		/// </returns>
 		public virtual bool Equals(RuntimeField other)
 		{
-			return (Module == other.Module && this.attributes == other.attributes);
+			return (MetadataModule == other.MetadataModule && this.attributes == other.attributes);
 		}
 
 		#endregion // IEquatable<RuntimeField> Members

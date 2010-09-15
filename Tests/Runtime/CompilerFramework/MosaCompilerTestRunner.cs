@@ -32,6 +32,11 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		#region Data members
 
 		/// <summary>
+		/// Holds the type system
+		/// </summary>
+		ITypeSystem typeSystem;
+
+		/// <summary>
 		/// The filename of the assembly, which contains the test case.
 		/// </summary>
 		string assembly = null;
@@ -50,11 +55,6 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		/// The test runtime.
 		/// </summary>
 		TestRuntime runtime;
-
-		/// <summary>
-		/// The metadata module of the test case.
-		/// </summary>
-		IMetadataModule module;
 
 		#endregion // Data members
 
@@ -122,7 +122,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
 			// Dispose the test runtime.
 			if (null != this.runtime)
 			{
-				this.runtime.Dispose();
+				//this.runtime.Dispose();
 				this.runtime = null;
 			}
 
@@ -139,7 +139,6 @@ namespace Test.Mosa.Runtime.CompilerFramework
 			}
 		}
 
-
 		/// <summary>
 		/// Runs a test case.
 		/// </summary>
@@ -154,11 +153,9 @@ namespace Test.Mosa.Runtime.CompilerFramework
 			// Do we need to compile the code?
 			if (this.needCompile == true)
 			{
-				if (module != null)
-					StaticRuntime.AssemblyLoader.Unload(module);	// FIXME
 				this.assembly = this.CompileTestCode<TDelegate>(ns, type, method);
 				Console.WriteLine("Executing MOSA compiler...");
-				module = RunMosaCompiler(this.assembly, StaticRuntime.TypeSystem, StaticRuntime.AssemblyLoader); // FIXME
+				RunMosaCompiler(this.assembly);
 				this.needCompile = false;
 			}
 
@@ -189,7 +186,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		/// <returns>An instance of <see cref="RuntimeMethod"/>.</returns>
 		private RuntimeMethod FindMethod(string ns, string type, string method)
 		{
-			foreach (RuntimeType t in runtime.TypeSystem.GetTypesFromModule(module))
+			foreach (RuntimeType t in typeSystem.GetCompiledTypes())
 			{
 				if (t.Namespace != ns || t.Name != type)
 					continue;
@@ -220,13 +217,20 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <param name="assemblyFile">The assembly file name.</param>
 		/// <returns>The metadata module, which represents the loaded assembly.</returns>
-		private IMetadataModule RunMosaCompiler(string assemblyFile, ITypeSystem typeSystem, IAssemblyLoader assemblyLoader)
+		private void RunMosaCompiler(string assemblyFile)
 		{
-			IMetadataModule rtModule = StaticRuntime.AssemblyLoader.Load(typeSystem, typeof(global::Mosa.Runtime.Runtime).Module.FullyQualifiedName);
-			IMetadataModule module = StaticRuntime.AssemblyLoader.Load(typeSystem, assemblyFile);
+			IAssemblyLoader assemblyLoader = new AssemblyLoader();
+			typeSystem = new DefaultTypeSystem(assemblyLoader);
 
-			TestCaseAssemblyCompiler.Compile(module, typeSystem, assemblyLoader);
-			return module;
+			List<string> files = new List<string>();
+			files.Add(assemblyFile);
+			assemblyLoader.InitializePrivatePaths(files);
+
+			assemblyLoader.AppendPrivatePath(typeof(global::Mosa.Runtime.Runtime).Module.FullyQualifiedName);
+
+			typeSystem.LoadModules(files);
+
+			TestCaseAssemblyCompiler.Compile(typeSystem, assemblyLoader);
 		}
 
 		#endregion // Methods

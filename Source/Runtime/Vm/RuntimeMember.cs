@@ -38,11 +38,6 @@ namespace Mosa.Runtime.Vm
 		/// </summary>
 		private string name;
 
-		/// <summary>
-		/// Holds the static instance of the runtime.
-		/// </summary>
-		protected ITypeSystem typeSystem;
-
 		#endregion // Data members
 
 		#region Construction
@@ -50,16 +45,15 @@ namespace Mosa.Runtime.Vm
 		/// <summary>
 		/// Initializes a new instance of <see cref="RuntimeMember"/>.
 		/// </summary>
+		/// <param name="moduleTypeSystem">The module type system.</param>
 		/// <param name="token">Holds the token of this runtime metadata.</param>
-		/// <param name="module">The module.</param>
 		/// <param name="declaringType">The declaring type of the member.</param>
 		/// <param name="attributes">Holds the attributes of the member.</param>
-		protected RuntimeMember(int token, IMetadataModule module, RuntimeType declaringType, RuntimeAttribute[] attributes, ITypeSystem typeSystem) :
-			base(module, token)
+		protected RuntimeMember(IModuleTypeSystem moduleTypeSystem, int token, RuntimeType declaringType, RuntimeAttribute[] attributes) :
+			base(moduleTypeSystem, token)
 		{
 			this.declaringType = declaringType;
 			this.attributes = attributes;
-			this.typeSystem = typeSystem;
 		}
 
 		#endregion // Construction

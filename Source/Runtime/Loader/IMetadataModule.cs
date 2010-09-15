@@ -25,7 +25,7 @@ namespace Mosa.Runtime.Loader
 		/// Gets the code bases of the module.
 		/// </summary>
 		/// <value>The code bases of the module.</value>
-		IList<string> CodeBases { get; }
+		string CodeBase { get; }
 
 		/// <summary>
 		/// Gets the entry point of the module.
@@ -41,7 +41,7 @@ namespace Mosa.Runtime.Loader
 		/// <summary>
 		/// Retrieves the name of the module.
 		/// </summary>
-		IList<string> Names { get; }
+		string Name { get; }
 
 		/// <summary>
 		/// Provides access to the provider contained in the assembly.

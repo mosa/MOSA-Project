@@ -47,10 +47,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.CIL
 			this.CodeSource = CreateTestCode();
 			this.UnsafeCode = true;
 
-			using (TestRuntime runtime = new TestRuntime())
-			{
-				Assert.DoesNotThrow(() => this.CompileTestCode());
-			}
+			TestRuntime runtime = new TestRuntime();
+
+			Assert.DoesNotThrow(() => this.CompileTestCode());
 		}
 	}
 }

@@ -29,16 +29,6 @@ namespace Mosa.Tools.Compiler
 	public class CompilationRuntime : BaseRuntime
 	{
 		/// <summary>
-		/// The assembly loader of this runtime.
-		/// </summary>
-		private IAssemblyLoader assemblyLoader;
-
-		/// <summary>
-		/// The type loader of this runtime.
-		/// </summary>
-		private ITypeSystem typeSystem;
-
-		/// <summary>
 		/// The memory page manager of this runtime.
 		/// </summary>
 		private IMemoryPageManager memoryManager;
@@ -53,8 +43,6 @@ namespace Mosa.Tools.Compiler
 		/// </summary>
 		public CompilationRuntime()
 		{
-			this.assemblyLoader = new AssemblyLoader();
-			this.typeSystem = new DefaultTypeSystem(assemblyLoader);
 			this.memoryManager = new MockMemoryPageManager();
 			this.jitService = new MockJitService();
 		}
@@ -69,24 +57,6 @@ namespace Mosa.Tools.Compiler
 		}
 
 		/// <summary>
-		/// Retrieves the type loader of the runtime.
-		/// </summary>
-		/// <value>The type loader.</value>
-		public override ITypeSystem TypeSystem
-		{
-			get { return this.typeSystem; }
-		}
-
-		/// <summary>
-		/// Gets the assembly loader.
-		/// </summary>
-		/// <value>The assembly loader.</value>
-		public override IAssemblyLoader AssemblyLoader
-		{
-			get { return this.assemblyLoader; }
-		}
-
-		/// <summary>
 		/// Gets the JIT service.
 		/// </summary>
 		/// <value>The JIT service.</value>
@@ -95,31 +65,5 @@ namespace Mosa.Tools.Compiler
 			get { return this.jitService; }
 		}
 
-		public void InitializePrivatePaths(IEnumerable<string> assemblyPaths)
-		{
-			// Append the paths of the folder to the loader path);
-			foreach (string path in this.FindPrivatePaths(assemblyPaths))
-			{
-				this.assemblyLoader.AppendPrivatePath(path);
-			}
-		}
-
-		/// <summary>
-		/// Finds the private paths.
-		/// </summary>
-		/// <param name="assemblyPaths">The assembly paths.</param>
-		/// <returns></returns>
-		private IEnumerable<string> FindPrivatePaths(IEnumerable<string> assemblyPaths)
-		{
-			List<string> privatePaths = new List<string>();
-			foreach (string assembly in assemblyPaths)
-			{
-				string path = Path.GetDirectoryName(assembly);
-				if (!privatePaths.Contains(path))
-					privatePaths.Add(path);
-			}
-
-			return privatePaths;
-		}
 	}
 }

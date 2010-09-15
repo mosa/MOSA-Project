@@ -24,8 +24,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 	{
 		private readonly Queue<CCtor> cctorQueue = new Queue<CCtor>();
 
-		private TestCaseAssemblyCompiler(IArchitecture architecture, IMetadataModule module, ITypeSystem typeSystem, IAssemblyLoader assemblyLoader) :
-			base(architecture, module, typeSystem, assemblyLoader)
+		private TestCaseAssemblyCompiler(IArchitecture architecture, ITypeSystem typeSystem) :
+			base(architecture, typeSystem)
 		{
 			// Build the assembly compiler pipeline
 			CompilerPipeline pipeline = this.Pipeline;
@@ -38,10 +38,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 			architecture.ExtendAssemblyCompilerPipeline(pipeline);
 		}
 
-		public static void Compile(IMetadataModule module, ITypeSystem typeSystem, IAssemblyLoader assemblyLoader)
+		public static void Compile(ITypeSystem typeSystem, IAssemblyLoader assemblyLoader)
 		{
 			IArchitecture architecture = x86.Architecture.CreateArchitecture(x86.ArchitectureFeatureFlags.AutoDetect);
-			new TestCaseAssemblyCompiler(architecture, module, typeSystem, assemblyLoader).Compile();
+			new TestCaseAssemblyCompiler(architecture, typeSystem).Compile();
 		}
 
 		public override IMethodCompiler CreateMethodCompiler(ICompilationSchedulerStage schedulerStage, RuntimeType type, RuntimeMethod method)

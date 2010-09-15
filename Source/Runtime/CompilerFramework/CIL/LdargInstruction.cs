@@ -55,10 +55,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 					break;
 
 				case OpCode.Ldarg_s:
-					{
-						byte arg = decoder.DecodeByte();
-						argIdx = arg;
-					}
+					argIdx = decoder.DecodeByte();
 					break;
 
 				case OpCode.Ldarg_0:

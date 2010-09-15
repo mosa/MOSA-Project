@@ -9,9 +9,9 @@ namespace Mosa.HelloWorld.xxTest
 {
 	class GenericType<T>
 	{
-		public static T StaticMethodInGenericType(T value)
+		public static T StaticMethodInGenericType(T same)
 		{
-			return value;
+			return same;
 		}
 	}
 

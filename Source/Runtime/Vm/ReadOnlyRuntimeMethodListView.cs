@@ -35,12 +35,13 @@ namespace Mosa.Runtime.Vm
 		}
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="ReadOnlyRuntimeFieldListView"/>.
+		/// Initializes a new instance of the <see cref="ReadOnlyRuntimeMethodListView"/> class.
 		/// </summary>
-		/// <param name="firstIndex">The first index of the list view.</param>
+		/// <param name="moduleTypeSystem">The module type system.</param>
+		/// <param name="start">The first index of the list view.</param>
 		/// <param name="count">The number of elements in the list view.</param>
-		public ReadOnlyRuntimeMethodListView(int firstIndex, int count, ITypeSystem typeSystem)
-			: base(firstIndex, count, typeSystem)
+		public ReadOnlyRuntimeMethodListView(IModuleTypeSystem moduleTypeSystem, int start, int count)
+			: base(moduleTypeSystem, start, count)
 		{
 		}
 
@@ -54,7 +55,7 @@ namespace Mosa.Runtime.Vm
 		/// <value></value>
 		protected override RuntimeMethod[] Items
 		{
-			get { if (typeSystem == null) return null; else return typeSystem.Methods; }
+			get { if (moduleTypeSystem == null) return null; else return moduleTypeSystem.Methods; }
 		}
 
 		#endregion // Overrides

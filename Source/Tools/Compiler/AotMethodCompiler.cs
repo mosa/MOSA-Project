@@ -40,7 +40,7 @@ namespace Mosa.Tools.Compiler
 		/// Initializes a new instance of the <see cref="AotMethodCompiler"/> class.
 		/// </summary>
 		public AotMethodCompiler(AssemblyCompiler compiler, ICompilationSchedulerStage compilationScheduler, RuntimeType type, RuntimeMethod method)
-			: base(compiler.Pipeline.FindFirst<IAssemblyLinker>(), compiler.Architecture, compilationScheduler, type, method, compiler.TypeSystem, compiler.AssemblyLoader)
+			: base(compiler.Pipeline.FindFirst<IAssemblyLinker>(), compiler.Architecture, compilationScheduler, type, method, compiler.TypeSystem)
 		{
 			this.assemblyCompiler = compiler;
 			this.Pipeline.AddRange(
@@ -49,13 +49,13 @@ namespace Mosa.Tools.Compiler
 					new DecodingStage(),
 					//InstructionLogger.Instance,
 					new BasicBlockBuilderStage(),
-					InstructionLogger.Instance,
+					//InstructionLogger.Instance,
 					new OperandDeterminationStage(),
-					InstructionLogger.Instance,
+					//InstructionLogger.Instance,
 					StaticAllocationResolutionStageWrapper.Instance,
-					InstructionLogger.Instance,
+					//InstructionLogger.Instance,
 					new CILTransformationStage(),
-					InstructionLogger.Instance,
+					//InstructionLogger.Instance,
 					//InstructionStatisticsStage.Instance,
 					//new DominanceCalculationStage(),
 					//InstructionLogger.Instance,
@@ -74,7 +74,7 @@ namespace Mosa.Tools.Compiler
 					//InstructionLogger.Instance,
 					//new BlockReductionStage(),
 					new LoopAwareBlockOrderStage(),
-					//InstructionLogger.Instance,
+					InstructionLogger.Instance,
 					//new SimpleTraceBlockOrderStage(),
 					//new ReverseBlockOrderStage(),	
 					//new LocalCSE(),

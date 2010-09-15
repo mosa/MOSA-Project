@@ -21,7 +21,7 @@ namespace Mosa.Runtime
 	/// <summary>
 	/// Provides central runtime entry points for various features.
 	/// </summary>
-	public abstract class BaseRuntime : IDisposable
+	public abstract class BaseRuntime
 	{
 
 		#region Construction
@@ -47,24 +47,6 @@ namespace Mosa.Runtime
 		}
 
 		/// <summary>
-		/// Retrieves the type loader of the runtime.
-		/// </summary>
-		/// <value>The type loader.</value>
-		public abstract ITypeSystem TypeSystem
-		{
-			get;
-		}
-
-		/// <summary>
-		/// Gets the assembly loader.
-		/// </summary>
-		/// <value>The assembly loader.</value>
-		public abstract IAssemblyLoader AssemblyLoader
-		{
-			get;
-		}
-
-		/// <summary>
 		/// Gets the JIT service.
 		/// </summary>
 		/// <value>The JIT service.</value>
@@ -75,17 +57,5 @@ namespace Mosa.Runtime
 
 		#endregion // Properties
 
-		#region IDisposable Members
-
-		/// <summary>
-		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-		/// </summary>
-		public void Dispose()
-		{
-			foreach (IMetadataModule module in AssemblyLoader.Modules)
-				AssemblyLoader.Unload(module);
-		}
-
-		#endregion // IDisposable Members
 	}
 }

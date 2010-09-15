@@ -30,7 +30,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// <param name="token">The token.</param>
 		public void LoadSignature(ISignatureContext context, IMetadataProvider provider, TokenTypes token)
 		{
-			SignatureReader reader = new SignatureReader(provider.ReadBlob(token), provider, token);
+			SignatureReader reader = new SignatureReader(provider.ReadBlob(token), token);
 
 			this.ParseSignature(context, reader);
 			Debug.Assert(reader.Index == reader.Length, @"Signature parser didn't complete.");
@@ -55,7 +55,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 		{
 			Signature result;
 
-			SignatureReader reader = new SignatureReader(provider.ReadBlob(token), provider, token);
+			SignatureReader reader = new SignatureReader(provider.ReadBlob(token), token);
 
 			if (reader[0] == 0x06)
 			{

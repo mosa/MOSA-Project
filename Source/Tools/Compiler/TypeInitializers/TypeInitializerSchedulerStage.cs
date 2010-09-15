@@ -43,7 +43,7 @@ namespace Mosa.Tools.Compiler.TypeInitializers
 		/// <summary>
 		/// Holds the method for the type initalizer
 		/// </summary>
-		private CompilerGeneratedMethod method;
+		private LinkerGeneratedMethod method;
 
 		#endregion // Data Members
 
@@ -69,7 +69,7 @@ namespace Mosa.Tools.Compiler.TypeInitializers
 		/// Gets the intializer method.
 		/// </summary>
 		/// <value>The method.</value>
-		public CompilerGeneratedMethod Method
+		public LinkerGeneratedMethod Method
 		{
 			get
 			{
@@ -103,7 +103,8 @@ namespace Mosa.Tools.Compiler.TypeInitializers
 		/// </summary>
 		void IAssemblyCompilerStage.Run()
 		{
-			RuntimeMethod entrypoint = typeSystem.GetMethod(DefaultSignatureContext.Instance, compiler.MainAssembly, compiler.MainAssembly.EntryPoint);
+			IModuleTypeSystem mainModule = typeSystem.GetMainModuleTypeSystem();
+			RuntimeMethod entrypoint = mainModule.GetMethod(DefaultSignatureContext.Instance, mainModule.MetadataModule.EntryPoint);
 
 			Schedule(entrypoint);
 			ctx.AppendInstruction(IR.Instruction.EpilogueInstruction);

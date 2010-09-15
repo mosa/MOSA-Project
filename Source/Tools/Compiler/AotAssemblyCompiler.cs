@@ -18,8 +18,8 @@ namespace Mosa.Tools.Compiler
 {
 	public class AotAssemblyCompiler : AssemblyCompiler
 	{
-		public AotAssemblyCompiler(IArchitecture architecture, IMetadataModule assembly, ITypeInitializerSchedulerStage typeInitializerSchedulerStage, IAssemblyLinker linker, ITypeSystem typeSystem, IAssemblyLoader assemblyLoader)
-			: base(architecture, assembly, typeSystem, assemblyLoader)
+		public AotAssemblyCompiler(IArchitecture architecture, ITypeInitializerSchedulerStage typeInitializerSchedulerStage, IAssemblyLinker linker, ITypeSystem typeSystem)
+			: base(architecture, typeSystem)
 		{
 			this.Pipeline.AddRange(
 				new IAssemblyCompilerStage[] 

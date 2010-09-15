@@ -52,7 +52,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			TokenTypes token = decoder.DecodeTokenType();
 
 			//throw new NotImplementedException();
-			uint size = (uint)ObjectModelUtility.ComputeTypeSize(decoder.Method, token, decoder.Compiler.Assembly.Metadata, decoder.Compiler.Architecture);
+			uint size = (uint)ObjectModelUtility.ComputeTypeSize(decoder.Method, token, decoder.ModuleTypeSystem, decoder.Compiler.Architecture);
 			ctx.Result = new Operands.ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(CilElementType.U4), size);
 			/*
 				TypeReference _typeRef = MetadataTypeReference.FromToken(decoder.Metadata, token);

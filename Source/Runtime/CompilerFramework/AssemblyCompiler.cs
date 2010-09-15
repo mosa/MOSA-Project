@@ -29,11 +29,6 @@ namespace Mosa.Runtime.CompilerFramework
 		private IArchitecture architecture;
 
 		/// <summary>
-		/// The assembly of this compiler.
-		/// </summary>
-		private IMetadataModule assembly;
-
-		/// <summary>
 		/// The pipeline of the assembly compiler.
 		/// </summary>
 		private CompilerPipeline pipeline;
@@ -43,12 +38,6 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		protected ITypeSystem typeSystem;
 
-		/// <summary>
-		/// Holds the assembly loader.
-		/// </summary>
-		/// <value>The assembly loader.</value>
-		protected IAssemblyLoader assemblyLoader;
-
 		#endregion // Data members
 
 		#region Construction
@@ -57,20 +46,15 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Initializes a new compiler instance.
 		/// </summary>
 		/// <param name="architecture">The compiler target architecture.</param>
-		/// <param name="assembly">The assembly of this compiler.</param>
 		/// <param name="typeSystem">The type system.</param>
-		/// <param name="assemblyLoader">The assembly loader.</param>
-		/// <exception cref="System.ArgumentNullException">Either <paramref name="architecture"/> or <paramref name="assembly"/> is null.</exception>
-		protected AssemblyCompiler(IArchitecture architecture, IMetadataModule assembly, ITypeSystem typeSystem, IAssemblyLoader assemblyLoader)
+		protected AssemblyCompiler(IArchitecture architecture, ITypeSystem typeSystem)
 		{
 			if (architecture == null)
 				throw new ArgumentNullException(@"architecture");
 
 			this.architecture = architecture;
-			this.assembly = assembly;
 			this.pipeline = new CompilerPipeline();
 			this.typeSystem = typeSystem;
-			this.assemblyLoader = assemblyLoader;
 		}
 
 		#endregion // Construction
@@ -97,15 +81,6 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
-		/// Gets the assembly.
-		/// </summary>
-		/// <value>The assembly.</value>
-		public IMetadataModule MainAssembly
-		{
-			get { return assembly; }
-		}
-
-		/// <summary>
 		/// Gets the pipeline.
 		/// </summary>
 		/// <value>The pipeline.</value>
@@ -121,15 +96,6 @@ namespace Mosa.Runtime.CompilerFramework
 		public ITypeSystem TypeSystem
 		{
 			get { return typeSystem; }
-		}
-
-		/// <summary>
-		/// Gets the assembly loader.
-		/// </summary>
-		/// <value>The assembly loader.</value>
-		public IAssemblyLoader AssemblyLoader
-		{
-			get { return assemblyLoader; }
 		}
 
 		#endregion // Properties

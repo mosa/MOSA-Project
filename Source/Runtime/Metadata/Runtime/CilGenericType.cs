@@ -1,20 +1,18 @@
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.Text;
+
+using Mosa.Runtime.Loader;
+using Mosa.Runtime.Metadata.Signatures;
+using Mosa.Runtime.Vm;
 
 namespace Mosa.Runtime.Metadata.Runtime
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Diagnostics;
-	using System.Text;
-
-	using Mosa.Runtime.Loader;
-	using Mosa.Runtime.Metadata.Signatures;
-	using Mosa.Runtime.Vm;
 
 	public class CilGenericType : RuntimeType
 	{
 		private readonly GenericInstSigType signature;
-
-		private readonly IMetadataModule signatureModule;
 
 		private readonly ISignatureContext signatureContext;
 
@@ -22,12 +20,11 @@ namespace Mosa.Runtime.Metadata.Runtime
 
 		private SigType[] genericArguments;
 
-		public CilGenericType(RuntimeType type, IMetadataModule referencingModule, GenericInstSigType genericTypeInstanceSignature, ISignatureContext signatureContext, ITypeSystem typeSystem) :
-			base(type.Token, type.Module, typeSystem)
+		public CilGenericType(IModuleTypeSystem moduleTypeSystem, RuntimeType type, GenericInstSigType genericTypeInstanceSignature, ISignatureContext signatureContext) :
+			base(moduleTypeSystem, type.Token)
 		{
 			this.signature = genericTypeInstanceSignature;
 			this.signatureContext = signatureContext;
-			this.signatureModule = referencingModule;
 
 			this.Methods = this.GetMethods();
 			this.Fields = this.GetFields();
@@ -80,9 +77,9 @@ namespace Mosa.Runtime.Metadata.Runtime
 			foreach (CilRuntimeMethod method in this.genericType.Methods)
 			{
 				MethodSignature signature = new MethodSignature();
-				signature.LoadSignature(this, method.Module.Metadata, method.Signature.Token);
+				signature.LoadSignature(this, method.MetadataModule.Metadata, method.Signature.Token);
 
-				RuntimeMethod genericInstanceMethod = new CilGenericMethod(method, signature, this, typeSystem);
+				RuntimeMethod genericInstanceMethod = new CilGenericMethod(moduleTypeSystem, method, signature, this);
 				methods.Add(genericInstanceMethod);
 			}
 
@@ -97,9 +94,9 @@ namespace Mosa.Runtime.Metadata.Runtime
 			foreach (CilRuntimeField field in this.genericType.Fields)
 			{
 				FieldSignature fsig = new FieldSignature();
-				fsig.LoadSignature(this, this.genericType.Module.Metadata, field.Signature.Token);
+				fsig.LoadSignature(this, this.genericType.MetadataModule.Metadata, field.Signature.Token);
 
-				CilGenericField genericInstanceField = new CilGenericField(this, field, fsig, typeSystem);
+				CilGenericField genericInstanceField = new CilGenericField(moduleTypeSystem, this, field, fsig);
 				fields.Add(genericInstanceField);
 			}
 
@@ -112,7 +109,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 			{
 				SigType[] signatureArguments = this.signature.GenericArguments;
 
-				this.genericType = typeSystem.GetType(DefaultSignatureContext.Instance, this.signatureModule, this.signature.BaseType.Token);
+				this.genericType = moduleTypeSystem.GetType(DefaultSignatureContext.Instance, this.signature.BaseType.Token);
 				this.genericArguments = this.signature.GenericArguments;
 			}
 		}
@@ -125,7 +122,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 			{
 				case CilElementType.Class:
 					Debug.Assert(sigType is TypeSigType, @"Failing to resolve VarSigType in GenericType.");
-					result = typeSystem.GetType(this, this.signatureModule, ((TypeSigType)sigType).Token);
+					result = moduleTypeSystem.GetType(this, ((TypeSigType)sigType).Token);
 					break;
 
 				case CilElementType.ValueType:
@@ -144,7 +141,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 						BuiltInSigType builtIn = sigType as BuiltInSigType;
 						if (builtIn != null)
 						{
-							result = typeSystem.GetType(builtIn.TypeName + ", mscorlib");
+							result = moduleTypeSystem.GetType(builtIn.TypeName + ", mscorlib");
 						}
 						else
 						{

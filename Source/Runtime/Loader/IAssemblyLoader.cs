@@ -19,6 +19,13 @@ namespace Mosa.Runtime.Loader
 	/// </summary>
 	public interface IAssemblyLoader
 	{
+
+		/// <summary>
+		/// Initializes the private paths.
+		/// </summary>
+		/// <param name="assemblyPaths">The assembly paths.</param>
+		void InitializePrivatePaths(IEnumerable<string> assemblyPaths);
+
 		/// <summary>
 		/// Appends the given path to the assembly search path.
 		/// </summary>
@@ -30,33 +37,7 @@ namespace Mosa.Runtime.Loader
 		/// </summary>
 		/// <param name="file">The file path of the assembly to load.</param>
 		/// <returns>The assembly image of the loaded assembly.</returns>
-		IMetadataModule Load(ITypeSystem typesystem, string file);
+		IMetadataModule LoadModule(string file);
 
-		/// <summary>
-		/// Loads the named assemblies (as a merged assembly)
-		/// </summary>
-		/// <param name="files">The files.</param>
-		/// <returns>
-		/// The assembly image of the loaded assembly.
-		/// </returns>
-		IMetadataModule MergeLoad(ITypeSystem typesystem, IEnumerable<string> files);
-
-		/// <summary>
-		/// Unloads the given module.
-		/// </summary>
-		/// <param name="module">The module to unload.</param>
-		void Unload(IMetadataModule module);
-
-		/// <summary>
-		/// Gets an enumerable collection of loaded modules.
-		/// </summary>
-		IEnumerable<IMetadataModule> Modules { get; }
-
-		/// <summary>
-		/// Gets the module.
-		/// </summary>
-		/// <param name="index">The index.</param>
-		/// <returns></returns>
-		IMetadataModule GetModule(int index);
 	}
 }
