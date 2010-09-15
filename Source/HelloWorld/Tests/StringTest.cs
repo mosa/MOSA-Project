@@ -5,7 +5,7 @@ using System;
 
 namespace Mosa.HelloWorld.Tests
 {
-	public static class StringTest
+	public class StringTest : KernelTest
 	{
 		public static void Test()
 		{
@@ -85,22 +85,6 @@ namespace Mosa.HelloWorld.Tests
 			string main = "123456789";
 
 			return main.Length == 9;
-		}
-
-		public static void PrintResult(bool flag)
-		{
-			byte color = Screen.Color;
-			if (flag)
-			{
-				Screen.Color = Colors.Green;
-				Screen.Write("+");
-			}
-			else
-			{
-				Screen.Color = Colors.Red;
-				Screen.Write("X");
-			}
-			Screen.Color = color;
 		}
 	}
 }

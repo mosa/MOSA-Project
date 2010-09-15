@@ -5,7 +5,7 @@ using System;
 
 namespace Mosa.HelloWorld.Tests
 {
-	public static class InterfaceTest
+	public class InterfaceTest : KernelTest
 	{
 		public static void Test()
 		{
@@ -38,22 +38,6 @@ namespace Mosa.HelloWorld.Tests
 			InterfaceB b = tc;
 			bool result = (b.A() == 2);
 			return result;
-		}
-
-		public static void PrintResult(bool flag)
-		{
-			byte color = Screen.Color;
-			if (flag)
-			{
-				Screen.Color = Colors.Green;
-				Screen.Write("+");
-			}
-			else
-			{
-				Screen.Color = Colors.Red;
-				Screen.Write("X");
-			}
-			Screen.Color = color;
 		}
 	}
 
