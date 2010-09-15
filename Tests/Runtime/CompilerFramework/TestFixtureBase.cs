@@ -30,6 +30,15 @@ namespace Test.Mosa.Runtime.CompilerFramework
 	/// </summary>
 	public abstract class TestFixtureBase
 	{
+
+		/// <summary>
+		/// Holds the type system
+		/// </summary>
+		ITypeSystem typeSystem;
+
+		/// <summary>
+		/// 
+		/// </summary>
 		private Assembly loadedAssembly;
 
 		/// <summary>
@@ -272,7 +281,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		/// <returns>An instance of <see cref="RuntimeMethod"/>.</returns>
 		private RuntimeMethod FindMethod(string ns, string type, string method)
 		{
-			foreach (RuntimeType t in StaticRuntime.TypeSystem.GetCompiledTypes())
+			foreach (RuntimeType t in typeSystem.GetCompiledTypes())
 			{
 				if (t.Namespace != ns || t.Name != type)
 					continue;
@@ -349,17 +358,18 @@ namespace Test.Mosa.Runtime.CompilerFramework
 
 		private void RunMosaCompiler(string assemblyFile)
 		{
-			//IMetadataModule rtModule = StaticRuntime.AssemblyLoader.Load(StaticRuntime.TypeSystem,typeof(global::Mosa.Runtime.Runtime).Module.FullyQualifiedName);
-			//IMetadataModule module = StaticRuntime.AssemblyLoader.Load(StaticRuntime.TypeSystem, assemblyFile);
+			IAssemblyLoader assemblyLoader = new AssemblyLoader();
+			typeSystem = new DefaultTypeSystem(assemblyLoader);
 
 			List<string> files = new List<string>();
-
 			files.Add(assemblyFile);
-			files.Add(typeof(global::Mosa.Runtime.Runtime).Module.FullyQualifiedName);
+		
+			assemblyLoader.InitializePrivatePaths(files);
+			assemblyLoader.AppendPrivatePath(typeof(global::Mosa.Runtime.Runtime).Module.FullyQualifiedName);
 
-			StaticRuntime.TypeSystem.LoadModules(files);
+			typeSystem.LoadModules(files);
 
-			TestCaseAssemblyCompiler.Compile(StaticRuntime.TypeSystem, StaticRuntime.AssemblyLoader);
+			TestCaseAssemblyCompiler.Compile(typeSystem, assemblyLoader);
 		}
 
 		public void Dispose()

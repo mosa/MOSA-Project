@@ -43,17 +43,6 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		public static IMemoryPageManager MemoryManager { get { return BaseRuntime.MemoryManager; } }
 
 		/// <summary>
-		/// Retrieves the type loader of the runtime.
-		/// </summary>
-		/// <value>The type loader.</value>
-		public static ITypeSystem TypeSystem { get { return BaseRuntime.TypeSystem; } }
-		/// <summary>
-		/// Gets the assembly loader.
-		/// </summary>
-		/// <value>The assembly loader.</value>
-		public static IAssemblyLoader AssemblyLoader { get { return BaseRuntime.AssemblyLoader; } }
-
-		/// <summary>
 		/// Gets the JIT service.
 		/// </summary>
 		/// <value>The JIT service.</value>

@@ -60,20 +60,21 @@ namespace Mosa.Runtime.Loader
 		{
 			lock (loaderLock)
 			{
-				privatePaths.Add(path);
+				string p = Path.GetDirectoryName(path);
+
+				if (!privatePaths.Contains(p))
+					privatePaths.Add(p);
 			}
 		}
 
+		/// <summary>
+		/// Initializes the private paths.
+		/// </summary>
+		/// <param name="assemblyPaths">The assembly paths.</param>
 		void IAssemblyLoader.InitializePrivatePaths(IEnumerable<string> assemblyPaths)
 		{
-			lock (loaderLock)
-			{
-				// Append the paths of the folder to the loader path);
-				foreach (string path in FindPrivatePaths(assemblyPaths))
-				{
-					privatePaths.Add(path);
-				}
-			}
+			foreach (string path in FindPrivatePaths(assemblyPaths))
+				((IAssemblyLoader)this).AppendPrivatePath(path);
 		}
 
 		/// <summary>
@@ -185,6 +186,7 @@ namespace Mosa.Runtime.Loader
 			}
 
 			return privatePaths;
+
 		}
 
 		#endregion // Internals

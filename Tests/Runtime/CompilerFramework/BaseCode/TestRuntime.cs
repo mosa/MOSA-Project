@@ -37,16 +37,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 		private IMemoryPageManager _memoryPageManager;
 
 		/// <summary>
-		/// The type loader of this runtime.
-		/// </summary>
-		private ITypeSystem _typeSystem;
-
-		/// <summary>
-		/// The assembly loader of this runtime.
-		/// </summary>
-		private IAssemblyLoader _assemblyLoader;
-
-		/// <summary>
 		/// The jit service of this runtime.
 		/// </summary>
 		private IJitService _jitService;
@@ -61,8 +51,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 		public TestRuntime()
 		{
 			_memoryPageManager = new Win32MemoryPageManager();
-			_assemblyLoader = new AssemblyLoader();
-			_typeSystem = new DefaultTypeSystem(_assemblyLoader);
 			_jitService = new SimpleJitService();
 			StaticRuntime.BaseRuntime = this; // HACK
 		}
@@ -74,16 +62,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 		public override IMemoryPageManager MemoryManager
 		{
 			get { return _memoryPageManager; }
-		}
-
-		public override ITypeSystem TypeSystem
-		{
-			get { return _typeSystem; }
-		}
-
-		public override IAssemblyLoader AssemblyLoader
-		{
-			get { return _assemblyLoader; }
 		}
 
 		public override IJitService JitService

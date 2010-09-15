@@ -17,9 +17,10 @@ using NDesk.Options;
 using Mosa.Runtime;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Loader;
+using Mosa.Runtime.Vm;
+using Mosa.Runtime.Linker;
 using Mosa.Tools.Compiler.Boot;
 using Mosa.Tools.Compiler.Linkers;
-using Mosa.Runtime.Linker;
 using Mosa.Tools.Compiler.Symbols.Pdb;
 using Mosa.Tools.Compiler.Stages;
 
@@ -256,13 +257,14 @@ namespace Mosa.Tools.Compiler
 
 		private void Compile()
 		{
-			CompilationRuntime runtime = new CompilationRuntime();
+			IAssemblyLoader assemblyLoader = new AssemblyLoader();
+			assemblyLoader.InitializePrivatePaths(this.GetInputFileNames());
 
-			runtime.AssemblyLoader.InitializePrivatePaths(this.GetInputFileNames());
-			runtime.TypeSystem.LoadModules(this.GetInputFileNames());
+			ITypeSystem typeSystem = new DefaultTypeSystem(assemblyLoader);
+			typeSystem.LoadModules(this.GetInputFileNames());
 
 			// Create the compiler
-			using (AotCompiler aot = new AotCompiler(this.architectureSelector.Architecture, runtime.TypeSystem))
+			using (AotCompiler aot = new AotCompiler(this.architectureSelector.Architecture, typeSystem))
 			{
 				aot.Pipeline.AddRange(new IAssemblyCompilerStage[] 
 					{

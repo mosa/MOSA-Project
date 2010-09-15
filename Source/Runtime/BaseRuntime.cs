@@ -47,24 +47,6 @@ namespace Mosa.Runtime
 		}
 
 		/// <summary>
-		/// Retrieves the type loader of the runtime.
-		/// </summary>
-		/// <value>The type loader.</value>
-		public abstract ITypeSystem TypeSystem
-		{
-			get;
-		}
-
-		/// <summary>
-		/// Gets the assembly loader.
-		/// </summary>
-		/// <value>The assembly loader.</value>
-		public abstract IAssemblyLoader AssemblyLoader
-		{
-			get;
-		}
-
-		/// <summary>
 		/// Gets the JIT service.
 		/// </summary>
 		/// <value>The JIT service.</value>
