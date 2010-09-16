@@ -8,6 +8,7 @@
 using Mosa.Platforms.x86;
 using Mosa.Kernel;
 using Mosa.Kernel.X86;
+using Mosa.Kernel.X86.Smbios;
 using System;
 
 namespace Mosa.HelloWorld
@@ -28,11 +29,11 @@ namespace Mosa.HelloWorld
 			Screen.GotoTop();
 			Screen.Color = Colors.Yellow;
 
-			Screen.Write(@"MOSA OS Version 0.6 '");
+            Screen.Write(@"MOSA OS Version 0.7 '");
 			Screen.Color = Colors.Red;
-			Screen.Write(@"Mammoth");
+			Screen.Write(@"Malibu");
 			Screen.Color = Colors.Yellow;
-			Screen.Write(@"'                               Copyright 2008-2010");
+			Screen.Write(@"'                                Copyright 2008-2010");
 			Screen.NextLine();
 
 			Screen.Color = 0x0F;
@@ -77,7 +78,7 @@ namespace Mosa.HelloWorld
 
 			Screen.NextLine();
 
-			Screen.Color = Colors.Green;
+			/*Screen.Color = Colors.Green;
 			Screen.Write(@"Memory-Map:");
 			Screen.NextLine();
 
@@ -96,9 +97,72 @@ namespace Mosa.HelloWorld
 				Screen.Write(@"Type: ");
 				Screen.Write(Multiboot.GetMemoryMapType(index), 16, 1);
 				Screen.NextLine();
+			}*/
+			
+			Screen.Color = Colors.Green;
+			Screen.Write (@"Smbios Info: ");
+			if (SmbiosManager.IsAvailable)
+			{
+				Screen.Color = Colors.White;
+				Screen.Write (@"[");
+				Screen.Color = Colors.Gray;
+				Screen.Write (@"Version ");
+				Screen.Write (SmbiosManager.MajorVersion, 10, -1);
+				Screen.Write (@".");
+				Screen.Write (SmbiosManager.MinorVersion, 10, -1);
+				Screen.Color = Colors.White;
+				Screen.Write (@"]");
+				Screen.NextLine ();
+				
+				Screen.Color = Colors.Yellow;
+				Screen.Write (@"[Bios]");
+				Screen.Color = Colors.White;
+				Screen.NextLine ();
+				
+				BiosInformationStructure biosInformation = new BiosInformationStructure ();
+				Screen.Color = Colors.White;
+				Screen.Write (@"Vendor: ");
+				Screen.Color = Colors.Gray;
+				Screen.Write (biosInformation.BiosVendor);
+				Screen.NextLine ();
+				
+				Screen.Color = Colors.Yellow;
+				Screen.Row = 9;
+				Screen.Column = 25;
+				Screen.Write (@"[Cpu]");
+				Screen.Color = Colors.White;
+				Screen.NextLine ();
+				Screen.Column = 25;
+				
+				CpuStructure cpuStructure = new CpuStructure ();
+				Screen.Color = Colors.White;
+				Screen.Write (@"Vendor: ");
+				Screen.Color = Colors.Gray;
+				Screen.Write (cpuStructure.Vendor);
+				Screen.NextLine ();
+				Screen.Column = 25;
+				Screen.Color = Colors.White;
+				Screen.Write (@"Clock Freq.: ");
+				Screen.Color = Colors.Gray;
+				Screen.Write (cpuStructure.ClockFrequency, 10, -1);
+				Screen.Write (@" MHz");
+				Screen.NextLine ();
+				Screen.Column = 25;
+				Screen.Color = Colors.White;
+				Screen.Write (@"Max. Speed: ");
+				Screen.Color = Colors.Gray;
+				Screen.Write (cpuStructure.MaxSpeed, 10, -1);
+				Screen.Write (@" MHz");
+				Screen.NextLine ();
+				Screen.Column = 25;
+			}
+			else
+			{
+				Screen.Color = Colors.Red;
+				Screen.Write (@"No SMBIOS available on this system!");
 			}
 
-			Screen.SetCursor(18, 0);
+			Screen.SetCursor(17, 0);
 
 			Screen.Color = 0x0F;
 			for (uint index = 0; index < 60; index++)
@@ -162,24 +226,22 @@ namespace Mosa.HelloWorld
 
 			//Multiboot.Dump(4,53);
 
-			Screen.Row = 23;
-			for (uint index = 0; index < 80; index++)
-			{
+			Screen.Row = 22;
+			for (uint index = 0; index < 80; index++) {
 				Screen.Column = index;
 				Screen.Write((char)205);
 			}
 
-			for (uint index = 2; index < 24; index++)
-			{
+			for (uint index = 2; index < 23; index++) {
 				Screen.Column = 60;
 				Screen.Row = index;
 
 				Screen.Color = Colors.White;
 				if (index == 7)
 					Screen.Write((char)185);
-				else if (index == 18)
+				else if (index == 17)
 					Screen.Write((char)185);
-				else if (index == 23)
+				else if (index == 22)
 					Screen.Write((char)202);
 				else
 					Screen.Write((char)186);

@@ -82,6 +82,10 @@
     <Compile Include="X86\PIC.cs" />
     <Compile Include="X86\ProcessManager.cs" />
     <Compile Include="X86\Screen.cs" />
+    <Compile Include="X86\Smbios\BiosInformationStructure.cs" />
+    <Compile Include="X86\Smbios\CpuStructure.cs" />
+    <Compile Include="X86\Smbios\SmbiosManager.cs" />
+    <Compile Include="X86\Smbios\SmbiosStructure.cs" />
     <Compile Include="X86\TaskManager.cs" />
     <Compile Include="X86\VirtualPageAllocator.cs" />
   </ItemGroup>

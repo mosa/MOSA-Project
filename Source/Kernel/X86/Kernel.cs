@@ -8,6 +8,7 @@
  */
 
 using Mosa.Kernel.X86;
+using Mosa.Kernel.X86.Smbios;
 
 namespace Mosa.HelloWorld
 {
@@ -52,6 +53,7 @@ namespace Mosa.HelloWorld
 			TaskManager.Setup();
 			Screen.Write('A');
 			Screen.SetCursor(24, 10);
+			SmbiosManager.Setup ();
 		}
 	}
 }

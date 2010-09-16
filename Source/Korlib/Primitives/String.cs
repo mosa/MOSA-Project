@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -98,6 +98,9 @@ namespace System
 
 		[MethodImplAttribute(MethodImplOptions.InternalCall)]
 		public extern String(char[] value, int startIndex, int length);
+		
+		[MethodImplAttribute(MethodImplOptions.InternalCall)]
+		public extern unsafe String(sbyte* value, int startIndex, int length);
 
 		////[MethodImplAttribute(MethodImplOptions.InternalCall)]
 		////public unsafe extern String(sbyte* value);
@@ -157,30 +160,44 @@ namespace System
 
 			return result;
 		}
+		
+		private static unsafe string CreateString(sbyte* value, int startIndex, int length)
+		{
+			String result = InternalAllocateString(length);
+			
+			char* chars = result.first_char;
+			
+			value += startIndex;
+			
+			for (int index = 0; index < length; index++)
+				*chars++ = (char)*value++;
+			
+			return result;
+		}
 
-		//public static bool operator ==(String a, String b)
-		//{
-		//    return String.Equals(a, b);
-		//}
+		/*public static bool operator ==(String a, String b)
+		{
+		    return String.Equals(a, b);
+		}
 
-		//public static bool operator !=(String a, String b)
-		//{
-		//    return !(a == b);
-		//}
+		public static bool operator !=(String a, String b)
+		{
+		    return !(a == b);
+		}
 
-		//public bool Equals(System.String i)
-		//{
-		//    return ((String)(object)i) == this;
-		//}
+		public bool Equals(System.String i)
+		{
+		    return i == this;
+		}
 
-		//public override bool Equals(object o)
-		//{
-		//    //if (!(o is String))
-		//    //	return false;
+		public override bool Equals(object o)
+		{
+		    if (!(o is String))
+		    	return false;
 
-		//    String other = (String)o;
-		//    return other == this;
-		//}
+		    String other = (String)o;
+		    return other == this;
+		}*/
 
 		public static unsafe bool Equals(String a, String b)
 		{
@@ -269,37 +286,28 @@ namespace System
 			char* chars = result.first_char;
 
 			for (int index = 0; index < newlen; index++)
-			{
 				*chars++ = this[startIndex + index];
-			}
 
 			return result;
 		}
 
-		//TODO: Following crashes the compiler
-		//public unsafe string Substring(int startIndex, int length)
-		//{
-		//    if (length < 0)
-		//        return Empty; //throw new System.ArgumentOutOfRangeException("length", "< 0");
+		public unsafe string Substring(int startIndex, int length)
+		{
+		    if (length < 0)
+		        return Empty; //throw new System.ArgumentOutOfRangeException("length", "< 0");
 
-		//    if (startIndex == 0)
-		//        return Empty;
+		    if (startIndex < 0 || startIndex > this.length)
+		        return Empty; //throw new System.ArgumentOutOfRangeException("startIndex");
 
-		//    if (startIndex < 0 || startIndex > this.length)
-		//        return Empty; //throw new System.ArgumentOutOfRangeException("startIndex");
+    		String result = InternalAllocateString(length);
 
-		//    String result = InternalAllocateString(length);
+		    char* chars = result.first_char;
 
-		//    char* chars = result.first_char;
+		    for (int index = 0; index < length; index++)
+		        *chars++ = this[startIndex + index];
 
-		//    for (int index = 0; index < length; index++)
-		//    {
-		//        *chars = this[startIndex + index];
-		//        chars++;
-		//    }
-
-		//    return result;
-		//}
+		    return result;
+		}
 
 		public static bool IsNullOrEmpty(string value)
 		{

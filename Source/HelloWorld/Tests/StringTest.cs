@@ -1,11 +1,11 @@
-﻿using Mosa.Platforms.x86;
+using Mosa.Platforms.x86;
 using Mosa.Kernel;
 using Mosa.Kernel.X86;
 using System;
 
 namespace Mosa.HelloWorld.Tests
 {
-	public static class StringTest
+	public class StringTest : KernelTest
 	{
 		public static void Test()
 		{
@@ -42,12 +42,36 @@ namespace Mosa.HelloWorld.Tests
 			return String.Equals(combined, abc);
 		}
 
+		public static bool ConcatTest3()
+		{
+			string abcde = "abcddddd";
+			string combined = "abc";
+			
+			for (int i = 0; i < 5; ++i)
+				combined = string.Concat(combined, new string ('d', 1));
+
+			return String.Equals(combined, abcde);
+		}
+		
+		public static bool ConcatTest4()
+		{
+			string abcde = "zzzzzzzzzz";
+			string combined = string.Empty;
+			char c = 'z';
+
+			for (int i = 0; i < 10; ++i)
+				combined = string.Concat(combined, new string(c, 1));
+
+			return String.Equals(combined, abcde);
+		}
+
 		public static bool SubStringTest()
 		{
 			string main = "abcdefghi";
-			string sub = main.Substring(6);
+			string sub1 = main.Substring(6);
+			string sub2 = main.Substring(0, 3);
 
-			return string.Equals("ghi", sub);
+			return string.Equals("ghi", sub1) && string.Equals("abc", sub2);
 		}
 
 		public static bool IndexOfTest()
@@ -61,45 +85,6 @@ namespace Mosa.HelloWorld.Tests
 			string main = "123456789";
 
 			return main.Length == 9;
-		}
-
-		public static bool ConcatTest3()
-		{
-			string abcde = "abcddddd";
-			string combined = "abc";
-
-			for (int i = 0; i < 5; ++i)
-				combined = string.Concat(combined, new string('d', 1));
-
-			return String.Equals(combined, abcde);
-		}
-
-		public static bool ConcatTest4()
-		{
-			string abcde = "zzzzzzzzzz";
-			string combined = string.Empty;
-			char c = 'z';
-
-			for (int i = 0; i < 10; ++i)
-				combined = string.Concat(combined, new string(c, 1));
-
-			return String.Equals(combined, abcde);
-		}
-
-		public static void PrintResult(bool flag)
-		{
-			byte color = Screen.Color;
-			if (flag)
-			{
-				Screen.Color = Colors.Green;
-				Screen.Write("+");
-			}
-			else
-			{
-				Screen.Color = Colors.Red;
-				Screen.Write("X");
-			}
-			Screen.Color = color;
 		}
 	}
 }
