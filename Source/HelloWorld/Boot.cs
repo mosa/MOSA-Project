@@ -29,7 +29,7 @@ namespace Mosa.HelloWorld
 			Screen.GotoTop();
 			Screen.Color = Colors.Yellow;
 
-            Screen.Write(@"MOSA OS Version 0.7 '");
+			Screen.Write(@"MOSA OS Version 0.7 '");
 			Screen.Color = Colors.Red;
 			Screen.Write(@"Malibu");
 			Screen.Color = Colors.Yellow;
