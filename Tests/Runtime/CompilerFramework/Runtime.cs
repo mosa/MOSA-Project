@@ -16,6 +16,7 @@ using Mosa.Runtime.Loader;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
 using Test.Mosa.Runtime.CompilerFramework;
+using Test.Mosa.Runtime.CompilerFramework.BaseCode;
 
 namespace Mosa.Runtime
 {
@@ -25,6 +26,14 @@ namespace Mosa.Runtime
 	/// </summary>
 	public static class Runtime
 	{
+		#region Data members
+
+		/// <summary>
+		/// The memory page manager of this runtime.
+		/// </summary>
+		public static IMemoryPageManager MemoryPageManager = new Win32MemoryPageManager();
+
+		#endregion // Data members
 
 		#region Internal Call Prototypes
 
@@ -42,7 +51,7 @@ namespace Mosa.Runtime
 			//
 			ulong allocationSize = (ulong)((2 * nativeIntSize) + classSize);
 
-			void* memory = StaticRuntime.MemoryManager.Allocate(IntPtr.Zero, allocationSize, PageProtectionFlags.Read | PageProtectionFlags.Write | PageProtectionFlags.WriteCombine).ToPointer();
+			void* memory = MemoryPageManager.Allocate(IntPtr.Zero, allocationSize, PageProtectionFlags.Read | PageProtectionFlags.Write | PageProtectionFlags.WriteCombine).ToPointer();
 			if (memory == null)
 			{
 				throw new OutOfMemoryException();

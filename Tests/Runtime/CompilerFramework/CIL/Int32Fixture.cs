@@ -18,7 +18,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 	[Importance(Importance.Critical)]
 	[Category(@"Basic types")]
 	[Description(@"Tests support for the basic type System.Int32")]
-	public class Int32Fixture : RuntimeFixture
+	public class Int32Fixture
 	{
 		private readonly ArithmeticInstructionTestRunner<int, int> arithmeticTests = new ArithmeticInstructionTestRunner<int, int>
 		{

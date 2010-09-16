@@ -15,7 +15,7 @@ using MbUnit.Framework;
 namespace Test.Mosa.Runtime.CompilerFramework.CLI
 {
 	[TestFixture]
-	public class UInt16Fixture : RuntimeFixture
+	public class UInt16Fixture 
 	{
 		private readonly ArithmeticInstructionTestRunner<int, ushort> arithmeticTests = new ArithmeticInstructionTestRunner<int, ushort>
 		{

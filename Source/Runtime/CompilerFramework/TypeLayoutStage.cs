@@ -61,9 +61,9 @@ namespace Mosa.Runtime.CompilerFramework
 			// Enumerate all types and do an appropriate type layout
 			foreach (RuntimeType type in typeSystem.GetCompiledTypes())
 			{
-				Debug.WriteLine("TypeLayout: " + type.FullName);
+				//Debug.WriteLine("TypeLayout: " + type.FullName);
 
-				if (type.Name.Equals("<Module>") && type.Namespace.Length == 0) // HACK
+				if (type.IsModule) 
 					continue;
 
 				if (type.IsGeneric || type.IsDelegate)

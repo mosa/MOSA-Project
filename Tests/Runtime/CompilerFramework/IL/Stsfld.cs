@@ -47,7 +47,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		[Importance(Importance.Severe)]
 		public void StsfldB(bool value)
 		{
-			this.CodeSource = s_testCode.Replace("type", "bool");
+			CodeSource = s_testCode.Replace("type", "bool");
 			bool res = (bool)Run<B_B>(@"", @"Test", @"Stsfld", value);
 			Assert.IsTrue(res);
 		}
@@ -67,7 +67,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		[Importance(Importance.Severe)]
 		public void StsfldC(char value)
 		{
-			this.CodeSource = s_testCode.Replace("type", "char");
+			CodeSource = s_testCode.Replace("type", "char");
 			bool res = (bool)Run<B_C>(@"", @"Test", @"Stsfld", value);
 			Assert.IsTrue(res);
 		}
@@ -82,7 +82,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		[Importance(Importance.Severe)]
 		public void StsfldI1(sbyte value)
 		{
-			this.CodeSource = s_testCode.Replace("type", "sbyte");
+			CodeSource = s_testCode.Replace("type", "sbyte");
 			bool res = (bool)Run<B_I1>(@"", @"Test", @"Stsfld", value);
 			Assert.IsTrue(res);
 		}
@@ -97,7 +97,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		[Importance(Importance.Severe)]
 		public void StsfldI2(short value)
 		{
-			this.CodeSource = s_testCode.Replace("type", "short");
+			CodeSource = s_testCode.Replace("type", "short");
 			bool res = (bool)Run<B_I2>(@"", @"Test", @"Stsfld", value);
 			Assert.IsTrue(res);
 		}
@@ -112,7 +112,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		[Importance(Importance.Severe)]
 		public void StsfldI4(int value)
 		{
-			this.CodeSource = s_testCode.Replace("type", "int");
+			CodeSource = s_testCode.Replace("type", "int");
 			bool res = (bool)Run<B_I4>(@"", @"Test", @"Stsfld", value);
 			Assert.IsTrue(res);
 		}
@@ -127,7 +127,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		[Importance(Importance.Severe)]
 		public void StsfldI8(long value)
 		{
-			this.CodeSource = s_testCode.Replace("type", "long");
+			CodeSource = s_testCode.Replace("type", "long");
 			bool res = (bool)Run<B_I8>(@"", @"Test", @"Stsfld", value);
 			Assert.IsTrue(res);
 		}
@@ -142,7 +142,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		[Importance(Importance.Severe)]
 		public void StsfldU1(byte value)
 		{
-			this.CodeSource = s_testCode.Replace("type", "byte");
+			CodeSource = s_testCode.Replace("type", "byte");
 			bool res = (bool)Run<B_U1>(@"", @"Test", @"Stsfld", value);
 			Assert.IsTrue(res);
 		}
@@ -157,7 +157,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		[Importance(Importance.Severe)]
 		public void StsfldU2(ushort value)
 		{
-			this.CodeSource = s_testCode.Replace("type", "ushort");
+			CodeSource = s_testCode.Replace("type", "ushort");
 			bool res = (bool)Run<B_U2>(@"", @"Test", @"Stsfld", value);
 			Assert.IsTrue(res);
 		}
@@ -172,7 +172,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		[Importance(Importance.Severe)]
 		public void StsfldU4(uint value)
 		{
-			this.CodeSource = s_testCode.Replace("type", "uint");
+			CodeSource = s_testCode.Replace("type", "uint");
 			bool res = (bool)Run<B_U4>(@"", @"Test", @"Stsfld", value);
 			Assert.IsTrue(res);
 		}
@@ -187,7 +187,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		[Importance(Importance.Severe)]
 		public void StsfldU8(ulong value)
 		{
-			this.CodeSource = s_testCode.Replace("type", "ulong");
+			CodeSource = s_testCode.Replace("type", "ulong");
 			bool res = (bool)Run<B_U8>(@"", @"Test", @"Stsfld", value);
 			Assert.IsTrue(res);
 		}
@@ -202,7 +202,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		[Importance(Importance.Severe)]
 		public void StsfldR4(float value)
 		{
-			this.CodeSource = s_testCode.Replace("type", "float");
+			CodeSource = s_testCode.Replace("type", "float");
 			bool res = (bool)Run<B_R4>(@"", @"Test", @"Stsfld", value);
 			Assert.IsTrue(res);
 		}
@@ -217,7 +217,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		[Importance(Importance.Severe)]
 		public void StsfldR8(double value)
 		{
-			this.CodeSource = s_testCode.Replace("type", "double");
+			CodeSource = s_testCode.Replace("type", "double");
 			bool res = (bool)Run<B_R8>(@"", @"Test", @"Stsfld", value);
 			Assert.IsTrue(res);
 		}

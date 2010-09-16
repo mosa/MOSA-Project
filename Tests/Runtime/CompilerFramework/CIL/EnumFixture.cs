@@ -45,11 +45,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.CIL
 		[Test]
 		public void ItemAMustEqual5()
 		{
-			this.CodeSource = CreateTestCode();
+			CodeSource = CreateTestCode();
 			this.DoNotReferenceMsCorlib = true;
 
 			// Due to Code.NoStdLibDefinitions... :(
-			this.UnsafeCode = true;
+			UnsafeCode = true;
 
 			Assert.IsTrue((bool)Run<B_V>("", "TestClass", "AMustBe5"));
 		}

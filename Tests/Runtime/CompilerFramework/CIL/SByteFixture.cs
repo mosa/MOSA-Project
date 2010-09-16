@@ -18,7 +18,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 	[Importance(Importance.Critical)]
 	[Category(@"Basic types")]
 	[Description(@"Tests support for the basic type System.SByte")]
-	public class SByteFixture : RuntimeFixture
+	public class SByteFixture 
 	{
 		private readonly ArithmeticInstructionTestRunner<int, sbyte> arithmeticTests = new ArithmeticInstructionTestRunner<int, sbyte>
 		{

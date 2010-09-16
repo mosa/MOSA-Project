@@ -274,9 +274,6 @@
     <Compile Include="MethodCompilationStageComposite.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="BaseRuntime.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="CompilerFramework\ArchitectureSpecificAttribute.cs">
       <SubType>Code</SubType>
     </Compile>

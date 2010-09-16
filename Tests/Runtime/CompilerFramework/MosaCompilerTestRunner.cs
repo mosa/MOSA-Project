@@ -51,11 +51,6 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		/// </summary>
 		string[] references;
 
-		/// <summary>
-		/// The test runtime.
-		/// </summary>
-		TestRuntime runtime;
-
 		#endregion // Data members
 
 		#region Construction
@@ -110,7 +105,6 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		public void Begin()
 		{
 			Console.WriteLine("Building runtime...");
-			runtime = new TestRuntime();
 		}
 
 		/// <summary>
@@ -119,15 +113,8 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		[FixtureTearDown]
 		public void End()
 		{
-			// Dispose the test runtime.
-			if (null != this.runtime)
-			{
-				//this.runtime.Dispose();
-				this.runtime = null;
-			}
-
 			// Try to delete the compiled assembly...
-			if (null != this.assembly)
+			if (this.assembly != null)
 			{
 				try
 				{
@@ -219,16 +206,17 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		/// <returns>The metadata module, which represents the loaded assembly.</returns>
 		private void RunMosaCompiler(string assemblyFile)
 		{
-			IAssemblyLoader assemblyLoader = new AssemblyLoader();
-			typeSystem = new DefaultTypeSystem(assemblyLoader);
-
 			List<string> files = new List<string>();
 			files.Add(assemblyFile);
-			assemblyLoader.InitializePrivatePaths(files);
 
+			IAssemblyLoader assemblyLoader = new AssemblyLoader();
+			assemblyLoader.InitializePrivatePaths(files);
 			assemblyLoader.AppendPrivatePath(typeof(global::Mosa.Runtime.Runtime).Module.FullyQualifiedName);
 
+			typeSystem = new DefaultTypeSystem(assemblyLoader);
 			typeSystem.LoadModules(files);
+
+			typeSystem.ResolveModuleReference(typeof(global::Mosa.Runtime.Runtime).Module.FullyQualifiedName);
 
 			TestCaseAssemblyCompiler.Compile(typeSystem, assemblyLoader);
 		}

@@ -73,7 +73,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 				.Replace(@"[[marshal-typename]]", marshalType)
 				.Replace(@"[[marshal-expectedType]]", marshalExpectedType);
 
-			this.CodeSource = codeBuilder.ToString();
+			CodeSource = codeBuilder.ToString();
 		}
 
 		private string CreateMarshalAttribute(string prefix, string typeName)
@@ -151,7 +151,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 
 		private void EnsureCodeSourceIsSet()
 		{
-			if (this.CodeSource == null)
+			if (CodeSource == null)
 			{
 				this.SetTestCode(this.ExpectedTypeName, this.TypeName);
 			}

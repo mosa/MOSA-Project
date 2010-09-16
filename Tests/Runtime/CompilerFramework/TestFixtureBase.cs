@@ -174,7 +174,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		public void End()
 		{
 			// Try to delete the compiled assembly...
-			if (null != this.assembly)
+			if (this.assembly != null)
 			{
 				try
 				{
@@ -358,16 +358,17 @@ namespace Test.Mosa.Runtime.CompilerFramework
 
 		private void RunMosaCompiler(string assemblyFile)
 		{
-			IAssemblyLoader assemblyLoader = new AssemblyLoader();
-			typeSystem = new DefaultTypeSystem(assemblyLoader);
-
 			List<string> files = new List<string>();
 			files.Add(assemblyFile);
-		
+
+			IAssemblyLoader assemblyLoader = new AssemblyLoader();
 			assemblyLoader.InitializePrivatePaths(files);
 			assemblyLoader.AppendPrivatePath(typeof(global::Mosa.Runtime.Runtime).Module.FullyQualifiedName);
 
+			typeSystem = new DefaultTypeSystem(assemblyLoader);
 			typeSystem.LoadModules(files);
+
+			typeSystem.ResolveModuleReference(typeof(global::Mosa.Runtime.Runtime).Module.FullyQualifiedName);
 
 			TestCaseAssemblyCompiler.Compile(typeSystem, assemblyLoader);
 		}

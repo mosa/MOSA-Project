@@ -44,10 +44,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.CIL
 		[Test]
 		public void MustCompileCodePinningVariables()
 		{
-			this.CodeSource = CreateTestCode();
-			this.UnsafeCode = true;
-
-			TestRuntime runtime = new TestRuntime();
+			CodeSource = CreateTestCode();
+			UnsafeCode = true;
 
 			Assert.DoesNotThrow(() => this.CompileTestCode());
 		}

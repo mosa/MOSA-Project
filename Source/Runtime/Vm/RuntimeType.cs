@@ -135,6 +135,12 @@ namespace Mosa.Runtime.Vm
 			get { return (this.arguments != null && this.arguments.Length != 0); }
 		}
 
+		/// <summary>
+		/// Gets a value indicating whether this instance is value type.
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if this instance is value type; otherwise, <c>false</c>.
+		/// </value>
 		public bool IsValueType
 		{
 			get
@@ -143,6 +149,18 @@ namespace Mosa.Runtime.Vm
 
 				RuntimeType valueType = moduleTypeSystem.TypeSystem.GetType(@"System.ValueType");
 				return this.IsSubclassOf(valueType);
+			}
+		}
+
+		/// <summary>
+		/// Gets a value indicating whether type is a module.
+		/// </summary>
+		/// <value><c>true</c> if this instance is module; otherwise, <c>false</c>.</value>
+		public bool IsModule
+		{
+			get
+			{
+				return (Name.Equals("<Module>") && Namespace.Length == 0);
 			}
 		}
 

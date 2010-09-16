@@ -130,7 +130,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Compiler\StaticAllocationFixture.cs" />
-    <Compile Include="StaticRuntime.cs" />
     <Compile Include="IL\ConditionalOperator.cs" />
     <Compile Include="IL\Stind.cs" />
     <Compile Include="IL\Switch.cs" />
@@ -151,9 +150,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BaseCode\TestLinkerSection.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="BaseCode\TestRuntime.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BaseCode\VirtualMemoryStream.cs">
@@ -238,7 +234,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Runtime.cs" />
-    <Compile Include="RuntimeFixture.cs" />
     <Compile Include="TestFixtureBase.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />

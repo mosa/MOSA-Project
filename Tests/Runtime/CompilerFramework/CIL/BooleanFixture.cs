@@ -18,7 +18,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CIL
 	[Importance(Importance.Critical)]
 	[Category(@"Basic types")]
 	[Description(@"Tests support for the basic type System.Boolean")]
-	public class BooleanFixture : RuntimeFixture
+	public class BooleanFixture 
 	{
 		private readonly BinaryLogicInstructionTestRunner<bool, bool, bool> logicTests = new BinaryLogicInstructionTestRunner<bool, bool, bool>
 		{

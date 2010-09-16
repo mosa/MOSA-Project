@@ -72,14 +72,14 @@ namespace Test.Mosa.Runtime.CompilerFramework.CIL
 		[Test]
 		public void MustCompileInterfaces()
 		{
-			this.CodeSource = CreateTestCode();
+			CodeSource = CreateTestCode();
 			Assert.IsTrue((bool)Run<B_V>("", "TestClass", "MustCompileWithInterfaces"));
 		}
 
 		[Test]
 		public void MustReturn3FromB()
 		{
-			this.CodeSource = CreateTestCode();
+			CodeSource = CreateTestCode();
 			Assert.IsTrue((bool)Run<B_V>("", "TestClass", "MustReturn3FromB"));
 		}
 	}

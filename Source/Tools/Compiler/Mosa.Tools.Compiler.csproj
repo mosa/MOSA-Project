@@ -97,9 +97,6 @@
     <Compile Include="AssemblyCompilerStageWrapper.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilationRuntime.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Compiler.cs">
       <SubType>Code</SubType>
     </Compile>

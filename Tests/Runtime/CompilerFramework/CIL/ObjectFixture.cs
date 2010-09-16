@@ -114,9 +114,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.CIL
 
 		private void EnsureCodeSourceIsSet()
 		{
-			if (this.CodeSource == null)
+			if (CodeSource == null)
 			{
-				this.CodeSource = TestCode;
+				CodeSource = TestCode;
 			}
 		}
 	}

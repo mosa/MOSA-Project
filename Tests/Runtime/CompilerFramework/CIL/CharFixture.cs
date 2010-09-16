@@ -18,7 +18,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 	[Importance(Importance.Critical)]
 	[Category(@"Basic types")]
 	[Description(@"Tests support for the basic type System.Char")]
-	public class CharFixture : RuntimeFixture
+	public class CharFixture 
 	{
 		private readonly ArithmeticInstructionTestRunner<int, char> arithmeticTests = new ArithmeticInstructionTestRunner<int, char>
 		{

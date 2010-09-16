@@ -38,7 +38,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 
 		private void RunTestCode<DelegateType, Value>(string code, Value value)
 		{
-			this.CodeSource = code;
+			CodeSource = code;
 			bool res = (bool)Run<DelegateType>(@"", @"Test", @"StaticFieldInit", value);
 			Assert.IsTrue(res);
 		}

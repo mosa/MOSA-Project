@@ -18,7 +18,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 	[Importance(Importance.Critical)]
 	[Category(@"Basic types")]
 	[Description(@"Tests support for the basic type System.Int64")]
-	public class Int64Fixture : RuntimeFixture
+	public class Int64Fixture 
 	{
 		private readonly ArithmeticInstructionTestRunner<long, long> arithmeticTests = new ArithmeticInstructionTestRunner<long, long>
 		{
