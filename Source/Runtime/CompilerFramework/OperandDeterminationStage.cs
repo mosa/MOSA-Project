@@ -138,21 +138,17 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Creates the temporary moves.
 		/// </summary>
-		/// <param name="ctx">The CTX.</param>
+		/// <param name="ctx">The context.</param>
 		/// <param name="block">The block.</param>
 		/// <param name="stack">The stack.</param>
 		private void CreateTemporaryMoves(Context ctx, BasicBlock block, Stack<Operand> stack)
 		{
-			Context context = ctx.InsertBefore();
-
-			context.SetInstruction(IR.Instruction.NopInstruction);
-
 			BasicBlock nextBlock;
 
 			if (NextBlockHasInitialStack(block, out nextBlock))
-				LinkTemporaryMoves(context, block, nextBlock, stack);
+				LinkTemporaryMoves(ctx, block, nextBlock, stack);
 			else
-				CreateNewTemporaryMoves(context, block, stack);
+				CreateNewTemporaryMoves(ctx, block, stack);
 		}
 
 		/// <summary>
