@@ -291,7 +291,6 @@ namespace Mosa.Runtime.CompilerFramework.Operands
 		public override string ToString()
 		{
 			return String.Format("[{0}]", _type);
-			//return String.Format("[Type: {0}]", _type);
 		}
 
 		#endregion // Object Overrides

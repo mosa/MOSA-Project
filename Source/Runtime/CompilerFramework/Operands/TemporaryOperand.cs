@@ -67,19 +67,6 @@ namespace Mosa.Runtime.CompilerFramework.Operands
 		}
 
 		#endregion // StackOperand Overrides
-
-		#region ICloneable Members
-
-		/// <summary>
-		/// Clones an operand.
-		/// </summary>
-		/// <returns>A new instance of TemporaryOperand.</returns>
-		public override object Clone()
-		{
-			return new TemporaryOperand(_label, _type, Base, Offset.ToInt32());
-		}
-
-		#endregion // ICloneable Members
 	}
 }
 

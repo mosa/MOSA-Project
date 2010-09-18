@@ -16,7 +16,7 @@ namespace Mosa.Runtime.CompilerFramework.Operands
 	/// <summary>
 	/// Represents an operand, that is located on the relative to the current stack frame.
 	/// </summary>
-	public abstract class StackOperand : MemoryOperand, ICloneable
+	public abstract class StackOperand : MemoryOperand
 	{
 		#region Data members
 
@@ -84,22 +84,13 @@ namespace Mosa.Runtime.CompilerFramework.Operands
 			string tmp = base.ToString();
 			//return String.Format(@"{0} {1}", this.Name, tmp.Insert(tmp.Length - 1, String.Format(", SSA Version: {0}", _ssaVersion)));
 			if (_ssaVersion == 0)
-				return String.Format(@"{0}", this.Name);
+				return String.Format(@"{0} {1}", this.Name, tmp);
 			else
 				return String.Format(@"{0} {1}", this.Name, tmp.Insert(tmp.Length - 1, String.Format(" #{0}", _ssaVersion)));
 		}
 
 		#endregion // Operand Overrides
 
-		#region ICloneable Members
-
-		/// <summary>
-		/// Clones the stack operand.
-		/// </summary>
-		/// <returns></returns>
-		public abstract object Clone();
-
-		#endregion // ICloneable Members
 	}
 }
 

@@ -1745,8 +1745,10 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <param name="operands"></param>
 		private void ProcessInvokeInstruction(Context ctx, Operand destinationOperand, Operand resultOperand, List<Operand> operands)
 		{
-			ctx.SetInstruction(Instruction.CallInstruction, (byte)(operands.Count + 1), (byte)(resultOperand != null ? 1 : 0));
-			ctx.SetResult(resultOperand);
+			ctx.SetInstruction(Instruction.CallInstruction, (byte)(operands.Count + 1), (byte)(resultOperand == null ? 0 : 1));
+
+			if (resultOperand != null)
+				ctx.SetResult(resultOperand);
 
 			int operandIndex = 0;
 			ctx.SetOperand(operandIndex++, destinationOperand);
@@ -1863,7 +1865,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		{
 			RuntimeType rt = typeSystem.GetType(@"Mosa.Runtime.Runtime");
 			Debug.Assert(rt != null, "@rt / @callTarget=" + internalCallTarget.ToString());
-			
+
 			RuntimeMethod callTarget = rt.FindMethod(internalCallTarget.ToString());
 			Debug.Assert(callTarget != null, "@callTarget=" + internalCallTarget.ToString());
 

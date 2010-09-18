@@ -66,15 +66,6 @@ namespace Mosa.Runtime.CompilerFramework.Operands
 			get { return _parameter.Name; }
 		}
 
-		/// <summary>
-		/// Clones the stack operand.
-		/// </summary>
-		/// <returns></returns>
-		public override object Clone()
-		{
-			return new ParameterOperand(Base, _parameter, _type);
-		}
-
 		#endregion // StackOperand overrides
 	}
 }

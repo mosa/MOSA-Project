@@ -10,7 +10,7 @@
 using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Runtime.Metadata.Signatures;
 
-namespace Mosa.Runtime.CompilerFramework
+namespace Mosa.Runtime.CompilerFramework.Operands
 {
 
 	/// <summary>
@@ -49,7 +49,6 @@ namespace Mosa.Runtime.CompilerFramework
 
 		#endregion // Construction
 
-
 		#region StackOperand overrides
 
 		/// <summary>
@@ -58,15 +57,6 @@ namespace Mosa.Runtime.CompilerFramework
 		public override string Name
 		{
 			get { return _name; }
-		}
-
-		/// <summary>
-		/// Clones the stack operand.
-		/// </summary>
-		/// <returns></returns>
-		public override object Clone()
-		{
-			return new LocalVariableOperand(Base, _name, -(Offset.ToInt32() / 4), Type);
 		}
 
 		#endregion // StackOperand overrides
