@@ -79,7 +79,7 @@ namespace Mosa.Runtime.CompilerFramework.Operands
 		/// <returns>A new instance of <see cref="ConstantOperand"/>, that represents the null value.</returns>
 		public static ConstantOperand GetNull()
 		{
-			if (null == _sObject)
+			if (_sObject == null)
 				_sObject = new SigType(CilElementType.Object);
 
 			return new ConstantOperand(_sObject, null);

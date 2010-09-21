@@ -386,7 +386,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Callvirt(Context ctx)
 		{
-			if (this.ProcessVmCall(ctx) == false)
+			if (!ProcessVmCall(ctx))
 			{
 				RuntimeMethod invokeTarget = ctx.InvokeTarget;
 
@@ -402,12 +402,10 @@ namespace Mosa.Runtime.CompilerFramework.IR
 
 					int methodTableOffset = CalculateMethodTableOffset(invokeTarget);
 
-					ctx.SetInstruction(Instruction.NopInstruction);
-					//ctx.AppendInstruction(Instruction.BreakInstruction);
 					ctx.AppendInstruction(Instruction.LoadInstruction, methodTable, thisPtr, ConstantOperand.FromValue(0));
 					ctx.AppendInstruction(Instruction.LoadInstruction, methodPtr, methodTable, new ConstantOperand(BuiltInSigType.Int32, methodTableOffset));
 
-					// HACK: This nop will be overwritten in ProcessInvokeInstruction
+					// This nop will be overwritten in ProcessInvokeInstruction
 					ctx.AppendInstruction(Instruction.NopInstruction);
 					this.ProcessInvokeInstruction(ctx, methodPtr, resultOperand, operands);
 				}

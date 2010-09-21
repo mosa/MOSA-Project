@@ -61,9 +61,9 @@ namespace Mosa.Runtime.CompilerFramework
 			// Enumerate all types and do an appropriate type layout
 			foreach (RuntimeType type in typeSystem.GetCompiledTypes())
 			{
-				//Debug.WriteLine("TypeLayout: " + type.FullName);
+				Debug.WriteLine("Type: " + type.ToString());
 
-				if (type.IsModule) 
+				if (type.IsModule)
 					continue;
 
 				if (type.IsGeneric || type.IsDelegate)
@@ -71,7 +71,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 				if (type.IsInterface)
 				{
-					this.CreateInterfaceMethodTable(type);
+					CreateInterfaceMethodTable(type);
 				}
 				else
 				{
@@ -93,6 +93,13 @@ namespace Mosa.Runtime.CompilerFramework
 				}
 
 				AllocateStaticFields(type);
+
+				int i = 0;
+				foreach (RuntimeMethod method in type.MethodTable)
+				{
+					Debug.WriteLine("    " + i.ToString() + ":" + method.ToString());
+					i++;
+				}
 			}
 		}
 
@@ -182,18 +189,27 @@ namespace Mosa.Runtime.CompilerFramework
 
 		private void BuildMethodTable(RuntimeType type)
 		{
-			IList<RuntimeMethod> methodTable = this.CreateMethodTable(type);
-			this.AskLinkerToCreateMethodTable(type.FullName, methodTable);
+			IList<RuntimeMethod> methodTable = CreateMethodTable(type);
+			AskLinkerToCreateMethodTable(type.FullName, methodTable);
 		}
 
+		/// <summary>
+		/// Creates the interface method table.
+		/// </summary>
+		/// <param name="type">The type.</param>
 		private void CreateInterfaceMethodTable(RuntimeType type)
 		{
-			this.CreateMethodTable(type);
+			CreateMethodTable(type);
 		}
 
+		/// <summary>
+		/// Creates the method table.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <returns></returns>
 		private List<RuntimeMethod> CreateMethodTable(RuntimeType type)
 		{
-			List<RuntimeMethod> methodTable = this.CreateMethodTableList(type);
+			List<RuntimeMethod> methodTable = CreateMethodTableFromBaseType(type);
 
 			foreach (RuntimeMethod method in type.Methods)
 			{
@@ -224,21 +240,24 @@ namespace Mosa.Runtime.CompilerFramework
 
 		private int FindOverrideSlot(List<RuntimeMethod> methodTable, RuntimeMethod method)
 		{
-			int slot = methodTable.Count;
-
 			foreach (RuntimeMethod baseMethod in methodTable)
 			{
 				if (baseMethod.Name.Equals(method.Name) && baseMethod.Signature.Matches(method.Signature))
 				{
-					slot = baseMethod.MethodTableSlot;
-					break;
+					return baseMethod.MethodTableSlot;
 				}
 			}
 
-			return slot;
+			throw new InvalidOperationException(@"Failed to find override method slot.");
+			//return methodTable.Count;
 		}
 
-		private List<RuntimeMethod> CreateMethodTableList(RuntimeType type)
+		/// <summary>
+		/// Creates the method table from the base type.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <returns></returns>
+		private List<RuntimeMethod> CreateMethodTableFromBaseType(RuntimeType type)
 		{
 			List<RuntimeMethod> methodTable;
 
@@ -251,7 +270,8 @@ namespace Mosa.Runtime.CompilerFramework
 				IList<RuntimeMethod> baseMethodTable = type.BaseType.MethodTable;
 				if (baseMethodTable == null)
 				{
-					baseMethodTable = this.CreateMethodTable(type.BaseType);
+					// Method table for the base type has not been create yet, so create it now
+					baseMethodTable = CreateMethodTable(type.BaseType);
 				}
 
 				methodTable = new List<RuntimeMethod>(baseMethodTable);
@@ -267,24 +287,24 @@ namespace Mosa.Runtime.CompilerFramework
 			// pointer. Used to realize object.GetType()
 
 			string methodTableSymbolName = name + @"$mtable";
-			int methodTableSize = this.nativePointerSize + methodTable.Count * this.nativePointerSize;
+			int methodTableSize = nativePointerSize + methodTable.Count * nativePointerSize;
 
-			using (Stream stream = this.linker.Allocate(methodTableSymbolName, SectionKind.Text, methodTableSize, this.nativePointerAlignment))
+			using (Stream stream = linker.Allocate(methodTableSymbolName, SectionKind.Text, methodTableSize, nativePointerAlignment))
 			{
 				stream.Position = methodTableSize;
 			}
 
-			int offset = this.nativePointerSize;
+			int offset = nativePointerSize;
 
 			foreach (RuntimeMethod method in methodTable)
 			{
 				if (!IsAbstract(method))
 				{
 					string methodSymbol = method.ToString();
-					this.linker.Link(LinkType.AbsoluteAddress | LinkType.I4, methodTableSymbolName, offset, 0, methodSymbol, IntPtr.Zero);
+					linker.Link(LinkType.AbsoluteAddress | LinkType.I4, methodTableSymbolName, offset, 0, methodSymbol, IntPtr.Zero);
 				}
 
-				offset += this.nativePointerSize;
+				offset += nativePointerSize;
 			}
 		}
 
@@ -310,17 +330,17 @@ namespace Mosa.Runtime.CompilerFramework
 			int typeAlignment;
 
 			RuntimeType baseType = type.BaseType;
-			if (null != baseType)
+			if (baseType != null)
 			{
 				typeSize = baseType.Size;
 			}
 
 			foreach (RuntimeField field in type.Fields)
 			{
-				this.architecture.GetTypeRequirements(field.SignatureType, out fieldSize, out typeAlignment);
+				architecture.GetTypeRequirements(field.SignatureType, out fieldSize, out typeAlignment);
 
 				// Pad the field in the type
-				if (0 != packingSize)
+				if (packingSize != 0)
 				{
 					int padding = (typeSize % packingSize);
 					typeSize += padding;
@@ -365,10 +385,10 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			foreach (RuntimeField field in type.Fields)
 			{
-				if (IsStaticField(field) == true && IsLiteralField(field) == false)
+				if (IsStaticField(field) && !IsLiteralField(field))
 				{
 					// Assign a memory slot to the static & initialize it, if there's initial data set
-					this.CreateStaticField(field);
+					CreateStaticField(field);
 				}
 			}
 		}

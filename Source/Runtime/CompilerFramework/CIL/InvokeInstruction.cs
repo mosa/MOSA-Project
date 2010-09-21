@@ -133,8 +133,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			// Validate the operands...
 			Debug.Assert(ctx.OperandCount == paramCount, @"Operand count doesn't match parameter count.");
 
-			for (int i = 0; i < ctx.OperandCount; i++)
-			{
+			//for (int i = 0; i < ctx.OperandCount; i++)
+			//{
 				/* FIXME: Check implicit conversions
 				// if (ops[i] != null) {
 					Debug.Assert(_operands[i].Type == _parameterTypes[i]);
@@ -144,7 +144,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 						throw new ExecutionEngineException(@"Invalid operand types.");
 					}
 				*/
-			}
+			//}
 		}
 
 		/// <summary>
