@@ -33,6 +33,8 @@ namespace Mosa.Runtime.CompilerFramework
 
 		private int nativePointerSize;
 
+		private Dictionary<RuntimeType, IList<RuntimeMethod>> methodTables = new Dictionary<RuntimeType, IList<RuntimeMethod>>();
+
 		#endregion // Data members
 
 		#region IPipelineStage members
@@ -61,8 +63,6 @@ namespace Mosa.Runtime.CompilerFramework
 			// Enumerate all types and do an appropriate type layout
 			foreach (RuntimeType type in typeSystem.GetCompiledTypes())
 			{
-				Debug.WriteLine("Type: " + type.ToString());
-
 				if (type.IsModule)
 					continue;
 
@@ -95,7 +95,8 @@ namespace Mosa.Runtime.CompilerFramework
 				AllocateStaticFields(type);
 
 				int i = 0;
-				foreach (RuntimeMethod method in type.MethodTable)
+				Debug.WriteLine("Type: " + type.ToString());
+				foreach (RuntimeMethod method in GetMethodTable(type))
 				{
 					Debug.WriteLine("    " + i.ToString() + ":" + method.ToString());
 					i++;
@@ -207,9 +208,14 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <param name="type">The type.</param>
 		/// <returns></returns>
-		private List<RuntimeMethod> CreateMethodTable(RuntimeType type)
+		private IList<RuntimeMethod> CreateMethodTable(RuntimeType type)
 		{
-			List<RuntimeMethod> methodTable = CreateMethodTableFromBaseType(type);
+			IList<RuntimeMethod> methodTable = GetMethodTable(type);
+
+			if (methodTable != null)
+				return methodTable;
+
+			methodTable = CreateMethodTableFromBaseType(type);
 
 			foreach (RuntimeMethod method in type.Methods)
 			{
@@ -238,7 +244,7 @@ namespace Mosa.Runtime.CompilerFramework
 			return methodTable;
 		}
 
-		private int FindOverrideSlot(List<RuntimeMethod> methodTable, RuntimeMethod method)
+		private int FindOverrideSlot(IList<RuntimeMethod> methodTable, RuntimeMethod method)
 		{
 			foreach (RuntimeMethod baseMethod in methodTable)
 			{
@@ -249,7 +255,16 @@ namespace Mosa.Runtime.CompilerFramework
 			}
 
 			throw new InvalidOperationException(@"Failed to find override method slot.");
-			//return methodTable.Count;
+		}
+
+		private IList<RuntimeMethod> GetMethodTable(RuntimeType type)
+		{
+			IList<RuntimeMethod> methods;
+
+			if (methodTables.TryGetValue(type, out methods))
+				return methods;
+			else
+				return null;
 		}
 
 		/// <summary>
@@ -259,15 +274,12 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns></returns>
 		private List<RuntimeMethod> CreateMethodTableFromBaseType(RuntimeType type)
 		{
-			List<RuntimeMethod> methodTable;
+			List<RuntimeMethod> methodTable = new List<RuntimeMethod>();
 
-			if (type.BaseType == null)
+			if (type.BaseType != null)
 			{
-				methodTable = new List<RuntimeMethod>();
-			}
-			else
-			{
-				IList<RuntimeMethod> baseMethodTable = type.BaseType.MethodTable;
+				IList<RuntimeMethod> baseMethodTable = GetMethodTable(type.BaseType);
+
 				if (baseMethodTable == null)
 				{
 					// Method table for the base type has not been create yet, so create it now
@@ -277,7 +289,7 @@ namespace Mosa.Runtime.CompilerFramework
 				methodTable = new List<RuntimeMethod>(baseMethodTable);
 			}
 
-			type.MethodTable = methodTable;
+			methodTables.Add(type, methodTable);
 			return methodTable;
 		}
 
