@@ -1,6 +1,6 @@
 using Mosa.Platforms.x86;
 
-namespace Mosa.Kernel.X86
+namespace Mosa.Kernel.X86.Smbios
 {
 	/// <summary>
 	///
