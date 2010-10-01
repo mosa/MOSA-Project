@@ -73,7 +73,7 @@ namespace Mosa.Tools.Compiler
 			using (var stream = this.linker.Allocate(symbolName, SectionKind.BSS, allocatedType.Size, 4))
 			{
 				// FIXME: Do we have to initialize this?
-				string methodTableSymbol = this.GetMethodTableForType(allocatedType);
+				string methodTableSymbol = GetMethodTableForType(allocatedType);
 				if (methodTableSymbol != null)
 				{
 					this.linker.Link(LinkType.AbsoluteAddress | LinkType.I4, symbolName, 0, 0, methodTableSymbol, IntPtr.Zero);

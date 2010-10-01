@@ -69,24 +69,24 @@ namespace Mosa.Platforms.x86
 
 			Operand invokeTarget = ctx.Operand1;
 			Operand result = ctx.Result;
-			Stack<Operand> operands = this.BuildOperandStack(ctx);
+			Stack<Operand> operands = BuildOperandStack(ctx);
 
 			ctx.SetInstruction(CPUx86.Instruction.NopInstruction);
 
-			int stackSize = this.ReserveStackSizeForCall(ctx, moduleTypeSystem, context, operands);
+			int stackSize = ReserveStackSizeForCall(ctx, moduleTypeSystem, context, operands);
 			if (stackSize != 0)
 			{
-				this.PushOperands(context, ctx, operands, stackSize, moduleTypeSystem);
+				PushOperands(context, ctx, operands, stackSize, moduleTypeSystem);
 			}
 
 			ctx.AppendInstruction(CPUx86.Instruction.CallInstruction, null, invokeTarget);
 
 			if (stackSize != 0)
 			{
-				this.FreeStackAfterCall(ctx, stackSize);
+				FreeStackAfterCall(ctx, stackSize);
 			}
 
-			this.CleanupReturnValue(ctx, result);
+			CleanupReturnValue(ctx, result);
 		}
 
 		private Stack<Operand> BuildOperandStack(Context ctx)
@@ -285,7 +285,7 @@ namespace Mosa.Platforms.x86
 
 			foreach (Operand op in operands)
 			{
-				this.architecture.GetTypeRequirements(op.Type, out size, out alignment);
+				architecture.GetTypeRequirements(op.Type, out size, out alignment);
 
 				if (op.Type.Type == CilElementType.ValueType)
 				{
@@ -306,7 +306,7 @@ namespace Mosa.Platforms.x86
 		void ICallingConvention.MoveReturnValue(Context ctx, Operand operand)
 		{
 			int size, alignment;
-			this.architecture.GetTypeRequirements(operand.Type, out size, out alignment);
+			architecture.GetTypeRequirements(operand.Type, out size, out alignment);
 
 			// FIXME: Do not issue a move, if the operand is already the destination register
 			if (4 == size || 2 == size || 1 == size)
@@ -350,7 +350,7 @@ namespace Mosa.Platforms.x86
 		{
 			// Special treatment for some stack types
 			// FIXME: Handle the size and alignment requirements of value types
-			this.architecture.GetTypeRequirements(stackOperand.Type, out size, out alignment);
+			architecture.GetTypeRequirements(stackOperand.Type, out size, out alignment);
 		}
 
 		int ICallingConvention.OffsetOfFirstLocal

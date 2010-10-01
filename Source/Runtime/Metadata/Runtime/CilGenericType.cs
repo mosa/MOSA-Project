@@ -64,14 +64,14 @@ namespace Mosa.Runtime.Metadata.Runtime
 
 		protected override RuntimeType GetBaseType()
 		{
-			this.ProcessSignature();
+			ProcessSignature();
 
-			return this.genericType.BaseType;
+			return genericType.BaseType;
 		}
 
-		private IEnumerable<RuntimeMethod> GetMethods()
+		private IList<RuntimeMethod> GetMethods()
 		{
-			this.ProcessSignature();
+			ProcessSignature();
 
 			List<RuntimeMethod> methods = new List<RuntimeMethod>();
 			foreach (CilRuntimeMethod method in this.genericType.Methods)
@@ -88,7 +88,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 
 		private IList<RuntimeField> GetFields()
 		{
-			this.ProcessSignature();
+			ProcessSignature();
 
 			List<RuntimeField> fields = new List<RuntimeField>();
 			foreach (CilRuntimeField field in this.genericType.Fields)

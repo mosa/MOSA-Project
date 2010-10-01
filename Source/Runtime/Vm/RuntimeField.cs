@@ -64,8 +64,8 @@ namespace Mosa.Runtime.Vm
 		/// <value>The attributes.</value>
 		public FieldAttributes Attributes
 		{
-			get { return this.attributes; }
-			protected set { this.attributes = value; }
+			get { return attributes; }
+			protected set { attributes = value; }
 		}
 
 		/// <summary>
@@ -75,22 +75,22 @@ namespace Mosa.Runtime.Vm
 		public ulong RVA
 		{
 			get { return rva; }
-			protected set { this.rva = value; }
+			protected set { rva = value; }
 		}
 
 		public FieldSignature Signature
 		{
 			get
 			{
-				if (this.signature == null)
-					this.signature = this.GetSignature();
+				if (signature == null)
+					signature = GetSignature();
 
-				return this.signature;
+				return signature;
 			}
 
 			protected set
 			{
-				this.signature = value;
+				signature = value;
 			}
 		}
 
@@ -113,6 +113,16 @@ namespace Mosa.Runtime.Vm
 				// HACK: Generic fields -- is this right?
 				return moduleTypeSystem.ResolveSignatureType(DefaultSignatureContext.Instance, this.SignatureType);
 			}
+		}
+
+		public bool IsLiteralField
+		{
+			get { return (attributes & FieldAttributes.Literal) == FieldAttributes.Literal; }
+		}
+
+		public bool IsStaticField
+		{
+			get { return (attributes & FieldAttributes.Static) == FieldAttributes.Static; }
 		}
 
 		#endregion // Properties

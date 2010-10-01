@@ -47,11 +47,6 @@ namespace Mosa.Runtime.Vm
 		private TypeAttributes flags;
 
 		/// <summary>
-		/// 
-		/// </summary>
-		private IList<RuntimeMethod> methodTable;
-
-		/// <summary>
 		/// Holds the (cached) namespace of the type.
 		/// </summary>
 		private string nameSpace;
@@ -69,7 +64,7 @@ namespace Mosa.Runtime.Vm
 		/// <summary>
 		/// Methods of the type.
 		/// </summary>
-		private IEnumerable<RuntimeMethod> methods;
+		private IList<RuntimeMethod> methods;
 
 		/// <summary>
 		/// Holds the fields of this type.
@@ -203,7 +198,7 @@ namespace Mosa.Runtime.Vm
 		/// Returns the methods of the type.
 		/// </summary>
 		/// <value>The methods.</value>
-		public IEnumerable<RuntimeMethod> Methods
+		public IList<RuntimeMethod> Methods
 		{
 			get { return this.methods; }
 			protected set
@@ -234,7 +229,7 @@ namespace Mosa.Runtime.Vm
 				return this.nameSpace;
 			}
 
-			set
+			protected set
 			{
 				if (value == null)
 					throw new ArgumentNullException(@"value");
@@ -261,18 +256,6 @@ namespace Mosa.Runtime.Vm
 			}
 		}
 
-		// FIXME: This list of methods is pretty specific to type loading/compilation. I don't think
-		// we need to keep it around as long as we do it right now.
-		public IList<RuntimeMethod> MethodTable
-		{
-			get { return this.methodTable; }
-			set
-			{
-				Debug.Assert(value != null, @"Assigning null method table.");
-				this.methodTable = value;
-			}
-		}
-
 		/// <summary>
 		/// Gets the packing of type fields.
 		/// </summary>
@@ -280,20 +263,17 @@ namespace Mosa.Runtime.Vm
 		public int Pack
 		{
 			get { return this.packing; }
-			protected set
-			{
-				this.packing = value;
-			}
+			protected set { this.packing = value; }
 		}
 
 		/// <summary>
 		/// Gets or sets the size of the type.
 		/// </summary>
 		/// <value>The size of the type.</value>
-		public int Size
+		public int Size							// FIXME: should be determined by TypeLayoutStage
 		{
 			get { return this.nativeSize; }
-			set { this.nativeSize = value; }
+			set { this.nativeSize = value; }	// FIXME: should be protected
 		}
 
 		/// <summary>
@@ -317,6 +297,14 @@ namespace Mosa.Runtime.Vm
 					}
 				}
 				return result;
+			}
+		}
+
+		public bool IsExplicitLayoutRequestedByType
+		{
+			get
+			{
+				return (flags & TypeAttributes.LayoutMask) == TypeAttributes.ExplicitLayout;
 			}
 		}
 
