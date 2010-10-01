@@ -85,8 +85,8 @@ namespace Mosa.Runtime.Vm
 		/// <value>The attributes.</value>
 		public MethodAttributes Attributes
 		{
-			get { return this.attributes; }
-			protected set { this.attributes = value; }
+			get { return attributes; }
+			protected set { attributes = value; }
 		}
 
 		/// <summary>
@@ -98,6 +98,17 @@ namespace Mosa.Runtime.Vm
 		public bool IsGeneric
 		{
 			get { return this.genericArguments != null; }
+		}
+
+		/// <summary>
+		/// Gets a value indicating whether this instance is abstract.
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if this instance is abstract; otherwise, <c>false</c>.
+		/// </value>
+		public bool IsAbstract
+		{
+			get { return (attributes & MethodAttributes.Abstract) == MethodAttributes.Abstract; }
 		}
 
 		/// <summary>
@@ -114,8 +125,8 @@ namespace Mosa.Runtime.Vm
 		/// <value>The impl attributes.</value>
 		public MethodImplAttributes ImplAttributes
 		{
-			get { return this.implFlags; }
-			protected set { this.implFlags = value; }
+			get { return implFlags; }
+			protected set { implFlags = value; }
 		}
 
 		/// <summary>
@@ -124,8 +135,8 @@ namespace Mosa.Runtime.Vm
 		/// <value>The parameters.</value>
 		public IList<RuntimeParameter> Parameters
 		{
-			get { return this.parameters; }
-			protected set { this.parameters = value; }
+			get { return parameters; }
+			protected set { parameters = value; }
 		}
 
 		/// <summary>
@@ -136,18 +147,18 @@ namespace Mosa.Runtime.Vm
 		{
 			get
 			{
-				if (this.signature == null)
+				if (signature == null)
 				{
-					this.signature = GetMethodSignature();
+					signature = GetMethodSignature();
 					Debug.Assert(this.signature != null, @"GetMethodSignature() failed.");
 				}
 
-				return this.signature;
+				return signature;
 			}
 
 			protected set
 			{
-				this.signature = value;
+				signature = value;
 			}
 		}
 

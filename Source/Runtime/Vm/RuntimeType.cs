@@ -64,7 +64,7 @@ namespace Mosa.Runtime.Vm
 		/// <summary>
 		/// Methods of the type.
 		/// </summary>
-		private IEnumerable<RuntimeMethod> methods;
+		private IList<RuntimeMethod> methods;
 
 		/// <summary>
 		/// Holds the fields of this type.
@@ -198,7 +198,7 @@ namespace Mosa.Runtime.Vm
 		/// Returns the methods of the type.
 		/// </summary>
 		/// <value>The methods.</value>
-		public IEnumerable<RuntimeMethod> Methods
+		public IList<RuntimeMethod> Methods
 		{
 			get { return this.methods; }
 			protected set
@@ -297,6 +297,14 @@ namespace Mosa.Runtime.Vm
 					}
 				}
 				return result;
+			}
+		}
+
+		public bool IsExplicitLayoutRequestedByType
+		{
+			get
+			{
+				return (flags & TypeAttributes.LayoutMask) == TypeAttributes.ExplicitLayout;
 			}
 		}
 

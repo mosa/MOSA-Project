@@ -27,7 +27,7 @@ namespace Mosa.HelloWorld.Tests
 		public static bool InterfaceTest2()
 		{
 			TestClass tc = new TestClass();
-			IInterfaceB b = tc;
+			IInterfaceAB b = tc;
 			bool result =  (b.B() == 3);
 			return result;
 		}
@@ -35,7 +35,7 @@ namespace Mosa.HelloWorld.Tests
 		public static bool InterfaceTest3()
 		{
 			TestClass tc = new TestClass();
-			IInterfaceB b = tc;
+			IInterfaceAB b = tc;
 			bool result = (b.A() == 2);
 			return result;
 		}
@@ -46,20 +46,20 @@ namespace Mosa.HelloWorld.Tests
 		int A();
 	}
 
-	public interface IInterfaceB
+	public interface IInterfaceAB
 	{
 		int A();
 		int B();
 	}
 
-	public class TestClass : IInterfaceA, IInterfaceB
+	public class TestClass : IInterfaceA, IInterfaceAB
 	{
 		public int A()
 		{
 			return 1;
 		}
 
-		int IInterfaceB.A()
+		int IInterfaceAB.A()
 		{
 			return 2;
 		}

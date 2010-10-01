@@ -39,6 +39,9 @@ namespace Mosa.Runtime.CompilerFramework.IR
 	/// </remarks>
 	public sealed class CILTransformationStage : BaseCodeTransformationStage, CIL.ICILVisitor, IPipelineStage
 	{
+
+		private int methodTableHeaderOffset = 2; // in pointer sizes
+
 		#region IMethodCompilerStage Members
 
 		/// <summary>
@@ -426,10 +429,10 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			int size;
 			int alignment;
 
-			this.Architecture.GetTypeRequirements(BuiltInSigType.IntPtr, out size, out alignment);
+			Architecture.GetTypeRequirements(BuiltInSigType.IntPtr, out size, out alignment);
 			int slot = invokeTarget.MethodTableSlot;
 
-			return size + (size * slot);
+			return (size + methodTableHeaderOffset) + (size * slot);
 		}
 
 		/// <summary>
@@ -485,7 +488,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 
 				ReplaceWithVmCall(before, VmCall.AllocateObject);
 
-				SymbolOperand methodTableSymbol = this.GetMethodTableSymbol(classType);
+				SymbolOperand methodTableSymbol = GetMethodTableSymbol(classType);
 
 				before.SetOperand(1, methodTableSymbol);
 				before.SetOperand(2, new ConstantOperand(BuiltInSigType.Int32, classType.Size));
@@ -496,7 +499,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 				SymbolOperand symbolOperand = SymbolOperand.FromMethod(ctorMethod);
 
 				ctorOperands.Insert(0, thisReference);
-				this.ProcessInvokeInstruction(ctx, symbolOperand, null, ctorOperands);
+				ProcessInvokeInstruction(ctx, symbolOperand, null, ctorOperands);
 			}
 		}
 
@@ -902,7 +905,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		private Operand CalculateArrayElementOffset(Context ctx, SZArraySigType arraySignatureType, Operand arrayIndexOperand)
 		{
 			int elementSizeInBytes = 0, alignment = 0;
-			this.Architecture.GetTypeRequirements(arraySignatureType.ElementType, out elementSizeInBytes, out alignment);
+			Architecture.GetTypeRequirements(arraySignatureType.ElementType, out elementSizeInBytes, out alignment);
 
 			//
 			// The sequence we're emitting is:
@@ -1874,7 +1877,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		private bool ReplaceWithInternalCall(Context ctx, RuntimeMethod method)
 		{
 			bool internalCall = ((method.ImplAttributes & Mosa.Runtime.Metadata.MethodImplAttributes.InternalCall) == Mosa.Runtime.Metadata.MethodImplAttributes.InternalCall);
-			if (internalCall == true)
+			if (internalCall)
 			{
 				string replacementMethod = this.BuildInternalCallName(method);
 
@@ -1884,7 +1887,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 				Operand result = ctx.Result;
 				List<Operand> operands = new List<Operand>(ctx.Operands);
 
-				this.ProcessInvokeInstruction(ctx, SymbolOperand.FromMethod(method), result, operands);
+				ProcessInvokeInstruction(ctx, SymbolOperand.FromMethod(method), result, operands);
 			}
 
 			return internalCall;

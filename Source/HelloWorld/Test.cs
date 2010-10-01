@@ -5,7 +5,7 @@
  *
  */
 
-namespace Mosa.HelloWorld.xxTest
+namespace Mosa.HelloWorld.Test
 {
 	class GenericType<T>
 	{

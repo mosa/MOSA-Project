@@ -255,7 +255,7 @@ namespace Mosa.HelloWorld
 			CMOS cmos = new CMOS();
 
 			Mosa.HelloWorld.Tests.StringTest.Test();
-			Mosa.HelloWorld.Tests.InterfaceTest.Test();
+			//Mosa.HelloWorld.Tests.InterfaceTest.Test();
 
 			while (true)
 			{
