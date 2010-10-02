@@ -54,9 +54,9 @@ namespace Mosa.Runtime.CompilerFramework
 		private Dictionary<RuntimeType, IList<RuntimeType>> typeInterfaces = new Dictionary<RuntimeType, IList<RuntimeType>>();
 
 		/// <summary>
-		/// Holds the index value  for each interface
+		/// Holds the slot value for each interface
 		/// </summary>
-		private Dictionary<RuntimeType, int> interfaceIndexes = new Dictionary<RuntimeType, int>();
+		private Dictionary<RuntimeType, int> interfaceSlots = new Dictionary<RuntimeType, int>();
 
 		#endregion // Data members
 
@@ -155,6 +155,11 @@ namespace Mosa.Runtime.CompilerFramework
 			return methodTableOffsets[method];
 		}
 
+		int ITypeLayout.GetInterfaceSlotOffset(RuntimeType type)
+		{
+			return interfaceSlots[type];
+		}
+
 		#endregion // ITypeLayout
 
 		/// <summary>
@@ -188,7 +193,7 @@ namespace Mosa.Runtime.CompilerFramework
 			Debug.Assert(type.IsInterface);
 
 			interfaces.Add(type);
-			interfaceIndexes.Add(type, interfaceIndexes.Count);
+			interfaceSlots.Add(type, interfaceSlots.Count);
 		}
 
 		private void BuildTypeInterfaceTables(RuntimeType type)

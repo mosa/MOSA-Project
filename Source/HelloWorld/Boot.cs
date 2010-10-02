@@ -5,11 +5,14 @@
  *
  */
 
+using System;
+
 using Mosa.Platforms.x86;
 using Mosa.Kernel;
 using Mosa.Kernel.X86;
 using Mosa.Kernel.X86.Smbios;
-using System;
+
+using Mosa.HelloWorld.Tests;
 
 namespace Mosa.HelloWorld
 {
@@ -254,8 +257,7 @@ namespace Mosa.HelloWorld
 
 			CMOS cmos = new CMOS();
 
-			Mosa.HelloWorld.Tests.StringTest.Test();
-			//Mosa.HelloWorld.Tests.InterfaceTest.Test();
+			KernelTest.RunTests();
 
 			while (true)
 			{

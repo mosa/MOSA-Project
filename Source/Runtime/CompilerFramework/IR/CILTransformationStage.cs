@@ -39,9 +39,6 @@ namespace Mosa.Runtime.CompilerFramework.IR
 	/// </remarks>
 	public sealed class CILTransformationStage : BaseCodeTransformationStage, CIL.ICILVisitor, IPipelineStage
 	{
-
-		private int methodTableHeaderOffset = 2; // in pointer sizes
-
 		#region IMethodCompilerStage Members
 
 		/// <summary>
@@ -271,7 +268,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 				RuntimeMethod invokeTarget = ctx.InvokeTarget;
 				SymbolOperand symbolOperand = SymbolOperand.FromMethod(invokeTarget);
 
-				this.ProcessInvokeInstruction(ctx, symbolOperand, ctx.Result, new List<Operand>(ctx.Operands));
+				ProcessInvokeInstruction(ctx, symbolOperand, ctx.Result, new List<Operand>(ctx.Operands));
 			}
 		}
 
@@ -284,7 +281,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			Operand destinationOperand = ctx.GetOperand(ctx.OperandCount - 1);
 			ctx.OperandCount -= 1;
 
-			this.ProcessInvokeInstruction(ctx, destinationOperand, ctx.Result, new List<Operand>(ctx.Operands));
+			ProcessInvokeInstruction(ctx, destinationOperand, ctx.Result, new List<Operand>(ctx.Operands));
 		}
 
 		/// <summary>
@@ -400,17 +397,32 @@ namespace Mosa.Runtime.CompilerFramework.IR
 				{
 					Operand thisPtr = ctx.Operand1;
 
-					Operand methodTable = this.MethodCompiler.CreateTemporary(BuiltInSigType.IntPtr);
-					Operand methodPtr = this.MethodCompiler.CreateTemporary(BuiltInSigType.IntPtr);
+					Operand methodTable = MethodCompiler.CreateTemporary(BuiltInSigType.IntPtr);
+					Operand methodPtr = MethodCompiler.CreateTemporary(BuiltInSigType.IntPtr);
 
-					int methodTableOffset = CalculateMethodTableOffset(invokeTarget);
+					int methodTableOffset = CalculateMethodTableOffset(invokeTarget) + (nativePointerSize * 2);
 
-					ctx.AppendInstruction(Instruction.LoadInstruction, methodTable, thisPtr, ConstantOperand.FromValue(0));
-					ctx.AppendInstruction(Instruction.LoadInstruction, methodPtr, methodTable, new ConstantOperand(BuiltInSigType.Int32, methodTableOffset));
+					if (!invokeTarget.DeclaringType.IsInterface)
+					{
+						ctx.SetInstruction(Instruction.LoadInstruction, methodTable, thisPtr, ConstantOperand.FromValue(0));
+						ctx.AppendInstruction(Instruction.LoadInstruction, methodPtr, methodTable, new ConstantOperand(BuiltInSigType.Int32, methodTableOffset));
+					}
+					else
+					{
+						int slotOffset = CalculateInterfaceSlotOffset(invokeTarget);
+
+						Operand slotPtr = MethodCompiler.CreateTemporary(BuiltInSigType.IntPtr);
+						Operand interfaceMethodTablePtr = MethodCompiler.CreateTemporary(BuiltInSigType.IntPtr);
+
+						ctx.SetInstruction(Instruction.LoadInstruction, methodTable, thisPtr, ConstantOperand.FromValue(0));
+						ctx.AppendInstruction(Instruction.LoadInstruction, slotPtr, methodTable, ConstantOperand.FromValue(0));
+						ctx.AppendInstruction(Instruction.LoadInstruction, interfaceMethodTablePtr, slotPtr, new ConstantOperand(BuiltInSigType.Int32, slotOffset));
+						ctx.AppendInstruction(Instruction.LoadInstruction, methodPtr, interfaceMethodTablePtr, new ConstantOperand(BuiltInSigType.Int32, methodTableOffset));
+					}
 
 					// This nop will be overwritten in ProcessInvokeInstruction
 					ctx.AppendInstruction(Instruction.NopInstruction);
-					this.ProcessInvokeInstruction(ctx, methodPtr, resultOperand, operands);
+					ProcessInvokeInstruction(ctx, methodPtr, resultOperand, operands);
 				}
 				else
 				{
@@ -419,20 +431,23 @@ namespace Mosa.Runtime.CompilerFramework.IR
 
 					// Create a symbol operand for the invocation target
 					SymbolOperand symbolOperand = SymbolOperand.FromMethod(invokeTarget);
-					this.ProcessInvokeInstruction(ctx, symbolOperand, resultOperand, operands);
+					ProcessInvokeInstruction(ctx, symbolOperand, resultOperand, operands);
 				}
 			}
 		}
 
 		private int CalculateMethodTableOffset(RuntimeMethod invokeTarget)
 		{
-			int size;
-			int alignment;
-
-			Architecture.GetTypeRequirements(BuiltInSigType.IntPtr, out size, out alignment);
 			int slot = typeLayout.GetMethodTableOffset(invokeTarget);
 
-			return (size + methodTableHeaderOffset) + (size * slot);
+			return (nativePointerSize * slot);
+		}
+
+		private int CalculateInterfaceSlotOffset(RuntimeMethod invokeTarget)
+		{
+			int slot = typeLayout.GetInterfaceSlotOffset(invokeTarget.DeclaringType);
+
+			return (nativePointerSize * slot);
 		}
 
 		/// <summary>

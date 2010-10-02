@@ -19,5 +19,7 @@ namespace Mosa.Runtime.CompilerFramework
 	public interface ITypeLayout
 	{
 		int GetMethodTableOffset(RuntimeMethod method);
+
+		int GetInterfaceSlotOffset(RuntimeType type);
 	}
 }

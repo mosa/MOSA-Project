@@ -14,6 +14,8 @@ using System.Diagnostics;
 
 using Mosa.Runtime.Vm;
 using Mosa.Runtime.Loader;
+using Mosa.Runtime.Metadata.Signatures;
+
 using CIL = Mosa.Runtime.CompilerFramework.CIL;
 
 namespace Mosa.Runtime.CompilerFramework
@@ -65,6 +67,10 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		protected ITypeLayout typeLayout;
 
+		protected int nativePointerSize;
+
+		protected int nativePointerAlignment;
+
 		#endregion // Data members
 
 		#region IMethodCompilerStage members
@@ -85,6 +91,8 @@ namespace Mosa.Runtime.CompilerFramework
 			moduleTypeSystem = compiler.Method.ModuleTypeSystem;
 			typeSystem = compiler.TypeSystem;
 			typeLayout = compiler.TypeLayout;
+
+			Architecture.GetTypeRequirements(BuiltInSigType.IntPtr, out nativePointerSize, out nativePointerAlignment);
 		}
 
 		#endregion // IMethodCompilerStage members
