@@ -7,15 +7,15 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+
+using Mosa.Runtime.Metadata.Signatures;
+using Mosa.Runtime.Vm;
+
 namespace Mosa.Runtime.CompilerFramework
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Diagnostics;
-
-	using Mosa.Runtime.Metadata.Signatures;
-	using Mosa.Runtime.Vm;
-
 	/// <summary>
 	/// Schedules compilation of types/methods.
 	/// </summary>
@@ -27,14 +27,14 @@ namespace Mosa.Runtime.CompilerFramework
 
 		#region IPipelineStage
 
-		string IPipelineStage.Name { get { return @"CompilerScheduler"; } }
+		string IPipelineStage.Name { get { return @"MethodCompilerSchedulerStage"; } }
 
 		#endregion // IPipelineStage
 
 		public MethodCompilerSchedulerStage()
 		{
-			this.methodQueue = new Queue<RuntimeMethod>();
-			this.typeQueue = new Queue<RuntimeType>();
+			methodQueue = new Queue<RuntimeMethod>();
+			typeQueue = new Queue<RuntimeType>();
 		}
 
 		#region IAssemblyCompilerStage members

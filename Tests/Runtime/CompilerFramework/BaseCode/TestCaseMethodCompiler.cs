@@ -26,10 +26,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 	{
 		private readonly TestCaseAssemblyCompiler assemblyCompiler;
 
-		public TestCaseMethodCompiler(TestCaseAssemblyCompiler assemblyCompiler, IAssemblyLinker linker, IArchitecture architecture, ICompilationSchedulerStage compilationScheduler, RuntimeType type, RuntimeMethod method) :
-			base(linker, architecture, compilationScheduler, type, method, assemblyCompiler.TypeSystem)
+		public TestCaseMethodCompiler(TestCaseAssemblyCompiler compiler, IArchitecture architecture, ICompilationSchedulerStage compilationScheduler, RuntimeType type, RuntimeMethod method)
+			: base(compiler.Pipeline.FindFirst<IAssemblyLinker>(), architecture, compilationScheduler, type, method, compiler.TypeSystem, compiler.Pipeline.FindFirst<ITypeLayout>())
 		{
-			this.assemblyCompiler = assemblyCompiler;
+			this.assemblyCompiler = compiler;
 
 			// Populate the pipeline
 			this.Pipeline.AddRange(new IMethodCompilerStage[] {

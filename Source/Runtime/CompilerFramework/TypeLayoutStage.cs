@@ -23,7 +23,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// <summary>
 	/// Performs memory layout of a type for compilation.
 	/// </summary>
-	public sealed class TypeLayoutStage : BaseAssemblyCompilerStage, IAssemblyCompilerStage
+	public sealed class TypeLayoutStage : BaseAssemblyCompilerStage, IAssemblyCompilerStage, ITypeLayout
 	{
 		#region Data members
 
@@ -34,7 +34,7 @@ namespace Mosa.Runtime.CompilerFramework
 		private int nativePointerSize;
 
 		/// <summary>
-		/// Holds a list of methods (values) for each type (key)
+		/// Holds a list of methods for each type
 		/// </summary>
 		private Dictionary<RuntimeType, IList<RuntimeMethod>> typeMethods = new Dictionary<RuntimeType, IList<RuntimeMethod>>();
 
@@ -44,12 +44,17 @@ namespace Mosa.Runtime.CompilerFramework
 		private List<RuntimeType> interfaces = new List<RuntimeType>();
 
 		/// <summary>
-		/// Holds a list of types (values) for each interface (key)
+		/// Holds the method table offsets value for each method
+		/// </summary>
+		private Dictionary<RuntimeMethod, int> methodTableOffsets = new Dictionary<RuntimeMethod, int>();
+
+		/// <summary>
+		/// Holds a list of types for each interface 
 		/// </summary>
 		private Dictionary<RuntimeType, IList<RuntimeType>> typeInterfaces = new Dictionary<RuntimeType, IList<RuntimeType>>();
 
 		/// <summary>
-		/// Holds the index value (values) for each interface (key)
+		/// Holds the index value  for each interface
 		/// </summary>
 		private Dictionary<RuntimeType, int> interfaceIndexes = new Dictionary<RuntimeType, int>();
 
@@ -61,7 +66,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
 		/// <value>The name of the compilation stage.</value>
-		string IPipelineStage.Name { get { return @"Type Layout"; } }
+		string IPipelineStage.Name { get { return @"TypeLayoutStage"; } }
 
 		#endregion // IPipelineStage
 
@@ -138,6 +143,20 @@ namespace Mosa.Runtime.CompilerFramework
 
 		#endregion // IAssemblyCompilerStage members
 
+		#region ITypeLayout members
+
+		/// <summary>
+		/// Gets the method table offset.
+		/// </summary>
+		/// <param name="method">The method.</param>
+		/// <returns></returns>
+		int ITypeLayout.GetMethodTableOffset(RuntimeMethod method)
+		{
+			return methodTableOffsets[method];
+		}
+
+		#endregion // ITypeLayout
+
 		/// <summary>
 		/// Builds the list of types by interface
 		/// </summary>
@@ -184,7 +203,7 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			if (type.Interfaces.Count == 0)
 				return;
-			
+
 			List<string> slots = new List<string>(interfaces.Count);
 
 			foreach (RuntimeType interfaceType in interfaces)
@@ -283,14 +302,14 @@ namespace Mosa.Runtime.CompilerFramework
 			// HINT: The method table is offset by a two pointers, type pointer and interface dispatch points. 
 			// The type pointer contains the type information pointer, used to realize object.GetType().
 			List<string> headerlinks = new List<string>();
-			
+
 			if (type.Interfaces.Count == 0)
-				headerlinks.Add(null); 
+				headerlinks.Add(null);
 			else
 				headerlinks.Add(type.FullName + @"$itable");
 
 			headerlinks.Add(null); // TODO: GetType()
-			
+
 			AskLinkerToCreateMethodTable(type.FullName + @"$mtable", methodTable, headerlinks);
 		}
 
@@ -329,7 +348,8 @@ namespace Mosa.Runtime.CompilerFramework
 						slot = FindOverrideSlot(methodTable, method);
 					}
 
-					method.MethodTableSlot = slot;
+					methodTableOffsets.Add(method, slot);
+
 					if (slot == methodTable.Count)
 					{
 						methodTable.Add(method);
@@ -350,7 +370,7 @@ namespace Mosa.Runtime.CompilerFramework
 			{
 				if (baseMethod.Name.Equals(method.Name) && baseMethod.Signature.Matches(method.Signature))
 				{
-					return baseMethod.MethodTableSlot;
+					return methodTableOffsets[baseMethod];
 				}
 			}
 

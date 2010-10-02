@@ -430,7 +430,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			int alignment;
 
 			Architecture.GetTypeRequirements(BuiltInSigType.IntPtr, out size, out alignment);
-			int slot = invokeTarget.MethodTableSlot;
+			int slot = typeLayout.GetMethodTableOffset(invokeTarget);
 
 			return (size + methodTableHeaderOffset) + (size * slot);
 		}
