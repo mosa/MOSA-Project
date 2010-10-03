@@ -28,8 +28,8 @@ namespace Mosa.Tools.Compiler.LinkTimeCodeGeneration
 		/// <param name="method">The metadata of the method to compile.</param>
 		/// <param name="instructionSet">The instruction set.</param>
 		/// <exception cref="System.ArgumentNullException"><paramref name="compiler"/>, <paramref name="method"/> or <paramref name="instructionSet"/> is null.</exception>
-		public LinkerMethodCompiler(AssemblyCompiler compiler, ICompilationSchedulerStage compilationScheduler, RuntimeMethod method, InstructionSet instructionSet) :
-			base(compiler.Pipeline.FindFirst<IAssemblyLinker>(), compiler.Architecture, compilationScheduler, method.DeclaringType, method, compiler.TypeSystem)
+		public LinkerMethodCompiler(AssemblyCompiler compiler, ICompilationSchedulerStage compilationScheduler, RuntimeMethod method, InstructionSet instructionSet)
+			: base(compiler.Pipeline.FindFirst<IAssemblyLinker>(), compiler.Architecture, compilationScheduler, method.DeclaringType, method, compiler.TypeSystem, compiler.Pipeline.FindFirst<ITypeLayout>())
 		{
 			this.InstructionSet = instructionSet;
 			this.CreateBlock(-1, 0);

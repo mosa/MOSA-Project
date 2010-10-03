@@ -14,6 +14,8 @@ using System.Diagnostics;
 
 using Mosa.Runtime.Vm;
 using Mosa.Runtime.Loader;
+using Mosa.Runtime.Metadata.Signatures;
+
 using CIL = Mosa.Runtime.CompilerFramework.CIL;
 
 namespace Mosa.Runtime.CompilerFramework
@@ -31,7 +33,7 @@ namespace Mosa.Runtime.CompilerFramework
 		protected IMethodCompiler MethodCompiler;
 
 		/// <summary>
-		/// The architecture of the compilation process.
+		/// The architecture of the compilation process
 		/// </summary>
 		protected IArchitecture Architecture;
 
@@ -41,14 +43,13 @@ namespace Mosa.Runtime.CompilerFramework
 		protected InstructionSet InstructionSet;
 
 		/// <summary>
-		/// List of basic blocks found during decoding.
+		/// List of basic blocks found during decoding
 		/// </summary>
 		protected List<BasicBlock> BasicBlocks;
 
 		/// <summary>
 		/// Holds the type loader 
 		/// </summary>
-		/// <value>The type loader.</value>
 		protected ITypeSystem typeSystem;
 
 		/// <summary>
@@ -57,10 +58,18 @@ namespace Mosa.Runtime.CompilerFramework
 		protected IModuleTypeSystem moduleTypeSystem; 
 
 		/// <summary>
-		/// Holds the assembly loader.
+		/// Holds the assembly loader
 		/// </summary>
-		/// <value>The assembly loader.</value>
 		protected IAssemblyLoader assemblyLoader;
+
+		/// <summary>
+		/// Holds the type layout interface
+		/// </summary>
+		protected ITypeLayout typeLayout;
+
+		protected int nativePointerSize;
+
+		protected int nativePointerAlignment;
 
 		#endregion // Data members
 
@@ -81,6 +90,9 @@ namespace Mosa.Runtime.CompilerFramework
 			Architecture = compiler.Architecture;
 			moduleTypeSystem = compiler.Method.ModuleTypeSystem;
 			typeSystem = compiler.TypeSystem;
+			typeLayout = compiler.TypeLayout;
+
+			Architecture.GetTypeRequirements(BuiltInSigType.IntPtr, out nativePointerSize, out nativePointerAlignment);
 		}
 
 		#endregion // IMethodCompilerStage members

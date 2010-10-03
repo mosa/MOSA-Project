@@ -23,7 +23,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// <summary>
 	/// Performs memory layout of a type for compilation.
 	/// </summary>
-	public sealed class TypeLayoutStage : BaseAssemblyCompilerStage, IAssemblyCompilerStage
+	public sealed class TypeLayoutStage : BaseAssemblyCompilerStage, IAssemblyCompilerStage, ITypeLayout
 	{
 		#region Data members
 
@@ -34,24 +34,29 @@ namespace Mosa.Runtime.CompilerFramework
 		private int nativePointerSize;
 
 		/// <summary>
-		/// Holds a list of methods (values) for each type (key)
+		/// Holds a list of methods for each type
 		/// </summary>
 		private Dictionary<RuntimeType, IList<RuntimeMethod>> typeMethods = new Dictionary<RuntimeType, IList<RuntimeMethod>>();
-
-		/// <summary>
-		/// Holds a list of types (values) for each interface (key)
-		/// </summary>
-		private Dictionary<RuntimeType, IList<RuntimeType>> typeInterfaces = new Dictionary<RuntimeType, IList<RuntimeType>>();
-
-		/// <summary>
-		/// Holds the index value (values) for each interface (key)
-		/// </summary>
-		private Dictionary<RuntimeType, int> interfaceIndexes = new Dictionary<RuntimeType, int>();
 
 		/// <summary>
 		/// Holds a list of interfaces
 		/// </summary>
 		private List<RuntimeType> interfaces = new List<RuntimeType>();
+
+		/// <summary>
+		/// Holds the method table offsets value for each method
+		/// </summary>
+		private Dictionary<RuntimeMethod, int> methodTableOffsets = new Dictionary<RuntimeMethod, int>();
+
+		/// <summary>
+		/// Holds a list of types for each interface 
+		/// </summary>
+		private Dictionary<RuntimeType, IList<RuntimeType>> typeInterfaces = new Dictionary<RuntimeType, IList<RuntimeType>>();
+
+		/// <summary>
+		/// Holds the slot value for each interface
+		/// </summary>
+		private Dictionary<RuntimeType, int> interfaceSlots = new Dictionary<RuntimeType, int>();
 
 		#endregion // Data members
 
@@ -61,7 +66,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
 		/// <value>The name of the compilation stage.</value>
-		string IPipelineStage.Name { get { return @"Type Layout"; } }
+		string IPipelineStage.Name { get { return @"TypeLayoutStage"; } }
 
 		#endregion // IPipelineStage
 
@@ -78,6 +83,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 		void IAssemblyCompilerStage.Run()
 		{
+
 			// Enumerate all types and do an appropriate type layout
 			foreach (RuntimeType type in typeSystem.GetCompiledTypes())
 			{
@@ -88,6 +94,19 @@ namespace Mosa.Runtime.CompilerFramework
 				{
 					// Builds the interface list and interface index values
 					BuildInterfaceType(type);
+				}
+			}
+
+			// Enumerate all types and do an appropriate type layout
+			foreach (RuntimeType type in typeSystem.GetCompiledTypes())
+			{
+				if (type.IsModule || type.IsGeneric || type.IsDelegate)
+					continue;
+
+				if (type.IsInterface)
+				{
+					// Builds the interface list and interface index values
+					//BuildInterfaceType(type);
 
 					CreateInterfaceMethodTable(type);
 				}
@@ -106,23 +125,42 @@ namespace Mosa.Runtime.CompilerFramework
 					}
 
 					BuildMethodTable(type);
-
+					BuildTypeInterfaceSlots(type);
 					BuildTypeInterfaceTables(type);
 				}
 
 				AllocateStaticFields(type);
 
-				int i = 0;
-				Debug.WriteLine("Type: " + type.ToString());
-				foreach (RuntimeMethod method in GetMethodTable(type))
-				{
-					Debug.WriteLine("    " + i.ToString() + ":" + method.ToString());
-					i++;
-				}
+				//int i = 0;
+				//Debug.WriteLine("Type: " + type.ToString());
+				//foreach (RuntimeMethod method in GetMethodTable(type))
+				//{
+				//    Debug.WriteLine("    " + i.ToString() + ":" + method.ToString());
+				//    i++;
+				//}
 			}
 		}
 
 		#endregion // IAssemblyCompilerStage members
+
+		#region ITypeLayout members
+
+		/// <summary>
+		/// Gets the method table offset.
+		/// </summary>
+		/// <param name="method">The method.</param>
+		/// <returns></returns>
+		int ITypeLayout.GetMethodTableOffset(RuntimeMethod method)
+		{
+			return methodTableOffsets[method];
+		}
+
+		int ITypeLayout.GetInterfaceSlotOffset(RuntimeType type)
+		{
+			return interfaceSlots[type];
+		}
+
+		#endregion // ITypeLayout
 
 		/// <summary>
 		/// Builds the list of types by interface
@@ -155,12 +193,7 @@ namespace Mosa.Runtime.CompilerFramework
 			Debug.Assert(type.IsInterface);
 
 			interfaces.Add(type);
-			interfaceIndexes.Add(type, interfaceIndexes.Count);
-		}
-
-		private bool IsExplicitLayoutRequestedByType(RuntimeType type)
-		{
-			return (type.Attributes & TypeAttributes.LayoutMask) == TypeAttributes.ExplicitLayout;
+			interfaceSlots.Add(type, interfaceSlots.Count);
 		}
 
 		private void BuildTypeInterfaceTables(RuntimeType type)
@@ -169,13 +202,31 @@ namespace Mosa.Runtime.CompilerFramework
 			{
 				BuildInterfaceTable(type, interfaceType);
 			}
+		}
 
-			// TODO: build slots
+		private void BuildTypeInterfaceSlots(RuntimeType type)
+		{
+			if (type.Interfaces.Count == 0)
+				return;
 
+			List<string> slots = new List<string>(interfaces.Count);
+
+			foreach (RuntimeType interfaceType in interfaces)
+			{
+				if (type.Interfaces.Contains(interfaceType))
+					slots.Add(type.FullName + @"$mtable$" + interfaceType.FullName);
+				else
+					slots.Add(null);
+			}
+
+			AskLinkerToCreateMethodTable(type.FullName + @"$itable", null, slots);
 		}
 
 		private void BuildInterfaceTable(RuntimeType type, RuntimeType interfaceType)
 		{
+			if (type.Interfaces.Count == 0)
+				return;
+
 			List<RuntimeMethod> methodTable = new List<RuntimeMethod>();
 
 			ScanExplicitInterfaceImplementations(type, interfaceType.Methods, methodTable);
@@ -256,7 +307,12 @@ namespace Mosa.Runtime.CompilerFramework
 			// HINT: The method table is offset by a two pointers, type pointer and interface dispatch points. 
 			// The type pointer contains the type information pointer, used to realize object.GetType().
 			List<string> headerlinks = new List<string>();
-			headerlinks.Add(null); // TODO: pointer interface slot
+
+			if (type.Interfaces.Count == 0)
+				headerlinks.Add(null);
+			else
+				headerlinks.Add(type.FullName + @"$itable");
+
 			headerlinks.Add(null); // TODO: GetType()
 
 			AskLinkerToCreateMethodTable(type.FullName + @"$mtable", methodTable, headerlinks);
@@ -297,7 +353,8 @@ namespace Mosa.Runtime.CompilerFramework
 						slot = FindOverrideSlot(methodTable, method);
 					}
 
-					method.MethodTableSlot = slot;
+					methodTableOffsets.Add(method, slot);
+
 					if (slot == methodTable.Count)
 					{
 						methodTable.Add(method);
@@ -318,7 +375,7 @@ namespace Mosa.Runtime.CompilerFramework
 			{
 				if (baseMethod.Name.Equals(method.Name) && baseMethod.Signature.Matches(method.Signature))
 				{
-					return baseMethod.MethodTableSlot;
+					return methodTableOffsets[baseMethod];
 				}
 			}
 
@@ -363,7 +420,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 		private void AskLinkerToCreateMethodTable(string methodTableName, IList<RuntimeMethod> methodTable, IList<string> headerlinks)
 		{
-			int methodTableSize = ((headerlinks == null ? 0 : headerlinks.Count) + methodTable.Count) * nativePointerSize;
+			int methodTableSize = ((headerlinks == null ? 0 : headerlinks.Count) + (methodTable == null ? 0 : methodTable.Count)) * nativePointerSize;
 
 			using (Stream stream = linker.Allocate(methodTableName, SectionKind.Text, methodTableSize, nativePointerAlignment))
 			{
@@ -384,13 +441,16 @@ namespace Mosa.Runtime.CompilerFramework
 				}
 			}
 
-			foreach (RuntimeMethod method in methodTable)
+			if (methodTable != null)
 			{
-				if (!method.IsAbstract)
+				foreach (RuntimeMethod method in methodTable)
 				{
-					linker.Link(LinkType.AbsoluteAddress | LinkType.I4, methodTableName, offset, 0, method.ToString(), IntPtr.Zero);
+					if (!method.IsAbstract)
+					{
+						linker.Link(LinkType.AbsoluteAddress | LinkType.I4, methodTableName, offset, 0, method.ToString(), IntPtr.Zero);
+					}
+					offset += nativePointerSize;
 				}
-				offset += nativePointerSize;
 			}
 		}
 

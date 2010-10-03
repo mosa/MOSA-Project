@@ -41,6 +41,13 @@ namespace Mosa.Tools.Compiler
 			Compile();
 		}
 
+		/// <summary>
+		/// Creates the method compiler.
+		/// </summary>
+		/// <param name="compilationScheduler">The compilation scheduler.</param>
+		/// <param name="type">The type.</param>
+		/// <param name="method">The method.</param>
+		/// <returns></returns>
 		public override IMethodCompiler CreateMethodCompiler(ICompilationSchedulerStage compilationScheduler, RuntimeType type, RuntimeMethod method)
 		{
 			IMethodCompiler mc = new AotMethodCompiler(

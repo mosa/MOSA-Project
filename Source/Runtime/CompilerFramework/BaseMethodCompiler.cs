@@ -43,7 +43,7 @@ namespace Mosa.Runtime.CompilerFramework
 		protected CompilerPipeline pipeline;
 
 		/// <summary>
-		/// Holds a list of operands, which represent method parameters.
+		/// Holds a list of operands which represent method parameters.
 		/// </summary>
 		private readonly List<Operand> _parameters;
 
@@ -55,32 +55,32 @@ namespace Mosa.Runtime.CompilerFramework
 		private IArchitecture _architecture;
 
 		/// <summary>
-		/// Holds the _linker used to resolve external symbols.
+		/// Holds the linker used to resolve external symbols
 		/// </summary>
 		private IAssemblyLinker _linker;
 
 		/// <summary>
-		/// Holds a list of operands, which represent local variables.
+		/// Holds a list of operands which represent local variables
 		/// </summary>
 		private List<Operand> _locals;
 
 		/// <summary>
-		/// Optional signature of stack local variables.
+		/// Optional signature of stack local variables
 		/// </summary>
 		private LocalVariableSignature _localsSig;
 
 		/// <summary>
-		/// The _method definition being compiled.
+		/// The method definition being compiled
 		/// </summary>
 		private RuntimeMethod _method;
 
 		/// <summary>
-		/// Holds the next free stack slot index.
+		/// Holds the next free stack slot index
 		/// </summary>
 		protected int _nextStackSlot;
 
 		/// <summary>
-		/// Holds the _type, which owns the _method.
+		/// Holds the _type, which owns the _method
 		/// </summary>
 		private RuntimeType _type;
 
@@ -95,15 +95,20 @@ namespace Mosa.Runtime.CompilerFramework
 		private List<BasicBlock> _basicBlocks;
 
 		/// <summary>
-		/// Holds the type system during compilation.
+		/// Holds the type system during compilation
 		/// </summary>
 		protected ITypeSystem typeSystem;
+
+		/// <summary>
+		/// Holds the type layout interface
+		/// </summary>
+		protected ITypeLayout typeLayout;
 
 		/// <summary>
 		/// Holds the modules type system
 		/// </summary>
 		protected IModuleTypeSystem moduleTypeSystem;
-		
+
 		#endregion // Data Members
 
 		#region Construction
@@ -121,7 +126,8 @@ namespace Mosa.Runtime.CompilerFramework
 			ICompilationSchedulerStage compilationScheduler,
 			RuntimeType type,
 			RuntimeMethod method,
-			ITypeSystem typeSystem)
+			ITypeSystem typeSystem,
+			ITypeLayout typeLayout)
 		{
 			if (architecture == null)
 				throw new ArgumentNullException(@"architecture");
@@ -146,6 +152,7 @@ namespace Mosa.Runtime.CompilerFramework
 			this.compilationScheduler = compilationScheduler;
 			this.moduleTypeSystem = method.ModuleTypeSystem;
 			this.typeSystem = typeSystem;
+			this.typeLayout = typeLayout;
 		}
 
 		#endregion // Construction
@@ -155,42 +162,27 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Gets the Architecture to compile for.
 		/// </summary>
-		public IArchitecture Architecture
-		{
-			get { return _architecture; }
-		}
+		public IArchitecture Architecture { get { return _architecture; } }
 
 		/// <summary>
 		/// Gets the assembly, which contains the method.
 		/// </summary>
-		public IMetadataModule Assembly
-		{
-			get { return this._method.MetadataModule; }
-		}
+		public IMetadataModule Assembly { get { return this._method.MetadataModule; } }
 
 		/// <summary>
 		/// Gets the _linker used to resolve external symbols.
 		/// </summary>
-		public IAssemblyLinker Linker
-		{
-			get { return _linker; }
-		}
+		public IAssemblyLinker Linker { get { return _linker; } }
 
 		/// <summary>
 		/// Gets the _method implementation being compiled.
 		/// </summary>
-		public RuntimeMethod Method
-		{
-			get { return _method; }
-		}
+		public RuntimeMethod Method { get { return _method; } }
 
 		/// <summary>
 		/// Gets the owner type of the method.
 		/// </summary>
-		public RuntimeType Type
-		{
-			get { return _type; }
-		}
+		public RuntimeType Type { get { return _type; } }
 
 		/// <summary>
 		/// Gets the instruction set.
@@ -212,24 +204,24 @@ namespace Mosa.Runtime.CompilerFramework
 			set { _basicBlocks = value; }
 		}
 
-		public ICompilationSchedulerStage Scheduler
-		{
-			get { return this.compilationScheduler; }
-		}
+		public ICompilationSchedulerStage Scheduler { get { return this.compilationScheduler; } }
 
 		/// <summary>
 		/// Provides access to the pipeline of this compiler.
 		/// </summary>
-		public CompilerPipeline Pipeline
-		{
-			get { return pipeline; }
-		}
+		public CompilerPipeline Pipeline { get { return pipeline; } }
 
 		/// <summary>
 		/// Gets the type system.
 		/// </summary>
 		/// <value>The type system.</value>
 		public ITypeSystem TypeSystem { get { return typeSystem; } }
+
+		/// <summary>
+		/// Gets the type layout.
+		/// </summary>
+		/// <value>The type layout.</value>
+		public ITypeLayout TypeLayout { get { return typeLayout; } }
 
 		#endregion // Properties
 

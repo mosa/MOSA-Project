@@ -33,8 +33,8 @@ namespace Mosa.Runtime.Jit.SimpleJit
 
 		#region Construction
 
-		public SimpleJitMethodCompiler(IAssemblyLinker linker, IArchitecture architecture, ICompilationSchedulerStage compilationScheduler, RuntimeType type, RuntimeMethod method, Stream codeStream, ITypeSystem typeSystem) :
-			base(linker, architecture, compilationScheduler, type, method, typeSystem)
+		public SimpleJitMethodCompiler(AssemblyCompiler compiler, ICompilationSchedulerStage compilationScheduler, RuntimeType type, RuntimeMethod method, Stream codeStream, ITypeSystem typeSystem)
+			: base(compiler.Pipeline.FindFirst<IAssemblyLinker>(), compiler.Architecture, compilationScheduler, type, method, typeSystem, compiler.Pipeline.FindFirst<ITypeLayout>())
 		{
 			if (codeStream == null)
 				throw new ArgumentNullException(@"codeStream");

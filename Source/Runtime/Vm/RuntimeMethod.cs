@@ -57,8 +57,6 @@ namespace Mosa.Runtime.Vm
 		/// </summary>
 		private ulong rva;
 
-		private int methodTableSlot;
-
 		#endregion // Data members
 
 		#region Construction
@@ -72,7 +70,6 @@ namespace Mosa.Runtime.Vm
 		public RuntimeMethod(IModuleTypeSystem moduleTypeSystem, int token, RuntimeType declaringType) :
 			base(moduleTypeSystem, token, declaringType, null)
 		{
-			this.methodTableSlot = -1;
 		}
 
 		#endregion // Construction
@@ -255,18 +252,5 @@ namespace Mosa.Runtime.Vm
 			return this.DeclaringType.GetGenericTypeArgument(index);
 		}
 
-		public int MethodTableSlot
-		{
-			get
-			{
-				Debug.Assert(this.methodTableSlot != -1, @"Method Table Slot not initialized.");
-				return this.methodTableSlot;
-			}
-
-			set
-			{
-				this.methodTableSlot = value;
-			}
-		}
 	}
 }

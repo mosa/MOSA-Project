@@ -72,7 +72,7 @@
     <Compile Include="JitLinker.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MethodCompiler.cs">
+    <Compile Include="SimpleJitMethodCompiler.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="RawMemoryStream.cs">

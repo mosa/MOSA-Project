@@ -150,5 +150,11 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value>The type system.</value>
 		ITypeSystem TypeSystem { get; }
 
+		/// <summary>
+		/// Gets the type layout.
+		/// </summary>
+		/// <value>The type layout.</value>
+		ITypeLayout TypeLayout { get; }
+
 	}
 }

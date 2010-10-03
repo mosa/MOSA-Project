@@ -102,8 +102,8 @@ namespace Mosa.Runtime.Vm
 		/// <value>The attributes.</value>
 		public TypeAttributes Attributes
 		{
-			get { return this.flags; }
-			protected set { this.flags = value; }
+			get { return flags; }
+			protected set { flags = value; }
 		}
 
 		/// <summary>
@@ -114,8 +114,8 @@ namespace Mosa.Runtime.Vm
 		{
 			get
 			{
-				this.AssertBaseTypeIsLoaded();
-				return this.baseType;
+				AssertBaseTypeIsLoaded();
+				return baseType;
 			}
 		}
 
@@ -127,7 +127,7 @@ namespace Mosa.Runtime.Vm
 		/// </value>
 		public bool IsGeneric
 		{
-			get { return (this.arguments != null && this.arguments.Length != 0); }
+			get { return (arguments != null && arguments.Length != 0); }
 		}
 
 		/// <summary>
@@ -165,15 +165,15 @@ namespace Mosa.Runtime.Vm
 		/// <value>The fields.</value>
 		public IList<RuntimeField> Fields
 		{
-			get { return this.fields; }
+			get { return fields; }
 			protected set
 			{
 				if (value == null)
 					throw new ArgumentNullException(@"value");
-				if (this.fields != null)
+				if (fields != null)
 					throw new InvalidOperationException();
 
-				this.fields = value;
+				fields = value;
 			}
 		}
 
@@ -185,12 +185,12 @@ namespace Mosa.Runtime.Vm
 		{
 			get
 			{
-				if (this.interfaces == null)
+				if (interfaces == null)
 				{
-					this.interfaces = this.LoadInterfaces();
+					interfaces = LoadInterfaces();
 				}
 
-				return this.interfaces;
+				return interfaces;
 			}
 		}
 
@@ -200,15 +200,15 @@ namespace Mosa.Runtime.Vm
 		/// <value>The methods.</value>
 		public IList<RuntimeMethod> Methods
 		{
-			get { return this.methods; }
+			get { return methods; }
 			protected set
 			{
 				if (value == null)
 					throw new ArgumentNullException(@"value");
-				if (this.methods != null)
+				if (methods != null)
 					throw new InvalidOperationException();
 
-				this.methods = value;
+				methods = value;
 			}
 		}
 
@@ -220,23 +220,23 @@ namespace Mosa.Runtime.Vm
 		{
 			get
 			{
-				if (this.nameSpace == null)
+				if (nameSpace == null)
 				{
-					this.nameSpace = GetNamespace();
-					Debug.Assert(this.nameSpace != null, @"GetNamespace() failed");
+					nameSpace = GetNamespace();
+					Debug.Assert(nameSpace != null, @"GetNamespace() failed");
 				}
 
-				return this.nameSpace;
+				return nameSpace;
 			}
 
 			protected set
 			{
 				if (value == null)
 					throw new ArgumentNullException(@"value");
-				if (this.nameSpace != null)
+				if (nameSpace != null)
 					throw new InvalidOperationException();
 
-				this.nameSpace = value;
+				nameSpace = value;
 			}
 		}
 
@@ -248,7 +248,8 @@ namespace Mosa.Runtime.Vm
 		{
 			get
 			{
-				string ns = this.Namespace, name = this.Name;
+				string ns = Namespace;
+				string name = Name;
 				if (ns == null)
 					return name;
 
@@ -262,8 +263,8 @@ namespace Mosa.Runtime.Vm
 		/// <value>The packing of type fields.</value>
 		public int Pack
 		{
-			get { return this.packing; }
-			protected set { this.packing = value; }
+			get { return packing; }
+			protected set { packing = value; }
 		}
 
 		/// <summary>
@@ -272,8 +273,8 @@ namespace Mosa.Runtime.Vm
 		/// <value>The size of the type.</value>
 		public int Size							// FIXME: should be determined by TypeLayoutStage
 		{
-			get { return this.nativeSize; }
-			set { this.nativeSize = value; }	// FIXME: should be protected
+			get { return nativeSize; }
+			set { nativeSize = value; }	// FIXME: should be protected
 		}
 
 		/// <summary>
@@ -338,9 +339,9 @@ namespace Mosa.Runtime.Vm
 
 			// FIXME: We're not checking interfaces yet
 			// FIXME: Only works for classes
-			Debug.Assert((this.flags & TypeAttributes.Class) == TypeAttributes.Class, @"Only works for classes!");
+			Debug.Assert((flags & TypeAttributes.Class) == TypeAttributes.Class, @"Only works for classes!");
 
-			return (this.Equals(type) == true || type.IsSubclassOf(this) == true);
+			return (Equals(type) || type.IsSubclassOf(this));
 		}
 
 		/// <summary>
@@ -357,14 +358,14 @@ namespace Mosa.Runtime.Vm
 			if (c == null)
 				throw new ArgumentNullException(@"c");
 
-			RuntimeType baseType = this.BaseType;
+			RuntimeType baseType = BaseType;
 			while (baseType != null)
 			{
-				if (baseType.Equals(c) == true)
+				if (baseType.Equals(c))
 					return true;
 
 				RuntimeType nextBaseType = baseType.BaseType;
-				if (baseType.Equals(nextBaseType) == true)
+				if (baseType.Equals(nextBaseType))
 					break;
 
 				baseType = nextBaseType;
@@ -380,7 +381,7 @@ namespace Mosa.Runtime.Vm
 		public void SetGenericParameter(List<GenericParamRow> gprs)
 		{
 			// TODO: Implement this method
-			this.arguments = new GenericArgument[gprs.Count];
+			arguments = new GenericArgument[gprs.Count];
 		}
 
 		#endregion // Methods
@@ -396,7 +397,7 @@ namespace Mosa.Runtime.Vm
 		/// </returns>
 		public virtual bool Equals(RuntimeType other)
 		{
-			return (this.flags == other.flags && this.nativeSize == other.nativeSize && this.packing == other.packing);
+			return (flags == other.flags && nativeSize == other.nativeSize && packing == other.packing);
 		}
 
 		#endregion // IEquatable<RuntimeType> Members
@@ -430,10 +431,10 @@ namespace Mosa.Runtime.Vm
 		{
 			get
 			{
-				this.AssertBaseTypeIsLoaded();
+				AssertBaseTypeIsLoaded();
 
 				RuntimeType delegateType = moduleTypeSystem.TypeSystem.GetType(@"System.Delegate, mscorlib");
-				return this.IsSubclassOf(delegateType);
+				return IsSubclassOf(delegateType);
 			}
 		}
 
@@ -444,7 +445,7 @@ namespace Mosa.Runtime.Vm
 				this.AssertBaseTypeIsLoaded();
 
 				RuntimeType enumType = moduleTypeSystem.TypeSystem.GetType(@"System.Enum");
-				return ReferenceEquals(this.BaseType, enumType);
+				return ReferenceEquals(BaseType, enumType);
 			}
 		}
 
@@ -452,7 +453,7 @@ namespace Mosa.Runtime.Vm
 		{
 			get
 			{
-				return (this.Attributes & TypeAttributes.Interface) == TypeAttributes.Interface;
+				return (Attributes & TypeAttributes.Interface) == TypeAttributes.Interface;
 			}
 		}
 
@@ -460,27 +461,25 @@ namespace Mosa.Runtime.Vm
 		{
 			get
 			{
-				return this.isCompiled;
+				return isCompiled;
 			}
-
 			set
 			{
-				this.isCompiled = value;
+				isCompiled = value;
 			}
 		}
 
-
 		private void AssertBaseTypeIsLoaded()
 		{
-			if (this.baseType == null)
+			if (baseType == null)
 			{
-				this.baseType = GetBaseType();
+				baseType = GetBaseType();
 			}
 		}
 
 		public RuntimeMethod FindMethod(string name)
 		{
-			foreach (RuntimeMethod method in this.Methods)
+			foreach (RuntimeMethod method in Methods)
 			{
 				if (name == method.Name)
 				{
@@ -488,7 +487,7 @@ namespace Mosa.Runtime.Vm
 				}
 			}
 
-			throw new MissingMethodException(this.Name, name);
+			throw new MissingMethodException(Name, name);
 		}
 
 		/// <summary>
