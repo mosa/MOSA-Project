@@ -400,15 +400,15 @@ namespace Mosa.Runtime.CompilerFramework.IR
 					Operand methodTable = MethodCompiler.CreateTemporary(BuiltInSigType.IntPtr);
 					Operand methodPtr = MethodCompiler.CreateTemporary(BuiltInSigType.IntPtr);
 
-					int methodTableOffset = CalculateMethodTableOffset(invokeTarget) + (nativePointerSize * 2);
-
 					if (!invokeTarget.DeclaringType.IsInterface)
 					{
+						int methodTableOffset = CalculateMethodTableOffset(invokeTarget) + (nativePointerSize * 2);
 						ctx.SetInstruction(Instruction.LoadInstruction, methodTable, thisPtr, ConstantOperand.FromValue(0));
 						ctx.AppendInstruction(Instruction.LoadInstruction, methodPtr, methodTable, new ConstantOperand(BuiltInSigType.Int32, methodTableOffset));
 					}
 					else
 					{
+						int methodTableOffset = CalculateMethodTableOffset(invokeTarget);
 						int slotOffset = CalculateInterfaceSlotOffset(invokeTarget);
 
 						Operand slotPtr = MethodCompiler.CreateTemporary(BuiltInSigType.IntPtr);
