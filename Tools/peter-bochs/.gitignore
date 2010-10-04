@@ -6,3 +6,5 @@ StopBochs.exe
 bochsout.txt
 breakpoint.xml
 memoryCombo.xml
+peter-bochs.log
+peter-bochs.xml
