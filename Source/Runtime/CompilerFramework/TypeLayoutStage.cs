@@ -49,11 +49,6 @@ namespace Mosa.Runtime.CompilerFramework
 		private Dictionary<RuntimeMethod, int> methodTableOffsets = new Dictionary<RuntimeMethod, int>();
 
 		/// <summary>
-		/// Holds a list of types for each interface 
-		/// </summary>
-		private Dictionary<RuntimeType, IList<RuntimeType>> typeInterfaces = new Dictionary<RuntimeType, IList<RuntimeType>>();
-
-		/// <summary>
 		/// Holds the slot value for each interface
 		/// </summary>
 		private Dictionary<RuntimeType, int> interfaceSlots = new Dictionary<RuntimeType, int>();
@@ -105,16 +100,10 @@ namespace Mosa.Runtime.CompilerFramework
 
 				if (type.IsInterface)
 				{
-					// Builds the interface list and interface index values
-					//BuildInterfaceType(type);
-
 					CreateInterfaceMethodTable(type);
 				}
 				else
 				{
-					// Builds interface->types list
-					BuildInterfaceTypes(type);
-
 					if (type.IsExplicitLayoutRequestedByType)
 					{
 						CreateExplicitLayout(type);
@@ -161,28 +150,6 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		#endregion // ITypeLayout
-
-		/// <summary>
-		/// Builds the list of types by interface
-		/// </summary>
-		/// <param name="type">The type.</param>
-		private void BuildInterfaceTypes(RuntimeType type)
-		{
-			Debug.Assert(!type.IsInterface);
-
-			foreach (RuntimeType interfaceType in type.Interfaces)
-			{
-				IList<RuntimeType> types;
-
-				if (!typeInterfaces.TryGetValue(interfaceType, out types))
-				{
-					types = new List<RuntimeType>();
-					typeInterfaces.Add(interfaceType, types);
-				}
-
-				types.Add(type);
-			}
-		}
 
 		/// <summary>
 		/// Builds a list of interfaces and assigns interface a unique index number
@@ -246,7 +213,7 @@ namespace Mosa.Runtime.CompilerFramework
 				{
 					foreach (RuntimeMethod interfaceMethod in interfaceType)
 					{
-						if (interfaceMethod != null && (TokenTypes)interfaceMethod.Token == row.MethodDeclarationTableIdx)
+						if (interfaceMethod != null && (TokenTypes)interfaceMethod.Token == (row.MethodDeclarationTableIdx & TokenTypes.RowIndexMask))
 						{
 							methodTable.Add(FindMethodByToken(type, row.MethodBodyTableIdx));
 						}
@@ -263,7 +230,7 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			foreach (RuntimeMethod method in type.Methods)
 			{
-				if ((TokenTypes)method.Token == methodToken)
+				if ((TokenTypes)method.Token == (methodToken & TokenTypes.RowIndexMask))
 				{
 					return method;
 				}
