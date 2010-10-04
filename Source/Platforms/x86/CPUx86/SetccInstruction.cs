@@ -34,6 +34,8 @@ namespace Mosa.Platforms.x86.CPUx86
 		private static readonly OpCode UGT = new OpCode(new byte[] { 0x0F, 0x97 });
 		private static readonly OpCode ULE = new OpCode(new byte[] { 0x0F, 0x96 });
 		private static readonly OpCode ULT = new OpCode(new byte[] { 0x0F, 0x92 });
+        private static readonly OpCode NP = new OpCode(new byte[] { 0x0F, 0x9B });
+        private static readonly OpCode NC = new OpCode(new byte[] { 0x0F, 0x93 });
 
 		#endregion
 
@@ -70,6 +72,8 @@ namespace Mosa.Platforms.x86.CPUx86
 				case IR.ConditionCode.UnsignedGreaterThan: opcode = UGT; break;
 				case IR.ConditionCode.UnsignedLessOrEqual: opcode = ULE; break;
 				case IR.ConditionCode.UnsignedLessThan: opcode = ULT; break;
+                case IR.ConditionCode.NoParity: opcode = NP; break;
+                case IR.ConditionCode.NoCarry: opcode = NC; break;
 				default: throw new NotSupportedException();
 			}
 

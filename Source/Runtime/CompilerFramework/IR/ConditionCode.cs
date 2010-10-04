@@ -73,5 +73,15 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// signed
 		/// </summary>
 		Signed,
+
+        /// <summary>
+        /// No parity
+        /// </summary>
+        NoParity,
+
+        /// <summary>
+        /// No carry flag
+        /// </summary>
+        NoCarry,
 	}
 }
