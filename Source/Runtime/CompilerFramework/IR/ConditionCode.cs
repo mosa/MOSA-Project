@@ -80,8 +80,23 @@ namespace Mosa.Runtime.CompilerFramework.IR
         NoParity,
 
         /// <summary>
+        /// Carry flag
+        /// </summary>
+        Carry,
+
+        /// <summary>
         /// No carry flag
         /// </summary>
         NoCarry,
+
+        /// <summary>
+        /// Zero flag
+        /// </summary>
+        Zero,
+
+        /// <summary>
+        /// No zero flag
+        /// </summary>
+        NoZero,
 	}
 }

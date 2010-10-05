@@ -150,9 +150,11 @@ namespace Mosa.Platforms.x86
 				right = ctx.Operand2;
 			}
 
-			IR.ConditionCode setcc = IR.ConditionCode.Equal;
             IR.ConditionCode setnp = IR.ConditionCode.NoParity;
             IR.ConditionCode setnc = IR.ConditionCode.NoCarry;
+            IR.ConditionCode setc = IR.ConditionCode.Carry;
+            IR.ConditionCode setnz = IR.ConditionCode.NoZero;
+            IR.ConditionCode setz = IR.ConditionCode.Zero;
 			IR.ConditionCode code = ctx.ConditionCode;
 
 			ctx.SetInstruction(CPUx86.Instruction.NopInstruction);
@@ -162,14 +164,10 @@ namespace Mosa.Platforms.x86
 			{
 				case IR.ConditionCode.Equal: break;
 				case IR.ConditionCode.NotEqual: break;
-				case IR.ConditionCode.UnsignedGreaterOrEqual: setcc = IR.ConditionCode.GreaterOrEqual; break;
-				case IR.ConditionCode.UnsignedGreaterThan: setcc = IR.ConditionCode.GreaterThan; break;
-				case IR.ConditionCode.UnsignedLessOrEqual: setcc = IR.ConditionCode.LessOrEqual; break;
-				case IR.ConditionCode.UnsignedLessThan: setcc = IR.ConditionCode.LessThan; break;
-				case IR.ConditionCode.GreaterOrEqual: setcc = IR.ConditionCode.UnsignedGreaterOrEqual; break;
-				case IR.ConditionCode.GreaterThan: setcc = IR.ConditionCode.UnsignedGreaterThan; break;
-				case IR.ConditionCode.LessOrEqual: setcc = IR.ConditionCode.UnsignedLessOrEqual; break;
-				case IR.ConditionCode.LessThan: setcc = IR.ConditionCode.UnsignedLessThan; break;
+                case IR.ConditionCode.UnsignedGreaterOrEqual: code = IR.ConditionCode.GreaterOrEqual; break;
+                case IR.ConditionCode.UnsignedGreaterThan: code = IR.ConditionCode.GreaterThan; break;
+                case IR.ConditionCode.UnsignedLessOrEqual: code = IR.ConditionCode.LessOrEqual; break;
+                case IR.ConditionCode.UnsignedLessThan: code = IR.ConditionCode.LessThan; break;
 			}
 
 			if (!(left is RegisterOperand))
@@ -201,7 +199,7 @@ namespace Mosa.Platforms.x86
 				switch (code)
 				{
 					case IR.ConditionCode.Equal:
-						ctx.AppendInstruction(CPUx86.Instruction.UcomissInstruction, left, right);
+						ctx.AppendInstruction(CPUx86.Instruction.ComissInstruction, left, right);
 						break;
 					case IR.ConditionCode.NotEqual: goto case IR.ConditionCode.Equal;
 					case IR.ConditionCode.UnsignedGreaterOrEqual: goto case IR.ConditionCode.Equal;
@@ -240,11 +238,48 @@ namespace Mosa.Platforms.x86
 			// Determine the result
 			RegisterOperand eax = new RegisterOperand(BuiltInSigType.Byte, GeneralPurposeRegister.EAX);
             RegisterOperand ebx = new RegisterOperand(BuiltInSigType.Byte, GeneralPurposeRegister.EBX);
-			ctx.AppendInstruction(CPUx86.Instruction.SetccInstruction, setcc, eax);
-            ctx.AppendInstruction(CPUx86.Instruction.SetccInstruction, setnp, ebx);
-            ctx.AppendInstruction(CPUx86.Instruction.AndInstruction, eax, ebx);
-            ctx.AppendInstruction(CPUx86.Instruction.SetccInstruction, setnc, ebx);
-            ctx.AppendInstruction(CPUx86.Instruction.AndInstruction, eax, ebx);
+            RegisterOperand ecx = new RegisterOperand(BuiltInSigType.Byte, GeneralPurposeRegister.ECX);
+            RegisterOperand edx = new RegisterOperand(BuiltInSigType.Byte, GeneralPurposeRegister.EDX);
+
+            if (code == ConditionCode.Equal)
+            {
+                ctx.AppendInstruction(CPUx86.Instruction.SetccInstruction, setz, eax);
+                ctx.AppendInstruction(CPUx86.Instruction.SetccInstruction, setnp, ebx);
+                ctx.AppendInstruction(CPUx86.Instruction.SetccInstruction, setnc, ecx);
+                ctx.AppendInstruction(CPUx86.Instruction.AndInstruction, eax, ebx);
+                ctx.AppendInstruction(CPUx86.Instruction.AndInstruction, eax, ecx);
+            }
+            else if (code == ConditionCode.NotEqual)
+            {
+                ctx.AppendInstruction(CPUx86.Instruction.SetccInstruction, setz, eax);
+                ctx.AppendInstruction(CPUx86.Instruction.SetccInstruction, setnp, ebx);
+                ctx.AppendInstruction(CPUx86.Instruction.SetccInstruction, setnc, ecx);
+                ctx.AppendInstruction(CPUx86.Instruction.AndInstruction, eax, ebx);
+                ctx.AppendInstruction(CPUx86.Instruction.AndInstruction, eax, ecx);
+                ctx.AppendInstruction(CPUx86.Instruction.NotInstruction, eax, eax);
+                ctx.AppendInstruction(CPUx86.Instruction.AndInstruction, eax, new ConstantOperand(new SigType(CilElementType.I4), (int)1));
+            }
+            else if (code == ConditionCode.GreaterThan || code == ConditionCode.GreaterOrEqual)
+            {
+                ctx.AppendInstruction(CPUx86.Instruction.SetccInstruction, setnz, eax);
+                ctx.AppendInstruction(CPUx86.Instruction.SetccInstruction, setnp, ebx);
+                ctx.AppendInstruction(CPUx86.Instruction.SetccInstruction, setnc, ecx);
+                ctx.AppendInstruction(CPUx86.Instruction.AndInstruction, eax, ebx);
+                ctx.AppendInstruction(CPUx86.Instruction.AndInstruction, eax, ecx);
+            }
+            else if (code == ConditionCode.LessThan || code == ConditionCode.LessOrEqual)
+            {
+                ctx.AppendInstruction(CPUx86.Instruction.SetccInstruction, setnz, eax);
+                ctx.AppendInstruction(CPUx86.Instruction.SetccInstruction, setnp, ebx);
+                ctx.AppendInstruction(CPUx86.Instruction.SetccInstruction, setc, ecx);
+                ctx.AppendInstruction(CPUx86.Instruction.AndInstruction, eax, ebx);
+                ctx.AppendInstruction(CPUx86.Instruction.AndInstruction, eax, ecx);
+            }
+            if (code == ConditionCode.GreaterOrEqual || code == ConditionCode.LessOrEqual)
+            {
+                ctx.AppendInstruction(CPUx86.Instruction.SetccInstruction, setz, edx);
+                ctx.AppendInstruction(CPUx86.Instruction.OrInstruction, eax, edx);
+            }
 			ctx.AppendInstruction(CPUx86.Instruction.MovzxInstruction, resultOperand, eax);
 		}
 
