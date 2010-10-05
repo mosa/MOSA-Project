@@ -30,7 +30,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			StackTypeCode.Int32,
 			StackTypeCode.Int64,
 			StackTypeCode.N,
-			StackTypeCode.Unknown,
+			StackTypeCode.F,
 			StackTypeCode.Unknown,
 			StackTypeCode.Unknown
 		};
@@ -64,7 +64,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			// Validate the operand
 			StackTypeCode result = _typeCodes[(int)ctx.Operand1.StackType];
 			if (StackTypeCode.Unknown == result)
-				throw new InvalidOperationException(@"Invalid operand to Neg instruction.");
+				throw new InvalidOperationException(@"Invalid operand to Neg instruction [" + result + "]");
 
 			ctx.Result = compiler.CreateTemporary(ctx.Operand1.Type);
 		}

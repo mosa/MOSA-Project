@@ -21,10 +21,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 
 		public ComparisonInstructionTestRunner()
 		{
-			this.IncludeCeq = true;
-			this.IncludeClt = true;
-			this.IncludeCgt = true;
-			this.IncludeCle = true;
+            this.IncludeCeq = true;
+            this.IncludeClt = true;
+            this.IncludeCgt = true;
+            this.IncludeCle = true;
 			this.IncludeCge = true;
 		}
 

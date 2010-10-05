@@ -60,7 +60,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 				codeBuilder.Append(TestCodeNeg);
 
 			// FIXME: Ret didn't yet fit anywhere else, move it once something shows up (e.g. call support?)
-			codeBuilder.Append(TestCodeRet);
+			//codeBuilder.Append(TestCodeRet);
 
 			codeBuilder.Append(TestCodeFooter);
 
