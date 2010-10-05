@@ -76,7 +76,6 @@ namespace Test.Mosa.Runtime.CompilerFramework
 			Assert.IsTrue((bool)Run<B_C>("", "Test", "TestCallStaticMethodInGenericTypeWith", value));
 		}
 
-		[Test, Ignore(@"Can't compile due to missing IntPtr.op_Equality right now. Needs runtime/compiler support.")]
 		[Row(0)]
 		[Row(Int32.MaxValue)]
 		[Row(Int32.MinValue)]
@@ -127,7 +126,6 @@ namespace Test.Mosa.Runtime.CompilerFramework
 			Assert.IsTrue((bool)Run<B_I8>("", "Test", "TestCallStaticMethodInGenericTypeWith", value));
 		}
 
-		[Test, Ignore(@"Can't link due to missing UIntPtr.op_Equality right now. Needs runtime/compiler support.")]
 		[Row(0U)]
 		[Row(UInt32.MaxValue)]
 		[Row(UInt32.MinValue)]

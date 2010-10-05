@@ -15515,8 +15515,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
         [Row(2.3, 0)]
         [Row(2.3, 1)]
         [Row(2.3, 2)]
-        [Row(2.3, double.MinValue)]
-        [Row(2.3, double.MaxValue)]
         [Row(2.3, double.PositiveInfinity)]
         [Row(2.3, double.NegativeInfinity)]
         [Row(2.3, 1.00012)]
