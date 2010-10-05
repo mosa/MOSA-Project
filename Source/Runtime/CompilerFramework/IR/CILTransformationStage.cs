@@ -745,23 +745,10 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <param name="ctx">The context.</param>
 		public void Ldfld(Context ctx)
 		{
-            if (this.portAliasAttributeType == null)
-                this.portAliasAttributeType = this.typeSystem.GetType(@"Mosa.Runtime.CompilerFramework.PortAliasAttribute, Mosa.Runtime");
-
 			Operand resultOperand = ctx.Result;
 			Operand objectOperand = ctx.Operand1;
 
 			RuntimeField field = ctx.RuntimeField;
-            object[] attributes = field.GetCustomAttributes(this.portAliasAttributeType);
-
-            foreach (object attribute in attributes)
-            {
-                if (attribute is PortAliasAttribute)
-                {
-                    //ProcessPortAliasLoad(ctx);
-                }
-            }
-
 			IntPtr address = field.Address;
 			ConstantOperand offsetOperand = new ConstantOperand(BuiltInSigType.IntPtr, address.ToInt64());
 
@@ -1685,7 +1672,6 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		}
 
 		private RuntimeType[] intrinsicAttributeTypes = null;
-        private RuntimeType portAliasAttributeType = null;
 
 		/// <summary>
 		/// Processes intrinsic method calls.

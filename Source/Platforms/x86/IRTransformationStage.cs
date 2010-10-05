@@ -633,16 +633,40 @@ namespace Mosa.Platforms.x86
 			Operand destination = context.Result;
 			Operand source = context.Operand1;
 
+            Context[] newBlocks = CreateEmptyBlockContexts(context.Label, 3);
+			Context nextBlock = SplitContext(context, false);
+
 			RegisterOperand xmm5 = new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM5);
+            RegisterOperand xmm6 = new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM6);
+            RegisterOperand eax = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EAX);
+            RegisterOperand edx = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EDX);
+            RegisterOperand uedx = new RegisterOperand(new SigType(CilElementType.U4), GeneralPurposeRegister.EDX);
 			Context before = context.InsertBefore();
-			before.SetInstruction(CPUx86.Instruction.MovInstruction, xmm5, destination);
 
-			// Round towards zero
-			context.AppendInstruction(CPUx86.Instruction.SseRoundInstruction, destination, destination, new ConstantOperand(BuiltInSigType.Byte, 0x03));
+            context.SetInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[0].BasicBlock);
+			LinkBlocks(context, newBlocks[0]);
 
-			context.AppendInstruction(CPUx86.Instruction.SseMulInstruction, destination, source);
-			context.AppendInstruction(CPUx86.Instruction.SseSubInstruction, xmm5, destination);
-			context.AppendInstruction(CPUx86.Instruction.MovInstruction, destination, xmm5);
+            newBlocks[0].SetInstruction(CPUx86.Instruction.MovsdInstruction, xmm5, source);
+            newBlocks[0].AppendInstruction(CPUx86.Instruction.MovsdInstruction, xmm6, destination);
+
+            newBlocks[0].AppendInstruction(CPUx86.Instruction.SseDivInstruction, destination, source);
+            newBlocks[0].AppendInstruction(CPUx86.Instruction.Cvttsd2siInstruction, edx, destination);
+
+            newBlocks[0].AppendInstruction(CPUx86.Instruction.CmpInstruction, edx, new ConstantOperand(new SigType(CilElementType.I4), 0));
+            newBlocks[0].AppendInstruction(CPUx86.Instruction.BranchInstruction, ConditionCode.Equal, newBlocks[2].BasicBlock);
+            newBlocks[0].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[1].BasicBlock);
+            LinkBlocks(newBlocks[0], newBlocks[1], newBlocks[2]);
+
+            newBlocks[1].AppendInstruction(CPUx86.Instruction.Cvtsi2sdInstruction, destination, edx);
+            newBlocks[1].AppendInstruction(CPUx86.Instruction.SseMulInstruction, destination, xmm5);
+			newBlocks[1].AppendInstruction(CPUx86.Instruction.SseSubInstruction, xmm6, destination);
+			newBlocks[1].AppendInstruction(CPUx86.Instruction.MovsdInstruction, destination, xmm6);
+            newBlocks[1].AppendInstruction(CPUx86.Instruction.JmpInstruction, nextBlock.BasicBlock);
+            LinkBlocks(newBlocks[1], nextBlock);
+
+            newBlocks[2].SetInstruction(CPUx86.Instruction.MovsdInstruction, destination, xmm6);
+            newBlocks[2].AppendInstruction(CPUx86.Instruction.JmpInstruction, nextBlock.BasicBlock);
+            LinkBlocks(newBlocks[2], nextBlock);
 		}
 
 		public void RemSInstruction(Context context)
