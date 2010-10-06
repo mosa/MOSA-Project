@@ -640,7 +640,6 @@ namespace Mosa.Platforms.x86
             RegisterOperand xmm6 = new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM6);
             RegisterOperand eax = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EAX);
             RegisterOperand edx = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EDX);
-            RegisterOperand uedx = new RegisterOperand(new SigType(CilElementType.U4), GeneralPurposeRegister.EDX);
 			Context before = context.InsertBefore();
 
             context.SetInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[0].BasicBlock);
