@@ -104,6 +104,9 @@ namespace Mosa.Runtime.Metadata.Signatures
 				case CilElementType.ValueType:
 					return true;
 
+				case CilElementType.SZArray:	// HACK: Needs to check type
+					return true;
+
 				default:
 					throw new NotImplementedException();
 			}
