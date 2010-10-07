@@ -97,6 +97,8 @@
     <Compile Include="Security\Permissions\SecurityPermissionAttribute.cs" />
     <Compile Include="Security\UnverifiableCodeAttribute.cs" />
     <Compile Include="Serializable.cs" />
+    <Compile Include="Text\ASCIIEncoding.cs" />
+    <Compile Include="Text\Encoding.cs" />
     <Compile Include="Type.cs" />
     <Compile Include="Collections\ICollection.cs" />
     <Compile Include="Collections\IEnumerable.cs" />
