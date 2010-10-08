@@ -126,7 +126,7 @@ namespace Pictor.Transform
 		///<returns></returns>
 		public static Affine NewIdentity()
 		{
-			Affine newAffine = new Affine { sx = 1.0, shy = 0.0, shx = 0.0, sy = 1.0, tx = 0.0, ty = 0.0 };
+			Affine newAffine = new Affine(1.0, 0.0, 0.0, 1.0, 0.0, 0.0);
 
 			return newAffine;
 		}
