@@ -105,6 +105,12 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 					resultType = new SigType(CilElementType.U8);
 					break;
 
+				case OpCode.Conv_ovf_i: goto case OpCode.Conv_i;
+				case OpCode.Conv_ovf_u: goto case OpCode.Conv_i;
+
+				case OpCode.Conv_ovf_i_un: goto case OpCode.Conv_i;
+				case OpCode.Conv_ovf_u_un: goto case OpCode.Conv_i;
+
 				default:
 					throw new NotSupportedException(@"Overflow checking conversions not supported.");
 			}

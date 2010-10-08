@@ -7,6 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using System.Text;
+
 namespace Mosa.ClassLib
 {
 	/// <summary>
@@ -14,6 +16,7 @@ namespace Mosa.ClassLib
 	/// </summary>
 	public struct BinaryFormat
 	{
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -330,12 +333,7 @@ namespace Mosa.ClassLib
 		/// <returns></returns>
 		public string GetString(uint offset, uint length)
 		{
-			string str = string.Empty;
-
-			for (uint i = 0; i < length; i++)
-				str = str + (char)data[offset + i];
-
-			return str;
+			return new ASCIIEncoding().GetString(data, (int)offset, (int)length);
 		}
 	}
 }
