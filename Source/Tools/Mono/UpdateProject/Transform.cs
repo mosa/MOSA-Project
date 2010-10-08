@@ -601,7 +601,7 @@ namespace Mosa.Tools.Mono.UpdateProject
 			foreach (MethodNode method in currentNode.Methods)
 			{
 				string extra = string.Empty;
-				bool endif = false;
+//				bool endif = false;
 
 				for (int i = method.Start; i <= method.End; i++)
 				{
@@ -614,11 +614,11 @@ namespace Mosa.Tools.Mono.UpdateProject
 
 					if (trim.StartsWith("#"))
 					{
-						if (trim.Contains("#endif"))
-							endif = false;
-						else
-							if (trim.Contains("#if"))
-								endif = true;
+//						if (trim.Contains("#endif"))
+//							endif = false;
+//						else
+//							if (trim.Contains("#if"))
+//								endif = true;
 						output.Add(trim);
 					}
 					else

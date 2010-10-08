@@ -355,21 +355,21 @@ namespace Mosa.Runtime.CompilerFramework.IR
 				ConstantOperand zero = new ConstantOperand(ctx.Operand1.Type, 0UL);
 				ctx.SetInstruction(Instruction.SubUInstruction, ctx.Result, zero, ctx.Operand1);
 			}
-            else if (ctx.Operand1.Type.Type == CilElementType.R4)
-            {
-                ConstantOperand minusOne = new ConstantOperand(ctx.Operand1.Type, -1.0f);
-                ctx.SetInstruction(Instruction.MulFInstruction, ctx.Result, minusOne, ctx.Operand1);
-            }
-            else if (ctx.Operand1.Type.Type == CilElementType.R8)
-            {
-                ConstantOperand minusOne = new ConstantOperand(ctx.Operand1.Type, -1.0);
-                ctx.SetInstruction(Instruction.MulFInstruction, ctx.Result, minusOne, ctx.Operand1);
-            }
-            else
-            {
-                ConstantOperand minusOne = new ConstantOperand(ctx.Operand1.Type, -1L);
-                ctx.SetInstruction(Instruction.MulSInstruction, ctx.Result, minusOne, ctx.Operand1);
-            }
+			else if (ctx.Operand1.Type.Type == CilElementType.R4)
+			{
+				ConstantOperand minusOne = new ConstantOperand(ctx.Operand1.Type, -1.0f);
+				ctx.SetInstruction(Instruction.MulFInstruction, ctx.Result, minusOne, ctx.Operand1);
+			}
+			else if (ctx.Operand1.Type.Type == CilElementType.R8)
+			{
+				ConstantOperand minusOne = new ConstantOperand(ctx.Operand1.Type, -1.0);
+				ctx.SetInstruction(Instruction.MulFInstruction, ctx.Result, minusOne, ctx.Operand1);
+			}
+			else
+			{
+				ConstantOperand minusOne = new ConstantOperand(ctx.Operand1.Type, -1L);
+				ctx.SetInstruction(Instruction.MulSInstruction, ctx.Result, minusOne, ctx.Operand1);
+			}
 		}
 
 		/// <summary>
