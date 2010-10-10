@@ -1,4 +1,5 @@
 using Mosa.Runtime.Metadata;
+using Mosa.Runtime.Metadata.Tables;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Vm;
 
@@ -19,21 +20,25 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns></returns>
 		public static int ComputeTypeSize(ISignatureContext context, TokenTypes token, IModuleTypeSystem moduleTypeSystem, IArchitecture architecture)
 		{
-			Metadata.Tables.TypeDefRow followingTypeDefinition = new Mosa.Runtime.Metadata.Tables.TypeDefRow();
-			Metadata.Tables.TypeDefRow typeDefinition = moduleTypeSystem.MetadataModule.Metadata.ReadTypeDefRow(token);
+			TypeDefRow followingTypeDefinition = new TypeDefRow();
+			TypeDefRow typeDefinition = moduleTypeSystem.MetadataModule.Metadata.ReadTypeDefRow(token);
 			try
 			{
-				followingTypeDefinition =  moduleTypeSystem.MetadataModule.Metadata.ReadTypeDefRow(token + 1);
+				followingTypeDefinition = moduleTypeSystem.MetadataModule.Metadata.ReadTypeDefRow(token + 1);
 			}
 			catch (System.Exception)
 			{
 			}
 
-			int result = 0;
+
 			TokenTypes fieldList = typeDefinition.FieldList;
-			TokenTypes last =  moduleTypeSystem.MetadataModule.Metadata.GetMaxTokenValue(TokenTypes.Field);
-			while (fieldList != followingTypeDefinition.FieldList && fieldList != last)
+			TokenTypes last = moduleTypeSystem.MetadataModule.Metadata.GetMaxTokenValue(TokenTypes.Field);
+
+			int result = 0;
+			while (fieldList != followingTypeDefinition.FieldList && fieldList < last)
+			{
 				result += FieldSize(context, fieldList++, moduleTypeSystem, architecture);
+			}
 
 			return result;
 		}
@@ -48,7 +53,11 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns></returns>
 		public static int FieldSize(ISignatureContext context, TokenTypes field, IModuleTypeSystem moduleTypeSystem, IArchitecture architecture)
 		{
-			Metadata.Tables.FieldRow fieldRow = moduleTypeSystem.MetadataModule.Metadata.ReadFieldRow(field);
+			FieldRow fieldRow = moduleTypeSystem.MetadataModule.Metadata.ReadFieldRow(field);
+
+			if ((fieldRow.Flags & FieldAttributes.Static) == FieldAttributes.Static)
+				return 0;
+
 			FieldSignature signature = Signature.FromMemberRefSignatureToken(context, moduleTypeSystem.MetadataModule.Metadata, fieldRow.SignatureBlobIdx) as FieldSignature;
 
 			// If the field is another struct, we have to dig down and compute its size too.
@@ -91,8 +100,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns></returns>
 		public static int ComputeFieldOffset(ISignatureContext context, TokenTypes token, IModuleTypeSystem moduleTypeSystem, IArchitecture architecture)
 		{
-			Metadata.Tables.TypeDefRow typeDefinition = moduleTypeSystem.MetadataModule.Metadata.ReadTypeDefRow(token);
-			Metadata.Tables.TypeDefRow followingTypeDefinition = moduleTypeSystem.MetadataModule.Metadata.ReadTypeDefRow(token + 1);
+			TypeDefRow typeDefinition = moduleTypeSystem.MetadataModule.Metadata.ReadTypeDefRow(token);
+			TypeDefRow followingTypeDefinition = moduleTypeSystem.MetadataModule.Metadata.ReadTypeDefRow(token + 1);
 
 			int result = 0;
 			TokenTypes fieldList = typeDefinition.FieldList;
