@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
 
+using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Vm;
 
@@ -47,10 +48,12 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			// Decode base classes first
 			base.Decode(ctx, decoder);
 
-			throw new NotImplementedException();
+			TokenTypes token = decoder.DecodeTokenType();
+			
+			RuntimeType type = decoder.ModuleTypeSystem.GetType(decoder.Method, token);
 
-			//TypeReference targetType = MetadataTypeReference.FromToken(decoder.Metadata, token);
-			//ctx.Result = CreateResultOperand(targetType);
+			ctx.Result = decoder.Compiler.CreateTemporary(new ClassSigType(token));
+			//throw new NotImplementedException();
 		}
 
 		/// <summary>

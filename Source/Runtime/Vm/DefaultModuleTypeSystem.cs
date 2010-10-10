@@ -786,8 +786,8 @@ namespace Mosa.Runtime.Vm
 
 				case TokenTypes.Field:
 					// AttributeTargets.Field
-                    RuntimeField field = ((IModuleTypeSystem)this).GetField(DefaultSignatureContext.Instance, owner);
-                    field.SetAttributes(ra);
+					RuntimeField field = ((IModuleTypeSystem)this).GetField(DefaultSignatureContext.Instance, owner);
+					field.SetAttributes(ra);
 					break;
 
 				case TokenTypes.GenericParam:

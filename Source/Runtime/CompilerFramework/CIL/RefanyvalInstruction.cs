@@ -53,7 +53,6 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			TokenTypes token = decoder.DecodeTokenType();
 
 			throw new NotImplementedException();
-			//_typeRef = MetadataTypeReference.FromToken(decoder.Metadata, token);
 		}
 
 		/// <summary>
