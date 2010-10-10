@@ -14,23 +14,18 @@ namespace System
 	/// </summary>
 	public class Activator
 	{
-		/// <summary>
-		/// Creates the instance.
-		/// </summary>
-		/// <param name="t">The t.</param>
-		/// <returns></returns>
-		public object CreateInstance(Type t)
+	
+		public static T CreateInstance<T>()
 		{
-			return CreateInstance(t, new object[] { });
+			return (T)CreateInstance(typeof(T));
 		}
 
-		/// <summary>
-		/// Creates the instance.
-		/// </summary>
-		/// <param name="t">The t.</param>
-		/// <param name="args">The args.</param>
-		/// <returns></returns>
-		public object CreateInstance(Type t, params object[] args)
+		public static object CreateInstance(Type type)
+		{
+			return CreateInstance(type, false);
+		}
+
+		public static object CreateInstance(Type type, bool nonPublic)
 		{
 			// TODO
 			return null;

@@ -72,10 +72,10 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		static public void StartPCIDevices()
 		{
-			foreach (IDevice device in deviceManager.GetDevices(new FindDevice.IsPCIDevice(), new FindDevice.IsAvailable()))
-			{
-				StartDevice(device as IPCIDevice);
-			}
+			//foreach (IDevice device in deviceManager.GetDevices(new FindDevice.IsPCIDevice(), new FindDevice.IsAvailable()))
+			//{
+			//    StartDevice(device as IPCIDevice);
+			//}
 		}
 
 		/// <summary>
