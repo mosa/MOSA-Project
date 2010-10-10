@@ -48,18 +48,11 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			base.Decode(ctx, decoder);
 
 			// Get the size type
-			// Load the _stackFrameIndex token from the immediate
+			// Load the stackFrameIndex token from the immediate
 			TokenTypes token = decoder.DecodeTokenType();
 
-			//throw new NotImplementedException();
 			uint size = (uint)ObjectModelUtility.ComputeTypeSize(decoder.Method, token, decoder.ModuleTypeSystem, decoder.Compiler.Architecture);
 			ctx.Result = new Operands.ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(CilElementType.U4), size);
-			/*
-				TypeReference _typeRef = MetadataTypeReference.FromToken(decoder.Metadata, token);
-
-				// FIXME: Push the size of the type after layout
-				ctx.Result = new ConstantOperand(NativeTypeReference.Int32, 0);
-			*/
 		}
 
 		/// <summary>
