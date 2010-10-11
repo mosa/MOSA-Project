@@ -41,7 +41,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="architecture">The architecture of the calling convention.</param>
 		public DefaultCallingConvention(IArchitecture architecture)
 		{
-			if (null == architecture)
+			if (architecture == null)
 				throw new ArgumentNullException(@"architecture");
 
 			this.architecture = architecture;
@@ -58,7 +58,7 @@ namespace Mosa.Platforms.x86
 		/// <returns>
 		/// A single instruction or an array of instructions, which appropriately represent the method call.
 		/// </returns>
-		void ICallingConvention.MakeCall(Context ctx, ISignatureContext context, IModuleTypeSystem moduleTypeSystem)
+		void ICallingConvention.MakeCall(Context ctx, ISignatureContext context, ITypeLayout typeLayout)
 		{
 			/*
 			 * Calling convention is right-to-left, pushed on the stack. Return value in EAX for integral
@@ -73,10 +73,10 @@ namespace Mosa.Platforms.x86
 
 			ctx.SetInstruction(CPUx86.Instruction.NopInstruction);
 
-			int stackSize = ReserveStackSizeForCall(ctx, moduleTypeSystem, context, operands);
+			int stackSize = ReserveStackSizeForCall(ctx, typeLayout, context, operands);
 			if (stackSize != 0)
 			{
-				PushOperands(context, ctx, operands, stackSize, moduleTypeSystem);
+				PushOperands(context, ctx, operands, stackSize, typeLayout);
 			}
 
 			ctx.AppendInstruction(CPUx86.Instruction.CallInstruction, null, invokeTarget);
@@ -105,9 +105,9 @@ namespace Mosa.Platforms.x86
 			return operandStack;
 		}
 
-		private int ReserveStackSizeForCall(Context ctx, IModuleTypeSystem moduleTypeSystem, ISignatureContext signatureContext, IEnumerable<Operand> operands)
+		private int ReserveStackSizeForCall(Context ctx, ITypeLayout typeLayout, ISignatureContext signatureContext, IEnumerable<Operand> operands)
 		{
-			int stackSize = CalculateStackSizeForParameters(signatureContext, operands, moduleTypeSystem);
+			int stackSize = CalculateStackSizeForParameters(signatureContext, operands, typeLayout);
 			if (stackSize != 0)
 			{
 				RegisterOperand esp = new RegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.ESP);
@@ -145,18 +145,23 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		/// <param name="operandStack">The operand stack.</param>
 		/// <param name="space">The space.</param>
-		private void PushOperands(ISignatureContext context, Context ctx, Stack<Operand> operandStack, int space, IModuleTypeSystem moduleTypeSystem)
+		private void PushOperands(ISignatureContext context, Context ctx, Stack<Operand> operandStack, int space, ITypeLayout typeLayout)
 		{
 			while (operandStack.Count != 0)
 			{
 				Operand operand = operandStack.Pop();
+				
 				int size, alignment;
-
 				architecture.GetTypeRequirements(operand.Type, out size, out alignment);
 
 				if (operand.Type.Type == CilElementType.ValueType)
-					size = ObjectModelUtility.ComputeTypeSize(context, (operand.Type as ValueTypeSigType).Token, moduleTypeSystem, architecture);
-
+				{
+					// FIXME
+					throw new System.NotSupportedException();
+					//size = typeLayout.GetTypeSize(context, operand.Type);
+					//size = ObjectModelUtility.ComputeTypeSize(context, (operand.Type as ValueTypeSigType).Token, moduleTypeSystem, architecture);
+				}
+				
 				space -= size;
 				Push(ctx, operand, space, size);
 			}
@@ -276,20 +281,23 @@ namespace Mosa.Platforms.x86
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="operands">The operands.</param>
-		/// <param name="moduleTypeSystem">The module type system.</param>
+		/// <param name="typeLayout">The type layout.</param>
 		/// <returns></returns>
-		private int CalculateStackSizeForParameters(ISignatureContext context, IEnumerable<Operand> operands, IModuleTypeSystem moduleTypeSystem)
+		private int CalculateStackSizeForParameters(ISignatureContext context, IEnumerable<Operand> operands, ITypeLayout typeLayout)
 		{
 			int result = 0;
-			int size, alignment;
 
 			foreach (Operand op in operands)
 			{
+				int size, alignment;
 				architecture.GetTypeRequirements(op.Type, out size, out alignment);
 
 				if (op.Type.Type == CilElementType.ValueType)
 				{
-					size = ObjectModelUtility.ComputeTypeSize(context, (op.Type as Runtime.Metadata.Signatures.ValueTypeSigType).Token, moduleTypeSystem, architecture);
+					// FIXME
+					throw new System.NotSupportedException();
+					//size = typeLayout.GetTypeSize(context, op.Type);
+					//size = ObjectModelUtility.ComputeTypeSize(context, (op.Type as ValueTypeSigType).Token, moduleTypeSystem, architecture);
 				}
 
 				result += size;

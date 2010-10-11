@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
@@ -110,7 +110,6 @@
     <Compile Include="CompilerFramework\IR\SubUInstruction.cs" />
     <Compile Include="CompilerFramework\IR\SwitchInstruction.cs" />
     <Compile Include="CompilerFramework\MethodCompilerSchedulerStage.cs" />
-    <Compile Include="CompilerFramework\ObjectModelUtility.cs" />
     <Compile Include="CompilerFramework\Operands\SymbolOperand.cs" />
     <Compile Include="CompilerFramework\PlatformStubStage.cs" />
     <Compile Include="CompilerFramework\IIntrinsicMethod.cs" />

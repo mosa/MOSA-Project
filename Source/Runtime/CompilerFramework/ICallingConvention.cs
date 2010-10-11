@@ -25,8 +25,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="signatureContext">The method signature context.</param>
-		/// <param name="moduleTypeSystem">The module type system.</param>
-		void MakeCall(Context context, ISignatureContext signatureContext, IModuleTypeSystem moduleTypeSystem);
+		/// <param name="typeLayout">The type layout.</param>
+		void MakeCall(Context context, ISignatureContext signatureContext, ITypeLayout typeLayout);
 
 		/// <summary>
 		/// Retrieves the stack requirements of a stack operand.
