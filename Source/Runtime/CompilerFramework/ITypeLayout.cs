@@ -9,6 +9,8 @@
 
 using System;
 
+using Mosa.Runtime.Metadata;
+using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Vm;
 
 namespace Mosa.Runtime.CompilerFramework
@@ -21,5 +23,10 @@ namespace Mosa.Runtime.CompilerFramework
 		int GetMethodTableOffset(RuntimeMethod method);
 
 		int GetInterfaceSlotOffset(RuntimeType type);
+
+		int GetTypeSize(ISignatureContext context, RuntimeType type);
+
+		int GetFieldSize(ISignatureContext context, RuntimeField field);
+
 	}
 }

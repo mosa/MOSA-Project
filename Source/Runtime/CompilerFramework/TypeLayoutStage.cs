@@ -10,13 +10,14 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Collections.Generic;
 
 using Mosa.Runtime.Linker;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Tables;
 using Mosa.Runtime.Vm;
 using Mosa.Runtime.Metadata.Signatures;
-using System.Collections.Generic;
+
 
 namespace Mosa.Runtime.CompilerFramework
 {
@@ -147,6 +148,33 @@ namespace Mosa.Runtime.CompilerFramework
 		int ITypeLayout.GetInterfaceSlotOffset(RuntimeType type)
 		{
 			return interfaceSlots[type];
+		}
+
+		int ITypeLayout.GetTypeSize(ISignatureContext context, RuntimeType type)
+		{
+			int size = 0;
+			foreach (RuntimeField field in type.Fields)
+			{
+				if (!field.IsStaticField)
+					size = size + ((ITypeLayout)this).GetFieldSize(context, field);
+
+			}
+
+			return size;
+		}
+
+		int ITypeLayout.GetFieldSize(ISignatureContext context, RuntimeField field)
+		{
+			// If the field is another struct, we have to dig down and compute its size too.
+			if (field.SignatureType.Type == CilElementType.ValueType)
+			{
+				return ((ITypeLayout)this).GetTypeSize(context, field.Type);
+			}
+
+			int size, alignment;
+			architecture.GetTypeRequirements(field.SignatureType, out size, out alignment);
+
+			return size;
 		}
 
 		#endregion // ITypeLayout
@@ -503,10 +531,7 @@ namespace Mosa.Runtime.CompilerFramework
 			int size, alignment;
 			architecture.GetTypeRequirements(field.SignatureType, out size, out alignment);
 
-			if (field.SignatureType.Type == CilElementType.ValueType)
-			{
-				size = ObjectModelUtility.ComputeTypeSize(field.DeclaringType, (field.SignatureType as Metadata.Signatures.ValueTypeSigType).Token, field.ModuleTypeSystem, architecture);
-			}
+			size = (int)((ITypeLayout)this).GetFieldSize(field.DeclaringType, field);
 
 			// The linker section to move this field into
 			SectionKind section;

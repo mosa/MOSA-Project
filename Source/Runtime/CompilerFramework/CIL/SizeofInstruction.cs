@@ -51,7 +51,10 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			// Load the stackFrameIndex token from the immediate
 			TokenTypes token = decoder.DecodeTokenType();
 
-			uint size = (uint)ObjectModelUtility.ComputeTypeSize(decoder.Method, token, decoder.ModuleTypeSystem, decoder.Compiler.Architecture);
+			RuntimeType type = decoder.ModuleTypeSystem.GetType(decoder.Method, token);
+
+			uint size = (uint)decoder.Compiler.TypeLayout.GetTypeSize(decoder.Method, type);
+
 			ctx.Result = new Operands.ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(CilElementType.U4), size);
 		}
 
