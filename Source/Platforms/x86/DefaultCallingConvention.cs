@@ -157,7 +157,7 @@ namespace Mosa.Platforms.x86
 				if (operand.Type.Type == CilElementType.ValueType)
 				{
 					// FIXME
-					throw new System.NotSupportedException();
+					throw new System.NotImplementedException();
 					//size = typeLayout.GetTypeSize(context, operand.Type);
 					//size = ObjectModelUtility.ComputeTypeSize(context, (operand.Type as ValueTypeSigType).Token, moduleTypeSystem, architecture);
 				}
@@ -295,7 +295,7 @@ namespace Mosa.Platforms.x86
 				if (op.Type.Type == CilElementType.ValueType)
 				{
 					// FIXME
-					throw new System.NotSupportedException();
+					throw new System.NotImplementedException();
 					//size = typeLayout.GetTypeSize(context, op.Type);
 					//size = ObjectModelUtility.ComputeTypeSize(context, (op.Type as ValueTypeSigType).Token, moduleTypeSystem, architecture);
 				}

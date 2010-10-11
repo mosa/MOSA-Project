@@ -116,6 +116,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 					BuildMethodTable(type);
 					BuildTypeInterfaceSlots(type);
+					BuildTypeInterfaceBitmap(type);
 					BuildTypeInterfaceTables(type);
 				}
 
@@ -217,6 +218,31 @@ namespace Mosa.Runtime.CompilerFramework
 			AskLinkerToCreateMethodTable(type.FullName + @"$itable", null, slots);
 		}
 
+		private void BuildTypeInterfaceBitmap(RuntimeType type)
+		{
+			if (type.Interfaces.Count == 0)
+				return;
+
+			byte[] bitmap = new byte[(((interfaces.Count - 1) / sizeof(byte)) + 1)];
+
+			int at = 0;
+			byte bit = 0;
+			foreach (RuntimeType interfaceType in interfaces)
+			{
+				if (type.Interfaces.Contains(interfaceType))
+					bitmap[at] = (byte)(bitmap[at] | (byte)(1 << bit));
+
+				bit++;
+				if (bit == sizeof(byte))
+				{
+					bit = 0;
+					at++;
+				}
+			}
+
+			AskLinkerToCreateArray(type.FullName + @"$ibitmap", bitmap);
+		}
+
 		private void BuildInterfaceTable(RuntimeType type, RuntimeType interfaceType)
 		{
 			if (type.Interfaces.Count == 0)
@@ -299,16 +325,33 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			IList<RuntimeMethod> methodTable = CreateMethodTable(type);
 
-			// HINT: The method table is offset by a two pointers, type pointer and interface dispatch points. 
-			// The type pointer contains the type information pointer, used to realize object.GetType().
+			// HINT: The method table is offset by a four pointers:
+			// 1. interface dispatch table pointer
+			// 2. type pointer - contains the type information pointer, used to realize object.GetType().
+			// 3. interface bitmap
+			// 4. parent type (if any)
 			List<string> headerlinks = new List<string>();
 
+			// 1. interface dispatch table pointer
 			if (type.Interfaces.Count == 0)
 				headerlinks.Add(null);
 			else
 				headerlinks.Add(type.FullName + @"$itable");
 
+			// 2. type pointer - contains the type information pointer, used to realize object.GetType().
 			headerlinks.Add(null); // TODO: GetType()
+
+			// 3. interface bitmap
+			if (type.Interfaces.Count == 0)
+				headerlinks.Add(null);
+			else
+				headerlinks.Add(type.FullName + @"$ibitmap");
+
+			// 4. parent type (if any)
+			if (type.BaseType == null)
+				headerlinks.Add(null);
+			else
+				headerlinks.Add(type.BaseType + @"$mtable");
 
 			AskLinkerToCreateMethodTable(type.FullName + @"$mtable", methodTable, headerlinks);
 		}
@@ -446,6 +489,19 @@ namespace Mosa.Runtime.CompilerFramework
 					}
 					offset += nativePointerSize;
 				}
+			}
+		}
+
+		private void AskLinkerToCreateArray(string tableName, byte[] array)
+		{
+			int size = array.Length;
+
+			using (Stream stream = linker.Allocate(tableName, SectionKind.Text, size, nativePointerAlignment))
+			{
+				foreach (byte b in array)
+					stream.WriteByte(b);
+
+				stream.Position = size;
 			}
 		}
 
