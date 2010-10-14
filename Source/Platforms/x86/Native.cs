@@ -291,6 +291,9 @@ namespace Mosa.Platforms.x86
 		[Intrinsic(typeof(Architecture), typeof(Intrinsic.SwitchTask))]
 		public static void SwitchTask(uint esp) { ThrowPlatformNotSupported(); }
 
+        [Intrinsic(typeof(Architecture), typeof(Intrinsic.RestoreContext))]
+        public static void RestoreContext() { ThrowPlatformNotSupported(); }
+
 		#endregion
 
 		/// <summary>

@@ -41,7 +41,6 @@ namespace Test.Mosa.Runtime.CompilerFramework
             CodeSource = CreateTestCode();
             this.DoNotReferenceMsCorlib = true;
             this.UnsafeCode = true;
-            this.References = new string[] { "Mosa.Platforms.x86.dll" };
             Assert.IsTrue((bool)Run<B_I>("", "Test", "CatchException", value));
         }
     }

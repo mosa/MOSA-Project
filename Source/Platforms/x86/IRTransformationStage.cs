@@ -795,7 +795,7 @@ namespace Mosa.Platforms.x86
 		{
 			ICallingConvention cc = Architecture.GetCallingConvention();
 			Debug.Assert(null != cc, @"Failed to retrieve the calling convention.");
-			cc.MakeCall(ctx, this.MethodCompiler.Method, this.MethodCompiler.TypeLayout);
+			cc.MakeCall(ctx, this.MethodCompiler.Method, this.MethodCompiler.TypeLayout, this.moduleTypeSystem);
 		}
 
 		/// <summary>
@@ -894,7 +894,7 @@ namespace Mosa.Platforms.x86
             int exceptionObject = 12;
             SigType u4 = new SigType(CilElementType.U4);
 
-            RuntimeType runtimeType = typeSystem.GetType(@"Mosa.Runtime.Runtime");
+            RuntimeType runtimeType = typeSystem.GetType(@"Mosa.Platforms.x86.ExceptionEngine, Mosa.Platforms.x86");
             RuntimeMethod runtimeMethod = runtimeType.FindMethod(@"ThrowException");
             SymbolOperand method = SymbolOperand.FromMethod(runtimeMethod);
 
@@ -916,6 +916,14 @@ namespace Mosa.Platforms.x86
             context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new RegisterOperand(u4, GeneralPurposeRegister.ECX));
             context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new RegisterOperand(u4, GeneralPurposeRegister.EAX));
             context.AppendInstruction(CPUx86.Instruction.CallInstruction, null, method);
+
+            if (!ExceptionEngine.compiled)
+            {
+                this.MethodCompiler.Scheduler.ScheduleTypeForCompilation(typeSystem.GetType(@"Mosa.Platforms.x86.RegisterContext, Mosa.Platforms.x86"));
+                this.MethodCompiler.Scheduler.ScheduleMethodForCompilation(typeSystem.GetType(@"Mosa.Platforms.x86.ExceptionEngine, Mosa.Platforms.x86").FindMethod(@"ThrowException"));
+                this.MethodCompiler.Scheduler.ScheduleMethodForCompilation(typeSystem.GetType(@"Mosa.Platforms.x86.ExceptionEngine, Mosa.Platforms.x86").FindMethod(@"RestoreContext"));
+                ExceptionEngine.compiled = true;
+            }
         }
 
 		#endregion //  IIRVisitor

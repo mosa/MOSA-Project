@@ -5,7 +5,7 @@ using System.Text;
 
 namespace Mosa.Platforms.x86
 {
-    public struct RegisterContext
+    public class RegisterContext
     {
         public uint Eax;
         public uint Ebx;

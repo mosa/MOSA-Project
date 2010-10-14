@@ -76,8 +76,8 @@ namespace Mosa.Platforms.x86.Intrinsic
 			map.Add(typeof(Get), new Get());
 			map.Add(typeof(Set), new Set());
 			map.Add(typeof(SwitchTask), new SwitchTask());
-
 			map.Add(typeof(Test), new Test());
+            map.Add(typeof(RestoreContext), new RestoreContext());
 
 			return map;
 		}
