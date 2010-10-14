@@ -217,5 +217,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		void SwitchInstruction(Context context);
 
 		void BreakInstruction(Context context);
+
+        void ThrowInstruction(Context context);
 	}
 }

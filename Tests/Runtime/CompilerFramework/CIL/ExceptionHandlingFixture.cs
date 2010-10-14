@@ -25,24 +25,11 @@ namespace Test.Mosa.Runtime.CompilerFramework
 
                 static class Test
 				{
-                    public static int CatchAndReturn(int value)
-                    {
-                        try
-                        {
-                            throw new Exception ();
-                        }
-                        catch (Exception e)
-                        {
-                            return value;
-                        }
-                        return -value;
-                    }
-
                     public static bool CatchException(int value)
                     {
-                        return value == CatchAndReturn(value);
+                        throw new Exception ();
                     }
-                }" + Code.ObjectClassDefinition;
+                }" + Code.ObjectClassDefinition + Code.NoStdLibDefinitions;
         }
 
         private delegate bool B_I(int value);
@@ -53,7 +40,8 @@ namespace Test.Mosa.Runtime.CompilerFramework
         {
             CodeSource = CreateTestCode();
             this.DoNotReferenceMsCorlib = true;
-            this.References = new string[] { "mscorlib.dll" };
+            this.UnsafeCode = true;
+            this.References = new string[] { "Mosa.Platforms.x86.dll" };
             Assert.IsTrue((bool)Run<B_I>("", "Test", "CatchException", value));
         }
     }

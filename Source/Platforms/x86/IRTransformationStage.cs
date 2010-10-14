@@ -19,6 +19,7 @@ using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Runtime.Linker;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
+using Mosa.Runtime.Vm;
 using IR = Mosa.Runtime.CompilerFramework.IR;
 
 namespace Mosa.Platforms.x86
@@ -882,6 +883,40 @@ namespace Mosa.Platforms.x86
 		{
 			context.ReplaceInstructionOnly(CPUx86.Instruction.PushInstruction);
 		}
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="context"></param>
+        public void ThrowInstruction(Context context)
+        {
+            int pointOfThrow = 4;
+            int exceptionObject = 12;
+            SigType u4 = new SigType(CilElementType.U4);
+
+            RuntimeType runtimeType = typeSystem.GetType(@"Mosa.Runtime.Runtime");
+            RuntimeMethod runtimeMethod = runtimeType.FindMethod(@"ThrowException");
+            SymbolOperand method = SymbolOperand.FromMethod(runtimeMethod);
+
+            Operand callTarget = context.Result;
+
+            MemoryOperand pointOfThrowOperand = new MemoryOperand(u4, GeneralPurposeRegister.ESP, new IntPtr(pointOfThrow));
+            MemoryOperand exceptionObjectOperand = new MemoryOperand(u4, GeneralPurposeRegister.ESP, new IntPtr(exceptionObject));
+            /** For debugging **/
+            context.SetInstruction(CPUx86.Instruction.BreakInstruction);
+            /** For debugging **/
+            context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new RegisterOperand(u4, GeneralPurposeRegister.ESP));
+            context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, pointOfThrowOperand);
+            context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, exceptionObjectOperand);
+            context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new RegisterOperand(u4, GeneralPurposeRegister.EBP));
+            context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new RegisterOperand(u4, GeneralPurposeRegister.EDI));
+            context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new RegisterOperand(u4, GeneralPurposeRegister.ESI));
+            context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new RegisterOperand(u4, GeneralPurposeRegister.EBX));
+            context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new RegisterOperand(u4, GeneralPurposeRegister.EDX));
+            context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new RegisterOperand(u4, GeneralPurposeRegister.ECX));
+            context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new RegisterOperand(u4, GeneralPurposeRegister.EAX));
+            context.AppendInstruction(CPUx86.Instruction.CallInstruction, null, method);
+        }
 
 		#endregion //  IIRVisitor
 

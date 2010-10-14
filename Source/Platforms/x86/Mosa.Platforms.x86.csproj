@@ -82,12 +82,14 @@
     <Compile Include="ControlRegister.cs" />
     <Compile Include="CPUx86\FarJmpInstruction.cs" />
     <Compile Include="CPUx86\SseRoundInstruction.cs" />
+    <Compile Include="ExceptionEngine.cs" />
     <Compile Include="Intrinsic\Cli.cs" />
     <Compile Include="Intrinsic\GetControlRegisterBase.cs" />
     <Compile Include="Intrinsic\GetCR0.cs" />
     <Compile Include="Intrinsic\GetCR2.cs" />
     <Compile Include="Intrinsic\GetCR3.cs" />
     <Compile Include="Intrinsic\GetCR4.cs" />
+    <Compile Include="Intrinsic\GetRegisterContext.cs" />
     <Compile Include="Intrinsic\JumpGlobalInterruptHandler.cs" />
     <Compile Include="Intrinsic\SetControlRegisterBase.cs" />
     <Compile Include="Intrinsic\SetCR0.cs" />
@@ -113,6 +115,7 @@
     <Compile Include="Intrinsic\Nop.cs" />
     <Compile Include="Intrinsic\Out.cs" />
     <Compile Include="Intrinsic\Sti.cs" />
+    <Compile Include="RegisterContext.cs" />
     <Compile Include="SegmentRegister.cs" />
     <Compile Include="CPUx86\BranchInstruction.cs" />
     <Compile Include="Intrinsic\Test.cs" />

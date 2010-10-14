@@ -61,25 +61,23 @@ namespace Mosa.Platforms.x86.CPUx86
 					emitter.Emit(CONST16, ctx.Operand1, null);
 				else if (IsInt(ctx.Operand1))
 					emitter.Emit(CONST32, ctx.Operand1, null);
+                return;
 			}
-			else
+			if (ctx.Operand1 is RegisterOperand)
 			{
-				if (ctx.Operand1 is RegisterOperand)
-				{
-					if ((ctx.Operand1 as RegisterOperand).Register is SegmentRegister)
-						switch (((ctx.Operand1 as RegisterOperand).Register as SegmentRegister).Segment)
-						{
-							case SegmentRegister.SegmentType.CS: emitter.Emit(PUSH_CS, null, null); return;
-							case SegmentRegister.SegmentType.SS: emitter.Emit(PUSH_SS, null, null); return;
-							case SegmentRegister.SegmentType.DS: emitter.Emit(PUSH_DS, null, null); return;
-							case SegmentRegister.SegmentType.ES: emitter.Emit(PUSH_ES, null, null); return;
-							case SegmentRegister.SegmentType.FS: emitter.Emit(PUSH_FS, null, null); return;
-							case SegmentRegister.SegmentType.GS: emitter.Emit(PUSH_GS, null, null); return;
-							default: throw new InvalidOperationException(@"unable to emit opcode for segment register");
-						}
-				}
-				emitter.Emit(PUSH, ctx.Operand1, null);
+				if ((ctx.Operand1 as RegisterOperand).Register is SegmentRegister)
+					switch (((ctx.Operand1 as RegisterOperand).Register as SegmentRegister).Segment)
+					{
+						case SegmentRegister.SegmentType.CS: emitter.Emit(PUSH_CS, null, null); return;
+						case SegmentRegister.SegmentType.SS: emitter.Emit(PUSH_SS, null, null); return;
+						case SegmentRegister.SegmentType.DS: emitter.Emit(PUSH_DS, null, null); return;
+						case SegmentRegister.SegmentType.ES: emitter.Emit(PUSH_ES, null, null); return;
+						case SegmentRegister.SegmentType.FS: emitter.Emit(PUSH_FS, null, null); return;
+						case SegmentRegister.SegmentType.GS: emitter.Emit(PUSH_GS, null, null); return;
+						default: throw new InvalidOperationException(@"unable to emit opcode for segment register");
+					}
 			}
+			emitter.Emit(PUSH, ctx.Operand1, null, null);
 		}
 
 		/// <summary>

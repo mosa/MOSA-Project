@@ -360,6 +360,10 @@ namespace Mosa.Platforms.x86
 				if (sib.HasValue)
 					_codeStream.WriteByte(sib.Value);
 			}
+
+            // Add displacement to the code
+            if (displacement != null)
+                WriteDisplacement(displacement);
 		}
 
 		/// <summary>
@@ -762,6 +766,8 @@ namespace Mosa.Platforms.x86
 				if (rop2 != null)
 					modRM |= (byte)(rop2.Register.RegisterCode << 3);
 				displacement = mop1;
+                if (mop1.Base.RegisterCode == 4)
+                    sib = 0xA4;
 			}
 			else if (mop1 != null)
 			{
