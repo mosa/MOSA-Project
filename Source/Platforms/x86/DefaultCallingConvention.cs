@@ -31,6 +31,11 @@ namespace Mosa.Platforms.x86
 		/// </summary>
 		private IArchitecture architecture;
 
+		/// <summary>
+		/// Holds the type layout
+		/// </summary>
+		private ITypeLayout typeLayout;
+
 		#endregion // Data members
 
 		#region Construction
@@ -39,12 +44,14 @@ namespace Mosa.Platforms.x86
 		/// Initializes a new instance of the <see cref="DefaultCallingConvention"/>.
 		/// </summary>
 		/// <param name="architecture">The architecture of the calling convention.</param>
-		public DefaultCallingConvention(IArchitecture architecture)
+		/// <param name="typeLayout">The type layout.</param>
+		public DefaultCallingConvention(IArchitecture architecture, ITypeLayout typeLayout)
 		{
 			if (architecture == null)
 				throw new ArgumentNullException(@"architecture");
 
 			this.architecture = architecture;
+			this.typeLayout = typeLayout;
 		}
 
 		#endregion // Construction
@@ -58,7 +65,7 @@ namespace Mosa.Platforms.x86
 		/// <returns>
 		/// A single instruction or an array of instructions, which appropriately represent the method call.
 		/// </returns>
-		void ICallingConvention.MakeCall(Context ctx, ISignatureContext context, ITypeLayout typeLayout)
+		void ICallingConvention.MakeCall(Context ctx, ISignatureContext context)
 		{
 			/*
 			 * Calling convention is right-to-left, pushed on the stack. Return value in EAX for integral
@@ -73,10 +80,10 @@ namespace Mosa.Platforms.x86
 
 			ctx.SetInstruction(CPUx86.Instruction.NopInstruction);
 
-			int stackSize = ReserveStackSizeForCall(ctx, typeLayout, context, operands);
+			int stackSize = ReserveStackSizeForCall(ctx, context, operands);
 			if (stackSize != 0)
 			{
-				PushOperands(context, ctx, operands, stackSize, typeLayout);
+				PushOperands(context, ctx, operands, stackSize);
 			}
 
 			ctx.AppendInstruction(CPUx86.Instruction.CallInstruction, null, invokeTarget);
@@ -105,9 +112,9 @@ namespace Mosa.Platforms.x86
 			return operandStack;
 		}
 
-		private int ReserveStackSizeForCall(Context ctx, ITypeLayout typeLayout, ISignatureContext signatureContext, IEnumerable<Operand> operands)
+		private int ReserveStackSizeForCall(Context ctx, ISignatureContext signatureContext, IEnumerable<Operand> operands)
 		{
-			int stackSize = CalculateStackSizeForParameters(signatureContext, operands, typeLayout);
+			int stackSize = CalculateStackSizeForParameters(signatureContext, operands);
 			if (stackSize != 0)
 			{
 				RegisterOperand esp = new RegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.ESP);
@@ -145,7 +152,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		/// <param name="operandStack">The operand stack.</param>
 		/// <param name="space">The space.</param>
-		private void PushOperands(ISignatureContext context, Context ctx, Stack<Operand> operandStack, int space, ITypeLayout typeLayout)
+		private void PushOperands(ISignatureContext context, Context ctx, Stack<Operand> operandStack, int space)
 		{
 			while (operandStack.Count != 0)
 			{
@@ -281,9 +288,8 @@ namespace Mosa.Platforms.x86
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="operands">The operands.</param>
-		/// <param name="typeLayout">The type layout.</param>
 		/// <returns></returns>
-		private int CalculateStackSizeForParameters(ISignatureContext context, IEnumerable<Operand> operands, ITypeLayout typeLayout)
+		private int CalculateStackSizeForParameters(ISignatureContext context, IEnumerable<Operand> operands)
 		{
 			int result = 0;
 

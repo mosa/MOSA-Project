@@ -63,19 +63,15 @@ namespace Mosa.Runtime.CompilerFramework
 			// Allocate a list of locals
 			List<StackOperand> locals = new List<StackOperand>();
 
-			// Retrieve the calling convention of the method
-			ICallingConvention cc = Architecture.GetCallingConvention();
-			Debug.Assert(null != cc, @"Failed to retrieve the calling convention of the method.");
-
 			// Iterate all Blocks and collect locals From all Blocks
 			foreach (BasicBlock block in BasicBlocks)
 				CollectLocalVariables(locals, block);
 
 			// Sort all found locals
-			OrderVariables(locals, cc);
+			OrderVariables(locals, callingConvention);
 
 			// Now we assign increasing stack offsets to each variable
-			_localsSize = LayoutVariables(locals, cc, cc.OffsetOfFirstLocal, 1);
+			_localsSize = LayoutVariables(locals, callingConvention, callingConvention.OffsetOfFirstLocal, 1);
 			if (TRACING.TraceInfo == true)
 			{
 				Trace.WriteLine(String.Format(@"Stack layout for method {0}", MethodCompiler.Method));
@@ -83,7 +79,7 @@ namespace Mosa.Runtime.CompilerFramework
 			}
 
 			// Layout parameters
-			LayoutParameters(MethodCompiler, cc);
+			LayoutParameters(MethodCompiler);
 
 			// Create a prologue instruction
 			Context prologueCtx = new Context(InstructionSet, FindBlock(-1)).InsertBefore();
@@ -134,8 +130,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Lays out all parameters of the method.
 		/// </summary>
 		/// <param name="compiler">The method compiler providing the parameters.</param>
-		/// <param name="cc">The calling convention used to invoke the method, which controls parameter layout.</param>
-		private void LayoutParameters(IMethodCompiler compiler, ICallingConvention cc)
+		private void LayoutParameters(IMethodCompiler compiler)
 		{
 			List<StackOperand> paramOps = new List<StackOperand>();
 
@@ -148,7 +143,7 @@ namespace Mosa.Runtime.CompilerFramework
 			/*if (compiler.Method.Signature.HasThis || compiler.Method.Signature.HasExplicitThis)
 				LayoutVariables(paramOps, cc, cc.OffsetOfFirstParameter + 4, -1);
 			else*/
-			LayoutVariables(paramOps, cc, cc.OffsetOfFirstParameter, -1);
+			LayoutVariables(paramOps, callingConvention, callingConvention.OffsetOfFirstParameter, -1);
 
 			if (TRACING.TraceInfo)
 				LogOperands(paramOps);

@@ -26,6 +26,12 @@ namespace Mosa.Platforms.x86
 	/// </summary>
 	public class Architecture : BasicArchitecture
 	{
+
+		/// <summary>
+		/// Holds the calling conversion
+		/// </summary>
+		private ICallingConvention callingConvention;
+
 		/// <summary>
 		/// Defines the register set of the target architecture.
 		/// </summary>
@@ -187,12 +193,16 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Retrieves a calling convention object for the requested calling convention.
 		/// </summary>
+		/// <param name="typeLayout">The type layout.</param>
 		/// <returns>
 		/// An instance of <see cref="ICallingConvention"/>.
 		/// </returns>
-		public override ICallingConvention GetCallingConvention()
+		public override ICallingConvention GetCallingConvention(ITypeLayout typeLayout)
 		{
-			return new DefaultCallingConvention(this);
+			if (callingConvention == null)
+				callingConvention = new DefaultCallingConvention(this, typeLayout);
+
+			return callingConvention;
 		}
 
 		/// <summary>

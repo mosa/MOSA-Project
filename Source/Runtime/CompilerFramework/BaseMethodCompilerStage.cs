@@ -67,6 +67,11 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		protected ITypeLayout typeLayout;
 
+		/// <summary>
+		/// Holds the calling convention interface
+		/// </summary>
+		protected ICallingConvention callingConvention;
+
 		protected int nativePointerSize;
 
 		protected int nativePointerAlignment;
@@ -91,6 +96,8 @@ namespace Mosa.Runtime.CompilerFramework
 			moduleTypeSystem = compiler.Method.ModuleTypeSystem;
 			typeSystem = compiler.TypeSystem;
 			typeLayout = compiler.TypeLayout;
+
+			callingConvention = Architecture.GetCallingConvention(typeLayout);
 
 			Architecture.GetTypeRequirements(BuiltInSigType.IntPtr, out nativePointerSize, out nativePointerAlignment);
 		}
