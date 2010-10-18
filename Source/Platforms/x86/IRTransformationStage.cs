@@ -153,11 +153,11 @@ namespace Mosa.Platforms.x86
 				right = ctx.Operand2;
 			}
 
-            IR.ConditionCode setnp = IR.ConditionCode.NoParity;
-            IR.ConditionCode setnc = IR.ConditionCode.NoCarry;
-            IR.ConditionCode setc = IR.ConditionCode.Carry;
-            IR.ConditionCode setnz = IR.ConditionCode.NoZero;
-            IR.ConditionCode setz = IR.ConditionCode.Zero;
+			IR.ConditionCode setnp = IR.ConditionCode.NoParity;
+			IR.ConditionCode setnc = IR.ConditionCode.NoCarry;
+			IR.ConditionCode setc = IR.ConditionCode.Carry;
+			IR.ConditionCode setnz = IR.ConditionCode.NoZero;
+			IR.ConditionCode setz = IR.ConditionCode.Zero;
 			IR.ConditionCode code = ctx.ConditionCode;
 
 			ctx.SetInstruction(CPUx86.Instruction.NopInstruction);
@@ -167,10 +167,10 @@ namespace Mosa.Platforms.x86
 			{
 				case IR.ConditionCode.Equal: break;
 				case IR.ConditionCode.NotEqual: break;
-                case IR.ConditionCode.UnsignedGreaterOrEqual: code = IR.ConditionCode.GreaterOrEqual; break;
-                case IR.ConditionCode.UnsignedGreaterThan: code = IR.ConditionCode.GreaterThan; break;
-                case IR.ConditionCode.UnsignedLessOrEqual: code = IR.ConditionCode.LessOrEqual; break;
-                case IR.ConditionCode.UnsignedLessThan: code = IR.ConditionCode.LessThan; break;
+				case IR.ConditionCode.UnsignedGreaterOrEqual: code = IR.ConditionCode.GreaterOrEqual; break;
+				case IR.ConditionCode.UnsignedGreaterThan: code = IR.ConditionCode.GreaterThan; break;
+				case IR.ConditionCode.UnsignedLessOrEqual: code = IR.ConditionCode.LessOrEqual; break;
+				case IR.ConditionCode.UnsignedLessThan: code = IR.ConditionCode.LessThan; break;
 			}
 
 			if (!(left is RegisterOperand))
@@ -240,49 +240,49 @@ namespace Mosa.Platforms.x86
 
 			// Determine the result
 			RegisterOperand eax = new RegisterOperand(BuiltInSigType.Byte, GeneralPurposeRegister.EAX);
-            RegisterOperand ebx = new RegisterOperand(BuiltInSigType.Byte, GeneralPurposeRegister.EBX);
-            RegisterOperand ecx = new RegisterOperand(BuiltInSigType.Byte, GeneralPurposeRegister.ECX);
-            RegisterOperand edx = new RegisterOperand(BuiltInSigType.Byte, GeneralPurposeRegister.EDX);
+			RegisterOperand ebx = new RegisterOperand(BuiltInSigType.Byte, GeneralPurposeRegister.EBX);
+			RegisterOperand ecx = new RegisterOperand(BuiltInSigType.Byte, GeneralPurposeRegister.ECX);
+			RegisterOperand edx = new RegisterOperand(BuiltInSigType.Byte, GeneralPurposeRegister.EDX);
 
-            if (code == ConditionCode.Equal)
-            {
-                ctx.AppendInstruction(CPUx86.Instruction.SetccInstruction, setz, eax);
-                ctx.AppendInstruction(CPUx86.Instruction.SetccInstruction, setnp, ebx);
-                ctx.AppendInstruction(CPUx86.Instruction.SetccInstruction, setnc, ecx);
-                ctx.AppendInstruction(CPUx86.Instruction.AndInstruction, eax, ebx);
-                ctx.AppendInstruction(CPUx86.Instruction.AndInstruction, eax, ecx);
-            }
-            else if (code == ConditionCode.NotEqual)
-            {
-                ctx.AppendInstruction(CPUx86.Instruction.SetccInstruction, setz, eax);
-                ctx.AppendInstruction(CPUx86.Instruction.SetccInstruction, setnp, ebx);
-                ctx.AppendInstruction(CPUx86.Instruction.SetccInstruction, setnc, ecx);
-                ctx.AppendInstruction(CPUx86.Instruction.AndInstruction, eax, ebx);
-                ctx.AppendInstruction(CPUx86.Instruction.AndInstruction, eax, ecx);
-                ctx.AppendInstruction(CPUx86.Instruction.NotInstruction, eax, eax);
-                ctx.AppendInstruction(CPUx86.Instruction.AndInstruction, eax, new ConstantOperand(new SigType(CilElementType.I4), (int)1));
-            }
-            else if (code == ConditionCode.GreaterThan || code == ConditionCode.GreaterOrEqual)
-            {
-                ctx.AppendInstruction(CPUx86.Instruction.SetccInstruction, setnz, eax);
-                ctx.AppendInstruction(CPUx86.Instruction.SetccInstruction, setnp, ebx);
-                ctx.AppendInstruction(CPUx86.Instruction.SetccInstruction, setnc, ecx);
-                ctx.AppendInstruction(CPUx86.Instruction.AndInstruction, eax, ebx);
-                ctx.AppendInstruction(CPUx86.Instruction.AndInstruction, eax, ecx);
-            }
-            else if (code == ConditionCode.LessThan || code == ConditionCode.LessOrEqual)
-            {
-                ctx.AppendInstruction(CPUx86.Instruction.SetccInstruction, setnz, eax);
-                ctx.AppendInstruction(CPUx86.Instruction.SetccInstruction, setnp, ebx);
-                ctx.AppendInstruction(CPUx86.Instruction.SetccInstruction, setc, ecx);
-                ctx.AppendInstruction(CPUx86.Instruction.AndInstruction, eax, ebx);
-                ctx.AppendInstruction(CPUx86.Instruction.AndInstruction, eax, ecx);
-            }
-            if (code == ConditionCode.GreaterOrEqual || code == ConditionCode.LessOrEqual)
-            {
-                ctx.AppendInstruction(CPUx86.Instruction.SetccInstruction, setz, edx);
-                ctx.AppendInstruction(CPUx86.Instruction.OrInstruction, eax, edx);
-            }
+			if (code == ConditionCode.Equal)
+			{
+				ctx.AppendInstruction(CPUx86.Instruction.SetccInstruction, setz, eax);
+				ctx.AppendInstruction(CPUx86.Instruction.SetccInstruction, setnp, ebx);
+				ctx.AppendInstruction(CPUx86.Instruction.SetccInstruction, setnc, ecx);
+				ctx.AppendInstruction(CPUx86.Instruction.AndInstruction, eax, ebx);
+				ctx.AppendInstruction(CPUx86.Instruction.AndInstruction, eax, ecx);
+			}
+			else if (code == ConditionCode.NotEqual)
+			{
+				ctx.AppendInstruction(CPUx86.Instruction.SetccInstruction, setz, eax);
+				ctx.AppendInstruction(CPUx86.Instruction.SetccInstruction, setnp, ebx);
+				ctx.AppendInstruction(CPUx86.Instruction.SetccInstruction, setnc, ecx);
+				ctx.AppendInstruction(CPUx86.Instruction.AndInstruction, eax, ebx);
+				ctx.AppendInstruction(CPUx86.Instruction.AndInstruction, eax, ecx);
+				ctx.AppendInstruction(CPUx86.Instruction.NotInstruction, eax, eax);
+				ctx.AppendInstruction(CPUx86.Instruction.AndInstruction, eax, new ConstantOperand(new SigType(CilElementType.I4), (int)1));
+			}
+			else if (code == ConditionCode.GreaterThan || code == ConditionCode.GreaterOrEqual)
+			{
+				ctx.AppendInstruction(CPUx86.Instruction.SetccInstruction, setnz, eax);
+				ctx.AppendInstruction(CPUx86.Instruction.SetccInstruction, setnp, ebx);
+				ctx.AppendInstruction(CPUx86.Instruction.SetccInstruction, setnc, ecx);
+				ctx.AppendInstruction(CPUx86.Instruction.AndInstruction, eax, ebx);
+				ctx.AppendInstruction(CPUx86.Instruction.AndInstruction, eax, ecx);
+			}
+			else if (code == ConditionCode.LessThan || code == ConditionCode.LessOrEqual)
+			{
+				ctx.AppendInstruction(CPUx86.Instruction.SetccInstruction, setnz, eax);
+				ctx.AppendInstruction(CPUx86.Instruction.SetccInstruction, setnp, ebx);
+				ctx.AppendInstruction(CPUx86.Instruction.SetccInstruction, setc, ecx);
+				ctx.AppendInstruction(CPUx86.Instruction.AndInstruction, eax, ebx);
+				ctx.AppendInstruction(CPUx86.Instruction.AndInstruction, eax, ecx);
+			}
+			if (code == ConditionCode.GreaterOrEqual || code == ConditionCode.LessOrEqual)
+			{
+				ctx.AppendInstruction(CPUx86.Instruction.SetccInstruction, setz, edx);
+				ctx.AppendInstruction(CPUx86.Instruction.OrInstruction, eax, edx);
+			}
 			ctx.AppendInstruction(CPUx86.Instruction.MovzxInstruction, resultOperand, eax);
 		}
 
@@ -532,8 +532,7 @@ namespace Mosa.Platforms.x86
 
 			if (op != null)
 			{
-				ICallingConvention cc = Architecture.GetCallingConvention();
-				cc.MoveReturnValue(ctx, op);
+				callingConvention.MoveReturnValue(ctx, op);
 				ctx.AppendInstruction(CPUx86.Instruction.JmpInstruction);
 				ctx.SetBranch(Int32.MaxValue);
 			}
@@ -638,39 +637,40 @@ namespace Mosa.Platforms.x86
 			Operand destination = context.Result;
 			Operand source = context.Operand1;
 
-            Context[] newBlocks = CreateEmptyBlockContexts(context.Label, 3);
+			Context[] newBlocks = CreateEmptyBlockContexts(context.Label, 3);
 			Context nextBlock = SplitContext(context, false);
 
 			RegisterOperand xmm5 = new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM5);
-            RegisterOperand xmm6 = new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM6);
-            RegisterOperand eax = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EAX);
-            RegisterOperand edx = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EDX);
+			RegisterOperand xmm6 = new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM6);
+			RegisterOperand eax = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EAX);
+			RegisterOperand edx = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EDX);
+			RegisterOperand uedx = new RegisterOperand(new SigType(CilElementType.U4), GeneralPurposeRegister.EDX);
 			Context before = context.InsertBefore();
 
-            context.SetInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[0].BasicBlock);
+			context.SetInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[0].BasicBlock);
 			LinkBlocks(context, newBlocks[0]);
 
-            newBlocks[0].SetInstruction(CPUx86.Instruction.MovsdInstruction, xmm5, source);
-            newBlocks[0].AppendInstruction(CPUx86.Instruction.MovsdInstruction, xmm6, destination);
+			newBlocks[0].SetInstruction(CPUx86.Instruction.MovsdInstruction, xmm5, source);
+			newBlocks[0].AppendInstruction(CPUx86.Instruction.MovsdInstruction, xmm6, destination);
 
-            newBlocks[0].AppendInstruction(CPUx86.Instruction.SseDivInstruction, destination, source);
-            newBlocks[0].AppendInstruction(CPUx86.Instruction.Cvttsd2siInstruction, edx, destination);
+			newBlocks[0].AppendInstruction(CPUx86.Instruction.SseDivInstruction, destination, source);
+			newBlocks[0].AppendInstruction(CPUx86.Instruction.Cvttsd2siInstruction, edx, destination);
 
-            newBlocks[0].AppendInstruction(CPUx86.Instruction.CmpInstruction, edx, new ConstantOperand(new SigType(CilElementType.I4), 0));
-            newBlocks[0].AppendInstruction(CPUx86.Instruction.BranchInstruction, ConditionCode.Equal, newBlocks[2].BasicBlock);
-            newBlocks[0].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[1].BasicBlock);
-            LinkBlocks(newBlocks[0], newBlocks[1], newBlocks[2]);
+			newBlocks[0].AppendInstruction(CPUx86.Instruction.CmpInstruction, edx, new ConstantOperand(new SigType(CilElementType.I4), 0));
+			newBlocks[0].AppendInstruction(CPUx86.Instruction.BranchInstruction, ConditionCode.Equal, newBlocks[2].BasicBlock);
+			newBlocks[0].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[1].BasicBlock);
+			LinkBlocks(newBlocks[0], newBlocks[1], newBlocks[2]);
 
-            newBlocks[1].AppendInstruction(CPUx86.Instruction.Cvtsi2sdInstruction, destination, edx);
-            newBlocks[1].AppendInstruction(CPUx86.Instruction.SseMulInstruction, destination, xmm5);
+			newBlocks[1].AppendInstruction(CPUx86.Instruction.Cvtsi2sdInstruction, destination, edx);
+			newBlocks[1].AppendInstruction(CPUx86.Instruction.SseMulInstruction, destination, xmm5);
 			newBlocks[1].AppendInstruction(CPUx86.Instruction.SseSubInstruction, xmm6, destination);
 			newBlocks[1].AppendInstruction(CPUx86.Instruction.MovsdInstruction, destination, xmm6);
-            newBlocks[1].AppendInstruction(CPUx86.Instruction.JmpInstruction, nextBlock.BasicBlock);
-            LinkBlocks(newBlocks[1], nextBlock);
+			newBlocks[1].AppendInstruction(CPUx86.Instruction.JmpInstruction, nextBlock.BasicBlock);
+			LinkBlocks(newBlocks[1], nextBlock);
 
-            newBlocks[2].SetInstruction(CPUx86.Instruction.MovsdInstruction, destination, xmm6);
-            newBlocks[2].AppendInstruction(CPUx86.Instruction.JmpInstruction, nextBlock.BasicBlock);
-            LinkBlocks(newBlocks[2], nextBlock);
+			newBlocks[2].SetInstruction(CPUx86.Instruction.MovsdInstruction, destination, xmm6);
+			newBlocks[2].AppendInstruction(CPUx86.Instruction.JmpInstruction, nextBlock.BasicBlock);
+			LinkBlocks(newBlocks[2], nextBlock);
 		}
 
 		public void RemSInstruction(Context context)
@@ -797,9 +797,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="ctx">The context.</param>
 		public void CallInstruction(Context ctx)
 		{
-			ICallingConvention cc = Architecture.GetCallingConvention();
-			Debug.Assert(null != cc, @"Failed to retrieve the calling convention.");
-			cc.MakeCall(ctx, this.MethodCompiler.Method, this.MethodCompiler.TypeLayout, this.moduleTypeSystem);
+			callingConvention.MakeCall(ctx, this.MethodCompiler.Method);
 		}
 
 		/// <summary>
