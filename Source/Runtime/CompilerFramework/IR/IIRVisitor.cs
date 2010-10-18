@@ -184,40 +184,112 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <param name="context">The context.</param>
 		void NopInstruction(Context context);
 
+		/// <summary>
+		/// Visitation function for <see cref="AddSInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
 		void AddSInstruction(Context context);
 
+		/// <summary>
+		/// Visitation function for <see cref="AddUInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
 		void AddUInstruction(Context context);
 
+		/// <summary>
+		/// Visitation function for <see cref="AddFInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
 		void AddFInstruction(Context context);
 
+		/// <summary>
+		/// Visitation function for <see cref="DivFInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
 		void DivFInstruction(Context context);
 
+		/// <summary>
+		/// Visitation function for <see cref="DivSInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
 		void DivSInstruction(Context context);
 
+		/// <summary>
+		/// Visitation function for <see cref="DivUInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
 		void DivUInstruction(Context context);
 
+		/// <summary>
+		/// Visitation function for <see cref="MulSInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
 		void MulSInstruction(Context context);
 
+		/// <summary>
+		/// Visitation function for <see cref="MulFInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
 		void MulFInstruction(Context context);
 
+		/// <summary>
+		/// Visitation function for <see cref="MulUInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
 		void MulUInstruction(Context context);
 
+		/// <summary>
+		/// Visitation function for <see cref="SubFInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
 		void SubFInstruction(Context context);
 
+		/// <summary>
+		/// Visitation function for <see cref="SubSInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
 		void SubSInstruction(Context context);
 
+		/// <summary>
+		/// Visitation function for <see cref="SubUInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
 		void SubUInstruction(Context context);
 
+		/// <summary>
+		/// Visitation function for <see cref="RemFInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
 		void RemFInstruction(Context context);
 
+		/// <summary>
+		/// Visitation function for <see cref="RemSInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
 		void RemSInstruction(Context context);
 
+		/// <summary>
+		/// Visitation function for <see cref="RemUInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
 		void RemUInstruction(Context context);
 
+		/// <summary>
+		/// Visitation function for <see cref="SwitchInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
 		void SwitchInstruction(Context context);
 
+		/// <summary>
+		/// Visitation function for <see cref="BreakInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
 		void BreakInstruction(Context context);
 
-        void ThrowInstruction(Context context);
+		/// <summary>
+		/// Visitation function for <see cref="ThrowInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void ThrowInstruction(Context context);
 	}
 }

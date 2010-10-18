@@ -317,313 +317,313 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		#region ICILVisitor - Unused
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Nop"/>.
+		/// Visitation function for <see cref="Nop"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Nop(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Break"/>.
+		/// Visitation function for <see cref="Break"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Break(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Ldarg"/>.
+		/// Visitation function for <see cref="Ldarg"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Ldarg(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Ldarga"/>.
+		/// Visitation function for <see cref="Ldarga"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Ldarga(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Ldloc"/>.
+		/// Visitation function for <see cref="Ldloc"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Ldloc(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Ldloca"/>.
+		/// Visitation function for <see cref="Ldloca"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Ldloca(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Ldc"/>.
+		/// Visitation function for <see cref="Ldc"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Ldc(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Ldobj"/>.
+		/// Visitation function for <see cref="Ldobj"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Ldobj(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Ldstr"/>.
+		/// Visitation function for <see cref="Ldstr"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Ldstr(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Ldfld"/>.
+		/// Visitation function for <see cref="Ldfld"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Ldfld(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Ldflda"/>.
+		/// Visitation function for <see cref="Ldflda"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Ldflda(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Ldsfld"/>.
+		/// Visitation function for <see cref="Ldsfld"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Ldsfld(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Ldsflda"/>.
+		/// Visitation function for <see cref="Ldsflda"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Ldsflda(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Ldftn"/>.
+		/// Visitation function for <see cref="Ldftn"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Ldftn(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Ldvirtftn"/>.
+		/// Visitation function for <see cref="Ldvirtftn"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Ldvirtftn(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Ldtoken"/>.
+		/// Visitation function for <see cref="Ldtoken"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Ldtoken(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Stloc"/>.
+		/// Visitation function for <see cref="Stloc"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Stloc(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Starg"/>.
+		/// Visitation function for <see cref="Starg"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Starg(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Stobj"/>.
+		/// Visitation function for <see cref="Stobj"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Stobj(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Stfld"/>.
+		/// Visitation function for <see cref="Stfld"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Stfld(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Stsfld"/>.
+		/// Visitation function for <see cref="Stsfld"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Stsfld(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Dup"/>.
+		/// Visitation function for <see cref="Dup"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Dup(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Pop"/>.
+		/// Visitation function for <see cref="Pop"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Pop(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Jmp"/>.
+		/// Visitation function for <see cref="Jmp"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Jmp(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Call"/>.
+		/// Visitation function for <see cref="Call"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Call(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Calli"/>.
+		/// Visitation function for <see cref="Calli"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Calli(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Ret"/>.
+		/// Visitation function for <see cref="Ret"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Ret(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Branch"/>.
+		/// Visitation function for <see cref="Branch"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Branch(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.UnaryBranch"/>.
+		/// Visitation function for <see cref="UnaryBranch"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.UnaryBranch(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.BinaryBranch"/>.
+		/// Visitation function for <see cref="BinaryBranch"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.BinaryBranch(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Switch"/>.
+		/// Visitation function for <see cref="Switch"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Switch(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.BinaryLogic"/>.
+		/// Visitation function for <see cref="BinaryLogic"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.BinaryLogic(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Shift"/>.
+		/// Visitation function for <see cref="Shift"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Shift(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Neg"/>.
+		/// Visitation function for <see cref="Neg"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Neg(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Not"/>.
+		/// Visitation function for <see cref="Not"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Not(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Conversion"/>.
+		/// Visitation function for <see cref="Conversion"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Conversion(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Callvirt"/>.
+		/// Visitation function for <see cref="Callvirt"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Callvirt(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Cpobj"/>.
+		/// Visitation function for <see cref="Cpobj"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Cpobj(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Newobj"/>.
+		/// Visitation function for <see cref="Newobj"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Newobj(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Castclass"/>.
+		/// Visitation function for <see cref="Castclass"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Castclass(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Isinst"/>.
+		/// Visitation function for <see cref="Isinst"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Isinst(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Unbox"/>.
+		/// Visitation function for <see cref="Unbox"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Unbox(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Throw"/>.
+		/// Visitation function for <see cref="Throw"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Throw(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Box"/>.
+		/// Visitation function for <see cref="Box"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Box(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Newarr"/>.
+		/// Visitation function for <see cref="Newarr"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Newarr(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Ldlen"/>.
+		/// Visitation function for <see cref="Ldlen"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Ldlen(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Ldelema"/>.
+		/// Visitation function for <see cref="Ldelema"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Ldelema(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Ldelem"/>.
+		/// Visitation function for <see cref="Ldelem"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Ldelem(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Stelem"/>.
+		/// Visitation function for <see cref="Stelem"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Stelem(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.UnboxAny"/>.
+		/// Visitation function for <see cref="UnboxAny"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.UnboxAny(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Refanyval"/>.
+		/// Visitation function for <see cref="Refanyval"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Refanyval(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.UnaryArithmetic"/>.
+		/// Visitation function for <see cref="UnaryArithmetic"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.UnaryArithmetic(Context ctx) { }
@@ -634,85 +634,85 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		void CIL.ICILVisitor.Mkrefany(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.ArithmeticOverflow"/>.
+		/// Visitation function for <see cref="ArithmeticOverflow"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.ArithmeticOverflow(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Endfinally"/>.
+		/// Visitation function for <see cref="Endfinally"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Endfinally(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Leave"/>.
+		/// Visitation function for <see cref="Leave"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Leave(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Arglist"/>.
+		/// Visitation function for <see cref="Arglist"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Arglist(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.BinaryComparison"/>.
+		/// Visitation function for <see cref="BinaryComparison"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.BinaryComparison(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Localalloc"/>.
+		/// Visitation function for <see cref="Localalloc"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Localalloc(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Endfilter"/>.
+		/// Visitation function for <see cref="Endfilter"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Endfilter(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.InitObj"/>.
+		/// Visitation function for <see cref="InitObj"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.InitObj(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Cpblk"/>.
+		/// Visitation function for <see cref="Cpblk"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Cpblk(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Initblk"/>.
+		/// Visitation function for <see cref="Initblk"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Initblk(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Prefix"/>.
+		/// Visitation function for <see cref="Prefix"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Prefix(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Rethrow"/>.
+		/// Visitation function for <see cref="Rethrow"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Rethrow(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Sizeof"/>.
+		/// Visitation function for <see cref="Sizeof"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Sizeof(Context ctx) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Refanytype"/>.
+		/// Visitation function for <see cref="Refanytype"/>.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		void CIL.ICILVisitor.Refanytype(Context ctx) { }

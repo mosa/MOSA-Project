@@ -20,57 +20,57 @@ namespace Mosa.Platforms.x86.CPUx86
 	public interface IX86Visitor : IVisitor
 	{
 		/// <summary>
-		/// Adds the specified context.
+		/// Adds instruction
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Add(Context context);
 		/// <summary>
-		/// Adcs the specified context.
+		/// Adcs instruction
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Adc(Context context);
 		/// <summary>
-		/// Ands the specified context.
+		/// Ands instruction
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void And(Context context);
 		/// <summary>
-		/// Cmp the specified context.
+		/// Cmp instruction
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Call(Context context);
 		/// <summary>
-		/// 
+		/// Directs the compare.
 		/// </summary>
-		/// <param name="context"></param>
+		/// <param name="context">The context.</param>
 		void DirectCompare(Context context);
 		/// <summary>
-		/// Or the specified context.
+		/// Or instruction
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Cmp(Context context);
 		/// <summary>
-		/// Or the specified context.
+		/// Or instruction
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Or(Context context);
 		/// <summary>
-		/// Xor the specified context.
+		/// Xor instruction
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Xor(Context context);
 		/// <summary>
-		/// Subs the specified context.
+		/// Subs instruction
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Sub(Context context);
 		/// <summary>
-		/// SBBs the specified context.
+		/// SBBs instruction
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Sbb(Context context);
 		/// <summary>
-		/// Muls the specified context.
+		/// Muls instruction
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Mul(Context context);
@@ -85,7 +85,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <param name="context">The context.</param>
 		void DirectDivision(Context context);
 		/// <summary>
-		/// Divs the specified context.
+		/// Divs instruction
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Div(Context context);
@@ -115,47 +115,47 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <param name="context">The context.</param>
 		void SseDiv(Context context);
 		/// <summary>
-		/// Sars the specified context.
+		/// Sars instruction
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Sar(Context context);
 		/// <summary>
-		/// Sals the specified context.
+		/// Sals instruction
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Sal(Context context);
 		/// <summary>
-		/// SHLs the specified context.
+		/// SHLs instruction
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Shl(Context context);
 		/// <summary>
-		/// SHRs the specified context.
+		/// SHRs instruction
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Shr(Context context);
 		/// <summary>
-		/// RCRs the specified context.
+		/// RCRs instruction
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Rcr(Context context);
 		/// <summary>
-		/// Cvtsi2sses the specified context.
+		/// Cvtsi2sses instruction
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Cvtsi2ss(Context context);
 		/// <summary>
-		/// Cvtsi2sds the specified context.
+		/// Cvtsi2sds instruction
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Cvtsi2sd(Context context);
 		/// <summary>
-		/// CVTSD2SSs the specified context.
+		/// CVTSD2SSs instruction
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Cvtsd2ss(Context context);
 		/// <summary>
-		/// CVTSS2SDs the specified context.
+		/// CVTSS2SDs instruction
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Cvtss2sd(Context context);
@@ -170,59 +170,57 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <param name="context"></param>
 		void Cvttss2si(Context context);
 		/// <summary>
-		/// Setccs the specified context.
+		/// Setccs instruction
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Setcc(Context context);
 		/// <summary>
-		/// CDQs the specified context.
+		/// CDQs instruction
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Cdq(Context context);
 		/// <summary>
-		/// SHLDs the specified context.
+		/// SHLDs instruction
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Shld(Context context);
 		/// <summary>
-		/// SHRDs the specified context.
+		/// SHRDs instruction
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Shrd(Context context);
 		/// <summary>
-		/// Comisds the specified context.
+		/// Comisds instruction
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Comisd(Context context);
 		/// <summary>
-		/// Comisses the specified context.
+		/// Comisses instruction
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Comiss(Context context);
 		/// <summary>
-		/// Ucomisds the specified context.
+		/// Ucomisds instruction
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Ucomisd(Context context);
 		/// <summary>
-		/// Ucomisses the specified context.
+		/// Ucomisses instruction
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Ucomiss(Context context);
 		/// <summary>
-		/// JNSs the specified context.
+		/// JNSs instruction
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Jns(Context context);
-
 		/// <summary>
 		/// X86 branch instruction
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Branch(Context context);
-
 		/// <summary>
-		/// Jumps the specified context.
+		/// Jumps instruction
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Jump(Context context);
@@ -277,7 +275,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <param name="context">The context.</param>
 		void Hlt(Context context);
 		/// <summary>
-		/// Invlpgs the specified context.
+		/// Invlpgs instruction
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Invlpg(Context context);
@@ -287,12 +285,12 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <param name="context">The context.</param>
 		void In(Context context);
 		/// <summary>
-		/// Incs the specified context.
+		/// Incs instruction
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Inc(Context context);
 		/// <summary>
-		/// Decs the specified context.
+		/// Decs instruction
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Dec(Context context);
@@ -446,7 +444,10 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Not(Context context);
-
+		/// <summary>
+		/// Sses round instruction
+		/// </summary>
+		/// <param name="context">The context.</param>
 		void SseRound(Context context);
 	}
 }

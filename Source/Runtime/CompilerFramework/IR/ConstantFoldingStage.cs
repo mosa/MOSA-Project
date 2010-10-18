@@ -32,31 +32,11 @@ namespace Mosa.Runtime.CompilerFramework.IR
 
 		#region IIRVisitor
 
-		public void AddSInstruction(Context ctx)
-		{
-		}
-
-		public void AddUInstruction(Context context)
-		{
-		}
-
-		public void AddFInstruction(Context context)
-		{
-		}
-
-		public void DivFInstruction(Context context)
-		{
-		}
-
-		public void DivSInstruction(Context context)
-		{
-		}
-
 		/// <summary>
 		/// Folds logical ANDs with 2 constants
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		public void LogicalAndInstruction(Context ctx)
+		void IR.IIRVisitor.LogicalAndInstruction(Context ctx)
 		{
 			if (ctx.Operand2 is ConstantOperand && ctx.Operand3 is ConstantOperand)
 			{
@@ -98,7 +78,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// Folds logical ORs with 2 constants
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		public void LogicalOrInstruction(Context ctx)
+		void IR.IIRVisitor.LogicalOrInstruction(Context ctx)
 		{
 			if (ctx.Operand2 is ConstantOperand && ctx.Operand3 is ConstantOperand)
 			{
@@ -140,7 +120,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// Folds logical XORs with 2 constants
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		public void LogicalXorInstruction(Context ctx)
+		void IR.IIRVisitor.LogicalXorInstruction(Context ctx)
 		{
 			if (ctx.Operand2 is ConstantOperand && ctx.Operand3 is ConstantOperand)
 			{
@@ -183,214 +163,262 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		#region IIRVisitor - Unused
 
 		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.AddressOfInstruction"/>.
+		/// Visitation function for <see cref="AddressOfInstruction"/>.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.AddressOfInstruction(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.ArithmeticShiftRightInstruction"/> instructions.
+		/// Visitation function for <see cref="ArithmeticShiftRightInstruction"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.ArithmeticShiftRightInstruction(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.BranchInstruction"/> instructions.
+		/// Visitation function for <see cref="BranchInstruction"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.BranchInstruction(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.CallInstruction"/> instructions.
+		/// Visitation function for <see cref="CallInstruction"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.CallInstruction(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.EpilogueInstruction"/> instructions.
+		/// Visitation function for <see cref="EpilogueInstruction"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.EpilogueInstruction(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.FloatingPointCompareInstruction"/> instructions.
+		/// Visitation function for <see cref="FloatingPointCompareInstruction"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.FloatingPointCompareInstruction(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.FloatingPointToIntegerConversionInstruction"/> instructions.
+		/// Visitation function for <see cref="FloatingPointToIntegerConversionInstruction"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.FloatingPointToIntegerConversionInstruction(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.IntegerCompareInstruction"/> instructions.
+		/// Visitation function for <see cref="IntegerCompareInstruction"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.IntegerCompareInstruction(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.IntegerToFloatingPointConversionInstruction"/> instruction.
+		/// Visitation function for <see cref="IntegerToFloatingPointConversionInstruction"/> instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.IntegerToFloatingPointConversionInstruction(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.JmpInstruction"/> instruction.
+		/// Visitation function for <see cref="JmpInstruction"/> instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.JmpInstruction(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.LiteralInstruction"/> instructions.
+		/// Visitation function for <see cref="LiteralInstruction"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.LiteralInstruction(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.LoadInstruction"/> instructions.
+		/// Visitation function for <see cref="LoadInstruction"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.LoadInstruction(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.LogicalNotInstruction"/> instructions.
+		/// Visitation function for <see cref="LogicalNotInstruction"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.LogicalNotInstruction(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.MoveInstruction"/> instructions.
+		/// Visitation function for <see cref="MoveInstruction"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.MoveInstruction(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.PhiInstruction"/> instructions.
+		/// Visitation function for <see cref="PhiInstruction"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.PhiInstruction(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.PopInstruction"/> instructions.
+		/// Visitation function for <see cref="PopInstruction"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.PopInstruction(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.PrologueInstruction"/> instructions.
+		/// Visitation function for <see cref="PrologueInstruction"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.PrologueInstruction(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.PushInstruction"/> instructions.
+		/// Visitation function for <see cref="PushInstruction"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.PushInstruction(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.ReturnInstruction"/> instructions.
+		/// Visitation function for <see cref="ReturnInstruction"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.ReturnInstruction(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.ShiftLeftInstruction"/> instructions.
+		/// Visitation function for <see cref="ShiftLeftInstruction"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.ShiftLeftInstruction(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.ShiftRightInstruction"/> instructions.
+		/// Visitation function for <see cref="ShiftRightInstruction"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.ShiftRightInstruction(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.SignExtendedMoveInstruction"/> instructions.
+		/// Visitation function for <see cref="SignExtendedMoveInstruction"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.SignExtendedMoveInstruction(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.StoreInstruction"/> instructions.
+		/// Visitation function for <see cref="StoreInstruction"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.StoreInstruction(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.DivUInstruction"/> instructions.
+		/// Visitation function for <see cref="DivUInstruction"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public void DivUInstruction(Context context)
-		{
-		}
-
-		public void MulSInstruction(Context context)
-		{
-		}
-
-		public void MulFInstruction(Context context)
-		{
-		}
-
-		public void MulUInstruction(Context context)
-		{
-		}
-
-		public void SubFInstruction(Context context)
-		{
-		}
-
-		public void SubSInstruction(Context context)
-		{
-		}
-
-		public void SubUInstruction(Context context)
-		{
-		}
-
-		public void RemFInstruction(Context context)
-		{
-		}
-
-		public void RemSInstruction(Context context)
-		{
-		}
-
-		public void RemUInstruction(Context context)
-		{
-		}
-
-		public void SwitchInstruction(Context context)
-		{
-		}
-
-		public void BreakInstruction(Context context)
-		{
-		}
+		void IR.IIRVisitor.DivUInstruction(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.ZeroExtendedMoveInstruction"/> instructions.
+		/// Visitation function for <see cref="MulSInstruction"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public void ZeroExtendedMoveInstruction(Context context)
-		{
-		}
+		void IR.IIRVisitor.MulSInstruction(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.NopInstruction"/> instructions.
+		/// Visitation function for <see cref="MulFInstruction"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public void NopInstruction(Context context)
-		{
-		}
+		void IR.IIRVisitor.MulFInstruction(Context context) { }
 
-        public void ThrowInstruction(Context context)
-        {
-        }
+		/// <summary>
+		/// Visitation function for <see cref="MulUInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IR.IIRVisitor.MulUInstruction(Context context) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="SubFInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IR.IIRVisitor.SubFInstruction(Context context) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="SubSInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IR.IIRVisitor.SubSInstruction(Context context) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="SubUInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IR.IIRVisitor.SubUInstruction(Context context) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="RemFInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IR.IIRVisitor.RemFInstruction(Context context) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="RemSInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IR.IIRVisitor.RemSInstruction(Context context) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="RemUInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IR.IIRVisitor.RemUInstruction(Context context) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="SwitchInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IR.IIRVisitor.SwitchInstruction(Context context) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="BreakInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IR.IIRVisitor.BreakInstruction(Context context) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="ZeroExtendedMoveInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IR.IIRVisitor.ZeroExtendedMoveInstruction(Context context) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="NopInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IR.IIRVisitor.NopInstruction(Context context) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="ThrowInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IR.IIRVisitor.ThrowInstruction(Context context) { }
+
+		/// <summary>
+		/// Adds the S instruction.
+		/// </summary>
+		/// <param name="ctx">The CTX.</param>
+		void IR.IIRVisitor.AddSInstruction(Context ctx) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="AddUInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IR.IIRVisitor.AddUInstruction(Context context) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="AddFInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IR.IIRVisitor.AddFInstruction(Context context) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="DivFInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IR.IIRVisitor.DivFInstruction(Context context) { }
+
+		/// <summary>
+		/// Visitation function for <see cref="DivSInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IR.IIRVisitor.DivSInstruction(Context context) { }
 
 		#endregion // IIRVisitor - Unused
 
