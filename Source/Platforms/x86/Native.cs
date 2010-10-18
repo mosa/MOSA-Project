@@ -294,6 +294,15 @@ namespace Mosa.Platforms.x86
         [Intrinsic(typeof(Architecture), typeof(Intrinsic.RestoreContext))]
         public static void RestoreContext() { ThrowPlatformNotSupported(); }
 
+        [Intrinsic(typeof(Architecture), typeof(Intrinsic.Pop))]
+        public static uint Pop() { ThrowPlatformNotSupported(); return 0; }
+
+        [Intrinsic(typeof(Architecture), typeof(Intrinsic.Push))]
+        public static void Push(uint val) { ThrowPlatformNotSupported(); }
+
+        [Intrinsic(typeof(Architecture), typeof(Intrinsic.GetEip))]
+        public static uint GetEip(uint val) { ThrowPlatformNotSupported(); return 0;  }
+
 		#endregion
 
 		/// <summary>

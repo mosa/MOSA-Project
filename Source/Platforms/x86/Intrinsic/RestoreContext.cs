@@ -35,13 +35,15 @@ namespace Mosa.Platforms.x86.Intrinsic
         public void ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem)
         {
             SigType u4 = new SigType(Runtime.Metadata.CilElementType.U4);
-            context.SetInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(u4, GeneralPurposeRegister.EAX), new MemoryOperand(u4, GeneralPurposeRegister.ESP, new IntPtr(4)));
-            context.SetInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(u4, GeneralPurposeRegister.EDX), new MemoryOperand(u4, GeneralPurposeRegister.EAX, new IntPtr(32)));
-            context.SetInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(u4, GeneralPurposeRegister.EBX), new MemoryOperand(u4, GeneralPurposeRegister.EAX, new IntPtr(4)));
-            context.SetInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(u4, GeneralPurposeRegister.EDI), new MemoryOperand(u4, GeneralPurposeRegister.EAX, new IntPtr(28)));
-            context.SetInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(u4, GeneralPurposeRegister.ESI), new MemoryOperand(u4, GeneralPurposeRegister.EAX, new IntPtr(24)));
-            context.SetInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(u4, GeneralPurposeRegister.ESP), new MemoryOperand(u4, GeneralPurposeRegister.EAX, new IntPtr(20)));
-            context.SetInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(u4, GeneralPurposeRegister.EBP), new MemoryOperand(u4, GeneralPurposeRegister.EAX, new IntPtr(16)));
+            context.SetInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(u4, GeneralPurposeRegister.EAX), new MemoryOperand(u4, GeneralPurposeRegister.ESP, new IntPtr(24)));
+            context.AppendInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(u4, GeneralPurposeRegister.EDX), new MemoryOperand(u4, GeneralPurposeRegister.EAX, new IntPtr(28)));
+            context.AppendInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(u4, GeneralPurposeRegister.EBX), new MemoryOperand(u4, GeneralPurposeRegister.EAX, new IntPtr(4)));
+            context.AppendInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(u4, GeneralPurposeRegister.EDI), new MemoryOperand(u4, GeneralPurposeRegister.EAX, new IntPtr(20)));
+            context.AppendInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(u4, GeneralPurposeRegister.ESI), new MemoryOperand(u4, GeneralPurposeRegister.EAX, new IntPtr(16)));
+            //context.AppendInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(u4, GeneralPurposeRegister.ESP), new MemoryOperand(u4, GeneralPurposeRegister.EAX, new IntPtr(20)));
+            context.AppendInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(u4, GeneralPurposeRegister.EBP), new MemoryOperand(u4, GeneralPurposeRegister.EAX, new IntPtr(24)));
+            context.AppendInstruction(CPUx86.Instruction.JmpInstruction);
+            context.SetOperand(0, new RegisterOperand(u4, GeneralPurposeRegister.EDX));
         }
 
         #endregion // Methods

@@ -7,22 +7,12 @@ namespace Mosa.Platforms.x86
 {
     public static class ExceptionEngine
     {
-        public static bool compiled = false;
-        public static void ThrowException(uint eax, uint ecx, uint edx, uint ebx, uint esi, uint edi, uint ebp, Exception exception, uint eip, uint esp)
+        public static void ThrowException(uint eax, uint ebx, uint ecx, uint edx, uint esi, uint edi, uint ebp, Exception exception, uint eip, uint esp)
         {
-            Mosa.Platforms.x86.RegisterContext registerContext = new RegisterContext ();
-            registerContext.Esp = esp + 8;
-            registerContext.Eip = eip;
-            registerContext.Ebp = ebp;
-            registerContext.Edi = edi;
-            registerContext.Esi = esi;
-            registerContext.Ebx = ebx;
-            registerContext.Edx = edx;
-            registerContext.Ecx = ecx;
-            registerContext.Eax = eax;
-
-            registerContext.Eip -= 1;
-
+            eip = Native.GetEip(Native.Pop()); // Fixme: This value has to be recomputed each time the method is changed!
+            Native.Push(0x00);
+            RegisterContext registerContext = new RegisterContext(eax, ebx, ecx, edx, esi, edi, ebp, eip, esp + 8);
+            //registerContext.Eip -= 1;
             RestoreContext(registerContext);
         }
 

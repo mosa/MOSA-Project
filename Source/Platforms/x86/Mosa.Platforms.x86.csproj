@@ -60,6 +60,8 @@
     <DebugType>none</DebugType>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Gallio, Version=3.2.0.0, Culture=neutral, PublicKeyToken=eb9cfa67ee6ab36e, processorArchitecture=MSIL" />
+    <Reference Include="MbUnit, Version=3.2.0.0, Culture=neutral, PublicKeyToken=eb9cfa67ee6ab36e, processorArchitecture=MSIL" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
@@ -83,6 +85,7 @@
     <Compile Include="CPUx86\FarJmpInstruction.cs" />
     <Compile Include="CPUx86\SseRoundInstruction.cs" />
     <Compile Include="ExceptionEngine.cs" />
+    <Compile Include="Intrinsic\GetEip.cs" />
     <Compile Include="Intrinsic\Cli.cs" />
     <Compile Include="Intrinsic\GetControlRegisterBase.cs" />
     <Compile Include="Intrinsic\GetCR0.cs" />
@@ -90,6 +93,8 @@
     <Compile Include="Intrinsic\GetCR3.cs" />
     <Compile Include="Intrinsic\GetCR4.cs" />
     <Compile Include="Intrinsic\JumpGlobalInterruptHandler.cs" />
+    <Compile Include="Intrinsic\Pop.cs" />
+    <Compile Include="Intrinsic\Push.cs" />
     <Compile Include="Intrinsic\RestoreContext.cs" />
     <Compile Include="Intrinsic\SetControlRegisterBase.cs" />
     <Compile Include="Intrinsic\SetCR0.cs" />

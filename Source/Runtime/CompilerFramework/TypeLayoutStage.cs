@@ -114,6 +114,8 @@ namespace Mosa.Runtime.CompilerFramework
 						CreateSequentialLayout(type);
 					}
 
+                    if (type.ToString().Contains("RegisterContext"))
+                        System.Console.WriteLine();
 					BuildMethodTable(type);
 					BuildTypeInterfaceSlots(type);
 					BuildTypeInterfaceBitmap(type);
@@ -321,7 +323,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Builds the method table.
 		/// </summary>
 		/// <param name="type">The type.</param>
-		private void BuildMethodTable(RuntimeType type)
+		public void BuildMethodTable(RuntimeType type)
 		{
 			IList<RuntimeMethod> methodTable = CreateMethodTable(type);
 
@@ -509,7 +511,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Performs a sequential layout of the type.
 		/// </summary>
 		/// <param name="type">The type.</param>
-		private void CreateSequentialLayout(RuntimeType type)
+		public void CreateSequentialLayout(RuntimeType type)
 		{
 			Debug.Assert(type != null, @"No type given.");
 

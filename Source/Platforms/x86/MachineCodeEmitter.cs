@@ -750,6 +750,8 @@ namespace Mosa.Platforms.x86
 				if (rop1 != null)
 					modRM |= (byte)(rop1.Register.RegisterCode << 3);
 				displacement = mop2;
+                if (mop2.Base.RegisterCode == 4)
+                    sib = 0xA4;
 			}
 			else if (mop2 != null)
 			{
