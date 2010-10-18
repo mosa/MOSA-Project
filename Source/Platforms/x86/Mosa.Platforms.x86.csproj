@@ -93,8 +93,6 @@
     <Compile Include="Intrinsic\GetCR3.cs" />
     <Compile Include="Intrinsic\GetCR4.cs" />
     <Compile Include="Intrinsic\JumpGlobalInterruptHandler.cs" />
-    <Compile Include="Intrinsic\Pop.cs" />
-    <Compile Include="Intrinsic\Push.cs" />
     <Compile Include="Intrinsic\RestoreContext.cs" />
     <Compile Include="Intrinsic\SetControlRegisterBase.cs" />
     <Compile Include="Intrinsic\SetCR0.cs" />

@@ -1,10 +1,10 @@
 ﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
+ * (c) 2010 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
+ *  Simon Wollwage (rootnode) <rootnode@mosa-project.org>
  */
 
 using System;
@@ -36,10 +36,13 @@ namespace Mosa.Platforms.x86.Intrinsic
         {
             Operand result = context.Result;
             SigType u4 = new SigType(CilElementType.U4);
-            context.SetInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(u4, GeneralPurposeRegister.EAX), context.Operand1);
-            context.AppendInstruction(CPUx86.Instruction.AddInstruction, new RegisterOperand(u4, GeneralPurposeRegister.EAX), new RegisterOperand(u4, GeneralPurposeRegister.ESP));
-            context.AppendInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(u4, GeneralPurposeRegister.EAX), new MemoryOperand(u4, GeneralPurposeRegister.EAX, new IntPtr(0)));
-            context.AppendInstruction(CPUx86.Instruction.MovInstruction, result, new RegisterOperand(u4, GeneralPurposeRegister.EAX));
+            RegisterOperand eax = new RegisterOperand(u4, GeneralPurposeRegister.EAX);
+
+            context.SetInstruction(CPUx86.Instruction.PopInstruction, eax);
+            context.AppendInstruction(CPUx86.Instruction.AddInstruction, eax, new RegisterOperand(u4, GeneralPurposeRegister.ESP));
+            context.AppendInstruction(CPUx86.Instruction.MovInstruction, eax, new MemoryOperand(u4, GeneralPurposeRegister.EAX, new IntPtr(0)));
+            context.AppendInstruction(CPUx86.Instruction.MovInstruction, result, eax);
+            context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, eax);
         }
 
         #endregion // Methods

@@ -107,6 +107,7 @@ namespace Mosa.Platforms.x86
 			RegisterOperand esp = new RegisterOperand(I, GeneralPurposeRegister.ESP);
 			int stackSize = (int)ctx.Other;
 
+            // Pop callee's EIP that has been used for instruction handling
 			ctx.SetInstruction(CPUx86.Instruction.PopInstruction, ebx);
 
 			if (MethodCompiler.Method.Signature.ReturnType.Type == CilElementType.I8
@@ -517,6 +518,7 @@ namespace Mosa.Platforms.x86
 				ctx.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new RegisterOperand(I, GeneralPurposeRegister.EDX));
 			}
 
+            // Save callee's EIP to the stack for exception handling
 			ctx.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new ConstantOperand(I, (-stackSize) + 0x0C));
 
 			//ctx.AppendInstruction(CPUx86.Instruction.BreakInstruction);
@@ -907,12 +909,14 @@ namespace Mosa.Platforms.x86
 
 			RegisterOperand esp = new RegisterOperand(u4, GeneralPurposeRegister.ESP);
 			RegisterOperand eax = new RegisterOperand(u4, GeneralPurposeRegister.EAX);
-			/* For debugging */
-			context.SetInstruction(CPUx86.Instruction.BreakInstruction);
-			/* For debugging */
-			context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new RegisterOperand(u4, GeneralPurposeRegister.ESP));
+
+            // Save current stack
+            context.SetInstruction(CPUx86.Instruction.PushInstruction, null, new RegisterOperand(u4, GeneralPurposeRegister.ESP));
+            // Save point of call
 			context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, pointOfThrowOperand);
+            // Pass thrown exception
 			context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, exceptionObjectOperand);
+            // Save registers
 			context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new RegisterOperand(u4, GeneralPurposeRegister.EBP));
 			context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new RegisterOperand(u4, GeneralPurposeRegister.EDI));
 			context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new RegisterOperand(u4, GeneralPurposeRegister.ESI));
@@ -921,6 +925,7 @@ namespace Mosa.Platforms.x86
 			context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new RegisterOperand(u4, GeneralPurposeRegister.ECX));
 			context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new RegisterOperand(u4, GeneralPurposeRegister.EAX));
 
+            // Pass them to the exception handling routine as parameters
 			context.AppendInstruction(CPUx86.Instruction.SubInstruction, esp, new ConstantOperand(esp.Type, 40));
 			context.AppendInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(u4, GeneralPurposeRegister.EDX), esp);
 
@@ -930,16 +935,16 @@ namespace Mosa.Platforms.x86
 				context.AppendInstruction(CPUx86.Instruction.MovInstruction, new MemoryOperand(u4, GeneralPurposeRegister.EDX, new IntPtr(i * 4)), eax);
 			}
 
+            // Call exception handling
 			context.AppendInstruction(CPUx86.Instruction.CallInstruction, null, method);
 
+            // Compile exception handling if neccessary
 			if (!exceptionHandlingCompiled)
 			{
 				this.MethodCompiler.Scheduler.ScheduleTypeForCompilation(typeSystem.GetType(@"Mosa.Platforms.x86.RegisterContext, Mosa.Platforms.x86"));
 				this.MethodCompiler.Scheduler.ScheduleTypeForCompilation(typeSystem.GetType(@"Mosa.Platforms.x86.ExceptionEngine, Mosa.Platforms.x86"));
 				(this.typeLayout as TypeLayoutStage).CreateSequentialLayout(typeSystem.GetType(@"Mosa.Platforms.x86.RegisterContext, Mosa.Platforms.x86"));
 				(this.typeLayout as TypeLayoutStage).CreateSequentialLayout(typeSystem.GetType(@"Mosa.Platforms.x86.ExceptionEngine, Mosa.Platforms.x86"));
-				//this.MethodCompiler.Scheduler.ScheduleMethodForCompilation(typeSystem.GetType(@"Mosa.Platforms.x86.ExceptionEngine, Mosa.Platforms.x86").FindMethod(@"ThrowException"));
-				//this.MethodCompiler.Scheduler.ScheduleMethodForCompilation(typeSystem.GetType(@"Mosa.Platforms.x86.ExceptionEngine, Mosa.Platforms.x86").FindMethod(@"RestoreContext"));
 				(this.typeLayout as TypeLayoutStage).BuildMethodTable(typeSystem.GetType(@"Mosa.Platforms.x86.RegisterContext, Mosa.Platforms.x86"));
 				(this.typeLayout as TypeLayoutStage).BuildMethodTable(typeSystem.GetType(@"Mosa.Platforms.x86.ExceptionEngine, Mosa.Platforms.x86"));
 				exceptionHandlingCompiled = true;
