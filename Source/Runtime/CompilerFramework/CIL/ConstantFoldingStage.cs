@@ -42,41 +42,41 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Folds multiplication with 2 constants
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Mul(Context ctx)
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Mul(Context context)
 		{
-			if (ctx.Operand1 is ConstantOperand && ctx.Operand2 is ConstantOperand)
+			if (context.Operand1 is ConstantOperand && context.Operand2 is ConstantOperand)
 			{
 				int result = 0;
 				float fresult = 0.0f; ;
 				double dresult = 0.0;
-				switch (ctx.Result.Type.Type)
+				switch (context.Result.Type.Type)
 				{
 					case Mosa.Runtime.Metadata.CilElementType.Char:
 						goto case Mosa.Runtime.Metadata.CilElementType.U2;
 					case Mosa.Runtime.Metadata.CilElementType.U1:
-						result = ((byte)(ctx.Operand1 as ConstantOperand).Value) * ((byte)(ctx.Operand2 as ConstantOperand).Value);
+						result = ((byte)(context.Operand1 as ConstantOperand).Value) * ((byte)(context.Operand2 as ConstantOperand).Value);
 						break;
 					case Mosa.Runtime.Metadata.CilElementType.U2:
-						result = ((ushort)(ctx.Operand1 as ConstantOperand).Value) * ((ushort)(ctx.Operand2 as ConstantOperand).Value);
+						result = ((ushort)(context.Operand1 as ConstantOperand).Value) * ((ushort)(context.Operand2 as ConstantOperand).Value);
 						break;
 					case Mosa.Runtime.Metadata.CilElementType.U4:
-						result = (int)(((uint)(ctx.Operand1 as ConstantOperand).Value) * ((uint)(ctx.Operand2 as ConstantOperand).Value));
+						result = (int)(((uint)(context.Operand1 as ConstantOperand).Value) * ((uint)(context.Operand2 as ConstantOperand).Value));
 						break;
 					case Mosa.Runtime.Metadata.CilElementType.I1:
-						result = ((sbyte)(ctx.Operand1 as ConstantOperand).Value) * ((sbyte)(ctx.Operand2 as ConstantOperand).Value);
+						result = ((sbyte)(context.Operand1 as ConstantOperand).Value) * ((sbyte)(context.Operand2 as ConstantOperand).Value);
 						break;
 					case Mosa.Runtime.Metadata.CilElementType.I2:
-						result = ((short)(ctx.Operand1 as ConstantOperand).Value) * ((short)(ctx.Operand2 as ConstantOperand).Value);
+						result = ((short)(context.Operand1 as ConstantOperand).Value) * ((short)(context.Operand2 as ConstantOperand).Value);
 						break;
 					case Mosa.Runtime.Metadata.CilElementType.I4:
-						result = ((int)(ctx.Operand1 as ConstantOperand).Value) * ((int)(ctx.Operand2 as ConstantOperand).Value);
+						result = ((int)(context.Operand1 as ConstantOperand).Value) * ((int)(context.Operand2 as ConstantOperand).Value);
 						break;
 					case Mosa.Runtime.Metadata.CilElementType.R4:
-						fresult = ((float)(ctx.Operand1 as ConstantOperand).Value) * ((float)(ctx.Operand2 as ConstantOperand).Value);
+						fresult = ((float)(context.Operand1 as ConstantOperand).Value) * ((float)(context.Operand2 as ConstantOperand).Value);
 						break;
 					case Mosa.Runtime.Metadata.CilElementType.R8:
-						dresult = ((double)(ctx.Operand1 as ConstantOperand).Value) * ((double)(ctx.Operand2 as ConstantOperand).Value);
+						dresult = ((double)(context.Operand1 as ConstantOperand).Value) * ((double)(context.Operand2 as ConstantOperand).Value);
 						break;
 					case Mosa.Runtime.Metadata.CilElementType.I:
 						goto case Mosa.Runtime.Metadata.CilElementType.I4;
@@ -85,53 +85,53 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 					default:
 						goto case Mosa.Runtime.Metadata.CilElementType.I4;
 				}
-				if (ctx.Result.Type.Type == Mosa.Runtime.Metadata.CilElementType.R4)
-					ctx.SetInstruction(IR.Instruction.MoveInstruction, ctx.Result, new ConstantOperand(ctx.Result.Type, fresult));
-				else if (ctx.Result.Type.Type == Mosa.Runtime.Metadata.CilElementType.R8)
-					ctx.SetInstruction(IR.Instruction.MoveInstruction, ctx.Result, new ConstantOperand(ctx.Result.Type, dresult));
+				if (context.Result.Type.Type == Mosa.Runtime.Metadata.CilElementType.R4)
+					context.SetInstruction(IR.Instruction.MoveInstruction, context.Result, new ConstantOperand(context.Result.Type, fresult));
+				else if (context.Result.Type.Type == Mosa.Runtime.Metadata.CilElementType.R8)
+					context.SetInstruction(IR.Instruction.MoveInstruction, context.Result, new ConstantOperand(context.Result.Type, dresult));
 				else
-					ctx.SetInstruction(IR.Instruction.MoveInstruction, ctx.Result, new ConstantOperand(ctx.Result.Type, result));
+					context.SetInstruction(IR.Instruction.MoveInstruction, context.Result, new ConstantOperand(context.Result.Type, result));
 			}
 		}
 
 		/// <summary>
 		/// Folds divisions with 2 constants
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Div(Context ctx)
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Div(Context context)
 		{
-			if (ctx.Operand1 is ConstantOperand && ctx.Operand2 is ConstantOperand)
+			if (context.Operand1 is ConstantOperand && context.Operand2 is ConstantOperand)
 			{
 				int result = 0;
 				float fresult = 0.0f; ;
 				double dresult = 0.0;
-				switch (ctx.Result.Type.Type)
+				switch (context.Result.Type.Type)
 				{
 					case Mosa.Runtime.Metadata.CilElementType.Char:
 						goto case Mosa.Runtime.Metadata.CilElementType.U2;
 					case Mosa.Runtime.Metadata.CilElementType.U1:
-						result = ((byte)(ctx.Operand1 as ConstantOperand).Value) / ((byte)(ctx.Operand2 as ConstantOperand).Value);
+						result = ((byte)(context.Operand1 as ConstantOperand).Value) / ((byte)(context.Operand2 as ConstantOperand).Value);
 						break;
 					case Mosa.Runtime.Metadata.CilElementType.U2:
-						result = ((ushort)(ctx.Operand1 as ConstantOperand).Value) / ((ushort)(ctx.Operand2 as ConstantOperand).Value);
+						result = ((ushort)(context.Operand1 as ConstantOperand).Value) / ((ushort)(context.Operand2 as ConstantOperand).Value);
 						break;
 					case Mosa.Runtime.Metadata.CilElementType.U4:
-						result = (int)(((uint)(ctx.Operand1 as ConstantOperand).Value) / ((uint)(ctx.Operand2 as ConstantOperand).Value));
+						result = (int)(((uint)(context.Operand1 as ConstantOperand).Value) / ((uint)(context.Operand2 as ConstantOperand).Value));
 						break;
 					case Mosa.Runtime.Metadata.CilElementType.I1:
-						result = ((sbyte)(ctx.Operand1 as ConstantOperand).Value) / ((sbyte)(ctx.Operand2 as ConstantOperand).Value);
+						result = ((sbyte)(context.Operand1 as ConstantOperand).Value) / ((sbyte)(context.Operand2 as ConstantOperand).Value);
 						break;
 					case Mosa.Runtime.Metadata.CilElementType.I2:
-						result = ((short)(ctx.Operand1 as ConstantOperand).Value) / ((short)(ctx.Operand2 as ConstantOperand).Value);
+						result = ((short)(context.Operand1 as ConstantOperand).Value) / ((short)(context.Operand2 as ConstantOperand).Value);
 						break;
 					case Mosa.Runtime.Metadata.CilElementType.I4:
-						result = ((int)(ctx.Operand1 as ConstantOperand).Value) / ((int)(ctx.Operand2 as ConstantOperand).Value);
+						result = ((int)(context.Operand1 as ConstantOperand).Value) / ((int)(context.Operand2 as ConstantOperand).Value);
 						break;
 					case Mosa.Runtime.Metadata.CilElementType.R4:
-						fresult = ((float)(ctx.Operand1 as ConstantOperand).Value) / ((float)(ctx.Operand2 as ConstantOperand).Value);
+						fresult = ((float)(context.Operand1 as ConstantOperand).Value) / ((float)(context.Operand2 as ConstantOperand).Value);
 						break;
 					case Mosa.Runtime.Metadata.CilElementType.R8:
-						dresult = ((double)(ctx.Operand1 as ConstantOperand).Value) / ((double)(ctx.Operand2 as ConstantOperand).Value);
+						dresult = ((double)(context.Operand1 as ConstantOperand).Value) / ((double)(context.Operand2 as ConstantOperand).Value);
 						break;
 					case Mosa.Runtime.Metadata.CilElementType.I:
 						goto case Mosa.Runtime.Metadata.CilElementType.I4;
@@ -140,53 +140,53 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 					default:
 						goto case Mosa.Runtime.Metadata.CilElementType.I4;
 				}
-				if (ctx.Result.Type.Type == Mosa.Runtime.Metadata.CilElementType.R4)
-					ctx.SetInstruction(IR.Instruction.MoveInstruction, ctx.Result, new ConstantOperand(ctx.Result.Type, fresult));
-				else if (ctx.Result.Type.Type == Mosa.Runtime.Metadata.CilElementType.R8)
-					ctx.SetInstruction(IR.Instruction.MoveInstruction, ctx.Result, new ConstantOperand(ctx.Result.Type, dresult));
+				if (context.Result.Type.Type == Mosa.Runtime.Metadata.CilElementType.R4)
+					context.SetInstruction(IR.Instruction.MoveInstruction, context.Result, new ConstantOperand(context.Result.Type, fresult));
+				else if (context.Result.Type.Type == Mosa.Runtime.Metadata.CilElementType.R8)
+					context.SetInstruction(IR.Instruction.MoveInstruction, context.Result, new ConstantOperand(context.Result.Type, dresult));
 				else
-					ctx.SetInstruction(IR.Instruction.MoveInstruction, ctx.Result, new ConstantOperand(ctx.Result.Type, result));
+					context.SetInstruction(IR.Instruction.MoveInstruction, context.Result, new ConstantOperand(context.Result.Type, result));
 			}
 		}
 
 		/// <summary>
 		/// Folds the remainder of 2 constants
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Rem(Context ctx)
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Rem(Context context)
 		{
-			if (ctx.Operand1 is ConstantOperand && ctx.Operand2 is ConstantOperand)
+			if (context.Operand1 is ConstantOperand && context.Operand2 is ConstantOperand)
 			{
 				int result = 0;
 				float fresult = 0.0f; ;
 				double dresult = 0.0;
-				switch (ctx.Result.Type.Type)
+				switch (context.Result.Type.Type)
 				{
 					case Mosa.Runtime.Metadata.CilElementType.Char:
 						goto case Mosa.Runtime.Metadata.CilElementType.U2;
 					case Mosa.Runtime.Metadata.CilElementType.U1:
-						result = ((byte)(ctx.Operand1 as ConstantOperand).Value) % ((byte)(ctx.Operand2 as ConstantOperand).Value);
+						result = ((byte)(context.Operand1 as ConstantOperand).Value) % ((byte)(context.Operand2 as ConstantOperand).Value);
 						break;
 					case Mosa.Runtime.Metadata.CilElementType.U2:
-						result = ((ushort)(ctx.Operand1 as ConstantOperand).Value) % ((ushort)(ctx.Operand2 as ConstantOperand).Value);
+						result = ((ushort)(context.Operand1 as ConstantOperand).Value) % ((ushort)(context.Operand2 as ConstantOperand).Value);
 						break;
 					case Mosa.Runtime.Metadata.CilElementType.U4:
-						result = (int)(((uint)(ctx.Operand1 as ConstantOperand).Value) % ((uint)(ctx.Operand2 as ConstantOperand).Value));
+						result = (int)(((uint)(context.Operand1 as ConstantOperand).Value) % ((uint)(context.Operand2 as ConstantOperand).Value));
 						break;
 					case Mosa.Runtime.Metadata.CilElementType.I1:
-						result = ((sbyte)(ctx.Operand1 as ConstantOperand).Value) % ((sbyte)(ctx.Operand2 as ConstantOperand).Value);
+						result = ((sbyte)(context.Operand1 as ConstantOperand).Value) % ((sbyte)(context.Operand2 as ConstantOperand).Value);
 						break;
 					case Mosa.Runtime.Metadata.CilElementType.I2:
-						result = ((short)(ctx.Operand1 as ConstantOperand).Value) % ((short)(ctx.Operand2 as ConstantOperand).Value);
+						result = ((short)(context.Operand1 as ConstantOperand).Value) % ((short)(context.Operand2 as ConstantOperand).Value);
 						break;
 					case Mosa.Runtime.Metadata.CilElementType.I4:
-						result = ((int)(ctx.Operand1 as ConstantOperand).Value) % ((int)(ctx.Operand2 as ConstantOperand).Value);
+						result = ((int)(context.Operand1 as ConstantOperand).Value) % ((int)(context.Operand2 as ConstantOperand).Value);
 						break;
 					case Mosa.Runtime.Metadata.CilElementType.R4:
-						fresult = ((float)(ctx.Operand1 as ConstantOperand).Value) % ((float)(ctx.Operand2 as ConstantOperand).Value);
+						fresult = ((float)(context.Operand1 as ConstantOperand).Value) % ((float)(context.Operand2 as ConstantOperand).Value);
 						break;
 					case Mosa.Runtime.Metadata.CilElementType.R8:
-						dresult = ((double)(ctx.Operand1 as ConstantOperand).Value) % ((double)(ctx.Operand2 as ConstantOperand).Value);
+						dresult = ((double)(context.Operand1 as ConstantOperand).Value) % ((double)(context.Operand2 as ConstantOperand).Value);
 						break;
 					case Mosa.Runtime.Metadata.CilElementType.I:
 						goto case Mosa.Runtime.Metadata.CilElementType.I4;
@@ -195,53 +195,53 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 					default:
 						goto case Mosa.Runtime.Metadata.CilElementType.I4;
 				}
-				if (ctx.Result.Type.Type == Mosa.Runtime.Metadata.CilElementType.R4)
-					ctx.SetInstruction(IR.Instruction.MoveInstruction, ctx.Result, new ConstantOperand(ctx.Result.Type, fresult));
-				else if (ctx.Result.Type.Type == Mosa.Runtime.Metadata.CilElementType.R8)
-					ctx.SetInstruction(IR.Instruction.MoveInstruction, ctx.Result, new ConstantOperand(ctx.Result.Type, dresult));
+				if (context.Result.Type.Type == Mosa.Runtime.Metadata.CilElementType.R4)
+					context.SetInstruction(IR.Instruction.MoveInstruction, context.Result, new ConstantOperand(context.Result.Type, fresult));
+				else if (context.Result.Type.Type == Mosa.Runtime.Metadata.CilElementType.R8)
+					context.SetInstruction(IR.Instruction.MoveInstruction, context.Result, new ConstantOperand(context.Result.Type, dresult));
 				else
-					ctx.SetInstruction(IR.Instruction.MoveInstruction, ctx.Result, new ConstantOperand(ctx.Result.Type, result));
+					context.SetInstruction(IR.Instruction.MoveInstruction, context.Result, new ConstantOperand(context.Result.Type, result));
 			}
 		}
 
 		/// <summary>
 		/// Folds additions with 2 constants
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Add(Context ctx)
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Add(Context context)
 		{
-			if (ctx.Operand1 is ConstantOperand && ctx.Operand2 is ConstantOperand)
+			if (context.Operand1 is ConstantOperand && context.Operand2 is ConstantOperand)
 			{
 				int result = 0;
 				float fresult = 0.0f; ;
 				double dresult = 0.0;
-				switch (ctx.Result.Type.Type)
+				switch (context.Result.Type.Type)
 				{
 					case Mosa.Runtime.Metadata.CilElementType.Char:
 						goto case Mosa.Runtime.Metadata.CilElementType.U2;
 					case Mosa.Runtime.Metadata.CilElementType.U1:
-						result = ((byte)(ctx.Operand1 as ConstantOperand).Value) + ((byte)(ctx.Operand2 as ConstantOperand).Value);
+						result = ((byte)(context.Operand1 as ConstantOperand).Value) + ((byte)(context.Operand2 as ConstantOperand).Value);
 						break;
 					case Mosa.Runtime.Metadata.CilElementType.U2:
-						result = ((ushort)(ctx.Operand1 as ConstantOperand).Value) + ((ushort)(ctx.Operand2 as ConstantOperand).Value);
+						result = ((ushort)(context.Operand1 as ConstantOperand).Value) + ((ushort)(context.Operand2 as ConstantOperand).Value);
 						break;
 					case Mosa.Runtime.Metadata.CilElementType.U4:
-						result = (int)(((uint)(ctx.Operand1 as ConstantOperand).Value) + ((uint)(ctx.Operand2 as ConstantOperand).Value));
+						result = (int)(((uint)(context.Operand1 as ConstantOperand).Value) + ((uint)(context.Operand2 as ConstantOperand).Value));
 						break;
 					case Mosa.Runtime.Metadata.CilElementType.I1:
-						result = ((sbyte)(ctx.Operand1 as ConstantOperand).Value) + ((sbyte)(ctx.Operand2 as ConstantOperand).Value);
+						result = ((sbyte)(context.Operand1 as ConstantOperand).Value) + ((sbyte)(context.Operand2 as ConstantOperand).Value);
 						break;
 					case Mosa.Runtime.Metadata.CilElementType.I2:
-						result = ((short)(ctx.Operand1 as ConstantOperand).Value) + ((short)(ctx.Operand2 as ConstantOperand).Value);
+						result = ((short)(context.Operand1 as ConstantOperand).Value) + ((short)(context.Operand2 as ConstantOperand).Value);
 						break;
 					case Mosa.Runtime.Metadata.CilElementType.I4:
-						result = ((int)(ctx.Operand1 as ConstantOperand).Value) + ((int)(ctx.Operand2 as ConstantOperand).Value);
+						result = ((int)(context.Operand1 as ConstantOperand).Value) + ((int)(context.Operand2 as ConstantOperand).Value);
 						break;
 					case Mosa.Runtime.Metadata.CilElementType.R4:
-						fresult = ((float)(ctx.Operand1 as ConstantOperand).Value) + ((float)(ctx.Operand2 as ConstantOperand).Value);
+						fresult = ((float)(context.Operand1 as ConstantOperand).Value) + ((float)(context.Operand2 as ConstantOperand).Value);
 						break;
 					case Mosa.Runtime.Metadata.CilElementType.R8:
-						dresult = ((double)(ctx.Operand1 as ConstantOperand).Value) + ((double)(ctx.Operand2 as ConstantOperand).Value);
+						dresult = ((double)(context.Operand1 as ConstantOperand).Value) + ((double)(context.Operand2 as ConstantOperand).Value);
 						break;
 					case Mosa.Runtime.Metadata.CilElementType.I:
 						goto case Mosa.Runtime.Metadata.CilElementType.I4;
@@ -251,53 +251,53 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 						goto case Mosa.Runtime.Metadata.CilElementType.I4;
 				}
 
-				if (ctx.Result.Type.Type == Mosa.Runtime.Metadata.CilElementType.R4)
-					ctx.SetInstruction(IR.Instruction.MoveInstruction, ctx.Result, new ConstantOperand(ctx.Result.Type, fresult));
-				else if (ctx.Result.Type.Type == Mosa.Runtime.Metadata.CilElementType.R8)
-					ctx.SetInstruction(IR.Instruction.MoveInstruction, ctx.Result, new ConstantOperand(ctx.Result.Type, dresult));
+				if (context.Result.Type.Type == Mosa.Runtime.Metadata.CilElementType.R4)
+					context.SetInstruction(IR.Instruction.MoveInstruction, context.Result, new ConstantOperand(context.Result.Type, fresult));
+				else if (context.Result.Type.Type == Mosa.Runtime.Metadata.CilElementType.R8)
+					context.SetInstruction(IR.Instruction.MoveInstruction, context.Result, new ConstantOperand(context.Result.Type, dresult));
 				else
-					ctx.SetInstruction(IR.Instruction.MoveInstruction, ctx.Result, new ConstantOperand(ctx.Result.Type, result));
+					context.SetInstruction(IR.Instruction.MoveInstruction, context.Result, new ConstantOperand(context.Result.Type, result));
 			}
 		}
 
 		/// <summary>
 		/// Folds substractions with 2 constants
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Sub(Context ctx)
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Sub(Context context)
 		{
-			if (ctx.Operand1 is ConstantOperand && ctx.Operand2 is ConstantOperand)
+			if (context.Operand1 is ConstantOperand && context.Operand2 is ConstantOperand)
 			{
 				int result = 0;
 				float fresult = 0.0f; ;
 				double dresult = 0.0;
-				switch (ctx.Result.Type.Type)
+				switch (context.Result.Type.Type)
 				{
 					case Mosa.Runtime.Metadata.CilElementType.Char:
 						goto case Mosa.Runtime.Metadata.CilElementType.U2;
 					case Mosa.Runtime.Metadata.CilElementType.U1:
-						result = ((byte)(ctx.Operand1 as ConstantOperand).Value) - ((byte)(ctx.Operand2 as ConstantOperand).Value);
+						result = ((byte)(context.Operand1 as ConstantOperand).Value) - ((byte)(context.Operand2 as ConstantOperand).Value);
 						break;
 					case Mosa.Runtime.Metadata.CilElementType.U2:
-						result = ((ushort)(ctx.Operand1 as ConstantOperand).Value) - ((ushort)(ctx.Operand2 as ConstantOperand).Value);
+						result = ((ushort)(context.Operand1 as ConstantOperand).Value) - ((ushort)(context.Operand2 as ConstantOperand).Value);
 						break;
 					case Mosa.Runtime.Metadata.CilElementType.U4:
-						result = (int)(((uint)(ctx.Operand1 as ConstantOperand).Value) - ((uint)(ctx.Operand2 as ConstantOperand).Value));
+						result = (int)(((uint)(context.Operand1 as ConstantOperand).Value) - ((uint)(context.Operand2 as ConstantOperand).Value));
 						break;
 					case Mosa.Runtime.Metadata.CilElementType.I1:
-						result = ((sbyte)(ctx.Operand1 as ConstantOperand).Value) - ((sbyte)(ctx.Operand2 as ConstantOperand).Value);
+						result = ((sbyte)(context.Operand1 as ConstantOperand).Value) - ((sbyte)(context.Operand2 as ConstantOperand).Value);
 						break;
 					case Mosa.Runtime.Metadata.CilElementType.I2:
-						result = ((short)(ctx.Operand1 as ConstantOperand).Value) - ((short)(ctx.Operand2 as ConstantOperand).Value);
+						result = ((short)(context.Operand1 as ConstantOperand).Value) - ((short)(context.Operand2 as ConstantOperand).Value);
 						break;
 					case Mosa.Runtime.Metadata.CilElementType.I4:
-						result = ((int)(ctx.Operand1 as ConstantOperand).Value) - ((int)(ctx.Operand2 as ConstantOperand).Value);
+						result = ((int)(context.Operand1 as ConstantOperand).Value) - ((int)(context.Operand2 as ConstantOperand).Value);
 						break;
 					case Mosa.Runtime.Metadata.CilElementType.R4:
-						fresult = ((float)(ctx.Operand1 as ConstantOperand).Value) - ((float)(ctx.Operand2 as ConstantOperand).Value);
+						fresult = ((float)(context.Operand1 as ConstantOperand).Value) - ((float)(context.Operand2 as ConstantOperand).Value);
 						break;
 					case Mosa.Runtime.Metadata.CilElementType.R8:
-						dresult = ((double)(ctx.Operand1 as ConstantOperand).Value) - ((double)(ctx.Operand2 as ConstantOperand).Value);
+						dresult = ((double)(context.Operand1 as ConstantOperand).Value) - ((double)(context.Operand2 as ConstantOperand).Value);
 						break;
 					case Mosa.Runtime.Metadata.CilElementType.I:
 						goto case Mosa.Runtime.Metadata.CilElementType.I4;
@@ -306,12 +306,12 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 					default:
 						goto case Mosa.Runtime.Metadata.CilElementType.I4;
 				}
-				if (ctx.Result.Type.Type == Mosa.Runtime.Metadata.CilElementType.R4)
-					ctx.SetInstruction(IR.Instruction.MoveInstruction, ctx.Result, new ConstantOperand(ctx.Result.Type, fresult));
-				else if (ctx.Result.Type.Type == Mosa.Runtime.Metadata.CilElementType.R8)
-					ctx.SetInstruction(IR.Instruction.MoveInstruction, ctx.Result, new ConstantOperand(ctx.Result.Type, dresult));
+				if (context.Result.Type.Type == Mosa.Runtime.Metadata.CilElementType.R4)
+					context.SetInstruction(IR.Instruction.MoveInstruction, context.Result, new ConstantOperand(context.Result.Type, fresult));
+				else if (context.Result.Type.Type == Mosa.Runtime.Metadata.CilElementType.R8)
+					context.SetInstruction(IR.Instruction.MoveInstruction, context.Result, new ConstantOperand(context.Result.Type, dresult));
 				else
-					ctx.SetInstruction(IR.Instruction.MoveInstruction, ctx.Result, new ConstantOperand(ctx.Result.Type, result));
+					context.SetInstruction(IR.Instruction.MoveInstruction, context.Result, new ConstantOperand(context.Result.Type, result));
 			}
 		}
 
@@ -320,405 +320,405 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		#region ICILVisitor - Unused
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Nop"/>.
+		/// Visitation function for Nop instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Nop(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Nop(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Break"/>.
+		/// Visitation function for Break instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Break(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Break(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Ldarg"/>.
+		/// Visitation function for Ldarg instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Ldarg(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Ldarg(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Ldarga"/>.
+		/// Visitation function for Ldarga instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Ldarga(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Ldarga(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Ldloc"/>.
+		/// Visitation function for Ldloc instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Ldloc(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Ldloc(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Ldloca"/>.
+		/// Visitation function for Ldloca instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Ldloca(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Ldloca(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Ldc"/>.
+		/// Visitation function for Ldc instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Ldc(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Ldc(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Ldobj"/>.
+		/// Visitation function for Ldobj instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Ldobj(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Ldobj(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Ldstr"/>.
+		/// Visitation function for Ldstr instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Ldstr(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Ldstr(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Ldfld"/>.
+		/// Visitation function for Ldfld instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Ldfld(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Ldfld(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Ldflda"/>.
+		/// Visitation function for Ldflda instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Ldflda(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Ldflda(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Ldsfld"/>.
+		/// Visitation function for Ldsfld instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Ldsfld(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Ldsfld(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Ldsflda"/>.
+		/// Visitation function for Ldsflda instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Ldsflda(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Ldsflda(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Ldftn"/>.
+		/// Visitation function for Ldftn instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Ldftn(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Ldftn(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Ldvirtftn"/>.
+		/// Visitation function for Ldvirtftn instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Ldvirtftn(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Ldvirtftn(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Ldtoken"/>.
+		/// Visitation function for Ldtoken instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Ldtoken(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Ldtoken(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Stloc"/>.
+		/// Visitation function for Stloc instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Stloc(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Stloc(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Starg"/>.
+		/// Visitation function for Starg instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Starg(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Starg(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Stobj"/>.
+		/// Visitation function for Stobj instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Stobj(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Stobj(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Stfld"/>.
+		/// Visitation function for Stfld instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Stfld(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Stfld(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Stsfld"/>.
+		/// Visitation function for Stsfld instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Stsfld(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Stsfld(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Dup"/>.
+		/// Visitation function for Dup instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Dup(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Dup(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Pop"/>.
+		/// Visitation function for Pop instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Pop(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Pop(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Jmp"/>.
+		/// Visitation function for Jmp instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Jmp(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Jmp(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Call"/>.
+		/// Visitation function for Call instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Call(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Call(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Calli"/>.
+		/// Visitation function for Calli instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Calli(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Calli(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Ret"/>.
+		/// Visitation function for Ret instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Ret(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Ret(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Branch"/>.
+		/// Visitation function for Branch instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Branch(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Branch(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.UnaryBranch"/>.
+		/// Visitation function for UnaryBranch instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.UnaryBranch(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.UnaryBranch(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.BinaryBranch"/>.
+		/// Visitation function for BinaryBranch instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.BinaryBranch(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.BinaryBranch(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Switch"/>.
+		/// Visitation function for Switch instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Switch(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Switch(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.BinaryLogic"/>.
+		/// Visitation function for BinaryLogic instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.BinaryLogic(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.BinaryLogic(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Shift"/>.
+		/// Visitation function for Shift instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Shift(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Shift(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Neg"/>.
+		/// Visitation function for Neg instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Neg(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Neg(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Not"/>.
+		/// Visitation function for Not instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Not(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Not(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Conversion"/>.
+		/// Visitation function for Conversion instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Conversion(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Conversion(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Callvirt"/>.
+		/// Visitation function for Callvirt instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Callvirt(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Callvirt(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Cpobj"/>.
+		/// Visitation function for Cpobj instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Cpobj(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Cpobj(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Newobj"/>.
+		/// Visitation function for Newobj instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Newobj(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Newobj(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Castclass"/>.
+		/// Visitation function for Castclass instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Castclass(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Castclass(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Isinst"/>.
+		/// Visitation function for Isinst instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Isinst(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Isinst(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Unbox"/>.
+		/// Visitation function for Unbox instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Unbox(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Unbox(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Throw"/>.
+		/// Visitation function for Throw instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Throw(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Throw(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Box"/>.
+		/// Visitation function for Box instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Box(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Box(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Newarr"/>.
+		/// Visitation function for Newarr instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Newarr(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Newarr(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Ldlen"/>.
+		/// Visitation function for Ldlen instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Ldlen(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Ldlen(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Ldelema"/>.
+		/// Visitation function for Ldelema instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Ldelema(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Ldelema(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Ldelem"/>.
+		/// Visitation function for Ldelem instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Ldelem(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Ldelem(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Stelem"/>.
+		/// Visitation function for Stelem instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Stelem(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Stelem(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.UnboxAny"/>.
+		/// Visitation function for UnboxAny instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.UnboxAny(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.UnboxAny(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Refanyval"/>.
+		/// Visitation function for Refanyval instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Refanyval(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Refanyval(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.UnaryArithmetic"/>.
+		/// Visitation function for UnaryArithmetic instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.UnaryArithmetic(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.UnaryArithmetic(Context context) { }
 
 		/// <summary>
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Mkrefany(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Mkrefany(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.ArithmeticOverflow"/>.
+		/// Visitation function for ArithmeticOverflow instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.ArithmeticOverflow(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.ArithmeticOverflow(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Endfinally"/>.
+		/// Visitation function for Endfinally instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Endfinally(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Endfinally(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Leave"/>.
+		/// Visitation function for Leave instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Leave(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Leave(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Arglist"/>.
+		/// Visitation function for Arglist instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Arglist(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Arglist(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.BinaryComparison"/>.
+		/// Visitation function for BinaryComparison instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.BinaryComparison(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.BinaryComparison(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Localalloc"/>.
+		/// Visitation function for Localalloc instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Localalloc(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Localalloc(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Endfilter"/>.
+		/// Visitation function for Endfilter instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Endfilter(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Endfilter(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.InitObj"/>.
+		/// Visitation function for InitObj instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.InitObj(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.InitObj(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Cpblk"/>.
+		/// Visitation function for Cpblk instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Cpblk(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Cpblk(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Initblk"/>.
+		/// Visitation function for Initblk instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Initblk(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Initblk(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Prefix"/>.
+		/// Visitation function for Prefix instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Prefix(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Prefix(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Rethrow"/>.
+		/// Visitation function for Rethrow instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Rethrow(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Rethrow(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Sizeof"/>.
+		/// Visitation function for Sizeof instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Sizeof(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Sizeof(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Refanytype"/>.
+		/// Visitation function for Refanytype instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Refanytype(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Refanytype(Context context) { }
 
 		#endregion // ICILVisitor - Unused
 	}

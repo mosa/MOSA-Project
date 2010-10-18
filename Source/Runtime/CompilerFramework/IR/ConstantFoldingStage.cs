@@ -10,6 +10,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+
 using Mosa.Runtime.CompilerFramework.Operands;
 
 namespace Mosa.Runtime.CompilerFramework.IR
@@ -35,33 +36,33 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <summary>
 		/// Folds logical ANDs with 2 constants
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.LogicalAndInstruction(Context ctx)
+		/// <param name="context">The context.</param>
+		void IR.IIRVisitor.LogicalAndInstruction(Context context)
 		{
-			if (ctx.Operand2 is ConstantOperand && ctx.Operand3 is ConstantOperand)
+			if (context.Operand2 is ConstantOperand && context.Operand3 is ConstantOperand)
 			{
 				int result = 0;
-				switch (ctx.Result.Type.Type)
+				switch (context.Result.Type.Type)
 				{
 					case Metadata.CilElementType.Char:
 						goto case Metadata.CilElementType.U2;
 					case Metadata.CilElementType.U1:
-						result = ((byte)(ctx.Operand2 as ConstantOperand).Value) & ((byte)(ctx.Operand3 as ConstantOperand).Value);
+						result = ((byte)(context.Operand2 as ConstantOperand).Value) & ((byte)(context.Operand3 as ConstantOperand).Value);
 						break;
 					case Metadata.CilElementType.U2:
-						result = ((ushort)(ctx.Operand2 as ConstantOperand).Value) & ((ushort)(ctx.Operand3 as ConstantOperand).Value);
+						result = ((ushort)(context.Operand2 as ConstantOperand).Value) & ((ushort)(context.Operand3 as ConstantOperand).Value);
 						break;
 					case Metadata.CilElementType.U4:
-						result = (int)(((uint)(ctx.Operand2 as ConstantOperand).Value) & ((uint)(ctx.Operand3 as ConstantOperand).Value));
+						result = (int)(((uint)(context.Operand2 as ConstantOperand).Value) & ((uint)(context.Operand3 as ConstantOperand).Value));
 						break;
 					case Mosa.Runtime.Metadata.CilElementType.I1:
-						result = ((sbyte)(ctx.Operand2 as ConstantOperand).Value) & ((sbyte)(ctx.Operand3 as ConstantOperand).Value);
+						result = ((sbyte)(context.Operand2 as ConstantOperand).Value) & ((sbyte)(context.Operand3 as ConstantOperand).Value);
 						break;
 					case Mosa.Runtime.Metadata.CilElementType.I2:
-						result = ((short)(ctx.Operand2 as ConstantOperand).Value) & ((short)(ctx.Operand3 as ConstantOperand).Value);
+						result = ((short)(context.Operand2 as ConstantOperand).Value) & ((short)(context.Operand3 as ConstantOperand).Value);
 						break;
 					case Mosa.Runtime.Metadata.CilElementType.I4:
-						result = ((int)(ctx.Operand2 as ConstantOperand).Value) & ((int)(ctx.Operand3 as ConstantOperand).Value);
+						result = ((int)(context.Operand2 as ConstantOperand).Value) & ((int)(context.Operand3 as ConstantOperand).Value);
 						break;
 					case Mosa.Runtime.Metadata.CilElementType.I:
 						goto case Mosa.Runtime.Metadata.CilElementType.I4;
@@ -70,40 +71,40 @@ namespace Mosa.Runtime.CompilerFramework.IR
 					default:
 						goto case Mosa.Runtime.Metadata.CilElementType.I4;
 				}
-				ctx.SetInstruction(IR.Instruction.MoveInstruction, ctx.Result, new ConstantOperand(ctx.Result.Type, result));
+				context.SetInstruction(IR.Instruction.MoveInstruction, context.Result, new ConstantOperand(context.Result.Type, result));
 			}
 		}
 
 		/// <summary>
 		/// Folds logical ORs with 2 constants
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.LogicalOrInstruction(Context ctx)
+		/// <param name="context">The context.</param>
+		void IR.IIRVisitor.LogicalOrInstruction(Context context)
 		{
-			if (ctx.Operand2 is ConstantOperand && ctx.Operand3 is ConstantOperand)
+			if (context.Operand2 is ConstantOperand && context.Operand3 is ConstantOperand)
 			{
 				int result = 0;
-				switch (ctx.Result.Type.Type)
+				switch (context.Result.Type.Type)
 				{
 					case Mosa.Runtime.Metadata.CilElementType.Char:
 						goto case Mosa.Runtime.Metadata.CilElementType.U2;
 					case Mosa.Runtime.Metadata.CilElementType.U1:
-						result = ((byte)(ctx.Operand2 as ConstantOperand).Value) | ((byte)(ctx.Operand3 as ConstantOperand).Value);
+						result = ((byte)(context.Operand2 as ConstantOperand).Value) | ((byte)(context.Operand3 as ConstantOperand).Value);
 						break;
 					case Mosa.Runtime.Metadata.CilElementType.U2:
-						result = ((ushort)(ctx.Operand2 as ConstantOperand).Value) | ((ushort)(ctx.Operand3 as ConstantOperand).Value);
+						result = ((ushort)(context.Operand2 as ConstantOperand).Value) | ((ushort)(context.Operand3 as ConstantOperand).Value);
 						break;
 					case Mosa.Runtime.Metadata.CilElementType.U4:
-						result = (int)(((uint)(ctx.Operand2 as ConstantOperand).Value) | ((uint)(ctx.Operand3 as ConstantOperand).Value));
+						result = (int)(((uint)(context.Operand2 as ConstantOperand).Value) | ((uint)(context.Operand3 as ConstantOperand).Value));
 						break;
 					case Mosa.Runtime.Metadata.CilElementType.I1:
-						result = (sbyte)(((uint)(sbyte)(ctx.Operand2 as ConstantOperand).Value) | ((uint)(sbyte)(ctx.Operand3 as ConstantOperand).Value));
+						result = (sbyte)(((uint)(sbyte)(context.Operand2 as ConstantOperand).Value) | ((uint)(sbyte)(context.Operand3 as ConstantOperand).Value));
 						break;
 					case Mosa.Runtime.Metadata.CilElementType.I2:
-						result = ((short)(ctx.Operand2 as ConstantOperand).Value) | ((short)(ctx.Operand3 as ConstantOperand).Value);
+						result = ((short)(context.Operand2 as ConstantOperand).Value) | ((short)(context.Operand3 as ConstantOperand).Value);
 						break;
 					case Mosa.Runtime.Metadata.CilElementType.I4:
-						result = ((int)(ctx.Operand2 as ConstantOperand).Value) | ((int)(ctx.Operand3 as ConstantOperand).Value);
+						result = ((int)(context.Operand2 as ConstantOperand).Value) | ((int)(context.Operand3 as ConstantOperand).Value);
 						break;
 					case Mosa.Runtime.Metadata.CilElementType.I:
 						goto case Mosa.Runtime.Metadata.CilElementType.I4;
@@ -112,40 +113,40 @@ namespace Mosa.Runtime.CompilerFramework.IR
 					default:
 						goto case Mosa.Runtime.Metadata.CilElementType.I4;
 				}
-				ctx.SetInstruction(IR.Instruction.MoveInstruction, ctx.Result, new ConstantOperand(ctx.Result.Type, result));
+				context.SetInstruction(IR.Instruction.MoveInstruction, context.Result, new ConstantOperand(context.Result.Type, result));
 			}
 		}
 
 		/// <summary>
 		/// Folds logical XORs with 2 constants
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.LogicalXorInstruction(Context ctx)
+		/// <param name="context">The context.</param>
+		void IR.IIRVisitor.LogicalXorInstruction(Context context)
 		{
-			if (ctx.Operand2 is ConstantOperand && ctx.Operand3 is ConstantOperand)
+			if (context.Operand2 is ConstantOperand && context.Operand3 is ConstantOperand)
 			{
 				int result = 0;
-				switch (ctx.Result.Type.Type)
+				switch (context.Result.Type.Type)
 				{
 					case Mosa.Runtime.Metadata.CilElementType.Char:
 						goto case Mosa.Runtime.Metadata.CilElementType.U2;
 					case Mosa.Runtime.Metadata.CilElementType.U1:
-						result = ((byte)(ctx.Operand2 as ConstantOperand).Value) ^ ((byte)(ctx.Operand3 as ConstantOperand).Value);
+						result = ((byte)(context.Operand2 as ConstantOperand).Value) ^ ((byte)(context.Operand3 as ConstantOperand).Value);
 						break;
 					case Mosa.Runtime.Metadata.CilElementType.U2:
-						result = ((ushort)(ctx.Operand2 as ConstantOperand).Value) ^ ((ushort)(ctx.Operand3 as ConstantOperand).Value);
+						result = ((ushort)(context.Operand2 as ConstantOperand).Value) ^ ((ushort)(context.Operand3 as ConstantOperand).Value);
 						break;
 					case Mosa.Runtime.Metadata.CilElementType.U4:
-						result = (int)(((uint)(ctx.Operand2 as ConstantOperand).Value) ^ ((uint)(ctx.Operand3 as ConstantOperand).Value));
+						result = (int)(((uint)(context.Operand2 as ConstantOperand).Value) ^ ((uint)(context.Operand3 as ConstantOperand).Value));
 						break;
 					case Mosa.Runtime.Metadata.CilElementType.I1:
-						result = ((sbyte)(ctx.Operand2 as ConstantOperand).Value) ^ ((sbyte)(ctx.Operand3 as ConstantOperand).Value);
+						result = ((sbyte)(context.Operand2 as ConstantOperand).Value) ^ ((sbyte)(context.Operand3 as ConstantOperand).Value);
 						break;
 					case Mosa.Runtime.Metadata.CilElementType.I2:
-						result = ((short)(ctx.Operand2 as ConstantOperand).Value) ^ ((short)(ctx.Operand3 as ConstantOperand).Value);
+						result = ((short)(context.Operand2 as ConstantOperand).Value) ^ ((short)(context.Operand3 as ConstantOperand).Value);
 						break;
 					case Mosa.Runtime.Metadata.CilElementType.I4:
-						result = ((int)(ctx.Operand2 as ConstantOperand).Value) ^ ((int)(ctx.Operand3 as ConstantOperand).Value);
+						result = ((int)(context.Operand2 as ConstantOperand).Value) ^ ((int)(context.Operand3 as ConstantOperand).Value);
 						break;
 					case Mosa.Runtime.Metadata.CilElementType.I:
 						goto case Mosa.Runtime.Metadata.CilElementType.I4;
@@ -154,7 +155,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 					default:
 						goto case Mosa.Runtime.Metadata.CilElementType.I4;
 				}
-				ctx.SetInstruction(IR.Instruction.MoveInstruction, ctx.Result, new ConstantOperand(ctx.Result.Type, result));
+				context.SetInstruction(IR.Instruction.MoveInstruction, context.Result, new ConstantOperand(context.Result.Type, result));
 			}
 		}
 
@@ -393,8 +394,8 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <summary>
 		/// Adds the S instruction.
 		/// </summary>
-		/// <param name="ctx">The CTX.</param>
-		void IR.IIRVisitor.AddSInstruction(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void IR.IIRVisitor.AddSInstruction(Context context) { }
 
 		/// <summary>
 		/// Visitation function for <see cref="AddUInstruction"/> instructions.

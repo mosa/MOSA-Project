@@ -115,8 +115,8 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Expands the add instruction for 64-bit operands.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		private void ExpandAdd(Context ctx)
+		/// <param name="context">The context.</param>
+		private void ExpandAdd(Context context)
 		{
 			/* This function transforms the ADD into the following sequence of x86 instructions:
 			 * 
@@ -136,23 +136,23 @@ namespace Mosa.Platforms.x86
 			RegisterOperand eaxL = new RegisterOperand(new SigType(CilElementType.U4), GeneralPurposeRegister.EAX);
 
 			Operand op1H, op1L, op2H, op2L, resH, resL;
-			SplitLongOperand(ctx.Operand1, out op1L, out op1H);
-			SplitLongOperand(ctx.Operand2, out op2L, out op2H);
-			SplitLongOperand(ctx.Result, out resL, out resH);
+			SplitLongOperand(context.Operand1, out op1L, out op1H);
+			SplitLongOperand(context.Operand2, out op2L, out op2H);
+			SplitLongOperand(context.Result, out resL, out resH);
 
-			ctx.SetInstruction(CPUx86.Instruction.MovInstruction, eaxL, op1L);
-			ctx.AppendInstruction(CPUx86.Instruction.AddInstruction, eaxL, op2L);
-			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, resL, eaxL);
-			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, eaxH, op1H);
-			ctx.AppendInstruction(CPUx86.Instruction.AdcInstruction, eaxH, op2H);
-			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, resH, eaxH);
+			context.SetInstruction(CPUx86.Instruction.MovInstruction, eaxL, op1L);
+			context.AppendInstruction(CPUx86.Instruction.AddInstruction, eaxL, op2L);
+			context.AppendInstruction(CPUx86.Instruction.MovInstruction, resL, eaxL);
+			context.AppendInstruction(CPUx86.Instruction.MovInstruction, eaxH, op1H);
+			context.AppendInstruction(CPUx86.Instruction.AdcInstruction, eaxH, op2H);
+			context.AppendInstruction(CPUx86.Instruction.MovInstruction, resH, eaxH);
 		}
 
 		/// <summary>
 		/// Expands the sub instruction for 64-bit operands.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		private void ExpandSub(Context ctx)
+		/// <param name="context">The context.</param>
+		private void ExpandSub(Context context)
 		{
 			/* This function transforms the SUB into the following sequence of x86 instructions:
 			 * 
@@ -172,45 +172,45 @@ namespace Mosa.Platforms.x86
 			RegisterOperand eaxL = new RegisterOperand(new SigType(CilElementType.U4), GeneralPurposeRegister.EAX);
 
 			Operand op1L, op1H, op2L, op2H, resL, resH;
-			SplitLongOperand(ctx.Operand1, out op1L, out op1H);
-			SplitLongOperand(ctx.Operand2, out op2L, out op2H);
-			SplitLongOperand(ctx.Result, out resL, out resH);
+			SplitLongOperand(context.Operand1, out op1L, out op1H);
+			SplitLongOperand(context.Operand2, out op2L, out op2H);
+			SplitLongOperand(context.Result, out resL, out resH);
 
-			ctx.SetInstruction(CPUx86.Instruction.MovInstruction, eaxL, op1L);
-			ctx.AppendInstruction(CPUx86.Instruction.SubInstruction, eaxL, op2L);
-			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, resL, eaxL);
-			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, eaxH, op1H);
-			ctx.AppendInstruction(CPUx86.Instruction.SbbInstruction, eaxH, op2H);
-			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, resH, eaxH);
+			context.SetInstruction(CPUx86.Instruction.MovInstruction, eaxL, op1L);
+			context.AppendInstruction(CPUx86.Instruction.SubInstruction, eaxL, op2L);
+			context.AppendInstruction(CPUx86.Instruction.MovInstruction, resL, eaxL);
+			context.AppendInstruction(CPUx86.Instruction.MovInstruction, eaxH, op1H);
+			context.AppendInstruction(CPUx86.Instruction.SbbInstruction, eaxH, op2H);
+			context.AppendInstruction(CPUx86.Instruction.MovInstruction, resH, eaxH);
 		}
 
 		/// <summary>
 		/// Expands the mul instruction for 64-bit operands.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		private void ExpandMul(Context ctx)
+		/// <param name="context">The context.</param>
+		private void ExpandMul(Context context)
 		{
-			Operand op0 = ctx.Result;
-			Operand op1 = ctx.Operand1;
-			Operand op2 = ctx.Operand2;
+			Operand op0 = context.Result;
+			Operand op1 = context.Operand1;
+			Operand op2 = context.Operand2;
 			Debug.Assert(op0 != null && op1 != null && op2 != null, @"Operands to 64 bit multiplication are not MemoryOperands.");
 
 			SigType I4 = new SigType(CilElementType.I4);
 			Operand op0H, op1H, op2H, op0L, op1L, op2L;
-			SplitLongOperand(ctx.Result, out op0L, out op0H);
-			SplitLongOperand(ctx.Operand1, out op1L, out op1H);
-			SplitLongOperand(ctx.Operand2, out op2L, out op2H);
+			SplitLongOperand(context.Result, out op0L, out op0H);
+			SplitLongOperand(context.Operand1, out op1L, out op1H);
+			SplitLongOperand(context.Operand2, out op2L, out op2H);
 
 			RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
 			RegisterOperand ebx = new RegisterOperand(I4, GeneralPurposeRegister.EBX);
 			RegisterOperand ecx = new RegisterOperand(I4, GeneralPurposeRegister.ECX);
 			RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
 
-			Context nextBlock = SplitContext(ctx, false);
-			Context[] newBlocks = CreateEmptyBlockContexts(ctx.Label, 4);
+			Context nextBlock = SplitContext(context, false);
+			Context[] newBlocks = CreateEmptyBlockContexts(context.Label, 4);
 
-			ctx.SetInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[0].BasicBlock);
-			LinkBlocks(ctx, newBlocks[0]);
+			context.SetInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[0].BasicBlock);
+			LinkBlocks(context, newBlocks[0]);
 
 			newBlocks[0].SetInstruction(CPUx86.Instruction.MovInstruction, eax, op1H);
 			newBlocks[0].AppendInstruction(CPUx86.Instruction.MovInstruction, ecx, op2H);
@@ -247,22 +247,22 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Expands the div.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		private void ExpandDiv(Context ctx)
+		/// <param name="context">The context.</param>
+		private void ExpandDiv(Context context)
 		{
 			SigType I4 = new SigType(CilElementType.I4);
 			SigType U4 = new SigType(CilElementType.U4);
 			SigType U1 = new SigType(CilElementType.U1);
 
 			Operand op0H, op1H, op2H, op0L, op1L, op2L;
-			//Operand op1 = EmitConstant(ctx.Operand1);
-			//Operand op2 = EmitConstant(ctx.Operand2);
-			SplitLongOperand(ctx.Result, out op0L, out op0H);
-			SplitLongOperand(ctx.Operand1, out op1L, out op1H);
-			SplitLongOperand(ctx.Operand2, out op2L, out op2H);
+			//Operand op1 = EmitConstant(context.Operand1);
+			//Operand op2 = EmitConstant(context.Operand2);
+			SplitLongOperand(context.Result, out op0L, out op0H);
+			SplitLongOperand(context.Operand1, out op1L, out op1H);
+			SplitLongOperand(context.Operand2, out op2L, out op2H);
 
-			Context[] newBlocks = CreateEmptyBlockContexts(ctx.Label, 17);
-			Context nextBlock = SplitContext(ctx, false);
+			Context[] newBlocks = CreateEmptyBlockContexts(context.Label, 17);
+			Context nextBlock = SplitContext(context, false);
 
 			RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
 			RegisterOperand ebx = new RegisterOperand(I4, GeneralPurposeRegister.EBX);
@@ -291,8 +291,8 @@ namespace Mosa.Platforms.x86
 			// sbb     eax,0
 			// mov     HIWORD(DVND),eax ; save positive value
 			// mov     LOWORD(DVND),edx
-			ctx.SetInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[0].BasicBlock);
-			LinkBlocks(ctx, newBlocks[0]);
+			context.SetInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[0].BasicBlock);
+			LinkBlocks(context, newBlocks[0]);
 			newBlocks[0].SetInstruction(CPUx86.Instruction.PushInstruction, null, edi);
 			newBlocks[0].AppendInstruction(CPUx86.Instruction.PushInstruction, null, esi);
 			newBlocks[0].AppendInstruction(CPUx86.Instruction.PushInstruction, null, ebx);
@@ -496,16 +496,16 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Expands the rem.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		private void ExpandRem(Context ctx)
+		/// <param name="context">The context.</param>
+		private void ExpandRem(Context context)
 		{
 			SigType I4 = new SigType(CilElementType.I4);
 			SigType U1 = new SigType(CilElementType.U1);
 
 			Operand op0H, op1H, op2H, op0L, op1L, op2L;
-			SplitLongOperand(ctx.Result, out op0L, out op0H);
-			SplitLongOperand(ctx.Operand1, out op1L, out op1H);
-			SplitLongOperand(ctx.Operand2, out op2L, out op2H);
+			SplitLongOperand(context.Result, out op0L, out op0H);
+			SplitLongOperand(context.Operand1, out op1L, out op1H);
+			SplitLongOperand(context.Operand2, out op2L, out op2H);
 			RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
 			RegisterOperand ebx = new RegisterOperand(I4, GeneralPurposeRegister.EBX);
 			RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
@@ -513,8 +513,8 @@ namespace Mosa.Platforms.x86
 			RegisterOperand edi = new RegisterOperand(I4, GeneralPurposeRegister.EDI);
 			RegisterOperand esi = new RegisterOperand(I4, GeneralPurposeRegister.ESI);
 
-			Context[] newBlocks = CreateEmptyBlockContexts(ctx.Label, 16);
-			Context nextBlock = SplitContext(ctx, false);
+			Context[] newBlocks = CreateEmptyBlockContexts(context.Label, 16);
+			Context nextBlock = SplitContext(context, false);
 
 			// Determine sign of the result (edi = 0 if result is positive, non-zero
 			// otherwise) and make operands positive.
@@ -529,7 +529,7 @@ namespace Mosa.Platforms.x86
 			//sbb     eax,0
 			//mov     HIWORD(DVND),eax ; save positive value
 			//mov     LOWORD(DVND),edx
-			ctx.SetInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[0].BasicBlock);
+			context.SetInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[0].BasicBlock);
 			newBlocks[0].AppendInstruction(CPUx86.Instruction.PushInstruction, null, edi);
 			newBlocks[0].AppendInstruction(CPUx86.Instruction.PushInstruction, null, esi);
 			newBlocks[0].AppendInstruction(CPUx86.Instruction.PushInstruction, null, ebx);
@@ -738,16 +738,16 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Expands the udiv instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		private void ExpandUDiv(Context ctx)
+		/// <param name="context">The context.</param>
+		private void ExpandUDiv(Context context)
 		{
 			SigType U4 = new SigType(CilElementType.U4);
 			SigType U1 = new SigType(CilElementType.U1);
 
 			Operand op0H, op1H, op2H, op0L, op1L, op2L;
-			SplitLongOperand(ctx.Result, out op0L, out op0H);
-			SplitLongOperand(ctx.Operand1, out op1L, out op1H);
-			SplitLongOperand(ctx.Operand2, out op2L, out op2H);
+			SplitLongOperand(context.Result, out op0L, out op0H);
+			SplitLongOperand(context.Operand1, out op1L, out op1H);
+			SplitLongOperand(context.Operand2, out op2L, out op2H);
 			RegisterOperand eax = new RegisterOperand(U4, GeneralPurposeRegister.EAX);
 			RegisterOperand ebx = new RegisterOperand(U4, GeneralPurposeRegister.EBX);
 			RegisterOperand edx = new RegisterOperand(U4, GeneralPurposeRegister.EDX);
@@ -755,9 +755,9 @@ namespace Mosa.Platforms.x86
 			RegisterOperand edi = new RegisterOperand(U4, GeneralPurposeRegister.EDI);
 			RegisterOperand esi = new RegisterOperand(U4, GeneralPurposeRegister.ESI);
 
-			Context[] newBlocks = CreateEmptyBlockContexts(ctx.Label, 12);
-			Context nextBlock = SplitContext(ctx, false);
-			ctx.SetInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[0].BasicBlock);
+			Context[] newBlocks = CreateEmptyBlockContexts(context.Label, 12);
+			Context nextBlock = SplitContext(context, false);
+			context.SetInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[0].BasicBlock);
 			newBlocks[0].AppendInstruction(CPUx86.Instruction.PushInstruction, null, edi);
 			newBlocks[0].AppendInstruction(CPUx86.Instruction.PushInstruction, null, esi);
 			newBlocks[0].AppendInstruction(CPUx86.Instruction.PushInstruction, null, ebx);
@@ -845,16 +845,16 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Expands the urem instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		private void ExpandURem(Context ctx)
+		/// <param name="context">The context.</param>
+		private void ExpandURem(Context context)
 		{
 			SigType U4 = new SigType(CilElementType.U4);
 			SigType U1 = new SigType(CilElementType.U1);
 
 			Operand op0H, op1H, op2H, op0L, op1L, op2L;
-			SplitLongOperand(ctx.Result, out op0L, out op0H);
-			SplitLongOperand(ctx.Operand1, out op1L, out op1H);
-			SplitLongOperand(ctx.Operand2, out op2L, out op2H);
+			SplitLongOperand(context.Result, out op0L, out op0H);
+			SplitLongOperand(context.Operand1, out op1L, out op1H);
+			SplitLongOperand(context.Operand2, out op2L, out op2H);
 			RegisterOperand eax = new RegisterOperand(U4, GeneralPurposeRegister.EAX);
 			RegisterOperand ebx = new RegisterOperand(U4, GeneralPurposeRegister.EBX);
 			RegisterOperand edx = new RegisterOperand(U4, GeneralPurposeRegister.EDX);
@@ -862,8 +862,8 @@ namespace Mosa.Platforms.x86
 			RegisterOperand edi = new RegisterOperand(U4, GeneralPurposeRegister.EDI);
 			RegisterOperand esi = new RegisterOperand(U4, GeneralPurposeRegister.ESI);
 
-			Context[] newBlocks = CreateEmptyBlockContexts(ctx.Label, 11);
-			Context nextBlock = SplitContext(ctx, false);
+			Context[] newBlocks = CreateEmptyBlockContexts(context.Label, 11);
+			Context nextBlock = SplitContext(context, false);
 
 			// Determine sign of the result (edi = 0 if result is positive, non-zero
 			// otherwise) and make operands positive.
@@ -878,7 +878,7 @@ namespace Mosa.Platforms.x86
 			//sbb     eax,0
 			//mov     HIWORD(DVND),eax ; save positive value
 			//mov     LOWORD(DVND),edx
-			ctx.SetInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[0].BasicBlock);
+			context.SetInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[0].BasicBlock);
 			newBlocks[0].AppendInstruction(CPUx86.Instruction.PushInstruction, null, edi);
 			newBlocks[0].AppendInstruction(CPUx86.Instruction.PushInstruction, null, esi);
 			newBlocks[0].AppendInstruction(CPUx86.Instruction.PushInstruction, null, ebx);
@@ -968,28 +968,28 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Expands the arithmetic shift right instruction for 64-bits.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		private void ExpandArithmeticShiftRight(Context ctx)
+		/// <param name="context">The context.</param>
+		private void ExpandArithmeticShiftRight(Context context)
 		{
 			SigType I4 = new SigType(CilElementType.I4);
 			SigType U1 = new SigType(CilElementType.U1);
-			Operand count = ctx.Operand2;
+			Operand count = context.Operand2;
 
 			Operand op0H, op1H, op0L, op1L;
-			SplitLongOperand(ctx.Result, out op0L, out op0H);
-			SplitLongOperand(ctx.Operand1, out op1L, out op1H);
+			SplitLongOperand(context.Result, out op0L, out op0H);
+			SplitLongOperand(context.Operand1, out op1L, out op1H);
 			RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
 			RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
 			RegisterOperand ecx = new RegisterOperand(I4, GeneralPurposeRegister.ECX);
 
 			RegisterOperand cl = new RegisterOperand(new SigType(CilElementType.U1), GeneralPurposeRegister.ECX);
 
-			Context[] newBlocks = CreateEmptyBlockContexts(ctx.Label, 6);
-			Context nextBlock = SplitContext(ctx, true);
+			Context[] newBlocks = CreateEmptyBlockContexts(context.Label, 6);
+			Context nextBlock = SplitContext(context, true);
 
 			// Handle shifts of 64 bits or more (if shifting 64 bits or more, the result
 			// depends only on the high order bit of edx).
-			ctx.SetInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[0].BasicBlock);
+			context.SetInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[0].BasicBlock);
 			newBlocks[0].AppendInstruction(CPUx86.Instruction.PushInstruction, null, ecx);
 			newBlocks[0].AppendInstruction(IR.Instruction.LogicalAndInstruction, count, count, new ConstantOperand(I4, 0x3F));
 			newBlocks[0].AppendInstruction(CPUx86.Instruction.MovInstruction, ecx, count);
@@ -1038,27 +1038,27 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Expands the shift left instruction for 64-bits.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		private void ExpandShiftLeft(Context ctx)
+		/// <param name="context">The context.</param>
+		private void ExpandShiftLeft(Context context)
 		{
 			SigType I4 = new SigType(CilElementType.I4);
-			Operand count = ctx.Operand2;  //  FIXME PG
+			Operand count = context.Operand2;  //  FIXME PG
 
 			Operand op0H, op1H, op0L, op1L;
-			SplitLongOperand(ctx.Result, out op0L, out op0H);
-			SplitLongOperand(ctx.Operand1, out op1L, out op1H);
+			SplitLongOperand(context.Result, out op0L, out op0H);
+			SplitLongOperand(context.Operand1, out op1L, out op1H);
 			RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
 			RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
 			RegisterOperand ecx = new RegisterOperand(I4, GeneralPurposeRegister.ECX);
 
 			RegisterOperand cl = new RegisterOperand(new SigType(CilElementType.U1), GeneralPurposeRegister.ECX);
 
-			Context nextBlock = SplitContext(ctx, true);
-			Context[] newBlocks = CreateEmptyBlockContexts(ctx.Label, 6);
+			Context nextBlock = SplitContext(context, true);
+			Context[] newBlocks = CreateEmptyBlockContexts(context.Label, 6);
 
 			// Handle shifts of 64 bits or more (if shifting 64 bits or more, the result
 			// depends only on the high order bit of edx).
-			ctx.SetInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[0].BasicBlock);
+			context.SetInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[0].BasicBlock);
 			newBlocks[0].AppendInstruction(CPUx86.Instruction.PushInstruction, null, ecx);
 			newBlocks[0].AppendInstruction(IR.Instruction.LogicalAndInstruction, count, count, new ConstantOperand(I4, 0x3F));
 			newBlocks[0].AppendInstruction(CPUx86.Instruction.MovInstruction, ecx, count);
@@ -1107,29 +1107,29 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Expands the shift right instruction for 64-bits.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		private void ExpandShiftRight(Context ctx)
+		/// <param name="context">The context.</param>
+		private void ExpandShiftRight(Context context)
 		{
 			SigType I4 = new SigType(CilElementType.I4);
 			SigType I1 = new SigType(CilElementType.I1);
 			SigType U1 = new SigType(CilElementType.U1);
-			Operand count = ctx.Operand2;
+			Operand count = context.Operand2;
 
 			Operand op0H, op1H, op0L, op1L;
-			SplitLongOperand(ctx.Operand1, out op0L, out op0H);
-			SplitLongOperand(ctx.Operand2, out op1L, out op1H);
+			SplitLongOperand(context.Operand1, out op0L, out op0H);
+			SplitLongOperand(context.Operand2, out op1L, out op1H);
 			RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
 			RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
 			RegisterOperand ecx = new RegisterOperand(U1, GeneralPurposeRegister.ECX);
 
 			RegisterOperand cl = new RegisterOperand(new SigType(CilElementType.U1), GeneralPurposeRegister.ECX);
 
-			Context[] newBlocks = CreateEmptyBlockContexts(ctx.Label, 6);
-			Context nextBlock = SplitContext(ctx, true);
+			Context[] newBlocks = CreateEmptyBlockContexts(context.Label, 6);
+			Context nextBlock = SplitContext(context, true);
 
 			// Handle shifts of 64 bits or more (if shifting 64 bits or more, the result
 			// depends only on the high order bit of edx).
-			ctx.SetInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[0].BasicBlock);
+			context.SetInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[0].BasicBlock);
 			newBlocks[0].AppendInstruction(CPUx86.Instruction.PushInstruction, null, ecx);
 			newBlocks[0].AppendInstruction(IR.Instruction.LogicalAndInstruction, count, count, new ConstantOperand(I4, 0x3F));
 			newBlocks[0].AppendInstruction(CPUx86.Instruction.MovInstruction, ecx, count);
@@ -1184,8 +1184,8 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Expands the neg instruction for 64-bits.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		private void ExpandNeg(Context ctx)
+		/// <param name="context">The context.</param>
+		private void ExpandNeg(Context context)
 		{
 			throw new NotSupportedException();
 		}
@@ -1193,107 +1193,107 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Expands the not instruction for 64-bits.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		private void ExpandNot(Context ctx)
+		/// <param name="context">The context.</param>
+		private void ExpandNot(Context context)
 		{
 			Operand op0H, op1H, op0L, op1L;
-			SplitLongOperand(ctx.Result, out op0L, out op0H);
-			SplitLongOperand(ctx.Operand1, out op1L, out op1H);
+			SplitLongOperand(context.Result, out op0L, out op0H);
+			SplitLongOperand(context.Operand1, out op1L, out op1H);
 
-			ctx.SetInstruction(IR.Instruction.LogicalNotInstruction, op0H, op1H);
-			ctx.AppendInstruction(IR.Instruction.LogicalNotInstruction, op0L, op1L);
+			context.SetInstruction(IR.Instruction.LogicalNotInstruction, op0H, op1H);
+			context.AppendInstruction(IR.Instruction.LogicalNotInstruction, op0L, op1L);
 		}
 
 		/// <summary>
 		/// Expands the and instruction for 64-bits.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		private void ExpandAnd(Context ctx)
+		/// <param name="context">The context.</param>
+		private void ExpandAnd(Context context)
 		{
 			Operand op0H, op1H, op2H, op0L, op1L, op2L;
-			SplitLongOperand(ctx.Result, out op0L, out op0H);
-			SplitLongOperand(ctx.Operand1, out op1L, out op1H);
-			SplitLongOperand(ctx.Operand2, out op2L, out op2H);
+			SplitLongOperand(context.Result, out op0L, out op0H);
+			SplitLongOperand(context.Operand1, out op1L, out op1H);
+			SplitLongOperand(context.Operand2, out op2L, out op2H);
 
-			if (ctx.Result.StackType != StackTypeCode.Int64)
+			if (context.Result.StackType != StackTypeCode.Int64)
 			{
-				ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, op0L, op1L);
-				ctx.AppendInstruction(CPUx86.Instruction.AndInstruction, op0L, op2L);
+				context.AppendInstruction(CPUx86.Instruction.MovInstruction, op0L, op1L);
+				context.AppendInstruction(CPUx86.Instruction.AndInstruction, op0L, op2L);
 			}
 			else
 			{
-				ctx.SetInstruction(CPUx86.Instruction.MovInstruction, op0H, op1H);
-				ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, op0L, op1L);
-				ctx.AppendInstruction(CPUx86.Instruction.AndInstruction, op0H, op2H);
-				ctx.AppendInstruction(CPUx86.Instruction.AndInstruction, op0L, op2L);
+				context.SetInstruction(CPUx86.Instruction.MovInstruction, op0H, op1H);
+				context.AppendInstruction(CPUx86.Instruction.MovInstruction, op0L, op1L);
+				context.AppendInstruction(CPUx86.Instruction.AndInstruction, op0H, op2H);
+				context.AppendInstruction(CPUx86.Instruction.AndInstruction, op0L, op2L);
 			}
 		}
 
 		/// <summary>
 		/// Expands the or instruction for 64-bits.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		private void ExpandOr(Context ctx)
+		/// <param name="context">The context.</param>
+		private void ExpandOr(Context context)
 		{
 			Operand op0H, op1H, op2H, op0L, op1L, op2L;
-			SplitLongOperand(ctx.Result, out op0L, out op0H);
-			SplitLongOperand(ctx.Operand1, out op1L, out op1H);
-			SplitLongOperand(ctx.Operand2, out op2L, out op2H);
+			SplitLongOperand(context.Result, out op0L, out op0H);
+			SplitLongOperand(context.Operand1, out op1L, out op1H);
+			SplitLongOperand(context.Operand2, out op2L, out op2H);
 
-			ctx.SetInstruction(CPUx86.Instruction.MovInstruction, op0H, op1H);
-			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, op0L, op1L);
-			ctx.AppendInstruction(CPUx86.Instruction.OrInstruction, op0H, op2H);
-			ctx.AppendInstruction(CPUx86.Instruction.OrInstruction, op0L, op2L);
+			context.SetInstruction(CPUx86.Instruction.MovInstruction, op0H, op1H);
+			context.AppendInstruction(CPUx86.Instruction.MovInstruction, op0L, op1L);
+			context.AppendInstruction(CPUx86.Instruction.OrInstruction, op0H, op2H);
+			context.AppendInstruction(CPUx86.Instruction.OrInstruction, op0L, op2L);
 		}
 
 		/// <summary>
 		/// Expands the neg instruction for 64-bits.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		private void ExpandXor(Context ctx)
+		/// <param name="context">The context.</param>
+		private void ExpandXor(Context context)
 		{
 			Operand op0H, op1H, op2H, op0L, op1L, op2L;
-			SplitLongOperand(ctx.Result, out op0L, out op0H);
-			SplitLongOperand(ctx.Operand1, out op1L, out op1H);
-			SplitLongOperand(ctx.Operand2, out op2L, out op2H);
+			SplitLongOperand(context.Result, out op0L, out op0H);
+			SplitLongOperand(context.Operand1, out op1L, out op1H);
+			SplitLongOperand(context.Operand2, out op2L, out op2H);
 
-			ctx.SetInstruction(CPUx86.Instruction.MovInstruction, op0H, op1H);
-			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, op0L, op1L);
-			ctx.AppendInstruction(CPUx86.Instruction.XorInstruction, op0H, op2H);
-			ctx.AppendInstruction(CPUx86.Instruction.XorInstruction, op0L, op2L);
+			context.SetInstruction(CPUx86.Instruction.MovInstruction, op0H, op1H);
+			context.AppendInstruction(CPUx86.Instruction.MovInstruction, op0L, op1L);
+			context.AppendInstruction(CPUx86.Instruction.XorInstruction, op0H, op2H);
+			context.AppendInstruction(CPUx86.Instruction.XorInstruction, op0L, op2L);
 		}
 
 		/// <summary>
 		/// Expands the move instruction for 64-bits.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		private void ExpandMove(Context ctx)
+		/// <param name="context">The context.</param>
+		private void ExpandMove(Context context)
 		{
 			Operand op0L, op0H, op1L, op1H;
 
-			if (ctx.Result.StackType == StackTypeCode.Int64)
+			if (context.Result.StackType == StackTypeCode.Int64)
 			{
-				SplitLongOperand(ctx.Result, out op0L, out op0H);
-				SplitLongOperand(ctx.Operand1, out op1L, out op1H);
+				SplitLongOperand(context.Result, out op0L, out op0H);
+				SplitLongOperand(context.Operand1, out op1L, out op1H);
 
-				ctx.SetInstruction(CPUx86.Instruction.MovInstruction, op0L, op1L);
-				ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, op0H, op1H);
+				context.SetInstruction(CPUx86.Instruction.MovInstruction, op0L, op1L);
+				context.AppendInstruction(CPUx86.Instruction.MovInstruction, op0H, op1H);
 			}
 			else
 			{
-				SplitLongOperand(ctx.Operand1, out op1L, out op1H);
-				ctx.SetInstruction(CPUx86.Instruction.MovInstruction, ctx.Result, op1L);
+				SplitLongOperand(context.Operand1, out op1L, out op1H);
+				context.SetInstruction(CPUx86.Instruction.MovInstruction, context.Result, op1L);
 			}
 		}
 
 		/// <summary>
 		/// Expands the unsigned move instruction for 64-bits.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		private void ExpandUnsignedMove(Context ctx)
+		/// <param name="context">The context.</param>
+		private void ExpandUnsignedMove(Context context)
 		{
-			MemoryOperand op0 = ctx.Result as MemoryOperand;
-			Operand op1 = ctx.Operand1;
+			MemoryOperand op0 = context.Result as MemoryOperand;
+			Operand op1 = context.Operand1;
 			Debug.Assert(op0 != null, @"I8 not in a memory operand!");
 
 			SigType U4 = new SigType(CilElementType.U4);
@@ -1306,35 +1306,35 @@ namespace Mosa.Platforms.x86
 			switch (op1.Type.Type)
 			{
 				case CilElementType.Boolean:
-					ctx.SetInstruction(IR.Instruction.ZeroExtendedMoveInstruction, op0L, op1L);
-					ctx.AppendInstruction(IR.Instruction.LogicalXorInstruction, op0H, op0H, op0H);
+					context.SetInstruction(IR.Instruction.ZeroExtendedMoveInstruction, op0L, op1L);
+					context.AppendInstruction(IR.Instruction.LogicalXorInstruction, op0H, op0H, op0H);
 					break;
 
 				case CilElementType.U1:
-					ctx.SetInstruction(IR.Instruction.ZeroExtendedMoveInstruction, eax, op1L);
-					ctx.AppendInstruction(CPUx86.Instruction.CdqInstruction);
-					ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, op0L, eax);
-					ctx.AppendInstruction(IR.Instruction.LogicalXorInstruction, op0H, op0H, op0H);
+					context.SetInstruction(IR.Instruction.ZeroExtendedMoveInstruction, eax, op1L);
+					context.AppendInstruction(CPUx86.Instruction.CdqInstruction);
+					context.AppendInstruction(CPUx86.Instruction.MovInstruction, op0L, eax);
+					context.AppendInstruction(IR.Instruction.LogicalXorInstruction, op0H, op0H, op0H);
 					break;
 
 				case CilElementType.U2: goto case CilElementType.U1;
 
 				case CilElementType.I4:
-					ctx.SetInstruction(IR.Instruction.ZeroExtendedMoveInstruction, eax, op1L);
-					ctx.AppendInstruction(CPUx86.Instruction.XorInstruction, edx, edx);
-					ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, op0L, eax);
-					ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, op0H, edx);
+					context.SetInstruction(IR.Instruction.ZeroExtendedMoveInstruction, eax, op1L);
+					context.AppendInstruction(CPUx86.Instruction.XorInstruction, edx, edx);
+					context.AppendInstruction(CPUx86.Instruction.MovInstruction, op0L, eax);
+					context.AppendInstruction(CPUx86.Instruction.MovInstruction, op0H, edx);
 					break;
 				case CilElementType.U4:
-					ctx.SetInstruction(IR.Instruction.ZeroExtendedMoveInstruction, eax, op1L);
-					ctx.AppendInstruction(CPUx86.Instruction.CdqInstruction);
-					ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, op0L, eax);
-					ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, op0H, edx);
+					context.SetInstruction(IR.Instruction.ZeroExtendedMoveInstruction, eax, op1L);
+					context.AppendInstruction(CPUx86.Instruction.CdqInstruction);
+					context.AppendInstruction(CPUx86.Instruction.MovInstruction, op0L, eax);
+					context.AppendInstruction(CPUx86.Instruction.MovInstruction, op0H, edx);
 					break;
 
 				case CilElementType.U8:
-					ctx.SetInstruction(IR.Instruction.ZeroExtendedMoveInstruction, op0L, op1L);
-					ctx.SetInstruction(IR.Instruction.ZeroExtendedMoveInstruction, op0H, op1H);
+					context.SetInstruction(IR.Instruction.ZeroExtendedMoveInstruction, op0L, op1L);
+					context.SetInstruction(IR.Instruction.ZeroExtendedMoveInstruction, op0H, op1H);
 					break;
 
 				case CilElementType.R4:
@@ -1352,11 +1352,11 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Expands the signed move instruction for 64-bits.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		private void ExpandSignedMove(Context ctx)
+		/// <param name="context">The context.</param>
+		private void ExpandSignedMove(Context context)
 		{
-			Operand op0 = ctx.Result;
-			Operand op1 = ctx.Operand1;
+			Operand op0 = context.Result;
+			Operand op1 = context.Operand1;
 			Debug.Assert(op0 != null, @"I8 not in a memory operand!");
 			SigType I4 = new SigType(CilElementType.I4);
 			Operand op0L, op0H;
@@ -1367,35 +1367,35 @@ namespace Mosa.Platforms.x86
 			switch (op1.Type.Type)
 			{
 				case CilElementType.Boolean:
-					ctx.SetInstruction(IR.Instruction.ZeroExtendedMoveInstruction, op0L, op1);
-					ctx.AppendInstruction(IR.Instruction.LogicalXorInstruction, op0H, op0H, op0H);
+					context.SetInstruction(IR.Instruction.ZeroExtendedMoveInstruction, op0L, op1);
+					context.AppendInstruction(IR.Instruction.LogicalXorInstruction, op0H, op0H, op0H);
 					break;
 
 				case CilElementType.I1:
-					ctx.SetInstruction(IR.Instruction.SignExtendedMoveInstruction, eax, op1);
-					ctx.AppendInstruction(CPUx86.Instruction.CdqInstruction);
-					ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, op0L, eax);
-					ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, op0H, edx);
+					context.SetInstruction(IR.Instruction.SignExtendedMoveInstruction, eax, op1);
+					context.AppendInstruction(CPUx86.Instruction.CdqInstruction);
+					context.AppendInstruction(CPUx86.Instruction.MovInstruction, op0L, eax);
+					context.AppendInstruction(CPUx86.Instruction.MovInstruction, op0H, edx);
 					break;
 
 				case CilElementType.I2: goto case CilElementType.I1;
 
 				case CilElementType.I4:
-					ctx.SetInstruction(CPUx86.Instruction.MovInstruction, eax, op1);
-					ctx.AppendInstruction(CPUx86.Instruction.CdqInstruction);
-					ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, op0L, eax);
-					ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, op0H, edx);
+					context.SetInstruction(CPUx86.Instruction.MovInstruction, eax, op1);
+					context.AppendInstruction(CPUx86.Instruction.CdqInstruction);
+					context.AppendInstruction(CPUx86.Instruction.MovInstruction, op0L, eax);
+					context.AppendInstruction(CPUx86.Instruction.MovInstruction, op0H, edx);
 					break;
 
 				case CilElementType.I8:
-					ctx.SetInstruction(CPUx86.Instruction.MovInstruction, op0, op1);
+					context.SetInstruction(CPUx86.Instruction.MovInstruction, op0, op1);
 					break;
 
 				case CilElementType.U1:
-					ctx.SetInstruction(IR.Instruction.ZeroExtendedMoveInstruction, eax, op1);
-					ctx.AppendInstruction(CPUx86.Instruction.CdqInstruction);
-					ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, op0L, eax);
-					ctx.AppendInstruction(IR.Instruction.LogicalXorInstruction, op0H, op0H, op0H);
+					context.SetInstruction(IR.Instruction.ZeroExtendedMoveInstruction, eax, op1);
+					context.AppendInstruction(CPUx86.Instruction.CdqInstruction);
+					context.AppendInstruction(CPUx86.Instruction.MovInstruction, op0L, eax);
+					context.AppendInstruction(IR.Instruction.LogicalXorInstruction, op0H, op0H, op0H);
 					break;
 
 				case CilElementType.U2: goto case CilElementType.U1;
@@ -1420,12 +1420,12 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Expands the load instruction for 64-bits.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		private void ExpandLoad(Context ctx)
+		/// <param name="context">The context.</param>
+		private void ExpandLoad(Context context)
 		{
-			Operand op0 = ctx.Result;
-			Operand op1 = ctx.Operand1;
-			Operand offsetOperand = ctx.Operand2;
+			Operand op0 = context.Result;
+			Operand op1 = context.Operand1;
+			Operand offsetOperand = context.Operand2;
 			Debug.Assert(op0 != null && op1 != null, @"Operands to I8 LoadInstruction are not MemoryOperand.");
 
 			SigType I4 = new SigType(CilElementType.I4);
@@ -1435,23 +1435,23 @@ namespace Mosa.Platforms.x86
 			RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
 			RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
 
-			ctx.SetInstruction(CPUx86.Instruction.MovInstruction, eax, op1);
-			ctx.AppendInstruction(CPUx86.Instruction.AddInstruction, eax, offsetOperand);
-			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, edx, new MemoryOperand(op0L.Type, GeneralPurposeRegister.EAX, IntPtr.Zero));
-			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, op0L, edx);
-			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, edx, new MemoryOperand(op0H.Type, GeneralPurposeRegister.EAX, new IntPtr(4)));
-			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, op0H, edx);
+			context.SetInstruction(CPUx86.Instruction.MovInstruction, eax, op1);
+			context.AppendInstruction(CPUx86.Instruction.AddInstruction, eax, offsetOperand);
+			context.AppendInstruction(CPUx86.Instruction.MovInstruction, edx, new MemoryOperand(op0L.Type, GeneralPurposeRegister.EAX, IntPtr.Zero));
+			context.AppendInstruction(CPUx86.Instruction.MovInstruction, op0L, edx);
+			context.AppendInstruction(CPUx86.Instruction.MovInstruction, edx, new MemoryOperand(op0H.Type, GeneralPurposeRegister.EAX, new IntPtr(4)));
+			context.AppendInstruction(CPUx86.Instruction.MovInstruction, op0H, edx);
 		}
 
 		/// <summary>
 		/// Expands the store instruction for 64-bits.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		private void ExpandStore(Context ctx)
+		/// <param name="context">The context.</param>
+		private void ExpandStore(Context context)
 		{
-			MemoryOperand op0 = ctx.Result as MemoryOperand;
-			Operand offsetOperand = ctx.Operand1;
-			MemoryOperand op2 = ctx.Operand2 as MemoryOperand;
+			MemoryOperand op0 = context.Result as MemoryOperand;
+			Operand offsetOperand = context.Operand1;
+			MemoryOperand op2 = context.Operand2 as MemoryOperand;
 			Debug.Assert(op0 != null && op2 != null, @"Operands to I8 LoadInstruction are not MemoryOperand.");
 
 			SigType I4 = new SigType(CilElementType.I4);
@@ -1461,22 +1461,22 @@ namespace Mosa.Platforms.x86
 			RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
 			RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
 
-			ctx.SetInstruction(CPUx86.Instruction.MovInstruction, edx, op0);
+			context.SetInstruction(CPUx86.Instruction.MovInstruction, edx, op0);
 
 			// Fortunately in 32-bit mode, we can't have 64-bit offsets, so this plain add should suffice.
-			ctx.AppendInstruction(CPUx86.Instruction.AddInstruction, edx, offsetOperand);
+			context.AppendInstruction(CPUx86.Instruction.AddInstruction, edx, offsetOperand);
 
-			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, eax, op1L);
-			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, new MemoryOperand(U4, GeneralPurposeRegister.EDX, IntPtr.Zero), eax);
-			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, eax, op1H);
-			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, new MemoryOperand(I4, GeneralPurposeRegister.EDX, new IntPtr(4)), eax);
+			context.AppendInstruction(CPUx86.Instruction.MovInstruction, eax, op1L);
+			context.AppendInstruction(CPUx86.Instruction.MovInstruction, new MemoryOperand(U4, GeneralPurposeRegister.EDX, IntPtr.Zero), eax);
+			context.AppendInstruction(CPUx86.Instruction.MovInstruction, eax, op1H);
+			context.AppendInstruction(CPUx86.Instruction.MovInstruction, new MemoryOperand(I4, GeneralPurposeRegister.EDX, new IntPtr(4)), eax);
 		}
 
 		/// <summary>
 		/// Expands the pop instruction for 64-bits.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		private void ExpandPop(Context ctx)
+		/// <param name="context">The context.</param>
+		private void ExpandPop(Context context)
 		{
 			throw new NotSupportedException();
 		}
@@ -1484,8 +1484,8 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Expands the push instruction for 64-bits.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		private void ExpandPush(Context ctx)
+		/// <param name="context">The context.</param>
+		private void ExpandPush(Context context)
 		{
 			throw new NotSupportedException();
 		}
@@ -1493,20 +1493,20 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Expands the unary branch instruction for 64-bits.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		private void ExpandUnaryBranch(Context ctx)
+		/// <param name="context">The context.</param>
+		private void ExpandUnaryBranch(Context context)
 		{
-			Debug.Assert(ctx.Branch.Targets.Length == 2);
+			Debug.Assert(context.Branch.Targets.Length == 2);
 
-			int target = ctx.Branch.Targets[0];
+			int target = context.Branch.Targets[0];
 
 			Operand op1H, op1L, op2H, op2L;
 			Operand zero = new ConstantOperand(new SigType(CilElementType.I4), (int)0);
-			SplitLongOperand(ctx.Operand1, out op1L, out op1H);
+			SplitLongOperand(context.Operand1, out op1L, out op1H);
 			SplitLongOperand(zero, out op2L, out op2H);
 			IR.ConditionCode code;
 
-			switch (((ctx.Instruction) as CIL.ICILInstruction).OpCode)
+			switch (((context.Instruction) as CIL.ICILInstruction).OpCode)
 			{
 				// Signed
 				case CIL.OpCode.Brtrue: code = IR.ConditionCode.NotEqual; break;
@@ -1542,11 +1542,11 @@ namespace Mosa.Platforms.x86
 
 			IR.ConditionCode conditionHigh = GetHighCondition(code);
 
-			Context[] newBlocks = CreateEmptyBlockContexts(ctx.Label, 3);
-			Context nextBlock = SplitContext(ctx, false);
+			Context[] newBlocks = CreateEmptyBlockContexts(context.Label, 3);
+			Context nextBlock = SplitContext(context, false);
 
-			ctx.SetInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[0].BasicBlock);
-			LinkBlocks(ctx, newBlocks[0]);
+			context.SetInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[0].BasicBlock);
+			LinkBlocks(context, newBlocks[0]);
 			// Compare high dwords
 			newBlocks[0].AppendInstruction(CPUx86.Instruction.DirectCompareInstruction, op1H, op2H);
 			// Branch if check already gave results
@@ -1575,26 +1575,26 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Expands the binary branch instruction for 64-bits.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		private void ExpandBinaryBranch(Context ctx)
+		/// <param name="context">The context.</param>
+		private void ExpandBinaryBranch(Context context)
 		{
-			Debug.Assert(ctx.Branch.Targets.Length == 1);
+			Debug.Assert(context.Branch.Targets.Length == 1);
 
-			int target = ctx.Branch.Targets[0];
+			int target = context.Branch.Targets[0];
 
 			Operand op1H, op1L, op2H, op2L;
-			SplitLongOperand(ctx.Operand1, out op1L, out op1H);
-			SplitLongOperand(ctx.Operand2, out op2L, out op2H);
+			SplitLongOperand(context.Operand1, out op1L, out op1H);
+			SplitLongOperand(context.Operand2, out op2L, out op2H);
 
-			Context[] newBlocks = CreateEmptyBlockContexts(ctx.Label, 3);
-			Context nextBlock = SplitContext(ctx, false);
+			Context[] newBlocks = CreateEmptyBlockContexts(context.Label, 3);
+			Context nextBlock = SplitContext(context, false);
 
-			IR.ConditionCode conditionCode = ConvertCondition((ctx.Instruction as CIL.ICILInstruction).OpCode);
+			IR.ConditionCode conditionCode = ConvertCondition((context.Instruction as CIL.ICILInstruction).OpCode);
 			IR.ConditionCode conditionHigh = GetHighCondition(conditionCode);
 
 			// TODO: optimize by removing this jump and merge with next block
-			ctx.SetInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[0].BasicBlock);
-			LinkBlocks(ctx, newBlocks[0]);
+			context.SetInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[0].BasicBlock);
+			LinkBlocks(context, newBlocks[0]);
 
 			// Compare high dwords
 			newBlocks[0].AppendInstruction(CPUx86.Instruction.DirectCompareInstruction, op1H, op2H);
@@ -1639,12 +1639,12 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Expands the binary comparison instruction for 64-bits.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		private void ExpandComparison(Context ctx)
+		/// <param name="context">The context.</param>
+		private void ExpandComparison(Context context)
 		{
-			Operand op0 = ctx.Result;
-			Operand op1 = ctx.Operand1;
-			Operand op2 = ctx.Operand2;
+			Operand op0 = context.Result;
+			Operand op1 = context.Operand1;
+			Operand op2 = context.Operand2;
 
 			Debug.Assert(op1 != null && op2 != null, @"IntegerCompareInstruction operand not memory!");
 			Debug.Assert(op0 is MemoryOperand || op0 is RegisterOperand, @"IntegerCompareInstruction result not memory and not register!");
@@ -1655,15 +1655,15 @@ namespace Mosa.Platforms.x86
 			SplitLongOperand(op1, out op1L, out op1H);
 			SplitLongOperand(op2, out op2L, out op2H);
 
-			Context[] newBlocks = CreateEmptyBlockContexts(ctx.Label, 4);
-			IR.ConditionCode conditionCode = ctx.ConditionCode;
-			Context nextBlock = SplitContext(ctx, false);
+			Context[] newBlocks = CreateEmptyBlockContexts(context.Label, 4);
+			IR.ConditionCode conditionCode = context.ConditionCode;
+			Context nextBlock = SplitContext(context, false);
 
 			// Compare high dwords
-			ctx.SetInstruction(CPUx86.Instruction.CmpInstruction, op1H, op2H);
-			ctx.AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.Equal, newBlocks[1].BasicBlock);
-			ctx.AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[0].BasicBlock);
-			LinkBlocks(ctx, newBlocks[0], newBlocks[1]);
+			context.SetInstruction(CPUx86.Instruction.CmpInstruction, op1H, op2H);
+			context.AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.Equal, newBlocks[1].BasicBlock);
+			context.AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[0].BasicBlock);
+			LinkBlocks(context, newBlocks[0], newBlocks[1]);
 
 			// Branch if check already gave results
 			newBlocks[0].SetInstruction(CPUx86.Instruction.BranchInstruction, conditionCode, newBlocks[2].BasicBlock);
@@ -1708,7 +1708,7 @@ namespace Mosa.Platforms.x86
 		#region IIRVisitor
 
 		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.BreakInstruction"/> instructions.
+		/// Visitation function for BreakInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.BreakInstruction(Context context)
@@ -1718,206 +1718,206 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Arithmetics the shift right instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.ArithmeticShiftRightInstruction(Context ctx)
+		/// <param name="context">The context.</param>
+		void IR.IIRVisitor.ArithmeticShiftRightInstruction(Context context)
 		{
-			if (IsInt64(ctx.Operand1) == true)
+			if (IsInt64(context.Operand1))
 			{
-				ExpandArithmeticShiftRight(ctx);
+				ExpandArithmeticShiftRight(context);
 			}
 		}
 
 		/// <summary>
 		/// Integers the compare instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.IntegerCompareInstruction(Context ctx)
+		/// <param name="context">The context.</param>
+		void IR.IIRVisitor.IntegerCompareInstruction(Context context)
 		{
-			if (IsInt64(ctx.Operand1) == true)
+			if (IsInt64(context.Operand1))
 			{
-				ExpandComparison(ctx);
+				ExpandComparison(context);
 			}
 		}
 
 		/// <summary>
 		/// Loads the instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.LoadInstruction(Context ctx)
+		/// <param name="context">The context.</param>
+		void IR.IIRVisitor.LoadInstruction(Context context)
 		{
-			if (IsInt64(ctx.Operand1) == true || IsInt64(ctx.Result) == true)
+			if (IsInt64(context.Operand1) || IsInt64(context.Result))
 			{
-				ExpandLoad(ctx);
+				ExpandLoad(context);
 			}
 		}
 
 		/// <summary>
 		/// Logicals the and instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.LogicalAndInstruction(Context ctx)
+		/// <param name="context">The context.</param>
+		void IR.IIRVisitor.LogicalAndInstruction(Context context)
 		{
-			if (IsInt64(ctx.Operand1) == true)
+			if (IsInt64(context.Operand1))
 			{
-				ExpandAnd(ctx);
+				ExpandAnd(context);
 			}
 		}
 
 		/// <summary>
 		/// Logicals the or instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.LogicalOrInstruction(Context ctx)
+		/// <param name="context">The context.</param>
+		void IR.IIRVisitor.LogicalOrInstruction(Context context)
 		{
-			if (IsInt64(ctx.Operand1) == true)
+			if (IsInt64(context.Operand1))
 			{
-				ExpandOr(ctx);
+				ExpandOr(context);
 			}
 		}
 
 		/// <summary>
 		/// Logicals the xor instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.LogicalXorInstruction(Context ctx)
+		/// <param name="context">The context.</param>
+		void IR.IIRVisitor.LogicalXorInstruction(Context context)
 		{
-			if (IsInt64(ctx.Operand1) == true)
+			if (IsInt64(context.Operand1))
 			{
-				ExpandXor(ctx);
+				ExpandXor(context);
 			}
 		}
 
 		/// <summary>
 		/// Logicals the not instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.LogicalNotInstruction(Context ctx)
+		/// <param name="context">The context.</param>
+		void IR.IIRVisitor.LogicalNotInstruction(Context context)
 		{
-			if (IsInt64(ctx.Operand1) == true)
+			if (IsInt64(context.Operand1))
 			{
-				ExpandNot(ctx);
+				ExpandNot(context);
 			}
 		}
 
 		/// <summary>
 		/// Moves the instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.MoveInstruction(Context ctx)
+		/// <param name="context">The context.</param>
+		void IR.IIRVisitor.MoveInstruction(Context context)
 		{
 			// FIXME: Why aren't we doing an SSE2 move for int64?
-			if (IsInt64(ctx.Operand1) == true)
+			if (IsInt64(context.Operand1))
 			{
-				ExpandMove(ctx);
+				ExpandMove(context);
 			}
 		}
 
 		/// <summary>
 		/// Pops the instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.PopInstruction(Context ctx)
+		/// <param name="context">The context.</param>
+		void IR.IIRVisitor.PopInstruction(Context context)
 		{
-			if (IsInt64(ctx.Operand1) == true)
+			if (IsInt64(context.Operand1))
 			{
-				ExpandPop(ctx);
+				ExpandPop(context);
 			}
 		}
 
 		/// <summary>
 		/// Pushes the instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.PushInstruction(Context ctx)
+		/// <param name="context">The context.</param>
+		void IR.IIRVisitor.PushInstruction(Context context)
 		{
-			if (IsInt64(ctx.Operand1) == true)
+			if (IsInt64(context.Operand1))
 			{
-				ExpandPush(ctx);
+				ExpandPush(context);
 			}
 		}
 
 		/// <summary>
 		/// Shifts the left instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.ShiftLeftInstruction(Context ctx)
+		/// <param name="context">The context.</param>
+		void IR.IIRVisitor.ShiftLeftInstruction(Context context)
 		{
-			if (IsInt64(ctx.Operand1) == true)
+			if (IsInt64(context.Operand1))
 			{
-				ExpandShiftLeft(ctx);
+				ExpandShiftLeft(context);
 			}
 		}
 
 		/// <summary>
 		/// Shifts the right instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.ShiftRightInstruction(Context ctx)
+		/// <param name="context">The context.</param>
+		void IR.IIRVisitor.ShiftRightInstruction(Context context)
 		{
-			if (IsInt64(ctx.Operand1) == true)
+			if (IsInt64(context.Operand1))
 			{
-				ExpandShiftRight(ctx);
+				ExpandShiftRight(context);
 			}
 		}
 
 		/// <summary>
 		/// Signs the extended move instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.SignExtendedMoveInstruction(Context ctx)
+		/// <param name="context">The context.</param>
+		void IR.IIRVisitor.SignExtendedMoveInstruction(Context context)
 		{
-			if (IsInt64(ctx.Operand1) == true || IsInt64(ctx.Result) == true)
+			if (IsInt64(context.Operand1) || IsInt64(context.Result))
 			{
-				ExpandSignedMove(ctx);
+				ExpandSignedMove(context);
 			}
 		}
 
 		/// <summary>
 		/// Stores the instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.StoreInstruction(Context ctx)
+		/// <param name="context">The context.</param>
+		void IR.IIRVisitor.StoreInstruction(Context context)
 		{
-			if (IsInt64(ctx.Operand2) == true)
+			if (IsInt64(context.Operand2))
 			{
-				ExpandStore(ctx);
+				ExpandStore(context);
 			}
 		}
 
 		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.DivSInstruction"/> instructions.
+		/// Visitation function for DivSInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.DivSInstruction(Context context)
 		{
-			if (IsInt64(context.Operand1) == true)
+			if (IsInt64(context.Operand1))
 			{
 				ExpandDiv(context);
 			}
 		}
 
-		void IR.IIRVisitor.DivUInstruction(Context ctx)
+		void IR.IIRVisitor.DivUInstruction(Context context)
 		{
-			if (IsInt64(ctx.Operand1) == true)
+			if (IsInt64(context.Operand1))
 			{
-				ExpandUDiv(ctx);
+				ExpandUDiv(context);
 			}
 		}
 
 		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.MulSInstruction"/> instructions.
+		/// Visitation function for MulSInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.MulSInstruction(Context context)
 		{
-			if (IsInt64(context.Operand1) == true)
+			if (IsInt64(context.Operand1))
 			{
 				ExpandMul(context);
 			}
 		}
 
 		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.MulFInstruction"/> instructions.
+		/// Visitation function for MulFInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.MulFInstruction(Context context)
@@ -1925,19 +1925,19 @@ namespace Mosa.Platforms.x86
 		}
 
 		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.MulUInstruction"/> instructions.
+		/// Visitation function for MulUInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.MulUInstruction(Context context)
 		{
-			if (IsInt64(context.Operand1) == true)
+			if (IsInt64(context.Operand1))
 			{
 				ExpandMul(context);
 			}
 		}
 
 		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.SubFInstruction"/> instructions.
+		/// Visitation function for SubFInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.SubFInstruction(Context context)
@@ -1945,12 +1945,12 @@ namespace Mosa.Platforms.x86
 		}
 
 		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.SubSInstruction"/> instructions.
+		/// Visitation function for SubSInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.SubSInstruction(Context context)
 		{
-			if (IsInt64(context.Operand1) == true)
+			if (IsInt64(context.Operand1))
 			{
 				ExpandSub(context);
 			}
@@ -1966,19 +1966,19 @@ namespace Mosa.Platforms.x86
 		}
 
 		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.SubUInstruction"/> instructions.
+		/// Visitation function for SubUInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.SubUInstruction(Context context)
 		{
-			if (IsInt64(context.Operand1) == true)
+			if (IsInt64(context.Operand1))
 			{
 				ExpandSub(context);
 			}
 		}
 
 		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.RemFInstruction"/> instructions.
+		/// Visitation function for RemFInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.RemFInstruction(Context context)
@@ -1986,31 +1986,31 @@ namespace Mosa.Platforms.x86
 		}
 
 		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.RemSInstruction"/> instructions.
+		/// Visitation function for RemSInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.RemSInstruction(Context context)
 		{
-			if (IsInt64(context.Operand1) == true)
+			if (IsInt64(context.Operand1))
 			{
 				ExpandRem(context);
 			}
 		}
 
 		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.RemUInstruction"/> instructions.
+		/// Visitation function for RemUInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.RemUInstruction(Context context)
 		{
-			if (IsInt64(context.Operand1) == true)
+			if (IsInt64(context.Operand1))
 			{
 				ExpandURem(context);
 			}
 		}
 
 		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.SwitchInstruction"/> instructions.
+		/// Visitation function for SwitchInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.SwitchInstruction(Context context)
@@ -2020,41 +2020,41 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Zeroes the extended move instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void IR.IIRVisitor.ZeroExtendedMoveInstruction(Context ctx)
+		/// <param name="context">The context.</param>
+		void IR.IIRVisitor.ZeroExtendedMoveInstruction(Context context)
 		{
-			if (IsInt64(ctx.Result) == true)
+			if (IsInt64(context.Result))
 			{
-				ExpandUnsignedMove(ctx);
+				ExpandUnsignedMove(context);
 			}
 		}
 
 		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.AddSInstruction"/>.
+		/// Visitation function for AddSInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.AddSInstruction(Context context)
 		{
-			if (IsInt64(context.Operand1) == true)
+			if (IsInt64(context.Operand1))
 			{
 				ExpandAdd(context);
 			}
 		}
 
 		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.AddUInstruction"/> instructions.
+		/// Visitation function for AddUInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.AddUInstruction(Context context)
 		{
-			if (IsInt64(context.Operand1) == true)
+			if (IsInt64(context.Operand1))
 			{
 				ExpandAdd(context);
 			}
 		}
 
 		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.AddFInstruction"/> instructions.
+		/// Visitation function for AddFInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.AddFInstruction(Context context)
@@ -2062,7 +2062,7 @@ namespace Mosa.Platforms.x86
 		}
 
 		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.DivFInstruction"/> instructions.
+		/// Visitation function for DivFInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.DivFInstruction(Context context)
@@ -2074,83 +2074,87 @@ namespace Mosa.Platforms.x86
 		#region IIRVisitor - Unused
 
 		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.AddressOfInstruction"/>.
+		/// Visitation function for AddressOfInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.AddressOfInstruction(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.BranchInstruction"/> instructions.
+		/// Visitation function for BranchInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.BranchInstruction(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.CallInstruction"/> instructions.
+		/// Visitation function for CallInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.CallInstruction(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.EpilogueInstruction"/> instructions.
+		/// Visitation function for EpilogueInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.EpilogueInstruction(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.FloatingPointCompareInstruction"/> instructions.
+		/// Visitation function for FloatingPointCompareInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.FloatingPointCompareInstruction(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.FloatingPointToIntegerConversionInstruction"/> instructions.
+		/// Visitation function for FloatingPointToIntegerConversionInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.FloatingPointToIntegerConversionInstruction(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.IntegerToFloatingPointConversionInstruction"/> instruction.
+		/// Visitation function for IntegerToFloatingPointConversionInstruction instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.IntegerToFloatingPointConversionInstruction(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.JmpInstruction"/> instruction.
+		/// Visitation function for JmpInstruction"/&gt; instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.JmpInstruction(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.LiteralInstruction"/> instructions.
+		/// Visitation function for LiteralInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.LiteralInstruction(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.PhiInstruction"/> instructions.
+		/// Visitation function for PhiInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.PhiInstruction(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.PrologueInstruction"/> instructions.
+		/// Visitation function for PrologueInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.PrologueInstruction(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.ReturnInstruction"/> instructions.
+		/// Visitation function for ReturnInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.ReturnInstruction(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="IR.IIRVisitor.NopInstruction"/> instructions.
+		/// Visitation function for NopInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.NopInstruction(Context context) { }
 
+		/// <summary>
+		/// Visitation function for ThrowInstruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.ThrowInstruction(Context context) { }
 
 		#endregion // IIRVisitor - Unused
@@ -2158,105 +2162,105 @@ namespace Mosa.Platforms.x86
 		#region ICILVisitor
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.UnaryBranch"/>.
+		/// Visitation function for UnaryBranch.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.UnaryBranch(Context ctx)
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.UnaryBranch(Context context)
 		{
-			if (IsInt64(ctx.Operand1) == true)
+			if (IsInt64(context.Operand1))
 			{
-				ExpandUnaryBranch(ctx);
+				ExpandUnaryBranch(context);
 			}
 		}
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.BinaryBranch"/>.
+		/// Visitation function for BinaryBranch.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.BinaryBranch(Context ctx)
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.BinaryBranch(Context context)
 		{
-			if (IsInt64(ctx.Operand1) == true)
+			if (IsInt64(context.Operand1))
 			{
-				ExpandBinaryBranch(ctx);
+				ExpandBinaryBranch(context);
 			}
 		}
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Neg"/>.
+		/// Visitation function for Neg.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Neg(Context ctx)
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Neg(Context context)
 		{
-			if (IsInt64(ctx.Operand1) == true)
+			if (IsInt64(context.Operand1))
 			{
-				ExpandNeg(ctx);
+				ExpandNeg(context);
 			}
 		}
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Not"/>.
+		/// Visitation function for Not.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Not(Context ctx)
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Not(Context context)
 		{
 			throw new NotSupportedException();
 		}
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.UnaryArithmetic"/>.
+		/// Visitation function for UnaryArithmetic.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.UnaryArithmetic(Context ctx)
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.UnaryArithmetic(Context context)
 		{
 			throw new NotSupportedException();
 		}
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.ArithmeticOverflow"/>.
+		/// Visitation function for ArithmeticOverflow.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.ArithmeticOverflow(Context ctx)
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.ArithmeticOverflow(Context context)
 		{
 			throw new NotSupportedException();
 		}
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Add"/>.
+		/// Visitation function for Add.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Add(Context ctx)
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Add(Context context)
 		{
 			throw new NotSupportedException();
 		}
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Sub"/>.
+		/// Visitation function for Sub.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Sub(Context ctx)
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Sub(Context context)
 		{
 			throw new NotSupportedException();
 		}
 
-		void CIL.ICILVisitor.Mul(Context ctx)
-		{
-			throw new NotSupportedException();
-		}
-
-		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Div"/>.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Div(Context ctx)
+		void CIL.ICILVisitor.Mul(Context context)
 		{
 			throw new NotSupportedException();
 		}
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Rem"/>.
+		/// Visitation function for Div.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Rem(Context ctx)
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Div(Context context)
+		{
+			throw new NotSupportedException();
+		}
+
+		/// <summary>
+		/// Visitation function for Rem.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Rem(Context context)
 		{
 			throw new NotSupportedException();
 		}
@@ -2266,370 +2270,370 @@ namespace Mosa.Platforms.x86
 		#region ICILVisitor - Unused
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Nop"/>.
+		/// Visitation function for Nop.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Nop(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Nop(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Break"/>.
+		/// Visitation function for Break.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Break(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Break(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Ldarg"/>.
+		/// Visitation function for Ldarg.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Ldarg(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Ldarg(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Ldarga"/>.
+		/// Visitation function for Ldarga.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Ldarga(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Ldarga(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Ldloc"/>.
+		/// Visitation function for Ldloc.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Ldloc(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Ldloc(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Ldloca"/>.
+		/// Visitation function for Ldloca.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Ldloca(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Ldloca(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Ldc"/>.
+		/// Visitation function for Ldc.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Ldc(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Ldc(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Ldobj"/>.
+		/// Visitation function for Ldobj.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Ldobj(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Ldobj(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Ldstr"/>.
+		/// Visitation function for Ldstr.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Ldstr(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Ldstr(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Ldfld"/>.
+		/// Visitation function for Ldfld.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Ldfld(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Ldfld(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Ldflda"/>.
+		/// Visitation function for Ldflda.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Ldflda(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Ldflda(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Ldsfld"/>.
+		/// Visitation function for Ldsfld.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Ldsfld(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Ldsfld(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Ldsflda"/>.
+		/// Visitation function for Ldsflda.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Ldsflda(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Ldsflda(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Ldftn"/>.
+		/// Visitation function for Ldftn.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Ldftn(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Ldftn(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Ldvirtftn"/>.
+		/// Visitation function for Ldvirtftn.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Ldvirtftn(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Ldvirtftn(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Ldtoken"/>.
+		/// Visitation function for Ldtoken.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Ldtoken(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Ldtoken(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Stloc"/>.
+		/// Visitation function for Stloc.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Stloc(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Stloc(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Starg"/>.
+		/// Visitation function for Starg.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Starg(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Starg(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Stobj"/>.
+		/// Visitation function for Stobj.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Stobj(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Stobj(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Stfld"/>.
+		/// Visitation function for Stfld.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Stfld(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Stfld(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Stsfld"/>.
+		/// Visitation function for Stsfld.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Stsfld(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Stsfld(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Dup"/>.
+		/// Visitation function for Dup.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Dup(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Dup(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Pop"/>.
+		/// Visitation function for Pop.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Pop(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Pop(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Jmp"/>.
+		/// Visitation function for Jmp.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Jmp(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Jmp(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Call"/>.
+		/// Visitation function for Call.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Call(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Call(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Calli"/>.
+		/// Visitation function for Calli.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Calli(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Calli(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Ret"/>.
+		/// Visitation function for Ret.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Ret(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Ret(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Branch"/>.
+		/// Visitation function for Branch.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Branch(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Branch(Context context) { }
 
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Switch"/>.
+		/// Visitation function for Switch.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Switch(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Switch(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.BinaryLogic"/>.
+		/// Visitation function for BinaryLogic.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.BinaryLogic(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.BinaryLogic(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Shift"/>.
+		/// Visitation function for Shift.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Shift(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Shift(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Conversion"/>.
+		/// Visitation function for Conversion.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Conversion(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Conversion(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Callvirt"/>.
+		/// Visitation function for Callvirt.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Callvirt(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Callvirt(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Cpobj"/>.
+		/// Visitation function for Cpobj.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Cpobj(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Cpobj(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Newobj"/>.
+		/// Visitation function for Newobj.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Newobj(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Newobj(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Castclass"/>.
+		/// Visitation function for Castclass.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Castclass(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Castclass(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Isinst"/>.
+		/// Visitation function for Isinst.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Isinst(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Isinst(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Unbox"/>.
+		/// Visitation function for Unbox.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Unbox(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Unbox(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Throw"/>.
+		/// Visitation function for Throw.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Throw(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Throw(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Box"/>.
+		/// Visitation function for Box.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Box(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Box(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Newarr"/>.
+		/// Visitation function for Newarr.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Newarr(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Newarr(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Ldlen"/>.
+		/// Visitation function for Ldlen.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Ldlen(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Ldlen(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Ldelema"/>.
+		/// Visitation function for Ldelema.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Ldelema(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Ldelema(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Ldelem"/>.
+		/// Visitation function for Ldelem.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Ldelem(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Ldelem(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Stelem"/>.
+		/// Visitation function for Stelem.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Stelem(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Stelem(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.UnboxAny"/>.
+		/// Visitation function for UnboxAny.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.UnboxAny(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.UnboxAny(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Refanyval"/>.
+		/// Visitation function for Refanyval.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Refanyval(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Refanyval(Context context) { }
 
 		/// <summary>
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Mkrefany(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Mkrefany(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Endfinally"/>.
+		/// Visitation function for Endfinally.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Endfinally(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Endfinally(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Leave"/>.
+		/// Visitation function for Leave.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Leave(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Leave(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Arglist"/>.
+		/// Visitation function for Arglist.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Arglist(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Arglist(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.BinaryComparison"/>.
+		/// Visitation function for BinaryComparison.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.BinaryComparison(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.BinaryComparison(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Localalloc"/>.
+		/// Visitation function for Localalloc.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Localalloc(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Localalloc(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Endfilter"/>.
+		/// Visitation function for Endfilter.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Endfilter(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Endfilter(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.InitObj"/>.
+		/// Visitation function for InitObj.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.InitObj(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.InitObj(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Cpblk"/>.
+		/// Visitation function for Cpblk.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Cpblk(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Cpblk(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Initblk"/>.
+		/// Visitation function for Initblk.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Initblk(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Initblk(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Prefix"/>.
+		/// Visitation function for Prefix.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Prefix(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Prefix(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Rethrow"/>.
+		/// Visitation function for Rethrow.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Rethrow(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Rethrow(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Sizeof"/>.
+		/// Visitation function for Sizeof.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Sizeof(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Sizeof(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Refanytype"/>.
+		/// Visitation function for Refanytype.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
-		void CIL.ICILVisitor.Refanytype(Context ctx) { }
+		/// <param name="context">The context.</param>
+		void CIL.ICILVisitor.Refanytype(Context context) { }
 
 		#endregion // ICILVisitor - Unused
 
