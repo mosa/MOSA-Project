@@ -88,10 +88,32 @@ namespace Mosa.Runtime.Metadata.Signatures
 		public override bool Equals(SigType other)
 		{
 			GenericInstSigType gist = other as GenericInstSigType;
-			if (null == gist)
+			if (gist == null)
 				return false;
 
+			// TEMP
+			if (!base.Equals(other))
+				return false;
+
+			if ( this.baseType != gist.baseType)
+				return false;
+
+			if (!SigType.Equals(this.genericArguments, gist.genericArguments))
+				return false;
+			// END TEMP
+
 			return (base.Equals(other) && this.baseType == gist.baseType && SigType.Equals(this.genericArguments, gist.genericArguments));
+		}
+
+		/// <summary>
+		/// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
+		/// </returns>
+		public override string ToString()
+		{
+			return base.ToString() + " " + baseType.ToString();
 		}
 
 		#endregion // SigType Overrides

@@ -107,6 +107,9 @@ namespace Mosa.Runtime.Metadata.Signatures
 				case CilElementType.SZArray:	
 					return this.Equals(other);
 
+				case CilElementType.GenericInst:
+					return this.Equals(other);
+
 				default:
 					throw new NotImplementedException();
 			}
