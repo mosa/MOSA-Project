@@ -183,5 +183,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		public static NopInstruction NopInstruction = new NopInstruction();
 
 		public static readonly SwitchInstruction SwitchInstruction = new SwitchInstruction();
+
+        public static readonly ThrowInstruction ThrowInstruction = new ThrowInstruction();
 	}
 }

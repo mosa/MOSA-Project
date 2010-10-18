@@ -599,7 +599,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <param name="ctx">The context.</param>
 		void ICILVisitor.Throw(Context ctx)
 		{
-			ReplaceWithVmCall(ctx, VmCall.Throw);
+            ctx.SetInstruction(IR.Instruction.ThrowInstruction);
 		}
 
 		/// <summary>

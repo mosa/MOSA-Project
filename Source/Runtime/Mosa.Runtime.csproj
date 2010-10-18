@@ -87,6 +87,8 @@
     <Compile Include="CompilerFramework\CIL\DecodingStage.cs" />
     <Compile Include="CompilerFramework\CIL\BreakInstruction.cs" />
     <Compile Include="CompilerFramework\BaseAssemblyCompilerStage.cs" />
+    <Compile Include="CompilerFramework\ExceptionEngine.cs" />
+    <Compile Include="CompilerFramework\IR\ThrowInstruction.cs" />
     <Compile Include="CompilerFramework\ITypeLayout.cs" />
     <Compile Include="CompilerFramework\GenericsResolverStage.cs" />
     <Compile Include="CompilerFramework\ICompilationSchedulerStage.cs" />
