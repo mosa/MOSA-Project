@@ -388,6 +388,10 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		{
 		}
 
+        public void ThrowInstruction(Context context)
+        {
+        }
+
 		#endregion // IIRVisitor - Unused
 
 	}
