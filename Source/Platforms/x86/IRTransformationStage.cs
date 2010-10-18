@@ -33,7 +33,7 @@ namespace Mosa.Platforms.x86
 	public sealed class IRTransformationStage : BaseTransformationStage, IR.IIRVisitor, IMethodCompilerStage, IPlatformStage, IPipelineStage
 	{
 		#region IPipelineStage Members
-        bool exceptionHandlingCompiled = false;
+		bool exceptionHandlingCompiled = false;
 		/// <summary>
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
@@ -107,7 +107,7 @@ namespace Mosa.Platforms.x86
 			RegisterOperand esp = new RegisterOperand(I, GeneralPurposeRegister.ESP);
 			int stackSize = (int)ctx.Other;
 
-            ctx.SetInstruction(CPUx86.Instruction.PopInstruction, ebx);
+			ctx.SetInstruction(CPUx86.Instruction.PopInstruction, ebx);
 
 			if (MethodCompiler.Method.Signature.ReturnType.Type == CilElementType.I8
 				|| MethodCompiler.Method.Signature.ReturnType.Type == CilElementType.U8)
@@ -517,7 +517,7 @@ namespace Mosa.Platforms.x86
 				ctx.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new RegisterOperand(I, GeneralPurposeRegister.EDX));
 			}
 
-            ctx.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new ConstantOperand(I, (-stackSize) + 0x0C));
+			ctx.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new ConstantOperand(I, (-stackSize) + 0x0C));
 
 			//ctx.AppendInstruction(CPUx86.Instruction.BreakInstruction);
 		}
@@ -886,65 +886,65 @@ namespace Mosa.Platforms.x86
 			context.ReplaceInstructionOnly(CPUx86.Instruction.PushInstruction);
 		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="context"></param>
-        public void ThrowInstruction(Context context)
-        {
-            int pointOfThrow = 4;
-            int exceptionObject = 12;
-            SigType u4 = new SigType(CilElementType.U4);
+		/// <summary>
+		/// Visitation function for <see cref="ThrowInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		public void ThrowInstruction(Context context)
+		{
+			int pointOfThrow = 4;
+			int exceptionObject = 12;
+			SigType u4 = new SigType(CilElementType.U4);
 
-            RuntimeType runtimeType = typeSystem.GetType(@"Mosa.Platforms.x86.ExceptionEngine, Mosa.Platforms.x86");
-            RuntimeMethod runtimeMethod = runtimeType.FindMethod(@"ThrowException");
-            SymbolOperand method = SymbolOperand.FromMethod(runtimeMethod);
+			RuntimeType runtimeType = typeSystem.GetType(@"Mosa.Platforms.x86.ExceptionEngine, Mosa.Platforms.x86");
+			RuntimeMethod runtimeMethod = runtimeType.FindMethod(@"ThrowException");
+			SymbolOperand method = SymbolOperand.FromMethod(runtimeMethod);
 
-            Operand callTarget = context.Result;
+			Operand callTarget = context.Result;
 
-            MemoryOperand pointOfThrowOperand = new MemoryOperand(u4, GeneralPurposeRegister.ESP, new IntPtr(pointOfThrow));
-            MemoryOperand exceptionObjectOperand = new MemoryOperand(u4, GeneralPurposeRegister.ESP, new IntPtr(exceptionObject));
+			MemoryOperand pointOfThrowOperand = new MemoryOperand(u4, GeneralPurposeRegister.ESP, new IntPtr(pointOfThrow));
+			MemoryOperand exceptionObjectOperand = new MemoryOperand(u4, GeneralPurposeRegister.ESP, new IntPtr(exceptionObject));
 
-            RegisterOperand esp = new RegisterOperand(u4, GeneralPurposeRegister.ESP);
-            RegisterOperand eax = new RegisterOperand(u4, GeneralPurposeRegister.EAX);
-            /** For debugging **/
-            context.SetInstruction(CPUx86.Instruction.BreakInstruction);
-            /** For debugging **/
-            context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new RegisterOperand(u4, GeneralPurposeRegister.ESP));
-            context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, pointOfThrowOperand);
-            context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, exceptionObjectOperand);
-            context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new RegisterOperand(u4, GeneralPurposeRegister.EBP));
-            context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new RegisterOperand(u4, GeneralPurposeRegister.EDI));
-            context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new RegisterOperand(u4, GeneralPurposeRegister.ESI));
-            context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new RegisterOperand(u4, GeneralPurposeRegister.EBX));
-            context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new RegisterOperand(u4, GeneralPurposeRegister.EDX));
-            context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new RegisterOperand(u4, GeneralPurposeRegister.ECX));
-            context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new RegisterOperand(u4, GeneralPurposeRegister.EAX));
+			RegisterOperand esp = new RegisterOperand(u4, GeneralPurposeRegister.ESP);
+			RegisterOperand eax = new RegisterOperand(u4, GeneralPurposeRegister.EAX);
+			/* For debugging */
+			context.SetInstruction(CPUx86.Instruction.BreakInstruction);
+			/* For debugging */
+			context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new RegisterOperand(u4, GeneralPurposeRegister.ESP));
+			context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, pointOfThrowOperand);
+			context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, exceptionObjectOperand);
+			context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new RegisterOperand(u4, GeneralPurposeRegister.EBP));
+			context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new RegisterOperand(u4, GeneralPurposeRegister.EDI));
+			context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new RegisterOperand(u4, GeneralPurposeRegister.ESI));
+			context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new RegisterOperand(u4, GeneralPurposeRegister.EBX));
+			context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new RegisterOperand(u4, GeneralPurposeRegister.EDX));
+			context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new RegisterOperand(u4, GeneralPurposeRegister.ECX));
+			context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new RegisterOperand(u4, GeneralPurposeRegister.EAX));
 
-            context.AppendInstruction(CPUx86.Instruction.SubInstruction, esp, new ConstantOperand(esp.Type, 40));
-            context.AppendInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(u4, GeneralPurposeRegister.EDX), esp);
+			context.AppendInstruction(CPUx86.Instruction.SubInstruction, esp, new ConstantOperand(esp.Type, 40));
+			context.AppendInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(u4, GeneralPurposeRegister.EDX), esp);
 
-            for (int i = 0; i < 10; ++i)
-            {
-                context.AppendInstruction(CPUx86.Instruction.PopInstruction, eax);
-                context.AppendInstruction(CPUx86.Instruction.MovInstruction, new MemoryOperand(u4, GeneralPurposeRegister.EDX, new IntPtr(i * 4)), eax);
-            }
+			for (int i = 0; i < 10; ++i)
+			{
+				context.AppendInstruction(CPUx86.Instruction.PopInstruction, eax);
+				context.AppendInstruction(CPUx86.Instruction.MovInstruction, new MemoryOperand(u4, GeneralPurposeRegister.EDX, new IntPtr(i * 4)), eax);
+			}
 
-            context.AppendInstruction(CPUx86.Instruction.CallInstruction, null, method);
+			context.AppendInstruction(CPUx86.Instruction.CallInstruction, null, method);
 
-            if (!exceptionHandlingCompiled)
-            {
-                this.MethodCompiler.Scheduler.ScheduleTypeForCompilation(typeSystem.GetType(@"Mosa.Platforms.x86.RegisterContext, Mosa.Platforms.x86"));
-                this.MethodCompiler.Scheduler.ScheduleTypeForCompilation(typeSystem.GetType(@"Mosa.Platforms.x86.ExceptionEngine, Mosa.Platforms.x86"));
-                (this.typeLayout as TypeLayoutStage).CreateSequentialLayout(typeSystem.GetType(@"Mosa.Platforms.x86.RegisterContext, Mosa.Platforms.x86"));
-                (this.typeLayout as TypeLayoutStage).CreateSequentialLayout(typeSystem.GetType(@"Mosa.Platforms.x86.ExceptionEngine, Mosa.Platforms.x86"));
-                //this.MethodCompiler.Scheduler.ScheduleMethodForCompilation(typeSystem.GetType(@"Mosa.Platforms.x86.ExceptionEngine, Mosa.Platforms.x86").FindMethod(@"ThrowException"));
-                //this.MethodCompiler.Scheduler.ScheduleMethodForCompilation(typeSystem.GetType(@"Mosa.Platforms.x86.ExceptionEngine, Mosa.Platforms.x86").FindMethod(@"RestoreContext"));
-                (this.typeLayout as TypeLayoutStage).BuildMethodTable(typeSystem.GetType(@"Mosa.Platforms.x86.RegisterContext, Mosa.Platforms.x86"));
-                (this.typeLayout as TypeLayoutStage).BuildMethodTable(typeSystem.GetType(@"Mosa.Platforms.x86.ExceptionEngine, Mosa.Platforms.x86"));
-                exceptionHandlingCompiled = true;
-            }
-        }
+			if (!exceptionHandlingCompiled)
+			{
+				this.MethodCompiler.Scheduler.ScheduleTypeForCompilation(typeSystem.GetType(@"Mosa.Platforms.x86.RegisterContext, Mosa.Platforms.x86"));
+				this.MethodCompiler.Scheduler.ScheduleTypeForCompilation(typeSystem.GetType(@"Mosa.Platforms.x86.ExceptionEngine, Mosa.Platforms.x86"));
+				(this.typeLayout as TypeLayoutStage).CreateSequentialLayout(typeSystem.GetType(@"Mosa.Platforms.x86.RegisterContext, Mosa.Platforms.x86"));
+				(this.typeLayout as TypeLayoutStage).CreateSequentialLayout(typeSystem.GetType(@"Mosa.Platforms.x86.ExceptionEngine, Mosa.Platforms.x86"));
+				//this.MethodCompiler.Scheduler.ScheduleMethodForCompilation(typeSystem.GetType(@"Mosa.Platforms.x86.ExceptionEngine, Mosa.Platforms.x86").FindMethod(@"ThrowException"));
+				//this.MethodCompiler.Scheduler.ScheduleMethodForCompilation(typeSystem.GetType(@"Mosa.Platforms.x86.ExceptionEngine, Mosa.Platforms.x86").FindMethod(@"RestoreContext"));
+				(this.typeLayout as TypeLayoutStage).BuildMethodTable(typeSystem.GetType(@"Mosa.Platforms.x86.RegisterContext, Mosa.Platforms.x86"));
+				(this.typeLayout as TypeLayoutStage).BuildMethodTable(typeSystem.GetType(@"Mosa.Platforms.x86.ExceptionEngine, Mosa.Platforms.x86"));
+				exceptionHandlingCompiled = true;
+			}
+		}
 
 		#endregion //  IIRVisitor
 

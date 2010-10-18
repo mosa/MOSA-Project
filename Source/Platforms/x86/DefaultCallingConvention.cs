@@ -164,8 +164,8 @@ namespace Mosa.Platforms.x86
 				if (operand.Type.Type == CilElementType.ValueType)
 				{
 					// FIXME
-					//throw new System.NotImplementedException();
-                    size = typeLayout.GetTypeSize(context, typeSystem.GetType(context, (operand.Type as ValueTypeSigType).Token));
+					throw new System.NotImplementedException();
+					//size = typeLayout.GetTypeSize(context, typeSystem.GetType(context, (operand.Type as ValueTypeSigType).Token));
 					//size = ObjectModelUtility.ComputeTypeSize(context, (operand.Type as ValueTypeSigType).Token, moduleTypeSystem, architecture);
 				}
 				
@@ -225,7 +225,7 @@ namespace Mosa.Platforms.x86
 
 					return;
 				}
-                
+				
 				RegisterOperand rop;
 				switch (op.StackType)
 				{
@@ -301,8 +301,8 @@ namespace Mosa.Platforms.x86
 				if (op.Type.Type == CilElementType.ValueType)
 				{
 					// FIXME
-					//throw new System.NotImplementedException();
-					size = typeLayout.GetTypeSize(context, typeSystem.GetType(context, (op.Type as ValueTypeSigType).Token));
+					throw new System.NotImplementedException();
+					//size = typeLayout.GetTypeSize(context, typeSystem.GetType(context, (op.Type as ValueTypeSigType).Token));
 					//size = ObjectModelUtility.ComputeTypeSize(context, (op.Type as ValueTypeSigType).Token, moduleTypeSystem, architecture);
 				}
 
