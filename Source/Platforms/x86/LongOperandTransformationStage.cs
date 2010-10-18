@@ -2062,6 +2062,8 @@ namespace Mosa.Platforms.x86
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.NopInstruction(Context context) { }
 
+        void IR.IIRVisitor.ThrowInstruction(Context context) { }
+
 		#endregion // IIRVisitor - Unused
 
 		#region ICILVisitor
