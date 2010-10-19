@@ -15,26 +15,26 @@ using MbUnit.Framework;
 namespace Test.Mosa.Runtime.CompilerFramework
 {
 	[TestFixture]
-	[Parallelizable]
+	//[Parallelizable]
 	public class GenericMethodMemberFixture : CodeDomTestRunner
 	{
 		private static string CreateTestCode(string type)
 		{
 			return @"
-                using System;
+				using System;
 
-                static class Test
+				static class Test
 				{
 					private static T GenericMethod<T>(T value)
 					{
 						return value;
 					}
 
-                    public static bool TestCallGenericMethodWith(" + type + @" value)
-                    {
-                        return value == GenericMethod(value);
-                    }
-                }" + Code.ObjectClassDefinition;
+					public static bool TestCallGenericMethodWith(" + type + @" value)
+					{
+						return value == GenericMethod(value);
+					}
+				}" + Code.ObjectClassDefinition;
 		}
 
 		private delegate bool B_B(bool value);
