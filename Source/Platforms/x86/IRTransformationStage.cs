@@ -974,10 +974,9 @@ namespace Mosa.Platforms.x86
 			RegisterOperand esp = new RegisterOperand(u4, GeneralPurposeRegister.ESP);
 			RegisterOperand eax = new RegisterOperand(u4, GeneralPurposeRegister.EAX);
 
-            context.SetInstruction(CPUx86.Instruction.BreakInstruction);
-            // Save current stack
-            context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new RegisterOperand(u4, GeneralPurposeRegister.ESP));
-            // Save point of call
+			// Save current stack
+			context.SetInstruction(CPUx86.Instruction.PushInstruction, null, new RegisterOperand(u4, GeneralPurposeRegister.ESP));
+			// Save point of call
 			context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, pointOfThrowOperand);
 			// Pass thrown exception
 			context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, exceptionObjectOperand);
