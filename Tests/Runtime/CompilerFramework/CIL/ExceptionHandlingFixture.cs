@@ -27,7 +27,15 @@ namespace Test.Mosa.Runtime.CompilerFramework
 				{
 					public static bool CatchException(int value)
 					{
-						throw new Exception ();
+						try
+						{
+							throw new Exception ();
+						}
+						catch (Exception exception)
+						{
+							return true;
+						}
+						return false;
 					}
 				}" + Code.ObjectClassDefinition + Code.NoStdLibDefinitions;
 		}

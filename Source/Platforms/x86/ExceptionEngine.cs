@@ -64,5 +64,15 @@ namespace Mosa.Platforms.x86
 		{
 
 		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="registerContext"></param>
+		/// <param name="exceptionInformation"></param>
+		private static void CallFilter(RegisterContext registerContext, object exceptionInformation)
+		{
+
+		}
 	}
 }

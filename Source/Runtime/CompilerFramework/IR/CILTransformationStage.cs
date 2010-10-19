@@ -1067,7 +1067,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Leave(Context context)
 		{
-			throw new NotSupportedException();
+			context.ReplaceInstructionOnly(IR.Instruction.JmpInstruction);
 		}
 
 		/// <summary>
