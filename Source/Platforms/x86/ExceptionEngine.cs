@@ -38,10 +38,8 @@ namespace Mosa.Platforms.x86
 			eip = Native.GetEip();
 			// Create context
 			RegisterContext registerContext = new RegisterContext(eax, ebx, ecx, edx, esi, edi, ebp, eip, esp + 40);
-
 			// Try to handle the exception
 			HandleException(registerContext, exception, eip);
-
 			// Return after exception has been handled
 			RestoreContext(registerContext);
 		}
@@ -63,7 +61,30 @@ namespace Mosa.Platforms.x86
 		/// <param name="eip">EIP to return to when handled</param>
 		private static void HandleException(RegisterContext registerContext, Exception exception, uint eip)
 		{
+			HandlerIdentificationPass(registerContext, exception, eip);
+			HandlerInvocationPass(registerContext, exception, eip);
+		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="registerContext"></param>
+		/// <param name="exception"></param>
+		/// <param name="eip"></param>
+		private static void HandlerIdentificationPass(RegisterContext registerContext, Exception exception, uint eip)
+		{
+			throw new NotImplementedException();
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="registerContext"></param>
+		/// <param name="exception"></param>
+		/// <param name="eip"></param>
+		private static void HandlerInvocationPass(RegisterContext registerContext, Exception exception, uint eip)
+		{
+			throw new NotImplementedException();
 		}
 
 		/// <summary>
