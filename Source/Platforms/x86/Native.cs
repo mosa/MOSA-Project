@@ -291,11 +291,14 @@ namespace Mosa.Platforms.x86
 		[Intrinsic(typeof(Architecture), typeof(Intrinsic.SwitchTask))]
 		public static void SwitchTask(uint esp) { ThrowPlatformNotSupported(); }
 
-        [Intrinsic(typeof(Architecture), typeof(Intrinsic.RestoreContext))]
-        public static void RestoreContext() { ThrowPlatformNotSupported(); }
+		[Intrinsic(typeof(Architecture), typeof(Intrinsic.RestoreContext))]
+		public static void RestoreContext() { ThrowPlatformNotSupported(); }
 
-        [Intrinsic(typeof(Architecture), typeof(Intrinsic.GetEip))]
-        public static uint GetEip() { ThrowPlatformNotSupported(); return 0;  }
+		[Intrinsic(typeof(Architecture), typeof(Intrinsic.GetEip))]
+		public static uint GetEip() { ThrowPlatformNotSupported(); return 0;  }
+
+		[Intrinsic(typeof(Architecture), typeof(Intrinsic.CallFilter))]
+		public static void CallFilter() { ThrowPlatformNotSupported(); }
 
 		#endregion
 

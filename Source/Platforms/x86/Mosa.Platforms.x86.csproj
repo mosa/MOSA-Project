@@ -85,6 +85,7 @@
     <Compile Include="CPUx86\FarJmpInstruction.cs" />
     <Compile Include="CPUx86\SseRoundInstruction.cs" />
     <Compile Include="ExceptionEngine.cs" />
+    <Compile Include="Intrinsic\CallFilter.cs" />
     <Compile Include="Intrinsic\GetEip.cs" />
     <Compile Include="Intrinsic\Cli.cs" />
     <Compile Include="Intrinsic\GetControlRegisterBase.cs" />

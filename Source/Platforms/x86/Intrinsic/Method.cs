@@ -79,6 +79,7 @@ namespace Mosa.Platforms.x86.Intrinsic
 			map.Add(typeof(Test), new Test());
             map.Add(typeof(RestoreContext), new RestoreContext());
             map.Add(typeof(GetEip), new GetEip());
+			map.Add(typeof(CallFilter), new CallFilter());
 
 			return map;
 		}

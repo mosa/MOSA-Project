@@ -72,7 +72,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="exceptionInformation"></param>
 		private static void CallFilter(RegisterContext registerContext, object exceptionInformation)
 		{
-
+			Native.CallFilter();
 		}
 	}
 }
