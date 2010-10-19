@@ -83,6 +83,7 @@
     <Compile Include="AddressModeConversionStage.cs" />
     <Compile Include="ControlRegister.cs" />
     <Compile Include="CPUx86\FarJmpInstruction.cs" />
+    <Compile Include="CPUx86\LeaveInstruction.cs" />
     <Compile Include="CPUx86\SseRoundInstruction.cs" />
     <Compile Include="ExceptionEngine.cs" />
     <Compile Include="Intrinsic\CallFilter.cs" />

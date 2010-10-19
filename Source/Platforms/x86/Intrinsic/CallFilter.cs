@@ -41,6 +41,7 @@ namespace Mosa.Platforms.x86.Intrinsic
 			RegisterOperand eax = new RegisterOperand(u4, GeneralPurposeRegister.EAX);
 			RegisterOperand ebx = new RegisterOperand(u4, GeneralPurposeRegister.EBX);
 			RegisterOperand ecx = new RegisterOperand(u4, GeneralPurposeRegister.ECX);
+			RegisterOperand edx = new RegisterOperand(u4, GeneralPurposeRegister.EDX);
 			RegisterOperand esi = new RegisterOperand(u4, GeneralPurposeRegister.ESI);
 			RegisterOperand edi = new RegisterOperand(u4, GeneralPurposeRegister.EDI);
 
@@ -50,11 +51,37 @@ namespace Mosa.Platforms.x86.Intrinsic
 			context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, esi);
 			context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, edi);
 
+			// Load register context
 			context.AppendInstruction(CPUx86.Instruction.MovInstruction, eax, new MemoryOperand(u4, GeneralPurposeRegister.ESP, new IntPtr(28)));
+			// Load exception handler
 			context.AppendInstruction(CPUx86.Instruction.MovInstruction, ecx, new MemoryOperand(u4, GeneralPurposeRegister.ESP, new IntPtr(32)));
+			// Save EBP
 			context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, ebp);
 
+			// Restore register values
 			context.AppendInstruction(CPUx86.Instruction.MovInstruction, ebp, new MemoryOperand(u4, GeneralPurposeRegister.EAX, new IntPtr(24)));
+			context.AppendInstruction(CPUx86.Instruction.MovInstruction, ebx, new MemoryOperand(u4, GeneralPurposeRegister.EAX, new IntPtr(4)));
+			context.AppendInstruction(CPUx86.Instruction.MovInstruction, esi, new MemoryOperand(u4, GeneralPurposeRegister.EAX, new IntPtr(16)));
+			context.AppendInstruction(CPUx86.Instruction.MovInstruction, edi, new MemoryOperand(u4, GeneralPurposeRegister.EAX, new IntPtr(20)));
+
+			// Align ESP
+			context.AppendInstruction(CPUx86.Instruction.MovInstruction, edx, esp);
+			context.AppendInstruction(CPUx86.Instruction.AndInstruction, esp, new ConstantOperand(u4, 0xFFFFFFF0u));
+			context.AppendInstruction(CPUx86.Instruction.SubInstruction, esp, new ConstantOperand(u4, 0x8u));
+
+			// Save original ESP
+			context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, edx);
+			// Call catch handler
+			context.AppendInstruction(CPUx86.Instruction.CallInstruction, ecx);
+
+			// Restore registers
+			context.AppendInstruction(CPUx86.Instruction.PopInstruction, esp);
+			context.AppendInstruction(CPUx86.Instruction.PopInstruction, ebp);
+			context.AppendInstruction(CPUx86.Instruction.PopInstruction, esi);
+			context.AppendInstruction(CPUx86.Instruction.PopInstruction, edi);
+			context.AppendInstruction(CPUx86.Instruction.PopInstruction, ebx);
+			context.AppendInstruction(CPUx86.Instruction.LeaveInstruction);
+			context.AppendInstruction(CPUx86.Instruction.RetInstruction);
 		}
 
 		#endregion // Methods

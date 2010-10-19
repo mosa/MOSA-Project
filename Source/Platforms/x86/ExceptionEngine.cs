@@ -56,20 +56,21 @@ namespace Mosa.Platforms.x86
 		}
 
 		/// <summary>
-		/// 
+		/// Tries to handle the exception by searching the method header for a suitable exception handler/filter.
 		/// </summary>
-		/// <param name="exception"></param>
-		/// <param name="eip"></param>
+		/// <param name="registerContext">The register status right before the throw</param>
+		/// <param name="exception">The thrown exception</param>
+		/// <param name="eip">EIP to return to when handled</param>
 		private static void HandleException(RegisterContext registerContext, Exception exception, uint eip)
 		{
 
 		}
 
 		/// <summary>
-		/// 
+		/// Calls the given filter to handle the exception
 		/// </summary>
-		/// <param name="registerContext"></param>
-		/// <param name="exceptionInformation"></param>
+		/// <param name="registerContext">The register status right before the throw</param>
+		/// <param name="exceptionInformation">The exception handler information</param>
 		private static void CallFilter(RegisterContext registerContext, object exceptionInformation)
 		{
 			Native.CallFilter();

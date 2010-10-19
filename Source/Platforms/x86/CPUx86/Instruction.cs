@@ -231,6 +231,10 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <summary>
 		/// 
 		/// </summary>
+		public static readonly LeaveInstruction LeaveInstruction = new LeaveInstruction();
+		/// <summary>
+		/// 
+		/// </summary>
 		public static readonly CldInstruction CldInstruction = new CldInstruction();
 		/// <summary>
 		/// 
