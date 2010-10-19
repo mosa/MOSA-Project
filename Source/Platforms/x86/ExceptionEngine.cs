@@ -37,7 +37,7 @@ namespace Mosa.Platforms.x86
             // Read callee's EIP from method header
             eip = Native.GetEip();
             // Create context
-            RegisterContext registerContext = new RegisterContext(eax, ebx, ecx, edx, esi, edi, ebp, eip, esp + 8);
+            RegisterContext registerContext = new RegisterContext(eax, ebx, ecx, edx, esi, edi, ebp, eip, esp + 40);
 
             // Return after exception has been handled
             RestoreContext(registerContext);

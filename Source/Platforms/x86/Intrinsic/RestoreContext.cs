@@ -44,7 +44,7 @@ namespace Mosa.Platforms.x86.Intrinsic
             context.AppendInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(u4, GeneralPurposeRegister.EBX), new MemoryOperand(u4, GeneralPurposeRegister.EAX, new IntPtr(4)));
             context.AppendInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(u4, GeneralPurposeRegister.EDI), new MemoryOperand(u4, GeneralPurposeRegister.EAX, new IntPtr(20)));
             context.AppendInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(u4, GeneralPurposeRegister.ESI), new MemoryOperand(u4, GeneralPurposeRegister.EAX, new IntPtr(16)));
-            context.AppendInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(u4, GeneralPurposeRegister.ESP), new MemoryOperand(u4, GeneralPurposeRegister.EAX, new IntPtr(20)));
+            context.AppendInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(u4, GeneralPurposeRegister.ESP), new MemoryOperand(u4, GeneralPurposeRegister.EAX, new IntPtr(32)));
             context.AppendInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(u4, GeneralPurposeRegister.EBP), new MemoryOperand(u4, GeneralPurposeRegister.EAX, new IntPtr(24)));
 
             // Jmp to EIP (stored in EDX)
