@@ -149,7 +149,6 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 				// Read all headers, so the IL decoder knows how to handle these...
 				byte flags;
-				EhClause clause = new EhClause();
 
 				do
 				{
@@ -177,7 +176,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 					// Read the clause
 					for (int i = 0; i < blocks; i++)
 					{
+						EhClause clause = new EhClause();
 						clause.Read(reader, isFat);
+						this.MethodCompiler.Method.ExceptionClauseHeader.AddClause(clause);
 						// FIXME: Create proper basic Blocks for each item in the clause
 					}
 				}

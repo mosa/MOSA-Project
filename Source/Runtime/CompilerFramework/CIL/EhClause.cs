@@ -74,21 +74,21 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </summary>
 		public int FilterOffset;
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public int TryEnd
-        {
-            get { return this.TryOffset + this.TryLength; }
-        }
+		/// <summary>
+		/// 
+		/// </summary>
+		public int TryEnd
+		{
+			get { return this.TryOffset + this.TryLength; }
+		}
 
-        /// <summary>
-        /// 
-        /// </summary>
-        public int HandlerEnd
-        {
-            get { return this.HandlerOffset + this.HandlerLength; }
-        }
+		/// <summary>
+		/// 
+		/// </summary>
+		public int HandlerEnd
+		{
+			get { return this.HandlerOffset + this.HandlerLength; }
+		}
 
 		/// <summary>
 		/// Reads the specified reader.

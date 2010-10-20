@@ -73,7 +73,14 @@ namespace Mosa.Platforms.x86
 		/// <param name="eip"></param>
 		private static void HandlerIdentificationPass(RegisterContext registerContext, Exception exception, uint eip)
 		{
-			throw new NotImplementedException();
+			RegisterContext initialContext = new RegisterContext(registerContext);
+
+			while (true)
+			{
+				RegisterContext newContext = null;
+
+				registerContext.Update(newContext);
+			}
 		}
 
 		/// <summary>

@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Text;
 
 using Mosa.Runtime.CompilerFramework;
+using Mosa.Runtime.CompilerFramework.CIL;
 using Mosa.Runtime.Loader;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Tables;
@@ -56,6 +57,11 @@ namespace Mosa.Runtime.Vm
 		/// Holds the rva of the MSIL of the method.
 		/// </summary>
 		private ulong rva;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		private ExceptionClauseHeader exceptionClauseHeader = new ExceptionClauseHeader();
 
 		#endregion // Data members
 
@@ -167,6 +173,14 @@ namespace Mosa.Runtime.Vm
 		{
 			get { return this.rva; }
 			protected set { this.rva = value; }
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public ExceptionClauseHeader ExceptionClauseHeader
+		{
+			get { return this.exceptionClauseHeader; }
 		}
 
 		#endregion // Properties
