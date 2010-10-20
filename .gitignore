@@ -15,6 +15,7 @@
 *.Cache
 *.tlog
 *.vs10x
+*.exe.manifest
 Thumbs.db
 build.force
 /bin/*

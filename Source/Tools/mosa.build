@@ -61,8 +61,18 @@
 	    </csc>
 	</target>
 
+	<target name="permutations">
+	    <csc target="exe" output="${outputDirectory}/Mosa.Permutations.exe" debug="${debug}">
+	        <sources>
+	        	<include name="Permutations/**/*.cs"/>
+	        </sources>
+
+	        <nowarn><warning number="${suppresswarnings}"/></nowarn>
+	    </csc>
+	</target>
+
 	<!-- Main build target -->
-	<target name="build" depends="createbootimage, makeisoimage, mosacl, mono"/>
+	<target name="build" depends="createbootimage, makeisoimage, mosacl, mono, permutations"/>
 	<target name="mono"><nant buildfile="Mono/mosa.build"/></target>
 
 </project>
