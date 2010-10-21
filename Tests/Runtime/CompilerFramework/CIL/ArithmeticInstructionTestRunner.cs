@@ -4,8 +4,8 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Michael Fröhlich (aka grover, <mailto:sharpos@michaelruck.de>)
- *  
+ *  Michael Fröhlich (grover) <michael.ruck@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>  
  */
 
 using System;
@@ -28,8 +28,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 			this.IncludeNeg = true;
 		}
 
-		public string ExpectedTypeName { get; set; }
-		public string TypeName { get; set; }
+		public string ExpectedType { get; set; }
+		public string FirstType { get; set; }
+		public string SecondType { get; set; }
 
 		public bool IncludeAdd { get; set; }
 		public bool IncludeSub { get; set; }
@@ -38,11 +39,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		public bool IncludeRem { get; set; }
 		public bool IncludeNeg { get; set; }
 
-		private void SetTestCode(string expectedType, string typeName)
+		private void SetTestCode()
 		{
-			string marshalType = this.CreateMarshalAttribute(String.Empty, typeName);
-			string returnMarshalType = this.CreateMarshalAttribute(@"return:", typeName);
-			string marshalExpectedType = this.CreateMarshalAttribute(String.Empty, expectedType);
+			string returnMarshalType = this.CreateMarshalAttribute(@"return:", FirstType);
+			string marshalFirstType = this.CreateMarshalAttribute(String.Empty, FirstType);
+			string marshalSecondType = this.CreateMarshalAttribute(String.Empty, SecondType);
+			string marshalExpectedType = this.CreateMarshalAttribute(String.Empty, ExpectedType);
 
 			StringBuilder codeBuilder = new StringBuilder();
 			codeBuilder.Append(TestCodeHeader);
@@ -67,37 +69,15 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 			codeBuilder.Append(Code.ObjectClassDefinition);
 
 			codeBuilder
-				.Replace(@"[[typename]]", typeName)
-				.Replace(@"[[expectedType]]", expectedType)
-				.Replace(@"[[returnmarshal-typename]]", returnMarshalType)
-				.Replace(@"[[marshal-typename]]", marshalType)
-				.Replace(@"[[marshal-expectedType]]", marshalExpectedType);
+				.Replace(@"[[expectedtype]]", ExpectedType)
+				.Replace(@"[[firsttype]]", FirstType)
+				.Replace(@"[[secondtype]]", SecondType)
+				.Replace(@"[[returnmarshal-type]]", returnMarshalType)
+				.Replace(@"[[marshal-expectedtype]]", marshalExpectedType)
+				.Replace(@"[[marshal-firsttype]]", marshalFirstType)
+				.Replace(@"[[marshal-secondtype]]", marshalSecondType);
 
 			CodeSource = codeBuilder.ToString();
-		}
-
-		private string CreateMarshalAttribute(string prefix, string typeName)
-		{
-			string result = String.Empty;
-			string marshalDirective = this.GetMarshalDirective(typeName);
-			if (marshalDirective != null)
-			{
-				result = @"[" + prefix + marshalDirective + @"]";
-			}
-
-			return result;
-		}
-
-		private string GetMarshalDirective(string typeName)
-		{
-			string marshalDirective = null;
-
-			if (typeName == @"char")
-			{
-				marshalDirective = @"MarshalAs(UnmanagedType.U2)";
-			}
-
-			return marshalDirective;
 		}
 
 		public void Add(R expected, T first, T second)
@@ -153,70 +133,78 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		{
 			if (CodeSource == null)
 			{
-				this.SetTestCode(this.ExpectedTypeName, this.TypeName);
+				this.SetTestCode();
 			}
 		}
 
 		private const string TestCodeHeader = @"
 			using System.Runtime.InteropServices;
-
-			[[returnmarshal-typename]]
-			public delegate [[typename]] R_T([[marshal-typename]][[typename]] value);
-
-			public delegate bool R_T_T([[marshal-expectedType]][[expectedType]] first, [[marshal-typename]][[typename]] second);
-
-			public delegate bool R_T_T_T([[marshal-expectedType]][[expectedType]] expectedValue, [[marshal-typename]][[typename]] first, [[marshal-typename]][[typename]] second);
-
+		
 			public static class ArithmeticsTestClass
 			{
 		";
 
 		private const string TestCodeAdd = @"
-				public static bool AddTest([[expectedType]] expectedValue, [[typename]] first, [[typename]] second)
+				public delegate bool R_AddTest([[marshal-expectedtype]][[expectedtype]] expectedValue, [[marshal-firsttype]][[firsttype]] first, [[marshal-secondtype]][[secondtype]] second);
+
+				public static bool AddTest([[expectedtype]] expectedValue, [[firsttype]] first, [[secondtype]] second)
 				{
 					return expectedValue == (first + second);   
 				}
 			";
 
 		private const string TestCodeSub = @"
-				public static bool SubTest([[expectedType]] expectedValue, [[typename]] first, [[typename]] second)
+				public delegate bool R_SubTest([[marshal-expectedtype]][[expectedtype]] expectedValue, [[marshal-firsttype]][[firsttype]] first, [[marshal-secondtype]][[secondtype]] second);
+
+				public static bool SubTest([[expectedtype]] expectedValue, [[firsttype]] first, [[secondtype]] second)
 				{
 					return expectedValue == (first - second);   
 				}
 			";
 
 		private const string TestCodeMul = @"
-				public static bool MulTest([[expectedType]] expectedValue, [[typename]] first, [[typename]] second)
+				public delegate bool R_MulTest([[marshal-expectedtype]][[expectedtype]] expectedValue, [[marshal-firsttype]][[firsttype]] first, [[marshal-secondtype]][[secondtype]] second);
+
+				public static bool MulTest([[expectedtype]] expectedValue, [[firsttype]] first, [[secondtype]] second)
 				{
 					return expectedValue == (first * second);
 				}
 			";
 
 		private const string TestCodeDiv = @"
-				public static bool DivTest([[expectedType]] expectedValue, [[typename]] first, [[typename]] second)
+				public delegate bool R_DivTest([[marshal-expectedtype]][[expectedtype]] expectedValue, [[marshal-firsttype]][[firsttype]] first, [[marshal-secondtype]][[secondtype]] second);
+
+				public static bool DivTest([[expectedtype]] expectedValue, [[firsttype]] first, [[secondtype]] second)
 				{
 					return expectedValue == (first / second);
 				}
 			";
 
 		private const string TestCodeRem = @"
-				public static bool RemTest([[expectedType]] expectedValue, [[typename]] first, [[typename]] second)
+				public delegate bool R_RemTest([[marshal-expectedtype]][[expectedtype]] expectedValue, [[marshal-firsttype]][[firsttype]] first, [[marshal-secondtype]][[secondtype]] second);
+
+				public static bool RemTest([[expectedtype]] expectedValue, [[firsttype]] first, [[secondtype]] second)
 				{
 					return expectedValue == (first % second);
 				}
 			";
 
 		private const string TestCodeNeg = @"
-				public static bool NegTest([[expectedType]] expectedValue, [[typename]] first)
+				public delegate bool R_NegTest([[marshal-expectedtype]][[expectedtype]] expectedValue, [[marshal-firsttype]][[firsttype]] first);
+
+				public static bool NegTest([[expectedtype]] expectedValue, [[firsttype]] first)
 				{
 					return expectedValue == (-first);
 				}
 			";
 
 		private const string TestCodeRet = @"
-				public static [[typename]] RetTest([[typename]] value)
+				[[returnmarshal-type]]
+				public delegate [[firsttype]] R_RetTest([[marshal-firsttype]][[firsttype]] first);
+
+				public static [[firsttype]] RetTest([[firsttype]] first)
 				{
-					return value;
+					return first;
 				}
 			";
 

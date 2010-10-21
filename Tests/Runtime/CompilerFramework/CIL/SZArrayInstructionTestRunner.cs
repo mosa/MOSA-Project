@@ -4,8 +4,8 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Michael Fröhlich (aka grover, <mailto:sharpos@michaelruck.de>)
- *  
+ *  Michael Fröhlich (grover) <michael.ruck@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
  */
 
 using System;
@@ -27,7 +27,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 			this.IncludeLdelema = true;
 		}
 
-		public string TypeName { get; set; }
+		public string FirstType { get; set; }
 
 		public bool IncludeNewarr { get; set; }
 		public bool IncludeLdlen { get; set; }
@@ -35,71 +35,34 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		public bool IncludeStelem { get; set; }
 		public bool IncludeLdelema { get; set; }
 
-		private void SetTestCode(string typeName)
+		private void SetTestCode()
 		{
-			string marshalType = this.CreateMarshalAttribute(String.Empty, typeName);
+			string marshalFirstType = this.CreateMarshalAttribute(String.Empty, FirstType);
 
 			StringBuilder codeBuilder = new StringBuilder();
 			codeBuilder.Append(TestCodeHeader);
 
-			if (this.IncludeNewarr == true)
-			{
+			if (this.IncludeNewarr)
 				codeBuilder.Append(TestCodeNewarr);
-			}
 
-			if (this.IncludeLdlen == true)
-			{
+			if (this.IncludeLdlen)
 				codeBuilder.Append(TestCodeLdlen);
-			}
-
-			if (this.IncludeLdelem == true)
-			{
+			if (this.IncludeLdelem)
 				codeBuilder.Append(TestCodeLdelem);
-			}
-
-			if (this.IncludeStelem == true)
-			{
+			if (this.IncludeStelem)
 				codeBuilder.Append(TestCodeStelem);
-			}
-
-			if (this.IncludeLdelema == true)
-			{
+			if (this.IncludeLdelema)
 				codeBuilder.Append(TestCodeLdelema);
-			}
 
 			codeBuilder.Append(TestCodeFooter);
 
 			codeBuilder.Append(Code.ObjectClassDefinition);
 
 			codeBuilder
-				.Replace(@"[[typename]]", typeName)
-				.Replace(@"[[marshal-typename]]", marshalType);
+				.Replace(@"[[firsttype]]", FirstType)
+				.Replace(@"[[marshal-firsttype]]", marshalFirstType);
 
 			CodeSource = codeBuilder.ToString();
-		}
-
-		private string CreateMarshalAttribute(string prefix, string typeName)
-		{
-			string result = String.Empty;
-			string marshalDirective = this.GetMarshalDirective(typeName);
-			if (marshalDirective != null)
-			{
-				result = @"[" + prefix + marshalDirective + @"]";
-			}
-
-			return result;
-		}
-
-		private string GetMarshalDirective(string typeName)
-		{
-			string marshalDirective = null;
-
-			if (typeName == @"char")
-			{
-				marshalDirective = @"MarshalAs(UnmanagedType.U2)";
-			}
-
-			return marshalDirective;
 		}
 
 		public void Newarr()
@@ -141,66 +104,70 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		{
 			if (CodeSource == null)
 			{
-				this.SetTestCode(this.TypeName);
+				this.SetTestCode();
 			}
 		}
 
 		private const string TestCodeHeader = @"
 			using System.Runtime.InteropServices;
 
-			public delegate bool R();
-
-			public delegate bool R_T(int index);
-
-			public delegate bool R_T_T(int index, [[marshal-typename]][[typename]] value);
-
 			public static class ArrayTestClass
 			{
 		";
 
 		private const string TestCodeNewarr = @"
+				public delegate bool R_NewarrTest();
+
 				public static bool NewarrTest()
 				{
-					[[typename]][] arr = new [[typename]][0];
+					[[firsttype]][] arr = new [[firsttype]][0];
 					return arr != null;
 				}
 			";
 
 		private const string TestCodeLdlen = @"
+				public delegate bool R_LdlenTest(int length);
+
 				public static bool LdlenTest(int length)
 				{
-					[[typename]][] arr = new [[typename]][length];
+					[[firsttype]][] arr = new [[firsttype]][length];
 					return arr.Length == length;   
 				}
 			";
 
 		private const string TestCodeLdelem = @"
-				public static bool LdelemTest(int index, [[typename]] value)
+				public delegate bool R_LdelemTest(int index, [[marshal-firsttype]][[firsttype]] value);
+
+				public static bool LdelemTest(int index, [[firsttype]] value)
 				{
-					[[typename]][] arr = new [[typename]][index + 1];
+					[[firsttype]][] arr = new [[firsttype]][index + 1];
 					arr[index] = value;
 					return value == arr[index];
 				}
 			";
 
 		private const string TestCodeStelem = @"
-				public static bool StelemTest(int index, [[typename]] value)
+				public delegate bool R_StelemTest(int index, [[marshal-firsttype]][[firsttype]] value);
+
+				public static bool StelemTest(int index, [[firsttype]] value)
 				{
-					[[typename]][] arr = new [[typename]][index + 1];
+					[[firsttype]][] arr = new [[firsttype]][index + 1];
 					arr[index] = value;
 					return true;
 				}
 			";
 
 		private const string TestCodeLdelema = @"
-				public static bool LdelemaTest(int index, [[typename]] value)
+				public delegate bool R_LdelemaTest(int index, [[marshal-firsttype]][[firsttype]] value);
+
+				public static bool LdelemaTest(int index, [[firsttype]] value)
 				{
-					[[typename]][] arr = new [[typename]][index + 1];
+					[[firsttype]][] arr = new [[firsttype]][index + 1];
 					SetValueInRefValue(ref arr[index], value);
 					return arr[index] == value;
 				}
 
-				private static void SetValueInRefValue(ref [[typename]] destination, [[typename]] value)
+				private static void SetValueInRefValue(ref [[firsttype]] destination, [[firsttype]] value)
 				{
 					destination = value;
 				}

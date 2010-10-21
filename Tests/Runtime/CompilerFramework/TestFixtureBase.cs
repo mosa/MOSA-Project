@@ -4,24 +4,26 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Alex Lyman (<mailto:mail.alex.lyman@gmail.com>)
- *  Michael Fröhlich (aka Michael Ruck, grover <mailto:sharpos@michaelruck.de>)
- *  
+ *  Alex Lyman <mail.alex.lyman@gmail.com>
+ *  Michael Fröhlich (grover) <michael.ruck@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
  */
 
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.IO;
+using System.Reflection;
+using System.CodeDom.Compiler;
+using System.Runtime.InteropServices;
+
+using MbUnit.Framework;
+
 using Mosa.Runtime.Loader;
 using Mosa.Runtime;
 using Mosa.Runtime.Vm;
 using Mosa.Runtime.Metadata.Signatures;
-using MbUnit.Framework;
-using System.Runtime.InteropServices;
 using Test.Mosa.Runtime.CompilerFramework.BaseCode;
-using System.IO;
-using System.Reflection;
-using System.CodeDom.Compiler;
 
 namespace Test.Mosa.Runtime.CompilerFramework
 {
@@ -74,12 +76,30 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Holds the temporary files collection.
 		/// </summary>
-		private TempFileCollection temps = new TempFileCollection();
+		private static TempFileCollection temps = new TempFileCollection(TempDirectory, false);
 
 		/// <summary>
 		/// Determines if unsafe code is allowed in the test.
 		/// </summary>
 		private bool unsafeCode;
+
+		private static string tempDirectory;
+
+		private static string TempDirectory
+		{
+			get
+			{
+				if (tempDirectory == null)
+				{
+					tempDirectory = Path.Combine(Path.GetTempPath(), "mosa");
+					if (!Directory.Exists(tempDirectory))
+					{
+						Directory.CreateDirectory(tempDirectory);
+					}
+				}
+				return tempDirectory;
+			}
+		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TestFixtureBase"/> class.
@@ -168,29 +188,11 @@ namespace Test.Mosa.Runtime.CompilerFramework
 			}
 		}
 
-		/// <summary>
-		/// Disposes the test runtime and deletes the compiled assembly.
-		/// </summary>
-		public void End()
-		{
-			// Try to delete the compiled assembly...
-			if (this.assembly != null)
-			{
-				try
-				{
-					File.Delete(this.assembly);
-				}
-				catch
-				{
-				}
-			}
-		}
-
 		public T Run<T>(string type, string method, params object[] parameters)
 		{
 			this.CompileTestCodeIfNecessary();
 
-			Type delegateType = this.LocateDelegateInCompiledAssembly(parameters.Length);
+			Type delegateType = this.LocateDelegateInCompiledAssembly(type, method);
 
 			IntPtr address = FindTestMethod(String.Empty, type, method);
 
@@ -208,36 +210,28 @@ namespace Test.Mosa.Runtime.CompilerFramework
 			return result;
 		}
 
-		private Type LocateDelegateInCompiledAssembly(int parameterCount)
+		private Type LocateDelegateInCompiledAssembly(string type, string method)
 		{
-			string result = BuildDelegateName(parameterCount);
-			return GetDelegateType(result);
+			string delegatename = BuildDelegateName(type, method);
+
+			Type delegatetype = GetDelegateType(delegatename);
+
+			return delegatetype;
 		}
 
-		private Type GetDelegateType(string result)
+		private Type GetDelegateType(string delegatename)
 		{
 			if (this.loadedAssembly == null)
 			{
 				this.loadedAssembly = Assembly.LoadFile(this.assembly);
 			}
 
-			Type delegateType = this.loadedAssembly.GetType(result, true);
-			return delegateType;
+			return this.loadedAssembly.GetType(delegatename, false);
 		}
 
-		private static string BuildDelegateName(int parameterCount)
+		private static string BuildDelegateName(string type, string method)
 		{
-			StringBuilder delegateName = new StringBuilder();
-			delegateName.Append(@"R_");
-
-			for (int index = 0; index < parameterCount; index++)
-			{
-				delegateName.Append("T_");
-			}
-
-			delegateName.Length = delegateName.Length - 1;
-			string result = delegateName.ToString();
-			return result;
+			return type + "+R_" + method;
 		}
 
 		private static object ExecuteTestMethod(Type delegateType, object[] parameters, IntPtr address)
@@ -263,7 +257,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		protected void CompileTestCodeIfNecessary()
 		{
 			// Do we need to compile the code?
-			if (this.needCompile == true)
+			if (this.needCompile)
 			{
 				this.CompileTestCode();
 
@@ -319,9 +313,12 @@ namespace Test.Mosa.Runtime.CompilerFramework
 			if (provider == null)
 				throw new NotSupportedException("The language '" + this.Language + "' is not supported on this machine.");
 
+			string filename = Path.Combine(TempDirectory, Path.ChangeExtension(Path.GetRandomFileName(), "dll"));
+			temps.AddFile(filename, false);
+
 			CompilerResults compileResults;
-			CompilerParameters parameters = new CompilerParameters(this.References, Path.GetTempFileName());
-			parameters.CompilerOptions = "/optimize- /debug+ /debug:full";
+			CompilerParameters parameters = new CompilerParameters(this.References, filename, false);
+			parameters.CompilerOptions = "/optimize-";
 
 			if (this.unsafeCode)
 			{
@@ -333,10 +330,10 @@ namespace Test.Mosa.Runtime.CompilerFramework
 			parameters.GenerateInMemory = false;
 			if (this.codeSource != null)
 			{
-				Console.Write("From Source: ");
-				Console.WriteLine(new string('-', 40 - 13));
-				Console.WriteLine(this.codeSource);
-				Console.WriteLine(new string('-', 40));
+				//Console.Write("From Source: ");
+				//Console.WriteLine(new string('-', 40 - 13));
+				//Console.WriteLine(this.codeSource);
+				//Console.WriteLine(new string('-', 40));
 				compileResults = provider.CompileAssemblyFromSource(parameters, this.codeSource);
 			}
 			else
@@ -373,16 +370,29 @@ namespace Test.Mosa.Runtime.CompilerFramework
 			TestCaseAssemblyCompiler.Compile(typeSystem, assemblyLoader);
 		}
 
-		public void Dispose()
+		protected string CreateMarshalAttribute(string prefix, string typeName)
 		{
-			try
+			string result = String.Empty;
+			string marshalDirective = this.GetMarshalDirective(typeName);
+			if (marshalDirective != null)
 			{
-				this.End();
+				result = @"[" + prefix + marshalDirective + @"]";
 			}
-			finally
-			{
-				GC.SuppressFinalize(this);
-			}
+
+			return result;
 		}
+
+		protected string GetMarshalDirective(string typeName)
+		{
+			string marshalDirective = null;
+
+			if (typeName == @"char")
+			{
+				marshalDirective = @"MarshalAs(UnmanagedType.U2)";
+			}
+
+			return marshalDirective;
+		}
+
 	}
 }

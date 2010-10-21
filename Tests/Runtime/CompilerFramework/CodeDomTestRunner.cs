@@ -4,8 +4,8 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Alex Lyman (<mailto:mail.alex.lyman@gmail.com>)
- *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
+ *  Alex Lyman <mail.alex.lyman@gmail.com>
+ *  Michael Fröhlich (grover) <michael.ruck@michaelruck.de>
  *  
  */
 
@@ -48,12 +48,14 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Holds the temporary files collection.
 		/// </summary>
-		private TempFileCollection temps = new TempFileCollection();
+		private static TempFileCollection temps = new TempFileCollection(TempDirectory, false);
 
 		/// <summary>
 		/// Determines if unsafe code is allowed in the test.
 		/// </summary>
 		private bool unsafeCode;
+
+		private static string tempDirectory;
 
 		#endregion // Data members
 
@@ -139,6 +141,22 @@ namespace Test.Mosa.Runtime.CompilerFramework
 			}
 		}
 
+		private static string TempDirectory
+		{
+			get
+			{
+				if (tempDirectory == null)
+				{
+					tempDirectory = Path.Combine(Path.GetTempPath(), "mosa");
+					if (!Directory.Exists(tempDirectory))
+					{
+						Directory.CreateDirectory(tempDirectory);
+					}
+				}
+				return tempDirectory;
+			}
+		}
+
 		#endregion // Properties
 
 		#region MosaCompilerTestRunner Overrides
@@ -158,9 +176,13 @@ namespace Test.Mosa.Runtime.CompilerFramework
 				provider = CodeDomProvider.CreateProvider(Language);
 			if (provider == null)
 				throw new NotSupportedException("The language '" + Language + "' is not supported on this machine.");
+
+			string filename = Path.Combine(TempDirectory, Path.ChangeExtension(Path.GetRandomFileName(), "dll"));
+			temps.AddFile(filename, false);
+
 			CompilerResults compileResults;
-			CompilerParameters parameters = new CompilerParameters(this.References, Path.GetTempFileName());
-			parameters.CompilerOptions = "/optimize- /debug+ /debug:full";
+			CompilerParameters parameters = new CompilerParameters(this.References, filename);
+			parameters.CompilerOptions = "/optimize-";
 
 			if (this.unsafeCode)
 			{
@@ -182,10 +204,10 @@ namespace Test.Mosa.Runtime.CompilerFramework
 
 			if (CodeSource != null)
 			{
-				Console.Write("From Source: ");
-				Console.WriteLine(new string('-', 40 - 13));
-				Console.WriteLine(codeSource);
-				Console.WriteLine(new string('-', 40));
+				//Console.Write("From Source: ");
+				//Console.WriteLine(new string('-', 40 - 13));
+				//Console.WriteLine(codeSource);
+				//Console.WriteLine(new string('-', 40));
 				compileResults = provider.CompileAssemblyFromSource(
 					parameters,
 					codeSource
@@ -211,6 +233,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
 				}
 				throw new Exception(sb.ToString());
 			}
+
 			return compileResults.PathToAssembly;
 		}
 

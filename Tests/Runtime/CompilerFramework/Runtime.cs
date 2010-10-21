@@ -198,10 +198,10 @@ namespace Mosa.Runtime
 			throw new NotImplementedException();
 		}
 
-        [VmCall(VmCall.Throw)]
-        public static void ThrowException(uint eax, uint ecx, uint edx, uint ebx, uint esi, uint edi, uint ebp, object exception, uint eip, uint esp)
-        {
-        }
+		[VmCall(VmCall.Throw)]
+		public static void ThrowException(uint eax, uint ecx, uint edx, uint ebx, uint esi, uint edi, uint ebp, object exception, uint eip, uint esp)
+		{
+		}
 
 		#endregion // Virtual Machine Call Prototypes
 

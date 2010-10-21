@@ -4,8 +4,8 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Simon Wollwage (<mailto:kintaro@think-in-co.de>)
- *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
+ *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
+ *  Michael Fröhlich (grover) <michael.ruck@michaelruck.de>
  *  
  */
 

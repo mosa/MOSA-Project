@@ -105,27 +105,38 @@
     <Compile Include="CIL\BinaryLogicInstructionTestRunner.cs" />
     <Compile Include="CIL\BooleanFixture.cs" />
     <Compile Include="CIL\ByteFixture.cs" />
+    <Compile Include="CIL\ByteFixture.Partial.cs" />
     <Compile Include="CIL\CallvirtFixture.cs" />
     <Compile Include="CIL\CharFixture.cs" />
+    <Compile Include="CIL\CharFixture.Partial.cs" />
     <Compile Include="CIL\ComparisonInstructionTestRunner.cs" />
     <Compile Include="CIL\DoubleFixture.cs" />
+    <Compile Include="CIL\DoubleFixture.Partial.cs" />
     <Compile Include="CIL\EnumFixture.cs" />
     <Compile Include="CIL\ExceptionHandlingFixture.cs" />
+    <Compile Include="CIL\FloatFixture.Partial.cs" />
     <Compile Include="CIL\GenericMethodMemberFixture.cs" />
     <Compile Include="CIL\GenericTypeFixture.cs" />
     <Compile Include="CIL\Int16Fixture.cs" />
+    <Compile Include="CIL\Int16Fixture.Partial.cs" />
     <Compile Include="CIL\Int32Fixture.cs" />
+    <Compile Include="CIL\Int32Fixture.Partial.cs" />
     <Compile Include="CIL\Int64Fixture.cs" />
+    <Compile Include="CIL\Int64Fixture.Partial.cs" />
     <Compile Include="CIL\InterfaceFixture.cs" />
     <Compile Include="CIL\ObjectFixture.cs" />
     <Compile Include="CIL\PinnedFixture.cs" />
     <Compile Include="CIL\SByteFixture.cs" />
-    <Compile Include="CIL\SingleFixture.cs" />
+    <Compile Include="CIL\SByteFixture.Partial.cs" />
+    <Compile Include="CIL\FloatFixture.cs" />
     <Compile Include="CIL\StringFixture.cs" />
     <Compile Include="CIL\SZArrayInstructionTestRunner.cs" />
     <Compile Include="CIL\UInt16Fixture.cs" />
+    <Compile Include="CIL\UInt16Fixture.Partial.cs" />
     <Compile Include="CIL\UInt32Fixture.cs" />
+    <Compile Include="CIL\UInt32Fixture.Partial.cs" />
     <Compile Include="CIL\UInt64Fixture.cs" />
+    <Compile Include="CIL\UInt64Fixture.Partial.cs" />
     <Compile Include="Code.cs" />
     <Compile Include="CodeDomTestRunner.cs">
       <SubType>Code</SubType>
@@ -136,9 +147,6 @@
     <Compile Include="IL\Switch.cs" />
     <Compile Include="IL\While.cs" />
     <Compile Include="MosaCompilerTestRunner.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ReflectionEmitTestRunner.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BaseCode\TestAssemblyLinker.cs">

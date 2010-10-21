@@ -4,7 +4,7 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Michael Fröhlich (aka grover, <mailto:sharpos@michaelruck.de>)
+ *  Michael Fröhlich (grover) <michael.ruck@michaelruck.de>
  *  
  */
 
@@ -21,14 +21,14 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 
 		public ComparisonInstructionTestRunner()
 		{
-            this.IncludeCeq = true;
-            this.IncludeClt = true;
-            this.IncludeCgt = true;
-            this.IncludeCle = true;
+			this.IncludeCeq = true;
+			this.IncludeClt = true;
+			this.IncludeCgt = true;
+			this.IncludeCle = true;
 			this.IncludeCge = true;
 		}
 
-		public string TypeName { get; set; }
+		public string FirstType { get; set; }
 
 		public bool IncludeCeq { get; set; }
 		public bool IncludeClt { get; set; }
@@ -36,13 +36,14 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		public bool IncludeCle { get; set; }
 		public bool IncludeCge { get; set; }
 
-		private void SetTestCode(string typeName)
+		private void SetTestCode()
 		{
-			string marshalType = this.CreateMarshalAttribute(String.Empty, typeName);
-			string returnMarshalType = this.CreateMarshalAttribute(@"return:", typeName);
+			string marshalFirstType = this.CreateMarshalAttribute(String.Empty, FirstType);
 
 			StringBuilder codeBuilder = new StringBuilder();
+
 			codeBuilder.Append(TestCodeHeader);
+
 			if (this.IncludeCeq)
 				codeBuilder.Append(TestCodeCeq);
 			if (this.IncludeClt)
@@ -53,40 +54,18 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 				codeBuilder.Append(TestCodeCle);
 			if (this.IncludeCge)
 				codeBuilder.Append(TestCodeCge);
+
 			codeBuilder.Append(TestCodeFooter);
 
 			codeBuilder.Append(Code.ObjectClassDefinition);
 
 			codeBuilder
-				.Replace(@"[[typename]]", typeName)
-				.Replace(@"[[returnmarshal-typename]]", returnMarshalType)
-				.Replace(@"[[marshal-typename]]", marshalType);
+				.Replace(@"[[firsttype]]", FirstType)
+				.Replace(@"[[secondtype]]", FirstType)
+				.Replace(@"[[marshal-firsttype]]", marshalFirstType)
+				.Replace(@"[[marshal-secondtype]]", marshalFirstType);
 
 			CodeSource = codeBuilder.ToString();
-		}
-
-		private string CreateMarshalAttribute(string prefix, string typeName)
-		{
-			string result = String.Empty;
-			string marshalDirective = this.GetMarshalDirective(typeName);
-			if (marshalDirective != null)
-			{
-				result = @"[" + prefix + marshalDirective + @"]";
-			}
-
-			return result;
-		}
-
-		private string GetMarshalDirective(string typeName)
-		{
-			string marshalDirective = null;
-
-			if (typeName == @"char")
-			{
-				marshalDirective = @"MarshalAs(UnmanagedType.U2)";
-			}
-
-			return marshalDirective;
 		}
 
 		public void Ceq(bool expected, T first, T second)
@@ -128,49 +107,57 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		{
 			if (CodeSource == null)
 			{
-				this.SetTestCode(this.TypeName);
+				this.SetTestCode();
 			}
 		}
 
 		private const string TestCodeHeader = @"
 			using System.Runtime.InteropServices;
 
-			public delegate bool R_T_T([[marshal-typename]][[typename]] first, [[marshal-typename]][[typename]] second);
-
 			public static class ComparisonTestClass
 			{
 		";
 
 		private const string TestCodeCeq = @"
-				public static bool CeqTest([[typename]] first, [[typename]] second)
+				public delegate bool R_CeqTest([[marshal-firsttype]][[firsttype]] first, [[marshal-secondtype]][[secondtype]] second);
+
+				public static bool CeqTest([[firsttype]] first, [[secondtype]] second)
 				{
 					return (first == second);
 				}
 			";
 
 		private const string TestCodeClt = @"
-				public static bool CltTest([[typename]] first, [[typename]] second)
+				public delegate bool R_CltTest([[marshal-firsttype]][[firsttype]] first, [[marshal-secondtype]][[secondtype]] second);
+
+				public static bool CltTest([[firsttype]] first, [[secondtype]] second)
 				{
 					return (first < second);
 				}
 			";
 
 		private const string TestCodeCgt = @"
-				public static bool CgtTest([[typename]] first, [[typename]] second)
+				public delegate bool R_CgtTest([[marshal-firsttype]][[firsttype]] first, [[marshal-secondtype]][[secondtype]] second);
+
+				public static bool CgtTest([[firsttype]] first, [[secondtype]] second)
 				{
 					return (first > second);
 				}
 			";
 
 		private const string TestCodeCle = @"
-				public static bool CleTest([[typename]] first, [[typename]] second)
+				public delegate bool R_CleTest([[marshal-firsttype]][[firsttype]] first, [[marshal-secondtype]][[secondtype]] second);
+
+				public static bool CleTest([[firsttype]] first, [[secondtype]] second)
 				{
 					return (first <= second);
 				}
 			";
 
 		private const string TestCodeCge = @"
-				public static bool CgeTest([[typename]] first, [[typename]] second)
+				public delegate bool R_CgeTest([[marshal-firsttype]][[firsttype]] first, [[marshal-secondtype]][[secondtype]] second);
+
+				public static bool CgeTest([[firsttype]] first, [[secondtype]] second)
 				{
 					return (first >= second);
 				}

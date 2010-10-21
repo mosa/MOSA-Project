@@ -4,7 +4,7 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Michael Fröhlich (aka Michael Ruck, grover <mailto:sharpos@michaelruck.de>)
+ *  Michael Fröhlich (grover) <michael.ruck@michaelruck.de>
  *
  */
 

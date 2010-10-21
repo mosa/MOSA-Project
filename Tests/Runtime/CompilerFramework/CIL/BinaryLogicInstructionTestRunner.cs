@@ -4,8 +4,8 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Michael Fröhlich (aka grover, <mailto:sharpos@michaelruck.de>)
- *  
+ *  Michael Fröhlich (grover) <michael.ruck@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
  */
 
 using System;
@@ -29,14 +29,17 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 			this.IncludeComp = true;
 		}
 
-		private void SetTestCode(string expectedType, string typeName, string shiftTypeName)
+		private void SetTestCode()
 		{
-			string marshalType = this.CreateMarshalAttribute(String.Empty, typeName);
-			string returnMarshalType = this.CreateMarshalAttribute(@"return:", typeName);
-			string marshalExpectedType = this.CreateMarshalAttribute(String.Empty, expectedType);
+			string marshalFirstType = this.CreateMarshalAttribute(String.Empty, FirstType);
+			string marshalSecondType = this.CreateMarshalAttribute(String.Empty, SecondType);
+			string marshalShiftType = this.CreateMarshalAttribute(String.Empty, ShiftType);
+			string marshalExpectedType = this.CreateMarshalAttribute(String.Empty, ExpectedType);
 
 			StringBuilder codeBuilder = new StringBuilder();
+
 			codeBuilder.Append(TestCodeHeader);
+
 			if (this.IncludeAnd)
 				codeBuilder.Append(TestCodeAnd);
 			if (this.IncludeOr)
@@ -51,48 +54,27 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 				codeBuilder.Append(TestCodeShl);
 			if (this.IncludeShr)
 				codeBuilder.Append(TestCodeShr);
+
 			codeBuilder.Append(TestCodeFooter);
 
 			codeBuilder.Append(Code.ObjectClassDefinition);
 
 			codeBuilder
-				.Replace(@"[[typename]]", typeName)
-				.Replace(@"[[shifttypename]]", shiftTypeName)
-				.Replace(@"[[expectedType]]", expectedType)
-				.Replace(@"[[returnmarshal-typename]]", returnMarshalType)
-				.Replace(@"[[marshal-typename]]", marshalType)
-				.Replace(@"[[marshal-expectedType]]", marshalExpectedType);
+				.Replace(@"[[expectedtype]]", ExpectedType)
+				.Replace(@"[[firsttype]]", FirstType)
+				.Replace(@"[[secondtype]]", SecondType)
+				.Replace(@"[[shifttypename]]", ShiftType)
+				.Replace(@"[[marshal-expectedtype]]", marshalExpectedType)
+				.Replace(@"[[marshal-firsttype]]", marshalFirstType)
+				.Replace(@"[[marshal-secondtype]]", marshalFirstType);
 
 			CodeSource = codeBuilder.ToString();
 		}
 
-		private string CreateMarshalAttribute(string prefix, string typeName)
-		{
-			string result = String.Empty;
-			string marshalDirective = this.GetMarshalDirective(typeName);
-			if (marshalDirective != null)
-			{
-				result = @"[" + prefix + marshalDirective + @"]";
-			}
-
-			return result;
-		}
-
-		private string GetMarshalDirective(string typeName)
-		{
-			string marshalDirective = null;
-
-			if (typeName == @"char")
-			{
-				marshalDirective = @"MarshalAs(UnmanagedType.U2)";
-			}
-
-			return marshalDirective;
-		}
-
-		public string ExpectedTypeName { get; set; }
-		public string TypeName { get; set; }
-		public string ShiftTypeName { get; set; }
+		public string ExpectedType { get; set; }
+		public string FirstType { get; set; }
+		public string SecondType { get; set; }
+		public string ShiftType { get; set; }
 
 		public bool IncludeAnd { get; set; }
 		public bool IncludeOr { get; set; }
@@ -155,67 +137,77 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		{
 			if (CodeSource == null)
 			{
-				this.SetTestCode(this.ExpectedTypeName, this.TypeName, this.ShiftTypeName);
+				this.SetTestCode();
 			}
 		}
 
 		private const string TestCodeHeader = @"
 			using System.Runtime.InteropServices;
 
-			public delegate bool R_T_T([[marshal-expectedType]][[expectedType]] expectedValue, [[marshal-typename]][[typename]] first);
-
-			public delegate bool R_T_T_T([[marshal-expectedType]][[expectedType]] expectedValue, [[marshal-typename]][[typename]] first, [[marshal-typename]][[typename]] second);
-			
 			public static class BinaryLogicTestClass
 			{
 		";
-
+				
 		private const string TestCodeAnd = @"
-				public static bool AndTest([[expectedType]] expectedValue, [[typename]] first, [[typename]] second)
+				public delegate bool R_AndTest([[marshal-expectedtype]][[expectedtype]] expectedValue, [[marshal-firsttype]][[firsttype]] first, [[marshal-secondtype]][[secondtype]] second);
+
+				public static bool AndTest([[expectedtype]] expectedValue, [[firsttype]] first, [[secondtype]] second)
 				{
 					return expectedValue == (first & second);
 				}
 		";
 
 		private const string TestCodeOr = @"
-				public static bool OrTest([[expectedType]] expectedValue, [[typename]] first, [[typename]] second)
+				public delegate bool R_OrTest([[marshal-expectedtype]][[expectedtype]] expectedValue, [[marshal-firsttype]][[firsttype]] first, [[marshal-secondtype]][[secondtype]] second);
+
+				public static bool OrTest([[expectedtype]] expectedValue, [[firsttype]] first, [[secondtype]] second)
 				{
 					return expectedValue == (first | second);
 				}
 		";
 
 		private const string TestCodeXor = @"
-				public static bool XorTest([[expectedType]] expectedValue, [[typename]] first, [[typename]] second)
+				public delegate bool R_XorTest([[marshal-expectedtype]][[expectedtype]] expectedValue, [[marshal-firsttype]][[firsttype]] first, [[marshal-secondtype]][[secondtype]] second);
+
+				public static bool XorTest([[expectedtype]] expectedValue, [[firsttype]] first, [[secondtype]] second)
 				{
 					return expectedValue == (first ^ second);
 				}
 		";
 
 		private const string TestCodeNot = @"
-				public static bool NotTest([[expectedType]] expectedValue, [[typename]] first)
+				public delegate bool R_NotTest([[marshal-expectedtype]][[expectedtype]] expectedValue, [[marshal-firsttype]][[firsttype]] first);
+
+				public static bool NotTest([[expectedtype]] expectedValue, [[firsttype]] first)
 				{
 					return expectedValue == (!first);
 				}
 		";
 
 		private const string TestCodeComp = @"
-				public static bool CompTest([[expectedType]] expectedValue, [[typename]] first)
+				public delegate bool R_CompTest([[marshal-expectedtype]][[expectedtype]] expectedValue, [[marshal-firsttype]][[firsttype]] first);
+
+				public static bool CompTest([[expectedtype]] expectedValue, [[firsttype]] first)
 				{
 					return expectedValue == (~first);
 				}
 		";
 
 		private const string TestCodeShl = @"
-				public static bool ShiftLeftTest([[expectedType]] expectedValue, [[typename]] first, [[shifttypename]] second)
+				public delegate bool R_ShiftLeftTest([[marshal-expectedtype]][[expectedtype]] expectedValue, [[marshal-firsttype]][[firsttype]] first, [[shifttypename]] second);
+
+				public static bool ShiftLeftTest([[expectedtype]] expectedValue, [[firsttype]] first, [[shifttypename]] second)
 				{
-					return expectedValue == ([[expectedType]])(first << second);
+					return expectedValue == ([[expectedtype]])(first << second);
 				}
 		";
 
 		private const string TestCodeShr = @"
-				public static bool ShiftRightTest([[expectedType]] expectedValue, [[typename]] first, [[shifttypename]] second)
+				public delegate bool R_ShiftRightTest([[marshal-expectedtype]][[expectedtype]] expectedValue, [[marshal-firsttype]][[firsttype]] first, [[shifttypename]] second);
+
+				public static bool ShiftRightTest([[expectedtype]] expectedValue, [[firsttype]] first, [[shifttypename]] second)
 				{
-					return expectedValue == ([[expectedType]])(first >> second);
+					return expectedValue == ([[expectedtype]])(first >> second);
 				}
 		";
 

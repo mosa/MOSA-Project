@@ -4,8 +4,8 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Alex Lyman (<mailto:mail.alex.lyman@gmail.com>)
- *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
+ *  Alex Lyman <mail.alex.lyman@gmail.com>
+ *  Michael Fröhlich (grover) <michael.ruck@michaelruck.de>
  *  
  */
 
@@ -27,7 +27,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
 	/// <summary>
 	/// Interface class for MbUnit3 to run our testcases.
 	/// </summary>
-	public abstract class MosaCompilerTestRunner : IDisposable
+	public abstract class MosaCompilerTestRunner 
 	{
 		#region Data members
 
@@ -108,25 +108,6 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
-		/// Disposes the test runtime and deletes the compiled assembly.
-		/// </summary>
-		[FixtureTearDown]
-		public void End()
-		{
-			// Try to delete the compiled assembly...
-			if (this.assembly != null)
-			{
-				try
-				{
-					File.Delete(this.assembly);
-				}
-				catch
-				{
-				}
-			}
-		}
-
-		/// <summary>
 		/// Runs a test case.
 		/// </summary>
 		/// <typeparam name="TDelegate">The delegate used to run the test case.</typeparam>
@@ -138,7 +119,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		public object Run<TDelegate>(string ns, string type, string method, params object[] parameters)
 		{
 			// Do we need to compile the code?
-			if (this.needCompile == true)
+			if (this.needCompile)
 			{
 				this.assembly = this.CompileTestCode<TDelegate>(ns, type, method);
 				Console.WriteLine("Executing MOSA compiler...");
@@ -223,16 +204,5 @@ namespace Test.Mosa.Runtime.CompilerFramework
 
 		#endregion // Methods
 
-		#region IDisposable Members
-
-		/// <summary>
-		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-		/// </summary>
-		void IDisposable.Dispose()
-		{
-			this.End();
-		}
-
-		#endregion // IDisposable Members
 	}
 }
