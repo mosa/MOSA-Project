@@ -75,7 +75,7 @@ namespace Mosa.Runtime.CompilerFramework
 			BuildBlockLinks(_prologue);
 
 			// Link Exception Header Clauses
-			//LinkExceptionHeaderClauses();
+			LinkExceptionHeaderClauses();
 		}
 
 		#endregion // IMethodCompilerStage members
