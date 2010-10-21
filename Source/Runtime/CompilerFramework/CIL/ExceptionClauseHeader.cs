@@ -38,7 +38,20 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <param name="clause"></param>
 		public void AddClause(EhClause clause)
 		{
-			this.clauses.Add(clause);
+			this.Clauses.Add(clause);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="context"></param>
+		public void LinkBlockToClause(Context context, BasicBlock block)
+		{
+			foreach (EhClause clause in this.Clauses)
+			{
+				if (clause.LinkBlockToClause(context, block))
+					return;
+			}
 		}
 
 		/// <summary>
@@ -46,7 +59,14 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </summary>
 		public void Sort()
 		{
-
+			this.Clauses.Sort(delegate(EhClause left, EhClause right) 
+			{
+				if (left.HandlerEnd < right.HandlerOffset)
+					return -1;
+				if (left.HandlerOffset > right.HandlerLength && left.HandlerOffset < right.HandlerEnd)
+					return -1;
+				return 1;
+			});
 		}
 	}
 }

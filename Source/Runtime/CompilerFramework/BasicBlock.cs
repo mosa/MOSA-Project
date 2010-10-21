@@ -9,6 +9,7 @@
 
 using System;
 using System.Collections.Generic;
+using Mosa.Runtime.CompilerFramework.CIL;
 using Mosa.Runtime.CompilerFramework.Operands;
 
 namespace Mosa.Runtime.CompilerFramework
@@ -60,6 +61,11 @@ namespace Mosa.Runtime.CompilerFramework
 		///
 		/// </summary>
 		private Stack<Operand> _initialStack;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		private EhClause _exceptionHeaderClause;
 
 		#endregion
 
@@ -151,6 +157,15 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			get { return _initialStack; }
 			set { _initialStack = value; }
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		public EhClause ExceptionHeaderClause
+		{
+			get { return this._exceptionHeaderClause; }
+			set { this._exceptionHeaderClause = value; }
 		}
 
 		#endregion

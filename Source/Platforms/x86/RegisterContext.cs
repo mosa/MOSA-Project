@@ -19,7 +19,7 @@ namespace Mosa.Platforms.x86
 	/// 
 	/// </summary>
 	[StructLayout(LayoutKind.Sequential, Pack=1)]
-	public class RegisterContext
+	public sealed class RegisterContext
 	{
 		/// <summary>
 		/// 

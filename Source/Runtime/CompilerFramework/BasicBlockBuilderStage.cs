@@ -73,6 +73,9 @@ namespace Mosa.Runtime.CompilerFramework
 
 			// Link all the blocks together
 			BuildBlockLinks(_prologue);
+
+			// Link Exception Header Clauses
+			//LinkExceptionHeaderClauses();
 		}
 
 		#endregion // IMethodCompilerStage members
@@ -227,5 +230,16 @@ namespace Mosa.Runtime.CompilerFramework
 			callee.PreviousBlocks.Add(caller);
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
+		private void LinkExceptionHeaderClauses()
+		{
+			foreach (BasicBlock block in this.BasicBlocks)
+			{
+				for (Context ctx = CreateContext(block); !ctx.EndOfInstruction; ctx.GotoNext())
+					this.MethodCompiler.Method.ExceptionClauseHeader.LinkBlockToClause(ctx, block);
+			}
+		}
 	}
 }

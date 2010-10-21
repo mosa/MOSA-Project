@@ -123,5 +123,23 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 				this.FilterOffset = reader.ReadInt32();
 			}
 		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="context"></param>
+		public bool LinkBlockToClause(Context context, BasicBlock block)
+		{
+			int label = context.Label;
+
+			if (this.TryOffset == label || this.TryEnd == label ||
+				this.HandlerOffset == label || this.HandlerEnd == label)
+			{
+				block.ExceptionHeaderClause = this;
+				return true;
+			}
+
+			return false;
+		}
 	}
 }

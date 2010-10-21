@@ -73,14 +73,6 @@ namespace Mosa.Platforms.x86
 		/// <param name="eip"></param>
 		private static void HandlerIdentificationPass(RegisterContext registerContext, Exception exception, uint eip)
 		{
-			RegisterContext initialContext = new RegisterContext(registerContext);
-
-			while (true)
-			{
-				RegisterContext newContext = null;
-
-				registerContext.Update(newContext);
-			}
 		}
 
 		/// <summary>
@@ -91,12 +83,11 @@ namespace Mosa.Platforms.x86
 		/// <param name="eip"></param>
 		private static void HandlerInvocationPass(RegisterContext registerContext, Exception exception, uint eip)
 		{
-			throw new NotImplementedException();
 		}
 
 		/// <summary>
 		/// Calls the given filter to handle the exception
-		/// </summary>
+		/// </summary>1
 		/// <param name="registerContext">The register status right before the throw</param>
 		/// <param name="exceptionInformation">The exception handler information</param>
 		private static void CallFilter(RegisterContext registerContext, object exceptionInformation)

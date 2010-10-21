@@ -119,6 +119,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
 			string curDir = Environment.CurrentDirectory;
 			builder.Save(Path.GetFileName(fileName));
 			Environment.CurrentDirectory = curDir;
+
 			return fileName;
 		}
 

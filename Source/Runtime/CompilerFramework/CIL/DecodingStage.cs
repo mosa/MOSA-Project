@@ -184,6 +184,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 				}
 				while (0x80 == (flags & 0x80));
 
+				this.MethodCompiler.Method.ExceptionClauseHeader.Sort();
 				reader.BaseStream.Position = codepos;
 			}
 		}
