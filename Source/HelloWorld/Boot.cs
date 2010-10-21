@@ -34,7 +34,7 @@ namespace Mosa.HelloWorld
 
 			Screen.Write(@"MOSA OS Version 0.9 '");
 			Screen.Color = Colors.Red;
-            Screen.Write(@"Prophecy");
+			Screen.Write(@"Prophecy");
 			Screen.Color = Colors.Yellow;
 			Screen.Write(@"'                              Copyright 2008-2010");
 			Screen.NextLine();
