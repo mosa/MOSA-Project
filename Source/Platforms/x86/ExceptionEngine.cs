@@ -65,21 +65,21 @@ namespace Mosa.Platforms.x86
 		}
 
 		/// <summary>
-		/// 
+		/// Identify the appropriate handler for the thrown exception
 		/// </summary>
-		/// <param name="registerContext"></param>
-		/// <param name="exception"></param>
-		/// <param name="eip"></param>
+		/// <param name="registerContext">The register status right before the throw</param>
+		/// <param name="exception">The thrown exception</param>
+		/// <param name="eip">EIP to return to when handled</param>
 		private static void HandlerIdentificationPass(RegisterContext registerContext, Exception exception, uint eip)
 		{
 		}
 
 		/// <summary>
-		/// 
+		/// Call the appropriate handler or rethrow the exception
 		/// </summary>
-		/// <param name="registerContext"></param>
-		/// <param name="exception"></param>
-		/// <param name="eip"></param>
+		/// <param name="registerContext">The register status right before the throw</param>
+		/// <param name="exception">The thrown exception</param>
+		/// <param name="eip">EIP to return to when handled</param>
 		private static void HandlerInvocationPass(RegisterContext registerContext, Exception exception, uint eip)
 		{
 		}
