@@ -4,8 +4,8 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
- *  Kai P. Reisert (<mailto:kpreisert@googlemail.com>)
+ *  Michael Fröhlich (grover) <michael.ruck@michaelruck.de>
+ *  Kai P. Reisert <kpreisert@googlemail.com>
  *  
  */
 

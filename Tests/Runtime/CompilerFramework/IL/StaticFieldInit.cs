@@ -190,7 +190,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void StaticFieldInitR4(float value)
 		{
 			string sValue = value.ToString("R", CultureInfo.InvariantCulture) + "f";
-			if (Single.IsNaN(value) == true)
+			if (Single.IsNaN(value))
 				sValue = "Single.NaN";
 			else if (value == Single.PositiveInfinity)
 				sValue = "Single.PositiveInfinity";
@@ -211,7 +211,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void StaticFieldInitR8(double value)
 		{
 			string sValue = value.ToString("R", CultureInfo.InvariantCulture);
-			if (Double.IsNaN(value) == true)
+			if (Double.IsNaN(value))
 				sValue = "Double.NaN";
 			else if (value == Double.PositiveInfinity)
 				sValue = "Double.PositiveInfinity";

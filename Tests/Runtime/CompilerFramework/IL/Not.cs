@@ -4,9 +4,9 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Alex Lyman (<mailto:mail.alex.lyman@gmail.com>)
- *  Simon Wollwage (<mailto:kintaro@think-in-co.de>)
- *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
+ *  Alex Lyman <mail.alex.lyman@gmail.com>
+ *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
+ *  Michael Fröhlich (grover) <michael.ruck@michaelruck.de>
  *  
  */
 

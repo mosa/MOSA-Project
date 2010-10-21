@@ -5,9 +5,9 @@
  *
  * Authors:
  *  Alex Lyman (<mailto:kintaro@think-in-co.de>)
- *  Simon Wollwage (<mailto:kintaro@think-in-co.de>)
- *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
- *  Kai P. Reisert (<mailto:kpreisert@googlemail.com>)
+ *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
+ *  Michael Fröhlich (grover) <michael.ruck@michaelruck.de>
+ *  Kai P. Reisert <kpreisert@googlemail.com>
  *  
  */
 
