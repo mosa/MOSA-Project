@@ -149,9 +149,6 @@
     <Compile Include="MosaCompilerTestRunner.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ReflectionEmitTestRunner.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="BaseCode\TestAssemblyLinker.cs">
       <SubType>Code</SubType>
     </Compile>

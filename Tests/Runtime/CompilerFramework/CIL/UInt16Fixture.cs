@@ -4,7 +4,7 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Michael Fröhlich (aka grover, <mailto:sharpos@michaelruck.de>)
+ *  Michael Fröhlich (grover) <michael.ruck@michaelruck.de>
  *  
  */
 
@@ -22,27 +22,29 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 	{
 		private readonly ArithmeticInstructionTestRunner<int, ushort> arithmeticTests = new ArithmeticInstructionTestRunner<int, ushort>
 		{
-			ExpectedTypeName = @"int",
-			TypeName = @"ushort"
+			ExpectedType = @"int",
+			FirstType = @"ushort",
+			SecondType = @"ushort"
 		};
 
 		private readonly BinaryLogicInstructionTestRunner<int, ushort, ushort> logicTests = new BinaryLogicInstructionTestRunner<int, ushort, ushort>
 		{
-			ExpectedTypeName = @"int",
-			ShiftTypeName = @"ushort",
-			TypeName = @"ushort",
+			ExpectedType = @"int",
+			FirstType = @"ushort",
+			SecondType = @"ushort",
+			ShiftType = @"ushort",
 			IncludeNot = false,
 			IncludeComp = false
 		};
 
 		private readonly ComparisonInstructionTestRunner<ushort> comparisonTests = new ComparisonInstructionTestRunner<ushort>
 		{
-			TypeName = @"ushort"
+			FirstType = @"ushort"
 		};
 
 		private readonly SZArrayInstructionTestRunner<ushort> arrayTests = new SZArrayInstructionTestRunner<ushort>
 		{
-			TypeName = @"ushort"
+			FirstType = @"ushort"
 		};
 
 	}

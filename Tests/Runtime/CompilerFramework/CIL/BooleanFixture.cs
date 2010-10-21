@@ -4,7 +4,7 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Michael Fröhlich (aka grover, <mailto:sharpos@michaelruck.de>)
+ *  Michael Fröhlich (grover) <michael.ruck@michaelruck.de>
  *  
  */
 
@@ -22,8 +22,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.CIL
 	{
 		private readonly BinaryLogicInstructionTestRunner<bool, bool, bool> logicTests = new BinaryLogicInstructionTestRunner<bool, bool, bool>
 		{
-			ExpectedTypeName = @"bool",
-			TypeName = @"bool",
+			ExpectedType = @"bool",
+			FirstType = @"bool",
+			SecondType = @"bool",
 			IncludeShl = false,
 			IncludeShr = false,
 			IncludeComp = false
@@ -31,7 +32,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CIL
 
 		private readonly ComparisonInstructionTestRunner<bool> comparisonTests = new ComparisonInstructionTestRunner<bool>
 		{
-			TypeName = @"bool",
+			FirstType = @"bool",
 			IncludeCge = false,
 			IncludeCgt = false,
 			IncludeCle = false,
@@ -40,7 +41,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CIL
 
 		private readonly SZArrayInstructionTestRunner<bool> arrayTests = new SZArrayInstructionTestRunner<bool>
 		{
-			TypeName = @"bool"
+			FirstType = @"bool"
 		};
 
 		#region And

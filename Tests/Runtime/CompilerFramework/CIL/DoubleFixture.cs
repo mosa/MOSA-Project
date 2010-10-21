@@ -4,8 +4,8 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Michael Fröhlich (aka grover, <mailto:sharpos@michaelruck.de>)
- *  
+ *  Michael Fröhlich (grover) <michael.ruck@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
  */
 
 using System;
@@ -22,19 +22,20 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 	{
 		private readonly ArithmeticInstructionTestRunner<double, double> arithmeticTests = new ArithmeticInstructionTestRunner<double, double>
 		{
-			ExpectedTypeName = @"double",
-			TypeName = @"double",
+			ExpectedType = @"double",
+			FirstType = @"double",
+			SecondType = @"double",
 			IncludeRem = false
 		};
 
 		private readonly ComparisonInstructionTestRunner<double> comparisonTests = new ComparisonInstructionTestRunner<double>
 		{
-			TypeName = @"double"
+			FirstType = @"double"
 		};
 
 		private readonly SZArrayInstructionTestRunner<double> arrayTests = new SZArrayInstructionTestRunner<double>
 		{
-			TypeName = @"double"
+			FirstType = @"double"
 		};
 
 	}

@@ -4,8 +4,8 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Alex Lyman (<mailto:mail.alex.lyman@gmail.com>)
- *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
+ *  Alex Lyman <mail.alex.lyman@gmail.com>
+ *  Michael Fröhlich (grover) <michael.ruck@michaelruck.de>
  *  
  */
 
@@ -160,7 +160,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
 				throw new NotSupportedException("The language '" + Language + "' is not supported on this machine.");
 			CompilerResults compileResults;
 			CompilerParameters parameters = new CompilerParameters(this.References, Path.GetTempFileName());
-			parameters.CompilerOptions = "/optimize- /debug+ /debug:full";
+			parameters.CompilerOptions = "/optimize- /debug+"; // /debug:full
 
 			if (this.unsafeCode)
 			{

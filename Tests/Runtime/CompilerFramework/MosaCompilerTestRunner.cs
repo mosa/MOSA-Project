@@ -4,8 +4,8 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Alex Lyman (<mailto:mail.alex.lyman@gmail.com>)
- *  Michael Ruck (<mailto:sharpos@michaelruck.de>)
+ *  Alex Lyman <mail.alex.lyman@gmail.com>
+ *  Michael Fröhlich (grover) <michael.ruck@michaelruck.de>
  *  
  */
 
@@ -138,7 +138,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		public object Run<TDelegate>(string ns, string type, string method, params object[] parameters)
 		{
 			// Do we need to compile the code?
-			if (this.needCompile == true)
+			if (this.needCompile)
 			{
 				this.assembly = this.CompileTestCode<TDelegate>(ns, type, method);
 				Console.WriteLine("Executing MOSA compiler...");
