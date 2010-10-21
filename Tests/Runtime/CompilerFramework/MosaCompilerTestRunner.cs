@@ -27,7 +27,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
 	/// <summary>
 	/// Interface class for MbUnit3 to run our testcases.
 	/// </summary>
-	public abstract class MosaCompilerTestRunner : IDisposable
+	public abstract class MosaCompilerTestRunner 
 	{
 		#region Data members
 
@@ -105,25 +105,6 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		public void Begin()
 		{
 			Console.WriteLine("Building runtime...");
-		}
-
-		/// <summary>
-		/// Disposes the test runtime and deletes the compiled assembly.
-		/// </summary>
-		[FixtureTearDown]
-		public void End()
-		{
-			// Try to delete the compiled assembly...
-			if (this.assembly != null)
-			{
-				try
-				{
-					File.Delete(this.assembly);
-				}
-				catch
-				{
-				}
-			}
 		}
 
 		/// <summary>
@@ -223,16 +204,5 @@ namespace Test.Mosa.Runtime.CompilerFramework
 
 		#endregion // Methods
 
-		#region IDisposable Members
-
-		/// <summary>
-		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-		/// </summary>
-		void IDisposable.Dispose()
-		{
-			this.End();
-		}
-
-		#endregion // IDisposable Members
 	}
 }

@@ -76,12 +76,30 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Holds the temporary files collection.
 		/// </summary>
-		private TempFileCollection temps = new TempFileCollection();
+		private static TempFileCollection temps = new TempFileCollection(TempDirectory, false);
 
 		/// <summary>
 		/// Determines if unsafe code is allowed in the test.
 		/// </summary>
 		private bool unsafeCode;
+
+		private static string tempDirectory;
+
+		private static string TempDirectory
+		{
+			get
+			{
+				if (tempDirectory == null)
+				{
+					tempDirectory = Path.Combine(Path.GetTempPath(), "mosa");
+					if (!Directory.Exists(tempDirectory))
+					{
+						Directory.CreateDirectory(tempDirectory);
+					}
+				}
+				return tempDirectory;
+			}
+		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TestFixtureBase"/> class.
@@ -166,24 +184,6 @@ namespace Test.Mosa.Runtime.CompilerFramework
 				{
 					this.unsafeCode = value;
 					this.NeedCompile = true;
-				}
-			}
-		}
-
-		/// <summary>
-		/// Disposes the test runtime and deletes the compiled assembly.
-		/// </summary>
-		public void End()
-		{
-			// Try to delete the compiled assembly...
-			if (this.assembly != null)
-			{
-				try
-				{
-					File.Delete(this.assembly);
-				}
-				catch
-				{
 				}
 			}
 		}
@@ -313,9 +313,12 @@ namespace Test.Mosa.Runtime.CompilerFramework
 			if (provider == null)
 				throw new NotSupportedException("The language '" + this.Language + "' is not supported on this machine.");
 
+			string filename = Path.Combine(TempDirectory, Path.ChangeExtension(Path.GetRandomFileName(), "dll"));
+			temps.AddFile(filename, false);
+
 			CompilerResults compileResults;
-			CompilerParameters parameters = new CompilerParameters(this.References, Path.GetTempFileName());
-			parameters.CompilerOptions = "/optimize- /debug+"; // /debug:full
+			CompilerParameters parameters = new CompilerParameters(this.References, filename, false);
+			parameters.CompilerOptions = "/optimize-";
 
 			if (this.unsafeCode)
 			{
@@ -327,10 +330,10 @@ namespace Test.Mosa.Runtime.CompilerFramework
 			parameters.GenerateInMemory = false;
 			if (this.codeSource != null)
 			{
-				Console.Write("From Source: ");
-				Console.WriteLine(new string('-', 40 - 13));
-				Console.WriteLine(this.codeSource);
-				Console.WriteLine(new string('-', 40));
+				//Console.Write("From Source: ");
+				//Console.WriteLine(new string('-', 40 - 13));
+				//Console.WriteLine(this.codeSource);
+				//Console.WriteLine(new string('-', 40));
 				compileResults = provider.CompileAssemblyFromSource(parameters, this.codeSource);
 			}
 			else
@@ -391,16 +394,5 @@ namespace Test.Mosa.Runtime.CompilerFramework
 			return marshalDirective;
 		}
 
-		public void Dispose()
-		{
-			try
-			{
-				this.End();
-			}
-			finally
-			{
-				GC.SuppressFinalize(this);
-			}
-		}
 	}
 }
