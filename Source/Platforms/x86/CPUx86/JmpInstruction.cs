@@ -24,7 +24,7 @@ namespace Mosa.Platforms.x86.CPUx86
 		#region Data Members
 
 		private static readonly byte[] JMP = new byte[] { 0xE9 };
-        private static readonly OpCode JmpReg = new OpCode(new byte[] { 0xFF }, 4);
+		private static readonly OpCode JmpReg = new OpCode(new byte[] { 0xFF }, 4);
 
 		#endregion
 
@@ -47,10 +47,10 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context ctx, MachineCodeEmitter emitter)
 		{
-            if (ctx.Operand1 is RegisterOperand)
-                emitter.Emit(JmpReg, ctx.Operand1);
+			if (ctx.Operand1 is RegisterOperand)
+				emitter.Emit(JmpReg, ctx.Operand1);
 			else 
-                emitter.EmitBranch(JMP, ctx.Branch.Targets[0]);
+				emitter.EmitBranch(JMP, ctx.Branch.Targets[0]);
 		}
 
 		/// <summary>

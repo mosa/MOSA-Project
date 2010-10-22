@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using Mosa.Runtime.CompilerFramework.CIL;
 
 namespace Mosa.Runtime.CompilerFramework
 {
@@ -78,6 +79,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		protected virtual void EmitInstructions()
 		{
+			ExceptionClauseHeader exceptionClauseHeader = this.MethodCompiler.Method.ExceptionClauseHeader;
 			foreach (BasicBlock block in BasicBlocks)
 			{
 				BlockStart(block);
@@ -86,6 +88,11 @@ namespace Mosa.Runtime.CompilerFramework
 					if (ctx.Instruction != null)
 						if (!ctx.Ignore)
 						{
+							if (block.ExceptionHeaderClause != null)
+							{
+								block.ExceptionHeaderClause.Update(ctx, codeStream);
+								// TODO: Add label for offset and/or end to codeEmitter
+							}
 							IPlatformInstruction instruction = ctx.Instruction as IPlatformInstruction;
 							if (instruction != null)
 								instruction.Emit(ctx, codeEmitter);

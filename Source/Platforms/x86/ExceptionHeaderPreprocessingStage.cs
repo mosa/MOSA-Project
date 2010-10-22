@@ -31,6 +31,13 @@ namespace Mosa.Platforms.x86
 		/// 
 		/// </summary>
 		private Dictionary<int, EhClause> labelMapping = new Dictionary<int, EhClause>();
+
+		/// <summary>
+		/// Retrieves the name of the compilation stage.
+		/// </summary>
+		/// <value>The name of the compilation stage.</value>
+		string IPipelineStage.Name { get { return @"X86.ExceptionHeaderPreprocessingStage"; } }
+
 		/// <summary>
 		/// Runs the specified method compiler.
 		/// </summary>
@@ -61,10 +68,20 @@ namespace Mosa.Platforms.x86
 		/// <param name="clause"></param>
 		private void AddClauseLabels(EhClause clause)
 		{
-			this.labelMapping.Add(clause.TryOffset, clause);
-			this.labelMapping.Add(clause.TryEnd, clause);
-			this.labelMapping.Add(clause.HandlerOffset, clause);
-			this.labelMapping.Add(clause.HandlerEnd, clause);
+			AddClauseLabel(clause, clause.TryOffset);
+			AddClauseLabel(clause, clause.TryEnd);
+			AddClauseLabel(clause, clause.HandlerOffset);
+			AddClauseLabel(clause, clause.HandlerEnd);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="clause"></param>
+		/// <param name="label"></param>
+		private void AddClauseLabel(EhClause clause, int label)
+		{
+			this.labelMapping[label] = clause;
 		}
 
 		/// <summary>
@@ -77,8 +94,12 @@ namespace Mosa.Platforms.x86
 			{
 				if (this.labelMapping.ContainsKey(context.Label))
 				{
-					// TODO:
-					// Add patch to method
+					EhClause clause = this.labelMapping[context.Label];
+					if (clause.TryOffset == context.Label || clause.HandlerOffset == context.Label)
+					{
+
+						this.labelMapping.Remove(context.Label);
+					}
 				}
 			}
 		}

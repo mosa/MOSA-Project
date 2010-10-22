@@ -178,6 +178,7 @@ namespace Mosa.Platforms.x86
 					//InstructionLogger.Instance,
 					new MemToMemConversionStage(),
 					//InstructionLogger.Instance,
+					new ExceptionHeaderPreprocessingStage(),
 				});
 
 			methodCompilerPipeline.InsertAfter<IBlockOrderStage>(

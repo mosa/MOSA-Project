@@ -43,7 +43,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public struct EhClause
+	public class EhClause
 	{
 		/// <summary>
 		/// 
@@ -140,6 +140,43 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			}
 
 			return false;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="context"></param>
+		/// <param name="stream"></param>
+		public void Update(Context context, Stream stream)
+		{
+			UpdateOffset(context, stream);
+			UpdateEnd(context, stream);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="context"></param>
+		/// <param name="stream"></param>
+		public void UpdateOffset(Context context, Stream stream)
+		{
+			if (context.Label == this.TryOffset)
+				this.TryOffset = (int)stream.Position;
+			if (context.Label == this.HandlerOffset)
+				this.HandlerOffset = (int)stream.Position;
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="context"></param>
+		/// <param name="stream"></param>
+		public void UpdateEnd(Context context, Stream stream)
+		{
+			if (context.Label == this.TryEnd)
+				this.TryLength = (int)stream.Position - this.TryOffset;
+			if (context.Label == this.HandlerEnd)
+				this.HandlerLength = (int)stream.Position - this.HandlerOffset;
 		}
 	}
 }
