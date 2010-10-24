@@ -63,7 +63,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <param name="context">The context.</param>
 		public override void Visit(ICILVisitor visitor, Context context)
 		{
-			visitor.Isinst(context);
+			visitor.IsInst(context);
 		}
 
 		#endregion Methods

@@ -2490,7 +2490,7 @@ namespace Mosa.Platforms.x86
 		/// Visitation function for Isinst.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Isinst(Context context) { }
+		void CIL.ICILVisitor.IsInst(Context context) { }
 
 		/// <summary>
 		/// Visitation function for Unbox.

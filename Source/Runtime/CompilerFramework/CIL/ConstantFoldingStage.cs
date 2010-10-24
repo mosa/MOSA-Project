@@ -563,7 +563,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// Visitation function for Isinst instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Isinst(Context context) { }
+		void CIL.ICILVisitor.IsInst(Context context) { }
 
 		/// <summary>
 		/// Visitation function for Unbox instruction.

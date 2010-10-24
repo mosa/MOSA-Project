@@ -371,10 +371,10 @@ namespace Mosa.Runtime.CompilerFramework
 		void CIL.ICILVisitor.Castclass(Context context) { }
 
 		/// <summary>
-		/// Visitation function for <see cref="CIL.ICILVisitor.Isinst"/>.
+		/// Visitation function for <see cref="CIL.ICILVisitor.IsInst"/>.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Isinst(Context context) { }
+		void CIL.ICILVisitor.IsInst(Context context) { }
 
 		/// <summary>
 		/// Visitation function for <see cref="CIL.ICILVisitor.Unbox"/>.

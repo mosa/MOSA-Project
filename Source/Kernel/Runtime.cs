@@ -20,12 +20,11 @@ namespace Mosa.Runtime
 			// HACK: Add compiler architecture to the runtime
 			uint nativeIntSize = 4;
 
-			//
 			// An object has the following memory layout:
 			//   - IntPtr MTable
 			//   - IntPtr SyncBlock
 			//   - 0 .. n object data fields
-			//
+
 			uint allocationSize = ((2 * nativeIntSize) + classSize);
 
 			void* memory = (void*)KernelGCMemory.AllocateMemory(allocationSize);
@@ -43,13 +42,12 @@ namespace Mosa.Runtime
 			// HACK: Add compiler architecture to the runtime
 			uint nativeIntSize = 4;
 
-			//
 			// An array has the following memory layout:
 			//   - IntPtr MTable
 			//   - IntPtr SyncBlock
 			//   - int length
 			//   - ElementType[length] elements
-			//
+
 			uint allocationSize = nativeIntSize + (uint)(elements * elementSize);
 			void* memory = AllocateObject(methodTable, allocationSize);
 
@@ -64,5 +62,11 @@ namespace Mosa.Runtime
 			void* result = AllocateArray(methodTable, 2, length);
 			return result;
 		}
+
+		public static unsafe bool IsInstanceOfType(void* methodTable, void* type)
+		{
+			return false; // TODO
+		}
+
 	}
 }

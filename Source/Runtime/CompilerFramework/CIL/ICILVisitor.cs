@@ -222,7 +222,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// Visitation function for Isinst instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void Isinst(Context context);
+		void IsInst(Context context);
 		/// <summary>
 		/// Visitation function for Unbox instruction.
 		/// </summary>

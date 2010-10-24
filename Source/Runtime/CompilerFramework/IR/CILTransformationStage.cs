@@ -578,7 +578,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// Visitation function for Isinst instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CIL.ICILVisitor.Isinst(Context context)
+		void CIL.ICILVisitor.IsInst(Context context)
 		{
 			ReplaceWithVmCall(context, VmCall.IsInstanceOfType);
 		}
