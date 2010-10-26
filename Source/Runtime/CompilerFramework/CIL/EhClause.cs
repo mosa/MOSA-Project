@@ -48,6 +48,10 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// 
 		/// </summary>
+		private int label;
+		/// <summary>
+		/// 
+		/// </summary>
 		public EhClauseType Kind;
 		/// <summary>
 		/// 
@@ -161,9 +165,15 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		public void UpdateOffset(Context context, Stream stream)
 		{
 			if (context.Label == this.TryOffset)
+			{
 				this.TryOffset = (int)stream.Position;
-			if (context.Label == this.HandlerOffset)
+				this.label = this.TryOffset;
+			}
+			else if (context.Label == this.HandlerOffset)
+			{
 				this.HandlerOffset = (int)stream.Position;
+				this.label = this.HandlerOffset;
+			}
 		}
 
 		/// <summary>
@@ -174,9 +184,25 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		public void UpdateEnd(Context context, Stream stream)
 		{
 			if (context.Label == this.TryEnd)
+			{
 				this.TryLength = (int)stream.Position - this.TryOffset;
+				this.label = this.TryEnd;
+			}
 			if (context.Label == this.HandlerEnd)
+			{
 				this.HandlerLength = (int)stream.Position - this.HandlerOffset;
+				this.label = this.HandlerLength;
+			}
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="context"></param>
+		/// <param name="emitter"></param>
+		public void AddLabelToCodeStream(ICodeEmitter emitter)
+		{
+			emitter.Label(0x50000000 + this.label);
 		}
 	}
 }
