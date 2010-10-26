@@ -196,10 +196,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		}
 
 		/// <summary>
-		/// 
+		/// Adds the label to code stream.
 		/// </summary>
-		/// <param name="context"></param>
-		/// <param name="emitter"></param>
+		/// <param name="emitter">The emitter.</param>
 		public void AddLabelToCodeStream(ICodeEmitter emitter)
 		{
 			emitter.Label(0x50000000 + this.label);
