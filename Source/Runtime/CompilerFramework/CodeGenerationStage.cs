@@ -91,7 +91,7 @@ namespace Mosa.Runtime.CompilerFramework
 							if (block.ExceptionHeaderClause != null)
 							{
 								block.ExceptionHeaderClause.Update(ctx, codeStream);
-								// TODO: Add label for offset and/or end to codeEmitter
+								block.ExceptionHeaderClause.AddLabelToCodeStream(codeEmitter);
 							}
 							IPlatformInstruction instruction = ctx.Instruction as IPlatformInstruction;
 							if (instruction != null)
