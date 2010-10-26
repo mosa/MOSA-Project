@@ -358,7 +358,7 @@ namespace Mosa.Runtime.Vm
 		{
 			foreach (RuntimeType type in _types)
 			{
-				if (null != type && nameSpace.Length == type.Namespace.Length && typeName.Length == type.Name.Length && typeName == type.Name && nameSpace == type.Namespace)
+				if (type != null && typeName == type.Name && nameSpace == type.Namespace)
 				{
 					return type;
 				}

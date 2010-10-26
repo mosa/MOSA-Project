@@ -62,7 +62,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Holds a list of operands which represent local variables
 		/// </summary>
-		private List<Operand> _locals;
+		private Operand[] _locals;
 
 		/// <summary>
 		/// Optional signature of stack local variables
@@ -326,15 +326,15 @@ namespace Mosa.Runtime.CompilerFramework
 			// which represent the same memory location. If we need to move a variable in an optimization
 			// stage to a different memory location, it should actually be a new one so sharing object
 			// only saves runtime space/perf.
+			// PG: Isn't that implemented below? Comment seems out of date with code
+
 			Debug.Assert(_localsSig != null, @"Method doesn't have locals.");
 			Debug.Assert(index < _localsSig.Locals.Length, @"Invalid local index requested.");
 
 			if (_localsSig == null || _localsSig.Locals.Length < index)
 				throw new ArgumentOutOfRangeException(@"index", index, @"Invalid parameter index");
 
-			Operand local = null;
-			if (_locals.Count > index)
-				local = _locals[index];
+			Operand local = _locals[index];
 
 			if (local == null)
 			{
@@ -439,11 +439,9 @@ namespace Mosa.Runtime.CompilerFramework
 			_localsSig = localVariableSignature;
 
 			int count = _localsSig.Locals.Length;
-			this._locals = new List<Operand>(count);
-			for (int index = 0; index < count; index++)
-				this._locals.Add(null);
+			this._locals = new Operand[count];
 
-			_nextStackSlot = _locals.Count + 1;
+			_nextStackSlot = _locals.Length + 1;
 		}
 
 		/// <summary>

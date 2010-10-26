@@ -58,7 +58,7 @@ namespace Mosa.EmulatedDevices
 			// Fix for Linux
 			files[0] = files[0].Replace('\\', System.IO.Path.DirectorySeparatorChar);
 
-			IOPortDispatch.RegisterDevice(new IDEController(IDEController.PrimaryIOBase, files));
+			//IOPortDispatch.RegisterDevice(new IDEController(IDEController.PrimaryIOBase, files));
 
 			// Simulate multiboot
 			Mosa.EmulatedDevices.Multiboot.Setup();

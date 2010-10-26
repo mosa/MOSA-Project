@@ -114,8 +114,6 @@ namespace Mosa.Runtime.CompilerFramework
 						CreateSequentialLayout(type);
 					}
 
-                    if (type.ToString().Contains("RegisterContext"))
-                        System.Console.WriteLine();
 					BuildMethodTable(type);
 					BuildTypeInterfaceSlots(type);
 					BuildTypeInterfaceBitmap(type);

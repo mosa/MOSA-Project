@@ -11,21 +11,30 @@ namespace Mosa.QuickTest
 	/// <summary>
 	/// 
 	/// </summary>
-	public static class App
+	public class GenericTest<T>
 	{
-		public static int Sum(int a, int b)
-		{
-			return a + b;
-		}
+		public T value;
 
-		/// <summary>
-		/// Main
-		/// </summary>
-		public static void Main()
-		{
-			int c = Sum(10, 20);
-		}
-
+		public T GetValue() { return value; }
+		public void SetValue(T value) { this.value = value; }
 
 	}
+
+	public class UseGeneric
+	{
+		public void UseGenericInteger()
+		{
+			GenericTest<int> genericInt = new GenericTest<int>();
+
+			genericInt.value = 10;
+		}
+	
+		public void UseGenericObject()
+		{
+			GenericTest<object> genericInt = new GenericTest<object>();
+
+			genericInt.value = new object();
+		}
+	}
+
 }
