@@ -115,20 +115,20 @@ namespace Mosa.Tools.Compiler.Linkers
 			CheckImplementation();
 
 			IModuleTypeSystem mainModule = typeSystem.GetMainModuleTypeSystem();
-			RuntimeMethod entrypoint = mainModule.GetMethod(DefaultSignatureContext.Instance, mainModule.MetadataModule.EntryPoint);
 
-			// Set the default entry point in the linker, if no previous stage has replaced it.
-			if (this.implementation.EntryPoint == null && entrypoint != null)
+			if (mainModule.MetadataModule.EntryPoint != TokenTypes.Module)
 			{
-				this.implementation.EntryPoint = this.GetSymbol(entrypoint.ToString());
+				RuntimeMethod entrypoint = mainModule.GetMethod(DefaultSignatureContext.Instance, mainModule.MetadataModule.EntryPoint);
+
+				implementation.EntryPoint = GetSymbol(entrypoint.ToString());
 			}
 
 			// Run the real linker
-			IAssemblyCompilerStage acs = this.implementation as IAssemblyCompilerStage;
-			Debug.Assert(acs != null, @"Linker doesn't implement IAssemblyCompilerStage.");
-			if (acs != null)
+			IAssemblyCompilerStage assemblyCompilerStage = implementation as IAssemblyCompilerStage;
+			Debug.Assert(assemblyCompilerStage != null, @"Linker doesn't implement IAssemblyCompilerStage.");
+			if (assemblyCompilerStage != null)
 			{
-				acs.Run();
+				assemblyCompilerStage.Run();
 			}
 		}
 

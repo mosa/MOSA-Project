@@ -14,5 +14,6 @@ namespace System
 	/// </summary>
 	public struct Single
 	{
+		internal float _value;
 	}
 }

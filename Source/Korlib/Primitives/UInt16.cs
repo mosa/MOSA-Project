@@ -17,11 +17,11 @@ namespace System
 		public const ushort MaxValue = 0xffff;
 		public const ushort MinValue = 0;
 
-		internal ushort m_value;
+		internal ushort _value;
 
 		public override string ToString()
 		{
-			return Int32.CreateString(m_value, false, false);
+			return Int32.CreateString(_value, false, false);
 		}
 
 	}
