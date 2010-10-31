@@ -141,7 +141,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 						BuiltInSigType builtIn = sigType as BuiltInSigType;
 						if (builtIn != null)
 						{
-							result = moduleTypeSystem.GetType(builtIn.TypeName + ", mscorlib");
+							result = moduleTypeSystem.TypeSystem.GetType(builtIn.TypeName + ", mscorlib");
 						}
 						else
 						{

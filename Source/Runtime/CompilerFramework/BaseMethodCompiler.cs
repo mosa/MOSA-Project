@@ -402,7 +402,7 @@ namespace Mosa.Runtime.CompilerFramework
 			TypeSigType typeSigType = signatureType as TypeSigType;
 			if (typeSigType != null)
 			{
-				runtimeType = this.LoadDependentType(typeSigType.Token);
+				runtimeType = LoadDependentType(typeSigType.Token);
 			}
 			else
 			{
@@ -439,7 +439,7 @@ namespace Mosa.Runtime.CompilerFramework
 			_localsSig = localVariableSignature;
 
 			int count = _localsSig.Locals.Length;
-			this._locals = new Operand[count];
+			_locals = new Operand[count];
 
 			_nextStackSlot = _locals.Length + 1;
 		}

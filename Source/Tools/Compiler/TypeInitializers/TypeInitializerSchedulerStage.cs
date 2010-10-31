@@ -104,9 +104,14 @@ namespace Mosa.Tools.Compiler.TypeInitializers
 		void IAssemblyCompilerStage.Run()
 		{
 			IModuleTypeSystem mainModule = typeSystem.GetMainModuleTypeSystem();
-			RuntimeMethod entrypoint = mainModule.GetMethod(DefaultSignatureContext.Instance, mainModule.MetadataModule.EntryPoint);
 
-			Schedule(entrypoint);
+			if (mainModule.MetadataModule.EntryPoint != TokenTypes.Module)
+			{
+				RuntimeMethod entrypoint = mainModule.GetMethod(DefaultSignatureContext.Instance, mainModule.MetadataModule.EntryPoint);
+
+				Schedule(entrypoint);
+			}
+
 			ctx.AppendInstruction(IR.Instruction.EpilogueInstruction);
 			ctx.Other = 0;
 
