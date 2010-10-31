@@ -17,11 +17,11 @@ namespace System
 		public const byte MinValue = 0;
 		public const byte MaxValue = 255;
 
-		internal byte m_value;
+		internal byte _value;
 
 		public override string ToString()
 		{
-			return Int32.CreateString(m_value, false, false);
+			return Int32.CreateString(_value, false, false);
 		}
 
 	}

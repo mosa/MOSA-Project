@@ -17,11 +17,11 @@ namespace System
 		public const short MaxValue = 32767;
 		public const short MinValue = -32768;
 
-		internal short m_value;
+		internal short _value;
 
 		public override string ToString()
 		{
-			return Int32.CreateString((uint)m_value, true, false);
+			return Int32.CreateString((uint)_value, true, false);
 		}
 
 	}

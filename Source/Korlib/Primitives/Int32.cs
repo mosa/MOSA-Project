@@ -17,11 +17,11 @@ namespace System
 		public const int MaxValue = 0x7fffffff;
 		public const int MinValue = -2147483648;
 
-		internal int m_value;
+		internal int _value;
 
 		public override string ToString()
 		{
-			return CreateString((uint)m_value, true, false);
+			return CreateString((uint)_value, true, false);
 		}
 
 		unsafe internal static string CreateString(uint value, bool signed, bool hex)

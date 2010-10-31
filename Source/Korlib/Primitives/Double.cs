@@ -14,5 +14,6 @@ namespace System
 	/// </summary>
 	public struct Double
 	{
+		internal double _value;
 	}
 }

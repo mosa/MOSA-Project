@@ -14,5 +14,11 @@ namespace System
 	/// </summary>
 	public struct UIntPtr
 	{
+		/// <summary>
+		/// This is 32-bit specific :(
+		/// </summary>
+		internal uint _value;
+
+		public static int Size { get { return 4; } }
 	}
 }

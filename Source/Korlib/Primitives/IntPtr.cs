@@ -18,6 +18,8 @@ namespace System
 		/// <summary>
 		/// This is 32-bit specific :(
 		/// </summary>
-		private int value;
+		internal int _value;
+
+		public static int Size { get { return 4; } }
 	}
 }

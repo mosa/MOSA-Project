@@ -17,11 +17,11 @@ namespace System
 		public const char MaxValue = (char)0xffff;
 		public const char MinValue = (char)0;
 
-		internal char m_value;
+		internal char _value;
 
 		public override string ToString()
 		{
-			return new String(m_value, 1);
+			return new String(_value, 1);
 		}
 	}
 }
