@@ -8,9 +8,6 @@
 namespace Mosa.QuickTest
 {
 
-	/// <summary>
-	/// 
-	/// </summary>
 	public class GenericTest<T>
 	{
 		public T value;
@@ -24,11 +21,11 @@ namespace Mosa.QuickTest
 	{
 		public void UseGenericInteger()
 		{
-			GenericTest<int> genericInt = new GenericTest<int>();
+			GenericTest<int> genericObject = new GenericTest<int>();
 
-			genericInt.value = 10;
+			genericObject.value = 10;
 		}
-	
+
 		public void UseGenericObject()
 		{
 			GenericTest<object> genericInt = new GenericTest<object>();
