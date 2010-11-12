@@ -43,7 +43,14 @@ namespace Mosa.Tools.Permutations
 
 		private static void WritePermuationsToFile(string directory, string classname, IList<string> permutations)
 		{
-			File.WriteAllLines(Path.Combine(directory, classname + ".Partial.cs"), FormatCode.Format(ClassTemplate.AddClass(classname, permutations)));
+			IList<string> lines = FormatCode.Format(ClassTemplate.AddClass(classname, permutations));
+
+			string[] arraylines = new string[lines.Count];
+
+			for (int i = 0; i < lines.Count; i++)
+				arraylines[i] = lines[i];
+
+			File.WriteAllLines(Path.Combine(directory, classname + ".Partial.cs"), arraylines);
 		}
 
 	}
