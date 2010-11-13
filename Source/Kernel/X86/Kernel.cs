@@ -10,7 +10,7 @@
 using Mosa.Kernel.X86;
 using Mosa.Kernel.X86.Smbios;
 
-namespace Mosa.HelloWorld
+namespace Mosa.Kernel.X86
 {
 	/// <summary>
 	/// 

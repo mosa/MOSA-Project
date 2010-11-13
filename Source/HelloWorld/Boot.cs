@@ -28,7 +28,8 @@ namespace Mosa.HelloWorld
 		/// </summary>
 		public static void Main()
 		{
-			Kernel.Setup();
+			Mosa.Kernel.X86.Kernel.Setup();
+
 			Screen.GotoTop();
 			Screen.Color = Colors.Yellow;
 
