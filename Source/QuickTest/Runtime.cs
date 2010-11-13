@@ -7,18 +7,16 @@
  *  Michael Fröhlich (grover) <michael.ruck@michaelruck.de>
  */
 
-using Mosa.Kernel;
-using Mosa.Kernel.X86;
-using Mosa.Platforms.x86;
-
 namespace Mosa.Runtime
 {
 	public static class Runtime
 	{
+		private unsafe static uint* free = (uint*)(1024 * 1024 * 4);
 
 		private unsafe static uint* AllocateMemory(uint size)
 		{
-			return (uint*)KernelGCMemory.AllocateMemory(size);
+			free = free + size;
+			return free;
 		}
 
 		public static unsafe void* AllocateObject(void* methodTable, uint classSize)

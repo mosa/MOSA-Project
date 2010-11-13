@@ -14,19 +14,18 @@ namespace Mosa.QuickTest
 
 		public T GetValue() { return value; }
 		public void SetValue(T value) { this.value = value; }
-
 	}
 
-	public class UseGeneric
+	public static class UseGeneric
 	{
-		public void UseGenericInteger()
+		public static void UseGenericInteger()
 		{
 			GenericTest<int> genericObject = new GenericTest<int>();
 
 			genericObject.value = 10;
 		}
 
-		public void UseGenericObject()
+		public static void UseGenericObject()
 		{
 			GenericTest<object> genericInt = new GenericTest<object>();
 

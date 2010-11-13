@@ -42,6 +42,8 @@
     </StartupObject>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Object.cs" />
+    <Compile Include="Runtime.cs" />
     <Compile Include="Test.cs" />
   </ItemGroup>
   <ItemGroup>
