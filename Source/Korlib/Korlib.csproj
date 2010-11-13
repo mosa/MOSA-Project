@@ -78,12 +78,13 @@
     <Compile Include="System\AttributeTarget.cs" />
     <Compile Include="System\AttributeUsageAttribute.cs" />
     <Compile Include="System\Convert.cs" />
+    <Compile Include="System\CLSCompliantAttribute.cs" />
     <Compile Include="System\Delegate.cs" />
     <Compile Include="System\Exception.cs" />
     <Compile Include="System\FlagsAttribute.cs" />
     <Compile Include="System\IDisposable.cs" />
     <Compile Include="System\InvalidOperationException.cs" />
-    <Compile Include="Mosa\Runtime\CompilerFramework\IntrinsicAttribute.cs" />
+    <Compile Include="Mosa.Runtime.CompilerFramework\IntrinsicAttribute.cs" />
     <Compile Include="System\MulticastDelegate.cs" />
     <Compile Include="System\NotSupportedException.cs" />
     <Compile Include="System\ObjectDisposedException.cs" />
