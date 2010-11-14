@@ -7,15 +7,16 @@
  *  Michael Fröhlich (aka Michael Ruck or grover) <sharpos@michaelruck.de>
  */
 
+using Mosa.Runtime.Metadata.Signatures;
+using Mosa.Runtime.Vm;
+
 namespace Mosa.Runtime.CompilerFramework
 {
-	using Mosa.Runtime.Metadata.Signatures;
-	using Mosa.Runtime.Vm;
 
 	public interface ICompilationSchedulerStage
 	{
 		void ScheduleTypeForCompilation(RuntimeType type);
 
-		void ScheduleMethodForCompilation(RuntimeMethod method);
+		//void ScheduleMethodForCompilation(RuntimeMethod method);
 	}
 }

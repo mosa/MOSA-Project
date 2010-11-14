@@ -22,7 +22,6 @@ namespace Mosa.Runtime.Metadata.Signatures
 			return new MVarSigType(index);
 		}
 
-
 		public SigType GetGenericTypeArgument(int index)
 		{
 			return new VarSigType(index);

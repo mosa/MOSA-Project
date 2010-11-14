@@ -151,25 +151,25 @@ namespace Mosa.Runtime.CompilerFramework
 			return interfaceSlots[type];
 		}
 
-		int ITypeLayout.GetTypeSize(ISignatureContext context, RuntimeType type)
+		int ITypeLayout.GetTypeSize(RuntimeType type)
 		{
 			int size = 0;
 			foreach (RuntimeField field in type.Fields)
 			{
 				if (!field.IsStaticField)
-					size = size + ((ITypeLayout)this).GetFieldSize(context, field);
+					size = size + ((ITypeLayout)this).GetFieldSize(field);
 
 			}
 
 			return size;
 		}
 
-		int ITypeLayout.GetFieldSize(ISignatureContext context, RuntimeField field)
+		int ITypeLayout.GetFieldSize(RuntimeField field)
 		{
 			// If the field is another struct, we have to dig down and compute its size too.
 			if (field.SignatureType.Type == CilElementType.ValueType)
 			{
-				return ((ITypeLayout)this).GetTypeSize(context, field.Type);
+				return ((ITypeLayout)this).GetTypeSize(field.Type);
 			}
 
 			int size, alignment;
@@ -587,7 +587,7 @@ namespace Mosa.Runtime.CompilerFramework
 			int size, alignment;
 			architecture.GetTypeRequirements(field.SignatureType, out size, out alignment);
 
-			size = (int)((ITypeLayout)this).GetFieldSize(field.DeclaringType, field);
+			size = (int)((ITypeLayout)this).GetFieldSize(field);
 
 			// The linker section to move this field into
 			SectionKind section;

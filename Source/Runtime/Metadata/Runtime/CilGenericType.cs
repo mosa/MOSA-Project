@@ -34,20 +34,21 @@ namespace Mosa.Runtime.Metadata.Runtime
 		{
 			get
 			{
-				return this.genericArguments;
+				ProcessSignature();
+				return genericArguments;
 			}
 		}
 
 		protected override string GetName()
 		{
-			this.ProcessSignature();
+			ProcessSignature();
 
 			StringBuilder sb = new StringBuilder();
-			sb.AppendFormat("{0}<", this.genericType.Name);
+			sb.AppendFormat("{0}<", genericType.Name);
 
-			foreach (SigType genericArgument in this.genericArguments)
+			foreach (SigType genericArgument in genericArguments)
 			{
-				sb.AppendFormat("{0}, ", this.GetRuntimeTypeForSigType(genericArgument).FullName);
+				sb.AppendFormat("{0}, ", GetRuntimeTypeForSigType(genericArgument).FullName);
 			}
 
 			sb.Length -= 2;
@@ -58,14 +59,13 @@ namespace Mosa.Runtime.Metadata.Runtime
 
 		protected override string GetNamespace()
 		{
-			this.ProcessSignature();
-			return this.genericType.Namespace;
+			ProcessSignature();
+			return genericType.Namespace;
 		}
 
 		protected override RuntimeType GetBaseType()
 		{
 			ProcessSignature();
-
 			return genericType.BaseType;
 		}
 
@@ -105,12 +105,12 @@ namespace Mosa.Runtime.Metadata.Runtime
 
 		private void ProcessSignature()
 		{
-			if (this.genericType == null)
+			if (genericType == null)
 			{
-				SigType[] signatureArguments = this.signature.GenericArguments;
+				SigType[] signatureArguments = signature.GenericArguments;
 
-				this.genericType = moduleTypeSystem.GetType(DefaultSignatureContext.Instance, this.signature.BaseType.Token);
-				this.genericArguments = this.signature.GenericArguments;
+				genericType = moduleTypeSystem.GetType(DefaultSignatureContext.Instance, signature.BaseType.Token);
+				genericArguments = signature.GenericArguments;
 			}
 		}
 
@@ -129,11 +129,11 @@ namespace Mosa.Runtime.Metadata.Runtime
 					goto case CilElementType.Class;
 
 				case CilElementType.Var:
-					sigType = this.GetGenericTypeArgument(((VarSigType)sigType).Index);
+					sigType = GetGenericTypeArgument(((VarSigType)sigType).Index);
 					goto case CilElementType.Class;
 
 				case CilElementType.MVar:
-					sigType = this.GetGenericTypeArgument(((MVarSigType)sigType).Index);
+					sigType = GetGenericTypeArgument(((MVarSigType)sigType).Index);
 					goto case CilElementType.Class;
 
 				default:
@@ -156,8 +156,8 @@ namespace Mosa.Runtime.Metadata.Runtime
 
 		public override SigType GetGenericTypeArgument(int index)
 		{
-			this.ProcessSignature();
-			return this.genericArguments[index];
+			ProcessSignature();
+			return genericArguments[index];
 		}
 
 		protected override IList<RuntimeType> LoadInterfaces()

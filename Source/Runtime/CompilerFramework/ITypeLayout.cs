@@ -24,9 +24,9 @@ namespace Mosa.Runtime.CompilerFramework
 
 		int GetInterfaceSlotOffset(RuntimeType type);
 
-		int GetTypeSize(ISignatureContext context, RuntimeType type);
+		int GetTypeSize(RuntimeType type);
 
-		int GetFieldSize(ISignatureContext context, RuntimeField field);
+		int GetFieldSize(RuntimeField field);
 
 	}
 }

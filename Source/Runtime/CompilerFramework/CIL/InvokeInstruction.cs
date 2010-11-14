@@ -135,15 +135,15 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 			//for (int i = 0; i < ctx.OperandCount; i++)
 			//{
-				/* FIXME: Check implicit conversions
-				// if (ops[i] != null) {
-					Debug.Assert(_operands[i].Type == _parameterTypes[i]);
-					if (_operands[i].Type != _parameterTypes[i])
-					{
-						// FIXME: Determine if we can do an implicit conversion
-						throw new ExecutionEngineException(@"Invalid operand types.");
-					}
-				*/
+			/* FIXME: Check implicit conversions
+			// if (ops[i] != null) {
+				Debug.Assert(_operands[i].Type == _parameterTypes[i]);
+				if (_operands[i].Type != _parameterTypes[i])
+				{
+					// FIXME: Determine if we can do an implicit conversion
+					throw new ExecutionEngineException(@"Invalid operand types.");
+				}
+			*/
 			//}
 		}
 
@@ -176,12 +176,13 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 					method = decoder.ModuleTypeSystem.GetMethod(decoder.Method, callTarget);
 					if (method.DeclaringType.IsGeneric)
 					{
-						ScheduleMethodForCompilation(decoder, method);
+						decoder.Compiler.Scheduler.ScheduleTypeForCompilation(method.DeclaringType);
 					}
 					break;
 
 				case TokenTypes.MethodSpec:
-					method = DecodeMethodSpecification(decoder, callTarget);
+					method = decoder.ModuleTypeSystem.GetMethod(decoder.Method, callTarget);
+					decoder.Compiler.Scheduler.ScheduleTypeForCompilation(method.DeclaringType);
 					break;
 
 				default:
@@ -192,22 +193,6 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			SetInvokeTarget(ctx, decoder.Compiler, method);
 
 			return callTarget;
-		}
-
-		private static RuntimeMethod DecodeMethodSpecification(IInstructionDecoder decoder, TokenTypes callTarget)
-		{
-			RuntimeMethod method = decoder.ModuleTypeSystem.GetMethod(decoder.Method, callTarget);
-
-			ScheduleMethodForCompilation(decoder, method);
-
-			return method;
-		}
-
-		private static void ScheduleMethodForCompilation(IInstructionDecoder decoder, RuntimeMethod method)
-		{
-			ICompilationSchedulerStage compilationScheduler = decoder.Compiler.Scheduler;
-			compilationScheduler.ScheduleMethodForCompilation(method);
-
 		}
 
 		/// <summary>

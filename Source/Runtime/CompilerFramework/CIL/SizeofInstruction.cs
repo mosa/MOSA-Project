@@ -53,7 +53,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 			RuntimeType type = decoder.ModuleTypeSystem.GetType(decoder.Method, token);
 
-			uint size = (uint)decoder.Compiler.TypeLayout.GetTypeSize(decoder.Method, type);
+			uint size = (uint)decoder.Compiler.TypeLayout.GetTypeSize( type);
 
 			ctx.Result = new Operands.ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(CilElementType.U4), size);
 		}
