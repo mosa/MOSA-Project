@@ -236,8 +236,6 @@ namespace Mosa.Runtime.Linker
 		{
 			try
 			{
-				Console.Error.WriteLine("Link Allocate: " + name);
-
 				Stream baseStream = Allocate(section, size, alignment);
 
 				// Create a linker symbol for the name
