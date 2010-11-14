@@ -42,30 +42,30 @@ namespace Mosa.Runtime.Metadata.Signatures
 			get { return types; }
 		}
 
-        /// <summary>
-        /// Parses the signature.
-        /// </summary>
-        /// <param name="context"></param>
-        /// <param name="reader"></param>
+		/// <summary>
+		/// Parses the signature.
+		/// </summary>
+		/// <param name="context"></param>
+		/// <param name="reader"></param>
 		protected override void ParseSignature(ISignatureContext context, SignatureReader reader)
 		{
 			if (reader.ReadByte() != 0x0A)
 				throw new InvalidOperationException(@"Invalid signature.");
 
-            int genArgCount = reader.ReadCompressedInt32();
-			this.types = new SigType[genArgCount];
+			int genArgCount = reader.ReadCompressedInt32();
+			types = new SigType[genArgCount];
 			for (int i = 0; i < genArgCount; i++)
-                this.types[i] = SigType.ParseTypeSignature(context, reader);
+				types[i] = SigType.ParseTypeSignature(context, reader);
 		}
 
 		public SigType GetGenericMethodArgument(int index)
 		{
-			return this.types[index];
+			return types[index];
 		}
 
 		public SigType GetGenericTypeArgument(int index)
 		{
-			return this.outerContext.GetGenericTypeArgument(index);
+			return outerContext.GetGenericTypeArgument(index);
 		}
 	}
 }

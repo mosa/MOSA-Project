@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using System;
@@ -339,7 +340,7 @@ namespace Mosa.Runtime.CompilerFramework
 			if (local == null)
 			{
 				VariableSignature localVariable = _localsSig.Locals[index];
-				this.ScheduleDependencyForCompilation(localVariable.Type);
+				ScheduleDependencyForCompilation(localVariable.Type);
 
 				local = new LocalVariableOperand(_architecture.StackFrameRegister, String.Format("L_{0}", index), index, localVariable.Type);
 				_locals[index] = local;
@@ -402,14 +403,14 @@ namespace Mosa.Runtime.CompilerFramework
 			TypeSigType typeSigType = signatureType as TypeSigType;
 			if (typeSigType != null)
 			{
-				runtimeType = LoadDependentType(typeSigType.Token);
+				runtimeType = moduleTypeSystem.GetType(this.Method, typeSigType.Token);
 			}
 			else
 			{
 				GenericInstSigType genericSignatureType = signatureType as GenericInstSigType;
 				if (genericSignatureType != null)
 				{
-					RuntimeType genericType = this.LoadDependentType(genericSignatureType.BaseType.Token);
+					RuntimeType genericType = moduleTypeSystem.GetType(this.Method, genericSignatureType.BaseType.Token);
 					Console.WriteLine(@"Loaded generic type {0}", genericType.FullName);
 
 					runtimeType = new CilGenericType(moduleTypeSystem, genericType, genericSignatureType, this.Method);
@@ -418,13 +419,8 @@ namespace Mosa.Runtime.CompilerFramework
 
 			if (runtimeType != null)
 			{
-				this.compilationScheduler.ScheduleTypeForCompilation(runtimeType);
+				compilationScheduler.ScheduleTypeForCompilation(runtimeType);
 			}
-		}
-
-		private RuntimeType LoadDependentType(TokenTypes tokenType)
-		{
-			return moduleTypeSystem.GetType(this.Method, tokenType);
 		}
 
 		/// <summary>

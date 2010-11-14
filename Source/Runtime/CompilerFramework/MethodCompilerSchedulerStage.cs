@@ -130,7 +130,7 @@ namespace Mosa.Runtime.CompilerFramework
 			if (!type.IsGeneric)
 			{
 				Console.WriteLine(@"Scheduling {0}", type.FullName);
-				Console.WriteLine(String.Format(@"Scheduling {0}", type.FullName));
+				Debug.WriteLine(String.Format(@"Scheduling {0}", type.FullName));
 
 				typeQueue.Enqueue(type);
 				type.IsCompiled = true;
