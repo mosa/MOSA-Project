@@ -21,8 +21,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MethodReferenceSignature"/> class.
 		/// </summary>
-		public MethodReferenceSignature() :
-			base()
+		public MethodReferenceSignature() 
 		{
 		}
 	}

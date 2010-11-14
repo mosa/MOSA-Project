@@ -19,13 +19,24 @@ namespace Mosa.Runtime.Metadata.Signatures
 	/// </summary>
 	public abstract class Signature
 	{
+		/// <summary>
+		/// 
+		/// </summary>
 		private TokenTypes token;
 
-		public TokenTypes Token { get { return token; } }
+		/// <summary>
+		/// Gets the token.
+		/// </summary>
+		/// <value>The token.</value>
+		public TokenTypes Token
+		{
+			get { return token; }
+		}
 
 		/// <summary>
 		/// Loads the signature.
 		/// </summary>
+		/// <param name="context">The context.</param>
 		/// <param name="provider">The provider.</param>
 		/// <param name="token">The token.</param>
 		public void LoadSignature(ISignatureContext context, IMetadataProvider provider, TokenTypes token)
@@ -48,14 +59,15 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// <summary>
 		/// Froms the member ref signature token.
 		/// </summary>
+		/// <param name="context">The context.</param>
 		/// <param name="provider">The provider.</param>
 		/// <param name="token">The token.</param>
 		/// <returns></returns>
 		public static Signature FromMemberRefSignatureToken(ISignatureContext context, IMetadataProvider provider, TokenTypes token)
 		{
-			Signature result;
-
 			SignatureReader reader = new SignatureReader(provider.ReadBlob(token), token);
+			
+			Signature result;
 
 			if (reader[0] == 0x06)
 			{

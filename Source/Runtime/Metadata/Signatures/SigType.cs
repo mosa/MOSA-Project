@@ -215,10 +215,10 @@ namespace Mosa.Runtime.Metadata.Signatures
 					return ParseArraySignature(context, reader);
 
 				case CilElementType.Class:
-					return ParseClassSignature(context, reader);
+					return ParseClassSignature(reader);
 
 				case CilElementType.FunctionPtr:
-					return ParseFunctionPointer(context, reader);
+					return ParseFunctionPointer(reader);
 
 				case CilElementType.GenericInst:
 					return ParseGenericInstance(context, reader);
@@ -233,7 +233,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 					return ParseSZArraySignature(context, reader);
 
 				case CilElementType.ValueType:
-					return ParseValueType(context, reader);
+					return ParseValueType(reader);
 
 				case CilElementType.Var:
 					return ParseVar(context, reader);
@@ -265,7 +265,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// <param name="context">The context.</param>
 		/// <param name="reader">The reader.</param>
 		/// <returns></returns>
-		private static TypeSigType ParseValueType(ISignatureContext context, SignatureReader reader)
+		private static TypeSigType ParseValueType(SignatureReader reader)
 		{
 			TokenTypes token = reader.ReadEncodedTypeDefOrRef();
 			return new ValueTypeSigType(token);
@@ -297,7 +297,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 		}
 
 		/// <summary>
-		/// Parses the M var.
+		/// Parses the MVar.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="reader">The reader.</param>
@@ -321,11 +321,11 @@ namespace Mosa.Runtime.Metadata.Signatures
 			switch (type)
 			{
 				case CilElementType.Class:
-					originalType = ParseClassSignature(context, reader);
+					originalType = ParseClassSignature(reader);
 					break;
 
 				case CilElementType.ValueType:
-					originalType = ParseValueType(context, reader);
+					originalType = ParseValueType(reader);
 					break;
 
 				default:
@@ -348,7 +348,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// <param name="context">The context.</param>
 		/// <param name="reader">The reader.</param>
 		/// <returns></returns>
-		private static SigType ParseFunctionPointer(ISignatureContext context, SignatureReader reader)
+		private static SigType ParseFunctionPointer(SignatureReader reader)
 		{
 			TokenTypes token = reader.ReadEncodedToken();
 			return new FnptrSigType(token);
@@ -357,10 +357,9 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// <summary>
 		/// Parses the class signature.
 		/// </summary>
-		/// <param name="context">The context.</param>
 		/// <param name="reader">The reader.</param>
 		/// <returns></returns>
-		private static TypeSigType ParseClassSignature(ISignatureContext context, SignatureReader reader)
+		private static TypeSigType ParseClassSignature(SignatureReader reader)
 		{
 			TokenTypes token = reader.ReadEncodedTypeDefOrRef();
 			return new ClassSigType(token);
@@ -404,7 +403,6 @@ namespace Mosa.Runtime.Metadata.Signatures
 			SigType elementType = ParseTypeSignature(context, reader);
 			return new SZArraySigType(customMods, elementType);
 		}
-
 
 		#endregion // Static methods
 

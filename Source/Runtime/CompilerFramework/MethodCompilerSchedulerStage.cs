@@ -117,6 +117,11 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 		}
 
+		void ICompilationSchedulerStage.ScheduleTypeForCompilation(RuntimeType type)
+		{
+			ScheduleTypeForCompilation(type);
+		}
+
 		public void ScheduleTypeForCompilation(RuntimeType type)
 		{
 			if (type == null)
@@ -137,7 +142,7 @@ namespace Mosa.Runtime.CompilerFramework
 			}
 		}
 
-		public void ScheduleMethodForCompilation(RuntimeMethod method)
+		protected void ScheduleMethodForCompilation(RuntimeMethod method)
 		{
 			if (method == null)
 				throw new ArgumentNullException(@"method");

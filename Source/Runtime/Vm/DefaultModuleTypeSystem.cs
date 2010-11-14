@@ -675,7 +675,7 @@ namespace Mosa.Runtime.Vm
 			}
 
 			// Set the generic parameters of the last type, if we have them
-			if (0 != gprs.Count)
+			if (gprs.Count != 0)
 			{
 				SetGenericParameters(gprs, owner);
 			}
@@ -857,7 +857,8 @@ namespace Mosa.Runtime.Vm
 					ownerType = this.ResolveTypeSpec(context, row.ClassTableIdx);
 					break;
 
-				case TokenTypes.TypeDef: goto case TokenTypes.TypeRef;
+				case TokenTypes.TypeDef: 
+					goto case TokenTypes.TypeRef;
 
 				case TokenTypes.TypeRef:
 					ownerType = ((IModuleTypeSystem)this).GetType(context, row.ClassTableIdx);

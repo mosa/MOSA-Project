@@ -88,10 +88,7 @@ namespace Mosa.Runtime.Vm
 				return signature;
 			}
 
-			protected set
-			{
-				signature = value;
-			}
+			protected set { signature = value; }
 		}
 
 		/// <summary>

@@ -927,12 +927,6 @@
     <Compile Include="Vm\ITypeSystem.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Vm\MethodTable.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Vm\Object.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Vm\ReadOnlyRuntimeFieldListView.cs">
       <SubType>Code</SubType>
     </Compile>

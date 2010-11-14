@@ -58,6 +58,9 @@ namespace Mosa.Runtime.CompilerFramework
 				if (type.IsGeneric)
 					continue;
 
+				if (type.IsModule)
+					continue;
+
 				scheduler.ScheduleTypeForCompilation(type);
 			}
 		}

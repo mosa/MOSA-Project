@@ -7,6 +7,8 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
+using System;
+
 namespace Mosa.Runtime.Metadata.Signatures
 {
 	/// <summary>
@@ -16,16 +18,16 @@ namespace Mosa.Runtime.Metadata.Signatures
 	{
 
 		/// <summary>
-		/// Parses the signature.
+		/// FieldSignature signature is indexed by the Field.Signature column
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="reader">The reader.</param>
 		protected override void ParseSignature(ISignatureContext context, SignatureReader reader)
 		{
-			if (Field != reader.PeekByte())
-				return;
-
-			reader.SkipByte();
+			if (Field != reader.ReadByte())
+			{
+				throw new InvalidOperationException(@"Invalid method definition signature.");
+			}
 
 			base.ParseSignature(context, reader);
 		}
