@@ -108,7 +108,6 @@ namespace Mosa.Runtime.Metadata.Runtime
 			return result.ToString();
 		}
 
-
 		private RuntimeType GetRuntimeTypeForSigType(SigType sigType)
 		{
 			RuntimeType result = null;

@@ -34,7 +34,7 @@ namespace Mosa.Runtime.Vm
 		/// <summary>
 		/// Holds the metadata module
 		/// </summary>
-		IMetadataModule MetadataModule { get;  }
+		IMetadataModule MetadataModule { get; }
 
 		/// <summary>
 		/// Array of loaded runtime type descriptors.
@@ -111,7 +111,7 @@ namespace Mosa.Runtime.Vm
 		/// </summary>
 		/// <param name="token">The token of the _stackFrameIndex to retrieve.</param>
 		/// <returns></returns>
-		RuntimeField GetField( TokenTypes token);
+		RuntimeField GetField(TokenTypes token);
 
 		/// <summary>
 		/// Retrieves the method definition identified by the given token in the scope.
@@ -131,10 +131,9 @@ namespace Mosa.Runtime.Vm
 		/// <summary>
 		/// Resolves the type of the signature.
 		/// </summary>
-		/// <param name="context">The context.</param>
 		/// <param name="sigType">Type of the signature.</param>
 		/// <returns></returns>
-		RuntimeType ResolveSignatureType(ISignatureContext context, SigType sigType);
+		RuntimeType ResolveSignatureType(SigType sigType);
 
 		/// <summary>
 		/// Adds the internal compiler defined type to the type system

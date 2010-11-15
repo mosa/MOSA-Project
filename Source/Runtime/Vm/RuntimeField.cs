@@ -108,7 +108,7 @@ namespace Mosa.Runtime.Vm
 			get
 			{
 				// HACK: Generic fields -- is this right?
-				return moduleTypeSystem.ResolveSignatureType(DefaultSignatureContext.Instance, this.SignatureType);
+				return moduleTypeSystem.ResolveSignatureType(this.SignatureType);
 			}
 		}
 

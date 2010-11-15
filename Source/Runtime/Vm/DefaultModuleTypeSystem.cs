@@ -306,23 +306,22 @@ namespace Mosa.Runtime.Vm
 		/// <summary>
 		/// Resolves the type of the signature.
 		/// </summary>
-		/// <param name="context">The context.</param>
 		/// <param name="sigType">Type of the signature.</param>
 		/// <returns></returns>
-		RuntimeType IModuleTypeSystem.ResolveSignatureType(ISignatureContext context, SigType sigType)
+		RuntimeType IModuleTypeSystem.ResolveSignatureType(SigType sigType)
 		{
 			switch (sigType.Type)
 			{
 				case CilElementType.Class:
 					TypeSigType typeSigType = (TypeSigType)sigType;
-					return ((IModuleTypeSystem)this).GetType(context, typeSigType.Token);
+					return ((IModuleTypeSystem)this).GetType(typeSigType.Token);
 
 				case CilElementType.ValueType:
 					goto case CilElementType.Class;
 
 				case CilElementType.GenericInst:
 					GenericInstSigType genericSigType = (GenericInstSigType)sigType;
-					RuntimeType baseType = ((IModuleTypeSystem)this).GetType(context, genericSigType.BaseType.Token);
+					RuntimeType baseType = ((IModuleTypeSystem)this).GetType(genericSigType.BaseType.Token);
 					return new CilGenericType(this, baseType, genericSigType);
 
 				default:
@@ -341,29 +340,25 @@ namespace Mosa.Runtime.Vm
 			switch (TokenTypes.TableMask & token)
 			{
 				case TokenTypes.MethodDef:
-					{
-						return methods[(int)(TokenTypes.RowIndexMask & token) - 1];
-					}
+					return methods[(int)(TokenTypes.RowIndexMask & token) - 1];
 
 				case TokenTypes.MemberRef:
+					MemberRefRow row = metadata.ReadMemberRefRow(token);
+					string nameString = metadata.ReadString(row.NameStringIdx);
+					RuntimeType type = ((IModuleTypeSystem)this).GetType(context, row.ClassTableIdx);
+
+					MethodSignature sig = (MethodSignature)Signature.FromMemberRefSignatureToken(type, metadata, row.SignatureBlobIdx);
+					foreach (RuntimeMethod method in type.Methods)
 					{
-						MemberRefRow row = metadata.ReadMemberRefRow(token);
-						string nameString = metadata.ReadString(row.NameStringIdx);
-						RuntimeType type = ((IModuleTypeSystem)this).GetType(context, row.ClassTableIdx);
+						if (method.Name != nameString)
+							continue;
+						if (!method.Signature.Matches(sig))
+							continue;
 
-						MethodSignature sig = (MethodSignature)Signature.FromMemberRefSignatureToken(type, metadata, row.SignatureBlobIdx);
-						foreach (RuntimeMethod method in type.Methods)
-						{
-							if (method.Name != nameString)
-								continue;
-							if (!method.Signature.Matches(sig))
-								continue;
-
-							return method;
-						}
-
-						throw new MissingMethodException(type.Name, nameString);
+						return method;
 					}
+
+					throw new MissingMethodException(type.Name, nameString);
 
 				case TokenTypes.MethodSpec:
 					return this.DecodeMethodSpec(context, token);
@@ -933,7 +928,7 @@ namespace Mosa.Runtime.Vm
 				TypeSpecSignature signature = new TypeSpecSignature();
 				signature.LoadSignature(context, metadata, typeSpec.SignatureBlobIdx);
 
-				typespecs[typeSpecIndex] = ((IModuleTypeSystem)this).ResolveSignatureType(context, signature.Type);
+				typespecs[typeSpecIndex] = ((IModuleTypeSystem)this).ResolveSignatureType(signature.Type);
 			}
 
 			return typespecs[typeSpecIndex];
