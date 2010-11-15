@@ -114,7 +114,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// </summary>
 		public MethodSignature()
 		{
-			///TODO: Remove this default constructor 
+			//TODO: Remove this default constructor 
 		}
 
 		/// <summary>

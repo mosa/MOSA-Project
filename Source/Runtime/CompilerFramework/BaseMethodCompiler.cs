@@ -413,7 +413,7 @@ namespace Mosa.Runtime.CompilerFramework
 					RuntimeType genericType = moduleTypeSystem.GetType(this.Method, genericSignatureType.BaseType.Token);
 					Console.WriteLine(@"Loaded generic type {0}", genericType.FullName);
 
-					runtimeType = new CilGenericType(moduleTypeSystem, genericType, genericSignatureType, this.Method);
+					runtimeType = new CilGenericType(moduleTypeSystem, genericType, genericSignatureType);
 				}
 			}
 

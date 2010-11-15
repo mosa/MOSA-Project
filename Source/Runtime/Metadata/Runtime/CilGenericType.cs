@@ -14,17 +14,14 @@ namespace Mosa.Runtime.Metadata.Runtime
 	{
 		private readonly GenericInstSigType signature;
 
-		private readonly ISignatureContext signatureContext;
-
 		private RuntimeType genericType;
 
 		private SigType[] genericArguments;
 
-		public CilGenericType(IModuleTypeSystem moduleTypeSystem, RuntimeType type, GenericInstSigType genericTypeInstanceSignature, ISignatureContext signatureContext) :
+		public CilGenericType(IModuleTypeSystem moduleTypeSystem, RuntimeType type, GenericInstSigType genericTypeInstanceSignature) :
 			base(moduleTypeSystem, type.Token)
 		{
 			this.signature = genericTypeInstanceSignature;
-			this.signatureContext = signatureContext;
 
 			this.Methods = this.GetMethods();
 			this.Fields = this.GetFields();
@@ -107,9 +104,9 @@ namespace Mosa.Runtime.Metadata.Runtime
 		{
 			if (genericType == null)
 			{
-				SigType[] signatureArguments = signature.GenericArguments;
+				//SigType[] signatureArguments = signature.GenericArguments;
 
-				genericType = moduleTypeSystem.GetType(DefaultSignatureContext.Instance, signature.BaseType.Token);
+				genericType = moduleTypeSystem.GetType(signature.BaseType.Token);
 				genericArguments = signature.GenericArguments;
 			}
 		}

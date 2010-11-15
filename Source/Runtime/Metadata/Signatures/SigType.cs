@@ -262,7 +262,6 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// <summary>
 		/// Parses the type of the value.
 		/// </summary>
-		/// <param name="context">The context.</param>
 		/// <param name="reader">The reader.</param>
 		/// <returns></returns>
 		private static TypeSigType ParseValueType(SignatureReader reader)
@@ -345,7 +344,6 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// <summary>
 		/// Parses the function pointer.
 		/// </summary>
-		/// <param name="context">The context.</param>
 		/// <param name="reader">The reader.</param>
 		/// <returns></returns>
 		private static SigType ParseFunctionPointer(SignatureReader reader)

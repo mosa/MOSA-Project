@@ -21,7 +21,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// <summary>
 		/// 
 		/// </summary>
-		private SigType _type;
+		private SigType type;
 
 		/// <summary>
 		/// Gets the type.
@@ -29,7 +29,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// <value>The type.</value>
 		public SigType Type
 		{
-			get { return _type; }
+			get { return type; }
 		}
 
 		/// <summary>
@@ -39,7 +39,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// <param name="reader"></param>
 		protected override void ParseSignature(ISignatureContext context, SignatureReader reader)
 		{
-			_type = SigType.ParseTypeSignature(context, reader);
+			type = SigType.ParseTypeSignature(context, reader);
 		}
 	}
 }

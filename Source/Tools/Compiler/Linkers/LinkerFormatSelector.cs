@@ -118,7 +118,7 @@ namespace Mosa.Tools.Compiler.Linkers
 
 			if (mainModule.MetadataModule.EntryPoint != TokenTypes.Module)
 			{
-				RuntimeMethod entrypoint = mainModule.GetMethod(DefaultSignatureContext.Instance, mainModule.MetadataModule.EntryPoint);
+				RuntimeMethod entrypoint = mainModule.GetMethod(mainModule.MetadataModule.EntryPoint);
 
 				implementation.EntryPoint = GetSymbol(entrypoint.ToString());
 			}

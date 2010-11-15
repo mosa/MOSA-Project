@@ -77,6 +77,13 @@ namespace Mosa.Runtime.Vm
 		RuntimeType GetType(ISignatureContext context, TokenTypes token);
 
 		/// <summary>
+		/// Retrieves the runtime type for a given metadata token.
+		/// </summary>
+		/// <param name="token">The token of the type to load. This can represent a typeref, typedef or typespec token.</param>
+		/// <returns>The runtime type of the specified token.</returns>
+		RuntimeType GetType(TokenTypes token);
+
+		/// <summary>
 		/// Retrieves the runtime type for a given type name.
 		/// </summary>
 		/// <param name="typeName">The name of the type to locate.</param>
@@ -100,12 +107,26 @@ namespace Mosa.Runtime.Vm
 		RuntimeField GetField(ISignatureContext context, TokenTypes token);
 
 		/// <summary>
+		/// Retrieves the stackFrameIndex definition identified by the given token in the scope.
+		/// </summary>
+		/// <param name="token">The token of the _stackFrameIndex to retrieve.</param>
+		/// <returns></returns>
+		RuntimeField GetField( TokenTypes token);
+
+		/// <summary>
 		/// Retrieves the method definition identified by the given token in the scope.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="token">The token of the method to retrieve.</param>
 		/// <returns></returns>
 		RuntimeMethod GetMethod(ISignatureContext context, TokenTypes token);
+
+		/// <summary>
+		/// Retrieves the method definition identified by the given token in the scope.
+		/// </summary>
+		/// <param name="token">The token of the method to retrieve.</param>
+		/// <returns></returns>
+		RuntimeMethod GetMethod(TokenTypes token);
 
 		/// <summary>
 		/// Resolves the type of the signature.
