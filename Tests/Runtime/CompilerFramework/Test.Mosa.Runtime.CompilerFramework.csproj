@@ -79,8 +79,6 @@
       <HintPath>..\..\..\3rdParty\MbUnit.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Source\Platforms\x86\Mosa.Platforms.x86.csproj">
@@ -98,6 +96,10 @@
     <ProjectReference Include="..\..\..\Source\Tools\Compiler\Mosa.Tools.Compiler.csproj">
       <Project>{B69C2F31-5161-47BB-9FD3-2F2F2BCBF659}</Project>
       <Name>Mosa.Tools.Compiler</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Source\Vm\Mosa.Vm.csproj">
+      <Project>{88E003EE-6EEC-4D9A-AE52-94A6F526F115}</Project>
+      <Name>Mosa.Vm</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

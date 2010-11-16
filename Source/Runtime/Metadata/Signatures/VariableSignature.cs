@@ -21,9 +21,9 @@ namespace Mosa.Runtime.Metadata.Signatures
 		{
 		}
 
-		public VariableSignature(ISignatureContext context, SignatureReader reader)
+		public VariableSignature(SignatureReader reader)
 		{
-			this.ParseSignature(context, reader);
+			this.ParseSignature(reader);
 		}
 
 		/// <summary>
@@ -49,12 +49,12 @@ namespace Mosa.Runtime.Metadata.Signatures
 			get { return this.type; }
 		}
 
-		protected override void ParseSignature(ISignatureContext context, SignatureReader reader)
+		protected override void ParseSignature(SignatureReader reader)
 		{
 			this.ParseModifier(reader);
 
 			this.customMods = CustomMod.ParseCustomMods(reader);
-			this.type = SigType.ParseTypeSignature(context, reader);
+			this.type = SigType.ParseTypeSignature(reader);
 		}
 
 		private void ParseModifier(SignatureReader reader)

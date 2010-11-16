@@ -68,13 +68,13 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public void Run()
 		{
-			_registerSet = Architecture.RegisterSet;
+			_registerSet = architecture.RegisterSet;
 			_activeOperands = new Operand[_registerSet.Length];
 			Debug.Assert(0 != _activeOperands.Length, @"No registers in the architecture?");
 			_activeOpLastUse = new Context[_registerSet.Length];
 
 			// Iterate basic Blocks
-			foreach (BasicBlock block in BasicBlocks)
+			foreach (BasicBlock block in basicBlocks)
 			{
 
 				// Iterate all instructions in the block

@@ -11,6 +11,8 @@
 */
 
 using System;
+
+using Mosa.Vm;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Platforms.x86.Intrinsic;
 

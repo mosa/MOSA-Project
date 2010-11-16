@@ -119,7 +119,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 		/// <returns>The base type.</returns>
 		protected override RuntimeType GetBaseType()
 		{
-			return moduleTypeSystem.GetType(this, this.baseTypeToken);
+			return moduleTypeSystem.GetType(this.baseTypeToken);
 		}
 
 		/// <summary>

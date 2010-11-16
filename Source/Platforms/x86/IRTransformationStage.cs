@@ -130,8 +130,8 @@ namespace Mosa.Platforms.x86
 			// Pop callee's EIP that has been used for instruction handling
 			context.SetInstruction(CPUx86.Instruction.PopInstruction, ebx);
 
-			if (MethodCompiler.Method.Signature.ReturnType.Type == CilElementType.I8
-				|| MethodCompiler.Method.Signature.ReturnType.Type == CilElementType.U8)
+			if (methodCompiler.Method.Signature.ReturnType.Type == CilElementType.I8
+				|| methodCompiler.Method.Signature.ReturnType.Type == CilElementType.U8)
 			{
 				// pop ebx
 				context.AppendInstruction(CPUx86.Instruction.PopInstruction, ebx);
@@ -528,11 +528,11 @@ namespace Mosa.Platforms.x86
 			 * the possibility to identify roots into the managed heap. 
 			 */
 			// mov [ebp-4], token
-			context.AppendInstruction(CPUx86.Instruction.MovInstruction, new MemoryOperand(I, GeneralPurposeRegister.EBP, new IntPtr(-4)), new ConstantOperand(I, MethodCompiler.Method.Token));
+			context.AppendInstruction(CPUx86.Instruction.MovInstruction, new MemoryOperand(I, GeneralPurposeRegister.EBP, new IntPtr(-4)), new ConstantOperand(I, methodCompiler.Method.Token));
 
 			// Do not save EDX for non-int64 return values
-			if (MethodCompiler.Method.Signature.ReturnType.Type != CilElementType.I8 &&
-				MethodCompiler.Method.Signature.ReturnType.Type != CilElementType.U8)
+			if (methodCompiler.Method.Signature.ReturnType.Type != CilElementType.I8 &&
+				methodCompiler.Method.Signature.ReturnType.Type != CilElementType.U8)
 			{
 				// push edx
 				context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new RegisterOperand(I, GeneralPurposeRegister.EDX));
@@ -863,7 +863,7 @@ namespace Mosa.Platforms.x86
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.CallInstruction(Context context)
 		{
-			callingConvention.MakeCall(context, this.MethodCompiler.Method);
+			callingConvention.MakeCall(context);
 		}
 
 		/// <summary>
@@ -1005,8 +1005,8 @@ namespace Mosa.Platforms.x86
 			// Compile exception handling if neccessary
 			if (!exceptionHandlingCompiled)
 			{
-				this.MethodCompiler.Scheduler.ScheduleTypeForCompilation(typeSystem.GetType(@"Mosa.Platforms.x86.RegisterContext, Mosa.Platforms.x86"));
-				this.MethodCompiler.Scheduler.ScheduleTypeForCompilation(typeSystem.GetType(@"Mosa.Platforms.x86.ExceptionEngine, Mosa.Platforms.x86"));
+				this.methodCompiler.Scheduler.ScheduleTypeForCompilation(typeSystem.GetType(@"Mosa.Platforms.x86.RegisterContext, Mosa.Platforms.x86"));
+				this.methodCompiler.Scheduler.ScheduleTypeForCompilation(typeSystem.GetType(@"Mosa.Platforms.x86.ExceptionEngine, Mosa.Platforms.x86"));
 				(this.typeLayout as TypeLayoutStage).CreateSequentialLayout(typeSystem.GetType(@"Mosa.Platforms.x86.RegisterContext, Mosa.Platforms.x86"));
 				(this.typeLayout as TypeLayoutStage).CreateSequentialLayout(typeSystem.GetType(@"Mosa.Platforms.x86.ExceptionEngine, Mosa.Platforms.x86"));
 				(this.typeLayout as TypeLayoutStage).BuildMethodTable(typeSystem.GetType(@"Mosa.Platforms.x86.RegisterContext, Mosa.Platforms.x86"));

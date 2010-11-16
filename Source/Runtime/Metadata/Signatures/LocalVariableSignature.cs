@@ -55,9 +55,8 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// <summary>
 		/// Parses the signature.
 		/// </summary>
-		/// <param name="context">The context.</param>
 		/// <param name="reader">The reader.</param>
-		protected override void ParseSignature(ISignatureContext context, SignatureReader reader)
+		protected override void ParseSignature(SignatureReader reader)
 		{
 			// Check signature identifier
 			if (reader.ReadByte() != 0x07)
@@ -70,7 +69,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 				this.locals = new VariableSignature[count];
 				for (int i = 0; i < count; i++)
 				{
-					this.locals[i] = new VariableSignature(context, reader);
+					this.locals[i] = new VariableSignature(reader);
 				}
 			}
 		}
@@ -81,10 +80,10 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// <param name="provider">The provider.</param>
 		/// <param name="token">The token.</param>
 		/// <returns></returns>
-		public static LocalVariableSignature Parse(ISignatureContext context, IMetadataProvider provider, TokenTypes token)
+		public static LocalVariableSignature Parse(IMetadataProvider provider, TokenTypes token)
 		{
 			var signature = new LocalVariableSignature();
-			signature.LoadSignature(context, provider, token);
+			signature.LoadSignature(provider, token);
 			return signature;
 		}
 	}

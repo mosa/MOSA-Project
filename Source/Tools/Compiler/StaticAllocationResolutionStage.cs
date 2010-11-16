@@ -38,9 +38,9 @@ namespace Mosa.Tools.Compiler
 
 		public void Run()
 		{
-			this.linker = this.MethodCompiler.Linker;
+			this.linker = this.methodCompiler.Linker;
 
-			if (this.MethodCompiler.Method.Name == @".cctor")
+			if (this.methodCompiler.Method.Name == @".cctor")
 			{
 				this.AttemptToStaticallyAllocateObjects();
 			}
@@ -106,7 +106,7 @@ namespace Mosa.Tools.Compiler
 		private Operand InsertLoadBeforeInstruction(Context context, string symbolName, SigType type)
 		{
 			Context before = context.InsertBefore();
-			Operand result = this.MethodCompiler.CreateTemporary(type);
+			Operand result = this.methodCompiler.CreateTemporary(type);
 			Operand op = new SymbolOperand(type, symbolName);
 
 			before.SetInstruction(Instruction.Get(OpCode.Ldc_i4), result, op);
@@ -116,7 +116,7 @@ namespace Mosa.Tools.Compiler
 
 		private IEnumerable<Context> ScanForOperatorNew()
 		{
-			foreach (BasicBlock block in this.BasicBlocks)
+			foreach (BasicBlock block in this.basicBlocks)
 			{
 				Context context = new Context(InstructionSet, block);
 				while (!context.EndOfInstruction)

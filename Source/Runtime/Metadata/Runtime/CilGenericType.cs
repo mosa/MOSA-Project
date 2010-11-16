@@ -74,7 +74,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 			foreach (CilRuntimeMethod method in this.genericType.Methods)
 			{
 				MethodSignature signature = new MethodSignature();
-				signature.LoadSignature(this, method.MetadataModule.Metadata, method.Signature.Token);
+				signature.LoadSignature(method.MetadataModule.Metadata, method.Signature.Token);
 
 				RuntimeMethod genericInstanceMethod = new CilGenericMethod(moduleTypeSystem, method, signature, this);
 				methods.Add(genericInstanceMethod);
@@ -91,7 +91,9 @@ namespace Mosa.Runtime.Metadata.Runtime
 			foreach (CilRuntimeField field in this.genericType.Fields)
 			{
 				FieldSignature fsig = new FieldSignature();
-				fsig.LoadSignature(this, this.genericType.MetadataModule.Metadata, field.Signature.Token);
+				fsig.LoadSignature(this.genericType.MetadataModule.Metadata, field.Signature.Token);
+
+				// TODO: Update generic with concrete types (???)
 
 				CilGenericField genericInstanceField = new CilGenericField(moduleTypeSystem, this, field, fsig);
 				fields.Add(genericInstanceField);
@@ -119,7 +121,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 			{
 				case CilElementType.Class:
 					Debug.Assert(sigType is TypeSigType, @"Failing to resolve VarSigType in GenericType.");
-					result = moduleTypeSystem.GetType(this, ((TypeSigType)sigType).Token);
+					result = moduleTypeSystem.GetType(((TypeSigType)sigType).Token);
 					break;
 
 				case CilElementType.ValueType:
@@ -149,6 +151,14 @@ namespace Mosa.Runtime.Metadata.Runtime
 			}
 
 			return result;
+		}
+
+		public override bool IsClosed
+		{
+			get
+			{
+				return signature.IsClosed;
+			}
 		}
 
 		public override SigType GetGenericTypeArgument(int index)

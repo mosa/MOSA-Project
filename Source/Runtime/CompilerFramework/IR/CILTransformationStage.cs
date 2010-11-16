@@ -24,6 +24,7 @@ using Mosa.Runtime.Vm;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Loader;
 using Mosa.Runtime.Linker;
+using Mosa.Vm;
 
 using IR = Mosa.Runtime.CompilerFramework.IR;
 using CIL = Mosa.Runtime.CompilerFramework.CIL;
@@ -261,7 +262,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 				return;
 			}
 
-			if (this.ProcessVmCall(context) == false && this.ProcessIntrinsicCall(context) == false)
+			if (!ProcessVmCall(context) && !ProcessIntrinsicCall(context))
 			{
 				// Create a symbol operand for the invocation target
 				RuntimeMethod invokeTarget = context.InvokeTarget;
@@ -406,8 +407,8 @@ namespace Mosa.Runtime.CompilerFramework.IR
 				{
 					Operand thisPtr = context.Operand1;
 
-					Operand methodTable = MethodCompiler.CreateTemporary(BuiltInSigType.IntPtr);
-					Operand methodPtr = MethodCompiler.CreateTemporary(BuiltInSigType.IntPtr);
+					Operand methodTable = methodCompiler.CreateTemporary(BuiltInSigType.IntPtr);
+					Operand methodPtr = methodCompiler.CreateTemporary(BuiltInSigType.IntPtr);
 
 					if (!invokeTarget.DeclaringType.IsInterface)
 					{
@@ -420,8 +421,8 @@ namespace Mosa.Runtime.CompilerFramework.IR
 						int methodTableOffset = CalculateMethodTableOffset(invokeTarget);
 						int slotOffset = CalculateInterfaceSlotOffset(invokeTarget);
 
-						Operand slotPtr = MethodCompiler.CreateTemporary(BuiltInSigType.IntPtr);
-						Operand interfaceMethodTablePtr = MethodCompiler.CreateTemporary(BuiltInSigType.IntPtr);
+						Operand slotPtr = methodCompiler.CreateTemporary(BuiltInSigType.IntPtr);
+						Operand interfaceMethodTablePtr = methodCompiler.CreateTemporary(BuiltInSigType.IntPtr);
 
 						context.SetInstruction(Instruction.LoadInstruction, methodTable, thisPtr, ConstantOperand.FromValue(0));
 						context.AppendInstruction(Instruction.LoadInstruction, slotPtr, methodTable, ConstantOperand.FromValue(0));
@@ -470,7 +471,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 
 			SZArraySigType arrayType = (SZArraySigType)context.Result.Type;
 			ClassSigType elementSigType = arrayType.ElementType as ClassSigType;
-			RuntimeType elementType = moduleTypeSystem.GetType(this.MethodCompiler.Method, elementSigType.Token);
+			RuntimeType elementType = moduleTypeSystem.GetType(elementSigType.Token);
 			Debug.Assert(elementType != null, @"Newarr didn't specify class signature?");
 
 			Operand lengthOperand = context.Operand1;
@@ -500,7 +501,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			Debug.Assert(thisReference != null, @"Newobj didn't specify class signature?");
 
 			ClassSigType classSigType = (ClassSigType)thisReference.Type;
-			RuntimeType classType = moduleTypeSystem.GetType(this.MethodCompiler.Method, classSigType.Token);
+			RuntimeType classType = moduleTypeSystem.GetType(classSigType.Token);
 
 			List<Operand> ctorOperands = new List<Operand>(context.Operands);
 			RuntimeMethod ctorMethod = context.InvokeTarget;
@@ -698,8 +699,8 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			 * 
 			 */
 
-			IAssemblyLinker linker = this.MethodCompiler.Linker;
-			IMetadataModule assembly = this.MethodCompiler.Assembly;
+			IAssemblyLinker linker = this.methodCompiler.Linker;
+			IMetadataModule assembly = this.methodCompiler.Assembly;
 
 			string referencedString = assembly.Metadata.ReadString(context.Token);
 
@@ -836,7 +837,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 				throw new NotSupportedException(@"CILTransformationStage.UnaryBranch doesn't support CIL opcode " + opcode);
 			}
 
-			Operand comparisonResult = this.MethodCompiler.CreateTemporary(BuiltInSigType.Int32);
+			Operand comparisonResult = this.methodCompiler.CreateTemporary(BuiltInSigType.Int32);
 			context.SetInstruction(Instruction.IntegerCompareInstruction, comparisonResult, first, second);
 			context.ConditionCode = cc;
 
@@ -863,7 +864,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 				comparisonInstruction = Instruction.FloatingPointCompareInstruction;
 			}
 
-			Operand comparisonResult = this.MethodCompiler.CreateTemporary(BuiltInSigType.Int32);
+			Operand comparisonResult = this.methodCompiler.CreateTemporary(BuiltInSigType.Int32);
 			context.SetInstruction(comparisonInstruction, comparisonResult, first, second);
 			context.ConditionCode = cc;
 
@@ -900,7 +901,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			Operand arrayLength = context.Result;
 			ConstantOperand constantOffset = ConstantOperand.FromValue(8);
 
-			Operand arrayAddress = this.MethodCompiler.CreateTemporary(new PtrSigType(BuiltInSigType.Int32));
+			Operand arrayAddress = this.methodCompiler.CreateTemporary(new PtrSigType(BuiltInSigType.Int32));
 			context.SetInstruction(Instruction.MoveInstruction, arrayAddress, arrayOperand);
 			context.AppendInstruction(IR.Instruction.LoadInstruction, arrayLength, arrayAddress, constantOffset);
 		}
@@ -929,7 +930,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		private Operand CalculateArrayElementOffset(Context context, SZArraySigType arraySignatureType, Operand arrayIndexOperand)
 		{
 			int elementSizeInBytes = 0, alignment = 0;
-			Architecture.GetTypeRequirements(arraySignatureType.ElementType, out elementSizeInBytes, out alignment);
+			architecture.GetTypeRequirements(arraySignatureType.ElementType, out elementSizeInBytes, out alignment);
 
 			//
 			// The sequence we're emitting is:
@@ -942,7 +943,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			// of x86, which might change for other platforms. We need to refactor this into some helper classes.
 			//
 
-			Operand elementOffset = this.MethodCompiler.CreateTemporary(BuiltInSigType.Int32);
+			Operand elementOffset = this.methodCompiler.CreateTemporary(BuiltInSigType.Int32);
 			Operand elementSizeOperand = new ConstantOperand(BuiltInSigType.Int32, elementSizeInBytes);
 			context.AppendInstruction(IR.Instruction.MulSInstruction, elementOffset, arrayIndexOperand, elementSizeOperand);
 
@@ -951,7 +952,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 
 		private Operand LoadArrayBaseAddress(Context context, SZArraySigType arraySignatureType, Operand arrayOperand)
 		{
-			Operand arrayAddress = this.MethodCompiler.CreateTemporary(new PtrSigType(arraySignatureType.ElementType));
+			Operand arrayAddress = this.methodCompiler.CreateTemporary(new PtrSigType(arraySignatureType.ElementType));
 			Operand fixedOffset = new ConstantOperand(BuiltInSigType.Int32, 12);
 			context.SetInstruction(Instruction.AddSInstruction, arrayAddress, arrayOperand, fixedOffset);
 			return arrayAddress;
@@ -1688,22 +1689,19 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			if (intrinsicAttributeTypes == null)
 			{
 
-				//if (assemblyLoader.Modules.FirstOrDefault(item => item.Names[0] == @"mscorlib") != null) // ????PG????
+				RuntimeType attributeType = typeSystem.GetType(@"Mosa.Vm.IntrinsicAttribute, Mosa.Vm");
+				if (attributeType != null)
 				{
-					RuntimeType attributeType = typeSystem.GetType(@"Mosa.Runtime.CompilerFramework.IntrinsicAttribute, mscorlib");
-					if (attributeType != null)
-					{
-						intrinsicAttributeTypes = new RuntimeType[2];
-						intrinsicAttributeTypes[1] = attributeType;
-					}
+					intrinsicAttributeTypes = new RuntimeType[1]; // Change: 2 to 1
+					intrinsicAttributeTypes[0] = attributeType;
 				}
 
-				if (intrinsicAttributeTypes == null)
-				{
-					intrinsicAttributeTypes = new RuntimeType[1];
-				}
+				//if (intrinsicAttributeTypes == null)
+				//{
+				//    intrinsicAttributeTypes = new RuntimeType[1];
+				//}
 
-				intrinsicAttributeTypes[0] = typeSystem.GetType(@"Mosa.Runtime.CompilerFramework.IntrinsicAttribute, Mosa.Runtime");
+				//intrinsicAttributeTypes[0] = typeSystem.GetType(@"Mosa.Runtime.CompilerFramework.IntrinsicAttribute, Mosa.Runtime");
 			}
 
 
@@ -1721,12 +1719,12 @@ namespace Mosa.Runtime.CompilerFramework.IR
 					instrinsic.ReplaceIntrinsicCall(context, typeSystem);
 					return true;
 				}
-				else if (architecture.IsInstanceOfType(this.Architecture))
+				else if (architecture.IsInstanceOfType(this.architecture))
 				{
 					// Found a replacement for the call...
 					try
 					{
-						IIntrinsicMethod instrinsic = this.Architecture.GetIntrinsicMethod(instructionType);
+						IIntrinsicMethod instrinsic = this.architecture.GetIntrinsicMethod(instructionType);
 						instrinsic.ReplaceIntrinsicCall(context, typeSystem);
 						return true;
 					}
@@ -1785,7 +1783,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 
 		private bool CanSkipDueToRecursiveSystemObjectCtorCall(Context context)
 		{
-			RuntimeMethod currentMethod = this.MethodCompiler.Method;
+			RuntimeMethod currentMethod = this.methodCompiler.Method;
 			RuntimeMethod invokeTarget = context.InvokeTarget;
 
 			// Skip recursive System.Object ctor calls.
@@ -1829,7 +1827,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 
 			if (extension != null)
 			{
-				Operand temp = this.MethodCompiler.CreateTemporary(extendedType);
+				Operand temp = this.methodCompiler.CreateTemporary(extendedType);
 				destination.Replace(temp, context.InstructionSet);
 				context.SetInstruction(extension, temp, source);
 			}
@@ -1863,7 +1861,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			Debug.Assert(rm != null, @"Call doesn't have a target.");
 
 			// Retrieve the runtime type
-			RuntimeType rt = typeSystem.GetType(@"Mosa.Runtime.Vm.VmCallAttribute, Mosa.Runtime");
+			RuntimeType rt = typeSystem.GetType(@"Mosa.Vm.VmCallAttribute, Mosa.Vm");
 			if (rm.IsDefined(rt))
 			{
 				foreach (RuntimeAttribute ra in rm.CustomAttributes)

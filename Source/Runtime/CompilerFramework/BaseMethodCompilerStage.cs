@@ -30,12 +30,12 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Hold the method compiler
 		/// </summary>
-		protected IMethodCompiler MethodCompiler;
+		protected IMethodCompiler methodCompiler;
 
 		/// <summary>
 		/// The architecture of the compilation process
 		/// </summary>
-		protected IArchitecture Architecture;
+		protected IArchitecture architecture;
 
 		/// <summary>
 		/// Holds the instruction set
@@ -45,7 +45,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// List of basic blocks found during decoding
 		/// </summary>
-		protected List<BasicBlock> BasicBlocks;
+		protected List<BasicBlock> basicBlocks;
 
 		/// <summary>
 		/// Holds the type loader 
@@ -89,17 +89,17 @@ namespace Mosa.Runtime.CompilerFramework
 			if (compiler == null)
 				throw new ArgumentNullException(@"compiler");
 
-			MethodCompiler = compiler;
+			methodCompiler = compiler;
 			InstructionSet = compiler.InstructionSet;
-			BasicBlocks = compiler.BasicBlocks;
-			Architecture = compiler.Architecture;
+			basicBlocks = compiler.BasicBlocks;
+			architecture = compiler.Architecture;
 			moduleTypeSystem = compiler.Method.ModuleTypeSystem;
 			typeSystem = compiler.TypeSystem;
 			typeLayout = compiler.TypeLayout;
 
-			callingConvention = Architecture.GetCallingConvention(typeLayout);
+			callingConvention = architecture.GetCallingConvention(typeLayout);
 
-			Architecture.GetTypeRequirements(BuiltInSigType.IntPtr, out nativePointerSize, out nativePointerAlignment);
+			architecture.GetTypeRequirements(BuiltInSigType.IntPtr, out nativePointerSize, out nativePointerAlignment);
 		}
 
 		#endregion // IMethodCompilerStage members
@@ -113,7 +113,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns></returns>
 		protected BasicBlock FindBlock(int label)
 		{
-			return MethodCompiler.FromLabel(label);
+			return methodCompiler.FromLabel(label);
 		}
 
 		/// <summary>
@@ -144,7 +144,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns></returns>
 		protected BasicBlock CreateBlock(int label, int index)
 		{
-			return MethodCompiler.CreateBlock(label, index);
+			return methodCompiler.CreateBlock(label, index);
 		}
 
 		/// <summary>
@@ -154,7 +154,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns></returns>
 		protected BasicBlock CreateBlock(int label)
 		{
-			return MethodCompiler.CreateBlock(label, -1);
+			return methodCompiler.CreateBlock(label, -1);
 		}
 
 		#endregion

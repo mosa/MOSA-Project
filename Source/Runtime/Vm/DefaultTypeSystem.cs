@@ -176,7 +176,7 @@ namespace Mosa.Runtime.Vm
 		{
 			foreach (IModuleTypeSystem module in compileModules)
 			{
-				foreach (RuntimeType type in module.GetTypes())
+				foreach (RuntimeType type in module.GetAllTypes())
 				{
 					yield return type;
 				}

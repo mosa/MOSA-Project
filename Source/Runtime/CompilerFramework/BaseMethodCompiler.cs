@@ -403,14 +403,14 @@ namespace Mosa.Runtime.CompilerFramework
 			TypeSigType typeSigType = signatureType as TypeSigType;
 			if (typeSigType != null)
 			{
-				runtimeType = moduleTypeSystem.GetType(this.Method, typeSigType.Token);
+				runtimeType = moduleTypeSystem.GetType(typeSigType.Token);
 			}
 			else
 			{
 				GenericInstSigType genericSignatureType = signatureType as GenericInstSigType;
 				if (genericSignatureType != null)
 				{
-					RuntimeType genericType = moduleTypeSystem.GetType(this.Method, genericSignatureType.BaseType.Token);
+					RuntimeType genericType = moduleTypeSystem.GetType(genericSignatureType.BaseType.Token);
 					Console.WriteLine(@"Loaded generic type {0}", genericType.FullName);
 
 					runtimeType = new CilGenericType(moduleTypeSystem, genericType, genericSignatureType);

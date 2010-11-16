@@ -109,7 +109,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public void Run()
 		{
-			foreach (BasicBlock block in BasicBlocks)
+			foreach (BasicBlock block in basicBlocks)
 				EliminateCommonSubexpressions(new Context(InstructionSet, block));
 		}
 

@@ -7,14 +7,16 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
+using System;
+using System.Diagnostics;
+
+using Mosa.Runtime.Metadata;
+using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.CompilerFramework.Operands;
 
 namespace Mosa.Runtime.CompilerFramework
 {
-	using System;
-	using System.Diagnostics;
-	using Metadata;
-	using Metadata.Signatures;
+
 
 	/// <summary>
 	/// Implements a basic framework for architectures.

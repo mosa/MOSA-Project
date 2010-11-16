@@ -95,9 +95,9 @@ namespace Mosa.Runtime.CompilerFramework
 		public void Run()
 		{
 			// Prepare the registers used for the evaluation stack
-			this.PrepareEvaluationStack(Architecture);
+			this.PrepareEvaluationStack(architecture);
 
-			foreach (BasicBlock block in BasicBlocks)
+			foreach (BasicBlock block in basicBlocks)
 				for (Context ctx = CreateContext(block); !ctx.EndOfInstruction; ctx.GotoNext())
 					ProcessInstruction(ctx);
 

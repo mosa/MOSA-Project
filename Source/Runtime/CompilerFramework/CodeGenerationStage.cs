@@ -54,7 +54,7 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 
 			// Retrieve a stream to place the code into
-			using (codeStream = MethodCompiler.RequestCodeStream())
+			using (codeStream = methodCompiler.RequestCodeStream())
 			{
 				// HINT: We need seeking to resolve labels.
 				Debug.Assert(codeStream.CanSeek, @"Can't seek code output stream.");
@@ -79,8 +79,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		protected virtual void EmitInstructions()
 		{
-			ExceptionClauseHeader exceptionClauseHeader = this.MethodCompiler.Method.ExceptionClauseHeader;
-			foreach (BasicBlock block in BasicBlocks)
+			ExceptionClauseHeader exceptionClauseHeader = this.methodCompiler.Method.ExceptionClauseHeader;
+			foreach (BasicBlock block in basicBlocks)
 			{
 				BlockStart(block);
 
@@ -109,8 +109,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		protected virtual void BeginGenerate()
 		{
-			codeEmitter = Architecture.GetCodeEmitter();
-			codeEmitter.Initialize(MethodCompiler, codeStream, MethodCompiler.Linker);
+			codeEmitter = architecture.GetCodeEmitter();
+			codeEmitter.Initialize(methodCompiler, codeStream, methodCompiler.Linker);
 		}
 
 		/// <summary>

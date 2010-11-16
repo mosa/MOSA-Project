@@ -165,7 +165,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 			}
 			this.returnType = this.ApplySpecification(context, specification, signature.ReturnType);
 		}
-		
+
 		private SigType ApplySpecification(ISignatureContext context, MethodSpecSignature specification, SigType sigType)
 		{
 			SigType result = sigType;
@@ -186,9 +186,8 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// <summary>
 		/// Parses the signature.
 		/// </summary>
-		/// <param name="context">The context.</param>
 		/// <param name="reader">The reader.</param>
-		protected sealed override void ParseSignature(ISignatureContext context, SignatureReader reader)
+		protected sealed override void ParseSignature(SignatureReader reader)
 		{
 			byte value = reader.ReadByte();
 
@@ -222,11 +221,11 @@ namespace Mosa.Runtime.Metadata.Signatures
 			parameters = new SigType[paramCount];
 
 			// Read the return type
-			returnType = SigType.ParseTypeSignature(context, reader);
+			returnType = SigType.ParseTypeSignature(reader);
 
 			// Read all parameters
 			for (int i = 0; i < paramCount; i++)
-				parameters[i] = SigType.ParseTypeSignature(context, reader);
+				parameters[i] = SigType.ParseTypeSignature(reader);
 		}
 
 		/// <summary>

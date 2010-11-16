@@ -67,7 +67,6 @@ namespace Mosa.Runtime.Metadata.Runtime
 			return result;
 		}
 
-
 		/// <summary>
 		/// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
 		/// </summary>
@@ -116,7 +115,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 			{
 				case CilElementType.Class:
 					Debug.Assert(sigType is TypeSigType, @"Failing to resolve VarSigType in GenericType.");
-					result = moduleTypeSystem.GetType(this, ((TypeSigType)sigType).Token);
+					result = moduleTypeSystem.GetType(((TypeSigType)sigType).Token);
 					break;
 
 				case CilElementType.ValueType:

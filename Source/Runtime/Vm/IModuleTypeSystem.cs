@@ -57,24 +57,15 @@ namespace Mosa.Runtime.Vm
 		RuntimeField[] Fields { get; }
 
 		/// <summary>
-		/// Gets the types from module.
+		/// Array of loaded runtime typespec descriptors.
 		/// </summary>
-		/// <returns></returns>
-		ReadOnlyRuntimeTypeListView GetTypes();
+		RuntimeType[] TypeSpecs { get; }
 
 		/// <summary>
 		/// Gets all types from module.
 		/// </summary>
 		/// <returns></returns>
 		IEnumerable<RuntimeType> GetAllTypes();
-
-		/// <summary>
-		/// Retrieves the runtime type for a given metadata token.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="token">The token of the type to load. This can represent a typeref, typedef or typespec token.</param>
-		/// <returns>The runtime type of the specified token.</returns>
-		RuntimeType GetType(ISignatureContext context, TokenTypes token);
 
 		/// <summary>
 		/// Retrieves the runtime type for a given metadata token.
@@ -99,27 +90,11 @@ namespace Mosa.Runtime.Vm
 		RuntimeType GetType(string nameSpace, string typeName);
 
 		/// <summary>
-		/// Retrieves the stackFrameIndex definition identified by the given token in the scope.
+		/// Retrieves the field definition identified by the given token in the scope.
 		/// </summary>
-		/// <param name="context">The generic parameter resolution context.</param>
-		/// <param name="token">The token of the _stackFrameIndex to retrieve.</param>
-		/// <returns></returns>
-		RuntimeField GetField(ISignatureContext context, TokenTypes token);
-
-		/// <summary>
-		/// Retrieves the stackFrameIndex definition identified by the given token in the scope.
-		/// </summary>
-		/// <param name="token">The token of the _stackFrameIndex to retrieve.</param>
+		/// <param name="token">The token of the field to retrieve.</param>
 		/// <returns></returns>
 		RuntimeField GetField(TokenTypes token);
-
-		/// <summary>
-		/// Retrieves the method definition identified by the given token in the scope.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="token">The token of the method to retrieve.</param>
-		/// <returns></returns>
-		RuntimeMethod GetMethod(ISignatureContext context, TokenTypes token);
 
 		/// <summary>
 		/// Retrieves the method definition identified by the given token in the scope.

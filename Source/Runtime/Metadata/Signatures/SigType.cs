@@ -23,7 +23,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// <summary>
 		/// Holds the CIL element type of the signature type.
 		/// </summary>
-		private CilElementType _type;
+		private CilElementType type;
 
 		#endregion // Data members
 
@@ -35,7 +35,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// <param name="type">The type.</param>
 		public SigType(CilElementType type)
 		{
-			_type = type;
+			this.type = type;
 		}
 
 		#endregion // Construction
@@ -46,7 +46,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// Gets the type.
 		/// </summary>
 		/// <value>The type.</value>
-		public CilElementType Type { get { return _type; } }
+		public CilElementType Type { get { return type; } }
 
 		#endregion // Properties
 
@@ -60,7 +60,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// </returns>
 		public override string ToString()
 		{
-			return _type.ToString();
+			return type.ToString();
 		}
 
 		#endregion // Object Overrides
@@ -149,10 +149,9 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// <summary>
 		/// Parses the type signature.
 		/// </summary>
-		/// <param name="context">The context.</param>
 		/// <param name="reader">The reader.</param>
 		/// <returns></returns>
-		public static SigType ParseTypeSignature(ISignatureContext context, SignatureReader reader)
+		public static SigType ParseTypeSignature(SignatureReader reader)
 		{
 			CilElementType type = (CilElementType)reader.ReadByte();
 			switch (type)
@@ -212,7 +211,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 					return BuiltInSigType.TypedByRef;
 
 				case CilElementType.Array:
-					return ParseArraySignature(context, reader);
+					return ParseArraySignature(reader);
 
 				case CilElementType.Class:
 					return ParseClassSignature(reader);
@@ -221,25 +220,25 @@ namespace Mosa.Runtime.Metadata.Signatures
 					return ParseFunctionPointer(reader);
 
 				case CilElementType.GenericInst:
-					return ParseGenericInstance(context, reader);
+					return ParseGenericInstance(reader);
 
 				case CilElementType.MVar:
-					return ParseMVar(context, reader);
+					return ParseMVar(reader);
 
 				case CilElementType.Ptr:
-					return ParsePointer(context, reader);
+					return ParsePointer(reader);
 
 				case CilElementType.SZArray:
-					return ParseSZArraySignature(context, reader);
+					return ParseSZArraySignature(reader);
 
 				case CilElementType.ValueType:
 					return ParseValueType(reader);
 
 				case CilElementType.Var:
-					return ParseVar(context, reader);
+					return ParseVar(reader);
 
 				case CilElementType.ByRef:
-					return ParseReference(context, reader);
+					return ParseReference(reader);
 
 				default:
 					throw new NotSupportedException(@"Unsupported CIL element type: " + type);
@@ -250,13 +249,13 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// <summary>
 		/// Parses the var.
 		/// </summary>
-		/// <param name="context">The context.</param>
 		/// <param name="reader">The reader.</param>
 		/// <returns></returns>
-		private static SigType ParseVar(ISignatureContext context, SignatureReader reader)
+		private static SigType ParseVar(SignatureReader reader)
 		{
 			int typeVariableIndex = reader.ReadCompressedInt32();
-			return context.GetGenericTypeArgument(typeVariableIndex);
+			return new VarSigType(typeVariableIndex);
+			//return context.GetGenericTypeArgument(typeVariableIndex);
 		}
 
 		/// <summary>
@@ -273,47 +272,44 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// <summary>
 		/// Parses the pointer.
 		/// </summary>
-		/// <param name="context">The context.</param>
 		/// <param name="reader">The reader.</param>
 		/// <returns></returns>
-		private static SigType ParsePointer(ISignatureContext context, SignatureReader reader)
+		private static SigType ParsePointer(SignatureReader reader)
 		{
 			CustomMod[] mods = CustomMod.ParseCustomMods(reader);
-			SigType type = ParseTypeSignature(context, reader);
+			SigType type = ParseTypeSignature(reader);
 			return new PtrSigType(mods, type);
 		}
 
 		/// <summary>
 		/// Parses the reference.
 		/// </summary>
-		/// <param name="context">The context.</param>
 		/// <param name="reader">The reader.</param>
 		/// <returns></returns>
-		private static SigType ParseReference(ISignatureContext context, SignatureReader reader)
+		private static SigType ParseReference(SignatureReader reader)
 		{
-			SigType type = ParseTypeSignature(context, reader);
+			SigType type = ParseTypeSignature(reader);
 			return new RefSigType(type);
 		}
 
 		/// <summary>
 		/// Parses the MVar.
 		/// </summary>
-		/// <param name="context">The context.</param>
 		/// <param name="reader">The reader.</param>
 		/// <returns></returns>
-		private static SigType ParseMVar(ISignatureContext context, SignatureReader reader)
+		private static SigType ParseMVar(SignatureReader reader)
 		{
 			int methodVariableIndex = reader.ReadCompressedInt32();
-			return context.GetGenericMethodArgument(methodVariableIndex);
+			return new MVarSigType(methodVariableIndex);
+			//return context.GetGenericMethodArgument(methodVariableIndex);
 		}
 
 		/// <summary>
 		/// Parses the generic instance.
 		/// </summary>
-		/// <param name="context">The context.</param>
 		/// <param name="reader">The reader.</param>
 		/// <returns></returns>
-		private static SigType ParseGenericInstance(ISignatureContext context, SignatureReader reader)
+		private static SigType ParseGenericInstance(SignatureReader reader)
 		{
 			TypeSigType originalType;
 			CilElementType type = (CilElementType)reader.ReadByte();
@@ -335,7 +331,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 			SigType[] genArgs = new SigType[genArgCount];
 			for (int i = 0; i < genArgCount; i++)
 			{
-				genArgs[i] = ParseTypeSignature(context, reader);
+				genArgs[i] = ParseTypeSignature(reader);
 			}
 
 			return new GenericInstSigType(originalType, genArgs);
@@ -366,12 +362,11 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// <summary>
 		/// Parses the array signature.
 		/// </summary>
-		/// <param name="context">The context.</param>
 		/// <param name="reader">The reader.</param>
 		/// <returns></returns>
-		private static SigType ParseArraySignature(ISignatureContext context, SignatureReader reader)
+		private static SigType ParseArraySignature(SignatureReader reader)
 		{
-			SigType elementType = ParseTypeSignature(context, reader);
+			SigType elementType = ParseTypeSignature(reader);
 			int rank, count;
 			int[] sizes, lowerBounds;
 
@@ -392,13 +387,12 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// <summary>
 		/// Parses the SZ array signature.
 		/// </summary>
-		/// <param name="context">The context.</param>
 		/// <param name="reader">The reader.</param>
 		/// <returns></returns>
-		private static SigType ParseSZArraySignature(ISignatureContext context, SignatureReader reader)
+		private static SigType ParseSZArraySignature(SignatureReader reader)
 		{
 			CustomMod[] customMods = CustomMod.ParseCustomMods(reader);
-			SigType elementType = ParseTypeSignature(context, reader);
+			SigType elementType = ParseTypeSignature(reader);
 			return new SZArraySigType(customMods, elementType);
 		}
 
@@ -415,7 +409,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// </returns>
 		public virtual bool Equals(SigType other)
 		{
-			return (_type == other._type);
+			return (type == other.type);
 		}
 
 		#endregion // IEquatable<SigType> Members

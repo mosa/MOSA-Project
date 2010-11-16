@@ -38,8 +38,10 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 			// Read the _stackFrameIndex From the code
 			TokenTypes token = decoder.DecodeTokenType();
-			RuntimeField field = decoder.ModuleTypeSystem.GetField(decoder.Method, token);
-			ctx.RuntimeField = field;
+	
+			// FIXME: GENERIC
+			ctx.RuntimeField = decoder.ModuleTypeSystem.GetField(token);
+
 			ctx.Result = decoder.Compiler.CreateTemporary(new Mosa.Runtime.Metadata.Signatures.SigType(CilElementType.Ptr));
 		}
 

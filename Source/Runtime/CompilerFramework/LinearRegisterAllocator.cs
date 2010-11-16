@@ -293,7 +293,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns></returns>
 		private List<Register> FillRegisterList()
 		{
-			return new List<Register>(Architecture.RegisterSet);
+			return new List<Register>(architecture.RegisterSet);
 		}
 
 		/// <summary>
@@ -426,7 +426,7 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			int offset = 0;
 
-			foreach (BasicBlock block in BasicBlocks)
+			foreach (BasicBlock block in basicBlocks)
 				for (Context ctx = CreateContext(block); !ctx.EndOfInstruction; ctx.GotoNext())
 					ctx.Offset = offset++;
 		}

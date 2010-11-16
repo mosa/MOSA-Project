@@ -71,32 +71,32 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public void Run()
 		{
-			if (!methodCount.ContainsKey(MethodCompiler.Method.Name))
-				methodCount[MethodCompiler.Method.Name] = 0;
+			if (!methodCount.ContainsKey(methodCompiler.Method.Name))
+				methodCount[methodCompiler.Method.Name] = 0;
 
-			++methodCount[MethodCompiler.Method.Name];
+			++methodCount[methodCompiler.Method.Name];
 
 			// Retreive the first block
 			firstBlock = FindBlock(-1);
 
 			workList = new Stack<BasicBlock>();
 			workList.Push(firstBlock);
-			workArray = new BitArray(BasicBlocks.Count);
+			workArray = new BitArray(basicBlocks.Count);
 
-			string methodName = MethodCompiler.Method.Name;
+			string methodName = methodCompiler.Method.Name;
 			methodName = methodName.Replace("<", "");
 			methodName = methodName.Replace(">", "");
 			methodName = methodName.Replace("$", "");
 			methodName = methodName.Replace(".", "");
-			IPipelineStage previousStage = MethodCompiler.GetPreviousStage(typeof(IMethodCompilerStage));
+			IPipelineStage previousStage = methodCompiler.GetPreviousStage(typeof(IMethodCompilerStage));
 			dotFile.WriteLine("subgraph cluster" + methodName + "_FlowGraph {");
-			dotFile.WriteLine("label = \"Method: " + methodName + "(" + MethodCompiler.Method.Signature + ") after " + previousStage.Name + "\"");
+			dotFile.WriteLine("label = \"Method: " + methodName + "(" + methodCompiler.Method.Signature + ") after " + previousStage.Name + "\"");
 			//dotFile.WriteLine("graph [rankdir = \"TB\"];");
 
 			string nodes = string.Empty;
 			string edges = string.Empty;
 
-			foreach (BasicBlock block in BasicBlocks)
+			foreach (BasicBlock block in basicBlocks)
 			{
 				string nodeName = string.Empty;
 				string nodeContent = string.Empty;
@@ -163,7 +163,7 @@ namespace Mosa.Runtime.CompilerFramework
 				//dotFile = new System.IO.StreamWriter("dotGraph_" + compiler.Method.Name + "_" + methodCount[compiler.Method.Name] + ".dot");
 				dotFile = new System.IO.StreamWriter("dotGraph.dot");
 				dotFile.WriteLine("digraph \"\" {");
-				dotFile.WriteLine("label = \"" + MethodCompiler.Assembly.Name + "\"");
+				dotFile.WriteLine("label = \"" + methodCompiler.Assembly.Name + "\"");
 			}
 			catch (System.Exception)
 			{

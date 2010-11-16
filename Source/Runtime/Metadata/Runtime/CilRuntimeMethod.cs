@@ -92,7 +92,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 		protected override MethodSignature GetMethodSignature()
 		{
 			MethodSignature signature = new MethodSignature();
-			signature.LoadSignature(this, this.MetadataModule.Metadata, this.signatureBlobIdx);
+			signature.LoadSignature(this.MetadataModule.Metadata, this.signatureBlobIdx);
 			return signature;
 		}
 

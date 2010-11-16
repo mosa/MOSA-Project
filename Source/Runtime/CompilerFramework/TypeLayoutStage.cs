@@ -83,6 +83,9 @@ namespace Mosa.Runtime.CompilerFramework
 			// Enumerate all types and do an appropriate type layout
 			foreach (RuntimeType type in typeSystem.GetCompiledTypes())
 			{
+				if (!type.IsClosed)
+					continue;	
+				
 				if (type.IsModule || type.IsGeneric || type.IsDelegate)
 					continue;
 
@@ -96,6 +99,9 @@ namespace Mosa.Runtime.CompilerFramework
 			// Enumerate all types and do an appropriate type layout
 			foreach (RuntimeType type in typeSystem.GetCompiledTypes())
 			{
+				if (!type.IsClosed)
+					continue;
+
 				if (type.IsModule || type.IsGeneric || type.IsDelegate)
 					continue;
 

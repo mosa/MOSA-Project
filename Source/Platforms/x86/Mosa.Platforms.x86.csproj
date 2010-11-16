@@ -63,13 +63,15 @@
     <Reference Include="Gallio, Version=3.2.0.0, Culture=neutral, PublicKeyToken=eb9cfa67ee6ab36e, processorArchitecture=MSIL" />
     <Reference Include="MbUnit, Version=3.2.0.0, Culture=neutral, PublicKeyToken=eb9cfa67ee6ab36e, processorArchitecture=MSIL" />
     <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\Runtime\Mosa.Runtime.csproj">
       <Project>{75A12A8A-8C8F-4D1E-801B-689D8F781BF4}</Project>
       <Name>Mosa.Runtime</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Vm\Mosa.Vm.csproj">
+      <Project>{88E003EE-6EEC-4D9A-AE52-94A6F526F115}</Project>
+      <Name>Mosa.Vm</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

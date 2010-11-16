@@ -119,7 +119,7 @@ namespace Mosa.Tools.Compiler
 		public void Run()
 		{
 			CheckImplementation();
-			implementation.Setup(MethodCompiler);
+			implementation.Setup(methodCompiler);
 			implementation.Run();
 		}
 

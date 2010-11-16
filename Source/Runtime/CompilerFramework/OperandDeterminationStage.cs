@@ -77,7 +77,7 @@ namespace Mosa.Runtime.CompilerFramework
 				if (!(ctx.Instruction is IR.JmpInstruction))
 				{
 					AssignOperandsFromCILStack(ctx, _operandStack);
-					(ctx.Instruction as ICILInstruction).Validate(ctx, MethodCompiler);
+					(ctx.Instruction as ICILInstruction).Validate(ctx, methodCompiler);
 					PushResultOperands(ctx, _operandStack);
 				}
 
@@ -202,7 +202,7 @@ namespace Mosa.Runtime.CompilerFramework
 			Stack<Operand> nextStack = new Stack<Operand>();
 			foreach (Operand operand in stack)
 			{
-				Operand temp = MethodCompiler.CreateTemporary(operand.Type);
+				Operand temp = methodCompiler.CreateTemporary(operand.Type);
 				nextStack.Push(temp);
 				_operandStack.Pop();
 				ctx.AppendInstruction(IR.Instruction.MoveInstruction, temp, operand);

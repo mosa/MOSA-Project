@@ -97,13 +97,13 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public void Run()
 		{
-			_dominanceProvider = (IDominanceProvider)MethodCompiler.GetPreviousStage(typeof(IDominanceProvider));
+			_dominanceProvider = (IDominanceProvider)methodCompiler.GetPreviousStage(typeof(IDominanceProvider));
 			Debug.Assert(_dominanceProvider != null, @"SSA Conversion requires a dominance provider.");
 			if (_dominanceProvider == null)
 				throw new InvalidOperationException(@"SSA Conversion requires a dominance provider.");
 
 			// Allocate space for live outs
-			_liveness = new IDictionary<StackOperand, StackOperand>[BasicBlocks.Count];
+			_liveness = new IDictionary<StackOperand, StackOperand>[basicBlocks.Count];
 			// Retrieve the dominance frontier Blocks
 			_dominanceFrontierBlocks = _dominanceProvider.GetDominanceFrontier();
 
@@ -119,20 +119,20 @@ namespace Mosa.Runtime.CompilerFramework
 			 */
 			IDictionary<StackOperand, StackOperand> liveIn = new Dictionary<StackOperand, StackOperand>(s_comparer);
 			int i = 0;
-			if (MethodCompiler.Method.Signature.HasThis)
+			if (methodCompiler.Method.Signature.HasThis)
 			{
-				StackOperand param = (StackOperand)MethodCompiler.GetParameterOperand(0);
+				StackOperand param = (StackOperand)methodCompiler.GetParameterOperand(0);
 				liveIn.Add(param, param);
 				i++;
 			}
-			for (int j = 0; j < MethodCompiler.Method.Parameters.Count; j++)
+			for (int j = 0; j < methodCompiler.Method.Parameters.Count; j++)
 			{
-				StackOperand param = (StackOperand)MethodCompiler.GetParameterOperand(i + j);
+				StackOperand param = (StackOperand)methodCompiler.GetParameterOperand(i + j);
 				liveIn.Add(param, param);
 			}
 
 			// Start with the very first block
-			workList.Enqueue(new WorkItem(BasicBlocks[0], null, liveIn));
+			workList.Enqueue(new WorkItem(basicBlocks[0], null, liveIn));
 
 			// Iterate until the worklist is empty
 			while (workList.Count != 0)
@@ -174,10 +174,10 @@ namespace Mosa.Runtime.CompilerFramework
 			ctxEpilogue.GotoLast();
 
 			// Iterate all parameter definitions
-			foreach (RuntimeParameter rp in MethodCompiler.Method.Parameters)
+			foreach (RuntimeParameter rp in methodCompiler.Method.Parameters)
 			{
 				// Retrieve the stack operand for the parameter
-				StackOperand paramOp = (StackOperand)MethodCompiler.GetParameterOperand(rp.Position - 1);
+				StackOperand paramOp = (StackOperand)methodCompiler.GetParameterOperand(rp.Position - 1);
 
 				// Only add a PHI if the runtime parameter is out or ref...
 				if (rp.IsOut || (paramOp.Type is RefSigType || paramOp.Type is PtrSigType))
@@ -341,7 +341,7 @@ namespace Mosa.Runtime.CompilerFramework
 			string name = cur.Name;
 			if (cur.Version == 0)
 				name = String.Format(@"T_{0}", name);
-			StackOperand op = MethodCompiler.CreateTemporary(cur.Type) as StackOperand;
+			StackOperand op = methodCompiler.CreateTemporary(cur.Type) as StackOperand;
 			//StackOperand op = new LocalVariableOperand(cur.Base, name, idx, cur.Type);
 			op.Version = ++_ssaVersion;
 			return op;

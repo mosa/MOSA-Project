@@ -95,7 +95,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 		protected override FieldSignature GetSignature()
 		{
 			FieldSignature fsig = new FieldSignature();
-			fsig.LoadSignature(this.DeclaringType, this.MetadataModule.Metadata, this.signature);
+			fsig.LoadSignature(this.MetadataModule.Metadata, this.signature);
 			return fsig;
 		}
 

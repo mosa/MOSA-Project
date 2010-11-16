@@ -8,10 +8,8 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 
-namespace Mosa.Runtime.Vm
+namespace Mosa.Vm
 {
 	/// <summary>
 	/// An enumeration used to identify icalls provided by the MOSA VM.

@@ -7,11 +7,12 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using System.Runtime.CompilerServices;
+
+using Mosa.Vm;
+
 namespace System
 {
-	using System.Runtime.CompilerServices;
-
-	using Mosa.Runtime.CompilerFramework;
 
 	/// <summary>
 	/// Implementation of the "System.String" class
@@ -98,7 +99,7 @@ namespace System
 
 		[MethodImplAttribute(MethodImplOptions.InternalCall)]
 		public extern String(char[] value, int startIndex, int length);
-		
+
 		[MethodImplAttribute(MethodImplOptions.InternalCall)]
 		public extern unsafe String(sbyte* value, int startIndex, int length);
 
@@ -160,43 +161,43 @@ namespace System
 
 			return result;
 		}
-		
+
 		private static unsafe string CreateString(sbyte* value, int startIndex, int length)
 		{
 			String result = InternalAllocateString(length);
-			
+
 			char* chars = result.first_char;
-			
+
 			value += startIndex;
-			
+
 			for (int index = 0; index < length; index++)
 				*chars++ = (char)*value++;
-			
+
 			return result;
 		}
 
 		/*public static bool operator ==(String a, String b)
 		{
-		    return String.Equals(a, b);
+			return String.Equals(a, b);
 		}
 
 		public static bool operator !=(String a, String b)
 		{
-		    return !(a == b);
+			return !(a == b);
 		}
 
 		public bool Equals(System.String i)
 		{
-		    return i == this;
+			return i == this;
 		}
 
 		public override bool Equals(object o)
 		{
-		    if (!(o is String))
-		    	return false;
+			if (!(o is String))
+				return false;
 
-		    String other = (String)o;
-		    return other == this;
+			String other = (String)o;
+			return other == this;
 		}*/
 
 		public static unsafe bool Equals(String a, String b)
@@ -293,20 +294,20 @@ namespace System
 
 		public unsafe string Substring(int startIndex, int length)
 		{
-		    if (length < 0)
-		        return Empty; //throw new System.ArgumentOutOfRangeException("length", "< 0");
+			if (length < 0)
+				return Empty; //throw new System.ArgumentOutOfRangeException("length", "< 0");
 
-		    if (startIndex < 0 || startIndex > this.length)
-		        return Empty; //throw new System.ArgumentOutOfRangeException("startIndex");
+			if (startIndex < 0 || startIndex > this.length)
+				return Empty; //throw new System.ArgumentOutOfRangeException("startIndex");
 
-    		String result = InternalAllocateString(length);
+			String result = InternalAllocateString(length);
 
-		    char* chars = result.first_char;
+			char* chars = result.first_char;
 
-		    for (int index = 0; index < length; index++)
-		        *chars++ = this[startIndex + index];
+			for (int index = 0; index < length; index++)
+				*chars++ = this[startIndex + index];
 
-		    return result;
+			return result;
 		}
 
 		public static bool IsNullOrEmpty(string value)

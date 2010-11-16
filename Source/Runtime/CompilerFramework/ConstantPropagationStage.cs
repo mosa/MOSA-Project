@@ -46,7 +46,7 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			bool remove = false;
 
-			foreach (BasicBlock block in BasicBlocks)
+			foreach (BasicBlock block in basicBlocks)
 			{
 				for (Context ctx = new Context(InstructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
 				{

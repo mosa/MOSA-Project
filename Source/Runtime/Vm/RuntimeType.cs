@@ -490,6 +490,14 @@ namespace Mosa.Runtime.Vm
 			throw new MissingMethodException(Name, name);
 		}
 
+		public virtual bool IsClosed
+		{
+			get
+			{
+				return true; 
+			}
+		}
+
 		/// <summary>
 		/// Loads the interfaces implemented by a type.
 		/// </summary>

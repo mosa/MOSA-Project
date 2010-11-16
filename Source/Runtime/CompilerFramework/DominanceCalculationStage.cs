@@ -75,11 +75,11 @@ namespace Mosa.Runtime.CompilerFramework
 			// Changed flag
 			bool changed = true;
 			// Blocks in reverse post order topology
-			BasicBlock[] revPostOrder = ReversePostorder(BasicBlocks);
+			BasicBlock[] revPostOrder = ReversePostorder(basicBlocks);
 
 			// Allocate a dominance array
-			_doms = new BasicBlock[BasicBlocks.Count];
-			_doms[0] = BasicBlocks[0];
+			_doms = new BasicBlock[basicBlocks.Count];
+			_doms[0] = basicBlocks[0];
 
 			// Calculate the dominance
 			while (changed)
@@ -115,9 +115,9 @@ namespace Mosa.Runtime.CompilerFramework
 		private void CalculateDominanceFrontier()
 		{
 			List<BasicBlock> domFrontier = new List<BasicBlock>();
-			List<BasicBlock>[] domFrontiers = new List<BasicBlock>[BasicBlocks.Count];
+			List<BasicBlock>[] domFrontiers = new List<BasicBlock>[basicBlocks.Count];
 
-			foreach (BasicBlock b in BasicBlocks)
+			foreach (BasicBlock b in basicBlocks)
 			{
 				if (b.PreviousBlocks.Count > 1)
 				{
@@ -140,7 +140,7 @@ namespace Mosa.Runtime.CompilerFramework
 			}
 
 			int idx = 0;
-			_domFrontierOfBlock = new BasicBlock[BasicBlocks.Count][];
+			_domFrontierOfBlock = new BasicBlock[basicBlocks.Count][];
 			foreach (List<BasicBlock> frontier in domFrontiers)
 			{
 				if (frontier != null)

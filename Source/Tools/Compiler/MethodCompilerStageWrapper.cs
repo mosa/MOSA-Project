@@ -71,7 +71,7 @@ namespace Mosa.Tools.Compiler
 		{
 			if (this.Enabled)
 			{
-				wrapped.Setup(MethodCompiler);
+				wrapped.Setup(methodCompiler);
 				wrapped.Run();
 			}
 		}

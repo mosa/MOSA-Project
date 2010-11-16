@@ -53,7 +53,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			//Console.WriteLine("Stfld used in {0}.{1}", decoder.Method.DeclaringType.FullName, decoder.Method.Name);
 
 			Debug.Assert(TokenTypes.Field == (TokenTypes.TableMask & token) || TokenTypes.MemberRef == (TokenTypes.TableMask & token), @"Invalid token type.");
-			ctx.RuntimeField = decoder.ModuleTypeSystem.GetField(decoder.Method, token);
+
+			// FIXME: GENERIC
+			ctx.RuntimeField = decoder.ModuleTypeSystem.GetField(token);
 		}
 
 		/// <summary>

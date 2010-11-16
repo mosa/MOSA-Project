@@ -81,7 +81,7 @@ namespace Mosa.Runtime.CompilerFramework
 			// Call Run on every stage
 			foreach (IMethodCompilerStage stage in Stages)
 			{
-				stage.Setup(MethodCompiler);
+				stage.Setup(methodCompiler);
 				stage.Run();
 			}
 

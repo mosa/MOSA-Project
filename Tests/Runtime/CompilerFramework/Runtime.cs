@@ -15,6 +15,8 @@ using Mosa.Runtime.Memory;
 using Mosa.Runtime.Loader;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
+using Mosa.Vm;
+
 using Test.Mosa.Runtime.CompilerFramework;
 using Test.Mosa.Runtime.CompilerFramework.BaseCode;
 

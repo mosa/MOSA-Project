@@ -80,7 +80,7 @@ namespace Mosa.Platforms.x86
 			ctxEpilogue.GotoLast();
 
 			// Iterate all blocks and collect locals from all blocks
-			foreach (BasicBlock block in BasicBlocks)
+			foreach (BasicBlock block in basicBlocks)
 				ProcessInstructions(CreateContext(block), ctxEpilogue);
 		}
 

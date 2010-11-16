@@ -59,10 +59,6 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Core">
-      <RequiredTargetFramework>3.5</RequiredTargetFramework>
-    </Reference>
-    <Reference Include="System.Data" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CompilerFramework\AssemblyMemberCompilationSchedulerStage.cs" />
@@ -93,7 +89,6 @@
     <Compile Include="CompilerFramework\ITypeLayout.cs" />
     <Compile Include="CompilerFramework\GenericsResolverStage.cs" />
     <Compile Include="CompilerFramework\ICompilationSchedulerStage.cs" />
-    <Compile Include="CompilerFramework\IntrinsicAttribute.cs" />
     <Compile Include="CompilerFramework\Intrinsics\InternalAllocateString.cs" />
     <Compile Include="CompilerFramework\IR\AddFInstruction.cs" />
     <Compile Include="CompilerFramework\IR\AddSInstruction.cs" />
@@ -939,9 +934,6 @@
     <Compile Include="Vm\ReadOnlyRuntimeParameterListView.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Vm\ReadOnlyRuntimeTypeListView.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Vm\RuntimeAttribute.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -963,13 +955,12 @@
     <Compile Include="Vm\RuntimeType.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Vm\VmCall.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Vm\VmCallAttribute.cs">
-      <SubType>Code</SubType>
-    </Compile>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Vm\Mosa.Vm.csproj">
+      <Project>{88E003EE-6EEC-4D9A-AE52-94A6F526F115}</Project>
+      <Name>Mosa.Vm</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

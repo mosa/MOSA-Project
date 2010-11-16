@@ -18,7 +18,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 	/// </summary>
 	public class MethodSpecSignature : Signature, ISignatureContext
 	{
-		private readonly ISignatureContext outerContext;
+		//private readonly ISignatureContext outerContext;
 
 		/// <summary>
 		/// 
@@ -28,9 +28,9 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MethodSpecSignature"/> class.
 		/// </summary>
-		public MethodSpecSignature(ISignatureContext outerContext)
+		public MethodSpecSignature()
 		{
-			this.outerContext = outerContext;
+			//this.outerContext = outerContext;
 		}
 
 		/// <summary>
@@ -45,9 +45,8 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// <summary>
 		/// Parses the signature.
 		/// </summary>
-		/// <param name="context"></param>
-		/// <param name="reader"></param>
-		protected override void ParseSignature(ISignatureContext context, SignatureReader reader)
+		/// <param name="reader">The reader.</param>
+		protected override void ParseSignature(SignatureReader reader)
 		{
 			if (reader.ReadByte() != 0x0A)
 				throw new InvalidOperationException(@"Invalid signature.");
@@ -55,7 +54,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 			int genArgCount = reader.ReadCompressedInt32();
 			types = new SigType[genArgCount];
 			for (int i = 0; i < genArgCount; i++)
-				types[i] = SigType.ParseTypeSignature(context, reader);
+				types[i] = SigType.ParseTypeSignature(reader);
 		}
 
 		public SigType GetGenericMethodArgument(int index)
@@ -65,7 +64,8 @@ namespace Mosa.Runtime.Metadata.Signatures
 
 		public SigType GetGenericTypeArgument(int index)
 		{
-			return outerContext.GetGenericTypeArgument(index);
+			return null; // TODO: Fixme!
+			//return outerContext.GetGenericTypeArgument(index);
 		}
 	}
 }

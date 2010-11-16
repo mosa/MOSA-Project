@@ -21,9 +21,8 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// <summary>
 		/// PropertySignature signature is indexed by the Property.Type column
 		/// </summary>
-		/// <param name="context">The context.</param>
 		/// <param name="reader">The reader.</param>
-		protected override void ParseSignature(ISignatureContext context, SignatureReader reader)
+		protected override void ParseSignature(SignatureReader reader)
 		{
 			throw new Exception("The method or operation is not implemented.");
 		}
