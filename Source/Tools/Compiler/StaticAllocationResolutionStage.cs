@@ -149,7 +149,7 @@ namespace Mosa.Tools.Compiler
 			// as that is hard to complete at this point of time.
 
 			RuntimeType allocationType = allocation.InvokeTarget.DeclaringType;
-			RuntimeType storageType = assignment.RuntimeField.Type;
+			RuntimeType storageType = assignment.RuntimeField.DeclaringType;
 
 			return ReferenceEquals(allocationType, storageType);
 		}

@@ -74,9 +74,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 					{
 						StandAloneSigRow row = methodCompiler.Method.MetadataModule.Metadata.ReadStandAloneSigRow(header.localsSignature);
 
-						LocalVariableSignature localsSignature = new LocalVariableSignature();
-						localsSignature.LoadSignature(methodCompiler.Method.MetadataModule.Metadata, row.SignatureBlobIdx);
-						this.methodCompiler.SetLocalVariableSignature(localsSignature);
+						LocalVariableSignature localsSignature = new LocalVariableSignature(methodCompiler.Method.MetadataModule.Metadata, row.SignatureBlobIdx);
+						methodCompiler.SetLocalVariableSignature(localsSignature);
 					}
 
 					/* Decode the instructions */

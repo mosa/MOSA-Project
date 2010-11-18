@@ -23,7 +23,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// <summary>
 		/// Holds the index of the generic parameter in the generic parameter list.
 		/// </summary>
-		private int _index;
+		private int index;
 
 		#endregion // Data members
 
@@ -36,7 +36,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 		public MVarSigType(int index) :
 			base(CilElementType.MVar)
 		{
-			_index = index;
+			this.index = index;
 		}
 
 		#endregion // Construction
@@ -47,7 +47,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// Gets the index of the generic parameter in the generic parameter list of the generic member.
 		/// </summary>
 		/// <value>The index.</value>
-		public int Index { get { return _index; } }
+		public int Index { get { return index; } }
 
 		#endregion // Properties
 
@@ -66,7 +66,18 @@ namespace Mosa.Runtime.Metadata.Signatures
 			if (mvst == null)
 				return false;
 
-			return (base.Equals(other) == true && _index == mvst._index);
+			return (base.Equals(other) == true && index == mvst.index);
+		}
+
+		/// <summary>
+		/// Returns a <see cref="System.String"/> that represents this instance.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="System.String"/> that represents this instance.
+		/// </returns>
+		public override string ToString()
+		{
+			return base.ToString() + ":" + index.ToString();
 		}
 
 		#endregion // SigType Overrides

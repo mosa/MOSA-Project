@@ -34,13 +34,46 @@ namespace Mosa.Runtime.Metadata.Signatures
 		}
 
 		/// <summary>
+		/// Initializes a new instance of the <see cref="Signature"/> class.
+		/// </summary>
+		public Signature()
+		{
+			// TODO: Remove this constructor
+		}
+
+		/// <summary>
+		/// Loads the signature.
+		/// </summary>
+		/// <param name="reader">The reader.</param>
+		public Signature(SignatureReader reader)
+		{
+			this.ParseSignature(reader);
+			//Debug.Assert(reader.Index == reader.Length, @"Signature parser didn't complete.");
+		}
+
+		/// <summary>
+		/// Loads the signature.
+		/// </summary>
+		/// <param name="provider">The provider.</param>
+		/// <param name="token">The token.</param>
+		public Signature(IMetadataProvider provider, TokenTypes token)
+		{
+			SignatureReader reader = new SignatureReader(provider.ReadBlob(token));
+
+			this.ParseSignature(reader);
+			Debug.Assert(reader.Index == reader.Length, @"Signature parser didn't complete.");
+
+			this.token = token;
+		}
+
+		/// <summary>
 		/// Loads the signature.
 		/// </summary>
 		/// <param name="provider">The provider.</param>
 		/// <param name="token">The token.</param>
 		public void LoadSignature(IMetadataProvider provider, TokenTypes token)
 		{
-			SignatureReader reader = new SignatureReader(provider.ReadBlob(token), token);
+			SignatureReader reader = new SignatureReader(provider.ReadBlob(token));
 
 			this.ParseSignature(reader);
 			Debug.Assert(reader.Index == reader.Length, @"Signature parser didn't complete.");
@@ -61,26 +94,19 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// <param name="provider">The provider.</param>
 		/// <param name="token">The token.</param>
 		/// <returns></returns>
-		public static Signature FromMemberRefSignatureToken(ISignatureContext context, IMetadataProvider provider, TokenTypes token)
+		public static Signature FromMemberRefSignatureToken(IMetadataProvider provider, TokenTypes token)
 		{
-			SignatureReader reader = new SignatureReader(provider.ReadBlob(token), token);
-
-			Signature result;
+			SignatureReader reader = new SignatureReader(provider.ReadBlob(token));
 
 			if (reader[0] == 0x06)
 			{
-				result = new FieldSignature();
+				return new FieldSignature(reader);
 			}
 			else
 			{
-				result = new MethodSignature();
+				return new MethodSignature(reader);
 			}
 
-			result.ParseSignature(reader);
-
-			Debug.Assert(reader.Index == reader.Length, @"Not all signature bytes read.");
-
-			return result;
 		}
 	}
 }

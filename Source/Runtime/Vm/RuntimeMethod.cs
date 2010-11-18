@@ -24,7 +24,7 @@ namespace Mosa.Runtime.Vm
 	/// <summary>
 	/// Base class for the runtime representation of methods.
 	/// </summary>
-	public abstract class RuntimeMethod : RuntimeMember, IEquatable<RuntimeMethod>, ISignatureContext
+	public abstract class RuntimeMethod : RuntimeMember, IEquatable<RuntimeMethod>
 	{
 		#region Data members
 
@@ -256,15 +256,6 @@ namespace Mosa.Runtime.Vm
 
 		#endregion // Object Overrides
 
-		public virtual SigType GetGenericMethodArgument(int index)
-		{
-			return DefaultSignatureContext.Instance.GetGenericMethodArgument(index);
-		}
-
-		public virtual SigType GetGenericTypeArgument(int index)
-		{
-			return this.DeclaringType.GetGenericTypeArgument(index);
-		}
 
 	}
 }

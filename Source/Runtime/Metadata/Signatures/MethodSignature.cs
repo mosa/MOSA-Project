@@ -116,6 +116,25 @@ namespace Mosa.Runtime.Metadata.Signatures
 		{
 			//TODO: Remove this default constructor 
 		}
+		
+		/// <summary>
+		/// Loads the signature.
+		/// </summary>
+		/// <param name="reader">The reader.</param>
+		public MethodSignature(SignatureReader reader)
+			: base(reader)
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="VariableSignature"/> class.
+		/// </summary>
+		/// <param name="provider">The provider.</param>
+		/// <param name="token">The token.</param>
+		public MethodSignature(IMetadataProvider provider, TokenTypes token)
+			: base(provider, token)
+		{
+		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MethodSignature"/> class.
@@ -137,51 +156,47 @@ namespace Mosa.Runtime.Metadata.Signatures
 			this.genericParameterCount = 0;
 		}
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="MethodSignature"/> class.
-		/// </summary>
-		/// <param name="context">The context of the generic method spec signature.</param>
-		/// <param name="signature">The signature of the generic method.</param>
-		/// <param name="specification">The signature specifying replacements for the generic signature.</param>
-		public MethodSignature(ISignatureContext context, MethodSignature signature, MethodSpecSignature specification)
-		{
-			if (context == null)
-				throw new ArgumentNullException(@"context");
-			if (signature == null)
-				throw new ArgumentNullException(@"signature");
-			if (specification == null)
-				throw new ArgumentNullException(@"specification");
+		//public MethodSignature(ISignatureContext context, MethodSignature signature, MethodSpecSignature specification)
+		//{
+		//    // NOT USED!!!
+		//    if (context == null)
+		//        throw new ArgumentNullException(@"context");
+		//    if (signature == null)
+		//        throw new ArgumentNullException(@"signature");
+		//    if (specification == null)
+		//        throw new ArgumentNullException(@"specification");
 
-			this.callingConvention = signature.CallingConvention;
-			this.hasExplicitThis = signature.HasExplicitThis;
-			this.hasThis = signature.HasThis;
-			this.genericParameterCount = 0;
+		//    this.callingConvention = signature.CallingConvention;
+		//    this.hasExplicitThis = signature.HasExplicitThis;
+		//    this.hasThis = signature.HasThis;
+		//    this.genericParameterCount = 0;
 
-			int length = signature.Parameters.Length;
-			this.parameters = new SigType[length];
-			for (int index = 0; index < length; index++)
-			{
-				this.parameters[index] = this.ApplySpecification(context, specification, signature.Parameters[index]);
-			}
-			this.returnType = this.ApplySpecification(context, specification, signature.ReturnType);
-		}
+		//    int length = signature.Parameters.Length;
+		//    this.parameters = new SigType[length];
+		//    for (int index = 0; index < length; index++)
+		//    {
+		//        this.parameters[index] = this.ApplySpecification(context, specification, signature.Parameters[index]);
+		//    }
+		//    this.returnType = this.ApplySpecification(context, specification, signature.ReturnType);
+		//}
 
-		private SigType ApplySpecification(ISignatureContext context, MethodSpecSignature specification, SigType sigType)
-		{
-			SigType result = sigType;
+		//private SigType ApplySpecification(ISignatureContext context, MethodSpecSignature specification, SigType sigType)
+		//{
+		//    // NOT USED!!!
+		//    SigType result = sigType;
 
-			if (sigType is VarSigType)
-			{
-				result = context.GetGenericTypeArgument(((VarSigType)sigType).Index);
-			}
-			else if (sigType is MVarSigType)
-			{
-				result = specification.Types[((MVarSigType)sigType).Index];
-			}
+		//    if (sigType is VarSigType)
+		//    {
+		//        result = context.GetGenericTypeArgument(((VarSigType)sigType).Index);
+		//    }
+		//    else if (sigType is MVarSigType)
+		//    {
+		//        result = specification.Types[((MVarSigType)sigType).Index];
+		//    }
 
-			Debug.WriteLine(String.Format(@"Replaced {0} by {1}.", sigType, result));
-			return result;
-		}
+		//    Debug.WriteLine(String.Format(@"Replaced {0} by {1}.", sigType, result));
+		//    return result;
+		//}
 
 		/// <summary>
 		/// Parses the signature.

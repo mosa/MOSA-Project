@@ -325,7 +325,8 @@ namespace Mosa.Runtime.Vm
 					string nameString = metadata.ReadString(row.NameStringIdx);
 					RuntimeType type = ((IModuleTypeSystem)this).GetType(row.ClassTableIdx);
 
-					MethodSignature sig = (MethodSignature)Signature.FromMemberRefSignatureToken(type, metadata, row.SignatureBlobIdx);
+					MethodSignature sig = (MethodSignature)Signature.FromMemberRefSignatureToken(metadata, row.SignatureBlobIdx);
+
 					foreach (RuntimeMethod method in type.Methods)
 					{
 						if (method.Name != nameString)
@@ -379,14 +380,12 @@ namespace Mosa.Runtime.Vm
 
 			CilRuntimeMethod genericMethod = (CilRuntimeMethod)((IModuleTypeSystem)this).GetMethod(methodSpec.MethodTableIdx);
 
-			MethodSpecSignature specSignature = new MethodSpecSignature();
+			MethodSpecSignature specSignature = new MethodSpecSignature();	 
 			specSignature.LoadSignature(metadata, methodSpec.InstantiationBlobIdx);
 
-			MethodSignature signature = new MethodSignature();
-			signature.LoadSignature(genericMethod.MetadataModule.Metadata, genericMethod.Signature.Token);
-			// TODO: Update signture with concert types
+			MethodSignature signature = new MethodSignature(genericMethod.MetadataModule.Metadata, genericMethod.Signature.Token);
 
-			return new CilGenericMethod(this, genericMethod, signature, specSignature);
+			return new CilGenericMethod(this, genericMethod, signature);
 		}
 
 		/// <summary>

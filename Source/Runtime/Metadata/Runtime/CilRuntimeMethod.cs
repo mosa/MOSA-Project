@@ -31,7 +31,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 		private TokenTypes nameIdx;
 
 		/// <summary>
-		/// Holds the method signature.
+		/// Holds the blob location of the signature.
 		/// </summary>
 		private TokenTypes signatureBlobIdx;
 

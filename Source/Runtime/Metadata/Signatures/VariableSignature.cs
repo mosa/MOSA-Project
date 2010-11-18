@@ -12,18 +12,26 @@ namespace Mosa.Runtime.Metadata.Signatures
 	public class VariableSignature : Signature
 	{
 		private CustomMod[] customMods;
-
 		private CilElementType modifier;
-
 		private SigType type;
 
-		protected VariableSignature()
+		/// <summary>
+		/// Initializes a new instance of the <see cref="VariableSignature"/> class.
+		/// </summary>
+		/// <param name="reader">The reader.</param>
+		public VariableSignature(SignatureReader reader)
+			: base(reader)
 		{
 		}
 
-		public VariableSignature(SignatureReader reader)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="VariableSignature"/> class.
+		/// </summary>
+		/// <param name="provider">The provider.</param>
+		/// <param name="token">The token.</param>
+		public VariableSignature(IMetadataProvider provider, TokenTypes token)
+			: base(provider, token)
 		{
-			this.ParseSignature(reader);
 		}
 
 		/// <summary>
@@ -47,6 +55,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 		public SigType Type
 		{
 			get { return this.type; }
+			protected set { this.type = value; }
 		}
 
 		protected override void ParseSignature(SignatureReader reader)

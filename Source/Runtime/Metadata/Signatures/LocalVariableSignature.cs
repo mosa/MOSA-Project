@@ -30,6 +30,24 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// </summary>
 		private static VariableSignature[] Empty = new VariableSignature[0];
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="LocalVariableSignature"/> class.
+		/// </summary>
+		/// <param name="reader">The reader.</param>
+		public LocalVariableSignature(SignatureReader reader)
+			: base(reader)
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="LocalVariableSignature"/> class.
+		/// </summary>
+		/// <param name="provider">The provider.</param>
+		/// <param name="token">The token.</param>
+		public LocalVariableSignature(IMetadataProvider provider, TokenTypes token)
+			: base(provider, token)
+		{
+		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LocalVariableSignature"/> class.
@@ -38,7 +56,6 @@ namespace Mosa.Runtime.Metadata.Signatures
 		{
 			this.locals = LocalVariableSignature.Empty;
 		}
-
 
 		/// <summary>
 		/// Gets the types.

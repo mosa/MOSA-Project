@@ -15,12 +15,10 @@ using System.Diagnostics;
 
 namespace Mosa.Runtime.Metadata
 {
-	public class SignatureReader
+	public sealed class SignatureReader
 	{
-		protected byte[] buffer = null;
-		protected int index = 0;
-
-		protected TokenTypes blob;
+		private byte[] buffer = null;
+		private int index = 0;
 
 		public int Index { get { return index; } }
 		public int Length { get { return buffer.Length; } }
@@ -37,17 +35,6 @@ namespace Mosa.Runtime.Metadata
 
 			this.buffer = buffer;
 			this.index = 0;
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="SignatureReader"/> class.
-		/// </summary>
-		/// <param name="buffer">The buffer.</param>
-		/// <param name="blob">The BLOB.</param>
-		public SignatureReader(byte[] buffer, TokenTypes blob)
-			: this(buffer)
-		{
-			this.blob = blob;
 		}
 
 		/// <summary>

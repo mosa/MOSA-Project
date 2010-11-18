@@ -48,6 +48,20 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// <value>The type.</value>
 		public CilElementType Type { get { return type; } }
 
+		/// <summary>
+		/// Gets a value indicating whether the type contains a generic type.
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if [contains generic type]; otherwise, <c>false</c>.
+		/// </value>
+		public bool ContainsGenericParameter
+		{
+			get
+			{
+				return (type == CilElementType.Var || type == CilElementType.MVar);
+			}
+		}
+
 		#endregion // Properties
 
 		#region Object Overrides
@@ -413,6 +427,8 @@ namespace Mosa.Runtime.Metadata.Signatures
 		}
 
 		#endregion // IEquatable<SigType> Members
+
+
 
 		/// <summary>
 		/// Expresses the signature element information in a string form differentiating it from other signature

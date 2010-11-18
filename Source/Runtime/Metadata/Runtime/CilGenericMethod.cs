@@ -22,13 +22,10 @@ namespace Mosa.Runtime.Metadata.Runtime
 	{
 		private readonly CilRuntimeMethod genericMethod;
 
-		private readonly ISignatureContext signatureContext;
-
-		public CilGenericMethod(IModuleTypeSystem moduleTypeSystem, CilRuntimeMethod method, MethodSignature signature, ISignatureContext signatureContext) :
+		public CilGenericMethod(IModuleTypeSystem moduleTypeSystem, CilRuntimeMethod method, MethodSignature signature) :
 			base(moduleTypeSystem, method.Token, method.DeclaringType)
 		{
 			this.genericMethod = method;
-			this.signatureContext = signatureContext;
 
 			this.Signature = signature;
 
@@ -48,25 +45,6 @@ namespace Mosa.Runtime.Metadata.Runtime
 			throw new NotImplementedException();
 		}
 
-		public override SigType GetGenericMethodArgument(int index)
-		{
-			SigType result = this.signatureContext.GetGenericMethodArgument(index);
-			Debug.Assert(result != null, @"Failing to return a generic method argument.");
-			return result;
-		}
-
-		public override SigType GetGenericTypeArgument(int index)
-		{
-			SigType result = this.signatureContext.GetGenericTypeArgument(index);
-			if (result == null)
-			{
-				result = base.GetGenericTypeArgument(index);
-			}
-
-			Debug.Assert(result != null, @"Failing to return a generic type argument.");
-			return result;
-		}
-
 		/// <summary>
 		/// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
 		/// </summary>
@@ -77,16 +55,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 		{
 			StringBuilder result = new StringBuilder();
 
-			// TODO: This seems like a bit of a hack
-			if (signatureContext is CilGenericType)
-			{
-				result.Append(signatureContext.ToString());
-			}
-			else
-			{
-				result.Append(DeclaringType.ToString());
-			}
-
+			result.Append(DeclaringType.ToString());
 			result.Append('.');
 			result.Append(Name);
 			result.Append('(');
@@ -109,42 +78,31 @@ namespace Mosa.Runtime.Metadata.Runtime
 
 		private RuntimeType GetRuntimeTypeForSigType(SigType sigType)
 		{
-			RuntimeType result = null;
-
 			switch (sigType.Type)
 			{
 				case CilElementType.Class:
 					Debug.Assert(sigType is TypeSigType, @"Failing to resolve VarSigType in GenericType.");
-					result = moduleTypeSystem.GetType(((TypeSigType)sigType).Token);
-					break;
+					return moduleTypeSystem.GetType(((TypeSigType)sigType).Token);
 
 				case CilElementType.ValueType:
 					goto case CilElementType.Class;
 
 				case CilElementType.Var:
-					sigType = this.GetGenericTypeArgument(((VarSigType)sigType).Index);
-					goto case CilElementType.Class;
+					throw new NotImplementedException(@"Failing to resolve VarSigType in GenericType.");
 
 				case CilElementType.MVar:
-					sigType = this.GetGenericTypeArgument(((MVarSigType)sigType).Index);
-					goto case CilElementType.Class;
+					throw new NotImplementedException(@"Failing to resolve MVarSigType in GenericType.");
 
 				default:
+					BuiltInSigType builtIn = sigType as BuiltInSigType;
+					if (builtIn != null)
 					{
-						BuiltInSigType builtIn = sigType as BuiltInSigType;
-						if (builtIn != null)
-						{
-							result = moduleTypeSystem.TypeSystem.GetType(builtIn.TypeName + ", mscorlib");
-						}
-						else
-						{
-							throw new NotImplementedException(String.Format("SigType of CilElementType.{0} is not supported.", sigType.Type));
-						}
-						break;
+						return moduleTypeSystem.TypeSystem.GetType(builtIn.TypeName + ", mscorlib");
 					}
+
+					throw new NotImplementedException(String.Format("SigType of CilElementType.{0} is not supported.", sigType.Type));
 			}
 
-			return result;
 		}
 
 	}

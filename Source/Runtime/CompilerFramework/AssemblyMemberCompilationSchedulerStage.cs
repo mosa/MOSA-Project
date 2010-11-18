@@ -54,7 +54,7 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			foreach (RuntimeType type in typeSystem.GetCompiledTypes())
 			{
-				if (!type.IsClosed)
+				if (type.ContainsGenericParameters)
 					continue;
 
 				// Do not schedule generic types, they're scheduled on demand.

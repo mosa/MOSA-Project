@@ -26,9 +26,9 @@ namespace Mosa.Runtime.Metadata.Signatures
 		private TypeSigType baseType;
 
 		/// <summary>
-		/// Hold indicator if type is open or closed
+		/// Hold indicator if type contains any generic parameters
 		/// </summary>
-		private bool closed;
+		private bool containsGenericParameters;
 
 		/// <summary>
 		/// Array of generic argument types to specify the generic type.
@@ -49,7 +49,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 		{
 			this.baseType = baseType;
 			this.genericArguments = genericArguments;
-			this.closed = DetermineIsTypeClosed();
+			this.containsGenericParameters = CheckContainsGenericParameters();
 		}
 
 		#endregion // Construction
@@ -84,9 +84,9 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// Gets a value indicating whether the the signature's types are closed.
 		/// </summary>
 		/// <value><c>true</c> if this signature's types are closed; otherwise, <c>false</c>.</value>
-		public bool IsClosed
+		public bool ContainsGenericParameters
 		{
-			get { return closed; }
+			get { return containsGenericParameters; }
 		}
 
 		#endregion // Properties
@@ -154,13 +154,13 @@ namespace Mosa.Runtime.Metadata.Signatures
 			return sb.ToString();
 		}
 
-		private bool DetermineIsTypeClosed()
+		private bool CheckContainsGenericParameters()
 		{
 			foreach (SigType sig in genericArguments)
-				if (sig.Type == CilElementType.Var || sig.Type == CilElementType.MVar)
-					return false;
+				if (sig.ContainsGenericParameter)
+					return true;
 
-			return true;
+			return false;
 		}
 	}
 }

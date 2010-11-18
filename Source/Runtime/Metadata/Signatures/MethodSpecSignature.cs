@@ -16,7 +16,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 	/// <summary>
 	/// 
 	/// </summary>
-	public class MethodSpecSignature : Signature, ISignatureContext
+	public class MethodSpecSignature : Signature
 	{
 		//private readonly ISignatureContext outerContext;
 
