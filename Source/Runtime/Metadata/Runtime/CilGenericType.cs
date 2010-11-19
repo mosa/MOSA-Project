@@ -22,6 +22,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 			base(moduleTypeSystem, type.Token)
 		{
 			this.signature = genericTypeInstanceSignature;
+			this.genericArguments = signature.GenericArguments;
 
 			this.Methods = this.GetMethods();
 			this.Fields = this.GetFields();
@@ -107,8 +108,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 		{
 			if (genericType == null)
 			{
-				genericType = moduleTypeSystem.GetType(signature.BaseType.Token);
-				genericArguments = signature.GenericArguments;
+				genericType = moduleTypeSystem.GetType(signature.BaseType.Token);				
 			}
 		}
 
