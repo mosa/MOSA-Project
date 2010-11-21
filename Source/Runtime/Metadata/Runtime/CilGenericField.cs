@@ -20,10 +20,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 			this.Attributes = genericField.Attributes;
 			this.SetAttributes(genericField.CustomAttributes);
 
-			if (declaringType.ContainsGenericParameters)
-			{
-				Signature.ApplyConcreteType(declaringType.GenericArguments);
-			}
+			Signature.ApplyGenericType(declaringType.GenericArguments);
 
 			return;
 		}

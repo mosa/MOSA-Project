@@ -64,7 +64,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			// Decode bases first
 			base.Decode(ctx, decoder);
 
-			switch (_opcode)
+			switch (opcode)
 			{
 				case OpCode.Br_s:
 					{

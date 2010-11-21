@@ -22,8 +22,8 @@ namespace Mosa.Runtime.Metadata.Runtime
 	{
 		private readonly CilRuntimeMethod genericMethod;
 
-		public CilGenericMethod(IModuleTypeSystem moduleTypeSystem, CilRuntimeMethod method, MethodSignature signature) :
-			base(moduleTypeSystem, method.Token, method.DeclaringType)
+		public CilGenericMethod(IModuleTypeSystem moduleTypeSystem, CilRuntimeMethod method, MethodSignature signature, RuntimeType declaringType) :
+			base(moduleTypeSystem, method.Token, declaringType)
 		{
 			this.genericMethod = method;
 
@@ -76,34 +76,34 @@ namespace Mosa.Runtime.Metadata.Runtime
 			return result.ToString();
 		}
 
-		private RuntimeType GetRuntimeTypeForSigType(SigType sigType)
-		{
-			switch (sigType.Type)
-			{
-				case CilElementType.Class:
-					Debug.Assert(sigType is TypeSigType, @"Failing to resolve VarSigType in GenericType.");
-					return moduleTypeSystem.GetType(((TypeSigType)sigType).Token);
+		//private RuntimeType GetRuntimeTypeForSigType(SigType sigType)
+		//{
+		//    switch (sigType.Type)
+		//    {
+		//        case CilElementType.Class:
+		//            Debug.Assert(sigType is TypeSigType, @"Failing to resolve VarSigType in GenericType.");
+		//            return moduleTypeSystem.GetType(((TypeSigType)sigType).Token);
 
-				case CilElementType.ValueType:
-					goto case CilElementType.Class;
+		//        case CilElementType.ValueType:
+		//            goto case CilElementType.Class;
 
-				case CilElementType.Var:
-					throw new NotImplementedException(@"Failing to resolve VarSigType in GenericType.");
+		//        case CilElementType.Var:
+		//            throw new NotImplementedException(@"Failing to resolve VarSigType in GenericType.");
 
-				case CilElementType.MVar:
-					throw new NotImplementedException(@"Failing to resolve MVarSigType in GenericType.");
+		//        case CilElementType.MVar:
+		//            throw new NotImplementedException(@"Failing to resolve MVarSigType in GenericType.");
 
-				default:
-					BuiltInSigType builtIn = sigType as BuiltInSigType;
-					if (builtIn != null)
-					{
-						return moduleTypeSystem.TypeSystem.GetType(builtIn.TypeName + ", mscorlib");
-					}
+		//        default:
+		//            BuiltInSigType builtIn = sigType as BuiltInSigType;
+		//            if (builtIn != null)
+		//            {
+		//                return moduleTypeSystem.TypeSystem.GetType(builtIn.TypeName + ", mscorlib");
+		//            }
 
-					throw new NotImplementedException(String.Format("SigType of CilElementType.{0} is not supported.", sigType.Type));
-			}
+		//            throw new NotImplementedException(String.Format("SigType of CilElementType.{0} is not supported.", sigType.Type));
+		//    }
 
-		}
+		//}
 
 	}
 }

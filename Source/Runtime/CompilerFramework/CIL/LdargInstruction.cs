@@ -48,7 +48,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			ushort argIdx;
 
 			// Opcode specific handling
-			switch (_opcode)
+			switch (opcode)
 			{
 				case OpCode.Ldarg:
 					argIdx = decoder.DecodeUShort();

@@ -90,18 +90,11 @@ namespace Mosa.Runtime.Metadata.Signatures
 				}
 			}
 		}
-
-		/// <summary>
-		/// Parses the specified provider.
-		/// </summary>
-		/// <param name="provider">The provider.</param>
-		/// <param name="token">The token.</param>
-		/// <returns></returns>
-		public static LocalVariableSignature Parse(IMetadataProvider provider, TokenTypes token)
+		
+		public void ApplyGenericType(SigType[] genericArguments)
 		{
-			var signature = new LocalVariableSignature();
-			signature.LoadSignature(provider, token);
-			return signature;
+			foreach (VariableSignature sig in locals)
+				sig.ApplyGenericType(genericArguments);
 		}
 	}
 }

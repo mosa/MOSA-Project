@@ -26,7 +26,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Holds the CIL opcode
 		/// </summary>
-		protected OpCode _opcode;
+		protected OpCode opcode;
 
 		#endregion // Data members
 
@@ -36,7 +36,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// Gets the op code.
 		/// </summary>
 		/// <value>The op code.</value>
-		public OpCode OpCode { get { return _opcode; } }
+		public OpCode OpCode { get { return opcode; } }
 
 		#endregion // Properties
 
@@ -49,7 +49,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		public BaseInstruction(OpCode opCode)
 			: base()
 		{
-			this._opcode = opCode;
+			this.opcode = opCode;
 		}
 
 		/// <summary>
@@ -60,7 +60,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		public BaseInstruction(OpCode opCode, byte operandCount)
 			: base(operandCount, 0)
 		{
-			this._opcode = opCode;
+			this.opcode = opCode;
 		}
 
 		/// <summary>
@@ -72,7 +72,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		public BaseInstruction(OpCode opCode, byte operandCount, byte resultCount)
 			: base(operandCount, resultCount)
 		{
-			this._opcode = opCode;
+			this.opcode = opCode;
 		}
 
 		#endregion // Construction
@@ -124,7 +124,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <returns>A string representation of the operand.</returns>
 		public override string ToString()
 		{
-			string code = _opcode.ToString();
+			string code = opcode.ToString();
 			int index = code.IndexOf("Instruction");
 
 			if (index > 0)

@@ -67,16 +67,16 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			// Read the branch target
 			// Is this a short branch target?
 			// FIXME: Remove unary branch instructions from this list.
-			if (_opcode == OpCode.Beq_s || _opcode == OpCode.Bge_s || _opcode == OpCode.Bge_un_s || _opcode == OpCode.Bgt_s ||
-				_opcode == OpCode.Bgt_un_s || _opcode == OpCode.Ble_s || _opcode == OpCode.Ble_un_s || _opcode == OpCode.Blt_s ||
-				_opcode == OpCode.Blt_un_s || _opcode == OpCode.Bne_un_s)
+			if (opcode == OpCode.Beq_s || opcode == OpCode.Bge_s || opcode == OpCode.Bge_un_s || opcode == OpCode.Bgt_s ||
+				opcode == OpCode.Bgt_un_s || opcode == OpCode.Ble_s || opcode == OpCode.Ble_un_s || opcode == OpCode.Blt_s ||
+				opcode == OpCode.Blt_un_s || opcode == OpCode.Bne_un_s)
 			{
 				sbyte target = decoder.DecodeSByte();
 				ctx.SetBranch(target);
 			}
-			else if (_opcode == OpCode.Beq || _opcode == OpCode.Bge || _opcode == OpCode.Bge_un || _opcode == OpCode.Bgt ||
-				_opcode == OpCode.Bgt_un || _opcode == OpCode.Ble || _opcode == OpCode.Ble_un || _opcode == OpCode.Blt ||
-				_opcode == OpCode.Blt_un || _opcode == OpCode.Bne_un)
+			else if (opcode == OpCode.Beq || opcode == OpCode.Bge || opcode == OpCode.Bge_un || opcode == OpCode.Bgt ||
+				opcode == OpCode.Bgt_un || opcode == OpCode.Ble || opcode == OpCode.Ble_un || opcode == OpCode.Blt ||
+				opcode == OpCode.Blt_un || opcode == OpCode.Bne_un)
 			{
 				int target = decoder.DecodeInt();
 				ctx.SetBranch(target);

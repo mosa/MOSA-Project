@@ -112,14 +112,6 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MethodSignature"/> class.
 		/// </summary>
-		public MethodSignature()
-		{
-			//TODO: Remove this default constructor 
-		}
-		
-		/// <summary>
-		/// Loads the signature.
-		/// </summary>
 		/// <param name="reader">The reader.</param>
 		public MethodSignature(SignatureReader reader)
 			: base(reader)
@@ -127,7 +119,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="VariableSignature"/> class.
+		/// Initializes a new instance of the <see cref="MethodSignature"/> class.
 		/// </summary>
 		/// <param name="provider">The provider.</param>
 		/// <param name="token">The token.</param>
@@ -297,6 +289,17 @@ namespace Mosa.Runtime.Metadata.Signatures
 			}
 
 			return true;
+		}
+
+		public void ApplyGenericType(SigType[] genericArguments)
+		{
+			for (int i = 0; i < parameters.Length; i++)
+			{
+				if (parameters[i] is VarSigType)
+				{
+					parameters[i] = genericArguments[(parameters[i] as VarSigType).Index];
+				}
+			}
 		}
 	}
 }

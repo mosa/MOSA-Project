@@ -75,5 +75,14 @@ namespace Mosa.Runtime.Metadata.Signatures
 				reader.SkipByte();
 			}
 		}
+
+		public void ApplyGenericType(SigType[] genericArguments)
+		{
+			if (this.Type is VarSigType)
+			{
+				this.Type = genericArguments[(Type as VarSigType).Index];
+			}
+		}
+
 	}
 }

@@ -17,6 +17,8 @@ namespace Mosa.Runtime.Metadata.Signatures
 	public sealed class FieldSignature : VariableSignature
 	{
 
+		private const int Field = 0x06;
+
 		/// <summary>
 		/// Loads the signature.
 		/// </summary>
@@ -50,17 +52,5 @@ namespace Mosa.Runtime.Metadata.Signatures
 			base.ParseSignature(reader);
 		}
 
-		public void ApplyConcreteType(SigType[] genericArguments)
-		{
-			if (this.Type is VarSigType)
-			{
-				this.Type = genericArguments[(Type as VarSigType).Index];
-			}
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		private const int Field = 0x06;
 	}
 }

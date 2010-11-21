@@ -31,6 +31,24 @@ namespace Mosa.Runtime.Metadata.Signatures
 		{
 			get { return type; }
 		}
+				/// <summary>
+		/// Initializes a new instance of the <see cref="TypeSpecSignature"/> class.
+		/// </summary>
+		/// <param name="reader">The reader.</param>
+		public TypeSpecSignature(SignatureReader reader)
+			: base(reader)
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="TypeSpecSignature"/> class.
+		/// </summary>
+		/// <param name="provider">The provider.</param>
+		/// <param name="token">The token.</param>
+		public TypeSpecSignature(IMetadataProvider provider, TokenTypes token)
+			: base(provider, token)
+		{
+		}
 
 		/// <summary>
 		/// Parses the signature.

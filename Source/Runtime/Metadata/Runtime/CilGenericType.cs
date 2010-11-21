@@ -83,7 +83,10 @@ namespace Mosa.Runtime.Metadata.Runtime
 			{
 				MethodSignature signature = new MethodSignature(method.MetadataModule.Metadata, method.Signature.Token);
 
-				RuntimeMethod genericInstanceMethod = new CilGenericMethod(moduleTypeSystem, method, signature);
+				signature.ApplyGenericType(this.genericArguments);
+				
+				RuntimeMethod genericInstanceMethod = new CilGenericMethod(moduleTypeSystem, method, signature, this);
+
 				methods.Add(genericInstanceMethod);
 			}
 

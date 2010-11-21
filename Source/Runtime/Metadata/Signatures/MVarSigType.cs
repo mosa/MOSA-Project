@@ -77,7 +77,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// </returns>
 		public override string ToString()
 		{
-			return base.ToString() + ":" + index.ToString();
+			return base.ToString() + "#" + index.ToString();
 		}
 
 		#endregion // SigType Overrides

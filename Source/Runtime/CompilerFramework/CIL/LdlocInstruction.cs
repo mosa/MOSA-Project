@@ -43,17 +43,14 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 			// Opcode specific handling
 			ushort locIdx;
-			switch (_opcode)
+			switch (opcode)
 			{
 				case OpCode.Ldloc:
-					locIdx = decoder.DecodeUShort( );
+					locIdx = decoder.DecodeUShort();
 					break;
 
 				case OpCode.Ldloc_s:
-					{
-						byte loc=decoder.DecodeByte( );
-						locIdx = loc;
-					}
+					locIdx = decoder.DecodeByte();
 					break;
 
 				case OpCode.Ldloc_0:

@@ -10,9 +10,12 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+
+using Mosa.Runtime;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Metadata.Tables;
+using Mosa.Runtime.Metadata.Runtime;
 using Mosa.Runtime.Vm;
 
 namespace Mosa.Runtime.CompilerFramework.CIL
@@ -75,6 +78,12 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 						StandAloneSigRow row = methodCompiler.Method.MetadataModule.Metadata.ReadStandAloneSigRow(header.localsSignature);
 
 						LocalVariableSignature localsSignature = new LocalVariableSignature(methodCompiler.Method.MetadataModule.Metadata, row.SignatureBlobIdx);
+
+						if (methodCompiler.Method.DeclaringType is CilGenericType)
+						{
+							localsSignature.ApplyGenericType((methodCompiler.Method.DeclaringType as CilGenericType).GenericArguments);
+						}
+
 						methodCompiler.SetLocalVariableSignature(localsSignature);
 					}
 

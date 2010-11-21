@@ -69,23 +69,23 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 			// Read the branch target
 			// Is this a short branch target?
-			if (_opcode == OpCode.Brfalse_s || _opcode == OpCode.Brtrue_s)
+			if (opcode == OpCode.Brfalse_s || opcode == OpCode.Brtrue_s)
 			{
 				sbyte target = decoder.DecodeSByte();
 				ctx.SetBranch(target);
 			}
-			else if (_opcode == OpCode.Brfalse || _opcode == OpCode.Brtrue)
+			else if (opcode == OpCode.Brfalse || opcode == OpCode.Brtrue)
 			{
 				int target = decoder.DecodeInt();
 				ctx.SetBranch(target);
 			}
-			else if (_opcode == OpCode.Switch)
+			else if (opcode == OpCode.Switch)
 			{
 				// Don't do anything, the derived class will do everything
 			}
 			else
 			{
-				throw new NotSupportedException(@"Invalid opcode " + _opcode.ToString() + " specified for UnaryBranchInstruction.");
+				throw new NotSupportedException(@"Invalid opcode " + opcode.ToString() + " specified for UnaryBranchInstruction.");
 			}
 		}
 

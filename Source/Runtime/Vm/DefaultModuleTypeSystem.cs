@@ -385,7 +385,7 @@ namespace Mosa.Runtime.Vm
 
 			MethodSignature signature = new MethodSignature(genericMethod.MetadataModule.Metadata, genericMethod.Signature.Token);
 
-			return new CilGenericMethod(this, genericMethod, signature);
+			return new CilGenericMethod(this, genericMethod, signature, genericMethod.DeclaringType);
 		}
 
 		/// <summary>
@@ -890,8 +890,7 @@ namespace Mosa.Runtime.Vm
 			{
 				TypeSpecRow typeSpec = metadata.ReadTypeSpecRow(typeSpecToken);
 
-				TypeSpecSignature signature = new TypeSpecSignature();
-				signature.LoadSignature(metadata, typeSpec.SignatureBlobIdx);
+				TypeSpecSignature signature = new TypeSpecSignature(metadata, typeSpec.SignatureBlobIdx);
 
 				if (signature.Type.Type == CilElementType.Class || signature.Type.Type == CilElementType.ValueType || signature.Type.Type == CilElementType.GenericInst)
 				{

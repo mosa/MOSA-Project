@@ -51,7 +51,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			ushort argIdx;
 
 			// Opcode specific handling 
-			if (_opcode == OpCode.Ldarga_s)
+			if (opcode == OpCode.Ldarga_s)
 			{
 				byte arg = decoder.DecodeByte();
 				argIdx = arg;
