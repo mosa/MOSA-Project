@@ -47,8 +47,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// <param name="reader">The reader.</param>
 		public Signature(SignatureReader reader)
 		{
-			this.ParseSignature(reader);
-			//Debug.Assert(reader.Index == reader.Length, @"Signature parser didn't complete.");
+			ParseSignature(reader);
 		}
 
 		/// <summary>
@@ -90,7 +89,6 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// <summary>
 		/// Froms the member ref signature token.
 		/// </summary>
-		/// <param name="context">The context.</param>
 		/// <param name="provider">The provider.</param>
 		/// <param name="token">The token.</param>
 		/// <returns></returns>

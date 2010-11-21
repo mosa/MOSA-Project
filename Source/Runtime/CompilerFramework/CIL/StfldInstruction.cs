@@ -56,6 +56,21 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 			// FIXME: GENERIC
 			ctx.RuntimeField = decoder.ModuleTypeSystem.GetField(token);
+
+			if (ctx.RuntimeField.DeclaringType != decoder.Method.DeclaringType)
+			{
+				Debug.Assert(!decoder.Method.DeclaringType.ContainsGenericParameters);
+
+				foreach (RuntimeField field in decoder.Method.DeclaringType.Fields)
+					if (field.Name == ctx.RuntimeField.Name)
+					{
+						ctx.RuntimeField = field;
+						break;
+					}
+
+				Debug.Assert(!ctx.RuntimeField.ContainsGenericParameter);
+			}
+
 		}
 
 		/// <summary>

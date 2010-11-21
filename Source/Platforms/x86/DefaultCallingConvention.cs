@@ -286,7 +286,6 @@ namespace Mosa.Platforms.x86
 		/// <summary>
 		/// Calculates the stack size for parameters.
 		/// </summary>
-		/// <param name="context">The context.</param>
 		/// <param name="operands">The operands.</param>
 		/// <returns></returns>
 		private int CalculateStackSizeForParameters(IEnumerable<Operand> operands)

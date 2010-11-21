@@ -62,7 +62,7 @@ namespace Mosa.Runtime.Vm
 		/// <summary>
 		/// Holds all loaded method definitions.
 		/// </summary>
-		private RuntimeMethod[] methodspecs;
+		private RuntimeMethod[] methodSpecs;
 
 		/// <summary>
 		/// Holds all loaded _stackFrameIndex definitions.
@@ -130,7 +130,7 @@ namespace Mosa.Runtime.Vm
 			parameters = new RuntimeParameter[GetTableRows(TokenTypes.Param)];
 
 			typeSpecs = new RuntimeType[GetTableRows(TokenTypes.TypeSpec)];
-			methodspecs = new RuntimeMethod[GetTableRows(TokenTypes.MethodSpec)];
+			methodSpecs = new RuntimeMethod[GetTableRows(TokenTypes.MethodSpec)];
 
 			// Load all types from the assembly into the type array
 			LoadTypes();
@@ -156,6 +156,9 @@ namespace Mosa.Runtime.Vm
 			fields = new RuntimeField[0];
 			types = new RuntimeType[0];
 			parameters = new RuntimeParameter[0];
+			
+			typeSpecs = new RuntimeType[0];
+			methodSpecs = new RuntimeMethod[0];
 		}
 
 		#endregion // Construction
