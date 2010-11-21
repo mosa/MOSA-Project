@@ -13,10 +13,8 @@
 using System;
 
 using Mosa.Vm;
-using Mosa.Runtime.CompilerFramework;
-using Mosa.Platforms.x86.Intrinsic;
 
-namespace Mosa.Platforms.x86
+namespace Mosa.Platform.X86.Instrinics
 {
 	/// <summary>
 	/// Provides stub methods for selected x86 native assembly instructions.
@@ -28,278 +26,278 @@ namespace Mosa.Platforms.x86
 		/// Wraps the x86 ldit instruction to load the interrupt descriptor table.
 		/// </summary>
 		/// <param name="address">The address.</param>
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Lidt))]
+		[Intrinsic(@"Mosa.Platform.X86.Intrinsic.Lidt, Mosa.Platform.X86")]
 		public static void Lidt(uint address) { ThrowPlatformNotSupported(); return; }
 
 		/// <summary>
 		/// Wraps the x86 cli instruction to disable interrupts
 		/// </summary>
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Cli))]
+		[Intrinsic(@"Mosa.Platform.X86.Intrinsic.Cli, Mosa.Platform.X86")]
 		public static void Cli() { ThrowPlatformNotSupported(); return; }
 
 		///// <summary>
 		///// Wraps the x86 cmpxchg instruction 
 		///// </summary>
-		//[Intrinsic(typeof(Architecture), typeof(Intrinsic.CmpXchg))]
+		//[Intrinsic(@"Mosa.Platform.X86.Intrinsic.CmpXchg, Mosa.Platform.X86")]
 		//public static void CmpXchg16(ref short first, short second) { ThrowPlatformNotSupported(); return; }
 
 		///// <summary>
 		///// Wraps the x86 cmpxchg instruction 
 		///// </summary>
-		//[Intrinsic(typeof(Architecture), typeof(Intrinsic.CmpXchg))]
+		//[Intrinsic(@"Mosa.Platform.X86.Intrinsic.CmpXchg, Mosa.Platform.X86")]
 		//public static void CmpXchg32(ref int first, int second) { ThrowPlatformNotSupported(); return; }
 
 		/// <summary>
 		/// Wraps the x86 lgdt instruction to load global descriptor table
 		/// </summary>
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Lgdt))]
+		[Intrinsic(@"Mosa.Platform.X86.Intrinsic.Lgdt, Mosa.Platform.X86")]
 		public static void Lgdt(uint address) { ThrowPlatformNotSupported(); return; }
 
 		/// <summary>
 		/// Wraps the x86 sti instruction to enable interrupts
 		/// </summary>
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Sti))]
+		[Intrinsic(@"Mosa.Platform.X86.Intrinsic.Sti, Mosa.Platform.X86")]
 		public static void Sti() { ThrowPlatformNotSupported(); return; }
 
 		/// <summary>
 		/// Wraps the x86 in instruction to read from an 8-bit port.
 		/// </summary>
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.In))]
+		[Intrinsic(@"Mosa.Platform.X86.Intrinsic.In, Mosa.Platform.X86")]
 		public static byte In(byte address) { ThrowPlatformNotSupported(); return 0; }
 
 		/// <summary>
 		/// Wraps the x86 in instruction to read from an 8-bit port.
 		/// </summary>
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.In))]
+		[Intrinsic(@"Mosa.Platform.X86.Intrinsic.In, Mosa.Platform.X86")]
 		public static byte In8(byte address) { ThrowPlatformNotSupported(); return 0; }
 
 		/// <summary>
 		/// Wraps the x86 in instruction to read from a 16-bit port.
 		/// </summary>
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.In))]
+		[Intrinsic(@"Mosa.Platform.X86.Intrinsic.In, Mosa.Platform.X86")]
 		public static ushort In16(ushort address) { ThrowPlatformNotSupported(); return 0; }
 
 		/// <summary>
 		/// Wraps the x86 in instruction to read from a 32-bit port.
 		/// </summary>
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.In))]
+		[Intrinsic(@"Mosa.Platform.X86.Intrinsic.In, Mosa.Platform.X86")]
 		public static uint In32(uint address) { ThrowPlatformNotSupported(); return 0; }
 
 		/// <summary>
 		/// Wraps the x86 out instruction to write to an 8-bit port.
 		/// </summary>
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Out))]
+		[Intrinsic(@"Mosa.Platform.X86.Intrinsic.Out, Mosa.Platform.X86")]
 		public static void Out8(byte address, byte value) { ThrowPlatformNotSupported(); }
 
 		/// <summary>
 		/// Wraps the x86 out instruction to write to an 8-bit port.
 		/// </summary>
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Out))]
+		[Intrinsic(@"Mosa.Platform.X86.Intrinsic.Out, Mosa.Platform.X86")]
 		public static void Out(byte address, byte value) { ThrowPlatformNotSupported(); }
 
 		/// <summary>
 		/// Wraps the x86 out instruction to write to a 16-bit port.
 		/// </summary>
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Out))]
+		[Intrinsic(@"Mosa.Platform.X86.Intrinsic.Out, Mosa.Platform.X86")]
 		public static void Out16(ushort address, ushort value) { ThrowPlatformNotSupported(); }
 
 		/// <summary>
 		/// Wraps the x86 out instruction to write to a 32-bit port.
 		/// </summary>
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Out))]
+		[Intrinsic(@"Mosa.Platform.X86.Intrinsic.Out, Mosa.Platform.X86")]
 		public static void Out32(uint address, uint value) { ThrowPlatformNotSupported(); }
 
 		/// <summary>
 		/// Wraps the x86 out instruction to write to a nop instruction.
 		/// </summary>
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Nop))]
+		[Intrinsic(@"Mosa.Platform.X86.Intrinsic.Nop, Mosa.Platform.X86")]
 		public static void Nop() { ThrowPlatformNotSupported(); }
 
 		/// <summary>
 		/// Wraps the x86 hlt instruction.
 		/// </summary>
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Hlt))]
+		[Intrinsic(@"Mosa.Platform.X86.Intrinsic.Hlt, Mosa.Platform.X86")]
 		public static void Hlt() { ThrowPlatformNotSupported(); }
 
 		/// <summary>
 		/// 
 		/// </summary>
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Invlpg))]
+		[Intrinsic(@"Mosa.Platform.X86.Intrinsic.Invlpg, Mosa.Platform.X86")]
 		public static void Invlpg(uint address) { ThrowPlatformNotSupported(); }
 
 		/// <summary>
 		/// Wraps the x86 CPUID instruction.
 		/// </summary>
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.CpuId))]
+		[Intrinsic(@"Mosa.Platform.X86.Intrinsic.CpuId, Mosa.Platform.X86")]
 		public static byte CpuId(uint function) { ThrowPlatformNotSupported(); return 0; }
 
 		/// <summary>
 		/// Wraps the x86 CPUID instruction.
 		/// </summary>
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.CpuIdEax))]
+		[Intrinsic(@"Mosa.Platform.X86.Intrinsic.CpuIdEax, Mosa.Platform.X86")]
 		public static int CpuIdEax(uint function) { ThrowPlatformNotSupported(); return 0; }
 
 		/// <summary>
 		/// Wraps the x86 CPUID instruction.
 		/// </summary>
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.CpuIdEbx))]
+		[Intrinsic(@"Mosa.Platform.X86.Intrinsic.CpuIdEbx, Mosa.Platform.X86")]
 		public static int CpuIdEbx(uint function) { ThrowPlatformNotSupported(); return 0; }
 
 		/// <summary>
 		/// Wraps the x86 CPUID instruction.
 		/// </summary>
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.CpuIdEcx))]
+		[Intrinsic(@"Mosa.Platform.X86.Intrinsic.CpuIdEcx, Mosa.Platform.X86")]
 		public static int CpuIdEcx(uint function) { ThrowPlatformNotSupported(); return 0; }
 
 		/// <summary>
 		/// Wraps the x86 CPUID instruction.
 		/// </summary>
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.CpuIdEdx))]
+		[Intrinsic(@"Mosa.Platform.X86.Intrinsic.CpuIdEdx, Mosa.Platform.X86")]
 		public static int CpuIdEdx(uint function) { ThrowPlatformNotSupported(); return 0; }
 
 		/// <summary>
 		/// 
 		/// </summary>
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.BochsDebug))]
+		[Intrinsic(@"Mosa.Platform.X86.Intrinsic.BochsDebug, Mosa.Platform.X86")]
 		public static void BochsDebug() { ThrowPlatformNotSupported(); return; }
 
 		/// <summary>
 		/// Sets the control register 0.
 		/// </summary>
 		/// <param name="status">The status.</param>
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.SetCR0))]
+		[Intrinsic(@"Mosa.Platform.X86.Intrinsic.SetCR0, Mosa.Platform.X86")]
 		public static void SetCR0(uint status) { ThrowPlatformNotSupported(); }
 
 		/// <summary>
 		/// Sets the control register 2.
 		/// </summary>
 		/// <param name="status">The status.</param>
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.SetCR2))]
+		[Intrinsic(@"Mosa.Platform.X86.Intrinsic.SetCR2, Mosa.Platform.X86")]
 		public static void SetCR2(uint status) { ThrowPlatformNotSupported(); }
 
 		/// <summary>
 		/// Sets the control register 3.
 		/// </summary>
 		/// <param name="status">The status.</param>
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.SetCR3))]
+		[Intrinsic(@"Mosa.Platform.X86.Intrinsic.SetCR3, Mosa.Platform.X86")]
 		public static void SetCR3(uint status) { ThrowPlatformNotSupported(); }
 
 		/// <summary>
 		/// Sets the control register 4.
 		/// </summary>
 		/// <param name="status">The status.</param>
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.SetCR4))]
+		[Intrinsic(@"Mosa.Platform.X86.Intrinsic.SetCR4, Mosa.Platform.X86")]
 		public static void SetCR4(uint status) { ThrowPlatformNotSupported(); }
 
 		/// <summary>
 		/// Gets the control register 0.
 		/// </summary>
 		/// <returns></returns>
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.GetCR0))]
+		[Intrinsic(@"Mosa.Platform.X86.Intrinsic.GetCR0, Mosa.Platform.X86")]
 		public static uint GetCR0() { ThrowPlatformNotSupported(); return 0; }
 
 		/// <summary>
 		/// Gets the control register 2.
 		/// </summary>
 		/// <returns></returns>
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.GetCR2))]
+		[Intrinsic(@"Mosa.Platform.X86.Intrinsic.GetCR2, Mosa.Platform.X86")]
 		public static uint GetCR2() { ThrowPlatformNotSupported(); return 0; }
 
 		/// <summary>
 		/// Gets the control register 3.
 		/// </summary>
 		/// <returns></returns>
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.GetCR3))]
+		[Intrinsic(@"Mosa.Platform.X86.Intrinsic.GetCR3, Mosa.Platform.X86")]
 		public static uint GetCR3() { ThrowPlatformNotSupported(); return 0; }
 
 		/// <summary>
 		/// Gets the control register 4.
 		/// </summary>
 		/// <returns></returns>
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.GetCR4))]
+		[Intrinsic(@"Mosa.Platform.X86.Intrinsic.GetCR4, Mosa.Platform.X86")]
 		public static uint GetCR4() { ThrowPlatformNotSupported(); return 0; }
 
 		/// <summary>
 		/// Jumps the global interrupt handler.
 		/// </summary>
 		/// <returns></returns>
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.GetIDTJumpLocation))]
+		[Intrinsic(@"Mosa.Platform.X86.Intrinsic.GetIDTJumpLocation, Mosa.Platform.X86")]
 		public static uint GetIDTJumpLocation(uint irq) { ThrowPlatformNotSupported(); return 0; }
 
 		/// <summary>
 		/// Lock
 		/// </summary>
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.SpinLock))]
+		[Intrinsic(@"Mosa.Platform.X86.Intrinsic.SpinLock, Mosa.Platform.X86")]
 		public static void SpinLock(uint address) { ThrowPlatformNotSupported(); }
 
 		/// <summary>
 		/// Unlock
 		/// </summary>
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.SpinUnlock))]
+		[Intrinsic(@"Mosa.Platform.X86.Intrinsic.SpinUnlock, Mosa.Platform.X86")]
 		public static void SpinUnlock(uint address) { ThrowPlatformNotSupported(); }
 
 		/// <summary>
 		/// 
 		/// </summary>
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Get))]
+		[Intrinsic(@"Mosa.Platform.X86.Intrinsic.Get, Mosa.Platform.X86")]
 		public static byte Get8(uint address) { ThrowPlatformNotSupported(); return 0; }
 
 		/// <summary>
 		/// 
 		/// </summary>
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Get))]
+		[Intrinsic(@"Mosa.Platform.X86.Intrinsic.Get, Mosa.Platform.X86")]
 		public static ushort Get16(uint address) { ThrowPlatformNotSupported(); return 0; }
 
 		/// <summary>
 		/// 
 		/// </summary>
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Get))]
+		[Intrinsic(@"Mosa.Platform.X86.Intrinsic.Get, Mosa.Platform.X86")]
 		public static uint Get32(uint address) { ThrowPlatformNotSupported(); return 0; }
 
 		/// <summary>
 		/// 
 		/// </summary>
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Get))]
+		[Intrinsic(@"Mosa.Platform.X86.Intrinsic.Get, Mosa.Platform.X86")]
 		public static ulong Get64(uint address) { ThrowPlatformNotSupported(); return 0; }
 
 		/// <summary>
 		/// 
 		/// </summary>
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Set))]
+		[Intrinsic(@"Mosa.Platform.X86.Intrinsic.Set, Mosa.Platform.X86")]
 		public static void Set8(uint address, byte value) { ThrowPlatformNotSupported(); }
 
 		/// <summary>
 		/// 
 		/// </summary>
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Set))]
+		[Intrinsic(@"Mosa.Platform.X86.Intrinsic.Set, Mosa.Platform.X86")]
 		public static void Set16(uint address, ushort value) { ThrowPlatformNotSupported(); }
 
 		/// <summary>
 		/// 
 		/// </summary>
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Set))]
+		[Intrinsic(@"Mosa.Platform.X86.Intrinsic.Set, Mosa.Platform.X86")]
 		public static void Set32(uint address, uint value) { ThrowPlatformNotSupported(); }
 
 		/// <summary>
 		/// 
 		/// </summary>
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.Set))]
+		[Intrinsic(@"Mosa.Platform.X86.Intrinsic.Set, Mosa.Platform.X86")]
 		public static void Set64(uint address, ulong value) { ThrowPlatformNotSupported(); }
 
 		/// <summary>
 		/// Switches the task.
 		/// </summary>
 		/// <param name="esp">The esp.</param>
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.SwitchTask))]
+		[Intrinsic(@"Mosa.Platform.X86.Intrinsic.SwitchTask, Mosa.Platform.X86")]
 		public static void SwitchTask(uint esp) { ThrowPlatformNotSupported(); }
 
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.RestoreContext))]
+		[Intrinsic(@"Mosa.Platform.X86.Intrinsic.RestoreContext, Mosa.Platform.X86")]
 		public static void RestoreContext() { ThrowPlatformNotSupported(); }
 
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.GetEip))]
+		[Intrinsic(@"Mosa.Platform.X86.Intrinsic.GetEip, Mosa.Platform.X86")]
 		public static uint GetEip() { ThrowPlatformNotSupported(); return 0;  }
 
-		[Intrinsic(typeof(Architecture), typeof(Intrinsic.CallFilter))]
+		[Intrinsic(@"Mosa.Platform.X86.Intrinsic.CallFilter, Mosa.Platform.X86")]
 		public static void CallFilter() { ThrowPlatformNotSupported(); }
 
 		#endregion

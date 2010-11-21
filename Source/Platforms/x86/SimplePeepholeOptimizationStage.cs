@@ -20,7 +20,7 @@ using Mosa.Runtime.Metadata.Signatures;
 using IR = Mosa.Runtime.CompilerFramework.IR;
 using CIL = Mosa.Runtime.CompilerFramework.CIL;
 
-namespace Mosa.Platforms.x86
+namespace Mosa.Platform.X86
 {
 	/// <summary>
 	/// 

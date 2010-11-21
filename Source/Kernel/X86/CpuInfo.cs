@@ -5,7 +5,7 @@
  *
  */
 
-using Mosa.Platforms.x86;
+using Mosa.Platform.X86.Instrinics;
 using Mosa.Kernel.X86;
 
 namespace Mosa.HelloWorld
@@ -26,7 +26,7 @@ namespace Mosa.HelloWorld
 		{
 			get
 			{
-				return (ulong)((Platforms.x86.Native.CpuIdEax(4) >> 26) + 1);
+				return (ulong)((Native.CpuIdEax(4) >> 26) + 1);
 			}
 		}
 
@@ -34,7 +34,7 @@ namespace Mosa.HelloWorld
 		{
 			get
 			{
-				return (ulong)((Platforms.x86.Native.CpuIdEax(1) & 0x3000) >> 12);
+				return (ulong)((Native.CpuIdEax(1) & 0x3000) >> 12);
 			}
 		}
 
@@ -42,7 +42,7 @@ namespace Mosa.HelloWorld
 		{
 			get
 			{
-				return (ulong)(Platforms.x86.Native.CpuIdEax(1) & 0xF);
+				return (ulong)(Native.CpuIdEax(1) & 0xF);
 			}
 		}
 
@@ -50,7 +50,7 @@ namespace Mosa.HelloWorld
 		{
 			get
 			{
-				return (ulong)((Platforms.x86.Native.CpuIdEax(1) & 0xF0) >> 4);
+				return (ulong)((Native.CpuIdEax(1) & 0xF0) >> 4);
 			}
 		}
 
@@ -58,7 +58,7 @@ namespace Mosa.HelloWorld
 		{
 			get
 			{
-				return (ulong)((Platforms.x86.Native.CpuIdEax(1) & 0xF00) >> 8);
+				return (ulong)((Native.CpuIdEax(1) & 0xF00) >> 8);
 			}
 		}
 
@@ -66,7 +66,7 @@ namespace Mosa.HelloWorld
 		{
 			get
 			{
-				uint identifier = (uint)Platforms.x86.Native.CpuIdEax(0x80000000);
+				uint identifier = (uint)Native.CpuIdEax(0x80000000);
 				return (identifier & 0x80000000) != 0;
 			}
 		}
@@ -75,22 +75,22 @@ namespace Mosa.HelloWorld
 		{
 			get
 			{
-				uint identifier = (uint)Platforms.x86.Native.CpuIdEax(0x80000000);
+				uint identifier = (uint)Native.CpuIdEax(0x80000000);
 				return identifier >= 0x80000004U;
 			}
 		}
 
 		public void PrintVendorString()
 		{
-			int identifier = Platforms.x86.Native.CpuIdEbx(0);
+			int identifier = Native.CpuIdEbx(0);
 			for (int i = 0; i < 4; ++i)
 				Screen.Write((char)((identifier >> (i * 8)) & 0xFF));
 
-			identifier = Platforms.x86.Native.CpuIdEdx(0);
+			identifier = Native.CpuIdEdx(0);
 			for (int i = 0; i < 4; ++i)
 				Screen.Write((char)((identifier >> (i * 8)) & 0xFF));
 
-			identifier = Platforms.x86.Native.CpuIdEcx(0);
+			identifier = Native.CpuIdEcx(0);
 			for (int i = 0; i < 4; ++i)
 				Screen.Write((char)((identifier >> (i * 8)) & 0xFF));
 		}
@@ -110,24 +110,24 @@ namespace Mosa.HelloWorld
 
 		private void PrintBrand(uint param)
 		{
-			int identifier = Platforms.x86.Native.CpuIdEax(param);
+			int identifier = Native.CpuIdEax(param);
 			bool whitespace = true;
 			if (identifier != 0x20202020)
 				for (int i = 0; i < 4; ++i)
 					PrintBrandPart(identifier, i, ref whitespace);
 
 
-			identifier = Platforms.x86.Native.CpuIdEbx(param);
+			identifier = Native.CpuIdEbx(param);
 			if (identifier != 0x20202020)
 				for (int i = 0; i < 4; ++i)
 					PrintBrandPart(identifier, i, ref whitespace);
 
-			identifier = Platforms.x86.Native.CpuIdEcx(param);
+			identifier = Native.CpuIdEcx(param);
 			if (identifier != 0x20202020)
 				for (int i = 0; i < 4; ++i)
 					PrintBrandPart(identifier, i, ref whitespace);
 
-			identifier = Platforms.x86.Native.CpuIdEdx(param);
+			identifier = Native.CpuIdEdx(param);
 			if (identifier != 0x20202020)
 				for (int i = 0; i < 4; ++i)
 					PrintBrandPart(identifier, i, ref whitespace);

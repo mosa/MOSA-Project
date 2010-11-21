@@ -18,7 +18,7 @@ using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Vm;
 
-namespace Mosa.Platforms.x86.Intrinsic
+namespace Mosa.Platform.X86.Intrinsic
 {
 	/// <summary>
 	/// Representations the x86 CPUID instruction.

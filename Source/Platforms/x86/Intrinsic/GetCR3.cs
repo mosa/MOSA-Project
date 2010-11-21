@@ -16,7 +16,7 @@ using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
 using IR = Mosa.Runtime.CompilerFramework.IR;
 
-namespace Mosa.Platforms.x86.Intrinsic
+namespace Mosa.Platform.X86.Intrinsic
 {
 	/// <summary>
 	/// 

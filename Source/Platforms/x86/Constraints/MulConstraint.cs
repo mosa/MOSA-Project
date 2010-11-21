@@ -13,7 +13,7 @@ using System.Text;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.CompilerFramework.Operands;
 
-namespace Mosa.Platforms.x86.Constraints
+namespace Mosa.Platform.X86.Constraints
 {
 	/// <summary>
 	/// 
@@ -59,8 +59,8 @@ namespace Mosa.Platforms.x86.Constraints
 		/// <param name="opIdx">The operand index to check.</param>
 		public Register[] GetRegistersForOperand(int opIdx)
 		{
-			Register[] valid = { x86.GeneralPurposeRegister.EAX, x86.GeneralPurposeRegister.EBX, 
-								 x86.GeneralPurposeRegister.ECX, x86.GeneralPurposeRegister.EDX };
+			Register[] valid = { X86.GeneralPurposeRegister.EAX, X86.GeneralPurposeRegister.EBX, 
+								 X86.GeneralPurposeRegister.ECX, X86.GeneralPurposeRegister.EDX };
 			return valid;
 		}
 
@@ -70,7 +70,7 @@ namespace Mosa.Platforms.x86.Constraints
 		/// <param name="resIdx">The result operand index to check.</param>
 		public Register[] GetRegistersForResult(int resIdx)
 		{
-			Register[] valid = { x86.GeneralPurposeRegister.EAX, x86.GeneralPurposeRegister.EDX };
+			Register[] valid = { X86.GeneralPurposeRegister.EAX, X86.GeneralPurposeRegister.EDX };
 			return valid;
 		}
 
@@ -83,7 +83,7 @@ namespace Mosa.Platforms.x86.Constraints
 		/// <returns>An array of registers used by the instruction.</returns>
 		public Register[] GetRegistersUsed()
 		{
-			Register[] valid = { x86.GeneralPurposeRegister.EAX, x86.GeneralPurposeRegister.EDX };
+			Register[] valid = { X86.GeneralPurposeRegister.EAX, X86.GeneralPurposeRegister.EDX };
 			return valid;
 		}
 	}

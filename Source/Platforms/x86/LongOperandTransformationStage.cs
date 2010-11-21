@@ -21,7 +21,7 @@ using Mosa.Runtime.Metadata;
 using CIL = Mosa.Runtime.CompilerFramework.CIL;
 using IR = Mosa.Runtime.CompilerFramework.IR;
 
-namespace Mosa.Platforms.x86
+namespace Mosa.Platform.X86
 {
 	/// <summary>
 	/// Transforms 64-bit arithmetic to 32-bit operations.

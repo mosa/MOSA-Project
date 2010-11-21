@@ -11,7 +11,7 @@ using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
 
-namespace Mosa.Platforms.x86
+namespace Mosa.Platform.X86
 {
 	/// <summary>
 	/// Base class for x86 segment registers.

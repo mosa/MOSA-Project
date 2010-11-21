@@ -13,7 +13,7 @@ using System.Diagnostics;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.CompilerFramework.Operands;
 
-namespace Mosa.Platforms.x86.Constraints
+namespace Mosa.Platform.X86.Constraints
 {
 	/// <summary>
 	/// A generic register constraint implementation for x86 two operand instructions
@@ -129,12 +129,12 @@ namespace Mosa.Platforms.x86.Constraints
 		protected Register[] GetGeneralPurposeRegisters()
 		{
 			return new Register[] {
-				x86.GeneralPurposeRegister.ESI,
-				x86.GeneralPurposeRegister.EDI,
-				x86.GeneralPurposeRegister.EBX, 
-				x86.GeneralPurposeRegister.EAX, 
-				x86.GeneralPurposeRegister.ECX,
-				x86.GeneralPurposeRegister.EDX,
+				X86.GeneralPurposeRegister.ESI,
+				X86.GeneralPurposeRegister.EDI,
+				X86.GeneralPurposeRegister.EBX, 
+				X86.GeneralPurposeRegister.EAX, 
+				X86.GeneralPurposeRegister.ECX,
+				X86.GeneralPurposeRegister.EDX,
 			};
 		}
 

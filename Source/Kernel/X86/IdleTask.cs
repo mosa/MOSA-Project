@@ -5,10 +5,10 @@
  *
  */
 
-using Mosa.Platforms.x86;
+using Mosa.Platform.X86.Instrinics;
 using Mosa.Kernel.X86;
 
-namespace Mosa.Platforms.x86.Intrinsic
+namespace Mosa.Platform.X86.Intrinsic
 {
 
 	/// <summary>

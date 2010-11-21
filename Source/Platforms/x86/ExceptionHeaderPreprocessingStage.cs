@@ -17,7 +17,7 @@ using Mosa.Runtime.Metadata;
 using Mosa.Runtime.CompilerFramework;
 using IR = Mosa.Runtime.CompilerFramework.IR;
 
-namespace Mosa.Platforms.x86
+namespace Mosa.Platform.X86
 {
 	/// <summary>
 	/// 

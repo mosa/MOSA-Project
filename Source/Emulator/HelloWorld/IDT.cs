@@ -9,7 +9,7 @@
 
 using Mosa.HelloWorld;
 
-using Mosa.Platforms.x86;
+using Mosa.Platform.X86;
 
 namespace Mosa.Kernel.X86
 {

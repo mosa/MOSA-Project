@@ -20,7 +20,7 @@ using CIL = Mosa.Runtime.CompilerFramework.CIL;
 using IR = Mosa.Runtime.CompilerFramework.IR;
 
 
-namespace Mosa.Platforms.x86.Intrinsic
+namespace Mosa.Platform.X86.Intrinsic
 {
 	/// <summary>
 	/// Representations the x86 in instruction.

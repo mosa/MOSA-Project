@@ -17,7 +17,7 @@ using CIL = Mosa.Runtime.CompilerFramework.CIL;
 using IR = Mosa.Runtime.CompilerFramework.IR;
 using System.Diagnostics;
 
-namespace Mosa.Platforms.x86.CPUx86
+namespace Mosa.Platform.X86.CPUx86
 {
 	/// <summary>
 	/// Representations the x86 in instruction.

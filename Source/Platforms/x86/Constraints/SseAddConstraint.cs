@@ -13,7 +13,7 @@ using System.Text;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.CompilerFramework.Operands;
 
-namespace Mosa.Platforms.x86.Constraints
+namespace Mosa.Platform.X86.Constraints
 {
 	/// <summary>
 	/// 
@@ -59,9 +59,9 @@ namespace Mosa.Platforms.x86.Constraints
 		/// <param name="opIdx">The operand index to check.</param>
 		public Register[] GetRegistersForOperand(int opIdx)
 		{
-			Register[] valid = { x86.SSE2Register.XMM0, x86.SSE2Register.XMM1, x86.SSE2Register.XMM2, 
-								 x86.SSE2Register.XMM7, x86.SSE2Register.XMM6, x86.SSE2Register.XMM5, 
-								 x86.SSE2Register.XMM6, x86.SSE2Register.XMM7 };
+			Register[] valid = { X86.SSE2Register.XMM0, X86.SSE2Register.XMM1, X86.SSE2Register.XMM2, 
+								 X86.SSE2Register.XMM7, X86.SSE2Register.XMM6, X86.SSE2Register.XMM5, 
+								 X86.SSE2Register.XMM6, X86.SSE2Register.XMM7 };
 			return valid;
 		}
 

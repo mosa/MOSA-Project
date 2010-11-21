@@ -7,7 +7,7 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-namespace Mosa.Platforms.x86.CPUx86
+namespace Mosa.Platform.X86.CPUx86
 {
 	/// <summary>
 	/// Abstract base class for x86 instructions with three operands.

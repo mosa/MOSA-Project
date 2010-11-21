@@ -957,7 +957,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Vm\Mosa.Vm.csproj">
+    <ProjectReference Include="..\Mosa.Vm\Mosa.Vm.csproj">
       <Project>{88E003EE-6EEC-4D9A-AE52-94A6F526F115}</Project>
       <Name>Mosa.Vm</Name>
     </ProjectReference>

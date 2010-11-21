@@ -15,9 +15,9 @@ using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
-using Mosa.Platforms.x86.Constraints;
+using Mosa.Platform.X86.Constraints;
 
-namespace Mosa.Platforms.x86
+namespace Mosa.Platform.X86
 {
 
 	/// <summary>

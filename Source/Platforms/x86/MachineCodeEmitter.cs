@@ -23,7 +23,7 @@ using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Vm;
 using IR = Mosa.Runtime.CompilerFramework.IR;
 
-namespace Mosa.Platforms.x86
+namespace Mosa.Platform.X86
 {
 	/// <summary>
 	/// An x86 machine code emitter.

@@ -12,7 +12,7 @@ using Mosa.Runtime.CompilerFramework;
 
 using IR = Mosa.Runtime.CompilerFramework.IR;
 
-namespace Mosa.Platforms.x86.CPUx86
+namespace Mosa.Platform.X86.CPUx86
 {
 	/// <summary>
 	/// Representation a x86 branch instruction.

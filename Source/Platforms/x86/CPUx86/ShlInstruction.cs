@@ -17,7 +17,7 @@ using Mosa.Runtime.CompilerFramework.Operands;
 using IR = Mosa.Runtime.CompilerFramework.IR;
 using Mosa.Runtime.Metadata;
 
-namespace Mosa.Platforms.x86.CPUx86
+namespace Mosa.Platform.X86.CPUx86
 {
 	/// <summary>
 	/// Representations the x86 shift left instruction.

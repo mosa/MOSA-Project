@@ -8,7 +8,7 @@
  */
 
 using Mosa.DeviceSystem;
-using Mosa.Platforms.x86;
+using Mosa.Platform.X86;
 
 namespace Mosa.EmulatedKernel
 {

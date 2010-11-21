@@ -17,7 +17,7 @@ using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Vm;
 
-namespace Mosa.Platforms.x86
+namespace Mosa.Platform.X86
 {
 	/// <summary>
 	/// Implements the CIL default calling convention for x86.

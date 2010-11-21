@@ -22,7 +22,7 @@ using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Vm;
 using IR = Mosa.Runtime.CompilerFramework.IR;
 
-namespace Mosa.Platforms.x86
+namespace Mosa.Platform.X86
 {
 	/// <summary>
 	/// Transforms IR instructions into their appropriate X86.

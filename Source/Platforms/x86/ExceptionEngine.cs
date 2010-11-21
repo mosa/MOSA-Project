@@ -11,7 +11,9 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Mosa.Platforms.x86
+using Mosa.Platform.X86.Instrinics;
+
+namespace Mosa.Platform.X86
 {
 	/// <summary>
 	/// 

@@ -10,7 +10,7 @@
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.CompilerFramework.Operands;
 
-namespace Mosa.Platforms.x86.Constraints
+namespace Mosa.Platform.X86.Constraints
 {
 	/// <summary>
 	/// Provides register constraints for the x86 idiv and div instructions.
