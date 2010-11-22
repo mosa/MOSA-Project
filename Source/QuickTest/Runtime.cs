@@ -7,7 +7,7 @@
  *  Michael Fröhlich (grover) <michael.ruck@michaelruck.de>
  */
 
-namespace Mosa.Runtime
+namespace Mosa.Vm
 {
 	public static class Runtime
 	{

@@ -49,7 +49,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 						return (expect == value);
 					}
 				}
-			" + Code.ObjectClassDefinition;
+			" + Code.AllTestCode;
 			Assert.IsTrue((bool)Run<B_I1>("", "Test", "LdlocaI1_CheckValue", value));
 		}
 
@@ -77,7 +77,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 						return (expect == value);
 					}
 				}
-			" + Code.ObjectClassDefinition;
+			" + Code.AllTestCode;
 			Assert.IsTrue((bool)Run<B_I2>("", "Test", "LdlocaI2_CheckValue", value));
 		}
 
@@ -105,7 +105,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 						return (expect == value);
 					}
 				}
-			" + Code.ObjectClassDefinition;
+			" + Code.AllTestCode;
 			Assert.IsTrue((bool)Run<B_I4>("", "Test", "LdlocaI4_CheckValue", value));
 		}
 
@@ -133,7 +133,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 						return (expect == value);
 					}
 				}
-			" + Code.ObjectClassDefinition;
+			" + Code.AllTestCode;
 			Assert.IsTrue((bool)Run<B_I8>("", "Test", "LdlocaI8_CheckValue", value));
 		}
 
@@ -161,7 +161,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 						return (expect == value);
 					}
 				}
-			" + Code.ObjectClassDefinition;
+			" + Code.AllTestCode;
 			Assert.IsTrue((bool)Run<B_U1>("", "Test", "LdlocaU1_CheckValue", value));
 		}
 
@@ -189,7 +189,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 						return (expect == value);
 					}
 				}
-			" + Code.ObjectClassDefinition;
+			" + Code.AllTestCode;
 			Assert.IsTrue((bool)Run<B_U2>("", "Test", "LdlocaU2_CheckValue", value));
 		}
 
@@ -217,7 +217,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 						return (expect == value);
 					}
 				}
-			" + Code.ObjectClassDefinition;
+			" + Code.AllTestCode;
 			Assert.IsTrue((bool)Run<B_U4>("", "Test", "LdlocaU4_CheckValue", value));
 		}
 
@@ -245,7 +245,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 						return (expect == value);
 					}
 				}
-			" + Code.ObjectClassDefinition;
+			" + Code.AllTestCode;
 			Assert.IsTrue((bool)Run<B_U8>("", "Test", "LdlocaU8_CheckValue", value));
 		}
 
@@ -273,7 +273,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 						return (expect == value);
 					}
 				}
-			" + Code.ObjectClassDefinition;
+			" + Code.AllTestCode;
 			Assert.IsTrue((bool)Run<B_R4>("", "Test", "LdlocaR4_CheckValue", value));
 		}
 
@@ -301,7 +301,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 						return (expect == value);
 					}
 				}
-			" + Code.ObjectClassDefinition;
+			" + Code.AllTestCode;
 			Assert.IsTrue((bool)Run<B_R8>("", "Test", "LdlocaR8_CheckValue", value));
 		}
 

@@ -81,9 +81,13 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Source\Platforms\x86\Mosa.Platforms.x86.csproj">
+    <ProjectReference Include="..\..\..\Source\Mosa.Vm\Mosa.Vm.csproj">
+      <Project>{88E003EE-6EEC-4D9A-AE52-94A6F526F115}</Project>
+      <Name>Mosa.Vm</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Source\Platforms\x86\Mosa.Platform.X86.csproj">
       <Project>{56CA38E7-0883-4461-A10E-386D0C58DBF9}</Project>
-      <Name>Mosa.Platforms.x86</Name>
+      <Name>Mosa.Platform.X86</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Source\Runtime\Mosa.Runtime.csproj">
       <Project>{75A12A8A-8C8F-4D1E-801B-689D8F781BF4}</Project>
@@ -96,10 +100,6 @@
     <ProjectReference Include="..\..\..\Source\Tools\Compiler\Mosa.Tools.Compiler.csproj">
       <Project>{B69C2F31-5161-47BB-9FD3-2F2F2BCBF659}</Project>
       <Name>Mosa.Tools.Compiler</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Source\Vm\Mosa.Vm.csproj">
-      <Project>{88E003EE-6EEC-4D9A-AE52-94A6F526F115}</Project>
-      <Name>Mosa.Vm</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

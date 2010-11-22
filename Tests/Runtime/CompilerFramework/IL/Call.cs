@@ -31,7 +31,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 				static class Test {
 					static bool " + name + "(" + type + " value) { return value == " + name + @"_Target(value); } 
 					static " + type + " " + name + "_Target(" + type + @" value) { return value; }
-				}" + Code.ObjectClassDefinition;
+				}" + Code.AllTestCode;
 		}
 
 		private static string CreateConstantTestCode(string name, string type, string constant)
@@ -40,7 +40,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 				static class Test {
 					static bool " + name + "(" + type + " value) { return value == " + name + "_Target(" + constant + @"); } 
 					static " + type + " " + name + "_Target(" + type + @" value) { return value; }
-				}" + Code.ObjectClassDefinition;
+				}" + Code.AllTestCode;
 		}
 
 		/// <summary>
@@ -57,7 +57,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 				static class Test { 
 					static void CallEmpty() { CallEmpty_Target(); } 
 					static void CallEmpty_Target() { }
-				}" + Code.ObjectClassDefinition;
+				}" + Code.AllTestCode;
 			Run<V>("", "Test", "CallEmpty");
 		}
 
@@ -538,7 +538,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 						return (a == 1 && b == 2 && c == 3 && d == 4);
 					}
 				}
-			" + Code.ObjectClassDefinition;
+			" + Code.AllTestCode;
 
 			Assert.IsTrue((bool)Run<B_I4_I4_I4_I4>(@"", @"Test", @"CallOrderI4", 1, 2, 3, 4));
 		}
@@ -560,7 +560,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 						return (a == 1 && b == 2 && c == 3 && d == 4);
 					}
 				}
-			" + Code.ObjectClassDefinition;
+			" + Code.AllTestCode;
 
 			Assert.IsTrue((bool)Run<B_U8_U8_U8_U8>(@"", @"Test", @"CallOrderU8", (ulong)1, (ulong)2, (ulong)3, (ulong)4));
 		}
@@ -582,7 +582,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 						return (a == 1 && b == 2 && c == 3 && d == 4);
 					}
 				}
-			" + Code.ObjectClassDefinition;
+			" + Code.AllTestCode;
 
 			Assert.IsTrue((bool)Run<B_U4_U8_U8_U8>(@"", @"Test", @"CallOrderU4_U8_U8_U8", (uint)1, (ulong)2, (ulong)3, (ulong)4));
 		}
@@ -609,7 +609,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 						return 0;
 					}
 				}
-			" + Code.ObjectClassDefinition;
+			" + Code.AllTestCode;
 
 			this.References = new string[] {
 				@"Mosa.Runtime.dll",

@@ -31,7 +31,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 						*(" + pointerType + @"*)address = value;
 						return true;
 					}
-					}" + Code.ObjectClassDefinition;
+					}" + Code.AllTestCode;
 		}
 
 		#region I1

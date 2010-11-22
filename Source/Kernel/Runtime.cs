@@ -11,7 +11,7 @@ using Mosa.Kernel;
 using Mosa.Kernel.X86;
 using Mosa.Platform.X86.Instrinics;
 
-namespace Mosa.Runtime
+namespace Mosa.Vm
 {
 	public static class Runtime
 	{

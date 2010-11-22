@@ -34,7 +34,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 					{
 						return expect == (a + b);
 					}
-				}" + Code.ObjectClassDefinition;
+				}" + Code.AllTestCode;
 		}
 
 		private static string CreateConstantTestCode(string name, string typeIn, string typeOut, string constLeft, string constRight)
@@ -48,7 +48,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 						{
 							return expect == (" + constLeft + @" + x);
 						}
-					}" + Code.ObjectClassDefinition;
+					}" + Code.AllTestCode;
 			}
 			else if (String.IsNullOrEmpty(constLeft))
 			{
@@ -59,7 +59,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 						{
 							return expect == (x + " + constRight + @");
 						}
-					}" + Code.ObjectClassDefinition;
+					}" + Code.AllTestCode;
 			}
 			else
 			{
@@ -90,6 +90,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void AddC(char a, char b)
 		{
 			CodeSource = CreateTestCode("AddC", "char", "char");
+			DoNotReferenceMsCorlib = true;
 			Assert.IsTrue((bool)Run<C_C_C>("", "Test", "AddC", (char)(a + b), a, b));
 		}
 
@@ -195,6 +196,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void AddI1(sbyte a, sbyte b)
 		{
 			CodeSource = CreateTestCode("AddI1", "sbyte", "int");
+			DoNotReferenceMsCorlib = true; 
 			Assert.IsTrue((bool)Run<I4_I1_I1>("", "Test", "AddI1", a + b, a, b));
 		}
 
@@ -247,7 +249,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		[Test, Author("rootnode")]
 		public void AddConstantI1Right(sbyte a)
 		{
-			CodeSource = "static class Test { static bool AddConstantI1Right(int expect, sbyte a) { return expect == (a + 1); } }" + Code.ObjectClassDefinition;
+			CodeSource = "static class Test { static bool AddConstantI1Right(int expect, sbyte a) { return expect == (a + 1); } }" + Code.AllTestCode;
 			Assert.IsTrue((bool)Run<I4_I1_C>("", "Test", "AddConstantI1Right", a + 1, a));
 		}
 		#endregion
@@ -1078,7 +1080,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		[Test, Author("alyman", "mail.alex.lyman@gmail.com")]
 		public void AddR8(double a, double b)
 		{
-			CodeSource = "static class Test { static bool AddR8(double expect, double a, double b) { return expect == (a + b); } }" + Code.ObjectClassDefinition;
+			CodeSource = "static class Test { static bool AddR8(double expect, double a, double b) { return expect == (a + b); } }" + Code.AllTestCode;
 			Assert.IsTrue((bool)Run<R8_R8_R8>("", "Test", "AddR8", (a + b), a, b));
 		}
 

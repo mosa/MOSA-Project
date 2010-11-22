@@ -22,8 +22,7 @@ using Mosa.Runtime.Metadata.Signatures;
 namespace Mosa.Runtime.Linker
 {
 	/// <summary>
-	/// This compilation stage links all external labels together, which
-	/// were previously registered.
+	/// This compilation stage links all external labels together, which were previously registered.
 	/// </summary>
 	public abstract class AssemblyLinkerStageBase : BaseAssemblyCompilerStage, IAssemblyCompilerStage, IAssemblyLinker
 	{
@@ -89,10 +88,10 @@ namespace Mosa.Runtime.Linker
 		{
 			long address;
 
-			this.AddVmCalls(this.symbols);
+			AddVmCalls(this.symbols);
 
 			// Check if we have unresolved requests and try to link them
-			List<string> members = new List<string>(this.linkRequests.Keys);
+			List<string> members = new List<string>(linkRequests.Keys);
 			foreach (string member in members)
 			{
 				// Is the runtime member resolved?
@@ -105,7 +104,7 @@ namespace Mosa.Runtime.Linker
 				}
 			}
 
-			Debug.Assert(this.linkRequests.Count == 0, @"AssemblyLinker has found unresolved symbols.");
+			Debug.Assert(linkRequests.Count == 0, @"AssemblyLinker has found unresolved symbols.");
 			if (this.linkRequests.Count != 0)
 			{
 				StringBuilder sb = new StringBuilder();
@@ -127,7 +126,7 @@ namespace Mosa.Runtime.Linker
 		/// A request to patch already emitted code by storing the calculated virtualAddress value.
 		/// </summary>
 		/// <param name="linkType">Type of the link.</param>
-		/// <param name="methodAddress">The virtual virtualAddress of the method whose code is being patched.</param>
+		/// <param name="methodAddress">The method address.</param>
 		/// <param name="methodOffset">The value to store at the position in code.</param>
 		/// <param name="methodRelativeBase">The method relative base.</param>
 		/// <param name="targetAddress">The position in code, where it should be patched.</param>
@@ -147,7 +146,7 @@ namespace Mosa.Runtime.Linker
 		/// <value>The base virtualAddress.</value>
 		public long BaseAddress
 		{
-			get { return this.baseAddress; }
+			get { return baseAddress; }
 		}
 
 		/// <summary>
@@ -156,8 +155,8 @@ namespace Mosa.Runtime.Linker
 		/// <value>The entry point symbol.</value>
 		public LinkerSymbol EntryPoint
 		{
-			get { return this.entryPoint; }
-			set { this.entryPoint = value; }
+			get { return entryPoint; }
+			set { entryPoint = value; }
 		}
 
 		/// <summary>
@@ -175,15 +174,8 @@ namespace Mosa.Runtime.Linker
 		/// <value>The output file.</value>
 		public string OutputFile
 		{
-			get
-			{
-				return this.outputFile;
-			}
-
-			set
-			{
-				this.outputFile = value;
-			}
+			get { return this.outputFile; }
+			set { this.outputFile = value; }
 		}
 
 		/// <summary>
@@ -287,7 +279,7 @@ namespace Mosa.Runtime.Linker
 				throw new ArgumentNullException(@"symbolName");
 
 			LinkerSymbol result;
-			if (!this.symbols.TryGetValue(symbolName, out result))
+			if (!symbols.TryGetValue(symbolName, out result))
 				throw new ArgumentException(@"Symbol not compiled.", @"member");
 
 			return result;
@@ -300,7 +292,7 @@ namespace Mosa.Runtime.Linker
 		/// <returns><c>true</c> if the symbol name is already used; <c>false</c> otherwise.</returns>
 		public bool HasSymbol(string symbolName)
 		{
-			return this.symbols.ContainsKey(symbolName);
+			return symbols.ContainsKey(symbolName);
 		}
 
 		/// <summary>
@@ -319,12 +311,11 @@ namespace Mosa.Runtime.Linker
 		/// </returns>
 		public virtual long Link(LinkType linkType, RuntimeMethod method, int methodOffset, int methodRelativeBase, string targetSymbolName, IntPtr offset)
 		{
-			Debug.Assert(null != targetSymbolName, @"Symbol can't be null.");
-			if (null == targetSymbolName)
+			Debug.Assert(targetSymbolName != null, @"Symbol can't be null.");
+			if (targetSymbolName == null)
 				throw new ArgumentNullException(@"symbol");
 
-			string symbolName = method.ToString();
-			return this.Link(linkType, symbolName, methodOffset, methodRelativeBase, targetSymbolName, offset);
+			return Link(linkType, method.ToString(), methodOffset, methodRelativeBase, targetSymbolName, offset);
 		}
 
 		/// <summary>
@@ -343,15 +334,15 @@ namespace Mosa.Runtime.Linker
 		/// </returns>
 		public virtual long Link(LinkType linkType, string symbolName, int methodOffset, int methodRelativeBase, string targetSymbol, IntPtr offset)
 		{
-			Debug.Assert(null != symbolName, @"Symbol can't be null.");
-			if (null == symbolName)
+			Debug.Assert(symbolName != null, @"Symbol can't be null.");
+			if (symbolName == null)
 				throw new ArgumentNullException(@"symbol");
 
 			List<LinkRequest> list;
 			if (!this.linkRequests.TryGetValue(targetSymbol, out list))
 			{
 				list = new List<LinkRequest>();
-				this.linkRequests.Add(targetSymbol, list);
+				linkRequests.Add(targetSymbol, list);
 			}
 
 			list.Add(new LinkRequest(linkType, symbolName, methodOffset, methodRelativeBase, targetSymbol, offset));
@@ -363,10 +354,7 @@ namespace Mosa.Runtime.Linker
 
 		public AssemblyCompiler Compiler
 		{
-			get
-			{
-				return this.compiler;
-			}
+			get { return this.compiler; }
 		}
 
 		#region Internals

@@ -21,7 +21,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 					return (s_fld == value);
 				}
 			}
-		" + Code.ObjectClassDefinition;
+		" + Code.AllTestCode;
 
 		private delegate bool B_B(bool value);
 		private delegate bool B_C([MarshalAs(UnmanagedType.U2)]char value);

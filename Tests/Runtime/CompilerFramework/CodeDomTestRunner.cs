@@ -66,7 +66,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public CodeDomTestRunner()
 		{
-			this.language = "C#";
+			language = "C#";
 		}
 
 		#endregion // Construction
@@ -79,13 +79,13 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		/// <value>The language.</value>
 		public string Language
 		{
-			get { return this.language; }
+			get { return language; }
 			set
 			{
-				if (this.language != value)
+				if (language != value)
 				{
-					this.language = value;
-					this.NeedCompile = true;
+					language = value;
+					NeedCompile = true;
 				}
 			}
 		}
@@ -96,13 +96,13 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		/// <value>The code filename.</value>
 		public string CodeFilename
 		{
-			get { return this.codeFilename; }
+			get { return codeFilename; }
 			set
 			{
-				if (this.codeFilename != value)
+				if (codeFilename != value)
 				{
-					this.codeFilename = value;
-					this.NeedCompile = true;
+					codeFilename = value;
+					NeedCompile = true;
 				}
 			}
 		}
@@ -113,13 +113,13 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		/// <value>The code source.</value>
 		public string CodeSource
 		{
-			get { return this.codeSource; }
+			get { return codeSource; }
 			set
 			{
-				if (this.codeSource != value)
+				if (codeSource != value)
 				{
-					this.codeSource = value;
-					this.NeedCompile = true;
+					codeSource = value;
+					NeedCompile = true;
 				}
 			}
 		}
@@ -130,13 +130,13 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		/// <value><c>true</c> if unsafe code is used in the test; otherwise, <c>false</c>.</value>
 		public bool UnsafeCode
 		{
-			get { return this.unsafeCode; }
+			get { return unsafeCode; }
 			set
 			{
-				if (this.unsafeCode != value)
+				if (unsafeCode != value)
 				{
-					this.unsafeCode = value;
-					this.NeedCompile = true;
+					unsafeCode = value;
+					NeedCompile = true;
 				}
 			}
 		}
@@ -171,8 +171,8 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		protected override string CompileTestCode<TDelegate>(string ns, string type, string method)
 		{
 			CodeDomProvider provider;
-			Console.WriteLine("Executing {0} compiler...", this.Language);
-			if (!providerCache.TryGetValue(this.language, out provider))
+			Console.WriteLine("Executing {0} compiler...", Language);
+			if (!providerCache.TryGetValue(language, out provider))
 				provider = CodeDomProvider.CreateProvider(Language);
 			if (provider == null)
 				throw new NotSupportedException("The language '" + Language + "' is not supported on this machine.");
@@ -181,20 +181,21 @@ namespace Test.Mosa.Runtime.CompilerFramework
 			temps.AddFile(filename, false);
 
 			CompilerResults compileResults;
-			CompilerParameters parameters = new CompilerParameters(this.References, filename);
+			CompilerParameters parameters = new CompilerParameters(References, filename);
 			parameters.CompilerOptions = "/optimize-";
 
-			if (this.unsafeCode)
+			unsafeCode = true;
+			if (unsafeCode)
 			{
-				if (this.Language == "C#")
+				if (Language == "C#")
 					parameters.CompilerOptions = parameters.CompilerOptions + " /unsafe+";
 				else
 					throw new NotSupportedException();
 			}
 
-			if (this.DoNotReferenceMsCorlib)
+			if (DoNotReferenceMsCorlib)
 			{
-				if (this.Language == "C#")
+				if (Language == "C#")
 					parameters.CompilerOptions = parameters.CompilerOptions + " /nostdlib";
 				else
 					throw new NotSupportedException();
@@ -202,12 +203,11 @@ namespace Test.Mosa.Runtime.CompilerFramework
 
 			parameters.GenerateInMemory = false;
 
+			Console.WriteLine("Compiler Options: {0}", parameters.CompilerOptions);
+
 			if (CodeSource != null)
 			{
-				//Console.Write("From Source: ");
-				//Console.WriteLine(new string('-', 40 - 13));
-				//Console.WriteLine(codeSource);
-				//Console.WriteLine(new string('-', 40));
+				Console.WriteLine("Code: {0}", CodeSource);
 				compileResults = provider.CompileAssemblyFromSource(
 					parameters,
 					codeSource

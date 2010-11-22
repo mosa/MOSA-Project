@@ -57,7 +57,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 
 			codeBuilder.Append(TestCodeFooter);
 
-			codeBuilder.Append(Code.ObjectClassDefinition);
+			codeBuilder.Append(Code.AllTestCode);
 
 			codeBuilder
 				.Replace(@"[[firsttype]]", FirstType)

@@ -38,7 +38,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CIL
 					}
 				}
 			"
-			+ Code.ObjectClassDefinition;
+			+ Code.AllTestCode;
 		}
 
 		[Test]

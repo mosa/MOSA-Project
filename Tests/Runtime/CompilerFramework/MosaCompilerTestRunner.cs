@@ -60,7 +60,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public MosaCompilerTestRunner()
 		{
-			this.references = new string[0];
+			references = new string[0];
 		}
 
 		#endregion // Construction
@@ -73,8 +73,8 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		/// <value><c>true</c> if a compilation is needed; otherwise, <c>false</c>.</value>
 		protected bool NeedCompile
 		{
-			get { return this.needCompile; }
-			set { this.needCompile = value; }
+			get { return needCompile; }
+			set { needCompile = value; }
 		}
 
 		/// <summary>
@@ -83,13 +83,13 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		/// <value>The references.</value>
 		public string[] References
 		{
-			get { return this.references; }
+			get { return references; }
 			set
 			{
-				if (this.references != value)
+				if (references != value)
 				{
-					this.references = value;
-					this.needCompile = true;
+					references = value;
+					needCompile = true;
 				}
 			}
 		}
@@ -119,12 +119,12 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		public object Run<TDelegate>(string ns, string type, string method, params object[] parameters)
 		{
 			// Do we need to compile the code?
-			if (this.needCompile)
+			if (needCompile)
 			{
-				this.assembly = this.CompileTestCode<TDelegate>(ns, type, method);
+				assembly = CompileTestCode<TDelegate>(ns, type, method);
 				Console.WriteLine("Executing MOSA compiler...");
-				RunMosaCompiler(this.assembly);
-				this.needCompile = false;
+				RunMosaCompiler(assembly);
+				needCompile = false;
 			}
 
 			// Find the test method to execute
@@ -191,13 +191,12 @@ namespace Test.Mosa.Runtime.CompilerFramework
 			files.Add(assemblyFile);
 
 			IAssemblyLoader assemblyLoader = new AssemblyLoader();
-			assemblyLoader.InitializePrivatePaths(files);
-			assemblyLoader.AppendPrivatePath(typeof(global::Mosa.Runtime.Runtime).Module.FullyQualifiedName);
+			//assemblyLoader.InitializePrivatePaths(files);
+			//assemblyLoader.AppendPrivatePath(typeof(global::Mosa.Vm.Runtime).Module.FullyQualifiedName);
 
 			typeSystem = new DefaultTypeSystem(assemblyLoader);
 			typeSystem.LoadModules(files);
-
-			typeSystem.ResolveModuleReference(typeof(global::Mosa.Runtime.Runtime).Module.FullyQualifiedName);
+			//typeSystem.ResolveModuleReference(typeof(global::Mosa.Vm.Runtime).Module.FullyQualifiedName);
 
 			TestCaseAssemblyCompiler.Compile(typeSystem, assemblyLoader);
 		}

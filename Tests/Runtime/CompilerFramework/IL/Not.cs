@@ -33,7 +33,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 					{
 						return expect == (~a);
 					}
-				}" + Code.ObjectClassDefinition;
+				}" + Code.AllTestCode;
 		}
 
 		#region C

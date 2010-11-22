@@ -45,7 +45,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 					{ 
 						return expect == ((short)a); 
 					} 
-				}" + Code.ObjectClassDefinition;
+				}" + Code.AllTestCode;
 			Assert.IsTrue((bool)Run<Native_ConvI2_I1>("", "Test", "ConvI2_I1", ((short)a), a));
 		}
 
@@ -70,7 +70,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 					{ 
 						return expect == ((short)a); 
 					} 
-				}" + Code.ObjectClassDefinition;
+				}" + Code.AllTestCode;
 			Assert.IsTrue((bool)Run<Native_ConvI2_I2>("", "Test", "ConvI2_I2", a, a));
 		}
 
@@ -95,7 +95,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 					{ 
 						return expect == ((short)a); 
 					} 
-				}" + Code.ObjectClassDefinition;
+				}" + Code.AllTestCode;
 			Assert.IsTrue((bool)Run<Native_ConvI2_I4>("", "Test", "ConvI2_I4", ((short)a), a));
 		}
 
@@ -120,7 +120,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 					{ 
 						return expect == ((short)a); 
 					} 
-				}" + Code.ObjectClassDefinition;
+				}" + Code.AllTestCode;
 			Assert.IsTrue((bool)Run<Native_ConvI2_I8>("", "Test", "ConvI2_I8", ((short)a), a));
 		}
 
@@ -146,7 +146,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 					{ 
 						return expect == ((short)a); 
 					} 
-				}" + Code.ObjectClassDefinition;
+				}" + Code.AllTestCode;
 			Assert.IsTrue((bool)Run<Native_ConvI2_R4>("", "Test", "ConvI2_R4", ((short)a), a));
 		}
 
@@ -171,7 +171,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 					{ 
 						return expect == ((short)a); 
 					} 
-				}" + Code.ObjectClassDefinition;
+				}" + Code.AllTestCode;
 			Assert.IsTrue((bool)Run<Native_ConvI2_R8>("", "Test", "ConvI2_R8", ((short)a), a));
 		}
 	}

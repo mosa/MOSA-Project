@@ -76,7 +76,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CIL
 					return (d.int32 == 49);
 				}
 			}
-		" + Code.ObjectClassDefinition;
+		" + Code.AllTestCode;
 
 		public delegate bool TestCodeDelegate();
 

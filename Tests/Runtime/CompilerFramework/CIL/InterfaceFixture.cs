@@ -64,7 +64,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CIL
 					}
 				}
 			"
-			+ Code.ObjectClassDefinition;
+			+ Code.AllTestCode;
 		}
 
 		private delegate bool B_V();

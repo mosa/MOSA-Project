@@ -43,7 +43,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 
 					return count;
 				}
-			}" + Code.ObjectClassDefinition;
+			}" + Code.AllTestCode;
 			Assert.AreEqual<int>(limit - start, (int)Run<I4_I4>("", "Test", "WhileIncI4", start, limit));
 		}
 
@@ -72,7 +72,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 
 					return count;
 				}
-			}" + Code.ObjectClassDefinition;
+			}" + Code.AllTestCode;
 			Assert.AreEqual<int>(start - limit, (int)Run<I4_I4>("", "Test", "WhileDecI4", start, limit));
 		}
 
@@ -101,7 +101,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 
 					return called;
 				}
-			}" + Code.ObjectClassDefinition;
+			}" + Code.AllTestCode;
 
 			Assert.IsFalse((bool)Run<BV>("", "Test", "WhileFalse", null));
 		}
@@ -146,7 +146,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 
 					return !called && start == limit && count == 20;
 				}
-			}" + Code.ObjectClassDefinition;
+			}" + Code.AllTestCode;
 			Assert.IsTrue((bool)Run<BV>("", "Test", "WhileContinueBreak", null));
 		}
 
@@ -174,7 +174,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 					
 					return count;
 				}
-			}" + Code.ObjectClassDefinition;
+			}" + Code.AllTestCode;
 			Assert.AreEqual<int>((256 + (int)limit) - start, (int)Run<U1_U1>("", "Test", "WhileOverflowIncI1", start, limit));
 		}
 
@@ -204,7 +204,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 					
 					return count;
 				}
-			}" + Code.ObjectClassDefinition;
+			}" + Code.AllTestCode;
+
 			Assert.AreEqual<int>((256 + (int)start) - limit, (int)Run<U1_U1>("", "Test", "WhileOverflowDecI1", start, limit));
 		}
 
@@ -251,7 +252,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 
 					return count;
 				}
-			}" + Code.ObjectClassDefinition;
+			}" + Code.AllTestCode;
 
 			int count = limit - start;
 			Assert.AreEqual<int>((int)((count * count) - ((count / 2.0f) * count) + (count / 2.0f)), (int)Run<I4_I4_I4_I4>("", "Test", "WhileNestedEqualsI4", initialStatus, wantedStatus, start, limit));

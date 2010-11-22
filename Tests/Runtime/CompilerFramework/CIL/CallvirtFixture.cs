@@ -51,7 +51,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CIL
 					return this.Test() + base.Test();
 				}
 			}
-		" + Code.ObjectClassDefinition;
+		" + Code.AllTestCode;
 
 		public delegate int TestCodeDelegate();
 

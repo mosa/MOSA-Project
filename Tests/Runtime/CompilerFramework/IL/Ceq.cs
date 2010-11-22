@@ -29,7 +29,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 					return (a == b);
 				}
 			}
-		" + Code.ObjectClassDefinition;
+		" + Code.AllTestCode;
 
 		private static string CreateConstantTestCode(string typeIn, string constLeft, string constRight)
 		{
@@ -42,7 +42,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 						{
 							return (" + constLeft + @" == x);
 						}
-					}" + Code.ObjectClassDefinition;
+					}" + Code.AllTestCode;
 			}
 			else if (String.IsNullOrEmpty(constLeft))
 			{
@@ -53,7 +53,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 						{
 							return (x == " + constRight + @");
 						}
-					}" + Code.ObjectClassDefinition;
+					}" + Code.AllTestCode;
 			}
 			else
 			{

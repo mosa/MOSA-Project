@@ -1870,7 +1870,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 					{
 						// Get the intrinsic attribute
 						VmCallAttribute vmCallAttribute = (VmCallAttribute)ra.GetAttribute();
-						this.ReplaceWithVmCall(context, vmCallAttribute.VmCall);
+						ReplaceWithVmCall(context, vmCallAttribute.VmCall);
 						return true;
 					}
 				}
@@ -1886,7 +1886,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <param name="internalCallTarget">The internal call target.</param>
 		private void ReplaceWithVmCall(Context context, VmCall internalCallTarget)
 		{
-			RuntimeType rt = typeSystem.GetType(@"Mosa.Runtime.Runtime");
+			RuntimeType rt = typeSystem.GetType(@"Mosa.Vm.Runtime");
 			Debug.Assert(rt != null, "@rt / @callTarget=" + internalCallTarget.ToString());
 
 			RuntimeMethod callTarget = rt.FindMethod(internalCallTarget.ToString());

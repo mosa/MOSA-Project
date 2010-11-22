@@ -38,6 +38,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.Compiler
 					return allocatedObject.dataField;
 				}                
 			}
-		" + Code.ObjectClassDefinition;
+		" + Code.AllTestCode;
 	}
 }

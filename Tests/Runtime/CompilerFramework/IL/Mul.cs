@@ -34,7 +34,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 					{
 						return expect == (a * b);
 					}
-				}" + Code.ObjectClassDefinition;
+				}" + Code.AllTestCode;
 		}
 
 		private static string CreateConstantTestCode(string name, string typeIn, string typeOut, string constLeft, string constRight)
@@ -48,7 +48,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 						{
 							return expect == (" + constLeft + @" * x);
 						}
-					}" + Code.ObjectClassDefinition;
+					}" + Code.AllTestCode;
 			}
 			else if (String.IsNullOrEmpty(constLeft))
 			{
@@ -59,7 +59,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 						{
 							return expect == (x * " + constRight + @");
 						}
-					}" + Code.ObjectClassDefinition;
+					}" + Code.AllTestCode;
 			}
 			else
 			{
@@ -890,7 +890,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		{
 			CodeSource = CreateConstantTestCode("MulConstantU8Left", "ulong", "ulong", a.ToString(), null);
 			// left side constant
-			CodeSource = "static class Test { static bool MulConstantU8Left(ulong expect, ulong b) { return expect == (" + a.ToString() + " * b); } }" + Code.ObjectClassDefinition;
+			CodeSource = "static class Test { static bool MulConstantU8Left(ulong expect, ulong b) { return expect == (" + a.ToString() + " * b); } }" + Code.AllTestCode;
 			Assert.IsTrue((bool)Run<U8_Constant_U8>("", "Test", "MulConstantU8Left", (ulong)(a * b), b));
 		}
 		#endregion

@@ -106,8 +106,8 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public TestFixtureBase()
 		{
-			this.references = new string[0];
-			this.language = "C#";
+			references = new string[0];
+			language = "C#";
 		}
 
 		/// <summary>
@@ -116,8 +116,8 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		/// <value><c>true</c> if a compilation is needed; otherwise, <c>false</c>.</value>
 		protected bool NeedCompile
 		{
-			get { return this.needCompile; }
-			set { this.needCompile = value; }
+			get { return needCompile; }
+			set { needCompile = value; }
 		}
 
 		/// <summary>
@@ -126,13 +126,13 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		/// <value>The references.</value>
 		public string[] References
 		{
-			get { return this.references; }
+			get { return references; }
 			set
 			{
-				if (this.references != value)
+				if (references != value)
 				{
-					this.references = value;
-					this.needCompile = true;
+					references = value;
+					needCompile = true;
 				}
 			}
 		}
@@ -143,13 +143,13 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		/// <value>The language.</value>
 		public string Language
 		{
-			get { return this.language; }
+			get { return language; }
 			set
 			{
-				if (this.language != value)
+				if (language != value)
 				{
-					this.language = value;
-					this.NeedCompile = true;
+					language = value;
+					NeedCompile = true;
 				}
 			}
 		}
@@ -160,13 +160,13 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		/// <value>The code source.</value>
 		public string CodeSource
 		{
-			get { return this.codeSource; }
+			get { return codeSource; }
 			set
 			{
-				if (this.codeSource != value)
+				if (codeSource != value)
 				{
-					this.codeSource = value;
-					this.NeedCompile = true;
+					codeSource = value;
+					NeedCompile = true;
 				}
 			}
 		}
@@ -177,22 +177,22 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		/// <value><c>true</c> if unsafe code is used in the test; otherwise, <c>false</c>.</value>
 		public bool UnsafeCode
 		{
-			get { return this.unsafeCode; }
+			get { return unsafeCode; }
 			set
 			{
-				if (this.unsafeCode != value)
+				if (unsafeCode != value)
 				{
-					this.unsafeCode = value;
-					this.NeedCompile = true;
+					unsafeCode = value;
+					NeedCompile = true;
 				}
 			}
 		}
 
 		public T Run<T>(string type, string method, params object[] parameters)
 		{
-			this.CompileTestCodeIfNecessary();
+			CompileTestCodeIfNecessary();
 
-			Type delegateType = this.LocateDelegateInCompiledAssembly(type, method);
+			Type delegateType = LocateDelegateInCompiledAssembly(type, method);
 
 			IntPtr address = FindTestMethod(String.Empty, type, method);
 
@@ -221,12 +221,12 @@ namespace Test.Mosa.Runtime.CompilerFramework
 
 		private Type GetDelegateType(string delegatename)
 		{
-			if (this.loadedAssembly == null)
+			if (loadedAssembly == null)
 			{
-				this.loadedAssembly = Assembly.LoadFile(this.assembly);
+				loadedAssembly = Assembly.LoadFile(assembly);
 			}
 
-			return this.loadedAssembly.GetType(delegatename, false);
+			return loadedAssembly.GetType(delegatename, false);
 		}
 
 		private static string BuildDelegateName(string type, string method)
@@ -257,11 +257,11 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		protected void CompileTestCodeIfNecessary()
 		{
 			// Do we need to compile the code?
-			if (this.needCompile)
+			if (needCompile)
 			{
-				this.CompileTestCode();
+				CompileTestCode();
 
-				this.needCompile = false;
+				needCompile = false;
 			}
 		}
 
@@ -293,48 +293,44 @@ namespace Test.Mosa.Runtime.CompilerFramework
 
 		protected void CompileTestCode()
 		{
-			if (this.loadedAssembly != null)
+			if (loadedAssembly != null)
 			{
-				this.loadedAssembly = null;
+				loadedAssembly = null;
 			}
 
-			this.assembly = this.RunCodeDomCompiler();
+			assembly = RunCodeDomCompiler();
 
 			Console.WriteLine("Executing MOSA compiler...");
-			RunMosaCompiler(this.assembly);
+			RunMosaCompiler(assembly);
 		}
 
 		private string RunCodeDomCompiler()
 		{
 			CodeDomProvider provider;
-			Console.WriteLine("Executing {0} compiler...", this.Language);
-			if (!providerCache.TryGetValue(this.language, out provider))
-				provider = CodeDomProvider.CreateProvider(this.Language);
+			Console.WriteLine("Executing {0} compiler...", Language);
+			if (!providerCache.TryGetValue(language, out provider))
+				provider = CodeDomProvider.CreateProvider(Language);
 			if (provider == null)
-				throw new NotSupportedException("The language '" + this.Language + "' is not supported on this machine.");
+				throw new NotSupportedException("The language '" + Language + "' is not supported on this machine.");
 
 			string filename = Path.Combine(TempDirectory, Path.ChangeExtension(Path.GetRandomFileName(), "dll"));
 			temps.AddFile(filename, false);
 
 			CompilerResults compileResults;
-			CompilerParameters parameters = new CompilerParameters(this.References, filename, false);
+			CompilerParameters parameters = new CompilerParameters(References, filename, false);
 			parameters.CompilerOptions = "/optimize-";
 
-			if (this.unsafeCode)
+			if (unsafeCode)
 			{
-				if (this.Language == "C#")
+				if (Language == "C#")
 					parameters.CompilerOptions = parameters.CompilerOptions + " /unsafe+";
 				else
 					throw new NotSupportedException();
 			}
 			parameters.GenerateInMemory = false;
-			if (this.codeSource != null)
+			if (codeSource != null)
 			{
-				//Console.Write("From Source: ");
-				//Console.WriteLine(new string('-', 40 - 13));
-				//Console.WriteLine(this.codeSource);
-				//Console.WriteLine(new string('-', 40));
-				compileResults = provider.CompileAssemblyFromSource(parameters, this.codeSource);
+				compileResults = provider.CompileAssemblyFromSource(parameters, codeSource);
 			}
 			else
 				throw new NotSupportedException();
@@ -359,13 +355,12 @@ namespace Test.Mosa.Runtime.CompilerFramework
 			files.Add(assemblyFile);
 
 			IAssemblyLoader assemblyLoader = new AssemblyLoader();
-			assemblyLoader.InitializePrivatePaths(files);
-			assemblyLoader.AppendPrivatePath(typeof(global::Mosa.Runtime.Runtime).Module.FullyQualifiedName);
+			//assemblyLoader.InitializePrivatePaths(files);
+			//assemblyLoader.AppendPrivatePath(typeof(global::Mosa.Vm.Runtime).Module.FullyQualifiedName);
 
 			typeSystem = new DefaultTypeSystem(assemblyLoader);
 			typeSystem.LoadModules(files);
-
-			typeSystem.ResolveModuleReference(typeof(global::Mosa.Runtime.Runtime).Module.FullyQualifiedName);
+			//typeSystem.ResolveModuleReference(typeof(global::Mosa.Runtime.Runtime).Module.FullyQualifiedName);
 
 			TestCaseAssemblyCompiler.Compile(typeSystem, assemblyLoader);
 		}
@@ -373,7 +368,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		protected string CreateMarshalAttribute(string prefix, string typeName)
 		{
 			string result = String.Empty;
-			string marshalDirective = this.GetMarshalDirective(typeName);
+			string marshalDirective = GetMarshalDirective(typeName);
 			if (marshalDirective != null)
 			{
 				result = @"[" + prefix + marshalDirective + @"]";
