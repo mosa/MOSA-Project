@@ -37,8 +37,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 
 		private void SetTestCode()
 		{
-			string marshalFirstType = this.CreateMarshalAttribute(String.Empty, FirstType);
-
 			StringBuilder codeBuilder = new StringBuilder();
 			codeBuilder.Append(TestCodeHeader);
 
@@ -59,8 +57,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 			codeBuilder.Append(Code.AllTestCode);
 
 			codeBuilder
-				.Replace(@"[[firsttype]]", FirstType)
-				.Replace(@"[[marshal-firsttype]]", marshalFirstType);
+				.Replace(@"[[firsttype]]", FirstType);
 
 			CodeSource = codeBuilder.ToString();
 		}
@@ -116,8 +113,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		";
 
 		private const string TestCodeNewarr = @"
-				public delegate bool R_NewarrTest();
-
 				public static bool NewarrTest()
 				{
 					[[firsttype]][] arr = new [[firsttype]][0];
@@ -126,8 +121,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 			";
 
 		private const string TestCodeLdlen = @"
-				public delegate bool R_LdlenTest(int length);
-
 				public static bool LdlenTest(int length)
 				{
 					[[firsttype]][] arr = new [[firsttype]][length];
@@ -136,8 +129,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 			";
 
 		private const string TestCodeLdelem = @"
-				public delegate bool R_LdelemTest(int index, [[marshal-firsttype]][[firsttype]] value);
-
 				public static bool LdelemTest(int index, [[firsttype]] value)
 				{
 					[[firsttype]][] arr = new [[firsttype]][index + 1];
@@ -147,8 +138,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 			";
 
 		private const string TestCodeStelem = @"
-				public delegate bool R_StelemTest(int index, [[marshal-firsttype]][[firsttype]] value);
-
 				public static bool StelemTest(int index, [[firsttype]] value)
 				{
 					[[firsttype]][] arr = new [[firsttype]][index + 1];
@@ -158,8 +147,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 			";
 
 		private const string TestCodeLdelema = @"
-				public delegate bool R_LdelemaTest(int index, [[marshal-firsttype]][[firsttype]] value);
-
 				public static bool LdelemaTest(int index, [[firsttype]] value)
 				{
 					[[firsttype]][] arr = new [[firsttype]][index + 1];

@@ -62,9 +62,9 @@ namespace Mosa.Runtime.Linker
 		/// </summary>
 		protected AssemblyLinkerStageBase()
 		{
-			this.baseAddress = 0x00400000; // Use the Win32 default for now, FIXME
-			this.linkRequests = new Dictionary<string, List<LinkRequest>>();
-			this.symbols = new Dictionary<string, LinkerSymbol>();
+			baseAddress = 0x00400000; // Use the Win32 default for now, FIXME
+			linkRequests = new Dictionary<string, List<LinkRequest>>();
+			symbols = new Dictionary<string, LinkerSymbol>();
 		}
 
 		#endregion // Construction
@@ -88,7 +88,7 @@ namespace Mosa.Runtime.Linker
 		{
 			long address;
 
-			AddVmCalls(this.symbols);
+			AddVmCalls(symbols);
 
 			// Check if we have unresolved requests and try to link them
 			List<string> members = new List<string>(linkRequests.Keys);
@@ -98,18 +98,18 @@ namespace Mosa.Runtime.Linker
 				if (IsResolved(member, out address))
 				{
 					// Yes, patch up the method
-					List<LinkRequest> link = this.linkRequests[member];
+					List<LinkRequest> link = linkRequests[member];
 					PatchRequests(address, link);
-					this.linkRequests.Remove(member);
+					linkRequests.Remove(member);
 				}
 			}
 
 			Debug.Assert(linkRequests.Count == 0, @"AssemblyLinker has found unresolved symbols.");
-			if (this.linkRequests.Count != 0)
+			if (linkRequests.Count != 0)
 			{
 				StringBuilder sb = new StringBuilder();
 				sb.AppendLine(@"Unresolved symbols:");
-				foreach (string member in this.linkRequests.Keys)
+				foreach (string member in linkRequests.Keys)
 				{
 					sb.AppendFormat("\t{0}\r\n", member);
 				}
@@ -174,8 +174,8 @@ namespace Mosa.Runtime.Linker
 		/// <value>The output file.</value>
 		public string OutputFile
 		{
-			get { return this.outputFile; }
-			set { this.outputFile = value; }
+			get { return outputFile; }
+			set { outputFile = value; }
 		}
 
 		/// <summary>
@@ -202,7 +202,7 @@ namespace Mosa.Runtime.Linker
 		/// <value>The symbol collection.</value>
 		public ICollection<LinkerSymbol> Symbols
 		{
-			get { return this.symbols.Values; }
+			get { return symbols.Values; }
 		}
 
 		/// <summary>
@@ -339,7 +339,7 @@ namespace Mosa.Runtime.Linker
 				throw new ArgumentNullException(@"symbol");
 
 			List<LinkRequest> list;
-			if (!this.linkRequests.TryGetValue(targetSymbol, out list))
+			if (!linkRequests.TryGetValue(targetSymbol, out list))
 			{
 				list = new List<LinkRequest>();
 				linkRequests.Add(targetSymbol, list);
@@ -354,7 +354,7 @@ namespace Mosa.Runtime.Linker
 
 		public AssemblyCompiler Compiler
 		{
-			get { return this.compiler; }
+			get { return compiler; }
 		}
 
 		#region Internals
@@ -371,7 +371,7 @@ namespace Mosa.Runtime.Linker
 		{
 			virtualAddress = 0;
 			LinkerSymbol linkerSymbol;
-			if (this.symbols.TryGetValue(symbol, out linkerSymbol))
+			if (symbols.TryGetValue(symbol, out linkerSymbol))
 			{
 				virtualAddress = linkerSymbol.VirtualAddress.ToInt64();
 			}

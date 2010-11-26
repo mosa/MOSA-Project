@@ -18,9 +18,6 @@ using MbUnit.Framework;
 
 namespace Test.Mosa.Runtime.CompilerFramework.IL
 {
-	/// <summary>
-	/// 
-	/// </summary>
 	[TestFixture]
 	public class NotFixture : CodeDomTestRunner
 	{
@@ -38,12 +35,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 
 		#region C
 
-		delegate bool I4_C(int expect, [MarshalAs(UnmanagedType.U2)]char a);
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
 		[Row(0)]
 		[Row(1)]
 		[Row(2)]
@@ -56,22 +47,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void NotC(char a)
 		{
 			CodeSource = CreateTestCode("NotC", "char", "int");
-			Assert.IsTrue((bool)Run<I4_C>("", "Test", "NotC", (int)~a, a));
+			Assert.IsTrue(Run<bool>("", "Test", "NotC", (int)~a, a));
 		}
 		#endregion
 
 		#region I1
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="expect"></param>
-		/// <param name="a"></param>
-		/// <returns></returns>
-		delegate bool I4_I1(sbyte expect, sbyte a);
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
+		
 		[Row(0)]
 		[Row(1)]
 		[Row(2)]
@@ -92,22 +73,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void NotI1(sbyte a)
 		{
 			CodeSource = CreateTestCode("NotI1", "sbyte", "int");
-			Assert.IsTrue((bool)Run<I4_I1>("", "Test", "NotI1", (sbyte)~a, (sbyte)a));
+			Assert.IsTrue(Run<bool>("", "Test", "NotI1", (sbyte)~a, (sbyte)a));
 		}
 		#endregion
 
 		#region U1
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="expect"></param>
-		/// <param name="a"></param>
-		/// <returns></returns>
-		delegate bool I_U1(int expect, byte a);
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
+		
 		[Row(0)]
 		[Row(1)]
 		[Row(2)]
@@ -121,22 +92,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void NotU1(byte a)
 		{
 			CodeSource = CreateTestCode("NotU1", "byte", "int");
-			Assert.IsTrue((bool)Run<I_U1>("", "Test", "NotU1", (~a), a));
+			Assert.IsTrue(Run<bool>("", "Test", "NotU1", (~a), a));
 		}
 		#endregion
 
 		#region I2
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="expect"></param>
-		/// <param name="a"></param>
-		/// <returns></returns>
-		delegate bool I4_I2(short expect, short a);
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
+		
 		[Row(0)]
 		[Row(1)]
 		[Row(2)]
@@ -157,22 +118,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void NotI2(short a)
 		{
 			CodeSource = CreateTestCode("NotI2", "short", "int");
-			Assert.IsTrue((bool)Run<I4_I2>("", "Test", "NotI2", (short)~a, (short)a));
+			Assert.IsTrue(Run<bool>("", "Test", "NotI2", (short)~a, (short)a));
 		}
 		#endregion
 
 		#region U2
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="expect"></param>
-		/// <param name="a"></param>
-		/// <returns></returns>
-		delegate bool I_U2(int expect, ushort a);
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
+	
 		[Row(0)]
 		[Row(1)]
 		[Row(2)]
@@ -186,22 +137,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void NotU2(ushort a)
 		{
 			CodeSource = CreateTestCode("NotU2", "ushort", "int");
-			Assert.IsTrue((bool)Run<I_U2>("", "Test", "NotU2", (~a), a));
+			Assert.IsTrue(Run<bool>("", "Test", "NotU2", (~a), a));
 		}
 		#endregion
 
 		#region I4
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="expect"></param>
-		/// <param name="a"></param>
-		/// <returns></returns>
-		delegate bool I4_I4(int expect, int a);
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
+		
 		[Row(0)]
 		[Row(1)]
 		[Row(2)]
@@ -222,22 +163,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void NotI4(int a)
 		{
 			CodeSource = CreateTestCode("NotI4", "int", "int");
-			Assert.IsTrue((bool)Run<I4_I4>("", "Test", "NotI4", (int)~a, (int)a));
+			Assert.IsTrue(Run<bool>("", "Test", "NotI4", (int)~a, (int)a));
 		}
 		#endregion
 
 		#region U4
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="expect"></param>
-		/// <param name="a"></param>
-		/// <returns></returns>
-		delegate bool U4_U4(uint expect, uint a);
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
+		
 		[Row(0)]
 		[Row(1)]
 		[Row(2)]
@@ -251,22 +182,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void NotU4(uint a)
 		{
 			CodeSource = CreateTestCode("NotU4", "uint", "uint");
-			Assert.IsTrue((bool)Run<U4_U4>("", "Test", "NotU4", ~(uint)a, a));
+			Assert.IsTrue(Run<bool>("", "Test", "NotU4", ~(uint)a, a));
 		}
 		#endregion
 
 		#region I8
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="expect"></param>
-		/// <param name="a"></param>
-		/// <returns></returns>
-		delegate bool I8_I8(long expect, long a);
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
+		
 		[Row(0)]
 		[Row(1)]
 		[Row(2)]
@@ -287,22 +208,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void NotI8(long a)
 		{
 			CodeSource = CreateTestCode("NotI8", "long", "long");
-			Assert.IsTrue((bool)Run<I8_I8>("", "Test", "NotI8", (long)~a, (long)a));
+			Assert.IsTrue(Run<bool>("", "Test", "NotI8", (long)~a, (long)a));
 		}
 		#endregion
 
 		#region U8
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="expect"></param>
-		/// <param name="a"></param>
-		/// <returns></returns>
-		delegate bool U8_U8(ulong expect, ulong a);
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
+	
 		[Row(0)]
 		[Row(1)]
 		[Row(2)]
@@ -316,7 +227,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void NotU8(ulong a)
 		{
 			CodeSource = CreateTestCode("NotU8", "ulong", "ulong");
-			Assert.IsTrue((bool)Run<U8_U8>("", "Test", "NotU8", ~(ulong)a, a));
+			Assert.IsTrue(Run<bool>("", "Test", "NotU8", ~(ulong)a, a));
 		}
 		#endregion
 	}

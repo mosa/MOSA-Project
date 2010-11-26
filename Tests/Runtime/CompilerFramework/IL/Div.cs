@@ -18,9 +18,6 @@ using MbUnit.Framework;
 
 namespace Test.Mosa.Runtime.CompilerFramework.IL
 {
-	/// <summary>
-	/// 
-	/// </summary>
 	[TestFixture]
 	public class Div : CodeDomTestRunner
 	{
@@ -109,19 +106,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		}
 
 		#region C
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="expect"></param>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
-		/// <returns></returns>
-		delegate bool C_C_C([MarshalAs(UnmanagedType.U2)]char expect, [MarshalAs(UnmanagedType.U2)]char a, [MarshalAs(UnmanagedType.U2)]char b);
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
+		
 		[Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
 		[Row(17, 128)]
 		[Row('a', 'Z')]
@@ -130,17 +115,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void DivC(char a, char b)
 		{
 			CodeSource = CreateTestCode("DivC", "char", "char");
-			Assert.IsTrue((bool)Run<C_C_C>("", "Test", "DivC", (char)(a / b), a, b));
+			Assert.IsTrue(Run<bool>("", "Test", "DivC", (char)(a / b), a, b));
 		}
 
-		delegate bool C_Constant_C(int expect, char x);
-		delegate int C_Constant_C_Return(int expect, [MarshalAs(UnmanagedType.U2)]char x);
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
 		//[Row(0, 'a')]
 		//[Row('-', '.')]
 		[Row('a', 'Z')]
@@ -148,14 +125,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void DivConstantCRight(char a, char b)
 		{
 			CodeSource = CreateConstantTestCodeWithReturn("DivConstantCRight", "char", "int", null, "'" + b.ToString() + "'");
-			Assert.AreEqual(a / b, Run<C_Constant_C_Return>("", "Test", "DivConstantCRight", (a / b), a));
+			Assert.AreEqual(a / b, Run<int>("", "Test", "DivConstantCRight", (a / b), a));
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
 		[Row('a', 0, ExpectedException = typeof(DivideByZeroException))]
 		[Row('-', '.')]
 		[Row((char)97, (char)90)]
@@ -163,24 +135,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void DivConstantCLeft(char a, char b)
 		{
 			CodeSource = CreateConstantTestCodeWithReturn("DivConstantCLeft", "char", "int", "'" + a.ToString() + "'", null);
-			Assert.AreEqual(a / b, Run<C_Constant_C_Return>("", "Test", "DivConstantCLeft", (a / b), (char)b));
+			Assert.AreEqual(a / b, Run<int>("", "Test", "DivConstantCLeft", (a / b), (char)b));
 		}
 		#endregion
 
 		#region I1
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="expect"></param>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
-		/// <returns></returns>
-		delegate bool I4_I1_I1(int expect, sbyte a, sbyte b);
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
+		
 		[Row(1, 2)]
 		[Row(23, 21)]
 		[Row(1, -2)]
@@ -237,16 +197,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void DivI1(sbyte a, sbyte b)
 		{
 			CodeSource = CreateTestCode("DivI1", "sbyte", "int");
-			Assert.IsTrue((bool)Run<I4_I1_I1>("", "Test", "DivI1", a / b, a, b));
+			Assert.IsTrue(Run<bool>("", "Test", "DivI1", a / b, a, b));
 		}
 
-		delegate bool I4_Constant_I1(int expect, sbyte x);
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
 		[Row(23, 21)]
 		[Row(2, -17)]
 		[Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
@@ -255,14 +208,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void DivConstantI1Right(sbyte a, sbyte b)
 		{
 			CodeSource = CreateConstantTestCode("DivConstantI1Right", "sbyte", "int", null, b.ToString());
-			Assert.IsTrue((bool)Run<I4_Constant_I1>("", "Test", "DivConstantI1Right", (a / b), a));
+			Assert.IsTrue(Run<bool>("", "Test", "DivConstantI1Right", (a / b), a));
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
 		[Row(23, 21)]
 		[Row(2, -17)]
 		[Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
@@ -271,24 +219,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void DivConstantI1Left(sbyte a, sbyte b)
 		{
 			CodeSource = CreateConstantTestCode("DivConstantI1Left", "sbyte", "int", a.ToString(), null);
-			Assert.IsTrue((bool)Run<I4_Constant_I1>("", "Test", "DivConstantI1Left", (a / b), b));
+			Assert.IsTrue(Run<bool>("", "Test", "DivConstantI1Left", (a / b), b));
 		}
 		#endregion
 
 		#region U1
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="expect"></param>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
-		/// <returns></returns>
-		delegate bool U4_U1_U1(uint expect, byte a, byte b);
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
+		
 		[Row(1, 2)]
 		[Row(23, 21)]
 		[Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
@@ -323,16 +259,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void DivU1(byte a, byte b)
 		{
 			CodeSource = CreateTestCode("DivU1", "byte", "uint");
-			Assert.IsTrue((bool)Run<U4_U1_U1>("", "Test", "DivU1", (uint)(a / b), a, b));
+			Assert.IsTrue(Run<bool>("", "Test", "DivU1", (uint)(a / b), a, b));
 		}
 
-		delegate bool U4_Constant_U1(uint expect, byte x);
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
 		[Row(23, 21)]
 		[Row(17, 1)]
 		[Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
@@ -341,14 +270,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void DivConstantU1Right(byte a, byte b)
 		{
 			CodeSource = CreateConstantTestCode("DivConstantU1Right", "byte", "uint", null, b.ToString());
-			Assert.IsTrue((bool)Run<U4_Constant_U1>("", "Test", "DivConstantU1Right", (uint)(a / b), a));
+			Assert.IsTrue(Run<bool>("", "Test", "DivConstantU1Right", (uint)(a / b), a));
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
 		[Row(23, 21)]
 		[Row(17, 1)]
 		[Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
@@ -357,24 +281,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void DivConstantU1Left(byte a, byte b)
 		{
 			CodeSource = CreateConstantTestCode("DivConstantU1Left", "byte", "uint", a.ToString(), null);
-			Assert.IsTrue((bool)Run<U4_Constant_U1>("", "Test", "DivConstantU1Left", (uint)(a / b), b));
+			Assert.IsTrue(Run<bool>("", "Test", "DivConstantU1Left", (uint)(a / b), b));
 		}
 		#endregion
 
 		#region I2
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="expect"></param>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
-		/// <returns></returns>
-		delegate bool I4_I2_I2(int expect, short a, short b);
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
+		
 		[Row(1, 2)]
 		[Row(23, 21)]
 		[Row(1, -2)]
@@ -431,16 +343,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void DivI2(short a, short b)
 		{
 			CodeSource = CreateTestCode("DivI2", "short", "int");
-			Assert.IsTrue((bool)Run<I4_I2_I2>("", "Test", "DivI2", a / b, a, b));
+			Assert.IsTrue(Run<bool>("", "Test", "DivI2", a / b, a, b));
 		}
 
-		delegate bool I4_Constant_I2(int expect, short x);
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
 		[Row(-23, 21)]
 		[Row(17, 1)]
 		[Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
@@ -449,14 +354,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void DivConstantI2Right(short a, short b)
 		{
 			CodeSource = CreateConstantTestCode("DivConstantI2Right", "short", "int", null, b.ToString());
-			Assert.IsTrue((bool)Run<I4_Constant_I2>("", "Test", "DivConstantI2Right", (a / b), a));
+			Assert.IsTrue(Run<bool>("", "Test", "DivConstantI2Right", (a / b), a));
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
 		[Row(-23, 21)]
 		[Row(17, 1)]
 		[Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
@@ -465,24 +365,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void DivConstantI2Left(short a, short b)
 		{
 			CodeSource = CreateConstantTestCode("DivConstantI2Left", "short", "int", a.ToString(), null);
-			Assert.IsTrue((bool)Run<I4_Constant_I2>("", "Test", "DivConstantI2Left", (a / b), b));
+			Assert.IsTrue(Run<bool>("", "Test", "DivConstantI2Left", (a / b), b));
 		}
 		#endregion
 
 		#region U2
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="expect"></param>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
-		/// <returns></returns>
-		delegate bool U4_U2_U2(uint expect, ushort a, ushort b);
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
+	
 		[Row(1, 2)]
 		[Row(23, 21)]
 		[Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
@@ -517,16 +405,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void DivU2(ushort a, ushort b)
 		{
 			CodeSource = CreateTestCode("DivU2", "ushort", "uint");
-			Assert.IsTrue((bool)Run<U4_U2_U2>("", "Test", "DivU2", (uint)(a / b), a, b));
+			Assert.IsTrue(Run<bool>("", "Test", "DivU2", (uint)(a / b), a, b));
 		}
 
-		delegate bool U4_Constant_U2(uint expect, ushort x);
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
 		[Row(23, 21)]
 		[Row(148, 23)]
 		[Row(17, 1)]
@@ -536,14 +417,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void DivConstantU2Right(ushort a, ushort b)
 		{
 			CodeSource = CreateConstantTestCode("DivConstantU2Right", "ushort", "uint", null, b.ToString());
-			Assert.IsTrue((bool)Run<U4_Constant_U2>("", "Test", "DivConstantU2Right", (uint)(a / b), a));
+			Assert.IsTrue(Run<bool>("", "Test", "DivConstantU2Right", (uint)(a / b), a));
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
 		[Row(23, 21)]
 		[Row(148, 23)]
 		[Row(17, 1)]
@@ -553,24 +429,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void DivConstantU2Left(ushort a, ushort b)
 		{
 			CodeSource = CreateConstantTestCode("DivConstantU2Left", "ushort", "uint", a.ToString(), null);
-			Assert.IsTrue((bool)Run<U4_Constant_U2>("", "Test", "DivConstantU2Left", (uint)(a / b), b));
+			Assert.IsTrue(Run<bool>("", "Test", "DivConstantU2Left", (uint)(a / b), b));
 		}
 		#endregion
 
 		#region I4
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="expect"></param>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
-		/// <returns></returns>
-		delegate bool I4_I4_I4(int expect, int a, int b);
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
+	
 		[Row(1, 2)]
 		/*[Row(23, 21)]
 		[Row(1, -2)]
@@ -627,16 +491,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void DivI4(int a, int b)
 		{
 			CodeSource = CreateTestCode("DivI4", "int", "int");
-			Assert.IsTrue((bool)Run<I4_I4_I4>("", "Test", "DivI4", (a / b), a, b));
+			Assert.IsTrue(Run<bool>("", "Test", "DivI4", (a / b), a, b));
 		}
 
-		delegate bool I4_Constant_I4(int expect, int x);
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
 		[Row(-23, 21)]
 		[Row(-23, 148)]
 		[Row(17, 1)]
@@ -646,14 +503,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void DivConstantI4Right(int a, int b)
 		{
 			CodeSource = CreateConstantTestCode("DivConstantI4Right", "int", "int", null, b.ToString());
-			Assert.IsTrue((bool)Run<I4_Constant_I4>("", "Test", "DivConstantI4Right", (a / b), a));
+			Assert.IsTrue(Run<bool>("", "Test", "DivConstantI4Right", (a / b), a));
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
 		[Row(-23, 21)]
 		[Row(-23, 148)]
 		[Row(17, 1)]
@@ -663,24 +515,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void DivConstantI4Left(int a, int b)
 		{
 			CodeSource = CreateConstantTestCode("DivConstantI4Left", "int", "int", a.ToString(), null);
-			Assert.IsTrue((bool)Run<I4_Constant_I4>("", "Test", "DivConstantI4Left", (a / b), b));
+			Assert.IsTrue(Run<bool>("", "Test", "DivConstantI4Left", (a / b), b));
 		}
 		#endregion
 
 		#region U4
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="expect"></param>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
-		/// <returns></returns>
-		delegate bool U4_U4_U4(uint expect, uint a, uint b);
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
+	
 		[Row(1, 2)]
 		[Row(23, 21)]
 		[Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
@@ -715,16 +555,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void DivU4(uint a, uint b)
 		{
 			CodeSource = CreateTestCode("DivU4", "uint", "uint");
-			Assert.IsTrue((bool)Run<U4_U4_U4>("", "Test", "DivU4", (uint)(a / b), a, b));
+			Assert.IsTrue(Run<bool>("", "Test", "DivU4", (uint)(a / b), a, b));
 		}
 
-		delegate bool U4_Constant_U4(uint expect, uint x);
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
 		[Row(1, 2)]
 		[Row(23, 21)]
 		[Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
@@ -734,14 +567,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void DivConstantU4Right(uint a, uint b)
 		{
 			CodeSource = CreateConstantTestCode("DivConstantU4Right", "uint", "uint", null, b.ToString());
-			Assert.IsTrue((bool)Run<U4_Constant_U4>("", "Test", "DivConstantU4Right", (uint)(a / b), a));
+			Assert.IsTrue(Run<bool>("", "Test", "DivConstantU4Right", (uint)(a / b), a));
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
 		[Row(1, 2)]
 		[Row(23, 21)]
 		[Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
@@ -751,33 +579,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void DivConstantU4Left(uint a, uint b)
 		{
 			CodeSource = CreateConstantTestCode("DivConstantU4Left", "uint", "uint", a.ToString(), null);
-			Assert.IsTrue((bool)Run<U4_Constant_U4>("", "Test", "DivConstantU4Left", (uint)(a / b), b));
+			Assert.IsTrue(Run<bool>("", "Test", "DivConstantU4Left", (uint)(a / b), b));
 		}
 		#endregion
 
 		#region U8
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="expect"></param>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
-		/// <returns></returns>
-		delegate bool U8_U8_U8(ulong expect, ulong a, ulong b);
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="expect"></param>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
-		/// <returns></returns>
-		delegate ulong U8_U8_U8_Return(ulong expect, ulong a, ulong b);
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
+	
 		[Row(1, 2)]
 		[Row(23, 21)]
 		[Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
@@ -812,24 +619,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void DivU8(ulong a, ulong b)
 		{
 			CodeSource = CreateTestCodeWithReturn("DivU8", "ulong", "ulong");
-			Assert.AreEqual((ulong)(a / b), Run<U8_U8_U8_Return>("", "Test", "DivU8", (ulong)(a / b), a, b));
+			Assert.AreEqual((ulong)(a / b), Run<ulong>("", "Test", "DivU8", (ulong)(a / b), a, b));
 		}
 		#endregion
 
 		#region I8
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="expect"></param>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
-		/// <returns></returns>
-		delegate bool I8_I8_I8(long expect, long a, long b);
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
+		
 		[Row(1, 2)]
 		[Row(23, 21)]
 		[Row(1, -2)]
@@ -886,16 +681,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void DivI8(long a, long b)
 		{
 			CodeSource = CreateTestCode("DivI8", "long", "long");
-			Assert.IsTrue((bool)Run<I8_I8_I8>("", "Test", "DivI8", (a / b), a, b));
+			Assert.IsTrue(Run<bool>("", "Test", "DivI8", (a / b), a, b));
 		}
 
-		delegate bool I8_Constant_I8(long expect, long x);
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
 		[Row(-23, 21)]
 		[Row(-23, 148)]
 		[Row(17, 1)]
@@ -905,14 +693,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void DivConstantI8Right(long a, long b)
 		{
 			CodeSource = CreateConstantTestCode("DivConstantI8Right", "long", "long", null, b.ToString());
-			Assert.IsTrue((bool)Run<I8_Constant_I8>("", "Test", "DivConstantI8Right", (a / b), a));
+			Assert.IsTrue(Run<bool>("", "Test", "DivConstantI8Right", (a / b), a));
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
 		[Row(-23, 21)]
 		[Row(-23, 148)]
 		[Row(17, 1)]
@@ -922,25 +705,13 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void DivConstantI8Left(long a, long b)
 		{
 			CodeSource = CreateConstantTestCode("DivConstantI8Left", "long", "long", a.ToString(), null);
-			Assert.IsTrue((bool)Run<I8_Constant_I8>("", "Test", "DivConstantI8Left", (a / b), b));
+			Assert.IsTrue(Run<bool>("", "Test", "DivConstantI8Left", (a / b), b));
 		}
 
 		#endregion
 
 		#region R4
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="expect"></param>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
-		/// <returns></returns>
-		delegate bool R4_R4_R4(float expect, float a, float b);
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
+		
 		[Row(1.0f, 2.0f)]
 		[Row(2.0f, 1.0f)]
 		[Row(1.0f, 2.5f)]
@@ -964,17 +735,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void DivR4(float a, float b)
 		{
 			CodeSource = CreateTestCode("DivR4", "float", "float");
-			Assert.IsTrue((bool)Run<R4_R4_R4>("", "Test", "DivR4", (a / b), a, b));
+			Assert.IsTrue(Run<bool>("", "Test", "DivR4", (a / b), a, b));
 		}
 
-		delegate bool R4_Constant_R4(float expect, float x);
-		delegate float R4_Constant_R4_Return(float expect, float x);
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
 		[Row(23f, 148.0016f)]
 		[Row(17.2f, 1f)]
 		[Row(0f, 0f)]
@@ -983,14 +746,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void DivConstantR4Right(float a, float b)
 		{
 			CodeSource = CreateConstantTestCode("DivConstantR4Right", "float", "float", null, b.ToString(System.Globalization.CultureInfo.InvariantCulture) + "f");
-			Assert.IsTrue((bool)Run<R4_Constant_R4>("", "Test", "DivConstantR4Right", (a / b), a));
+			Assert.IsTrue(Run<bool>("", "Test", "DivConstantR4Right", (a / b), a));
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
 		[Row(23f, 148.0016f)]
 		[Row(17.2f, 1f)]
 		[Row(0f, 0f)]
@@ -1000,24 +758,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		{
 
 			CodeSource = CreateConstantTestCode("DivConstantR4Left", "float", "float", a.ToString(System.Globalization.CultureInfo.InvariantCulture) + "f", null);
-			Assert.IsTrue((bool)Run<R4_Constant_R4>("", "Test", "DivConstantR4Left", (a / b), b));
+			Assert.IsTrue(Run<bool>("", "Test", "DivConstantR4Left", (a / b), b));
 		}
 		#endregion
 
 		#region R8
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="expect"></param>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
-		/// <returns></returns>
-		delegate bool R8_R8_R8(double expect, double a, double b);
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
+		
 		[Row(1.0, 2.0)]
 		[Row(2.0, 1.0)]
 		[Row(1.0, 2.5)]
@@ -1042,16 +788,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void DivR8(double a, double b)
 		{
 			CodeSource = CreateTestCode("DivR8", "double", "double");
-			Assert.IsTrue((bool)Run<R8_R8_R8>("", "Test", "DivR8", (a / b), a, b));
+			Assert.IsTrue(Run<bool>("", "Test", "DivR8", (a / b), a, b));
 		}
 
-		delegate bool R8_Constant_R8(double expect, double x);
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
 		[Row(23, 148.0016)]
 		[Row(17.2, 1.0)]
 		[Row(0.0, 0.0)]
@@ -1060,14 +799,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void DivConstantR8Right(double a, double b)
 		{
 			CodeSource = CreateConstantTestCode("DivConstantR8Right", "double", "double", null, b.ToString(System.Globalization.CultureInfo.InvariantCulture));
-			Assert.IsTrue((bool)Run<R8_Constant_R8>("", "Test", "DivConstantR8Right", (a / b), a));
+			Assert.IsTrue(Run<bool>("", "Test", "DivConstantR8Right", (a / b), a));
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
 		[Row(23, 148.0016)]
 		[Row(17.2, 1.0)]
 		[Row(0.0, 0.0)]
@@ -1076,7 +810,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void DivConstantR8Left(double a, double b)
 		{
 			CodeSource = CreateConstantTestCode("DivConstantR8Left", "double", "double", a.ToString(System.Globalization.CultureInfo.InvariantCulture), null);
-			Assert.IsTrue((bool)Run<R8_Constant_R8>("", "Test", "DivConstantR8Left", (a / b), b));
+			Assert.IsTrue(Run<bool>("", "Test", "DivConstantR8Left", (a / b), b));
 		}
 		#endregion
 	}

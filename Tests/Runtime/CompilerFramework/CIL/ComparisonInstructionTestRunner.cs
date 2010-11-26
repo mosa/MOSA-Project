@@ -38,8 +38,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 
 		private void SetTestCode()
 		{
-			string marshalFirstType = this.CreateMarshalAttribute(String.Empty, FirstType);
-
 			StringBuilder codeBuilder = new StringBuilder();
 
 			codeBuilder.Append(TestCodeHeader);
@@ -61,9 +59,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 
 			codeBuilder
 				.Replace(@"[[firsttype]]", FirstType)
-				.Replace(@"[[secondtype]]", FirstType)
-				.Replace(@"[[marshal-firsttype]]", marshalFirstType)
-				.Replace(@"[[marshal-secondtype]]", marshalFirstType);
+				.Replace(@"[[secondtype]]", FirstType);
 
 			CodeSource = codeBuilder.ToString();
 		}
@@ -119,8 +115,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		";
 
 		private const string TestCodeCeq = @"
-				public delegate bool R_CeqTest([[marshal-firsttype]][[firsttype]] first, [[marshal-secondtype]][[secondtype]] second);
-
 				public static bool CeqTest([[firsttype]] first, [[secondtype]] second)
 				{
 					return (first == second);
@@ -128,8 +122,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 			";
 
 		private const string TestCodeClt = @"
-				public delegate bool R_CltTest([[marshal-firsttype]][[firsttype]] first, [[marshal-secondtype]][[secondtype]] second);
-
 				public static bool CltTest([[firsttype]] first, [[secondtype]] second)
 				{
 					return (first < second);
@@ -137,8 +129,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 			";
 
 		private const string TestCodeCgt = @"
-				public delegate bool R_CgtTest([[marshal-firsttype]][[firsttype]] first, [[marshal-secondtype]][[secondtype]] second);
-
 				public static bool CgtTest([[firsttype]] first, [[secondtype]] second)
 				{
 					return (first > second);
@@ -146,8 +136,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 			";
 
 		private const string TestCodeCle = @"
-				public delegate bool R_CleTest([[marshal-firsttype]][[firsttype]] first, [[marshal-secondtype]][[secondtype]] second);
-
 				public static bool CleTest([[firsttype]] first, [[secondtype]] second)
 				{
 					return (first <= second);
@@ -155,8 +143,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 			";
 
 		private const string TestCodeCge = @"
-				public delegate bool R_CgeTest([[marshal-firsttype]][[firsttype]] first, [[marshal-secondtype]][[secondtype]] second);
-
 				public static bool CgeTest([[firsttype]] first, [[secondtype]] second)
 				{
 					return (first >= second);

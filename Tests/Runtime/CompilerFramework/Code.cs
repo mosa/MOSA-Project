@@ -46,6 +46,36 @@ namespace Test.Mosa.Runtime.CompilerFramework
 					}
 				}
 			}
+
+			namespace System.Runtime.InteropServices
+			{
+
+				public enum UnmanagedType
+				{
+					Bool = 2,
+					I1 = 3,
+					U1 = 4,
+					I2 = 5,
+					U2 = 6,
+					I4 = 7,
+					U4 = 8,
+					I8 = 9,
+					U8 = 10,
+					R4 = 11,
+					R8 = 12
+				}
+
+				public sealed class MarshalAsAttribute : Attribute 
+				{
+					public MarshalAsAttribute(short unmanagedType) 
+					{
+					}
+					
+					public MarshalAsAttribute(UnmanagedType unmanagedType) 
+					{
+					}
+				}
+			}
 		";
 
 		public const string NoStdLibDefinitions = @"

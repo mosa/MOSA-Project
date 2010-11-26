@@ -12,12 +12,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.Compiler
 		public void MustCompileStaticAllocation()
 		{
 			CodeSource = TestCode;
-			int result = (int)this.Run<I4_V>(@"", @"StaticAllocationTestCode", @"GetData");
+			int result = (int)this.Run<int>(@"", @"StaticAllocationTestCode", @"GetData");
 			Assert.AreEqual(0x7AADF00D, result);
 		}
-
-		private delegate int I4_V();
-
+		
 		private const string TestCode = @"
 			public class StaticallyAllocatedType
 			{

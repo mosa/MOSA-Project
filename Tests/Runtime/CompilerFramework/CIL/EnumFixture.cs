@@ -38,18 +38,16 @@ namespace Test.Mosa.Runtime.CompilerFramework.CIL
 			+ Code.AllTestCode;
 		}
 
-		private delegate bool B_V();
-
 		[Test]
 		public void ItemAMustEqual5()
 		{
 			CodeSource = CreateTestCode();
-			DoNotReferenceMsCorlib = true;
+			DoNotReferenceMscorlib = true;
 
 			// Due to Code.NoStdLibDefinitions... :(
 			UnsafeCode = true;
 
-			Assert.IsTrue((bool)Run<B_V>("", "TestClass", "AMustBe5"));
+			Assert.IsTrue(Run<bool>("", "TestClass", "AMustBe5"));
 		}
 	}
 }

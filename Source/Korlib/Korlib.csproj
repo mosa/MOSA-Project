@@ -70,6 +70,7 @@
     </NoWarn>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="System.Runtime.InteropServices\UnmanagedType.cs" />
     <Compile Include="System\Activator.cs" />
     <Compile Include="System\ArgumentException.cs" />
     <Compile Include="System\ArgumentNullException.cs" />

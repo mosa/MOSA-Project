@@ -78,13 +78,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.CIL
 			}
 		" + Code.AllTestCode;
 
-		public delegate bool TestCodeDelegate();
-
 		[Test]
 		public void TestNewobjWithoutArgs()
 		{
 			this.EnsureCodeSourceIsSet();
-			bool result = (bool)this.Run<TestCodeDelegate>(@"", @"Derived", @"NewobjTest");
+			bool result = Run<bool>(@"", @"Derived", @"NewobjTest");
 			Assert.IsTrue(result);
 		}
 
@@ -92,7 +90,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CIL
 		public void TestNewobjWithOneArg()
 		{
 			this.EnsureCodeSourceIsSet();
-			bool result = (bool)this.Run<TestCodeDelegate>(@"", @"Derived", @"NewobjTestWithOneArg");
+			bool result = Run<bool>(@"", @"Derived", @"NewobjTestWithOneArg");
 			Assert.IsTrue(result);
 		}
 
@@ -100,7 +98,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CIL
 		public void TestNewobjWithTwoArgs()
 		{
 			this.EnsureCodeSourceIsSet();
-			bool result = (bool)this.Run<TestCodeDelegate>(@"", @"Derived", @"NewobjTestWithTwoArgs");
+			bool result = Run<bool>(@"", @"Derived", @"NewobjTestWithTwoArgs");
 			Assert.IsTrue(result);
 		}
 
@@ -108,7 +106,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CIL
 		public void TestNewobjWithThreeArgs()
 		{
 			this.EnsureCodeSourceIsSet();
-			bool result = (bool)this.Run<TestCodeDelegate>(@"", @"Derived", @"NewobjTestWithThreeArgs");
+			bool result = Run<bool>(@"", @"Derived", @"NewobjTestWithThreeArgs");
 			Assert.IsTrue(result);
 		}
 

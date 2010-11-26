@@ -41,11 +41,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 
 		private void SetTestCode()
 		{
-			string returnMarshalType = this.CreateMarshalAttribute(@"return:", FirstType);
-			string marshalFirstType = this.CreateMarshalAttribute(String.Empty, FirstType);
-			string marshalSecondType = this.CreateMarshalAttribute(String.Empty, SecondType);
-			string marshalExpectedType = this.CreateMarshalAttribute(String.Empty, ExpectedType);
-
 			StringBuilder codeBuilder = new StringBuilder();
 			codeBuilder.Append(TestCodeHeader);
 			if (this.IncludeAdd)
@@ -71,11 +66,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 			codeBuilder
 				.Replace(@"[[expectedtype]]", ExpectedType)
 				.Replace(@"[[firsttype]]", FirstType)
-				.Replace(@"[[secondtype]]", SecondType)
-				.Replace(@"[[returnmarshal-type]]", returnMarshalType)
-				.Replace(@"[[marshal-expectedtype]]", marshalExpectedType)
-				.Replace(@"[[marshal-firsttype]]", marshalFirstType)
-				.Replace(@"[[marshal-secondtype]]", marshalSecondType);
+				.Replace(@"[[secondtype]]", SecondType);
 
 			CodeSource = codeBuilder.ToString();
 		}
@@ -145,8 +136,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		";
 
 		private const string TestCodeAdd = @"
-				public delegate bool R_AddTest([[marshal-expectedtype]][[expectedtype]] expectedValue, [[marshal-firsttype]][[firsttype]] first, [[marshal-secondtype]][[secondtype]] second);
-
 				public static bool AddTest([[expectedtype]] expectedValue, [[firsttype]] first, [[secondtype]] second)
 				{
 					return expectedValue == (first + second);   
@@ -154,8 +143,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 			";
 
 		private const string TestCodeSub = @"
-				public delegate bool R_SubTest([[marshal-expectedtype]][[expectedtype]] expectedValue, [[marshal-firsttype]][[firsttype]] first, [[marshal-secondtype]][[secondtype]] second);
-
 				public static bool SubTest([[expectedtype]] expectedValue, [[firsttype]] first, [[secondtype]] second)
 				{
 					return expectedValue == (first - second);   
@@ -163,8 +150,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 			";
 
 		private const string TestCodeMul = @"
-				public delegate bool R_MulTest([[marshal-expectedtype]][[expectedtype]] expectedValue, [[marshal-firsttype]][[firsttype]] first, [[marshal-secondtype]][[secondtype]] second);
-
 				public static bool MulTest([[expectedtype]] expectedValue, [[firsttype]] first, [[secondtype]] second)
 				{
 					return expectedValue == (first * second);
@@ -172,8 +157,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 			";
 
 		private const string TestCodeDiv = @"
-				public delegate bool R_DivTest([[marshal-expectedtype]][[expectedtype]] expectedValue, [[marshal-firsttype]][[firsttype]] first, [[marshal-secondtype]][[secondtype]] second);
-
 				public static bool DivTest([[expectedtype]] expectedValue, [[firsttype]] first, [[secondtype]] second)
 				{
 					return expectedValue == (first / second);
@@ -181,8 +164,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 			";
 
 		private const string TestCodeRem = @"
-				public delegate bool R_RemTest([[marshal-expectedtype]][[expectedtype]] expectedValue, [[marshal-firsttype]][[firsttype]] first, [[marshal-secondtype]][[secondtype]] second);
-
 				public static bool RemTest([[expectedtype]] expectedValue, [[firsttype]] first, [[secondtype]] second)
 				{
 					return expectedValue == (first % second);
@@ -190,8 +171,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 			";
 
 		private const string TestCodeNeg = @"
-				public delegate bool R_NegTest([[marshal-expectedtype]][[expectedtype]] expectedValue, [[marshal-firsttype]][[firsttype]] first);
-
 				public static bool NegTest([[expectedtype]] expectedValue, [[firsttype]] first)
 				{
 					return expectedValue == (-first);
@@ -199,9 +178,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 			";
 
 		private const string TestCodeRet = @"
-				[[returnmarshal-type]]
-				public delegate [[firsttype]] R_RetTest([[marshal-firsttype]][[firsttype]] first);
-
 				public static [[firsttype]] RetTest([[firsttype]] first)
 				{
 					return first;

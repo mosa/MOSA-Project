@@ -20,7 +20,7 @@ using Mosa.Runtime.CompilerFramework.CIL;
 using Mosa.Runtime.CompilerFramework.IR;
 using Mosa.Tools.Compiler;
 
-namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
+namespace Test.Mosa.Runtime.CompilerFramework
 {
 	class TestCaseMethodCompiler : BaseMethodCompiler
 	{
@@ -69,8 +69,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 		{
 			LinkerStream stream = base.RequestCodeStream() as LinkerStream;
 			VirtualMemoryStream vms = (VirtualMemoryStream)stream.BaseStream;
-			if (this.Method.Address == IntPtr.Zero)
-				this.Method.Address = new IntPtr(vms.Base.ToInt64() + vms.Position);
+			if (Method.Address == IntPtr.Zero)
+				Method.Address = new IntPtr(vms.Base.ToInt64() + vms.Position);
 			return stream;
 		}
 
@@ -81,10 +81,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 		{
 			// If we're compiling a type initializer, run it immediately.
 			MethodAttributes attrs = MethodAttributes.SpecialName | MethodAttributes.RTSpecialName | MethodAttributes.Static;
-			if ((this.Method.Attributes & attrs) == attrs && this.Method.Name == ".cctor")
+			if ((this.Method.Attributes & attrs) == attrs && Method.Name == ".cctor")
 			{
-				CCtor cctor = (CCtor)Marshal.GetDelegateForFunctionPointer(this.Method.Address, typeof(CCtor));
-				this.assemblyCompiler.QueueCCtorForInvocationAfterCompilation(cctor);
+				CCtor cctor = (CCtor)Marshal.GetDelegateForFunctionPointer(Method.Address, typeof(CCtor));
+				assemblyCompiler.QueueCCtorForInvocationAfterCompilation(cctor);
 			}
 
 			base.EndCompile();

@@ -20,7 +20,7 @@ using Mosa.Runtime.Vm;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Metadata;
 
-namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
+namespace Test.Mosa.Runtime.CompilerFramework
 {
 	/// <summary>
 	/// A specialized linker for in-memory tests. This linker performs live linking in memory without
@@ -203,6 +203,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 
 			LinkerSymbol symbol = new LinkerSymbol(allocateArrayMethod, SectionKind.Text, virtualAddress);
 			symbol.VirtualAddress = new IntPtr(symbol.SectionAddress);
+
+			virtualMachineCalls.Remove(allocateArrayMethod);
 			virtualMachineCalls.Add(allocateArrayMethod, symbol);
 
 			IntPtr allocateObject = Marshal.GetFunctionPointerForDelegate(allocateObjectHandler);
@@ -213,6 +215,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 
 			symbol = new LinkerSymbol(allocateObjectMethod, SectionKind.Text, virtualAddress);
 			symbol.VirtualAddress = new IntPtr(symbol.SectionAddress);
+
+			virtualMachineCalls.Remove(allocateObjectMethod);
 			virtualMachineCalls.Add(allocateObjectMethod, symbol);
 		}
 

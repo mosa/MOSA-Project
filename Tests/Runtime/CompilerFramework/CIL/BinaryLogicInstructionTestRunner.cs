@@ -31,11 +31,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 
 		private void SetTestCode()
 		{
-			string marshalFirstType = this.CreateMarshalAttribute(String.Empty, FirstType);
-			string marshalSecondType = this.CreateMarshalAttribute(String.Empty, SecondType);
-			string marshalShiftType = this.CreateMarshalAttribute(String.Empty, ShiftType);
-			string marshalExpectedType = this.CreateMarshalAttribute(String.Empty, ExpectedType);
-
 			StringBuilder codeBuilder = new StringBuilder();
 
 			codeBuilder.Append(TestCodeHeader);
@@ -63,10 +58,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 				.Replace(@"[[expectedtype]]", ExpectedType)
 				.Replace(@"[[firsttype]]", FirstType)
 				.Replace(@"[[secondtype]]", SecondType)
-				.Replace(@"[[shifttypename]]", ShiftType)
-				.Replace(@"[[marshal-expectedtype]]", marshalExpectedType)
-				.Replace(@"[[marshal-firsttype]]", marshalFirstType)
-				.Replace(@"[[marshal-secondtype]]", marshalFirstType);
+				.Replace(@"[[shifttypename]]", ShiftType);
 
 			CodeSource = codeBuilder.ToString();
 		}
@@ -149,8 +141,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		";
 				
 		private const string TestCodeAnd = @"
-				public delegate bool R_AndTest([[marshal-expectedtype]][[expectedtype]] expectedValue, [[marshal-firsttype]][[firsttype]] first, [[marshal-secondtype]][[secondtype]] second);
-
 				public static bool AndTest([[expectedtype]] expectedValue, [[firsttype]] first, [[secondtype]] second)
 				{
 					return expectedValue == (first & second);
@@ -158,8 +148,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		";
 
 		private const string TestCodeOr = @"
-				public delegate bool R_OrTest([[marshal-expectedtype]][[expectedtype]] expectedValue, [[marshal-firsttype]][[firsttype]] first, [[marshal-secondtype]][[secondtype]] second);
-
 				public static bool OrTest([[expectedtype]] expectedValue, [[firsttype]] first, [[secondtype]] second)
 				{
 					return expectedValue == (first | second);
@@ -167,8 +155,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		";
 
 		private const string TestCodeXor = @"
-				public delegate bool R_XorTest([[marshal-expectedtype]][[expectedtype]] expectedValue, [[marshal-firsttype]][[firsttype]] first, [[marshal-secondtype]][[secondtype]] second);
-
 				public static bool XorTest([[expectedtype]] expectedValue, [[firsttype]] first, [[secondtype]] second)
 				{
 					return expectedValue == (first ^ second);
@@ -176,8 +162,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		";
 
 		private const string TestCodeNot = @"
-				public delegate bool R_NotTest([[marshal-expectedtype]][[expectedtype]] expectedValue, [[marshal-firsttype]][[firsttype]] first);
-
 				public static bool NotTest([[expectedtype]] expectedValue, [[firsttype]] first)
 				{
 					return expectedValue == (!first);
@@ -185,8 +169,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		";
 
 		private const string TestCodeComp = @"
-				public delegate bool R_CompTest([[marshal-expectedtype]][[expectedtype]] expectedValue, [[marshal-firsttype]][[firsttype]] first);
-
 				public static bool CompTest([[expectedtype]] expectedValue, [[firsttype]] first)
 				{
 					return expectedValue == (~first);
@@ -194,8 +176,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		";
 
 		private const string TestCodeShl = @"
-				public delegate bool R_ShiftLeftTest([[marshal-expectedtype]][[expectedtype]] expectedValue, [[marshal-firsttype]][[firsttype]] first, [[shifttypename]] second);
-
 				public static bool ShiftLeftTest([[expectedtype]] expectedValue, [[firsttype]] first, [[shifttypename]] second)
 				{
 					return expectedValue == ([[expectedtype]])(first << second);
@@ -203,8 +183,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		";
 
 		private const string TestCodeShr = @"
-				public delegate bool R_ShiftRightTest([[marshal-expectedtype]][[expectedtype]] expectedValue, [[marshal-firsttype]][[firsttype]] first, [[shifttypename]] second);
-
 				public static bool ShiftRightTest([[expectedtype]] expectedValue, [[firsttype]] first, [[shifttypename]] second)
 				{
 					return expectedValue == ([[expectedtype]])(first >> second);

@@ -9,12 +9,11 @@
  */
 
 using MbUnit.Framework;
-using Test.Mosa.Runtime.CompilerFramework.BaseCode;
+
+using Test.Mosa.Runtime.CompilerFramework;
 
 namespace Test.Mosa.Runtime.CompilerFramework.CIL
 {
-
-
 	[TestFixture]
 	[Importance(Importance.Critical)]
 	[Category(@"Memory Model")]
@@ -45,7 +44,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CIL
 		public void MustCompileCodePinningVariables()
 		{
 			CodeSource = CreateTestCode();
-			UnsafeCode = true;
 
 			Assert.DoesNotThrow(() => this.CompileTestCode());
 		}

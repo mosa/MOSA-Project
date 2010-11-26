@@ -144,6 +144,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Compiler\StaticAllocationFixture.cs" />
+    <Compile Include="DelegateUtility.cs" />
     <Compile Include="IL\ConditionalOperator.cs" />
     <Compile Include="IL\Stind.cs" />
     <Compile Include="IL\Switch.cs" />
@@ -151,22 +152,23 @@
     <Compile Include="MosaCompilerTestRunner.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="BaseCode\TestAssemblyLinker.cs">
+    <Compile Include="PrebuiltDelegates.cs" />
+    <Compile Include="TestAssemblyLinker.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="BaseCode\TestCaseAssemblyCompiler.cs">
+    <Compile Include="TestCaseAssemblyCompiler.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="BaseCode\TestCaseMethodCompiler.cs">
+    <Compile Include="TestCaseMethodCompiler.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="BaseCode\TestLinkerSection.cs">
+    <Compile Include="TestLinkerSection.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="BaseCode\VirtualMemoryStream.cs">
+    <Compile Include="VirtualMemoryStream.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="BaseCode\Win32MemoryPageManager.cs">
+    <Compile Include="Win32MemoryPageManager.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IL\Add.cs">

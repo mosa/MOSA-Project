@@ -53,13 +53,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.CIL
 			}
 		" + Code.AllTestCode;
 
-		public delegate int TestCodeDelegate();
-
 		[Test]
 		public void TestVirtualCall()
 		{
 			this.EnsureCodeSourceIsSet();
-			int result = (int)this.Run<TestCodeDelegate>(@"", @"Derived", @"STest");
+			int result = Run<int>(@"", @"Derived", @"STest");
 			Assert.AreEqual(7, result);
 		}
 
@@ -67,7 +65,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CIL
 		public void TestBaseCall()
 		{
 			this.EnsureCodeSourceIsSet();
-			int result = (int)this.Run<TestCodeDelegate>(@"", @"Derived", @"STestBaseCall");
+			int result = (int)Run<int>(@"", @"Derived", @"STestBaseCall");
 			Assert.AreEqual(12, result);
 		}
 

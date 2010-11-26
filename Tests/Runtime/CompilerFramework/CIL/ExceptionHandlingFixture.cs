@@ -41,16 +41,14 @@ namespace Test.Mosa.Runtime.CompilerFramework
 				+ Code.AllTestCode;
 		}
 
-		private delegate bool B_I(int value);
-
 		[Test]
 		[Row(1)]
 		public void CatchException(int value)
 		{
 			CodeSource = CreateTestCode();
-			DoNotReferenceMsCorlib = true;
+			DoNotReferenceMscorlib = true;
 			UnsafeCode = true;
-			Assert.IsTrue((bool)Run<B_I>("", "Test", "CatchException", value));
+			Assert.IsTrue(Run<bool>("", "Test", "CatchException", value));
 		}
 	}
 }

@@ -8,14 +8,12 @@
  *
  */
 
-
 using System;
 using MbUnit.Framework;
 
 namespace Test.Mosa.Runtime.CompilerFramework
 {
 	[TestFixture]
-	//[Parallelizable]
 	public class GenericMethodMemberFixture : CodeDomTestRunner
 	{
 		private static string CreateTestCode(string type)
@@ -36,35 +34,14 @@ namespace Test.Mosa.Runtime.CompilerFramework
 					}
 				}" + Code.AllTestCode;
 		}
-
-		private delegate bool B_B(bool value);
-		private delegate bool B_C(char value);
-
-		private delegate bool B_I(IntPtr value);
-		private delegate bool B_I1(sbyte value);
-		private delegate bool B_I2(short value);
-		private delegate bool B_I4(int value);
-		private delegate bool B_I8(long value);
-
-		private delegate bool B_U(byte value);
-		private delegate bool B_U1(byte value);
-		private delegate bool B_U2(ushort value);
-		private delegate bool B_U4(uint value);
-		private delegate bool B_U8(ulong value);
-
-		private delegate bool B_R4(float value);
-		private delegate bool B_R8(double value);
-
-		private delegate bool B_O(object value);
-
-
+		
 		[Test]
 		[Row(true)]
 		[Row(false)]
 		public void MustMakeSuccessfulCallToStaticGenericMethodWithB(bool value)
 		{
 			CodeSource = CreateTestCode("bool");
-			Assert.IsTrue((bool)Run<B_B>("", "Test", "TestCallGenericMethodWith", value));
+			Assert.IsTrue(Run<bool>("", "Test", "TestCallGenericMethodWith", value));
 		}
 
 		[Test]
@@ -74,7 +51,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		public void MustMakeSuccessfulCallToStaticGenericMethodWithC(char value)
 		{
 			CodeSource = CreateTestCode("char");
-			Assert.IsTrue((bool)Run<B_C>("", "Test", "TestCallGenericMethodWith", value));
+			Assert.IsTrue(Run<bool>("", "Test", "TestCallGenericMethodWith", value));
 		}
 
 		[Row(0)]
@@ -83,7 +60,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		public void MustMakeSuccessfulCallToStaticGenericMethodWithI(int value)
 		{
 			CodeSource = CreateTestCode("IntPtr");
-			Assert.IsTrue((bool)Run<B_I>("", "Test", "TestCallGenericMethodWith", new IntPtr(value)));
+			Assert.IsTrue(Run<bool>("", "Test", "TestCallGenericMethodWith", new IntPtr(value)));
 		}
 
 		[Test]
@@ -93,7 +70,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		public void MustMakeSuccessfulCallToStaticGenericMethodWithI1(sbyte value)
 		{
 			CodeSource = CreateTestCode("sbyte");
-			Assert.IsTrue((bool)Run<B_I1>("", "Test", "TestCallGenericMethodWith", value));
+			Assert.IsTrue(Run<bool>("", "Test", "TestCallGenericMethodWith", value));
 		}
 
 		[Test]
@@ -103,7 +80,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		public void MustMakeSuccessfulCallToStaticGenericMethodWithI2(short value)
 		{
 			CodeSource = CreateTestCode("short");
-			Assert.IsTrue((bool)Run<B_I2>("", "Test", "TestCallGenericMethodWith", value));
+			Assert.IsTrue(Run<bool>("", "Test", "TestCallGenericMethodWith", value));
 		}
 
 		[Test]
@@ -114,7 +91,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		public void MustMakeSuccessfulCallToStaticGenericMethodWithI4(int value)
 		{
 			CodeSource = CreateTestCode("int");
-			Assert.IsTrue((bool)Run<B_I4>("", "Test", "TestCallGenericMethodWith", value));
+			Assert.IsTrue(Run<bool>("", "Test", "TestCallGenericMethodWith", value));
 		}
 
 		[Test]
@@ -124,7 +101,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		public void MustMakeSuccessfulCallToStaticGenericMethodWithI8(long value)
 		{
 			CodeSource = CreateTestCode("long");
-			Assert.IsTrue((bool)Run<B_I8>("", "Test", "TestCallGenericMethodWith", value));
+			Assert.IsTrue(Run<bool>("", "Test", "TestCallGenericMethodWith", value));
 		}
 
 		[Row(0U)]
@@ -133,7 +110,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		public void MustMakeSuccessfulCallToStaticGenericMethodWithU(uint value)
 		{
 			CodeSource = CreateTestCode("UIntPtr");
-			Assert.IsTrue((bool)Run<B_U>("", "Test", "TestCallGenericMethodWith", new UIntPtr(value)));
+			Assert.IsTrue(Run<bool>("", "Test", "TestCallGenericMethodWith", new UIntPtr(value)));
 		}
 
 		[Test]
@@ -143,7 +120,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		public void MustMakeSuccessfulCallToStaticGenericMethodWithU1(byte value)
 		{
 			CodeSource = CreateTestCode("byte");
-			Assert.IsTrue((bool)Run<B_U1>("", "Test", "TestCallGenericMethodWith", value));
+			Assert.IsTrue(Run<bool>("", "Test", "TestCallGenericMethodWith", value));
 		}
 
 		[Test]
@@ -153,7 +130,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		public void MustMakeSuccessfulCallToStaticGenericMethodWithU2(ushort value)
 		{
 			CodeSource = CreateTestCode("ushort");
-			Assert.IsTrue((bool)Run<B_U2>("", "Test", "TestCallGenericMethodWith", value));
+			Assert.IsTrue(Run<bool>("", "Test", "TestCallGenericMethodWith", value));
 		}
 
 		[Test]
@@ -163,7 +140,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		public void MustMakeSuccessfulCallToStaticGenericMethodWithU4(uint value)
 		{
 			CodeSource = CreateTestCode("uint");
-			Assert.IsTrue((bool)Run<B_U4>("", "Test", "TestCallGenericMethodWith", value));
+			Assert.IsTrue(Run<bool>("", "Test", "TestCallGenericMethodWith", value));
 		}
 
 		[Test]
@@ -173,7 +150,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		public void MustMakeSuccessfulCallToStaticGenericMethodWithU8(ulong value)
 		{
 			CodeSource = CreateTestCode("ulong");
-			Assert.IsTrue((bool)Run<B_U8>("", "Test", "TestCallGenericMethodWith", value));
+			Assert.IsTrue(Run<bool>("", "Test", "TestCallGenericMethodWith", value));
 		}
 
 		[Test]
@@ -183,7 +160,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		public void MustMakeSuccessfulCallToStaticGenericMethodWithR4(float value)
 		{
 			CodeSource = CreateTestCode("float");
-			Assert.IsTrue((bool)Run<B_R4>("", "Test", "TestCallGenericMethodWith", value));
+			Assert.IsTrue(Run<bool>("", "Test", "TestCallGenericMethodWith", value));
 		}
 
 		[Test]
@@ -193,7 +170,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		public void MustMakeSuccessfulCallToStaticGenericMethodWithR8(double value)
 		{
 			CodeSource = CreateTestCode("double");
-			Assert.IsTrue((bool)Run<B_R8>("", "Test", "TestCallGenericMethodWith", value));
+			Assert.IsTrue(Run<bool>("", "Test", "TestCallGenericMethodWith", value));
 		}
 
 		[Test]
@@ -201,7 +178,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		public void MustMakeSuccessfulCallToStaticGenericMethodWithO(object value)
 		{
 			CodeSource = CreateTestCode("object");
-			Assert.IsTrue((bool)Run<B_O>("", "Test", "TestCallGenericMethodWith", value));
+			Assert.IsTrue(Run<bool>("", "Test", "TestCallGenericMethodWith", value));
 		}
 	}
 }

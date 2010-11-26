@@ -14,7 +14,6 @@ using Mosa.Runtime.Vm;
 using Mosa.Runtime.Memory;
 
 using Test.Mosa.Runtime.CompilerFramework;
-using Test.Mosa.Runtime.CompilerFramework.BaseCode;
 
 namespace Mosa.Vm
 {
