@@ -11,10 +11,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 	{
 		private static string testCode = @"
 			static class Test {
-				private static type s_fld;
+				private static #type fld;
 				public static bool Stsfld(#type value) {
-					s_fld = value;
-					return (value == s_fld);
+					fld = value;
+					return (value == fld);
 				}
 			}
 		" + Code.AllTestCode;

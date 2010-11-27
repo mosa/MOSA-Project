@@ -93,7 +93,7 @@ namespace Mosa.Runtime.Vm
 					if (module.MetadataModule.Name == assembly)
 						return module; // already referenced
 
-			IMetadataModule metaModule = this.assemblyLoader.LoadModule(assembly);
+			IMetadataModule metaModule = assemblyLoader.LoadModule(assembly);
 
 			IModuleTypeSystem moduleTypeSystem = new DefaultModuleTypeSystem(this, metaModule);
 

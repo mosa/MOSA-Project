@@ -95,46 +95,76 @@ namespace Test.Mosa.Runtime.CompilerFramework
 
 				public struct SByte
 				{
+					public const sbyte MinValue = -128;
+					public const sbyte MaxValue = 127;
 				}
 
 				public struct Byte
 				{
+					public const byte MinValue = 0;
+					public const byte MaxValue = 255;
 				}
 
 				public struct Int16
 				{
+					public const short MaxValue =  32767;
+					public const short MinValue = -32768;
 				}
 
 				public struct Int32
 				{
+					public const int MaxValue = 0x7fffffff;
+					public const int MinValue = -2147483648;
 				}
 
 				public struct Int64
 				{
+					public const long MaxValue = 0x7fffffffffffffff;
+					public const long MinValue = -9223372036854775808;
 				}   
 
 				public struct UInt16
 				{
+					public const ushort MaxValue = 0xffff;
+					public const ushort MinValue = 0;
 				}
 
 				public struct UInt32
 				{
+					public const uint MaxValue = 0xffffffff;
+					public const uint MinValue = 0;
 				}
 
 				public struct UInt64
 				{
+					public const ulong MaxValue = 0xffffffffffffffff;
+					public const ulong MinValue = 0;
 				}   
 
 				public struct Single
 				{
+					public const float Epsilon = 1.4e-45f;
+					public const float MaxValue = 3.40282346638528859e38f;
+					public const float MinValue = -3.40282346638528859e38f;
+					public const float NaN = 0.0f / 0.0f;
+					public const float PositiveInfinity = 1.0f / 0.0f;
+					public const float NegativeInfinity = -1.0f / 0.0f;
 				}
 
 				public struct Double
 				{
+					public const double Epsilon = 4.9406564584124650e-324;
+					public const double MaxValue = 1.7976931348623157e308;
+					public const double MinValue = -1.7976931348623157e308;
+					public const double NaN = 0.0d / 0.0d;
+					public const double NegativeInfinity = -1.0d / 0.0d;
+					public const double PositiveInfinity = 1.0d / 0.0d;
 				}
 
 				public struct Char
 				{
+					public const char MaxValue = (char)0xffff;
+					public const char MinValue = (char)0;
 				}
 
 				public struct Boolean

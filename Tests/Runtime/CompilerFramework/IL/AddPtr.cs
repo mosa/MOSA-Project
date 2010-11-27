@@ -307,7 +307,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 			int* pa = (int*)a;
 			CodeSource = CreateTestCode("long", "int*", "int*");
 			UnsafeCode = true;
-			Assert.AreEqual((int)(b + pa), (int)Run<int>("", "Test", "AddPtr", b, a));
+			Assert.AreEqual((int)(b + pa), (int)Run<IntPtr>("", "Test", "AddPtr", b, a));
 		}
 
 		[Row(0, 42)]
@@ -319,7 +319,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 			int* pa = (int*)a;
 			CodeSource = CreateConstantTestCode("int*", "int*", null, b.ToString());
 			UnsafeCode = true;
-			Assert.AreEqual((int)(pa + b), (int)Run<int>("", "Test", "AddPtr", a));
+			Assert.AreEqual((int)(pa + b), (int)Run<IntPtr>("", "Test", "AddPtr", a));
 		}
 
 		[Row(0, 42)]
@@ -331,7 +331,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 			int* pa = (int*)a;
 			CodeSource = CreateConstantTestCode("int*", "int*", null, b.ToString());
 			UnsafeCode = true;
-			Assert.AreEqual((int)(pa + b), (int)Run<int>("", "Test", "AddPtr", a));
+			Assert.AreEqual((int)(pa + b), (int)Run<IntPtr>("", "Test", "AddPtr", a));
 		}
 
 		[Row(0, 42)]
@@ -343,7 +343,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 			int* pa = (int*)a;
 			CodeSource = CreateConstantTestCode("int*", "int*", b.ToString(), null);
 			UnsafeCode = true;
-			Assert.AreEqual((int)(b + pa), (int)Run<int>("", "Test", "AddPtr", a));
+			Assert.AreEqual((int)(b + pa), (int)Run<IntPtr>("", "Test", "AddPtr", a));
 		}
 
 		[Row(0, 42)]
@@ -355,7 +355,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 			int* pa = (int*)a;
 			CodeSource = CreateConstantTestCode("int*", "int*", b.ToString(), null);
 			UnsafeCode = true;
-			Assert.AreEqual((int)(pa + b), (int)Run<int>("", "Test", "AddPtr", a));
+			Assert.AreEqual((int)(pa + b), (int)Run<IntPtr>("", "Test", "AddPtr", a));
 		}
 		#endregion
 
@@ -370,7 +370,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 			long* pa = (long*)a;
 			CodeSource = CreateTestCode("long*", "int", "long*");
 			UnsafeCode = true;
-			Assert.AreEqual((int)(pa + b), (int)Run<int>("", "Test", "AddPtr", a, b));
+			Assert.AreEqual((int)(pa + b), (int)Run<IntPtr>("", "Test", "AddPtr", a, b));
 		}
 
 		[Row(0, 42)]
@@ -382,7 +382,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 			long* pa = (long*)a;
 			CodeSource = CreateTestCode("long*", "long", "long*");
 			UnsafeCode = true;
-			Assert.AreEqual((int)(pa + b), (int)Run<int>("", "Test", "AddPtr", a, b));
+			Assert.AreEqual((int)(pa + b), (int)Run<IntPtr>("", "Test", "AddPtr", a, b));
 		}
 
 		[Row(0, 42)]
@@ -394,7 +394,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 			long* pa = (long*)a;
 			CodeSource = CreateTestCode("int", "long*", "long*");
 			UnsafeCode = true;
-			Assert.AreEqual((int)(b + pa), (int)Run<int>("", "Test", "AddPtr", b, a));
+			Assert.AreEqual((int)(b + pa), (int)Run<IntPtr>("", "Test", "AddPtr", b, a));
 		}
 
 		[Row(0, 42)]
@@ -406,7 +406,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 			long* pa = (long*)a;
 			CodeSource = CreateTestCode("long", "long*", "long*");
 			UnsafeCode = true;
-			Assert.AreEqual((int)(b + pa), (int)Run<int>("", "Test", "AddPtr", b, a));
+			Assert.AreEqual((int)(b + pa), (int)Run<IntPtr>("", "Test", "AddPtr", b, a));
 		}
 
 		[Row(0, 42)]
@@ -418,7 +418,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 			long* pa = (long*)a;
 			CodeSource = CreateConstantTestCode("long*", "long*", null, b.ToString());
 			UnsafeCode = true;
-			Assert.AreEqual((int)(pa + b), (int)Run<int>("", "Test", "AddPtr", a));
+			Assert.AreEqual((int)(pa + b), (int)Run<IntPtr>("", "Test", "AddPtr", a));
 		}
 
 		[Row(0, 42)]
@@ -430,7 +430,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 			long* pa = (long*)a;
 			CodeSource = CreateConstantTestCode("long*", "long*", null, b.ToString());
 			UnsafeCode = true;
-			Assert.AreEqual((int)(pa + b), (int)Run<int>("", "Test", "AddPtr", a));
+			Assert.AreEqual((int)(pa + b), (int)Run<IntPtr>("", "Test", "AddPtr", a));
 		}
 
 		[Row(0, 42)]
@@ -442,7 +442,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 			long* pa = (long*)a;
 			CodeSource = CreateConstantTestCode("long*", "long*", b.ToString(), null);
 			UnsafeCode = true;
-			Assert.AreEqual((int)(b + pa), (int)Run<int>("", "Test", "AddPtr", a));
+			Assert.AreEqual((int)(b + pa), (int)Run<IntPtr>("", "Test", "AddPtr", a));
 		}
 
 		[Row(0, 42)]
@@ -454,7 +454,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 			long* pa = (long*)a;
 			CodeSource = CreateConstantTestCode("long*", "long*", b.ToString(), null);
 			UnsafeCode = true;
-			Assert.AreEqual((int)(pa + b), (int)Run<int>("", "Test", "AddPtr", a));
+			Assert.AreEqual((int)(pa + b), (int)Run<IntPtr>("", "Test", "AddPtr", a));
 		}
 		#endregion
 
@@ -469,7 +469,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 			double* pa = (double*)a;
 			CodeSource = CreateTestCode("double*", "int", "double*");
 			UnsafeCode = true;
-			Assert.AreEqual((int)(pa + b), (int)Run<int>("", "Test", "AddPtr", a, b));
+			Assert.AreEqual((int)(pa + b), (int)Run<IntPtr>("", "Test", "AddPtr", a, b));
 		}
 
 		[Row(0, 42)]
@@ -481,7 +481,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 			long* pa = (long*)a;
 			CodeSource = CreateTestCode("double*", "long", "double*");
 			UnsafeCode = true;
-			Assert.AreEqual((int)(pa + b), (int)Run<int>("", "Test", "AddPtr", a, b));
+			Assert.AreEqual((int)(pa + b), (int)Run<IntPtr>("", "Test", "AddPtr", a, b));
 		}
 
 		[Row(0, 42)]
@@ -493,7 +493,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 			double* pa = (double*)a;
 			CodeSource = CreateTestCode("long", "double*", "double*");
 			UnsafeCode = true;
-			Assert.AreEqual((int)(b + pa), (int)Run<int>("", "Test", "AddPtr", b, a));
+			Assert.AreEqual((int)(b + pa), (int)Run<IntPtr>("", "Test", "AddPtr", b, a));
 		}
 
 		[Row(0, 42)]
@@ -505,7 +505,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 			double* pa = (double*)a;
 			CodeSource = CreateTestCode("long", "double*", "double*");
 			UnsafeCode = true;
-			Assert.AreEqual((int)(b + pa), (int)Run<int>("", "Test", "AddPtr", b, a));
+			Assert.AreEqual((int)(b + pa), (int)Run<IntPtr>("", "Test", "AddPtr", b, a));
 		}
 
 		[Row(0, 42)]
@@ -517,7 +517,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 			double* pa = (double*)a;
 			CodeSource = CreateConstantTestCode("double*", "double*", null, b.ToString());
 			UnsafeCode = true;
-			Assert.AreEqual((int)(pa + b), (int)Run<int>("", "Test", "AddPtr", a));
+			Assert.AreEqual((int)(pa + b), (int)Run<IntPtr>("", "Test", "AddPtr", a));
 		}
 
 		[Row(0, 42)]
@@ -529,7 +529,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 			double* pa = (double*)a;
 			CodeSource = CreateConstantTestCode("double*", "double*", null, b.ToString());
 			UnsafeCode = true;
-			Assert.AreEqual((int)(pa + b), (int)Run<int>("", "Test", "AddPtr", a));
+			Assert.AreEqual((int)(pa + b), (int)Run<IntPtr>("", "Test", "AddPtr", a));
 		}
 
 		[Row(0, 42)]
@@ -541,7 +541,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 			double* pa = (double*)a;
 			CodeSource = CreateConstantTestCode("double*", "double*", b.ToString(), null);
 			UnsafeCode = true;
-			Assert.AreEqual((int)(b + pa), (int)Run<int>("", "Test", "AddPtr", a));
+			Assert.AreEqual((int)(b + pa), (int)Run<IntPtr>("", "Test", "AddPtr", a));
 		}
 
 		[Row(0, 42)]
@@ -553,8 +553,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 			double* pa = (double*)a;
 			CodeSource = CreateConstantTestCode("double*", "double*", b.ToString(), null);
 			UnsafeCode = true;
-			Assert.AreEqual((int)(pa + b), (int)Run<int>("", "Test", "AddPtr", a));
+			Assert.AreEqual((int)(pa + b), (int)Run<IntPtr>("", "Test", "AddPtr", a));
 		}
+
 		#endregion
 	}
 }

@@ -14,9 +14,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		private static string testCode = @"
 			using System;
 			static class Test {
-				private static type s_fld = #value;
+				private static #type fld = #value;
 				public static bool StaticFieldInit(#type value) {
-					return (s_fld == value);
+					return (fld == value);
 				}
 			}
 		" + Code.AllTestCode;

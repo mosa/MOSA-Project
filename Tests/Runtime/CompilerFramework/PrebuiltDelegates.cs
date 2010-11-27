@@ -44334,5 +44334,37 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		delegate UIntPtr U_U_U_C(UIntPtr value1, UIntPtr value2, [MarshalAs(UnmanagedType.U2)]char value3);
 		delegate UIntPtr U_U_U_I(UIntPtr value1, UIntPtr value2, IntPtr value3);
 		delegate UIntPtr U_U_U_U(UIntPtr value1, UIntPtr value2, UIntPtr value3);
+
+
+		delegate int I4_I4_I4_I4_I4(int value1, int value2, int value3, int value4);
+		delegate bool B_U4_U8_U8_U8(uint value1, ulong value2, ulong value3, ulong value4);
+
+		delegate bool B_I1_I1_I1_I1(int value1, int value2, int value3, int value4);
+		delegate bool B_I2_I2_I2_I2(int value1, int value2, int value3, int value4);
+		delegate bool B_I4_I4_I4_I4(int value1, int value2, int value3, int value4);
+		delegate bool B_I8_I8_I8_I8(int value1, int value2, int value3, int value4);
+
+		delegate bool B_U1_U1_U1_U1(uint value1, uint value2, uint value3, uint value4);
+		delegate bool B_U2_U2_U2_U2(uint value1, uint value2, uint value3, uint value4);
+		delegate bool B_U4_U4_U4_U4(uint value1, uint value2, uint value3, uint value4);
+		delegate bool B_U8_U8_U8_U8(uint value1, uint value2, uint value3, uint value4);
+
+		delegate bool B_I1_I1_I1_I1_I1(int value1, int value2, int value3, int value4, int value5);
+		delegate bool B_I2_I2_I2_I2_I2(int value1, int value2, int value3, int value4, int value5);
+		delegate bool B_I4_I4_I4_I4_I4(int value1, int value2, int value3, int value4, int value5);
+		delegate bool B_I8_I8_I8_I8_I8(int value1, int value2, int value3, int value4, int value5);
+
+		delegate bool B_U1_U1_U1_U1_U1(uint value1, uint value2, uint value3, uint value4, uint value5);
+		delegate bool B_U2_U2_U2_U2_U2(uint value1, uint value2, uint value3, uint value4, uint value5);
+		delegate bool B_U4_U4_U4_U4_U4(uint value1, uint value2, uint value3, uint value4, uint value5);
+		delegate bool B_U8_U8_U8_U8_U8(uint value1, uint value2, uint value3, uint value4, uint value5);
+
+		delegate void V_I2_I2(short value1, short value2);
+		delegate void V_I4_I4(int value1, int value2);
+		delegate void V_I8_I8(long value1, long value2);
+
+		delegate void V_R4_R4(float value1, float value2);
+		delegate void V_R8_R8(double value1, double value2);
+
 	}
 }
