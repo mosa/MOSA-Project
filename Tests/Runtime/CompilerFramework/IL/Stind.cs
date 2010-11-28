@@ -45,9 +45,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 			CodeSource = CreateDereferencedVoidPointerAssignmentTestCode("sbyte", "I1");
 			UnsafeCode = true;
 
-			var address = (void*)Marshal.AllocHGlobal(sizeof(sbyte));
-			var runResult = Run<bool>("", "Test", "DereffedVoidPtrAssign_I1", a, (IntPtr)address);
-			var success = (*(sbyte*)address == a);
+			void* address = (void*)Marshal.AllocHGlobal(sizeof(sbyte));
+			bool runResult = Run<bool>("", "Test", "DereffedVoidPtrAssign_I1", a, (IntPtr)address);
+			bool success = (*(sbyte*)address == a);
 			Marshal.FreeHGlobal((IntPtr)address);
 
 			Assert.IsTrue(success, "DereffedVoidPtrAssign_I1");
@@ -181,9 +181,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 			CodeSource = CreateDereferencedVoidPointerAssignmentTestCode("uint", "U4");
 			UnsafeCode = true;
 
-			var address = (void*)Marshal.AllocHGlobal(sizeof(uint));
-			var runResult = Run<bool>("", "Test", "DereffedVoidPtrAssign_U4", a, (IntPtr)address);
-			var success = (*(uint*)address == a);
+			void* address = (void*)Marshal.AllocHGlobal(sizeof(uint));
+			bool runResult = Run<bool>("", "Test", "DereffedVoidPtrAssign_U4", a, (IntPtr)address);
+			bool success = (*(uint*)address == a);
 			Marshal.FreeHGlobal((IntPtr)address);
 
 			Assert.IsTrue(success, "DereffedVoidPtrAssign_U4");

@@ -37,8 +37,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
 						}
 						return false;
 					}
-				}"
-				+ Code.AllTestCode;
+				}" + Code.AllTestCode;
 		}
 
 		[Test]

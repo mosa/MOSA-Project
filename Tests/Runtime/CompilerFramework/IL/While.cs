@@ -41,7 +41,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 					return count;
 				}
 			}" + Code.AllTestCode;
-			Assert.AreEqual<int>(limit - start, (int)Run<int>("", "Test", "WhileIncI4", start, limit));
+			Assert.AreEqual<int>(limit - start, Run<int>("", "Test", "WhileIncI4", start, limit));
 		}
 
 		#endregion
@@ -69,7 +69,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 					return count;
 				}
 			}" + Code.AllTestCode;
-			Assert.AreEqual<int>(start - limit, (int)Run<int>("", "Test", "WhileDecI4", start, limit));
+			Assert.AreEqual<int>(start - limit, Run<int>("", "Test", "WhileDecI4", start, limit));
 		}
 
 		#endregion
@@ -168,7 +168,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 					return count;
 				}
 			}" + Code.AllTestCode;
-			Assert.AreEqual<int>((256 + (int)limit) - start, (int)Run<int>("", "Test", "WhileOverflowIncI1", start, limit));
+			Assert.AreEqual<int>((256 + (int)limit) - start, Run<int>("", "Test", "WhileOverflowIncI1", start, limit));
 		}
 
 		#endregion
@@ -197,7 +197,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 				}
 			}" + Code.AllTestCode;
 
-			Assert.AreEqual<int>((256 + (int)start) - limit, (int)Run<int>("", "Test", "WhileOverflowDecI1", start, limit));
+			Assert.AreEqual<int>((256 + (int)start) - limit, Run<int>("", "Test", "WhileOverflowDecI1", start, limit));
 		}
 
 		#endregion
@@ -244,7 +244,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 			}" + Code.AllTestCode;
 
 			int count = limit - start;
-			Assert.AreEqual<int>((int)((count * count) - ((count / 2.0f) * count) + (count / 2.0f)), (int)Run<int>("", "Test", "WhileNestedEqualsI4", initialStatus, wantedStatus, start, limit));
+			Assert.AreEqual<int>((int)((count * count) - ((count / 2.0f) * count) + (count / 2.0f)), Run<int>("", "Test", "WhileNestedEqualsI4", initialStatus, wantedStatus, start, limit));
 		}
 
 		#endregion

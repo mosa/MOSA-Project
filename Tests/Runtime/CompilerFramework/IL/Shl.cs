@@ -131,7 +131,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void ShlConstantCRight(char a, char b)
 		{
 			CodeSource = CreateConstantTestCodeWithReturn("ShlConstantCRight", "char", "int", null, "'" + b.ToString() + "'");
-			Assert.AreEqual(a << b, (int)Run<int>("", "Test", "ShlConstantCRight", (char)(a << b), a));
+			Assert.AreEqual(a << b, Run<int>("", "Test", "ShlConstantCRight", (char)(a << b), a));
 		}
 
 		[Row('a', 0)]
@@ -141,7 +141,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void ShlConstantCLeft(char a, char b)
 		{
 			CodeSource = CreateConstantTestCodeWithReturn("ShlConstantCLeft", "char", "int", "'" + a.ToString() + "'", null);
-			Assert.AreEqual(a << b, (int)Run<int>("", "Test", "ShlConstantCLeft", (char)(a << b), b));
+			Assert.AreEqual(a << b, Run<int>("", "Test", "ShlConstantCLeft", (char)(a << b), b));
 		}
 		#endregion
 

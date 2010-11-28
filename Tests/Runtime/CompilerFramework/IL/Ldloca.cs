@@ -20,27 +20,34 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 	[TestFixture]
 	public class Ldloca : CodeDomTestRunner
 	{
+
+		private static string TestCode = @"
+			static class Test
+			{
+				static bool #name(#type expect)
+				{
+					#type a = expect;
+					return DoCheckValue(expect, ref a);
+				}
+
+				static bool DoCheckValue(#type expect, ref #type value)
+				{
+					return (expect == value);
+				}
+			}";
+
+		private static string CreateTestCode(string name, string type)
+		{
+			return TestCode.Replace("#name", name).Replace("#type", type) + Code.AllTestCode;
+		}
+
 		#region CheckValue
 
 		[Column(0, 1, SByte.MinValue, SByte.MaxValue, SByte.MinValue + 1, SByte.MaxValue - 1)]
 		[Test, Author(@"grover", @"sharpos@michaelruck.de")]
 		public void LdlocaI1_CheckValue(sbyte value)
 		{
-			CodeSource = @"
-				static class Test
-				{
-					static bool LdlocaI1_CheckValue(sbyte expect)
-					{
-						sbyte a = expect;
-						return LdlocaI1_DoCheckValue(expect, ref a);
-					}
-
-					static bool LdlocaI1_DoCheckValue(sbyte expect, ref sbyte value)
-					{
-						return (expect == value);
-					}
-				}
-			" + Code.AllTestCode;
+			CodeSource = CreateTestCode("LdlocaI1_CheckValue", "sbyte");
 			Assert.IsTrue(Run<bool>("", "Test", "LdlocaI1_CheckValue", value));
 		}
 
@@ -48,21 +55,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		[Test, Author(@"grover", @"sharpos@michaelruck.de")]
 		public void LdlocaI2_CheckValue(short value)
 		{
-			CodeSource = @"
-				static class Test
-				{
-					static bool LdlocaI2_CheckValue(short expect)
-					{
-						short a = expect;
-						return LdlocaI2_DoCheckValue(expect, ref a);
-					}
-
-					static bool LdlocaI2_DoCheckValue(short expect, ref short value)
-					{
-						return (expect == value);
-					}
-				}
-			" + Code.AllTestCode;
+			CodeSource = CreateTestCode("LdlocaI2_CheckValue", "short");
 			Assert.IsTrue(Run<bool>("", "Test", "LdlocaI2_CheckValue", value));
 		}
 
@@ -70,21 +63,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		[Test, Author(@"grover", @"sharpos@michaelruck.de")]
 		public void LdlocaI4_CheckValue(int value)
 		{
-			CodeSource = @"
-				static class Test
-				{
-					static bool LdlocaI4_CheckValue(int expect)
-					{
-						int a = expect;
-						return LdlocaI4_DoCheckValue(expect, ref a);
-					}
-
-					static bool LdlocaI4_DoCheckValue(int expect, ref int value)
-					{
-						return (expect == value);
-					}
-				}
-			" + Code.AllTestCode;
+			CodeSource = CreateTestCode("LdlocaI4_CheckValue", "sbintyte");
 			Assert.IsTrue(Run<bool>("", "Test", "LdlocaI4_CheckValue", value));
 		}
 
@@ -92,21 +71,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		[Test, Author(@"grover", @"sharpos@michaelruck.de")]
 		public void LdlocaI8_CheckValue(long value)
 		{
-			CodeSource = @"
-				static class Test
-				{
-					static bool LdlocaI8_CheckValue(long expect)
-					{
-						long a = expect;
-						return LdlocaI8_DoCheckValue(expect, ref a);
-					}
-
-					static bool LdlocaI8_DoCheckValue(long expect, ref long value)
-					{
-						return (expect == value);
-					}
-				}
-			" + Code.AllTestCode;
+			CodeSource = CreateTestCode("LdlocaI8_CheckValue", "long");
 			Assert.IsTrue(Run<bool>("", "Test", "LdlocaI8_CheckValue", value));
 		}
 
@@ -114,21 +79,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		[Test, Author(@"grover", @"sharpos@michaelruck.de")]
 		public void LdlocaU1_CheckValue(byte value)
 		{
-			CodeSource = @"
-				static class Test
-				{
-					static bool LdlocaU1_CheckValue(byte expect)
-					{
-						byte a = expect;
-						return LdlocaU1_DoCheckValue(expect, ref a);
-					}
-
-					static bool LdlocaU1_DoCheckValue(byte expect, ref byte value)
-					{
-						return (expect == value);
-					}
-				}
-			" + Code.AllTestCode;
+			CodeSource = CreateTestCode("LdlocaU1_CheckValue", "byte");
 			Assert.IsTrue(Run<bool>("", "Test", "LdlocaU1_CheckValue", value));
 		}
 
@@ -136,21 +87,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		[Test, Author(@"grover", @"sharpos@michaelruck.de")]
 		public void LdlocaU2_CheckValue(ushort value)
 		{
-			CodeSource = @"
-				static class Test
-				{
-					static bool LdlocaU2_CheckValue(ushort expect)
-					{
-						ushort a = expect;
-						return LdlocaU2_DoCheckValue(expect, ref a);
-					}
-
-					static bool LdlocaU2_DoCheckValue(ushort expect, ref ushort value)
-					{
-						return (expect == value);
-					}
-				}
-			" + Code.AllTestCode;
+			CodeSource = CreateTestCode("LdlocaU2_CheckValue", "ushort");
 			Assert.IsTrue(Run<bool>("", "Test", "LdlocaU2_CheckValue", value));
 		}
 
@@ -158,21 +95,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		[Test, Author(@"grover", @"sharpos@michaelruck.de")]
 		public void LdlocaU4_CheckValue(uint value)
 		{
-			CodeSource = @"
-				static class Test
-				{
-					static bool LdlocaU4_CheckValue(uint expect)
-					{
-						uint a = expect;
-						return LdlocaU4_DoCheckValue(expect, ref a);
-					}
-
-					static bool LdlocaU4_DoCheckValue(uint expect, ref uint value)
-					{
-						return (expect == value);
-					}
-				}
-			" + Code.AllTestCode;
+			CodeSource = CreateTestCode("LdlocaU4_CheckValue", "uint");
 			Assert.IsTrue(Run<bool>("", "Test", "LdlocaU4_CheckValue", value));
 		}
 
@@ -180,21 +103,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		[Test, Author(@"grover", @"sharpos@michaelruck.de")]
 		public void LdlocaU8_CheckValue(ulong value)
 		{
-			CodeSource = @"
-				static class Test
-				{
-					static bool LdlocaU8_CheckValue(ulong expect)
-					{
-						ulong a = expect;
-						return LdlocaU8_DoCheckValue(expect, ref a);
-					}
-
-					static bool LdlocaU8_DoCheckValue(ulong expect, ref ulong value)
-					{
-						return (expect == value);
-					}
-				}
-			" + Code.AllTestCode;
+			CodeSource = CreateTestCode("LdlocaU8_CheckValue", "ulong");
 			Assert.IsTrue(Run<bool>("", "Test", "LdlocaU8_CheckValue", value));
 		}
 
@@ -202,21 +111,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		[Test, Author(@"grover", @"sharpos@michaelruck.de")]
 		public void LdlocaR4_CheckValue(float value)
 		{
-			CodeSource = @"
-				static class Test
-				{
-					static bool LdlocaR4_CheckValue(float expect)
-					{
-						float a = expect;
-						return LdlocaR4_DoCheckValue(expect, ref a);
-					}
-
-					static bool LdlocaR4_DoCheckValue(float expect, ref float value)
-					{
-						return (expect == value);
-					}
-				}
-			" + Code.AllTestCode;
+			CodeSource = CreateTestCode("LdlocaR4_CheckValue", "float");
 			Assert.IsTrue(Run<bool>("", "Test", "LdlocaR4_CheckValue", value));
 		}
 
@@ -224,21 +119,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		[Test, Author(@"grover", @"sharpos@michaelruck.de")]
 		public void LdlocaR8_CheckValue(double value)
 		{
-			CodeSource = @"
-				static class Test
-				{
-					static bool LdlocaR8_CheckValue(double expect)
-					{
-						double a = expect;
-						return LdlocaR8_DoCheckValue(expect, ref a);
-					}
-
-					static bool LdlocaR8_DoCheckValue(double expect, ref double value)
-					{
-						return (expect == value);
-					}
-				}
-			" + Code.AllTestCode;
+			CodeSource = CreateTestCode("LdlocaR8_CheckValue", "double");
 			Assert.IsTrue(Run<bool>("", "Test", "LdlocaR8_CheckValue", value));
 		}
 

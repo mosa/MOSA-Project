@@ -20,31 +20,26 @@ namespace Test.Mosa.Runtime.CompilerFramework.CIL
 	[Description(@"Tests support for pinning variables in memory.")]
 	public class PinnedFixture : TestFixtureBase
 	{
-		private static string CreateTestCode()
-		{
-			return @"
-				public class PinsAMemberClass
-				{
-					private int length;
+		static readonly string TestCode = @"
+			public class PinsAMemberClass
+			{
+				private int length;
 
-					public unsafe void PinsAVariable()
+				public unsafe void PinsAVariable()
+				{
+					fixed (int *pLength = &this.length)
 					{
-						fixed (int *pLength = &this.length)
-						{
-							char* pChars = (char*)(pLength + 1);
-							*(pChars) = (char)0;
-						}
+						char* pChars = (char*)(pLength + 1);
+						*(pChars) = (char)0;
 					}
 				}
-			"
-			+ Code.AllTestCode;
-		}
+			}
+		" + Code.AllTestCode;
 
 		[Test]
 		public void MustCompileCodePinningVariables()
 		{
-			CodeSource = CreateTestCode();
-
+			CodeSource = TestCode;
 			Assert.DoesNotThrow(() => this.CompileTestCode());
 		}
 	}

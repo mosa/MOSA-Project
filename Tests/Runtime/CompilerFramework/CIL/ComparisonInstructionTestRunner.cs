@@ -21,11 +21,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 
 		public ComparisonInstructionTestRunner()
 		{
-			this.IncludeCeq = true;
-			this.IncludeClt = true;
-			this.IncludeCgt = true;
-			this.IncludeCle = true;
-			this.IncludeCge = true;
+			IncludeCeq = true;
+			IncludeClt = true;
+			IncludeCgt = true;
+			IncludeCle = true;
+			IncludeCge = true;
 		}
 
 		public string FirstType { get; set; }
@@ -42,24 +42,23 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 
 			codeBuilder.Append(TestCodeHeader);
 
-			if (this.IncludeCeq)
+			if (IncludeCeq)
 				codeBuilder.Append(TestCodeCeq);
-			if (this.IncludeClt)
+			if (IncludeClt)
 				codeBuilder.Append(TestCodeClt);
-			if (this.IncludeCgt)
+			if (IncludeCgt)
 				codeBuilder.Append(TestCodeCgt);
-			if (this.IncludeCle)
+			if (IncludeCle)
 				codeBuilder.Append(TestCodeCle);
-			if (this.IncludeCge)
+			if (IncludeCge)
 				codeBuilder.Append(TestCodeCge);
 
 			codeBuilder.Append(TestCodeFooter);
-
 			codeBuilder.Append(Code.AllTestCode);
 
 			codeBuilder
-				.Replace(@"[[firsttype]]", FirstType)
-				.Replace(@"[[secondtype]]", FirstType);
+				.Replace(@"#firsttype", FirstType)
+				.Replace(@"#secondtype", FirstType);
 
 			CodeSource = codeBuilder.ToString();
 		}
@@ -115,35 +114,35 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		";
 
 		private const string TestCodeCeq = @"
-				public static bool CeqTest([[firsttype]] first, [[secondtype]] second)
+				public static bool CeqTest(#firsttype first, #secondtype second)
 				{
 					return (first == second);
 				}
 			";
 
 		private const string TestCodeClt = @"
-				public static bool CltTest([[firsttype]] first, [[secondtype]] second)
+				public static bool CltTest(#firsttype first, #secondtype second)
 				{
 					return (first < second);
 				}
 			";
 
 		private const string TestCodeCgt = @"
-				public static bool CgtTest([[firsttype]] first, [[secondtype]] second)
+				public static bool CgtTest(#firsttype first, #secondtype second)
 				{
 					return (first > second);
 				}
 			";
 
 		private const string TestCodeCle = @"
-				public static bool CleTest([[firsttype]] first, [[secondtype]] second)
+				public static bool CleTest(#firsttype first, #secondtype second)
 				{
 					return (first <= second);
 				}
 			";
 
 		private const string TestCodeCge = @"
-				public static bool CgeTest([[firsttype]] first, [[secondtype]] second)
+				public static bool CgeTest(#firsttype first, #secondtype second)
 				{
 					return (first >= second);
 				}

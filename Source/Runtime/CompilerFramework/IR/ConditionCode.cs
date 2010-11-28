@@ -74,29 +74,29 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// </summary>
 		Signed,
 
-        /// <summary>
-        /// No parity
-        /// </summary>
-        NoParity,
+		/// <summary>
+		/// No parity
+		/// </summary>
+		NoParity,
 
-        /// <summary>
-        /// Carry flag
-        /// </summary>
-        Carry,
+		/// <summary>
+		/// Carry flag
+		/// </summary>
+		Carry,
 
-        /// <summary>
-        /// No carry flag
-        /// </summary>
-        NoCarry,
+		/// <summary>
+		/// No carry flag
+		/// </summary>
+		NoCarry,
 
-        /// <summary>
-        /// Zero flag
-        /// </summary>
-        Zero,
+		/// <summary>
+		/// Zero flag
+		/// </summary>
+		Zero,
 
-        /// <summary>
-        /// No zero flag
-        /// </summary>
-        NoZero,
+		/// <summary>
+		/// No zero flag
+		/// </summary>
+		NoZero,
 	}
 }

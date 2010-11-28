@@ -47,9 +47,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CIL
 						return '" + value[value.Length - 1] + @"' == ch;
 					}
 				}
-
-			"
-			+ Code.AllTestCode;
+			" + Code.AllTestCode;
 		}
 
 		[Test]

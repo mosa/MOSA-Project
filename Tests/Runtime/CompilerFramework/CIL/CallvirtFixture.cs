@@ -65,7 +65,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CIL
 		public void TestBaseCall()
 		{
 			this.EnsureCodeSourceIsSet();
-			int result = (int)Run<int>(@"", @"Derived", @"STestBaseCall");
+			int result = Run<int>(@"", @"Derived", @"STestBaseCall");
 			Assert.AreEqual(12, result);
 		}
 

@@ -20,44 +20,64 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 	[TestFixture]
 	public class Ldarga : CodeDomTestRunner
 	{
+		private static string TestCode = @"
+			static class Test
+			{ 
+				static bool #name(#type expect, #type a) 
+				{
+					return CheckValue(expect, ref a);
+				}
+
+				static bool CheckValue(#type expect, ref #type a)
+				{
+					return expect == a;
+				}
+			}";
+
+		private static string TestCodeWithLocalVariable = @"
+			static class Test
+			{ 
+				static bool #name(#type expect, #type a) 
+				{
+					ChangeValue(expect, ref a);
+					return expect == a;
+				}
+
+				static void ChangeValue(#type expect, ref #type a)
+				{
+					a = expect;
+				}
+			}";
+
+		private static string CreateTestCode(string name, string type)
+		{
+			return TestCode
+				.Replace("#name", name)
+				.Replace("#type", type)
+				+ Code.AllTestCode;
+		}
+
+		private static string CreateTestCodeWithLocalVariable(string name, string type)
+		{
+			return TestCodeWithLocalVariable
+				.Replace("#name", name)
+				.Replace("#type", type)
+				+ Code.AllTestCode;
+		}
+
 		#region CheckValue
-	
+
 		[Test, Author("alyman", "mail.alex.lyman@gmail.com")]
 		public void LdargaI1_CheckValue([Column(0, 1, sbyte.MinValue, sbyte.MaxValue)] sbyte a)
 		{
-			CodeSource = @"
-				static class Test
-				{ 
-					static bool LdargaI1_CheckValue(sbyte expect, sbyte a) 
-					{
-						return CheckValue(expect, ref a);
-					}
-
-					static bool CheckValue(sbyte expect, ref sbyte a)
-					{
-						return expect == a;
-					}
-				}" + Code.AllTestCode;
-
+			CodeSource = CreateTestCode("LdargaI1_CheckValue", "sbyte");
 			Assert.IsTrue(Run<bool>("", "Test", "LdargaI1_CheckValue", a, a));
 		}
 
 		[Test, Author("alyman", "mail.alex.lyman@gmail.com")]
 		public void LdargaU1_CheckValue([Column(0, 1, byte.MinValue, byte.MaxValue)] byte a)
 		{
-			CodeSource = @"
-				static class Test
-				{ 
-					static bool LdargaU1_CheckValue(byte expect, byte a) 
-					{
-						return CheckValue(expect, ref a);
-					}
-
-					static bool CheckValue(byte expect, ref byte a)
-					{
-						return expect == a;
-					}
-				}" + Code.AllTestCode;
+			CodeSource = CreateTestCode("LdargaU1_CheckValue", "byte");
 			Assert.IsTrue(Run<bool>("", "Test", "LdargaU1_CheckValue", a, a));
 		}
 
@@ -68,19 +88,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		[Test, Author("alyman", "mail.alex.lyman@gmail.com")]
 		public void LdargaI2_CheckValue(short a)
 		{
-			CodeSource = @"
-				static class Test
-				{ 
-					static bool LdargaI2_CheckValue(short expect, short a) 
-					{
-						return CheckValue(expect, ref a);
-					}
-
-					static bool CheckValue(short expect, ref short a)
-					{
-						return expect == a;
-					}
-				}" + Code.AllTestCode;
+			CodeSource = CreateTestCode("LdargaI2_CheckValue", "short");
 			Assert.IsTrue(Run<bool>("", "Test", "LdargaI2_CheckValue", a, a));
 		}
 
@@ -88,19 +96,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		[Test, Author("alyman", "mail.alex.lyman@gmail.com")]
 		public void LdargaU2_CheckValue(ushort a)
 		{
-			CodeSource = @"
-				static class Test
-				{ 
-					static bool LdargaU2_CheckValue(ushort expect, ushort a) 
-					{
-						return CheckValue(expect, ref a);
-					}
-
-					static bool CheckValue(ushort expect, ref ushort a)
-					{
-						return expect == a;
-					}
-				}" + Code.AllTestCode;
+			CodeSource = CreateTestCode("LdargaU2_CheckValue", "ushort");
 			Assert.IsTrue(Run<bool>("", "Test", "LdargaU2_CheckValue", a, a));
 		}
 
@@ -108,19 +104,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		[Test, Author("alyman", "mail.alex.lyman@gmail.com")]
 		public void LdargaI4_CheckValue(int a)
 		{
-			CodeSource = @"
-				static class Test
-				{ 
-					static bool LdargaI4_CheckValue(int expect, int a) 
-					{
-						return CheckValue(expect, ref a);
-					}
-
-					static bool CheckValue(int expect, ref int a)
-					{
-						return expect == a;
-					}
-				}" + Code.AllTestCode;
+			CodeSource = CreateTestCode("LdargaI4_CheckValue", "int");
 			Assert.IsTrue(Run<bool>("", "Test", "LdargaI4_CheckValue", a, a));
 		}
 
@@ -128,19 +112,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		[Test, Author("alyman", "mail.alex.lyman@gmail.com")]
 		public void LdargaU4_CheckValue(uint a)
 		{
-			CodeSource = @"
-				static class Test
-				{ 
-					static bool LdargaU4_CheckValue(uint expect, uint a) 
-					{
-						return CheckValue(expect, ref a);
-					}
-
-					static bool CheckValue(uint expect, ref uint a)
-					{
-						return expect == a;
-					}
-				}" + Code.AllTestCode;
+			CodeSource = CreateTestCode("LdargaU4_CheckValue", "uint");
 			Assert.IsTrue(Run<bool>("", "Test", "LdargaU4_CheckValue", a, a));
 		}
 
@@ -148,19 +120,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		[Test, Author("alyman", "mail.alex.lyman@gmail.com")]
 		public void LdargaI8_CheckValue(long a)
 		{
-			CodeSource = @"
-				static class Test
-				{ 
-					static bool LdargaI8_CheckValue(long expect, long a) 
-					{
-						return CheckValue(expect, ref a);
-					}
-
-					static bool CheckValue(long expect, ref long a)
-					{
-						return expect == a;
-					}
-				}" + Code.AllTestCode;
+			CodeSource = CreateTestCode("LdargaI8_CheckValue", "long");
 			Assert.IsTrue(Run<bool>("", "Test", "LdargaI8_CheckValue", a, a));
 		}
 
@@ -168,19 +128,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		[Test, Author("alyman", "mail.alex.lyman@gmail.com")]
 		public void LdargaU8_CheckValue(ulong a)
 		{
-			CodeSource = @"
-				static class Test
-				{ 
-					static bool LdargaU8_CheckValue(ulong expect, ulong a) 
-					{
-						return CheckValue(expect, ref a);
-					}
-
-					static bool CheckValue(ulong expect, ref ulong a)
-					{
-						return expect == a;
-					}
-				}" + Code.AllTestCode;
+			CodeSource = CreateTestCode("LdargaU8_CheckValue", "ulong");
 			Assert.IsTrue(Run<bool>("", "Test", "LdargaU8_CheckValue", a, a));
 		}
 
@@ -188,19 +136,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		[Test, Author("alyman", "mail.alex.lyman@gmail.com")]
 		public void LdargaR4_CheckValue(float a)
 		{
-			CodeSource = @"
-				static class Test
-				{ 
-					static bool LdargaR4_CheckValue(float expect, float a) 
-					{
-						return CheckValue(expect, ref a);
-					}
-
-					static bool CheckValue(float expect, ref float a)
-					{
-						return expect == a;
-					}
-				}" + Code.AllTestCode;
+			CodeSource = CreateTestCode("LdargaR4_CheckValue", "float");
 			Assert.IsTrue(Run<bool>("", "Test", "LdargaR4_CheckValue", a, a));
 		}
 
@@ -208,22 +144,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		[Test, Author("alyman", "mail.alex.lyman@gmail.com")]
 		public void LdargaR8_CheckValue(double a)
 		{
-			CodeSource = @"
-				static class Test
-				{ 
-					static bool LdargaR8_CheckValue(double expect, double a) 
-					{
-						return CheckValue(expect, ref a);
-					}
-
-					static bool CheckValue(double expect, ref double a)
-					{
-						return expect == a;
-					}
-				}" + Code.AllTestCode;
+			CodeSource = CreateTestCode("LdargaR8_CheckValue", "double");
 			Assert.IsTrue(Run<bool>("", "Test", "LdargaR8_CheckValue", a, a));
 		}
-
 
 		#endregion
 
@@ -233,20 +156,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		[Test, Author("alyman", "mail.alex.lyman@gmail.com")]
 		public void LdargaI1_ChangeValue(sbyte newValue, sbyte oldValue)
 		{
-			CodeSource = @"
-				static class Test
-				{ 
-					static bool LdargaI1_ChangeValue(sbyte expect, sbyte a) 
-					{
-						ChangeValue(expect, ref a);
-						return expect == a;
-					}
-
-					static void ChangeValue(sbyte expect, ref sbyte a)
-					{
-						a = expect;
-					}
-				}" + Code.AllTestCode;
+			CodeSource = CreateTestCode("LdargaI1_ChangeValue", "sbyte");
 			Assert.IsTrue(Run<bool>("", "Test", "LdargaI1_ChangeValue", newValue, oldValue));
 		}
 
@@ -254,55 +164,40 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		[Test, Author("alyman", "mail.alex.lyman@gmail.com")]
 		public void LdargaI2_ChangeValue(short newValue, short oldValue)
 		{
-			CodeSource = "static class Test { static void LdargaI2_ChangeValue(short value, ref short a) { a = value; } }" + Code.AllTestCode;
-			object[] args = new object[] { newValue, oldValue };
-			Run<object>("", "Test", "LdargaI2_ChangeValue", args);
-			Console.WriteLine("{0} {1} {2}", newValue, args[0], args[1]);
-			Assert.AreEqual(newValue, args[1]);
+			CodeSource = CreateTestCode("LdargaI2_ChangeValue", "short");
+			Assert.IsTrue(Run<bool>("", "Test", "LdargaI2_ChangeValue", newValue, oldValue));
 		}
 
 		[Row(1, 0), Row(0, 1), Row(1, int.MinValue), Row(0, int.MaxValue)]
 		[Test, Author("alyman", "mail.alex.lyman@gmail.com")]
 		public void LdargaI4_ChangeValue(int newValue, int oldValue)
 		{
-			CodeSource = "static class Test { static void LdargaI4_ChangeValue(int value, ref int a) { a = value; } }" + Code.AllTestCode;
-			object[] args = new object[] { newValue, oldValue };
-			Run<object>("", "Test", "LdargaI4_ChangeValue", args);
-			Console.WriteLine("{0} {1} {2}", newValue, args[0], args[1]);
-			Assert.AreEqual(newValue, args[1]);
+			CodeSource = CreateTestCode("LdargaI4_ChangeValue", "int");
+			Assert.IsTrue(Run<bool>("", "Test", "LdargaI4_ChangeValue", newValue, oldValue));
 		}
 
 		[Row(1, 0), Row(0, 1), Row(1, long.MinValue), Row(0, long.MaxValue)]
 		[Test, Author("alyman", "mail.alex.lyman@gmail.com")]
 		public void LdargaI8_ChangeValue(long newValue, long oldValue)
 		{
-			CodeSource = "static class Test { static void LdargaI8_ChangeValue(long value, ref long a) { a = value; } }" + Code.AllTestCode;
-			object[] args = new object[] { newValue, oldValue };
-			Run<object>("", "Test", "LdargaI8_ChangeValue", args);
-			Console.WriteLine("{0} {1} {2}", newValue, args[0], args[1]);
-			Assert.AreEqual(newValue, args[1]);
+			CodeSource = CreateTestCode("LdargaI8_ChangeValue", "long");
+			Assert.IsTrue(Run<bool>("", "Test", "LdargaI8_ChangeValue", newValue, oldValue));
 		}
 
 		[Row(1, 0), Row(0, 1), Row(1, float.MinValue), Row(0, float.MaxValue)]
 		[Test, Author("alyman", "mail.alex.lyman@gmail.com")]
 		public void LdargaR4_ChangeValue(float newValue, float oldValue)
 		{
-			CodeSource = "static class Test { static void LdargaR4_ChangeValue(float value, ref float a) { a = value; } }" + Code.AllTestCode;
-			object[] args = new object[] { newValue, oldValue };
-			Run<object>("", "Test", "LdargaR4_ChangeValue", args);
-			Console.WriteLine("{0} {1} {2}", newValue, args[0], args[1]);
-			Assert.AreEqual(newValue, args[1]);
+			CodeSource = CreateTestCode("LdargaR4_ChangeValue", "float");
+			Assert.IsTrue(Run<bool>("", "Test", "LdargaR4_ChangeValue", newValue, oldValue));
 		}
 
 		[Row(1, 0), Row(0, 1), Row(1, double.MinValue), Row(0, double.MaxValue)]
 		[Test, Author("alyman", "mail.alex.lyman@gmail.com")]
 		public void LdargaR8_ChangeValue(double newValue, double oldValue)
 		{
-			CodeSource = "static class Test { static void LdargaR8_ChangeValue(double value, ref double a) { a = value; } }" + Code.AllTestCode;
-			object[] args = new object[] { newValue, oldValue };
-			Run<object>("", "Test", "LdargaR8_ChangeValue", args);
-			Console.WriteLine("{0} {1} {2}", newValue, args[0], args[1]);
-			Assert.AreEqual(newValue, args[1]);
+			CodeSource = CreateTestCode("LdargaR8_ChangeValue", "double");
+			Assert.IsTrue(Run<bool>("", "Test", "LdargaR8_ChangeValue", newValue, oldValue));
 		}
 
 		#endregion

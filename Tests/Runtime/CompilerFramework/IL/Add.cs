@@ -843,6 +843,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 			CodeSource = CreateConstantTestCode("AddConstantR8Left", "double", "double", a.ToString(System.Globalization.CultureInfo.InvariantCulture), null);
 			Assert.IsTrue(Run<bool>("", "Test", "AddConstantR8Left", (a + b), b));
 		}
+
 		#endregion
 	}
 }

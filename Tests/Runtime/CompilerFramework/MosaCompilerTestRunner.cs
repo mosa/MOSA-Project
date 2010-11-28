@@ -106,7 +106,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Runs a test case.
 		/// </summary>
-		/// <typeparam name="T">The delegate used to run the test case.</typeparam>
+		/// <typeparam name="T">The return type of the test method.</typeparam>
 		/// <param name="ns">The namespace of the test.</param>
 		/// <param name="type">The type, which contains the test.</param>
 		/// <param name="method">The name of the method of the test.</param>

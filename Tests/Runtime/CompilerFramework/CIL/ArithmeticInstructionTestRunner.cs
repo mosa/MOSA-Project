@@ -20,12 +20,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 
 		public ArithmeticInstructionTestRunner()
 		{
-			this.IncludeAdd = true;
-			this.IncludeSub = true;
-			this.IncludeMul = true;
-			this.IncludeDiv = true;
-			this.IncludeRem = true;
-			this.IncludeNeg = true;
+			IncludeAdd = true;
+			IncludeSub = true;
+			IncludeMul = true;
+			IncludeDiv = true;
+			IncludeRem = true;
+			IncludeNeg = true;
 		}
 
 		public string ExpectedType { get; set; }
@@ -42,31 +42,30 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		private void SetTestCode()
 		{
 			StringBuilder codeBuilder = new StringBuilder();
+
 			codeBuilder.Append(TestCodeHeader);
-			if (this.IncludeAdd)
+
+			if (IncludeAdd)
 				codeBuilder.Append(TestCodeAdd);
-			if (this.IncludeSub)
+			if (IncludeSub)
 				codeBuilder.Append(TestCodeSub);
-			if (this.IncludeMul)
+			if (IncludeMul)
 				codeBuilder.Append(TestCodeMul);
-			if (this.IncludeDiv)
+			if (IncludeDiv)
 				codeBuilder.Append(TestCodeDiv);
-			if (this.IncludeRem)
+			if (IncludeRem)
 				codeBuilder.Append(TestCodeRem);
-			if (this.IncludeNeg)
+			if (IncludeNeg)
 				codeBuilder.Append(TestCodeNeg);
 
-			// FIXME: Ret didn't yet fit anywhere else, move it once something shows up (e.g. call support?)
 			codeBuilder.Append(TestCodeRet);
-
 			codeBuilder.Append(TestCodeFooter);
-
 			codeBuilder.Append(Code.AllTestCode);
 
 			codeBuilder
-				.Replace(@"[[expectedtype]]", ExpectedType)
-				.Replace(@"[[firsttype]]", FirstType)
-				.Replace(@"[[secondtype]]", SecondType);
+				.Replace(@"#expectedtype", ExpectedType)
+				.Replace(@"#firsttype", FirstType)
+				.Replace(@"#secondtype", SecondType);
 
 			CodeSource = codeBuilder.ToString();
 		}
@@ -136,49 +135,49 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		";
 
 		private const string TestCodeAdd = @"
-				public static bool AddTest([[expectedtype]] expectedValue, [[firsttype]] first, [[secondtype]] second)
+				public static bool AddTest(#expectedtype expectedValue, #firsttype first, #secondtype second)
 				{
 					return expectedValue == (first + second);   
 				}
 			";
 
 		private const string TestCodeSub = @"
-				public static bool SubTest([[expectedtype]] expectedValue, [[firsttype]] first, [[secondtype]] second)
+				public static bool SubTest(#expectedtype expectedValue, #firsttype first, #secondtype second)
 				{
 					return expectedValue == (first - second);   
 				}
 			";
 
 		private const string TestCodeMul = @"
-				public static bool MulTest([[expectedtype]] expectedValue, [[firsttype]] first, [[secondtype]] second)
+				public static bool MulTest(#expectedtype expectedValue, #firsttype first, #secondtype second)
 				{
 					return expectedValue == (first * second);
 				}
 			";
 
 		private const string TestCodeDiv = @"
-				public static bool DivTest([[expectedtype]] expectedValue, [[firsttype]] first, [[secondtype]] second)
+				public static bool DivTest(#expectedtype expectedValue, #firsttype first, #secondtype second)
 				{
 					return expectedValue == (first / second);
 				}
 			";
 
 		private const string TestCodeRem = @"
-				public static bool RemTest([[expectedtype]] expectedValue, [[firsttype]] first, [[secondtype]] second)
+				public static bool RemTest(#expectedtype expectedValue, #firsttype first, #secondtype second)
 				{
 					return expectedValue == (first % second);
 				}
 			";
 
 		private const string TestCodeNeg = @"
-				public static bool NegTest([[expectedtype]] expectedValue, [[firsttype]] first)
+				public static bool NegTest(#expectedtype expectedValue, #firsttype first)
 				{
 					return expectedValue == (-first);
 				}
 			";
 
 		private const string TestCodeRet = @"
-				public static [[firsttype]] RetTest([[firsttype]] first)
+				public static #firsttype RetTest(#firsttype first)
 				{
 					return first;
 				}
