@@ -221,6 +221,8 @@ namespace Mosa.Runtime.CompilerFramework
 				case IR.ConditionCode.UnsignedLessThan: return @"less (U)";
 				case IR.ConditionCode.NotSigned: return @"unsigned";
 				case IR.ConditionCode.Signed: return @"signed";
+				case IR.ConditionCode.Zero: return @"zero";
+				case IR.ConditionCode.NoZero: return @"nozero";
 				default: throw new NotSupportedException();
 			}
 		}
