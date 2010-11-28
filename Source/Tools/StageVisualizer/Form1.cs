@@ -18,7 +18,7 @@ namespace Mosa.Tools.StageVisualizer
 			InitializeComponent();
 		}
 
-		private void button1_Click(object sender, EventArgs e)
+		private void loadButton_Click(object sender, EventArgs e)
 		{
 			if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
 				output = new Output(openFileDialog1.FileName);
@@ -77,10 +77,10 @@ namespace Mosa.Tools.StageVisualizer
 				if (cbLabels.Items.Contains(label))
 					cbLabels.SelectedItem = label;
 
-			btnUpdate_Click(sender, e);
+			refreshButton_Click(sender, e);
 		}
 
-		private void btnUpdate_Click(object sender, EventArgs e)
+		private void refreshButton_Click(object sender, EventArgs e)
 		{
 			if (cbMethods.SelectedItem == null) {
 				tbResult.Lines = new string[0];
@@ -117,7 +117,7 @@ namespace Mosa.Tools.StageVisualizer
 		private void cbLabels_SelectionChangeCommitted(object sender, EventArgs e)
 		{
 			cbLabel.Checked = true;
-			btnUpdate_Click(sender, e);
+			refreshButton_Click(sender, e);
 		}
 
 		private void tbSource_TextChanged(object sender, EventArgs e)
@@ -126,5 +126,10 @@ namespace Mosa.Tools.StageVisualizer
 			UpdateText(sender, e);
 			lbStatus.Text = DateTime.Now.ToString();
 		}
+
+        private void saveButton_Click(object sender, EventArgs e)
+        {
+
+        }
 	}
 }
