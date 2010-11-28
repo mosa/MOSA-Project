@@ -223,6 +223,10 @@ namespace Mosa.Runtime.CompilerFramework
 				case IR.ConditionCode.Signed: return @"signed";
 				case IR.ConditionCode.Zero: return @"zero";
 				case IR.ConditionCode.NoZero: return @"nozero";
+				case IR.ConditionCode.NoParity: return @"noparity";
+				case IR.ConditionCode.Carry: return @"carry";
+				case IR.ConditionCode.NoCarry: return @"nocarry";
+
 				default: throw new NotSupportedException();
 			}
 		}
