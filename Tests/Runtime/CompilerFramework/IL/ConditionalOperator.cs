@@ -19,16 +19,23 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 	[TestFixture]
 	class ConditionalOperator : CodeDomTestRunner
 	{
+		private static string TestCode = @"
+			static class Test
+				{
+					static bool #name (#typeOut expect, #typeIn a, #typeIn b, #typeIn c, #typeIn d)
+					{
+						return expect == ((a #condition b) ? c : d);
+					}
+				}";
+
 		private static string CreateTestCode(string name, string condition, string typeIn, string typeOut)
 		{
-			return @"
-				static class Test
-				{
-					static bool " + name + "(" + typeOut + " expect, " + typeIn + " a, " + typeIn + @" b, " + typeIn + @" c, " + typeIn + @" d)
-					{
-						return expect == ((a " + condition + @" b) ? c : d);
-					}
-				}" + Code.AllTestCode;
+			return TestCode
+				.Replace("#name", name)
+				.Replace("#condition", condition)
+				.Replace("#typeIn", typeIn)
+				.Replace("#typeOut", typeOut)
+				+ Code.AllTestCode;
 		}
 
 		[Row((byte)2, (byte)2, (byte)0, (byte)1)]

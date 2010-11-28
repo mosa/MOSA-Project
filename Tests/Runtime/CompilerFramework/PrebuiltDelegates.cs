@@ -44355,7 +44355,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		delegate bool B_I8_I8_I8_I8_I8(long value1, long value2, long value3, long value4, long value5);
 
 		delegate bool B_U1_U1_U1_U1_U1(byte value1, byte value2, byte value3, byte value4, byte value5);
-		delegate bool B_U2_U2_U2_U2_U2(ushort value1, short value2, short value3, short value4, short value5);
+		delegate bool B_U2_U2_U2_U2_U2(ushort value1, ushort value2, ushort value3, ushort value4, ushort value5);
 		delegate bool B_U4_U4_U4_U4_U4(uint value1, uint value2, uint value3, uint value4, uint value5);
 		delegate bool B_U8_U8_U8_U8_U8(ulong value1, ulong value2, ulong value3, ulong value4, ulong value5);
 
