@@ -17,6 +17,7 @@ using Test.Mosa.Runtime.CompilerFramework;
 
 namespace Test.Mosa.Runtime.CompilerFramework.IL
 {
+
 	[TestFixture]
 	public class AddPtr : CodeDomTestRunner
 	{
@@ -53,7 +54,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 
 					static unsafe #type DoAddPtr(#type a)
 					{
-						return (a + #value);
+						return a + ((#constantType)#constantValue);
 					}
 				}";
 
@@ -67,30 +68,26 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 
 					static unsafe #type DoAddPtr(#type a)
 					{
-						return (#value + a);
+						return ((#constantType)#constantValue) + a;
 					}
 				}";
 
-		private static string CreateConstantTestCode(string type, string constantLeft, string constantRight)
+		private static string CreateConstantRightTestCode(string type, string constantType, string constantValue)
 		{
-			if (constantLeft == null)
-			{
-				return TestCodeConstantRight
-					.Replace("#type", type)
-					.Replace("#value", constantRight)
-					+ Code.AllTestCode;
-			}
-			else if (constantRight == null)
-			{
-				return TestCodeConstantLeft
-					.Replace("#type", type)
-					.Replace("#value", constantLeft)
-					+ Code.AllTestCode;
-			}
-			else
-			{
-				throw new NotSupportedException();
-			}
+			return TestCodeConstantRight
+				.Replace("#type", type)
+				.Replace("#constantType", constantType)
+				.Replace("#constantValue", constantValue)
+				+ Code.AllTestCode;
+		}
+
+		private static string CreateConstantLeftTestCode(string type, string constantType, string constantValue)
+		{
+			return TestCodeConstantLeft
+				.Replace("#type", type)
+				.Replace("#constantType", constantType)
+				.Replace("#constantValue", constantValue)
+				+ Code.AllTestCode;
 		}
 
 		#region C
@@ -98,89 +95,89 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public unsafe void AddCPtrI4Left(int a, int b)
 		{
 			CodeSource = CreateTestCode("char*", "int", "char*");
 			UnsafeCode = true;
-			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", b, a, a + b));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, b, (int)((char*)a + (int)b)));
 		}
 
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
-		public unsafe void AddCPtrI8Left(int a, long b)
+		[Test]
+		public unsafe void AddCPtrI8Left(int a, int b)
 		{
 			CodeSource = CreateTestCode("char*", "long", "char*");
 			UnsafeCode = true;
-			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", b, a, a + b));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, b, (int)((char*)a + (long)b)));
 		}
 
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public unsafe void AddCPtrI4Right(int a, int b)
 		{
 			CodeSource = CreateTestCode("int", "char*", "char*");
 			UnsafeCode = true;
-			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", b, a, a + b));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", b, a, (int)((char*)a + (int)b)));
 		}
 
 		//[Row(0, 42)]
 		//[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
-		public unsafe void AddCPtrI8Right(int a, long b)
+		[Test]
+		public unsafe void AddCPtrI8Right(int a, int b)
 		{
 			CodeSource = CreateTestCode("long", "char*", "char*");
 			UnsafeCode = true;
-			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", b, a, a + b));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", b, a, (int)((char*)a + (int)b)));
 		}
 
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public unsafe void AddConstantCPtrI4Left(int a, int b)
 		{
-			CodeSource = CreateConstantTestCode("char*", null, b.ToString());
+			CodeSource = CreateConstantLeftTestCode("char*", "int", b.ToString());
 			UnsafeCode = true;
-			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, a + b));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, (int)((char*)a + (int)b)));
 		}
 
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
-		public unsafe void AddConstantCPtrI8Left(int a, long b)
+		[Test]
+		public unsafe void AddConstantCPtrI8Left(int a, int b)
 		{
-			CodeSource = CreateConstantTestCode("char*", null, b.ToString());
+			CodeSource = CreateConstantLeftTestCode("char*", "long", b.ToString());
 			UnsafeCode = true;
-			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, a + b));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, (int)((char*)a + (long)b)));
 		}
 
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public unsafe void AddConstantCPtrI4Right(int a, int b)
 		{
-			CodeSource = CreateConstantTestCode("char*", b.ToString(), null);
+			CodeSource = CreateConstantRightTestCode("char*", "int", b.ToString());
 			UnsafeCode = true;
-			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, a + b));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, (int)((char*)a + (int)b)));
 		}
 
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
-		public unsafe void AddConstantCPtrI8Right(int a, long b)
+		[Test]
+		public unsafe void AddConstantCPtrI8Right(int a, int b)
 		{
-			CodeSource = CreateConstantTestCode("char*", b.ToString(), null);
+			CodeSource = CreateConstantLeftTestCode("char*", "long", b.ToString());
 			UnsafeCode = true;
-			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, a + b));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, (int)((char*)a + (long)b)));
 		}
 		#endregion
 
@@ -189,90 +186,91 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public unsafe void AddU1PtrI4Left(int a, int b)
 		{
 			CodeSource = CreateTestCode("byte*", "int", "byte*");
 			UnsafeCode = true;
-			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", b, a, a + b));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, b, (int)((byte*)a + (int)b)));
 		}
 
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public unsafe void AddU1PtrI8Left(int a, int b)
 		{
 			CodeSource = CreateTestCode("byte*", "long", "byte*");
 			UnsafeCode = true;
-			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", b, a, a + b));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, b, (int)((byte*)a + (long)b)));
 		}
 
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public unsafe void AddU1PtrI4Right(int a, int b)
 		{
 			CodeSource = CreateTestCode("int", "byte*", "byte*");
 			UnsafeCode = true;
-			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", b, a, a + b));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", b, a, (int)((byte*)a + (int)b)));
 		}
 
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public unsafe void AddU1PtrI8Right(int a, int b)
 		{
 			CodeSource = CreateTestCode("long", "byte*", "byte*");
 			UnsafeCode = true;
-			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", b, a, a + b));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", b, a, (int)((byte*)a + (int)b)));
 		}
 
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public unsafe void AddConstantU1PtrI4Left(int a, int b)
 		{
-			CodeSource = CreateConstantTestCode("byte*", null, b.ToString());
+			CodeSource = CreateConstantLeftTestCode("byte*", "int", b.ToString());
 			UnsafeCode = true;
-			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, a + b));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, (int)((byte*)a + (int)b)));
 		}
 
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
-		public unsafe void AddConstantU1PtrI8Left(int a, long b)
+		[Test]
+		public unsafe void AddConstantU1PtrI8Left(int a, int b)
 		{
-			CodeSource = CreateConstantTestCode("byte*", null, b.ToString());
+			CodeSource = CreateConstantLeftTestCode("byte*", "long", b.ToString());
 			UnsafeCode = true;
-			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, a + b));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, (int)((byte*)a + (long)b)));
 		}
 
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public unsafe void AddConstantU1PtrI4Right(int a, int b)
 		{
-			CodeSource = CreateConstantTestCode("byte*", b.ToString(), null);
+			CodeSource = CreateConstantRightTestCode("byte*", "int", b.ToString());
 			UnsafeCode = true;
-			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", b, a, a + b));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, (int)((byte*)a + (int)b)));
 		}
 
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
-		public unsafe void AddConstantU1PtrI8Right(int a, long b)
+		[Test]
+		public unsafe void AddConstantU1PtrI8Right(int a, int b)
 		{
-			CodeSource = CreateConstantTestCode("byte*", b.ToString(), null);
+			CodeSource = CreateConstantRightTestCode("byte*", "long", b.ToString());
 			UnsafeCode = true;
-			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, a + b));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, (int)((byte*)a + (long)b)));
 		}
+
 		#endregion
 
 		#region I4
@@ -280,89 +278,89 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public unsafe void AddI4PtrI4Left(int a, int b)
 		{
 			CodeSource = CreateTestCode("int*", "int", "int*");
 			UnsafeCode = true;
-			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", b, a, a + b));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, b, (int)((int*)a + (int)b)));
 		}
 
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public unsafe void AddI4PtrI8Left(int a, int b)
 		{
 			CodeSource = CreateTestCode("int*", "long", "int*");
 			UnsafeCode = true;
-			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", b, a, a + b));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, b, (int)((int*)a + (long)b)));
 		}
 
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public unsafe void AddI4PtrI4Right(int a, int b)
 		{
 			CodeSource = CreateTestCode("int", "int*", "int*");
 			UnsafeCode = true;
-			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", b, a, a + b));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", b, a, (int)((int*)a + (int)b)));
 		}
 
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public unsafe void AddI4PtrI8Right(int a, int b)
 		{
 			CodeSource = CreateTestCode("long", "int*", "int*");
 			UnsafeCode = true;
-			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", b, a, a + b));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", b, a, (int)((int*)a + (long)b)));
 		}
 
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public unsafe void AddConstantI4PtrI4Left(int a, int b)
 		{
-			CodeSource = CreateConstantTestCode("int*", null, b.ToString());
+			CodeSource = CreateConstantLeftTestCode("int*", "int", b.ToString());
 			UnsafeCode = true;
-			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", b, a, a + b));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, (int)((int*)a + (int)b)));
 		}
 
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
-		public unsafe void AddConstantI4PtrI8Left(int a, long b)
+		[Test]
+		public unsafe void AddConstantI4PtrI8Left(int a, int b)
 		{
-			CodeSource = CreateConstantTestCode("int*", null, b.ToString());
+			CodeSource = CreateConstantLeftTestCode("int*", "long", b.ToString());
 			UnsafeCode = true;
-			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, a + b));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, (int)((int*)a + (long)b)));
 		}
 
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public unsafe void AddConstantI4PtrI4Right(int a, int b)
 		{
-			CodeSource = CreateConstantTestCode("int*", b.ToString(), null);
+			CodeSource = CreateConstantRightTestCode("int*", "int", b.ToString());
 			UnsafeCode = true;
-			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", b, a, a + b));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, (int)((int*)a + (int)b)));
 		}
 
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
-		public unsafe void AddConstantI4PtrI8Right(int a, long b)
+		[Test]
+		public unsafe void AddConstantI4PtrI8Right(int a, int b)
 		{
-			CodeSource = CreateConstantTestCode("int*", b.ToString(), null);
+			CodeSource = CreateConstantRightTestCode("int*", "long", b.ToString());
 			UnsafeCode = true;
-			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, a + b));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, (int)((int*)a + (long)b)));
 		}
 		#endregion
 
@@ -371,89 +369,89 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public unsafe void AddI8PtrI4Left(int a, int b)
 		{
 			CodeSource = CreateTestCode("long*", "int", "long*");
 			UnsafeCode = true;
-			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, a + b));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, b, (int)((long*)a + (int)b)));
 		}
 
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public unsafe void AddI8PtrI8Left(int a, int b)
 		{
 			CodeSource = CreateTestCode("long*", "long", "long*");
 			UnsafeCode = true;
-			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, a + b));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, b, (int)((long*)a + (long)b)));
 		}
 
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public unsafe void AddI8PtrI4Right(int a, int b)
 		{
 			CodeSource = CreateTestCode("int", "long*", "long*");
 			UnsafeCode = true;
-			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, a + b));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", b, a, (int)((long*)a + (int)b)));
 		}
 
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public unsafe void AddI8PtrI8Right(int a, int b)
 		{
 			CodeSource = CreateTestCode("long", "long*", "long*");
 			UnsafeCode = true;
-			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, a + b));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", b, a, (int)((long*)a + (long)b)));
 		}
 
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public unsafe void AddConstantI8PtrI4Left(int a, int b)
 		{
-			CodeSource = CreateConstantTestCode("long*", null, b.ToString());
+			CodeSource = CreateConstantLeftTestCode("long*", "int", b.ToString());
 			UnsafeCode = true;
-			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, a + b));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, (int)((long*)a + (int)b)));
 		}
 
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
-		public unsafe void AddConstantI8PtrI8Left(int a, long b)
+		[Test]
+		public unsafe void AddConstantI8PtrI8Left(int a, int b)
 		{
-			CodeSource = CreateConstantTestCode("long*", null, b.ToString());
+			CodeSource = CreateConstantLeftTestCode("long*", "long", b.ToString());
 			UnsafeCode = true;
-			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, a + b));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, (int)((long*)a + (long)b)));
 		}
 
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public unsafe void AddConstantI8PtrI4Right(int a, int b)
 		{
-			CodeSource = CreateConstantTestCode("long*", b.ToString(), null);
+			CodeSource = CreateConstantRightTestCode("long*", "int", b.ToString());
 			UnsafeCode = true;
-			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", b, a, a + b));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, (int)((long*)a + (int)b)));
 		}
 
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
-		public unsafe void AddConstantI8PtrI8Right(int a, long b)
+		[Test]
+		public unsafe void AddConstantI8PtrI8Right(int a, int b)
 		{
-			CodeSource = CreateConstantTestCode("long*", b.ToString(), null);
+			CodeSource = CreateConstantRightTestCode("long*", "long", b.ToString());
 			UnsafeCode = true;
-			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, a + b));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, (int)((long*)a + (long)b)));
 		}
 		#endregion
 
@@ -462,89 +460,89 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public unsafe void AddR8PtrI4Left(int a, int b)
 		{
 			CodeSource = CreateTestCode("double*", "int", "double*");
 			UnsafeCode = true;
-			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", b, a, a + b));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, b, (int)((double*)a + (int)b)));
 		}
 
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public unsafe void AddR8PtrI8Left(int a, int b)
 		{
 			CodeSource = CreateTestCode("double*", "long", "double*");
 			UnsafeCode = true;
-			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", b, a, a + b));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, b, (int)((double*)a + (long)b)));
 		}
 
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public unsafe void AddR8PtrI4Right(int a, int b)
 		{
 			CodeSource = CreateTestCode("long", "double*", "double*");
 			UnsafeCode = true;
-			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", b, a, a + b));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", b, a, (int)((double*)a + (long)b)));
 		}
 
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public unsafe void AddR8PtrI8Right(int a, int b)
 		{
 			CodeSource = CreateTestCode("long", "double*", "double*");
 			UnsafeCode = true;
-			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", b, a, a + b));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", b, a, (int)((double*)a + (long)b)));
 		}
 
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public unsafe void AddConstantR8PtrI4Left(int a, int b)
 		{
-			CodeSource = CreateConstantTestCode("double*", null, b.ToString());
+			CodeSource = CreateConstantLeftTestCode("double*", "int", b.ToString());
 			UnsafeCode = true;
-			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, a + b));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, (int)((double*)a + (int)b)));
 		}
 
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
-		public unsafe void AddConstantR8PtrI8Left(int a, long b)
+		[Test]
+		public unsafe void AddConstantR8PtrI8Left(int a, int b)
 		{
-			CodeSource = CreateConstantTestCode("double*", null, b.ToString());
+			CodeSource = CreateConstantLeftTestCode("double*", "long", b.ToString());
 			UnsafeCode = true;
-			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, a + b));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, (int)((double*)a + (long)b)));
 		}
 
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public unsafe void AddConstantR8PtrI4Right(int a, int b)
 		{
-			CodeSource = CreateConstantTestCode("double*", b.ToString(), null);
+			CodeSource = CreateConstantRightTestCode("double*", "int", b.ToString());
 			UnsafeCode = true;
-			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, a + b));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, (int)((double*)a + (int)b)));
 		}
 
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
-		public unsafe void AddConstantR8PtrI8Right(int a, long b)
+		[Test]
+		public unsafe void AddConstantR8PtrI8Right(int a, int b)
 		{
-			CodeSource = CreateConstantTestCode("double*", b.ToString(), null);
+			CodeSource = CreateConstantRightTestCode("double*", "long", b.ToString());
 			UnsafeCode = true;
-			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, a + b));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, (int)((double*)a + (long)b)));
 		}
 
 		#endregion

@@ -178,6 +178,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
 
 				public struct UIntPtr
 				{
+					private uint value;
 				}
 
 				public struct Decimal
