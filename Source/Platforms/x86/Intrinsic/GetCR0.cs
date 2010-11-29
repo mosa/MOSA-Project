@@ -24,6 +24,9 @@ namespace Mosa.Platform.X86.Intrinsic
 	public sealed class GetCR0 : GetControlRegisterBase
 	{
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="GetCR0"/> class.
+		/// </summary>
 		public GetCR0()
 			: base(ControlRegister.CR0)
 		{

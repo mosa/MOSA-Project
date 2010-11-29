@@ -6,6 +6,9 @@ using Mosa.Runtime.CompilerFramework;
 
 namespace Mosa.Platform.X86.CPUx86
 {
+	/// <summary>
+	/// 
+	/// </summary>
 	public class SseRoundInstruction : BaseInstruction
 	{
 		// ROUNDSS

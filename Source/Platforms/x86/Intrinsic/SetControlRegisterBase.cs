@@ -28,6 +28,10 @@ namespace Mosa.Platform.X86.Intrinsic
 
 		private ControlRegister _control;
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="SetControlRegisterBase"/> class.
+		/// </summary>
+		/// <param name="control">The control.</param>
 		protected SetControlRegisterBase(ControlRegister control)
 		{
 			_control = control;

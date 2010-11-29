@@ -214,6 +214,7 @@ namespace Mosa.Platform.X86
 		/// <param name="ctx">The context.</param>
 		/// <param name="op">The op.</param>
 		/// <param name="stackSize">Size of the stack.</param>
+		/// <param name="parameterSize">Size of the parameter.</param>
 		private void Push(Context ctx, Operand op, int stackSize, int parameterSize)
 		{
 			if (op is MemoryOperand)

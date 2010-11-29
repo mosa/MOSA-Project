@@ -1688,16 +1688,37 @@ namespace Mosa.Platform.X86
 			LinkBlocks(newBlocks[3], nextBlock);
 		}
 
+		/// <summary>
+		/// Determines whether the specified op is int64.
+		/// </summary>
+		/// <param name="op">The op.</param>
+		/// <returns>
+		/// 	<c>true</c> if the specified op is int64; otherwise, <c>false</c>.
+		/// </returns>
 		public static bool IsInt64(Operand op)
 		{
 			return op.StackType == StackTypeCode.Int64;
 		}
 
+		/// <summary>
+		/// Determines whether the specified op is double.
+		/// </summary>
+		/// <param name="op">The op.</param>
+		/// <returns>
+		/// 	<c>true</c> if the specified op is double; otherwise, <c>false</c>.
+		/// </returns>
 		public static bool IsDouble(Operand op)
 		{
 			return op.Type.Matches(BuiltInSigType.Double);
 		}
 
+		/// <summary>
+		/// Determines whether [is double or int64] [the specified op].
+		/// </summary>
+		/// <param name="op">The op.</param>
+		/// <returns>
+		/// 	<c>true</c> if [is double or int64] [the specified op]; otherwise, <c>false</c>.
+		/// </returns>
 		public static bool IsDoubleOrInt64(Operand op)
 		{
 			return IsInt64(op) || IsDouble(op);

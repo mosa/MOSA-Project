@@ -361,6 +361,9 @@ namespace Mosa.Platform.X86.CPUx86
 		/// </summary>
 		public static readonly LeaInstruction LeaInstruction = new LeaInstruction();
 
+		/// <summary>
+		/// 
+		/// </summary>
 		public static readonly SseRoundInstruction SseRoundInstruction = new SseRoundInstruction();
 	}
 }

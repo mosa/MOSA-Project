@@ -23,6 +23,9 @@ using IR = Mosa.Runtime.CompilerFramework.IR;
 
 namespace Mosa.Platform.X86.Intrinsic
 {
+	/// <summary>
+	/// 
+	/// </summary>
 	public sealed class CallFilter : IIntrinsicMethod
 	{
 		#region Methods
