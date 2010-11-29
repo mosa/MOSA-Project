@@ -44,7 +44,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		#region CheckValue
 
 		[Column(0, 1, SByte.MinValue, SByte.MaxValue, SByte.MinValue + 1, SByte.MaxValue - 1)]
-		[Test, Author(@"grover", @"sharpos@michaelruck.de")]
+		[Test]
 		public void LdlocaI1_CheckValue(sbyte value)
 		{
 			CodeSource = CreateTestCode("LdlocaI1_CheckValue", "sbyte");
@@ -52,7 +52,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		}
 
 		[Column(0, 1, Int16.MinValue, Int16.MaxValue, Int16.MinValue + 1, Int16.MaxValue - 1)]
-		[Test, Author(@"grover", @"sharpos@michaelruck.de")]
+		[Test]
 		public void LdlocaI2_CheckValue(short value)
 		{
 			CodeSource = CreateTestCode("LdlocaI2_CheckValue", "short");
@@ -60,15 +60,15 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		}
 
 		[Column(0, 1, Int32.MinValue, Int32.MaxValue, Int32.MinValue + 1, Int32.MaxValue - 1)]
-		[Test, Author(@"grover", @"sharpos@michaelruck.de")]
+		[Test]
 		public void LdlocaI4_CheckValue(int value)
 		{
-			CodeSource = CreateTestCode("LdlocaI4_CheckValue", "sbintyte");
+			CodeSource = CreateTestCode("LdlocaI4_CheckValue", "int");
 			Assert.IsTrue(Run<bool>("", "Test", "LdlocaI4_CheckValue", value));
 		}
 
 		[Column(0, 1, Int64.MinValue, Int64.MaxValue, Int64.MinValue + 1, Int64.MaxValue - 1)]
-		[Test, Author(@"grover", @"sharpos@michaelruck.de")]
+		[Test]
 		public void LdlocaI8_CheckValue(long value)
 		{
 			CodeSource = CreateTestCode("LdlocaI8_CheckValue", "long");
@@ -76,7 +76,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		}
 
 		[Column(0, 1, Byte.MinValue, Byte.MaxValue, Byte.MinValue + 1, Byte.MaxValue - 1)]
-		[Test, Author(@"grover", @"sharpos@michaelruck.de")]
+		[Test]
 		public void LdlocaU1_CheckValue(byte value)
 		{
 			CodeSource = CreateTestCode("LdlocaU1_CheckValue", "byte");
@@ -84,7 +84,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		}
 
 		[Column(0, 1, UInt16.MinValue, UInt16.MaxValue, UInt16.MinValue + 1, UInt16.MaxValue - 1)]
-		[Test, Author(@"grover", @"sharpos@michaelruck.de")]
+		[Test]
 		public void LdlocaU2_CheckValue(ushort value)
 		{
 			CodeSource = CreateTestCode("LdlocaU2_CheckValue", "ushort");
@@ -92,7 +92,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		}
 
 		[Column(0, 1, UInt32.MinValue, UInt32.MaxValue, UInt32.MinValue + 1, UInt32.MaxValue - 1)]
-		[Test, Author(@"grover", @"sharpos@michaelruck.de")]
+		[Test]
 		public void LdlocaU4_CheckValue(uint value)
 		{
 			CodeSource = CreateTestCode("LdlocaU4_CheckValue", "uint");
@@ -100,7 +100,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		}
 
 		[Column(0, 1, UInt64.MinValue, UInt64.MaxValue, UInt64.MinValue + 1, UInt64.MaxValue - 1)]
-		[Test, Author(@"grover", @"sharpos@michaelruck.de")]
+		[Test]
 		public void LdlocaU8_CheckValue(ulong value)
 		{
 			CodeSource = CreateTestCode("LdlocaU8_CheckValue", "ulong");
@@ -108,7 +108,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		}
 
 		[Column(0, 1, Single.MinValue, Single.MaxValue, Single.MinValue + 1, Single.MaxValue - 1)]
-		[Test, Author(@"grover", @"sharpos@michaelruck.de")]
+		[Test]
 		public void LdlocaR4_CheckValue(float value)
 		{
 			CodeSource = CreateTestCode("LdlocaR4_CheckValue", "float");
@@ -116,7 +116,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		}
 
 		[Column(0, 1, Double.MinValue, Double.MaxValue, Double.MinValue + 1, Double.MaxValue - 1)]
-		[Test, Author(@"grover", @"sharpos@michaelruck.de")]
+		[Test]
 		public void LdlocaR8_CheckValue(double value)
 		{
 			CodeSource = CreateTestCode("LdlocaR8_CheckValue", "double");
