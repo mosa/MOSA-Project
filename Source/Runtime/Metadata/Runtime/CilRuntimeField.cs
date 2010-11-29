@@ -30,9 +30,9 @@ namespace Mosa.Runtime.Metadata.Runtime
 		private TokenTypes nameIdx;
 
 		/// <summary>
-		/// Holds the signature token of the field.
+		/// Holds the blob location of the signature.
 		/// </summary>
-		private TokenTypes signature;
+		private TokenTypes signatureBlobIdx;
 
 		#endregion // Data Members
 
@@ -50,7 +50,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 			base(moduleTypeSystem, declaringType)
 		{
 			this.nameIdx = field.NameStringIdx;
-			this.signature = field.SignatureBlobIdx;
+			this.signatureBlobIdx = field.SignatureBlobIdx;
 			base.Attributes = field.Flags;
 			base.RVA = rva;
 			//base.Offset = offset; ?
@@ -66,7 +66,6 @@ namespace Mosa.Runtime.Metadata.Runtime
 
 			this.SetAttributes(genericField.CustomAttributes);
 		}
-
 
 		#endregion // Construction
 
@@ -84,7 +83,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 			CilRuntimeField crf = other as CilRuntimeField;
 			return (crf != null &&
 					this.nameIdx == crf.nameIdx &&
-					this.signature == crf.signature &&
+					this.signatureBlobIdx == crf.signatureBlobIdx &&
 					base.Equals(other) == true);
 		}
 
@@ -94,9 +93,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 		/// <returns>The type of the field.</returns>
 		protected override FieldSignature GetSignature()
 		{
-			FieldSignature fsig = new FieldSignature();
-			fsig.LoadSignature(this.DeclaringType, this.MetadataModule.Metadata, this.signature);
-			return fsig;
+			return new FieldSignature(this.MetadataModule.Metadata, this.signatureBlobIdx);
 		}
 
 		/// <summary>
@@ -109,7 +106,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 			Debug.Assert(name != null, @"Failed to retrieve CilRuntimeMethod name.");
 			return name;
 		}
-
+		
 		#endregion // RuntimeField Overrides
 	}
 }

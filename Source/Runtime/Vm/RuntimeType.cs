@@ -22,7 +22,7 @@ namespace Mosa.Runtime.Vm
 	/// <summary>
 	/// Internal runtime representation of a type.
 	/// </summary>
-	public abstract class RuntimeType : RuntimeMember, IEquatable<RuntimeType>, ISignatureContext
+	public abstract class RuntimeType : RuntimeMember, IEquatable<RuntimeType>
 	{
 		#region Data members
 
@@ -417,16 +417,6 @@ namespace Mosa.Runtime.Vm
 
 		#endregion // Object Overrides
 
-		public SigType GetGenericMethodArgument(int index)
-		{
-			return DefaultSignatureContext.Instance.GetGenericMethodArgument(index);
-		}
-
-		public virtual SigType GetGenericTypeArgument(int index)
-		{
-			return DefaultSignatureContext.Instance.GetGenericTypeArgument(index);
-		}
-
 		public bool IsDelegate
 		{
 			get
@@ -488,6 +478,14 @@ namespace Mosa.Runtime.Vm
 			}
 
 			throw new MissingMethodException(Name, name);
+		}
+
+		public virtual bool ContainsGenericParameters
+		{
+			get
+			{
+				return false; 
+			}
 		}
 
 		/// <summary>

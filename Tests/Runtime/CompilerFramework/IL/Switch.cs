@@ -17,23 +17,11 @@ using MbUnit.Framework;
 
 namespace Test.Mosa.Runtime.CompilerFramework.IL
 {
-	/// <summary>
-	/// 
-	/// </summary>
+	
 	[TestFixture]
 	public class Switch : CodeDomTestRunner
 	{
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="expect"></param>
-		/// <param name="a"></param>
-		/// <returns></returns>
-		delegate sbyte I1_I1([MarshalAs(UnmanagedType.I1)]sbyte expect, [MarshalAs(UnmanagedType.I1)]sbyte a);
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
+		
 		[Row(1)]
 		[Row(23)]
 		[Row(-1)]
@@ -79,21 +67,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 							break;
 					}
 				}
-			}" + Code.ObjectClassDefinition;
-			Assert.AreEqual(a, Run<I1_I1>("", "Test", "SwitchI1", a, a));
+			}" + Code.AllTestCode;
+
+			Assert.AreEqual(a, Run<sbyte>("", "Test", "SwitchI1", a, a));
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="expect"></param>
-		/// <param name="a"></param>
-		/// <returns></returns>
-		delegate bool U1_U1(byte expect, byte a);
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
 		[Row(1)]
 		[Row(23)]
 		[Row(0)]
@@ -128,21 +106,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 							break;
 					}
 				}
-			}" + Code.ObjectClassDefinition;
-			Assert.IsTrue((bool)Run<U1_U1>("", "Test", "SwitchU1", a, a));
+			}" + Code.AllTestCode;
+			Assert.IsTrue(Run<bool>("", "Test", "SwitchU1", a, a));
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="expect"></param>
-		/// <param name="a"></param>
-		/// <returns></returns>
-		delegate bool I2_I2(short expect, short a);
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
 		[Row(1)]
 		[Row(23)]
 		[Row(-1)]
@@ -192,21 +159,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 							break;
 					}
 				}
-			}" + Code.ObjectClassDefinition;
-			Assert.IsTrue((bool)Run<I2_I2>("", "Test", "SwitchI2", a, a));
+			}" + Code.AllTestCode;
+			Assert.IsTrue(Run<bool>("", "Test", "SwitchI2", a, a));
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="expect"></param>
-		/// <param name="a"></param>
-		/// <returns></returns>
-		delegate bool U2_U2(ushort expect, ushort a);
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
 		[Row(1)]
 		[Row(23)]
 		[Row(0)]
@@ -245,21 +201,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 							break;
 					}
 				}
-			}" + Code.ObjectClassDefinition;
-			Assert.IsTrue((bool)Run<U2_U2>("", "Test", "SwitchU2", a, a));
+			}" + Code.AllTestCode;
+			Assert.IsTrue(Run<bool>("", "Test", "SwitchU2", a, a));
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="expect"></param>
-		/// <param name="a"></param>
-		/// <returns></returns>
-		delegate bool I4_I4(int expect, int a);
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
 		[Row(1)]
 		[Row(23)]
 		[Row(-1)]
@@ -309,21 +254,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 							break;
 					}
 				}
-			}" + Code.ObjectClassDefinition;
-			Assert.IsTrue((bool)Run<I4_I4>("", "Test", "SwitchI4", a, a));
+			}" + Code.AllTestCode;
+			Assert.IsTrue(Run<bool>("", "Test", "SwitchI4", a, a));
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="expect"></param>
-		/// <param name="a"></param>
-		/// <returns></returns>
-		delegate bool U4_U4(uint expect, uint a);
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
 		[Row(1)]
 		[Row(23)]
 		[Row(0)]
@@ -362,22 +296,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 							break;
 					}
 				}
-			}" + Code.ObjectClassDefinition;
-			Assert.IsTrue((bool)Run<U4_U4>("", "Test", "SwitchU4", a, a));
+			}" + Code.AllTestCode;
+			Assert.IsTrue(Run<bool>("", "Test", "SwitchU4", a, a));
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="expect"></param>
-		/// <param name="a"></param>
-		/// <returns></returns>
-		delegate bool I8_I8(long expect, long a);
-		delegate long I8_I8_R(long expect, long a);
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
 		[Row(1)]
 		[Row(23)]
 		[Row(-1)]
@@ -427,21 +349,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 							break;
 					}
 				}
-			}" + Code.ObjectClassDefinition;
-			Assert.AreEqual(a, (long)Run<I8_I8_R>("", "Test", "SwitchI8", a, a));
+			}" + Code.AllTestCode;
+			Assert.AreEqual(a, (long)Run<long>("", "Test", "SwitchI8", a, a));
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="expect"></param>
-		/// <param name="a"></param>
-		/// <returns></returns>
-		delegate bool U8_U8(ulong expect, ulong a);
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
 		[Row(1)]
 		[Row(23)]
 		[Row(0)]
@@ -480,8 +391,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 							break;
 					}
 				}
-			}" + Code.ObjectClassDefinition;
-			Assert.IsTrue((bool)Run<U8_U8>("", "Test", "SwitchU8", a, a));
+			}" + Code.AllTestCode;
+			Assert.IsTrue(Run<bool>("", "Test", "SwitchU8", a, a));
 		}
 	}
 }

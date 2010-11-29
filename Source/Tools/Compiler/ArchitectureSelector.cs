@@ -36,7 +36,7 @@ namespace Mosa.Tools.Compiler
 			switch (architecture.ToLower())
 			{
 				case "x86":
-					return Mosa.Platforms.x86.Architecture.CreateArchitecture(Mosa.Platforms.x86.ArchitectureFeatureFlags.AutoDetect);
+					return Mosa.Platform.X86.Architecture.CreateArchitecture(Mosa.Platform.X86.ArchitectureFeatureFlags.AutoDetect);
 
 				case "x64":
 				default:

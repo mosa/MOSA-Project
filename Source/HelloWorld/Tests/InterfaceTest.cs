@@ -1,4 +1,4 @@
-﻿using Mosa.Platforms.x86;
+﻿using Mosa.Platform.X86;
 using Mosa.Kernel;
 using Mosa.Kernel.X86;
 using System;

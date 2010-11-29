@@ -24,8 +24,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Expands method call instruction represented by the context to perform the method call.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		/// <param name="signatureContext">The method signature context.</param>
-		void MakeCall(Context context, ISignatureContext signatureContext);
+		void MakeCall(Context context);
 
 		/// <summary>
 		/// Retrieves the stack requirements of a stack operand.

@@ -46,7 +46,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			ConstantOperand constantValueOperand;
 
 			// Opcode specific handling
-			switch (_opcode)
+			switch (opcode)
 			{
 				case OpCode.Ldc_i4:
 					{

@@ -15,7 +15,7 @@ using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.CompilerFramework.Operands;
 using IR = Mosa.Runtime.CompilerFramework.IR;
 
-namespace Mosa.Platforms.x86.CPUx86
+namespace Mosa.Platform.X86.CPUx86
 {
 	/// <summary>
 	/// Representations the x86 and instruction.

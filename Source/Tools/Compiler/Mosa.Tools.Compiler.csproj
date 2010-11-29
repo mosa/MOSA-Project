@@ -56,6 +56,9 @@
     <WarningLevel>2</WarningLevel>
     <DebugType>none</DebugType>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>Mosa.Tools.Compiler.Program</StartupObject>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core">
@@ -67,13 +70,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\Platforms\x86\Mosa.Platforms.x86.csproj">
+    <ProjectReference Include="..\..\Platforms\x86\Mosa.Platform.X86.csproj">
       <Project>{56CA38E7-0883-4461-A10E-386D0C58DBF9}</Project>
-      <Name>Mosa.Platforms.x86</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\..\Runtime\Mosa.Runtime.csproj">
-      <Project>{75A12A8A-8C8F-4D1E-801B-689D8F781BF4}</Project>
-      <Name>Mosa.Runtime</Name>
+      <Name>Mosa.Platform.X86</Name>
     </ProjectReference>
     <Compile Include="AotAssemblyCompiler.cs" />
     <Compile Include="AssemblyCompilationStage.cs" />
@@ -183,6 +182,10 @@
     </Compile>
     <Compile Include="TypeInitializers\TypeInitializerSchedulerStageProxy.cs" />
     <Compile Include="Stages\InterruptBuilderStage.cs" />
+    <ProjectReference Include="..\..\Runtime\Mosa.Runtime.csproj">
+      <Project>{75A12A8A-8C8F-4D1E-801B-689D8F781BF4}</Project>
+      <Name>Mosa.Runtime</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <PropertyGroup>

@@ -42,20 +42,24 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			base.Setup(compiler);
 
-			ICompilationSchedulerStage scheduler = compiler.Pipeline.FindFirst<ICompilationSchedulerStage>();
+			scheduler = compiler.Pipeline.FindFirst<ICompilationSchedulerStage>();
 
 			if (scheduler == null)
 				throw new InvalidOperationException(@"No compilation scheduler found in the assembly compiler pipeline.");
-
-			this.scheduler = scheduler;
 		}
 
 		void IAssemblyCompilerStage.Run()
 		{
 			foreach (RuntimeType type in typeSystem.GetCompiledTypes())
 			{
+				if (type.ContainsGenericParameters)
+					continue;
+
 				// Do not schedule generic types, they're scheduled on demand.
 				if (type.IsGeneric)
+					continue;
+
+				if (type.IsModule)
 					continue;
 
 				scheduler.ScheduleTypeForCompilation(type);

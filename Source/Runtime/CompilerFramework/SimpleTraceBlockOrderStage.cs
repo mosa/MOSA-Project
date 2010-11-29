@@ -48,10 +48,10 @@ namespace Mosa.Runtime.CompilerFramework
 			BasicBlock first = FindBlock(-1);
 
 			// Create dictionary of refereced blocks
-			Dictionary<BasicBlock, int> referenced = new Dictionary<BasicBlock, int>(BasicBlocks.Count);
+			Dictionary<BasicBlock, int> referenced = new Dictionary<BasicBlock, int>(basicBlocks.Count);
 
 			// Allocate list of ordered Blocks
-			_ordered = new BasicBlock[BasicBlocks.Count];
+			_ordered = new BasicBlock[basicBlocks.Count];
 			int orderBlockCnt = 0;
 
 			// Create sorted worklist
@@ -76,7 +76,7 @@ namespace Mosa.Runtime.CompilerFramework
 			}
 
 			// Place unreferenced Blocks at the end of the list
-			foreach (BasicBlock block in BasicBlocks)
+			foreach (BasicBlock block in basicBlocks)
 				if (!referenced.ContainsKey(block))
 					_ordered[orderBlockCnt++] = block;
 		}

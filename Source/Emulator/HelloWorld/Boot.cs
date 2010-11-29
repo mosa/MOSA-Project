@@ -5,7 +5,7 @@
  *
  */
 
-using Mosa.Platforms.x86;
+using Mosa.Platform.X86;
 using Mosa.Kernel.X86;
 
 namespace Mosa.HelloWorld
@@ -290,15 +290,15 @@ namespace Mosa.HelloWorld
 			Screen.Write(' ');
 			Screen.Color = 0x0F;
 
-			int identifier = Platforms.x86.Native.CpuIdEbx(0);
+			int identifier = Platform.X86.Native.CpuIdEbx(0);
 			for (int i = 0; i < 4; ++i)
 				Screen.Write((char)((identifier >> (i * 8)) & 0xFF));
 
-			identifier = Platforms.x86.Native.CpuIdEdx(0);
+			identifier = Platform.X86.Native.CpuIdEdx(0);
 			for (int i = 0; i < 4; ++i)
 				Screen.Write((char)((identifier >> (i * 8)) & 0xFF));
 
-			identifier = Platforms.x86.Native.CpuIdEcx(0);
+			identifier = Platform.X86.Native.CpuIdEcx(0);
 			for (int i = 0; i < 4; ++i)
 				Screen.Write((char)((identifier >> (i * 8)) & 0xFF));
 
@@ -325,7 +325,7 @@ namespace Mosa.HelloWorld
 			Screen.NextLine();
 			#endregion
 
-			int info = Platforms.x86.Native.CpuIdEax(1);
+			int info = Platform.X86.Native.CpuIdEax(1);
 			#region Stepping
 			Screen.Color = 0x0A;
 			Screen.Write('S');
@@ -397,7 +397,7 @@ namespace Mosa.HelloWorld
 			Screen.Write(' ');
 			Screen.Color = 0x0F;
 
-			info = Platforms.x86.Native.CpuIdEax(4);
+			info = Platform.X86.Native.CpuIdEax(4);
 			Screen.Write((ulong)((info >> 26) + 1), 16, 2);
 			#endregion
 
@@ -510,22 +510,22 @@ namespace Mosa.HelloWorld
 		/// <param name="param">The param.</param>
 		private static void PrintBrand(uint param)
 		{
-			int identifier = Platforms.x86.Native.CpuIdEax(param);
+			int identifier = Platform.X86.Native.CpuIdEax(param);
 			if (identifier != 0x20202020)
 				for (int i = 0; i < 4; ++i)
 					Screen.Write((char)((identifier >> (i * 8)) & 0xFF));
 
-			identifier = Platforms.x86.Native.CpuIdEbx(param);
+			identifier = Platform.X86.Native.CpuIdEbx(param);
 			if (identifier != 0x20202020)
 				for (int i = 0; i < 4; ++i)
 					Screen.Write((char)((identifier >> (i * 8)) & 0xFF));
 
-			identifier = Platforms.x86.Native.CpuIdEcx(param);
+			identifier = Platform.X86.Native.CpuIdEcx(param);
 			if (identifier != 0x20202020)
 				for (int i = 0; i < 4; ++i)
 					Screen.Write((char)((identifier >> (i * 8)) & 0xFF));
 
-			identifier = Platforms.x86.Native.CpuIdEdx(param);
+			identifier = Platform.X86.Native.CpuIdEdx(param);
 			if (identifier != 0x20202020)
 				for (int i = 0; i < 4; ++i)
 					Screen.Write((char)((identifier >> (i * 8)) & 0xFF));

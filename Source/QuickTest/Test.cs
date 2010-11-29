@@ -27,9 +27,9 @@ namespace Mosa.QuickTest
 
 		public static void UseGenericObject()
 		{
-			GenericTest<object> genericInt = new GenericTest<object>();
+			GenericTest<object> genericObject = new GenericTest<object>();
 
-			genericInt.value = new object();
+			genericObject.value = new object();
 		}
 	}
 

@@ -64,7 +64,7 @@ namespace Mosa.Runtime.CompilerFramework
 			List<StackOperand> locals = new List<StackOperand>();
 
 			// Iterate all Blocks and collect locals From all Blocks
-			foreach (BasicBlock block in BasicBlocks)
+			foreach (BasicBlock block in basicBlocks)
 				CollectLocalVariables(locals, block);
 
 			// Sort all found locals
@@ -74,12 +74,12 @@ namespace Mosa.Runtime.CompilerFramework
 			_localsSize = LayoutVariables(locals, callingConvention, callingConvention.OffsetOfFirstLocal, 1);
 			if (TRACING.TraceInfo == true)
 			{
-				Trace.WriteLine(String.Format(@"Stack layout for method {0}", MethodCompiler.Method));
+				Trace.WriteLine(String.Format(@"Stack layout for method {0}", methodCompiler.Method));
 				LogOperands(locals);
 			}
 
 			// Layout parameters
-			LayoutParameters(MethodCompiler);
+			LayoutParameters(methodCompiler);
 
 			// Create a prologue instruction
 			Context prologueCtx = new Context(InstructionSet, FindBlock(-1)).InsertBefore();

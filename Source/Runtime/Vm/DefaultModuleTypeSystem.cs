@@ -42,32 +42,32 @@ namespace Mosa.Runtime.Vm
 		/// <summary>
 		/// Array of loaded runtime type descriptors.
 		/// </summary>
-		private RuntimeType[] _types;
+		private RuntimeType[] types;
 
 		/// <summary>
 		/// Holds all loaded method definitions.
 		/// </summary>
-		private RuntimeMethod[] _methods;
+		private RuntimeMethod[] methods;
 
 		/// <summary>
 		/// Holds all parameter information elements.
 		/// </summary>
-		private RuntimeParameter[] _parameters;
+		private RuntimeParameter[] parameters;
 
 		/// <summary>
-		/// Array of loaded runtime type descriptors.
+		/// Array of loaded runtime typeSpec descriptors.
 		/// </summary>
-		private RuntimeType[] _typespecs;
+		private RuntimeType[] typeSpecs;
 
 		/// <summary>
 		/// Holds all loaded method definitions.
 		/// </summary>
-		private RuntimeMethod[] _methodspecs;
+		private RuntimeMethod[] methodSpecs;
 
 		/// <summary>
 		/// Holds all loaded _stackFrameIndex definitions.
 		/// </summary>
-		private RuntimeField[] _fields;
+		private RuntimeField[] fields;
 
 		#endregion // Data members
 
@@ -85,22 +85,27 @@ namespace Mosa.Runtime.Vm
 		/// <summary>
 		/// Array of loaded runtime type descriptors.
 		/// </summary>
-		RuntimeType[] IModuleTypeSystem.Types { get { return _types; } }
+		RuntimeType[] IModuleTypeSystem.Types { get { return types; } }
 
 		/// <summary>
 		/// Holds all loaded method definitions.
 		/// </summary>
-		RuntimeMethod[] IModuleTypeSystem.Methods { get { return _methods; } }
+		RuntimeMethod[] IModuleTypeSystem.Methods { get { return methods; } }
 
 		/// <summary>
 		/// Holds all parameter information elements.
 		/// </summary>
-		RuntimeParameter[] IModuleTypeSystem.Parameters { get { return _parameters; } }
+		RuntimeParameter[] IModuleTypeSystem.Parameters { get { return parameters; } }
 
 		/// <summary>
 		/// Holds all loaded _stackFrameIndex definitions.
 		/// </summary>
-		RuntimeField[] IModuleTypeSystem.Fields { get { return _fields; } }
+		RuntimeField[] IModuleTypeSystem.Fields { get { return fields; } }
+
+		/// <summary>
+		/// Array of loaded runtime typespec descriptors.
+		/// </summary>
+		RuntimeType[] IModuleTypeSystem.TypeSpecs { get { return typeSpecs; } }
 
 		#region Construction
 
@@ -119,17 +124,18 @@ namespace Mosa.Runtime.Vm
 			this.metadataModule = metadataModule;
 			this.metadata = metadataModule.Metadata;
 
-			_methods = new RuntimeMethod[GetTableRows(TokenTypes.MethodDef)];
-			_fields = new RuntimeField[GetTableRows(TokenTypes.Field)];
-			_types = new RuntimeType[GetTableRows(TokenTypes.TypeDef)];
-			_parameters = new RuntimeParameter[GetTableRows(TokenTypes.Param)];
+			methods = new RuntimeMethod[GetTableRows(TokenTypes.MethodDef)];
+			fields = new RuntimeField[GetTableRows(TokenTypes.Field)];
+			types = new RuntimeType[GetTableRows(TokenTypes.TypeDef)];
+			parameters = new RuntimeParameter[GetTableRows(TokenTypes.Param)];
 
-			_typespecs = new RuntimeType[GetTableRows(TokenTypes.TypeSpec)];
-			_methodspecs = new RuntimeMethod[GetTableRows(TokenTypes.MethodSpec)];
+			typeSpecs = new RuntimeType[GetTableRows(TokenTypes.TypeSpec)];
+			methodSpecs = new RuntimeMethod[GetTableRows(TokenTypes.MethodSpec)];
 
 			// Load all types from the assembly into the type array
 			LoadTypes();
 			LoadGenerics();
+			LoadTypeSpecs();
 			LoadParameters();
 			LoadCustomAttributes();
 		}
@@ -146,10 +152,13 @@ namespace Mosa.Runtime.Vm
 			this.metadataModule = null;
 			this.metadata = null;
 
-			_methods = new RuntimeMethod[0];
-			_fields = new RuntimeField[0];
-			_types = new RuntimeType[0];
-			_parameters = new RuntimeParameter[0];
+			methods = new RuntimeMethod[0];
+			fields = new RuntimeField[0];
+			types = new RuntimeType[0];
+			parameters = new RuntimeParameter[0];
+			
+			typeSpecs = new RuntimeType[0];
+			methodSpecs = new RuntimeMethod[0];
 		}
 
 		#endregion // Construction
@@ -157,25 +166,25 @@ namespace Mosa.Runtime.Vm
 		#region ITypeSystem Members
 
 		/// <summary>
-		/// Gets the types from module.
-		/// </summary>
-		/// <returns></returns>
-		ReadOnlyRuntimeTypeListView IModuleTypeSystem.GetTypes()
-		{
-			return new ReadOnlyRuntimeTypeListView(this, 0, _types.Length);
-		}
-
-		/// <summary>
 		/// Gets all types from module.
 		/// </summary>
 		/// <returns></returns>
 		IEnumerable<RuntimeType> IModuleTypeSystem.GetAllTypes()
 		{
-			foreach (RuntimeType type in ((IModuleTypeSystem)this).GetTypes())
+			foreach (RuntimeType type in types)
 				yield return type;
+
+			foreach (RuntimeType type in typeSpecs)
+				if (type != null)
+					yield return type;
 		}
 
-		RuntimeType IModuleTypeSystem.GetType(ISignatureContext context, TokenTypes token)
+		/// <summary>
+		/// Retrieves the runtime type for a given metadata token.
+		/// </summary>
+		/// <param name="token">The token of the type to load. This can represent a typeref, typedef or typespec token.</param>
+		/// <returns>The runtime type of the specified token.</returns>
+		RuntimeType IModuleTypeSystem.GetType(TokenTypes token)
 		{
 			TokenTypes table = (TokenTypes.TableMask & token);
 
@@ -192,11 +201,11 @@ namespace Mosa.Runtime.Vm
 
 				if (table == TokenTypes.TypeDef)
 				{
-					return this._types[row - 1];
+					return this.types[row - 1];
 				}
 				else if (table == TokenTypes.TypeSpec)
 				{
-					return ResolveTypeSpec(context, token);
+					return ResolveTypeSpec(token);
 				}
 				else
 				{
@@ -205,6 +214,13 @@ namespace Mosa.Runtime.Vm
 			}
 		}
 
+		/// <summary>
+		/// Retrieves the runtime type for a given type name.
+		/// </summary>
+		/// <param name="typeName">The name of the type to locate.</param>
+		/// <returns>
+		/// The located <see cref="RuntimeType"/> or null.
+		/// </returns>
 		RuntimeType IModuleTypeSystem.GetType(string typeName)
 		{
 			string[] names = typeName.Split(',');
@@ -240,17 +256,16 @@ namespace Mosa.Runtime.Vm
 		/// <param name="type">The type.</param>
 		void IModuleTypeSystem.AddInternalType(RuntimeType type)
 		{
-			Array.Resize<RuntimeType>(ref _types, _types.Length + 1);
-			_types[_types.Length - 1] = type;
+			Array.Resize<RuntimeType>(ref types, types.Length + 1);
+			types[types.Length - 1] = type;
 		}
 
 		/// <summary>
-		/// Retrieves the stackFrameIndex definition identified by the given token in the scope.
+		/// Retrieves the field definition identified by the given token in the scope.
 		/// </summary>
-		/// <param name="context">The generic parameter resolution context.</param>
-		/// <param name="token">The token of the _stackFrameIndex to retrieve.</param>
+		/// <param name="token">The token of the field to retrieve.</param>
 		/// <returns></returns>
-		RuntimeField IModuleTypeSystem.GetField(ISignatureContext context, TokenTypes token)
+		RuntimeField IModuleTypeSystem.GetField(TokenTypes token)
 		{
 			if (TokenTypes.Field != (TokenTypes.TableMask & token) && TokenTypes.MemberRef != (TokenTypes.TableMask & token))
 				throw new ArgumentException(@"Invalid field token.");
@@ -259,12 +274,12 @@ namespace Mosa.Runtime.Vm
 
 			if (TokenTypes.MemberRef == (TokenTypes.TableMask & token))
 			{
-				result = GetFieldForMemberReference(context, token);
+				result = GetFieldForMemberReference(token);
 			}
 			else
 			{
 				int fieldIndex = (int)(token & TokenTypes.RowIndexMask) - 1;
-				result = _fields[fieldIndex];
+				result = fields[fieldIndex];
 			}
 
 			return result;
@@ -273,30 +288,23 @@ namespace Mosa.Runtime.Vm
 		/// <summary>
 		/// Resolves the type of the signature.
 		/// </summary>
-		/// <param name="context">The context.</param>
 		/// <param name="sigType">Type of the signature.</param>
 		/// <returns></returns>
-		RuntimeType IModuleTypeSystem.ResolveSignatureType(ISignatureContext context, SigType sigType)
+		RuntimeType IModuleTypeSystem.ResolveSignatureType(SigType sigType)
 		{
 			switch (sigType.Type)
 			{
 				case CilElementType.Class:
-					{
-						TypeSigType typeSigType = (TypeSigType)sigType;
-						return ((IModuleTypeSystem)this).GetType(context, typeSigType.Token);
-					}
+					TypeSigType typeSigType = (TypeSigType)sigType;
+					return ((IModuleTypeSystem)this).GetType(typeSigType.Token);
 
 				case CilElementType.ValueType:
 					goto case CilElementType.Class;
 
 				case CilElementType.GenericInst:
-					{
-						GenericInstSigType genericSigType = (GenericInstSigType)sigType;
-
-						RuntimeType baseType = ((IModuleTypeSystem)this).GetType(context, genericSigType.BaseType.Token);
-
-						return new CilGenericType(this, baseType, genericSigType, context);
-					}
+					GenericInstSigType genericSigType = (GenericInstSigType)sigType;
+					RuntimeType baseType = ((IModuleTypeSystem)this).GetType(genericSigType.BaseType.Token);
+					return new CilGenericType(this, baseType, genericSigType);
 
 				default:
 					throw new NotSupportedException(String.Format(@"ResolveSignatureType does not support CilElementType.{0}", sigType.Type));
@@ -306,40 +314,36 @@ namespace Mosa.Runtime.Vm
 		/// <summary>
 		/// Retrieves the method definition identified by the given token in the scope.
 		/// </summary>
-		/// <param name="context"></param>
 		/// <param name="token">The token of the method to retrieve.</param>
 		/// <returns></returns>
-		RuntimeMethod IModuleTypeSystem.GetMethod(ISignatureContext context, TokenTypes token)
+		RuntimeMethod IModuleTypeSystem.GetMethod(TokenTypes token)
 		{
 			switch (TokenTypes.TableMask & token)
 			{
 				case TokenTypes.MethodDef:
-					{
-						return _methods[(int)(TokenTypes.RowIndexMask & token) - 1];
-					}
+					return methods[(int)(TokenTypes.RowIndexMask & token) - 1];
 
 				case TokenTypes.MemberRef:
+					MemberRefRow row = metadata.ReadMemberRefRow(token);
+					string nameString = metadata.ReadString(row.NameStringIdx);
+					RuntimeType type = ((IModuleTypeSystem)this).GetType(row.ClassTableIdx);
+
+					MethodSignature sig = (MethodSignature)Signature.FromMemberRefSignatureToken(metadata, row.SignatureBlobIdx);
+
+					foreach (RuntimeMethod method in type.Methods)
 					{
-						MemberRefRow row = metadata.ReadMemberRefRow(token);
-						string nameString = metadata.ReadString(row.NameStringIdx);
-						RuntimeType type = ((IModuleTypeSystem)this).GetType(context, row.ClassTableIdx);
+						if (method.Name != nameString)
+							continue;
+						if (!method.Signature.Matches(sig))
+							continue;
 
-						MethodSignature sig = (MethodSignature)Signature.FromMemberRefSignatureToken(type, metadata, row.SignatureBlobIdx);
-						foreach (RuntimeMethod method in type.Methods)
-						{
-							if (method.Name != nameString)
-								continue;
-							if (!method.Signature.Matches(sig))
-								continue;
-
-							return method;
-						}
-
-						throw new MissingMethodException(type.Name, nameString);
+						return method;
 					}
 
+					throw new MissingMethodException(type.Name, nameString);
+
 				case TokenTypes.MethodSpec:
-					return this.DecodeMethodSpec(context, token);
+					return this.DecodeMethodSpec(token);
 
 				default:
 					throw new NotSupportedException(@"Can't get method for token " + token.ToString("x"));
@@ -356,7 +360,7 @@ namespace Mosa.Runtime.Vm
 		/// <returns>The <see cref="RuntimeType"/> or null.</returns>
 		private RuntimeType FindType(string typeName, string nameSpace)
 		{
-			foreach (RuntimeType type in _types)
+			foreach (RuntimeType type in types)
 			{
 				if (type != null && typeName == type.Name && nameSpace == type.Namespace)
 				{
@@ -371,22 +375,20 @@ namespace Mosa.Runtime.Vm
 		/// <summary>
 		/// Decodes the method specification
 		/// </summary>
-		/// <param name="context">The context.</param>
 		/// <param name="token">The token.</param>
 		/// <returns></returns>
-		private RuntimeMethod DecodeMethodSpec(ISignatureContext context, TokenTypes token)
+		private RuntimeMethod DecodeMethodSpec(TokenTypes token)
 		{
 			MethodSpecRow methodSpec = metadata.ReadMethodSpecRow(token);
 
-			CilRuntimeMethod genericMethod = (CilRuntimeMethod)((IModuleTypeSystem)this).GetMethod(context, methodSpec.MethodTableIdx);
+			CilRuntimeMethod genericMethod = (CilRuntimeMethod)((IModuleTypeSystem)this).GetMethod(methodSpec.MethodTableIdx);
 
-			MethodSpecSignature specSignature = new MethodSpecSignature(context);
-			specSignature.LoadSignature(context, metadata, methodSpec.InstantiationBlobIdx);
+			MethodSpecSignature specSignature = new MethodSpecSignature();	 
+			specSignature.LoadSignature(metadata, methodSpec.InstantiationBlobIdx);
 
-			MethodSignature signature = new MethodSignature();
-			signature.LoadSignature(specSignature, genericMethod.MetadataModule.Metadata, genericMethod.Signature.Token);
+			MethodSignature signature = new MethodSignature(genericMethod.MetadataModule.Metadata, genericMethod.Signature.Token);
 
-			return new CilGenericMethod(this, genericMethod, signature, specSignature);
+			return new CilGenericMethod(this, genericMethod, signature, genericMethod.DeclaringType);
 		}
 
 		/// <summary>
@@ -397,25 +399,6 @@ namespace Mosa.Runtime.Vm
 		private int GetTableRows(TokenTypes tokenType)
 		{
 			return (int)(TokenTypes.RowIndexMask & metadata.GetMaxTokenValue(tokenType));
-		}
-
-		private TokenTypes DecodeTypeIndex(byte signature)
-		{
-			TokenTypes result = TokenTypes.TypeDef;
-			if ((signature & 0x3) == 0x00)
-				result = TokenTypes.TypeDef;
-			else if ((signature & 0x03) == 0x01)
-				result = TokenTypes.TypeRef;
-			else if ((signature & 0x03) == 0x02)
-				result = TokenTypes.TypeSpec;
-
-			result |= (TokenTypes)(signature >> 2);
-			return result;
-		}
-
-		private CilElementType GetElementType(byte[] blob, int index)
-		{
-			return (CilElementType)(blob[4 + index]);
 		}
 
 		/// <summary>
@@ -458,7 +441,6 @@ namespace Mosa.Runtime.Vm
 					maxNextField = nextTypeDefRow.FieldList;
 					maxNextMethod = nextTypeDefRow.MethodList;
 
-					// Crazy!
 					if (maxNextMethod > maxMethod)
 						maxNextMethod = maxMethod + 1;
 					if (maxNextField > maxField)
@@ -488,7 +470,7 @@ namespace Mosa.Runtime.Vm
 				rt = new CilRuntimeType(this, token, typeDefRow, maxNextField, maxNextMethod, packing, size);
 				LoadMethods(rt, typeDefRow.MethodList, maxNextMethod, ref methodOffset);
 				LoadFields(rt, typeDefRow.FieldList, maxNextField, ref fieldOffset);
-				_types[typeOffset++] = rt;
+				types[typeOffset++] = rt;
 
 				packing = size = 0;
 				typeDefRow = nextTypeDefRow;
@@ -524,8 +506,8 @@ namespace Mosa.Runtime.Vm
 					maxParam = metadata.GetMaxTokenValue(TokenTypes.Param) + 1;
 				}
 
-				Debug.Assert(offset < _methods.Length, @"Invalid method index.");
-				_methods[offset++] = new CilRuntimeMethod(this, offset, methodDef, maxParam, declaringType);
+				Debug.Assert(offset < methods.Length, @"Invalid method index.");
+				methods[offset++] = new CilRuntimeMethod(this, offset, methodDef, maxParam, declaringType);
 
 				//Debug.Write("-> " + ((uint)token).ToString("X") + ": ");
 				//Debug.Write(methodDef.NameStringIdx.ToString("X") + ": ");
@@ -550,7 +532,7 @@ namespace Mosa.Runtime.Vm
 			while (token <= maxParam)
 			{
 				ParamRow paramDef = metadata.ReadParamRow(token++);
-				_parameters[offset++] = new RuntimeParameter(metadataModule, paramDef);
+				parameters[offset++] = new RuntimeParameter(metadataModule, paramDef);
 			}
 		}
 
@@ -629,7 +611,7 @@ namespace Mosa.Runtime.Vm
 				}
 
 				// Load the field metadata
-				_fields[offset++] = new CilRuntimeField(this, ref field, layout, rva, declaringType);
+				fields[offset++] = new CilRuntimeField(this, ref field, layout, rva, declaringType);
 			}
 
 			/* FIXME:
@@ -662,7 +644,7 @@ namespace Mosa.Runtime.Vm
 				if (owner < gpr.OwnerTableIdx)
 				{
 					// Yes, commit them to the last type
-					if (0 != owner && 0 != gprs.Count)
+					if (owner != 0 && gprs.Count != 0)
 					{
 						SetGenericParameters(gprs, owner);
 						gprs.Clear();
@@ -675,7 +657,7 @@ namespace Mosa.Runtime.Vm
 			}
 
 			// Set the generic parameters of the last type, if we have them
-			if (0 != gprs.Count)
+			if (gprs.Count != 0)
 			{
 				SetGenericParameters(gprs, owner);
 			}
@@ -692,11 +674,11 @@ namespace Mosa.Runtime.Vm
 			switch (owner & TokenTypes.TableMask)
 			{
 				case TokenTypes.TypeDef:
-					_types[(int)(TokenTypes.RowIndexMask & owner) - 1].SetGenericParameter(gprs);
+					types[(int)(TokenTypes.RowIndexMask & owner) - 1].SetGenericParameter(gprs);
 					break;
 
 				case TokenTypes.MethodDef:
-					_methods[(int)(TokenTypes.RowIndexMask & owner) - 1].SetGenericParameter(gprs);
+					methods[(int)(TokenTypes.RowIndexMask & owner) - 1].SetGenericParameter(gprs);
 					break;
 
 				default:
@@ -769,14 +751,14 @@ namespace Mosa.Runtime.Vm
 					// AttributeTargets.Enum
 					// AttributeTargets.Interface
 					// AttributeTargets.Struct
-					RuntimeType type = ((IModuleTypeSystem)this).GetType(DefaultSignatureContext.Instance, owner);
+					RuntimeType type = ((IModuleTypeSystem)this).GetType(owner);
 					type.SetAttributes(ra);
 					break;
 
 				case TokenTypes.MethodDef:
 					// AttributeTargets.Constructor
 					// AttributeTargets.Method
-					RuntimeMethod method = ((IModuleTypeSystem)this).GetMethod(DefaultSignatureContext.Instance, owner);
+					RuntimeMethod method = ((IModuleTypeSystem)this).GetMethod(owner);
 					method.SetAttributes(ra);
 					break;
 
@@ -786,7 +768,7 @@ namespace Mosa.Runtime.Vm
 
 				case TokenTypes.Field:
 					// AttributeTargets.Field
-					RuntimeField field = ((IModuleTypeSystem)this).GetField(DefaultSignatureContext.Instance, owner);
+					RuntimeField field = ((IModuleTypeSystem)this).GetField(owner);
 					field.SetAttributes(ra);
 					break;
 
@@ -845,7 +827,7 @@ namespace Mosa.Runtime.Vm
 			}
 		}
 
-		private RuntimeField GetFieldForMemberReference(ISignatureContext context, TokenTypes token)
+		private RuntimeField GetFieldForMemberReference(TokenTypes token)
 		{
 			MemberRefRow row = metadata.ReadMemberRefRow(token);
 
@@ -854,13 +836,14 @@ namespace Mosa.Runtime.Vm
 			switch (row.ClassTableIdx & TokenTypes.TableMask)
 			{
 				case TokenTypes.TypeSpec:
-					ownerType = this.ResolveTypeSpec(context, row.ClassTableIdx);
+					ownerType = this.ResolveTypeSpec(row.ClassTableIdx);
 					break;
 
-				case TokenTypes.TypeDef: goto case TokenTypes.TypeRef;
+				case TokenTypes.TypeDef:
+					goto case TokenTypes.TypeRef;
 
 				case TokenTypes.TypeRef:
-					ownerType = ((IModuleTypeSystem)this).GetType(context, row.ClassTableIdx);
+					ownerType = ((IModuleTypeSystem)this).GetType(row.ClassTableIdx);
 					break;
 
 				default:
@@ -884,26 +867,48 @@ namespace Mosa.Runtime.Vm
 		}
 
 		/// <summary>
+		/// Loads all parameters from the given metadata module.
+		/// </summary>
+		private void LoadTypeSpecs()
+		{
+			TokenTypes maxParam = metadata.GetMaxTokenValue(TokenTypes.TypeSpec);
+			TokenTypes token = TokenTypes.TypeSpec + 1;
+
+			while (token <= maxParam)
+			{
+				ResolveTypeSpec(token++);
+			}
+		}
+
+		/// <summary>
 		/// Resolves the type specification
 		/// </summary>
-		/// <param name="context">The context.</param>
 		/// <param name="typeSpecToken">The type spec token.</param>
 		/// <returns></returns>
-		private RuntimeType ResolveTypeSpec(ISignatureContext context, TokenTypes typeSpecToken)
+		private RuntimeType ResolveTypeSpec(TokenTypes typeSpecToken)
 		{
 			int typeSpecIndex = (int)(typeSpecToken & TokenTypes.RowIndexMask) - 1;
 
-			if (_typespecs[typeSpecIndex] == null)
+			if (typeSpecs[typeSpecIndex] == null)
 			{
 				TypeSpecRow typeSpec = metadata.ReadTypeSpecRow(typeSpecToken);
 
-				TypeSpecSignature signature = new TypeSpecSignature();
-				signature.LoadSignature(context, metadata, typeSpec.SignatureBlobIdx);
+				TypeSpecSignature signature = new TypeSpecSignature(metadata, typeSpec.SignatureBlobIdx);
 
-				_typespecs[typeSpecIndex] = ((IModuleTypeSystem)this).ResolveSignatureType(context, signature.Type);
+				if (signature.Type.Type == CilElementType.Class || signature.Type.Type == CilElementType.ValueType || signature.Type.Type == CilElementType.GenericInst)
+				{
+					GenericInstSigType genericSig = signature.Type as GenericInstSigType;
+
+					if (genericSig != null)
+					{
+						RuntimeType genericType = ((IModuleTypeSystem)this).ResolveSignatureType(signature.Type);
+
+						typeSpecs[typeSpecIndex] = genericType;
+					}
+				}
 			}
 
-			return _typespecs[typeSpecIndex];
+			return typeSpecs[typeSpecIndex];
 		}
 
 		public override string ToString()

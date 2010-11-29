@@ -51,7 +51,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			ushort locIdx;
 
 			// Opcode specific handling 
-			if (_opcode == OpCode.Ldloca_s)
+			if (opcode == OpCode.Ldloca_s)
 			{
 				byte loc = decoder.DecodeByte();
 				locIdx = loc;

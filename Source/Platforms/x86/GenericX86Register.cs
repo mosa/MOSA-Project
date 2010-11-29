@@ -9,7 +9,7 @@
 
 using Mosa.Runtime.CompilerFramework;
 
-namespace Mosa.Platforms.x86
+namespace Mosa.Platform.X86
 {
 	/// <summary>
 	/// Base class for x86 registers.

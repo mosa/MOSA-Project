@@ -19,9 +19,6 @@ using MbUnit.Framework;
 
 namespace Test.Mosa.Runtime.CompilerFramework.IL
 {
-	/// <summary>
-	/// 
-	/// </summary>
 	[TestFixture]
 	public class Rem : CodeDomTestRunner
 	{
@@ -34,7 +31,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 					{
 						return expect == (a % b);
 					}
-				}" + Code.ObjectClassDefinition;
+				}" + Code.AllTestCode;
 		}
 
 		private static string CreateTestCodeWithReturn(string name, string typeIn, string typeOut)
@@ -46,7 +43,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 					{
 						return (a % b);
 					}
-				}" + Code.ObjectClassDefinition;
+				}" + Code.AllTestCode;
 		}
 
 		private static string CreateConstantTestCode(string name, string typeIn, string typeOut, string constLeft, string constRight)
@@ -60,7 +57,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 						{
 							return expect == (" + constLeft + @" % x);
 						}
-					}" + Code.ObjectClassDefinition;
+					}" + Code.AllTestCode;
 			}
 			else if (String.IsNullOrEmpty(constLeft))
 			{
@@ -71,7 +68,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 						{
 							return expect == (x % " + constRight + @");
 						}
-					}" + Code.ObjectClassDefinition;
+					}" + Code.AllTestCode;
 			}
 			else
 			{
@@ -80,19 +77,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		}
 
 		#region C
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="expect"></param>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
-		/// <returns></returns>
-		delegate bool C_C_C([MarshalAs(UnmanagedType.U2)]char expect, [MarshalAs(UnmanagedType.U2)]char a, [MarshalAs(UnmanagedType.U2)]char b);
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
+		
 		[Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
 		[Row(17, 128)]
 		[Row('a', 'Z')]
@@ -101,16 +86,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void RemC(char a, char b)
 		{
 			CodeSource = CreateTestCode("RemC", "char", "char");
-			Assert.IsTrue((bool)Run<C_C_C>("", "Test", "RemC", (char)(a % b), a, b));
+			Assert.IsTrue(Run<bool>("", "Test", "RemC", (char)(a % b), a, b));
 		}
 
-		delegate bool C_Constant_C([MarshalAs(UnmanagedType.U2)]char expect, [MarshalAs(UnmanagedType.U2)]char x);
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
 		[Row(0, 'a')]
 		[Row('-', '.')]
 		[Row('a', 'Z')]
@@ -118,14 +96,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void RemConstantCRight(char a, char b)
 		{
 			CodeSource = CreateConstantTestCode("RemConstantCRight", "char", "char", null, "'" + b.ToString() + "'");
-			Assert.IsTrue((bool)Run<C_Constant_C>("", "Test", "RemConstantCRight", (char)(a % b), a));
+			Assert.IsTrue(Run<bool>("", "Test", "RemConstantCRight", (char)(a % b), a));
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
 		[Row('a', 0, ExpectedException = typeof(DivideByZeroException))]
 		[Row('-', '.')]
 		[Row('a', 'Z')]
@@ -133,25 +106,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void RemConstantCLeft(char a, char b)
 		{
 			CodeSource = CreateConstantTestCode("RemConstantCLeft", "char", "char", "'" + a.ToString() + "'", null);
-			Assert.IsTrue((bool)Run<C_Constant_C>("", "Test", "RemConstantCLeft", (char)(a % b), b));
+			Assert.IsTrue(Run<bool>("", "Test", "RemConstantCLeft", (char)(a % b), b));
 		}
 		#endregion
 
 		#region I1
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="expect"></param>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
-		/// <returns></returns>
-		delegate bool I4_I1_I1(sbyte expect, sbyte a, sbyte b);
-		delegate int I4_I1_I1_Return(sbyte expect, sbyte a, sbyte b);
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
+		
 		[Row(1, 2)]
 		[Row(23, 21)]
 		[Row(1, -2)]
@@ -208,16 +168,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void RemI1(sbyte a, sbyte b)
 		{
 			CodeSource = CreateTestCodeWithReturn("RemI1", "sbyte", "int");
-			Assert.AreEqual(a % b, Run<I4_I1_I1_Return>("", "Test", "RemI1", (sbyte)(a % b), a, b));
+			Assert.AreEqual(a % b, Run<int>("", "Test", "RemI1", (sbyte)(a % b), a, b));
 		}
 
-		delegate bool I1_Constant_I1(sbyte expect, sbyte x);
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
 		[Row(23, 21)]
 		[Row(2, -17)]
 		[Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
@@ -226,14 +179,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void RemConstantI1Right(sbyte a, sbyte b)
 		{
 			CodeSource = CreateConstantTestCode("RemConstantI1Right", "sbyte", "sbyte", null, b.ToString());
-			Assert.IsTrue((bool)Run<I1_Constant_I1>("", "Test", "RemConstantI1Right", (sbyte)(a % b), a));
+			Assert.IsTrue(Run<bool>("", "Test", "RemConstantI1Right", (sbyte)(a % b), a));
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
 		[Row(23, 21)]
 		[Row(2, -17)]
 		[Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
@@ -242,24 +190,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void RemConstantI1Left(sbyte a, sbyte b)
 		{
 			CodeSource = CreateConstantTestCode("RemConstantI1Left", "sbyte", "sbyte", a.ToString(), null);
-			Assert.IsTrue((bool)Run<I1_Constant_I1>("", "Test", "RemConstantI1Left", (sbyte)(a % b), b));
+			Assert.IsTrue(Run<bool>("", "Test", "RemConstantI1Left", (sbyte)(a % b), b));
 		}
 		#endregion
 
 		#region U1
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="expect"></param>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
-		/// <returns></returns>
-		delegate bool U4_U1_U1(byte expect, byte a, byte b);
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
+		
 		[Row(1, 2)]
 		[Row(23, 21)]
 		[Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
@@ -294,16 +230,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void RemU1(byte a, byte b)
 		{
 			CodeSource = CreateTestCode("RemU1", "byte", "byte");
-			Assert.IsTrue((bool)Run<U4_U1_U1>("", "Test", "RemU1", (byte)(a % b), a, b));
+			Assert.IsTrue(Run<bool>("", "Test", "RemU1", (byte)(a % b), a, b));
 		}
 
-		delegate bool U1_Constant_U1(byte expect, byte x);
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
 		[Row(23, 21)]
 		[Row(17, 1)]
 		[Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
@@ -312,14 +241,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void RemConstantU1Right(byte a, byte b)
 		{
 			CodeSource = CreateConstantTestCode("RemConstantU1Right", "byte", "byte", null, b.ToString());
-			Assert.IsTrue((bool)Run<U1_Constant_U1>("", "Test", "RemConstantU1Right", (byte)(a % b), a));
+			Assert.IsTrue(Run<bool>("", "Test", "RemConstantU1Right", (byte)(a % b), a));
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
 		[Row(23, 21)]
 		[Row(17, 1)]
 		[Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
@@ -328,24 +252,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void RemConstantU1Left(byte a, byte b)
 		{
 			CodeSource = CreateConstantTestCode("RemConstantU1Left", "byte", "byte", a.ToString(), null);
-			Assert.IsTrue((bool)Run<U1_Constant_U1>("", "Test", "RemConstantU1Left", (byte)(a % b), b));
+			Assert.IsTrue(Run<bool>("", "Test", "RemConstantU1Left", (byte)(a % b), b));
 		}
 		#endregion
 
 		#region I2
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="expect"></param>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
-		/// <returns></returns>
-		delegate bool I4_I2_I2(short expect, short a, short b);
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
+		
 		[Row(1, 2)]
 		[Row(23, 21)]
 		[Row(1, -2)]
@@ -402,16 +314,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void RemI2(short a, short b)
 		{
 			CodeSource = CreateTestCode("RemI2", "short", "short");
-			Assert.IsTrue((bool)Run<I4_I2_I2>("", "Test", "RemI2", (short)(a % b), a, b));
+			Assert.IsTrue(Run<bool>("", "Test", "RemI2", (short)(a % b), a, b));
 		}
 
-		delegate bool I2_Constant_I2(short expect, short x);
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
 		[Row(-23, 21)]
 		[Row(17, 1)]
 		[Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
@@ -420,14 +325,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void RemConstantI2Right(short a, short b)
 		{
 			CodeSource = CreateConstantTestCode("RemConstantI2Right", "short", "short", null, b.ToString());
-			Assert.IsTrue((bool)Run<I2_Constant_I2>("", "Test", "RemConstantI2Right", (short)(a % b), a));
+			Assert.IsTrue(Run<bool>("", "Test", "RemConstantI2Right", (short)(a % b), a));
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
 		[Row(-23, 21)]
 		[Row(17, 1)]
 		[Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
@@ -436,24 +336,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void RemConstantI2Left(short a, short b)
 		{
 			CodeSource = CreateConstantTestCode("RemConstantI2Left", "short", "short", a.ToString(), null);
-			Assert.IsTrue((bool)Run<I2_Constant_I2>("", "Test", "RemConstantI2Left", (short)(a % b), b));
+			Assert.IsTrue(Run<bool>("", "Test", "RemConstantI2Left", (short)(a % b), b));
 		}
 		#endregion
 
 		#region U2
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="expect"></param>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
-		/// <returns></returns>
-		delegate bool U4_U2_U2(ushort expect, ushort a, ushort b);
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
+	
 		[Row(1, 2)]
 		[Row(23, 21)]
 		[Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
@@ -488,16 +376,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void RemU2(ushort a, ushort b)
 		{
 			CodeSource = CreateTestCode("RemU2", "ushort", "ushort");
-			Assert.IsTrue((bool)Run<U4_U2_U2>("", "Test", "RemU2", (ushort)(a % b), a, b));
+			Assert.IsTrue(Run<bool>("", "Test", "RemU2", (ushort)(a % b), a, b));
 		}
 
-		delegate bool U2_Constant_U2(ushort expect, ushort x);
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
 		[Row(23, 21)]
 		[Row(148, 23)]
 		[Row(17, 1)]
@@ -507,14 +388,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void RemConstantU2Right(ushort a, ushort b)
 		{
 			CodeSource = CreateConstantTestCode("RemConstantU2Right", "ushort", "ushort", null, b.ToString());
-			Assert.IsTrue((bool)Run<U2_Constant_U2>("", "Test", "RemConstantU2Right", (ushort)(a % b), a));
+			Assert.IsTrue(Run<bool>("", "Test", "RemConstantU2Right", (ushort)(a % b), a));
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
 		[Row(23, 21)]
 		[Row(148, 23)]
 		[Row(17, 1)]
@@ -524,24 +400,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void RemConstantU2Left(ushort a, ushort b)
 		{
 			CodeSource = CreateConstantTestCode("RemConstantU2Left", "ushort", "ushort", a.ToString(), null);
-			Assert.IsTrue((bool)Run<U2_Constant_U2>("", "Test", "RemConstantU2Left", (ushort)(a % b), b));
+			Assert.IsTrue(Run<bool>("", "Test", "RemConstantU2Left", (ushort)(a % b), b));
 		}
 		#endregion
 
 		#region I4
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="expect"></param>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
-		/// <returns></returns>
-		delegate bool I4_I4_I4(int expect, int a, int b);
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
+		
 		[Row(1, 2)]
 		[Row(23, 21)]
 		[Row(1, -2)]
@@ -598,16 +462,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void RemI4(int a, int b)
 		{
 			CodeSource = CreateTestCode("RemI4", "int", "int");
-			Assert.IsTrue((bool)Run<I4_I4_I4>("", "Test", "RemI4", (int)(a % b), a, b));
+			Assert.IsTrue(Run<bool>("", "Test", "RemI4", (int)(a % b), a, b));
 		}
 
-		delegate bool I4_Constant_I4(int expect, int x);
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
 		[Row(-23, 21)]
 		[Row(-23, 148)]
 		[Row(17, 1)]
@@ -617,14 +474,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void RemConstantI4Right(int a, int b)
 		{
 			CodeSource = CreateConstantTestCode("RemConstantI4Right", "int", "int", null, b.ToString());
-			Assert.IsTrue((bool)Run<I4_Constant_I4>("", "Test", "RemConstantI4Right", (a % b), a));
+			Assert.IsTrue(Run<bool>("", "Test", "RemConstantI4Right", (a % b), a));
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
 		[Row(-23, 21)]
 		[Row(-23, 148)]
 		[Row(17, 1)]
@@ -634,24 +486,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void RemConstantI4Left(int a, int b)
 		{
 			CodeSource = CreateConstantTestCode("RemConstantI4Left", "int", "int", a.ToString(), null);
-			Assert.IsTrue((bool)Run<I4_Constant_I4>("", "Test", "RemConstantI4Left", (a % b), b));
+			Assert.IsTrue(Run<bool>("", "Test", "RemConstantI4Left", (a % b), b));
 		}
 		#endregion
 
 		#region U4
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="expect"></param>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
-		/// <returns></returns>
-		delegate bool U4_U4_U4(uint expect, uint a, uint b);
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
+		
 		[Row(1, 2)]
 		[Row(23, 21)]
 		[Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
@@ -686,16 +526,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void RemU4(uint a, uint b)
 		{
 			CodeSource = CreateTestCode("RemU4", "uint", "uint");
-			Assert.IsTrue((bool)Run<U4_U4_U4>("", "Test", "RemU4", (uint)(a % b), a, b));
+			Assert.IsTrue(Run<bool>("", "Test", "RemU4", (uint)(a % b), a, b));
 		}
 
-		delegate bool U4_Constant_U4(uint expect, uint x);
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
 		[Row(1, 2)]
 		[Row(23, 21)]
 		[Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
@@ -705,14 +538,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void RemConstantU4Right(uint a, uint b)
 		{
 			CodeSource = CreateConstantTestCode("RemConstantU4Right", "uint", "uint", null, b.ToString());
-			Assert.IsTrue((bool)Run<U4_Constant_U4>("", "Test", "RemConstantU4Right", (uint)(a % b), a));
+			Assert.IsTrue(Run<bool>("", "Test", "RemConstantU4Right", (uint)(a % b), a));
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
 		[Row(1, 2)]
 		[Row(23, 21)]
 		[Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
@@ -722,25 +550,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void RemConstantU4Left(uint a, uint b)
 		{
 			CodeSource = CreateConstantTestCode("RemConstantU4Left", "uint", "uint", a.ToString(), null);
-			Assert.IsTrue((bool)Run<U4_Constant_U4>("", "Test", "RemConstantU4Left", (uint)(a % b), b));
+			Assert.IsTrue(Run<bool>("", "Test", "RemConstantU4Left", (uint)(a % b), b));
 		}
 		#endregion
 
 		#region I8
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="expect"></param>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
-		/// <returns></returns>
-		delegate bool I8_I8_I8(long expect, long a, long b);
-		delegate long I8_I8_I8_Return(long expect, long a, long b);
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
+	
 		[Row(1, 2)]
 		[Row(23, 21)]
 		[Row(1, -2)]
@@ -797,16 +612,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void RemI8(long a, long b)
 		{
 			CodeSource = CreateTestCodeWithReturn("RemI8", "long", "long");
-			Assert.AreEqual((long)(a % b), (long)Run<I8_I8_I8_Return>("", "Test", "RemI8", (long)(a % b), a, b));
+			Assert.AreEqual((long)(a % b), (long)Run<long>("", "Test", "RemI8", (long)(a % b), a, b));
 		}
 
-		delegate bool I8_Constant_I8(long expect, long x);
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
 		[Row(-23, 148)]
 		[Row(17, 1)]
 		[Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
@@ -815,14 +623,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void RemConstantI8Right(long a, long b)
 		{
 			CodeSource = CreateConstantTestCode("RemConstantI8Right", "long", "long", null, b.ToString());
-			Assert.IsTrue((bool)Run<I8_Constant_I8>("", "Test", "RemConstantI8Right", (a % b), a));
+			Assert.IsTrue(Run<bool>("", "Test", "RemConstantI8Right", (a % b), a));
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
 		[Row(-23, 148)]
 		[Row(17, 1)]
 		[Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
@@ -831,24 +634,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void RemConstantI8Left(long a, long b)
 		{
 			CodeSource = CreateConstantTestCode("RemConstantI8Left", "long", "long", a.ToString(), null);
-			Assert.IsTrue((bool)Run<I8_Constant_I8>("", "Test", "RemConstantI8Left", (a % b), b));
+			Assert.IsTrue(Run<bool>("", "Test", "RemConstantI8Left", (a % b), b));
 		}
 		#endregion
 
 		#region U8
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="expect"></param>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
-		/// <returns></returns>
-		delegate bool U8_U8_U8(ulong expect, ulong a, ulong b);
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
+		
 		[Row(1, 2)]
 		[Row(23, 21)]
 		[Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
@@ -883,16 +674,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void RemU8(ulong a, ulong b)
 		{
 			CodeSource = CreateTestCode("RemU8", "ulong", "ulong");
-			Assert.IsTrue((bool)Run<U8_U8_U8>("", "Test", "RemU8", (ulong)(a % b), a, b));
+			Assert.IsTrue(Run<bool>("", "Test", "RemU8", (ulong)(a % b), a, b));
 		}
 
-		delegate bool U8_Constant_U8(ulong expect, ulong x);
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
 		[Row(23, 148)]
 		[Row(17, 1)]
 		[Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
@@ -901,14 +685,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void RemConstantU8Right(ulong a, ulong b)
 		{
 			CodeSource = CreateConstantTestCode("RemConstantU8Right", "ulong", "ulong", null, b.ToString());
-			Assert.IsTrue((bool)Run<U8_Constant_U8>("", "Test", "RemConstantU8Right", (ulong)(a % b), a));
+			Assert.IsTrue(Run<bool>("", "Test", "RemConstantU8Right", (ulong)(a % b), a));
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
 		[Row(23, 148)]
 		[Row(17, 1)]
 		[Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
@@ -917,7 +696,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void RemConstantU8Left(ulong a, ulong b)
 		{
 			CodeSource = CreateConstantTestCode("RemConstantU8Left", "ulong", "ulong", a.ToString(), null);
-			Assert.IsTrue((bool)Run<U8_Constant_U8>("", "Test", "RemConstantU8Left", (ulong)(a % b), b));
+			Assert.IsTrue(Run<bool>("", "Test", "RemConstantU8Left", (ulong)(a % b), b));
 		}
 		#endregion
 	}

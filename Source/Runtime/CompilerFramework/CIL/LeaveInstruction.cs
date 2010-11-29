@@ -46,7 +46,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			// Decode base classes first
 			base.Decode(ctx, decoder);
 
-			switch (_opcode)
+			switch (opcode)
 			{
 				case OpCode.Leave_s:
 					{

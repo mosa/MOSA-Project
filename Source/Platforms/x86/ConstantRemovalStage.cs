@@ -16,7 +16,7 @@ using Mosa.Runtime.Metadata;
 using Mosa.Runtime.CompilerFramework;
 using IR = Mosa.Runtime.CompilerFramework.IR;
 
-namespace Mosa.Platforms.x86
+namespace Mosa.Platform.X86
 {
 	/// <summary>
 	/// This is an x86 specific compiler stage to remove floating point constants from instructions.
@@ -80,7 +80,7 @@ namespace Mosa.Platforms.x86
 			ctxEpilogue.GotoLast();
 
 			// Iterate all blocks and collect locals from all blocks
-			foreach (BasicBlock block in BasicBlocks)
+			foreach (BasicBlock block in basicBlocks)
 				ProcessInstructions(CreateContext(block), ctxEpilogue);
 		}
 

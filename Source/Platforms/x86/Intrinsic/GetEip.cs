@@ -21,8 +21,11 @@ using Mosa.Runtime.Metadata.Signatures;
 using CIL = Mosa.Runtime.CompilerFramework.CIL;
 using IR = Mosa.Runtime.CompilerFramework.IR;
 
-namespace Mosa.Platforms.x86.Intrinsic
+namespace Mosa.Platform.X86.Intrinsic
 {
+	/// <summary>
+	/// 
+	/// </summary>
     public sealed class GetEip : IIntrinsicMethod
     {
         #region Methods

@@ -119,7 +119,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 		/// <returns>The base type.</returns>
 		protected override RuntimeType GetBaseType()
 		{
-			return moduleTypeSystem.GetType(this, this.baseTypeToken);
+			return moduleTypeSystem.GetType(this.baseTypeToken);
 		}
 
 		/// <summary>
@@ -191,7 +191,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 				InterfaceImplRow row = metadata.ReadInterfaceImplRow(token);
 				if (row.ClassTableIdx == (TokenTypes)this.Token)
 				{
-					RuntimeType interfaceType = moduleTypeSystem.GetType(DefaultSignatureContext.Instance, row.InterfaceTableIdx);
+					RuntimeType interfaceType = moduleTypeSystem.GetType(row.InterfaceTableIdx);
 
 					if (result == null)
 					{

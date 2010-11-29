@@ -12,20 +12,20 @@ using System;
 namespace Mosa.Runtime.Metadata.Signatures
 {
 
-	public interface ISignatureContext
-	{
-		/// <summary>
-		/// Gets the generic method argument.
-		/// </summary>
-		/// <param name="index">The index.</param>
-		/// <returns></returns>
-		SigType GetGenericMethodArgument(int index);
+	//public interface ISignatureContext
+	//{
+	//    /// <summary>
+	//    /// Gets the generic method argument.
+	//    /// </summary>
+	//    /// <param name="index">The index.</param>
+	//    /// <returns></returns>
+	//    SigType GetGenericMethodArgument(int index);
 
-		/// <summary>
-		/// Gets the generic type argument.
-		/// </summary>
-		/// <param name="index">The index.</param>
-		/// <returns></returns>
-		SigType GetGenericTypeArgument(int index);
-	}
+	//    /// <summary>
+	//    /// Gets the generic type argument.
+	//    /// </summary>
+	//    /// <param name="index">The index.</param>
+	//    /// <returns></returns>
+	//    SigType GetGenericTypeArgument(int index);
+	//}
 }

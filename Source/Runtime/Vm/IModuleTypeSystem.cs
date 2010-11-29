@@ -34,7 +34,7 @@ namespace Mosa.Runtime.Vm
 		/// <summary>
 		/// Holds the metadata module
 		/// </summary>
-		IMetadataModule MetadataModule { get;  }
+		IMetadataModule MetadataModule { get; }
 
 		/// <summary>
 		/// Array of loaded runtime type descriptors.
@@ -57,10 +57,9 @@ namespace Mosa.Runtime.Vm
 		RuntimeField[] Fields { get; }
 
 		/// <summary>
-		/// Gets the types from module.
+		/// Array of loaded runtime typespec descriptors.
 		/// </summary>
-		/// <returns></returns>
-		ReadOnlyRuntimeTypeListView GetTypes();
+		RuntimeType[] TypeSpecs { get; }
 
 		/// <summary>
 		/// Gets all types from module.
@@ -71,10 +70,9 @@ namespace Mosa.Runtime.Vm
 		/// <summary>
 		/// Retrieves the runtime type for a given metadata token.
 		/// </summary>
-		/// <param name="context">The context.</param>
 		/// <param name="token">The token of the type to load. This can represent a typeref, typedef or typespec token.</param>
 		/// <returns>The runtime type of the specified token.</returns>
-		RuntimeType GetType(ISignatureContext context, TokenTypes token);
+		RuntimeType GetType(TokenTypes token);
 
 		/// <summary>
 		/// Retrieves the runtime type for a given type name.
@@ -92,28 +90,25 @@ namespace Mosa.Runtime.Vm
 		RuntimeType GetType(string nameSpace, string typeName);
 
 		/// <summary>
-		/// Retrieves the stackFrameIndex definition identified by the given token in the scope.
+		/// Retrieves the field definition identified by the given token in the scope.
 		/// </summary>
-		/// <param name="context">The generic parameter resolution context.</param>
-		/// <param name="token">The token of the _stackFrameIndex to retrieve.</param>
+		/// <param name="token">The token of the field to retrieve.</param>
 		/// <returns></returns>
-		RuntimeField GetField(ISignatureContext context, TokenTypes token);
+		RuntimeField GetField(TokenTypes token);
 
 		/// <summary>
 		/// Retrieves the method definition identified by the given token in the scope.
 		/// </summary>
-		/// <param name="context">The context.</param>
 		/// <param name="token">The token of the method to retrieve.</param>
 		/// <returns></returns>
-		RuntimeMethod GetMethod(ISignatureContext context, TokenTypes token);
+		RuntimeMethod GetMethod(TokenTypes token);
 
 		/// <summary>
 		/// Resolves the type of the signature.
 		/// </summary>
-		/// <param name="context">The context.</param>
 		/// <param name="sigType">Type of the signature.</param>
 		/// <returns></returns>
-		RuntimeType ResolveSignatureType(ISignatureContext context, SigType sigType);
+		RuntimeType ResolveSignatureType(SigType sigType);
 
 		/// <summary>
 		/// Adds the internal compiler defined type to the type system

@@ -18,11 +18,23 @@ namespace Mosa.Runtime.Metadata.Signatures
 	/// </summary>
 	public class MethodReferenceSignature : MethodSignature
 	{
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MethodReferenceSignature"/> class.
 		/// </summary>
-		public MethodReferenceSignature() :
-			base()
+		/// <param name="reader">The reader.</param>
+		public MethodReferenceSignature(SignatureReader reader)
+			: base(reader)
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="MethodReferenceSignature"/> class.
+		/// </summary>
+		/// <param name="provider">The provider.</param>
+		/// <param name="token">The token.</param>
+		public MethodReferenceSignature(IMetadataProvider provider, TokenTypes token)
+			: base(provider, token)
 		{
 		}
 	}

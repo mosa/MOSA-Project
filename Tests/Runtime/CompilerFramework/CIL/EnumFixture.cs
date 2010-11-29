@@ -34,24 +34,20 @@ namespace Test.Mosa.Runtime.CompilerFramework.CIL
 						return 5 == (int)TestEnum.ItemA;
 					}
 				}
-
 			"
-			+ Code.ObjectClassDefinition
-			+ Code.NoStdLibDefinitions;
+			+ Code.AllTestCode;
 		}
-
-		private delegate bool B_V();
 
 		[Test]
 		public void ItemAMustEqual5()
 		{
 			CodeSource = CreateTestCode();
-			this.DoNotReferenceMsCorlib = true;
+			DoNotReferenceMscorlib = true;
 
 			// Due to Code.NoStdLibDefinitions... :(
 			UnsafeCode = true;
 
-			Assert.IsTrue((bool)Run<B_V>("", "TestClass", "AMustBe5"));
+			Assert.IsTrue(Run<bool>("", "TestClass", "AMustBe5"));
 		}
 	}
 }

@@ -30,22 +30,22 @@ namespace Mosa.Runtime.Vm
 		/// <summary>
 		/// The instantiated attribute.
 		/// </summary>
-		private object _attribute;
+		private object attribute;
 
 		/// <summary>
 		/// Specifies the blob, which contains the attribute initialization.
 		/// </summary>
-		private TokenTypes _attributeBlob;
+		private TokenTypes attributeBlob;
 
 		/// <summary>
 		/// Holds the ctor of the attribute type to invoke.
 		/// </summary>
-		private TokenTypes _ctor;
+		private TokenTypes ctor;
 
 		/// <summary>
 		/// Holds the ctor method of the attribute type.
 		/// </summary>
-		private RuntimeMethod _ctorMethod;
+		private RuntimeMethod ctorMethod;
 
 		/// <summary>
 		/// Holds the static instance of the runtime.
@@ -63,9 +63,9 @@ namespace Mosa.Runtime.Vm
 		/// <param name="car">The custom attribute row from metadata.</param>
 		public RuntimeAttribute(IModuleTypeSystem moduleTypeSystem, CustomAttributeRow car)
 		{
-			_attribute = null;
-			_attributeBlob = car.ValueBlobIdx;
-			_ctor = car.TypeIdx;
+			attribute = null;
+			attributeBlob = car.ValueBlobIdx;
+			ctor = car.TypeIdx;
 			this.moduleTypeSystem = moduleTypeSystem;
 		}
 
@@ -80,14 +80,14 @@ namespace Mosa.Runtime.Vm
 		public object GetAttribute()
 		{
 			// Skip over attribute initialization, if we already initialized the attribute
-			if (null != _attribute)
-				return _attribute;
+			if (null != attribute)
+				return attribute;
 
 			// Retrieve the attribute type
-			_attribute = CustomAttributeParser.Parse(moduleTypeSystem.MetadataModule, _attributeBlob, _ctorMethod);
-			Debug.Assert(null != _attribute, @"Failed to load the attribute.");
+			attribute = CustomAttributeParser.Parse(moduleTypeSystem.MetadataModule, attributeBlob, ctorMethod);
+			Debug.Assert(null != attribute, @"Failed to load the attribute.");
 
-			return _attribute;
+			return attribute;
 		}
 
 		#endregion // Methods
@@ -102,10 +102,10 @@ namespace Mosa.Runtime.Vm
 		{
 			get
 			{
-				if (null == _ctorMethod)
+				if (ctorMethod == null)
 					LocateAttributeCtorMethod();
 
-				return _ctorMethod.DeclaringType;
+				return ctorMethod.DeclaringType;
 			}
 		}
 
@@ -118,8 +118,8 @@ namespace Mosa.Runtime.Vm
 		/// </summary>
 		private void LocateAttributeCtorMethod()
 		{
-			_ctorMethod = moduleTypeSystem.GetMethod(DefaultSignatureContext.Instance, _ctor);
-			Debug.Assert(null != _ctorMethod);
+			ctorMethod = moduleTypeSystem.GetMethod(ctor);
+			Debug.Assert(null != ctorMethod);
 		}
 
 		#endregion // Internals

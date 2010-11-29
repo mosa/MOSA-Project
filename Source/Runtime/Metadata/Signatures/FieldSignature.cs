@@ -7,6 +7,8 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
+using System;
+
 namespace Mosa.Runtime.Metadata.Signatures
 {
 	/// <summary>
@@ -15,24 +17,40 @@ namespace Mosa.Runtime.Metadata.Signatures
 	public sealed class FieldSignature : VariableSignature
 	{
 
+		private const int Field = 0x06;
+
 		/// <summary>
-		/// Parses the signature.
+		/// Loads the signature.
 		/// </summary>
-		/// <param name="context">The context.</param>
 		/// <param name="reader">The reader.</param>
-		protected override void ParseSignature(ISignatureContext context, SignatureReader reader)
+		public FieldSignature(SignatureReader reader)
+			: base(reader)
 		{
-			if (Field != reader.PeekByte())
-				return;
-
-			reader.SkipByte();
-
-			base.ParseSignature(context, reader);
 		}
 
 		/// <summary>
-		/// 
+		/// Initializes a new instance of the <see cref="FieldSignature"/> class.
 		/// </summary>
-		private const int Field = 0x06;
+		/// <param name="provider">The provider.</param>
+		/// <param name="token">The token.</param>
+		public FieldSignature(IMetadataProvider provider, TokenTypes token)
+			: base(provider, token)
+		{
+		}
+
+		/// <summary>
+		/// FieldSignature signature is indexed by the Field.Signature column
+		/// </summary>
+		/// <param name="reader">The reader.</param>
+		protected override void ParseSignature(SignatureReader reader)
+		{
+			if (Field != reader.ReadByte())
+			{
+				throw new InvalidOperationException(@"Invalid method definition signature.");
+			}
+
+			base.ParseSignature(reader);
+		}
+
 	}
 }

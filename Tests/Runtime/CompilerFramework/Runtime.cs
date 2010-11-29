@@ -12,13 +12,10 @@ using System.Runtime.CompilerServices;
 
 using Mosa.Runtime.Vm;
 using Mosa.Runtime.Memory;
-using Mosa.Runtime.Loader;
-using Mosa.Runtime.Metadata;
-using Mosa.Runtime.Metadata.Signatures;
-using Test.Mosa.Runtime.CompilerFramework;
-using Test.Mosa.Runtime.CompilerFramework.BaseCode;
 
-namespace Mosa.Runtime
+using Test.Mosa.Runtime.CompilerFramework;
+
+namespace Mosa.Vm
 {
 
 	/// <summary>

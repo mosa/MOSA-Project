@@ -48,9 +48,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </summary>
 		public void Run()
 		{
-			for (int index = 0; index < this.BasicBlocks.Count; index++)
+			for (int index = 0; index < this.basicBlocks.Count; index++)
 			{
-				for (Context ctx = new Context(InstructionSet, BasicBlocks[index]); !ctx.EndOfInstruction; ctx.GotoNext())
+				for (Context ctx = new Context(InstructionSet, basicBlocks[index]); !ctx.EndOfInstruction; ctx.GotoNext())
 				{
 					IInstruction instruction = ctx.Instruction;
 					if (instruction is ICILInstruction)
@@ -67,7 +67,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <param name="context">The context to log and throw.</param>
 		private void ThrowCompilationException(Context context)
 		{
-			string message = @"Leaking CIL instruction to late stages. Instruction " + context.Instruction.ToString(context) + @" at " + context.Label + @" in method " + this.MethodCompiler.Method;
+			string message = @"Leaking CIL instruction to late stages. Instruction " + context.Instruction.ToString(context) + @" at " + context.Label + @" in method " + this.methodCompiler.Method;
 			Trace.WriteLine(message);
 
 			if (this.MustThrowCompilationException == true)

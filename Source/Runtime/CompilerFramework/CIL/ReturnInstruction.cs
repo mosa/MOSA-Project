@@ -67,7 +67,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			// Decode base classes first
 			base.Decode(ctx, decoder);
 
-			if (OpCode.Ret != _opcode)
+			if (OpCode.Ret != opcode)
 				throw new ArgumentException(@"Invalid opcode.", @"code");
 
 			if (decoder.Method.Signature.ReturnType.Type == CilElementType.Void)

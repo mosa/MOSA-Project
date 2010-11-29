@@ -9,7 +9,7 @@
 
 using System;
 
-namespace Mosa.Platforms.x86
+namespace Mosa.Platform.X86
 {
 	/// <summary>
 	/// Determines features provided by an architecture.

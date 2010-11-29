@@ -14,5 +14,10 @@ namespace System
 	/// </summary>
 	public struct UInt64
 	{
+		public const ulong MaxValue = 0xffffffffffffffff;
+		public const ulong MinValue = 0;
+
+		internal ulong _value;
+
 	}
 }

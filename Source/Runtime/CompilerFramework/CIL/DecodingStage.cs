@@ -10,9 +10,12 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+
+using Mosa.Runtime;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Metadata.Tables;
+using Mosa.Runtime.Metadata.Runtime;
 using Mosa.Runtime.Vm;
 
 namespace Mosa.Runtime.CompilerFramework.CIL
@@ -35,18 +38,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// The reader used to process the code stream.
 		/// </summary>
-		private BinaryReader _codeReader;
-
-		/// <summary>
-		/// The current compiler context.
-		/// </summary>
-		private IMethodCompiler _compiler;
-
-		/// <summary>
-		/// The method implementation of the currently compiled method.
-		/// </summary>
-		private RuntimeMethod _method;
-
+		private BinaryReader codeReader;
+		
 		#endregion // Data members
 
 		#region IPipelineStage Members
@@ -65,40 +58,41 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			// The size of the code in bytes
 			MethodHeader header = new MethodHeader();
 
-			using (Stream code = MethodCompiler.GetInstructionStream())
+			using (Stream code = methodCompiler.GetInstructionStream())
 			{
 				// Initalize the instruction, setting the initalize size to 10 times the code stream
-				MethodCompiler.InstructionSet = new InstructionSet((int)code.Length * 10);
+				methodCompiler.InstructionSet = new InstructionSet((int)code.Length * 10);
 
 				// update the base class 
-				InstructionSet = MethodCompiler.InstructionSet;
+				InstructionSet = methodCompiler.InstructionSet;
 
 				using (BinaryReader reader = new BinaryReader(code))
 				{
-					_compiler = MethodCompiler;
-					_method = MethodCompiler.Method;
-					_codeReader = reader;
+					codeReader = reader;
 
-					//Debug.WriteLine("Decoding " + _compiler.Method.ToString());
+					//Debug.WriteLine("Decoding " + methodCompiler.Method.ToString());
 					ReadMethodHeader(reader, ref header);
 
 					if (header.localsSignature != 0)
 					{
-						IMetadataProvider md = _method.MetadataModule.Metadata;
-						StandAloneSigRow row = md.ReadStandAloneSigRow(header.localsSignature);
+						StandAloneSigRow row = methodCompiler.Method.MetadataModule.Metadata.ReadStandAloneSigRow(header.localsSignature);
 
-						LocalVariableSignature localsSignature = new LocalVariableSignature();
-						localsSignature.LoadSignature(this._method, md, row.SignatureBlobIdx);
-						this.MethodCompiler.SetLocalVariableSignature(localsSignature);
+						LocalVariableSignature localsSignature = new LocalVariableSignature(methodCompiler.Method.MetadataModule.Metadata, row.SignatureBlobIdx);
+
+						if (methodCompiler.Method.DeclaringType is CilGenericType)
+						{
+							localsSignature.ApplyGenericType((methodCompiler.Method.DeclaringType as CilGenericType).GenericArguments);
+						}
+
+						methodCompiler.SetLocalVariableSignature(localsSignature);
 					}
 
 					/* Decode the instructions */
-					Decode(MethodCompiler, ref header);
+					Decode(methodCompiler, ref header);
 
 					// When we leave, the operand stack must only contain the locals...
 					//Debug.Assert(_operandStack.Count == _method.Locals.Count);
-					_codeReader = null;
-					_compiler = null;
+					codeReader = null;
 				}
 			}
 		}
@@ -178,13 +172,13 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 					{
 						EhClause clause = new EhClause();
 						clause.Read(reader, isFat);
-						this.MethodCompiler.Method.ExceptionClauseHeader.AddClause(clause);
+						this.methodCompiler.Method.ExceptionClauseHeader.AddClause(clause);
 						// FIXME: Create proper basic Blocks for each item in the clause
 					}
 				}
 				while (0x80 == (flags & 0x80));
 
-				this.MethodCompiler.Method.ExceptionClauseHeader.Sort();
+				methodCompiler.Method.ExceptionClauseHeader.Sort();
 				reader.BaseStream.Position = codepos;
 			}
 		}
@@ -197,10 +191,10 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		private void Decode(IMethodCompiler compiler, ref MethodHeader header)
 		{
 			// Start of the code stream
-			long codeStart = _codeReader.BaseStream.Position;
+			long codeStart = codeReader.BaseStream.Position;
 
 			// End of the code stream
-			long codeEnd = _codeReader.BaseStream.Position + header.codeSize;
+			long codeEnd = codeReader.BaseStream.Position + header.codeSize;
 
 			// Prefix instruction
 			//PrefixInstruction prefix = null;
@@ -208,15 +202,15 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			// Setup context
 			Context ctx = new Context(InstructionSet, -1);
 
-			while (codeEnd != _codeReader.BaseStream.Position)
+			while (codeEnd != codeReader.BaseStream.Position)
 			{
 				// Determine the instruction offset
-				int instOffset = (int)(_codeReader.BaseStream.Position - codeStart);
+				int instOffset = (int)(codeReader.BaseStream.Position - codeStart);
 
 				// Read the next opcode from the stream
-				OpCode op = (OpCode)_codeReader.ReadByte();
+				OpCode op = (OpCode)codeReader.ReadByte();
 				if (OpCode.Extop == op)
-					op = (OpCode)(0x100 | _codeReader.ReadByte());
+					op = (OpCode)(0x100 | codeReader.ReadByte());
 
 				ICILInstruction instruction = Instruction.Get(op);
 
@@ -239,7 +233,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 				// Do we need to patch branch targets?
 				if (instruction is IBranchInstruction && instruction.FlowControl != FlowControl.Return)
 				{
-					int pc = (int)(_codeReader.BaseStream.Position - codeStart);
+					int pc = (int)(codeReader.BaseStream.Position - codeStart);
 
 					for (int i = 0; i < ctx.Branch.Targets.Length; i++)
 						ctx.Branch.Targets[i] += pc;
@@ -259,7 +253,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <value></value>
 		IMethodCompiler IInstructionDecoder.Compiler
 		{
-			get { return _compiler; }
+			get { return methodCompiler; }
 		}
 
 		/// <summary>
@@ -268,7 +262,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <value></value>
 		RuntimeMethod IInstructionDecoder.Method
 		{
-			get { return _method; }
+			get { return methodCompiler.Method; }
 		}
 
 		/// <summary>
@@ -286,7 +280,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <returns></returns>
 		byte IInstructionDecoder.DecodeByte()
 		{
-			return _codeReader.ReadByte();
+			return codeReader.ReadByte();
 		}
 
 		/// <summary>
@@ -295,7 +289,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <returns></returns>
 		sbyte IInstructionDecoder.DecodeSByte()
 		{
-			return _codeReader.ReadSByte();
+			return codeReader.ReadSByte();
 		}
 
 		/// <summary>
@@ -304,7 +298,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <returns></returns>
 		short IInstructionDecoder.DecodeShort()
 		{
-			return _codeReader.ReadInt16();
+			return codeReader.ReadInt16();
 		}
 
 		/// <summary>
@@ -313,7 +307,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <returns></returns>
 		ushort IInstructionDecoder.DecodeUShort()
 		{
-			return _codeReader.ReadUInt16();
+			return codeReader.ReadUInt16();
 		}
 
 		/// <summary>
@@ -322,7 +316,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <returns></returns>
 		int IInstructionDecoder.DecodeInt()
 		{
-			return _codeReader.ReadInt32();
+			return codeReader.ReadInt32();
 		}
 
 		/// <summary>
@@ -331,7 +325,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <returns></returns>
 		uint IInstructionDecoder.DecodeUInt()
 		{
-			return _codeReader.ReadUInt32();
+			return codeReader.ReadUInt32();
 		}
 
 		/// <summary>
@@ -340,7 +334,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <returns></returns>
 		long IInstructionDecoder.DecodeLong()
 		{
-			return _codeReader.ReadInt64();
+			return codeReader.ReadInt64();
 		}
 
 		/// <summary>
@@ -349,7 +343,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <returns></returns>
 		float IInstructionDecoder.DecodeFloat()
 		{
-			return _codeReader.ReadSingle();
+			return codeReader.ReadSingle();
 		}
 
 		/// <summary>
@@ -358,7 +352,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <returns></returns>
 		double IInstructionDecoder.DecodeDouble()
 		{
-			return _codeReader.ReadDouble();
+			return codeReader.ReadDouble();
 		}
 
 		/// <summary>
@@ -367,7 +361,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <returns></returns>
 		TokenTypes IInstructionDecoder.DecodeTokenType()
 		{
-			return (TokenTypes)_codeReader.ReadInt32();
+			return (TokenTypes)codeReader.ReadInt32();
 		}
 
 		#endregion

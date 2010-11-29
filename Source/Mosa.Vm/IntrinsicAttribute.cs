@@ -9,7 +9,7 @@
 
 using System;
 
-namespace Mosa.Runtime.CompilerFramework
+namespace Mosa.Vm
 {
 	/// <summary>
 	/// Used to mark architecture intrinsic methods or properties.

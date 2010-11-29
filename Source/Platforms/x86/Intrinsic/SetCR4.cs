@@ -16,7 +16,7 @@ using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
 using IR = Mosa.Runtime.CompilerFramework.IR;
 
-namespace Mosa.Platforms.x86.Intrinsic
+namespace Mosa.Platform.X86.Intrinsic
 {
 	/// <summary>
 	/// 
@@ -24,6 +24,9 @@ namespace Mosa.Platforms.x86.Intrinsic
 	public sealed class SetCR4 : SetControlRegisterBase
 	{
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="SetCR4"/> class.
+		/// </summary>
 		public SetCR4()
 			: base(ControlRegister.CR4)
 		{

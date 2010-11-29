@@ -95,7 +95,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			base.Validate(ctx, compiler);
 
 			StackTypeCode result = StackTypeCode.Unknown;
-			switch (_opcode)
+			switch (opcode)
 			{
 				case OpCode.Add_ovf_un:
 					result = _addovfunTable[(int)ctx.Operand1.StackType][(int)ctx.Operand2.StackType];
@@ -111,7 +111,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			}
 
 			if (StackTypeCode.Unknown == result)
-				throw new InvalidOperationException(@"Invalid operand types passed to " + _opcode);
+				throw new InvalidOperationException(@"Invalid operand types passed to " + opcode);
 
 			ctx.Result = compiler.CreateTemporary(Operand.SigTypeFromStackType(result));
 		}

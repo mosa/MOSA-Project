@@ -19,9 +19,9 @@ using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Tools.Compiler.LinkTimeCodeGeneration;
 using Mosa.Runtime.Linker;
 
-using Mosa.Platforms.x86;
+using Mosa.Platform.X86;
 using IR = Mosa.Runtime.CompilerFramework.IR;
-using CPUx86 = Mosa.Platforms.x86.CPUx86;
+using CPUx86 = Mosa.Platform.X86.CPUx86;
 
 namespace Mosa.Tools.Compiler.Stages
 {

@@ -47,42 +47,37 @@ namespace Test.Mosa.Runtime.CompilerFramework.CIL
 						return '" + value[value.Length - 1] + @"' == ch;
 					}
 				}
-
-			"
-			+ Code.ObjectClassDefinition
-			+ Code.NoStdLibDefinitions;
+			" + Code.AllTestCode;
 		}
-
-		private delegate bool B_V();
 
 		[Test]
 		public void MustProperlyCompileLdstrAndLengthMustMatch()
 		{
 			CodeSource = CreateTestCode(@"Foo");
-			this.DoNotReferenceMsCorlib = true;
+			DoNotReferenceMscorlib = true;
 			UnsafeCode = true;
 
-			Assert.IsTrue((bool)Run<B_V>("", "TestClass", "LengthMustMatch"));
+			Assert.IsTrue(Run<bool>("", "TestClass", "LengthMustMatch"));
 		}
 
 		[Test]
 		public void FirstCharacterMustMatchInStrings()
 		{
 			CodeSource = CreateTestCode(@"Foo");
-			this.DoNotReferenceMsCorlib = true;
+			DoNotReferenceMscorlib = true;
 			UnsafeCode = true;
 
-			Assert.IsTrue((bool)Run<B_V>("", "TestClass", "FirstCharacterMustMatch"));
+			Assert.IsTrue(Run<bool>("", "TestClass", "FirstCharacterMustMatch"));
 		}
 
 		[Test]
 		public void LastCharacterMustMatchInStrings()
 		{
 			CodeSource = CreateTestCode(@"Foo");
-			this.DoNotReferenceMsCorlib = true;
+			DoNotReferenceMscorlib = true;
 			UnsafeCode = true;
 
-			Assert.IsTrue((bool)Run<B_V>("", "TestClass", "LastCharacterMustMatch"));
+			Assert.IsTrue(Run<bool>("", "TestClass", "LastCharacterMustMatch"));
 		}
 	}
 }

@@ -19,9 +19,6 @@ using MbUnit.Framework;
 
 namespace Test.Mosa.Runtime.CompilerFramework.IL
 {
-	/// <summary>
-	/// 
-	/// </summary>
 	[TestFixture]
 	public class Shl : CodeDomTestRunner
 	{
@@ -39,7 +36,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 					{
 						return expect == (a << b);
 					}
-				}" + Code.ObjectClassDefinition;
+				}" + Code.AllTestCode;
 		}
 
 		private static string CreateTestCodeWithReturn(string name, string typeInA, string typeInB, string typeOut)
@@ -51,7 +48,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 					{
 						return (a << b);
 					}
-				}" + Code.ObjectClassDefinition;
+				}" + Code.AllTestCode;
 		}
 
 		private static string CreateConstantTestCode(string name, string typeIn, string typeOut, string constLeft, string constRight)
@@ -65,7 +62,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 						{
 							return expect == (" + constLeft + @" << x);
 						}
-					}" + Code.ObjectClassDefinition;
+					}" + Code.AllTestCode;
 			}
 			else if (String.IsNullOrEmpty(constLeft))
 			{
@@ -76,7 +73,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 						{
 							return expect == (x << " + constRight + @");
 						}
-					}" + Code.ObjectClassDefinition;
+					}" + Code.AllTestCode;
 			}
 			else
 			{
@@ -95,7 +92,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 						{
 							return (" + constLeft + @" << x);
 						}
-					}" + Code.ObjectClassDefinition;
+					}" + Code.AllTestCode;
 			}
 			else if (String.IsNullOrEmpty(constLeft))
 			{
@@ -106,7 +103,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 						{
 							return (x << " + constRight + @");
 						}
-					}" + Code.ObjectClassDefinition;
+					}" + Code.AllTestCode;
 			}
 			else
 			{
@@ -115,19 +112,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		}
 
 		#region C
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="expect"></param>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
-		/// <returns></returns>
-		delegate bool C_C_C(int expect, [MarshalAs(UnmanagedType.U2)]char a, [MarshalAs(UnmanagedType.U2)]char b);
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
+		
 		[Row(0, 0)]
 		[Row(17, 128)]
 		[Row('a', 'Z')]
@@ -136,17 +121,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void ShlC(char a, char b)
 		{
 			CodeSource = CreateTestCode("AddC", "char", "int");
-			Assert.IsTrue((bool)Run<C_C_C>("", "Test", "AddC", (a << b), a, b));
+			Assert.IsTrue(Run<bool>("", "Test", "AddC", (a << b), a, b));
 		}
 
-		delegate bool C_Constant_C(int expect, char x);
-		delegate int C_Constant_C_Return([MarshalAs(UnmanagedType.U2)]char expect, [MarshalAs(UnmanagedType.U2)]char x);
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
 		[Row(0, 'a')]
 		[Row('-', '.')]
 		[Row('a', 'Z')]
@@ -154,14 +131,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void ShlConstantCRight(char a, char b)
 		{
 			CodeSource = CreateConstantTestCodeWithReturn("ShlConstantCRight", "char", "int", null, "'" + b.ToString() + "'");
-			Assert.AreEqual(a << b, (int)Run<C_Constant_C_Return>("", "Test", "ShlConstantCRight", (char)(a << b), a));
+			Assert.AreEqual(a << b, Run<int>("", "Test", "ShlConstantCRight", (char)(a << b), a));
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
 		[Row('a', 0)]
 		[Row('-', '.')]
 		[Row('a', 'Z')]
@@ -169,24 +141,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void ShlConstantCLeft(char a, char b)
 		{
 			CodeSource = CreateConstantTestCodeWithReturn("ShlConstantCLeft", "char", "int", "'" + a.ToString() + "'", null);
-			Assert.AreEqual(a << b, (int)Run<C_Constant_C_Return>("", "Test", "ShlConstantCLeft", (char)(a << b), b));
+			Assert.AreEqual(a << b, Run<int>("", "Test", "ShlConstantCLeft", (char)(a << b), b));
 		}
 		#endregion
 
 		#region I1
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="expect"></param>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
-		/// <returns></returns>
-		delegate bool I4_I1_I1(int expect, sbyte a, sbyte b);
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
+		
 		[Row(1, 2)]
 		[Row(23, 21)]
 		// And reverse
@@ -219,16 +179,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void ShlI1(sbyte a, sbyte b)
 		{
 			CodeSource = CreateTestCode("ShlI1", "sbyte", "int");
-			Assert.IsTrue((bool)Run<I4_I1_I1>("", "Test", "ShlI1", a << b, a, b));
+			Assert.IsTrue(Run<bool>("", "Test", "ShlI1", a << b, a, b));
 		}
 
-		delegate bool I4_Constant_I1(int expect, sbyte x);
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
 		[Row(-42, 48)]
 		[Row(17, 1)]
 		[Row(0, 0)]
@@ -237,14 +190,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void ShlConstantI1Right(sbyte a, sbyte b)
 		{
 			CodeSource = CreateConstantTestCode("ShlConstantI1Right", "sbyte", "int", null, b.ToString());
-			Assert.IsTrue((bool)Run<I4_Constant_I1>("", "Test", "ShlConstantI1Right", (a << b), a));
+			Assert.IsTrue(Run<bool>("", "Test", "ShlConstantI1Right", (a << b), a));
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
 		[Row(-42, 48)]
 		[Row(17, 1)]
 		[Row(0, 0)]
@@ -253,24 +201,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void ShlConstantI1Left(sbyte a, sbyte b)
 		{
 			CodeSource = CreateConstantTestCode("ShlConstantI1Left", "sbyte", "int", a.ToString(), null);
-			Assert.IsTrue((bool)Run<I4_Constant_I1>("", "Test", "ShlConstantI1Left", (a << b), b));
+			Assert.IsTrue(Run<bool>("", "Test", "ShlConstantI1Left", (a << b), b));
 		}
 		#endregion
 
 		#region I2
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="expect"></param>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
-		/// <returns></returns>
-		delegate bool I4_I2_I2(int expect, short a, short b);
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
+		
 		[Row(1, 2)]
 		[Row(23, 21)]
 		// And reverse
@@ -303,16 +239,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void ShlI2(short a, short b)
 		{
 			CodeSource = CreateTestCode("ShlI2", "short", "int");
-			Assert.IsTrue((bool)Run<I4_I2_I2>("", "Test", "ShlI2", (a << b), a, b));
+			Assert.IsTrue(Run<bool>("", "Test", "ShlI2", (a << b), a, b));
 		}
 
-		delegate bool I4_Constant_I2(int expect, short x);
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
 		[Row(-23, 148)]
 		[Row(17, 1)]
 		[Row(0, 0)]
@@ -321,14 +250,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void ShlConstantI2Right(short a, short b)
 		{
 			CodeSource = CreateConstantTestCode("ShlConstantI2Right", "short", "int", null, b.ToString());
-			Assert.IsTrue((bool)Run<I4_Constant_I2>("", "Test", "ShlConstantI2Right", (a << b), a));
+			Assert.IsTrue(Run<bool>("", "Test", "ShlConstantI2Right", (a << b), a));
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
 		[Row(-23, 148)]
 		[Row(17, 1)]
 		[Row(0, 0)]
@@ -337,24 +261,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void ShlConstantI2Left(short a, short b)
 		{
 			CodeSource = CreateConstantTestCode("ShlConstantI2Left", "short", "int", a.ToString(), null);
-			Assert.IsTrue((bool)Run<I4_Constant_I2>("", "Test", "ShlConstantI2Left", (a << b), b));
+			Assert.IsTrue(Run<bool>("", "Test", "ShlConstantI2Left", (a << b), b));
 		}
 		#endregion
 
 		#region I4
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="expect"></param>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
-		/// <returns></returns>
-		delegate bool I4_I4_I4(int expect, int a, int b);
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
+	
 		[Row(1, 2)]
 		[Row(23, 21)]
 		// And reverse
@@ -387,16 +299,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void ShlI4(int a, int b)
 		{
 			CodeSource = CreateTestCode("ShlI4", "int", "int");
-			Assert.IsTrue((bool)Run<I4_I4_I4>("", "Test", "ShlI4", (a << b), a, b));
+			Assert.IsTrue(Run<bool>("", "Test", "ShlI4", (a << b), a, b));
 		}
 
-		delegate bool I4_Constant_I4(int expect, int x);
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
 		[Row(-23, 148)]
 		[Row(17, 1)]
 		[Row(0, 0)]
@@ -405,14 +310,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void ShlConstantI4Right(int a, int b)
 		{
 			CodeSource = CreateConstantTestCode("ShlConstantI4Right", "int", "int", null, b.ToString());
-			Assert.IsTrue((bool)Run<I4_Constant_I4>("", "Test", "ShlConstantI4Right", (a << b), a));
+			Assert.IsTrue(Run<bool>("", "Test", "ShlConstantI4Right", (a << b), a));
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
 		[Row(-23, 148)]
 		[Row(17, 1)]
 		[Row(0, 0)]
@@ -421,25 +321,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void ShlConstantI4Left(int a, int b)
 		{
 			CodeSource = CreateConstantTestCode("ShlConstantI4Left", "int", "int", a.ToString(), null);
-			Assert.IsTrue((bool)Run<I4_Constant_I4>("", "Test", "ShlConstantI4Left", (a << b), b));
+			Assert.IsTrue(Run<bool>("", "Test", "ShlConstantI4Left", (a << b), b));
 		}
 		#endregion
 
 		#region I8
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="expect"></param>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
-		/// <returns></returns>
-		delegate bool I8_I8_I4(long expect, long a, int b);
-		delegate long I8_I8_I4_R(long expect, long a, int b);
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
+	
 		[Row(1, 1)]
 		[Row(1, 0)]
 		[Row(0, 1)]
@@ -448,16 +335,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void ShlI8(long a, int b)
 		{
 			CodeSource = CreateTestCodeWithReturn("ShlI8", "long", "int", "long");
-			Assert.AreEqual((a << b), Run<I8_I8_I4_R>("", "Test", "ShlI8", (a << b), a, b));
+			Assert.AreEqual((a << b), Run<long>("", "Test", "ShlI8", (a << b), a, b));
 		}
 
-		delegate bool I8_Constant_I8(long expect, long x);
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
 		[Row(-23, 148)]
 		[Row(17, 1)]
 		[Row(0, 0)]
@@ -466,14 +346,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void ShlConstantI8Right(long a, int b)
 		{
 			CodeSource = CreateConstantTestCode("ShlConstantI8Right", "long", "long", null, b.ToString());
-			Assert.IsTrue((bool)Run<I8_Constant_I8>("", "Test", "ShlConstantI8Right", (a << b), a));
+			Assert.IsTrue(Run<bool>("", "Test", "ShlConstantI8Right", (a << b), a));
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="a"></param>
-		/// <param name="b"></param>
 		[Row(-23, 148)]
 		[Row(17, 1)]
 		[Row(0, 0)]
@@ -482,7 +357,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		public void ShlConstantI8Left(long a, int b)
 		{
 			CodeSource = CreateConstantTestCode("ShlConstantI8Left", "int", "long", a.ToString(), null);
-			Assert.IsTrue((bool)Run<I8_Constant_I8>("", "Test", "ShlConstantI8Left", (a << b), b));
+			Assert.IsTrue(Run<bool>("", "Test", "ShlConstantI8Left", (a << b), b));
 		}
 		#endregion
 	}

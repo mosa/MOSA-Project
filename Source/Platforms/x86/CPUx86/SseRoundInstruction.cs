@@ -4,8 +4,11 @@ using System.Text;
 using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Runtime.CompilerFramework;
 
-namespace Mosa.Platforms.x86.CPUx86
+namespace Mosa.Platform.X86.CPUx86
 {
+	/// <summary>
+	/// 
+	/// </summary>
 	public class SseRoundInstruction : BaseInstruction
 	{
 		// ROUNDSS

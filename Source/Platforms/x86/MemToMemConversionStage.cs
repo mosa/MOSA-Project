@@ -21,7 +21,7 @@ using Mosa.Runtime.Metadata.Signatures;
 
 using IR = Mosa.Runtime.CompilerFramework.IR;
 
-namespace Mosa.Platforms.x86
+namespace Mosa.Platform.X86
 {
 	/// <summary>
 	/// 
@@ -46,7 +46,7 @@ namespace Mosa.Platforms.x86
 		/// </summary>
 		public override void Run()
 		{
-			foreach (BasicBlock block in BasicBlocks)
+			foreach (BasicBlock block in basicBlocks)
 			{
 				for (Context ctx = CreateContext(block); !ctx.EndOfInstruction; ctx.GotoNext())
 				{

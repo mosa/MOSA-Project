@@ -14,17 +14,15 @@ namespace Mosa.Runtime.Metadata.Runtime
 	{
 		private readonly GenericInstSigType signature;
 
-		private readonly ISignatureContext signatureContext;
-
 		private RuntimeType genericType;
 
 		private SigType[] genericArguments;
 
-		public CilGenericType(IModuleTypeSystem moduleTypeSystem, RuntimeType type, GenericInstSigType genericTypeInstanceSignature, ISignatureContext signatureContext) :
+		public CilGenericType(IModuleTypeSystem moduleTypeSystem, RuntimeType type, GenericInstSigType genericTypeInstanceSignature) :
 			base(moduleTypeSystem, type.Token)
 		{
 			this.signature = genericTypeInstanceSignature;
-			this.signatureContext = signatureContext;
+			this.genericArguments = signature.GenericArguments;
 
 			this.Methods = this.GetMethods();
 			this.Fields = this.GetFields();
@@ -46,9 +44,16 @@ namespace Mosa.Runtime.Metadata.Runtime
 			StringBuilder sb = new StringBuilder();
 			sb.AppendFormat("{0}<", genericType.Name);
 
-			foreach (SigType genericArgument in genericArguments)
+			foreach (SigType sigType in genericArguments)
 			{
-				sb.AppendFormat("{0}, ", GetRuntimeTypeForSigType(genericArgument).FullName);
+				if (sigType.ContainsGenericParameter)
+				{
+					sb.AppendFormat("<{0}>, ", sigType.ToString());
+				}
+				else
+				{
+					sb.AppendFormat("{0}, ", GetRuntimeTypeForSigType(sigType).FullName);
+				}
 			}
 
 			sb.Length -= 2;
@@ -76,10 +81,12 @@ namespace Mosa.Runtime.Metadata.Runtime
 			List<RuntimeMethod> methods = new List<RuntimeMethod>();
 			foreach (CilRuntimeMethod method in this.genericType.Methods)
 			{
-				MethodSignature signature = new MethodSignature();
-				signature.LoadSignature(this, method.MetadataModule.Metadata, method.Signature.Token);
+				MethodSignature signature = new MethodSignature(method.MetadataModule.Metadata, method.Signature.Token);
 
+				signature.ApplyGenericType(this.genericArguments);
+				
 				RuntimeMethod genericInstanceMethod = new CilGenericMethod(moduleTypeSystem, method, signature, this);
+
 				methods.Add(genericInstanceMethod);
 			}
 
@@ -93,10 +100,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 			List<RuntimeField> fields = new List<RuntimeField>();
 			foreach (CilRuntimeField field in this.genericType.Fields)
 			{
-				FieldSignature fsig = new FieldSignature();
-				fsig.LoadSignature(this, this.genericType.MetadataModule.Metadata, field.Signature.Token);
-
-				CilGenericField genericInstanceField = new CilGenericField(moduleTypeSystem, this, field, fsig);
+				CilGenericField genericInstanceField = new CilGenericField(moduleTypeSystem, this, field);
 				fields.Add(genericInstanceField);
 			}
 
@@ -107,10 +111,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 		{
 			if (genericType == null)
 			{
-				SigType[] signatureArguments = signature.GenericArguments;
-
-				genericType = moduleTypeSystem.GetType(DefaultSignatureContext.Instance, signature.BaseType.Token);
-				genericArguments = signature.GenericArguments;
+				genericType = moduleTypeSystem.GetType(signature.BaseType.Token);				
 			}
 		}
 
@@ -122,19 +123,17 @@ namespace Mosa.Runtime.Metadata.Runtime
 			{
 				case CilElementType.Class:
 					Debug.Assert(sigType is TypeSigType, @"Failing to resolve VarSigType in GenericType.");
-					result = moduleTypeSystem.GetType(this, ((TypeSigType)sigType).Token);
+					result = moduleTypeSystem.GetType(((TypeSigType)sigType).Token);
 					break;
 
 				case CilElementType.ValueType:
 					goto case CilElementType.Class;
 
 				case CilElementType.Var:
-					sigType = GetGenericTypeArgument(((VarSigType)sigType).Index);
-					goto case CilElementType.Class;
+					throw new NotImplementedException(@"Failing to resolve VarSigType in GenericType.");
 
 				case CilElementType.MVar:
-					sigType = GetGenericTypeArgument(((MVarSigType)sigType).Index);
-					goto case CilElementType.Class;
+					throw new NotImplementedException(@"Failing to resolve VarMSigType in GenericType.");
 
 				default:
 					{
@@ -154,10 +153,12 @@ namespace Mosa.Runtime.Metadata.Runtime
 			return result;
 		}
 
-		public override SigType GetGenericTypeArgument(int index)
+		public override bool ContainsGenericParameters
 		{
-			ProcessSignature();
-			return genericArguments[index];
+			get
+			{
+				return signature.ContainsGenericParameters;
+			}
 		}
 
 		protected override IList<RuntimeType> LoadInterfaces()

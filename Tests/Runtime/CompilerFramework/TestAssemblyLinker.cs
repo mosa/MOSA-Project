@@ -20,7 +20,7 @@ using Mosa.Runtime.Vm;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Metadata;
 
-namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
+namespace Test.Mosa.Runtime.CompilerFramework
 {
 	/// <summary>
 	/// A specialized linker for in-memory tests. This linker performs live linking in memory without
@@ -37,7 +37,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 		/// <summary>
 		/// Holds the linker sections of the assembly linker.
 		/// </summary>
-		private List<LinkerSection> _sections;
+		private List<LinkerSection> sections;
 
 		private readonly AllocateArrayDelegate allocateArrayHandler;
 
@@ -53,12 +53,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 		public unsafe TestAssemblyLinker()
 		{
 			int maxSections = (int)SectionKind.Max;
-			_sections = new List<LinkerSection>(maxSections);
+			sections = new List<LinkerSection>(maxSections);
 			for (int i = 0; i < maxSections; i++)
-				_sections.Add(new TestLinkerSection((SectionKind)i, String.Empty, IntPtr.Zero));
+				sections.Add(new TestLinkerSection((SectionKind)i, String.Empty, IntPtr.Zero));
 
-			this.allocateArrayHandler = new AllocateArrayDelegate(global::Mosa.Runtime.Runtime.AllocateArray);
-			this.allocateObjectHandler = new AllocateObjectDelegate(global::Mosa.Runtime.Runtime.AllocateObject);
+			this.allocateArrayHandler = new AllocateArrayDelegate(global::Mosa.Vm.Runtime.AllocateArray);
+			this.allocateObjectHandler = new AllocateObjectDelegate(global::Mosa.Vm.Runtime.AllocateObject);
 		}
 
 		#endregion // Construction
@@ -100,7 +100,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 		/// <returns>The retrieved linker section.</returns>
 		public override LinkerSection GetSection(SectionKind sectionKind)
 		{
-			return _sections[(int)sectionKind];
+			return sections[(int)sectionKind];
 		}
 
 		/// <summary>
@@ -109,7 +109,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 		/// <value>The sections collection.</value>
 		public override ICollection<LinkerSection> Sections
 		{
-			get { return (ICollection<LinkerSection>)_sections.AsReadOnly(); }
+			get { return (ICollection<LinkerSection>)sections.AsReadOnly(); }
 		}
 
 		/// <summary>
@@ -123,7 +123,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 		/// </returns>
 		protected override Stream Allocate(SectionKind section, int size, int alignment)
 		{
-			TestLinkerSection tle = (TestLinkerSection)_sections[(int)section];
+			TestLinkerSection tle = (TestLinkerSection)sections[(int)section];
 			return tle.Allocate(size, alignment);
 		}
 
@@ -143,7 +143,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 			try
 			{
 				VirtualMemoryStream vms = (VirtualMemoryStream)stream.BaseStream;
-				LinkerSymbol symbol = this.GetSymbol(name);
+				LinkerSymbol symbol = GetSymbol(name);
 				symbol.VirtualAddress = new IntPtr(vms.Base.ToInt64() + vms.Position);
 				Trace.WriteLine("Symbol " + name + " located at 0x" + symbol.VirtualAddress.ToInt32().ToString("x08"));
 			}
@@ -195,24 +195,28 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 		{
 			Trace.WriteLine(@"TestAssemblyLinker adding VM calls:");
 
-			IntPtr allocate = Marshal.GetFunctionPointerForDelegate(this.allocateArrayHandler);
+			IntPtr allocate = Marshal.GetFunctionPointerForDelegate(allocateArrayHandler);
 
-			const string allocateArrayMethod = @"Mosa.Runtime.Runtime.AllocateArray(Ptr methodTable,U4 elementSize,U4 elements)";
+			const string allocateArrayMethod = @"Mosa.Vm.Runtime.AllocateArray(Ptr methodTable,U4 elementSize,U4 elements)";
 			long virtualAddress = allocate.ToInt64();
 			Trace.WriteLine(String.Format("\t{0} at 0x{1:x08}", allocateArrayMethod, virtualAddress));
 
 			LinkerSymbol symbol = new LinkerSymbol(allocateArrayMethod, SectionKind.Text, virtualAddress);
 			symbol.VirtualAddress = new IntPtr(symbol.SectionAddress);
+
+			virtualMachineCalls.Remove(allocateArrayMethod);
 			virtualMachineCalls.Add(allocateArrayMethod, symbol);
 
-			IntPtr allocateObject = Marshal.GetFunctionPointerForDelegate(this.allocateObjectHandler);
+			IntPtr allocateObject = Marshal.GetFunctionPointerForDelegate(allocateObjectHandler);
 
-			const string allocateObjectMethod = @"Mosa.Runtime.Runtime.AllocateObject(Ptr methodTable,U4 classSize)";
+			const string allocateObjectMethod = @"Mosa.Vm.Runtime.AllocateObject(Ptr methodTable,U4 classSize)";
 			virtualAddress = allocateObject.ToInt64();
 			Trace.WriteLine(String.Format("\t{0} at 0x{1:x08}", allocateObjectMethod, virtualAddress));
 
 			symbol = new LinkerSymbol(allocateObjectMethod, SectionKind.Text, virtualAddress);
 			symbol.VirtualAddress = new IntPtr(symbol.SectionAddress);
+
+			virtualMachineCalls.Remove(allocateObjectMethod);
 			virtualMachineCalls.Add(allocateObjectMethod, symbol);
 		}
 
@@ -223,7 +227,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 		{
 			// Adjust the symbol addresses
 			// __grover, 01/02/2009: Copied from ObjectFileLayoutStage
-			foreach (LinkerSymbol symbol in this.Symbols)
+			foreach (LinkerSymbol symbol in Symbols)
 			{
 				LinkerSection ls = GetSection(symbol.Section);
 				symbol.Offset = ls.Offset + symbol.SectionAddress;

@@ -8,6 +8,7 @@
  */
 
 using System;
+using System.Diagnostics;
 
 using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Runtime.Metadata;
@@ -47,7 +48,22 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			base.Decode(ctx, decoder);
 
 			TokenTypes token = decoder.DecodeTokenType();
-			ctx.RuntimeField = decoder.ModuleTypeSystem.GetField(decoder.Method, token);
+
+			ctx.RuntimeField = decoder.ModuleTypeSystem.GetField(token);
+
+			if (ctx.RuntimeField.DeclaringType != decoder.Method.DeclaringType)
+			{
+				Debug.Assert(!decoder.Method.DeclaringType.ContainsGenericParameters);
+
+				foreach (RuntimeField field in decoder.Method.DeclaringType.Fields)
+					if (field.Name == ctx.RuntimeField.Name)
+					{
+						ctx.RuntimeField = field;
+						break;
+					}
+
+				Debug.Assert(!ctx.RuntimeField.ContainsGenericParameter);
+			}
 
 			SigType sigType = ctx.RuntimeField.SignatureType;
 			ctx.Result = LoadInstruction.CreateResultOperand(decoder, Operand.StackTypeFromSigType(sigType), sigType);

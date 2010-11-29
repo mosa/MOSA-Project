@@ -20,11 +20,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 
 		public SZArrayInstructionTestRunner()
 		{
-			this.IncludeNewarr = true;
-			this.IncludeLdlen = true;
-			this.IncludeLdelem = true;
-			this.IncludeStelem = true;
-			this.IncludeLdelema = true;
+			IncludeNewarr = true;
+			IncludeLdlen = true;
+			IncludeLdelem = true;
+			IncludeStelem = true;
+			IncludeLdelema = true;
 		}
 
 		public string FirstType { get; set; }
@@ -37,9 +37,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 
 		private void SetTestCode()
 		{
-			string marshalFirstType = this.CreateMarshalAttribute(String.Empty, FirstType);
-
 			StringBuilder codeBuilder = new StringBuilder();
+
 			codeBuilder.Append(TestCodeHeader);
 
 			if (this.IncludeNewarr)
@@ -55,12 +54,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 				codeBuilder.Append(TestCodeLdelema);
 
 			codeBuilder.Append(TestCodeFooter);
-
-			codeBuilder.Append(Code.ObjectClassDefinition);
+			codeBuilder.Append(Code.AllTestCode);
 
 			codeBuilder
-				.Replace(@"[[firsttype]]", FirstType)
-				.Replace(@"[[marshal-firsttype]]", marshalFirstType);
+				.Replace(@"#firsttype", FirstType);
 
 			CodeSource = codeBuilder.ToString();
 		}
@@ -116,58 +113,48 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		";
 
 		private const string TestCodeNewarr = @"
-				public delegate bool R_NewarrTest();
-
 				public static bool NewarrTest()
 				{
-					[[firsttype]][] arr = new [[firsttype]][0];
+					#firsttype[] arr = new #firsttype[0];
 					return arr != null;
 				}
 			";
 
 		private const string TestCodeLdlen = @"
-				public delegate bool R_LdlenTest(int length);
-
 				public static bool LdlenTest(int length)
 				{
-					[[firsttype]][] arr = new [[firsttype]][length];
+					#firsttype[] arr = new #firsttype[length];
 					return arr.Length == length;   
 				}
 			";
 
 		private const string TestCodeLdelem = @"
-				public delegate bool R_LdelemTest(int index, [[marshal-firsttype]][[firsttype]] value);
-
-				public static bool LdelemTest(int index, [[firsttype]] value)
+				public static bool LdelemTest(int index, #firsttype value)
 				{
-					[[firsttype]][] arr = new [[firsttype]][index + 1];
+					#firsttype[] arr = new #firsttype[index + 1];
 					arr[index] = value;
 					return value == arr[index];
 				}
 			";
 
 		private const string TestCodeStelem = @"
-				public delegate bool R_StelemTest(int index, [[marshal-firsttype]][[firsttype]] value);
-
-				public static bool StelemTest(int index, [[firsttype]] value)
+				public static bool StelemTest(int index, #firsttype value)
 				{
-					[[firsttype]][] arr = new [[firsttype]][index + 1];
+					#firsttype[] arr = new #firsttype[index + 1];
 					arr[index] = value;
 					return true;
 				}
 			";
 
 		private const string TestCodeLdelema = @"
-				public delegate bool R_LdelemaTest(int index, [[marshal-firsttype]][[firsttype]] value);
-
-				public static bool LdelemaTest(int index, [[firsttype]] value)
+				public static bool LdelemaTest(int index, #firsttype value)
 				{
-					[[firsttype]][] arr = new [[firsttype]][index + 1];
+					#firsttype[] arr = new #firsttype[index + 1];
 					SetValueInRefValue(ref arr[index], value);
 					return arr[index] == value;
 				}
 
-				private static void SetValueInRefValue(ref [[firsttype]] destination, [[firsttype]] value)
+				private static void SetValueInRefValue(ref #firsttype destination, #firsttype value)
 				{
 					destination = value;
 				}

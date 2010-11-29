@@ -162,7 +162,7 @@ namespace Mosa.Runtime.CompilerFramework
 			_loops = new List<ConnectedBlocks>();
 
 			// Create dictionary for the depth of basic Blocks
-			_depths = new Dictionary<BasicBlock, int>(BasicBlocks.Count);
+			_depths = new Dictionary<BasicBlock, int>(basicBlocks.Count);
 
 			// Deteremine Loop Depths
 			DetermineLoopDepths();
@@ -186,8 +186,8 @@ namespace Mosa.Runtime.CompilerFramework
 			queue.Enqueue(new ConnectedBlocks(null, _first));
 
 			// Flag per basic block
-			Dictionary<BasicBlock, int> visited = new Dictionary<BasicBlock, int>(BasicBlocks.Count);
-			Dictionary<BasicBlock, int> active = new Dictionary<BasicBlock, int>(BasicBlocks.Count);
+			Dictionary<BasicBlock, int> visited = new Dictionary<BasicBlock, int>(basicBlocks.Count);
+			Dictionary<BasicBlock, int> active = new Dictionary<BasicBlock, int>(basicBlocks.Count);
 
 			// Create dictionary for loop _header index assignments
 			Dictionary<BasicBlock, int> loopHeaderIndexes = new Dictionary<BasicBlock, int>();
@@ -258,7 +258,7 @@ namespace Mosa.Runtime.CompilerFramework
 				stack.Push(loop.From);
 
 				// Clear visit flag
-				visited = new Dictionary<BasicBlock, int>(BasicBlocks.Count);
+				visited = new Dictionary<BasicBlock, int>(basicBlocks.Count);
 
 				while (stack.Count != 0)
 				{
@@ -286,7 +286,7 @@ namespace Mosa.Runtime.CompilerFramework
 			}
 
 			// Last step, assign LoopIndex and LoopDepth to each basic block
-			foreach (BasicBlock block in BasicBlocks)
+			foreach (BasicBlock block in basicBlocks)
 				if (count.ContainsKey(block))
 					_depths.Add(block, count[block].Count);
 				else
@@ -299,20 +299,20 @@ namespace Mosa.Runtime.CompilerFramework
 		private void DetermineBlockOrder()
 		{
 			// Create an array to hold the forward branch count
-			int[] forward = new int[BasicBlocks.Count];
+			int[] forward = new int[basicBlocks.Count];
 
-			Dictionary<BasicBlock, int> referenced = new Dictionary<BasicBlock, int>(BasicBlocks.Count);
+			Dictionary<BasicBlock, int> referenced = new Dictionary<BasicBlock, int>(basicBlocks.Count);
 
 			// Copy previous branch count to array
-			for (int i = 0; i < BasicBlocks.Count; i++)
-				forward[i] = BasicBlocks[i].PreviousBlocks.Count;
+			for (int i = 0; i < basicBlocks.Count; i++)
+				forward[i] = basicBlocks[i].PreviousBlocks.Count;
 
 			// Calculate forward branch count (PreviousBlock.Count minus loops to head)
 			foreach (ConnectedBlocks connecterBlock in _loops)
 				forward[connecterBlock.to.Sequence]--;
 
 			// Allocate list of ordered Blocks
-			_ordered = new BasicBlock[BasicBlocks.Count];
+			_ordered = new BasicBlock[basicBlocks.Count];
 			int orderBlockCnt = 0;
 
 			// Create sorted worklist
@@ -342,7 +342,7 @@ namespace Mosa.Runtime.CompilerFramework
 			}
 
 			// Place unreferenced blocks at the end of the list
-			foreach (BasicBlock block in BasicBlocks)
+			foreach (BasicBlock block in basicBlocks)
 				if (!referenced.ContainsKey(block))
 					_ordered[orderBlockCnt++] = block;
 		}
@@ -352,8 +352,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		private void OrderBlocks()
 		{
-			for (int i = 0; i < BasicBlocks.Count; i++)
-				BasicBlocks[i] = _ordered[i];
+			for (int i = 0; i < basicBlocks.Count; i++)
+				basicBlocks[i] = _ordered[i];
 		}
 
 		#endregion // Methods

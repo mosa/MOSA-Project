@@ -107,7 +107,7 @@ namespace Mosa.Tools.Compiler.TypeInitializers
 
 			if (mainModule.MetadataModule.EntryPoint != TokenTypes.Module)
 			{
-				RuntimeMethod entrypoint = mainModule.GetMethod(DefaultSignatureContext.Instance, mainModule.MetadataModule.EntryPoint);
+				RuntimeMethod entrypoint = mainModule.GetMethod(mainModule.MetadataModule.EntryPoint);
 
 				Schedule(entrypoint);
 			}

@@ -21,11 +21,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 
 		public ComparisonInstructionTestRunner()
 		{
-			this.IncludeCeq = true;
-			this.IncludeClt = true;
-			this.IncludeCgt = true;
-			this.IncludeCle = true;
-			this.IncludeCge = true;
+			IncludeCeq = true;
+			IncludeClt = true;
+			IncludeCgt = true;
+			IncludeCle = true;
+			IncludeCge = true;
 		}
 
 		public string FirstType { get; set; }
@@ -38,32 +38,27 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 
 		private void SetTestCode()
 		{
-			string marshalFirstType = this.CreateMarshalAttribute(String.Empty, FirstType);
-
 			StringBuilder codeBuilder = new StringBuilder();
 
 			codeBuilder.Append(TestCodeHeader);
 
-			if (this.IncludeCeq)
+			if (IncludeCeq)
 				codeBuilder.Append(TestCodeCeq);
-			if (this.IncludeClt)
+			if (IncludeClt)
 				codeBuilder.Append(TestCodeClt);
-			if (this.IncludeCgt)
+			if (IncludeCgt)
 				codeBuilder.Append(TestCodeCgt);
-			if (this.IncludeCle)
+			if (IncludeCle)
 				codeBuilder.Append(TestCodeCle);
-			if (this.IncludeCge)
+			if (IncludeCge)
 				codeBuilder.Append(TestCodeCge);
 
 			codeBuilder.Append(TestCodeFooter);
-
-			codeBuilder.Append(Code.ObjectClassDefinition);
+			codeBuilder.Append(Code.AllTestCode);
 
 			codeBuilder
-				.Replace(@"[[firsttype]]", FirstType)
-				.Replace(@"[[secondtype]]", FirstType)
-				.Replace(@"[[marshal-firsttype]]", marshalFirstType)
-				.Replace(@"[[marshal-secondtype]]", marshalFirstType);
+				.Replace(@"#firsttype", FirstType)
+				.Replace(@"#secondtype", FirstType);
 
 			CodeSource = codeBuilder.ToString();
 		}
@@ -119,45 +114,35 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		";
 
 		private const string TestCodeCeq = @"
-				public delegate bool R_CeqTest([[marshal-firsttype]][[firsttype]] first, [[marshal-secondtype]][[secondtype]] second);
-
-				public static bool CeqTest([[firsttype]] first, [[secondtype]] second)
+				public static bool CeqTest(#firsttype first, #secondtype second)
 				{
 					return (first == second);
 				}
 			";
 
 		private const string TestCodeClt = @"
-				public delegate bool R_CltTest([[marshal-firsttype]][[firsttype]] first, [[marshal-secondtype]][[secondtype]] second);
-
-				public static bool CltTest([[firsttype]] first, [[secondtype]] second)
+				public static bool CltTest(#firsttype first, #secondtype second)
 				{
 					return (first < second);
 				}
 			";
 
 		private const string TestCodeCgt = @"
-				public delegate bool R_CgtTest([[marshal-firsttype]][[firsttype]] first, [[marshal-secondtype]][[secondtype]] second);
-
-				public static bool CgtTest([[firsttype]] first, [[secondtype]] second)
+				public static bool CgtTest(#firsttype first, #secondtype second)
 				{
 					return (first > second);
 				}
 			";
 
 		private const string TestCodeCle = @"
-				public delegate bool R_CleTest([[marshal-firsttype]][[firsttype]] first, [[marshal-secondtype]][[secondtype]] second);
-
-				public static bool CleTest([[firsttype]] first, [[secondtype]] second)
+				public static bool CleTest(#firsttype first, #secondtype second)
 				{
 					return (first <= second);
 				}
 			";
 
 		private const string TestCodeCge = @"
-				public delegate bool R_CgeTest([[marshal-firsttype]][[firsttype]] first, [[marshal-secondtype]][[secondtype]] second);
-
-				public static bool CgeTest([[firsttype]] first, [[secondtype]] second)
+				public static bool CgeTest(#firsttype first, #secondtype second)
 				{
 					return (first >= second);
 				}

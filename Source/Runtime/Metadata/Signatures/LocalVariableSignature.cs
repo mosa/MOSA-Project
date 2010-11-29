@@ -30,6 +30,24 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// </summary>
 		private static VariableSignature[] Empty = new VariableSignature[0];
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="LocalVariableSignature"/> class.
+		/// </summary>
+		/// <param name="reader">The reader.</param>
+		public LocalVariableSignature(SignatureReader reader)
+			: base(reader)
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="LocalVariableSignature"/> class.
+		/// </summary>
+		/// <param name="provider">The provider.</param>
+		/// <param name="token">The token.</param>
+		public LocalVariableSignature(IMetadataProvider provider, TokenTypes token)
+			: base(provider, token)
+		{
+		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LocalVariableSignature"/> class.
@@ -38,7 +56,6 @@ namespace Mosa.Runtime.Metadata.Signatures
 		{
 			this.locals = LocalVariableSignature.Empty;
 		}
-
 
 		/// <summary>
 		/// Gets the types.
@@ -55,9 +72,8 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// <summary>
 		/// Parses the signature.
 		/// </summary>
-		/// <param name="context">The context.</param>
 		/// <param name="reader">The reader.</param>
-		protected override void ParseSignature(ISignatureContext context, SignatureReader reader)
+		protected override void ParseSignature(SignatureReader reader)
 		{
 			// Check signature identifier
 			if (reader.ReadByte() != 0x07)
@@ -70,22 +86,15 @@ namespace Mosa.Runtime.Metadata.Signatures
 				this.locals = new VariableSignature[count];
 				for (int i = 0; i < count; i++)
 				{
-					this.locals[i] = new VariableSignature(context, reader);
+					this.locals[i] = new VariableSignature(reader);
 				}
 			}
 		}
-
-		/// <summary>
-		/// Parses the specified provider.
-		/// </summary>
-		/// <param name="provider">The provider.</param>
-		/// <param name="token">The token.</param>
-		/// <returns></returns>
-		public static LocalVariableSignature Parse(ISignatureContext context, IMetadataProvider provider, TokenTypes token)
+		
+		public void ApplyGenericType(SigType[] genericArguments)
 		{
-			var signature = new LocalVariableSignature();
-			signature.LoadSignature(context, provider, token);
-			return signature;
+			foreach (VariableSignature sig in locals)
+				sig.ApplyGenericType(genericArguments);
 		}
 	}
 }

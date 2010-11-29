@@ -21,7 +21,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// <summary>
 		/// 
 		/// </summary>
-		private SigType _type;
+		private SigType type;
 
 		/// <summary>
 		/// Gets the type.
@@ -29,17 +29,34 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// <value>The type.</value>
 		public SigType Type
 		{
-			get { return _type; }
+			get { return type; }
+		}
+				/// <summary>
+		/// Initializes a new instance of the <see cref="TypeSpecSignature"/> class.
+		/// </summary>
+		/// <param name="reader">The reader.</param>
+		public TypeSpecSignature(SignatureReader reader)
+			: base(reader)
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="TypeSpecSignature"/> class.
+		/// </summary>
+		/// <param name="provider">The provider.</param>
+		/// <param name="token">The token.</param>
+		public TypeSpecSignature(IMetadataProvider provider, TokenTypes token)
+			: base(provider, token)
+		{
 		}
 
 		/// <summary>
 		/// Parses the signature.
 		/// </summary>
-		/// <param name="context"></param>
-		/// <param name="reader"></param>
-		protected override void ParseSignature(ISignatureContext context, SignatureReader reader)
+		/// <param name="reader">The reader.</param>
+		protected override void ParseSignature(SignatureReader reader)
 		{
-			_type = SigType.ParseTypeSignature(context, reader);
+			type = SigType.ParseTypeSignature(reader);
 		}
 	}
 }

@@ -14,9 +14,9 @@ using Mosa.Runtime.Linker;
 using Mosa.Runtime.Loader;
 using Mosa.Runtime.Vm;
 
-using x86 = Mosa.Platforms.x86;
+using x86 = Mosa.Platform.X86;
 
-namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
+namespace Test.Mosa.Runtime.CompilerFramework
 {
 	public delegate void CCtor();
 
@@ -28,14 +28,13 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 			base(architecture, typeSystem)
 		{
 			// Build the assembly compiler pipeline
-			CompilerPipeline pipeline = this.Pipeline;
-			pipeline.AddRange(new IAssemblyCompilerStage[] {
+			Pipeline.AddRange(new IAssemblyCompilerStage[] {
 				new TypeLayoutStage(),
 				new AssemblyMemberCompilationSchedulerStage(),
 				new MethodCompilerSchedulerStage(),
 				new TestAssemblyLinker(),
 			});
-			architecture.ExtendAssemblyCompilerPipeline(pipeline);
+			architecture.ExtendAssemblyCompilerPipeline(Pipeline);
 		}
 
 		public static void Compile(ITypeSystem typeSystem, IAssemblyLoader assemblyLoader)
@@ -46,8 +45,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 
 		public override IMethodCompiler CreateMethodCompiler(ICompilationSchedulerStage schedulerStage, RuntimeType type, RuntimeMethod method)
 		{
-			IMethodCompiler mc = new TestCaseMethodCompiler(this, this.Architecture, schedulerStage, type, method);
-			this.Architecture.ExtendMethodCompilerPipeline(mc.Pipeline);
+			IMethodCompiler mc = new TestCaseMethodCompiler(this, Architecture, schedulerStage, type, method);
+			Architecture.ExtendMethodCompilerPipeline(mc.Pipeline);
 			return mc;
 		}
 
@@ -64,7 +63,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 
 		public void QueueCCtorForInvocationAfterCompilation(CCtor cctor)
 		{
-			this.cctorQueue.Enqueue(cctor);
+			cctorQueue.Enqueue(cctor);
 		}
 	}
 }

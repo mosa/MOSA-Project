@@ -93,9 +93,9 @@
       <Project>{631BC4F3-E2D8-4319-814C-13904CAA17CE}</Project>
       <Name>Korlib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Platforms\x86\Mosa.Platforms.x86.csproj">
-      <Project>{56CA38E7-0883-4461-A10E-386D0C58DBF9}</Project>
-      <Name>Mosa.Platforms.x86</Name>
+    <ProjectReference Include="..\Mosa.Platform.X86.Instrinics\Mosa.Platform.X86.Instrinics.csproj">
+      <Project>{A47B7998-4EE8-4AF8-9373-C664FDEDDC65}</Project>
+      <Name>Mosa.Platform.X86.Instrinics</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

@@ -64,23 +64,21 @@ namespace Test.Mosa.Runtime.CompilerFramework.CIL
 					}
 				}
 			"
-			+ Code.ObjectClassDefinition;
+			+ Code.AllTestCode;
 		}
-
-		private delegate bool B_V();
-
+		
 		[Test]
 		public void MustCompileInterfaces()
 		{
 			CodeSource = CreateTestCode();
-			Assert.IsTrue((bool)Run<B_V>("", "TestClass", "MustCompileWithInterfaces"));
+			Assert.IsTrue(Run<bool>("", "TestClass", "MustCompileWithInterfaces"));
 		}
 
 		[Test]
 		public void MustReturn3FromB()
 		{
 			CodeSource = CreateTestCode();
-			Assert.IsTrue((bool)Run<B_V>("", "TestClass", "MustReturn3FromB"));
+			Assert.IsTrue(Run<bool>("", "TestClass", "MustReturn3FromB"));
 		}
 	}
 }

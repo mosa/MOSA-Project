@@ -88,10 +88,7 @@ namespace Mosa.Runtime.Vm
 				return signature;
 			}
 
-			protected set
-			{
-				signature = value;
-			}
+			protected set { signature = value; }
 		}
 
 		/// <summary>
@@ -106,14 +103,14 @@ namespace Mosa.Runtime.Vm
 			}
 		}
 
-		public RuntimeType Type
-		{
-			get
-			{
-				// HACK: Generic fields -- is this right?
-				return moduleTypeSystem.ResolveSignatureType(DefaultSignatureContext.Instance, this.SignatureType);
-			}
-		}
+		//public RuntimeType Type
+		//{
+		//    get
+		//    {
+		//        // HACK: Generic fields -- is this right?
+		//        return moduleTypeSystem.ResolveSignatureType(this.SignatureType);
+		//    }
+		//}
 
 		public bool IsLiteralField
 		{
@@ -123,6 +120,14 @@ namespace Mosa.Runtime.Vm
 		public bool IsStaticField
 		{
 			get { return (attributes & FieldAttributes.Static) == FieldAttributes.Static; }
+		}
+
+		public bool ContainsGenericParameter
+		{
+			get
+			{
+				return Signature.Type.ContainsGenericParameter;
+			}
 		}
 
 		#endregion // Properties

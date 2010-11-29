@@ -12,7 +12,7 @@ using System.Collections.Generic;
 
 using Mosa.Runtime.CompilerFramework;
 
-namespace Mosa.Platforms.x86.Intrinsic
+namespace Mosa.Platform.X86.Intrinsic
 {
 	/// <summary>
 	/// 

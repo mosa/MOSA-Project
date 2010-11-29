@@ -14,5 +14,9 @@ namespace System
 	/// </summary>
 	public struct Int64
 	{
+		public const long MaxValue = 0x7fffffffffffffff;
+		public const long MinValue = -9223372036854775808;
+
+		internal long _value;
 	}
 }

@@ -50,8 +50,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public virtual void Run()
 		{
-			for (int index = 0; index < BasicBlocks.Count; index++)
-				for (Context ctx = new Context(InstructionSet, BasicBlocks[index]); !ctx.EndOfInstruction; ctx.GotoNext())
+			for (int index = 0; index < basicBlocks.Count; index++)
+				for (Context ctx = new Context(InstructionSet, basicBlocks[index]); !ctx.EndOfInstruction; ctx.GotoNext())
 					if (ctx.Instruction != null)
 						ctx.Clone().Visit(this);
 		}
@@ -137,7 +137,7 @@ namespace Mosa.Runtime.CompilerFramework
 		protected Context CreateEmptyBlockContext(int label)
 		{
 			Context ctx = new Context(InstructionSet, -1);
-			BasicBlock block = CreateBlock(BasicBlocks.Count + 0x10000000);
+			BasicBlock block = CreateBlock(basicBlocks.Count + 0x10000000);
 			ctx.BasicBlock = block;
 
 			// Need a dummy instruction at the start of each block to establish a starting point of the block
@@ -176,7 +176,7 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			Context current = ctx.Clone();
 
-			int label = BasicBlocks.Count + 0x10000000;
+			int label = basicBlocks.Count + 0x10000000;
 
 			BasicBlock nextBlock = CreateBlock(label);
 
@@ -258,10 +258,10 @@ namespace Mosa.Runtime.CompilerFramework
 			if (cop != null && (cop.StackType == StackTypeCode.F || cop.StackType == StackTypeCode.Int64))
 			{
 				int size, alignment;
-				Architecture.GetTypeRequirements(cop.Type, out size, out alignment);
+				architecture.GetTypeRequirements(cop.Type, out size, out alignment);
 
 				string name = String.Format("C_{0}", Guid.NewGuid());
-				using (Stream stream = MethodCompiler.Linker.Allocate(name, SectionKind.ROData, size, alignment))
+				using (Stream stream = methodCompiler.Linker.Allocate(name, SectionKind.ROData, size, alignment))
 				{
 					byte[] buffer;
 

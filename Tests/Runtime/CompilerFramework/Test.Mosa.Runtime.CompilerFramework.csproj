@@ -79,13 +79,15 @@
       <HintPath>..\..\..\3rdParty\MbUnit.dll</HintPath>
     </Reference>
     <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Source\Platforms\x86\Mosa.Platforms.x86.csproj">
+    <ProjectReference Include="..\..\..\Source\Mosa.Vm\Mosa.Vm.csproj">
+      <Project>{88E003EE-6EEC-4D9A-AE52-94A6F526F115}</Project>
+      <Name>Mosa.Vm</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\..\Source\Platforms\x86\Mosa.Platform.X86.csproj">
       <Project>{56CA38E7-0883-4461-A10E-386D0C58DBF9}</Project>
-      <Name>Mosa.Platforms.x86</Name>
+      <Name>Mosa.Platform.X86</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\..\Source\Runtime\Mosa.Runtime.csproj">
       <Project>{75A12A8A-8C8F-4D1E-801B-689D8F781BF4}</Project>
@@ -142,6 +144,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Compiler\StaticAllocationFixture.cs" />
+    <Compile Include="DelegateUtility.cs" />
     <Compile Include="IL\ConditionalOperator.cs" />
     <Compile Include="IL\Stind.cs" />
     <Compile Include="IL\Switch.cs" />
@@ -149,22 +152,23 @@
     <Compile Include="MosaCompilerTestRunner.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="BaseCode\TestAssemblyLinker.cs">
+    <Compile Include="PrebuiltDelegates.cs" />
+    <Compile Include="TestAssemblyLinker.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="BaseCode\TestCaseAssemblyCompiler.cs">
+    <Compile Include="TestCaseAssemblyCompiler.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="BaseCode\TestCaseMethodCompiler.cs">
+    <Compile Include="TestCaseMethodCompiler.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="BaseCode\TestLinkerSection.cs">
+    <Compile Include="TestLinkerSection.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="BaseCode\VirtualMemoryStream.cs">
+    <Compile Include="VirtualMemoryStream.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="BaseCode\Win32MemoryPageManager.cs">
+    <Compile Include="Win32MemoryPageManager.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IL\Add.cs">

@@ -70,6 +70,7 @@
     </NoWarn>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="System.Runtime.InteropServices\UnmanagedType.cs" />
     <Compile Include="System\Activator.cs" />
     <Compile Include="System\ArgumentException.cs" />
     <Compile Include="System\ArgumentNullException.cs" />
@@ -84,7 +85,6 @@
     <Compile Include="System\FlagsAttribute.cs" />
     <Compile Include="System\IDisposable.cs" />
     <Compile Include="System\InvalidOperationException.cs" />
-    <Compile Include="Mosa.Runtime.CompilerFramework\IntrinsicAttribute.cs" />
     <Compile Include="System\MulticastDelegate.cs" />
     <Compile Include="System\NotSupportedException.cs" />
     <Compile Include="System\ObjectDisposedException.cs" />
@@ -142,6 +142,12 @@
     <Compile Include="System.Runtime.CompilerServices\CompilerGeneratedAttribute.cs" />
     <Compile Include="System.Runtime.InteropServices\ComVisible.cs" />
     <Compile Include="System.Runtime.InteropServices\OutAttribute.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Mosa.Vm\Mosa.Vm.csproj">
+      <Project>{88E003EE-6EEC-4D9A-AE52-94A6F526F115}</Project>
+      <Name>Mosa.Vm</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <PropertyGroup>

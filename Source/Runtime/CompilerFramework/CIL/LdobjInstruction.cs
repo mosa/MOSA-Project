@@ -113,7 +113,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			base.Validate(ctx, compiler);
 
 			// If we're ldind.i8, fix an IL deficiency that the result may be U8
-			if (_opcode == OpCode.Ldind_i8 && this.typeRef.Type == CilElementType.I8)
+			if (opcode == OpCode.Ldind_i8 && this.typeRef.Type == CilElementType.I8)
 			{
 				SigType opType = ctx.Operand1.Type;
 				RefSigType rst = opType as RefSigType;

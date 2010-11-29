@@ -12,18 +12,26 @@ namespace Mosa.Runtime.Metadata.Signatures
 	public class VariableSignature : Signature
 	{
 		private CustomMod[] customMods;
-
 		private CilElementType modifier;
-
 		private SigType type;
 
-		protected VariableSignature()
+		/// <summary>
+		/// Initializes a new instance of the <see cref="VariableSignature"/> class.
+		/// </summary>
+		/// <param name="reader">The reader.</param>
+		public VariableSignature(SignatureReader reader)
+			: base(reader)
 		{
 		}
 
-		public VariableSignature(ISignatureContext context, SignatureReader reader)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="VariableSignature"/> class.
+		/// </summary>
+		/// <param name="provider">The provider.</param>
+		/// <param name="token">The token.</param>
+		public VariableSignature(IMetadataProvider provider, TokenTypes token)
+			: base(provider, token)
 		{
-			this.ParseSignature(context, reader);
 		}
 
 		/// <summary>
@@ -47,14 +55,15 @@ namespace Mosa.Runtime.Metadata.Signatures
 		public SigType Type
 		{
 			get { return this.type; }
+			protected set { this.type = value; }
 		}
 
-		protected override void ParseSignature(ISignatureContext context, SignatureReader reader)
+		protected override void ParseSignature(SignatureReader reader)
 		{
 			this.ParseModifier(reader);
 
 			this.customMods = CustomMod.ParseCustomMods(reader);
-			this.type = SigType.ParseTypeSignature(context, reader);
+			this.type = SigType.ParseTypeSignature(reader);
 		}
 
 		private void ParseModifier(SignatureReader reader)
@@ -66,5 +75,14 @@ namespace Mosa.Runtime.Metadata.Signatures
 				reader.SkipByte();
 			}
 		}
+
+		public void ApplyGenericType(SigType[] genericArguments)
+		{
+			if (this.Type is VarSigType)
+			{
+				this.Type = genericArguments[(Type as VarSigType).Index];
+			}
+		}
+
 	}
 }

@@ -7,9 +7,9 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Platforms.x86.Intrinsic;
+using Mosa.Platform.X86.Intrinsic;
 
-namespace Mosa.Platforms.x86.CPUx86
+namespace Mosa.Platform.X86.CPUx86
 {
 	/// <summary>
 	/// 
@@ -361,6 +361,9 @@ namespace Mosa.Platforms.x86.CPUx86
 		/// </summary>
 		public static readonly LeaInstruction LeaInstruction = new LeaInstruction();
 
+		/// <summary>
+		/// 
+		/// </summary>
 		public static readonly SseRoundInstruction SseRoundInstruction = new SseRoundInstruction();
 	}
 }

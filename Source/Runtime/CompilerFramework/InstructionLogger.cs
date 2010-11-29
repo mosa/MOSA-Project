@@ -46,24 +46,24 @@ namespace Mosa.Runtime.CompilerFramework
 			if (!output)
 				return;
 
-			if (MethodCompiler.Method.Name.Contains("<$>"))
+			if (methodCompiler.Method.Name.Contains("<$>"))
 				return;
 
 			if (!string.IsNullOrEmpty(classfilter))
-				if (!MethodCompiler.Method.DeclaringType.FullName.Contains(classfilter))
+				if (!methodCompiler.Method.DeclaringType.FullName.Contains(classfilter))
 					return;
 
 			// Previous stage
-			IPipelineStage prevStage = MethodCompiler.GetPreviousStage(typeof(IMethodCompilerStage));
+			IPipelineStage prevStage = methodCompiler.GetPreviousStage(typeof(IMethodCompilerStage));
 
 			// Line number
 			int index = 1;
 
-			Debug.WriteLine(String.Format("IR representation of method {0} after stage {1}", MethodCompiler.Method, prevStage.Name));
+			Debug.WriteLine(String.Format("IR representation of method {0} after stage {1}", methodCompiler.Method, prevStage.Name));
 
-			if (this.BasicBlocks.Count > 0)
+			if (this.basicBlocks.Count > 0)
 			{
-				foreach (BasicBlock block in BasicBlocks)
+				foreach (BasicBlock block in basicBlocks)
 				{
 					Debug.WriteLine(String.Format("Block #{0} - label L_{1:X4}", index, block.Label));
 

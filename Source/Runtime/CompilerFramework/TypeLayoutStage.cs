@@ -83,6 +83,9 @@ namespace Mosa.Runtime.CompilerFramework
 			// Enumerate all types and do an appropriate type layout
 			foreach (RuntimeType type in typeSystem.GetCompiledTypes())
 			{
+				if (type.ContainsGenericParameters)
+					continue;	
+				
 				if (type.IsModule || type.IsGeneric || type.IsDelegate)
 					continue;
 
@@ -96,6 +99,9 @@ namespace Mosa.Runtime.CompilerFramework
 			// Enumerate all types and do an appropriate type layout
 			foreach (RuntimeType type in typeSystem.GetCompiledTypes())
 			{
+				if (type.ContainsGenericParameters)
+					continue;
+
 				if (type.IsModule || type.IsGeneric || type.IsDelegate)
 					continue;
 
@@ -169,7 +175,7 @@ namespace Mosa.Runtime.CompilerFramework
 			// If the field is another struct, we have to dig down and compute its size too.
 			if (field.SignatureType.Type == CilElementType.ValueType)
 			{
-				return ((ITypeLayout)this).GetTypeSize(field.Type);
+				return ((ITypeLayout)this).GetTypeSize(field.DeclaringType);
 			}
 
 			int size, alignment;

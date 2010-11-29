@@ -16,6 +16,7 @@ using System.IO;
 using System.Reflection;
 using System.CodeDom.Compiler;
 using System.Runtime.InteropServices;
+using System.Diagnostics;
 
 using MbUnit.Framework;
 
@@ -23,7 +24,6 @@ using Mosa.Runtime.Loader;
 using Mosa.Runtime;
 using Mosa.Runtime.Vm;
 using Mosa.Runtime.Metadata.Signatures;
-using Test.Mosa.Runtime.CompilerFramework.BaseCode;
 
 namespace Test.Mosa.Runtime.CompilerFramework
 {
@@ -32,6 +32,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
 	/// </summary>
 	public abstract class TestFixtureBase
 	{
+		#region Data members
 
 		/// <summary>
 		/// Holds the type system
@@ -51,7 +52,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Flag, which determines if the compiler needs to run.
 		/// </summary>
-		private bool needCompile = true;
+		private bool needCompile;
 
 		/// <summary>
 		/// An array of assembly references to include in the compilation.
@@ -83,7 +84,91 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		/// </summary>
 		private bool unsafeCode;
 
+		/// <summary>
+		/// Determines if mscorlib is referenced in the test.
+		/// </summary>
+		private bool doNotReferenceMscorlib;
+
+		/// <summary>
+		/// 
+		/// </summary>
 		private static string tempDirectory;
+
+		#endregion // Data members
+
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="TestFixtureBase"/> class.
+		/// </summary>
+		public TestFixtureBase()
+		{
+			references = new string[0];
+			language = "C#";
+			unsafeCode = true;
+			doNotReferenceMscorlib = true;
+			NeedCompile = true;
+		}
+
+		#endregion // Construction
+
+		#region Properties
+
+		/// <summary>
+		/// Gets or sets a value indicating whether the test needs to be compiled.
+		/// </summary>
+		/// <value><c>true</c> if a compilation is needed; otherwise, <c>false</c>.</value>
+		protected bool NeedCompile
+		{
+			get { return needCompile; }
+			set { needCompile = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets the language.
+		/// </summary>
+		/// <value>The language.</value>
+		protected string Language
+		{
+			get { return language; }
+			set { if (language != value) NeedCompile = true; language = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets the code source.
+		/// </summary>
+		/// <value>The code source.</value>
+		protected string CodeSource
+		{
+			get { return codeSource; }
+			set { if (codeSource != value) NeedCompile = true; codeSource = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets a value indicating whether unsafe code is used in the test.
+		/// </summary>
+		/// <value><c>true</c> if unsafe code is used in the test; otherwise, <c>false</c>.</value>
+		protected bool UnsafeCode
+		{
+			get { return unsafeCode; }
+			set { if (unsafeCode != value) NeedCompile = true; unsafeCode = value; }
+		}
+
+		protected bool DoNotReferenceMscorlib
+		{
+			get { return doNotReferenceMscorlib; }
+			set { if (doNotReferenceMscorlib != value) NeedCompile = true; doNotReferenceMscorlib = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets the references.
+		/// </summary>
+		/// <value>The references.</value>
+		protected string[] References
+		{
+			get { return references; }
+			set { if (references != value) NeedCompile = true; references = value; }
+		}
 
 		private static string TempDirectory
 		{
@@ -101,167 +186,56 @@ namespace Test.Mosa.Runtime.CompilerFramework
 			}
 		}
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="TestFixtureBase"/> class.
-		/// </summary>
-		public TestFixtureBase()
-		{
-			this.references = new string[0];
-			this.language = "C#";
-		}
-
-		/// <summary>
-		/// Gets or sets a value indicating whether the test needs to be compiled.
-		/// </summary>
-		/// <value><c>true</c> if a compilation is needed; otherwise, <c>false</c>.</value>
-		protected bool NeedCompile
-		{
-			get { return this.needCompile; }
-			set { this.needCompile = value; }
-		}
-
-		/// <summary>
-		/// Gets or sets the references.
-		/// </summary>
-		/// <value>The references.</value>
-		public string[] References
-		{
-			get { return this.references; }
-			set
-			{
-				if (this.references != value)
-				{
-					this.references = value;
-					this.needCompile = true;
-				}
-			}
-		}
-
-		/// <summary>
-		/// Gets or sets the language.
-		/// </summary>
-		/// <value>The language.</value>
-		public string Language
-		{
-			get { return this.language; }
-			set
-			{
-				if (this.language != value)
-				{
-					this.language = value;
-					this.NeedCompile = true;
-				}
-			}
-		}
-
-		/// <summary>
-		/// Gets or sets the code source.
-		/// </summary>
-		/// <value>The code source.</value>
-		public string CodeSource
-		{
-			get { return this.codeSource; }
-			set
-			{
-				if (this.codeSource != value)
-				{
-					this.codeSource = value;
-					this.NeedCompile = true;
-				}
-			}
-		}
-
-		/// <summary>
-		/// Gets or sets a value indicating whether unsafe code is used in the test.
-		/// </summary>
-		/// <value><c>true</c> if unsafe code is used in the test; otherwise, <c>false</c>.</value>
-		public bool UnsafeCode
-		{
-			get { return this.unsafeCode; }
-			set
-			{
-				if (this.unsafeCode != value)
-				{
-					this.unsafeCode = value;
-					this.NeedCompile = true;
-				}
-			}
-		}
+		#endregion Properties
 
 		public T Run<T>(string type, string method, params object[] parameters)
 		{
-			this.CompileTestCodeIfNecessary();
-
-			Type delegateType = this.LocateDelegateInCompiledAssembly(type, method);
-
-			IntPtr address = FindTestMethod(String.Empty, type, method);
-
-			T result = default(T);
-			object tempResult = ExecuteTestMethod(delegateType, parameters, address);
-			try
+			if (needCompile)
 			{
-				result = (T)tempResult;
-			}
-			catch (InvalidCastException)
-			{
-				Assert.Fail(@"Failed to convert result {0} of type {1} to type {2}.", tempResult, tempResult.GetType(), typeof(T));
+				CompileTestCode();
+				needCompile = false;
 			}
 
-			return result;
-		}
+			// Find the test method to execute
+			RuntimeMethod runtimeMethod = FindMethod(
+				string.Empty,
+				type,
+				method
+			);
 
-		private Type LocateDelegateInCompiledAssembly(string type, string method)
-		{
-			string delegatename = BuildDelegateName(type, method);
+			// Get delegate name
+			string delegateName;
 
-			Type delegatetype = GetDelegateType(delegatename);
+			if (default(T) is System.ValueType)
+				delegateName = "Test.Mosa.Runtime.CompilerFramework.PrebuiltDelegates+" + DelegateUtility.GetDelegteName(default(T), parameters);
+			else
+				delegateName = "Test.Mosa.Runtime.CompilerFramework.PrebuiltDelegates+" + DelegateUtility.GetDelegteName(null, parameters);
 
-			return delegatetype;
-		}
+			// Get the prebuilt delegate type
+			Type delegateType = Type.GetType(delegateName);
 
-		private Type GetDelegateType(string delegatename)
-		{
-			if (this.loadedAssembly == null)
-			{
-				this.loadedAssembly = Assembly.LoadFile(this.assembly);
-			}
+			Debug.Assert(delegateType != null, delegateName);
 
-			return this.loadedAssembly.GetType(delegatename, false);
-		}
-
-		private static string BuildDelegateName(string type, string method)
-		{
-			return type + "+R_" + method;
-		}
-
-		private static object ExecuteTestMethod(Type delegateType, object[] parameters, IntPtr address)
-		{
 			// Create a delegate for the test method
 			Delegate fn = Marshal.GetDelegateForFunctionPointer(
-				address,
+				runtimeMethod.Address,
 				delegateType
 			);
 
 			// Execute the test method
-			return fn.DynamicInvoke(parameters);
-		}
+			object tempResult = fn.DynamicInvoke(parameters);
 
-		private IntPtr FindTestMethod(string ns, string type, string method)
-		{
-			// Find the test method to execute
-			RuntimeMethod runtimeMethod = FindMethod(ns, type, method);
-			IntPtr address = runtimeMethod.Address;
-			return address;
-		}
-
-		protected void CompileTestCodeIfNecessary()
-		{
-			// Do we need to compile the code?
-			if (this.needCompile)
+			try
 			{
-				this.CompileTestCode();
-
-				this.needCompile = false;
+				if (default(T) is System.ValueType)
+					return (T)tempResult;
+				else
+					return default(T);
+			}
+			catch (InvalidCastException e)
+			{
+				Assert.Fail(@"Failed to convert result {0} of type {1} to type {2}.", tempResult, tempResult.GetType(), typeof(T));
+				throw e;
 			}
 		}
 
@@ -279,6 +253,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
 			{
 				if (t.Namespace != ns || t.Name != type)
 					continue;
+
 				foreach (RuntimeMethod m in t.Methods)
 				{
 					if (m.Name == method)
@@ -288,53 +263,64 @@ namespace Test.Mosa.Runtime.CompilerFramework
 				}
 			}
 
-			throw new MissingMethodException(ns + @"." + type, method);
+			throw new MissingMethodException(ns + "." + type, method);
 		}
 
 		protected void CompileTestCode()
 		{
-			if (this.loadedAssembly != null)
+			if (loadedAssembly != null)
 			{
-				this.loadedAssembly = null;
+				loadedAssembly = null;
 			}
 
-			this.assembly = this.RunCodeDomCompiler();
+			assembly = RunCodeDomCompiler();
 
 			Console.WriteLine("Executing MOSA compiler...");
-			RunMosaCompiler(this.assembly);
+			RunMosaCompiler(assembly);
 		}
 
 		private string RunCodeDomCompiler()
 		{
+			Console.WriteLine("Executing {0} compiler...", Language);
+
 			CodeDomProvider provider;
-			Console.WriteLine("Executing {0} compiler...", this.Language);
-			if (!providerCache.TryGetValue(this.language, out provider))
-				provider = CodeDomProvider.CreateProvider(this.Language);
-			if (provider == null)
-				throw new NotSupportedException("The language '" + this.Language + "' is not supported on this machine.");
+			if (!providerCache.TryGetValue(language, out provider))
+			{
+				provider = CodeDomProvider.CreateProvider(Language);
+				if (provider == null)
+					throw new NotSupportedException("The language '" + Language + "' is not supported on this machine.");
+				providerCache.Add(Language, provider);
+			}
 
 			string filename = Path.Combine(TempDirectory, Path.ChangeExtension(Path.GetRandomFileName(), "dll"));
 			temps.AddFile(filename, false);
 
 			CompilerResults compileResults;
-			CompilerParameters parameters = new CompilerParameters(this.References, filename, false);
+			CompilerParameters parameters = new CompilerParameters(References, filename, false);
 			parameters.CompilerOptions = "/optimize-";
 
-			if (this.unsafeCode)
+			if (unsafeCode)
 			{
-				if (this.Language == "C#")
+				if (Language == "C#")
 					parameters.CompilerOptions = parameters.CompilerOptions + " /unsafe+";
 				else
 					throw new NotSupportedException();
 			}
-			parameters.GenerateInMemory = false;
-			if (this.codeSource != null)
+
+			if (doNotReferenceMscorlib)
 			{
-				//Console.Write("From Source: ");
-				//Console.WriteLine(new string('-', 40 - 13));
-				//Console.WriteLine(this.codeSource);
-				//Console.WriteLine(new string('-', 40));
-				compileResults = provider.CompileAssemblyFromSource(parameters, this.codeSource);
+				if (Language == "C#")
+					parameters.CompilerOptions = parameters.CompilerOptions + " /nostdlib";
+				else
+					throw new NotSupportedException();
+			}
+
+			parameters.GenerateInMemory = false;
+
+			if (codeSource != null)
+			{
+				Console.WriteLine("Code: {0}", codeSource);
+				compileResults = provider.CompileAssemblyFromSource(parameters, codeSource);
 			}
 			else
 				throw new NotSupportedException();
@@ -359,13 +345,9 @@ namespace Test.Mosa.Runtime.CompilerFramework
 			files.Add(assemblyFile);
 
 			IAssemblyLoader assemblyLoader = new AssemblyLoader();
-			assemblyLoader.InitializePrivatePaths(files);
-			assemblyLoader.AppendPrivatePath(typeof(global::Mosa.Runtime.Runtime).Module.FullyQualifiedName);
 
 			typeSystem = new DefaultTypeSystem(assemblyLoader);
 			typeSystem.LoadModules(files);
-
-			typeSystem.ResolveModuleReference(typeof(global::Mosa.Runtime.Runtime).Module.FullyQualifiedName);
 
 			TestCaseAssemblyCompiler.Compile(typeSystem, assemblyLoader);
 		}
@@ -373,7 +355,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		protected string CreateMarshalAttribute(string prefix, string typeName)
 		{
 			string result = String.Empty;
-			string marshalDirective = this.GetMarshalDirective(typeName);
+			string marshalDirective = GetMarshalDirective(typeName);
 			if (marshalDirective != null)
 			{
 				result = @"[" + prefix + marshalDirective + @"]";

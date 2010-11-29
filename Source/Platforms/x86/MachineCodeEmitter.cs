@@ -23,7 +23,7 @@ using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Vm;
 using IR = Mosa.Runtime.CompilerFramework.IR;
 
-namespace Mosa.Platforms.x86
+namespace Mosa.Platform.X86
 {
 	/// <summary>
 	/// An x86 machine code emitter.
@@ -344,6 +344,11 @@ namespace Mosa.Platforms.x86
 			}
 		}
 
+		/// <summary>
+		/// Emits the specified op code.
+		/// </summary>
+		/// <param name="opCode">The op code.</param>
+		/// <param name="dest">The dest.</param>
 		public void Emit(OpCode opCode, Operand dest)
 		{
 			byte? sib, modRM;

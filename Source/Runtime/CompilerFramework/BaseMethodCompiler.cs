@@ -46,54 +46,54 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Holds a list of operands which represent method parameters.
 		/// </summary>
-		private readonly List<Operand> _parameters;
+		private readonly List<Operand> parameters;
 
 		private readonly ICompilationSchedulerStage compilationScheduler;
 
 		/// <summary>
 		/// The Architecture of the compilation target.
 		/// </summary>
-		private IArchitecture _architecture;
+		private IArchitecture architecture;
 
 		/// <summary>
 		/// Holds the linker used to resolve external symbols
 		/// </summary>
-		private IAssemblyLinker _linker;
+		private IAssemblyLinker linker;
 
 		/// <summary>
 		/// Holds a list of operands which represent local variables
 		/// </summary>
-		private Operand[] _locals;
+		private Operand[] locals;
 
 		/// <summary>
 		/// Optional signature of stack local variables
 		/// </summary>
-		private LocalVariableSignature _localsSig;
+		private LocalVariableSignature localsSig;
 
 		/// <summary>
 		/// The method definition being compiled
 		/// </summary>
-		private RuntimeMethod _method;
+		private RuntimeMethod method;
 
 		/// <summary>
 		/// Holds the next free stack slot index
 		/// </summary>
-		protected int _nextStackSlot;
+		protected int nextStackSlot;
 
 		/// <summary>
 		/// Holds the _type, which owns the _method
 		/// </summary>
-		private RuntimeType _type;
+		private RuntimeType type;
 
 		/// <summary>
 		/// Holds the instruction set
 		/// </summary>
-		private InstructionSet _instructionSet;
+		private InstructionSet instructionSet;
 
 		/// <summary>
 		/// Holds the basic blocks
 		/// </summary>
-		private List<BasicBlock> _basicBlocks;
+		private List<BasicBlock> basicBlocks;
 
 		/// <summary>
 		/// Holds the type system during compilation
@@ -139,14 +139,15 @@ namespace Mosa.Runtime.CompilerFramework
 			if (compilationScheduler == null)
 				throw new ArgumentNullException(@"compilationScheduler");
 
-			_linker = linker;
-			_architecture = architecture;
-			_method = method;
-			_parameters = new List<Operand>(new Operand[_method.Parameters.Count]);
-			_type = type;
-			_nextStackSlot = 0;
-			_basicBlocks = new List<BasicBlock>();
-			_instructionSet = null; // this will be set later
+			this.linker = linker;
+			this.architecture = architecture;
+			this.method = method;
+			this.type = type;
+
+			parameters = new List<Operand>(new Operand[method.Parameters.Count]);
+			nextStackSlot = 0;
+			basicBlocks = new List<BasicBlock>();
+			instructionSet = null; // this will be set later
 
 			pipeline = new CompilerPipeline();
 
@@ -163,27 +164,27 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Gets the Architecture to compile for.
 		/// </summary>
-		public IArchitecture Architecture { get { return _architecture; } }
+		public IArchitecture Architecture { get { return architecture; } }
 
 		/// <summary>
 		/// Gets the assembly, which contains the method.
 		/// </summary>
-		public IMetadataModule Assembly { get { return this._method.MetadataModule; } }
+		public IMetadataModule Assembly { get { return this.method.MetadataModule; } }
 
 		/// <summary>
 		/// Gets the _linker used to resolve external symbols.
 		/// </summary>
-		public IAssemblyLinker Linker { get { return _linker; } }
+		public IAssemblyLinker Linker { get { return linker; } }
 
 		/// <summary>
 		/// Gets the _method implementation being compiled.
 		/// </summary>
-		public RuntimeMethod Method { get { return _method; } }
+		public RuntimeMethod Method { get { return method; } }
 
 		/// <summary>
 		/// Gets the owner type of the method.
 		/// </summary>
-		public RuntimeType Type { get { return _type; } }
+		public RuntimeType Type { get { return type; } }
 
 		/// <summary>
 		/// Gets the instruction set.
@@ -191,8 +192,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value>The instruction set.</value>
 		public InstructionSet InstructionSet
 		{
-			get { return _instructionSet; }
-			set { _instructionSet = value; }
+			get { return instructionSet; }
+			set { instructionSet = value; }
 		}
 
 		/// <summary>
@@ -201,8 +202,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value>The basic blocks.</value>
 		public List<BasicBlock> BasicBlocks
 		{
-			get { return _basicBlocks; }
-			set { _basicBlocks = value; }
+			get { return basicBlocks; }
+			set { basicBlocks = value; }
 		}
 
 		public ICompilationSchedulerStage Scheduler { get { return this.compilationScheduler; } }
@@ -234,7 +235,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns>A stream object, which can be used to store emitted instructions.</returns>
 		public virtual Stream RequestCodeStream()
 		{
-			return _linker.Allocate(_method.ToString(), SectionKind.Text, 0, 0);
+			return linker.Allocate(method.ToString(), SectionKind.Text, 0, 0);
 		}
 
 		/// <summary>
@@ -263,7 +264,7 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			if (type.Type != CilElementType.I8 && type.Type != CilElementType.U8)
 			{
-				return _architecture.CreateResultOperand(type, _nextStackSlot, _nextStackSlot++);
+				return architecture.CreateResultOperand(type, nextStackSlot, nextStackSlot++);
 			}
 			return CreateTemporary(type);
 		}
@@ -275,9 +276,9 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns>An operand, which represents the temporary.</returns>
 		public Operand CreateTemporary(SigType type)
 		{
-			int stackSlot = _nextStackSlot++;
+			int stackSlot = nextStackSlot++;
 			return new LocalVariableOperand(
-				_architecture.StackFrameRegister, String.Format(@"T_{0}", stackSlot), stackSlot, type);
+				architecture.StackFrameRegister, String.Format(@"T_{0}", stackSlot), stackSlot, type);
 		}
 
 		/// <summary>
@@ -298,12 +299,12 @@ namespace Mosa.Runtime.CompilerFramework
 			pipeline.Clear();
 			pipeline = null;
 
-			_architecture = null;
-			_linker = null;
-			_method = null;
-			_type = null;
-			_instructionSet = null;
-			_basicBlocks = null;
+			architecture = null;
+			linker = null;
+			method = null;
+			type = null;
+			instructionSet = null;
+			basicBlocks = null;
 		}
 
 		/// <summary>
@@ -312,7 +313,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns>A stream, which represents the IL of the method.</returns>
 		public Stream GetInstructionStream()
 		{
-			return _method.MetadataModule.GetInstructionStream((long)_method.Rva);
+			return method.MetadataModule.GetInstructionStream((long)method.Rva);
 		}
 
 		/// <summary>
@@ -329,21 +330,23 @@ namespace Mosa.Runtime.CompilerFramework
 			// only saves runtime space/perf.
 			// PG: Isn't that implemented below? Comment seems out of date with code
 
-			Debug.Assert(_localsSig != null, @"Method doesn't have locals.");
-			Debug.Assert(index < _localsSig.Locals.Length, @"Invalid local index requested.");
+			Debug.Assert(localsSig != null, @"Method doesn't have locals.");
+			Debug.Assert(index < localsSig.Locals.Length, @"Invalid local index requested.");
 
-			if (_localsSig == null || _localsSig.Locals.Length < index)
+			if (localsSig == null || localsSig.Locals.Length < index)
 				throw new ArgumentOutOfRangeException(@"index", index, @"Invalid parameter index");
 
-			Operand local = _locals[index];
+			Operand local = locals[index];
 
 			if (local == null)
 			{
-				VariableSignature localVariable = _localsSig.Locals[index];
-				ScheduleDependencyForCompilation(localVariable.Type);
+				VariableSignature localVariable = localsSig.Locals[index];
+				
+				//ScheduleDependencyForCompilation(localVariable.Type);
 
-				local = new LocalVariableOperand(_architecture.StackFrameRegister, String.Format("L_{0}", index), index, localVariable.Type);
-				_locals[index] = local;
+				local = new LocalVariableOperand(architecture.StackFrameRegister, String.Format("L_{0}", index), index, localVariable.Type);
+
+				locals[index] = local;
 			}
 
 			return local;
@@ -361,39 +364,40 @@ namespace Mosa.Runtime.CompilerFramework
 			// which represent the same memory location. If we need to move a variable in an optimization
 			// stage to a different memory location, it should actually be a new one so sharing object
 			// only saves runtime space/perf.
-			MethodSignature sig = _method.Signature;
+			MethodSignature sig = method.Signature;
+		
 			if (sig.HasThis || sig.HasExplicitThis)
 			{
 				if (index == 0)
 				{
 					return new ParameterOperand(
-						_architecture.StackFrameRegister,
-						new RuntimeParameter(_method.MetadataModule, @"this", 2, ParameterAttributes.In),
-						new ClassSigType((TokenTypes)_type.Token));
+						architecture.StackFrameRegister,
+						new RuntimeParameter(method.MetadataModule, @"this", 2, ParameterAttributes.In),
+						new ClassSigType((TokenTypes)type.Token));
 				}
 				// Decrement the index, as the caller actually wants a real parameter
 				--index;
 			}
 
 			// A normal argument, decode it...
-			IList<RuntimeParameter> parameters = _method.Parameters;
-			Debug.Assert(parameters != null, @"Method doesn't have arguments.");
-			Debug.Assert(index < parameters.Count, @"Invalid argument index requested.");
-			if (parameters == null || parameters.Count <= index)
+			IList<RuntimeParameter> methodParameters = method.Parameters;
+			Debug.Assert(methodParameters != null, @"Method doesn't have arguments.");
+			Debug.Assert(index < methodParameters.Count, @"Invalid argument index requested.");
+			if (methodParameters == null || methodParameters.Count <= index)
 				throw new ArgumentOutOfRangeException(@"index", index, @"Invalid parameter index");
 
-			Operand param = null;
-			if (_parameters.Count > index)
-				param = _parameters[index];
+			Operand parameter = null;
+			if (parameters.Count > index)
+				parameter = parameters[index];
 
-			if (param == null)
+			if (parameter == null)
 			{
 				SigType parameterType = sig.Parameters[index];
-				param = new ParameterOperand(_architecture.StackFrameRegister, parameters[index], parameterType);
-				_parameters[index] = param;
+				parameter = new ParameterOperand(architecture.StackFrameRegister, methodParameters[index], parameterType);
+				parameters[index] = parameter;
 			}
 
-			return param;
+			return parameter;
 		}
 
 		private void ScheduleDependencyForCompilation(SigType signatureType)
@@ -403,17 +407,17 @@ namespace Mosa.Runtime.CompilerFramework
 			TypeSigType typeSigType = signatureType as TypeSigType;
 			if (typeSigType != null)
 			{
-				runtimeType = moduleTypeSystem.GetType(this.Method, typeSigType.Token);
+				runtimeType = moduleTypeSystem.GetType(typeSigType.Token);
 			}
 			else
 			{
 				GenericInstSigType genericSignatureType = signatureType as GenericInstSigType;
 				if (genericSignatureType != null)
 				{
-					RuntimeType genericType = moduleTypeSystem.GetType(this.Method, genericSignatureType.BaseType.Token);
+					RuntimeType genericType = moduleTypeSystem.GetType(genericSignatureType.BaseType.Token);
 					Console.WriteLine(@"Loaded generic type {0}", genericType.FullName);
 
-					runtimeType = new CilGenericType(moduleTypeSystem, genericType, genericSignatureType, this.Method);
+					runtimeType = new CilGenericType(moduleTypeSystem, genericType, genericSignatureType);
 				}
 			}
 
@@ -432,12 +436,12 @@ namespace Mosa.Runtime.CompilerFramework
 			if (localVariableSignature == null)
 				throw new ArgumentNullException(@"localVariableSignature");
 
-			_localsSig = localVariableSignature;
+			localsSig = localVariableSignature;
 
-			int count = _localsSig.Locals.Length;
-			_locals = new Operand[count];
+			int count = localsSig.Locals.Length;
+			locals = new Operand[count];
 
-			_nextStackSlot = _locals.Length + 1;
+			nextStackSlot = locals.Length + 1;
 		}
 
 		/// <summary>
@@ -500,7 +504,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </returns>
 		public BasicBlock FromLabel(int label)
 		{
-			return _basicBlocks.Find(delegate(BasicBlock block)
+			return basicBlocks.Find(delegate(BasicBlock block)
 			{
 				return (label == block.Label);
 			});
@@ -515,8 +519,8 @@ namespace Mosa.Runtime.CompilerFramework
 		public BasicBlock CreateBlock(int label, int index)
 		{
 			// HACK: BasicBlock.Count for the sequence works for now since blocks are not removed
-			BasicBlock basicBlock = new BasicBlock(_basicBlocks.Count, label, index);
-			_basicBlocks.Add(basicBlock);
+			BasicBlock basicBlock = new BasicBlock(basicBlocks.Count, label, index);
+			basicBlocks.Add(basicBlock);
 			return basicBlock;
 		}
 

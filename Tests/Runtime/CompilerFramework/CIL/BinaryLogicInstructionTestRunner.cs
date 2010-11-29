@@ -20,53 +20,44 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 
 		public BinaryLogicInstructionTestRunner()
 		{
-			this.IncludeAnd = true;
-			this.IncludeOr = true;
-			this.IncludeXor = true;
-			this.IncludeNot = true;
-			this.IncludeShl = true;
-			this.IncludeShr = true;
-			this.IncludeComp = true;
+			IncludeAnd = true;
+			IncludeOr = true;
+			IncludeXor = true;
+			IncludeNot = true;
+			IncludeShl = true;
+			IncludeShr = true;
+			IncludeComp = true;
 		}
 
 		private void SetTestCode()
 		{
-			string marshalFirstType = this.CreateMarshalAttribute(String.Empty, FirstType);
-			string marshalSecondType = this.CreateMarshalAttribute(String.Empty, SecondType);
-			string marshalShiftType = this.CreateMarshalAttribute(String.Empty, ShiftType);
-			string marshalExpectedType = this.CreateMarshalAttribute(String.Empty, ExpectedType);
-
 			StringBuilder codeBuilder = new StringBuilder();
 
 			codeBuilder.Append(TestCodeHeader);
 
-			if (this.IncludeAnd)
+			if (IncludeAnd)
 				codeBuilder.Append(TestCodeAnd);
-			if (this.IncludeOr)
+			if (IncludeOr)
 				codeBuilder.Append(TestCodeOr);
-			if (this.IncludeXor)
+			if (IncludeXor)
 				codeBuilder.Append(TestCodeXor);
-			if (this.IncludeNot)
+			if (IncludeNot)
 				codeBuilder.Append(TestCodeNot);
-			if (this.IncludeComp)
+			if (IncludeComp)
 				codeBuilder.Append(TestCodeComp);
-			if (this.IncludeShl)
+			if (IncludeShl)
 				codeBuilder.Append(TestCodeShl);
-			if (this.IncludeShr)
+			if (IncludeShr)
 				codeBuilder.Append(TestCodeShr);
 
 			codeBuilder.Append(TestCodeFooter);
-
-			codeBuilder.Append(Code.ObjectClassDefinition);
+			codeBuilder.Append(Code.AllTestCode);
 
 			codeBuilder
-				.Replace(@"[[expectedtype]]", ExpectedType)
-				.Replace(@"[[firsttype]]", FirstType)
-				.Replace(@"[[secondtype]]", SecondType)
-				.Replace(@"[[shifttypename]]", ShiftType)
-				.Replace(@"[[marshal-expectedtype]]", marshalExpectedType)
-				.Replace(@"[[marshal-firsttype]]", marshalFirstType)
-				.Replace(@"[[marshal-secondtype]]", marshalFirstType);
+				.Replace(@"#expectedtype", ExpectedType)
+				.Replace(@"#firsttype", FirstType)
+				.Replace(@"#secondtype", SecondType)
+				.Replace(@"#shifttypename", ShiftType);
 
 			CodeSource = codeBuilder.ToString();
 		}
@@ -149,65 +140,51 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		";
 				
 		private const string TestCodeAnd = @"
-				public delegate bool R_AndTest([[marshal-expectedtype]][[expectedtype]] expectedValue, [[marshal-firsttype]][[firsttype]] first, [[marshal-secondtype]][[secondtype]] second);
-
-				public static bool AndTest([[expectedtype]] expectedValue, [[firsttype]] first, [[secondtype]] second)
+				public static bool AndTest(#expectedtype expectedValue, #firsttype first, #secondtype second)
 				{
 					return expectedValue == (first & second);
 				}
 		";
 
 		private const string TestCodeOr = @"
-				public delegate bool R_OrTest([[marshal-expectedtype]][[expectedtype]] expectedValue, [[marshal-firsttype]][[firsttype]] first, [[marshal-secondtype]][[secondtype]] second);
-
-				public static bool OrTest([[expectedtype]] expectedValue, [[firsttype]] first, [[secondtype]] second)
+				public static bool OrTest(#expectedtype expectedValue, #firsttype first, #secondtype second)
 				{
 					return expectedValue == (first | second);
 				}
 		";
 
 		private const string TestCodeXor = @"
-				public delegate bool R_XorTest([[marshal-expectedtype]][[expectedtype]] expectedValue, [[marshal-firsttype]][[firsttype]] first, [[marshal-secondtype]][[secondtype]] second);
-
-				public static bool XorTest([[expectedtype]] expectedValue, [[firsttype]] first, [[secondtype]] second)
+				public static bool XorTest(#expectedtype expectedValue, #firsttype first, #secondtype second)
 				{
 					return expectedValue == (first ^ second);
 				}
 		";
 
 		private const string TestCodeNot = @"
-				public delegate bool R_NotTest([[marshal-expectedtype]][[expectedtype]] expectedValue, [[marshal-firsttype]][[firsttype]] first);
-
-				public static bool NotTest([[expectedtype]] expectedValue, [[firsttype]] first)
+				public static bool NotTest(#expectedtype expectedValue, #firsttype first)
 				{
 					return expectedValue == (!first);
 				}
 		";
 
 		private const string TestCodeComp = @"
-				public delegate bool R_CompTest([[marshal-expectedtype]][[expectedtype]] expectedValue, [[marshal-firsttype]][[firsttype]] first);
-
-				public static bool CompTest([[expectedtype]] expectedValue, [[firsttype]] first)
+				public static bool CompTest(#expectedtype expectedValue, #firsttype first)
 				{
 					return expectedValue == (~first);
 				}
 		";
 
 		private const string TestCodeShl = @"
-				public delegate bool R_ShiftLeftTest([[marshal-expectedtype]][[expectedtype]] expectedValue, [[marshal-firsttype]][[firsttype]] first, [[shifttypename]] second);
-
-				public static bool ShiftLeftTest([[expectedtype]] expectedValue, [[firsttype]] first, [[shifttypename]] second)
+				public static bool ShiftLeftTest(#expectedtype expectedValue, #firsttype first, #shifttypename second)
 				{
-					return expectedValue == ([[expectedtype]])(first << second);
+					return expectedValue == (#expectedtype)(first << second);
 				}
 		";
 
 		private const string TestCodeShr = @"
-				public delegate bool R_ShiftRightTest([[marshal-expectedtype]][[expectedtype]] expectedValue, [[marshal-firsttype]][[firsttype]] first, [[shifttypename]] second);
-
-				public static bool ShiftRightTest([[expectedtype]] expectedValue, [[firsttype]] first, [[shifttypename]] second)
+				public static bool ShiftRightTest(#expectedtype expectedValue, #firsttype first, #shifttypename second)
 				{
-					return expectedValue == ([[expectedtype]])(first >> second);
+					return expectedValue == (#expectedtype)(first >> second);
 				}
 		";
 

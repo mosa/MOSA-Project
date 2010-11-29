@@ -23,32 +23,32 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// <summary>
 		/// 
 		/// </summary>
-		private CallingConvention _callingConvention;
+		private CallingConvention callingConvention;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private int _genericParameterCount;
+		private int genericParameterCount;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private bool _hasExplicitThis;
+		private bool hasExplicitThis;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private bool _hasThis;
+		private bool hasThis;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private SigType[] _parameters;
+		private SigType[] parameters;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private SigType _returnType;
+		private SigType returnType;
 
 		/// <summary>
 		/// Gets the calling convention.
@@ -56,8 +56,8 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// <value>The calling convention.</value>
 		public CallingConvention CallingConvention
 		{
-			get { return _callingConvention; }
-			set { this._callingConvention = value; }
+			get { return callingConvention; }
+			protected set { callingConvention = value; }
 		}
 
 		/// <summary>
@@ -66,7 +66,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// <value>The generic parameter count.</value>
 		public int GenericParameterCount
 		{
-			get { return _genericParameterCount; }
+			get { return genericParameterCount; }
 		}
 
 		/// <summary>
@@ -77,8 +77,8 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// </value>
 		public bool HasExplicitThis
 		{
-			get { return _hasExplicitThis; }
-			set { this._hasExplicitThis = value; }
+			get { return hasExplicitThis; }
+			protected set { hasExplicitThis = value; }
 		}
 
 		/// <summary>
@@ -87,8 +87,8 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// <value><c>true</c> if this instance has this; otherwise, <c>false</c>.</value>
 		public bool HasThis
 		{
-			get { return _hasThis; }
-			set { this._hasThis = value; }
+			get { return hasThis; }
+			protected set { hasThis = value; }
 		}
 
 		/// <summary>
@@ -97,7 +97,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// <value>The parameters.</value>
 		public SigType[] Parameters
 		{
-			get { return _parameters; }
+			get { return parameters; }
 		}
 
 		/// <summary>
@@ -106,10 +106,25 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// <value>The type of the return.</value>
 		public SigType ReturnType
 		{
-			get { return _returnType; }
+			get { return returnType; }
 		}
 
-		public MethodSignature()
+		/// <summary>
+		/// Initializes a new instance of the <see cref="MethodSignature"/> class.
+		/// </summary>
+		/// <param name="reader">The reader.</param>
+		public MethodSignature(SignatureReader reader)
+			: base(reader)
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="MethodSignature"/> class.
+		/// </summary>
+		/// <param name="provider">The provider.</param>
+		/// <param name="token">The token.</param>
+		public MethodSignature(IMetadataProvider provider, TokenTypes token)
+			: base(provider, token)
 		{
 		}
 
@@ -125,99 +140,99 @@ namespace Mosa.Runtime.Metadata.Signatures
 			if (parameters == null)
 				throw new ArgumentNullException(@"parameters");
 
-			this._callingConvention = CallingConvention.Default;
-			this._hasExplicitThis = this._hasThis = false;
-			this._parameters = parameters;
-			this._returnType = returnType;
-			this._genericParameterCount = 0;
+			this.callingConvention = CallingConvention.Default;
+			this.hasExplicitThis = false;
+			this.hasThis = false;
+			this.parameters = parameters;
+			this.returnType = returnType;
+			this.genericParameterCount = 0;
 		}
+
+		//public MethodSignature(ISignatureContext context, MethodSignature signature, MethodSpecSignature specification)
+		//{
+		//    // NOT USED!!!
+		//    if (context == null)
+		//        throw new ArgumentNullException(@"context");
+		//    if (signature == null)
+		//        throw new ArgumentNullException(@"signature");
+		//    if (specification == null)
+		//        throw new ArgumentNullException(@"specification");
+
+		//    this.callingConvention = signature.CallingConvention;
+		//    this.hasExplicitThis = signature.HasExplicitThis;
+		//    this.hasThis = signature.HasThis;
+		//    this.genericParameterCount = 0;
+
+		//    int length = signature.Parameters.Length;
+		//    this.parameters = new SigType[length];
+		//    for (int index = 0; index < length; index++)
+		//    {
+		//        this.parameters[index] = this.ApplySpecification(context, specification, signature.Parameters[index]);
+		//    }
+		//    this.returnType = this.ApplySpecification(context, specification, signature.ReturnType);
+		//}
+
+		//private SigType ApplySpecification(ISignatureContext context, MethodSpecSignature specification, SigType sigType)
+		//{
+		//    // NOT USED!!!
+		//    SigType result = sigType;
+
+		//    if (sigType is VarSigType)
+		//    {
+		//        result = context.GetGenericTypeArgument(((VarSigType)sigType).Index);
+		//    }
+		//    else if (sigType is MVarSigType)
+		//    {
+		//        result = specification.Types[((MVarSigType)sigType).Index];
+		//    }
+
+		//    Debug.WriteLine(String.Format(@"Replaced {0} by {1}.", sigType, result));
+		//    return result;
+		//}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="MethodSignature"/> class.
+		/// Parses the signature.
 		/// </summary>
-		/// <param name="context">The context of the generic method spec signature.</param>
-		/// <param name="signature">The signature of the generic method.</param>
-		/// <param name="specification">The signature specifying replacements for the generic signature.</param>
-		public MethodSignature(ISignatureContext context, MethodSignature signature, MethodSpecSignature specification)
+		/// <param name="reader">The reader.</param>
+		protected sealed override void ParseSignature(SignatureReader reader)
 		{
-			if (context == null)
-				throw new ArgumentNullException(@"context");
-			if (signature == null)
-				throw new ArgumentNullException(@"signature");
-			if (specification == null)
-				throw new ArgumentNullException(@"specification");
+			byte value = reader.ReadByte();
 
-			this._callingConvention = signature.CallingConvention;
-			this._hasExplicitThis = signature.HasExplicitThis;
-			this._hasThis = signature.HasThis;
-			this._genericParameterCount = 0;
-
-			int length = signature.Parameters.Length;
-			this._parameters = new SigType[length];
-			for (int index = 0; index < length; index++)
-			{
-				this._parameters[index] = this.ApplySpecification(context, specification, signature.Parameters[index]);
-			}
-			this._returnType = this.ApplySpecification(context, specification, signature.ReturnType);
-		}
-
-		private SigType ApplySpecification(ISignatureContext context, MethodSpecSignature specification, SigType sigType)
-		{
-			SigType result = sigType;
-
-			if (sigType is VarSigType)
-			{
-				result = context.GetGenericTypeArgument(((VarSigType)sigType).Index);
-			}
-			else if (sigType is MVarSigType)
-			{
-				result = specification.Types[((MVarSigType)sigType).Index];
-			}
-
-			Debug.WriteLine(String.Format(@"Replaced {0} by {1}.", sigType, result));
-			return result;
-		}
-
-        /// <summary>
-        /// Parses the signature.
-        /// </summary>
-        /// <param name="context">The context.</param>
-        /// <param name="reader">The reader.</param>
-		protected sealed override void ParseSignature(ISignatureContext context, SignatureReader reader)
-		{
 			// Check for instance signature
-            if (HAS_THIS == (reader.PeekByte() & HAS_THIS))
+			if (HAS_THIS == (value & HAS_THIS))
 			{
-				_hasThis = true;
+				hasThis = true;
 			}
-            if (HAS_EXPLICIT_THIS == (reader.PeekByte() & HAS_EXPLICIT_THIS))
-				_hasExplicitThis = true;
-            if (GENERIC == (reader.PeekByte() & GENERIC))
+
+			if (HAS_EXPLICIT_THIS == (value & HAS_EXPLICIT_THIS))
 			{
-				_callingConvention = CallingConvention.Generic;
-				_genericParameterCount = reader.ReadCompressedInt32();
+				hasExplicitThis = true;
 			}
-            else if (VARARG == (reader.PeekByte() & VARARG))
+
+			if (GENERIC == (value & GENERIC))
 			{
-				_callingConvention = CallingConvention.Vararg;
+				callingConvention = CallingConvention.Generic;
+				genericParameterCount = reader.ReadCompressedInt32();
 			}
-            else if (0x00 != (reader.PeekByte() & 0x1F))
+			else if (VARARG == (value & VARARG))
+			{
+				callingConvention = CallingConvention.Vararg;
+			}
+			else if ((value & 0x1F) != 0x00)
 			{
 				throw new InvalidOperationException(@"Invalid method definition signature.");
 			}
 
-            reader.SkipByte();
-
 			// Number of parameters
-            int paramCount = reader.ReadCompressedInt32();
-			_parameters = new SigType[paramCount];
+			int paramCount = reader.ReadCompressedInt32();
+			parameters = new SigType[paramCount];
 
 			// Read the return type
-            _returnType = SigType.ParseTypeSignature(context, reader);
+			returnType = SigType.ParseTypeSignature(reader);
 
 			// Read all parameters
 			for (int i = 0; i < paramCount; i++)
-                _parameters[i] = SigType.ParseTypeSignature(context, reader);
+				parameters[i] = SigType.ParseTypeSignature(reader);
 		}
 
 		/// <summary>
@@ -274,6 +289,17 @@ namespace Mosa.Runtime.Metadata.Signatures
 			}
 
 			return true;
+		}
+
+		public void ApplyGenericType(SigType[] genericArguments)
+		{
+			for (int i = 0; i < parameters.Length; i++)
+			{
+				if (parameters[i] is VarSigType)
+				{
+					parameters[i] = genericArguments[(parameters[i] as VarSigType).Index];
+				}
+			}
 		}
 	}
 }

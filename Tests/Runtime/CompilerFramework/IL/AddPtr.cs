@@ -13,752 +13,538 @@ using System;
 using System.Runtime.InteropServices;
 using Gallio.Framework;
 using MbUnit.Framework;
-using Test.Mosa.Runtime.CompilerFramework.BaseCode;
+using Test.Mosa.Runtime.CompilerFramework;
 
 namespace Test.Mosa.Runtime.CompilerFramework.IL
 {
-	/// <summary>
-	/// Testcase for the AddInstruction on pointers
-	/// </summary>
+
 	[TestFixture]
 	public class AddPtr : CodeDomTestRunner
 	{
-		private static string CreateTestCode(string typeInA, string typeInB, string typeOut)
-		{
-			return @"
-				static class Test
+		private static string TestCode = @"
+			static class Test
 				{
-					static unsafe " + typeOut + " AddPtr(" + typeInA + " a, " + typeInB + @" b)
+					static unsafe bool AddPtr(int a, int b, int expect)
+					{
+						return expect == (int)(DoAddPtr((#typeInA)a, (#typeInB)b));
+					}
+
+					static unsafe #typeOut DoAddPtr(#typeInA a, #typeInB b)
 					{
 						return (a + b);
 					}
-				}" + Code.ObjectClassDefinition;
-		}
+				}";
 
-		private static string CreateConstantTestCode(string typeIn, string typeOut, string constantLeft, string constantRight)
+		private static string CreateTestCode(string typeInA, string typeInB, string typeOut)
 		{
-			if (constantLeft == null)
-			{
-				return @"
-					static class Test
-					{
-						static unsafe " + typeOut + " AddPtr(" + typeIn + @" a)
-						{
-							return (a + " + constantRight + @");
-						}
-					}" + Code.ObjectClassDefinition;
-			}
-			else if (constantRight == null)
-			{
-				return @"
-					static class Test
-					{
-						static unsafe " + typeOut + " AddPtr(" + typeIn + @" a)
-						{
-							return (" + constantLeft + @" + a);
-						}
-					}" + Code.ObjectClassDefinition;
-			}
-			else
-			{
-				throw new NotSupportedException();
-			}
+			return TestCode
+				.Replace("#typeInA", typeInA)
+				.Replace("#typeInB", typeInB)
+				.Replace("#typeOut", typeOut)
+				+ Code.AllTestCode;
 		}
 
-		delegate int I4_I4_I4(int a, int b);
-		delegate int I4_I4_I4_Ptr(int a, int b);
-		delegate int I4_I4_I8(int a, long b);
-		delegate int I4_I8_I4(long a, int b);
-		delegate int I4_I4_Constant(int x);
+		private static string TestCodeConstantRight = @"
+			static class Test
+				{
+					static unsafe bool AddPtr(int a, int expect)
+					{
+						return expect == (int)(DoAddPtr((#type)a));
+					}
+
+					static unsafe #type DoAddPtr(#type a)
+					{
+						return a + ((#constantType)#constantValue);
+					}
+				}";
+
+		private static string TestCodeConstantLeft = @"
+			static class Test
+				{
+					static unsafe bool AddPtr(int a, int expect)
+					{
+						return expect == (int)(DoAddPtr((#type)a));
+					}
+
+					static unsafe #type DoAddPtr(#type a)
+					{
+						return ((#constantType)#constantValue) + a;
+					}
+				}";
+
+		private static string CreateConstantRightTestCode(string type, string constantType, string constantValue)
+		{
+			return TestCodeConstantRight
+				.Replace("#type", type)
+				.Replace("#constantType", constantType)
+				.Replace("#constantValue", constantValue)
+				+ Code.AllTestCode;
+		}
+
+		private static string CreateConstantLeftTestCode(string type, string constantType, string constantValue)
+		{
+			return TestCodeConstantLeft
+				.Replace("#type", type)
+				.Replace("#constantType", constantType)
+				.Replace("#constantValue", constantValue)
+				+ Code.AllTestCode;
+		}
 
 		#region C
-		/// <summary>
-		/// Tests addition of an integer to a pointer.
-		/// </summary>
-		/// <param name="a">The pointer value.</param>
-		/// <param name="b">The integer to add to the pointer.</param>
+
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public unsafe void AddCPtrI4Left(int a, int b)
 		{
-			char* pa = (char*)a;
 			CodeSource = CreateTestCode("char*", "int", "char*");
 			UnsafeCode = true;
-			Assert.AreEqual((int)(pa + b), (int)Run<I4_I4_I4>("", "Test", "AddPtr", a, b));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, b, (int)((char*)a + (int)b)));
 		}
 
-		/// <summary>
-		/// Tests addition of a long to a pointer.
-		/// </summary>
-		/// <param name="a">The pointer value.</param>
-		/// <param name="b">The long to add to the pointer.</param>
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
-		public unsafe void AddCPtrI8Left(int a, long b)
+		[Test]
+		public unsafe void AddCPtrI8Left(int a, int b)
 		{
-			char* pa = (char*)a;
 			CodeSource = CreateTestCode("char*", "long", "char*");
 			UnsafeCode = true;
-			Assert.AreEqual((int)(pa + b), (int)Run<I4_I4_I8>("", "Test", "AddPtr", a, b));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, b, (int)((char*)a + (long)b)));
 		}
 
-		/// <summary>
-		/// Tests addition of an integer to a pointer.
-		/// </summary>
-		/// <param name="a">The pointer value.</param>
-		/// <param name="b">The integer to add to the pointer.</param>
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public unsafe void AddCPtrI4Right(int a, int b)
 		{
-			char* pa = (char*)a;
 			CodeSource = CreateTestCode("int", "char*", "char*");
 			UnsafeCode = true;
-			Assert.AreEqual((int)(b + pa), (int)Run<I4_I4_I4>("", "Test", "AddPtr", b, a));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", b, a, (int)((char*)a + (int)b)));
 		}
 
-		/// <summary>
-		/// Tests addition of a long to a pointer.
-		/// </summary>
-		/// <param name="a">The pointer value.</param>
-		/// <param name="b">The long to add to the pointer.</param>
 		//[Row(0, 42)]
 		//[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
-		public unsafe void AddCPtrI8Right(int a, long b)
+		[Test]
+		public unsafe void AddCPtrI8Right(int a, int b)
 		{
-			char* pa = (char*)a;
 			CodeSource = CreateTestCode("long", "char*", "char*");
 			UnsafeCode = true;
-			Assert.AreEqual((int)(pa + b), (int)Run<I4_I8_I4>("", "Test", "AddPtr", b, a));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", b, a, (int)((char*)a + (int)b)));
 		}
 
-		/// <summary>
-		/// Tests addition of an integer to a pointer.
-		/// </summary>
-		/// <param name="a">The pointer value.</param>
-		/// <param name="b">The integer to add to the pointer.</param>
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public unsafe void AddConstantCPtrI4Left(int a, int b)
 		{
-			char* pa = (char*)a;
-			CodeSource = CreateConstantTestCode("char*", "char*", null, b.ToString());
+			CodeSource = CreateConstantLeftTestCode("char*", "int", b.ToString());
 			UnsafeCode = true;
-			Assert.AreEqual((int)(pa + b), (int)Run<I4_I4_Constant>("", "Test", "AddPtr", a));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, (int)((char*)a + (int)b)));
 		}
 
-		/// <summary>
-		/// Tests addition of a long to a pointer.
-		/// </summary>
-		/// <param name="a">The pointer value.</param>
-		/// <param name="b">The long to add to the pointer.</param>
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
-		public unsafe void AddConstantCPtrI8Left(int a, long b)
+		[Test]
+		public unsafe void AddConstantCPtrI8Left(int a, int b)
 		{
-			char* pa = (char*)a;
-			CodeSource = CreateConstantTestCode("char*", "char*", null, b.ToString());
+			CodeSource = CreateConstantLeftTestCode("char*", "long", b.ToString());
 			UnsafeCode = true;
-			Assert.AreEqual((int)(pa + b), (int)Run<I4_I4_Constant>("", "Test", "AddPtr", a));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, (int)((char*)a + (long)b)));
 		}
 
-		/// <summary>
-		/// Tests addition of an integer to a pointer.
-		/// </summary>
-		/// <param name="a">The pointer value.</param>
-		/// <param name="b">The integer to add to the pointer.</param>
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public unsafe void AddConstantCPtrI4Right(int a, int b)
 		{
-			char* pa = (char*)a;
-			CodeSource = CreateConstantTestCode("char*", "char*", b.ToString(), null);
+			CodeSource = CreateConstantRightTestCode("char*", "int", b.ToString());
 			UnsafeCode = true;
-			Assert.AreEqual((int)(b + pa), (int)Run<I4_I4_Constant>("", "Test", "AddPtr", a));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, (int)((char*)a + (int)b)));
 		}
 
-		/// <summary>
-		/// Tests addition of a long to a pointer.
-		/// </summary>
-		/// <param name="a">The pointer value.</param>
-		/// <param name="b">The long to add to the pointer.</param>
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
-		public unsafe void AddConstantCPtrI8Right(int a, long b)
+		[Test]
+		public unsafe void AddConstantCPtrI8Right(int a, int b)
 		{
-			char* pa = (char*)a;
-			CodeSource = CreateConstantTestCode("char*", "char*", b.ToString(), null);
+			CodeSource = CreateConstantLeftTestCode("char*", "long", b.ToString());
 			UnsafeCode = true;
-			Assert.AreEqual((int)(pa + b), (int)Run<I4_I4_Constant>("", "Test", "AddPtr", a));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, (int)((char*)a + (long)b)));
 		}
 		#endregion
 
 		#region U1
-		/// <summary>
-		/// Tests addition of an integer to a pointer.
-		/// </summary>
-		/// <param name="a">The pointer value.</param>
-		/// <param name="b">The integer to add to the pointer.</param>
+
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public unsafe void AddU1PtrI4Left(int a, int b)
 		{
-			byte* pa = (byte*)a;
 			CodeSource = CreateTestCode("byte*", "int", "byte*");
 			UnsafeCode = true;
-			Assert.AreEqual((int)(pa + b), (int)Run<I4_I4_I4>("", "Test", "AddPtr", a, b));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, b, (int)((byte*)a + (int)b)));
 		}
 
-		/// <summary>
-		/// Tests addition of a long to a pointer.
-		/// </summary>
-		/// <param name="a">The pointer value.</param>
-		/// <param name="b">The long to add to the pointer.</param>
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public unsafe void AddU1PtrI8Left(int a, int b)
 		{
-			byte* pa = (byte*)a;
 			CodeSource = CreateTestCode("byte*", "long", "byte*");
 			UnsafeCode = true;
-			Assert.AreEqual((int)(pa + b), (int)Run<I4_I4_I8>("", "Test", "AddPtr", a, b));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, b, (int)((byte*)a + (long)b)));
 		}
 
-		/// <summary>
-		/// Tests addition of an integer to a pointer.
-		/// </summary>
-		/// <param name="a">The pointer value.</param>
-		/// <param name="b">The integer to add to the pointer.</param>
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public unsafe void AddU1PtrI4Right(int a, int b)
 		{
-			byte* pa = (byte*)a;
 			CodeSource = CreateTestCode("int", "byte*", "byte*");
 			UnsafeCode = true;
-			Assert.AreEqual((int)(b + pa), (int)Run<I4_I4_I4>("", "Test", "AddPtr", b, a));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", b, a, (int)((byte*)a + (int)b)));
 		}
 
-		/// <summary>
-		/// Tests addition of a long to a pointer.
-		/// </summary>
-		/// <param name="a">The pointer value.</param>
-		/// <param name="b">The long to add to the pointer.</param>
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public unsafe void AddU1PtrI8Right(int a, int b)
 		{
-			byte* pa = (byte*)a;
 			CodeSource = CreateTestCode("long", "byte*", "byte*");
 			UnsafeCode = true;
-			Assert.AreEqual((int)(b + pa), (int)Run<I4_I8_I4>("", "Test", "AddPtr", b, a));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", b, a, (int)((byte*)a + (int)b)));
 		}
 
-		/// <summary>
-		/// Tests addition of an integer to a pointer.
-		/// </summary>
-		/// <param name="a">The pointer value.</param>
-		/// <param name="b">The integer to add to the pointer.</param>
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public unsafe void AddConstantU1PtrI4Left(int a, int b)
 		{
-			byte* pa = (byte*)a;
-			CodeSource = CreateConstantTestCode("byte*", "byte*", null, b.ToString());
+			CodeSource = CreateConstantLeftTestCode("byte*", "int", b.ToString());
 			UnsafeCode = true;
-			Assert.AreEqual((int)(pa + b), (int)Run<I4_I4_Constant>("", "Test", "AddPtr", a));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, (int)((byte*)a + (int)b)));
 		}
 
-		/// <summary>
-		/// Tests addition of a long to a pointer.
-		/// </summary>
-		/// <param name="a">The pointer value.</param>
-		/// <param name="b">The long to add to the pointer.</param>
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
-		public unsafe void AddConstantU1PtrI8Left(int a, long b)
+		[Test]
+		public unsafe void AddConstantU1PtrI8Left(int a, int b)
 		{
-			byte* pa = (byte*)a;
-			CodeSource = CreateConstantTestCode("byte*", "byte*", null, b.ToString());
+			CodeSource = CreateConstantLeftTestCode("byte*", "long", b.ToString());
 			UnsafeCode = true;
-			Assert.AreEqual((int)(pa + b), (int)Run<I4_I4_Constant>("", "Test", "AddPtr", a));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, (int)((byte*)a + (long)b)));
 		}
 
-		/// <summary>
-		/// Tests addition of an integer to a pointer.
-		/// </summary>
-		/// <param name="a">The pointer value.</param>
-		/// <param name="b">The integer to add to the pointer.</param>
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public unsafe void AddConstantU1PtrI4Right(int a, int b)
 		{
-			byte* pa = (byte*)a;
-			CodeSource = CreateConstantTestCode("byte*", "byte*", b.ToString(), null);
+			CodeSource = CreateConstantRightTestCode("byte*", "int", b.ToString());
 			UnsafeCode = true;
-			Assert.AreEqual((int)(b + pa), (int)Run<I4_I4_Constant>("", "Test", "AddPtr", a));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, (int)((byte*)a + (int)b)));
 		}
 
-		/// <summary>
-		/// Tests addition of a long to a pointer.
-		/// </summary>
-		/// <param name="a">The pointer value.</param>
-		/// <param name="b">The long to add to the pointer.</param>
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
-		public unsafe void AddConstantU1PtrI8Right(int a, long b)
+		[Test]
+		public unsafe void AddConstantU1PtrI8Right(int a, int b)
 		{
-			byte* pa = (byte*)a;
-			CodeSource = CreateConstantTestCode("byte*", "byte*", b.ToString(), null);
+			CodeSource = CreateConstantRightTestCode("byte*", "long", b.ToString());
 			UnsafeCode = true;
-			Assert.AreEqual((int)(pa + b), (int)Run<I4_I4_Constant>("", "Test", "AddPtr", a));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, (int)((byte*)a + (long)b)));
 		}
+
 		#endregion
 
 		#region I4
-		/// <summary>
-		/// Tests addition of an integer to a pointer.
-		/// </summary>
-		/// <param name="a">The pointer value.</param>
-		/// <param name="b">The integer to add to the pointer.</param>
+
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public unsafe void AddI4PtrI4Left(int a, int b)
 		{
-			int* pa = (int*)a;
 			CodeSource = CreateTestCode("int*", "int", "int*");
 			UnsafeCode = true;
-			Assert.AreEqual((int)(pa + b), (int)Run<I4_I4_I4>("", "Test", "AddPtr", a, b));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, b, (int)((int*)a + (int)b)));
 		}
 
-		/// <summary>
-		/// Tests addition of a long to a pointer.
-		/// </summary>
-		/// <param name="a">The pointer value.</param>
-		/// <param name="b">The long to add to the pointer.</param>
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public unsafe void AddI4PtrI8Left(int a, int b)
 		{
-			int* pa = (int*)a;
 			CodeSource = CreateTestCode("int*", "long", "int*");
 			UnsafeCode = true;
-			Assert.AreEqual((int)(pa + b), (int)Run<I4_I4_I8>("", "Test", "AddPtr", a, b));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, b, (int)((int*)a + (long)b)));
 		}
 
-		/// <summary>
-		/// Tests addition of an integer to a pointer.
-		/// </summary>
-		/// <param name="a">The pointer value.</param>
-		/// <param name="b">The integer to add to the pointer.</param>
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public unsafe void AddI4PtrI4Right(int a, int b)
 		{
-			int* pa = (int*)a;
 			CodeSource = CreateTestCode("int", "int*", "int*");
 			UnsafeCode = true;
-			Assert.AreEqual((int)(b + pa), (int)Run<I4_I4_I4>("", "Test", "AddPtr", b, a));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", b, a, (int)((int*)a + (int)b)));
 		}
 
-		/// <summary>
-		/// Tests addition of a long to a pointer.
-		/// </summary>
-		/// <param name="a">The pointer value.</param>
-		/// <param name="b">The long to add to the pointer.</param>
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public unsafe void AddI4PtrI8Right(int a, int b)
 		{
-			int* pa = (int*)a;
 			CodeSource = CreateTestCode("long", "int*", "int*");
 			UnsafeCode = true;
-			Assert.AreEqual((int)(b + pa), (int)Run<I4_I8_I4>("", "Test", "AddPtr", b, a));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", b, a, (int)((int*)a + (long)b)));
 		}
 
-		/// <summary>
-		/// Tests addition of an integer to a pointer.
-		/// </summary>
-		/// <param name="a">The pointer value.</param>
-		/// <param name="b">The integer to add to the pointer.</param>
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public unsafe void AddConstantI4PtrI4Left(int a, int b)
 		{
-			int* pa = (int*)a;
-			CodeSource = CreateConstantTestCode("int*", "int*", null, b.ToString());
+			CodeSource = CreateConstantLeftTestCode("int*", "int", b.ToString());
 			UnsafeCode = true;
-			Assert.AreEqual((int)(pa + b), (int)Run<I4_I4_Constant>("", "Test", "AddPtr", a));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, (int)((int*)a + (int)b)));
 		}
 
-		/// <summary>
-		/// Tests addition of a long to a pointer.
-		/// </summary>
-		/// <param name="a">The pointer value.</param>
-		/// <param name="b">The long to add to the pointer.</param>
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
-		public unsafe void AddConstantI4PtrI8Left(int a, long b)
+		[Test]
+		public unsafe void AddConstantI4PtrI8Left(int a, int b)
 		{
-			int* pa = (int*)a;
-			CodeSource = CreateConstantTestCode("int*", "int*", null, b.ToString());
+			CodeSource = CreateConstantLeftTestCode("int*", "long", b.ToString());
 			UnsafeCode = true;
-			Assert.AreEqual((int)(pa + b), (int)Run<I4_I4_Constant>("", "Test", "AddPtr", a));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, (int)((int*)a + (long)b)));
 		}
 
-		/// <summary>
-		/// Tests addition of an integer to a pointer.
-		/// </summary>
-		/// <param name="a">The pointer value.</param>
-		/// <param name="b">The integer to add to the pointer.</param>
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public unsafe void AddConstantI4PtrI4Right(int a, int b)
 		{
-			int* pa = (int*)a;
-			CodeSource = CreateConstantTestCode("int*", "int*", b.ToString(), null);
+			CodeSource = CreateConstantRightTestCode("int*", "int", b.ToString());
 			UnsafeCode = true;
-			Assert.AreEqual((int)(b + pa), (int)Run<I4_I4_Constant>("", "Test", "AddPtr", a));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, (int)((int*)a + (int)b)));
 		}
 
-		/// <summary>
-		/// Tests addition of a long to a pointer.
-		/// </summary>
-		/// <param name="a">The pointer value.</param>
-		/// <param name="b">The long to add to the pointer.</param>
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
-		public unsafe void AddConstantI4PtrI8Right(int a, long b)
+		[Test]
+		public unsafe void AddConstantI4PtrI8Right(int a, int b)
 		{
-			int* pa = (int*)a;
-			CodeSource = CreateConstantTestCode("int*", "int*", b.ToString(), null);
+			CodeSource = CreateConstantRightTestCode("int*", "long", b.ToString());
 			UnsafeCode = true;
-			Assert.AreEqual((int)(pa + b), (int)Run<I4_I4_Constant>("", "Test", "AddPtr", a));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, (int)((int*)a + (long)b)));
 		}
 		#endregion
 
 		#region I8
-		/// <summary>
-		/// Tests addition of an integer to a pointer.
-		/// </summary>
-		/// <param name="a">The pointer value.</param>
-		/// <param name="b">The integer to add to the pointer.</param>
+
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public unsafe void AddI8PtrI4Left(int a, int b)
 		{
-			long* pa = (long*)a;
 			CodeSource = CreateTestCode("long*", "int", "long*");
 			UnsafeCode = true;
-			Assert.AreEqual((int)(pa + b), (int)Run<I4_I4_I4>("", "Test", "AddPtr", a, b));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, b, (int)((long*)a + (int)b)));
 		}
 
-		/// <summary>
-		/// Tests addition of a long to a pointer.
-		/// </summary>
-		/// <param name="a">The pointer value.</param>
-		/// <param name="b">The long to add to the pointer.</param>
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public unsafe void AddI8PtrI8Left(int a, int b)
 		{
-			long* pa = (long*)a;
 			CodeSource = CreateTestCode("long*", "long", "long*");
 			UnsafeCode = true;
-			Assert.AreEqual((int)(pa + b), (int)Run<I4_I4_I8>("", "Test", "AddPtr", a, b));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, b, (int)((long*)a + (long)b)));
 		}
 
-		/// <summary>
-		/// Tests addition of an integer to a pointer.
-		/// </summary>
-		/// <param name="a">The pointer value.</param>
-		/// <param name="b">The integer to add to the pointer.</param>
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public unsafe void AddI8PtrI4Right(int a, int b)
 		{
-			long* pa = (long*)a;
 			CodeSource = CreateTestCode("int", "long*", "long*");
 			UnsafeCode = true;
-			Assert.AreEqual((int)(b + pa), (int)Run<I4_I4_I4>("", "Test", "AddPtr", b, a));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", b, a, (int)((long*)a + (int)b)));
 		}
 
-		/// <summary>
-		/// Tests addition of a long to a pointer.
-		/// </summary>
-		/// <param name="a">The pointer value.</param>
-		/// <param name="b">The long to add to the pointer.</param>
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public unsafe void AddI8PtrI8Right(int a, int b)
 		{
-			long* pa = (long*)a;
 			CodeSource = CreateTestCode("long", "long*", "long*");
 			UnsafeCode = true;
-			Assert.AreEqual((int)(b + pa), (int)Run<I4_I8_I4>("", "Test", "AddPtr", b, a));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", b, a, (int)((long*)a + (long)b)));
 		}
 
-		/// <summary>
-		/// Tests addition of an integer to a pointer.
-		/// </summary>
-		/// <param name="a">The pointer value.</param>
-		/// <param name="b">The integer to add to the pointer.</param>
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public unsafe void AddConstantI8PtrI4Left(int a, int b)
 		{
-			long* pa = (long*)a;
-			CodeSource = CreateConstantTestCode("long*", "long*", null, b.ToString());
+			CodeSource = CreateConstantLeftTestCode("long*", "int", b.ToString());
 			UnsafeCode = true;
-			Assert.AreEqual((int)(pa + b), (int)Run<I4_I4_Constant>("", "Test", "AddPtr", a));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, (int)((long*)a + (int)b)));
 		}
 
-		/// <summary>
-		/// Tests addition of a long to a pointer.
-		/// </summary>
-		/// <param name="a">The pointer value.</param>
-		/// <param name="b">The long to add to the pointer.</param>
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
-		public unsafe void AddConstantI8PtrI8Left(int a, long b)
+		[Test]
+		public unsafe void AddConstantI8PtrI8Left(int a, int b)
 		{
-			long* pa = (long*)a;
-			CodeSource = CreateConstantTestCode("long*", "long*", null, b.ToString());
+			CodeSource = CreateConstantLeftTestCode("long*", "long", b.ToString());
 			UnsafeCode = true;
-			Assert.AreEqual((int)(pa + b), (int)Run<I4_I4_Constant>("", "Test", "AddPtr", a));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, (int)((long*)a + (long)b)));
 		}
 
-		/// <summary>
-		/// Tests addition of an integer to a pointer.
-		/// </summary>
-		/// <param name="a">The pointer value.</param>
-		/// <param name="b">The integer to add to the pointer.</param>
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public unsafe void AddConstantI8PtrI4Right(int a, int b)
 		{
-			long* pa = (long*)a;
-			CodeSource = CreateConstantTestCode("long*", "long*", b.ToString(), null);
+			CodeSource = CreateConstantRightTestCode("long*", "int", b.ToString());
 			UnsafeCode = true;
-			Assert.AreEqual((int)(b + pa), (int)Run<I4_I4_Constant>("", "Test", "AddPtr", a));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, (int)((long*)a + (int)b)));
 		}
 
-		/// <summary>
-		/// Tests addition of a long to a pointer.
-		/// </summary>
-		/// <param name="a">The pointer value.</param>
-		/// <param name="b">The long to add to the pointer.</param>
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
-		public unsafe void AddConstantI8PtrI8Right(int a, long b)
+		[Test]
+		public unsafe void AddConstantI8PtrI8Right(int a, int b)
 		{
-			long* pa = (long*)a;
-			CodeSource = CreateConstantTestCode("long*", "long*", b.ToString(), null);
+			CodeSource = CreateConstantRightTestCode("long*", "long", b.ToString());
 			UnsafeCode = true;
-			Assert.AreEqual((int)(pa + b), (int)Run<I4_I4_Constant>("", "Test", "AddPtr", a));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, (int)((long*)a + (long)b)));
 		}
 		#endregion
 
 		#region R8
-		/// <summary>
-		/// Tests addition of an integer to a pointer.
-		/// </summary>
-		/// <param name="a">The pointer value.</param>
-		/// <param name="b">The integer to add to the pointer.</param>
+
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public unsafe void AddR8PtrI4Left(int a, int b)
 		{
-			double* pa = (double*)a;
 			CodeSource = CreateTestCode("double*", "int", "double*");
 			UnsafeCode = true;
-			Assert.AreEqual((int)(pa + b), (int)Run<I4_I4_I4>("", "Test", "AddPtr", a, b));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, b, (int)((double*)a + (int)b)));
 		}
 
-		/// <summary>
-		/// Tests addition of a long to a pointer.
-		/// </summary>
-		/// <param name="a">The pointer value.</param>
-		/// <param name="b">The long to add to the pointer.</param>
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public unsafe void AddR8PtrI8Left(int a, int b)
 		{
-			long* pa = (long*)a;
 			CodeSource = CreateTestCode("double*", "long", "double*");
 			UnsafeCode = true;
-			Assert.AreEqual((int)(pa + b), (int)Run<I4_I4_I8>("", "Test", "AddPtr", a, b));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, b, (int)((double*)a + (long)b)));
 		}
 
-		/// <summary>
-		/// Tests addition of an integer to a pointer.
-		/// </summary>
-		/// <param name="a">The pointer value.</param>
-		/// <param name="b">The integer to add to the pointer.</param>
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public unsafe void AddR8PtrI4Right(int a, int b)
 		{
-			double* pa = (double*)a;
 			CodeSource = CreateTestCode("long", "double*", "double*");
 			UnsafeCode = true;
-			Assert.AreEqual((int)(b + pa), (int)Run<I4_I8_I4>("", "Test", "AddPtr", b, a));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", b, a, (int)((double*)a + (long)b)));
 		}
 
-		/// <summary>
-		/// Tests addition of a long to a pointer.
-		/// </summary>
-		/// <param name="a">The pointer value.</param>
-		/// <param name="b">The long to add to the pointer.</param>
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public unsafe void AddR8PtrI8Right(int a, int b)
 		{
-			double* pa = (double*)a;
 			CodeSource = CreateTestCode("long", "double*", "double*");
 			UnsafeCode = true;
-			Assert.AreEqual((int)(b + pa), (int)Run<I4_I8_I4>("", "Test", "AddPtr", b, a));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", b, a, (int)((double*)a + (long)b)));
 		}
 
-		/// <summary>
-		/// Tests addition of an integer to a pointer.
-		/// </summary>
-		/// <param name="a">The pointer value.</param>
-		/// <param name="b">The integer to add to the pointer.</param>
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public unsafe void AddConstantR8PtrI4Left(int a, int b)
 		{
-			double* pa = (double*)a;
-			CodeSource = CreateConstantTestCode("double*", "double*", null, b.ToString());
+			CodeSource = CreateConstantLeftTestCode("double*", "int", b.ToString());
 			UnsafeCode = true;
-			Assert.AreEqual((int)(pa + b), (int)Run<I4_I4_Constant>("", "Test", "AddPtr", a));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, (int)((double*)a + (int)b)));
 		}
 
-		/// <summary>
-		/// Tests addition of a long to a pointer.
-		/// </summary>
-		/// <param name="a">The pointer value.</param>
-		/// <param name="b">The long to add to the pointer.</param>
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
-		public unsafe void AddConstantR8PtrI8Left(int a, long b)
+		[Test]
+		public unsafe void AddConstantR8PtrI8Left(int a, int b)
 		{
-			double* pa = (double*)a;
-			CodeSource = CreateConstantTestCode("double*", "double*", null, b.ToString());
+			CodeSource = CreateConstantLeftTestCode("double*", "long", b.ToString());
 			UnsafeCode = true;
-			Assert.AreEqual((int)(pa + b), (int)Run<I4_I4_Constant>("", "Test", "AddPtr", a));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, (int)((double*)a + (long)b)));
 		}
 
-		/// <summary>
-		/// Tests addition of an integer to a pointer.
-		/// </summary>
-		/// <param name="a">The pointer value.</param>
-		/// <param name="b">The integer to add to the pointer.</param>
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public unsafe void AddConstantR8PtrI4Right(int a, int b)
 		{
-			double* pa = (double*)a;
-			CodeSource = CreateConstantTestCode("double*", "double*", b.ToString(), null);
+			CodeSource = CreateConstantRightTestCode("double*", "int", b.ToString());
 			UnsafeCode = true;
-			Assert.AreEqual((int)(b + pa), (int)Run<I4_I4_Constant>("", "Test", "AddPtr", a));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, (int)((double*)a + (int)b)));
 		}
 
-		/// <summary>
-		/// Tests addition of a long to a pointer.
-		/// </summary>
-		/// <param name="a">The pointer value.</param>
-		/// <param name="b">The long to add to the pointer.</param>
 		[Row(0, 42)]
 		[Row(int.MaxValue, 42)]
 		[Row(42, 0)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
-		public unsafe void AddConstantR8PtrI8Right(int a, long b)
+		[Test]
+		public unsafe void AddConstantR8PtrI8Right(int a, int b)
 		{
-			double* pa = (double*)a;
-			CodeSource = CreateConstantTestCode("double*", "double*", b.ToString(), null);
+			CodeSource = CreateConstantRightTestCode("double*", "long", b.ToString());
 			UnsafeCode = true;
-			Assert.AreEqual((int)(pa + b), (int)Run<I4_I4_Constant>("", "Test", "AddPtr", a));
+			Assert.IsTrue(Run<bool>("", "Test", "AddPtr", a, (int)((double*)a + (long)b)));
 		}
+
 		#endregion
 	}
 }

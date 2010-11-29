@@ -28,17 +28,18 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(frmMain));
-			this.panel1 = new System.Windows.Forms.Panel();
+			System.Windows.Forms.Label methodLabel;
+			System.Windows.Forms.Label labelLabel;
+			System.Windows.Forms.Label stageLabel;
+			System.Windows.Forms.GroupBox formatOptionsGroupBox;
+			this.cbRemoveNextPrev = new System.Windows.Forms.CheckBox();
+			this.cbSpace = new System.Windows.Forms.CheckBox();
 			this.cbStage = new System.Windows.Forms.CheckBox();
-			this.cbBlock = new System.Windows.Forms.CheckBox();
-			this.cbBlocks = new System.Windows.Forms.ComboBox();
 			this.cbLabel = new System.Windows.Forms.CheckBox();
 			this.cbLabels = new System.Windows.Forms.ComboBox();
-			this.btnUpdate = new System.Windows.Forms.Button();
-			this.label2 = new System.Windows.Forms.Label();
+			this.refreshButton = new System.Windows.Forms.Button();
 			this.cbMethods = new System.Windows.Forms.ComboBox();
-			this.btnLoad = new System.Windows.Forms.Button();
+			this.loadButton = new System.Windows.Forms.Button();
 			this.cbStages = new System.Windows.Forms.ComboBox();
 			this.tabControl1 = new System.Windows.Forms.TabControl();
 			this.Result = new System.Windows.Forms.TabPage();
@@ -48,184 +49,223 @@
 			this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
 			this.lbStatus = new System.Windows.Forms.ToolStripStatusLabel();
-			this.cbRemoveNextPrev = new System.Windows.Forms.CheckBox();
-			this.cbSpace = new System.Windows.Forms.CheckBox();
-			this.panel1.SuspendLayout();
+			this.panel1 = new System.Windows.Forms.FlowLayoutPanel();
+			this.saveButton = new System.Windows.Forms.Button();
+			this.resetButton = new System.Windows.Forms.Button();
+			this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
+			methodLabel = new System.Windows.Forms.Label();
+			labelLabel = new System.Windows.Forms.Label();
+			stageLabel = new System.Windows.Forms.Label();
+			formatOptionsGroupBox = new System.Windows.Forms.GroupBox();
+			formatOptionsGroupBox.SuspendLayout();
 			this.tabControl1.SuspendLayout();
 			this.Result.SuspendLayout();
 			this.Source.SuspendLayout();
 			this.statusStrip1.SuspendLayout();
+			this.panel1.SuspendLayout();
 			this.SuspendLayout();
 			// 
-			// panel1
+			// methodLabel
 			// 
-			this.panel1.Controls.Add(this.cbSpace);
-			this.panel1.Controls.Add(this.cbRemoveNextPrev);
-			this.panel1.Controls.Add(this.cbStage);
-			this.panel1.Controls.Add(this.cbBlock);
-			this.panel1.Controls.Add(this.cbBlocks);
-			this.panel1.Controls.Add(this.cbLabel);
-			this.panel1.Controls.Add(this.cbLabels);
-			this.panel1.Controls.Add(this.btnUpdate);
-			this.panel1.Controls.Add(this.label2);
-			this.panel1.Controls.Add(this.cbMethods);
-			this.panel1.Controls.Add(this.btnLoad);
-			this.panel1.Controls.Add(this.cbStages);
-			this.panel1.Location = new System.Drawing.Point(1, 2);
-			this.panel1.Name = "panel1";
-			this.panel1.Size = new System.Drawing.Size(260, 439);
-			this.panel1.TabIndex = 1;
+			methodLabel.AutoSize = true;
+			methodLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			methodLabel.Location = new System.Drawing.Point(10, 110);
+			methodLabel.Margin = new System.Windows.Forms.Padding(4);
+			methodLabel.Name = "methodLabel";
+			methodLabel.Size = new System.Drawing.Size(59, 17);
+			methodLabel.TabIndex = 4;
+			methodLabel.Text = "Method:";
+			// 
+			// labelLabel
+			// 
+			labelLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			labelLabel.Location = new System.Drawing.Point(10, 229);
+			labelLabel.Margin = new System.Windows.Forms.Padding(4);
+			labelLabel.Name = "labelLabel";
+			labelLabel.Size = new System.Drawing.Size(158, 20);
+			labelLabel.TabIndex = 17;
+			labelLabel.Text = "Label:";
+			// 
+			// stageLabel
+			// 
+			stageLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			stageLabel.Location = new System.Drawing.Point(10, 167);
+			stageLabel.Margin = new System.Windows.Forms.Padding(4);
+			stageLabel.Name = "stageLabel";
+			stageLabel.Size = new System.Drawing.Size(158, 20);
+			stageLabel.TabIndex = 18;
+			stageLabel.Text = "Stage:";
+			// 
+			// formatOptionsGroupBox
+			// 
+			formatOptionsGroupBox.Controls.Add(this.cbRemoveNextPrev);
+			formatOptionsGroupBox.Controls.Add(this.cbSpace);
+			formatOptionsGroupBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			formatOptionsGroupBox.Location = new System.Drawing.Point(10, 291);
+			formatOptionsGroupBox.Margin = new System.Windows.Forms.Padding(4);
+			formatOptionsGroupBox.Name = "formatOptionsGroupBox";
+			formatOptionsGroupBox.Padding = new System.Windows.Forms.Padding(4);
+			formatOptionsGroupBox.Size = new System.Drawing.Size(248, 191);
+			formatOptionsGroupBox.TabIndex = 19;
+			formatOptionsGroupBox.TabStop = false;
+			formatOptionsGroupBox.Text = "Formatting Options";
+			// 
+			// cbRemoveNextPrev
+			// 
+			this.cbRemoveNextPrev.AutoSize = true;
+			this.cbRemoveNextPrev.Checked = true;
+			this.cbRemoveNextPrev.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.cbRemoveNextPrev.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.cbRemoveNextPrev.Location = new System.Drawing.Point(8, 59);
+			this.cbRemoveNextPrev.Margin = new System.Windows.Forms.Padding(4);
+			this.cbRemoveNextPrev.Name = "cbRemoveNextPrev";
+			this.cbRemoveNextPrev.Size = new System.Drawing.Size(172, 21);
+			this.cbRemoveNextPrev.TabIndex = 12;
+			this.cbRemoveNextPrev.Text = "Remove next/prev info.";
+			this.cbRemoveNextPrev.UseVisualStyleBackColor = true;
+			this.cbRemoveNextPrev.CheckStateChanged += new System.EventHandler(this.refreshButton_Click);
+			// 
+			// cbSpace
+			// 
+			this.cbSpace.AutoSize = true;
+			this.cbSpace.Checked = true;
+			this.cbSpace.CheckState = System.Windows.Forms.CheckState.Checked;
+			this.cbSpace.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.cbSpace.Location = new System.Drawing.Point(8, 27);
+			this.cbSpace.Margin = new System.Windows.Forms.Padding(4);
+			this.cbSpace.Name = "cbSpace";
+			this.cbSpace.Size = new System.Drawing.Size(164, 21);
+			this.cbSpace.TabIndex = 13;
+			this.cbSpace.Text = "Add space after block";
+			this.cbSpace.UseVisualStyleBackColor = true;
+			this.cbSpace.CheckedChanged += new System.EventHandler(this.refreshButton_Click);
 			// 
 			// cbStage
 			// 
 			this.cbStage.AutoSize = true;
 			this.cbStage.Checked = true;
 			this.cbStage.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.cbStage.Location = new System.Drawing.Point(11, 118);
+			this.cbStage.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.cbStage.Location = new System.Drawing.Point(176, 167);
+			this.cbStage.Margin = new System.Windows.Forms.Padding(4);
 			this.cbStage.Name = "cbStage";
-			this.cbStage.Size = new System.Drawing.Size(57, 17);
+			this.cbStage.Size = new System.Drawing.Size(73, 21);
 			this.cbStage.TabIndex = 11;
-			this.cbStage.Text = "Stage:";
+			this.cbStage.Text = "Display";
 			this.cbStage.UseVisualStyleBackColor = true;
-			this.cbStage.CheckedChanged += new System.EventHandler(this.btnUpdate_Click);
-			// 
-			// cbBlock
-			// 
-			this.cbBlock.AutoSize = true;
-			this.cbBlock.Location = new System.Drawing.Point(10, 368);
-			this.cbBlock.Name = "cbBlock";
-			this.cbBlock.Size = new System.Drawing.Size(56, 17);
-			this.cbBlock.TabIndex = 10;
-			this.cbBlock.Text = "Block:";
-			this.cbBlock.UseVisualStyleBackColor = true;
-			this.cbBlock.Visible = false;
-			this.cbBlock.CheckedChanged += new System.EventHandler(this.btnUpdate_Click);
-			// 
-			// cbBlocks
-			// 
-			this.cbBlocks.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.cbBlocks.Font = new System.Drawing.Font("Arial Narrow", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.cbBlocks.FormattingEnabled = true;
-			this.cbBlocks.Location = new System.Drawing.Point(4, 388);
-			this.cbBlocks.MaxDropDownItems = 20;
-			this.cbBlocks.Name = "cbBlocks";
-			this.cbBlocks.Size = new System.Drawing.Size(245, 23);
-			this.cbBlocks.TabIndex = 9;
-			this.cbBlocks.Visible = false;
+			this.cbStage.CheckedChanged += new System.EventHandler(this.refreshButton_Click);
 			// 
 			// cbLabel
 			// 
 			this.cbLabel.AutoSize = true;
-			this.cbLabel.Location = new System.Drawing.Point(11, 174);
+			this.cbLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.cbLabel.Location = new System.Drawing.Point(176, 229);
+			this.cbLabel.Margin = new System.Windows.Forms.Padding(4);
 			this.cbLabel.Name = "cbLabel";
-			this.cbLabel.Size = new System.Drawing.Size(55, 17);
+			this.cbLabel.Size = new System.Drawing.Size(73, 21);
 			this.cbLabel.TabIndex = 8;
-			this.cbLabel.Text = "Label:";
+			this.cbLabel.Text = "Display";
 			this.cbLabel.UseVisualStyleBackColor = true;
-			this.cbLabel.CheckedChanged += new System.EventHandler(this.btnUpdate_Click);
+			this.cbLabel.CheckedChanged += new System.EventHandler(this.refreshButton_Click);
 			// 
 			// cbLabels
 			// 
 			this.cbLabels.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.cbLabels.Font = new System.Drawing.Font("Arial Narrow", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.cbLabels.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.cbLabels.FormattingEnabled = true;
-			this.cbLabels.Location = new System.Drawing.Point(6, 197);
+			this.cbLabels.Location = new System.Drawing.Point(10, 258);
+			this.cbLabels.Margin = new System.Windows.Forms.Padding(4);
 			this.cbLabels.MaxDropDownItems = 20;
 			this.cbLabels.Name = "cbLabels";
-			this.cbLabels.Size = new System.Drawing.Size(245, 23);
+			this.cbLabels.Size = new System.Drawing.Size(248, 24);
 			this.cbLabels.TabIndex = 6;
 			this.cbLabels.SelectionChangeCommitted += new System.EventHandler(this.cbLabels_SelectionChangeCommitted);
 			// 
-			// btnUpdate
+			// refreshButton
 			// 
-			this.btnUpdate.Image = ((System.Drawing.Image)(resources.GetObject("btnUpdate.Image")));
-			this.btnUpdate.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.btnUpdate.Location = new System.Drawing.Point(17, 304);
-			this.btnUpdate.Name = "btnUpdate";
-			this.btnUpdate.Size = new System.Drawing.Size(213, 41);
-			this.btnUpdate.TabIndex = 5;
-			this.btnUpdate.Text = "Update";
-			this.btnUpdate.UseVisualStyleBackColor = true;
-			this.btnUpdate.Click += new System.EventHandler(this.btnUpdate_Click);
-			// 
-			// label2
-			// 
-			this.label2.AutoSize = true;
-			this.label2.Location = new System.Drawing.Point(11, 68);
-			this.label2.Name = "label2";
-			this.label2.Size = new System.Drawing.Size(46, 13);
-			this.label2.TabIndex = 4;
-			this.label2.Text = "Method:";
+			this.refreshButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.refreshButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.refreshButton.Location = new System.Drawing.Point(10, 60);
+			this.refreshButton.Margin = new System.Windows.Forms.Padding(4);
+			this.refreshButton.Name = "refreshButton";
+			this.refreshButton.Size = new System.Drawing.Size(120, 42);
+			this.refreshButton.TabIndex = 5;
+			this.refreshButton.Text = "Refresh";
+			this.refreshButton.UseVisualStyleBackColor = true;
+			this.refreshButton.Click += new System.EventHandler(this.refreshButton_Click);
 			// 
 			// cbMethods
 			// 
 			this.cbMethods.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.cbMethods.Font = new System.Drawing.Font("Arial Narrow", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.cbMethods.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.cbMethods.FormattingEnabled = true;
-			this.cbMethods.Location = new System.Drawing.Point(5, 84);
+			this.cbMethods.Location = new System.Drawing.Point(10, 135);
+			this.cbMethods.Margin = new System.Windows.Forms.Padding(4);
 			this.cbMethods.MaxDropDownItems = 20;
 			this.cbMethods.Name = "cbMethods";
-			this.cbMethods.Size = new System.Drawing.Size(246, 23);
+			this.cbMethods.Size = new System.Drawing.Size(248, 24);
 			this.cbMethods.TabIndex = 3;
 			this.cbMethods.SelectionChangeCommitted += new System.EventHandler(this.cbMethods_SelectionChangeCommitted);
 			// 
-			// btnLoad
+			// loadButton
 			// 
-			this.btnLoad.Image = ((System.Drawing.Image)(resources.GetObject("btnLoad.Image")));
-			this.btnLoad.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
-			this.btnLoad.Location = new System.Drawing.Point(17, 11);
-			this.btnLoad.Name = "btnLoad";
-			this.btnLoad.Size = new System.Drawing.Size(213, 41);
-			this.btnLoad.TabIndex = 1;
-			this.btnLoad.Text = "Load Output";
-			this.btnLoad.UseVisualStyleBackColor = true;
-			this.btnLoad.Click += new System.EventHandler(this.button1_Click);
+			this.loadButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.loadButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.loadButton.Location = new System.Drawing.Point(10, 10);
+			this.loadButton.Margin = new System.Windows.Forms.Padding(4);
+			this.loadButton.Name = "loadButton";
+			this.loadButton.Size = new System.Drawing.Size(120, 42);
+			this.loadButton.TabIndex = 1;
+			this.loadButton.Text = "Load...";
+			this.loadButton.UseVisualStyleBackColor = true;
+			this.loadButton.Click += new System.EventHandler(this.loadButton_Click);
 			// 
 			// cbStages
 			// 
 			this.cbStages.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.cbStages.Font = new System.Drawing.Font("Arial Narrow", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.cbStages.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.cbStages.FormattingEnabled = true;
-			this.cbStages.Location = new System.Drawing.Point(5, 138);
+			this.cbStages.Location = new System.Drawing.Point(10, 196);
+			this.cbStages.Margin = new System.Windows.Forms.Padding(4);
 			this.cbStages.MaxDropDownItems = 20;
 			this.cbStages.Name = "cbStages";
-			this.cbStages.Size = new System.Drawing.Size(245, 23);
+			this.cbStages.Size = new System.Drawing.Size(248, 24);
 			this.cbStages.TabIndex = 0;
 			this.cbStages.SelectionChangeCommitted += new System.EventHandler(this.cbStages_SelectionChangeCommitted);
 			// 
 			// tabControl1
 			// 
-			this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-						| System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
 			this.tabControl1.Controls.Add(this.Result);
 			this.tabControl1.Controls.Add(this.Source);
-			this.tabControl1.Location = new System.Drawing.Point(257, 2);
+			this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tabControl1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.tabControl1.Location = new System.Drawing.Point(268, 0);
+			this.tabControl1.Margin = new System.Windows.Forms.Padding(5);
 			this.tabControl1.Name = "tabControl1";
 			this.tabControl1.SelectedIndex = 0;
-			this.tabControl1.Size = new System.Drawing.Size(525, 439);
+			this.tabControl1.Size = new System.Drawing.Size(746, 578);
 			this.tabControl1.TabIndex = 2;
 			// 
 			// Result
 			// 
 			this.Result.Controls.Add(this.tbResult);
-			this.Result.Location = new System.Drawing.Point(4, 22);
+			this.Result.Location = new System.Drawing.Point(4, 25);
+			this.Result.Margin = new System.Windows.Forms.Padding(5);
 			this.Result.Name = "Result";
-			this.Result.Padding = new System.Windows.Forms.Padding(3);
-			this.Result.Size = new System.Drawing.Size(517, 413);
+			this.Result.Padding = new System.Windows.Forms.Padding(5);
+			this.Result.Size = new System.Drawing.Size(738, 549);
 			this.Result.TabIndex = 0;
 			this.Result.Text = "Result";
 			this.Result.UseVisualStyleBackColor = true;
 			// 
 			// tbResult
 			// 
-			this.tbResult.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-						| System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
-			this.tbResult.Font = new System.Drawing.Font("Lucida Console", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.tbResult.Location = new System.Drawing.Point(0, 0);
+			this.tbResult.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tbResult.Font = new System.Drawing.Font("Lucida Console", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.tbResult.Location = new System.Drawing.Point(5, 5);
+			this.tbResult.Margin = new System.Windows.Forms.Padding(5);
 			this.tbResult.Name = "tbResult";
-			this.tbResult.Size = new System.Drawing.Size(516, 395);
+			this.tbResult.Size = new System.Drawing.Size(728, 539);
 			this.tbResult.TabIndex = 2;
 			this.tbResult.Text = "";
 			this.tbResult.WordWrap = false;
@@ -233,23 +273,22 @@
 			// Source
 			// 
 			this.Source.Controls.Add(this.tbSource);
-			this.Source.Location = new System.Drawing.Point(4, 22);
+			this.Source.Location = new System.Drawing.Point(4, 25);
+			this.Source.Margin = new System.Windows.Forms.Padding(5);
 			this.Source.Name = "Source";
-			this.Source.Padding = new System.Windows.Forms.Padding(3);
-			this.Source.Size = new System.Drawing.Size(517, 413);
+			this.Source.Padding = new System.Windows.Forms.Padding(5);
+			this.Source.Size = new System.Drawing.Size(738, 549);
 			this.Source.TabIndex = 1;
 			this.Source.Text = "Source";
 			this.Source.UseVisualStyleBackColor = true;
 			// 
 			// tbSource
 			// 
-			this.tbSource.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
-						| System.Windows.Forms.AnchorStyles.Left)
-						| System.Windows.Forms.AnchorStyles.Right)));
-			this.tbSource.Font = new System.Drawing.Font("Lucida Console", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.tbSource.Location = new System.Drawing.Point(0, 0);
+			this.tbSource.Dock = System.Windows.Forms.DockStyle.Fill;
+			this.tbSource.Location = new System.Drawing.Point(5, 5);
+			this.tbSource.Margin = new System.Windows.Forms.Padding(5);
 			this.tbSource.Name = "tbSource";
-			this.tbSource.Size = new System.Drawing.Size(521, 413);
+			this.tbSource.Size = new System.Drawing.Size(728, 539);
 			this.tbSource.TabIndex = 1;
 			this.tbSource.Text = "";
 			this.tbSource.WordWrap = false;
@@ -259,62 +298,89 @@
 			// 
 			this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.lbStatus});
-			this.statusStrip1.Location = new System.Drawing.Point(0, 422);
+			this.statusStrip1.Location = new System.Drawing.Point(0, 578);
 			this.statusStrip1.Name = "statusStrip1";
-			this.statusStrip1.Size = new System.Drawing.Size(782, 22);
+			this.statusStrip1.Padding = new System.Windows.Forms.Padding(3, 0, 24, 0);
+			this.statusStrip1.Size = new System.Drawing.Size(1014, 22);
 			this.statusStrip1.TabIndex = 3;
 			this.statusStrip1.Text = "statusStrip1";
 			// 
 			// lbStatus
 			// 
 			this.lbStatus.Name = "lbStatus";
-			this.lbStatus.Size = new System.Drawing.Size(118, 17);
-			this.lbStatus.Text = "toolStripStatusLabel1";
+			this.lbStatus.Size = new System.Drawing.Size(145, 17);
+			this.lbStatus.Text = "MOSA Compiler Visualizer";
 			// 
-			// cbRemoveNextPrev
+			// panel1
 			// 
-			this.cbRemoveNextPrev.AutoSize = true;
-			this.cbRemoveNextPrev.Checked = true;
-			this.cbRemoveNextPrev.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.cbRemoveNextPrev.Location = new System.Drawing.Point(11, 238);
-			this.cbRemoveNextPrev.Name = "cbRemoveNextPrev";
-			this.cbRemoveNextPrev.Size = new System.Drawing.Size(169, 17);
-			this.cbRemoveNextPrev.TabIndex = 12;
-			this.cbRemoveNextPrev.Text = "Remove next/prev information";
-			this.cbRemoveNextPrev.UseVisualStyleBackColor = true;
-			this.cbRemoveNextPrev.CheckStateChanged += new System.EventHandler(this.btnUpdate_Click);
+			this.panel1.Controls.Add(this.loadButton);
+			this.panel1.Controls.Add(this.saveButton);
+			this.panel1.Controls.Add(this.refreshButton);
+			this.panel1.Controls.Add(this.resetButton);
+			this.panel1.Controls.Add(methodLabel);
+			this.panel1.Controls.Add(this.cbMethods);
+			this.panel1.Controls.Add(stageLabel);
+			this.panel1.Controls.Add(this.cbStage);
+			this.panel1.Controls.Add(this.cbStages);
+			this.panel1.Controls.Add(labelLabel);
+			this.panel1.Controls.Add(this.cbLabel);
+			this.panel1.Controls.Add(this.cbLabels);
+			this.panel1.Controls.Add(formatOptionsGroupBox);
+			this.panel1.Dock = System.Windows.Forms.DockStyle.Left;
+			this.panel1.Location = new System.Drawing.Point(0, 0);
+			this.panel1.Margin = new System.Windows.Forms.Padding(0);
+			this.panel1.Name = "panel1";
+			this.panel1.Padding = new System.Windows.Forms.Padding(6);
+			this.panel1.Size = new System.Drawing.Size(268, 578);
+			this.panel1.TabIndex = 1;
 			// 
-			// cbSpace
+			// saveButton
 			// 
-			this.cbSpace.AutoSize = true;
-			this.cbSpace.Checked = true;
-			this.cbSpace.CheckState = System.Windows.Forms.CheckState.Checked;
-			this.cbSpace.Location = new System.Drawing.Point(11, 261);
-			this.cbSpace.Name = "cbSpace";
-			this.cbSpace.Size = new System.Drawing.Size(130, 17);
-			this.cbSpace.TabIndex = 13;
-			this.cbSpace.Text = "Add space after block";
-			this.cbSpace.UseVisualStyleBackColor = true;
-			this.cbSpace.CheckedChanged += new System.EventHandler(this.btnUpdate_Click);
+			this.saveButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.saveButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.saveButton.Location = new System.Drawing.Point(138, 10);
+			this.saveButton.Margin = new System.Windows.Forms.Padding(4);
+			this.saveButton.Name = "saveButton";
+			this.saveButton.Size = new System.Drawing.Size(120, 42);
+			this.saveButton.TabIndex = 14;
+			this.saveButton.Text = "Save...";
+			this.saveButton.UseVisualStyleBackColor = true;
+			this.saveButton.Click += new System.EventHandler(this.saveButton_Click);
+			// 
+			// resetButton
+			// 
+			this.resetButton.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.resetButton.ImageAlign = System.Drawing.ContentAlignment.MiddleLeft;
+			this.resetButton.Location = new System.Drawing.Point(138, 60);
+			this.resetButton.Margin = new System.Windows.Forms.Padding(4);
+			this.resetButton.Name = "resetButton";
+			this.resetButton.Size = new System.Drawing.Size(120, 42);
+			this.resetButton.TabIndex = 15;
+			this.resetButton.Text = "Reset";
+			this.resetButton.UseVisualStyleBackColor = true;
 			// 
 			// frmMain
 			// 
-			this.AcceptButton = this.btnUpdate;
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+			this.AcceptButton = this.refreshButton;
+			this.AutoScaleDimensions = new System.Drawing.SizeF(9F, 20F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(782, 444);
-			this.Controls.Add(this.statusStrip1);
+			this.ClientSize = new System.Drawing.Size(1014, 600);
 			this.Controls.Add(this.tabControl1);
 			this.Controls.Add(this.panel1);
+			this.Controls.Add(this.statusStrip1);
+			this.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.Margin = new System.Windows.Forms.Padding(5);
 			this.Name = "frmMain";
 			this.Text = "MOSA Compiler Visualizer";
-			this.panel1.ResumeLayout(false);
-			this.panel1.PerformLayout();
+			formatOptionsGroupBox.ResumeLayout(false);
+			formatOptionsGroupBox.PerformLayout();
 			this.tabControl1.ResumeLayout(false);
 			this.Result.ResumeLayout(false);
 			this.Source.ResumeLayout(false);
 			this.statusStrip1.ResumeLayout(false);
 			this.statusStrip1.PerformLayout();
+			this.panel1.ResumeLayout(false);
+			this.panel1.PerformLayout();
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -322,17 +388,13 @@
 
 		#endregion
 
-		private System.Windows.Forms.Panel panel1;
-		private System.Windows.Forms.ComboBox cbMethods;
-		private System.Windows.Forms.Button btnLoad;
+        private System.Windows.Forms.ComboBox cbMethods;
+		private System.Windows.Forms.Button loadButton;
 		private System.Windows.Forms.ComboBox cbStages;
-		private System.Windows.Forms.Button btnUpdate;
-		private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.Button refreshButton;
 		private System.Windows.Forms.CheckBox cbLabel;
 		private System.Windows.Forms.ComboBox cbLabels;
 		private System.Windows.Forms.CheckBox cbStage;
-		private System.Windows.Forms.CheckBox cbBlock;
-		private System.Windows.Forms.ComboBox cbBlocks;
 		private System.Windows.Forms.TabControl tabControl1;
 		private System.Windows.Forms.TabPage Result;
 		private System.Windows.Forms.TabPage Source;
@@ -343,6 +405,10 @@
 		private System.Windows.Forms.ToolStripStatusLabel lbStatus;
 		private System.Windows.Forms.CheckBox cbRemoveNextPrev;
 		private System.Windows.Forms.CheckBox cbSpace;
+        private System.Windows.Forms.FlowLayoutPanel panel1;
+        private System.Windows.Forms.Button saveButton;
+        private System.Windows.Forms.Button resetButton;
+		private System.Windows.Forms.SaveFileDialog saveFileDialog1;
 	}
 }
 

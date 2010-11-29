@@ -16,7 +16,7 @@ using IR = Mosa.Runtime.CompilerFramework.IR;
 using Mosa.Runtime.CompilerFramework;
 
 
-namespace Mosa.Platforms.x86.CPUx86
+namespace Mosa.Platform.X86.CPUx86
 {
 	/// <summary>
 	/// Representations the x86 pause instruction.

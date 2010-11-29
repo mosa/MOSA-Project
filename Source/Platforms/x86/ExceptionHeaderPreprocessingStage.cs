@@ -17,7 +17,7 @@ using Mosa.Runtime.Metadata;
 using Mosa.Runtime.CompilerFramework;
 using IR = Mosa.Runtime.CompilerFramework.IR;
 
-namespace Mosa.Platforms.x86
+namespace Mosa.Platform.X86
 {
 	/// <summary>
 	/// 
@@ -45,7 +45,7 @@ namespace Mosa.Platforms.x86
 		{
 			ProcessExceptionClauseLabels();
 			// Iterate all blocks and preprocess them
-			foreach (BasicBlock block in BasicBlocks)
+			foreach (BasicBlock block in basicBlocks)
 				ProcessBlock(block);
 		}
 
@@ -56,7 +56,7 @@ namespace Mosa.Platforms.x86
 		{
 			this.labelMapping.Clear();
 
-			foreach (EhClause clause in this.MethodCompiler.Method.ExceptionClauseHeader.Clauses)
+			foreach (EhClause clause in this.methodCompiler.Method.ExceptionClauseHeader.Clauses)
 			{
 				AddClauseLabels(clause);
 			}

@@ -31,7 +31,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 		private TokenTypes nameIdx;
 
 		/// <summary>
-		/// Holds the method signature.
+		/// Holds the blob location of the signature.
 		/// </summary>
 		private TokenTypes signatureBlobIdx;
 
@@ -91,9 +91,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 		/// <returns>The method signature.</returns>
 		protected override MethodSignature GetMethodSignature()
 		{
-			MethodSignature signature = new MethodSignature();
-			signature.LoadSignature(this, this.MetadataModule.Metadata, this.signatureBlobIdx);
-			return signature;
+			return new MethodSignature(MetadataModule.Metadata, signatureBlobIdx);
 		}
 
 		/// <summary>

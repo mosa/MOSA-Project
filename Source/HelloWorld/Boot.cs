@@ -7,7 +7,7 @@
 
 using System;
 
-using Mosa.Platforms.x86;
+using Mosa.Platform.X86.Instrinics;
 using Mosa.Kernel;
 using Mosa.Kernel.X86;
 using Mosa.Kernel.X86.Smbios;

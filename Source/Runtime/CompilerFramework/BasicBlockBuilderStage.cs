@@ -235,10 +235,10 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		private void LinkExceptionHeaderClauses()
 		{
-			foreach (BasicBlock block in this.BasicBlocks)
+			foreach (BasicBlock block in this.basicBlocks)
 			{
 				for (Context ctx = CreateContext(block); !ctx.EndOfInstruction; ctx.GotoNext())
-					this.MethodCompiler.Method.ExceptionClauseHeader.LinkBlockToClause(ctx, block);
+					this.methodCompiler.Method.ExceptionClauseHeader.LinkBlockToClause(ctx, block);
 			}
 		}
 	}

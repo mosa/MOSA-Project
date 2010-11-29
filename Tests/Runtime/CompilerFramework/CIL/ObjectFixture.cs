@@ -18,7 +18,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CIL
 	[Description(@"Tests new operator, type checking and virtual method calls.")]
 	public class ObjectFixture : CodeDomTestRunner
 	{
-		public static readonly string TestCode = @"
+		 static readonly string TestCode = @"
 			public class Base
 			{
 				public int Test()
@@ -75,49 +75,39 @@ namespace Test.Mosa.Runtime.CompilerFramework.CIL
 					Derived d = new Derived(21, 2, 7);
 					return (d.int32 == 49);
 				}
-			}
-		" + Code.ObjectClassDefinition;
-
-		public delegate bool TestCodeDelegate();
+			}" + Code.AllTestCode;
 
 		[Test]
 		public void TestNewobjWithoutArgs()
 		{
-			this.EnsureCodeSourceIsSet();
-			bool result = (bool)this.Run<TestCodeDelegate>(@"", @"Derived", @"NewobjTest");
+			CodeSource = TestCode;
+			bool result = Run<bool>(@"", @"Derived", @"NewobjTest");
 			Assert.IsTrue(result);
 		}
 
 		[Test]
 		public void TestNewobjWithOneArg()
 		{
-			this.EnsureCodeSourceIsSet();
-			bool result = (bool)this.Run<TestCodeDelegate>(@"", @"Derived", @"NewobjTestWithOneArg");
+			CodeSource = TestCode;
+			bool result = Run<bool>(@"", @"Derived", @"NewobjTestWithOneArg");
 			Assert.IsTrue(result);
 		}
 
 		[Test]
 		public void TestNewobjWithTwoArgs()
 		{
-			this.EnsureCodeSourceIsSet();
-			bool result = (bool)this.Run<TestCodeDelegate>(@"", @"Derived", @"NewobjTestWithTwoArgs");
+			CodeSource = TestCode;
+			bool result = Run<bool>(@"", @"Derived", @"NewobjTestWithTwoArgs");
 			Assert.IsTrue(result);
 		}
 
 		[Test]
 		public void TestNewobjWithThreeArgs()
 		{
-			this.EnsureCodeSourceIsSet();
-			bool result = (bool)this.Run<TestCodeDelegate>(@"", @"Derived", @"NewobjTestWithThreeArgs");
+			CodeSource = TestCode;
+			bool result = Run<bool>(@"", @"Derived", @"NewobjTestWithThreeArgs");
 			Assert.IsTrue(result);
 		}
 
-		private void EnsureCodeSourceIsSet()
-		{
-			if (CodeSource == null)
-			{
-				CodeSource = TestCode;
-			}
-		}
 	}
 }

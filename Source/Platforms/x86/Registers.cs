@@ -9,7 +9,7 @@
 
 // Note: This file is currently unused.
 
-namespace Mosa.Platforms.x86
+namespace Mosa.Platform.X86
 {
 	/// <summary>
 	/// Enumeration of all standard registers accessible in standard 32/bit x86 CPUs

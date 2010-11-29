@@ -13,7 +13,7 @@ using System.Text;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.CompilerFramework.Operands;
 
-namespace Mosa.Platforms.x86.Constraints
+namespace Mosa.Platform.X86.Constraints
 {
 	/// <summary>
 	/// 
@@ -62,14 +62,14 @@ namespace Mosa.Platforms.x86.Constraints
 		public Register[] GetRegistersForOperand(int opIdx)
 		{
 			Register[] valid = { 
-				x86.GeneralPurposeRegister.EAX, 
-				x86.GeneralPurposeRegister.EBX, 
-				x86.GeneralPurposeRegister.ECX, 
-				x86.GeneralPurposeRegister.EDX,
-				x86.GeneralPurposeRegister.EBP, 
-				x86.GeneralPurposeRegister.EDI,
-				x86.GeneralPurposeRegister.ESI, 
-				x86.GeneralPurposeRegister.ESP 
+				X86.GeneralPurposeRegister.EAX, 
+				X86.GeneralPurposeRegister.EBX, 
+				X86.GeneralPurposeRegister.ECX, 
+				X86.GeneralPurposeRegister.EDX,
+				X86.GeneralPurposeRegister.EBP, 
+				X86.GeneralPurposeRegister.EDI,
+				X86.GeneralPurposeRegister.ESI, 
+				X86.GeneralPurposeRegister.ESP 
 			};
 
 			return valid;

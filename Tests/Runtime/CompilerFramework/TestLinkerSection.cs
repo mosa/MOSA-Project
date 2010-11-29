@@ -13,9 +13,8 @@ using System.IO;
 using Mosa.Runtime;
 using Mosa.Runtime.Linker;
 using Mosa.Runtime.Memory;
-using Test.Mosa.Runtime.CompilerFramework;
 
-namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
+namespace Test.Mosa.Runtime.CompilerFramework
 {
 	/// <summary>
 	/// 
@@ -60,7 +59,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.BaseCode
 			if (null == stream)
 			{
 				// Request 64K of memory
-				VirtualMemoryStream vms = new VirtualMemoryStream(global::Mosa.Runtime.Runtime.MemoryPageManager, 16 * 4096);
+				VirtualMemoryStream vms = new VirtualMemoryStream(global::Mosa.Vm.Runtime.MemoryPageManager, 16 * 4096);
 
 				// Save the stream for further references
 				this.stream = stream = vms;
