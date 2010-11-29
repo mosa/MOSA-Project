@@ -24,12 +24,14 @@ namespace Mosa.Tools.StageVisualizer
 		public Output(string[] lines)
 		{
 			Lines = lines;
+			Prepare(); 
 			Parse();
 		}
 
 		public Output(string file)
 		{
 			Lines = System.IO.File.ReadAllLines(file);
+			Prepare();
 			Parse();
 		}
 
@@ -48,7 +50,18 @@ namespace Mosa.Tools.StageVisualizer
 			Sections.Add(section);
 		}
 
-		public void Parse()
+		protected void Prepare()
+		{
+			for (int i = 0; i < Lines.Length; i++)
+			{
+				string line = Lines[i];
+
+				if (line.StartsWith("Compiling ") || line.StartsWith("Scheduling ") || line.StartsWith("'mosacl.vshost.exe") || line.StartsWith("Skipping ") || line.StartsWith("Method will") || line.StartsWith("The "))
+					Lines[i] = string.Empty;
+			}
+		}
+
+		protected void Parse()
 		{
 			string method = string.Empty;
 			string stage = string.Empty;

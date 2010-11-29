@@ -52,6 +52,7 @@
 			this.panel1 = new System.Windows.Forms.FlowLayoutPanel();
 			this.saveButton = new System.Windows.Forms.Button();
 			this.resetButton = new System.Windows.Forms.Button();
+			this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
 			methodLabel = new System.Windows.Forms.Label();
 			labelLabel = new System.Windows.Forms.Label();
 			stageLabel = new System.Windows.Forms.Label();
@@ -78,7 +79,7 @@
 			// labelLabel
 			// 
 			labelLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			labelLabel.Location = new System.Drawing.Point(10, 228);
+			labelLabel.Location = new System.Drawing.Point(10, 229);
 			labelLabel.Margin = new System.Windows.Forms.Padding(4);
 			labelLabel.Name = "labelLabel";
 			labelLabel.Size = new System.Drawing.Size(158, 20);
@@ -100,7 +101,7 @@
 			formatOptionsGroupBox.Controls.Add(this.cbRemoveNextPrev);
 			formatOptionsGroupBox.Controls.Add(this.cbSpace);
 			formatOptionsGroupBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			formatOptionsGroupBox.Location = new System.Drawing.Point(10, 293);
+			formatOptionsGroupBox.Location = new System.Drawing.Point(10, 291);
 			formatOptionsGroupBox.Margin = new System.Windows.Forms.Padding(4);
 			formatOptionsGroupBox.Name = "formatOptionsGroupBox";
 			formatOptionsGroupBox.Padding = new System.Windows.Forms.Padding(4);
@@ -158,7 +159,7 @@
 			// 
 			this.cbLabel.AutoSize = true;
 			this.cbLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.cbLabel.Location = new System.Drawing.Point(176, 228);
+			this.cbLabel.Location = new System.Drawing.Point(176, 229);
 			this.cbLabel.Margin = new System.Windows.Forms.Padding(4);
 			this.cbLabel.Name = "cbLabel";
 			this.cbLabel.Size = new System.Drawing.Size(73, 21);
@@ -172,7 +173,7 @@
 			this.cbLabels.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.cbLabels.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.cbLabels.FormattingEnabled = true;
-			this.cbLabels.Location = new System.Drawing.Point(10, 257);
+			this.cbLabels.Location = new System.Drawing.Point(10, 258);
 			this.cbLabels.Margin = new System.Windows.Forms.Padding(4);
 			this.cbLabels.MaxDropDownItems = 20;
 			this.cbLabels.Name = "cbLabels";
@@ -272,11 +273,11 @@
 			// Source
 			// 
 			this.Source.Controls.Add(this.tbSource);
-			this.Source.Location = new System.Drawing.Point(4, 29);
+			this.Source.Location = new System.Drawing.Point(4, 25);
 			this.Source.Margin = new System.Windows.Forms.Padding(5);
 			this.Source.Name = "Source";
 			this.Source.Padding = new System.Windows.Forms.Padding(5);
-			this.Source.Size = new System.Drawing.Size(738, 545);
+			this.Source.Size = new System.Drawing.Size(738, 549);
 			this.Source.TabIndex = 1;
 			this.Source.Text = "Source";
 			this.Source.UseVisualStyleBackColor = true;
@@ -287,7 +288,7 @@
 			this.tbSource.Location = new System.Drawing.Point(5, 5);
 			this.tbSource.Margin = new System.Windows.Forms.Padding(5);
 			this.tbSource.Name = "tbSource";
-			this.tbSource.Size = new System.Drawing.Size(728, 535);
+			this.tbSource.Size = new System.Drawing.Size(728, 539);
 			this.tbSource.TabIndex = 1;
 			this.tbSource.Text = "";
 			this.tbSource.WordWrap = false;
@@ -407,6 +408,7 @@
         private System.Windows.Forms.FlowLayoutPanel panel1;
         private System.Windows.Forms.Button saveButton;
         private System.Windows.Forms.Button resetButton;
+		private System.Windows.Forms.SaveFileDialog saveFileDialog1;
 	}
 }
 

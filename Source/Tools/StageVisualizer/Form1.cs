@@ -5,6 +5,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Text;
+using System.IO;
 using System.Windows.Forms;
 
 namespace Mosa.Tools.StageVisualizer
@@ -20,7 +21,8 @@ namespace Mosa.Tools.StageVisualizer
 
 		private void loadButton_Click(object sender, EventArgs e)
 		{
-			if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK) {
+			if (openFileDialog1.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+			{
 				output = new Output(openFileDialog1.FileName);
 				tbSource.Lines = output.Lines;
 				UpdateText(sender, e);
@@ -41,7 +43,8 @@ namespace Mosa.Tools.StageVisualizer
 
 		private void cbMethods_SelectionChangeCommitted(object sender, EventArgs e)
 		{
-			if (output != null) {
+			if (output != null)
+			{
 				cbStages.Items.Clear();
 
 				foreach (string item in output.GetStages(cbMethods.SelectedItem.ToString()))
@@ -82,7 +85,8 @@ namespace Mosa.Tools.StageVisualizer
 
 		private void refreshButton_Click(object sender, EventArgs e)
 		{
-			if (cbMethods.SelectedItem == null) {
+			if (cbMethods.SelectedItem == null)
+			{
 				tbResult.Lines = new string[0];
 				return;
 			}
@@ -127,14 +131,45 @@ namespace Mosa.Tools.StageVisualizer
 			lbStatus.Text = DateTime.Now.ToString();
 		}
 
-        private void saveButton_Click(object sender, EventArgs e)
-        {
-
-        }
-
-		private void cbBlocks_SelectedIndexChanged(object sender, EventArgs e)
+		private void saveButton_Click(object sender, EventArgs e)
 		{
 
+			if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+			{
+				Stream stream = saveFileDialog1.OpenFile();
+				TextWriter writer = new StreamWriter(stream);
+
+				string label = string.Empty;
+
+				List<string> methods = output.GetMethods();
+				methods.Sort();
+
+				foreach (string method in methods)
+				{
+					foreach (string stage in output.GetStages(method))
+					{
+						string heading = "METHOD: " + method + " STAGE: " + stage;
+						writer.WriteLine(string.Empty.PadLeft(heading.Length, '='));
+						writer.WriteLine(string.Empty.PadLeft(heading.Length, '='));
+						writer.WriteLine(heading);
+						writer.WriteLine(string.Empty.PadLeft(heading.Length, '='));
+						writer.WriteLine(string.Empty.PadLeft(heading.Length, '='));
+						writer.WriteLine();
+
+						List<string> lines = output.GetText(method, stage, label, cbRemoveNextPrev.Checked, cbSpace.Checked);
+
+						foreach (string line in lines)
+							writer.WriteLine(line);
+
+						writer.WriteLine();
+					}
+				}
+
+				stream.Close();
+			}
+
 		}
+
+
 	}
 }
