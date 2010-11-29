@@ -131,5 +131,10 @@ namespace Mosa.Tools.StageVisualizer
         {
 
         }
+
+		private void cbBlocks_SelectedIndexChanged(object sender, EventArgs e)
+		{
+
+		}
 	}
 }
