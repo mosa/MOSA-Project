@@ -1923,38 +1923,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		
 		#endregion // Neg
 		
-		#region Ret
-		
-		[Row(0)]
-		[Row(1)]
-		[Row(2)]
-		[Row(double.MinValue)]
-		[Row(double.MaxValue)]
-
-		[Row(double.PositiveInfinity)]
-		[Row(double.NegativeInfinity)]
-		[Row(1.00012)]
-		[Row(1.1497)]
-		[Row(1.2)]
-		[Row(17.0002501)]
-		[Row(23)]
-		[Row(12321452132.561)]
-		[Row(-1)]
-		[Row(-2)]
-		[Row(-1.00012)]
-		[Row(-1.1497)]
-		[Row(-1.2)]
-		[Row(-17.0002501)]
-		[Row(-23)]
-		[Row(-12321452132.561)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
-		public void RetDouble(double value)
-		{
-			this.arithmeticTests.Ret(value);
-		}
-		
-		#endregion // Ret
-		
 		#region Ceq
 		
 		[Row(0, 0)]

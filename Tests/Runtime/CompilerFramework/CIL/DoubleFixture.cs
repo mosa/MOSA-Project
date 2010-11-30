@@ -25,7 +25,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 			ExpectedType = @"double",
 			FirstType = @"double",
 			SecondType = @"double",
-			IncludeRem = false
+			IncludeRem = false,
+            IncludeRet = false
 		};
 
 		private readonly ComparisonInstructionTestRunner<double> comparisonTests = new ComparisonInstructionTestRunner<double>
