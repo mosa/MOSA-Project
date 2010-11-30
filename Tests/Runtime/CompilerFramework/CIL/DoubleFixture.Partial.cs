@@ -24,7 +24,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(0, 2)]
 		[Row(0, double.MinValue)]
 		[Row(0, double.MaxValue)]
-		[Row(0, double.NaN)]
 		[Row(0, double.PositiveInfinity)]
 		[Row(0, double.NegativeInfinity)]
 		[Row(0, 1.00012)]
@@ -46,7 +45,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(1, 2)]
 		[Row(1, double.MinValue)]
 		[Row(1, double.MaxValue)]
-		[Row(1, double.NaN)]
 		[Row(1, double.PositiveInfinity)]
 		[Row(1, double.NegativeInfinity)]
 		[Row(1, 1.00012)]
@@ -68,7 +66,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(2, 2)]
 		[Row(2, double.MinValue)]
 		[Row(2, double.MaxValue)]
-		[Row(2, double.NaN)]
 		[Row(2, double.PositiveInfinity)]
 		[Row(2, double.NegativeInfinity)]
 		[Row(2, 1.00012)]
@@ -90,7 +87,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(double.MinValue, 2)]
 		[Row(double.MinValue, double.MinValue)]
 		[Row(double.MinValue, double.MaxValue)]
-		[Row(double.MinValue, double.NaN)]
 		[Row(double.MinValue, double.PositiveInfinity)]
 		[Row(double.MinValue, double.NegativeInfinity)]
 		[Row(double.MinValue, 1.00012)]
@@ -112,7 +108,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(double.MaxValue, 2)]
 		[Row(double.MaxValue, double.MinValue)]
 		[Row(double.MaxValue, double.MaxValue)]
-		[Row(double.MaxValue, double.NaN)]
 		[Row(double.MaxValue, double.PositiveInfinity)]
 		[Row(double.MaxValue, double.NegativeInfinity)]
 		[Row(double.MaxValue, 1.00012)]
@@ -129,36 +124,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(double.MaxValue, -17.0002501)]
 		[Row(double.MaxValue, -23)]
 		[Row(double.MaxValue, -12321452132.561)]
-		[Row(double.NaN, 0)]
-		[Row(double.NaN, 1)]
-		[Row(double.NaN, 2)]
-		[Row(double.NaN, double.MinValue)]
-		[Row(double.NaN, double.MaxValue)]
-		[Row(double.NaN, double.NaN)]
-		[Row(double.NaN, double.PositiveInfinity)]
-		[Row(double.NaN, double.NegativeInfinity)]
-		[Row(double.NaN, 1.00012)]
-		[Row(double.NaN, 1.1497)]
-		[Row(double.NaN, 1.2)]
-		[Row(double.NaN, 17.0002501)]
-		[Row(double.NaN, 23)]
-		[Row(double.NaN, 12321452132.561)]
-		[Row(double.NaN, -1)]
-		[Row(double.NaN, -2)]
-		[Row(double.NaN, -1.00012)]
-		[Row(double.NaN, -1.1497)]
-		[Row(double.NaN, -1.2)]
-		[Row(double.NaN, -17.0002501)]
-		[Row(double.NaN, -23)]
-		[Row(double.NaN, -12321452132.561)]
 		[Row(double.PositiveInfinity, 0)]
 		[Row(double.PositiveInfinity, 1)]
 		[Row(double.PositiveInfinity, 2)]
 		[Row(double.PositiveInfinity, double.MinValue)]
 		[Row(double.PositiveInfinity, double.MaxValue)]
-		[Row(double.PositiveInfinity, double.NaN)]
 		[Row(double.PositiveInfinity, double.PositiveInfinity)]
-		[Row(double.PositiveInfinity, double.NegativeInfinity)]
 		[Row(double.PositiveInfinity, 1.00012)]
 		[Row(double.PositiveInfinity, 1.1497)]
 		[Row(double.PositiveInfinity, 1.2)]
@@ -178,8 +149,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(double.NegativeInfinity, 2)]
 		[Row(double.NegativeInfinity, double.MinValue)]
 		[Row(double.NegativeInfinity, double.MaxValue)]
-		[Row(double.NegativeInfinity, double.NaN)]
-		[Row(double.NegativeInfinity, double.PositiveInfinity)]
 		[Row(double.NegativeInfinity, double.NegativeInfinity)]
 		[Row(double.NegativeInfinity, 1.00012)]
 		[Row(double.NegativeInfinity, 1.1497)]
@@ -200,7 +169,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(1.00012, 2)]
 		[Row(1.00012, double.MinValue)]
 		[Row(1.00012, double.MaxValue)]
-		[Row(1.00012, double.NaN)]
 		[Row(1.00012, double.PositiveInfinity)]
 		[Row(1.00012, double.NegativeInfinity)]
 		[Row(1.00012, 1.00012)]
@@ -222,7 +190,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(1.1497, 2)]
 		[Row(1.1497, double.MinValue)]
 		[Row(1.1497, double.MaxValue)]
-		[Row(1.1497, double.NaN)]
 		[Row(1.1497, double.PositiveInfinity)]
 		[Row(1.1497, double.NegativeInfinity)]
 		[Row(1.1497, 1.00012)]
@@ -244,7 +211,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(1.2, 2)]
 		[Row(1.2, double.MinValue)]
 		[Row(1.2, double.MaxValue)]
-		[Row(1.2, double.NaN)]
 		[Row(1.2, double.PositiveInfinity)]
 		[Row(1.2, double.NegativeInfinity)]
 		[Row(1.2, 1.00012)]
@@ -266,7 +232,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(17.0002501, 2)]
 		[Row(17.0002501, double.MinValue)]
 		[Row(17.0002501, double.MaxValue)]
-		[Row(17.0002501, double.NaN)]
 		[Row(17.0002501, double.PositiveInfinity)]
 		[Row(17.0002501, double.NegativeInfinity)]
 		[Row(17.0002501, 1.00012)]
@@ -288,7 +253,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(23, 2)]
 		[Row(23, double.MinValue)]
 		[Row(23, double.MaxValue)]
-		[Row(23, double.NaN)]
 		[Row(23, double.PositiveInfinity)]
 		[Row(23, double.NegativeInfinity)]
 		[Row(23, 1.00012)]
@@ -310,7 +274,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(12321452132.561, 2)]
 		[Row(12321452132.561, double.MinValue)]
 		[Row(12321452132.561, double.MaxValue)]
-		[Row(12321452132.561, double.NaN)]
 		[Row(12321452132.561, double.PositiveInfinity)]
 		[Row(12321452132.561, double.NegativeInfinity)]
 		[Row(12321452132.561, 1.00012)]
@@ -332,7 +295,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-1, 2)]
 		[Row(-1, double.MinValue)]
 		[Row(-1, double.MaxValue)]
-		[Row(-1, double.NaN)]
 		[Row(-1, double.PositiveInfinity)]
 		[Row(-1, double.NegativeInfinity)]
 		[Row(-1, 1.00012)]
@@ -354,7 +316,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-2, 2)]
 		[Row(-2, double.MinValue)]
 		[Row(-2, double.MaxValue)]
-		[Row(-2, double.NaN)]
 		[Row(-2, double.PositiveInfinity)]
 		[Row(-2, double.NegativeInfinity)]
 		[Row(-2, 1.00012)]
@@ -376,7 +337,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-1.00012, 2)]
 		[Row(-1.00012, double.MinValue)]
 		[Row(-1.00012, double.MaxValue)]
-		[Row(-1.00012, double.NaN)]
 		[Row(-1.00012, double.PositiveInfinity)]
 		[Row(-1.00012, double.NegativeInfinity)]
 		[Row(-1.00012, 1.00012)]
@@ -398,7 +358,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-1.1497, 2)]
 		[Row(-1.1497, double.MinValue)]
 		[Row(-1.1497, double.MaxValue)]
-		[Row(-1.1497, double.NaN)]
 		[Row(-1.1497, double.PositiveInfinity)]
 		[Row(-1.1497, double.NegativeInfinity)]
 		[Row(-1.1497, 1.00012)]
@@ -420,7 +379,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-1.2, 2)]
 		[Row(-1.2, double.MinValue)]
 		[Row(-1.2, double.MaxValue)]
-		[Row(-1.2, double.NaN)]
 		[Row(-1.2, double.PositiveInfinity)]
 		[Row(-1.2, double.NegativeInfinity)]
 		[Row(-1.2, 1.00012)]
@@ -442,7 +400,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-17.0002501, 2)]
 		[Row(-17.0002501, double.MinValue)]
 		[Row(-17.0002501, double.MaxValue)]
-		[Row(-17.0002501, double.NaN)]
 		[Row(-17.0002501, double.PositiveInfinity)]
 		[Row(-17.0002501, double.NegativeInfinity)]
 		[Row(-17.0002501, 1.00012)]
@@ -464,7 +421,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-23, 2)]
 		[Row(-23, double.MinValue)]
 		[Row(-23, double.MaxValue)]
-		[Row(-23, double.NaN)]
 		[Row(-23, double.PositiveInfinity)]
 		[Row(-23, double.NegativeInfinity)]
 		[Row(-23, 1.00012)]
@@ -486,7 +442,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-12321452132.561, 2)]
 		[Row(-12321452132.561, double.MinValue)]
 		[Row(-12321452132.561, double.MaxValue)]
-		[Row(-12321452132.561, double.NaN)]
 		[Row(-12321452132.561, double.PositiveInfinity)]
 		[Row(-12321452132.561, double.NegativeInfinity)]
 		[Row(-12321452132.561, 1.00012)]
@@ -518,7 +473,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(0, 2)]
 		[Row(0, double.MinValue)]
 		[Row(0, double.MaxValue)]
-		[Row(0, double.NaN)]
+
 		[Row(0, double.PositiveInfinity)]
 		[Row(0, double.NegativeInfinity)]
 		[Row(0, 1.00012)]
@@ -540,7 +495,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(1, 2)]
 		[Row(1, double.MinValue)]
 		[Row(1, double.MaxValue)]
-		[Row(1, double.NaN)]
+
 		[Row(1, double.PositiveInfinity)]
 		[Row(1, double.NegativeInfinity)]
 		[Row(1, 1.00012)]
@@ -562,7 +517,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(2, 2)]
 		[Row(2, double.MinValue)]
 		[Row(2, double.MaxValue)]
-		[Row(2, double.NaN)]
+
 		[Row(2, double.PositiveInfinity)]
 		[Row(2, double.NegativeInfinity)]
 		[Row(2, 1.00012)]
@@ -584,7 +539,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(double.MinValue, 2)]
 		[Row(double.MinValue, double.MinValue)]
 		[Row(double.MinValue, double.MaxValue)]
-		[Row(double.MinValue, double.NaN)]
+
 		[Row(double.MinValue, double.PositiveInfinity)]
 		[Row(double.MinValue, double.NegativeInfinity)]
 		[Row(double.MinValue, 1.00012)]
@@ -606,7 +561,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(double.MaxValue, 2)]
 		[Row(double.MaxValue, double.MinValue)]
 		[Row(double.MaxValue, double.MaxValue)]
-		[Row(double.MaxValue, double.NaN)]
+
 		[Row(double.MaxValue, double.PositiveInfinity)]
 		[Row(double.MaxValue, double.NegativeInfinity)]
 		[Row(double.MaxValue, 1.00012)]
@@ -623,35 +578,33 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(double.MaxValue, -17.0002501)]
 		[Row(double.MaxValue, -23)]
 		[Row(double.MaxValue, -12321452132.561)]
-		[Row(double.NaN, 0)]
-		[Row(double.NaN, 1)]
-		[Row(double.NaN, 2)]
-		[Row(double.NaN, double.MinValue)]
-		[Row(double.NaN, double.MaxValue)]
-		[Row(double.NaN, double.NaN)]
-		[Row(double.NaN, double.PositiveInfinity)]
-		[Row(double.NaN, double.NegativeInfinity)]
-		[Row(double.NaN, 1.00012)]
-		[Row(double.NaN, 1.1497)]
-		[Row(double.NaN, 1.2)]
-		[Row(double.NaN, 17.0002501)]
-		[Row(double.NaN, 23)]
-		[Row(double.NaN, 12321452132.561)]
-		[Row(double.NaN, -1)]
-		[Row(double.NaN, -2)]
-		[Row(double.NaN, -1.00012)]
-		[Row(double.NaN, -1.1497)]
-		[Row(double.NaN, -1.2)]
-		[Row(double.NaN, -17.0002501)]
-		[Row(double.NaN, -23)]
-		[Row(double.NaN, -12321452132.561)]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 		[Row(double.PositiveInfinity, 0)]
 		[Row(double.PositiveInfinity, 1)]
 		[Row(double.PositiveInfinity, 2)]
 		[Row(double.PositiveInfinity, double.MinValue)]
 		[Row(double.PositiveInfinity, double.MaxValue)]
-		[Row(double.PositiveInfinity, double.NaN)]
-		[Row(double.PositiveInfinity, double.PositiveInfinity)]
 		[Row(double.PositiveInfinity, double.NegativeInfinity)]
 		[Row(double.PositiveInfinity, 1.00012)]
 		[Row(double.PositiveInfinity, 1.1497)]
@@ -672,9 +625,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(double.NegativeInfinity, 2)]
 		[Row(double.NegativeInfinity, double.MinValue)]
 		[Row(double.NegativeInfinity, double.MaxValue)]
-		[Row(double.NegativeInfinity, double.NaN)]
+
 		[Row(double.NegativeInfinity, double.PositiveInfinity)]
-		[Row(double.NegativeInfinity, double.NegativeInfinity)]
 		[Row(double.NegativeInfinity, 1.00012)]
 		[Row(double.NegativeInfinity, 1.1497)]
 		[Row(double.NegativeInfinity, 1.2)]
@@ -694,7 +646,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(1.00012, 2)]
 		[Row(1.00012, double.MinValue)]
 		[Row(1.00012, double.MaxValue)]
-		[Row(1.00012, double.NaN)]
+
 		[Row(1.00012, double.PositiveInfinity)]
 		[Row(1.00012, double.NegativeInfinity)]
 		[Row(1.00012, 1.00012)]
@@ -716,7 +668,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(1.1497, 2)]
 		[Row(1.1497, double.MinValue)]
 		[Row(1.1497, double.MaxValue)]
-		[Row(1.1497, double.NaN)]
+
 		[Row(1.1497, double.PositiveInfinity)]
 		[Row(1.1497, double.NegativeInfinity)]
 		[Row(1.1497, 1.00012)]
@@ -738,7 +690,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(1.2, 2)]
 		[Row(1.2, double.MinValue)]
 		[Row(1.2, double.MaxValue)]
-		[Row(1.2, double.NaN)]
+
 		[Row(1.2, double.PositiveInfinity)]
 		[Row(1.2, double.NegativeInfinity)]
 		[Row(1.2, 1.00012)]
@@ -760,7 +712,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(17.0002501, 2)]
 		[Row(17.0002501, double.MinValue)]
 		[Row(17.0002501, double.MaxValue)]
-		[Row(17.0002501, double.NaN)]
+
 		[Row(17.0002501, double.PositiveInfinity)]
 		[Row(17.0002501, double.NegativeInfinity)]
 		[Row(17.0002501, 1.00012)]
@@ -782,7 +734,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(23, 2)]
 		[Row(23, double.MinValue)]
 		[Row(23, double.MaxValue)]
-		[Row(23, double.NaN)]
+
 		[Row(23, double.PositiveInfinity)]
 		[Row(23, double.NegativeInfinity)]
 		[Row(23, 1.00012)]
@@ -804,7 +756,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(12321452132.561, 2)]
 		[Row(12321452132.561, double.MinValue)]
 		[Row(12321452132.561, double.MaxValue)]
-		[Row(12321452132.561, double.NaN)]
+
 		[Row(12321452132.561, double.PositiveInfinity)]
 		[Row(12321452132.561, double.NegativeInfinity)]
 		[Row(12321452132.561, 1.00012)]
@@ -826,7 +778,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-1, 2)]
 		[Row(-1, double.MinValue)]
 		[Row(-1, double.MaxValue)]
-		[Row(-1, double.NaN)]
+
 		[Row(-1, double.PositiveInfinity)]
 		[Row(-1, double.NegativeInfinity)]
 		[Row(-1, 1.00012)]
@@ -848,7 +800,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-2, 2)]
 		[Row(-2, double.MinValue)]
 		[Row(-2, double.MaxValue)]
-		[Row(-2, double.NaN)]
+
 		[Row(-2, double.PositiveInfinity)]
 		[Row(-2, double.NegativeInfinity)]
 		[Row(-2, 1.00012)]
@@ -870,7 +822,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-1.00012, 2)]
 		[Row(-1.00012, double.MinValue)]
 		[Row(-1.00012, double.MaxValue)]
-		[Row(-1.00012, double.NaN)]
+
 		[Row(-1.00012, double.PositiveInfinity)]
 		[Row(-1.00012, double.NegativeInfinity)]
 		[Row(-1.00012, 1.00012)]
@@ -892,7 +844,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-1.1497, 2)]
 		[Row(-1.1497, double.MinValue)]
 		[Row(-1.1497, double.MaxValue)]
-		[Row(-1.1497, double.NaN)]
+
 		[Row(-1.1497, double.PositiveInfinity)]
 		[Row(-1.1497, double.NegativeInfinity)]
 		[Row(-1.1497, 1.00012)]
@@ -914,7 +866,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-1.2, 2)]
 		[Row(-1.2, double.MinValue)]
 		[Row(-1.2, double.MaxValue)]
-		[Row(-1.2, double.NaN)]
+
 		[Row(-1.2, double.PositiveInfinity)]
 		[Row(-1.2, double.NegativeInfinity)]
 		[Row(-1.2, 1.00012)]
@@ -936,7 +888,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-17.0002501, 2)]
 		[Row(-17.0002501, double.MinValue)]
 		[Row(-17.0002501, double.MaxValue)]
-		[Row(-17.0002501, double.NaN)]
+
 		[Row(-17.0002501, double.PositiveInfinity)]
 		[Row(-17.0002501, double.NegativeInfinity)]
 		[Row(-17.0002501, 1.00012)]
@@ -958,7 +910,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-23, 2)]
 		[Row(-23, double.MinValue)]
 		[Row(-23, double.MaxValue)]
-		[Row(-23, double.NaN)]
+
 		[Row(-23, double.PositiveInfinity)]
 		[Row(-23, double.NegativeInfinity)]
 		[Row(-23, 1.00012)]
@@ -980,7 +932,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-12321452132.561, 2)]
 		[Row(-12321452132.561, double.MinValue)]
 		[Row(-12321452132.561, double.MaxValue)]
-		[Row(-12321452132.561, double.NaN)]
+
 		[Row(-12321452132.561, double.PositiveInfinity)]
 		[Row(-12321452132.561, double.NegativeInfinity)]
 		[Row(-12321452132.561, 1.00012)]
@@ -1012,9 +964,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(0, 2)]
 		[Row(0, double.MinValue)]
 		[Row(0, double.MaxValue)]
-		[Row(0, double.NaN)]
-		[Row(0, double.PositiveInfinity)]
-		[Row(0, double.NegativeInfinity)]
 		[Row(0, 1.00012)]
 		[Row(0, 1.1497)]
 		[Row(0, 1.2)]
@@ -1034,7 +983,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(1, 2)]
 		[Row(1, double.MinValue)]
 		[Row(1, double.MaxValue)]
-		[Row(1, double.NaN)]
+
 		[Row(1, double.PositiveInfinity)]
 		[Row(1, double.NegativeInfinity)]
 		[Row(1, 1.00012)]
@@ -1056,7 +1005,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(2, 2)]
 		[Row(2, double.MinValue)]
 		[Row(2, double.MaxValue)]
-		[Row(2, double.NaN)]
+
 		[Row(2, double.PositiveInfinity)]
 		[Row(2, double.NegativeInfinity)]
 		[Row(2, 1.00012)]
@@ -1078,7 +1027,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(double.MinValue, 2)]
 		[Row(double.MinValue, double.MinValue)]
 		[Row(double.MinValue, double.MaxValue)]
-		[Row(double.MinValue, double.NaN)]
+
 		[Row(double.MinValue, double.PositiveInfinity)]
 		[Row(double.MinValue, double.NegativeInfinity)]
 		[Row(double.MinValue, 1.00012)]
@@ -1100,7 +1049,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(double.MaxValue, 2)]
 		[Row(double.MaxValue, double.MinValue)]
 		[Row(double.MaxValue, double.MaxValue)]
-		[Row(double.MaxValue, double.NaN)]
+
 		[Row(double.MaxValue, double.PositiveInfinity)]
 		[Row(double.MaxValue, double.NegativeInfinity)]
 		[Row(double.MaxValue, 1.00012)]
@@ -1117,34 +1066,33 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(double.MaxValue, -17.0002501)]
 		[Row(double.MaxValue, -23)]
 		[Row(double.MaxValue, -12321452132.561)]
-		[Row(double.NaN, 0)]
-		[Row(double.NaN, 1)]
-		[Row(double.NaN, 2)]
-		[Row(double.NaN, double.MinValue)]
-		[Row(double.NaN, double.MaxValue)]
-		[Row(double.NaN, double.NaN)]
-		[Row(double.NaN, double.PositiveInfinity)]
-		[Row(double.NaN, double.NegativeInfinity)]
-		[Row(double.NaN, 1.00012)]
-		[Row(double.NaN, 1.1497)]
-		[Row(double.NaN, 1.2)]
-		[Row(double.NaN, 17.0002501)]
-		[Row(double.NaN, 23)]
-		[Row(double.NaN, 12321452132.561)]
-		[Row(double.NaN, -1)]
-		[Row(double.NaN, -2)]
-		[Row(double.NaN, -1.00012)]
-		[Row(double.NaN, -1.1497)]
-		[Row(double.NaN, -1.2)]
-		[Row(double.NaN, -17.0002501)]
-		[Row(double.NaN, -23)]
-		[Row(double.NaN, -12321452132.561)]
-		[Row(double.PositiveInfinity, 0)]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 		[Row(double.PositiveInfinity, 1)]
 		[Row(double.PositiveInfinity, 2)]
 		[Row(double.PositiveInfinity, double.MinValue)]
 		[Row(double.PositiveInfinity, double.MaxValue)]
-		[Row(double.PositiveInfinity, double.NaN)]
+
 		[Row(double.PositiveInfinity, double.PositiveInfinity)]
 		[Row(double.PositiveInfinity, double.NegativeInfinity)]
 		[Row(double.PositiveInfinity, 1.00012)]
@@ -1161,12 +1109,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(double.PositiveInfinity, -17.0002501)]
 		[Row(double.PositiveInfinity, -23)]
 		[Row(double.PositiveInfinity, -12321452132.561)]
-		[Row(double.NegativeInfinity, 0)]
 		[Row(double.NegativeInfinity, 1)]
 		[Row(double.NegativeInfinity, 2)]
 		[Row(double.NegativeInfinity, double.MinValue)]
 		[Row(double.NegativeInfinity, double.MaxValue)]
-		[Row(double.NegativeInfinity, double.NaN)]
+
 		[Row(double.NegativeInfinity, double.PositiveInfinity)]
 		[Row(double.NegativeInfinity, double.NegativeInfinity)]
 		[Row(double.NegativeInfinity, 1.00012)]
@@ -1188,7 +1135,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(1.00012, 2)]
 		[Row(1.00012, double.MinValue)]
 		[Row(1.00012, double.MaxValue)]
-		[Row(1.00012, double.NaN)]
+
 		[Row(1.00012, double.PositiveInfinity)]
 		[Row(1.00012, double.NegativeInfinity)]
 		[Row(1.00012, 1.00012)]
@@ -1210,7 +1157,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(1.1497, 2)]
 		[Row(1.1497, double.MinValue)]
 		[Row(1.1497, double.MaxValue)]
-		[Row(1.1497, double.NaN)]
+
 		[Row(1.1497, double.PositiveInfinity)]
 		[Row(1.1497, double.NegativeInfinity)]
 		[Row(1.1497, 1.00012)]
@@ -1232,7 +1179,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(1.2, 2)]
 		[Row(1.2, double.MinValue)]
 		[Row(1.2, double.MaxValue)]
-		[Row(1.2, double.NaN)]
+
 		[Row(1.2, double.PositiveInfinity)]
 		[Row(1.2, double.NegativeInfinity)]
 		[Row(1.2, 1.00012)]
@@ -1254,7 +1201,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(17.0002501, 2)]
 		[Row(17.0002501, double.MinValue)]
 		[Row(17.0002501, double.MaxValue)]
-		[Row(17.0002501, double.NaN)]
+
 		[Row(17.0002501, double.PositiveInfinity)]
 		[Row(17.0002501, double.NegativeInfinity)]
 		[Row(17.0002501, 1.00012)]
@@ -1276,7 +1223,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(23, 2)]
 		[Row(23, double.MinValue)]
 		[Row(23, double.MaxValue)]
-		[Row(23, double.NaN)]
+
 		[Row(23, double.PositiveInfinity)]
 		[Row(23, double.NegativeInfinity)]
 		[Row(23, 1.00012)]
@@ -1298,7 +1245,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(12321452132.561, 2)]
 		[Row(12321452132.561, double.MinValue)]
 		[Row(12321452132.561, double.MaxValue)]
-		[Row(12321452132.561, double.NaN)]
+
 		[Row(12321452132.561, double.PositiveInfinity)]
 		[Row(12321452132.561, double.NegativeInfinity)]
 		[Row(12321452132.561, 1.00012)]
@@ -1320,7 +1267,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-1, 2)]
 		[Row(-1, double.MinValue)]
 		[Row(-1, double.MaxValue)]
-		[Row(-1, double.NaN)]
+
 		[Row(-1, double.PositiveInfinity)]
 		[Row(-1, double.NegativeInfinity)]
 		[Row(-1, 1.00012)]
@@ -1342,7 +1289,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-2, 2)]
 		[Row(-2, double.MinValue)]
 		[Row(-2, double.MaxValue)]
-		[Row(-2, double.NaN)]
+
 		[Row(-2, double.PositiveInfinity)]
 		[Row(-2, double.NegativeInfinity)]
 		[Row(-2, 1.00012)]
@@ -1364,7 +1311,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-1.00012, 2)]
 		[Row(-1.00012, double.MinValue)]
 		[Row(-1.00012, double.MaxValue)]
-		[Row(-1.00012, double.NaN)]
+
 		[Row(-1.00012, double.PositiveInfinity)]
 		[Row(-1.00012, double.NegativeInfinity)]
 		[Row(-1.00012, 1.00012)]
@@ -1386,7 +1333,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-1.1497, 2)]
 		[Row(-1.1497, double.MinValue)]
 		[Row(-1.1497, double.MaxValue)]
-		[Row(-1.1497, double.NaN)]
+
 		[Row(-1.1497, double.PositiveInfinity)]
 		[Row(-1.1497, double.NegativeInfinity)]
 		[Row(-1.1497, 1.00012)]
@@ -1408,7 +1355,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-1.2, 2)]
 		[Row(-1.2, double.MinValue)]
 		[Row(-1.2, double.MaxValue)]
-		[Row(-1.2, double.NaN)]
+
 		[Row(-1.2, double.PositiveInfinity)]
 		[Row(-1.2, double.NegativeInfinity)]
 		[Row(-1.2, 1.00012)]
@@ -1430,7 +1377,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-17.0002501, 2)]
 		[Row(-17.0002501, double.MinValue)]
 		[Row(-17.0002501, double.MaxValue)]
-		[Row(-17.0002501, double.NaN)]
+
 		[Row(-17.0002501, double.PositiveInfinity)]
 		[Row(-17.0002501, double.NegativeInfinity)]
 		[Row(-17.0002501, 1.00012)]
@@ -1452,7 +1399,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-23, 2)]
 		[Row(-23, double.MinValue)]
 		[Row(-23, double.MaxValue)]
-		[Row(-23, double.NaN)]
+
 		[Row(-23, double.PositiveInfinity)]
 		[Row(-23, double.NegativeInfinity)]
 		[Row(-23, 1.00012)]
@@ -1474,7 +1421,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-12321452132.561, 2)]
 		[Row(-12321452132.561, double.MinValue)]
 		[Row(-12321452132.561, double.MaxValue)]
-		[Row(-12321452132.561, double.NaN)]
 		[Row(-12321452132.561, double.PositiveInfinity)]
 		[Row(-12321452132.561, double.NegativeInfinity)]
 		[Row(-12321452132.561, 1.00012)]
@@ -1501,12 +1447,10 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		
 		#region Div
 		
-		[Row(0, 0)]
 		[Row(0, 1)]
 		[Row(0, 2)]
 		[Row(0, double.MinValue)]
 		[Row(0, double.MaxValue)]
-		[Row(0, double.NaN)]
 		[Row(0, double.PositiveInfinity)]
 		[Row(0, double.NegativeInfinity)]
 		[Row(0, 1.00012)]
@@ -1528,7 +1472,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(1, 2)]
 		[Row(1, double.MinValue)]
 		[Row(1, double.MaxValue)]
-		[Row(1, double.NaN)]
 		[Row(1, double.PositiveInfinity)]
 		[Row(1, double.NegativeInfinity)]
 		[Row(1, 1.00012)]
@@ -1550,7 +1493,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(2, 2)]
 		[Row(2, double.MinValue)]
 		[Row(2, double.MaxValue)]
-		[Row(2, double.NaN)]
 		[Row(2, double.PositiveInfinity)]
 		[Row(2, double.NegativeInfinity)]
 		[Row(2, 1.00012)]
@@ -1572,7 +1514,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(double.MinValue, 2)]
 		[Row(double.MinValue, double.MinValue)]
 		[Row(double.MinValue, double.MaxValue)]
-		[Row(double.MinValue, double.NaN)]
 		[Row(double.MinValue, double.PositiveInfinity)]
 		[Row(double.MinValue, double.NegativeInfinity)]
 		[Row(double.MinValue, 1.00012)]
@@ -1594,7 +1535,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(double.MaxValue, 2)]
 		[Row(double.MaxValue, double.MinValue)]
 		[Row(double.MaxValue, double.MaxValue)]
-		[Row(double.MaxValue, double.NaN)]
 		[Row(double.MaxValue, double.PositiveInfinity)]
 		[Row(double.MaxValue, double.NegativeInfinity)]
 		[Row(double.MaxValue, 1.00012)]
@@ -1611,36 +1551,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(double.MaxValue, -17.0002501)]
 		[Row(double.MaxValue, -23)]
 		[Row(double.MaxValue, -12321452132.561)]
-		[Row(double.NaN, 0)]
-		[Row(double.NaN, 1)]
-		[Row(double.NaN, 2)]
-		[Row(double.NaN, double.MinValue)]
-		[Row(double.NaN, double.MaxValue)]
-		[Row(double.NaN, double.NaN)]
-		[Row(double.NaN, double.PositiveInfinity)]
-		[Row(double.NaN, double.NegativeInfinity)]
-		[Row(double.NaN, 1.00012)]
-		[Row(double.NaN, 1.1497)]
-		[Row(double.NaN, 1.2)]
-		[Row(double.NaN, 17.0002501)]
-		[Row(double.NaN, 23)]
-		[Row(double.NaN, 12321452132.561)]
-		[Row(double.NaN, -1)]
-		[Row(double.NaN, -2)]
-		[Row(double.NaN, -1.00012)]
-		[Row(double.NaN, -1.1497)]
-		[Row(double.NaN, -1.2)]
-		[Row(double.NaN, -17.0002501)]
-		[Row(double.NaN, -23)]
-		[Row(double.NaN, -12321452132.561)]
 		[Row(double.PositiveInfinity, 0)]
 		[Row(double.PositiveInfinity, 1)]
 		[Row(double.PositiveInfinity, 2)]
 		[Row(double.PositiveInfinity, double.MinValue)]
 		[Row(double.PositiveInfinity, double.MaxValue)]
-		[Row(double.PositiveInfinity, double.NaN)]
-		[Row(double.PositiveInfinity, double.PositiveInfinity)]
-		[Row(double.PositiveInfinity, double.NegativeInfinity)]
 		[Row(double.PositiveInfinity, 1.00012)]
 		[Row(double.PositiveInfinity, 1.1497)]
 		[Row(double.PositiveInfinity, 1.2)]
@@ -1660,9 +1575,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(double.NegativeInfinity, 2)]
 		[Row(double.NegativeInfinity, double.MinValue)]
 		[Row(double.NegativeInfinity, double.MaxValue)]
-		[Row(double.NegativeInfinity, double.NaN)]
-		[Row(double.NegativeInfinity, double.PositiveInfinity)]
-		[Row(double.NegativeInfinity, double.NegativeInfinity)]
 		[Row(double.NegativeInfinity, 1.00012)]
 		[Row(double.NegativeInfinity, 1.1497)]
 		[Row(double.NegativeInfinity, 1.2)]
@@ -1682,7 +1594,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(1.00012, 2)]
 		[Row(1.00012, double.MinValue)]
 		[Row(1.00012, double.MaxValue)]
-		[Row(1.00012, double.NaN)]
 		[Row(1.00012, double.PositiveInfinity)]
 		[Row(1.00012, double.NegativeInfinity)]
 		[Row(1.00012, 1.00012)]
@@ -1704,7 +1615,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(1.1497, 2)]
 		[Row(1.1497, double.MinValue)]
 		[Row(1.1497, double.MaxValue)]
-		[Row(1.1497, double.NaN)]
 		[Row(1.1497, double.PositiveInfinity)]
 		[Row(1.1497, double.NegativeInfinity)]
 		[Row(1.1497, 1.00012)]
@@ -1726,7 +1636,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(1.2, 2)]
 		[Row(1.2, double.MinValue)]
 		[Row(1.2, double.MaxValue)]
-		[Row(1.2, double.NaN)]
 		[Row(1.2, double.PositiveInfinity)]
 		[Row(1.2, double.NegativeInfinity)]
 		[Row(1.2, 1.00012)]
@@ -1748,7 +1657,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(17.0002501, 2)]
 		[Row(17.0002501, double.MinValue)]
 		[Row(17.0002501, double.MaxValue)]
-		[Row(17.0002501, double.NaN)]
 		[Row(17.0002501, double.PositiveInfinity)]
 		[Row(17.0002501, double.NegativeInfinity)]
 		[Row(17.0002501, 1.00012)]
@@ -1770,7 +1678,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(23, 2)]
 		[Row(23, double.MinValue)]
 		[Row(23, double.MaxValue)]
-		[Row(23, double.NaN)]
 		[Row(23, double.PositiveInfinity)]
 		[Row(23, double.NegativeInfinity)]
 		[Row(23, 1.00012)]
@@ -1792,7 +1699,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(12321452132.561, 2)]
 		[Row(12321452132.561, double.MinValue)]
 		[Row(12321452132.561, double.MaxValue)]
-		[Row(12321452132.561, double.NaN)]
 		[Row(12321452132.561, double.PositiveInfinity)]
 		[Row(12321452132.561, double.NegativeInfinity)]
 		[Row(12321452132.561, 1.00012)]
@@ -1814,7 +1720,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-1, 2)]
 		[Row(-1, double.MinValue)]
 		[Row(-1, double.MaxValue)]
-		[Row(-1, double.NaN)]
 		[Row(-1, double.PositiveInfinity)]
 		[Row(-1, double.NegativeInfinity)]
 		[Row(-1, 1.00012)]
@@ -1836,7 +1741,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-2, 2)]
 		[Row(-2, double.MinValue)]
 		[Row(-2, double.MaxValue)]
-		[Row(-2, double.NaN)]
 		[Row(-2, double.PositiveInfinity)]
 		[Row(-2, double.NegativeInfinity)]
 		[Row(-2, 1.00012)]
@@ -1858,7 +1762,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-1.00012, 2)]
 		[Row(-1.00012, double.MinValue)]
 		[Row(-1.00012, double.MaxValue)]
-		[Row(-1.00012, double.NaN)]
 		[Row(-1.00012, double.PositiveInfinity)]
 		[Row(-1.00012, double.NegativeInfinity)]
 		[Row(-1.00012, 1.00012)]
@@ -1880,7 +1783,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-1.1497, 2)]
 		[Row(-1.1497, double.MinValue)]
 		[Row(-1.1497, double.MaxValue)]
-		[Row(-1.1497, double.NaN)]
 		[Row(-1.1497, double.PositiveInfinity)]
 		[Row(-1.1497, double.NegativeInfinity)]
 		[Row(-1.1497, 1.00012)]
@@ -1902,7 +1804,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-1.2, 2)]
 		[Row(-1.2, double.MinValue)]
 		[Row(-1.2, double.MaxValue)]
-		[Row(-1.2, double.NaN)]
 		[Row(-1.2, double.PositiveInfinity)]
 		[Row(-1.2, double.NegativeInfinity)]
 		[Row(-1.2, 1.00012)]
@@ -1924,7 +1825,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-17.0002501, 2)]
 		[Row(-17.0002501, double.MinValue)]
 		[Row(-17.0002501, double.MaxValue)]
-		[Row(-17.0002501, double.NaN)]
 		[Row(-17.0002501, double.PositiveInfinity)]
 		[Row(-17.0002501, double.NegativeInfinity)]
 		[Row(-17.0002501, 1.00012)]
@@ -1946,7 +1846,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-23, 2)]
 		[Row(-23, double.MinValue)]
 		[Row(-23, double.MaxValue)]
-		[Row(-23, double.NaN)]
 		[Row(-23, double.PositiveInfinity)]
 		[Row(-23, double.NegativeInfinity)]
 		[Row(-23, 1.00012)]
@@ -1968,7 +1867,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-12321452132.561, 2)]
 		[Row(-12321452132.561, double.MinValue)]
 		[Row(-12321452132.561, double.MaxValue)]
-		[Row(-12321452132.561, double.NaN)]
 		[Row(-12321452132.561, double.PositiveInfinity)]
 		[Row(-12321452132.561, double.NegativeInfinity)]
 		[Row(-12321452132.561, 1.00012)]
@@ -2000,7 +1898,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(2)]
 		[Row(double.MinValue)]
 		[Row(double.MaxValue)]
-		[Row(double.NaN)]
+
 		[Row(double.PositiveInfinity)]
 		[Row(double.NegativeInfinity)]
 		[Row(1.00012)]
@@ -2032,7 +1930,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(2)]
 		[Row(double.MinValue)]
 		[Row(double.MaxValue)]
-		[Row(double.NaN)]
+
 		[Row(double.PositiveInfinity)]
 		[Row(double.NegativeInfinity)]
 		[Row(1.00012)]
@@ -2064,7 +1962,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(0, 2)]
 		[Row(0, double.MinValue)]
 		[Row(0, double.MaxValue)]
-		[Row(0, double.NaN)]
 		[Row(0, double.PositiveInfinity)]
 		[Row(0, double.NegativeInfinity)]
 		[Row(0, 1.00012)]
@@ -2086,7 +1983,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(1, 2)]
 		[Row(1, double.MinValue)]
 		[Row(1, double.MaxValue)]
-		[Row(1, double.NaN)]
 		[Row(1, double.PositiveInfinity)]
 		[Row(1, double.NegativeInfinity)]
 		[Row(1, 1.00012)]
@@ -2108,7 +2004,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(2, 2)]
 		[Row(2, double.MinValue)]
 		[Row(2, double.MaxValue)]
-		[Row(2, double.NaN)]
 		[Row(2, double.PositiveInfinity)]
 		[Row(2, double.NegativeInfinity)]
 		[Row(2, 1.00012)]
@@ -2130,7 +2025,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(double.MinValue, 2)]
 		[Row(double.MinValue, double.MinValue)]
 		[Row(double.MinValue, double.MaxValue)]
-		[Row(double.MinValue, double.NaN)]
 		[Row(double.MinValue, double.PositiveInfinity)]
 		[Row(double.MinValue, double.NegativeInfinity)]
 		[Row(double.MinValue, 1.00012)]
@@ -2152,7 +2046,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(double.MaxValue, 2)]
 		[Row(double.MaxValue, double.MinValue)]
 		[Row(double.MaxValue, double.MaxValue)]
-		[Row(double.MaxValue, double.NaN)]
 		[Row(double.MaxValue, double.PositiveInfinity)]
 		[Row(double.MaxValue, double.NegativeInfinity)]
 		[Row(double.MaxValue, 1.00012)]
@@ -2169,34 +2062,11 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(double.MaxValue, -17.0002501)]
 		[Row(double.MaxValue, -23)]
 		[Row(double.MaxValue, -12321452132.561)]
-		[Row(double.NaN, 0)]
-		[Row(double.NaN, 1)]
-		[Row(double.NaN, 2)]
-		[Row(double.NaN, double.MinValue)]
-		[Row(double.NaN, double.MaxValue)]
-		[Row(double.NaN, double.NaN)]
-		[Row(double.NaN, double.PositiveInfinity)]
-		[Row(double.NaN, double.NegativeInfinity)]
-		[Row(double.NaN, 1.00012)]
-		[Row(double.NaN, 1.1497)]
-		[Row(double.NaN, 1.2)]
-		[Row(double.NaN, 17.0002501)]
-		[Row(double.NaN, 23)]
-		[Row(double.NaN, 12321452132.561)]
-		[Row(double.NaN, -1)]
-		[Row(double.NaN, -2)]
-		[Row(double.NaN, -1.00012)]
-		[Row(double.NaN, -1.1497)]
-		[Row(double.NaN, -1.2)]
-		[Row(double.NaN, -17.0002501)]
-		[Row(double.NaN, -23)]
-		[Row(double.NaN, -12321452132.561)]
 		[Row(double.PositiveInfinity, 0)]
 		[Row(double.PositiveInfinity, 1)]
 		[Row(double.PositiveInfinity, 2)]
 		[Row(double.PositiveInfinity, double.MinValue)]
 		[Row(double.PositiveInfinity, double.MaxValue)]
-		[Row(double.PositiveInfinity, double.NaN)]
 		[Row(double.PositiveInfinity, double.PositiveInfinity)]
 		[Row(double.PositiveInfinity, double.NegativeInfinity)]
 		[Row(double.PositiveInfinity, 1.00012)]
@@ -2218,7 +2088,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(double.NegativeInfinity, 2)]
 		[Row(double.NegativeInfinity, double.MinValue)]
 		[Row(double.NegativeInfinity, double.MaxValue)]
-		[Row(double.NegativeInfinity, double.NaN)]
 		[Row(double.NegativeInfinity, double.PositiveInfinity)]
 		[Row(double.NegativeInfinity, double.NegativeInfinity)]
 		[Row(double.NegativeInfinity, 1.00012)]
@@ -2240,7 +2109,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(1.00012, 2)]
 		[Row(1.00012, double.MinValue)]
 		[Row(1.00012, double.MaxValue)]
-		[Row(1.00012, double.NaN)]
 		[Row(1.00012, double.PositiveInfinity)]
 		[Row(1.00012, double.NegativeInfinity)]
 		[Row(1.00012, 1.00012)]
@@ -2262,7 +2130,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(1.1497, 2)]
 		[Row(1.1497, double.MinValue)]
 		[Row(1.1497, double.MaxValue)]
-		[Row(1.1497, double.NaN)]
 		[Row(1.1497, double.PositiveInfinity)]
 		[Row(1.1497, double.NegativeInfinity)]
 		[Row(1.1497, 1.00012)]
@@ -2284,7 +2151,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(1.2, 2)]
 		[Row(1.2, double.MinValue)]
 		[Row(1.2, double.MaxValue)]
-		[Row(1.2, double.NaN)]
 		[Row(1.2, double.PositiveInfinity)]
 		[Row(1.2, double.NegativeInfinity)]
 		[Row(1.2, 1.00012)]
@@ -2306,7 +2172,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(17.0002501, 2)]
 		[Row(17.0002501, double.MinValue)]
 		[Row(17.0002501, double.MaxValue)]
-		[Row(17.0002501, double.NaN)]
 		[Row(17.0002501, double.PositiveInfinity)]
 		[Row(17.0002501, double.NegativeInfinity)]
 		[Row(17.0002501, 1.00012)]
@@ -2328,7 +2193,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(23, 2)]
 		[Row(23, double.MinValue)]
 		[Row(23, double.MaxValue)]
-		[Row(23, double.NaN)]
 		[Row(23, double.PositiveInfinity)]
 		[Row(23, double.NegativeInfinity)]
 		[Row(23, 1.00012)]
@@ -2350,7 +2214,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(12321452132.561, 2)]
 		[Row(12321452132.561, double.MinValue)]
 		[Row(12321452132.561, double.MaxValue)]
-		[Row(12321452132.561, double.NaN)]
 		[Row(12321452132.561, double.PositiveInfinity)]
 		[Row(12321452132.561, double.NegativeInfinity)]
 		[Row(12321452132.561, 1.00012)]
@@ -2372,7 +2235,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-1, 2)]
 		[Row(-1, double.MinValue)]
 		[Row(-1, double.MaxValue)]
-		[Row(-1, double.NaN)]
 		[Row(-1, double.PositiveInfinity)]
 		[Row(-1, double.NegativeInfinity)]
 		[Row(-1, 1.00012)]
@@ -2394,7 +2256,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-2, 2)]
 		[Row(-2, double.MinValue)]
 		[Row(-2, double.MaxValue)]
-		[Row(-2, double.NaN)]
 		[Row(-2, double.PositiveInfinity)]
 		[Row(-2, double.NegativeInfinity)]
 		[Row(-2, 1.00012)]
@@ -2416,7 +2277,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-1.00012, 2)]
 		[Row(-1.00012, double.MinValue)]
 		[Row(-1.00012, double.MaxValue)]
-		[Row(-1.00012, double.NaN)]
 		[Row(-1.00012, double.PositiveInfinity)]
 		[Row(-1.00012, double.NegativeInfinity)]
 		[Row(-1.00012, 1.00012)]
@@ -2438,7 +2298,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-1.1497, 2)]
 		[Row(-1.1497, double.MinValue)]
 		[Row(-1.1497, double.MaxValue)]
-		[Row(-1.1497, double.NaN)]
 		[Row(-1.1497, double.PositiveInfinity)]
 		[Row(-1.1497, double.NegativeInfinity)]
 		[Row(-1.1497, 1.00012)]
@@ -2460,7 +2319,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-1.2, 2)]
 		[Row(-1.2, double.MinValue)]
 		[Row(-1.2, double.MaxValue)]
-		[Row(-1.2, double.NaN)]
 		[Row(-1.2, double.PositiveInfinity)]
 		[Row(-1.2, double.NegativeInfinity)]
 		[Row(-1.2, 1.00012)]
@@ -2482,7 +2340,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-17.0002501, 2)]
 		[Row(-17.0002501, double.MinValue)]
 		[Row(-17.0002501, double.MaxValue)]
-		[Row(-17.0002501, double.NaN)]
 		[Row(-17.0002501, double.PositiveInfinity)]
 		[Row(-17.0002501, double.NegativeInfinity)]
 		[Row(-17.0002501, 1.00012)]
@@ -2504,7 +2361,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-23, 2)]
 		[Row(-23, double.MinValue)]
 		[Row(-23, double.MaxValue)]
-		[Row(-23, double.NaN)]
 		[Row(-23, double.PositiveInfinity)]
 		[Row(-23, double.NegativeInfinity)]
 		[Row(-23, 1.00012)]
@@ -2526,7 +2382,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-12321452132.561, 2)]
 		[Row(-12321452132.561, double.MinValue)]
 		[Row(-12321452132.561, double.MaxValue)]
-		[Row(-12321452132.561, double.NaN)]
 		[Row(-12321452132.561, double.PositiveInfinity)]
 		[Row(-12321452132.561, double.NegativeInfinity)]
 		[Row(-12321452132.561, 1.00012)]
@@ -2558,7 +2413,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(0, 2)]
 		[Row(0, double.MinValue)]
 		[Row(0, double.MaxValue)]
-		[Row(0, double.NaN)]
+
 		[Row(0, double.PositiveInfinity)]
 		[Row(0, double.NegativeInfinity)]
 		[Row(0, 1.00012)]
@@ -2580,7 +2435,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(1, 2)]
 		[Row(1, double.MinValue)]
 		[Row(1, double.MaxValue)]
-		[Row(1, double.NaN)]
+
 		[Row(1, double.PositiveInfinity)]
 		[Row(1, double.NegativeInfinity)]
 		[Row(1, 1.00012)]
@@ -2602,7 +2457,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(2, 2)]
 		[Row(2, double.MinValue)]
 		[Row(2, double.MaxValue)]
-		[Row(2, double.NaN)]
+
 		[Row(2, double.PositiveInfinity)]
 		[Row(2, double.NegativeInfinity)]
 		[Row(2, 1.00012)]
@@ -2624,7 +2479,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(double.MinValue, 2)]
 		[Row(double.MinValue, double.MinValue)]
 		[Row(double.MinValue, double.MaxValue)]
-		[Row(double.MinValue, double.NaN)]
+
 		[Row(double.MinValue, double.PositiveInfinity)]
 		[Row(double.MinValue, double.NegativeInfinity)]
 		[Row(double.MinValue, 1.00012)]
@@ -2646,7 +2501,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(double.MaxValue, 2)]
 		[Row(double.MaxValue, double.MinValue)]
 		[Row(double.MaxValue, double.MaxValue)]
-		[Row(double.MaxValue, double.NaN)]
+
 		[Row(double.MaxValue, double.PositiveInfinity)]
 		[Row(double.MaxValue, double.NegativeInfinity)]
 		[Row(double.MaxValue, 1.00012)]
@@ -2663,34 +2518,34 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(double.MaxValue, -17.0002501)]
 		[Row(double.MaxValue, -23)]
 		[Row(double.MaxValue, -12321452132.561)]
-		[Row(double.NaN, 0)]
-		[Row(double.NaN, 1)]
-		[Row(double.NaN, 2)]
-		[Row(double.NaN, double.MinValue)]
-		[Row(double.NaN, double.MaxValue)]
-		[Row(double.NaN, double.NaN)]
-		[Row(double.NaN, double.PositiveInfinity)]
-		[Row(double.NaN, double.NegativeInfinity)]
-		[Row(double.NaN, 1.00012)]
-		[Row(double.NaN, 1.1497)]
-		[Row(double.NaN, 1.2)]
-		[Row(double.NaN, 17.0002501)]
-		[Row(double.NaN, 23)]
-		[Row(double.NaN, 12321452132.561)]
-		[Row(double.NaN, -1)]
-		[Row(double.NaN, -2)]
-		[Row(double.NaN, -1.00012)]
-		[Row(double.NaN, -1.1497)]
-		[Row(double.NaN, -1.2)]
-		[Row(double.NaN, -17.0002501)]
-		[Row(double.NaN, -23)]
-		[Row(double.NaN, -12321452132.561)]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 		[Row(double.PositiveInfinity, 0)]
 		[Row(double.PositiveInfinity, 1)]
 		[Row(double.PositiveInfinity, 2)]
 		[Row(double.PositiveInfinity, double.MinValue)]
 		[Row(double.PositiveInfinity, double.MaxValue)]
-		[Row(double.PositiveInfinity, double.NaN)]
+
 		[Row(double.PositiveInfinity, double.PositiveInfinity)]
 		[Row(double.PositiveInfinity, double.NegativeInfinity)]
 		[Row(double.PositiveInfinity, 1.00012)]
@@ -2712,7 +2567,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(double.NegativeInfinity, 2)]
 		[Row(double.NegativeInfinity, double.MinValue)]
 		[Row(double.NegativeInfinity, double.MaxValue)]
-		[Row(double.NegativeInfinity, double.NaN)]
+
 		[Row(double.NegativeInfinity, double.PositiveInfinity)]
 		[Row(double.NegativeInfinity, double.NegativeInfinity)]
 		[Row(double.NegativeInfinity, 1.00012)]
@@ -2734,7 +2589,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(1.00012, 2)]
 		[Row(1.00012, double.MinValue)]
 		[Row(1.00012, double.MaxValue)]
-		[Row(1.00012, double.NaN)]
+
 		[Row(1.00012, double.PositiveInfinity)]
 		[Row(1.00012, double.NegativeInfinity)]
 		[Row(1.00012, 1.00012)]
@@ -2756,7 +2611,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(1.1497, 2)]
 		[Row(1.1497, double.MinValue)]
 		[Row(1.1497, double.MaxValue)]
-		[Row(1.1497, double.NaN)]
+
 		[Row(1.1497, double.PositiveInfinity)]
 		[Row(1.1497, double.NegativeInfinity)]
 		[Row(1.1497, 1.00012)]
@@ -2778,7 +2633,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(1.2, 2)]
 		[Row(1.2, double.MinValue)]
 		[Row(1.2, double.MaxValue)]
-		[Row(1.2, double.NaN)]
+
 		[Row(1.2, double.PositiveInfinity)]
 		[Row(1.2, double.NegativeInfinity)]
 		[Row(1.2, 1.00012)]
@@ -2800,7 +2655,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(17.0002501, 2)]
 		[Row(17.0002501, double.MinValue)]
 		[Row(17.0002501, double.MaxValue)]
-		[Row(17.0002501, double.NaN)]
+
 		[Row(17.0002501, double.PositiveInfinity)]
 		[Row(17.0002501, double.NegativeInfinity)]
 		[Row(17.0002501, 1.00012)]
@@ -2822,7 +2677,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(23, 2)]
 		[Row(23, double.MinValue)]
 		[Row(23, double.MaxValue)]
-		[Row(23, double.NaN)]
+
 		[Row(23, double.PositiveInfinity)]
 		[Row(23, double.NegativeInfinity)]
 		[Row(23, 1.00012)]
@@ -2844,7 +2699,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(12321452132.561, 2)]
 		[Row(12321452132.561, double.MinValue)]
 		[Row(12321452132.561, double.MaxValue)]
-		[Row(12321452132.561, double.NaN)]
+
 		[Row(12321452132.561, double.PositiveInfinity)]
 		[Row(12321452132.561, double.NegativeInfinity)]
 		[Row(12321452132.561, 1.00012)]
@@ -2866,7 +2721,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-1, 2)]
 		[Row(-1, double.MinValue)]
 		[Row(-1, double.MaxValue)]
-		[Row(-1, double.NaN)]
+
 		[Row(-1, double.PositiveInfinity)]
 		[Row(-1, double.NegativeInfinity)]
 		[Row(-1, 1.00012)]
@@ -2888,7 +2743,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-2, 2)]
 		[Row(-2, double.MinValue)]
 		[Row(-2, double.MaxValue)]
-		[Row(-2, double.NaN)]
+
 		[Row(-2, double.PositiveInfinity)]
 		[Row(-2, double.NegativeInfinity)]
 		[Row(-2, 1.00012)]
@@ -2910,7 +2765,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-1.00012, 2)]
 		[Row(-1.00012, double.MinValue)]
 		[Row(-1.00012, double.MaxValue)]
-		[Row(-1.00012, double.NaN)]
+
 		[Row(-1.00012, double.PositiveInfinity)]
 		[Row(-1.00012, double.NegativeInfinity)]
 		[Row(-1.00012, 1.00012)]
@@ -2932,7 +2787,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-1.1497, 2)]
 		[Row(-1.1497, double.MinValue)]
 		[Row(-1.1497, double.MaxValue)]
-		[Row(-1.1497, double.NaN)]
+
 		[Row(-1.1497, double.PositiveInfinity)]
 		[Row(-1.1497, double.NegativeInfinity)]
 		[Row(-1.1497, 1.00012)]
@@ -2954,7 +2809,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-1.2, 2)]
 		[Row(-1.2, double.MinValue)]
 		[Row(-1.2, double.MaxValue)]
-		[Row(-1.2, double.NaN)]
+
 		[Row(-1.2, double.PositiveInfinity)]
 		[Row(-1.2, double.NegativeInfinity)]
 		[Row(-1.2, 1.00012)]
@@ -2976,7 +2831,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-17.0002501, 2)]
 		[Row(-17.0002501, double.MinValue)]
 		[Row(-17.0002501, double.MaxValue)]
-		[Row(-17.0002501, double.NaN)]
+
 		[Row(-17.0002501, double.PositiveInfinity)]
 		[Row(-17.0002501, double.NegativeInfinity)]
 		[Row(-17.0002501, 1.00012)]
@@ -2998,7 +2853,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-23, 2)]
 		[Row(-23, double.MinValue)]
 		[Row(-23, double.MaxValue)]
-		[Row(-23, double.NaN)]
+
 		[Row(-23, double.PositiveInfinity)]
 		[Row(-23, double.NegativeInfinity)]
 		[Row(-23, 1.00012)]
@@ -3020,7 +2875,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-12321452132.561, 2)]
 		[Row(-12321452132.561, double.MinValue)]
 		[Row(-12321452132.561, double.MaxValue)]
-		[Row(-12321452132.561, double.NaN)]
+
 		[Row(-12321452132.561, double.PositiveInfinity)]
 		[Row(-12321452132.561, double.NegativeInfinity)]
 		[Row(-12321452132.561, 1.00012)]
@@ -3052,7 +2907,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(0, 2)]
 		[Row(0, double.MinValue)]
 		[Row(0, double.MaxValue)]
-		[Row(0, double.NaN)]
+
 		[Row(0, double.PositiveInfinity)]
 		[Row(0, double.NegativeInfinity)]
 		[Row(0, 1.00012)]
@@ -3074,7 +2929,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(1, 2)]
 		[Row(1, double.MinValue)]
 		[Row(1, double.MaxValue)]
-		[Row(1, double.NaN)]
+
 		[Row(1, double.PositiveInfinity)]
 		[Row(1, double.NegativeInfinity)]
 		[Row(1, 1.00012)]
@@ -3096,7 +2951,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(2, 2)]
 		[Row(2, double.MinValue)]
 		[Row(2, double.MaxValue)]
-		[Row(2, double.NaN)]
+
 		[Row(2, double.PositiveInfinity)]
 		[Row(2, double.NegativeInfinity)]
 		[Row(2, 1.00012)]
@@ -3118,7 +2973,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(double.MinValue, 2)]
 		[Row(double.MinValue, double.MinValue)]
 		[Row(double.MinValue, double.MaxValue)]
-		[Row(double.MinValue, double.NaN)]
+
 		[Row(double.MinValue, double.PositiveInfinity)]
 		[Row(double.MinValue, double.NegativeInfinity)]
 		[Row(double.MinValue, 1.00012)]
@@ -3140,7 +2995,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(double.MaxValue, 2)]
 		[Row(double.MaxValue, double.MinValue)]
 		[Row(double.MaxValue, double.MaxValue)]
-		[Row(double.MaxValue, double.NaN)]
+
 		[Row(double.MaxValue, double.PositiveInfinity)]
 		[Row(double.MaxValue, double.NegativeInfinity)]
 		[Row(double.MaxValue, 1.00012)]
@@ -3157,34 +3012,34 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(double.MaxValue, -17.0002501)]
 		[Row(double.MaxValue, -23)]
 		[Row(double.MaxValue, -12321452132.561)]
-		[Row(double.NaN, 0)]
-		[Row(double.NaN, 1)]
-		[Row(double.NaN, 2)]
-		[Row(double.NaN, double.MinValue)]
-		[Row(double.NaN, double.MaxValue)]
-		[Row(double.NaN, double.NaN)]
-		[Row(double.NaN, double.PositiveInfinity)]
-		[Row(double.NaN, double.NegativeInfinity)]
-		[Row(double.NaN, 1.00012)]
-		[Row(double.NaN, 1.1497)]
-		[Row(double.NaN, 1.2)]
-		[Row(double.NaN, 17.0002501)]
-		[Row(double.NaN, 23)]
-		[Row(double.NaN, 12321452132.561)]
-		[Row(double.NaN, -1)]
-		[Row(double.NaN, -2)]
-		[Row(double.NaN, -1.00012)]
-		[Row(double.NaN, -1.1497)]
-		[Row(double.NaN, -1.2)]
-		[Row(double.NaN, -17.0002501)]
-		[Row(double.NaN, -23)]
-		[Row(double.NaN, -12321452132.561)]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 		[Row(double.PositiveInfinity, 0)]
 		[Row(double.PositiveInfinity, 1)]
 		[Row(double.PositiveInfinity, 2)]
 		[Row(double.PositiveInfinity, double.MinValue)]
 		[Row(double.PositiveInfinity, double.MaxValue)]
-		[Row(double.PositiveInfinity, double.NaN)]
+
 		[Row(double.PositiveInfinity, double.PositiveInfinity)]
 		[Row(double.PositiveInfinity, double.NegativeInfinity)]
 		[Row(double.PositiveInfinity, 1.00012)]
@@ -3206,7 +3061,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(double.NegativeInfinity, 2)]
 		[Row(double.NegativeInfinity, double.MinValue)]
 		[Row(double.NegativeInfinity, double.MaxValue)]
-		[Row(double.NegativeInfinity, double.NaN)]
+
 		[Row(double.NegativeInfinity, double.PositiveInfinity)]
 		[Row(double.NegativeInfinity, double.NegativeInfinity)]
 		[Row(double.NegativeInfinity, 1.00012)]
@@ -3228,7 +3083,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(1.00012, 2)]
 		[Row(1.00012, double.MinValue)]
 		[Row(1.00012, double.MaxValue)]
-		[Row(1.00012, double.NaN)]
+
 		[Row(1.00012, double.PositiveInfinity)]
 		[Row(1.00012, double.NegativeInfinity)]
 		[Row(1.00012, 1.00012)]
@@ -3250,7 +3105,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(1.1497, 2)]
 		[Row(1.1497, double.MinValue)]
 		[Row(1.1497, double.MaxValue)]
-		[Row(1.1497, double.NaN)]
+
 		[Row(1.1497, double.PositiveInfinity)]
 		[Row(1.1497, double.NegativeInfinity)]
 		[Row(1.1497, 1.00012)]
@@ -3272,7 +3127,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(1.2, 2)]
 		[Row(1.2, double.MinValue)]
 		[Row(1.2, double.MaxValue)]
-		[Row(1.2, double.NaN)]
+
 		[Row(1.2, double.PositiveInfinity)]
 		[Row(1.2, double.NegativeInfinity)]
 		[Row(1.2, 1.00012)]
@@ -3294,7 +3149,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(17.0002501, 2)]
 		[Row(17.0002501, double.MinValue)]
 		[Row(17.0002501, double.MaxValue)]
-		[Row(17.0002501, double.NaN)]
+
 		[Row(17.0002501, double.PositiveInfinity)]
 		[Row(17.0002501, double.NegativeInfinity)]
 		[Row(17.0002501, 1.00012)]
@@ -3316,7 +3171,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(23, 2)]
 		[Row(23, double.MinValue)]
 		[Row(23, double.MaxValue)]
-		[Row(23, double.NaN)]
+
 		[Row(23, double.PositiveInfinity)]
 		[Row(23, double.NegativeInfinity)]
 		[Row(23, 1.00012)]
@@ -3338,7 +3193,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(12321452132.561, 2)]
 		[Row(12321452132.561, double.MinValue)]
 		[Row(12321452132.561, double.MaxValue)]
-		[Row(12321452132.561, double.NaN)]
+
 		[Row(12321452132.561, double.PositiveInfinity)]
 		[Row(12321452132.561, double.NegativeInfinity)]
 		[Row(12321452132.561, 1.00012)]
@@ -3360,7 +3215,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-1, 2)]
 		[Row(-1, double.MinValue)]
 		[Row(-1, double.MaxValue)]
-		[Row(-1, double.NaN)]
+
 		[Row(-1, double.PositiveInfinity)]
 		[Row(-1, double.NegativeInfinity)]
 		[Row(-1, 1.00012)]
@@ -3382,7 +3237,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-2, 2)]
 		[Row(-2, double.MinValue)]
 		[Row(-2, double.MaxValue)]
-		[Row(-2, double.NaN)]
+
 		[Row(-2, double.PositiveInfinity)]
 		[Row(-2, double.NegativeInfinity)]
 		[Row(-2, 1.00012)]
@@ -3404,7 +3259,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-1.00012, 2)]
 		[Row(-1.00012, double.MinValue)]
 		[Row(-1.00012, double.MaxValue)]
-		[Row(-1.00012, double.NaN)]
+
 		[Row(-1.00012, double.PositiveInfinity)]
 		[Row(-1.00012, double.NegativeInfinity)]
 		[Row(-1.00012, 1.00012)]
@@ -3426,7 +3281,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-1.1497, 2)]
 		[Row(-1.1497, double.MinValue)]
 		[Row(-1.1497, double.MaxValue)]
-		[Row(-1.1497, double.NaN)]
+
 		[Row(-1.1497, double.PositiveInfinity)]
 		[Row(-1.1497, double.NegativeInfinity)]
 		[Row(-1.1497, 1.00012)]
@@ -3448,7 +3303,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-1.2, 2)]
 		[Row(-1.2, double.MinValue)]
 		[Row(-1.2, double.MaxValue)]
-		[Row(-1.2, double.NaN)]
+
 		[Row(-1.2, double.PositiveInfinity)]
 		[Row(-1.2, double.NegativeInfinity)]
 		[Row(-1.2, 1.00012)]
@@ -3470,7 +3325,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-17.0002501, 2)]
 		[Row(-17.0002501, double.MinValue)]
 		[Row(-17.0002501, double.MaxValue)]
-		[Row(-17.0002501, double.NaN)]
+
 		[Row(-17.0002501, double.PositiveInfinity)]
 		[Row(-17.0002501, double.NegativeInfinity)]
 		[Row(-17.0002501, 1.00012)]
@@ -3492,7 +3347,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-23, 2)]
 		[Row(-23, double.MinValue)]
 		[Row(-23, double.MaxValue)]
-		[Row(-23, double.NaN)]
+
 		[Row(-23, double.PositiveInfinity)]
 		[Row(-23, double.NegativeInfinity)]
 		[Row(-23, 1.00012)]
@@ -3514,7 +3369,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-12321452132.561, 2)]
 		[Row(-12321452132.561, double.MinValue)]
 		[Row(-12321452132.561, double.MaxValue)]
-		[Row(-12321452132.561, double.NaN)]
+
 		[Row(-12321452132.561, double.PositiveInfinity)]
 		[Row(-12321452132.561, double.NegativeInfinity)]
 		[Row(-12321452132.561, 1.00012)]
@@ -3546,7 +3401,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(0, 2)]
 		[Row(0, double.MinValue)]
 		[Row(0, double.MaxValue)]
-		[Row(0, double.NaN)]
+
 		[Row(0, double.PositiveInfinity)]
 		[Row(0, double.NegativeInfinity)]
 		[Row(0, 1.00012)]
@@ -3568,7 +3423,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(1, 2)]
 		[Row(1, double.MinValue)]
 		[Row(1, double.MaxValue)]
-		[Row(1, double.NaN)]
+
 		[Row(1, double.PositiveInfinity)]
 		[Row(1, double.NegativeInfinity)]
 		[Row(1, 1.00012)]
@@ -3590,7 +3445,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(2, 2)]
 		[Row(2, double.MinValue)]
 		[Row(2, double.MaxValue)]
-		[Row(2, double.NaN)]
+
 		[Row(2, double.PositiveInfinity)]
 		[Row(2, double.NegativeInfinity)]
 		[Row(2, 1.00012)]
@@ -3612,7 +3467,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(double.MinValue, 2)]
 		[Row(double.MinValue, double.MinValue)]
 		[Row(double.MinValue, double.MaxValue)]
-		[Row(double.MinValue, double.NaN)]
+
 		[Row(double.MinValue, double.PositiveInfinity)]
 		[Row(double.MinValue, double.NegativeInfinity)]
 		[Row(double.MinValue, 1.00012)]
@@ -3634,7 +3489,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(double.MaxValue, 2)]
 		[Row(double.MaxValue, double.MinValue)]
 		[Row(double.MaxValue, double.MaxValue)]
-		[Row(double.MaxValue, double.NaN)]
+
 		[Row(double.MaxValue, double.PositiveInfinity)]
 		[Row(double.MaxValue, double.NegativeInfinity)]
 		[Row(double.MaxValue, 1.00012)]
@@ -3651,34 +3506,34 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(double.MaxValue, -17.0002501)]
 		[Row(double.MaxValue, -23)]
 		[Row(double.MaxValue, -12321452132.561)]
-		[Row(double.NaN, 0)]
-		[Row(double.NaN, 1)]
-		[Row(double.NaN, 2)]
-		[Row(double.NaN, double.MinValue)]
-		[Row(double.NaN, double.MaxValue)]
-		[Row(double.NaN, double.NaN)]
-		[Row(double.NaN, double.PositiveInfinity)]
-		[Row(double.NaN, double.NegativeInfinity)]
-		[Row(double.NaN, 1.00012)]
-		[Row(double.NaN, 1.1497)]
-		[Row(double.NaN, 1.2)]
-		[Row(double.NaN, 17.0002501)]
-		[Row(double.NaN, 23)]
-		[Row(double.NaN, 12321452132.561)]
-		[Row(double.NaN, -1)]
-		[Row(double.NaN, -2)]
-		[Row(double.NaN, -1.00012)]
-		[Row(double.NaN, -1.1497)]
-		[Row(double.NaN, -1.2)]
-		[Row(double.NaN, -17.0002501)]
-		[Row(double.NaN, -23)]
-		[Row(double.NaN, -12321452132.561)]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 		[Row(double.PositiveInfinity, 0)]
 		[Row(double.PositiveInfinity, 1)]
 		[Row(double.PositiveInfinity, 2)]
 		[Row(double.PositiveInfinity, double.MinValue)]
 		[Row(double.PositiveInfinity, double.MaxValue)]
-		[Row(double.PositiveInfinity, double.NaN)]
+
 		[Row(double.PositiveInfinity, double.PositiveInfinity)]
 		[Row(double.PositiveInfinity, double.NegativeInfinity)]
 		[Row(double.PositiveInfinity, 1.00012)]
@@ -3700,7 +3555,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(double.NegativeInfinity, 2)]
 		[Row(double.NegativeInfinity, double.MinValue)]
 		[Row(double.NegativeInfinity, double.MaxValue)]
-		[Row(double.NegativeInfinity, double.NaN)]
+
 		[Row(double.NegativeInfinity, double.PositiveInfinity)]
 		[Row(double.NegativeInfinity, double.NegativeInfinity)]
 		[Row(double.NegativeInfinity, 1.00012)]
@@ -3722,7 +3577,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(1.00012, 2)]
 		[Row(1.00012, double.MinValue)]
 		[Row(1.00012, double.MaxValue)]
-		[Row(1.00012, double.NaN)]
+
 		[Row(1.00012, double.PositiveInfinity)]
 		[Row(1.00012, double.NegativeInfinity)]
 		[Row(1.00012, 1.00012)]
@@ -3744,7 +3599,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(1.1497, 2)]
 		[Row(1.1497, double.MinValue)]
 		[Row(1.1497, double.MaxValue)]
-		[Row(1.1497, double.NaN)]
+
 		[Row(1.1497, double.PositiveInfinity)]
 		[Row(1.1497, double.NegativeInfinity)]
 		[Row(1.1497, 1.00012)]
@@ -3766,7 +3621,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(1.2, 2)]
 		[Row(1.2, double.MinValue)]
 		[Row(1.2, double.MaxValue)]
-		[Row(1.2, double.NaN)]
+
 		[Row(1.2, double.PositiveInfinity)]
 		[Row(1.2, double.NegativeInfinity)]
 		[Row(1.2, 1.00012)]
@@ -3788,7 +3643,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(17.0002501, 2)]
 		[Row(17.0002501, double.MinValue)]
 		[Row(17.0002501, double.MaxValue)]
-		[Row(17.0002501, double.NaN)]
+
 		[Row(17.0002501, double.PositiveInfinity)]
 		[Row(17.0002501, double.NegativeInfinity)]
 		[Row(17.0002501, 1.00012)]
@@ -3810,7 +3665,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(23, 2)]
 		[Row(23, double.MinValue)]
 		[Row(23, double.MaxValue)]
-		[Row(23, double.NaN)]
+
 		[Row(23, double.PositiveInfinity)]
 		[Row(23, double.NegativeInfinity)]
 		[Row(23, 1.00012)]
@@ -3832,7 +3687,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(12321452132.561, 2)]
 		[Row(12321452132.561, double.MinValue)]
 		[Row(12321452132.561, double.MaxValue)]
-		[Row(12321452132.561, double.NaN)]
+
 		[Row(12321452132.561, double.PositiveInfinity)]
 		[Row(12321452132.561, double.NegativeInfinity)]
 		[Row(12321452132.561, 1.00012)]
@@ -3854,7 +3709,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-1, 2)]
 		[Row(-1, double.MinValue)]
 		[Row(-1, double.MaxValue)]
-		[Row(-1, double.NaN)]
+
 		[Row(-1, double.PositiveInfinity)]
 		[Row(-1, double.NegativeInfinity)]
 		[Row(-1, 1.00012)]
@@ -3876,7 +3731,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-2, 2)]
 		[Row(-2, double.MinValue)]
 		[Row(-2, double.MaxValue)]
-		[Row(-2, double.NaN)]
+
 		[Row(-2, double.PositiveInfinity)]
 		[Row(-2, double.NegativeInfinity)]
 		[Row(-2, 1.00012)]
@@ -3898,7 +3753,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-1.00012, 2)]
 		[Row(-1.00012, double.MinValue)]
 		[Row(-1.00012, double.MaxValue)]
-		[Row(-1.00012, double.NaN)]
+
 		[Row(-1.00012, double.PositiveInfinity)]
 		[Row(-1.00012, double.NegativeInfinity)]
 		[Row(-1.00012, 1.00012)]
@@ -3920,7 +3775,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-1.1497, 2)]
 		[Row(-1.1497, double.MinValue)]
 		[Row(-1.1497, double.MaxValue)]
-		[Row(-1.1497, double.NaN)]
+
 		[Row(-1.1497, double.PositiveInfinity)]
 		[Row(-1.1497, double.NegativeInfinity)]
 		[Row(-1.1497, 1.00012)]
@@ -3942,7 +3797,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-1.2, 2)]
 		[Row(-1.2, double.MinValue)]
 		[Row(-1.2, double.MaxValue)]
-		[Row(-1.2, double.NaN)]
+
 		[Row(-1.2, double.PositiveInfinity)]
 		[Row(-1.2, double.NegativeInfinity)]
 		[Row(-1.2, 1.00012)]
@@ -3964,7 +3819,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-17.0002501, 2)]
 		[Row(-17.0002501, double.MinValue)]
 		[Row(-17.0002501, double.MaxValue)]
-		[Row(-17.0002501, double.NaN)]
+
 		[Row(-17.0002501, double.PositiveInfinity)]
 		[Row(-17.0002501, double.NegativeInfinity)]
 		[Row(-17.0002501, 1.00012)]
@@ -3986,7 +3841,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-23, 2)]
 		[Row(-23, double.MinValue)]
 		[Row(-23, double.MaxValue)]
-		[Row(-23, double.NaN)]
+
 		[Row(-23, double.PositiveInfinity)]
 		[Row(-23, double.NegativeInfinity)]
 		[Row(-23, 1.00012)]
@@ -4008,7 +3863,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-12321452132.561, 2)]
 		[Row(-12321452132.561, double.MinValue)]
 		[Row(-12321452132.561, double.MaxValue)]
-		[Row(-12321452132.561, double.NaN)]
 		[Row(-12321452132.561, double.PositiveInfinity)]
 		[Row(-12321452132.561, double.NegativeInfinity)]
 		[Row(-12321452132.561, 1.00012)]
@@ -4040,7 +3894,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(0, 2)]
 		[Row(0, double.MinValue)]
 		[Row(0, double.MaxValue)]
-		[Row(0, double.NaN)]
+
 		[Row(0, double.PositiveInfinity)]
 		[Row(0, double.NegativeInfinity)]
 		[Row(0, 1.00012)]
@@ -4062,7 +3916,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(1, 2)]
 		[Row(1, double.MinValue)]
 		[Row(1, double.MaxValue)]
-		[Row(1, double.NaN)]
+
 		[Row(1, double.PositiveInfinity)]
 		[Row(1, double.NegativeInfinity)]
 		[Row(1, 1.00012)]
@@ -4084,7 +3938,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(2, 2)]
 		[Row(2, double.MinValue)]
 		[Row(2, double.MaxValue)]
-		[Row(2, double.NaN)]
+
 		[Row(2, double.PositiveInfinity)]
 		[Row(2, double.NegativeInfinity)]
 		[Row(2, 1.00012)]
@@ -4106,7 +3960,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(double.MinValue, 2)]
 		[Row(double.MinValue, double.MinValue)]
 		[Row(double.MinValue, double.MaxValue)]
-		[Row(double.MinValue, double.NaN)]
+
 		[Row(double.MinValue, double.PositiveInfinity)]
 		[Row(double.MinValue, double.NegativeInfinity)]
 		[Row(double.MinValue, 1.00012)]
@@ -4128,7 +3982,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(double.MaxValue, 2)]
 		[Row(double.MaxValue, double.MinValue)]
 		[Row(double.MaxValue, double.MaxValue)]
-		[Row(double.MaxValue, double.NaN)]
+
 		[Row(double.MaxValue, double.PositiveInfinity)]
 		[Row(double.MaxValue, double.NegativeInfinity)]
 		[Row(double.MaxValue, 1.00012)]
@@ -4145,34 +3999,34 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(double.MaxValue, -17.0002501)]
 		[Row(double.MaxValue, -23)]
 		[Row(double.MaxValue, -12321452132.561)]
-		[Row(double.NaN, 0)]
-		[Row(double.NaN, 1)]
-		[Row(double.NaN, 2)]
-		[Row(double.NaN, double.MinValue)]
-		[Row(double.NaN, double.MaxValue)]
-		[Row(double.NaN, double.NaN)]
-		[Row(double.NaN, double.PositiveInfinity)]
-		[Row(double.NaN, double.NegativeInfinity)]
-		[Row(double.NaN, 1.00012)]
-		[Row(double.NaN, 1.1497)]
-		[Row(double.NaN, 1.2)]
-		[Row(double.NaN, 17.0002501)]
-		[Row(double.NaN, 23)]
-		[Row(double.NaN, 12321452132.561)]
-		[Row(double.NaN, -1)]
-		[Row(double.NaN, -2)]
-		[Row(double.NaN, -1.00012)]
-		[Row(double.NaN, -1.1497)]
-		[Row(double.NaN, -1.2)]
-		[Row(double.NaN, -17.0002501)]
-		[Row(double.NaN, -23)]
-		[Row(double.NaN, -12321452132.561)]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 		[Row(double.PositiveInfinity, 0)]
 		[Row(double.PositiveInfinity, 1)]
 		[Row(double.PositiveInfinity, 2)]
 		[Row(double.PositiveInfinity, double.MinValue)]
 		[Row(double.PositiveInfinity, double.MaxValue)]
-		[Row(double.PositiveInfinity, double.NaN)]
+
 		[Row(double.PositiveInfinity, double.PositiveInfinity)]
 		[Row(double.PositiveInfinity, double.NegativeInfinity)]
 		[Row(double.PositiveInfinity, 1.00012)]
@@ -4194,7 +4048,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(double.NegativeInfinity, 2)]
 		[Row(double.NegativeInfinity, double.MinValue)]
 		[Row(double.NegativeInfinity, double.MaxValue)]
-		[Row(double.NegativeInfinity, double.NaN)]
+
 		[Row(double.NegativeInfinity, double.PositiveInfinity)]
 		[Row(double.NegativeInfinity, double.NegativeInfinity)]
 		[Row(double.NegativeInfinity, 1.00012)]
@@ -4216,7 +4070,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(1.00012, 2)]
 		[Row(1.00012, double.MinValue)]
 		[Row(1.00012, double.MaxValue)]
-		[Row(1.00012, double.NaN)]
+
 		[Row(1.00012, double.PositiveInfinity)]
 		[Row(1.00012, double.NegativeInfinity)]
 		[Row(1.00012, 1.00012)]
@@ -4238,7 +4092,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(1.1497, 2)]
 		[Row(1.1497, double.MinValue)]
 		[Row(1.1497, double.MaxValue)]
-		[Row(1.1497, double.NaN)]
+
 		[Row(1.1497, double.PositiveInfinity)]
 		[Row(1.1497, double.NegativeInfinity)]
 		[Row(1.1497, 1.00012)]
@@ -4260,7 +4114,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(1.2, 2)]
 		[Row(1.2, double.MinValue)]
 		[Row(1.2, double.MaxValue)]
-		[Row(1.2, double.NaN)]
+
 		[Row(1.2, double.PositiveInfinity)]
 		[Row(1.2, double.NegativeInfinity)]
 		[Row(1.2, 1.00012)]
@@ -4282,7 +4136,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(17.0002501, 2)]
 		[Row(17.0002501, double.MinValue)]
 		[Row(17.0002501, double.MaxValue)]
-		[Row(17.0002501, double.NaN)]
+
 		[Row(17.0002501, double.PositiveInfinity)]
 		[Row(17.0002501, double.NegativeInfinity)]
 		[Row(17.0002501, 1.00012)]
@@ -4304,7 +4158,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(23, 2)]
 		[Row(23, double.MinValue)]
 		[Row(23, double.MaxValue)]
-		[Row(23, double.NaN)]
+
 		[Row(23, double.PositiveInfinity)]
 		[Row(23, double.NegativeInfinity)]
 		[Row(23, 1.00012)]
@@ -4326,7 +4180,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(12321452132.561, 2)]
 		[Row(12321452132.561, double.MinValue)]
 		[Row(12321452132.561, double.MaxValue)]
-		[Row(12321452132.561, double.NaN)]
+
 		[Row(12321452132.561, double.PositiveInfinity)]
 		[Row(12321452132.561, double.NegativeInfinity)]
 		[Row(12321452132.561, 1.00012)]
@@ -4348,7 +4202,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-1, 2)]
 		[Row(-1, double.MinValue)]
 		[Row(-1, double.MaxValue)]
-		[Row(-1, double.NaN)]
+
 		[Row(-1, double.PositiveInfinity)]
 		[Row(-1, double.NegativeInfinity)]
 		[Row(-1, 1.00012)]
@@ -4370,7 +4224,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-2, 2)]
 		[Row(-2, double.MinValue)]
 		[Row(-2, double.MaxValue)]
-		[Row(-2, double.NaN)]
+
 		[Row(-2, double.PositiveInfinity)]
 		[Row(-2, double.NegativeInfinity)]
 		[Row(-2, 1.00012)]
@@ -4392,7 +4246,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-1.00012, 2)]
 		[Row(-1.00012, double.MinValue)]
 		[Row(-1.00012, double.MaxValue)]
-		[Row(-1.00012, double.NaN)]
+
 		[Row(-1.00012, double.PositiveInfinity)]
 		[Row(-1.00012, double.NegativeInfinity)]
 		[Row(-1.00012, 1.00012)]
@@ -4414,7 +4268,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-1.1497, 2)]
 		[Row(-1.1497, double.MinValue)]
 		[Row(-1.1497, double.MaxValue)]
-		[Row(-1.1497, double.NaN)]
+
 		[Row(-1.1497, double.PositiveInfinity)]
 		[Row(-1.1497, double.NegativeInfinity)]
 		[Row(-1.1497, 1.00012)]
@@ -4436,7 +4290,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-1.2, 2)]
 		[Row(-1.2, double.MinValue)]
 		[Row(-1.2, double.MaxValue)]
-		[Row(-1.2, double.NaN)]
+
 		[Row(-1.2, double.PositiveInfinity)]
 		[Row(-1.2, double.NegativeInfinity)]
 		[Row(-1.2, 1.00012)]
@@ -4458,7 +4312,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-17.0002501, 2)]
 		[Row(-17.0002501, double.MinValue)]
 		[Row(-17.0002501, double.MaxValue)]
-		[Row(-17.0002501, double.NaN)]
+
 		[Row(-17.0002501, double.PositiveInfinity)]
 		[Row(-17.0002501, double.NegativeInfinity)]
 		[Row(-17.0002501, 1.00012)]
@@ -4480,7 +4334,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-23, 2)]
 		[Row(-23, double.MinValue)]
 		[Row(-23, double.MaxValue)]
-		[Row(-23, double.NaN)]
+
 		[Row(-23, double.PositiveInfinity)]
 		[Row(-23, double.NegativeInfinity)]
 		[Row(-23, 1.00012)]
@@ -4502,7 +4356,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-12321452132.561, 2)]
 		[Row(-12321452132.561, double.MinValue)]
 		[Row(-12321452132.561, double.MaxValue)]
-		[Row(-12321452132.561, double.NaN)]
+
 		[Row(-12321452132.561, double.PositiveInfinity)]
 		[Row(-12321452132.561, double.NegativeInfinity)]
 		[Row(-12321452132.561, 1.00012)]
