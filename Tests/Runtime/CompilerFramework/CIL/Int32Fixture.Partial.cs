@@ -263,7 +263,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(Int32.MinValue, Int32.MaxValue)]
 		[Row(Int32.MinValue, Int32.MinValue + 1)]
 		[Row(Int32.MinValue, Int32.MaxValue - 1)]
-		[Row(Int32.MinValue, -1)]
+		[Row(Int32.MinValue, -1, ExpectedException = typeof(OverflowException))]
 		[Row(Int32.MinValue, Int32.MinValue + 2)]
 		[Row(Int32.MaxValue, 0, ExpectedException = typeof(DivideByZeroException))]
 		[Row(Int32.MaxValue, 1)]
