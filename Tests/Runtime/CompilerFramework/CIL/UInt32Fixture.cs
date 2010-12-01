@@ -22,28 +22,28 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 	{
 		private readonly ArithmeticInstructionTestRunner<uint, uint> arithmeticTests = new ArithmeticInstructionTestRunner<uint, uint>
 		{
-			ExpectedType = @"uint",
-			FirstType = @"uint",
-			SecondType = @"uint"
+			ExpectedType = "uint",
+			FirstType = "uint",
+			SecondType = "uint"
 		};
 
 		private readonly BinaryLogicInstructionTestRunner<uint, uint, int> logicTests = new BinaryLogicInstructionTestRunner<uint, uint, int>
 		{
-			ExpectedType = @"uint",
-			FirstType = @"uint",
-			SecondType = @"uint",
-			ShiftType = @"int",
+			ExpectedType = "uint",
+			FirstType = "uint",
+			SecondType = "uint",
+			ShiftType = "int",
 			IncludeNot = false
 		};
 
 		private readonly ComparisonInstructionTestRunner<uint> comparisonTests = new ComparisonInstructionTestRunner<uint>
 		{
-			FirstType = @"uint"
+			FirstType = "uint"
 		};
 
 		private readonly SZArrayInstructionTestRunner<uint> arrayTests = new SZArrayInstructionTestRunner<uint>
 		{
-			FirstType = @"uint"
+			FirstType = "uint"
 		};
 
 	}

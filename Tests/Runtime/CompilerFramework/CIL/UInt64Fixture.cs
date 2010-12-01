@@ -22,29 +22,29 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 	{
 		private readonly ArithmeticInstructionTestRunner<ulong, ulong> arithmeticTests = new ArithmeticInstructionTestRunner<ulong, ulong>
 		{
-			ExpectedType = @"ulong",
-			FirstType = @"ulong",
-			SecondType = @"ulong",
+			ExpectedType = "ulong",
+			FirstType = "ulong",
+			SecondType = "ulong",
 			IncludeNeg = false
 		};
 
 		private readonly BinaryLogicInstructionTestRunner<ulong, ulong, int> logicTests = new BinaryLogicInstructionTestRunner<ulong, ulong, int>
 		{
-			ExpectedType = @"ulong",
-			FirstType = @"ulong",
-			SecondType = @"ulong",
-			ShiftType = @"int",
+			ExpectedType = "ulong",
+			FirstType = "ulong",
+			SecondType = "ulong",
+			ShiftType = "int",
 			IncludeNot = false,
 		};
 
 		private readonly ComparisonInstructionTestRunner<ulong> comparisonTests = new ComparisonInstructionTestRunner<ulong>
 		{
-			FirstType = @"ulong"
+			FirstType = "ulong"
 		};
 
 		private readonly SZArrayInstructionTestRunner<ulong> arrayTests = new SZArrayInstructionTestRunner<ulong>
 		{
-			FirstType = @"ulong"
+			FirstType = "ulong"
 		};
 
 	}

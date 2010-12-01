@@ -96,7 +96,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 				}
 			}" + Code.AllTestCode;
 
-			Assert.IsFalse(Run<bool>("", "Test", "WhileFalse", null));
+			Assert.IsFalse(Run<bool>("", "Test", "WhileFalse"));
 		}
 
 		#endregion
@@ -140,7 +140,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 					return !called && start == limit && count == 20;
 				}
 			}" + Code.AllTestCode;
-			Assert.IsTrue(Run<bool>("", "Test", "WhileContinueBreak", null));
+			Assert.IsTrue(Run<bool>("", "Test", "WhileContinueBreak"));
 		}
 
 		#endregion

@@ -368,7 +368,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		{
 			string marshalDirective = null;
 
-			if (typeName == @"char")
+			if (typeName == "char")
 			{
 				marshalDirective = @"MarshalAs(UnmanagedType.U2)";
 			}

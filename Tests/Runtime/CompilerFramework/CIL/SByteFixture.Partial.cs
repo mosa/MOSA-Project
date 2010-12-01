@@ -10,8 +10,9 @@
 /* DO NOT MODIFY THIS FILE COMPUTER GENERATED CODE. */
 
 using System;
-
 using MbUnit.Framework;
+
+using Test.Mosa.Runtime.CompilerFramework.Permutation;
 
 namespace Test.Mosa.Runtime.CompilerFramework.CLI
 {
@@ -388,16 +389,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		#endregion // Rem
 		
 		#region Neg
-		
-		[Row(0)]
-		[Row(1)]
-		[Row(sbyte.MinValue)]
-		[Row(sbyte.MaxValue)]
-		[Row(sbyte.MinValue + 1)]
-		[Row(sbyte.MaxValue - 1)]
-		[Row(-1)]
-		[Row(sbyte.MinValue + 2)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+
+		[Test, Factory(typeof(I1),"AllPermutations")]
 		public void NegSbyte(sbyte first)
 		{
 			this.arithmeticTests.Neg(-first, first);

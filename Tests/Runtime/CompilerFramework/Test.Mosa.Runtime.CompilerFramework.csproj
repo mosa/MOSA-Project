@@ -79,6 +79,8 @@
       <HintPath>..\..\..\3rdParty\MbUnit.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\Source\Mosa.Vm\Mosa.Vm.csproj">
@@ -152,6 +154,8 @@
     <Compile Include="MosaCompilerTestRunner.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Permutation\Extension.cs" />
+    <Compile Include="Permutation\I1.cs" />
     <Compile Include="PrebuiltDelegates.cs" />
     <Compile Include="TestAssemblyLinker.cs">
       <SubType>Code</SubType>

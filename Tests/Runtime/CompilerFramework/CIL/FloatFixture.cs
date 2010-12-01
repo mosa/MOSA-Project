@@ -22,9 +22,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 	{
 		private readonly ArithmeticInstructionTestRunner<float, float> arithmeticTests = new ArithmeticInstructionTestRunner<float, float>
 		{
-			ExpectedType = @"float",
-			FirstType = @"float",
-			SecondType = @"float",
+			ExpectedType = "float",
+			FirstType = "float",
+			SecondType = "float",
 			//IncludeAdd = false,
 			//IncludeDiv = false,
 			//IncludeMul = false,
@@ -35,12 +35,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 
 		private readonly ComparisonInstructionTestRunner<float> comparisonTests = new ComparisonInstructionTestRunner<float>
 		{
-			FirstType = @"float"
+			FirstType = "float"
 		};
 
 		private readonly SZArrayInstructionTestRunner<float> arrayTests = new SZArrayInstructionTestRunner<float>
 		{
-			FirstType = @"float"
+			FirstType = "float"
 		};
 	}
 }

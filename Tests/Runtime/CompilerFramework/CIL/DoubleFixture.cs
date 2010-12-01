@@ -22,20 +22,20 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 	{
 		private readonly ArithmeticInstructionTestRunner<double, double> arithmeticTests = new ArithmeticInstructionTestRunner<double, double>
 		{
-			ExpectedType = @"double",
-			FirstType = @"double",
-			SecondType = @"double",
+			ExpectedType = "double",
+			FirstType = "double",
+			SecondType = "double",
 			IncludeRem = false
 		};
 
 		private readonly ComparisonInstructionTestRunner<double> comparisonTests = new ComparisonInstructionTestRunner<double>
 		{
-			FirstType = @"double"
+			FirstType = "double"
 		};
 
 		private readonly SZArrayInstructionTestRunner<double> arrayTests = new SZArrayInstructionTestRunner<double>
 		{
-			FirstType = @"double"
+			FirstType = "double"
 		};
 
 	}

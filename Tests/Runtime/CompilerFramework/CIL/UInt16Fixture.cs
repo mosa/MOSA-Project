@@ -22,14 +22,14 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 	{
 		private readonly ArithmeticInstructionTestRunner<int, ushort> arithmeticTests = new ArithmeticInstructionTestRunner<int, ushort>
 		{
-			ExpectedType = @"int",
+			ExpectedType = "int",
 			FirstType = @"ushort",
 			SecondType = @"ushort"
 		};
 
 		private readonly BinaryLogicInstructionTestRunner<int, ushort, ushort> logicTests = new BinaryLogicInstructionTestRunner<int, ushort, ushort>
 		{
-			ExpectedType = @"int",
+			ExpectedType = "int",
 			FirstType = @"ushort",
 			SecondType = @"ushort",
 			ShiftType = @"ushort",
