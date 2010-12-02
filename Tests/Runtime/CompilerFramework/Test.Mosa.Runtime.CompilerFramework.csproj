@@ -109,7 +109,6 @@
     <Compile Include="CIL\BinaryLogicInstructionTestRunner.cs" />
     <Compile Include="CIL\BooleanFixture.cs" />
     <Compile Include="CIL\ByteFixture.cs" />
-    <Compile Include="CIL\ByteFixture.Partial.cs" />
     <Compile Include="CIL\CallvirtFixture.cs" />
     <Compile Include="CIL\CharFixture.cs" />
     <Compile Include="CIL\CharFixture.Partial.cs" />

@@ -39,6 +39,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.Permutation
 			}
 		}
 
+		#region I1 Types
+
 		public static IEnumerable<object[]> I1_I1
 		{
 			get
@@ -101,5 +103,50 @@ namespace Test.Mosa.Runtime.CompilerFramework.Permutation
 			}
 		}
 
+		#endregion
+
+		#region U1 Types
+
+		public static IEnumerable<object[]> U1_U1
+		{
+			get
+			{
+				foreach (byte a in U1.Samples)
+					foreach (byte b in U1.Samples)
+						yield return new object[2] { a, b };
+			}
+		}
+
+		public static IEnumerable<object[]> U1_U1WithoutZero
+		{
+			get
+			{
+				foreach (byte a in U1.Samples)
+					foreach (byte b in U1.Samples)
+						if (b != 0)
+							yield return new object[2] { a, b };
+			}
+		}
+
+		public static IEnumerable<object[]> U1_U1Zero
+		{
+			get
+			{
+				foreach (byte a in U1.Samples)
+					yield return new object[2] { a, (byte)0 };
+			}
+		}
+
+		public static IEnumerable<object[]> ISmall_U1
+		{
+			get
+			{
+				foreach (int a in SmallNumbers)
+					foreach (byte b in U1.Samples)
+						yield return new object[2] { (int)a, b };
+			}
+		}
+
+		#endregion
 	}
 }

@@ -26,7 +26,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 			IncludeDiv = true;
 			IncludeRem = true;
 			IncludeNeg = true;
-            IncludeRet = true;
+			IncludeRet = true;
 		}
 
 		public string ExpectedType { get; set; }
@@ -39,7 +39,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		public bool IncludeDiv { get; set; }
 		public bool IncludeRem { get; set; }
 		public bool IncludeNeg { get; set; }
-        public bool IncludeRet { get; set; }
+		public bool IncludeRet { get; set; }
 
 		private void SetTestCode()
 		{
@@ -59,8 +59,8 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 				codeBuilder.Append(TestCodeRem);
 			if (IncludeNeg)
 				codeBuilder.Append(TestCodeNeg);
-            if (IncludeRet)
-			    codeBuilder.Append(TestCodeRet);
+			if (IncludeRet)
+				codeBuilder.Append(TestCodeRet);
 			codeBuilder.Append(TestCodeFooter);
 			codeBuilder.Append(Code.AllTestCode);
 
@@ -107,12 +107,12 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 			Assert.IsTrue(result);
 		}
 
-        public void Ret(T value)
-        {
-            this.EnsureCodeSourceIsSet();
-            T result = this.Run<T>(TestClassName, @"RetTest", value);
-            Assert.AreEqual(result, value);
-        }
+		public void Ret(T value)
+		{
+			this.EnsureCodeSourceIsSet();
+			T result = this.Run<T>(TestClassName, @"RetTest", value);
+			Assert.AreEqual(result, value);
+		}
 
 		public void Neg(R expectedValue, T first)
 		{
