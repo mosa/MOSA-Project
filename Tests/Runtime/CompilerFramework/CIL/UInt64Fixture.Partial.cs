@@ -55,7 +55,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(UInt32.MaxValue - 1, UInt64.MaxValue - 1)]
 		[Row(UInt32.MaxValue - 1, UInt32.MaxValue)]
 		[Row(UInt32.MaxValue - 1, UInt32.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void AddUlongUlong(ulong a, ulong b)
 		{
 			this.arithmeticTests.Add((a + b), a, b);
@@ -101,7 +101,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(UInt32.MaxValue - 1, UInt64.MaxValue - 1)]
 		[Row(UInt32.MaxValue - 1, UInt32.MaxValue)]
 		[Row(UInt32.MaxValue - 1, UInt32.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void SubUlongUlong(ulong a, ulong b)
 		{
 			this.arithmeticTests.Sub((a - b), a, b);
@@ -147,7 +147,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(UInt32.MaxValue - 1, UInt64.MaxValue - 1)]
 		[Row(UInt32.MaxValue - 1, UInt32.MaxValue)]
 		[Row(UInt32.MaxValue - 1, UInt32.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void MulUlongUlong(ulong a, ulong b)
 		{
 			this.arithmeticTests.Mul((a * b), a, b);
@@ -193,7 +193,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(UInt32.MaxValue - 1, UInt64.MaxValue - 1)]
 		[Row(UInt32.MaxValue - 1, UInt32.MaxValue)]
 		[Row(UInt32.MaxValue - 1, UInt32.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void DivUlongUlong(ulong a, ulong b)
 		{
 			this.arithmeticTests.Div((a / b), a, b);
@@ -239,7 +239,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(UInt32.MaxValue - 1, UInt64.MaxValue - 1)]
 		[Row(UInt32.MaxValue - 1, UInt32.MaxValue)]
 		[Row(UInt32.MaxValue - 1, UInt32.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void RemUlongUlong(ulong a, ulong b)
 		{
 			this.arithmeticTests.Rem((a % b), a, b);
@@ -255,7 +255,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(UInt64.MaxValue - 1)]
 		[Row(UInt32.MaxValue)]
 		[Row(UInt32.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void RetUlong(ulong value)
 		{
 			this.arithmeticTests.Ret(value);
@@ -301,7 +301,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(UInt32.MaxValue - 1, UInt64.MaxValue - 1)]
 		[Row(UInt32.MaxValue - 1, UInt32.MaxValue)]
 		[Row(UInt32.MaxValue - 1, UInt32.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void AndUlongUlong(ulong first, ulong second)
 		{
 			this.logicTests.And((first & second), first, second);
@@ -347,7 +347,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(UInt32.MaxValue - 1, UInt64.MaxValue - 1)]
 		[Row(UInt32.MaxValue - 1, UInt32.MaxValue)]
 		[Row(UInt32.MaxValue - 1, UInt32.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void OrUlongUlong(ulong first, ulong second)
 		{
 			this.logicTests.Or((first | second), first, second);
@@ -393,7 +393,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(UInt32.MaxValue - 1, UInt64.MaxValue - 1)]
 		[Row(UInt32.MaxValue - 1, UInt32.MaxValue)]
 		[Row(UInt32.MaxValue - 1, UInt32.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void XorUlongUlong(ulong first, ulong second)
 		{
 			this.logicTests.Xor((first ^ second), first, second);
@@ -409,7 +409,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(UInt64.MaxValue - 1)]
 		[Row(UInt32.MaxValue)]
 		[Row(UInt32.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void BitwiseNotUlong(ulong first)
 		{
 			this.logicTests.Comp(~first, first);
@@ -455,7 +455,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(UInt32.MaxValue - 1, UInt64.MaxValue - 1)]
 		[Row(UInt32.MaxValue - 1, UInt32.MaxValue)]
 		[Row(UInt32.MaxValue - 1, UInt32.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void CeqUlongUlong(ulong first, ulong second)
 		{
 			this.comparisonTests.Ceq((first == second), first, second);
@@ -501,7 +501,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(UInt32.MaxValue - 1, UInt64.MaxValue - 1)]
 		[Row(UInt32.MaxValue - 1, UInt32.MaxValue)]
 		[Row(UInt32.MaxValue - 1, UInt32.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void CgtUlongUlong(ulong first, ulong second)
 		{
 			this.comparisonTests.Cgt((first > second), first, second);
@@ -547,7 +547,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(UInt32.MaxValue - 1, UInt64.MaxValue - 1)]
 		[Row(UInt32.MaxValue - 1, UInt32.MaxValue)]
 		[Row(UInt32.MaxValue - 1, UInt32.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void CltUlongUlong(ulong first, ulong second)
 		{
 			this.comparisonTests.Clt((first < second), first, second);
@@ -593,7 +593,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(UInt32.MaxValue - 1, UInt64.MaxValue - 1)]
 		[Row(UInt32.MaxValue - 1, UInt32.MaxValue)]
 		[Row(UInt32.MaxValue - 1, UInt32.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void CgeUlongUlong(ulong first, ulong second)
 		{
 			this.comparisonTests.Cge((first >= second), first, second);
@@ -639,7 +639,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(UInt32.MaxValue - 1, UInt64.MaxValue - 1)]
 		[Row(UInt32.MaxValue - 1, UInt32.MaxValue)]
 		[Row(UInt32.MaxValue - 1, UInt32.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void CleUlongUlong(ulong first, ulong second)
 		{
 			this.comparisonTests.Cle((first <= second), first, second);
@@ -649,7 +649,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		
 		#region Newarr
 		
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void NewarrUlong()
 		{
 			this.arrayTests.Newarr();
@@ -666,7 +666,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(7)]
 		[Row(8)]
 		[Row(10)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void LdlenUlong(int length)
 		{
 			this.arrayTests.Ldlen(length);
@@ -718,7 +718,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(10, UInt64.MaxValue - 1)]
 		[Row(10, UInt32.MaxValue)]
 		[Row(10, UInt32.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void StelemUlong(int index, ulong value)
 		{
 			this.arrayTests.Stelem(index, value);
@@ -770,7 +770,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(10, UInt64.MaxValue - 1)]
 		[Row(10, UInt32.MaxValue)]
 		[Row(10, UInt32.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void LdelemUlong(int index, ulong value)
 		{
 			this.arrayTests.Ldelem(index, value);
@@ -822,7 +822,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(10, UInt64.MaxValue - 1)]
 		[Row(10, UInt32.MaxValue)]
 		[Row(10, UInt32.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void LdelemaUlong(int index, ulong value)
 		{
 			this.arrayTests.Ldelema(index, value);

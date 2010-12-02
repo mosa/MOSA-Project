@@ -188,7 +188,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(Int32.MinValue + 2, -1)]
 		[Row(Int32.MinValue + 2, Int64.MinValue + 2)]
 		[Row(Int32.MinValue + 2, Int32.MinValue + 2)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void AddLongLong(long a, long b)
 		{
 			this.arithmeticTests.Add((a + b), a, b);
@@ -367,7 +367,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(Int32.MinValue + 2, -1)]
 		[Row(Int32.MinValue + 2, Int64.MinValue + 2)]
 		[Row(Int32.MinValue + 2, Int32.MinValue + 2)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void SubLongLong(long a, long b)
 		{
 			this.arithmeticTests.Sub((a - b), a, b);
@@ -546,7 +546,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(Int32.MinValue + 2, -1)]
 		[Row(Int32.MinValue + 2, Int64.MinValue + 2)]
 		[Row(Int32.MinValue + 2, Int32.MinValue + 2)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void MulLongLong(long a, long b)
 		{
 			this.arithmeticTests.Mul((a * b), a, b);
@@ -725,7 +725,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(Int32.MinValue + 2, -1)]
 		[Row(Int32.MinValue + 2, Int64.MinValue + 2)]
 		[Row(Int32.MinValue + 2, Int32.MinValue + 2)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void DivLongLong(long a, long b)
 		{
 			this.arithmeticTests.Div((a / b), a, b);
@@ -904,7 +904,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		//[Row(Int32.MinValue + 2, -1, ExpectedException = typeof(OverflowException))]
 		//[Row(Int32.MinValue + 2, Int64.MinValue + 2, ExpectedException = typeof(OverflowException))]
 		//[Row(Int32.MinValue + 2, Int32.MinValue + 2, ExpectedException = typeof(OverflowException))]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void RemLongLong(long a, long b)
 		{
 			this.arithmeticTests.Rem((a % b), a, b);
@@ -927,7 +927,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-1)]
 		[Row(Int64.MinValue + 2)]
 		[Row(Int32.MinValue + 2)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void NegLong(long first)
 		{
 			this.arithmeticTests.Neg(-first, first);
@@ -950,7 +950,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-1)]
 		[Row(Int64.MinValue + 2)]
 		[Row(Int32.MinValue + 2)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void RetLong(long value)
 		{
 			this.arithmeticTests.Ret(value);
@@ -1129,7 +1129,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(Int32.MinValue + 2, -1)]
 		[Row(Int32.MinValue + 2, Int64.MinValue + 2)]
 		[Row(Int32.MinValue + 2, Int32.MinValue + 2)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void AndLongLong(long first, long second)
 		{
 			this.logicTests.And((first & second), first, second);
@@ -1308,7 +1308,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(Int32.MinValue + 2, -1)]
 		[Row(Int32.MinValue + 2, Int64.MinValue + 2)]
 		[Row(Int32.MinValue + 2, Int32.MinValue + 2)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void OrLongLong(long first, long second)
 		{
 			this.logicTests.Or((first | second), first, second);
@@ -1487,7 +1487,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(Int32.MinValue + 2, -1)]
 		[Row(Int32.MinValue + 2, Int64.MinValue + 2)]
 		[Row(Int32.MinValue + 2, Int32.MinValue + 2)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void XorLongLong(long first, long second)
 		{
 			this.logicTests.Xor((first ^ second), first, second);
@@ -1510,7 +1510,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-1)]
 		[Row(Int64.MinValue + 2)]
 		[Row(Int32.MinValue + 2)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void BitwiseNotLong(long first)
 		{
 			this.logicTests.Comp(~first, first);
@@ -2352,7 +2352,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(Int32.MinValue + 2, 61)]
 		[Row(Int32.MinValue + 2, 62)]
 		[Row(Int32.MinValue + 2, 63)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void ShlLongInt(long first, int second)
 		{
 			this.logicTests.Shl((first << second), first, second);
@@ -3194,7 +3194,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(Int32.MinValue + 2, 61)]
 		[Row(Int32.MinValue + 2, 62)]
 		[Row(Int32.MinValue + 2, 63)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void ShrLongInt(long first, int second)
 		{
 			this.logicTests.Shr((first >> second), first, second);
@@ -3373,7 +3373,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(Int32.MinValue + 2, -1)]
 		[Row(Int32.MinValue + 2, Int64.MinValue + 2)]
 		[Row(Int32.MinValue + 2, Int32.MinValue + 2)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void CeqLongLong(long first, long second)
 		{
 			this.comparisonTests.Ceq((first == second), first, second);
@@ -3552,7 +3552,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(Int32.MinValue + 2, -1)]
 		[Row(Int32.MinValue + 2, Int64.MinValue + 2)]
 		[Row(Int32.MinValue + 2, Int32.MinValue + 2)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void CgtLongLong(long first, long second)
 		{
 			this.comparisonTests.Cgt((first > second), first, second);
@@ -3731,7 +3731,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(Int32.MinValue + 2, -1)]
 		[Row(Int32.MinValue + 2, Int64.MinValue + 2)]
 		[Row(Int32.MinValue + 2, Int32.MinValue + 2)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void CltLongLong(long first, long second)
 		{
 			this.comparisonTests.Clt((first < second), first, second);
@@ -3910,7 +3910,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(Int32.MinValue + 2, -1)]
 		[Row(Int32.MinValue + 2, Int64.MinValue + 2)]
 		[Row(Int32.MinValue + 2, Int32.MinValue + 2)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void CgeLongLong(long first, long second)
 		{
 			this.comparisonTests.Cge((first >= second), first, second);
@@ -4089,7 +4089,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(Int32.MinValue + 2, -1)]
 		[Row(Int32.MinValue + 2, Int64.MinValue + 2)]
 		[Row(Int32.MinValue + 2, Int32.MinValue + 2)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void CleLongLong(long first, long second)
 		{
 			this.comparisonTests.Cle((first <= second), first, second);
@@ -4099,7 +4099,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		
 		#region Newarr
 		
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void NewarrLong()
 		{
 			this.arrayTests.Newarr();
@@ -4116,7 +4116,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(7)]
 		[Row(8)]
 		[Row(10)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void LdlenLong(int length)
 		{
 			this.arrayTests.Ldlen(length);
@@ -4217,7 +4217,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(10, -1)]
 		[Row(10, Int64.MinValue + 2)]
 		[Row(10, Int32.MinValue + 2)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void StelemLong(int index, long value)
 		{
 			this.arrayTests.Stelem(index, value);
@@ -4318,7 +4318,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(10, -1)]
 		[Row(10, Int64.MinValue + 2)]
 		[Row(10, Int32.MinValue + 2)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void LdelemLong(int index, long value)
 		{
 			this.arrayTests.Ldelem(index, value);
@@ -4419,7 +4419,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(10, -1)]
 		[Row(10, Int64.MinValue + 2)]
 		[Row(10, Int32.MinValue + 2)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void LdelemaLong(int index, long value)
 		{
 			this.arrayTests.Ldelema(index, value);

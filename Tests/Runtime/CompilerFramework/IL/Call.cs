@@ -146,7 +146,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		[Row(128)]
 		[Row(byte.MinValue)]
 		[Row(byte.MaxValue)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void CallU1(byte value)
 		{
 			CodeSource = CreateTestCode("CallU1", "byte");
@@ -163,7 +163,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		[Row(128)]
 		[Row(byte.MinValue)]
 		[Row(byte.MaxValue)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void CallConstantU1(byte value)
 		{
 			CodeSource = CreateConstantTestCode("CallConstantU1", "byte", value.ToString());
@@ -219,7 +219,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		[Row(100)]
 		[Row(ushort.MinValue)]
 		[Row(ushort.MaxValue)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void CallU2(ushort value)
 		{
 			CodeSource = CreateTestCode("CallU2", "ushort");
@@ -234,7 +234,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		[Row(100)]
 		[Row(ushort.MinValue)]
 		[Row(ushort.MaxValue)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void CallConstantU2(ushort value)
 		{
 			CodeSource = CreateConstantTestCode("CallConstantU2", "ushort", value.ToString());
@@ -290,7 +290,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		[Row(100)]
 		[Row(uint.MinValue)]
 		[Row(uint.MaxValue)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void CallU4(uint value)
 		{
 			CodeSource = CreateTestCode("CallU4", "uint");
@@ -306,7 +306,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		[Row(100)]
 		[Row(uint.MinValue)]
 		[Row(uint.MaxValue)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void CallConstantU4(uint value)
 		{
 			CodeSource = CreateConstantTestCode("CallConstantU4", "uint", value.ToString());
@@ -362,7 +362,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		[Row(100)]
 		[Row(ulong.MinValue)]
 		[Row(ulong.MaxValue)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void CallU8(ulong value)
 		{
 			CodeSource = CreateTestCode("CallU8", "ulong");
@@ -378,7 +378,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.IL
 		[Row(100)]
 		[Row(ulong.MinValue)]
 		[Row(ulong.MaxValue)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void CallConstantU8(ulong value)
 		{
 			CodeSource = CreateConstantTestCode("CallConstantU8", "ulong", value.ToString());

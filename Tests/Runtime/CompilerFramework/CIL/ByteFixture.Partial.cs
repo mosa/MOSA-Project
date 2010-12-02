@@ -35,7 +35,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(byte.MaxValue - 1, 1)]
 		[Row(byte.MaxValue - 1, byte.MaxValue)]
 		[Row(byte.MaxValue - 1, byte.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void AddByteByte(byte a, byte b)
 		{
 			this.arithmeticTests.Add((a + b), a, b);
@@ -61,7 +61,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(byte.MaxValue - 1, 1)]
 		[Row(byte.MaxValue - 1, byte.MaxValue)]
 		[Row(byte.MaxValue - 1, byte.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void SubByteByte(byte a, byte b)
 		{
 			this.arithmeticTests.Sub((a - b), a, b);
@@ -87,7 +87,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(byte.MaxValue - 1, 1)]
 		[Row(byte.MaxValue - 1, byte.MaxValue)]
 		[Row(byte.MaxValue - 1, byte.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void MulByteByte(byte a, byte b)
 		{
 			this.arithmeticTests.Mul((a * b), a, b);
@@ -113,7 +113,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(byte.MaxValue - 1, 1)]
 		[Row(byte.MaxValue - 1, byte.MaxValue)]
 		[Row(byte.MaxValue - 1, byte.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void DivByteByte(byte a, byte b)
 		{
 			this.arithmeticTests.Div((a / b), a, b);
@@ -139,7 +139,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(byte.MaxValue - 1, 1)]
 		[Row(byte.MaxValue - 1, byte.MaxValue)]
 		[Row(byte.MaxValue - 1, byte.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void RemByteByte(byte a, byte b)
 		{
 			this.arithmeticTests.Rem((a % b), a, b);
@@ -153,7 +153,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(1)]
 		[Row(byte.MaxValue)]
 		[Row(byte.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void RetByte(byte value)
 		{
 			this.arithmeticTests.Ret(value);
@@ -179,7 +179,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(byte.MaxValue - 1, 1)]
 		[Row(byte.MaxValue - 1, byte.MaxValue)]
 		[Row(byte.MaxValue - 1, byte.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void AndByteByte(byte first, byte second)
 		{
 			this.logicTests.And((first & second), first, second);
@@ -205,7 +205,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(byte.MaxValue - 1, 1)]
 		[Row(byte.MaxValue - 1, byte.MaxValue)]
 		[Row(byte.MaxValue - 1, byte.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void OrByteByte(byte first, byte second)
 		{
 			this.logicTests.Or((first | second), first, second);
@@ -231,7 +231,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(byte.MaxValue - 1, 1)]
 		[Row(byte.MaxValue - 1, byte.MaxValue)]
 		[Row(byte.MaxValue - 1, byte.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void XorByteByte(byte first, byte second)
 		{
 			this.logicTests.Xor((first ^ second), first, second);
@@ -273,7 +273,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(byte.MaxValue - 1, 5)]
 		[Row(byte.MaxValue - 1, 6)]
 		[Row(byte.MaxValue - 1, 7)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void ShlByteByte(byte first, byte second)
 		{
 			this.logicTests.Shl((first << second), first, second);
@@ -315,7 +315,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(byte.MaxValue - 1, 5)]
 		[Row(byte.MaxValue - 1, 6)]
 		[Row(byte.MaxValue - 1, 7)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void ShrByteByte(byte first, byte second)
 		{
 			this.logicTests.Shr((first >> second), first, second);
@@ -341,7 +341,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(byte.MaxValue - 1, 1)]
 		[Row(byte.MaxValue - 1, byte.MaxValue)]
 		[Row(byte.MaxValue - 1, byte.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void CeqByteByte(byte first, byte second)
 		{
 			this.comparisonTests.Ceq((first == second), first, second);
@@ -367,7 +367,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(byte.MaxValue - 1, 1)]
 		[Row(byte.MaxValue - 1, byte.MaxValue)]
 		[Row(byte.MaxValue - 1, byte.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void CgtByteByte(byte first, byte second)
 		{
 			this.comparisonTests.Cgt((first > second), first, second);
@@ -393,7 +393,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(byte.MaxValue - 1, 1)]
 		[Row(byte.MaxValue - 1, byte.MaxValue)]
 		[Row(byte.MaxValue - 1, byte.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void CltByteByte(byte first, byte second)
 		{
 			this.comparisonTests.Clt((first < second), first, second);
@@ -419,7 +419,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(byte.MaxValue - 1, 1)]
 		[Row(byte.MaxValue - 1, byte.MaxValue)]
 		[Row(byte.MaxValue - 1, byte.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void CgeByteByte(byte first, byte second)
 		{
 			this.comparisonTests.Cge((first >= second), first, second);
@@ -445,7 +445,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(byte.MaxValue - 1, 1)]
 		[Row(byte.MaxValue - 1, byte.MaxValue)]
 		[Row(byte.MaxValue - 1, byte.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void CleByteByte(byte first, byte second)
 		{
 			this.comparisonTests.Cle((first <= second), first, second);
@@ -455,7 +455,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		
 		#region Newarr
 		
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void NewarrByte()
 		{
 			this.arrayTests.Newarr();
@@ -472,7 +472,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(7)]
 		[Row(8)]
 		[Row(10)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void LdlenByte(int length)
 		{
 			this.arrayTests.Ldlen(length);
@@ -510,7 +510,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(10, 1)]
 		[Row(10, byte.MaxValue)]
 		[Row(10, byte.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void StelemByte(int index, byte value)
 		{
 			this.arrayTests.Stelem(index, value);
@@ -548,7 +548,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(10, 1)]
 		[Row(10, byte.MaxValue)]
 		[Row(10, byte.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void LdelemByte(int index, byte value)
 		{
 			this.arrayTests.Ldelem(index, value);
@@ -586,7 +586,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(10, 1)]
 		[Row(10, byte.MaxValue)]
 		[Row(10, byte.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void LdelemaByte(int index, byte value)
 		{
 			this.arrayTests.Ldelema(index, value);

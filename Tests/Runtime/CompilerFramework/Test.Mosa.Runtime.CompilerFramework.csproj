@@ -131,7 +131,6 @@
     <Compile Include="CIL\ObjectFixture.cs" />
     <Compile Include="CIL\PinnedFixture.cs" />
     <Compile Include="CIL\SByteFixture.cs" />
-    <Compile Include="CIL\SByteFixture.Partial.cs" />
     <Compile Include="CIL\FloatFixture.cs" />
     <Compile Include="CIL\StringFixture.cs" />
     <Compile Include="CIL\SZArrayInstructionTestRunner.cs" />
@@ -154,6 +153,8 @@
     <Compile Include="MosaCompilerTestRunner.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Permutation\U1.cs" />
+    <Compile Include="Permutation\Numbers.cs" />
     <Compile Include="Permutation\Extension.cs" />
     <Compile Include="Permutation\I1.cs" />
     <Compile Include="PrebuiltDelegates.cs" />

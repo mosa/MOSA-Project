@@ -35,7 +35,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(UInt16.MaxValue - 1, 1)]
 		[Row(UInt16.MaxValue - 1, UInt16.MaxValue)]
 		[Row(UInt16.MaxValue - 1, UInt16.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void AddUshortUshort(ushort a, ushort b)
 		{
 			this.arithmeticTests.Add((a + b), a, b);
@@ -61,7 +61,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(UInt16.MaxValue - 1, 1)]
 		[Row(UInt16.MaxValue - 1, UInt16.MaxValue)]
 		[Row(UInt16.MaxValue - 1, UInt16.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void SubUshortUshort(ushort a, ushort b)
 		{
 			this.arithmeticTests.Sub((a - b), a, b);
@@ -87,7 +87,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(UInt16.MaxValue - 1, 1)]
 		[Row(UInt16.MaxValue - 1, UInt16.MaxValue)]
 		[Row(UInt16.MaxValue - 1, UInt16.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void MulUshortUshort(ushort a, ushort b)
 		{
 			this.arithmeticTests.Mul((a * b), a, b);
@@ -113,7 +113,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(UInt16.MaxValue - 1, 1)]
 		[Row(UInt16.MaxValue - 1, UInt16.MaxValue)]
 		[Row(UInt16.MaxValue - 1, UInt16.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void DivUshortUshort(ushort a, ushort b)
 		{
 			this.arithmeticTests.Div((a / b), a, b);
@@ -139,7 +139,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(UInt16.MaxValue - 1, 1)]
 		[Row(UInt16.MaxValue - 1, UInt16.MaxValue)]
 		[Row(UInt16.MaxValue - 1, UInt16.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void RemUshortUshort(ushort a, ushort b)
 		{
 			this.arithmeticTests.Rem((a % b), a, b);
@@ -153,7 +153,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(1)]
 		[Row(UInt16.MaxValue)]
 		[Row(UInt16.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void RetUshort(ushort value)
 		{
 			this.arithmeticTests.Ret(value);
@@ -179,7 +179,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(UInt16.MaxValue - 1, 1)]
 		[Row(UInt16.MaxValue - 1, UInt16.MaxValue)]
 		[Row(UInt16.MaxValue - 1, UInt16.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void AndUshortUshort(ushort first, ushort second)
 		{
 			this.logicTests.And((first & second), first, second);
@@ -205,7 +205,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(UInt16.MaxValue - 1, 1)]
 		[Row(UInt16.MaxValue - 1, UInt16.MaxValue)]
 		[Row(UInt16.MaxValue - 1, UInt16.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void OrUshortUshort(ushort first, ushort second)
 		{
 			this.logicTests.Or((first | second), first, second);
@@ -231,7 +231,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(UInt16.MaxValue - 1, 1)]
 		[Row(UInt16.MaxValue - 1, UInt16.MaxValue)]
 		[Row(UInt16.MaxValue - 1, UInt16.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void XorUshortUshort(ushort first, ushort second)
 		{
 			this.logicTests.Xor((first ^ second), first, second);
@@ -257,7 +257,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(UInt16.MaxValue - 1, 1)]
 		[Row(UInt16.MaxValue - 1, UInt16.MaxValue)]
 		[Row(UInt16.MaxValue - 1, UInt16.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void CeqUshortUshort(ushort first, ushort second)
 		{
 			this.comparisonTests.Ceq((first == second), first, second);
@@ -283,7 +283,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(UInt16.MaxValue - 1, 1)]
 		[Row(UInt16.MaxValue - 1, UInt16.MaxValue)]
 		[Row(UInt16.MaxValue - 1, UInt16.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void CgtUshortUshort(ushort first, ushort second)
 		{
 			this.comparisonTests.Cgt((first > second), first, second);
@@ -309,7 +309,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(UInt16.MaxValue - 1, 1)]
 		[Row(UInt16.MaxValue - 1, UInt16.MaxValue)]
 		[Row(UInt16.MaxValue - 1, UInt16.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void CltUshortUshort(ushort first, ushort second)
 		{
 			this.comparisonTests.Clt((first < second), first, second);
@@ -335,7 +335,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(UInt16.MaxValue - 1, 1)]
 		[Row(UInt16.MaxValue - 1, UInt16.MaxValue)]
 		[Row(UInt16.MaxValue - 1, UInt16.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void CgeUshortUshort(ushort first, ushort second)
 		{
 			this.comparisonTests.Cge((first >= second), first, second);
@@ -361,7 +361,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(UInt16.MaxValue - 1, 1)]
 		[Row(UInt16.MaxValue - 1, UInt16.MaxValue)]
 		[Row(UInt16.MaxValue - 1, UInt16.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void CleUshortUshort(ushort first, ushort second)
 		{
 			this.comparisonTests.Cle((first <= second), first, second);
@@ -371,7 +371,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		
 		#region Newarr
 		
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void NewarrUshort()
 		{
 			this.arrayTests.Newarr();
@@ -388,7 +388,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(7)]
 		[Row(8)]
 		[Row(10)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void LdlenUshort(int length)
 		{
 			this.arrayTests.Ldlen(length);
@@ -426,7 +426,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(10, 1)]
 		[Row(10, UInt16.MaxValue)]
 		[Row(10, UInt16.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void StelemUshort(int index, ushort value)
 		{
 			this.arrayTests.Stelem(index, value);
@@ -464,7 +464,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(10, 1)]
 		[Row(10, UInt16.MaxValue)]
 		[Row(10, UInt16.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void LdelemUshort(int index, ushort value)
 		{
 			this.arrayTests.Ldelem(index, value);
@@ -502,7 +502,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(10, 1)]
 		[Row(10, UInt16.MaxValue)]
 		[Row(10, UInt16.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void LdelemaUshort(int index, ushort value)
 		{
 			this.arrayTests.Ldelema(index, value);

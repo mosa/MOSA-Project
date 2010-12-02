@@ -35,7 +35,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(UInt32.MaxValue - 1, 1)]
 		[Row(UInt32.MaxValue - 1, UInt32.MaxValue)]
 		[Row(UInt32.MaxValue - 1, UInt32.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void AddUintUint(uint a, uint b)
 		{
 			this.arithmeticTests.Add((a + b), a, b);
@@ -61,7 +61,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(UInt32.MaxValue - 1, 1)]
 		[Row(UInt32.MaxValue - 1, UInt32.MaxValue)]
 		[Row(UInt32.MaxValue - 1, UInt32.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void SubUintUint(uint a, uint b)
 		{
 			this.arithmeticTests.Sub((a - b), a, b);
@@ -87,7 +87,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(UInt32.MaxValue - 1, 1)]
 		[Row(UInt32.MaxValue - 1, UInt32.MaxValue)]
 		[Row(UInt32.MaxValue - 1, UInt32.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void MulUintUint(uint a, uint b)
 		{
 			this.arithmeticTests.Mul((a * b), a, b);
@@ -113,7 +113,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(UInt32.MaxValue - 1, 1)]
 		[Row(UInt32.MaxValue - 1, UInt32.MaxValue)]
 		[Row(UInt32.MaxValue - 1, UInt32.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void DivUintUint(uint a, uint b)
 		{
 			this.arithmeticTests.Div((a / b), a, b);
@@ -139,7 +139,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(UInt32.MaxValue - 1, 1)]
 		[Row(UInt32.MaxValue - 1, UInt32.MaxValue)]
 		[Row(UInt32.MaxValue - 1, UInt32.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void RemUintUint(uint a, uint b)
 		{
 			this.arithmeticTests.Rem((a % b), a, b);
@@ -153,7 +153,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(1)]
 		[Row(UInt32.MaxValue)]
 		[Row(UInt32.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void RetUint(uint value)
 		{
 			this.arithmeticTests.Ret(value);
@@ -179,7 +179,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(UInt32.MaxValue - 1, 1)]
 		[Row(UInt32.MaxValue - 1, UInt32.MaxValue)]
 		[Row(UInt32.MaxValue - 1, UInt32.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void AndUintUint(uint first, uint second)
 		{
 			this.logicTests.And((first & second), first, second);
@@ -205,7 +205,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(UInt32.MaxValue - 1, 1)]
 		[Row(UInt32.MaxValue - 1, UInt32.MaxValue)]
 		[Row(UInt32.MaxValue - 1, UInt32.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void OrUintUint(uint first, uint second)
 		{
 			this.logicTests.Or((first | second), first, second);
@@ -231,7 +231,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(UInt32.MaxValue - 1, 1)]
 		[Row(UInt32.MaxValue - 1, UInt32.MaxValue)]
 		[Row(UInt32.MaxValue - 1, UInt32.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void XorUintUint(uint first, uint second)
 		{
 			this.logicTests.Xor((first ^ second), first, second);
@@ -245,7 +245,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(1)]
 		[Row(UInt32.MaxValue)]
 		[Row(UInt32.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void BitwiseNotUint(uint first)
 		{
 			this.logicTests.Comp(~first, first);
@@ -271,7 +271,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(UInt32.MaxValue - 1, 1)]
 		[Row(UInt32.MaxValue - 1, UInt32.MaxValue)]
 		[Row(UInt32.MaxValue - 1, UInt32.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void CeqUintUint(uint first, uint second)
 		{
 			this.comparisonTests.Ceq((first == second), first, second);
@@ -297,7 +297,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(UInt32.MaxValue - 1, 1)]
 		[Row(UInt32.MaxValue - 1, UInt32.MaxValue)]
 		[Row(UInt32.MaxValue - 1, UInt32.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void CgtUintUint(uint first, uint second)
 		{
 			this.comparisonTests.Cgt((first > second), first, second);
@@ -323,7 +323,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(UInt32.MaxValue - 1, 1)]
 		[Row(UInt32.MaxValue - 1, UInt32.MaxValue)]
 		[Row(UInt32.MaxValue - 1, UInt32.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void CltUintUint(uint first, uint second)
 		{
 			this.comparisonTests.Clt((first < second), first, second);
@@ -349,7 +349,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(UInt32.MaxValue - 1, 1)]
 		[Row(UInt32.MaxValue - 1, UInt32.MaxValue)]
 		[Row(UInt32.MaxValue - 1, UInt32.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void CgeUintUint(uint first, uint second)
 		{
 			this.comparisonTests.Cge((first >= second), first, second);
@@ -375,7 +375,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(UInt32.MaxValue - 1, 1)]
 		[Row(UInt32.MaxValue - 1, UInt32.MaxValue)]
 		[Row(UInt32.MaxValue - 1, UInt32.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void CleUintUint(uint first, uint second)
 		{
 			this.comparisonTests.Cle((first <= second), first, second);
@@ -385,7 +385,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		
 		#region Newarr
 		
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void NewarrUint()
 		{
 			this.arrayTests.Newarr();
@@ -402,7 +402,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(7)]
 		[Row(8)]
 		[Row(10)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void LdlenUint(int length)
 		{
 			this.arrayTests.Ldlen(length);
@@ -440,7 +440,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(10, 1)]
 		[Row(10, UInt32.MaxValue)]
 		[Row(10, UInt32.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void StelemUint(int index, uint value)
 		{
 			this.arrayTests.Stelem(index, value);
@@ -478,7 +478,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(10, 1)]
 		[Row(10, UInt32.MaxValue)]
 		[Row(10, UInt32.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void LdelemUint(int index, uint value)
 		{
 			this.arrayTests.Ldelem(index, value);
@@ -516,7 +516,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(10, 1)]
 		[Row(10, UInt32.MaxValue)]
 		[Row(10, UInt32.MaxValue - 1)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void LdelemaUint(int index, uint value)
 		{
 			this.arrayTests.Ldelema(index, value);

@@ -458,7 +458,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-12321452132.561, -17.0002501)]
 		[Row(-12321452132.561, -23)]
 		[Row(-12321452132.561, -12321452132.561)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void AddDoubleDouble(double a, double b)
 		{
 			this.arithmeticTests.Add((a + b), a, b);
@@ -949,7 +949,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-12321452132.561, -17.0002501)]
 		[Row(-12321452132.561, -23)]
 		[Row(-12321452132.561, -12321452132.561)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void SubDoubleDouble(double a, double b)
 		{
 			this.arithmeticTests.Sub((a - b), a, b);
@@ -1437,7 +1437,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-12321452132.561, -17.0002501)]
 		[Row(-12321452132.561, -23)]
 		[Row(-12321452132.561, -12321452132.561)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void MulDoubleDouble(double a, double b)
 		{
 			this.arithmeticTests.Mul((a * b), a, b);
@@ -1883,7 +1883,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-12321452132.561, -17.0002501)]
 		[Row(-12321452132.561, -23)]
 		[Row(-12321452132.561, -12321452132.561)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void DivDoubleDouble(double a, double b)
 		{
 			this.arithmeticTests.Div((a / b), a, b);
@@ -1915,7 +1915,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-17.0002501)]
 		[Row(-23)]
 		[Row(-12321452132.561)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void NegDouble(double first)
 		{
 			this.arithmeticTests.Neg(-first, first);
@@ -2366,7 +2366,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-12321452132.561, -17.0002501)]
 		[Row(-12321452132.561, -23)]
 		[Row(-12321452132.561, -12321452132.561)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void CeqDoubleDouble(double first, double second)
 		{
 			this.comparisonTests.Ceq((first == second), first, second);
@@ -2860,7 +2860,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-12321452132.561, -17.0002501)]
 		[Row(-12321452132.561, -23)]
 		[Row(-12321452132.561, -12321452132.561)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void CgtDoubleDouble(double first, double second)
 		{
 			this.comparisonTests.Cgt((first > second), first, second);
@@ -3354,7 +3354,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-12321452132.561, -17.0002501)]
 		[Row(-12321452132.561, -23)]
 		[Row(-12321452132.561, -12321452132.561)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void CltDoubleDouble(double first, double second)
 		{
 			this.comparisonTests.Clt((first < second), first, second);
@@ -3847,7 +3847,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-12321452132.561, -17.0002501)]
 		[Row(-12321452132.561, -23)]
 		[Row(-12321452132.561, -12321452132.561)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void CgeDoubleDouble(double first, double second)
 		{
 			this.comparisonTests.Cge((first >= second), first, second);
@@ -4341,7 +4341,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(-12321452132.561, -17.0002501)]
 		[Row(-12321452132.561, -23)]
 		[Row(-12321452132.561, -12321452132.561)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void CleDoubleDouble(double first, double second)
 		{
 			this.comparisonTests.Cle((first <= second), first, second);

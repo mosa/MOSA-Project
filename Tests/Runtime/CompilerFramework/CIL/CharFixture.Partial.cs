@@ -308,7 +308,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(256, 128)]
 		[Row(256, 255)]
 		[Row(256, 256)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void AddCharChar(char a, char b)
 		{
 			this.arithmeticTests.Add((a + b), a, b);
@@ -607,7 +607,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(256, 128)]
 		[Row(256, 255)]
 		[Row(256, 256)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void SubCharChar(char a, char b)
 		{
 			this.arithmeticTests.Sub((a - b), a, b);
@@ -906,7 +906,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(256, 128)]
 		[Row(256, 255)]
 		[Row(256, 256)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void MulCharChar(char a, char b)
 		{
 			this.arithmeticTests.Mul((a * b), a, b);
@@ -1205,7 +1205,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(256, 128)]
 		[Row(256, 255)]
 		[Row(256, 256)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void DivCharChar(char a, char b)
 		{
 			this.arithmeticTests.Div((a / b), a, b);
@@ -1504,7 +1504,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(256, 128)]
 		[Row(256, 255)]
 		[Row(256, 256)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void RemCharChar(char a, char b)
 		{
 			this.arithmeticTests.Rem((a % b), a, b);
@@ -1531,7 +1531,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(128)]
 		[Row(255)]
 		[Row(256)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void RetChar(char value)
 		{
 			this.arithmeticTests.Ret(value);
@@ -1830,7 +1830,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(256, 128)]
 		[Row(256, 255)]
 		[Row(256, 256)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void AndCharChar(char first, char second)
 		{
 			this.logicTests.And((first & second), first, second);
@@ -2129,7 +2129,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(256, 128)]
 		[Row(256, 255)]
 		[Row(256, 256)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void OrCharChar(char first, char second)
 		{
 			this.logicTests.Or((first | second), first, second);
@@ -2428,7 +2428,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(256, 128)]
 		[Row(256, 255)]
 		[Row(256, 256)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void XorCharChar(char first, char second)
 		{
 			this.logicTests.Xor((first ^ second), first, second);
@@ -2710,7 +2710,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(256, 13)]
 		[Row(256, 14)]
 		[Row(256, 15)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void ShlCharChar(char first, char second)
 		{
 			this.logicTests.Shl((first << second), first, second);
@@ -2992,7 +2992,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(256, 13)]
 		[Row(256, 14)]
 		[Row(256, 15)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void ShrCharChar(char first, char second)
 		{
 			this.logicTests.Shr((first >> second), first, second);
@@ -3291,7 +3291,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(256, 128)]
 		[Row(256, 255)]
 		[Row(256, 256)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void CeqCharChar(char first, char second)
 		{
 			this.comparisonTests.Ceq((first == second), first, second);
@@ -3590,7 +3590,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(256, 128)]
 		[Row(256, 255)]
 		[Row(256, 256)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void CgtCharChar(char first, char second)
 		{
 			this.comparisonTests.Cgt((first > second), first, second);
@@ -3889,7 +3889,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(256, 128)]
 		[Row(256, 255)]
 		[Row(256, 256)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void CltCharChar(char first, char second)
 		{
 			this.comparisonTests.Clt((first < second), first, second);
@@ -4188,7 +4188,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(256, 128)]
 		[Row(256, 255)]
 		[Row(256, 256)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void CgeCharChar(char first, char second)
 		{
 			this.comparisonTests.Cge((first >= second), first, second);
@@ -4487,7 +4487,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		[Row(256, 128)]
 		[Row(256, 255)]
 		[Row(256, 256)]
-		[Test, Author("tgiphil", "phil@thinkedge.com")]
+		[Test]
 		public void CleCharChar(char first, char second)
 		{
 			this.comparisonTests.Cle((first <= second), first, second);
