@@ -20,7 +20,7 @@ namespace System.Text
 			if (byteCount == 0)
 				return String.Empty;
 
-			string result = string.InternalAllocateString(byteCount);
+			string result = String.InternalAllocateString(byteCount);
 
 			char* chars = result.first_char;
 
