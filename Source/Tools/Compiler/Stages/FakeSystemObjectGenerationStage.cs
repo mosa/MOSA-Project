@@ -16,7 +16,7 @@ using Mosa.Tools.Compiler.LinkTimeCodeGeneration;
 using Mosa.Runtime.Vm;
 using Mosa.Runtime.CompilerFramework.IR;
 
-using Mosa.Platform.X86;
+using Mosa.Platform.x86;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Metadata;
 
@@ -67,7 +67,7 @@ namespace Mosa.Tools.Compiler.Stages
 			this.InstructionSet = new InstructionSet(1);
 
 			Context ctx = this.CreateContext(-1);
-			ctx.AppendInstruction(Mosa.Platform.X86.CPUx86.Instruction.RetInstruction);
+			ctx.AppendInstruction(Mosa.Platform.x86.CPUx86.Instruction.RetInstruction);
 		}
 
 		private RuntimeMethod GenerateMethod(string nameSpace, string typeName, string methodName)

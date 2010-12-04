@@ -87,15 +87,15 @@
       <Project>{88E003EE-6EEC-4D9A-AE52-94A6F526F115}</Project>
       <Name>Mosa.Vm</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Source\Platforms\x86\Mosa.Platform.X86.csproj">
+    <ProjectReference Include="..\..\..\Source\Mosa.Platform.x86\Mosa.Platform.X86.csproj">
       <Project>{56CA38E7-0883-4461-A10E-386D0C58DBF9}</Project>
       <Name>Mosa.Platform.X86</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Source\Runtime\Mosa.Runtime.csproj">
+    <ProjectReference Include="..\..\..\Source\Mosa.Runtime\Mosa.Runtime.csproj">
       <Project>{75A12A8A-8C8F-4D1E-801B-689D8F781BF4}</Project>
       <Name>Mosa.Runtime</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\..\Source\Jit\SimpleJit\Mosa.Jit.SimpleJit.csproj">
+    <ProjectReference Include="..\..\..\Source\Mosa.Jit.SimpleJit\Mosa.Jit.SimpleJit.csproj">
       <Project>{57399D8B-1B6C-4169-A340-B804F240B450}</Project>
       <Name>Mosa.Jit.SimpleJit</Name>
     </ProjectReference>

@@ -1,0 +1,171 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{D89972FD-A930-4D0C-B393-1895E78FAFAB}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>Mosa.FileSystem</AssemblyName>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>
+    </AppDesignerFolder>
+    <RootNamespace>Mosa.FileSystem</RootNamespace>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <BaseAddress>285212672</BaseAddress>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\bin\</OutputPath>
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <RemoveIntegerChecks>False</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <BaseAddress>285212672</BaseAddress>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>..\..\bin\Mosa.FileSystem.xml</DocumentationFile>
+    <FileAlignment>4096</FileAlignment>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\bin\</OutputPath>
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <RemoveIntegerChecks>False</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningLevel>2</WarningLevel>
+    <DebugType>none</DebugType>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Mosa.ClassLib\Mosa.ClassLib.csproj">
+      <Project>{27A3C89C-1967-45FF-A77E-94F44995C42C}</Project>
+      <Name>Mosa.ClassLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.DeviceSystem\Mosa.DeviceSystem.csproj">
+      <Project>{6509477A-7360-4937-A1B9-26FED0A75CDA}</Project>
+      <Name>Mosa.DeviceSystem</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.DeviceDrivers\Mosa.DeviceDrivers.csproj">
+      <Project>{4DBD4C50-BEC5-48D9-B471-9FB0A7F69999}</Project>
+      <Name>Mosa.DeviceDrivers</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="FAT\FatFileAttributes.cs" />
+    <Compile Include="FAT\FatType.cs" />
+    <Compile Include="FAT\Find\Any.cs" />
+    <Compile Include="FAT\Find\WithName.cs" />
+    <Compile Include="FAT\Find\Volume.cs" />
+    <Compile Include="FAT\Find\ByCluster.cs" />
+    <Compile Include="FAT\FatFileLocation.cs" />
+    <Compile Include="FAT\Find\Empty.cs" />
+    <Compile Include="GenericFileSystem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IFileSystemDevice.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GenericFileSystemSettings.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FAT\FatFileSystem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FAT\FatService.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FAT\FatFileStream.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FAT\FatSettings.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FAT\VfsDirectory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FAT\VfsFile.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="FAT\VfsFileSystem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VFS\AccessCheck.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VFS\AccessMode.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VFS\DirectoryEntry.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VFS\DirectoryNode.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VFS\FileSystemFactory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VFS\IDirectory.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VFS\IFileSystem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VFS\IFileSystemService.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VFS\IVfsNode.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VFS\NodeBase.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VFS\PathResolutionFlags.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VFS\PathResolver.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VFS\PathSplitter.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VFS\SymbolicLinkNode.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VFS\VfsNodeType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="VFS\VirtualFileSystem.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>

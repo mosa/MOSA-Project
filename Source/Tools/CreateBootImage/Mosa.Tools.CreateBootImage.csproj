@@ -45,23 +45,23 @@
     <Compile Include="Program.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\ClassLib\Mosa.ClassLib.csproj">
+    <ProjectReference Include="..\..\Mosa.ClassLib\Mosa.ClassLib.csproj">
       <Project>{27A3C89C-1967-45FF-A77E-94F44995C42C}</Project>
       <Name>Mosa.ClassLib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\DeviceDrivers\Mosa.DeviceDrivers.csproj">
+    <ProjectReference Include="..\..\Mosa.DeviceDrivers\Mosa.DeviceDrivers.csproj">
       <Project>{4DBD4C50-BEC5-48D9-B471-9FB0A7F69999}</Project>
       <Name>Mosa.DeviceDrivers</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\DeviceSystem\Mosa.DeviceSystem.csproj">
+    <ProjectReference Include="..\..\Mosa.DeviceSystem\Mosa.DeviceSystem.csproj">
       <Project>{6509477A-7360-4937-A1B9-26FED0A75CDA}</Project>
       <Name>Mosa.DeviceSystem</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\EmulatedDevices\Mosa.EmulatedDevices.csproj">
+    <ProjectReference Include="..\..\Mosa.EmulatedDevices\Mosa.EmulatedDevices.csproj">
       <Project>{4BCC3783-8374-4E44-A843-22C0C5624C92}</Project>
       <Name>Mosa.EmulatedDevices</Name>
     </ProjectReference>
-    <ProjectReference Include="..\..\FileSystem\Mosa.FileSystem.csproj">
+    <ProjectReference Include="..\..\Mosa.FileSystem\Mosa.FileSystem.csproj">
       <Project>{D89972FD-A930-4D0C-B393-1895E78FAFAB}</Project>
       <Name>Mosa.FileSystem</Name>
     </ProjectReference>

@@ -19,9 +19,9 @@ using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Tools.Compiler.LinkTimeCodeGeneration;
 using Mosa.Runtime.Linker;
 
-using Mosa.Platform.X86;
+using Mosa.Platform.x86;
 using IR = Mosa.Runtime.CompilerFramework.IR;
-using CPUx86 = Mosa.Platform.X86.CPUx86;
+using CPUx86 = Mosa.Platform.x86.CPUx86;
 
 namespace Mosa.Tools.Compiler.Stages
 {
@@ -88,8 +88,8 @@ namespace Mosa.Tools.Compiler.Stages
 		/// </summary>
 		private void CreateISRMethods()
 		{
-			// Get RuntimeMethod for the Mosa.Kernel.X86.IDT.InterruptHandler
-			RuntimeType rt = typeSystem.GetType(@"Mosa.Kernel.X86.IDT");
+			// Get RuntimeMethod for the Mosa.Kernel.x86.IDT.InterruptHandler
+			RuntimeType rt = typeSystem.GetType(@"Mosa.Kernel.x86.IDT");
 			if (rt == null)
 			{
 				return;

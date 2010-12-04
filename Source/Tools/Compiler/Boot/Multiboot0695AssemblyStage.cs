@@ -23,11 +23,11 @@ using Mosa.Runtime.Linker.Elf64;
 using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Tools.Compiler.LinkTimeCodeGeneration;
-using Mosa.Platform.X86;
+using Mosa.Platform.x86;
 using Mosa.Tools.Compiler.TypeInitializers;
 
 using IR = Mosa.Runtime.CompilerFramework.IR;
-using CPUx86 = Mosa.Platform.X86.CPUx86;
+using CPUx86 = Mosa.Platform.x86.CPUx86;
 
 namespace Mosa.Tools.Compiler.Boot
 {
