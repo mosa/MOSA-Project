@@ -44,7 +44,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.Permutation
 			// Get negatives
 			list.AddIfNew<sbyte>(GetNegatives(list));
 
-			//list.Sort();
+			list.Sort();
 
 			return list;
 		}

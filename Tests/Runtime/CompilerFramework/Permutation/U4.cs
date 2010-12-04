@@ -15,23 +15,23 @@ using MbUnit.Framework;
 
 namespace Test.Mosa.Runtime.CompilerFramework.Permutation
 {
-	public class U1
+	public class U4
 	{
-		private static IList<byte> samples = null;
-		public static IList<byte> SampleData { get { if (samples == null) samples = GetSamples(); return samples; } }
+		private static IList<uint> samples = null;
+		public static IList<uint> SampleData { get { if (samples == null) samples = GetSamples(); return samples; } }
 
-		public static IEnumerable<byte> Samples
+		public static IEnumerable<uint> Samples
 		{
 			get
 			{
-				foreach (byte value in SampleData)
+				foreach (uint value in SampleData)
 					yield return value;
 			}
 		}
 
-		public static IList<byte> GetSamples()
+		public static IList<uint> GetSamples()
 		{
-			List<byte> list = new List<byte>();
+			List<uint> list = new List<uint>();
 
 			list.Add(0);
 			list.Add(1);
@@ -40,6 +40,14 @@ namespace Test.Mosa.Runtime.CompilerFramework.Permutation
 			list.Add(byte.MaxValue);
 			list.Add(byte.MinValue + 1);
 			list.Add(byte.MaxValue - 1);
+			list.Add(ushort.MinValue);
+			list.Add(ushort.MaxValue);
+			list.Add(ushort.MinValue + 1);
+			list.Add(ushort.MaxValue - 1);
+			list.Add(uint.MinValue);
+			list.Add(uint.MaxValue);
+			list.Add(uint.MinValue + 1);
+			list.Add(uint.MaxValue - 1);
 
 			list.Sort();
 

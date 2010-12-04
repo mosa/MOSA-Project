@@ -152,6 +152,14 @@
     <Compile Include="MosaCompilerTestRunner.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Permutation\R8.cs" />
+    <Compile Include="Permutation\R4.cs" />
+    <Compile Include="Permutation\U8.cs" />
+    <Compile Include="Permutation\U4.cs" />
+    <Compile Include="Permutation\U2.cs" />
+    <Compile Include="Permutation\I8.cs" />
+    <Compile Include="Permutation\I4.cs" />
+    <Compile Include="Permutation\I2.cs" />
     <Compile Include="Permutation\U1.cs" />
     <Compile Include="Permutation\Numbers.cs" />
     <Compile Include="Permutation\Extension.cs" />
