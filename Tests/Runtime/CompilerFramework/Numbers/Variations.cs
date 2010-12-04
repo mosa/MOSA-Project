@@ -13,9 +13,9 @@ using System.Text;
 
 using MbUnit.Framework;
 
-namespace Test.Mosa.Runtime.CompilerFramework.Permutation
+namespace Test.Mosa.Runtime.CompilerFramework.Numbers
 {
-	public static class Numbers
+	public static class Variations
 	{
 
 		public static IEnumerable<int> GetUpTo(int end)
@@ -143,6 +143,116 @@ namespace Test.Mosa.Runtime.CompilerFramework.Permutation
 			{
 				foreach (int a in SmallNumbers)
 					foreach (byte b in U1.Samples)
+						yield return new object[2] { (int)a, b };
+			}
+		}
+
+		#endregion
+
+		#region I2 Types
+
+		public static IEnumerable<object[]> I2_I2
+		{
+			get
+			{
+				foreach (short a in I2.Samples)
+					foreach (short b in I2.Samples)
+						yield return new object[2] { a, b };
+			}
+		}
+
+		public static IEnumerable<object[]> I2_I2WithoutZero
+		{
+			get
+			{
+				foreach (short a in I2.Samples)
+					foreach (short b in I2.Samples)
+						if (b != 0)
+							yield return new object[2] { a, b };
+			}
+		}
+
+		public static IEnumerable<object[]> I2_I2Zero
+		{
+			get
+			{
+				foreach (short a in I2.Samples)
+					yield return new object[2] { a, (short)0 };
+			}
+		}
+
+		public static IEnumerable<object[]> I2_I2AboveZero
+		{
+			get
+			{
+				foreach (short a in I2.Samples)
+					foreach (short b in I2.Samples)
+						if (b > 0)
+							yield return new object[2] { a, b };
+			}
+		}
+
+		public static IEnumerable<object[]> I2_I2BelowZero
+		{
+			get
+			{
+				foreach (short a in I2.Samples)
+					foreach (short b in I2.Samples)
+						if (b < 0)
+							yield return new object[2] { a, b };
+			}
+		}
+
+		public static IEnumerable<object[]> ISmall_I2
+		{
+			get
+			{
+				foreach (int a in SmallNumbers)
+					foreach (short b in I2.Samples)
+						yield return new object[2] { a, b };
+			}
+		}
+
+		#endregion
+
+		#region U2 Types
+
+		public static IEnumerable<object[]> U2_U2
+		{
+			get
+			{
+				foreach (ushort a in U2.Samples)
+					foreach (ushort b in U2.Samples)
+						yield return new object[2] { a, b };
+			}
+		}
+
+		public static IEnumerable<object[]> U2_U2WithoutZero
+		{
+			get
+			{
+				foreach (ushort a in U2.Samples)
+					foreach (ushort b in U2.Samples)
+						if (b != 0)
+							yield return new object[2] { a, b };
+			}
+		}
+
+		public static IEnumerable<object[]> U2_U2Zero
+		{
+			get
+			{
+				foreach (ushort a in U2.Samples)
+					yield return new object[2] { a, (ushort)0 };
+			}
+		}
+
+		public static IEnumerable<object[]> ISmall_U2
+		{
+			get
+			{
+				foreach (int a in SmallNumbers)
+					foreach (ushort b in U2.Samples)
 						yield return new object[2] { (int)a, b };
 			}
 		}

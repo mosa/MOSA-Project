@@ -11,7 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Test.Mosa.Runtime.CompilerFramework.Permutation
+namespace Test.Mosa.Runtime.CompilerFramework.Numbers
 {
 	public static class Extension
 	{

@@ -13,25 +13,25 @@ using System.Text;
 
 using MbUnit.Framework;
 
-namespace Test.Mosa.Runtime.CompilerFramework.Permutation
+namespace Test.Mosa.Runtime.CompilerFramework.Numbers
 {
-	public class I4
+	public class I2
 	{
-		private static IList<int> samples = null;
-		public static IList<int> SampleData { get { if (samples == null) samples = GetSamples(); return samples; } }
+		private static IList<short> samples = null;
+		public static IList<short> SampleData { get { if (samples == null) samples = GetSamples(); return samples; } }
 
-		public static IEnumerable<int> Samples
+		public static IEnumerable<short> Samples
 		{
 			get
 			{
-				foreach (int value in SampleData)
+				foreach (short value in SampleData)
 					yield return value;
 			}
 		}
 
-		public static IList<int> GetSamples()
+		public static IList<short> GetSamples()
 		{
-			List<int> list = new List<int>();
+			List<short> list = new List<short>();
 
 			list.Add(0);
 			list.Add(1);
@@ -46,27 +46,23 @@ namespace Test.Mosa.Runtime.CompilerFramework.Permutation
 			list.Add(short.MaxValue);
 			list.Add(short.MinValue + 1);
 			list.Add(short.MaxValue - 1);
-			list.Add(int.MinValue);
-			list.Add(int.MaxValue);
-			list.Add(int.MinValue + 1);
-			list.Add(int.MaxValue - 1);
 
 			// Get negatives
-			list.AddIfNew<int>(GetNegatives(list));
+			list.AddIfNew<short>(GetNegatives(list));
 
 			list.Sort();
 
 			return list;
 		}
 
-		protected static IList<int> GetNegatives(IList<int> list)
+		protected static IList<short> GetNegatives(IList<short> list)
 		{
-			List<int> negs = new List<int>();
+			List<short> negs = new List<short>();
 
-			foreach (int value in list)
+			foreach (short value in list)
 			{
 				if (value > 0)
-					negs.AddIfNew<int>((int)-value);
+					negs.AddIfNew<short>((short)-value);
 			}
 
 			return negs;

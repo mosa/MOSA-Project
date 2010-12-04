@@ -13,25 +13,25 @@ using System.Text;
 
 using MbUnit.Framework;
 
-namespace Test.Mosa.Runtime.CompilerFramework.Permutation
+namespace Test.Mosa.Runtime.CompilerFramework.Numbers
 {
-	public class U4
+	public class U2
 	{
-		private static IList<uint> samples = null;
-		public static IList<uint> SampleData { get { if (samples == null) samples = GetSamples(); return samples; } }
+		private static IList<ushort> samples = null;
+		public static IList<ushort> SampleData { get { if (samples == null) samples = GetSamples(); return samples; } }
 
-		public static IEnumerable<uint> Samples
+		public static IEnumerable<ushort> Samples
 		{
 			get
 			{
-				foreach (uint value in SampleData)
+				foreach (ushort value in SampleData)
 					yield return value;
 			}
 		}
 
-		public static IList<uint> GetSamples()
+		public static IList<ushort> GetSamples()
 		{
-			List<uint> list = new List<uint>();
+			List<ushort> list = new List<ushort>();
 
 			list.Add(0);
 			list.Add(1);
@@ -44,10 +44,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.Permutation
 			list.Add(ushort.MaxValue);
 			list.Add(ushort.MinValue + 1);
 			list.Add(ushort.MaxValue - 1);
-			list.Add(uint.MinValue);
-			list.Add(uint.MaxValue);
-			list.Add(uint.MinValue + 1);
-			list.Add(uint.MaxValue - 1);
 
 			list.Sort();
 

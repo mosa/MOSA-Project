@@ -13,7 +13,7 @@ using System.Text;
 
 using MbUnit.Framework;
 
-namespace Test.Mosa.Runtime.CompilerFramework.Permutation
+namespace Test.Mosa.Runtime.CompilerFramework.Numbers
 {
 	public class R4
 	{

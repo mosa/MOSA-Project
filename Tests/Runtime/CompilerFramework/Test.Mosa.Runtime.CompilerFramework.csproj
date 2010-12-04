@@ -152,18 +152,18 @@
     <Compile Include="MosaCompilerTestRunner.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Permutation\R8.cs" />
-    <Compile Include="Permutation\R4.cs" />
-    <Compile Include="Permutation\U8.cs" />
-    <Compile Include="Permutation\U4.cs" />
-    <Compile Include="Permutation\U2.cs" />
-    <Compile Include="Permutation\I8.cs" />
-    <Compile Include="Permutation\I4.cs" />
-    <Compile Include="Permutation\I2.cs" />
-    <Compile Include="Permutation\U1.cs" />
-    <Compile Include="Permutation\Numbers.cs" />
-    <Compile Include="Permutation\Extension.cs" />
-    <Compile Include="Permutation\I1.cs" />
+    <Compile Include="Numbers\R8.cs" />
+    <Compile Include="Numbers\R4.cs" />
+    <Compile Include="Numbers\U8.cs" />
+    <Compile Include="Numbers\U4.cs" />
+    <Compile Include="Numbers\U2.cs" />
+    <Compile Include="Numbers\I8.cs" />
+    <Compile Include="Numbers\I4.cs" />
+    <Compile Include="Numbers\I2.cs" />
+    <Compile Include="Numbers\U1.cs" />
+    <Compile Include="Numbers\Variations.cs" />
+    <Compile Include="Numbers\Extension.cs" />
+    <Compile Include="Numbers\I1.cs" />
     <Compile Include="PrebuiltDelegates.cs" />
     <Compile Include="TestAssemblyLinker.cs">
       <SubType>Code</SubType>

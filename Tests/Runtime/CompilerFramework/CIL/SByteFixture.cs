@@ -11,7 +11,7 @@
 using System;
 using MbUnit.Framework;
 
-using Test.Mosa.Runtime.CompilerFramework.Permutation;
+using Test.Mosa.Runtime.CompilerFramework.Numbers;
 
 namespace Test.Mosa.Runtime.CompilerFramework.CLI
 {
@@ -50,7 +50,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 
 		#region Add
 
-		[Test, Factory(typeof(Numbers), "I1_I1")]
+		[Test, Factory(typeof(Variations), "I1_I1")]
 		public void AddI1I1(sbyte a, sbyte b)
 		{
 			this.arithmeticTests.Add((a + b), a, b);
@@ -60,7 +60,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 
 		#region Sub
 
-		[Test, Factory(typeof(Numbers), "I1_I1")]
+		[Test, Factory(typeof(Variations), "I1_I1")]
 		public void SubI1I1(sbyte a, sbyte b)
 		{
 			this.arithmeticTests.Sub((a - b), a, b);
@@ -70,7 +70,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 
 		#region Mul
 
-		[Test, Factory(typeof(Numbers), "I1_I1")]
+		[Test, Factory(typeof(Variations), "I1_I1")]
 		public void MulI1I1(sbyte a, sbyte b)
 		{
 			this.arithmeticTests.Mul((a * b), a, b);
@@ -80,13 +80,13 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 
 		#region Div
 
-		[Test, Factory(typeof(Numbers), "I1_I1WithoutZero")]
+		[Test, Factory(typeof(Variations), "I1_I1WithoutZero")]
 		public void DivI1I1(sbyte a, sbyte b)
 		{
 			this.arithmeticTests.Div((a / b), a, b);
 		}
 
-		[Test, Factory(typeof(Numbers), "I1_I1Zero")]
+		[Test, Factory(typeof(Variations), "I1_I1Zero")]
 		[ExpectedException(typeof(DivideByZeroException))]
 		public void DivI1I1DivideByZeroException(sbyte a, sbyte b)
 		{
@@ -97,20 +97,20 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 
 		#region Rem
 
-		[Test, Factory(typeof(Numbers), "I1_I1AboveZero")]
+		[Test, Factory(typeof(Variations), "I1_I1AboveZero")]
 		public void RemI1I1(sbyte a, sbyte b)
 		{
 			this.arithmeticTests.Rem((a % b), a, b);
 		}
 
-		[Test, Factory(typeof(Numbers), "I1_I1Zero")]
+		[Test, Factory(typeof(Variations), "I1_I1Zero")]
 		[ExpectedException(typeof(DivideByZeroException))]
 		public void RemI1I1DivideByZeroException(sbyte a, sbyte b)
 		{
 			this.arithmeticTests.Rem((a % b), a, b);
 		}
 
-		//[Test, Factory(typeof(Numbers), "I1_I1BelowZero")]
+		//[Test, Factory(typeof(Variations), "I1_I1BelowZero")]
 		//[ExpectedException(typeof(OverflowException))]
 		//public void RemI1I1OverflowException(sbyte a, sbyte b)
 		//{
@@ -121,7 +121,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 
 		#region And
 
-		[Test, Factory(typeof(Numbers), "I1_I1")]
+		[Test, Factory(typeof(Variations), "I1_I1")]
 		public void AndI1I1(sbyte first, sbyte second)
 		{
 			this.logicTests.And((first & second), first, second);
@@ -131,7 +131,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 
 		#region Or
 
-		[Test, Factory(typeof(Numbers), "I1_I1")]
+		[Test, Factory(typeof(Variations), "I1_I1")]
 		public void OrI1I1(sbyte first, sbyte second)
 		{
 			this.logicTests.Or((first | second), first, second);
@@ -141,7 +141,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 
 		#region Xor
 
-		[Test, Factory(typeof(Numbers), "I1_I1")]
+		[Test, Factory(typeof(Variations), "I1_I1")]
 		public void XorI1I1(sbyte first, sbyte second)
 		{
 			this.logicTests.Xor((first ^ second), first, second);
@@ -171,7 +171,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 
 		#region Ceq
 
-		[Test, Factory(typeof(Numbers), "I1_I1")]
+		[Test, Factory(typeof(Variations), "I1_I1")]
 		public void CgtI1I1(sbyte first, sbyte second)
 		{
 			this.comparisonTests.Cgt((first > second), first, second);
@@ -181,7 +181,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 
 		#region Clt
 
-		[Test, Factory(typeof(Numbers), "I1_I1")]
+		[Test, Factory(typeof(Variations), "I1_I1")]
 		public void CltI1I1(sbyte first, sbyte second)
 		{
 			this.comparisonTests.Clt((first < second), first, second);
@@ -191,7 +191,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 
 		#region Cge
 
-		[Test, Factory(typeof(Numbers), "I1_I1")]
+		[Test, Factory(typeof(Variations), "I1_I1")]
 		public void CgeI1I1(sbyte first, sbyte second)
 		{
 			this.comparisonTests.Cge((first >= second), first, second);
@@ -201,7 +201,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 
 		#region Cle
 
-		[Test, Factory(typeof(Numbers), "I1_I1")]
+		[Test, Factory(typeof(Variations), "I1_I1")]
 		public void CleI1I1(sbyte first, sbyte second)
 		{
 			this.comparisonTests.Cle((first <= second), first, second);
@@ -221,7 +221,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 
 		#region Ldlen
 
-		[Test, Factory(typeof(Numbers), "SmallNumbers")]
+		[Test, Factory(typeof(Variations), "SmallNumbers")]
 		public void LdlenSbyte(int length)
 		{
 			this.arrayTests.Ldlen(length);
@@ -231,7 +231,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 
 		#region Stelem
 
-		[Test, Factory(typeof(Numbers), "ISmall_I1")]
+		[Test, Factory(typeof(Variations), "ISmall_I1")]
 		public void StelemSbyte(int index, sbyte value)
 		{
 			this.arrayTests.Stelem(index, value);
@@ -241,7 +241,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 
 		#region Ldelem
 
-		[Test, Factory(typeof(Numbers), "ISmall_I1")]
+		[Test, Factory(typeof(Variations), "ISmall_I1")]
 		public void LdelemSbyte(int index, sbyte value)
 		{
 			this.arrayTests.Ldelem(index, value);
@@ -251,7 +251,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 
 		#region Ldelema
 
-		[Test, Factory(typeof(Numbers), "ISmall_I1")]
+		[Test, Factory(typeof(Variations), "ISmall_I1")]
 		public void LdelemaSbyte(int index, sbyte value)
 		{
 			this.arrayTests.Ldelema(index, value);
