@@ -213,6 +213,16 @@ namespace Test.Mosa.Runtime.CompilerFramework.Numbers
 			}
 		}
 
+		public static IEnumerable<object[]> I2_I2UpTo16
+		{
+			get
+			{
+				foreach (short a in I2.Samples)
+					foreach (short b in GetUpTo(16))
+						yield return new object[2] { a, b };
+			}
+		}
+
 		#endregion
 
 		#region U2 Types
@@ -254,6 +264,276 @@ namespace Test.Mosa.Runtime.CompilerFramework.Numbers
 				foreach (int a in SmallNumbers)
 					foreach (ushort b in U2.Samples)
 						yield return new object[2] { (int)a, b };
+			}
+		}
+
+		public static IEnumerable<object[]> U2_U2UpTo16
+		{
+			get
+			{
+				foreach (ushort a in I2.Samples)
+					foreach (ushort b in GetUpTo(16))
+						yield return new object[2] { a, b };
+			}
+		}
+
+		#endregion
+
+		#region I4 Types
+
+		public static IEnumerable<object[]> I4_I4
+		{
+			get
+			{
+				foreach (int a in I4.Samples)
+					foreach (int b in I4.Samples)
+						yield return new object[2] { a, b };
+			}
+		}
+
+		public static IEnumerable<object[]> I4_I4WithoutZero
+		{
+			get
+			{
+				foreach (int a in I4.Samples)
+					foreach (int b in I4.Samples)
+						if (b != 0)
+							yield return new object[2] { a, b };
+			}
+		}
+
+		public static IEnumerable<object[]> I4_I4Zero
+		{
+			get
+			{
+				foreach (int a in I4.Samples)
+					yield return new object[2] { a, (int)0 };
+			}
+		}
+
+		public static IEnumerable<object[]> I4_I4AboveZero
+		{
+			get
+			{
+				foreach (int a in I4.Samples)
+					foreach (int b in I4.Samples)
+						if (b > 0)
+							yield return new object[2] { a, b };
+			}
+		}
+
+		public static IEnumerable<object[]> I4_I4BelowZero
+		{
+			get
+			{
+				foreach (int a in I4.Samples)
+					foreach (int b in I4.Samples)
+						if (b < 0)
+							yield return new object[2] { a, b };
+			}
+		}
+
+		public static IEnumerable<object[]> ISmall_I4
+		{
+			get
+			{
+				foreach (int a in SmallNumbers)
+					foreach (int b in I4.Samples)
+						yield return new object[2] { a, b };
+			}
+		}
+
+		public static IEnumerable<object[]> I4_I4UpTo32
+		{
+			get
+			{
+				foreach (int a in I4.Samples)
+					foreach (int b in GetUpTo(32))
+						yield return new object[2] { a, b };
+			}
+		}
+
+		#endregion
+
+		#region U4 Types
+
+		public static IEnumerable<object[]> U4_U4
+		{
+			get
+			{
+				foreach (uint a in U4.Samples)
+					foreach (uint b in U4.Samples)
+						yield return new object[2] { a, b };
+			}
+		}
+
+		public static IEnumerable<object[]> U4_U4WithoutZero
+		{
+			get
+			{
+				foreach (uint a in U4.Samples)
+					foreach (uint b in U4.Samples)
+						if (b != 0)
+							yield return new object[2] { a, b };
+			}
+		}
+
+		public static IEnumerable<object[]> U4_U4Zero
+		{
+			get
+			{
+				foreach (uint a in U4.Samples)
+					yield return new object[2] { a, (uint)0 };
+			}
+		}
+
+		public static IEnumerable<object[]> ISmall_U4
+		{
+			get
+			{
+				foreach (int a in SmallNumbers)
+					foreach (uint b in U4.Samples)
+						yield return new object[2] { (int)a, b };
+			}
+		}
+
+		public static IEnumerable<object[]> U4_U4UpTo32
+		{
+			get
+			{
+				foreach (uint a in I2.Samples)
+					foreach (uint b in GetUpTo(32))
+						yield return new object[2] { a, b };
+			}
+		}
+
+		#endregion
+
+		#region I8 Types
+
+		public static IEnumerable<object[]> I8_I8
+		{
+			get
+			{
+				foreach (long a in I8.Samples)
+					foreach (long b in I8.Samples)
+						yield return new object[2] { a, b };
+			}
+		}
+
+		public static IEnumerable<object[]> I8_I8WithoutZero
+		{
+			get
+			{
+				foreach (long a in I8.Samples)
+					foreach (long b in I8.Samples)
+						if (b != 0)
+							yield return new object[2] { a, b };
+			}
+		}
+
+		public static IEnumerable<object[]> I8_I8Zero
+		{
+			get
+			{
+				foreach (long a in I8.Samples)
+					yield return new object[2] { a, (long)0 };
+			}
+		}
+
+		public static IEnumerable<object[]> I8_I8AboveZero
+		{
+			get
+			{
+				foreach (long a in I8.Samples)
+					foreach (long b in I8.Samples)
+						if (b > 0)
+							yield return new object[2] { a, b };
+			}
+		}
+
+		public static IEnumerable<object[]> I8_I8BelowZero
+		{
+			get
+			{
+				foreach (long a in I8.Samples)
+					foreach (long b in I8.Samples)
+						if (b < 0)
+							yield return new object[2] { a, b };
+			}
+		}
+
+		public static IEnumerable<object[]> ISmall_I8
+		{
+			get
+			{
+				foreach (int a in SmallNumbers)
+					foreach (long b in I8.Samples)
+						yield return new object[2] { a, b };
+			}
+		}
+
+		public static IEnumerable<object[]> I8_I8UpTo64
+		{
+			get
+			{
+				foreach (long a in I8.Samples)
+					foreach (long b in GetUpTo(64))
+						yield return new object[2] { a, b };
+			}
+		}
+
+		#endregion
+
+		#region U8 Types
+
+		public static IEnumerable<object[]> U8_U8
+		{
+			get
+			{
+				foreach (ulong a in U8.Samples)
+					foreach (ulong b in U8.Samples)
+						yield return new object[2] { a, b };
+			}
+		}
+
+		public static IEnumerable<object[]> U8_U8WithoutZero
+		{
+			get
+			{
+				foreach (ulong a in U8.Samples)
+					foreach (ulong b in U8.Samples)
+						if (b != 0)
+							yield return new object[2] { a, b };
+			}
+		}
+
+		public static IEnumerable<object[]> U8_U8Zero
+		{
+			get
+			{
+				foreach (ulong a in U8.Samples)
+					yield return new object[2] { a, (ulong)0 };
+			}
+		}
+
+		public static IEnumerable<object[]> ISmall_U8
+		{
+			get
+			{
+				foreach (int a in SmallNumbers)
+					foreach (ulong b in U8.Samples)
+						yield return new object[2] { (int)a, b };
+			}
+		}
+
+		public static IEnumerable<object[]> U8_U8UpTo64
+		{
+			get
+			{
+				foreach (ulong a in I8.Samples)
+					foreach (ulong b in GetUpTo(64))
+						yield return new object[2] { a, b };
 			}
 		}
 

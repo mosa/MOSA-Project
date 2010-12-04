@@ -19,7 +19,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 	[Importance(Importance.Critical)]
 	//[Category(@"Basic types")]
 	//[Description(@"Tests support for the basic type System.SByte")]
-	public partial class SByteFixture
+	public class SByteFixture
 	{
 		private readonly ArithmeticInstructionTestRunner<int, sbyte> arithmeticTests = new ArithmeticInstructionTestRunner<int, sbyte>
 		{
@@ -119,6 +119,26 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 
 		#endregion // Rem
 
+		#region Neg
+
+		[Test, Factory(typeof(I1), "Samples")]
+		public void NegI1(sbyte first)
+		{
+			this.arithmeticTests.Neg(-first, first);
+		}
+
+		#endregion // Neg
+
+		#region Ret
+
+		[Test, Factory(typeof(I1), "Samples")]
+		public void RetI1(sbyte value)
+		{
+			this.arithmeticTests.Ret(value);
+		}
+
+		#endregion // Ret
+
 		#region And
 
 		[Test, Factory(typeof(Variations), "I1_I1")]
@@ -148,26 +168,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		}
 
 		#endregion // Xor
-
-		#region Neg
-
-		[Test, Factory(typeof(I1), "Samples")]
-		public void NegI1(sbyte first)
-		{
-			this.arithmeticTests.Neg(-first, first);
-		}
-
-		#endregion // Neg
-
-		#region Ret
-
-		[Test, Factory(typeof(I1), "Samples")]
-		public void RetI1(sbyte value)
-		{
-			this.arithmeticTests.Ret(value);
-		}
-
-		#endregion // Ret
 
 		#region Ceq
 
@@ -212,7 +212,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		#region Newarr
 
 		[Test]
-		public void NewarrSbyte()
+		public void NewarrI1()
 		{
 			this.arrayTests.Newarr();
 		}
@@ -222,7 +222,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		#region Ldlen
 
 		[Test, Factory(typeof(Variations), "SmallNumbers")]
-		public void LdlenSbyte(int length)
+		public void LdlenI1(int length)
 		{
 			this.arrayTests.Ldlen(length);
 		}
@@ -232,7 +232,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		#region Stelem
 
 		[Test, Factory(typeof(Variations), "ISmall_I1")]
-		public void StelemSbyte(int index, sbyte value)
+		public void StelemI1(int index, sbyte value)
 		{
 			this.arrayTests.Stelem(index, value);
 		}
@@ -242,7 +242,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		#region Ldelem
 
 		[Test, Factory(typeof(Variations), "ISmall_I1")]
-		public void LdelemSbyte(int index, sbyte value)
+		public void LdelemI1(int index, sbyte value)
 		{
 			this.arrayTests.Ldelem(index, value);
 		}
@@ -252,7 +252,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		#region Ldelema
 
 		[Test, Factory(typeof(Variations), "ISmall_I1")]
-		public void LdelemaSbyte(int index, sbyte value)
+		public void LdelemaI1(int index, sbyte value)
 		{
 			this.arrayTests.Ldelema(index, value);
 		}

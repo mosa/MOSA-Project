@@ -9,15 +9,16 @@
  */
 
 using System;
-
 using MbUnit.Framework;
+
+using Test.Mosa.Runtime.CompilerFramework.Numbers;
 
 namespace Test.Mosa.Runtime.CompilerFramework.CLI
 {
 	[TestFixture]
 	[Importance(Importance.Critical)]
-	[Category(@"Basic types")]
-	[Description(@"Tests support for the basic type System.Single")]
+	//[Category(@"Basic types")]
+	//[Description(@"Tests support for the basic type System.Single")]
 	public partial class FloatFixture 
 	{
 		private readonly ArithmeticInstructionTestRunner<float, float> arithmeticTests = new ArithmeticInstructionTestRunner<float, float>

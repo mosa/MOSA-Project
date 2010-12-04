@@ -19,7 +19,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 	[Importance(Importance.Critical)]
 	//[Category(@"Basic types")]
 	//[Description(@"Tests support for the basic type System.Byte")]
-	public partial class ByteFixture
+	public class ByteFixture
 	{
 		private readonly ArithmeticInstructionTestRunner<int, byte> arithmeticTests = new ArithmeticInstructionTestRunner<int, byte>
 		{
@@ -109,8 +109,28 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		{
 			this.arithmeticTests.Rem((a % b), a, b);
 		}
-		
+
 		#endregion // Rem
+
+		#region Neg
+
+		[Test, Factory(typeof(U1), "Samples")]
+		public void NegU1(byte first)
+		{
+			this.arithmeticTests.Neg(-first, first);
+		}
+
+		#endregion // Neg
+
+		#region Ret
+
+		[Test, Factory(typeof(U1), "Samples")]
+		public void RetU1(byte value)
+		{
+			this.arithmeticTests.Ret(value);
+		}
+
+		#endregion // Ret
 
 		#region And
 
@@ -141,26 +161,6 @@ namespace Test.Mosa.Runtime.CompilerFramework.CLI
 		}
 
 		#endregion // Xor
-
-		#region Neg
-
-		[Test, Factory(typeof(U1), "Samples")]
-		public void NegU1(byte first)
-		{
-			this.arithmeticTests.Neg(-first, first);
-		}
-
-		#endregion // Neg
-
-		#region Ret
-
-		[Test, Factory(typeof(U1), "Samples")]
-		public void RetU1(byte value)
-		{
-			this.arithmeticTests.Ret(value);
-		}
-
-		#endregion // Ret
 
 		#region Ceq
 

@@ -121,11 +121,8 @@
     <Compile Include="CIL\GenericMethodMemberFixture.cs" />
     <Compile Include="CIL\GenericTypeFixture.cs" />
     <Compile Include="CIL\Int16Fixture.cs" />
-    <Compile Include="CIL\Int16Fixture.Partial.cs" />
     <Compile Include="CIL\Int32Fixture.cs" />
-    <Compile Include="CIL\Int32Fixture.Partial.cs" />
     <Compile Include="CIL\Int64Fixture.cs" />
-    <Compile Include="CIL\Int64Fixture.Partial.cs" />
     <Compile Include="CIL\InterfaceFixture.cs" />
     <Compile Include="CIL\ObjectFixture.cs" />
     <Compile Include="CIL\PinnedFixture.cs" />
@@ -134,11 +131,8 @@
     <Compile Include="CIL\StringFixture.cs" />
     <Compile Include="CIL\SZArrayInstructionTestRunner.cs" />
     <Compile Include="CIL\UInt16Fixture.cs" />
-    <Compile Include="CIL\UInt16Fixture.Partial.cs" />
     <Compile Include="CIL\UInt32Fixture.cs" />
-    <Compile Include="CIL\UInt32Fixture.Partial.cs" />
     <Compile Include="CIL\UInt64Fixture.cs" />
-    <Compile Include="CIL\UInt64Fixture.Partial.cs" />
     <Compile Include="Code.cs" />
     <Compile Include="CodeDomTestRunner.cs">
       <SubType>Code</SubType>
@@ -152,6 +146,7 @@
     <Compile Include="MosaCompilerTestRunner.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="Numbers\C.cs" />
     <Compile Include="Numbers\R8.cs" />
     <Compile Include="Numbers\R4.cs" />
     <Compile Include="Numbers\U8.cs" />
