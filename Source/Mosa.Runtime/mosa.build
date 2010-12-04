@@ -20,6 +20,7 @@
 		<references>
 			<include name="System.Data.dll"/>
 			<include name="System.Xml.dll"/>
+			<include name="${outputDirectory}/Mosa.Vm.dll"/>
 		</references>
 		
 		<!-- supress warnings -->
