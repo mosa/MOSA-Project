@@ -121,7 +121,6 @@ namespace Test.Mosa.Runtime.CompilerFramework
 				Console.WriteLine("Executing MOSA compiler...");
 				RunMosaCompiler(assembly);
 				needCompile = false;
-				Prebuilt.LoadPrebuiltDelegateAssembly();
 			}
 
 			// Find the test method to execute

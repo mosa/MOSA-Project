@@ -8,9 +8,9 @@ namespace Test.Mosa.Runtime.CompilerFramework
 {
 	public static class Prebuilt
 	{
-		static Assembly prebuilt = LoadPrebuiltDelegateAssembly();
+		private static Assembly prebuilt = LoadPrebuiltDelegateAssembly();
 
-		public static Assembly LoadPrebuiltDelegateAssembly()
+		private static Assembly LoadPrebuiltDelegateAssembly()
 		{
 			if (prebuilt == null)
 			{

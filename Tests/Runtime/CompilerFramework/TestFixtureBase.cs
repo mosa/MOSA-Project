@@ -194,7 +194,6 @@ namespace Test.Mosa.Runtime.CompilerFramework
 			{
 				CompileTestCode();
 				needCompile = false;
-				Prebuilt.LoadPrebuiltDelegateAssembly();
 			}
 
 			// Find the test method to execute
