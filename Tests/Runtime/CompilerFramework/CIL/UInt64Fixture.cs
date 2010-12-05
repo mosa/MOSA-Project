@@ -17,9 +17,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.CIL
 {
 	[TestFixture]
 	[Importance(Importance.Critical)]
-	[Category(@"Basic types")]
-	[Description(@"Tests support for the basic type System.UInt64")]
-	public partial class UInt64Fixture
+	//[Category(@"Basic types")]
+	//[Description(@"Tests support for the basic type System.UInt64")]
+	public class UInt64Fixture
 	{
 		private readonly ArithmeticInstructionTestRunner<ulong, ulong> arithmeticTests = new ArithmeticInstructionTestRunner<ulong, ulong>
 		{

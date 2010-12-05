@@ -112,7 +112,7 @@
     <Compile Include="CIL\CallvirtFixture.cs" />
     <Compile Include="CIL\CharFixture.cs" />
     <Compile Include="CIL\ComparisonInstructionTestRunner.cs" />
-    <Compile Include="CIL\FloatingPointInstructionTestRunner.cs" />
+    <Compile Include="CIL\FloatingInstructionTestRunner.cs" />
     <Compile Include="CIL\DoubleFixture.cs" />
     <Compile Include="CIL\EnumFixture.cs" />
     <Compile Include="CIL\ExceptionHandlingFixture.cs" />
@@ -125,7 +125,7 @@
     <Compile Include="CIL\ObjectFixture.cs" />
     <Compile Include="CIL\PinnedFixture.cs" />
     <Compile Include="CIL\SByteFixture.cs" />
-    <Compile Include="CIL\FloatFixture.cs" />
+    <Compile Include="CIL\SingleFixture.cs" />
     <Compile Include="CIL\StringFixture.cs" />
     <Compile Include="CIL\SZArrayInstructionTestRunner.cs" />
     <Compile Include="CIL\UInt16Fixture.cs" />

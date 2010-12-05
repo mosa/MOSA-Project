@@ -353,29 +353,5 @@ namespace Test.Mosa.Runtime.CompilerFramework
 			TestCaseAssemblyCompiler.Compile(typeSystem, assemblyLoader);
 		}
 
-		protected string CreateMarshalAttribute(string prefix, string typeName)
-		{
-			string result = String.Empty;
-			string marshalDirective = GetMarshalDirective(typeName);
-			if (marshalDirective != null)
-			{
-				result = @"[" + prefix + marshalDirective + @"]";
-			}
-
-			return result;
-		}
-
-		protected string GetMarshalDirective(string typeName)
-		{
-			string marshalDirective = null;
-
-			if (typeName == "char")
-			{
-				marshalDirective = @"MarshalAs(UnmanagedType.U2)";
-			}
-
-			return marshalDirective;
-		}
-
 	}
 }

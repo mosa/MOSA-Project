@@ -14,11 +14,11 @@ using MbUnit.Framework;
 
 namespace Test.Mosa.Runtime.CompilerFramework.CIL
 {
-	public class FloatingPointInstructionTestRunner<R, T> : TestFixtureBase
+	public class FloatingArithmeticInstructionTestRunner<R, T> : TestFixtureBase
 	{
 		private const string TestClassName = @"ArithmeticsTestClass";
 
-		public FloatingPointInstructionTestRunner()
+		public FloatingArithmeticInstructionTestRunner()
 		{
 			IncludeAdd = true;
 			IncludeSub = true;
@@ -129,83 +129,52 @@ namespace Test.Mosa.Runtime.CompilerFramework.CIL
 			}
 		}
 
-		public static bool Compare(double expectedValue, double resultValue)
-		{
-			if (expectedValue == resultValue)
-				return true;
-
-			double diff = expectedValue - resultValue;
-
-			if (diff < 0)
-				diff = -diff;
-
-			if (diff < 0.00001)
-				return true;
-
-			return false;
-		}
-
 		private const string TestCodeHeader = @"
 			using System.Runtime.InteropServices;
 		
 			public static class ArithmeticsTestClass
 			{
-				public static bool Compare(#expectedtype expectedValue, #expectedtype resultValue)
-				{
-					if (expectedValue == resultValue)
-						return true;
-
-					double diff = expectedValue - resultValue;
-
-					if (diff < 0)
-						diff = -diff;
-
-					if (diff < 0.000001)
-						return true;
-
-					return false;
-				}
 		";
 
 		private const string TestCodeAdd = @"
 				public static bool AddTest(#expectedtype expectedValue, #firsttype first, #secondtype second)
 				{
-					return Compare(expectedValue, (first + second));
+					return expectedValue.CompareTo(first + second) == 0;   
 				}
 			";
 
 		private const string TestCodeSub = @"
 				public static bool SubTest(#expectedtype expectedValue, #firsttype first, #secondtype second)
 				{
-					return Compare(expectedValue, (first - second));   
+					return expectedValue.CompareTo(first - second) == 0;   
 				}
 			";
 
 		private const string TestCodeMul = @"
 				public static bool MulTest(#expectedtype expectedValue, #firsttype first, #secondtype second)
 				{
-					return Compare(expectedValue, (first * second));
+					return expectedValue.CompareTo(first * second) == 0;
 				}
 			";
 
 		private const string TestCodeDiv = @"
 				public static bool DivTest(#expectedtype expectedValue, #firsttype first, #secondtype second)
 				{
-					return Compare(expectedValue, (first / second));
+					return expectedValue.CompareTo(first / second) == 0;
 				}
 			";
 
 		private const string TestCodeRem = @"
 				public static bool RemTest(#expectedtype expectedValue, #firsttype first, #secondtype second)
 				{
-					return Compare(expectedValue, (first % second));
+					return expectedValue.CompareTo(first % second) == 0;
 				}
 			";
 
 		private const string TestCodeNeg = @"
 				public static bool NegTest(#expectedtype expectedValue, #firsttype first)
 				{
-					return Compare(expectedValue, (-first));
+					return expectedValue.CompareTo(-first) == 0;
 				}
 			";
 
