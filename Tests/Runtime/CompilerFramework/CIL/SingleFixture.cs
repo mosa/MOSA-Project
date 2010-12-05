@@ -19,19 +19,13 @@ namespace Test.Mosa.Runtime.CompilerFramework.CIL
 	[Importance(Importance.Critical)]
 	//[Category(@"Basic types")]
 	//[Description(@"Tests support for the basic type System.Single")]
-	public partial class FloatFixture 
+	public class SingleFixture
 	{
-		private readonly FloatingPointInstructionTestRunner<float, float> arithmeticTests = new FloatingPointInstructionTestRunner<float, float>
+		private readonly FloatingArithmeticInstructionTestRunner<float, float> arithmeticTests = new FloatingArithmeticInstructionTestRunner<float, float>
 		{
 			ExpectedType = "float",
 			FirstType = "float",
 			SecondType = "float",
-			//IncludeAdd = false,
-			//IncludeDiv = false,
-			//IncludeMul = false,
-			IncludeNeg = false,
-			//IncludeRem = false,
-			//IncludeSub = false
 		};
 
 		private readonly ComparisonInstructionTestRunner<float> comparisonTests = new ComparisonInstructionTestRunner<float>
@@ -93,7 +87,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CIL
 
 		//#region Rem
 
-		//[Test, Factory(typeof(Variations), "R4_R4AboveZero")]
+		//[Test, Factory(typeof(Variations), "R4_R4WithoutZero")]
 		//public void RemR4R4(float a, float b)
 		//{
 		//    this.arithmeticTests.Rem((a % b), a, b);

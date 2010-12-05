@@ -19,15 +19,13 @@ namespace Test.Mosa.Runtime.CompilerFramework.CIL
 	[Importance(Importance.Critical)]
 	//[Category(@"Basic types")]
 	//[Description(@"Tests support for the basic type System.Double")]
-	public partial class DoubleFixture
+	public class DoubleFixture
 	{
-		private readonly FloatingPointInstructionTestRunner<double, double> arithmeticTests = new FloatingPointInstructionTestRunner<double, double>
+		private readonly FloatingArithmeticInstructionTestRunner<double, double> arithmeticTests = new FloatingArithmeticInstructionTestRunner<double, double>
 		{
 			ExpectedType = "double",
 			FirstType = "double",
 			SecondType = "double",
-			IncludeRem = false,
-			IncludeRet = true
 		};
 
 		private readonly ComparisonInstructionTestRunner<double> comparisonTests = new ComparisonInstructionTestRunner<double>
@@ -89,7 +87,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CIL
 
 		#region Rem
 
-		[Test, Factory(typeof(Variations), "R8_R8AboveZero")]
+		[Test, Factory(typeof(Variations), "R8_R8WithoutZero")]
 		public void RemR8R8(double a, double b)
 		{
 			this.arithmeticTests.Rem((a % b), a, b);
