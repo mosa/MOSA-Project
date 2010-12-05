@@ -38,9 +38,9 @@ namespace Test.Mosa.Runtime.CompilerFramework.Numbers
 			list.Add(2);
 			list.Add(float.MinValue);
 			list.Add(float.MaxValue);
-			list.Add(float.NaN);
-			list.Add(float.PositiveInfinity);
-			list.Add(float.NegativeInfinity);
+			//list.Add(float.NaN);
+			//list.Add(float.PositiveInfinity);
+			//list.Add(float.NegativeInfinity);
 
 			list.Add(1.00012f);
 			//list.Add(1.045);

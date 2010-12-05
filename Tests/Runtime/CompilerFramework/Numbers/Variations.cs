@@ -538,5 +538,147 @@ namespace Test.Mosa.Runtime.CompilerFramework.Numbers
 		}
 
 		#endregion
+
+		#region C Types
+
+		public static IEnumerable<object[]> C_C
+		{
+			get
+			{
+				foreach (char a in C.Samples)
+					foreach (char b in C.Samples)
+						yield return new object[2] { a, b };
+			}
+		}
+
+		public static IEnumerable<object[]> C_CWithoutZero
+		{
+			get
+			{
+				foreach (char a in C.Samples)
+					foreach (char b in C.Samples)
+						if (b != 0)
+							yield return new object[2] { a, b };
+			}
+		}
+
+		public static IEnumerable<object[]> C_CZero
+		{
+			get
+			{
+				foreach (char a in C.Samples)
+					yield return new object[2] { a, (char)0 };
+			}
+		}
+
+		public static IEnumerable<object[]> ISmall_C
+		{
+			get
+			{
+				foreach (int a in SmallNumbers)
+					foreach (char b in C.Samples)
+						yield return new object[2] { (int)a, b };
+			}
+		}
+
+		public static IEnumerable<object[]> C_CUpTo16
+		{
+			get
+			{
+				foreach (char a in I2.Samples)
+					foreach (char b in GetUpTo(16))
+						yield return new object[2] { a, b };
+			}
+		}
+
+		#endregion
+
+		#region R4 Types
+
+		public static IEnumerable<object[]> R4_R4
+		{
+			get
+			{
+				foreach (float a in R4.Samples)
+					foreach (float b in R4.Samples)
+						yield return new object[2] { a, b };
+			}
+		}
+
+		public static IEnumerable<object[]> R4_R4WithoutZero
+		{
+			get
+			{
+				foreach (float a in R4.Samples)
+					foreach (float b in R4.Samples)
+						if (b != 0)
+							yield return new object[2] { a, b };
+			}
+		}
+
+		public static IEnumerable<object[]> R4_R4Zero
+		{
+			get
+			{
+				foreach (float a in R4.Samples)
+					yield return new object[2] { a, (float)0 };
+			}
+		}
+
+		public static IEnumerable<object[]> ISmall_R4
+		{
+			get
+			{
+				foreach (int a in SmallNumbers)
+					foreach (float b in R4.Samples)
+						yield return new object[2] { (int)a, b };
+			}
+		}
+
+		#endregion
+
+		#region R8 Types
+
+		public static IEnumerable<object[]> R8_R8
+		{
+			get
+			{
+				foreach (double a in R8.Samples)
+					foreach (double b in R8.Samples)
+						yield return new object[2] { a, b };
+			}
+		}
+
+		public static IEnumerable<object[]> R8_R8WithoutZero
+		{
+			get
+			{
+				foreach (double a in R8.Samples)
+					foreach (double b in R8.Samples)
+						if (b != 0)
+							yield return new object[2] { a, b };
+			}
+		}
+
+		public static IEnumerable<object[]> R8_R8Zero
+		{
+			get
+			{
+				foreach (double a in R8.Samples)
+					yield return new object[2] { a, (double)0 };
+			}
+		}
+
+		public static IEnumerable<object[]> ISmall_R8
+		{
+			get
+			{
+				foreach (int a in SmallNumbers)
+					foreach (double b in R8.Samples)
+						yield return new object[2] { (int)a, b };
+			}
+		}
+
+		#endregion
 	}
 }

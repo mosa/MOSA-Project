@@ -121,6 +121,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
 				Console.WriteLine("Executing MOSA compiler...");
 				RunMosaCompiler(assembly);
 				needCompile = false;
+				Prebuilt.LoadPrebuiltDelegateAssembly();
 			}
 
 			// Find the test method to execute
@@ -134,12 +135,13 @@ namespace Test.Mosa.Runtime.CompilerFramework
 			string delegateName;
 
 			if (default(T) is System.ValueType)
-				delegateName = "Test.Mosa.Runtime.CompilerFramework.PrebuiltDelegates+" + DelegateUtility.GetDelegteName(default(T), parameters);
+				delegateName = "Mosa.Test.Prebuilt.Delegates+" + DelegateUtility.GetDelegteName(default(T), parameters);
 			else
-				delegateName = "Test.Mosa.Runtime.CompilerFramework.PrebuiltDelegates+" + DelegateUtility.GetDelegteName(null, parameters);
+				delegateName = "Mosa.Test.Prebuilt.Delegates+" + DelegateUtility.GetDelegteName(null, parameters);
 
 			// Get the prebuilt delegate type
-			Type delegateType = Type.GetType(delegateName);
+			//Type delegateType = Type.GetType(delegateName);
+			Type delegateType = Prebuilt.GetType(delegateName);
 
 			Debug.Assert(delegateType != null, delegateName);
 

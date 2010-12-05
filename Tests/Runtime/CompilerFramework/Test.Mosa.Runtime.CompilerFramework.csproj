@@ -111,13 +111,11 @@
     <Compile Include="CIL\ByteFixture.cs" />
     <Compile Include="CIL\CallvirtFixture.cs" />
     <Compile Include="CIL\CharFixture.cs" />
-    <Compile Include="CIL\CharFixture.Partial.cs" />
     <Compile Include="CIL\ComparisonInstructionTestRunner.cs" />
+    <Compile Include="CIL\FloatingPointInstructionTestRunner.cs" />
     <Compile Include="CIL\DoubleFixture.cs" />
-    <Compile Include="CIL\DoubleFixture.Partial.cs" />
     <Compile Include="CIL\EnumFixture.cs" />
     <Compile Include="CIL\ExceptionHandlingFixture.cs" />
-    <Compile Include="CIL\FloatFixture.Partial.cs" />
     <Compile Include="CIL\GenericMethodMemberFixture.cs" />
     <Compile Include="CIL\GenericTypeFixture.cs" />
     <Compile Include="CIL\Int16Fixture.cs" />
@@ -159,7 +157,7 @@
     <Compile Include="Numbers\Variations.cs" />
     <Compile Include="Numbers\Extension.cs" />
     <Compile Include="Numbers\I1.cs" />
-    <Compile Include="PrebuiltDelegates.cs" />
+    <Compile Include="Prebuilt.cs" />
     <Compile Include="TestAssemblyLinker.cs">
       <SubType>Code</SubType>
     </Compile>
