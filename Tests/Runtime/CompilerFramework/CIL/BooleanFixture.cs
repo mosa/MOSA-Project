@@ -8,16 +8,17 @@
  *  
  */
 
+using System;
 using MbUnit.Framework;
 
-using Test.Mosa.Runtime.CompilerFramework.CLI;
+using Test.Mosa.Runtime.CompilerFramework.Numbers;
 
 namespace Test.Mosa.Runtime.CompilerFramework.CIL
 {
 	[TestFixture]
 	[Importance(Importance.Critical)]
-	[Category(@"Basic types")]
-	[Description(@"Tests support for the basic type System.Boolean")]
+	//[Category(@"Basic types")]
+	//[Description(@"Tests support for the basic type System.Boolean")]
 	public class BooleanFixture 
 	{
 		private readonly BinaryLogicInstructionTestRunner<bool, bool, bool> logicTests = new BinaryLogicInstructionTestRunner<bool, bool, bool>
@@ -124,10 +125,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CIL
 
 		#region Ldlen
 
-		[Row(0)]
-		[Row(1)]
-		[Row(10)]
-		[Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
+		[Test, Factory(typeof(Variations), "SmallNumbers")]
 		public void Ldlen(int length)
 		{
 			this.arrayTests.Ldlen(length);

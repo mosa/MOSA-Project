@@ -13,7 +13,7 @@ using MbUnit.Framework;
 
 using Test.Mosa.Runtime.CompilerFramework.Numbers;
 
-namespace Test.Mosa.Runtime.CompilerFramework.CLI
+namespace Test.Mosa.Runtime.CompilerFramework.CIL
 {
 	[TestFixture]
 	[Importance(Importance.Critical)]

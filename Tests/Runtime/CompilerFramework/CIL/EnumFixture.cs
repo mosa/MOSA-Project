@@ -34,8 +34,7 @@ namespace Test.Mosa.Runtime.CompilerFramework.CIL
 						return 5 == (int)TestEnum.ItemA;
 					}
 				}
-			"
-			+ Code.AllTestCode;
+			" + Code.AllTestCode;
 		}
 
 		[Test]
