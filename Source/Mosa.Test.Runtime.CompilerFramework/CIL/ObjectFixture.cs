@@ -10,7 +10,7 @@
 
 using MbUnit.Framework;
 
-namespace Test.Mosa.Runtime.CompilerFramework.CIL
+namespace Mosa.Test.Runtime.CompilerFramework.CIL
 {
 	[TestFixture]
 	[Importance(Importance.Critical)]

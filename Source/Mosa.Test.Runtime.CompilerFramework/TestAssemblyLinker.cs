@@ -20,7 +20,7 @@ using Mosa.Runtime.Vm;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Metadata;
 
-namespace Test.Mosa.Runtime.CompilerFramework
+namespace Mosa.Test.Runtime.CompilerFramework
 {
 	/// <summary>
 	/// A specialized linker for in-memory tests. This linker performs live linking in memory without

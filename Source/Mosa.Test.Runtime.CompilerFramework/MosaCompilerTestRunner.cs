@@ -24,7 +24,7 @@ using Mosa.Runtime.Loader;
 using Mosa.Runtime.Vm;
 using Mosa.Runtime.Metadata.Signatures;
 
-namespace Test.Mosa.Runtime.CompilerFramework
+namespace Mosa.Test.Runtime.CompilerFramework
 {
 	/// <summary>
 	/// Interface class for MbUnit3 to run our testcases.

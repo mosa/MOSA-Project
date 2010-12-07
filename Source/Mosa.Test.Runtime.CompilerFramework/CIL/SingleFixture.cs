@@ -11,9 +11,9 @@
 using System;
 using MbUnit.Framework;
 
-using Test.Mosa.Runtime.CompilerFramework.Numbers;
+using Mosa.Test.Runtime.CompilerFramework.Numbers;
 
-namespace Test.Mosa.Runtime.CompilerFramework.CIL
+namespace Mosa.Test.Runtime.CompilerFramework.CIL
 {
 	[TestFixture]
 	[Importance(Importance.Critical)]

@@ -8,7 +8,7 @@
  *  
  */
 
-namespace Test.Mosa.Runtime.CompilerFramework
+namespace Mosa.Test.Runtime.CompilerFramework
 {
 	public static class Code
 	{

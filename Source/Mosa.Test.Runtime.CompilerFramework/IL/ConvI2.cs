@@ -16,7 +16,7 @@ using System.Text;
 using MbUnit.Framework;
 using System.Reflection.Emit;
 
-namespace Test.Mosa.Runtime.CompilerFramework.IL
+namespace Mosa.Test.Runtime.CompilerFramework.IL
 {
 	[TestFixture]
 	public class ConvI2 : CodeDomTestRunner

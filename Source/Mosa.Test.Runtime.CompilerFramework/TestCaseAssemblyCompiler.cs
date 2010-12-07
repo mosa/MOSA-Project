@@ -16,7 +16,7 @@ using Mosa.Runtime.Vm;
 
 using x86 = Mosa.Platform.x86;
 
-namespace Test.Mosa.Runtime.CompilerFramework
+namespace Mosa.Test.Runtime.CompilerFramework
 {
 	public delegate void CCtor();
 

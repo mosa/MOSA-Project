@@ -15,7 +15,7 @@ using System.Collections.Generic;
 using System.Text;
 using MbUnit.Framework;
 
-namespace Test.Mosa.Runtime.CompilerFramework.IL
+namespace Mosa.Test.Runtime.CompilerFramework.IL
 {
 	[TestFixture]
 	public class Ldloca : CodeDomTestRunner

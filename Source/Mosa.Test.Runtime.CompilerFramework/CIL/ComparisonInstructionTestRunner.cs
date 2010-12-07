@@ -13,7 +13,7 @@ using System.Text;
 
 using MbUnit.Framework;
 
-namespace Test.Mosa.Runtime.CompilerFramework.CIL
+namespace Mosa.Test.Runtime.CompilerFramework.CIL
 {
 	public class ComparisonInstructionTestRunner<T> : TestFixtureBase
 	{

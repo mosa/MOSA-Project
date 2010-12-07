@@ -13,7 +13,7 @@ using System.Runtime.CompilerServices;
 using Mosa.Runtime.Vm;
 using Mosa.Runtime.Memory;
 
-using Test.Mosa.Runtime.CompilerFramework;
+using Mosa.Test.Runtime.CompilerFramework;
 
 namespace Mosa.Vm
 {

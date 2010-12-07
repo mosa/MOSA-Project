@@ -15,7 +15,7 @@ using System.Text;
 using System.CodeDom.Compiler;
 using System.IO;
 
-namespace Test.Mosa.Runtime.CompilerFramework
+namespace Mosa.Test.Runtime.CompilerFramework
 {
 
 	/// <summary>

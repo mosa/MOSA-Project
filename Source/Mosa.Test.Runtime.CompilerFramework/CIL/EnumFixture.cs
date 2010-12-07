@@ -8,7 +8,7 @@
  *  
  */
 
-namespace Test.Mosa.Runtime.CompilerFramework.CIL
+namespace Mosa.Test.Runtime.CompilerFramework.CIL
 {
 	using MbUnit.Framework;
 

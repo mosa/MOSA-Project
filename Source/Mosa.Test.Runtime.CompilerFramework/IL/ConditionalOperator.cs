@@ -14,7 +14,7 @@ using MbUnit.Framework;
 using System.Globalization;
 using System.Runtime.InteropServices;
 
-namespace Test.Mosa.Runtime.CompilerFramework.IL
+namespace Mosa.Test.Runtime.CompilerFramework.IL
 {
 	[TestFixture]
 	class ConditionalOperator : CodeDomTestRunner

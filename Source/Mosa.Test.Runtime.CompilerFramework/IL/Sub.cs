@@ -15,9 +15,9 @@ using System;
 using System.Runtime.InteropServices;
 using Gallio.Framework;
 using MbUnit.Framework;
-using Test.Mosa.Runtime.CompilerFramework;
+using Mosa.Test.Runtime.CompilerFramework;
 
-namespace Test.Mosa.Runtime.CompilerFramework.IL
+namespace Mosa.Test.Runtime.CompilerFramework.IL
 {
 
 	[TestFixture]

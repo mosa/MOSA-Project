@@ -11,7 +11,7 @@
 using System;
 using MbUnit.Framework;
 
-namespace Test.Mosa.Runtime.CompilerFramework
+namespace Mosa.Test.Runtime.CompilerFramework
 {
 	[TestFixture]
 	public class GenericMethodMemberFixture : CodeDomTestRunner
