@@ -79,7 +79,7 @@
 			// labelLabel
 			// 
 			labelLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			labelLabel.Location = new System.Drawing.Point(10, 229);
+			labelLabel.Location = new System.Drawing.Point(10, 228);
 			labelLabel.Margin = new System.Windows.Forms.Padding(4);
 			labelLabel.Name = "labelLabel";
 			labelLabel.Size = new System.Drawing.Size(158, 20);
@@ -101,7 +101,7 @@
 			formatOptionsGroupBox.Controls.Add(this.cbRemoveNextPrev);
 			formatOptionsGroupBox.Controls.Add(this.cbSpace);
 			formatOptionsGroupBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			formatOptionsGroupBox.Location = new System.Drawing.Point(10, 291);
+			formatOptionsGroupBox.Location = new System.Drawing.Point(10, 289);
 			formatOptionsGroupBox.Margin = new System.Windows.Forms.Padding(4);
 			formatOptionsGroupBox.Name = "formatOptionsGroupBox";
 			formatOptionsGroupBox.Padding = new System.Windows.Forms.Padding(4);
@@ -159,7 +159,7 @@
 			// 
 			this.cbLabel.AutoSize = true;
 			this.cbLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.cbLabel.Location = new System.Drawing.Point(176, 229);
+			this.cbLabel.Location = new System.Drawing.Point(176, 228);
 			this.cbLabel.Margin = new System.Windows.Forms.Padding(4);
 			this.cbLabel.Name = "cbLabel";
 			this.cbLabel.Size = new System.Drawing.Size(73, 21);
@@ -173,7 +173,7 @@
 			this.cbLabels.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
 			this.cbLabels.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.cbLabels.FormattingEnabled = true;
-			this.cbLabels.Location = new System.Drawing.Point(10, 258);
+			this.cbLabels.Location = new System.Drawing.Point(10, 257);
 			this.cbLabels.Margin = new System.Windows.Forms.Padding(4);
 			this.cbLabels.MaxDropDownItems = 20;
 			this.cbLabels.Name = "cbLabels";

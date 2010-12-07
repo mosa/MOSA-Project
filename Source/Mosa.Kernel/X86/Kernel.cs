@@ -53,7 +53,7 @@ namespace Mosa.Kernel.x86
 			TaskManager.Setup();
 			Screen.Write('A');
 			Screen.SetCursor(24, 10);
-			SmbiosManager.Setup ();
+			SmbiosManager.Setup();
 		}
 	}
 }
