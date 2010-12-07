@@ -20,15 +20,12 @@ namespace System.Text
 			if (byteCount == 0)
 				return String.Empty;
 
-			string result = String.InternalAllocateString(byteCount);
-
-			char* chars = result.first_char;
+			string result = "";
 
 			for (int index = byteIndex; index < byteIndex + byteCount; index++)
 			{
 				byte b = bytes[index];
-				*chars = (b <= 0x7F) ? (char)b : (char)'?';
-				chars++;
+				result += new string ((b <= 0x7F) ? (char)b : (char)'?', 1);
 			}
 
 			return result;
