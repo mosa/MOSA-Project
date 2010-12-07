@@ -84,8 +84,8 @@ namespace Mosa.Runtime.CompilerFramework
 			foreach (RuntimeType type in typeSystem.GetCompiledTypes())
 			{
 				if (type.ContainsGenericParameters)
-					continue;	
-				
+					continue;
+
 				if (type.IsModule || type.IsGeneric || type.IsDelegate)
 					continue;
 
@@ -466,6 +466,8 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			int methodTableSize = ((headerlinks == null ? 0 : headerlinks.Count) + (methodTable == null ? 0 : methodTable.Count)) * nativePointerSize;
 
+			Debug.WriteLine("Method Table: " + methodTableName);
+
 			using (Stream stream = linker.Allocate(methodTableName, SectionKind.Text, methodTableSize, nativePointerAlignment))
 			{
 				stream.Position = methodTableSize;
@@ -479,7 +481,12 @@ namespace Mosa.Runtime.CompilerFramework
 				{
 					if (!string.IsNullOrEmpty(link))
 					{
+						Debug.WriteLine("  # " + (offset / nativePointerSize).ToString() + " " + link);
 						linker.Link(LinkType.AbsoluteAddress | LinkType.I4, methodTableName, offset, 0, link, IntPtr.Zero);
+					}
+					else
+					{
+						Debug.WriteLine("  # " + (offset / nativePointerSize).ToString() + " [null]");
 					}
 					offset += nativePointerSize;
 				}
@@ -491,7 +498,12 @@ namespace Mosa.Runtime.CompilerFramework
 				{
 					if (!method.IsAbstract)
 					{
+						Debug.WriteLine("  # " + (offset / nativePointerSize).ToString() + " " + method.ToString());
 						linker.Link(LinkType.AbsoluteAddress | LinkType.I4, methodTableName, offset, 0, method.ToString(), IntPtr.Zero);
+					}
+					else
+					{
+						Debug.WriteLine("  # " + (offset / nativePointerSize).ToString() + " [null]");
 					}
 					offset += nativePointerSize;
 				}

@@ -165,6 +165,8 @@ namespace Mosa.Tools.StageVisualizer
 					}
 				}
 
+				writer.Flush();
+				stream.Flush();
 				stream.Close();
 			}
 
