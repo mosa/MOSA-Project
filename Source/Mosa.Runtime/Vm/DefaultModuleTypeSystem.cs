@@ -812,9 +812,7 @@ namespace Mosa.Runtime.Vm
 					string typeNamespace = metadata.ReadString(row.TypeNamespaceIdx);
 
 					AssemblyRefRow asmRefRow = metadata.ReadAssemblyRefRow(row.ResolutionScopeIdx);
-
 					IModuleTypeSystem module = typeSystem.ResolveModuleReference(metadata.ReadString(asmRefRow.NameIdx));
-
 					RuntimeType type = module.GetType(typeNamespace, typeName);
 
 					if (type != null)
