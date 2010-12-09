@@ -6,7 +6,8 @@
  */
 
 using Mosa.Platforms.x86;
-using Mosa.Kernel.X86;
+using Mosa.Platforms.x86.Intrinsic;
+using Mosa.Kernel.x86;
 
 namespace Mosa.Platforms.x86.Intrinsic
 {
@@ -25,7 +26,7 @@ namespace Mosa.Platforms.x86.Intrinsic
 		{
 			while (true) {
 				_counter++;
-				Native.Hlt();	// wait for interrupt
+				//Native.Hlt();	// wait for interrupt
 			}
 		}
 

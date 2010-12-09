@@ -1,4 +1,5 @@
-using Mosa.Platforms.x86;
+using Mosa.Platform.x86;
+using Mosa.Platform.x86.Intrinsic;
 
 namespace Mosa.Kernel.X86.Smbios
 {

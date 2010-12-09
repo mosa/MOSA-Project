@@ -16,7 +16,7 @@ using System.Text;
 using System.Reflection;
 using System.IO;
 
-namespace Test.Mosa.Runtime.CompilerFramework
+namespace Mosa.Test.Runtime.CompilerFramework
 {
 	/// <summary>
 	/// A test runner base class for tests using Reflection.Emit.
@@ -81,7 +81,7 @@ namespace Test.Mosa.Runtime.CompilerFramework
 		/// <returns>The name of the compiled assembly file.</returns>
 		/// <exception cref="NotSupportedException">Compilation is not supported.</exception>
 		/// <exception cref="Exception">A generic exception during compilation.</exception>
-		protected override string CompileTestCode<TDelegate>(string ns, string type, string method)
+		protected string CompileTestCode<TDelegate>(string ns, string type, string method)
 		{
 			string fileName = Path.GetTempFileName();
 			File.Delete(fileName);

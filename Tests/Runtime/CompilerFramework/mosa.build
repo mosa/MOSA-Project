@@ -12,13 +12,19 @@
 	
 	<!-- Main build target -->
 	<target name="build">
-	    <csc target="library" unsafe="true" output="${outputDirectory}/mscorlib.dll" debug="${debug}" nostdlib="true" noconfig="true">
+	    <csc target="library" unsafe="true" output="${outputDirectory}/Test.Mosa.Runtime.CompilerFramework.dll" debug="${debug}" noconfig="true">
 		<sources>
 			<include name="**/*.cs"/>
 		</sources>
 		
 		<references>
-			<include name="${outputDirectory}/Mosa.Vm.dll"/>
+			<include name="${outputDirectory}/Mosa.Runtime.dll"/>
+			<include name="${outputDirectory}/Mosa.SimpleJit.dll"/>
+			<include name="${outputDirectory}/Mosa.Platform.x86.dll"/>
+			<include name="${outputDirectory}/mosacl.exe"/>
+			<include name="../../../3rdParty/Gallio.dll"/>
+			<include name="../../../3rdParty/MbUnit.dll"/>
+			<include name="System.dll"/>
 		</references>
 		
 		<!-- supress warnings -->
