@@ -10,21 +10,15 @@ using Mosa.Kernel;
 
 namespace Mosa.Kernel.x86
 {
-	public struct Cursor
-	{
-		public uint Column;
-		public uint Row;
-	}
 
 	/// <summary>
 	/// 
 	/// </summary>
 	public static class Screen
 	{
-		/// <summary>
-		/// 
-		/// </summary>
-		public static Cursor Cursor;
+		public static uint column = 0;
+		public static uint row = 0;
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -45,8 +39,8 @@ namespace Mosa.Kernel.x86
 		/// </summary>
 		public static uint Column
 		{
-			get { return Cursor.Column; }
-			set { Cursor.Column = value; }
+			get { return column; }
+			set { column = value; }
 		}
 
 		/// <summary>
@@ -54,8 +48,8 @@ namespace Mosa.Kernel.x86
 		/// </summary>
 		public static uint Row
 		{
-			get { return Cursor.Row; }
-			set { Cursor.Row = value; }
+			get { return row; }
+			set { row = value; }
 		}
 
 		/// <summary>
@@ -158,7 +152,7 @@ namespace Mosa.Kernel.x86
 		/// </summary>
 		/// <param name="row">The row.</param>
 		/// <param name="col">The col.</param>
-		public static void SetCursor(uint row, uint col)
+		public static void Goto(uint row, uint col)
 		{
 			Row = row;
 			Column = col;

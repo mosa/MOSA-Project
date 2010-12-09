@@ -46,7 +46,7 @@ namespace Mosa.HelloWorld
 			Screen.Write(new String((char)205, 19));
 			Screen.NextLine();
 
-			Screen.SetCursor(2, 0);
+			Screen.Goto(2, 0);
 			Screen.Color = Colors.Green;
 			Screen.Write(@"Multibootaddress: ");
 			Screen.Color = Colors.Gray;
@@ -102,71 +102,71 @@ namespace Mosa.HelloWorld
 				Screen.Write(Multiboot.GetMemoryMapType(index), 16, 1);
 				Screen.NextLine();
 			}*/
-			
+
 			Screen.Color = Colors.Green;
-			Screen.Write (@"Smbios Info: ");
+			Screen.Write(@"Smbios Info: ");
 			if (SmbiosManager.IsAvailable)
 			{
 				Screen.Color = Colors.White;
-				Screen.Write (@"[");
+				Screen.Write(@"[");
 				Screen.Color = Colors.Gray;
-				Screen.Write (@"Version ");
-				Screen.Write (SmbiosManager.MajorVersion, 10, -1);
-				Screen.Write (@".");
-				Screen.Write (SmbiosManager.MinorVersion, 10, -1);
+				Screen.Write(@"Version ");
+				Screen.Write(SmbiosManager.MajorVersion, 10, -1);
+				Screen.Write(@".");
+				Screen.Write(SmbiosManager.MinorVersion, 10, -1);
 				Screen.Color = Colors.White;
-				Screen.Write (@"]");
-				Screen.NextLine ();
-				
+				Screen.Write(@"]");
+				Screen.NextLine();
+
 				Screen.Color = Colors.Yellow;
-				Screen.Write (@"[Bios]");
+				Screen.Write(@"[Bios]");
 				Screen.Color = Colors.White;
-				Screen.NextLine ();
-				
-				BiosInformationStructure biosInformation = new BiosInformationStructure ();
+				Screen.NextLine();
+
+				BiosInformationStructure biosInformation = new BiosInformationStructure();
 				Screen.Color = Colors.White;
-				Screen.Write (@"Vendor: ");
+				Screen.Write(@"Vendor: ");
 				Screen.Color = Colors.Gray;
-				Screen.Write (biosInformation.BiosVendor);
-				Screen.NextLine ();
-				
+				Screen.Write(biosInformation.BiosVendor);
+				Screen.NextLine();
+
 				Screen.Color = Colors.Yellow;
 				Screen.Row = 9;
 				Screen.Column = 25;
-				Screen.Write (@"[Cpu]");
+				Screen.Write(@"[Cpu]");
 				Screen.Color = Colors.White;
-				Screen.NextLine ();
+				Screen.NextLine();
 				Screen.Column = 25;
-				
-				CpuStructure cpuStructure = new CpuStructure ();
+
+				CpuStructure cpuStructure = new CpuStructure();
 				Screen.Color = Colors.White;
-				Screen.Write (@"Vendor: ");
+				Screen.Write(@"Vendor: ");
 				Screen.Color = Colors.Gray;
-				Screen.Write (cpuStructure.Vendor);
-				Screen.NextLine ();
-				Screen.Column = 25;
-				Screen.Color = Colors.White;
-				Screen.Write (@"Clock Freq.: ");
-				Screen.Color = Colors.Gray;
-				Screen.Write (cpuStructure.ClockFrequency, 10, -1);
-				Screen.Write (@" MHz");
-				Screen.NextLine ();
+				Screen.Write(cpuStructure.Vendor);
+				Screen.NextLine();
 				Screen.Column = 25;
 				Screen.Color = Colors.White;
-				Screen.Write (@"Max. Speed: ");
+				Screen.Write(@"Clock Freq.: ");
 				Screen.Color = Colors.Gray;
-				Screen.Write (cpuStructure.MaxSpeed, 10, -1);
-				Screen.Write (@" MHz");
-				Screen.NextLine ();
+				Screen.Write(cpuStructure.ClockFrequency, 10, -1);
+				Screen.Write(@" MHz");
+				Screen.NextLine();
+				Screen.Column = 25;
+				Screen.Color = Colors.White;
+				Screen.Write(@"Max. Speed: ");
+				Screen.Color = Colors.Gray;
+				Screen.Write(cpuStructure.MaxSpeed, 10, -1);
+				Screen.Write(@" MHz");
+				Screen.NextLine();
 				Screen.Column = 25;
 			}
 			else
 			{
 				Screen.Color = Colors.Red;
-				Screen.Write (@"No SMBIOS available on this system!");
+				Screen.Write(@"No SMBIOS available on this system!");
 			}
 
-			Screen.SetCursor(17, 0);
+			Screen.Goto(17, 0);
 
 			Screen.Color = 0x0F;
 			for (uint index = 0; index < 60; index++)
@@ -231,12 +231,14 @@ namespace Mosa.HelloWorld
 			//Multiboot.Dump(4,53);
 
 			Screen.Row = 22;
-			for (uint index = 0; index < 80; index++) {
+			for (uint index = 0; index < 80; index++)
+			{
 				Screen.Column = index;
 				Screen.Write((char)205);
 			}
 
-			for (uint index = 2; index < 23; index++) {
+			for (uint index = 2; index < 23; index++)
+			{
 				Screen.Column = 60;
 				Screen.Row = index;
 
@@ -251,7 +253,7 @@ namespace Mosa.HelloWorld
 					Screen.Write((char)186);
 			}
 
-			Screen.SetCursor(24, 29);
+			Screen.Goto(24, 29);
 			Screen.Color = Colors.Yellow;
 
 			Screen.Write(@"www.mosa-project.org");
@@ -272,7 +274,7 @@ namespace Mosa.HelloWorld
 		/// </summary>
 		private static void DisplayTime(CMOS cmos)
 		{
-			Screen.SetCursor(24, 52);
+			Screen.Goto(24, 52);
 			Screen.Color = Colors.Green;
 			Screen.Write(@"Time: ");
 
