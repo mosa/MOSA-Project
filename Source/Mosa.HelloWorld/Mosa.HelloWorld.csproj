@@ -67,6 +67,7 @@
     <Compile Include="Tests\KernelTest.cs" />
     <Compile Include="Tests\StringTest.cs" />
     <Compile Include="Tests\InterfaceTest.cs" />
+    <Compile Include="Tests\GenericTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mosa.ClassLib\Mosa.ClassLib.csproj">

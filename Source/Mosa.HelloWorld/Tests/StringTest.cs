@@ -9,7 +9,7 @@ namespace Mosa.HelloWorld.Tests
 	{
 		public static void Test()
 		{
-			Screen.SetCursor(23, 0);
+			Screen.Goto(23, 0);
 			Screen.Write("String Test: ");
 
 			PrintResult(ConcatTest1());
