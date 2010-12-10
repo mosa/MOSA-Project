@@ -24,7 +24,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private ulong _rva;
+		private uint _rva;
 
 		/// <summary>
 		/// 
@@ -40,7 +40,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// </summary>
 		/// <param name="rva">The rva.</param>
 		/// <param name="fieldTableIdx">The field table idx.</param>
-		public FieldRVARow(ulong rva, TokenTypes fieldTableIdx)
+		public FieldRVARow(uint rva, TokenTypes fieldTableIdx)
 		{
 			_rva = rva;
 			_fieldTableIdx = fieldTableIdx;
@@ -54,7 +54,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Gets the rva.
 		/// </summary>
 		/// <value>The rva.</value>
-		public ulong Rva
+		public uint Rva
 		{
 			get { return _rva; }
 		}

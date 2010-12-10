@@ -24,6 +24,8 @@ namespace Mosa.Runtime.Metadata.Runtime
 			this.signature = genericTypeInstanceSignature;
 			this.genericArguments = signature.GenericArguments;
 
+			this.genericType = moduleTypeSystem.GetType(signature.BaseType.Token);
+
 			this.Methods = this.GetMethods();
 			this.Fields = this.GetFields();
 		}
@@ -32,15 +34,12 @@ namespace Mosa.Runtime.Metadata.Runtime
 		{
 			get
 			{
-				ProcessSignature();
 				return genericArguments;
 			}
 		}
 
 		protected override string GetName()
 		{
-			ProcessSignature();
-
 			StringBuilder sb = new StringBuilder();
 			sb.AppendFormat("{0}<", genericType.Name);
 
@@ -64,27 +63,23 @@ namespace Mosa.Runtime.Metadata.Runtime
 
 		protected override string GetNamespace()
 		{
-			ProcessSignature();
 			return genericType.Namespace;
 		}
 
 		protected override RuntimeType GetBaseType()
 		{
-			ProcessSignature();
 			return genericType.BaseType;
 		}
 
 		private IList<RuntimeMethod> GetMethods()
 		{
-			ProcessSignature();
-
 			List<RuntimeMethod> methods = new List<RuntimeMethod>();
 			foreach (CilRuntimeMethod method in this.genericType.Methods)
 			{
 				MethodSignature signature = new MethodSignature(method.MetadataModule.Metadata, method.Signature.Token);
 
 				signature.ApplyGenericType(this.genericArguments);
-				
+
 				RuntimeMethod genericInstanceMethod = new CilGenericMethod(moduleTypeSystem, method, signature, this);
 
 				methods.Add(genericInstanceMethod);
@@ -95,24 +90,19 @@ namespace Mosa.Runtime.Metadata.Runtime
 
 		private IList<RuntimeField> GetFields()
 		{
-			ProcessSignature();
-
 			List<RuntimeField> fields = new List<RuntimeField>();
 			foreach (CilRuntimeField field in this.genericType.Fields)
 			{
-				CilGenericField genericInstanceField = new CilGenericField(moduleTypeSystem, this, field);
+				FieldSignature signature = new FieldSignature(field.MetadataModule.Metadata, field.Signature.Token);
+
+				signature.ApplyGenericType(this.genericArguments);
+
+				CilGenericField genericInstanceField = new CilGenericField(moduleTypeSystem, field, signature, this);
+
 				fields.Add(genericInstanceField);
 			}
 
 			return fields;
-		}
-
-		private void ProcessSignature()
-		{
-			if (genericType == null)
-			{
-				genericType = moduleTypeSystem.GetType(signature.BaseType.Token);				
-			}
 		}
 
 		private RuntimeType GetRuntimeTypeForSigType(SigType sigType)

@@ -18,19 +18,19 @@ namespace Mosa.Runtime.Metadata.Signatures
 	/// </summary>
 	public class MethodSpecSignature : Signature
 	{
-		//private readonly ISignatureContext outerContext;
-
 		/// <summary>
 		/// 
 		/// </summary>
 		private SigType[] types;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="MethodSpecSignature"/> class.
+		/// Initializes a new instance of the <see cref="VariableSignature"/> class.
 		/// </summary>
-		public MethodSpecSignature()
+		/// <param name="provider">The provider.</param>
+		/// <param name="token">The token.</param>
+		public MethodSpecSignature(IMetadataProvider provider, TokenTypes token)
+			: base(provider, token)
 		{
-			//this.outerContext = outerContext;
 		}
 
 		/// <summary>
@@ -57,15 +57,5 @@ namespace Mosa.Runtime.Metadata.Signatures
 				types[i] = SigType.ParseTypeSignature(reader);
 		}
 
-		public SigType GetGenericMethodArgument(int index)
-		{
-			return types[index];
-		}
-
-		public SigType GetGenericTypeArgument(int index)
-		{
-			return null; // TODO: Fixme!
-			//return outerContext.GetGenericTypeArgument(index);
-		}
 	}
 }
