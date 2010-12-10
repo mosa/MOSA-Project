@@ -46,7 +46,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 		/// <param name="offset">The offset.</param>
 		/// <param name="rva">The rva.</param>
 		/// <param name="declaringType">Type of the declaring.</param>
-		public CilRuntimeField(IModuleTypeSystem moduleTypeSystem, ref FieldRow field, ulong offset, ulong rva, RuntimeType declaringType) :
+		public CilRuntimeField(IModuleTypeSystem moduleTypeSystem, FieldRow field, uint offset, uint rva, RuntimeType declaringType) :
 			base(moduleTypeSystem, declaringType)
 		{
 			this.nameIdx = field.NameStringIdx;

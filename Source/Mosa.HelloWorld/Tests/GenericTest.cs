@@ -21,6 +21,9 @@ namespace Mosa.HelloWorld.Tests
 
 			PrintResult(GenericTest1());
 			PrintResult(GenericTest2());
+			PrintResult(GenericTest3());
+			PrintResult(GenericTest4());
+			PrintResult(GenericTest5());
 		}
 
 		public static bool GenericTest1()
@@ -41,17 +44,57 @@ namespace Mosa.HelloWorld.Tests
 			return true;
 		}
 
-		//public static bool GenericTest3()
-		//{
-		//    GenericTest<int> genericObject = new GenericTest<int>();
+		public static bool GenericTest3()
+		{
+			GenericTest<int> genericObject = new GenericTest<int>();
 
-		//    genericObject.value = 10;
+			genericObject.value = 10;
 
-		//    return genericObject.GetValue() == 10;
-		//}
+			return genericObject.GetValue() == 10;
+		}
 
+		public static bool GenericTest4()
+		{
+			GenericTest<TestObject> genericObject = new GenericTest<TestObject>();
+
+			genericObject.value = new TestObject(232, 1231);
+
+			if (genericObject.GetValue().A != 232)
+				return false;
+
+			if (genericObject.GetValue().B != 1231)
+				return false;
+
+			if (genericObject.value.A != 232)
+				return false;
+
+			if (genericObject.value.B != 1231)
+				return false;
+
+			return true;
+		}
+
+		public static bool GenericTest5()
+		{
+			GenericTest<TestObject> genericObject = new GenericTest<TestObject>();
+
+			genericObject.SetValue(new TestObject(232, 1231));
+
+			if (genericObject.GetValue().A != 232)
+				return false;
+
+			if (genericObject.GetValue().B != 1231)
+				return false;
+
+			if (genericObject.value.A != 232)
+				return false;
+
+			if (genericObject.value.B != 1231)
+				return false;
+
+			return true;
+		}
 	}
-
 
 	public class GenericTest<T>
 	{
@@ -59,6 +102,18 @@ namespace Mosa.HelloWorld.Tests
 
 		public T GetValue() { return value; }
 		public void SetValue(T value) { this.value = value; }
+	}
+
+	public class TestObject
+	{
+		public int A;
+		public int B;
+
+		public TestObject(int a, int b)
+		{
+			A = a;
+			B = b;
+		}
 	}
 
 }

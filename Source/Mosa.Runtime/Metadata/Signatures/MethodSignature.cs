@@ -148,48 +148,6 @@ namespace Mosa.Runtime.Metadata.Signatures
 			this.genericParameterCount = 0;
 		}
 
-		//public MethodSignature(ISignatureContext context, MethodSignature signature, MethodSpecSignature specification)
-		//{
-		//    // NOT USED!!!
-		//    if (context == null)
-		//        throw new ArgumentNullException(@"context");
-		//    if (signature == null)
-		//        throw new ArgumentNullException(@"signature");
-		//    if (specification == null)
-		//        throw new ArgumentNullException(@"specification");
-
-		//    this.callingConvention = signature.CallingConvention;
-		//    this.hasExplicitThis = signature.HasExplicitThis;
-		//    this.hasThis = signature.HasThis;
-		//    this.genericParameterCount = 0;
-
-		//    int length = signature.Parameters.Length;
-		//    this.parameters = new SigType[length];
-		//    for (int index = 0; index < length; index++)
-		//    {
-		//        this.parameters[index] = this.ApplySpecification(context, specification, signature.Parameters[index]);
-		//    }
-		//    this.returnType = this.ApplySpecification(context, specification, signature.ReturnType);
-		//}
-
-		//private SigType ApplySpecification(ISignatureContext context, MethodSpecSignature specification, SigType sigType)
-		//{
-		//    // NOT USED!!!
-		//    SigType result = sigType;
-
-		//    if (sigType is VarSigType)
-		//    {
-		//        result = context.GetGenericTypeArgument(((VarSigType)sigType).Index);
-		//    }
-		//    else if (sigType is MVarSigType)
-		//    {
-		//        result = specification.Types[((MVarSigType)sigType).Index];
-		//    }
-
-		//    Debug.WriteLine(String.Format(@"Replaced {0} by {1}.", sigType, result));
-		//    return result;
-		//}
-
 		/// <summary>
 		/// Parses the signature.
 		/// </summary>
@@ -300,6 +258,9 @@ namespace Mosa.Runtime.Metadata.Signatures
 					parameters[i] = genericArguments[(parameters[i] as VarSigType).Index];
 				}
 			}
+
+			if (returnType is VarSigType)
+				returnType = genericArguments[(returnType as VarSigType).Index];
 		}
 	}
 }

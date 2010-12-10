@@ -156,7 +156,7 @@ namespace Mosa.Runtime.Vm
 			fields = new RuntimeField[0];
 			types = new RuntimeType[0];
 			parameters = new RuntimeParameter[0];
-			
+
 			typeSpecs = new RuntimeType[0];
 			methodSpecs = new RuntimeMethod[0];
 		}
@@ -201,7 +201,7 @@ namespace Mosa.Runtime.Vm
 
 				if (table == TokenTypes.TypeDef)
 				{
-					return this.types[row - 1];
+					return types[row - 1];
 				}
 				else if (table == TokenTypes.TypeSpec)
 				{
@@ -330,6 +330,12 @@ namespace Mosa.Runtime.Vm
 
 					MethodSignature sig = (MethodSignature)Signature.FromMemberRefSignatureToken(metadata, row.SignatureBlobIdx);
 
+					CilGenericType genericType = type as CilGenericType;
+					if (genericType != null)
+					{
+						sig.ApplyGenericType(genericType.GenericArguments);
+					}
+
 					foreach (RuntimeMethod method in type.Methods)
 					{
 						if (method.Name != nameString)
@@ -383,8 +389,7 @@ namespace Mosa.Runtime.Vm
 
 			CilRuntimeMethod genericMethod = (CilRuntimeMethod)((IModuleTypeSystem)this).GetMethod(methodSpec.MethodTableIdx);
 
-			MethodSpecSignature specSignature = new MethodSpecSignature();	 
-			specSignature.LoadSignature(metadata, methodSpec.InstantiationBlobIdx);
+			MethodSpecSignature specSignature = new MethodSpecSignature(metadata, methodSpec.InstantiationBlobIdx);
 
 			MethodSignature signature = new MethodSignature(genericMethod.MetadataModule.Metadata, genericMethod.Signature.Token);
 
@@ -563,8 +568,8 @@ namespace Mosa.Runtime.Vm
 			{
 				// Read the stackFrameIndex
 				FieldRow field = metadata.ReadFieldRow(token);
-				ulong rva = 0;
-				ulong layout = 0;
+				uint rva = 0;
+				uint layout = 0;
 
 				// Static fields have an optional RVA, non-static may have a layout assigned
 				if ((field.Flags & FieldAttributes.HasFieldRVA) == FieldAttributes.HasFieldRVA)
@@ -611,7 +616,7 @@ namespace Mosa.Runtime.Vm
 				}
 
 				// Load the field metadata
-				fields[offset++] = new CilRuntimeField(this, ref field, layout, rva, declaringType);
+				fields[offset++] = new CilRuntimeField(this, field, layout, rva, declaringType);
 			}
 
 			/* FIXME:

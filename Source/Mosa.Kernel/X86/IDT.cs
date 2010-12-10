@@ -363,12 +363,12 @@ namespace Mosa.Kernel.x86
 			uint r = Screen.Row;
 			byte col = Screen.Color;
 
-			Screen.Column = 30;
+			Screen.Column = 31;
 			Screen.Row = 0;
 			Screen.Color = Colors.Cyan;
 
 			_counter++;
-			Screen.Write(_counter, 10, 8);
+			Screen.Write(_counter, 10, 7);
 			Screen.Write(':');
 			Screen.Write(interrupt, 16, 2);
 

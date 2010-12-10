@@ -9,19 +9,17 @@ namespace Mosa.Runtime.Metadata.Runtime
 	{
 		private readonly RuntimeField genericField;
 
-		public CilGenericField(IModuleTypeSystem moduleTypeSystem, CilGenericType declaringType, RuntimeField genericField) :
+		public CilGenericField(IModuleTypeSystem moduleTypeSystem, RuntimeField genericField, FieldSignature signature, CilGenericType declaringType) :
 			base(moduleTypeSystem, declaringType)
 		{
-			this.Signature = new FieldSignature(MetadataModule.Metadata, genericField.Signature.Token);
+			this.Signature = signature;
 
 			this.genericField = genericField;
 
 			// FIXME: RVA, Address of these?
 			this.Attributes = genericField.Attributes;
 			this.SetAttributes(genericField.CustomAttributes);
-
-			Signature.ApplyGenericType(declaringType.GenericArguments);
-
+			
 			return;
 		}
 
