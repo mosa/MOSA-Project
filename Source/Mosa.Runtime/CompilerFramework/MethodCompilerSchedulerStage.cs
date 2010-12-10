@@ -60,7 +60,10 @@ namespace Mosa.Runtime.CompilerFramework
 				return;
 			}
 
-			Console.WriteLine(@"Compiling " + type.FullName);
+			Console.ForegroundColor = ConsoleColor.Yellow;
+			Console.Write(@"[Compiling]  ");
+			Console.ForegroundColor = ConsoleColor.White;
+			Console.WriteLine(type.FullName);
 			Debug.WriteLine(@"Compiling " + type.FullName);
 			foreach (RuntimeMethod method in type.Methods)
 			{
@@ -95,7 +98,10 @@ namespace Mosa.Runtime.CompilerFramework
 
 		private void CompileMethod(RuntimeMethod method)
 		{
-			Console.WriteLine(@"Compiling " + method.ToString());
+			Console.ForegroundColor = ConsoleColor.Yellow;
+			Console.Write(@"[Compiling]  ");
+			Console.ForegroundColor = ConsoleColor.White;
+			Console.WriteLine(method.ToString());
 			Debug.WriteLine(@"Compiling " + method.ToString());
 			using (IMethodCompiler mc = compiler.CreateMethodCompiler(this, method.DeclaringType, method))
 			{
@@ -134,7 +140,10 @@ namespace Mosa.Runtime.CompilerFramework
 
 			if (!type.IsGeneric)
 			{
-				Console.WriteLine(@"Scheduling {0}", type.FullName);
+				Console.ForegroundColor = ConsoleColor.Blue;
+				Console.Write(@"[Scheduling] ");
+				Console.ForegroundColor = ConsoleColor.White;
+				Console.WriteLine(type.FullName);
 				Debug.WriteLine(String.Format(@"Scheduling {0}", type.FullName));
 
 				typeQueue.Enqueue(type);
@@ -149,7 +158,10 @@ namespace Mosa.Runtime.CompilerFramework
 
 			if (!method.IsGeneric)
 			{
-				Console.WriteLine(@"Scheduling {1}.{0}", method.Name, method.DeclaringType.FullName);
+				Console.ForegroundColor = ConsoleColor.Blue;
+				Console.Write(@"[Scheduling] ");
+				Console.ForegroundColor = ConsoleColor.White;
+				Console.WriteLine("{1}.{0}", method.Name, method.DeclaringType.FullName);
 				Debug.WriteLine(String.Format(@"Scheduling {1}.{0}", method.Name, method.DeclaringType.FullName));
 
 				methodQueue.Enqueue(method);
