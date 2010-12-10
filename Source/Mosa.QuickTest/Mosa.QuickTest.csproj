@@ -43,9 +43,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Boot.cs" />
+    <Compile Include="Test.cs" />
     <Compile Include="Object.cs" />
     <Compile Include="Runtime.cs" />
-    <Compile Include="Test.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

@@ -21,6 +21,7 @@ namespace Mosa.HelloWorld.Tests
 
 			PrintResult(GenericTest1());
 			PrintResult(GenericTest2());
+			PrintResult(GenericTest3());
 		}
 
 		public static bool GenericTest1()
@@ -41,17 +42,16 @@ namespace Mosa.HelloWorld.Tests
 			return true;
 		}
 
-		//public static bool GenericTest3()
-		//{
-		//    GenericTest<int> genericObject = new GenericTest<int>();
+		public static bool GenericTest3()
+		{
+			GenericTest<int> genericObject = new GenericTest<int>();
 
-		//    genericObject.value = 10;
+			genericObject.value = 10;
 
-		//    return genericObject.GetValue() == 10;
-		//}
+			return genericObject.GetValue() == 10;
+		}
 
 	}
-
 
 	public class GenericTest<T>
 	{

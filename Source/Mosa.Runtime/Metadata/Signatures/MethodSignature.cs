@@ -300,6 +300,9 @@ namespace Mosa.Runtime.Metadata.Signatures
 					parameters[i] = genericArguments[(parameters[i] as VarSigType).Index];
 				}
 			}
+
+			if (returnType is VarSigType)
+				returnType = genericArguments[(returnType as VarSigType).Index];
 		}
 	}
 }

@@ -201,7 +201,7 @@ namespace Mosa.Runtime.Vm
 
 				if (table == TokenTypes.TypeDef)
 				{
-					return this.types[row - 1];
+					return types[row - 1];
 				}
 				else if (table == TokenTypes.TypeSpec)
 				{
@@ -329,6 +329,12 @@ namespace Mosa.Runtime.Vm
 					RuntimeType type = ((IModuleTypeSystem)this).GetType(row.ClassTableIdx);
 
 					MethodSignature sig = (MethodSignature)Signature.FromMemberRefSignatureToken(metadata, row.SignatureBlobIdx);
+
+					CilGenericType genericType = type as CilGenericType;
+					if (genericType != null)
+					{
+						sig.ApplyGenericType(genericType.GenericArguments);
+					}
 
 					foreach (RuntimeMethod method in type.Methods)
 					{
