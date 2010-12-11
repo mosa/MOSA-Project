@@ -60,7 +60,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 			{
 				int count = maxParam - method.ParamList;
 				int start = (int)(method.ParamList & TokenTypes.RowIndexMask) - 1;
-				base.Parameters = new ReadOnlyRuntimeParameterListView(moduleTypeSystem, start, count);
+				base.Parameters = new ReadOnlyRuntimeParameterListView((IModuleTypeSystemInternalList)moduleTypeSystem, start, count);
 			}
 			else
 			{

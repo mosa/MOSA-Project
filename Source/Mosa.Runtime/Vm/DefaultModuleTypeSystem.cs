@@ -23,7 +23,7 @@ namespace Mosa.Runtime.Vm
 	/// <summary>
 	/// 
 	/// </summary>
-	public sealed class DefaultModuleTypeSystem : IModuleTypeSystem
+	public sealed class DefaultModuleTypeSystem : IModuleTypeSystem, IModuleTypeSystemInternalList
 	{
 		#region Data members
 
@@ -85,27 +85,27 @@ namespace Mosa.Runtime.Vm
 		/// <summary>
 		/// Array of loaded runtime type descriptors.
 		/// </summary>
-		RuntimeType[] IModuleTypeSystem.Types { get { return types; } }
+		private RuntimeType[] Types { get { return types; } }
 
 		/// <summary>
 		/// Holds all loaded method definitions.
 		/// </summary>
-		RuntimeMethod[] IModuleTypeSystem.Methods { get { return methods; } }
+		RuntimeMethod[] IModuleTypeSystemInternalList.Methods { get { return methods; } }
 
 		/// <summary>
 		/// Holds all parameter information elements.
 		/// </summary>
-		RuntimeParameter[] IModuleTypeSystem.Parameters { get { return parameters; } }
+		RuntimeParameter[] IModuleTypeSystemInternalList.Parameters { get { return parameters; } }
 
 		/// <summary>
 		/// Holds all loaded _stackFrameIndex definitions.
 		/// </summary>
-		RuntimeField[] IModuleTypeSystem.Fields { get { return fields; } }
+		RuntimeField[] IModuleTypeSystemInternalList.Fields { get { return fields; } }
 
 		/// <summary>
 		/// Array of loaded runtime typespec descriptors.
 		/// </summary>
-		RuntimeType[] IModuleTypeSystem.TypeSpecs { get { return typeSpecs; } }
+		private RuntimeType[] TypeSpecs { get { return typeSpecs; } }
 
 		#region Construction
 
@@ -286,32 +286,6 @@ namespace Mosa.Runtime.Vm
 		}
 
 		/// <summary>
-		/// Resolves the type of the signature.
-		/// </summary>
-		/// <param name="sigType">Type of the signature.</param>
-		/// <returns></returns>
-		RuntimeType IModuleTypeSystem.ResolveSignatureType(SigType sigType)
-		{
-			switch (sigType.Type)
-			{
-				case CilElementType.Class:
-					TypeSigType typeSigType = (TypeSigType)sigType;
-					return ((IModuleTypeSystem)this).GetType(typeSigType.Token);
-
-				case CilElementType.ValueType:
-					goto case CilElementType.Class;
-
-				case CilElementType.GenericInst:
-					GenericInstSigType genericSigType = (GenericInstSigType)sigType;
-					RuntimeType baseType = ((IModuleTypeSystem)this).GetType(genericSigType.BaseType.Token);
-					return new CilGenericType(this, baseType, genericSigType);
-
-				default:
-					throw new NotSupportedException(String.Format(@"ResolveSignatureType does not support CilElementType.{0}", sigType.Type));
-			}
-		}
-
-		/// <summary>
 		/// Retrieves the method definition identified by the given token in the scope.
 		/// </summary>
 		/// <param name="token">The token of the method to retrieve.</param>
@@ -358,6 +332,8 @@ namespace Mosa.Runtime.Vm
 
 		#endregion // ITypeSystem Members
 
+		#region Internals
+
 		/// <summary>
 		/// Finds the type.
 		/// </summary>
@@ -376,7 +352,31 @@ namespace Mosa.Runtime.Vm
 			return null;
 		}
 
-		#region Internals
+		/// <summary>
+		/// Resolves the type of the signature.
+		/// </summary>
+		/// <param name="sigType">Type of the signature.</param>
+		/// <returns></returns>
+		RuntimeType ResolveSignatureType(SigType sigType)
+		{
+			switch (sigType.Type)
+			{
+				case CilElementType.Class:
+					TypeSigType typeSigType = (TypeSigType)sigType;
+					return ((IModuleTypeSystem)this).GetType(typeSigType.Token);
+
+				case CilElementType.ValueType:
+					goto case CilElementType.Class;
+
+				case CilElementType.GenericInst:
+					GenericInstSigType genericSigType = (GenericInstSigType)sigType;
+					RuntimeType baseType = ((IModuleTypeSystem)this).GetType(genericSigType.BaseType.Token);
+					return new CilGenericType(this, baseType, genericSigType);
+
+				default:
+					throw new NotSupportedException(String.Format(@"ResolveSignatureType does not support CilElementType.{0}", sigType.Type));
+			}
+		}
 
 		/// <summary>
 		/// Decodes the method specification
@@ -904,7 +904,7 @@ namespace Mosa.Runtime.Vm
 
 					if (genericSig != null)
 					{
-						RuntimeType genericType = ((IModuleTypeSystem)this).ResolveSignatureType(signature.Type);
+						RuntimeType genericType = ResolveSignatureType(signature.Type);
 
 						typeSpecs[typeSpecIndex] = genericType;
 					}

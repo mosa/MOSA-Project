@@ -28,7 +28,7 @@ namespace Mosa.HelloWorld.Tests
 
 		public static bool GenericTest1()
 		{
-			GenericTest<int> genericObject = new GenericTest<int>();
+			GenericClassTest<int> genericObject = new GenericClassTest<int>();
 
 			genericObject.value = 10;
 
@@ -37,7 +37,7 @@ namespace Mosa.HelloWorld.Tests
 
 		public static bool GenericTest2()
 		{
-			GenericTest<object> genericObject = new GenericTest<object>();
+			GenericClassTest<object> genericObject = new GenericClassTest<object>();
 
 			genericObject.value = new object();
 
@@ -46,7 +46,7 @@ namespace Mosa.HelloWorld.Tests
 
 		public static bool GenericTest3()
 		{
-			GenericTest<int> genericObject = new GenericTest<int>();
+			GenericClassTest<int> genericObject = new GenericClassTest<int>();
 
 			genericObject.value = 10;
 
@@ -55,7 +55,7 @@ namespace Mosa.HelloWorld.Tests
 
 		public static bool GenericTest4()
 		{
-			GenericTest<TestObject> genericObject = new GenericTest<TestObject>();
+			GenericClassTest<TestObject> genericObject = new GenericClassTest<TestObject>();
 
 			genericObject.value = new TestObject(232, 1231);
 
@@ -76,7 +76,7 @@ namespace Mosa.HelloWorld.Tests
 
 		public static bool GenericTest5()
 		{
-			GenericTest<TestObject> genericObject = new GenericTest<TestObject>();
+			GenericClassTest<TestObject> genericObject = new GenericClassTest<TestObject>();
 
 			genericObject.SetValue(new TestObject(232, 1231));
 
@@ -96,7 +96,7 @@ namespace Mosa.HelloWorld.Tests
 		}
 	}
 
-	public class GenericTest<T>
+	public class GenericClassTest<T>
 	{
 		public T value;
 

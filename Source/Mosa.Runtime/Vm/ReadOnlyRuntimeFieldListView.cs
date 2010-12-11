@@ -39,8 +39,8 @@ namespace Mosa.Runtime.Vm
 		/// </summary>
 		/// <param name="start">The first index of the list view.</param>
 		/// <param name="count">The number of elements in the list view.</param>
-		public ReadOnlyRuntimeFieldListView(IModuleTypeSystem moduleTypeSystem, int start, int count)
-			: base(moduleTypeSystem, start, count)
+		internal ReadOnlyRuntimeFieldListView(IModuleTypeSystemInternalList moduleTypeSystemInternalList, int start, int count)
+			: base(moduleTypeSystemInternalList, start, count)
 		{
 		}
 
@@ -52,7 +52,7 @@ namespace Mosa.Runtime.Vm
 		/// </summary>
 		protected override RuntimeField[] Items
 		{
-			get { if (moduleTypeSystem == null) return null; else return moduleTypeSystem.Fields; }
+			get { if (moduleTypeSystemInternalList == null) return null; else return moduleTypeSystemInternalList.Fields; }
 		}
 
 		#endregion // Overrides

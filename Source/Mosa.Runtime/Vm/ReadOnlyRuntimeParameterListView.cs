@@ -41,11 +41,11 @@ namespace Mosa.Runtime.Vm
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ReadOnlyRuntimeParameterListView"/> class.
 		/// </summary>
-		/// <param name="moduleTypeSystem">The module type system.</param>
+		/// <param name="moduleTypeSystemInternalList">The module type system.</param>
 		/// <param name="start">The first index of the list view.</param>
 		/// <param name="count">The number of elements in the list view.</param>
-		public ReadOnlyRuntimeParameterListView(IModuleTypeSystem moduleTypeSystem, int start, int count)
-			: base(moduleTypeSystem, start, count)
+		internal ReadOnlyRuntimeParameterListView(IModuleTypeSystemInternalList moduleTypeSystemInternalList, int start, int count)
+			: base(moduleTypeSystemInternalList, start, count)
 		{
 		}
 
@@ -58,7 +58,7 @@ namespace Mosa.Runtime.Vm
 		/// </summary>
 		protected override RuntimeParameter[] Items
 		{
-			get { if (moduleTypeSystem == null) return null; else return moduleTypeSystem.Parameters; }
+			get { if (moduleTypeSystemInternalList == null) return null; else return moduleTypeSystemInternalList.Parameters; }
 		}
 
 		#endregion // Overrides

@@ -37,7 +37,7 @@ namespace Mosa.Runtime.Vm
 		/// <summary>
 		/// Holds the static instance of the runtime.
 		/// </summary>
-		protected IModuleTypeSystem moduleTypeSystem;
+		internal IModuleTypeSystemInternalList moduleTypeSystemInternalList;
 
 		#endregion // Data members
 
@@ -53,10 +53,10 @@ namespace Mosa.Runtime.Vm
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ReadOnlyRuntimeListView&lt;T&gt;"/> class.
 		/// </summary>
-		/// <param name="moduleTypeSystem">The module type system.</param>
+		/// <param name="moduleTypeSystemInternalList">The module type system.</param>
 		/// <param name="start">The index of the first _stackFrameIndex. May not be negative.</param>
 		/// <param name="count">The number of fields in the list. Must be larger than zero.</param>
-		public ReadOnlyRuntimeListView(IModuleTypeSystem moduleTypeSystem, int start, int count)
+		internal ReadOnlyRuntimeListView(IModuleTypeSystemInternalList moduleTypeSystemInternalList, int start, int count)
 		{
 			if (0 > start)
 				throw new ArgumentOutOfRangeException(@"firstField", start, @"May not be negative.");
@@ -65,7 +65,7 @@ namespace Mosa.Runtime.Vm
 
 			this.start = start;
 			this.count = count;
-			this.moduleTypeSystem = moduleTypeSystem;
+			this.moduleTypeSystemInternalList = moduleTypeSystemInternalList;
 		}
 
 		#endregion // Construction

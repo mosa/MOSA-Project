@@ -53,8 +53,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			// Opcode specific handling 
 			if (opcode == OpCode.Ldarga_s)
 			{
-				byte arg = decoder.DecodeByte();
-				argIdx = arg;
+				argIdx = decoder.DecodeByte();
 			}
 			else
 			{

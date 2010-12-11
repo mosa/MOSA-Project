@@ -37,11 +37,11 @@ namespace Mosa.Runtime.Vm
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ReadOnlyRuntimeMethodListView"/> class.
 		/// </summary>
-		/// <param name="moduleTypeSystem">The module type system.</param>
+		/// <param name="moduleTypeSystemInternalList">The module type system.</param>
 		/// <param name="start">The first index of the list view.</param>
 		/// <param name="count">The number of elements in the list view.</param>
-		public ReadOnlyRuntimeMethodListView(IModuleTypeSystem moduleTypeSystem, int start, int count)
-			: base(moduleTypeSystem, start, count)
+		internal ReadOnlyRuntimeMethodListView(IModuleTypeSystemInternalList moduleTypeSystemInternalList, int start, int count)
+			: base(moduleTypeSystemInternalList, start, count)
 		{
 		}
 
@@ -55,7 +55,7 @@ namespace Mosa.Runtime.Vm
 		/// <value></value>
 		protected override RuntimeMethod[] Items
 		{
-			get { if (moduleTypeSystem == null) return null; else return moduleTypeSystem.Methods; }
+			get { if (moduleTypeSystemInternalList == null) return null; else return moduleTypeSystemInternalList.Methods; }
 		}
 
 		#endregion // Overrides

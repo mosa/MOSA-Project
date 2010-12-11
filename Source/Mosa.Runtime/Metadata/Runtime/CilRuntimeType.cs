@@ -71,7 +71,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 			if (0 < members)
 			{
 				int i = (int)(typeDefRow.FieldList & TokenTypes.RowIndexMask) - 1 ;
-				base.Fields = new ReadOnlyRuntimeFieldListView(moduleTypeSystem,i, members);
+				base.Fields = new ReadOnlyRuntimeFieldListView((IModuleTypeSystemInternalList)moduleTypeSystem,i, members);
 			}
 			else
 			{
@@ -83,7 +83,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 			if (0 < members)
 			{
 				int i = (int)(typeDefRow.MethodList & TokenTypes.RowIndexMask) - 1;
-				base.Methods = new ReadOnlyRuntimeMethodListView(moduleTypeSystem, i, members);
+				base.Methods = new ReadOnlyRuntimeMethodListView((IModuleTypeSystemInternalList)moduleTypeSystem, i, members);
 			}
 			else
 			{
