@@ -14,7 +14,7 @@ using System.Diagnostics;
 using System.IO;
 using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Runtime.Linker;
-using Mosa.Runtime.Loader;
+using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Runtime;
 using Mosa.Runtime.Metadata.Signatures;

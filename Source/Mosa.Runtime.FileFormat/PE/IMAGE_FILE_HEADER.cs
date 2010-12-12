@@ -10,7 +10,7 @@
 using System;
 using System.IO;
 
-namespace Mosa.Runtime.Linker.PE
+namespace Mosa.Runtime.FileFormat.PE
 {
 	/// <summary>
 	/// Structure of the COFF file _header at the start of a portable executable file.

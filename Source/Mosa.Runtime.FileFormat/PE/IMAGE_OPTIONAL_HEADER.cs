@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 
-namespace Mosa.Runtime.Linker.PE
+namespace Mosa.Runtime.FileFormat.PE
 {
 	/// <summary>
 	/// Structure of the optional _header in a portable executable file.

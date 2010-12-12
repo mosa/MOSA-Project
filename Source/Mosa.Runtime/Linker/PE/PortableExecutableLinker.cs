@@ -11,11 +11,12 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
+using System.Diagnostics;
 
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Vm;
-using System.Text;
-using System.Diagnostics;
+using Mosa.Runtime.FileFormat.PE;
 
 namespace Mosa.Runtime.Linker.PE
 {
@@ -463,8 +464,8 @@ namespace Mosa.Runtime.Linker.PE
 			ntHeaders.OptionalHeader.DataDirectory = new IMAGE_DATA_DIRECTORY[IMAGE_OPTIONAL_HEADER.IMAGE_NUMBEROF_DIRECTORY_ENTRIES];
 
 			// Populate the CIL data directory 
-			ntHeaders.OptionalHeader.DataDirectory[14].VirtualAddress = (uint)GetSymbol(PE.CLI_HEADER.SymbolName).VirtualAddress.ToInt64();
-			ntHeaders.OptionalHeader.DataDirectory[14].Size = PE.CLI_HEADER.Length;
+			ntHeaders.OptionalHeader.DataDirectory[14].VirtualAddress = (uint)GetSymbol(CLI_HEADER.SymbolName).VirtualAddress.ToInt64();
+			ntHeaders.OptionalHeader.DataDirectory[14].Size = CLI_HEADER.Length;
 
 			ntHeaders.Write(writer);
 

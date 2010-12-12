@@ -16,7 +16,7 @@ using NDesk.Options;
 
 using Mosa.Runtime;
 using Mosa.Runtime.CompilerFramework;
-using Mosa.Runtime.Loader;
+using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime.Vm;
 using Mosa.Runtime.Linker;
 using Mosa.Tools.Compiler.Boot;

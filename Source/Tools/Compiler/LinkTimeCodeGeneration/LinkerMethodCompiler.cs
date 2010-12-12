@@ -12,7 +12,7 @@ using System.Collections.Generic;
 
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Linker;
-using Mosa.Runtime.Loader;
+using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime.Vm;
 
 namespace Mosa.Tools.Compiler.LinkTimeCodeGeneration

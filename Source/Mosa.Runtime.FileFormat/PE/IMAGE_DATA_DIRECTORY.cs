@@ -10,7 +10,7 @@
 using System;
 using System.IO;
 
-namespace Mosa.Runtime.Linker.PE
+namespace Mosa.Runtime.FileFormat.PE
 {
 	/// <summary>
 	/// Represents a data directory in a portable executable image.

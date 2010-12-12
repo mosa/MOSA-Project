@@ -49,6 +49,14 @@
     <Compile Include="HeapType.cs" />
     <Compile Include="IMetadataProvider.cs" />
     <Compile Include="IndexType.cs" />
+    <Compile Include="Loader\AssemblyLoader.cs" />
+    <Compile Include="Loader\IAssemblyLoader.cs" />
+    <Compile Include="Loader\IMetadataModule.cs" />
+    <Compile Include="Loader\InstructionStream.cs" />
+    <Compile Include="Loader\ModuleType.cs" />
+    <Compile Include="Loader\PE\MetadataRoot.cs" />
+    <Compile Include="Loader\PE\PortableExecutableImage.cs" />
+    <Compile Include="Loader\PE\StreamHeader.cs" />
     <Compile Include="ManifestResourceAttributes.cs" />
     <Compile Include="MethodAttributes.cs" />
     <Compile Include="MethodImplAttributes.cs" />
@@ -128,6 +136,12 @@
     <Compile Include="TokenTypes.cs" />
     <Compile Include="TypeAttributes.cs" />
     <Compile Include="UserStringHeap.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Mosa.Runtime.FileFormat\Mosa.Runtime.FileFormat.csproj">
+      <Project>{CC2E6418-C325-4486-B50D-941EC27053F6}</Project>
+      <Name>Mosa.Runtime.FileFormat</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -253,7 +253,6 @@
     <Compile Include="CompilerFramework\LoopAwareBlockOrderStage.cs" />
     <Compile Include="CompilerFramework\LocalCSE.cs" />
     <Compile Include="CompilerFramework\IMethodCompiler.cs" />
-    <Compile Include="Loader\PE\StreamHeader.cs" />
     <Compile Include="Memory\IMemoryPageManager.cs" />
     <Compile Include="Memory\PageAccessFlags.cs" />
     <Compile Include="Metadata\Runtime\CilGenericField.cs" />
@@ -341,9 +340,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CompilerFramework\InstructionLogger.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompilerFramework\InstructionStream.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CompilerFramework\IPlatformStage.cs">
@@ -583,58 +579,16 @@
     <Compile Include="Linker\Elf64\Sections\Elf64StringTableSection.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Linker\PE\CLI_HEADER.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Linker\PE\IMAGE_DATA_DIRECTORY.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Linker\PE\IMAGE_DOS_HEADER.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Linker\PE\IMAGE_FILE_HEADER.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Linker\PE\IMAGE_NT_HEADERS.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Linker\PE\IMAGE_OPTIONAL_HEADER.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Linker\PE\IMAGE_SECTION_HEADER.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Linker\PE\PortableExecutableLinker.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Linker\PE\PortableExecutableLinkerSection.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Linker\PE\RuntimeImageFlags.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Loader\AssemblyLoader.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Vm\IModuleTypeSystemInternalList.cs" />
     <Compile Include="Vm\DefaultModuleTypeSystem.cs" />
     <Compile Include="Vm\IModuleTypeSystem.cs" />
     <Compile Include="Vm\GenericArgument.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Loader\IMetadataModule.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Loader\IAssemblyLoader.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Loader\ModuleType.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Loader\PE\MetadataRoot.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Loader\PE\PortableExecutableImage.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Blobs\CustomAttributeParser.cs">
@@ -696,6 +650,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Mosa.Runtime.FileFormat\Mosa.Runtime.FileFormat.csproj">
+      <Project>{CC2E6418-C325-4486-B50D-941EC27053F6}</Project>
+      <Name>Mosa.Runtime.FileFormat</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mosa.Runtime.Metadata\Mosa.Runtime.Metadata.csproj">
       <Project>{7033B213-2055-4C6A-B008-D9856267F5D7}</Project>
       <Name>Mosa.Runtime.Metadata</Name>
@@ -705,5 +663,6 @@
       <Name>Mosa.Vm</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

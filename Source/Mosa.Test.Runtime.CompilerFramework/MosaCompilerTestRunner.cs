@@ -20,7 +20,7 @@ using System.Diagnostics;
 using MbUnit.Framework;
 
 using Mosa.Runtime;
-using Mosa.Runtime.Loader;
+using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime.Vm;
 //using Mosa.Runtime.Metadata.Signatures;
 

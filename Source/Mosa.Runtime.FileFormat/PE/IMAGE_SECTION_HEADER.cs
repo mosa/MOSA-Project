@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 
-namespace Mosa.Runtime.Linker.PE
+namespace Mosa.Runtime.FileFormat.PE
 {
 	/// <summary>
 	/// The _header of a section in a portable executable image.

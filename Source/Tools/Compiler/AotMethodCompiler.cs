@@ -15,7 +15,7 @@ using Mosa.Runtime.CompilerFramework.IR;
 using Mosa.Runtime.Linker;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Vm;
-using Mosa.Runtime.Loader;
+using Mosa.Runtime.Metadata.Loader;
 using Mosa.Tools.Compiler.Stages;
 
 namespace Mosa.Tools.Compiler

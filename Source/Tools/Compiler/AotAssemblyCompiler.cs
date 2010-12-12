@@ -9,7 +9,7 @@
 
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Linker;
-using Mosa.Runtime.Loader;
+using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime.Vm;
 using Mosa.Tools.Compiler.Linkers;
 using Mosa.Tools.Compiler.TypeInitializers;

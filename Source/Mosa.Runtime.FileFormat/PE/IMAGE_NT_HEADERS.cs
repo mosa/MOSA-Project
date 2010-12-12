@@ -10,7 +10,7 @@
 using System;
 using System.IO;
 
-namespace Mosa.Runtime.Linker.PE
+namespace Mosa.Runtime.FileFormat.PE
 {
 	/// <summary>
 	/// Combines the PE signature with the image file and optional headers.

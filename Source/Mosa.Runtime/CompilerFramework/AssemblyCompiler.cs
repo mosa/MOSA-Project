@@ -8,7 +8,7 @@
  */
 
 using System;
-using Mosa.Runtime.Loader;
+using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Vm;
 

@@ -17,7 +17,7 @@ using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Tables;
 using Mosa.Runtime.Vm;
 using Mosa.Runtime.Metadata.Signatures;
-using Mosa.Runtime.Loader;
+using Mosa.Runtime.Metadata.Loader;
 
 namespace Mosa.Runtime.CompilerFramework
 {

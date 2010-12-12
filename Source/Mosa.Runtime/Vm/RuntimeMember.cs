@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
 
-using Mosa.Runtime.Loader;
+using Mosa.Runtime.Metadata.Loader;
 
 namespace Mosa.Runtime.Vm
 {

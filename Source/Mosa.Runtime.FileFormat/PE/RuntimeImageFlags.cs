@@ -9,7 +9,7 @@
 
 using System;
 
-namespace Mosa.Runtime.Linker.PE
+namespace Mosa.Runtime.FileFormat.PE
 {
 	/// <summary>
 	/// Holds CLI image flags.

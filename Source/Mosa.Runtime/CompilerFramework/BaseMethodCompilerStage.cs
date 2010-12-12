@@ -13,7 +13,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 
 using Mosa.Runtime.Vm;
-using Mosa.Runtime.Loader;
+using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime.Metadata.Signatures;
 
 using CIL = Mosa.Runtime.CompilerFramework.CIL;

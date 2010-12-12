@@ -13,7 +13,7 @@ using System.Runtime.InteropServices;
 
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Linker;
-using Mosa.Runtime.Loader;
+using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Vm;
 using Mosa.Runtime.CompilerFramework.CIL;
