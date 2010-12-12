@@ -50,8 +50,12 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 			TokenTypes token = decoder.DecodeTokenType();
 
-			// FIXME: GENERIC
 			ctx.RuntimeField = decoder.ModuleTypeSystem.GetField(token);
+
+			if (ctx.RuntimeField.ContainsGenericParameter)
+			{
+				;
+			}
 
 			SigType sigType = new RefSigType(ctx.RuntimeField.SignatureType);
 			ctx.Result = LoadInstruction.CreateResultOperand(decoder, Operand.StackTypeFromSigType(sigType), sigType);

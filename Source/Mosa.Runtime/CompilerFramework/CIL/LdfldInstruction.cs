@@ -51,12 +51,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 			ctx.RuntimeField = decoder.ModuleTypeSystem.GetField(token);
 
-			// TODO: Move this bit of code into ModuleTypeSystem
-
-			if (ctx.RuntimeField.DeclaringType != decoder.Method.DeclaringType)
+			if (ctx.RuntimeField.ContainsGenericParameter)
 			{
-				Debug.Assert(!decoder.Method.DeclaringType.ContainsGenericParameters);
-
 				foreach (RuntimeField field in decoder.Method.DeclaringType.Fields)
 					if (field.Name == ctx.RuntimeField.Name)
 					{

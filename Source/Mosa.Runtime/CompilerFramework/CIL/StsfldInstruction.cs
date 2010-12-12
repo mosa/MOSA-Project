@@ -50,8 +50,12 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			// Read the field from the code
 			TokenTypes token = decoder.DecodeTokenType();
 
-			// FIXME: GENERIC
 			ctx.RuntimeField = decoder.ModuleTypeSystem.GetField(token);
+
+			if (ctx.RuntimeField.ContainsGenericParameter)
+			{
+				;
+			}
 
 			Debug.Assert((ctx.RuntimeField.Attributes & FieldAttributes.Static) == FieldAttributes.Static, @"Static field access on non-static field.");
 		}

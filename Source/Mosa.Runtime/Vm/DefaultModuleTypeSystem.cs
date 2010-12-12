@@ -267,22 +267,17 @@ namespace Mosa.Runtime.Vm
 		/// <returns></returns>
 		RuntimeField IModuleTypeSystem.GetField(TokenTypes token)
 		{
-			if (TokenTypes.Field != (TokenTypes.TableMask & token) && TokenTypes.MemberRef != (TokenTypes.TableMask & token))
-				throw new ArgumentException(@"Invalid field token.");
-
-			RuntimeField result;
-
-			if (TokenTypes.MemberRef == (TokenTypes.TableMask & token))
+			switch (TokenTypes.TableMask & token)
 			{
-				result = GetFieldForMemberReference(token);
-			}
-			else
-			{
-				int fieldIndex = (int)(token & TokenTypes.RowIndexMask) - 1;
-				result = fields[fieldIndex];
-			}
+				case TokenTypes.Field:
+					return fields[(int)(token & TokenTypes.RowIndexMask) - 1];
 
-			return result;
+				case TokenTypes.MemberRef:
+					return GetFieldForMemberReference(token);
+
+				default:
+					throw new NotSupportedException(@"Can't get method for token " + token.ToString("x"));
+			}
 		}
 
 		/// <summary>
@@ -323,7 +318,7 @@ namespace Mosa.Runtime.Vm
 					throw new MissingMethodException(type.Name, nameString);
 
 				case TokenTypes.MethodSpec:
-					return this.DecodeMethodSpec(token);
+					return DecodeMethodSpec(token);
 
 				default:
 					throw new NotSupportedException(@"Can't get method for token " + token.ToString("x"));
