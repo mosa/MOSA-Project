@@ -259,13 +259,6 @@
     <Compile Include="Metadata\Runtime\CilGenericField.cs" />
     <Compile Include="Metadata\Runtime\CilGenericMethod.cs" />
     <Compile Include="Metadata\Runtime\CilGenericType.cs" />
-    <Compile Include="Metadata\SignatureReader.cs" />
-    <Compile Include="Metadata\Signatures\BuiltInSigType.cs" />
-    <Compile Include="Metadata\Signatures\DefaultSignatureContext.cs" />
-    <Compile Include="Metadata\Signatures\ISignatureContext.cs" />
-    <Compile Include="Metadata\Signatures\TypeSigType.cs" />
-    <Compile Include="Metadata\Signatures\VariableSignature.cs" />
-    <Compile Include="Metadata\Symbol.cs" />
     <Compile Include="IJitService.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -644,84 +637,6 @@
     <Compile Include="Loader\PE\PortableExecutableImage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Metadata\AssemblyFlags.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\AssemblyHashAlgorithm.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\BlobHeap.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\CallingConvention.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\CilElementType.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\EventAttributes.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\FieldAttributes.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\FileAttributes.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\GenericParamAttributes.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\GuidHeap.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Heap.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\HeapType.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\IMetadataProvider.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\IndexType.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\ManifestResourceAttributes.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\MethodAttributes.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\MethodImplAttributes.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\MethodSemanticsAttributes.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\ParameterAttributes.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\PInvokeAttributes.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\PropertyAttributes.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\StringHeap.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\TableHeap.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\TokenTypes.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\TypeAttributes.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\UserStringHeap.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Metadata\Blobs\CustomAttributeParser.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -732,183 +647,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Metadata\Runtime\CilRuntimeType.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Signatures\ArraySigType.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Signatures\ClassSigType.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Signatures\CustomMod.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Signatures\FieldSignature.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Signatures\FnptrSigType.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Signatures\GenericInstSigType.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Signatures\LocalVariableSignature.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Signatures\MethodReferenceSignature.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Signatures\MethodSignature.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Signatures\MethodSpecSignature.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Signatures\MVarSigType.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Signatures\PropertySignature.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Signatures\PtrSigType.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Signatures\RefSigType.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Signatures\Signature.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Signatures\SigType.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Signatures\StandaloneMethodSignature.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Signatures\SZArraySigType.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Signatures\TypeSpecSignature.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Signatures\ValueTypeSigType.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Signatures\VarSigType.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Tables\AssemblyOSRow.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Tables\AssemblyProcessorRow.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Tables\AssemblyRefOSRow.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Tables\AssemblyRefProcessorRow.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Tables\AssemblyRefRow.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Tables\AssemblyRow.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Tables\ClassLayoutRow.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Tables\ConstantRow.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Tables\CustomAttributeRow.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Tables\DeclSecurityRow.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Tables\EventMapRow.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Tables\EventRow.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Tables\ExportedTypeRow.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Tables\FieldLayoutRow.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Tables\FieldMarshalRow.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Tables\FieldRow.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Tables\FieldRVARow.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Tables\FileRow.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Tables\GenericParamConstraintRow.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Tables\GenericParamRow.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Tables\ImplMapRow.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Tables\InterfaceImplRow.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Tables\ManifestResourceRow.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Tables\MemberRefRow.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Tables\MethodDefRow.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Tables\MethodImplRow.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Tables\MethodSemanticsRow.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Tables\MethodSpecRow.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Tables\ModuleRefRow.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Tables\ModuleRow.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Tables\NestedClassRow.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Tables\ParamRow.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Tables\PropertyMapRow.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Tables\PropertyRow.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Tables\StandaloneSigRow.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Tables\TypeDefRow.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Tables\TypeRefRow.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Tables\TypeSpecRow.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="System\DataConverter.cs" />
@@ -958,6 +696,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Mosa.Runtime.Metadata\Mosa.Runtime.Metadata.csproj">
+      <Project>{7033B213-2055-4C6A-B008-D9856267F5D7}</Project>
+      <Name>Mosa.Runtime.Metadata</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mosa.Vm\Mosa.Vm.csproj">
       <Project>{88E003EE-6EEC-4D9A-AE52-94A6F526F115}</Project>
       <Name>Mosa.Vm</Name>

@@ -66,6 +66,10 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Mosa.Runtime.Metadata\Mosa.Runtime.Metadata.csproj">
+      <Project>{7033B213-2055-4C6A-B008-D9856267F5D7}</Project>
+      <Name>Mosa.Runtime.Metadata</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mosa.Vm\Mosa.Vm.csproj">
       <Project>{88E003EE-6EEC-4D9A-AE52-94A6F526F115}</Project>
       <Name>Mosa.Vm</Name>

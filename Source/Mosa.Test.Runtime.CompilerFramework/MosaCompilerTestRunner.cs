@@ -22,7 +22,7 @@ using MbUnit.Framework;
 using Mosa.Runtime;
 using Mosa.Runtime.Loader;
 using Mosa.Runtime.Vm;
-using Mosa.Runtime.Metadata.Signatures;
+//using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Test.Runtime.CompilerFramework
 {

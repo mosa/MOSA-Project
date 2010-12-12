@@ -1,0 +1,140 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{7033B213-2055-4C6A-B008-D9856267F5D7}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Mosa.Runtime.Metadata</RootNamespace>
+    <AssemblyName>Mosa.Runtime.Metadata</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyFlags.cs" />
+    <Compile Include="AssemblyHashAlgorithm.cs" />
+    <Compile Include="BlobHeap.cs" />
+    <Compile Include="CallingConvention.cs" />
+    <Compile Include="CilElementType.cs" />
+    <Compile Include="EventAttributes.cs" />
+    <Compile Include="FieldAttributes.cs" />
+    <Compile Include="FileAttributes.cs" />
+    <Compile Include="GenericParamAttributes.cs" />
+    <Compile Include="GuidHeap.cs" />
+    <Compile Include="Heap.cs" />
+    <Compile Include="HeapType.cs" />
+    <Compile Include="IMetadataProvider.cs" />
+    <Compile Include="IndexType.cs" />
+    <Compile Include="ManifestResourceAttributes.cs" />
+    <Compile Include="MethodAttributes.cs" />
+    <Compile Include="MethodImplAttributes.cs" />
+    <Compile Include="MethodSemanticsAttributes.cs" />
+    <Compile Include="ParameterAttributes.cs" />
+    <Compile Include="PInvokeAttributes.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="PropertyAttributes.cs" />
+    <Compile Include="SignatureReader.cs" />
+    <Compile Include="Signatures\ArraySigType.cs" />
+    <Compile Include="Signatures\BuiltInSigType.cs" />
+    <Compile Include="Signatures\ClassSigType.cs" />
+    <Compile Include="Signatures\CustomMod.cs" />
+    <Compile Include="Signatures\DefaultSignatureContext.cs" />
+    <Compile Include="Signatures\FieldSignature.cs" />
+    <Compile Include="Signatures\FnptrSigType.cs" />
+    <Compile Include="Signatures\GenericInstSigType.cs" />
+    <Compile Include="Signatures\ISignatureContext.cs" />
+    <Compile Include="Signatures\LocalVariableSignature.cs" />
+    <Compile Include="Signatures\MethodReferenceSignature.cs" />
+    <Compile Include="Signatures\MethodSignature.cs" />
+    <Compile Include="Signatures\MethodSpecSignature.cs" />
+    <Compile Include="Signatures\MVarSigType.cs" />
+    <Compile Include="Signatures\PropertySignature.cs" />
+    <Compile Include="Signatures\PtrSigType.cs" />
+    <Compile Include="Signatures\RefSigType.cs" />
+    <Compile Include="Signatures\Signature.cs" />
+    <Compile Include="Signatures\SigType.cs" />
+    <Compile Include="Signatures\StandaloneMethodSignature.cs" />
+    <Compile Include="Signatures\SZArraySigType.cs" />
+    <Compile Include="Signatures\TypeSigType.cs" />
+    <Compile Include="Signatures\TypeSpecSignature.cs" />
+    <Compile Include="Signatures\ValueTypeSigType.cs" />
+    <Compile Include="Signatures\VariableSignature.cs" />
+    <Compile Include="Signatures\VarSigType.cs" />
+    <Compile Include="StringHeap.cs" />
+    <Compile Include="Symbol.cs" />
+    <Compile Include="TableHeap.cs" />
+    <Compile Include="Tables\AssemblyOSRow.cs" />
+    <Compile Include="Tables\AssemblyProcessorRow.cs" />
+    <Compile Include="Tables\AssemblyRefOSRow.cs" />
+    <Compile Include="Tables\AssemblyRefProcessorRow.cs" />
+    <Compile Include="Tables\AssemblyRefRow.cs" />
+    <Compile Include="Tables\AssemblyRow.cs" />
+    <Compile Include="Tables\ClassLayoutRow.cs" />
+    <Compile Include="Tables\ConstantRow.cs" />
+    <Compile Include="Tables\CustomAttributeRow.cs" />
+    <Compile Include="Tables\DeclSecurityRow.cs" />
+    <Compile Include="Tables\EventMapRow.cs" />
+    <Compile Include="Tables\EventRow.cs" />
+    <Compile Include="Tables\ExportedTypeRow.cs" />
+    <Compile Include="Tables\FieldLayoutRow.cs" />
+    <Compile Include="Tables\FieldMarshalRow.cs" />
+    <Compile Include="Tables\FieldRow.cs" />
+    <Compile Include="Tables\FieldRVARow.cs" />
+    <Compile Include="Tables\FileRow.cs" />
+    <Compile Include="Tables\GenericParamConstraintRow.cs" />
+    <Compile Include="Tables\GenericParamRow.cs" />
+    <Compile Include="Tables\ImplMapRow.cs" />
+    <Compile Include="Tables\InterfaceImplRow.cs" />
+    <Compile Include="Tables\ManifestResourceRow.cs" />
+    <Compile Include="Tables\MemberRefRow.cs" />
+    <Compile Include="Tables\MethodDefRow.cs" />
+    <Compile Include="Tables\MethodImplRow.cs" />
+    <Compile Include="Tables\MethodSemanticsRow.cs" />
+    <Compile Include="Tables\MethodSpecRow.cs" />
+    <Compile Include="Tables\ModuleRefRow.cs" />
+    <Compile Include="Tables\ModuleRow.cs" />
+    <Compile Include="Tables\NestedClassRow.cs" />
+    <Compile Include="Tables\ParamRow.cs" />
+    <Compile Include="Tables\PropertyMapRow.cs" />
+    <Compile Include="Tables\PropertyRow.cs" />
+    <Compile Include="Tables\StandaloneSigRow.cs" />
+    <Compile Include="Tables\TypeDefRow.cs" />
+    <Compile Include="Tables\TypeRefRow.cs" />
+    <Compile Include="Tables\TypeSpecRow.cs" />
+    <Compile Include="TokenTypes.cs" />
+    <Compile Include="TypeAttributes.cs" />
+    <Compile Include="UserStringHeap.cs" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

@@ -11,7 +11,6 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 
-using Mosa.Runtime.Loader;
 using Mosa.Runtime.Metadata.Tables;
 
 namespace Mosa.Runtime.Metadata
