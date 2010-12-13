@@ -20,6 +20,8 @@
 		
 		<references>
 			<include name="${outputDirectory}/Mosa.Runtime.dll"/>
+			<include name="${outputDirectory}/Mosa.Runtime.Metadata.dll"/>
+			<include name="${outputDirectory}/Mosa.Runtime.FileFormat.dll"/>
 			<include name="System.dll"/>
 		</references>		
 		

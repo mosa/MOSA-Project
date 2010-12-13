@@ -21,6 +21,8 @@
 			<include name="System.Data.dll"/>
 			<include name="System.Xml.dll"/>
 			<include name="${outputDirectory}/Mosa.Vm.dll"/>
+			<include name="${outputDirectory}/Mosa.Runtime.Metadata.dll"/>
+			<include name="${outputDirectory}/Mosa.Runtime.FileFormat.dll"/>
 		</references>
 		
 		<!-- supress warnings -->
