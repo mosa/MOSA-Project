@@ -70,8 +70,8 @@ namespace Mosa.Runtime.Metadata.Runtime
 			int members = maxField - typeDefRow.FieldList;
 			if (0 < members)
 			{
-				int i = (int)(typeDefRow.FieldList & TokenTypes.RowIndexMask) - 1 ;
-				base.Fields = new ReadOnlyRuntimeFieldListView((IModuleTypeSystemInternalList)moduleTypeSystem,i, members);
+				int i = (int)(typeDefRow.FieldList & TokenTypes.RowIndexMask) - 1;
+				base.Fields = new ReadOnlyRuntimeFieldListView((IModuleTypeSystemInternalList)moduleTypeSystem, i, members);
 			}
 			else
 			{
@@ -183,12 +183,11 @@ namespace Mosa.Runtime.Metadata.Runtime
 		protected override IList<RuntimeType> LoadInterfaces()
 		{
 			List<RuntimeType> result = null;
-			IMetadataProvider metadata = moduleTypeSystem.MetadataModule.Metadata;
 
-			TokenTypes maxToken = metadata.GetMaxTokenValue(TokenTypes.InterfaceImpl);
+			TokenTypes maxToken = MetadataModule.Metadata.GetMaxTokenValue(TokenTypes.InterfaceImpl);
 			for (TokenTypes token = TokenTypes.InterfaceImpl + 1; token <= maxToken; token++)
 			{
-				InterfaceImplRow row = metadata.ReadInterfaceImplRow(token);
+				InterfaceImplRow row = MetadataModule.Metadata.ReadInterfaceImplRow(token);
 				if (row.ClassTableIdx == (TokenTypes)this.Token)
 				{
 					RuntimeType interfaceType = moduleTypeSystem.GetType(row.InterfaceTableIdx);

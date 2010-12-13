@@ -18,13 +18,15 @@ namespace Mosa.Runtime.Metadata.Runtime
 
 		private SigType[] genericArguments;
 
-		public CilGenericType(IModuleTypeSystem moduleTypeSystem, RuntimeType type, GenericInstSigType genericTypeInstanceSignature) :
-			base(moduleTypeSystem, type.Token)
+		public CilGenericType(IModuleTypeSystem moduleTypeSystem, RuntimeType genericType, GenericInstSigType genericTypeInstanceSignature) :
+			base(moduleTypeSystem, genericType.Token)
 		{
 			this.signature = genericTypeInstanceSignature;
 			this.genericArguments = signature.GenericArguments;
 
-			this.genericType = moduleTypeSystem.GetType(signature.BaseType.Token);
+			this.genericType = genericType;
+
+			base.Attributes = genericType.Attributes;
 
 			this.Methods = this.GetMethods();
 			this.Fields = this.GetFields();
@@ -153,6 +155,29 @@ namespace Mosa.Runtime.Metadata.Runtime
 
 		protected override IList<RuntimeType> LoadInterfaces()
 		{
+			List<RuntimeType> result = null;
+
+			//for (TokenTypes token = TokenTypes.InterfaceImpl + 1; token <= maxToken; token++)
+			//{
+			//    InterfaceImplRow row = MetadataModule.Metadata.ReadInterfaceImplRow(token);
+			//    if (row.ClassTableIdx == (TokenTypes)this.Token)
+			//    {
+			//        RuntimeType interfaceType = moduleTypeSystem.GetType(row.InterfaceTableIdx);
+
+			//        if (result == null)
+			//        {
+			//            result = new List<RuntimeType>();
+			//        }
+
+			//        result.Add(interfaceType);
+			//    }
+			//}
+
+			if (result != null)
+			{
+				return result;
+			}
+
 			return NoInterfaces;
 		}
 	}

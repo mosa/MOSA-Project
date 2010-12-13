@@ -26,9 +26,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 			base(moduleTypeSystem, method.Token, declaringType)
 		{
 			this.genericMethod = method;
-
 			this.Signature = signature;
-
 			this.Attributes = method.Attributes;
 			this.ImplAttributes = method.ImplAttributes;
 			this.Rva = method.Rva;

@@ -25,6 +25,8 @@ namespace Mosa.HelloWorld.Tests
 			PrintResult(GenericTest4());
 			PrintResult(GenericTest5());
 			PrintResult(GenericTest6());
+			PrintResult(GenericTest7());
+			PrintResult(GenericTest8());
 		}
 
 		public static bool GenericTest1()
@@ -102,13 +104,45 @@ namespace Mosa.HelloWorld.Tests
 
 			return (genericObject.Return10() == 10);
 		}
+
+		public static bool GenericTest7()
+		{
+			GenericClassTest<int> genericObject = new GenericClassTest<int>();
+
+			genericObject.value = 20;
+
+			IGenericInterface<int> genericInterface = genericObject;
+
+			return (genericInterface.Return10() == 10);
+		}
+
+		public static bool GenericTest8()
+		{
+			GenericClassTest<int> genericObject = new GenericClassTest<int>();
+
+			genericObject.value = 10;
+
+			IGenericInterface<int> genericInterface = genericObject;
+
+			return (genericInterface.ReturnIt() == 10);
+		}
+
+		public static bool GenericTest9()
+		{
+			GenericClassTest<int> genericObject = new GenericClassTest<int>();
+
+			genericObject.value = 10;
+
+			return (genericObject.ReturnIt() == 10);
+		}
 	}
-	public interface GenericInterface<T>
+	public interface IGenericInterface<T>
 	{
 		int Return10();
+		T ReturnIt();
 	}
 
-	public class GenericClassTest<T> : GenericInterface<T>
+	public class GenericClassTest<T> : IGenericInterface<T>
 	{
 		public T value;
 
@@ -116,6 +150,7 @@ namespace Mosa.HelloWorld.Tests
 		public void SetValue(T value) { this.value = value; }
 
 		public int Return10() { return 10; }
+		public T ReturnIt() { return value; }
 	}
 
 	public class TestObject

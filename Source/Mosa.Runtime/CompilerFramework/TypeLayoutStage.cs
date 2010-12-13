@@ -79,7 +79,6 @@ namespace Mosa.Runtime.CompilerFramework
 
 		void IAssemblyCompilerStage.Run()
 		{
-
 			// Enumerate all types and do an appropriate type layout
 			foreach (RuntimeType type in typeSystem.GetCompiledTypes())
 			{
@@ -127,14 +126,6 @@ namespace Mosa.Runtime.CompilerFramework
 				}
 
 				AllocateStaticFields(type);
-
-				//int i = 0;
-				//Debug.WriteLine("Type: " + type.ToString());
-				//foreach (RuntimeMethod method in GetMethodTable(type))
-				//{
-				//    Debug.WriteLine("    " + i.ToString() + ":" + method.ToString());
-				//    i++;
-				//}
 			}
 		}
 
@@ -164,7 +155,6 @@ namespace Mosa.Runtime.CompilerFramework
 			{
 				if (!field.IsStaticField)
 					size = size + ((ITypeLayout)this).GetFieldSize(field);
-
 			}
 
 			return size;
@@ -387,12 +377,11 @@ namespace Mosa.Runtime.CompilerFramework
 
 			foreach (RuntimeMethod method in type.Methods)
 			{
-				MethodAttributes attributes = method.Attributes;
-				if ((attributes & MethodAttributes.Virtual) == MethodAttributes.Virtual)
+				if ((method.Attributes & MethodAttributes.Virtual) == MethodAttributes.Virtual)
 				{
 					int slot = methodTable.Count;
 
-					if ((attributes & MethodAttributes.NewSlot) != MethodAttributes.NewSlot)
+					if ((method.Attributes & MethodAttributes.NewSlot) != MethodAttributes.NewSlot)
 					{
 						slot = FindOverrideSlot(methodTable, method);
 					}

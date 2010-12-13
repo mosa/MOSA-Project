@@ -13,10 +13,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 			base(moduleTypeSystem, declaringType)
 		{
 			this.Signature = signature;
-
 			this.genericField = genericField;
-
-			// FIXME: RVA, Address of these?
 			this.Attributes = genericField.Attributes;
 			this.SetAttributes(genericField.CustomAttributes);
 			

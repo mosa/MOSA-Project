@@ -9,34 +9,24 @@ using System;
 
 namespace Mosa.HelloWorld.Tests
 {
-	public interface GenericInterface<T>
+
+	public class Test 
 	{
-		int Return10();
-	}
-
-	public class GenericTest<T> : GenericInterface<T>
-	{
-		public T value;
-
-		public T GetValue() { return value; }
-		public void SetValue(T value) { this.value = value; }
-
-		public int Return10() { return 10; }
-	}
-
-	public class Test
-	{
-		public static void GoTest()
+		public static void Run()
 		{
 			GenericTest1();
 			GenericTest2();
 			GenericTest3();
 			GenericTest4();
+			GenericTest5();
+			GenericTest6();
+			GenericTest7();
+			GenericTest8();
 		}
 
 		public static bool GenericTest1()
 		{
-			GenericTest<int> genericObject = new GenericTest<int>();
+			GenericClassTest<int> genericObject = new GenericClassTest<int>();
 
 			genericObject.value = 10;
 
@@ -45,7 +35,7 @@ namespace Mosa.HelloWorld.Tests
 
 		public static bool GenericTest2()
 		{
-			GenericTest<object> genericObject = new GenericTest<object>();
+			GenericClassTest<object> genericObject = new GenericClassTest<object>();
 
 			genericObject.value = new object();
 
@@ -54,7 +44,7 @@ namespace Mosa.HelloWorld.Tests
 
 		public static bool GenericTest3()
 		{
-			GenericTest<int> genericObject = new GenericTest<int>();
+			GenericClassTest<int> genericObject = new GenericClassTest<int>();
 
 			genericObject.value = 10;
 
@@ -63,9 +53,111 @@ namespace Mosa.HelloWorld.Tests
 
 		public static bool GenericTest4()
 		{
-			GenericTest<int> genericObject = new GenericTest<int>();
+			GenericClassTest<TestObject> genericObject = new GenericClassTest<TestObject>();
 
-			return (genericObject.Return10() != 10);
+			genericObject.value = new TestObject(232, 1231);
+
+			if (genericObject.GetValue().A != 232)
+				return false;
+
+			if (genericObject.GetValue().B != 1231)
+				return false;
+
+			if (genericObject.value.A != 232)
+				return false;
+
+			if (genericObject.value.B != 1231)
+				return false;
+
+			return true;
+		}
+
+		public static bool GenericTest5()
+		{
+			GenericClassTest<TestObject> genericObject = new GenericClassTest<TestObject>();
+
+			genericObject.SetValue(new TestObject(232, 1231));
+
+			if (genericObject.GetValue().A != 232)
+				return false;
+
+			if (genericObject.GetValue().B != 1231)
+				return false;
+
+			if (genericObject.value.A != 232)
+				return false;
+
+			if (genericObject.value.B != 1231)
+				return false;
+
+			return true;
+		}
+
+		public static bool GenericTest6()
+		{
+			GenericClassTest<int> genericObject = new GenericClassTest<int>();
+
+			return (genericObject.Return10() == 10);
+		}
+
+		public static bool GenericTest7()
+		{
+			GenericClassTest<int> genericObject = new GenericClassTest<int>();
+
+			genericObject.value = 20;
+
+			IGenericInterface<int> genericInterface = genericObject;
+
+			return (genericInterface.Return10() == 10);
+		}
+
+		public static bool GenericTest8()
+		{
+			GenericClassTest<int> genericObject = new GenericClassTest<int>();
+
+			genericObject.value = 10;
+
+			IGenericInterface<int> genericInterface = genericObject;
+
+			return (genericInterface.ReturnIt() == 10);
+		}
+
+		public static bool GenericTest9()
+		{
+			GenericClassTest<int> genericObject = new GenericClassTest<int>();
+
+			genericObject.value = 10;
+
+			return (genericObject.ReturnIt() == 10);
+		}
+	}
+
+	public interface IGenericInterface<T>
+	{
+		int Return10();
+		T ReturnIt();
+	}
+
+	public class GenericClassTest<T> : IGenericInterface<T>
+	{
+		public T value;
+
+		public T GetValue() { return value; }
+		public void SetValue(T value) { this.value = value; }
+
+		public int Return10() { return 10; }
+		public T ReturnIt() { return value; }
+	}
+
+	public class TestObject
+	{
+		public int A;
+		public int B;
+
+		public TestObject(int a, int b)
+		{
+			A = a;
+			B = b;
 		}
 	}
 
