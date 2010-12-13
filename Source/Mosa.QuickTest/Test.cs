@@ -9,6 +9,20 @@ using System;
 
 namespace Mosa.HelloWorld.Tests
 {
+	public interface GenericInterface<T>
+	{
+		int Return10();
+	}
+
+	public class GenericTest<T> : GenericInterface<T>
+	{
+		public T value;
+
+		public T GetValue() { return value; }
+		public void SetValue(T value) { this.value = value; }
+
+		public int Return10() { return 10; }
+	}
 
 	public class Test
 	{
@@ -16,6 +30,8 @@ namespace Mosa.HelloWorld.Tests
 		{
 			GenericTest1();
 			GenericTest2();
+			GenericTest3();
+			GenericTest4();
 		}
 
 		public static bool GenericTest1()
@@ -45,15 +61,12 @@ namespace Mosa.HelloWorld.Tests
 			return genericObject.GetValue() == 10;
 		}
 
-	}
+		public static bool GenericTest4()
+		{
+			GenericTest<int> genericObject = new GenericTest<int>();
 
-
-	public class GenericTest<T>
-	{
-		public T value;
-
-		public T GetValue() { return value; }
-		public void SetValue(T value) { this.value = value; }
+			return (genericObject.Return10() != 10);
+		}
 	}
 
 }

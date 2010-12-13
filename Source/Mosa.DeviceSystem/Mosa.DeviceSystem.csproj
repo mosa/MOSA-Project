@@ -271,9 +271,6 @@
     <Compile Include="TextScreen.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="VGAFont.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="PCI\AddressType.cs">
       <SubType>Code</SubType>
     </Compile>

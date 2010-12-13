@@ -24,6 +24,7 @@ namespace Mosa.HelloWorld.Tests
 			PrintResult(GenericTest3());
 			PrintResult(GenericTest4());
 			PrintResult(GenericTest5());
+			PrintResult(GenericTest6());
 		}
 
 		public static bool GenericTest1()
@@ -94,14 +95,27 @@ namespace Mosa.HelloWorld.Tests
 
 			return true;
 		}
+
+		public static bool GenericTest6()
+		{
+			GenericClassTest<int> genericObject = new GenericClassTest<int>();
+
+			return (genericObject.Return10() == 10);
+		}
+	}
+	public interface GenericInterface<T>
+	{
+		int Return10();
 	}
 
-	public class GenericClassTest<T>
+	public class GenericClassTest<T> : GenericInterface<T>
 	{
 		public T value;
 
 		public T GetValue() { return value; }
 		public void SetValue(T value) { this.value = value; }
+
+		public int Return10() { return 10; }
 	}
 
 	public class TestObject
