@@ -22,7 +22,7 @@ using Mosa.Runtime.FileFormat.PE;
 namespace Mosa.Tools.Compiler
 {
 	/// <summary>
-	///  Writes the cil _header into the generated binary.
+	///  Writes the CIL header into the generated binary.
 	/// </summary>
 	public sealed class CilHeaderBuilderStage : BaseAssemblyCompilerStage, IAssemblyCompilerStage, IPipelineStage
 	{
@@ -31,7 +31,7 @@ namespace Mosa.Tools.Compiler
 
 		private IAssemblyLinker linker;
 
-		private CLI_HEADER _cliHeader;
+		private CLI_HEADER cliHeader;
 
 		#endregion // Data members
 
@@ -55,15 +55,15 @@ namespace Mosa.Tools.Compiler
 		/// </summary>
 		void IAssemblyCompilerStage.Run()
 		{
-			_cliHeader.Cb = 0x48;
-			_cliHeader.MajorRuntimeVersion = 2;
-			_cliHeader.MinorRuntimeVersion = 0;
-			_cliHeader.Flags = RuntimeImageFlags.ILOnly;
-			_cliHeader.EntryPointToken = 0x06000001; // FIXME: ??
+			cliHeader.Cb = 0x48;
+			cliHeader.MajorRuntimeVersion = 2;
+			cliHeader.MinorRuntimeVersion = 0;
+			cliHeader.Flags = RuntimeImageFlags.ILOnly;
+			cliHeader.EntryPointToken = 0x06000001; // FIXME: ??
 
 			LinkerSymbol metadata = this.linker.GetSymbol(Mosa.Runtime.Metadata.Symbol.Name);
-			_cliHeader.Metadata.VirtualAddress = (uint)(this.linker.GetSection(SectionKind.Text).VirtualAddress.ToInt64() + metadata.SectionAddress);
-			_cliHeader.Metadata.Size = (int)metadata.Length;
+			cliHeader.Metadata.VirtualAddress = (uint)(this.linker.GetSection(SectionKind.Text).VirtualAddress.ToInt64() + metadata.SectionAddress);
+			cliHeader.Metadata.Size = (int)metadata.Length;
 
 			WriteCilHeader();
 		}
@@ -80,7 +80,7 @@ namespace Mosa.Tools.Compiler
 			using (Stream stream = this.linker.Allocate(CLI_HEADER.SymbolName, SectionKind.Text, CLI_HEADER.Length, 4))
 			using (BinaryWriter bw = new BinaryWriter(stream, Encoding.ASCII))
 			{
-				_cliHeader.WriteTo(bw);
+				cliHeader.WriteTo(bw);
 			}
 		}
 

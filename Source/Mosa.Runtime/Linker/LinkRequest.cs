@@ -10,7 +10,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Mosa.Runtime.Vm;
 using System.IO;
 
 namespace Mosa.Runtime.Linker
