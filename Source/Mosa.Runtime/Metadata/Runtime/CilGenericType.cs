@@ -162,34 +162,29 @@ namespace Mosa.Runtime.Metadata.Runtime
 				if (!type.ContainsGenericParameters)
 				{
 					result.Add(type);
+                    continue;
 				}
-				else
+				// find the enclosed type
+				foreach (RuntimeType runtimetype in ModuleTypeSystem.GetAllTypes())
 				{
-					// find the enclosed type
-					foreach (RuntimeType runtimetype in ModuleTypeSystem.GetAllTypes())
+					if (runtimetype.IsInterface)
 					{
-						if (runtimetype.IsInterface)
+						CilGenericType runtimetypegeneric = runtimetype as CilGenericType;
+                        if (runtimetypegeneric == null)
+                            continue;
+                        if (type != runtimetypegeneric.genericType)
+                            continue;
+						// FIXME
+						if (signature == runtimetypegeneric.signature)
 						{
-							CilGenericType runtimetypegeneric = runtimetype as CilGenericType;
-							if (runtimetypegeneric != null)
-								// FIXME
-								if (type == runtimetypegeneric.genericType)
-									if (signature == runtimetypegeneric.signature)
-									{
-										result.Add(runtimetype);
-										break;
-									}
+							result.Add(runtimetype);
+							break;
 						}
 					}
 				}
 			}
 
-			if (result.Count != 0)
-			{
-				return result;
-			}
-
-			return NoInterfaces;
+			return result.Count != 0 ? result : NoInterfaces;
 		}
 	}
 }
