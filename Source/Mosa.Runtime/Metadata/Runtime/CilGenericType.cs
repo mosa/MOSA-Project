@@ -161,8 +161,8 @@ namespace Mosa.Runtime.Metadata.Runtime
 			{
 				if (!type.ContainsGenericParameters)
 				{
-					result.Add(type);
-					continue;
+                    result.Add(type);
+                    continue;
 				}
 				// find the enclosed type
 				foreach (RuntimeType runtimetype in ModuleTypeSystem.GetAllTypes())
