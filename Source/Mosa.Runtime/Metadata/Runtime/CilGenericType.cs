@@ -155,25 +155,36 @@ namespace Mosa.Runtime.Metadata.Runtime
 
 		protected override IList<RuntimeType> LoadInterfaces()
 		{
-			List<RuntimeType> result = null;
+			List<RuntimeType> result = new List<RuntimeType>();
 
-			//for (TokenTypes token = TokenTypes.InterfaceImpl + 1; token <= maxToken; token++)
-			//{
-			//    InterfaceImplRow row = MetadataModule.Metadata.ReadInterfaceImplRow(token);
-			//    if (row.ClassTableIdx == (TokenTypes)this.Token)
-			//    {
-			//        RuntimeType interfaceType = moduleTypeSystem.GetType(row.InterfaceTableIdx);
+			foreach (RuntimeType type in genericType.Interfaces)
+			{
+				if (!type.ContainsGenericParameters)
+				{
+					result.Add(type);
+				}
+				else
+				{
+					// find the enclosed type
+					foreach (RuntimeType runtimetype in ModuleTypeSystem.GetAllTypes())
+					{
+						if (runtimetype.IsInterface)
+						{
+							CilGenericType runtimetypegeneric = runtimetype as CilGenericType;
+							if (runtimetypegeneric != null)
+								// FIXME
+								if (type == runtimetypegeneric.genericType)
+									if (signature == runtimetypegeneric.signature)
+									{
+										result.Add(runtimetype);
+										break;
+									}
+						}
+					}
+				}
+			}
 
-			//        if (result == null)
-			//        {
-			//            result = new List<RuntimeType>();
-			//        }
-
-			//        result.Add(interfaceType);
-			//    }
-			//}
-
-			if (result != null)
+			if (result.Count != 0)
 			{
 				return result;
 			}

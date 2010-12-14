@@ -79,7 +79,7 @@
 			// labelLabel
 			// 
 			labelLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			labelLabel.Location = new System.Drawing.Point(10, 228);
+			labelLabel.Location = new System.Drawing.Point(10, 225);
 			labelLabel.Margin = new System.Windows.Forms.Padding(4);
 			labelLabel.Name = "labelLabel";
 			labelLabel.Size = new System.Drawing.Size(158, 20);
@@ -89,7 +89,7 @@
 			// stageLabel
 			// 
 			stageLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			stageLabel.Location = new System.Drawing.Point(10, 167);
+			stageLabel.Location = new System.Drawing.Point(10, 164);
 			stageLabel.Margin = new System.Windows.Forms.Padding(4);
 			stageLabel.Name = "stageLabel";
 			stageLabel.Size = new System.Drawing.Size(158, 20);
@@ -101,7 +101,7 @@
 			formatOptionsGroupBox.Controls.Add(this.cbRemoveNextPrev);
 			formatOptionsGroupBox.Controls.Add(this.cbSpace);
 			formatOptionsGroupBox.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			formatOptionsGroupBox.Location = new System.Drawing.Point(10, 289);
+			formatOptionsGroupBox.Location = new System.Drawing.Point(10, 286);
 			formatOptionsGroupBox.Margin = new System.Windows.Forms.Padding(4);
 			formatOptionsGroupBox.Name = "formatOptionsGroupBox";
 			formatOptionsGroupBox.Padding = new System.Windows.Forms.Padding(4);
@@ -146,7 +146,7 @@
 			this.cbStage.Checked = true;
 			this.cbStage.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.cbStage.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.cbStage.Location = new System.Drawing.Point(176, 167);
+			this.cbStage.Location = new System.Drawing.Point(176, 164);
 			this.cbStage.Margin = new System.Windows.Forms.Padding(4);
 			this.cbStage.Name = "cbStage";
 			this.cbStage.Size = new System.Drawing.Size(73, 21);
@@ -159,7 +159,7 @@
 			// 
 			this.cbLabel.AutoSize = true;
 			this.cbLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.cbLabel.Location = new System.Drawing.Point(176, 228);
+			this.cbLabel.Location = new System.Drawing.Point(176, 225);
 			this.cbLabel.Margin = new System.Windows.Forms.Padding(4);
 			this.cbLabel.Name = "cbLabel";
 			this.cbLabel.Size = new System.Drawing.Size(73, 21);
@@ -171,13 +171,13 @@
 			// cbLabels
 			// 
 			this.cbLabels.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.cbLabels.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.cbLabels.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.cbLabels.FormattingEnabled = true;
-			this.cbLabels.Location = new System.Drawing.Point(10, 257);
+			this.cbLabels.Location = new System.Drawing.Point(10, 254);
 			this.cbLabels.Margin = new System.Windows.Forms.Padding(4);
 			this.cbLabels.MaxDropDownItems = 20;
 			this.cbLabels.Name = "cbLabels";
-			this.cbLabels.Size = new System.Drawing.Size(248, 24);
+			this.cbLabels.Size = new System.Drawing.Size(248, 21);
 			this.cbLabels.TabIndex = 6;
 			this.cbLabels.SelectionChangeCommitted += new System.EventHandler(this.cbLabels_SelectionChangeCommitted);
 			// 
@@ -197,13 +197,13 @@
 			// cbMethods
 			// 
 			this.cbMethods.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.cbMethods.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.cbMethods.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.cbMethods.FormattingEnabled = true;
 			this.cbMethods.Location = new System.Drawing.Point(10, 135);
 			this.cbMethods.Margin = new System.Windows.Forms.Padding(4);
 			this.cbMethods.MaxDropDownItems = 20;
 			this.cbMethods.Name = "cbMethods";
-			this.cbMethods.Size = new System.Drawing.Size(248, 24);
+			this.cbMethods.Size = new System.Drawing.Size(248, 21);
 			this.cbMethods.TabIndex = 3;
 			this.cbMethods.SelectionChangeCommitted += new System.EventHandler(this.cbMethods_SelectionChangeCommitted);
 			// 
@@ -223,13 +223,13 @@
 			// cbStages
 			// 
 			this.cbStages.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-			this.cbStages.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			this.cbStages.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
 			this.cbStages.FormattingEnabled = true;
-			this.cbStages.Location = new System.Drawing.Point(10, 196);
+			this.cbStages.Location = new System.Drawing.Point(10, 193);
 			this.cbStages.Margin = new System.Windows.Forms.Padding(4);
 			this.cbStages.MaxDropDownItems = 20;
 			this.cbStages.Name = "cbStages";
-			this.cbStages.Size = new System.Drawing.Size(248, 24);
+			this.cbStages.Size = new System.Drawing.Size(248, 21);
 			this.cbStages.TabIndex = 0;
 			this.cbStages.SelectionChangeCommitted += new System.EventHandler(this.cbStages_SelectionChangeCommitted);
 			// 

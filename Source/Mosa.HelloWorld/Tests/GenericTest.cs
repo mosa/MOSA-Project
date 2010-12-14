@@ -107,11 +107,7 @@ namespace Mosa.HelloWorld.Tests
 
 		public static bool GenericTest7()
 		{
-			GenericClassTest<int> genericObject = new GenericClassTest<int>();
-
-			genericObject.value = 20;
-
-			IGenericInterface<int> genericInterface = genericObject;
+			IGenericInterface<int> genericInterface = new GenericClassTest<int>();
 
 			return (genericInterface.Return10() == 10);
 		}
