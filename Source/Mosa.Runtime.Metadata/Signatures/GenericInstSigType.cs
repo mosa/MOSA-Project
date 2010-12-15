@@ -110,7 +110,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 			if (!base.Equals(other))
 				return false;
 
-			if ( this.baseType != gist.baseType)
+			if (this.baseType != gist.baseType)
 				return false;
 
 			if (!SigType.Equals(this.genericArguments, gist.genericArguments))
@@ -157,7 +157,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 		private bool CheckContainsGenericParameters()
 		{
 			foreach (SigType sig in genericArguments)
-				if (sig.ContainsGenericParameter)
+				if (sig.IsOpenGenericParameter)
 					return true;
 
 			return false;

@@ -126,7 +126,7 @@ namespace Mosa.Runtime.Vm
 		{
 			get
 			{
-				return Signature.Type.ContainsGenericParameter;
+				return Signature.Type.IsOpenGenericParameter;
 			}
 		}
 

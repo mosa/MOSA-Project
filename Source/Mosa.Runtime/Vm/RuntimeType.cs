@@ -480,7 +480,7 @@ namespace Mosa.Runtime.Vm
 			throw new MissingMethodException(Name, name);
 		}
 
-		public virtual bool ContainsGenericParameters
+		public virtual bool ContainsOpenGenericParameters
 		{
 			get
 			{

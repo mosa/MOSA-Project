@@ -82,7 +82,7 @@ namespace Mosa.Runtime.CompilerFramework
 			// Enumerate all types and do an appropriate type layout
 			foreach (RuntimeType type in typeSystem.GetCompiledTypes())
 			{
-				if (type.ContainsGenericParameters)
+				if (type.ContainsOpenGenericParameters)
 					continue;
 
 				if (type.IsModule || type.IsGeneric || type.IsDelegate)
@@ -98,7 +98,7 @@ namespace Mosa.Runtime.CompilerFramework
 			// Enumerate all types and do an appropriate type layout
 			foreach (RuntimeType type in typeSystem.GetCompiledTypes())
 			{
-				if (type.ContainsGenericParameters)
+				if (type.ContainsOpenGenericParameters)
 					continue;
 
 				if (type.IsModule || type.IsGeneric || type.IsDelegate)
