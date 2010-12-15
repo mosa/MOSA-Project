@@ -47,7 +47,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 
 			foreach (SigType sigType in genericArguments)
 			{
-				if (sigType.ContainsGenericParameter)
+				if (sigType.IsOpenGenericParameter)
 				{
 					sb.AppendFormat("<{0}>, ", sigType.ToString());
 				}
@@ -145,7 +145,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 			return result;
 		}
 
-		public override bool ContainsGenericParameters
+		public override bool ContainsOpenGenericParameters
 		{
 			get
 			{
@@ -159,26 +159,32 @@ namespace Mosa.Runtime.Metadata.Runtime
 
 			foreach (RuntimeType type in genericType.Interfaces)
 			{
-				if (!type.ContainsGenericParameters)
+				if (!type.ContainsOpenGenericParameters)
 				{
 					result.Add(type);
 				}
 				else
 				{
-					// find the enclosed type
+					RuntimeType basegeneric = (type as CilGenericType).genericType;
+
+					// find the enclosed type 
+					// -- only needs to search generic type interfaces
 					foreach (RuntimeType runtimetype in ModuleTypeSystem.GetAllTypes())
 					{
 						if (runtimetype.IsInterface)
 						{
 							CilGenericType runtimetypegeneric = runtimetype as CilGenericType;
 							if (runtimetypegeneric != null)
-								// FIXME
-								if (type == runtimetypegeneric.genericType)
-									if (signature == runtimetypegeneric.signature)
+							{
+								if (basegeneric == runtimetypegeneric.genericType)
+								{
+									if (SigType.Equals(signature.GenericArguments, runtimetypegeneric.signature.GenericArguments))
 									{
 										result.Add(runtimetype);
 										break;
 									}
+								}
+							}
 						}
 					}
 				}
@@ -191,5 +197,29 @@ namespace Mosa.Runtime.Metadata.Runtime
 
 			return NoInterfaces;
 		}
+
+
+		/// <summary>
+		/// Indicates whether the current object is equal to another object of the same type.
+		/// </summary>
+		/// <param name="other">An object to compare with this object.</param>
+		/// <returns>
+		/// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
+		/// </returns>
+		public override bool Equals(RuntimeType other)
+		{
+			CilGenericType crt = other as CilGenericType;
+
+			if (crt == null)
+				return false;
+
+			return 
+				this.moduleTypeSystem == crt.moduleTypeSystem &&
+				genericType == crt.genericType &&
+				signature == crt.signature &&
+				SigType.Equals(this.genericArguments, crt.genericArguments) &&
+				base.Equals(other);
+		}
+
 	}
 }

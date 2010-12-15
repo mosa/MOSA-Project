@@ -54,7 +54,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// <value>
 		/// 	<c>true</c> if [contains generic type]; otherwise, <c>false</c>.
 		/// </value>
-		public bool ContainsGenericParameter
+		public bool IsOpenGenericParameter
 		{
 			get
 			{
@@ -427,8 +427,6 @@ namespace Mosa.Runtime.Metadata.Signatures
 		}
 
 		#endregion // IEquatable<SigType> Members
-
-
 
 		/// <summary>
 		/// Expresses the signature element information in a string form differentiating it from other signature
