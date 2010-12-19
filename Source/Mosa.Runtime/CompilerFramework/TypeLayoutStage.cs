@@ -18,7 +18,6 @@ using Mosa.Runtime.Metadata.Tables;
 using Mosa.Runtime.Vm;
 using Mosa.Runtime.Metadata.Signatures;
 
-
 namespace Mosa.Runtime.CompilerFramework
 {
 	/// <summary>
@@ -244,18 +243,26 @@ namespace Mosa.Runtime.CompilerFramework
 			if (type.Interfaces.Count == 0)
 				return;
 
-			List<RuntimeMethod> methodTable = new List<RuntimeMethod>();
+			RuntimeMethod[] methodTable = new RuntimeMethod[interfaceType.Methods.Count];
 
+			// Implicit Interface Methods
+			for (int slot = 0; slot < interfaceType.Methods.Count; slot++)
+			{
+				methodTable[slot] = FindInterfaceMethod(type, interfaceType.Methods[slot]);
+			}
+
+			// Explicit Interface Methods
 			ScanExplicitInterfaceImplementations(type, interfaceType.Methods, methodTable);
-			AddImplicitInterfaceImplementations(type, interfaceType.Methods, methodTable);
 
 			AskLinkerToCreateMethodTable(type.FullName + @"$mtable$" + interfaceType.FullName, methodTable, null);
 		}
 
-		private void ScanExplicitInterfaceImplementations(RuntimeType type, IList<RuntimeMethod> interfaceType, IList<RuntimeMethod> methodTable)
+		private void ScanExplicitInterfaceImplementations(RuntimeType type, IList<RuntimeMethod> interfaceType, RuntimeMethod[] methodTable)
 		{
 			IMetadataProvider metadata = type.MetadataModule.Metadata;
 			TokenTypes maxToken = metadata.GetMaxTokenValue(TokenTypes.MethodImpl);
+			int slot = 0;
+
 			for (TokenTypes token = TokenTypes.MethodImpl + 1; token <= maxToken; token++)
 			{
 				MethodImplRow row = metadata.ReadMethodImplRow(token);
@@ -265,12 +272,9 @@ namespace Mosa.Runtime.CompilerFramework
 					{
 						if (interfaceMethod != null && (TokenTypes)interfaceMethod.Token == (row.MethodDeclarationTableIdx & TokenTypes.RowIndexMask))
 						{
-							methodTable.Add(FindMethodByToken(type, row.MethodBodyTableIdx));
+							methodTable[slot] = FindMethodByToken(type, row.MethodBodyTableIdx);
 						}
-						else
-						{
-							methodTable.Add(null);
-						}
+						slot++;
 					}
 				}
 			}
@@ -289,13 +293,13 @@ namespace Mosa.Runtime.CompilerFramework
 			throw new InvalidOperationException(@"Failed to find explicit interface method implementation.");
 		}
 
-		private void AddImplicitInterfaceImplementations(RuntimeType type, IList<RuntimeMethod> interfaceType, IList<RuntimeMethod> methodTable)
+		private void AddImplicitInterfaceImplementations(RuntimeType type, IList<RuntimeMethod> interfaceMethods, IList<RuntimeMethod> methodTable)
 		{
 			for (int slot = 0; slot < methodTable.Count; slot++)
 			{
 				if (methodTable[slot] == null)
 				{
-					methodTable[slot] = FindInterfaceMethod(type, interfaceType[slot]);
+					methodTable[slot] = FindInterfaceMethod(type, interfaceMethods[slot]);
 				}
 			}
 		}

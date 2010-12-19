@@ -27,6 +27,7 @@ namespace Mosa.HelloWorld.Tests
 			PrintResult(GenericTest6());
 			PrintResult(GenericTest7());
 			PrintResult(GenericTest8());
+			PrintResult(GenericTest9());
 		}
 
 		public static bool GenericTest1()
@@ -116,7 +117,7 @@ namespace Mosa.HelloWorld.Tests
 		{
 			GenericClassTest<int> genericObject = new GenericClassTest<int>();
 
-			genericObject.value = 10;
+			//genericObject.value = 10;
 
 			IGenericInterface<int> genericInterface = genericObject;
 
@@ -127,11 +128,12 @@ namespace Mosa.HelloWorld.Tests
 		{
 			GenericClassTest<int> genericObject = new GenericClassTest<int>();
 
-			genericObject.value = 10;
+			//genericObject.value = 10;
 
 			return (genericObject.ReturnIt() == 10);
 		}
 	}
+
 	public interface IGenericInterface<T>
 	{
 		int Return10();
