@@ -10,20 +10,9 @@ using System;
 namespace Mosa.HelloWorld.Tests
 {
 
-	public class Test 
+	public class GenericTest 
 	{
-		public static void Run()
-		{
-			GenericTest1();
-			GenericTest2();
-			GenericTest3();
-			GenericTest4();
-			GenericTest5();
-			GenericTest6();
-			GenericTest7();
-			GenericTest8();
-		}
-
+		
 		public static bool GenericTest1()
 		{
 			GenericClassTest<int> genericObject = new GenericClassTest<int>();
@@ -105,6 +94,15 @@ namespace Mosa.HelloWorld.Tests
 			IGenericInterface<int> genericInterface = new GenericClassTest<int>();
 
 			return (genericInterface.Return10() == 10);
+		}
+
+		public static bool GenericTest8A()
+		{
+			GenericClassTest<int> genericObject = new GenericClassTest<int>();
+
+			IGenericInterface<int> genericInterface = genericObject;
+
+			return (genericInterface.ReturnIt() == 10);
 		}
 
 		public static bool GenericTest8()
