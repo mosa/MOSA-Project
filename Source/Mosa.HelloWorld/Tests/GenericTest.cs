@@ -27,7 +27,7 @@ namespace Mosa.HelloWorld.Tests
 			PrintResult(GenericTest6());
 			PrintResult(GenericTest7());
 			PrintResult(GenericTest8A());
-			PrintResult(GenericTest8());
+			//PrintResult(GenericTest8());
 			//PrintResult(GenericTest9());
 		}
 
