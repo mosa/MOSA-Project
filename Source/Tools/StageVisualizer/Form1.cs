@@ -108,7 +108,7 @@ namespace Mosa.Tools.StageVisualizer
 			if (!cbStage.Checked)
 				stage = string.Empty;
 
-			List<string> lines = output.GetText(method, stage, label, cbRemoveNextPrev.Checked, cbSpace.Checked);
+			List<string> lines = output.GetText(method, stage, label, removeNextprevInformationToolStripMenuItem.Checked, spaceAfterBlockToolStripMenuItem.Checked);
 
 			string[] final = new string[lines.Count];
 
@@ -156,7 +156,7 @@ namespace Mosa.Tools.StageVisualizer
 						writer.WriteLine(string.Empty.PadLeft(heading.Length, '='));
 						writer.WriteLine();
 
-						List<string> lines = output.GetText(method, stage, label, cbRemoveNextPrev.Checked, cbSpace.Checked);
+						List<string> lines = output.GetText(method, stage, label, removeNextprevInformationToolStripMenuItem.Checked, spaceAfterBlockToolStripMenuItem.Checked);
 
 						foreach (string line in lines)
 							writer.WriteLine(line);
@@ -172,6 +172,10 @@ namespace Mosa.Tools.StageVisualizer
 
 		}
 
+		private void quitToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			Close();
+		}
 
 	}
 }

@@ -421,16 +421,15 @@ namespace Mosa.Runtime.CompilerFramework.IR
 						int methodTableOffset = CalculateMethodTableOffset(invokeTarget);
 						int slotOffset = CalculateInterfaceSlotOffset(invokeTarget);
 
-						Operand slotPtr = methodCompiler.CreateTemporary(BuiltInSigType.IntPtr);
+						Operand interfaceSlotPtr = methodCompiler.CreateTemporary(BuiltInSigType.IntPtr);
 						Operand interfaceMethodTablePtr = methodCompiler.CreateTemporary(BuiltInSigType.IntPtr);
 
 						context.SetInstruction(Instruction.LoadInstruction, methodTable, thisPtr, ConstantOperand.FromValue(0));
-						context.AppendInstruction(Instruction.LoadInstruction, slotPtr, methodTable, ConstantOperand.FromValue(0));
-						context.AppendInstruction(Instruction.LoadInstruction, interfaceMethodTablePtr, slotPtr, new ConstantOperand(BuiltInSigType.Int32, slotOffset));
+						context.AppendInstruction(Instruction.LoadInstruction, interfaceSlotPtr, methodTable, ConstantOperand.FromValue(0));
+						context.AppendInstruction(Instruction.LoadInstruction, interfaceMethodTablePtr, interfaceSlotPtr, new ConstantOperand(BuiltInSigType.Int32, slotOffset));
 						context.AppendInstruction(Instruction.LoadInstruction, methodPtr, interfaceMethodTablePtr, new ConstantOperand(BuiltInSigType.Int32, methodTableOffset));
 					}
 
-					// This nop will be overwritten in ProcessInvokeInstruction
 					context.AppendInstruction(Instruction.NopInstruction);
 					ProcessInvokeInstruction(context, methodPtr, resultOperand, operands);
 				}
