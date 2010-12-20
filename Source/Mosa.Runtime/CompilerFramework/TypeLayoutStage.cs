@@ -527,7 +527,7 @@ namespace Mosa.Runtime.CompilerFramework
 			// Receives the size/alignment
 			int packingSize = type.Pack;
 			// Instance size
-			int typeSize = 0;
+			int typeSize = 8;
 
 			int fieldSize;
 			int typeAlignment;
@@ -535,7 +535,8 @@ namespace Mosa.Runtime.CompilerFramework
 			RuntimeType baseType = type.BaseType;
 			if (baseType != null)
 			{
-				typeSize = baseType.Size;
+				CreateSequentialLayout (baseType);
+				typeSize = baseType.Size - 8;
 			}
 
 			foreach (RuntimeField field in type.Fields)
