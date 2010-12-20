@@ -174,6 +174,7 @@ namespace Mosa.Platform.x86
 				right = context.Operand2;
 			}
 
+			IR.ConditionCode setp = IR.ConditionCode.Parity;
 			IR.ConditionCode setnp = IR.ConditionCode.NoParity;
 			IR.ConditionCode setnc = IR.ConditionCode.NoCarry;
 			IR.ConditionCode setc = IR.ConditionCode.Carry;
@@ -282,6 +283,12 @@ namespace Mosa.Platform.x86
 				context.AppendInstruction(CPUx86.Instruction.AndInstruction, eax, ecx);
 				context.AppendInstruction(CPUx86.Instruction.NotInstruction, eax, eax);
 				context.AppendInstruction(CPUx86.Instruction.AndInstruction, eax, new ConstantOperand(new SigType(CilElementType.I4), (int)1));
+				context.AppendInstruction(CPUx86.Instruction.SetccInstruction, setz, ebx);
+				context.AppendInstruction(CPUx86.Instruction.SetccInstruction, setp, ecx);
+				context.AppendInstruction(CPUx86.Instruction.SetccInstruction, setc, edx);
+				context.AppendInstruction(CPUx86.Instruction.AndInstruction, ebx, ecx);
+				context.AppendInstruction(CPUx86.Instruction.AndInstruction, ebx, edx);
+				context.AppendInstruction(CPUx86.Instruction.OrInstruction, eax, ebx);
 			}
 			else if (code == IR.ConditionCode.GreaterThan || code == IR.ConditionCode.GreaterOrEqual)
 			{
