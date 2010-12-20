@@ -161,11 +161,9 @@ namespace Mosa.Runtime.Metadata.Runtime
 			{
 				if (!type.ContainsOpenGenericParameters)
 				{
-                    result.Add(type);
-                    continue;
+					result.Add(type);
 				}
-				// find the enclosed type
-				foreach (RuntimeType runtimetype in ModuleTypeSystem.GetAllTypes())
+				else
 				{
 					RuntimeType basegeneric = (type as CilGenericType).genericType;
 
@@ -173,13 +171,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 					// -- only needs to search generic type interfaces
 					foreach (RuntimeType runtimetype in ModuleTypeSystem.GetAllTypes())
 					{
-						CilGenericType runtimetypegeneric = runtimetype as CilGenericType;
-						if (runtimetypegeneric == null)
-							continue;
-						if (type != runtimetypegeneric.genericType)
-							continue;
-						// FIXME
-						if (signature == runtimetypegeneric.signature)
+						if (runtimetype.IsInterface)
 						{
 							CilGenericType runtimetypegeneric = runtimetype as CilGenericType;
 							if (runtimetypegeneric != null)
@@ -198,7 +190,12 @@ namespace Mosa.Runtime.Metadata.Runtime
 				}
 			}
 
-			return result.Count != 0 ? result : NoInterfaces;
+			if (result.Count != 0)
+			{
+				return result;
+			}
+
+			return NoInterfaces;
 		}
 
 
@@ -226,3 +223,4 @@ namespace Mosa.Runtime.Metadata.Runtime
 
 	}
 }
+
