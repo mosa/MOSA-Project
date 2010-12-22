@@ -30,6 +30,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.CIL
 
 		private readonly ComparisonInstructionTestRunner<double> comparisonTests = new ComparisonInstructionTestRunner<double>
 		{
+			IncludeNaN = true,
+			IncudePositiveInfinity = true,
 			FirstType = "double"
 		};
 
@@ -37,6 +39,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.CIL
 		{
 			FirstType = "double"
 		};
+
+		
 	
 		#region Add
 
@@ -135,7 +139,7 @@ namespace Mosa.Test.Runtime.CompilerFramework.CIL
 		[Test, Factory(typeof(Variations), "R8_R8")]
 		public void CeqR8R8(double first, double second)
 		{
-			this.comparisonTests.Ceq((first == second), first, second);
+			this.comparisonTests.Ceq((first.CompareTo(second) == 0), first, second);
 		}
 
 		#endregion // Ceq
@@ -165,7 +169,24 @@ namespace Mosa.Test.Runtime.CompilerFramework.CIL
 		[Test, Factory(typeof(Variations), "R8_R8")]
 		public void CgeR8R8(double first, double second)
 		{
-			this.comparisonTests.Cge((first >= second), first, second);
+			this.comparisonTests.Cge((first.CompareTo(second) >= 0), first, second);
+		}
+
+		[Test]
+		[Row(double.NaN)]
+		[Row(1.0)]
+		public void IsNaN(double val)
+		{
+			this.comparisonTests.NaN(double.IsNaN(val), val);
+		}
+
+		[Test]
+		[Row(double.PositiveInfinity)]
+		[Row(double.NegativeInfinity)]
+		[Row(1.0)]
+		public void IsPositiveInfinity(double val)
+		{
+			this.comparisonTests.PositiveInfinity(double.IsPositiveInfinity(val), val);
 		}
 
 		#endregion // Cge

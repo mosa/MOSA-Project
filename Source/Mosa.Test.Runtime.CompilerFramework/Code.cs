@@ -7,7 +7,10 @@
  *  Michael Fröhlich (grover) <michael.ruck@michaelruck.de>
  *  
  */
-
+namespace System.Runtime.CompilerServices
+{
+	public class ExtensionAttribute : Attribute { }
+}
 namespace Mosa.Test.Runtime.CompilerFramework
 {
 	public static class Code
@@ -97,48 +100,119 @@ namespace Mosa.Test.Runtime.CompilerFramework
 				{
 					public const sbyte MinValue = -128;
 					public const sbyte MaxValue = 127;
+					internal sbyte _value;
+
+					public int CompareTo (SByte value)
+					{
+						if (_value < value) return -1;
+						else if (_value > value) return 1;
+						return 0;
+					}
 				}
 
 				public struct Byte
 				{
 					public const byte MinValue = 0;
 					public const byte MaxValue = 255;
+
+					internal byte _value;
+
+					public int CompareTo (byte value)
+					{
+						if (_value < value) return -1;
+						else if (_value > value) return 1;
+						return 0;
+					}
 				}
 
 				public struct Int16
 				{
 					public const short MaxValue =  32767;
 					public const short MinValue = -32768;
+
+					internal short _value;
+
+					public int CompareTo (short value)
+					{
+						if (_value < value) return -1;
+						else if (_value > value) return 1;
+						return 0;
+					}
 				}
 
 				public struct Int32
 				{
 					public const int MaxValue = 0x7fffffff;
 					public const int MinValue = -2147483648;
+
+					internal int _value;
+
+					public int CompareTo (int value)
+					{
+						if (_value < value) return -1;
+						else if (_value > value) return 1;
+						return 0;
+					}
 				}
 
 				public struct Int64
 				{
 					public const long MaxValue = 0x7fffffffffffffff;
 					public const long MinValue = -9223372036854775808;
+
+					internal long _value;
+
+					public int CompareTo (long value)
+					{
+						if (_value < value) return -1;
+						else if (_value > value) return 1;
+						return 0;
+					}
 				}   
 
 				public struct UInt16
 				{
 					public const ushort MaxValue = 0xffff;
 					public const ushort MinValue = 0;
+
+					internal ushort _value;
+
+					public int CompareTo (ushort value)
+					{
+						if (_value < value) return -1;
+						else if (_value > value) return 1;
+						return 0;
+					}
 				}
 
 				public struct UInt32
 				{
 					public const uint MaxValue = 0xffffffff;
 					public const uint MinValue = 0;
+
+					internal uint _value;
+
+					public int CompareTo (uint value)
+					{
+						if (_value < value) return -1;
+						else if (_value > value) return 1;
+						return 0;
+					}
 				}
 
 				public struct UInt64
 				{
 					public const ulong MaxValue = 0xffffffffffffffff;
 					public const ulong MinValue = 0;
+
+					internal ulong _value;
+
+					public int CompareTo (ulong value)
+					{
+						if (_value < value) return -1;
+						else if (_value > value) return 1;
+						return 0;
+					}
 				}   
 
 				public struct Single
@@ -221,12 +295,12 @@ namespace Mosa.Test.Runtime.CompilerFramework
 
 					public static bool IsNegativeInfinity(double d)
 					{
-						return (d < 0.0d && (d == NegativeInfinity || d == PositiveInfinity));
+						return d == NegativeInfinity;
 					}
 
 					public static bool IsPositiveInfinity(double d)
 					{
-						return (d > 0.0d && (d == NegativeInfinity || d == PositiveInfinity));
+						return d == PositiveInfinity;
 					}
 
 					public static bool IsInfinity(double d)
@@ -236,10 +310,12 @@ namespace Mosa.Test.Runtime.CompilerFramework
 
 					public int CompareTo(double value)
 					{
-						if (IsPositiveInfinity(_value) && IsPositiveInfinity(value))
-							return 0;
-						if (IsNegativeInfinity(_value) && IsNegativeInfinity(value))
-							return 0;
+						if (IsPositiveInfinity(_value))
+							if (IsPositiveInfinity(value))
+								return 0;
+						if (IsNegativeInfinity(_value))
+							if (IsNegativeInfinity(value))
+								return 0;
 
 						if (IsNaN(value)) if (IsNaN(_value))
 								return 0;
@@ -251,7 +327,7 @@ namespace Mosa.Test.Runtime.CompilerFramework
 								return 0;
 							else
 								return -1;
-
+						
 						if (_value > value)
 							return 1;
 						else if (_value < value)
@@ -265,10 +341,31 @@ namespace Mosa.Test.Runtime.CompilerFramework
 				{
 					public const char MaxValue = (char)0xffff;
 					public const char MinValue = (char)0;
+
+                    internal char _value;
+
+					public int CompareTo (char value)
+					{
+						if (_value < value) return -1;
+						else if (_value > value) return 1;
+						return 0;
+					}
 				}
 
 				public struct Boolean
 				{
+					internal bool _value;
+	
+					public bool CompareTo(bool value)
+					{
+						if (!_value)
+							if (value)
+								return -1;
+						if (_value)
+							if (!value)
+								return 1;
+						return 0;
+					}
 				}
 
 				public struct IntPtr
@@ -326,6 +423,43 @@ namespace Mosa.Test.Runtime.CompilerFramework
 
 				public class Array
 				{
+					private int length;
+
+					public int Length
+					{
+						get
+						{
+							return this.length;
+						}
+					}
+
+					/// <summary>
+					/// 
+					/// </summary>
+					public void SetValue(object value, int index)
+					{
+						// TODO
+					}
+
+					/// <summary>
+					/// 
+					/// </summary>
+					public object GetValue(int index)
+					{
+						// TODO
+						return null;
+					}
+
+					/// <summary>
+					/// 
+					/// </summary>
+					public static void Copy(Array sourceArray, int sourceIndex, Array destinationArray, int destinationIndex, int length)
+					{
+						for (int s = 0, d = destinationIndex; s < length; s++, d++)
+						{
+							sourceArray.SetValue(destinationArray.GetValue(d), s + sourceIndex);
+						}
+					}
 				}
 
 				public class Exception

@@ -26,6 +26,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.CIL
 			IncludeCgt = true;
 			IncludeCle = true;
 			IncludeCge = true;
+			IncludeNaN = false;
+			IncudePositiveInfinity = false;
 		}
 
 		public string FirstType { get; set; }
@@ -35,6 +37,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.CIL
 		public bool IncludeCgt { get; set; }
 		public bool IncludeCle { get; set; }
 		public bool IncludeCge { get; set; }
+		public bool IncludeNaN { get; set; }
+		public bool IncudePositiveInfinity { get; set; }
 
 		private void SetTestCode()
 		{
@@ -52,6 +56,10 @@ namespace Mosa.Test.Runtime.CompilerFramework.CIL
 				codeBuilder.Append(TestCodeCle);
 			if (IncludeCge)
 				codeBuilder.Append(TestCodeCge);
+			if (IncludeNaN)
+				codeBuilder.Append(TestCodeNaN);
+			if (IncudePositiveInfinity)
+				codeBuilder.Append(TestCodePositiveInfity);
 
 			codeBuilder.Append(TestCodeFooter);
 			codeBuilder.Append(Code.AllTestCode);
@@ -98,6 +106,20 @@ namespace Mosa.Test.Runtime.CompilerFramework.CIL
 			Assert.AreEqual(expected, result);
 		}
 
+		public void NaN(bool expected, T first)
+		{
+			this.EnsureCodeSourceIsSet();
+			bool result = this.Run<bool>(TestClassName, @"NaNTest", first);
+			Assert.AreEqual(expected, result);
+		}
+
+		public void PositiveInfinity(bool expected, T first)
+		{
+			this.EnsureCodeSourceIsSet();
+			bool result = this.Run<bool>(TestClassName, @"PositiveInfinityTest", first);
+			Assert.AreEqual(expected, result);
+		}
+
 		private void EnsureCodeSourceIsSet()
 		{
 			if (CodeSource == null)
@@ -116,35 +138,49 @@ namespace Mosa.Test.Runtime.CompilerFramework.CIL
 		private const string TestCodeCeq = @"
 				public static bool CeqTest(#firsttype first, #secondtype second)
 				{
-					return (first == second);
+					return (first.CompareTo(second) == 0);
 				}
 			";
 
 		private const string TestCodeClt = @"
 				public static bool CltTest(#firsttype first, #secondtype second)
 				{
-					return (first < second);
+					return (first.CompareTo(second) < 0);
 				}
 			";
 
 		private const string TestCodeCgt = @"
 				public static bool CgtTest(#firsttype first, #secondtype second)
 				{
-					return (first > second);
+					return (first.CompareTo(second) > 0);
 				}
 			";
 
 		private const string TestCodeCle = @"
 				public static bool CleTest(#firsttype first, #secondtype second)
 				{
-					return (first <= second);
+					return (first.CompareTo(second) <= 0);
 				}
 			";
 
 		private const string TestCodeCge = @"
 				public static bool CgeTest(#firsttype first, #secondtype second)
 				{
-					return (first >= second);
+					return (first.CompareTo(second) >= 0);
+				}
+			";
+
+		private const string TestCodeNaN = @"
+				public static bool NaNTest(#firsttype first)
+				{
+					return (double.IsNaN(first));
+				}
+			";
+
+		private const string TestCodePositiveInfity = @"
+				public static bool PositiveInfinityTest(#firsttype first)
+				{
+					return (double.IsPositiveInfinity(first));
 				}
 			";
 
