@@ -174,7 +174,6 @@ namespace Mosa.Platform.x86
 				right = context.Operand2;
 			}
 
-			IR.ConditionCode setp = IR.ConditionCode.Parity;
 			IR.ConditionCode setnp = IR.ConditionCode.NoParity;
 			IR.ConditionCode setnc = IR.ConditionCode.NoCarry;
 			IR.ConditionCode setc = IR.ConditionCode.Carry;
@@ -266,31 +265,36 @@ namespace Mosa.Platform.x86
 			RegisterOperand ecx = new RegisterOperand(BuiltInSigType.Byte, GeneralPurposeRegister.ECX);
 			RegisterOperand edx = new RegisterOperand(BuiltInSigType.Byte, GeneralPurposeRegister.EDX);
 
+			context.AppendInstruction(CPUx86.Instruction.PushfdInstruction);
+
 			if (code == IR.ConditionCode.Equal)
 			{
 				context.AppendInstruction(CPUx86.Instruction.SetccInstruction, setz, eax);
 				context.AppendInstruction(CPUx86.Instruction.SetccInstruction, setnp, ebx);
 				context.AppendInstruction(CPUx86.Instruction.SetccInstruction, setnc, ecx);
+				context.AppendInstruction(CPUx86.Instruction.SetccInstruction, setnz, edx);
 				context.AppendInstruction(CPUx86.Instruction.AndInstruction, eax, ebx);
 				context.AppendInstruction(CPUx86.Instruction.AndInstruction, eax, ecx);
+				context.AppendInstruction(CPUx86.Instruction.OrInstruction, ebx, ecx);
+				context.AppendInstruction(CPUx86.Instruction.OrInstruction, ebx, edx);
+				context.AppendInstruction(CPUx86.Instruction.AndInstruction, eax, ebx);
+				context.AppendInstruction(CPUx86.Instruction.AndInstruction, eax, new ConstantOperand(new SigType(CilElementType.I4), (int)1));
 			}
 			else if (code == IR.ConditionCode.NotEqual)
 			{
 				context.AppendInstruction(CPUx86.Instruction.SetccInstruction, setz, eax);
 				context.AppendInstruction(CPUx86.Instruction.SetccInstruction, setnp, ebx);
 				context.AppendInstruction(CPUx86.Instruction.SetccInstruction, setnc, ecx);
+				context.AppendInstruction(CPUx86.Instruction.SetccInstruction, setnz, edx);
 				context.AppendInstruction(CPUx86.Instruction.AndInstruction, eax, ebx);
 				context.AppendInstruction(CPUx86.Instruction.AndInstruction, eax, ecx);
-				context.AppendInstruction(CPUx86.Instruction.NotInstruction, eax, eax);
-				context.AppendInstruction(CPUx86.Instruction.AndInstruction, eax, new ConstantOperand(new SigType(CilElementType.I4), (int)1));
-				context.AppendInstruction(CPUx86.Instruction.SetccInstruction, setz, ebx);
-				context.AppendInstruction(CPUx86.Instruction.SetccInstruction, setp, ecx);
-				context.AppendInstruction(CPUx86.Instruction.SetccInstruction, setc, edx);
-				context.AppendInstruction(CPUx86.Instruction.AndInstruction, ebx, ecx);
-				context.AppendInstruction(CPUx86.Instruction.AndInstruction, ebx, edx);
+				context.AppendInstruction(CPUx86.Instruction.OrInstruction, ebx, ecx);
+				context.AppendInstruction(CPUx86.Instruction.OrInstruction, ebx, edx);
+				context.AppendInstruction(CPUx86.Instruction.NotInstruction, ebx, ebx);
 				context.AppendInstruction(CPUx86.Instruction.OrInstruction, eax, ebx);
+				context.AppendInstruction(CPUx86.Instruction.AndInstruction, eax, new ConstantOperand(new SigType(CilElementType.I4), (int)1));
 			}
-			else if (code == IR.ConditionCode.GreaterThan || code == IR.ConditionCode.GreaterOrEqual)
+			else if (code == IR.ConditionCode.GreaterThan)
 			{
 				context.AppendInstruction(CPUx86.Instruction.SetccInstruction, setnz, eax);
 				context.AppendInstruction(CPUx86.Instruction.SetccInstruction, setnp, ebx);
@@ -298,7 +302,7 @@ namespace Mosa.Platform.x86
 				context.AppendInstruction(CPUx86.Instruction.AndInstruction, eax, ebx);
 				context.AppendInstruction(CPUx86.Instruction.AndInstruction, eax, ecx);
 			}
-			else if (code == IR.ConditionCode.LessThan || code == IR.ConditionCode.LessOrEqual)
+			else if (code == IR.ConditionCode.LessThan)
 			{
 				context.AppendInstruction(CPUx86.Instruction.SetccInstruction, setnz, eax);
 				context.AppendInstruction(CPUx86.Instruction.SetccInstruction, setnp, ebx);
@@ -306,12 +310,28 @@ namespace Mosa.Platform.x86
 				context.AppendInstruction(CPUx86.Instruction.AndInstruction, eax, ebx);
 				context.AppendInstruction(CPUx86.Instruction.AndInstruction, eax, ecx);
 			}
-			if (code == IR.ConditionCode.GreaterOrEqual || code == IR.ConditionCode.LessOrEqual)
+			else if (code == IR.ConditionCode.GreaterOrEqual)
 			{
+				context.AppendInstruction(CPUx86.Instruction.SetccInstruction, setnz, eax);
+				context.AppendInstruction(CPUx86.Instruction.SetccInstruction, setnp, ebx);
+				context.AppendInstruction(CPUx86.Instruction.SetccInstruction, setnc, ecx);
 				context.AppendInstruction(CPUx86.Instruction.SetccInstruction, setz, edx);
+				context.AppendInstruction(CPUx86.Instruction.AndInstruction, eax, ebx);
+				context.AppendInstruction(CPUx86.Instruction.AndInstruction, eax, ecx);
+				context.AppendInstruction(CPUx86.Instruction.OrInstruction, eax, edx);
+			}
+			else if (code == IR.ConditionCode.LessOrEqual)
+			{
+				context.AppendInstruction(CPUx86.Instruction.SetccInstruction, setnz, eax);
+				context.AppendInstruction(CPUx86.Instruction.SetccInstruction, setnp, ebx);
+				context.AppendInstruction(CPUx86.Instruction.SetccInstruction, setc, ecx);
+				context.AppendInstruction(CPUx86.Instruction.SetccInstruction, setz, edx);
+				context.AppendInstruction(CPUx86.Instruction.AndInstruction, eax, ebx);
+				context.AppendInstruction(CPUx86.Instruction.AndInstruction, eax, ecx);
 				context.AppendInstruction(CPUx86.Instruction.OrInstruction, eax, edx);
 			}
 			context.AppendInstruction(CPUx86.Instruction.MovzxInstruction, resultOperand, eax);
+			context.AppendInstruction(CPUx86.Instruction.PopfdInstruction);
 		}
 
 		/// <summary>

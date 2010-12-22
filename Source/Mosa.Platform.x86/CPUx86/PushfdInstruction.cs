@@ -27,6 +27,18 @@ namespace Mosa.Platform.x86.CPUx86
 		#region Methods
 
 		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="destination"></param>
+		/// <param name="source"></param>
+		/// <param name="third"></param>
+		/// <returns></returns>
+		protected override OpCode ComputeOpCode(Runtime.CompilerFramework.Operands.Operand destination, Runtime.CompilerFramework.Operands.Operand source, Runtime.CompilerFramework.Operands.Operand third)
+		{
+			return new OpCode(new byte[] { 0x9C });
+		}
+
+		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
 		/// </summary>
 		/// <param name="visitor">The visitor object.</param>
