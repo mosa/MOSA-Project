@@ -5,12 +5,10 @@
  *
  * Authors:
  *  Michael Fröhlich (grover) <michael.ruck@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  *  
  */
-namespace System.Runtime.CompilerServices
-{
-	public class ExtensionAttribute : Attribute { }
-}
+
 namespace Mosa.Test.Runtime.CompilerFramework
 {
 	public static class Code
@@ -342,7 +340,7 @@ namespace Mosa.Test.Runtime.CompilerFramework
 					public const char MaxValue = (char)0xffff;
 					public const char MinValue = (char)0;
 
-                    internal char _value;
+					internal char _value;
 
 					public int CompareTo (char value)
 					{
@@ -356,7 +354,7 @@ namespace Mosa.Test.Runtime.CompilerFramework
 				{
 					internal bool _value;
 	
-					public bool CompareTo(bool value)
+					public int CompareTo(bool value)
 					{
 						if (!_value)
 							if (value)
