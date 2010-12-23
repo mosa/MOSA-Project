@@ -18,7 +18,7 @@ using MbUnit.Framework;
 namespace Mosa.Test.Runtime.CompilerFramework.IL
 {
 	[TestFixture]
-	public class Ldarga : CodeDomTestRunner
+	public class Ldarga : TestCompilerAdapter
 	{
 		private static string TestCodeCheckValue = @"
 			static class Test
@@ -70,15 +70,15 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void LdargaI1_CheckValue([Column(0, 1, sbyte.MinValue, sbyte.MaxValue)] sbyte a)
 		{
-			CodeSource = CreateTestCodeCheckValue("LdargaI1_CheckValue", "sbyte");
-			Assert.IsTrue(Run<bool>("", "Test", "LdargaI1_CheckValue", a, a));
+			compiler.CodeSource = CreateTestCodeCheckValue("LdargaI1_CheckValue", "sbyte");
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "LdargaI1_CheckValue", a, a));
 		}
 
 		[Test]
 		public void LdargaU1_CheckValue([Column(0, 1, byte.MinValue, byte.MaxValue)] byte a)
 		{
-			CodeSource = CreateTestCodeCheckValue("LdargaU1_CheckValue", "byte");
-			Assert.IsTrue(Run<bool>("", "Test", "LdargaU1_CheckValue", a, a));
+			compiler.CodeSource = CreateTestCodeCheckValue("LdargaU1_CheckValue", "byte");
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "LdargaU1_CheckValue", a, a));
 		}
 
 		[Row(0)]
@@ -88,64 +88,64 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void LdargaI2_CheckValue(short a)
 		{
-			CodeSource = CreateTestCodeCheckValue("LdargaI2_CheckValue", "short");
-			Assert.IsTrue(Run<bool>("", "Test", "LdargaI2_CheckValue", a, a));
+			compiler.CodeSource = CreateTestCodeCheckValue("LdargaI2_CheckValue", "short");
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "LdargaI2_CheckValue", a, a));
 		}
 
 		[Column(0, 1, ushort.MinValue, ushort.MaxValue)]
 		[Test]
 		public void LdargaU2_CheckValue(ushort a)
 		{
-			CodeSource = CreateTestCodeCheckValue("LdargaU2_CheckValue", "ushort");
-			Assert.IsTrue(Run<bool>("", "Test", "LdargaU2_CheckValue", a, a));
+			compiler.CodeSource = CreateTestCodeCheckValue("LdargaU2_CheckValue", "ushort");
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "LdargaU2_CheckValue", a, a));
 		}
 
 		[Column(0, 1, int.MinValue, int.MaxValue)]
 		[Test]
 		public void LdargaI4_CheckValue(int a)
 		{
-			CodeSource = CreateTestCodeCheckValue("LdargaI4_CheckValue", "int");
-			Assert.IsTrue(Run<bool>("", "Test", "LdargaI4_CheckValue", a, a));
+			compiler.CodeSource = CreateTestCodeCheckValue("LdargaI4_CheckValue", "int");
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "LdargaI4_CheckValue", a, a));
 		}
 
 		[Column(0, 1, uint.MinValue, uint.MaxValue)]
 		[Test]
 		public void LdargaU4_CheckValue(uint a)
 		{
-			CodeSource = CreateTestCodeCheckValue("LdargaU4_CheckValue", "uint");
-			Assert.IsTrue(Run<bool>("", "Test", "LdargaU4_CheckValue", a, a));
+			compiler.CodeSource = CreateTestCodeCheckValue("LdargaU4_CheckValue", "uint");
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "LdargaU4_CheckValue", a, a));
 		}
 
 		[Column(0, 1, long.MinValue, long.MaxValue)]
 		[Test]
 		public void LdargaI8_CheckValue(long a)
 		{
-			CodeSource = CreateTestCodeCheckValue("LdargaI8_CheckValue", "long");
-			Assert.IsTrue(Run<bool>("", "Test", "LdargaI8_CheckValue", a, a));
+			compiler.CodeSource = CreateTestCodeCheckValue("LdargaI8_CheckValue", "long");
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "LdargaI8_CheckValue", a, a));
 		}
 
 		[Column(0, 1, ulong.MinValue, ulong.MaxValue)]
 		[Test]
 		public void LdargaU8_CheckValue(ulong a)
 		{
-			CodeSource = CreateTestCodeCheckValue("LdargaU8_CheckValue", "ulong");
-			Assert.IsTrue(Run<bool>("", "Test", "LdargaU8_CheckValue", a, a));
+			compiler.CodeSource = CreateTestCodeCheckValue("LdargaU8_CheckValue", "ulong");
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "LdargaU8_CheckValue", a, a));
 		}
 
 		[Column(0, 1, float.MinValue, float.MaxValue)]
 		[Test]
 		public void LdargaR4_CheckValue(float a)
 		{
-			CodeSource = CreateTestCodeCheckValue("LdargaR4_CheckValue", "float");
-			Assert.IsTrue(Run<bool>("", "Test", "LdargaR4_CheckValue", a, a));
+			compiler.CodeSource = CreateTestCodeCheckValue("LdargaR4_CheckValue", "float");
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "LdargaR4_CheckValue", a, a));
 		}
 
 		[Column(0, 1, double.MinValue, double.MaxValue)]
 		[Test]
 		public void LdargaR8_CheckValue(double a)
 		{
-			CodeSource = CreateTestCodeCheckValue("LdargaR8_CheckValue", "double");
-			Assert.IsTrue(Run<bool>("", "Test", "LdargaR8_CheckValue", a, a));
+			compiler.CodeSource = CreateTestCodeCheckValue("LdargaR8_CheckValue", "double");
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "LdargaR8_CheckValue", a, a));
 		}
 
 		#endregion
@@ -156,48 +156,48 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void LdargaI1_ChangeValue(sbyte newValue, sbyte oldValue)
 		{
-			CodeSource = CreateTestCodeChangeValue("LdargaI1_ChangeValue", "sbyte");
-			Assert.IsTrue(Run<bool>("", "Test", "LdargaI1_ChangeValue", newValue, oldValue));
+			compiler.CodeSource = CreateTestCodeChangeValue("LdargaI1_ChangeValue", "sbyte");
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "LdargaI1_ChangeValue", newValue, oldValue));
 		}
 
 		[Row(1, 0), Row(0, 1), Row(1, short.MinValue), Row(0, short.MaxValue)]
 		[Test]
 		public void LdargaI2_ChangeValue(short newValue, short oldValue)
 		{
-			CodeSource = CreateTestCodeChangeValue("LdargaI2_ChangeValue", "short");
-			Assert.IsTrue(Run<bool>("", "Test", "LdargaI2_ChangeValue", newValue, oldValue));
+			compiler.CodeSource = CreateTestCodeChangeValue("LdargaI2_ChangeValue", "short");
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "LdargaI2_ChangeValue", newValue, oldValue));
 		}
 
 		[Row(1, 0), Row(0, 1), Row(1, int.MinValue), Row(0, int.MaxValue)]
 		[Test]
 		public void LdargaI4_ChangeValue(int newValue, int oldValue)
 		{
-			CodeSource = CreateTestCodeChangeValue("LdargaI4_ChangeValue", "int");
-			Assert.IsTrue(Run<bool>("", "Test", "LdargaI4_ChangeValue", newValue, oldValue));
+			compiler.CodeSource = CreateTestCodeChangeValue("LdargaI4_ChangeValue", "int");
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "LdargaI4_ChangeValue", newValue, oldValue));
 		}
 
 		[Row(1, 0), Row(0, 1), Row(1, long.MinValue), Row(0, long.MaxValue)]
 		[Test]
 		public void LdargaI8_ChangeValue(long newValue, long oldValue)
 		{
-			CodeSource = CreateTestCodeChangeValue("LdargaI8_ChangeValue", "long");
-			Assert.IsTrue(Run<bool>("", "Test", "LdargaI8_ChangeValue", newValue, oldValue));
+			compiler.CodeSource = CreateTestCodeChangeValue("LdargaI8_ChangeValue", "long");
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "LdargaI8_ChangeValue", newValue, oldValue));
 		}
 
 		[Row(1, 0), Row(0, 1), Row(1, float.MinValue), Row(0, float.MaxValue)]
 		[Test]
 		public void LdargaR4_ChangeValue(float newValue, float oldValue)
 		{
-			CodeSource = CreateTestCodeChangeValue("LdargaR4_ChangeValue", "float");
-			Assert.IsTrue(Run<bool>("", "Test", "LdargaR4_ChangeValue", newValue, oldValue));
+			compiler.CodeSource = CreateTestCodeChangeValue("LdargaR4_ChangeValue", "float");
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "LdargaR4_ChangeValue", newValue, oldValue));
 		}
 
 		[Row(1, 0), Row(0, 1), Row(1, double.MinValue), Row(0, double.MaxValue)]
 		[Test]
 		public void LdargaR8_ChangeValue(double newValue, double oldValue)
 		{
-			CodeSource = CreateTestCodeChangeValue("LdargaR8_ChangeValue", "double");
-			Assert.IsTrue(Run<bool>("", "Test", "LdargaR8_ChangeValue", newValue, oldValue));
+			compiler.CodeSource = CreateTestCodeChangeValue("LdargaR8_ChangeValue", "double");
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "LdargaR8_ChangeValue", newValue, oldValue));
 		}
 
 		#endregion

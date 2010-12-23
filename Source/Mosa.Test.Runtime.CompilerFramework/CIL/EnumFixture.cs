@@ -16,7 +16,7 @@ namespace Mosa.Test.Runtime.CompilerFramework.CIL
 	[Importance(Importance.Critical)]
 	[Category(@"Basic types")]
 	[Description(@"Tests support for the basic type System.Enum")]
-	public class EnumFixture : CodeDomTestRunner
+	public class EnumFixture : TestCompilerAdapter
 	{
 		private static string CreateTestCode()
 		{
@@ -40,13 +40,13 @@ namespace Mosa.Test.Runtime.CompilerFramework.CIL
 		[Test]
 		public void ItemAMustEqual5()
 		{
-			CodeSource = CreateTestCode();
-			DoNotReferenceMscorlib = true;
+			compiler.CodeSource = CreateTestCode();
+			compiler.DoNotReferenceMscorlib = true;
 
 			// Due to Code.NoStdLibDefinitions... :(
-			UnsafeCode = true;
+			compiler.UnsafeCode = true;
 
-			Assert.IsTrue(Run<bool>("", "TestClass", "AMustBe5"));
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "TestClass", "AMustBe5"));
 		}
 	}
 }

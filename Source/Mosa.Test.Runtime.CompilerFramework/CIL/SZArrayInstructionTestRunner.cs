@@ -14,7 +14,7 @@ using MbUnit.Framework;
 
 namespace Mosa.Test.Runtime.CompilerFramework.CIL
 {
-	public class SZArrayInstructionTestRunner<T> : TestFixtureBase
+	public class SZArrayInstructionTestRunner<T> : TestCompilerAdapter
 	{
 		private const string TestClassName = @"ArrayTestClass";
 
@@ -59,50 +59,47 @@ namespace Mosa.Test.Runtime.CompilerFramework.CIL
 			codeBuilder
 				.Replace(@"#firsttype", FirstType);
 
-			CodeSource = codeBuilder.ToString();
+			compiler.CodeSource = codeBuilder.ToString();
 		}
 
 		public void Newarr()
 		{
 			this.EnsureCodeSourceIsSet();
-			bool result = this.Run<bool>(TestClassName, @"NewarrTest");
+			bool result = compiler.Run<bool>(string.Empty, TestClassName, @"NewarrTest");
 			Assert.IsTrue(result);
 		}
 
 		public void Ldlen(int length)
 		{
 			this.EnsureCodeSourceIsSet();
-			bool result = this.Run<bool>(TestClassName, @"LdlenTest", length);
+			bool result = compiler.Run<bool>(string.Empty, TestClassName, @"LdlenTest", length);
 			Assert.IsTrue(result);
 		}
 
 		public void Stelem(int index, T value)
 		{
 			this.EnsureCodeSourceIsSet();
-			bool result = this.Run<bool>(TestClassName, @"StelemTest", index, value);
+			bool result = compiler.Run<bool>(string.Empty, TestClassName, @"StelemTest", index, value);
 			Assert.IsTrue(result);
 		}
 
 		public void Ldelem(int index, T value)
 		{
 			this.EnsureCodeSourceIsSet();
-			bool result = this.Run<bool>(TestClassName, @"LdelemTest", index, value);
+			bool result = compiler.Run<bool>(string.Empty, TestClassName, @"LdelemTest", index, value);
 			Assert.IsTrue(result);
 		}
 
 		public void Ldelema(int index, T value)
 		{
 			this.EnsureCodeSourceIsSet();
-			bool result = this.Run<bool>(TestClassName, @"LdelemaTest", index, value);
+			bool result = compiler.Run<bool>(string.Empty, TestClassName, @"LdelemaTest", index, value);
 			Assert.IsTrue(result);
 		}
 
 		private void EnsureCodeSourceIsSet()
 		{
-			if (CodeSource == null)
-			{
-				this.SetTestCode();
-			}
+			this.SetTestCode();
 		}
 
 		private const string TestCodeHeader = @"

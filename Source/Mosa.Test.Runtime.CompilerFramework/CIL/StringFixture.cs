@@ -16,7 +16,7 @@ namespace Mosa.Test.Runtime.CompilerFramework.CIL
 	[Importance(Importance.Critical)]
 	[Category(@"Basic types")]
 	[Description(@"Tests support for the basic type System.String")]
-	public class StringFixture : CodeDomTestRunner
+	public class StringFixture : TestCompilerAdapter
 	{
 		private static string CreateTestCode(string value)
 		{
@@ -53,31 +53,31 @@ namespace Mosa.Test.Runtime.CompilerFramework.CIL
 		[Test]
 		public void MustProperlyCompileLdstrAndLengthMustMatch()
 		{
-			CodeSource = CreateTestCode(@"Foo");
-			DoNotReferenceMscorlib = true;
-			UnsafeCode = true;
+			compiler.CodeSource = CreateTestCode(@"Foo");
+			compiler.DoNotReferenceMscorlib = true;
+			compiler.UnsafeCode = true;
 
-			Assert.IsTrue(Run<bool>("", "TestClass", "LengthMustMatch"));
+			Assert.IsTrue(compiler.Run<bool>("", "TestClass", "LengthMustMatch"));
 		}
 
 		[Test]
 		public void FirstCharacterMustMatchInStrings()
 		{
-			CodeSource = CreateTestCode(@"Foo");
-			DoNotReferenceMscorlib = true;
-			UnsafeCode = true;
+			compiler.CodeSource = CreateTestCode(@"Foo");
+			compiler.DoNotReferenceMscorlib = true;
+			compiler.UnsafeCode = true;
 
-			Assert.IsTrue(Run<bool>("", "TestClass", "FirstCharacterMustMatch"));
+			Assert.IsTrue(compiler.Run<bool>("", "TestClass", "FirstCharacterMustMatch"));
 		}
 
 		[Test]
 		public void LastCharacterMustMatchInStrings()
 		{
-			CodeSource = CreateTestCode(@"Foo");
-			DoNotReferenceMscorlib = true;
-			UnsafeCode = true;
+			compiler.CodeSource = CreateTestCode(@"Foo");
+			compiler.DoNotReferenceMscorlib = true;
+			compiler.UnsafeCode = true;
 
-			Assert.IsTrue(Run<bool>("", "TestClass", "LastCharacterMustMatch"));
+			Assert.IsTrue(compiler.Run<bool>("", "TestClass", "LastCharacterMustMatch"));
 		}
 	}
 }

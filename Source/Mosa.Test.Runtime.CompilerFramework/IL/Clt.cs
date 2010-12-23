@@ -17,7 +17,7 @@ using MbUnit.Framework;
 namespace Mosa.Test.Runtime.CompilerFramework.IL
 {
 	[TestFixture]
-	public class Clt : CodeDomTestRunner
+	public class Clt : TestCompilerAdapter
 	{
 		private static string s_testCode = @"
 			static class Test {
@@ -63,33 +63,33 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(17, 128)]
 		[Row('a', 'Z')]
 		[Row(char.MinValue, char.MaxValue)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public void CltC(char a, char b)
 		{
-			CodeSource = s_testCode.Replace("#t1", "char").Replace("#t2", "char");
-			bool res = Run<bool>(@"", @"Test", @"Clt", a, b);
+			compiler.CodeSource = s_testCode.Replace("#t1", "char").Replace("#t2", "char");
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"Clt", a, b);
 			Assert.IsTrue((a < b) == res);
 		}
 
 		[Row(0, 'a')]
 		[Row('-', '.')]
 		[Row('a', 'Z')]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public void CltConstantCRight(char a, char b)
 		{
-			CodeSource = CreateConstantTestCode("char", null, "'" + b.ToString() + "'");
-			bool res = Run<bool>(@"", @"Test", @"CltConstant", a);
+			compiler.CodeSource = CreateConstantTestCode("char", null, "'" + b.ToString() + "'");
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"CltConstant", a);
 			Assert.IsTrue((a < b) == res);
 		}
 
 		[Row('a', 0)]
 		[Row('-', '.')]
 		[Row('a', 'Z')]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public void CltConstantCLeft(char a, char b)
 		{
-			CodeSource = CreateConstantTestCode("char", "'" + a.ToString() + "'", null);
-			bool res = Run<bool>(@"", @"Test", @"CltConstant", b);
+			compiler.CodeSource = CreateConstantTestCode("char", "'" + a.ToString() + "'", null);
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"CltConstant", b);
 			Assert.IsTrue((a < b) == res);
 		}
 		#endregion
@@ -107,11 +107,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(SByte.MinValue, 0)]
 		[Row(SByte.MaxValue, 0)]
 		[Row(1, 0)]
-		[Test, Author(@"Michael Ruck"), Importance(Importance.Critical)]
+		[Test, Importance(Importance.Critical)]
 		public void CltI1(sbyte a, sbyte b)
 		{
-			CodeSource = s_testCode.Replace("#t1", "sbyte").Replace("#t2", "sbyte");
-			bool res = Run<bool>(@"", @"Test", @"Clt", a, b);
+			compiler.CodeSource = s_testCode.Replace("#t1", "sbyte").Replace("#t2", "sbyte");
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"Clt", a, b);
 			Assert.IsTrue((a < b) == res);
 		}
 
@@ -119,11 +119,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(-17, 42)]
 		[Row(sbyte.MinValue, sbyte.MinValue)]
 		[Row(sbyte.MinValue, sbyte.MaxValue)]
-		[Test, Author("boddlnagg")]
+		[Test]
 		public void CltConstantI1Right(sbyte a, sbyte b)
 		{
-			CodeSource = CreateConstantTestCode("sbyte", null, b.ToString());
-			bool res = Run<bool>(@"", @"Test", @"CltConstant", a);
+			compiler.CodeSource = CreateConstantTestCode("sbyte", null, b.ToString());
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"CltConstant", a);
 			Assert.IsTrue((a < b) == res);
 		}
 
@@ -132,11 +132,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(-17, 42)]
 		[Row(sbyte.MinValue, sbyte.MinValue)]
 		[Row(sbyte.MinValue, sbyte.MaxValue)]
-		[Test, Author("boddlnagg")]
+		[Test]
 		public void CltConstantI1Left(sbyte a, sbyte b)
 		{
-			CodeSource = CreateConstantTestCode("sbyte", a.ToString(), null);
-			bool res = Run<bool>(@"", @"Test", @"CltConstant", b);
+			compiler.CodeSource = CreateConstantTestCode("sbyte", a.ToString(), null);
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"CltConstant", b);
 			Assert.IsTrue((a < b) == res);
 		}
 		#endregion
@@ -153,11 +153,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(Int16.MinValue, 0)]
 		[Row(Int16.MaxValue, 0)]
 		[Row(1, 0)]
-		[Test, Author(@"Michael Ruck"), Importance(Importance.Critical)]
+		[Test, Importance(Importance.Critical)]
 		public void CltI2(short a, short b)
 		{
-			CodeSource = s_testCode.Replace("#t1", "short").Replace("#t2", "short");
-			bool res = Run<bool>(@"", @"Test", @"Clt", a, b);
+			compiler.CodeSource = s_testCode.Replace("#t1", "short").Replace("#t2", "short");
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"Clt", a, b);
 			Assert.IsTrue((a < b) == res);
 		}
 
@@ -165,11 +165,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(-17, 42)]
 		[Row(short.MinValue, short.MinValue)]
 		[Row(short.MinValue, short.MaxValue)]
-		[Test, Author("boddlnagg")]
+		[Test]
 		public void CltConstantI2Right(short a, short b)
 		{
-			CodeSource = CreateConstantTestCode("short", null, b.ToString());
-			bool res = Run<bool>(@"", @"Test", @"CltConstant", a);
+			compiler.CodeSource = CreateConstantTestCode("short", null, b.ToString());
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"CltConstant", a);
 			Assert.IsTrue((a < b) == res);
 		}
 
@@ -177,11 +177,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(-17, 42)]
 		[Row(short.MinValue, short.MinValue)]
 		[Row(short.MinValue, short.MaxValue)]
-		[Test, Author("boddlnagg")]
+		[Test]
 		public void CltConstantI2Left(short a, short b)
 		{
-			CodeSource = CreateConstantTestCode("short", a.ToString(), null);
-			bool res = Run<bool>(@"", @"Test", @"CltConstant", b);
+			compiler.CodeSource = CreateConstantTestCode("short", a.ToString(), null);
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"CltConstant", b);
 			Assert.IsTrue((a < b) == res);
 		}
 		#endregion
@@ -198,11 +198,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(Int32.MinValue, 0)]
 		[Row(Int32.MaxValue, 0)]
 		[Row(1, 0)]
-		[Test, Author(@"Michael Ruck"), Importance(Importance.Critical)]
+		[Test, Importance(Importance.Critical)]
 		public void CltI4(int a, int b)
 		{
-			CodeSource = s_testCode.Replace("#t1", "int").Replace("#t2", "int");
-			bool res = Run<bool>(@"", @"Test", @"Clt", a, b);
+			compiler.CodeSource = s_testCode.Replace("#t1", "int").Replace("#t2", "int");
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"Clt", a, b);
 			Assert.IsTrue((a < b) == res);
 		}
 
@@ -210,11 +210,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(-17, 42)]
 		[Row(int.MinValue, int.MinValue)]
 		[Row(int.MinValue, int.MaxValue)]
-		[Test, Author("boddlnagg")]
+		[Test]
 		public void CltConstantI4Right(int a, int b)
 		{
-			CodeSource = CreateConstantTestCode("int", null, b.ToString());
-			bool res = Run<bool>(@"", @"Test", @"CltConstant", a);
+			compiler.CodeSource = CreateConstantTestCode("int", null, b.ToString());
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"CltConstant", a);
 			Assert.IsTrue((a < b) == res);
 		}
 
@@ -222,11 +222,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(-17, 42)]
 		[Row(int.MinValue, int.MinValue)]
 		[Row(int.MinValue, int.MaxValue)]
-		[Test, Author("boddlnagg")]
+		[Test]
 		public void CltConstantI4Left(int a, int b)
 		{
-			CodeSource = CreateConstantTestCode("int", a.ToString(), null);
-			bool res = Run<bool>(@"", @"Test", @"CltConstant", b);
+			compiler.CodeSource = CreateConstantTestCode("int", a.ToString(), null);
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"CltConstant", b);
 			Assert.IsTrue((a < b) == res);
 		}
 		#endregion
@@ -245,11 +245,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(1L, 0L)]
 		[Row(-1L, -2L)]
 		[Row(-2L, -1L)]
-		[Test, Author(@"Michael Ruck"), Importance(Importance.Critical)]
+		[Test, Importance(Importance.Critical)]
 		public void CltI8(long a, long b)
 		{
-			CodeSource = s_testCode.Replace("#t1", "long").Replace("#t2", "long");
-			bool res = Run<bool>(@"", @"Test", @"Clt", a, b);
+			compiler.CodeSource = s_testCode.Replace("#t1", "long").Replace("#t2", "long");
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"Clt", a, b);
 			Assert.IsTrue((a < b) == res);
 		}
 
@@ -257,11 +257,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(-17, 42)]
 		[Row(long.MinValue, long.MinValue)]
 		[Row(long.MinValue, long.MaxValue)]
-		[Test, Author("boddlnagg")]
+		[Test]
 		public void CltConstantI8Right(long a, long b)
 		{
-			CodeSource = CreateConstantTestCode("long", null, b.ToString());
-			bool res = Run<bool>(@"", @"Test", @"CltConstant", a);
+			compiler.CodeSource = CreateConstantTestCode("long", null, b.ToString());
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"CltConstant", a);
 			Assert.IsTrue((a < b) == res);
 		}
 
@@ -269,11 +269,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(-17, 42)]
 		[Row(long.MinValue, long.MinValue)]
 		[Row(long.MinValue, long.MaxValue)]
-		[Test, Author("boddlnagg")]
+		[Test]
 		public void CltConstantI8Left(long a, long b)
 		{
-			CodeSource = CreateConstantTestCode("long", a.ToString(), null);
-			bool res = Run<bool>(@"", @"Test", @"CltConstant", b);
+			compiler.CodeSource = CreateConstantTestCode("long", a.ToString(), null);
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"CltConstant", b);
 			Assert.IsTrue((a < b) == res);
 		}
 		#endregion
@@ -290,11 +290,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(Byte.MinValue, 1)]
 		[Row(Byte.MaxValue, 0)]
 		[Row(1, 0)]
-		[Test, Author(@"Michael Ruck"), Importance(Importance.Critical)]
+		[Test, Importance(Importance.Critical)]
 		public void CltU1(byte a, byte b)
 		{
-			CodeSource = s_testCode.Replace("#t1", "byte").Replace("#t2", "byte");
-			bool res = Run<bool>(@"", @"Test", @"Clt", a, b);
+			compiler.CodeSource = s_testCode.Replace("#t1", "byte").Replace("#t2", "byte");
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"Clt", a, b);
 			Assert.IsTrue((a < b) == res);
 		}
 
@@ -302,11 +302,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(17, 142)]
 		[Row(byte.MaxValue, byte.MaxValue)]
 		[Row(byte.MinValue, byte.MaxValue)]
-		[Test, Author("boddlnagg")]
+		[Test]
 		public void CltConstantU1Right(byte a, byte b)
 		{
-			CodeSource = CreateConstantTestCode("byte", null, b.ToString());
-			bool res = Run<bool>(@"", @"Test", @"CltConstant", a);
+			compiler.CodeSource = CreateConstantTestCode("byte", null, b.ToString());
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"CltConstant", a);
 			Assert.IsTrue((a < b) == res);
 		}
 
@@ -314,11 +314,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(17, 142)]
 		[Row(byte.MaxValue, byte.MaxValue)]
 		[Row(byte.MinValue, byte.MaxValue)]
-		[Test, Author("boddlnagg")]
+		[Test]
 		public void CltConstantU1Left(byte a, byte b)
 		{
-			CodeSource = CreateConstantTestCode("byte", a.ToString(), null);
-			bool res = Run<bool>(@"", @"Test", @"CltConstant", b);
+			compiler.CodeSource = CreateConstantTestCode("byte", a.ToString(), null);
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"CltConstant", b);
 			Assert.IsTrue((a < b) == res);
 		}
 		#endregion
@@ -335,11 +335,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(UInt16.MinValue, 2)]
 		[Row(UInt16.MaxValue, 0)]
 		[Row(1, 0)]
-		[Test, Author(@"Michael Ruck"), Importance(Importance.Critical)]
+		[Test, Importance(Importance.Critical)]
 		public void CltU2(ushort a, ushort b)
 		{
-			CodeSource = s_testCode.Replace("#t1", "ushort").Replace("#t2", "ushort");
-			bool res = Run<bool>(@"", @"Test", @"Clt", a, b);
+			compiler.CodeSource = s_testCode.Replace("#t1", "ushort").Replace("#t2", "ushort");
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"Clt", a, b);
 			Assert.IsTrue((a < b) == res);
 		}
 
@@ -347,11 +347,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(17, 142)]
 		[Row(ushort.MaxValue, ushort.MaxValue)]
 		[Row(ushort.MinValue, ushort.MaxValue)]
-		[Test, Author("boddlnagg")]
+		[Test]
 		public void CltConstantU2Right(ushort a, ushort b)
 		{
-			CodeSource = CreateConstantTestCode("ushort", null, b.ToString());
-			bool res = Run<bool>(@"", @"Test", @"CltConstant", a);
+			compiler.CodeSource = CreateConstantTestCode("ushort", null, b.ToString());
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"CltConstant", a);
 			Assert.IsTrue((a < b) == res);
 		}
 
@@ -359,11 +359,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(17, 142)]
 		[Row(ushort.MaxValue, ushort.MaxValue)]
 		[Row(ushort.MinValue, ushort.MaxValue)]
-		[Test, Author("boddlnagg")]
+		[Test]
 		public void CltConstantU2Left(ushort a, ushort b)
 		{
-			CodeSource = CreateConstantTestCode("ushort", a.ToString(), null);
-			bool res = Run<bool>(@"", @"Test", @"CltConstant", b);
+			compiler.CodeSource = CreateConstantTestCode("ushort", a.ToString(), null);
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"CltConstant", b);
 			Assert.IsTrue((a < b) == res);
 		}
 		#endregion
@@ -380,11 +380,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(UInt32.MinValue, 1)]
 		[Row(UInt32.MaxValue, 0)]
 		[Row(1, 0)]
-		[Test, Author(@"Michael Ruck"), Importance(Importance.Critical)]
+		[Test, Importance(Importance.Critical)]
 		public void CltU4(uint a, uint b)
 		{
-			CodeSource = s_testCode.Replace("#t1", "uint").Replace("#t2", "uint");
-			bool res = Run<bool>(@"", @"Test", @"Clt", a, b);
+			compiler.CodeSource = s_testCode.Replace("#t1", "uint").Replace("#t2", "uint");
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"Clt", a, b);
 			Assert.IsTrue((a < b) == res);
 		}
 
@@ -392,11 +392,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(17, 142)]
 		[Row(uint.MaxValue, uint.MaxValue)]
 		[Row(uint.MinValue, uint.MaxValue)]
-		[Test, Author("boddlnagg")]
+		[Test]
 		public void CltConstantU4Right(uint a, uint b)
 		{
-			CodeSource = CreateConstantTestCode("uint", null, b.ToString());
-			bool res = Run<bool>(@"", @"Test", @"CltConstant", a);
+			compiler.CodeSource = CreateConstantTestCode("uint", null, b.ToString());
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"CltConstant", a);
 			Assert.IsTrue((a < b) == res);
 		}
 
@@ -404,11 +404,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(17, 142)]
 		[Row(uint.MaxValue, uint.MaxValue)]
 		[Row(uint.MinValue, uint.MaxValue)]
-		[Test, Author("boddlnagg")]
+		[Test]
 		public void CltConstantU4Left(uint a, uint b)
 		{
-			CodeSource = CreateConstantTestCode("uint", a.ToString(), null);
-			bool res = Run<bool>(@"", @"Test", @"CltConstant", b);
+			compiler.CodeSource = CreateConstantTestCode("uint", a.ToString(), null);
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"CltConstant", b);
 			Assert.IsTrue((a < b) == res);
 		}
 		#endregion
@@ -425,11 +425,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(UInt64.MinValue, 1)]
 		[Row(UInt64.MaxValue, 0)]
 		[Row(1, 0)]
-		[Test, Author(@"Michael Ruck"), Importance(Importance.Critical)]
+		[Test, Importance(Importance.Critical)]
 		public void CltU8(ulong a, ulong b)
 		{
-			CodeSource = s_testCode.Replace("#t1", "ulong").Replace("#t2", "ulong");
-			bool res = Run<bool>(@"", @"Test", @"Clt", a, b);
+			compiler.CodeSource = s_testCode.Replace("#t1", "ulong").Replace("#t2", "ulong");
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"Clt", a, b);
 			Assert.IsTrue((a < b) == res);
 		}
 
@@ -437,11 +437,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(17, 142)]
 		[Row(ulong.MaxValue, ulong.MaxValue)]
 		[Row(ulong.MinValue, ulong.MaxValue)]
-		[Test, Author("boddlnagg")]
+		[Test]
 		public void CltConstantU8Right(ulong a, ulong b)
 		{
-			CodeSource = CreateConstantTestCode("ulong", null, b.ToString());
-			bool res = Run<bool>(@"", @"Test", @"CltConstant", a);
+			compiler.CodeSource = CreateConstantTestCode("ulong", null, b.ToString());
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"CltConstant", a);
 			Assert.IsTrue((a < b) == res);
 		}
 
@@ -449,11 +449,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(17, 142)]
 		[Row(ulong.MaxValue, ulong.MaxValue)]
 		[Row(ulong.MinValue, ulong.MaxValue)]
-		[Test, Author("boddlnagg")]
+		[Test]
 		public void CltConstantU8Left(ulong a, ulong b)
 		{
-			CodeSource = CreateConstantTestCode("ulong", a.ToString(), null);
-			bool res = Run<bool>(@"", @"Test", @"CltConstant", b);
+			compiler.CodeSource = CreateConstantTestCode("ulong", a.ToString(), null);
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"CltConstant", b);
 			Assert.IsTrue((a < b) == res);
 		}
 		#endregion
@@ -470,11 +470,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(Single.MinValue, 0.0f)]
 		[Row(Single.MaxValue, 0.0f)]
 		[Row(0.0f, 1.0f)]
-		[Test, Author(@"Michael Ruck"), Importance(Importance.Critical)]
+		[Test, Importance(Importance.Critical)]
 		public void CltR4(float a, float b)
 		{
-			CodeSource = s_testCode.Replace("#t1", "float").Replace("#t2", "float");
-			bool res = Run<bool>(@"", @"Test", @"Clt", a, b);
+			compiler.CodeSource = s_testCode.Replace("#t1", "float").Replace("#t2", "float");
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"Clt", a, b);
 			Assert.IsTrue((a < b) == res);
 		}
 
@@ -487,11 +487,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(Single.MinValue, 0.0f)]
 		[Row(Single.MaxValue, 0.0f)]
 		[Row(0.0f, 1.0f)]
-		[Test, Author("boddlnagg")]
+		[Test]
 		public void CltConstantR4Right(float a, float b)
 		{
-			CodeSource = CreateConstantTestCode("float", null, b.ToString(System.Globalization.CultureInfo.InvariantCulture) + "f");
-			bool res = Run<bool>(@"", @"Test", @"CltConstant", a);
+			compiler.CodeSource = CreateConstantTestCode("float", null, b.ToString(System.Globalization.CultureInfo.InvariantCulture) + "f");
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"CltConstant", a);
 			Assert.IsTrue((a < b) == res);
 		}
 
@@ -504,11 +504,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(Single.MinValue, 0.0f)]
 		[Row(Single.MaxValue, 0.0f)]
 		[Row(0.0f, 1.0f)]
-		[Test, Author("boddlnagg")]
+		[Test]
 		public void CltConstantR4Left(float a, float b)
 		{
-			CodeSource = CreateConstantTestCode("float", a.ToString(System.Globalization.CultureInfo.InvariantCulture) + "f", null);
-			bool res = Run<bool>(@"", @"Test", @"CltConstant", b);
+			compiler.CodeSource = CreateConstantTestCode("float", a.ToString(System.Globalization.CultureInfo.InvariantCulture) + "f", null);
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"CltConstant", b);
 			Assert.IsTrue((a < b) == res);
 		}
 		#endregion
@@ -525,11 +525,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(Double.MinValue, 0.0)]
 		[Row(Double.MaxValue, 0.0)]
 		[Row(1.0, 0.0)]
-		[Test, Author(@"Michael Ruck"), Importance(Importance.Critical)]
+		[Test, Importance(Importance.Critical)]
 		public void CltR8(double a, double b)
 		{
-			CodeSource = s_testCode.Replace("#t1", "double").Replace("#t2", "double");
-			bool res = Run<bool>(@"", @"Test", @"Clt", a, b);
+			compiler.CodeSource = s_testCode.Replace("#t1", "double").Replace("#t2", "double");
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"Clt", a, b);
 			Assert.IsTrue((a < b) == res);
 		}
 
@@ -537,11 +537,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(-17.0, 42.5)]
 		[Row(1.79769313486231E+308, 1.79769313486231E+308)]
 		[Row(-1.79769313486231E+308, 1.79769313486231E+308)]
-		[Test, Author("boddlnagg")]
+		[Test]
 		public void CltConstantR8Right(double a, double b)
 		{
-			CodeSource = CreateConstantTestCode("double", null, b.ToString(System.Globalization.CultureInfo.InvariantCulture));
-			bool res = Run<bool>(@"", @"Test", @"CltConstant", a);
+			compiler.CodeSource = CreateConstantTestCode("double", null, b.ToString(System.Globalization.CultureInfo.InvariantCulture));
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"CltConstant", a);
 			Assert.IsTrue((a < b) == res);
 		}
 
@@ -549,11 +549,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(-17.0, 42.5)]
 		[Row(1.79769313486231E+308, 1.79769313486231E+308)]
 		[Row(-1.79769313486231E+308, 1.79769313486231E+308)]
-		[Test, Author("boddlnagg")]
+		[Test]
 		public void CltConstantR8Left(double a, double b)
 		{
-			CodeSource = CreateConstantTestCode("double", a.ToString(System.Globalization.CultureInfo.InvariantCulture), null);
-			bool res = Run<bool>(@"", @"Test", @"CltConstant", b);
+			compiler.CodeSource = CreateConstantTestCode("double", a.ToString(System.Globalization.CultureInfo.InvariantCulture), null);
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"CltConstant", b);
 			Assert.IsTrue((a < b) == res);
 		}
 		#endregion

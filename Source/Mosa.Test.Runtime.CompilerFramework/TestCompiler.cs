@@ -4,8 +4,6 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Alex Lyman <mail.alex.lyman@gmail.com>
- *  Michael Fröhlich (grover) <michael.ruck@michaelruck.de>
  *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
  */
 
@@ -23,14 +21,10 @@ using MbUnit.Framework;
 using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime;
 using Mosa.Runtime.Vm;
-//using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Test.Runtime.CompilerFramework
 {
-	/// <summary>
-	/// Interface class for MbUnit3 to run our testcases.
-	/// </summary>
-	public abstract class TestFixtureBase
+	public class TestCompiler
 	{
 		#region Data members
 
@@ -52,7 +46,7 @@ namespace Mosa.Test.Runtime.CompilerFramework
 		/// <summary>
 		/// Flag, which determines if the compiler needs to run.
 		/// </summary>
-		private bool needCompile;
+		private bool isDirty = true;
 
 		/// <summary>
 		/// An array of assembly references to include in the compilation.
@@ -99,15 +93,15 @@ namespace Mosa.Test.Runtime.CompilerFramework
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="TestFixtureBase"/> class.
+		/// Initializes a new instance of the <see cref="TestCompiler"/> class.
 		/// </summary>
-		public TestFixtureBase()
+		public TestCompiler()
 		{
 			references = new string[0];
 			language = "C#";
 			unsafeCode = true;
 			doNotReferenceMscorlib = true;
-			NeedCompile = true;
+			IsDirty = true;
 		}
 
 		#endregion // Construction
@@ -118,56 +112,56 @@ namespace Mosa.Test.Runtime.CompilerFramework
 		/// Gets or sets a value indicating whether the test needs to be compiled.
 		/// </summary>
 		/// <value><c>true</c> if a compilation is needed; otherwise, <c>false</c>.</value>
-		protected bool NeedCompile
+		protected bool IsDirty
 		{
-			get { return needCompile; }
-			set { needCompile = value; }
+			get { return isDirty; }
+			set { isDirty = value; }
 		}
 
 		/// <summary>
 		/// Gets or sets the language.
 		/// </summary>
 		/// <value>The language.</value>
-		protected string Language
+		public string Language
 		{
 			get { return language; }
-			set { if (language != value) NeedCompile = true; language = value; }
+			set { if (language != value) IsDirty = true; language = value; }
 		}
 
 		/// <summary>
 		/// Gets or sets the code source.
 		/// </summary>
 		/// <value>The code source.</value>
-		protected string CodeSource
+		public string CodeSource
 		{
 			get { return codeSource; }
-			set { if (codeSource != value) NeedCompile = true; codeSource = value; }
+			set { if (codeSource != value) IsDirty = true; codeSource = value; }
 		}
 
 		/// <summary>
 		/// Gets or sets a value indicating whether unsafe code is used in the test.
 		/// </summary>
 		/// <value><c>true</c> if unsafe code is used in the test; otherwise, <c>false</c>.</value>
-		protected bool UnsafeCode
+		public bool UnsafeCode
 		{
 			get { return unsafeCode; }
-			set { if (unsafeCode != value) NeedCompile = true; unsafeCode = value; }
+			set { if (unsafeCode != value) IsDirty = true; unsafeCode = value; }
 		}
 
-		protected bool DoNotReferenceMscorlib
+		public bool DoNotReferenceMscorlib
 		{
 			get { return doNotReferenceMscorlib; }
-			set { if (doNotReferenceMscorlib != value) NeedCompile = true; doNotReferenceMscorlib = value; }
+			set { if (doNotReferenceMscorlib != value) IsDirty = true; doNotReferenceMscorlib = value; }
 		}
 
 		/// <summary>
 		/// Gets or sets the references.
 		/// </summary>
 		/// <value>The references.</value>
-		protected string[] References
+		public string[] References
 		{
 			get { return references; }
-			set { if (references != value) NeedCompile = true; references = value; }
+			set { if (references != value) IsDirty = true; references = value; }
 		}
 
 		private static string TempDirectory
@@ -188,17 +182,17 @@ namespace Mosa.Test.Runtime.CompilerFramework
 
 		#endregion Properties
 
-		public T Run<T>(string type, string method, params object[] parameters)
+		public T Run<T>(string ns, string type, string method, params object[] parameters)
 		{
-			if (needCompile)
+			if (isDirty)
 			{
 				CompileTestCode();
-				needCompile = false;
+				isDirty = false;
 			}
 
 			// Find the test method to execute
 			RuntimeMethod runtimeMethod = FindMethod(
-				string.Empty,
+				ns,
 				type,
 				method
 			);
@@ -212,7 +206,6 @@ namespace Mosa.Test.Runtime.CompilerFramework
 				delegateName = "Mosa.Test.Prebuilt.Delegates+" + DelegateUtility.GetDelegteName(null, parameters);
 
 			// Get the prebuilt delegate type
-			//Type delegateType = Type.GetType(delegateName);
 			Type delegateType = Prebuilt.GetType(delegateName);
 
 			Debug.Assert(delegateType != null, delegateName);
@@ -240,6 +233,20 @@ namespace Mosa.Test.Runtime.CompilerFramework
 			}
 		}
 
+		// Might not keep this as a public method
+		public void CompileTestCode()
+		{
+			if (loadedAssembly != null)
+			{
+				loadedAssembly = null;
+			}
+
+			assembly = RunCodeDomCompiler();
+
+			Console.WriteLine("Executing MOSA compiler...");
+			RunMosaCompiler(assembly);
+		}
+
 		/// <summary>
 		/// Finds a runtime method, which represents the requested method.
 		/// </summary>
@@ -252,8 +259,12 @@ namespace Mosa.Test.Runtime.CompilerFramework
 		{
 			foreach (RuntimeType t in typeSystem.GetCompiledTypes())
 			{
-				if (t.Namespace != ns || t.Name != type)
+				if (t.Name != type)
 					continue;
+
+				if (!string.IsNullOrEmpty(ns))
+					if (t.Namespace != ns)
+						continue;
 
 				foreach (RuntimeMethod m in t.Methods)
 				{
@@ -265,19 +276,6 @@ namespace Mosa.Test.Runtime.CompilerFramework
 			}
 
 			throw new MissingMethodException(ns + "." + type, method);
-		}
-
-		protected void CompileTestCode()
-		{
-			if (loadedAssembly != null)
-			{
-				loadedAssembly = null;
-			}
-
-			assembly = RunCodeDomCompiler();
-
-			Console.WriteLine("Executing MOSA compiler...");
-			RunMosaCompiler(assembly);
 		}
 
 		private string RunCodeDomCompiler()

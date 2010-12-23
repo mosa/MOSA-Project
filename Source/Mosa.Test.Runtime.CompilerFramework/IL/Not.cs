@@ -19,7 +19,7 @@ using MbUnit.Framework;
 namespace Mosa.Test.Runtime.CompilerFramework.IL
 {
 	[TestFixture]
-	public class NotFixture : CodeDomTestRunner
+	public class NotFixture : TestCompilerAdapter
 	{
 		private static string CreateTestCode(string name, string typeIn, string typeOut)
 		{
@@ -43,11 +43,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row('Z')]
 		[Row(100)]
 		[Row(char.MaxValue)]
-		[Test, Author("boddlnagg", "boddlnagg@googlemail.com")]
+		[Test]
 		public void NotC(char a)
 		{
-			CodeSource = CreateTestCode("NotC", "char", "int");
-			Assert.IsTrue(Run<bool>("", "Test", "NotC", (int)~a, a));
+			compiler.CodeSource = CreateTestCode("NotC", "char", "int");
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "NotC", (int)~a, a));
 		}
 		#endregion
 
@@ -69,11 +69,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(-100)]
 		[Row(sbyte.MinValue)]
 		[Row(sbyte.MaxValue)]
-		[Test, Author("rootnode", "rootnode@mosa-project.org")]
+		[Test]
 		public void NotI1(sbyte a)
 		{
-			CodeSource = CreateTestCode("NotI1", "sbyte", "int");
-			Assert.IsTrue(Run<bool>("", "Test", "NotI1", (sbyte)~a, (sbyte)a));
+			compiler.CodeSource = CreateTestCode("NotI1", "sbyte", "int");
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "NotI1", (sbyte)~a, (sbyte)a));
 		}
 		#endregion
 
@@ -88,11 +88,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(100)]
 		[Row(byte.MinValue)]
 		[Row(byte.MaxValue)]
-		[Test, Author("rootnode", "rootnode@mosa-project.org")]
+		[Test]
 		public void NotU1(byte a)
 		{
-			CodeSource = CreateTestCode("NotU1", "byte", "int");
-			Assert.IsTrue(Run<bool>("", "Test", "NotU1", (~a), a));
+			compiler.CodeSource = CreateTestCode("NotU1", "byte", "int");
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "NotU1", (~a), a));
 		}
 		#endregion
 
@@ -114,11 +114,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(-100)]
 		[Row(short.MinValue)]
 		[Row(short.MaxValue)]
-		[Test, Author("rootnode", "rootnode@mosa-project.org")]
+		[Test]
 		public void NotI2(short a)
 		{
-			CodeSource = CreateTestCode("NotI2", "short", "int");
-			Assert.IsTrue(Run<bool>("", "Test", "NotI2", (short)~a, (short)a));
+			compiler.CodeSource = CreateTestCode("NotI2", "short", "int");
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "NotI2", (short)~a, (short)a));
 		}
 		#endregion
 
@@ -133,11 +133,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(100)]
 		[Row(ushort.MinValue)]
 		[Row(ushort.MaxValue)]
-		[Test, Author("rootnode", "rootnode@mosa-project.org")]
+		[Test]
 		public void NotU2(ushort a)
 		{
-			CodeSource = CreateTestCode("NotU2", "ushort", "int");
-			Assert.IsTrue(Run<bool>("", "Test", "NotU2", (~a), a));
+			compiler.CodeSource = CreateTestCode("NotU2", "ushort", "int");
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "NotU2", (~a), a));
 		}
 		#endregion
 
@@ -159,11 +159,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(-100)]
 		[Row(int.MinValue)]
 		[Row(int.MaxValue)]
-		[Test, Author("rootnode", "rootnode@mosa-project.org")]
+		[Test]
 		public void NotI4(int a)
 		{
-			CodeSource = CreateTestCode("NotI4", "int", "int");
-			Assert.IsTrue(Run<bool>("", "Test", "NotI4", (int)~a, (int)a));
+			compiler.CodeSource = CreateTestCode("NotI4", "int", "int");
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "NotI4", (int)~a, (int)a));
 		}
 		#endregion
 
@@ -178,11 +178,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(100)]
 		[Row(uint.MinValue)]
 		[Row(uint.MaxValue)]
-		[Test, Author("rootnode", "rootnode@mosa-project.org")]
+		[Test]
 		public void NotU4(uint a)
 		{
-			CodeSource = CreateTestCode("NotU4", "uint", "uint");
-			Assert.IsTrue(Run<bool>("", "Test", "NotU4", ~(uint)a, a));
+			compiler.CodeSource = CreateTestCode("NotU4", "uint", "uint");
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "NotU4", ~(uint)a, a));
 		}
 		#endregion
 
@@ -204,11 +204,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(-100)]
 		[Row(sbyte.MinValue)]
 		[Row(sbyte.MaxValue)]
-		[Test, Author("rootnode", "rootnode@mosa-project.org")]
+		[Test]
 		public void NotI8(long a)
 		{
-			CodeSource = CreateTestCode("NotI8", "long", "long");
-			Assert.IsTrue(Run<bool>("", "Test", "NotI8", (long)~a, (long)a));
+			compiler.CodeSource = CreateTestCode("NotI8", "long", "long");
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "NotI8", (long)~a, (long)a));
 		}
 		#endregion
 
@@ -223,11 +223,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(100)]
 		[Row(ulong.MinValue)]
 		[Row(ulong.MaxValue)]
-		[Test, Author("rootnode", "rootnode@mosa-project.org")]
+		[Test]
 		public void NotU8(ulong a)
 		{
-			CodeSource = CreateTestCode("NotU8", "ulong", "ulong");
-			Assert.IsTrue(Run<bool>("", "Test", "NotU8", ~(ulong)a, a));
+			compiler.CodeSource = CreateTestCode("NotU8", "ulong", "ulong");
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "NotU8", ~(ulong)a, a));
 		}
 		#endregion
 	}

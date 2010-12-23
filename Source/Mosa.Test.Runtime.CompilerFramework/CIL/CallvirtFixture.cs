@@ -16,7 +16,7 @@ namespace Mosa.Test.Runtime.CompilerFramework.CIL
 	[Importance(Importance.Critical)]
 	[Category(@"Method calls")]
 	[Description(@"Tests proper method table building and virtual call support.")]
-	public class CallvirtFixture : CodeDomTestRunner
+	public class CallvirtFixture : TestCompilerAdapter
 	{
 		public static readonly string TestCode = @"
 			public class Base
@@ -56,25 +56,18 @@ namespace Mosa.Test.Runtime.CompilerFramework.CIL
 		[Test]
 		public void TestVirtualCall()
 		{
-			this.EnsureCodeSourceIsSet();
-			int result = Run<int>(@"", @"Derived", @"STest");
+			compiler.CodeSource = TestCode;
+			int result = compiler.Run<int>(string.Empty, @"Derived", @"STest");
 			Assert.AreEqual(7, result);
 		}
 
 		[Test]
 		public void TestBaseCall()
 		{
-			this.EnsureCodeSourceIsSet();
-			int result = Run<int>(@"", @"Derived", @"STestBaseCall");
+			compiler.CodeSource = TestCode;
+			int result = compiler.Run<int>(string.Empty, @"Derived", @"STestBaseCall");
 			Assert.AreEqual(12, result);
 		}
 
-		private void EnsureCodeSourceIsSet()
-		{
-			if (CodeSource == null)
-			{
-				CodeSource = TestCode;
-			}
-		}
 	}
 }

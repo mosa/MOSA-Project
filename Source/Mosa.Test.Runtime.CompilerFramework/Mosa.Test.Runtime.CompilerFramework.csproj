@@ -136,18 +136,12 @@
     <Compile Include="CIL\UInt32Fixture.cs" />
     <Compile Include="CIL\UInt64Fixture.cs" />
     <Compile Include="Code.cs" />
-    <Compile Include="CodeDomTestRunner.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Compiler\StaticAllocationFixture.cs" />
     <Compile Include="DelegateUtility.cs" />
     <Compile Include="IL\ConditionalOperator.cs" />
     <Compile Include="IL\Stind.cs" />
     <Compile Include="IL\Switch.cs" />
     <Compile Include="IL\While.cs" />
-    <Compile Include="MosaCompilerTestRunner.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Numbers\C.cs" />
     <Compile Include="Numbers\R8.cs" />
     <Compile Include="Numbers\R4.cs" />
@@ -171,6 +165,8 @@
     <Compile Include="TestCaseMethodCompiler.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="TestCompiler.cs" />
+    <Compile Include="TestCompilerAdapter.cs" />
     <Compile Include="TestLinkerSection.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -256,7 +252,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Runtime.cs" />
-    <Compile Include="TestFixtureBase.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <PropertyGroup>

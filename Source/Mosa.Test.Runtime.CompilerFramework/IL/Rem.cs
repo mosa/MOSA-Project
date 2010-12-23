@@ -20,7 +20,7 @@ using MbUnit.Framework;
 namespace Mosa.Test.Runtime.CompilerFramework.IL
 {
 	[TestFixture]
-	public class Rem : CodeDomTestRunner
+	public class Rem : TestCompilerAdapter
 	{
 		private static string CreateTestCode(string name, string typeIn, string typeOut)
 		{
@@ -82,31 +82,31 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(17, 128)]
 		[Row('a', 'Z')]
 		[Row(char.MinValue, char.MaxValue)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public void RemC(char a, char b)
 		{
-			CodeSource = CreateTestCode("RemC", "char", "char");
-			Assert.IsTrue(Run<bool>("", "Test", "RemC", (char)(a % b), a, b));
+			compiler.CodeSource = CreateTestCode("RemC", "char", "char");
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "RemC", (char)(a % b), a, b));
 		}
 
 		[Row(0, 'a')]
 		[Row('-', '.')]
 		[Row('a', 'Z')]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public void RemConstantCRight(char a, char b)
 		{
-			CodeSource = CreateConstantTestCode("RemConstantCRight", "char", "char", null, "'" + b.ToString() + "'");
-			Assert.IsTrue(Run<bool>("", "Test", "RemConstantCRight", (char)(a % b), a));
+			compiler.CodeSource = CreateConstantTestCode("RemConstantCRight", "char", "char", null, "'" + b.ToString() + "'");
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "RemConstantCRight", (char)(a % b), a));
 		}
 
 		[Row('a', 0, ExpectedException = typeof(DivideByZeroException))]
 		[Row('-', '.')]
 		[Row('a', 'Z')]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public void RemConstantCLeft(char a, char b)
 		{
-			CodeSource = CreateConstantTestCode("RemConstantCLeft", "char", "char", "'" + a.ToString() + "'", null);
-			Assert.IsTrue(Run<bool>("", "Test", "RemConstantCLeft", (char)(a % b), b));
+			compiler.CodeSource = CreateConstantTestCode("RemConstantCLeft", "char", "char", "'" + a.ToString() + "'", null);
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "RemConstantCLeft", (char)(a % b), b));
 		}
 		#endregion
 
@@ -164,33 +164,33 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(sbyte.MinValue, sbyte.MaxValue)]
 		[Row(sbyte.MaxValue, sbyte.MinValue)]
 		[Row(1, 0, ExpectedException = typeof(DivideByZeroException))]
-		[Test, Author("rootnode", "rootnode@mosa-project.org")]
+		[Test]
 		public void RemI1(sbyte a, sbyte b)
 		{
-			CodeSource = CreateTestCodeWithReturn("RemI1", "sbyte", "int");
-			Assert.AreEqual(a % b, Run<int>("", "Test", "RemI1", (sbyte)(a % b), a, b));
+			compiler.CodeSource = CreateTestCodeWithReturn("RemI1", "sbyte", "int");
+			Assert.AreEqual(a % b, compiler.Run<int>(string.Empty, "Test", "RemI1", (sbyte)(a % b), a, b));
 		}
 
 		[Row(23, 21)]
 		[Row(2, -17)]
 		[Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
 		[Row(sbyte.MinValue, sbyte.MaxValue)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public void RemConstantI1Right(sbyte a, sbyte b)
 		{
-			CodeSource = CreateConstantTestCode("RemConstantI1Right", "sbyte", "sbyte", null, b.ToString());
-			Assert.IsTrue(Run<bool>("", "Test", "RemConstantI1Right", (sbyte)(a % b), a));
+			compiler.CodeSource = CreateConstantTestCode("RemConstantI1Right", "sbyte", "sbyte", null, b.ToString());
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "RemConstantI1Right", (sbyte)(a % b), a));
 		}
 
 		[Row(23, 21)]
 		[Row(2, -17)]
 		[Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
 		[Row(sbyte.MinValue, sbyte.MaxValue)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public void RemConstantI1Left(sbyte a, sbyte b)
 		{
-			CodeSource = CreateConstantTestCode("RemConstantI1Left", "sbyte", "sbyte", a.ToString(), null);
-			Assert.IsTrue(Run<bool>("", "Test", "RemConstantI1Left", (sbyte)(a % b), b));
+			compiler.CodeSource = CreateConstantTestCode("RemConstantI1Left", "sbyte", "sbyte", a.ToString(), null);
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "RemConstantI1Left", (sbyte)(a % b), b));
 		}
 		#endregion
 
@@ -226,33 +226,33 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(byte.MinValue, byte.MaxValue)]
 		[Row(byte.MaxValue, byte.MinValue, ExpectedException = typeof(DivideByZeroException))]
 		[Row(1, 0, ExpectedException = typeof(DivideByZeroException))]
-		[Test, Author("rootnode", "rootnode@mosa-project.org")]
+		[Test]
 		public void RemU1(byte a, byte b)
 		{
-			CodeSource = CreateTestCode("RemU1", "byte", "byte");
-			Assert.IsTrue(Run<bool>("", "Test", "RemU1", (byte)(a % b), a, b));
+			compiler.CodeSource = CreateTestCode("RemU1", "byte", "byte");
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "RemU1", (byte)(a % b), a, b));
 		}
 
 		[Row(23, 21)]
 		[Row(17, 1)]
 		[Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
 		//[Row(byte.MinValue, byte.MaxValue)] FIXME: Uncommenting this lets the test runner freeze
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public void RemConstantU1Right(byte a, byte b)
 		{
-			CodeSource = CreateConstantTestCode("RemConstantU1Right", "byte", "byte", null, b.ToString());
-			Assert.IsTrue(Run<bool>("", "Test", "RemConstantU1Right", (byte)(a % b), a));
+			compiler.CodeSource = CreateConstantTestCode("RemConstantU1Right", "byte", "byte", null, b.ToString());
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "RemConstantU1Right", (byte)(a % b), a));
 		}
 
 		[Row(23, 21)]
 		[Row(17, 1)]
 		[Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
 		[Row(byte.MinValue, byte.MaxValue)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public void RemConstantU1Left(byte a, byte b)
 		{
-			CodeSource = CreateConstantTestCode("RemConstantU1Left", "byte", "byte", a.ToString(), null);
-			Assert.IsTrue(Run<bool>("", "Test", "RemConstantU1Left", (byte)(a % b), b));
+			compiler.CodeSource = CreateConstantTestCode("RemConstantU1Left", "byte", "byte", a.ToString(), null);
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "RemConstantU1Left", (byte)(a % b), b));
 		}
 		#endregion
 
@@ -310,33 +310,33 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(short.MinValue, short.MaxValue)]
 		[Row(short.MaxValue, short.MinValue)]
 		[Row(1, 0, ExpectedException = typeof(DivideByZeroException))]
-		[Test, Author("rootnode", "rootnode@mosa-project.org")]
+		[Test]
 		public void RemI2(short a, short b)
 		{
-			CodeSource = CreateTestCode("RemI2", "short", "short");
-			Assert.IsTrue(Run<bool>("", "Test", "RemI2", (short)(a % b), a, b));
+			compiler.CodeSource = CreateTestCode("RemI2", "short", "short");
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "RemI2", (short)(a % b), a, b));
 		}
 
 		[Row(-23, 21)]
 		[Row(17, 1)]
 		[Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
 		[Row(short.MinValue, short.MaxValue)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public void RemConstantI2Right(short a, short b)
 		{
-			CodeSource = CreateConstantTestCode("RemConstantI2Right", "short", "short", null, b.ToString());
-			Assert.IsTrue(Run<bool>("", "Test", "RemConstantI2Right", (short)(a % b), a));
+			compiler.CodeSource = CreateConstantTestCode("RemConstantI2Right", "short", "short", null, b.ToString());
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "RemConstantI2Right", (short)(a % b), a));
 		}
 
 		[Row(-23, 21)]
 		[Row(17, 1)]
 		[Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
 		[Row(short.MinValue, short.MaxValue)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public void RemConstantI2Left(short a, short b)
 		{
-			CodeSource = CreateConstantTestCode("RemConstantI2Left", "short", "short", a.ToString(), null);
-			Assert.IsTrue(Run<bool>("", "Test", "RemConstantI2Left", (short)(a % b), b));
+			compiler.CodeSource = CreateConstantTestCode("RemConstantI2Left", "short", "short", a.ToString(), null);
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "RemConstantI2Left", (short)(a % b), b));
 		}
 		#endregion
 
@@ -372,11 +372,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(ushort.MinValue, ushort.MaxValue)]
 		[Row(ushort.MaxValue, ushort.MinValue, ExpectedException = typeof(DivideByZeroException))]
 		[Row(1, 0, ExpectedException = typeof(DivideByZeroException))]
-		[Test, Author("rootnode", "rootnode@mosa-project.org")]
+		[Test]
 		public void RemU2(ushort a, ushort b)
 		{
-			CodeSource = CreateTestCode("RemU2", "ushort", "ushort");
-			Assert.IsTrue(Run<bool>("", "Test", "RemU2", (ushort)(a % b), a, b));
+			compiler.CodeSource = CreateTestCode("RemU2", "ushort", "ushort");
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "RemU2", (ushort)(a % b), a, b));
 		}
 
 		[Row(23, 21)]
@@ -384,11 +384,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(17, 1)]
 		[Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
 		[Row(ushort.MinValue, ushort.MaxValue)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public void RemConstantU2Right(ushort a, ushort b)
 		{
-			CodeSource = CreateConstantTestCode("RemConstantU2Right", "ushort", "ushort", null, b.ToString());
-			Assert.IsTrue(Run<bool>("", "Test", "RemConstantU2Right", (ushort)(a % b), a));
+			compiler.CodeSource = CreateConstantTestCode("RemConstantU2Right", "ushort", "ushort", null, b.ToString());
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "RemConstantU2Right", (ushort)(a % b), a));
 		}
 
 		[Row(23, 21)]
@@ -396,11 +396,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(17, 1)]
 		[Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
 		[Row(ushort.MinValue, ushort.MaxValue)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public void RemConstantU2Left(ushort a, ushort b)
 		{
-			CodeSource = CreateConstantTestCode("RemConstantU2Left", "ushort", "ushort", a.ToString(), null);
-			Assert.IsTrue(Run<bool>("", "Test", "RemConstantU2Left", (ushort)(a % b), b));
+			compiler.CodeSource = CreateConstantTestCode("RemConstantU2Left", "ushort", "ushort", a.ToString(), null);
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "RemConstantU2Left", (ushort)(a % b), b));
 		}
 		#endregion
 
@@ -458,11 +458,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(int.MinValue, int.MaxValue)]
 		[Row(int.MaxValue, int.MinValue)]
 		[Row(1, 0, ExpectedException = typeof(DivideByZeroException))]
-		[Test, Author("rootnode", "rootnode@mosa-project.org")]
+		[Test]
 		public void RemI4(int a, int b)
 		{
-			CodeSource = CreateTestCode("RemI4", "int", "int");
-			Assert.IsTrue(Run<bool>("", "Test", "RemI4", (int)(a % b), a, b));
+			compiler.CodeSource = CreateTestCode("RemI4", "int", "int");
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "RemI4", (int)(a % b), a, b));
 		}
 
 		[Row(-23, 21)]
@@ -470,11 +470,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(17, 1)]
 		[Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
 		[Row(int.MinValue, int.MaxValue)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public void RemConstantI4Right(int a, int b)
 		{
-			CodeSource = CreateConstantTestCode("RemConstantI4Right", "int", "int", null, b.ToString());
-			Assert.IsTrue(Run<bool>("", "Test", "RemConstantI4Right", (a % b), a));
+			compiler.CodeSource = CreateConstantTestCode("RemConstantI4Right", "int", "int", null, b.ToString());
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "RemConstantI4Right", (a % b), a));
 		}
 
 		[Row(-23, 21)]
@@ -482,11 +482,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(17, 1)]
 		[Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
 		[Row(int.MinValue, int.MaxValue)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public void RemConstantI4Left(int a, int b)
 		{
-			CodeSource = CreateConstantTestCode("RemConstantI4Left", "int", "int", a.ToString(), null);
-			Assert.IsTrue(Run<bool>("", "Test", "RemConstantI4Left", (a % b), b));
+			compiler.CodeSource = CreateConstantTestCode("RemConstantI4Left", "int", "int", a.ToString(), null);
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "RemConstantI4Left", (a % b), b));
 		}
 		#endregion
 
@@ -522,11 +522,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(uint.MinValue, uint.MaxValue)]
 		[Row(uint.MaxValue, uint.MinValue, ExpectedException = typeof(DivideByZeroException))]
 		[Row(1, 0, ExpectedException = typeof(DivideByZeroException))]
-		[Test, Author("rootnode", "rootnode@mosa-project.org")]
+		[Test]
 		public void RemU4(uint a, uint b)
 		{
-			CodeSource = CreateTestCode("RemU4", "uint", "uint");
-			Assert.IsTrue(Run<bool>("", "Test", "RemU4", (uint)(a % b), a, b));
+			compiler.CodeSource = CreateTestCode("RemU4", "uint", "uint");
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "RemU4", (uint)(a % b), a, b));
 		}
 
 		[Row(1, 2)]
@@ -534,11 +534,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
 		[Row(123, uint.MaxValue)]
 		[Row(uint.MinValue, uint.MaxValue)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public void RemConstantU4Right(uint a, uint b)
 		{
-			CodeSource = CreateConstantTestCode("RemConstantU4Right", "uint", "uint", null, b.ToString());
-			Assert.IsTrue(Run<bool>("", "Test", "RemConstantU4Right", (uint)(a % b), a));
+			compiler.CodeSource = CreateConstantTestCode("RemConstantU4Right", "uint", "uint", null, b.ToString());
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "RemConstantU4Right", (uint)(a % b), a));
 		}
 
 		[Row(1, 2)]
@@ -546,11 +546,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
 		[Row(123, uint.MaxValue)]
 		[Row(uint.MinValue, uint.MaxValue)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public void RemConstantU4Left(uint a, uint b)
 		{
-			CodeSource = CreateConstantTestCode("RemConstantU4Left", "uint", "uint", a.ToString(), null);
-			Assert.IsTrue(Run<bool>("", "Test", "RemConstantU4Left", (uint)(a % b), b));
+			compiler.CodeSource = CreateConstantTestCode("RemConstantU4Left", "uint", "uint", a.ToString(), null);
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "RemConstantU4Left", (uint)(a % b), b));
 		}
 		#endregion
 
@@ -608,33 +608,33 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(long.MinValue, long.MaxValue)]
 		[Row(long.MaxValue, long.MinValue)]
 		[Row(1, 0, ExpectedException = typeof(DivideByZeroException))]
-		[Test, Author("rootnode", "rootnode@mosa-project.org")]
+		[Test]
 		public void RemI8(long a, long b)
 		{
-			CodeSource = CreateTestCodeWithReturn("RemI8", "long", "long");
-			Assert.AreEqual((long)(a % b), (long)Run<long>("", "Test", "RemI8", (long)(a % b), a, b));
+			compiler.CodeSource = CreateTestCodeWithReturn("RemI8", "long", "long");
+			Assert.AreEqual((long)(a % b), (long)compiler.Run<long>(string.Empty, "Test", "RemI8", (long)(a % b), a, b));
 		}
 
 		[Row(-23, 148)]
 		[Row(17, 1)]
 		[Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
 		[Row(long.MinValue, long.MaxValue)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public void RemConstantI8Right(long a, long b)
 		{
-			CodeSource = CreateConstantTestCode("RemConstantI8Right", "long", "long", null, b.ToString());
-			Assert.IsTrue(Run<bool>("", "Test", "RemConstantI8Right", (a % b), a));
+			compiler.CodeSource = CreateConstantTestCode("RemConstantI8Right", "long", "long", null, b.ToString());
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "RemConstantI8Right", (a % b), a));
 		}
 
 		[Row(-23, 148)]
 		[Row(17, 1)]
 		[Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
 		[Row(long.MinValue, long.MaxValue)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public void RemConstantI8Left(long a, long b)
 		{
-			CodeSource = CreateConstantTestCode("RemConstantI8Left", "long", "long", a.ToString(), null);
-			Assert.IsTrue(Run<bool>("", "Test", "RemConstantI8Left", (a % b), b));
+			compiler.CodeSource = CreateConstantTestCode("RemConstantI8Left", "long", "long", a.ToString(), null);
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "RemConstantI8Left", (a % b), b));
 		}
 		#endregion
 
@@ -670,33 +670,33 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(ulong.MinValue, ulong.MaxValue)]
 		[Row(ulong.MaxValue, ulong.MinValue, ExpectedException = typeof(DivideByZeroException))]
 		[Row(1, 0, ExpectedException = typeof(DivideByZeroException))]
-		[Test, Author("rootnode", "rootnode@mosa-project.org")]
+		[Test]
 		public void RemU8(ulong a, ulong b)
 		{
-			CodeSource = CreateTestCode("RemU8", "ulong", "ulong");
-			Assert.IsTrue(Run<bool>("", "Test", "RemU8", (ulong)(a % b), a, b));
+			compiler.CodeSource = CreateTestCode("RemU8", "ulong", "ulong");
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "RemU8", (ulong)(a % b), a, b));
 		}
 
 		[Row(23, 148)]
 		[Row(17, 1)]
 		[Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
 		[Row(ulong.MinValue, ulong.MaxValue)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public void RemConstantU8Right(ulong a, ulong b)
 		{
-			CodeSource = CreateConstantTestCode("RemConstantU8Right", "ulong", "ulong", null, b.ToString());
-			Assert.IsTrue(Run<bool>("", "Test", "RemConstantU8Right", (ulong)(a % b), a));
+			compiler.CodeSource = CreateConstantTestCode("RemConstantU8Right", "ulong", "ulong", null, b.ToString());
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "RemConstantU8Right", (ulong)(a % b), a));
 		}
 
 		[Row(23, 148)]
 		[Row(17, 1)]
 		[Row(0, 0, ExpectedException = typeof(DivideByZeroException))]
 		[Row(ulong.MinValue, ulong.MaxValue)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public void RemConstantU8Left(ulong a, ulong b)
 		{
-			CodeSource = CreateConstantTestCode("RemConstantU8Left", "ulong", "ulong", a.ToString(), null);
-			Assert.IsTrue(Run<bool>("", "Test", "RemConstantU8Left", (ulong)(a % b), b));
+			compiler.CodeSource = CreateConstantTestCode("RemConstantU8Left", "ulong", "ulong", a.ToString(), null);
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "RemConstantU8Left", (ulong)(a % b), b));
 		}
 		#endregion
 	}

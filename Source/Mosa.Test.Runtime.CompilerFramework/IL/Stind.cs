@@ -16,7 +16,7 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 {
 
 	[TestFixture]
-	public unsafe class Stind : CodeDomTestRunner
+	public unsafe class Stind : TestCompilerAdapter
 	{
 		#region DereffedVoidPtrAssign
 
@@ -39,14 +39,14 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(0)]
 		[Row(1)]
 		[Row(sbyte.MaxValue)]
-		[Test, Author("illuminus", "illuminus86@gmail.com")]
+		[Test]
 		public unsafe void DereffedVoidPtrAssign_I1(sbyte a)
 		{
-			CodeSource = CreateDereferencedVoidPointerAssignmentTestCode("sbyte", "I1");
-			UnsafeCode = true;
+			compiler.CodeSource = CreateDereferencedVoidPointerAssignmentTestCode("sbyte", "I1");
+			compiler.UnsafeCode = true;
 
 			void* address = (void*)Marshal.AllocHGlobal(sizeof(sbyte));
-			bool runResult = Run<bool>("", "Test", "DereffedVoidPtrAssign_I1", a, (IntPtr)address);
+			bool runResult = compiler.Run<bool>(string.Empty, "Test", "DereffedVoidPtrAssign_I1", a, (IntPtr)address);
 			bool success = (*(sbyte*)address == a);
 			Marshal.FreeHGlobal((IntPtr)address);
 
@@ -62,14 +62,14 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(0)]
 		[Row(1)]
 		[Row(short.MaxValue)]
-		[Test, Author("illuminus", "illuminus86@gmail.com")]
+		[Test]
 		public unsafe void DereffedVoidPtrAssign_I2(short a)
 		{
-			CodeSource = CreateDereferencedVoidPointerAssignmentTestCode("short", "I2");
-			UnsafeCode = true;
+			compiler.CodeSource = CreateDereferencedVoidPointerAssignmentTestCode("short", "I2");
+			compiler.UnsafeCode = true;
 
 			void* address = (void*)Marshal.AllocHGlobal(sizeof(short));
-			bool runResult = Run<bool>("", "Test", "DereffedVoidPtrAssign_I2", a, (IntPtr)address);
+			bool runResult = compiler.Run<bool>(string.Empty, "Test", "DereffedVoidPtrAssign_I2", a, (IntPtr)address);
 			bool success = (*(short*)address == a);
 			Marshal.FreeHGlobal((IntPtr)address);
 
@@ -85,14 +85,14 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(0)]
 		[Row(1)]
 		[Row(int.MaxValue)]
-		[Test, Author("illuminus", "illuminus86@gmail.com")]
+		[Test]
 		public unsafe void DereffedVoidPtrAssign_I4(int a)
 		{
-			CodeSource = CreateDereferencedVoidPointerAssignmentTestCode("int", "I4");
-			UnsafeCode = true;
+			compiler.CodeSource = CreateDereferencedVoidPointerAssignmentTestCode("int", "I4");
+			compiler.UnsafeCode = true;
 
 			void* address = (void*)Marshal.AllocHGlobal(sizeof(int));
-			bool runResult = Run<bool>("", "Test", "DereffedVoidPtrAssign_I4", a, (IntPtr)address);
+			bool runResult = compiler.Run<bool>(string.Empty, "Test", "DereffedVoidPtrAssign_I4", a, (IntPtr)address);
 			bool success = (*(int*)address == a);
 			Marshal.FreeHGlobal((IntPtr)address);
 
@@ -108,14 +108,14 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(0L)]
 		[Row(1L)]
 		[Row(long.MaxValue)]
-		[Test, Author("illuminus", "illuminus86@gmail.com")]
+		[Test]
 		public unsafe void DereffedVoidPtrAssign_I8(long a)
 		{
-			CodeSource = CreateDereferencedVoidPointerAssignmentTestCode("long", "I8");
-			UnsafeCode = true;
+			compiler.CodeSource = CreateDereferencedVoidPointerAssignmentTestCode("long", "I8");
+			compiler.UnsafeCode = true;
 
 			void* address = (void*)Marshal.AllocHGlobal(sizeof(long));
-			bool runResult = Run<bool>("", "Test", "DereffedVoidPtrAssign_I8", a, (IntPtr)address);
+			bool runResult = compiler.Run<bool>(string.Empty, "Test", "DereffedVoidPtrAssign_I8", a, (IntPtr)address);
 			bool success = (*(long*)address == a);
 			Marshal.FreeHGlobal((IntPtr)address);
 
@@ -130,14 +130,14 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(125)]
 		[Row(127)]
 		[Row(byte.MaxValue)]
-		[Test, Author("illuminus", "illuminus86@gmail.com")]
+		[Test]
 		public unsafe void DereffedVoidPtrAssign_U1(byte a)
 		{
-			CodeSource = CreateDereferencedVoidPointerAssignmentTestCode("byte", "U1");
-			UnsafeCode = true;
+			compiler.CodeSource = CreateDereferencedVoidPointerAssignmentTestCode("byte", "U1");
+			compiler.UnsafeCode = true;
 
 			void* address = (void*)Marshal.AllocHGlobal(sizeof(byte));
-			bool runResult = Run<bool>("", "Test", "DereffedVoidPtrAssign_U1", a, (IntPtr)address);
+			bool runResult = compiler.Run<bool>(string.Empty, "Test", "DereffedVoidPtrAssign_U1", a, (IntPtr)address);
 			bool success = (*(byte*)address == a);
 			Marshal.FreeHGlobal((IntPtr)address);
 
@@ -153,14 +153,14 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row((ushort.MaxValue / 2) + 1)]
 		[Row(1)]
 		[Row(ushort.MaxValue)]
-		[Test, Author("illuminus", "illuminus86@gmail.com")]
+		[Test]
 		public unsafe void DereffedVoidPtrAssign_U2(ushort a)
 		{
-			CodeSource = CreateDereferencedVoidPointerAssignmentTestCode("ushort", "U2");
-			UnsafeCode = true;
+			compiler.CodeSource = CreateDereferencedVoidPointerAssignmentTestCode("ushort", "U2");
+			compiler.UnsafeCode = true;
 
 			void* address = (void*)Marshal.AllocHGlobal(sizeof(ushort));
-			bool runResult = Run<bool>("", "Test", "DereffedVoidPtrAssign_U2", a, (IntPtr)address);
+			bool runResult = compiler.Run<bool>(string.Empty, "Test", "DereffedVoidPtrAssign_U2", a, (IntPtr)address);
 			bool success = (*(ushort*)address == a);
 			Marshal.FreeHGlobal((IntPtr)address);
 
@@ -175,14 +175,14 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(uint.MaxValue / 2)]
 		[Row((uint.MaxValue / 2) + 1)]
 		[Row(uint.MaxValue)]
-		[Test, Author("illuminus", "illuminus86@gmail.com")]
+		[Test]
 		public void DereffedVoidPtrAssign_U4(uint a)
 		{
-			CodeSource = CreateDereferencedVoidPointerAssignmentTestCode("uint", "U4");
-			UnsafeCode = true;
+			compiler.CodeSource = CreateDereferencedVoidPointerAssignmentTestCode("uint", "U4");
+			compiler.UnsafeCode = true;
 
 			void* address = (void*)Marshal.AllocHGlobal(sizeof(uint));
-			bool runResult = Run<bool>("", "Test", "DereffedVoidPtrAssign_U4", a, (IntPtr)address);
+			bool runResult = compiler.Run<bool>(string.Empty, "Test", "DereffedVoidPtrAssign_U4", a, (IntPtr)address);
 			bool success = (*(uint*)address == a);
 			Marshal.FreeHGlobal((IntPtr)address);
 
@@ -196,14 +196,14 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(ulong.MinValue)]
 		[Row((ulong.MaxValue / 2) + 1)]
 		[Row(ulong.MaxValue)]
-		[Test, Author("illuminus", "illuminus86@gmail.com")]
+		[Test]
 		public unsafe void DereffedVoidPtrAssign_U8(ulong a)
 		{
-			CodeSource = CreateDereferencedVoidPointerAssignmentTestCode("ulong", "U8");
-			UnsafeCode = true;
+			compiler.CodeSource = CreateDereferencedVoidPointerAssignmentTestCode("ulong", "U8");
+			compiler.UnsafeCode = true;
 
 			void* address = (void*)Marshal.AllocHGlobal(sizeof(ulong));
-			bool runResult = Run<bool>("", "Test", "DereffedVoidPtrAssign_U8", a, (IntPtr)address);
+			bool runResult = compiler.Run<bool>(string.Empty, "Test", "DereffedVoidPtrAssign_U8", a, (IntPtr)address);
 			bool success = (*(ulong*)address == a);
 			Marshal.FreeHGlobal((IntPtr)address);
 

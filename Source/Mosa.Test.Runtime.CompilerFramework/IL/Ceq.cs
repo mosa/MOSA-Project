@@ -18,7 +18,7 @@ using MbUnit.Framework;
 namespace Mosa.Test.Runtime.CompilerFramework.IL
 {
 	[TestFixture]
-	public class Ceq : CodeDomTestRunner
+	public class Ceq : TestCompilerAdapter
 	{
 		private static string testCode = @"
 			static class Test {
@@ -63,11 +63,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(true, false, false)]
 		[Row(false, true, false)]
 		[Row(false, false, true)]
-		[Test, Author(@"Michael Ruck"), Importance(Importance.Critical)]
+		[Test, Importance(Importance.Critical)]
 		public void CeqB(bool result, bool a, bool b)
 		{
-			CodeSource = testCode.Replace("#t1", "bool").Replace("#t2", "bool");
-			bool res = Run<bool>(@"", @"Test", @"Ceq", a, b);
+			compiler.CodeSource = testCode.Replace("#t1", "bool").Replace("#t2", "bool");
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"Ceq", a, b);
 			Assert.IsTrue(result == res);
 		}
 
@@ -75,11 +75,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(true, false, false)]
 		[Row(false, true, false)]
 		[Row(false, false, true)]
-		[Test, Author("boddlnagg")]
+		[Test]
 		public void CeqConstantBRight(bool result, bool a, bool b)
 		{
-			CodeSource = CreateConstantTestCode("bool", null, b.ToString().ToLower());
-			bool res = Run<bool>(@"", @"Test", @"CeqConstant", a);
+			compiler.CodeSource = CreateConstantTestCode("bool", null, b.ToString().ToLower());
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"CeqConstant", a);
 			Assert.IsTrue(result == res);
 		}
 
@@ -87,11 +87,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(true, false, false)]
 		[Row(false, true, false)]
 		[Row(false, false, true)]
-		[Test, Author("boddlnagg")]
+		[Test]
 		public void CeqConstantBLeft(bool result, bool a, bool b)
 		{
-			CodeSource = CreateConstantTestCode("bool", a.ToString().ToLower(), null);
-			bool res = Run<bool>(@"", @"Test", @"CeqConstant", b);
+			compiler.CodeSource = CreateConstantTestCode("bool", a.ToString().ToLower(), null);
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"CeqConstant", b);
 			Assert.IsTrue(result == res);
 		}
 		#endregion
@@ -102,33 +102,33 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(false, 'a', 'Z')]
 		[Row(true, 'a', 'a')]
 		[Row(false, 0, 128)]
-		[Test, Author("boddlnagg")]
+		[Test]
 		public void CeqC(bool result, char a, char b)
 		{
-			CodeSource = testCode.Replace("#t1", "char").Replace("#t2", "char");
-			bool res = Run<bool>(@"", @"Test", @"Ceq", a, b);
+			compiler.CodeSource = testCode.Replace("#t1", "char").Replace("#t2", "char");
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"Ceq", a, b);
 			Assert.IsTrue(result == res);
 		}
 
 		[Row(false, 0, 'a')]
 		[Row(false, '-', '.')]
 		[Row(true, 'a', 'a')]
-		[Test, Author("boddlnagg")]
+		[Test]
 		public void CeqConstantCRight(bool result, char a, char b)
 		{
-			CodeSource = CreateConstantTestCode("char", null, "'" + b.ToString() + "'");
-			bool res = Run<bool>(@"", @"Test", @"CeqConstant", a);
+			compiler.CodeSource = CreateConstantTestCode("char", null, "'" + b.ToString() + "'");
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"CeqConstant", a);
 			Assert.IsTrue(result == res);
 		}
 
 		[Row(false, 'a', 0)]
 		[Row(false, '-', '.')]
 		[Row(true, 'a', 'a')]
-		[Test, Author("boddlnagg")]
+		[Test]
 		public void CeqConstantCLeft(bool result, char a, char b)
 		{
-			CodeSource = CreateConstantTestCode("char", "'" + a.ToString() + "'", null);
-			bool res = Run<bool>(@"", @"Test", @"CeqConstant", b);
+			compiler.CodeSource = CreateConstantTestCode("char", "'" + a.ToString() + "'", null);
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"CeqConstant", b);
 			Assert.IsTrue(result == res);
 		}
 		#endregion
@@ -145,11 +145,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(false, SByte.MinValue, 0)]
 		[Row(false, SByte.MaxValue, 0)]
 		[Row(false, 1, 0)]
-		[Test, Author(@"Michael Ruck"), Importance(Importance.Critical)]
+		[Test, Importance(Importance.Critical)]
 		public void CeqI1(bool result, sbyte a, sbyte b)
 		{
-			CodeSource = testCode.Replace("#t1", "sbyte").Replace("#t2", "sbyte");
-			bool res = Run<bool>(@"", @"Test", @"Ceq", a, b);
+			compiler.CodeSource = testCode.Replace("#t1", "sbyte").Replace("#t2", "sbyte");
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"Ceq", a, b);
 			Assert.IsTrue(result == res);
 		}
 
@@ -157,11 +157,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(false, -17, 42)]
 		[Row(true, sbyte.MinValue, sbyte.MinValue)]
 		[Row(false, sbyte.MinValue, sbyte.MaxValue)]
-		[Test, Author("boddlnagg")]
+		[Test]
 		public void CeqConstantI1Right(bool result, sbyte a, sbyte b)
 		{
-			CodeSource = CreateConstantTestCode("sbyte", null, b.ToString());
-			bool res = Run<bool>(@"", @"Test", @"CeqConstant", a);
+			compiler.CodeSource = CreateConstantTestCode("sbyte", null, b.ToString());
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"CeqConstant", a);
 			Assert.IsTrue(result == res);
 		}
 
@@ -169,11 +169,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(false, -17, 42)]
 		[Row(true, sbyte.MinValue, sbyte.MinValue)]
 		[Row(false, sbyte.MinValue, sbyte.MaxValue)]
-		[Test, Author("boddlnagg")]
+		[Test]
 		public void CeqConstantI1Left(bool result, sbyte a, sbyte b)
 		{
-			CodeSource = CreateConstantTestCode("sbyte", a.ToString(), null);
-			bool res = Run<bool>(@"", @"Test", @"CeqConstant", b);
+			compiler.CodeSource = CreateConstantTestCode("sbyte", a.ToString(), null);
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"CeqConstant", b);
 			Assert.IsTrue(result == res);
 		}
 		#endregion
@@ -190,11 +190,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(false, Int16.MinValue, 0)]
 		[Row(false, Int16.MaxValue, 0)]
 		[Row(false, 1, 0)]
-		[Test, Author(@"Michael Ruck"), Importance(Importance.Critical)]
+		[Test, Importance(Importance.Critical)]
 		public void CeqI2(bool result, short a, short b)
 		{
-			CodeSource = testCode.Replace("#t1", "short").Replace("#t2", "short");
-			bool res = Run<bool>(@"", @"Test", @"Ceq", a, b);
+			compiler.CodeSource = testCode.Replace("#t1", "short").Replace("#t2", "short");
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"Ceq", a, b);
 			Assert.IsTrue(result == res);
 		}
 
@@ -202,11 +202,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(false, -17, 42)]
 		[Row(true, short.MinValue, short.MinValue)]
 		[Row(false, short.MinValue, short.MaxValue)]
-		[Test, Author("boddlnagg")]
+		[Test]
 		public void CeqConstantI2Right(bool result, short a, short b)
 		{
-			CodeSource = CreateConstantTestCode("short", null, b.ToString());
-			bool res = Run<bool>(@"", @"Test", @"CeqConstant", a);
+			compiler.CodeSource = CreateConstantTestCode("short", null, b.ToString());
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"CeqConstant", a);
 			Assert.IsTrue(result == res);
 		}
 
@@ -214,11 +214,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(false, -17, 42)]
 		[Row(true, short.MinValue, short.MinValue)]
 		[Row(false, short.MinValue, short.MaxValue)]
-		[Test, Author("boddlnagg")]
+		[Test]
 		public void CeqConstantI2Left(bool result, short a, short b)
 		{
-			CodeSource = CreateConstantTestCode("short", a.ToString(), null);
-			bool res = Run<bool>(@"", @"Test", @"CeqConstant", b);
+			compiler.CodeSource = CreateConstantTestCode("short", a.ToString(), null);
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"CeqConstant", b);
 			Assert.IsTrue(result == res);
 		}
 		#endregion
@@ -235,11 +235,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(false, Int32.MinValue, 0)]
 		[Row(false, Int32.MaxValue, 0)]
 		[Row(false, 1, 0)]
-		[Test, Author(@"Michael Ruck"), Importance(Importance.Critical)]
+		[Test, Importance(Importance.Critical)]
 		public void CeqI4(bool result, int a, int b)
 		{
-			CodeSource = testCode.Replace("#t1", "int").Replace("#t2", "int");
-			bool res = Run<bool>(@"", @"Test", @"Ceq", a, b);
+			compiler.CodeSource = testCode.Replace("#t1", "int").Replace("#t2", "int");
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"Ceq", a, b);
 			Assert.IsTrue(result == res);
 		}
 
@@ -247,11 +247,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(false, -17, 42)]
 		[Row(true, int.MinValue, int.MinValue)]
 		[Row(false, int.MinValue, int.MaxValue)]
-		[Test, Author("boddlnagg")]
+		[Test]
 		public void CeqConstantI4Right(bool result, int a, int b)
 		{
-			CodeSource = CreateConstantTestCode("int", null, b.ToString());
-			bool res = Run<bool>(@"", @"Test", @"CeqConstant", a);
+			compiler.CodeSource = CreateConstantTestCode("int", null, b.ToString());
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"CeqConstant", a);
 			Assert.IsTrue(result == res);
 		}
 
@@ -259,11 +259,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(false, -17, 42)]
 		[Row(true, int.MinValue, int.MinValue)]
 		[Row(false, int.MinValue, int.MaxValue)]
-		[Test, Author("boddlnagg")]
+		[Test]
 		public void CeqConstantI4Left(bool result, int a, int b)
 		{
-			CodeSource = CreateConstantTestCode("int", a.ToString(), null);
-			bool res = Run<bool>(@"", @"Test", @"CeqConstant", b);
+			compiler.CodeSource = CreateConstantTestCode("int", a.ToString(), null);
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"CeqConstant", b);
 			Assert.IsTrue(result == res);
 		}
 		#endregion
@@ -280,11 +280,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(false, Int64.MinValue, 0L)]
 		[Row(false, Int64.MaxValue, 0L)]
 		[Row(false, 1L, 0L)]
-		[Test, Author(@"Michael Ruck"), Importance(Importance.Critical)]
+		[Test, Importance(Importance.Critical)]
 		public void CeqI8(bool result, long a, long b)
 		{
-			CodeSource = testCode.Replace("#t1", "long").Replace("#t2", "long");
-			bool res = Run<bool>(@"", @"Test", @"Ceq", a, b);
+			compiler.CodeSource = testCode.Replace("#t1", "long").Replace("#t2", "long");
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"Ceq", a, b);
 			Assert.IsTrue(result == res);
 		}
 
@@ -292,11 +292,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(false, -17, 42)]
 		[Row(true, long.MinValue, long.MinValue)]
 		[Row(false, long.MinValue, long.MaxValue)]
-		[Test, Author("boddlnagg")]
+		[Test]
 		public void CeqConstantI8Right(bool result, long a, long b)
 		{
-			CodeSource = CreateConstantTestCode("long", null, b.ToString());
-			bool res = Run<bool>(@"", @"Test", @"CeqConstant", a);
+			compiler.CodeSource = CreateConstantTestCode("long", null, b.ToString());
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"CeqConstant", a);
 			Assert.IsTrue(result == res);
 		}
 
@@ -304,11 +304,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(false, -17, 42)]
 		[Row(true, long.MinValue, long.MinValue)]
 		[Row(false, long.MinValue, long.MaxValue)]
-		[Test, Author("boddlnagg")]
+		[Test]
 		public void CeqConstantI8Left(bool result, long a, long b)
 		{
-			CodeSource = CreateConstantTestCode("long", a.ToString(), null);
-			bool res = Run<bool>(@"", @"Test", @"CeqConstant", b);
+			compiler.CodeSource = CreateConstantTestCode("long", a.ToString(), null);
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"CeqConstant", b);
 			Assert.IsTrue(result == res);
 		}
 		#endregion
@@ -325,11 +325,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(false, Byte.MinValue, 1)]
 		[Row(false, Byte.MaxValue, 0)]
 		[Row(false, 1, 0)]
-		[Test, Author(@"Michael Ruck"), Importance(Importance.Critical)]
+		[Test, Importance(Importance.Critical)]
 		public void CeqU1(bool result, byte a, byte b)
 		{
-			CodeSource = testCode.Replace("#t1", "byte").Replace("#t2", "byte");
-			bool res = Run<bool>(@"", @"Test", @"Ceq", a, b);
+			compiler.CodeSource = testCode.Replace("#t1", "byte").Replace("#t2", "byte");
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"Ceq", a, b);
 			Assert.IsTrue(result == res);
 		}
 
@@ -337,11 +337,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(false, 17, 142)]
 		[Row(true, byte.MaxValue, byte.MaxValue)]
 		[Row(false, byte.MinValue, byte.MaxValue)]
-		[Test, Author("boddlnagg")]
+		[Test]
 		public void CeqConstantU1Right(bool result, byte a, byte b)
 		{
-			CodeSource = CreateConstantTestCode("byte", null, b.ToString());
-			bool res = Run<bool>(@"", @"Test", @"CeqConstant", a);
+			compiler.CodeSource = CreateConstantTestCode("byte", null, b.ToString());
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"CeqConstant", a);
 			Assert.IsTrue(result == res);
 		}
 
@@ -349,11 +349,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(false, 17, 142)]
 		[Row(true, byte.MaxValue, byte.MaxValue)]
 		[Row(false, byte.MinValue, byte.MaxValue)]
-		[Test, Author("boddlnagg")]
+		[Test]
 		public void CeqConstantU1Left(bool result, byte a, byte b)
 		{
-			CodeSource = CreateConstantTestCode("byte", a.ToString(), null);
-			bool res = Run<bool>(@"", @"Test", @"CeqConstant", b);
+			compiler.CodeSource = CreateConstantTestCode("byte", a.ToString(), null);
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"CeqConstant", b);
 			Assert.IsTrue(result == res);
 		}
 		#endregion
@@ -370,11 +370,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(false, UInt16.MinValue, 2)]
 		[Row(false, UInt16.MaxValue, 0)]
 		[Row(false, 1, 0)]
-		[Test, Author(@"Michael Ruck"), Importance(Importance.Critical)]
+		[Test, Importance(Importance.Critical)]
 		public void CeqU2(bool result, ushort a, ushort b)
 		{
-			CodeSource = testCode.Replace("#t1", "ushort").Replace("#t2", "ushort");
-			bool res = Run<bool>(@"", @"Test", @"Ceq", a, b);
+			compiler.CodeSource = testCode.Replace("#t1", "ushort").Replace("#t2", "ushort");
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"Ceq", a, b);
 			Assert.IsTrue(result == res);
 		}
 
@@ -382,11 +382,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(false, 17, 142)]
 		[Row(true, ushort.MaxValue, ushort.MaxValue)]
 		[Row(false, ushort.MinValue, ushort.MaxValue)]
-		[Test, Author("boddlnagg")]
+		[Test]
 		public void CeqConstantU2Right(bool result, ushort a, ushort b)
 		{
-			CodeSource = CreateConstantTestCode("ushort", null, b.ToString());
-			bool res = Run<bool>(@"", @"Test", @"CeqConstant", a);
+			compiler.CodeSource = CreateConstantTestCode("ushort", null, b.ToString());
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"CeqConstant", a);
 			Assert.IsTrue(result == res);
 		}
 
@@ -395,11 +395,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(false, 17, 142)]
 		[Row(true, ushort.MaxValue, ushort.MaxValue)]
 		[Row(false, ushort.MinValue, ushort.MaxValue)]
-		[Test, Author("boddlnagg")]
+		[Test]
 		public void CeqConstantU2Left(bool result, ushort a, ushort b)
 		{
-			CodeSource = CreateConstantTestCode("ushort", a.ToString(), null);
-			bool res = Run<bool>(@"", @"Test", @"CeqConstant", b);
+			compiler.CodeSource = CreateConstantTestCode("ushort", a.ToString(), null);
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"CeqConstant", b);
 			Assert.IsTrue(result == res);
 		}
 		#endregion
@@ -416,11 +416,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(false, UInt32.MinValue, 1)]
 		[Row(false, UInt32.MaxValue, 0)]
 		[Row(false, 1, 0)]
-		[Test, Author(@"Michael Ruck"), Importance(Importance.Critical)]
+		[Test, Importance(Importance.Critical)]
 		public void CeqU4(bool result, uint a, uint b)
 		{
-			CodeSource = testCode.Replace("#t1", "uint").Replace("#t2", "uint");
-			bool res = Run<bool>(@"", @"Test", @"Ceq", a, b);
+			compiler.CodeSource = testCode.Replace("#t1", "uint").Replace("#t2", "uint");
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"Ceq", a, b);
 			Assert.IsTrue(result == res);
 		}
 
@@ -428,11 +428,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(false, 17, 142)]
 		[Row(true, uint.MaxValue, uint.MaxValue)]
 		[Row(false, uint.MinValue, uint.MaxValue)]
-		[Test, Author("boddlnagg")]
+		[Test]
 		public void CeqConstantU4Right(bool result, uint a, uint b)
 		{
-			CodeSource = CreateConstantTestCode("uint", null, b.ToString());
-			bool res = Run<bool>(@"", @"Test", @"CeqConstant", a);
+			compiler.CodeSource = CreateConstantTestCode("uint", null, b.ToString());
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"CeqConstant", a);
 			Assert.IsTrue(result == res);
 		}
 
@@ -440,11 +440,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(false, 17, 142)]
 		[Row(true, uint.MaxValue, uint.MaxValue)]
 		[Row(false, uint.MinValue, uint.MaxValue)]
-		[Test, Author("boddlnagg")]
+		[Test]
 		public void CeqConstantU4Left(bool result, uint a, uint b)
 		{
-			CodeSource = CreateConstantTestCode("uint", a.ToString(), null);
-			bool res = Run<bool>(@"", @"Test", @"CeqConstant", b);
+			compiler.CodeSource = CreateConstantTestCode("uint", a.ToString(), null);
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"CeqConstant", b);
 			Assert.IsTrue(result == res);
 		}
 		#endregion
@@ -461,11 +461,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(false, UInt64.MinValue, 1)]
 		[Row(false, UInt64.MaxValue, 0)]
 		[Row(false, 1, 0)]
-		[Test, Author(@"Michael Ruck"), Importance(Importance.Critical)]
+		[Test, Importance(Importance.Critical)]
 		public void CeqU8(bool result, ulong a, ulong b)
 		{
-			CodeSource = testCode.Replace("#t1", "ulong").Replace("#t2", "ulong");
-			bool res = Run<bool>(@"", @"Test", @"Ceq", a, b);
+			compiler.CodeSource = testCode.Replace("#t1", "ulong").Replace("#t2", "ulong");
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"Ceq", a, b);
 			Assert.IsTrue(result == res);
 		}
 
@@ -473,11 +473,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(false, 17, 142)]
 		[Row(true, ulong.MaxValue, ulong.MaxValue)]
 		[Row(false, ulong.MinValue, ulong.MaxValue)]
-		[Test, Author("boddlnagg")]
+		[Test]
 		public void CeqConstantU8Right(bool result, ulong a, ulong b)
 		{
-			CodeSource = CreateConstantTestCode("ulong", null, b.ToString());
-			bool res = Run<bool>(@"", @"Test", @"CeqConstant", a);
+			compiler.CodeSource = CreateConstantTestCode("ulong", null, b.ToString());
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"CeqConstant", a);
 			Assert.IsTrue(result == res);
 		}
 
@@ -485,11 +485,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(false, 17, 142)]
 		[Row(true, ulong.MaxValue, ulong.MaxValue)]
 		[Row(false, ulong.MinValue, ulong.MaxValue)]
-		[Test, Author("boddlnagg")]
+		[Test]
 		public void CeqConstantU8Left(bool result, ulong a, ulong b)
 		{
-			CodeSource = CreateConstantTestCode("ulong", a.ToString(), null);
-			bool res = Run<bool>(@"", @"Test", @"CeqConstant", b);
+			compiler.CodeSource = CreateConstantTestCode("ulong", a.ToString(), null);
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"CeqConstant", b);
 			Assert.IsTrue(result == res);
 		}
 		#endregion
@@ -506,11 +506,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(false, Single.MinValue, 0.0f)]
 		[Row(false, Single.MaxValue, 0.0f)]
 		[Row(false, 1.0f, 0.0f)]
-		[Test, Author(@"Michael Ruck"), Importance(Importance.Critical)]
+		[Test, Importance(Importance.Critical)]
 		public void CeqR4(bool result, float a, float b)
 		{
-			CodeSource = testCode.Replace("#t1", "float").Replace("#t2", "float");
-			bool res = Run<bool>(@"", @"Test", @"Ceq", a, b);
+			compiler.CodeSource = testCode.Replace("#t1", "float").Replace("#t2", "float");
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"Ceq", a, b);
 			Assert.IsTrue(result == res);
 		}
 
@@ -520,11 +520,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(false, 11.91262f, 11.91263f)]
 		[Row(false, -17f, 42f)]
 		[Row(false, Single.MinValue, Single.MaxValue)]
-		[Test, Author("boddlnagg")]
+		[Test]
 		public void CeqConstantR4Right(bool result, float a, float b)
 		{
-			CodeSource = CreateConstantTestCode("float", null, b.ToString(System.Globalization.CultureInfo.InvariantCulture) + "f");
-			bool res = Run<bool>(@"", @"Test", @"CeqConstant", a);
+			compiler.CodeSource = CreateConstantTestCode("float", null, b.ToString(System.Globalization.CultureInfo.InvariantCulture) + "f");
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"CeqConstant", a);
 			Assert.IsTrue(result == res);
 		}
 
@@ -534,11 +534,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(false, 11.91262f, 11.91263f)]
 		[Row(false, -17f, 42f)]
 		[Row(false, Single.MinValue, Single.MaxValue)]
-		[Test, Author("boddlnagg")]
+		[Test]
 		public void CeqConstantR4Left(bool result, float a, float b)
 		{
-			CodeSource = CreateConstantTestCode("float", a.ToString(System.Globalization.CultureInfo.InvariantCulture) + "f", null);
-			bool res = Run<bool>(@"", @"Test", @"CeqConstant", b);
+			compiler.CodeSource = CreateConstantTestCode("float", a.ToString(System.Globalization.CultureInfo.InvariantCulture) + "f", null);
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"CeqConstant", b);
 			Assert.IsTrue(result == res);
 		}
 		#endregion
@@ -555,11 +555,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(false, Double.MinValue, 0.0)]
 		[Row(false, Double.MaxValue, 0.0)]
 		[Row(false, 1.0, 0.0)]
-		[Test, Author(@"Michael Ruck"), Importance(Importance.Critical)]
+		[Test, Importance(Importance.Critical)]
 		public void CeqR8(bool result, double a, double b)
 		{
-			CodeSource = testCode.Replace("#t1", "double").Replace("#t2", "double");
-			bool res = Run<bool>(@"", @"Test", @"Ceq", a, b);
+			compiler.CodeSource = testCode.Replace("#t1", "double").Replace("#t2", "double");
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"Ceq", a, b);
 			Assert.IsTrue(result == res);
 		}
 
@@ -567,11 +567,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(false, -17.0, 42.5)]
 		[Row(true, 1.79769313486231E+308, 1.79769313486231E+308)]
 		[Row(false, -1.79769313486231E+308, 1.79769313486231E+308)]
-		[Test, Author("boddlnagg")]
+		[Test]
 		public void CeqConstantR8Right(bool result, double a, double b)
 		{
-			CodeSource = CreateConstantTestCode("double", null, b.ToString(System.Globalization.CultureInfo.InvariantCulture));
-			bool res = Run<bool>(@"", @"Test", @"CeqConstant", a);
+			compiler.CodeSource = CreateConstantTestCode("double", null, b.ToString(System.Globalization.CultureInfo.InvariantCulture));
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"CeqConstant", a);
 			Assert.IsTrue(result == res);
 		}
 
@@ -579,11 +579,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(false, -17.0, 42.5)]
 		[Row(true, 1.79769313486231E+308, 1.79769313486231E+308)]
 		[Row(false, -1.79769313486231E+308, 1.79769313486231E+308)]
-		[Test, Author("boddlnagg")]
+		[Test]
 		public void CeqConstantR8Left(bool result, double a, double b)
 		{
-			CodeSource = CreateConstantTestCode("double", a.ToString(System.Globalization.CultureInfo.InvariantCulture), null);
-			bool res = Run<bool>(@"", @"Test", @"CeqConstant", b);
+			compiler.CodeSource = CreateConstantTestCode("double", a.ToString(System.Globalization.CultureInfo.InvariantCulture), null);
+			bool res = compiler.Run<bool>(string.Empty, @"Test", @"CeqConstant", b);
 			Assert.IsTrue(result == res);
 		}
 		#endregion

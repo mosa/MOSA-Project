@@ -16,7 +16,7 @@ namespace Mosa.Test.Runtime.CompilerFramework.CIL
 	[Importance(Importance.Critical)]
 	[Category(@"Object support")]
 	[Description(@"Tests new operator, type checking and virtual method calls.")]
-	public class ObjectFixture : CodeDomTestRunner
+	public class ObjectFixture : TestCompilerAdapter
 	{
 		 static readonly string TestCode = @"
 			public class Base
@@ -80,32 +80,32 @@ namespace Mosa.Test.Runtime.CompilerFramework.CIL
 		[Test]
 		public void TestNewobjWithoutArgs()
 		{
-			CodeSource = TestCode;
-			bool result = Run<bool>(@"", @"Derived", @"NewobjTest");
+			compiler.CodeSource = TestCode;
+			bool result = compiler.Run<bool>(string.Empty, @"Derived", @"NewobjTest");
 			Assert.IsTrue(result);
 		}
 
 		[Test]
 		public void TestNewobjWithOneArg()
 		{
-			CodeSource = TestCode;
-			bool result = Run<bool>(@"", @"Derived", @"NewobjTestWithOneArg");
+			compiler.CodeSource = TestCode;
+			bool result = compiler.Run<bool>(string.Empty, @"Derived", @"NewobjTestWithOneArg");
 			Assert.IsTrue(result);
 		}
 
 		[Test]
 		public void TestNewobjWithTwoArgs()
 		{
-			CodeSource = TestCode;
-			bool result = Run<bool>(@"", @"Derived", @"NewobjTestWithTwoArgs");
+			compiler.CodeSource = TestCode;
+			bool result = compiler.Run<bool>(string.Empty, @"Derived", @"NewobjTestWithTwoArgs");
 			Assert.IsTrue(result);
 		}
 
 		[Test]
 		public void TestNewobjWithThreeArgs()
 		{
-			CodeSource = TestCode;
-			bool result = Run<bool>(@"", @"Derived", @"NewobjTestWithThreeArgs");
+			compiler.CodeSource = TestCode;
+			bool result = compiler.Run<bool>(string.Empty, @"Derived", @"NewobjTestWithThreeArgs");
 			Assert.IsTrue(result);
 		}
 

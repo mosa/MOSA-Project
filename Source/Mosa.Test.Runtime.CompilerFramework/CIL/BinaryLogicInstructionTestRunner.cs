@@ -14,7 +14,7 @@ using MbUnit.Framework;
 
 namespace Mosa.Test.Runtime.CompilerFramework.CIL
 {
-	public class BinaryLogicInstructionTestRunner<R, T, S> : TestFixtureBase
+	public sealed class BinaryLogicInstructionTestRunner<R, T, S> : TestCompilerAdapter
 	{
 		private const string TestClassName = @"BinaryLogicTestClass";
 
@@ -59,7 +59,7 @@ namespace Mosa.Test.Runtime.CompilerFramework.CIL
 				.Replace(@"#secondtype", SecondType)
 				.Replace(@"#shifttypename", ShiftType);
 
-			CodeSource = codeBuilder.ToString();
+			compiler.CodeSource = codeBuilder.ToString();
 		}
 
 		public string ExpectedType { get; set; }
@@ -78,58 +78,55 @@ namespace Mosa.Test.Runtime.CompilerFramework.CIL
 		public void And(R expectedValue, T first, T second)
 		{
 			this.EnsureCodeSourceIsSet();
-			bool result = this.Run<bool>(TestClassName, @"AndTest", expectedValue, first, second);
+			bool result = compiler.Run<bool>(string.Empty,TestClassName, @"AndTest", expectedValue, first, second);
 			Assert.IsTrue(result);
 		}
 
 		public void Or(R expectedValue, T first, T second)
 		{
 			this.EnsureCodeSourceIsSet();
-			bool result = this.Run<bool>(TestClassName, @"OrTest", expectedValue, first, second);
+			bool result = compiler.Run<bool>(string.Empty,TestClassName, @"OrTest", expectedValue, first, second);
 			Assert.IsTrue(result);
 		}
 
 		public void Xor(R expectedValue, T first, T second)
 		{
 			this.EnsureCodeSourceIsSet();
-			bool result = this.Run<bool>(TestClassName, @"XorTest", expectedValue, first, second);
+			bool result = compiler.Run<bool>(string.Empty,TestClassName, @"XorTest", expectedValue, first, second);
 			Assert.IsTrue(result);
 		}
 
 		public void Not(R expectedValue, T first)
 		{
 			this.EnsureCodeSourceIsSet();
-			bool result = this.Run<bool>(TestClassName, @"NotTest", expectedValue, first);
+			bool result = compiler.Run<bool>(string.Empty,TestClassName, @"NotTest", expectedValue, first);
 			Assert.IsTrue(result);
 		}
 
 		public void Comp(R expectedValue, T first)
 		{
 			this.EnsureCodeSourceIsSet();
-			bool result = this.Run<bool>(TestClassName, @"CompTest", expectedValue, first);
+			bool result = compiler.Run<bool>(string.Empty,TestClassName, @"CompTest", expectedValue, first);
 			Assert.IsTrue(result);
 		}
 
 		public void Shl(R expectedValue, T first, S second)
 		{
 			this.EnsureCodeSourceIsSet();
-			bool result = this.Run<bool>(TestClassName, @"ShiftLeftTest", expectedValue, first, second);
+			bool result = compiler.Run<bool>(string.Empty,TestClassName, @"ShiftLeftTest", expectedValue, first, second);
 			Assert.IsTrue(result);
 		}
 
 		public void Shr(R expectedValue, T first, S second)
 		{
 			this.EnsureCodeSourceIsSet();
-			bool result = this.Run<bool>(TestClassName, @"ShiftRightTest", expectedValue, first, second);
+			bool result = compiler.Run<bool>(string.Empty,TestClassName, @"ShiftRightTest", expectedValue, first, second);
 			Assert.IsTrue(result);
 		}
 
 		private void EnsureCodeSourceIsSet()
 		{
-			if (CodeSource == null)
-			{
-				this.SetTestCode();
-			}
+			this.SetTestCode();
 		}
 
 		private const string TestCodeHeader = @"

@@ -51,7 +51,7 @@ namespace Mosa.Test.Runtime.CompilerFramework.CIL
 		[Row(true, false)]
 		[Row(false, true)]
 		[Row(false, false)]
-		[Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
+		[Test]
 		public void And(bool first, bool second)
 		{
 			this.logicTests.And((first & second), first, second);
@@ -65,7 +65,7 @@ namespace Mosa.Test.Runtime.CompilerFramework.CIL
 		[Row(true, false)]
 		[Row(false, true)]
 		[Row(false, false)]
-		[Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
+		[Test]
 		public void Or(bool first, bool second)
 		{
 			this.logicTests.Or((first | second), first, second);
@@ -79,7 +79,7 @@ namespace Mosa.Test.Runtime.CompilerFramework.CIL
 		[Row(true, false)]
 		[Row(false, true)]
 		[Row(false, false)]
-		[Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
+		[Test]
 		public void Xor(bool first, bool second)
 		{
 			this.logicTests.Xor((first ^ second), first, second);
@@ -91,7 +91,7 @@ namespace Mosa.Test.Runtime.CompilerFramework.CIL
 
 		[Row(true)]
 		[Row(false)]
-		[Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
+		[Test]
 		public void Not(bool value)
 		{
 			this.logicTests.Not(!value, value);
@@ -105,7 +105,7 @@ namespace Mosa.Test.Runtime.CompilerFramework.CIL
 		[Row(false, true, false)]
 		[Row(false, false, true)]
 		[Row(true, false, false)]
-		[Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
+		[Test]
 		public void Ceq(bool expectedValue, bool first, bool second)
 		{
 			this.comparisonTests.Ceq((first == second), first, second);
@@ -115,7 +115,7 @@ namespace Mosa.Test.Runtime.CompilerFramework.CIL
 
 		#region Newarr
 
-		[Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
+		[Test]
 		public void Newarr()
 		{
 			this.arrayTests.Newarr();
@@ -141,7 +141,7 @@ namespace Mosa.Test.Runtime.CompilerFramework.CIL
 		[Row(7, false)]
 		[Row(9, true)]
 		[Row(6, false)]
-		[Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
+		[Test]
 		public void Stelem(int index, bool value)
 		{
 			this.arrayTests.Stelem(index, value);
@@ -157,7 +157,7 @@ namespace Mosa.Test.Runtime.CompilerFramework.CIL
 		[Row(7, false)]
 		[Row(9, true)]
 		[Row(6, false)]
-		[Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
+		[Test]
 		public void Ldelem(int index, bool value)
 		{
 			this.arrayTests.Ldelem(index, value);
@@ -173,7 +173,7 @@ namespace Mosa.Test.Runtime.CompilerFramework.CIL
 		[Row(7, false)]
 		[Row(9, true)]
 		[Row(6, false)]
-		[Test, Author(@"Michael Fröhlich, sharpos@michaelruck.de")]
+		[Test]
 		public void Ldelema(int index, bool value)
 		{
 			this.arrayTests.Ldelema(index, value);

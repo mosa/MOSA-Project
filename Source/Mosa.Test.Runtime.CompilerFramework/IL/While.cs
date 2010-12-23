@@ -16,7 +16,7 @@ using MbUnit.Framework;
 namespace Mosa.Test.Runtime.CompilerFramework.IL
 {
 	[TestFixture]
-	public class While : CodeDomTestRunner
+	public class While : TestCompilerAdapter
 	{
 		#region WhileIncI4 test
 		// Tests basic increment loop
@@ -24,10 +24,10 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(0, 20)]
 		[Row(-20, 0)]
 		[Row(-100, 100)]
-		[Test, Author("mincus", "phillmwebster@gmail.com")]
+		[Test]
 		public void WhileIncI4(int start, int limit)
 		{
-			CodeSource = @"static class Test {
+			compiler.CodeSource = @"static class Test {
 				static int WhileIncI4(int start, int limit)
 				{
 					int count = 0;
@@ -41,7 +41,7 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 					return count;
 				}
 			}" + Code.AllTestCode;
-			Assert.AreEqual<int>(limit - start, Run<int>("", "Test", "WhileIncI4", start, limit));
+			Assert.AreEqual<int>(limit - start, compiler.Run<int>(string.Empty, "Test", "WhileIncI4", start, limit));
 		}
 
 		#endregion
@@ -52,10 +52,10 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(20, 0)]
 		[Row(0, -20)]
 		[Row(100, -100)]
-		[Test, Author("mincus", "phillmwebster@gmail.com")]
+		[Test]
 		public void WhileDecI4(int start, int limit)
 		{
-			CodeSource = @"static class Test {
+			compiler.CodeSource = @"static class Test {
 				static int WhileDecI4(int start, int limit)
 				{
 					int count = 0;
@@ -69,7 +69,7 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 					return count;
 				}
 			}" + Code.AllTestCode;
-			Assert.AreEqual<int>(start - limit, Run<int>("", "Test", "WhileDecI4", start, limit));
+			Assert.AreEqual<int>(start - limit, compiler.Run<int>(string.Empty, "Test", "WhileDecI4", start, limit));
 		}
 
 		#endregion
@@ -79,10 +79,10 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		// Ensures "unreachable code" is never reached.
 
 		[Row()]
-		[Test, Author("mincus", "phillmwebster@gmail.com")]
+		[Test]
 		public void WhileFalse()
 		{
-			CodeSource = @"static class Test {
+			compiler.CodeSource = @"static class Test {
 				static bool WhileFalse()
 				{
 					bool called = false;
@@ -96,7 +96,7 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 				}
 			}" + Code.AllTestCode;
 
-			Assert.IsFalse(Run<bool>("", "Test", "WhileFalse"));
+			Assert.IsFalse(compiler.Run<bool>(string.Empty, "Test", "WhileFalse"));
 		}
 
 		#endregion
@@ -109,10 +109,10 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		// Tests "unreachable code" after a continue or break is never reached.
 
 		[Row()]
-		[Test, Author("mincus", "phillmwebster@gmail.com")]
+		[Test]
 		public void WhileContinueBreak()
 		{
-			CodeSource = @"static class Test {
+			compiler.CodeSource = @"static class Test {
 				static bool WhileContinueBreak()
 				{
 					bool called = false;
@@ -140,7 +140,7 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 					return !called && start == limit && count == 20;
 				}
 			}" + Code.AllTestCode;
-			Assert.IsTrue(Run<bool>("", "Test", "WhileContinueBreak"));
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "WhileContinueBreak"));
 		}
 
 		#endregion
@@ -151,10 +151,10 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 
 		[Row(254, 1)]
 		[Row(byte.MaxValue, byte.MinValue)]
-		[Test, Author("mincus", "phillmwebster@gmail.com")]
+		[Test]
 		public void WhileOverflowIncI1(byte start, byte limit)
 		{
-			CodeSource = @"static class Test {
+			compiler.CodeSource = @"static class Test {
 				static int WhileOverflowIncI1(byte start, byte limit)
 				{
 					int count = 0;
@@ -168,7 +168,7 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 					return count;
 				}
 			}" + Code.AllTestCode;
-			Assert.AreEqual<int>((256 + (int)limit) - start, Run<int>("", "Test", "WhileOverflowIncI1", start, limit));
+			Assert.AreEqual<int>((256 + (int)limit) - start, compiler.Run<int>(string.Empty, "Test", "WhileOverflowIncI1", start, limit));
 		}
 
 		#endregion
@@ -179,10 +179,10 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 
 		[Row(1, 254)]
 		[Row(byte.MinValue, byte.MaxValue)]
-		[Test, Author("mincus", "phillmwebster@gmail.com")]
+		[Test]
 		public void WhileOverflowDecI1(byte start, byte limit)
 		{
-			CodeSource = @"static class Test {
+			compiler.CodeSource = @"static class Test {
 				static int WhileOverflowDecI1(byte start, byte limit)
 				{
 					int count = 0;
@@ -197,7 +197,7 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 				}
 			}" + Code.AllTestCode;
 
-			Assert.AreEqual<int>((256 + (int)start) - limit, Run<int>("", "Test", "WhileOverflowDecI1", start, limit));
+			Assert.AreEqual<int>((256 + (int)start) - limit, compiler.Run<int>(string.Empty, "Test", "WhileOverflowDecI1", start, limit));
 		}
 
 		#endregion
@@ -211,10 +211,10 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(0, 1, 100, 200)]
 		[Row(1, 0, -100, 100)]
 		[Row(int.MaxValue, int.MinValue, -2, 3)]
-		[Test, Author("mincus", "phillmwebster@gmail.com")]
+		[Test]
 		public void WhileNestedEqualsI4(int initialStatus, int wantedStatus, int start, int limit)
 		{
-			CodeSource = @"static class Test {
+			compiler.CodeSource = @"static class Test {
 				static int WhileNestedEqualsI4(int initialStatus, int wantedStatus, int start, int limit)
 				{
 					int count = 0;
@@ -244,7 +244,7 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 			}" + Code.AllTestCode;
 
 			int count = limit - start;
-			Assert.AreEqual<int>((int)((count * count) - ((count / 2.0f) * count) + (count / 2.0f)), Run<int>("", "Test", "WhileNestedEqualsI4", initialStatus, wantedStatus, start, limit));
+			Assert.AreEqual<int>((int)((count * count) - ((count / 2.0f) * count) + (count / 2.0f)), compiler.Run<int>(string.Empty, "Test", "WhileNestedEqualsI4", initialStatus, wantedStatus, start, limit));
 		}
 
 		#endregion

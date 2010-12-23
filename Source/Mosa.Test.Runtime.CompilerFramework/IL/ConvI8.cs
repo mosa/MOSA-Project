@@ -19,55 +19,55 @@ using System.Reflection.Emit;
 namespace Mosa.Test.Runtime.CompilerFramework.IL
 {
 	[TestFixture]
-	public class ConvI8 : CodeDomTestRunner
+	public class ConvI8 : TestCompilerAdapter
 	{
 		
 		[Column(0, 1, 2, sbyte.MinValue, sbyte.MaxValue)]
-		[Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+		[Test]
 		public void ConvI8_I1(sbyte a)
 		{
-			CodeSource = "static class Test { static bool ConvI8_I1(long expect, sbyte a) { return expect == ((long)a); } }" + Code.AllTestCode;
-			Assert.IsTrue(Run<bool>("", "Test", "ConvI8_I1", ((long)a), a));
+			compiler.CodeSource = "static class Test { static bool ConvI8_I1(long expect, sbyte a) { return expect == ((long)a); } }" + Code.AllTestCode;
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "ConvI8_I1", ((long)a), a));
 		}
 
 		[Column(0, 1, 2, short.MinValue, short.MaxValue)]
-		[Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+		[Test]
 		public void ConvI8_I2(short a)
 		{
-			CodeSource = "static class Test { static bool ConvI8_I2(long expect, short a) { return expect == ((long)a); } }" + Code.AllTestCode;
-			Assert.IsTrue(Run<bool>("", "Test", "ConvI8_I2", ((long)a), a));
+			compiler.CodeSource = "static class Test { static bool ConvI8_I2(long expect, short a) { return expect == ((long)a); } }" + Code.AllTestCode;
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "ConvI8_I2", ((long)a), a));
 		}
 
 		[Column(0, 1, 2, int.MinValue, int.MaxValue)]
-		[Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+		[Test]
 		public void ConvI8_I4(int a)
 		{
-			CodeSource = "static class Test { static bool ConvI8_I4(long expect, int a) { return expect == ((long)a); } }" + Code.AllTestCode;
-			Assert.IsTrue(Run<bool>("", "Test", "ConvI8_I4", ((long)a), a));
+			compiler.CodeSource = "static class Test { static bool ConvI8_I4(long expect, int a) { return expect == ((long)a); } }" + Code.AllTestCode;
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "ConvI8_I4", ((long)a), a));
 		}
 
 		[Column(0, 1, 2, long.MinValue, long.MaxValue)]
-		[Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+		[Test]
 		public void ConvI8_I8(long a)
 		{
-			CodeSource = "static class Test { static bool ConvI8_I8(long expect, long a) { return expect == ((long)a); } }" + Code.AllTestCode;
-			Assert.IsTrue(Run<bool>("", "Test", "ConvI8_I8", ((long)a), a));
+			compiler.CodeSource = "static class Test { static bool ConvI8_I8(long expect, long a) { return expect == ((long)a); } }" + Code.AllTestCode;
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "ConvI8_I8", ((long)a), a));
 		}
 
 		[Column(0, 1, 2, long.MinValue, long.MaxValue)]
-		[Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+		[Test]
 		public void ConvI8_R4(float a)
 		{
-			CodeSource = "static class Test { static bool ConvI1_R4(int expect, float a) { return expect == ((int)a); } }" + Code.AllTestCode;
-			Assert.IsTrue(Run<bool>("", "Test", "ConvI1_R4", ((int)a), a));
+			compiler.CodeSource = "static class Test { static bool ConvI1_R4(int expect, float a) { return expect == ((int)a); } }" + Code.AllTestCode;
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "ConvI1_R4", ((int)a), a));
 		}
 
 		[Column(0, 1, 2, long.MinValue, long.MaxValue)]
-		[Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+		[Test]
 		public void ConvI8_R8(double a)
 		{
-			CodeSource = "static class Test { static bool ConvI1_R8(int expect, double a) { return expect == ((int)a); } }" + Code.AllTestCode;
-			Assert.IsTrue(Run<bool>("", "Test", "ConvI1_R8", ((int)a), a));
+			compiler.CodeSource = "static class Test { static bool ConvI1_R8(int expect, double a) { return expect == ((int)a); } }" + Code.AllTestCode;
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "ConvI1_R8", ((int)a), a));
 		}
 	}
 }

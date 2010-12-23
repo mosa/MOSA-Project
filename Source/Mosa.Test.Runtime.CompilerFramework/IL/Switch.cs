@@ -19,7 +19,7 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 {
 	
 	[TestFixture]
-	public class Switch : CodeDomTestRunner
+	public class Switch : TestCompilerAdapter
 	{
 		
 		[Row(1)]
@@ -29,10 +29,10 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		// And reverse
 		[Row(2)]
 		[Row(-2)]
-		[Test, Author("rootnode", "rootnode@mosa-project.org")]
+		[Test]
 		public void SwitchI1(sbyte a)
 		{
-			CodeSource = @"static class Test { 
+			compiler.CodeSource = @"static class Test { 
 				static sbyte SwitchI1(sbyte expect, sbyte a) { return Switch_Target(a); } 
 				static sbyte Switch_Target(sbyte a)
 				{
@@ -69,7 +69,7 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 				}
 			}" + Code.AllTestCode;
 
-			Assert.AreEqual(a, Run<sbyte>("", "Test", "SwitchI1", a, a));
+			Assert.AreEqual(a, compiler.Run<sbyte>(string.Empty, "Test", "SwitchI1", a, a));
 		}
 
 		[Row(1)]
@@ -77,10 +77,10 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(0)]
 		// And reverse
 		[Row(2)]
-		[Test, Author("rootnode", "rootnode@mosa-project.org")]
+		[Test]
 		public void SwitchU1(byte a)
 		{
-			CodeSource = @"static class Test { 
+			compiler.CodeSource = @"static class Test { 
 				static bool SwitchU1(byte expect, byte a) { return expect == Switch_Target(a); } 
 				static byte Switch_Target(byte a)
 				{
@@ -107,7 +107,7 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 					}
 				}
 			}" + Code.AllTestCode;
-			Assert.IsTrue(Run<bool>("", "Test", "SwitchU1", a, a));
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "SwitchU1", a, a));
 		}
 
 		[Row(1)]
@@ -121,10 +121,10 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(short.MinValue)]
 		// (MaxValue, X) Cases
 		[Row(short.MaxValue)]
-		[Test, Author("rootnode", "rootnode@mosa-project.org")]
+		[Test]
 		public void SwitchI2(short a)
 		{
-			CodeSource = @"static class Test { 
+			compiler.CodeSource = @"static class Test { 
 				static bool SwitchI2(short expect, short a) { return expect == Switch_Target(a); } 
 				static short Switch_Target(short a)
 				{
@@ -160,7 +160,7 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 					}
 				}
 			}" + Code.AllTestCode;
-			Assert.IsTrue(Run<bool>("", "Test", "SwitchI2", a, a));
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "SwitchI2", a, a));
 		}
 
 		[Row(1)]
@@ -172,10 +172,10 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(ushort.MinValue)]
 		// (MaxValue, X) Cases
 		[Row(ushort.MaxValue)]
-		[Test, Author("rootnode", "rootnode@mosa-project.org")]
+		[Test]
 		public void SwitchU2(ushort a)
 		{
-			CodeSource = @"static class Test { 
+			compiler.CodeSource = @"static class Test { 
 				static bool SwitchU2(ushort expect, ushort a) { return expect == Switch_Target(a); } 
 				static ushort Switch_Target(ushort a)
 				{
@@ -202,7 +202,7 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 					}
 				}
 			}" + Code.AllTestCode;
-			Assert.IsTrue(Run<bool>("", "Test", "SwitchU2", a, a));
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "SwitchU2", a, a));
 		}
 
 		[Row(1)]
@@ -216,10 +216,10 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(int.MinValue)]
 		// (MaxValue, X) Cases
 		[Row(int.MaxValue)]
-		[Test, Author("rootnode", "rootnode@mosa-project.org")]
+		[Test]
 		public void SwitchI4(int a)
 		{
-			CodeSource = @"static class Test { 
+			compiler.CodeSource = @"static class Test { 
 				static bool SwitchI4(int expect, int a) { return expect == Switch_Target(a); } 
 				static int Switch_Target(int a)
 				{
@@ -255,7 +255,7 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 					}
 				}
 			}" + Code.AllTestCode;
-			Assert.IsTrue(Run<bool>("", "Test", "SwitchI4", a, a));
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "SwitchI4", a, a));
 		}
 
 		[Row(1)]
@@ -267,10 +267,10 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(uint.MinValue)]
 		// (MaxValue, X) Cases
 		[Row(uint.MaxValue)]
-		[Test, Author("rootnode", "rootnode@mosa-project.org")]
+		[Test]
 		public void SwitchU4(uint a)
 		{
-			CodeSource = @"static class Test { 
+			compiler.CodeSource = @"static class Test { 
 				static bool SwitchU4(uint expect, uint a) { return expect == Switch_Target(a); } 
 				static uint Switch_Target(uint a)
 				{
@@ -297,7 +297,7 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 					}
 				}
 			}" + Code.AllTestCode;
-			Assert.IsTrue(Run<bool>("", "Test", "SwitchU4", a, a));
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "SwitchU4", a, a));
 		}
 
 		[Row(1)]
@@ -311,10 +311,10 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(long.MinValue)]
 		// (MaxValue, X) Cases
 		[Row(long.MaxValue)]
-		[Test, Author("rootnode", "rootnode@mosa-project.org")]
+		[Test]
 		public void SwitchI8(long a)
 		{
-			CodeSource = @"static class Test { 
+			compiler.CodeSource = @"static class Test { 
 				static long SwitchI8(long expect, long a) { return Switch_Target(a); } 
 				static long Switch_Target(long a)
 				{
@@ -350,7 +350,7 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 					}
 				}
 			}" + Code.AllTestCode;
-			Assert.AreEqual(a, (long)Run<long>("", "Test", "SwitchI8", a, a));
+			Assert.AreEqual(a, (long)compiler.Run<long>(string.Empty, "Test", "SwitchI8", a, a));
 		}
 
 		[Row(1)]
@@ -362,10 +362,10 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(ulong.MinValue)]
 		// (MaxValue, X) Cases
 		[Row(ulong.MaxValue)]
-		[Test, Author("rootnode", "rootnode@mosa-project.org")]
+		[Test]
 		public void SwitchU8(ulong a)
 		{
-			CodeSource = @"static class Test { 
+			compiler.CodeSource = @"static class Test { 
 				static bool SwitchU8(ulong expect, ulong a) { return expect == Switch_Target(a); } 
 				static ulong Switch_Target(ulong a)
 				{
@@ -392,7 +392,7 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 					}
 				}
 			}" + Code.AllTestCode;
-			Assert.IsTrue(Run<bool>("", "Test", "SwitchU8", a, a));
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "SwitchU8", a, a));
 		}
 	}
 }

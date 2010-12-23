@@ -39,8 +39,6 @@ namespace Mosa.Test.Runtime.CompilerFramework.CIL
 		{
 			FirstType = "double"
 		};
-
-		
 	
 		#region Add
 

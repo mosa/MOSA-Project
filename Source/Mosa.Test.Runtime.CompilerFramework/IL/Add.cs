@@ -22,7 +22,7 @@ using Mosa.Test.Runtime.CompilerFramework;
 namespace Mosa.Test.Runtime.CompilerFramework.IL
 {
 	[TestFixture]
-	public class Add : CodeDomTestRunner
+	public class Add : TestCompilerAdapter
 	{
 		private static string CreateTestCode(string name, string typeIn, string typeOut)
 		{
@@ -73,32 +73,32 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row('-', '.')]
 		[Row('a', 'Z')]
 		[Row(char.MinValue, char.MaxValue)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public void AddC(char a, char b)
 		{
-			CodeSource = CreateTestCode("AddC", "char", "char");
-			DoNotReferenceMscorlib = true;
-			Assert.IsTrue(Run<bool>("", "Test", "AddC", (char)(a + b), a, b));
+			compiler.CodeSource = CreateTestCode("AddC", "char", "char");
+			compiler.DoNotReferenceMscorlib = true;
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "AddC", (char)(a + b), a, b));
 		}
 
 		[Row(0, 'a')]
 		[Row('-', '.')]
 		[Row('a', 'Z')]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public void AddConstantCRight(char a, char b)
 		{
-			CodeSource = CreateConstantTestCode("AddConstantCRight", "char", "char", null, "'" + b.ToString() + "'");
-			Assert.IsTrue(Run<bool>("", "Test", "AddConstantCRight", (char)(a + b), a));
+			compiler.CodeSource = CreateConstantTestCode("AddConstantCRight", "char", "char", null, "'" + b.ToString() + "'");
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "AddConstantCRight", (char)(a + b), a));
 		}
 
 		[Row('a', 0)]
 		[Row('-', '.')]
 		[Row('a', 'Z')]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public void AddConstantCLeft(char a, char b)
 		{
-			CodeSource = CreateConstantTestCode("AddConstantCLeft", "char", "char", "'" + a.ToString() + "'", null);
-			Assert.IsTrue(Run<bool>("", "Test", "AddConstantCLeft", (char)(a + b), b));
+			compiler.CodeSource = CreateConstantTestCode("AddConstantCLeft", "char", "char", "'" + a.ToString() + "'", null);
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "AddConstantCLeft", (char)(a + b), b));
 		}
 		#endregion
 
@@ -154,42 +154,42 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(-123, sbyte.MaxValue)]
 		// Extremvaluecases
 		[Row(sbyte.MinValue, sbyte.MaxValue)]
-		[Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+		[Test]
 		public void AddI1(sbyte a, sbyte b)
 		{
-			CodeSource = CreateTestCode("AddI1", "sbyte", "int");
-			DoNotReferenceMscorlib = true;
-			Assert.IsTrue(Run<bool>("", "Test", "AddI1", a + b, a, b));
+			compiler.CodeSource = CreateTestCode("AddI1", "sbyte", "int");
+			compiler.DoNotReferenceMscorlib = true;
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "AddI1", a + b, a, b));
 		}
 
 		[Row(-42, 48)]
 		[Row(17, 1)]
 		[Row(0, 0)]
 		[Row(sbyte.MinValue, sbyte.MaxValue)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public void AddConstantI1Right(sbyte a, sbyte b)
 		{
-			CodeSource = CreateConstantTestCode("AddConstantI1Right", "sbyte", "int", null, b.ToString());
-			Assert.IsTrue(Run<bool>("", "Test", "AddConstantI1Right", (a + b), a));
+			compiler.CodeSource = CreateConstantTestCode("AddConstantI1Right", "sbyte", "int", null, b.ToString());
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "AddConstantI1Right", (a + b), a));
 		}
 
 		[Row(-42, 48)]
 		[Row(17, 1)]
 		[Row(0, 0)]
 		[Row(sbyte.MinValue, sbyte.MaxValue)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public void AddConstantI1Left(sbyte a, sbyte b)
 		{
-			CodeSource = CreateConstantTestCode("AddConstantI1Left", "sbyte", "int", a.ToString(), null);
-			Assert.IsTrue(Run<bool>("", "Test", "AddConstantI1Left", (a + b), b));
+			compiler.CodeSource = CreateConstantTestCode("AddConstantI1Left", "sbyte", "int", a.ToString(), null);
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "AddConstantI1Left", (a + b), b));
 		}
 
 		[Row(1)]
-		[Test, Author("rootnode")]
+		[Test]
 		public void AddConstantI1Right(sbyte a)
 		{
-			CodeSource = "static class Test { static bool AddConstantI1Right(int expect, sbyte a) { return expect == (a + 1); } }" + Code.AllTestCode;
-			Assert.IsTrue(Run<bool>("", "Test", "AddConstantI1Right", a + 1, a));
+			compiler.CodeSource = "static class Test { static bool AddConstantI1Right(int expect, sbyte a) { return expect == (a + 1); } }" + Code.AllTestCode;
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "AddConstantI1Right", a + 1, a));
 		}
 		#endregion
 
@@ -223,33 +223,33 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(123, byte.MaxValue)]
 		// Extremvaluecases
 		[Row(byte.MinValue, byte.MaxValue)]
-		[Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+		[Test]
 		public void AddU1(byte a, byte b)
 		{
-			CodeSource = CreateTestCode("AddU1", "byte", "uint");
-			Assert.IsTrue(Run<bool>("", "Test", "AddU1", (uint)(a + b), a, b));
+			compiler.CodeSource = CreateTestCode("AddU1", "byte", "uint");
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "AddU1", (uint)(a + b), a, b));
 		}
 
 		[Row(23, 148)]
 		[Row(17, 1)]
 		[Row(0, 0)]
 		[Row(byte.MinValue, byte.MaxValue)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public void AddConstantU1Right(byte a, byte b)
 		{
-			CodeSource = CreateConstantTestCode("AddConstantU1Right", "byte", "uint", null, b.ToString());
-			Assert.IsTrue(Run<bool>("", "Test", "AddConstantU1Right", (uint)(a + b), a));
+			compiler.CodeSource = CreateConstantTestCode("AddConstantU1Right", "byte", "uint", null, b.ToString());
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "AddConstantU1Right", (uint)(a + b), a));
 		}
 
 		[Row(23, 148)]
 		[Row(17, 1)]
 		[Row(0, 0)]
 		[Row(byte.MinValue, byte.MaxValue)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public void AddConstantU1Left(byte a, byte b)
 		{
-			CodeSource = CreateConstantTestCode("AddConstantU1Left", "byte", "uint", a.ToString(), null);
-			Assert.IsTrue(Run<bool>("", "Test", "AddConstantU1Left", (uint)(a + b), b));
+			compiler.CodeSource = CreateConstantTestCode("AddConstantU1Left", "byte", "uint", a.ToString(), null);
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "AddConstantU1Left", (uint)(a + b), b));
 		}
 		#endregion
 
@@ -305,33 +305,33 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(-123, short.MaxValue)]
 		// Extremvaluecases
 		[Row(short.MinValue, short.MaxValue)]
-		[Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+		[Test]
 		public void AddI2(short a, short b)
 		{
-			CodeSource = CreateTestCode("AddI2", "short", "int");
-			Assert.IsTrue(Run<bool>("", "Test", "AddI2", (a + b), a, b));
+			compiler.CodeSource = CreateTestCode("AddI2", "short", "int");
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "AddI2", (a + b), a, b));
 		}
 
 		[Row(-23, 148)]
 		[Row(17, 1)]
 		[Row(0, 0)]
 		[Row(short.MinValue, short.MaxValue)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public void AddConstantI2Right(short a, short b)
 		{
-			CodeSource = CreateConstantTestCode("AddConstantI2Right", "short", "int", null, b.ToString());
-			Assert.IsTrue(Run<bool>("", "Test", "AddConstantI2Right", (a + b), a));
+			compiler.CodeSource = CreateConstantTestCode("AddConstantI2Right", "short", "int", null, b.ToString());
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "AddConstantI2Right", (a + b), a));
 		}
 
 		[Row(-23, 148)]
 		[Row(17, 1)]
 		[Row(0, 0)]
 		[Row(short.MinValue, short.MaxValue)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public void AddConstantI2Left(short a, short b)
 		{
-			CodeSource = CreateConstantTestCode("AddConstantI2Left", "short", "int", a.ToString(), null);
-			Assert.IsTrue(Run<bool>("", "Test", "AddConstantI2Left", (a + b), b));
+			compiler.CodeSource = CreateConstantTestCode("AddConstantI2Left", "short", "int", a.ToString(), null);
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "AddConstantI2Left", (a + b), b));
 		}
 		#endregion
 
@@ -365,33 +365,33 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(123, ushort.MaxValue)]
 		// Extremvaluecases
 		[Row(ushort.MinValue, ushort.MaxValue)]
-		[Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+		[Test]
 		public void AddU2(ushort a, ushort b)
 		{
-			CodeSource = CreateTestCode("AddU2", "ushort", "uint");
-			Assert.IsTrue(Run<bool>("", "Test", "AddU2", (uint)(a + b), a, b));
+			compiler.CodeSource = CreateTestCode("AddU2", "ushort", "uint");
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "AddU2", (uint)(a + b), a, b));
 		}
 
 		[Row(23, 148)]
 		[Row(17, 1)]
 		[Row(0, 0)]
 		[Row(ushort.MinValue, ushort.MaxValue)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public void AddConstantU2Right(ushort a, ushort b)
 		{
-			CodeSource = CreateConstantTestCode("AddConstantU2Right", "ushort", "uint", null, b.ToString());
-			Assert.IsTrue(Run<bool>("", "Test", "AddConstantU2Right", (uint)(a + b), a));
+			compiler.CodeSource = CreateConstantTestCode("AddConstantU2Right", "ushort", "uint", null, b.ToString());
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "AddConstantU2Right", (uint)(a + b), a));
 		}
 
 		[Row(23, 148)]
 		[Row(17, 1)]
 		[Row(0, 0)]
 		[Row(ushort.MinValue, ushort.MaxValue)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public void AddConstantU2Left(ushort a, ushort b)
 		{
-			CodeSource = CreateConstantTestCode("AddConstantU2Left", "ushort", "uint", a.ToString(), null);
-			Assert.IsTrue(Run<bool>("", "Test", "AddConstantU2Left", (uint)(a + b), b));
+			compiler.CodeSource = CreateConstantTestCode("AddConstantU2Left", "ushort", "uint", a.ToString(), null);
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "AddConstantU2Left", (uint)(a + b), b));
 		}
 		#endregion
 
@@ -447,33 +447,33 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(-123, int.MaxValue)]
 		// Extremvaluecases
 		[Row(int.MinValue, int.MaxValue)]
-		[Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+		[Test]
 		public void AddI4(int a, int b)
 		{
-			CodeSource = CreateTestCode("AddI4", "int", "int");
-			Assert.IsTrue(Run<bool>("", "Test", "AddI4", (a + b), a, b));
+			compiler.CodeSource = CreateTestCode("AddI4", "int", "int");
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "AddI4", (a + b), a, b));
 		}
 
 		[Row(-23, 148)]
 		[Row(17, 1)]
 		[Row(0, 0)]
 		[Row(int.MinValue, int.MaxValue)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public void AddConstantI4Right(int a, int b)
 		{
-			CodeSource = CreateConstantTestCode("AddConstantI4Right", "int", "int", null, b.ToString());
-			Assert.IsTrue(Run<bool>("", "Test", "AddConstantI4Right", (a + b), a));
+			compiler.CodeSource = CreateConstantTestCode("AddConstantI4Right", "int", "int", null, b.ToString());
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "AddConstantI4Right", (a + b), a));
 		}
 
 		[Row(-23, 148)]
 		[Row(17, 1)]
 		[Row(0, 0)]
 		[Row(int.MinValue, int.MaxValue)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public void AddConstantI4Left(int a, int b)
 		{
-			CodeSource = CreateConstantTestCode("AddConstantI4Left", "int", "int", a.ToString(), null);
-			Assert.IsTrue(Run<bool>("", "Test", "AddConstantI4Left", (a + b), b));
+			compiler.CodeSource = CreateConstantTestCode("AddConstantI4Left", "int", "int", a.ToString(), null);
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "AddConstantI4Left", (a + b), b));
 		}
 		#endregion
 
@@ -507,33 +507,33 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(123, uint.MaxValue)]
 		// Extremvaluecases
 		[Row(uint.MinValue, uint.MaxValue)]
-		[Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+		[Test]
 		public void AddU4(uint a, uint b)
 		{
-			CodeSource = CreateTestCode("AddU4", "uint", "uint");
-			Assert.IsTrue(Run<bool>("", "Test", "AddU4", (uint)(a + b), a, b));
+			compiler.CodeSource = CreateTestCode("AddU4", "uint", "uint");
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "AddU4", (uint)(a + b), a, b));
 		}
 
 		[Row(23, 148)]
 		[Row(17, 1)]
 		[Row(0, 0)]
 		[Row(uint.MinValue, uint.MaxValue)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public void AddConstantU4Right(uint a, uint b)
 		{
-			CodeSource = CreateConstantTestCode("AddConstantU4Right", "uint", "uint", null, b.ToString());
-			Assert.IsTrue(Run<bool>("", "Test", "AddConstantU4Right", (uint)(a + b), a));
+			compiler.CodeSource = CreateConstantTestCode("AddConstantU4Right", "uint", "uint", null, b.ToString());
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "AddConstantU4Right", (uint)(a + b), a));
 		}
 
 		[Row(23, 148)]
 		[Row(17, 1)]
 		[Row(0, 0)]
 		[Row(uint.MinValue, uint.MaxValue)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public void AddConstantU4Left(uint a, uint b)
 		{
-			CodeSource = CreateConstantTestCode("AddConstantU4Left", "uint", "uint", a.ToString(), null);
-			Assert.IsTrue(Run<bool>("", "Test", "AddConstantU4Left", (uint)(a + b), b));
+			compiler.CodeSource = CreateConstantTestCode("AddConstantU4Left", "uint", "uint", a.ToString(), null);
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "AddConstantU4Left", (uint)(a + b), b));
 		}
 		#endregion
 
@@ -590,33 +590,33 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(0x0000000100000000L, 0x0000000100000000L)]
 		// Extremvaluecases
 		[Row(long.MinValue, long.MaxValue)]
-		[Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+		[Test]
 		public void AddI8(long a, long b)
 		{
-			CodeSource = CreateTestCode("AddI8", "long", "long");
-			Assert.IsTrue(Run<bool>("", "Test", "AddI8", (a + b), a, b));
+			compiler.CodeSource = CreateTestCode("AddI8", "long", "long");
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "AddI8", (a + b), a, b));
 		}
 
 		[Row(-23, 148)]
 		[Row(17, 1)]
 		[Row(0, 0)]
 		[Row(long.MinValue, long.MaxValue)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public void AddConstantI8Right(long a, long b)
 		{
-			CodeSource = CreateConstantTestCode("AddConstantI8Right", "long", "long", null, b.ToString());
-			Assert.IsTrue(Run<bool>("", "Test", "AddConstantI8Right", (a + b), a));
+			compiler.CodeSource = CreateConstantTestCode("AddConstantI8Right", "long", "long", null, b.ToString());
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "AddConstantI8Right", (a + b), a));
 		}
 
 		//[Row(-23, 148)]
 		//[Row(17, 1)]
 		[Row(0, 0)]
 		//[Row(long.MinValue, long.MaxValue)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public void AddConstantI8Left(long a, long b)
 		{
-			CodeSource = CreateConstantTestCode("AddConstantI8Left", "long", "long", a.ToString(), null);
-			Assert.IsTrue(Run<bool>("", "Test", "AddConstantI8Left", (a + b), b));
+			compiler.CodeSource = CreateConstantTestCode("AddConstantI8Left", "long", "long", a.ToString(), null);
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "AddConstantI8Left", (a + b), b));
 		}
 		#endregion
 
@@ -650,33 +650,33 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(123, ulong.MaxValue)]
 		// Extremvaluecases
 		[Row(ulong.MinValue, ulong.MaxValue)]
-		[Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+		[Test]
 		public void AddU8(ulong a, ulong b)
 		{
-			CodeSource = CreateTestCode("AddU8", "ulong", "ulong");
-			Assert.IsTrue(Run<bool>("", "Test", "AddU8", (ulong)(a + b), a, b));
+			compiler.CodeSource = CreateTestCode("AddU8", "ulong", "ulong");
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "AddU8", (ulong)(a + b), a, b));
 		}
 		
 		[Row(23, 148)]
 		[Row(17, 1)]
 		[Row(0, 0)]
 		[Row(ulong.MinValue, ulong.MaxValue)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public void AddConstantU8Right(ulong a, ulong b)
 		{
-			CodeSource = CreateConstantTestCode("AddConstantU8Right", "ulong", "ulong", null, b.ToString());
-			Assert.IsTrue(Run<bool>("", "Test", "AddConstantU8Right", (ulong)(a + b), a));
+			compiler.CodeSource = CreateConstantTestCode("AddConstantU8Right", "ulong", "ulong", null, b.ToString());
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "AddConstantU8Right", (ulong)(a + b), a));
 		}
 
 		[Row(23, 148)]
 		[Row(17, 1)]
 		[Row(0, 0)]
 		[Row(ulong.MinValue, ulong.MaxValue)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public void AddConstantU8Left(ulong a, ulong b)
 		{
-			CodeSource = CreateConstantTestCode("AddConstantU8Left", "ulong", "ulong", a.ToString(), null);
-			Assert.IsTrue(Run<bool>("", "Test", "AddConstantU8Left", (ulong)(a + b), b));
+			compiler.CodeSource = CreateConstantTestCode("AddConstantU8Left", "ulong", "ulong", a.ToString(), null);
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "AddConstantU8Left", (ulong)(a + b), b));
 		}
 		#endregion
 
@@ -730,11 +730,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(float.PositiveInfinity, 1.0f)]
 		[Row(1.0f, float.NegativeInfinity)]
 		[Row(float.NegativeInfinity, 1.0f)]
-		[Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+		[Test]
 		public void AddR4(float a, float b)
 		{
-			CodeSource = CreateTestCode("AddR4", "float", "float");
-			Assert.IsTrue(Run<bool>("", "Test", "AddR4", a + b, a, b));
+			compiler.CodeSource = CreateTestCode("AddR4", "float", "float");
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "AddR4", a + b, a, b));
 		}
 
 		[Row(23f, 148.0016f)]
@@ -742,11 +742,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(0f, 0f)]
 		// Obsolete. This test just fails because we're calculating with higher precision
 		// [Row(float.MinValue, float.MaxValue)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public void AddConstantR4Right(float a, float b)
 		{
-			CodeSource = CreateConstantTestCode("AddConstantR4Right", "float", "float", null, b.ToString(System.Globalization.CultureInfo.InvariantCulture) + "f");
-			Assert.IsTrue(Run<bool>("", "Test", "AddConstantR4Right", (a + b), a));
+			compiler.CodeSource = CreateConstantTestCode("AddConstantR4Right", "float", "float", null, b.ToString(System.Globalization.CultureInfo.InvariantCulture) + "f");
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "AddConstantR4Right", (a + b), a));
 		}
 
 		[Row(23f, 148.0016f)]
@@ -754,11 +754,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(0f, 0f)]
 		// Obsolete. This test just fails because we're calculating with higher precision
 		// [Row(float.MinValue, float.MaxValue)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public void AddConstantR4Left(float a, float b)
 		{
-			CodeSource = CreateConstantTestCode("AddConstantR4Left", "float", "float", a.ToString(System.Globalization.CultureInfo.InvariantCulture) + "f", null);
-			Assert.IsTrue(Run<bool>("", "Test", "AddConstantR4Left", (a + b), b));
+			compiler.CodeSource = CreateConstantTestCode("AddConstantR4Left", "float", "float", a.ToString(System.Globalization.CultureInfo.InvariantCulture) + "f", null);
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "AddConstantR4Left", (a + b), b));
 		}
 
 		#endregion
@@ -815,33 +815,33 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Row(double.PositiveInfinity, 1.0f)]
 		[Row(1.0f, double.NegativeInfinity)]
 		[Row(double.NegativeInfinity, 1.0f)]
-		[Test, Author("alyman", "mail.alex.lyman@gmail.com")]
+		[Test]
 		public void AddR8(double a, double b)
 		{
-			CodeSource = "static class Test { static bool AddR8(double expect, double a, double b) { return expect == (a + b); } }" + Code.AllTestCode;
-			Assert.IsTrue(Run<bool>("", "Test", "AddR8", (a + b), a, b));
+			compiler.CodeSource = "static class Test { static bool AddR8(double expect, double a, double b) { return expect == (a + b); } }" + Code.AllTestCode;
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "AddR8", (a + b), a, b));
 		}
 
 		[Row(23, 148.0016)]
 		[Row(17.2, 1.0)]
 		[Row(0.0, 0.0)]
 		[Row(-1.79769313486231E+308, 1.79769313486231E+308)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public void AddConstantR8Right(double a, double b)
 		{
-			CodeSource = CreateConstantTestCode("AddConstantR8Right", "double", "double", null, b.ToString(System.Globalization.CultureInfo.InvariantCulture));
-			Assert.IsTrue(Run<bool>("", "Test", "AddConstantR8Right", (a + b), a));
+			compiler.CodeSource = CreateConstantTestCode("AddConstantR8Right", "double", "double", null, b.ToString(System.Globalization.CultureInfo.InvariantCulture));
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "AddConstantR8Right", (a + b), a));
 		}
 
 		[Row(23, 148.0016)]
 		[Row(17.2, 1.0)]
 		[Row(0.0, 0.0)]
 		[Row(-1.79769313486231E+308, 1.79769313486231E+308)]
-		[Test, Author("boddlnagg", "kpreisert@googlemail.com")]
+		[Test]
 		public void AddConstantR8Left(double a, double b)
 		{
-			CodeSource = CreateConstantTestCode("AddConstantR8Left", "double", "double", a.ToString(System.Globalization.CultureInfo.InvariantCulture), null);
-			Assert.IsTrue(Run<bool>("", "Test", "AddConstantR8Left", (a + b), b));
+			compiler.CodeSource = CreateConstantTestCode("AddConstantR8Left", "double", "double", a.ToString(System.Globalization.CultureInfo.InvariantCulture), null);
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "AddConstantR8Left", (a + b), b));
 		}
 
 		#endregion

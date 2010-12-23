@@ -16,7 +16,7 @@ namespace Mosa.Test.Runtime.CompilerFramework
 {
 	[TestFixture]
 	//[Parallelizable]
-	public class ExceptionHandlingFixture : CodeDomTestRunner
+	public class ExceptionHandlingFixture : TestCompilerAdapter
 	{
 		private static string CreateTestCode()
 		{
@@ -44,10 +44,10 @@ namespace Mosa.Test.Runtime.CompilerFramework
 		[Row(1)]
 		public void CatchException(int value)
 		{
-			CodeSource = CreateTestCode();
-			DoNotReferenceMscorlib = true;
-			UnsafeCode = true;
-			Assert.IsTrue(Run<bool>("", "Test", "CatchException", value));
+			compiler.CodeSource = CreateTestCode();
+			compiler.DoNotReferenceMscorlib = true;
+			compiler.UnsafeCode = true;
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "CatchException", value));
 		}
 	}
 }

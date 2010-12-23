@@ -6,13 +6,13 @@ using MbUnit.Framework;
 namespace Mosa.Test.Runtime.CompilerFramework.Compiler
 {
 	[TestFixture]
-	public class StaticAllocationFixture : CodeDomTestRunner
+	public class StaticAllocationFixture : TestCompilerAdapter
 	{
 		[Test]
 		public void MustCompileStaticAllocation()
 		{
-			CodeSource = TestCode;
-			int result = (int)this.Run<int>(@"", @"StaticAllocationTestCode", @"GetData");
+			compiler.CodeSource = TestCode;
+			int result = compiler.Run<int>(string.Empty, @"StaticAllocationTestCode", @"GetData");
 			Assert.AreEqual(0x7AADF00D, result);
 		}
 		

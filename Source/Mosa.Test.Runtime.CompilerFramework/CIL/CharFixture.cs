@@ -48,7 +48,6 @@ namespace Mosa.Test.Runtime.CompilerFramework.CIL
 			FirstType = "char"
 		};
 
-
 		#region Add
 
 		[Test, Factory(typeof(Variations), "C_C")]

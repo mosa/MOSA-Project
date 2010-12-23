@@ -16,7 +16,7 @@ namespace Mosa.Test.Runtime.CompilerFramework.CIL
 	[Importance(Importance.Critical)]
 	[Category(@"Compiler")]
 	[Description(@"Tests support for interfaces.")]
-	public class InterfaceFixture : CodeDomTestRunner
+	public class InterfaceFixture : TestCompilerAdapter
 	{
 		private static string CreateTestCode()
 		{
@@ -70,15 +70,15 @@ namespace Mosa.Test.Runtime.CompilerFramework.CIL
 		[Test]
 		public void MustCompileInterfaces()
 		{
-			CodeSource = CreateTestCode();
-			Assert.IsTrue(Run<bool>("", "TestClass", "MustCompileWithInterfaces"));
+			compiler.CodeSource = CreateTestCode();
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "TestClass", "MustCompileWithInterfaces"));
 		}
 
 		[Test]
 		public void MustReturn3FromB()
 		{
-			CodeSource = CreateTestCode();
-			Assert.IsTrue(Run<bool>("", "TestClass", "MustReturn3FromB"));
+			compiler.CodeSource = CreateTestCode();
+			Assert.IsTrue(compiler.Run<bool>(string.Empty, "TestClass", "MustReturn3FromB"));
 		}
 	}
 }
