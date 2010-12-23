@@ -75,37 +75,37 @@ namespace Mosa.Test.Runtime.CompilerFramework.CIL
 					Derived d = new Derived(21, 2, 7);
 					return (d.int32 == 49);
 				}
-			}" + Code.AllTestCode;
+			}";
 
 		[Test]
 		public void TestNewobjWithoutArgs()
 		{
-			compiler.CodeSource = TestCode;
-			bool result = compiler.Run<bool>(string.Empty, @"Derived", @"NewobjTest");
+			settings.CodeSource = TestCode;
+			bool result = Run<bool>(string.Empty, @"Derived", @"NewobjTest");
 			Assert.IsTrue(result);
 		}
 
 		[Test]
 		public void TestNewobjWithOneArg()
 		{
-			compiler.CodeSource = TestCode;
-			bool result = compiler.Run<bool>(string.Empty, @"Derived", @"NewobjTestWithOneArg");
+			settings.CodeSource = TestCode;
+			bool result = Run<bool>(string.Empty, @"Derived", @"NewobjTestWithOneArg");
 			Assert.IsTrue(result);
 		}
 
 		[Test]
 		public void TestNewobjWithTwoArgs()
 		{
-			compiler.CodeSource = TestCode;
-			bool result = compiler.Run<bool>(string.Empty, @"Derived", @"NewobjTestWithTwoArgs");
+			settings.CodeSource = TestCode;
+			bool result = Run<bool>(string.Empty, @"Derived", @"NewobjTestWithTwoArgs");
 			Assert.IsTrue(result);
 		}
 
 		[Test]
 		public void TestNewobjWithThreeArgs()
 		{
-			compiler.CodeSource = TestCode;
-			bool result = compiler.Run<bool>(string.Empty, @"Derived", @"NewobjTestWithThreeArgs");
+			settings.CodeSource = TestCode;
+			bool result = Run<bool>(string.Empty, @"Derived", @"NewobjTestWithThreeArgs");
 			Assert.IsTrue(result);
 		}
 

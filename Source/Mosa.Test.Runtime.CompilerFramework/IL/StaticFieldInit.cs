@@ -19,12 +19,12 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 					return (fld == value);
 				}
 			}
-		" + Code.AllTestCode;
+		";
 
 		private void RunTestCode<Value>(string code, Value value)
 		{
-			compiler.CodeSource = code;
-			bool res = compiler.Run<bool>(string.Empty, @"Test", @"StaticFieldInit", value);
+			settings.CodeSource = code;
+			bool res = Run<bool>(string.Empty, @"Test", @"StaticFieldInit", value);
 			Assert.IsTrue(res);
 		}
 

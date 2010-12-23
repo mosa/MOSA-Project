@@ -26,48 +26,48 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void ConvI4_I1(sbyte a)
 		{
-			compiler.CodeSource = "static class Test { static bool ConvI4_I1(int expect, sbyte a) { return expect == ((int)a); } }" + Code.AllTestCode;
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "ConvI4_I1", ((int)a), a));
+			settings.CodeSource = "static class Test { static bool ConvI4_I1(int expect, sbyte a) { return expect == ((int)a); } }";
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "ConvI4_I1", ((int)a), a));
 		}
 
 		[Column(0, 1, 2, short.MinValue, short.MaxValue)]
 		[Test]
 		public void ConvI4_I2(short a)
 		{
-			compiler.CodeSource = "static class Test { static bool ConvI4_I2(int expect, short a) { return expect == ((int)a); } }" + Code.AllTestCode;
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "ConvI4_I2", ((int)a), a));
+			settings.CodeSource = "static class Test { static bool ConvI4_I2(int expect, short a) { return expect == ((int)a); } }";
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "ConvI4_I2", ((int)a), a));
 		}
 
 		[Column(0, 1, 2, int.MinValue, int.MaxValue)]
 		[Test]
 		public void ConvI4_I4(int a)
 		{
-			compiler.CodeSource = "static class Test { static bool ConvI4_I4(int expect, int a) { return expect == ((int)a); } }" + Code.AllTestCode;
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "ConvI4_I4", ((int)a), a));
+			settings.CodeSource = "static class Test { static bool ConvI4_I4(int expect, int a) { return expect == ((int)a); } }";
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "ConvI4_I4", ((int)a), a));
 		}
 
 		[Column(0, 1, 2, int.MinValue, int.MaxValue)]
 		[Test]
 		public void ConvI4_I8(long a)
 		{
-			compiler.CodeSource = "static class Test { static bool ConvI4_I8(int expect, long a) { return expect == ((int)a); } }" + Code.AllTestCode;
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "ConvI4_I8", ((int)a), a));
+			settings.CodeSource = "static class Test { static bool ConvI4_I8(int expect, long a) { return expect == ((int)a); } }";
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "ConvI4_I8", ((int)a), a));
 		}
 
 		[Column(0.0f, 1.0f, 2.0f, Single.MinValue, Single.MaxValue)]
 		[Test]
 		public void ConvI4_R4(float a)
 		{
-			compiler.CodeSource = "static class Test { static bool ConvI1_R4(int expect, float a) { return expect == ((int)a); } }" + Code.AllTestCode;
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "ConvI1_R4", ((int)a), a));
+			settings.CodeSource = "static class Test { static bool ConvI1_R4(int expect, float a) { return expect == ((int)a); } }";
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "ConvI1_R4", ((int)a), a));
 		}
 
 		[Column(0.0f, 1.0f, 2.0f, Double.MinValue, Double.MaxValue)]
 		[Test]
 		public void ConvI4_R8(double a)
 		{
-			compiler.CodeSource = "static class Test { static bool ConvI1_R8(int expect, double a) { return expect == ((int)a); } }" + Code.AllTestCode;
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "ConvI1_R8", ((int)a), a));
+			settings.CodeSource = "static class Test { static bool ConvI1_R8(int expect, double a) { return expect == ((int)a); } }";
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "ConvI1_R8", ((int)a), a));
 		}
 	}
 }

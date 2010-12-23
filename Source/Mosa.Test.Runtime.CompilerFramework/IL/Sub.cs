@@ -32,7 +32,7 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 					{
 						return expect == (a - b);
 					}
-				}" + Code.AllTestCode;
+				}";
 		}
 
 		private static string CreateConstantTestCode(string name, string typeIn, string typeOut, string constLeft, string constRight)
@@ -46,7 +46,7 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 						{
 							return expect == ((" + constLeft + @") - x);
 						}
-					}" + Code.AllTestCode;
+					}";
 			}
 			else if (String.IsNullOrEmpty(constLeft))
 			{
@@ -57,7 +57,7 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 						{
 							return expect == (x - (" + constRight + @"));
 						}
-					}" + Code.AllTestCode;
+					}";
 			}
 			else
 			{
@@ -74,8 +74,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void SubC(char a, char b)
 		{
-			compiler.CodeSource = CreateTestCode("SubC", "char", "int");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "SubC", (a - b), a, b));
+			settings.CodeSource = CreateTestCode("SubC", "char", "int");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "SubC", (a - b), a, b));
 		}
 
 		[Row(0, 'a')]
@@ -84,8 +84,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void SubConstantCRight(char a, char b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("SubConstantCRight", "char", "int", null, "'" + b.ToString() + "'");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "SubConstantCRight", (a - b), a));
+			settings.CodeSource = CreateConstantTestCode("SubConstantCRight", "char", "int", null, "'" + b.ToString() + "'");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "SubConstantCRight", (a - b), a));
 		}
 
 		[Row('a', 0)]
@@ -94,8 +94,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void SubConstantCLeft(char a, char b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("SubConstantCLeft", "char", "int", "'" + a.ToString() + "'", null);
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "SubConstantCLeft", (a - b), b));
+			settings.CodeSource = CreateConstantTestCode("SubConstantCLeft", "char", "int", "'" + a.ToString() + "'", null);
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "SubConstantCLeft", (a - b), b));
 		}
 		#endregion
 
@@ -154,8 +154,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void SubI1(sbyte a, sbyte b)
 		{
-			compiler.CodeSource = CreateTestCode("SubI1", "sbyte", "int");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "SubI1", a - b, a, b));
+			settings.CodeSource = CreateTestCode("SubI1", "sbyte", "int");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "SubI1", a - b, a, b));
 		}
 
 		[Row(-42, 48)]
@@ -168,8 +168,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void SubConstantI1Right(sbyte a, sbyte b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("SubConstantI1Right", "sbyte", "int", null, b.ToString());
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "SubConstantI1Right", (a - b), a));
+			settings.CodeSource = CreateConstantTestCode("SubConstantI1Right", "sbyte", "int", null, b.ToString());
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "SubConstantI1Right", (a - b), a));
 		}
 
 		[Row(-42, 48)]
@@ -179,8 +179,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void SubConstantI1Left(sbyte a, sbyte b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("SubConstantI1Left", "sbyte", "int", a.ToString(), null);
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "SubConstantI1Left", (a - b), b));
+			settings.CodeSource = CreateConstantTestCode("SubConstantI1Left", "sbyte", "int", a.ToString(), null);
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "SubConstantI1Left", (a - b), b));
 		}
 		#endregion I1
 
@@ -239,8 +239,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void SubI2(short a, short b)
 		{
-			compiler.CodeSource = CreateTestCode("SubI2", "short", "int");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "SubI2", (a - b), a, b));
+			settings.CodeSource = CreateTestCode("SubI2", "short", "int");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "SubI2", (a - b), a, b));
 		}
 
 		[Row(-23, 148)]
@@ -250,8 +250,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void SubConstantI2Right(short a, short b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("SubConstantI2Right", "short", "int", null, b.ToString());
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "SubConstantI2Right", (a - b), a));
+			settings.CodeSource = CreateConstantTestCode("SubConstantI2Right", "short", "int", null, b.ToString());
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "SubConstantI2Right", (a - b), a));
 		}
 
 		[Row(-23, 148)]
@@ -261,8 +261,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void SubConstantI2Left(short a, short b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("SubConstantI2Left", "short", "int", a.ToString(), null);
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "SubConstantI2Left", (a - b), b));
+			settings.CodeSource = CreateConstantTestCode("SubConstantI2Left", "short", "int", a.ToString(), null);
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "SubConstantI2Left", (a - b), b));
 		}
 		#endregion
 
@@ -298,8 +298,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void SubU2(ushort a, ushort b)
 		{
-			compiler.CodeSource = CreateTestCode("SubU2", "ushort", "int");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "SubU2", (a - b), a, b));
+			settings.CodeSource = CreateTestCode("SubU2", "ushort", "int");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "SubU2", (a - b), a, b));
 		}
 
 		[Row(23, 148)]
@@ -309,8 +309,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void SubConstantU2Right(ushort a, ushort b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("SubConstantU2Right", "ushort", "int", null, b.ToString());
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "SubConstantU2Right", (a - b), a));
+			settings.CodeSource = CreateConstantTestCode("SubConstantU2Right", "ushort", "int", null, b.ToString());
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "SubConstantU2Right", (a - b), a));
 		}
 
 		////[Row(23, 148)]
@@ -320,8 +320,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void SubConstantU2Left(ushort a, ushort b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("SubConstantU2Left", "ushort", "int", a.ToString(), null);
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "SubConstantU2Left", (a - b), b));
+			settings.CodeSource = CreateConstantTestCode("SubConstantU2Left", "ushort", "int", a.ToString(), null);
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "SubConstantU2Left", (a - b), b));
 		}
 		#endregion
 
@@ -380,8 +380,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void SubI4(int a, int b)
 		{
-			compiler.CodeSource = CreateTestCode("SubI4", "int", "int");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "SubI4", (a - b), a, b));
+			settings.CodeSource = CreateTestCode("SubI4", "int", "int");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "SubI4", (a - b), a, b));
 		}
 
 		[Row(-23, 148)]
@@ -391,8 +391,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void SubConstantI4Right(int a, int b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("SubConstantI4Right", "int", "int", null, b.ToString());
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "SubConstantI4Right", (a - b), a));
+			settings.CodeSource = CreateConstantTestCode("SubConstantI4Right", "int", "int", null, b.ToString());
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "SubConstantI4Right", (a - b), a));
 		}
 
 		[Row(-23, 148)]
@@ -402,8 +402,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void SubConstantI4Left(int a, int b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("SubConstantI4Left", "int", "int", a.ToString(), null);
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "SubConstantI4Left", (a - b), b));
+			settings.CodeSource = CreateConstantTestCode("SubConstantI4Left", "int", "int", a.ToString(), null);
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "SubConstantI4Left", (a - b), b));
 		}
 		#endregion
 
@@ -462,8 +462,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void SubI8(long a, long b)
 		{
-			compiler.CodeSource = CreateTestCode("SubI8", "long", "long");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "SubI8", (a - b), a, b));
+			settings.CodeSource = CreateTestCode("SubI8", "long", "long");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "SubI8", (a - b), a, b));
 		}
 
 		[Row(-23, 148)]
@@ -473,8 +473,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void SubConstantI8Right(long a, long b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("SubConstantI8Right", "long", "long", null, b.ToString());
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "SubConstantI8Right", (a - b), a));
+			settings.CodeSource = CreateConstantTestCode("SubConstantI8Right", "long", "long", null, b.ToString());
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "SubConstantI8Right", (a - b), a));
 		}
 
 		[Row(-23, 148)]
@@ -484,8 +484,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void SubConstantI8Left(long a, long b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("SubConstantI8Left", "long", "long", a.ToString(), null);
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "SubConstantI8Left", (a - b), b));
+			settings.CodeSource = CreateConstantTestCode("SubConstantI8Left", "long", "long", a.ToString(), null);
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "SubConstantI8Left", (a - b), b));
 		}
 		#endregion
 
@@ -542,8 +542,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void SubR4(float a, float b)
 		{
-			compiler.CodeSource = CreateTestCode("SubR4", "float", "float");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "SubR4", (a - b), a, b));
+			settings.CodeSource = CreateTestCode("SubR4", "float", "float");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "SubR4", (a - b), a, b));
 		}
 
 		[Row(23f, 148.0016f)]
@@ -552,8 +552,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void SubConstantR4Right(float a, float b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("SubConstantR4Right", "float", "float", null, b.ToString(System.Globalization.CultureInfo.InvariantCulture) + "f");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "SubConstantR4Right", (a - b), a));
+			settings.CodeSource = CreateConstantTestCode("SubConstantR4Right", "float", "float", null, b.ToString(System.Globalization.CultureInfo.InvariantCulture) + "f");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "SubConstantR4Right", (a - b), a));
 		}
 
 		[Row(23f, 148.0016f)]
@@ -564,8 +564,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void SubConstantR4Left(float a, float b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("SubConstantR4Left", "float", "float", a.ToString(System.Globalization.CultureInfo.InvariantCulture) + "f", null);
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "SubConstantR4Left", (a - b), b));
+			settings.CodeSource = CreateConstantTestCode("SubConstantR4Left", "float", "float", a.ToString(System.Globalization.CultureInfo.InvariantCulture) + "f", null);
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "SubConstantR4Left", (a - b), b));
 		}
 		#endregion
 
@@ -624,8 +624,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void SubR8(double a, double b)
 		{
-			compiler.CodeSource = CreateTestCode("SubR8", "double", "double");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "SubR8", (a - b), a, b));
+			settings.CodeSource = CreateTestCode("SubR8", "double", "double");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "SubR8", (a - b), a, b));
 		}
 
 		[Row(23, 148.0016)]
@@ -635,8 +635,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void SubConstantR8Right(double a, double b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("SubConstantR8Right", "double", "double", null, b.ToString(System.Globalization.CultureInfo.InvariantCulture));
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "SubConstantR8Right", (a - b), a));
+			settings.CodeSource = CreateConstantTestCode("SubConstantR8Right", "double", "double", null, b.ToString(System.Globalization.CultureInfo.InvariantCulture));
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "SubConstantR8Right", (a - b), a));
 		}
 
 		[Row(23, 148.0016)]
@@ -646,8 +646,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void SubConstantR8Left(double a, double b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("SubConstantR8Left", "double", "double", a.ToString(System.Globalization.CultureInfo.InvariantCulture), null);
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "SubConstantR8Left", (a - b), b));
+			settings.CodeSource = CreateConstantTestCode("SubConstantR8Left", "double", "double", a.ToString(System.Globalization.CultureInfo.InvariantCulture), null);
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "SubConstantR8Left", (a - b), b));
 		}
 		#endregion
 

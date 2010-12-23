@@ -137,6 +137,7 @@
     <Compile Include="CIL\UInt64Fixture.cs" />
     <Compile Include="Code.cs" />
     <Compile Include="Compiler\StaticAllocationFixture.cs" />
+    <Compile Include="TestCompilerSettings.cs" />
     <Compile Include="DelegateUtility.cs" />
     <Compile Include="IL\ConditionalOperator.cs" />
     <Compile Include="IL\Stind.cs" />

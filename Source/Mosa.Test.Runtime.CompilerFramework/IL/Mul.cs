@@ -31,7 +31,7 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 					{
 						return expect == (a * b);
 					}
-				}" + Code.AllTestCode;
+				}";
 		}
 
 		private static string CreateConstantTestCode(string name, string typeIn, string typeOut, string constLeft, string constRight)
@@ -45,7 +45,7 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 						{
 							return expect == (" + constLeft + @" * x);
 						}
-					}" + Code.AllTestCode;
+					}";
 			}
 			else if (String.IsNullOrEmpty(constLeft))
 			{
@@ -56,7 +56,7 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 						{
 							return expect == (x * " + constRight + @");
 						}
-					}" + Code.AllTestCode;
+					}";
 			}
 			else
 			{
@@ -73,8 +73,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void MulC(char a, char b)
 		{
-			compiler.CodeSource = CreateTestCode("MulC", "char", "char");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "MulC", (char)(a * b), a, b));
+			settings.CodeSource = CreateTestCode("MulC", "char", "char");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "MulC", (char)(a * b), a, b));
 		}
 
 		[Row(0, 'a')]
@@ -83,8 +83,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void MulConstantCRight(char a, char b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("MulConstantCRight", "char", "char", null, "'" + b.ToString() + "'");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "MulConstantCRight", (char)(a * b), a));
+			settings.CodeSource = CreateConstantTestCode("MulConstantCRight", "char", "char", null, "'" + b.ToString() + "'");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "MulConstantCRight", (char)(a * b), a));
 		}
 
 		[Row('a', 0)]
@@ -93,8 +93,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void MulConstantCLeft(char a, char b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("MulConstantCLeft", "char", "char", "'" + a.ToString() + "'", null);
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "MulConstantCLeft", (char)(a * b), b));
+			settings.CodeSource = CreateConstantTestCode("MulConstantCLeft", "char", "char", "'" + a.ToString() + "'", null);
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "MulConstantCLeft", (char)(a * b), b));
 		}
 		#endregion
 
@@ -154,8 +154,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void MulI1(sbyte a, sbyte b)
 		{
-			compiler.CodeSource = CreateTestCode("MulI1", "sbyte", "int");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "MulI1", a * b, a, b));
+			settings.CodeSource = CreateTestCode("MulI1", "sbyte", "int");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "MulI1", a * b, a, b));
 		}
 
 		[Row(23, 21)]
@@ -165,8 +165,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void MulConstantI1Right(sbyte a, sbyte b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("MulConstantI1Right", "sbyte", "int", null, b.ToString());
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "MulConstantI1Right", (a * b), a));
+			settings.CodeSource = CreateConstantTestCode("MulConstantI1Right", "sbyte", "int", null, b.ToString());
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "MulConstantI1Right", (a * b), a));
 		}
 
 		[Row(23, 21)]
@@ -176,8 +176,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void MulConstantI1Left(sbyte a, sbyte b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("MulConstantI1Left", "sbyte", "int", a.ToString(), null);
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "MulConstantI1Left", (a * b), b));
+			settings.CodeSource = CreateConstantTestCode("MulConstantI1Left", "sbyte", "int", a.ToString(), null);
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "MulConstantI1Left", (a * b), b));
 		}
 		#endregion
 
@@ -215,8 +215,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void MulU1(byte a, byte b)
 		{
-			compiler.CodeSource = CreateTestCode("MulU1", "byte", "uint");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "MulU1", (uint)(a * b), a, b));
+			settings.CodeSource = CreateTestCode("MulU1", "byte", "uint");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "MulU1", (uint)(a * b), a, b));
 		}
 
 		[Row(23, 21)]
@@ -226,8 +226,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void MulConstantU1Right(byte a, byte b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("MulConstantU1Right", "byte", "uint", null, b.ToString());
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "MulConstantU1Right", (uint)(a * b), a));
+			settings.CodeSource = CreateConstantTestCode("MulConstantU1Right", "byte", "uint", null, b.ToString());
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "MulConstantU1Right", (uint)(a * b), a));
 		}
 
 		[Row(23, 21)]
@@ -237,8 +237,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void MulConstantU1Left(byte a, byte b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("MulConstantU1Left", "byte", "uint", a.ToString(), null);
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "MulConstantU1Left", (uint)(a * b), b));
+			settings.CodeSource = CreateConstantTestCode("MulConstantU1Left", "byte", "uint", a.ToString(), null);
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "MulConstantU1Left", (uint)(a * b), b));
 		}
 		#endregion
 
@@ -298,8 +298,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void MulI2(short a, short b)
 		{
-			compiler.CodeSource = CreateTestCode("MulI2", "short", "int");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "MulI2", (a * b), a, b));
+			settings.CodeSource = CreateTestCode("MulI2", "short", "int");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "MulI2", (a * b), a, b));
 		}
 
 		[Row(-23, 21)]
@@ -309,8 +309,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void MulConstantI2Right(short a, short b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("MulConstantI2Right", "short", "int", null, b.ToString());
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "MulConstantI2Right", (a * b), a));
+			settings.CodeSource = CreateConstantTestCode("MulConstantI2Right", "short", "int", null, b.ToString());
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "MulConstantI2Right", (a * b), a));
 		}
 
 		[Row(-23, 21)]
@@ -320,8 +320,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void MulConstantI2Left(short a, short b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("MulConstantI2Left", "short", "int", a.ToString(), null);
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "MulConstantI2Left", (a * b), b));
+			settings.CodeSource = CreateConstantTestCode("MulConstantI2Left", "short", "int", a.ToString(), null);
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "MulConstantI2Left", (a * b), b));
 		}
 		#endregion
 
@@ -359,8 +359,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void MulU2(ushort a, ushort b)
 		{
-			compiler.CodeSource = CreateTestCode("MulU2", "ushort", "uint");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "MulU2", (uint)(a * b), a, b));
+			settings.CodeSource = CreateTestCode("MulU2", "ushort", "uint");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "MulU2", (uint)(a * b), a, b));
 		}
 
 		[Row(23, 21)]
@@ -371,8 +371,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void MulConstantU2Right(ushort a, ushort b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("MulConstantU2Right", "ushort", "uint", null, b.ToString());
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "MulConstantU2Right", (uint)(a * b), a));
+			settings.CodeSource = CreateConstantTestCode("MulConstantU2Right", "ushort", "uint", null, b.ToString());
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "MulConstantU2Right", (uint)(a * b), a));
 		}
 
 		[Row(23, 21)]
@@ -383,8 +383,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void MulConstantU2Left(ushort a, ushort b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("MulConstantU2Left", "ushort", "uint", a.ToString(), null);
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "MulConstantU2Left", (uint)(a * b), b));
+			settings.CodeSource = CreateConstantTestCode("MulConstantU2Left", "ushort", "uint", a.ToString(), null);
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "MulConstantU2Left", (uint)(a * b), b));
 		}
 		#endregion
 
@@ -444,8 +444,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void MulI4(int a, int b)
 		{
-			compiler.CodeSource = CreateTestCode("MulI4", "int", "int");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "MulI4", (a * b), a, b));
+			settings.CodeSource = CreateTestCode("MulI4", "int", "int");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "MulI4", (a * b), a, b));
 		}
 
 		[Row(-23, 21)]
@@ -456,8 +456,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void MulConstantI4Right(int a, int b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("MulConstantI4Right", "int", "int", null, b.ToString());
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "MulConstantI4Right", (a * b), a));
+			settings.CodeSource = CreateConstantTestCode("MulConstantI4Right", "int", "int", null, b.ToString());
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "MulConstantI4Right", (a * b), a));
 		}
 
 		[Row(-23, 21)]
@@ -468,8 +468,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void MulConstantI4Left(int a, int b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("MulConstantI4Left", "int", "int", a.ToString(), null);
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "MulConstantI4Left", (a * b), b));
+			settings.CodeSource = CreateConstantTestCode("MulConstantI4Left", "int", "int", a.ToString(), null);
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "MulConstantI4Left", (a * b), b));
 		}
 		#endregion
 
@@ -507,8 +507,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void MulU4(uint a, uint b)
 		{
-			compiler.CodeSource = CreateTestCode("MulU4", "uint", "uint");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "MulU4", (uint)(a * b), a, b));
+			settings.CodeSource = CreateTestCode("MulU4", "uint", "uint");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "MulU4", (uint)(a * b), a, b));
 		}
 
 		[Row(23, 21)]
@@ -519,8 +519,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void MulConstantU4Right(uint a, uint b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("MulConstantU4Right", "uint", "uint", null, b.ToString());
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "MulConstantU4Right", (uint)(a * b), a));
+			settings.CodeSource = CreateConstantTestCode("MulConstantU4Right", "uint", "uint", null, b.ToString());
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "MulConstantU4Right", (uint)(a * b), a));
 		}
 
 		[Row(23, 21)]
@@ -531,8 +531,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void MulConstantU4Left(uint a, uint b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("MulConstantU4Left", "uint", "uint", a.ToString(), null);
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "MulConstantU4Left", (uint)(a * b), b));
+			settings.CodeSource = CreateConstantTestCode("MulConstantU4Left", "uint", "uint", a.ToString(), null);
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "MulConstantU4Left", (uint)(a * b), b));
 		}
 		#endregion
 
@@ -589,8 +589,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void MulI8(long a, long b)
 		{
-			compiler.CodeSource = CreateTestCode("MulI8", "long", "long");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "MulI8", (a * b), a, b));
+			settings.CodeSource = CreateTestCode("MulI8", "long", "long");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "MulI8", (a * b), a, b));
 		}
 
 		[Row(-23, 148)]
@@ -600,8 +600,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void MulConstantI8Right(long a, long b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("MulConstantI8Right", "long", "long", null, b.ToString());
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "MulConstantI8Right", (a * b), a));
+			settings.CodeSource = CreateConstantTestCode("MulConstantI8Right", "long", "long", null, b.ToString());
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "MulConstantI8Right", (a * b), a));
 		}
 
 		[Row(-23, 148)]
@@ -611,8 +611,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void MulConstantI8Left(long a, long b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("MulConstantI8Left", "long", "long", a.ToString(), null);
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "MulConstantI8Left", (a * b), b));
+			settings.CodeSource = CreateConstantTestCode("MulConstantI8Left", "long", "long", a.ToString(), null);
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "MulConstantI8Left", (a * b), b));
 		}
 		#endregion
 
@@ -647,8 +647,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void MulU8(ulong a, ulong b)
 		{
-			compiler.CodeSource = CreateTestCode("MulU8", "ulong", "ulong");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "MulU8", (ulong)(a * b), a, b));
+			settings.CodeSource = CreateTestCode("MulU8", "ulong", "ulong");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "MulU8", (ulong)(a * b), a, b));
 		}
 
 		[Row(23, 148)]
@@ -658,8 +658,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void MulConstantU8Right(ulong a, ulong b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("MulConstantU8Right", "ulong", "ulong", null, b.ToString());
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "MulConstantU8Right", (ulong)(a * b), a));
+			settings.CodeSource = CreateConstantTestCode("MulConstantU8Right", "ulong", "ulong", null, b.ToString());
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "MulConstantU8Right", (ulong)(a * b), a));
 		}
 
 		[Row(23, 148)]
@@ -669,10 +669,10 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void MulConstantU8Left(ulong a, ulong b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("MulConstantU8Left", "ulong", "ulong", a.ToString(), null);
+			settings.CodeSource = CreateConstantTestCode("MulConstantU8Left", "ulong", "ulong", a.ToString(), null);
 			// left side constant
-			compiler.CodeSource = "static class Test { static bool MulConstantU8Left(ulong expect, ulong b) { return expect == (" + a.ToString() + " * b); } }" + Code.AllTestCode;
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "MulConstantU8Left", (ulong)(a * b), b));
+			settings.CodeSource = "static class Test { static bool MulConstantU8Left(ulong expect, ulong b) { return expect == (" + a.ToString() + " * b); } }";
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "MulConstantU8Left", (ulong)(a * b), b));
 		}
 		#endregion
 
@@ -689,8 +689,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void MulR4(float a, float b)
 		{
-			compiler.CodeSource = CreateTestCode("MulR4", "float", "float");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "MulR4", (a * b), a, b));
+			settings.CodeSource = CreateTestCode("MulR4", "float", "float");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "MulR4", (a * b), a, b));
 		}
 
 		[Row(23f, 148.0016f)]
@@ -700,8 +700,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void MulConstantR4Right(float a, float b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("MulConstantR4Right", "float", "float", null, b.ToString(System.Globalization.CultureInfo.InvariantCulture) + "f");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "MulConstantR4Right", (a * b), a));
+			settings.CodeSource = CreateConstantTestCode("MulConstantR4Right", "float", "float", null, b.ToString(System.Globalization.CultureInfo.InvariantCulture) + "f");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "MulConstantR4Right", (a * b), a));
 		}
 
 		[Row(23f, 148.0016f)]
@@ -711,8 +711,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void MulConstantR4Left(float a, float b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("MulConstantR4Left", "float", "float", a.ToString(System.Globalization.CultureInfo.InvariantCulture) + "f", null);
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "MulConstantR4Left", (a * b), b));
+			settings.CodeSource = CreateConstantTestCode("MulConstantR4Left", "float", "float", a.ToString(System.Globalization.CultureInfo.InvariantCulture) + "f", null);
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "MulConstantR4Left", (a * b), b));
 		}
 		#endregion
 
@@ -729,8 +729,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void MulR8(double a, double b)
 		{
-			compiler.CodeSource = CreateTestCode("MulR8", "double", "double");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "MulR8", (a * b), a, b));
+			settings.CodeSource = CreateTestCode("MulR8", "double", "double");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "MulR8", (a * b), a, b));
 		}
 
 		[Row(23, 148.0016)]
@@ -740,8 +740,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void MulConstantR8Right(double a, double b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("MulConstantR8Right", "double", "double", null, b.ToString(System.Globalization.CultureInfo.InvariantCulture));
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "MulConstantR8Right", (a * b), a));
+			settings.CodeSource = CreateConstantTestCode("MulConstantR8Right", "double", "double", null, b.ToString(System.Globalization.CultureInfo.InvariantCulture));
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "MulConstantR8Right", (a * b), a));
 		}
 
 		[Row(23, 148.0016)]
@@ -751,8 +751,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void MulConstantR8Left(double a, double b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("MulConstantR8Left", "double", "double", a.ToString(System.Globalization.CultureInfo.InvariantCulture), null);
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "MulConstantR8Left", (a * b), b));
+			settings.CodeSource = CreateConstantTestCode("MulConstantR8Left", "double", "double", a.ToString(System.Globalization.CultureInfo.InvariantCulture), null);
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "MulConstantR8Left", (a * b), b));
 		}
 		#endregion
 	}

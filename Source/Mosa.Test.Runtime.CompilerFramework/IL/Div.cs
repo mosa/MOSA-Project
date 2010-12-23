@@ -30,7 +30,7 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 					{
 						return expect == (a / b);
 					}
-				}" + Code.AllTestCode;
+				}";
 		}
 
 		private static string CreateTestCodeWithReturn(string name, string typeIn, string typeOut)
@@ -42,7 +42,7 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 					{
 						return (a / b);
 					}
-				}" + Code.AllTestCode;
+				}";
 		}
 
 		private static string CreateConstantTestCode(string name, string typeIn, string typeOut, string constLeft, string constRight)
@@ -56,7 +56,7 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 						{
 							return expect == (" + constLeft + @" / x);
 						}
-					}" + Code.AllTestCode;
+					}";
 			}
 			else if (String.IsNullOrEmpty(constLeft))
 			{
@@ -67,7 +67,7 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 						{
 							return expect == (x / " + constRight + @");
 						}
-					}" + Code.AllTestCode;
+					}";
 			}
 			else
 			{
@@ -86,7 +86,7 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 						{
 							return (" + constLeft + @" / x);
 						}
-					}" + Code.AllTestCode;
+					}";
 			}
 			else if (String.IsNullOrEmpty(constLeft))
 			{
@@ -97,7 +97,7 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 						{
 							return (x / " + constRight + @");
 						}
-					}" + Code.AllTestCode;
+					}";
 			}
 			else
 			{
@@ -114,8 +114,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void DivC(char a, char b)
 		{
-			compiler.CodeSource = CreateTestCode("DivC", "char", "char");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "DivC", (char)(a / b), a, b));
+			settings.CodeSource = CreateTestCode("DivC", "char", "char");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "DivC", (char)(a / b), a, b));
 		}
 
 		//[Row(0, 'a')]
@@ -124,8 +124,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void DivConstantCRight(char a, char b)
 		{
-			compiler.CodeSource = CreateConstantTestCodeWithReturn("DivConstantCRight", "char", "int", null, "'" + b.ToString() + "'");
-			Assert.AreEqual(a / b, compiler.Run<int>(string.Empty, "Test", "DivConstantCRight", (a / b), a));
+			settings.CodeSource = CreateConstantTestCodeWithReturn("DivConstantCRight", "char", "int", null, "'" + b.ToString() + "'");
+			Assert.AreEqual(a / b, Run<int>(string.Empty, "Test", "DivConstantCRight", (a / b), a));
 		}
 
 		[Row('a', 0, ExpectedException = typeof(DivideByZeroException))]
@@ -134,8 +134,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void DivConstantCLeft(char a, char b)
 		{
-			compiler.CodeSource = CreateConstantTestCodeWithReturn("DivConstantCLeft", "char", "int", "'" + a.ToString() + "'", null);
-			Assert.AreEqual(a / b, compiler.Run<int>(string.Empty, "Test", "DivConstantCLeft", (a / b), (char)b));
+			settings.CodeSource = CreateConstantTestCodeWithReturn("DivConstantCLeft", "char", "int", "'" + a.ToString() + "'", null);
+			Assert.AreEqual(a / b, Run<int>(string.Empty, "Test", "DivConstantCLeft", (a / b), (char)b));
 		}
 		#endregion
 
@@ -196,8 +196,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void DivI1(sbyte a, sbyte b)
 		{
-			compiler.CodeSource = CreateTestCode("DivI1", "sbyte", "int");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "DivI1", a / b, a, b));
+			settings.CodeSource = CreateTestCode("DivI1", "sbyte", "int");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "DivI1", a / b, a, b));
 		}
 
 		[Row(23, 21)]
@@ -207,8 +207,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void DivConstantI1Right(sbyte a, sbyte b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("DivConstantI1Right", "sbyte", "int", null, b.ToString());
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "DivConstantI1Right", (a / b), a));
+			settings.CodeSource = CreateConstantTestCode("DivConstantI1Right", "sbyte", "int", null, b.ToString());
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "DivConstantI1Right", (a / b), a));
 		}
 
 		[Row(23, 21)]
@@ -218,8 +218,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void DivConstantI1Left(sbyte a, sbyte b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("DivConstantI1Left", "sbyte", "int", a.ToString(), null);
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "DivConstantI1Left", (a / b), b));
+			settings.CodeSource = CreateConstantTestCode("DivConstantI1Left", "sbyte", "int", a.ToString(), null);
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "DivConstantI1Left", (a / b), b));
 		}
 		#endregion
 
@@ -258,8 +258,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void DivU1(byte a, byte b)
 		{
-			compiler.CodeSource = CreateTestCode("DivU1", "byte", "uint");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "DivU1", (uint)(a / b), a, b));
+			settings.CodeSource = CreateTestCode("DivU1", "byte", "uint");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "DivU1", (uint)(a / b), a, b));
 		}
 
 		[Row(23, 21)]
@@ -269,8 +269,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void DivConstantU1Right(byte a, byte b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("DivConstantU1Right", "byte", "uint", null, b.ToString());
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "DivConstantU1Right", (uint)(a / b), a));
+			settings.CodeSource = CreateConstantTestCode("DivConstantU1Right", "byte", "uint", null, b.ToString());
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "DivConstantU1Right", (uint)(a / b), a));
 		}
 
 		[Row(23, 21)]
@@ -280,8 +280,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void DivConstantU1Left(byte a, byte b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("DivConstantU1Left", "byte", "uint", a.ToString(), null);
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "DivConstantU1Left", (uint)(a / b), b));
+			settings.CodeSource = CreateConstantTestCode("DivConstantU1Left", "byte", "uint", a.ToString(), null);
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "DivConstantU1Left", (uint)(a / b), b));
 		}
 		#endregion
 
@@ -342,8 +342,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void DivI2(short a, short b)
 		{
-			compiler.CodeSource = CreateTestCode("DivI2", "short", "int");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "DivI2", a / b, a, b));
+			settings.CodeSource = CreateTestCode("DivI2", "short", "int");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "DivI2", a / b, a, b));
 		}
 
 		[Row(-23, 21)]
@@ -353,8 +353,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void DivConstantI2Right(short a, short b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("DivConstantI2Right", "short", "int", null, b.ToString());
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "DivConstantI2Right", (a / b), a));
+			settings.CodeSource = CreateConstantTestCode("DivConstantI2Right", "short", "int", null, b.ToString());
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "DivConstantI2Right", (a / b), a));
 		}
 
 		[Row(-23, 21)]
@@ -364,8 +364,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void DivConstantI2Left(short a, short b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("DivConstantI2Left", "short", "int", a.ToString(), null);
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "DivConstantI2Left", (a / b), b));
+			settings.CodeSource = CreateConstantTestCode("DivConstantI2Left", "short", "int", a.ToString(), null);
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "DivConstantI2Left", (a / b), b));
 		}
 		#endregion
 
@@ -404,8 +404,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void DivU2(ushort a, ushort b)
 		{
-			compiler.CodeSource = CreateTestCode("DivU2", "ushort", "uint");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "DivU2", (uint)(a / b), a, b));
+			settings.CodeSource = CreateTestCode("DivU2", "ushort", "uint");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "DivU2", (uint)(a / b), a, b));
 		}
 
 		[Row(23, 21)]
@@ -416,8 +416,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void DivConstantU2Right(ushort a, ushort b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("DivConstantU2Right", "ushort", "uint", null, b.ToString());
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "DivConstantU2Right", (uint)(a / b), a));
+			settings.CodeSource = CreateConstantTestCode("DivConstantU2Right", "ushort", "uint", null, b.ToString());
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "DivConstantU2Right", (uint)(a / b), a));
 		}
 
 		[Row(23, 21)]
@@ -428,8 +428,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void DivConstantU2Left(ushort a, ushort b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("DivConstantU2Left", "ushort", "uint", a.ToString(), null);
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "DivConstantU2Left", (uint)(a / b), b));
+			settings.CodeSource = CreateConstantTestCode("DivConstantU2Left", "ushort", "uint", a.ToString(), null);
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "DivConstantU2Left", (uint)(a / b), b));
 		}
 		#endregion
 
@@ -490,8 +490,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void DivI4(int a, int b)
 		{
-			compiler.CodeSource = CreateTestCode("DivI4", "int", "int");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "DivI4", (a / b), a, b));
+			settings.CodeSource = CreateTestCode("DivI4", "int", "int");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "DivI4", (a / b), a, b));
 		}
 
 		[Row(-23, 21)]
@@ -502,8 +502,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void DivConstantI4Right(int a, int b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("DivConstantI4Right", "int", "int", null, b.ToString());
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "DivConstantI4Right", (a / b), a));
+			settings.CodeSource = CreateConstantTestCode("DivConstantI4Right", "int", "int", null, b.ToString());
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "DivConstantI4Right", (a / b), a));
 		}
 
 		[Row(-23, 21)]
@@ -514,8 +514,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void DivConstantI4Left(int a, int b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("DivConstantI4Left", "int", "int", a.ToString(), null);
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "DivConstantI4Left", (a / b), b));
+			settings.CodeSource = CreateConstantTestCode("DivConstantI4Left", "int", "int", a.ToString(), null);
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "DivConstantI4Left", (a / b), b));
 		}
 		#endregion
 
@@ -554,8 +554,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void DivU4(uint a, uint b)
 		{
-			compiler.CodeSource = CreateTestCode("DivU4", "uint", "uint");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "DivU4", (uint)(a / b), a, b));
+			settings.CodeSource = CreateTestCode("DivU4", "uint", "uint");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "DivU4", (uint)(a / b), a, b));
 		}
 
 		[Row(1, 2)]
@@ -566,8 +566,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void DivConstantU4Right(uint a, uint b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("DivConstantU4Right", "uint", "uint", null, b.ToString());
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "DivConstantU4Right", (uint)(a / b), a));
+			settings.CodeSource = CreateConstantTestCode("DivConstantU4Right", "uint", "uint", null, b.ToString());
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "DivConstantU4Right", (uint)(a / b), a));
 		}
 
 		[Row(1, 2)]
@@ -578,8 +578,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void DivConstantU4Left(uint a, uint b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("DivConstantU4Left", "uint", "uint", a.ToString(), null);
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "DivConstantU4Left", (uint)(a / b), b));
+			settings.CodeSource = CreateConstantTestCode("DivConstantU4Left", "uint", "uint", a.ToString(), null);
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "DivConstantU4Left", (uint)(a / b), b));
 		}
 		#endregion
 
@@ -618,8 +618,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void DivU8(ulong a, ulong b)
 		{
-			compiler.CodeSource = CreateTestCodeWithReturn("DivU8", "ulong", "ulong");
-			Assert.AreEqual((ulong)(a / b), compiler.Run<ulong>(string.Empty, "Test", "DivU8", (ulong)(a / b), a, b));
+			settings.CodeSource = CreateTestCodeWithReturn("DivU8", "ulong", "ulong");
+			Assert.AreEqual((ulong)(a / b), Run<ulong>(string.Empty, "Test", "DivU8", (ulong)(a / b), a, b));
 		}
 		#endregion
 
@@ -680,8 +680,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void DivI8(long a, long b)
 		{
-			compiler.CodeSource = CreateTestCode("DivI8", "long", "long");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "DivI8", (a / b), a, b));
+			settings.CodeSource = CreateTestCode("DivI8", "long", "long");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "DivI8", (a / b), a, b));
 		}
 
 		[Row(-23, 21)]
@@ -692,8 +692,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void DivConstantI8Right(long a, long b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("DivConstantI8Right", "long", "long", null, b.ToString());
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "DivConstantI8Right", (a / b), a));
+			settings.CodeSource = CreateConstantTestCode("DivConstantI8Right", "long", "long", null, b.ToString());
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "DivConstantI8Right", (a / b), a));
 		}
 
 		[Row(-23, 21)]
@@ -704,8 +704,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void DivConstantI8Left(long a, long b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("DivConstantI8Left", "long", "long", a.ToString(), null);
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "DivConstantI8Left", (a / b), b));
+			settings.CodeSource = CreateConstantTestCode("DivConstantI8Left", "long", "long", a.ToString(), null);
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "DivConstantI8Left", (a / b), b));
 		}
 
 		#endregion
@@ -734,8 +734,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void DivR4(float a, float b)
 		{
-			compiler.CodeSource = CreateTestCode("DivR4", "float", "float");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "DivR4", (a / b), a, b));
+			settings.CodeSource = CreateTestCode("DivR4", "float", "float");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "DivR4", (a / b), a, b));
 		}
 
 		[Row(23f, 148.0016f)]
@@ -745,8 +745,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void DivConstantR4Right(float a, float b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("DivConstantR4Right", "float", "float", null, b.ToString(System.Globalization.CultureInfo.InvariantCulture) + "f");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "DivConstantR4Right", (a / b), a));
+			settings.CodeSource = CreateConstantTestCode("DivConstantR4Right", "float", "float", null, b.ToString(System.Globalization.CultureInfo.InvariantCulture) + "f");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "DivConstantR4Right", (a / b), a));
 		}
 
 		[Row(23f, 148.0016f)]
@@ -757,8 +757,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		public void DivConstantR4Left(float a, float b)
 		{
 
-			compiler.CodeSource = CreateConstantTestCode("DivConstantR4Left", "float", "float", a.ToString(System.Globalization.CultureInfo.InvariantCulture) + "f", null);
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "DivConstantR4Left", (a / b), b));
+			settings.CodeSource = CreateConstantTestCode("DivConstantR4Left", "float", "float", a.ToString(System.Globalization.CultureInfo.InvariantCulture) + "f", null);
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "DivConstantR4Left", (a / b), b));
 		}
 		#endregion
 
@@ -787,8 +787,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void DivR8(double a, double b)
 		{
-			compiler.CodeSource = CreateTestCode("DivR8", "double", "double");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "DivR8", (a / b), a, b));
+			settings.CodeSource = CreateTestCode("DivR8", "double", "double");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "DivR8", (a / b), a, b));
 		}
 
 		[Row(23, 148.0016)]
@@ -798,8 +798,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void DivConstantR8Right(double a, double b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("DivConstantR8Right", "double", "double", null, b.ToString(System.Globalization.CultureInfo.InvariantCulture));
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "DivConstantR8Right", (a / b), a));
+			settings.CodeSource = CreateConstantTestCode("DivConstantR8Right", "double", "double", null, b.ToString(System.Globalization.CultureInfo.InvariantCulture));
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "DivConstantR8Right", (a / b), a));
 		}
 
 		[Row(23, 148.0016)]
@@ -809,8 +809,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void DivConstantR8Left(double a, double b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("DivConstantR8Left", "double", "double", a.ToString(System.Globalization.CultureInfo.InvariantCulture), null);
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "DivConstantR8Left", (a / b), b));
+			settings.CodeSource = CreateConstantTestCode("DivConstantR8Left", "double", "double", a.ToString(System.Globalization.CultureInfo.InvariantCulture), null);
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "DivConstantR8Left", (a / b), b));
 		}
 		#endregion
 	}

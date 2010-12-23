@@ -36,32 +36,7 @@ namespace Mosa.Test.Runtime.CompilerFramework
 		/// <summary>
 		/// 
 		/// </summary>
-		private Assembly loadedAssembly;
-
-		/// <summary>
-		/// The filename of the assembly, which contains the test case.
-		/// </summary>
-		private string assembly = null;
-
-		/// <summary>
-		/// Flag, which determines if the compiler needs to run.
-		/// </summary>
-		private bool isDirty = true;
-
-		/// <summary>
-		/// An array of assembly references to include in the compilation.
-		/// </summary>
-		private string[] references;
-
-		/// <summary>
-		/// The source text of the test code to compile.
-		/// </summary>
-		private string codeSource;
-
-		/// <summary>
-		/// Holds the target language of this test runner.
-		/// </summary>
-		private string language;
+		private TestCompilerSettings cacheSettings = null;
 
 		/// <summary>
 		/// A cache of CodeDom providers.
@@ -72,16 +47,6 @@ namespace Mosa.Test.Runtime.CompilerFramework
 		/// Holds the temporary files collection.
 		/// </summary>
 		private static TempFileCollection temps = new TempFileCollection(TempDirectory, false);
-
-		/// <summary>
-		/// Determines if unsafe code is allowed in the test.
-		/// </summary>
-		private bool unsafeCode;
-
-		/// <summary>
-		/// Determines if mscorlib is referenced in the test.
-		/// </summary>
-		private bool doNotReferenceMscorlib;
 
 		/// <summary>
 		/// 
@@ -97,72 +62,11 @@ namespace Mosa.Test.Runtime.CompilerFramework
 		/// </summary>
 		public TestCompiler()
 		{
-			references = new string[0];
-			language = "C#";
-			unsafeCode = true;
-			doNotReferenceMscorlib = true;
-			IsDirty = true;
 		}
 
 		#endregion // Construction
 
 		#region Properties
-
-		/// <summary>
-		/// Gets or sets a value indicating whether the test needs to be compiled.
-		/// </summary>
-		/// <value><c>true</c> if a compilation is needed; otherwise, <c>false</c>.</value>
-		protected bool IsDirty
-		{
-			get { return isDirty; }
-			set { isDirty = value; }
-		}
-
-		/// <summary>
-		/// Gets or sets the language.
-		/// </summary>
-		/// <value>The language.</value>
-		public string Language
-		{
-			get { return language; }
-			set { if (language != value) IsDirty = true; language = value; }
-		}
-
-		/// <summary>
-		/// Gets or sets the code source.
-		/// </summary>
-		/// <value>The code source.</value>
-		public string CodeSource
-		{
-			get { return codeSource; }
-			set { if (codeSource != value) IsDirty = true; codeSource = value; }
-		}
-
-		/// <summary>
-		/// Gets or sets a value indicating whether unsafe code is used in the test.
-		/// </summary>
-		/// <value><c>true</c> if unsafe code is used in the test; otherwise, <c>false</c>.</value>
-		public bool UnsafeCode
-		{
-			get { return unsafeCode; }
-			set { if (unsafeCode != value) IsDirty = true; unsafeCode = value; }
-		}
-
-		public bool DoNotReferenceMscorlib
-		{
-			get { return doNotReferenceMscorlib; }
-			set { if (doNotReferenceMscorlib != value) IsDirty = true; doNotReferenceMscorlib = value; }
-		}
-
-		/// <summary>
-		/// Gets or sets the references.
-		/// </summary>
-		/// <value>The references.</value>
-		public string[] References
-		{
-			get { return references; }
-			set { if (references != value) IsDirty = true; references = value; }
-		}
 
 		private static string TempDirectory
 		{
@@ -182,12 +86,11 @@ namespace Mosa.Test.Runtime.CompilerFramework
 
 		#endregion Properties
 
-		public T Run<T>(string ns, string type, string method, params object[] parameters)
+		public T Run<T>(TestCompilerSettings settings, string ns, string type, string method, params object[] parameters)
 		{
-			if (isDirty)
+			if (cacheSettings == null || !cacheSettings.IsEqual(settings))
 			{
-				CompileTestCode();
-				isDirty = false;
+				CompileTestCode(settings);
 			}
 
 			// Find the test method to execute
@@ -234,17 +137,17 @@ namespace Mosa.Test.Runtime.CompilerFramework
 		}
 
 		// Might not keep this as a public method
-		public void CompileTestCode()
+		public void CompileTestCode(TestCompilerSettings settings)
 		{
-			if (loadedAssembly != null)
+			if (cacheSettings == null || !cacheSettings.IsEqual(settings))
 			{
-				loadedAssembly = null;
+				cacheSettings = new TestCompilerSettings(settings);
+
+				string assembly = RunCodeDomCompiler(settings);
+
+				Console.WriteLine("Executing MOSA compiler...");
+				RunMosaCompiler(settings, assembly);
 			}
-
-			assembly = RunCodeDomCompiler();
-
-			Console.WriteLine("Executing MOSA compiler...");
-			RunMosaCompiler(assembly);
 		}
 
 		/// <summary>
@@ -278,37 +181,40 @@ namespace Mosa.Test.Runtime.CompilerFramework
 			throw new MissingMethodException(ns + "." + type, method);
 		}
 
-		private string RunCodeDomCompiler()
+		private string RunCodeDomCompiler(TestCompilerSettings settings)
 		{
-			Console.WriteLine("Executing {0} compiler...", Language);
+			Console.WriteLine("Executing {0} compiler...", settings.Language);
 
 			CodeDomProvider provider;
-			if (!providerCache.TryGetValue(language, out provider))
+			if (!providerCache.TryGetValue(settings.Language, out provider))
 			{
-				provider = CodeDomProvider.CreateProvider(Language);
+				provider = CodeDomProvider.CreateProvider(settings.Language);
 				if (provider == null)
-					throw new NotSupportedException("The language '" + Language + "' is not supported on this machine.");
-				providerCache.Add(Language, provider);
+					throw new NotSupportedException("The language '" + settings.Language + "' is not supported on this machine.");
+				providerCache.Add(settings.Language, provider);
 			}
 
 			string filename = Path.Combine(TempDirectory, Path.ChangeExtension(Path.GetRandomFileName(), "dll"));
 			temps.AddFile(filename, false);
 
+			string[] references = new string[settings.References.Count];
+			settings.References.CopyTo(references, 0);
+
 			CompilerResults compileResults;
-			CompilerParameters parameters = new CompilerParameters(References, filename, false);
+			CompilerParameters parameters = new CompilerParameters(references, filename, false);
 			parameters.CompilerOptions = "/optimize-";
 
-			if (unsafeCode)
+			if (settings.UnsafeCode)
 			{
-				if (Language == "C#")
+				if (settings.Language == "C#")
 					parameters.CompilerOptions = parameters.CompilerOptions + " /unsafe+";
 				else
 					throw new NotSupportedException();
 			}
 
-			if (doNotReferenceMscorlib)
+			if (settings.DoNotReferenceMscorlib)
 			{
-				if (Language == "C#")
+				if (settings.Language == "C#")
 					parameters.CompilerOptions = parameters.CompilerOptions + " /nostdlib";
 				else
 					throw new NotSupportedException();
@@ -316,10 +222,10 @@ namespace Mosa.Test.Runtime.CompilerFramework
 
 			parameters.GenerateInMemory = false;
 
-			if (codeSource != null)
+			if (settings.CodeSource != null)
 			{
-				Console.WriteLine("Code: {0}", codeSource);
-				compileResults = provider.CompileAssemblyFromSource(parameters, codeSource);
+				Console.WriteLine("Code: {0}", settings.CodeSource + settings.AdditionalSource);
+				compileResults = provider.CompileAssemblyFromSource(parameters, settings.CodeSource + settings.AdditionalSource);
 			}
 			else
 				throw new NotSupportedException();
@@ -338,10 +244,13 @@ namespace Mosa.Test.Runtime.CompilerFramework
 			return compileResults.PathToAssembly;
 		}
 
-		private void RunMosaCompiler(string assemblyFile)
+		private void RunMosaCompiler(TestCompilerSettings settings, string assemblyFile)
 		{
 			List<string> files = new List<string>();
 			files.Add(assemblyFile);
+
+			foreach (string file in settings.References)
+				files.Add(file);
 
 			IAssemblyLoader assemblyLoader = new AssemblyLoader();
 

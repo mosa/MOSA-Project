@@ -5,7 +5,9 @@ CD ..\Tests
 IF EXIST "%ProgramFiles(x86)%\Gallio\bin\Gallio.Echo.exe" SET GALLIO="%ProgramFiles(x86)%\Gallio\bin\Gallio.Echo.exe"
 IF EXIST "%ProgramFiles%\Gallio\bin\Gallio.Echo.exe" SET GALLIO="%ProgramFiles%\Gallio\bin\Gallio.Echo.exe"
 
-%GALLIO% /rnf:Tests /rt:Xml-Inline /report-directory:reports ..\bin\Mosa.Test.Runtime.CompilerFramework.dll
+CD ..\bin
+
+%GALLIO% /rnf:Test /rt:Xml-Inline /report-directory:..\Tests\reports Mosa.Test.Runtime.CompilerFramework.dll
 
 CALL ExtractResults.BAT
 

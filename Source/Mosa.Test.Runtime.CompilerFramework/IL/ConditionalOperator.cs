@@ -34,8 +34,7 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 				.Replace("#name", name)
 				.Replace("#condition", condition)
 				.Replace("#typeIn", typeIn)
-				.Replace("#typeOut", typeOut)
-				+ Code.AllTestCode;
+				.Replace("#typeOut", typeOut);
 		}
 
 		[Row((byte)2, (byte)2, (byte)0, (byte)1)]
@@ -44,8 +43,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void ConditionalOperator_EQ_U1(byte a, byte b, byte c, byte d)
 		{
-			compiler.CodeSource = CreateTestCode("ConditionalOperator_EQ_U1", "==", "byte", "byte");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "ConditionalOperator_EQ_U1", ((a == b) ? c : d), a, b, c, d));
+			settings.CodeSource = CreateTestCode("ConditionalOperator_EQ_U1", "==", "byte", "byte");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "ConditionalOperator_EQ_U1", ((a == b) ? c : d), a, b, c, d));
 		}
 
 		[Row((byte)2, (byte)2, (byte)0, (byte)1)]
@@ -54,8 +53,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void ConditionalOperator_NEQ_U1(byte a, byte b, byte c, byte d)
 		{
-			compiler.CodeSource = CreateTestCode("ConditionalOperator_NEQ_U1", "!=", "byte", "byte");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "ConditionalOperator_NEQ_U1", ((a != b) ? c : d), a, b, c, d));
+			settings.CodeSource = CreateTestCode("ConditionalOperator_NEQ_U1", "!=", "byte", "byte");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "ConditionalOperator_NEQ_U1", ((a != b) ? c : d), a, b, c, d));
 		}
 
 		[Row((sbyte)2, (sbyte)2, (sbyte)0, (sbyte)1)]
@@ -65,8 +64,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void ConditionalOperator_EQ_I1(sbyte a, sbyte b, sbyte c, sbyte d)
 		{
-			compiler.CodeSource = CreateTestCode("ConditionalOperator_EQ_I1", "==", "sbyte", "sbyte");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "ConditionalOperator_EQ_I1", ((a == b) ? c : d), a, b, c, d));
+			settings.CodeSource = CreateTestCode("ConditionalOperator_EQ_I1", "==", "sbyte", "sbyte");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "ConditionalOperator_EQ_I1", ((a == b) ? c : d), a, b, c, d));
 		}
 
 		[Row((sbyte)2, (sbyte)2, (sbyte)0, (sbyte)1)]
@@ -76,8 +75,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void ConditionalOperator_NEQ_I1(sbyte a, sbyte b, sbyte c, sbyte d)
 		{
-			compiler.CodeSource = CreateTestCode("ConditionalOperator_NEQ_I1", "!=", "sbyte", "sbyte");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "ConditionalOperator_NEQ_I1", ((a != b) ? c : d), a, b, c, d));
+			settings.CodeSource = CreateTestCode("ConditionalOperator_NEQ_I1", "!=", "sbyte", "sbyte");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "ConditionalOperator_NEQ_I1", ((a != b) ? c : d), a, b, c, d));
 		}
 
 		[Row((ushort)2, (ushort)2, (ushort)0, (ushort)1)]
@@ -85,8 +84,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void ConditionalOperator_EQ_U2(ushort a, ushort b, ushort c, ushort d)
 		{
-			compiler.CodeSource = CreateTestCode("ConditionalOperator_EQ_U2", "==", "ushort", "ushort");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "ConditionalOperator_EQ_U2", ((a == b) ? c : d), a, b, c, d));
+			settings.CodeSource = CreateTestCode("ConditionalOperator_EQ_U2", "==", "ushort", "ushort");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "ConditionalOperator_EQ_U2", ((a == b) ? c : d), a, b, c, d));
 		}
 
 		[Row((ushort)2, (ushort)2, (ushort)0, (ushort)1)]
@@ -94,8 +93,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void ConditionalOperator_NEQ_U2(ushort a, ushort b, ushort c, ushort d)
 		{
-			compiler.CodeSource = CreateTestCode("ConditionalOperator_NEQ_U2", "!=", "ushort", "ushort");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "ConditionalOperator_NEQ_U2", ((a != b) ? c : d), a, b, c, d));
+			settings.CodeSource = CreateTestCode("ConditionalOperator_NEQ_U2", "!=", "ushort", "ushort");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "ConditionalOperator_NEQ_U2", ((a != b) ? c : d), a, b, c, d));
 		}
 
 		[Row((short)2, (short)2, (short)0, (short)1)]
@@ -105,8 +104,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void ConditionalOperator_EQ_I2(short a, short b, short c, short d)
 		{
-			compiler.CodeSource = CreateTestCode("ConditionalOperator_EQ_I2", "==", "short", "short");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "ConditionalOperator_EQ_I2", ((a == b) ? c : d), a, b, c, d));
+			settings.CodeSource = CreateTestCode("ConditionalOperator_EQ_I2", "==", "short", "short");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "ConditionalOperator_EQ_I2", ((a == b) ? c : d), a, b, c, d));
 		}
 
 		[Row((short)2, (short)2, (short)0, (short)1)]
@@ -116,8 +115,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void ConditionalOperator_NEQ_I2(short a, short b, short c, short d)
 		{
-			compiler.CodeSource = CreateTestCode("ConditionalOperator_NEQ_I2", "!=", "short", "short");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "ConditionalOperator_NEQ_I2", ((a != b) ? c : d), a, b, c, d));
+			settings.CodeSource = CreateTestCode("ConditionalOperator_NEQ_I2", "!=", "short", "short");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "ConditionalOperator_NEQ_I2", ((a != b) ? c : d), a, b, c, d));
 		}
 
 		[Row((int)2, (int)2, (int)0, (int)1)]
@@ -127,8 +126,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void ConditionalOperator_EQ_I4(int a, int b, int c, int d)
 		{
-			compiler.CodeSource = CreateTestCode("ConditionalOperator_EQ_I4", "==", "int", "int");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "ConditionalOperator_EQ_I4", ((a == b) ? c : d), a, b, c, d));
+			settings.CodeSource = CreateTestCode("ConditionalOperator_EQ_I4", "==", "int", "int");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "ConditionalOperator_EQ_I4", ((a == b) ? c : d), a, b, c, d));
 		}
 
 		[Row((int)2, (int)2, (int)0, (int)1)]
@@ -138,8 +137,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void ConditionalOperator_NEQ_I4(int a, int b, int c, int d)
 		{
-			compiler.CodeSource = CreateTestCode("ConditionalOperator_NEQ_I4", "!=", "int", "int");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "ConditionalOperator_NEQ_I4", ((a != b) ? c : d), a, b, c, d));
+			settings.CodeSource = CreateTestCode("ConditionalOperator_NEQ_I4", "!=", "int", "int");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "ConditionalOperator_NEQ_I4", ((a != b) ? c : d), a, b, c, d));
 		}
 
 		[Row((uint)2, (uint)2, (uint)0, (uint)1)]
@@ -147,8 +146,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void ConditionalOperator_EQ_U4(uint a, uint b, uint c, uint d)
 		{
-			compiler.CodeSource = CreateTestCode("ConditionalOperator_EQ_U4", "==", "uint", "uint");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "ConditionalOperator_EQ_U4", ((a == b) ? c : d), a, b, c, d));
+			settings.CodeSource = CreateTestCode("ConditionalOperator_EQ_U4", "==", "uint", "uint");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "ConditionalOperator_EQ_U4", ((a == b) ? c : d), a, b, c, d));
 		}
 
 		[Row((uint)2, (uint)2, (uint)0, (uint)1)]
@@ -156,8 +155,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void ConditionalOperator_NEQ_U4(uint a, uint b, uint c, uint d)
 		{
-			compiler.CodeSource = CreateTestCode("ConditionalOperator_NEQ_U4", "!=", "uint", "uint");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "ConditionalOperator_NEQ_U4", ((a != b) ? c : d), a, b, c, d));
+			settings.CodeSource = CreateTestCode("ConditionalOperator_NEQ_U4", "!=", "uint", "uint");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "ConditionalOperator_NEQ_U4", ((a != b) ? c : d), a, b, c, d));
 		}
 
 		[Row((long)2, (long)2, (long)0, (long)1)]
@@ -167,8 +166,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void ConditionalOperator_EQ_I8(long a, long b, long c, long d)
 		{
-			compiler.CodeSource = CreateTestCode("ConditionalOperator_EQ_I8", "==", "long", "long");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "ConditionalOperator_EQ_I8", ((a == b) ? c : d), a, b, c, d));
+			settings.CodeSource = CreateTestCode("ConditionalOperator_EQ_I8", "==", "long", "long");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "ConditionalOperator_EQ_I8", ((a == b) ? c : d), a, b, c, d));
 		}
 
 		[Row((long)2, (long)2, (long)0, (long)1)]
@@ -178,8 +177,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void ConditionalOperator_NEQ_I8(long a, long b, long c, long d)
 		{
-			compiler.CodeSource = CreateTestCode("ConditionalOperator_NEQ_I8", "!=", "long", "long");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "ConditionalOperator_NEQ_I8", ((a != b) ? c : d), a, b, c, d));
+			settings.CodeSource = CreateTestCode("ConditionalOperator_NEQ_I8", "!=", "long", "long");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "ConditionalOperator_NEQ_I8", ((a != b) ? c : d), a, b, c, d));
 		}
 
 		[Row((ulong)2, (ulong)2, (ulong)0, (ulong)1)]
@@ -187,8 +186,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void ConditionalOperator_EQ_U8(ulong a, ulong b, ulong c, ulong d)
 		{
-			compiler.CodeSource = CreateTestCode("ConditionalOperator_EQ_U8", "==", "ulong", "ulong");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "ConditionalOperator_EQ_U8", ((a == b) ? c : d), a, b, c, d));
+			settings.CodeSource = CreateTestCode("ConditionalOperator_EQ_U8", "==", "ulong", "ulong");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "ConditionalOperator_EQ_U8", ((a == b) ? c : d), a, b, c, d));
 		}
 
 		[Row((ulong)2, (ulong)2, (ulong)0, (ulong)1)]
@@ -196,8 +195,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void ConditionalOperator_NEQ_U8(ulong a, ulong b, ulong c, ulong d)
 		{
-			compiler.CodeSource = CreateTestCode("ConditionalOperator_NEQ_U8", "!=", "ulong", "ulong");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "ConditionalOperator_NEQ_U8", ((a != b) ? c : d), a, b, c, d));
+			settings.CodeSource = CreateTestCode("ConditionalOperator_NEQ_U8", "!=", "ulong", "ulong");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "ConditionalOperator_NEQ_U8", ((a != b) ? c : d), a, b, c, d));
 		}
 	}
 }

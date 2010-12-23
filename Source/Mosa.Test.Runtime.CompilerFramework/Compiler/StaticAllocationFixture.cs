@@ -11,8 +11,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.Compiler
 		[Test]
 		public void MustCompileStaticAllocation()
 		{
-			compiler.CodeSource = TestCode;
-			int result = compiler.Run<int>(string.Empty, @"StaticAllocationTestCode", @"GetData");
+			settings.CodeSource = TestCode;
+			int result = Run<int>(string.Empty, @"StaticAllocationTestCode", @"GetData");
 			Assert.AreEqual(0x7AADF00D, result);
 		}
 		
@@ -36,6 +36,6 @@ namespace Mosa.Test.Runtime.CompilerFramework.Compiler
 					return allocatedObject.dataField;
 				}                
 			}
-		" + Code.AllTestCode;
+		";
 	}
 }

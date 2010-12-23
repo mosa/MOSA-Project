@@ -34,13 +34,13 @@ namespace Mosa.Test.Runtime.CompilerFramework.CIL
 					}
 				}
 			}
-		" + Code.AllTestCode;
+		";
 
 		[Test]
 		public void MustCompileCodePinningVariables()
 		{
-			compiler.CodeSource = TestCode;
-			Assert.DoesNotThrow(() => compiler.CompileTestCode());
+			settings.CodeSource = TestCode;
+			Assert.DoesNotThrow(() => CompileTestCode());
 		}
 	}
 }

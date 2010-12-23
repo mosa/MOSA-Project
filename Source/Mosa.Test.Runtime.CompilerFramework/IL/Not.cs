@@ -30,7 +30,7 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 					{
 						return expect == (~a);
 					}
-				}" + Code.AllTestCode;
+				}";
 		}
 
 		#region C
@@ -46,8 +46,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void NotC(char a)
 		{
-			compiler.CodeSource = CreateTestCode("NotC", "char", "int");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "NotC", (int)~a, a));
+			settings.CodeSource = CreateTestCode("NotC", "char", "int");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "NotC", (int)~a, a));
 		}
 		#endregion
 
@@ -72,8 +72,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void NotI1(sbyte a)
 		{
-			compiler.CodeSource = CreateTestCode("NotI1", "sbyte", "int");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "NotI1", (sbyte)~a, (sbyte)a));
+			settings.CodeSource = CreateTestCode("NotI1", "sbyte", "int");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "NotI1", (sbyte)~a, (sbyte)a));
 		}
 		#endregion
 
@@ -91,8 +91,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void NotU1(byte a)
 		{
-			compiler.CodeSource = CreateTestCode("NotU1", "byte", "int");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "NotU1", (~a), a));
+			settings.CodeSource = CreateTestCode("NotU1", "byte", "int");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "NotU1", (~a), a));
 		}
 		#endregion
 
@@ -117,8 +117,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void NotI2(short a)
 		{
-			compiler.CodeSource = CreateTestCode("NotI2", "short", "int");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "NotI2", (short)~a, (short)a));
+			settings.CodeSource = CreateTestCode("NotI2", "short", "int");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "NotI2", (short)~a, (short)a));
 		}
 		#endregion
 
@@ -136,8 +136,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void NotU2(ushort a)
 		{
-			compiler.CodeSource = CreateTestCode("NotU2", "ushort", "int");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "NotU2", (~a), a));
+			settings.CodeSource = CreateTestCode("NotU2", "ushort", "int");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "NotU2", (~a), a));
 		}
 		#endregion
 
@@ -162,8 +162,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void NotI4(int a)
 		{
-			compiler.CodeSource = CreateTestCode("NotI4", "int", "int");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "NotI4", (int)~a, (int)a));
+			settings.CodeSource = CreateTestCode("NotI4", "int", "int");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "NotI4", (int)~a, (int)a));
 		}
 		#endregion
 
@@ -181,8 +181,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void NotU4(uint a)
 		{
-			compiler.CodeSource = CreateTestCode("NotU4", "uint", "uint");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "NotU4", ~(uint)a, a));
+			settings.CodeSource = CreateTestCode("NotU4", "uint", "uint");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "NotU4", ~(uint)a, a));
 		}
 		#endregion
 
@@ -207,8 +207,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void NotI8(long a)
 		{
-			compiler.CodeSource = CreateTestCode("NotI8", "long", "long");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "NotI8", (long)~a, (long)a));
+			settings.CodeSource = CreateTestCode("NotI8", "long", "long");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "NotI8", (long)~a, (long)a));
 		}
 		#endregion
 
@@ -226,8 +226,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void NotU8(ulong a)
 		{
-			compiler.CodeSource = CreateTestCode("NotU8", "ulong", "ulong");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "NotU8", ~(ulong)a, a));
+			settings.CodeSource = CreateTestCode("NotU8", "ulong", "ulong");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "NotU8", ~(ulong)a, a));
 		}
 		#endregion
 	}

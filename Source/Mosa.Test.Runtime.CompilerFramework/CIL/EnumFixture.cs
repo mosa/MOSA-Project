@@ -34,19 +34,14 @@ namespace Mosa.Test.Runtime.CompilerFramework.CIL
 						return 5 == (int)TestEnum.ItemA;
 					}
 				}
-			" + Code.AllTestCode;
+			";
 		}
 
 		[Test]
 		public void ItemAMustEqual5()
 		{
-			compiler.CodeSource = CreateTestCode();
-			compiler.DoNotReferenceMscorlib = true;
-
-			// Due to Code.NoStdLibDefinitions... :(
-			compiler.UnsafeCode = true;
-
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "TestClass", "AMustBe5"));
+			settings.CodeSource = CreateTestCode();
+			Assert.IsTrue(Run<bool>(string.Empty, "TestClass", "AMustBe5"));
 		}
 	}
 }

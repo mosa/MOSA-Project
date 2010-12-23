@@ -51,21 +51,21 @@ namespace Mosa.Test.Runtime.CompilerFramework.CIL
 					return this.Test() + base.Test();
 				}
 			}
-		" + Code.AllTestCode;
+		";
 
 		[Test]
 		public void TestVirtualCall()
 		{
-			compiler.CodeSource = TestCode;
-			int result = compiler.Run<int>(string.Empty, @"Derived", @"STest");
+			settings.CodeSource = TestCode;
+			int result = Run<int>(string.Empty, @"Derived", @"STest");
 			Assert.AreEqual(7, result);
 		}
 
 		[Test]
 		public void TestBaseCall()
 		{
-			compiler.CodeSource = TestCode;
-			int result = compiler.Run<int>(string.Empty, @"Derived", @"STestBaseCall");
+			settings.CodeSource = TestCode;
+			int result = Run<int>(string.Empty, @"Derived", @"STestBaseCall");
 			Assert.AreEqual(12, result);
 		}
 

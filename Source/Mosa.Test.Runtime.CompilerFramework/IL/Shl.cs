@@ -36,7 +36,7 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 					{
 						return expect == (a << b);
 					}
-				}" + Code.AllTestCode;
+				}";
 		}
 
 		private static string CreateTestCodeWithReturn(string name, string typeInA, string typeInB, string typeOut)
@@ -48,7 +48,7 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 					{
 						return (a << b);
 					}
-				}" + Code.AllTestCode;
+				}";
 		}
 
 		private static string CreateConstantTestCode(string name, string typeIn, string typeOut, string constLeft, string constRight)
@@ -62,7 +62,7 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 						{
 							return expect == (" + constLeft + @" << x);
 						}
-					}" + Code.AllTestCode;
+					}";
 			}
 			else if (String.IsNullOrEmpty(constLeft))
 			{
@@ -73,7 +73,7 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 						{
 							return expect == (x << " + constRight + @");
 						}
-					}" + Code.AllTestCode;
+					}";
 			}
 			else
 			{
@@ -92,7 +92,7 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 						{
 							return (" + constLeft + @" << x);
 						}
-					}" + Code.AllTestCode;
+					}";
 			}
 			else if (String.IsNullOrEmpty(constLeft))
 			{
@@ -103,7 +103,7 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 						{
 							return (x << " + constRight + @");
 						}
-					}" + Code.AllTestCode;
+					}";
 			}
 			else
 			{
@@ -120,8 +120,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void ShlC(char a, char b)
 		{
-			compiler.CodeSource = CreateTestCode("AddC", "char", "int");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "AddC", (a << b), a, b));
+			settings.CodeSource = CreateTestCode("AddC", "char", "int");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AddC", (a << b), a, b));
 		}
 
 		[Row(0, 'a')]
@@ -130,8 +130,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void ShlConstantCRight(char a, char b)
 		{
-			compiler.CodeSource = CreateConstantTestCodeWithReturn("ShlConstantCRight", "char", "int", null, "'" + b.ToString() + "'");
-			Assert.AreEqual(a << b, compiler.Run<int>(string.Empty, "Test", "ShlConstantCRight", (char)(a << b), a));
+			settings.CodeSource = CreateConstantTestCodeWithReturn("ShlConstantCRight", "char", "int", null, "'" + b.ToString() + "'");
+			Assert.AreEqual(a << b, Run<int>(string.Empty, "Test", "ShlConstantCRight", (char)(a << b), a));
 		}
 
 		[Row('a', 0)]
@@ -140,8 +140,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void ShlConstantCLeft(char a, char b)
 		{
-			compiler.CodeSource = CreateConstantTestCodeWithReturn("ShlConstantCLeft", "char", "int", "'" + a.ToString() + "'", null);
-			Assert.AreEqual(a << b, compiler.Run<int>(string.Empty, "Test", "ShlConstantCLeft", (char)(a << b), b));
+			settings.CodeSource = CreateConstantTestCodeWithReturn("ShlConstantCLeft", "char", "int", "'" + a.ToString() + "'", null);
+			Assert.AreEqual(a << b, Run<int>(string.Empty, "Test", "ShlConstantCLeft", (char)(a << b), b));
 		}
 		#endregion
 
@@ -178,8 +178,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void ShlI1(sbyte a, sbyte b)
 		{
-			compiler.CodeSource = CreateTestCode("ShlI1", "sbyte", "int");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "ShlI1", a << b, a, b));
+			settings.CodeSource = CreateTestCode("ShlI1", "sbyte", "int");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "ShlI1", a << b, a, b));
 		}
 
 		[Row(-42, 48)]
@@ -189,8 +189,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void ShlConstantI1Right(sbyte a, sbyte b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("ShlConstantI1Right", "sbyte", "int", null, b.ToString());
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "ShlConstantI1Right", (a << b), a));
+			settings.CodeSource = CreateConstantTestCode("ShlConstantI1Right", "sbyte", "int", null, b.ToString());
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "ShlConstantI1Right", (a << b), a));
 		}
 
 		[Row(-42, 48)]
@@ -200,8 +200,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void ShlConstantI1Left(sbyte a, sbyte b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("ShlConstantI1Left", "sbyte", "int", a.ToString(), null);
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "ShlConstantI1Left", (a << b), b));
+			settings.CodeSource = CreateConstantTestCode("ShlConstantI1Left", "sbyte", "int", a.ToString(), null);
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "ShlConstantI1Left", (a << b), b));
 		}
 		#endregion
 
@@ -238,8 +238,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void ShlI2(short a, short b)
 		{
-			compiler.CodeSource = CreateTestCode("ShlI2", "short", "int");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "ShlI2", (a << b), a, b));
+			settings.CodeSource = CreateTestCode("ShlI2", "short", "int");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "ShlI2", (a << b), a, b));
 		}
 
 		[Row(-23, 148)]
@@ -249,8 +249,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void ShlConstantI2Right(short a, short b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("ShlConstantI2Right", "short", "int", null, b.ToString());
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "ShlConstantI2Right", (a << b), a));
+			settings.CodeSource = CreateConstantTestCode("ShlConstantI2Right", "short", "int", null, b.ToString());
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "ShlConstantI2Right", (a << b), a));
 		}
 
 		[Row(-23, 148)]
@@ -260,8 +260,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void ShlConstantI2Left(short a, short b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("ShlConstantI2Left", "short", "int", a.ToString(), null);
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "ShlConstantI2Left", (a << b), b));
+			settings.CodeSource = CreateConstantTestCode("ShlConstantI2Left", "short", "int", a.ToString(), null);
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "ShlConstantI2Left", (a << b), b));
 		}
 		#endregion
 
@@ -298,8 +298,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void ShlI4(int a, int b)
 		{
-			compiler.CodeSource = CreateTestCode("ShlI4", "int", "int");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "ShlI4", (a << b), a, b));
+			settings.CodeSource = CreateTestCode("ShlI4", "int", "int");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "ShlI4", (a << b), a, b));
 		}
 
 		[Row(-23, 148)]
@@ -309,8 +309,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void ShlConstantI4Right(int a, int b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("ShlConstantI4Right", "int", "int", null, b.ToString());
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "ShlConstantI4Right", (a << b), a));
+			settings.CodeSource = CreateConstantTestCode("ShlConstantI4Right", "int", "int", null, b.ToString());
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "ShlConstantI4Right", (a << b), a));
 		}
 
 		[Row(-23, 148)]
@@ -320,8 +320,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void ShlConstantI4Left(int a, int b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("ShlConstantI4Left", "int", "int", a.ToString(), null);
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "ShlConstantI4Left", (a << b), b));
+			settings.CodeSource = CreateConstantTestCode("ShlConstantI4Left", "int", "int", a.ToString(), null);
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "ShlConstantI4Left", (a << b), b));
 		}
 		#endregion
 
@@ -334,8 +334,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void ShlI8(long a, int b)
 		{
-			compiler.CodeSource = CreateTestCodeWithReturn("ShlI8", "long", "int", "long");
-			Assert.AreEqual((a << b), compiler.Run<long>(string.Empty, "Test", "ShlI8", (a << b), a, b));
+			settings.CodeSource = CreateTestCodeWithReturn("ShlI8", "long", "int", "long");
+			Assert.AreEqual((a << b), Run<long>(string.Empty, "Test", "ShlI8", (a << b), a, b));
 		}
 
 		[Row(-23, 148)]
@@ -345,8 +345,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void ShlConstantI8Right(long a, int b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("ShlConstantI8Right", "long", "long", null, b.ToString());
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "ShlConstantI8Right", (a << b), a));
+			settings.CodeSource = CreateConstantTestCode("ShlConstantI8Right", "long", "long", null, b.ToString());
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "ShlConstantI8Right", (a << b), a));
 		}
 
 		[Row(-23, 148)]
@@ -356,8 +356,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void ShlConstantI8Left(long a, int b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("ShlConstantI8Left", "int", "long", a.ToString(), null);
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "ShlConstantI8Left", (a << b), b));
+			settings.CodeSource = CreateConstantTestCode("ShlConstantI8Left", "int", "long", a.ToString(), null);
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "ShlConstantI8Left", (a << b), b));
 		}
 		#endregion
 	}

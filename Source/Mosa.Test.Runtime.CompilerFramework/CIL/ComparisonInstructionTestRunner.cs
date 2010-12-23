@@ -62,67 +62,62 @@ namespace Mosa.Test.Runtime.CompilerFramework.CIL
 				codeBuilder.Append(TestCodePositiveInfity);
 
 			codeBuilder.Append(TestCodeFooter);
-			codeBuilder.Append(Code.AllTestCode);
+			
 
 			codeBuilder
 				.Replace(@"#firsttype", FirstType)
 				.Replace(@"#secondtype", FirstType);
 
-			compiler.CodeSource = codeBuilder.ToString();
+			settings.CodeSource = codeBuilder.ToString();
 		}
 
 		public void Ceq(bool expected, T first, T second)
 		{
-			this.EnsureCodeSourceIsSet();
-			bool result = compiler.Run<bool>(string.Empty, TestClassName, @"CeqTest", first, second);
+			SetTestCode();
+			bool result = Run<bool>(string.Empty, TestClassName, @"CeqTest", first, second);
 			Assert.AreEqual(expected, result);
 		}
 
 		public void Clt(bool expected, T first, T second)
 		{
-			this.EnsureCodeSourceIsSet();
-			bool result = compiler.Run<bool>(string.Empty, TestClassName, @"CltTest", first, second);
+			SetTestCode();
+			bool result = Run<bool>(string.Empty, TestClassName, @"CltTest", first, second);
 			Assert.AreEqual(expected, result);
 		}
 
 		public void Cgt(bool expected, T first, T second)
 		{
-			this.EnsureCodeSourceIsSet();
-			bool result = compiler.Run<bool>(string.Empty, TestClassName, @"CgtTest", first, second);
+			SetTestCode();
+			bool result = Run<bool>(string.Empty, TestClassName, @"CgtTest", first, second);
 			Assert.AreEqual(expected, result);
 		}
 
 		public void Cle(bool expected, T first, T second)
 		{
-			this.EnsureCodeSourceIsSet();
-			bool result = compiler.Run<bool>(string.Empty, TestClassName, @"CleTest", first, second);
+			SetTestCode();
+			bool result = Run<bool>(string.Empty, TestClassName, @"CleTest", first, second);
 			Assert.AreEqual(expected, result);
 		}
 
 		public void Cge(bool expected, T first, T second)
 		{
-			this.EnsureCodeSourceIsSet();
-			bool result = compiler.Run<bool>(string.Empty, TestClassName, @"CgeTest", first, second);
+			SetTestCode();
+			bool result = Run<bool>(string.Empty, TestClassName, @"CgeTest", first, second);
 			Assert.AreEqual(expected, result);
 		}
 
 		public void NaN(bool expected, T first)
 		{
-			this.EnsureCodeSourceIsSet();
-			bool result = compiler.Run<bool>(string.Empty, TestClassName, @"NaNTest", first);
+			SetTestCode();
+			bool result = Run<bool>(string.Empty, TestClassName, @"NaNTest", first);
 			Assert.AreEqual(expected, result);
 		}
 
 		public void PositiveInfinity(bool expected, T first)
 		{
-			this.EnsureCodeSourceIsSet();
-			bool result = compiler.Run<bool>(string.Empty, TestClassName, @"PositiveInfinityTest", first);
+			SetTestCode();
+			bool result = Run<bool>(string.Empty, TestClassName, @"PositiveInfinityTest", first);
 			Assert.AreEqual(expected, result);
-		}
-
-		private void EnsureCodeSourceIsSet()
-		{
-			this.SetTestCode();
 		}
 
 		private const string TestCodeHeader = @"

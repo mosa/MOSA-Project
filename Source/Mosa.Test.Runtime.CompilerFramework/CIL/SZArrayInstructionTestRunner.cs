@@ -54,52 +54,47 @@ namespace Mosa.Test.Runtime.CompilerFramework.CIL
 				codeBuilder.Append(TestCodeLdelema);
 
 			codeBuilder.Append(TestCodeFooter);
-			codeBuilder.Append(Code.AllTestCode);
+			
 
 			codeBuilder
 				.Replace(@"#firsttype", FirstType);
 
-			compiler.CodeSource = codeBuilder.ToString();
+			settings.CodeSource = codeBuilder.ToString();
 		}
 
 		public void Newarr()
 		{
-			this.EnsureCodeSourceIsSet();
-			bool result = compiler.Run<bool>(string.Empty, TestClassName, @"NewarrTest");
+			SetTestCode();
+			bool result = Run<bool>(string.Empty, TestClassName, @"NewarrTest");
 			Assert.IsTrue(result);
 		}
 
 		public void Ldlen(int length)
 		{
-			this.EnsureCodeSourceIsSet();
-			bool result = compiler.Run<bool>(string.Empty, TestClassName, @"LdlenTest", length);
+			SetTestCode();
+			bool result = Run<bool>(string.Empty, TestClassName, @"LdlenTest", length);
 			Assert.IsTrue(result);
 		}
 
 		public void Stelem(int index, T value)
 		{
-			this.EnsureCodeSourceIsSet();
-			bool result = compiler.Run<bool>(string.Empty, TestClassName, @"StelemTest", index, value);
+			SetTestCode();
+			bool result = Run<bool>(string.Empty, TestClassName, @"StelemTest", index, value);
 			Assert.IsTrue(result);
 		}
 
 		public void Ldelem(int index, T value)
 		{
-			this.EnsureCodeSourceIsSet();
-			bool result = compiler.Run<bool>(string.Empty, TestClassName, @"LdelemTest", index, value);
+			SetTestCode();
+			bool result = Run<bool>(string.Empty, TestClassName, @"LdelemTest", index, value);
 			Assert.IsTrue(result);
 		}
 
 		public void Ldelema(int index, T value)
 		{
-			this.EnsureCodeSourceIsSet();
-			bool result = compiler.Run<bool>(string.Empty, TestClassName, @"LdelemaTest", index, value);
+			SetTestCode();
+			bool result = Run<bool>(string.Empty, TestClassName, @"LdelemaTest", index, value);
 			Assert.IsTrue(result);
-		}
-
-		private void EnsureCodeSourceIsSet()
-		{
-			this.SetTestCode();
 		}
 
 		private const string TestCodeHeader = @"

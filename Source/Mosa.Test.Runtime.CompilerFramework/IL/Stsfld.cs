@@ -17,7 +17,7 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 					return (value == fld);
 				}
 			}
-		" + Code.AllTestCode;
+		";
 
 		[Row(true)]
 		[Row(false)]
@@ -26,8 +26,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Importance(Importance.Severe)]
 		public void StsfldB(bool value)
 		{
-			compiler.CodeSource = testCode.Replace("#type", "bool");
-			bool res = compiler.Run<bool>(string.Empty, @"Test", @"Stsfld", value);
+			settings.CodeSource = testCode.Replace("#type", "bool");
+			bool res = Run<bool>(string.Empty, @"Test", @"Stsfld", value);
 			Assert.IsTrue(res);
 		}
 
@@ -42,8 +42,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Importance(Importance.Severe)]
 		public void StsfldC(char value)
 		{
-			compiler.CodeSource = testCode.Replace("#type", "char");
-			bool res = compiler.Run<bool>(string.Empty, @"Test", @"Stsfld", value);
+			settings.CodeSource = testCode.Replace("#type", "char");
+			bool res = Run<bool>(string.Empty, @"Test", @"Stsfld", value);
 			Assert.IsTrue(res);
 		}
 
@@ -53,8 +53,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Importance(Importance.Severe)]
 		public void StsfldI1(sbyte value)
 		{
-			compiler.CodeSource = testCode.Replace("#type", "sbyte");
-			bool res = compiler.Run<bool>(string.Empty, @"Test", @"Stsfld", value);
+			settings.CodeSource = testCode.Replace("#type", "sbyte");
+			bool res = Run<bool>(string.Empty, @"Test", @"Stsfld", value);
 			Assert.IsTrue(res);
 		}
 
@@ -64,8 +64,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Importance(Importance.Severe)]
 		public void StsfldI2(short value)
 		{
-			compiler.CodeSource = testCode.Replace("#type", "short");
-			bool res = compiler.Run<bool>(string.Empty, @"Test", @"Stsfld", value);
+			settings.CodeSource = testCode.Replace("#type", "short");
+			bool res = Run<bool>(string.Empty, @"Test", @"Stsfld", value);
 			Assert.IsTrue(res);
 		}
 
@@ -75,8 +75,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Importance(Importance.Severe)]
 		public void StsfldI4(int value)
 		{
-			compiler.CodeSource = testCode.Replace("#type", "int");
-			bool res = compiler.Run<bool>(string.Empty, @"Test", @"Stsfld", value);
+			settings.CodeSource = testCode.Replace("#type", "int");
+			bool res = Run<bool>(string.Empty, @"Test", @"Stsfld", value);
 			Assert.IsTrue(res);
 		}
 
@@ -86,8 +86,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Importance(Importance.Severe)]
 		public void StsfldI8(long value)
 		{
-			compiler.CodeSource = testCode.Replace("#type", "long");
-			bool res = compiler.Run<bool>(string.Empty, @"Test", @"Stsfld", value);
+			settings.CodeSource = testCode.Replace("#type", "long");
+			bool res = Run<bool>(string.Empty, @"Test", @"Stsfld", value);
 			Assert.IsTrue(res);
 		}
 
@@ -97,8 +97,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Importance(Importance.Severe)]
 		public void StsfldU1(byte value)
 		{
-			compiler.CodeSource = testCode.Replace("#type", "byte");
-			bool res = compiler.Run<bool>(string.Empty, @"Test", @"Stsfld", value);
+			settings.CodeSource = testCode.Replace("#type", "byte");
+			bool res = Run<bool>(string.Empty, @"Test", @"Stsfld", value);
 			Assert.IsTrue(res);
 		}
 
@@ -109,8 +109,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Importance(Importance.Severe)]
 		public void StsfldU2(ushort value)
 		{
-			compiler.CodeSource = testCode.Replace("#type", "ushort");
-			bool res = compiler.Run<bool>(string.Empty, @"Test", @"Stsfld", value);
+			settings.CodeSource = testCode.Replace("#type", "ushort");
+			bool res = Run<bool>(string.Empty, @"Test", @"Stsfld", value);
 			Assert.IsTrue(res);
 		}
 
@@ -120,8 +120,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Importance(Importance.Severe)]
 		public void StsfldU4(uint value)
 		{
-			compiler.CodeSource = testCode.Replace("#type", "uint");
-			bool res = compiler.Run<bool>(string.Empty, @"Test", @"Stsfld", value);
+			settings.CodeSource = testCode.Replace("#type", "uint");
+			bool res = Run<bool>(string.Empty, @"Test", @"Stsfld", value);
 			Assert.IsTrue(res);
 		}
 
@@ -131,8 +131,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Importance(Importance.Severe)]
 		public void StsfldU8(ulong value)
 		{
-			compiler.CodeSource = testCode.Replace("#type", "ulong");
-			bool res = compiler.Run<bool>(string.Empty, @"Test", @"Stsfld", value);
+			settings.CodeSource = testCode.Replace("#type", "ulong");
+			bool res = Run<bool>(string.Empty, @"Test", @"Stsfld", value);
 			Assert.IsTrue(res);
 		}
 
@@ -142,8 +142,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Importance(Importance.Severe)]
 		public void StsfldR4(float value)
 		{
-			compiler.CodeSource = testCode.Replace("#type", "float");
-			bool res = compiler.Run<bool>(string.Empty, @"Test", @"Stsfld", value);
+			settings.CodeSource = testCode.Replace("#type", "float");
+			bool res = Run<bool>(string.Empty, @"Test", @"Stsfld", value);
 			Assert.IsTrue(res);
 		}
 
@@ -153,8 +153,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Importance(Importance.Severe)]
 		public void StsfldR8(double value)
 		{
-			compiler.CodeSource = testCode.Replace("#type", "double");
-			bool res = compiler.Run<bool>(string.Empty, @"Test", @"Stsfld", value);
+			settings.CodeSource = testCode.Replace("#type", "double");
+			bool res = Run<bool>(string.Empty, @"Test", @"Stsfld", value);
 			Assert.IsTrue(res);
 		}
 	}

@@ -62,62 +62,61 @@ namespace Mosa.Test.Runtime.CompilerFramework.CIL
 			if (IncludeRet)
 				codeBuilder.Append(TestCodeRet);
 			codeBuilder.Append(TestCodeFooter);
-			codeBuilder.Append(Code.AllTestCode);
 
 			codeBuilder
 				.Replace(@"#expectedtype", ExpectedType)
 				.Replace(@"#firsttype", FirstType)
 				.Replace(@"#secondtype", SecondType);
 
-			compiler.CodeSource = codeBuilder.ToString();
+			settings.CodeSource = codeBuilder.ToString();
 		}
 
 		public void Add(R expected, T first, T second)
 		{
-			this.EnsureCodeSourceIsSet();
-			bool result = compiler.Run<bool>(string.Empty, TestClassName, @"AddTest", expected, first, second);
+			SetTestCode();
+			bool result = Run<bool>(string.Empty, TestClassName, @"AddTest", expected, first, second);
 			Assert.IsTrue(result);
 		}
 
 		public void Sub(R expected, T first, T second)
 		{
-			this.EnsureCodeSourceIsSet();
-			bool result = compiler.Run<bool>(string.Empty, TestClassName, @"SubTest", expected, first, second);
+			SetTestCode();
+			bool result = Run<bool>(string.Empty, TestClassName, @"SubTest", expected, first, second);
 			Assert.IsTrue(result);
 		}
 
 		public void Mul(R expected, T first, T second)
 		{
-			this.EnsureCodeSourceIsSet();
-			bool result = compiler.Run<bool>(string.Empty, TestClassName, @"MulTest", expected, first, second);
+			SetTestCode();
+			bool result = Run<bool>(string.Empty, TestClassName, @"MulTest", expected, first, second);
 			Assert.IsTrue(result);
 		}
 
 		public void Div(R expected, T first, T second)
 		{
-			this.EnsureCodeSourceIsSet();
-			bool result = compiler.Run<bool>(string.Empty, TestClassName, @"DivTest", expected, first, second);
+			SetTestCode();
+			bool result = Run<bool>(string.Empty, TestClassName, @"DivTest", expected, first, second);
 			Assert.IsTrue(result);
 		}
 
 		public void Rem(R expected, T first, T second)
 		{
-			this.EnsureCodeSourceIsSet();
-			bool result = compiler.Run<bool>(string.Empty, TestClassName, @"RemTest", expected, first, second);
+			SetTestCode();
+			bool result = Run<bool>(string.Empty, TestClassName, @"RemTest", expected, first, second);
 			Assert.IsTrue(result);
 		}
 
 		public void Ret(T value)
 		{
-			this.EnsureCodeSourceIsSet();
-			T result = compiler.Run<T>(string.Empty, TestClassName, @"RetTest", value);
+			SetTestCode();
+			T result = Run<T>(string.Empty, TestClassName, @"RetTest", value);
 			Assert.AreEqual(result, value);
 		}
 
 		public void Neg(R expectedValue, T first)
 		{
-			this.EnsureCodeSourceIsSet();
-			bool result = compiler.Run<bool>(string.Empty, TestClassName, @"NegTest", expectedValue, first);
+			SetTestCode();
+			bool result = Run<bool>(string.Empty, TestClassName, @"NegTest", expectedValue, first);
 			Assert.IsTrue(result);
 		}
 

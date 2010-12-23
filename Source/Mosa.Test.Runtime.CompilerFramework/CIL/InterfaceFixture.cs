@@ -63,22 +63,21 @@ namespace Mosa.Test.Runtime.CompilerFramework.CIL
 						return result;
 					}
 				}
-			"
-			+ Code.AllTestCode;
+			";
 		}
 		
 		[Test]
 		public void MustCompileInterfaces()
 		{
-			compiler.CodeSource = CreateTestCode();
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "TestClass", "MustCompileWithInterfaces"));
+			settings.CodeSource = CreateTestCode();
+			Assert.IsTrue(Run<bool>(string.Empty, "TestClass", "MustCompileWithInterfaces"));
 		}
 
 		[Test]
 		public void MustReturn3FromB()
 		{
-			compiler.CodeSource = CreateTestCode();
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "TestClass", "MustReturn3FromB"));
+			settings.CodeSource = CreateTestCode();
+			Assert.IsTrue(Run<bool>(string.Empty, "TestClass", "MustReturn3FromB"));
 		}
 	}
 }

@@ -31,7 +31,7 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 					{
 						return expect == (a & b);
 					}
-				}" + Code.AllTestCode;
+				}";
 		}
 
 		private static string CreateConstantTestCode(string name, string typeIn, string typeOut, string constLeft, string constRight)
@@ -45,7 +45,7 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 						{
 							return expect == (" + constLeft + @" & x);
 						}
-					}" + Code.AllTestCode;
+					}";
 			}
 			else if (String.IsNullOrEmpty(constLeft))
 			{
@@ -56,7 +56,7 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 						{
 							return expect == (x & " + constRight + @");
 						}
-					}" + Code.AllTestCode;
+					}";
 			}
 			else
 			{
@@ -74,8 +74,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void AndB(bool a, bool b)
 		{
-			compiler.CodeSource = CreateTestCode("AndB", "bool", "bool");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "AndB", (a & b), a, b));
+			settings.CodeSource = CreateTestCode("AndB", "bool", "bool");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AndB", (a & b), a, b));
 		}
 
 		[Row(true, true)]
@@ -85,8 +85,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void AndConstantBRight(bool a, bool b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("AndConstantBRight", "bool", "bool", null, b.ToString().ToLower());
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "AndConstantBRight", (a & b), a));
+			settings.CodeSource = CreateConstantTestCode("AndConstantBRight", "bool", "bool", null, b.ToString().ToLower());
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AndConstantBRight", (a & b), a));
 		}
 
 		[Row(true, true)]
@@ -96,8 +96,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void AndConstantBLeft(bool a, bool b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("AndConstantBLeft", "bool", "bool", a.ToString().ToLower(), null);
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "AndConstantBLeft", (a & b), b));
+			settings.CodeSource = CreateConstantTestCode("AndConstantBLeft", "bool", "bool", a.ToString().ToLower(), null);
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AndConstantBLeft", (a & b), b));
 		}
 		#endregion
 
@@ -111,8 +111,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void AndC(char a, char b)
 		{
-			compiler.CodeSource = CreateTestCode("AndC", "char", "char");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "AndC", (char)(a & b), a, b));
+			settings.CodeSource = CreateTestCode("AndC", "char", "char");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AndC", (char)(a & b), a, b));
 		}
 
 		[Row(0, 'a')]
@@ -121,8 +121,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void AndConstantCRight(char a, char b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("AndConstantCRight", "char", "char", null, "'" + b.ToString() + "'");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "AndConstantCRight", (char)(a & b), a));
+			settings.CodeSource = CreateConstantTestCode("AndConstantCRight", "char", "char", null, "'" + b.ToString() + "'");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AndConstantCRight", (char)(a & b), a));
 		}
 
 		[Row('a', 0)]
@@ -131,8 +131,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void AndConstantCLeft(char a, char b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("AndConstantCLeft", "char", "char", "'" + a.ToString() + "'", null);
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "AndConstantCLeft", (char)(a & b), b));
+			settings.CodeSource = CreateConstantTestCode("AndConstantCLeft", "char", "char", "'" + a.ToString() + "'", null);
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AndConstantCLeft", (char)(a & b), b));
 		}
 		#endregion
 
@@ -192,8 +192,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void AndI1(sbyte a, sbyte b)
 		{
-			compiler.CodeSource = CreateTestCode("AndI1", "sbyte", "int");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "AndI1", (a & b), a, b));
+			settings.CodeSource = CreateTestCode("AndI1", "sbyte", "int");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AndI1", (a & b), a, b));
 		}
 
 		[Row(-42, 48)]
@@ -203,8 +203,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void AndConstantI1Right(sbyte a, sbyte b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("AndConstantI1Right", "sbyte", "int", null, b.ToString());
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "AndConstantI1Right", (a & b), a));
+			settings.CodeSource = CreateConstantTestCode("AndConstantI1Right", "sbyte", "int", null, b.ToString());
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AndConstantI1Right", (a & b), a));
 		}
 
 		[Row(-42, 48)]
@@ -214,8 +214,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void AndConstantI1Left(sbyte a, sbyte b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("AndConstantI1Left", "sbyte", "int", a.ToString(), null);
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "AndConstantI1Left", (a & b), b));
+			settings.CodeSource = CreateConstantTestCode("AndConstantI1Left", "sbyte", "int", a.ToString(), null);
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AndConstantI1Left", (a & b), b));
 		}
 		#endregion
 
@@ -275,8 +275,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void AndI2(short a, short b)
 		{
-			compiler.CodeSource = CreateTestCode("AndI2", "short", "int");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "AndI2", (a & b), a, b));
+			settings.CodeSource = CreateTestCode("AndI2", "short", "int");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AndI2", (a & b), a, b));
 		}
 
 		[Row(-23, 148)]
@@ -286,8 +286,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void AndConstantI2Right(short a, short b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("AndConstantI2Right", "short", "int", null, b.ToString());
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "AndConstantI2Right", (a & b), a));
+			settings.CodeSource = CreateConstantTestCode("AndConstantI2Right", "short", "int", null, b.ToString());
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AndConstantI2Right", (a & b), a));
 		}
 
 		[Row(-23, 148)]
@@ -297,8 +297,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void AndConstantI2Left(short a, short b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("AndConstantI2Left", "short", "int", a.ToString(), null);
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "AndConstantI2Left", (a & b), b));
+			settings.CodeSource = CreateConstantTestCode("AndConstantI2Left", "short", "int", a.ToString(), null);
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AndConstantI2Left", (a & b), b));
 		}
 		#endregion
 
@@ -358,8 +358,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void AndI4(int a, int b)
 		{
-			compiler.CodeSource = CreateTestCode("AndI4", "int", "int");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "AndI4", (a & b), a, b));
+			settings.CodeSource = CreateTestCode("AndI4", "int", "int");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AndI4", (a & b), a, b));
 		}
 
 		[Row(-23, 148)]
@@ -369,8 +369,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void AndConstantI4Right(int a, int b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("AndConstantI4Right", "int", "int", null, b.ToString());
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "AndConstantI4Right", (a & b), a));
+			settings.CodeSource = CreateConstantTestCode("AndConstantI4Right", "int", "int", null, b.ToString());
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AndConstantI4Right", (a & b), a));
 		}
 
 		[Row(-23, 148)]
@@ -380,8 +380,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void AndConstantI4Left(int a, int b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("AndConstantI4Left", "int", "int", a.ToString(), null);
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "AndConstantI4Left", (a & b), b));
+			settings.CodeSource = CreateConstantTestCode("AndConstantI4Left", "int", "int", a.ToString(), null);
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AndConstantI4Left", (a & b), b));
 		}
 		#endregion
 
@@ -441,8 +441,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void AndI8(long a, long b)
 		{
-			compiler.CodeSource = CreateTestCode("AndI8", "long", "long");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "AndI8", (a & b), a, b));
+			settings.CodeSource = CreateTestCode("AndI8", "long", "long");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AndI8", (a & b), a, b));
 		}
 
 		[Row(-23, 148)]
@@ -452,8 +452,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void AndConstantI8Right(long a, long b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("AndConstantI8Right", "long", "long", null, b.ToString());
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "AndConstantI8Right", (a & b), a));
+			settings.CodeSource = CreateConstantTestCode("AndConstantI8Right", "long", "long", null, b.ToString());
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AndConstantI8Right", (a & b), a));
 		}
 
 		[Row(-23, 148)]
@@ -463,8 +463,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void AndConstantI8Left(long a, long b)
 		{
-			compiler.CodeSource = CreateConstantTestCode("AndConstantI8Left", "long", "long", a.ToString(), null);
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "AndConstantI8Left", (a & b), b));
+			settings.CodeSource = CreateConstantTestCode("AndConstantI8Left", "long", "long", a.ToString(), null);
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AndConstantI8Left", (a & b), b));
 		}
 		#endregion
 	}

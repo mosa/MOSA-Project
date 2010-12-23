@@ -28,7 +28,7 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 				static class Test {
 					static bool " + name + "(" + type + " value) { return value == " + name + @"_Target(value); } 
 					static " + type + " " + name + "_Target(" + type + @" value) { return value; }
-				}" + Code.AllTestCode;
+				}";
 		}
 
 		private static string CreateConstantTestCode(string name, string type, string constant)
@@ -37,18 +37,18 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 				static class Test {
 					static bool " + name + "(" + type + " value) { return value == " + name + "_Target(" + constant + @"); } 
 					static " + type + " " + name + "_Target(" + type + @" value) { return value; }
-				}" + Code.AllTestCode;
+				}";
 		}
 
 		[Test]
 		public void CallEmpty()
 		{
-			compiler.CodeSource = @"
+			settings.CodeSource = @"
 				static class Test { 
 					static void CallEmpty() { CallEmpty_Target(); } 
 					static void CallEmpty_Target() { }
-				}" + Code.AllTestCode;
-			compiler.Run<object>(string.Empty, "Test", "CallEmpty");
+				}";
+			Run<object>(string.Empty, "Test", "CallEmpty");
 		}
 
 		#region B
@@ -58,8 +58,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void CallB(bool value)
 		{
-			compiler.CodeSource = CreateTestCode("CallB", "bool");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "CallB", value));
+			settings.CodeSource = CreateTestCode("CallB", "bool");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "CallB", value));
 		}
 
 		[Row(true)]
@@ -67,8 +67,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void CallConstantB(bool value)
 		{
-			compiler.CodeSource = CreateConstantTestCode("CallConstantB", "bool", value.ToString().ToLower());
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "CallConstantB", value));
+			settings.CodeSource = CreateConstantTestCode("CallConstantB", "bool", value.ToString().ToLower());
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "CallConstantB", value));
 		}
 		#endregion
 
@@ -81,8 +81,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void CallC(char value)
 		{
-			compiler.CodeSource = CreateTestCode("CallC", "char");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "CallC", value));
+			settings.CodeSource = CreateTestCode("CallC", "char");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "CallC", value));
 		}
 
 		[Row('a')]
@@ -92,8 +92,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void CallConstantC(char value)
 		{
-			compiler.CodeSource = CreateConstantTestCode("CallConstantC", "char", "'" + value.ToString() + "'");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "CallConstantC", value));
+			settings.CodeSource = CreateConstantTestCode("CallConstantC", "char", "'" + value.ToString() + "'");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "CallConstantC", value));
 		}
 		#endregion
 
@@ -118,8 +118,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void CallI1(sbyte value)
 		{
-			compiler.CodeSource = CreateTestCode("CallI1", "sbyte");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "CallI1", value));
+			settings.CodeSource = CreateTestCode("CallI1", "sbyte");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "CallI1", value));
 		}
 
 		[Row(0)]
@@ -129,8 +129,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void CallConstantI1(sbyte value)
 		{
-			compiler.CodeSource = CreateConstantTestCode("CallConstantI1", "sbyte", value.ToString());
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "CallConstantI1", value));
+			settings.CodeSource = CreateConstantTestCode("CallConstantI1", "sbyte", value.ToString());
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "CallConstantI1", value));
 		}
 		#endregion
 
@@ -149,8 +149,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void CallU1(byte value)
 		{
-			compiler.CodeSource = CreateTestCode("CallU1", "byte");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "CallU1", value));
+			settings.CodeSource = CreateTestCode("CallU1", "byte");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "CallU1", value));
 		}
 
 		[Row(1)]
@@ -166,8 +166,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void CallConstantU1(byte value)
 		{
-			compiler.CodeSource = CreateConstantTestCode("CallConstantU1", "byte", value.ToString());
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "CallConstantU1", value));
+			settings.CodeSource = CreateConstantTestCode("CallConstantU1", "byte", value.ToString());
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "CallConstantU1", value));
 		}
 		#endregion
 
@@ -192,8 +192,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void CallI2(short value)
 		{
-			compiler.CodeSource = CreateTestCode("CallI2", "short");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "CallI2", value));
+			settings.CodeSource = CreateTestCode("CallI2", "short");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "CallI2", value));
 		}
 
 		[Row(0)]
@@ -203,8 +203,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void CallConstantI2(short value)
 		{
-			compiler.CodeSource = CreateConstantTestCode("CallConstantI2", "short", value.ToString());
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "CallConstantI2", value));
+			settings.CodeSource = CreateConstantTestCode("CallConstantI2", "short", value.ToString());
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "CallConstantI2", value));
 		}
 		#endregion
 
@@ -222,8 +222,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void CallU2(ushort value)
 		{
-			compiler.CodeSource = CreateTestCode("CallU2", "ushort");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "CallU2", value));
+			settings.CodeSource = CreateTestCode("CallU2", "ushort");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "CallU2", value));
 		}
 
 		[Row(1)]
@@ -237,8 +237,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void CallConstantU2(ushort value)
 		{
-			compiler.CodeSource = CreateConstantTestCode("CallConstantU2", "ushort", value.ToString());
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "CallConstantU2", value));
+			settings.CodeSource = CreateConstantTestCode("CallConstantU2", "ushort", value.ToString());
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "CallConstantU2", value));
 		}
 		#endregion
 
@@ -263,8 +263,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void CallI4(int value)
 		{
-			compiler.CodeSource = CreateTestCode("CallI4", "int");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "CallI4", value));
+			settings.CodeSource = CreateTestCode("CallI4", "int");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "CallI4", value));
 		}
 
 		[Row(0)]
@@ -274,8 +274,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void CallConstantI4(int value)
 		{
-			compiler.CodeSource = CreateConstantTestCode("CallConstantI4", "int", value.ToString());
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "CallConstantI4", value));
+			settings.CodeSource = CreateConstantTestCode("CallConstantI4", "int", value.ToString());
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "CallConstantI4", value));
 		}
 		#endregion
 
@@ -293,8 +293,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void CallU4(uint value)
 		{
-			compiler.CodeSource = CreateTestCode("CallU4", "uint");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "CallU4", value));
+			settings.CodeSource = CreateTestCode("CallU4", "uint");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "CallU4", value));
 		}
 
 		[Row(0)]
@@ -309,8 +309,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void CallConstantU4(uint value)
 		{
-			compiler.CodeSource = CreateConstantTestCode("CallConstantU4", "uint", value.ToString());
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "CallConstantU4", value));
+			settings.CodeSource = CreateConstantTestCode("CallConstantU4", "uint", value.ToString());
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "CallConstantU4", value));
 		}
 		#endregion
 
@@ -335,8 +335,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void CallI8(long value)
 		{
-			compiler.CodeSource = CreateTestCode("CallI8", "long");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "CallI8", value));
+			settings.CodeSource = CreateTestCode("CallI8", "long");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "CallI8", value));
 		}
 
 		[Row(0)]
@@ -346,8 +346,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void CallConstantI8(long value)
 		{
-			compiler.CodeSource = CreateConstantTestCode("CallConstantI8", "long", value.ToString());
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "CallConstantI8", value));
+			settings.CodeSource = CreateConstantTestCode("CallConstantI8", "long", value.ToString());
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "CallConstantI8", value));
 		}
 		#endregion
 
@@ -365,8 +365,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void CallU8(ulong value)
 		{
-			compiler.CodeSource = CreateTestCode("CallU8", "ulong");
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "CallU8", value));
+			settings.CodeSource = CreateTestCode("CallU8", "ulong");
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "CallU8", value));
 		}
 
 		[Row(0)]
@@ -381,51 +381,51 @@ namespace Mosa.Test.Runtime.CompilerFramework.IL
 		[Test]
 		public void CallConstantU8(ulong value)
 		{
-			compiler.CodeSource = CreateConstantTestCode("CallConstantU8", "ulong", value.ToString());
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "CallConstantU8", value));
+			settings.CodeSource = CreateConstantTestCode("CallConstantU8", "ulong", value.ToString());
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "CallConstantU8", value));
 		}
 		#endregion
 
 		[Test]
 		public void CallOrderI4()
 		{
-			compiler.CodeSource = @"
+			settings.CodeSource = @"
 				static class Test {
 					static bool CallOrderI4(int a, int b, int c, int d) {
 						return (a == 1 && b == 2 && c == 3 && d == 4);
 					}
 				}
-			" + Code.AllTestCode;
+			";
 
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, @"Test", @"CallOrderI4", 1, 2, 3, 4));
+			Assert.IsTrue(Run<bool>(string.Empty, @"Test", @"CallOrderI4", 1, 2, 3, 4));
 		}
 
 		[Test]
 		public void CallOrderU8()
 		{
-			compiler.CodeSource = @"
+			settings.CodeSource = @"
 				static class Test {
 					static bool CallOrderU8(ulong a, ulong b, ulong c, ulong d) {
 						return (a == 1 && b == 2 && c == 3 && d == 4);
 					}
 				}
-			" + Code.AllTestCode;
+			";
 
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, @"Test", @"CallOrderU8", (ulong)1, (ulong)2, (ulong)3, (ulong)4));
+			Assert.IsTrue(Run<bool>(string.Empty, @"Test", @"CallOrderU8", (ulong)1, (ulong)2, (ulong)3, (ulong)4));
 		}
 
 		[Test]
 		public void CallOrderU4_U8_U8_U8()
 		{
-			compiler.CodeSource = @"
+			settings.CodeSource = @"
 				static class Test {
 					static bool CallOrderU4_U8_U8_U8(uint a, ulong b, ulong c, ulong d) {
 						return (a == 1 && b == 2 && c == 3 && d == 4);
 					}
 				}
-			" + Code.AllTestCode;
+			";
 
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, @"Test", @"CallOrderU4_U8_U8_U8", (uint)1, (ulong)2, (ulong)3, (ulong)4));
+			Assert.IsTrue(Run<bool>(string.Empty, @"Test", @"CallOrderU4_U8_U8_U8", (uint)1, (ulong)2, (ulong)3, (ulong)4));
 		}
 
 	}

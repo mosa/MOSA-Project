@@ -37,17 +37,15 @@ namespace Mosa.Test.Runtime.CompilerFramework
 						}
 						return false;
 					}
-				}" + Code.AllTestCode;
+				}";
 		}
 
 		[Test]
 		[Row(1)]
 		public void CatchException(int value)
 		{
-			compiler.CodeSource = CreateTestCode();
-			compiler.DoNotReferenceMscorlib = true;
-			compiler.UnsafeCode = true;
-			Assert.IsTrue(compiler.Run<bool>(string.Empty, "Test", "CatchException", value));
+			settings.CodeSource = CreateTestCode();
+			Assert.IsTrue(Run<bool>(string.Empty, "Test", "CatchException", value));
 		}
 	}
 }
