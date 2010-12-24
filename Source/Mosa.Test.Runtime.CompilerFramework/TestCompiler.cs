@@ -88,10 +88,7 @@ namespace Mosa.Test.Runtime.CompilerFramework
 
 		public T Run<T>(TestCompilerSettings settings, string ns, string type, string method, params object[] parameters)
 		{
-			if (cacheSettings == null || !cacheSettings.IsEqual(settings))
-			{
-				CompileTestCode(settings);
-			}
+			CompileTestCode(settings);
 
 			// Find the test method to execute
 			RuntimeMethod runtimeMethod = FindMethod(
@@ -99,6 +96,10 @@ namespace Mosa.Test.Runtime.CompilerFramework
 				type,
 				method
 			);
+
+			Debug.Assert(runtimeMethod != null, runtimeMethod.ToString());
+			Debug.Assert(runtimeMethod.Address != null, runtimeMethod.ToString());
+			Debug.Assert(runtimeMethod.Address != IntPtr.Zero, runtimeMethod.ToString());
 
 			// Get delegate name
 			string delegateName;

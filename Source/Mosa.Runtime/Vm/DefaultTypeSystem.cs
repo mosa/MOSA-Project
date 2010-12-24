@@ -73,6 +73,9 @@ namespace Mosa.Runtime.Vm
 			{
 				IMetadataModule metaModule = this.assemblyLoader.LoadModule(file);
 
+				Debug.Assert(metaModule != null);
+				Debug.Assert(metaModule.Metadata != null);
+
 				IModuleTypeSystem moduleTypeSystem = new DefaultModuleTypeSystem(this, metaModule);
 
 				modules.Add(moduleTypeSystem);
@@ -94,6 +97,9 @@ namespace Mosa.Runtime.Vm
 						return module; // already referenced
 
 			IMetadataModule metaModule = assemblyLoader.LoadModule(assembly);
+
+			Debug.Assert(metaModule != null);
+			Debug.Assert(metaModule.Metadata != null);
 
 			IModuleTypeSystem moduleTypeSystem = new DefaultModuleTypeSystem(this, metaModule);
 

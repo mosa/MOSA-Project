@@ -11,6 +11,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Diagnostics;
 
 using Mosa.Runtime.Metadata.Loader.PE;
 
@@ -88,6 +89,9 @@ namespace Mosa.Runtime.Metadata.Loader
 			{
 				IMetadataModule module = LoadAssembly(file);
 
+				Debug.Assert(module != null);
+				Debug.Assert(module.Metadata != null);
+					
 				return module;
 			}
 		}
