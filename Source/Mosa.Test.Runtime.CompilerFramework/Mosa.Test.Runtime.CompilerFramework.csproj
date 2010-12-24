@@ -103,7 +103,7 @@
       <Project>{57399D8B-1B6C-4169-A340-B804F240B450}</Project>
       <Name>Mosa.Jit.SimpleJit</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Tools\Compiler\Mosa.Tools.Compiler.csproj">
+    <ProjectReference Include="..\Mosa.Tools.Compiler\Mosa.Tools.Compiler.csproj">
       <Project>{B69C2F31-5161-47BB-9FD3-2F2F2BCBF659}</Project>
       <Name>Mosa.Tools.Compiler</Name>
     </ProjectReference>

@@ -18,7 +18,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Mono", "Mono", "{30F29437-8
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Kernel", "Kernel", "{FF773BDF-A20C-4A5F-BFF9-F422C2AFF3CE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Tools.Compiler", "Tools\Compiler\Mosa.Tools.Compiler.csproj", "{B69C2F31-5161-47BB-9FD3-2F2F2BCBF659}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Tools.Compiler", "Mosa.Tools.Compiler\Mosa.Tools.Compiler.csproj", "{B69C2F31-5161-47BB-9FD3-2F2F2BCBF659}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.HelloWorld", "Mosa.HelloWorld\Mosa.HelloWorld.csproj", "{F1776FF2-A727-4FAF-B6BE-D37D6B019038}"
 EndProject
