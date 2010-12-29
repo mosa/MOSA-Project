@@ -40,31 +40,8 @@
 	    </csc>
 	</target>
 	
-	<!-- mosacl tool -->
-	<target name="mosacl">
-	    <csc target="exe" output="${outputDirectory}/mosacl.exe" debug="${debug}" unsafe="true">
-		<sources>
-			<include name="Compiler/**/*.cs"/>
-		</sources>
-		
-		<references>
-			<include name="${outputDirectory}/Mosa.Platform.x86.dll"/>
-			<include name="${outputDirectory}/Mosa.Runtime.dll"/>
-			<include name="${outputDirectory}/Mosa.Runtime.Metadata.dll"/>
-			<include name="${outputDirectory}/Mosa.Runtime.FileFormat.dll"/>
-			<include name="System.dll"/>
-			<include name="System.Core.dll"/>
-			<include name="System.Data.dll"/>
-			<include name="System.Xml.dll"/>
-		</references>
-		
-		<!-- supress warnings -->
-		<nowarn><warning number="${suppresswarnings}"/></nowarn>
-	    </csc>
-	</target>
-
 	<!-- Main build target -->
-	<target name="build" depends="createbootimage, makeisoimage, mosacl, mono"/>
+	<target name="build" depends="createbootimage, makeisoimage, mono"/>
 	<target name="mono"><nant buildfile="Mono/mosa.build"/></target>
 
 </project>

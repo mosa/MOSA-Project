@@ -42,8 +42,9 @@
 	<target name="emulator" depends="init, devicesystem, devicedrivers, emulatedkernel, filesystem, emulateddevices, classlib, pictor, pictor.ui"><nant buildfile="Mosa.Emulator/mosa.build"/></target>
 	<target name="korlib" depends="init"><nant buildfile="Korlib/mosa.build"/></target>
 	<target name="tests" depends="init"><nant buildfile="Mosa.Test.Runtime.CompilerFramework/mosa.build"/></target>
+	<target name="compiler" depends="platforms, runtime"><nant buildfile="Mosa.Tools.Compiler/mosa.build"/></target>
 	<!-- meta target -->
-	<target name="all" depends="classlib, devicesystem, devicedrivers, filesystem, emulatedkernel, emulateddevices, kernel, pictor, pictor.ui, platforms, runtime, tools, helloworld, emulator, korlib, tests"/>
+	<target name="all" depends="classlib, devicesystem, devicedrivers, filesystem, emulatedkernel, emulateddevices, compiler, kernel, pictor, pictor.ui, platforms, runtime, tools, helloworld, emulator, korlib, tests"/>
 
 		
 </project>
