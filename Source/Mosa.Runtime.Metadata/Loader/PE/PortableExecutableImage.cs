@@ -160,6 +160,10 @@ namespace Mosa.Runtime.Metadata.Loader.PE
 					name = _metadataRoot.ReadString(arow.NameIdx);
 				}
 
+				// HACK: Presents Mosa.Test.Korlib as mscorlib
+				if (name == @"Mosa.Test.Korlib")
+					return @"mscorlib";
+
 				return name;
 			}
 		}

@@ -1899,7 +1899,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		private void ReplaceWithVmCall(Context context, VmCall internalCallTarget)
 		{
 			RuntimeType rt = typeSystem.GetType(@"Mosa.Vm.Runtime");
-			Debug.Assert(rt != null, "@rt / @callTarget=" + internalCallTarget.ToString());
+			Debug.Assert(rt != null, "Can not find Mosa.Vm.Runtime / @callTarget=" + internalCallTarget.ToString());
 
 			RuntimeMethod callTarget = rt.FindMethod(internalCallTarget.ToString());
 			Debug.Assert(callTarget != null, "@callTarget=" + internalCallTarget.ToString());
@@ -1911,6 +1911,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		private bool ReplaceWithInternalCall(Context context, RuntimeMethod method)
 		{
 			bool internalCall = ((method.ImplAttributes & Mosa.Runtime.Metadata.MethodImplAttributes.InternalCall) == Mosa.Runtime.Metadata.MethodImplAttributes.InternalCall);
+			
 			if (internalCall)
 			{
 				string replacementMethod = this.BuildInternalCallName(method);

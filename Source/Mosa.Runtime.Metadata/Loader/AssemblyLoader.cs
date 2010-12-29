@@ -38,12 +38,12 @@ namespace Mosa.Runtime.Metadata.Loader
 		public AssemblyLoader()
 		{
 			// HACK: I can't figure out an easier way to get the framework dir right now...
-			string frameworkDir = System.Runtime.InteropServices.RuntimeEnvironment.GetRuntimeDirectory();
-			string frameworkDir32 = frameworkDir.Contains("Framework64") ? frameworkDir.Replace("Framework64", "Framework") : frameworkDir;
+			//string frameworkDir = System.Runtime.InteropServices.RuntimeEnvironment.GetRuntimeDirectory();
+			//string frameworkDir32 = frameworkDir.Contains("Framework64") ? frameworkDir.Replace("Framework64", "Framework") : frameworkDir;
 			searchPath = new[] {
 				AppDomain.CurrentDomain.BaseDirectory,
-				frameworkDir,
-				frameworkDir32
+				//frameworkDir,
+				//frameworkDir32
 			};
 		}
 
@@ -59,10 +59,8 @@ namespace Mosa.Runtime.Metadata.Loader
 		{
 			lock (loaderLock)
 			{
-				string p = Path.GetDirectoryName(path);
-
-				if (!privatePaths.Contains(p))
-					privatePaths.Add(p);
+				if (!privatePaths.Contains(path))
+					privatePaths.Add(path);
 			}
 		}
 
@@ -91,7 +89,7 @@ namespace Mosa.Runtime.Metadata.Loader
 
 				Debug.Assert(module != null);
 				Debug.Assert(module.Metadata != null);
-					
+
 				return module;
 			}
 		}
@@ -107,16 +105,18 @@ namespace Mosa.Runtime.Metadata.Loader
 
 		private IMetadataModule LoadAssembly(string file)
 		{
-			IMetadataModule result = null;
 
-			if (!Path.IsPathRooted(file))
+			if (Path.IsPathRooted(file))
 			{
-				result = DoLoadAssembly(Path.GetFileName(file) + @".dll");
+				return LoadAssembly2(file); 
 			}
-			else
-			{
-				result = LoadAssembly2(file);
-			}
+
+			file = Path.GetFileName(file);
+
+			if (!file.EndsWith(".dll"))
+				file = file + ".dll";
+
+			IMetadataModule result = DoLoadAssembly(file);
 
 			return result;
 		}
@@ -180,6 +180,7 @@ namespace Mosa.Runtime.Metadata.Loader
 		private IEnumerable<string> FindPrivatePaths(IEnumerable<string> assemblyPaths)
 		{
 			List<string> privatePaths = new List<string>();
+
 			foreach (string assembly in assemblyPaths)
 			{
 				string path = Path.GetDirectoryName(assembly);
@@ -188,7 +189,6 @@ namespace Mosa.Runtime.Metadata.Loader
 			}
 
 			return privatePaths;
-
 		}
 
 		#endregion // Internals

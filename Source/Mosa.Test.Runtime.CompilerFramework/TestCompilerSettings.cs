@@ -63,7 +63,7 @@ namespace Mosa.Test.Runtime.CompilerFramework
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="TestCompiler"/> class.
+		/// Initializes a new instance of the <see cref="TestCompilerSettings"/> class.
 		/// </summary>
 		public TestCompilerSettings()
 		{
@@ -74,6 +74,10 @@ namespace Mosa.Test.Runtime.CompilerFramework
 			//AddReference(@"Mosa.Test.Korlib.dll");
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="TestCompilerSettings"/> class.
+		/// </summary>
+		/// <param name="settings">The settings.</param>
 		public TestCompilerSettings(TestCompilerSettings settings)
 		{
 			language = settings.language;

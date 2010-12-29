@@ -64,6 +64,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Boot.cs" />
+    <Compile Include="Tests\Generic2Test.cs" />
     <Compile Include="Tests\KernelTest.cs" />
     <Compile Include="Tests\StringTest.cs" />
     <Compile Include="Tests\InterfaceTest.cs" />

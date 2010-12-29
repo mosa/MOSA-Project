@@ -135,7 +135,6 @@
     <Compile Include="CIL\UInt16Fixture.cs" />
     <Compile Include="CIL\UInt32Fixture.cs" />
     <Compile Include="CIL\UInt64Fixture.cs" />
-    <Compile Include="Code.cs" />
     <Compile Include="Compiler\StaticAllocationFixture.cs" />
     <Compile Include="TestCompilerSettings.cs" />
     <Compile Include="DelegateUtility.cs" />

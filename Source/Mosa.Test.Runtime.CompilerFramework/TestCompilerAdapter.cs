@@ -11,15 +11,19 @@ namespace Mosa.Test.Runtime.CompilerFramework
 
 		protected TestCompilerSettings settings = new TestCompilerSettings();
 
+		protected TestCompilerAdapter()
+		{
+			settings.AddReference("Mosa.Test.Korlib.dll");
+		}
+
 		protected T Run<T>(string ns, string type, string method, params object[] parameters)
 		{
-			settings.AdditionalSource = Code.AllTestCode;
+			CompileTestCode();
 			return compiler.Run<T>(settings, ns, type, method, parameters);
 		}
 
 		protected void CompileTestCode()
 		{
-			settings.AdditionalSource = Code.AllTestCode;
 			compiler.CompileTestCode(settings);
 		}
 	}

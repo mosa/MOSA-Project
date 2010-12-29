@@ -132,13 +132,11 @@ namespace Mosa.Runtime.Vm
 
 				Debug.Assert(module != null);
 
-				RuntimeType type = module.GetType(typeName);
+				RuntimeType type = module.GetType(names[0]);
 
-				if (type != null)
-					return type;
-
-				// something went wrong
-				Debug.Assert(false);
+				Debug.Assert(type != null);
+				
+				return type;
 			}
 
 			foreach (IModuleTypeSystem module in modules)

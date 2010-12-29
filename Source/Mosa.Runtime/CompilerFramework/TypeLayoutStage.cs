@@ -308,9 +308,12 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			foreach (RuntimeMethod method in type.Methods)
 			{
-				if (interfaceMethod.Name.Equals(method.Name) && interfaceMethod.Signature.Matches(method.Signature))
+				if (interfaceMethod.Name.Equals(method.Name))
 				{
-					return method;
+					if (interfaceMethod.Signature.Matches(method.Signature))
+					{
+						return method;
+					}
 				}
 			}
 
@@ -535,7 +538,7 @@ namespace Mosa.Runtime.CompilerFramework
 			RuntimeType baseType = type.BaseType;
 			if (baseType != null)
 			{
-				CreateSequentialLayout (baseType);
+				CreateSequentialLayout(baseType);
 				typeSize = baseType.Size - 8;
 			}
 
