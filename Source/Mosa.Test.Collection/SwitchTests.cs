@@ -10,10 +10,9 @@
 namespace Mosa.Test.Collection
 {
 
-	static class Switch
+	public static class SwitchTests
 	{
-		static sbyte SwitchI1(sbyte expect, sbyte a) { return Switch_Target(a); }
-		static sbyte Switch_Target(sbyte a)
+		public static sbyte SwitchI1(sbyte a)
 		{
 			switch (a)
 			{
@@ -38,8 +37,7 @@ namespace Mosa.Test.Collection
 			}
 		}
 
-		static bool SwitchU1(byte expect, byte a) { return expect == Switch_Target(a); }
-		static byte Switch_Target(byte a)
+		public static byte SwitchU1(byte a)
 		{
 			switch (a)
 			{
@@ -58,8 +56,7 @@ namespace Mosa.Test.Collection
 			}
 		}
 
-		static bool SwitchI2(short expect, short a) { return expect == Switch_Target(a); }
-		static short Switch_Target(short a)
+		public static short SwitchI2(short a)
 		{
 			switch (a)
 			{
@@ -84,8 +81,7 @@ namespace Mosa.Test.Collection
 			}
 		}
 
-		static bool SwitchU2(ushort expect, ushort a) { return expect == Switch_Target(a); }
-		static ushort Switch_Target(ushort a)
+		public static ushort SwitchU2(ushort a)
 		{
 			switch (a)
 			{
@@ -104,8 +100,7 @@ namespace Mosa.Test.Collection
 			}
 		}
 
-		static bool SwitchI4(int expect, int a) { return expect == Switch_Target(a); }
-		static int Switch_Target(int a)
+		public static int SwitchI4(int a)
 		{
 			switch (a)
 			{
@@ -130,8 +125,7 @@ namespace Mosa.Test.Collection
 			}
 		}
 
-		static bool SwitchU4(uint expect, uint a) { return expect == Switch_Target(a); }
-		static uint Switch_Target(uint a)
+		public static uint SwitchU4(uint a)
 		{
 			switch (a)
 			{
@@ -150,8 +144,7 @@ namespace Mosa.Test.Collection
 			}
 		}
 
-		static long SwitchI8(long expect, long a) { return Switch_Target(a); }
-		static long Switch_Target(long a)
+		public static long SwitchI8(long a)
 		{
 			switch (a)
 			{
@@ -176,8 +169,7 @@ namespace Mosa.Test.Collection
 			}
 		}
 
-		static bool SwitchU8(ulong expect, ulong a) { return expect == Switch_Target(a); }
-		static ulong Switch_Target(ulong a)
+		public static ulong SwitchU8(ulong a)
 		{
 			switch (a)
 			{
