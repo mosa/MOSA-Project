@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using Mosa.Test.Runtime.CompilerFramework.IL;
-using Mosa.Test.Runtime.CompilerFramework.CIL;
+using Mosa.Test.Cases.IL;
+using Mosa.Test.Cases.CIL;
 
 namespace Mosa.Test.Debug
 {
