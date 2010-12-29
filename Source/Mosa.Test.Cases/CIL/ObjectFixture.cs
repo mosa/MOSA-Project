@@ -20,94 +20,36 @@ namespace Mosa.Test.Cases.CIL
 	[Description(@"Tests new operator, type checking and virtual method calls.")]
 	public class ObjectFixture : TestCompilerAdapter
 	{
-		 static readonly string TestCode = @"
-			public class Base
-			{
-				public int Test()
-				{
-					return 5;
-				}
-			}
-
-			public class Derived : Base
-			{
-				private readonly int int32;
-
-				public Derived()
-				{
-					this.int32 = 0;
-				}
-
-				public Derived(int value)
-				{
-					this.int32 = value;
-				}
-
-				public Derived(int v1, int v2)
-				{
-					this.int32 = v1 + v2;
-				}
-
-				public Derived(int v1, int v2, int v3)
-				{
-					this.int32 = (v1 * v2) + v3;
-				}
-
-				public static bool NewobjTest()
-				{
-					Derived d = new Derived();
-					return d != null;
-				}
-
-				public static bool NewobjTestWithOneArg()
-				{
-					Derived d = new Derived(42);
-					return (d.int32 == 42);
-				}
-
-				public static bool NewobjTestWithTwoArgs()
-				{
-					Derived d = new Derived(42, 3);
-					return (d.int32 == 45);
-				}
-
-
-				public static bool NewobjTestWithThreeArgs()
-				{
-					Derived d = new Derived(21, 2, 7);
-					return (d.int32 == 49);
-				}
-			}";
+		public ObjectFixture()
+		{
+			settings.AddReference("Mosa.Test.Collection.dll");
+		}
 
 		[Test]
 		public void TestNewobjWithoutArgs()
 		{
-			settings.CodeSource = TestCode;
-			bool result = Run<bool>(string.Empty, @"Derived", @"NewobjTest");
+			bool result = Run<bool>("Mosa.Test.Collection", @"Derived", @"NewobjTest");
 			Assert.IsTrue(result);
 		}
 
 		[Test]
 		public void TestNewobjWithOneArg()
 		{
-			settings.CodeSource = TestCode;
-			bool result = Run<bool>(string.Empty, @"Derived", @"NewobjTestWithOneArg");
+			bool result = Run<bool>("Mosa.Test.Collection", @"Derived", @"NewobjTestWithOneArg");
 			Assert.IsTrue(result);
 		}
 
 		[Test]
 		public void TestNewobjWithTwoArgs()
 		{
-			settings.CodeSource = TestCode;
-			bool result = Run<bool>(string.Empty, @"Derived", @"NewobjTestWithTwoArgs");
+			bool result = Run<bool>("Mosa.Test.Collection", @"Derived", @"NewobjTestWithTwoArgs");
 			Assert.IsTrue(result);
 		}
 
 		[Test]
 		public void TestNewobjWithThreeArgs()
 		{
-			settings.CodeSource = TestCode;
-			bool result = Run<bool>(string.Empty, @"Derived", @"NewobjTestWithThreeArgs");
+			bool result = Run<bool>("Mosa.Test.Collection", @"Derived", @"NewobjTestWithThreeArgs");
 			Assert.IsTrue(result);
 		}
 

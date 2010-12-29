@@ -14,73 +14,28 @@ using Mosa.Test.Runtime.CompilerFramework;
 
 namespace Mosa.Test.Cases.CIL
 {
-
 	[TestFixture]
 	[Importance(Importance.Critical)]
 	[Category(@"Compiler")]
 	[Description(@"Tests support for interfaces.")]
 	public class InterfaceFixture : TestCompilerAdapter
 	{
-		private static string CreateTestCode()
+
+		public InterfaceFixture()
 		{
-			return @"
-				public interface InterfaceA
-				{
-					int A();
-				}
-
-				public interface InterfaceB
-				{
-					int A();
-					int B();
-				}
-
-				public class TestClass : InterfaceA, InterfaceB
-				{
-					public int A()
-					{
-						return 1;
-					}
-
-					int InterfaceB.A()
-					{
-						return 2;
-					}
-
-					public int B()
-					{
-						return 3;
-					}
-
-					public static bool MustCompileWithInterfaces()
-					{
-						return true;
-					}
-
-					public static bool MustReturn3FromB()
-					{
-						TestClass tc = new TestClass();
-						bool result = tc.B() == 3;
-						InterfaceB b = tc;
-						result = result & (b.B() == 3);
-						return result;
-					}
-				}
-			";
+			settings.AddReference("Mosa.Test.Collection.dll");
 		}
 
 		[Test]
 		public void MustCompileInterfaces()
 		{
-			settings.CodeSource = CreateTestCode();
-			Assert.IsTrue(Run<bool>(string.Empty, "TestClass", "MustCompileWithInterfaces"));
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "TestClass", "MustCompileWithInterfaces"));
 		}
 
 		[Test]
 		public void MustReturn3FromB()
 		{
-			settings.CodeSource = CreateTestCode();
-			Assert.IsTrue(Run<bool>(string.Empty, "TestClass", "MustReturn3FromB"));
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "TestClass", "MustReturn3FromB"));
 		}
 	}
 }

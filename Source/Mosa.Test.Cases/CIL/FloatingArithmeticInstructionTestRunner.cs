@@ -63,6 +63,7 @@ namespace Mosa.Test.Cases.CIL
 				codeBuilder.Append(TestCodeNeg);
 			if (IncludeRet)
 				codeBuilder.Append(TestCodeRet);
+
 			codeBuilder.Append(TestCodeFooter);
 
 			codeBuilder

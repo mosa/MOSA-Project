@@ -20,30 +20,15 @@ namespace Mosa.Test.Cases.CIL
 	[Description(@"Tests support for the basic type System.Enum")]
 	public class EnumFixture : TestCompilerAdapter
 	{
-		private static string CreateTestCode()
+		public EnumFixture()
 		{
-			return @"
-				public enum TestEnum
-				{
-					ItemA = 5,
-					ItemB
-				}
-
-				public class TestClass
-				{
-					public static bool AMustBe5()
-					{
-						return 5 == (int)TestEnum.ItemA;
-					}
-				}
-			";
+			settings.AddReference("Mosa.Test.Collection.dll");
 		}
 
 		[Test]
 		public void ItemAMustEqual5()
 		{
-			settings.CodeSource = CreateTestCode();
-			Assert.IsTrue(Run<bool>(string.Empty, "TestClass", "AMustBe5"));
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "TestEnumClass", "AMustBe5"));
 		}
 	}
 }

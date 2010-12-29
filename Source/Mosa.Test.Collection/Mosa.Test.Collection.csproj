@@ -47,12 +47,9 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Mosa.Test.Korlib\Mosa.Test.Korlib.csproj">
-      <Project>{76CD55B8-DB16-4DF5-849C-8E2CBEF8A81B}</Project>
-      <Name>Mosa.Test.Korlib</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
+    <Compile Include="InterfaceTests.cs" />
+    <Compile Include="EnumTests.cs" />
+    <Compile Include="ObjectTests.cs" />
     <Compile Include="SwitchTests.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

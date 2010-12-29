@@ -63,7 +63,6 @@ namespace Mosa.Test.Cases.CIL
 				codeBuilder.Append(TestCodePositiveInfity);
 
 			codeBuilder.Append(TestCodeFooter);
-			
 
 			codeBuilder
 				.Replace(@"#firsttype", FirstType)

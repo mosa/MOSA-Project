@@ -20,54 +20,22 @@ namespace Mosa.Test.Cases.CIL
 	[Description(@"Tests proper method table building and virtual call support.")]
 	public class CallvirtFixture : TestCompilerAdapter
 	{
-		public static readonly string TestCode = @"
-			public class Base
-			{
-				public virtual int Test()
-				{
-					return 5;
-				}
-			}
-
-			public class Derived : Base
-			{
-				public static readonly Derived Instance = new Derived();
-
-				public static int STest()
-				{
-					return Instance.Test();
-				}
-
-				public static int STestBaseCall()
-				{
-					return Instance.TestBaseCall();
-				}
-
-				public override int Test()
-				{
-					return 7;
-				}
-
-				public int TestBaseCall()
-				{
-					return this.Test() + base.Test();
-				}
-			}
-		";
+		public CallvirtFixture()
+		{
+			settings.AddReference("Mosa.Test.Collection.dll");
+		}
 
 		[Test]
 		public void TestVirtualCall()
 		{
-			settings.CodeSource = TestCode;
-			int result = Run<int>(string.Empty, @"Derived", @"STest");
+			int result = Run<int>("Mosa.Test.Collection", @"VDerived", @"STest");
 			Assert.AreEqual(7, result);
 		}
 
 		[Test]
 		public void TestBaseCall()
 		{
-			settings.CodeSource = TestCode;
-			int result = Run<int>(string.Empty, @"Derived", @"STestBaseCall");
+			int result = Run<int>("Mosa.Test.Collection", @"VDerived", @"STestBaseCall");
 			Assert.AreEqual(12, result);
 		}
 

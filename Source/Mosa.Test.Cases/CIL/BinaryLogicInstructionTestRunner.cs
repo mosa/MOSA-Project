@@ -53,7 +53,6 @@ namespace Mosa.Test.Cases.CIL
 				codeBuilder.Append(TestCodeShr);
 
 			codeBuilder.Append(TestCodeFooter);
-			
 
 			codeBuilder
 				.Replace(@"#expectedtype", ExpectedType)

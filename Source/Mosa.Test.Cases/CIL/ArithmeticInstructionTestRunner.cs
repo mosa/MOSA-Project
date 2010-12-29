@@ -65,7 +65,6 @@ namespace Mosa.Test.Cases.CIL
 				codeBuilder.Append(TestCodeRet);
 			codeBuilder.Append(TestCodeFooter);
 			
-
 			codeBuilder
 				.Replace(@"#expectedtype", ExpectedType)
 				.Replace(@"#firsttype", FirstType)

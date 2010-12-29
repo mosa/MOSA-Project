@@ -32,8 +32,7 @@ namespace Mosa.Test.Cases.IL
 
 		[Row(true)]
 		//[Row(false)]
-		[Test]
-		
+		[Test]		
 		[Importance(Importance.Severe)]
 		public void StaticFieldInitB(bool value)
 		{
@@ -47,7 +46,6 @@ namespace Mosa.Test.Cases.IL
 		[Row('0')]
 		[Row('9')]
 		[Test]
-		
 		[Importance(Importance.Severe)]
 		public void StaticFieldInitC(char value)
 		{
@@ -56,7 +54,6 @@ namespace Mosa.Test.Cases.IL
 
 		[Column(SByte.MaxValue, SByte.MinValue, (sbyte)0, (sbyte)1, (sbyte)-1)]
 		[Test]
-		
 		[Importance(Importance.Severe)]
 		public void StaticFieldInitI1(sbyte value)
 		{
@@ -65,7 +62,6 @@ namespace Mosa.Test.Cases.IL
 
 		[Column(Int16.MaxValue, Int16.MinValue, (short)0, (short)1, (short)-1)]
 		[Test]
-		
 		[Importance(Importance.Severe)]
 		public void StaticFieldInitI2(short value)
 		{
@@ -74,7 +70,6 @@ namespace Mosa.Test.Cases.IL
 
 		[Column(Int32.MaxValue, Int32.MinValue, 0, 1, -1)]
 		[Test]
-		
 		[Importance(Importance.Severe)]
 		public void StaticFieldInitI4(int value)
 		{
@@ -83,7 +78,6 @@ namespace Mosa.Test.Cases.IL
 
 		[Column(Int64.MaxValue/*, Int64.MinValue, 0L, 1L, -1L*/)]
 		[Test]
-		
 		[Importance(Importance.Severe)]
 		public void StaticFieldInitI8(long value)
 		{
@@ -92,7 +86,6 @@ namespace Mosa.Test.Cases.IL
 
 		[Column(Byte.MaxValue, Byte.MinValue, (byte)0U, (byte)1U, (byte)0xFFU)]
 		[Test]
-		
 		[Importance(Importance.Severe)]
 		public void StaticFieldInitU1(byte value)
 		{
@@ -101,7 +94,6 @@ namespace Mosa.Test.Cases.IL
 
 		[Column(UInt16.MaxValue, UInt16.MinValue, (ushort)0U, (ushort)1U, (ushort)0xFFFFU)]
 		[Test]
-		
 		[Importance(Importance.Severe)]
 		public void StaticFieldInitU2(ushort value)
 		{
@@ -110,7 +102,6 @@ namespace Mosa.Test.Cases.IL
 
 		[Column(UInt32.MaxValue, UInt32.MinValue, 0U, 1U, 0xFFFFFFFFU)]
 		[Test]
-		
 		[Importance(Importance.Severe)]
 		public void StaticFieldInitU4(uint value)
 		{
@@ -119,7 +110,6 @@ namespace Mosa.Test.Cases.IL
 
 		[Column(UInt64.MaxValue, UInt64.MinValue, 0UL, 1UL, 0xFFFFFFFFFFFFFFFFUL)]
 		[Test]
-		
 		[Importance(Importance.Severe)]
 		public void StaticFieldInitU8(ulong value)
 		{
@@ -128,7 +118,6 @@ namespace Mosa.Test.Cases.IL
 
 		[Column(/*Single.MaxValue, Single.MinValue, 0.0f, 1.0f,*/ Single.NaN, Single.NegativeInfinity, Single.PositiveInfinity, Single.Epsilon)]
 		[Test]
-		
 		[Importance(Importance.Severe)]
 		public void StaticFieldInitR4(float value)
 		{
@@ -145,7 +134,6 @@ namespace Mosa.Test.Cases.IL
 
 		[Column(Double.MaxValue, Double.MinValue, 0.0, 1.0, Double.NaN, Double.NegativeInfinity, Double.PositiveInfinity, Double.Epsilon)]
 		[Test]
-		
 		[Importance(Importance.Severe)]
 		public void StaticFieldInitR8(double value)
 		{

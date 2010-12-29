@@ -45,7 +45,6 @@ namespace Mosa.Test.Cases.CIL
 
 			if (this.IncludeNewarr)
 				codeBuilder.Append(TestCodeNewarr);
-
 			if (this.IncludeLdlen)
 				codeBuilder.Append(TestCodeLdlen);
 			if (this.IncludeLdelem)
@@ -56,7 +55,6 @@ namespace Mosa.Test.Cases.CIL
 				codeBuilder.Append(TestCodeLdelema);
 
 			codeBuilder.Append(TestCodeFooter);
-			
 
 			codeBuilder
 				.Replace(@"#firsttype", FirstType);
