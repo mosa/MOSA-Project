@@ -8,8 +8,8 @@
     <ProjectGuid>{067AAB6B-447A-45BA-9E0D-DFEA886B4F69}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Mosa.Test.Suite</RootNamespace>
-    <AssemblyName>Mosa.Test.Suite</AssemblyName>
+    <RootNamespace>Mosa.Test.Collection</RootNamespace>
+    <AssemblyName>Mosa.Test.Collection</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
@@ -53,7 +53,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Simple.cs" />
+    <Compile Include="Switch.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
