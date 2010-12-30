@@ -10,7 +10,7 @@
 namespace Mosa.Test.Collection
 {
 
-	public static class UShortTests
+	public static class UInt16Tests
 	{
 
 		public static int AddU2U2(ushort first, ushort second)

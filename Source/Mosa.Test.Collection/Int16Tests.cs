@@ -10,7 +10,7 @@
 namespace Mosa.Test.Collection
 {
 
-	public static class ShortTests
+	public static class Int16Tests
 	{
 
 		public static int AddI2I2(short first, short second)

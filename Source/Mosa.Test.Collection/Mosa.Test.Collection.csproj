@@ -47,10 +47,10 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Int16Tests.cs" />
     <Compile Include="Int8Tests.cs" />
+    <Compile Include="UInt16Tests.cs" />
     <Compile Include="UInt8Tests.cs" />
-    <Compile Include="UShortTests.cs" />
-    <Compile Include="ShortTests.cs" />
     <Compile Include="InterfaceTests.cs" />
     <Compile Include="EnumTests.cs" />
     <Compile Include="ObjectTests.cs" />

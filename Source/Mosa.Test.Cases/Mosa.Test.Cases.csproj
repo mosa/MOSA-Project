@@ -86,10 +86,10 @@
     <Compile Include="CIL\CallvirtFixture.cs" />
     <Compile Include="CIL\CharFixture.cs" />
     <Compile Include="CIL\ComparisonInstructionTestRunner.cs" />
+    <Compile Include="CIL\Int16Fixture.cs" />
     <Compile Include="CIL\Int8Fixture.cs" />
+    <Compile Include="CIL\UInt16Fixture.cs" />
     <Compile Include="CIL\UInt8Fixture.cs" />
-    <Compile Include="CIL\UShortFixture.cs" />
-    <Compile Include="CIL\ShortFixture.cs" />
     <Compile Include="CIL\DoubleFixture.cs" />
     <Compile Include="CIL\EnumFixture.cs" />
     <Compile Include="CIL\ExceptionHandlingFixture.cs" />
