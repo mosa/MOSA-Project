@@ -13,59 +13,59 @@ namespace Mosa.Test.Collection
 	public static class SingleTests
 	{
 
-		public static float AddU8U8(float first, float second)
+		public static float AddR4R4(float first, float second)
 		{
 			return (first + second);
 		}
 
-		public static float SubU8U8(float first, float second)
+		public static float SubR4R4(float first, float second)
 		{
 			return (first - second);
 		}
 
-		public static float MulU8U8(float first, float second)
+		public static float MulR4R4(float first, float second)
 		{
 			return (first * second);
 		}
 
-		public static float DivU8U8(float first, float second)
+		public static float DivR4R4(float first, float second)
 		{
 			return (first / second);
 		}
 
-		public static float RemU8U8(float first, float second)
+		public static float RemR4R4(float first, float second)
 		{
 			return (first % second);
 		}
 
-		public static float RetU8(float first)
+		public static float RetR4(float first)
 		{
 			return first;
 		}
 
-		public static bool CeqU8U8(float first, float second)
+		public static bool CeqR4R4(double first, double second)
 		{
-			return (first == second);
+			return (first.CompareTo(second) == 0);
 		}
 
-		public static bool CltU8U8(float first, float second)
+		public static bool CltR4R4(double first, double second)
 		{
-			return (first < second);
+			return (first.CompareTo(second) < 0);
 		}
 
-		public static bool CgtU8U8(float first, float second)
+		public static bool CgtR4R4(double first, double second)
 		{
-			return (first > second);
+			return (first.CompareTo(second) > 0);
 		}
 
-		public static bool CleU8U8(float first, float second)
+		public static bool CleR4R4(double first, double second)
 		{
-			return (first <= second);
+			return (first.CompareTo(second) <= 0);
 		}
 
-		public static bool CgeU8U8(float first, float second)
+		public static bool CgeR4R4(double first, double second)
 		{
-			return (first >= second);
+			return (first.CompareTo(second) >= 0);
 		}
 
 		public static bool Newarr()

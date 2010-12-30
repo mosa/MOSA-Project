@@ -45,27 +45,27 @@ namespace Mosa.Test.Collection
 
 		public static bool CeqR8R8(double first, double second)
 		{
-			return (first == second);
+			return (first.CompareTo(second) == 0);
 		}
 
 		public static bool CltR8R8(double first, double second)
 		{
-			return (first < second);
+			return (first.CompareTo(second) < 0);
 		}
 
 		public static bool CgtR8R8(double first, double second)
 		{
-			return (first > second);
+			return (first.CompareTo(second) > 0);
 		}
 
 		public static bool CleR8R8(double first, double second)
 		{
-			return (first <= second);
+			return (first.CompareTo(second) <= 0);
 		}
 
 		public static bool CgeR8R8(double first, double second)
 		{
-			return (first >= second);
+			return (first.CompareTo(second) >= 0);
 		}
 
 		public static bool Newarr()
