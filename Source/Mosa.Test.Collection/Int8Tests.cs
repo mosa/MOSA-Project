@@ -10,90 +10,90 @@
 namespace Mosa.Test.Collection
 {
 
-	public static class SByteTests
+	public static class Int8Tests
 	{
 
-		public static int AddU1U1(sbyte first, sbyte second)
+		public static int AddI1I1(sbyte first, sbyte second)
 		{
 			return (first + second);
 		}
 
-		public static int SubU1U1(sbyte first, sbyte second)
+		public static int SubI1I1(sbyte first, sbyte second)
 		{
 			return (first - second);
 		}
 
-		public static int MulU1U1(sbyte first, sbyte second)
+		public static int MulI1I1(sbyte first, sbyte second)
 		{
 			return (first * second);
 		}
 
-		public static int DivU1U1(sbyte first, sbyte second)
+		public static int DivI1I1(sbyte first, sbyte second)
 		{
 			return (first / second);
 		}
 
-		public static int RemU1U1(sbyte first, sbyte second)
+		public static int RemI1I1(sbyte first, sbyte second)
 		{
 			return (first % second);
 		}
 
-		public static sbyte RetU1(sbyte first)
+		public static sbyte RetI1(sbyte first)
 		{
 			return first;
 		}
 
-		public static int AndU1U1(sbyte first, sbyte second)
+		public static int AndI1I1(sbyte first, sbyte second)
 		{
 			return (first & second);
 		}
 
-		public static int OrU1U1(sbyte first, sbyte second)
+		public static int OrI1I1(sbyte first, sbyte second)
 		{
 			return (first | second);
 		}
 
-		public static int XorU1U1(sbyte first, sbyte second)
+		public static int XorI1I1(sbyte first, sbyte second)
 		{
 			return (first ^ second);
 		}
 
-		//public static int CompU1(sbyte first)
-		//{
-		//    return (~first);
-		//}
+		public static int CompI1(sbyte first)
+		{
+			return (~first);
+		}
 
-		//public static int ShiftLeftU1U1(sbyte first, byte second)
-		//{
-		//    return (first << second);
-		//}
+		public static int ShiftLeftI1I1(sbyte first, byte second)
+		{
+			return (first << second);
+		}
 
-		//public static int ShiftRightU1U1(sbyte first, byte second)
-		//{
-		//    return (first >> second);
-		//}
+		public static int ShiftRightI1I1(sbyte first, byte second)
+		{
+			return (first >> second);
+		}
 
-		public static bool CeqU1U1(sbyte first, sbyte second)
+		public static bool CeqI1I1(sbyte first, sbyte second)
 		{
 			return (first == second);
 		}
 
-		public static bool CltU1U1(sbyte first, sbyte second)
+		public static bool CltI1I1(sbyte first, sbyte second)
 		{
 			return (first < second);
 		}
 
-		public static bool CgtU1U1(sbyte first, sbyte second)
+		public static bool CgtI1I1(sbyte first, sbyte second)
 		{
 			return (first > second);
 		}
 
-		public static bool CleU1U1(sbyte first, sbyte second)
+		public static bool CleI1I1(sbyte first, sbyte second)
 		{
 			return (first <= second);
 		}
 
-		public static bool CgeU1U1(sbyte first, sbyte second)
+		public static bool CgeI1I1(sbyte first, sbyte second)
 		{
 			return (first >= second);
 		}

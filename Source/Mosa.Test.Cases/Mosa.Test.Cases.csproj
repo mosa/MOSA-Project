@@ -83,10 +83,11 @@
     <Compile Include="CIL\ArithmeticInstructionTestRunner.cs" />
     <Compile Include="CIL\BinaryLogicInstructionTestRunner.cs" />
     <Compile Include="CIL\BooleanFixture.cs" />
-    <Compile Include="CIL\ByteFixture.cs" />
     <Compile Include="CIL\CallvirtFixture.cs" />
     <Compile Include="CIL\CharFixture.cs" />
     <Compile Include="CIL\ComparisonInstructionTestRunner.cs" />
+    <Compile Include="CIL\Int8Fixture.cs" />
+    <Compile Include="CIL\UInt8Fixture.cs" />
     <Compile Include="CIL\UShortFixture.cs" />
     <Compile Include="CIL\ShortFixture.cs" />
     <Compile Include="CIL\DoubleFixture.cs" />
@@ -100,7 +101,6 @@
     <Compile Include="CIL\InterfaceFixture.cs" />
     <Compile Include="CIL\ObjectFixture.cs" />
     <Compile Include="CIL\PinnedFixture.cs" />
-    <Compile Include="CIL\SByteFixture.cs" />
     <Compile Include="CIL\SingleFixture.cs" />
     <Compile Include="CIL\StringFixture.cs" />
     <Compile Include="CIL\SZArrayInstructionTestRunner.cs" />

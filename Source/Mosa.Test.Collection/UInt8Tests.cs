@@ -10,7 +10,7 @@
 namespace Mosa.Test.Collection
 {
 
-	public static class ByteTests
+	public static class UInt8Tests
 	{
 
 		public static int AddU1U1(byte first, byte second)

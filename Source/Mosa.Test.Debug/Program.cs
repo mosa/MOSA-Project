@@ -18,7 +18,7 @@ namespace Mosa.Test.Debug
 			
 			add.AddU4(0x32, 0x32);
 
-			ByteFixture byteFixture = new ByteFixture();
+			Int8Fixture byteFixture = new Int8Fixture();
 
 			byteFixture.Newarr();
 
