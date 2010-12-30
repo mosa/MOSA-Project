@@ -100,7 +100,7 @@ namespace Mosa.Test.Collection
 
 		public static bool Newarr()
 		{
-			byte[] arr = new byte[0];
+			short[] arr = new short[0];
 			return arr != null;
 		}
 
