@@ -4,229 +4,173 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Michael Fröhlich (grover) <michael.ruck@michaelruck.de>
- *  
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
  */
 
 using System;
 using MbUnit.Framework;
 
+using Mosa.Test.Runtime.CompilerFramework;
 using Mosa.Test.Runtime.CompilerFramework.Numbers;
+using Mosa.Test.Collection;
 
 namespace Mosa.Test.Cases.CIL
 {
-	[TestFixture]
+	//[TestFixture]
 	[Importance(Importance.Critical)]
-	//[Category(@"Basic types")]
-	//[Description(@"Tests support for the basic type System.Single")]
-	public class SingleFixture
+	public class SingleFixture : TestCompilerAdapter
 	{
-		private readonly FloatingArithmeticInstructionTestRunner<float, float> arithmeticTests = new FloatingArithmeticInstructionTestRunner<float, float>
+
+		public SingleFixture()
 		{
-			ExpectedType = "float",
-			FirstType = "float",
-			SecondType = "float",
-		};
-
-		private readonly ComparisonInstructionTestRunner<float> comparisonTests = new ComparisonInstructionTestRunner<float>
-		{
-			FirstType = "float"
-		};
-
-		private readonly SZArrayInstructionTestRunner<float> arrayTests = new SZArrayInstructionTestRunner<float>
-		{
-			FirstType = "float"
-		};
-
-		//#region Add
-
-		//[Test, Factory(typeof(Variations), "R4_R4")]
-		//public void AddR4R4(float a, float b)
-		//{
-		//    this.arithmeticTests.Add((a + b), a, b);
-		//}
-
-		//#endregion // Add
-
-		//#region Sub
-
-		//[Test, Factory(typeof(Variations), "R4_R4")]
-		//public void SubR4R4(float a, float b)
-		//{
-		//    this.arithmeticTests.Sub((a - b), a, b);
-		//}
-
-		//#endregion // Sub
-
-		//#region Mul
-
-		//[Test, Factory(typeof(Variations), "R4_R4")]
-		//public void MulR4R4(float a, float b)
-		//{
-		//    this.arithmeticTests.Mul((a * b), a, b);
-		//}
-
-		//#endregion // Mul
-
-		//#region Div
-
-		//[Test, Factory(typeof(Variations), "R4_R4WithoutZero")]
-		//public void DivR4R4(float a, float b)
-		//{
-		//    this.arithmeticTests.Div((a / b), a, b);
-		//}
-
-		////[Test, Factory(typeof(Variations), "R4_R4Zero")]
-		////[ExpectedException(typeof(DivideByZeroException))]
-		////public void DivR4R4DivideByZeroException(float a, float b)
-		////{
-		////    this.arithmeticTests.Div((a / b), a, b);
-		////}
-
-		//#endregion // Div
-
-		//#region Rem
-
-		//[Test, Factory(typeof(Variations), "R4_R4WithoutZero")]
-		//public void RemR4R4(float a, float b)
-		//{
-		//    this.arithmeticTests.Rem((a % b), a, b);
-		//}
-
-		////[Test, Factory(typeof(Variations), "R4_R4Zero")]
-		////[ExpectedException(typeof(DivideByZeroException))]
-		////public void RemR4R4DivideByZeroException(float a, float b)
-		////{
-		////    this.arithmeticTests.Rem((a % b), a, b);
-		////}
-
-		////[Test, Factory(typeof(Variations), "R4_R4BelowZero")]
-		////[ExpectedException(typeof(OverflowException))]
-		////public void RemR4R4OverflowException(float a, float b)
-		////{
-		////    this.arithmeticTests.Rem((a % b), a, b);
-		////}
-
-		//#endregion // Rem
-
-		//#region Neg
-
-		//[Test, Factory(typeof(R4), "Samples")]
-		//public void NegR4(float first)
-		//{
-		//    this.arithmeticTests.Neg(-first, first);
-		//}
-
-		//#endregion // Neg
-
-		//#region Ret
-
-		//[Test, Factory(typeof(R4), "Samples")]
-		//public void RetR4(float value)
-		//{
-		//    this.arithmeticTests.Ret(value);
-		//}
-
-		//#endregion // Ret
-
-		#region Ceq
-
-		[Test, Factory(typeof(Variations), "R4_R4")]
-		public void CeqR4R4(float first, float second)
-		{
-			this.comparisonTests.Ceq((first == second), first, second);
+			settings.AddReference("Mosa.Test.Collection.dll");
 		}
 
-		#endregion // Ceq
-
-		#region Cgt
-
-		[Test, Factory(typeof(Variations), "R4_R4")]
-		public void CgtR4R4(float first, float second)
+		[Test, Factory(typeof(Variations), "R8_R8")]
+		public void AddR8_R8(float a, float b)
 		{
-			this.comparisonTests.Cgt((first > second), first, second);
+			Assert.AreEqual(0, DoubleTests.AddR8R8(a, b).CompareTo(Run<float>("Mosa.Test.Collection", "DoubleTests", "AddR8R8", a, b)));
 		}
 
-		#endregion // Cgt
-
-		#region Clt
-
-		[Test, Factory(typeof(Variations), "R4_R4")]
-		public void CltR4R4(float first, float second)
+		[Test, Factory(typeof(Variations), "R8_R8")]
+		public void SubR8_R8(float a, float b)
 		{
-			this.comparisonTests.Clt((first < second), first, second);
+			Assert.AreEqual(0, DoubleTests.SubR8R8(a, b).CompareTo(Run<float>("Mosa.Test.Collection", "DoubleTests", "SubR8R8", a, b)));
 		}
 
-		#endregion // Clt
-
-		#region Cge
-
-		[Test, Factory(typeof(Variations), "R4_R4")]
-		public void CgeR4R4(float first, float second)
+		[Test, Factory(typeof(Variations), "R8_R8")]
+		public void MulR8_R8(float a, float b)
 		{
-			this.comparisonTests.Cge((first >= second), first, second);
+			Assert.AreEqual(0, DoubleTests.MulR8R8(a, b).CompareTo(Run<float>("Mosa.Test.Collection", "DoubleTests", "MulR8R8", a, b)));
 		}
 
-		#endregion // Cge
-
-		#region Cle
-
-		[Test, Factory(typeof(Variations), "R4_R4")]
-		public void CleR4R4(float first, float second)
+		[Test, Factory(typeof(Variations), "R8_R8WithoutZero")]
+		public void DivR8_R8(float a, float b)
 		{
-			this.comparisonTests.Cle((first <= second), first, second);
+			Assert.AreEqual(0, DoubleTests.DivR8R8(a, b).CompareTo(Run<float>("Mosa.Test.Collection", "DoubleTests", "DivR8R8", a, b)));
 		}
 
-		#endregion // Cle
+		[Test, Factory(typeof(Variations), "R8_R8Zero")]
+		[ExpectedException(typeof(DivideByZeroException))]
+		public void DivR8_R8DivideByZeroException(float a, float b)
+		{
+			Assert.AreEqual(0, DoubleTests.DivR8R8(a, b).CompareTo(Run<float>("Mosa.Test.Collection", "DoubleTests", "DivR8R8", a, b)));
+		}
 
-		#region Newarr
+		[Test, Factory(typeof(Variations), "R8_R8WithoutZero")]
+		public void RemR8_R8(float a, float b)
+		{
+			Assert.AreEqual(0, DoubleTests.RemR8R8(a, b).CompareTo(Run<float>("Mosa.Test.Collection", "DoubleTests", "RemR8R8", a, b)));
+		}
+
+		[Test, Factory(typeof(Variations), "R8_R8Zero")]
+		[ExpectedException(typeof(DivideByZeroException))]
+		public void RemR8_R8DivideByZeroException(float a, float b)
+		{
+			Assert.AreEqual(0, DoubleTests.RemR8R8(a, b).CompareTo(Run<float>("Mosa.Test.Collection", "DoubleTests", "RemR8R8", a, b)));
+		}
+
+		[Test, Factory(typeof(I1), "Samples")]
+		public void RetR8(float a)
+		{
+			Assert.AreEqual(0, DoubleTests.RetR8(a).CompareTo(Run<float>("Mosa.Test.Collection", "DoubleTests", "RetR8", a)));
+		}
+
+		[Test, Factory(typeof(Variations), "R8_R8")]
+		public void CeqR8_R8(float a, float b)
+		{
+			Assert.AreEqual(DoubleTests.CeqR8R8(a, b), Run<bool>("Mosa.Test.Collection", "DoubleTests", "CeqR8R8", a, b));
+		}
+
+		[Test, Factory(typeof(Variations), "R8_R8")]
+		public void CltR8_R8(float a, float b)
+		{
+			Assert.AreEqual(DoubleTests.CltR8R8(a, b), Run<bool>("Mosa.Test.Collection", "DoubleTests", "CltR8R8", a, b));
+		}
+
+		[Test, Factory(typeof(Variations), "R8_R8")]
+		public void CgtR8_R8(float a, float b)
+		{
+			Assert.AreEqual(DoubleTests.CgtR8R8(a, b), Run<bool>("Mosa.Test.Collection", "DoubleTests", "CgtR8R8", a, b));
+		}
+
+		[Test, Factory(typeof(Variations), "R8_R8")]
+		public void CleR8_R8(float a, float b)
+		{
+			Assert.AreEqual(DoubleTests.CleR8R8(a, b), Run<bool>("Mosa.Test.Collection", "DoubleTests", "CleR8R8", a, b));
+		}
+
+		[Test, Factory(typeof(Variations), "R8_R8")]
+		public void CgeR8_R8(float a, float b)
+		{
+			Assert.AreEqual(DoubleTests.CgeR8R8(a, b), Run<bool>("Mosa.Test.Collection", "DoubleTests", "CgeR8R8", a, b));
+		}
 
 		[Test]
-		public void NewarrR4()
+		public void Newarr()
 		{
-			this.arrayTests.Newarr();
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "DoubleTests", "Newarr"));
 		}
-
-		#endregion // Newarr
-
-		#region Ldlen
 
 		[Test, Factory(typeof(Variations), "SmallNumbers")]
-		public void LdlenR4(int length)
+		public void Ldlen(int length)
 		{
-			this.arrayTests.Ldlen(length);
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "DoubleTests", "Ldlen", length));
 		}
 
-		#endregion // Ldlen
-
-		#region Stelem
-
-		[Test, Factory(typeof(Variations), "ISmall_R4")]
-		public void StelemR4(int index, float value)
+		[Test, Factory(typeof(Variations), "ISmall_I1")]
+		public void StelemR8(int index, float value)
 		{
-			this.arrayTests.Stelem(index, value);
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "DoubleTests", "Stelem", index, value));
 		}
 
-		#endregion // Stelem
-
-		#region Ldelem
-
-		[Test, Factory(typeof(Variations), "ISmall_R4")]
-		public void LdelemR4(int index, float value)
+		[Test, Factory(typeof(Variations), "ISmall_I1")]
+		public void LdelemR8(int index, float value)
 		{
-			this.arrayTests.Ldelem(index, value);
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "DoubleTests", "Ldelem", index, value));
 		}
 
-		#endregion // Ldelem
-
-		#region Ldelema
-
-		[Test, Factory(typeof(Variations), "ISmall_R4")]
-		public void LdelemaR4(int index, float value)
+		[Test, Factory(typeof(Variations), "ISmall_I1")]
+		public void LdelemaR8(int index, float value)
 		{
-			this.arrayTests.Ldelema(index, value);
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "DoubleTests", "Ldelema", index, value));
 		}
 
-		#endregion // Ldelema
 	}
 }
+
+
+//[Test, Factory(typeof(Variations), "R8_R8WithoutZero")]
+//public void DivR8R8(float a, float b)
+//{
+//    this.arithmeticTests.Div((a / b), a, b);
+//}
+
+////[Test, Factory(typeof(Variations), "R8_R8Zero")]
+////[ExpectedException(typeof(DivideByZeroException))]
+////public void DivR8R8DivideByZeroException(float a, float b)
+////{
+////    this.arithmeticTests.Div((a / b), a, b);
+////}
+
+
+//[Test, Factory(typeof(Variations), "R8_R8WithoutZero")]
+//public void RemR8R8(float a, float b)
+//{
+//    this.arithmeticTests.Rem((a % b), a, b);
+//}
+
+////[Test, Factory(typeof(Variations), "R8_R8Zero")]
+////[ExpectedException(typeof(DivideByZeroException))]
+////public void RemR8R8DivideByZeroException(float a, float b)
+////{
+////    this.arithmeticTests.Rem((a % b), a, b);
+////}
+
+////[Test, Factory(typeof(Variations), "R8_R8BelowZero")]
+////[ExpectedException(typeof(OverflowException))]
+////public void RemR8R8OverflowException(float a, float b)
+////{
+////    this.arithmeticTests.Rem((a % b), a, b);
+////}
+

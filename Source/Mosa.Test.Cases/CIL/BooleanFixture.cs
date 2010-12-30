@@ -11,7 +11,9 @@
 using System;
 using MbUnit.Framework;
 
+using Mosa.Test.Runtime.CompilerFramework;
 using Mosa.Test.Runtime.CompilerFramework.Numbers;
+using Mosa.Test.Collection;
 
 namespace Mosa.Test.Cases.CIL
 {
@@ -19,166 +21,72 @@ namespace Mosa.Test.Cases.CIL
 	[Importance(Importance.Critical)]
 	//[Category(@"Basic types")]
 	//[Description(@"Tests support for the basic type System.Boolean")]
-	public class BooleanFixture 
+	public class BooleanFixture : TestCompilerAdapter
 	{
-		private readonly BinaryLogicInstructionTestRunner<bool, bool, bool> logicTests = new BinaryLogicInstructionTestRunner<bool, bool, bool>
-		{
-			ExpectedType = @"bool",
-			FirstType = @"bool",
-			SecondType = @"bool",
-			IncludeShl = false,
-			IncludeShr = false,
-			IncludeComp = false
-		};
 
-		private readonly ComparisonInstructionTestRunner<bool> comparisonTests = new ComparisonInstructionTestRunner<bool>
+		public BooleanFixture()
 		{
-			FirstType = @"bool",
-			IncludeCge = false,
-			IncludeCgt = false,
-			IncludeCle = false,
-			IncludeClt = false
-		};
-
-		private readonly SZArrayInstructionTestRunner<bool> arrayTests = new SZArrayInstructionTestRunner<bool>
-		{
-			FirstType = @"bool"
-		};
-
-		#region And
-
-		[Row(true, true)]
-		[Row(true, false)]
-		[Row(false, true)]
-		[Row(false, false)]
-		[Test]
-		public void And(bool first, bool second)
-		{
-			this.logicTests.And((first & second), first, second);
+			settings.AddReference("Mosa.Test.Collection.dll");
 		}
 
-		#endregion // And
-
-		#region Or
-
-		[Row(true, true)]
-		[Row(true, false)]
-		[Row(false, true)]
-		[Row(false, false)]
-		[Test]
-		public void Or(bool first, bool second)
+		[Test, Factory(typeof(B), "Samples")]
+		public void RetB(bool a)
 		{
-			this.logicTests.Or((first | second), first, second);
+			Assert.AreEqual(BooleanTests.RetB(a), Run<bool>("Mosa.Test.Collection", "BooleanTests", "RetB", a));
 		}
 
-		#endregion // Or
-
-		#region Xor
-
-		[Row(true, true)]
-		[Row(true, false)]
-		[Row(false, true)]
-		[Row(false, false)]
-		[Test]
-		public void Xor(bool first, bool second)
+		[Test, Factory(typeof(Variations), "B_B")]
+		public void AndBB(bool a, bool b)
 		{
-			this.logicTests.Xor((first ^ second), first, second);
+			Assert.AreEqual(BooleanTests.AndBB(a, b), Run<bool>("Mosa.Test.Collection", "BooleanTests", "AndBB", a, b));
 		}
 
-		#endregion // Xor
-
-		#region Not
-
-		[Row(true)]
-		[Row(false)]
-		[Test]
-		public void Not(bool value)
+		[Test, Factory(typeof(Variations), "B_B")]
+		public void OrBB(bool a, bool b)
 		{
-			this.logicTests.Not(!value, value);
+			Assert.AreEqual(BooleanTests.OrBB(a, b), Run<bool>("Mosa.Test.Collection", "BooleanTests", "OrBB", a, b));
 		}
 
-		#endregion // Not
-
-		#region Ceq
-
-		[Row(true, true, true)]
-		[Row(false, true, false)]
-		[Row(false, false, true)]
-		[Row(true, false, false)]
-		[Test]
-		public void Ceq(bool expectedValue, bool first, bool second)
+		[Test, Factory(typeof(Variations), "B_B")]
+		public void XorBB(bool a, bool b)
 		{
-			this.comparisonTests.Ceq((first == second), first, second);
+			Assert.AreEqual(BooleanTests.XorBB(a, b), Run<bool>("Mosa.Test.Collection", "BooleanTests", "XorBB", a, b));
 		}
 
-		#endregion // Ceq
-
-		#region Newarr
+		[Test, Factory(typeof(B), "Samples")]
+		public void NotB(bool a)
+		{
+			Assert.AreEqual(BooleanTests.NotB(a), Run<bool>("Mosa.Test.Collection", "BooleanTests", "NotB", a));
+		}
 
 		[Test]
 		public void Newarr()
 		{
-			this.arrayTests.Newarr();
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "BooleanTests", "Newarr"));
 		}
-
-		#endregion // Newarr
-
-		#region Ldlen
 
 		[Test, Factory(typeof(Variations), "SmallNumbers")]
 		public void Ldlen(int length)
 		{
-			this.arrayTests.Ldlen(length);
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "BooleanTests", "Ldlen", length));
 		}
 
-		#endregion // Ldlen
-
-		#region Stelem
-
-		[Row(0, true)]
-		[Row(0, false)]
-		[Row(3, true)]
-		[Row(7, false)]
-		[Row(9, true)]
-		[Row(6, false)]
-		[Test]
-		public void Stelem(int index, bool value)
+		[Test, Factory(typeof(Variations), "ISmall_B")]
+		public void StelemB(int index, bool value)
 		{
-			this.arrayTests.Stelem(index, value);
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "BooleanTests", "Stelem", index, value));
 		}
 
-		#endregion // Stelem
-
-		#region Ldelem
-
-		[Row(0, true)]
-		[Row(0, false)]
-		[Row(3, true)]
-		[Row(7, false)]
-		[Row(9, true)]
-		[Row(6, false)]
-		[Test]
-		public void Ldelem(int index, bool value)
+		[Test, Factory(typeof(Variations), "ISmall_B")]
+		public void LdelemB(int index, bool value)
 		{
-			this.arrayTests.Ldelem(index, value);
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "BooleanTests", "Ldelem", index, value));
 		}
 
-		#endregion // Ldelem
-
-		#region Ldelema
-
-		[Row(0, true)]
-		[Row(0, false)]
-		[Row(3, true)]
-		[Row(7, false)]
-		[Row(9, true)]
-		[Row(6, false)]
-		[Test]
-		public void Ldelema(int index, bool value)
+		[Test, Factory(typeof(Variations), "ISmall_B")]
+		public void LdelemaB(int index, bool value)
 		{
-			this.arrayTests.Ldelema(index, value);
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "BooleanTests", "Ldelema", index, value));
 		}
-
-		#endregion // Ldelema
 	}
 }

@@ -110,6 +110,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Compiler\StaticAllocationFixture.cs" />
+    <Compile Include="Numbers\B.cs" />
     <Compile Include="TestCompilerSettings.cs" />
     <Compile Include="DelegateUtility.cs" />
     <Compile Include="Numbers\C.cs" />

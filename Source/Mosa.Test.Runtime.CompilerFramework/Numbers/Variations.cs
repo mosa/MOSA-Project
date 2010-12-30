@@ -39,6 +39,30 @@ namespace Mosa.Test.Runtime.CompilerFramework.Numbers
 			}
 		}
 
+		#region B Types
+
+		public static IEnumerable<object[]> B_B
+		{
+			get
+			{
+				foreach (bool a in B.Samples)
+					foreach (bool b in B.Samples)
+						yield return new object[2] { a, b };
+			}
+		}
+
+		public static IEnumerable<object[]> ISmall_B
+		{
+			get
+			{
+				foreach (int a in SmallNumbers)
+					foreach (bool b in B.Samples)
+						yield return new object[2] { a, b };
+			}
+		}
+
+		#endregion
+
 		#region I1 Types
 
 		public static IEnumerable<object[]> I1_I1
