@@ -103,6 +103,16 @@ namespace Mosa.Test.Runtime.CompilerFramework.Numbers
 			}
 		}
 
+		public static IEnumerable<object[]> I1_U1UpTo8
+		{
+			get
+			{
+				foreach (byte a in I1.Samples)
+					foreach (byte b in GetUpTo(8))
+						yield return new object[2] { a, b };
+			}
+		}
+
 		#endregion
 
 		#region U1 Types
@@ -277,12 +287,12 @@ namespace Mosa.Test.Runtime.CompilerFramework.Numbers
 			}
 		}
 
-		public static IEnumerable<object[]> U2_U2UpTo16
+		public static IEnumerable<object[]> U2_I1UpTo16
 		{
 			get
 			{
 				foreach (ushort a in I2.Samples)
-					foreach (ushort b in GetUpTo(16))
+					foreach (byte b in GetUpTo(16))
 						yield return new object[2] { a, b };
 			}
 		}

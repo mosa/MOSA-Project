@@ -4,259 +4,173 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Michael Fröhlich (grover) <michael.ruck@michaelruck.de>
- *  
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
  */
 
 using System;
 using MbUnit.Framework;
 
+using Mosa.Test.Runtime.CompilerFramework;
 using Mosa.Test.Runtime.CompilerFramework.Numbers;
+using Mosa.Test.Collection;
 
 namespace Mosa.Test.Cases.CIL
 {
 	[TestFixture]
 	[Importance(Importance.Critical)]
-	//[Category(@"Basic types")]
-	//[Description(@"Tests support for the basic type System.SByte")]
-	public class SByteFixture
+	public class SByteFixture : TestCompilerAdapter
 	{
-		private readonly ArithmeticInstructionTestRunner<int, sbyte> arithmeticTests = new ArithmeticInstructionTestRunner<int, sbyte>
-		{
-			ExpectedType = "int",
-			FirstType = "sbyte",
-			SecondType = "sbyte"
-		};
 
-		private readonly BinaryLogicInstructionTestRunner<int, sbyte, sbyte> logicTests = new BinaryLogicInstructionTestRunner<int, sbyte, sbyte>
+		public SByteFixture()
 		{
-			ExpectedType = "int",
-			FirstType = "sbyte",
-			SecondType = "sbyte",
-			ShiftType = "sbyte",
-			IncludeNot = false,
-			IncludeComp = false
-		};
-
-		private readonly ComparisonInstructionTestRunner<sbyte> comparisonTests = new ComparisonInstructionTestRunner<sbyte>
-		{
-			FirstType = "sbyte"
-		};
-
-		private readonly SZArrayInstructionTestRunner<sbyte> arrayTests = new SZArrayInstructionTestRunner<sbyte>
-		{
-			FirstType = "sbyte"
-		};
-
-		#region Add
-
-		[Test, Factory(typeof(Variations), "I1_I1")]
-		public void AddI1I1(sbyte a, sbyte b)
-		{
-			this.arithmeticTests.Add((a + b), a, b);
+			settings.AddReference("Mosa.Test.Collection.dll");
 		}
 
-		#endregion // Add
-
-		#region Sub
-
 		[Test, Factory(typeof(Variations), "I1_I1")]
-		public void SubI1I1(sbyte a, sbyte b)
+		public void AddU1U1(sbyte a, sbyte b)
 		{
-			this.arithmeticTests.Sub((a - b), a, b);
+			Assert.AreEqual(SByteTests.AddU1U1(a, b), Run<int>("Mosa.Test.Collection", "SByteTests", "AddU1U1", a, b));
 		}
 
-		#endregion // Sub
-
-		#region Mul
-
 		[Test, Factory(typeof(Variations), "I1_I1")]
-		public void MulI1I1(sbyte a, sbyte b)
+		public void SubU1U1(sbyte a, sbyte b)
 		{
-			this.arithmeticTests.Mul((a * b), a, b);
+			Assert.AreEqual(SByteTests.SubU1U1(a, b), Run<int>("Mosa.Test.Collection", "SByteTests", "SubU1U1", a, b));
 		}
 
-		#endregion // Mul
-
-		#region Div
+		[Test, Factory(typeof(Variations), "I1_I1")]
+		public void MulU1U1(sbyte a, sbyte b)
+		{
+			Assert.AreEqual(SByteTests.MulU1U1(a, b), Run<int>("Mosa.Test.Collection", "SByteTests", "MulU1U1", a, b));
+		}
 
 		[Test, Factory(typeof(Variations), "I1_I1WithoutZero")]
-		public void DivI1I1(sbyte a, sbyte b)
+		public void DivU1U1(sbyte a, sbyte b)
 		{
-			this.arithmeticTests.Div((a / b), a, b);
+			Assert.AreEqual(SByteTests.DivU1U1(a, b), Run<int>("Mosa.Test.Collection", "SByteTests", "DivU1U1", a, b));
 		}
 
 		[Test, Factory(typeof(Variations), "I1_I1Zero")]
 		[ExpectedException(typeof(DivideByZeroException))]
-		public void DivI1I1DivideByZeroException(sbyte a, sbyte b)
+		public void DivU1U1DivideByZeroException(sbyte a, sbyte b)
 		{
-			this.arithmeticTests.Div((a / b), a, b);
+			Assert.AreEqual(SByteTests.DivU1U1(a, b), Run<int>("Mosa.Test.Collection", "SByteTests", "DivU1U1", a, b));
 		}
 
-		#endregion // Div
-
-		#region Rem
-
-		[Test, Factory(typeof(Variations), "I1_I1AboveZero")]
-		public void RemI1I1(sbyte a, sbyte b)
+		[Test, Factory(typeof(Variations), "I1_I1WithoutZero")]
+		public void RemU1U1(sbyte a, sbyte b)
 		{
-			this.arithmeticTests.Rem((a % b), a, b);
+			Assert.AreEqual(SByteTests.RemU1U1(a, b), Run<int>("Mosa.Test.Collection", "SByteTests", "RemU1U1", a, b));
 		}
 
 		[Test, Factory(typeof(Variations), "I1_I1Zero")]
 		[ExpectedException(typeof(DivideByZeroException))]
-		public void RemI1I1DivideByZeroException(sbyte a, sbyte b)
+		public void RemU1U1DivideByZeroException(sbyte a, sbyte b)
 		{
-			this.arithmeticTests.Rem((a % b), a, b);
+			Assert.AreEqual(SByteTests.RemU1U1(a, b), Run<int>("Mosa.Test.Collection", "SByteTests", "RemU1U1", a, b));
 		}
 
-		//[Test, Factory(typeof(Variations), "I1_I1BelowZero")]
-		//[ExpectedException(typeof(OverflowException))]
-		//public void RemI1I1OverflowException(sbyte a, sbyte b)
+		[Test, Factory(typeof(I1), "Samples")]
+		public void RetU1(sbyte a)
+		{
+			Assert.AreEqual(SByteTests.RetU1(a), Run<sbyte>("Mosa.Test.Collection", "SByteTests", "RetU1", a));
+		}
+
+		[Test, Factory(typeof(Variations), "I1_I1")]
+		public void AndU1U1(sbyte a, sbyte b)
+		{
+			Assert.AreEqual(SByteTests.AndU1U1(a, b), Run<int>("Mosa.Test.Collection", "SByteTests", "AndU1U1", a, b));
+		}
+
+		[Test, Factory(typeof(Variations), "I1_I1")]
+		public void OrU1U1(sbyte a, sbyte b)
+		{
+			Assert.AreEqual(SByteTests.OrU1U1(a, b), Run<int>("Mosa.Test.Collection", "SByteTests", "OrU1U1", a, b));
+		}
+
+		[Test, Factory(typeof(Variations), "I1_I1")]
+		public void XorU1U1(sbyte a, sbyte b)
+		{
+			Assert.AreEqual(SByteTests.XorU1U1(a, b), Run<int>("Mosa.Test.Collection", "SByteTests", "XorU1U1", a, b));
+		}
+
+		//[Test, Factory(typeof(U1), "Samples")]
+		//public void CompU1(sbyte a)
 		//{
-		//    this.arithmeticTests.Rem((a % b), a, b);
+		//    Assert.AreEqual(SByteTests.CompU1(a), Run<int>("Mosa.Test.Collection", "SByteTests", "CompU1", a));
 		//}
 
-		#endregion // Rem
+		//[Test, Factory(typeof(Variations), "I1_U1UpTo8")]
+		//public void ShiftLeftU1U1(sbyte a, byte b)
+		//{
+		//    Assert.AreEqual(SByteTests.ShiftLeftU1U1(a, b), Run<int>("Mosa.Test.Collection", "SByteTests", "ShiftLeftU1U1", a, b));
+		//}
 
-		#region Neg
-
-		[Test, Factory(typeof(I1), "Samples")]
-		public void NegI1(sbyte first)
-		{
-			this.arithmeticTests.Neg(-first, first);
-		}
-
-		#endregion // Neg
-
-		#region Ret
-
-		[Test, Factory(typeof(I1), "Samples")]
-		public void RetI1(sbyte value)
-		{
-			this.arithmeticTests.Ret(value);
-		}
-
-		#endregion // Ret
-
-		#region And
+		//[Test, Factory(typeof(Variations), "I1_U1UpTo8")]
+		//public void ShiftRightU1U1(sbyte a, byte b)
+		//{
+		//    Assert.AreEqual(SByteTests.ShiftRightU1U1(a, b), Run<int>("Mosa.Test.Collection", "SByteTests", "ShiftRightU1U1", a, b));
+		//}
 
 		[Test, Factory(typeof(Variations), "I1_I1")]
-		public void AndI1I1(sbyte first, sbyte second)
+		public void CeqU1U1(sbyte a, sbyte b)
 		{
-			this.logicTests.And((first & second), first, second);
+			Assert.AreEqual(SByteTests.CeqU1U1(a, b), Run<bool>("Mosa.Test.Collection", "SByteTests", "CeqU1U1", a, b));
 		}
-
-		#endregion // And
-
-		#region Or
 
 		[Test, Factory(typeof(Variations), "I1_I1")]
-		public void OrI1I1(sbyte first, sbyte second)
+		public void CltU1U1(sbyte a, sbyte b)
 		{
-			this.logicTests.Or((first | second), first, second);
+			Assert.AreEqual(SByteTests.CltU1U1(a, b), Run<bool>("Mosa.Test.Collection", "SByteTests", "CltU1U1", a, b));
 		}
-
-		#endregion // Or
-
-		#region Xor
 
 		[Test, Factory(typeof(Variations), "I1_I1")]
-		public void XorI1I1(sbyte first, sbyte second)
+		public void CgtU1U1(sbyte a, sbyte b)
 		{
-			this.logicTests.Xor((first ^ second), first, second);
+			Assert.AreEqual(SByteTests.CgtU1U1(a, b), Run<bool>("Mosa.Test.Collection", "SByteTests", "CgtU1U1", a, b));
 		}
-
-		#endregion // Xor
-
-		#region Ceq
 
 		[Test, Factory(typeof(Variations), "I1_I1")]
-		public void CgtI1I1(sbyte first, sbyte second)
+		public void CleU1U1(sbyte a, sbyte b)
 		{
-			this.comparisonTests.Cgt((first > second), first, second);
+			Assert.AreEqual(SByteTests.CleU1U1(a, b), Run<bool>("Mosa.Test.Collection", "SByteTests", "CleU1U1", a, b));
 		}
-
-		#endregion // Cgt
-
-		#region Clt
 
 		[Test, Factory(typeof(Variations), "I1_I1")]
-		public void CltI1I1(sbyte first, sbyte second)
+		public void CgeU1U1(sbyte a, sbyte b)
 		{
-			this.comparisonTests.Clt((first < second), first, second);
+			Assert.AreEqual(SByteTests.CgeU1U1(a, b), Run<bool>("Mosa.Test.Collection", "SByteTests", "CgeU1U1", a, b));
 		}
-
-		#endregion // Clt
-
-		#region Cge
-
-		[Test, Factory(typeof(Variations), "I1_I1")]
-		public void CgeI1I1(sbyte first, sbyte second)
-		{
-			this.comparisonTests.Cge((first >= second), first, second);
-		}
-
-		#endregion // Cge
-
-		#region Cle
-
-		[Test, Factory(typeof(Variations), "I1_I1")]
-		public void CleI1I1(sbyte first, sbyte second)
-		{
-			this.comparisonTests.Cle((first <= second), first, second);
-		}
-
-		#endregion // Cle
-
-		#region Newarr
 
 		[Test]
-		public void NewarrI1()
+		public void Newarr()
 		{
-			this.arrayTests.Newarr();
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "SByteTests", "Newarr"));
 		}
-
-		#endregion // Newarr
-
-		#region Ldlen
 
 		[Test, Factory(typeof(Variations), "SmallNumbers")]
-		public void LdlenI1(int length)
+		public void Ldlen(int length)
 		{
-			this.arrayTests.Ldlen(length);
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "SByteTests", "Ldlen", length));
 		}
-
-		#endregion // Ldlen
-
-		#region Stelem
 
 		[Test, Factory(typeof(Variations), "ISmall_I1")]
-		public void StelemI1(int index, sbyte value)
+		public void StelemU1(int index, sbyte value)
 		{
-			this.arrayTests.Stelem(index, value);
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "SByteTests", "Stelem", index, value));
 		}
-
-		#endregion // Stelem
-
-		#region Ldelem
 
 		[Test, Factory(typeof(Variations), "ISmall_I1")]
-		public void LdelemI1(int index, sbyte value)
+		public void LdelemU1(int index, sbyte value)
 		{
-			this.arrayTests.Ldelem(index, value);
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "SByteTests", "Ldelem", index, value));
 		}
-
-		#endregion // Ldelem
-
-		#region Ldelema
 
 		[Test, Factory(typeof(Variations), "ISmall_I1")]
-		public void LdelemaI1(int index, sbyte value)
+		public void LdelemaU1(int index, sbyte value)
 		{
-			this.arrayTests.Ldelema(index, value);
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "SByteTests", "Ldelema", index, value));
 		}
 
-		#endregion // Ldelema
 	}
 }
