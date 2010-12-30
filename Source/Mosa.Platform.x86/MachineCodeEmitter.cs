@@ -476,7 +476,7 @@ namespace Mosa.Platform.x86
 			else
 				disp = LittleEndianBitConverter.GetBytes((displacement as MemoryOperand).Offset.ToInt32());
 
-			_codeStream.Write(disp, 0, disp.Length);
+			  _codeStream.Write(disp, 0, disp.Length);
 		}
 
 		/// <summary>

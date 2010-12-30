@@ -4,289 +4,173 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Michael Fröhlich (grover) <michael.ruck@michaelruck.de>
- *  
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
  */
 
 using System;
 using MbUnit.Framework;
 
+using Mosa.Test.Runtime.CompilerFramework;
 using Mosa.Test.Runtime.CompilerFramework.Numbers;
+using Mosa.Test.Collection;
 
 namespace Mosa.Test.Cases.CIL
 {
 	[TestFixture]
 	[Importance(Importance.Critical)]
-	//[Category(@"Basic types")]
-	//[Description(@"Tests support for the basic type System.Char")]
-	public class CharFixture
+	public class CharFixture : TestCompilerAdapter
 	{
-		private readonly ArithmeticInstructionTestRunner<int, char> arithmeticTests = new ArithmeticInstructionTestRunner<int, char>
-		{
-			ExpectedType = "int",
-			FirstType = "char",
-			SecondType = "char",
-		};
 
-		private readonly BinaryLogicInstructionTestRunner<int, char, char> logicTests = new BinaryLogicInstructionTestRunner<int, char, char>
+		public CharFixture()
 		{
-			ExpectedType = "int",
-			FirstType = "char",
-			SecondType = "char",
-			ShiftType = "char",
-			IncludeComp = false,
-			IncludeNot = false
-		};
-
-		private readonly ComparisonInstructionTestRunner<char> comparisonTests = new ComparisonInstructionTestRunner<char>
-		{
-			FirstType = "char"
-		};
-
-		private readonly SZArrayInstructionTestRunner<char> arrayTests = new SZArrayInstructionTestRunner<char>
-		{
-			FirstType = "char"
-		};
-
-		#region Add
+			settings.AddReference("Mosa.Test.Collection.dll");
+		}
 
 		[Test, Factory(typeof(Variations), "C_C")]
 		public void AddCC(char a, char b)
 		{
-			this.arithmeticTests.Add((a + b), a, b);
+			Assert.AreEqual(CharTests.AddCC(a, b), Run<int>("Mosa.Test.Collection", "CharTests", "AddCC", a, b));
 		}
-
-		#endregion // Add
-
-		#region Sub
 
 		[Test, Factory(typeof(Variations), "C_C")]
 		public void SubCC(char a, char b)
 		{
-			this.arithmeticTests.Sub((a - b), a, b);
+			Assert.AreEqual(CharTests.SubCC(a, b), Run<int>("Mosa.Test.Collection", "CharTests", "SubCC", a, b));
 		}
-
-		#endregion // Sub
-
-		#region Mul
 
 		[Test, Factory(typeof(Variations), "C_C")]
 		public void MulCC(char a, char b)
 		{
-			this.arithmeticTests.Mul((a * b), a, b);
+			Assert.AreEqual(CharTests.MulCC(a, b), Run<int>("Mosa.Test.Collection", "CharTests", "MulCC", a, b));
 		}
-
-		#endregion // Mul
-
-		#region Div
 
 		[Test, Factory(typeof(Variations), "C_CWithoutZero")]
 		public void DivCC(char a, char b)
 		{
-			this.arithmeticTests.Div((a / b), a, b);
+			Assert.AreEqual(CharTests.DivCC(a, b), Run<int>("Mosa.Test.Collection", "CharTests", "DivCC", a, b));
 		}
 
 		[Test, Factory(typeof(Variations), "C_CZero")]
 		[ExpectedException(typeof(DivideByZeroException))]
 		public void DivCCDivideByZeroException(char a, char b)
 		{
-			this.arithmeticTests.Div((a / b), a, b);
+			Assert.AreEqual(CharTests.DivCC(a, b), Run<int>("Mosa.Test.Collection", "CharTests", "DivCC", a, b));
 		}
-
-		#endregion // Div
-
-		#region Rem
 
 		[Test, Factory(typeof(Variations), "C_CWithoutZero")]
 		public void RemCC(char a, char b)
 		{
-			this.arithmeticTests.Rem((a % b), a, b);
+			Assert.AreEqual(CharTests.RemCC(a, b), Run<int>("Mosa.Test.Collection", "CharTests", "RemCC", a, b));
 		}
 
 		[Test, Factory(typeof(Variations), "C_CZero")]
 		[ExpectedException(typeof(DivideByZeroException))]
 		public void RemCCDivideByZeroException(char a, char b)
 		{
-			this.arithmeticTests.Rem((a % b), a, b);
+			Assert.AreEqual(CharTests.RemCC(a, b), Run<int>("Mosa.Test.Collection", "CharTests", "RemCC", a, b));
 		}
 
-		//[Test, Factory(typeof(Variations), "C_CBelowZero")]
-		//[ExpectedException(typeof(OverflowException))]
-		//public void RemCCOverflowException(char a, char b)
+		[Test, Factory(typeof(C), "Samples")]
+		public void RetC(char a)
+		{
+			Assert.AreEqual(CharTests.RetC(a), Run<char>("Mosa.Test.Collection", "CharTests", "RetC", a));
+		}
+
+		[Test, Factory(typeof(Variations), "C_C")]
+		public void AndCC(char a, char b)
+		{
+			Assert.AreEqual(CharTests.AndCC(a, b), Run<int>("Mosa.Test.Collection", "CharTests", "AndCC", a, b));
+		}
+
+		[Test, Factory(typeof(Variations), "C_C")]
+		public void OrCC(char a, char b)
+		{
+			Assert.AreEqual(CharTests.OrCC(a, b), Run<int>("Mosa.Test.Collection", "CharTests", "OrCC", a, b));
+		}
+
+		[Test, Factory(typeof(Variations), "C_C")]
+		public void XorCC(char a, char b)
+		{
+			Assert.AreEqual(CharTests.XorCC(a, b), Run<int>("Mosa.Test.Collection", "CharTests", "XorCC", a, b));
+		}
+
+		//[Test, Factory(typeof(C), "Samples")]
+		//public void CompC(char a)
 		//{
-		//    this.arithmeticTests.Rem((a % b), a, b);
+		//    Assert.AreEqual(CharTests.CompC(a), Run<int>("Mosa.Test.Collection", "CharTests", "CompC", a));
 		//}
 
-		#endregion // Rem
+		//[Test, Factory(typeof(Variations), "C_CUpTo8")]
+		//public void ShiftLeftCC(char a, byte b)
+		//{
+		//    Assert.AreEqual(CharTests.ShiftLeftCC(a, b), Run<int>("Mosa.Test.Collection", "CharTests", "ShiftLeftCC", a, b));
+		//}
 
-		#region Neg
-
-		[Test, Factory(typeof(C), "Samples")]
-		public void NegC(char first)
-		{
-			this.arithmeticTests.Neg(-first, first);
-		}
-
-		#endregion // Neg
-
-		#region Ret
-
-		[Test, Factory(typeof(C), "Samples")]
-		public void RetC(char value)
-		{
-			this.arithmeticTests.Ret(value);
-		}
-
-		#endregion // Ret
-
-		#region And
+		//[Test, Factory(typeof(Variations), "C_CUpTo8")]
+		//public void ShiftRightCC(char a, byte b)
+		//{
+		//    Assert.AreEqual(CharTests.ShiftRightCC(a, b), Run<int>("Mosa.Test.Collection", "CharTests", "ShiftRightCC", a, b));
+		//}
 
 		[Test, Factory(typeof(Variations), "C_C")]
-		public void AndCC(char first, char second)
+		public void CeqCC(char a, char b)
 		{
-			this.logicTests.And((first & second), first, second);
+			Assert.AreEqual(CharTests.CeqCC(a, b), Run<bool>("Mosa.Test.Collection", "CharTests", "CeqCC", a, b));
 		}
-
-		#endregion // And
-
-		#region Or
 
 		[Test, Factory(typeof(Variations), "C_C")]
-		public void OrCC(char first, char second)
+		public void CltCC(char a, char b)
 		{
-			this.logicTests.Or((first | second), first, second);
+			Assert.AreEqual(CharTests.CltCC(a, b), Run<bool>("Mosa.Test.Collection", "CharTests", "CltCC", a, b));
 		}
-
-		#endregion // Or
-
-		#region Xor
 
 		[Test, Factory(typeof(Variations), "C_C")]
-		public void XorCC(char first, char second)
+		public void CgtCC(char a, char b)
 		{
-			this.logicTests.Xor((first ^ second), first, second);
+			Assert.AreEqual(CharTests.CgtCC(a, b), Run<bool>("Mosa.Test.Collection", "CharTests", "CgtCC", a, b));
 		}
-
-		#endregion // Xor
-
-		#region Shl
-
-		[Test, Factory(typeof(Variations), "C_CUpTo16")]
-		public void ShlCC(char first, char second)
-		{
-			this.logicTests.Shl((first << second), first, second);
-		}
-
-		#endregion // Shl
-
-		#region Shr
-
-		[Test, Factory(typeof(Variations), "C_CUpTo16")]
-		public void ShrCC(char first, char second)
-		{
-			this.logicTests.Shr((first >> second), first, second);
-		}
-
-		#endregion // Shr
-
-		#region Ceq
 
 		[Test, Factory(typeof(Variations), "C_C")]
-		public void CeqCC(char first, char second)
+		public void CleCC(char a, char b)
 		{
-			this.comparisonTests.Ceq((first == second), first, second);
+			Assert.AreEqual(CharTests.CleCC(a, b), Run<bool>("Mosa.Test.Collection", "CharTests", "CleCC", a, b));
 		}
-
-		#endregion // Ceq
-
-		#region Cgt
 
 		[Test, Factory(typeof(Variations), "C_C")]
-		public void CgtCC(char first, char second)
+		public void CgeCC(char a, char b)
 		{
-			this.comparisonTests.Cgt((first > second), first, second);
+			Assert.AreEqual(CharTests.CgeCC(a, b), Run<bool>("Mosa.Test.Collection", "CharTests", "CgeCC", a, b));
 		}
-
-		#endregion // Cgt
-
-		#region Clt
-
-		[Test, Factory(typeof(Variations), "C_C")]
-		public void CltCC(char first, char second)
-		{
-			this.comparisonTests.Clt((first < second), first, second);
-		}
-
-		#endregion // Clt
-
-		#region Cge
-
-		[Test, Factory(typeof(Variations), "C_C")]
-		public void CgeCC(char first, char second)
-		{
-			this.comparisonTests.Cge((first >= second), first, second);
-		}
-
-		#endregion // Cge
-
-		#region Cle
-
-		[Test, Factory(typeof(Variations), "C_C")]
-		public void CleCC(char first, char second)
-		{
-			this.comparisonTests.Cle((first <= second), first, second);
-		}
-
-		#endregion // Cle
-
-		#region Newarr
 
 		[Test]
-		public void NewarrC()
+		public void Newarr()
 		{
-			this.arrayTests.Newarr();
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "CharTests", "Newarr"));
 		}
-
-		#endregion // Newarr
-
-		#region Ldlen
 
 		[Test, Factory(typeof(Variations), "SmallNumbers")]
-		public void LdlenC(int length)
+		public void Ldlen(int length)
 		{
-			this.arrayTests.Ldlen(length);
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "CharTests", "Ldlen", length));
 		}
-
-		#endregion // Ldlen
-
-		#region Stelem
 
 		[Test, Factory(typeof(Variations), "ISmall_C")]
 		public void StelemC(int index, char value)
 		{
-			this.arrayTests.Stelem(index, value);
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "CharTests", "Stelem", index, value));
 		}
-
-		#endregion // Stelem
-
-		#region Ldelem
 
 		[Test, Factory(typeof(Variations), "ISmall_C")]
 		public void LdelemC(int index, char value)
 		{
-			this.arrayTests.Ldelem(index, value);
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "CharTests", "Ldelem", index, value));
 		}
-
-		#endregion // Ldelem
-
-		#region Ldelema
 
 		[Test, Factory(typeof(Variations), "ISmall_C")]
 		public void LdelemaC(int index, char value)
 		{
-			this.arrayTests.Ldelema(index, value);
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "CharTests", "Ldelema", index, value));
 		}
 
-		#endregion // Ldelema
 	}
 }

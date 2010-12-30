@@ -47,9 +47,14 @@
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CharTests.cs" />
     <Compile Include="Int16Tests.cs" />
+    <Compile Include="Int32Tests.cs" />
+    <Compile Include="Int64Tests.cs" />
     <Compile Include="Int8Tests.cs" />
     <Compile Include="UInt16Tests.cs" />
+    <Compile Include="UInt32Tests.cs" />
+    <Compile Include="UInt64Tests.cs" />
     <Compile Include="UInt8Tests.cs" />
     <Compile Include="InterfaceTests.cs" />
     <Compile Include="EnumTests.cs" />

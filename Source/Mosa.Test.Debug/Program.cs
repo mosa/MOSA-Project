@@ -12,17 +12,11 @@ namespace Mosa.Test.Debug
 	{
 		public static void Main()
 		{
-			Add add = new Add();
+			CharFixture charFixture = new CharFixture();
 
-			add.AddU4(0x32, 0x32);
-			
-			add.AddU4(0x32, 0x32);
+			charFixture.AddCC('\0', '\0');
 
-			Int8Fixture byteFixture = new Int8Fixture();
-
-			byteFixture.Newarr();
-
-			return;
+			  return;
 		}
 	}
 }

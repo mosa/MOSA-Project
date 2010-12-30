@@ -58,8 +58,8 @@ namespace Mosa.Test.Runtime.CompilerFramework
 			Stream stream = this.stream;
 			if (null == stream)
 			{
-				// Request 64K of memory
-				VirtualMemoryStream vms = new VirtualMemoryStream(global::Mosa.Vm.Runtime.MemoryPageManager, 16 * 4096);
+				// Request 1Mb of memory
+				VirtualMemoryStream vms = new VirtualMemoryStream(global::Mosa.Vm.Runtime.MemoryPageManager, 1024 * 1024);
 
 				// Save the stream for further references
 				this.stream = stream = vms;
