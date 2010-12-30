@@ -4,289 +4,173 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Michael Fröhlich (grover) <michael.ruck@michaelruck.de>
- *  
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
  */
 
 using System;
 using MbUnit.Framework;
 
+using Mosa.Test.Runtime.CompilerFramework;
 using Mosa.Test.Runtime.CompilerFramework.Numbers;
+using Mosa.Test.Collection;
 
 namespace Mosa.Test.Cases.CIL
 {
 	[TestFixture]
 	[Importance(Importance.Critical)]
-	//[Category(@"Basic types")]
-	//[Description(@"Tests support for the basic type System.Int32")]
-	public class Int32Fixture
+	public class Int32Fixture : TestCompilerAdapter
 	{
-		private readonly ArithmeticInstructionTestRunner<int, int> arithmeticTests = new ArithmeticInstructionTestRunner<int, int>
+
+		public Int32Fixture()
 		{
-			ExpectedType = "int",
-			FirstType = "int",
-			SecondType = "int"
-		};
-
-		private readonly BinaryLogicInstructionTestRunner<int, int, int> logicTests = new BinaryLogicInstructionTestRunner<int, int, int>
-		{
-			ExpectedType = "int",
-			FirstType = "int",
-			SecondType = "int",
-			ShiftType = "int",
-			IncludeNot = false
-		};
-
-		private readonly ComparisonInstructionTestRunner<int> comparisonTests = new ComparisonInstructionTestRunner<int>
-		{
-			FirstType = "int"
-		};
-
-		private readonly SZArrayInstructionTestRunner<int> arrayTests = new SZArrayInstructionTestRunner<int>
-		{
-			FirstType = "int"
-		};
-
-
-		#region Add
+			settings.AddReference("Mosa.Test.Collection.dll");
+		}
 
 		[Test, Factory(typeof(Variations), "I4_I4")]
 		public void AddI4I4(int a, int b)
 		{
-			this.arithmeticTests.Add((a + b), a, b);
+			Assert.AreEqual(Int32Tests.AddI4I4(a, b), Run<int>("Mosa.Test.Collection", "Int32Tests", "AddI4I4", a, b));
 		}
-
-		#endregion // Add
-
-		#region Sub
 
 		[Test, Factory(typeof(Variations), "I4_I4")]
 		public void SubI4I4(int a, int b)
 		{
-			this.arithmeticTests.Sub((a - b), a, b);
+			Assert.AreEqual(Int32Tests.SubI4I4(a, b), Run<int>("Mosa.Test.Collection", "Int32Tests", "SubI4I4", a, b));
 		}
-
-		#endregion // Sub
-
-		#region Mul
 
 		[Test, Factory(typeof(Variations), "I4_I4")]
 		public void MulI4I4(int a, int b)
 		{
-			this.arithmeticTests.Mul((a * b), a, b);
+			Assert.AreEqual(Int32Tests.MulI4I4(a, b), Run<int>("Mosa.Test.Collection", "Int32Tests", "MulI4I4", a, b));
 		}
-
-		#endregion // Mul
-
-		#region Div
 
 		[Test, Factory(typeof(Variations), "I4_I4WithoutZero")]
 		public void DivI4I4(int a, int b)
 		{
-			this.arithmeticTests.Div((a / b), a, b);
+			Assert.AreEqual(Int32Tests.DivI4I4(a, b), Run<int>("Mosa.Test.Collection", "Int32Tests", "DivI4I4", a, b));
 		}
 
 		[Test, Factory(typeof(Variations), "I4_I4Zero")]
 		[ExpectedException(typeof(DivideByZeroException))]
 		public void DivI4I4DivideByZeroException(int a, int b)
 		{
-			this.arithmeticTests.Div((a / b), a, b);
+			Assert.AreEqual(Int32Tests.DivI4I4(a, b), Run<int>("Mosa.Test.Collection", "Int32Tests", "DivI4I4", a, b));
 		}
 
-		#endregion // Div
-
-		#region Rem
-
-		[Test, Factory(typeof(Variations), "I4_I4AboveZero")]
+		[Test, Factory(typeof(Variations), "I4_I4WithoutZero")]
 		public void RemI4I4(int a, int b)
 		{
-			this.arithmeticTests.Rem((a % b), a, b);
+			Assert.AreEqual(Int32Tests.RemI4I4(a, b), Run<int>("Mosa.Test.Collection", "Int32Tests", "RemI4I4", a, b));
 		}
 
 		[Test, Factory(typeof(Variations), "I4_I4Zero")]
 		[ExpectedException(typeof(DivideByZeroException))]
 		public void RemI4I4DivideByZeroException(int a, int b)
 		{
-			this.arithmeticTests.Rem((a % b), a, b);
+			Assert.AreEqual(Int32Tests.RemI4I4(a, b), Run<int>("Mosa.Test.Collection", "Int32Tests", "RemI4I4", a, b));
 		}
 
-		//[Test, Factory(typeof(Variations), "I4_I4BelowZero")]
-		//[ExpectedException(typeof(OverflowException))]
-		//public void RemI4I4OverflowException(int a, int b)
+		[Test, Factory(typeof(I4), "Samples")]
+		public void RetI4(int a)
+		{
+			Assert.AreEqual(Int32Tests.RetI4(a), Run<int>("Mosa.Test.Collection", "Int32Tests", "RetI4", a));
+		}
+
+		[Test, Factory(typeof(Variations), "I4_I4")]
+		public void AndI4I4(int a, int b)
+		{
+			Assert.AreEqual(Int32Tests.AndI4I4(a, b), Run<int>("Mosa.Test.Collection", "Int32Tests", "AndI4I4", a, b));
+		}
+
+		[Test, Factory(typeof(Variations), "I4_I4")]
+		public void OrI4I4(int a, int b)
+		{
+			Assert.AreEqual(Int32Tests.OrI4I4(a, b), Run<int>("Mosa.Test.Collection", "Int32Tests", "OrI4I4", a, b));
+		}
+
+		[Test, Factory(typeof(Variations), "I4_I4")]
+		public void XorI4I4(int a, int b)
+		{
+			Assert.AreEqual(Int32Tests.XorI4I4(a, b), Run<int>("Mosa.Test.Collection", "Int32Tests", "XorI4I4", a, b));
+		}
+
+		//[Test, Factory(typeof(I4), "Samples")]
+		//public void CompI4(int a)
 		//{
-		//    this.arithmeticTests.Rem((a % b), a, b);
+		//    Assert.AreEqual(Int32Tests.CompI4(a), Run<int>("Mosa.Test.Collection", "Int32Tests", "CompI4", a));
 		//}
 
-		#endregion // Rem
+		//[Test, Factory(typeof(Variations), "I4_I4UpTo8")]
+		//public void ShiftLeftI4I4(int a, byte b)
+		//{
+		//    Assert.AreEqual(Int32Tests.ShiftLeftI4I4(a, b), Run<int>("Mosa.Test.Collection", "Int32Tests", "ShiftLeftI4I4", a, b));
+		//}
 
-		#region Neg
-
-		[Test, Factory(typeof(I4), "Samples")]
-		public void NegI4(int first)
-		{
-			this.arithmeticTests.Neg(-first, first);
-		}
-
-		#endregion // Neg
-
-		#region Ret
-
-		[Test, Factory(typeof(I4), "Samples")]
-		public void RetI4(int value)
-		{
-			this.arithmeticTests.Ret(value);
-		}
-
-		#endregion // Ret
-
-		#region And
+		//[Test, Factory(typeof(Variations), "I4_I4UpTo8")]
+		//public void ShiftRightI4I4(int a, byte b)
+		//{
+		//    Assert.AreEqual(Int32Tests.ShiftRightI4I4(a, b), Run<int>("Mosa.Test.Collection", "Int32Tests", "ShiftRightI4I4", a, b));
+		//}
 
 		[Test, Factory(typeof(Variations), "I4_I4")]
-		public void AndI4I4(int first, int second)
+		public void CeqI4I4(int a, int b)
 		{
-			this.logicTests.And((first & second), first, second);
+			Assert.AreEqual(Int32Tests.CeqI4I4(a, b), Run<bool>("Mosa.Test.Collection", "Int32Tests", "CeqI4I4", a, b));
 		}
-
-		#endregion // And
-
-		#region Or
 
 		[Test, Factory(typeof(Variations), "I4_I4")]
-		public void OrI4I4(int first, int second)
+		public void CltI4I4(int a, int b)
 		{
-			this.logicTests.Or((first | second), first, second);
+			Assert.AreEqual(Int32Tests.CltI4I4(a, b), Run<bool>("Mosa.Test.Collection", "Int32Tests", "CltI4I4", a, b));
 		}
-
-		#endregion // Or
-
-		#region Xor
 
 		[Test, Factory(typeof(Variations), "I4_I4")]
-		public void XorI4I4(int first, int second)
+		public void CgtI4I4(int a, int b)
 		{
-			this.logicTests.Xor((first ^ second), first, second);
+			Assert.AreEqual(Int32Tests.CgtI4I4(a, b), Run<bool>("Mosa.Test.Collection", "Int32Tests", "CgtI4I4", a, b));
 		}
-
-		#endregion // Xor
-
-		#region Shl
-
-		[Test, Factory(typeof(Variations), "I4_I4UpTo32")]
-		public void ShlI4I4(int first, int second)
-		{
-			this.logicTests.Shl((first << second), first, second);
-		}
-
-		#endregion // Shl
-
-		#region Shr
-
-		[Test, Factory(typeof(Variations), "I4_I4UpTo32")]
-		public void ShrI4I4(int first, int second)
-		{
-			this.logicTests.Shr((first >> second), first, second);
-		}
-
-		#endregion // Shr
-
-		#region Ceq
 
 		[Test, Factory(typeof(Variations), "I4_I4")]
-		public void CeqI4I4(int first, int second)
+		public void CleI4I4(int a, int b)
 		{
-			this.comparisonTests.Ceq((first == second), first, second);
+			Assert.AreEqual(Int32Tests.CleI4I4(a, b), Run<bool>("Mosa.Test.Collection", "Int32Tests", "CleI4I4", a, b));
 		}
-
-		#endregion // Ceq
-
-		#region Cgt
 
 		[Test, Factory(typeof(Variations), "I4_I4")]
-		public void CgtI4I4(int first, int second)
+		public void CgeI4I4(int a, int b)
 		{
-			this.comparisonTests.Cgt((first > second), first, second);
+			Assert.AreEqual(Int32Tests.CgeI4I4(a, b), Run<bool>("Mosa.Test.Collection", "Int32Tests", "CgeI4I4", a, b));
 		}
-
-		#endregion // Cgt
-
-		#region Clt
-
-		[Test, Factory(typeof(Variations), "I4_I4")]
-		public void CltI4I4(int first, int second)
-		{
-			this.comparisonTests.Clt((first < second), first, second);
-		}
-
-		#endregion // Clt
-
-		#region Cge
-
-		[Test, Factory(typeof(Variations), "I4_I4")]
-		public void CgeI4I4(int first, int second)
-		{
-			this.comparisonTests.Cge((first >= second), first, second);
-		}
-
-		#endregion // Cge
-
-		#region Cle
-
-		[Test, Factory(typeof(Variations), "I4_I4")]
-		public void CleI4I4(int first, int second)
-		{
-			this.comparisonTests.Cle((first <= second), first, second);
-		}
-
-		#endregion // Cle
-
-		#region Newarr
 
 		[Test]
-		public void NewarrI4()
+		public void Newarr()
 		{
-			this.arrayTests.Newarr();
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "Int32Tests", "Newarr"));
 		}
-
-		#endregion // Newarr
-
-		#region Ldlen
 
 		[Test, Factory(typeof(Variations), "SmallNumbers")]
-		public void LdlenI4(int length)
+		public void Ldlen(int length)
 		{
-			this.arrayTests.Ldlen(length);
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "Int32Tests", "Ldlen", length));
 		}
-
-		#endregion // Ldlen
-
-		#region Stelem
 
 		[Test, Factory(typeof(Variations), "ISmall_I4")]
 		public void StelemI4(int index, int value)
 		{
-			this.arrayTests.Stelem(index, value);
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "Int32Tests", "Stelem", index, value));
 		}
-
-		#endregion // Stelem
-
-		#region Ldelem
 
 		[Test, Factory(typeof(Variations), "ISmall_I4")]
 		public void LdelemI4(int index, int value)
 		{
-			this.arrayTests.Ldelem(index, value);
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "Int32Tests", "Ldelem", index, value));
 		}
-
-		#endregion // Ldelem
-
-		#region Ldelema
 
 		[Test, Factory(typeof(Variations), "ISmall_I4")]
 		public void LdelemaI4(int index, int value)
 		{
-			this.arrayTests.Ldelema(index, value);
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "Int32Tests", "Ldelema", index, value));
 		}
 
-		#endregion // Ldelema
 	}
 }

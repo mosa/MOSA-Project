@@ -363,12 +363,12 @@ namespace Mosa.Test.Runtime.CompilerFramework.Numbers
 			}
 		}
 
-		public static IEnumerable<object[]> I4_I4UpTo32
+		public static IEnumerable<object[]> I4_U1UpTo32
 		{
 			get
 			{
 				foreach (int a in I4.Samples)
-					foreach (int b in GetUpTo(32))
+					foreach (byte b in GetUpTo(32))
 						yield return new object[2] { a, b };
 			}
 		}
@@ -417,12 +417,12 @@ namespace Mosa.Test.Runtime.CompilerFramework.Numbers
 			}
 		}
 
-		public static IEnumerable<object[]> U4_U4UpTo32
+		public static IEnumerable<object[]> U4_U1UpTo32
 		{
 			get
 			{
 				foreach (uint a in I2.Samples)
-					foreach (uint b in GetUpTo(32))
+					foreach (byte b in GetUpTo(32))
 						yield return new object[2] { a, b };
 			}
 		}
@@ -493,12 +493,12 @@ namespace Mosa.Test.Runtime.CompilerFramework.Numbers
 			}
 		}
 
-		public static IEnumerable<object[]> I8_I8UpTo64
+		public static IEnumerable<object[]> I8_U1UpTo64
 		{
 			get
 			{
 				foreach (long a in I8.Samples)
-					foreach (long b in GetUpTo(64))
+					foreach (byte b in GetUpTo(64))
 						yield return new object[2] { a, b };
 			}
 		}
@@ -547,12 +547,12 @@ namespace Mosa.Test.Runtime.CompilerFramework.Numbers
 			}
 		}
 
-		public static IEnumerable<object[]> U8_U8UpTo64
+		public static IEnumerable<object[]> U8_U1UpTo64
 		{
 			get
 			{
 				foreach (ulong a in I8.Samples)
-					foreach (ulong b in GetUpTo(64))
+					foreach (byte b in GetUpTo(64))
 						yield return new object[2] { a, b };
 			}
 		}
