@@ -12,11 +12,14 @@ namespace Mosa.Test.Debug
 	{
 		public static void Main()
 		{
-			CharFixture charFixture = new CharFixture();
+			ConvI8 fixture = new ConvI8();
 
-			charFixture.AddCC('\0', '\0');
+			//TODO: not implemented yet
+			fixture.ConvI8_I1(0);
 
-			  return;
+			//fixture.ConvI8_R4
+
+			return;
 		}
 	}
 }

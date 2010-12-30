@@ -48,6 +48,10 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CharTests.cs" />
+    <Compile Include="ConvI2Tests.cs" />
+    <Compile Include="ConvI1Tests.cs" />
+    <Compile Include="ConvI4Tests.cs" />
+    <Compile Include="ConvI8Tests.cs" />
     <Compile Include="Int16Tests.cs" />
     <Compile Include="Int32Tests.cs" />
     <Compile Include="Int64Tests.cs" />
