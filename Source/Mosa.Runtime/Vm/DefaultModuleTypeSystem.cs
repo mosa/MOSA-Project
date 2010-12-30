@@ -315,6 +315,20 @@ namespace Mosa.Runtime.Vm
 						return method;
 					}
 
+					// Special case when string.get_Chars is same as string.get_Item
+					if (type.FullName == "System.String" && nameString == "get_Chars")
+					{
+						nameString = "get_Item";
+						foreach (RuntimeMethod method in type.Methods)
+						{
+							if (method.Name != nameString)
+								continue;
+							if (!method.Signature.Matches(sig))
+								continue;
+							return method;
+						}
+					}
+
 					throw new MissingMethodException(type.Name, nameString);
 
 				case TokenTypes.MethodSpec:

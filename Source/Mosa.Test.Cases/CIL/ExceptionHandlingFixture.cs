@@ -8,44 +8,25 @@
  *
  */
 
-
 using System;
 using MbUnit.Framework;
 
 namespace Mosa.Test.Runtime.CompilerFramework
 {
-	[TestFixture]
-	//[Parallelizable]
+	//[TestFixture]
 	public class ExceptionHandlingFixture : TestCompilerAdapter
 	{
-		private static string CreateTestCode()
-		{
-			return @"
-				using System;
 
-				static class Test
-				{
-					public static bool CatchException(int value)
-					{
-						try
-						{
-							throw new Exception ();
-						}
-						catch (Exception exception)
-						{
-							return true;
-						}
-						return false;
-					}
-				}";
+		public ExceptionHandlingFixture()
+		{
+			settings.AddReference("Mosa.Test.Collection.dll");
 		}
 
 		[Test]
 		[Row(1)]
 		public void CatchException(int value)
 		{
-			settings.CodeSource = CreateTestCode();
-			Assert.IsTrue(Run<bool>(string.Empty, "Test", "CatchException", value));
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "ExceptionHandlingTests", "CatchException", value));
 		}
 	}
 }
