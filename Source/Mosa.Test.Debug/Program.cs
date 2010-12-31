@@ -12,12 +12,9 @@ namespace Mosa.Test.Debug
 	{
 		public static void Main()
 		{
-			ConvI8 fixture = new ConvI8();
+			StringFixture s = new StringFixture();
 
-			//TODO: not implemented yet
-			fixture.ConvI8_I1(0);
-
-			//fixture.ConvI8_R4
+			s.FirstCharacterMustMatchInStrings();
 
 			return;
 		}

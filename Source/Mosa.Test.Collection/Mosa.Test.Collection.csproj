@@ -52,6 +52,11 @@
     <Compile Include="ConvI1Tests.cs" />
     <Compile Include="ConvI4Tests.cs" />
     <Compile Include="ConvI8Tests.cs" />
+    <Compile Include="BooleanTests.cs" />
+    <Compile Include="StringTests.cs" />
+    <Compile Include="ExceptionHandlingTests.cs" />
+    <Compile Include="SingleTests.cs" />
+    <Compile Include="DoubleTests.cs" />
     <Compile Include="Int16Tests.cs" />
     <Compile Include="Int32Tests.cs" />
     <Compile Include="Int64Tests.cs" />

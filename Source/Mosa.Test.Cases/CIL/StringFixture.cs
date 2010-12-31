@@ -17,61 +17,32 @@ namespace Mosa.Test.Cases.CIL
 
 	[TestFixture]
 	[Importance(Importance.Critical)]
-	[Category(@"Basic types")]
-	[Description(@"Tests support for the basic type System.String")]
+	//[Category(@"Basic types")]
+	//[Description(@"Tests support for the basic type System.String")]
 	public class StringFixture : TestCompilerAdapter
 	{
-		private static string CreateTestCode(string value)
+
+		public StringFixture()
 		{
-			return @"
-				public class TestClass
-				{
-					public static string valueA = @""" + value + @""";
-					public static string valueB = @""" + value + @""";
-
-					public static bool LengthMustMatch()
-					{
-						return " + value.Length + @" == valueA.Length;
-					}
-
-					public static bool FirstCharacterMustMatch()
-					{
-						return '" + value[0] + @"' == valueA[0];
-					}
-
-					public static bool LastCharacterMustMatch()
-					{
-						char ch = '\0';
-						for (int index = 0; index < valueA.Length; index++)
-						{
-							ch = valueA[index];
-						}
-
-						return '" + value[value.Length - 1] + @"' == ch;
-					}
-				}
-			";
+			settings.AddReference("Mosa.Test.Collection.dll");
 		}
 
 		[Test]
 		public void MustProperlyCompileLdstrAndLengthMustMatch()
 		{
-			settings.CodeSource = CreateTestCode(@"Foo");
-			Assert.IsTrue(Run<bool>("", "TestClass", "LengthMustMatch"));
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "StringTests", "LengthMustMatch"));
 		}
 
 		[Test]
 		public void FirstCharacterMustMatchInStrings()
 		{
-			settings.CodeSource = CreateTestCode(@"Foo");
-			Assert.IsTrue(Run<bool>("", "TestClass", "FirstCharacterMustMatch"));
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "StringTests", "FirstCharacterMustMatch"));
 		}
 
 		[Test]
 		public void LastCharacterMustMatchInStrings()
 		{
-			settings.CodeSource = CreateTestCode(@"Foo");
-			Assert.IsTrue(Run<bool>("", "TestClass", "LastCharacterMustMatch"));
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "StringTests", "LastCharacterMustMatch"));
 		}
 	}
 }

@@ -62,6 +62,8 @@ namespace System.Runtime.InteropServices
 
 namespace System
 {
+	using System.Runtime.CompilerServices;
+
 	public class ValueType : Object
 	{
 	}
@@ -393,6 +395,7 @@ namespace System
 				return result;
 			}
 		}
+
 	}
 
 	public class MulticastDelegate : Delegate
