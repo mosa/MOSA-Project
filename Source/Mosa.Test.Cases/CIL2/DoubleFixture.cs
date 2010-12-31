@@ -14,9 +14,9 @@ using Mosa.Test.Runtime.CompilerFramework;
 using Mosa.Test.Runtime.CompilerFramework.Numbers;
 using Mosa.Test.Collection;
 
-namespace Mosa.Test.Cases.CIL
+namespace Mosa.Test.Cases.CIL2
 {
-	//[TestFixture]
+	[TestFixture]
 	[Importance(Importance.Critical)]
 	public class DoubleFixture : TestCompilerAdapter
 	{
