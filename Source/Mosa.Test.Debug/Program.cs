@@ -12,9 +12,12 @@ namespace Mosa.Test.Debug
 	{
 		public static void Main()
 		{
-			StringFixture s = new StringFixture();
+			ConditionalOperator s = new ConditionalOperator();
 
-			s.FirstCharacterMustMatchInStrings();
+			s.EQ_I1(0x02, 0x02, 0x00, 0x01);
+			s.EQ_U1(0xff, 0x00, 0xff, 0x00);
+			s.EQ_U2(1, 0, 1, 0);
+			s.EQ_U8(2, 2, 0, 1);
 
 			return;
 		}

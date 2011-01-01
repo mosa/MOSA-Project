@@ -44332,8 +44332,6 @@ namespace Mosa.Test.Prebuilt
 		delegate UIntPtr U_U_U_I(UIntPtr value1, UIntPtr value2, IntPtr value3);
 		delegate UIntPtr U_U_U_U(UIntPtr value1, UIntPtr value2, UIntPtr value3);
 
-
-		delegate int I4_I4_I4_I4_I4(int value1, int value2, int value3, int value4);
 		delegate bool B_U4_U8_U8_U8(uint value1, ulong value2, ulong value3, ulong value4);
 
 		delegate bool B_I1_I1_I1_I1(sbyte value1, sbyte value2, sbyte value3, sbyte value4);
@@ -44362,6 +44360,16 @@ namespace Mosa.Test.Prebuilt
 
 		delegate void V_R4_R4(float value1, float value2);
 		delegate void V_R8_R8(double value1, double value2);
+
+		delegate sbyte I1_I1_I1_I1_I1(sbyte value1, sbyte value2, sbyte value3, sbyte value4);
+		delegate short I2_I2_I2_I2_I2(short value1, short value2, short value3, short value4);
+		delegate int I4_I4_I4_I4_I4(int value1, int value2, int value3, int value4);
+		delegate long I8_I8_I8_I8_I8(long value1, long value2, long value3, long value4);
+
+		delegate byte U1_U1_U1_U1_U1(byte value1, byte value2, byte value3, byte value4);
+		delegate ushort U2_U2_U2_U2_U2(ushort value1, ushort value2, ushort value3, ushort value4);
+		delegate uint U4_U4_U4_U4_U4(uint value1, uint value2, uint value3, uint value4);
+		delegate ulong U8_U8_U8_U8_U8(ulong value1, ulong value2, ulong value3, ulong value4);
 
 	}
 }

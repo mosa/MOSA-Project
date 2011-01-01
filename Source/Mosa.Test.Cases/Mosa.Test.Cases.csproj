@@ -117,7 +117,6 @@
     <Compile Include="IL\Ldarga.cs" />
     <Compile Include="IL\Ldloca.cs" />
     <Compile Include="IL\Mul.cs" />
-    <Compile Include="IL\Not.cs" />
     <Compile Include="IL\Or.cs" />
     <Compile Include="IL\Rem.cs" />
     <Compile Include="IL\Shl.cs" />
