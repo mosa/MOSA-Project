@@ -53,6 +53,7 @@
     <Compile Include="ConvI4Tests.cs" />
     <Compile Include="ConvI8Tests.cs" />
     <Compile Include="BooleanTests.cs" />
+    <Compile Include="ConditionalOperatorTests.cs" />
     <Compile Include="WhileTests.cs" />
     <Compile Include="StringTests.cs" />
     <Compile Include="ExceptionHandlingTests.cs" />
