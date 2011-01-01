@@ -18,7 +18,7 @@ using System.Reflection.Emit;
 
 using Mosa.Test.Runtime.CompilerFramework;
 
-namespace Mosa.Test.Cases.OLD.IL
+namespace Mosa.Test.Cases.IL
 {
 	[TestFixture]
 	public class ConvI1 : TestCompilerAdapter
