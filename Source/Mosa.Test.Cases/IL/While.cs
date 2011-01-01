@@ -20,6 +20,12 @@ namespace Mosa.Test.Cases.IL
 	[TestFixture]
 	public class While : TestCompilerAdapter
 	{
+
+		public While()
+		{
+			settings.AddReference("Mosa.Test.Collection.dll");
+		}
+
 		#region WhileIncI4 test
 		// Tests basic increment loop
 
@@ -29,21 +35,7 @@ namespace Mosa.Test.Cases.IL
 		[Test]
 		public void WhileIncI4(int start, int limit)
 		{
-			settings.CodeSource = @"static class Test {
-				static int WhileIncI4(int start, int limit)
-				{
-					int count = 0;
-
-					while(start < limit)
-					{
-						++count;
-						++start;
-					}
-
-					return count;
-				}
-			}";
-			Assert.AreEqual<int>(limit - start, Run<int>(string.Empty, "Test", "WhileIncI4", start, limit));
+			Assert.AreEqual<int>(limit - start, Run<int>("Mosa.Test.Collection", "WhileTests", "WhileIncI4", start, limit));
 		}
 
 		#endregion
@@ -57,21 +49,7 @@ namespace Mosa.Test.Cases.IL
 		[Test]
 		public void WhileDecI4(int start, int limit)
 		{
-			settings.CodeSource = @"static class Test {
-				static int WhileDecI4(int start, int limit)
-				{
-					int count = 0;
-
-					while(start > limit)
-					{
-						++count;
-						--start;
-					}
-
-					return count;
-				}
-			}";
-			Assert.AreEqual<int>(start - limit, Run<int>(string.Empty, "Test", "WhileDecI4", start, limit));
+			Assert.AreEqual<int>(start - limit, Run<int>("Mosa.Test.Collection", "WhileTests", "WhileDecI4", start, limit));
 		}
 
 		#endregion
@@ -84,21 +62,7 @@ namespace Mosa.Test.Cases.IL
 		[Test]
 		public void WhileFalse()
 		{
-			settings.CodeSource = @"static class Test {
-				static bool WhileFalse()
-				{
-					bool called = false;
-
-					while(false)
-					{
-						called = true;
-					}
-
-					return called;
-				}
-			}";
-
-			Assert.IsFalse(Run<bool>(string.Empty, "Test", "WhileFalse"));
+			Assert.IsFalse(Run<bool>("Mosa.Test.Collection", "WhileTests", "WhileFalse"));
 		}
 
 		#endregion
@@ -114,35 +78,7 @@ namespace Mosa.Test.Cases.IL
 		[Test]
 		public void WhileContinueBreak()
 		{
-			settings.CodeSource = @"static class Test {
-				static bool WhileContinueBreak()
-				{
-					bool called = false;
-					int start = 0;
-					int limit = 20;
-					int count = 0;
-			
-					while(true)
-					{
-						++count;
-						++start;
-					
-						if(start == limit)
-						{
-							break;
-						}
-						else
-						{
-							continue;
-						}
-				
-						called = true;
-					}
-
-					return !called && start == limit && count == 20;
-				}
-			}";
-			Assert.IsTrue(Run<bool>(string.Empty, "Test", "WhileContinueBreak"));
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "WhileTests", "WhileContinueBreak"));
 		}
 
 		#endregion
@@ -156,21 +92,8 @@ namespace Mosa.Test.Cases.IL
 		[Test]
 		public void WhileOverflowIncI1(byte start, byte limit)
 		{
-			settings.CodeSource = @"static class Test {
-				static int WhileOverflowIncI1(byte start, byte limit)
-				{
-					int count = 0;
-
-					while(start != limit)
-					{
-						++start;
-						++count;
-					}
-					
-					return count;
-				}
-			}";
-			Assert.AreEqual<int>((256 + (int)limit) - start, Run<int>(string.Empty, "Test", "WhileOverflowIncI1", start, limit));
+			int expect = (256 + (int)limit) - start;
+			Assert.AreEqual<int>(expect, Run<int>("Mosa.Test.Collection", "WhileTests", "WhileOverflowIncI1", start, limit));
 		}
 
 		#endregion
@@ -184,22 +107,8 @@ namespace Mosa.Test.Cases.IL
 		[Test]
 		public void WhileOverflowDecI1(byte start, byte limit)
 		{
-			settings.CodeSource = @"static class Test {
-				static int WhileOverflowDecI1(byte start, byte limit)
-				{
-					int count = 0;
-
-					while(start != limit)
-					{
-						--start;
-						++count;
-					}
-					
-					return count;
-				}
-			}";
-
-			Assert.AreEqual<int>((256 + (int)start) - limit, Run<int>(string.Empty, "Test", "WhileOverflowDecI1", start, limit));
+			int expect = (256 + (int)start) - limit;
+			Assert.AreEqual<int>(expect, Run<int>("Mosa.Test.Collection", "WhileTests", "WhileOverflowDecI1", start, limit));
 		}
 
 		#endregion
@@ -216,37 +125,9 @@ namespace Mosa.Test.Cases.IL
 		[Test]
 		public void WhileNestedEqualsI4(int initialStatus, int wantedStatus, int start, int limit)
 		{
-			settings.CodeSource = @"static class Test {
-				static int WhileNestedEqualsI4(int initialStatus, int wantedStatus, int start, int limit)
-				{
-					int count = 0;
-					int start2 = start;
-					int status = initialStatus;
-
-					while (status == initialStatus)
-					{
-						start2 = start;
-
-						while (start2 < limit)
-						{
-							++start2;
-							++count;
-						}
-
-						++start;
-
-						if (start == limit)
-						{
-							status = wantedStatus;
-						}
-					}
-
-					return count;
-				}
-			}";
-
 			int count = limit - start;
-			Assert.AreEqual<int>((int)((count * count) - ((count / 2.0f) * count) + (count / 2.0f)), Run<int>(string.Empty, "Test", "WhileNestedEqualsI4", initialStatus, wantedStatus, start, limit));
+			int expect = (int)((count * count) - ((count / 2.0f) * count) + (count / 2.0f));
+			Assert.AreEqual<int>(expect, Run<int>("Mosa.Test.Collection", "WhileTests", "WhileNestedEqualsI4", initialStatus, wantedStatus, start, limit));
 		}
 
 		#endregion

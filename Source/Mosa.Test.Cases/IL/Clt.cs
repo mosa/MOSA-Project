@@ -16,7 +16,7 @@ using MbUnit.Framework;
 
 using Mosa.Test.Runtime.CompilerFramework;
 
-namespace Mosa.Test.Cases.IL
+namespace Mosa.Test.Cases.OLD.IL
 {
 	[TestFixture]
 	public class Clt : TestCompilerAdapter
