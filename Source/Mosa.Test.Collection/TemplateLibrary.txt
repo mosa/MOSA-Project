@@ -1,0 +1,10 @@
+﻿<# 	List<KeyValuePair<string, string>> Integers = new List<KeyValuePair<string, string>>();
+	
+	Integers.Add(new KeyValuePair<string, string>("sbyte", "I1"));
+	Integers.Add(new KeyValuePair<string, string>("short", "I2"));
+	Integers.Add(new KeyValuePair<string, string>("int", "I4"));
+	Integers.Add(new KeyValuePair<string, string>("long", "I8"));
+	Integers.Add(new KeyValuePair<string, string>("byte", "U1"));
+	Integers.Add(new KeyValuePair<string, string>("ushort", "U2"));
+	Integers.Add(new KeyValuePair<string, string>("uint", "U4"));
+	Integers.Add(new KeyValuePair<string, string>("ulong", "U8"));	#>

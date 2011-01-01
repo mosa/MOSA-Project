@@ -5,6 +5,7 @@ using System.Text;
 
 using Mosa.Test.Cases.IL;
 using Mosa.Test.Cases.CIL;
+using Mosa.Test.Cases.OLD.IL;
 
 namespace Mosa.Test.Debug
 {
@@ -12,12 +13,18 @@ namespace Mosa.Test.Debug
 	{
 		public static void Main()
 		{
-			ConditionalOperator s = new ConditionalOperator();
+			//ConditionalOperator s = new ConditionalOperator();
 
-			s.EQ_I1(0x02, 0x02, 0x00, 0x01);
-			s.EQ_U1(0xff, 0x00, 0xff, 0x00);
-			s.EQ_U2(1, 0, 1, 0);
-			s.EQ_U8(2, 2, 0, 1);
+			//s.EQ_I1(0x02, 0x02, 0x00, 0x01);
+			//s.EQ_U1(0xff, 0x00, 0xff, 0x00);
+			//s.EQ_U2(1, 0, 1, 0);
+			//s.EQ_U8(2, 2, 0, 1);
+
+			Add add = new Add();
+
+			add.AddConstantCLeft('a', 'Z');
+			add.AddConstantCLeft('a', 'Z');
+			add.AddConstantCLeft('a', 'Z');
 
 			return;
 		}
