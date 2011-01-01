@@ -14,7 +14,7 @@ using Mosa.Test.Runtime.CompilerFramework;
 using Mosa.Test.Runtime.CompilerFramework.Numbers;
 using Mosa.Test.Collection;
 
-namespace Mosa.Test.Cases.CIL2
+namespace Mosa.Test.Cases.FIX.CIL
 {
 	[TestFixture]
 	[Importance(Importance.Critical)]

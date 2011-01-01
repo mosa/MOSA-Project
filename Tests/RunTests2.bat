@@ -9,7 +9,7 @@ CD ..\bin
 
 rem %GALLIO% /rnf:Tests /rt:Xml-Inline /report-directory:..\Tests\reports Mosa.Test.Cases.dll /filter:Type:StringFixture
 
-%GALLIO% /rnf:Tests /rt:Xml-Inline /report-directory:..\Tests\reports Mosa.Test.Cases.dll /filter:Namespace:Mosa.Test.Cases.CIL
+%GALLIO% /rnf:Tests /rt:Xml-Inline /report-directory:..\Tests\reports Mosa.Test.Cases.dll "/filter:Namespace:Mosa.Test.Cases.CIL or Namespace:Mosa.Test.Cases.IL"
 
 CD ..\Tests
 
