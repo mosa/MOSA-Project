@@ -1,7 +1,4 @@
-﻿<#@ template language="C#" #> 
-<#@ import namespace="System.Collections" #>
-<#@ import namespace="System.Collections.Generic" #>
-<#@ include file="TemplateLibrary.txt" #>
+﻿<#@ include file="TemplateLibrary.txt" #>
 
 using System;
 
@@ -21,7 +18,17 @@ namespace Mosa.Test.Collection
 		{
 			return (expect == a);
 		}
+
+		public static bool LdargaChangeValue<#= integer.Value #>(<#= integer.Key #> expect, <#= integer.Key #> a) 
+		{
+			 LdargaChangeValueRef<#= integer.Value #>(expect, ref a);
+			 return expect == a;
+		}
+
+		public static void  LdargaChangeValueRef<#= integer.Value #>(<#= integer.Key #> expect, ref <#= integer.Key #> a)
+		{
+			a = expect;
+		}
 	<# } #>
 	}
 }
- 

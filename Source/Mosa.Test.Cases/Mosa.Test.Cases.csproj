@@ -113,9 +113,9 @@
     <Compile Include="IL\ConvI2.cs" />
     <Compile Include="IL\ConvI4.cs" />
     <Compile Include="IL\ConvI8.cs" />
-    <Compile Include="IL\LdargaCheckValue.cs" />
-    <Compile Include="IL\Div.cs" />
     <Compile Include="IL\Ldarga.cs" />
+    <Compile Include="IL\Div.cs" />
+    <Compile Include="IL\Ldarga2.cs" />
     <Compile Include="IL\Ldloca.cs" />
     <Compile Include="IL\Mul.cs" />
     <Compile Include="IL\Or.cs" />
