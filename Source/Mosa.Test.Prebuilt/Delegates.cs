@@ -2221,7 +2221,10 @@ namespace Mosa.Test.Prebuilt
 		delegate bool B_I2_U(short value1, UIntPtr value2);
 		delegate bool B_I4_U1(int value1, byte value2);
 		delegate bool B_I4_I2(int value1, short value2);
+		
+		[UnmanagedFunctionPointerAttribute(CallingConvention.StdCall)]		
 		delegate bool B_I4_I4(int value1, int value2);
+
 		delegate bool B_I4_I8(int value1, long value2);
 		delegate bool B_I4_I1(int value1, sbyte value2);
 		delegate bool B_I4_U2(int value1, ushort value2);

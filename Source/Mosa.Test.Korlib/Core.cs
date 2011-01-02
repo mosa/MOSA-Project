@@ -30,35 +30,6 @@
 	}
 }
 
-namespace System.Runtime.InteropServices
-{
-
-	public enum UnmanagedType
-	{
-		Bool = 2,
-		I1 = 3,
-		U1 = 4,
-		I2 = 5,
-		U2 = 6,
-		I4 = 7,
-		U4 = 8,
-		I8 = 9,
-		U8 = 10,
-		R4 = 11,
-		R8 = 12
-	}
-
-	public sealed class MarshalAsAttribute : Attribute
-	{
-		public MarshalAsAttribute(short unmanagedType)
-		{
-		}
-
-		public MarshalAsAttribute(UnmanagedType unmanagedType)
-		{
-		}
-	}
-}
 
 namespace System
 {
@@ -475,12 +446,107 @@ namespace System
 	{
 	}
 
+	[AttributeUsage(AttributeTargets.Class, Inherited = true)]
+	public sealed class AttributeUsageAttribute : Attribute
+	{
+		public AttributeUsageAttribute(AttributeTargets validOn)
+		{
+			this.validOn = validOn;
+		}
+
+		private bool allowMultiple = true;
+
+		public bool AllowMultiple
+		{
+			get { return allowMultiple; }
+			set { allowMultiple = value; }
+		}
+
+		private bool inherited = false;
+
+		public bool Inherited
+		{
+			get { return inherited; }
+			set { inherited = value; }
+		}
+
+		private AttributeTargets validOn;
+
+		public AttributeTargets ValidOn
+		{
+			get { return validOn; }
+		}
+	}
+
 	namespace Runtime
 	{
 		namespace InteropServices
 		{
 			public class OutAttribute : Attribute
 			{
+			}
+
+			public enum UnmanagedType
+			{
+				Bool = 2,
+				I1 = 3,
+				U1 = 4,
+				I2 = 5,
+				U2 = 6,
+				I4 = 7,
+				U4 = 8,
+				I8 = 9,
+				U8 = 10,
+				R4 = 11,
+				R8 = 12
+			}
+
+			public enum CallingConvention
+			{
+				Winapi = 1,
+				Cdecl = 2,
+				StdCall = 3,
+				ThisCall = 4,
+				FastCall = 5,
+			}
+
+			public sealed class MarshalAsAttribute : Attribute
+			{
+				public MarshalAsAttribute(short unmanagedType)
+				{
+				}
+
+				public MarshalAsAttribute(UnmanagedType unmanagedType)
+				{
+				}
+			}
+
+			[AttributeUsage(AttributeTargets.Method, Inherited = false)]
+			public sealed class DllImportAttribute : Attribute
+			{
+				public CallingConvention CallingConvention;
+				private string Dll;
+				public string EntryPoint;
+
+				public string Value { get { return Dll; } }
+
+				public DllImportAttribute(string dllName)
+				{
+					Dll = dllName;
+				}
+			}
+
+			[AttributeUsage(AttributeTargets.Delegate, Inherited = false, AllowMultiple = false)]
+			public sealed class UnmanagedFunctionPointerAttribute : Attribute
+			{
+				private CallingConvention call_conv;
+
+				public CallingConvention CallingConvention { get { return call_conv; } }
+
+				public UnmanagedFunctionPointerAttribute(CallingConvention callingConvention)
+				{
+					this.call_conv = callingConvention;
+				}
 			}
 		}
 	}

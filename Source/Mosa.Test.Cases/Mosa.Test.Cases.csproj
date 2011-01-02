@@ -102,7 +102,7 @@
     <Compile Include="IL\Add.cs" />
     <Compile Include="IL\AddPtr.cs" />
     <Compile Include="IL\And.cs" />
-    <Compile Include="IL\Call.cs" />
+    <Compile Include="IL\CallWithConstant.cs" />
     <Compile Include="IL\Ceq.cs" />
     <Compile Include="IL\Cgt.cs" />
     <Compile Include="IL\Clt.cs" />
@@ -113,6 +113,10 @@
     <None Include="IL\ConditionalOperator.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>ConditionalOperator.cs</LastGenOutput>
+    </None>
+    <None Include="IL\Call.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Call.cs</LastGenOutput>
     </None>
     <None Include="IL\Switch.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -132,6 +136,11 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="IL\CallOrder.cs" />
+    <Compile Include="IL\Call.cs">
+      <DependentUpon>Call.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="IL\Ldloca.cs">
       <DependentUpon>Ldloca.tt</DependentUpon>
       <AutoGen>True</AutoGen>

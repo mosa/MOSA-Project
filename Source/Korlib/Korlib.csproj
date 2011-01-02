@@ -70,6 +70,9 @@
     </NoWarn>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="System.Runtime.InteropServices\CallingConvention.cs" />
+    <Compile Include="System.Runtime.InteropServices\DllImportAttribute.cs" />
+    <Compile Include="System.Runtime.InteropServices\UnmanagedFunctionPointerAttribute.cs" />
     <Compile Include="System.Runtime.InteropServices\UnmanagedType.cs" />
     <Compile Include="System\Activator.cs" />
     <Compile Include="System\ArgumentException.cs" />

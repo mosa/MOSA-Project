@@ -7,6 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
  */
 
+using System.Runtime.InteropServices;
+
 namespace Mosa.Test.Collection
 {
 
@@ -26,6 +28,7 @@ namespace Mosa.Test.Collection
 			return (a == 1);
 		}
 
+		
 		public static bool CallOrderI4I4(int a, int b)
 		{
 			return (a == 1 && b == 2);
