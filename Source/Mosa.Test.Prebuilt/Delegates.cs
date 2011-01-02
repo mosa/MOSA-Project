@@ -44371,5 +44371,8 @@ namespace Mosa.Test.Prebuilt
 		delegate uint U4_U4_U4_U4_U4(uint value1, uint value2, uint value3, uint value4);
 		delegate ulong U8_U8_U8_U8_U8(ulong value1, ulong value2, ulong value3, ulong value4);
 
+		[return: MarshalAs(UnmanagedType.U2)]
+		delegate char C_C_C_C_C([MarshalAs(UnmanagedType.U2)]char value1, [MarshalAs(UnmanagedType.U2)]char value2, [MarshalAs(UnmanagedType.U2)]char value3, [MarshalAs(UnmanagedType.U2)]char value4);
+
 	}
 }

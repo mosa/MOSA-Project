@@ -1,0 +1,30 @@
+﻿<#@ include file="../TemplateLibrary.txt" #>
+
+using System;
+using System.Collections.Generic;
+using System.Text;
+using MbUnit.Framework;
+
+using Mosa.Test.Runtime.CompilerFramework;
+using Mosa.Test.Runtime.CompilerFramework.Numbers;
+
+namespace Mosa.Test.Cases.IL
+{
+	[TestFixture]
+	public class Ldloca : TestCompilerAdapter
+	{
+		public Ldloca()
+		{
+			settings.AddReference("Mosa.Test.Collection.dll");
+		}
+		<# foreach (KeyValuePair<string, string> number in NumbersWithChar) { #>
+
+		[Test, Factory(typeof(<#= number.Value #>), "Samples")]
+		public void LdlocaCheckValue<#= number.Value #>(<#= number.Key #> a)
+		{
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdlocaTests", "LdlocaCheckValue<#= number.Value #>", a, a));
+		}
+		<# } #>
+
+	}
+}

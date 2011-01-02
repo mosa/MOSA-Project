@@ -1,14 +1,13 @@
 ﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
+ * (c) 2011 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Alex Lyman <mail.alex.lyman@gmail.com>
- *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
- *  Michael Fröhlich (grover) <michael.ruck@michaelruck.de>
- *  
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
+ *
  */
+ 
 
 using System;
 using System.Collections.Generic;
@@ -16,190 +15,150 @@ using System.Text;
 using MbUnit.Framework;
 
 using Mosa.Test.Runtime.CompilerFramework;
+using Mosa.Test.Runtime.CompilerFramework.Numbers;
 
-namespace Mosa.Test.Cases.OLD.IL
+namespace Mosa.Test.Cases.IL
 {
 	[TestFixture]
 	public class Ldarga : TestCompilerAdapter
 	{
-		private static string TestCodeCheckValue = @"
-			static class Test
-			{ 
-				static bool #name(#type expect, #type a) 
-				{
-					return CheckValue(expect, ref a);
-				}
-
-				static bool CheckValue(#type expect, ref #type a)
-				{
-					return expect == a;
-				}
-			}";
-
-		private static string CreateTestCodeCheckValue(string name, string type)
+		public Ldarga()
 		{
-			return TestCodeCheckValue
-				.Replace("#name", name)
-				.Replace("#type", type);
-		}
-
-		private static string TestCodeChangeValue = @"
-			static class Test
-			{ 
-				static bool #name(#type expect, #type a) 
-				{
-					ChangeValue(expect, ref a);
-					return expect == a;
-				}
-
-				static void ChangeValue(#type expect, ref #type a)
-				{
-					a = expect;
-				}
-			}";
-
-		private static string CreateTestCodeChangeValue(string name, string type)
-		{
-			return TestCodeChangeValue
-				.Replace("#name", name)
-				.Replace("#type", type);
+			settings.AddReference("Mosa.Test.Collection.dll");
 		}
 
 		#region CheckValue
-
-		[Test]
-		public void LdargaI1_CheckValue([Column(0, 1, sbyte.MinValue, sbyte.MaxValue)] sbyte a)
+		
+		[Test, Factory(typeof(U1), "Samples")]
+		public void LdargaCheckValueU1(byte a)
 		{
-			settings.CodeSource = CreateTestCodeCheckValue("LdargaI1_CheckValue", "sbyte");
-			Assert.IsTrue(Run<bool>(string.Empty, "Test", "LdargaI1_CheckValue", a, a));
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaCheckValueU1", a, a));
 		}
-
-		[Test]
-		public void LdargaU1_CheckValue([Column(0, 1, byte.MinValue, byte.MaxValue)] byte a)
+		
+		[Test, Factory(typeof(U2), "Samples")]
+		public void LdargaCheckValueU2(ushort a)
 		{
-			settings.CodeSource = CreateTestCodeCheckValue("LdargaU1_CheckValue", "byte");
-			Assert.IsTrue(Run<bool>(string.Empty, "Test", "LdargaU1_CheckValue", a, a));
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaCheckValueU2", a, a));
 		}
-
-		[Row(0)]
-		[Row(1)]
-		[Row(short.MinValue)]
-		[Row(short.MaxValue)]
-		[Test]
-		public void LdargaI2_CheckValue(short a)
+		
+		[Test, Factory(typeof(U4), "Samples")]
+		public void LdargaCheckValueU4(uint a)
 		{
-			settings.CodeSource = CreateTestCodeCheckValue("LdargaI2_CheckValue", "short");
-			Assert.IsTrue(Run<bool>(string.Empty, "Test", "LdargaI2_CheckValue", a, a));
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaCheckValueU4", a, a));
 		}
-
-		[Column(0, 1, ushort.MinValue, ushort.MaxValue)]
-		[Test]
-		public void LdargaU2_CheckValue(ushort a)
+		
+		[Test, Factory(typeof(U8), "Samples")]
+		public void LdargaCheckValueU8(ulong a)
 		{
-			settings.CodeSource = CreateTestCodeCheckValue("LdargaU2_CheckValue", "ushort");
-			Assert.IsTrue(Run<bool>(string.Empty, "Test", "LdargaU2_CheckValue", a, a));
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaCheckValueU8", a, a));
 		}
-
-		[Column(0, 1, int.MinValue, int.MaxValue)]
-		[Test]
-		public void LdargaI4_CheckValue(int a)
+		
+		[Test, Factory(typeof(I1), "Samples")]
+		public void LdargaCheckValueI1(sbyte a)
 		{
-			settings.CodeSource = CreateTestCodeCheckValue("LdargaI4_CheckValue", "int");
-			Assert.IsTrue(Run<bool>(string.Empty, "Test", "LdargaI4_CheckValue", a, a));
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaCheckValueI1", a, a));
 		}
-
-		[Column(0, 1, uint.MinValue, uint.MaxValue)]
-		[Test]
-		public void LdargaU4_CheckValue(uint a)
+		
+		[Test, Factory(typeof(I2), "Samples")]
+		public void LdargaCheckValueI2(short a)
 		{
-			settings.CodeSource = CreateTestCodeCheckValue("LdargaU4_CheckValue", "uint");
-			Assert.IsTrue(Run<bool>(string.Empty, "Test", "LdargaU4_CheckValue", a, a));
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaCheckValueI2", a, a));
 		}
-
-		[Column(0, 1, long.MinValue, long.MaxValue)]
-		[Test]
-		public void LdargaI8_CheckValue(long a)
+		
+		[Test, Factory(typeof(I4), "Samples")]
+		public void LdargaCheckValueI4(int a)
 		{
-			settings.CodeSource = CreateTestCodeCheckValue("LdargaI8_CheckValue", "long");
-			Assert.IsTrue(Run<bool>(string.Empty, "Test", "LdargaI8_CheckValue", a, a));
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaCheckValueI4", a, a));
 		}
-
-		[Column(0, 1, ulong.MinValue, ulong.MaxValue)]
-		[Test]
-		public void LdargaU8_CheckValue(ulong a)
+		
+		[Test, Factory(typeof(I8), "Samples")]
+		public void LdargaCheckValueI8(long a)
 		{
-			settings.CodeSource = CreateTestCodeCheckValue("LdargaU8_CheckValue", "ulong");
-			Assert.IsTrue(Run<bool>(string.Empty, "Test", "LdargaU8_CheckValue", a, a));
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaCheckValueI8", a, a));
 		}
-
-		[Column(0, 1, float.MinValue, float.MaxValue)]
-		[Test]
-		public void LdargaR4_CheckValue(float a)
+		
+		[Test, Factory(typeof(R4), "Samples")]
+		public void LdargaCheckValueR4(float a)
 		{
-			settings.CodeSource = CreateTestCodeCheckValue("LdargaR4_CheckValue", "float");
-			Assert.IsTrue(Run<bool>(string.Empty, "Test", "LdargaR4_CheckValue", a, a));
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaCheckValueR4", a, a));
 		}
-
-		[Column(0, 1, double.MinValue, double.MaxValue)]
-		[Test]
-		public void LdargaR8_CheckValue(double a)
+		
+		[Test, Factory(typeof(R8), "Samples")]
+		public void LdargaCheckValueR8(double a)
 		{
-			settings.CodeSource = CreateTestCodeCheckValue("LdargaR8_CheckValue", "double");
-			Assert.IsTrue(Run<bool>(string.Empty, "Test", "LdargaR8_CheckValue", a, a));
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaCheckValueR8", a, a));
 		}
-
+		
+		[Test, Factory(typeof(C), "Samples")]
+		public void LdargaCheckValueC(char a)
+		{
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaCheckValueC", a, a));
+		}
+		
 		#endregion
 
 		#region ChangeValue
-
-		[Row(1, 0), Row(0, 1), Row(1, sbyte.MinValue), Row(0, sbyte.MaxValue)]
-		[Test]
-		public void LdargaI1_ChangeValue(sbyte newValue, sbyte oldValue)
+		
+		[Test, Factory(typeof(U1), "Samples")]
+		public void LdargaChangeValueU1(byte a)
 		{
-			settings.CodeSource = CreateTestCodeChangeValue("LdargaI1_ChangeValue", "sbyte");
-			Assert.IsTrue(Run<bool>(string.Empty, "Test", "LdargaI1_ChangeValue", newValue, oldValue));
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaChangeValueU1", a, a));
 		}
-
-		[Row(1, 0), Row(0, 1), Row(1, short.MinValue), Row(0, short.MaxValue)]
-		[Test]
-		public void LdargaI2_ChangeValue(short newValue, short oldValue)
+		
+		[Test, Factory(typeof(U2), "Samples")]
+		public void LdargaChangeValueU2(ushort a)
 		{
-			settings.CodeSource = CreateTestCodeChangeValue("LdargaI2_ChangeValue", "short");
-			Assert.IsTrue(Run<bool>(string.Empty, "Test", "LdargaI2_ChangeValue", newValue, oldValue));
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaChangeValueU2", a, a));
 		}
-
-		[Row(1, 0), Row(0, 1), Row(1, int.MinValue), Row(0, int.MaxValue)]
-		[Test]
-		public void LdargaI4_ChangeValue(int newValue, int oldValue)
+		
+		[Test, Factory(typeof(U4), "Samples")]
+		public void LdargaChangeValueU4(uint a)
 		{
-			settings.CodeSource = CreateTestCodeChangeValue("LdargaI4_ChangeValue", "int");
-			Assert.IsTrue(Run<bool>(string.Empty, "Test", "LdargaI4_ChangeValue", newValue, oldValue));
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaChangeValueU4", a, a));
 		}
-
-		[Row(1, 0), Row(0, 1), Row(1, long.MinValue), Row(0, long.MaxValue)]
-		[Test]
-		public void LdargaI8_ChangeValue(long newValue, long oldValue)
+		
+		[Test, Factory(typeof(U8), "Samples")]
+		public void LdargaChangeValueU8(ulong a)
 		{
-			settings.CodeSource = CreateTestCodeChangeValue("LdargaI8_ChangeValue", "long");
-			Assert.IsTrue(Run<bool>(string.Empty, "Test", "LdargaI8_ChangeValue", newValue, oldValue));
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaChangeValueU8", a, a));
 		}
-
-		[Row(1, 0), Row(0, 1), Row(1, float.MinValue), Row(0, float.MaxValue)]
-		[Test]
-		public void LdargaR4_ChangeValue(float newValue, float oldValue)
+		
+		[Test, Factory(typeof(I1), "Samples")]
+		public void LdargaChangeValueI1(sbyte a)
 		{
-			settings.CodeSource = CreateTestCodeChangeValue("LdargaR4_ChangeValue", "float");
-			Assert.IsTrue(Run<bool>(string.Empty, "Test", "LdargaR4_ChangeValue", newValue, oldValue));
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaChangeValueI1", a, a));
 		}
-
-		[Row(1, 0), Row(0, 1), Row(1, double.MinValue), Row(0, double.MaxValue)]
-		[Test]
-		public void LdargaR8_ChangeValue(double newValue, double oldValue)
+		
+		[Test, Factory(typeof(I2), "Samples")]
+		public void LdargaChangeValueI2(short a)
 		{
-			settings.CodeSource = CreateTestCodeChangeValue("LdargaR8_ChangeValue", "double");
-			Assert.IsTrue(Run<bool>(string.Empty, "Test", "LdargaR8_ChangeValue", newValue, oldValue));
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaChangeValueI2", a, a));
 		}
-
+		
+		[Test, Factory(typeof(I4), "Samples")]
+		public void LdargaChangeValueI4(int a)
+		{
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaChangeValueI4", a, a));
+		}
+		
+		[Test, Factory(typeof(I8), "Samples")]
+		public void LdargaChangeValueI8(long a)
+		{
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaChangeValueI8", a, a));
+		}
+		
+		[Test, Factory(typeof(R4), "Samples")]
+		public void LdargaChangeValueR4(float a)
+		{
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaChangeValueR4", a, a));
+		}
+		
+		[Test, Factory(typeof(R8), "Samples")]
+		public void LdargaChangeValueR8(double a)
+		{
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaChangeValueR8", a, a));
+		}
+		
 		#endregion
 	}
 }

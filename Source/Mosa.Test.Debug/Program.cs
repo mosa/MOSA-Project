@@ -4,7 +4,9 @@ using System.Linq;
 using System.Text;
 
 using Mosa.Test.Cases.IL;
+using Mosa.Test.Cases.FIX.IL;
 using Mosa.Test.Cases.CIL;
+using Mosa.Test.Cases.OLD.IL;
 
 namespace Mosa.Test.Debug
 {
@@ -14,10 +16,16 @@ namespace Mosa.Test.Debug
 		{
 			ConditionalOperator s = new ConditionalOperator();
 
-			s.EQ_I1(0x02, 0x02, 0x00, 0x01);
-			s.EQ_U1(0xff, 0x00, 0xff, 0x00);
-			s.EQ_U2(1, 0, 1, 0);
-			s.EQ_U8(2, 2, 0, 1);
+			s.CompareEqualI1((sbyte)0x02, (sbyte)0x02, (sbyte)0x05, (sbyte)0x01);
+			s.CompareEqualI1((sbyte)0x60, (sbyte)0x00, (sbyte)0x60, (sbyte)0x06);
+			s.CompareEqualI1((sbyte)1, (sbyte)0, (sbyte)1, (sbyte)2);
+			s.CompareEqualI1((sbyte)2, (sbyte)2, (sbyte)2, (sbyte)1);
+
+			Add add = new Add();
+
+			add.AddConstantCLeft('a', 'Z');
+			add.AddConstantCLeft('a', 'Z');
+			add.AddConstantCLeft('a', 'Z');
 
 			return;
 		}

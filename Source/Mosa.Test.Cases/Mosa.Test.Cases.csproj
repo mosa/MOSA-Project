@@ -70,13 +70,11 @@
     <DebugType>none</DebugType>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Gallio, Version=3.1.0.0, Culture=neutral, PublicKeyToken=eb9cfa67ee6ab36e, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\3rdParty\Gallio.dll</HintPath>
+    <Reference Include="Gallio, Version=3.2.0.0, Culture=neutral, PublicKeyToken=eb9cfa67ee6ab36e, processorArchitecture=MSIL">
+      <HintPath>..\..\3rdParty\Gallio.dll</HintPath>
     </Reference>
-    <Reference Include="MbUnit, Version=3.1.0.0, Culture=neutral, PublicKeyToken=eb9cfa67ee6ab36e, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\3rdParty\MbUnit.dll</HintPath>
+    <Reference Include="MbUnit, Version=3.2.0.0, Culture=neutral, PublicKeyToken=eb9cfa67ee6ab36e, processorArchitecture=MSIL">
+      <HintPath>..\..\3rdParty\MbUnit.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -108,14 +106,43 @@
     <Compile Include="IL\Ceq.cs" />
     <Compile Include="IL\Cgt.cs" />
     <Compile Include="IL\Clt.cs" />
-    <Compile Include="IL\ConditionalOperator.cs" />
     <Compile Include="IL\ConvI1.cs" />
     <Compile Include="IL\ConvI2.cs" />
     <Compile Include="IL\ConvI4.cs" />
     <Compile Include="IL\ConvI8.cs" />
+    <None Include="IL\ConditionalOperator.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>ConditionalOperator.cs</LastGenOutput>
+    </None>
+    <None Include="IL\Switch.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Switch.cs</LastGenOutput>
+    </None>
+    <None Include="IL\Ldloca.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Ldloca.cs</LastGenOutput>
+    </None>
+    <None Include="IL\Ldarga.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Ldarga.cs</LastGenOutput>
+    </None>
+    <Compile Include="IL\ConditionalOperator.cs">
+      <DependentUpon>ConditionalOperator.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="IL\CallOrder.cs" />
+    <Compile Include="IL\Ldloca.cs">
+      <DependentUpon>Ldloca.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="IL\Div.cs" />
-    <Compile Include="IL\Ldarga.cs" />
-    <Compile Include="IL\Ldloca.cs" />
+    <Compile Include="IL\Ldarga.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Ldarga.tt</DependentUpon>
+    </Compile>
     <Compile Include="IL\Mul.cs" />
     <Compile Include="IL\Or.cs" />
     <Compile Include="IL\Rem.cs" />
@@ -125,7 +152,11 @@
     <Compile Include="IL\Stind.cs" />
     <Compile Include="IL\Stsfld.cs" />
     <Compile Include="IL\Sub.cs" />
-    <Compile Include="IL\Switch.cs" />
+    <Compile Include="IL\Switch.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Switch.tt</DependentUpon>
+    </Compile>
     <Compile Include="IL\While.cs" />
     <Compile Include="IL\Xor.cs" />
   </ItemGroup>
@@ -138,6 +169,12 @@
       <Project>{AD653B6B-EBB7-4E69-93F7-FADA40462648}</Project>
       <Name>Mosa.Test.Runtime.CompilerFramework</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="TemplateLibrary.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <PropertyGroup>

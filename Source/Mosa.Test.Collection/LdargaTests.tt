@@ -1,0 +1,33 @@
+﻿<#@ include file="TemplateLibrary.txt" #>
+using System;
+
+namespace Mosa.Test.Collection
+{
+
+	public static class LdargaTests 
+	{
+	<# foreach (KeyValuePair<string, string> number in NumbersWithChar) { #>
+
+		public static bool LdargaCheckValue<#= number.Value #>(<#= number.Key #> expect, <#= number.Key #> a) 
+		{
+			return LdargaCheckValueRef<#= number.Value #>(expect, ref a);
+		}
+
+		private static bool LdargaCheckValueRef<#= number.Value #>(<#= number.Key #> expect, ref <#= number.Key #> a)
+		{
+			return (expect == a);
+		}
+
+		public static bool LdargaChangeValue<#= number.Value #>(<#= number.Key #> expect, <#= number.Key #> a) 
+		{
+			 LdargaChangeValueRef<#= number.Value #>(expect, ref a);
+			 return expect == a;
+		}
+
+		private static void  LdargaChangeValueRef<#= number.Value #>(<#= number.Key #> expect, ref <#= number.Key #> a)
+		{
+			a = expect;
+		}
+	<# } #>
+	}
+}
