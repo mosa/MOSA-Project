@@ -54,6 +54,11 @@
     <Compile Include="ConvI8Tests.cs" />
     <Compile Include="BooleanTests.cs" />
     <Compile Include="ConditionalOperatorTests.cs" />
+    <Compile Include="LdlocaTests.cs">
+      <DependentUpon>LdlocaTests.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="LdargaTests.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -85,6 +90,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="LdlocaTests.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>LdlocaTests.cs</LastGenOutput>
+    </None>
     <None Include="LdargaTests.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>LdargaTests.cs</LastGenOutput>

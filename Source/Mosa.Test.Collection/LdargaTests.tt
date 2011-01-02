@@ -13,7 +13,7 @@ namespace Mosa.Test.Collection
 			return LdargaCheckValueRef<#= number.Value #>(expect, ref a);
 		}
 
-		public static bool LdargaCheckValueRef<#= number.Value #>(<#= number.Key #> expect, ref <#= number.Key #> a)
+		private static bool LdargaCheckValueRef<#= number.Value #>(<#= number.Key #> expect, ref <#= number.Key #> a)
 		{
 			return (expect == a);
 		}
@@ -24,7 +24,7 @@ namespace Mosa.Test.Collection
 			 return expect == a;
 		}
 
-		public static void  LdargaChangeValueRef<#= number.Value #>(<#= number.Key #> expect, ref <#= number.Key #> a)
+		private static void  LdargaChangeValueRef<#= number.Value #>(<#= number.Key #> expect, ref <#= number.Key #> a)
 		{
 			a = expect;
 		}

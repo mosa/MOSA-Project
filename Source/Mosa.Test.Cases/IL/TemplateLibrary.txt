@@ -26,4 +26,9 @@
 	
 	Numbers.Add(new KeyValuePair<string, string>("float", "R4"));
 	Numbers.Add(new KeyValuePair<string, string>("double", "R8"));	
+	Numbers.Add(new KeyValuePair<string, string>("char", "C"));	
+
+	List<KeyValuePair<string, string>> Primitives = new List<KeyValuePair<string, string>>(Numbers);
+	
+	Primitives.Add(new KeyValuePair<string, string>("bool", "B"));
 #>

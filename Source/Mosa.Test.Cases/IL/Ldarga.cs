@@ -98,6 +98,13 @@ namespace Mosa.Test.Cases.IL
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaCheckValueR8", a, a));
 		}
 		
+		[Column(0, 1, 2, char.MinValue, char.MaxValue)]
+		[Test]
+		public void LdargaCheckValueC(char a)
+		{
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaCheckValueC", a, a));
+		}
+		
 		#endregion
 
 		#region ChangeValue
@@ -170,6 +177,13 @@ namespace Mosa.Test.Cases.IL
 		public void LdargaChangeValueR8(double a)
 		{
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaChangeValueR8", a, a));
+		}
+		
+		[Column(0, 1, 2, char.MinValue, char.MaxValue)]
+		[Test]
+		public void LdargaChangeValueC(char a)
+		{
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaChangeValueC", a, a));
 		}
 		
 		#endregion
