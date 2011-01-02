@@ -11,13 +11,10 @@
 	<property name="outputDirectory" value="../bin" overwrite="false"/>
 	
 	<!-- Main build target -->
-	<target name="build" depends="conditional" define="MOSA_PREBUILT" />
+	<target name="build" depends="conditional"/>
 
 	<target name="conditional">
-		<csc target="library" unsafe="true" output="${outputDirectory}/mscorlib.dll" debug="${debug}" nostdlib="true">		
-			<references>
-				<include name="${outputDirectory}/Mosa.Vm.dll"/>
-			</references>
+		<csc target="library" unsafe="true" output="${outputDirectory}/prebuilt/mscorlib.dll" debug="${debug}" nostdlib="true" define="MOSA_PREBUILT">		
 			<sources>
 				<include name="**/*.cs"/>
 			</sources>
