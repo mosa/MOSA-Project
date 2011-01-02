@@ -54,10 +54,10 @@
     <Compile Include="ConvI8Tests.cs" />
     <Compile Include="BooleanTests.cs" />
     <Compile Include="ConditionalOperatorTests.cs" />
-    <Compile Include="Ldarga.cs">
+    <Compile Include="LdargaTests.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Ldarga.tt</DependentUpon>
+      <DependentUpon>LdargaTests.tt</DependentUpon>
     </Compile>
     <Compile Include="WhileTests.cs" />
     <Compile Include="StringTests.cs" />
@@ -85,9 +85,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Ldarga.tt">
+    <None Include="LdargaTests.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Ldarga.cs</LastGenOutput>
+      <LastGenOutput>LdargaTests.cs</LastGenOutput>
     </None>
   </ItemGroup>
   <ItemGroup>

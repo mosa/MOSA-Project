@@ -8,13 +8,12 @@
  *
  */
  
-
 using System;
 
 namespace Mosa.Test.Collection
 {
 
-	public static class Ldarga 
+	public static class LdargaTests 
 	{
 	
 		public static bool LdargaCheckValueI1(sbyte expect, sbyte a) 

@@ -113,8 +113,16 @@
     <Compile Include="IL\ConvI2.cs" />
     <Compile Include="IL\ConvI4.cs" />
     <Compile Include="IL\ConvI8.cs" />
-    <Compile Include="IL\Ldarga.cs" />
+    <None Include="IL\Ldarga.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Ldarga.cs</LastGenOutput>
+    </None>
     <Compile Include="IL\Div.cs" />
+    <Compile Include="IL\Ldarga.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Ldarga.tt</DependentUpon>
+    </Compile>
     <Compile Include="IL\Ldloca.cs" />
     <Compile Include="IL\Mul.cs" />
     <Compile Include="IL\Or.cs" />
@@ -138,6 +146,12 @@
       <Project>{AD653B6B-EBB7-4E69-93F7-FADA40462648}</Project>
       <Name>Mosa.Test.Runtime.CompilerFramework</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="IL\TemplateLibrary.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <PropertyGroup>
