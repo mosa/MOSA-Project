@@ -16,6 +16,9 @@
 		<sources>
 			<include name="**/*.cs"/>
 		</sources>
+		<references>
+			<include name="${outputDirectory}/mscorlib.dll"/>
+		</references>
 		<!-- supress warnings -->
 		<nowarn><warning number="${suppresswarnings}"/></nowarn>
 	    </csc>

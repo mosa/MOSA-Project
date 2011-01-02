@@ -11,7 +11,7 @@
 	<property name="outputDirectory" value="../bin" overwrite="false"/>
 	
 	<!-- Main build target -->
-	<target name="build" depends="conditional"/>
+	<target name="build" depends="conditional" define="MOSA_PREBUILT" />
 
 	<target name="conditional">
 		<csc target="library" unsafe="true" output="${outputDirectory}/mscorlib.dll" debug="${debug}" nostdlib="true">		
