@@ -16,7 +16,7 @@ namespace Mosa.Test.Cases.IL
 		{
 			settings.AddReference("Mosa.Test.Collection.dll");
 		}
-		<# foreach (KeyValuePair<string, string> number in Numbers) { #>
+		<# foreach (KeyValuePair<string, string> number in NumbersWithChar) { #>
 
 		[Column(0, 1, 2, <#= number.Key #>.MinValue, <#= number.Key #>.MaxValue, <#= number.Key #>.MinValue + 1, <#= number.Key #>.MaxValue - 1)]
 		[Test]

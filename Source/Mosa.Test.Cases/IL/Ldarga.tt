@@ -18,7 +18,7 @@ namespace Mosa.Test.Cases.IL
 		}
 
 		#region CheckValue
-		<# foreach (KeyValuePair<string, string> number in Numbers) { #>
+		<# foreach (KeyValuePair<string, string> number in NumbersWithChar) { #>
 
 		[Column(0, 1, 2, <#= number.Key #>.MinValue, <#= number.Key #>.MaxValue)]
 		[Test]
