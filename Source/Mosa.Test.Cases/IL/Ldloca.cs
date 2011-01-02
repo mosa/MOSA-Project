@@ -1,14 +1,13 @@
 ﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
+ * (c) 2011 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Alex Lyman <mail.alex.lyman@gmail.com>
- *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
- *  Michael Fröhlich (grover) <michael.ruck@michaelruck.de>
- *  
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
+ *
  */
+ 
 
 using System;
 using System.Collections.Generic;
@@ -17,114 +16,92 @@ using MbUnit.Framework;
 
 using Mosa.Test.Runtime.CompilerFramework;
 
-namespace Mosa.Test.Cases.OLD.IL
+namespace Mosa.Test.Cases.IL
 {
 	[TestFixture]
 	public class Ldloca : TestCompilerAdapter
 	{
-
-		private static string TestCode = @"
-			static class Test
-			{
-				static bool #name(#type expect)
-				{
-					#type a = expect;
-					return DoCheckValue(expect, ref a);
-				}
-
-				static bool DoCheckValue(#type expect, ref #type value)
-				{
-					return (expect == value);
-				}
-			}";
-
-		private static string CreateTestCode(string name, string type)
+		public Ldloca()
 		{
-			return TestCode.Replace("#name", name).Replace("#type", type);
+			settings.AddReference("Mosa.Test.Collection.dll");
 		}
-
-		#region CheckValue
-
-		[Column(0, 1, SByte.MinValue, SByte.MaxValue, SByte.MinValue + 1, SByte.MaxValue - 1)]
+		
+		[Column(0, 1, 2, byte.MinValue, byte.MaxValue, byte.MinValue + 1, byte.MaxValue - 1)]
 		[Test]
-		public void LdlocaI1_CheckValue(sbyte value)
+		public void LdlocaCheckValueU1(byte a)
 		{
-			settings.CodeSource = CreateTestCode("LdlocaI1_CheckValue", "sbyte");
-			Assert.IsTrue(Run<bool>(string.Empty, "Test", "LdlocaI1_CheckValue", value));
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdlocaTests", "LdlocaCheckValueU1", a, a));
 		}
-
-		[Column(0, 1, Int16.MinValue, Int16.MaxValue, Int16.MinValue + 1, Int16.MaxValue - 1)]
+		
+		[Column(0, 1, 2, ushort.MinValue, ushort.MaxValue, ushort.MinValue + 1, ushort.MaxValue - 1)]
 		[Test]
-		public void LdlocaI2_CheckValue(short value)
+		public void LdlocaCheckValueU2(ushort a)
 		{
-			settings.CodeSource = CreateTestCode("LdlocaI2_CheckValue", "short");
-			Assert.IsTrue(Run<bool>(string.Empty, "Test", "LdlocaI2_CheckValue", value));
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdlocaTests", "LdlocaCheckValueU2", a, a));
 		}
-
-		[Column(0, 1, Int32.MinValue, Int32.MaxValue, Int32.MinValue + 1, Int32.MaxValue - 1)]
+		
+		[Column(0, 1, 2, uint.MinValue, uint.MaxValue, uint.MinValue + 1, uint.MaxValue - 1)]
 		[Test]
-		public void LdlocaI4_CheckValue(int value)
+		public void LdlocaCheckValueU4(uint a)
 		{
-			settings.CodeSource = CreateTestCode("LdlocaI4_CheckValue", "int");
-			Assert.IsTrue(Run<bool>(string.Empty, "Test", "LdlocaI4_CheckValue", value));
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdlocaTests", "LdlocaCheckValueU4", a, a));
 		}
-
-		[Column(0, 1, Int64.MinValue, Int64.MaxValue, Int64.MinValue + 1, Int64.MaxValue - 1)]
+		
+		[Column(0, 1, 2, ulong.MinValue, ulong.MaxValue, ulong.MinValue + 1, ulong.MaxValue - 1)]
 		[Test]
-		public void LdlocaI8_CheckValue(long value)
+		public void LdlocaCheckValueU8(ulong a)
 		{
-			settings.CodeSource = CreateTestCode("LdlocaI8_CheckValue", "long");
-			Assert.IsTrue(Run<bool>(string.Empty, "Test", "LdlocaI8_CheckValue", value));
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdlocaTests", "LdlocaCheckValueU8", a, a));
 		}
-
-		[Column(0, 1, Byte.MinValue, Byte.MaxValue, Byte.MinValue + 1, Byte.MaxValue - 1)]
+		
+		[Column(0, 1, 2, sbyte.MinValue, sbyte.MaxValue, sbyte.MinValue + 1, sbyte.MaxValue - 1)]
 		[Test]
-		public void LdlocaU1_CheckValue(byte value)
+		public void LdlocaCheckValueI1(sbyte a)
 		{
-			settings.CodeSource = CreateTestCode("LdlocaU1_CheckValue", "byte");
-			Assert.IsTrue(Run<bool>(string.Empty, "Test", "LdlocaU1_CheckValue", value));
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdlocaTests", "LdlocaCheckValueI1", a, a));
 		}
-
-		[Column(0, 1, UInt16.MinValue, UInt16.MaxValue, UInt16.MinValue + 1, UInt16.MaxValue - 1)]
+		
+		[Column(0, 1, 2, short.MinValue, short.MaxValue, short.MinValue + 1, short.MaxValue - 1)]
 		[Test]
-		public void LdlocaU2_CheckValue(ushort value)
+		public void LdlocaCheckValueI2(short a)
 		{
-			settings.CodeSource = CreateTestCode("LdlocaU2_CheckValue", "ushort");
-			Assert.IsTrue(Run<bool>(string.Empty, "Test", "LdlocaU2_CheckValue", value));
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdlocaTests", "LdlocaCheckValueI2", a, a));
 		}
-
-		[Column(0, 1, UInt32.MinValue, UInt32.MaxValue, UInt32.MinValue + 1, UInt32.MaxValue - 1)]
+		
+		[Column(0, 1, 2, int.MinValue, int.MaxValue, int.MinValue + 1, int.MaxValue - 1)]
 		[Test]
-		public void LdlocaU4_CheckValue(uint value)
+		public void LdlocaCheckValueI4(int a)
 		{
-			settings.CodeSource = CreateTestCode("LdlocaU4_CheckValue", "uint");
-			Assert.IsTrue(Run<bool>(string.Empty, "Test", "LdlocaU4_CheckValue", value));
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdlocaTests", "LdlocaCheckValueI4", a, a));
 		}
-
-		[Column(0, 1, UInt64.MinValue, UInt64.MaxValue, UInt64.MinValue + 1, UInt64.MaxValue - 1)]
+		
+		[Column(0, 1, 2, long.MinValue, long.MaxValue, long.MinValue + 1, long.MaxValue - 1)]
 		[Test]
-		public void LdlocaU8_CheckValue(ulong value)
+		public void LdlocaCheckValueI8(long a)
 		{
-			settings.CodeSource = CreateTestCode("LdlocaU8_CheckValue", "ulong");
-			Assert.IsTrue(Run<bool>(string.Empty, "Test", "LdlocaU8_CheckValue", value));
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdlocaTests", "LdlocaCheckValueI8", a, a));
 		}
-
-		[Column(0, 1, Single.MinValue, Single.MaxValue, Single.MinValue + 1, Single.MaxValue - 1)]
+		
+		[Column(0, 1, 2, float.MinValue, float.MaxValue, float.MinValue + 1, float.MaxValue - 1)]
 		[Test]
-		public void LdlocaR4_CheckValue(float value)
+		public void LdlocaCheckValueR4(float a)
 		{
-			settings.CodeSource = CreateTestCode("LdlocaR4_CheckValue", "float");
-			Assert.IsTrue(Run<bool>(string.Empty, "Test", "LdlocaR4_CheckValue", value));
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdlocaTests", "LdlocaCheckValueR4", a, a));
 		}
-
-		[Column(0, 1, Double.MinValue, Double.MaxValue, Double.MinValue + 1, Double.MaxValue - 1)]
+		
+		[Column(0, 1, 2, double.MinValue, double.MaxValue, double.MinValue + 1, double.MaxValue - 1)]
 		[Test]
-		public void LdlocaR8_CheckValue(double value)
+		public void LdlocaCheckValueR8(double a)
 		{
-			settings.CodeSource = CreateTestCode("LdlocaR8_CheckValue", "double");
-			Assert.IsTrue(Run<bool>(string.Empty, "Test", "LdlocaR8_CheckValue", value));
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdlocaTests", "LdlocaCheckValueR8", a, a));
 		}
-
-		#endregion // CheckValue
+		
+		[Column(0, 1, 2, char.MinValue, char.MaxValue, char.MinValue + 1, char.MaxValue - 1)]
+		[Test]
+		public void LdlocaCheckValueC(char a)
+		{
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdlocaTests", "LdlocaCheckValueC", a, a));
+		}
+		
 	}
 }

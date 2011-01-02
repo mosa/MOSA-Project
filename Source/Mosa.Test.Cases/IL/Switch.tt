@@ -1,0 +1,31 @@
+﻿<#@ include file="../TemplateLibrary.txt" #>
+
+using System;
+using System.Collections.Generic;
+using System.Text;
+using MbUnit.Framework;
+
+using Mosa.Test.Runtime.CompilerFramework;
+using Mosa.Test.Runtime.CompilerFramework.Numbers;
+using Mosa.Test.Collection;
+
+namespace Mosa.Test.Cases.IL
+{
+	[TestFixture]
+	public class Switch : TestCompilerAdapter
+	{
+		public Switch()
+		{
+			settings.AddReference("Mosa.Test.Collection.dll");
+		}
+		<# foreach (KeyValuePair<string, string> number in Integers) { #>
+
+		[Test, Factory(typeof(<#= number.Value #>), "Samples")]
+		public void Switch<#= number.Value #>(<#= number.Key #> a)
+		{
+			Assert.AreEqual(SwitchTests.Switch<#= number.Value #>(a), Run<<#= number.Key #>>("Mosa.Test.Collection", "SwitchTests", "Switch<#= number.Value #>", a));
+		}
+		<# } #>
+
+	}
+}

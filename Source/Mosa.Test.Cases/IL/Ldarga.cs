@@ -28,34 +28,6 @@ namespace Mosa.Test.Cases.IL
 
 		#region CheckValue
 		
-		[Column(0, 1, 2, sbyte.MinValue, sbyte.MaxValue)]
-		[Test]
-		public void LdargaCheckValueI1(sbyte a)
-		{
-			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaCheckValueI1", a, a));
-		}
-		
-		[Column(0, 1, 2, short.MinValue, short.MaxValue)]
-		[Test]
-		public void LdargaCheckValueI2(short a)
-		{
-			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaCheckValueI2", a, a));
-		}
-		
-		[Column(0, 1, 2, int.MinValue, int.MaxValue)]
-		[Test]
-		public void LdargaCheckValueI4(int a)
-		{
-			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaCheckValueI4", a, a));
-		}
-		
-		[Column(0, 1, 2, long.MinValue, long.MaxValue)]
-		[Test]
-		public void LdargaCheckValueI8(long a)
-		{
-			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaCheckValueI8", a, a));
-		}
-		
 		[Column(0, 1, 2, byte.MinValue, byte.MaxValue)]
 		[Test]
 		public void LdargaCheckValueU1(byte a)
@@ -84,6 +56,34 @@ namespace Mosa.Test.Cases.IL
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaCheckValueU8", a, a));
 		}
 		
+		[Column(0, 1, 2, sbyte.MinValue, sbyte.MaxValue)]
+		[Test]
+		public void LdargaCheckValueI1(sbyte a)
+		{
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaCheckValueI1", a, a));
+		}
+		
+		[Column(0, 1, 2, short.MinValue, short.MaxValue)]
+		[Test]
+		public void LdargaCheckValueI2(short a)
+		{
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaCheckValueI2", a, a));
+		}
+		
+		[Column(0, 1, 2, int.MinValue, int.MaxValue)]
+		[Test]
+		public void LdargaCheckValueI4(int a)
+		{
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaCheckValueI4", a, a));
+		}
+		
+		[Column(0, 1, 2, long.MinValue, long.MaxValue)]
+		[Test]
+		public void LdargaCheckValueI8(long a)
+		{
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaCheckValueI8", a, a));
+		}
+		
 		[Column(0, 1, 2, float.MinValue, float.MaxValue)]
 		[Test]
 		public void LdargaCheckValueR4(float a)
@@ -108,34 +108,6 @@ namespace Mosa.Test.Cases.IL
 		#endregion
 
 		#region ChangeValue
-		
-		[Column(0, 1, 2, sbyte.MinValue, sbyte.MaxValue)]
-		[Test]
-		public void LdargaChangeValueI1(sbyte a)
-		{
-			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaChangeValueI1", a, a));
-		}
-		
-		[Column(0, 1, 2, short.MinValue, short.MaxValue)]
-		[Test]
-		public void LdargaChangeValueI2(short a)
-		{
-			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaChangeValueI2", a, a));
-		}
-		
-		[Column(0, 1, 2, int.MinValue, int.MaxValue)]
-		[Test]
-		public void LdargaChangeValueI4(int a)
-		{
-			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaChangeValueI4", a, a));
-		}
-		
-		[Column(0, 1, 2, long.MinValue, long.MaxValue)]
-		[Test]
-		public void LdargaChangeValueI8(long a)
-		{
-			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaChangeValueI8", a, a));
-		}
 		
 		[Column(0, 1, 2, byte.MinValue, byte.MaxValue)]
 		[Test]
@@ -163,6 +135,34 @@ namespace Mosa.Test.Cases.IL
 		public void LdargaChangeValueU8(ulong a)
 		{
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaChangeValueU8", a, a));
+		}
+		
+		[Column(0, 1, 2, sbyte.MinValue, sbyte.MaxValue)]
+		[Test]
+		public void LdargaChangeValueI1(sbyte a)
+		{
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaChangeValueI1", a, a));
+		}
+		
+		[Column(0, 1, 2, short.MinValue, short.MaxValue)]
+		[Test]
+		public void LdargaChangeValueI2(short a)
+		{
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaChangeValueI2", a, a));
+		}
+		
+		[Column(0, 1, 2, int.MinValue, int.MaxValue)]
+		[Test]
+		public void LdargaChangeValueI4(int a)
+		{
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaChangeValueI4", a, a));
+		}
+		
+		[Column(0, 1, 2, long.MinValue, long.MaxValue)]
+		[Test]
+		public void LdargaChangeValueI8(long a)
+		{
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaChangeValueI8", a, a));
 		}
 		
 		[Column(0, 1, 2, float.MinValue, float.MaxValue)]

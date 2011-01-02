@@ -113,17 +113,29 @@
     <Compile Include="IL\ConvI2.cs" />
     <Compile Include="IL\ConvI4.cs" />
     <Compile Include="IL\ConvI8.cs" />
+    <None Include="IL\Switch.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Switch1.cs</LastGenOutput>
+    </None>
+    <None Include="IL\Ldloca.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Ldloca.cs</LastGenOutput>
+    </None>
     <None Include="IL\Ldarga.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Ldarga.cs</LastGenOutput>
     </None>
+    <Compile Include="IL\Ldloca.cs">
+      <DependentUpon>Ldloca.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="IL\Div.cs" />
     <Compile Include="IL\Ldarga.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Ldarga.tt</DependentUpon>
     </Compile>
-    <Compile Include="IL\Ldloca.cs" />
     <Compile Include="IL\Mul.cs" />
     <Compile Include="IL\Or.cs" />
     <Compile Include="IL\Rem.cs" />
@@ -133,7 +145,12 @@
     <Compile Include="IL\Stind.cs" />
     <Compile Include="IL\Stsfld.cs" />
     <Compile Include="IL\Sub.cs" />
-    <Compile Include="IL\Switch.cs" />
+    <Compile Include="IL\Switch1.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Switch.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IL\Switch2.cs" />
     <Compile Include="IL\While.cs" />
     <Compile Include="IL\Xor.cs" />
   </ItemGroup>
@@ -151,7 +168,7 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="IL\TemplateLibrary.txt" />
+    <Content Include="TemplateLibrary.txt" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <PropertyGroup>

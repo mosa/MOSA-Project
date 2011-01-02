@@ -16,50 +16,6 @@ namespace Mosa.Test.Collection
 	public static class LdlocaTests 
 	{
 	
-		public static bool LdlocaCheckValueI1(sbyte expect) 
-		{
-			sbyte a = expect;
-			return LdlocaCheckValueRefI1(expect, ref a);
-		}
-
-		private static bool LdlocaCheckValueRefI1(sbyte expect, ref sbyte a)
-		{
-			return (expect == a);
-		}
-	
-		public static bool LdlocaCheckValueI2(short expect) 
-		{
-			short a = expect;
-			return LdlocaCheckValueRefI2(expect, ref a);
-		}
-
-		private static bool LdlocaCheckValueRefI2(short expect, ref short a)
-		{
-			return (expect == a);
-		}
-	
-		public static bool LdlocaCheckValueI4(int expect) 
-		{
-			int a = expect;
-			return LdlocaCheckValueRefI4(expect, ref a);
-		}
-
-		private static bool LdlocaCheckValueRefI4(int expect, ref int a)
-		{
-			return (expect == a);
-		}
-	
-		public static bool LdlocaCheckValueI8(long expect) 
-		{
-			long a = expect;
-			return LdlocaCheckValueRefI8(expect, ref a);
-		}
-
-		private static bool LdlocaCheckValueRefI8(long expect, ref long a)
-		{
-			return (expect == a);
-		}
-	
 		public static bool LdlocaCheckValueU1(byte expect) 
 		{
 			byte a = expect;
@@ -100,6 +56,50 @@ namespace Mosa.Test.Collection
 		}
 
 		private static bool LdlocaCheckValueRefU8(ulong expect, ref ulong a)
+		{
+			return (expect == a);
+		}
+	
+		public static bool LdlocaCheckValueI1(sbyte expect) 
+		{
+			sbyte a = expect;
+			return LdlocaCheckValueRefI1(expect, ref a);
+		}
+
+		private static bool LdlocaCheckValueRefI1(sbyte expect, ref sbyte a)
+		{
+			return (expect == a);
+		}
+	
+		public static bool LdlocaCheckValueI2(short expect) 
+		{
+			short a = expect;
+			return LdlocaCheckValueRefI2(expect, ref a);
+		}
+
+		private static bool LdlocaCheckValueRefI2(short expect, ref short a)
+		{
+			return (expect == a);
+		}
+	
+		public static bool LdlocaCheckValueI4(int expect) 
+		{
+			int a = expect;
+			return LdlocaCheckValueRefI4(expect, ref a);
+		}
+
+		private static bool LdlocaCheckValueRefI4(int expect, ref int a)
+		{
+			return (expect == a);
+		}
+	
+		public static bool LdlocaCheckValueI8(long expect) 
+		{
+			long a = expect;
+			return LdlocaCheckValueRefI8(expect, ref a);
+		}
+
+		private static bool LdlocaCheckValueRefI8(long expect, ref long a)
 		{
 			return (expect == a);
 		}

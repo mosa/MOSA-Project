@@ -54,6 +54,11 @@
     <Compile Include="ConvI8Tests.cs" />
     <Compile Include="BooleanTests.cs" />
     <Compile Include="ConditionalOperatorTests.cs" />
+    <Compile Include="SwitchTests.cs">
+      <DependentUpon>SwitchTests.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="LdlocaTests.cs">
       <DependentUpon>LdlocaTests.tt</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -80,7 +85,6 @@
     <Compile Include="InterfaceTests.cs" />
     <Compile Include="EnumTests.cs" />
     <Compile Include="ObjectTests.cs" />
-    <Compile Include="SwitchTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Gallio, Version=3.2.0.0, Culture=neutral, PublicKeyToken=eb9cfa67ee6ab36e, processorArchitecture=MSIL" />
@@ -90,6 +94,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="SwitchTests.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>SwitchTests.cs</LastGenOutput>
+    </None>
     <None Include="LdlocaTests.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>LdlocaTests.cs</LastGenOutput>

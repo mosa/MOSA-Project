@@ -23,10 +23,10 @@ namespace Mosa.Test.Cases.IL
 {
 
 	[TestFixture]
-	public class Switch : TestCompilerAdapter
+	public class Switch2 : TestCompilerAdapter
 	{
 
-		public Switch()
+		public Switch2()
 		{
 			settings.AddReference("Mosa.Test.Collection.dll");
 		}
