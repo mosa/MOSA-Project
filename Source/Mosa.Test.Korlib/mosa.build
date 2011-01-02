@@ -12,14 +12,11 @@
 	
 	<!-- Main build target -->
 	<target name="build">
-	    <csc target="library" unsafe="true" output="${outputDirectory}/mscorlib.dll" debug="${debug}" nostdlib="true">		
-		<references>
-			<include name="${outputDirectory}/Mosa.Vm.dll"/>
-		</references>
+	    <csc target="exe" output="${outputDirectory}/Mosa.Test.Korlib.dll" debug="${debug}" unsafe="true">
 		<sources>
 			<include name="**/*.cs"/>
 		</sources>
-		
+
 		<!-- supress warnings -->
 		<nowarn><warning number="${suppresswarnings}"/></nowarn>
 	    </csc>
