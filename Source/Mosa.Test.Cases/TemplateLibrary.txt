@@ -29,13 +29,29 @@
 	
 	Integers.AddRange(NegativeIntegers);
 	
+	List<KeyValuePair<string, string>> IntegersWithChar = new List<KeyValuePair<string, string>>(Integers);
+	
+	IntegersWithChar.Add(new KeyValuePair<string, string>("char", "C"));	
+
 	List<KeyValuePair<string, string>> Numbers = new List<KeyValuePair<string, string>>(Integers);
 	
 	Numbers.Add(new KeyValuePair<string, string>("float", "R4"));
 	Numbers.Add(new KeyValuePair<string, string>("double", "R8"));	
-	Numbers.Add(new KeyValuePair<string, string>("char", "C"));	
+
+	List<KeyValuePair<string, string>> NumbersWithChar = new List<KeyValuePair<string, string>>(Numbers);
+	
+	NumbersWithChar.Add(new KeyValuePair<string, string>("char", "C"));	
 
 	List<KeyValuePair<string, string>> Primitives = new List<KeyValuePair<string, string>>(Numbers);
 	
 	Primitives.Add(new KeyValuePair<string, string>("bool", "B"));
+
+	List<KeyValuePair<string, string>> Comparisons = new List<KeyValuePair<string, string>>();
+
+	Comparisons.Add(new KeyValuePair<string, string>("==", "Equal"));
+	Comparisons.Add(new KeyValuePair<string, string>("!=", "NotEqual"));
+	Comparisons.Add(new KeyValuePair<string, string>(">", "GreaterThan"));
+	Comparisons.Add(new KeyValuePair<string, string>("<", "LessThan"));
+	Comparisons.Add(new KeyValuePair<string, string>(">=", "GreaterThanOrEqual"));
+	Comparisons.Add(new KeyValuePair<string, string>("<=", "LessThanOrEqual"));
 #>

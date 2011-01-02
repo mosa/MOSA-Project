@@ -6,7 +6,7 @@ namespace Mosa.Test.Collection
 
 	public static class LdlocaTests 
 	{
-	<# foreach (KeyValuePair<string, string> number in Numbers) { #>
+	<# foreach (KeyValuePair<string, string> number in NumbersWithChar) { #>
 
 		public static bool LdlocaCheckValue<#= number.Value #>(<#= number.Key #> expect) 
 		{

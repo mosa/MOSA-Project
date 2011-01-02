@@ -6,6 +6,7 @@ using System.Text;
 using MbUnit.Framework;
 
 using Mosa.Test.Runtime.CompilerFramework;
+using Mosa.Test.Runtime.CompilerFramework.Numbers;
 
 namespace Mosa.Test.Cases.IL
 {
@@ -18,8 +19,7 @@ namespace Mosa.Test.Cases.IL
 		}
 		<# foreach (KeyValuePair<string, string> number in NumbersWithChar) { #>
 
-		[Column(0, 1, 2, <#= number.Key #>.MinValue, <#= number.Key #>.MaxValue, <#= number.Key #>.MinValue + 1, <#= number.Key #>.MaxValue - 1)]
-		[Test]
+		[Test, Factory(typeof(<#= number.Value #>), "Samples")]
 		public void LdlocaCheckValue<#= number.Value #>(<#= number.Key #> a)
 		{
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdlocaTests", "LdlocaCheckValue<#= number.Value #>", a, a));

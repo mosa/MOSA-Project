@@ -70,13 +70,11 @@
     <DebugType>none</DebugType>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Gallio, Version=3.1.0.0, Culture=neutral, PublicKeyToken=eb9cfa67ee6ab36e, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\3rdParty\Gallio.dll</HintPath>
+    <Reference Include="Gallio, Version=3.2.0.0, Culture=neutral, PublicKeyToken=eb9cfa67ee6ab36e, processorArchitecture=MSIL">
+      <HintPath>..\..\3rdParty\Gallio.dll</HintPath>
     </Reference>
-    <Reference Include="MbUnit, Version=3.1.0.0, Culture=neutral, PublicKeyToken=eb9cfa67ee6ab36e, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\3rdParty\MbUnit.dll</HintPath>
+    <Reference Include="MbUnit, Version=3.2.0.0, Culture=neutral, PublicKeyToken=eb9cfa67ee6ab36e, processorArchitecture=MSIL">
+      <HintPath>..\..\3rdParty\MbUnit.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -108,14 +106,17 @@
     <Compile Include="IL\Ceq.cs" />
     <Compile Include="IL\Cgt.cs" />
     <Compile Include="IL\Clt.cs" />
-    <Compile Include="IL\ConditionalOperator.cs" />
     <Compile Include="IL\ConvI1.cs" />
     <Compile Include="IL\ConvI2.cs" />
     <Compile Include="IL\ConvI4.cs" />
     <Compile Include="IL\ConvI8.cs" />
+    <None Include="IL\ConditionalOperator.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>ConditionalOperator.cs</LastGenOutput>
+    </None>
     <None Include="IL\Switch.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Switch1.cs</LastGenOutput>
+      <LastGenOutput>Switch.cs</LastGenOutput>
     </None>
     <None Include="IL\Ldloca.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -125,6 +126,12 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Ldarga.cs</LastGenOutput>
     </None>
+    <Compile Include="IL\ConditionalOperator.cs">
+      <DependentUpon>ConditionalOperator.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="IL\CallOrder.cs" />
     <Compile Include="IL\Ldloca.cs">
       <DependentUpon>Ldloca.tt</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -145,12 +152,11 @@
     <Compile Include="IL\Stind.cs" />
     <Compile Include="IL\Stsfld.cs" />
     <Compile Include="IL\Sub.cs" />
-    <Compile Include="IL\Switch1.cs">
+    <Compile Include="IL\Switch.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Switch.tt</DependentUpon>
     </Compile>
-    <Compile Include="IL\Switch2.cs" />
     <Compile Include="IL\While.cs" />
     <Compile Include="IL\Xor.cs" />
   </ItemGroup>

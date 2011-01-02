@@ -6,6 +6,7 @@ using System.Text;
 using MbUnit.Framework;
 
 using Mosa.Test.Runtime.CompilerFramework;
+using Mosa.Test.Runtime.CompilerFramework.Numbers;
 
 namespace Mosa.Test.Cases.IL
 {
@@ -20,8 +21,7 @@ namespace Mosa.Test.Cases.IL
 		#region CheckValue
 		<# foreach (KeyValuePair<string, string> number in NumbersWithChar) { #>
 
-		[Column(0, 1, 2, <#= number.Key #>.MinValue, <#= number.Key #>.MaxValue)]
-		[Test]
+		[Test, Factory(typeof(<#= number.Value #>), "Samples")]
 		public void LdargaCheckValue<#= number.Value #>(<#= number.Key #> a)
 		{
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaCheckValue<#= number.Value #>", a, a));
@@ -33,8 +33,7 @@ namespace Mosa.Test.Cases.IL
 		#region ChangeValue
 		<# foreach (KeyValuePair<string, string> number in Numbers) { #>
 
-		[Column(0, 1, 2, <#= number.Key #>.MinValue, <#= number.Key #>.MaxValue)]
-		[Test]
+		[Test, Factory(typeof(<#= number.Value #>), "Samples")]
 		public void LdargaChangeValue<#= number.Value #>(<#= number.Key #> a)
 		{
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaChangeValue<#= number.Value #>", a, a));

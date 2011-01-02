@@ -1,0 +1,19 @@
+﻿<#@ include file="TemplateLibrary.txt" #>
+using System;
+
+namespace Mosa.Test.Collection
+{
+
+	public static class ConditionalOperatorTests 
+	{
+	<# foreach (KeyValuePair<string, string> number in Numbers) 
+		foreach (KeyValuePair<string, string> compare in Comparisons) 
+	{ #>
+
+		public static <#= number.Key #> Compare<#= compare.Value #><#= number.Value #>(<#= number.Key #> a, <#= number.Key #> b, <#= number.Key #> c, <#= number.Key #> d)
+		{
+			return ((a <#= compare.Key #> b) ? c : d);
+		}
+	<# } #>
+	}
+}

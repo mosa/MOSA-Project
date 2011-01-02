@@ -6,7 +6,7 @@ namespace Mosa.Test.Collection
 
 	public static class LdargaTests 
 	{
-	<# foreach (KeyValuePair<string, string> number in Numbers) { #>
+	<# foreach (KeyValuePair<string, string> number in NumbersWithChar) { #>
 
 		public static bool LdargaCheckValue<#= number.Value #>(<#= number.Key #> expect, <#= number.Key #> a) 
 		{

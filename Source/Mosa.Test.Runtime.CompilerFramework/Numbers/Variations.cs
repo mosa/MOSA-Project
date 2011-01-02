@@ -75,6 +75,18 @@ namespace Mosa.Test.Runtime.CompilerFramework.Numbers
 			}
 		}
 
+		public static IEnumerable<object[]> I1_I1_I1_I1
+		{
+			get
+			{
+				foreach (sbyte a in I1.Samples)
+					foreach (sbyte b in I1.Samples)
+						foreach (sbyte c in I1.Samples)
+							foreach (sbyte d in I1.Samples)
+								yield return new object[4] { a, b, c, d };
+			}
+		}
+
 		public static IEnumerable<object[]> I1_I1WithoutZero
 		{
 			get
@@ -131,7 +143,7 @@ namespace Mosa.Test.Runtime.CompilerFramework.Numbers
 		{
 			get
 			{
-				foreach (byte a in I1.Samples)
+				foreach (sbyte a in I1.Samples)
 					foreach (byte b in GetUpTo(8))
 						yield return new object[2] { a, b };
 			}
@@ -148,6 +160,18 @@ namespace Mosa.Test.Runtime.CompilerFramework.Numbers
 				foreach (byte a in U1.Samples)
 					foreach (byte b in U1.Samples)
 						yield return new object[2] { a, b };
+			}
+		}
+
+		public static IEnumerable<object[]> U1_U1_U1_U1
+		{
+			get
+			{
+				foreach (byte a in U1.Samples)
+					foreach (byte b in U1.Samples)
+						foreach (byte c in U1.Samples)
+							foreach (byte d in U1.Samples)
+								yield return new object[4] { a, b, c, d };
 			}
 		}
 
@@ -205,6 +229,17 @@ namespace Mosa.Test.Runtime.CompilerFramework.Numbers
 			}
 		}
 
+		public static IEnumerable<object[]> I2_I2_I2_I2
+		{
+			get
+			{
+				foreach (short a in I2.Samples)
+					foreach (short b in I2.Samples)
+						foreach (short c in I2.Samples)
+							foreach (short d in I2.Samples)
+								yield return new object[4] { a, b, c, d };
+			}
+		}
 		public static IEnumerable<object[]> I2_I2WithoutZero
 		{
 			get
@@ -281,6 +316,17 @@ namespace Mosa.Test.Runtime.CompilerFramework.Numbers
 			}
 		}
 
+		public static IEnumerable<object[]> U2_U2_U2_U2
+		{
+			get
+			{
+				foreach (ushort a in U2.Samples)
+					foreach (ushort b in U2.Samples)
+						foreach (ushort c in U2.Samples)
+							foreach (ushort d in U2.Samples)
+								yield return new object[4] { a, b, c, d };
+			}
+		}
 		public static IEnumerable<object[]> U2_U2WithoutZero
 		{
 			get
@@ -332,6 +378,18 @@ namespace Mosa.Test.Runtime.CompilerFramework.Numbers
 				foreach (int a in I4.Samples)
 					foreach (int b in I4.Samples)
 						yield return new object[2] { a, b };
+			}
+		}
+
+		public static IEnumerable<object[]> I4_I4_I4_I4
+		{
+			get
+			{
+				foreach (int a in I4.Samples)
+					foreach (int b in I4.Samples)
+						foreach (int c in I4.Samples)
+							foreach (int d in I4.Samples)
+								yield return new object[4] { a, b, c, d };
 			}
 		}
 
@@ -411,6 +469,18 @@ namespace Mosa.Test.Runtime.CompilerFramework.Numbers
 			}
 		}
 
+		public static IEnumerable<object[]> U4_U4_U4_U4
+		{
+			get
+			{
+				foreach (uint a in U4.Samples)
+					foreach (uint b in U4.Samples)
+						foreach (uint c in U4.Samples)
+							foreach (uint d in U4.Samples)
+								yield return new object[4] { a, b, c, d };
+			}
+		}
+
 		public static IEnumerable<object[]> U4_U4WithoutZero
 		{
 			get
@@ -462,6 +532,18 @@ namespace Mosa.Test.Runtime.CompilerFramework.Numbers
 				foreach (long a in I8.Samples)
 					foreach (long b in I8.Samples)
 						yield return new object[2] { a, b };
+			}
+		}
+
+		public static IEnumerable<object[]> I8_I8_I8_I8
+		{
+			get
+			{
+				foreach (long a in I8.Samples)
+					foreach (long b in I8.Samples)
+						foreach (long c in I8.Samples)
+							foreach (long d in I8.Samples)
+								yield return new object[4] { a, b, c, d };
 			}
 		}
 
@@ -541,6 +623,18 @@ namespace Mosa.Test.Runtime.CompilerFramework.Numbers
 			}
 		}
 
+		public static IEnumerable<object[]> U8_U8_U8_U8
+		{
+			get
+			{
+				foreach (ulong a in U8.Samples)
+					foreach (ulong b in U8.Samples)
+						foreach (ulong c in U8.Samples)
+							foreach (ulong d in U8.Samples)
+								yield return new object[4] { a, b, c, d };
+			}
+		}
+
 		public static IEnumerable<object[]> U8_U8WithoutZero
 		{
 			get
@@ -592,6 +686,18 @@ namespace Mosa.Test.Runtime.CompilerFramework.Numbers
 				foreach (char a in C.Samples)
 					foreach (char b in C.Samples)
 						yield return new object[2] { a, b };
+			}
+		}
+
+		public static IEnumerable<object[]> C_C_C_C
+		{
+			get
+			{
+				foreach (char a in C.Samples)
+					foreach (char b in C.Samples)
+						foreach (char c in C.Samples)
+							foreach (char d in C.Samples)
+								yield return new object[4] { a, b, c, d };
 			}
 		}
 
@@ -649,6 +755,17 @@ namespace Mosa.Test.Runtime.CompilerFramework.Numbers
 			}
 		}
 
+		public static IEnumerable<object[]> R4_R4_R4_R4
+		{
+			get
+			{
+				foreach (float a in R4.Samples)
+					foreach (float b in R4.Samples)
+						foreach (float c in R4.Samples)
+							foreach (float d in R4.Samples)
+								yield return new object[4] { a, b, c, d };
+			}
+		}
 		public static IEnumerable<object[]> R4_R4WithoutZero
 		{
 			get
@@ -690,6 +807,18 @@ namespace Mosa.Test.Runtime.CompilerFramework.Numbers
 				foreach (double a in R8.Samples)
 					foreach (double b in R8.Samples)
 						yield return new object[2] { a, b };
+			}
+		}
+
+		public static IEnumerable<object[]> R8_R8_R8_R8
+		{
+			get
+			{
+				foreach (double a in R8.Samples)
+					foreach (double b in R8.Samples)
+						foreach (double c in R8.Samples)
+							foreach (double d in R8.Samples)
+								yield return new object[4] { a, b, c, d };
 			}
 		}
 

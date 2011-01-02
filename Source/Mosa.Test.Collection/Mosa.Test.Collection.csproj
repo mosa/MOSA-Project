@@ -53,7 +53,12 @@
     <Compile Include="ConvI4Tests.cs" />
     <Compile Include="ConvI8Tests.cs" />
     <Compile Include="BooleanTests.cs" />
-    <Compile Include="ConditionalOperatorTests.cs" />
+    <Compile Include="ConditionalOperatorTests.cs">
+      <DependentUpon>ConditionalOperatorTests.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="CallOrderTests.cs" />
     <Compile Include="SwitchTests.cs">
       <DependentUpon>SwitchTests.tt</DependentUpon>
       <AutoGen>True</AutoGen>
@@ -94,6 +99,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="ConditionalOperatorTests.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>ConditionalOperatorTests.cs</LastGenOutput>
+    </None>
     <None Include="SwitchTests.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>SwitchTests.cs</LastGenOutput>
