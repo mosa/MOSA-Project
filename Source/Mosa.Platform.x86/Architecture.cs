@@ -194,14 +194,13 @@ namespace Mosa.Platform.x86
 		/// <summary>
 		/// Retrieves a calling convention object for the requested calling convention.
 		/// </summary>
-		/// <param name="typeLayout">The type layout.</param>
 		/// <returns>
 		/// An instance of <see cref="ICallingConvention"/>.
 		/// </returns>
-		public override ICallingConvention GetCallingConvention(ITypeLayout typeLayout)
+		public override ICallingConvention GetCallingConvention()
 		{
 			if (callingConvention == null)
-				callingConvention = new DefaultCallingConvention(this, typeLayout);
+				callingConvention = new DefaultCallingConvention(this);
 
 			return callingConvention;
 		}

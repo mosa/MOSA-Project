@@ -97,7 +97,7 @@ namespace Mosa.Runtime.CompilerFramework
 			typeSystem = compiler.TypeSystem;
 			typeLayout = compiler.TypeLayout;
 
-			callingConvention = architecture.GetCallingConvention(typeLayout);
+			callingConvention = architecture.GetCallingConvention();
 
 			architecture.GetTypeRequirements(BuiltInSigType.IntPtr, out nativePointerSize, out nativePointerAlignment);
 		}

@@ -90,7 +90,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <param name="typeLayout">The type layout.</param>
 		/// <returns>A calling convention implementation.</returns>
-		public abstract ICallingConvention GetCallingConvention(ITypeLayout typeLayout);
+		public abstract ICallingConvention GetCallingConvention();
 
 		/// <summary>
 		/// Gets the type memory requirements.

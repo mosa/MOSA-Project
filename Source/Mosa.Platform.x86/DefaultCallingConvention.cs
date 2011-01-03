@@ -31,11 +31,6 @@ namespace Mosa.Platform.x86
 		/// </summary>
 		private IArchitecture architecture;
 
-		/// <summary>
-		/// Holds the type layout
-		/// </summary>
-		private ITypeLayout typeLayout;
-
 		#endregion // Data members
 
 		#region Construction
@@ -45,13 +40,12 @@ namespace Mosa.Platform.x86
 		/// </summary>
 		/// <param name="architecture">The architecture of the calling convention.</param>
 		/// <param name="typeLayout">The type layout.</param>
-		public DefaultCallingConvention(IArchitecture architecture, ITypeLayout typeLayout)
+		public DefaultCallingConvention(IArchitecture architecture)
 		{
 			if (architecture == null)
 				throw new ArgumentNullException(@"architecture");
 
 			this.architecture = architecture;
-			this.typeLayout = typeLayout;
 		}
 
 		#endregion // Construction

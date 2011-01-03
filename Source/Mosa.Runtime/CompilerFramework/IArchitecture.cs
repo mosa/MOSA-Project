@@ -54,7 +54,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <param name="typeLayout">The type layout.</param>
 		/// <returns>A calling convention implementation.</returns>
-		ICallingConvention GetCallingConvention(ITypeLayout typeLayout);
+		ICallingConvention GetCallingConvention();
 
 		/// <summary>
 		/// Requests the architecture to add architecture specific compilation stages to the assembly compiler 
