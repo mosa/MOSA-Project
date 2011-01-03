@@ -52,7 +52,6 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Retrieves an object, that is able to translate the CIL calling convention into appropriate native code.
 		/// </summary>
-		/// <param name="typeLayout">The type layout.</param>
 		/// <returns>A calling convention implementation.</returns>
 		ICallingConvention GetCallingConvention();
 
