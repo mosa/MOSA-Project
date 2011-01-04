@@ -14,7 +14,7 @@ using Mosa.Test.Runtime.CompilerFramework;
 using Mosa.Test.Runtime.CompilerFramework.Numbers;
 using Mosa.Test.Collection;
 
-namespace Mosa.Test.Cases.FIX.CIL
+namespace Mosa.Test.Cases.CIL
 {
 	[TestFixture]
 	[Importance(Importance.Critical)]
@@ -27,81 +27,76 @@ namespace Mosa.Test.Cases.FIX.CIL
 		}
 
 		[Test]
-		public void AddR4_R4([R4Number]float a, [R4Number]float b)
+		public void AddR4R4([R4Number]float a, [R4Number]float b)
 		{
-			Assert.AreEqual(SingleTests.AddR4R4(a, b), Run<float>("Mosa.Test.Collection", "SingleTests", "AddR4R4", a, b));
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "SingleTests", "AddR4R4", SingleTests.AddR4R4(a, b), a, b));
 		}
 
 		[Test]
-		public void SubR4_R4([R4Number]float a, [R4Number]float b)
+		public void SubR4R4([R4Number]float a, [R4Number]float b)
 		{
-			Assert.AreEqual(SingleTests.SubR4R4(a, b), Run<float>("Mosa.Test.Collection", "SingleTests", "SubR4R4", a, b));
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "SingleTests", "SubR4R4", SingleTests.SubR4R4(a, b), a, b));
 		}
 
 		[Test]
-		public void MulR4_R4([R4Number]float a, [R4Number]float b)
+		public void MulR4R4([R4Number]float a, [R4Number]float b)
 		{
-			Assert.AreEqual(SingleTests.MulR4R4(a, b), Run<float>("Mosa.Test.Collection", "SingleTests", "MulR4R4", a, b));
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "SingleTests", "MulR4R4", SingleTests.MulR4R4(a, b), a, b));
 		}
 
 		[Test]
-		public void DivR4_R4([R4Number]float a, [R4NotZero]float b)
+		public void DivR4R4([R4Number]float a, [R4NumberNotZero]float b)
 		{
-			Assert.AreEqual(SingleTests.DivR4R4(a, b), Run<float>("Mosa.Test.Collection", "SingleTests", "DivR4R4", a, b));
-		}
-
-		//[Test]
-		//[ExpectedException(typeof(DivideByZeroException))]
-		//public void DivR4_R4DivideByZeroException([R4Number]float a)
-		//{
-		//    Assert.AreEqual(SingleTests.DivR4R4(a, (float)0),Run<float>("Mosa.Test.Collection", "SingleTests", "DivR4R4", a, (float)0));
-		//}
-
-		[Test]
-		public void RemR4_R4([R4Number]float a, [R4NotZero]float b)
-		{
-			Assert.AreEqual(SingleTests.RemR4R4(a, b), Run<float>("Mosa.Test.Collection", "SingleTests", "RemR4R4", a, b));
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "SingleTests", "DivR4R4", SingleTests.DivR4R4(a, b), a, b));
 		}
 
 		//[Test]
 		//[ExpectedException(typeof(DivideByZeroException))]
-		//public void RemR4_R4DivideByZeroException([R4Number]float a)
+		//public void DivR4R4DivideByZeroException([R4Number]float a)
 		//{
-		//    Assert.AreEqual(SingleTests.RemR4R4(a, (float)0),Run<float>("Mosa.Test.Collection", "SingleTests", "RemR4R4", a, (float)0));
+		//    Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "SingleTests", "DivR4R4", SingleTests.DivR4R4(a, (float)0), a, (float)0));
 		//}
 
 		[Test]
-		public void RetR4([R4Number]float a)
+		[Pending]
+		public void RemR4R4([R4Number]float a, [R4NumberNotZero]float b)
 		{
-			Assert.AreEqual(SingleTests.RetR4(a), Run<float>("Mosa.Test.Collection", "SingleTests", "RetR4", a));
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "SingleTests", "RemR4R4", SingleTests.RemR4R4(a, b), a, b));
 		}
 
+		//[Test]
+		//[ExpectedException(typeof(DivideByZeroException))]
+		//public void RemR4R4DivideByZeroException([R4Number]float a)
+		//{
+		//    Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "SingleTests", "RemR4R4", SingleTests.RemR4R4(a, (float)0), a, (float)0));
+		//}
+
 		[Test]
-		public void CeqR4_R4([R4Number]float a, [R4Number]float b)
+		public void CeqR4R4([R4Number]float a, [R4Number]float b)
 		{
 			Assert.AreEqual(SingleTests.CeqR4R4(a, b), Run<bool>("Mosa.Test.Collection", "SingleTests", "CeqR4R4", a, b));
 		}
 
 		[Test]
-		public void CltR4_R4([R4Number]float a, [R4Number]float b)
+		public void CltR4R4([R4Number]float a, [R4Number]float b)
 		{
 			Assert.AreEqual(SingleTests.CltR4R4(a, b), Run<bool>("Mosa.Test.Collection", "SingleTests", "CltR4R4", a, b));
 		}
 
 		[Test]
-		public void CgtR4_R4([R4Number]float a, [R4Number]float b)
+		public void CgtR4R4([R4Number]float a, [R4Number]float b)
 		{
 			Assert.AreEqual(SingleTests.CgtR4R4(a, b), Run<bool>("Mosa.Test.Collection", "SingleTests", "CgtR4R4", a, b));
 		}
 
 		[Test]
-		public void CleR4_R4([R4Number]float a, [R4Number]float b)
+		public void CleR4R4([R4Number]float a, [R4Number]float b)
 		{
 			Assert.AreEqual(SingleTests.CleR4R4(a, b), Run<bool>("Mosa.Test.Collection", "SingleTests", "CleR4R4", a, b));
 		}
 
 		[Test]
-		public void CgeR4_R4([R4Number]float a, [R4Number]float b)
+		public void CgeR4R4([R4Number]float a, [R4Number]float b)
 		{
 			Assert.AreEqual(SingleTests.CgeR4R4(a, b), Run<bool>("Mosa.Test.Collection", "SingleTests", "CgeR4R4", a, b));
 		}
@@ -138,39 +133,4 @@ namespace Mosa.Test.Cases.FIX.CIL
 
 	}
 }
-
-
-//[Test, Factory(typeof(Variations), "R4_R4WithoutZero")]
-//public void DivR4R4([R4Number]float a, [R4Number]float b)
-//{
-//    this.arithmeticTests.Div((a / b), a, b);
-//}
-
-////[Test, Factory(typeof(Variations), "R4_R4Zero")]
-////[ExpectedException(typeof(DivideByZeroException))]
-////public void DivR4R4DivideByZeroException([R4Number]float a, [R4Number]float b)
-////{
-////    this.arithmeticTests.Div((a / b), a, b);
-////}
-
-
-//[Test, Factory(typeof(Variations), "R4_R4WithoutZero")]
-//public void RemR4R4([R4Number]float a, [R4Number]float b)
-//{
-//    this.arithmeticTests.Rem((a % b), a, b);
-//}
-
-////[Test, Factory(typeof(Variations), "R4_R4Zero")]
-////[ExpectedException(typeof(DivideByZeroException))]
-////public void RemR4R4DivideByZeroException([R4Number]float a, [R4Number]float b)
-////{
-////    this.arithmeticTests.Rem((a % b), a, b);
-////}
-
-////[Test, Factory(typeof(Variations), "R4_R4BelowZero")]
-////[ExpectedException(typeof(OverflowException))]
-////public void RemR4R4OverflowException([R4Number]float a, [R4Number]float b)
-////{
-////    this.arithmeticTests.Rem((a % b), a, b);
-////}
 

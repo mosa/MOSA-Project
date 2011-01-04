@@ -7,11 +7,33 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
  */
 
+using System;
+
 namespace Mosa.Test.Collection
 {
 
 	public static class SingleTests
 	{
+
+		public static bool AddR4R4(float expected, float first, float second)
+		{
+			return expected == (first + second);
+		}
+
+		public static bool SubR4R4(float expected, float first, float second)
+		{
+			return expected == (first - second);
+		}
+
+		public static bool MulR4R4(float expected, float first, float second)
+		{
+			return expected == (first * second);
+		}
+
+		public static bool DivR4R4(float expected, float first, float second)
+		{
+			return expected == (first / second);
+		}
 
 		public static float AddR4R4(float first, float second)
 		{
@@ -38,32 +60,27 @@ namespace Mosa.Test.Collection
 			return (first % second);
 		}
 
-		public static float RetR4(float first)
-		{
-			return first;
-		}
-
-		public static bool CeqR4R4(double first, double second)
+		public static bool CeqR4R4(float first, float second)
 		{
 			return (first.CompareTo(second) == 0);
 		}
 
-		public static bool CltR4R4(double first, double second)
+		public static bool CltR4R4(float first, float second)
 		{
 			return (first.CompareTo(second) < 0);
 		}
 
-		public static bool CgtR4R4(double first, double second)
+		public static bool CgtR4R4(float first, float second)
 		{
 			return (first.CompareTo(second) > 0);
 		}
 
-		public static bool CleR4R4(double first, double second)
+		public static bool CleR4R4(float first, float second)
 		{
 			return (first.CompareTo(second) <= 0);
 		}
 
-		public static bool CgeR4R4(double first, double second)
+		public static bool CgeR4R4(float first, float second)
 		{
 			return (first.CompareTo(second) >= 0);
 		}

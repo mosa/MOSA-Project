@@ -7,11 +7,33 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
  */
 
+using System;
+
 namespace Mosa.Test.Collection
 {
 
 	public static class DoubleTests
 	{
+
+		public static bool AddR8R8(double expected, double first, double second)
+		{
+			return expected == (first + second);
+		}
+
+		public static bool SubR8R8(double expected, double first, double second)
+		{
+			return expected == (first - second);
+		}
+
+		public static bool MulR8R8(double expected, double first, double second)
+		{
+			return expected == (first * second);
+		}
+
+		public static bool DivR8R8(double expected, double first, double second)
+		{
+			return expected == (first / second);
+		}
 
 		public static double AddR8R8(double first, double second)
 		{
@@ -36,11 +58,6 @@ namespace Mosa.Test.Collection
 		public static double RemR8R8(double first, double second)
 		{
 			return (first % second);
-		}
-
-		public static double RetR8(double first)
-		{
-			return first;
 		}
 
 		public static bool CeqR8R8(double first, double second)

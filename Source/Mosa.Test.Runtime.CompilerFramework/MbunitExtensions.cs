@@ -171,6 +171,25 @@ namespace Mosa.Test.Runtime.CompilerFramework
 			dataSource.AddDataSet(new ValueSequenceDataSet(Series.R8Number, GetMetadata(), false));
 		}
 	}
+
+	[AttributeUsage(PatternAttributeTargets.DataContext, AllowMultiple = false, Inherited = true)]
+	public class R4NumberNotZeroAttribute : DataAttribute
+	{
+		protected override void PopulateDataSource(IPatternScope scope, DataSource dataSource, ICodeElementInfo codeElement)
+		{
+			dataSource.AddDataSet(new ValueSequenceDataSet(Series.R4NumberNotZero, GetMetadata(), false));
+		}
+	}
+
+	[AttributeUsage(PatternAttributeTargets.DataContext, AllowMultiple = false, Inherited = true)]
+	public class R8NumberNotZeroAttribute : DataAttribute
+	{
+		protected override void PopulateDataSource(IPatternScope scope, DataSource dataSource, ICodeElementInfo codeElement)
+		{
+			dataSource.AddDataSet(new ValueSequenceDataSet(Series.R8NumberNotZero, GetMetadata(), false));
+		}
+	}
+
 	#region Series Above Zero
 
 	[AttributeUsage(PatternAttributeTargets.DataContext, AllowMultiple = false, Inherited = true)]

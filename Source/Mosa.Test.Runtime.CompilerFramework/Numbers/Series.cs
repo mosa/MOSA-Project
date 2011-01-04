@@ -385,6 +385,11 @@ namespace Mosa.Test.Runtime.CompilerFramework.Numbers
 			get { foreach (float a in R4) if (!float.IsNaN(a) && !float.IsInfinity(a)) yield return a; }
 		}
 
+		public static IEnumerable<float> R4NumberNotZero
+		{
+			get { foreach (float a in R8) if (a != 0) if (!float.IsNaN(a) && !float.IsInfinity(a)) yield return a; }
+		}
+
 		public static IEnumerable<float> R4NotZero
 		{
 			get { foreach (float a in R4) if (a != 0) yield return a; }
@@ -426,9 +431,14 @@ namespace Mosa.Test.Runtime.CompilerFramework.Numbers
 			get { foreach (double a in R8) if (!double.IsNaN(a)) yield return a; }
 		}
 
-		public static IEnumerable<float> R8Number
+		public static IEnumerable<double> R8Number
 		{
-			get { foreach (float a in R8) if (!double.IsNaN(a) && !double.IsInfinity(a)) yield return a; }
+			get { foreach (double a in R8) if (!double.IsNaN(a) && !double.IsInfinity(a)) yield return a; }
+		}
+
+		public static IEnumerable<double> R8NumberNotZero
+		{
+			get { foreach (double a in R8) if (a != 0) if (!double.IsNaN(a) && !double.IsInfinity(a)) yield return a; }
 		}
 
 		public static IEnumerable<double> R8NotZero

@@ -32,11 +32,15 @@
 	List<KeyValuePair<string, string>> IntegersWithChar = new List<KeyValuePair<string, string>>(Integers);
 	
 	IntegersWithChar.Add(new KeyValuePair<string, string>("char", "C"));	
+	
+	List<KeyValuePair<string, string>> FloatingPoints = new List<KeyValuePair<string, string>>();
+	
+	FloatingPoints.Add(new KeyValuePair<string, string>("float", "R4"));
+	FloatingPoints.Add(new KeyValuePair<string, string>("double", "R8"));	
 
 	List<KeyValuePair<string, string>> Numbers = new List<KeyValuePair<string, string>>(Integers);
 	
-	Numbers.Add(new KeyValuePair<string, string>("float", "R4"));
-	Numbers.Add(new KeyValuePair<string, string>("double", "R8"));	
+	Numbers.AddRange(FloatingPoints);	
 
 	List<KeyValuePair<string, string>> NumbersWithChar = new List<KeyValuePair<string, string>>(Numbers);
 	
