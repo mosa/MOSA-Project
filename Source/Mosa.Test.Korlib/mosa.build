@@ -11,19 +11,14 @@
 	<property name="outputDirectory" value="../bin" overwrite="false"/>
 	
 	<!-- Main build target -->
-	<target name="build" depends="conditional"/>
+	<target name="build">
+	    <csc target="exe" output="${outputDirectory}/Mosa.Test.Korlib.dll" debug="${debug}" unsafe="true">
+		<sources>
+			<include name="**/*.cs"/>
+		</sources>
 
-	<target name="conditional">
-		<csc target="library" unsafe="true" output="${outputDirectory}/mscorlib.dll" debug="${debug}" nostdlib="true">		
-			<references>
-				<include name="${outputDirectory}/Mosa.Vm.dll"/>
-			</references>
-			<sources>
-				<include name="**/*.cs"/>
-			</sources>
-		
-			<!-- supress warnings -->
-			<nowarn><warning number="${suppresswarnings}"/></nowarn>
+		<!-- supress warnings -->
+		<nowarn><warning number="${suppresswarnings}"/></nowarn>
 	    </csc>
 	</target>
 	

@@ -20,6 +20,7 @@
 		<references>
 			<include name="System.dll"/>
 			<include name="${outputDirectory}/Mosa.Kernel.dll"/>
+			<include name="${outputDirectory}/Mosa.ClassLib.dll"/>
 			<include name="${outputDirectory}/Mosa.Platform.x86.dll"/>
 			<include name="${outputDirectory}/Mosa.Platform.x86.Intrinsic.dll"/>
 		</references>
