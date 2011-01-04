@@ -18,6 +18,8 @@ namespace Mosa.Test.Runtime.CompilerFramework.Numbers
 	public static class Series
 	{
 
+		#region Utilities
+
 		public static IEnumerable<int> GetUpTo(int end)
 		{
 			for (int i = 0; i < end; i++)
@@ -39,25 +41,31 @@ namespace Mosa.Test.Runtime.CompilerFramework.Numbers
 			}
 		}
 
+		#endregion
+
 		#region B Types
+
+		public static IEnumerable<bool> B { get { return Numbers.B.Series; } }
 
 		#endregion
 
 		#region C Types
 
+		public static IEnumerable<char> C { get { return Numbers.C.Series; } }
+
 		public static IEnumerable<char> CNotZero
 		{
-			get { foreach (char a in C.Series) if (a != 0) yield return a; }
+			get { foreach (char a in C) if (a != 0) yield return a; }
 		}
 
 		public static IEnumerable<char> CAboveZero
 		{
-			get { foreach (char a in C.Series) if (a > 0) yield return a; }
+			get { foreach (char a in C) if (a > 0) yield return a; }
 		}
 
 		public static IEnumerable<char> CBelowZero
 		{
-			get { foreach (char a in C.Series) if (a < 0) yield return a; }
+			get { foreach (char a in C) if (a < 0) yield return a; }
 		}
 
 		public static IEnumerable<char> CUpTo8
@@ -79,19 +87,21 @@ namespace Mosa.Test.Runtime.CompilerFramework.Numbers
 
 		#region I1 Types
 
+		public static IEnumerable<sbyte> I1 { get { return Numbers.I1.Series; } }
+
 		public static IEnumerable<sbyte> I1NotZero
 		{
-			get { foreach (sbyte a in I1.Series) if (a != 0) yield return a; }
+			get { foreach (sbyte a in I1) if (a != 0) yield return a; }
 		}
 
 		public static IEnumerable<sbyte> I1AboveZero
 		{
-			get { foreach (sbyte a in I1.Series) if (a > 0) yield return a; }
+			get { foreach (sbyte a in I1) if (a > 0) yield return a; }
 		}
 
 		public static IEnumerable<sbyte> I1BelowZero
 		{
-			get { foreach (sbyte a in I1.Series) if (a < 0) yield return a; }
+			get { foreach (sbyte a in I1) if (a < 0) yield return a; }
 		}
 
 		public static IEnumerable<sbyte> I1UpTo8
@@ -113,19 +123,21 @@ namespace Mosa.Test.Runtime.CompilerFramework.Numbers
 
 		#region U1 Types
 
+		public static IEnumerable<byte> U1 { get { return Numbers.U1.Series; } }
+
 		public static IEnumerable<byte> U1NotZero
 		{
-			get { foreach (byte a in U1.Series) if (a != 0) yield return a; }
+			get { foreach (byte a in U1) if (a != 0) yield return a; }
 		}
 
 		public static IEnumerable<byte> U1AboveZero
 		{
-			get { foreach (byte a in U1.Series) if (a > 0) yield return a; }
+			get { foreach (byte a in U1) if (a > 0) yield return a; }
 		}
 
 		public static IEnumerable<byte> U1BelowZero
 		{
-			get { foreach (byte a in U1.Series) if (a < 0) yield return a; }
+			get { foreach (byte a in U1) if (a < 0) yield return a; }
 		}
 
 		public static IEnumerable<byte> U1UpTo8
@@ -147,19 +159,21 @@ namespace Mosa.Test.Runtime.CompilerFramework.Numbers
 
 		#region I2 Types
 
+		public static IEnumerable<short> I2 { get { return Numbers.I2.Series; } }
+
 		public static IEnumerable<short> I2NotZero
 		{
-			get { foreach (short a in I2.Series) if (a != 0) yield return a; }
+			get { foreach (short a in I2) if (a != 0) yield return a; }
 		}
 
 		public static IEnumerable<short> I2AboveZero
 		{
-			get { foreach (short a in I2.Series) if (a > 0) yield return a; }
+			get { foreach (short a in I2) if (a > 0) yield return a; }
 		}
 
 		public static IEnumerable<short> I2BelowZero
 		{
-			get { foreach (short a in I2.Series) if (a < 0) yield return a; }
+			get { foreach (short a in I2) if (a < 0) yield return a; }
 		}
 
 		public static IEnumerable<short> I2UpTo8
@@ -181,19 +195,21 @@ namespace Mosa.Test.Runtime.CompilerFramework.Numbers
 
 		#region U2 Types
 
+		public static IEnumerable<ushort> U2 { get { return Numbers.U2.Series; } }
+
 		public static IEnumerable<ushort> U2NotZero
 		{
-			get { foreach (ushort a in U2.Series) if (a != 0) yield return a; }
+			get { foreach (ushort a in U2) if (a != 0) yield return a; }
 		}
 
 		public static IEnumerable<ushort> U2AboveZero
 		{
-			get { foreach (ushort a in U2.Series) if (a > 0) yield return a; }
+			get { foreach (ushort a in U2) if (a > 0) yield return a; }
 		}
 
 		public static IEnumerable<ushort> U2BelowZero
 		{
-			get { foreach (ushort a in U2.Series) if (a < 0) yield return a; }
+			get { foreach (ushort a in U2) if (a < 0) yield return a; }
 		}
 
 		public static IEnumerable<ushort> U2UpTo8
@@ -215,19 +231,21 @@ namespace Mosa.Test.Runtime.CompilerFramework.Numbers
 
 		#region I4 Types
 
+		public static IEnumerable<int> I4 { get { return Numbers.I4.Series; } }
+
 		public static IEnumerable<int> I4NotZero
 		{
-			get { foreach (int a in I4.Series) if (a != 0) yield return a; }
+			get { foreach (int a in I4) if (a != 0) yield return a; }
 		}
 
 		public static IEnumerable<int> I4AboveZero
 		{
-			get { foreach (int a in I4.Series) if (a > 0) yield return a; }
+			get { foreach (int a in I4) if (a > 0) yield return a; }
 		}
 
 		public static IEnumerable<int> I4BelowZero
 		{
-			get { foreach (int a in I4.Series) if (a < 0) yield return a; }
+			get { foreach (int a in I4) if (a < 0) yield return a; }
 		}
 
 		public static IEnumerable<int> I4UpTo8
@@ -249,19 +267,21 @@ namespace Mosa.Test.Runtime.CompilerFramework.Numbers
 
 		#region U4 Types
 
+		public static IEnumerable<uint> U4 { get { return Numbers.U4.Series; } }
+
 		public static IEnumerable<uint> U4NotZero
 		{
-			get { foreach (uint a in U4.Series) if (a != 0) yield return a; }
+			get { foreach (uint a in U4) if (a != 0) yield return a; }
 		}
 
 		public static IEnumerable<uint> U4AboveZero
 		{
-			get { foreach (uint a in U4.Series) if (a > 0) yield return a; }
+			get { foreach (uint a in U4) if (a > 0) yield return a; }
 		}
 
 		public static IEnumerable<uint> U4BelowZero
 		{
-			get { foreach (uint a in U4.Series) if (a < 0) yield return a; }
+			get { foreach (uint a in U4) if (a < 0) yield return a; }
 		}
 
 		public static IEnumerable<uint> U4UpTo16
@@ -282,19 +302,21 @@ namespace Mosa.Test.Runtime.CompilerFramework.Numbers
 
 		#region I8 Types
 
+		public static IEnumerable<long> I8 { get { return Numbers.I8.Series; } }
+
 		public static IEnumerable<long> I8NotZero
 		{
-			get { foreach (long a in I8.Series) if (a != 0) yield return a; }
+			get { foreach (long a in I8) if (a != 0) yield return a; }
 		}
 
 		public static IEnumerable<long> I8AboveZero
 		{
-			get { foreach (long a in I8.Series) if (a > 0) yield return a; }
+			get { foreach (long a in I8) if (a > 0) yield return a; }
 		}
 
 		public static IEnumerable<long> I8BelowZero
 		{
-			get { foreach (long a in I8.Series) if (a < 0) yield return a; }
+			get { foreach (long a in I8) if (a < 0) yield return a; }
 		}
 
 		public static IEnumerable<long> I8UpTo8
@@ -316,19 +338,21 @@ namespace Mosa.Test.Runtime.CompilerFramework.Numbers
 
 		#region U8 Types
 
+		public static IEnumerable<ulong> U8 { get { return Numbers.U8.Series; } }
+
 		public static IEnumerable<ulong> U8NotZero
 		{
-			get { foreach (ulong a in U8.Series) if (a != 0) yield return a; }
+			get { foreach (ulong a in U8) if (a != 0) yield return a; }
 		}
 
 		public static IEnumerable<ulong> U8AboveZero
 		{
-			get { foreach (ulong a in U8.Series) if (a > 0) yield return a; }
+			get { foreach (ulong a in U8) if (a > 0) yield return a; }
 		}
 
 		public static IEnumerable<ulong> U8BelowZero
 		{
-			get { foreach (ulong a in U8.Series) if (a < 0) yield return a; }
+			get { foreach (ulong a in U8) if (a < 0) yield return a; }
 		}
 
 		public static IEnumerable<ulong> U8UpTo8
@@ -349,19 +373,31 @@ namespace Mosa.Test.Runtime.CompilerFramework.Numbers
 
 		#region R4 Types
 
+		public static IEnumerable<float> R4 { get { return Numbers.R4.Series; } }
+
+		public static IEnumerable<float> R4NotNaN
+		{
+			get { foreach (float a in R4) if (!float.IsNaN(a)) yield return a; }
+		}
+
+		public static IEnumerable<float> R4Number
+		{
+			get { foreach (float a in R4) if (!float.IsNaN(a) && !float.IsInfinity(a)) yield return a; }
+		}
+
 		public static IEnumerable<float> R4NotZero
 		{
-			get { foreach (float a in R4.Series) if (a != 0) yield return a; }
+			get { foreach (float a in R4) if (a != 0) yield return a; }
 		}
 
 		public static IEnumerable<float> R4AboveZero
 		{
-			get { foreach (float a in R4.Series) if (a > 0) yield return a; }
+			get { foreach (float a in R4) if (a > 0) yield return a; }
 		}
 
 		public static IEnumerable<float> R4BelowZero
 		{
-			get { foreach (float a in R4.Series) if (a < 0) yield return a; }
+			get { foreach (float a in R4) if (a < 0) yield return a; }
 		}
 
 		public static IEnumerable<float> R4UpTo8
@@ -383,19 +419,31 @@ namespace Mosa.Test.Runtime.CompilerFramework.Numbers
 
 		#region R8 Types
 
+		public static IEnumerable<double> R8 { get { return Numbers.R8.Series; } }
+
+		public static IEnumerable<double> R8NotNaN
+		{
+			get { foreach (double a in R8) if (!double.IsNaN(a)) yield return a; }
+		}
+
+		public static IEnumerable<float> R8Number
+		{
+			get { foreach (float a in R8) if (!double.IsNaN(a) && !double.IsInfinity(a)) yield return a; }
+		}
+
 		public static IEnumerable<double> R8NotZero
 		{
-			get { foreach (double a in R8.Series) if (a != 0) yield return a; }
+			get { foreach (double a in R8) if (a != 0) yield return a; }
 		}
 
 		public static IEnumerable<double> R8AboveZero
 		{
-			get { foreach (double a in R8.Series) if (a > 0) yield return a; }
+			get { foreach (double a in R8) if (a > 0) yield return a; }
 		}
 
 		public static IEnumerable<double> R8BelowZero
 		{
-			get { foreach (double a in R8.Series) if (a < 0) yield return a; }
+			get { foreach (double a in R8) if (a < 0) yield return a; }
 		}
 
 		public static IEnumerable<double> R8UpTo8

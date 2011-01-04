@@ -15,7 +15,7 @@ using MbUnit.Framework;
 
 namespace Mosa.Test.Runtime.CompilerFramework.Numbers
 {
-	public class U8
+	public static class U8
 	{
 		private static IList<ulong> series = null;
 

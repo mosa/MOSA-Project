@@ -43,6 +43,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Boot.cs" />
+    <Compile Include="Test.cs" />
     <Compile Include="GenericTest.cs" />
     <Compile Include="Object.cs" />
     <Compile Include="Runtime.cs" />

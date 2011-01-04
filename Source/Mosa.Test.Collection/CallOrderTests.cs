@@ -33,6 +33,21 @@ namespace Mosa.Test.Collection
 			return (a == 1 && b == 2);
 		}
 
+		public static int CallOrderI4I4_2(int a, int b)
+		{
+			return a + (b * 10);
+		}
+
+		public static bool CallOrderU4U4(uint a, uint b)
+		{
+			return (a == 1 && b == 2);
+		}
+
+		public static uint CallOrderU4U4_2(uint a, uint b)
+		{
+			return a + (b * 10);
+		}
+
 		public static bool CallOrderI4I4I4(int a, int b, int c)
 		{
 			return (a == 1 && b == 2 && c == 3);
@@ -52,5 +67,11 @@ namespace Mosa.Test.Collection
 		{
 			return (a == 1 && b == 2 && c == 3 && d == 4);
 		}
+
+		public static int CallOrderI4I4I4I4_2(int a, int b, int c, int d)
+		{
+			return a + (b * 10) + (c * 100) + (d * 1000);
+		}
+
 	}
 }

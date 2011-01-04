@@ -16,8 +16,8 @@ namespace Mosa.Test.Cases.CIL
 {
 	[TestFixture]
 	[Importance(Importance.Critical)]
-	[Category(@"Object support")]
-	[Description(@"Tests new operator, type checking and virtual method calls.")]
+	//[Category(@"Object support")]
+	//[Description(@"Tests new operator, type checking and virtual method calls.")]
 	public class ObjectFixture : TestCompilerAdapter
 	{
 		public ObjectFixture()

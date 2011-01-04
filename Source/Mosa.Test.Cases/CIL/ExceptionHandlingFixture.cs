@@ -24,7 +24,7 @@ namespace Mosa.Test.Cases.CIL
 			settings.AddReference("Mosa.Test.Collection.dll");
 		}
 
-		[Test]
+		//[Test]
 		[Row(1)]
 		public void CatchException(int value)
 		{

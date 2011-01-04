@@ -88,24 +88,24 @@
     <Compile Include="CIL\DoubleFixture.cs" />
     <Compile Include="CIL\EnumFixture.cs" />
     <Compile Include="CIL\ExceptionHandlingFixture.cs" />
-    <Compile Include="CIL\GenericMethodMemberFixture.cs" />
-    <Compile Include="CIL\GenericTypeFixture.cs" />
+    <Compile Include="OLD.CIL\GenericMethodMemberFixture.cs" />
+    <Compile Include="OLD.CIL\GenericTypeFixture.cs" />
     <Compile Include="CIL\Int32Fixture.cs" />
     <Compile Include="CIL\Int64Fixture.cs" />
     <Compile Include="CIL\InterfaceFixture.cs" />
     <Compile Include="CIL\ObjectFixture.cs" />
-    <Compile Include="CIL\PinnedFixture.cs" />
+    <Compile Include="OLD.CIL\PinnedFixture.cs" />
     <Compile Include="CIL\SingleFixture.cs" />
     <Compile Include="CIL\StringFixture.cs" />
     <Compile Include="CIL\UInt32Fixture.cs" />
     <Compile Include="CIL\UInt64Fixture.cs" />
-    <Compile Include="IL\Add.cs" />
-    <Compile Include="IL\AddPtr.cs" />
-    <Compile Include="IL\And.cs" />
+    <Compile Include="OLD.IL\Add.cs" />
+    <Compile Include="OLD.IL\AddPtr.cs" />
+    <Compile Include="OLD.IL\And.cs" />
     <Compile Include="IL\CallWithConstant.cs" />
-    <Compile Include="IL\Ceq.cs" />
-    <Compile Include="IL\Cgt.cs" />
-    <Compile Include="IL\Clt.cs" />
+    <Compile Include="OLD.IL\Ceq.cs" />
+    <Compile Include="OLD.IL\Cgt.cs" />
+    <Compile Include="OLD.IL\Clt.cs" />
     <None Include="IL\ConditionalOperator.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>ConditionalOperator.cs</LastGenOutput>
@@ -151,28 +151,28 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="IL\Div.cs" />
+    <Compile Include="OLD.IL\Div.cs" />
     <Compile Include="IL\Ldarga.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Ldarga.tt</DependentUpon>
     </Compile>
-    <Compile Include="IL\Mul.cs" />
-    <Compile Include="IL\Or.cs" />
-    <Compile Include="IL\Rem.cs" />
-    <Compile Include="IL\Shl.cs" />
-    <Compile Include="IL\Shr.cs" />
-    <Compile Include="IL\StaticFieldInit.cs" />
-    <Compile Include="IL\Stind.cs" />
-    <Compile Include="IL\Stsfld.cs" />
-    <Compile Include="IL\Sub.cs" />
+    <Compile Include="OLD.IL\Mul.cs" />
+    <Compile Include="OLD.IL\Or.cs" />
+    <Compile Include="OLD.IL\Rem.cs" />
+    <Compile Include="OLD.IL\Shl.cs" />
+    <Compile Include="OLD.IL\Shr.cs" />
+    <Compile Include="OLD.IL\StaticFieldInit.cs" />
+    <Compile Include="OLD.IL\Stind.cs" />
+    <Compile Include="OLD.IL\Stsfld.cs" />
+    <Compile Include="OLD.IL\Sub.cs" />
     <Compile Include="IL\Switch.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Switch.tt</DependentUpon>
     </Compile>
     <Compile Include="IL\While.cs" />
-    <Compile Include="IL\Xor.cs" />
+    <Compile Include="OLD.IL\Xor.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mosa.Test.Collection\Mosa.Test.Collection.csproj">
@@ -190,6 +190,7 @@
   <ItemGroup>
     <Content Include="TemplateLibrary.txt" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <PropertyGroup>
     <PreBuildEvent>

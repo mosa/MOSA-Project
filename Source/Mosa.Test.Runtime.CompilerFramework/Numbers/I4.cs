@@ -15,7 +15,7 @@ using MbUnit.Framework;
 
 namespace Mosa.Test.Runtime.CompilerFramework.Numbers
 {
-	public class I4
+	public static class I4
 	{
 		private static IList<int> series = null;
 
@@ -60,7 +60,7 @@ namespace Mosa.Test.Runtime.CompilerFramework.Numbers
 			return list;
 		}
 
-		protected static IList<int> GetNegatives(IList<int> list)
+		private static IList<int> GetNegatives(IList<int> list)
 		{
 			List<int> negs = new List<int>();
 

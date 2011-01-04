@@ -15,7 +15,7 @@ using MbUnit.Framework;
 
 namespace Mosa.Test.Runtime.CompilerFramework.Numbers
 {
-	public class B
+	public static class B
 	{
 		public static IEnumerable<bool> Series
 		{

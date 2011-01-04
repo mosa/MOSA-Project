@@ -18,6 +18,7 @@ using System.Runtime.InteropServices;
 using MbUnit.Framework;
 
 using Mosa.Test.Runtime.CompilerFramework;
+using Mosa.Test.Collection;
 
 namespace Mosa.Test.Cases.IL
 {
@@ -39,31 +40,49 @@ namespace Mosa.Test.Cases.IL
 		[Test]
 		public void CallOrderI4()
 		{
-			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "CallOrderTests", "CallOrderI4", 1));
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "CallOrderTests", "CallOrderI4", (int)1));
 		}
 
 		[Test]
 		public void CallOrderI4I4()
 		{
-			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "CallOrderTests", "CallOrderI4I4", 1, 2));
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "CallOrderTests", "CallOrderI4I4", (int)1, (int)2));
 		}
 
 		[Test]
 		public void CallOrderI4I4_2()
 		{
-			Assert.IsFalse(Run<bool>("Mosa.Test.Collection", "CallOrderTests", "CallOrderI4I4", 2, 1));
+			Assert.AreEqual(CallOrderTests.CallOrderI4I4_2((int)3, (int)4), Run<int>("Mosa.Test.Collection", "CallOrderTests", "CallOrderI4I4_2", (int)3, (int)4));
+		}
+
+		[Test]
+		public void CallOrderU4U4()
+		{
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "CallOrderTests", "CallOrderU4U4", (uint)1, (uint)2));
+		}
+
+		[Test]
+		public void CallOrderU4U4_2()
+		{
+			Assert.AreEqual(CallOrderTests.CallOrderU4U4_2((uint)3, (uint)4), Run<uint>("Mosa.Test.Collection", "CallOrderTests", "CallOrderU4U4_2", (uint)3, (uint)4));
 		}
 
 		[Test]
 		public void CallOrderI4I4I4()
 		{
-			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "CallOrderTests", "CallOrderI4I4I4", 1, 2, 3));
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "CallOrderTests", "CallOrderI4I4I4", (int)1, (int)2, (int)3));
 		}
 
 		[Test]
 		public void CallOrderI4I4I4I4()
 		{
-			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "CallOrderTests", "CallOrderI4I4I4I4", 1, 2, 3, 4));
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "CallOrderTests", "CallOrderI4I4I4I4", (int)1, (int)2, (int)3, (int)4));
+		}
+
+		[Test]
+		public void CallOrderI4I4I4I4_2()
+		{
+			Assert.AreEqual(CallOrderTests.CallOrderI4I4I4I4_2((int)1, (int)2, (int)3, (int)4), Run<int>("Mosa.Test.Collection", "CallOrderTests", "CallOrderI4I4I4I4_2", (int)1, (int)2, (int)3, (int)4));
 		}
 
 		[Test]

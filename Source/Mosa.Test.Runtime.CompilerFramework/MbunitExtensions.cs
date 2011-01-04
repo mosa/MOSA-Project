@@ -22,7 +22,7 @@ namespace Mosa.Test.Runtime.CompilerFramework
 	{
 		protected override void PopulateDataSource(IPatternScope scope, DataSource dataSource, ICodeElementInfo codeElement)
 		{
-			dataSource.AddDataSet(new ValueSequenceDataSet(B.Series, GetMetadata(), false));
+			dataSource.AddDataSet(new ValueSequenceDataSet(Series.B, GetMetadata(), false));
 		}
 	}
 
@@ -31,7 +31,7 @@ namespace Mosa.Test.Runtime.CompilerFramework
 	{
 		protected override void PopulateDataSource(IPatternScope scope, DataSource dataSource, ICodeElementInfo codeElement)
 		{
-			dataSource.AddDataSet(new ValueSequenceDataSet(C.Series, GetMetadata(), false));
+			dataSource.AddDataSet(new ValueSequenceDataSet(Series.C, GetMetadata(), false));
 		}
 	}
 
@@ -40,7 +40,7 @@ namespace Mosa.Test.Runtime.CompilerFramework
 	{
 		protected override void PopulateDataSource(IPatternScope scope, DataSource dataSource, ICodeElementInfo codeElement)
 		{
-			dataSource.AddDataSet(new ValueSequenceDataSet(I1.Series, GetMetadata(), false));
+			dataSource.AddDataSet(new ValueSequenceDataSet(Series.I1, GetMetadata(), false));
 		}
 	}
 
@@ -49,7 +49,7 @@ namespace Mosa.Test.Runtime.CompilerFramework
 	{
 		protected override void PopulateDataSource(IPatternScope scope, DataSource dataSource, ICodeElementInfo codeElement)
 		{
-			dataSource.AddDataSet(new ValueSequenceDataSet(I2.Series, GetMetadata(), false));
+			dataSource.AddDataSet(new ValueSequenceDataSet(Series.I2, GetMetadata(), false));
 		}
 	}
 
@@ -58,7 +58,7 @@ namespace Mosa.Test.Runtime.CompilerFramework
 	{
 		protected override void PopulateDataSource(IPatternScope scope, DataSource dataSource, ICodeElementInfo codeElement)
 		{
-			dataSource.AddDataSet(new ValueSequenceDataSet(I4.Series, GetMetadata(), false));
+			dataSource.AddDataSet(new ValueSequenceDataSet(Series.I4, GetMetadata(), false));
 		}
 	}
 
@@ -67,7 +67,7 @@ namespace Mosa.Test.Runtime.CompilerFramework
 	{
 		protected override void PopulateDataSource(IPatternScope scope, DataSource dataSource, ICodeElementInfo codeElement)
 		{
-			dataSource.AddDataSet(new ValueSequenceDataSet(I8.Series, GetMetadata(), false));
+			dataSource.AddDataSet(new ValueSequenceDataSet(Series.I8, GetMetadata(), false));
 		}
 	}
 
@@ -76,7 +76,7 @@ namespace Mosa.Test.Runtime.CompilerFramework
 	{
 		protected override void PopulateDataSource(IPatternScope scope, DataSource dataSource, ICodeElementInfo codeElement)
 		{
-			dataSource.AddDataSet(new ValueSequenceDataSet(U1.Series, GetMetadata(), false));
+			dataSource.AddDataSet(new ValueSequenceDataSet(Series.U1, GetMetadata(), false));
 		}
 	}
 
@@ -85,7 +85,7 @@ namespace Mosa.Test.Runtime.CompilerFramework
 	{
 		protected override void PopulateDataSource(IPatternScope scope, DataSource dataSource, ICodeElementInfo codeElement)
 		{
-			dataSource.AddDataSet(new ValueSequenceDataSet(U2.Series, GetMetadata(), false));
+			dataSource.AddDataSet(new ValueSequenceDataSet(Series.U2, GetMetadata(), false));
 		}
 	}
 
@@ -94,7 +94,7 @@ namespace Mosa.Test.Runtime.CompilerFramework
 	{
 		protected override void PopulateDataSource(IPatternScope scope, DataSource dataSource, ICodeElementInfo codeElement)
 		{
-			dataSource.AddDataSet(new ValueSequenceDataSet(U4.Series, GetMetadata(), false));
+			dataSource.AddDataSet(new ValueSequenceDataSet(Series.U4, GetMetadata(), false));
 		}
 	}
 
@@ -103,7 +103,7 @@ namespace Mosa.Test.Runtime.CompilerFramework
 	{
 		protected override void PopulateDataSource(IPatternScope scope, DataSource dataSource, ICodeElementInfo codeElement)
 		{
-			dataSource.AddDataSet(new ValueSequenceDataSet(U8.Series, GetMetadata(), false));
+			dataSource.AddDataSet(new ValueSequenceDataSet(Series.U8, GetMetadata(), false));
 		}
 	}
 
@@ -112,7 +112,7 @@ namespace Mosa.Test.Runtime.CompilerFramework
 	{
 		protected override void PopulateDataSource(IPatternScope scope, DataSource dataSource, ICodeElementInfo codeElement)
 		{
-			dataSource.AddDataSet(new ValueSequenceDataSet(R4.Series, GetMetadata(), false));
+			dataSource.AddDataSet(new ValueSequenceDataSet(Series.R4, GetMetadata(), false));
 		}
 	}
 
@@ -121,7 +121,7 @@ namespace Mosa.Test.Runtime.CompilerFramework
 	{
 		protected override void PopulateDataSource(IPatternScope scope, DataSource dataSource, ICodeElementInfo codeElement)
 		{
-			dataSource.AddDataSet(new ValueSequenceDataSet(R8.Series, GetMetadata(), false));
+			dataSource.AddDataSet(new ValueSequenceDataSet(Series.R8, GetMetadata(), false));
 		}
 	}
 
@@ -136,6 +136,41 @@ namespace Mosa.Test.Runtime.CompilerFramework
 		}
 	}
 
+	[AttributeUsage(PatternAttributeTargets.DataContext, AllowMultiple = false, Inherited = true)]
+	public class R4NotNaNAttribute : DataAttribute
+	{
+		protected override void PopulateDataSource(IPatternScope scope, DataSource dataSource, ICodeElementInfo codeElement)
+		{
+			dataSource.AddDataSet(new ValueSequenceDataSet(Series.R4NotNaN, GetMetadata(), false));
+		}
+	}
+
+	[AttributeUsage(PatternAttributeTargets.DataContext, AllowMultiple = false, Inherited = true)]
+	public class R8NotNaNAttribute : DataAttribute
+	{
+		protected override void PopulateDataSource(IPatternScope scope, DataSource dataSource, ICodeElementInfo codeElement)
+		{
+			dataSource.AddDataSet(new ValueSequenceDataSet(Series.R8NotNaN, GetMetadata(), false));
+		}
+	}
+
+	[AttributeUsage(PatternAttributeTargets.DataContext, AllowMultiple = false, Inherited = true)]
+	public class R4NumberAttribute : DataAttribute
+	{
+		protected override void PopulateDataSource(IPatternScope scope, DataSource dataSource, ICodeElementInfo codeElement)
+		{
+			dataSource.AddDataSet(new ValueSequenceDataSet(Series.R4Number, GetMetadata(), false));
+		}
+	}
+
+	[AttributeUsage(PatternAttributeTargets.DataContext, AllowMultiple = false, Inherited = true)]
+	public class R8NumberAttribute : DataAttribute
+	{
+		protected override void PopulateDataSource(IPatternScope scope, DataSource dataSource, ICodeElementInfo codeElement)
+		{
+			dataSource.AddDataSet(new ValueSequenceDataSet(Series.R8Number, GetMetadata(), false));
+		}
+	}
 	#region Series Above Zero
 
 	[AttributeUsage(PatternAttributeTargets.DataContext, AllowMultiple = false, Inherited = true)]
