@@ -143,12 +143,15 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="stack">The stack.</param>
 		private void CreateTemporaryMoves(Context ctx, BasicBlock block, Stack<Operand> stack)
 		{
+			Context context = ctx.InsertBefore();
+			context.SetInstruction(IR.Instruction.NopInstruction);
+
 			BasicBlock nextBlock;
 
 			if (NextBlockHasInitialStack(block, out nextBlock))
-				LinkTemporaryMoves(ctx, block, nextBlock, stack);
+				LinkTemporaryMoves(context, block, nextBlock, stack);
 			else
-				CreateNewTemporaryMoves(ctx, block, stack);
+				CreateNewTemporaryMoves(context, block, stack);
 		}
 
 		/// <summary>
