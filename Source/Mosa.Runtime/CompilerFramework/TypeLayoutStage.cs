@@ -317,7 +317,8 @@ namespace Mosa.Runtime.CompilerFramework
 				}
 			}
 
-			throw new InvalidOperationException(@"Failed to find implicit interface implementation.");
+			return null;
+			//throw new InvalidOperationException(@"Failed to find implicit interface implementation.");
 		}
 
 		/// <summary>
