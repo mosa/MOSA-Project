@@ -27,11 +27,5 @@ namespace Mosa.Test.Runtime.CompilerFramework.Numbers
 				list.AddIfNew<T>(value);
 		}
 
-		public static IEnumerable<int> UpTo(this int start, int end)
-		{
-			while (start <= end)
-				yield return start++;
-		}
-
 	}
 }

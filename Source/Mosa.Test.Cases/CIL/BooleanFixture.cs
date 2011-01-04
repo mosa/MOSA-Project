@@ -29,32 +29,32 @@ namespace Mosa.Test.Cases.CIL
 			settings.AddReference("Mosa.Test.Collection.dll");
 		}
 
-		[Test, Factory(typeof(B), "Samples")]
-		public void RetB(bool a)
+		[Test]
+		public void RetB([B] bool a)
 		{
 			Assert.AreEqual(BooleanTests.RetB(a), Run<bool>("Mosa.Test.Collection", "BooleanTests", "RetB", a));
 		}
 
-		[Test, Factory(typeof(Variations), "B_B")]
-		public void AndBB(bool a, bool b)
+		[Test]
+		public void AndBB([B]bool a, [B] bool b)
 		{
 			Assert.AreEqual(BooleanTests.AndBB(a, b), Run<bool>("Mosa.Test.Collection", "BooleanTests", "AndBB", a, b));
 		}
 
-		[Test, Factory(typeof(Variations), "B_B")]
-		public void OrBB(bool a, bool b)
+		[Test]
+		public void OrBB([B]bool a, [B] bool b)
 		{
 			Assert.AreEqual(BooleanTests.OrBB(a, b), Run<bool>("Mosa.Test.Collection", "BooleanTests", "OrBB", a, b));
 		}
 
-		[Test, Factory(typeof(Variations), "B_B")]
-		public void XorBB(bool a, bool b)
+		[Test]
+		public void XorBB([B]bool a, [B] bool b)
 		{
 			Assert.AreEqual(BooleanTests.XorBB(a, b), Run<bool>("Mosa.Test.Collection", "BooleanTests", "XorBB", a, b));
 		}
 
-		[Test, Factory(typeof(B), "Samples")]
-		public void NotB(bool a)
+		[Test]
+		public void NotB([B]bool a)
 		{
 			Assert.AreEqual(BooleanTests.NotB(a), Run<bool>("Mosa.Test.Collection", "BooleanTests", "NotB", a));
 		}
@@ -65,26 +65,26 @@ namespace Mosa.Test.Cases.CIL
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "BooleanTests", "Newarr"));
 		}
 
-		[Test, Factory(typeof(Variations), "SmallNumbers")]
-		public void Ldlen(int length)
+		[Test]
+		public void Ldlen([I4Small]int length)
 		{
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "BooleanTests", "Ldlen", length));
 		}
 
-		[Test, Factory(typeof(Variations), "ISmall_B")]
-		public void StelemB(int index, bool value)
+		[Test]
+		public void StelemB([I4Small]int index, [B]bool value)
 		{
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "BooleanTests", "Stelem", index, value));
 		}
 
-		[Test, Factory(typeof(Variations), "ISmall_B")]
-		public void LdelemB(int index, bool value)
+		[Test]
+		public void LdelemB([I4Small] int index, [B]bool value)
 		{
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "BooleanTests", "Ldelem", index, value));
 		}
 
-		[Test, Factory(typeof(Variations), "ISmall_B")]
-		public void LdelemaB(int index, bool value)
+		[Test]
+		public void LdelemaB([I4Small]int index, [B]bool value)
 		{
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "BooleanTests", "Ldelema", index, value));
 		}

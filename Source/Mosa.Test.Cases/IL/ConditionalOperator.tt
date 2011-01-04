@@ -22,8 +22,8 @@ namespace Mosa.Test.Cases.FIX.IL
 		foreach (KeyValuePair<string, string> compare in Comparisons) 
 		{ #>
 		
-		[Test, Factory(typeof(Variations), "<#= number.Value #>_<#= number.Value #>_<#= number.Value #>_<#= number.Value #>")]
-		public void Compare<#= compare.Value #><#= number.Value #>(<#= number.Key #> a, <#= number.Key #> b, <#= number.Key #> c, <#= number.Key #> d)
+		[Test]
+		public void Compare<#= compare.Value #><#= number.Value #>([<#= number.Value #>]<#= number.Key #> a, [<#= number.Value #>]<#= number.Key #> b, [<#= number.Value #>]<#= number.Key #> c, [<#= number.Value #>]<#= number.Key #> d)
 		{
 			Assert.AreEqual(ConditionalOperatorTests.Compare<#= compare.Value #><#= number.Value #>(a, b, c, d), Run<<#= number.Key #>>("Mosa.Test.Collection", "ConditionalOperatorTests", "Compare<#= compare.Value #><#= number.Value #>", a, b, c, d));
 		}

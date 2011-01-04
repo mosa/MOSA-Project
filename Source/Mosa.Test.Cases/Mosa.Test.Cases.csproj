@@ -106,10 +106,6 @@
     <Compile Include="IL\Ceq.cs" />
     <Compile Include="IL\Cgt.cs" />
     <Compile Include="IL\Clt.cs" />
-    <Compile Include="IL\ConvI1.cs" />
-    <Compile Include="IL\ConvI2.cs" />
-    <Compile Include="IL\ConvI4.cs" />
-    <Compile Include="IL\ConvI8.cs" />
     <None Include="IL\ConditionalOperator.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>ConditionalOperator.cs</LastGenOutput>
@@ -117,6 +113,10 @@
     <None Include="IL\Call.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Call.cs</LastGenOutput>
+    </None>
+    <None Include="IL\Conv.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Conv.cs</LastGenOutput>
     </None>
     <None Include="IL\Switch.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
@@ -138,6 +138,11 @@
     <Compile Include="IL\CallOrder.cs" />
     <Compile Include="IL\Call.cs">
       <DependentUpon>Call.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="IL\Conv.cs">
+      <DependentUpon>Conv.tt</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>

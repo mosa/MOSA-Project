@@ -28,7 +28,6 @@ namespace Mosa.Test.Collection
 			return (a == 1);
 		}
 
-		
 		public static bool CallOrderI4I4(int a, int b)
 		{
 			return (a == 1 && b == 2);

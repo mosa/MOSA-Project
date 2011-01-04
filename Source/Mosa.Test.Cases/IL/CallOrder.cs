@@ -49,6 +49,12 @@ namespace Mosa.Test.Cases.IL
 		}
 
 		[Test]
+		public void CallOrderI4I4_2()
+		{
+			Assert.IsFalse(Run<bool>("Mosa.Test.Collection", "CallOrderTests", "CallOrderI4I4", 2, 1));
+		}
+
+		[Test]
 		public void CallOrderI4I4I4()
 		{
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "CallOrderTests", "CallOrderI4I4I4", 1, 2, 3));

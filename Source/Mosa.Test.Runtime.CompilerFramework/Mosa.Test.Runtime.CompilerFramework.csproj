@@ -108,7 +108,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Compiler\StaticAllocationFixture.cs" />
+    <Compile Include="MbunitExtensions.cs" />
     <Compile Include="Numbers\B.cs" />
+    <Compile Include="Numbers\Series.cs" />
     <Compile Include="TestCompilerSettings.cs" />
     <Compile Include="DelegateUtility.cs" />
     <Compile Include="Numbers\C.cs" />
@@ -121,7 +123,6 @@
     <Compile Include="Numbers\I4.cs" />
     <Compile Include="Numbers\I2.cs" />
     <Compile Include="Numbers\U1.cs" />
-    <Compile Include="Numbers\Variations.cs" />
     <Compile Include="Numbers\Extension.cs" />
     <Compile Include="Numbers\I1.cs" />
     <Compile Include="Prebuilt.cs" />

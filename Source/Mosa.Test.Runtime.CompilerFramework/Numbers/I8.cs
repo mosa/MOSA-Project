@@ -17,19 +17,20 @@ namespace Mosa.Test.Runtime.CompilerFramework.Numbers
 {
 	public class I8
 	{
-		private static IList<long> samples = null;
-		public static IList<long> SampleData { get { if (samples == null) samples = GetSamples(); return samples; } }
+		private static IList<long> series = null;
 
-		public static IEnumerable<long> Samples
+		public static IEnumerable<long> Series
 		{
 			get
 			{
-				foreach (long value in SampleData)
+				if (series == null) series = GetSeries();
+
+				foreach (long value in series)
 					yield return value;
 			}
 		}
 
-		public static IList<long> GetSamples()
+		public static IList<long> GetSeries()
 		{
 			List<long> list = new List<long>();
 

@@ -17,19 +17,20 @@ namespace Mosa.Test.Runtime.CompilerFramework.Numbers
 {
 	public class U4
 	{
-		private static IList<uint> samples = null;
-		public static IList<uint> SampleData { get { if (samples == null) samples = GetSamples(); return samples; } }
+		private static IList<uint> series = null;
 
-		public static IEnumerable<uint> Samples
+		public static IEnumerable<uint> Series
 		{
 			get
 			{
-				foreach (uint value in SampleData)
+				if (series == null) series = GetSeries();
+
+				foreach (uint value in series)
 					yield return value;
 			}
 		}
 
-		public static IList<uint> GetSamples()
+		public static IList<uint> GetSeries()
 		{
 			List<uint> list = new List<uint>();
 

@@ -27,56 +27,56 @@ namespace Mosa.Test.Cases.IL
 			settings.AddReference("Mosa.Test.Collection.dll");
 		}
 		
-		[Test, Factory(typeof(U1), "Samples")]
-		public void CallU1(byte a)
+		[Test]
+		public void CallU1([U1]byte a)
 		{
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "CallTests", "CallU1", a));
 		}
 		
-		[Test, Factory(typeof(U2), "Samples")]
-		public void CallU2(ushort a)
+		[Test]
+		public void CallU2([U2]ushort a)
 		{
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "CallTests", "CallU2", a));
 		}
 		
-		[Test, Factory(typeof(U4), "Samples")]
-		public void CallU4(uint a)
+		[Test]
+		public void CallU4([U4]uint a)
 		{
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "CallTests", "CallU4", a));
 		}
 		
-		[Test, Factory(typeof(U8), "Samples")]
-		public void CallU8(ulong a)
+		[Test]
+		public void CallU8([U8]ulong a)
 		{
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "CallTests", "CallU8", a));
 		}
 		
-		[Test, Factory(typeof(I1), "Samples")]
-		public void CallI1(sbyte a)
+		[Test]
+		public void CallI1([I1]sbyte a)
 		{
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "CallTests", "CallI1", a));
 		}
 		
-		[Test, Factory(typeof(I2), "Samples")]
-		public void CallI2(short a)
+		[Test]
+		public void CallI2([I2]short a)
 		{
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "CallTests", "CallI2", a));
 		}
 		
-		[Test, Factory(typeof(I4), "Samples")]
-		public void CallI4(int a)
+		[Test]
+		public void CallI4([I4]int a)
 		{
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "CallTests", "CallI4", a));
 		}
 		
-		[Test, Factory(typeof(I8), "Samples")]
-		public void CallI8(long a)
+		[Test]
+		public void CallI8([I8]long a)
 		{
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "CallTests", "CallI8", a));
 		}
 		
-		[Test, Factory(typeof(C), "Samples")]
-		public void CallC(char a)
+		[Test]
+		public void CallC([C]char a)
 		{
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "CallTests", "CallC", a));
 		}

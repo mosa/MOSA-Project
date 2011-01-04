@@ -19,8 +19,8 @@ namespace Mosa.Test.Cases.IL
 		}
 		<# foreach (KeyValuePair<string, string> number in IntegersWithChar) { #>
 
-		[Test, Factory(typeof(<#= number.Value #>), "Samples")]
-		public void Call<#= number.Value #>(<#= number.Key #> a)
+		[Test]
+		public void Call<#= number.Value #>([<#= number.Value #>]<#= number.Key #> a)
 		{
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "CallTests", "Call<#= number.Value #>", a));
 		}

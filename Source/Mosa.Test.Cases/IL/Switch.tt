@@ -19,8 +19,8 @@ namespace Mosa.Test.Cases.IL
 		}
 		<# foreach (KeyValuePair<string, string> number in Integers) { #>
 
-		[Test, Factory(typeof(<#= number.Value #>), "Samples")]
-		public void Switch<#= number.Value #>(<#= number.Key #> a)
+		[Test]
+		public void Switch<#= number.Value #>([<#= number.Value #>]<#= number.Key #> a)
 		{
 			Assert.AreEqual(SwitchTests.Switch<#= number.Value #>(a), Run<<#= number.Key #>>("Mosa.Test.Collection", "SwitchTests", "Switch<#= number.Value #>", a));
 		}

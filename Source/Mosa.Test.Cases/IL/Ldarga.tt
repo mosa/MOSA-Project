@@ -21,8 +21,8 @@ namespace Mosa.Test.Cases.IL
 		#region CheckValue
 		<# foreach (KeyValuePair<string, string> number in NumbersWithChar) { #>
 
-		[Test, Factory(typeof(<#= number.Value #>), "Samples")]
-		public void LdargaCheckValue<#= number.Value #>(<#= number.Key #> a)
+		[Test]
+		public void LdargaCheckValue<#= number.Value #>([<#= number.Value #>]<#= number.Key #> a)
 		{
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaCheckValue<#= number.Value #>", a, a));
 		}
@@ -33,8 +33,8 @@ namespace Mosa.Test.Cases.IL
 		#region ChangeValue
 		<# foreach (KeyValuePair<string, string> number in Numbers) { #>
 
-		[Test, Factory(typeof(<#= number.Value #>), "Samples")]
-		public void LdargaChangeValue<#= number.Value #>(<#= number.Key #> a)
+		[Test]
+		public void LdargaChangeValue<#= number.Value #>([<#= number.Value #>]<#= number.Key #> a)
 		{
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaChangeValue<#= number.Value #>", a, a));
 		}
