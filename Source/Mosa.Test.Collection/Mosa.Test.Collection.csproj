@@ -69,6 +69,7 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
+    <Compile Include="GenericInterfaceTests.cs" />
     <Compile Include="SwitchTests.cs">
       <DependentUpon>SwitchTests.tt</DependentUpon>
       <AutoGen>True</AutoGen>

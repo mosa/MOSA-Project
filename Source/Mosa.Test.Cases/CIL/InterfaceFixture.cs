@@ -11,13 +11,14 @@
 using MbUnit.Framework;
 
 using Mosa.Test.Runtime.CompilerFramework;
+using Mosa.Test.Collection;
 
 namespace Mosa.Test.Cases.CIL
 {
 	[TestFixture]
 	[Importance(Importance.Critical)]
-	[Category(@"Compiler")]
-	[Description(@"Tests support for interfaces.")]
+	//[Category(@"Compiler")]
+	//[Description(@"Tests support for interfaces.")]
 	public class InterfaceFixture : TestCompilerAdapter
 	{
 
@@ -27,15 +28,22 @@ namespace Mosa.Test.Cases.CIL
 		}
 
 		[Test]
-		public void MustCompileInterfaces()
+		public void InterfaceTest1()
 		{
-			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "TestClass", "MustCompileWithInterfaces"));
+			Assert.AreEqual(InterfaceTests.InterfaceTest1(), Run<int>("Mosa.Test.Collection", "InterfaceTests", "InterfaceTest1"));
 		}
 
 		[Test]
-		public void MustReturn3FromB()
+		public void InterfaceTest2()
 		{
-			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "TestClass", "MustReturn3FromB"));
+			Assert.AreEqual(InterfaceTests.InterfaceTest2(), Run<int>("Mosa.Test.Collection", "InterfaceTests", "InterfaceTest2"));
 		}
+
+		[Test]
+		public void InterfaceTest3()
+		{
+			Assert.AreEqual(InterfaceTests.InterfaceTest3(), Run<int>("Mosa.Test.Collection", "InterfaceTests", "InterfaceTest3"));
+		}
+
 	}
 }

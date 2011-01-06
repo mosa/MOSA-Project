@@ -9,25 +9,26 @@
 
 namespace Mosa.Test.Collection
 {
-	public interface InterfaceA
+
+	public interface IInterfaceA
 	{
 		int A();
 	}
 
-	public interface InterfaceB
+	public interface IInterfaceAB
 	{
 		int A();
 		int B();
 	}
 
-	public class TestClass : InterfaceA, InterfaceB
+	public class InterfaceTestClass : IInterfaceA, IInterfaceAB
 	{
 		public int A()
 		{
 			return 1;
 		}
 
-		int InterfaceB.A()
+		int IInterfaceAB.A()
 		{
 			return 2;
 		}
@@ -37,18 +38,28 @@ namespace Mosa.Test.Collection
 			return 3;
 		}
 
-		public static bool MustCompileWithInterfaces()
+	}
+
+	public static class InterfaceTests
+	{
+		public static int InterfaceTest1()
 		{
-			return true;
+			InterfaceTestClass tc = new InterfaceTestClass();
+			return tc.B();
 		}
 
-		public static bool MustReturn3FromB()
+		public static int InterfaceTest2()
 		{
-			TestClass tc = new TestClass();
-			bool result = tc.B() == 3;
-			InterfaceB b = tc;
-			result = result & (b.B() == 3);
-			return result;
+			InterfaceTestClass tc = new InterfaceTestClass();
+			IInterfaceAB b = tc;
+			return b.B();
+		}
+
+		public static int InterfaceTest3()
+		{
+			InterfaceTestClass tc = new InterfaceTestClass();
+			IInterfaceAB b = tc;
+			return b.A();
 		}
 	}
 

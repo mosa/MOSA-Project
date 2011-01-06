@@ -81,6 +81,7 @@
     <Compile Include="CIL\BooleanFixture.cs" />
     <Compile Include="CIL\CallvirtFixture.cs" />
     <Compile Include="CIL\CharFixture.cs" />
+    <Compile Include="CIL\GenericInterfaceFixture.cs" />
     <Compile Include="CIL\Int16Fixture.cs" />
     <Compile Include="CIL\Int8Fixture.cs" />
     <Compile Include="CIL\UInt16Fixture.cs" />
