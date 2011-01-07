@@ -13,7 +13,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 
-using Mosa.Runtime.FileFormat.PE;
+using Mosa.Compiler.FileFormat.PE;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Metadata.Tables;

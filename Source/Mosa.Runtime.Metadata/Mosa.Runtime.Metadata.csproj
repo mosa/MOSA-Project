@@ -138,9 +138,9 @@
     <Compile Include="UserStringHeap.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Mosa.Runtime.FileFormat\Mosa.Runtime.FileFormat.csproj">
+    <ProjectReference Include="..\Mosa.Compiler.FileFormat\Mosa.Compiler.FileFormat.csproj">
       <Project>{CC2E6418-C325-4486-B50D-941EC27053F6}</Project>
-      <Name>Mosa.Runtime.FileFormat</Name>
+      <Name>Mosa.Compiler.FileFormat</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

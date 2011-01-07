@@ -17,7 +17,7 @@ using System.Text;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Linker;
 using Mosa.Runtime.Linker.PE;
-using Mosa.Runtime.FileFormat.PE;
+using Mosa.Compiler.FileFormat.PE;
 
 namespace Mosa.Tools.Compiler
 {

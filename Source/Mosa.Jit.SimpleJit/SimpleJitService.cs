@@ -11,11 +11,11 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Text;
+using System.IO;
 
 using Mosa.Runtime;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Vm;
-using System.IO;
 
 namespace Mosa.Jit.SimpleJit
 {

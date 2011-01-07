@@ -15,7 +15,7 @@ using System.Text;
 using System.Diagnostics;
 
 using Mosa.Runtime.CompilerFramework;
-using Mosa.Runtime.FileFormat.PE;
+using Mosa.Compiler.FileFormat.PE;
 
 namespace Mosa.Runtime.Linker.PE
 {

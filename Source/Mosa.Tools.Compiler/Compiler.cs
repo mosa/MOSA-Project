@@ -21,7 +21,6 @@ using Mosa.Runtime.Vm;
 using Mosa.Runtime.Linker;
 using Mosa.Tools.Compiler.Boot;
 using Mosa.Tools.Compiler.Linkers;
-using Mosa.Tools.Compiler.Symbols.Pdb;
 using Mosa.Tools.Compiler.Stages;
 
 namespace Mosa.Tools.Compiler
