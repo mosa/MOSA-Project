@@ -324,7 +324,7 @@ namespace Mosa.Platform.x86
 		{
 			long address = _linker.Link(
 				LinkType.RelativeOffset | LinkType.I4,
-				_compiler.Method,
+				_compiler.Method.ToString(),
 				(int)(_codeStream.Position - _codeStreamBasePosition),
 				(int)(_codeStream.Position - _codeStreamBasePosition) + 4,
 				symbolOperand.Name,
@@ -461,17 +461,17 @@ namespace Mosa.Platform.x86
 			if (label != null)
 			{
 				int pos = (int)(_codeStream.Position - _codeStreamBasePosition);
-				disp = LittleEndianBitConverter.GetBytes((uint)_linker.Link(LinkType.AbsoluteAddress | LinkType.I4, _compiler.Method, pos, 0, label.Name, IntPtr.Zero));
+				disp = LittleEndianBitConverter.GetBytes((uint)_linker.Link(LinkType.AbsoluteAddress | LinkType.I4, _compiler.Method.ToString(), pos, 0, label.Name, IntPtr.Zero));
 			}
 			else if (member != null)
 			{
 				int pos = (int)(_codeStream.Position - _codeStreamBasePosition);
-				disp = LittleEndianBitConverter.GetBytes((uint)_linker.Link(LinkType.AbsoluteAddress | LinkType.I4, _compiler.Method, pos, 0, member.Member.ToString(), member.Offset));
+				disp = LittleEndianBitConverter.GetBytes((uint)_linker.Link(LinkType.AbsoluteAddress | LinkType.I4, _compiler.Method.ToString(), pos, 0, member.Member.ToString(), member.Offset));
 			}
 			else if (symbol != null)
 			{
 				int pos = (int)(_codeStream.Position - _codeStreamBasePosition);
-				disp = LittleEndianBitConverter.GetBytes((uint)_linker.Link(LinkType.AbsoluteAddress | LinkType.I4, _compiler.Method, pos, 0, symbol.Name, IntPtr.Zero));
+				disp = LittleEndianBitConverter.GetBytes((uint)_linker.Link(LinkType.AbsoluteAddress | LinkType.I4, _compiler.Method.ToString(), pos, 0, symbol.Name, IntPtr.Zero));
 			}
 			else
 				disp = LittleEndianBitConverter.GetBytes((displacement as MemoryOperand).Offset.ToInt32());

@@ -12,8 +12,6 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 
-using Mosa.Runtime.Vm;
-
 namespace Mosa.Runtime.Linker
 {
 	/// <summary>
@@ -115,22 +113,6 @@ namespace Mosa.Runtime.Linker
 		/// <param name="symbolName">The symbol name.</param>
 		/// <returns><c>true</c> if the symbol name is already used; <c>false</c> otherwise.</returns>
 		bool HasSymbol(string symbolName);
-
-		/// <summary>
-		/// Issues a linker request for the given runtime method.
-		/// </summary>
-		/// <param name="linkType">The type of link required.</param>
-		/// <param name="method">The method the patched code belongs to.</param>
-		/// <param name="methodOffset">The offset inside the method where the patch is placed.</param>
-		/// <param name="methodRelativeBase">The base virtualAddress, if a relative link is required.</param>
-		/// <param name="symbolName">The linker symbol name to link against.</param>
-		/// <param name="offset">An offset to apply to the link target.</param>
-		/// <returns>
-		/// The return value is the preliminary virtualAddress to place in the generated machine 
-		/// code. On 32-bit systems, only the lower 32 bits are valid. The above are not used. An implementation of
-		/// IAssemblyLinker may not rely on 64-bits being stored in the memory defined by position.
-		/// </returns>
-		long Link(LinkType linkType, RuntimeMethod method, int methodOffset, int methodRelativeBase, string symbolName, IntPtr offset);
 
 		/// <summary>
 		/// Issues a linker request for the given runtime method.

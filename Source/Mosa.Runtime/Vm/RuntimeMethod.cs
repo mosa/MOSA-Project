@@ -231,6 +231,7 @@ namespace Mosa.Runtime.Vm
 		/// </returns>
 		public override string ToString()
 		{
+			//TODO: The result of this method should be cached to improve performance
 			StringBuilder result = new StringBuilder();
 
 			result.Append(this.DeclaringType.ToString());

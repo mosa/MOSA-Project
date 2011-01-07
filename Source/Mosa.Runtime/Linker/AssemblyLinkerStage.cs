@@ -12,11 +12,11 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Text;
 
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Vm;
-using System.Text;
 using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Runtime.Linker
@@ -293,29 +293,6 @@ namespace Mosa.Runtime.Linker
 		public bool HasSymbol(string symbolName)
 		{
 			return symbols.ContainsKey(symbolName);
-		}
-
-		/// <summary>
-		/// Issues a linker request for the given runtime method.
-		/// </summary>
-		/// <param name="linkType">The type of link required.</param>
-		/// <param name="method">The method the patched code belongs to.</param>
-		/// <param name="methodOffset">The offset inside the method where the patch is placed.</param>
-		/// <param name="methodRelativeBase">The base virtualAddress, if a relative link is required.</param>
-		/// <param name="targetSymbolName">The linker symbol to link against.</param>
-		/// <param name="offset">The offset to apply to the symbol to link against.</param>
-		/// <returns>
-		/// The return value is the preliminary virtualAddress to place in the generated machine
-		/// code. On 32-bit systems, only the lower 32 bits are valid. The above are not used. An implementation of
-		/// IAssemblyLinker may not rely on 64-bits being stored in the memory defined by position.
-		/// </returns>
-		public virtual long Link(LinkType linkType, RuntimeMethod method, int methodOffset, int methodRelativeBase, string targetSymbolName, IntPtr offset)
-		{
-			Debug.Assert(targetSymbolName != null, @"Symbol can't be null.");
-			if (targetSymbolName == null)
-				throw new ArgumentNullException(@"symbol");
-
-			return Link(linkType, method.ToString(), methodOffset, methodRelativeBase, targetSymbolName, offset);
 		}
 
 		/// <summary>

@@ -298,26 +298,6 @@ namespace Mosa.Tools.Compiler.Linkers
 		/// Issues a linker request for the given runtime method.
 		/// </summary>
 		/// <param name="linkType">The type of link required.</param>
-		/// <param name="method">The method the patched code belongs to.</param>
-		/// <param name="methodOffset">The offset inside the method where the patch is placed.</param>
-		/// <param name="methodRelativeBase">The base virtualAddress, if a relative link is required.</param>
-		/// <param name="symbol">The linker symbol to link against.</param>
-		/// <param name="offset">The offset.</param>
-		/// <returns>
-		/// The return value is the preliminary virtualAddress to place in the generated machine
-		/// code. On 32-bit systems, only the lower 32 bits are valid. The above are not used. An implementation of
-		/// IAssemblyLinker may not rely on 64-bits being stored in the memory defined by position.
-		/// </returns>
-		public long Link(LinkType linkType, RuntimeMethod method, int methodOffset, int methodRelativeBase, string symbol, IntPtr offset)
-		{
-			CheckImplementation();
-			return this.implementation.Link(linkType, method, methodOffset, methodRelativeBase, symbol, offset);
-		}
-
-		/// <summary>
-		/// Issues a linker request for the given runtime method.
-		/// </summary>
-		/// <param name="linkType">The type of link required.</param>
 		/// <param name="symbolName">The method the patched code belongs to.</param>
 		/// <param name="methodOffset">The offset inside the method where the patch is placed.</param>
 		/// <param name="methodRelativeBase">The base virtualAddress, if a relative link is required.</param>

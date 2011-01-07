@@ -120,11 +120,6 @@ namespace Mosa.Tools.Compiler.Linkers
 			return this.linker.HasSymbol(symbolName);
 		}
 
-		public long Link(LinkType linkType, RuntimeMethod method, int methodOffset, int methodRelativeBase, string symbolName, IntPtr offset)
-		{
-			return this.linker.Link(linkType, method, methodOffset, methodRelativeBase, symbolName, offset);
-		}
-
 		public long Link(LinkType linkType, string symbolName, int methodOffset, int methodRelativeBase, string targetSymbol, IntPtr offset)
 		{
 			return this.linker.Link(linkType, symbolName, methodOffset, methodRelativeBase, targetSymbol, offset);
