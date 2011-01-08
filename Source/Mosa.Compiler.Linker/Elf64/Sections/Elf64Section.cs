@@ -11,7 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using Mosa.Compiler.FileFormat;
+using Mosa.Compiler.Common;
 
 namespace Mosa.Compiler.Linker.Elf64.Sections
 {

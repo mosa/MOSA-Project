@@ -10,7 +10,7 @@
 using System;
 using System.IO;
 
-using Mosa.Compiler.FileFormat;
+using Mosa.Compiler.Common;
 
 namespace Mosa.Compiler.Linker.PE
 {

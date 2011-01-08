@@ -8,8 +8,8 @@
     <ProjectGuid>{038DC96D-021B-41E6-867E-047598F92ED3}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Mosa.QuickTest</RootNamespace>
-    <AssemblyName>Mosa.QuickTest</AssemblyName>
+    <RootNamespace>Mosa.Test.Quick</RootNamespace>
+    <AssemblyName>Mosa.Test.Quick</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
@@ -44,7 +44,6 @@
   <ItemGroup>
     <Compile Include="Boot.cs" />
     <Compile Include="Test.cs" />
-    <Compile Include="GenericTest.cs" />
     <Compile Include="Object.cs" />
     <Compile Include="Runtime.cs" />
   </ItemGroup>

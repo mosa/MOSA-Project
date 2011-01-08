@@ -54,7 +54,7 @@ using System.Text;
 #pragma warning disable 3021
 
 // (NOTE: In the original Mono file, this is actually in the Mono namespace. )
-namespace Mosa.Compiler.FileFormat
+namespace Mosa.Compiler.Common
 {
 
 #if MONO_DATACONVERTER_PUBLIC

@@ -11,7 +11,7 @@ using System;
 using System.IO;
 using System.Text;
 
-namespace Mosa.Compiler.FileFormat
+namespace Mosa.Compiler.Common
 {
 	/// <summary>
 	/// An implementation of BinaryWriter that uses Endianness-aware data writing

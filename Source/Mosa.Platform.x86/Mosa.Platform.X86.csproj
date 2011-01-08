@@ -66,6 +66,10 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj">
+      <Project>{0B1011A6-8FCD-4F9E-BBB8-8DB86E23D2E8}</Project>
+      <Name>Mosa.Compiler.Common</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mosa.Compiler.FileFormat\Mosa.Compiler.FileFormat.csproj">
       <Project>{CC2E6418-C325-4486-B50D-941EC27053F6}</Project>
       <Name>Mosa.Compiler.FileFormat</Name>

@@ -68,7 +68,7 @@
     <Compile Include="AotAssemblyCompiler.cs" />
     <Compile Include="AssemblyCompilationStage.cs" />
     <Compile Include="ConstantFoldingWrapper.cs" />
-    <Compile Include="Linker\AssemblyLinkerStageBase.cs" />
+    <Compile Include="Linker\BaseAssemblyLinkerStage.cs" />
     <Compile Include="Linker\Elf32LinkerWrapper.cs" />
     <Compile Include="Linker\Elf32LinkerStage.cs" />
     <Compile Include="Linker\Elf64LinkerWrapper.cs" />
@@ -170,9 +170,7 @@
       <Name>Mosa.Runtime</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Symbols\Pdb\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <PropertyGroup>
     <PreBuildEvent>

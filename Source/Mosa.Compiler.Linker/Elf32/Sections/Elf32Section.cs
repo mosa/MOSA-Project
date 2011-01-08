@@ -9,7 +9,7 @@
 
 using System;
 
-using Mosa.Compiler.FileFormat;
+using Mosa.Compiler.Common;
 
 namespace Mosa.Compiler.Linker.Elf32.Sections
 {

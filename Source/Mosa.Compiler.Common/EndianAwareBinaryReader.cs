@@ -12,7 +12,7 @@ using System.IO;
 using System.Text;
 using System.Collections.Generic;
 
-namespace Mosa.Compiler.FileFormat
+namespace Mosa.Compiler.Common
 {
 	/// <summary>
 	/// An implementation of BinaryReader that uses Endianness-aware data reading
