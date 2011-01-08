@@ -81,6 +81,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Mosa.Compiler.Linker\Mosa.Compiler.Linker.csproj">
+      <Project>{65866A51-B229-44C5-AC81-87A90FA1741B}</Project>
+      <Name>Mosa.Compiler.Linker</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mosa.Runtime.Metadata\Mosa.Runtime.Metadata.csproj">
       <Project>{7033B213-2055-4C6A-B008-D9856267F5D7}</Project>
       <Name>Mosa.Runtime.Metadata</Name>
@@ -96,10 +100,6 @@
     <ProjectReference Include="..\\Mosa.Runtime\Mosa.Runtime.csproj">
       <Project>{75A12A8A-8C8F-4D1E-801B-689D8F781BF4}</Project>
       <Name>Mosa.Runtime</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mosa.Jit.SimpleJit\Mosa.Jit.SimpleJit.csproj">
-      <Project>{57399D8B-1B6C-4169-A340-B804F240B450}</Project>
-      <Name>Mosa.Jit.SimpleJit</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mosa.Tools.Compiler\Mosa.Tools.Compiler.csproj">
       <Project>{B69C2F31-5161-47BB-9FD3-2F2F2BCBF659}</Project>

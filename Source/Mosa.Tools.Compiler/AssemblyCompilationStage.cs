@@ -14,7 +14,7 @@ using System.IO;
 
 using Mosa.Runtime;
 using Mosa.Runtime.CompilerFramework;
-using Mosa.Runtime.Linker;
+using Mosa.Compiler.Linker;
 using Mosa.Runtime.Metadata.Loader;
 using Mosa.Compiler.Pdb;
 using Mosa.Tools.Compiler.TypeInitializers;

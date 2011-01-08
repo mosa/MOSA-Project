@@ -12,7 +12,8 @@ using System.IO;
 using System.Text;
 
 using Mosa.Runtime.CompilerFramework;
-using Mosa.Runtime.Linker;
+using Mosa.Compiler.Linker;
+using Mosa.Tools.Compiler.Linker;
 
 using NDesk.Options;
 

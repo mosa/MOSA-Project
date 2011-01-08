@@ -12,7 +12,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Collections.Generic;
 
-using Mosa.Runtime.Linker;
+using Mosa.Compiler.Linker;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Tables;
 using Mosa.Runtime.Vm;

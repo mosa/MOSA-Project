@@ -1,0 +1,102 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{65866A51-B229-44C5-AC81-87A90FA1741B}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Mosa.Compiler.Linker</RootNamespace>
+    <AssemblyName>Mosa.Compiler.Linker</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Elf32\Elf32FileType.cs" />
+    <Compile Include="Elf32\Elf32Header.cs" />
+    <Compile Include="Elf32\Elf32IdentClass.cs" />
+    <Compile Include="Elf32\Elf32IdentData.cs" />
+    <Compile Include="Elf32\Elf32IdentIndex.cs" />
+    <Compile Include="Elf32\Elf32MachineType.cs" />
+    <Compile Include="Elf32\Elf32ProgramHeader.cs" />
+    <Compile Include="Elf32\Elf32ProgramHeaderFlags.cs" />
+    <Compile Include="Elf32\Elf32ProgramHeaderType.cs" />
+    <Compile Include="Elf32\Elf32SymbolTableEntry.cs" />
+    <Compile Include="Elf32\Elf32Version.cs" />
+    <Compile Include="Elf32\Sections\Elf32BssSection.cs" />
+    <Compile Include="Elf32\Sections\Elf32CodeSection.cs" />
+    <Compile Include="Elf32\Sections\Elf32DataSection.cs" />
+    <Compile Include="Elf32\Sections\Elf32NullSection.cs" />
+    <Compile Include="Elf32\Sections\Elf32RoDataSection.cs" />
+    <Compile Include="Elf32\Sections\Elf32Section.cs" />
+    <Compile Include="Elf32\Sections\Elf32SectionAttribute.cs" />
+    <Compile Include="Elf32\Sections\Elf32SectionHeader.cs" />
+    <Compile Include="Elf32\Sections\Elf32SectionType.cs" />
+    <Compile Include="Elf32\Sections\Elf32StringTableSection.cs" />
+    <Compile Include="Elf64\Elf64FileType.cs" />
+    <Compile Include="Elf64\Elf64Header.cs" />
+    <Compile Include="Elf64\Elf64IdentClass.cs" />
+    <Compile Include="Elf64\Elf64IdentData.cs" />
+    <Compile Include="Elf64\Elf64IdentIndex.cs" />
+    <Compile Include="Elf64\Elf64MachineType.cs" />
+    <Compile Include="Elf64\Elf64ProgramHeader.cs" />
+    <Compile Include="Elf64\Elf64SymbolTableEntry.cs" />
+    <Compile Include="Elf64\Elf64Version.cs" />
+    <Compile Include="Elf64\Sections\Elf64BssSection.cs" />
+    <Compile Include="Elf64\Sections\Elf64CodeSection.cs" />
+    <Compile Include="Elf64\Sections\Elf64DataSection.cs" />
+    <Compile Include="Elf64\Sections\Elf64NullSection.cs" />
+    <Compile Include="Elf64\Sections\Elf64RoDataSection.cs" />
+    <Compile Include="Elf64\Sections\Elf64Section.cs" />
+    <Compile Include="Elf64\Sections\Elf64SectionAttribute.cs" />
+    <Compile Include="Elf64\Sections\Elf64SectionHeader.cs" />
+    <Compile Include="Elf64\Sections\Elf64SectionType.cs" />
+    <Compile Include="Elf64\Sections\Elf64StringTableSection.cs" />
+    <Compile Include="IAssemblyLinker.cs" />
+    <Compile Include="LinkerException.cs" />
+    <Compile Include="LinkerSection.cs" />
+    <Compile Include="LinkerStream.cs" />
+    <Compile Include="LinkerSymbol.cs" />
+    <Compile Include="LinkRequest.cs" />
+    <Compile Include="LinkType.cs" />
+    <Compile Include="PE\PortableExecutableLinkerSection.cs" />
+    <Compile Include="SectionKind.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Mosa.Compiler.FileFormat\Mosa.Compiler.FileFormat.csproj">
+      <Project>{CC2E6418-C325-4486-B50D-941EC27053F6}</Project>
+      <Name>Mosa.Compiler.FileFormat</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

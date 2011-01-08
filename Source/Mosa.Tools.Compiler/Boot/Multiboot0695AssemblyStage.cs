@@ -14,25 +14,25 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Collections.Generic;
-using NDesk.Options;
 
 using Mosa.Runtime.CompilerFramework;
-using Mosa.Runtime.Linker;
-using Mosa.Runtime.Linker.Elf32;
-using Mosa.Runtime.Linker.Elf64;
 using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Runtime.Metadata.Signatures;
+using Mosa.Compiler.Linker;
+using Mosa.Tools.Compiler.TypeInitializers;
+using Mosa.Tools.Compiler.Linker;
 using Mosa.Tools.Compiler.LinkTimeCodeGeneration;
 using Mosa.Platform.x86;
-using Mosa.Tools.Compiler.TypeInitializers;
+using Mosa.Runtime.Metadata;
 
-using IR = Mosa.Runtime.CompilerFramework.IR;
 using CPUx86 = Mosa.Platform.x86.CPUx86;
+using IR = Mosa.Runtime.CompilerFramework.IR;
+
+using NDesk.Options;
 
 namespace Mosa.Tools.Compiler.Boot
 {
-	using Runtime.Metadata;
-
+	
 	/*
 	 * FIXME:
 	 * - Allow video mode options to be controlled by the command line
@@ -246,7 +246,7 @@ namespace Mosa.Tools.Compiler.Boot
 				uint entry_point = (uint)entryPoint.ToInt32();
 
 				// Are we linking an ELF binary?
-				if (!(this.linker is Elf32Linker || this.linker is Elf64Linker))
+				if (!(this.linker is Elf32LinkerStage || this.linker is Elf64LinkerStage))
 				{
 					// Check the linker layout settings
 					if (this.linker.LoadSectionAlignment != this.linker.VirtualSectionAlignment)

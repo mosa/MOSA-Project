@@ -12,7 +12,7 @@ using System;
 using System.Text;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Metadata;
-using Mosa.Runtime.Linker;
+using Mosa.Compiler.Linker;
 using System.IO;
 using System.Diagnostics;
 

@@ -63,6 +63,10 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Mosa.Compiler.Linker\Mosa.Compiler.Linker.csproj">
+      <Project>{65866A51-B229-44C5-AC81-87A90FA1741B}</Project>
+      <Name>Mosa.Compiler.Linker</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mosa.Runtime.Metadata\Mosa.Runtime.Metadata.csproj">
       <Project>{7033B213-2055-4C6A-B008-D9856267F5D7}</Project>
       <Name>Mosa.Runtime.Metadata</Name>

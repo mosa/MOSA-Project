@@ -68,7 +68,17 @@
     <Compile Include="AotAssemblyCompiler.cs" />
     <Compile Include="AssemblyCompilationStage.cs" />
     <Compile Include="ConstantFoldingWrapper.cs" />
-    <Compile Include="Linkers\LinkerProxy.cs" />
+    <Compile Include="Linker\AssemblyLinkerStageBase.cs" />
+    <Compile Include="Linker\Elf32LinkerWrapper.cs" />
+    <Compile Include="Linker\Elf32LinkerStage.cs" />
+    <Compile Include="Linker\Elf64LinkerWrapper.cs" />
+    <Compile Include="Linker\Elf64LinkerStage.cs" />
+    <Compile Include="Linker\LinkerFormatSelector.cs" />
+    <Compile Include="Linker\LinkerProxy.cs" />
+    <Compile Include="Linker\MapFileGenerationStage.cs" />
+    <Compile Include="Linker\ObjectFileLayoutStage.cs" />
+    <Compile Include="Linker\PortableExecutableLinkerStage.cs" />
+    <Compile Include="Linker\PortableExecutableLinkerWrapper.cs" />
     <Compile Include="Metadata\MetadataBuilderStage.cs" />
     <Compile Include="Metadata\MetadataStreamHeader.cs" />
     <Compile Include="Metadata\MetadataTableCodedIndexWriter.cs" />
@@ -114,18 +124,6 @@
     <Compile Include="Boot\Multiboot0695AssemblyStage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Linkers\Elf32LinkerWrapper.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Linkers\Elf64LinkerWrapper.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Linkers\LinkerFormatSelector.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Linkers\PortableExecutableLinkerWrapper.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="LinkTimeCodeGeneration\LinkerGeneratedMethod.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -150,6 +148,10 @@
     <ProjectReference Include="..\Mosa.Compiler.FileFormat\Mosa.Compiler.FileFormat.csproj">
       <Project>{CC2E6418-C325-4486-B50D-941EC27053F6}</Project>
       <Name>Mosa.Compiler.FileFormat</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Compiler.Linker\Mosa.Compiler.Linker.csproj">
+      <Project>{65866A51-B229-44C5-AC81-87A90FA1741B}</Project>
+      <Name>Mosa.Compiler.Linker</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mosa.Compiler.Pdb\Mosa.Compiler.Pdb.csproj">
       <Project>{F970F8CB-8FF1-4244-9A31-D00C6D7AABE5}</Project>

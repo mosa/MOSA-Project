@@ -23,7 +23,7 @@ using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Vm;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Metadata.Loader;
-using Mosa.Runtime.Linker;
+using Mosa.Compiler.Linker;
 using Mosa.Vm;
 
 using IR = Mosa.Runtime.CompilerFramework.IR;

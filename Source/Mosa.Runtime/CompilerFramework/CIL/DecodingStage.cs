@@ -17,6 +17,7 @@ using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Metadata.Tables;
 using Mosa.Runtime.Metadata.Runtime;
 using Mosa.Runtime.Vm;
+using Mosa.Compiler.FileFormat;
 
 namespace Mosa.Runtime.CompilerFramework.CIL
 {

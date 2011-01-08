@@ -11,16 +11,17 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-using Mosa.Runtime.CompilerFramework;
-using Mosa.Runtime.Linker;
 using Mosa.Runtime.Vm;
+using Mosa.Runtime.Linker;
+using Mosa.Runtime.CompilerFramework;
+using Mosa.Compiler.Linker;
 
 namespace Mosa.Jit.SimpleJit
 {
 	/// <summary>
 	/// A fast runtime linker.
 	/// </summary>
-	public sealed class JitLinker : AssemblyLinkerStageBase, IPipelineStage
+	public sealed class JitLinker : BaseAssemblyLinkerStage, IPipelineStage
 	{
 		#region Construction
 

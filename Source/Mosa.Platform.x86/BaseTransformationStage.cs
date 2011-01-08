@@ -10,9 +10,11 @@
  */
 
 using System;
+
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Runtime.Metadata;
+using Mosa.Compiler.FileFormat;
 
 namespace Mosa.Platform.x86
 {

@@ -11,7 +11,7 @@ using System;
 using System.IO;
 
 using Mosa.Runtime.CompilerFramework;
-using Mosa.Runtime.Linker;
+using Mosa.Compiler.Linker;
 using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime.Vm;
 

@@ -13,7 +13,7 @@ using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Runtime.Vm;
 using Mosa.Tools.Compiler.LinkTimeCodeGeneration;
-using Mosa.Runtime.Linker;
+using Mosa.Compiler.Linker;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
 using IR = Mosa.Runtime.CompilerFramework.IR;

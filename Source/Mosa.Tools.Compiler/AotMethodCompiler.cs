@@ -12,7 +12,7 @@
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.CompilerFramework.CIL;
 using Mosa.Runtime.CompilerFramework.IR;
-using Mosa.Runtime.Linker;
+using Mosa.Compiler.Linker;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Vm;
 using Mosa.Runtime.Metadata.Loader;

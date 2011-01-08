@@ -14,7 +14,7 @@ using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Runtime.Vm;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Metadata.Loader;
-using Mosa.Runtime.Linker;
+using Mosa.Compiler.Linker;
 
 namespace Mosa.Runtime.CompilerFramework
 {

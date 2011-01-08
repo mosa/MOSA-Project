@@ -15,10 +15,11 @@ using System.Reflection;
 using System.Reflection.Emit;
 using System.Runtime.InteropServices;
 
-using Mosa.Runtime.Linker;
+using Mosa.Compiler.Linker;
 using Mosa.Runtime.Vm;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Metadata;
+using Mosa.Runtime.Linker;
 
 namespace Mosa.Test.Runtime.CompilerFramework
 {
@@ -30,7 +31,7 @@ namespace Mosa.Test.Runtime.CompilerFramework
 	/// It is similar to the Jit linker. TODO: Move most of this code to the Jit linker and reuse 
 	/// the Jit linker.
 	/// </remarks>
-	public class TestAssemblyLinker : AssemblyLinkerStageBase, IPipelineStage
+	public class TestAssemblyLinker : BaseAssemblyLinkerStage, IPipelineStage
 	{
 		#region Data members
 

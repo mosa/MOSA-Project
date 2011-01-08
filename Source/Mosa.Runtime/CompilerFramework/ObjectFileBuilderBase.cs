@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Mosa.Runtime.Vm;
 using System.IO;
-using Mosa.Runtime.Linker;
+using Mosa.Compiler.Linker;
 
 namespace Mosa.Runtime.CompilerFramework
 {
@@ -109,7 +109,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Retrieves the collection of sections created during compilation.
 		/// </summary>
 		/// <value>The sections collection.</value>
-		public ICollection<Linker.LinkerSection> Sections { get { throw new NotImplementedException(); } }
+		public ICollection<LinkerSection> Sections { get { throw new NotImplementedException(); } }
 
 		/// <summary>
 		/// Retrieves the collection of symbols known by the linker.

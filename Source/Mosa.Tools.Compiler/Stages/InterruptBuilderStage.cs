@@ -17,7 +17,7 @@ using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Tools.Compiler.LinkTimeCodeGeneration;
-using Mosa.Runtime.Linker;
+using Mosa.Compiler.Linker;
 
 using Mosa.Platform.x86;
 using IR = Mosa.Runtime.CompilerFramework.IR;

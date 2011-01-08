@@ -17,7 +17,8 @@ using System.IO;
 
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.CompilerFramework.Operands;
-using Mosa.Runtime.Linker;
+using Mosa.Compiler.FileFormat;
+using Mosa.Compiler.Linker;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Vm;
@@ -30,7 +31,7 @@ namespace Mosa.Platform.x86
 	/// </summary>
 	public sealed class MachineCodeEmitter : ICodeEmitter, IDisposable
 	{
-		private static readonly System.DataConverter LittleEndianBitConverter = System.DataConverter.LittleEndian;
+		private static readonly DataConverter LittleEndianBitConverter = DataConverter.LittleEndian;
 
 		#region Types
 

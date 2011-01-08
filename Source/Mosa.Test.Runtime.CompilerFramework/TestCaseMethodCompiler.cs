@@ -12,7 +12,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 
 using Mosa.Runtime.CompilerFramework;
-using Mosa.Runtime.Linker;
+using Mosa.Compiler.Linker;
 using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Vm;

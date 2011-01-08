@@ -11,7 +11,7 @@ using System;
 using System.IO;
 
 using Mosa.Runtime;
-using Mosa.Runtime.Linker;
+using Mosa.Compiler.Linker;
 using Mosa.Runtime.Memory;
 
 namespace Mosa.Test.Runtime.CompilerFramework
