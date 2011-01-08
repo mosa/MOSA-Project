@@ -21,7 +21,7 @@ using Mosa.Runtime.Vm;
 using Mosa.Compiler.Linker;
 using Mosa.Tools.Compiler.Boot;
 using Mosa.Tools.Compiler.Linker;
-using Mosa.Tools.Compiler.Stages;
+using Mosa.Tools.Compiler.Stage;
 
 namespace Mosa.Tools.Compiler
 {

@@ -13,11 +13,10 @@ using System.Text;
 
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Compiler.Linker;
-using Mosa.Tools.Compiler.Linker;
 
 using NDesk.Options;
 
-namespace Mosa.Tools.Compiler
+namespace Mosa.Tools.Compiler.Linker
 {
 	/// <summary>
 	/// Wraps the map file generation stage and adds options to configure it.

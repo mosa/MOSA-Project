@@ -82,7 +82,7 @@
     <Compile Include="Metadata\MetadataStreamHeader.cs" />
     <Compile Include="Metadata\MetadataTableCodedIndexWriter.cs" />
     <Compile Include="Metadata\MetadataTableWriter.cs" />
-    <Compile Include="MethodCompilerStageWrapper.cs" />
+    <Compile Include="Stage\MethodCompilerStageWrapper.cs" />
     <Compile Include="RegisterAllocatorSelector.cs" />
     <Compile Include="AotCompiler.cs">
       <SubType>Code</SubType>
@@ -103,11 +103,11 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="InstructionSchedulingWrapper.cs" />
-    <Compile Include="InstructionStatisticsStage.cs">
+    <Compile Include="Stage\InstructionStatisticsStage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="InstructionStatisticsWrapper.cs" />
-    <Compile Include="MapFileGeneratorWrapper.cs">
+    <Compile Include="Stage\InstructionStatisticsWrapper.cs" />
+    <Compile Include="Linker\MapFileGeneratorWrapper.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CilHeaderBuilderStage.cs" />
@@ -135,15 +135,15 @@
     <Compile Include="LinkTimeCodeGeneration\LinkTimeCodeGenerator.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Stages\FakeSystemObjectGenerationStage.cs" />
-    <Compile Include="Stages\StaticAllocationResolutionStageWrapper.cs" />
-    <Compile Include="StaticAllocationResolutionStage.cs" />
+    <Compile Include="Stage\FakeSystemObjectGenerationStage.cs" />
+    <Compile Include="Stage\StaticAllocationResolutionStageWrapper.cs" />
+    <Compile Include="Stage\StaticAllocationResolutionStage.cs" />
     <Compile Include="TypeInitializers\ITypeInitializerSchedulerStage.cs" />
     <Compile Include="TypeInitializers\TypeInitializerSchedulerStage.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="TypeInitializers\TypeInitializerSchedulerStageProxy.cs" />
-    <Compile Include="Stages\InterruptBuilderStage.cs" />
+    <Compile Include="Stage\InterruptBuilderStage.cs" />
     <ProjectReference Include="..\Mosa.Compiler.FileFormat\Mosa.Compiler.FileFormat.csproj">
       <Project>{CC2E6418-C325-4486-B50D-941EC27053F6}</Project>
       <Name>Mosa.Compiler.FileFormat</Name>

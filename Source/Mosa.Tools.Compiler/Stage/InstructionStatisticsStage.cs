@@ -10,7 +10,10 @@
 using System;
 using System.Collections.Generic;
 
-namespace Mosa.Runtime.CompilerFramework
+using Mosa.Tools.Compiler;
+using Mosa.Runtime.CompilerFramework;
+
+namespace Mosa.Tools.Compiler.Stage
 {
 	/// <summary>
 	/// This stage just saves statistics about the code we're compiling, for example

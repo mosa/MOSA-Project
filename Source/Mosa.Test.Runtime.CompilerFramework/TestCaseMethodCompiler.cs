@@ -19,6 +19,7 @@ using Mosa.Runtime.Vm;
 using Mosa.Runtime.CompilerFramework.CIL;
 using Mosa.Runtime.CompilerFramework.IR;
 using Mosa.Tools.Compiler;
+using Mosa.Tools.Compiler.Stage;
 
 namespace Mosa.Test.Runtime.CompilerFramework
 {

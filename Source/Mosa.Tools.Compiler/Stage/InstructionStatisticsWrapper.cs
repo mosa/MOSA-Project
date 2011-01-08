@@ -14,7 +14,7 @@ using CIL = Mosa.Runtime.CompilerFramework.CIL;
 
 using NDesk.Options;
 
-namespace Mosa.Tools.Compiler
+namespace Mosa.Tools.Compiler.Stage
 {
 	/// <summary>
 	/// Wraps the constant folding optimization stage and adds an option to disable it.

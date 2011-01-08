@@ -7,7 +7,7 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-namespace Mosa.Tools.Compiler.Stages
+namespace Mosa.Tools.Compiler.Stage
 {
 	using Mosa.Runtime.CompilerFramework;
 

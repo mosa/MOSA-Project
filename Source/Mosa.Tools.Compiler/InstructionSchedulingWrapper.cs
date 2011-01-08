@@ -9,12 +9,13 @@
 
 using System;
 
+using Mosa.Tools.Compiler;
 using Mosa.Runtime.CompilerFramework;
 using CIL = Mosa.Runtime.CompilerFramework.CIL;
 
 using NDesk.Options;
 
-namespace Mosa.Tools.Compiler
+namespace Mosa.Tools.Compiler.Stage
 {
 	/// <summary>
 	/// Wraps the InstructionSchedulingWrapper optimization stage and adds an option to disable it.

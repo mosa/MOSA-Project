@@ -10,6 +10,8 @@
 using System;
 
 using Mosa.Runtime.CompilerFramework;
+using Mosa.Tools.Compiler.Stage;
+
 using CIL = Mosa.Runtime.CompilerFramework.CIL;
 
 using NDesk.Options;

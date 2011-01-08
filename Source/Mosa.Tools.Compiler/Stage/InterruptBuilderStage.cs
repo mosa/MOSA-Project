@@ -23,7 +23,7 @@ using Mosa.Platform.x86;
 using IR = Mosa.Runtime.CompilerFramework.IR;
 using CPUx86 = Mosa.Platform.x86.CPUx86;
 
-namespace Mosa.Tools.Compiler.Stages
+namespace Mosa.Tools.Compiler.Stage
 {
 
 	/// <summary>

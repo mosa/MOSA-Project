@@ -10,6 +10,7 @@
 
 using Mosa.Runtime;
 using Mosa.Runtime.CompilerFramework;
+using Mosa.Tools.Compiler.Stage;
 using Mosa.Compiler.Linker;
 using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime.Vm;

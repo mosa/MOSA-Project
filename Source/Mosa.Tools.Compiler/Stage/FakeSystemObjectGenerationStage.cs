@@ -20,7 +20,7 @@ using Mosa.Platform.x86;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Metadata;
 
-namespace Mosa.Tools.Compiler.Stages
+namespace Mosa.Tools.Compiler.Stage
 {
 	public class FakeSystemObjectGenerationStage : BaseMethodCompilerStage, IAssemblyCompilerStage, IPipelineStage
 	{
