@@ -16,7 +16,7 @@ namespace Mosa.Tools.Compiler
 	/// <summary>
 	/// Abstract base class for assembly compiler stage wrappers.
 	/// </summary>
-	/// <typeparam name="WrappedType">The type of the rapped type.</typeparam>
+	/// <typeparam name="WrappedType">The type of the wrapped type.</typeparam>
 	public abstract class AssemblyCompilerStageWrapper<WrappedType> : IAssemblyCompilerStage, IHasOptions, IPipelineStage
 		where WrappedType : IAssemblyCompilerStage, new()
 	{

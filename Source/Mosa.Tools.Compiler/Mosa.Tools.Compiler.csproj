@@ -68,11 +68,10 @@
     <Compile Include="AotAssemblyCompiler.cs" />
     <Compile Include="AssemblyCompilationStage.cs" />
     <Compile Include="ConstantFoldingWrapper.cs" />
-    <Compile Include="Linker\BaseAssemblyLinkerStage.cs" />
-    <Compile Include="Linker\Elf32LinkerWrapper.cs" />
-    <Compile Include="Linker\Elf32LinkerStage.cs" />
-    <Compile Include="Linker\Elf64LinkerWrapper.cs" />
     <Compile Include="Linker\Elf64LinkerStage.cs" />
+    <Compile Include="Linker\Elf32LinkerStage.cs" />
+    <Compile Include="Linker\Elf32LinkerWrapper.cs" />
+    <Compile Include="Linker\Elf64LinkerWrapper.cs" />
     <Compile Include="Linker\LinkerFormatSelector.cs" />
     <Compile Include="Linker\LinkerProxy.cs" />
     <Compile Include="Linker\MapFileGenerationStage.cs" />

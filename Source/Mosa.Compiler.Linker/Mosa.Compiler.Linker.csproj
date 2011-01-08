@@ -35,11 +35,13 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseAssemblyLinker.cs" />
     <Compile Include="Elf32\Elf32FileType.cs" />
     <Compile Include="Elf32\Elf32Header.cs" />
     <Compile Include="Elf32\Elf32IdentClass.cs" />
     <Compile Include="Elf32\Elf32IdentData.cs" />
     <Compile Include="Elf32\Elf32IdentIndex.cs" />
+    <Compile Include="Elf32\Elf32Linker.cs" />
     <Compile Include="Elf32\Elf32MachineType.cs" />
     <Compile Include="Elf32\Elf32ProgramHeader.cs" />
     <Compile Include="Elf32\Elf32ProgramHeaderFlags.cs" />
@@ -61,6 +63,7 @@
     <Compile Include="Elf64\Elf64IdentClass.cs" />
     <Compile Include="Elf64\Elf64IdentData.cs" />
     <Compile Include="Elf64\Elf64IdentIndex.cs" />
+    <Compile Include="Elf64\Elf64Linker.cs" />
     <Compile Include="Elf64\Elf64MachineType.cs" />
     <Compile Include="Elf64\Elf64ProgramHeader.cs" />
     <Compile Include="Elf64\Elf64SymbolTableEntry.cs" />
@@ -83,6 +86,7 @@
     <Compile Include="LinkRequest.cs" />
     <Compile Include="LinkType.cs" />
     <Compile Include="PE\PortableExecutableLinkerSection.cs" />
+    <Compile Include="PE\PortableExecutableLinker.cs" />
     <Compile Include="SectionKind.cs" />
   </ItemGroup>
   <ItemGroup>

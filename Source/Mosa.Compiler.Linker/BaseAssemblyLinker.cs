@@ -15,17 +15,13 @@ using System.IO;
 using System.Text;
 
 using Mosa.Compiler.Linker;
-using Mosa.Runtime.CompilerFramework;
-using Mosa.Runtime.Metadata;
-using Mosa.Runtime.Vm;
-using Mosa.Runtime.Metadata.Signatures;
 
-namespace Mosa.Tools.Compiler.Linker
+namespace Mosa.Compiler.Linker
 {
 	/// <summary>
 	/// This compilation stage links all external labels together, which were previously registered.
 	/// </summary>
-	public abstract class BaseAssemblyLinkerStage : BaseAssemblyCompilerStage, IAssemblyCompilerStage, IAssemblyLinker
+	public abstract class BaseAssemblyLinker : IAssemblyLinker
 	{
 		#region Data members
 
@@ -59,9 +55,9 @@ namespace Mosa.Tools.Compiler.Linker
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="BaseAssemblyLinkerStage"/>.
+		/// Initializes a new instance of <see cref="BaseAssemblyLinker"/>.
 		/// </summary>
-		protected BaseAssemblyLinkerStage()
+		protected BaseAssemblyLinker()
 		{
 			baseAddress = 0x00400000; // Use the Win32 default for now, FIXME
 			linkRequests = new Dictionary<string, List<LinkRequest>>();
@@ -69,18 +65,6 @@ namespace Mosa.Tools.Compiler.Linker
 		}
 
 		#endregion // Construction
-
-		#region IPipelineStage Members
-
-		/// <summary>
-		/// Retrieves the name of the compilation stage.
-		/// </summary>
-		/// <value></value>
-		string IPipelineStage.Name { get { return @"AssemblyLinkerStageBase"; } }
-
-		#endregion //  IPipelineStage Members
-
-		#region IAssemblyCompilerStage Members
 
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
@@ -118,8 +102,6 @@ namespace Mosa.Tools.Compiler.Linker
 				throw new LinkerException(sb.ToString());
 			}
 		}
-
-		#endregion // IAssemblyCompilerStage Members
 
 		#region Methods
 
@@ -330,11 +312,6 @@ namespace Mosa.Tools.Compiler.Linker
 
 		#endregion // IAssemblyLinker Members
 
-		public AssemblyCompiler Compiler
-		{
-			get { return compiler; }
-		}
-
 		#region Internals
 
 		/// <summary>
@@ -355,18 +332,6 @@ namespace Mosa.Tools.Compiler.Linker
 			}
 
 			return (0 != virtualAddress);
-		}
-
-		/// <summary>
-		/// Checks that <paramref name="member"/> is a member, which can be linked.
-		/// </summary>
-		/// <param name="member">The member to check.</param>
-		/// <returns>
-		/// True, if the member is valid for linking.
-		/// </returns>
-		protected bool IsValid(RuntimeMember member)
-		{
-			return (member is RuntimeMethod || (member is RuntimeField && FieldAttributes.Static == (FieldAttributes.Static & ((RuntimeField)member).Attributes)));
 		}
 
 		/// <summary>
