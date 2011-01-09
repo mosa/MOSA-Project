@@ -12,7 +12,7 @@
 	
 	<!-- Main build target -->
 	<target name="build">
-	    <csc target="library" output="${outputDirectory}/Mosa.Compiler.FileFormat.dll" debug="${debug}" unsafe="true">
+	    <csc target="library" output="${outputDirectory}/Mosa.Compiler.Pdb.dll" debug="${debug}" unsafe="true">
 		<sources>
 			<include name="**/*.cs"/>
 		</sources>

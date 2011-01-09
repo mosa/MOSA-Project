@@ -14,7 +14,7 @@
 	<target name="build" depends="conditional"/>
 
 	<target name="conditional">
-		<csc target="library" unsafe="true" output="${outputDirectory}/prebuilt/mscorlib.dll" debug="${debug}" nostdlib="true" define="MOSA_PREBUILT">		
+		<csc target="library" unsafe="true" output="${outputDirectory}/prebuilt/mscorlib.dll" debug="${debug}" nostdlib="true" noconfig="true" define="MOSA_PREBUILT">		
 			<sources>
 				<include name="**/*.cs"/>
 			</sources>
