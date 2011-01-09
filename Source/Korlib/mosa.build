@@ -15,11 +15,9 @@
 
 	<target name="conditional">
 		<csc target="library" unsafe="true" output="${outputDirectory}/mscorlib.dll" debug="${debug}" nostdlib="true" noconfig="true">		
-			<references>
-				<include name="${outputDirectory}/Mosa.Vm.dll"/>
-			</references>
 			<sources>
 				<include name="**/*.cs"/>
+				<include name="../Mosa.Vm/IntrinsicAttribute.cs"/>
 			</sources>
 		
 			<!-- supress warnings -->

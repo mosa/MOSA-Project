@@ -34,7 +34,7 @@
 	<target name="pictor.ui" depends="init, pictor"><nant buildfile="Pictor.UI/mosa.build"/></target>
 	<target name="platforms" depends="init, runtime, common, linker"><nant buildfile="Mosa.Platform.x86/mosa.build"/></target>
 	<target name="intrinsic" depends="init, runtime, platforms"><nant buildfile="Mosa.Platform.x86.Intrinsic/mosa.build"/></target>
-	<target name="vm" depends="init, korlib-prebuilt"><nant buildfile="Mosa.Vm/mosa.build"/></target>
+	<target name="vm" depends="init"><nant buildfile="Mosa.Vm/mosa.build"/></target>
 	<target name="runtime" depends="init,vm,metadata,fileformat,common,linker"><nant buildfile="Mosa.Runtime/mosa.build"/></target>
 	<target name="metadata" depends="fileformat"><nant buildfile="Mosa.Runtime.Metadata/mosa.build"/></target>
 	<target name="common" depends="init"><nant buildfile="Mosa.Compiler.Common/mosa.build"/></target>
@@ -45,14 +45,13 @@
 	<target name="helloworld" depends="init,kernel"><nant buildfile="Mosa.HelloWorld/mosa.build"/></target>
 	<target name="emulator" depends="init, devicesystem, devicedrivers, emulatedkernel, filesystem, emulateddevices, classlib, pictor, pictor.ui"><nant buildfile="Mosa.Emulator/mosa.build"/></target>
 	<target name="korlib" depends="init, vm"><nant buildfile="Korlib/mosa.build"/></target>
-	<target name="korlib-prebuilt" depends="init"><nant buildfile="Korlib/mosa-prebuilt.build"/></target>
 	<target name="test-cases" depends="init, test-collection, test-runtime"><nant buildfile="Mosa.Test.Cases/mosa.build"/></target>
 	<target name="test-collection" depends="init"><nant buildfile="Mosa.Test.Collection/mosa.build"/></target>
 	<target name="test-runtime" depends="init"><nant buildfile="Mosa.Test.Runtime.CompilerFramework/mosa.build"/></target>
 	<target name="compiler" depends="platforms, runtime, linker, pdb"><nant buildfile="Mosa.Tools.Compiler/mosa.build"/></target>
 	<!-- meta target -->
 	<target name="tests" depends="test-cases, test-runtime"/>
-	<target name="all" depends="classlib, devicesystem, devicedrivers, filesystem, emulatedkernel, emulateddevices, compiler, kernel, pictor, pictor.ui, platforms, runtime, tools, helloworld, emulator, korlib-prebuilt, korlib, tests"/>
+	<target name="all" depends="classlib, devicesystem, devicedrivers, filesystem, emulatedkernel, emulateddevices, compiler, kernel, pictor, pictor.ui, platforms, runtime, tools, helloworld, emulator, korlib, tests"/>
 
 		
 </project>

@@ -12,13 +12,10 @@
 	
 	<!-- Main build target -->
 	<target name="build">
-	    <csc target="library" output="${outputDirectory}/Mosa.Vm.dll" debug="${debug}" nostdlib="true">
+	    <csc target="library" output="${outputDirectory}/Mosa.Vm.dll" debug="${debug}">
 		<sources>
 			<include name="**/*.cs"/>
 		</sources>
-		<references>
-			<include name="${outputDirectory}/prebuilt/mscorlib.dll"/>
-		</references>
 		<!-- supress warnings -->
 		<nowarn><warning number="${suppresswarnings}"/></nowarn>
 	    </csc>

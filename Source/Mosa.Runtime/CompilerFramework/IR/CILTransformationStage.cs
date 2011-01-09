@@ -1699,23 +1699,20 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		{
 			// HACK: This allows us to resolve IntrinsicAttribute from Korlib without directly referencing it. It is slower, but works.
 			if (intrinsicAttributeTypes == null)
-			{
+            {
 
-				RuntimeType attributeType = typeSystem.GetType(@"Mosa.Vm.IntrinsicAttribute, Mosa.Vm");
-				if (attributeType != null)
-				{
-					intrinsicAttributeTypes = new RuntimeType[1]; // Change: 2 to 1
-					intrinsicAttributeTypes[0] = attributeType;
-				}
+                if (typeSystem.GetType(@"Mosa.Vm.IntrinsicAttribute, mscorlib") != null)
+                {
+                    intrinsicAttributeTypes = new RuntimeType[2];
+                    intrinsicAttributeTypes[1] = typeSystem.GetType(@"Mosa.Vm.IntrinsicAttribute, mscorlib");
+                }
+                else
+                {
+                    intrinsicAttributeTypes = new RuntimeType[2];
+                }
 
-				//if (intrinsicAttributeTypes == null)
-				//{
-				//    intrinsicAttributeTypes = new RuntimeType[1];
-				//}
-
-				//intrinsicAttributeTypes[0] = typeSystem.GetType(@"Mosa.Runtime.CompilerFramework.IntrinsicAttribute, Mosa.Runtime");
-			}
-
+                intrinsicAttributeTypes[0] = typeSystem.GetType(@"Mosa.Vm.IntrinsicAttribute, Mosa.Vm");
+            }
 
 			// Retrieve the runtime type
 			object attribute = this.FindIntrinsicAttributeInstance(context);
