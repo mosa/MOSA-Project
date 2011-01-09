@@ -14,7 +14,7 @@ using Mosa.ClassLib;
 
 namespace Mosa.HelloWorld.Tests
 {
-/*
+
 	public class Generic2Test : KernelTest
 	{
 		public static void Test()
@@ -32,5 +32,5 @@ namespace Mosa.HelloWorld.Tests
 		//    return true;
 		//}
 	}
-*/
+
 }

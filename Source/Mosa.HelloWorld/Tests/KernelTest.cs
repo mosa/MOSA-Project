@@ -27,7 +27,7 @@ namespace Mosa.HelloWorld.Tests
 			StringTest.Test();
 			InterfaceTest.Test();
 			GenericTest.Test();
-			//Generic2Test.Test();
+			Generic2Test.Test();
 		}
 	}
 }
