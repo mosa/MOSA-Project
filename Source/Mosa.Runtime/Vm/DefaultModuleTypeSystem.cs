@@ -825,7 +825,13 @@ namespace Mosa.Runtime.Vm
 					int nameIdx = (int)row.TypeNameIdx;
 					int namespaceIdx = (int)row.TypeNamespaceIdx;
 				
-					if ((row.ResolutionScopeIdx & TokenTypes.TableMask) == TokenTypes.TypeRef)
+					if ((row.ResolutionScopeIdx & TokenTypes.TableMask) == TokenTypes.ModuleRef)
+					{
+						throw new NotImplementedException();
+					}
+					else if ((row.ResolutionScopeIdx & TokenTypes.AssemblyRef) == TokenTypes.AssemblyRef)
+						return this.ResolveTypeRef(row.ResolutionScopeIdx);
+					else if ((row.ResolutionScopeIdx & TokenTypes.TableMask) == TokenTypes.TypeRef)
 						return this.ResolveTypeRef(row.ResolutionScopeIdx);
 				
 					throw new NotImplementedException(string.Format("{0:X} {1:X} {2:X}", resScope, nameIdx, namespaceIdx));
