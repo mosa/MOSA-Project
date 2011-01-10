@@ -39,7 +39,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>Mosa.HelloWorld.Boot</StartupObject>
+    <StartupObject>Mosa.Test.Quick.Boot</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Boot.cs" />

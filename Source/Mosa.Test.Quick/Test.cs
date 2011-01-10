@@ -7,7 +7,7 @@
 
 using System;
 
-namespace Mosa.HelloWorld.Tests
+namespace Mosa.Test.Quick.Tests
 {
 	
 	public interface IInterfaceAA<T>

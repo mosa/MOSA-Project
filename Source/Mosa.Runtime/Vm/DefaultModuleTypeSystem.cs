@@ -504,10 +504,11 @@ namespace Mosa.Runtime.Vm
 			if (first >= last)
 				return;
 
-			MethodDefRow methodDef, nextMethodDef = new MethodDefRow();
+			MethodDefRow nextMethodDef = new MethodDefRow();
+			
 			TokenTypes maxParam, maxMethod = metadata.GetMaxTokenValue(TokenTypes.MethodDef);
+			MethodDefRow methodDef = metadata.ReadMethodDefRow(first);
 
-			methodDef = metadata.ReadMethodDefRow(first);
 			for (TokenTypes token = first; token < last; token++)
 			{
 				if (token < maxMethod)

@@ -257,20 +257,20 @@ namespace Mosa.Runtime.CompilerFramework
 			AskLinkerToCreateMethodTable(type.FullName + @"$mtable$" + interfaceType.FullName, methodTable, null);
 		}
 
-		private void ScanExplicitInterfaceImplementations(RuntimeType type, IList<RuntimeMethod> interfaceType, RuntimeMethod[] methodTable)
+		private void ScanExplicitInterfaceImplementations(RuntimeType type, IList<RuntimeMethod> interfaceMethods, RuntimeMethod[] methodTable)
 		{
 			IMetadataProvider metadata = type.MetadataModule.Metadata;
 			TokenTypes maxToken = metadata.GetMaxTokenValue(TokenTypes.MethodImpl);
-			int slot = 0;
 
 			for (TokenTypes token = TokenTypes.MethodImpl + 1; token <= maxToken; token++)
 			{
 				MethodImplRow row = metadata.ReadMethodImplRow(token);
 				if (row.ClassTableIdx == (TokenTypes)type.Token)
 				{
-					foreach (RuntimeMethod interfaceMethod in interfaceType)
+					int slot = 0;
+					foreach (RuntimeMethod interfaceMethod in interfaceMethods)
 					{
-						if (interfaceMethod != null && (TokenTypes)interfaceMethod.Token == (row.MethodDeclarationTableIdx & TokenTypes.RowIndexMask))
+						if ((TokenTypes)interfaceMethod.Token == (row.MethodDeclarationTableIdx & TokenTypes.RowIndexMask))
 						{
 							methodTable[slot] = FindMethodByToken(type, row.MethodBodyTableIdx);
 						}

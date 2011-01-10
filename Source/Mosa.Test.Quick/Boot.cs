@@ -5,7 +5,7 @@
  *
  */
 
-namespace Mosa.HelloWorld
+namespace Mosa.Test.Quick
 {
 
 	/// <summary>
