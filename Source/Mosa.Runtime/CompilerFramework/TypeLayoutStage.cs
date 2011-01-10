@@ -189,6 +189,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 		private void BuildTypeInterfaceTables(RuntimeType type)
 		{
+			System.Console.WriteLine("Building interface table for " + type);
 			foreach (RuntimeType interfaceType in type.Interfaces)
 			{
 				BuildInterfaceTable(type, interfaceType);
@@ -242,13 +243,22 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			if (type.Interfaces.Count == 0)
 				return;
-
+			
 			RuntimeMethod[] methodTable = new RuntimeMethod[interfaceType.Methods.Count];
 
 			// Implicit Interface Methods
+			System.Console.WriteLine ("  Building mtable for interface " + interfaceType + " with " + interfaceType.Methods.Count + " methods");
 			for (int slot = 0; slot < interfaceType.Methods.Count; slot++)
 			{
+				System.Console.WriteLine ("    > searching interface method " + interfaceType.Methods[slot] + " in type " + type);
 				methodTable[slot] = FindInterfaceMethod(type, interfaceType.Methods[slot]);
+				System.Console.WriteLine ("    < found interface method " + interfaceType.Methods[slot] + " -> " + methodTable[slot]);
+			}
+			
+			System.Console.WriteLine("  Result for interface " + interfaceType);
+			foreach (RuntimeMethod m in methodTable)
+			{
+				System.Console.WriteLine("    interface method -> " + m);
 			}
 
 			// Explicit Interface Methods
@@ -306,21 +316,35 @@ namespace Mosa.Runtime.CompilerFramework
 
 		private RuntimeMethod FindInterfaceMethod(RuntimeType type, RuntimeMethod interfaceMethod)
 		{
-			foreach (RuntimeType interfaceType in type.Interfaces)
-			{
-				foreach (RuntimeMethod method in interfaceType.Methods)
+			foreach (RuntimeMethod method in type.Methods)
+			{				
+				string cleanInterfaceMethodName = GetCleanMethodName (interfaceMethod.Name);
+				string cleanMethodName = GetCleanMethodName (method.Name);
+				
+				System.Console.WriteLine ("      :: Method {0}", cleanMethodName);
+				
+				if (cleanInterfaceMethodName.Equals(cleanMethodName))
 				{
-					if (interfaceMethod.Name.Equals(method.Name))
+					if (interfaceMethod.Signature.Matches(method.Signature))
 					{
-						if (interfaceMethod.Signature.Matches(method.Signature))
-						{
-							return method;
-						}
+						return method;
 					}
 				}
 			}
-
+			
+			if (type.BaseType != null)
+			{
+				System.Console.WriteLine("Descending from " + type + " to " + type.BaseType);
+				return FindInterfaceMethod(type.BaseType, interfaceMethod);
+			}
 			throw new InvalidOperationException(@"Failed to find implicit interface implementation for type " + type + " and interface method " + interfaceMethod);
+		}
+		
+		private string GetCleanMethodName (string fullName)
+		{
+			if (!fullName.Contains("."))
+				return fullName;
+			return fullName.Substring(fullName.LastIndexOf(".") + 1);
 		}
 
 		/// <summary>

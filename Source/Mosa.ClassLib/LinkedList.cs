@@ -420,7 +420,7 @@ namespace Mosa.ClassLib
 		/// <returns>
 		/// A <see cref="T:System.Collections.Generic.IEnumerator`1"/> that can be used to iterate through the collection.
 		/// </returns>
-		public System.Collections.Generic.IEnumerator<T> GetEnumerator()
+		System.Collections.Generic.IEnumerator<T> System.Collections.Generic.IEnumerable<T>.GetEnumerator()
 		{
 			for (LinkedListNode<T> cur = first; cur != null; cur = cur.next)
 				yield return cur.value;
