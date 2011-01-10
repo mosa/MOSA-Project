@@ -40,7 +40,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// The reader used to process the code stream.
 		/// </summary>
 		private BinaryReader codeReader;
-		
+
 		#endregion // Data members
 
 		#region IPipelineStage Members
@@ -56,23 +56,22 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </summary>
 		public void Run()
 		{
-			// The size of the code in bytes
-			MethodHeader header = new MethodHeader();
 
 			using (Stream code = methodCompiler.GetInstructionStream())
 			{
-				// Initialize the instruction, setting the initialize size the same as the code stream
-				methodCompiler.InstructionSet = new InstructionSet((int)code.Length);
+				// Initialize the instruction
+				methodCompiler.InstructionSet = new InstructionSet(256);
 
 				// update the base class 
 				InstructionSet = methodCompiler.InstructionSet;
 
-				using (BinaryReader reader = new BinaryReader(code))
+				using (codeReader = new BinaryReader(code))
 				{
-					codeReader = reader;
+					// The size of the code in bytes
+					MethodHeader header = new MethodHeader();
 
 					//Debug.WriteLine("Decoding " + methodCompiler.Method.ToString());
-					ReadMethodHeader(reader, ref header);
+					ReadMethodHeader(codeReader, ref header);
 
 					if (header.localsSignature != 0)
 					{
@@ -93,7 +92,6 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 					// When we leave, the operand stack must only contain the locals...
 					//Debug.Assert(_operandStack.Count == _method.Locals.Count);
-					codeReader = null;
 				}
 			}
 		}

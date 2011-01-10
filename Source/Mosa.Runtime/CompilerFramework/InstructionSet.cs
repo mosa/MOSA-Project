@@ -272,11 +272,7 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			if (index == -1)
 				return CreateRoot();
-
-			// FIXME: Asserts without a message or a comment are not useful to figure out.
-			// I don't see a reason this should not be valid??
-			//Debug.Assert(index > 0);
-
+			
 			int free = GetFree();
 
 			// setup new node's prev/next
