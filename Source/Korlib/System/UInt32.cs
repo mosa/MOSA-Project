@@ -23,6 +23,10 @@ namespace System
 		{
 			return Int32.CreateString(_value, false, false);
 		}
-
+		
+		public string ToString(string format)
+		{
+			return null; // FIXME (rootnode)
+		}
 	}
 }

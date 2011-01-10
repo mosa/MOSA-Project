@@ -53,7 +53,11 @@ namespace Mosa.Runtime.Metadata.Runtime
 				}
 				else
 				{
-					sb.AppendFormat("{0}, ", GetRuntimeTypeForSigType(sigType).FullName);
+					RuntimeType type = GetRuntimeTypeForSigType(sigType);
+					if (type != null)
+						sb.AppendFormat("{0}, ", GetRuntimeTypeForSigType(sigType).FullName);
+					else
+						sb.Append("<null>");
 				}
 			}
 
@@ -126,6 +130,11 @@ namespace Mosa.Runtime.Metadata.Runtime
 
 				case CilElementType.MVar:
 					throw new NotImplementedException(@"Failing to resolve VarMSigType in GenericType.");
+				
+				case CilElementType.SZArray:
+				{
+					return null; // FIXME (rootnode)
+				}
 
 				default:
 					{

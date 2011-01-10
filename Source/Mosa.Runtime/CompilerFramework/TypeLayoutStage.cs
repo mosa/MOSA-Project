@@ -306,19 +306,21 @@ namespace Mosa.Runtime.CompilerFramework
 
 		private RuntimeMethod FindInterfaceMethod(RuntimeType type, RuntimeMethod interfaceMethod)
 		{
-			foreach (RuntimeMethod method in type.Methods)
+			foreach (RuntimeType interfaceType in type.Interfaces)
 			{
-				if (interfaceMethod.Name.Equals(method.Name))
+				foreach (RuntimeMethod method in interfaceType.Methods)
 				{
-					if (interfaceMethod.Signature.Matches(method.Signature))
+					if (interfaceMethod.Name.Equals(method.Name))
 					{
-						return method;
+						if (interfaceMethod.Signature.Matches(method.Signature))
+						{
+							return method;
+						}
 					}
 				}
 			}
 
-			return null;
-			//throw new InvalidOperationException(@"Failed to find implicit interface implementation.");
+			throw new InvalidOperationException(@"Failed to find implicit interface implementation for type " + type + " and interface method " + interfaceMethod);
 		}
 
 		/// <summary>
