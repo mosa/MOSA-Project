@@ -134,7 +134,7 @@ namespace Mosa.Runtime.Vm
 
 				RuntimeType type = module.GetType(names[0]);
 
-				Debug.Assert(type != null);
+				//Debug.Assert(type != null);
 				
 				return type;
 			}
