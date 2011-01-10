@@ -48,12 +48,12 @@ namespace Mosa.Test.Collection
 			return aa.GetValue(value);
 		}
 
-		//public static int InterfaceTest3(int value)
-		//{
-		//    GenericInterfaceTestClass<int> gic = new GenericInterfaceTestClass<int>();
-		//    IInterfaceBB<int> bb = gic;
-		//    return bb.Get(value);
-		//}
+		public static int InterfaceTest3(int value)
+		{
+			GenericInterfaceTestClass<int> gic = new GenericInterfaceTestClass<int>();
+			IInterfaceBB<int> bb = gic;
+			return bb.Get(value);
+		}
 	}
 
 }

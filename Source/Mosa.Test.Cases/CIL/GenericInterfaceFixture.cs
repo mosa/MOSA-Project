@@ -39,10 +39,10 @@ namespace Mosa.Test.Cases.CIL
 			Assert.AreEqual(GenericInterfaceTests.InterfaceTest2(a), Run<int>("Mosa.Test.Collection", "GenericInterfaceTests", "InterfaceTest2", a));
 		}
 
-		//[Test]
-		//public void GenericInterfaceTest3([I4]int a)
-		//{
-		//    Assert.AreEqual(GenericInterfaceTests.InterfaceTest3(a), Run<int>("Mosa.Test.Collection", "GenericInterfaceTests", "InterfaceTest3", a));
-		//}
+		[Test]
+		public void GenericInterfaceTest3([I4]int a)
+		{
+			Assert.AreEqual(GenericInterfaceTests.InterfaceTest3(a), Run<int>("Mosa.Test.Collection", "GenericInterfaceTests", "InterfaceTest3", a));
+		}
 	}
 }
