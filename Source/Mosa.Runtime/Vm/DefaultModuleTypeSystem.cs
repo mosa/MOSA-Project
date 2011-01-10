@@ -820,7 +820,16 @@ namespace Mosa.Runtime.Vm
 				case TokenTypes.Module:
 				case TokenTypes.ModuleRef:
 				case TokenTypes.TypeRef:
-					throw new NotImplementedException();
+				{
+					int resScope = (int)row.ResolutionScopeIdx;
+					int nameIdx = (int)row.TypeNameIdx;
+					int namespaceIdx = (int)row.TypeNamespaceIdx;
+				
+					if ((row.ResolutionScopeIdx & TokenTypes.TableMask) == TokenTypes.TypeRef)
+						return this.ResolveTypeRef(row.ResolutionScopeIdx);
+				
+					throw new NotImplementedException(string.Format("{0:X} {1:X} {2:X}", resScope, nameIdx, namespaceIdx));
+				}
 				case TokenTypes.AssemblyRef:
 					string typeName = metadata.ReadString(row.TypeNameIdx);
 					string typeNamespace = metadata.ReadString(row.TypeNamespaceIdx);
