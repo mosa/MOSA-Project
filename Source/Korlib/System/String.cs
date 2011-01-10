@@ -264,6 +264,36 @@ namespace System
 			return result;
 		}
 
+		public static string Concat (Object a)
+		{
+			return a.ToString();
+		}
+
+		public static string Concat (Object a, Object b)
+		{
+			return Concat (a.ToString(), b.ToString());
+		}
+
+		public static string Concat (Object a, Object b, Object c)
+		{
+			return Concat (a.ToString(), b.ToString(), c.ToString());
+		}
+
+		public static string Concat (Object a, Object b, Object c, Object d)
+		{
+			return Concat (a.ToString(), b.ToString(), c.ToString(), d.ToString());
+		}
+
+		public static string Concat (string[] objects)
+		{
+			string result = string.Empty;
+
+			for (int i = 0; i < objects.Length - 1; ++i)
+				result = Concat (result, objects[i], objects[i + 1]);
+
+			return result;
+		}
+
 		public unsafe string Substring(int startIndex)
 		{
 			if (startIndex == 0)
