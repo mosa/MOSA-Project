@@ -107,6 +107,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <param name="header">The method header structure to populate.</param>
 		private void ReadMethodHeader(BinaryReader reader, ref MethodHeader header)
 		{
+			if (reader.BaseStream.Position % 4 != 0)
+				reader.BaseStream.Position += 4 - reader.BaseStream.Position % 4;
+			
 			header.flags = (MethodFlags)reader.ReadByte();
 			switch (header.flags & MethodFlags.HeaderMask)
 			{
@@ -125,7 +128,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 					break;
 
 				default:
-					throw new InvalidDataException(@"Invalid method header.");
+					throw new InvalidDataException(@"Invalid method header. (Flags = " + header.flags.ToString("X") + ")");
 			}
 
 			// Are there sections following the code?

@@ -182,14 +182,13 @@ namespace Mosa.Runtime.CompilerFramework
 		private void BuildInterfaceType(RuntimeType type)
 		{
 			Debug.Assert(type.IsInterface);
-
+			
 			interfaces.Add(type);
 			interfaceSlots.Add(type, interfaceSlots.Count);
 		}
 
 		private void BuildTypeInterfaceTables(RuntimeType type)
 		{
-			System.Console.WriteLine("Building interface table for " + type);
 			foreach (RuntimeType interfaceType in type.Interfaces)
 			{
 				BuildInterfaceTable(type, interfaceType);
@@ -247,19 +246,8 @@ namespace Mosa.Runtime.CompilerFramework
 			RuntimeMethod[] methodTable = new RuntimeMethod[interfaceType.Methods.Count];
 
 			// Implicit Interface Methods
-			System.Console.WriteLine ("  Building mtable for interface " + interfaceType + " with " + interfaceType.Methods.Count + " methods");
 			for (int slot = 0; slot < interfaceType.Methods.Count; slot++)
-			{
-				System.Console.WriteLine ("    > searching interface method " + interfaceType.Methods[slot] + " in type " + type);
 				methodTable[slot] = FindInterfaceMethod(type, interfaceType.Methods[slot]);
-				System.Console.WriteLine ("    < found interface method " + interfaceType.Methods[slot] + " -> " + methodTable[slot]);
-			}
-			
-			System.Console.WriteLine("  Result for interface " + interfaceType);
-			foreach (RuntimeMethod m in methodTable)
-			{
-				System.Console.WriteLine("    interface method -> " + m);
-			}
 
 			// Explicit Interface Methods
 			ScanExplicitInterfaceImplementations(type, interfaceType.Methods, methodTable);
@@ -320,8 +308,6 @@ namespace Mosa.Runtime.CompilerFramework
 			{				
 				string cleanInterfaceMethodName = GetCleanMethodName (interfaceMethod.Name);
 				string cleanMethodName = GetCleanMethodName (method.Name);
-				
-				System.Console.WriteLine ("      :: Method {0}", cleanMethodName);
 				
 				if (cleanInterfaceMethodName.Equals(cleanMethodName))
 				{
