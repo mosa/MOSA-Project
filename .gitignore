@@ -21,3 +21,8 @@ build.force
 /bin/*
 /Bin/*
 /tmp
+
+/tags
+/Run/dotGraph.dot
+/Run/kernel.dis
+/Run/statistics.txt
