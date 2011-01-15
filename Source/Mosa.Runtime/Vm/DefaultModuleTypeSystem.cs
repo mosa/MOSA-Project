@@ -798,7 +798,6 @@ namespace Mosa.Runtime.Vm
 					goto case TokenTypes.TypeRef;
 				case TokenTypes.ModuleRef:
 					throw new NotImplementedException();
-					break;
 				case TokenTypes.TypeRef:
 				{
 					int resScope = (int)row.ResolutionScopeIdx;
