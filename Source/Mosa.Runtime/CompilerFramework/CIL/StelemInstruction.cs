@@ -38,8 +38,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// Initializes a new instance of the <see cref="StelemInstruction"/> class.
 		/// </summary>
 		/// <param name="opcode">The opcode.</param>
-		public StelemInstruction(OpCode opcode)
-			: base(opcode, 3)
+		public StelemInstruction(OpCode opcode) : base (opcode, 3)
 		{
 			switch (opcode)
 			{
@@ -67,8 +66,11 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 				case OpCode.Stelem_ref: // FIXME: Really object?
 					_typeRef = new SigType(CilElementType.Object);
 					break;
+				case OpCode.Stelem:
+					_typeRef = new SigType(CilElementType.Type);
+					break;
 				default:
-					throw new NotImplementedException();
+					throw new NotImplementedException("Not implemented: " + opcode);
 			}
 		}
 
@@ -85,6 +87,19 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		{
 			// Decode base classes first
 			base.Decode(ctx, decoder);
+
+			// Do we have a type?
+			if (this._typeRef == null)
+			{
+				// No, retrieve a type reference from the immediate argument
+				TokenTypes token = decoder.DecodeTokenType();
+				this._typeRef = new ClassSigType(token);
+			}
+
+			/*StackTypeCode stackType = Operand.StackTypeFromSigType(this._typeRef);
+			Operand result = LoadInstruction.CreateResultOperand(decoder, stackType, this._typeRef);
+
+			ctx.Result = result;*/
 		}
 
 		/// <summary>

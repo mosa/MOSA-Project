@@ -270,6 +270,14 @@ namespace Mosa.Runtime.CompilerFramework
 			get { return _instructionSet.Data[_index].Ignore; }
 			set { _instructionSet.Data[_index].Ignore = value; }
 		}
+		
+		/// <summary>
+		/// 
+		/// </summary>
+		public BaseInstruction Prefix
+		{
+			get; set;
+		}
 
 		/// <summary>
 		/// Gets or sets the branch hint (true means branch likely)

@@ -135,6 +135,7 @@ namespace Mosa.Runtime.CompilerFramework.Operands
 				case CilElementType.GenericInst: result = StackTypeCode.O; break;
 				case CilElementType.Array: result = StackTypeCode.O; break;
 				case CilElementType.SZArray: result = StackTypeCode.O; break;
+				case CilElementType.Var: result = StackTypeCode.O; break;
 
 				default:
 					throw new NotSupportedException(String.Format(@"Can't transform SigType of CilElementType.{0} to StackTypeCode.", type.Type));

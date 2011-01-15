@@ -385,7 +385,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			/* 0x0A3 */
 			opcodeMap[(int)OpCode.Ldelem] = null; // new LdelemInstruction(OpCode.Ldelem);
 			/* 0x0A4 */
-			opcodeMap[(int)OpCode.Stelem] = null; // new StelemInstruction(OpCode.Stelem);
+			opcodeMap[(int)OpCode.Stelem] = new StelemInstruction(OpCode.Stelem);
 			/* 0x0A5 */
 			opcodeMap[(int)OpCode.Unbox_any] = new UnboxAnyInstruction(OpCode.Unbox_any);
 			/* Opcodes 0x0A6-0x0B2 are undefined */
