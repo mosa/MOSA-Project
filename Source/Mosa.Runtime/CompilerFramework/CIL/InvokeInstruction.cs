@@ -175,9 +175,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 				case TokenTypes.MemberRef:
 					method = decoder.ModuleTypeSystem.GetMethod(callTarget);
 					if (method.DeclaringType.IsGeneric)
-					{
 						decoder.Compiler.Scheduler.ScheduleTypeForCompilation(method.DeclaringType);
-					}
 					break;
 
 				case TokenTypes.MethodSpec:
