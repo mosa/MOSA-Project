@@ -56,7 +56,6 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </summary>
 		public void Run()
 		{
-
 			using (Stream code = methodCompiler.GetInstructionStream())
 			{
 				// Initialize the instruction
@@ -69,8 +68,6 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 				{
 					// The size of the code in bytes
 					MethodHeader header = new MethodHeader();
-
-					//Debug.WriteLine("Decoding " + methodCompiler.Method.ToString());
 					ReadMethodHeader(codeReader, ref header);
 
 					if (header.localsSignature != 0)
@@ -107,10 +104,10 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <param name="header">The method header structure to populate.</param>
 		private void ReadMethodHeader(BinaryReader reader, ref MethodHeader header)
 		{
-			if (reader.BaseStream.Position % 4 != 0)
-				reader.BaseStream.Position += 4 - reader.BaseStream.Position % 4;
-			
+			// Read first byte
 			header.flags = (MethodFlags)reader.ReadByte();
+			
+			// Check least significant 2 bits
 			switch (header.flags & MethodFlags.HeaderMask)
 			{
 				case MethodFlags.TinyFormat:
@@ -119,6 +116,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 					break;
 
 				case MethodFlags.FatFormat:
+					// Read second byte of flags
 					header.flags = (MethodFlags)(reader.ReadByte() << 8 | (byte)header.flags);
 					if (MethodFlags.ValidHeader != (header.flags & MethodFlags.HeaderSizeMask))
 						throw new InvalidDataException(@"Invalid method _header.");
@@ -128,7 +126,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 					break;
 
 				default:
-					throw new InvalidDataException(@"Invalid method header. (Flags = " + header.flags.ToString("X") + ")");
+					throw new InvalidDataException(@"Invalid method header while trying to decode " + this.methodCompiler.Method.ToString() + ". (Flags = " + header.flags.ToString("X") + ", Rva = " + this.methodCompiler.Method.Rva + ")");
 			}
 
 			// Are there sections following the code?
@@ -199,10 +197,12 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			long codeEnd = codeReader.BaseStream.Position + header.codeSize;
 
 			// Prefix instruction
-			//PrefixInstruction prefix = null;
+			PrefixInstruction prefix = null;
 
 			// Setup context
 			Context ctx = new Context(InstructionSet, -1);
+			
+			int index = 0;
 
 			while (codeEnd != codeReader.BaseStream.Position)
 			{
@@ -219,16 +219,17 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 				if (instruction == null)
 					throw new Exception("CIL " + op + " is not yet supported");
 
-				//if (instruction is PrefixInstruction) {
-				//    prefix = instruction as PrefixInstruction;
-				//    continue;
-				//}
+				if (instruction is PrefixInstruction) {
+				    prefix = instruction as PrefixInstruction;
+					prefix.Decode(ctx, this);
+				    continue;
+				}
 
 				// Create and initialize the corresponding instruction
 				ctx.AppendInstruction(instruction);
 				ctx.Label = instOffset;
 				instruction.Decode(ctx, this);
-				//ctx.Prefix = prefix;
+				ctx.Prefix = prefix;
 
 				Debug.Assert(ctx.Instruction != null);
 
@@ -241,7 +242,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 						ctx.Branch.Targets[i] += pc;
 				}
 
-				//prefix = null;
+				prefix = null;
 			}
 		}
 

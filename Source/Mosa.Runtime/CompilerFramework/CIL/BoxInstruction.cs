@@ -49,14 +49,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 			// Retrieve the provider token to check against
 			TokenTypes token = decoder.DecodeTokenType();
-
-			throw new NotImplementedException();
-
-			//TypeReference targetType = MetadataTypeReference.FromToken(decoder.Metadata, token);
-			// FIXME: TypeReference targetType = decoder.Metadata.GetRow<TypeReference>(decoder.Metadata, token);
-
-			// Push the result
-			//_results[0] = CreateResultOperand(targetType);
+			
+			ctx.Other = decoder.ModuleTypeSystem.GetType (token);
 		}
 
 		/// <summary>

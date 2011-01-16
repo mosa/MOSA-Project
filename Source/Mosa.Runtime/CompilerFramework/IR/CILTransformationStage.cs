@@ -1758,11 +1758,18 @@ namespace Mosa.Runtime.CompilerFramework.IR
 
 			foreach (RuntimeType intrinsicAttributeType in this.intrinsicAttributeTypes)
 			{
-				object[] attributes = rm.GetCustomAttributes(intrinsicAttributeType);
-				if (attributes != null && attributes.Length > 0)
-				{
-					return attributes[0];
-				}
+                try
+                {
+                    object[] attributes = rm.GetCustomAttributes(intrinsicAttributeType);
+                    if (attributes != null && attributes.Length > 0)
+                    {
+                        return attributes[0];
+                    }
+                }
+                catch (NullReferenceException)
+                {
+                    return null;
+                }
 			}
 
 			return null;

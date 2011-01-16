@@ -252,7 +252,7 @@ namespace Mosa.ClassLib
 		public LinkedListNode<T> AddAfter(LinkedListNode<T> node, T value)
 		{
 			if (node == null)
-				throw new System.ArgumentNullException();
+				return null;
 
 			LinkedListNode<T> cur = new LinkedListNode<T>(value, node, node.next);
 
@@ -276,7 +276,7 @@ namespace Mosa.ClassLib
 		public LinkedListNode<T> AddBefore(LinkedListNode<T> node, T value)
 		{
 			if (node == null)
-				throw new System.ArgumentNullException();
+				return null;
 
 			LinkedListNode<T> cur = new LinkedListNode<T>(value, node.previous, node);
 
@@ -314,7 +314,7 @@ namespace Mosa.ClassLib
 		public void Remove(LinkedListNode<T> node)
 		{
 			if (node == null)
-				throw new System.InvalidOperationException();
+				return;
 
 			if (node.previous != null)
 				node.previous.next = node.next;
@@ -337,7 +337,7 @@ namespace Mosa.ClassLib
 		public void RemoveFirst()
 		{
 			if (first == null)
-				throw new System.InvalidOperationException();
+				return;
 
 			first = first.next;
 			first.previous = null;
@@ -354,7 +354,7 @@ namespace Mosa.ClassLib
 		public void RemoveLast()
 		{
 			if (last == null)
-				throw new System.InvalidOperationException();
+				return;
 
 			if (last.previous != null)
 				last.previous.next = null;
@@ -376,9 +376,9 @@ namespace Mosa.ClassLib
 		public void CopyTo(T[] array, int arrayIndex)
 		{
 			if (array == null)
-				throw new System.ArgumentNullException();
+				return;
 			if (arrayIndex < 0)
-				throw new System.ArgumentOutOfRangeException();
+				return;
 
 			//if (array.Rank != 1)
 			//    throw new ArgumentException();

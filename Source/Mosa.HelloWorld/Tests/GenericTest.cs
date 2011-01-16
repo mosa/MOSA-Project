@@ -29,16 +29,6 @@ namespace Mosa.HelloWorld.Tests
 			PrintResult(GenericTest7());
 			PrintResult(GenericTest8());
 			PrintResult(GenericTest9());
-			PrintResult(GenericTest10());
-
-		}
-
-		public static bool GenericTest10()
-		{
-			LinkedList<int> foo = new LinkedList<int>();
-			foo.Add(42);
-			LinkedList<int>.LinkedListNode<int> node = foo.First;
-			return node.value == 42;
 		}
 
 		public static bool GenericTest1()

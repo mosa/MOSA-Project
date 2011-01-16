@@ -215,9 +215,11 @@ namespace Mosa.Compiler.Linker
 
 				// Create a linker symbol for the name
 				LinkerSymbol symbol = new LinkerSymbol(name, section, baseStream.Position);
-
+				
+				
 				// Save the symbol for later use
-				symbols.Add(symbol.Name, symbol);
+				if (!symbols.ContainsKey(symbol.Name))
+					symbols.Add(symbol.Name, symbol);
 
 				// Wrap the stream to catch premature disposal
 				Stream result = new LinkerStream(symbol, baseStream, size);
