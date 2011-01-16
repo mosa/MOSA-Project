@@ -202,8 +202,6 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			// Setup context
 			Context ctx = new Context(InstructionSet, -1);
 			
-			int index = 0;
-
 			while (codeEnd != codeReader.BaseStream.Position)
 			{
 				// Determine the instruction offset
