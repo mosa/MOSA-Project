@@ -77,6 +77,17 @@ namespace Mosa.Runtime.Vm
 		/// <param name="token">The token of the method to retrieve.</param>
 		/// <returns></returns>
 		RuntimeMethod GetMethod(TokenTypes token);
+		
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="token">
+		/// A <see cref="TokenTypes"/>
+		/// </param>
+		/// <returns>
+		/// A <see cref="RuntimeMethod"/>
+		/// </returns>
+		RuntimeMethod GetMethod(TokenTypes token, RuntimeType callingType);
 
 		/// <summary>
 		/// Adds the internal compiler defined type to the type system

@@ -95,11 +95,6 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 				TokenTypes token = decoder.DecodeTokenType();
 				this._typeRef = new ClassSigType(token);
 			}
-
-			/*StackTypeCode stackType = Operand.StackTypeFromSigType(this._typeRef);
-			Operand result = LoadInstruction.CreateResultOperand(decoder, stackType, this._typeRef);
-
-			ctx.Result = result;*/
 		}
 
 		/// <summary>

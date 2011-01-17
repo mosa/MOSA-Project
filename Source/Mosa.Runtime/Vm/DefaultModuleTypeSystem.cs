@@ -322,6 +322,48 @@ namespace Mosa.Runtime.Vm
 					throw new NotSupportedException(@"Can't get method for token " + token.ToString("x"));
 			}
 		}
+		
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="token">
+		/// A <see cref="TokenTypes"/>
+		/// </param>
+		/// <param name="callingType">
+		/// A <see cref="RuntimeType"/>
+		/// </param>
+		/// <returns>
+		/// A <see cref="RuntimeMethod"/>
+		/// </returns>
+		RuntimeMethod IModuleTypeSystem.GetMethod(TokenTypes token, RuntimeType callingType) 
+		{
+			RuntimeMethod calledMethod = (this as IModuleTypeSystem).GetMethod (token);
+			
+			if (callingType == null)
+				return calledMethod;
+			
+			if (calledMethod.DeclaringType.Namespace != callingType.Namespace)
+				return calledMethod;
+			
+			string declaringTypeName = calledMethod.DeclaringType.Name;
+			if (declaringTypeName.Contains ("<"))
+				declaringTypeName = declaringTypeName.Substring (0, declaringTypeName.IndexOf ('<'));
+			
+			string callingTypeName = callingType.Name;
+			if (callingTypeName.Contains ("<"))
+				callingTypeName = callingTypeName.Substring (0, callingTypeName.IndexOf ('<'));
+			
+			if (declaringTypeName != callingTypeName)
+				return calledMethod;
+			
+			foreach (RuntimeMethod m in callingType.Methods)
+			{
+				if (calledMethod.Name == m.Name)
+					return m;
+			}
+			
+			return calledMethod;
+		}
 
 		#endregion // ITypeSystem Members
 

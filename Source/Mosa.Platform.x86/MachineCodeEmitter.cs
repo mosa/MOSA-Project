@@ -459,7 +459,7 @@ namespace Mosa.Platform.x86
 			MemberOperand member = displacement as MemberOperand;
 			LabelOperand label = displacement as LabelOperand;
 			SymbolOperand symbol = displacement as SymbolOperand;
-
+			
 			if (label != null)
 			{
 				int pos = (int)(_codeStream.Position - _codeStreamBasePosition);
