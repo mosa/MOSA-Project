@@ -6,11 +6,11 @@ using System.Diagnostics;
 
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Tables;
-using Mosa.Runtime.TypeLoader.Cil;
+using Mosa.Runtime.TypeSystem.Cil;
 
-namespace Mosa.Runtime.TypeLoader
+namespace Mosa.Runtime.TypeSystem
 {
-	public class Loader
+	public class TypeLoader
 	{
 		#region Data members
 
@@ -57,7 +57,7 @@ namespace Mosa.Runtime.TypeLoader
 		/// Initializes static data members of the type loader.
 		/// </summary>
 		/// <param name="metadataProvider">The metadata provider.</param>
-		public Loader(IMetadataProvider metadataProvider)
+		public TypeLoader(IMetadataProvider metadataProvider)
 		{
 			Debug.Assert(metadataProvider != null);
 

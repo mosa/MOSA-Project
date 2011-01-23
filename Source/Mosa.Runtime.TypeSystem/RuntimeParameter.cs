@@ -15,7 +15,7 @@ using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Tables;
 
-namespace Mosa.Runtime.TypeLoader
+namespace Mosa.Runtime.TypeSystem
 {
 	/// <summary>
 	/// Holds method parameters for reflection and compilation.

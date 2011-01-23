@@ -6,10 +6,10 @@ using System.Text;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime.Metadata.Signatures;
-using Mosa.Runtime.TypeLoader;
-using Mosa.Runtime.TypeLoader.Cil;
+using Mosa.Runtime.TypeSystem;
+using Mosa.Runtime.TypeSystem.Cil;
 
-namespace Mosa.Runtime.TypeLoader.Generic
+namespace Mosa.Runtime.TypeSystem.Generic
 {
 
 	public class CilGenericType : RuntimeType

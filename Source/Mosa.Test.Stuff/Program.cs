@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using Mosa.Runtime.TypeLoader;
+using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Loader;
 
@@ -20,7 +20,7 @@ namespace Mosa.Test.Stuff
 
 			IMetadataModule metadataModule = assemblyLoader.LoadModule(files[0]);
 
-			Loader loader = new Loader(metadataModule.Metadata);
+			TypeLoader loader = new TypeLoader(metadataModule.Metadata);
 
 			return;
 		}
