@@ -1,0 +1,110 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{5F30A68E-05BF-40EA-B576-5EBCDE520449}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>Mosa.Runtime.TypeLoader</AssemblyName>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <OutputType>Library</OutputType>
+    <RootNamespace>Mosa.Runtime.TypeLoader</RootNamespace>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\bin\</OutputPath>
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <RemoveIntegerChecks>False</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>..\..\bin\Mosa.Runtime.TypeLoader.xml</DocumentationFile>
+    <FileAlignment>4096</FileAlignment>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\bin\</OutputPath>
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <RemoveIntegerChecks>False</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningLevel>2</WarningLevel>
+    <DebugType>none</DebugType>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj">
+      <Project>{0B1011A6-8FCD-4F9E-BBB8-8DB86E23D2E8}</Project>
+      <Name>Mosa.Compiler.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Compiler.FileFormat\Mosa.Compiler.FileFormat.csproj">
+      <Project>{CC2E6418-C325-4486-B50D-941EC27053F6}</Project>
+      <Name>Mosa.Compiler.FileFormat</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Compiler.Linker\Mosa.Compiler.Linker.csproj">
+      <Project>{65866A51-B229-44C5-AC81-87A90FA1741B}</Project>
+      <Name>Mosa.Compiler.Linker</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Runtime.Metadata\Mosa.Runtime.Metadata.csproj">
+      <Project>{7033B213-2055-4C6A-B008-D9856267F5D7}</Project>
+      <Name>Mosa.Runtime.Metadata</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Cil\CilRuntimeField.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Cil\CilRuntimeMethod.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Cil\CilRuntimeType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="CustomAttributeParser.cs" />
+    <Compile Include="GenericArgument.cs" />
+    <Compile Include="Generic\CilGenericField.cs" />
+    <Compile Include="Generic\CilGenericMethod.cs" />
+    <Compile Include="Generic\CilGenericType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IRuntimeAttributable.cs" />
+    <Compile Include="Loader.cs" />
+    <Compile Include="RuntimeAttribute.cs" />
+    <Compile Include="RuntimeField.cs" />
+    <Compile Include="RuntimeMember.cs" />
+    <Compile Include="RuntimeMethod.cs" />
+    <Compile Include="RuntimeObject.cs" />
+    <Compile Include="RuntimeParameter.cs" />
+    <Compile Include="RuntimeType.cs" />
+  </ItemGroup>
+  <ItemGroup />
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+</Project>

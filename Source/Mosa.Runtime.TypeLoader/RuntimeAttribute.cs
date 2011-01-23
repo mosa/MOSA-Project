@@ -14,11 +14,10 @@ using System.Text;
 
 using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime.Metadata;
-using Mosa.Runtime.Metadata.Blobs;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Metadata.Tables;
 
-namespace Mosa.Runtime.Vm
+namespace Mosa.Runtime.TypeLoader
 {
 	/// <summary>
 	/// Represents an attribute in runtime type information.
@@ -47,11 +46,6 @@ namespace Mosa.Runtime.Vm
 		/// </summary>
 		private RuntimeMethod ctorMethod;
 
-		/// <summary>
-		/// Holds the static instance of the runtime.
-		/// </summary>
-		protected IModuleTypeSystem moduleTypeSystem;
-
 		#endregion // Data members
 
 		#region Construction
@@ -59,14 +53,21 @@ namespace Mosa.Runtime.Vm
 		/// <summary>
 		/// Populates the <see cref="RuntimeAttribute"/> with the values in <paramref name="car"/>.
 		/// </summary>
-		/// <param name="moduleTypeSystem">The module type system.</param>
+		/// <param name="metadataProvider">The metadata provider.</param>
 		/// <param name="car">The custom attribute row from metadata.</param>
-		public RuntimeAttribute(IModuleTypeSystem moduleTypeSystem, CustomAttributeRow car)
+		public RuntimeAttribute(IMetadataProvider metadataProvider, CustomAttributeRow car)
 		{
 			attribute = null;
 			attributeBlob = car.ValueBlobIdx;
 			ctor = car.TypeIdx;
-			this.moduleTypeSystem = moduleTypeSystem;
+
+			// Retrieve the attribute type
+			attribute = CustomAttributeParser.Parse(metadataProvider, attributeBlob, ctorMethod);
+			Debug.Assert(null != attribute, @"Failed to load the attribute.");
+
+			//TODO
+			//ctorMethod = moduleTypeSystem.GetMethod(ctor);
+			ctorMethod = null;
 		}
 
 		#endregion // Construction
@@ -79,14 +80,6 @@ namespace Mosa.Runtime.Vm
 		/// <returns>An instance of the attribute.</returns>
 		public object GetAttribute()
 		{
-			// Skip over attribute initialization, if we already initialized the attribute
-			if (null != attribute)
-				return attribute;
-
-			// Retrieve the attribute type
-			attribute = CustomAttributeParser.Parse(moduleTypeSystem.MetadataModule.Metadata, attributeBlob, ctorMethod);
-			Debug.Assert(null != attribute, @"Failed to load the attribute.");
-
 			return attribute;
 		}
 
@@ -102,26 +95,11 @@ namespace Mosa.Runtime.Vm
 		{
 			get
 			{
-				if (ctorMethod == null)
-					LocateAttributeCtorMethod();
-
 				return ctorMethod.DeclaringType;
 			}
 		}
 
 		#endregion // Properties
 
-		#region Internals
-
-		/// <summary>
-		/// Locates the attribute ctor method.
-		/// </summary>
-		private void LocateAttributeCtorMethod()
-		{
-			ctorMethod = moduleTypeSystem.GetMethod(ctor);
-			Debug.Assert(null != ctorMethod);
-		}
-
-		#endregion // Internals
 	}
 }

@@ -71,12 +71,12 @@ namespace Mosa.Runtime.Vm
 		{
 			foreach (string file in files)
 			{
-				IMetadataModule metaModule = this.assemblyLoader.LoadModule(file);
+				IMetadataModule metadataModule = this.assemblyLoader.LoadModule(file);
 
-				Debug.Assert(metaModule != null);
-				Debug.Assert(metaModule.Metadata != null);
+				Debug.Assert(metadataModule != null);
+				Debug.Assert(metadataModule.Metadata != null);
 
-				IModuleTypeSystem moduleTypeSystem = new DefaultModuleTypeSystem(this, metaModule);
+				IModuleTypeSystem moduleTypeSystem = new DefaultModuleTypeSystem(this, metadataModule);
 
 				modules.Add(moduleTypeSystem);
 				compileModules.Add(moduleTypeSystem);

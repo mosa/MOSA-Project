@@ -13,12 +13,11 @@ using System.Text;
 using System.IO;
 using System.Diagnostics;
 
-using Mosa.Runtime.Vm;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Metadata.Loader;
 
-namespace Mosa.Runtime.Metadata.Blobs
+namespace Mosa.Runtime.TypeLoader
 {
 	/// <summary>
 	/// Parses and instantiates custom attributes in assembly metadata blobs.
@@ -120,7 +119,7 @@ namespace Mosa.Runtime.Metadata.Blobs
 		{
 			RuntimeType rt = attributeCtor.DeclaringType;
 			Type attributeType = Type.GetType(String.Format("{0}.{1}, Mosa.Vm", rt.Namespace, rt.Name));
-			return Activator.CreateInstance(attributeType, args, null);
+			return Activator.CreateInstance(attributeType, args, null);			
 		}
 
 		/// <summary>

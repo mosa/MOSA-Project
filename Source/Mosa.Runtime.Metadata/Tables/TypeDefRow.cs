@@ -19,33 +19,33 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private TypeAttributes _flags;
+		private TypeAttributes flags;
 
 		/// <summary>
 		/// An index into the String heap
 		/// </summary>
-		private TokenTypes _typeNameIdx;
+		private TokenTypes typeNameIdx;
 
 		/// <summary>
 		/// An index into the String heap
 		/// </summary>
-		private TokenTypes _typeNamespaceIdx;
+		private TokenTypes typeNamespaceIdx;
 
 		/// <summary>
 		/// Index into a <see cref="TypeDefRow"/>, <see cref="TypeRefRow"/>, or <see cref="TypeSpecRow"/> table.
 		/// </summary>
-		private TokenTypes _extends;
+		private TokenTypes extends;
 
 		/// <summary>
 		/// An index into the <see cref="FieldRow"/>, it marks the first of a contiguous run of Fields
 		/// owned by this type.
 		/// </summary>
-		private TokenTypes _fieldList;
+		private TokenTypes fieldList;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes _methodList;
+		private TokenTypes methodList;
 
 		#endregion // Data members
 
@@ -63,12 +63,12 @@ namespace Mosa.Runtime.Metadata.Tables
 		public TypeDefRow(TypeAttributes flags, TokenTypes typeNameIdx, TokenTypes typeNamespaceIdx,
 							TokenTypes extends, TokenTypes fieldList, TokenTypes methodList)
 		{
-			_flags = flags;
-			_typeNameIdx = typeNameIdx;
-			_typeNamespaceIdx = typeNamespaceIdx;
-			_extends = extends;
-			_fieldList = fieldList;
-			_methodList = methodList;
+			this.flags = flags;
+			this.typeNameIdx = typeNameIdx;
+			this.typeNamespaceIdx = typeNamespaceIdx;
+			this.extends = extends;
+			this.fieldList = fieldList;
+			this.methodList = methodList;
 		}
 
 		#endregion // Construction
@@ -81,8 +81,8 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <value>The flags.</value>
 		public TypeAttributes Flags
 		{
-			get { return _flags; }
-			set { _flags = value; }
+			get { return flags; }
+			set { flags = value; }
 		}
 
 		/// <summary>
@@ -91,8 +91,8 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <value>The type name idx.</value>
 		public TokenTypes TypeNameIdx
 		{
-			get { return _typeNameIdx; }
-			set { _typeNameIdx = value; }
+			get { return typeNameIdx; }
+			set { typeNameIdx = value; }
 		}
 
 		/// <summary>
@@ -101,8 +101,8 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <value>The type namespace idx.</value>
 		public TokenTypes TypeNamespaceIdx
 		{
-			get { return _typeNamespaceIdx; }
-			set { _typeNamespaceIdx = value; }
+			get { return typeNamespaceIdx; }
+			set { typeNamespaceIdx = value; }
 		}
 
 		/// <summary>
@@ -111,8 +111,8 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <value>The extends.</value>
 		public TokenTypes Extends
 		{
-			get { return _extends; }
-			set { _extends = value; }
+			get { return extends; }
+			set { extends = value; }
 		}
 
 		/// <summary>
@@ -121,8 +121,8 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <value>The field list.</value>
 		public TokenTypes FieldList
 		{
-			get { return _fieldList; }
-			set { _fieldList = value; }
+			get { return fieldList; }
+			set { fieldList = value; }
 		}
 
 		/// <summary>
@@ -131,8 +131,8 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <value>The method list.</value>
 		public TokenTypes MethodList
 		{
-			get { return _methodList; }
-			set { _methodList = value; }
+			get { return methodList; }
+			set { methodList = value; }
 		}
 
 		#endregion // Properties
