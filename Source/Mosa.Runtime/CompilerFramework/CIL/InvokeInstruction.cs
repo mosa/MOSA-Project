@@ -173,14 +173,14 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 					break;
 
 				case TokenTypes.MemberRef:
-					
 					method = decoder.ModuleTypeSystem.GetMethod(callTarget, decoder.Method.DeclaringType);
+					//System.Console.WriteLine ("CallTarget 0x{0:X} for {1} from {2} ({3})", callTarget, method, decoder.Method);
 					if (method.DeclaringType.IsGeneric)
 						decoder.Compiler.Scheduler.ScheduleTypeForCompilation(method.DeclaringType);
 					break;
 
 				case TokenTypes.MethodSpec:
-					method = decoder.ModuleTypeSystem.GetMethod(callTarget);
+					method = decoder.ModuleTypeSystem.GetMethod(callTarget, decoder.Method.DeclaringType);
 					decoder.Compiler.Scheduler.ScheduleTypeForCompilation(method.DeclaringType);
 					break;
 

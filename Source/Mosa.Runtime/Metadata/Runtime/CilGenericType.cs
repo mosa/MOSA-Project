@@ -38,6 +38,10 @@ namespace Mosa.Runtime.Metadata.Runtime
 			{
 				return genericArguments;
 			}
+			internal set
+			{
+				this.genericArguments = value;
+			}
 		}
 
 		protected override string GetName()
@@ -205,6 +209,29 @@ namespace Mosa.Runtime.Metadata.Runtime
 			}
 
 			return NoInterfaces;
+		}
+		
+		protected override IList<RuntimeType> LoadNestedTypes ()
+		{
+			List<RuntimeType> result = new List<RuntimeType>();
+			
+			TokenTypes maxToken = MetadataModule.Metadata.GetMaxTokenValue(TokenTypes.NestedClass);
+			for (TokenTypes token = TokenTypes.NestedClass + 1; token <= maxToken; ++token)
+			{
+				Metadata.Tables.NestedClassRow row = MetadataModule.Metadata.ReadNestedClassRow(token);
+				RuntimeType enclosingType = this.ModuleTypeSystem.GetType (row.EnclosingClassTableIdx);
+				
+				string name = this.Name.Substring (0, this.Name.IndexOf('<'));
+				if (enclosingType.Namespace == this.Namespace && enclosingType.Name == name)
+				{
+					RuntimeType nestedType = this.ModuleTypeSystem.GetType (row.NestedClassTableIdx);
+					result.Add(nestedType);
+				}
+			}
+			
+			if (result.Count == 0)
+				return null;
+			return result;
 		}
 
 
