@@ -16,7 +16,7 @@ using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Tables;
 using Mosa.Runtime.Metadata.Signatures;
 
-namespace Mosa.Runtime.TypeLoader
+namespace Mosa.Runtime.TypeSystem
 {
 	/// <summary>
 	/// Base class for the runtime representation of fields.

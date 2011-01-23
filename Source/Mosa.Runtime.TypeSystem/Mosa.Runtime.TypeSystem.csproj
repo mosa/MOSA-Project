@@ -9,14 +9,14 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
-    <AssemblyName>Mosa.Runtime.TypeLoader</AssemblyName>
+    <AssemblyName>Mosa.Runtime.TypeSystem</AssemblyName>
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
     <DelaySign>false</DelaySign>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <OutputType>Library</OutputType>
-    <RootNamespace>Mosa.Runtime.TypeLoader</RootNamespace>
+    <RootNamespace>Mosa.Runtime.TypeSystem</RootNamespace>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
@@ -47,7 +47,7 @@
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
     <DefineConstants>TRACE</DefineConstants>
-    <DocumentationFile>..\..\bin\Mosa.Runtime.TypeLoader.xml</DocumentationFile>
+    <DocumentationFile>..\..\bin\Mosa.Runtime.TypeSystem.xml</DocumentationFile>
     <FileAlignment>4096</FileAlignment>
     <Optimize>true</Optimize>
     <OutputPath>..\..\bin\</OutputPath>
@@ -96,7 +96,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IRuntimeAttributable.cs" />
-    <Compile Include="Loader.cs" />
+    <Compile Include="TypeLoader.cs" />
     <Compile Include="RuntimeAttribute.cs" />
     <Compile Include="RuntimeField.cs" />
     <Compile Include="RuntimeMember.cs" />

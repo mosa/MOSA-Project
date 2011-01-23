@@ -98,7 +98,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Test.Quick", "Mosa.Tes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Compiler.Common", "Mosa.Compiler.Common\Mosa.Compiler.Common.csproj", "{0B1011A6-8FCD-4F9E-BBB8-8DB86E23D2E8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Runtime.TypeLoader", "Mosa.Runtime.TypeLoader\Mosa.Runtime.TypeLoader.csproj", "{5F30A68E-05BF-40EA-B576-5EBCDE520449}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Runtime.TypeSystem", "Mosa.Runtime.TypeSystem\Mosa.Runtime.TypeSystem.csproj", "{5F30A68E-05BF-40EA-B576-5EBCDE520449}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Test.Stuff", "Mosa.Test.Stuff\Mosa.Test.Stuff.csproj", "{9FABB00D-89E1-45B9-8CA5-E25512293C5F}"
 EndProject

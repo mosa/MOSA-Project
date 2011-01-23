@@ -12,13 +12,13 @@ using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
 
-using Mosa.Runtime.TypeLoader;
+using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime.Metadata.Tables;
 using Mosa.Runtime.Metadata.Signatures;
 
-namespace Mosa.Runtime.TypeLoader.Cil
+namespace Mosa.Runtime.TypeSystem.Cil
 {
 	/// <summary>
 	/// A CIL specialization of <see cref="RuntimeMethod"/>.

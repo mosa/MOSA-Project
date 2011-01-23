@@ -14,7 +14,7 @@ using System.Diagnostics;
 
 using Mosa.Runtime.Metadata.Loader;
 
-namespace Mosa.Runtime.TypeLoader
+namespace Mosa.Runtime.TypeSystem
 {
 	/// <summary>
 	/// 

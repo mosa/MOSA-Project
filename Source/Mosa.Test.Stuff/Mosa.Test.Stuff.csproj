@@ -69,9 +69,9 @@
       <Project>{7033B213-2055-4C6A-B008-D9856267F5D7}</Project>
       <Name>Mosa.Runtime.Metadata</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mosa.Runtime.TypeLoader\Mosa.Runtime.TypeLoader.csproj">
+    <ProjectReference Include="..\Mosa.Runtime.TypeSystem\Mosa.Runtime.TypeSystem.csproj">
       <Project>{5F30A68E-05BF-40EA-B576-5EBCDE520449}</Project>
-      <Name>Mosa.Runtime.TypeLoader</Name>
+      <Name>Mosa.Runtime.TypeSystem</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

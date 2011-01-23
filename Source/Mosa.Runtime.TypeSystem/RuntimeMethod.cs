@@ -17,7 +17,7 @@ using Mosa.Runtime.Metadata.Tables;
 using Mosa.Runtime.Metadata.Signatures;
 using System.Diagnostics;
 
-namespace Mosa.Runtime.TypeLoader
+namespace Mosa.Runtime.TypeSystem
 {
 	/// <summary>
 	/// Base class for the runtime representation of methods.

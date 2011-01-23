@@ -7,7 +7,7 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-namespace Mosa.Runtime.TypeLoader
+namespace Mosa.Runtime.TypeSystem
 {
 	/// <summary>
 	/// 

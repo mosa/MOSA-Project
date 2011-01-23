@@ -15,9 +15,9 @@ using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Metadata.Tables;
-using Mosa.Runtime.TypeLoader;
+using Mosa.Runtime.TypeSystem;
 
-namespace Mosa.Runtime.TypeLoader.Cil
+namespace Mosa.Runtime.TypeSystem.Cil
 {
 	/// <summary>
 	/// A CIL specialization of <see cref="RuntimeField"/>.
