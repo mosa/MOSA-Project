@@ -98,7 +98,7 @@ namespace Mosa.Runtime.Vm
 		RuntimeParameter[] IModuleTypeSystemInternalList.Parameters { get { return parameters; } }
 
 		/// <summary>
-		/// Holds all loaded _stackFrameIndex definitions.
+		/// Holds all loaded fields definitions.
 		/// </summary>
 		RuntimeField[] IModuleTypeSystemInternalList.Fields { get { return fields; } }
 
@@ -156,7 +156,7 @@ namespace Mosa.Runtime.Vm
 			fields = new RuntimeField[0];
 			types = new RuntimeType[0];
 			parameters = new RuntimeParameter[0];
-			
+
 			typeSpecs = new RuntimeType[0];
 			methodSpecs = new RuntimeMethod[0];
 		}
@@ -185,7 +185,7 @@ namespace Mosa.Runtime.Vm
 		/// <param name="token">The token of the type to load. This can represent a typeref, typedef or typespec token.</param>
 		/// <returns>The runtime type of the specified token.</returns>
 		RuntimeType IModuleTypeSystem.GetType(TokenTypes token)
-		{			
+		{
 			switch (token & TokenTypes.TableMask)
 			{
 				case TokenTypes.TypeRef:
@@ -286,7 +286,7 @@ namespace Mosa.Runtime.Vm
 					MethodSignature sig = Signature.FromMemberRefSignatureToken(metadata, row.SignatureBlobIdx) as MethodSignature;
 
 					CilGenericType genericType = type as CilGenericType;
-					if (genericType != null) 
+					if (genericType != null)
 						sig.ApplyGenericType(genericType.GenericArguments);
 
 					foreach (RuntimeMethod method in type.Methods)
@@ -322,46 +322,40 @@ namespace Mosa.Runtime.Vm
 					throw new NotSupportedException(@"Can't get method for token " + token.ToString("x"));
 			}
 		}
-		
+
 		/// <summary>
-		/// 
+		/// Gets the method.
 		/// </summary>
-		/// <param name="token">
-		/// A <see cref="TokenTypes"/>
-		/// </param>
-		/// <param name="callingType">
-		/// A <see cref="RuntimeType"/>
-		/// </param>
-		/// <returns>
-		/// A <see cref="RuntimeMethod"/>
-		/// </returns>
-		RuntimeMethod IModuleTypeSystem.GetMethod(TokenTypes token, RuntimeType callingType) 
+		/// <param name="token">The token.</param>
+		/// <param name="callingType">Type of the calling.</param>
+		/// <returns></returns>
+		RuntimeMethod IModuleTypeSystem.GetMethod(TokenTypes token, RuntimeType callingType)
 		{
-			RuntimeMethod calledMethod = (this as IModuleTypeSystem).GetMethod (token);
-			
+			RuntimeMethod calledMethod = (this as IModuleTypeSystem).GetMethod(token);
+
 			if (callingType == null)
 				return calledMethod;
-			
+
 			if (calledMethod.DeclaringType.Namespace != callingType.Namespace)
 				return calledMethod;
-			
+
 			string declaringTypeName = calledMethod.DeclaringType.Name;
-			if (declaringTypeName.Contains ("<"))
-				declaringTypeName = declaringTypeName.Substring (0, declaringTypeName.IndexOf ('<'));
-			
+			if (declaringTypeName.Contains("<"))
+				declaringTypeName = declaringTypeName.Substring(0, declaringTypeName.IndexOf('<'));
+
 			string callingTypeName = callingType.Name;
-			if (callingTypeName.Contains ("<"))
-				callingTypeName = callingTypeName.Substring (0, callingTypeName.IndexOf ('<'));
-			
+			if (callingTypeName.Contains("<"))
+				callingTypeName = callingTypeName.Substring(0, callingTypeName.IndexOf('<'));
+
 			if (declaringTypeName != callingTypeName)
 				return calledMethod;
-			
+
 			foreach (RuntimeMethod m in callingType.Methods)
 			{
 				if (calledMethod.Name == m.Name)
 					return m;
 			}
-			
+
 			return calledMethod;
 		}
 
@@ -406,7 +400,7 @@ namespace Mosa.Runtime.Vm
 				case CilElementType.GenericInst:
 					GenericInstSigType genericSigType = (GenericInstSigType)sigType;
 					RuntimeType baseType = ((IModuleTypeSystem)this).GetType(genericSigType.BaseType.Token);
-					IModuleTypeSystem moduleTypeSystem = ResolveModuleTypeSystem (token);
+					IModuleTypeSystem moduleTypeSystem = ResolveModuleTypeSystem(token);
 					return new CilGenericType(moduleTypeSystem, baseType, genericSigType);
 
 				default:
@@ -501,13 +495,13 @@ namespace Mosa.Runtime.Vm
 
 				// Create and populate the runtime type
 				rt = new CilRuntimeType(this, token, typeDefRow, maxNextField, maxNextMethod, packing, size);
-				
-				string typeName = metadata.ReadString (typeDefRow.TypeNameIdx);
-				string typeNamespace = metadata.ReadString (typeDefRow.TypeNamespaceIdx);
-				
+
+				string typeName = metadata.ReadString(typeDefRow.TypeNameIdx);
+				string typeNamespace = metadata.ReadString(typeDefRow.TypeNamespaceIdx);
+
 				LoadMethods(rt, typeDefRow.MethodList, maxNextMethod, ref methodOffset);
 				LoadFields(rt, typeDefRow.FieldList, maxNextField, ref fieldOffset);
-				
+
 				types[typeOffset++] = rt;
 
 				packing = size = 0;
@@ -529,7 +523,7 @@ namespace Mosa.Runtime.Vm
 				return;
 
 			MethodDefRow nextMethodDef = new MethodDefRow();
-			
+
 			TokenTypes maxParam, maxMethod = metadata.GetMaxTokenValue(TokenTypes.MethodDef);
 			MethodDefRow methodDef = metadata.ReadMethodDefRow(first);
 
@@ -841,81 +835,81 @@ namespace Mosa.Runtime.Vm
 				case TokenTypes.ModuleRef:
 					throw new NotImplementedException();
 				case TokenTypes.TypeRef:
-				{
-					int resScope = (int)row.ResolutionScopeIdx;
-					int nameIdx = (int)row.TypeNameIdx;
-					int namespaceIdx = (int)row.TypeNamespaceIdx;
-					string name = metadata.ReadString(row.TypeNameIdx);
-				
-					// FIXME: (rootnode) Implement nested types for variable nesting levels
-					string nestedTypeName = metadata.ReadString(row.TypeNameIdx);
-					row = metadata.ReadTypeRefRow(row.ResolutionScopeIdx);
-					string typeName = metadata.ReadString(row.TypeNameIdx);
-					string typeNamespace = metadata.ReadString(row.TypeNamespaceIdx) + "." + typeName;
+					{
+						int resScope = (int)row.ResolutionScopeIdx;
+						int nameIdx = (int)row.TypeNameIdx;
+						int namespaceIdx = (int)row.TypeNamespaceIdx;
+						string name = metadata.ReadString(row.TypeNameIdx);
 
-					AssemblyRefRow asmRefRow = metadata.ReadAssemblyRefRow(row.ResolutionScopeIdx);
-					string assemblyName = metadata.ReadString(asmRefRow.NameIdx);
-					IModuleTypeSystem module = typeSystem.ResolveModuleReference(metadata.ReadString(asmRefRow.NameIdx));
-					RuntimeType type = module.GetType(typeNamespace, nestedTypeName);
+						// FIXME: (rootnode) Implement nested types for variable nesting levels
+						string nestedTypeName = metadata.ReadString(row.TypeNameIdx);
+						row = metadata.ReadTypeRefRow(row.ResolutionScopeIdx);
+						string typeName = metadata.ReadString(row.TypeNameIdx);
+						string typeNamespace = metadata.ReadString(row.TypeNamespaceIdx) + "." + typeName;
 
-					if (type != null)
-						return type;
-				
-					throw new NotImplementedException(string.Format("{0:X} {1:X} {2:X}", resScope, nameIdx, namespaceIdx));
-				}
+						AssemblyRefRow asmRefRow = metadata.ReadAssemblyRefRow(row.ResolutionScopeIdx);
+						string assemblyName = metadata.ReadString(asmRefRow.NameIdx);
+						IModuleTypeSystem module = typeSystem.ResolveModuleReference(metadata.ReadString(asmRefRow.NameIdx));
+						RuntimeType type = module.GetType(typeNamespace, nestedTypeName);
+
+						if (type != null)
+							return type;
+
+						throw new NotImplementedException(string.Format("{0:X} {1:X} {2:X}", resScope, nameIdx, namespaceIdx));
+					}
 				case TokenTypes.AssemblyRef:
-				{
-					string typeName = metadata.ReadString(row.TypeNameIdx);
-					string typeNamespace = metadata.ReadString(row.TypeNamespaceIdx);
+					{
+						string typeName = metadata.ReadString(row.TypeNameIdx);
+						string typeNamespace = metadata.ReadString(row.TypeNamespaceIdx);
 
-					AssemblyRefRow asmRefRow = metadata.ReadAssemblyRefRow(row.ResolutionScopeIdx);
-					IModuleTypeSystem module = typeSystem.ResolveModuleReference(metadata.ReadString(asmRefRow.NameIdx));
-					RuntimeType type = module.GetType(typeNamespace, typeName);
+						AssemblyRefRow asmRefRow = metadata.ReadAssemblyRefRow(row.ResolutionScopeIdx);
+						IModuleTypeSystem module = typeSystem.ResolveModuleReference(metadata.ReadString(asmRefRow.NameIdx));
+						RuntimeType type = module.GetType(typeNamespace, typeName);
 
-					if (type != null)
-						return type;
+						if (type != null)
+							return type;
 
-					throw new TypeLoadException("Could not find type: " + typeNamespace + Type.Delimiter + typeName);
-				}
+						throw new TypeLoadException("Could not find type: " + typeNamespace + Type.Delimiter + typeName);
+					}
 				default:
 					throw new NotSupportedException();
 			}
 		}
-		
+
 		private IModuleTypeSystem ResolveModuleTypeSystem(TokenTypes token)
-		{			
+		{
 			switch (token & TokenTypes.TableMask)
 			{
 				case TokenTypes.TypeSpec:
-				{
-					TypeSpecRow typeSpecRow = metadata.ReadTypeSpecRow(token);
-					TypeSpecSignature typeSpecSignature = new TypeSpecSignature(metadata, typeSpecRow.SignatureBlobIdx);
-					GenericInstSigType genericInstSigType = typeSpecSignature.Type as GenericInstSigType;
-				
-					if ((genericInstSigType.BaseType.Token & TokenTypes.TableMask) == TokenTypes.TypeRef)
 					{
-						TypeRefRow typeRefRow = metadata.ReadTypeRefRow(genericInstSigType.BaseType.Token);
-						TokenTypes resolutionScopeIdx = typeRefRow.ResolutionScopeIdx;
+						TypeSpecRow typeSpecRow = metadata.ReadTypeSpecRow(token);
+						TypeSpecSignature typeSpecSignature = new TypeSpecSignature(metadata, typeSpecRow.SignatureBlobIdx);
+						GenericInstSigType genericInstSigType = typeSpecSignature.Type as GenericInstSigType;
 
-						// Recurse until we hit an assembly reference so we know which ModuleTypeSystem
-						// we have to use
-						while ((resolutionScopeIdx & TokenTypes.TableMask) != TokenTypes.AssemblyRef)
-							resolutionScopeIdx = metadata.ReadTypeRefRow(resolutionScopeIdx).ResolutionScopeIdx;	
+						if ((genericInstSigType.BaseType.Token & TokenTypes.TableMask) == TokenTypes.TypeRef)
+						{
+							TypeRefRow typeRefRow = metadata.ReadTypeRefRow(genericInstSigType.BaseType.Token);
+							TokenTypes resolutionScopeIdx = typeRefRow.ResolutionScopeIdx;
 
-						AssemblyRefRow assemblyRefRow = metadata.ReadAssemblyRefRow(resolutionScopeIdx);
+							// Recurse until we hit an assembly reference so we know which ModuleTypeSystem
+							// we have to use
+							while ((resolutionScopeIdx & TokenTypes.TableMask) != TokenTypes.AssemblyRef)
+								resolutionScopeIdx = metadata.ReadTypeRefRow(resolutionScopeIdx).ResolutionScopeIdx;
+
+							AssemblyRefRow assemblyRefRow = metadata.ReadAssemblyRefRow(resolutionScopeIdx);
+							string name = metadata.ReadString(assemblyRefRow.NameIdx);
+							return this.typeSystem.ResolveModuleReference(metadata.ReadString(assemblyRefRow.NameIdx));
+						}
+						else
+							return this;
+					}
+				case TokenTypes.TypeRef:
+					{
+						TypeRefRow typeRefRow = metadata.ReadTypeRefRow(token);
+						AssemblyRefRow assemblyRefRow = metadata.ReadAssemblyRefRow(typeRefRow.ResolutionScopeIdx);
 						string name = metadata.ReadString(assemblyRefRow.NameIdx);
 						return this.typeSystem.ResolveModuleReference(metadata.ReadString(assemblyRefRow.NameIdx));
 					}
-					else 
-						return this;
-				}
-				case TokenTypes.TypeRef:
-				{
-					TypeRefRow typeRefRow = metadata.ReadTypeRefRow(token);
-					AssemblyRefRow assemblyRefRow = metadata.ReadAssemblyRefRow(typeRefRow.ResolutionScopeIdx);
-					string name = metadata.ReadString(assemblyRefRow.NameIdx);
-					return this.typeSystem.ResolveModuleReference(metadata.ReadString(assemblyRefRow.NameIdx));
-				}
 				default:
 					return this;
 			}
@@ -925,7 +919,7 @@ namespace Mosa.Runtime.Vm
 		{
 			MemberRefRow row = metadata.ReadMemberRefRow(token);
 			RuntimeType ownerType;
-			FieldSignature sig = new FieldSignature (metadata, row.SignatureBlobIdx);
+			FieldSignature sig = new FieldSignature(metadata, row.SignatureBlobIdx);
 
 			switch (row.ClassTableIdx & TokenTypes.TableMask)
 			{
