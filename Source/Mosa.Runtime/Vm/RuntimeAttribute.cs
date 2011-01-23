@@ -84,7 +84,7 @@ namespace Mosa.Runtime.Vm
 				return attribute;
 
 			// Retrieve the attribute type
-			attribute = CustomAttributeParser.Parse(moduleTypeSystem.MetadataModule, attributeBlob, ctorMethod);
+			attribute = CustomAttributeParser.Parse(moduleTypeSystem.MetadataModule.Metadata, attributeBlob, ctorMethod);
 			Debug.Assert(null != attribute, @"Failed to load the attribute.");
 
 			return attribute;

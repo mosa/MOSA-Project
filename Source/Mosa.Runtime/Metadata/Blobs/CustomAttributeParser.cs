@@ -10,11 +10,13 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Mosa.Runtime.Metadata.Loader;
-using Mosa.Runtime.Vm;
 using System.IO;
 using System.Diagnostics;
+
+using Mosa.Runtime.Vm;
+using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
+using Mosa.Runtime.Metadata.Loader;
 
 namespace Mosa.Runtime.Metadata.Blobs
 {
@@ -47,19 +49,19 @@ namespace Mosa.Runtime.Metadata.Blobs
 		/// <summary>
 		/// Parses the specified attribute blob and instantiates the attribute.
 		/// </summary>
-		/// <param name="module">The metadata module, which contains the attribute blob.</param>
+		/// <param name="metadataProvider">The metadata module, which contains the attribute blob.</param>
 		/// <param name="attributeBlob">The attribute blob token.</param>
 		/// <param name="attributeCtor">The constructor of the attribute.</param>
 		/// <returns>The fully instantiated and initialized attribute.</returns>
 		/// <exception cref="System.ArgumentException"><paramref name="attributeBlob"/> is invalid.</exception>
-		/// <exception cref="System.ArgumentNullException"><paramref name="module"/> is null or <paramref name="attributeCtor"/> is null.</exception>
-		public static object Parse(IMetadataModule module, TokenTypes attributeBlob, RuntimeMethod attributeCtor)
+		/// <exception cref="System.ArgumentNullException"><paramref name="metadataProvider"/> is null or <paramref name="attributeCtor"/> is null.</exception>
+		public static object Parse(IMetadataProvider metadataProvider, TokenTypes attributeBlob, RuntimeMethod attributeCtor)
 		{
 			// Return value
 			object result;
 
 			// Try to load the blob from the module
-			byte[] blob = module.Metadata.ReadBlob(attributeBlob);
+			byte[] blob = metadataProvider.ReadBlob(attributeBlob);
 			if (null != blob)
 			{
 				if (0 != blob.Length)
@@ -77,7 +79,7 @@ namespace Mosa.Runtime.Metadata.Blobs
 						IList<RuntimeParameter> parameters = attributeCtor.Parameters;
 						object[] args = new object[parameters.Count];
 						for (int idx = 0; idx < parameters.Count; idx++)
-							args[idx] = ParseFixedArg(module, reader, paramSig[idx]);
+							args[idx] = ParseFixedArg(metadataProvider, reader, paramSig[idx]);
 
 						// Create the attribute instance
 						result = CreateAttribute(attributeCtor, args);
@@ -118,17 +120,17 @@ namespace Mosa.Runtime.Metadata.Blobs
 		{
 			RuntimeType rt = attributeCtor.DeclaringType;
 			Type attributeType = Type.GetType(String.Format("{0}.{1}, Mosa.Vm", rt.Namespace, rt.Name));
-			return Activator.CreateInstance(attributeType, args, null);			
+			return Activator.CreateInstance(attributeType, args, null);
 		}
 
 		/// <summary>
 		/// Parses a fixed argument in an attribute blob definition.
 		/// </summary>
-		/// <param name="module">The metadata module, which contains the attribute blob.</param>
+		/// <param name="metadataProvider">The metadata module, which contains the attribute blob.</param>
 		/// <param name="reader">The binary reader to read it From.</param>
 		/// <param name="sigType">The signature type of the value to read.</param>
 		/// <returns></returns>
-		private static object ParseFixedArg(IMetadataModule module, BinaryReader reader, SigType sigType)
+		private static object ParseFixedArg(IMetadataProvider metadataProvider, BinaryReader reader, SigType sigType)
 		{
 			// Return value
 			object result = null;
@@ -136,9 +138,9 @@ namespace Mosa.Runtime.Metadata.Blobs
 			// A vector?
 			SZArraySigType arraySigType = sigType as SZArraySigType;
 			if (arraySigType != null)
-				result = ParseSZArrayArg(module, reader, arraySigType);
+				result = ParseSZArrayArg(metadataProvider, reader, arraySigType);
 			else
-				result = ParseElem(module, reader, sigType);
+				result = ParseElem(metadataProvider, reader, sigType);
 
 			return result;
 		}
@@ -146,11 +148,13 @@ namespace Mosa.Runtime.Metadata.Blobs
 		/// <summary>
 		/// Parses an SZArray attribute value.
 		/// </summary>
-		/// <param name="module">The metadata module, which contains the attribute blob.</param>
+		/// <param name="metadataProvider">The metadata module, which contains the attribute blob.</param>
 		/// <param name="reader">The binary reader used to read from the attribute blob.</param>
 		/// <param name="sigType">Type of the SZArray.</param>
-		/// <returns>An Array, which represents the SZArray definition.</returns>
-		private static object ParseSZArrayArg(IMetadataModule module, BinaryReader reader, SZArraySigType sigType)
+		/// <returns>
+		/// An Array, which represents the SZArray definition.
+		/// </returns>
+		private static object ParseSZArrayArg(IMetadataProvider metadataProvider, BinaryReader reader, SZArraySigType sigType)
 		{
 			// Return value
 			Array result;
@@ -166,7 +170,7 @@ namespace Mosa.Runtime.Metadata.Blobs
 			result = Array.CreateInstance(elementType, numElements);
 			for (int idx = 0; idx < numElements; idx++)
 			{
-				object item = ParseElem(module, reader, sigType.ElementType);
+				object item = ParseElem(metadataProvider, reader, sigType.ElementType);
 				result.SetValue(item, idx);
 			}
 
@@ -176,12 +180,12 @@ namespace Mosa.Runtime.Metadata.Blobs
 		/// <summary>
 		/// Parses an elementary field, parameter or property definition.
 		/// </summary>
-		/// <param name="module">The metadata module, which contains the attribute blob.</param>
+		/// <param name="metadataProvider">The metadata module, which contains the attribute blob.</param>
 		/// <param name="reader">The binary reader to read data From.</param>
 		/// <param name="sigType">The signature type of the field, parameter or property to read.</param>
 		/// <returns>An object, which represents the value read from the attribute blob.</returns>
 		/// <exception cref="System.NotSupportedException"><paramref name="sigType"/> is not yet supported.</exception>
-		private static object ParseElem(IMetadataModule module, BinaryReader reader, SigType sigType)
+		private static object ParseElem(IMetadataProvider metadataProvider, BinaryReader reader, SigType sigType)
 		{
 			object result;
 
@@ -256,7 +260,9 @@ namespace Mosa.Runtime.Metadata.Blobs
 						}
 						else
 						{
-							result = Type.GetType(typeName + ", " + module.Name);
+							//TODO
+							//result = Type.GetType(typeName + ", " + metadataProvider.Name);
+							result = Type.GetType(typeName);
 						}
 					}
 					break;
