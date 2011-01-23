@@ -75,6 +75,11 @@ namespace Mosa.Runtime.Vm
 		/// Holds the interfaces of this type.
 		/// </summary>
 		private IList<RuntimeType> interfaces;
+		
+		/// <summary>
+		/// 
+		/// </summary>
+		private IList<RuntimeType> nestedTypes;
 
 		private bool isCompiled;
 
@@ -275,6 +280,27 @@ namespace Mosa.Runtime.Vm
 		{
 			get { return nativeSize; }
 			set { nativeSize = value; }	// FIXME: should be protected
+		}
+		
+		/// <summary>
+		/// 
+		/// </summary>
+		public IList<RuntimeType> NestedTypes
+		{
+			get
+			{
+				if (this.nestedTypes == null)
+					this.nestedTypes = LoadNestedTypes ();
+				return this.nestedTypes;
+			}
+		}
+		
+		/// <summary>
+		/// 
+		/// </summary>
+		public bool HasNestedTypes
+		{
+			get { return this.NestedTypes != null && this.NestedTypes.Count > 0; }
 		}
 
 		/// <summary>
@@ -492,5 +518,10 @@ namespace Mosa.Runtime.Vm
 		/// Loads the interfaces implemented by a type.
 		/// </summary>
 		protected abstract IList<RuntimeType> LoadInterfaces();
+		
+		/// <summary>
+		/// Loads all nested types for this type.
+		/// </summary>
+		protected abstract IList<RuntimeType> LoadNestedTypes();
 	}
 }

@@ -702,6 +702,9 @@ namespace Mosa.Runtime.Vm
 			{
 				case TokenTypes.TypeDef:
 					types[(int)(TokenTypes.RowIndexMask & owner) - 1].SetGenericParameter(gprs);
+					if (types[(int)(TokenTypes.RowIndexMask & owner) - 1].HasNestedTypes)
+					foreach (RuntimeType nestedType in types[(int)(TokenTypes.RowIndexMask & owner) - 1].NestedTypes)
+						nestedType.SetGenericParameter(gprs);
 					break;
 
 				case TokenTypes.MethodDef:

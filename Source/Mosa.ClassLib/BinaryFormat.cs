@@ -333,7 +333,7 @@ namespace Mosa.ClassLib
 		/// <returns></returns>
 		public string GetString(uint offset, uint length)
 		{
-			return new ASCIIEncoding().GetString(data, (int)offset, (int)length);
+			return null;//return new ASCIIEncoding().GetString(data, (int)offset, (int)length);
 		}
 	}
 }
