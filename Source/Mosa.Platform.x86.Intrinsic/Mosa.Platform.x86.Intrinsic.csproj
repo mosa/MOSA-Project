@@ -63,9 +63,9 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Mosa.Vm\Mosa.Vm.csproj">
+    <ProjectReference Include="..\Mosa.Intrinsic\Mosa.Intrinsic.csproj">
       <Project>{88E003EE-6EEC-4D9A-AE52-94A6F526F115}</Project>
-      <Name>Mosa.Vm</Name>
+      <Name>Mosa.Intrinsic</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -12,7 +12,7 @@
 
 using System;
 
-using Mosa.Vm;
+using Mosa.Intrinsic;
 
 namespace Mosa.Platform.x86.Intrinsic
 {

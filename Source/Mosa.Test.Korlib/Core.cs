@@ -573,7 +573,7 @@ namespace System
 	}
 }
 
-namespace Mosa.Vm
+namespace Mosa.Intrinsic
 {
 
 	using System;

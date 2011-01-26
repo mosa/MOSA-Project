@@ -18,7 +18,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// <summary>
 		/// Loads the module.
 		/// </summary>
-		/// <param name="module">The module.</param>
+		/// <param name="metadataModule">The metadata module.</param>
 		void ITypeSystem.LoadModule(IMetadataModule metadataModule)
 		{
 			ITypeModule typeModule = new TypeModule(this, metadataModule);
@@ -57,7 +57,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// Gets the runtime type for the given type name and namespace
 		/// </summary>
 		/// <param name="nameSpace">The name space.</param>
-		/// <param name="typeName">Name of the type.</param>
+		/// <param name="name">The name.</param>
 		/// <returns></returns>
 		RuntimeType ITypeSystem.GetType(string nameSpace, string name)
 		{

@@ -24,7 +24,7 @@ using Mosa.Runtime.Vm;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Metadata.Loader;
 using Mosa.Compiler.Linker;
-using Mosa.Vm;
+using Mosa.Intrinsic;
 
 using IR = Mosa.Runtime.CompilerFramework.IR;
 using CIL = Mosa.Runtime.CompilerFramework.CIL;
@@ -1699,20 +1699,20 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		{
 			// HACK: This allows us to resolve IntrinsicAttribute from Korlib without directly referencing it. It is slower, but works.
 			if (intrinsicAttributeTypes == null)
-            {
+			{
 
-                if (typeSystem.GetType(@"Mosa.Vm.IntrinsicAttribute, mscorlib") != null)
-                {
-                    intrinsicAttributeTypes = new RuntimeType[2];
-                    intrinsicAttributeTypes[1] = typeSystem.GetType(@"Mosa.Vm.IntrinsicAttribute, mscorlib");
-                }
-                else
-                {
-                    intrinsicAttributeTypes = new RuntimeType[2];
-                }
+				if (typeSystem.GetType(@"Mosa.Intrinsic.IntrinsicAttribute, mscorlib") != null)
+				{
+					intrinsicAttributeTypes = new RuntimeType[2];
+					intrinsicAttributeTypes[1] = typeSystem.GetType(@"Mosa.Intrinsic.IntrinsicAttribute, mscorlib");
+				}
+				else
+				{
+					intrinsicAttributeTypes = new RuntimeType[2];
+				}
 
-                intrinsicAttributeTypes[0] = typeSystem.GetType(@"Mosa.Vm.IntrinsicAttribute, Mosa.Vm");
-            }
+				intrinsicAttributeTypes[0] = typeSystem.GetType(@"Mosa.Intrinsic.IntrinsicAttribute, Mosa.Intrinsic");
+			}
 
 			// Retrieve the runtime type
 			object attribute = this.FindIntrinsicAttributeInstance(context);
@@ -1758,18 +1758,18 @@ namespace Mosa.Runtime.CompilerFramework.IR
 
 			foreach (RuntimeType intrinsicAttributeType in this.intrinsicAttributeTypes)
 			{
-                try
-                {
-                    object[] attributes = rm.GetCustomAttributes(intrinsicAttributeType);
-                    if (attributes != null && attributes.Length > 0)
-                    {
-                        return attributes[0];
-                    }
-                }
-                catch (NullReferenceException)
-                {
-                    return null;
-                }
+				try
+				{
+					object[] attributes = rm.GetCustomAttributes(intrinsicAttributeType);
+					if (attributes != null && attributes.Length > 0)
+					{
+						return attributes[0];
+					}
+				}
+				catch (NullReferenceException)
+				{
+					return null;
+				}
 			}
 
 			return null;
@@ -1877,7 +1877,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			Debug.Assert(rm != null, @"Call doesn't have a target.");
 
 			// Retrieve the runtime type
-			RuntimeType rt = typeSystem.GetType(@"Mosa.Vm.VmCallAttribute, Mosa.Vm");
+			RuntimeType rt = typeSystem.GetType(@"Mosa.Intrinsic.VmCallAttribute, Mosa.Intrinsic");
 			if (rm.IsDefined(rt))
 			{
 				foreach (RuntimeAttribute ra in rm.CustomAttributes)
@@ -1902,8 +1902,8 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <param name="internalCallTarget">The internal call target.</param>
 		private void ReplaceWithVmCall(Context context, VmCall internalCallTarget)
 		{
-			RuntimeType rt = typeSystem.GetType(@"Mosa.Vm.Runtime");
-			Debug.Assert(rt != null, "Can not find Mosa.Vm.Runtime / @callTarget=" + internalCallTarget.ToString());
+			RuntimeType rt = typeSystem.GetType(@"Mosa.Intrinsic.Runtime");
+			Debug.Assert(rt != null, "Can not find Mosa.Intrinsic.Runtime / @callTarget=" + internalCallTarget.ToString());
 
 			RuntimeMethod callTarget = rt.FindMethod(internalCallTarget.ToString());
 			Debug.Assert(callTarget != null, "@callTarget=" + internalCallTarget.ToString());
