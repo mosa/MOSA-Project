@@ -10,12 +10,12 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Diagnostics;
 
-using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime.Metadata;
+using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Metadata.Tables;
-using System.Diagnostics;
 
 namespace Mosa.Runtime.TypeSystem
 {
@@ -90,7 +90,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// Initializes a new instance of the <see cref="RuntimeType"/> class.
 		/// </summary>
 		/// <param name="token">The token of the type.</param>
-		public RuntimeType(int token) :
+		public RuntimeType(TokenTypes token) :
 			base(token, null, null)
 		{
 			//TODO

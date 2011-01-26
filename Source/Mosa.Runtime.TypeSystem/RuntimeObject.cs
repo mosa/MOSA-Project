@@ -11,6 +11,8 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
+using Mosa.Runtime.Metadata;
+
 namespace Mosa.Runtime.TypeSystem
 {
 	/// <summary>
@@ -23,7 +25,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// <summary>
 		/// Holds the token of the object.
 		/// </summary>
-		private int token;
+		private TokenTypes token;
 
 		#endregion // Data members
 
@@ -33,7 +35,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// Initializes a new instance of <see cref="RuntimeObject"/>.
 		/// </summary>
 		/// <param name="token">The runtime token of this metadata.</param>
-		protected RuntimeObject(int token)
+		protected RuntimeObject(TokenTypes token)
 		{
 			this.token = token;
 		}
@@ -45,7 +47,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// <summary>
 		/// Retrieves the token of the object.
 		/// </summary>
-		public int Token
+		public TokenTypes Token
 		{
 			get { return token; }
 		}

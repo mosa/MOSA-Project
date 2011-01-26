@@ -43,21 +43,21 @@ namespace Mosa.Runtime.TypeSystem.Cil
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CilRuntimeField"/> class.
 		/// </summary>
-		/// <param name="metadataProvider">The metadata provider.</param>
-		/// <param name="field">The field.</param>
+		/// <param name="name">The name.</param>
+		/// <param name="signature">The signature.</param>
 		/// <param name="offset">The offset.</param>
 		/// <param name="rva">The rva.</param>
 		/// <param name="declaringType">Type of the declaring.</param>
-		public CilRuntimeField(IMetadataProvider metadataProvider, FieldRow field, uint offset, uint rva, RuntimeType declaringType) :
+		/// <param name="field">The field.</param>
+		public CilRuntimeField(string name, FieldSignature signature, uint offset, uint rva, RuntimeType declaringType, FieldRow field) :
 			base(declaringType)
 		{
-			this.nameIdx = field.NameStringIdx;
-			this.signatureBlobIdx = field.SignatureBlobIdx;
+			this.Name = name;
+			this.Signature = signature; 
 			base.Attributes = field.Flags;
 			base.RVA = rva;
-
-			this.Signature = new FieldSignature(metadataProvider, this.signatureBlobIdx);
-			this.Name = metadataProvider.ReadString(this.nameIdx);
+			this.nameIdx = field.NameStringIdx;
+			this.signatureBlobIdx = field.SignatureBlobIdx;
 		}
 
 		/// <summary>
@@ -73,7 +73,6 @@ namespace Mosa.Runtime.TypeSystem.Cil
 			this.Attributes = genericField.Attributes;
 			this.RVA = genericField.RVA;
 			this.Signature = signature;
-
 			this.SetAttributes(genericField.CustomAttributes);
 
 			this.Signature = new FieldSignature(metadataProvider, this.signatureBlobIdx);

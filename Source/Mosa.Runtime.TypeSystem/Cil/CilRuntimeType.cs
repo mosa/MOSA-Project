@@ -49,13 +49,15 @@ namespace Mosa.Runtime.TypeSystem.Cil
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CilRuntimeType"/> class.
 		/// </summary>
-		/// <param name="metadataProvider">The metadata provider.</param>
-		/// <param name="token">The token.</param>
-		/// <param name="typeDefRow">The type def row.</param>
+		/// <param name="name">The name.</param>
+		/// <param name="typenamespace">The typenamespace.</param>
 		/// <param name="packing">The packing.</param>
 		/// <param name="size">The size.</param>
-		public CilRuntimeType(IMetadataProvider metadataProvider, TokenTypes token, TypeDefRow typeDefRow, int packing, int size, RuntimeType baseType) :
-			base((int)token)
+		/// <param name="token">The token.</param>
+		/// <param name="baseType">Type of the base.</param>
+		/// <param name="typeDefRow">The type def row.</param>
+		public CilRuntimeType(string name, string typenamespace, int packing, int size, TokenTypes token, RuntimeType baseType, TypeDefRow typeDefRow) :
+			base(token)
 		{
 			this.baseTypeToken = typeDefRow.Extends;
 			this.nameIdx = typeDefRow.TypeNameIdx;
@@ -64,15 +66,12 @@ namespace Mosa.Runtime.TypeSystem.Cil
 			base.Pack = packing;
 			base.Size = size;
 			base.BaseType = baseType;
-
-			this.Name = metadataProvider.ReadString(this.nameIdx);
-			Debug.Assert(this.Name != null, @"Failed to retrieve CilRuntimeMethod name.");
+			this.Name = name;
+			this.Namespace = typenamespace;
 
 			this.Fields = new List<RuntimeField>();
 			this.Methods = new List<RuntimeMethod>();
 			this.Interfaces = new List<RuntimeType>();
-
-			this.Namespace = GetNamespace(metadataProvider);
 		}
 
 		#endregion // Construction
@@ -120,12 +119,12 @@ namespace Mosa.Runtime.TypeSystem.Cil
 			}
 		}
 
-		private TokenTypes GetEnclosingType(IMetadataProvider metadataProvider, int token)
+		private TokenTypes GetEnclosingType(IMetadataProvider metadataProvider, TokenTypes token)
 		{
 			for (int i = 1; ; i++)
 			{
 				NestedClassRow row = metadataProvider.ReadNestedClassRow(TokenTypes.NestedClass + i);
-				if (row.NestedClassTableIdx == (TokenTypes)token)
+				if (row.NestedClassTableIdx == token)
 					return row.EnclosingClassTableIdx;
 			}
 		}
