@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
 
+using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Loader;
 
 namespace Mosa.Runtime.TypeSystem
@@ -48,7 +49,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// <param name="token">Holds the token of this runtime metadata.</param>
 		/// <param name="declaringType">The declaring type of the member.</param>
 		/// <param name="attributes">Holds the attributes of the member.</param>
-		protected RuntimeMember(int token, RuntimeType declaringType, RuntimeAttribute[] attributes) :
+		protected RuntimeMember(TokenTypes token, RuntimeType declaringType, RuntimeAttribute[] attributes) :
 			base(token)
 		{
 			this.declaringType = declaringType;

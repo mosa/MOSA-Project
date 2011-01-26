@@ -13,14 +13,20 @@ namespace Mosa.Test.Stuff
 	{
 		static void Main(string[] args)
 		{
-			string[] files = { @"X:\MOSA-Project-tgiphil\bin\Mosa.Test.Quick.exe" };
+			string[] files = { @"X:\MOSA-Project-tgiphil\bin\Mosa.Vm.dll", @"X:\MOSA-Project-tgiphil\bin\mscorlib.dll" };
+			
+			ITypeSystem typeSystem = new TypeSystem();
 
 			IAssemblyLoader assemblyLoader = new AssemblyLoader();
 			assemblyLoader.InitializePrivatePaths(files);
 
-			IMetadataModule metadataModule = assemblyLoader.LoadModule(files[0]);
+			foreach (string file in files)
+			{
+				IMetadataModule metadataModule = assemblyLoader.LoadModule(file);
 
-			TypeLoader loader = new TypeLoader(metadataModule.Metadata);
+				typeSystem.LoadModule(metadataModule);
+			}
+
 
 			return;
 		}

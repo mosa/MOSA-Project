@@ -67,7 +67,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		/// <param name="token">The token.</param>
 		/// <param name="declaringType">The type, which declared this method.</param>
-		public RuntimeMethod(int token, RuntimeType declaringType) :
+		public RuntimeMethod(TokenTypes token, RuntimeType declaringType) :
 			base(token, declaringType, null)
 		{
 		}

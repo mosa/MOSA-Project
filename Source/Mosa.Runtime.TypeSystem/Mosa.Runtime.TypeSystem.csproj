@@ -79,6 +79,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Cil\CilRuntimeField.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -88,6 +89,7 @@
     <Compile Include="Cil\CilRuntimeType.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="TypeSystem.cs" />
     <Compile Include="CustomAttributeParser.cs" />
     <Compile Include="GenericArgument.cs" />
     <Compile Include="Generic\CilGenericField.cs" />
@@ -96,7 +98,8 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IRuntimeAttributable.cs" />
-    <Compile Include="TypeLoader.cs" />
+    <Compile Include="ITypeModule.cs" />
+    <Compile Include="TypeModule.cs" />
     <Compile Include="RuntimeAttribute.cs" />
     <Compile Include="RuntimeField.cs" />
     <Compile Include="RuntimeMember.cs" />
@@ -104,6 +107,7 @@
     <Compile Include="RuntimeObject.cs" />
     <Compile Include="RuntimeParameter.cs" />
     <Compile Include="RuntimeType.cs" />
+    <Compile Include="ITypeSystem.cs" />
   </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
