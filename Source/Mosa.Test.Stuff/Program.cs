@@ -27,7 +27,6 @@ namespace Mosa.Test.Stuff
 				typeSystem.LoadModule(metadataModule);
 			}
 
-
 			return;
 		}
 	}

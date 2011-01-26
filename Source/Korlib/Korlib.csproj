@@ -70,6 +70,9 @@
     </NoWarn>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Mosa.Intrinsic\IntrinsicAttribute.cs" />
+    <Compile Include="Mosa.Intrinsic\VmCall.cs" />
+    <Compile Include="Mosa.Intrinsic\VmCallAttribute.cs" />
     <Compile Include="System.Runtime.InteropServices\CallingConvention.cs" />
     <Compile Include="System.Runtime.InteropServices\DllImportAttribute.cs" />
     <Compile Include="System.Runtime.InteropServices\UnmanagedFunctionPointerAttribute.cs" />
@@ -145,12 +148,6 @@
     <Compile Include="System.Runtime.CompilerServices\CompilerGeneratedAttribute.cs" />
     <Compile Include="System.Runtime.InteropServices\ComVisible.cs" />
     <Compile Include="System.Runtime.InteropServices\OutAttribute.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Mosa.Intrinsic\Mosa.Intrinsic.csproj">
-      <Project>{88E003EE-6EEC-4D9A-AE52-94A6F526F115}</Project>
-      <Name>Mosa.Intrinsic</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <PropertyGroup>

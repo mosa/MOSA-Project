@@ -873,7 +873,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 				context.AppendInstruction(Instruction.JmpInstruction);
 				context.SetBranch(context.Next.Label);
 			}
-			else 
+			else
 			{
 				Operand comparisonResult = this.methodCompiler.CreateTemporary(BuiltInSigType.Int32);
 				context.SetInstruction(comparisonInstruction, comparisonResult, first, second);
@@ -1700,18 +1700,13 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			// HACK: This allows us to resolve IntrinsicAttribute from Korlib without directly referencing it. It is slower, but works.
 			if (intrinsicAttributeTypes == null)
 			{
+				intrinsicAttributeTypes = new RuntimeType[2];
+				intrinsicAttributeTypes[0] = typeSystem.GetType(@"Mosa.Intrinsic.IntrinsicAttribute, Mosa.Intrinsic");
 
 				if (typeSystem.GetType(@"Mosa.Intrinsic.IntrinsicAttribute, mscorlib") != null)
 				{
-					intrinsicAttributeTypes = new RuntimeType[2];
 					intrinsicAttributeTypes[1] = typeSystem.GetType(@"Mosa.Intrinsic.IntrinsicAttribute, mscorlib");
 				}
-				else
-				{
-					intrinsicAttributeTypes = new RuntimeType[2];
-				}
-
-				intrinsicAttributeTypes[0] = typeSystem.GetType(@"Mosa.Intrinsic.IntrinsicAttribute, Mosa.Intrinsic");
 			}
 
 			// Retrieve the runtime type
@@ -1756,19 +1751,22 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			RuntimeMethod rm = context.InvokeTarget;
 			Debug.Assert(rm != null, @"Call doesn't have a target.");
 
-			foreach (RuntimeType intrinsicAttributeType in this.intrinsicAttributeTypes)
+			foreach (RuntimeType intrinsicAttributeType in intrinsicAttributeTypes)
 			{
-				try
+				if (intrinsicAttributeType != null)
 				{
-					object[] attributes = rm.GetCustomAttributes(intrinsicAttributeType);
-					if (attributes != null && attributes.Length > 0)
+					try
 					{
-						return attributes[0];
+						object[] attributes = rm.GetCustomAttributes(intrinsicAttributeType);
+						if (attributes != null && attributes.Length > 0)
+						{
+							return attributes[0];
+						}
 					}
-				}
-				catch (NullReferenceException)
-				{
-					return null;
+					catch (NullReferenceException)
+					{
+						return null;
+					}
 				}
 			}
 
@@ -1915,7 +1913,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		private bool ReplaceWithInternalCall(Context context, RuntimeMethod method)
 		{
 			bool internalCall = ((method.ImplAttributes & Mosa.Runtime.Metadata.MethodImplAttributes.InternalCall) == Mosa.Runtime.Metadata.MethodImplAttributes.InternalCall);
-			
+
 			if (internalCall)
 			{
 				string replacementMethod = this.BuildInternalCallName(method);

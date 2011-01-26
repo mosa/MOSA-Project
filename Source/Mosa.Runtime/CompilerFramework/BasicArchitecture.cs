@@ -114,7 +114,7 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
-		/// Gets the intrinsics instruction by type
+		/// Gets the intrinsic instruction by type
 		/// </summary>
 		/// <param name="type">The type.</param>
 		/// <returns></returns>
