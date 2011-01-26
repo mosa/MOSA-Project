@@ -19,17 +19,17 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes _resolutionScopeIdx;
+		private TokenTypes resolutionScopeIdx;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes _typeNameIdx;
+		private TokenTypes typeNameIdx;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes _typeNamespaceIdx;
+		private TokenTypes typeNamespaceIdx;
 
 		#endregion // Data members
 
@@ -43,9 +43,9 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <param name="typeNamespaceIdx">The type namespace idx.</param>
 		public TypeRefRow(TokenTypes resolutionScopeIdx, TokenTypes typeNameIdx, TokenTypes typeNamespaceIdx)
 		{
-			_resolutionScopeIdx = resolutionScopeIdx;
-			_typeNameIdx = typeNameIdx;
-			_typeNamespaceIdx = typeNamespaceIdx;
+			this.resolutionScopeIdx = resolutionScopeIdx;
+			this.typeNameIdx = typeNameIdx;
+			this.typeNamespaceIdx = typeNamespaceIdx;
 		}
 
 		#endregion // Construction
@@ -58,8 +58,8 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <value>The resolution scope idx.</value>
 		public TokenTypes ResolutionScopeIdx
 		{
-			get { return _resolutionScopeIdx; }
-			set { _resolutionScopeIdx = value; }
+			get { return resolutionScopeIdx; }
+			set { resolutionScopeIdx = value; }
 		}
 
 		/// <summary>
@@ -68,8 +68,8 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <value>The type name idx.</value>
 		public TokenTypes TypeNameIdx
 		{
-			get { return _typeNameIdx; }
-			set { _typeNameIdx = value; }
+			get { return typeNameIdx; }
+			set { typeNameIdx = value; }
 		}
 
 		/// <summary>
@@ -78,8 +78,8 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <value>The type namespace idx.</value>
 		public TokenTypes TypeNamespaceIdx
 		{
-			get { return _typeNamespaceIdx; }
-			set { _typeNamespaceIdx = value; }
+			get { return typeNamespaceIdx; }
+			set { typeNamespaceIdx = value; }
 		}
 
 		#endregion // Properties

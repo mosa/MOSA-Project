@@ -69,7 +69,7 @@ namespace Mosa.Runtime.Metadata.Loader.PE
 		/// <summary>
 		/// Metadata binary byte array.
 		/// </summary>	
-		byte[] metadata;
+		private byte[] metadata;
 
 		#endregion // Data members
 
