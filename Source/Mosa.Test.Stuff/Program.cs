@@ -13,8 +13,8 @@ namespace Mosa.Test.Stuff
 	{
 		static void Main(string[] args)
 		{
-			string[] files = { @"X:\MOSA-Project-tgiphil\bin\mscorlib.dll" };
-			
+			string[] files = { @"X:\MOSA-Project-tgiphil\bin\mscorlib.dll", @"X:\MOSA-Project-tgiphil\bin\Mosa.Platform.X86.Intrinsic.dll", @"X:\MOSA-Project-tgiphil\bin\Mosa.Kernel.dll" };
+
 			ITypeSystem typeSystem = new TypeSystem();
 
 			IAssemblyLoader assemblyLoader = new AssemblyLoader();

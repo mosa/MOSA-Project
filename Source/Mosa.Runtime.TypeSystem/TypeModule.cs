@@ -120,7 +120,7 @@ namespace Mosa.Runtime.TypeSystem
 			LoadParameters();
 			//LoadCustomAttributes();
 			LoadInterfaces();
-			LoadTypeReferences();	
+			LoadTypeReferences();
 			LoadMemberReferences();
 		}
 
@@ -454,14 +454,12 @@ namespace Mosa.Runtime.TypeSystem
 				switch (row.ClassTableIdx & TokenTypes.TableMask)
 				{
 					case TokenTypes.TypeDef:
-						ownerType = types[(int)row.ClassTableIdx];
+						ownerType = types[(int)(row.ClassTableIdx & TokenTypes.RowIndexMask) - 1];
 						break;
 
 					case TokenTypes.TypeRef:
-						//TODO
-						//ownerType = ((IModuleTypeSystem)this).GetType(row.ClassTableIdx);
-						//break;
-						continue;
+						ownerType = typeRef[(int)(row.ClassTableIdx & TokenTypes.RowIndexMask) - 1];
+						break;
 
 					case TokenTypes.TypeSpec:
 						//TODO
@@ -472,27 +470,43 @@ namespace Mosa.Runtime.TypeSystem
 						throw new NotSupportedException(String.Format(@"LoadMemberReferences() does not support token table {0}", row.ClassTableIdx & TokenTypes.TableMask));
 				}
 
-				//MethodSignature signature = new MethodSignature(metadataProvider, row.SignatureBlobIdx);
-				//FieldSignature signature = new FieldSignature(metadataProvider, row.SignatureBlobIdx);
-
 				if (ownerType == null)
 					throw new InvalidOperationException(String.Format(@"Failed to retrieve owner type for Token {0:x} (Table {1})", row.ClassTableIdx, row.ClassTableIdx & TokenTypes.TableMask));
 
+				Signature signature = Signature.FromMemberRefSignatureToken(metadataProvider, row.SignatureBlobIdx);
 				RuntimeMember runtimeMember = null;
 
-				foreach (RuntimeField field in ownerType.Fields)
+				if (signature is FieldSignature)
 				{
-					if (field.Name == name)
+					foreach (RuntimeField field in ownerType.Fields)
 					{
-						runtimeMember = field;
-						break;
+						if (field.Name == name)
+						{
+							runtimeMember = field;
+							break;
+						}
+					}
+				}
+				else
+				{
+					Debug.Assert(signature is MethodSignature);
+
+					foreach (RuntimeMethod method in ownerType.Methods)
+					{
+						if (method.Name == name)
+
+							if (method.Signature.Matches(signature as MethodSignature))
+							{
+								runtimeMember = method;
+								break;
+							}
 					}
 				}
 
 				if (runtimeMember == null)
 					throw new InvalidOperationException(String.Format(@"Failed to locate field {0}.{1}", ownerType.FullName, name));
 
-				memberRef[(int)token] = runtimeMember;
+				memberRef[(int)(token & TokenTypes.RowIndexMask) - 1] = runtimeMember;
 			}
 		}
 
@@ -534,7 +548,7 @@ namespace Mosa.Runtime.TypeSystem
 
 							if (runtimeType == null)
 								throw new TypeLoadException("Could not find type: " + typeNamespace2 + Type.Delimiter + typeName);
-							
+
 							break;
 						}
 
@@ -563,7 +577,7 @@ namespace Mosa.Runtime.TypeSystem
 						throw new NotImplementedException();
 				}
 
-				typeRef[(int)token] = runtimeType;
+				typeRef[(int)(token & TokenTypes.RowIndexMask) - 1] = runtimeType;
 			}
 		}
 
