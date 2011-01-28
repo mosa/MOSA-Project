@@ -38,18 +38,18 @@ namespace Mosa.Runtime.TypeSystem
 		/// <returns>The runtime type of the specified token.</returns>
 		RuntimeType GetType(TokenTypes token);
 
-		///// <summary>
-		///// Retrieves the field definition identified by the given token in the scope.
-		///// </summary>
-		///// <param name="token">The token of the field to retrieve.</param>
-		///// <returns></returns>
-		//RuntimeField GetField(TokenTypes token);
+		/// <summary>
+		/// Retrieves the field definition identified by the given token in the scope.
+		/// </summary>
+		/// <param name="token">The token of the field to retrieve.</param>
+		/// <returns></returns>
+		RuntimeField GetField(TokenTypes token);
 
-		///// <summary>
-		///// Retrieves the method definition identified by the given token in the scope.
-		///// </summary>
-		///// <param name="token">The token of the method to retrieve.</param>
-		///// <returns></returns>
-		//RuntimeMethod GetMethod(TokenTypes token);
+		/// <summary>
+		/// Retrieves the method definition identified by the given token in the scope.
+		/// </summary>
+		/// <param name="token">The token of the method to retrieve.</param>
+		/// <returns></returns>
+		RuntimeMethod GetMethod(TokenTypes token);
 	}
 }

@@ -118,7 +118,7 @@ namespace Mosa.Runtime.TypeSystem
 			//LoadGenerics();
 			//LoadTypeSpecs();
 			LoadParameters();
-			//LoadCustomAttributes();
+			LoadCustomAttributes();
 			LoadInterfaces();
 			LoadTypeReferences();
 			LoadMemberReferences();
@@ -206,7 +206,9 @@ namespace Mosa.Runtime.TypeSystem
 
 			for (TokenTypes token = TokenTypes.TypeDef + 1; token <= maxTypeDef; token++)
 			{
-				TokenTypes maxNextMethod, maxNextField;
+				TokenTypes maxNextMethod;
+				TokenTypes maxNextField;
+
 				string name = metadataProvider.ReadString(typeDefRow.TypeNameIdx);
 
 				if (token < maxTypeDef)
@@ -299,7 +301,6 @@ namespace Mosa.Runtime.TypeSystem
 				methods[offset++] = method;
 				methodDef = nextMethodDef;
 			}
-
 		}
 
 		/// <summary>
@@ -307,15 +308,11 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		private void LoadParameters()
 		{
-			TokenTypes maxParam = metadataProvider.GetMaxTokenValue(TokenTypes.Param);
-			TokenTypes token = TokenTypes.Param + 1;
-
-			int offset = 0;
-
-			while (token <= maxParam)
+			TokenTypes maxToken = metadataProvider.GetMaxTokenValue(TokenTypes.Param);
+			for (TokenTypes token = TokenTypes.Param + 1; token <= maxToken; token++)
 			{
-				ParamRow paramDef = metadataProvider.ReadParamRow(token++);
-				parameters[offset++] = new RuntimeParameter(metadataProvider, paramDef);
+				ParamRow paramDef = metadataProvider.ReadParamRow(token);
+				parameters[(int)(token & TokenTypes.RowIndexMask) - 1] = new RuntimeParameter(GetString(paramDef.NameIdx), paramDef);
 			}
 		}
 
@@ -501,6 +498,23 @@ namespace Mosa.Runtime.TypeSystem
 								break;
 							}
 					}
+
+					// Special case: string.get_Chars is same as string.get_Item
+					if (runtimeMember == null && name == "get_Chars" && ownerType.FullName == "System.String")
+					{
+						name = "get_Item";
+
+						foreach (RuntimeMethod method in ownerType.Methods)
+						{
+							if (method.Name == name)
+
+								if (method.Signature.Matches(signature as MethodSignature))
+								{
+									runtimeMember = method;
+									break;
+								}
+						}
+					}
 				}
 
 				if (runtimeMember == null)
@@ -581,6 +595,74 @@ namespace Mosa.Runtime.TypeSystem
 			}
 		}
 
+		/// <summary>
+		/// Loads all custom attributes from the assembly.
+		/// </summary>
+		private void LoadCustomAttributes()
+		{
+			TokenTypes maxToken = metadataProvider.GetMaxTokenValue(TokenTypes.CustomAttribute);
+			for (TokenTypes token = TokenTypes.CustomAttribute + 1; token <= maxToken; token++)
+			{
+				CustomAttributeRow row = metadataProvider.ReadCustomAttributeRow(token);
+				TokenTypes owner = row.ParentTableIdx;
+
+				RuntimeMethod ctorMethod = methods[(int)(row.TypeIdx & TokenTypes.RowIndexMask) - 1];
+				//object attribute = CustomAttributeParser.Parse(metadataProvider, row.ValueBlobIdx, ctorMethod);
+				RuntimeAttribute runtimeAttribute = new RuntimeAttribute(row, ctorMethod);
+
+				// The following switch matches the AttributeTargets enumeration against
+				// metadata tables, which make valid targets for an attribute.
+				switch (owner & TokenTypes.TableMask)
+				{
+					case TokenTypes.Assembly:
+						// AttributeTargets.Assembly
+						break;
+
+					case TokenTypes.TypeDef:
+						// AttributeTargets.Class
+						// AttributeTargets.Delegate
+						// AttributeTargets.Enum
+						// AttributeTargets.Interface
+						// AttributeTargets.Struct
+						types[(int)(owner & TokenTypes.RowIndexMask) - 1].CustomAttributes.Add(runtimeAttribute);
+						break;
+
+					case TokenTypes.MethodDef:
+						// AttributeTargets.Constructor
+						// AttributeTargets.Method
+						methods[(int)(owner & TokenTypes.RowIndexMask) - 1].CustomAttributes.Add(runtimeAttribute);
+						break;
+
+					case TokenTypes.Event:
+						// AttributeTargets.Event
+						break;
+
+					case TokenTypes.Field:
+						// AttributeTargets.Field
+						fields[(int)(owner & TokenTypes.RowIndexMask) - 1].CustomAttributes.Add(runtimeAttribute);
+						break;
+
+					case TokenTypes.GenericParam:
+						// AttributeTargets.GenericParameter
+						break;
+
+					case TokenTypes.Module:
+						// AttributeTargets.Module
+						break;
+
+					case TokenTypes.Param:
+						// AttributeTargets.Parameter
+						// AttributeTargets.ReturnValue
+						break;
+
+					case TokenTypes.Property:
+						// AttributeTargets.StackFrameIndex
+						break;
+				}
+			}
+
+		}
+
 		#endregion
 
 		#region ITypeLoader interface
@@ -654,6 +736,51 @@ namespace Mosa.Runtime.TypeSystem
 
 				default:
 					throw new ArgumentException(@"Not a type token.", @"token");
+			}
+		}
+
+		/// <summary>
+		/// Retrieves the field definition identified by the given token in the scope.
+		/// </summary>
+		/// <param name="token">The token of the field to retrieve.</param>
+		/// <returns></returns>
+		RuntimeField ITypeModule.GetField(TokenTypes token)
+		{
+			switch (TokenTypes.TableMask & token)
+			{
+				case TokenTypes.Field:
+					return fields[(int)(token & TokenTypes.RowIndexMask) - 1];
+
+				case TokenTypes.MemberRef:
+					return memberRef[(int)(token & TokenTypes.RowIndexMask) - 1] as RuntimeField;
+
+				default:
+					throw new NotSupportedException(@"Can't get method for token " + token.ToString("x"));
+			}
+		}
+
+		/// <summary>
+		/// Retrieves the method definition identified by the given token in the scope.
+		/// </summary>
+		/// <param name="token">The token of the method to retrieve.</param>
+		/// <returns></returns>
+		RuntimeMethod ITypeModule.GetMethod(TokenTypes token)
+		{
+			switch (TokenTypes.TableMask & token)
+			{
+				case TokenTypes.MethodDef:
+					return methods[(int)(TokenTypes.RowIndexMask & token) - 1];
+
+				case TokenTypes.MemberRef:
+					return memberRef[(int)(token & TokenTypes.RowIndexMask) - 1] as RuntimeMethod;
+
+				//TODO
+				//case TokenTypes.MethodSpec:
+				//    return DecodeMethodSpec(token);
+				//    break;
+
+				default:
+					throw new NotSupportedException(@"Can't get method for token " + token.ToString("x"));
 			}
 		}
 

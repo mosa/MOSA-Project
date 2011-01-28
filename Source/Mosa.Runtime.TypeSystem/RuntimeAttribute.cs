@@ -25,12 +25,7 @@ namespace Mosa.Runtime.TypeSystem
 	public class RuntimeAttribute
 	{
 		#region Data members
-
-		/// <summary>
-		/// The instantiated attribute.
-		/// </summary>
-		private object attribute;
-
+		
 		/// <summary>
 		/// Specifies the blob, which contains the attribute initialization.
 		/// </summary>
@@ -55,49 +50,32 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		/// <param name="metadataProvider">The metadata provider.</param>
 		/// <param name="car">The custom attribute row from metadata.</param>
-		public RuntimeAttribute(IMetadataProvider metadataProvider, CustomAttributeRow car)
+		public RuntimeAttribute(CustomAttributeRow customAttributeRow, RuntimeMethod ctorMethod)
 		{
-			attribute = null;
-			attributeBlob = car.ValueBlobIdx;
-			ctor = car.TypeIdx;
-
-			// Retrieve the attribute type
-			attribute = CustomAttributeParser.Parse(metadataProvider, attributeBlob, ctorMethod);
-			Debug.Assert(null != attribute, @"Failed to load the attribute.");
-
-			//TODO
-			//ctorMethod = moduleTypeSystem.GetMethod(ctor);
-			ctorMethod = null;
+			this.ctorMethod = ctorMethod;		
+			this.attributeBlob = customAttributeRow.ValueBlobIdx; // NEVER USED
+			this.ctor = customAttributeRow.TypeIdx; // NEVER USED
 		}
 
 		#endregion // Construction
 
 		#region Methods
 
-		/// <summary>
-		/// Retrieves the attribute.
-		/// </summary>
-		/// <returns>An instance of the attribute.</returns>
-		public object GetAttribute()
-		{
-			return attribute;
-		}
-
 		#endregion // Methods
 
 		#region Properties
 
 		/// <summary>
-		/// Gets the attribute type.
+		/// Gets the runtime type.
 		/// </summary>
-		/// <value>The attribute type.</value>
-		public RuntimeType Type
-		{
-			get
-			{
-				return ctorMethod.DeclaringType;
-			}
-		}
+		/// <value>The runtime type.</value>
+		public RuntimeType Type { get { return ctorMethod.DeclaringType; } }
+
+		/// <summary>
+		/// Gets the ctor method.
+		/// </summary>
+		/// <value>The ctor method.</value>
+		public RuntimeMethod CtorMethod { get { return ctorMethod; } }
 
 		#endregion // Properties
 

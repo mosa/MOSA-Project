@@ -73,7 +73,8 @@ namespace Mosa.Runtime.TypeSystem.Cil
 			this.Attributes = genericField.Attributes;
 			this.RVA = genericField.RVA;
 			this.Signature = signature;
-			this.SetAttributes(genericField.CustomAttributes);
+			//TODO:
+			//this.SetAttributes(genericField.CustomAttributes);
 
 			this.Signature = new FieldSignature(metadataProvider, this.signatureBlobIdx);
 			this.Name = metadataProvider.ReadString(this.nameIdx);

@@ -728,7 +728,7 @@ namespace Mosa.Runtime.Vm
 			{
 				CustomAttributeRow car = metadata.ReadCustomAttributeRow(token);
 
-				// Do we need to commit generic parameters?
+				// Do we need to the attributes?
 				if (owner != car.ParentTableIdx)
 				{
 					// Yes, commit them to the last type
@@ -745,7 +745,7 @@ namespace Mosa.Runtime.Vm
 				attributes.Add(car);
 			}
 
-			// Set the generic parameters of the last type, if we have them
+			// Set the attributes of the last type, if we have them
 			if (attributes.Count != 0)
 			{
 				SetAttributes(owner, attributes);

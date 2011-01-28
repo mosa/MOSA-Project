@@ -49,7 +49,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		/// <param name="declaringType">Specifies the type, which contains this field.</param>
 		public RuntimeField(RuntimeType declaringType) :
-			base(0, declaringType, null)
+			base(0, declaringType)
 		{
 		}
 
@@ -151,7 +151,6 @@ namespace Mosa.Runtime.TypeSystem
 		/// </returns>
 		public virtual bool Equals(RuntimeField other)
 		{
-			//return (MetadataModule == other.MetadataModule && this.attributes == other.attributes);
 			return (this.attributes == other.attributes);
 		}
 

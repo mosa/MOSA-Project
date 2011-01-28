@@ -118,7 +118,7 @@ namespace Mosa.Runtime.TypeSystem
 		private static object CreateAttribute(RuntimeMethod attributeCtor, object[] args)
 		{
 			RuntimeType rt = attributeCtor.DeclaringType;
-			Type attributeType = Type.GetType(String.Format("{0}.{1}, Mosa.Intrinsic", rt.Namespace, rt.Name));
+			Type attributeType = Type.GetType(String.Format("{0}.{1}", rt.Namespace, rt.Name));
 			return Activator.CreateInstance(attributeType, args, null);			
 		}
 

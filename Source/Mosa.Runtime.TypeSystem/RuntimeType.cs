@@ -76,10 +76,19 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		private IList<RuntimeType> nestedTypes;
 
-		private bool isCompiled;
-
+		/// <summary>
+		/// 
+		/// </summary>
 		private bool isValueType;
+
+		/// <summary>
+		/// 
+		/// </summary>
 		private bool isDelegate;
+
+		/// <summary>
+		/// 
+		/// </summary>
 		private bool isEnum;
 
 		#endregion // Data members
@@ -90,26 +99,41 @@ namespace Mosa.Runtime.TypeSystem
 		/// Initializes a new instance of the <see cref="RuntimeType"/> class.
 		/// </summary>
 		/// <param name="token">The token of the type.</param>
-		public RuntimeType(TokenTypes token) :
-			base(token, null, null)
+		public RuntimeType(TokenTypes token, RuntimeType baseType) :
+			base(token, null)
 		{
-			//TODO
-			//RuntimeType valueType = moduleTypeSystem.TypeSystem.GetType(@"System.ValueType");
-			//isValueType = this.IsSubclassOf(valueType);
-			isValueType = false;
+			this.baseType = baseType;
 
-			//TODO
-			//RuntimeType delegateType = moduleTypeSystem.TypeSystem.GetType(@"System.Delegate, mscorlib");
-			//isDelegate = IsSubclassOf(delegateType);
-			isDelegate = false;
+			if (baseType == null)
+			{
+				this.isValueType = false;
+				this.isDelegate = false;
+				this.isEnum = false;
+			}
+			else
+			{
+				if (baseType.isValueType)
+					this.isValueType = true;
+				else
+					if (baseType.FullName == "System.ValueType")
+						this.isValueType = true;
 
-			//TODO
-			//RuntimeType enumType = moduleTypeSystem.TypeSystem.GetType(@"System.Enum");
-			//isEnum = ReferenceEquals(BaseType, enumType);
-			isEnum = false;
+				if (baseType.isDelegate)
+					this.isDelegate = true;
+				else
+					if (baseType.FullName == "System.Delegate")
+						this.isDelegate = true;
 
-			//TODO
-			//interfaces = null;
+				if (baseType.isEnum)
+					this.isEnum = true;
+				else
+					if (baseType.FullName == "System.Enum")
+						this.isEnum = true;
+			}
+
+			this.Fields = new List<RuntimeField>();
+			this.Methods = new List<RuntimeMethod>();
+			this.Interfaces = new List<RuntimeType>();
 		}
 
 		#endregion // Construction
@@ -424,14 +448,7 @@ namespace Mosa.Runtime.TypeSystem
 		{
 			get { return (Attributes & TypeAttributes.Interface) == TypeAttributes.Interface; }
 		}
-
-		public bool IsCompiled
-		{
-			get { return isCompiled; }
-			set { isCompiled = value; }
-		}
-
-
+		
 		public RuntimeMethod FindMethod(string name)
 		{
 			foreach (RuntimeMethod method in Methods)

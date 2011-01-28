@@ -14,7 +14,8 @@ namespace Mosa.Runtime.TypeSystem.Generic
 		{
 			this.Signature = signature;
 			this.Attributes = genericField.Attributes;
-			this.SetAttributes(genericField.CustomAttributes);
+			//TODO
+			//this.SetAttributes(genericField.CustomAttributes);
 
 			base.Name = genericField.Name;
 		}

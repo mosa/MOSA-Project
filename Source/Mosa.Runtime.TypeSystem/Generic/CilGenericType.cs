@@ -21,7 +21,7 @@ namespace Mosa.Runtime.TypeSystem.Generic
 		private SigType[] genericArguments;
 
 		public CilGenericType(IMetadataProvider metadataProvider, RuntimeType genericType, GenericInstSigType genericTypeInstanceSignature) :
-			base(genericType.Token)
+			base(genericType.Token, genericType.BaseType)
 		{
 			this.signature = genericTypeInstanceSignature;
 			this.genericArguments = signature.GenericArguments;

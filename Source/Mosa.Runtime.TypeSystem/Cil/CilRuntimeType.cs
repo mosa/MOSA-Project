@@ -57,7 +57,7 @@ namespace Mosa.Runtime.TypeSystem.Cil
 		/// <param name="baseType">Type of the base.</param>
 		/// <param name="typeDefRow">The type def row.</param>
 		public CilRuntimeType(string name, string typenamespace, int packing, int size, TokenTypes token, RuntimeType baseType, TypeDefRow typeDefRow) :
-			base(token)
+			base(token, baseType)
 		{
 			this.baseTypeToken = typeDefRow.Extends;
 			this.nameIdx = typeDefRow.TypeNameIdx;
@@ -65,36 +65,13 @@ namespace Mosa.Runtime.TypeSystem.Cil
 			base.Attributes = typeDefRow.Flags;
 			base.Pack = packing;
 			base.Size = size;
-			base.BaseType = baseType;
 			this.Name = name;
 			this.Namespace = typenamespace;
-
-			this.Fields = new List<RuntimeField>();
-			this.Methods = new List<RuntimeMethod>();
-			this.Interfaces = new List<RuntimeType>();
 		}
 
 		#endregion // Construction
 
 		#region Methods
-
-		/// <summary>
-		/// Indicates whether the current object is equal to another object of the same type.
-		/// </summary>
-		/// <param name="other">An object to compare with this object.</param>
-		/// <returns>
-		/// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
-		/// </returns>
-		public override bool Equals(RuntimeType other)
-		{
-			CilRuntimeType crt = other as CilRuntimeType;
-			return (crt != null &&
-				//this.moduleTypeSystem == crt.moduleTypeSystem &&
-				this.nameIdx == crt.nameIdx &&
-				this.namespaceIdx == crt.namespaceIdx &&
-				this.baseTypeToken == crt.baseTypeToken &&
-				base.Equals(other));
-		}
 
 		/// <summary>
 		/// Called to retrieve the namespace of the type.
@@ -103,6 +80,7 @@ namespace Mosa.Runtime.TypeSystem.Cil
 		/// <returns>The namespace of the type.</returns>
 		private string GetNamespace(IMetadataProvider metadataProvider)
 		{
+			//TODO
 			if (IsNested)
 			{
 				TokenTypes enclosingType = GetEnclosingType(metadataProvider, Token);
@@ -121,6 +99,7 @@ namespace Mosa.Runtime.TypeSystem.Cil
 
 		private TokenTypes GetEnclosingType(IMetadataProvider metadataProvider, TokenTypes token)
 		{
+			//TODO
 			for (int i = 1; ; i++)
 			{
 				NestedClassRow row = metadataProvider.ReadNestedClassRow(TokenTypes.NestedClass + i);
