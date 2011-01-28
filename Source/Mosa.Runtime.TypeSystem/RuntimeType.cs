@@ -169,7 +169,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// </value>
 		public bool IsGeneric
 		{
-			get { return genericParameters.Count == 0; }
+			get { return genericParameters.Count != 0; }
 		}
 
 		/// <summary>
