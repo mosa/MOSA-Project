@@ -400,6 +400,7 @@ namespace Mosa.Runtime.CompilerFramework
 			return parameter;
 		}
 
+		// NOT USED
 		private void ScheduleDependencyForCompilation(SigType signatureType)
 		{
 			RuntimeType runtimeType = null;

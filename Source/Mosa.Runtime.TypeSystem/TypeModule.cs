@@ -74,6 +74,11 @@ namespace Mosa.Runtime.TypeSystem
 		/// <summary>
 		/// 
 		/// </summary>
+		private RuntimeType[] genericParamConstraint;
+
+		/// <summary>
+		/// 
+		/// </summary>
 		Dictionary<TokenTypes, string> strings;
 
 		/// <summary>
@@ -99,19 +104,20 @@ namespace Mosa.Runtime.TypeSystem
 			this.metadataModule = metadataModule;
 			this.metadataProvider = metadataModule.Metadata;
 
-			methods = new RuntimeMethod[GetTableRows(TokenTypes.MethodDef)];
-			fields = new RuntimeField[GetTableRows(TokenTypes.Field)];
-			types = new RuntimeType[GetTableRows(TokenTypes.TypeDef)];
-			parameters = new RuntimeParameter[GetTableRows(TokenTypes.Param)];
+			this.methods = new RuntimeMethod[GetTableRows(TokenTypes.MethodDef)];
+			this.fields = new RuntimeField[GetTableRows(TokenTypes.Field)];
+			this.types = new RuntimeType[GetTableRows(TokenTypes.TypeDef)];
+			this.parameters = new RuntimeParameter[GetTableRows(TokenTypes.Param)];
 
-			typeSpecs = new RuntimeType[GetTableRows(TokenTypes.TypeSpec)];
-			methodSpecs = new RuntimeMethod[GetTableRows(TokenTypes.MethodSpec)];
+			this.typeSpecs = new RuntimeType[GetTableRows(TokenTypes.TypeSpec)];
+			this.methodSpecs = new RuntimeMethod[GetTableRows(TokenTypes.MethodSpec)];
 
-			memberRef = new RuntimeMember[GetTableRows(TokenTypes.MemberRef)];
-			typeRef = new RuntimeType[GetTableRows(TokenTypes.TypeRef)];
+			this.memberRef = new RuntimeMember[GetTableRows(TokenTypes.MemberRef)];
+			this.typeRef = new RuntimeType[GetTableRows(TokenTypes.TypeRef)];
+			this.genericParamConstraint = new RuntimeType[GetTableRows(TokenTypes.GenericParamConstraint)];
 
-			signatures = new Dictionary<TokenTypes, Signature>();
-			strings = new Dictionary<TokenTypes, string>();
+			this.signatures = new Dictionary<TokenTypes, Signature>();
+			this.strings = new Dictionary<TokenTypes, string>();
 
 			// Load all types from the assembly into the type array
 			LoadTypes();
@@ -122,6 +128,7 @@ namespace Mosa.Runtime.TypeSystem
 			LoadInterfaces();
 			LoadTypeReferences();
 			LoadMemberReferences();
+			LoadGenericParams();
 		}
 
 		#endregion // Construction
@@ -461,7 +468,8 @@ namespace Mosa.Runtime.TypeSystem
 					case TokenTypes.TypeSpec:
 						//TODO
 						//ownerType = this.ResolveTypeSpec(row.ClassTableIdx);
-						break;
+						//break;
+						continue;
 
 					default:
 						throw new NotSupportedException(String.Format(@"LoadMemberReferences() does not support token table {0}", row.ClassTableIdx & TokenTypes.TableMask));
@@ -606,7 +614,22 @@ namespace Mosa.Runtime.TypeSystem
 				CustomAttributeRow row = metadataProvider.ReadCustomAttributeRow(token);
 				TokenTypes owner = row.ParentTableIdx;
 
-				RuntimeMethod ctorMethod = methods[(int)(row.TypeIdx & TokenTypes.RowIndexMask) - 1];
+				RuntimeMethod ctorMethod;
+
+				switch (row.TypeIdx & TokenTypes.TableMask)
+				{
+					case TokenTypes.MethodDef:
+						ctorMethod = methods[(int)(row.TypeIdx & TokenTypes.RowIndexMask) - 1];
+						break;
+
+					case TokenTypes.MemberRef:
+						ctorMethod = memberRef[(int)(row.TypeIdx & TokenTypes.RowIndexMask) - 1] as RuntimeMethod;
+						break;
+
+					default:
+						throw new NotImplementedException();
+				}
+
 				//object attribute = CustomAttributeParser.Parse(metadataProvider, row.ValueBlobIdx, ctorMethod);
 				RuntimeAttribute runtimeAttribute = new RuntimeAttribute(row, ctorMethod);
 
@@ -658,6 +681,39 @@ namespace Mosa.Runtime.TypeSystem
 					case TokenTypes.Property:
 						// AttributeTargets.StackFrameIndex
 						break;
+
+					//default:
+					//    throw new NotImplementedException();
+				}
+			}
+
+		}
+
+		/// <summary>
+		/// Loads the generic param constraints.
+		/// </summary>
+		private void LoadGenericParams()
+		{
+			TokenTypes maxToken = metadataProvider.GetMaxTokenValue(TokenTypes.GenericParam);
+			for (TokenTypes token = TokenTypes.GenericParam + 1; token <= maxToken; token++)
+			{
+				GenericParamRow row = metadataProvider.ReadGenericParamRow(token);
+				string name = GetString(row.NameStringIdx);
+
+				// The following switch matches the AttributeTargets enumeration against
+				// metadata tables, which make valid targets for an attribute.
+				switch (row.OwnerTableIdx & TokenTypes.TableMask)
+				{
+					case TokenTypes.TypeDef:
+						types[(int)(row.OwnerTableIdx & TokenTypes.RowIndexMask) - 1].GenericParameters.Add(new GenericParameter(name, row.Flags));
+						break;
+
+					case TokenTypes.MethodDef:
+						methods[(int)(row.OwnerTableIdx & TokenTypes.RowIndexMask) - 1].GenericParameters.Add(new GenericParameter(name, row.Flags));
+						break;
+
+					default:
+						throw new NotImplementedException();
 				}
 			}
 
@@ -715,20 +771,14 @@ namespace Mosa.Runtime.TypeSystem
 		{
 			switch (token & TokenTypes.TableMask)
 			{
-
 				case TokenTypes.TypeDef:
-					{
-						int typeDefRowIndex = (int)(token & TokenTypes.RowIndexMask);
+					if (token == TokenTypes.TypeDef)
+						return null;
 
-						if (typeDefRowIndex == 0)
-							return null;
+					return types[(int)(token & TokenTypes.RowIndexMask) - 1];
 
-						return types[typeDefRowIndex - 1];
-					}
-
-				//TODO
-				//case TokenTypes.TypeRef:
-				//    return ResolveTypeRef(token);
+				case TokenTypes.TypeRef:
+					return typeRef[(int)(token & TokenTypes.RowIndexMask) - 1];
 
 				//TODO
 				//case TokenTypes.TypeSpec:

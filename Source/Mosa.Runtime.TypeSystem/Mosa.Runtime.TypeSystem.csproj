@@ -89,9 +89,9 @@
     <Compile Include="Cil\CilRuntimeType.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="GenericParameter.cs" />
     <Compile Include="TypeSystem.cs" />
     <Compile Include="CustomAttributeParser.cs" />
-    <Compile Include="GenericArgument.cs" />
     <Compile Include="Generic\CilGenericField.cs" />
     <Compile Include="Generic\CilGenericMethod.cs" />
     <Compile Include="Generic\CilGenericType.cs">

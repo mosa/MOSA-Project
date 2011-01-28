@@ -20,7 +20,7 @@ namespace Mosa.Runtime.TypeSystem
 	/// <summary>
 	/// Holds method parameters for reflection and compilation.
 	/// </summary>
-	public class RuntimeParameter : IEquatable<RuntimeParameter>
+	public class RuntimeParameter
 	{
 		#region Data members
 
@@ -124,7 +124,7 @@ namespace Mosa.Runtime.TypeSystem
 		{
 			get { return token; }
 		}
-		
+
 		/// <summary>
 		/// Retrieves the parameter position.
 		/// </summary>
@@ -139,20 +139,5 @@ namespace Mosa.Runtime.TypeSystem
 
 		#endregion // Methods
 
-		#region IEquatable<RuntimeParameter> Members
-
-		/// <summary>
-		/// Equalses the specified other.
-		/// </summary>
-		/// <param name="other">The other.</param>
-		/// <returns></returns>
-		public bool Equals(RuntimeParameter other)
-		{
-			//TODO
-			//return (module == other.module && nameIdx == other.nameIdx && position == other.position);
-			return (nameIdx == other.nameIdx && position == other.position);
-		}
-
-		#endregion // IEquatable<RuntimeParameter> Members
 	}
 }

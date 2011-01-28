@@ -22,14 +22,9 @@ namespace Mosa.Runtime.TypeSystem
 	/// <summary>
 	/// Internal runtime representation of a type.
 	/// </summary>
-	public abstract class RuntimeType : RuntimeMember, IEquatable<RuntimeType>
+	public abstract class RuntimeType : RuntimeMember
 	{
 		#region Data members
-
-		/// <summary>
-		/// Holds the generic arguments of the type.
-		/// </summary>
-		private GenericArgument[] arguments;
 
 		/// <summary>
 		/// Holds the base type of this type.
@@ -91,6 +86,11 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		private bool isEnum;
 
+		/// <summary>
+		/// 
+		/// </summary>
+		private IList<GenericParameter> genericParameters;
+
 		#endregion // Data members
 
 		#region Construction
@@ -134,6 +134,7 @@ namespace Mosa.Runtime.TypeSystem
 			this.Fields = new List<RuntimeField>();
 			this.Methods = new List<RuntimeMethod>();
 			this.Interfaces = new List<RuntimeType>();
+			this.genericParameters = new List<GenericParameter>();
 		}
 
 		#endregion // Construction
@@ -168,7 +169,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// </value>
 		public bool IsGeneric
 		{
-			get { return (arguments != null && arguments.Length != 0); }
+			get { return genericParameters.Count == 0; }
 		}
 
 		/// <summary>
@@ -338,6 +339,31 @@ namespace Mosa.Runtime.TypeSystem
 			get { return (flags & TypeAttributes.LayoutMask) == TypeAttributes.ExplicitLayout; }
 		}
 
+		public bool IsDelegate
+		{
+			get { return isDelegate; }
+		}
+
+		public bool IsEnum
+		{
+			get { return isEnum; }
+		}
+
+		public bool IsInterface
+		{
+			get { return (Attributes & TypeAttributes.Interface) == TypeAttributes.Interface; }
+		}
+
+		/// <summary>
+		/// Returns the interfaces implemented by this type.
+		/// </summary>
+		/// <value>A list of interfaces.</value>
+		public IList<GenericParameter> GenericParameters
+		{
+			get { return genericParameters; }
+			protected set { genericParameters = value; }
+		}
+
 		#endregion // Properties
 
 		#region Methods
@@ -391,33 +417,7 @@ namespace Mosa.Runtime.TypeSystem
 			return false;
 		}
 
-		/// <summary>
-		/// Sets generic parameters on this method.
-		/// </summary>
-		/// <param name="gprs">A list of generic parameters to set on the method.</param>
-		public void SetGenericParameter(List<GenericParamRow> gprs)
-		{
-			// TODO: Implement this method
-			arguments = new GenericArgument[gprs.Count];
-		}
-
 		#endregion // Methods
-
-		#region IEquatable<RuntimeType> Members
-
-		/// <summary>
-		/// Indicates whether the current object is equal to another object of the same type.
-		/// </summary>
-		/// <param name="other">An object to compare with this object.</param>
-		/// <returns>
-		/// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
-		/// </returns>
-		public virtual bool Equals(RuntimeType other)
-		{
-			return (flags == other.flags && nativeSize == other.nativeSize && packing == other.packing);
-		}
-
-		#endregion // IEquatable<RuntimeType> Members
 
 		#region Object Overrides
 
@@ -434,21 +434,6 @@ namespace Mosa.Runtime.TypeSystem
 
 		#endregion // Object Overrides
 
-		public bool IsDelegate
-		{
-			get { return isDelegate; }
-		}
-
-		public bool IsEnum
-		{
-			get { return isEnum; }
-		}
-
-		public bool IsInterface
-		{
-			get { return (Attributes & TypeAttributes.Interface) == TypeAttributes.Interface; }
-		}
-		
 		public RuntimeMethod FindMethod(string name)
 		{
 			foreach (RuntimeMethod method in Methods)

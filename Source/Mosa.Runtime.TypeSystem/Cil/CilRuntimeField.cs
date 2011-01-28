@@ -82,24 +82,5 @@ namespace Mosa.Runtime.TypeSystem.Cil
 
 		#endregion // Construction
 
-		#region RuntimeField Overrides
-
-		/// <summary>
-		/// Indicates whether the current object is equal to another object of the same type.
-		/// </summary>
-		/// <param name="other">An object to compare with this object.</param>
-		/// <returns>
-		/// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
-		/// </returns>
-		public override bool Equals(RuntimeField other)
-		{
-			CilRuntimeField crf = other as CilRuntimeField;
-			return (crf != null &&
-					this.nameIdx == crf.nameIdx &&
-					this.signatureBlobIdx == crf.signatureBlobIdx &&
-					base.Equals(other) == true);
-		}
-
-		#endregion // RuntimeField Overrides
 	}
 }

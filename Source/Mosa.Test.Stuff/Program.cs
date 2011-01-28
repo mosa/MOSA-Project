@@ -13,7 +13,14 @@ namespace Mosa.Test.Stuff
 	{
 		static void Main(string[] args)
 		{
-			string[] files = { @"X:\MOSA-Project-tgiphil\bin\mscorlib.dll", @"X:\MOSA-Project-tgiphil\bin\Mosa.Platform.X86.Intrinsic.dll", @"X:\MOSA-Project-tgiphil\bin\Mosa.Kernel.dll" };
+			string[] files = { 
+				@"X:\MOSA-Project-tgiphil\bin\mscorlib.dll", 
+				@"X:\MOSA-Project-tgiphil\bin\Mosa.Platform.X86.Intrinsic.dll", 
+				@"X:\MOSA-Project-tgiphil\bin\Mosa.Kernel.dll",
+				@"X:\MOSA-Project-tgiphil\bin\Mosa.HelloWorld.exe"
+			};
+
+			//string[] files = { @"X:\MOSA-Project-tgiphil\bin\Mosa.Test.Quick.exe" };
 
 			ITypeSystem typeSystem = new TypeSystem();
 
