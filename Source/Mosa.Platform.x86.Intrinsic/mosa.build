@@ -17,7 +17,7 @@
 			<include name="**/*.cs"/>
 		</sources>
 		<references>
-			<include name="${outputDirectory}/Mosa.Vm.dll"/>
+			<include name="${outputDirectory}/Mosa.Intrinsic.dll"/>
 		</references>
 		<!-- supress warnings -->
 		<nowarn><warning number="${suppresswarnings}"/></nowarn>
