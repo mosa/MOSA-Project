@@ -49,13 +49,15 @@ namespace Mosa.Runtime.TypeSystem.Cil
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CilRuntimeType"/> class.
 		/// </summary>
-		/// <param name="metadataProvider">The metadata provider.</param>
-		/// <param name="token">The token.</param>
-		/// <param name="typeDefRow">The type def row.</param>
+		/// <param name="name">The name.</param>
+		/// <param name="typenamespace">The typenamespace.</param>
 		/// <param name="packing">The packing.</param>
 		/// <param name="size">The size.</param>
-		public CilRuntimeType(IMetadataProvider metadataProvider, TokenTypes token, TypeDefRow typeDefRow, int packing, int size, RuntimeType baseType) :
-			base((int)token)
+		/// <param name="token">The token.</param>
+		/// <param name="baseType">Type of the base.</param>
+		/// <param name="typeDefRow">The type def row.</param>
+		public CilRuntimeType(string name, string typenamespace, int packing, int size, TokenTypes token, RuntimeType baseType, TypeDefRow typeDefRow) :
+			base(token, baseType)
 		{
 			this.baseTypeToken = typeDefRow.Extends;
 			this.nameIdx = typeDefRow.TypeNameIdx;
@@ -63,39 +65,13 @@ namespace Mosa.Runtime.TypeSystem.Cil
 			base.Attributes = typeDefRow.Flags;
 			base.Pack = packing;
 			base.Size = size;
-			base.BaseType = baseType;
-
-			this.Name = metadataProvider.ReadString(this.nameIdx);
-			Debug.Assert(this.Name != null, @"Failed to retrieve CilRuntimeMethod name.");
-
-			this.Fields = new List<RuntimeField>();
-			this.Methods = new List<RuntimeMethod>();
-			this.Interfaces = new List<RuntimeType>();
-
-			this.Namespace = GetNamespace(metadataProvider);
+			this.Name = name;
+			this.Namespace = typenamespace;
 		}
 
 		#endregion // Construction
 
 		#region Methods
-
-		/// <summary>
-		/// Indicates whether the current object is equal to another object of the same type.
-		/// </summary>
-		/// <param name="other">An object to compare with this object.</param>
-		/// <returns>
-		/// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
-		/// </returns>
-		public override bool Equals(RuntimeType other)
-		{
-			CilRuntimeType crt = other as CilRuntimeType;
-			return (crt != null &&
-				//this.moduleTypeSystem == crt.moduleTypeSystem &&
-				this.nameIdx == crt.nameIdx &&
-				this.namespaceIdx == crt.namespaceIdx &&
-				this.baseTypeToken == crt.baseTypeToken &&
-				base.Equals(other));
-		}
 
 		/// <summary>
 		/// Called to retrieve the namespace of the type.
@@ -104,6 +80,7 @@ namespace Mosa.Runtime.TypeSystem.Cil
 		/// <returns>The namespace of the type.</returns>
 		private string GetNamespace(IMetadataProvider metadataProvider)
 		{
+			//TODO
 			if (IsNested)
 			{
 				TokenTypes enclosingType = GetEnclosingType(metadataProvider, Token);
@@ -120,12 +97,13 @@ namespace Mosa.Runtime.TypeSystem.Cil
 			}
 		}
 
-		private TokenTypes GetEnclosingType(IMetadataProvider metadataProvider, int token)
+		private TokenTypes GetEnclosingType(IMetadataProvider metadataProvider, TokenTypes token)
 		{
+			//TODO
 			for (int i = 1; ; i++)
 			{
 				NestedClassRow row = metadataProvider.ReadNestedClassRow(TokenTypes.NestedClass + i);
-				if (row.NestedClassTableIdx == (TokenTypes)token)
+				if (row.NestedClassTableIdx == token)
 					return row.EnclosingClassTableIdx;
 			}
 		}

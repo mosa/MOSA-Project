@@ -19,7 +19,7 @@ namespace Mosa.Runtime.CompilerFramework.Intrinsics
 		private const string StringClassMethodTableSymbolName = @"System.String$mtable";
 
 		/// <summary>
-		/// Replaces the instrinsic call site
+		/// Replaces the intrinsic call site
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="typeSystem">The type system.</param>
@@ -35,7 +35,7 @@ namespace Mosa.Runtime.CompilerFramework.Intrinsics
 
 		private SymbolOperand GetInternalAllocateStringCallTarget(ITypeSystem typeSystem)
 		{
-			RuntimeType runtimeType = typeSystem.GetType(@"Mosa.Vm.Runtime");
+			RuntimeType runtimeType = typeSystem.GetType(@"Mosa.Intrinsic.Runtime");
 			RuntimeMethod callTarget = runtimeType.FindMethod(@"AllocateString");
 
 			return SymbolOperand.FromMethod(callTarget);

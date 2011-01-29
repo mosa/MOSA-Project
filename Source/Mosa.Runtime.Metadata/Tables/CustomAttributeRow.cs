@@ -24,17 +24,17 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes _parentTableIdx;
+		private TokenTypes parentTableIdx;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes _typeIdx;
+		private TokenTypes typeIdx;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes _valueBlobIdx;
+		private TokenTypes valueBlobIdx;
 
 		#endregion // Data members
 
@@ -48,9 +48,9 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <param name="valueBlobIdx">The value BLOB idx.</param>
 		public CustomAttributeRow(TokenTypes parentTableIdx, TokenTypes typeIdx, TokenTypes valueBlobIdx)
 		{
-			_parentTableIdx = parentTableIdx;
-			_typeIdx = typeIdx;
-			_valueBlobIdx = valueBlobIdx;
+			this.parentTableIdx = parentTableIdx;
+			this.typeIdx = typeIdx;
+			this.valueBlobIdx = valueBlobIdx;
 		}
 
 		#endregion // Construction
@@ -63,7 +63,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <value>The parent table idx.</value>
 		public TokenTypes ParentTableIdx
 		{
-			get { return _parentTableIdx; }
+			get { return parentTableIdx; }
 		}
 
 		/// <summary>
@@ -72,7 +72,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <value>The type idx.</value>
 		public TokenTypes TypeIdx
 		{
-			get { return _typeIdx; }
+			get { return typeIdx; }
 		}
 
 		/// <summary>
@@ -81,7 +81,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <value>The value BLOB idx.</value>
 		public TokenTypes ValueBlobIdx
 		{
-			get { return _valueBlobIdx; }
+			get { return valueBlobIdx; }
 		}
 
 		#endregion // Properties

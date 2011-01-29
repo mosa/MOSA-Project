@@ -22,10 +22,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// Gets the custom attributes.
 		/// </summary>
 		/// <value>The custom attributes.</value>
-		RuntimeAttribute[] CustomAttributes
-		{
-			get;
-		}
+		List<RuntimeAttribute> CustomAttributes { get; }
 
 		/// <summary>
 		/// Determines if the given attribute type is applied.

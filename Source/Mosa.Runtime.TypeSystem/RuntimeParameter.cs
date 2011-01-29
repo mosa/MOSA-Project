@@ -20,7 +20,7 @@ namespace Mosa.Runtime.TypeSystem
 	/// <summary>
 	/// Holds method parameters for reflection and compilation.
 	/// </summary>
-	public class RuntimeParameter : IEquatable<RuntimeParameter>
+	public class RuntimeParameter
 	{
 		#region Data members
 
@@ -56,35 +56,29 @@ namespace Mosa.Runtime.TypeSystem
 		/// <summary>
 		/// Initializes a new instance of the <see cref="RuntimeParameter"/> class.
 		/// </summary>
-		/// <param name="metadataProvider">The metadata provider.</param>
 		/// <param name="name">The name.</param>
 		/// <param name="position">The position.</param>
 		/// <param name="attributes">The attributes.</param>
-		public RuntimeParameter(IMetadataProvider metadataProvider, string name, int position, ParameterAttributes attributes)
+		public RuntimeParameter(string name, int position, ParameterAttributes attributes)
 		{
 			this.nameIdx = (TokenTypes)0;
 			this.token = (TokenTypes)0;
 			this.attributes = attributes;
 			this.name = name;
 			this.position = position;
-
-			// Load the name
-			name = metadataProvider.ReadString(nameIdx);
 		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="RuntimeParameter"/> class.
 		/// </summary>
-		/// <param name="metadataProvider">The metadata provider.</param>
+		/// <param name="name">The name.</param>
 		/// <param name="param">The param.</param>
-		public RuntimeParameter(IMetadataProvider metadataProvider, ParamRow param)
+		public RuntimeParameter(string name, ParamRow param)
 		{
 			this.attributes = param.Flags;
 			this.nameIdx = param.NameIdx;
 			this.position = param.Sequence;
-
-			// Load the name
-			name = metadataProvider.ReadString(nameIdx);
+			this.name = name;
 		}
 
 		#endregion // Construction
@@ -130,7 +124,7 @@ namespace Mosa.Runtime.TypeSystem
 		{
 			get { return token; }
 		}
-		
+
 		/// <summary>
 		/// Retrieves the parameter position.
 		/// </summary>
@@ -145,20 +139,5 @@ namespace Mosa.Runtime.TypeSystem
 
 		#endregion // Methods
 
-		#region IEquatable<RuntimeParameter> Members
-
-		/// <summary>
-		/// Equalses the specified other.
-		/// </summary>
-		/// <param name="other">The other.</param>
-		/// <returns></returns>
-		public bool Equals(RuntimeParameter other)
-		{
-			//TODO
-			//return (module == other.module && nameIdx == other.nameIdx && position == other.position);
-			return (nameIdx == other.nameIdx && position == other.position);
-		}
-
-		#endregion // IEquatable<RuntimeParameter> Members
 	}
 }

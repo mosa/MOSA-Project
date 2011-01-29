@@ -437,7 +437,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 		public virtual string ToSymbolPart()
 		{
 			// If it's not a subclass of SigType and it is trivial to express, do it here. 
-			// Otherwise, call the virtual method _ToSymbolPart() and hope that it is overriden so that it doesn't throw a NotImplementedException
+			// Otherwise, call the virtual method ToSymbolPart() and hope that it is overridden so that it doesn't throw a NotImplementedException
 			switch (this.Type)
 			{
 				case CilElementType.Boolean:

@@ -43,21 +43,21 @@ namespace Mosa.Runtime.TypeSystem.Cil
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CilRuntimeField"/> class.
 		/// </summary>
-		/// <param name="metadataProvider">The metadata provider.</param>
-		/// <param name="field">The field.</param>
+		/// <param name="name">The name.</param>
+		/// <param name="signature">The signature.</param>
 		/// <param name="offset">The offset.</param>
 		/// <param name="rva">The rva.</param>
 		/// <param name="declaringType">Type of the declaring.</param>
-		public CilRuntimeField(IMetadataProvider metadataProvider, FieldRow field, uint offset, uint rva, RuntimeType declaringType) :
+		/// <param name="field">The field.</param>
+		public CilRuntimeField(string name, FieldSignature signature, uint offset, uint rva, RuntimeType declaringType, FieldRow field) :
 			base(declaringType)
 		{
-			this.nameIdx = field.NameStringIdx;
-			this.signatureBlobIdx = field.SignatureBlobIdx;
+			this.Name = name;
+			this.Signature = signature; 
 			base.Attributes = field.Flags;
 			base.RVA = rva;
-
-			this.Signature = new FieldSignature(metadataProvider, this.signatureBlobIdx);
-			this.Name = metadataProvider.ReadString(this.nameIdx);
+			this.nameIdx = field.NameStringIdx;
+			this.signatureBlobIdx = field.SignatureBlobIdx;
 		}
 
 		/// <summary>
@@ -73,8 +73,8 @@ namespace Mosa.Runtime.TypeSystem.Cil
 			this.Attributes = genericField.Attributes;
 			this.RVA = genericField.RVA;
 			this.Signature = signature;
-
-			this.SetAttributes(genericField.CustomAttributes);
+			//TODO:
+			//this.SetAttributes(genericField.CustomAttributes);
 
 			this.Signature = new FieldSignature(metadataProvider, this.signatureBlobIdx);
 			this.Name = metadataProvider.ReadString(this.nameIdx);
@@ -82,24 +82,5 @@ namespace Mosa.Runtime.TypeSystem.Cil
 
 		#endregion // Construction
 
-		#region RuntimeField Overrides
-
-		/// <summary>
-		/// Indicates whether the current object is equal to another object of the same type.
-		/// </summary>
-		/// <param name="other">An object to compare with this object.</param>
-		/// <returns>
-		/// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
-		/// </returns>
-		public override bool Equals(RuntimeField other)
-		{
-			CilRuntimeField crf = other as CilRuntimeField;
-			return (crf != null &&
-					this.nameIdx == crf.nameIdx &&
-					this.signatureBlobIdx == crf.signatureBlobIdx &&
-					base.Equals(other) == true);
-		}
-
-		#endregion // RuntimeField Overrides
 	}
 }

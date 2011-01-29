@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
 
+using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Loader;
 
 namespace Mosa.Runtime.TypeSystem
@@ -26,7 +27,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// <summary>
 		/// Holds the attributes of the member.
 		/// </summary>
-		private RuntimeAttribute[] attributes;
+		private List<RuntimeAttribute> attributes;
 
 		/// <summary>
 		/// Specifies the type, that declares the member.
@@ -47,12 +48,11 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		/// <param name="token">Holds the token of this runtime metadata.</param>
 		/// <param name="declaringType">The declaring type of the member.</param>
-		/// <param name="attributes">Holds the attributes of the member.</param>
-		protected RuntimeMember(int token, RuntimeType declaringType, RuntimeAttribute[] attributes) :
+		protected RuntimeMember(TokenTypes token, RuntimeType declaringType) :
 			base(token)
 		{
 			this.declaringType = declaringType;
-			this.attributes = attributes;
+			this.attributes = new List<RuntimeAttribute>();
 		}
 
 		#endregion // Construction
@@ -86,6 +86,24 @@ namespace Mosa.Runtime.TypeSystem
 			}
 		}
 
+		/// <summary>
+		/// Returns the attributes of the type.
+		/// </summary>
+		/// <value>The attributes.</value>
+		public List<RuntimeAttribute> CustomAttributes
+		{
+			get { return attributes; }
+			protected set
+			{
+				if (value == null)
+					throw new ArgumentNullException(@"value");
+				if (attributes != null)
+					throw new InvalidOperationException();
+
+				attributes = value;
+			}
+		}
+
 		#endregion // Properties
 
 		#region Methods
@@ -93,18 +111,6 @@ namespace Mosa.Runtime.TypeSystem
 		#endregion // Methods
 
 		#region IRuntimeAttributable Members
-
-		/// <summary>
-		/// Gets the custom attributes.
-		/// </summary>
-		/// <value>The custom attributes.</value>
-		public RuntimeAttribute[] CustomAttributes
-		{
-			get
-			{
-				return this.attributes;
-			}
-		}
 
 		/// <summary>
 		/// Determines if the given attribute type is applied.
@@ -130,39 +136,7 @@ namespace Mosa.Runtime.TypeSystem
 			}
 			return result;
 		}
-
-		/// <summary>
-		/// Returns an array of custom attributes identified by RuntimeType.
-		/// </summary>
-		/// <param name="attributeType">Type of attribute to search for. Only attributes that are assignable to this type are returned.</param>
-		/// <returns>An array of custom attributes applied to this member, or an array with zero (0) elements if no matching attributes have been applied.</returns>
-		public object[] GetCustomAttributes(RuntimeType attributeType)
-		{
-			List<object> result = new List<object>();
-			if (this.attributes != null)
-			{
-				foreach (RuntimeAttribute attribute in this.attributes)
-				{
-					if (attributeType.IsAssignableFrom(attribute.Type))
-						result.Add(attribute.GetAttribute());
-				}
-			}
-
-			return result.ToArray();
-		}
-
-		/// <summary>
-		/// Sets the attributes of this member.
-		/// </summary>
-		/// <param name="attributes">The attributes.</param>
-		internal void SetAttributes(RuntimeAttribute[] attributes)
-		{
-			if (this.attributes != null)
-				throw new InvalidOperationException(@"Can't set attributes twice.");
-
-			this.attributes = attributes;
-		}
-
+		
 		#endregion // IRuntimeAttributable Members
 	}
 }

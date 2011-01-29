@@ -731,7 +731,7 @@ namespace Mosa.Runtime.Vm
 			{
 				CustomAttributeRow car = metadata.ReadCustomAttributeRow(token);
 
-				// Do we need to commit generic parameters?
+				// Do we need to the attributes?
 				if (owner != car.ParentTableIdx)
 				{
 					// Yes, commit them to the last type
@@ -748,7 +748,7 @@ namespace Mosa.Runtime.Vm
 				attributes.Add(car);
 			}
 
-			// Set the generic parameters of the last type, if we have them
+			// Set the attributes of the last type, if we have them
 			if (attributes.Count != 0)
 			{
 				SetAttributes(owner, attributes);
@@ -839,26 +839,25 @@ namespace Mosa.Runtime.Vm
 					throw new NotImplementedException();
 				case TokenTypes.TypeRef:
 					{
-						int resScope = (int)row.ResolutionScopeIdx;
-						int nameIdx = (int)row.TypeNameIdx;
-						int namespaceIdx = (int)row.TypeNamespaceIdx;
 						string name = metadata.ReadString(row.TypeNameIdx);
 
-						// FIXME: (rootnode) Implement nested types for variable nesting levels
-						string nestedTypeName = metadata.ReadString(row.TypeNameIdx);
+						if ((int)row.ResolutionScopeIdx == 0)
+							throw new NotImplementedException(string.Format("{0:X} {1:X} {2:X}", (int)row.ResolutionScopeIdx, (int)row.TypeNameIdx, (int)row.TypeNamespaceIdx));
+					
 						row = metadata.ReadTypeRefRow(row.ResolutionScopeIdx);
 						string typeName = metadata.ReadString(row.TypeNameIdx);
 						string typeNamespace = metadata.ReadString(row.TypeNamespaceIdx) + "." + typeName;
 
 						AssemblyRefRow asmRefRow = metadata.ReadAssemblyRefRow(row.ResolutionScopeIdx);
 						string assemblyName = metadata.ReadString(asmRefRow.NameIdx);
-						IModuleTypeSystem module = typeSystem.ResolveModuleReference(metadata.ReadString(asmRefRow.NameIdx));
-						RuntimeType type = module.GetType(typeNamespace, nestedTypeName);
+
+						IModuleTypeSystem module = typeSystem.ResolveModuleReference(assemblyName);
+						RuntimeType type = module.GetType(typeNamespace, name);
 
 						if (type != null)
 							return type;
 
-						throw new NotImplementedException(string.Format("{0:X} {1:X} {2:X}", resScope, nameIdx, namespaceIdx));
+						throw new NotImplementedException(string.Format("{0:X} {1:X} {2:X}", (int)row.ResolutionScopeIdx, (int)row.TypeNameIdx, (int)row.TypeNamespaceIdx));
 					}
 				case TokenTypes.AssemblyRef:
 					{
@@ -926,15 +925,15 @@ namespace Mosa.Runtime.Vm
 
 			switch (row.ClassTableIdx & TokenTypes.TableMask)
 			{
-				case TokenTypes.TypeSpec:
-					ownerType = this.ResolveTypeSpec(row.ClassTableIdx);
-					break;
-
 				case TokenTypes.TypeDef:
 					goto case TokenTypes.TypeRef;
 
 				case TokenTypes.TypeRef:
 					ownerType = ((IModuleTypeSystem)this).GetType(row.ClassTableIdx);
+					break;
+
+				case TokenTypes.TypeSpec:
+					ownerType = this.ResolveTypeSpec(row.ClassTableIdx);
 					break;
 
 				default:

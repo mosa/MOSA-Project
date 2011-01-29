@@ -56,17 +56,6 @@ namespace Mosa.Runtime.Metadata.Runtime
 			//base.Offset = offset; ?
 		}
 
-		public CilRuntimeField(IModuleTypeSystem moduleTypeSystem, RuntimeField genericField, FieldSignature signature) :
-			base(moduleTypeSystem, genericField.DeclaringType)
-		{
-			this.Name = genericField.Name;
-			this.Attributes = genericField.Attributes;
-			this.RVA = genericField.RVA;
-			this.Signature = signature;
-
-			this.SetAttributes(genericField.CustomAttributes);
-		}
-
 		#endregion // Construction
 
 		#region RuntimeField Overrides

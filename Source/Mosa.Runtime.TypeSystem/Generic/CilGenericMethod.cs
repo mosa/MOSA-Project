@@ -22,12 +22,9 @@ namespace Mosa.Runtime.TypeSystem.Generic
 
 	internal class CilGenericMethod : RuntimeMethod
 	{
-		//private readonly CilRuntimeMethod genericMethod;
-
 		public CilGenericMethod(CilRuntimeMethod genericMethod, MethodSignature signature, RuntimeType declaringType) :
 			base(genericMethod.Token, declaringType)
 		{
-			//this.genericMethod = genericMethod;
 			this.Signature = signature;
 			this.Attributes = genericMethod.Attributes;
 			this.ImplAttributes = genericMethod.ImplAttributes;

@@ -21,7 +21,7 @@ namespace Mosa.Runtime.TypeSystem.Generic
 		private SigType[] genericArguments;
 
 		public CilGenericType(IMetadataProvider metadataProvider, RuntimeType genericType, GenericInstSigType genericTypeInstanceSignature) :
-			base(genericType.Token)
+			base(genericType.Token, genericType.BaseType)
 		{
 			this.signature = genericTypeInstanceSignature;
 			this.genericArguments = signature.GenericArguments;
@@ -182,27 +182,6 @@ namespace Mosa.Runtime.TypeSystem.Generic
 		//    }
 		//}
 
-		/// <summary>
-		/// Indicates whether the current object is equal to another object of the same type.
-		/// </summary>
-		/// <param name="other">An object to compare with this object.</param>
-		/// <returns>
-		/// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
-		/// </returns>
-		public override bool Equals(RuntimeType other)
-		{
-			CilGenericType crt = other as CilGenericType;
-
-			if (crt == null)
-				return false;
-
-			return
-				//this.moduleTypeSystem == crt.moduleTypeSystem &&
-				genericType == crt.genericType &&
-				signature == crt.signature &&
-				SigType.Equals(this.genericArguments, crt.genericArguments) &&
-				base.Equals(other);
-		}
 
 	}
 }

@@ -24,17 +24,17 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes _classTableIdx;
+		private TokenTypes classTableIdx;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes _nameStringIdx;
+		private TokenTypes nameStringIdx;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes _signatureBlobIdx;
+		private TokenTypes signatureBlobIdx;
 
 		#endregion // Data members
 
@@ -48,9 +48,9 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <param name="signatureBlobIdx">The signature BLOB idx.</param>
 		public MemberRefRow(TokenTypes classTableIdx, TokenTypes nameStringIdx, TokenTypes signatureBlobIdx)
 		{
-			_classTableIdx = classTableIdx;
-			_nameStringIdx = nameStringIdx;
-			_signatureBlobIdx = signatureBlobIdx;
+			this.classTableIdx = classTableIdx;
+			this.nameStringIdx = nameStringIdx;
+			this.signatureBlobIdx = signatureBlobIdx;
 		}
 
 		#endregion // Construction
@@ -63,7 +63,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <value>The class table idx.</value>
 		public TokenTypes ClassTableIdx
 		{
-			get { return _classTableIdx; }
+			get { return classTableIdx; }
 		}
 
 		/// <summary>
@@ -72,7 +72,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <value>The name string idx.</value>
 		public TokenTypes NameStringIdx
 		{
-			get { return _nameStringIdx; }
+			get { return nameStringIdx; }
 		}
 
 		/// <summary>
@@ -81,7 +81,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <value>The signature BLOB idx.</value>
 		public TokenTypes SignatureBlobIdx
 		{
-			get { return _signatureBlobIdx; }
+			get { return signatureBlobIdx; }
 		}
 
 		#endregion // Properties

@@ -62,7 +62,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Tools.Mono.UpdateSourc
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Tools.StageVisualizer", "Tools\StageVisualizer\Mosa.Tools.StageVisualizer.csproj", "{93FC3B7E-2B95-46D5-B7D1-5E64085E41D3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Vm", "Mosa.Vm\Mosa.Vm.csproj", "{88E003EE-6EEC-4D9A-AE52-94A6F526F115}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Intrinsic", "Mosa.Intrinsic\Mosa.Intrinsic.csproj", "{88E003EE-6EEC-4D9A-AE52-94A6F526F115}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Libraries", "Libraries", "{E808AF53-3054-497B-B7C5-DEA4FDED0806}"
 EndProject

@@ -12,7 +12,6 @@ using System.IO;
 using System.Collections.Generic;
 
 using Mosa.Runtime.Metadata;
-//using Mosa.Runtime.Vm;
 
 namespace Mosa.Runtime.Metadata.Loader
 {

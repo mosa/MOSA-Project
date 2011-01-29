@@ -22,14 +22,9 @@ namespace Mosa.Runtime.TypeSystem
 	/// <summary>
 	/// Base class for the runtime representation of methods.
 	/// </summary>
-	public abstract class RuntimeMethod : RuntimeMember, IEquatable<RuntimeMethod>
+	public abstract class RuntimeMethod : RuntimeMember
 	{
 		#region Data members
-
-		/// <summary>
-		/// Holds the generic arguments of the method.
-		/// </summary>
-		private GenericArgument[] genericArguments;
 
 		/// <summary>
 		/// The implementation attributes of the method.
@@ -56,6 +51,11 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		private ulong rva;
 
+		/// <summary>
+		/// 
+		/// </summary>
+		private IList<GenericParameter> genericParameters;
+
 		//private ExceptionClauseHeader exceptionClauseHeader = new ExceptionClauseHeader();
 
 		#endregion // Data members
@@ -67,9 +67,10 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		/// <param name="token">The token.</param>
 		/// <param name="declaringType">The type, which declared this method.</param>
-		public RuntimeMethod(int token, RuntimeType declaringType) :
-			base(token, declaringType, null)
+		public RuntimeMethod(TokenTypes token, RuntimeType declaringType) :
+			base(token, declaringType)
 		{
+			this.genericParameters = new List<GenericParameter>();
 		}
 
 		#endregion // Construction
@@ -94,7 +95,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// </value>
 		public bool IsGeneric
 		{
-			get { return this.genericArguments != null; }
+			get { return this.genericParameters.Count != 0; }
 		}
 
 		/// <summary>
@@ -156,39 +157,17 @@ namespace Mosa.Runtime.TypeSystem
 			protected set { this.rva = value; }
 		}
 
+		/// <summary>
+		/// Returns the interfaces implemented by this type.
+		/// </summary>
+		/// <value>A list of interfaces.</value>
+		public IList<GenericParameter> GenericParameters
+		{
+			get { return genericParameters; }
+			protected set { genericParameters = value; }
+		}
+
 		#endregion // Properties
-
-		#region Methods
-
-		/// <summary>
-		/// Sets generic parameters on this method.
-		/// </summary>
-		/// <param name="gprs">A list of generic parameters to set on the method.</param>
-		public void SetGenericParameter(List<GenericParamRow> gprs)
-		{
-			// TODO: Implement this method
-			this.genericArguments = new GenericArgument[gprs.Count];
-		}
-
-		#endregion // Methods
-
-		#region IEquatable<RuntimeMethod> Members
-
-		/// <summary>
-		/// Indicates whether the current object is equal to another object of the same type.
-		/// </summary>
-		/// <param name="other">An object to compare with this object.</param>
-		/// <returns>
-		/// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
-		/// </returns>
-		public virtual bool Equals(RuntimeMethod other)
-		{
-			//TODO
-			//return (base.Equals(other) && MetadataModule == other.MetadataModule);
-			return (base.Equals(other));
-		}
-
-		#endregion // IEquatable<RuntimeMethod> Members
 
 		#region Object Overrides
 
@@ -225,7 +204,6 @@ namespace Mosa.Runtime.TypeSystem
 		}
 
 		#endregion // Object Overrides
-
 
 	}
 }

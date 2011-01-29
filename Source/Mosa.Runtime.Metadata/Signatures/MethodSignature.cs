@@ -214,7 +214,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 		private const byte HAS_EXPLICIT_THIS = 0x40;
 
 		/// <summary>
-		/// Matcheses the specified other.
+		/// Matches the specified other.
 		/// </summary>
 		/// <param name="other">The other.</param>
 		/// <returns></returns>

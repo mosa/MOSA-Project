@@ -9,7 +9,7 @@
 
 using System;
 
-namespace Mosa.Vm
+namespace Mosa.Intrinsic
 {
 	/// <summary>
 	/// Used to mark architecture intrinsic methods or properties.

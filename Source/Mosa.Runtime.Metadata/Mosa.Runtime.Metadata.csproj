@@ -70,11 +70,9 @@
     <Compile Include="Signatures\BuiltInSigType.cs" />
     <Compile Include="Signatures\ClassSigType.cs" />
     <Compile Include="Signatures\CustomMod.cs" />
-    <Compile Include="Signatures\DefaultSignatureContext.cs" />
     <Compile Include="Signatures\FieldSignature.cs" />
     <Compile Include="Signatures\FnptrSigType.cs" />
     <Compile Include="Signatures\GenericInstSigType.cs" />
-    <Compile Include="Signatures\ISignatureContext.cs" />
     <Compile Include="Signatures\LocalVariableSignature.cs" />
     <Compile Include="Signatures\MethodReferenceSignature.cs" />
     <Compile Include="Signatures\MethodSignature.cs" />

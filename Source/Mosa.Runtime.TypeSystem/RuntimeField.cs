@@ -21,7 +21,7 @@ namespace Mosa.Runtime.TypeSystem
 	/// <summary>
 	/// Base class for the runtime representation of fields.
 	/// </summary>
-	public abstract class RuntimeField : RuntimeMember, IEquatable<RuntimeField>
+	public abstract class RuntimeField : RuntimeMember
 	{
 		#region Data members
 
@@ -49,7 +49,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		/// <param name="declaringType">Specifies the type, which contains this field.</param>
 		public RuntimeField(RuntimeType declaringType) :
-			base(0, declaringType, null)
+			base(0, declaringType)
 		{
 		}
 
@@ -139,22 +139,6 @@ namespace Mosa.Runtime.TypeSystem
 		}
 
 		#endregion // Object Overrides
-
-		#region IEquatable<RuntimeField> Members
-
-		/// <summary>
-		/// Indicates whether the current object is equal to another object of the same type.
-		/// </summary>
-		/// <param name="other">An object to compare with this object.</param>
-		/// <returns>
-		/// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
-		/// </returns>
-		public virtual bool Equals(RuntimeField other)
-		{
-			//return (MetadataModule == other.MetadataModule && this.attributes == other.attributes);
-			return (this.attributes == other.attributes);
-		}
-
-		#endregion // IEquatable<RuntimeField> Members
+		
 	}
 }

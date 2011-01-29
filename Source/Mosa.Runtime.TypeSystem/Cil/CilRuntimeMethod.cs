@@ -44,43 +44,26 @@ namespace Mosa.Runtime.TypeSystem.Cil
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CilRuntimeMethod"/> class.
 		/// </summary>
-		/// <param name="metadataProvider">The metadata provider.</param>
+		/// <param name="name">The name.</param>
+		/// <param name="signature">The signature.</param>
 		/// <param name="token">The token.</param>
-		/// <param name="method">The method.</param>
 		/// <param name="declaringType">Type of the declaring.</param>
-		public CilRuntimeMethod(IMetadataProvider metadataProvider, int token, MethodDefRow method, RuntimeType declaringType) :
-			base((int)token, declaringType)
+		/// <param name="method">The method.</param>
+		public CilRuntimeMethod(string name, MethodSignature signature, TokenTypes token, RuntimeType declaringType, MethodDefRow method) :
+			base(token, declaringType)
 		{
 			this.nameIdx = method.NameStringIdx;
 			this.signatureBlobIdx = method.SignatureBlobIdx;
 			base.Attributes = method.Flags;
 			base.ImplAttributes = method.ImplFlags;
 			base.Rva = method.Rva;
+			this.Name = name;
+			this.Signature = signature;
 
-			this.Name = metadataProvider.ReadString(this.nameIdx);
-			Debug.Assert(this.Name != null, @"Failed to retrieve CilRuntimeMethod name.");
-
-			this.Signature = new MethodSignature(metadataProvider, signatureBlobIdx);
 			this.Parameters = new List<RuntimeParameter>();
 		}
 
 		#endregion // Construction
 
-		#region RuntimeMethod Overrides
-
-		/// <summary>
-		/// Indicates whether the current object is equal to another object of the same type.
-		/// </summary>
-		/// <param name="other">An object to compare with this object.</param>
-		/// <returns>
-		/// true if the current object is equal to the <paramref name="other"/> parameter; otherwise, false.
-		/// </returns>
-		public override bool Equals(RuntimeMethod other)
-		{
-			CilRuntimeMethod crm = other as CilRuntimeMethod;
-			return (crm != null && this.nameIdx == crm.nameIdx && this.signatureBlobIdx == crm.signatureBlobIdx && base.Equals(other) == true);
-		}
-
-		#endregion // RuntimeMethod Overrides
 	}
 }

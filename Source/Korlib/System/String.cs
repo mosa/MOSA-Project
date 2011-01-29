@@ -116,7 +116,7 @@ namespace System
 		////[MethodImplAttribute(MethodImplOptions.InternalCall)]
 		////public unsafe extern String(char* value, int startIndex, int length);
 
-		[Mosa.Vm.Intrinsic(@"Mosa.Runtime.CompilerFramework.Intrinsics.InternalAllocateString, Mosa.Runtime")]
+		[Mosa.Intrinsic.Intrinsic(@"Mosa.Runtime.CompilerFramework.Intrinsics.InternalAllocateString, Mosa.Runtime")]
 		internal static string InternalAllocateString(int length)
 		{
 			//throw new NotSupportedException(@"Can't run this code outside of MOSA.");
