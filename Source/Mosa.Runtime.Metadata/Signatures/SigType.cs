@@ -54,13 +54,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// <value>
 		/// 	<c>true</c> if [contains generic type]; otherwise, <c>false</c>.
 		/// </value>
-		public bool IsOpenGenericParameter
-		{
-			get
-			{
-				return (type == CilElementType.Var || type == CilElementType.MVar);
-			}
-		}
+		public bool IsOpenGenericParameter { get { return (type == CilElementType.Var || type == CilElementType.MVar); } }
 
 		#endregion // Properties
 

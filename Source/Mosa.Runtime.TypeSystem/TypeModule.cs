@@ -129,6 +129,8 @@ namespace Mosa.Runtime.TypeSystem
 			LoadTypeReferences();
 			LoadMemberReferences();
 			LoadGenericParams();
+
+			LoadTypeSpecs();
 		}
 
 		#endregion // Construction
@@ -172,6 +174,11 @@ namespace Mosa.Runtime.TypeSystem
 		private FieldSignature GetFieldSignature(TokenTypes blobIdx)
 		{
 			return (RetrieveSignature(blobIdx) ?? StoreSignature(blobIdx, new FieldSignature(metadataProvider, blobIdx))) as FieldSignature;
+		}
+
+		private TypeSpecSignature GetTypeSpecSignature(TokenTypes blobIdx)
+		{
+			return (RetrieveSignature(blobIdx) ?? StoreSignature(blobIdx, new TypeSpecSignature(metadataProvider, blobIdx))) as TypeSpecSignature;
 		}
 
 		/// <summary>
@@ -715,6 +722,23 @@ namespace Mosa.Runtime.TypeSystem
 					default:
 						throw new NotImplementedException();
 				}
+			}
+
+		}
+
+		/// <summary>
+		/// Loads the type specs.
+		/// </summary>
+		private void LoadTypeSpecs()
+		{
+			TokenTypes maxToken = metadataProvider.GetMaxTokenValue(TokenTypes.TypeSpec);
+			for (TokenTypes token = TokenTypes.TypeSpec + 1; token <= maxToken; token++)
+			{
+				TypeSpecRow row = metadataProvider.ReadTypeSpecRow(token);
+
+				TypeSpecSignature signature = GetTypeSpecSignature(row.SignatureBlobIdx);
+
+				continue;
 			}
 
 		}
