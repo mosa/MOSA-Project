@@ -474,9 +474,7 @@ namespace Mosa.Runtime.TypeSystem
 						break;
 
 					case TokenTypes.TypeSpec:
-						//TODO
-						//ownerType = this.ResolveTypeSpec(row.ClassTableIdx);
-						//break;
+						ownerType = typeSpecs[(int)(row.ClassTableIdx & TokenTypes.RowIndexMask) - 1];
 						continue;
 
 					default:
@@ -724,7 +722,6 @@ namespace Mosa.Runtime.TypeSystem
 						throw new NotImplementedException();
 				}
 			}
-
 		}
 
 		/// <summary>
@@ -797,9 +794,9 @@ namespace Mosa.Runtime.TypeSystem
 			foreach (RuntimeType type in types)
 				yield return type;
 
-			//foreach (RuntimeType type in typeSpecs)
-			//    if (type != null)
-			//        yield return type;
+			foreach (RuntimeType type in typeSpecs)
+				if (type != null)
+					yield return type;
 		}
 
 		/// <summary>
@@ -824,8 +821,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// <summary>
 		/// Gets the runtime type for the given type name and namespace
 		/// </summary>
-		/// <param name="nameSpace">The name space.</param>
-		/// <param name="name">The name.</param>
+		/// <param name="fullname">The fullname.</param>
 		/// <returns></returns>
 		RuntimeType ITypeModule.GetType(string fullname)
 		{
@@ -855,9 +851,8 @@ namespace Mosa.Runtime.TypeSystem
 				case TokenTypes.TypeRef:
 					return typeRef[(int)(token & TokenTypes.RowIndexMask) - 1];
 
-				//TODO
-				//case TokenTypes.TypeSpec:
-				//    return ResolveTypeSpec(token);
+				case TokenTypes.TypeSpec:
+					return typeSpecs[(int)(token & TokenTypes.RowIndexMask) - 1];
 
 				default:
 					throw new ArgumentException(@"Not a type token.", @"token");
@@ -899,10 +894,11 @@ namespace Mosa.Runtime.TypeSystem
 				case TokenTypes.MemberRef:
 					return memberRef[(int)(token & TokenTypes.RowIndexMask) - 1] as RuntimeMethod;
 
-				//TODO
-				//case TokenTypes.MethodSpec:
-				//    return DecodeMethodSpec(token);
-				//    break;
+				case TokenTypes.MethodSpec:
+					//TODO
+					//    return DecodeMethodSpec(token);
+					//    break;
+					return null;
 
 				default:
 					throw new NotSupportedException(@"Can't get method for token " + token.ToString("x"));
