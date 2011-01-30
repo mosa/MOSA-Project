@@ -66,7 +66,6 @@ namespace Mosa.Runtime.Vm
 		public RuntimeType DeclaringType
 		{
 			get { return this.declaringType; }
-			internal set { this.declaringType = value; }
 		}
 
 		/// <summary>

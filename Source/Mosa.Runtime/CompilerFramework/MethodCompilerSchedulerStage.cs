@@ -83,16 +83,6 @@ namespace Mosa.Runtime.CompilerFramework
 
 				ScheduleMethodForCompilation(method);
 			}
-			
-			if (type.HasNestedTypes)
-			{
-				System.Console.WriteLine ("Adding nested types");
-				foreach (RuntimeType nestedType in type.NestedTypes)
-				{
-					System.Console.WriteLine ("  Adding nested type " + nestedType + " from " + type);	
-					this.ScheduleTypeForCompilation (nestedType);
-				}
-			}
 
 			CompilePendingMethods();
 		}
