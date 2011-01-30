@@ -1,3 +1,3 @@
 cd ..\..\Tools\JPC
 call GetJPC.bat
-java -jar JPCDebugger.jar -hda ..\..\Run\build\bootimage.img -boot hda
+"%ProgramFiles(x86)%\Java\jre6\bin\java.exe" -jar JPCDebugger.jar -hda ..\..\Run\build\bootimage.img -boot hda
