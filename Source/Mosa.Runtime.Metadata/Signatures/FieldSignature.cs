@@ -39,6 +39,15 @@ namespace Mosa.Runtime.Metadata.Signatures
 		}
 
 		/// <summary>
+		/// Initializes a new instance of the <see cref="FieldSignature"/> class.
+		/// </summary>
+		/// <param name="signature">The signature.</param>
+		public FieldSignature(FieldSignature signature)
+			: base(signature)
+		{
+		}
+
+		/// <summary>
 		/// FieldSignature signature is indexed by the Field.Signature column
 		/// </summary>
 		/// <param name="reader">The reader.</param>

@@ -31,6 +31,13 @@ namespace Mosa.Runtime.TypeSystem
 		RuntimeType GetType(string nameSpace, string name);
 
 		/// <summary>
+		/// Gets the type.
+		/// </summary>
+		/// <param name="fullname">The fullname.</param>
+		/// <returns></returns>
+		RuntimeType GetType(string fullname);
+		
+		/// <summary>
 		/// Resolves the module reference.
 		/// </summary>
 		/// <param name="assembly">The assembly.</param>

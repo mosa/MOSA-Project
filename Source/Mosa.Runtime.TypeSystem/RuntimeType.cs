@@ -203,8 +203,6 @@ namespace Mosa.Runtime.TypeSystem
 			{
 				if (value == null)
 					throw new ArgumentNullException(@"value");
-				if (fields != null)
-					throw new InvalidOperationException();
 
 				fields = value;
 			}
@@ -231,8 +229,6 @@ namespace Mosa.Runtime.TypeSystem
 			{
 				if (value == null)
 					throw new ArgumentNullException(@"value");
-				if (methods != null)
-					throw new InvalidOperationException();
 
 				methods = value;
 			}

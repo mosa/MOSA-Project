@@ -71,6 +71,21 @@ namespace Mosa.Runtime.TypeSystem
 			return null;
 		}
 
+
+		/// <summary>
+		/// Gets the type.
+		/// </summary>
+		/// <param name="fullname">The fullname.</param>
+		/// <returns></returns>
+		RuntimeType ITypeSystem.GetType(string fullname)
+		{
+			int dot = fullname.LastIndexOf(".");
+
+			if (dot < 0)
+				return null;
+
+			return ((ITypeSystem)this).GetType(fullname.Substring(0, dot), fullname.Substring(dot + 1));
+		}
 		
 	}
 }

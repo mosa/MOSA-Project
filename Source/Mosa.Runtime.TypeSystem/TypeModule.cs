@@ -9,6 +9,7 @@ using Mosa.Runtime.Metadata.Tables;
 using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.TypeSystem.Cil;
+using Mosa.Runtime.TypeSystem.Generic;
 
 namespace Mosa.Runtime.TypeSystem
 {
@@ -19,7 +20,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// <summary>
 		/// Holds the type system
 		/// </summary>
-		private readonly ITypeSystem TypeSystem;
+		private readonly ITypeSystem typeSystem;
 
 		/// <summary>
 		/// Holds the metadata provider
@@ -100,7 +101,7 @@ namespace Mosa.Runtime.TypeSystem
 			Debug.Assert(metadataModule != null);
 			Debug.Assert(typeSystem != null);
 
-			this.TypeSystem = typeSystem;
+			this.typeSystem = typeSystem;
 			this.metadataModule = metadataModule;
 			this.metadataProvider = metadataModule.Metadata;
 
@@ -572,7 +573,7 @@ namespace Mosa.Runtime.TypeSystem
 
 							AssemblyRefRow asmRefRow = metadataProvider.ReadAssemblyRefRow(row2.ResolutionScopeIdx);
 							string assemblyName = GetString(asmRefRow.NameIdx);
-							ITypeModule module = TypeSystem.ResolveModuleReference(assemblyName);
+							ITypeModule module = typeSystem.ResolveModuleReference(assemblyName);
 							runtimeType = module.GetType(typeNamespace2, typeName);
 
 							if (runtimeType == null)
@@ -593,7 +594,7 @@ namespace Mosa.Runtime.TypeSystem
 
 							AssemblyRefRow asmRefRow = metadataProvider.ReadAssemblyRefRow(row.ResolutionScopeIdx);
 							string assemblyName = GetString(asmRefRow.NameIdx);
-							ITypeModule module = TypeSystem.ResolveModuleReference(assemblyName);
+							ITypeModule module = typeSystem.ResolveModuleReference(assemblyName);
 							runtimeType = module.GetType(typeNamespace, typeName);
 
 							if (runtimeType == null)
@@ -735,10 +736,38 @@ namespace Mosa.Runtime.TypeSystem
 			for (TokenTypes token = TokenTypes.TypeSpec + 1; token <= maxToken; token++)
 			{
 				TypeSpecRow row = metadataProvider.ReadTypeSpecRow(token);
-
 				TypeSpecSignature signature = GetTypeSpecSignature(row.SignatureBlobIdx);
 
-				continue;
+				GenericInstSigType genericSigType = signature.Type as GenericInstSigType;
+
+				if (genericSigType != null)
+				{
+					RuntimeType genericType = null;
+					SigType sigType = genericSigType;
+
+					switch (genericSigType.Type)
+					{
+						case CilElementType.ValueType:
+							goto case CilElementType.Class;
+
+						case CilElementType.Class:
+
+							TypeSigType typeSigType = (TypeSigType)sigType;
+							genericType = types[(int)typeSigType.Token];
+							break;
+
+						case CilElementType.GenericInst:
+							GenericInstSigType genericSigType2 = (GenericInstSigType)sigType;
+							RuntimeType genericBaseType = types[(int)(genericSigType2.BaseType.Token & TokenTypes.RowIndexMask) - 1];
+							genericType = new CilGenericType(genericBaseType, genericSigType, this);
+							break;
+
+						default:
+							throw new NotSupportedException(String.Format(@"ResolveSignatureType does not support CilElementType.{0}", genericSigType.Type));
+					}
+
+					typeSpecs[(int)(token & TokenTypes.RowIndexMask) - 1] = genericType;
+				}
 			}
 
 		}
@@ -746,6 +775,12 @@ namespace Mosa.Runtime.TypeSystem
 		#endregion
 
 		#region ITypeLoader interface
+
+		/// <summary>
+		/// Gets the type system.
+		/// </summary>
+		/// <value>The type system.</value>
+		ITypeSystem ITypeModule.TypeSystem { get { return typeSystem; } }
 
 		/// <summary>
 		/// Gets the metadata module.
@@ -784,6 +819,22 @@ namespace Mosa.Runtime.TypeSystem
 			}
 
 			return null;
+		}
+
+		/// <summary>
+		/// Gets the runtime type for the given type name and namespace
+		/// </summary>
+		/// <param name="nameSpace">The name space.</param>
+		/// <param name="name">The name.</param>
+		/// <returns></returns>
+		RuntimeType ITypeModule.GetType(string fullname)
+		{
+			int dot = fullname.LastIndexOf(".");
+
+			if (dot < 0)
+				return null;
+
+			return ((ITypeModule)this).GetType(fullname.Substring(0, dot), fullname.Substring(dot + 1));
 		}
 
 		/// <summary>
