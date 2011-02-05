@@ -748,7 +748,6 @@ namespace Mosa.Runtime.TypeSystem
 							goto case CilElementType.Class;
 
 						case CilElementType.Class:
-
 							TypeSigType typeSigType = (TypeSigType)sigType;
 							genericType = types[(int)typeSigType.Token];
 							break;
@@ -760,7 +759,7 @@ namespace Mosa.Runtime.TypeSystem
 							break;
 
 						default:
-							throw new NotSupportedException(String.Format(@"ResolveSignatureType does not support CilElementType.{0}", genericSigType.Type));
+							throw new NotSupportedException(String.Format(@"LoadTypeSpecs does not support CilElementType.{0}", genericSigType.Type));
 					}
 
 					typeSpecs[(int)(token & TokenTypes.RowIndexMask) - 1] = genericType;

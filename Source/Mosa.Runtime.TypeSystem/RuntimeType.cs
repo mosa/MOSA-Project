@@ -445,7 +445,7 @@ namespace Mosa.Runtime.TypeSystem
 
 		public virtual bool ContainsOpenGenericParameters
 		{
-			get { return false; }
+			get { return genericParameters.Count != 0; }
 		}
 
 

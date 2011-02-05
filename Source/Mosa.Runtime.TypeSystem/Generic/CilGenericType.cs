@@ -30,11 +30,10 @@ namespace Mosa.Runtime.TypeSystem.Generic
 			base.Attributes = baseGenericType.Attributes;
 			base.Namespace = baseGenericType.Namespace;
 
+			base.Name = GetName(typeModule);
 			this.Methods = GetMethods();
 			this.Fields = GetFields();
 			this.Interfaces = GetInterfaces();
-
-			base.Name = GetName(typeModule);
 		}
 
 		public SigType[] GenericArguments

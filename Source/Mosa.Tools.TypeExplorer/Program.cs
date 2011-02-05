@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace Mosa.Tools.StageVisualizer
+namespace Mosa.Tools.TypeExplorer
 {
 	static class Program
 	{
@@ -15,7 +15,7 @@ namespace Mosa.Tools.StageVisualizer
 		{
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(new frmMain());
+			Application.Run(new Main());
 		}
 	}
 }
