@@ -19,10 +19,13 @@ namespace Mosa.Runtime.TypeSystem
 		/// Loads the module.
 		/// </summary>
 		/// <param name="metadataModule">The metadata module.</param>
-		void ITypeSystem.LoadModule(IMetadataModule metadataModule)
+		void ITypeSystem.LoadModules(IList<IMetadataModule> modules)
 		{
-			ITypeModule typeModule = new TypeModule(this, metadataModule);
-			typeModules.Add(typeModule);
+			foreach (IMetadataModule module in modules)
+			{
+				ITypeModule typeModule = new TypeModule(this, module);
+				typeModules.Add(typeModule);
+			}
 		}
 
 		/// <summary>
@@ -49,7 +52,7 @@ namespace Mosa.Runtime.TypeSystem
 					}
 				}
 			}
-			
+
 			return null;
 		}
 
@@ -86,6 +89,6 @@ namespace Mosa.Runtime.TypeSystem
 
 			return ((ITypeSystem)this).GetType(fullname.Substring(0, dot), fullname.Substring(dot + 1));
 		}
-		
+
 	}
 }

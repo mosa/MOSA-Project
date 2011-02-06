@@ -10,11 +10,12 @@ namespace Mosa.Runtime.TypeSystem
 {
 	public interface ITypeSystem
 	{
+
 		/// <summary>
 		/// Loads the modules.
 		/// </summary>
-		/// <param name="module">The module.</param>
-		void LoadModule(IMetadataModule module);
+		/// <param name="modules">The modules.</param>
+		void LoadModules(IList<IMetadataModule> modules);
 
 		/// <summary>
 		/// Gets the type modules.

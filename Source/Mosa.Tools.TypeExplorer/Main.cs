@@ -24,31 +24,23 @@ namespace Mosa.Tools.TypeExplorer
 
 		private void Main_Load(object sender, EventArgs e)
 		{
-			openToolStripMenuItem_Click(null, null);
 		}
 
 		private void openToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			string[] files = { 
-				@"X:\MOSA-Project-tgiphil\bin\mscorlib.dll", 
-				@"X:\MOSA-Project-tgiphil\bin\Mosa.Platform.X86.Intrinsic.dll", 
-				@"X:\MOSA-Project-tgiphil\bin\Mosa.Kernel.dll",
-				@"X:\MOSA-Project-tgiphil\bin\Mosa.HelloWorld.exe"
-			};
+			if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
+			{
+				LoadAssembly(openFileDialog.FileName);
+			}
+		}
 
-			//string[] files = { @"X:\MOSA-Project-tgiphil\bin\Mosa.Test.Quick.exe" };
+		protected void LoadAssembly(string filename)
+		{
+			IAssemblyLoader assemblyLoader = new AssemblyLoader();
+			assemblyLoader.LoadModule(filename);
 
 			ITypeSystem typeSystem = new TypeSystem();
-
-			IAssemblyLoader assemblyLoader = new AssemblyLoader();
-			assemblyLoader.InitializePrivatePaths(files);
-
-			foreach (string file in files)
-			{
-				IMetadataModule metadataModule = assemblyLoader.LoadModule(file);
-
-				typeSystem.LoadModule(metadataModule);
-			}
+			typeSystem.LoadModules(assemblyLoader.Modules);
 
 			treeView.BeginUpdate();
 			treeView.Nodes.Clear();
