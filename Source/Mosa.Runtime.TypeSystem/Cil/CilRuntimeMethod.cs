@@ -27,16 +27,6 @@ namespace Mosa.Runtime.TypeSystem.Cil
 	{
 		#region Data Members
 
-		/// <summary>
-		/// The index of the method name.
-		/// </summary>
-		private TokenTypes nameIdx;
-
-		/// <summary>
-		/// Holds the blob location of the signature.
-		/// </summary>
-		private TokenTypes signatureBlobIdx;
-
 		#endregion // Data Members
 
 		#region Construction
@@ -52,8 +42,6 @@ namespace Mosa.Runtime.TypeSystem.Cil
 		public CilRuntimeMethod(string name, MethodSignature signature, TokenTypes token, RuntimeType declaringType, MethodDefRow method) :
 			base(token, declaringType)
 		{
-			this.nameIdx = method.NameStringIdx;
-			this.signatureBlobIdx = method.SignatureBlobIdx;
 			base.Attributes = method.Flags;
 			base.ImplAttributes = method.ImplFlags;
 			base.Rva = method.Rva;

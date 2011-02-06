@@ -245,8 +245,6 @@ namespace Mosa.Runtime.TypeSystem
 			{
 				if (value == null)
 					throw new ArgumentNullException(@"value");
-				if (nameSpace != null)
-					throw new InvalidOperationException();
 
 				nameSpace = value;
 			}

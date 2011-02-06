@@ -26,16 +26,6 @@ namespace Mosa.Runtime.TypeSystem.Cil
 	{
 		#region Data Members
 
-		/// <summary>
-		/// Holds the name index of the RuntimeField.
-		/// </summary>
-		private TokenTypes nameIdx;
-
-		/// <summary>
-		/// Holds the blob location of the signature.
-		/// </summary>
-		private TokenTypes signatureBlobIdx;
-
 		#endregion // Data Members
 
 		#region Construction
@@ -56,28 +46,6 @@ namespace Mosa.Runtime.TypeSystem.Cil
 			this.Signature = signature; 
 			base.Attributes = field.Flags;
 			base.RVA = rva;
-			this.nameIdx = field.NameStringIdx;
-			this.signatureBlobIdx = field.SignatureBlobIdx;
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="CilRuntimeField"/> class.
-		/// </summary>
-		/// <param name="metadataProvider">The metadata provider.</param>
-		/// <param name="genericField">The generic field.</param>
-		/// <param name="signature">The signature.</param>
-		public CilRuntimeField(IMetadataProvider metadataProvider, RuntimeField genericField, FieldSignature signature) :
-			base(genericField.DeclaringType)
-		{
-			this.Name = genericField.Name;
-			this.Attributes = genericField.Attributes;
-			this.RVA = genericField.RVA;
-			this.Signature = signature;
-			//TODO:
-			//this.SetAttributes(genericField.CustomAttributes);
-
-			this.Signature = new FieldSignature(metadataProvider, this.signatureBlobIdx);
-			this.Name = metadataProvider.ReadString(this.nameIdx);
 		}
 
 		#endregion // Construction
