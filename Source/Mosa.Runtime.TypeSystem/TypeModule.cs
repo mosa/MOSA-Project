@@ -122,16 +122,15 @@ namespace Mosa.Runtime.TypeSystem
 
 			// Load all types from the assembly into the type array
 			LoadTypes();
-			//LoadGenerics();
-			//LoadTypeSpecs();
 			LoadParameters();
 			LoadCustomAttributes();
-			LoadInterfaces();
 			LoadTypeReferences();
 			LoadMemberReferences();
 			LoadGenericParams();
 
 			LoadTypeSpecs();
+			LoadInterfaces();
+
 		}
 
 		#endregion // Construction
@@ -253,7 +252,7 @@ namespace Mosa.Runtime.TypeSystem
 						layoutRow = metadataProvider.ReadClassLayoutRow(tokenLayout);
 				}
 
-				RuntimeType baseType = (typeDefRow.Extends != TokenTypes.TypeDef) ? types[(int)(typeDefRow.Extends & TokenTypes.RowIndexMask)] : null;
+				RuntimeType baseType = (typeDefRow.Extends != TokenTypes.TypeDef) ? types[(int)(typeDefRow.Extends & TokenTypes.RowIndexMask) - 1] : null;
 				RuntimeType enclosingType = (nestedRow.NestedClassTableIdx == token) ? types[(int)(nestedRow.EnclosingClassTableIdx & TokenTypes.RowIndexMask) - 1] : null;
 
 				// Create and populate the runtime type
@@ -450,8 +449,17 @@ namespace Mosa.Runtime.TypeSystem
 			{
 				InterfaceImplRow row = metadataProvider.ReadInterfaceImplRow(token);
 
-				RuntimeType interfaceType = types[(int)(row.ClassTableIdx & TokenTypes.RowIndexMask)];
-				RuntimeType declaringType = types[(int)(row.InterfaceTableIdx & TokenTypes.RowIndexMask)];
+				RuntimeType declaringType = types[(int)(row.ClassTableIdx & TokenTypes.RowIndexMask) - 1];
+				RuntimeType interfaceType;
+
+				if ((row.InterfaceTableIdx & TokenTypes.TableMask) == TokenTypes.TypeSpec)
+				{
+					interfaceType = typeSpecs[(int)(row.InterfaceTableIdx & TokenTypes.RowIndexMask) - 1];
+				}
+				else
+				{
+					interfaceType = types[(int)(row.InterfaceTableIdx & TokenTypes.RowIndexMask) - 1];
+				}
 
 				declaringType.Interfaces.Add(interfaceType);
 			}

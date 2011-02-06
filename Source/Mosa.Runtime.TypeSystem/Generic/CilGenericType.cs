@@ -33,7 +33,7 @@ namespace Mosa.Runtime.TypeSystem.Generic
 			base.Name = GetName(typeModule);
 			this.Methods = GetMethods();
 			this.Fields = GetFields();
-			this.Interfaces = GetInterfaces();
+			//this.Interfaces = GetInterfaces();
 		}
 
 		public SigType[] GenericArguments

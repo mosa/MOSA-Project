@@ -55,6 +55,24 @@ namespace Mosa.Tools.TypeExplorer
 					TreeNode typeNode = new TreeNode(type.ToString());
 					moduleNode.Nodes.Add(typeNode);
 
+					if (type.BaseType != null)
+					{
+						TreeNode baseTypeNode = new TreeNode("Base Type: " + type.BaseType.Name);
+						typeNode.Nodes.Add(baseTypeNode);
+					}
+
+					if (type.Interfaces.Count != 0)
+					{
+						TreeNode interfacesNodes = new TreeNode("Interfaces");
+						typeNode.Nodes.Add(interfacesNodes);
+
+						foreach (RuntimeType interfaceType in type.Interfaces)
+						{
+							TreeNode interfaceNode = new TreeNode(interfaceType.Name);
+							interfacesNodes.Nodes.Add(interfaceNode);
+						}
+					}
+
 					foreach (RuntimeMethod method in type.Methods)
 					{
 						TreeNode methodNode = new TreeNode(method.ToString());
