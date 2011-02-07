@@ -121,16 +121,15 @@ namespace Mosa.Runtime.TypeSystem
 			this.strings = new Dictionary<TokenTypes, string>();
 
 			// Load all types from the assembly into the type array
+			LoadTypeReferences();
 			LoadTypes();
 			LoadParameters();
 			LoadCustomAttributes();
-			LoadTypeReferences();
 			LoadMemberReferences();
 			LoadGenericParams();
 
 			LoadTypeSpecs();
 			LoadInterfaces();
-
 		}
 
 		#endregion // Construction
@@ -252,8 +251,15 @@ namespace Mosa.Runtime.TypeSystem
 						layoutRow = metadataProvider.ReadClassLayoutRow(tokenLayout);
 				}
 
-				RuntimeType baseType = (typeDefRow.Extends != TokenTypes.TypeDef) ? types[(int)(typeDefRow.Extends & TokenTypes.RowIndexMask) - 1] : null;
+				//(typeDefRow.Extends != TokenTypes.TypeDef) ? types[(int)(typeDefRow.Extends & TokenTypes.RowIndexMask) - 1] : null;
+				RuntimeType baseType = GetType(typeDefRow.Extends);
 				RuntimeType enclosingType = (nestedRow.NestedClassTableIdx == token) ? types[(int)(nestedRow.EnclosingClassTableIdx & TokenTypes.RowIndexMask) - 1] : null;
+
+				if (baseType != null)
+					if (baseType.Name.Contains("<Module>"))
+					{
+						Console.WriteLine("test");
+					}
 
 				// Create and populate the runtime type
 				CilRuntimeType type = new CilRuntimeType(
@@ -784,6 +790,32 @@ namespace Mosa.Runtime.TypeSystem
 
 		}
 
+		/// <summary>
+		/// Retrieves the runtime type for a given metadata token.
+		/// </summary>
+		/// <param name="token">The token of the type to load. This can represent a typeref, typedef or typespec token.</param>
+		/// <returns>The runtime type of the specified token.</returns>
+		private RuntimeType GetType(TokenTypes token)
+		{
+			switch (token & TokenTypes.TableMask)
+			{
+				case TokenTypes.TypeDef:
+					if (token == TokenTypes.TypeDef)
+						return null;
+
+					return types[(int)(token & TokenTypes.RowIndexMask) - 1];
+
+				case TokenTypes.TypeRef:
+					return typeRef[(int)(token & TokenTypes.RowIndexMask) - 1];
+
+				case TokenTypes.TypeSpec:
+					return typeSpecs[(int)(token & TokenTypes.RowIndexMask) - 1];
+
+				default:
+					throw new ArgumentException(@"Not a type token.", @"token");
+			}
+		}
+
 		#endregion
 
 		#region ITypeLoader interface
@@ -855,23 +887,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// <returns>The runtime type of the specified token.</returns>
 		RuntimeType ITypeModule.GetType(TokenTypes token)
 		{
-			switch (token & TokenTypes.TableMask)
-			{
-				case TokenTypes.TypeDef:
-					if (token == TokenTypes.TypeDef)
-						return null;
-
-					return types[(int)(token & TokenTypes.RowIndexMask) - 1];
-
-				case TokenTypes.TypeRef:
-					return typeRef[(int)(token & TokenTypes.RowIndexMask) - 1];
-
-				case TokenTypes.TypeSpec:
-					return typeSpecs[(int)(token & TokenTypes.RowIndexMask) - 1];
-
-				default:
-					throw new ArgumentException(@"Not a type token.", @"token");
-			}
+			return GetType(token);
 		}
 
 		/// <summary>
