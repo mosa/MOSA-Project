@@ -9,6 +9,7 @@ using Mosa.Runtime.Metadata.Tables;
 using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.TypeSystem.Cil;
+using Mosa.Runtime.TypeSystem.Generic;
 
 namespace Mosa.Runtime.TypeSystem
 {
@@ -19,7 +20,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// <summary>
 		/// Holds the type system
 		/// </summary>
-		private readonly ITypeSystem TypeSystem;
+		private readonly ITypeSystem typeSystem;
 
 		/// <summary>
 		/// Holds the metadata provider
@@ -100,7 +101,7 @@ namespace Mosa.Runtime.TypeSystem
 			Debug.Assert(metadataModule != null);
 			Debug.Assert(typeSystem != null);
 
-			this.TypeSystem = typeSystem;
+			this.typeSystem = typeSystem;
 			this.metadataModule = metadataModule;
 			this.metadataProvider = metadataModule.Metadata;
 
@@ -120,15 +121,15 @@ namespace Mosa.Runtime.TypeSystem
 			this.strings = new Dictionary<TokenTypes, string>();
 
 			// Load all types from the assembly into the type array
+			LoadTypeReferences();
 			LoadTypes();
-			//LoadGenerics();
-			//LoadTypeSpecs();
 			LoadParameters();
 			LoadCustomAttributes();
-			LoadInterfaces();
-			LoadTypeReferences();
 			LoadMemberReferences();
 			LoadGenericParams();
+
+			LoadTypeSpecs();
+			LoadInterfaces();
 		}
 
 		#endregion // Construction
@@ -174,6 +175,11 @@ namespace Mosa.Runtime.TypeSystem
 			return (RetrieveSignature(blobIdx) ?? StoreSignature(blobIdx, new FieldSignature(metadataProvider, blobIdx))) as FieldSignature;
 		}
 
+		private TypeSpecSignature GetTypeSpecSignature(TokenTypes blobIdx)
+		{
+			return (RetrieveSignature(blobIdx) ?? StoreSignature(blobIdx, new TypeSpecSignature(metadataProvider, blobIdx))) as TypeSpecSignature;
+		}
+
 		/// <summary>
 		/// Gets the table rows.
 		/// </summary>
@@ -192,31 +198,31 @@ namespace Mosa.Runtime.TypeSystem
 			int typeOffset = 0;
 			int methodOffset = 0;
 			int fieldOffset = 0;
-			int size = 0;
-			int packing = 0;
 
 			TokenTypes maxTypeDef = metadataProvider.GetMaxTokenValue(TokenTypes.TypeDef);
-			TokenTypes maxLayout = metadataProvider.GetMaxTokenValue(TokenTypes.ClassLayout);
 			TokenTypes maxMethod = metadataProvider.GetMaxTokenValue(TokenTypes.MethodDef);
 			TokenTypes maxField = metadataProvider.GetMaxTokenValue(TokenTypes.Field);
+			TokenTypes maxLayout = metadataProvider.GetMaxTokenValue(TokenTypes.ClassLayout);
+			TokenTypes maxNestedClass = metadataProvider.GetMaxTokenValue(TokenTypes.NestedClass);
 
 			TokenTypes tokenLayout = TokenTypes.ClassLayout + 1;
-			ClassLayoutRow layoutRow = new ClassLayoutRow();
+			ClassLayoutRow layoutRow = (TokenTypes.ClassLayout < maxLayout) ? metadataProvider.ReadClassLayoutRow(tokenLayout) : new ClassLayoutRow();
 
-			if (TokenTypes.ClassLayout < maxLayout)
-			{
-				layoutRow = metadataProvider.ReadClassLayoutRow(tokenLayout);
-			}
+			TokenTypes tokenNested = TokenTypes.NestedClass + 1;
+			NestedClassRow nestedRow = (TokenTypes.NestedClass < maxNestedClass) ? metadataProvider.ReadNestedClassRow(tokenNested) : new NestedClassRow();
 
 			TypeDefRow typeDefRow = metadataProvider.ReadTypeDefRow(TokenTypes.TypeDef + 1);
 			TypeDefRow nextTypeDefRow = new TypeDefRow();
+
+			int size = 0;
+			int packing = 0;
 
 			for (TokenTypes token = TokenTypes.TypeDef + 1; token <= maxTypeDef; token++)
 			{
 				TokenTypes maxNextMethod;
 				TokenTypes maxNextField;
 
-				string name = metadataProvider.ReadString(typeDefRow.TypeNameIdx);
+				//string name = metadataProvider.ReadString(typeDefRow.TypeNameIdx);
 
 				if (token < maxTypeDef)
 				{
@@ -235,7 +241,6 @@ namespace Mosa.Runtime.TypeSystem
 					maxNextField = maxField + 1;
 				}
 
-				// Is this our layout info?
 				if (layoutRow.ParentTypeDefIdx == token)
 				{
 					size = layoutRow.ClassSize;
@@ -246,7 +251,15 @@ namespace Mosa.Runtime.TypeSystem
 						layoutRow = metadataProvider.ReadClassLayoutRow(tokenLayout);
 				}
 
-				RuntimeType baseType = (typeDefRow.Extends != TokenTypes.TypeDef) ? types[(int)(typeDefRow.Extends & TokenTypes.RowIndexMask)] : null;
+				//(typeDefRow.Extends != TokenTypes.TypeDef) ? types[(int)(typeDefRow.Extends & TokenTypes.RowIndexMask) - 1] : null;
+				RuntimeType baseType = GetType(typeDefRow.Extends);
+				RuntimeType enclosingType = (nestedRow.NestedClassTableIdx == token) ? types[(int)(nestedRow.EnclosingClassTableIdx & TokenTypes.RowIndexMask) - 1] : null;
+
+				if (baseType != null)
+					if (baseType.Name.Contains("<Module>"))
+					{
+						Console.WriteLine("test");
+					}
 
 				// Create and populate the runtime type
 				CilRuntimeType type = new CilRuntimeType(
@@ -256,12 +269,20 @@ namespace Mosa.Runtime.TypeSystem
 					size,
 					token,
 					baseType,
+					enclosingType,
 					typeDefRow
 				);
 
 				LoadMethods(type, typeDefRow.MethodList, maxNextMethod, ref methodOffset);
 				LoadFields(type, typeDefRow.FieldList, maxNextField, ref fieldOffset);
 				types[typeOffset++] = type;
+
+				if (nestedRow.NestedClassTableIdx == token)
+				{
+					tokenNested++;
+					if (tokenNested <= maxNestedClass)
+						nestedRow = metadataProvider.ReadNestedClassRow(tokenNested);
+				}
 
 				typeDefRow = nextTypeDefRow;
 				packing = 0;
@@ -434,8 +455,17 @@ namespace Mosa.Runtime.TypeSystem
 			{
 				InterfaceImplRow row = metadataProvider.ReadInterfaceImplRow(token);
 
-				RuntimeType interfaceType = types[(int)(row.ClassTableIdx & TokenTypes.RowIndexMask)];
-				RuntimeType declaringType = types[(int)(row.InterfaceTableIdx & TokenTypes.RowIndexMask)];
+				RuntimeType declaringType = types[(int)(row.ClassTableIdx & TokenTypes.RowIndexMask) - 1];
+				RuntimeType interfaceType;
+
+				if ((row.InterfaceTableIdx & TokenTypes.TableMask) == TokenTypes.TypeSpec)
+				{
+					interfaceType = typeSpecs[(int)(row.InterfaceTableIdx & TokenTypes.RowIndexMask) - 1];
+				}
+				else
+				{
+					interfaceType = types[(int)(row.InterfaceTableIdx & TokenTypes.RowIndexMask) - 1];
+				}
 
 				declaringType.Interfaces.Add(interfaceType);
 			}
@@ -466,9 +496,7 @@ namespace Mosa.Runtime.TypeSystem
 						break;
 
 					case TokenTypes.TypeSpec:
-						//TODO
-						//ownerType = this.ResolveTypeSpec(row.ClassTableIdx);
-						//break;
+						ownerType = typeSpecs[(int)(row.ClassTableIdx & TokenTypes.RowIndexMask) - 1];
 						continue;
 
 					default:
@@ -565,7 +593,7 @@ namespace Mosa.Runtime.TypeSystem
 
 							AssemblyRefRow asmRefRow = metadataProvider.ReadAssemblyRefRow(row2.ResolutionScopeIdx);
 							string assemblyName = GetString(asmRefRow.NameIdx);
-							ITypeModule module = TypeSystem.ResolveModuleReference(assemblyName);
+							ITypeModule module = typeSystem.ResolveModuleReference(assemblyName);
 							runtimeType = module.GetType(typeNamespace2, typeName);
 
 							if (runtimeType == null)
@@ -586,7 +614,7 @@ namespace Mosa.Runtime.TypeSystem
 
 							AssemblyRefRow asmRefRow = metadataProvider.ReadAssemblyRefRow(row.ResolutionScopeIdx);
 							string assemblyName = GetString(asmRefRow.NameIdx);
-							ITypeModule module = TypeSystem.ResolveModuleReference(assemblyName);
+							ITypeModule module = typeSystem.ResolveModuleReference(assemblyName);
 							runtimeType = module.GetType(typeNamespace, typeName);
 
 							if (runtimeType == null)
@@ -716,12 +744,87 @@ namespace Mosa.Runtime.TypeSystem
 						throw new NotImplementedException();
 				}
 			}
+		}
 
+		/// <summary>
+		/// Loads the type specs.
+		/// </summary>
+		private void LoadTypeSpecs()
+		{
+			TokenTypes maxToken = metadataProvider.GetMaxTokenValue(TokenTypes.TypeSpec);
+			for (TokenTypes token = TokenTypes.TypeSpec + 1; token <= maxToken; token++)
+			{
+				TypeSpecRow row = metadataProvider.ReadTypeSpecRow(token);
+				TypeSpecSignature signature = GetTypeSpecSignature(row.SignatureBlobIdx);
+
+				GenericInstSigType genericSigType = signature.Type as GenericInstSigType;
+
+				if (genericSigType != null)
+				{
+					RuntimeType genericType = null;
+					SigType sigType = genericSigType;
+
+					switch (genericSigType.Type)
+					{
+						case CilElementType.ValueType:
+							goto case CilElementType.Class;
+
+						case CilElementType.Class:
+							TypeSigType typeSigType = (TypeSigType)sigType;
+							genericType = types[(int)typeSigType.Token];
+							break;
+
+						case CilElementType.GenericInst:
+							GenericInstSigType genericSigType2 = (GenericInstSigType)sigType;
+							RuntimeType genericBaseType = types[(int)(genericSigType2.BaseType.Token & TokenTypes.RowIndexMask) - 1];
+							genericType = new CilGenericType(genericBaseType, genericSigType, this);
+							break;
+
+						default:
+							throw new NotSupportedException(String.Format(@"LoadTypeSpecs does not support CilElementType.{0}", genericSigType.Type));
+					}
+
+					typeSpecs[(int)(token & TokenTypes.RowIndexMask) - 1] = genericType;
+				}
+			}
+
+		}
+
+		/// <summary>
+		/// Retrieves the runtime type for a given metadata token.
+		/// </summary>
+		/// <param name="token">The token of the type to load. This can represent a typeref, typedef or typespec token.</param>
+		/// <returns>The runtime type of the specified token.</returns>
+		private RuntimeType GetType(TokenTypes token)
+		{
+			switch (token & TokenTypes.TableMask)
+			{
+				case TokenTypes.TypeDef:
+					if (token == TokenTypes.TypeDef)
+						return null;
+
+					return types[(int)(token & TokenTypes.RowIndexMask) - 1];
+
+				case TokenTypes.TypeRef:
+					return typeRef[(int)(token & TokenTypes.RowIndexMask) - 1];
+
+				case TokenTypes.TypeSpec:
+					return typeSpecs[(int)(token & TokenTypes.RowIndexMask) - 1];
+
+				default:
+					throw new ArgumentException(@"Not a type token.", @"token");
+			}
 		}
 
 		#endregion
 
 		#region ITypeLoader interface
+
+		/// <summary>
+		/// Gets the type system.
+		/// </summary>
+		/// <value>The type system.</value>
+		ITypeSystem ITypeModule.TypeSystem { get { return typeSystem; } }
 
 		/// <summary>
 		/// Gets the metadata module.
@@ -738,9 +841,9 @@ namespace Mosa.Runtime.TypeSystem
 			foreach (RuntimeType type in types)
 				yield return type;
 
-			//foreach (RuntimeType type in typeSpecs)
-			//    if (type != null)
-			//        yield return type;
+			foreach (RuntimeType type in typeSpecs)
+				if (type != null)
+					yield return type;
 		}
 
 		/// <summary>
@@ -763,30 +866,28 @@ namespace Mosa.Runtime.TypeSystem
 		}
 
 		/// <summary>
+		/// Gets the runtime type for the given type name and namespace
+		/// </summary>
+		/// <param name="fullname">The fullname.</param>
+		/// <returns></returns>
+		RuntimeType ITypeModule.GetType(string fullname)
+		{
+			int dot = fullname.LastIndexOf(".");
+
+			if (dot < 0)
+				return null;
+
+			return ((ITypeModule)this).GetType(fullname.Substring(0, dot), fullname.Substring(dot + 1));
+		}
+
+		/// <summary>
 		/// Retrieves the runtime type for a given metadata token.
 		/// </summary>
 		/// <param name="token">The token of the type to load. This can represent a typeref, typedef or typespec token.</param>
 		/// <returns>The runtime type of the specified token.</returns>
 		RuntimeType ITypeModule.GetType(TokenTypes token)
 		{
-			switch (token & TokenTypes.TableMask)
-			{
-				case TokenTypes.TypeDef:
-					if (token == TokenTypes.TypeDef)
-						return null;
-
-					return types[(int)(token & TokenTypes.RowIndexMask) - 1];
-
-				case TokenTypes.TypeRef:
-					return typeRef[(int)(token & TokenTypes.RowIndexMask) - 1];
-
-				//TODO
-				//case TokenTypes.TypeSpec:
-				//    return ResolveTypeSpec(token);
-
-				default:
-					throw new ArgumentException(@"Not a type token.", @"token");
-			}
+			return GetType(token);
 		}
 
 		/// <summary>
@@ -824,10 +925,11 @@ namespace Mosa.Runtime.TypeSystem
 				case TokenTypes.MemberRef:
 					return memberRef[(int)(token & TokenTypes.RowIndexMask) - 1] as RuntimeMethod;
 
-				//TODO
-				//case TokenTypes.MethodSpec:
-				//    return DecodeMethodSpec(token);
-				//    break;
+				case TokenTypes.MethodSpec:
+					//TODO
+					//    return DecodeMethodSpec(token);
+					//    break;
+					return null;
 
 				default:
 					throw new NotSupportedException(@"Can't get method for token " + token.ToString("x"));

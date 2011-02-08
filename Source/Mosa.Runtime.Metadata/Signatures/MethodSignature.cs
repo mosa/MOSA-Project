@@ -148,6 +148,24 @@ namespace Mosa.Runtime.Metadata.Signatures
 		}
 
 		/// <summary>
+		/// Initializes a new instance of the <see cref="MethodSignature"/> class.
+		/// </summary>
+		/// <param name="signature">The signature.</param>
+		public MethodSignature(MethodSignature signature)
+			: base(signature)
+		{
+			this.callingConvention = signature.callingConvention;
+			this.hasExplicitThis = signature.hasExplicitThis;
+			this.hasThis = signature.hasThis;
+			this.returnType = signature.returnType;
+			this.genericParameterCount = signature.genericParameterCount;
+
+			this.parameters = new SigType[signature.parameters.Length];
+			for (int i = 0; i < signature.parameters.Length; i++)
+				this.parameters[i] = signature.parameters[i];
+		}
+
+		/// <summary>
 		/// Parses the signature.
 		/// </summary>
 		/// <param name="reader">The reader.</param>

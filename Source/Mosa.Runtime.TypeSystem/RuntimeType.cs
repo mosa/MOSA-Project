@@ -203,8 +203,6 @@ namespace Mosa.Runtime.TypeSystem
 			{
 				if (value == null)
 					throw new ArgumentNullException(@"value");
-				if (fields != null)
-					throw new InvalidOperationException();
 
 				fields = value;
 			}
@@ -231,8 +229,6 @@ namespace Mosa.Runtime.TypeSystem
 			{
 				if (value == null)
 					throw new ArgumentNullException(@"value");
-				if (methods != null)
-					throw new InvalidOperationException();
 
 				methods = value;
 			}
@@ -249,8 +245,6 @@ namespace Mosa.Runtime.TypeSystem
 			{
 				if (value == null)
 					throw new ArgumentNullException(@"value");
-				if (nameSpace != null)
-					throw new InvalidOperationException();
 
 				nameSpace = value;
 			}
@@ -449,7 +443,7 @@ namespace Mosa.Runtime.TypeSystem
 
 		public virtual bool ContainsOpenGenericParameters
 		{
-			get { return false; }
+			get { return genericParameters.Count != 0; }
 		}
 
 

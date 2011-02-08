@@ -18,6 +18,19 @@ namespace Mosa.Runtime.Metadata.Loader
 	{
 
 		/// <summary>
+		/// Loads the named assembly.
+		/// </summary>
+		/// <param name="file">The file path of the assembly to load.</param>
+		/// <returns>The assembly image of the loaded assembly.</returns>
+		IMetadataModule LoadModule(string file);
+
+		/// <summary>
+		/// Gets the modules.
+		/// </summary>
+		/// <value>The modules.</value>
+		IList<IMetadataModule> Modules { get; }
+
+		/// <summary>
 		/// Initializes the private paths.
 		/// </summary>
 		/// <param name="assemblyPaths">The assembly paths.</param>
@@ -28,13 +41,6 @@ namespace Mosa.Runtime.Metadata.Loader
 		/// </summary>
 		/// <param name="path">The path to append to the assembly search path.</param>
 		void AppendPrivatePath(string path);
-
-		/// <summary>
-		/// Loads the named assembly.
-		/// </summary>
-		/// <param name="file">The file path of the assembly to load.</param>
-		/// <returns>The assembly image of the loaded assembly.</returns>
-		IMetadataModule LoadModule(string file);
 
 	}
 }

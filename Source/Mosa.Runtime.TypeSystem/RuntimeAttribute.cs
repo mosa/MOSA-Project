@@ -46,10 +46,10 @@ namespace Mosa.Runtime.TypeSystem
 		#region Construction
 
 		/// <summary>
-		/// Populates the <see cref="RuntimeAttribute"/> with the values in <paramref name="car"/>.
+		/// Initializes a new instance of the <see cref="RuntimeAttribute"/> class.
 		/// </summary>
-		/// <param name="metadataProvider">The metadata provider.</param>
-		/// <param name="car">The custom attribute row from metadata.</param>
+		/// <param name="customAttributeRow">The custom attribute row.</param>
+		/// <param name="ctorMethod">The ctor method.</param>
 		public RuntimeAttribute(CustomAttributeRow customAttributeRow, RuntimeMethod ctorMethod)
 		{
 			this.ctorMethod = ctorMethod;		

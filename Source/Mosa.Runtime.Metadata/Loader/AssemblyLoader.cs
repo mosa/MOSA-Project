@@ -13,7 +13,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Diagnostics;
 
+using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Loader.PE;
+using Mosa.Runtime.Metadata.Tables;
+using Mosa.Runtime.Metadata.Loader;
 
 namespace Mosa.Runtime.Metadata.Loader
 {
@@ -27,6 +30,8 @@ namespace Mosa.Runtime.Metadata.Loader
 		private string[] searchPath;
 		private List<string> privatePaths = new List<string>();
 		private object loaderLock = new object();
+
+		private List<IMetadataModule> modules = new List<IMetadataModule>();
 
 		#endregion // Data members
 
@@ -52,6 +57,32 @@ namespace Mosa.Runtime.Metadata.Loader
 		#region IAssemblyLoader
 
 		/// <summary>
+		/// Loads the named assembly.
+		/// </summary>
+		/// <param name="file">The file path of the assembly to load.</param>
+		/// <returns>
+		/// The assembly image of the loaded assembly.
+		/// </returns>
+		IMetadataModule IAssemblyLoader.LoadModule(string file)
+		{
+			lock (loaderLock)
+			{
+				IMetadataModule module = LoadDependencies(file);
+
+				Debug.Assert(module != null);
+				Debug.Assert(module.Metadata != null);
+
+				return module;
+			}
+		}
+
+		/// <summary>
+		/// Gets the modules.
+		/// </summary>
+		/// <value>The modules.</value>
+		IList<IMetadataModule> IAssemblyLoader.Modules { get { return modules.AsReadOnly(); } }
+
+		/// <summary>
 		/// Appends the given path to the assembly search path.
 		/// </summary>
 		/// <param name="path">The path to append to the assembly search path.</param>
@@ -74,29 +105,41 @@ namespace Mosa.Runtime.Metadata.Loader
 				((IAssemblyLoader)this).AppendPrivatePath(path);
 		}
 
-		/// <summary>
-		/// Loads the named assembly.
-		/// </summary>
-		/// <param name="file">The file path of the assembly to load.</param>
-		/// <returns>
-		/// The assembly image of the loaded assembly.
-		/// </returns>
-		IMetadataModule IAssemblyLoader.LoadModule(string file)
-		{
-			lock (loaderLock)
-			{
-				IMetadataModule module = LoadAssembly(file);
-
-				Debug.Assert(module != null);
-				Debug.Assert(module.Metadata != null);
-
-				return module;
-			}
-		}
-
 		#endregion // IAssemblyLoader
 
 		#region Internals
+
+		private bool isLoaded(string name)
+		{
+			foreach (IMetadataModule module in modules)
+				if (module.Name == name)
+					return true;
+
+			return false;
+		}
+
+		private IMetadataModule LoadDependencies(string file)
+		{
+			IMetadataModule metadataModule = LoadAssembly(file);
+
+			if (!isLoaded(metadataModule.Name))
+			{
+				TokenTypes maxToken = metadataModule.Metadata.GetMaxTokenValue(TokenTypes.AssemblyRef);
+				for (TokenTypes token = TokenTypes.AssemblyRef + 1; token <= maxToken; token++)
+				{
+					AssemblyRefRow row = metadataModule.Metadata.ReadAssemblyRefRow(token);
+					string assembly = metadataModule.Metadata.ReadString(row.NameIdx);
+
+					LoadDependencies(assembly);
+				}
+
+				if (!isLoaded(metadataModule.Name))
+					modules.Add(metadataModule);
+			}
+
+			return metadataModule;
+		}
+
 
 		public static string CreateFileCodeBase(string file)
 		{
@@ -108,7 +151,7 @@ namespace Mosa.Runtime.Metadata.Loader
 
 			if (Path.IsPathRooted(file))
 			{
-				return LoadAssembly2(file); 
+				return LoadAssembly2(file);
 			}
 
 			file = Path.GetFileName(file);

@@ -35,6 +35,19 @@ namespace Mosa.Runtime.Metadata.Signatures
 		}
 
 		/// <summary>
+		/// Initializes a new instance of the <see cref="VariableSignature"/> class.
+		/// </summary>
+		/// <param name="provider">The provider.</param>
+		/// <param name="token">The token.</param>
+		public VariableSignature(VariableSignature signature)
+			: base(signature)
+		{
+			this.customMods = signature.customMods;
+			this.modifier = signature.modifier;
+			this.type = signature.type;
+		}
+
+		/// <summary>
 		/// Gets the custom mods.
 		/// </summary>
 		/// <value>The custom mods.</value>

@@ -68,6 +68,18 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// <summary>
 		/// Loads the signature.
 		/// </summary>
+		/// <param name="signature">The signature.</param>
+		public Signature(Signature signature)
+		{
+			if (signature == null)
+				throw new ArgumentNullException(@"signature");
+
+			this.token = signature.token;
+		}
+
+		/// <summary>
+		/// Loads the signature.
+		/// </summary>
 		/// <param name="provider">The provider.</param>
 		/// <param name="token">The token.</param>
 		public void LoadSignature(IMetadataProvider provider, TokenTypes token)

@@ -12,6 +12,12 @@ namespace Mosa.Runtime.TypeSystem
 	{
 
 		/// <summary>
+		/// Gets the type system.
+		/// </summary>
+		/// <value>The type system.</value>
+		ITypeSystem TypeSystem { get; }
+
+		/// <summary>
 		/// Gets the metadata module.
 		/// </summary>
 		/// <value>The metadata module.</value>
@@ -30,7 +36,14 @@ namespace Mosa.Runtime.TypeSystem
 		/// <param name="name">The name.</param>
 		/// <returns></returns>
 		RuntimeType GetType(string nameSpace, string name);
-
+		
+		/// <summary>
+		/// Gets the type.
+		/// </summary>
+		/// <param name="fullname">The fullname.</param>
+		/// <returns></returns>
+		RuntimeType GetType(string fullname);
+		
 		/// <summary>
 		/// Retrieves the runtime type for a given metadata token.
 		/// </summary>

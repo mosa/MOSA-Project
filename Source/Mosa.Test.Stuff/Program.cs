@@ -5,34 +5,22 @@ using System.Text;
 
 using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.Metadata;
+using Mosa.Runtime.Metadata.Tables;
 using Mosa.Runtime.Metadata.Loader;
+using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Test.Stuff
 {
 	static class Program
 	{
+
 		static void Main(string[] args)
 		{
-			string[] files = { 
-				@"X:\MOSA-Project-tgiphil\bin\mscorlib.dll", 
-				@"X:\MOSA-Project-tgiphil\bin\Mosa.Platform.X86.Intrinsic.dll", 
-				@"X:\MOSA-Project-tgiphil\bin\Mosa.Kernel.dll",
-				@"X:\MOSA-Project-tgiphil\bin\Mosa.HelloWorld.exe"
-			};
-
-			//string[] files = { @"X:\MOSA-Project-tgiphil\bin\Mosa.Test.Quick.exe" };
+			IAssemblyLoader assemblyLoader = new AssemblyLoader();
+			assemblyLoader.LoadModule(@"X:\MOSA-Project-tgiphil\bin\Mosa.HelloWorld.exe");
 
 			ITypeSystem typeSystem = new TypeSystem();
-
-			IAssemblyLoader assemblyLoader = new AssemblyLoader();
-			assemblyLoader.InitializePrivatePaths(files);
-
-			foreach (string file in files)
-			{
-				IMetadataModule metadataModule = assemblyLoader.LoadModule(file);
-
-				typeSystem.LoadModule(metadataModule);
-			}
+			typeSystem.LoadModules(assemblyLoader.Modules);
 
 			return;
 		}
