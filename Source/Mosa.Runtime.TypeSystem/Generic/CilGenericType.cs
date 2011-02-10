@@ -33,7 +33,7 @@ namespace Mosa.Runtime.TypeSystem.Generic
 			base.Name = GetName(typeModule);
 			this.Methods = GetMethods();
 			this.Fields = GetFields();
-			//this.Interfaces = GetInterfaces();
+			this.Interfaces = GetInterfaces();
 		}
 
 		public SigType[] GenericArguments
@@ -159,7 +159,8 @@ namespace Mosa.Runtime.TypeSystem.Generic
 				}
 				else
 				{
-					
+					continue;
+
 					// find the enclosed type 
 					// -- only needs to search generic type interfaces
 					//foreach (RuntimeType runtimetype in typeModule.GetAllTypes())

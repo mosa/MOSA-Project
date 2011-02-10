@@ -128,8 +128,9 @@ namespace Mosa.Runtime.TypeSystem
 			LoadMemberReferences();
 			LoadGenericParams();
 
+			LoadInterfaces(false);
 			LoadTypeSpecs();
-			LoadInterfaces();
+			LoadInterfaces(true);
 		}
 
 		#endregion // Construction
@@ -448,7 +449,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// <summary>
 		/// Loads the interfaces.
 		/// </summary>
-		protected void LoadInterfaces()
+		protected void LoadInterfaces(bool genericFlag)
 		{
 			TokenTypes maxToken = metadataProvider.GetMaxTokenValue(TokenTypes.InterfaceImpl);
 			for (TokenTypes token = TokenTypes.InterfaceImpl + 1; token <= maxToken; token++)
@@ -460,10 +461,16 @@ namespace Mosa.Runtime.TypeSystem
 
 				if ((row.InterfaceTableIdx & TokenTypes.TableMask) == TokenTypes.TypeSpec)
 				{
+					if (!genericFlag)
+						continue;
+
 					interfaceType = typeSpecs[(int)(row.InterfaceTableIdx & TokenTypes.RowIndexMask) - 1];
 				}
 				else
 				{
+					if (genericFlag)
+						continue;
+
 					interfaceType = types[(int)(row.InterfaceTableIdx & TokenTypes.RowIndexMask) - 1];
 				}
 
