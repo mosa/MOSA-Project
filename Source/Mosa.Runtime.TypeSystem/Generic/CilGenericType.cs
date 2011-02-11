@@ -33,13 +33,22 @@ namespace Mosa.Runtime.TypeSystem.Generic
 			base.Name = GetName(typeModule);
 			this.Methods = GetMethods();
 			this.Fields = GetFields();
-			this.Interfaces = GetInterfaces();
+			this.Interfaces = new List<RuntimeType>(); //GetInterfaces();
 		}
 
+		/// <summary>
+		/// Gets the generic arguments.
+		/// </summary>
+		/// <value>The generic arguments.</value>
 		public SigType[] GenericArguments
 		{
 			get { return genericArguments; }
 		}
+
+		//public RuntimeType BaseGenericType
+		//{
+		//    get { return baseGenericType; }
+		//}
 
 		private string GetName(ITypeModule typeModule)
 		{
@@ -147,44 +156,51 @@ namespace Mosa.Runtime.TypeSystem.Generic
 			get { return signature.ContainsGenericParameters; }
 		}
 
-		private IList<RuntimeType> GetInterfaces()
+		public void ResolveInterfaces(ITypeModule typeModule)
 		{
-			IList<RuntimeType> interfaces = new List<RuntimeType>();
+			//IList<RuntimeType> interfaces = new List<RuntimeType>();
 
 			foreach (RuntimeType type in baseGenericType.Interfaces)
 			{
 				if (!type.ContainsOpenGenericParameters)
 				{
-					interfaces.Add(type);
+					Interfaces.Add(type);
 				}
 				else
 				{
-					continue;
+					CilGenericType genericType = type as CilGenericType;
+					Debug.Assert(genericType != null);
 
-					// find the enclosed type 
+					RuntimeType matchedInterfaceType = null;
+
 					// -- only needs to search generic type interfaces
-					//foreach (RuntimeType runtimetype in typeModule.GetAllTypes())
-					//{
-					//    if (runtimetype.IsInterface)
-					//    {
-					//        CilGenericType runtimetypegeneric = runtimetype as CilGenericType;
-					//        if (runtimetypegeneric != null)
-					//        {
-					//            if (baseGeneric == runtimetypegeneric.genericType)
-					//            {
-					//                if (SigType.Equals(signature.GenericArguments, runtimetypegeneric.signature.GenericArguments))
-					//                {
-					//                    interfaces.Add(runtimetype);
-					//                    break;
-					//                }
-					//            }
-					//        }
-					//    }
-					//}
+					foreach (RuntimeType runtimetype in typeModule.GetAllTypes())
+					{
+						if (runtimetype.IsInterface)
+						{
+							CilGenericType runtimetypegeneric = runtimetype as CilGenericType;
+							if (runtimetypegeneric != null)
+							{
+								if (genericType.baseGenericType == runtimetypegeneric.baseGenericType)
+								{
+									if (SigType.Equals(signature.GenericArguments, runtimetypegeneric.signature.GenericArguments))
+									{
+										matchedInterfaceType = runtimetype;
+										//Interfaces.Add(runtimetype);
+										break;
+									}
+								}
+							}
+						}
+					}
+
+					if (matchedInterfaceType != null)
+						Interfaces.Add(matchedInterfaceType);
+					else
+						continue;
 				}
 			}
 
-			return interfaces;
 		}
 
 	}
