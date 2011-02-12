@@ -181,6 +181,11 @@ namespace Mosa.Runtime.TypeSystem
 			return (RetrieveSignature(blobIdx) ?? StoreSignature(blobIdx, new TypeSpecSignature(metadataProvider, blobIdx))) as TypeSpecSignature;
 		}
 
+		private Signature GetMemberRefSignature(TokenTypes blobIdx)
+		{
+			return (RetrieveSignature(blobIdx) ?? StoreSignature(blobIdx, Signature.FromMemberRefSignatureToken(metadataProvider, blobIdx)));
+		}
+
 		/// <summary>
 		/// Gets the table rows.
 		/// </summary>
@@ -323,7 +328,7 @@ namespace Mosa.Runtime.TypeSystem
 
 				Debug.Assert(offset < methods.Length, @"Invalid method index.");
 
-				CilRuntimeMethod method = new CilRuntimeMethod(GetString(methodDef.NameStringIdx), GetMethodSignature(methodDef.SignatureBlobIdx), (TokenTypes)offset, declaringType, methodDef);
+				CilRuntimeMethod method = new CilRuntimeMethod(GetString(methodDef.NameStringIdx), GetMethodSignature(methodDef.SignatureBlobIdx), token, declaringType, methodDef);
 
 				declaringType.Methods.Add(method);
 
@@ -429,6 +434,7 @@ namespace Mosa.Runtime.TypeSystem
 				CilRuntimeField field = new CilRuntimeField(
 					GetString(fieldRow.NameStringIdx),
 					GetFieldSignature(fieldRow.SignatureBlobIdx),
+					token,
 					layout,
 					rva,
 					declaringType,
@@ -522,9 +528,9 @@ namespace Mosa.Runtime.TypeSystem
 				if (ownerType == null)
 					throw new InvalidOperationException(String.Format(@"Failed to retrieve owner type for Token {0:x} (Table {1})", row.ClassTableIdx, row.ClassTableIdx & TokenTypes.TableMask));
 
-				Signature signature = Signature.FromMemberRefSignatureToken(metadataProvider, row.SignatureBlobIdx);
+				Signature signature = GetMemberRefSignature(row.SignatureBlobIdx);
+				
 				RuntimeMember runtimeMember = null;
-
 				if (signature is FieldSignature)
 				{
 					foreach (RuntimeField field in ownerType.Fields)
@@ -793,7 +799,7 @@ namespace Mosa.Runtime.TypeSystem
 						case CilElementType.GenericInst:
 							GenericInstSigType genericSigType2 = (GenericInstSigType)sigType;
 							RuntimeType genericBaseType = types[(int)(genericSigType2.BaseType.Token & TokenTypes.RowIndexMask) - 1];
-							genericType = new CilGenericType(genericBaseType, genericSigType, this);
+							genericType = new CilGenericType(genericBaseType, genericSigType, token, this);
 							break;
 
 						default:
@@ -802,6 +808,8 @@ namespace Mosa.Runtime.TypeSystem
 
 					typeSpecs[(int)(token & TokenTypes.RowIndexMask) - 1] = genericType;
 				}
+				else
+					continue;
 			}
 
 		}

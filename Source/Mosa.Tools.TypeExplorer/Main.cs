@@ -34,16 +34,46 @@ namespace Mosa.Tools.TypeExplorer
 			}
 		}
 
+		protected string TokenToString(TokenTypes token)
+		{
+			return ((int)token).ToString("X8");
+		}
+
+		protected string FormatToString(TokenTypes token, bool show)
+		{
+			if (!show)
+				return string.Empty;
+
+			return "[" + TokenToString(token) + "] ";
+		}
+
+		protected string FormatRuntimeMember(RuntimeMember member, bool show)
+		{
+			if (!show)
+				return member.Name;
+
+			return "[" + TokenToString(member.Token) + "] " + member.Name;
+		}
+
+		ITypeSystem typeSystem = new TypeSystem();
+
 		protected void LoadAssembly(string filename)
 		{
 			IAssemblyLoader assemblyLoader = new AssemblyLoader();
 			assemblyLoader.LoadModule(filename);
 
-			ITypeSystem typeSystem = new TypeSystem();
+			typeSystem = new TypeSystem();
 			typeSystem.LoadModules(assemblyLoader.Modules);
 
+			Update();
+		}
+
+		protected void Update()
+		{
 			treeView.BeginUpdate();
 			treeView.Nodes.Clear();
+
+			bool show = showTokenValues.Checked;
 
 			foreach (ITypeModule module in typeSystem.TypeModules)
 			{
@@ -52,12 +82,12 @@ namespace Mosa.Tools.TypeExplorer
 
 				foreach (RuntimeType type in module.GetAllTypes())
 				{
-					TreeNode typeNode = new TreeNode(type.ToString());
+					TreeNode typeNode = new TreeNode(FormatRuntimeMember(type, show));
 					moduleNode.Nodes.Add(typeNode);
 
 					if (type.BaseType != null)
 					{
-						TreeNode baseTypeNode = new TreeNode("Base Type: " + type.BaseType.Name);
+						TreeNode baseTypeNode = new TreeNode("Base Type: " + FormatRuntimeMember(type.BaseType, show));
 						typeNode.Nodes.Add(baseTypeNode);
 					}
 
@@ -68,20 +98,20 @@ namespace Mosa.Tools.TypeExplorer
 
 						foreach (RuntimeType interfaceType in type.Interfaces)
 						{
-							TreeNode interfaceNode = new TreeNode(interfaceType.Name);
+							TreeNode interfaceNode = new TreeNode(FormatRuntimeMember(interfaceType, show));
 							interfacesNodes.Nodes.Add(interfaceNode);
 						}
 					}
 
 					foreach (RuntimeMethod method in type.Methods)
 					{
-						TreeNode methodNode = new TreeNode(method.ToString());
+						TreeNode methodNode = new TreeNode(FormatRuntimeMember(method, show));
 						typeNode.Nodes.Add(methodNode);
 					}
 
 					foreach (RuntimeField field in type.Fields)
 					{
-						TreeNode fieldNode = new TreeNode(field.ToString());
+						TreeNode fieldNode = new TreeNode(FormatRuntimeMember(field, show));
 						typeNode.Nodes.Add(fieldNode);
 					}
 				}
@@ -93,6 +123,11 @@ namespace Mosa.Tools.TypeExplorer
 		private void quitToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			Application.Exit();
+		}
+
+		private void showTokenValues_Click(object sender, EventArgs e)
+		{
+			Update();
 		}
 
 	}

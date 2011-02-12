@@ -283,12 +283,17 @@ namespace Mosa.Runtime.Vm
 					string nameString = metadata.ReadString(row.NameStringIdx);
 					RuntimeType type = (this as IModuleTypeSystem).GetType(row.ClassTableIdx);
 
-					MethodSignature sig = Signature.FromMemberRefSignatureToken(metadata, row.SignatureBlobIdx) as MethodSignature;
+					MethodSignature sig;
 
 					CilGenericType genericType = type as CilGenericType;
 					if (genericType != null)
-						sig.ApplyGenericType(genericType.GenericArguments);
-
+					{
+						sig = Signature.FromMemberRefSignatureToken(metadata, row.SignatureBlobIdx, genericType.GenericArguments) as MethodSignature;
+					}
+					else
+					{
+						sig = Signature.FromMemberRefSignatureToken(metadata, row.SignatureBlobIdx) as MethodSignature;
+					}
 					foreach (RuntimeMethod method in type.Methods)
 					{
 						if (method.Name != nameString)
@@ -840,7 +845,7 @@ namespace Mosa.Runtime.Vm
 
 						if ((int)row.ResolutionScopeIdx == 0)
 							throw new NotImplementedException(string.Format("{0:X} {1:X} {2:X}", (int)row.ResolutionScopeIdx, (int)row.TypeNameIdx, (int)row.TypeNamespaceIdx));
-					
+
 						row = metadata.ReadTypeRefRow(row.ResolutionScopeIdx);
 						string typeName = metadata.ReadString(row.TypeNameIdx);
 						string typeNamespace = metadata.ReadString(row.TypeNamespaceIdx) + "." + typeName;

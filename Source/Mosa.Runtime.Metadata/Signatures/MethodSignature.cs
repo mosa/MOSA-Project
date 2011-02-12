@@ -120,6 +120,17 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MethodSignature"/> class.
 		/// </summary>
+		/// <param name="reader">The reader.</param>
+		/// <param name="genericArguments">The generic arguments.</param>
+		public MethodSignature(SignatureReader reader, SigType[] genericArguments)
+			: base(reader)
+		{
+			ApplyGenericArguments(genericArguments);
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="MethodSignature"/> class.
+		/// </summary>
 		/// <param name="provider">The provider.</param>
 		/// <param name="token">The token.</param>
 		public MethodSignature(IMetadataProvider provider, TokenTypes token)
@@ -163,6 +174,17 @@ namespace Mosa.Runtime.Metadata.Signatures
 			this.parameters = new SigType[signature.parameters.Length];
 			for (int i = 0; i < signature.parameters.Length; i++)
 				this.parameters[i] = signature.parameters[i];
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="MethodSignature"/> class.
+		/// </summary>
+		/// <param name="signature">The signature.</param>
+		/// <param name="genericArguments">The generic arguments.</param>
+		public MethodSignature(MethodSignature signature, SigType[] genericArguments)
+			: this(signature)
+		{
+			ApplyGenericArguments(genericArguments);
 		}
 
 		/// <summary>
@@ -266,7 +288,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 			return true;
 		}
 
-		public void ApplyGenericType(SigType[] genericArguments)
+		protected void ApplyGenericArguments(SigType[] genericArguments)
 		{
 			for (int i = 0; i < parameters.Length; i++)
 			{
