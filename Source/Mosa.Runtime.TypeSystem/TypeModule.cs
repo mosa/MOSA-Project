@@ -128,9 +128,9 @@ namespace Mosa.Runtime.TypeSystem
 			LoadMemberReferences();
 			LoadGenericParams();
 
-			LoadInterfaces(false);
 			LoadTypeSpecs();
-			LoadInterfaces(true);
+			LoadInterfaces();
+			LoadGenericInterfaces();
 		}
 
 		#endregion // Construction
@@ -179,6 +179,11 @@ namespace Mosa.Runtime.TypeSystem
 		private TypeSpecSignature GetTypeSpecSignature(TokenTypes blobIdx)
 		{
 			return (RetrieveSignature(blobIdx) ?? StoreSignature(blobIdx, new TypeSpecSignature(metadataProvider, blobIdx))) as TypeSpecSignature;
+		}
+
+		private Signature GetMemberRefSignature(TokenTypes blobIdx)
+		{
+			return (RetrieveSignature(blobIdx) ?? StoreSignature(blobIdx, Signature.FromMemberRefSignatureToken(metadataProvider, blobIdx)));
 		}
 
 		/// <summary>
@@ -323,7 +328,7 @@ namespace Mosa.Runtime.TypeSystem
 
 				Debug.Assert(offset < methods.Length, @"Invalid method index.");
 
-				CilRuntimeMethod method = new CilRuntimeMethod(GetString(methodDef.NameStringIdx), GetMethodSignature(methodDef.SignatureBlobIdx), (TokenTypes)offset, declaringType, methodDef);
+				CilRuntimeMethod method = new CilRuntimeMethod(GetString(methodDef.NameStringIdx), GetMethodSignature(methodDef.SignatureBlobIdx), token, declaringType, methodDef);
 
 				declaringType.Methods.Add(method);
 
@@ -429,6 +434,7 @@ namespace Mosa.Runtime.TypeSystem
 				CilRuntimeField field = new CilRuntimeField(
 					GetString(fieldRow.NameStringIdx),
 					GetFieldSignature(fieldRow.SignatureBlobIdx),
+					token,
 					layout,
 					rva,
 					declaringType,
@@ -449,7 +455,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// <summary>
 		/// Loads the interfaces.
 		/// </summary>
-		protected void LoadInterfaces(bool genericFlag)
+		protected void LoadInterfaces()
 		{
 			TokenTypes maxToken = metadataProvider.GetMaxTokenValue(TokenTypes.InterfaceImpl);
 			for (TokenTypes token = TokenTypes.InterfaceImpl + 1; token <= maxToken; token++)
@@ -461,22 +467,31 @@ namespace Mosa.Runtime.TypeSystem
 
 				if ((row.InterfaceTableIdx & TokenTypes.TableMask) == TokenTypes.TypeSpec)
 				{
-					if (!genericFlag)
-						continue;
-
 					interfaceType = typeSpecs[(int)(row.InterfaceTableIdx & TokenTypes.RowIndexMask) - 1];
 				}
 				else
 				{
-					if (genericFlag)
-						continue;
-
 					interfaceType = types[(int)(row.InterfaceTableIdx & TokenTypes.RowIndexMask) - 1];
 				}
 
 				declaringType.Interfaces.Add(interfaceType);
 			}
 
+		}
+
+		/// <summary>
+		/// Loads the generic interfaces.
+		/// </summary>
+		protected void LoadGenericInterfaces()
+		{
+			foreach (RuntimeType type in typeSpecs)
+			{
+				CilGenericType genericType = type as CilGenericType;
+				if (genericType != null)
+				{
+					genericType.ResolveInterfaces(this);
+				}
+			}
 		}
 
 		/// <summary>
@@ -513,9 +528,9 @@ namespace Mosa.Runtime.TypeSystem
 				if (ownerType == null)
 					throw new InvalidOperationException(String.Format(@"Failed to retrieve owner type for Token {0:x} (Table {1})", row.ClassTableIdx, row.ClassTableIdx & TokenTypes.TableMask));
 
-				Signature signature = Signature.FromMemberRefSignatureToken(metadataProvider, row.SignatureBlobIdx);
+				Signature signature = GetMemberRefSignature(row.SignatureBlobIdx);
+				
 				RuntimeMember runtimeMember = null;
-
 				if (signature is FieldSignature)
 				{
 					foreach (RuntimeField field in ownerType.Fields)
@@ -784,7 +799,7 @@ namespace Mosa.Runtime.TypeSystem
 						case CilElementType.GenericInst:
 							GenericInstSigType genericSigType2 = (GenericInstSigType)sigType;
 							RuntimeType genericBaseType = types[(int)(genericSigType2.BaseType.Token & TokenTypes.RowIndexMask) - 1];
-							genericType = new CilGenericType(genericBaseType, genericSigType, this);
+							genericType = new CilGenericType(genericBaseType, genericSigType, token, this);
 							break;
 
 						default:
@@ -793,6 +808,8 @@ namespace Mosa.Runtime.TypeSystem
 
 					typeSpecs[(int)(token & TokenTypes.RowIndexMask) - 1] = genericType;
 				}
+				else
+					continue;
 			}
 
 		}

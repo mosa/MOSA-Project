@@ -29,7 +29,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// <summary>
 		/// Holds the base type of this type.
 		/// </summary>
-		private RuntimeType baseType;
+		private readonly RuntimeType baseType;
 
 		/// <summary>
 		/// Holds the type flag.
@@ -54,17 +54,17 @@ namespace Mosa.Runtime.TypeSystem
 		/// <summary>
 		/// Methods of the type.
 		/// </summary>
-		private IList<RuntimeMethod> methods;
+		private readonly IList<RuntimeMethod> methods;
 
 		/// <summary>
 		/// Holds the fields of this type.
 		/// </summary>
-		private IList<RuntimeField> fields;
+		private readonly IList<RuntimeField> fields;
 
 		/// <summary>
 		/// Holds the interfaces of this type.
 		/// </summary>
-		private IList<RuntimeType> interfaces;
+		private readonly IList<RuntimeType> interfaces;
 
 		/// <summary>
 		/// 
@@ -74,17 +74,17 @@ namespace Mosa.Runtime.TypeSystem
 		/// <summary>
 		/// 
 		/// </summary>
-		private bool isValueType;
+		private readonly bool isValueType;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private bool isDelegate;
+		private readonly bool isDelegate;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private bool isEnum;
+		private readonly bool isEnum;
 
 		/// <summary>
 		/// 
@@ -131,9 +131,9 @@ namespace Mosa.Runtime.TypeSystem
 						this.isEnum = true;
 			}
 
-			this.Fields = new List<RuntimeField>();
-			this.Methods = new List<RuntimeMethod>();
-			this.Interfaces = new List<RuntimeType>();
+			this.fields = new List<RuntimeField>();
+			this.methods = new List<RuntimeMethod>();
+			this.interfaces = new List<RuntimeType>();
 			this.genericParameters = new List<GenericParameter>();
 		}
 
@@ -158,7 +158,6 @@ namespace Mosa.Runtime.TypeSystem
 		public RuntimeType BaseType
 		{
 			get { return baseType; }
-			protected set { baseType = value; }
 		}
 
 		/// <summary>
@@ -199,13 +198,6 @@ namespace Mosa.Runtime.TypeSystem
 		public IList<RuntimeField> Fields
 		{
 			get { return fields; }
-			protected set
-			{
-				if (value == null)
-					throw new ArgumentNullException(@"value");
-
-				fields = value;
-			}
 		}
 
 		/// <summary>
@@ -215,7 +207,6 @@ namespace Mosa.Runtime.TypeSystem
 		public IList<RuntimeType> Interfaces
 		{
 			get { return interfaces; }
-			protected set { interfaces = value; }
 		}
 
 		/// <summary>
@@ -225,13 +216,6 @@ namespace Mosa.Runtime.TypeSystem
 		public IList<RuntimeMethod> Methods
 		{
 			get { return methods; }
-			protected set
-			{
-				if (value == null)
-					throw new ArgumentNullException(@"value");
-
-				methods = value;
-			}
 		}
 
 		/// <summary>

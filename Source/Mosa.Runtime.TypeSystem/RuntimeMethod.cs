@@ -54,7 +54,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// <summary>
 		/// 
 		/// </summary>
-		private IList<GenericParameter> genericParameters;
+		private readonly IList<GenericParameter> genericParameters;
 
 		//private ExceptionClauseHeader exceptionClauseHeader = new ExceptionClauseHeader();
 
@@ -164,7 +164,6 @@ namespace Mosa.Runtime.TypeSystem
 		public IList<GenericParameter> GenericParameters
 		{
 			get { return genericParameters; }
-			protected set { genericParameters = value; }
 		}
 
 		#endregion // Properties

@@ -32,7 +32,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// <summary>
 		/// Specifies the type, that declares the member.
 		/// </summary>
-		private RuntimeType declaringType;
+		private readonly RuntimeType declaringType;
 
 		/// <summary>
 		/// Holds the (cached) name of the type.
@@ -65,7 +65,6 @@ namespace Mosa.Runtime.TypeSystem
 		public RuntimeType DeclaringType
 		{
 			get { return this.declaringType; }
-			internal set { this.declaringType = value; }
 		}
 
 		/// <summary>
@@ -79,8 +78,6 @@ namespace Mosa.Runtime.TypeSystem
 			{
 				if (value == null)
 					throw new ArgumentNullException(@"value");
-				if (this.name != null)
-					throw new InvalidOperationException();
 
 				this.name = value;
 			}
@@ -136,7 +133,7 @@ namespace Mosa.Runtime.TypeSystem
 			}
 			return result;
 		}
-		
+
 		#endregion // IRuntimeAttributable Members
 	}
 }

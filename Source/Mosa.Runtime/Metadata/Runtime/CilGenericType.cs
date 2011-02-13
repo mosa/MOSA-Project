@@ -34,14 +34,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 
 		public SigType[] GenericArguments
 		{
-			get
-			{
-				return genericArguments;
-			}
-			internal set
-			{
-				this.genericArguments = value;
-			}
+			get { return genericArguments; }
 		}
 
 		protected override string GetName()
@@ -86,9 +79,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 			List<RuntimeMethod> methods = new List<RuntimeMethod>();
 			foreach (CilRuntimeMethod method in this.genericType.Methods)
 			{
-				MethodSignature signature = new MethodSignature(method.MetadataModule.Metadata, method.Signature.Token);
-
-				signature.ApplyGenericType(this.genericArguments);
+				MethodSignature signature = new MethodSignature(method.Signature, genericArguments);
 
 				RuntimeMethod genericInstanceMethod = new CilGenericMethod(moduleTypeSystem, method, signature, this);
 
@@ -103,9 +94,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 			List<RuntimeField> fields = new List<RuntimeField>();
 			foreach (CilRuntimeField field in this.genericType.Fields)
 			{
-				FieldSignature signature = new FieldSignature(field.MetadataModule.Metadata, field.Signature.Token);
-
-				signature.ApplyGenericType(this.genericArguments);
+				FieldSignature signature = new FieldSignature(field.Signature, genericArguments);
 
 				CilGenericField genericInstanceField = new CilGenericField(moduleTypeSystem, field, signature, this);
 
@@ -134,11 +123,11 @@ namespace Mosa.Runtime.Metadata.Runtime
 
 				case CilElementType.MVar:
 					throw new NotImplementedException(@"Failing to resolve VarMSigType in GenericType.");
-				
+
 				case CilElementType.SZArray:
-				{
-					return null; // FIXME (rootnode)
-				}
+					{
+						return null; // FIXME (rootnode)
+					}
 
 				default:
 					{
@@ -249,7 +238,7 @@ namespace Mosa.Runtime.Metadata.Runtime
 			if (crt == null)
 				return false;
 
-			return 
+			return
 				this.moduleTypeSystem == crt.moduleTypeSystem &&
 				genericType == crt.genericType &&
 				signature == crt.signature &&

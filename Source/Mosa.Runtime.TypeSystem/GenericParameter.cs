@@ -19,12 +19,12 @@ namespace Mosa.Runtime.TypeSystem
 		/// <summary>
 		/// 
 		/// </summary>
-		private GenericParamAttributes flags;
+		private readonly GenericParamAttributes flags;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private string name;
+		private readonly string name;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="GenericParameter"/> class.

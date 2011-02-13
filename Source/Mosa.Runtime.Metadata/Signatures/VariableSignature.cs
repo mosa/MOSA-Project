@@ -48,6 +48,17 @@ namespace Mosa.Runtime.Metadata.Signatures
 		}
 
 		/// <summary>
+		/// Initializes a new instance of the <see cref="VariableSignature"/> class.
+		/// </summary>
+		/// <param name="signature">The signature.</param>
+		/// <param name="genericArguments">The generic arguments.</param>
+		public VariableSignature(VariableSignature signature, SigType[] genericArguments)
+			: this(signature)
+		{
+			ApplyGenericArguments(genericArguments);
+		}
+
+		/// <summary>
 		/// Gets the custom mods.
 		/// </summary>
 		/// <value>The custom mods.</value>
@@ -89,8 +100,11 @@ namespace Mosa.Runtime.Metadata.Signatures
 			}
 		}
 
-		public void ApplyGenericType(SigType[] genericArguments)
+		protected void ApplyGenericArguments(SigType[] genericArguments)
 		{
+			if (genericArguments == null)
+				return;
+
 			if (this.Type is VarSigType)
 			{
 				this.Type = genericArguments[(Type as VarSigType).Index];

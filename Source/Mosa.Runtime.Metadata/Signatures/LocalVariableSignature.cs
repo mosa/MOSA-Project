@@ -52,6 +52,18 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LocalVariableSignature"/> class.
 		/// </summary>
+		/// <param name="provider">The provider.</param>
+		/// <param name="token">The token.</param>
+		/// <param name="genericArguments">The generic arguments.</param>
+		public LocalVariableSignature(IMetadataProvider provider, TokenTypes token, SigType[] genericArguments)
+			: base(provider, token)
+		{
+			ApplyGenericArguments(genericArguments);
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="LocalVariableSignature"/> class.
+		/// </summary>
 		public LocalVariableSignature()
 		{
 			this.locals = LocalVariableSignature.Empty;
@@ -63,10 +75,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// <value>The types.</value>
 		public VariableSignature[] Locals
 		{
-			get
-			{
-				return this.locals;
-			}
+			get { return this.locals; }
 		}
 
 		/// <summary>
@@ -90,11 +99,13 @@ namespace Mosa.Runtime.Metadata.Signatures
 				}
 			}
 		}
-		
-		public void ApplyGenericType(SigType[] genericArguments)
+
+		private void ApplyGenericArguments(SigType[] genericArguments)
 		{
-			foreach (VariableSignature sig in locals)
-				sig.ApplyGenericType(genericArguments);
+			for (int i = 0; i < locals.Length; i++)
+			{
+				locals[i] = new VariableSignature(locals[i], genericArguments);
+			}
 		}
 	}
 }

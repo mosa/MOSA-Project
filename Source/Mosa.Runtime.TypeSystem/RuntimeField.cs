@@ -53,6 +53,14 @@ namespace Mosa.Runtime.TypeSystem
 		{
 		}
 
+		/// <summary>
+		/// Initializes a new instance of <see cref="RuntimeField"/>.
+		/// </summary>
+		/// <param name="declaringType">Specifies the type, which contains this field.</param>
+		public RuntimeField(RuntimeType declaringType, TokenTypes token) :
+			base(token, declaringType)
+		{
+		}
 		#endregion // Construction
 
 		#region Properties

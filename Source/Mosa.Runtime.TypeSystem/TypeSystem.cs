@@ -18,7 +18,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// <summary>
 		/// Loads the module.
 		/// </summary>
-		/// <param name="metadataModule">The metadata module.</param>
+		/// <param name="modules">The modules.</param>
 		void ITypeSystem.LoadModules(IList<IMetadataModule> modules)
 		{
 			foreach (IMetadataModule module in modules)

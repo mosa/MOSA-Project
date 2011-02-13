@@ -74,12 +74,16 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 					{
 						StandAloneSigRow row = methodCompiler.Method.MetadataModule.Metadata.ReadStandAloneSigRow(header.localsSignature);
 
-						LocalVariableSignature localsSignature = new LocalVariableSignature(methodCompiler.Method.MetadataModule.Metadata, row.SignatureBlobIdx);
+						LocalVariableSignature localsSignature;
 
 						if (methodCompiler.Method.DeclaringType is CilGenericType)
 						{
-							localsSignature.ApplyGenericType((methodCompiler.Method.DeclaringType as CilGenericType).GenericArguments);
+							localsSignature = new LocalVariableSignature(methodCompiler.Method.MetadataModule.Metadata, row.SignatureBlobIdx, (methodCompiler.Method.DeclaringType as CilGenericType).GenericArguments);
 						}
+						else
+						{
+							localsSignature = new LocalVariableSignature(methodCompiler.Method.MetadataModule.Metadata, row.SignatureBlobIdx);
+						}	
 
 						methodCompiler.SetLocalVariableSignature(localsSignature);
 					}

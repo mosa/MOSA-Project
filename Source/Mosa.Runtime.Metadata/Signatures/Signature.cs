@@ -116,7 +116,20 @@ namespace Mosa.Runtime.Metadata.Signatures
 			{
 				return new MethodSignature(reader);
 			}
+		}
 
+		public static Signature FromMemberRefSignatureToken(IMetadataProvider provider, TokenTypes token, SigType[] genericArguments)
+		{
+			SignatureReader reader = new SignatureReader(provider.ReadBlob(token));
+
+			if (reader[0] == 0x06)
+			{
+				return new FieldSignature(reader, genericArguments);
+			}
+			else
+			{
+				return new MethodSignature(reader, genericArguments);
+			}
 		}
 	}
 }

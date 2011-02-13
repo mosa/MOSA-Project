@@ -39,11 +39,11 @@ namespace Mosa.Runtime.TypeSystem.Cil
 		/// <param name="rva">The rva.</param>
 		/// <param name="declaringType">Type of the declaring.</param>
 		/// <param name="field">The field.</param>
-		public CilRuntimeField(string name, FieldSignature signature, uint offset, uint rva, RuntimeType declaringType, FieldRow field) :
-			base(declaringType)
+		public CilRuntimeField(string name, FieldSignature signature, TokenTypes token, uint offset, uint rva, RuntimeType declaringType, FieldRow field) :
+			base(declaringType, token)
 		{
 			this.Name = name;
-			this.Signature = signature; 
+			this.Signature = signature;
 			base.Attributes = field.Flags;
 			base.RVA = rva;
 		}

@@ -30,12 +30,12 @@ namespace Mosa.Runtime.TypeSystem.Cil
 		/// <summary>
 		/// Holds the token of the base type of this type.
 		/// </summary>
-		private TokenTypes baseTypeToken;
+		private readonly TokenTypes baseTypeToken;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private RuntimeType EnclosingType;
+		private readonly RuntimeType EnclosingType;
 
 		#endregion // Data Members
 
