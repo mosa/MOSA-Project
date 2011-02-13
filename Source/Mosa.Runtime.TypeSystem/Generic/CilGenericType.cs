@@ -14,11 +14,11 @@ namespace Mosa.Runtime.TypeSystem.Generic
 
 	public class CilGenericType : RuntimeType
 	{
-		private RuntimeType baseGenericType;
+		private readonly RuntimeType baseGenericType;
 
 		private readonly GenericInstSigType signature;
 
-		private SigType[] genericArguments;
+		private readonly SigType[] genericArguments;
 
 		public CilGenericType(RuntimeType baseGenericType, GenericInstSigType genericTypeInstanceSignature, TokenTypes token, ITypeModule typeModule) :
 			base(token, baseGenericType.BaseType)
@@ -31,9 +31,8 @@ namespace Mosa.Runtime.TypeSystem.Generic
 			base.Namespace = baseGenericType.Namespace;
 
 			base.Name = GetName(typeModule);
-			this.Methods = GetMethods();
-			this.Fields = GetFields();
-			this.Interfaces = new List<RuntimeType>(); //GetInterfaces();
+			ResolveMethods();
+			ResolveFields();
 		}
 
 		/// <summary>
@@ -45,10 +44,10 @@ namespace Mosa.Runtime.TypeSystem.Generic
 			get { return genericArguments; }
 		}
 
-		//public RuntimeType BaseGenericType
-		//{
-		//    get { return baseGenericType; }
-		//}
+		public RuntimeType BaseGenericType
+		{
+			get { return baseGenericType; }
+		}
 
 		private string GetName(ITypeModule typeModule)
 		{
@@ -121,32 +120,27 @@ namespace Mosa.Runtime.TypeSystem.Generic
 			return result;
 		}
 
-		private IList<RuntimeMethod> GetMethods()
+		private void ResolveMethods()
 		{
-			List<RuntimeMethod> methods = new List<RuntimeMethod>();
 			foreach (CilRuntimeMethod method in baseGenericType.Methods)
 			{
 				MethodSignature signature = new MethodSignature(method.Signature, genericArguments);
 
 				RuntimeMethod genericInstanceMethod = new CilGenericMethod(method, signature, this);
-				methods.Add(genericInstanceMethod);
+				Methods.Add(genericInstanceMethod);
 			}
-
-			return methods;
 		}
 
-		private IList<RuntimeField> GetFields()
+		private void ResolveFields()
 		{
-			List<RuntimeField> fields = new List<RuntimeField>();
 			foreach (CilRuntimeField field in baseGenericType.Fields)
 			{
 				FieldSignature signature = new FieldSignature(field.Signature, genericArguments);
 
 				CilGenericField genericInstanceField = new CilGenericField(field, signature, this);
-				fields.Add(genericInstanceField);
+				Fields.Add(genericInstanceField);
 			}
 
-			return fields;
 		}
 
 		public override bool ContainsOpenGenericParameters
@@ -156,8 +150,6 @@ namespace Mosa.Runtime.TypeSystem.Generic
 
 		public void ResolveInterfaces(ITypeModule typeModule)
 		{
-			//IList<RuntimeType> interfaces = new List<RuntimeType>();
-
 			foreach (RuntimeType type in baseGenericType.Interfaces)
 			{
 				if (!type.ContainsOpenGenericParameters)

@@ -10,6 +10,7 @@ using System.Windows.Forms;
 using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Loader;
+using Mosa.Runtime.TypeSystem.Generic;
 
 namespace Mosa.Tools.TypeExplorer
 {
@@ -89,6 +90,16 @@ namespace Mosa.Tools.TypeExplorer
 					{
 						TreeNode baseTypeNode = new TreeNode("Base Type: " + FormatRuntimeMember(type.BaseType, show));
 						typeNode.Nodes.Add(baseTypeNode);
+					}
+
+					CilGenericType genericType = type as CilGenericType;
+					if (genericType != null)
+					{
+						if (genericType.BaseGenericType != null)
+						{
+							TreeNode genericBaseTypeNode = new TreeNode("Generic Base Type: " + FormatRuntimeMember(genericType.BaseGenericType, show));
+							typeNode.Nodes.Add(genericBaseTypeNode);
+						}
 					}
 
 					if (type.Interfaces.Count != 0)

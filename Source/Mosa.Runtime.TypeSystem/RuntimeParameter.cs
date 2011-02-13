@@ -27,27 +27,22 @@ namespace Mosa.Runtime.TypeSystem
 		/// <summary>
 		/// Holds the attributes of the parameter.
 		/// </summary>
-		private ParameterAttributes attributes;
-
-		/// <summary>
-		/// Holds the token of the parameter name string.
-		/// </summary>
-		private TokenTypes nameIdx;
+		private readonly ParameterAttributes attributes;
 
 		/// <summary>
 		/// Cached name of the parameter. This value is filled upon first request of the name.
 		/// </summary>
-		private string name;
+		private readonly string name;
 
 		/// <summary>
 		/// Holds the parameter token.
 		/// </summary>
-		private TokenTypes token;
+		private readonly TokenTypes token;
 
 		/// <summary>
 		/// Holds the parameter index.
 		/// </summary>
-		private int position;
+		private readonly int position;
 
 		#endregion // Data members
 
@@ -61,7 +56,6 @@ namespace Mosa.Runtime.TypeSystem
 		/// <param name="attributes">The attributes.</param>
 		public RuntimeParameter(string name, int position, ParameterAttributes attributes)
 		{
-			this.nameIdx = (TokenTypes)0;
 			this.token = (TokenTypes)0;
 			this.attributes = attributes;
 			this.name = name;
@@ -76,7 +70,6 @@ namespace Mosa.Runtime.TypeSystem
 		public RuntimeParameter(string name, ParamRow param)
 		{
 			this.attributes = param.Flags;
-			this.nameIdx = param.NameIdx;
 			this.position = param.Sequence;
 			this.name = name;
 		}

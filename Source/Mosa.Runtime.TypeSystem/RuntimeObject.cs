@@ -25,7 +25,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// <summary>
 		/// Holds the token of the object.
 		/// </summary>
-		private TokenTypes token;
+		private readonly TokenTypes token;
 
 		#endregion // Data members
 

@@ -29,17 +29,17 @@ namespace Mosa.Runtime.TypeSystem
 		/// <summary>
 		/// Specifies the blob, which contains the attribute initialization.
 		/// </summary>
-		private TokenTypes attributeBlob;
+		private readonly TokenTypes attributeBlob;
 
 		/// <summary>
 		/// Holds the ctor of the attribute type to invoke.
 		/// </summary>
-		private TokenTypes ctor;
+		private readonly TokenTypes ctor;
 
 		/// <summary>
 		/// Holds the ctor method of the attribute type.
 		/// </summary>
-		private RuntimeMethod ctorMethod;
+		private readonly RuntimeMethod ctorMethod;
 
 		#endregion // Data members
 
