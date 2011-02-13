@@ -84,11 +84,15 @@ namespace Mosa.Runtime.TypeSystem.Generic
 			{
 				case CilElementType.Class:
 					Debug.Assert(sigType is TypeSigType, @"Failing to resolve VarSigType in GenericType.");
-					result = typeModule.GetType(((TypeSigType)sigType).Token);
+					result = typeModule.GetType((sigType as TypeSigType).Token);
 					break;
 
 				case CilElementType.ValueType:
 					goto case CilElementType.Class;
+
+				case CilElementType.GenericInst:
+					result = typeModule.GetType((sigType as GenericInstSigType).BaseType.Token);
+					break;
 
 				case CilElementType.Var:
 					throw new NotImplementedException(@"Failing to resolve VarSigType in GenericType.");
@@ -97,24 +101,27 @@ namespace Mosa.Runtime.TypeSystem.Generic
 					throw new NotImplementedException(@"Failing to resolve VarMSigType in GenericType.");
 
 				case CilElementType.SZArray:
-					{
-						return null; // FIXME (rootnode)
-					}
+					// FIXME
+					return null;
 
 				default:
+					BuiltInSigType builtIn = sigType as BuiltInSigType;
+					if (builtIn != null)
 					{
-						BuiltInSigType builtIn = sigType as BuiltInSigType;
-						if (builtIn != null)
-						{
-							ITypeModule mscorlib = typeModule.TypeSystem.ResolveModuleReference("mscorlib");
-							result = mscorlib.GetType(builtIn.TypeName);
-						}
+						ITypeModule mscorlib;
+
+						if (typeModule.MetadataModule.Name == "mscorlib")
+							mscorlib = typeModule;
 						else
-						{
-							throw new NotImplementedException(String.Format("SigType of CilElementType.{0} is not supported.", sigType.Type));
-						}
-						break;
+							mscorlib = typeModule.TypeSystem.ResolveModuleReference("mscorlib");
+
+						result = mscorlib.GetType(builtIn.TypeName);
 					}
+					else
+					{
+						throw new NotImplementedException(String.Format("SigType of CilElementType.{0} is not supported.", sigType.Type));
+					}
+					break;
 			}
 
 			return result;

@@ -16,7 +16,7 @@ namespace Mosa.Tools.TypeExplorer
 {
 	public partial class Main : Form
 	{
-		//ITypeSystem typeSystem = new TypeSystem();
+		ITypeSystem typeSystem = new TypeSystem();
 
 		public Main()
 		{
@@ -55,8 +55,6 @@ namespace Mosa.Tools.TypeExplorer
 
 			return "[" + TokenToString(member.Token) + "] " + member.Name;
 		}
-
-		ITypeSystem typeSystem = new TypeSystem();
 
 		protected void LoadAssembly(string filename)
 		{
