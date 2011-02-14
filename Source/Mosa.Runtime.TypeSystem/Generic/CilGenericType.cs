@@ -20,8 +20,16 @@ namespace Mosa.Runtime.TypeSystem.Generic
 
 		private readonly SigType[] genericArguments;
 
-		public CilGenericType(RuntimeType baseGenericType, GenericInstSigType genericTypeInstanceSignature, TokenTypes token, ITypeModule typeModule) :
-			base(token, baseGenericType.BaseType)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CilGenericType"/> class.
+		/// </summary>
+		/// <param name="module">The module.</param>
+		/// <param name="baseGenericType">Type of the base generic.</param>
+		/// <param name="genericTypeInstanceSignature">The generic type instance signature.</param>
+		/// <param name="token">The token.</param>
+		/// <param name="typeModule">The type module.</param>
+		public CilGenericType(ITypeModule module, RuntimeType baseGenericType, GenericInstSigType genericTypeInstanceSignature, TokenTypes token, ITypeModule typeModule) :
+			base(module, token, baseGenericType.BaseType)
 		{
 			this.signature = genericTypeInstanceSignature;
 			this.genericArguments = signature.GenericArguments;
@@ -84,11 +92,15 @@ namespace Mosa.Runtime.TypeSystem.Generic
 			{
 				case CilElementType.Class:
 					Debug.Assert(sigType is TypeSigType, @"Failing to resolve VarSigType in GenericType.");
-					result = typeModule.GetType(((TypeSigType)sigType).Token);
+					result = typeModule.GetType((sigType as TypeSigType).Token);
 					break;
 
 				case CilElementType.ValueType:
 					goto case CilElementType.Class;
+
+				case CilElementType.GenericInst:
+					result = typeModule.GetType((sigType as GenericInstSigType).BaseType.Token);
+					break;
 
 				case CilElementType.Var:
 					throw new NotImplementedException(@"Failing to resolve VarSigType in GenericType.");
@@ -97,24 +109,27 @@ namespace Mosa.Runtime.TypeSystem.Generic
 					throw new NotImplementedException(@"Failing to resolve VarMSigType in GenericType.");
 
 				case CilElementType.SZArray:
-					{
-						return null; // FIXME (rootnode)
-					}
+					// FIXME
+					return null;
 
 				default:
+					BuiltInSigType builtIn = sigType as BuiltInSigType;
+					if (builtIn != null)
 					{
-						BuiltInSigType builtIn = sigType as BuiltInSigType;
-						if (builtIn != null)
-						{
-							ITypeModule mscorlib = typeModule.TypeSystem.ResolveModuleReference("mscorlib");
-							result = mscorlib.GetType(builtIn.TypeName);
-						}
+						ITypeModule mscorlib;
+
+						if (typeModule.MetadataModule.Name == "mscorlib")
+							mscorlib = typeModule;
 						else
-						{
-							throw new NotImplementedException(String.Format("SigType of CilElementType.{0} is not supported.", sigType.Type));
-						}
-						break;
+							mscorlib = typeModule.TypeSystem.ResolveModuleReference("mscorlib");
+
+						result = mscorlib.GetType(builtIn.TypeName);
 					}
+					else
+					{
+						throw new NotImplementedException(String.Format("SigType of CilElementType.{0} is not supported.", sigType.Type));
+					}
+					break;
 			}
 
 			return result;
@@ -126,7 +141,7 @@ namespace Mosa.Runtime.TypeSystem.Generic
 			{
 				MethodSignature signature = new MethodSignature(method.Signature, genericArguments);
 
-				RuntimeMethod genericInstanceMethod = new CilGenericMethod(method, signature, this);
+				RuntimeMethod genericInstanceMethod = new CilGenericMethod(Module, method, signature, this);
 				Methods.Add(genericInstanceMethod);
 			}
 		}
@@ -137,7 +152,7 @@ namespace Mosa.Runtime.TypeSystem.Generic
 			{
 				FieldSignature signature = new FieldSignature(field.Signature, genericArguments);
 
-				CilGenericField genericInstanceField = new CilGenericField(field, signature, this);
+				CilGenericField genericInstanceField = new CilGenericField(Module, field, signature, this);
 				Fields.Add(genericInstanceField);
 			}
 

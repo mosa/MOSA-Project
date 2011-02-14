@@ -155,7 +155,7 @@ namespace Mosa.Tools.Mono.CreateProject
 					writer.WriteLine("\t\t<DebugSymbols>true</DebugSymbols>");
 					writer.WriteLine("\t\t<DebugType>full</DebugType>");
 					writer.WriteLine("\t\t<Optimize>false</Optimize>");
-					writer.WriteLine("\t\t<OutputPath>bin" + Path.DirectorySeparatorChar + "Debug" + Path.DirectorySeparatorChar + "</OutputPath>");
+					writer.WriteLine("\t\t<OutputPath>.." + Path.DirectorySeparatorChar + "bin" + Path.DirectorySeparatorChar + "</OutputPath>");
 
 					StringBuilder conditions = new StringBuilder();
 					foreach (string file in Conditions)
@@ -170,7 +170,7 @@ namespace Mosa.Tools.Mono.CreateProject
 					writer.WriteLine("\t<PropertyGroup Condition=\" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' \">");
 					writer.WriteLine("\t\t<DebugType>pdbonly</DebugType>");
 					writer.WriteLine("\t\t<Optimize>true</Optimize>");
-					writer.WriteLine("\t\t<OutputPath>bin" + Path.DirectorySeparatorChar + "Release" + Path.DirectorySeparatorChar + "</OutputPath>");
+					writer.WriteLine("\t\t<OutputPath>.." + Path.DirectorySeparatorChar + "bin" + Path.DirectorySeparatorChar + "</OutputPath>");
 					writer.WriteLine("\t\t<DefineConstants>" + conditions + "</DefineConstants>");
 					writer.WriteLine("\t\t<ErrorReport>prompt</ErrorReport>");
 					writer.WriteLine("\t\t<WarningLevel>4</WarningLevel>");

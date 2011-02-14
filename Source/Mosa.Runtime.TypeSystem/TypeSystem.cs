@@ -90,5 +90,20 @@ namespace Mosa.Runtime.TypeSystem
 			return ((ITypeSystem)this).GetType(fullname.Substring(0, dot), fullname.Substring(dot + 1));
 		}
 
+		/// <summary>
+		/// Gets all types from type system.
+		/// </summary>
+		/// <returns></returns>
+		IEnumerable<RuntimeType> ITypeSystem.GetAllTypes()
+		{
+			foreach (ITypeModule typeModule in typeModules)
+			{
+				foreach (RuntimeType type in typeModule.GetAllTypes())
+				{
+					if (type != null)
+						yield return type;
+				}
+			}
+		}
 	}
 }
