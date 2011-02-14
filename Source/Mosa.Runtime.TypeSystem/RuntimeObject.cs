@@ -27,6 +27,11 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		private readonly TokenTypes token;
 
+		/// <summary>
+		/// Holds the module from which this object originated
+		/// </summary>
+		private readonly TypeModule module;
+
 		#endregion // Data members
 
 		#region Construction
@@ -34,9 +39,11 @@ namespace Mosa.Runtime.TypeSystem
 		/// <summary>
 		/// Initializes a new instance of <see cref="RuntimeObject"/>.
 		/// </summary>
+		/// <param name="module">The module.</param>
 		/// <param name="token">The runtime token of this metadata.</param>
-		protected RuntimeObject(TokenTypes token)
+		protected RuntimeObject(TypeModule module, TokenTypes token)
 		{
+			this.module = module;
 			this.token = token;
 		}
 
@@ -50,6 +57,15 @@ namespace Mosa.Runtime.TypeSystem
 		public TokenTypes Token
 		{
 			get { return token; }
+		}
+
+		/// <summary>
+		/// Retrieves the module from which this object originated
+		/// </summary>
+		/// <value>The module.</value>
+		public TypeModule Module
+		{
+			get { return module; }
 		}
 
 		#endregion // Properties

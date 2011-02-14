@@ -46,10 +46,11 @@ namespace Mosa.Runtime.TypeSystem
 		/// <summary>
 		/// Initializes a new instance of <see cref="RuntimeMember"/>.
 		/// </summary>
+		/// <param name="module">The module.</param>
 		/// <param name="token">Holds the token of this runtime metadata.</param>
 		/// <param name="declaringType">The declaring type of the member.</param>
-		protected RuntimeMember(TokenTypes token, RuntimeType declaringType) :
-			base(token)
+		protected RuntimeMember(TypeModule module, TokenTypes token, RuntimeType declaringType) :
+			base(module, token)
 		{
 			this.declaringType = declaringType;
 			this.attributes = new List<RuntimeAttribute>();

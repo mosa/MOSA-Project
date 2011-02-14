@@ -67,8 +67,8 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		/// <param name="token">The token.</param>
 		/// <param name="declaringType">The type, which declared this method.</param>
-		public RuntimeMethod(TokenTypes token, RuntimeType declaringType) :
-			base(token, declaringType)
+		public RuntimeMethod(TypeModule module, TokenTypes token, RuntimeType declaringType) :
+			base(module, token, declaringType)
 		{
 			this.genericParameters = new List<GenericParameter>();
 		}

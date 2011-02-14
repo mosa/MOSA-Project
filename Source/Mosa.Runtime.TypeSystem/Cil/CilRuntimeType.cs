@@ -44,15 +44,17 @@ namespace Mosa.Runtime.TypeSystem.Cil
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CilRuntimeType"/> class.
 		/// </summary>
+		/// <param name="module">The module.</param>
 		/// <param name="name">The name.</param>
 		/// <param name="typenamespace">The typenamespace.</param>
 		/// <param name="packing">The packing.</param>
 		/// <param name="size">The size.</param>
 		/// <param name="token">The token.</param>
 		/// <param name="baseType">Type of the base.</param>
+		/// <param name="enclosingType">Type of the enclosing.</param>
 		/// <param name="typeDefRow">The type def row.</param>
-		public CilRuntimeType(string name, string typenamespace, int packing, int size, TokenTypes token, RuntimeType baseType, RuntimeType enclosingType, TypeDefRow typeDefRow) :
-			base(token, baseType)
+		public CilRuntimeType(TypeModule module, string name, string typenamespace, int packing, int size, TokenTypes token, RuntimeType baseType, RuntimeType enclosingType, TypeDefRow typeDefRow) :
+			base(module, token, baseType)
 		{
 			this.baseTypeToken = typeDefRow.Extends;
 			base.Attributes = typeDefRow.Flags;

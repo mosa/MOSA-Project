@@ -9,8 +9,15 @@ namespace Mosa.Runtime.TypeSystem.Generic
 {
 	public class CilGenericField : RuntimeField
 	{
-		public CilGenericField(RuntimeField genericField, FieldSignature signature, CilGenericType declaringType) :
-			base(declaringType)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CilGenericField"/> class.
+		/// </summary>
+		/// <param name="module">The module.</param>
+		/// <param name="genericField">The generic field.</param>
+		/// <param name="signature">The signature.</param>
+		/// <param name="declaringType">Type of the declaring.</param>
+		public CilGenericField(TypeModule module, RuntimeField genericField, FieldSignature signature, CilGenericType declaringType) :
+			base(module, declaringType)
 		{
 			this.Signature = signature;
 			this.Attributes = genericField.Attributes;
