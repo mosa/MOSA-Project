@@ -64,5 +64,13 @@ namespace Mosa.Runtime.TypeSystem
 		/// <param name="token">The token of the method to retrieve.</param>
 		/// <returns></returns>
 		RuntimeMethod GetMethod(TokenTypes token);
+
+		/// <summary>
+		/// Gets the method.
+		/// </summary>
+		/// <param name="token">The token.</param>
+		/// <param name="callingType">Type of the calling.</param>
+		/// <returns></returns>
+		RuntimeMethod GetMethod(TokenTypes token, RuntimeType callingType);
 	}
 }

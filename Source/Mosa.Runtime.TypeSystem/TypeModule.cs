@@ -851,7 +851,7 @@ namespace Mosa.Runtime.TypeSystem
 
 		#endregion
 
-		#region ITypeLoader interface
+		#region ITypeModule interface
 
 		/// <summary>
 		/// Gets the type system.
@@ -967,6 +967,44 @@ namespace Mosa.Runtime.TypeSystem
 				default:
 					throw new NotSupportedException(@"Can't get method for token " + token.ToString("x"));
 			}
+		}
+
+		/// <summary>
+		/// Gets the method.
+		/// </summary>
+		/// <param name="token">The token.</param>
+		/// <param name="callingType">Type of the calling.</param>
+		/// <returns></returns>
+		RuntimeMethod ITypeModule.GetMethod(TokenTypes token, RuntimeType callingType)
+		{
+			RuntimeMethod calledMethod = (this as ITypeModule).GetMethod(token);
+
+			if (callingType == null)
+				return calledMethod;
+
+			if (calledMethod.DeclaringType.Namespace != callingType.Namespace)
+				return calledMethod;
+
+			string declaringTypeName = calledMethod.DeclaringType.Name;
+			if (declaringTypeName.Contains("<"))
+				declaringTypeName = declaringTypeName.Substring(0, declaringTypeName.IndexOf('<'));
+
+			string callingTypeName = callingType.Name;
+			if (callingTypeName.Contains("<"))
+				callingTypeName = callingTypeName.Substring(0, callingTypeName.IndexOf('<'));
+
+			if (declaringTypeName != callingTypeName)
+				return calledMethod;
+
+			foreach (RuntimeMethod m in callingType.Methods)
+			{
+				if (calledMethod.Name == m.Name)
+				{
+					return m;
+				}
+			}
+
+			return calledMethod;
 		}
 
 		#endregion
