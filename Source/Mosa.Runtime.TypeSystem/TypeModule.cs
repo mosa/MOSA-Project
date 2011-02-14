@@ -269,6 +269,7 @@ namespace Mosa.Runtime.TypeSystem
 
 				// Create and populate the runtime type
 				CilRuntimeType type = new CilRuntimeType(
+					this,
 					GetString(typeDefRow.TypeNameIdx),
 					GetString(typeDefRow.TypeNamespaceIdx),
 					packing,
@@ -328,7 +329,14 @@ namespace Mosa.Runtime.TypeSystem
 
 				Debug.Assert(offset < methods.Length, @"Invalid method index.");
 
-				CilRuntimeMethod method = new CilRuntimeMethod(GetString(methodDef.NameStringIdx), GetMethodSignature(methodDef.SignatureBlobIdx), token, declaringType, methodDef);
+				CilRuntimeMethod method = new CilRuntimeMethod(
+					this,
+					GetString(methodDef.NameStringIdx),
+					GetMethodSignature(methodDef.SignatureBlobIdx),
+					token,
+					declaringType,
+					methodDef
+				);
 
 				declaringType.Methods.Add(method);
 
@@ -432,6 +440,7 @@ namespace Mosa.Runtime.TypeSystem
 
 				// Load the field metadata
 				CilRuntimeField field = new CilRuntimeField(
+					this,
 					GetString(fieldRow.NameStringIdx),
 					GetFieldSignature(fieldRow.SignatureBlobIdx),
 					token,
@@ -799,7 +808,7 @@ namespace Mosa.Runtime.TypeSystem
 						case CilElementType.GenericInst:
 							GenericInstSigType genericSigType2 = (GenericInstSigType)sigType;
 							RuntimeType genericBaseType = types[(int)(genericSigType2.BaseType.Token & TokenTypes.RowIndexMask) - 1];
-							genericType = new CilGenericType(genericBaseType, genericSigType, token, this);
+							genericType = new CilGenericType(this, genericBaseType, genericSigType, token, this);
 							break;
 
 						default:

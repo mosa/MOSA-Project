@@ -47,18 +47,21 @@ namespace Mosa.Runtime.TypeSystem
 		/// <summary>
 		/// Initializes a new instance of <see cref="RuntimeField"/>.
 		/// </summary>
+		/// <param name="module">The module.</param>
 		/// <param name="declaringType">Specifies the type, which contains this field.</param>
-		public RuntimeField(RuntimeType declaringType) :
-			base(0, declaringType)
+		public RuntimeField(TypeModule module, RuntimeType declaringType) :
+			base(module, 0, declaringType)
 		{
 		}
 
 		/// <summary>
 		/// Initializes a new instance of <see cref="RuntimeField"/>.
 		/// </summary>
+		/// <param name="module">The module.</param>
+		/// <param name="token">The token.</param>
 		/// <param name="declaringType">Specifies the type, which contains this field.</param>
-		public RuntimeField(RuntimeType declaringType, TokenTypes token) :
-			base(token, declaringType)
+		public RuntimeField(TypeModule module, TokenTypes token, RuntimeType declaringType) :
+			base(module, token, declaringType)
 		{
 		}
 		#endregion // Construction

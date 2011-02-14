@@ -22,8 +22,15 @@ namespace Mosa.Runtime.TypeSystem.Generic
 
 	internal class CilGenericMethod : RuntimeMethod
 	{
-		public CilGenericMethod(CilRuntimeMethod genericMethod, MethodSignature signature, RuntimeType declaringType) :
-			base(genericMethod.Token, declaringType)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CilGenericMethod"/> class.
+		/// </summary>
+		/// <param name="module">The module.</param>
+		/// <param name="genericMethod">The generic method.</param>
+		/// <param name="signature">The signature.</param>
+		/// <param name="declaringType">Type of the declaring.</param>
+		public CilGenericMethod(TypeModule module, CilRuntimeMethod genericMethod, MethodSignature signature, RuntimeType declaringType) :
+			base(module, genericMethod.Token, declaringType)
 		{
 			this.Signature = signature;
 			this.Attributes = genericMethod.Attributes;

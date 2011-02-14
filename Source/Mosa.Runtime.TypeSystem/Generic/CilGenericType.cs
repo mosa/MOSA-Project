@@ -20,8 +20,16 @@ namespace Mosa.Runtime.TypeSystem.Generic
 
 		private readonly SigType[] genericArguments;
 
-		public CilGenericType(RuntimeType baseGenericType, GenericInstSigType genericTypeInstanceSignature, TokenTypes token, ITypeModule typeModule) :
-			base(token, baseGenericType.BaseType)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CilGenericType"/> class.
+		/// </summary>
+		/// <param name="module">The module.</param>
+		/// <param name="baseGenericType">Type of the base generic.</param>
+		/// <param name="genericTypeInstanceSignature">The generic type instance signature.</param>
+		/// <param name="token">The token.</param>
+		/// <param name="typeModule">The type module.</param>
+		public CilGenericType(TypeModule module, RuntimeType baseGenericType, GenericInstSigType genericTypeInstanceSignature, TokenTypes token, ITypeModule typeModule) :
+			base(module, token, baseGenericType.BaseType)
 		{
 			this.signature = genericTypeInstanceSignature;
 			this.genericArguments = signature.GenericArguments;
@@ -133,7 +141,7 @@ namespace Mosa.Runtime.TypeSystem.Generic
 			{
 				MethodSignature signature = new MethodSignature(method.Signature, genericArguments);
 
-				RuntimeMethod genericInstanceMethod = new CilGenericMethod(method, signature, this);
+				RuntimeMethod genericInstanceMethod = new CilGenericMethod(Module, method, signature, this);
 				Methods.Add(genericInstanceMethod);
 			}
 		}
@@ -144,7 +152,7 @@ namespace Mosa.Runtime.TypeSystem.Generic
 			{
 				FieldSignature signature = new FieldSignature(field.Signature, genericArguments);
 
-				CilGenericField genericInstanceField = new CilGenericField(field, signature, this);
+				CilGenericField genericInstanceField = new CilGenericField(Module, field, signature, this);
 				Fields.Add(genericInstanceField);
 			}
 

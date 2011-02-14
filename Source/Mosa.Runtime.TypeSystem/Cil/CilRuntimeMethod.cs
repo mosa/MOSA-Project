@@ -34,13 +34,14 @@ namespace Mosa.Runtime.TypeSystem.Cil
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CilRuntimeMethod"/> class.
 		/// </summary>
+		/// <param name="module">The module.</param>
 		/// <param name="name">The name.</param>
 		/// <param name="signature">The signature.</param>
 		/// <param name="token">The token.</param>
 		/// <param name="declaringType">Type of the declaring.</param>
 		/// <param name="method">The method.</param>
-		public CilRuntimeMethod(string name, MethodSignature signature, TokenTypes token, RuntimeType declaringType, MethodDefRow method) :
-			base(token, declaringType)
+		public CilRuntimeMethod(TypeModule module, string name, MethodSignature signature, TokenTypes token, RuntimeType declaringType, MethodDefRow method) :
+			base(module, token, declaringType)
 		{
 			base.Attributes = method.Flags;
 			base.ImplAttributes = method.ImplFlags;
