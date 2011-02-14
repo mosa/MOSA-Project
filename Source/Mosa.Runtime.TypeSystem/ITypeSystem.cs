@@ -44,5 +44,11 @@ namespace Mosa.Runtime.TypeSystem
 		/// <param name="assembly">The assembly.</param>
 		/// <returns></returns>
 		ITypeModule ResolveModuleReference(string assembly);
+
+		/// <summary>
+		/// Gets all types from type system.
+		/// </summary>
+		/// <returns></returns>
+		IEnumerable<RuntimeType> GetAllTypes();
 	}
 }
