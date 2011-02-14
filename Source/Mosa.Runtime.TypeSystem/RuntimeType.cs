@@ -99,7 +99,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// Initializes a new instance of the <see cref="RuntimeType"/> class.
 		/// </summary>
 		/// <param name="token">The token of the type.</param>
-		public RuntimeType(TypeModule module, TokenTypes token, RuntimeType baseType) :
+		public RuntimeType(ITypeModule module, TokenTypes token, RuntimeType baseType) :
 			base(module, token, null)
 		{
 			this.baseType = baseType;

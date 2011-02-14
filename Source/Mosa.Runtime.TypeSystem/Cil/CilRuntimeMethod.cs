@@ -40,7 +40,7 @@ namespace Mosa.Runtime.TypeSystem.Cil
 		/// <param name="token">The token.</param>
 		/// <param name="declaringType">Type of the declaring.</param>
 		/// <param name="method">The method.</param>
-		public CilRuntimeMethod(TypeModule module, string name, MethodSignature signature, TokenTypes token, RuntimeType declaringType, MethodDefRow method) :
+		public CilRuntimeMethod(ITypeModule module, string name, MethodSignature signature, TokenTypes token, RuntimeType declaringType, MethodDefRow method) :
 			base(module, token, declaringType)
 		{
 			base.Attributes = method.Flags;

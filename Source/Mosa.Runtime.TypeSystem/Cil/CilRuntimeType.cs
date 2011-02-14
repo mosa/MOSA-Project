@@ -53,7 +53,7 @@ namespace Mosa.Runtime.TypeSystem.Cil
 		/// <param name="baseType">Type of the base.</param>
 		/// <param name="enclosingType">Type of the enclosing.</param>
 		/// <param name="typeDefRow">The type def row.</param>
-		public CilRuntimeType(TypeModule module, string name, string typenamespace, int packing, int size, TokenTypes token, RuntimeType baseType, RuntimeType enclosingType, TypeDefRow typeDefRow) :
+		public CilRuntimeType(ITypeModule module, string name, string typenamespace, int packing, int size, TokenTypes token, RuntimeType baseType, RuntimeType enclosingType, TypeDefRow typeDefRow) :
 			base(module, token, baseType)
 		{
 			this.baseTypeToken = typeDefRow.Extends;

@@ -30,7 +30,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// <summary>
 		/// Holds the module from which this object originated
 		/// </summary>
-		private readonly TypeModule module;
+		private readonly ITypeModule module;
 
 		#endregion // Data members
 
@@ -41,7 +41,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		/// <param name="module">The module.</param>
 		/// <param name="token">The runtime token of this metadata.</param>
-		protected RuntimeObject(TypeModule module, TokenTypes token)
+		protected RuntimeObject(ITypeModule module, TokenTypes token)
 		{
 			this.module = module;
 			this.token = token;
@@ -63,7 +63,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// Retrieves the module from which this object originated
 		/// </summary>
 		/// <value>The module.</value>
-		public TypeModule Module
+		public ITypeModule Module
 		{
 			get { return module; }
 		}

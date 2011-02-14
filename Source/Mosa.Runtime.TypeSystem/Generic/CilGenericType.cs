@@ -28,7 +28,7 @@ namespace Mosa.Runtime.TypeSystem.Generic
 		/// <param name="genericTypeInstanceSignature">The generic type instance signature.</param>
 		/// <param name="token">The token.</param>
 		/// <param name="typeModule">The type module.</param>
-		public CilGenericType(TypeModule module, RuntimeType baseGenericType, GenericInstSigType genericTypeInstanceSignature, TokenTypes token, ITypeModule typeModule) :
+		public CilGenericType(ITypeModule module, RuntimeType baseGenericType, GenericInstSigType genericTypeInstanceSignature, TokenTypes token, ITypeModule typeModule) :
 			base(module, token, baseGenericType.BaseType)
 		{
 			this.signature = genericTypeInstanceSignature;
