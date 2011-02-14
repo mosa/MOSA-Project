@@ -150,17 +150,17 @@ namespace Mosa.Runtime.TypeSystem
 			return value;
 		}
 
-		private Signature RetrieveSignature(TokenTypes blobIdx)
+		private T RetrieveSignature<T>(TokenTypes blobIdx) where T : Signature
 		{
 			Signature signature;
 
 			if (signatures.TryGetValue(blobIdx, out signature))
-				return signature;
+				return signature as T;
 			else
-				return null;
+				return (T)null;
 		}
 
-		private Signature StoreSignature(TokenTypes blobIdx, Signature signature)
+		private T StoreSignature<T>(TokenTypes blobIdx, T signature) where T : Signature
 		{
 			signatures.Add(blobIdx, signature);
 			return signature;
@@ -168,22 +168,22 @@ namespace Mosa.Runtime.TypeSystem
 
 		private MethodSignature GetMethodSignature(TokenTypes blobIdx)
 		{
-			return (RetrieveSignature(blobIdx) ?? StoreSignature(blobIdx, new MethodSignature(metadataProvider, blobIdx))) as MethodSignature;
+			return (RetrieveSignature<MethodSignature>(blobIdx) ?? StoreSignature<MethodSignature>(blobIdx, new MethodSignature(metadataProvider, blobIdx)));
 		}
 
 		private FieldSignature GetFieldSignature(TokenTypes blobIdx)
 		{
-			return (RetrieveSignature(blobIdx) ?? StoreSignature(blobIdx, new FieldSignature(metadataProvider, blobIdx))) as FieldSignature;
+			return (RetrieveSignature<FieldSignature>(blobIdx) ?? StoreSignature<FieldSignature>(blobIdx, new FieldSignature(metadataProvider, blobIdx)));
 		}
 
 		private TypeSpecSignature GetTypeSpecSignature(TokenTypes blobIdx)
 		{
-			return (RetrieveSignature(blobIdx) ?? StoreSignature(blobIdx, new TypeSpecSignature(metadataProvider, blobIdx))) as TypeSpecSignature;
+			return (RetrieveSignature<TypeSpecSignature>(blobIdx) ?? StoreSignature<TypeSpecSignature>(blobIdx, new TypeSpecSignature(metadataProvider, blobIdx)));
 		}
 
 		private Signature GetMemberRefSignature(TokenTypes blobIdx)
 		{
-			return (RetrieveSignature(blobIdx) ?? StoreSignature(blobIdx, Signature.FromMemberRefSignatureToken(metadataProvider, blobIdx)));
+			return (RetrieveSignature<Signature>(blobIdx) ?? StoreSignature<Signature>(blobIdx, Signature.FromMemberRefSignatureToken(metadataProvider, blobIdx)));
 		}
 
 		/// <summary>
@@ -529,7 +529,7 @@ namespace Mosa.Runtime.TypeSystem
 					throw new InvalidOperationException(String.Format(@"Failed to retrieve owner type for Token {0:x} (Table {1})", row.ClassTableIdx, row.ClassTableIdx & TokenTypes.TableMask));
 
 				Signature signature = GetMemberRefSignature(row.SignatureBlobIdx);
-				
+
 				RuntimeMember runtimeMember = null;
 				if (signature is FieldSignature)
 				{
