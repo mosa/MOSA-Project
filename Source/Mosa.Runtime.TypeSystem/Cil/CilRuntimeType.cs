@@ -60,8 +60,8 @@ namespace Mosa.Runtime.TypeSystem.Cil
 			base.Attributes = typeDefRow.Flags;
 			base.Pack = packing;
 			base.Size = size;
-			this.Name = name;
-			this.Namespace = typenamespace;
+			base.Name = name;
+			base.Namespace = typenamespace;
 			this.EnclosingType = enclosingType;
 
 			if (IsNested)

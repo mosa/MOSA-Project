@@ -16,6 +16,11 @@ namespace Mosa.Runtime.TypeSystem
 		private List<ITypeModule> typeModules = new List<ITypeModule>();
 
 		/// <summary>
+		/// Holds the type module for internally created types
+		/// </summary>
+		private InternalTypeModule internalTypeModule;
+
+		/// <summary>
 		/// Loads the module.
 		/// </summary>
 		/// <param name="modules">The modules.</param>
@@ -104,6 +109,34 @@ namespace Mosa.Runtime.TypeSystem
 						yield return type;
 				}
 			}
+		}
+
+		/// <summary>
+		/// Gets the internal type module.
+		/// </summary>
+		/// <value>The internal type module.</value>
+		InternalTypeModule ITypeSystem.InternalTypeModule
+		{
+			get
+			{
+				if (internalTypeModule == null)
+				{
+					internalTypeModule = new InternalTypeModule(this);
+
+					typeModules.Add(internalTypeModule);
+				}
+
+				return this.internalTypeModule;
+			}
+		}
+
+		/// <summary>
+		/// Adds the internal compiler defined type to the type system
+		/// </summary>
+		/// <param name="type">The type.</param>
+		void ITypeSystem.AddInternalType(RuntimeType type)
+		{
+			((ITypeSystem)this).InternalTypeModule.AddType(type);
 		}
 	}
 }

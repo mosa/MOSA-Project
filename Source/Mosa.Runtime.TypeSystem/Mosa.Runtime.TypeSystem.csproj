@@ -89,6 +89,7 @@
     <Compile Include="Cil\CilRuntimeType.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="InternalTypeModule.cs" />
     <Compile Include="GenericParameter.cs" />
     <Compile Include="TypeSystem.cs" />
     <Compile Include="CustomAttributeParser.cs" />
