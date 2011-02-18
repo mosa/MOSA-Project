@@ -22,6 +22,9 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		private readonly ITypeSystem typeSystem;
 
+		/// <summary>
+		/// 
+		/// </summary>
 		private readonly List<RuntimeType> types;
 
 		#endregion // Data members

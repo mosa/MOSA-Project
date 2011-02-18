@@ -76,7 +76,7 @@ namespace Mosa.Tools.TypeExplorer
 
 			foreach (ITypeModule module in typeSystem.TypeModules)
 			{
-				TreeNode moduleNode = new TreeNode(module.MetadataModule.Name);
+				TreeNode moduleNode = new TreeNode(module.Name);
 				treeView.Nodes.Add(moduleNode);
 
 				foreach (RuntimeType type in module.GetAllTypes())

@@ -118,7 +118,7 @@ namespace Mosa.Runtime.TypeSystem.Generic
 					{
 						ITypeModule mscorlib;
 
-						if (typeModule.MetadataModule.Name == "mscorlib")
+						if (typeModule.Name == "mscorlib")
 							mscorlib = typeModule;
 						else
 							mscorlib = typeModule.TypeSystem.ResolveModuleReference("mscorlib");

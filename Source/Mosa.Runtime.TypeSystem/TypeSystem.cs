@@ -21,6 +21,11 @@ namespace Mosa.Runtime.TypeSystem
 		private InternalTypeModule internalTypeModule;
 
 		/// <summary>
+		/// 
+		/// </summary>
+		private ITypeModule mainTypeModule;
+
+		/// <summary>
 		/// Loads the module.
 		/// </summary>
 		/// <param name="modules">The modules.</param>
@@ -49,12 +54,9 @@ namespace Mosa.Runtime.TypeSystem
 			// Search for reference first
 			foreach (ITypeModule typeModule in typeModules)
 			{
-				if (typeModule.MetadataModule != null)
+				if (typeModule.Name == assembly)
 				{
-					if (typeModule.MetadataModule.Name == assembly)
-					{
-						return typeModule; // already referenced
-					}
+					return typeModule; // already referenced
 				}
 			}
 
@@ -137,6 +139,16 @@ namespace Mosa.Runtime.TypeSystem
 		void ITypeSystem.AddInternalType(RuntimeType type)
 		{
 			((ITypeSystem)this).InternalTypeModule.AddType(type);
+		}
+
+		/// <summary>
+		/// Gets the main type module.
+		/// </summary>
+		/// <returns></returns>
+		ITypeModule ITypeSystem.MainTypeModule
+		{
+			get { return mainTypeModule; }
+			set { mainTypeModule = value; }
 		}
 	}
 }
