@@ -24,6 +24,12 @@ namespace Mosa.Runtime.TypeSystem
 		IMetadataModule MetadataModule { get; }
 
 		/// <summary>
+		/// Gets the module's name.
+		/// </summary>
+		/// <value>The module's name.</value>
+		string Name { get; }
+
+		/// <summary>
 		/// Gets all types from module.
 		/// </summary>
 		/// <returns></returns>

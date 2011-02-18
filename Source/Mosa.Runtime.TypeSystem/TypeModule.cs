@@ -261,12 +261,6 @@ namespace Mosa.Runtime.TypeSystem
 				RuntimeType baseType = GetType(typeDefRow.Extends);
 				RuntimeType enclosingType = (nestedRow.NestedClassTableIdx == token) ? types[(int)(nestedRow.EnclosingClassTableIdx & TokenTypes.RowIndexMask) - 1] : null;
 
-				if (baseType != null)
-					if (baseType.Name.Contains("<Module>"))
-					{
-						Console.WriteLine("test");
-					}
-
 				// Create and populate the runtime type
 				CilRuntimeType type = new CilRuntimeType(
 					this,
@@ -864,6 +858,12 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		/// <value>The metadata module.</value>
 		IMetadataModule ITypeModule.MetadataModule { get { return metadataModule; } }
+
+		/// <summary>
+		/// Gets the module's name.
+		/// </summary>
+		/// <value>The module's name.</value>
+		string ITypeModule.Name { get { return metadataModule.Name; } }
 
 		/// <summary>
 		/// Gets all types from module.
