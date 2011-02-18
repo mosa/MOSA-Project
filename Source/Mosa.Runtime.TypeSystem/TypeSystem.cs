@@ -35,6 +35,9 @@ namespace Mosa.Runtime.TypeSystem
 			{
 				ITypeModule typeModule = new TypeModule(this, module);
 				typeModules.Add(typeModule);
+
+				if (typeModule.MetadataModule.ModuleType == ModuleType.Executable)
+					mainTypeModule = typeModule;
 			}
 		}
 
@@ -117,16 +120,11 @@ namespace Mosa.Runtime.TypeSystem
 		/// Gets the internal type module.
 		/// </summary>
 		/// <value>The internal type module.</value>
-		InternalTypeModule ITypeSystem.InternalTypeModule
+		ITypeModule ITypeSystem.InternalTypeModule
 		{
 			get
 			{
-				if (internalTypeModule == null)
-				{
-					internalTypeModule = new InternalTypeModule(this);
-
-					typeModules.Add(internalTypeModule);
-				}
+				InitializeInternalTypeModule();
 
 				return this.internalTypeModule;
 			}
@@ -138,7 +136,8 @@ namespace Mosa.Runtime.TypeSystem
 		/// <param name="type">The type.</param>
 		void ITypeSystem.AddInternalType(RuntimeType type)
 		{
-			((ITypeSystem)this).InternalTypeModule.AddType(type);
+			InitializeInternalTypeModule();
+			internalTypeModule.AddType(type);
 		}
 
 		/// <summary>
@@ -149,6 +148,19 @@ namespace Mosa.Runtime.TypeSystem
 		{
 			get { return mainTypeModule; }
 			set { mainTypeModule = value; }
+		}
+
+		/// <summary>
+		/// Initializes the internal type module.
+		/// </summary>
+		public void InitializeInternalTypeModule()
+		{
+			if (internalTypeModule == null)
+			{
+				internalTypeModule = new InternalTypeModule(this);
+
+				typeModules.Add(internalTypeModule);
+			}
 		}
 	}
 }
