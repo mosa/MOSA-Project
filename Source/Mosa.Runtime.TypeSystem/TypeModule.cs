@@ -43,11 +43,6 @@ namespace Mosa.Runtime.TypeSystem
 		private RuntimeMethod[] methods;
 
 		/// <summary>
-		/// Holds all parameter information elements.
-		/// </summary>
-		private RuntimeParameter[] parameters;
-
-		/// <summary>
 		/// Array of loaded runtime typeSpec descriptors.
 		/// </summary>
 		private RuntimeType[] typeSpecs;
@@ -80,12 +75,17 @@ namespace Mosa.Runtime.TypeSystem
 		/// <summary>
 		/// 
 		/// </summary>
-		Dictionary<TokenTypes, string> strings;
+		private Dictionary<TokenTypes, string> strings;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		Dictionary<TokenTypes, Signature> signatures;
+		private Dictionary<TokenTypes, Signature> signatures;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		private int[] tableRows = new int[(int)TokenTypes.MaxTable >> 24];
 
 		#endregion // Data members
 
@@ -105,10 +105,11 @@ namespace Mosa.Runtime.TypeSystem
 			this.metadataModule = metadataModule;
 			this.metadataProvider = metadataModule.Metadata;
 
+			RetrieveAllTableSizes();
+
 			this.methods = new RuntimeMethod[GetTableRows(TokenTypes.MethodDef)];
 			this.fields = new RuntimeField[GetTableRows(TokenTypes.Field)];
 			this.types = new RuntimeType[GetTableRows(TokenTypes.TypeDef)];
-			this.parameters = new RuntimeParameter[GetTableRows(TokenTypes.Param)];
 
 			this.typeSpecs = new RuntimeType[GetTableRows(TokenTypes.TypeSpec)];
 			this.methodSpecs = new RuntimeMethod[GetTableRows(TokenTypes.MethodSpec)];
@@ -123,7 +124,6 @@ namespace Mosa.Runtime.TypeSystem
 			// Load all types from the assembly into the type array
 			LoadTypeReferences();
 			LoadTypes();
-			LoadParameters();
 			LoadCustomAttributes();
 			LoadMemberReferences();
 			LoadGenericParams();
@@ -136,6 +136,29 @@ namespace Mosa.Runtime.TypeSystem
 		#endregion // Construction
 
 		#region Internals
+
+		private void RetrieveAllTableSizes()
+		{
+			for (int i = 0; i < (int)TokenTypes.MaxTable >> 24; i++)
+			{
+				tableRows[i] = (int)(metadataProvider.GetMaxTokenValue((TokenTypes)(i << 24)) & TokenTypes.RowIndexMask);
+			}
+		}
+
+		/// <summary>
+		/// Gets the table rows.
+		/// </summary>
+		/// <param name="tokenType">Type of the token.</param>
+		/// <returns></returns>
+		private int GetTableRows(TokenTypes tokenType)
+		{
+			return tableRows[(int)(tokenType) >> 24];
+		}
+
+		private TokenTypes GetMaxTokenValue(TokenTypes tokenType)
+		{
+			return (TokenTypes)(tableRows[(int)(tokenType) >> 24]) | (tokenType & TokenTypes.TableMask);
+		}
 
 		private string GetString(TokenTypes stringIdx)
 		{
@@ -187,16 +210,6 @@ namespace Mosa.Runtime.TypeSystem
 		}
 
 		/// <summary>
-		/// Gets the table rows.
-		/// </summary>
-		/// <param name="tokenType">Type of the token.</param>
-		/// <returns></returns>
-		private int GetTableRows(TokenTypes tokenType)
-		{
-			return (int)(TokenTypes.RowIndexMask & metadataProvider.GetMaxTokenValue(tokenType));
-		}
-
-		/// <summary>
 		/// Loads all types from the given metadata module.
 		/// </summary>
 		private void LoadTypes()
@@ -205,11 +218,11 @@ namespace Mosa.Runtime.TypeSystem
 			int methodOffset = 0;
 			int fieldOffset = 0;
 
-			TokenTypes maxTypeDef = metadataProvider.GetMaxTokenValue(TokenTypes.TypeDef);
-			TokenTypes maxMethod = metadataProvider.GetMaxTokenValue(TokenTypes.MethodDef);
-			TokenTypes maxField = metadataProvider.GetMaxTokenValue(TokenTypes.Field);
-			TokenTypes maxLayout = metadataProvider.GetMaxTokenValue(TokenTypes.ClassLayout);
-			TokenTypes maxNestedClass = metadataProvider.GetMaxTokenValue(TokenTypes.NestedClass);
+			TokenTypes maxTypeDef = GetMaxTokenValue(TokenTypes.TypeDef);
+			TokenTypes maxMethod = GetMaxTokenValue(TokenTypes.MethodDef);
+			TokenTypes maxField = GetMaxTokenValue(TokenTypes.Field);
+			TokenTypes maxLayout = GetMaxTokenValue(TokenTypes.ClassLayout);
+			TokenTypes maxNestedClass = GetMaxTokenValue(TokenTypes.NestedClass);
 
 			TokenTypes tokenLayout = TokenTypes.ClassLayout + 1;
 			ClassLayoutRow layoutRow = (TokenTypes.ClassLayout < maxLayout) ? metadataProvider.ReadClassLayoutRow(tokenLayout) : new ClassLayoutRow();
@@ -220,15 +233,13 @@ namespace Mosa.Runtime.TypeSystem
 			TypeDefRow typeDefRow = metadataProvider.ReadTypeDefRow(TokenTypes.TypeDef + 1);
 			TypeDefRow nextTypeDefRow = new TypeDefRow();
 
-			int size = 0;
-			int packing = 0;
-
 			for (TokenTypes token = TokenTypes.TypeDef + 1; token <= maxTypeDef; token++)
 			{
+				int size = 0;
+				int packing = 0;
+
 				TokenTypes maxNextMethod;
 				TokenTypes maxNextField;
-
-				//string name = metadataProvider.ReadString(typeDefRow.TypeNameIdx);
 
 				if (token < maxTypeDef)
 				{
@@ -257,7 +268,6 @@ namespace Mosa.Runtime.TypeSystem
 						layoutRow = metadataProvider.ReadClassLayoutRow(tokenLayout);
 				}
 
-				//(typeDefRow.Extends != TokenTypes.TypeDef) ? types[(int)(typeDefRow.Extends & TokenTypes.RowIndexMask) - 1] : null;
 				RuntimeType baseType = GetType(typeDefRow.Extends);
 				RuntimeType enclosingType = (nestedRow.NestedClassTableIdx == token) ? types[(int)(nestedRow.EnclosingClassTableIdx & TokenTypes.RowIndexMask) - 1] : null;
 
@@ -286,8 +296,6 @@ namespace Mosa.Runtime.TypeSystem
 				}
 
 				typeDefRow = nextTypeDefRow;
-				packing = 0;
-				size = 0;
 			}
 
 		}
@@ -304,13 +312,14 @@ namespace Mosa.Runtime.TypeSystem
 			if (first >= last)
 				return;
 
-			MethodDefRow nextMethodDef = new MethodDefRow();
-
-			TokenTypes maxParam, maxMethod = metadataProvider.GetMaxTokenValue(TokenTypes.MethodDef);
+			TokenTypes maxMethod = GetMaxTokenValue(TokenTypes.MethodDef);
 			MethodDefRow methodDef = metadataProvider.ReadMethodDefRow(first);
+			MethodDefRow nextMethodDef = new MethodDefRow();
 
 			for (TokenTypes token = first; token < last; token++)
 			{
+				TokenTypes maxParam;
+
 				if (token < maxMethod)
 				{
 					nextMethodDef = metadataProvider.ReadMethodDefRow(token + 1);
@@ -318,7 +327,7 @@ namespace Mosa.Runtime.TypeSystem
 				}
 				else
 				{
-					maxParam = metadataProvider.GetMaxTokenValue(TokenTypes.Param) + 1;
+					maxParam = GetMaxTokenValue(TokenTypes.Param) + 1;
 				}
 
 				Debug.Assert(offset < methods.Length, @"Invalid method index.");
@@ -332,6 +341,7 @@ namespace Mosa.Runtime.TypeSystem
 					methodDef
 				);
 
+				LoadParameters(method, methodDef.ParamList, maxParam);
 				declaringType.Methods.Add(method);
 
 				methods[offset++] = method;
@@ -340,15 +350,17 @@ namespace Mosa.Runtime.TypeSystem
 		}
 
 		/// <summary>
-		/// Loads all parameters from the given metadata module.
+		/// Loads the parameters.
 		/// </summary>
-		private void LoadParameters()
+		/// <param name="method">The method.</param>
+		/// <param name="first">The first.</param>
+		/// <param name="max">The max.</param>
+		private void LoadParameters(RuntimeMethod method, TokenTypes first, TokenTypes max)
 		{
-			TokenTypes maxToken = metadataProvider.GetMaxTokenValue(TokenTypes.Param);
-			for (TokenTypes token = TokenTypes.Param + 1; token <= maxToken; token++)
+			for (TokenTypes token = first; token < max; token++)
 			{
 				ParamRow paramDef = metadataProvider.ReadParamRow(token);
-				parameters[(int)(token & TokenTypes.RowIndexMask) - 1] = new RuntimeParameter(GetString(paramDef.NameIdx), paramDef);
+				method.Parameters.Add(new RuntimeParameter(GetString(paramDef.NameIdx), paramDef.Sequence, paramDef.Flags));
 			}
 		}
 
@@ -361,8 +373,8 @@ namespace Mosa.Runtime.TypeSystem
 		/// <param name="offset">The offset in the fields array.</param>
 		private void LoadFields(RuntimeType declaringType, TokenTypes first, TokenTypes last, ref int offset)
 		{
-			TokenTypes maxRVA = metadataProvider.GetMaxTokenValue(TokenTypes.FieldRVA);
-			TokenTypes maxLayout = metadataProvider.GetMaxTokenValue(TokenTypes.FieldLayout);
+			TokenTypes maxRVA = GetMaxTokenValue(TokenTypes.FieldRVA);
+			TokenTypes maxLayout = GetMaxTokenValue(TokenTypes.FieldLayout);
 			TokenTypes tokenRva = TokenTypes.FieldRVA + 1;
 			TokenTypes tokenLayout = TokenTypes.FieldLayout + 1;
 
@@ -460,7 +472,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		protected void LoadInterfaces()
 		{
-			TokenTypes maxToken = metadataProvider.GetMaxTokenValue(TokenTypes.InterfaceImpl);
+			TokenTypes maxToken = GetMaxTokenValue(TokenTypes.InterfaceImpl);
 			for (TokenTypes token = TokenTypes.InterfaceImpl + 1; token <= maxToken; token++)
 			{
 				InterfaceImplRow row = metadataProvider.ReadInterfaceImplRow(token);
@@ -502,7 +514,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		protected void LoadMemberReferences()
 		{
-			TokenTypes maxToken = metadataProvider.GetMaxTokenValue(TokenTypes.MemberRef);
+			TokenTypes maxToken = GetMaxTokenValue(TokenTypes.MemberRef);
 			for (TokenTypes token = TokenTypes.MemberRef + 1; token <= maxToken; token++)
 			{
 				MemberRefRow row = metadataProvider.ReadMemberRefRow(token);
@@ -590,7 +602,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		protected void LoadTypeReferences()
 		{
-			TokenTypes maxToken = metadataProvider.GetMaxTokenValue(TokenTypes.TypeRef);
+			TokenTypes maxToken = GetMaxTokenValue(TokenTypes.TypeRef);
 			for (TokenTypes token = TokenTypes.TypeRef + 1; token <= maxToken; token++)
 			{
 				RuntimeType runtimeType = null;
@@ -661,7 +673,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		private void LoadCustomAttributes()
 		{
-			TokenTypes maxToken = metadataProvider.GetMaxTokenValue(TokenTypes.CustomAttribute);
+			TokenTypes maxToken = GetMaxTokenValue(TokenTypes.CustomAttribute);
 			for (TokenTypes token = TokenTypes.CustomAttribute + 1; token <= maxToken; token++)
 			{
 				CustomAttributeRow row = metadataProvider.ReadCustomAttributeRow(token);
@@ -747,7 +759,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		private void LoadGenericParams()
 		{
-			TokenTypes maxToken = metadataProvider.GetMaxTokenValue(TokenTypes.GenericParam);
+			TokenTypes maxToken = GetMaxTokenValue(TokenTypes.GenericParam);
 			for (TokenTypes token = TokenTypes.GenericParam + 1; token <= maxToken; token++)
 			{
 				GenericParamRow row = metadataProvider.ReadGenericParamRow(token);
@@ -776,7 +788,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		private void LoadTypeSpecs()
 		{
-			TokenTypes maxToken = metadataProvider.GetMaxTokenValue(TokenTypes.TypeSpec);
+			TokenTypes maxToken = GetMaxTokenValue(TokenTypes.TypeSpec);
 			for (TokenTypes token = TokenTypes.TypeSpec + 1; token <= maxToken; token++)
 			{
 				TypeSpecRow row = metadataProvider.ReadTypeSpecRow(token);
@@ -1009,5 +1021,15 @@ namespace Mosa.Runtime.TypeSystem
 
 		#endregion
 
+		/// <summary>
+		/// Returns a <see cref="System.String"/> that represents this instance.
+		/// </summary>
+		/// <returns>
+		/// A <see cref="System.String"/> that represents this instance.
+		/// </returns>
+		public override string ToString()
+		{
+			return metadataModule.Name;
+		}
 	}
 }

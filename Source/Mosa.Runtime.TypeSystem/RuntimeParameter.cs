@@ -62,18 +62,6 @@ namespace Mosa.Runtime.TypeSystem
 			this.position = position;
 		}
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="RuntimeParameter"/> class.
-		/// </summary>
-		/// <param name="name">The name.</param>
-		/// <param name="param">The param.</param>
-		public RuntimeParameter(string name, ParamRow param)
-		{
-			this.attributes = param.Flags;
-			this.position = param.Sequence;
-			this.name = name;
-		}
-
 		#endregion // Construction
 
 		#region Properties

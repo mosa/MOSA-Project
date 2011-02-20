@@ -32,11 +32,20 @@ namespace Mosa.Runtime.TypeSystem
 		RuntimeType GetType(string nameSpace, string name);
 
 		/// <summary>
+		/// Gets the runtime type for the given type name and namespace
+		/// </summary>
+		/// <param name="module">The module.</param>
+		/// <param name="nameSpace">The name space.</param>
+		/// <param name="name">The name.</param>
+		/// <returns></returns>
+		RuntimeType GetType(string assembly, string nameSpace, string name);
+
+		/// <summary>
 		/// Gets the type.
 		/// </summary>
-		/// <param name="fullname">The fullname.</param>
+		/// <param name="name">The name.</param>
 		/// <returns></returns>
-		RuntimeType GetType(string fullname);
+		RuntimeType GetType(string name);
 
 		/// <summary>
 		/// Resolves the module reference.
@@ -55,7 +64,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// Gets the internal type module.
 		/// </summary>
 		/// <value>The internal type module.</value>
-		InternalTypeModule InternalTypeModule { get; }
+		ITypeModule InternalTypeModule { get; }
 
 		/// <summary>
 		/// Adds the internal compiler defined type to the type system
