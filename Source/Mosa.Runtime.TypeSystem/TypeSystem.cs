@@ -26,6 +26,14 @@ namespace Mosa.Runtime.TypeSystem
 		private ITypeModule mainTypeModule;
 
 		/// <summary>
+		/// Initializes a new instance of the <see cref="TypeSystem"/> class.
+		/// </summary>
+		public TypeSystem()
+		{
+			InitializeInternalTypeModule();
+		}
+
+		/// <summary>
 		/// Loads the module.
 		/// </summary>
 		/// <param name="modules">The modules.</param>
@@ -143,7 +151,6 @@ namespace Mosa.Runtime.TypeSystem
 		{
 			get
 			{
-				InitializeInternalTypeModule();
 
 				return this.internalTypeModule;
 			}
@@ -155,7 +162,6 @@ namespace Mosa.Runtime.TypeSystem
 		/// <param name="type">The type.</param>
 		void ITypeSystem.AddInternalType(RuntimeType type)
 		{
-			InitializeInternalTypeModule();
 			internalTypeModule.AddType(type);
 		}
 
