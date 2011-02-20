@@ -44,7 +44,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// <summary>
 		/// Holds the calculated native size of the type.
 		/// </summary>
-		private int nativeSize;
+		private int layoutSize;
 
 		/// <summary>
 		/// Holds the field packing.
@@ -265,10 +265,10 @@ namespace Mosa.Runtime.TypeSystem
 		/// Gets or sets the size of the type.
 		/// </summary>
 		/// <value>The size of the type.</value>
-		public int Size
+		public int LayoutSize
 		{
-			get { return nativeSize; }
-			protected set { nativeSize = value; }
+			get { return layoutSize; }
+			protected set { layoutSize = value; }
 		}
 
 		/// <summary>

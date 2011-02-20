@@ -84,20 +84,39 @@ namespace Mosa.Runtime.TypeSystem
 			return null;
 		}
 
+		/// <summary>
+		/// Gets the runtime type for the given type name and namespace
+		/// </summary>
+		/// <param name="module">The module.</param>
+		/// <param name="nameSpace">The name space.</param>
+		/// <param name="name">The name.</param>
+		/// <returns></returns>
+		RuntimeType ITypeSystem.GetType(string assembly, string nameSpace, string name)
+		{
+			ITypeModule module = ((ITypeSystem)this).ResolveModuleReference(assembly);
+
+			if (module == null)
+				return null;
+
+			return module.GetType(nameSpace, name);
+		}
 
 		/// <summary>
 		/// Gets the type.
 		/// </summary>
-		/// <param name="fullname">The fullname.</param>
+		/// <param name="name">The name.</param>
 		/// <returns></returns>
-		RuntimeType ITypeSystem.GetType(string fullname)
+		RuntimeType ITypeSystem.GetType(string name)
 		{
-			int dot = fullname.LastIndexOf(".");
+			if (name.IndexOf(',') > 0)
+				return null; // FIXME!
+
+			int dot = name.LastIndexOf('.');
 
 			if (dot < 0)
 				return null;
 
-			return ((ITypeSystem)this).GetType(fullname.Substring(0, dot), fullname.Substring(dot + 1));
+			return ((ITypeSystem)this).GetType(name.Substring(0, dot), name.Substring(dot + 1));
 		}
 
 		/// <summary>

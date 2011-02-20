@@ -59,7 +59,7 @@ namespace Mosa.Runtime.TypeSystem.Cil
 			this.baseTypeToken = typeDefRow.Extends;
 			base.Attributes = typeDefRow.Flags;
 			base.Pack = packing;
-			base.Size = size;
+			base.LayoutSize = size;
 			base.Name = name;
 			base.Namespace = typenamespace;
 			this.EnclosingType = enclosingType;

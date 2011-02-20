@@ -186,7 +186,7 @@ namespace Mosa.Runtime.TypeSystem
 			result.Append(this.Name);
 			result.Append('(');
 
-			if (0 != this.Parameters.Count)
+			if (this.Parameters.Count != 0)
 			{
 				MethodSignature sig = this.Signature;
 				int i = 0;

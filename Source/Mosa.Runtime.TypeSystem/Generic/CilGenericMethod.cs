@@ -55,7 +55,7 @@ namespace Mosa.Runtime.TypeSystem.Generic
 			result.Append(Name);
 			result.Append('(');
 
-			if (0 != this.Parameters.Count)
+			if (this.Parameters.Count != 0)
 			{
 				MethodSignature sig = this.Signature;
 				int i = 0;
