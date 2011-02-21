@@ -121,13 +121,12 @@ namespace Mosa.Runtime.TypeSystem
 				{
 					if (type.IsExplicitLayoutRequestedByType)
 					{
-						ResolveExplicitLayout(type);
+
 					}
 					else
 					{
-						ResolveSequentialLayout(type);
+						CreateSequentialLayout(type);
 					}
-
 					CreateMethodTable(type);
 					ResolveTypeInterfaceTables(type);
 				}
@@ -155,20 +154,16 @@ namespace Mosa.Runtime.TypeSystem
 		{
 			int size = 0;
 
-			if (typeSizes.TryGetValue(type, out size))
-				return size;
-
-			foreach (RuntimeField field in type.Fields)
-			{
-				if (!field.IsStaticField)
-					size = size + ((ITypeLayout2)this).GetFieldSize(field);
-			}
-
-			typeSizes.Add(type, size);
+			typeSizes.TryGetValue(type, out size);
 
 			return size;
 		}
 
+		/// <summary>
+		/// Gets the size of the field.
+		/// </summary>
+		/// <param name="field">The field.</param>
+		/// <returns></returns>
 		int ITypeLayout2.GetFieldSize(RuntimeField field)
 		{
 			int size = 0;
@@ -224,6 +219,72 @@ namespace Mosa.Runtime.TypeSystem
 
 		#endregion // ITypeLayout
 
+		#region Internal - Layout
+
+		private void CreateSequentialLayout(RuntimeType type)
+		{
+			Debug.Assert(type != null, @"No type given.");
+
+			// Instance size
+			int typeSize = 8;
+
+			if (typeSizes.ContainsKey(type))
+				return;
+
+			// Receives the size/alignment
+			int packingSize = type.Pack;
+
+			if (type.BaseType != null)
+			{
+				((ITypeLayout2)(this)).GetTypeSize(type.BaseType);
+				typeSize = typeSizes[type.BaseType] - 8;
+			}
+
+			foreach (RuntimeField field in type.Fields)
+			{
+				if (!field.IsStaticField)
+				{
+					int fieldSize = GetMemorySize(field.SignatureType);
+					int fieldAlignment = GetAlignmentSize(field.SignatureType);
+
+					// Pad the field in the type
+					if (packingSize != 0)
+					{
+						int padding = (typeSize % packingSize);
+						typeSize += padding;
+					}
+
+					// Set the field address
+					fieldOffets.Add(field, typeSize);
+
+					typeSize += fieldSize;
+				}
+			}
+
+			typeSizes.Add(type, typeSize);
+		}
+
+		/// <summary>
+		/// Applies the explicit layout to the given type.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		private void ResolveExplicitLayout(RuntimeType type)
+		{
+			Debug.Assert(type != null, @"No type given.");
+			Debug.Assert(type.BaseType.LayoutSize != 0, @"Type size not set for explicit layout.");
+
+			foreach (RuntimeField field in type.Fields)
+			{
+				// Explicit layout assigns a physical offset from the start of the structure
+				// to the field. We just assign this offset.
+				Debug.Assert(fieldSizes[field] != 0, @"Non-static field doesn't have layout!");
+			}
+		}
+
+		#endregion
+
+		#region Internal - Interface
+
 		/// <summary>
 		/// Builds a list of interfaces and assigns interface a unique index number
 		/// </summary>
@@ -261,7 +322,7 @@ namespace Mosa.Runtime.TypeSystem
 
 		private void ScanExplicitInterfaceImplementations(RuntimeType type, IList<RuntimeMethod> interfaceMethods, RuntimeMethod[] methodTable)
 		{
-			//TODO: don't go to the metadata
+			//TODO: write so access directly to metadata is not required
 			IMetadataProvider metadata = type.Module.MetadataModule.Metadata;
 			TokenTypes maxToken = metadata.GetMaxTokenValue(TokenTypes.MethodImpl);
 
@@ -326,6 +387,10 @@ namespace Mosa.Runtime.TypeSystem
 				return fullName;
 			return fullName.Substring(fullName.LastIndexOf(".") + 1);
 		}
+
+		#endregion
+
+		#region Internal
 
 		private IList<RuntimeMethod> CreateMethodTable(RuntimeType type)
 		{
@@ -408,66 +473,6 @@ namespace Mosa.Runtime.TypeSystem
 		}
 
 		/// <summary>
-		/// Performs a sequential layout of the type.
-		/// </summary>
-		/// <param name="type">The type.</param>
-		public void ResolveSequentialLayout(RuntimeType type)
-		{
-			Debug.Assert(type != null, @"No type given.");
-
-			if (typeSizes.ContainsKey(type))
-				return;
-
-			// Receives the size/alignment
-			int packingSize = type.Pack;
-			// Instance size
-			int typeSize = 8;
-
-			if (type.BaseType != null)
-			{
-				ResolveSequentialLayout(type.BaseType);
-				typeSize = typeSizes[type.BaseType] - 8;
-			}
-
-			foreach (RuntimeField field in type.Fields)
-			{
-				int fieldSize = GetMemorySize(field.SignatureType);
-				int fieldAlignment = GetAlignmentSize(field.SignatureType);
-
-				// Pad the field in the type
-				if (packingSize != 0)
-				{
-					int padding = (typeSize % packingSize);
-					typeSize += padding;
-				}
-
-				// Set the field address
-				fieldOffets.Add(field, typeSize);
-
-				typeSize += fieldSize;
-			}
-
-			typeSizes.Add(type, typeSize);
-		}
-
-		/// <summary>
-		/// Applies the explicit layout to the given type.
-		/// </summary>
-		/// <param name="type">The type.</param>
-		private void ResolveExplicitLayout(RuntimeType type)
-		{
-			Debug.Assert(type != null, @"No type given.");
-			Debug.Assert(type.BaseType.LayoutSize != 0, @"Type size not set for explicit layout.");
-
-			foreach (RuntimeField field in type.Fields)
-			{
-				// Explicit layout assigns a physical offset from the start of the structure
-				// to the field. We just assign this offset.
-				Debug.Assert(fieldSizes[field] != 0, @"Non-static field doesn't have layout!");
-			}
-		}
-
-		/// <summary>
 		/// Gets the type memory requirements.
 		/// </summary>
 		/// <param name="signatureType">The signature type.</param>
@@ -534,6 +539,8 @@ namespace Mosa.Runtime.TypeSystem
 				default: return 4;
 			}
 		}
+
+		#endregion
 
 	}
 }

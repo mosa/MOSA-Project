@@ -131,9 +131,20 @@ namespace Mosa.Tools.TypeExplorer
 						foreach (RuntimeField field in type.Fields)
 						{
 							TreeNode fieldNode = new TreeNode(FormatRuntimeMember(field));
-							if (showSizes.Checked)
-								fieldNode.Text = fieldNode.Text + " (Size: " + typeLayout.GetFieldSize(field).ToString() + " - Offset: " + typeLayout.GetFieldOffset(field).ToString() + ")";
 							fieldsNode.Nodes.Add(fieldNode);
+
+							if (field.IsStaticField)
+								fieldNode.Text = fieldNode.Text + " [Static]";
+
+							if (showSizes.Checked)
+							{
+								fieldNode.Text = fieldNode.Text + " (Size: " + typeLayout.GetFieldSize(field).ToString();
+								
+								if (!field.IsStaticField)
+									fieldNode.Text = fieldNode.Text + " - Offset: " + typeLayout.GetFieldOffset(field).ToString();
+
+								fieldNode.Text = fieldNode.Text + ")";
+							}
 						}
 					}
 
@@ -146,6 +157,12 @@ namespace Mosa.Tools.TypeExplorer
 						{
 							TreeNode methodNode = new TreeNode(FormatRuntimeMember(method));
 							methodsNode.Nodes.Add(methodNode);
+
+							if ((method.Attributes & MethodAttributes.Static) == MethodAttributes.Static)
+								methodNode.Text = methodNode.Text + " [Static]";
+
+							if (method.IsAbstract)
+								methodNode.Text = methodNode.Text + " [Abstract]";
 						}
 					}
 
