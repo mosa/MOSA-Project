@@ -43,7 +43,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// <summary>
 		/// Holds a list of methods for each type
 		/// </summary>
-		private Dictionary<RuntimeType, IList<RuntimeMethod>> typeMethods = new Dictionary<RuntimeType, IList<RuntimeMethod>>();
+		private Dictionary<RuntimeType, IList<RuntimeMethod>> typeMethodTables = new Dictionary<RuntimeType, IList<RuntimeMethod>>();
 
 		/// <summary>
 		/// Holds a list of interfaces
@@ -61,17 +61,17 @@ namespace Mosa.Runtime.TypeSystem
 		private Dictionary<RuntimeType, int> interfaceSlots = new Dictionary<RuntimeType, int>();
 
 		/// <summary>
-		/// 
+		/// Holds the size of each type
 		/// </summary>
 		private Dictionary<RuntimeType, int> typeSizes = new Dictionary<RuntimeType, int>();
 
 		/// <summary>
-		/// 
+		/// Holds the size of each field
 		/// </summary>
 		private Dictionary<RuntimeField, int> fieldSizes = new Dictionary<RuntimeField, int>();
 
 		/// <summary>
-		/// 
+		/// Holds the offset for each field
 		/// </summary>
 		private Dictionary<RuntimeField, int> fieldOffets = new Dictionary<RuntimeField, int>();
 
@@ -127,13 +127,19 @@ namespace Mosa.Runtime.TypeSystem
 					{
 						CreateSequentialLayout(type);
 					}
+
 					CreateMethodTable(type);
-					ResolveTypeInterfaceTables(type);
 				}
 			}
 		}
 
 		#region ITypeLayout members
+
+		/// <summary>
+		/// Gets the type system.
+		/// </summary>
+		/// <value>The type system.</value>
+		ITypeSystem ITypeLayout2.TypeSystem { get { return typeSystem; } }
 
 		/// <summary>
 		/// Gets the method table offset.
@@ -145,11 +151,21 @@ namespace Mosa.Runtime.TypeSystem
 			return methodTableOffsets[method];
 		}
 
+		/// <summary>
+		/// Gets the interface slot offset.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <returns></returns>
 		int ITypeLayout2.GetInterfaceSlotOffset(RuntimeType type)
 		{
 			return interfaceSlots[type];
 		}
 
+		/// <summary>
+		/// Gets the size of the type.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <returns></returns>
 		int ITypeLayout2.GetTypeSize(RuntimeType type)
 		{
 			int size = 0;
@@ -203,7 +219,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		/// <param name="type">The type.</param>
 		/// <returns></returns>
-		IList<RuntimeMethod> ITypeLayout2.GetTypeMethods(RuntimeType type)
+		IList<RuntimeMethod> ITypeLayout2.GetMethodTable(RuntimeType type)
 		{
 			if (type.ContainsOpenGenericParameters)
 				return null;
@@ -214,8 +230,36 @@ namespace Mosa.Runtime.TypeSystem
 			if (type.IsInterface)
 				return null;
 
-			return typeMethods[type];
+			return typeMethodTables[type];
 		}
+
+		/// <summary>
+		/// Gets the interface table.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <param name="interfaceType">Type of the interface.</param>
+		/// <returns></returns>
+		RuntimeMethod[] ITypeLayout2.GetInterfaceTable(RuntimeType type, RuntimeType interfaceType)
+		{
+			if (type.Interfaces.Count == 0)
+				return null;
+
+			RuntimeMethod[] methodTable = new RuntimeMethod[interfaceType.Methods.Count];
+
+			// Implicit Interface Methods
+			for (int slot = 0; slot < interfaceType.Methods.Count; slot++)
+				methodTable[slot] = FindInterfaceMethod(type, interfaceType.Methods[slot]);
+
+			// Explicit Interface Methods
+			ScanExplicitInterfaceImplementations(type, interfaceType.Methods, methodTable);
+
+			return methodTable;
+		}
+
+		/// <summary>
+		/// Get a list of interfaces
+		/// </summary>
+		IList<RuntimeType> ITypeLayout2.Interfaces { get { return interfaces.AsReadOnly(); } }
 
 		#endregion // ITypeLayout
 
@@ -297,29 +341,6 @@ namespace Mosa.Runtime.TypeSystem
 			interfaceSlots.Add(type, interfaceSlots.Count);
 		}
 
-		private void ResolveTypeInterfaceTables(RuntimeType type)
-		{
-			foreach (RuntimeType interfaceType in type.Interfaces)
-			{
-				ResolveInterfaceTable(type, interfaceType);
-			}
-		}
-
-		private void ResolveInterfaceTable(RuntimeType type, RuntimeType interfaceType)
-		{
-			if (type.Interfaces.Count == 0)
-				return;
-
-			RuntimeMethod[] methodTable = new RuntimeMethod[interfaceType.Methods.Count];
-
-			// Implicit Interface Methods
-			for (int slot = 0; slot < interfaceType.Methods.Count; slot++)
-				methodTable[slot] = FindInterfaceMethod(type, interfaceType.Methods[slot]);
-
-			// Explicit Interface Methods
-			ScanExplicitInterfaceImplementations(type, interfaceType.Methods, methodTable);
-		}
-
 		private void ScanExplicitInterfaceImplementations(RuntimeType type, IList<RuntimeMethod> interfaceMethods, RuntimeMethod[] methodTable)
 		{
 			//TODO: write so access directly to metadata is not required
@@ -359,9 +380,10 @@ namespace Mosa.Runtime.TypeSystem
 
 		private RuntimeMethod FindInterfaceMethod(RuntimeType type, RuntimeMethod interfaceMethod)
 		{
+			string cleanInterfaceMethodName = GetCleanMethodName(interfaceMethod.Name);
+
 			foreach (RuntimeMethod method in type.Methods)
 			{
-				string cleanInterfaceMethodName = GetCleanMethodName(interfaceMethod.Name);
 				string cleanMethodName = GetCleanMethodName(method.Name);
 
 				if (cleanInterfaceMethodName.Equals(cleanMethodName))
@@ -394,10 +416,12 @@ namespace Mosa.Runtime.TypeSystem
 
 		private IList<RuntimeMethod> CreateMethodTable(RuntimeType type)
 		{
-			IList<RuntimeMethod> methodTable = GetMethodTable(type);
+			IList<RuntimeMethod> methodTable;
 
-			if (methodTable != null)
+			if (typeMethodTables.TryGetValue(type, out methodTable))
+			{
 				return methodTable;
+			}
 
 			methodTable = GetMethodTableFromBaseType(type);
 
@@ -425,7 +449,8 @@ namespace Mosa.Runtime.TypeSystem
 				}
 			}
 
-			typeMethods.Add(type, methodTable);
+			typeMethodTables.Add(type, methodTable);
+
 			return methodTable;
 		}
 
@@ -435,9 +460,9 @@ namespace Mosa.Runtime.TypeSystem
 
 			if (type.BaseType != null)
 			{
-				IList<RuntimeMethod> baseMethodTable = GetMethodTable(type.BaseType);
+				IList<RuntimeMethod> baseMethodTable;
 
-				if (baseMethodTable == null)
+				if (!typeMethodTables.TryGetValue(type, out baseMethodTable))
 				{
 					// Method table for the base type has not been create yet, so create it now
 					baseMethodTable = CreateMethodTable(type.BaseType);
@@ -460,16 +485,6 @@ namespace Mosa.Runtime.TypeSystem
 			}
 
 			throw new InvalidOperationException(@"Failed to find override method slot.");
-		}
-
-		private IList<RuntimeMethod> GetMethodTable(RuntimeType type)
-		{
-			IList<RuntimeMethod> methods;
-
-			if (typeMethods.TryGetValue(type, out methods))
-				return methods;
-			else
-				return null;
 		}
 
 		/// <summary>

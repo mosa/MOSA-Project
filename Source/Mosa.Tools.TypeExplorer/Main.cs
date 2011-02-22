@@ -166,12 +166,12 @@ namespace Mosa.Tools.TypeExplorer
 						}
 					}
 
-					if (typeLayout.GetTypeMethods(type) != null)
+					if (typeLayout.GetMethodTable(type) != null)
 					{
-						TreeNode methodTableNode = new TreeNode("Method Table Entries");
+						TreeNode methodTableNode = new TreeNode("Method Table");
 						typeNode.Nodes.Add(methodTableNode);
 
-						foreach (RuntimeMethod method in typeLayout.GetTypeMethods(type))
+						foreach (RuntimeMethod method in typeLayout.GetMethodTable(type))
 						{
 							TreeNode methodNode = new TreeNode(FormatRuntimeMember(method));
 							methodTableNode.Nodes.Add(methodNode);

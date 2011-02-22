@@ -16,10 +16,15 @@ using Mosa.Runtime.Metadata.Signatures;
 namespace Mosa.Runtime.TypeSystem
 {
 
-	/// <summary>
-	/// </summary>
 	public interface ITypeLayout2
 	{
+
+		/// <summary>
+		/// Gets the type system.
+		/// </summary>
+		/// <value>The type system.</value>
+		ITypeSystem TypeSystem { get; }
+
 		/// <summary>
 		/// Gets the method table offset.
 		/// </summary>
@@ -60,6 +65,19 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		/// <param name="type">The type.</param>
 		/// <returns></returns>
-		IList<RuntimeMethod> GetTypeMethods(RuntimeType type);
+		IList<RuntimeMethod> GetMethodTable(RuntimeType type);
+
+		/// <summary>
+		/// Gets the interface table.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <param name="interfaceType">Type of the interface.</param>
+		/// <returns></returns>
+		RuntimeMethod[] GetInterfaceTable(RuntimeType type, RuntimeType interfaceType);
+
+		/// <summary>
+		/// Get a list of interfaces
+		/// </summary>
+		IList<RuntimeType> Interfaces { get; }
 	}
 }
