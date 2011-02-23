@@ -91,8 +91,8 @@
     </Compile>
     <Compile Include="InternalTypeModule.cs" />
     <Compile Include="GenericParameter.cs" />
-    <Compile Include="ITypeLayout2.cs" />
-    <Compile Include="TypeLayout2.cs" />
+    <Compile Include="ITypeLayout.cs" />
+    <Compile Include="TypeLayout.cs" />
     <Compile Include="TypeSystem.cs" />
     <Compile Include="CustomAttributeParser.cs" />
     <Compile Include="Generic\CilGenericField.cs" />

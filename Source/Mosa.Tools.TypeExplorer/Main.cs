@@ -17,7 +17,7 @@ namespace Mosa.Tools.TypeExplorer
 	public partial class Main : Form
 	{
 		ITypeSystem typeSystem = new TypeSystem();
-		ITypeLayout2 typeLayout;
+		ITypeLayout typeLayout;
 
 		public Main()
 		{
@@ -73,7 +73,7 @@ namespace Mosa.Tools.TypeExplorer
 			typeSystem = new TypeSystem();
 			typeSystem.LoadModules(assemblyLoader.Modules);
 
-			typeLayout = new TypeLayout2(typeSystem, 4, 4);
+			typeLayout = new TypeLayout(typeSystem, 4, 4);
 
 			Update();
 		}

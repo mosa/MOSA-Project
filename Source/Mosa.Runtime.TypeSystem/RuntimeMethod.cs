@@ -49,7 +49,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// <summary>
 		/// Holds the rva of the MSIL of the method.
 		/// </summary>
-		private ulong rva;
+		private uint rva;
 
 		/// <summary>
 		/// 
@@ -151,7 +151,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// Holds the RVA of the method in the binary.
 		/// </summary>
 		/// <value>The rva.</value>
-		public ulong Rva
+		public uint Rva
 		{
 			get { return this.rva; }
 			protected set { this.rva = value; }

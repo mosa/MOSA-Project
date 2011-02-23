@@ -34,7 +34,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// <summary>
 		/// Gets the runtime type for the given type name and namespace
 		/// </summary>
-		/// <param name="module">The module.</param>
+		/// <param name="assembly">The assembly.</param>
 		/// <param name="nameSpace">The name space.</param>
 		/// <param name="name">The name.</param>
 		/// <returns></returns>

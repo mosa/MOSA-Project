@@ -281,7 +281,8 @@ namespace Mosa.Runtime.TypeSystem
 					token,
 					baseType,
 					enclosingType,
-					typeDefRow
+					typeDefRow.Flags,
+					typeDefRow.Extends
 				);
 
 				LoadMethods(type, typeDefRow.MethodList, maxNextMethod, ref methodOffset);
@@ -338,7 +339,9 @@ namespace Mosa.Runtime.TypeSystem
 					GetMethodSignature(methodDef.SignatureBlobIdx),
 					token,
 					declaringType,
-					methodDef
+					methodDef.Flags,
+					methodDef.ImplFlags,
+					methodDef.Rva
 				);
 
 				LoadParameters(method, methodDef.ParamList, maxParam);
@@ -453,7 +456,7 @@ namespace Mosa.Runtime.TypeSystem
 					layout,
 					rva,
 					declaringType,
-					fieldRow
+					fieldRow.Flags
 				);
 
 				declaringType.Fields.Add(field);

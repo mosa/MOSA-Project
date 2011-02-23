@@ -25,7 +25,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private ulong _rva;
+		private uint _rva;
 
 		/// <summary>
 		/// 
@@ -65,7 +65,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <param name="nameStringIdx">The name string idx.</param>
 		/// <param name="signatureBlobIdx">The signature BLOB idx.</param>
 		/// <param name="paramList">The param list.</param>
-		public MethodDefRow(ulong rva, MethodImplAttributes implFlags, MethodAttributes flags, TokenTypes nameStringIdx,
+		public MethodDefRow(uint rva, MethodImplAttributes implFlags, MethodAttributes flags, TokenTypes nameStringIdx,
 								TokenTypes signatureBlobIdx, TokenTypes paramList)
 		{
 			_rva = rva;
@@ -84,7 +84,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Gets the rva.
 		/// </summary>
 		/// <value>The rva.</value>
-		public ulong Rva
+		public uint Rva
 		{
 			get { return _rva; }
 		}

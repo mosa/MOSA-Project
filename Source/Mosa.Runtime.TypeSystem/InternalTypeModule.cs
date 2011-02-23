@@ -35,7 +35,6 @@ namespace Mosa.Runtime.TypeSystem
 		/// Initializes static data members of the type loader.
 		/// </summary>
 		/// <param name="typeSystem">The type system.</param>
-		/// <param name="metadataModule">The metadata module.</param>
 		public InternalTypeModule(ITypeSystem typeSystem)
 		{
 			Debug.Assert(typeSystem != null);
