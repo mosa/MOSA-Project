@@ -60,7 +60,7 @@ namespace Mosa.Tools.TypeExplorer
 		protected string FormatRuntimeType(RuntimeType type)
 		{
 			if (!showTokenValues.Checked)
-				return type.Name;
+				return type.Namespace + Type.Delimiter + type.Name;
 
 			return "[" + TokenToString(type.Token) + "] " + type.Namespace + Type.Delimiter + type.Name;
 		}
