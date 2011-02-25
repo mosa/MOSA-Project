@@ -1,7 +1,17 @@
-﻿using System;
+﻿/*
+ * (c) 2008 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Diagnostics;
 
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Loader;
@@ -24,14 +34,6 @@ namespace Mosa.Runtime.TypeSystem
 		/// 
 		/// </summary>
 		private ITypeModule mainTypeModule;
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="TypeSystem"/> class.
-		/// </summary>
-		public TypeSystem()
-		{
-			InitializeInternalTypeModule();
-		}
 
 		/// <summary>
 		/// Loads the module.
@@ -95,7 +97,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// <summary>
 		/// Gets the runtime type for the given type name and namespace
 		/// </summary>
-		/// <param name="module">The module.</param>
+		/// <param name="assembly">The assembly.</param>
 		/// <param name="nameSpace">The name space.</param>
 		/// <param name="name">The name.</param>
 		/// <returns></returns>
@@ -116,8 +118,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// <returns></returns>
 		RuntimeType ITypeSystem.GetType(string name)
 		{
-			if (name.IndexOf(',') > 0)
-				return null; // FIXME!
+			Debug.Assert(name.IndexOf(',') < 0);
 
 			int dot = name.LastIndexOf('.');
 
@@ -151,6 +152,7 @@ namespace Mosa.Runtime.TypeSystem
 		{
 			get
 			{
+				InitializeInternalTypeModule();
 
 				return this.internalTypeModule;
 			}
@@ -162,6 +164,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// <param name="type">The type.</param>
 		void ITypeSystem.AddInternalType(RuntimeType type)
 		{
+			InitializeInternalTypeModule();
 			internalTypeModule.AddType(type);
 		}
 

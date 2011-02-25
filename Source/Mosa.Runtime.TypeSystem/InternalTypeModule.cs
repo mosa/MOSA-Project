@@ -1,4 +1,13 @@
-﻿using System;
+﻿/*
+ * (c) 2008 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -35,7 +44,6 @@ namespace Mosa.Runtime.TypeSystem
 		/// Initializes static data members of the type loader.
 		/// </summary>
 		/// <param name="typeSystem">The type system.</param>
-		/// <param name="metadataModule">The metadata module.</param>
 		public InternalTypeModule(ITypeSystem typeSystem)
 		{
 			Debug.Assert(typeSystem != null);

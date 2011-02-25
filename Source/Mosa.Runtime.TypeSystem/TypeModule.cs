@@ -1,4 +1,13 @@
-﻿using System;
+﻿/*
+ * (c) 2008 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -124,11 +133,11 @@ namespace Mosa.Runtime.TypeSystem
 			// Load all types from the assembly into the type array
 			LoadTypeReferences();
 			LoadTypes();
-			LoadCustomAttributes();
+			LoadTypeSpecs();
 			LoadMemberReferences();
+			LoadCustomAttributes();
 			LoadGenericParams();
 
-			LoadTypeSpecs();
 			LoadInterfaces();
 			LoadGenericInterfaces();
 		}
@@ -281,7 +290,8 @@ namespace Mosa.Runtime.TypeSystem
 					token,
 					baseType,
 					enclosingType,
-					typeDefRow
+					typeDefRow.Flags,
+					typeDefRow.Extends
 				);
 
 				LoadMethods(type, typeDefRow.MethodList, maxNextMethod, ref methodOffset);
@@ -338,7 +348,9 @@ namespace Mosa.Runtime.TypeSystem
 					GetMethodSignature(methodDef.SignatureBlobIdx),
 					token,
 					declaringType,
-					methodDef
+					methodDef.Flags,
+					methodDef.ImplFlags,
+					methodDef.Rva
 				);
 
 				LoadParameters(method, methodDef.ParamList, maxParam);
@@ -453,7 +465,7 @@ namespace Mosa.Runtime.TypeSystem
 					layout,
 					rva,
 					declaringType,
-					fieldRow
+					fieldRow.Flags
 				);
 
 				declaringType.Fields.Add(field);
@@ -534,7 +546,7 @@ namespace Mosa.Runtime.TypeSystem
 
 					case TokenTypes.TypeSpec:
 						ownerType = typeSpecs[(int)(row.ClassTableIdx & TokenTypes.RowIndexMask) - 1];
-						continue;
+						break;
 
 					default:
 						throw new NotSupportedException(String.Format(@"LoadMemberReferences() does not support token table {0}", row.ClassTableIdx & TokenTypes.TableMask));
@@ -544,6 +556,8 @@ namespace Mosa.Runtime.TypeSystem
 					throw new InvalidOperationException(String.Format(@"Failed to retrieve owner type for Token {0:x} (Table {1})", row.ClassTableIdx, row.ClassTableIdx & TokenTypes.TableMask));
 
 				Signature signature = GetMemberRefSignature(row.SignatureBlobIdx);
+
+				CilGenericType genericOwnerType = ownerType as CilGenericType;
 
 				RuntimeMember runtimeMember = null;
 				if (signature is FieldSignature)
@@ -559,13 +573,19 @@ namespace Mosa.Runtime.TypeSystem
 				}
 				else
 				{
+					MethodSignature methodSignature = signature as MethodSignature;
 					Debug.Assert(signature is MethodSignature);
+
+					if ((genericOwnerType != null) && (genericOwnerType.GenericArguments.Length != 0))
+					{
+						methodSignature = new MethodSignature(methodSignature, genericOwnerType.GenericArguments);
+					}
 
 					foreach (RuntimeMethod method in ownerType.Methods)
 					{
 						if (method.Name == name)
 
-							if (method.Signature.Matches(signature as MethodSignature))
+							if (method.Signature.Matches(methodSignature))
 							{
 								runtimeMember = method;
 								break;
@@ -580,12 +600,13 @@ namespace Mosa.Runtime.TypeSystem
 						foreach (RuntimeMethod method in ownerType.Methods)
 						{
 							if (method.Name == name)
-
-								if (method.Signature.Matches(signature as MethodSignature))
+							{
+								if (method.Signature.Matches(methodSignature))
 								{
 									runtimeMember = method;
 									break;
 								}
+							}
 						}
 					}
 				}
@@ -1029,7 +1050,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// </returns>
 		public override string ToString()
 		{
-			return metadataModule.Name;
+			return ((ITypeModule)(this)).Name;
 		}
 	}
 }

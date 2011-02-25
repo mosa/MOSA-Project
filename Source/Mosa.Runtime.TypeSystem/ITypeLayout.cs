@@ -16,7 +16,7 @@ using Mosa.Runtime.Metadata.Signatures;
 namespace Mosa.Runtime.TypeSystem
 {
 
-	public interface ITypeLayout2
+	public interface ITypeLayout
 	{
 
 		/// <summary>
@@ -24,6 +24,18 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		/// <value>The type system.</value>
 		ITypeSystem TypeSystem { get; }
+
+		/// <summary>
+		/// Gets the size of the native pointer.
+		/// </summary>
+		/// <value>The size of the native pointer.</value>
+		int NativePointerSize { get; }
+
+		/// <summary>
+		/// Gets the native pointer alignment.
+		/// </summary>
+		/// <value>The native pointer alignment.</value>
+		int NativePointerAlignment { get; }
 
 		/// <summary>
 		/// Gets the method table offset.

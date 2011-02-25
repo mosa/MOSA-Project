@@ -17,7 +17,7 @@ namespace Mosa.Tools.TypeExplorer
 	public partial class Main : Form
 	{
 		ITypeSystem typeSystem = new TypeSystem();
-		ITypeLayout2 typeLayout;
+		ITypeLayout typeLayout;
 
 		public Main()
 		{
@@ -60,7 +60,7 @@ namespace Mosa.Tools.TypeExplorer
 		protected string FormatRuntimeType(RuntimeType type)
 		{
 			if (!showTokenValues.Checked)
-				return type.Name;
+				return type.Namespace + Type.Delimiter + type.Name;
 
 			return "[" + TokenToString(type.Token) + "] " + type.Namespace + Type.Delimiter + type.Name;
 		}
@@ -73,7 +73,7 @@ namespace Mosa.Tools.TypeExplorer
 			typeSystem = new TypeSystem();
 			typeSystem.LoadModules(assemblyLoader.Modules);
 
-			typeLayout = new TypeLayout2(typeSystem, 4, 4);
+			typeLayout = new TypeLayout(typeSystem, 4, 4);
 
 			Update();
 		}
@@ -131,9 +131,20 @@ namespace Mosa.Tools.TypeExplorer
 						foreach (RuntimeField field in type.Fields)
 						{
 							TreeNode fieldNode = new TreeNode(FormatRuntimeMember(field));
-							if (showSizes.Checked)
-								fieldNode.Text = fieldNode.Text + " (Size: " + typeLayout.GetFieldSize(field).ToString() + " - Offset: " + typeLayout.GetFieldOffset(field).ToString() + ")";
 							fieldsNode.Nodes.Add(fieldNode);
+
+							if (field.IsStaticField)
+								fieldNode.Text = fieldNode.Text + " [Static]";
+
+							if (showSizes.Checked)
+							{
+								fieldNode.Text = fieldNode.Text + " (Size: " + typeLayout.GetFieldSize(field).ToString();
+								
+								if (!field.IsStaticField)
+									fieldNode.Text = fieldNode.Text + " - Offset: " + typeLayout.GetFieldOffset(field).ToString();
+
+								fieldNode.Text = fieldNode.Text + ")";
+							}
 						}
 					}
 
@@ -146,15 +157,21 @@ namespace Mosa.Tools.TypeExplorer
 						{
 							TreeNode methodNode = new TreeNode(FormatRuntimeMember(method));
 							methodsNode.Nodes.Add(methodNode);
+
+							if ((method.Attributes & MethodAttributes.Static) == MethodAttributes.Static)
+								methodNode.Text = methodNode.Text + " [Static]";
+
+							if (method.IsAbstract)
+								methodNode.Text = methodNode.Text + " [Abstract]";
 						}
 					}
 
-					if (typeLayout.GetTypeMethods(type) != null)
+					if (typeLayout.GetMethodTable(type) != null)
 					{
-						TreeNode methodTableNode = new TreeNode("Method Table Entries");
+						TreeNode methodTableNode = new TreeNode("Method Table");
 						typeNode.Nodes.Add(methodTableNode);
 
-						foreach (RuntimeMethod method in typeLayout.GetTypeMethods(type))
+						foreach (RuntimeMethod method in typeLayout.GetMethodTable(type))
 						{
 							TreeNode methodNode = new TreeNode(FormatRuntimeMember(method));
 							methodTableNode.Nodes.Add(methodNode);

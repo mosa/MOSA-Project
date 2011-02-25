@@ -4,7 +4,7 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using System;
@@ -21,7 +21,7 @@ namespace Mosa.Runtime.TypeSystem
 	/// <summary>
 	/// Performs memory layout of a type for compilation.
 	/// </summary>
-	public sealed class TypeLayout2 : ITypeLayout2
+	public sealed class TypeLayout : ITypeLayout
 	{
 		#region Data members
 
@@ -39,11 +39,6 @@ namespace Mosa.Runtime.TypeSystem
 		/// 
 		/// </summary>
 		private int nativePointerSize;
-
-		/// <summary>
-		/// Holds a list of methods for each type
-		/// </summary>
-		private Dictionary<RuntimeType, IList<RuntimeMethod>> typeMethodTables = new Dictionary<RuntimeType, IList<RuntimeMethod>>();
 
 		/// <summary>
 		/// Holds a list of interfaces
@@ -75,13 +70,20 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		private Dictionary<RuntimeField, int> fieldOffets = new Dictionary<RuntimeField, int>();
 
+		/// <summary>
+		/// Holds a list of methods for each type
+		/// </summary>
+		private Dictionary<RuntimeType, IList<RuntimeMethod>> typeMethodTables = new Dictionary<RuntimeType, IList<RuntimeMethod>>();
+
 		#endregion // Data members
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="TypeLayout2"/> class.
+		/// Initializes a new instance of the <see cref="TypeLayout"/> class.
 		/// </summary>
 		/// <param name="typeSystem">The type system.</param>
-		public TypeLayout2(ITypeSystem typeSystem, int nativePointerAlignment, int nativePointerSize)
+		/// <param name="nativePointerSize">Size of the native pointer.</param>
+		/// <param name="nativePointerAlignment">The native pointer alignment.</param>
+		public TypeLayout(ITypeSystem typeSystem, int nativePointerSize, int nativePointerAlignment)
 		{
 			this.nativePointerAlignment = nativePointerAlignment;
 			this.nativePointerSize = nativePointerSize;
@@ -90,64 +92,34 @@ namespace Mosa.Runtime.TypeSystem
 			ResolveLayouts();
 		}
 
-		private void ResolveLayouts()
-		{
-			// Enumerate all types and do an appropriate type layout
-			foreach (RuntimeType type in typeSystem.GetAllTypes())
-			{
-				if (type.ContainsOpenGenericParameters)
-					continue;
-
-				if (type.IsModule || type.IsGeneric || type.IsDelegate)
-					continue;
-
-				if (type.IsInterface)
-				{
-					// Builds the interface list and interface index values
-					ResolveInterfaceType(type);
-				}
-			}
-
-			// Enumerate all types and do an appropriate type layout
-			foreach (RuntimeType type in typeSystem.GetAllTypes())
-			{
-				if (type.ContainsOpenGenericParameters)
-					continue;
-
-				if (type.IsModule || type.IsGeneric || type.IsDelegate)
-					continue;
-
-				if (!type.IsInterface)
-				{
-					if (type.IsExplicitLayoutRequestedByType)
-					{
-
-					}
-					else
-					{
-						CreateSequentialLayout(type);
-					}
-
-					CreateMethodTable(type);
-				}
-			}
-		}
-
 		#region ITypeLayout members
 
 		/// <summary>
 		/// Gets the type system.
 		/// </summary>
 		/// <value>The type system.</value>
-		ITypeSystem ITypeLayout2.TypeSystem { get { return typeSystem; } }
+		ITypeSystem ITypeLayout.TypeSystem { get { return typeSystem; } }
+
+		/// <summary>
+		/// Gets the size of the native pointer.
+		/// </summary>
+		/// <value>The size of the native pointer.</value>
+		int ITypeLayout.NativePointerSize { get { return nativePointerSize; } }
+
+		/// <summary>
+		/// Gets the native pointer alignment.
+		/// </summary>
+		/// <value>The native pointer alignment.</value>
+		int ITypeLayout.NativePointerAlignment { get { return nativePointerAlignment; } }
 
 		/// <summary>
 		/// Gets the method table offset.
 		/// </summary>
 		/// <param name="method">The method.</param>
 		/// <returns></returns>
-		int ITypeLayout2.GetMethodTableOffset(RuntimeMethod method)
+		int ITypeLayout.GetMethodTableOffset(RuntimeMethod method)
 		{
+			ResolveType(method.DeclaringType);
 			return methodTableOffsets[method];
 		}
 
@@ -156,8 +128,9 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		/// <param name="type">The type.</param>
 		/// <returns></returns>
-		int ITypeLayout2.GetInterfaceSlotOffset(RuntimeType type)
+		int ITypeLayout.GetInterfaceSlotOffset(RuntimeType type)
 		{
+			ResolveType(type);
 			return interfaceSlots[type];
 		}
 
@@ -166,10 +139,11 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		/// <param name="type">The type.</param>
 		/// <returns></returns>
-		int ITypeLayout2.GetTypeSize(RuntimeType type)
+		int ITypeLayout.GetTypeSize(RuntimeType type)
 		{
-			int size = 0;
+			ResolveType(type);
 
+			int size = 0;
 			typeSizes.TryGetValue(type, out size);
 
 			return size;
@@ -180,17 +154,23 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		/// <param name="field">The field.</param>
 		/// <returns></returns>
-		int ITypeLayout2.GetFieldSize(RuntimeField field)
+		int ITypeLayout.GetFieldSize(RuntimeField field)
 		{
 			int size = 0;
 
 			if (fieldSizes.TryGetValue(field, out size))
+			{
 				return size;
+			}
+			else
+			{
+				ResolveType(field.DeclaringType);
+			}
 
 			// If the field is another struct, we have to dig down and compute its size too.
 			if (field.SignatureType.Type == CilElementType.ValueType)
 			{
-				return ((ITypeLayout2)this).GetTypeSize(field.DeclaringType);
+				return ((ITypeLayout)this).GetTypeSize(field.DeclaringType);
 			}
 
 			size = GetMemorySize(field.SignatureType);
@@ -205,8 +185,10 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		/// <param name="field">The field.</param>
 		/// <returns></returns>
-		int ITypeLayout2.GetFieldOffset(RuntimeField field)
+		int ITypeLayout.GetFieldOffset(RuntimeField field)
 		{
+			ResolveType(field.DeclaringType);
+
 			int size = 0;
 
 			fieldOffets.TryGetValue(field, out size);
@@ -219,7 +201,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		/// <param name="type">The type.</param>
 		/// <returns></returns>
-		IList<RuntimeMethod> ITypeLayout2.GetMethodTable(RuntimeType type)
+		IList<RuntimeMethod> ITypeLayout.GetMethodTable(RuntimeType type)
 		{
 			if (type.ContainsOpenGenericParameters)
 				return null;
@@ -227,8 +209,10 @@ namespace Mosa.Runtime.TypeSystem
 			if (type.IsModule || type.IsGeneric || type.IsDelegate)
 				return null;
 
-			if (type.IsInterface)
-				return null;
+			//if (type.IsInterface)
+			//    return null;
+
+			ResolveType(type);
 
 			return typeMethodTables[type];
 		}
@@ -239,10 +223,12 @@ namespace Mosa.Runtime.TypeSystem
 		/// <param name="type">The type.</param>
 		/// <param name="interfaceType">Type of the interface.</param>
 		/// <returns></returns>
-		RuntimeMethod[] ITypeLayout2.GetInterfaceTable(RuntimeType type, RuntimeType interfaceType)
+		RuntimeMethod[] ITypeLayout.GetInterfaceTable(RuntimeType type, RuntimeType interfaceType)
 		{
 			if (type.Interfaces.Count == 0)
 				return null;
+
+			ResolveType(type);
 
 			RuntimeMethod[] methodTable = new RuntimeMethod[interfaceType.Methods.Count];
 
@@ -259,29 +245,97 @@ namespace Mosa.Runtime.TypeSystem
 		/// <summary>
 		/// Get a list of interfaces
 		/// </summary>
-		IList<RuntimeType> ITypeLayout2.Interfaces { get { return interfaces.AsReadOnly(); } }
+		IList<RuntimeType> ITypeLayout.Interfaces { get { return interfaces.AsReadOnly(); } }
 
 		#endregion // ITypeLayout
 
 		#region Internal - Layout
 
+		private void ResolveLayouts()
+		{
+			// Enumerate all types and do an appropriate type layout
+			foreach (RuntimeType type in typeSystem.GetAllTypes())
+			{
+				ResolveType(type);
+			}
+		}
+
+		private void ResolveType(RuntimeType type)
+		{
+			if (type.ContainsOpenGenericParameters)
+				return;
+
+			if (type.IsModule || type.IsGeneric || type.IsDelegate)
+				return;
+
+			if (typeSizes.ContainsKey(type))
+				return;
+
+			if (type.BaseType != null)
+				ResolveType(type.BaseType);
+
+			if (type.IsInterface)
+			{
+				ResolveInterfaceType(type);
+				CreateMethodTable(type);
+				return;
+			}
+
+			foreach (RuntimeType interfaceType in type.Interfaces)
+			{
+				ResolveInterfaceType(interfaceType);
+			}
+
+			if (type.IsExplicitLayoutRequestedByType)
+			{
+				ResolveExplicitLayout(type);
+			}
+			else
+			{
+				CreateSequentialLayout(type);
+			}
+
+			CreateMethodTable(type);
+		}
+
+		/// <summary>
+		/// Builds a list of interfaces and assigns interface a unique index number
+		/// </summary>
+		/// <param name="type">The type.</param>
+		private void ResolveInterfaceType(RuntimeType type)
+		{
+			Debug.Assert(type.IsInterface);
+
+			if (type.ContainsOpenGenericParameters)
+				return;
+
+			if (type.IsModule || type.IsGeneric || type.IsDelegate)
+				return;
+
+			if (interfaces.Contains(type))
+				return;
+
+			interfaces.Add(type);
+			interfaceSlots.Add(type, interfaceSlots.Count);
+		}
+
 		private void CreateSequentialLayout(RuntimeType type)
 		{
 			Debug.Assert(type != null, @"No type given.");
 
-			// Instance size
-			int typeSize = 8;
-
 			if (typeSizes.ContainsKey(type))
 				return;
+
+			// Instance size
+			int typeSize = 0;
 
 			// Receives the size/alignment
 			int packingSize = type.Pack;
 
 			if (type.BaseType != null)
 			{
-				((ITypeLayout2)(this)).GetTypeSize(type.BaseType);
-				typeSize = typeSizes[type.BaseType] - 8;
+				((ITypeLayout)(this)).GetTypeSize(type.BaseType);
+				typeSize = typeSizes[type.BaseType];
 			}
 
 			foreach (RuntimeField field in type.Fields)
@@ -329,21 +383,9 @@ namespace Mosa.Runtime.TypeSystem
 
 		#region Internal - Interface
 
-		/// <summary>
-		/// Builds a list of interfaces and assigns interface a unique index number
-		/// </summary>
-		/// <param name="type">The type.</param>
-		private void ResolveInterfaceType(RuntimeType type)
-		{
-			Debug.Assert(type.IsInterface);
-
-			interfaces.Add(type);
-			interfaceSlots.Add(type, interfaceSlots.Count);
-		}
-
 		private void ScanExplicitInterfaceImplementations(RuntimeType type, IList<RuntimeMethod> interfaceMethods, RuntimeMethod[] methodTable)
 		{
-			//TODO: write so access directly to metadata is not required
+			//TODO: rewrite so that access directly to metadata is not required
 			IMetadataProvider metadata = type.Module.MetadataModule.Metadata;
 			TokenTypes maxToken = metadata.GetMaxTokenValue(TokenTypes.MethodImpl);
 
