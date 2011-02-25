@@ -209,8 +209,8 @@ namespace Mosa.Runtime.TypeSystem
 			if (type.IsModule || type.IsGeneric || type.IsDelegate)
 				return null;
 
-			if (type.IsInterface)
-				return null;
+			//if (type.IsInterface)
+			//    return null;
 
 			ResolveType(type);
 
@@ -277,6 +277,7 @@ namespace Mosa.Runtime.TypeSystem
 			if (type.IsInterface)
 			{
 				ResolveInterfaceType(type);
+				CreateMethodTable(type);
 				return;
 			}
 
