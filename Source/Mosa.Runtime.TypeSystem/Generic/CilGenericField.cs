@@ -16,7 +16,7 @@ namespace Mosa.Runtime.TypeSystem.Generic
 		/// <param name="genericField">The generic field.</param>
 		/// <param name="signature">The signature.</param>
 		/// <param name="declaringType">Type of the declaring.</param>
-		public CilGenericField(TypeModule module, RuntimeField genericField, FieldSignature signature, CilGenericType declaringType) :
+		public CilGenericField(ITypeModule module, RuntimeField genericField, FieldSignature signature, CilGenericType declaringType) :
 			base(module, declaringType)
 		{
 			this.Signature = signature;

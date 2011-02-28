@@ -231,15 +231,15 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
-		/// 
+		/// Links the exception header clauses.
 		/// </summary>
 		private void LinkExceptionHeaderClauses()
 		{
-			foreach (BasicBlock block in this.basicBlocks)
-			{
-				for (Context ctx = CreateContext(block); !ctx.EndOfInstruction; ctx.GotoNext())
-					this.methodCompiler.Method.ExceptionClauseHeader.LinkBlockToClause(ctx, block);
-			}
+			//foreach (BasicBlock block in this.basicBlocks)
+			//{
+			//    for (Context ctx = CreateContext(block); !ctx.EndOfInstruction; ctx.GotoNext())
+			//        this.methodCompiler.Method.ExceptionClauseHeader.LinkBlockToClause(ctx, block);
+			//}
 		}
 	}
 }

@@ -24,17 +24,17 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// Holds the flags of the parameter.
 		/// </summary>
-		private ParameterAttributes _flags;
+		private ParameterAttributes flags;
 
 		/// <summary>
 		/// The token holding the name of the parameter.
 		/// </summary>
-		private TokenTypes _nameIdx;
+		private TokenTypes nameIdx;
 
 		/// <summary>
 		/// Holds the sequence index of the parameter.
 		/// </summary>
-		private short _sequence;
+		private short sequence;
 
 		#endregion // Data members
 
@@ -48,9 +48,9 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <param name="nameIdx">The name idx.</param>
 		public ParamRow(ParameterAttributes flags, short sequence, TokenTypes nameIdx)
 		{
-			_nameIdx = nameIdx;
-			_sequence = sequence;
-			_flags = flags;
+			this.nameIdx = nameIdx;
+			this.sequence = sequence;
+			this.flags = flags;
 		}
 
 		#endregion // Construction
@@ -63,7 +63,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <value>The flags.</value>
 		public ParameterAttributes Flags
 		{
-			get { return _flags; }
+			get { return flags; }
 		}
 
 		/// <summary>
@@ -74,7 +74,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		{
 			get
 			{
-				return _nameIdx;
+				return nameIdx;
 			}
 		}
 
@@ -84,7 +84,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <value>The sequence.</value>
 		public short Sequence
 		{
-			get { return _sequence; }
+			get { return sequence; }
 		}
 
 		#endregion // Properties

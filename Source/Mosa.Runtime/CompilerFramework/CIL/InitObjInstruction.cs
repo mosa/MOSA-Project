@@ -11,7 +11,7 @@ using System;
 
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
-using Mosa.Runtime.Vm;
+using Mosa.Runtime.TypeSystem;
 
 namespace Mosa.Runtime.CompilerFramework.CIL
 {
@@ -51,7 +51,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			ctx.Token = token;
 
 			//throw new NotImplementedException();
-			decoder.ModuleTypeSystem.GetType (token);
+			decoder.TypeModule.GetType (token);
 			//Mosa.Runtime.Vm.RuntimeType type = decoder.ModuleTypeSystem.GetType(decoder.Method, token);
 		}
 

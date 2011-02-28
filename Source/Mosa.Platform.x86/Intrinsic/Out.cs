@@ -12,7 +12,7 @@ using System;
 using Mosa.Runtime;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.CompilerFramework.Operands;
-using Mosa.Runtime.Vm;
+using Mosa.Runtime.TypeSystem;
 
 namespace Mosa.Platform.x86.Intrinsic
 {

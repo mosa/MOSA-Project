@@ -10,7 +10,7 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Mosa.Runtime.Vm;
+using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
 
@@ -34,7 +34,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 		void IAssemblyCompilerStage.Run()
 		{
-			foreach (RuntimeType type in typeSystem.GetCompiledTypes())
+			foreach (RuntimeType type in typeSystem.GetAllTypes())
 			{
 				foreach (RuntimeMethod method in type.Methods)
 				{

@@ -12,7 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-using Mosa.Runtime.Vm;
+using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime.Metadata.Signatures;
 
@@ -55,7 +55,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Holds the modules type system
 		/// </summary>
-		protected IModuleTypeSystem moduleTypeSystem; 
+		protected ITypeModule typeModule; 
 
 		/// <summary>
 		/// Holds the assembly loader
@@ -93,10 +93,9 @@ namespace Mosa.Runtime.CompilerFramework
 			InstructionSet = compiler.InstructionSet;
 			basicBlocks = compiler.BasicBlocks;
 			architecture = compiler.Architecture;
-			moduleTypeSystem = compiler.Method.ModuleTypeSystem;
+			typeModule = compiler.Method.Module;
 			typeSystem = compiler.TypeSystem;
-			typeLayout = compiler.TypeLayout;
-
+			typeLayout = compiler.TypeLayout;	
 			callingConvention = architecture.GetCallingConvention();
 
 			architecture.GetTypeRequirements(BuiltInSigType.IntPtr, out nativePointerSize, out nativePointerAlignment);

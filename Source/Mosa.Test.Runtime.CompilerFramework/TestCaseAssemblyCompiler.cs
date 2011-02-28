@@ -7,12 +7,13 @@
  *  Michael Fröhlich (grover) <michael.ruck@michaelruck.de>
  */
 
+using System;
 using System.Collections.Generic;
 
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Compiler.Linker;
 using Mosa.Runtime.Metadata.Loader;
-using Mosa.Runtime.Vm;
+using Mosa.Runtime.TypeSystem;
 
 using x86 = Mosa.Platform.x86;
 
@@ -24,23 +25,27 @@ namespace Mosa.Test.Runtime.CompilerFramework
 	{
 		private readonly Queue<CCtor> cctorQueue = new Queue<CCtor>();
 
-		private TestCaseAssemblyCompiler(IArchitecture architecture, ITypeSystem typeSystem) :
-			base(architecture, typeSystem)
+		private TestCaseAssemblyCompiler(IArchitecture architecture, ITypeSystem typeSystem, ITypeLayout typeLayout) :
+			base(architecture, typeSystem, typeLayout)
 		{
 			// Build the assembly compiler pipeline
 			Pipeline.AddRange(new IAssemblyCompilerStage[] {
-				new TypeLayoutStage(),
 				new AssemblyMemberCompilationSchedulerStage(),
 				new MethodCompilerSchedulerStage(),
+				new TypeLayoutStage(),
 				new TestAssemblyLinker(),
 			});
 			architecture.ExtendAssemblyCompilerPipeline(Pipeline);
 		}
 
-		public static void Compile(ITypeSystem typeSystem, IAssemblyLoader assemblyLoader)
+		public static void Compile(ITypeSystem typeSystem)
 		{
 			IArchitecture architecture = x86.Architecture.CreateArchitecture(x86.ArchitectureFeatureFlags.AutoDetect);
-			new TestCaseAssemblyCompiler(architecture, typeSystem).Compile();
+
+			// FIXME: get from architecture
+			TypeLayout typeLayout = new TypeLayout(typeSystem, 4, 4);
+
+			new TestCaseAssemblyCompiler(architecture, typeSystem, typeLayout).Compile();
 		}
 
 		public override IMethodCompiler CreateMethodCompiler(ICompilationSchedulerStage schedulerStage, RuntimeType type, RuntimeMethod method)

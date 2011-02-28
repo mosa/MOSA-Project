@@ -14,8 +14,8 @@ using Mosa.Runtime.CompilerFramework.CIL;
 using Mosa.Runtime.CompilerFramework.IR;
 using Mosa.Compiler.Linker;
 using Mosa.Runtime.Metadata;
-using Mosa.Runtime.Vm;
 using Mosa.Runtime.Metadata.Loader;
+using Mosa.Runtime.TypeSystem;
 using Mosa.Tools.Compiler.Stage;
 
 namespace Mosa.Tools.Compiler
@@ -35,12 +35,12 @@ namespace Mosa.Tools.Compiler
 		#endregion // Data Members
 
 		#region Construction
-		
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AotMethodCompiler"/> class.
 		/// </summary>
 		public AotMethodCompiler(AssemblyCompiler compiler, ICompilationSchedulerStage compilationScheduler, RuntimeType type, RuntimeMethod method)
-			: base(compiler.Pipeline.FindFirst<IAssemblyLinker>(), compiler.Architecture, compilationScheduler, type, method, compiler.TypeSystem, compiler.Pipeline.FindFirst<ITypeLayout>())
+			: base(compiler.Pipeline.FindFirst<IAssemblyLinker>(), compiler.Architecture, compilationScheduler, type, method, compiler.TypeSystem, compiler.TypeLayout)
 		{
 			this.assemblyCompiler = compiler;
 			this.Pipeline.AddRange(

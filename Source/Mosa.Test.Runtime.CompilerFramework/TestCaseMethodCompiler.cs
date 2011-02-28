@@ -10,12 +10,13 @@
 using System;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Collections.Generic;
 
-using Mosa.Runtime.CompilerFramework;
 using Mosa.Compiler.Linker;
 using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime.Metadata;
-using Mosa.Runtime.Vm;
+using Mosa.Runtime.TypeSystem;
+using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.CompilerFramework.CIL;
 using Mosa.Runtime.CompilerFramework.IR;
 using Mosa.Tools.Compiler;
@@ -27,8 +28,12 @@ namespace Mosa.Test.Runtime.CompilerFramework
 	{
 		private readonly TestCaseAssemblyCompiler assemblyCompiler;
 
+		private IntPtr address = IntPtr.Zero;
+
+		public IntPtr Address { get { return address; } }
+
 		public TestCaseMethodCompiler(TestCaseAssemblyCompiler compiler, IArchitecture architecture, ICompilationSchedulerStage compilationScheduler, RuntimeType type, RuntimeMethod method)
-			: base(compiler.Pipeline.FindFirst<IAssemblyLinker>(), architecture, compilationScheduler, type, method, compiler.TypeSystem, compiler.Pipeline.FindFirst<ITypeLayout>())
+			: base(compiler.Pipeline.FindFirst<IAssemblyLinker>(), architecture, compilationScheduler, type, method, compiler.TypeSystem, compiler.TypeLayout)
 		{
 			this.assemblyCompiler = compiler;
 
@@ -70,8 +75,10 @@ namespace Mosa.Test.Runtime.CompilerFramework
 		{
 			LinkerStream stream = base.RequestCodeStream() as LinkerStream;
 			VirtualMemoryStream vms = (VirtualMemoryStream)stream.BaseStream;
-			if (Method.Address == IntPtr.Zero)
-				Method.Address = new IntPtr(vms.Base.ToInt64() + vms.Position);
+
+			if (address == IntPtr.Zero)
+				address = new IntPtr(vms.Base.ToInt64() + vms.Position);
+
 			return stream;
 		}
 
@@ -84,7 +91,7 @@ namespace Mosa.Test.Runtime.CompilerFramework
 			MethodAttributes attrs = MethodAttributes.SpecialName | MethodAttributes.RTSpecialName | MethodAttributes.Static;
 			if ((this.Method.Attributes & attrs) == attrs && Method.Name == ".cctor")
 			{
-				CCtor cctor = (CCtor)Marshal.GetDelegateForFunctionPointer(Method.Address, typeof(CCtor));
+				CCtor cctor = (CCtor)Marshal.GetDelegateForFunctionPointer(address, typeof(CCtor));
 				assemblyCompiler.QueueCCtorForInvocationAfterCompilation(cctor);
 			}
 

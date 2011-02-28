@@ -15,7 +15,7 @@ using System.Diagnostics;
 using Mosa.Runtime;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.CompilerFramework.Operands;
-using Mosa.Runtime.Vm;
+using Mosa.Runtime.TypeSystem;
 using CIL = Mosa.Runtime.CompilerFramework.CIL;
 using IR = Mosa.Runtime.CompilerFramework.IR;
 

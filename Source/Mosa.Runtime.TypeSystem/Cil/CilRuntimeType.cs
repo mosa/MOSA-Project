@@ -46,22 +46,23 @@ namespace Mosa.Runtime.TypeSystem.Cil
 		/// </summary>
 		/// <param name="module">The module.</param>
 		/// <param name="name">The name.</param>
-		/// <param name="typenamespace">The typenamespace.</param>
+		/// <param name="typeNamespace">The type namespace.</param>
 		/// <param name="packing">The packing.</param>
 		/// <param name="size">The size.</param>
 		/// <param name="token">The token.</param>
 		/// <param name="baseType">Type of the base.</param>
 		/// <param name="enclosingType">Type of the enclosing.</param>
-		/// <param name="typeDefRow">The type def row.</param>
-		public CilRuntimeType(TypeModule module, string name, string typenamespace, int packing, int size, TokenTypes token, RuntimeType baseType, RuntimeType enclosingType, TypeDefRow typeDefRow) :
+		/// <param name="attributes">The attributes.</param>
+		/// <param name="baseToken">The base token.</param>
+		public CilRuntimeType(ITypeModule module, string name, string typeNamespace, int packing, int size, TokenTypes token, RuntimeType baseType, RuntimeType enclosingType, TypeAttributes attributes, TokenTypes baseToken) :
 			base(module, token, baseType)
 		{
-			this.baseTypeToken = typeDefRow.Extends;
-			base.Attributes = typeDefRow.Flags;
+			this.baseTypeToken = baseToken;
+			base.Attributes = attributes;
 			base.Pack = packing;
-			base.Size = size;
-			this.Name = name;
-			this.Namespace = typenamespace;
+			base.LayoutSize = size;
+			base.Name = name;
+			base.Namespace = typeNamespace;
 			this.EnclosingType = enclosingType;
 
 			if (IsNested)

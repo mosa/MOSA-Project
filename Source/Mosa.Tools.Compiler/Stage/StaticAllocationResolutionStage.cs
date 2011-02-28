@@ -13,7 +13,7 @@ using System.Diagnostics;
 
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.CompilerFramework.CIL;
-using Mosa.Runtime.Vm;
+using Mosa.Runtime.TypeSystem;
 using Mosa.Compiler.Linker;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.CompilerFramework.Operands;
@@ -70,7 +70,7 @@ namespace Mosa.Tools.Compiler.Stage
 
 			// Allocate a linker symbol to refer to for this allocation. Use the destination field name as the linker symbol name.
 			string symbolName = assignment.RuntimeField.ToString() + @"<<$cctor";
-			using (var stream = this.linker.Allocate(symbolName, SectionKind.BSS, allocatedType.Size, 4))
+			using (var stream = this.linker.Allocate(symbolName, SectionKind.BSS, typeLayout.GetTypeSize(allocatedType), 4))
 			{
 				// FIXME: Do we have to initialize this?
 				string methodTableSymbol = GetMethodTableForType(allocatedType);

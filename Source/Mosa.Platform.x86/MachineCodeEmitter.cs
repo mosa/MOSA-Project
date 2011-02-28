@@ -21,7 +21,7 @@ using Mosa.Compiler.Common;
 using Mosa.Compiler.Linker;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
-using Mosa.Runtime.Vm;
+using Mosa.Runtime.TypeSystem;
 
 using IR = Mosa.Runtime.CompilerFramework.IR;
 

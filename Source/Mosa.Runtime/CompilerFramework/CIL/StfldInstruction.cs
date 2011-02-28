@@ -13,7 +13,7 @@ using System.Diagnostics;
 using System.Text;
 
 using Mosa.Runtime.Metadata;
-using Mosa.Runtime.Vm;
+using Mosa.Runtime.TypeSystem;
 
 namespace Mosa.Runtime.CompilerFramework.CIL
 {
@@ -54,7 +54,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 			Debug.Assert(TokenTypes.Field == (TokenTypes.TableMask & token) || TokenTypes.MemberRef == (TokenTypes.TableMask & token), @"Invalid token type.");
 
-			ctx.RuntimeField = decoder.ModuleTypeSystem.GetField(token);
+			ctx.RuntimeField = decoder.TypeModule.GetField(token);
 
 			if (ctx.RuntimeField.ContainsGenericParameter)
 			{

@@ -14,7 +14,7 @@ using System.Diagnostics;
 using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
-using Mosa.Runtime.Vm;
+using Mosa.Runtime.TypeSystem;
 using IR2 = Mosa.Runtime.CompilerFramework;
 
 namespace Mosa.Runtime.CompilerFramework

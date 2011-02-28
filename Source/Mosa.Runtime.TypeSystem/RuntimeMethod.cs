@@ -49,7 +49,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// <summary>
 		/// Holds the rva of the MSIL of the method.
 		/// </summary>
-		private ulong rva;
+		private uint rva;
 
 		/// <summary>
 		/// 
@@ -67,10 +67,11 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		/// <param name="token">The token.</param>
 		/// <param name="declaringType">The type, which declared this method.</param>
-		public RuntimeMethod(TypeModule module, TokenTypes token, RuntimeType declaringType) :
+		public RuntimeMethod(ITypeModule module, TokenTypes token, RuntimeType declaringType) :
 			base(module, token, declaringType)
 		{
 			this.genericParameters = new List<GenericParameter>();
+			//this.parameters = new List<RuntimeParameter>();
 		}
 
 		#endregion // Construction
@@ -151,7 +152,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// Holds the RVA of the method in the binary.
 		/// </summary>
 		/// <value>The rva.</value>
-		public ulong Rva
+		public uint Rva
 		{
 			get { return this.rva; }
 			protected set { this.rva = value; }
@@ -186,7 +187,7 @@ namespace Mosa.Runtime.TypeSystem
 			result.Append(this.Name);
 			result.Append('(');
 
-			if (0 != this.Parameters.Count)
+			if (this.Parameters.Count != 0)
 			{
 				MethodSignature sig = this.Signature;
 				int i = 0;

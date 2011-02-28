@@ -11,8 +11,10 @@ using System;
 using System.Collections.Generic;
 
 using Mosa.Runtime.Metadata.Loader;
-using Mosa.Runtime.Vm;
+using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.CompilerFramework;
+using Mosa.Runtime.Metadata;
+using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Tools.Compiler.LinkTimeCodeGeneration
 {
@@ -55,18 +57,20 @@ namespace Mosa.Tools.Compiler.LinkTimeCodeGeneration
 			if (methodName.Length == 0)
 				throw new ArgumentException(@"Invalid method name.");
 
-			LinkerGeneratedType compilerGeneratedType = typeSystem.InternalModuleTypeSystem.GetType(@"Mosa.Tools.Compiler", @"LinkerGenerated") as LinkerGeneratedType;
+			LinkerGeneratedType compilerGeneratedType = typeSystem.InternalTypeModule.GetType(@"Mosa.Tools.Compiler", @"LinkerGenerated") as LinkerGeneratedType;
 
 			// Create the type if we need to.
 			if (compilerGeneratedType == null)
 			{
-				compilerGeneratedType = new LinkerGeneratedType(typeSystem.InternalModuleTypeSystem, @"Mosa.Tools.Compiler", @"LinkerGenerated");
+				compilerGeneratedType = new LinkerGeneratedType(typeSystem.InternalTypeModule, @"Mosa.Tools.Compiler", @"LinkerGenerated", null);
 				typeSystem.AddInternalType(compilerGeneratedType);
 			}
 
+			MethodSignature signature = new MethodSignature(new SigType(CilElementType.Void), new SigType[0]);
+
 			// Create the method
 			// HACK: <$> prevents the method from being called from CIL
-			LinkerGeneratedMethod method = new LinkerGeneratedMethod(typeSystem.InternalModuleTypeSystem, "<$>" + methodName, compilerGeneratedType);
+			LinkerGeneratedMethod method = new LinkerGeneratedMethod(typeSystem.InternalTypeModule, "<$>" + methodName, compilerGeneratedType, signature);
 			compilerGeneratedType.AddMethod(method);
 
 			LinkerMethodCompiler methodCompiler = new LinkerMethodCompiler(compiler, compiler.Pipeline.FindFirst<ICompilationSchedulerStage>(), method, instructionSet);

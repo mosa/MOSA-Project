@@ -64,6 +64,21 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LocalVariableSignature"/> class.
 		/// </summary>
+		/// <param name="provider">The provider.</param>
+		/// <param name="token">The token.</param>
+		/// <param name="genericArguments">The generic arguments.</param>
+		public LocalVariableSignature(LocalVariableSignature signature, SigType[] genericArguments)
+			: base(signature.Token)
+		{
+			locals = new VariableSignature[signature.locals.Length];
+		
+			for (int i = 0; i < signature.locals.Length; i++)
+				locals[i] = new VariableSignature(signature.locals[i], genericArguments);
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="LocalVariableSignature"/> class.
+		/// </summary>
 		public LocalVariableSignature()
 		{
 			this.locals = LocalVariableSignature.Empty;
@@ -95,7 +110,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 				this.locals = new VariableSignature[count];
 				for (int i = 0; i < count; i++)
 				{
-					this.locals[i] = new VariableSignature(reader);
+					locals[i] = new VariableSignature(reader);
 				}
 			}
 		}

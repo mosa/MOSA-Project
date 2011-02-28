@@ -7,7 +7,9 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-using Mosa.Runtime.Vm;
+using System;
+
+using Mosa.Runtime.TypeSystem;
 
 namespace Mosa.Runtime.CompilerFramework.Operands
 {
@@ -26,8 +28,8 @@ namespace Mosa.Runtime.CompilerFramework.Operands
 		/// Initializes a new instance of the <see cref="StaticFieldOperand"/> class.
 		/// </summary>
 		/// <param name="field">The field.</param>
-		public StaticFieldOperand(RuntimeField field) :
-			base(field.SignatureType, null, field.Address)
+		public StaticFieldOperand(RuntimeField field, IntPtr offset) :
+			base(field.SignatureType, null, offset) /* field.Address */
 		{
 		}
 

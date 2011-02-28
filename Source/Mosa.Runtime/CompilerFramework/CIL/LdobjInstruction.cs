@@ -15,7 +15,7 @@ using System.Text;
 using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
-using Mosa.Runtime.Vm;
+using Mosa.Runtime.TypeSystem;
 
 namespace Mosa.Runtime.CompilerFramework.CIL
 {

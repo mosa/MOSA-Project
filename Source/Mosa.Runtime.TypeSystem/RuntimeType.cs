@@ -44,7 +44,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// <summary>
 		/// Holds the calculated native size of the type.
 		/// </summary>
-		private int nativeSize;
+		private int layoutSize;
 
 		/// <summary>
 		/// Holds the field packing.
@@ -99,7 +99,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// Initializes a new instance of the <see cref="RuntimeType"/> class.
 		/// </summary>
 		/// <param name="token">The token of the type.</param>
-		public RuntimeType(TypeModule module, TokenTypes token, RuntimeType baseType) :
+		public RuntimeType(ITypeModule module, TokenTypes token, RuntimeType baseType) :
 			base(module, token, null)
 		{
 			this.baseType = baseType;
@@ -265,10 +265,10 @@ namespace Mosa.Runtime.TypeSystem
 		/// Gets or sets the size of the type.
 		/// </summary>
 		/// <value>The size of the type.</value>
-		public int Size
+		public int LayoutSize
 		{
-			get { return nativeSize; }
-			protected set { nativeSize = value; }
+			get { return layoutSize; }
+			protected set { layoutSize = value; }
 		}
 
 		/// <summary>

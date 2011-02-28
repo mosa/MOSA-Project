@@ -10,7 +10,8 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using Mosa.Runtime.Vm;
+
+using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Loader;
@@ -24,13 +25,6 @@ namespace Mosa.Tools.Compiler
 	{
 		#region Data Members
 
-		/// <summary>
-		/// Holds the name of the compiler generated method.
-		/// </summary>
-		private string name;
-
-		private MethodSignature signature;
-
 		#endregion // Data Members
 
 		#region Construction
@@ -41,44 +35,19 @@ namespace Mosa.Tools.Compiler
 		/// <param name="typeSystem">The type system.</param>
 		/// <param name="name">The name of the method.</param>
 		/// <param name="declaringType">Type of the declaring.</param>
-		public LinkerGeneratedMethod(IModuleTypeSystem typeSystem, string name, RuntimeType declaringType) :
+		public LinkerGeneratedMethod(ITypeModule typeSystem, string name, RuntimeType declaringType, MethodSignature signature) :
 			base(typeSystem, 0, declaringType)
 		{
 			if (name == null)
 				throw new ArgumentNullException(@"name");
 
-			this.name = name;
-			this.signature = new MethodSignature(new SigType(CilElementType.Void), new SigType[0]);
+			base.Name = name;
+
+			base.Signature = signature;
 			this.Parameters = new List<RuntimeParameter>();
 		}
 
 		#endregion // Construction
 
-		#region RuntimeMethod Overrides
-
-		/// <summary>
-		/// Called to retrieve the name of the type.
-		/// </summary>
-		/// <returns>The name of the type.</returns>
-		protected override string GetName()
-		{
-			return this.name;
-		}
-
-		/// <summary>
-		/// Gets the method signature.
-		/// </summary>
-		/// <returns>The method signature.</returns>
-		protected override MethodSignature GetMethodSignature()
-		{
-			return this.signature;
-		}
-
-		#endregion // RuntimeMethod Overrides
-
-		public void SetSignature(MethodSignature signature)
-		{
-			this.signature = signature;
-		}
 	}
 }

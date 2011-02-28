@@ -1,4 +1,4 @@
-/*
+﻿/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -13,12 +13,11 @@ using System.Text;
 using System.IO;
 using System.Diagnostics;
 
-using Mosa.Runtime.Vm;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
-using Mosa.Runtime.Metadata.Loader;
+using Mosa.Runtime.TypeSystem;
 
-namespace Mosa.Runtime.Metadata.Blobs
+namespace Mosa.Runtime.CompilerFramework
 {
 	/// <summary>
 	/// Parses and instantiates custom attributes in assembly metadata blobs.
@@ -52,7 +51,9 @@ namespace Mosa.Runtime.Metadata.Blobs
 		/// <param name="metadataProvider">The metadata module, which contains the attribute blob.</param>
 		/// <param name="attributeBlob">The attribute blob token.</param>
 		/// <param name="attributeCtor">The constructor of the attribute.</param>
-		/// <returns>The fully instantiated and initialized attribute.</returns>
+		/// <returns>
+		/// The fully instantiated and initialized attribute.
+		/// </returns>
 		/// <exception cref="System.ArgumentException"><paramref name="attributeBlob"/> is invalid.</exception>
 		/// <exception cref="System.ArgumentNullException"><paramref name="metadataProvider"/> is null or <paramref name="attributeCtor"/> is null.</exception>
 		public static object Parse(IMetadataProvider metadataProvider, TokenTypes attributeBlob, RuntimeMethod attributeCtor)
@@ -62,35 +63,28 @@ namespace Mosa.Runtime.Metadata.Blobs
 
 			// Try to load the blob from the module
 			byte[] blob = metadataProvider.ReadBlob(attributeBlob);
-			if (null != blob)
+			if (blob != null)
 			{
-				if (0 != blob.Length)
+				if (blob.Length != 0)
 				{
 					// Create a binary reader for the blob
 					using (BinaryReader reader = new BinaryReader(new MemoryStream(blob), Encoding.UTF8))
 					{
 						ushort prologue = reader.ReadUInt16();
-						Debug.Assert(ATTRIBUTE_BLOB_PROLOGUE == prologue, @"Attribute prologue doesn't match.");
+						Debug.Assert(prologue == ATTRIBUTE_BLOB_PROLOGUE, @"Attribute prologue doesn't match.");
 						if (prologue != ATTRIBUTE_BLOB_PROLOGUE)
 							throw new ArgumentException(@"Invalid custom attribute blob.", "attributeBlob");
 
 						// Fixed argument list of the ctor
 						SigType[] paramSig = attributeCtor.Signature.Parameters;
 						IList<RuntimeParameter> parameters = attributeCtor.Parameters;
+
 						object[] args = new object[parameters.Count];
 						for (int idx = 0; idx < parameters.Count; idx++)
 							args[idx] = ParseFixedArg(metadataProvider, reader, paramSig[idx]);
 
 						// Create the attribute instance
 						result = CreateAttribute(attributeCtor, args);
-
-						// Are there any named args?
-						ushort numNamed = reader.ReadUInt16();
-						for (ushort idx = 0; idx < numNamed; idx++)
-						{
-							// FIXME: Process the named arguments
-							Trace.WriteLine(@"Skipping named argument of an attribute.");
-						}
 					}
 				}
 				else
@@ -118,8 +112,8 @@ namespace Mosa.Runtime.Metadata.Blobs
 		/// <returns>The newly constructed attribute.</returns>
 		private static object CreateAttribute(RuntimeMethod attributeCtor, object[] args)
 		{
-			RuntimeType rt = attributeCtor.DeclaringType;
-			Type attributeType = Type.GetType(String.Format("{0}.{1}, Mosa.Intrinsic", rt.Namespace, rt.Name));
+			RuntimeType type = attributeCtor.DeclaringType;
+			Type attributeType = Type.GetType(String.Format("{0}.{1}, Mosa.Intrinsic", type.Namespace, type.Name));
 			return Activator.CreateInstance(attributeType, args, null);
 		}
 
@@ -167,6 +161,7 @@ namespace Mosa.Runtime.Metadata.Blobs
 			// Retrieve the array element type
 			Type elementType = GetTypeFromSigType(sigType);
 			Debug.Assert(null != elementType, @"Failed to get System.Type for SigType.");
+
 			result = Array.CreateInstance(elementType, numElements);
 			for (int idx = 0; idx < numElements; idx++)
 			{
@@ -244,48 +239,13 @@ namespace Mosa.Runtime.Metadata.Blobs
 					break;
 
 				case CilElementType.Type:
-					{
-						string typeName = ParseSerString(reader);
-						result = Type.GetType(typeName);
-					}
-					break;
+					throw new NotSupportedException();
 
 				case CilElementType.Class:
-					{
-						string typeName = ParseSerString(reader);
-						string[] type = typeName.Split(',');
-						if (type.Length > 1)
-						{
-							result = Type.GetType(typeName);
-						}
-						else
-						{
-							//TODO
-							//result = Type.GetType(typeName + ", " + metadataProvider.Name);
-							result = Type.GetType(typeName);
-						}
-					}
-					break;
+					throw new NotSupportedException();
 
 				case CilElementType.ValueType:
-					{
-						//ValueTypeSigType vtSigType = sigType as ValueTypeSigType;
-						//ITypeSystem ts = RuntimeBase.Instance.TypeSystem;
-						//RuntimeType type = ts.GetType(DefaultSignatureContext.Instance, module, vtSigType.Token);
-						//RuntimeType baseType = type.BaseType;
-						//if (@"System" == baseType.Namespace && "Enum" == baseType.Name) {
-						//    // Retrieve the value field to get the enums integer type
-						//    RuntimeField value = type.Fields[0];
-						//    Debug.Assert(value.Name == @"value", @"First field of enum not named value");
-						//    result = ParseElem(module, reader, value.SignatureType);
-						//    Type enumType = Type.GetType(type.Namespace + "." + type.Name);
-						//    result = Enum.ToObject(enumType, result);
-						//}
-						//else {
-						throw new NotSupportedException();
-						//}
-					}
-				//break;
+					throw new NotSupportedException();
 
 				case CilElementType.Object:
 					throw new NotSupportedException();

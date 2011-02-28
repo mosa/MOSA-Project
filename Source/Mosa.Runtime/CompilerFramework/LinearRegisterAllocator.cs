@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using Mosa.Runtime.CompilerFramework.Operands;
 using IR = Mosa.Runtime.CompilerFramework.IR;
-using Mosa.Runtime.Vm;
+using Mosa.Runtime.TypeSystem;
 using System.Diagnostics;
 
 namespace Mosa.Runtime.CompilerFramework

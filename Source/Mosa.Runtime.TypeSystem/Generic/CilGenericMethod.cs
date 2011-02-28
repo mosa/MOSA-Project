@@ -29,7 +29,7 @@ namespace Mosa.Runtime.TypeSystem.Generic
 		/// <param name="genericMethod">The generic method.</param>
 		/// <param name="signature">The signature.</param>
 		/// <param name="declaringType">Type of the declaring.</param>
-		public CilGenericMethod(TypeModule module, CilRuntimeMethod genericMethod, MethodSignature signature, RuntimeType declaringType) :
+		public CilGenericMethod(ITypeModule module, CilRuntimeMethod genericMethod, MethodSignature signature, RuntimeType declaringType) :
 			base(module, genericMethod.Token, declaringType)
 		{
 			this.Signature = signature;
@@ -55,7 +55,7 @@ namespace Mosa.Runtime.TypeSystem.Generic
 			result.Append(Name);
 			result.Append('(');
 
-			if (0 != this.Parameters.Count)
+			if (this.Parameters.Count != 0)
 			{
 				MethodSignature sig = this.Signature;
 				int i = 0;

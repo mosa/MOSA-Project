@@ -1,4 +1,13 @@
-﻿using System;
+﻿/*
+ * (c) 2008 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -22,6 +31,12 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		/// <value>The metadata module.</value>
 		IMetadataModule MetadataModule { get; }
+
+		/// <summary>
+		/// Gets the module's name.
+		/// </summary>
+		/// <value>The module's name.</value>
+		string Name { get; }
 
 		/// <summary>
 		/// Gets all types from module.
@@ -64,5 +79,13 @@ namespace Mosa.Runtime.TypeSystem
 		/// <param name="token">The token of the method to retrieve.</param>
 		/// <returns></returns>
 		RuntimeMethod GetMethod(TokenTypes token);
+
+		/// <summary>
+		/// Gets the method.
+		/// </summary>
+		/// <param name="token">The token.</param>
+		/// <param name="callingType">Type of the calling.</param>
+		/// <returns></returns>
+		RuntimeMethod GetMethod(TokenTypes token, RuntimeType callingType);
 	}
 }

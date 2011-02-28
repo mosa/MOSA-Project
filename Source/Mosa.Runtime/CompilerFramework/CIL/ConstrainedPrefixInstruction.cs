@@ -14,7 +14,7 @@ using System.Text;
 
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
-using Mosa.Runtime.Vm;
+using Mosa.Runtime.TypeSystem;
 
 namespace Mosa.Runtime.CompilerFramework.CIL
 {
@@ -49,7 +49,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			base.Decode(ctx, decoder);
 			// Retrieve the type token
 			TokenTypes token = decoder.DecodeTokenType();
-			ctx.Other = decoder.ModuleTypeSystem.GetType (token);
+			ctx.Other = decoder.TypeModule.GetType (token);
 			/*
 				_constraint = MetadataTypeReference.FromToken(decoder.Metadata, token);
 				Debug.Assert(null != _constraint);

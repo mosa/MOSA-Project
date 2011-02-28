@@ -14,7 +14,7 @@ using System.Text;
 
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
-using Mosa.Runtime.Vm;
+using Mosa.Runtime.TypeSystem;
 
 namespace Mosa.Runtime.CompilerFramework.CIL
 {
@@ -50,7 +50,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 			TokenTypes token = decoder.DecodeTokenType();
 
-			RuntimeType type = decoder.ModuleTypeSystem.GetType(token);
+			RuntimeType type = decoder.TypeModule.GetType(token);
 
 			ctx.Result = decoder.Compiler.CreateTemporary(new ClassSigType(token));
 			//throw new NotImplementedException();

@@ -8,7 +8,7 @@
  */
 
 using Mosa.Runtime.CompilerFramework;
-using Mosa.Runtime.Vm;
+using Mosa.Runtime.TypeSystem;
 
 namespace Mosa.Tools.Compiler.TypeInitializers
 {

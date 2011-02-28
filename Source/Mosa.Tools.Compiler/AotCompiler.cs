@@ -13,7 +13,7 @@ using Mosa.Runtime.CompilerFramework;
 using Mosa.Tools.Compiler.Stage;
 using Mosa.Compiler.Linker;
 using Mosa.Runtime.Metadata.Loader;
-using Mosa.Runtime.Vm;
+using Mosa.Runtime.TypeSystem;
 using System.Diagnostics;
 
 namespace Mosa.Tools.Compiler
@@ -40,8 +40,8 @@ namespace Mosa.Tools.Compiler
 		/// </summary>
 		/// <param name="architecture">The target compilation architecture.</param>
 		/// <param name="typeSystem">The type system.</param>
-		public AotCompiler(IArchitecture architecture, ITypeSystem typeSystem) :
-			base(architecture, typeSystem)
+		public AotCompiler(IArchitecture architecture, ITypeSystem typeSystem, ITypeLayout typeLayout) :
+			base(architecture, typeSystem, typeLayout)
 		{
 		}
 

@@ -20,7 +20,7 @@ using MbUnit.Framework;
 
 using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime;
-using Mosa.Runtime.Vm;
+using Mosa.Runtime.TypeSystem;
 
 namespace Mosa.Test.Runtime.CompilerFramework
 {

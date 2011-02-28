@@ -36,9 +36,8 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Signature"/> class.
 		/// </summary>
-		public Signature()
+		protected Signature()
 		{
-			// TODO: Remove this constructor
 		}
 
 		/// <summary>
@@ -48,6 +47,15 @@ namespace Mosa.Runtime.Metadata.Signatures
 		public Signature(SignatureReader reader)
 		{
 			ParseSignature(reader);
+		}
+
+		/// <summary>
+		/// Loads the signature.
+		/// </summary>
+		/// <param name="token">The token.</param>
+		protected Signature(TokenTypes token)
+		{
+			this.token = token;
 		}
 
 		/// <summary>

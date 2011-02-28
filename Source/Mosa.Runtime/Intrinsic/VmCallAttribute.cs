@@ -9,7 +9,7 @@
 
 using System;
 
-namespace Mosa.Intrinsic
+namespace Mosa.Runtime.Intrinsic
 {
 	/// <summary>
 	/// Used to mark a method with the <see cref="VmCall"/> to invoke.

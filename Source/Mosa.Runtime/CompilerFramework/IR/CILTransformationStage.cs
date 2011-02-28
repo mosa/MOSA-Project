@@ -20,11 +20,11 @@ using System.Reflection;
 using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
-using Mosa.Runtime.Vm;
+using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Metadata.Loader;
 using Mosa.Compiler.Linker;
-using Mosa.Intrinsic;
+using Mosa.Runtime.Intrinsic;
 
 using IR = Mosa.Runtime.CompilerFramework.IR;
 using CIL = Mosa.Runtime.CompilerFramework.CIL;
@@ -39,13 +39,41 @@ namespace Mosa.Runtime.CompilerFramework.IR
 	/// </remarks>
 	public sealed class CILTransformationStage : BaseCodeTransformationStage, CIL.ICILVisitor, IPipelineStage
 	{
-		#region IMethodCompilerStage Members
+
+		#region Data members
+
+		private RuntimeType vmCallAttribute = null;
+
+		private RuntimeType[] intrinsicAttributeTypes = null;
+
+		#endregion // Data members
+
+		#region IPipelineStage Members
 
 		/// <summary>
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
 		/// <value>The name of the compilation stage.</value>
 		string IPipelineStage.Name { get { return @"IR.CILTransformationStage"; } }
+
+		#endregion // IPipelineStage Members
+
+		#region IMethodCompilerStage Members
+
+		/// <summary>
+		/// Performs stage specific processing on the compiler context.
+		/// </summary>
+		public override void Run()
+		{
+			vmCallAttribute = typeSystem.GetType("Mosa.Intrinsic", "VmCallAttribute");
+
+			// HACK: This allows us to resolve IntrinsicAttribute from Korlib without directly referencing it. It is slower, but works.
+			intrinsicAttributeTypes = new RuntimeType[2];
+			intrinsicAttributeTypes[0] = typeSystem.GetType("Mosa.Intrinsic", "Mosa.Intrinsic", "IntrinsicAttribute");
+			intrinsicAttributeTypes[1] = typeSystem.GetType("mscorlib", "Mosa.Intrinsic", "IntrinsicAttribute");
+
+			base.Run();
+		}
 
 		#endregion // IMethodCompilerStage Members
 
@@ -470,11 +498,11 @@ namespace Mosa.Runtime.CompilerFramework.IR
 
 			SZArraySigType arrayType = (SZArraySigType)context.Result.Type;
 			ClassSigType elementSigType = arrayType.ElementType as ClassSigType;
-			RuntimeType elementType = moduleTypeSystem.GetType(elementSigType.Token);
+			RuntimeType elementType = typeModule.GetType(elementSigType.Token);
 			Debug.Assert(elementType != null, @"Newarr didn't specify class signature?");
 
 			Operand lengthOperand = context.Operand1;
-			int elementSize = elementType.Size;
+			int elementSize = typeLayout.GetTypeSize(elementType);
 
 			// HACK: If we can't determine the size now, assume 16 bytes per array element.
 			if (elementSize == 0)
@@ -500,7 +528,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			Debug.Assert(thisReference != null, @"Newobj didn't specify class signature?");
 
 			ClassSigType classSigType = (ClassSigType)thisReference.Type;
-			RuntimeType classType = moduleTypeSystem.GetType(classSigType.Token);
+			RuntimeType classType = typeModule.GetType(classSigType.Token);
 
 			List<Operand> ctorOperands = new List<Operand>(context.Operands);
 			RuntimeMethod ctorMethod = context.InvokeTarget;
@@ -515,7 +543,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 				SymbolOperand methodTableSymbol = GetMethodTableSymbol(classType);
 
 				before.SetOperand(1, methodTableSymbol);
-				before.SetOperand(2, new ConstantOperand(BuiltInSigType.Int32, classType.Size));
+				before.SetOperand(2, new ConstantOperand(BuiltInSigType.Int32, typeLayout.GetTypeSize(classType)));
 				before.OperandCount = 2;
 				before.Result = thisReference;
 
@@ -748,8 +776,9 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			Operand objectOperand = context.Operand1;
 
 			RuntimeField field = context.RuntimeField;
-			IntPtr address = field.Address;
-			ConstantOperand offsetOperand = new ConstantOperand(BuiltInSigType.IntPtr, address.ToInt64());
+			//IntPtr address = field.Address;
+			int offset = typeLayout.GetFieldOffset(field);
+			ConstantOperand offsetOperand = new ConstantOperand(BuiltInSigType.IntPtr, offset);
 
 			IInstruction loadInstruction = Instruction.LoadInstruction;
 			if (MustSignExtendOnLoad(field.SignatureType.Type))
@@ -773,7 +802,9 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			Operand fieldAddress = context.Result;
 			Operand objectOperand = context.Operand1;
 
-			Operand fixedOffset = new ConstantOperand(BuiltInSigType.Int32, context.RuntimeField.Address.ToInt32());
+			int offset = typeLayout.GetFieldOffset(context.RuntimeField);
+
+			Operand fixedOffset = new ConstantOperand(BuiltInSigType.Int32, offset);
 			context.SetInstruction(Instruction.AddUInstruction, fieldAddress, objectOperand, fixedOffset);
 		}
 
@@ -786,8 +817,9 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			Operand objectOperand = context.Operand1;
 			Operand valueOperand = context.Operand2;
 
-			IntPtr address = context.RuntimeField.Address;
-			ConstantOperand offsetOperand = new ConstantOperand(BuiltInSigType.IntPtr, address.ToInt64());
+			//IntPtr address = context.RuntimeField.Address;
+			int offset = typeLayout.GetFieldOffset(context.RuntimeField);
+			ConstantOperand offsetOperand = new ConstantOperand(BuiltInSigType.IntPtr, offset);
 
 			context.SetInstruction(Instruction.StoreInstruction, objectOperand, offsetOperand, valueOperand);
 		}
@@ -1683,8 +1715,6 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			}
 		}
 
-		private RuntimeType[] intrinsicAttributeTypes = null;
-
 		/// <summary>
 		/// Processes intrinsic method calls.
 		/// </summary>
@@ -1697,20 +1727,9 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// </remarks>
 		private bool ProcessIntrinsicCall(Context context)
 		{
-			// HACK: This allows us to resolve IntrinsicAttribute from Korlib without directly referencing it. It is slower, but works.
-			if (intrinsicAttributeTypes == null)
-			{
-				intrinsicAttributeTypes = new RuntimeType[2];
-				intrinsicAttributeTypes[0] = typeSystem.GetType(@"Mosa.Intrinsic.IntrinsicAttribute, Mosa.Intrinsic");
-
-				if (typeSystem.GetType(@"Mosa.Intrinsic.IntrinsicAttribute, mscorlib") != null)
-				{
-					intrinsicAttributeTypes[1] = typeSystem.GetType(@"Mosa.Intrinsic.IntrinsicAttribute, mscorlib");
-				}
-			}
-
 			// Retrieve the runtime type
 			object attribute = this.FindIntrinsicAttributeInstance(context);
+
 			if (attribute != null)
 			{
 				Type attributeType = attribute.GetType();
@@ -1746,6 +1765,11 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			return false;
 		}
 
+		/// <summary>
+		/// Finds the intrinsic attribute instance.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <returns></returns>
 		private object FindIntrinsicAttributeInstance(Context context)
 		{
 			RuntimeMethod rm = context.InvokeTarget;
@@ -1757,7 +1781,8 @@ namespace Mosa.Runtime.CompilerFramework.IR
 				{
 					try
 					{
-						object[] attributes = rm.GetCustomAttributes(intrinsicAttributeType);
+						// FIXME: 
+						object[] attributes = null; // rm.GetCustomAttributes(intrinsicAttributeType);
 						if (attributes != null && attributes.Length > 0)
 						{
 							return attributes[0];
@@ -1875,16 +1900,16 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			Debug.Assert(rm != null, @"Call doesn't have a target.");
 
 			// Retrieve the runtime type
-			RuntimeType rt = typeSystem.GetType(@"Mosa.Intrinsic.VmCallAttribute, Mosa.Intrinsic");
-			if (rm.IsDefined(rt))
+			if (rm.IsDefined(vmCallAttribute))
 			{
 				foreach (RuntimeAttribute ra in rm.CustomAttributes)
 				{
-					if (ra.Type == rt)
+					if (ra.Type == vmCallAttribute)
 					{
 						// Get the intrinsic attribute
-						VmCallAttribute vmCallAttribute = (VmCallAttribute)ra.GetAttribute();
-						ReplaceWithVmCall(context, vmCallAttribute.VmCall);
+						VmCallAttribute callAttribute = (VmCallAttribute)CustomAttributeParser.Parse(methodCompiler.Assembly.Metadata, ra.AttributeBlob, ra.CtorMethod);
+
+						ReplaceWithVmCall(context, callAttribute.VmCall);
 						return true;
 					}
 				}
@@ -1900,14 +1925,14 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <param name="internalCallTarget">The internal call target.</param>
 		private void ReplaceWithVmCall(Context context, VmCall internalCallTarget)
 		{
-			RuntimeType rt = typeSystem.GetType(@"Mosa.Intrinsic.Runtime");
-			Debug.Assert(rt != null, "Can not find Mosa.Intrinsic.Runtime / @callTarget=" + internalCallTarget.ToString());
+			RuntimeType type = typeSystem.GetType(@"Mosa.Intrinsic.Runtime");
+			Debug.Assert(type != null, "Cannot find Mosa.Intrinsic.Runtime");
 
-			RuntimeMethod callTarget = rt.FindMethod(internalCallTarget.ToString());
-			Debug.Assert(callTarget != null, "@callTarget=" + internalCallTarget.ToString());
+			RuntimeMethod method = type.FindMethod(internalCallTarget.ToString());
+			Debug.Assert(method != null, "Cannot find method: " + internalCallTarget.ToString());
 
 			context.ReplaceInstructionOnly(IR.Instruction.CallInstruction);
-			context.SetOperand(0, SymbolOperand.FromMethod(callTarget));
+			context.SetOperand(0, SymbolOperand.FromMethod(method));
 		}
 
 		private bool ReplaceWithInternalCall(Context context, RuntimeMethod method)

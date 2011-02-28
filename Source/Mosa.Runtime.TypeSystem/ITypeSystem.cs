@@ -1,4 +1,13 @@
-﻿using System;
+﻿/*
+ * (c) 2008 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -32,12 +41,21 @@ namespace Mosa.Runtime.TypeSystem
 		RuntimeType GetType(string nameSpace, string name);
 
 		/// <summary>
+		/// Gets the runtime type for the given type name and namespace
+		/// </summary>
+		/// <param name="assembly">The assembly.</param>
+		/// <param name="nameSpace">The name space.</param>
+		/// <param name="name">The name.</param>
+		/// <returns></returns>
+		RuntimeType GetType(string assembly, string nameSpace, string name);
+
+		/// <summary>
 		/// Gets the type.
 		/// </summary>
-		/// <param name="fullname">The fullname.</param>
+		/// <param name="name">The name.</param>
 		/// <returns></returns>
-		RuntimeType GetType(string fullname);
-		
+		RuntimeType GetType(string name);
+
 		/// <summary>
 		/// Resolves the module reference.
 		/// </summary>
@@ -50,5 +68,23 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		/// <returns></returns>
 		IEnumerable<RuntimeType> GetAllTypes();
+
+		/// <summary>
+		/// Gets the internal type module.
+		/// </summary>
+		/// <value>The internal type module.</value>
+		ITypeModule InternalTypeModule { get; }
+
+		/// <summary>
+		/// Adds the internal compiler defined type to the type system
+		/// </summary>
+		/// <param name="type">The type.</param>
+		void AddInternalType(RuntimeType type);
+
+		/// <summary>
+		/// Gets the main type module.
+		/// </summary>
+		/// <returns></returns>
+		ITypeModule MainTypeModule { get; set; }
 	}
 }

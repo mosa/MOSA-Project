@@ -16,7 +16,7 @@ using System.Reflection.Emit;
 using System.Runtime.InteropServices;
 
 using Mosa.Compiler.Linker;
-using Mosa.Runtime.Vm;
+using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Linker;

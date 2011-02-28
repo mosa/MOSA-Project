@@ -25,7 +25,7 @@ namespace Mosa.Runtime.TypeSystem
 	public class RuntimeAttribute
 	{
 		#region Data members
-		
+
 		/// <summary>
 		/// Specifies the blob, which contains the attribute initialization.
 		/// </summary>
@@ -48,13 +48,14 @@ namespace Mosa.Runtime.TypeSystem
 		/// <summary>
 		/// Initializes a new instance of the <see cref="RuntimeAttribute"/> class.
 		/// </summary>
-		/// <param name="customAttributeRow">The custom attribute row.</param>
+		/// <param name="attributeBlog">The attribute blog.</param>
+		/// <param name="ctor">The ctor.</param>
 		/// <param name="ctorMethod">The ctor method.</param>
-		public RuntimeAttribute(CustomAttributeRow customAttributeRow, RuntimeMethod ctorMethod)
+		public RuntimeAttribute(TokenTypes attributeBlog, TokenTypes ctor, RuntimeMethod ctorMethod)
 		{
-			this.ctorMethod = ctorMethod;		
-			this.attributeBlob = customAttributeRow.ValueBlobIdx; // NEVER USED
-			this.ctor = customAttributeRow.TypeIdx; // NEVER USED
+			this.ctorMethod = ctorMethod;
+			this.attributeBlob = attributeBlog;
+			this.ctor = ctor;
 		}
 
 		#endregion // Construction
@@ -76,6 +77,12 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		/// <value>The ctor method.</value>
 		public RuntimeMethod CtorMethod { get { return ctorMethod; } }
+
+		/// <summary>
+		/// Gets the attribute BLOB.
+		/// </summary>
+		/// <value>The attribute BLOB.</value>
+		public TokenTypes AttributeBlob { get { return attributeBlob; } }
 
 		#endregion // Properties
 

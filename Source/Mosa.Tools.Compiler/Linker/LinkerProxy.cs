@@ -13,7 +13,7 @@ using System.IO;
 
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Compiler.Linker;
-using Mosa.Runtime.Vm;
+using Mosa.Runtime.TypeSystem;
 
 namespace Mosa.Tools.Compiler.Linker
 {

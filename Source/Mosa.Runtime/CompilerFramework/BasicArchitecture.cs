@@ -17,7 +17,6 @@ using Mosa.Runtime.CompilerFramework.Operands;
 namespace Mosa.Runtime.CompilerFramework
 {
 
-
 	/// <summary>
 	/// Implements a basic framework for architectures.
 	/// </summary>

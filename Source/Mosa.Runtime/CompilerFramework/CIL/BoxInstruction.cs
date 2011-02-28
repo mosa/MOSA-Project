@@ -13,7 +13,7 @@ using System.Diagnostics;
 using System.Text;
 
 using Mosa.Runtime.Metadata;
-using Mosa.Runtime.Vm;
+using Mosa.Runtime.TypeSystem;
 
 namespace Mosa.Runtime.CompilerFramework.CIL
 {
@@ -50,7 +50,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			// Retrieve the provider token to check against
 			TokenTypes token = decoder.DecodeTokenType();
 			
-			ctx.Other = decoder.ModuleTypeSystem.GetType (token);
+			ctx.Other = decoder.TypeModule.GetType (token);
 		}
 
 		/// <summary>

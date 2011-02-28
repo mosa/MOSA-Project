@@ -61,9 +61,12 @@ namespace Mosa.Tools.Compiler
 			cliHeader.Flags = RuntimeImageFlags.ILOnly;
 			cliHeader.EntryPointToken = 0x06000001; // FIXME: ??
 
-			LinkerSymbol metadata = this.linker.GetSymbol(Mosa.Runtime.Metadata.Symbol.Name);
-			cliHeader.Metadata.VirtualAddress = (uint)(this.linker.GetSection(SectionKind.Text).VirtualAddress.ToInt64() + metadata.SectionAddress);
-			cliHeader.Metadata.Size = (int)metadata.Length;
+			//LinkerSymbol metadata = this.linker.GetSymbol(Mosa.Runtime.Metadata.Symbol.Name);
+			//cliHeader.Metadata.VirtualAddress = (uint)(this.linker.GetSection(SectionKind.Text).VirtualAddress.ToInt64() + metadata.SectionAddress);
+			//cliHeader.Metadata.Size = (int)metadata.Length;
+
+			cliHeader.Metadata.VirtualAddress = 0;
+			cliHeader.Metadata.Size = 0;
 
 			WriteCilHeader();
 		}
