@@ -170,10 +170,12 @@ namespace Mosa.Runtime.TypeSystem
 			// If the field is another struct, we have to dig down and compute its size too.
 			if (field.SignatureType.Type == CilElementType.ValueType)
 			{
-				return ((ITypeLayout)this).GetTypeSize(field.DeclaringType);
+				size = ((ITypeLayout)this).GetTypeSize(field.DeclaringType);
 			}
-
-			size = GetMemorySize(field.SignatureType);
+			else
+			{
+				size = GetMemorySize(field.SignatureType);
+			}
 
 			fieldSizes.Add(field, size);
 
@@ -334,8 +336,11 @@ namespace Mosa.Runtime.TypeSystem
 
 			if (type.BaseType != null)
 			{
-				((ITypeLayout)(this)).GetTypeSize(type.BaseType);
-				typeSize = typeSizes[type.BaseType];
+				if (!type.IsValueType)
+				{
+					((ITypeLayout)(this)).GetTypeSize(type.BaseType);
+					typeSize = typeSizes[type.BaseType];
+				}
 			}
 
 			foreach (RuntimeField field in type.Fields)
