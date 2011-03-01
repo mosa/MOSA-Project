@@ -84,9 +84,10 @@
     <Compile Include="CompilerFramework\CIL\BreakInstruction.cs" />
     <Compile Include="CompilerFramework\BaseAssemblyCompilerStage.cs" />
     <Compile Include="CompilerFramework\CIL\ExceptionClauseHeader.cs" />
+    <Compile Include="CompilerFramework\CustomAttributeParser.cs" />
+    <Compile Include="CompilerFramework\TypeLayoutStage.cs" />
     <Compile Include="CompilerFramework\ExceptionEngine.cs" />
     <Compile Include="CompilerFramework\IR\ThrowInstruction.cs" />
-    <Compile Include="CompilerFramework\ITypeLayout.cs" />
     <Compile Include="CompilerFramework\GenericsResolverStage.cs" />
     <Compile Include="CompilerFramework\ICompilationSchedulerStage.cs" />
     <Compile Include="CompilerFramework\Intrinsics\InternalAllocateString.cs" />
@@ -253,12 +254,10 @@
     <Compile Include="CompilerFramework\LoopAwareBlockOrderStage.cs" />
     <Compile Include="CompilerFramework\LocalCSE.cs" />
     <Compile Include="CompilerFramework\IMethodCompiler.cs" />
+    <Compile Include="Intrinsic\IntrinsicAttribute.cs" />
     <Compile Include="Linker\BaseAssemblyLinkerStage.cs" />
     <Compile Include="Memory\IMemoryPageManager.cs" />
     <Compile Include="Memory\PageAccessFlags.cs" />
-    <Compile Include="Metadata\Runtime\CilGenericField.cs" />
-    <Compile Include="Metadata\Runtime\CilGenericMethod.cs" />
-    <Compile Include="Metadata\Runtime\CilGenericType.cs" />
     <Compile Include="IJitService.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -415,72 +414,11 @@
     <Compile Include="CompilerFramework\Operands\TemporaryOperand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\TypeLayoutStage.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="CompilerFramework\Operands\LocalVariableOperand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Vm\IModuleTypeSystemInternalList.cs" />
-    <Compile Include="Vm\DefaultModuleTypeSystem.cs" />
-    <Compile Include="Vm\IModuleTypeSystem.cs" />
-    <Compile Include="Vm\GenericArgument.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Blobs\CustomAttributeParser.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Runtime\CilRuntimeField.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Runtime\CilRuntimeMethod.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Metadata\Runtime\CilRuntimeType.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Vm\DefaultTypeSystem.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Vm\IRuntimeAttributable.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Vm\ITypeSystem.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Vm\ReadOnlyRuntimeFieldListView.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Vm\ReadOnlyRuntimeListView.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Vm\ReadOnlyRuntimeMethodListView.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Vm\ReadOnlyRuntimeParameterListView.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Vm\RuntimeAttribute.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Vm\RuntimeField.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Vm\RuntimeMember.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Vm\RuntimeMethod.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Vm\RuntimeObject.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Vm\RuntimeParameter.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Vm\RuntimeType.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Intrinsic\VmCall.cs" />
+    <Compile Include="Intrinsic\VmCallAttribute.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj">
@@ -499,9 +437,9 @@
       <Project>{7033B213-2055-4C6A-B008-D9856267F5D7}</Project>
       <Name>Mosa.Runtime.Metadata</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mosa.Intrinsic\Mosa.Intrinsic.csproj">
-      <Project>{88E003EE-6EEC-4D9A-AE52-94A6F526F115}</Project>
-      <Name>Mosa.Intrinsic</Name>
+    <ProjectReference Include="..\Mosa.Runtime.TypeSystem\Mosa.Runtime.TypeSystem.csproj">
+      <Project>{5F30A68E-05BF-40EA-B576-5EBCDE520449}</Project>
+      <Name>Mosa.Runtime.TypeSystem</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup />

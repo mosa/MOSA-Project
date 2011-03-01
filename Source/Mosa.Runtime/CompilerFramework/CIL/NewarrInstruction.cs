@@ -13,7 +13,7 @@ using System.Diagnostics;
 using System.Text;
 
 using Mosa.Runtime.Metadata;
-using Mosa.Runtime.Vm;
+using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Runtime.CompilerFramework.CIL

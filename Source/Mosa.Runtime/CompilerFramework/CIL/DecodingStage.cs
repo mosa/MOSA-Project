@@ -15,9 +15,9 @@ using Mosa.Runtime;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Metadata.Tables;
-using Mosa.Runtime.Metadata.Runtime;
-using Mosa.Runtime.Vm;
 using Mosa.Compiler.Common;
+using Mosa.Runtime.TypeSystem;
+using Mosa.Runtime.TypeSystem.Generic;
 
 namespace Mosa.Runtime.CompilerFramework.CIL
 {
@@ -72,17 +72,17 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 					if (header.localsSignature != 0)
 					{
-						StandAloneSigRow row = methodCompiler.Method.MetadataModule.Metadata.ReadStandAloneSigRow(header.localsSignature);
+						StandAloneSigRow row = methodCompiler.Method.Module.MetadataModule.Metadata.ReadStandAloneSigRow(header.localsSignature);
 
 						LocalVariableSignature localsSignature;
 
 						if (methodCompiler.Method.DeclaringType is CilGenericType)
 						{
-							localsSignature = new LocalVariableSignature(methodCompiler.Method.MetadataModule.Metadata, row.SignatureBlobIdx, (methodCompiler.Method.DeclaringType as CilGenericType).GenericArguments);
+							localsSignature = new LocalVariableSignature(methodCompiler.Method.Module.MetadataModule.Metadata, row.SignatureBlobIdx, (methodCompiler.Method.DeclaringType as CilGenericType).GenericArguments);
 						}
 						else
 						{
-							localsSignature = new LocalVariableSignature(methodCompiler.Method.MetadataModule.Metadata, row.SignatureBlobIdx);
+							localsSignature = new LocalVariableSignature(methodCompiler.Method.Module.MetadataModule.Metadata, row.SignatureBlobIdx);
 						}	
 
 						methodCompiler.SetLocalVariableSignature(localsSignature);
@@ -176,13 +176,13 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 					{
 						EhClause clause = new EhClause();
 						clause.Read(reader, isFat);
-						this.methodCompiler.Method.ExceptionClauseHeader.AddClause(clause);
+						//this.methodCompiler.Method.ExceptionClauseHeader.AddClause(clause);
 						// FIXME: Create proper basic Blocks for each item in the clause
 					}
 				}
 				while (0x80 == (flags & 0x80));
 
-				methodCompiler.Method.ExceptionClauseHeader.Sort();
+				//methodCompiler.Method.ExceptionClauseHeader.Sort();
 				reader.BaseStream.Position = codepos;
 			}
 		}
@@ -274,9 +274,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// Gets the type system.
 		/// </summary>
 		/// <value>The type system.</value>
-		IModuleTypeSystem IInstructionDecoder.ModuleTypeSystem
+		ITypeModule IInstructionDecoder.TypeModule
 		{
-			get { return moduleTypeSystem; }
+			get { return typeModule; }
 		}
 
 		/// <summary>

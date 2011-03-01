@@ -13,7 +13,7 @@ using System.Diagnostics;
 using System.Text;
 
 using Mosa.Runtime.Metadata;
-using Mosa.Runtime.Vm;
+using Mosa.Runtime.TypeSystem;
 
 namespace Mosa.Runtime.CompilerFramework.CIL
 {
@@ -51,7 +51,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			// Load the stackFrameIndex token from the immediate
 			TokenTypes token = decoder.DecodeTokenType();
 
-			RuntimeType type = decoder.ModuleTypeSystem.GetType(token);
+			RuntimeType type = decoder.TypeModule.GetType(token);
 
 			uint size = (uint)decoder.Compiler.TypeLayout.GetTypeSize( type);
 

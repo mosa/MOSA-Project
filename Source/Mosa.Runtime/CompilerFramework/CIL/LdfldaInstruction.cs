@@ -13,7 +13,7 @@ using System.Diagnostics;
 using System.Text;
 
 using Mosa.Runtime.Metadata;
-using Mosa.Runtime.Vm;
+using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.CompilerFramework.Operands;
 
@@ -50,7 +50,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 			TokenTypes token = decoder.DecodeTokenType();
 
-			ctx.RuntimeField = decoder.ModuleTypeSystem.GetField(token);
+			ctx.RuntimeField = decoder.TypeModule.GetField(token);
 
 			if (ctx.RuntimeField.ContainsGenericParameter)
 			{

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 using Mosa.Runtime.CompilerFramework.Operands;
-using Mosa.Runtime.Vm;
+using Mosa.Runtime.TypeSystem;
 
 namespace Mosa.Runtime.CompilerFramework
 {

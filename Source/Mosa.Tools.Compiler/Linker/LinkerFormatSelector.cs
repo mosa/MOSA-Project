@@ -15,7 +15,7 @@ using System.IO;
 
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Compiler.Linker;
-using Mosa.Runtime.Vm;
+using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
 
@@ -114,7 +114,7 @@ namespace Mosa.Tools.Compiler.Linker
 		{
 			CheckImplementation();
 
-			IModuleTypeSystem mainModule = typeSystem.GetMainModuleTypeSystem();
+			ITypeModule mainModule = typeSystem.MainTypeModule;
 
 			if (mainModule.MetadataModule.EntryPoint != TokenTypes.Module)
 			{

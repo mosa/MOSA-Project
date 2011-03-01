@@ -93,7 +93,7 @@ namespace Mosa.Runtime.CompilerFramework
 		void GetTypeRequirements(SigType type, out int size, out int alignment);
 
 		/// <summary>
-		/// Gets the intrinsics instruction by type
+		/// Gets the intrinsic instruction by type
 		/// </summary>
 		/// <param name="type">The type.</param>
 		/// <returns></returns>

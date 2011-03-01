@@ -10,7 +10,7 @@
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Compiler.Linker;
 using Mosa.Runtime.Metadata.Loader;
-using Mosa.Runtime.Vm;
+using Mosa.Runtime.TypeSystem;
 using Mosa.Tools.Compiler.Linker;
 using Mosa.Tools.Compiler.TypeInitializers;
 
@@ -18,16 +18,16 @@ namespace Mosa.Tools.Compiler
 {
 	public class AotAssemblyCompiler : AssemblyCompiler
 	{
-		public AotAssemblyCompiler(IArchitecture architecture, ITypeInitializerSchedulerStage typeInitializerSchedulerStage, IAssemblyLinker linker, ITypeSystem typeSystem)
-			: base(architecture, typeSystem)
+		public AotAssemblyCompiler(IArchitecture architecture, ITypeInitializerSchedulerStage typeInitializerSchedulerStage, IAssemblyLinker linker, ITypeSystem typeSystem, ITypeLayout typeLayout)
+			: base(architecture, typeSystem, typeLayout)
 		{
 			this.Pipeline.AddRange(
 				new IAssemblyCompilerStage[] 
 					{
-						new TypeLayoutStage(),
 						new AssemblyMemberCompilationSchedulerStage(),
 						new MethodCompilerSchedulerStage(),
 						new TypeInitializerSchedulerStageProxy(typeInitializerSchedulerStage),
+						new TypeLayoutStage(),
 						new LinkerProxy(linker)
 					});
 		}

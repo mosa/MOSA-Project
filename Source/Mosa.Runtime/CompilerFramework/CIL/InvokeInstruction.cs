@@ -15,7 +15,7 @@ using System.Text;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Tables;
 using Mosa.Runtime.Metadata.Signatures;
-using Mosa.Runtime.Vm;
+using Mosa.Runtime.TypeSystem;
 
 namespace Mosa.Runtime.CompilerFramework.CIL
 {
@@ -169,18 +169,17 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			switch (targetType)
 			{
 				case TokenTypes.MethodDef:
-					method = decoder.ModuleTypeSystem.GetMethod(callTarget);
+					method = decoder.TypeModule.GetMethod(callTarget);
 					break;
 
 				case TokenTypes.MemberRef:
-					method = decoder.ModuleTypeSystem.GetMethod(callTarget, decoder.Method.DeclaringType);
-					//System.Console.WriteLine ("CallTarget 0x{0:X} for {1} from {2} ({3})", callTarget, method, decoder.Method);
+					method = decoder.TypeModule.GetMethod(callTarget, decoder.Method.DeclaringType);
 					if (method.DeclaringType.IsGeneric)
 						decoder.Compiler.Scheduler.ScheduleTypeForCompilation(method.DeclaringType);
 					break;
 
 				case TokenTypes.MethodSpec:
-					method = decoder.ModuleTypeSystem.GetMethod(callTarget, decoder.Method.DeclaringType);
+					method = decoder.TypeModule.GetMethod(callTarget);
 					decoder.Compiler.Scheduler.ScheduleTypeForCompilation(method.DeclaringType);
 					break;
 

@@ -14,7 +14,7 @@ using System.Diagnostics;
 
 using Mosa.Runtime;
 using Mosa.Runtime.CompilerFramework;
-using Mosa.Runtime.Vm;
+using Mosa.Runtime.TypeSystem;
 using IR = Mosa.Runtime.CompilerFramework.IR;
 
 namespace Mosa.Platform.x86.Intrinsic

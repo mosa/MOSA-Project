@@ -716,8 +716,7 @@ namespace Mosa.Runtime.TypeSystem
 						throw new NotImplementedException();
 				}
 
-				//object attribute = CustomAttributeParser.Parse(metadataProvider, row.ValueBlobIdx, ctorMethod);
-				RuntimeAttribute runtimeAttribute = new RuntimeAttribute(row, ctorMethod);
+				RuntimeAttribute runtimeAttribute = new RuntimeAttribute(row.ValueBlobIdx, row.TypeIdx, ctorMethod);
 
 				// The following switch matches the AttributeTargets enumeration against
 				// metadata tables, which make valid targets for an attribute.
@@ -845,7 +844,14 @@ namespace Mosa.Runtime.TypeSystem
 					typeSpecs[(int)(token & TokenTypes.RowIndexMask) - 1] = genericType;
 				}
 				else
-					continue;
+				{
+					if (signature.Type is MVarSigType)
+						continue;
+					else if (signature.Type is SZArraySigType)
+						continue;
+					else
+						continue;
+				}
 			}
 
 		}

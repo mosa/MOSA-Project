@@ -7,7 +7,7 @@
  *  Michael Fröhlich (grover) <sharpos@michaelruck.de>
  */
 
-using Mosa.Runtime.Vm;
+using Mosa.Runtime.TypeSystem;
 
 namespace Mosa.Tools.Compiler.TypeInitializers
 {

@@ -12,13 +12,14 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+
 using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Compiler.Linker;
-using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime.Metadata;
-using Mosa.Runtime.Metadata.Runtime;
+using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime.Metadata.Signatures;
-using Mosa.Runtime.Vm;
+using Mosa.Runtime.TypeSystem;
+using Mosa.Runtime.TypeSystem.Generic;
 
 namespace Mosa.Runtime.CompilerFramework
 {
@@ -108,7 +109,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Holds the modules type system
 		/// </summary>
-		protected IModuleTypeSystem moduleTypeSystem;
+		protected ITypeModule moduleTypeSystem;
 
 		#endregion // Data Members
 
@@ -119,7 +120,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <param name="linker">The _linker.</param>
 		/// <param name="architecture">The target compilation Architecture.</param>
-		/// <param name="type">The type, which owns the _method to compile.</param>
+		/// <param name="type">The type, which owns the method to compile.</param>
 		/// <param name="method">The method to compile by this instance.</param>
 		protected BaseMethodCompiler(
 			IAssemblyLinker linker,
@@ -152,7 +153,7 @@ namespace Mosa.Runtime.CompilerFramework
 			pipeline = new CompilerPipeline();
 
 			this.compilationScheduler = compilationScheduler;
-			this.moduleTypeSystem = method.ModuleTypeSystem;
+			this.moduleTypeSystem = method.Module;
 			this.typeSystem = typeSystem;
 			this.typeLayout = typeLayout;
 		}
@@ -169,7 +170,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Gets the assembly, which contains the method.
 		/// </summary>
-		public IMetadataModule Assembly { get { return this.method.MetadataModule; } }
+		public IMetadataModule Assembly { get { return this.moduleTypeSystem.MetadataModule; } }
 
 		/// <summary>
 		/// Gets the _linker used to resolve external symbols.
@@ -177,7 +178,7 @@ namespace Mosa.Runtime.CompilerFramework
 		public IAssemblyLinker Linker { get { return linker; } }
 
 		/// <summary>
-		/// Gets the _method implementation being compiled.
+		/// Gets the method implementation being compiled.
 		/// </summary>
 		public RuntimeMethod Method { get { return method; } }
 
@@ -313,7 +314,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns>A stream, which represents the IL of the method.</returns>
 		public Stream GetInstructionStream()
 		{
-			return method.MetadataModule.GetInstructionStream((long)method.Rva);
+			return method.Module.MetadataModule.GetInstructionStream((long)method.Rva);
 		}
 
 		/// <summary>
@@ -341,7 +342,7 @@ namespace Mosa.Runtime.CompilerFramework
 			if (local == null)
 			{
 				VariableSignature localVariable = localsSig.Locals[index];
-				
+
 				//ScheduleDependencyForCompilation(localVariable.Type);
 
 				local = new LocalVariableOperand(architecture.StackFrameRegister, String.Format("L_{0}", index), index, localVariable.Type);
@@ -365,14 +366,14 @@ namespace Mosa.Runtime.CompilerFramework
 			// stage to a different memory location, it should actually be a new one so sharing object
 			// only saves runtime space/perf.
 			MethodSignature sig = method.Signature;
-		
+
 			if (sig.HasThis || sig.HasExplicitThis)
 			{
 				if (index == 0)
 				{
 					return new ParameterOperand(
 						architecture.StackFrameRegister,
-						new RuntimeParameter(method.MetadataModule, @"this", 2, ParameterAttributes.In),
+						new RuntimeParameter(@"this", 2, ParameterAttributes.In),
 						new ClassSigType((TokenTypes)type.Token));
 				}
 				// Decrement the index, as the caller actually wants a real parameter
@@ -401,32 +402,32 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		// NOT USED
-		private void ScheduleDependencyForCompilation(SigType signatureType)
-		{
-			RuntimeType runtimeType = null;
+		//private void ScheduleDependencyForCompilation(SigType signatureType)
+		//{
+		//    RuntimeType runtimeType = null;
 
-			TypeSigType typeSigType = signatureType as TypeSigType;
-			if (typeSigType != null)
-			{
-				runtimeType = moduleTypeSystem.GetType(typeSigType.Token);
-			}
-			else
-			{
-				GenericInstSigType genericSignatureType = signatureType as GenericInstSigType;
-				if (genericSignatureType != null)
-				{
-					RuntimeType genericType = moduleTypeSystem.GetType(genericSignatureType.BaseType.Token);
-					Console.WriteLine(@"Loaded generic type {0}", genericType.FullName);
+		//    TypeSigType typeSigType = signatureType as TypeSigType;
+		//    if (typeSigType != null)
+		//    {
+		//        runtimeType = moduleTypeSystem.GetType(typeSigType.Token);
+		//    }
+		//    else
+		//    {
+		//        GenericInstSigType genericSignatureType = signatureType as GenericInstSigType;
+		//        if (genericSignatureType != null)
+		//        {
+		//            RuntimeType genericType = moduleTypeSystem.GetType(genericSignatureType.BaseType.Token);
+		//            Console.WriteLine(@"Loaded generic type {0}", genericType.FullName);
 
-					runtimeType = new CilGenericType(moduleTypeSystem, genericType, genericSignatureType);
-				}
-			}
+		//            runtimeType = new CilGenericType(moduleTypeSystem, genericType, genericSignatureType);
+		//        }
+		//    }
 
-			if (runtimeType != null)
-			{
-				compilationScheduler.ScheduleTypeForCompilation(runtimeType);
-			}
-		}
+		//    if (runtimeType != null)
+		//    {
+		//        compilationScheduler.ScheduleTypeForCompilation(runtimeType);
+		//    }
+		//}
 
 		/// <summary>
 		/// Sets the signature of local variables in the method.

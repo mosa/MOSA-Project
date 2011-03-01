@@ -16,8 +16,10 @@ using NDesk.Options;
 
 using Mosa.Runtime;
 using Mosa.Runtime.CompilerFramework;
+using Mosa.Runtime.Metadata;
+using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Metadata.Loader;
-using Mosa.Runtime.Vm;
+using Mosa.Runtime.TypeSystem;
 using Mosa.Compiler.Linker;
 using Mosa.Tools.Compiler.Boot;
 using Mosa.Tools.Compiler.Linker;
@@ -171,7 +173,7 @@ namespace Mosa.Tools.Compiler
 			Console.WriteLine("Copyright 2008 by Novell. NDesk.Options is released under the MIT/X11 license.");
 			Console.WriteLine();
 			Console.WriteLine("Parsing options...");
-			
+
 			try
 			{
 				if (args == null || args.Length == 0)
@@ -226,10 +228,10 @@ namespace Mosa.Tools.Compiler
 			DateTime start = DateTime.Now;
 			Compile();
 			DateTime end = DateTime.Now;
-			
+
 			TimeSpan time = end - start;
-			Console.WriteLine ();
-			Console.WriteLine ("Compilation time: " + time);
+			Console.WriteLine();
+			Console.WriteLine("Compilation time: " + time);
 
 			//try
 			//{
@@ -266,11 +268,23 @@ namespace Mosa.Tools.Compiler
 			IAssemblyLoader assemblyLoader = new AssemblyLoader();
 			assemblyLoader.InitializePrivatePaths(this.GetInputFileNames());
 
-			ITypeSystem typeSystem = new DefaultTypeSystem(assemblyLoader);
-			typeSystem.LoadModules(this.GetInputFileNames());
+			foreach (string file in this.GetInputFileNames())
+			{
+				assemblyLoader.LoadModule(file);
+			}
+
+			ITypeSystem typeSystem = new TypeSystem();
+			typeSystem.LoadModules(assemblyLoader.Modules);
+
+			int nativePointerSize;
+			int nativePointerAlignment;
+
+			this.architectureSelector.Architecture.GetTypeRequirements(BuiltInSigType.IntPtr, out nativePointerSize, out nativePointerAlignment);
+
+			TypeLayout typeLayout = new TypeLayout(typeSystem, nativePointerSize, nativePointerAlignment);
 
 			// Create the compiler
-			using (AotCompiler aot = new AotCompiler(this.architectureSelector.Architecture, typeSystem))
+			using (AotCompiler aot = new AotCompiler(this.architectureSelector.Architecture, typeSystem, typeLayout))
 			{
 				aot.Pipeline.AddRange(new IAssemblyCompilerStage[] 
 					{
@@ -281,7 +295,6 @@ namespace Mosa.Tools.Compiler
 						new MethodCompilerSchedulerStage(),
 						new TypeInitializers.TypeInitializerSchedulerStage(),
 						this.bootFormatStage,
-						new Metadata.MetadataBuilderStage(),
 						new CilHeaderBuilderStage(),
 						new ObjectFileLayoutStage(),
 						this.linkerStage,
@@ -291,12 +304,6 @@ namespace Mosa.Tools.Compiler
 				aot.Run();
 			}
 		}
-
-		//private IMetadataModule GetMainAssembly(IAssemblyLoader assemblyLoader)
-		//{
-		//    string firstAssembly = this.inputFiles[0].FullName;
-		//    return assemblyLoader.Load(firstAssembly);
-		//}
 
 		/// <summary>
 		/// Gets a list of input file names.

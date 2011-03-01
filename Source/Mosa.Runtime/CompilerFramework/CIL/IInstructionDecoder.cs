@@ -8,7 +8,7 @@
  */
 
 using Mosa.Runtime.Metadata;
-using Mosa.Runtime.Vm;
+using Mosa.Runtime.TypeSystem;
 
 namespace Mosa.Runtime.CompilerFramework.CIL
 {
@@ -31,7 +31,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// Gets the type system.
 		/// </summary>
 		/// <value>The type system.</value>
-		IModuleTypeSystem ModuleTypeSystem { get; }
+		ITypeModule TypeModule { get; }
 
 		/// <summary>
 		/// Decodes the byte value from the instruction stream

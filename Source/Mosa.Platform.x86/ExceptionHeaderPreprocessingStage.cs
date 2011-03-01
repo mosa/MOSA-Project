@@ -56,10 +56,11 @@ namespace Mosa.Platform.x86
 		{
 			this.labelMapping.Clear();
 
-			foreach (EhClause clause in this.methodCompiler.Method.ExceptionClauseHeader.Clauses)
-			{
-				AddClauseLabels(clause);
-			}
+			//FIXME
+			//foreach (EhClause clause in this.methodCompiler.Method.ExceptionClauseHeader.Clauses)
+			//{
+			//    AddClauseLabels(clause);
+			//}
 		}
 
 		/// <summary>

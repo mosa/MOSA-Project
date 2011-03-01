@@ -19,7 +19,7 @@ using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Compiler.Linker;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
-using Mosa.Runtime.Vm;
+using Mosa.Runtime.TypeSystem;
 using IR = Mosa.Runtime.CompilerFramework.IR;
 
 namespace Mosa.Platform.x86
@@ -1029,15 +1029,16 @@ namespace Mosa.Platform.x86
 			// Call exception handling
 			context.AppendInstruction(CPUx86.Instruction.CallInstruction, null, method);
 
-			// Compile exception handling if neccessary
+			// Compile exception handling if necessary
 			if (!exceptionHandlingCompiled)
 			{
-				this.methodCompiler.Scheduler.ScheduleTypeForCompilation(typeSystem.GetType(@"Mosa.Platforms.x86.RegisterContext, Mosa.Platforms.x86"));
-				this.methodCompiler.Scheduler.ScheduleTypeForCompilation(typeSystem.GetType(@"Mosa.Platforms.x86.ExceptionEngine, Mosa.Platforms.x86"));
-				(this.typeLayout as TypeLayoutStage).CreateSequentialLayout(typeSystem.GetType(@"Mosa.Platforms.x86.RegisterContext, Mosa.Platforms.x86"));
-				(this.typeLayout as TypeLayoutStage).CreateSequentialLayout(typeSystem.GetType(@"Mosa.Platforms.x86.ExceptionEngine, Mosa.Platforms.x86"));
-				(this.typeLayout as TypeLayoutStage).BuildMethodTable(typeSystem.GetType(@"Mosa.Platforms.x86.RegisterContext, Mosa.Platforms.x86"));
-				(this.typeLayout as TypeLayoutStage).BuildMethodTable(typeSystem.GetType(@"Mosa.Platforms.x86.ExceptionEngine, Mosa.Platforms.x86"));
+				//FIXME
+				//this.methodCompiler.Scheduler.ScheduleTypeForCompilation(typeSystem.GetType(@"Mosa.Platforms.x86.RegisterContext, Mosa.Platforms.x86"));
+				//this.methodCompiler.Scheduler.ScheduleTypeForCompilation(typeSystem.GetType(@"Mosa.Platforms.x86.ExceptionEngine, Mosa.Platforms.x86"));
+				//(this.typeLayout as TypeLayoutStage).CreateSequentialLayout(typeSystem.GetType(@"Mosa.Platforms.x86.RegisterContext, Mosa.Platforms.x86"));
+				//(this.typeLayout as TypeLayoutStage).CreateSequentialLayout(typeSystem.GetType(@"Mosa.Platforms.x86.ExceptionEngine, Mosa.Platforms.x86"));
+				//(this.typeLayout as TypeLayoutStage).BuildMethodTable(typeSystem.GetType(@"Mosa.Platforms.x86.RegisterContext, Mosa.Platforms.x86"));
+				//(this.typeLayout as TypeLayoutStage).BuildMethodTable(typeSystem.GetType(@"Mosa.Platforms.x86.ExceptionEngine, Mosa.Platforms.x86"));
 				exceptionHandlingCompiled = true;
 			}
 		}

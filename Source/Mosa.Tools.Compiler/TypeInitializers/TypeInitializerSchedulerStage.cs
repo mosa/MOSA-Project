@@ -11,7 +11,7 @@ using System.Collections.Generic;
 
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.CompilerFramework.Operands;
-using Mosa.Runtime.Vm;
+using Mosa.Runtime.TypeSystem;
 using Mosa.Tools.Compiler.LinkTimeCodeGeneration;
 using Mosa.Compiler.Linker;
 using Mosa.Runtime.Metadata;
@@ -103,11 +103,11 @@ namespace Mosa.Tools.Compiler.TypeInitializers
 		/// </summary>
 		void IAssemblyCompilerStage.Run()
 		{
-			IModuleTypeSystem mainModule = typeSystem.GetMainModuleTypeSystem();
+			ITypeModule mainTypeModule = typeSystem.MainTypeModule;
 
-			if (mainModule.MetadataModule.EntryPoint != TokenTypes.Module)
+			if (mainTypeModule.MetadataModule.EntryPoint != TokenTypes.Module)
 			{
-				RuntimeMethod entrypoint = mainModule.GetMethod(mainModule.MetadataModule.EntryPoint);
+				RuntimeMethod entrypoint = mainTypeModule.GetMethod(mainTypeModule.MetadataModule.EntryPoint);
 
 				Schedule(entrypoint);
 			}

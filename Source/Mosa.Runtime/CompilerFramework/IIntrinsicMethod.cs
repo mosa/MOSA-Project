@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using System.Text;
 
 using Mosa.Runtime.CompilerFramework;
-using Mosa.Runtime.Vm;
+using Mosa.Runtime.TypeSystem;
 
 namespace Mosa.Runtime.CompilerFramework
 {
@@ -22,7 +22,7 @@ namespace Mosa.Runtime.CompilerFramework
 	public interface IIntrinsicMethod
 	{
 		/// <summary>
-		/// Replaces the instrinsic call site
+		/// Replaces the intrinsic call site
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="typeSystem">The type system.</param>

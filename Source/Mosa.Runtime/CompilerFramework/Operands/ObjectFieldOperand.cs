@@ -7,8 +7,9 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
+using System;
 
-using Mosa.Runtime.Vm;
+using Mosa.Runtime.TypeSystem;
 
 namespace Mosa.Runtime.CompilerFramework.Operands
 {
@@ -24,8 +25,8 @@ namespace Mosa.Runtime.CompilerFramework.Operands
 		/// </summary>
 		/// <param name="objectInstance">The operand, representing the object instance.</param>
 		/// <param name="field">The referenced field.</param>
-		public ObjectFieldOperand(Operand objectInstance, RuntimeField field) :
-			base(field.SignatureType, null, field.Address)
+		public ObjectFieldOperand(Operand objectInstance, RuntimeField field, IntPtr offset) :
+			base(field.SignatureType, null, offset) /* field.Address */
 		{
 		}
 

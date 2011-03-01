@@ -230,14 +230,18 @@ namespace Mosa.Platform.x86
 				case CilElementType.R8: memorySize = alignment = 8; break;
 				case CilElementType.Boolean: memorySize = alignment = 4; break;
 				case CilElementType.Char: memorySize = alignment = 4; break;
+
+				// Platform specific
 				case CilElementType.Ptr: memorySize = alignment = 4; break;
-				case CilElementType.ValueType: memorySize = alignment = 4; break; // FIXME: HACK!
+				case CilElementType.I: memorySize = alignment = 4; break;
+				case CilElementType.U: memorySize = alignment = 4; break;
+
 				default: memorySize = alignment = 4; break;
 			}
 		}
 
 		/// <summary>
-		/// Gets the intrinsics instruction by type
+		/// Gets the intrinsic instruction by type
 		/// </summary>
 		/// <param name="type">The type.</param>
 		/// <returns></returns>

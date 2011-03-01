@@ -11,7 +11,7 @@ using System;
 using System.Collections.Generic;
 
 using Mosa.Runtime.Metadata.Loader;
-using Mosa.Runtime.Vm;
+using Mosa.Runtime.TypeSystem;
 
 namespace Mosa.Tools.Compiler
 {
@@ -30,60 +30,22 @@ namespace Mosa.Tools.Compiler
 		/// <param name="moduleTypeSystem">The module type system.</param>
 		/// <param name="nameSpace">The name space.</param>
 		/// <param name="name">The name.</param>
-		public LinkerGeneratedType(IModuleTypeSystem moduleTypeSystem, string nameSpace, string name) :
-			base(moduleTypeSystem, 0)
+		/// <param name="baseType">Type of the base.</param>
+		public LinkerGeneratedType(ITypeModule moduleTypeSystem, string nameSpace, string name, RuntimeType baseType) :
+			base(moduleTypeSystem, 0, baseType)
 		{
 			if (nameSpace == null)
 				throw new ArgumentNullException(@"namespace");
 			if (name == null)
 				throw new ArgumentNullException(@"name");
 
-			this.methods = new List<RuntimeMethod>();
-
 			base.Namespace = nameSpace;
 			base.Name = name;
-			base.Methods = this.methods;
-			base.Fields = new List<RuntimeField>();
+
+			this.methods = new List<RuntimeMethod>();
 		}
 
 		#endregion // Construction
-
-		#region RuntimeType Overrides
-
-		/// <summary>
-		/// Gets the base type.
-		/// </summary>
-		/// <returns>The base type.</returns>
-		protected override RuntimeType GetBaseType()
-		{
-			// Compiler generated types don't have a base type.
-			return null;
-		}
-
-		/// <summary>
-		/// Called to retrieve the name of the type.
-		/// </summary>
-		/// <returns>The name of the type.</returns>
-		protected override string GetName()
-		{
-			return this.Name;
-		}
-
-		/// <summary>
-		/// Called to retrieve the namespace of the type.
-		/// </summary>
-		/// <returns>The namespace of the type.</returns>
-		protected override string GetNamespace()
-		{
-			return this.Namespace;
-		}
-
-		protected override IList<RuntimeType> LoadInterfaces()
-		{
-			return NoInterfaces;
-		}
-
-		#endregion // RuntimeType Overrides
 
 		public void AddMethod(RuntimeMethod method)
 		{

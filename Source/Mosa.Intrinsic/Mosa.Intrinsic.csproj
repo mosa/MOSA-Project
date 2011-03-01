@@ -58,11 +58,6 @@
     <WarningLevel>2</WarningLevel>
     <DebugType>none</DebugType>
   </PropertyGroup>
-  <ItemGroup>
-    <Compile Include="IntrinsicAttribute.cs" />
-    <Compile Include="VmCall.cs" />
-    <Compile Include="VmCallAttribute.cs" />
-  </ItemGroup>
   <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

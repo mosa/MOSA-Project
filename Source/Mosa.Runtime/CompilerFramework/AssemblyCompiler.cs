@@ -10,7 +10,7 @@
 using System;
 using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime.Metadata;
-using Mosa.Runtime.Vm;
+using Mosa.Runtime.TypeSystem;
 
 namespace Mosa.Runtime.CompilerFramework
 {
@@ -38,6 +38,11 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		protected ITypeSystem typeSystem;
 
+		/// <summary>
+		/// Holds the current type layout during complication
+		/// </summary>
+		protected ITypeLayout typeLayout;
+
 		#endregion // Data members
 
 		#region Construction
@@ -47,7 +52,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <param name="architecture">The compiler target architecture.</param>
 		/// <param name="typeSystem">The type system.</param>
-		protected AssemblyCompiler(IArchitecture architecture, ITypeSystem typeSystem)
+		protected AssemblyCompiler(IArchitecture architecture, ITypeSystem typeSystem, ITypeLayout typeLayout)
 		{
 			if (architecture == null)
 				throw new ArgumentNullException(@"architecture");
@@ -55,6 +60,7 @@ namespace Mosa.Runtime.CompilerFramework
 			this.architecture = architecture;
 			this.pipeline = new CompilerPipeline();
 			this.typeSystem = typeSystem;
+			this.typeLayout = typeLayout;
 		}
 
 		#endregion // Construction
@@ -96,6 +102,11 @@ namespace Mosa.Runtime.CompilerFramework
 		public ITypeSystem TypeSystem
 		{
 			get { return typeSystem; }
+		}
+
+		public ITypeLayout TypeLayout
+		{
+			get { return typeLayout; }
 		}
 
 		#endregion // Properties

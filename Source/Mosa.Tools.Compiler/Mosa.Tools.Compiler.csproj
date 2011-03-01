@@ -78,10 +78,6 @@
     <Compile Include="Linker\ObjectFileLayoutStage.cs" />
     <Compile Include="Linker\PortableExecutableLinkerStage.cs" />
     <Compile Include="Linker\PortableExecutableLinkerWrapper.cs" />
-    <Compile Include="Metadata\MetadataBuilderStage.cs" />
-    <Compile Include="Metadata\MetadataStreamHeader.cs" />
-    <Compile Include="Metadata\MetadataTableCodedIndexWriter.cs" />
-    <Compile Include="Metadata\MetadataTableWriter.cs" />
     <Compile Include="Stage\MethodCompilerStageWrapper.cs" />
     <Compile Include="RegisterAllocatorSelector.cs" />
     <Compile Include="AotCompiler.cs">
@@ -164,12 +160,18 @@
       <Project>{7033B213-2055-4C6A-B008-D9856267F5D7}</Project>
       <Name>Mosa.Runtime.Metadata</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mosa.Runtime.TypeSystem\Mosa.Runtime.TypeSystem.csproj">
+      <Project>{5F30A68E-05BF-40EA-B576-5EBCDE520449}</Project>
+      <Name>Mosa.Runtime.TypeSystem</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mosa.Runtime\Mosa.Runtime.csproj">
       <Project>{75A12A8A-8C8F-4D1E-801B-689D8F781BF4}</Project>
       <Name>Mosa.Runtime</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Metadata\" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <PropertyGroup>
     <PreBuildEvent>

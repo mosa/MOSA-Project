@@ -12,7 +12,7 @@ using System.Collections.Generic;
 
 using Mosa.Runtime;
 using Mosa.Runtime.CompilerFramework;
-using Mosa.Runtime.Vm;
+using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.CompilerFramework.Operands;

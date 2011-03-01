@@ -10,8 +10,10 @@
 using System;
 using System.Runtime.CompilerServices;
 
-using Mosa.Runtime.Vm;
+using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.Memory;
+using Mosa.Runtime.Intrinsic;
+
 using Mosa.Test.Runtime.CompilerFramework;
 
 namespace Mosa.Intrinsic

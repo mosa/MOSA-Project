@@ -13,7 +13,7 @@ using System.Linq;
 using System.Text;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Tools.Compiler.LinkTimeCodeGeneration;
-using Mosa.Runtime.Vm;
+using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.CompilerFramework.IR;
 
 using Mosa.Platform.x86;
@@ -72,10 +72,12 @@ namespace Mosa.Tools.Compiler.Stage
 
 		private RuntimeMethod GenerateMethod(string nameSpace, string typeName, string methodName)
 		{
-			var type = new LinkerGeneratedType(moduleTypeSystem, nameSpace, typeName);
+			var type = new LinkerGeneratedType(typeModule, nameSpace, typeName, null);
+
+			MethodSignature signature = new MethodSignature(new SigType(CilElementType.Void), new SigType[0]);
 
 			// Create the method
-			LinkerGeneratedMethod method = new LinkerGeneratedMethod(moduleTypeSystem, methodName, type);
+			LinkerGeneratedMethod method = new LinkerGeneratedMethod(typeModule, methodName, type, signature);
 			type.AddMethod(method);
 
 			return method;
@@ -89,12 +91,13 @@ namespace Mosa.Tools.Compiler.Stage
 
 		private void CompileObjectEquals(string typeName)
 		{
-			LinkerGeneratedType type = new LinkerGeneratedType(moduleTypeSystem, @"System", typeName);
+			LinkerGeneratedType type = new LinkerGeneratedType(typeModule, @"System", typeName, null);
+
+			MethodSignature signature = new MethodSignature(BuiltInSigType.Boolean, new SigType[] { BuiltInSigType.Object });
 
 			// Create the method
-			LinkerGeneratedMethod method = new LinkerGeneratedMethod(moduleTypeSystem, @"Equals", type);
-			method.Parameters.Add(new RuntimeParameter(null, @"obj", 0, ParameterAttributes.In));
-			method.SetSignature(new MethodSignature(BuiltInSigType.Boolean, new SigType[] { BuiltInSigType.Object }));
+			LinkerGeneratedMethod method = new LinkerGeneratedMethod(typeModule, @"Equals", type, signature);
+			method.Parameters.Add(new RuntimeParameter(@"obj", 0, ParameterAttributes.In));
 			type.AddMethod(method);
 
 			this.Compile(method);

@@ -13,7 +13,7 @@ namespace Mosa.Runtime.CompilerFramework
 	using System.Collections.Generic;
 	using System.Diagnostics;
 
-	using Mosa.Runtime.Vm;
+	using Mosa.Runtime.TypeSystem;
 
 	/// <summary>
 	/// Schedules all types of an assembly for compilation.
@@ -50,7 +50,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 		void IAssemblyCompilerStage.Run()
 		{
-			foreach (RuntimeType type in typeSystem.GetCompiledTypes())
+			foreach (RuntimeType type in typeSystem.GetAllTypes())
 			{
 				if (type.ContainsOpenGenericParameters)
 					continue;

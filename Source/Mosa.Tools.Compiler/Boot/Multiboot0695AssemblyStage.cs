@@ -168,7 +168,7 @@ namespace Mosa.Tools.Compiler.Boot
 			}
 			else
 			{
-				var typeInitializerSchedulerStage = this.compiler.Pipeline.FindFirst<ITypeInitializerSchedulerStage>();
+				ITypeInitializerSchedulerStage typeInitializerSchedulerStage = this.compiler.Pipeline.FindFirst<ITypeInitializerSchedulerStage>();
 
 				SigType I4 = new SigType(CilElementType.I4);
 				RegisterOperand ecx = new RegisterOperand(I4, GeneralPurposeRegister.ECX);

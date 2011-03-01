@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 
 using Mosa.Runtime.Metadata.Signatures;
-using Mosa.Runtime.Vm;
+using Mosa.Runtime.TypeSystem;
 
 namespace Mosa.Runtime.CompilerFramework
 {
@@ -25,6 +25,8 @@ namespace Mosa.Runtime.CompilerFramework
 
 		private readonly Queue<RuntimeType> typeQueue;
 
+		private readonly Dictionary<RuntimeType, RuntimeType> compiled;
+
 		#region IPipelineStage
 
 		string IPipelineStage.Name { get { return @"MethodCompilerSchedulerStage"; } }
@@ -35,6 +37,7 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			methodQueue = new Queue<RuntimeMethod>();
 			typeQueue = new Queue<RuntimeType>();
+			compiled = new Dictionary<RuntimeType, RuntimeType>();
 		}
 
 		#region IAssemblyCompilerStage members
@@ -143,10 +146,8 @@ namespace Mosa.Runtime.CompilerFramework
 			if (type == null)
 				throw new ArgumentNullException(@"type");
 
-			if (type.IsCompiled)
-			{
+			if (compiled.ContainsKey(type))
 				return;
-			}
 
 			if (!type.IsGeneric)
 			{
@@ -157,7 +158,7 @@ namespace Mosa.Runtime.CompilerFramework
 				Debug.WriteLine(String.Format(@"Scheduling {0}", type.FullName));
 
 				typeQueue.Enqueue(type);
-				type.IsCompiled = true;
+				compiled.Add(type, type);
 			}
 		}
 

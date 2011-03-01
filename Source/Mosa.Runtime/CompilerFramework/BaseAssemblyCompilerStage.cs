@@ -15,7 +15,7 @@ using System.Collections.Generic;
 using Mosa.Compiler.Linker;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Tables;
-using Mosa.Runtime.Vm;
+using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Metadata.Loader;
 
@@ -43,6 +43,11 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		protected ITypeSystem typeSystem;
 
+		/// <summary>
+		/// Holds the current type layout during compilation.
+		/// </summary>
+		protected ITypeLayout typeLayout;
+
 		#endregion // Data members
 
 		#region IAssemblyCompilerStage members
@@ -52,6 +57,7 @@ namespace Mosa.Runtime.CompilerFramework
 			this.compiler = compiler;
 			architecture = compiler.Architecture;
 			typeSystem = compiler.TypeSystem;
+			typeLayout = compiler.TypeLayout;
 		}
 
 		#endregion // IAssemblyCompilerStage members

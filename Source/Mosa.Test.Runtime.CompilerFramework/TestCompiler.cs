@@ -20,7 +20,7 @@ using MbUnit.Framework;
 
 using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime;
-using Mosa.Runtime.Vm;
+using Mosa.Runtime.TypeSystem;
 
 namespace Mosa.Test.Runtime.CompilerFramework
 {
@@ -31,7 +31,7 @@ namespace Mosa.Test.Runtime.CompilerFramework
 		/// <summary>
 		/// Holds the type system
 		/// </summary>
-		ITypeSystem typeSystem;
+		private ITypeSystem typeSystem;
 
 		/// <summary>
 		/// 
@@ -44,14 +44,14 @@ namespace Mosa.Test.Runtime.CompilerFramework
 		private static Dictionary<string, CodeDomProvider> providerCache = new Dictionary<string, CodeDomProvider>();
 
 		/// <summary>
-		/// Holds the temporary files collection.
-		/// </summary>
-		private static TempFileCollection temps = new TempFileCollection(TempDirectory, false);
-
-		/// <summary>
 		/// 
 		/// </summary>
 		private static string tempDirectory;
+
+		/// <summary>
+		/// Holds the temporary files collection.
+		/// </summary>
+		private static TempFileCollection temps = new TempFileCollection(TempDirectory, false);
 
 		#endregion // Data members
 
@@ -98,8 +98,8 @@ namespace Mosa.Test.Runtime.CompilerFramework
 			);
 
 			Debug.Assert(runtimeMethod != null, runtimeMethod.ToString());
-			Debug.Assert(runtimeMethod.Address != null, runtimeMethod.ToString());
-			Debug.Assert(runtimeMethod.Address != IntPtr.Zero, runtimeMethod.ToString());
+			//Debug.Assert(runtimeMethod.Address != null, runtimeMethod.ToString());
+			//Debug.Assert(runtimeMethod.Address != IntPtr.Zero, runtimeMethod.ToString());
 
 			// Get delegate name
 			string delegateName;
@@ -114,9 +114,11 @@ namespace Mosa.Test.Runtime.CompilerFramework
 
 			Debug.Assert(delegateType != null, delegateName);
 
+			//NOTES: Would it be better to get the address from the linker?
+
 			// Create a delegate for the test method
 			Delegate fn = Marshal.GetDelegateForFunctionPointer(
-				runtimeMethod.Address,
+				IntPtr.Zero, // runtimeMethod.Address,
 				delegateType
 			);
 
@@ -161,7 +163,7 @@ namespace Mosa.Test.Runtime.CompilerFramework
 		/// <returns>An instance of <see cref="RuntimeMethod"/>.</returns>
 		private RuntimeMethod FindMethod(string ns, string type, string method)
 		{
-			foreach (RuntimeType t in typeSystem.GetCompiledTypes())
+			foreach (RuntimeType t in typeSystem.GetAllTypes())
 			{
 				if (t.Name != type)
 					continue;
@@ -247,18 +249,16 @@ namespace Mosa.Test.Runtime.CompilerFramework
 
 		private void RunMosaCompiler(TestCompilerSettings settings, string assemblyFile)
 		{
-			List<string> files = new List<string>();
-			files.Add(assemblyFile);
+			IAssemblyLoader assemblyLoader = new AssemblyLoader();
+			assemblyLoader.InitializePrivatePaths(settings.References);
 
 			foreach (string file in settings.References)
-				files.Add(file);
+				assemblyLoader.LoadModule(file);
 
-			IAssemblyLoader assemblyLoader = new AssemblyLoader();
+			typeSystem = new TypeSystem();
+			typeSystem.LoadModules(assemblyLoader.Modules);
 
-			typeSystem = new DefaultTypeSystem(assemblyLoader);
-			typeSystem.LoadModules(files);
-
-			TestCaseAssemblyCompiler.Compile(typeSystem, assemblyLoader);
+			TestCaseAssemblyCompiler.Compile(typeSystem);
 		}
 
 	}

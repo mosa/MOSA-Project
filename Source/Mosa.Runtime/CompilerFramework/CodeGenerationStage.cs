@@ -79,7 +79,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		protected virtual void EmitInstructions()
 		{
-			ExceptionClauseHeader exceptionClauseHeader = this.methodCompiler.Method.ExceptionClauseHeader;
+			//ExceptionClauseHeader exceptionClauseHeader = this.methodCompiler.Method.ExceptionClauseHeader;
 			foreach (BasicBlock block in basicBlocks)
 			{
 				BlockStart(block);

@@ -9,7 +9,7 @@
 
 using System;
 
-namespace Mosa.Intrinsic
+namespace Mosa.Runtime.Intrinsic
 {
 	/// <summary>
 	/// An enumeration used to identify icalls provided by the MOSA VM.
