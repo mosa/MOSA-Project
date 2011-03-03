@@ -23,7 +23,7 @@ namespace Mosa.Runtime.CompilerFramework
 	{
 		public static readonly InstructionLogger Instance = new InstructionLogger();
 
-		public static bool output = true;
+		public static bool output = false;
 		public static string classfilter = string.Empty;
 
 		#region IPipelineStage

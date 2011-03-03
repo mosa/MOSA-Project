@@ -47,10 +47,7 @@ namespace Mosa.Intrinsic
 		/// <value>The runtime call of this attribute.</value>
 		public VmCall VmCall
 		{
-			get
-			{
-				return this.vmCall;
-			}
+			get { return this.vmCall; }
 		}
 
 		#endregion // Properties

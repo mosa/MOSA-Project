@@ -44,7 +44,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 
 		private RuntimeType vmCallAttribute = null;
 
-		private RuntimeType[] intrinsicAttributeTypes = null;
+		private RuntimeType vmIntrinsicAttribute = null;
 
 		#endregion // Data members
 
@@ -68,9 +68,8 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			vmCallAttribute = typeSystem.GetType("Mosa.Intrinsic", "VmCallAttribute");
 
 			// HACK: This allows us to resolve IntrinsicAttribute from Korlib without directly referencing it. It is slower, but works.
-			intrinsicAttributeTypes = new RuntimeType[2];
-			intrinsicAttributeTypes[0] = typeSystem.GetType("Mosa.Intrinsic", "Mosa.Intrinsic", "IntrinsicAttribute");
-			intrinsicAttributeTypes[1] = typeSystem.GetType("mscorlib", "Mosa.Intrinsic", "IntrinsicAttribute");
+			vmIntrinsicAttribute = typeSystem.GetType("mscorlib", "Mosa.Intrinsic", "IntrinsicAttribute");
+			//vmIntrinsicAttributes[1] = typeSystem.GetType("Mosa.Intrinsic", "Mosa.Intrinsic", "IntrinsicAttribute");
 
 			base.Run();
 		}
@@ -290,14 +289,17 @@ namespace Mosa.Runtime.CompilerFramework.IR
 				return;
 			}
 
-			if (!ProcessVmCall(context) && !ProcessIntrinsicCall(context))
-			{
-				// Create a symbol operand for the invocation target
-				RuntimeMethod invokeTarget = context.InvokeTarget;
-				SymbolOperand symbolOperand = SymbolOperand.FromMethod(invokeTarget);
+			if (ProcessVmCall(context))
+				return;
 
-				ProcessInvokeInstruction(context, symbolOperand, context.Result, new List<Operand>(context.Operands));
-			}
+			if (ProcessIntrinsicCall(context))
+				return;
+
+			// Create a symbol operand for the invocation target
+			RuntimeMethod invokeTarget = context.InvokeTarget;
+			SymbolOperand symbolOperand = SymbolOperand.FromMethod(invokeTarget);
+
+			ProcessInvokeInstruction(context, symbolOperand, context.Result, new List<Operand>(context.Operands));
 		}
 
 		/// <summary>
@@ -1719,7 +1721,9 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// Processes intrinsic method calls.
 		/// </summary>
 		/// <param name="context">The transformation context.</param>
-		/// <returns><c>true</c> if the method was replaced by an intrinsic; <c>false</c> otherwise.</returns>
+		/// <returns>
+		/// 	<c>true</c> if the method was replaced by an intrinsic; <c>false</c> otherwise.
+		/// </returns>
 		/// <remarks>
 		/// This method checks if the call target has an Intrinsic-Attribute applied with
 		/// the current architecture. If it has, the method call is replaced by the specified
@@ -1727,42 +1731,15 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// </remarks>
 		private bool ProcessIntrinsicCall(Context context)
 		{
-			// Retrieve the runtime type
-			object attribute = this.FindIntrinsicAttributeInstance(context);
+			IIntrinsicMethod instrinsic = GetIntrinsicMethod(context);
 
-			if (attribute != null)
-			{
-				Type attributeType = attribute.GetType();
-				Type architecture = (Type)attributeType.InvokeMember(@"Architecture", BindingFlags.Public | BindingFlags.GetProperty | BindingFlags.Instance, null, attribute, null);
-				Type instructionType = (Type)attributeType.InvokeMember(@"InstructionType", BindingFlags.Public | BindingFlags.GetProperty | BindingFlags.Instance, null, attribute, null);
+			if (instrinsic == null)
+				return false;
 
-				if (architecture == null)
-				{
-					IIntrinsicMethod instrinsic = (IIntrinsicMethod)Activator.CreateInstance(instructionType, true);
-					instrinsic.ReplaceIntrinsicCall(context, typeSystem);
-					return true;
-				}
-				else if (architecture.IsInstanceOfType(this.architecture))
-				{
-					// Found a replacement for the call...
-					try
-					{
-						IIntrinsicMethod instrinsic = this.architecture.GetIntrinsicMethod(instructionType);
-						instrinsic.ReplaceIntrinsicCall(context, typeSystem);
-						return true;
-					}
-					catch (Exception e)
-					{
-						string message = "Failed to replace intrinsic call with its instruction: " + instructionType.ToString();
-						Trace.WriteLine(message);
-						Trace.WriteLine(e);
+			instrinsic.ReplaceIntrinsicCall(context, typeSystem);
 
-						throw new CompilationException(message, e);
-					}
-				}
-			}
+			return true;
 
-			return false;
 		}
 
 		/// <summary>
@@ -1770,28 +1747,34 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <returns></returns>
-		private object FindIntrinsicAttributeInstance(Context context)
+		private IIntrinsicMethod GetIntrinsicMethod(Context context)
 		{
-			RuntimeMethod rm = context.InvokeTarget;
-			Debug.Assert(rm != null, @"Call doesn't have a target.");
+			if (vmIntrinsicAttribute == null)
+				return null;
 
-			foreach (RuntimeType intrinsicAttributeType in intrinsicAttributeTypes)
+			RuntimeMethod method = context.InvokeTarget;
+			Debug.Assert(method != null, @"Call doesn't have a target.");
+
+			foreach (RuntimeAttribute ra in method.CustomAttributes)
 			{
-				if (intrinsicAttributeType != null)
+				if (ra.Type == vmIntrinsicAttribute)
 				{
-					try
-					{
-						// FIXME: 
-						object[] attributes = null; // rm.GetCustomAttributes(intrinsicAttributeType);
-						if (attributes != null && attributes.Length > 0)
-						{
-							return attributes[0];
-						}
-					}
-					catch (NullReferenceException)
-					{
+					// Get the intrinsic attribute
+					object[] args = CustomAttributeParser.Parse(methodCompiler.Assembly.Metadata, ra.AttributeBlob, ra.CtorMethod);
+
+					if ((args == null) || (args.Length == 0))
 						return null;
-					}
+
+					string name = args[0] as string;
+
+					Type instrinsicType = Type.GetType(name);
+
+					if (instrinsicType == null)
+						return null;
+
+					IIntrinsicMethod intrinsicMethod = Activator.CreateInstance(instrinsicType) as IIntrinsicMethod;
+
+					return intrinsicMethod;
 				}
 			}
 
@@ -1896,20 +1879,27 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// </remarks>
 		private bool ProcessVmCall(Context context)
 		{
-			RuntimeMethod rm = context.InvokeTarget;
-			Debug.Assert(rm != null, @"Call doesn't have a target.");
+			RuntimeMethod method = context.InvokeTarget;
+			Debug.Assert(method != null, @"Call doesn't have a target.");
 
 			// Retrieve the runtime type
-			if (rm.IsDefined(vmCallAttribute))
+			if (method.IsDefined(vmCallAttribute))
 			{
-				foreach (RuntimeAttribute ra in rm.CustomAttributes)
+				foreach (RuntimeAttribute ra in method.CustomAttributes)
 				{
 					if (ra.Type == vmCallAttribute)
 					{
 						// Get the intrinsic attribute
-						VmCallAttribute callAttribute = (VmCallAttribute)CustomAttributeParser.Parse(methodCompiler.Assembly.Metadata, ra.AttributeBlob, ra.CtorMethod);
+						object[] args = CustomAttributeParser.Parse(methodCompiler.Assembly.Metadata, ra.AttributeBlob, ra.CtorMethod);
+
+						//VmCallAttribute callAttribute = (VmCallAttribute)CustomAttributeParser.CreateAttribute(ra.CtorMethod, parameters, "Mosa.Intrinsic");
+
+						RuntimeType type = ra.CtorMethod.DeclaringType;
+						Type attributeType = Type.GetType(String.Format("{0}.{1}, {2}", type.Namespace, type.Name, "Mosa.Intrinsic"));
+						VmCallAttribute callAttribute = (VmCallAttribute)Activator.CreateInstance(attributeType, args);
 
 						ReplaceWithVmCall(context, callAttribute.VmCall);
+
 						return true;
 					}
 				}

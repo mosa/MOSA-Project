@@ -56,66 +56,44 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </returns>
 		/// <exception cref="System.ArgumentException"><paramref name="attributeBlob"/> is invalid.</exception>
 		/// <exception cref="System.ArgumentNullException"><paramref name="metadataProvider"/> is null or <paramref name="attributeCtor"/> is null.</exception>
-		public static object Parse(IMetadataProvider metadataProvider, TokenTypes attributeBlob, RuntimeMethod attributeCtor)
+		public static object[] Parse(IMetadataProvider metadataProvider, TokenTypes attributeBlob, RuntimeMethod attributeCtor)
 		{
-			// Return value
-			object result;
 
 			// Try to load the blob from the module
 			byte[] blob = metadataProvider.ReadBlob(attributeBlob);
-			if (blob != null)
-			{
-				if (blob.Length != 0)
-				{
-					// Create a binary reader for the blob
-					using (BinaryReader reader = new BinaryReader(new MemoryStream(blob), Encoding.UTF8))
-					{
-						ushort prologue = reader.ReadUInt16();
-						Debug.Assert(prologue == ATTRIBUTE_BLOB_PROLOGUE, @"Attribute prologue doesn't match.");
-						if (prologue != ATTRIBUTE_BLOB_PROLOGUE)
-							throw new ArgumentException(@"Invalid custom attribute blob.", "attributeBlob");
-
-						// Fixed argument list of the ctor
-						SigType[] paramSig = attributeCtor.Signature.Parameters;
-						IList<RuntimeParameter> parameters = attributeCtor.Parameters;
-
-						object[] args = new object[parameters.Count];
-						for (int idx = 0; idx < parameters.Count; idx++)
-							args[idx] = ParseFixedArg(metadataProvider, reader, paramSig[idx]);
-
-						// Create the attribute instance
-						result = CreateAttribute(attributeCtor, args);
-					}
-				}
-				else
-				{
-					result = CreateAttribute(attributeCtor, null);
-				}
-			}
-			else
+			if (blob == null)
 			{
 				throw new ArgumentException(@"Invalid attribute blob token.", @"attributeBlob");
 			}
 
-			return result;
-		}
+			if (blob.Length == 0)
+				return null;
 
+			// Create a binary reader for the blob
+			using (BinaryReader reader = new BinaryReader(new MemoryStream(blob), Encoding.UTF8))
+			{
+				ushort prologue = reader.ReadUInt16();
+				Debug.Assert(prologue == ATTRIBUTE_BLOB_PROLOGUE, @"Attribute prologue doesn't match.");
+				if (prologue != ATTRIBUTE_BLOB_PROLOGUE)
+					throw new ArgumentException(@"Invalid custom attribute blob.", "attributeBlob");
+
+				// Fixed argument list of the ctor
+				SigType[] paramSig = attributeCtor.Signature.Parameters;
+				IList<RuntimeParameter> parameters = attributeCtor.Parameters;
+
+				object[] args = new object[parameters.Count];
+				for (int idx = 0; idx < parameters.Count; idx++)
+					args[idx] = ParseFixedArg(metadataProvider, reader, paramSig[idx]);
+
+				// Create the attribute instance
+				return args;
+			}
+		}
+		
 		#endregion // Methods
 
 		#region Internals
 
-		/// <summary>
-		/// Creates the attribute.
-		/// </summary>
-		/// <param name="attributeCtor">The attribute constructor to invoke.</param>
-		/// <param name="args">The arguments to pass to the constructor.</param>
-		/// <returns>The newly constructed attribute.</returns>
-		private static object CreateAttribute(RuntimeMethod attributeCtor, object[] args)
-		{
-			RuntimeType type = attributeCtor.DeclaringType;
-			Type attributeType = Type.GetType(String.Format("{0}.{1}, Mosa.Intrinsic", type.Namespace, type.Name));
-			return Activator.CreateInstance(attributeType, args, null);
-		}
 
 		/// <summary>
 		/// Parses a fixed argument in an attribute blob definition.
