@@ -33,7 +33,7 @@
 
 namespace System
 {
-	using System.Runtime.CompilerServices;
+	//using System.Runtime.CompilerServices;
 
 	public class ValueType : Object
 	{
@@ -446,6 +446,26 @@ namespace System
 	{
 	}
 
+	public enum AttributeTargets
+	{
+		Assembly = 1,
+		Module = 2,
+		Class = 4,
+		Struct = 8,
+		Enum = 16,
+		Constructor = 32,
+		Method = 64,
+		Property = 128,
+		Field = 256,
+		Event = 512,
+		Interface = 1024,
+		Parameter = 2048,
+		Delegate = 4096,
+		ReturnValue = 8192,
+		GenericParameter = 16384,
+		All = 32767,
+	}
+
 	[AttributeUsage(AttributeTargets.Class, Inherited = true)]
 	public sealed class AttributeUsageAttribute : Attribute
 	{
@@ -569,6 +589,91 @@ namespace System
 
 		public interface IEnumerator
 		{
+		}
+	}
+}
+
+namespace System.Security
+{
+	[AttributeUsage(AttributeTargets.Module, AllowMultiple = true, Inherited = false)]
+	public sealed class UnverifiableCodeAttribute : System.Attribute
+	{
+	}
+}
+
+namespace System.Security.Permissions
+{
+	public enum SecurityAction
+	{
+		RequestMinimum
+	}
+
+	public class SecurityPermissionAttribute : Attribute
+	{
+		public SecurityPermissionAttribute(SecurityAction action)
+		{
+		}
+
+		public bool SkipVerification
+		{
+			get
+			{
+				return true;
+			}
+			set
+			{
+
+			}
+		}
+	}
+}
+
+namespace System.Diagnostics
+{
+	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Module)]
+	public sealed class DebuggableAttribute : System.Attribute
+	{
+		public enum DebuggingModes
+		{
+			None = 0,
+			Default = 1,
+			IgnoreSymbolStoreSequencePoints = 2,
+			EnableEditAndContinue = 4,
+			DisableOptimizations = 256
+		}
+
+		public DebuggableAttribute(DebuggingModes modes)
+		{
+		}
+	}
+}
+
+namespace System.Runtime.CompilerServices
+{
+	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Module |
+		 AttributeTargets.Class | AttributeTargets.Method)]
+	public class CompilationRelaxationsAttribute : System.Attribute
+	{
+		public CompilationRelaxationsAttribute(int relaxations)
+		{
+		}
+	}
+
+	public sealed class RuntimeCompatibilityAttribute : Attribute
+	{
+		public RuntimeCompatibilityAttribute()
+		{
+		}
+
+		public bool WrapNonExceptionThrows
+		{
+			get
+			{
+				return false;
+			}
+			set
+			{
+			}
 		}
 	}
 }

@@ -27,7 +27,6 @@ namespace Mosa.Runtime.Metadata.Loader
 	{
 		#region Data members
 
-		private string[] searchPath;
 		private List<string> privatePaths = new List<string>();
 		private object loaderLock = new object();
 
@@ -42,14 +41,6 @@ namespace Mosa.Runtime.Metadata.Loader
 		/// </summary>
 		public AssemblyLoader()
 		{
-			// HACK: I can't figure out an easier way to get the framework dir right now...
-			//string frameworkDir = System.Runtime.InteropServices.RuntimeEnvironment.GetRuntimeDirectory();
-			//string frameworkDir32 = frameworkDir.Contains("Framework64") ? frameworkDir.Replace("Framework64", "Framework") : frameworkDir;
-			searchPath = new[] {
-				AppDomain.CurrentDomain.BaseDirectory,
-				//frameworkDir,
-				//frameworkDir32
-			};
 		}
 
 		#endregion // Construction
@@ -86,7 +77,7 @@ namespace Mosa.Runtime.Metadata.Loader
 		/// Appends the given path to the assembly search path.
 		/// </summary>
 		/// <param name="path">The path to append to the assembly search path.</param>
-		void IAssemblyLoader.AppendPrivatePath(string path)
+		void IAssemblyLoader.AddPrivatePath(string path)
 		{
 			lock (loaderLock)
 			{
@@ -102,7 +93,7 @@ namespace Mosa.Runtime.Metadata.Loader
 		void IAssemblyLoader.InitializePrivatePaths(IEnumerable<string> assemblyPaths)
 		{
 			foreach (string path in FindPrivatePaths(assemblyPaths))
-				((IAssemblyLoader)this).AppendPrivatePath(path);
+				((IAssemblyLoader)this).AddPrivatePath(path);
 		}
 
 		#endregion // IAssemblyLoader
@@ -140,18 +131,31 @@ namespace Mosa.Runtime.Metadata.Loader
 			return metadataModule;
 		}
 
-
 		public static string CreateFileCodeBase(string file)
 		{
 			return @"file://" + file.Replace('\\', '/');
 		}
 
+		/// <summary>
+		/// Loads the PE assembly.
+		/// </summary>
+		/// <param name="file">The file.</param>
+		/// <returns></returns>
+		private IMetadataModule LoadPEAssembly(string file)
+		{
+			if (!File.Exists(file))
+				return null;
+
+			string codeBase = CreateFileCodeBase(file);
+
+			return PortableExecutableImage.Load(new FileStream(file, FileMode.Open, FileAccess.Read), codeBase);
+		}
+
 		private IMetadataModule LoadAssembly(string file)
 		{
-
 			if (Path.IsPathRooted(file))
 			{
-				return LoadAssembly2(file);
+				return LoadPEAssembly(file);
 			}
 
 			file = Path.GetFileName(file);
@@ -159,34 +163,9 @@ namespace Mosa.Runtime.Metadata.Loader
 			if (!file.EndsWith(".dll"))
 				file = file + ".dll";
 
-			IMetadataModule result = DoLoadAssembly(file);
+			IMetadataModule result = TryAssemblyLoadFromPaths(file, privatePaths);
 
 			return result;
-		}
-
-		/// <summary>
-		/// Loads the assembly.
-		/// </summary>
-		/// <param name="file">The file.</param>
-		/// <returns></returns>
-		private IMetadataModule LoadAssembly2(string file)
-		{
-			string codeBase = CreateFileCodeBase(file);
-
-			if (!File.Exists(file))
-				return null;
-
-			return PortableExecutableImage.Load(new FileStream(file, FileMode.Open, FileAccess.Read), codeBase);
-		}
-
-		/// <summary>
-		/// Does the load assembly.
-		/// </summary>
-		/// <param name="name">The name.</param>
-		/// <returns></returns>
-		private IMetadataModule DoLoadAssembly(string name)
-		{
-			return DoLoadAssemblyFromPaths(name, privatePaths) ?? DoLoadAssemblyFromPaths(name, searchPath);
 		}
 
 		/// <summary>
@@ -195,16 +174,18 @@ namespace Mosa.Runtime.Metadata.Loader
 		/// <param name="name">The name.</param>
 		/// <param name="paths">The paths.</param>
 		/// <returns></returns>
-		private IMetadataModule DoLoadAssemblyFromPaths(string name, IEnumerable<string> paths)
+		private IMetadataModule TryAssemblyLoadFromPaths(string name, IEnumerable<string> paths)
 		{
 			foreach (string path in paths)
 			{
-				string fullName = Path.Combine(path, name);
 				try
 				{
-					IMetadataModule result = LoadAssembly(fullName);
+					IMetadataModule result = LoadPEAssembly(Path.Combine(path, name));
+
 					if (result != null)
+					{ 
 						return result;
+					}
 				}
 				catch
 				{

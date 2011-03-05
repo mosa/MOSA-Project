@@ -253,7 +253,9 @@ namespace Mosa.Test.Runtime.CompilerFramework
 			assemblyLoader.InitializePrivatePaths(settings.References);
 
 			foreach (string file in settings.References)
+			{
 				assemblyLoader.LoadModule(file);
+			}
 
 			typeSystem = new TypeSystem();
 			typeSystem.LoadModules(assemblyLoader.Modules);
