@@ -25,27 +25,34 @@ namespace Mosa.Test.Runtime.CompilerFramework
 	{
 		private readonly Queue<CCtor> cctorQueue = new Queue<CCtor>();
 
+		private readonly TestAssemblyLinker linker;
+
 		private TestCaseAssemblyCompiler(IArchitecture architecture, ITypeSystem typeSystem, ITypeLayout typeLayout) :
 			base(architecture, typeSystem, typeLayout)
 		{
+			linker = new TestAssemblyLinker();
+
 			// Build the assembly compiler pipeline
 			Pipeline.AddRange(new IAssemblyCompilerStage[] {
 				new AssemblyMemberCompilationSchedulerStage(),
 				new MethodCompilerSchedulerStage(),
 				new TypeLayoutStage(),
-				new TestAssemblyLinker(),
+				linker
 			});
 			architecture.ExtendAssemblyCompilerPipeline(Pipeline);
 		}
 
-		public static void Compile(ITypeSystem typeSystem)
+		public static TestAssemblyLinker Compile(ITypeSystem typeSystem)
 		{
 			IArchitecture architecture = x86.Architecture.CreateArchitecture(x86.ArchitectureFeatureFlags.AutoDetect);
 
 			// FIXME: get from architecture
 			TypeLayout typeLayout = new TypeLayout(typeSystem, 4, 4);
 
-			new TestCaseAssemblyCompiler(architecture, typeSystem, typeLayout).Compile();
+			TestCaseAssemblyCompiler compiler = new TestCaseAssemblyCompiler(architecture, typeSystem, typeLayout);
+			compiler.Compile();
+
+			return compiler.linker;
 		}
 
 		public override IMethodCompiler CreateMethodCompiler(ICompilationSchedulerStage schedulerStage, RuntimeType type, RuntimeMethod method)
@@ -70,5 +77,6 @@ namespace Mosa.Test.Runtime.CompilerFramework
 		{
 			cctorQueue.Enqueue(cctor);
 		}
+
 	}
 }

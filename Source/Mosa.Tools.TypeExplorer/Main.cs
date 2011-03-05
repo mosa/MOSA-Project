@@ -68,6 +68,8 @@ namespace Mosa.Tools.TypeExplorer
 		protected void LoadAssembly(string filename)
 		{
 			IAssemblyLoader assemblyLoader = new AssemblyLoader();
+			assemblyLoader.AddPrivatePath(System.IO.Path.GetDirectoryName(filename));
+
 			assemblyLoader.LoadModule(filename);
 
 			typeSystem = new TypeSystem();
