@@ -1759,8 +1759,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			{
 				if (ra.Type == vmIntrinsicAttribute)
 				{
-					// Get the intrinsic attribute
-					object[] args = CustomAttributeParser.Parse(methodCompiler.Assembly.Metadata, ra.AttributeBlob, ra.CtorMethod);
+					object[] args = CustomAttributeParser.Parse(ra.Blob, ra.CtorMethod);
 
 					if ((args == null) || (args.Length == 0))
 						return null;
@@ -1890,9 +1889,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 					if (ra.Type == vmCallAttribute)
 					{
 						// Get the intrinsic attribute
-						object[] args = CustomAttributeParser.Parse(methodCompiler.Assembly.Metadata, ra.AttributeBlob, ra.CtorMethod);
-
-						//VmCallAttribute callAttribute = (VmCallAttribute)CustomAttributeParser.CreateAttribute(ra.CtorMethod, parameters, "Mosa.Intrinsic");
+						object[] args = CustomAttributeParser.Parse(ra.Blob, ra.CtorMethod);
 
 						RuntimeType type = ra.CtorMethod.DeclaringType;
 						Type attributeType = Type.GetType(String.Format("{0}.{1}, {2}", type.Namespace, type.Name, "Mosa.Intrinsic"));

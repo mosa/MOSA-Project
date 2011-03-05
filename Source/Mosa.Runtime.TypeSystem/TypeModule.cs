@@ -716,7 +716,9 @@ namespace Mosa.Runtime.TypeSystem
 						throw new NotImplementedException();
 				}
 
-				RuntimeAttribute runtimeAttribute = new RuntimeAttribute(row.ValueBlobIdx, row.TypeIdx, ctorMethod);
+				byte[] blob = metadataProvider.ReadBlob(row.ValueBlobIdx);
+				//object[] args = CustomAttributeParser.Parse(blob, row.ValueBlobIdx, ctorMethod);
+				RuntimeAttribute runtimeAttribute = new RuntimeAttribute(row.TypeIdx, ctorMethod, blob);
 
 				// The following switch matches the AttributeTargets enumeration against
 				// metadata tables, which make valid targets for an attribute.
