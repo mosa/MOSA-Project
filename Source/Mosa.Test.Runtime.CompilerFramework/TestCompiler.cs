@@ -53,6 +53,11 @@ namespace Mosa.Test.Runtime.CompilerFramework
 		/// </summary>
 		private static TempFileCollection temps = new TempFileCollection(TempDirectory, false);
 
+		/// <summary>
+		/// 
+		/// </summary>
+		private TestAssemblyLinker linker;
+
 		#endregion // Data members
 
 		#region Construction
@@ -114,11 +119,11 @@ namespace Mosa.Test.Runtime.CompilerFramework
 
 			Debug.Assert(delegateType != null, delegateName);
 
-			//NOTES: Would it be better to get the address from the linker?
+			IntPtr address = linker.GetSymbol(runtimeMethod.ToString()).VirtualAddress;
 
 			// Create a delegate for the test method
 			Delegate fn = Marshal.GetDelegateForFunctionPointer(
-				IntPtr.Zero, // runtimeMethod.Address,
+				address,
 				delegateType
 			);
 
@@ -149,7 +154,7 @@ namespace Mosa.Test.Runtime.CompilerFramework
 				string assembly = RunCodeDomCompiler(settings);
 
 				Console.WriteLine("Executing MOSA compiler...");
-				RunMosaCompiler(settings, assembly);
+				linker = RunMosaCompiler(settings, assembly);
 			}
 		}
 
@@ -179,6 +184,8 @@ namespace Mosa.Test.Runtime.CompilerFramework
 						return m;
 					}
 				}
+
+				break;
 			}
 
 			throw new MissingMethodException(ns + "." + type, method);
@@ -227,7 +234,7 @@ namespace Mosa.Test.Runtime.CompilerFramework
 
 			if (settings.CodeSource != null)
 			{
-				Console.WriteLine("Code: {0}", settings.CodeSource + settings.AdditionalSource);
+				//Console.WriteLine("Code: {0}", settings.CodeSource + settings.AdditionalSource);
 				compileResults = provider.CompileAssemblyFromSource(parameters, settings.CodeSource + settings.AdditionalSource);
 			}
 			else
@@ -247,18 +254,22 @@ namespace Mosa.Test.Runtime.CompilerFramework
 			return compileResults.PathToAssembly;
 		}
 
-		private void RunMosaCompiler(TestCompilerSettings settings, string assemblyFile)
+		private TestAssemblyLinker RunMosaCompiler(TestCompilerSettings settings, string assemblyFile)
 		{
 			IAssemblyLoader assemblyLoader = new AssemblyLoader();
 			assemblyLoader.InitializePrivatePaths(settings.References);
 
 			foreach (string file in settings.References)
+			{
 				assemblyLoader.LoadModule(file);
+			}
 
 			typeSystem = new TypeSystem();
 			typeSystem.LoadModules(assemblyLoader.Modules);
 
-			TestCaseAssemblyCompiler.Compile(typeSystem);
+			TestAssemblyLinker linker = TestCaseAssemblyCompiler.Compile(typeSystem);
+
+			return linker;
 		}
 
 	}

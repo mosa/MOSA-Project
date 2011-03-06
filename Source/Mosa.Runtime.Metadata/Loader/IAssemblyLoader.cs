@@ -40,7 +40,7 @@ namespace Mosa.Runtime.Metadata.Loader
 		/// Appends the given path to the assembly search path.
 		/// </summary>
 		/// <param name="path">The path to append to the assembly search path.</param>
-		void AppendPrivatePath(string path);
+		void AddPrivatePath(string path);
 
 	}
 }

@@ -57,6 +57,14 @@ namespace Mosa.Tools.TypeExplorer
 			return "[" + TokenToString(member.Token) + "] " + member.Name;
 		}
 
+		protected string FormatRuntimeMember(RuntimeMethod method)
+		{
+			if (!showTokenValues.Checked)
+				return method.Name;
+
+			return "[" + TokenToString(method.Token) + "] " + method.ToString();
+		}
+
 		protected string FormatRuntimeType(RuntimeType type)
 		{
 			if (!showTokenValues.Checked)
@@ -68,6 +76,8 @@ namespace Mosa.Tools.TypeExplorer
 		protected void LoadAssembly(string filename)
 		{
 			IAssemblyLoader assemblyLoader = new AssemblyLoader();
+			assemblyLoader.AddPrivatePath(System.IO.Path.GetDirectoryName(filename));
+
 			assemblyLoader.LoadModule(filename);
 
 			typeSystem = new TypeSystem();
@@ -75,10 +85,10 @@ namespace Mosa.Tools.TypeExplorer
 
 			typeLayout = new TypeLayout(typeSystem, 4, 4);
 
-			Update();
+			UpdateTree();
 		}
 
-		protected void Update()
+		protected void UpdateTree()
 		{
 			treeView.BeginUpdate();
 			treeView.Nodes.Clear();
@@ -190,12 +200,12 @@ namespace Mosa.Tools.TypeExplorer
 
 		private void showTokenValues_Click(object sender, EventArgs e)
 		{
-			Update();
+			UpdateTree();
 		}
 
 		private void showSizes_Click(object sender, EventArgs e)
 		{
-			Update();
+			UpdateTree();
 		}
 
 	}

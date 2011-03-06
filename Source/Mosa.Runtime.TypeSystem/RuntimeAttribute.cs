@@ -27,9 +27,9 @@ namespace Mosa.Runtime.TypeSystem
 		#region Data members
 
 		/// <summary>
-		/// Specifies the blob, which contains the attribute initialization.
+		/// Holds the module from which this object originated
 		/// </summary>
-		private readonly TokenTypes attributeBlob;
+		private readonly ITypeModule module;
 
 		/// <summary>
 		/// Holds the ctor of the attribute type to invoke.
@@ -41,6 +41,16 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		private readonly RuntimeMethod ctorMethod;
 
+		/// <summary>
+		/// Holds the blob index
+		/// </summary>
+		private readonly TokenTypes blobIndex;
+
+		/// <summary>
+		/// Holds the blob
+		/// </summary>
+		private byte[] blob;
+
 		#endregion // Data members
 
 		#region Construction
@@ -48,14 +58,16 @@ namespace Mosa.Runtime.TypeSystem
 		/// <summary>
 		/// Initializes a new instance of the <see cref="RuntimeAttribute"/> class.
 		/// </summary>
-		/// <param name="attributeBlog">The attribute blog.</param>
+		/// <param name="module">The module.</param>
 		/// <param name="ctor">The ctor.</param>
 		/// <param name="ctorMethod">The ctor method.</param>
-		public RuntimeAttribute(TokenTypes attributeBlog, TokenTypes ctor, RuntimeMethod ctorMethod)
+		/// <param name="blobIndex">Index of the blob.</param>
+		public RuntimeAttribute(ITypeModule module, TokenTypes ctor, RuntimeMethod ctorMethod, TokenTypes blobIndex)
 		{
+			this.module = module;
 			this.ctorMethod = ctorMethod;
-			this.attributeBlob = attributeBlog;
 			this.ctor = ctor;
+			this.blobIndex = blobIndex;
 		}
 
 		#endregion // Construction
@@ -65,6 +77,15 @@ namespace Mosa.Runtime.TypeSystem
 		#endregion // Methods
 
 		#region Properties
+
+		/// <summary>
+		/// Retrieves the module from which this object originated
+		/// </summary>
+		/// <value>The module.</value>
+		public ITypeModule Module
+		{
+			get { return module; }
+		}
 
 		/// <summary>
 		/// Gets the runtime type.
@@ -79,10 +100,27 @@ namespace Mosa.Runtime.TypeSystem
 		public RuntimeMethod CtorMethod { get { return ctorMethod; } }
 
 		/// <summary>
-		/// Gets the attribute BLOB.
+		/// Gets the index of the blob.
 		/// </summary>
-		/// <value>The attribute BLOB.</value>
-		public TokenTypes AttributeBlob { get { return attributeBlob; } }
+		/// <value>The index of the blob.</value>
+		public TokenTypes BlobIndex { get { return blobIndex; } }
+
+		/// <summary>
+		/// Gets the blob.
+		/// </summary>
+		/// <value>The blob.</value>
+		public byte[] Blob
+		{
+			get
+			{
+				if (blob == null)
+				{
+					blob = Module.MetadataModule.Metadata.ReadBlob(blobIndex);
+				}
+
+				return blob;
+			}
+		}
 
 		#endregion // Properties
 

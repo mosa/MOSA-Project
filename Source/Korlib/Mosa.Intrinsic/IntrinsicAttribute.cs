@@ -26,14 +26,9 @@ namespace Mosa.Intrinsic
 		#region Data members
 
 		/// <summary>
-		/// The architecture of the intrinsic implementation.
-		/// </summary>
-		private readonly Type architecture;
-
-		/// <summary>
 		/// The IR type of this instruction.
 		/// </summary>
-		private readonly Type instructionType;
+		private readonly string instructionType;
 
 		#endregion // Data members
 
@@ -42,32 +37,10 @@ namespace Mosa.Intrinsic
 		/// <summary>
 		/// Initializes a new instance of the IntrinsicAttribute type.
 		/// </summary>
-		/// <param name="architecture">The specific architecture of the intrinsic implementation.</param>
-		/// <param name="instructionType">The type of the IR instruction, which generates appropriate native code.</param>
-		public IntrinsicAttribute(Type architecture, Type instructionType)
-		{
-			this.architecture = architecture;
-			this.instructionType = instructionType;
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the IntrinsicAttribute type.
-		/// </summary>
-		/// <param name="instructionType">The type used to build the architecture neutral intrinsic.</param>
-		public IntrinsicAttribute(Type instructionType)
-		{
-			this.architecture = null;
-			this.instructionType = instructionType;
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the IntrinsicAttribute type.
-		/// </summary>
 		/// <param name="instructionType">The type used to build the architecture neutral intrinsic.</param>
 		public IntrinsicAttribute(string instructionType)
 		{
-			this.architecture = null;
-			this.instructionType = Type.GetType(instructionType, true);
+			this.instructionType = instructionType;
 		}
 
 		#endregion // Construction
@@ -75,18 +48,9 @@ namespace Mosa.Intrinsic
 		#region Properties
 
 		/// <summary>
-		/// Returns the architecture, which has support for an intrinsic implementation.
-		/// </summary>
-		/// <value><c>null</c> if the intrinsic is architecture neutral; otherwise a reference to the type of the Architecture.</value>
-		public Type Architecture
-		{
-			get { return this.architecture; }
-		}
-
-		/// <summary>
 		/// Returns the instruction type used to represent the intrinsic.
 		/// </summary>
-		public Type InstructionType
+		public string InstructionType
 		{
 			get { return this.instructionType; }
 		}

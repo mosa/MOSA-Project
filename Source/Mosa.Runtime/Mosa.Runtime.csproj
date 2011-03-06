@@ -84,7 +84,6 @@
     <Compile Include="CompilerFramework\CIL\BreakInstruction.cs" />
     <Compile Include="CompilerFramework\BaseAssemblyCompilerStage.cs" />
     <Compile Include="CompilerFramework\CIL\ExceptionClauseHeader.cs" />
-    <Compile Include="CompilerFramework\CustomAttributeParser.cs" />
     <Compile Include="CompilerFramework\TypeLayoutStage.cs" />
     <Compile Include="CompilerFramework\ExceptionEngine.cs" />
     <Compile Include="CompilerFramework\IR\ThrowInstruction.cs" />
