@@ -1752,11 +1752,11 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			RuntimeMethod method = context.InvokeTarget;
 			Debug.Assert(method != null, @"Call doesn't have a target.");
 
-			foreach (RuntimeAttribute ra in method.CustomAttributes)
+			foreach (RuntimeAttribute attribute in method.CustomAttributes)
 			{
-				if (ra.Type == vmIntrinsicAttribute)
+				if (attribute.Type == vmIntrinsicAttribute)
 				{
-					object[] args = CustomAttributeParser.Parse(ra.Blob, ra.CtorMethod);
+					object[] args = CustomAttributeParser.Parse(attribute.Blob, attribute.CtorMethod);
 
 					if ((args == null) || (args.Length == 0))
 						return null;
@@ -1881,14 +1881,14 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			// Retrieve the runtime type
 			if (method.IsDefined(vmCallAttribute))
 			{
-				foreach (RuntimeAttribute ra in method.CustomAttributes)
+				foreach (RuntimeAttribute attribute in method.CustomAttributes)
 				{
-					if (ra.Type == vmCallAttribute)
+					if (attribute.Type == vmCallAttribute)
 					{
 						// Get the intrinsic attribute
-						object[] args = CustomAttributeParser.Parse(ra.Blob, ra.CtorMethod);
+						object[] args = CustomAttributeParser.Parse(attribute.Blob, attribute.CtorMethod);
 
-						RuntimeType type = ra.CtorMethod.DeclaringType;
+						RuntimeType type = attribute.CtorMethod.DeclaringType;
 						Type attributeType = Type.GetType(String.Format("{0}.{1}, {2}", type.Namespace, type.Name, "Mosa.Intrinsic"));
 						VmCallAttribute callAttribute = (VmCallAttribute)Activator.CreateInstance(attributeType, args);
 

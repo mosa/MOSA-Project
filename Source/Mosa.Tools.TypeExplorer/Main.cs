@@ -85,10 +85,10 @@ namespace Mosa.Tools.TypeExplorer
 
 			typeLayout = new TypeLayout(typeSystem, 4, 4);
 
-			Update();
+			UpdateTree();
 		}
 
-		protected void Update()
+		protected void UpdateTree()
 		{
 			treeView.BeginUpdate();
 			treeView.Nodes.Clear();
@@ -200,12 +200,12 @@ namespace Mosa.Tools.TypeExplorer
 
 		private void showTokenValues_Click(object sender, EventArgs e)
 		{
-			Update();
+			UpdateTree();
 		}
 
 		private void showSizes_Click(object sender, EventArgs e)
 		{
-			Update();
+			UpdateTree();
 		}
 
 	}
