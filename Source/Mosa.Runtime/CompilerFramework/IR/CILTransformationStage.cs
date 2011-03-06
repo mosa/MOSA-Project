@@ -66,10 +66,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		public override void Run()
 		{
 			vmCallAttribute = typeSystem.GetType("Mosa.Intrinsic", "VmCallAttribute");
-
-			// HACK: This allows us to resolve IntrinsicAttribute from Korlib without directly referencing it. It is slower, but works.
 			vmIntrinsicAttribute = typeSystem.GetType("mscorlib", "Mosa.Intrinsic", "IntrinsicAttribute");
-			//vmIntrinsicAttributes[1] = typeSystem.GetType("Mosa.Intrinsic", "Mosa.Intrinsic", "IntrinsicAttribute");
 
 			base.Run();
 		}

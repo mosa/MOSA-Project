@@ -57,6 +57,14 @@ namespace Mosa.Tools.TypeExplorer
 			return "[" + TokenToString(member.Token) + "] " + member.Name;
 		}
 
+		protected string FormatRuntimeMember(RuntimeMethod method)
+		{
+			if (!showTokenValues.Checked)
+				return method.Name;
+
+			return "[" + TokenToString(method.Token) + "] " + method.ToString();
+		}
+
 		protected string FormatRuntimeType(RuntimeType type)
 		{
 			if (!showTokenValues.Checked)

@@ -56,7 +56,10 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		private readonly IList<GenericParameter> genericParameters;
 
-		//private ExceptionClauseHeader exceptionClauseHeader = new ExceptionClauseHeader();
+		/// <summary>
+		/// Holds the full method name
+		/// </summary>
+		private string FullName;
 
 		#endregion // Data members
 
@@ -179,12 +182,14 @@ namespace Mosa.Runtime.TypeSystem
 		/// </returns>
 		public override string ToString()
 		{
-			//TODO: The result of this method should be cached to improve performance
+			if (FullName != null)
+				return FullName;
+
 			StringBuilder result = new StringBuilder();
 
-			result.Append(this.DeclaringType.ToString());
+			result.Append(DeclaringType.ToString());
 			result.Append('.');
-			result.Append(this.Name);
+			result.Append(Name);
 			result.Append('(');
 
 			if (this.Parameters.Count != 0)
@@ -200,7 +205,9 @@ namespace Mosa.Runtime.TypeSystem
 
 			result.Append(')');
 
-			return result.ToString();
+			FullName =  result.ToString();
+
+			return FullName;
 		}
 
 		#endregion // Object Overrides

@@ -40,36 +40,5 @@ namespace Mosa.Runtime.TypeSystem.Generic
 			base.Name = genericMethod.Name;
 		}
 
-		/// <summary>
-		/// Returns a <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
-		/// </summary>
-		/// <returns>
-		/// A <see cref="T:System.String"/> that represents the current <see cref="T:System.Object"/>.
-		/// </returns>
-		public override string ToString()
-		{
-			StringBuilder result = new StringBuilder();
-
-			result.Append(DeclaringType.ToString());
-			result.Append('.');
-			result.Append(Name);
-			result.Append('(');
-
-			if (this.Parameters.Count != 0)
-			{
-				MethodSignature sig = this.Signature;
-				int i = 0;
-				foreach (RuntimeParameter p in this.Parameters)
-				{
-					result.AppendFormat("{0} {1},", sig.Parameters[i++].Type, p.Name);
-				}
-				result.Remove(result.Length - 1, 1);
-			}
-
-			result.Append(')');
-
-			return result.ToString();
-		}
-
 	}
 }
