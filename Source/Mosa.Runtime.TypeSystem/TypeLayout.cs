@@ -239,7 +239,7 @@ namespace Mosa.Runtime.TypeSystem
 				methodTable[slot] = FindInterfaceMethod(type, interfaceType.Methods[slot]);
 
 			// Explicit Interface Methods
-			ScanExplicitInterfaceImplementations(type, interfaceType.Methods, methodTable);
+			ScanExplicitInterfaceImplementations(type, interfaceType, methodTable);
 
 			return methodTable;
 		}
@@ -388,9 +388,9 @@ namespace Mosa.Runtime.TypeSystem
 
 		#region Internal - Interface
 
-		private void ScanExplicitInterfaceImplementations(RuntimeType type, IList<RuntimeMethod> interfaceMethods, RuntimeMethod[] methodTable)
+		private void ScanExplicitInterfaceImplementations(RuntimeType type, RuntimeType interfaceType, RuntimeMethod[] methodTable)
 		{
-			//TODO: rewrite so that access directly to metadata is not required
+			//TODO: rewrite so that access directly to metadata is not required, type system should assist instead
 			IMetadataProvider metadata = type.Module.MetadataModule.Metadata;
 			TokenTypes maxToken = metadata.GetMaxTokenValue(TokenTypes.MethodImpl);
 
@@ -400,9 +400,9 @@ namespace Mosa.Runtime.TypeSystem
 				if (row.ClassTableIdx == (TokenTypes)type.Token)
 				{
 					int slot = 0;
-					foreach (RuntimeMethod interfaceMethod in interfaceMethods)
+					foreach (RuntimeMethod interfaceMethod in interfaceType.Methods)
 					{
-						if ((TokenTypes)interfaceMethod.Token == (row.MethodDeclarationTableIdx & TokenTypes.RowIndexMask))
+						if (interfaceMethod.Token == row.MethodDeclarationTableIdx)
 						{
 							methodTable[slot] = FindMethodByToken(type, row.MethodBodyTableIdx);
 						}
@@ -416,7 +416,7 @@ namespace Mosa.Runtime.TypeSystem
 		{
 			foreach (RuntimeMethod method in type.Methods)
 			{
-				if ((TokenTypes)method.Token == (methodToken & TokenTypes.RowIndexMask))
+				if (method.Token == methodToken)
 				{
 					return method;
 				}
