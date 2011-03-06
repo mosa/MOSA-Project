@@ -20,8 +20,8 @@
 		<references>
 			<include name="System.Data.dll"/>
 			<include name="System.Xml.dll"/>
-			<include name="${outputDirectory}/Mosa.Intrinsic.dll"/>
 			<include name="${outputDirectory}/Mosa.Runtime.Metadata.dll"/>
+			<include name="${outputDirectory}/Mosa.Runtime.TypeSystem.dll"/>
 			<include name="${outputDirectory}/Mosa.Compiler.FileFormat.dll"/>
 			<include name="${outputDirectory}/Mosa.Compiler.Common.dll"/>
 			<include name="${outputDirectory}/Mosa.Compiler.Linker.dll"/>

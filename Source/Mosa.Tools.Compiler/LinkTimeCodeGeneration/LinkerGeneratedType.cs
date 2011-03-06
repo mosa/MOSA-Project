@@ -51,12 +51,5 @@ namespace Mosa.Tools.Compiler
 		{
 			this.methods.Add(method);
 		}
-		#region implemented abstract members of Mosa.Runtime.Vm.RuntimeType
-		protected override IList<RuntimeType> LoadNestedTypes ()
-		{
-			return null;
-		}
-		
-		#endregion
 	}
 }

@@ -8,7 +8,7 @@
 	<property name="debug" value="none" overwrite="false"/>
 	
 	<!-- Speaks for itself, I should hope -->
-	<property name="outputDirectory" value="../../bin" overwrite="false"/>
+	<property name="outputDirectory" value="../bin" overwrite="false"/>
 	
 	<!-- Main build target -->
 	<target name="build">
@@ -20,6 +20,7 @@
 		
 		<references>
 			<include name="${outputDirectory}/Mosa.Runtime.dll"/>
+			<include name="${outputDirectory}/Mosa.Runtime.TypeSystem.dll"/>
 			<include name="${outputDirectory}/Mosa.Runtime.Metadata.dll"/>
 			<include name="${outputDirectory}/Mosa.Compiler.FileFormat.dll"/>
 			<include name="${outputDirectory}/Mosa.Compiler.Common.dll"/>
