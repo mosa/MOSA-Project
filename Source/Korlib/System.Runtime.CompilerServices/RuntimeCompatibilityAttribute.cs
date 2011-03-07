@@ -4,6 +4,14 @@ namespace System.Runtime.CompilerServices
 	[AttributeUsageAttribute(AttributeTargets.Assembly, Inherited = false, AllowMultiple = false)]
 	public sealed class RuntimeCompatibilityAttribute : Attribute
 	{
-		public bool WrapNonExceptionThrows { get; set; }
+		public RuntimeCompatibilityAttribute()
+		{
+		}
+
+		public bool WrapNonExceptionThrows
+		{
+			get { return false; }
+			set { }
+		}
 	}
 }

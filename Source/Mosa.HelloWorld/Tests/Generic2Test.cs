@@ -25,12 +25,12 @@ namespace Mosa.HelloWorld.Tests
 			//PrintResult(GenericTest1());
 		}
 
-		//public static bool GenericTest1()
-		//{
-		//    LinkedList<int> list = new LinkedList<int>();
+		public static bool GenericTest1()
+		{
+			//LinkedList<int> list = new LinkedList<int>();
 
-		//    return true;
-		//}
+			return true;
+		}
 	}
 
 }

@@ -59,7 +59,12 @@
     <Compile Include="Mosa.Intrinsic\IntrinsicAttribute.cs" />
     <Compile Include="Mosa.Intrinsic\VmCall.cs" />
     <Compile Include="Mosa.Intrinsic\VmCallAttribute.cs" />
+    <Compile Include="System.Diagnostics\DebuggerHiddenAttribute.cs" />
+    <Compile Include="System.Runtime.CompilerServices\CompilationRelaxationsAttribute.cs" />
+    <Compile Include="System.Runtime.CompilerServices\RuntimeCompatibilityAttribute.cs" />
     <Compile Include="System.Runtime.InteropServices\CallingConvention.cs" />
+    <Compile Include="System.Runtime.InteropServices\LayoutKind.cs" />
+    <Compile Include="System.Runtime.InteropServices\StructLayoutAttribute.cs" />
     <Compile Include="System.Runtime.InteropServices\DllImportAttribute.cs" />
     <Compile Include="System.Runtime.InteropServices\UnmanagedFunctionPointerAttribute.cs" />
     <Compile Include="System.Runtime.InteropServices\UnmanagedType.cs" />
@@ -72,6 +77,8 @@
     <Compile Include="System\AttributeUsageAttribute.cs" />
     <Compile Include="System\Convert.cs" />
     <Compile Include="System\CLSCompliantAttribute.cs" />
+    <Compile Include="System.Diagnostics\DebuggableAttribute.cs" />
+    <Compile Include="System\IComparable.cs" />
     <Compile Include="System\Delegate.cs" />
     <Compile Include="System\Exception.cs" />
     <Compile Include="System\FlagsAttribute.cs" />
@@ -134,6 +141,9 @@
     <Compile Include="System.Runtime.CompilerServices\CompilerGeneratedAttribute.cs" />
     <Compile Include="System.Runtime.InteropServices\ComVisible.cs" />
     <Compile Include="System.Runtime.InteropServices\OutAttribute.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
 </Project>

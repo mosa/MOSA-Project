@@ -616,14 +616,8 @@ namespace System.Security.Permissions
 
 		public bool SkipVerification
 		{
-			get
-			{
-				return true;
-			}
-			set
-			{
-
-			}
+			get { return true; }
+			set { }
 		}
 	}
 }
@@ -650,8 +644,7 @@ namespace System.Diagnostics
 
 namespace System.Runtime.CompilerServices
 {
-	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Module |
-		 AttributeTargets.Class | AttributeTargets.Method)]
+	[AttributeUsage(AttributeTargets.Assembly | AttributeTargets.Module | AttributeTargets.Class | AttributeTargets.Method)]
 	public class CompilationRelaxationsAttribute : System.Attribute
 	{
 		public CompilationRelaxationsAttribute(int relaxations)
@@ -667,13 +660,8 @@ namespace System.Runtime.CompilerServices
 
 		public bool WrapNonExceptionThrows
 		{
-			get
-			{
-				return false;
-			}
-			set
-			{
-			}
+			get { return false; }
+			set { }
 		}
 	}
 }

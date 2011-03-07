@@ -7,10 +7,16 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-namespace System.Security
+using System;
+
+namespace System.Runtime.InteropServices
 {
-	[AttributeUsage(AttributeTargets.Module, AllowMultiple = true, Inherited = false)]
-	public sealed class UnverifiableCodeAttribute : System.Attribute
+	[Serializable]
+	public enum LayoutKind
 	{
+		Sequential = 0,
+		Explicit = 2,
+		Auto = 3
 	}
+
 }

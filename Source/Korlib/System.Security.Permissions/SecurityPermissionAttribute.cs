@@ -1,3 +1,12 @@
+/*
+ * (c) 2008 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ */
+
 namespace System.Security.Permissions
 {
 	public class SecurityPermissionAttribute : Attribute
@@ -8,14 +17,8 @@ namespace System.Security.Permissions
 
 		public bool SkipVerification
 		{
-			get
-			{
-				return true;
-			}
-			set
-			{
-
-			}
+			get { return true; }
+			set { }
 		}
 	}
 }
