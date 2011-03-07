@@ -10,8 +10,6 @@
  *  Scott Balmos <sbalmos@fastmail.fm>
 */
 
-using System;
-
 using Mosa.Intrinsic;
 
 namespace Mosa.Platform.x86.Intrinsic
