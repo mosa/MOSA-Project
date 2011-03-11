@@ -7,13 +7,15 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using System.Collections.Generic;
+
 namespace Mosa.ClassLib
 {
 	/// <summary>
 	/// Implements a linked list
 	/// </summary>
 	/// <typeparam name="T"></typeparam>
-	public class LinkedList<T> : System.Collections.Generic.IEnumerable<T>, System.Collections.Generic.ICollection<T>
+	public class LinkedList<T> : IEnumerable<T>, ICollection<T>
 	{
 		/// <summary>
 		/// 
@@ -62,19 +64,19 @@ namespace Mosa.ClassLib
 		protected int count;
 
 		/// <summary>
-		/// Gets a value indicating whether the <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only.
+		/// Gets a value indicating whether the <see cref="T:ICollection`1"/> is read-only.
 		/// </summary>
 		/// <value></value>
-		/// <returns>true if the <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only; otherwise, false.
+		/// <returns>true if the <see cref="T:ICollection`1"/> is read-only; otherwise, false.
 		/// </returns>
 		public bool IsReadOnly { get { return false; } }
 
 		/// <summary>
-		/// Gets the number of elements contained in the <see cref="T:System.Collections.Generic.ICollection`1"/>.
+		/// Gets the number of elements contained in the <see cref="T:ICollection`1"/>.
 		/// </summary>
 		/// <value></value>
 		/// <returns>
-		/// The number of elements contained in the <see cref="T:System.Collections.Generic.ICollection`1"/>.
+		/// The number of elements contained in the <see cref="T:ICollection`1"/>.
 		/// </returns>
 		public int Count { get { return count; } }
 
@@ -115,10 +117,10 @@ namespace Mosa.ClassLib
 		}
 
 		/// <summary>
-		/// Removes all items from the <see cref="T:System.Collections.Generic.ICollection`1"/>.
+		/// Removes all items from the <see cref="T:ICollection`1"/>.
 		/// </summary>
 		/// <exception cref="T:System.NotSupportedException">
-		/// The <see cref="T:System.Collections.Generic.ICollection`1"/> is read-only.
+		/// The <see cref="T:ICollection`1"/> is read-only.
 		/// </exception>
 		public void Clear()
 		{
@@ -363,9 +365,9 @@ namespace Mosa.ClassLib
 		}
 
 		/// <summary>
-		/// Copies the elements of the <see cref="T:System.Collections.Generic.ICollection`1"/> to an <see cref="T:System.Array"/>, starting at a particular <see cref="T:System.Array"/> index.
+		/// Copies the elements of the <see cref="T:ICollection`1"/> to an <see cref="T:System.Array"/>, starting at a particular <see cref="T:System.Array"/> index.
 		/// </summary>
-		/// <param name="array">The one-dimensional <see cref="T:System.Array"/> that is the destination of the elements copied from <see cref="T:System.Collections.Generic.ICollection`1"/>. The <see cref="T:System.Array"/> must have zero-based indexing.</param>
+		/// <param name="array">The one-dimensional <see cref="T:System.Array"/> that is the destination of the elements copied from <see cref="T:ICollection`1"/>. The <see cref="T:System.Array"/> must have zero-based indexing.</param>
 		/// <param name="arrayIndex">The zero-based index in <paramref name="array"/> at which copying begins.</param>
 		/// <exception cref="T:System.ArgumentNullException">
 		/// 	<paramref name="array"/> is null.
@@ -418,9 +420,9 @@ namespace Mosa.ClassLib
 		/// Returns an enumerator that iterates through the collection.
 		/// </summary>
 		/// <returns>
-		/// A <see cref="T:System.Collections.Generic.IEnumerator`1"/> that can be used to iterate through the collection.
+		/// A <see cref="T:IEnumerator`1"/> that can be used to iterate through the collection.
 		/// </returns>
-		System.Collections.Generic.IEnumerator<T> System.Collections.Generic.IEnumerable<T>.GetEnumerator()
+		IEnumerator<T> IEnumerable<T>.GetEnumerator()
 		{
 			for (LinkedListNode<T> cur = first; cur != null; cur = cur.next)
 				yield return cur.value;

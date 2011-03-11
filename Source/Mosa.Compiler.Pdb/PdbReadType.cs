@@ -97,7 +97,7 @@ namespace Mosa.Compiler.Pdb
 			{
 				int version = reader.ReadInt32();
 				if (version != 4)
-					throw new InvalidDataException(@"PDB symbol table has unsupported _header.");
+					throw new InvalidDataException(@"PDB symbol table has unsupported header.");
 
 				return reader;
 			}

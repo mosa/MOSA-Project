@@ -58,7 +58,7 @@ namespace Mosa.Compiler.Pdb
 		public IEnumerator<CvLine> GetEnumerator()
 		{
 			// These are fields from a line number table structure
-			// _header: The _header of the line number table - always 0x000000F2
+			// header: The _header of the line number table - always 0x000000F2
 			// nextBlockOffset: The number of bytes to skip to get to the next block (skip after reading nextBlockOffset!)
 			// start: The function start address whose line number information is provided.
 			// seg: The segment of the function
@@ -91,7 +91,7 @@ namespace Mosa.Compiler.Pdb
 						fileOffset = reader.ReadInt32();
 						numberOfLines = reader.ReadInt32();
 						sizeOfLines = reader.ReadInt32();
-						Debug.WriteLine(String.Format("Line numbers table _header: size={0}, fileOffset={1}, numberOfLines={2}, sizeOfLines={3}, address={4:x4}:{5:x8}", size, fileOffset, numberOfLines, sizeOfLines, seg, start));
+						Debug.WriteLine(String.Format("Line numbers table header: size={0}, fileOffset={1}, numberOfLines={2}, sizeOfLines={3}, address={4:x4}:{5:x8}", size, fileOffset, numberOfLines, sizeOfLines, seg, start));
 
 						int[] startCol = new int[numberOfLines], endCol = new int[numberOfLines];
 						long pos = reader.BaseStream.Position;

@@ -17,14 +17,14 @@ using System.Diagnostics;
 namespace Mosa.Compiler.Pdb
 {
 	/// <summary>
-	/// Represents the _header of PDB files.
+	/// Represents the header of PDB files.
 	/// </summary>
 	public struct PdbFileHeader
 	{
 		#region Constants
 
 		/// <summary>
-		/// Specifies the length of the PDB signature in the file _header.
+		/// Specifies the length of the PDB signature in the file header.
 		/// </summary>
 		private const int PdbSignatureLength = 0x20;
 
@@ -82,10 +82,10 @@ namespace Mosa.Compiler.Pdb
 		#region Methods
 
 		/// <summary>
-		/// Reads the PDB file _header from the given reader.
+		/// Reads the PDB file header from the given reader.
 		/// </summary>
 		/// <param name="reader">The reader to read From.</param>
-		/// <param name="header">The _header to populate.</param>
+		/// <param name="header">The header to populate.</param>
 		/// <returns><c>true</c> if reading was successful, otherwise <c>false</c>.</returns>
 		public static bool Read(BinaryReader reader, out PdbFileHeader header)
 		{

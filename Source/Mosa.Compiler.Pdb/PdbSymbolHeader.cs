@@ -52,7 +52,7 @@ namespace Mosa.Compiler.Pdb
 		/// Reads the specified reader.
 		/// </summary>
 		/// <param name="reader">The reader.</param>
-		/// <param name="header">The _header.</param>
+		/// <param name="header">The header.</param>
 		/// <returns></returns>
 		public static bool Read(BinaryReader reader, out PdbSymbolHeader header)
 		{

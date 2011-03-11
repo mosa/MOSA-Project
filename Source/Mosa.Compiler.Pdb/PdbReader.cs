@@ -24,7 +24,7 @@ namespace Mosa.Compiler.Pdb
 		#region Data Members
 
 		/// <summary>
-		/// Holds the _header of the PDB file.
+		/// Holds the header of the PDB file.
 		/// </summary>
 		private PdbFileHeader header;
 
@@ -65,7 +65,7 @@ namespace Mosa.Compiler.Pdb
 			this.stream = stream;
 			this.reader = new BinaryReader(stream);
 
-			// Read the file _header
+			// Read the file header
 			if (PdbFileHeader.Read(this.reader, out this.header) == false)
 				throw new InvalidDataException(@"Not a Microsoft program database v7.0 file.");
 
@@ -148,7 +148,7 @@ namespace Mosa.Compiler.Pdb
 			{
 				using (BinaryReader reader = new BinaryReader(GetStream(3)))
 				{
-					// Read the symbol _header
+					// Read the symbol header
 					PdbSymbolHeader header;
 					if (PdbSymbolHeader.Read(reader, out header) == true)
 					{
@@ -179,7 +179,7 @@ namespace Mosa.Compiler.Pdb
 			{
 				using (BinaryReader reader = new BinaryReader(GetStream(3)))
 				{
-					// Read the symbol _header
+					// Read the symbol header
 					PdbSymbolHeader header;
 					if (PdbSymbolHeader.Read(reader, out header) == true)
 					{
