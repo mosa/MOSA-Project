@@ -69,11 +69,6 @@ namespace Mosa.Runtime.TypeSystem
 		/// <summary>
 		/// 
 		/// </summary>
-		private IList<RuntimeType> nestedTypes;
-
-		/// <summary>
-		/// 
-		/// </summary>
 		private readonly bool isValueType;
 
 		/// <summary>
@@ -98,7 +93,9 @@ namespace Mosa.Runtime.TypeSystem
 		/// <summary>
 		/// Initializes a new instance of the <see cref="RuntimeType"/> class.
 		/// </summary>
+		/// <param name="module">The module.</param>
 		/// <param name="token">The token of the type.</param>
+		/// <param name="baseType">Type of the base.</param>
 		public RuntimeType(ITypeModule module, TokenTypes token, RuntimeType baseType) :
 			base(module, token, null)
 		{
@@ -269,23 +266,6 @@ namespace Mosa.Runtime.TypeSystem
 		{
 			get { return layoutSize; }
 			protected set { layoutSize = value; }
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		public IList<RuntimeType> NestedTypes
-		{
-			get { return this.nestedTypes; }
-			protected set { this.nestedTypes = value; }
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		public bool HasNestedTypes
-		{
-			get { return this.NestedTypes != null && this.NestedTypes.Count > 0; }
 		}
 
 		/// <summary>

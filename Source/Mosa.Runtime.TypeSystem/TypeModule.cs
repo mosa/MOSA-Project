@@ -616,12 +616,13 @@ namespace Mosa.Runtime.TypeSystem
 					foreach (RuntimeMethod method in ownerType.Methods)
 					{
 						if (method.Name == name)
-
+						{
 							if (method.Signature.Matches(methodSignature))
 							{
 								runtimeMember = method;
 								break;
 							}
+						}
 					}
 
 					// Special case: string.get_Chars is same as string.get_Item
@@ -1079,6 +1080,48 @@ namespace Mosa.Runtime.TypeSystem
 			}
 
 			return calledMethod;
+		}
+
+		/// <summary>
+		/// Gets the open generic.
+		/// </summary>
+		/// <param name="baseGenericType">Type of the base generic.</param>
+		/// <returns></returns>
+		CilGenericType ITypeModule.GetOpenGeneric(RuntimeType baseGenericType)
+		{
+			if (baseGenericType.IsInterface || baseGenericType.IsModule)
+				return null;
+
+			if (baseGenericType.GenericParameters.Count == 0)
+				return null;
+
+			foreach (RuntimeType type in typeSpecs)
+			{
+				CilGenericType genericType = type as CilGenericType;
+				if (genericType != null)
+				{
+					if (genericType.BaseGenericType == baseGenericType)
+					{
+						if (genericType.ContainsOpenGenericParameters)
+						{
+							bool open = true;
+							foreach (SigType sigType in genericType.GenericArguments)
+							{
+								if (!sigType.IsOpenGenericParameter)
+								{
+									open = false;
+									break;
+								}
+							}
+
+							if (open)
+								return genericType;
+						}
+					}
+				}
+			}
+
+			return null;
 		}
 
 		#endregion

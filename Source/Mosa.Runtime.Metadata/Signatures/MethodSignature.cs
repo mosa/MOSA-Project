@@ -294,7 +294,8 @@ namespace Mosa.Runtime.Metadata.Signatures
 			{
 				if (parameters[i] is VarSigType)
 				{
-					parameters[i] = genericArguments[(parameters[i] as VarSigType).Index];
+					if ((parameters[i] as VarSigType).Index < genericArguments.Length)
+						parameters[i] = genericArguments[(parameters[i] as VarSigType).Index];
 				}
 			}
 

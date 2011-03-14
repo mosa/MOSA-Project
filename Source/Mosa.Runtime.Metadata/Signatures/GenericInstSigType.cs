@@ -49,7 +49,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 		{
 			this.baseType = baseType;
 			this.genericArguments = genericArguments;
-			this.containsGenericParameters = CheckContainsGenericParameters();
+			this.containsGenericParameters = CheckContainsOpenGenericParameters();
 		}
 
 		#endregion // Construction
@@ -62,10 +62,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// <value>The type of the generic type.</value>
 		public TypeSigType BaseType
 		{
-			get
-			{
-				return this.baseType;
-			}
+			get { return this.baseType; }
 		}
 
 		/// <summary>
@@ -74,10 +71,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// <value>The generic type signatures.</value>
 		public SigType[] GenericArguments
 		{
-			get
-			{
-				return this.genericArguments;
-			}
+			get { return this.genericArguments; }
 		}
 
 		/// <summary>
@@ -154,7 +148,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 			return sb.ToString();
 		}
 
-		private bool CheckContainsGenericParameters()
+		private bool CheckContainsOpenGenericParameters()
 		{
 			foreach (SigType sig in genericArguments)
 				if (sig.IsOpenGenericParameter)

@@ -14,6 +14,7 @@ using System.Text;
 
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Loader;
+using Mosa.Runtime.TypeSystem.Generic;
 
 namespace Mosa.Runtime.TypeSystem
 {
@@ -86,5 +87,12 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		/// <returns></returns>
 		ITypeModule MainTypeModule { get; set; }
+
+		/// <summary>
+		/// Gets the open generic.
+		/// </summary>
+		/// <param name="baseGenericType">Type of the base generic.</param>
+		/// <returns></returns>
+		CilGenericType GetOpenGeneric(RuntimeType baseGenericType);
 	}
 }
