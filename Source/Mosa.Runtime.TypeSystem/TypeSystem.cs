@@ -72,6 +72,13 @@ namespace Mosa.Runtime.TypeSystem
 				{
 					return typeModule; // already referenced
 				}
+
+				// Handle pseudo mscorlib
+				if ((typeModule.Name == "mscorlib") && (assembly == "Mosa.Test.Korlib"))
+				{
+					return typeModule;
+				}
+
 			}
 
 			return null;
