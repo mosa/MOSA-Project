@@ -348,7 +348,7 @@ namespace Mosa.Runtime.TypeSystem
 				if (!field.IsStaticField)
 				{
 					int fieldSize = GetMemorySize(field.SignatureType);
-					int fieldAlignment = GetAlignmentSize(field.SignatureType);
+					//int fieldAlignment = GetAlignmentSize(field.SignatureType);
 
 					// Pad the field in the type
 					if (packingSize != 0)

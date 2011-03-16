@@ -662,8 +662,7 @@ namespace Mosa.Runtime.TypeSystem
 
 				TypeRefRow row = metadataProvider.ReadTypeRefRow(token);
 				string typeName = GetString(row.TypeNameIdx);
-				string typenamespace = GetString(row.TypeNamespaceIdx);
-
+				//string typenamespace = GetString(row.TypeNamespaceIdx);
 				if (row.ResolutionScopeIdx == 0)
 					throw new NotImplementedException();
 
