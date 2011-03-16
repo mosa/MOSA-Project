@@ -1,0 +1,322 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{56CA38E7-0883-4461-A10E-386D0C58DBF9}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>Mosa.Platform.x86</AssemblyName>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>
+    </AppDesignerFolder>
+    <RootNamespace>Mosa.Platform.x86</RootNamespace>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\bin\</OutputPath>
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <RemoveIntegerChecks>False</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <AllowUnsafeBlocks>false</AllowUnsafeBlocks>
+    <BaseAddress>285212672</BaseAddress>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <FileAlignment>4096</FileAlignment>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\bin\</OutputPath>
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <RemoveIntegerChecks>False</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningLevel>2</WarningLevel>
+    <DebugType>none</DebugType>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="Gallio, Version=3.2.0.0, Culture=neutral, PublicKeyToken=eb9cfa67ee6ab36e, processorArchitecture=MSIL" />
+    <Reference Include="MbUnit, Version=3.2.0.0, Culture=neutral, PublicKeyToken=eb9cfa67ee6ab36e, processorArchitecture=MSIL" />
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj">
+      <Project>{0B1011A6-8FCD-4F9E-BBB8-8DB86E23D2E8}</Project>
+      <Name>Mosa.Compiler.Common</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Compiler.FileFormat\Mosa.Compiler.FileFormat.csproj">
+      <Project>{CC2E6418-C325-4486-B50D-941EC27053F6}</Project>
+      <Name>Mosa.Compiler.FileFormat</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Compiler.Linker\Mosa.Compiler.Linker.csproj">
+      <Project>{65866A51-B229-44C5-AC81-87A90FA1741B}</Project>
+      <Name>Mosa.Compiler.Linker</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Runtime.Metadata\Mosa.Runtime.Metadata.csproj">
+      <Project>{7033B213-2055-4C6A-B008-D9856267F5D7}</Project>
+      <Name>Mosa.Runtime.Metadata</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Runtime.TypeSystem\Mosa.Runtime.TypeSystem.csproj">
+      <Project>{5F30A68E-05BF-40EA-B576-5EBCDE520449}</Project>
+      <Name>Mosa.Runtime.TypeSystem</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Runtime\Mosa.Runtime.csproj">
+      <Project>{75A12A8A-8C8F-4D1E-801B-689D8F781BF4}</Project>
+      <Name>Mosa.Runtime</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Architecture.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="ArchitectureFeatureFlags.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="BaseTransformationStage.cs" />
+    <Compile Include="AddressModeConversionStage.cs" />
+    <Compile Include="ControlRegister.cs" />
+    <Compile Include="CPUx86\FarJmpInstruction.cs" />
+    <Compile Include="CPUx86\LeaveInstruction.cs" />
+    <Compile Include="CPUx86\SseRoundInstruction.cs" />
+    <Compile Include="ExceptionEngine.cs" />
+    <Compile Include="ExceptionHeaderPreprocessingStage.cs" />
+    <Compile Include="Intrinsic\CallFilter.cs" />
+    <Compile Include="Intrinsic\GetEip.cs" />
+    <Compile Include="Intrinsic\Cli.cs" />
+    <Compile Include="Intrinsic\GetControlRegisterBase.cs" />
+    <Compile Include="Intrinsic\GetCR0.cs" />
+    <Compile Include="Intrinsic\GetCR2.cs" />
+    <Compile Include="Intrinsic\GetCR3.cs" />
+    <Compile Include="Intrinsic\GetCR4.cs" />
+    <Compile Include="Intrinsic\JumpGlobalInterruptHandler.cs" />
+    <Compile Include="Intrinsic\RestoreContext.cs" />
+    <Compile Include="Intrinsic\SetControlRegisterBase.cs" />
+    <Compile Include="Intrinsic\SetCR0.cs" />
+    <Compile Include="Intrinsic\SetCR2.cs" />
+    <Compile Include="Intrinsic\SetCR3.cs" />
+    <Compile Include="Intrinsic\SetCR4.cs" />
+    <Compile Include="Intrinsic\SwitchTask.cs" />
+    <Compile Include="Intrinsic\Get.cs" />
+    <Compile Include="Intrinsic\Hlt.cs" />
+    <Compile Include="Intrinsic\Set.cs" />
+    <Compile Include="Intrinsic\SpinUnlock.cs" />
+    <Compile Include="Intrinsic\SpinLock.cs" />
+    <Compile Include="Intrinsic\CpuIdEax.cs" />
+    <Compile Include="Intrinsic\CpuIdEbx.cs" />
+    <Compile Include="Intrinsic\CpuIdEcx.cs" />
+    <Compile Include="Intrinsic\CpuIdEdx.cs" />
+    <Compile Include="Intrinsic\CpuId.cs" />
+    <Compile Include="Intrinsic\In.cs" />
+    <Compile Include="Intrinsic\Invlpg.cs" />
+    <Compile Include="Intrinsic\GetIDTJumpLocation.cs" />
+    <Compile Include="Intrinsic\Lgdt.cs" />
+    <Compile Include="Intrinsic\Lidt.cs" />
+    <Compile Include="Intrinsic\Nop.cs" />
+    <Compile Include="Intrinsic\Out.cs" />
+    <Compile Include="Intrinsic\Sti.cs" />
+    <Compile Include="RegisterContext.cs" />
+    <Compile Include="SegmentRegister.cs" />
+    <Compile Include="CPUx86\BranchInstruction.cs" />
+    <Compile Include="Intrinsic\Test.cs" />
+    <Compile Include="CPUx86\Cvttsd2siInstruction.cs" />
+    <Compile Include="CPUx86\Cvttss2si.cs" />
+    <Compile Include="CPUx86\DirectCompareInstruction.cs" />
+    <Compile Include="CPUx86\DirectDivisionInstruction.cs" />
+    <Compile Include="CPUx86\JmpInstruction.cs" />
+    <Compile Include="CPUx86\LeaInstruction.cs" />
+    <Compile Include="CPUx86\UDivInstruction.cs" />
+    <Compile Include="SimplePeepholeOptimizationStage.cs" />
+    <Compile Include="MemToMemConversionStage.cs" />
+    <Compile Include="CPUx86\CallInstruction.cs" />
+    <Compile Include="CPUx86\IX86Instruction.cs" />
+    <Compile Include="CPUx86\MovsdInstruction.cs" />
+    <Compile Include="CPUx86\MovssInstruction.cs" />
+    <Compile Include="CPUx86\RetInstruction.cs" />
+    <Compile Include="CPUx86\MovzxInstruction.cs" />
+    <Compile Include="CPUx86\MovsxInstruction.cs" />
+    <Compile Include="MachineCodeEmitter.cs" />
+    <Compile Include="ConstantRemovalStage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="TweakTransformationStage.cs" />
+    <Compile Include="CPUx86\AdcInstruction.cs" />
+    <Compile Include="CPUx86\AddInstruction.cs" />
+    <Compile Include="CPUx86\CdqInstruction.cs" />
+    <Compile Include="CPUx86\CmpInstruction.cs" />
+    <Compile Include="CPUx86\ComisdInstruction.cs" />
+    <Compile Include="CPUx86\ComissInstruction.cs" />
+    <Compile Include="CPUx86\BreakInstruction.cs" />
+    <Compile Include="CPUx86\Cvtsd2ssInstruction.cs" />
+    <Compile Include="CPUx86\Cvtsi2sdInstruction.cs" />
+    <Compile Include="CPUx86\Cvtsi2ssInstruction.cs" />
+    <Compile Include="CPUx86\Cvtss2sdInstruction.cs" />
+    <Compile Include="CPUx86\DecInstruction.cs" />
+    <Compile Include="CPUx86\DivInstruction.cs" />
+    <Compile Include="CPUx86\IncInstruction.cs" />
+    <Compile Include="CPUx86\Instruction.cs" />
+    <Compile Include="CPUx86\IntInstruction.cs" />
+    <Compile Include="Intrinsic\BochsDebug.cs" />
+    <Compile Include="CPUx86\CldInstruction.cs" />
+    <Compile Include="CPUx86\CliInstruction.cs" />
+    <Compile Include="CPUx86\CmpXchgInstruction.cs" />
+    <Compile Include="CPUx86\CpuIdEaxInstruction.cs" />
+    <Compile Include="CPUx86\CpuIdEbxInstruction.cs" />
+    <Compile Include="CPUx86\CpuIdEcxInstruction.cs" />
+    <Compile Include="CPUx86\CpuIdEdxInstruction.cs" />
+    <Compile Include="CPUx86\CpuIdInstruction.cs" />
+    <Compile Include="CPUx86\HltInstruction.cs" />
+    <Compile Include="CPUx86\InInstruction.cs" />
+    <Compile Include="Intrinsic\Method.cs" />
+    <Compile Include="CPUx86\InvlpgInstruction.cs" />
+    <Compile Include="CPUx86\IRetdInstruction.cs" />
+    <Compile Include="CPUx86\LgdtInstruction.cs" />
+    <Compile Include="CPUx86\LidtInstruction.cs" />
+    <Compile Include="CPUx86\LockInstruction.cs" />
+    <Compile Include="CPUx86\OutInstruction.cs" />
+    <Compile Include="CPUx86\PauseInstruction.cs" />
+    <Compile Include="CPUx86\PopadInstruction.cs" />
+    <Compile Include="CPUx86\PopfdInstruction.cs" />
+    <Compile Include="CPUx86\PopInstruction.cs" />
+    <Compile Include="CPUx86\PushadInstruction.cs" />
+    <Compile Include="CPUx86\PushfdInstruction.cs" />
+    <Compile Include="CPUx86\PushInstruction.cs" />
+    <Compile Include="CPUx86\RcrInstruction.cs" />
+    <Compile Include="CPUx86\RdmsrInstruction.cs" />
+    <Compile Include="CPUx86\RdpmcInstruction.cs" />
+    <Compile Include="CPUx86\RdtscInstruction.cs" />
+    <Compile Include="CPUx86\RepInstruction.cs" />
+    <Compile Include="CPUx86\StiInstruction.cs" />
+    <Compile Include="CPUx86\StosbInstruction.cs" />
+    <Compile Include="CPUx86\StosdInstruction.cs" />
+    <Compile Include="CPUx86\XchgInstruction.cs" />
+    <Compile Include="CPUx86\LiteralInstruction.cs" />
+    <Compile Include="CPUx86\AndInstruction.cs" />
+    <Compile Include="CPUx86\NotInstruction.cs" />
+    <Compile Include="CPUx86\OrInstruction.cs" />
+    <Compile Include="CPUx86\XorInstruction.cs" />
+    <Compile Include="CPUx86\MovInstruction.cs" />
+    <Compile Include="CPUx86\MulInstruction.cs" />
+    <Compile Include="CPUx86\NegInstruction.cs" />
+    <Compile Include="CPUx86\OneOperandInstruction.cs" />
+    <Compile Include="CPUx86\SalInstruction.cs" />
+    <Compile Include="CPUx86\SarInstruction.cs" />
+    <Compile Include="CPUx86\SbbInstruction.cs" />
+    <Compile Include="CPUx86\SetccInstruction.cs" />
+    <Compile Include="CPUx86\ShldInstruction.cs" />
+    <Compile Include="CPUx86\ShlInstruction.cs" />
+    <Compile Include="CPUx86\ShrdInstruction.cs" />
+    <Compile Include="CPUx86\ShrInstruction.cs" />
+    <Compile Include="CPUx86\SseAddInstruction.cs" />
+    <Compile Include="CPUx86\SseDivInstruction.cs" />
+    <Compile Include="CPUx86\SseMulInstruction.cs" />
+    <Compile Include="CPUx86\SseSubInstruction.cs" />
+    <Compile Include="CPUx86\SubInstruction.cs" />
+    <Compile Include="CPUx86\ThreeOperandInstruction.cs" />
+    <Compile Include="CPUx86\TwoOperandInstruction.cs" />
+    <Compile Include="CPUx86\UcomisdInstruction.cs" />
+    <Compile Include="CPUx86\UcomissInstruction.cs" />
+    <Compile Include="OpCode.cs" />
+    <Compile Include="CPUx86\BaseInstruction.cs" />
+    <Compile Include="CPUx86\IX86Visitor.cs" />
+    <Compile Include="CPUx86\NopInstruction.cs" />
+    <Compile Include="DefaultCallingConvention.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GeneralPurposeRegister.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="GenericX86Register.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IRTransformationStage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="LongOperandTransformationStage.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="MMXRegister.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Registers.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="SSE2Register.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Constraints\CmpXchgConstraint.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Constraints\DivConstraint.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Constraints\GPRConstraint.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Constraints\IntConstraint.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Constraints\LogicalAndConstraint.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Constraints\LogicalNotConstraint.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Constraints\LogicalOrConstraint.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Constraints\LogicalXorConstraint.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Constraints\MoveConstraint.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Constraints\MulConstraint.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Constraints\ShiftConstraint.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Constraints\SseAddConstraint.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Constraints\SSEConstraint.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Constraints\SseSubConstraint.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
+</Project>
