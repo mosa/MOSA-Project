@@ -12,6 +12,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 
+using Mono.Cecil;
+
 using Mosa.Runtime.Metadata.Tables;
 
 namespace Mosa.Runtime.Metadata
@@ -304,6 +306,23 @@ namespace Mosa.Runtime.Metadata
 		}
 
 		/// <summary>
+		/// Determines the size of an index into the named table.
+		/// </summary>
+		/// <param name="metadataToken">The metadata token.</param>
+		/// <returns>The index size in bytes.</returns>
+		private int GetIndexSize(TokenType tokenType)
+		{
+			int table = (int)tokenType >> 24;
+			if (0 > table || table >= (int)TokenTypes.MaxTable)
+				throw new ArgumentException(@"Invalid token type.", @"tokenTypes");
+
+			if (_rowCounts[table] > 65535)
+				return 4;
+
+			return 2;
+		}
+
+		/// <summary>
 		/// Read and decode an index value from the reader.
 		/// </summary>
 		/// <param name="reader">The reader to read From.</param>
@@ -360,6 +379,18 @@ namespace Mosa.Runtime.Metadata
 			return (TokenTypes)(2 == width ? reader.ReadInt16() : reader.ReadInt32()) | table;
 		}
 
+		/// <summary>
+		/// Read and decode an index value from the reader.
+		/// </summary>
+		/// <param name="reader">The reader to read From.</param>
+		/// <param name="metadataToken">The metadata token.</param>
+		/// <returns>The index value.</returns>
+		private MetadataToken ReadIndexValue(BinaryReader reader, TokenType tokenType)
+		{
+			int width = GetIndexSize(tokenType);
+			return new MetadataToken(tokenType, 2 == width ? reader.ReadInt16() : reader.ReadInt32());
+		}
+
 		private BinaryReader CreateReaderForToken(TokenTypes token)
 		{
 			// Calculate the table and row index
@@ -374,6 +405,20 @@ namespace Mosa.Runtime.Metadata
 				throw new ArgumentException(@"Invalid row index.", @"token");
 			int tableIdx = (int)(table) >> 24;
 			int tableOffset = _tableOffsets[tableIdx] + ((int)row - 1) * _recordSize[tableIdx];
+
+			BinaryReader reader = new BinaryReader(new MemoryStream(_metadata), Encoding.UTF8);
+			reader.BaseStream.Position = tableOffset;
+			return reader;
+		}
+
+		private BinaryReader CreateReaderForToken(MetadataToken metadataToken)
+		{
+			if (metadataToken.RID > GetMaxTokenValue(metadataToken).RID)
+				throw new ArgumentException(@"Row is out of bounds.", @"token");
+			if (metadataToken.RID == 0)
+				throw new ArgumentException(@"Invalid row index.", @"token");
+			int tableIdx = (int)(metadataToken.TokenType) >> 24;
+			int tableOffset = _tableOffsets[tableIdx] + ((int)(metadataToken.RID - 1) * _recordSize[tableIdx]);
 
 			BinaryReader reader = new BinaryReader(new MemoryStream(_metadata), Encoding.UTF8);
 			reader.BaseStream.Position = tableOffset;
@@ -396,6 +441,17 @@ namespace Mosa.Runtime.Metadata
 				throw new ArgumentException(@"Invalid table token type.", @"table");
 
 			return table | (TokenTypes)_rowCounts[((int)table >> 24)];
+		}
+
+		/// <summary>
+		/// Retrieves the number of rows in a specified table.
+		/// </summary>
+		/// <param name="metadataToken">The metadata token.</param>
+		/// <returns>The row count in the table.</returns>
+		/// <exception cref="System.ArgumentException">Invalid token type specified for table.</exception>
+		public MetadataToken GetMaxTokenValue(MetadataToken metadataToken)
+		{
+			return new MetadataToken(metadataToken.TokenType, _rowCounts[((int)metadataToken.TokenType >> 24)]);
 		}
 
 		/// <summary>
@@ -916,7 +972,7 @@ namespace Mosa.Runtime.Metadata
 					reader.ReadUInt16(),
 					reader.ReadUInt16(),
 					reader.ReadUInt16(),
-					(AssemblyFlags)reader.ReadUInt32(),
+					(AssemblyAttributes)reader.ReadUInt32(),
 					ReadIndexValue(reader, IndexType.BlobHeap),
 					ReadIndexValue(reader, IndexType.StringHeap),
 					ReadIndexValue(reader, IndexType.StringHeap)
@@ -979,7 +1035,7 @@ namespace Mosa.Runtime.Metadata
 					reader.ReadUInt16(),
 					reader.ReadUInt16(),
 					reader.ReadUInt16(),
-					(AssemblyFlags)reader.ReadUInt32(),
+					(AssemblyAttributes)reader.ReadUInt32(),
 					ReadIndexValue(reader, IndexType.BlobHeap),
 					ReadIndexValue(reader, IndexType.StringHeap),
 					ReadIndexValue(reader, IndexType.StringHeap),
@@ -1124,7 +1180,7 @@ namespace Mosa.Runtime.Metadata
 			{
 				return new GenericParamRow(
 					reader.ReadUInt16(),
-					(GenericParamAttributes)reader.ReadUInt16(),
+					(GenericParameterAttributes)reader.ReadUInt16(),
 					ReadIndexValue(reader, IndexType.TypeOrMethodDef),
 					ReadIndexValue(reader, IndexType.StringHeap)
 				);

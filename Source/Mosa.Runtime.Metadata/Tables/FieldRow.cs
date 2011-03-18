@@ -7,6 +7,8 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
+using Mono.Cecil;
+
 namespace Mosa.Runtime.Metadata.Tables
 {
 	/// <summary>

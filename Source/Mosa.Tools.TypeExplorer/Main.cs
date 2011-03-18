@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
+//using Mono.Cecil;
+
 using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Loader;
@@ -188,7 +190,7 @@ namespace Mosa.Tools.TypeExplorer
 							TreeNode methodNode = new TreeNode(FormatRuntimeMember(method));
 							methodsNode.Nodes.Add(methodNode);
 
-							if ((method.Attributes & MethodAttributes.Static) == MethodAttributes.Static)
+							if ((method.Attributes & Mono.Cecil.MethodAttributes.Static) == Mono.Cecil.MethodAttributes.Static)
 								methodNode.Text = methodNode.Text + " [Static]";
 
 							if (method.IsAbstract)

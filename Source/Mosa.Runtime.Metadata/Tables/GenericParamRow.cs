@@ -12,6 +12,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 
+using Mono.Cecil;
+
 namespace Mosa.Runtime.Metadata.Tables
 {
 	/// <summary>
@@ -29,7 +31,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private GenericParamAttributes _flags;
+		private GenericParameterAttributes _flags;
 
 		/// <summary>
 		/// 
@@ -52,7 +54,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <param name="flags">The flags.</param>
 		/// <param name="ownerTableIdx">The owner table idx.</param>
 		/// <param name="nameStringIdx">The name string idx.</param>
-		public GenericParamRow(ushort number, GenericParamAttributes flags, TokenTypes ownerTableIdx, TokenTypes nameStringIdx)
+		public GenericParamRow(ushort number, GenericParameterAttributes flags, TokenTypes ownerTableIdx, TokenTypes nameStringIdx)
 		{
 			_number = number;
 			_flags = flags;
@@ -77,7 +79,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Gets the flags.
 		/// </summary>
 		/// <value>The flags.</value>
-		public GenericParamAttributes Flags
+		public GenericParameterAttributes Flags
 		{
 			get { return _flags; }
 		}

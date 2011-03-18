@@ -12,6 +12,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Collections.Generic;
 
+using Mono.Cecil;
+
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Tables;
 using Mosa.Runtime.Metadata.Signatures;

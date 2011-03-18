@@ -12,6 +12,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 
+using Mono.Cecil;
+
 namespace Mosa.Runtime.Metadata.Tables
 {
 	/// <summary>
@@ -44,7 +46,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private AssemblyFlags _flags;
+		private AssemblyAttributes _flags;
 
 		/// <summary>
 		/// 
@@ -83,7 +85,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <param name="cultureIdx">The culture idx.</param>
 		/// <param name="hashValueIdx">The hash value idx.</param>
 		public AssemblyRefRow(ushort majorVersion, ushort minorVersion, ushort buildNumber, ushort revisionNumber,
-								AssemblyFlags flags, TokenTypes publicKeyOrTokenIdx, TokenTypes nameIdx,
+								AssemblyAttributes flags, TokenTypes publicKeyOrTokenIdx, TokenTypes nameIdx,
 								TokenTypes cultureIdx, TokenTypes hashValueIdx)
 		{
 			_majorVersion = majorVersion;
@@ -141,7 +143,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Gets the flags.
 		/// </summary>
 		/// <value>The flags.</value>
-		public AssemblyFlags Flags
+		public AssemblyAttributes Flags
 		{
 			get { return _flags; }
 		}

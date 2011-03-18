@@ -12,6 +12,8 @@ using System.IO;
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
 
+using Mono.Cecil;
+
 using Mosa.Compiler.Linker;
 using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime.Metadata;

@@ -12,6 +12,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
 
+using Mono.Cecil;
+
 namespace Mosa.Runtime.Metadata.Signatures
 {
 	/// <summary>
@@ -22,7 +24,8 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// <summary>
 		/// 
 		/// </summary>
-		private CallingConvention callingConvention;
+		//private CallingConvention callingConvention;
+		private MethodCallingConvention methodCallingConvention;
 
 		/// <summary>
 		/// 
@@ -53,10 +56,10 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// Gets the calling convention.
 		/// </summary>
 		/// <value>The calling convention.</value>
-		public CallingConvention CallingConvention
+		public MethodCallingConvention MethodCallingConvention
 		{
-			get { return callingConvention; }
-			protected set { callingConvention = value; }
+			get { return methodCallingConvention; }
+			protected set { methodCallingConvention = value; }
 		}
 
 		/// <summary>
@@ -150,7 +153,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 			if (parameters == null)
 				throw new ArgumentNullException(@"parameters");
 
-			this.callingConvention = CallingConvention.Default;
+			this.methodCallingConvention = MethodCallingConvention.Default;
 			this.hasExplicitThis = false;
 			this.hasThis = false;
 			this.parameters = parameters;
@@ -165,7 +168,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 		public MethodSignature(MethodSignature signature)
 			: base(signature)
 		{
-			this.callingConvention = signature.callingConvention;
+			this.methodCallingConvention = signature.methodCallingConvention;
 			this.hasExplicitThis = signature.hasExplicitThis;
 			this.hasThis = signature.hasThis;
 			this.returnType = signature.returnType;
@@ -208,12 +211,12 @@ namespace Mosa.Runtime.Metadata.Signatures
 
 			if (GENERIC == (value & GENERIC))
 			{
-				callingConvention = CallingConvention.Generic;
+				methodCallingConvention = MethodCallingConvention.Generic;
 				genericParameterCount = reader.ReadCompressedInt32();
 			}
 			else if (VARARG == (value & VARARG))
 			{
-				callingConvention = CallingConvention.Vararg;
+				methodCallingConvention = MethodCallingConvention.VarArg;
 			}
 			else if ((value & 0x1F) != 0x00)
 			{
@@ -266,7 +269,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 			// TODO: Check this to make sure it is correct
 			if (other.GenericParameterCount != this.GenericParameterCount)
 				return false;
-			if (other.CallingConvention != this.CallingConvention)
+			if (other.MethodCallingConvention != this.MethodCallingConvention)
 				return false;
 			if (other.HasThis != this.HasThis)
 				return false;

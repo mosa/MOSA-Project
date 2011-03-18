@@ -1,0 +1,80 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{BE9A5A27-22C4-4664-A8BD-388B30B5972C}</ProjectGuid>
+    <OutputType>Exe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Mosa.Tools.CreateBootImage</RootNamespace>
+    <AssemblyName>Mosa.Tools.CreateBootImage</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <StartupObject>Mosa.Tools.CreateBootImage.Program</StartupObject>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>
+    </DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <DocumentationFile>..\..\bin\Mosa.Tools.CreateBootImage.XML</DocumentationFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Program.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Mosa.ClassLib\Mosa.ClassLib.csproj">
+      <Project>{27A3C89C-1967-45FF-A77E-94F44995C42C}</Project>
+      <Name>Mosa.ClassLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.DeviceDrivers\Mosa.DeviceDrivers.csproj">
+      <Project>{4DBD4C50-BEC5-48D9-B471-9FB0A7F69999}</Project>
+      <Name>Mosa.DeviceDrivers</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.DeviceSystem\Mosa.DeviceSystem.csproj">
+      <Project>{6509477A-7360-4937-A1B9-26FED0A75CDA}</Project>
+      <Name>Mosa.DeviceSystem</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.EmulatedDevices\Mosa.EmulatedDevices.csproj">
+      <Project>{4BCC3783-8374-4E44-A843-22C0C5624C92}</Project>
+      <Name>Mosa.EmulatedDevices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.FileSystem\Mosa.FileSystem.csproj">
+      <Project>{D89972FD-A930-4D0C-B393-1895E78FAFAB}</Project>
+      <Name>Mosa.FileSystem</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

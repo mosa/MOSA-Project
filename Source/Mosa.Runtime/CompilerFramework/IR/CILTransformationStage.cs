@@ -14,7 +14,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
-using System.Reflection;
+//using System.Reflection;
+
+using Mono.Cecil;
 
 using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Runtime.Metadata;
@@ -429,7 +431,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 				Operand resultOperand = context.Result;
 				var operands = new List<Operand>(context.Operands);
 
-				if ((invokeTarget.Attributes & Mosa.Runtime.Metadata.MethodAttributes.Virtual) == Mosa.Runtime.Metadata.MethodAttributes.Virtual)
+				if ((invokeTarget.Attributes & MethodAttributes.Virtual) == MethodAttributes.Virtual)
 				{
 					Operand thisPtr = context.Operand1;
 
@@ -1920,7 +1922,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 
 		private bool ReplaceWithInternalCall(Context context, RuntimeMethod method)
 		{
-			bool internalCall = ((method.ImplAttributes & Mosa.Runtime.Metadata.MethodImplAttributes.InternalCall) == Mosa.Runtime.Metadata.MethodImplAttributes.InternalCall);
+			bool internalCall = ((method.ImplAttributes & MethodImplAttributes.InternalCall) == MethodImplAttributes.InternalCall);
 
 			if (internalCall)
 			{

@@ -11,6 +11,8 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 
+using Mono.Cecil;
+
 using Mosa.Runtime.Metadata.Tables;
 
 namespace Mosa.Runtime.Metadata
@@ -31,6 +33,13 @@ namespace Mosa.Runtime.Metadata
 		/// <param name="table">The token type, whose maximum value is returned.</param>
 		/// <exception cref="System.ArgumentException">Invalid token type specified.</exception>
 		TokenTypes GetMaxTokenValue(TokenTypes table);
+
+		/// <summary>
+		/// Gets the max token value.
+		/// </summary>
+		/// <param name="metadataToken">The metadata token.</param>
+		/// <returns></returns>
+		MetadataToken GetMaxTokenValue(MetadataToken metadataToken);
 
 		/// <summary>
 		/// Reads a string heap or user string heap entry.

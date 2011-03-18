@@ -12,6 +12,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
 
+using Mono.Cecil;
+
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Tables;
 using Mosa.Runtime.Metadata.Loader;
@@ -225,7 +227,7 @@ namespace Mosa.Runtime.TypeSystem
 			public TokenTypes MaxMethod;
 			public TokenTypes MaxField;
 			public int Size;
-			public int PackingSize;
+			public short PackingSize;
 		}
 
 		/// <summary>
@@ -258,7 +260,7 @@ namespace Mosa.Runtime.TypeSystem
 				info.NestedClassTableIdx = (nestedRow.NestedClassTableIdx == token) ? nestedRow.NestedClassTableIdx : 0;
 				info.EnclosingClassTableIdx = (nestedRow.NestedClassTableIdx == token) ? nestedRow.EnclosingClassTableIdx : 0;
 				info.Size = (layoutRow.ParentTypeDefIdx == token) ? layoutRow.ClassSize : 0;
-				info.PackingSize = (layoutRow.ParentTypeDefIdx == token) ? layoutRow.PackingSize : 0;
+				info.PackingSize = (layoutRow.ParentTypeDefIdx == token) ? layoutRow.PackingSize : (short)0;
 
 				if (token < maxTypeDef)
 				{
