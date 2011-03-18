@@ -10,26 +10,6 @@
 	<!-- Speaks for itself, I should hope -->
 	<property name="outputDirectory" value="${project::get-base-directory()}/../bin" overwrite="false"/>
 	
-	<!-- CreateBootImage tool -->
-	<target name="createbootimage">
-	    <csc target="exe" output="${outputDirectory}/Mosa.Tools.CreateBootImage.exe" debug="${debug}">
-		<sources>
-			<include name="CreateBootImage/**/*.cs"/>
-		</sources>
-		
-		<references>
-			<include name="${outputDirectory}/Mosa.ClassLib.dll"/>
-			<include name="${outputDirectory}/Mosa.DeviceSystem.dll"/>
-			<include name="${outputDirectory}/Mosa.DeviceDrivers.dll"/>
-			<include name="${outputDirectory}/Mosa.FileSystem.dll"/>
-			<include name="${outputDirectory}/Mosa.EmulatedDevices.dll"/>
-		</references>
-		
-		<!-- supress warnings -->
-		<nowarn><warning number="${suppresswarnings}"/></nowarn>
-	    </csc>
-	</target>
-
 	<target name="makeisoimage">
 	    <csc target="exe" output="${outputDirectory}/Mosa.MakeISOImage.exe" debug="${debug}">
 	        <sources>
@@ -41,7 +21,7 @@
 	</target>
 	
 	<!-- Main build target -->
-	<target name="build" depends="createbootimage, makeisoimage, mono"/>
+	<target name="build" depends="makeisoimage, mono"/>
 	<target name="mono"><nant buildfile="Mono/mosa.build"/></target>
 
 </project>

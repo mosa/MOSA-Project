@@ -20,6 +20,7 @@
 	<target name="init">
 		<mkdir dir="${outputDirectory}"/>
 	</target>
+
         <target name="Mosa.Tools.Compiler" depends="init,Mosa.Compiler.FileFormat,Mosa.Compiler.Linker,Mosa.Compiler.Pdb,Mosa.Platform.x86,Mosa.Runtime.Metadata,Mosa.Runtime.TypeSystem,Mosa.Runtime,"><nant buildfile="Mosa.Tools.Compiler/mosa.build"/></target>
         <target name="Mosa.HelloWorld" depends="init,Mosa.ClassLib,Mosa.DeviceDrivers,Mosa.DeviceSystem,Mosa.FileSystem,Mosa.Kernel,Korlib,Mosa.Platform.x86.Intrinsic,"><nant buildfile="Mosa.HelloWorld/mosa.build"/></target>
         <target name="ToolsCreatePCIList" depends="init,"><nant buildfile="Tools/CreatePCIList/mosa.build"/></target>
@@ -35,7 +36,7 @@
         <target name="Pictor.UI" depends="init,Pictor,"><nant buildfile="Pictor.UI/mosa.build"/></target>
         <target name="ToolsXmlTo" depends="init,"><nant buildfile="Tools/XmlTo/mosa.build"/></target>
         <target name="ToolsMakeIsoImage" depends="init,"><nant buildfile="Tools/MakeIsoImage/mosa.build"/></target>
-        <target name="ToolsCreateBootImage" depends="init,Mosa.ClassLib,Mosa.DeviceDrivers,Mosa.DeviceSystem,Mosa.EmulatedDevices,Mosa.FileSystem,"><nant buildfile="Tools/CreateBootImage/mosa.build"/></target>
+        <target name="ToolsCreateBootImage" depends="init,Mosa.ClassLib,Mosa.DeviceDrivers,Mosa.DeviceSystem,Mosa.EmulatedDevices,Mosa.FileSystem,"><nant buildfile="CreateBootImage/mosa.build"/></target>
         <target name="ToolsMonoUpdateProject" depends="init,"><nant buildfile="Tools/Mono/UpdateProject/mosa.build"/></target>
         <target name="ToolsMonoCreateProject" depends="init,"><nant buildfile="Tools/Mono/CreateProject/mosa.build"/></target>
         <target name="Korlib" depends="init,"><nant buildfile="Korlib/mosa.build"/></target>
