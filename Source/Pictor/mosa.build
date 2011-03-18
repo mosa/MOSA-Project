@@ -12,14 +12,89 @@
 	
 	<!-- Main build target -->
 	<target name="build">
-	    <csc target="library" output="${outputDirectory}/Mosa.Pictor.dll" debug="${debug}" unsafe="true">
+	    <csc target="library" output="${outputDirectory}/Pictor.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
-			<include name="**/*.cs"/>
+                    <include name="AntiAliasedCompundRasterizer.cs"/>
+                    <include name="AntiAliasedLineBasics.cs"/>
+                    <include name="AntiAliasedOutlineRasterizer.cs"/>
+                    <include name="AntiAliasedOutlineRenderer.cs"/>
+                    <include name="AntialiasedRasterizerCells.cs"/>
+                    <include name="AntiAliasedScanlineRasterizer.cs"/>
+                    <include name="Array.cs"/>
+                    <include name="Basics.cs"/>
+                    <include name="Blur.cs"/>
+                    <include name="BoundingRect.cs"/>
+                    <include name="BSpline.cs"/>
+                    <include name="ClipLiangBarsky.cs"/>
+                    <include name="ColorGray.cs"/>
+                    <include name="ColorRGBA.cs"/>
+                    <include name="DdaLine.cs"/>
+                    <include name="EquationSimulator.cs"/>
+                    <include name="Execution Timer.cs"/>
+                    <include name="GammaFunctions.cs"/>
+                    <include name="GammaLookupTable.cs"/>
+                    <include name="IColorType.cs"/>
+                    <include name="IGenerator.cs"/>
+                    <include name="ImageFilters.cs"/>
+                    <include name="IMarkers.cs"/>
+                    <include name="IScanline.cs"/>
+                    <include name="IVertexDest.cs"/>
+                    <include name="LinearSpanInterpolator.cs"/>
+                    <include name="Math.cs"/>
+                    <include name="MathStroke.cs"/>
+                    <include name="OutlineImageRenderer.cs"/>
+                    <include name="PatternFiltersRGBA.cs"/>
+                    <include name="PerspectiveSpanInterpolator.cs"/>
+                    <include name="PixelFormat/AlphaMaskAdaptor.cs"/>
+                    <include name="PixelFormat/AlphaMaskU8.cs"/>
+                    <include name="PixelFormat/ClippingProxy.cs"/>
+                    <include name="PixelFormat/Gray.cs"/>
+                    <include name="PixelFormat/IPixelFormat.cs"/>
+                    <include name="PixelFormat/RGB.cs"/>
+                    <include name="PixelFormat/RgbA.cs"/>
+                    <include name="PixelFormat/Transposer.cs"/>
+                    <include name="Quicksort.cs"/>
+                    <include name="RasterBuffer.cs"/>
+                    <include name="RasterBufferAccessors.cs"/>
+                    <include name="RasterizerClip.cs"/>
+                    <include name="Scanline.cs"/>
+                    <include name="ScanlineBin.cs"/>
+                    <include name="ScanlineRenderer.cs"/>
+                    <include name="SpanAllocator.cs"/>
+                    <include name="SpanGradient.cs"/>
+                    <include name="SpanImageFilter.cs"/>
+                    <include name="SpanImageFilterRGB.cs"/>
+                    <include name="SpanImageFilterRGBA.cs"/>
+                    <include name="SpanSubdivisionAdaptor.cs"/>
+                    <include name="Transform/Affine.cs"/>
+                    <include name="Transform/Bilinear.cs"/>
+                    <include name="Transform/ITransform.cs"/>
+                    <include name="Transform/Perspective.cs"/>
+                    <include name="Transform/Viewport.cs"/>
+                    <include name="UnpackedScanline.cs"/>
+                    <include name="VcGenStroke.cs"/>
+                    <include name="VertexSequence.cs"/>
+                    <include name="VertexSource/Arc.cs"/>
+                    <include name="VertexSource/CurveConverter.cs"/>
+                    <include name="VertexSource/Curves.cs"/>
+                    <include name="VertexSource/Ellipse.cs"/>
+                    <include name="VertexSource/GouraudSpan.cs"/>
+                    <include name="VertexSource/GouraudSpanRGBA.cs"/>
+                    <include name="VertexSource/GsvText.cs"/>
+                    <include name="VertexSource/IVertexSource.cs"/>
+                    <include name="VertexSource/PathStorage.cs"/>
+                    <include name="VertexSource/RoundedRect.cs"/>
+                    <include name="VertexSource/StrokeConverter.cs"/>
+                    <include name="VertexSource/TransformConverter.cs"/>
+                    <include name="VertexSource/VcGenConverterAdaptor.cs"/>
 		</sources>
-		
+		<references>
+                    <include name="System.dll"/>
+                    <include name="System.Data.dll"/>
+                    <include name="System.Xml.dll"/>
+		</references>
 		<!-- supress warnings -->
 		<nowarn><warning number="${suppresswarnings}"/></nowarn>
-	    </csc>
+        </csc>
 	</target>
-	
 </project>

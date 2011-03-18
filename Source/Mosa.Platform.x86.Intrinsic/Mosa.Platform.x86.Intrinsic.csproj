@@ -9,7 +9,7 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
-    <AssemblyName>Mosa.Platform.X86.Intrinsic</AssemblyName>
+    <AssemblyName>Mosa.Platform.x86.Intrinsic</AssemblyName>
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
@@ -18,7 +18,7 @@
     <OutputType>Library</OutputType>
     <AppDesignerFolder>
     </AppDesignerFolder>
-    <RootNamespace>Mosa.Platform.X86.Intrinsic</RootNamespace>
+    <RootNamespace>Mosa.Platform.x86.Intrinsic</RootNamespace>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
@@ -50,7 +50,7 @@
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
     <DefineConstants>TRACE</DefineConstants>
-    <DocumentationFile>..\..\bin\Mosa.Platform.X86.Intrinsic.xml</DocumentationFile>
+    <DocumentationFile>..\..\bin\Mosa.Platform.x86.Intrinsic.xml</DocumentationFile>
     <FileAlignment>4096</FileAlignment>
     <Optimize>true</Optimize>
     <OutputPath>..\..\bin\</OutputPath>

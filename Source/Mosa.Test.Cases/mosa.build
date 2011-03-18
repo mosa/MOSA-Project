@@ -12,19 +12,63 @@
 	
 	<!-- Main build target -->
 	<target name="build">
-	    <csc target="exe" output="${outputDirectory}/Mosa.Test.Cases.dll" debug="${debug}" unsafe="true">
+	    <csc target="library" output="${outputDirectory}/Mosa.Test.Cases.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
-			<include name="**/*.cs"/>
+                    <include name="CIL/BooleanFixture.cs"/>
+                    <include name="CIL/CallvirtFixture.cs"/>
+                    <include name="CIL/CharFixture.cs"/>
+                    <include name="CIL/GenericInterfaceFixture.cs"/>
+                    <include name="CIL/Int16Fixture.cs"/>
+                    <include name="CIL/Int8Fixture.cs"/>
+                    <include name="CIL/UInt16Fixture.cs"/>
+                    <include name="CIL/UInt8Fixture.cs"/>
+                    <include name="CIL/DoubleFixture.cs"/>
+                    <include name="CIL/EnumFixture.cs"/>
+                    <include name="CIL/ExceptionHandlingFixture.cs"/>
+                    <include name="OLD.CIL/GenericMethodMemberFixture.cs"/>
+                    <include name="OLD.CIL/GenericTypeFixture.cs"/>
+                    <include name="CIL/Int32Fixture.cs"/>
+                    <include name="CIL/Int64Fixture.cs"/>
+                    <include name="CIL/InterfaceFixture.cs"/>
+                    <include name="CIL/ObjectFixture.cs"/>
+                    <include name="OLD.CIL/PinnedFixture.cs"/>
+                    <include name="CIL/SingleFixture.cs"/>
+                    <include name="CIL/StringFixture.cs"/>
+                    <include name="CIL/UInt32Fixture.cs"/>
+                    <include name="CIL/UInt64Fixture.cs"/>
+                    <include name="OLD.IL/Add.cs"/>
+                    <include name="OLD.IL/AddPtr.cs"/>
+                    <include name="OLD.IL/And.cs"/>
+                    <include name="IL/CallWithConstant.cs"/>
+                    <include name="OLD.IL/Ceq.cs"/>
+                    <include name="OLD.IL/Cgt.cs"/>
+                    <include name="OLD.IL/Clt.cs"/>
+                    <include name="IL/ConditionalOperator.cs"/>
+                    <include name="IL/CallOrder.cs"/>
+                    <include name="IL/Call.cs"/>
+                    <include name="IL/Conv.cs"/>
+                    <include name="IL/Ldloca.cs"/>
+                    <include name="OLD.IL/Div.cs"/>
+                    <include name="IL/Ldarga.cs"/>
+                    <include name="OLD.IL/Mul.cs"/>
+                    <include name="OLD.IL/Or.cs"/>
+                    <include name="OLD.IL/Rem.cs"/>
+                    <include name="OLD.IL/Shl.cs"/>
+                    <include name="OLD.IL/Shr.cs"/>
+                    <include name="OLD.IL/StaticFieldInit.cs"/>
+                    <include name="OLD.IL/Stind.cs"/>
+                    <include name="OLD.IL/Stsfld.cs"/>
+                    <include name="OLD.IL/Sub.cs"/>
+                    <include name="IL/Switch.cs"/>
+                    <include name="IL/While.cs"/>
+                    <include name="OLD.IL/Xor.cs"/>
 		</sources>
-
 		<references>
-			<include name="${outputDirectory}/Mosa.Test.Collection.dll"/>
-			<include name="${outputDirectory}/Mosa.Test.Runtime.COmpilerFramework.dll"/>
+                    <include name="${outputDirectory}/Mosa.Test.Collection.dll"/>
+                    <include name="${outputDirectory}/Mosa.Test.Runtime.CompilerFramework.dll"/>
 		</references>
-
 		<!-- supress warnings -->
 		<nowarn><warning number="${suppresswarnings}"/></nowarn>
-	    </csc>
+        </csc>
 	</target>
-	
 </project>

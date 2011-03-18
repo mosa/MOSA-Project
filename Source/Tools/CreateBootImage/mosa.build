@@ -12,23 +12,17 @@
 	
 	<!-- Main build target -->
 	<target name="build">
-	    <csc target="library" output="${outputDirectory}/Mosa.HelloWorld.dll" debug="${debug}" unsafe="true" nostdlib="false">
+	    <csc target="library" output="${outputDirectory}/Mosa.Tools.CreateBootImage.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
-                    <include name="Boot.cs"/>
-                    <include name="Tests/Generic2Test.cs"/>
-                    <include name="Tests/KernelTest.cs"/>
-                    <include name="Tests/StringTest.cs"/>
-                    <include name="Tests/InterfaceTest.cs"/>
-                    <include name="Tests/GenericTest.cs"/>
+                    <include name="Program.cs"/>
 		</sources>
 		<references>
+                    <include name="System.dll"/>
                     <include name="${outputDirectory}/Mosa.ClassLib.dll"/>
                     <include name="${outputDirectory}/Mosa.DeviceDrivers.dll"/>
                     <include name="${outputDirectory}/Mosa.DeviceSystem.dll"/>
+                    <include name="${outputDirectory}/Mosa.EmulatedDevices.dll"/>
                     <include name="${outputDirectory}/Mosa.FileSystem.dll"/>
-                    <include name="${outputDirectory}/Mosa.Kernel.dll"/>
-                    <include name="${outputDirectory}/mscorlib.dll"/>
-                    <include name="${outputDirectory}/Mosa.Platform.x86.Intrinsic.dll"/>
 		</references>
 		<!-- supress warnings -->
 		<nowarn><warning number="${suppresswarnings}"/></nowarn>

@@ -12,32 +12,24 @@
 	
 	<!-- Main build target -->
 	<target name="build">
-	    <csc target="library" output="${outputDirectory}/Mosa.EmulatedKernel.dll" debug="${debug}" unsafe="true" nostdlib="false">
+	    <csc target="library" output="${outputDirectory}/Mosa.Tools.TypeExplorer.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
-                    <include name="Memory.cs"/>
-                    <include name="Native.cs"/>
-                    <include name="IOPort.cs"/>
-                    <include name="HardwareAbstraction.cs"/>
-                    <include name="IHardwareDevice.cs"/>
-                    <include name="IIOPortDevice.cs"/>
-                    <include name="IOPortDispatch.cs"/>
-                    <include name="IOPortHandler.cs"/>
-                    <include name="MemoryDispatch.cs"/>
-                    <include name="MemoryHandler.cs"/>
-                    <include name="PCIBus.cs"/>
-                    <include name="PCIDevice.cs"/>
-                    <include name="PortRange.cs"/>
+                    <include name="Main.cs"/>
+                    <include name="Main.Designer.cs"/>
+                    <include name="Program.cs"/>
                     <include name="Properties/Resources.Designer.cs"/>
 		</sources>
 		<references>
                     <include name="System.dll"/>
+                    <include name="System.Core.dll"/>
+                    <include name="System.Xml.Linq.dll"/>
+                    <include name="System.Data.DataSetExtensions.dll"/>
                     <include name="System.Data.dll"/>
                     <include name="System.Drawing.dll"/>
                     <include name="System.Windows.Forms.dll"/>
                     <include name="System.Xml.dll"/>
-                    <include name="${outputDirectory}/Mosa.ClassLib.dll"/>
-                    <include name="${outputDirectory}/Mosa.DeviceSystem.dll"/>
-                    <include name="${outputDirectory}/Mosa.DeviceDrivers.dll"/>
+                    <include name="${outputDirectory}/Mosa.Runtime.Metadata.dll"/>
+                    <include name="${outputDirectory}/Mosa.Runtime.TypeSystem.dll"/>
 		</references>
 		<!-- supress warnings -->
 		<nowarn><warning number="${suppresswarnings}"/></nowarn>

@@ -12,14 +12,17 @@
 	
 	<!-- Main build target -->
 	<target name="build">
-	    <csc target="library" output="${outputDirectory}/Mosa.ClassLib.dll" debug="${debug}">
+	    <csc target="library" output="${outputDirectory}/Mosa.ClassLib.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
-			<include name="**/*.cs"/>
+                    <include name="BinaryFormat.cs"/>
+                    <include name="Math.cs"/>
+                    <include name="LinkedList.cs"/>
+                    <include name="RedBlackTree.cs"/>
 		</sources>
-		
+		<references>
+		</references>
 		<!-- supress warnings -->
 		<nowarn><warning number="${suppresswarnings}"/></nowarn>
-	    </csc>
+        </csc>
 	</target>
-	
 </project>
