@@ -12,28 +12,62 @@
 	
 	<!-- Main build target -->
 	<target name="build">
-	    <csc target="exe" output="${outputDirectory}/mosacl.exe" debug="${debug}" unsafe="true">
+	    <csc target="library" output="${outputDirectory}/mosacl.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
-			<include name="**/*.cs"/>
+                    <include name="AotAssemblyCompiler.cs"/>
+                    <include name="AssemblyCompilationStage.cs"/>
+                    <include name="ConstantFoldingWrapper.cs"/>
+                    <include name="Linker/Elf64LinkerStage.cs"/>
+                    <include name="Linker/Elf32LinkerStage.cs"/>
+                    <include name="Linker/Elf32LinkerWrapper.cs"/>
+                    <include name="Linker/Elf64LinkerWrapper.cs"/>
+                    <include name="Linker/LinkerFormatSelector.cs"/>
+                    <include name="Linker/LinkerProxy.cs"/>
+                    <include name="Linker/MapFileGenerationStage.cs"/>
+                    <include name="Linker/ObjectFileLayoutStage.cs"/>
+                    <include name="Linker/PortableExecutableLinkerStage.cs"/>
+                    <include name="Linker/PortableExecutableLinkerWrapper.cs"/>
+                    <include name="Stage/MethodCompilerStageWrapper.cs"/>
+                    <include name="RegisterAllocatorSelector.cs"/>
+                    <include name="AotCompiler.cs"/>
+                    <include name="AotMethodCompiler.cs"/>
+                    <include name="ArchitectureSelector.cs"/>
+                    <include name="AssemblyCompilerStageWrapper.cs"/>
+                    <include name="Compiler.cs"/>
+                    <include name="IHasOptions.cs"/>
+                    <include name="InstructionSchedulingWrapper.cs"/>
+                    <include name="Stage/InstructionStatisticsStage.cs"/>
+                    <include name="Stage/InstructionStatisticsWrapper.cs"/>
+                    <include name="Linker/MapFileGeneratorWrapper.cs"/>
+                    <include name="CilHeaderBuilderStage.cs"/>
+                    <include name="Options.cs"/>
+                    <include name="Program.cs"/>
+                    <include name="Boot/BootFormatSelector.cs"/>
+                    <include name="Boot/Multiboot0695AssemblyStage.cs"/>
+                    <include name="LinkTimeCodeGeneration/LinkerGeneratedMethod.cs"/>
+                    <include name="LinkTimeCodeGeneration/LinkerGeneratedType.cs"/>
+                    <include name="LinkTimeCodeGeneration/LinkerMethodCompiler.cs"/>
+                    <include name="LinkTimeCodeGeneration/LinkTimeCodeGenerator.cs"/>
+                    <include name="Stage/FakeSystemObjectGenerationStage.cs"/>
+                    <include name="Stage/StaticAllocationResolutionStageWrapper.cs"/>
+                    <include name="Stage/StaticAllocationResolutionStage.cs"/>
+                    <include name="TypeInitializers/ITypeInitializerSchedulerStage.cs"/>
+                    <include name="TypeInitializers/TypeInitializerSchedulerStage.cs"/>
+                    <include name="TypeInitializers/TypeInitializerSchedulerStageProxy.cs"/>
+                    <include name="Stage/InterruptBuilderStage.cs"/>
 		</sources>
-
 		<references>
-			<include name="${outputDirectory}/Mosa.Platform.x86.dll"/>
-			<include name="${outputDirectory}/Mosa.Runtime.dll"/>
-			<include name="${outputDirectory}/Mosa.Runtime.Metadata.dll"/>
-			<include name="${outputDirectory}/Mosa.Runtime.TypeSystem.dll"/>
-			<include name="${outputDirectory}/Mosa.Compiler.FileFormat.dll"/>
-			<include name="${outputDirectory}/Mosa.Compiler.Linker.dll"/>
-			<include name="${outputDirectory}/Mosa.Compiler.Pdb.dll"/>
-			<include name="System.dll"/>
-			<include name="System.Core.dll"/>
-			<include name="System.Data.dll"/>
-			<include name="System.Xml.dll"/>
+                    <include name="System.dll"/>
+                    <include name="${outputDirectory}/Mosa.Compiler.FileFormat.dll"/>
+                    <include name="${outputDirectory}/Mosa.Compiler.Linker.dll"/>
+                    <include name="${outputDirectory}/Mosa.Compiler.Pdb.dll"/>
+                    <include name="${outputDirectory}/Mosa.Platform.x86.dll"/>
+                    <include name="${outputDirectory}/Mosa.Runtime.Metadata.dll"/>
+                    <include name="${outputDirectory}/Mosa.Runtime.TypeSystem.dll"/>
+                    <include name="${outputDirectory}/Mosa.Runtime.dll"/>
 		</references>
-
 		<!-- supress warnings -->
 		<nowarn><warning number="${suppresswarnings}"/></nowarn>
-	    </csc>
+        </csc>
 	</target>
-	
 </project>

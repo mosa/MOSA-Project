@@ -12,17 +12,114 @@
 	
 	<!-- Main build target -->
 	<target name="build">
-	    <csc target="library" output="${outputDirectory}/Mosa.Runtime.Metadata.dll" debug="${debug}" unsafe="true">
+	    <csc target="library" output="${outputDirectory}/Mosa.Runtime.Metadata.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
-			<include name="**/*.cs"/>
+                    <include name="AssemblyFlags.cs"/>
+                    <include name="AssemblyHashAlgorithm.cs"/>
+                    <include name="BlobHeap.cs"/>
+                    <include name="CallingConvention.cs"/>
+                    <include name="CilElementType.cs"/>
+                    <include name="EventAttributes.cs"/>
+                    <include name="FieldAttributes.cs"/>
+                    <include name="FileAttributes.cs"/>
+                    <include name="GenericParamAttributes.cs"/>
+                    <include name="GuidHeap.cs"/>
+                    <include name="Heap.cs"/>
+                    <include name="HeapType.cs"/>
+                    <include name="IMetadataProvider.cs"/>
+                    <include name="IndexType.cs"/>
+                    <include name="Loader/AssemblyLoader.cs"/>
+                    <include name="Loader/IAssemblyLoader.cs"/>
+                    <include name="Loader/IMetadataModule.cs"/>
+                    <include name="Loader/InstructionStream.cs"/>
+                    <include name="Loader/ModuleType.cs"/>
+                    <include name="Loader/PE/MetadataRoot.cs"/>
+                    <include name="Loader/PE/PortableExecutableImage.cs"/>
+                    <include name="Loader/PE/StreamHeader.cs"/>
+                    <include name="ManifestResourceAttributes.cs"/>
+                    <include name="MethodAttributes.cs"/>
+                    <include name="MethodImplAttributes.cs"/>
+                    <include name="MethodSemanticsAttributes.cs"/>
+                    <include name="ParameterAttributes.cs"/>
+                    <include name="PInvokeAttributes.cs"/>
+                    <include name="Properties/AssemblyInfo.cs"/>
+                    <include name="PropertyAttributes.cs"/>
+                    <include name="SignatureReader.cs"/>
+                    <include name="Signatures/ArraySigType.cs"/>
+                    <include name="Signatures/BuiltInSigType.cs"/>
+                    <include name="Signatures/ClassSigType.cs"/>
+                    <include name="Signatures/CustomMod.cs"/>
+                    <include name="Signatures/FieldSignature.cs"/>
+                    <include name="Signatures/FnptrSigType.cs"/>
+                    <include name="Signatures/GenericInstSigType.cs"/>
+                    <include name="Signatures/LocalVariableSignature.cs"/>
+                    <include name="Signatures/MethodReferenceSignature.cs"/>
+                    <include name="Signatures/MethodSignature.cs"/>
+                    <include name="Signatures/MethodSpecSignature.cs"/>
+                    <include name="Signatures/MVarSigType.cs"/>
+                    <include name="Signatures/PropertySignature.cs"/>
+                    <include name="Signatures/PtrSigType.cs"/>
+                    <include name="Signatures/RefSigType.cs"/>
+                    <include name="Signatures/Signature.cs"/>
+                    <include name="Signatures/SigType.cs"/>
+                    <include name="Signatures/StandaloneMethodSignature.cs"/>
+                    <include name="Signatures/SZArraySigType.cs"/>
+                    <include name="Signatures/TypeSigType.cs"/>
+                    <include name="Signatures/TypeSpecSignature.cs"/>
+                    <include name="Signatures/ValueTypeSigType.cs"/>
+                    <include name="Signatures/VariableSignature.cs"/>
+                    <include name="Signatures/VarSigType.cs"/>
+                    <include name="StringHeap.cs"/>
+                    <include name="Symbol.cs"/>
+                    <include name="TableHeap.cs"/>
+                    <include name="Tables/AssemblyOSRow.cs"/>
+                    <include name="Tables/AssemblyProcessorRow.cs"/>
+                    <include name="Tables/AssemblyRefOSRow.cs"/>
+                    <include name="Tables/AssemblyRefProcessorRow.cs"/>
+                    <include name="Tables/AssemblyRefRow.cs"/>
+                    <include name="Tables/AssemblyRow.cs"/>
+                    <include name="Tables/ClassLayoutRow.cs"/>
+                    <include name="Tables/ConstantRow.cs"/>
+                    <include name="Tables/CustomAttributeRow.cs"/>
+                    <include name="Tables/DeclSecurityRow.cs"/>
+                    <include name="Tables/EventMapRow.cs"/>
+                    <include name="Tables/EventRow.cs"/>
+                    <include name="Tables/ExportedTypeRow.cs"/>
+                    <include name="Tables/FieldLayoutRow.cs"/>
+                    <include name="Tables/FieldMarshalRow.cs"/>
+                    <include name="Tables/FieldRow.cs"/>
+                    <include name="Tables/FieldRVARow.cs"/>
+                    <include name="Tables/FileRow.cs"/>
+                    <include name="Tables/GenericParamConstraintRow.cs"/>
+                    <include name="Tables/GenericParamRow.cs"/>
+                    <include name="Tables/ImplMapRow.cs"/>
+                    <include name="Tables/InterfaceImplRow.cs"/>
+                    <include name="Tables/ManifestResourceRow.cs"/>
+                    <include name="Tables/MemberRefRow.cs"/>
+                    <include name="Tables/MethodDefRow.cs"/>
+                    <include name="Tables/MethodImplRow.cs"/>
+                    <include name="Tables/MethodSemanticsRow.cs"/>
+                    <include name="Tables/MethodSpecRow.cs"/>
+                    <include name="Tables/ModuleRefRow.cs"/>
+                    <include name="Tables/ModuleRow.cs"/>
+                    <include name="Tables/NestedClassRow.cs"/>
+                    <include name="Tables/ParamRow.cs"/>
+                    <include name="Tables/PropertyMapRow.cs"/>
+                    <include name="Tables/PropertyRow.cs"/>
+                    <include name="Tables/StandaloneSigRow.cs"/>
+                    <include name="Tables/TypeDefRow.cs"/>
+                    <include name="Tables/TypeRefRow.cs"/>
+                    <include name="Tables/TypeSpecRow.cs"/>
+                    <include name="TokenTypes.cs"/>
+                    <include name="TypeAttributes.cs"/>
+                    <include name="UserStringHeap.cs"/>
 		</sources>
-
 		<references>
-			<include name="${outputDirectory}/Mosa.Compiler.FileFormat.dll"/>
+                    <include name="System.dll"/>
+                    <include name="${outputDirectory}/Mosa.Compiler.FileFormat.dll"/>
 		</references>
 		<!-- supress warnings -->
 		<nowarn><warning number="${suppresswarnings}"/></nowarn>
-	    </csc>
+        </csc>
 	</target>
-	
 </project>

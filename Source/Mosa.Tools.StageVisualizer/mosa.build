@@ -12,25 +12,26 @@
 	
 	<!-- Main build target -->
 	<target name="build">
-	    <csc target="library" output="${outputDirectory}/Mosa.Platform.x86.dll" debug="${debug}" unsafe="true">
+	    <csc target="library" output="${outputDirectory}/Mosa.Tools.StageVisualizer.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
-			<include name="**/*.cs"/>
-			<exclude name="SalInstruction.cs"/>
+                    <include name="Output.cs"/>
+                    <include name="Main.cs"/>
+                    <include name="Main.Designer.cs"/>
+                    <include name="Program.cs"/>
+                    <include name="Properties/AssemblyInfo.cs"/>
 		</sources>
-		
 		<references>
-			<include name="${outputDirectory}/Mosa.Runtime.dll"/>
-			<include name="${outputDirectory}/Mosa.Runtime.TypeSystem.dll"/>
-			<include name="${outputDirectory}/Mosa.Runtime.Metadata.dll"/>
-			<include name="${outputDirectory}/Mosa.Compiler.FileFormat.dll"/>
-			<include name="${outputDirectory}/Mosa.Compiler.Common.dll"/>
-			<include name="${outputDirectory}/Mosa.Compiler.Linker.dll"/>
-			<include name="System.dll"/>
-		</references>		
-		
+                    <include name="System.dll"/>
+                    <include name="System.Core.dll"/>
+                    <include name="System.Xml.Linq.dll"/>
+                    <include name="System.Data.DataSetExtensions.dll"/>
+                    <include name="System.Data.dll"/>
+                    <include name="System.Drawing.dll"/>
+                    <include name="System.Windows.Forms.dll"/>
+                    <include name="System.Xml.dll"/>
+		</references>
 		<!-- supress warnings -->
 		<nowarn><warning number="${suppresswarnings}"/></nowarn>
-	    </csc>
+        </csc>
 	</target>
-	
 </project>

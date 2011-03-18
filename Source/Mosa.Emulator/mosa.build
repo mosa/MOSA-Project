@@ -12,28 +12,49 @@
 	
 	<!-- Main build target -->
 	<target name="build">
-	    <csc target="exe" output="${outputDirectory}/Emulator.exe" debug="${debug}" unsafe="true" main="Mosa.Emulator.Program">
+	    <csc target="library" output="${outputDirectory}/Mosa.Emulator.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
-			<include name="**/*.cs"/>
+                    <include name="HelloWorld/Boot.cs"/>
+                    <include name="HelloWorld/CMOS.cs"/>
+                    <include name="HelloWorld/GDT.cs"/>
+                    <include name="HelloWorld/IDT.cs"/>
+                    <include name="HelloWorld/Kernel.cs"/>
+                    <include name="HelloWorld/Keyboard.cs"/>
+                    <include name="HelloWorld/Memory.cs"/>
+                    <include name="HelloWorld/PageFaultHandler.cs"/>
+                    <include name="HelloWorld/PageFrameAllocator.cs"/>
+                    <include name="HelloWorld/Panic.cs"/>
+                    <include name="HelloWorld/PIC.cs"/>
+                    <include name="HelloWorld/ProcessManager.cs"/>
+                    <include name="HelloWorld/TaskManager.cs"/>
+                    <include name="HelloWorld/VirtualPageAllocator.cs"/>
+                    <include name="HelloWorld/Multiboot.cs"/>
+                    <include name="HelloWorld/PageTable.cs"/>
+                    <include name="HelloWorld/Screen.cs"/>
+                    <include name="MemoryForm.cs"/>
+                    <include name="MemoryForm.Designer.cs"/>
+                    <include name="PlatformSpecificWindow.cs"/>
+                    <include name="PixelMap.cs"/>
+                    <include name="EmulatorDemo.cs"/>
+                    <include name="PlatformSupport.cs"/>
+                    <include name="Program.cs"/>
 		</sources>
-		
 		<references>
-			<include name="${outputDirectory}/Mosa.DeviceSystem.dll"/>
-			<include name="${outputDirectory}/Mosa.DeviceDrivers.dll"/>
-			<include name="${outputDirectory}/Mosa.EmulatedKernel.dll"/>
-			<include name="${outputDirectory}/Mosa.FileSystem.dll"/>
-			<include name="${outputDirectory}/Mosa.EmulatedDevices.dll"/>
-			<include name="${outputDirectory}/Mosa.ClassLib.dll"/>
-			<include name="${outputDirectory}/Mosa.Pictor.dll"/>
-			<include name="${outputDirectory}/Mosa.Pictor.UI.dll"/>
-			<include name="System.dll"/>
-			<include name="System.Drawing.dll"/>
-			<include name="System.Windows.Forms.dll"/>
+                    <include name="System.dll"/>
+                    <include name="System.Data.dll"/>
+                    <include name="System.Drawing.dll"/>
+                    <include name="System.Windows.Forms.dll"/>
+                    <include name="${outputDirectory}/Mosa.EmulatedDevices.dll"/>
+                    <include name="${outputDirectory}/Mosa.ClassLib.dll"/>
+                    <include name="${outputDirectory}/Mosa.DeviceSystem.dll"/>
+                    <include name="${outputDirectory}/Mosa.DeviceDrivers.dll"/>
+                    <include name="${outputDirectory}/Mosa.EmulatedKernel.dll"/>
+                    <include name="${outputDirectory}/Mosa.FileSystem.dll"/>
+                    <include name="${outputDirectory}/Pictor.UI.dll"/>
+                    <include name="${outputDirectory}/Pictor.dll"/>
 		</references>
-		
 		<!-- supress warnings -->
 		<nowarn><warning number="${suppresswarnings}"/></nowarn>
-	    </csc>
+        </csc>
 	</target>
-	
 </project>

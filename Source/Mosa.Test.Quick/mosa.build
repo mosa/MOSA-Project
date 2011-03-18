@@ -12,12 +12,14 @@
 	
 	<!-- Main build target -->
 	<target name="build">
-	    <csc target="library" output="${outputDirectory}/Mosa.Platform.x86.Intrinsic.dll" debug="${debug}" unsafe="true" nostdlib="false">
+	    <csc target="library" output="${outputDirectory}/Mosa.Test.Quick.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
-                    <include name="Native.cs"/>
+                    <include name="Boot.cs"/>
+                    <include name="Test.cs"/>
+                    <include name="Object.cs"/>
+                    <include name="Runtime.cs"/>
 		</sources>
 		<references>
-                    <include name="${outputDirectory}/mscorlib.dll"/>
 		</references>
 		<!-- supress warnings -->
 		<nowarn><warning number="${suppresswarnings}"/></nowarn>
