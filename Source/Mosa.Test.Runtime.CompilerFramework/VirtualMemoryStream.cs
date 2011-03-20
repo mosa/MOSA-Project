@@ -68,7 +68,7 @@ namespace Mosa.Test.Runtime.CompilerFramework
 		protected unsafe override void Dispose(bool disposing)
 		{
 			base.Dispose(disposing);
-			if (null != _memory)
+			if (_memory != IntPtr.Zero)
 			{
 				_pageManager.Free(_memory, _allocationSize);
 				_memory = IntPtr.Zero;

@@ -63,21 +63,21 @@ namespace Mosa.Platform.x86
 		/// <summary>
 		/// Maps constraints to an instruction. Deprecated.
 		/// </summary>
-		private static readonly Dictionary<Type, Type> Constraints = new Dictionary<Type, Type>
-		{
-			{ typeof(CPUx86.AddInstruction), typeof(GPRConstraint) },
-			{ typeof(CPUx86.AdcInstruction), typeof(GPRConstraint) },
-			{ typeof(CPUx86.DivInstruction), typeof(DivConstraint) },
-			{ typeof(CPUx86.AndInstruction), typeof(LogicalAndConstraint) },
-			{ typeof(CPUx86.OrInstruction), typeof(LogicalOrConstraint) },
-			{ typeof(CPUx86.XorInstruction), typeof(LogicalXorConstraint) },
-			{ typeof(CPUx86.MovInstruction), typeof(MoveConstraint) },
-			{ typeof(CPUx86.MulInstruction), typeof(MulConstraint) },
-			{ typeof(CPUx86.SarInstruction), typeof(ShiftConstraint) },
-			{ typeof(CPUx86.ShlInstruction), typeof(ShiftConstraint) },
-			{ typeof(CPUx86.ShrInstruction), typeof(ShiftConstraint) },
-			{ typeof(CPUx86.SubInstruction), typeof(GPRConstraint) },
-		};
+		//private static readonly Dictionary<Type, Type> Constraints = new Dictionary<Type, Type>
+		//{
+		//    { typeof(CPUx86.AddInstruction), typeof(GPRConstraint) },
+		//    { typeof(CPUx86.AdcInstruction), typeof(GPRConstraint) },
+		//    { typeof(CPUx86.DivInstruction), typeof(DivConstraint) },
+		//    { typeof(CPUx86.AndInstruction), typeof(LogicalAndConstraint) },
+		//    { typeof(CPUx86.OrInstruction), typeof(LogicalOrConstraint) },
+		//    { typeof(CPUx86.XorInstruction), typeof(LogicalXorConstraint) },
+		//    { typeof(CPUx86.MovInstruction), typeof(MoveConstraint) },
+		//    { typeof(CPUx86.MulInstruction), typeof(MulConstraint) },
+		//    { typeof(CPUx86.SarInstruction), typeof(ShiftConstraint) },
+		//    { typeof(CPUx86.ShlInstruction), typeof(ShiftConstraint) },
+		//    { typeof(CPUx86.ShrInstruction), typeof(ShiftConstraint) },
+		//    { typeof(CPUx86.SubInstruction), typeof(GPRConstraint) },
+		//};
 
 		/// <summary>
 		/// Specifies the architecture features to use in generated code.

@@ -242,7 +242,7 @@ namespace Mosa.Tools.Compiler.Boot
 				// bss_end_addr is the virtualAddress of the last byte to be zeroed out
 				uint bss_end_addr = 0;
 				// entry_point the load virtualAddress of the entry point to invoke
-				uint entry_point = (uint)entryPoint.ToInt32();
+				//uint entry_point = (uint)entryPoint.ToInt32();
 
 				// Are we linking an ELF binary?
 				if (!(this.linker is Elf32LinkerStage || this.linker is Elf64LinkerStage))
