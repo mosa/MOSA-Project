@@ -10309,7 +10309,11 @@ namespace Mosa.DeviceSystem.PCI
 		/// <returns></returns>
 		public static string Lookup(ushort vendorID, ushort deviceID, ushort subSystem, ushort subVendor)
 		{
+<<<<<<< HEAD
 #if !__MonoCS__
+=======
+#if !MONO
+>>>>>>> 1b397451a973dd14cd0a389d0bafd585db57cddd
 			switch ((((ulong)vendorID << 48) | ((ulong)deviceID << 32) | ((ulong)subSystem << 16) | subVendor))
 			{
 				case 0x0E1100460E114091: return "Smart Array 6i";
