@@ -1,3 +1,4 @@
 *.dll
 *.exe
 *.resources
+Mono.Cecil

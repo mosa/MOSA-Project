@@ -9,16 +9,17 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using Mosa.Runtime.CompilerFramework;
-using Mosa.Tools.Compiler.LinkTimeCodeGeneration;
-using Mosa.Runtime.TypeSystem;
-using Mosa.Runtime.CompilerFramework.IR;
+
+using Mono.Cecil;
 
 using Mosa.Platform.x86;
+using Mosa.Runtime.CompilerFramework;
+using Mosa.Runtime.TypeSystem;
+using Mosa.Runtime.CompilerFramework.IR;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Metadata;
+using Mosa.Tools.Compiler.LinkTimeCodeGeneration;
 
 namespace Mosa.Tools.Compiler.Stage
 {

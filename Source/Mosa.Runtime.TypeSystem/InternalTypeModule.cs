@@ -9,7 +9,6 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Diagnostics;
 
@@ -158,6 +157,16 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		/// <value>The module's name.</value>
 		string ITypeModule.Name { get { return "<internal>"; } }
+
+		/// <summary>
+		/// Gets the open generic.
+		/// </summary>
+		/// <param name="baseGenericType">Type of the base generic.</param>
+		/// <returns></returns>
+		CilGenericType ITypeModule.GetOpenGeneric(RuntimeType baseGenericType)
+		{
+			return null;
+		}
 
 		#endregion
 

@@ -152,7 +152,8 @@ namespace Mosa.DeviceSystem
 			if (driverAtttribute.AutoLoad)
 			{
 				IHardwareDevice hardwareDevice = System.Activator.CreateInstance(deviceDriver.DriverType) as IHardwareDevice;
-				ISADeviceDriverAttribute attribute = deviceDriver.Attribute as ISADeviceDriverAttribute;
+				//UNUSED:
+				//ISADeviceDriverAttribute attribute = deviceDriver.Attribute as ISADeviceDriverAttribute;
 
 				LinkedList<IIOPortRegion> ioPortRegions = new LinkedList<IIOPortRegion>();
 				LinkedList<IMemoryRegion> memoryRegions = new LinkedList<IMemoryRegion>();

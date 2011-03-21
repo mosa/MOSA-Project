@@ -22,12 +22,14 @@ namespace Mosa.HelloWorld.Tests
 			Screen.Goto(23, 65);
 			Screen.Write("List Test: ");
 
-			//PrintResult(GenericTest1());
+			PrintResult(GenericTest1());
 		}
 
 		public static bool GenericTest1()
 		{
 			//LinkedList<int> list = new LinkedList<int>();
+
+			//int a = Math.Min(10, 10);
 
 			return true;
 		}

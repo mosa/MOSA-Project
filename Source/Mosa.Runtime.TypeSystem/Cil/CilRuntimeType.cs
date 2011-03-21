@@ -12,6 +12,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
 
+using Mono.Cecil;
+
 using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Loader;
@@ -33,9 +35,9 @@ namespace Mosa.Runtime.TypeSystem.Cil
 		private readonly TokenTypes baseTypeToken;
 
 		/// <summary>
-		/// 
+		/// Holds the enclosing type, if any.
 		/// </summary>
-		private readonly RuntimeType EnclosingType;
+		private readonly RuntimeType enclosingType;
 
 		#endregion // Data Members
 
@@ -58,12 +60,13 @@ namespace Mosa.Runtime.TypeSystem.Cil
 			base(module, token, baseType)
 		{
 			this.baseTypeToken = baseToken;
+			this.enclosingType = enclosingType;
+
 			base.Attributes = attributes;
 			base.Pack = packing;
 			base.LayoutSize = size;
 			base.Name = name;
 			base.Namespace = typeNamespace;
-			this.EnclosingType = enclosingType;
 
 			if (IsNested)
 			{

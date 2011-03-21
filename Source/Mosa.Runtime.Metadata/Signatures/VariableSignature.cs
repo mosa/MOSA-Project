@@ -107,7 +107,8 @@ namespace Mosa.Runtime.Metadata.Signatures
 
 			if (this.Type is VarSigType)
 			{
-				this.Type = genericArguments[(Type as VarSigType).Index];
+				if ((Type as VarSigType).Index < genericArguments.Length)
+					this.Type = genericArguments[(Type as VarSigType).Index];
 			}
 		}
 

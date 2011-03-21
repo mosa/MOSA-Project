@@ -70,15 +70,20 @@
     <DebugType>none</DebugType>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Gallio, Version=3.2.0.0, Culture=neutral, PublicKeyToken=eb9cfa67ee6ab36e, processorArchitecture=MSIL">
-      <HintPath>..\..\3rdParty\Gallio.dll</HintPath>
-    </Reference>
-    <Reference Include="MbUnit, Version=3.2.0.0, Culture=neutral, PublicKeyToken=eb9cfa67ee6ab36e, processorArchitecture=MSIL">
-      <HintPath>..\..\3rdParty\MbUnit.dll</HintPath>
+    <Reference Include="Mono.Cecil, Version=0.9.4.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+      <HintPath>..\..\3rdParty\Mono.Cecil.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
+    <Reference Include="Gallio, Version=3.2.0.0, Culture=neutral, PublicKeyToken=eb9cfa67ee6ab36e">
+      <HintPath>..\..\3rdParty\Gallio.dll</HintPath>
+    </Reference>
+    <Reference Include="MbUnit, Version=3.2.0.0, Culture=neutral, PublicKeyToken=eb9cfa67ee6ab36e">
+      <HintPath>..\..\3rdParty\MbUnit.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Core">
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mosa.Compiler.Linker\Mosa.Compiler.Linker.csproj">
@@ -97,13 +102,13 @@
       <Project>{5F30A68E-05BF-40EA-B576-5EBCDE520449}</Project>
       <Name>Mosa.Runtime.TypeSystem</Name>
     </ProjectReference>
-    <ProjectReference Include="..\\Mosa.Runtime\Mosa.Runtime.csproj">
-      <Project>{75A12A8A-8C8F-4D1E-801B-689D8F781BF4}</Project>
-      <Name>Mosa.Runtime</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Mosa.Tools.Compiler\Mosa.Tools.Compiler.csproj">
       <Project>{B69C2F31-5161-47BB-9FD3-2F2F2BCBF659}</Project>
       <Name>Mosa.Tools.Compiler</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Runtime\Mosa.Runtime.csproj">
+      <Project>{75A12A8A-8C8F-4D1E-801B-689D8F781BF4}</Project>
+      <Name>Mosa.Runtime</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -19,7 +19,7 @@ namespace Mosa.EmulatedKernel
 	{
 		private uint _address;
 		private uint _size;
-		private uint _end;
+		//private uint _end;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Memory"/> class.
@@ -30,7 +30,7 @@ namespace Mosa.EmulatedKernel
 		{
 			_address = address;
 			_size = size;
-			_end = address + size - 1;
+			//_end = address + size - 1;
 		}
 
 		/// <summary>

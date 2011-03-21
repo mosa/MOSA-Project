@@ -14,11 +14,25 @@ namespace Mosa.Runtime.TypeSystem.Generic
 
 	public class CilGenericType : RuntimeType
 	{
-		private readonly RuntimeType baseGenericType;
+		/// <summary>
+		/// 
+		/// </summary>
+		private readonly CilRuntimeType baseGenericType;
 
+		/// <summary>
+		/// 
+		/// </summary>
 		private readonly GenericInstSigType signature;
 
+		/// <summary>
+		/// 
+		/// </summary>
 		private readonly SigType[] genericArguments;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		private readonly bool containsOpenGenericArguments;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CilGenericType"/> class.
@@ -31,16 +45,29 @@ namespace Mosa.Runtime.TypeSystem.Generic
 		public CilGenericType(ITypeModule module, RuntimeType baseGenericType, GenericInstSigType genericTypeInstanceSignature, TokenTypes token, ITypeModule typeModule) :
 			base(module, token, baseGenericType.BaseType)
 		{
-			this.signature = genericTypeInstanceSignature;
-			this.genericArguments = signature.GenericArguments;
+			Debug.Assert(baseGenericType is CilRuntimeType);
 
-			this.baseGenericType = baseGenericType;
+			this.signature = genericTypeInstanceSignature;
+			this.baseGenericType = baseGenericType as CilRuntimeType;
 			base.Attributes = baseGenericType.Attributes;
 			base.Namespace = baseGenericType.Namespace;
 
+			if (this.baseGenericType.IsNested)
+			{
+				// TODO: find generic type 
+
+				;
+			}
+
+			// TODO: if this is a nested types, add enclosing type(s) into genericArguments first
+			this.genericArguments = signature.GenericArguments;
+
 			base.Name = GetName(typeModule);
+
 			ResolveMethods();
 			ResolveFields();
+
+			this.containsOpenGenericArguments = CheckContainsOpenGenericParameters();
 		}
 
 		/// <summary>
@@ -158,9 +185,18 @@ namespace Mosa.Runtime.TypeSystem.Generic
 
 		}
 
+		private bool CheckContainsOpenGenericParameters()
+		{
+			foreach (SigType sig in genericArguments)
+				if (sig.IsOpenGenericParameter)
+					return true;
+
+			return false;
+		}
+
 		public override bool ContainsOpenGenericParameters
 		{
-			get { return signature.ContainsGenericParameters; }
+			get { return containsOpenGenericArguments; }
 		}
 
 		public void ResolveInterfaces(ITypeModule typeModule)
@@ -188,7 +224,7 @@ namespace Mosa.Runtime.TypeSystem.Generic
 							{
 								if (genericType.baseGenericType == runtimetypegeneric.baseGenericType)
 								{
-									if (SigType.Equals(signature.GenericArguments, runtimetypegeneric.signature.GenericArguments))
+									if (SigType.Equals(GenericArguments, runtimetypegeneric.GenericArguments))
 									{
 										matchedInterfaceType = runtimetype;
 										//Interfaces.Add(runtimetype);

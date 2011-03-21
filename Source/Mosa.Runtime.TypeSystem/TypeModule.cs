@@ -9,9 +9,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Diagnostics;
+
+using Mono.Cecil;
 
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Tables;
@@ -226,7 +227,7 @@ namespace Mosa.Runtime.TypeSystem
 			public TokenTypes MaxMethod;
 			public TokenTypes MaxField;
 			public int Size;
-			public int PackingSize;
+			public short PackingSize;
 		}
 
 		/// <summary>
@@ -259,7 +260,7 @@ namespace Mosa.Runtime.TypeSystem
 				info.NestedClassTableIdx = (nestedRow.NestedClassTableIdx == token) ? nestedRow.NestedClassTableIdx : 0;
 				info.EnclosingClassTableIdx = (nestedRow.NestedClassTableIdx == token) ? nestedRow.EnclosingClassTableIdx : 0;
 				info.Size = (layoutRow.ParentTypeDefIdx == token) ? layoutRow.ClassSize : 0;
-				info.PackingSize = (layoutRow.ParentTypeDefIdx == token) ? layoutRow.PackingSize : 0;
+				info.PackingSize = (layoutRow.ParentTypeDefIdx == token) ? layoutRow.PackingSize : (short)0;
 
 				if (token < maxTypeDef)
 				{
@@ -616,12 +617,13 @@ namespace Mosa.Runtime.TypeSystem
 					foreach (RuntimeMethod method in ownerType.Methods)
 					{
 						if (method.Name == name)
-
+						{
 							if (method.Signature.Matches(methodSignature))
 							{
 								runtimeMember = method;
 								break;
 							}
+						}
 					}
 
 					// Special case: string.get_Chars is same as string.get_Item
@@ -662,8 +664,7 @@ namespace Mosa.Runtime.TypeSystem
 
 				TypeRefRow row = metadataProvider.ReadTypeRefRow(token);
 				string typeName = GetString(row.TypeNameIdx);
-				string typenamespace = GetString(row.TypeNamespaceIdx);
-
+				//string typenamespace = GetString(row.TypeNamespaceIdx);
 				if (row.ResolutionScopeIdx == 0)
 					throw new NotImplementedException();
 
@@ -1079,6 +1080,48 @@ namespace Mosa.Runtime.TypeSystem
 			}
 
 			return calledMethod;
+		}
+
+		/// <summary>
+		/// Gets the open generic.
+		/// </summary>
+		/// <param name="baseGenericType">Type of the base generic.</param>
+		/// <returns></returns>
+		CilGenericType ITypeModule.GetOpenGeneric(RuntimeType baseGenericType)
+		{
+			if (baseGenericType.IsInterface || baseGenericType.IsModule)
+				return null;
+
+			if (baseGenericType.GenericParameters.Count == 0)
+				return null;
+
+			foreach (RuntimeType type in typeSpecs)
+			{
+				CilGenericType genericType = type as CilGenericType;
+				if (genericType != null)
+				{
+					if (genericType.BaseGenericType == baseGenericType)
+					{
+						if (genericType.ContainsOpenGenericParameters)
+						{
+							bool open = true;
+							foreach (SigType sigType in genericType.GenericArguments)
+							{
+								if (!sigType.IsOpenGenericParameter)
+								{
+									open = false;
+									break;
+								}
+							}
+
+							if (open)
+								return genericType;
+						}
+					}
+				}
+			}
+
+			return null;
 		}
 
 		#endregion

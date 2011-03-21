@@ -9,12 +9,12 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Diagnostics;
 
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Loader;
+using Mosa.Runtime.TypeSystem.Generic;
 
 namespace Mosa.Runtime.TypeSystem
 {
@@ -71,6 +71,13 @@ namespace Mosa.Runtime.TypeSystem
 				{
 					return typeModule; // already referenced
 				}
+
+				// Handle pseudo mscorlib
+				if ((typeModule.Name == "mscorlib") && (assembly == "Mosa.Test.Korlib"))
+				{
+					return typeModule;
+				}
+
 			}
 
 			return null;
@@ -176,6 +183,26 @@ namespace Mosa.Runtime.TypeSystem
 		{
 			get { return mainTypeModule; }
 			set { mainTypeModule = value; }
+		}
+
+		/// <summary>
+		/// Gets the open generic.
+		/// </summary>
+		/// <param name="baseGenericType">Type of the base generic.</param>
+		/// <returns></returns>
+		CilGenericType ITypeSystem.GetOpenGeneric(RuntimeType baseGenericType)
+		{
+			foreach (ITypeModule typeModule in typeModules)
+			{
+				CilGenericType type = typeModule.GetOpenGeneric(baseGenericType);
+
+				if (type != null)
+				{
+					return type;
+				}
+			}
+
+			return null;
 		}
 
 		/// <summary>

@@ -32,18 +32,14 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Mono.Cecil">
+      <HintPath>..\..\3rdParty\Mono.Cecil.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssemblyFlags.cs" />
-    <Compile Include="AssemblyHashAlgorithm.cs" />
     <Compile Include="BlobHeap.cs" />
-    <Compile Include="CallingConvention.cs" />
     <Compile Include="CilElementType.cs" />
-    <Compile Include="EventAttributes.cs" />
-    <Compile Include="FieldAttributes.cs" />
-    <Compile Include="FileAttributes.cs" />
-    <Compile Include="GenericParamAttributes.cs" />
     <Compile Include="GuidHeap.cs" />
     <Compile Include="Heap.cs" />
     <Compile Include="HeapType.cs" />
@@ -57,14 +53,7 @@
     <Compile Include="Loader\PE\MetadataRoot.cs" />
     <Compile Include="Loader\PE\PortableExecutableImage.cs" />
     <Compile Include="Loader\PE\StreamHeader.cs" />
-    <Compile Include="ManifestResourceAttributes.cs" />
-    <Compile Include="MethodAttributes.cs" />
-    <Compile Include="MethodImplAttributes.cs" />
-    <Compile Include="MethodSemanticsAttributes.cs" />
-    <Compile Include="ParameterAttributes.cs" />
-    <Compile Include="PInvokeAttributes.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="PropertyAttributes.cs" />
     <Compile Include="SignatureReader.cs" />
     <Compile Include="Signatures\ArraySigType.cs" />
     <Compile Include="Signatures\BuiltInSigType.cs" />
@@ -132,7 +121,6 @@
     <Compile Include="Tables\TypeRefRow.cs" />
     <Compile Include="Tables\TypeSpecRow.cs" />
     <Compile Include="TokenTypes.cs" />
-    <Compile Include="TypeAttributes.cs" />
     <Compile Include="UserStringHeap.cs" />
   </ItemGroup>
   <ItemGroup>

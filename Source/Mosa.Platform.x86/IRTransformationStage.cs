@@ -723,10 +723,15 @@ namespace Mosa.Platform.x86
 
 			RegisterOperand xmm5 = new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM5);
 			RegisterOperand xmm6 = new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM6);
-			RegisterOperand eax = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EAX);
+			//UNUSED:
+			//RegisterOperand eax = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EAX);
 			RegisterOperand edx = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EDX);
-			RegisterOperand uedx = new RegisterOperand(new SigType(CilElementType.U4), GeneralPurposeRegister.EDX);
-			Context before = context.InsertBefore();
+			
+			//UNUSED:
+			//RegisterOperand uedx = new RegisterOperand(new SigType(CilElementType.U4), GeneralPurposeRegister.EDX);
+			
+			//UNUSED:
+			//Context before = context.InsertBefore();
 
 			context.SetInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[0].BasicBlock);
 			LinkBlocks(context, newBlocks[0]);
@@ -992,8 +997,9 @@ namespace Mosa.Platform.x86
 			RuntimeType runtimeType = typeSystem.GetType(@"Mosa.Platforms.x86.ExceptionEngine, Mosa.Platforms.x86");
 			RuntimeMethod runtimeMethod = runtimeType.FindMethod(@"ThrowException");
 			SymbolOperand method = SymbolOperand.FromMethod(runtimeMethod);
-
-			Operand callTarget = context.Result;
+			
+			//UNUSED:
+			//Operand callTarget = context.Result;
 
 			MemoryOperand pointOfThrowOperand = new MemoryOperand(u4, GeneralPurposeRegister.ESP, new IntPtr(pointOfThrow));
 			MemoryOperand exceptionObjectOperand = new MemoryOperand(u4, GeneralPurposeRegister.ESP, new IntPtr(exceptionObject));

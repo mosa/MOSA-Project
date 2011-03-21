@@ -13,6 +13,8 @@ using System.Runtime.InteropServices;
 using System.Text;
 using System.Collections.Generic;
 
+using Mono.Cecil;
+
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Tables;
 
@@ -202,6 +204,16 @@ namespace Mosa.Runtime.Metadata.Loader.PE
 					break;
 			}
 			return result;
+		}
+
+		/// <summary>
+		/// Gets the max token value.
+		/// </summary>
+		/// <param name="metadataToken">The metadata token.</param>
+		/// <returns></returns>
+		MetadataToken IMetadataProvider.GetMaxTokenValue(MetadataToken metadataToken)
+		{
+			return ((TableHeap)_streams[(int)HeapType.Tables]).GetMaxTokenValue(metadataToken);
 		}
 
 		/// <summary>

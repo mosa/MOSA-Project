@@ -272,11 +272,12 @@ namespace Mosa.Platform.x86
 			RegisterOperand esi = new RegisterOperand(I4, GeneralPurposeRegister.ESI);
 
 			RegisterOperand ueax = new RegisterOperand(U4, GeneralPurposeRegister.EAX);
-			RegisterOperand uebx = new RegisterOperand(U4, GeneralPurposeRegister.EBX);
 			RegisterOperand uedx = new RegisterOperand(U4, GeneralPurposeRegister.EDX);
 			RegisterOperand uecx = new RegisterOperand(U4, GeneralPurposeRegister.ECX);
-			RegisterOperand uedi = new RegisterOperand(U4, GeneralPurposeRegister.EDI);
-			RegisterOperand uesi = new RegisterOperand(U4, GeneralPurposeRegister.ESI);
+			//UNUSED:
+			//RegisterOperand uebx = new RegisterOperand(U4, GeneralPurposeRegister.EBX);
+			//RegisterOperand uedi = new RegisterOperand(U4, GeneralPurposeRegister.EDI);
+			//RegisterOperand uesi = new RegisterOperand(U4, GeneralPurposeRegister.ESI);
 
 			// ; Determine sign of the result (edi = 0 if result is positive, non-zero
 			// ; otherwise) and make operands positive.
@@ -981,8 +982,9 @@ namespace Mosa.Platform.x86
 			RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
 			RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
 			RegisterOperand ecx = new RegisterOperand(I4, GeneralPurposeRegister.ECX);
-
-			RegisterOperand cl = new RegisterOperand(new SigType(CilElementType.U1), GeneralPurposeRegister.ECX);
+			
+			//UNUSED:
+			//RegisterOperand cl = new RegisterOperand(new SigType(CilElementType.U1), GeneralPurposeRegister.ECX);
 
 			Context[] newBlocks = CreateEmptyBlockContexts(context.Label, 6);
 			Context nextBlock = SplitContext(context, true);
@@ -1121,8 +1123,9 @@ namespace Mosa.Platform.x86
 			RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
 			RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
 			RegisterOperand ecx = new RegisterOperand(U1, GeneralPurposeRegister.ECX);
-
-			RegisterOperand cl = new RegisterOperand(new SigType(CilElementType.U1), GeneralPurposeRegister.ECX);
+			
+			//UNUSED:
+			//RegisterOperand cl = new RegisterOperand(new SigType(CilElementType.U1), GeneralPurposeRegister.ECX);
 
 			Context[] newBlocks = CreateEmptyBlockContexts(context.Label, 6);
 			Context nextBlock = SplitContext(context, true);
@@ -1539,8 +1542,9 @@ namespace Mosa.Platform.x86
 				case CIL.OpCode.Blt_un: goto case CIL.OpCode.Blt_un_s;
 				default: throw new NotImplementedException();
 			}
-
-			IR.ConditionCode conditionHigh = GetHighCondition(code);
+			
+			//UNUSED:
+			//IR.ConditionCode conditionHigh = GetHighCondition(code);
 
 			Context[] newBlocks = CreateEmptyBlockContexts(context.Label, 3);
 			Context nextBlock = SplitContext(context, false);
@@ -1590,7 +1594,8 @@ namespace Mosa.Platform.x86
 			Context nextBlock = SplitContext(context, false);
 
 			IR.ConditionCode conditionCode = ConvertCondition((context.Instruction as CIL.ICILInstruction).OpCode);
-			IR.ConditionCode conditionHigh = GetHighCondition(conditionCode);
+			//UNUSED:
+			//IR.ConditionCode conditionHigh = GetHighCondition(conditionCode);
 
 			// TODO: optimize by removing this jump and merge with next block
 			context.SetInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[0].BasicBlock);
@@ -1649,7 +1654,9 @@ namespace Mosa.Platform.x86
 			Debug.Assert(op1 != null && op2 != null, @"IntegerCompareInstruction operand not memory!");
 			Debug.Assert(op0 is MemoryOperand || op0 is RegisterOperand, @"IntegerCompareInstruction result not memory and not register!");
 
-			SigType I4 = new SigType(CilElementType.I4), U4 = new SigType(CilElementType.U4);
+			SigType I4 = new SigType(CilElementType.I4);
+			//UNUSED:
+			//SigType U4 = new SigType(CilElementType.U4);
 
 			Operand op1L, op1H, op2L, op2H;
 			SplitLongOperand(op1, out op1L, out op1H);

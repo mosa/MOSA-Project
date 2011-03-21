@@ -16,6 +16,7 @@
 *.tlog
 *.vs10x
 *.exe.manifest
+*.mdb
 Thumbs.db
 build.force
 /bin/*

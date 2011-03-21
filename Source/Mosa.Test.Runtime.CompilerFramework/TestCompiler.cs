@@ -259,6 +259,8 @@ namespace Mosa.Test.Runtime.CompilerFramework
 			IAssemblyLoader assemblyLoader = new AssemblyLoader();
 			assemblyLoader.InitializePrivatePaths(settings.References);
 
+			assemblyLoader.LoadModule(assemblyFile);
+			
 			foreach (string file in settings.References)
 			{
 				assemblyLoader.LoadModule(file);

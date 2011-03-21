@@ -21,8 +21,9 @@ namespace Mosa.Platform.x86.CPUx86
 	{
 
 		#region Data Members
-
-		private static readonly byte[] JMP = new byte[] { 0xEA };
+		
+		//UNUSED:
+		//private static readonly byte[] JMP = new byte[] { 0xEA };
 
 		#endregion
 

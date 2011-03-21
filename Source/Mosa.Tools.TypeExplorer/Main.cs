@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
+//using Mono.Cecil;
+
 using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Loader;
@@ -119,6 +121,26 @@ namespace Mosa.Tools.TypeExplorer
 						}
 					}
 
+					CilGenericType genericOpenType = typeSystem.GetOpenGeneric(type);
+					if (genericOpenType != null)
+					{
+						TreeNode genericOpenTypeNode = new TreeNode("Open Generic Type: " + FormatRuntimeType(genericOpenType));
+						typeNode.Nodes.Add(genericOpenTypeNode);
+					}
+
+
+					if (type.GenericParameters.Count != 0)
+					{
+						TreeNode genericParameterNodes = new TreeNode("Generic Parameters");
+						typeNode.Nodes.Add(genericParameterNodes);
+
+						foreach (GenericParameter genericParameter in type.GenericParameters)
+						{
+							TreeNode GenericParameterNode = new TreeNode(genericParameter.Name);
+							genericParameterNodes.Nodes.Add(GenericParameterNode);
+						}
+					}
+
 					if (type.Interfaces.Count != 0)
 					{
 						TreeNode interfacesNodes = new TreeNode("Interfaces");
@@ -135,7 +157,7 @@ namespace Mosa.Tools.TypeExplorer
 					{
 						TreeNode fieldsNode = new TreeNode("Fields");
 						if (showSizes.Checked)
-							fieldsNode.Text = fieldsNode.Text + " (Size: " + typeLayout.GetTypeSize(type).ToString() + ")";
+							fieldsNode.Text = fieldsNode.Text + " (Count: " + type.Fields.Count.ToString() + " - Size: " + typeLayout.GetTypeSize(type).ToString() + ")";
 						typeNode.Nodes.Add(fieldsNode);
 
 						foreach (RuntimeField field in type.Fields)
@@ -149,7 +171,7 @@ namespace Mosa.Tools.TypeExplorer
 							if (showSizes.Checked)
 							{
 								fieldNode.Text = fieldNode.Text + " (Size: " + typeLayout.GetFieldSize(field).ToString();
-								
+
 								if (!field.IsStaticField)
 									fieldNode.Text = fieldNode.Text + " - Offset: " + typeLayout.GetFieldOffset(field).ToString();
 
@@ -168,7 +190,7 @@ namespace Mosa.Tools.TypeExplorer
 							TreeNode methodNode = new TreeNode(FormatRuntimeMember(method));
 							methodsNode.Nodes.Add(methodNode);
 
-							if ((method.Attributes & MethodAttributes.Static) == MethodAttributes.Static)
+							if ((method.Attributes & Mono.Cecil.MethodAttributes.Static) == Mono.Cecil.MethodAttributes.Static)
 								methodNode.Text = methodNode.Text + " [Static]";
 
 							if (method.IsAbstract)

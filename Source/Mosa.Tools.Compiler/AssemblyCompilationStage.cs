@@ -23,8 +23,7 @@ namespace Mosa.Tools.Compiler
 {
 	public class AssemblyCompilationStage : BaseAssemblyCompilerStage, IAssemblyCompilerStage
 	{
-		private readonly List<IMetadataModule> inputAssemblies = new List<IMetadataModule>();
-
+		
 		private IAssemblyLinker linker;
 
 		private ITypeInitializerSchedulerStage typeInitializerSchedulerStage;

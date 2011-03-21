@@ -26,7 +26,8 @@ namespace Mosa.Platform.x86.CPUx86
 		#region Data Members
 
 		private static readonly OpCode O_C = new OpCode(new byte[] { 0x81 }, 5);
-		private static readonly OpCode O_C_16 = new OpCode(new byte[] { 0x66, 0x81 }, 5);
+		//UNUSED:
+		//private static readonly OpCode O_C_16 = new OpCode(new byte[] { 0x66, 0x81 }, 5);
 		private static readonly OpCode R_O = new OpCode(new byte[] { 0x2B });
 		private static readonly OpCode R_O_16 = new OpCode(new byte[] { 0x66, 0x2B });
 		private static readonly OpCode M_R = new OpCode(new byte[] { 0x29 });

@@ -12,6 +12,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Collections.Generic;
 
+using Mono.Cecil;
+
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Tables;
 using Mosa.Runtime.Metadata.Signatures;
@@ -348,7 +350,7 @@ namespace Mosa.Runtime.TypeSystem
 				if (!field.IsStaticField)
 				{
 					int fieldSize = GetMemorySize(field.SignatureType);
-					int fieldAlignment = GetAlignmentSize(field.SignatureType);
+					//int fieldAlignment = GetAlignmentSize(field.SignatureType);
 
 					// Pad the field in the type
 					if (packingSize != 0)

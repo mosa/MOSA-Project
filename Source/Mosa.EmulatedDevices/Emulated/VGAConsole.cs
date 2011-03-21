@@ -31,8 +31,8 @@ namespace Mosa.EmulatedDevices.Emulated
 		private int fontHeight;
 		private Mosa.DeviceSystem.ColorPalette palette;
 
-		private int cursorX = 0;
-		private int cursorY = 0;
+		//private int cursorX = 0;
+		//private int cursorY = 0;
 
 		#region Definitions
 
@@ -139,7 +139,8 @@ namespace Mosa.EmulatedDevices.Emulated
 			width = 80;
 			height = 27;
 
-			cursorX = cursorY = 0;
+			//cursorX = 0;
+			//cursorY = 0;
 			cursorPosition = 0;
 			lastCommand = 0;
 
@@ -328,8 +329,8 @@ namespace Mosa.EmulatedDevices.Emulated
 		/// </summary>
 		protected void SetCursor()
 		{
-			cursorY = (int)(cursorPosition / width);
-			cursorX = (int)(cursorPosition - (cursorY * width));
+			//cursorY = (int)(cursorPosition / width);
+			//cursorX = (int)(cursorPosition - (cursorY * width));
 		}
 
 		/// <summary>

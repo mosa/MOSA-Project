@@ -9,6 +9,8 @@
 
 using Mosa.Runtime.Metadata;
 
+using Mono.Cecil;
+
 namespace Mosa.Runtime.TypeSystem
 {
 	/// <summary>
@@ -19,7 +21,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// <summary>
 		/// 
 		/// </summary>
-		private readonly GenericParamAttributes flags;
+		private readonly GenericParameterAttributes flags;
 
 		/// <summary>
 		/// 
@@ -31,7 +33,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		/// <param name="name">The name.</param>
 		/// <param name="flags">The flags.</param>
-		public GenericParameter(string name, GenericParamAttributes flags)
+		public GenericParameter(string name, GenericParameterAttributes flags)
 		{
 			this.name = name;
 			this.flags = flags;
@@ -41,7 +43,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// Gets the flags.
 		/// </summary>
 		/// <value>The flags.</value>
-		public GenericParamAttributes Flags { get { return flags; } }
+		public GenericParameterAttributes Flags { get { return flags; } }
 
 		/// <summary>
 		/// Gets the name.

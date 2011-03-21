@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 
 using Mosa.Runtime.TypeSystem;
@@ -17,7 +16,9 @@ namespace Mosa.Test.Stuff
 		static void Main(string[] args)
 		{
 			IAssemblyLoader assemblyLoader = new AssemblyLoader();
-			assemblyLoader.LoadModule(@"X:\MOSA-Project-tgiphil\bin\Mosa.HelloWorld.exe");
+			assemblyLoader.AddPrivatePath(@"X:\MonoTest\bin\");
+
+			assemblyLoader.LoadModule(@"X:\MonoTest\bin\Mosa.HelloWorld.exe");
 
 			ITypeSystem typeSystem = new TypeSystem();
 			typeSystem.LoadModules(assemblyLoader.Modules);
