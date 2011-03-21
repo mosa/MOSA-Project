@@ -14,7 +14,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
-//using System.Reflection;
 
 using Mono.Cecil;
 
@@ -1834,8 +1833,8 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <param name="internalCallTarget">The internal call target.</param>
 		private void ReplaceWithVmCall(Context context, VmCall internalCallTarget)
 		{
-			RuntimeType type = typeSystem.GetType(@"Mosa.Intrinsic.Runtime");
-			Debug.Assert(type != null, "Cannot find Mosa.Intrinsic.Runtime");
+			RuntimeType type = typeSystem.GetType(@"Mosa.Internal.Runtime");
+			Debug.Assert(type != null, "Cannot find Mosa.Internal.Runtime");
 
 			RuntimeMethod method = type.FindMethod(internalCallTarget.ToString());
 			Debug.Assert(method != null, "Cannot find method: " + internalCallTarget.ToString());

@@ -58,8 +58,8 @@ namespace Mosa.Test.Runtime.CompilerFramework
 			for (int i = 0; i < maxSections; i++)
 				sections.Add(new TestLinkerSection((SectionKind)i, String.Empty, IntPtr.Zero));
 
-			this.allocateArrayHandler = new AllocateArrayDelegate(global::Mosa.Intrinsic.Runtime.AllocateArray);
-			this.allocateObjectHandler = new AllocateObjectDelegate(global::Mosa.Intrinsic.Runtime.AllocateObject);
+			this.allocateArrayHandler = new AllocateArrayDelegate(global::Mosa.Internal.Runtime.AllocateArray);
+			this.allocateObjectHandler = new AllocateObjectDelegate(global::Mosa.Internal.Runtime.AllocateObject);
 		}
 
 		#endregion // Construction
@@ -198,7 +198,7 @@ namespace Mosa.Test.Runtime.CompilerFramework
 
 			IntPtr allocate = Marshal.GetFunctionPointerForDelegate(allocateArrayHandler);
 
-			const string allocateArrayMethod = @"Mosa.Intrinsic.Runtime.AllocateArray(Ptr methodTable,U4 elementSize,U4 elements)";
+			const string allocateArrayMethod = @"Mosa.Internal.Runtime.AllocateArray(Ptr methodTable,U4 elementSize,U4 elements)";
 			long virtualAddress = allocate.ToInt64();
 			Trace.WriteLine(String.Format("\t{0} at 0x{1:x08}", allocateArrayMethod, virtualAddress));
 
@@ -210,7 +210,7 @@ namespace Mosa.Test.Runtime.CompilerFramework
 
 			IntPtr allocateObject = Marshal.GetFunctionPointerForDelegate(allocateObjectHandler);
 
-			const string allocateObjectMethod = @"Mosa.Intrinsic.Runtime.AllocateObject(Ptr methodTable,U4 classSize)";
+			const string allocateObjectMethod = @"Mosa.Internal.Runtime.AllocateObject(Ptr methodTable,U4 classSize)";
 			virtualAddress = allocateObject.ToInt64();
 			Trace.WriteLine(String.Format("\t{0} at 0x{1:x08}", allocateObjectMethod, virtualAddress));
 

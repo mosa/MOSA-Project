@@ -15,7 +15,7 @@ using Mosa.Runtime.Memory;
 
 using Mosa.Test.Runtime.CompilerFramework;
 
-namespace Mosa.Intrinsic
+namespace Mosa.Internal
 {
 
 	/// <summary>

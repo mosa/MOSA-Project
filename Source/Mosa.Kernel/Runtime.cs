@@ -9,9 +9,8 @@
 
 using Mosa.Kernel;
 using Mosa.Kernel.x86;
-using Mosa.Platform.x86.Intrinsic;
 
-namespace Mosa.Intrinsic
+namespace Mosa.Internal
 {
 	public static class Runtime
 	{

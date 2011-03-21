@@ -666,7 +666,7 @@ namespace System.Runtime.CompilerServices
 	}
 }
 
-namespace Mosa.Intrinsic
+namespace Mosa.Internal
 {
 
 	using System;
