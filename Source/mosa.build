@@ -20,7 +20,6 @@
 	<target name="init">
 		<mkdir dir="${outputDirectory}"/>
 	</target>
-
         <target name="Mosa.Tools.Compiler" depends="init,Mosa.Compiler.FileFormat,Mosa.Compiler.Linker,Mosa.Compiler.Pdb,Mosa.Platform.x86,Mosa.Runtime.Metadata,Mosa.Runtime.TypeSystem,Mosa.Runtime,"><nant buildfile="Mosa.Tools.Compiler/mosa.build"/></target>
         <target name="Mosa.HelloWorld" depends="init,Mosa.ClassLib,Mosa.DeviceDrivers,Mosa.DeviceSystem,Mosa.FileSystem,Mosa.Kernel,Korlib,Mosa.Platform.x86.Intrinsic,"><nant buildfile="Mosa.HelloWorld/mosa.build"/></target>
         <target name="ToolsCreatePCIList" depends="init,"><nant buildfile="Tools/CreatePCIList/mosa.build"/></target>
@@ -36,7 +35,7 @@
         <target name="Pictor.UI" depends="init,Pictor,"><nant buildfile="Pictor.UI/mosa.build"/></target>
         <target name="ToolsXmlTo" depends="init,"><nant buildfile="Tools/XmlTo/mosa.build"/></target>
         <target name="ToolsMakeIsoImage" depends="init,"><nant buildfile="Tools/MakeIsoImage/mosa.build"/></target>
-        <target name="ToolsCreateBootImage" depends="init,Mosa.ClassLib,Mosa.DeviceDrivers,Mosa.DeviceSystem,Mosa.EmulatedDevices,Mosa.FileSystem,"><nant buildfile="CreateBootImage/mosa.build"/></target>
+        <target name="Mosa.Tools.CreateBootImage" depends="init,Mosa.ClassLib,Mosa.DeviceDrivers,Mosa.DeviceSystem,Mosa.EmulatedDevices,Mosa.FileSystem,"><nant buildfile="Mosa.Tools.CreateBootImage/mosa.build"/></target>
         <target name="ToolsMonoUpdateProject" depends="init,"><nant buildfile="Tools/Mono/UpdateProject/mosa.build"/></target>
         <target name="ToolsMonoCreateProject" depends="init,"><nant buildfile="Tools/Mono/CreateProject/mosa.build"/></target>
         <target name="Korlib" depends="init,"><nant buildfile="Korlib/mosa.build"/></target>
@@ -45,7 +44,7 @@
         <target name="Mosa.Platform.x86.Intrinsic" depends="init,Korlib,"><nant buildfile="Mosa.Platform.x86.Intrinsic/mosa.build"/></target>
         <target name="Mosa.Platform.x86" depends="init,Mosa.Compiler.Common,Mosa.Compiler.FileFormat,Mosa.Compiler.Linker,Mosa.Runtime.Metadata,Mosa.Runtime.TypeSystem,Mosa.Runtime,"><nant buildfile="Mosa.Platform.x86/mosa.build"/></target>
         <target name="Mosa.Test.Prebuilt" depends="init,"><nant buildfile="Mosa.Test.Prebuilt/mosa.build"/></target>
-        <target name="Mosa.Test.Runtime.CompilerFramework" depends="init,Mosa.Compiler.Linker,Mosa.Runtime.Metadata,Mosa.Platform.x86,Mosa.Runtime.TypeSystem,Mosa.Runtime,Mosa.Tools.Compiler,"><nant buildfile="Mosa.Test.Runtime.CompilerFramework/mosa.build"/></target>
+        <target name="Mosa.Test.Runtime.CompilerFramework" depends="init,Mosa.Compiler.Linker,Mosa.Runtime.Metadata,Mosa.Platform.x86,Mosa.Runtime.TypeSystem,Mosa.Tools.Compiler,Mosa.Runtime,"><nant buildfile="Mosa.Test.Runtime.CompilerFramework/mosa.build"/></target>
         <target name="Mosa.Runtime.Metadata" depends="init,Mosa.Compiler.FileFormat,"><nant buildfile="Mosa.Runtime.Metadata/mosa.build"/></target>
         <target name="Mosa.Test.Korlib" depends="init,"><nant buildfile="Mosa.Test.Korlib/mosa.build"/></target>
         <target name="Mosa.Test.Debug" depends="init,Mosa.Test.Cases,Mosa.Test.Runtime.CompilerFramework,"><nant buildfile="Mosa.Test.Debug/mosa.build"/></target>
@@ -60,7 +59,8 @@
         <target name="Mosa.Test.Stuff" depends="init,Mosa.Runtime.Metadata,Mosa.Runtime.TypeSystem,"><nant buildfile="Mosa.Test.Stuff/mosa.build"/></target>
         <target name="Mosa.Tools.StageVisualizer" depends="init,"><nant buildfile="Mosa.Tools.StageVisualizer/mosa.build"/></target>
         <target name="Mosa.Tools.TypeExplorer" depends="init,Mosa.Runtime.Metadata,Mosa.Runtime.TypeSystem,"><nant buildfile="Mosa.Tools.TypeExplorer/mosa.build"/></target>
+        <target name="Mosa.Tools.MetadataExplorer" depends="init,Mosa.Runtime.Metadata,Mosa.Runtime.TypeSystem,"><nant buildfile="Mosa.Tools.MetadataExplorer/mosa.build"/></target>
 
         <target name="all" depends ="
-Mosa.Tools.Compiler,Mosa.HelloWorld,ToolsCreatePCIList,Mosa.Runtime,Mosa.ClassLib,Mosa.DeviceDrivers,Mosa.FileSystem,Mosa.DeviceSystem,Mosa.Emulator,Mosa.EmulatedDevices,Mosa.EmulatedKernel,Pictor,Pictor.UI,ToolsXmlTo,ToolsMakeIsoImage,ToolsCreateBootImage,ToolsMonoUpdateProject,ToolsMonoCreateProject,Korlib,Mosa.Kernel,ToolsMonoUpdateSource,Mosa.Platform.x86.Intrinsic,Mosa.Platform.x86,Mosa.Test.Prebuilt,Mosa.Test.Runtime.CompilerFramework,Mosa.Runtime.Metadata,Mosa.Test.Korlib,Mosa.Test.Debug,Mosa.Test.Cases,Mosa.Test.Collection,Mosa.Compiler.Pdb,Mosa.Compiler.FileFormat,Mosa.Compiler.Linker,Mosa.Test.Quick,Mosa.Compiler.Common,Mosa.Runtime.TypeSystem,Mosa.Test.Stuff,Mosa.Tools.StageVisualizer,Mosa.Tools.TypeExplorer,"/>
+Mosa.Tools.Compiler,Mosa.HelloWorld,ToolsCreatePCIList,Mosa.Runtime,Mosa.ClassLib,Mosa.DeviceDrivers,Mosa.FileSystem,Mosa.DeviceSystem,Mosa.Emulator,Mosa.EmulatedDevices,Mosa.EmulatedKernel,Pictor,Pictor.UI,ToolsXmlTo,ToolsMakeIsoImage,Mosa.Tools.CreateBootImage,ToolsMonoUpdateProject,ToolsMonoCreateProject,Korlib,Mosa.Kernel,ToolsMonoUpdateSource,Mosa.Platform.x86.Intrinsic,Mosa.Platform.x86,Mosa.Test.Prebuilt,Mosa.Test.Runtime.CompilerFramework,Mosa.Runtime.Metadata,Mosa.Test.Korlib,Mosa.Test.Debug,Mosa.Test.Cases,Mosa.Test.Collection,Mosa.Compiler.Pdb,Mosa.Compiler.FileFormat,Mosa.Compiler.Linker,Mosa.Test.Quick,Mosa.Compiler.Common,Mosa.Runtime.TypeSystem,Mosa.Test.Stuff,Mosa.Tools.StageVisualizer,Mosa.Tools.TypeExplorer,Mosa.Tools.MetadataExplorer,"/>
 </project>

@@ -12,7 +12,7 @@
 	
 	<!-- Main build target -->
 	<target name="build">
-	    <csc target="library" output="${outputDirectory}/mosacl.dll" debug="${debug}" unsafe="true" nostdlib="false">
+	    <csc target="exe" output="${outputDirectory}/mosacl.exe" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
                     <include name="AotAssemblyCompiler.cs"/>
                     <include name="AssemblyCompilationStage.cs"/>
@@ -58,6 +58,7 @@
 		</sources>
 		<references>
                     <include name="System.dll"/>
+                    <include name="../../3rdParty/Mono.Cecil.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.FileFormat.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Linker.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Pdb.dll"/>

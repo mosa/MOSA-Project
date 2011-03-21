@@ -12,7 +12,7 @@
 	
 	<!-- Main build target -->
 	<target name="build">
-	    <csc target="library" output="${outputDirectory}/Mosa.Tools.Mono.UpdateProject.dll" debug="${debug}" unsafe="true" nostdlib="false">
+	    <csc target="exe" output="${outputDirectory}/Mosa.Tools.Mono.UpdateProject.exe" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
                     <include name="Add.cs"/>
                     <include name="CompareFile.cs"/>

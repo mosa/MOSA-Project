@@ -12,7 +12,7 @@
 	
 	<!-- Main build target -->
 	<target name="build">
-	    <csc target="library" output="${outputDirectory}/Mosa.HelloWorld.dll" debug="${debug}" unsafe="true" nostdlib="false">
+	    <csc target="exe" output="${outputDirectory}/Mosa.HelloWorld.exe" debug="${debug}" unsafe="true" nostdlib="true">
 		<sources>
                     <include name="Boot.cs"/>
                     <include name="Tests/Generic2Test.cs"/>

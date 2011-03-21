@@ -41,6 +41,7 @@
 		</sources>
 		<references>
                     <include name="System.dll"/>
+                    <include name="../../3rdParty/Mono.Cecil.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Common.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.FileFormat.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Linker.dll"/>

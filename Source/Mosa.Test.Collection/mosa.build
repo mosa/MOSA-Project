@@ -49,6 +49,8 @@
                     <include name="System.dll"/>
                     <include name="System.Data.dll"/>
                     <include name="System.Xml.dll"/>
+                    <include name="../../3rdParty/Gallio.dll"/>
+                    <include name="../../3rdParty/MbUnit.dll"/>
 		</references>
 		<!-- supress warnings -->
 		<nowarn><warning number="${suppresswarnings}"/></nowarn>

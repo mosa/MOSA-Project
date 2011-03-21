@@ -98,40 +98,67 @@ def proj2nant(projectFile, nantFile)
   
   references = []
   mosaReferences = []
-  doc.elements.each('Project/ItemGroup/Reference') do |reference|
-    unless reference.attributes["Include"].include?(",")
-      references << reference.attributes["Include"] + ".dll"
+  
+  isLibrary = false
+  doc.elements.each('Project/PropertyGroup/OutputType') do |outputType|
+    if outputType.text == 'Library'
+      isLibrary = true
     end
   end
   
-  doc.elements.each('Project/ItemGroup/ProjectReference') do |reference|
-    mosaReferences << reference.attributes["Include"].tr('\\', '/')
-    dependency = reference.attributes["Include"].tr('\\', '/')
-    dependency = dependency[0..dependency.rindex('/') - 1]
-    dependency = dependency[dependency.rindex('/') + 1..-1]
-    @projectReferences[buildFile] << dependency
+  if not projectFile.include? ("Korlib")
+    doc.elements.each('Project/ItemGroup/Reference') do |reference|
+      unless reference.attributes["Include"].include?(",")
+        if not reference.has_elements?
+          references << reference.attributes["Include"] + ".dll"
+        end
+      end
+    end
+  
+    doc.elements.each('Project/ItemGroup/Reference/HintPath') do |reference|
+      references << reference.text.tr('\\', '/')
+    end
+  
+    doc.elements.each('Project/ItemGroup/ProjectReference') do |reference|
+      mosaReferences << reference.attributes["Include"].tr('\\', '/')
+      dependency = reference.attributes["Include"].tr('\\', '/')
+      dependency = dependency[0..dependency.rindex('/') - 1]
+      dependency = dependency[dependency.rindex('/') + 1..-1]
+      @projectReferences[buildFile] << dependency
+    end
   end
   
   nostdlib = false
-  if doc.root.elements['Project/PropertyGroup/NoStdLib'] == 'True'
-    nostdlib = true
+  doc.elements.each('Project/PropertyGroup/NoStdLib') do |reference|
+    if reference.text == 'True'
+      nostdlib = true
+    end
   end
   
   assemblyName = projectFile
   doc.elements.each('Project/PropertyGroup/AssemblyName') do |assembly|
-    assemblyName = assembly.text + ".dll"
+    puts "Is Library = " + isLibrary.to_s
+    if isLibrary
+      assemblyName = assembly.text + ".dll"
+    else
+      assemblyName = assembly.text + ".exe"
+    end
   end
   
-  create_project_buildfile buildFile, includeFiles, assemblyName, nostdlib, references, mosaReferences
+  create_project_buildfile buildFile, includeFiles, assemblyName, nostdlib, references, mosaReferences, isLibrary
 end
 
-def create_project_buildfile (buildFile, sourceFiles, assemblyName, nostdlib, references, projectReferences)
+def create_project_buildfile (buildFile, sourceFiles, assemblyName, nostdlib, references, projectReferences, isLibrary)
   fileHandle = File.new(@baseDir + buildFile, "w")
   part1 = File.open('project.1.preset', 'rb') { |file| file.read }
   part2 = File.open('project.2.preset', 'rb') { |file| file.read }
   part3 = File.open('project.3.preset', 'rb') { |file| file.read }
   part4 = File.open('project.4.preset', 'rb') { |file| file.read }
   part5 = File.open('project.5.preset', 'rb') { |file| file.read }
+  
+  if not isLibrary
+    part1 = part1.sub('library', 'exe')
+  end
   
   nostdlibString = 'nostdlib="' + nostdlib.to_s + '"'
   

@@ -48,12 +48,16 @@
                     <include name="System.dll"/>
                     <include name="System.Data.dll"/>
                     <include name="System.Xml.dll"/>
+                    <include name="System.Core.dll"/>
+                    <include name="../../3rdParty/Mono.Cecil.dll"/>
+                    <include name="../../3rdParty/Gallio.dll"/>
+                    <include name="../../3rdParty/MbUnit.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Linker.dll"/>
                     <include name="${outputDirectory}/Mosa.Runtime.Metadata.dll"/>
                     <include name="${outputDirectory}/Mosa.Platform.x86.dll"/>
                     <include name="${outputDirectory}/Mosa.Runtime.TypeSystem.dll"/>
-                    <include name="${outputDirectory}/Mosa.Runtime.dll"/>
                     <include name="${outputDirectory}/mosacl.dll"/>
+                    <include name="${outputDirectory}/Mosa.Runtime.dll"/>
 		</references>
 		<!-- supress warnings -->
 		<nowarn><warning number="${suppresswarnings}"/></nowarn>

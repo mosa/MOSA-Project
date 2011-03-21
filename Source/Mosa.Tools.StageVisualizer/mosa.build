@@ -12,7 +12,7 @@
 	
 	<!-- Main build target -->
 	<target name="build">
-	    <csc target="library" output="${outputDirectory}/Mosa.Tools.StageVisualizer.dll" debug="${debug}" unsafe="true" nostdlib="false">
+	    <csc target="exe" output="${outputDirectory}/Mosa.Tools.StageVisualizer.exe" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
                     <include name="Output.cs"/>
                     <include name="Main.cs"/>
@@ -22,9 +22,6 @@
 		</sources>
 		<references>
                     <include name="System.dll"/>
-                    <include name="System.Core.dll"/>
-                    <include name="System.Xml.Linq.dll"/>
-                    <include name="System.Data.DataSetExtensions.dll"/>
                     <include name="System.Data.dll"/>
                     <include name="System.Drawing.dll"/>
                     <include name="System.Windows.Forms.dll"/>

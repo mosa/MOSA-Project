@@ -12,7 +12,7 @@
 	
 	<!-- Main build target -->
 	<target name="build">
-	    <csc target="library" output="${outputDirectory}/mscorlib.dll" debug="${debug}" unsafe="true" nostdlib="false">
+	    <csc target="library" output="${outputDirectory}/mscorlib.dll" debug="${debug}" unsafe="true" nostdlib="true">
 		<sources>
                     <include name="Mosa.Intrinsic/IntrinsicAttribute.cs"/>
                     <include name="Mosa.Intrinsic/VmCall.cs"/>
@@ -101,7 +101,6 @@
                     <include name="System.Runtime.InteropServices/OutAttribute.cs"/>
 		</sources>
 		<references>
-                    <include name="System.dll"/>
 		</references>
 		<!-- supress warnings -->
 		<nowarn><warning number="${suppresswarnings}"/></nowarn>

@@ -64,6 +64,8 @@
                     <include name="OLD.IL/Xor.cs"/>
 		</sources>
 		<references>
+                    <include name="../../3rdParty/Gallio.dll"/>
+                    <include name="../../3rdParty/MbUnit.dll"/>
                     <include name="${outputDirectory}/Mosa.Test.Collection.dll"/>
                     <include name="${outputDirectory}/Mosa.Test.Runtime.CompilerFramework.dll"/>
 		</references>

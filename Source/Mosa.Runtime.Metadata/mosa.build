@@ -14,15 +14,8 @@
 	<target name="build">
 	    <csc target="library" output="${outputDirectory}/Mosa.Runtime.Metadata.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
-                    <include name="AssemblyFlags.cs"/>
-                    <include name="AssemblyHashAlgorithm.cs"/>
                     <include name="BlobHeap.cs"/>
-                    <include name="CallingConvention.cs"/>
                     <include name="CilElementType.cs"/>
-                    <include name="EventAttributes.cs"/>
-                    <include name="FieldAttributes.cs"/>
-                    <include name="FileAttributes.cs"/>
-                    <include name="GenericParamAttributes.cs"/>
                     <include name="GuidHeap.cs"/>
                     <include name="Heap.cs"/>
                     <include name="HeapType.cs"/>
@@ -36,14 +29,7 @@
                     <include name="Loader/PE/MetadataRoot.cs"/>
                     <include name="Loader/PE/PortableExecutableImage.cs"/>
                     <include name="Loader/PE/StreamHeader.cs"/>
-                    <include name="ManifestResourceAttributes.cs"/>
-                    <include name="MethodAttributes.cs"/>
-                    <include name="MethodImplAttributes.cs"/>
-                    <include name="MethodSemanticsAttributes.cs"/>
-                    <include name="ParameterAttributes.cs"/>
-                    <include name="PInvokeAttributes.cs"/>
                     <include name="Properties/AssemblyInfo.cs"/>
-                    <include name="PropertyAttributes.cs"/>
                     <include name="SignatureReader.cs"/>
                     <include name="Signatures/ArraySigType.cs"/>
                     <include name="Signatures/BuiltInSigType.cs"/>
@@ -111,11 +97,11 @@
                     <include name="Tables/TypeRefRow.cs"/>
                     <include name="Tables/TypeSpecRow.cs"/>
                     <include name="TokenTypes.cs"/>
-                    <include name="TypeAttributes.cs"/>
                     <include name="UserStringHeap.cs"/>
 		</sources>
 		<references>
                     <include name="System.dll"/>
+                    <include name="../../3rdParty/Mono.Cecil.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.FileFormat.dll"/>
 		</references>
 		<!-- supress warnings -->

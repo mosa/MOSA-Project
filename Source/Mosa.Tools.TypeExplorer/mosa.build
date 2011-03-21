@@ -12,7 +12,7 @@
 	
 	<!-- Main build target -->
 	<target name="build">
-	    <csc target="library" output="${outputDirectory}/Mosa.Tools.TypeExplorer.dll" debug="${debug}" unsafe="true" nostdlib="false">
+	    <csc target="exe" output="${outputDirectory}/Mosa.Tools.TypeExplorer.exe" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
                     <include name="Main.cs"/>
                     <include name="Main.Designer.cs"/>
@@ -21,13 +21,11 @@
 		</sources>
 		<references>
                     <include name="System.dll"/>
-                    <include name="System.Core.dll"/>
-                    <include name="System.Xml.Linq.dll"/>
-                    <include name="System.Data.DataSetExtensions.dll"/>
                     <include name="System.Data.dll"/>
                     <include name="System.Drawing.dll"/>
                     <include name="System.Windows.Forms.dll"/>
                     <include name="System.Xml.dll"/>
+                    <include name="../../3rdParty/Mono.Cecil.dll"/>
                     <include name="${outputDirectory}/Mosa.Runtime.Metadata.dll"/>
                     <include name="${outputDirectory}/Mosa.Runtime.TypeSystem.dll"/>
 		</references>

@@ -12,13 +12,22 @@
 	
 	<!-- Main build target -->
 	<target name="build">
-	    <csc target="library" output="${outputDirectory}/Mosa.Compiler.FileFormat.dll" debug="${debug}" unsafe="true">
+	    <csc target="library" output="${outputDirectory}/Mosa.Compiler.FileFormat.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
-			<include name="**/*.cs"/>
+                    <include name="PE/CLI_HEADER.cs"/>
+                    <include name="PE/IMAGE_DATA_DIRECTORY.cs"/>
+                    <include name="PE/IMAGE_DOS_HEADER.cs"/>
+                    <include name="PE/IMAGE_FILE_HEADER.cs"/>
+                    <include name="PE/IMAGE_NT_HEADERS.cs"/>
+                    <include name="PE/IMAGE_OPTIONAL_HEADER.cs"/>
+                    <include name="PE/IMAGE_SECTION_HEADER.cs"/>
+                    <include name="PE/RuntimeImageFlags.cs"/>
 		</sources>
+		<references>
+                    <include name="System.dll"/>
+		</references>
 		<!-- supress warnings -->
 		<nowarn><warning number="${suppresswarnings}"/></nowarn>
-	    </csc>
+        </csc>
 	</target>
-	
 </project>

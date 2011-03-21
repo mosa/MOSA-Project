@@ -15,9 +15,8 @@
 	    <csc target="library" output="${outputDirectory}/Mosa.ClassLib.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
                     <include name="BinaryFormat.cs"/>
-                    <include name="Math.cs"/>
                     <include name="LinkedList.cs"/>
-                    <include name="RedBlackTree.cs"/>
+                    <include name="Math.cs"/>
 		</sources>
 		<references>
 		</references>

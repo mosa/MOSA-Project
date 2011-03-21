@@ -12,7 +12,7 @@
 	
 	<!-- Main build target -->
 	<target name="build">
-	    <csc target="library" output="${outputDirectory}/Mosa.Emulator.dll" debug="${debug}" unsafe="true" nostdlib="false">
+	    <csc target="exe" output="${outputDirectory}/Mosa.Emulator.exe" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
                     <include name="HelloWorld/Boot.cs"/>
                     <include name="HelloWorld/CMOS.cs"/>
