@@ -10309,9 +10309,9 @@ namespace Mosa.DeviceSystem.PCI
 		/// <returns></returns>
 		public static string Lookup(ushort vendorID, ushort deviceID, ushort subSystem, ushort subVendor)
 		{
+#if !__MonoCS__
 			switch ((((ulong)vendorID << 48) | ((ulong)deviceID << 32) | ((ulong)subSystem << 16) | subVendor))
 			{
-#if !MONO
 				case 0x0E1100460E114091: return "Smart Array 6i";
 				case 0x0E1100460E11409A: return "Smart Array 641";
 				case 0x0E1100460E11409B: return "Smart Array 642";
@@ -17080,9 +17080,11 @@ namespace Mosa.DeviceSystem.PCI
 				case 0xE159000100590003: return "128k ISDN-U Adapter";
 				case 0xE159000100A70001: return "TELES.S0/PCI 2.x ISDN Adapter";
 				case 0xE159000180860003: return "Digium X100P/X101P analogue PSTN FXO interface";
-#endif
 				default: return string.Empty;
 			}
+#else
+			return string.Empty;
+#endif
 		}
 	}
 }
