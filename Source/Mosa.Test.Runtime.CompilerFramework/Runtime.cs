@@ -12,7 +12,6 @@ using System.Runtime.CompilerServices;
 
 using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.Memory;
-using Mosa.Runtime.Intrinsic;
 
 using Mosa.Test.Runtime.CompilerFramework;
 
@@ -35,7 +34,6 @@ namespace Mosa.Intrinsic
 
 		#region Internal Call Prototypes
 
-		[VmCall(VmCall.AllocateObject)]
 		public static unsafe void* AllocateObject(void* methodTable, uint classSize)
 		{
 			// HACK: Add compiler architecture to the runtime
@@ -75,7 +73,6 @@ namespace Mosa.Intrinsic
 		/// the appropriate constructor in order to obtain a real object. The object header
 		/// has been set.
 		/// </remarks>
-		[VmCall(VmCall.AllocateArray)]
 		public static unsafe void* AllocateArray(void* methodTable, uint elementSize, uint elements)
 		{
 			if (elements < 0)
@@ -109,7 +106,6 @@ namespace Mosa.Intrinsic
 		/// </summary>
 		/// <param name="valueType">Type of the value.</param>
 		/// <returns>The boxed value type.</returns>
-		[VmCall(VmCall.Box)]
 		public static object Box(ValueType valueType)
 		{
 			throw new NotImplementedException();
@@ -123,7 +119,6 @@ namespace Mosa.Intrinsic
 		/// <returns>
 		/// The cast object if type checks were successful.
 		/// </returns>
-		[VmCall(VmCall.Castclass)]
 		public static object Castclass(object obj, UIntPtr typeHandle)
 		{
 			throw new InvalidCastException();
@@ -137,7 +132,6 @@ namespace Mosa.Intrinsic
 		/// <returns>
 		/// The cast object if type checks were successful. Otherwise null.
 		/// </returns>
-		[VmCall(VmCall.IsInstanceOfType)]
 		public static bool IsInstanceOfType(object obj, UIntPtr typeHandle)
 		{
 			return false;
@@ -149,7 +143,6 @@ namespace Mosa.Intrinsic
 		/// <param name="destination">The destination.</param>
 		/// <param name="source">The source.</param>
 		/// <param name="count">The number of bytes to copy.</param>
-		[VmCall(VmCall.Memcpy)]
 		public unsafe static void Memcpy(byte* destination, byte* source, int count)
 		{
 			throw new NotImplementedException();
@@ -161,7 +154,6 @@ namespace Mosa.Intrinsic
 		/// <param name="destination">The destination.</param>
 		/// <param name="value">The value.</param>
 		/// <param name="count">The number of bytes to fill.</param>
-		[VmCall(VmCall.Memset)]
 		public unsafe static void Memset(byte* destination, byte value, int count)
 		{
 			// FIXME: Forward this to the architecture
@@ -170,7 +162,6 @@ namespace Mosa.Intrinsic
 		/// <summary>
 		/// Rethrows the current exception.
 		/// </summary>
-		[VmCall(VmCall.Rethrow)]
 		public static void Rethrow()
 		{
 			throw new NotImplementedException();
@@ -180,7 +171,6 @@ namespace Mosa.Intrinsic
 		/// Throws the specified exception.
 		/// </summary>
 		/// <param name="exception">The exception.</param>
-		[VmCall(VmCall.Throw)]
 		public static void Throw(object exception)
 		{
 		}
@@ -190,13 +180,11 @@ namespace Mosa.Intrinsic
 		/// </summary>
 		/// <param name="obj">The object.</param>
 		/// <param name="valueType">The value type to unbox.</param>
-		[VmCall(VmCall.Unbox)]
 		public static void Unbox(object obj, ValueType valueType)
 		{
 			throw new NotImplementedException();
 		}
 
-		[VmCall(VmCall.Throw)]
 		public static void ThrowException(uint eax, uint ecx, uint edx, uint ebx, uint esi, uint edi, uint ebp, object exception, uint eip, uint esp)
 		{
 		}

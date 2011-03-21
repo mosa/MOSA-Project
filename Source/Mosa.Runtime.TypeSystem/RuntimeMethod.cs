@@ -76,7 +76,6 @@ namespace Mosa.Runtime.TypeSystem
 			base(module, token, declaringType)
 		{
 			this.genericParameters = new List<GenericParameter>();
-			//this.parameters = new List<RuntimeParameter>();
 		}
 
 		#endregion // Construction

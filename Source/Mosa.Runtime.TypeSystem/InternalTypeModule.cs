@@ -168,6 +168,16 @@ namespace Mosa.Runtime.TypeSystem
 			return null;
 		}
 
+		/// <summary>
+		/// Gets the name of the external.
+		/// </summary>
+		/// <param name="token">The token.</param>
+		/// <returns></returns>
+		string ITypeModule.GetExternalName(TokenTypes token)
+		{
+			return null;
+		}
+
 		#endregion
 
 		/// <summary>

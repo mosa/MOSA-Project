@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
@@ -257,7 +257,6 @@
     <Compile Include="CompilerFramework\LoopAwareBlockOrderStage.cs" />
     <Compile Include="CompilerFramework\LocalCSE.cs" />
     <Compile Include="CompilerFramework\IMethodCompiler.cs" />
-    <Compile Include="Intrinsic\IntrinsicAttribute.cs" />
     <Compile Include="Linker\BaseAssemblyLinkerStage.cs" />
     <Compile Include="Memory\IMemoryPageManager.cs" />
     <Compile Include="Memory\PageAccessFlags.cs" />
@@ -420,8 +419,7 @@
     <Compile Include="CompilerFramework\Operands\LocalVariableOperand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Intrinsic\VmCall.cs" />
-    <Compile Include="Intrinsic\VmCallAttribute.cs" />
+    <Compile Include="CompilerFramework\IR\VmCall.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj">

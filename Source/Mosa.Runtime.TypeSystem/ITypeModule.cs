@@ -94,6 +94,13 @@ namespace Mosa.Runtime.TypeSystem
 		/// <param name="baseGenericType">Type of the base generic.</param>
 		/// <returns></returns>
 		CilGenericType GetOpenGeneric(RuntimeType baseGenericType);
+
+		/// <summary>
+		/// Gets the name of the external.
+		/// </summary>
+		/// <param name="token">The token.</param>
+		/// <returns></returns>
+		string GetExternalName(TokenTypes token);
 		
 	}
 }

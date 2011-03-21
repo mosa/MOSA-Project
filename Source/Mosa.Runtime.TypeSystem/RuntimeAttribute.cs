@@ -29,7 +29,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// <summary>
 		/// Holds the module from which this object originated
 		/// </summary>
-		private readonly ITypeModule module;
+		private readonly ITypeModule typeModule;
 
 		/// <summary>
 		/// Holds the ctor of the attribute type to invoke.
@@ -58,13 +58,13 @@ namespace Mosa.Runtime.TypeSystem
 		/// <summary>
 		/// Initializes a new instance of the <see cref="RuntimeAttribute"/> class.
 		/// </summary>
-		/// <param name="module">The module.</param>
+		/// <param name="typeModule">The type module.</param>
 		/// <param name="ctor">The ctor.</param>
 		/// <param name="ctorMethod">The ctor method.</param>
 		/// <param name="blobIndex">Index of the blob.</param>
-		public RuntimeAttribute(ITypeModule module, TokenTypes ctor, RuntimeMethod ctorMethod, TokenTypes blobIndex)
+		public RuntimeAttribute(ITypeModule typeModule, TokenTypes ctor, RuntimeMethod ctorMethod, TokenTypes blobIndex)
 		{
-			this.module = module;
+			this.typeModule = typeModule;
 			this.ctorMethod = ctorMethod;
 			this.ctor = ctor;
 			this.blobIndex = blobIndex;
@@ -81,10 +81,10 @@ namespace Mosa.Runtime.TypeSystem
 		/// <summary>
 		/// Retrieves the module from which this object originated
 		/// </summary>
-		/// <value>The module.</value>
-		public ITypeModule Module
+		/// <value>The type module.</value>
+		public ITypeModule TypeModule
 		{
-			get { return module; }
+			get { return typeModule; }
 		}
 
 		/// <summary>
@@ -115,7 +115,7 @@ namespace Mosa.Runtime.TypeSystem
 			{
 				if (blob == null)
 				{
-					blob = Module.MetadataModule.Metadata.ReadBlob(blobIndex);
+					blob = TypeModule.MetadataModule.Metadata.ReadBlob(blobIndex);
 				}
 
 				return blob;

@@ -56,9 +56,6 @@
     </NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Mosa.Intrinsic\IntrinsicAttribute.cs" />
-    <Compile Include="Mosa.Intrinsic\VmCall.cs" />
-    <Compile Include="Mosa.Intrinsic\VmCallAttribute.cs" />
     <Compile Include="System.Diagnostics\DebuggerHiddenAttribute.cs" />
     <Compile Include="System.Runtime.CompilerServices\CompilationRelaxationsAttribute.cs" />
     <Compile Include="System.Runtime.CompilerServices\RuntimeCompatibilityAttribute.cs" />

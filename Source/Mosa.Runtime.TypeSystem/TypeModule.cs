@@ -85,6 +85,11 @@ namespace Mosa.Runtime.TypeSystem
 		/// <summary>
 		/// 
 		/// </summary>
+		private Dictionary<TokenTypes, string> externals;
+
+		/// <summary>
+		/// 
+		/// </summary>
 		private Dictionary<TokenTypes, string> strings;
 
 		/// <summary>
@@ -128,6 +133,8 @@ namespace Mosa.Runtime.TypeSystem
 			this.typeRef = new RuntimeType[GetTableRows(TokenTypes.TypeRef)];
 			this.genericParamConstraint = new RuntimeType[GetTableRows(TokenTypes.GenericParamConstraint)];
 
+			this.externals = new Dictionary<TokenTypes, string>();
+
 			this.signatures = new Dictionary<TokenTypes, Signature>();
 			this.strings = new Dictionary<TokenTypes, string>();
 
@@ -141,6 +148,8 @@ namespace Mosa.Runtime.TypeSystem
 
 			LoadInterfaces();
 			LoadGenericInterfaces();
+
+			LoadExternals();
 		}
 
 		#endregion // Construction
@@ -749,7 +758,6 @@ namespace Mosa.Runtime.TypeSystem
 						throw new NotImplementedException();
 				}
 
-				//byte[] blob = metadataProvider.ReadBlob(row.ValueBlobIdx);
 				RuntimeAttribute runtimeAttribute = new RuntimeAttribute(this, row.TypeIdx, ctorMethod, row.ValueBlobIdx);
 
 				// The following switch matches the AttributeTargets enumeration against
@@ -888,6 +896,26 @@ namespace Mosa.Runtime.TypeSystem
 				}
 			}
 
+		}
+
+		/// <summary>
+		/// Loads the externals.
+		/// </summary>
+		private void LoadExternals()
+		{
+			TokenTypes maxToken = GetMaxTokenValue(TokenTypes.ImplMap);
+			for (TokenTypes token = TokenTypes.ImplMap + 1; token <= maxToken; token++)
+			{
+				ImplMapRow row = metadataProvider.ReadImplMapRow(token);
+
+				//TODO: verify row.ImportScopeTableIdx indexes MethodDef and nothing else
+
+				ModuleRefRow moduleRow = metadataProvider.ReadModuleRefRow(row.ImportScopeTableIdx);
+
+				string external = GetString(moduleRow.NameStringIdx);
+
+				externals.Add(row.MemberForwardedTableIdx, external);
+			}
 		}
 
 		/// <summary>
@@ -1122,6 +1150,20 @@ namespace Mosa.Runtime.TypeSystem
 			}
 
 			return null;
+		}
+
+		/// <summary>
+		/// Gets the name of the external.
+		/// </summary>
+		/// <param name="token">The token.</param>
+		/// <returns></returns>
+		string ITypeModule.GetExternalName(TokenTypes token)
+		{
+			string name = null;
+
+			externals.TryGetValue(token, out name);
+	
+			return name;
 		}
 
 		#endregion

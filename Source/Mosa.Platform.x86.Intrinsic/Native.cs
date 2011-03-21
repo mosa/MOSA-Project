@@ -10,14 +10,14 @@
  *  Scott Balmos <sbalmos@fastmail.fm>
 */
 
-using Mosa.Intrinsic;
+using System.Runtime.InteropServices;
 
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
 	/// Provides stub methods for selected x86 native assembly instructions.
 	/// </summary>
-	public static unsafe class Native
+	public static class Native
 	{
 		#region Intrinsic
 
@@ -25,279 +25,279 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// Wraps the x86 ldit instruction to load the interrupt descriptor table.
 		/// </summary>
 		/// <param name="address">The address.</param>
-		[Intrinsic(@"Mosa.Platform.x86.Intrinsic.Lidt, Mosa.Platform.x86")]
-		public static void Lidt(uint address) { return; }
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Lidt, Mosa.Platform.x86")]
+		public extern static void Lidt(uint address);
 
 		/// <summary>
 		/// Wraps the x86 cli instruction to disable interrupts
 		/// </summary>
-		[Intrinsic(@"Mosa.Platform.x86.Intrinsic.Cli, Mosa.Platform.x86")]
-		public static void Cli() { return; }
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Cli, Mosa.Platform.x86")]
+		public extern static void Cli();
 
 		///// <summary>
 		///// Wraps the x86 cmpxchg instruction 
 		///// </summary>
-		//[Intrinsic(@"Mosa.Platform.x86.Intrinsic.CmpXchg, Mosa.Platform.x86")]
-		//public static void CmpXchg16(ref short first, short second) {  return; }
+		//[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.CmpXchg, Mosa.Platform.x86")]
+		//public extern static void CmpXchg16(ref short first, short second);
 
 		///// <summary>
 		///// Wraps the x86 cmpxchg instruction 
 		///// </summary>
-		//[Intrinsic(@"Mosa.Platform.x86.Intrinsic.CmpXchg, Mosa.Platform.x86")]
-		//public static void CmpXchg32(ref int first, int second) {  return; }
+		//[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.CmpXchg, Mosa.Platform.x86")]
+		//public extern static void CmpXchg32(ref int first, int second);
 
 		/// <summary>
 		/// Wraps the x86 lgdt instruction to load global descriptor table
 		/// </summary>
-		[Intrinsic(@"Mosa.Platform.x86.Intrinsic.Lgdt, Mosa.Platform.x86")]
-		public static void Lgdt(uint address) { return; }
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Lgdt, Mosa.Platform.x86")]
+		public extern static void Lgdt(uint address);
 
 		/// <summary>
 		/// Wraps the x86 sti instruction to enable interrupts
 		/// </summary>
-		[Intrinsic(@"Mosa.Platform.x86.Intrinsic.Sti, Mosa.Platform.x86")]
-		public static void Sti() { return; }
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Sti, Mosa.Platform.x86")]
+		public extern static void Sti();
 
 		/// <summary>
 		/// Wraps the x86 in instruction to read from an 8-bit port.
 		/// </summary>
-		[Intrinsic(@"Mosa.Platform.x86.Intrinsic.In, Mosa.Platform.x86")]
-		public static byte In(byte address) { return 0; }
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.In, Mosa.Platform.x86")]
+		public extern static byte In(byte address);
 
 		/// <summary>
 		/// Wraps the x86 in instruction to read from an 8-bit port.
 		/// </summary>
-		[Intrinsic(@"Mosa.Platform.x86.Intrinsic.In, Mosa.Platform.x86")]
-		public static byte In8(byte address) { return 0; }
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.In, Mosa.Platform.x86")]
+		public extern static byte In8(byte address) ;
 
 		/// <summary>
 		/// Wraps the x86 in instruction to read from a 16-bit port.
 		/// </summary>
-		[Intrinsic(@"Mosa.Platform.x86.Intrinsic.In, Mosa.Platform.x86")]
-		public static ushort In16(ushort address) { return 0; }
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.In, Mosa.Platform.x86")]
+		public extern static ushort In16(ushort address);
 
 		/// <summary>
 		/// Wraps the x86 in instruction to read from a 32-bit port.
 		/// </summary>
-		[Intrinsic(@"Mosa.Platform.x86.Intrinsic.In, Mosa.Platform.x86")]
-		public static uint In32(uint address) { return 0; }
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.In, Mosa.Platform.x86")]
+		public extern static uint In32(uint address);
 
 		/// <summary>
 		/// Wraps the x86 out instruction to write to an 8-bit port.
 		/// </summary>
-		[Intrinsic(@"Mosa.Platform.x86.Intrinsic.Out, Mosa.Platform.x86")]
-		public static void Out8(byte address, byte value) { }
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Out, Mosa.Platform.x86")]
+		public extern static void Out8(byte address, byte value);
 
 		/// <summary>
 		/// Wraps the x86 out instruction to write to an 8-bit port.
 		/// </summary>
-		[Intrinsic(@"Mosa.Platform.x86.Intrinsic.Out, Mosa.Platform.x86")]
-		public static void Out(byte address, byte value) { }
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Out, Mosa.Platform.x86")]
+		public extern static void Out(byte address, byte value);
 
 		/// <summary>
 		/// Wraps the x86 out instruction to write to a 16-bit port.
 		/// </summary>
-		[Intrinsic(@"Mosa.Platform.x86.Intrinsic.Out, Mosa.Platform.x86")]
-		public static void Out16(ushort address, ushort value) { }
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Out, Mosa.Platform.x86")]
+		public extern static void Out16(ushort address, ushort value);
 
 		/// <summary>
 		/// Wraps the x86 out instruction to write to a 32-bit port.
 		/// </summary>
-		[Intrinsic(@"Mosa.Platform.x86.Intrinsic.Out, Mosa.Platform.x86")]
-		public static void Out32(uint address, uint value) { }
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Out, Mosa.Platform.x86")]
+		public extern static void Out32(uint address, uint value);
 
 		/// <summary>
 		/// Wraps the x86 out instruction to write to a nop instruction.
 		/// </summary>
-		[Intrinsic(@"Mosa.Platform.x86.Intrinsic.Nop, Mosa.Platform.x86")]
-		public static void Nop() { }
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Nop, Mosa.Platform.x86")]
+		public extern static void Nop();
 
 		/// <summary>
 		/// Wraps the x86 hlt instruction.
 		/// </summary>
-		[Intrinsic(@"Mosa.Platform.x86.Intrinsic.Hlt, Mosa.Platform.x86")]
-		public static void Hlt() { }
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Hlt, Mosa.Platform.x86")]
+		public extern static void Hlt();
 
 		/// <summary>
 		/// 
 		/// </summary>
-		[Intrinsic(@"Mosa.Platform.x86.Intrinsic.Invlpg, Mosa.Platform.x86")]
-		public static void Invlpg(uint address) { }
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Invlpg, Mosa.Platform.x86")]
+		public extern static void Invlpg(uint address);
 
 		/// <summary>
 		/// Wraps the x86 CPUID instruction.
 		/// </summary>
-		[Intrinsic(@"Mosa.Platform.x86.Intrinsic.CpuId, Mosa.Platform.x86")]
-		public static byte CpuId(uint function) { return 0; }
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.CpuId, Mosa.Platform.x86")]
+		public extern static byte CpuId(uint function);
 
 		/// <summary>
 		/// Wraps the x86 CPUID instruction.
 		/// </summary>
-		[Intrinsic(@"Mosa.Platform.x86.Intrinsic.CpuIdEax, Mosa.Platform.x86")]
-		public static int CpuIdEax(uint function) { return 0; }
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.CpuIdEax, Mosa.Platform.x86")]
+		public extern static int CpuIdEax(uint function);
 
 		/// <summary>
 		/// Wraps the x86 CPUID instruction.
 		/// </summary>
-		[Intrinsic(@"Mosa.Platform.x86.Intrinsic.CpuIdEbx, Mosa.Platform.x86")]
-		public static int CpuIdEbx(uint function) { return 0; }
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.CpuIdEbx, Mosa.Platform.x86")]
+		public extern static int CpuIdEbx(uint function);
 
 		/// <summary>
 		/// Wraps the x86 CPUID instruction.
 		/// </summary>
-		[Intrinsic(@"Mosa.Platform.x86.Intrinsic.CpuIdEcx, Mosa.Platform.x86")]
-		public static int CpuIdEcx(uint function) { return 0; }
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.CpuIdEcx, Mosa.Platform.x86")]
+		public extern static int CpuIdEcx(uint function);
 
 		/// <summary>
 		/// Wraps the x86 CPUID instruction.
 		/// </summary>
-		[Intrinsic(@"Mosa.Platform.x86.Intrinsic.CpuIdEdx, Mosa.Platform.x86")]
-		public static int CpuIdEdx(uint function) { return 0; }
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.CpuIdEdx, Mosa.Platform.x86")]
+		public extern static int CpuIdEdx(uint function);
 
 		/// <summary>
 		/// 
 		/// </summary>
-		[Intrinsic(@"Mosa.Platform.x86.Intrinsic.BochsDebug, Mosa.Platform.x86")]
-		public static void BochsDebug() { return; }
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.BochsDebug, Mosa.Platform.x86")]
+		public extern static void BochsDebug();
 
 		/// <summary>
 		/// Sets the control register 0.
 		/// </summary>
 		/// <param name="status">The status.</param>
-		[Intrinsic(@"Mosa.Platform.x86.Intrinsic.SetCR0, Mosa.Platform.x86")]
-		public static void SetCR0(uint status) { }
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.SetCR0, Mosa.Platform.x86")]
+		public extern static void SetCR0(uint status);
 
 		/// <summary>
 		/// Sets the control register 2.
 		/// </summary>
 		/// <param name="status">The status.</param>
-		[Intrinsic(@"Mosa.Platform.x86.Intrinsic.SetCR2, Mosa.Platform.x86")]
-		public static void SetCR2(uint status) { }
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.SetCR2, Mosa.Platform.x86")]
+		public extern static void SetCR2(uint status);
 
 		/// <summary>
 		/// Sets the control register 3.
 		/// </summary>
 		/// <param name="status">The status.</param>
-		[Intrinsic(@"Mosa.Platform.x86.Intrinsic.SetCR3, Mosa.Platform.x86")]
-		public static void SetCR3(uint status) { }
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.SetCR3, Mosa.Platform.x86")]
+		public extern static void SetCR3(uint status);
 
 		/// <summary>
 		/// Sets the control register 4.
 		/// </summary>
 		/// <param name="status">The status.</param>
-		[Intrinsic(@"Mosa.Platform.x86.Intrinsic.SetCR4, Mosa.Platform.x86")]
-		public static void SetCR4(uint status) { }
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.SetCR4, Mosa.Platform.x86")]
+		public extern static void SetCR4(uint status);
 
 		/// <summary>
 		/// Gets the control register 0.
 		/// </summary>
 		/// <returns></returns>
-		[Intrinsic(@"Mosa.Platform.x86.Intrinsic.GetCR0, Mosa.Platform.x86")]
-		public static uint GetCR0() { return 0; }
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.GetCR0, Mosa.Platform.x86")]
+		public extern static uint GetCR0();
 
 		/// <summary>
 		/// Gets the control register 2.
 		/// </summary>
 		/// <returns></returns>
-		[Intrinsic(@"Mosa.Platform.x86.Intrinsic.GetCR2, Mosa.Platform.x86")]
-		public static uint GetCR2() { return 0; }
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.GetCR2, Mosa.Platform.x86")]
+		public extern static uint GetCR2();
 
 		/// <summary>
 		/// Gets the control register 3.
 		/// </summary>
 		/// <returns></returns>
-		[Intrinsic(@"Mosa.Platform.x86.Intrinsic.GetCR3, Mosa.Platform.x86")]
-		public static uint GetCR3() { return 0; }
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.GetCR3, Mosa.Platform.x86")]
+		public extern static uint GetCR3();
 
 		/// <summary>
 		/// Gets the control register 4.
 		/// </summary>
 		/// <returns></returns>
-		[Intrinsic(@"Mosa.Platform.x86.Intrinsic.GetCR4, Mosa.Platform.x86")]
-		public static uint GetCR4() { return 0; }
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.GetCR4, Mosa.Platform.x86")]
+		public extern static uint GetCR4();
 
 		/// <summary>
 		/// Jumps the global interrupt handler.
 		/// </summary>
 		/// <returns></returns>
-		[Intrinsic(@"Mosa.Platform.x86.Intrinsic.GetIDTJumpLocation, Mosa.Platform.x86")]
-		public static uint GetIDTJumpLocation(uint irq) { return 0; }
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.GetIDTJumpLocation, Mosa.Platform.x86")]
+		public extern static uint GetIDTJumpLocation(uint irq);
 
 		/// <summary>
 		/// Lock
 		/// </summary>
-		[Intrinsic(@"Mosa.Platform.x86.Intrinsic.SpinLock, Mosa.Platform.x86")]
-		public static void SpinLock(uint address) { }
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.SpinLock, Mosa.Platform.x86")]
+		public extern static void SpinLock(uint address);
 
 		/// <summary>
 		/// Unlock
 		/// </summary>
-		[Intrinsic(@"Mosa.Platform.x86.Intrinsic.SpinUnlock, Mosa.Platform.x86")]
-		public static void SpinUnlock(uint address) { }
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.SpinUnlock, Mosa.Platform.x86")]
+		public extern static void SpinUnlock(uint address);
 
 		/// <summary>
 		/// 
 		/// </summary>
-		[Intrinsic(@"Mosa.Platform.x86.Intrinsic.Get, Mosa.Platform.x86")]
-		public static byte Get8(uint address) { return 0; }
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Get, Mosa.Platform.x86")]
+		public extern static byte Get8(uint address);
 
 		/// <summary>
 		/// 
 		/// </summary>
-		[Intrinsic(@"Mosa.Platform.x86.Intrinsic.Get, Mosa.Platform.x86")]
-		public static ushort Get16(uint address) { return 0; }
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Get, Mosa.Platform.x86")]
+		public extern static ushort Get16(uint address);
 
 		/// <summary>
 		/// 
 		/// </summary>
-		[Intrinsic(@"Mosa.Platform.x86.Intrinsic.Get, Mosa.Platform.x86")]
-		public static uint Get32(uint address) { return 0; }
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Get, Mosa.Platform.x86")]
+		public extern static uint Get32(uint address);
 
 		/// <summary>
 		/// 
 		/// </summary>
-		[Intrinsic(@"Mosa.Platform.x86.Intrinsic.Get, Mosa.Platform.x86")]
-		public static ulong Get64(uint address) { return 0; }
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Get, Mosa.Platform.x86")]
+		public extern static ulong Get64(uint address);
 
 		/// <summary>
 		/// 
 		/// </summary>
-		[Intrinsic(@"Mosa.Platform.x86.Intrinsic.Set, Mosa.Platform.x86")]
-		public static void Set8(uint address, byte value) { }
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Set, Mosa.Platform.x86")]
+		public extern static void Set8(uint address, byte value);
 
 		/// <summary>
 		/// 
 		/// </summary>
-		[Intrinsic(@"Mosa.Platform.x86.Intrinsic.Set, Mosa.Platform.x86")]
-		public static void Set16(uint address, ushort value) { }
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Set, Mosa.Platform.x86")]
+		public extern static void Set16(uint address, ushort value);
 
 		/// <summary>
 		/// 
 		/// </summary>
-		[Intrinsic(@"Mosa.Platform.x86.Intrinsic.Set, Mosa.Platform.x86")]
-		public static void Set32(uint address, uint value) { }
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Set, Mosa.Platform.x86")]
+		public extern static void Set32(uint address, uint value);
 
 		/// <summary>
 		/// 
 		/// </summary>
-		[Intrinsic(@"Mosa.Platform.x86.Intrinsic.Set, Mosa.Platform.x86")]
-		public static void Set64(uint address, ulong value) { }
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Set, Mosa.Platform.x86")]
+		public extern static void Set64(uint address, ulong value);
 
 		/// <summary>
 		/// Switches the task.
 		/// </summary>
 		/// <param name="esp">The esp.</param>
-		[Intrinsic(@"Mosa.Platform.x86.Intrinsic.SwitchTask, Mosa.Platform.x86")]
-		public static void SwitchTask(uint esp) { }
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.SwitchTask, Mosa.Platform.x86")]
+		public extern static void SwitchTask(uint esp);
 
-		[Intrinsic(@"Mosa.Platform.x86.Intrinsic.RestoreContext, Mosa.Platform.x86")]
-		public static void RestoreContext() { }
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.RestoreContext, Mosa.Platform.x86")]
+		public extern static void RestoreContext();
 
-		[Intrinsic(@"Mosa.Platform.x86.Intrinsic.GetEip, Mosa.Platform.x86")]
-		public static uint GetEip() { return 0; }
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.GetEip, Mosa.Platform.x86")]
+		public extern static uint GetEip();
 
-		[Intrinsic(@"Mosa.Platform.x86.Intrinsic.CallFilter, Mosa.Platform.x86")]
-		public static void CallFilter() { }
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.CallFilter, Mosa.Platform.x86")]
+		public extern static void CallFilter();
 
 		#endregion
 

@@ -95,8 +95,6 @@ namespace Mosa.Runtime.TypeSystem
 			{
 				if (value == null)
 					throw new ArgumentNullException(@"value");
-				if (attributes != null)
-					throw new InvalidOperationException();
 
 				attributes = value;
 			}

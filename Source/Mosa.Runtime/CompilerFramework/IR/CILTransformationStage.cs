@@ -25,7 +25,6 @@ using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Metadata.Loader;
 using Mosa.Compiler.Linker;
-using Mosa.Runtime.Intrinsic;
 
 using IR = Mosa.Runtime.CompilerFramework.IR;
 using CIL = Mosa.Runtime.CompilerFramework.CIL;
@@ -42,10 +41,6 @@ namespace Mosa.Runtime.CompilerFramework.IR
 	{
 
 		#region Data members
-
-		private RuntimeType vmCallAttribute = null;
-
-		private RuntimeType vmIntrinsicAttribute = null;
 
 		#endregion // Data members
 
@@ -66,9 +61,6 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// </summary>
 		public override void Run()
 		{
-			vmCallAttribute = typeSystem.GetType("Mosa.Intrinsic", "VmCallAttribute");
-			vmIntrinsicAttribute = typeSystem.GetType("mscorlib", "Mosa.Intrinsic", "IntrinsicAttribute");
-
 			base.Run();
 		}
 
@@ -287,10 +279,10 @@ namespace Mosa.Runtime.CompilerFramework.IR
 				return;
 			}
 
-			if (ProcessVmCall(context))
-				return;
+			//if (ProcessVmCall(context))
+			//    return;
 
-			if (ProcessIntrinsicCall(context))
+			if (ProcessExternalCall(context))
 				return;
 
 			// Create a symbol operand for the invocation target
@@ -424,52 +416,49 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Callvirt(Context context)
 		{
-			if (!ProcessVmCall(context))
+			RuntimeMethod invokeTarget = context.InvokeTarget;
+
+			Operand resultOperand = context.Result;
+			var operands = new List<Operand>(context.Operands);
+
+			if ((invokeTarget.Attributes & MethodAttributes.Virtual) == MethodAttributes.Virtual)
 			{
-				RuntimeMethod invokeTarget = context.InvokeTarget;
+				Operand thisPtr = context.Operand1;
 
-				Operand resultOperand = context.Result;
-				var operands = new List<Operand>(context.Operands);
+				Operand methodTable = methodCompiler.CreateTemporary(BuiltInSigType.IntPtr);
+				Operand methodPtr = methodCompiler.CreateTemporary(BuiltInSigType.IntPtr);
 
-				if ((invokeTarget.Attributes & MethodAttributes.Virtual) == MethodAttributes.Virtual)
+				if (!invokeTarget.DeclaringType.IsInterface)
 				{
-					Operand thisPtr = context.Operand1;
-
-					Operand methodTable = methodCompiler.CreateTemporary(BuiltInSigType.IntPtr);
-					Operand methodPtr = methodCompiler.CreateTemporary(BuiltInSigType.IntPtr);
-
-					if (!invokeTarget.DeclaringType.IsInterface)
-					{
-						int methodTableOffset = CalculateMethodTableOffset(invokeTarget) + (nativePointerSize * 4);
-						context.SetInstruction(Instruction.LoadInstruction, methodTable, thisPtr, ConstantOperand.FromValue(0));
-						context.AppendInstruction(Instruction.LoadInstruction, methodPtr, methodTable, new ConstantOperand(BuiltInSigType.Int32, methodTableOffset));
-					}
-					else
-					{
-						int methodTableOffset = CalculateMethodTableOffset(invokeTarget);
-						int slotOffset = CalculateInterfaceSlotOffset(invokeTarget);
-
-						Operand interfaceSlotPtr = methodCompiler.CreateTemporary(BuiltInSigType.IntPtr);
-						Operand interfaceMethodTablePtr = methodCompiler.CreateTemporary(BuiltInSigType.IntPtr);
-
-						context.SetInstruction(Instruction.LoadInstruction, methodTable, thisPtr, ConstantOperand.FromValue(0));
-						context.AppendInstruction(Instruction.LoadInstruction, interfaceSlotPtr, methodTable, ConstantOperand.FromValue(0));
-						context.AppendInstruction(Instruction.LoadInstruction, interfaceMethodTablePtr, interfaceSlotPtr, new ConstantOperand(BuiltInSigType.Int32, slotOffset));
-						context.AppendInstruction(Instruction.LoadInstruction, methodPtr, interfaceMethodTablePtr, new ConstantOperand(BuiltInSigType.Int32, methodTableOffset));
-					}
-
-					context.AppendInstruction(Instruction.NopInstruction);
-					ProcessInvokeInstruction(context, methodPtr, resultOperand, operands);
+					int methodTableOffset = CalculateMethodTableOffset(invokeTarget) + (nativePointerSize * 4);
+					context.SetInstruction(Instruction.LoadInstruction, methodTable, thisPtr, ConstantOperand.FromValue(0));
+					context.AppendInstruction(Instruction.LoadInstruction, methodPtr, methodTable, new ConstantOperand(BuiltInSigType.Int32, methodTableOffset));
 				}
 				else
 				{
-					// FIXME: Callvirt imposes a null-check. For virtual calls this is done implicitly, but for non-virtual calls
-					// we have to make this explicitly somehow.
+					int methodTableOffset = CalculateMethodTableOffset(invokeTarget);
+					int slotOffset = CalculateInterfaceSlotOffset(invokeTarget);
 
-					// Create a symbol operand for the invocation target
-					SymbolOperand symbolOperand = SymbolOperand.FromMethod(invokeTarget);
-					ProcessInvokeInstruction(context, symbolOperand, resultOperand, operands);
+					Operand interfaceSlotPtr = methodCompiler.CreateTemporary(BuiltInSigType.IntPtr);
+					Operand interfaceMethodTablePtr = methodCompiler.CreateTemporary(BuiltInSigType.IntPtr);
+
+					context.SetInstruction(Instruction.LoadInstruction, methodTable, thisPtr, ConstantOperand.FromValue(0));
+					context.AppendInstruction(Instruction.LoadInstruction, interfaceSlotPtr, methodTable, ConstantOperand.FromValue(0));
+					context.AppendInstruction(Instruction.LoadInstruction, interfaceMethodTablePtr, interfaceSlotPtr, new ConstantOperand(BuiltInSigType.Int32, slotOffset));
+					context.AppendInstruction(Instruction.LoadInstruction, methodPtr, interfaceMethodTablePtr, new ConstantOperand(BuiltInSigType.Int32, methodTableOffset));
 				}
+
+				context.AppendInstruction(Instruction.NopInstruction);
+				ProcessInvokeInstruction(context, methodPtr, resultOperand, operands);
+			}
+			else
+			{
+				// FIXME: Callvirt imposes a null-check. For virtual calls this is done implicitly, but for non-virtual calls
+				// we have to make this explicitly somehow.
+
+				// Create a symbol operand for the invocation target
+				SymbolOperand symbolOperand = SymbolOperand.FromMethod(invokeTarget);
+				ProcessInvokeInstruction(context, symbolOperand, resultOperand, operands);
 			}
 		}
 
@@ -1716,7 +1705,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		}
 
 		/// <summary>
-		/// Processes intrinsic method calls.
+		/// Processes external method calls.
 		/// </summary>
 		/// <param name="context">The transformation context.</param>
 		/// <returns>
@@ -1727,59 +1716,32 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// the current architecture. If it has, the method call is replaced by the specified
 		/// native  instruction.
 		/// </remarks>
-		private bool ProcessIntrinsicCall(Context context)
+		private bool ProcessExternalCall(Context context)
 		{
-			IIntrinsicMethod instrinsic = GetIntrinsicMethod(context);
-
-			if (instrinsic == null)
+			if ((context.InvokeTarget.Attributes & MethodAttributes.PInvokeImpl) != MethodAttributes.PInvokeImpl)
 				return false;
 
-			instrinsic.ReplaceIntrinsicCall(context, typeSystem);
+			string external = context.InvokeTarget.Module.GetExternalName(context.InvokeTarget.Token);
+
+			//TODO: Verify!
+
+			Type instrinsicType = Type.GetType(external);
+
+			if (instrinsicType == null)
+				return false;
+
+			IIntrinsicMethod intrinsicMethod = Activator.CreateInstance(instrinsicType) as IIntrinsicMethod;
+
+			if (intrinsicMethod == null)
+				return false;
+
+			intrinsicMethod.ReplaceIntrinsicCall(context, typeSystem);
 
 			return true;
-
 		}
 
 		/// <summary>
-		/// Finds the intrinsic attribute instance.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <returns></returns>
-		private IIntrinsicMethod GetIntrinsicMethod(Context context)
-		{
-			if (vmIntrinsicAttribute == null)
-				return null;
-
-			RuntimeMethod method = context.InvokeTarget;
-			Debug.Assert(method != null, @"Call doesn't have a target.");
-
-			foreach (RuntimeAttribute attribute in method.CustomAttributes)
-			{
-				if (attribute.Type == vmIntrinsicAttribute)
-				{
-					object[] args = CustomAttributeParser.Parse(attribute.Blob, attribute.CtorMethod);
-
-					if ((args == null) || (args.Length == 0))
-						return null;
-
-					string name = args[0] as string;
-
-					Type instrinsicType = Type.GetType(name);
-
-					if (instrinsicType == null)
-						return null;
-
-					IIntrinsicMethod intrinsicMethod = Activator.CreateInstance(instrinsicType) as IIntrinsicMethod;
-
-					return intrinsicMethod;
-				}
-			}
-
-			return null;
-		}
-
-		/// <summary>
-		/// Processes a method call  instruction.
+		/// Processes a method call instruction.
 		/// </summary>
 		/// <param name="context">The transformation context.</param>
 		/// <param name="destinationOperand">The operand, which holds the call destination.</param>
@@ -1863,44 +1825,6 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		private void ProcessStoreInstruction(Context context)
 		{
 			context.SetInstruction(IR.Instruction.MoveInstruction, context.Result, context.Operand1);
-		}
-
-		/// <summary>
-		/// Processes virtual machine internal method calls.
-		/// </summary>
-		/// <param name="context">The transformation context.</param>
-		/// <returns><c>true</c> if the method was replaced by an vm call; <c>false</c> otherwise.</returns>
-		/// <remarks>
-		/// This method checks if the call target has an VmCallAttribute applied to it. If it has, 
-		/// the method call is replaced by the specified virtual machine call.
-		/// </remarks>
-		private bool ProcessVmCall(Context context)
-		{
-			RuntimeMethod method = context.InvokeTarget;
-			Debug.Assert(method != null, @"Call doesn't have a target.");
-
-			// Retrieve the runtime type
-			if (method.IsDefined(vmCallAttribute))
-			{
-				foreach (RuntimeAttribute attribute in method.CustomAttributes)
-				{
-					if (attribute.Type == vmCallAttribute)
-					{
-						// Get the intrinsic attribute
-						object[] args = CustomAttributeParser.Parse(attribute.Blob, attribute.CtorMethod);
-
-						RuntimeType type = attribute.CtorMethod.DeclaringType;
-						Type attributeType = Type.GetType(String.Format("{0}.{1}, {2}", type.Namespace, type.Name, "Mosa.Intrinsic"));
-						VmCallAttribute callAttribute = (VmCallAttribute)Activator.CreateInstance(attributeType, args);
-
-						ReplaceWithVmCall(context, callAttribute.VmCall);
-
-						return true;
-					}
-				}
-			}
-
-			return false;
 		}
 
 		/// <summary>
