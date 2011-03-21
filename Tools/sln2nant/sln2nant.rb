@@ -18,8 +18,10 @@ def sln2nant(solutionFile)
         if values[1].end_with?(".csproj\"")
           cleaned = values[1].strip.tr('\"', '').tr('\\', '/').tr('//', '/')
           projectFile = @baseDir + cleaned
-          projectFiles << projectFile
-          @buildfiles << cleaned[0..cleaned.rindex('/')] + 'mosa.build'
+          if not (projectFile.include? 'Test')
+            projectFiles << projectFile
+            @buildfiles << cleaned[0..cleaned.rindex('/')] + 'mosa.build'
+          end
         end
       end
     end
@@ -98,6 +100,11 @@ def proj2nant(projectFile, nantFile)
   
   references = []
   mosaReferences = []
+  startupObject = nil
+  
+  doc.elements.each('Project/PropertyGroup/StartupObject') do |startup|
+    startupObject = startup.text
+  end
   
   isLibrary = false
   doc.elements.each('Project/PropertyGroup/OutputType') do |outputType|
@@ -145,10 +152,10 @@ def proj2nant(projectFile, nantFile)
     end
   end
   
-  create_project_buildfile buildFile, includeFiles, assemblyName, nostdlib, references, mosaReferences, isLibrary
+  create_project_buildfile buildFile, includeFiles, assemblyName, nostdlib, references, mosaReferences, isLibrary, startupObject
 end
 
-def create_project_buildfile (buildFile, sourceFiles, assemblyName, nostdlib, references, projectReferences, isLibrary)
+def create_project_buildfile (buildFile, sourceFiles, assemblyName, nostdlib, references, projectReferences, isLibrary, startupObject)
   fileHandle = File.new(@baseDir + buildFile, "w")
   part1 = File.open('project.1.preset', 'rb') { |file| file.read }
   part2 = File.open('project.2.preset', 'rb') { |file| file.read }
@@ -158,6 +165,9 @@ def create_project_buildfile (buildFile, sourceFiles, assemblyName, nostdlib, re
   
   if not isLibrary
     part1 = part1.sub('library', 'exe')
+    if not (startupObject == nil)
+      part1 = part1.sub('exe"', 'exe" main="' + startupObject + '"')
+    end
   end
   
   nostdlibString = 'nostdlib="' + nostdlib.to_s + '"'

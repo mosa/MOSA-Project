@@ -12,7 +12,7 @@
 	
 	<!-- Main build target -->
 	<target name="build">
-	    <csc target="exe" output="${outputDirectory}/Mosa.Test.Stuff.exe" debug="${debug}" unsafe="true" nostdlib="false">
+	    <csc target="exe" main="Mosa.Test.Stuff.Program" output="${outputDirectory}/Mosa.Test.Stuff.exe" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
                     <include name="Program.cs"/>
 		</sources>

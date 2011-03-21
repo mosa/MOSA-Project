@@ -206,7 +206,6 @@
                     <include name="CompilerFramework/LoopAwareBlockOrderStage.cs"/>
                     <include name="CompilerFramework/LocalCSE.cs"/>
                     <include name="CompilerFramework/IMethodCompiler.cs"/>
-                    <include name="Intrinsic/IntrinsicAttribute.cs"/>
                     <include name="Linker/BaseAssemblyLinkerStage.cs"/>
                     <include name="Memory/IMemoryPageManager.cs"/>
                     <include name="Memory/PageAccessFlags.cs"/>
@@ -263,8 +262,7 @@
                     <include name="CompilerFramework/Operands/StaticFieldOperand.cs"/>
                     <include name="CompilerFramework/Operands/TemporaryOperand.cs"/>
                     <include name="CompilerFramework/Operands/LocalVariableOperand.cs"/>
-                    <include name="Intrinsic/VmCall.cs"/>
-                    <include name="Intrinsic/VmCallAttribute.cs"/>
+                    <include name="CompilerFramework/IR/VmCall.cs"/>
 		</sources>
 		<references>
                     <include name="System.dll"/>

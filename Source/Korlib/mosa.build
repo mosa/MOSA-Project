@@ -14,9 +14,6 @@
 	<target name="build">
 	    <csc target="library" output="${outputDirectory}/mscorlib.dll" debug="${debug}" unsafe="true" nostdlib="true">
 		<sources>
-                    <include name="Mosa.Intrinsic/IntrinsicAttribute.cs"/>
-                    <include name="Mosa.Intrinsic/VmCall.cs"/>
-                    <include name="Mosa.Intrinsic/VmCallAttribute.cs"/>
                     <include name="System.Diagnostics/DebuggerHiddenAttribute.cs"/>
                     <include name="System.Runtime.CompilerServices/CompilationRelaxationsAttribute.cs"/>
                     <include name="System.Runtime.CompilerServices/RuntimeCompatibilityAttribute.cs"/>
