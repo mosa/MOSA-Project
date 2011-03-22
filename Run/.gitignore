@@ -1,2 +1,5 @@
 /build/
 /Bochs/bochsout.txt
+dotGraph.dot
+kernel.dis
+statistics.txt
