@@ -70,18 +70,18 @@
     <DebugType>none</DebugType>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Mono.Cecil, Version=0.9.4.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
+    <Reference Include="Mono.Cecil">
       <HintPath>..\..\3rdParty\Mono.Cecil.dll</HintPath>
+    </Reference>
+    <Reference Include="Gallio">
+      <HintPath>..\..\3rdParty\Gallio.dll</HintPath>
+    </Reference>
+    <Reference Include="MbUnit">
+      <HintPath>..\..\3rdParty\MbUnit.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Data" />
     <Reference Include="System.Xml" />
-    <Reference Include="Gallio, Version=3.2.0.0, Culture=neutral, PublicKeyToken=eb9cfa67ee6ab36e">
-      <HintPath>..\..\3rdParty\Gallio.dll</HintPath>
-    </Reference>
-    <Reference Include="MbUnit, Version=3.2.0.0, Culture=neutral, PublicKeyToken=eb9cfa67ee6ab36e">
-      <HintPath>..\..\3rdParty\MbUnit.dll</HintPath>
-    </Reference>
     <Reference Include="System.Core">
     </Reference>
   </ItemGroup>

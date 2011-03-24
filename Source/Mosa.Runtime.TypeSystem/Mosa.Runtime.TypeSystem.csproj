@@ -60,7 +60,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="Mono.Cecil, Version=0.9.4.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756">
+    <Reference Include="Mono.Cecil">
       <HintPath>..\..\3rdParty\Mono.Cecil.dll</HintPath>
     </Reference>
   </ItemGroup>
