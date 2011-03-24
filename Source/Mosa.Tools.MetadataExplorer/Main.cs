@@ -7,10 +7,13 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
+using Mono.Cecil;
+
 using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime.TypeSystem.Generic;
+using Mosa.Tools.MetadataExplorer.Tables;
 
 namespace Mosa.Tools.MetadataExplorer
 {
@@ -54,7 +57,7 @@ namespace Mosa.Tools.MetadataExplorer
 			assemblyLoader.AddPrivatePath(System.IO.Path.GetDirectoryName(filename));
 
 			metadataModule = assemblyLoader.LoadModule(filename);
-			
+
 			UpdateTree();
 		}
 
@@ -63,7 +66,41 @@ namespace Mosa.Tools.MetadataExplorer
 			treeView.BeginUpdate();
 			treeView.Nodes.Clear();
 
-			//TODO: xxxx
+			//Cycle through all metadata tables
+			foreach (TokenType table in Enum.GetValues(typeof(TokenType)))
+			{
+				if (table == TokenType.Module || table == TokenType.String)
+					continue;
+
+				int count = metadataModule.Metadata.GetRowCount(table);
+
+				if (count == 0)
+					continue;
+
+				TreeNode tableNode = new TreeNode("[" + table.FormatToString() + "] " + table.ToString() + " (" + count.ToString() + ")");
+				treeView.Nodes.Add(tableNode);
+
+				//Cycle through all metadata rows
+				for (int rowid = 1; rowid <= count; rowid++)
+				{
+					MetadataToken token = new MetadataToken(table, rowid);
+
+					TableRow row = Resolver.GetTableRow(metadataModule.Metadata, token);
+
+					if (row == null)
+						continue;
+
+					TreeNode rowNode = new TreeNode(token.FormatToString() + " - " + row.Name);
+					tableNode.Nodes.Add(rowNode);
+
+					foreach (KeyValuePair<string, string> data in row.GetValues())
+					{
+						TreeNode rowValueNode = new TreeNode(data.Key + ": " + data.Value);
+						rowNode.Nodes.Add(rowValueNode);
+					}
+				}
+
+			}
 
 			treeView.EndUpdate();
 		}

@@ -106,7 +106,6 @@ namespace Mosa.Runtime.Metadata
 
 		#region Construction
 
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="TableHeap"/> class.
 		/// </summary>
@@ -428,6 +427,16 @@ namespace Mosa.Runtime.Metadata
 		#endregion // Methods
 
 		#region IMetadataProvider members
+
+		/// <summary>
+		/// Gets the rows.
+		/// </summary>
+		/// <param name="table">The table.</param>
+		/// <returns></returns>
+		public int GetRowCount(TokenType table)
+		{
+			return _rowCounts[((int)table >> 24)];
+		}
 
 		/// <summary>
 		/// Retrieves the number of rows in a specified table.

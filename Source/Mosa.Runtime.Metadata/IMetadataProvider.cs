@@ -40,6 +40,13 @@ namespace Mosa.Runtime.Metadata
 		/// <param name="metadataToken">The metadata token.</param>
 		/// <returns></returns>
 		MetadataToken GetMaxTokenValue(MetadataToken metadataToken);
+		
+		/// <summary>
+		/// Gets the row count.
+		/// </summary>
+		/// <param name="table">The table.</param>
+		/// <returns></returns>
+		int GetRowCount(TokenType table);
 
 		/// <summary>
 		/// Reads a string heap or user string heap entry.

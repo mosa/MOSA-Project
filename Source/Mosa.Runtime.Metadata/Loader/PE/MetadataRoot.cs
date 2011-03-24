@@ -174,6 +174,16 @@ namespace Mosa.Runtime.Metadata.Loader.PE
 		#region IMetadataProvider members
 
 		/// <summary>
+		/// Gets the rows.
+		/// </summary>
+		/// <param name="table">The table.</param>
+		/// <returns></returns>
+		int IMetadataProvider.GetRowCount(TokenType table)
+		{
+			return ((TableHeap)_streams[(int)HeapType.Tables]).GetRowCount(table);
+		}
+
+		/// <summary>
 		/// Gets the max token value.
 		/// </summary>
 		/// <param name="tokenType">Type of the token.</param>
