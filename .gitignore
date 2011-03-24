@@ -19,6 +19,7 @@
 *.mdb
 Thumbs.db
 build.force
+obj
 /bin/*
 /Bin/*
 /tmp

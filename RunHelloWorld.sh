@@ -1,4 +1,4 @@
 cd Source
-nant
+./Compile.sh
 cd ../Run
 exec ./QEMU-CompileAndRun.sh

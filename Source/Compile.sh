@@ -1,1 +1,2 @@
-xbuild MOSA-Mono2-6-3.sln /p:TreatWarningsAsErrors=false
+nant
+cp ../3rdParty/*.dll ../bin/
