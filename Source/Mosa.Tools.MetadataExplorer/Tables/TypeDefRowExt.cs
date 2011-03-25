@@ -36,9 +36,14 @@ namespace Mosa.Tools.MetadataExplorer.Tables
 
 		public override IEnumerable GetValues()
 		{
-			//yield return Create("Name IDX", row.TypeNameIdx.FormatToString());
-			yield return Create("Name", Name);
-			yield return Create("Namespace", metadata.ReadString(row.TypeNamespaceIdx));
+			yield return TokenString("Name", row.TypeNameIdx);
+			yield return TokenString("Namespace", row.TypeNamespaceIdx);
+			yield return TokenValue("TypeNameIdx", row.TypeNameIdx);
+			yield return TokenValue("TypeNamespaceIdx", row.TypeNamespaceIdx);
+			yield return TokenValue("Extends", row.Extends);
+			yield return TokenValue("FieldList", row.FieldList);
+			yield return Value("Flags", row.Flags.ToString());
+			yield return TokenValue("MethodList", row.MethodList);
 		}
 	}
 }

@@ -29,9 +29,24 @@ namespace Mosa.Tools.MetadataExplorer.Tables
 
 		public abstract IEnumerable GetValues();
 
-		protected KeyValuePair<string, string> Create(string name, string value)
+		protected KeyValuePair<string, string> Value(string name, string value)
 		{
 			return new KeyValuePair<string, string>(name, value);
+		}
+
+		protected KeyValuePair<string, string> TokenValue(string name, TokenTypes token)
+		{
+			return Value(name, token.FormatToString());
+		}
+
+		protected KeyValuePair<string, string> TokenString(string name, TokenTypes token)
+		{
+			return Value(name, ReadString(token));
+		}
+
+		private string ReadString(TokenTypes token)
+		{
+			return metadata.ReadString(token);
 		}
 	}
 }

@@ -32,6 +32,10 @@ namespace Mosa.Tools.MetadataExplorer.Tables
 				case TokenType.File: return new FileRowExt(metadata, metadata.ReadFileRow((TokenTypes)metadataToken.ToInt32()));
 				case TokenType.TypeDef: return new TypeDefRowExt(metadata, metadata.ReadTypeDefRow((TokenTypes)metadataToken.ToInt32()));
 				case TokenType.TypeSpec: return new TypeSpecRowExt(metadata, metadata.ReadTypeSpecRow((TokenTypes)metadataToken.ToInt32()));
+				case TokenType.TypeRef: return new TypeRefRowExt(metadata, metadata.ReadTypeRefRow((TokenTypes)metadataToken.ToInt32()));
+				case TokenType.Field: return new FieldRowExt(metadata, metadata.ReadFieldRow((TokenTypes)metadataToken.ToInt32()));
+				case TokenType.Method: return new MethodDefRowExt(metadata, metadata.ReadMethodDefRow((TokenTypes)metadataToken.ToInt32()));
+					
 				default: return null;
 			}
 		}

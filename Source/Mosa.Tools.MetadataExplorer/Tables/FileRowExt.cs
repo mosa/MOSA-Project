@@ -36,8 +36,8 @@ namespace Mosa.Tools.MetadataExplorer.Tables
 
 		public override IEnumerable GetValues()
 		{
-			//yield return Create("Name IDX", row.NameStringIdx.ToString());
-			yield return Create("Name", Name);
+			yield return TokenValue("NameStringIdx", row.NameStringIdx);
+			yield return TokenString("Name", row.NameStringIdx);
 		}
 	}
 }

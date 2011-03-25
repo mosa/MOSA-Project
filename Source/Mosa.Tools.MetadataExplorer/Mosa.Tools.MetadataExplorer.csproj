@@ -62,7 +62,10 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Tables\Extension.cs" />
+    <Compile Include="Extension.cs" />
+    <Compile Include="Tables\MethodDefRowExt.cs" />
+    <Compile Include="Tables\FieldRowExt.cs" />
+    <Compile Include="Tables\TypeRefRowExt.cs" />
     <Compile Include="Tables\TypeSpecRowExt.cs" />
     <Compile Include="Tables\Resolver.cs" />
     <Compile Include="Tables\TypeDefRowExt.cs" />

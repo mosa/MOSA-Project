@@ -15,7 +15,6 @@ using System.Collections;
 
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Tables;
-using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Tools.MetadataExplorer.Tables
 {
@@ -23,26 +22,27 @@ namespace Mosa.Tools.MetadataExplorer.Tables
 	/// <summary>
 	/// 
 	/// </summary>
-	public class TypeSpecRowExt : TableRow
+	public class MethodDefRowExt : TableRow
 	{
-		protected TypeSpecRow row;
+		protected MethodDefRow row;
 
-		public TypeSpecRowExt(IMetadataProvider metadata, TypeSpecRow row)
+		public MethodDefRowExt(IMetadataProvider metadata, MethodDefRow row)
 		{
 			this.metadata = metadata;
 			this.row = row;
 		}
 
-		public override string Name { get { return row.SignatureBlobIdx.FormatToString(); } }
+		public override string Name { get { return metadata.ReadString(row.NameStringIdx); } }
 
 		public override IEnumerable GetValues()
 		{
+			yield return TokenString("Name", row.NameStringIdx);
+			yield return TokenValue("NameStringIdx", row.NameStringIdx);
+			yield return Value("Flags", row.Flags.ToString());
+			yield return Value("ImplFlags", row.ImplFlags.ToString());
+			yield return TokenValue("ParamList", row.ParamList);
+			yield return Value("Rva", row.Rva.ToString()); 
 			yield return TokenValue("SignatureBlobIdx", row.SignatureBlobIdx);
-
-			TypeSpecSignature signature = new TypeSpecSignature(metadata, row.SignatureBlobIdx);
-			yield return TokenValue("Signature Token", signature.Token);
-			yield return Value("Signature Type", signature.Type.ToString());
-
 		}
 	}
 }

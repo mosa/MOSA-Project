@@ -18,7 +18,7 @@ using Mono.Cecil;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Tables;
 
-namespace Mosa.Tools.MetadataExplorer.Tables
+namespace Mosa.Tools.MetadataExplorer
 {
 
 	public static class Extension
