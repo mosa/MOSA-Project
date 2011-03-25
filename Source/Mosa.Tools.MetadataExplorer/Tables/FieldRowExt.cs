@@ -15,6 +15,7 @@ using System.Collections;
 
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Tables;
+using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Tools.MetadataExplorer.Tables
 {
@@ -40,6 +41,11 @@ namespace Mosa.Tools.MetadataExplorer.Tables
 			yield return TokenValue("NameStringIdx", row.NameStringIdx);
 			yield return Value("Flags", row.Flags.ToString());
 			yield return TokenValue("SignatureBlobIdx", row.SignatureBlobIdx);
+
+			FieldSignature signature = new FieldSignature(metadata, row.SignatureBlobIdx);
+			yield return TokenValue("Signature Token", signature.Token);
+			yield return Value("Signature Modifier", signature.Modifier.ToString());
+			yield return Value("Signature Type", signature.Type.ToString());
 		}
 	}
 }

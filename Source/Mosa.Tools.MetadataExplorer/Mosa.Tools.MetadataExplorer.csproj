@@ -63,6 +63,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Extension.cs" />
+    <Compile Include="Tables\GenericParamRowExt.cs" />
+    <Compile Include="Tables\ParamRowExt.cs" />
+    <Compile Include="Tables\MemberRefRowExt.cs" />
     <Compile Include="Tables\MethodDefRowExt.cs" />
     <Compile Include="Tables\FieldRowExt.cs" />
     <Compile Include="Tables\TypeRefRowExt.cs" />

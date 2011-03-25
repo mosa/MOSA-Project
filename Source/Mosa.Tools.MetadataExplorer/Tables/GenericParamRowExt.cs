@@ -23,11 +23,11 @@ namespace Mosa.Tools.MetadataExplorer.Tables
 	/// <summary>
 	/// 
 	/// </summary>
-	public class MethodDefRowExt : TableRow
+	public class GenericParamRowExt : TableRow
 	{
-		protected MethodDefRow row;
+		protected GenericParamRow row;
 
-		public MethodDefRowExt(IMetadataProvider metadata, MethodDefRow row)
+		public GenericParamRowExt(IMetadataProvider metadata, GenericParamRow row)
 		{
 			this.metadata = metadata;
 			this.row = row;
@@ -39,15 +39,9 @@ namespace Mosa.Tools.MetadataExplorer.Tables
 		{
 			yield return TokenString("Name", row.NameStringIdx);
 			yield return TokenValue("NameStringIdx", row.NameStringIdx);
+			yield return TokenValue("OwnerTableIdx", row.OwnerTableIdx);
 			yield return Value("Flags", row.Flags.ToString());
-			yield return Value("ImplFlags", row.ImplFlags.ToString());
-			yield return TokenValue("ParamList", row.ParamList);
-			yield return Value("Rva", row.Rva.ToString());
-			yield return TokenValue("SignatureBlobIdx", row.SignatureBlobIdx);
-
-			MethodSignature signature = new MethodSignature(metadata, row.SignatureBlobIdx);
-			yield return TokenValue("Signature Token", signature.Token);
-			yield return Value("Signature Generic Parameters", signature.GenericParameterCount.ToString());
+			yield return Value("Number", row.Number.ToString());
 		}
 	}
 }
