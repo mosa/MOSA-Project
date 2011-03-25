@@ -535,13 +535,11 @@ namespace Mosa.Runtime.TypeSystem
 				RuntimeType interfaceType;
 
 				if ((row.InterfaceTableIdx & TokenTypes.TableMask) == TokenTypes.TypeSpec)
-				{
 					interfaceType = typeSpecs[(int)(row.InterfaceTableIdx & TokenTypes.RowIndexMask) - 1];
-				}
-				else
-				{
+				else if ((row.InterfaceTableIdx & TokenTypes.TableMask) == TokenTypes.TypeDef)
 					interfaceType = types[(int)(row.InterfaceTableIdx & TokenTypes.RowIndexMask) - 1];
-				}
+				else 
+					interfaceType = typeRef[(int)(row.InterfaceTableIdx & TokenTypes.RowIndexMask) - 1];
 
 				declaringType.Interfaces.Add(interfaceType);
 			}
@@ -875,7 +873,12 @@ namespace Mosa.Runtime.TypeSystem
 
 						case CilElementType.GenericInst:
 							GenericInstSigType genericSigType2 = (GenericInstSigType)sigType;
-							RuntimeType genericBaseType = types[(int)(genericSigType2.BaseType.Token & TokenTypes.RowIndexMask) - 1];
+							int index = (int)(genericSigType2.BaseType.Token & TokenTypes.RowIndexMask) - 1;
+							RuntimeType genericBaseType = null;
+							if ((genericSigType2.BaseType.Token & TokenTypes.TypeDef) == TokenTypes.TypeDef) 
+								genericBaseType = types[index];
+							else if ((genericSigType2.BaseType.Token & TokenTypes.TypeRef) == TokenTypes.TypeRef) 
+								genericBaseType = typeRef[index];
 							genericType = new CilGenericType(this, genericBaseType, genericSigType, token, this);
 							break;
 
