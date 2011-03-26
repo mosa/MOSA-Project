@@ -9,8 +9,6 @@
 
 using Mosa.Runtime.Metadata;
 
-using Mono.Cecil;
-
 namespace Mosa.Runtime.TypeSystem
 {
 	/// <summary>

@@ -13,7 +13,7 @@ using System.Text;
 using System.IO;
 //using System.Reflection;
 
-using Mono.Cecil;
+using Mosa.Runtime.Metadata;
 
 namespace Mosa.Runtime.Metadata.Tables
 {

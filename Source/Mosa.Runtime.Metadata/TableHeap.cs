@@ -12,8 +12,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 
-using Mono.Cecil;
-
 using Mosa.Runtime.Metadata.Tables;
 
 namespace Mosa.Runtime.Metadata
@@ -39,7 +37,7 @@ namespace Mosa.Runtime.Metadata
 		#region Static members
 
 		private static readonly int[][] IndexTables = new[]
-		                                                   {
+		{
 			new[] { (int)TokenTypes.TypeDef, (int)TokenTypes.TypeRef, (int)TokenTypes.TypeSpec },
 			new[] { (int)TokenTypes.Field, (int)TokenTypes.Param, (int)TokenTypes.Property },
 			new[] { (int)TokenTypes.MethodDef, (int)TokenTypes.Field, (int)TokenTypes.TypeRef, (int)TokenTypes.TypeDef, (int)TokenTypes.Param, (int)TokenTypes.InterfaceImpl, (int)TokenTypes.MemberRef, (int)TokenTypes.Module, /*(int)TokenTypes.Permission,*/ (int)TokenTypes.Property, (int)TokenTypes.Event, (int)TokenTypes.StandAloneSig, (int)TokenTypes.ModuleRef, (int)TokenTypes.TypeSpec, (int)TokenTypes.Assembly, (int)TokenTypes.AssemblyRef, (int)TokenTypes.File, (int)TokenTypes.ExportedType, (int)TokenTypes.ManifestResource },
@@ -53,6 +51,23 @@ namespace Mosa.Runtime.Metadata
 			new[] { -1, -1, (int)TokenTypes.MethodDef, (int)TokenTypes.MemberRef, -1 },
 			new[] { (int)TokenTypes.Module, (int)TokenTypes.ModuleRef, (int)TokenTypes.AssemblyRef, (int)TokenTypes.TypeRef },
 			new[] { (int)TokenTypes.TypeDef, (int)TokenTypes.MethodDef }
+		};
+
+		private static readonly TableTypes[][] IndexTables2 = new[]
+		{
+		    new[] { TableTypes.TypeDef, TableTypes.TypeRef, TableTypes.TypeSpec },
+		    new[] { TableTypes.Field, TableTypes.Param, TableTypes.Property },
+		    new[] { TableTypes.MethodDef, TableTypes.Field, TableTypes.TypeRef, TableTypes.TypeDef, TableTypes.Param, TableTypes.InterfaceImpl, TableTypes.MemberRef, TableTypes.Module, /*TableTypes.Permission,*/ TableTypes.Property, TableTypes.Event, TableTypes.StandAloneSig, TableTypes.ModuleRef, TableTypes.TypeSpec, TableTypes.Assembly, TableTypes.AssemblyRef, TableTypes.File, TableTypes.ExportedType, TableTypes.ManifestResource },
+		    new[] { TableTypes.Field, TableTypes.Param },
+		    new[] { TableTypes.TypeDef, TableTypes.MethodDef, TableTypes.Assembly },
+		    new[] { TableTypes.TypeDef, TableTypes.TypeRef, TableTypes.ModuleRef, TableTypes.MethodDef, TableTypes.TypeSpec },
+		    new[] { TableTypes.Event, TableTypes.Property },
+		    new[] { TableTypes.MethodDef, TableTypes.MemberRef },
+		    new[] { TableTypes.Field, TableTypes.MethodDef },
+		    new[] { TableTypes.File, TableTypes.AssemblyRef, TableTypes.ExportedType },
+		    new[] { TableTypes.Assembly, TableTypes.Assembly, TableTypes.MethodDef, TableTypes.MemberRef, TableTypes.Assembly },
+		    new[] { TableTypes.Module, TableTypes.ModuleRef, TableTypes.AssemblyRef, TableTypes.TypeRef },
+		    new[] { TableTypes.TypeDef, TableTypes.MethodDef }
 		};
 
 		private static readonly int[] IndexBits = new[] {
@@ -307,15 +322,15 @@ namespace Mosa.Runtime.Metadata
 		/// <summary>
 		/// Determines the size of an index into the named table.
 		/// </summary>
-		/// <param name="metadataToken">The metadata token.</param>
+		/// <param name="tokenTypes">The table to determine the index for.</param>
 		/// <returns>The index size in bytes.</returns>
-		private int GetIndexSize(TokenType tokenType)
+		private int GetIndexSize(TableTypes table)
 		{
-			int table = (int)tokenType >> 24;
-			if (0 > table || table >= (int)TokenTypes.MaxTable)
+			int _table = (int)table >> 24;
+			if (0 > _table || _table >= (int)TableTypes.GenericParamConstraint)
 				throw new ArgumentException(@"Invalid token type.", @"tokenTypes");
 
-			if (_rowCounts[table] > 65535)
+			if (_rowCounts[_table] > 65535)
 				return 4;
 
 			return 2;
@@ -366,6 +381,25 @@ namespace Mosa.Runtime.Metadata
 			return value;
 		}
 
+		private MetadataToken ReadIndexValue2(BinaryReader reader, IndexType index)
+		{
+			int value = (GetIndexSize(index) == 2) ? (0x0000FFFF & (int)reader.ReadInt16()) : reader.ReadInt32();
+
+			Debug.Assert(index < IndexType.CodedIndexCount);
+
+			int bits = IndexBits[(int)index];
+			int mask = 1;
+
+			for (int i = 1; i < bits; i++) mask = (mask << 1) | 1;
+
+			// Get the table
+			int table = (int)value & mask;
+
+			// Correct the value
+			value = ((int)value >> bits);
+
+			return new MetadataToken(IndexTables2[(int)index][table], value);
+		}
 		/// <summary>
 		/// Read and decode an index value from the reader.
 		/// </summary>
@@ -382,12 +416,12 @@ namespace Mosa.Runtime.Metadata
 		/// Read and decode an index value from the reader.
 		/// </summary>
 		/// <param name="reader">The reader to read From.</param>
-		/// <param name="metadataToken">The metadata token.</param>
+		/// <param name="table">The token.</param>
 		/// <returns>The index value.</returns>
-		private MetadataToken ReadIndexValue(BinaryReader reader, TokenType tokenType)
+		private MetadataToken ReadIndexValue(BinaryReader reader, TableTypes table)
 		{
-			int width = GetIndexSize(tokenType);
-			return new MetadataToken(tokenType, 2 == width ? reader.ReadInt16() : reader.ReadInt32());
+			int width = GetIndexSize(table);
+			return new MetadataToken(table, 2 == width ? reader.ReadInt16() : reader.ReadInt32());
 		}
 
 		private BinaryReader CreateReaderForToken(TokenTypes token)
@@ -410,14 +444,14 @@ namespace Mosa.Runtime.Metadata
 			return reader;
 		}
 
-		private BinaryReader CreateReaderForToken(MetadataToken metadataToken)
+		private BinaryReader CreateReaderForToken(MetadataToken token)
 		{
-			if (metadataToken.RID > GetMaxTokenValue(metadataToken).RID)
+			if (token.RID > GetMaxTokenValue(token).RID)
 				throw new ArgumentException(@"Row is out of bounds.", @"token");
-			if (metadataToken.RID == 0)
+			if (token.RID == 0)
 				throw new ArgumentException(@"Invalid row index.", @"token");
-			int tableIdx = (int)(metadataToken.TokenType) >> 24;
-			int tableOffset = _tableOffsets[tableIdx] + ((int)(metadataToken.RID - 1) * _recordSize[tableIdx]);
+			int tableIdx = (int)(token.Table) >> 24;
+			int tableOffset = _tableOffsets[tableIdx] + ((int)(token.RID - 1) * _recordSize[tableIdx]);
 
 			BinaryReader reader = new BinaryReader(new MemoryStream(_metadata), Encoding.UTF8);
 			reader.BaseStream.Position = tableOffset;
@@ -433,7 +467,17 @@ namespace Mosa.Runtime.Metadata
 		/// </summary>
 		/// <param name="table">The table.</param>
 		/// <returns></returns>
-		public int GetRowCount(TokenType table)
+		public int GetRowCount(TokenTypes table)
+		{
+			return _rowCounts[((int)table >> 24)];
+		}
+
+		/// <summary>
+		/// Gets the rows.
+		/// </summary>
+		/// <param name="table">The table.</param>
+		/// <returns></returns>
+		public int GetRowCount(TableTypes table)
 		{
 			return _rowCounts[((int)table >> 24)];
 		}
@@ -455,12 +499,12 @@ namespace Mosa.Runtime.Metadata
 		/// <summary>
 		/// Retrieves the number of rows in a specified table.
 		/// </summary>
-		/// <param name="metadataToken">The metadata token.</param>
+		/// <param name="token">The metadata token.</param>
 		/// <returns>The row count in the table.</returns>
 		/// <exception cref="System.ArgumentException">Invalid token type specified for table.</exception>
-		public MetadataToken GetMaxTokenValue(MetadataToken metadataToken)
+		public MetadataToken GetMaxTokenValue(MetadataToken token)
 		{
-			return new MetadataToken(metadataToken.TokenType, _rowCounts[((int)metadataToken.TokenType >> 24)]);
+			return new MetadataToken(token.Table, _rowCounts[((int)token.Table >> 24)]);
 		}
 
 		/// <summary>

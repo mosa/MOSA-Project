@@ -62,9 +62,6 @@
     <StartupObject>Mosa.Tools.Compiler.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Mono.Cecil">
-      <HintPath>..\..\3rdParty\Mono.Cecil.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>

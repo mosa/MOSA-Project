@@ -7,8 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-using Mono.Cecil;
-
 using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Loader;
@@ -67,9 +65,9 @@ namespace Mosa.Tools.MetadataExplorer
 			treeView.Nodes.Clear();
 
 			//Cycle through all metadata tables
-			foreach (TokenType table in Enum.GetValues(typeof(TokenType)))
+			foreach (TableTypes table in Enum.GetValues(typeof(TableTypes)))
 			{
-				if (table == TokenType.Module || table == TokenType.String)
+				if (table == TableTypes.Module)
 					continue;
 
 				int count = metadataModule.Metadata.GetRowCount(table);

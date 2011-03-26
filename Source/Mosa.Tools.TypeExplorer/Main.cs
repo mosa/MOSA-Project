@@ -190,7 +190,7 @@ namespace Mosa.Tools.TypeExplorer
 							TreeNode methodNode = new TreeNode(FormatRuntimeMember(method));
 							methodsNode.Nodes.Add(methodNode);
 
-							if ((method.Attributes & Mono.Cecil.MethodAttributes.Static) == Mono.Cecil.MethodAttributes.Static)
+							if ((method.Attributes & MethodAttributes.Static) == MethodAttributes.Static)
 								methodNode.Text = methodNode.Text + " [Static]";
 
 							if (method.IsAbstract)

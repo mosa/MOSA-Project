@@ -27,20 +27,20 @@ namespace Mosa.Tools.MetadataExplorer.Tables
 		protected TypeRefRow row;
 
 		public TypeRefRowExt(IMetadataProvider metadata, TypeRefRow row)
+			: base(metadata)
 		{
-			this.metadata = metadata;
 			this.row = row;
 		}
 
-		public override string Name { get { return metadata.ReadString(row.TypeNameIdx); } }
+		public override string Name { get { return Metadata.ReadString(row.TypeNameIdx); } }
 
 		public override IEnumerable GetValues()
 		{
 			yield return TokenString("Name", row.TypeNameIdx);
 			yield return TokenString("Namespace", row.TypeNamespaceIdx);
-			yield return TokenValue("TypeNameIdx", row.TypeNameIdx);
-			yield return TokenValue("TypeNamespaceIdx", row.TypeNamespaceIdx);
-			yield return TokenValue("ResolutionScopeIdx", row.ResolutionScopeIdx);
+			yield return Value("TypeNameIdx", row.TypeNameIdx);
+			yield return Value("TypeNamespaceIdx", row.TypeNamespaceIdx);
+			yield return Value("ResolutionScopeIdx", row.ResolutionScopeIdx);
 		}
 	}
 }

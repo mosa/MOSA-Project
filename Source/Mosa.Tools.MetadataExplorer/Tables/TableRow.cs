@@ -13,8 +13,6 @@ using System.Text;
 using System.IO;
 using System.Collections;
 
-using Mono.Cecil;
-
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Tables;
 
@@ -23,9 +21,15 @@ namespace Mosa.Tools.MetadataExplorer.Tables
 
 	public abstract class TableRow
 	{
-		protected IMetadataProvider metadata;
+		private IMetadataProvider metadata;
 
 		public abstract string Name { get; }
+		public IMetadataProvider Metadata { get { return metadata; } }
+
+		public TableRow(IMetadataProvider metadata)
+		{
+			this.metadata = metadata;
+		}
 
 		public abstract IEnumerable GetValues();
 
@@ -34,7 +38,17 @@ namespace Mosa.Tools.MetadataExplorer.Tables
 			return new KeyValuePair<string, string>(name, value);
 		}
 
-		protected KeyValuePair<string, string> TokenValue(string name, TokenTypes token)
+		protected KeyValuePair<string, string> Value(string name, int value)
+		{
+			return new KeyValuePair<string, string>(name, value.ToString());
+		}
+
+		protected KeyValuePair<string, string> Value(string name, MetadataToken token)
+		{
+			return Value(name, token.FormatToString());
+		}
+
+		protected KeyValuePair<string, string> Value(string name, TokenTypes token)
 		{
 			return Value(name, token.FormatToString());
 		}
@@ -42,6 +56,11 @@ namespace Mosa.Tools.MetadataExplorer.Tables
 		protected KeyValuePair<string, string> TokenString(string name, TokenTypes token)
 		{
 			return Value(name, ReadString(token));
+		}
+
+		private string ReadString(int index)
+		{
+			return metadata.ReadString((TokenTypes)index);
 		}
 
 		private string ReadString(TokenTypes token)

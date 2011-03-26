@@ -28,20 +28,20 @@ namespace Mosa.Tools.MetadataExplorer.Tables
 		protected GenericParamRow row;
 
 		public GenericParamRowExt(IMetadataProvider metadata, GenericParamRow row)
+			: base(metadata)
 		{
-			this.metadata = metadata;
 			this.row = row;
 		}
 
-		public override string Name { get { return metadata.ReadString(row.NameStringIdx); } }
+		public override string Name { get { return Metadata.ReadString(row.NameStringIdx); } }
 
 		public override IEnumerable GetValues()
 		{
 			yield return TokenString("Name", row.NameStringIdx);
-			yield return TokenValue("NameStringIdx", row.NameStringIdx);
-			yield return TokenValue("OwnerTableIdx", row.OwnerTableIdx);
+			yield return Value("NameStringIdx", row.NameStringIdx);
+			yield return Value("OwnerTableIdx", row.OwnerTableIdx);
 			yield return Value("Flags", row.Flags.ToString());
-			yield return Value("Number", row.Number.ToString());
+			yield return Value("Number", row.Number);
 		}
 	}
 }

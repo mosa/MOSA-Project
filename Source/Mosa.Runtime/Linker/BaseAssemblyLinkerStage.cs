@@ -14,8 +14,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 
-using Mono.Cecil;
-
 using Mosa.Compiler.Linker;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Metadata;

@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
 
-using Mono.Cecil;
+using Mosa.Runtime.Metadata;
 
 namespace Mosa.Runtime.Metadata.Signatures
 {

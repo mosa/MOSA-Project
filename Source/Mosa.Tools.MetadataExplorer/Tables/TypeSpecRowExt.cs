@@ -28,8 +28,8 @@ namespace Mosa.Tools.MetadataExplorer.Tables
 		protected TypeSpecRow row;
 
 		public TypeSpecRowExt(IMetadataProvider metadata, TypeSpecRow row)
+			: base(metadata)
 		{
-			this.metadata = metadata;
 			this.row = row;
 		}
 
@@ -37,10 +37,10 @@ namespace Mosa.Tools.MetadataExplorer.Tables
 
 		public override IEnumerable GetValues()
 		{
-			yield return TokenValue("SignatureBlobIdx", row.SignatureBlobIdx);
+			yield return Value("SignatureBlobIdx", row.SignatureBlobIdx);
 
-			TypeSpecSignature signature = new TypeSpecSignature(metadata, row.SignatureBlobIdx);
-			yield return TokenValue("Signature Token", signature.Token);
+			TypeSpecSignature signature = new TypeSpecSignature(Metadata, row.SignatureBlobIdx);
+			yield return Value("Signature Token", signature.Token);
 			yield return Value("Signature Type", signature.Type.ToString());
 
 		}

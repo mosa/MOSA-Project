@@ -35,9 +35,6 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Mono.Cecil">
-      <HintPath>..\..\3rdParty\Mono.Cecil.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
@@ -63,6 +60,11 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Extension.cs" />
+    <Compile Include="Tables\InterfaceImplRowExt.cs" />
+    <Compile Include="Tables\CustomAttributeRowExt.cs" />
+    <Compile Include="Tables\AssemblyRowExt.cs" />
+    <Compile Include="Tables\AssemblyRefRowExt.cs" />
+    <Compile Include="Tables\ImplMapRowExt.cs" />
     <Compile Include="Tables\GenericParamRowExt.cs" />
     <Compile Include="Tables\ParamRowExt.cs" />
     <Compile Include="Tables\MemberRefRowExt.cs" />

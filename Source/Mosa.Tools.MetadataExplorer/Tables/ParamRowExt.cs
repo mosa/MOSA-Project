@@ -28,17 +28,17 @@ namespace Mosa.Tools.MetadataExplorer.Tables
 		protected ParamRow row;
 
 		public ParamRowExt(IMetadataProvider metadata, ParamRow row)
+			: base(metadata)
 		{
-			this.metadata = metadata;
 			this.row = row;
 		}
 
-		public override string Name { get { return metadata.ReadString(row.NameIdx); } }
+		public override string Name { get { return Metadata.ReadString(row.NameIdx); } }
 
 		public override IEnumerable GetValues()
 		{
 			yield return TokenString("Name", row.NameIdx);
-			yield return TokenValue("NameIdx", row.NameIdx);
+			yield return Value("NameIdx", row.NameIdx);
 			yield return Value("NameIdx", row.Flags.ToString());
 			yield return Value("Sequence", row.Sequence.ToString());
 		}

@@ -15,8 +15,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 
-using Mono.Cecil;
-
 using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;

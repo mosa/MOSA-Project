@@ -11,7 +11,7 @@ using System;
 using System.IO;
 using System.Collections.Generic;
 
-using Mono.Cecil;
+using Mosa.Runtime.Metadata;
 
 using Mosa.Runtime.Metadata.Tables;
 
@@ -35,18 +35,18 @@ namespace Mosa.Runtime.Metadata
 		TokenTypes GetMaxTokenValue(TokenTypes table);
 
 		/// <summary>
-		/// Gets the max token value.
+		/// Gets the row count.
 		/// </summary>
-		/// <param name="metadataToken">The metadata token.</param>
+		/// <param name="table">The table.</param>
 		/// <returns></returns>
-		MetadataToken GetMaxTokenValue(MetadataToken metadataToken);
-		
+		int GetRowCount(TokenTypes table);
+
 		/// <summary>
 		/// Gets the row count.
 		/// </summary>
 		/// <param name="table">The table.</param>
 		/// <returns></returns>
-		int GetRowCount(TokenType table);
+		int GetRowCount(TableTypes table);
 
 		/// <summary>
 		/// Reads a string heap or user string heap entry.

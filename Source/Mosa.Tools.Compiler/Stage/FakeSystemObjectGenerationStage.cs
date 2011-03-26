@@ -11,8 +11,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using Mono.Cecil;
-
 using Mosa.Platform.x86;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.TypeSystem;

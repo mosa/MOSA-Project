@@ -28,19 +28,19 @@ namespace Mosa.Tools.MetadataExplorer.Tables
 		protected MemberRefRow row;
 
 		public MemberRefRowExt(IMetadataProvider metadata, MemberRefRow row)
+			: base(metadata)
 		{
-			this.metadata = metadata;
 			this.row = row;
 		}
 
-		public override string Name { get { return metadata.ReadString(row.NameStringIdx); } }
+		public override string Name { get { return Metadata.ReadString(row.NameStringIdx); } }
 
 		public override IEnumerable GetValues()
 		{
 			yield return TokenString("Name", row.NameStringIdx);
-			yield return TokenValue("NameStringIdx", row.NameStringIdx);
-			yield return TokenValue("SignatureBlobIdx", row.SignatureBlobIdx);
-			yield return TokenValue("ClassTableIdx", row.ClassTableIdx);
+			yield return Value("NameStringIdx", row.NameStringIdx);
+			yield return Value("SignatureBlobIdx", row.SignatureBlobIdx);
+			yield return Value("ClassTableIdx", row.ClassTableIdx);
 
 			//FieldSignature signature = new FieldSignature(metadata, row.SignatureBlobIdx);
 			//yield return TokenValue("Signature Token", signature.Token);

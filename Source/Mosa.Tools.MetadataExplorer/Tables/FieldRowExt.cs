@@ -28,22 +28,22 @@ namespace Mosa.Tools.MetadataExplorer.Tables
 		protected FieldRow row;
 
 		public FieldRowExt(IMetadataProvider metadata, FieldRow row)
+			: base(metadata)
 		{
-			this.metadata = metadata;
 			this.row = row;
 		}
 
-		public override string Name { get { return metadata.ReadString(row.NameStringIdx); } }
+		public override string Name { get { return Metadata.ReadString(row.NameStringIdx); } }
 
 		public override IEnumerable GetValues()
 		{
 			yield return TokenString("Name", row.NameStringIdx);
-			yield return TokenValue("NameStringIdx", row.NameStringIdx);
+			yield return Value("NameStringIdx", row.NameStringIdx);
 			yield return Value("Flags", row.Flags.ToString());
-			yield return TokenValue("SignatureBlobIdx", row.SignatureBlobIdx);
+			yield return Value("SignatureBlobIdx", row.SignatureBlobIdx);
 
-			FieldSignature signature = new FieldSignature(metadata, row.SignatureBlobIdx);
-			yield return TokenValue("Signature Token", signature.Token);
+			FieldSignature signature = new FieldSignature(Metadata, row.SignatureBlobIdx);
+			yield return Value("Signature Token", signature.Token);
 			yield return Value("Signature Modifier", signature.Modifier.ToString());
 			yield return Value("Signature Type", signature.Type.ToString());
 		}

@@ -13,8 +13,6 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 
-using Mono.Cecil;
-
 using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Compiler.Linker;
 using Mosa.Runtime.Metadata;

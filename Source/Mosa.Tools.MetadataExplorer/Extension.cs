@@ -13,8 +13,6 @@ using System.Text;
 using System.IO;
 using System.Collections;
 
-using Mono.Cecil;
-
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Tables;
 
@@ -23,7 +21,13 @@ namespace Mosa.Tools.MetadataExplorer
 
 	public static class Extension
 	{
+
 		public static string FormatToString(this TokenTypes token)
+		{
+			return ((int)token).ToString("X8");
+		}
+
+		public static string FormatToString(this TableTypes token)
 		{
 			return ((int)token).ToString("X8");
 		}
@@ -33,9 +37,5 @@ namespace Mosa.Tools.MetadataExplorer
 			return token.ToInt32().ToString("X8");
 		}
 
-		public static string FormatToString(this TokenType token)
-		{
-			return ((int)token).ToString("X8");
-		}
 	}
 }

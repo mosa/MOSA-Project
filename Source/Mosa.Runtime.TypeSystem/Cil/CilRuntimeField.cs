@@ -10,8 +10,6 @@
 using System;
 using System.Diagnostics;
 
-using Mono.Cecil;
-
 using Mosa.Runtime;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Loader;

@@ -70,9 +70,6 @@
     <DebugType>none</DebugType>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Mono.Cecil">
-      <HintPath>..\..\3rdParty\Mono.Cecil.dll</HintPath>
-    </Reference>
     <Reference Include="Gallio">
       <HintPath>..\..\3rdParty\Gallio.dll</HintPath>
     </Reference>

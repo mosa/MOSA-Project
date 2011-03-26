@@ -28,25 +28,25 @@ namespace Mosa.Tools.MetadataExplorer.Tables
 		protected MethodDefRow row;
 
 		public MethodDefRowExt(IMetadataProvider metadata, MethodDefRow row)
+			: base(metadata)
 		{
-			this.metadata = metadata;
 			this.row = row;
 		}
 
-		public override string Name { get { return metadata.ReadString(row.NameStringIdx); } }
+		public override string Name { get { return Metadata.ReadString(row.NameStringIdx); } }
 
 		public override IEnumerable GetValues()
 		{
 			yield return TokenString("Name", row.NameStringIdx);
-			yield return TokenValue("NameStringIdx", row.NameStringIdx);
+			yield return Value("NameStringIdx", row.NameStringIdx);
 			yield return Value("Flags", row.Flags.ToString());
 			yield return Value("ImplFlags", row.ImplFlags.ToString());
-			yield return TokenValue("ParamList", row.ParamList);
+			yield return Value("ParamList", row.ParamList);
 			yield return Value("Rva", row.Rva.ToString());
-			yield return TokenValue("SignatureBlobIdx", row.SignatureBlobIdx);
+			yield return Value("SignatureBlobIdx", row.SignatureBlobIdx);
 
-			MethodSignature signature = new MethodSignature(metadata, row.SignatureBlobIdx);
-			yield return TokenValue("Signature Token", signature.Token);
+			MethodSignature signature = new MethodSignature(Metadata, row.SignatureBlobIdx);
+			yield return Value("Signature Token", signature.Token);
 			yield return Value("Signature Generic Parameters", signature.GenericParameterCount.ToString());
 		}
 	}
