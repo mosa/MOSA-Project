@@ -161,7 +161,7 @@ namespace Mosa.Runtime.Metadata.Loader.PE
 		/// <exception cref="System.ArgumentException"><paramref name="type"/> is invalid.</exception>
 		public Heap GetHeap(HeapType type)
 		{
-			if (0 > type || type >= HeapType.MaxType)
+			if (type < 0 || type >= HeapType.MaxType)
 				throw new ArgumentException(@"Invalid heap type.", @"type");
 
 			return _streams[(int)type];
@@ -172,26 +172,16 @@ namespace Mosa.Runtime.Metadata.Loader.PE
 		#region IMetadataProvider members
 
 		/// <summary>
-		/// Gets the rows.
-		/// </summary>
-		/// <param name="table">The table.</param>
-		/// <returns></returns>
-		int IMetadataProvider.GetRowCount(TokenTypes table)
-		{
-			return ((TableHeap)_streams[(int)HeapType.Tables]).GetRowCount(table);
-		}
-
-		/// <summary>
 		/// Gets the row count.
 		/// </summary>
 		/// <param name="table">The table.</param>
 		/// <returns></returns>
-		int IMetadataProvider.GetRowCount(MetadataTable table)
+		int IMetadataProvider.GetRowCount(TableTypes table)
 		{
 			return ((TableHeap)_streams[(int)HeapType.Tables]).GetRowCount(table);
 		}
 
-		MetadataToken IMetadataProvider.GetMaxTokenValue(MetadataTable table)
+		Token IMetadataProvider.GetMaxTokenValue(TableTypes table)
 		{
 			return ((TableHeap)_streams[(int)HeapType.Tables]).GetMaxTokenValue(table);
 		}
@@ -203,21 +193,19 @@ namespace Mosa.Runtime.Metadata.Loader.PE
 		/// <returns></returns>
 		string IMetadataProvider.ReadString(TokenTypes token)
 		{
-			switch ((TokenTypes.TableMask & token))
-			{
-				case TokenTypes.String:
-					{
-						StringHeap sheap = (StringHeap)_streams[(int)HeapType.String];
-						return sheap.ReadString(token);
-					}
-				case TokenTypes.UserString:
-					{
-						UserStringHeap usheap = (UserStringHeap)_streams[(int)HeapType.UserString];
-						return usheap.ReadString(token);
-					}
-				default:
-					throw new ArgumentException(@"Invalid token for a string.", @"token");
-			}
+			StringHeap sheap = (StringHeap)_streams[(int)HeapType.String];
+			return sheap.ReadString(token);
+		}
+
+		/// <summary>
+		/// Reads the user string.
+		/// </summary>
+		/// <param name="token">The token of the string to read.</param>
+		/// <returns></returns>
+		string IMetadataProvider.ReadUserString(TokenTypes token)
+		{
+			UserStringHeap usheap = (UserStringHeap)_streams[(int)HeapType.UserString];
+			return usheap.ReadString(token);
 		}
 
 		/// <summary>
@@ -227,15 +215,8 @@ namespace Mosa.Runtime.Metadata.Loader.PE
 		/// <returns></returns>
 		Guid IMetadataProvider.ReadGuid(TokenTypes token)
 		{
-			if ((TokenTypes.TableMask & token) == TokenTypes.Guid)
-			{
-				GuidHeap gheap = (GuidHeap)_streams[(int)HeapType.Guid];
-				return gheap.ReadGuid(token);
-			}
-			else
-			{
-				throw new ArgumentException(@"Invalid token for a guid.", @"token");
-			}
+			GuidHeap gheap = (GuidHeap)_streams[(int)HeapType.Guid];
+			return gheap.ReadGuid(token);
 		}
 
 		/// <summary>
@@ -245,15 +226,8 @@ namespace Mosa.Runtime.Metadata.Loader.PE
 		/// <returns></returns>
 		byte[] IMetadataProvider.ReadBlob(TokenTypes token)
 		{
-			if (TokenTypes.Blob == (TokenTypes.TableMask & token))
-			{
-				BlobHeap bheap = (BlobHeap)_streams[(int)HeapType.Blob];
-				return bheap.ReadBlob(token);
-			}
-			else
-			{
-				throw new ArgumentException(@"Invalid token for a blob.", @"token");
-			}
+			BlobHeap bheap = (BlobHeap)_streams[(int)HeapType.Blob];
+			return bheap.ReadBlob(token);
 		}
 
 		/// <summary>
@@ -261,7 +235,7 @@ namespace Mosa.Runtime.Metadata.Loader.PE
 		/// </summary>
 		/// <param name="token">The module row token.</param>
 		/// <returns></returns>
-		ModuleRow IMetadataProvider.ReadModuleRow(MetadataToken token)
+		ModuleRow IMetadataProvider.ReadModuleRow(Token token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadModuleRow(token);
@@ -272,7 +246,7 @@ namespace Mosa.Runtime.Metadata.Loader.PE
 		/// </summary>
 		/// <param name="token">The type reference row token.</param>
 		/// <returns></returns>
-		TypeRefRow IMetadataProvider.ReadTypeRefRow(MetadataToken token)
+		TypeRefRow IMetadataProvider.ReadTypeRefRow(Token token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadTypeRefRow(token);
@@ -283,7 +257,7 @@ namespace Mosa.Runtime.Metadata.Loader.PE
 		/// </summary>
 		/// <param name="token">The type definition row token.</param>
 		/// <returns></returns>
-		TypeDefRow IMetadataProvider.ReadTypeDefRow(MetadataToken token)
+		TypeDefRow IMetadataProvider.ReadTypeDefRow(Token token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadTypeDefRow(token);
@@ -294,7 +268,7 @@ namespace Mosa.Runtime.Metadata.Loader.PE
 		/// </summary>
 		/// <param name="token">The field definition row token.</param>
 		/// <returns></returns>
-		FieldRow IMetadataProvider.ReadFieldRow(MetadataToken token)
+		FieldRow IMetadataProvider.ReadFieldRow(Token token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadFieldRow(token);
@@ -305,7 +279,7 @@ namespace Mosa.Runtime.Metadata.Loader.PE
 		/// </summary>
 		/// <param name="token">The method definition row token.</param>
 		/// <returns></returns>
-		MethodDefRow IMetadataProvider.ReadMethodDefRow(MetadataToken token)
+		MethodDefRow IMetadataProvider.ReadMethodDefRow(Token token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadMethodDefRow(token);
@@ -316,7 +290,7 @@ namespace Mosa.Runtime.Metadata.Loader.PE
 		/// </summary>
 		/// <param name="token">The parameter row token.</param>
 		/// <returns></returns>
-		ParamRow IMetadataProvider.ReadParamRow(MetadataToken token)
+		ParamRow IMetadataProvider.ReadParamRow(Token token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadParamRow(token);
@@ -327,7 +301,7 @@ namespace Mosa.Runtime.Metadata.Loader.PE
 		/// </summary>
 		/// <param name="token">The interface implementation row token.</param>
 		/// <returns></returns>
-		InterfaceImplRow IMetadataProvider.ReadInterfaceImplRow(MetadataToken token)
+		InterfaceImplRow IMetadataProvider.ReadInterfaceImplRow(Token token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadInterfaceImplRow(token);
@@ -338,7 +312,7 @@ namespace Mosa.Runtime.Metadata.Loader.PE
 		/// </summary>
 		/// <param name="token">The member reference row token.</param>
 		/// <returns></returns>
-		MemberRefRow IMetadataProvider.ReadMemberRefRow(MetadataToken token)
+		MemberRefRow IMetadataProvider.ReadMemberRefRow(Token token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadMemberRefRow(token);
@@ -349,7 +323,7 @@ namespace Mosa.Runtime.Metadata.Loader.PE
 		/// </summary>
 		/// <param name="token">The constant row token.</param>
 		/// <returns></returns>
-		ConstantRow IMetadataProvider.ReadConstantRow(MetadataToken token)
+		ConstantRow IMetadataProvider.ReadConstantRow(Token token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadConstantRow(token);
@@ -360,7 +334,7 @@ namespace Mosa.Runtime.Metadata.Loader.PE
 		/// </summary>
 		/// <param name="token">The constant row token.</param>
 		/// <returns></returns>
-		CustomAttributeRow IMetadataProvider.ReadCustomAttributeRow(MetadataToken token)
+		CustomAttributeRow IMetadataProvider.ReadCustomAttributeRow(Token token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadCustomAttributeRow(token);
@@ -371,7 +345,7 @@ namespace Mosa.Runtime.Metadata.Loader.PE
 		/// </summary>
 		/// <param name="token">The _stackFrameIndex marshal row token.</param>
 		/// <returns></returns>
-		FieldMarshalRow IMetadataProvider.ReadFieldMarshalRow(MetadataToken token)
+		FieldMarshalRow IMetadataProvider.ReadFieldMarshalRow(Token token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadFieldMarshalRow(token);
@@ -382,7 +356,7 @@ namespace Mosa.Runtime.Metadata.Loader.PE
 		/// </summary>
 		/// <param name="token">The declarative security row token.</param>
 		/// <returns></returns>
-		DeclSecurityRow IMetadataProvider.ReadDeclSecurityRow(MetadataToken token)
+		DeclSecurityRow IMetadataProvider.ReadDeclSecurityRow(Token token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadDeclSecurityRow(token);
@@ -393,7 +367,7 @@ namespace Mosa.Runtime.Metadata.Loader.PE
 		/// </summary>
 		/// <param name="token">The class layout row token.</param>
 		/// <returns></returns>
-		ClassLayoutRow IMetadataProvider.ReadClassLayoutRow(MetadataToken token)
+		ClassLayoutRow IMetadataProvider.ReadClassLayoutRow(Token token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadClassLayoutRow(token);
@@ -404,7 +378,7 @@ namespace Mosa.Runtime.Metadata.Loader.PE
 		/// </summary>
 		/// <param name="token">The _stackFrameIndex layout row token.</param>
 		/// <returns></returns>
-		FieldLayoutRow IMetadataProvider.ReadFieldLayoutRow(MetadataToken token)
+		FieldLayoutRow IMetadataProvider.ReadFieldLayoutRow(Token token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadFieldLayoutRow(token);
@@ -415,7 +389,7 @@ namespace Mosa.Runtime.Metadata.Loader.PE
 		/// </summary>
 		/// <param name="token">The standalone signature row token.</param>
 		/// <returns></returns>
-		StandAloneSigRow IMetadataProvider.ReadStandAloneSigRow(MetadataToken token)
+		StandAloneSigRow IMetadataProvider.ReadStandAloneSigRow(Token token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadStandAloneSigRow(token);
@@ -426,7 +400,7 @@ namespace Mosa.Runtime.Metadata.Loader.PE
 		/// </summary>
 		/// <param name="token">The event map row token.</param>
 		/// <returns></returns>
-		EventMapRow IMetadataProvider.ReadEventMapRow(MetadataToken token)
+		EventMapRow IMetadataProvider.ReadEventMapRow(Token token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadEventMapRow(token);
@@ -437,7 +411,7 @@ namespace Mosa.Runtime.Metadata.Loader.PE
 		/// </summary>
 		/// <param name="token">The event row token.</param>
 		/// <returns></returns>
-		EventRow IMetadataProvider.ReadEventRow(MetadataToken token)
+		EventRow IMetadataProvider.ReadEventRow(Token token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadEventRow(token);
@@ -448,7 +422,7 @@ namespace Mosa.Runtime.Metadata.Loader.PE
 		/// </summary>
 		/// <param name="token">The property map row token.</param>
 		/// <returns></returns>
-		PropertyMapRow IMetadataProvider.ReadPropertyMapRow(MetadataToken token)
+		PropertyMapRow IMetadataProvider.ReadPropertyMapRow(Token token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadPropertyMapRow(token);
@@ -459,7 +433,7 @@ namespace Mosa.Runtime.Metadata.Loader.PE
 		/// </summary>
 		/// <param name="token">The property row token.</param>
 		/// <returns></returns>
-		PropertyRow IMetadataProvider.ReadPropertyRow(MetadataToken token)
+		PropertyRow IMetadataProvider.ReadPropertyRow(Token token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadPropertyRow(token);
@@ -470,7 +444,7 @@ namespace Mosa.Runtime.Metadata.Loader.PE
 		/// </summary>
 		/// <param name="token">The method semantics row token.</param>
 		/// <returns></returns>
-		MethodSemanticsRow IMetadataProvider.ReadMethodSemanticsRow(MetadataToken token)
+		MethodSemanticsRow IMetadataProvider.ReadMethodSemanticsRow(Token token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadMethodSemanticsRow(token);
@@ -481,7 +455,7 @@ namespace Mosa.Runtime.Metadata.Loader.PE
 		/// </summary>
 		/// <param name="token">The method impl row token.</param>
 		/// <returns></returns>
-		MethodImplRow IMetadataProvider.ReadMethodImplRow(MetadataToken token)
+		MethodImplRow IMetadataProvider.ReadMethodImplRow(Token token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadMethodImplRow(token);
@@ -492,7 +466,7 @@ namespace Mosa.Runtime.Metadata.Loader.PE
 		/// </summary>
 		/// <param name="token">The module ref row token.</param>
 		/// <returns></returns>
-		ModuleRefRow IMetadataProvider.ReadModuleRefRow(MetadataToken token)
+		ModuleRefRow IMetadataProvider.ReadModuleRefRow(Token token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadModuleRefRow(token);
@@ -503,7 +477,7 @@ namespace Mosa.Runtime.Metadata.Loader.PE
 		/// </summary>
 		/// <param name="token">The typespec row token.</param>
 		/// <returns></returns>
-		TypeSpecRow IMetadataProvider.ReadTypeSpecRow(MetadataToken token)
+		TypeSpecRow IMetadataProvider.ReadTypeSpecRow(Token token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadTypeSpecRow(token);
@@ -514,7 +488,7 @@ namespace Mosa.Runtime.Metadata.Loader.PE
 		/// </summary>
 		/// <param name="token">The implementation map row token.</param>
 		/// <returns></returns>
-		ImplMapRow IMetadataProvider.ReadImplMapRow(MetadataToken token)
+		ImplMapRow IMetadataProvider.ReadImplMapRow(Token token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadImplMapRow(token);
@@ -525,7 +499,7 @@ namespace Mosa.Runtime.Metadata.Loader.PE
 		/// </summary>
 		/// <param name="token">The _stackFrameIndex rva row token.</param>
 		/// <returns></returns>
-		FieldRVARow IMetadataProvider.ReadFieldRVARow(MetadataToken token)
+		FieldRVARow IMetadataProvider.ReadFieldRVARow(Token token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadFieldRVARow(token);
@@ -536,7 +510,7 @@ namespace Mosa.Runtime.Metadata.Loader.PE
 		/// </summary>
 		/// <param name="token">The assembly row token.</param>
 		/// <returns></returns>
-		AssemblyRow IMetadataProvider.ReadAssemblyRow(MetadataToken token)
+		AssemblyRow IMetadataProvider.ReadAssemblyRow(Token token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadAssemblyRow(token);
@@ -547,7 +521,7 @@ namespace Mosa.Runtime.Metadata.Loader.PE
 		/// </summary>
 		/// <param name="token">The assembly processor row token.</param>
 		/// <returns></returns>
-		AssemblyProcessorRow IMetadataProvider.ReadAssemblyProcessorRow(MetadataToken token)
+		AssemblyProcessorRow IMetadataProvider.ReadAssemblyProcessorRow(Token token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadAssemblyProcessorRow(token);
@@ -558,7 +532,7 @@ namespace Mosa.Runtime.Metadata.Loader.PE
 		/// </summary>
 		/// <param name="token">The assembly os row token.</param>
 		/// <returns></returns>
-		AssemblyOSRow IMetadataProvider.ReadAssemblyOSRow(MetadataToken token)
+		AssemblyOSRow IMetadataProvider.ReadAssemblyOSRow(Token token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadAssemblyOSRow(token);
@@ -569,7 +543,7 @@ namespace Mosa.Runtime.Metadata.Loader.PE
 		/// </summary>
 		/// <param name="token">The assembly reference row token.</param>
 		/// <returns></returns>
-		AssemblyRefRow IMetadataProvider.ReadAssemblyRefRow(MetadataToken token)
+		AssemblyRefRow IMetadataProvider.ReadAssemblyRefRow(Token token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadAssemblyRefRow(token);
@@ -580,7 +554,7 @@ namespace Mosa.Runtime.Metadata.Loader.PE
 		/// </summary>
 		/// <param name="token">The assembly reference processor row token.</param>
 		/// <returns></returns>
-		AssemblyRefProcessorRow IMetadataProvider.ReadAssemblyRefProcessorRow(MetadataToken token)
+		AssemblyRefProcessorRow IMetadataProvider.ReadAssemblyRefProcessorRow(Token token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadAssemblyRefProcessorRow(token);
@@ -591,7 +565,7 @@ namespace Mosa.Runtime.Metadata.Loader.PE
 		/// </summary>
 		/// <param name="token">The assembly reference os row token.</param>
 		/// <returns></returns>
-		AssemblyRefOSRow IMetadataProvider.ReadAssemblyRefOSRow(MetadataToken token)
+		AssemblyRefOSRow IMetadataProvider.ReadAssemblyRefOSRow(Token token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadAssemblyRefOSRow(token);
@@ -602,7 +576,7 @@ namespace Mosa.Runtime.Metadata.Loader.PE
 		/// </summary>
 		/// <param name="token">The file row token.</param>
 		/// <returns></returns>
-		FileRow IMetadataProvider.ReadFileRow(MetadataToken token)
+		FileRow IMetadataProvider.ReadFileRow(Token token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadFileRow(token);
@@ -613,7 +587,7 @@ namespace Mosa.Runtime.Metadata.Loader.PE
 		/// </summary>
 		/// <param name="token">The exported type row token.</param>
 		/// <returns></returns>
-		ExportedTypeRow IMetadataProvider.ReadExportedTypeRow(MetadataToken token)
+		ExportedTypeRow IMetadataProvider.ReadExportedTypeRow(Token token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadExportedTypeRow(token);
@@ -624,7 +598,7 @@ namespace Mosa.Runtime.Metadata.Loader.PE
 		/// </summary>
 		/// <param name="token">The manifest resource row token.</param>
 		/// <returns></returns>
-		ManifestResourceRow IMetadataProvider.ReadManifestResourceRow(MetadataToken token)
+		ManifestResourceRow IMetadataProvider.ReadManifestResourceRow(Token token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadManifestResourceRow(token);
@@ -635,7 +609,7 @@ namespace Mosa.Runtime.Metadata.Loader.PE
 		/// </summary>
 		/// <param name="token">The manifest resource row token.</param>
 		/// <returns></returns>
-		NestedClassRow IMetadataProvider.ReadNestedClassRow(MetadataToken token)
+		NestedClassRow IMetadataProvider.ReadNestedClassRow(Token token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadNestedClassRow(token);
@@ -646,7 +620,7 @@ namespace Mosa.Runtime.Metadata.Loader.PE
 		/// </summary>
 		/// <param name="token">The generic parameter row token.</param>
 		/// <returns></returns>
-		GenericParamRow IMetadataProvider.ReadGenericParamRow(MetadataToken token)
+		GenericParamRow IMetadataProvider.ReadGenericParamRow(Token token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadGenericParamRow(token);
@@ -657,7 +631,7 @@ namespace Mosa.Runtime.Metadata.Loader.PE
 		/// </summary>
 		/// <param name="token">The method specification row token.</param>
 		/// <returns></returns>
-		MethodSpecRow IMetadataProvider.ReadMethodSpecRow(MetadataToken token)
+		MethodSpecRow IMetadataProvider.ReadMethodSpecRow(Token token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadMethodSpecRow(token);
@@ -668,7 +642,7 @@ namespace Mosa.Runtime.Metadata.Loader.PE
 		/// </summary>
 		/// <param name="token">The generic parameter constraint row token.</param>
 		/// <returns></returns>
-		GenericParamConstraintRow IMetadataProvider.ReadGenericParamConstraintRow(MetadataToken token)
+		GenericParamConstraintRow IMetadataProvider.ReadGenericParamConstraintRow(Token token)
 		{
 			TableHeap theap = (TableHeap)_streams[(int)HeapType.Tables];
 			return theap.ReadGenericParamConstraintRow(token);

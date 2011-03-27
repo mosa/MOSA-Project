@@ -43,7 +43,7 @@ namespace Mosa.Tools.MetadataExplorer.Tables
 			return new KeyValuePair<string, string>(name, value.ToString());
 		}
 
-		protected KeyValuePair<string, string> Value(string name, MetadataToken token)
+		protected KeyValuePair<string, string> Value(string name, Token token)
 		{
 			return Value(name, token.FormatToString());
 		}

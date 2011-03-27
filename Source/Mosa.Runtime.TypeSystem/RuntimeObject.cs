@@ -25,7 +25,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// <summary>
 		/// Holds the token of the object.
 		/// </summary>
-		private readonly MetadataToken token;
+		private readonly Token token;
 
 		/// <summary>
 		/// Holds the module from which this object originated
@@ -41,7 +41,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		/// <param name="module">The module.</param>
 		/// <param name="token">The runtime token of this metadata.</param>
-		protected RuntimeObject(ITypeModule module, MetadataToken token)
+		protected RuntimeObject(ITypeModule module, Token token)
 		{
 			this.module = module;
 			this.token = token;
@@ -54,7 +54,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// <summary>
 		/// Retrieves the token of the object.
 		/// </summary>
-		public MetadataToken Token
+		public Token Token
 		{
 			get { return token; }
 		}

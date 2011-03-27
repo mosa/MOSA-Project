@@ -96,7 +96,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// <param name="module">The module.</param>
 		/// <param name="token">The token of the type.</param>
 		/// <param name="baseType">Type of the base.</param>
-		public RuntimeType(ITypeModule module, MetadataToken token, RuntimeType baseType) :
+		public RuntimeType(ITypeModule module, Token token, RuntimeType baseType) :
 			base(module, token, null)
 		{
 			this.baseType = baseType;

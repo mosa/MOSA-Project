@@ -39,7 +39,7 @@
     <Compile Include="AssemblyHashAlgorithm.cs" />
     <Compile Include="BlobHeap.cs" />
     <Compile Include="CilElementType.cs" />
-    <Compile Include="MetadataTable.cs" />
+    <Compile Include="TableTypes.cs" />
     <Compile Include="EventAttributes.cs" />
     <Compile Include="FieldAttributes.cs" />
     <Compile Include="GenericParameterAttributes.cs" />
@@ -131,7 +131,7 @@
     <Compile Include="Tables\TypeDefRow.cs" />
     <Compile Include="Tables\TypeRefRow.cs" />
     <Compile Include="Tables\TypeSpecRow.cs" />
-    <Compile Include="MetadataToken.cs" />
+    <Compile Include="Token.cs" />
     <Compile Include="TokenTypes.cs" />
     <Compile Include="TypeAttributes.cs" />
     <Compile Include="UserStringHeap.cs" />

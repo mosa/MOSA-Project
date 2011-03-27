@@ -330,7 +330,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Gets or sets the token.
 		/// </summary>
 		/// <value>The token.</value>
-		public MetadataToken Token
+		public Token Token
 		{
 			get { return _instructionSet.Data[_index].Token; }
 			set { _instructionSet.Data[_index].Token = value; }

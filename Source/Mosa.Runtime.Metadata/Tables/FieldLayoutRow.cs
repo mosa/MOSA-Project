@@ -29,7 +29,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private MetadataToken _field;
+		private Token _field;
 
 		#endregion // Data members
 
@@ -40,7 +40,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// </summary>
 		/// <param name="offset">The offset.</param>
 		/// <param name="field">The field.</param>
-		public FieldLayoutRow(uint offset, MetadataToken field)
+		public FieldLayoutRow(uint offset, Token field)
 		{
 			_offset = offset;
 			_field = field;
@@ -63,7 +63,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Gets the field.
 		/// </summary>
 		/// <value>The field.</value>
-		public MetadataToken Field
+		public Token Field
 		{
 			get { return _field; }
 		}

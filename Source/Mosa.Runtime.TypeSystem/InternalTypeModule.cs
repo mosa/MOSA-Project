@@ -116,7 +116,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		/// <param name="token">The token of the type to load. This can represent a typeref, typedef or typespec token.</param>
 		/// <returns>The runtime type of the specified token.</returns>
-		RuntimeType ITypeModule.GetType(MetadataToken token)
+		RuntimeType ITypeModule.GetType(Token token)
 		{
 			return null;
 		}
@@ -126,7 +126,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		/// <param name="token">The token of the field to retrieve.</param>
 		/// <returns></returns>
-		RuntimeField ITypeModule.GetField(MetadataToken token)
+		RuntimeField ITypeModule.GetField(Token token)
 		{
 			return null;
 		}
@@ -136,7 +136,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		/// <param name="token">The token of the method to retrieve.</param>
 		/// <returns></returns>
-		RuntimeMethod ITypeModule.GetMethod(MetadataToken token)
+		RuntimeMethod ITypeModule.GetMethod(Token token)
 		{
 			return null;
 		}
@@ -147,7 +147,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// <param name="token">The token.</param>
 		/// <param name="callingType">Type of the calling.</param>
 		/// <returns></returns>
-		RuntimeMethod ITypeModule.GetMethod(MetadataToken token, RuntimeType callingType)
+		RuntimeMethod ITypeModule.GetMethod(Token token, RuntimeType callingType)
 		{
 			return null;
 		}
@@ -173,7 +173,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		/// <param name="token">The token.</param>
 		/// <returns></returns>
-		string ITypeModule.GetExternalName(MetadataToken token)
+		string ITypeModule.GetExternalName(Token token)
 		{
 			return null;
 		}

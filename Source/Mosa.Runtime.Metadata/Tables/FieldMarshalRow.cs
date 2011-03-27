@@ -24,7 +24,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private MetadataToken _parent;
+		private Token _parent;
 
 		/// <summary>
 		/// 
@@ -40,7 +40,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// </summary>
 		/// <param name="parent">The parent.</param>
 		/// <param name="nativeTypeBlobIdx">The native type BLOB idx.</param>
-		public FieldMarshalRow(MetadataToken parent, TokenTypes nativeTypeBlobIdx)
+		public FieldMarshalRow(Token parent, TokenTypes nativeTypeBlobIdx)
 		{
 			_parent = parent;
 			_nativeTypeBlobIdx = nativeTypeBlobIdx;
@@ -54,7 +54,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Gets the parent.
 		/// </summary>
 		/// <value>The parent.</value>
-		public MetadataToken Parent
+		public Token Parent
 		{
 			get { return _parent; }
 		}

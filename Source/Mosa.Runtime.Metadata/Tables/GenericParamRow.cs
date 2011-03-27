@@ -36,7 +36,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private MetadataToken owner;
+		private Token owner;
 
 		/// <summary>
 		/// 
@@ -54,7 +54,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <param name="flags">The flags.</param>
 		/// <param name="owner">The owner table idx.</param>
 		/// <param name="nameStringIdx">The name string idx.</param>
-		public GenericParamRow(ushort number, GenericParameterAttributes flags, MetadataToken owner, TokenTypes nameStringIdx)
+		public GenericParamRow(ushort number, GenericParameterAttributes flags, Token owner, TokenTypes nameStringIdx)
 		{
 			this.number = number;
 			this.flags = flags;
@@ -88,7 +88,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Gets the owner table idx.
 		/// </summary>
 		/// <value>The owner table idx.</value>
-		public MetadataToken Owner
+		public Token Owner
 		{
 			get { return owner; }
 		}

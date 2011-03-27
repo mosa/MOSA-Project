@@ -41,7 +41,7 @@ namespace Mosa.Runtime.TypeSystem.Cil
 		/// <param name="rva">The rva.</param>
 		/// <param name="declaringType">Type of the declaring.</param>
 		/// <param name="attributes">The attributes.</param>
-		public CilRuntimeField(ITypeModule module, string name, FieldSignature signature, MetadataToken token, uint offset, uint rva, RuntimeType declaringType, FieldAttributes attributes) :
+		public CilRuntimeField(ITypeModule module, string name, FieldSignature signature, Token token, uint offset, uint rva, RuntimeType declaringType, FieldAttributes attributes) :
 			base(module, token, declaringType)
 		{
 			this.Name = name;

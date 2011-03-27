@@ -48,7 +48,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			base.Decode(ctx, decoder);
 
 			// Read the fn token
-			MetadataToken token = decoder.DecodeTokenType();
+			Token token = decoder.DecodeTokenType();
 			throw new NotImplementedException();
 			/*
 				_function = MetadataMemberReference.FromToken(decoder.Metadata, token);

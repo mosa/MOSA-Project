@@ -20,7 +20,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// Initializes a new instance of the <see cref="ValueTypeSigType"/> class.
 		/// </summary>
 		/// <param name="token">The type definition, reference or specification token of the value type.</param>
-		public ValueTypeSigType(MetadataToken token)
+		public ValueTypeSigType(Token token)
 			: base(token, CilElementType.ValueType)
 		{
 		}

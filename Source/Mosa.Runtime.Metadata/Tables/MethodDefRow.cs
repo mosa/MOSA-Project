@@ -52,7 +52,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private MetadataToken _paramList;
+		private Token _paramList;
 
 		#endregion // Data members
 
@@ -68,7 +68,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <param name="signatureBlobIdx">The signature BLOB idx.</param>
 		/// <param name="paramList">The param list.</param>
 		public MethodDefRow(uint rva, MethodImplAttributes implFlags, MethodAttributes flags, TokenTypes nameStringIdx,
-								TokenTypes signatureBlobIdx, MetadataToken paramList)
+								TokenTypes signatureBlobIdx, Token paramList)
 		{
 			this._rva = rva;
 			this._implFlags = implFlags;
@@ -131,7 +131,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Gets the param list.
 		/// </summary>
 		/// <value>The param list.</value>
-		public MetadataToken ParamList
+		public Token ParamList
 		{
 			get { return _paramList; }
 		}

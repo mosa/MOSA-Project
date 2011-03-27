@@ -34,6 +34,6 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Local variable signature token 
 		/// </summary>
-		public MetadataToken localsSignature;
+		public Token localsSignature;
 	}
 }

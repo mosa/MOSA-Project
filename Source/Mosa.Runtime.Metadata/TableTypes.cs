@@ -18,7 +18,7 @@ namespace Mosa.Runtime.Metadata
 	/// <remarks>
 	/// These token types represent the tables in CIL provider.
 	/// </remarks>
-	public enum MetadataTable
+	public enum TableTypes
 	{
 		/// <summary>
 		/// 

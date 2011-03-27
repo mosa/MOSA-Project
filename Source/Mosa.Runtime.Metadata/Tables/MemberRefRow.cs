@@ -24,7 +24,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private MetadataToken @class;
+		private Token @class;
 
 		/// <summary>
 		/// 
@@ -46,7 +46,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <param name="classTableIdx">The class table idx.</param>
 		/// <param name="nameStringIdx">The name string idx.</param>
 		/// <param name="signatureBlobIdx">The signature BLOB idx.</param>
-		public MemberRefRow(MetadataToken @class, TokenTypes nameStringIdx, TokenTypes signatureBlobIdx)
+		public MemberRefRow(Token @class, TokenTypes nameStringIdx, TokenTypes signatureBlobIdx)
 		{
 			this.@class = @class;
 			this.nameStringIdx = nameStringIdx;
@@ -61,7 +61,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Gets the class table idx.
 		/// </summary>
 		/// <value>The class table idx.</value>
-		public MetadataToken Class
+		public Token Class
 		{
 			get { return @class; }
 		}

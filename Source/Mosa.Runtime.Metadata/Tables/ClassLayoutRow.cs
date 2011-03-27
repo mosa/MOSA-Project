@@ -34,7 +34,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private MetadataToken parent;
+		private Token parent;
 
 		#endregion // Data members
 
@@ -46,7 +46,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <param name="packingSize">Size of the packing.</param>
 		/// <param name="classSize">Size of the class.</param>
 		/// <param name="parent">The parent type def idx.</param>
-		public ClassLayoutRow(short packingSize, int classSize, MetadataToken parent)
+		public ClassLayoutRow(short packingSize, int classSize, Token parent)
 		{
 			this.packingSize = packingSize;
 			this.classSize = classSize;
@@ -79,7 +79,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Gets the parent type def idx.
 		/// </summary>
 		/// <value>The parent type def idx.</value>
-		public MetadataToken Parent
+		public Token Parent
 		{
 			get { return parent; }
 		}

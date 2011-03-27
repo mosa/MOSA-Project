@@ -125,17 +125,17 @@ namespace Mosa.Runtime.Metadata
 		/// <summary>
 		/// 
 		/// </summary>
-		private static readonly MetadataTable[] _typeDefOrRefEncodedTables2 = new MetadataTable[] { MetadataTable.TypeDef, MetadataTable.TypeRef, MetadataTable.TypeSpec };
+		private static readonly TableTypes[] _typeDefOrRefEncodedTables2 = new TableTypes[] { TableTypes.TypeDef, TableTypes.TypeRef, TableTypes.TypeSpec };
 
 		/// <summary>
 		/// Reads the type def or ref encoded.
 		/// </summary>
 		/// <returns></returns>
-		public MetadataToken ReadEncodedTypeDefOrRef()
+		public Token ReadEncodedTypeDefOrRef()
 		{
 			int value = ReadCompressedInt32();
 			Debug.Assert(0 != (value & 0xFFFFFFFC), @"Invalid TypeDefOrRefEncoded index value.");
-			MetadataToken token = new MetadataToken(_typeDefOrRefEncodedTables2[value & 0x03], value >> 2);
+			Token token = new Token(_typeDefOrRefEncodedTables2[value & 0x03], value >> 2);
 			return token;
 		}
 

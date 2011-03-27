@@ -36,18 +36,18 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// Index into a <see cref="TypeDefRow"/>, <see cref="TypeRefRow"/>, or <see cref="TypeSpecRow"/> table.
 		/// </summary>
-		private MetadataToken extends;
+		private Token extends;
 
 		/// <summary>
 		/// An index into the <see cref="FieldRow"/>, it marks the first of a contiguous run of Fields
 		/// owned by this type.
 		/// </summary>
-		private MetadataToken fieldList;
+		private Token fieldList;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private MetadataToken methodList;
+		private Token methodList;
 
 		#endregion // Data members
 
@@ -63,7 +63,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <param name="fieldList">The field list.</param>
 		/// <param name="methodList">The method list.</param>
 		public TypeDefRow(TypeAttributes flags, TokenTypes typeNameIdx, TokenTypes typeNamespaceIdx,
-							MetadataToken extends, MetadataToken fieldList, MetadataToken methodList)
+							Token extends, Token fieldList, Token methodList)
 		{
 			this.flags = flags;
 			this.typeNameIdx = typeNameIdx;
@@ -108,7 +108,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Gets or sets the extends.
 		/// </summary>
 		/// <value>The extends.</value>
-		public MetadataToken Extends
+		public Token Extends
 		{
 			get { return extends; }
 		}
@@ -117,7 +117,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Gets or sets the field list.
 		/// </summary>
 		/// <value>The field list.</value>
-		public MetadataToken FieldList
+		public Token FieldList
 		{
 			get { return fieldList; }
 		}
@@ -126,7 +126,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Gets or sets the method list.
 		/// </summary>
 		/// <value>The method list.</value>
-		public MetadataToken MethodList
+		public Token MethodList
 		{
 			get { return methodList; }
 		}

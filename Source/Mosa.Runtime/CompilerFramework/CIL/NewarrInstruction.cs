@@ -49,7 +49,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			base.Decode(ctx, decoder);
 
 			// Read the type specification
-			MetadataToken token = decoder.DecodeTokenType();
+			Token token = decoder.DecodeTokenType();
 
 			// FIXME: If ctx.Operands1 is an integral constant, we can infer the maximum size of the array
 			// and instantiate an ArrayTypeSpecification with max. sizes. This way we could eliminate bounds

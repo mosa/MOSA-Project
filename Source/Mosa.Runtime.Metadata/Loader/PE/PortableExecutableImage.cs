@@ -129,14 +129,14 @@ namespace Mosa.Runtime.Metadata.Loader.PE
 
 		string IMetadataModule.CodeBase { get { return this.codeBase; } }
 
-		MetadataToken IMetadataModule.EntryPoint
+		Token IMetadataModule.EntryPoint
 		{
 			get
 			{
 				if (_cliHeader.EntryPointToken == 0)
-					return MetadataToken.Zero;
+					return Token.Zero;
 
-				return new MetadataToken(_cliHeader.EntryPointToken);
+				return new Token(_cliHeader.EntryPointToken);
 			}
 		}
 
@@ -156,7 +156,7 @@ namespace Mosa.Runtime.Metadata.Loader.PE
 			{
 				if (name == null)
 				{
-					AssemblyRow arow = _metadataRoot.ReadAssemblyRow(new MetadataToken(MetadataTable.Assembly, 1));
+					AssemblyRow arow = _metadataRoot.ReadAssemblyRow(new Token(TableTypes.Assembly, 1));
 					name = _metadataRoot.ReadString(arow.NameIdx);
 				}
 

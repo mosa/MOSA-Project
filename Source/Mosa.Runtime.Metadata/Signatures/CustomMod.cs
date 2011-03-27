@@ -49,7 +49,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// <summary>
 		/// The token of the modifier.
 		/// </summary>
-		private MetadataToken _token;
+		private Token _token;
 
 		#endregion // Data members
 
@@ -60,7 +60,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// </summary>
 		/// <param name="type">The modifier type.</param>
 		/// <param name="token">The modifier token type.</param>
-		public CustomMod(CustomModType type, MetadataToken token)
+		public CustomMod(CustomModType type, Token token)
 		{
 			_type = type;
 			_token = token;
@@ -80,7 +80,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// Gets the custom modifiers token type.
 		/// </summary>
 		/// <value>The token type.</value>
-		public MetadataToken Token { get { return _token; } }
+		public Token Token { get { return _token; } }
 
 		#endregion // Properties
 
@@ -102,7 +102,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 
 				reader.SkipByte();
 
-				MetadataToken modType = reader.ReadEncodedTypeDefOrRef(); 
+				Token modType = reader.ReadEncodedTypeDefOrRef(); 
 				mods.Add(new CustomMod((CustomModType)(type - CilElementType.Required + 1), modType));
 			}
 

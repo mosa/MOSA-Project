@@ -48,7 +48,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			base.Decode(ctx, decoder);
 
 			// Read the field from the code
-			MetadataToken token = decoder.DecodeTokenType();
+			Token token = decoder.DecodeTokenType();
 
 			ctx.RuntimeField = decoder.TypeModule.GetField(token);
 

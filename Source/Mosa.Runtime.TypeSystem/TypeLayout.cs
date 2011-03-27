@@ -392,9 +392,9 @@ namespace Mosa.Runtime.TypeSystem
 		{
 			//TODO: rewrite so that access directly to metadata is not required, type system should assist instead
 			IMetadataProvider metadata = type.Module.MetadataModule.Metadata;
-			MetadataToken maxToken = metadata.GetMaxTokenValue(MetadataTable.MethodImpl);
+			Token maxToken = metadata.GetMaxTokenValue(TableTypes.MethodImpl);
 
-			foreach (MetadataToken token in new MetadataToken(MetadataTable.MethodImpl, 1).Upto(maxToken))
+			foreach (Token token in new Token(TableTypes.MethodImpl, 1).Upto(maxToken))
 			{
 				MethodImplRow row = metadata.ReadMethodImplRow(token);
 				if (row.@Class == type.Token)
@@ -412,7 +412,7 @@ namespace Mosa.Runtime.TypeSystem
 			}
 		}
 
-		private RuntimeMethod FindMethodByToken(RuntimeType type, MetadataToken methodToken)
+		private RuntimeMethod FindMethodByToken(RuntimeType type, Token methodToken)
 		{
 			foreach (RuntimeMethod method in type.Methods)
 			{

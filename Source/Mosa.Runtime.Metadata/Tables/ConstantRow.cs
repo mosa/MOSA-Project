@@ -31,7 +31,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private MetadataToken _parent;
+		private Token _parent;
 
 		/// <summary>
 		/// 
@@ -48,7 +48,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <param name="type">The type.</param>
 		/// <param name="parent">The parent.</param>
 		/// <param name="valueBlobIdx">The value BLOB idx.</param>
-		public ConstantRow(CilElementType type, MetadataToken parent, TokenTypes valueBlobIdx)
+		public ConstantRow(CilElementType type, Token parent, TokenTypes valueBlobIdx)
 		{
 			_type = type;
 			_parent = parent;
@@ -72,7 +72,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Gets the parent.
 		/// </summary>
 		/// <value>The parent.</value>
-		public MetadataToken Parent
+		public Token Parent
 		{
 			get { return _parent; }
 		}

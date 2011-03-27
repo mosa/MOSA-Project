@@ -31,7 +31,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private MetadataToken _memberForwardedTableIdx;
+		private Token _memberForwardedTableIdx;
 
 		/// <summary>
 		/// 
@@ -41,7 +41,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private MetadataToken _importScopeTableIdx;
+		private Token _importScopeTableIdx;
 
 		#endregion // Data members
 
@@ -54,8 +54,8 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <param name="memberForwardedTableIdx">The member forwarded table idx.</param>
 		/// <param name="importNameStringIdx">The import name string idx.</param>
 		/// <param name="importScopeTableIdx">The import scope table idx.</param>
-		public ImplMapRow(PInvokeAttributes mappingFlags, MetadataToken memberForwardedTableIdx,
-			TokenTypes importNameStringIdx, MetadataToken importScopeTableIdx)
+		public ImplMapRow(PInvokeAttributes mappingFlags, Token memberForwardedTableIdx,
+			TokenTypes importNameStringIdx, Token importScopeTableIdx)
 		{
 			_mappingFlags = mappingFlags;
 			_memberForwardedTableIdx = memberForwardedTableIdx;
@@ -80,7 +80,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Gets the member forwarded.
 		/// </summary>
 		/// <value>The member forwarded.</value>
-		public MetadataToken MemberForwarded
+		public Token MemberForwarded
 		{
 			get { return _memberForwardedTableIdx; }
 		}
@@ -98,7 +98,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Gets the import scope table idx.
 		/// </summary>
 		/// <value>The import scope table idx.</value>
-		public MetadataToken ImportScopeTableIdx
+		public Token ImportScopeTableIdx
 		{
 			get { return _importScopeTableIdx; }
 		}

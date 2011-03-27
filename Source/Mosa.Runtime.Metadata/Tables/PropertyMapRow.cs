@@ -24,12 +24,12 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private MetadataToken _parent;
+		private Token _parent;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private MetadataToken _property;
+		private Token _property;
 
 		#endregion // Data members
 
@@ -40,7 +40,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// </summary>
 		/// <param name="parentTableIdx">The parent table idx.</param>
 		/// <param name="propertyTableIdx">The property table idx.</param>
-		public PropertyMapRow(MetadataToken parent, MetadataToken property)
+		public PropertyMapRow(Token parent, Token property)
 		{
 			_parent = parent;
 			_property = property;
@@ -54,7 +54,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Gets the parent table idx.
 		/// </summary>
 		/// <value>The parent table idx.</value>
-		public MetadataToken ParentTableIdx
+		public Token ParentTableIdx
 		{
 			get { return _parent; }
 		}
@@ -63,7 +63,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Gets the property table idx.
 		/// </summary>
 		/// <value>The property table idx.</value>
-		public MetadataToken PropertyTableIdx
+		public Token PropertyTableIdx
 		{
 			get { return _property; }
 		}

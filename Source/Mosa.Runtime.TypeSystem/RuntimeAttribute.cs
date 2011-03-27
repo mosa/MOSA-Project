@@ -34,7 +34,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// <summary>
 		/// Holds the ctor of the attribute type to invoke.
 		/// </summary>
-		private readonly MetadataToken ctor;
+		private readonly Token ctor;
 
 		/// <summary>
 		/// Holds the ctor method of the attribute type.
@@ -62,7 +62,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// <param name="ctor">The ctor.</param>
 		/// <param name="ctorMethod">The ctor method.</param>
 		/// <param name="blobIndex">Index of the blob.</param>
-		public RuntimeAttribute(ITypeModule typeModule, MetadataToken ctor, RuntimeMethod ctorMethod, TokenTypes blobIndex)
+		public RuntimeAttribute(ITypeModule typeModule, Token ctor, RuntimeMethod ctorMethod, TokenTypes blobIndex)
 		{
 			this.typeModule = typeModule;
 			this.ctorMethod = ctorMethod;

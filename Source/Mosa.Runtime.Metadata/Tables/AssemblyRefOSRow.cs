@@ -36,7 +36,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private MetadataToken _assemblyRefIdx;
+		private Token _assemblyRefIdx;
 
 		#endregion // Data members
 
@@ -49,7 +49,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <param name="majorVersion">The major version.</param>
 		/// <param name="minorVersion">The minor version.</param>
 		/// <param name="assemblyRefIdx">The assembly ref idx.</param>
-		public AssemblyRefOSRow(uint platformId, uint majorVersion, uint minorVersion, MetadataToken assemblyRefIdx)
+		public AssemblyRefOSRow(uint platformId, uint majorVersion, uint minorVersion, Token assemblyRefIdx)
 		{
 			_platformId = platformId;
 			_majorVersion = majorVersion;
@@ -92,7 +92,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Gets the assembly ref idx.
 		/// </summary>
 		/// <value>The assembly ref idx.</value>
-		public MetadataToken AssemblyRefIdx
+		public Token AssemblyRefIdx
 		{
 			get { return _assemblyRefIdx; }
 		}

@@ -48,7 +48,7 @@ namespace Mosa.Runtime.CompilerFramework
 					// and also add them to the method list.
 
 					// So, the method has generic parameters, so we compile it for every instantiation type
-					List<MetadataToken> typeList = GetTokenTypesForMethod(compiler, type, method);
+					List<Token> typeList = GetTokenTypesForMethod(compiler, type, method);
 					List<RuntimeMethod> methods = RecompileMethods(compiler, typeList, method);
 					ReinsertMethods(methods, method, type);
 				}
@@ -95,12 +95,12 @@ namespace Mosa.Runtime.CompilerFramework
 			return parameter.Type == CilElementType.Var;
 		}
 
-		private static List<MetadataToken> GetTokenTypesForMethod(AssemblyCompiler compiler, RuntimeType type, RuntimeMethod method)
+		private static List<Token> GetTokenTypesForMethod(AssemblyCompiler compiler, RuntimeType type, RuntimeMethod method)
 		{
 			throw new NotImplementedException();
 		}
 
-		private static List<RuntimeMethod> RecompileMethods(AssemblyCompiler compiler, List<MetadataToken> types, RuntimeMethod method)
+		private static List<RuntimeMethod> RecompileMethods(AssemblyCompiler compiler, List<Token> types, RuntimeMethod method)
 		{
 			throw new NotImplementedException();
 		}

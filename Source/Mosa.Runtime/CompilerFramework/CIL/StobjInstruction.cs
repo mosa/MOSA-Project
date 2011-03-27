@@ -90,7 +90,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			if (_valueType == null)
 			{
 				// No, retrieve a type reference from the immediate argument
-				MetadataToken token = decoder.DecodeTokenType();
+				Token token = decoder.DecodeTokenType();
 
 				throw new NotImplementedException();
 				//_valueType = MetadataTypeReference.FromToken(decoder.Metadata, token);

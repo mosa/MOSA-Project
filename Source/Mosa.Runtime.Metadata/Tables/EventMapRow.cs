@@ -24,12 +24,12 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private MetadataToken _typeDef;
+		private Token _typeDef;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private MetadataToken _eventList;
+		private Token _eventList;
 
 		#endregion // Data members
 
@@ -40,7 +40,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// </summary>
 		/// <param name="typeDef">The type def.</param>
 		/// <param name="eventList">The event list.</param>
-		public EventMapRow(MetadataToken typeDef, MetadataToken eventList)
+		public EventMapRow(Token typeDef, Token eventList)
 		{
 			_typeDef = typeDef;
 			_eventList = eventList;
@@ -54,7 +54,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Gets the type def.
 		/// </summary>
 		/// <value>The type def.</value>
-		public MetadataToken TypeDef
+		public Token TypeDef
 		{
 			get { return _typeDef; }
 		}
@@ -63,7 +63,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Gets the event list.
 		/// </summary>
 		/// <value>The event list.</value>
-		public MetadataToken EventList
+		public Token EventList
 		{
 			get { return _eventList; }
 		}

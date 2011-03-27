@@ -65,9 +65,9 @@ namespace Mosa.Tools.MetadataExplorer
 			treeView.Nodes.Clear();
 
 			//Cycle through all metadata tables
-			foreach (MetadataTable table in Enum.GetValues(typeof(MetadataTable)))
+			foreach (TableTypes table in Enum.GetValues(typeof(TableTypes)))
 			{
-				if (table == MetadataTable.Module)
+				if (table == TableTypes.Module)
 					continue;
 
 				int count = metadataModule.Metadata.GetRowCount(table);
@@ -81,7 +81,7 @@ namespace Mosa.Tools.MetadataExplorer
 				//Cycle through all metadata rows
 				for (int rowid = 1; rowid <= count; rowid++)
 				{
-					MetadataToken token = new MetadataToken(table, rowid);
+					Token token = new Token(table, rowid);
 
 					TableRow row = Resolver.GetTableRow(metadataModule.Metadata, token);
 

@@ -24,12 +24,12 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private MetadataToken @class;
+		private Token @class;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private MetadataToken @interface;
+		private Token @interface;
 
 		#endregion // Data members
 
@@ -40,7 +40,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// </summary>
 		/// <param name="class">The @class.</param>
 		/// <param name="interface">The @interface.</param>
-		public InterfaceImplRow(MetadataToken @class, MetadataToken @interface)
+		public InterfaceImplRow(Token @class, Token @interface)
 		{
 			this.@class = @class;
 			this.@interface = @interface;
@@ -54,7 +54,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Gets the class.
 		/// </summary>
 		/// <value>The class.</value>
-		public MetadataToken Class
+		public Token Class
 		{
 			get { return this.@class; }
 		}
@@ -63,7 +63,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Gets the interface.
 		/// </summary>
 		/// <value>The interface.</value>
-		public MetadataToken Interface
+		public Token Interface
 		{
 			get { return this.@interface; }
 		}

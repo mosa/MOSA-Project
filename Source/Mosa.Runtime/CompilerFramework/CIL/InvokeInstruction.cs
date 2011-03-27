@@ -154,11 +154,11 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <param name="decoder">The IL decoder, which provides decoding functionality.</param>
 		/// <param name="flags">Flags, which control the</param>
 		/// <returns></returns>
-		protected static MetadataToken DecodeInvocationTarget(Context ctx, IInstructionDecoder decoder, InvokeSupportFlags flags)
+		protected static Token DecodeInvocationTarget(Context ctx, IInstructionDecoder decoder, InvokeSupportFlags flags)
 		{
 			// Retrieve the immediate argument - it contains the token
 			// of the methoddef, methodref, methodspec or callsite to call.
-			MetadataToken callTarget = decoder.DecodeTokenType();
+			Token callTarget = decoder.DecodeTokenType();
 
 			if (!IsCallTargetSupported(callTarget.Table, flags))
 				throw new InvalidOperationException(@"Invalid IL call target specification.");
@@ -167,17 +167,17 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 			switch (callTarget.Table)
 			{
-				case MetadataTable.MethodDef:
+				case TableTypes.MethodDef:
 					method = decoder.TypeModule.GetMethod(callTarget);
 					break;
 
-				case MetadataTable.MemberRef:
+				case TableTypes.MemberRef:
 					method = decoder.TypeModule.GetMethod(callTarget, decoder.Method.DeclaringType);
 					if (method.DeclaringType.IsGeneric)
 						decoder.Compiler.Scheduler.ScheduleTypeForCompilation(method.DeclaringType);
 					break;
 
-				case MetadataTable.MethodSpec:
+				case TableTypes.MethodSpec:
 					method = decoder.TypeModule.GetMethod(callTarget);
 					decoder.Compiler.Scheduler.ScheduleTypeForCompilation(method.DeclaringType);
 					break;
@@ -236,15 +236,15 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <returns>
 		/// 	<c>true</c> if [is call target supported] [the specified target type]; otherwise, <c>false</c>.
 		/// </returns>
-		private static bool IsCallTargetSupported(MetadataTable targetType, InvokeSupportFlags flags)
+		private static bool IsCallTargetSupported(TableTypes targetType, InvokeSupportFlags flags)
 		{
 			bool result = false;
 
-			if (targetType == MetadataTable.MethodDef && InvokeSupportFlags.MethodDef == (flags & InvokeSupportFlags.MethodDef))
+			if (targetType == TableTypes.MethodDef && InvokeSupportFlags.MethodDef == (flags & InvokeSupportFlags.MethodDef))
 				result = true;
-			else if (targetType == MetadataTable.MemberRef && InvokeSupportFlags.MemberRef == (flags & InvokeSupportFlags.MemberRef))
+			else if (targetType == TableTypes.MemberRef && InvokeSupportFlags.MemberRef == (flags & InvokeSupportFlags.MemberRef))
 				result = true;
-			else if (targetType == MetadataTable.MethodSpec && InvokeSupportFlags.MethodSpec == (flags & InvokeSupportFlags.MethodSpec))
+			else if (targetType == TableTypes.MethodSpec && InvokeSupportFlags.MethodSpec == (flags & InvokeSupportFlags.MethodSpec))
 				result = true;
 
 			return result;

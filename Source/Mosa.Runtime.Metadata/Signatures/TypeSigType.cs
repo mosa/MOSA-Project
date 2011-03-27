@@ -5,11 +5,11 @@ namespace Mosa.Runtime.Metadata.Signatures
 {
 	public class TypeSigType : SigType
 	{
-		private readonly MetadataToken token;
+		private readonly Token token;
 
-		public MetadataToken Token { get { return this.token; } }
+		public Token Token { get { return this.token; } }
 
-		public TypeSigType(MetadataToken token, CilElementType type) :
+		public TypeSigType(Token token, CilElementType type) :
 			base(type)
 		{
 			this.token = token;

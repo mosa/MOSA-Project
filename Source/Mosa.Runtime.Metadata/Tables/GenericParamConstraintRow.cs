@@ -24,12 +24,12 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private MetadataToken _owner;
+		private Token _owner;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private MetadataToken _constraint;
+		private Token _constraint;
 
 		#endregion // Data members
 
@@ -40,7 +40,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// </summary>
 		/// <param name="owner">The owner table idx.</param>
 		/// <param name="constraint">The constraint table idx.</param>
-		public GenericParamConstraintRow(MetadataToken owner, MetadataToken constraint)
+		public GenericParamConstraintRow(Token owner, Token constraint)
 		{
 			_owner = owner;
 			_constraint = constraint;
@@ -54,7 +54,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Gets the owner table idx.
 		/// </summary>
 		/// <value>The owner table idx.</value>
-		public MetadataToken Owner
+		public Token Owner
 		{
 			get { return _owner; }
 		}
@@ -63,7 +63,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Gets the constraint table idx.
 		/// </summary>
 		/// <value>The constraint table idx.</value>
-		public MetadataToken Constraint
+		public Token Constraint
 		{
 			get { return _constraint; }
 		}

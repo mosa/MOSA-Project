@@ -50,7 +50,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// <param name="module">The module.</param>
 		/// <param name="declaringType">Specifies the type, which contains this field.</param>
 		public RuntimeField(ITypeModule module, RuntimeType declaringType) :
-			base(module, MetadataToken.Zero, declaringType)
+			base(module, Token.Zero, declaringType)
 		{
 		}
 
@@ -60,7 +60,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// <param name="module">The module.</param>
 		/// <param name="token">The token.</param>
 		/// <param name="declaringType">Specifies the type, which contains this field.</param>
-		public RuntimeField(ITypeModule module, MetadataToken token, RuntimeType declaringType) :
+		public RuntimeField(ITypeModule module, Token token, RuntimeType declaringType) :
 			base(module, token, declaringType)
 		{
 		}

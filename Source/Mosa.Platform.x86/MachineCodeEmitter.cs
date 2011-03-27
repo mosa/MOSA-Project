@@ -514,9 +514,9 @@ namespace Mosa.Platform.x86
 					case CilElementType.I:
 						try
 						{
-							if (co.Value is MetadataToken)
+							if (co.Value is Token)
 							{
-								imm = LittleEndianBitConverter.GetBytes(((MetadataToken)co.Value).ToInt32());
+								imm = LittleEndianBitConverter.GetBytes(((Token)co.Value).ToInt32());
 							}
 							else
 							{

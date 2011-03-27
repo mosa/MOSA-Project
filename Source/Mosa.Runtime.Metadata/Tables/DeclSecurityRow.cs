@@ -30,7 +30,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private MetadataToken _parent;
+		private Token _parent;
 
 		/// <summary>
 		/// 
@@ -47,7 +47,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <param name="action">The action.</param>
 		/// <param name="parent">The parent table idx.</param>
 		/// <param name="permissionSetBlobIdx">The permission set BLOB idx.</param>
-		public DeclSecurityRow(SecurityAction action, MetadataToken parent, TokenTypes permissionSetBlobIdx)
+		public DeclSecurityRow(SecurityAction action, Token parent, TokenTypes permissionSetBlobIdx)
 		{
 			_action = action;
 			_parent = parent;
@@ -71,7 +71,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Gets the parent.
 		/// </summary>
 		/// <value>The parent.</value>
-		public MetadataToken Parent
+		public Token Parent
 		{
 			get { return _parent; }
 		}

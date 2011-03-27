@@ -29,7 +29,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private MetadataToken _field;
+		private Token _field;
 
 		#endregion // Data members
 
@@ -40,7 +40,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// </summary>
 		/// <param name="rva">The rva.</param>
 		/// <param name="fieldTableIdx">The field table idx.</param>
-		public FieldRVARow(uint rva, MetadataToken fieldTableIdx)
+		public FieldRVARow(uint rva, Token fieldTableIdx)
 		{
 			_rva = rva;
 			_field = fieldTableIdx;
@@ -64,7 +64,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Gets the field table idx.
 		/// </summary>
 		/// <value>The field table idx.</value>
-		public MetadataToken Field
+		public Token Field
 		{
 			get { return _field; }
 		}

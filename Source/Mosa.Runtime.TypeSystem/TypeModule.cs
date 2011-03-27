@@ -83,7 +83,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// <summary>
 		/// 
 		/// </summary>
-		private Dictionary<MetadataToken, string> externals;
+		private Dictionary<Token, string> externals;
 
 		/// <summary>
 		/// 
@@ -100,7 +100,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		private int[] tableRows = new int[TableCount];
 
-		private const int TableCount = ((int)MetadataTable.GenericParamConstraint >> 24) + 1;
+		private const int TableCount = ((int)TableTypes.GenericParamConstraint >> 24) + 1;
 
 		#endregion // Data members
 
@@ -122,18 +122,18 @@ namespace Mosa.Runtime.TypeSystem
 
 			RetrieveAllTableSizes();
 
-			this.methods = new RuntimeMethod[GetTableRows(MetadataTable.MethodDef)];
-			this.fields = new RuntimeField[GetTableRows(MetadataTable.Field)];
-			this.types = new RuntimeType[GetTableRows(MetadataTable.TypeDef)];
+			this.methods = new RuntimeMethod[GetTableRows(TableTypes.MethodDef)];
+			this.fields = new RuntimeField[GetTableRows(TableTypes.Field)];
+			this.types = new RuntimeType[GetTableRows(TableTypes.TypeDef)];
 
-			this.typeSpecs = new RuntimeType[GetTableRows(MetadataTable.TypeSpec)];
-			this.methodSpecs = new RuntimeMethod[GetTableRows(MetadataTable.MethodSpec)];
+			this.typeSpecs = new RuntimeType[GetTableRows(TableTypes.TypeSpec)];
+			this.methodSpecs = new RuntimeMethod[GetTableRows(TableTypes.MethodSpec)];
 
-			this.memberRef = new RuntimeMember[GetTableRows(MetadataTable.MemberRef)];
-			this.typeRef = new RuntimeType[GetTableRows(MetadataTable.TypeRef)];
-			this.genericParamConstraint = new RuntimeType[GetTableRows(MetadataTable.GenericParamConstraint)];
+			this.memberRef = new RuntimeMember[GetTableRows(TableTypes.MemberRef)];
+			this.typeRef = new RuntimeType[GetTableRows(TableTypes.TypeRef)];
+			this.genericParamConstraint = new RuntimeType[GetTableRows(TableTypes.GenericParamConstraint)];
 
-			this.externals = new Dictionary<MetadataToken, string>();
+			this.externals = new Dictionary<Token, string>();
 
 			this.signatures = new Dictionary<TokenTypes, Signature>();
 			this.strings = new Dictionary<TokenTypes, string>();
@@ -160,7 +160,7 @@ namespace Mosa.Runtime.TypeSystem
 		{
 			for (int i = 0; i < TableCount; i++)
 			{
-				tableRows[i] = metadataProvider.GetRowCount((MetadataTable)(i << 24));
+				tableRows[i] = metadataProvider.GetRowCount((TableTypes)(i << 24));
 			}
 		}
 
@@ -169,7 +169,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		/// <param name="tokenType">Type of the token.</param>
 		/// <returns></returns>
-		private int GetTableRows(MetadataTable tokenType)
+		private int GetTableRows(TableTypes tokenType)
 		{
 			return tableRows[(int)(tokenType) >> 24];
 		}
@@ -179,9 +179,9 @@ namespace Mosa.Runtime.TypeSystem
 			return (TokenTypes)(tableRows[(int)(tokenType) >> 24]) | (tokenType & TokenTypes.TableMask);
 		}
 
-		private MetadataToken GetMaxTokenValue(MetadataTable table)
+		private Token GetMaxTokenValue(TableTypes table)
 		{
-			return new MetadataToken(table, tableRows[(int)(table) >> 24]);
+			return new Token(table, tableRows[(int)(table) >> 24]);
 		}
 
 		private string GetString(TokenTypes stringIdx)
@@ -236,10 +236,10 @@ namespace Mosa.Runtime.TypeSystem
 		private struct TypeInfo
 		{
 			public TypeDefRow TypeDefRow;
-			public MetadataToken NestedClass;
-			public MetadataToken EnclosingClass;
-			public MetadataToken MaxMethod;
-			public MetadataToken MaxField;
+			public Token NestedClass;
+			public Token EnclosingClass;
+			public Token MaxMethod;
+			public Token MaxField;
 			public int Size;
 			public short PackingSize;
 		}
@@ -249,30 +249,30 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		private void LoadTypes()
 		{
-			List<TypeInfo> typeInfos = new List<TypeInfo>(GetTableRows(MetadataTable.TypeDef));
+			List<TypeInfo> typeInfos = new List<TypeInfo>(GetTableRows(TableTypes.TypeDef));
 
-			MetadataToken maxTypeDef = GetMaxTokenValue(MetadataTable.TypeDef);
-			MetadataToken maxMethod = GetMaxTokenValue(MetadataTable.MethodDef);
-			MetadataToken maxField = GetMaxTokenValue(MetadataTable.Field);
-			MetadataToken maxLayout = GetMaxTokenValue(MetadataTable.ClassLayout);
-			MetadataToken maxNestedClass = GetMaxTokenValue(MetadataTable.NestedClass);
+			Token maxTypeDef = GetMaxTokenValue(TableTypes.TypeDef);
+			Token maxMethod = GetMaxTokenValue(TableTypes.MethodDef);
+			Token maxField = GetMaxTokenValue(TableTypes.Field);
+			Token maxLayout = GetMaxTokenValue(TableTypes.ClassLayout);
+			Token maxNestedClass = GetMaxTokenValue(TableTypes.NestedClass);
 
-			MetadataToken tokenLayout = new MetadataToken(MetadataTable.ClassLayout, 1);
+			Token tokenLayout = new Token(TableTypes.ClassLayout, 1);
 			ClassLayoutRow layoutRow = (maxLayout.RID != 0) ? metadataProvider.ReadClassLayoutRow(tokenLayout) : new ClassLayoutRow();
 
-			MetadataToken tokenNested = new MetadataToken(MetadataTable.NestedClass, 1);
+			Token tokenNested = new Token(TableTypes.NestedClass, 1);
 			NestedClassRow nestedRow = (maxNestedClass.RID != 0) ? metadataProvider.ReadNestedClassRow(tokenNested) : new NestedClassRow();
 
 			TypeDefRow nextTypeDefRow = new TypeDefRow();
-			TypeDefRow typeDefRow = metadataProvider.ReadTypeDefRow(new MetadataToken(MetadataTable.TypeDef, 1));
+			TypeDefRow typeDefRow = metadataProvider.ReadTypeDefRow(new Token(TableTypes.TypeDef, 1));
 
-			foreach (MetadataToken token in new MetadataToken(MetadataTable.TypeDef, 1).Upto(maxTypeDef))
+			foreach (Token token in new Token(TableTypes.TypeDef, 1).Upto(maxTypeDef))
 			{
 				TypeInfo info = new TypeInfo();
 
 				info.TypeDefRow = typeDefRow;
-				info.NestedClass = (nestedRow.NestedClass == token) ? nestedRow.NestedClass : MetadataToken.Zero;
-				info.EnclosingClass = (nestedRow.NestedClass == token) ? nestedRow.EnclosingClass : MetadataToken.Zero;
+				info.NestedClass = (nestedRow.NestedClass == token) ? nestedRow.NestedClass : Token.Zero;
+				info.EnclosingClass = (nestedRow.NestedClass == token) ? nestedRow.EnclosingClass : Token.Zero;
 				info.Size = (layoutRow.Parent == token) ? layoutRow.ClassSize : 0;
 				info.PackingSize = (layoutRow.Parent == token) ? layoutRow.PackingSize : (short)0;
 
@@ -314,13 +314,13 @@ namespace Mosa.Runtime.TypeSystem
 				typeDefRow = nextTypeDefRow;
 			}
 
-			foreach (MetadataToken token in new MetadataToken(MetadataTable.TypeDef, 1).Upto(maxTypeDef))
+			foreach (Token token in new Token(TableTypes.TypeDef, 1).Upto(maxTypeDef))
 			{
 				LoadType(token, typeInfos);
 			}
 		}
 
-		private void LoadType(MetadataToken token, IList<TypeInfo> typeInfos)
+		private void LoadType(Token token, IList<TypeInfo> typeInfos)
 		{
 			TypeInfo info = typeInfos[(int)token.RID - 1];
 
@@ -329,11 +329,11 @@ namespace Mosa.Runtime.TypeSystem
 
 			if (info.TypeDefRow.Extends.RID != 0)
 			{
-				if (info.TypeDefRow.Extends.Table == MetadataTable.TypeDef)
+				if (info.TypeDefRow.Extends.Table == TableTypes.TypeDef)
 				{
 					LoadType(info.TypeDefRow.Extends, typeInfos);
 				}
-				else if (info.TypeDefRow.Extends.Table != MetadataTable.TypeRef)
+				else if (info.TypeDefRow.Extends.Table != TableTypes.TypeRef)
 				{
 					throw new ArgumentException(@"unexpected token type.", @"extends");
 				}
@@ -367,18 +367,18 @@ namespace Mosa.Runtime.TypeSystem
 		/// <param name="declaringType">The type, which declared the method.</param>
 		/// <param name="first">The first method token to load.</param>
 		/// <param name="last">The last method token to load (non-inclusive.)</param>
-		private void LoadMethods(RuntimeType declaringType, MetadataToken first, MetadataToken last)
+		private void LoadMethods(RuntimeType declaringType, Token first, Token last)
 		{
 			if (first.RID >= last.RID)
 				return;
 
-			MetadataToken maxMethod = GetMaxTokenValue(MetadataTable.MethodDef);
+			Token maxMethod = GetMaxTokenValue(TableTypes.MethodDef);
 			MethodDefRow methodDef = metadataProvider.ReadMethodDefRow(first);
 			MethodDefRow nextMethodDef = new MethodDefRow();
 
-			foreach (MetadataToken token in first.Upto(last.PreviousRow))
+			foreach (Token token in first.Upto(last.PreviousRow))
 			{
-				MetadataToken maxParam;
+				Token maxParam;
 
 				if (token.RID < maxMethod.RID)
 				{
@@ -387,7 +387,7 @@ namespace Mosa.Runtime.TypeSystem
 				}
 				else
 				{
-					maxParam = GetMaxTokenValue(MetadataTable.Param).NextRow;
+					maxParam = GetMaxTokenValue(TableTypes.Param).NextRow;
 				}
 
 				CilRuntimeMethod method = new CilRuntimeMethod(
@@ -415,9 +415,9 @@ namespace Mosa.Runtime.TypeSystem
 		/// <param name="method">The method.</param>
 		/// <param name="first">The first.</param>
 		/// <param name="max">The max.</param>
-		private void LoadParameters(RuntimeMethod method, MetadataToken first, MetadataToken max)
+		private void LoadParameters(RuntimeMethod method, Token first, Token max)
 		{
-			foreach (MetadataToken token in first.Upto(max.PreviousRow))
+			foreach (Token token in first.Upto(max.PreviousRow))
 			//for (TokenTypes token = first; token < max; token++)
 			{
 				ParamRow paramDef = metadataProvider.ReadParamRow(token);
@@ -431,17 +431,17 @@ namespace Mosa.Runtime.TypeSystem
 		/// <param name="declaringType">The type, which declared the method.</param>
 		/// <param name="first">The first field token to load.</param>
 		/// <param name="last">The last field token to load (non-inclusive.)</param>
-		private void LoadFields(RuntimeType declaringType, MetadataToken first, MetadataToken last)
+		private void LoadFields(RuntimeType declaringType, Token first, Token last)
 		{
-			MetadataToken maxRVA = GetMaxTokenValue(MetadataTable.FieldRVA);
-			MetadataToken maxLayout = GetMaxTokenValue(MetadataTable.FieldLayout);
-			MetadataToken tokenRva = new MetadataToken(MetadataTable.FieldRVA, 1);
-			MetadataToken tokenLayout = new MetadataToken(MetadataTable.FieldLayout, 1);
+			Token maxRVA = GetMaxTokenValue(TableTypes.FieldRVA);
+			Token maxLayout = GetMaxTokenValue(TableTypes.FieldLayout);
+			Token tokenRva = new Token(TableTypes.FieldRVA, 1);
+			Token tokenLayout = new Token(TableTypes.FieldLayout, 1);
 
 			FieldRVARow fieldRVA = (maxRVA.RID != 0) ? metadataProvider.ReadFieldRVARow(tokenRva) : new FieldRVARow();
 			FieldLayoutRow fieldLayout = (maxLayout.RID != 0) ? metadataProvider.ReadFieldLayoutRow(tokenLayout) : new FieldLayoutRow();
 
-			foreach (MetadataToken token in first.Upto(last.PreviousRow))
+			foreach (Token token in first.Upto(last.PreviousRow))
 			{
 				FieldRow fieldRow = metadataProvider.ReadFieldRow(token);
 				uint rva = 0;
@@ -525,18 +525,18 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		protected void LoadInterfaces()
 		{
-			MetadataToken maxToken = GetMaxTokenValue(MetadataTable.InterfaceImpl);
+			Token maxToken = GetMaxTokenValue(TableTypes.InterfaceImpl);
 
-			foreach (MetadataToken token in new MetadataToken(MetadataTable.InterfaceImpl, 1).Upto(maxToken))
+			foreach (Token token in new Token(TableTypes.InterfaceImpl, 1).Upto(maxToken))
 			{
 				InterfaceImplRow row = metadataProvider.ReadInterfaceImplRow(token);
 
 				RuntimeType declaringType = types[row.Class.RID - 1];
 				RuntimeType interfaceType;
 
-				if (row.Interface.Table == MetadataTable.TypeSpec)
+				if (row.Interface.Table == TableTypes.TypeSpec)
 					interfaceType = typeSpecs[row.Interface.RID - 1];
-				else if (row.Interface.Table == MetadataTable.TypeDef)
+				else if (row.Interface.Table == TableTypes.TypeDef)
 					interfaceType = types[row.Interface.RID - 1];
 				else
 					interfaceType = typeRef[row.Interface.RID - 1];
@@ -566,8 +566,8 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		protected void LoadMemberReferences()
 		{
-			MetadataToken maxToken = GetMaxTokenValue(MetadataTable.MemberRef);
-			foreach (MetadataToken token in new MetadataToken(MetadataTable.MemberRef, 1).Upto(maxToken))
+			Token maxToken = GetMaxTokenValue(TableTypes.MemberRef);
+			foreach (Token token in new Token(TableTypes.MemberRef, 1).Upto(maxToken))
 			{
 				MemberRefRow row = metadataProvider.ReadMemberRefRow(token);
 				string name = GetString(row.NameStringIdx);
@@ -576,15 +576,15 @@ namespace Mosa.Runtime.TypeSystem
 
 				switch (row.Class.Table)
 				{
-					case MetadataTable.TypeDef:
+					case TableTypes.TypeDef:
 						ownerType = types[row.Class.RID - 1];
 						break;
 
-					case MetadataTable.TypeRef:
+					case TableTypes.TypeRef:
 						ownerType = typeRef[row.Class.RID - 1];
 						break;
 
-					case MetadataTable.TypeSpec:
+					case TableTypes.TypeSpec:
 						ownerType = typeSpecs[row.Class.RID - 1];
 						break;
 
@@ -664,8 +664,8 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		protected void LoadTypeReferences()
 		{
-			MetadataToken maxToken = GetMaxTokenValue(MetadataTable.TypeRef);
-			foreach (MetadataToken token in new MetadataToken(MetadataTable.TypeRef, 1).Upto(maxToken))
+			Token maxToken = GetMaxTokenValue(TableTypes.TypeRef);
+			foreach (Token token in new Token(TableTypes.TypeRef, 1).Upto(maxToken))
 			{
 				RuntimeType runtimeType = null;
 
@@ -674,13 +674,13 @@ namespace Mosa.Runtime.TypeSystem
 
 				switch (row.ResolutionScope.Table)
 				{
-					case MetadataTable.Module:
-						goto case MetadataTable.TypeRef;
+					case TableTypes.Module:
+						goto case TableTypes.TypeRef;
 
-					case MetadataTable.TypeDef:
+					case TableTypes.TypeDef:
 						throw new NotImplementedException();
 
-					case MetadataTable.TypeRef:
+					case TableTypes.TypeRef:
 						{
 							TypeRefRow row2 = metadataProvider.ReadTypeRefRow(row.ResolutionScope);
 							string typeName2 = GetString(row2.TypeNameIdx);
@@ -697,13 +697,13 @@ namespace Mosa.Runtime.TypeSystem
 							break;
 						}
 
-					case MetadataTable.TypeSpec:
+					case TableTypes.TypeSpec:
 						throw new NotImplementedException();
 
-					case MetadataTable.ModuleRef:
+					case TableTypes.ModuleRef:
 						throw new NotImplementedException();
 
-					case MetadataTable.AssemblyRef:
+					case TableTypes.AssemblyRef:
 						{
 							string typeNamespace = GetString(row.TypeNamespaceIdx);
 
@@ -731,21 +731,21 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		private void LoadCustomAttributes()
 		{
-			MetadataToken maxToken = GetMaxTokenValue(MetadataTable.CustomAttribute);
-			foreach (MetadataToken token in new MetadataToken(MetadataTable.CustomAttribute, 1).Upto(maxToken))
+			Token maxToken = GetMaxTokenValue(TableTypes.CustomAttribute);
+			foreach (Token token in new Token(TableTypes.CustomAttribute, 1).Upto(maxToken))
 			{
 				CustomAttributeRow row = metadataProvider.ReadCustomAttributeRow(token);
-				MetadataToken owner = row.Parent;
+				Token owner = row.Parent;
 
 				RuntimeMethod ctorMethod;
 
 				switch (row.Type.Table)
 				{
-					case MetadataTable.MethodDef:
+					case TableTypes.MethodDef:
 						ctorMethod = methods[row.Type.RID - 1];
 						break;
 
-					case MetadataTable.MemberRef:
+					case TableTypes.MemberRef:
 						ctorMethod = memberRef[row.Type.RID - 1] as RuntimeMethod;
 						break;
 
@@ -759,11 +759,11 @@ namespace Mosa.Runtime.TypeSystem
 				// metadata tables, which make valid targets for an attribute.
 				switch (owner.Table)
 				{
-					case MetadataTable.Assembly:
+					case TableTypes.Assembly:
 						// AttributeTargets.Assembly
 						break;
 
-					case MetadataTable.TypeDef:
+					case TableTypes.TypeDef:
 						// AttributeTargets.Class
 						// AttributeTargets.Delegate
 						// AttributeTargets.Enum
@@ -772,35 +772,35 @@ namespace Mosa.Runtime.TypeSystem
 						types[owner.RID - 1].CustomAttributes.Add(runtimeAttribute);
 						break;
 
-					case MetadataTable.MethodDef:
+					case TableTypes.MethodDef:
 						// AttributeTargets.Constructor
 						// AttributeTargets.Method
 						methods[owner.RID - 1].CustomAttributes.Add(runtimeAttribute);
 						break;
 
-					case MetadataTable.Event:
+					case TableTypes.Event:
 						// AttributeTargets.Event
 						break;
 
-					case MetadataTable.Field:
+					case TableTypes.Field:
 						// AttributeTargets.Field
 						fields[owner.RID - 1].CustomAttributes.Add(runtimeAttribute);
 						break;
 
-					case MetadataTable.GenericParam:
+					case TableTypes.GenericParam:
 						// AttributeTargets.GenericParameter
 						break;
 
-					case MetadataTable.Module:
+					case TableTypes.Module:
 						// AttributeTargets.Module
 						break;
 
-					case MetadataTable.Param:
+					case TableTypes.Param:
 						// AttributeTargets.Parameter
 						// AttributeTargets.ReturnValue
 						break;
 
-					case MetadataTable.Property:
+					case TableTypes.Property:
 						// AttributeTargets.StackFrameIndex
 						break;
 
@@ -816,8 +816,8 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		private void LoadGenericParams()
 		{
-			MetadataToken maxToken = GetMaxTokenValue(MetadataTable.GenericParam);
-			foreach (MetadataToken token in new MetadataToken(MetadataTable.GenericParam, 1).Upto(maxToken))
+			Token maxToken = GetMaxTokenValue(TableTypes.GenericParam);
+			foreach (Token token in new Token(TableTypes.GenericParam, 1).Upto(maxToken))
 			{
 				GenericParamRow row = metadataProvider.ReadGenericParamRow(token);
 				string name = GetString(row.NameStringIdx);
@@ -826,11 +826,11 @@ namespace Mosa.Runtime.TypeSystem
 				// metadata tables, which make valid targets for an attribute.
 				switch (row.Owner.Table)
 				{
-					case MetadataTable.TypeDef:
+					case TableTypes.TypeDef:
 						types[row.Owner.RID - 1].GenericParameters.Add(new GenericParameter(name, row.Flags));
 						break;
 
-					case MetadataTable.MethodDef:
+					case TableTypes.MethodDef:
 						methods[row.Owner.RID - 1].GenericParameters.Add(new GenericParameter(name, row.Flags));
 						break;
 
@@ -845,8 +845,8 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		private void LoadTypeSpecs()
 		{
-			MetadataToken maxToken = GetMaxTokenValue(MetadataTable.TypeSpec);
-			foreach (MetadataToken token in new MetadataToken(MetadataTable.TypeSpec, 1).Upto(maxToken))
+			Token maxToken = GetMaxTokenValue(TableTypes.TypeSpec);
+			foreach (Token token in new Token(TableTypes.TypeSpec, 1).Upto(maxToken))
 			{
 				TypeSpecRow row = metadataProvider.ReadTypeSpecRow(token);
 				TypeSpecSignature signature = GetTypeSpecSignature(row.SignatureBlobIdx);
@@ -872,9 +872,9 @@ namespace Mosa.Runtime.TypeSystem
 							GenericInstSigType genericSigType2 = (GenericInstSigType)sigType;
 							RuntimeType genericBaseType = null;
 
-							if (genericSigType2.BaseType.Token.Table == MetadataTable.TypeDef)
+							if (genericSigType2.BaseType.Token.Table == TableTypes.TypeDef)
 								genericBaseType = types[genericSigType2.BaseType.Token.RID - 1];
-							else if (genericSigType2.BaseType.Token.Table == MetadataTable.TypeRef)
+							else if (genericSigType2.BaseType.Token.Table == TableTypes.TypeRef)
 								genericBaseType = typeRef[genericSigType2.BaseType.Token.RID - 1];
 
 							genericType = new CilGenericType(this, genericBaseType, genericSigType, token, this);
@@ -905,8 +905,8 @@ namespace Mosa.Runtime.TypeSystem
 		private void LoadExternals()
 		{
 
-			MetadataToken maxToken = GetMaxTokenValue(MetadataTable.ImplMap);
-			foreach (MetadataToken token in new MetadataToken(MetadataTable.ImplMap, 1).Upto(maxToken))
+			Token maxToken = GetMaxTokenValue(TableTypes.ImplMap);
+			foreach (Token token in new Token(TableTypes.ImplMap, 1).Upto(maxToken))
 			{
 				ImplMapRow row = metadataProvider.ReadImplMapRow(token);
 
@@ -925,7 +925,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		/// <param name="token">The token of the type to load. This can represent a typeref, typedef or typespec token.</param>
 		/// <returns>The runtime type of the specified token.</returns>
-		private RuntimeType GetType(MetadataToken token)
+		private RuntimeType GetType(Token token)
 		{
 			int index = (int)token.RID - 1;
 
@@ -934,13 +934,13 @@ namespace Mosa.Runtime.TypeSystem
 
 			switch (token.Table)
 			{
-				case MetadataTable.TypeDef:
+				case TableTypes.TypeDef:
 					return types[index];
 
-				case MetadataTable.TypeRef:
+				case TableTypes.TypeRef:
 					return typeRef[index];
 
-				case MetadataTable.TypeSpec:
+				case TableTypes.TypeSpec:
 					return typeSpecs[index];
 
 				default:
@@ -1023,7 +1023,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		/// <param name="token">The token of the type to load. This can represent a typeref, typedef or typespec token.</param>
 		/// <returns>The runtime type of the specified token.</returns>
-		RuntimeType ITypeModule.GetType(MetadataToken token)
+		RuntimeType ITypeModule.GetType(Token token)
 		{
 			return GetType(token);
 		}
@@ -1033,14 +1033,14 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		/// <param name="token">The token of the field to retrieve.</param>
 		/// <returns></returns>
-		RuntimeField ITypeModule.GetField(MetadataToken token)
+		RuntimeField ITypeModule.GetField(Token token)
 		{
 			switch (token.Table)
 			{
-				case MetadataTable.Field:
+				case TableTypes.Field:
 					return fields[token.RID - 1];
 
-				case MetadataTable.MemberRef:
+				case TableTypes.MemberRef:
 					return memberRef[token.RID - 1] as RuntimeField;
 
 				default:
@@ -1053,17 +1053,17 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		/// <param name="token">The token of the method to retrieve.</param>
 		/// <returns></returns>
-		RuntimeMethod ITypeModule.GetMethod(MetadataToken token)
+		RuntimeMethod ITypeModule.GetMethod(Token token)
 		{
 			switch (token.Table)
 			{
-				case MetadataTable.MethodDef:
+				case TableTypes.MethodDef:
 					return methods[token.RID - 1];
 
-				case MetadataTable.MemberRef:
+				case TableTypes.MemberRef:
 					return memberRef[token.RID - 1] as RuntimeMethod;
 
-				case MetadataTable.MethodSpec:
+				case TableTypes.MethodSpec:
 					//TODO
 					//    return DecodeMethodSpec(token);
 					//    break;
@@ -1080,7 +1080,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// <param name="token">The token.</param>
 		/// <param name="callingType">Type of the calling.</param>
 		/// <returns></returns>
-		RuntimeMethod ITypeModule.GetMethod(MetadataToken token, RuntimeType callingType)
+		RuntimeMethod ITypeModule.GetMethod(Token token, RuntimeType callingType)
 		{
 			RuntimeMethod calledMethod = (this as ITypeModule).GetMethod(token);
 
@@ -1159,7 +1159,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		/// <param name="token">The token.</param>
 		/// <returns></returns>
-		string ITypeModule.GetExternalName(MetadataToken token)
+		string ITypeModule.GetExternalName(Token token)
 		{
 			string name = null;
 

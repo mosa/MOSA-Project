@@ -91,7 +91,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
 		public override void Decode(Context ctx, IInstructionDecoder decoder)
 		{
-			MetadataToken ctor = DecodeInvocationTarget(ctx, decoder, InvokeSupport);
+			Token ctor = DecodeInvocationTarget(ctx, decoder, InvokeSupport);
 
 			/*
 			 * HACK: We need to remove the this parameter from the operand list, as it
@@ -113,9 +113,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			ctx.ResultCount = 1;
 		}
 
-		private SigType CreateSignatureTypeFor(IMetadataModule module, MetadataToken ctorToken, RuntimeType declaringType)
+		private SigType CreateSignatureTypeFor(IMetadataModule module, Token ctorToken, RuntimeType declaringType)
 		{
-			MetadataToken typeToken = declaringType.Token;
+			Token typeToken = declaringType.Token;
 			if (IsMemberRef(ctorToken) == true)
 			{
 				typeToken = GetLocalTypeRefToken(module, ctorToken);
@@ -130,15 +130,15 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			return new ClassSigType(typeToken);
 		}
 
-		private static MetadataToken GetLocalTypeRefToken(IMetadataModule module, MetadataToken ctorToken)
+		private static Token GetLocalTypeRefToken(IMetadataModule module, Token ctorToken)
 		{
 			MemberRefRow memberRef = module.Metadata.ReadMemberRefRow(ctorToken);
 			return memberRef.Class;
 		}
 
-		private static bool IsMemberRef(MetadataToken ctorToken)
+		private static bool IsMemberRef(Token ctorToken)
 		{
-			return ctorToken.Table == MetadataTable.MemberRef;
+			return ctorToken.Table == TableTypes.MemberRef;
 		}
 
 		/// <summary>

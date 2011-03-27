@@ -126,7 +126,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 						throw new InvalidDataException(@"Invalid method _header.");
 					header.maxStack = reader.ReadUInt16();
 					header.codeSize = reader.ReadUInt32();
-					header.localsSignature = new MetadataToken(reader.ReadUInt32()); // ReadStandAloneSigRow
+					header.localsSignature = new Token(reader.ReadUInt32()); // ReadStandAloneSigRow
 					break;
 
 				default:
@@ -365,9 +365,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// Decodes the tokentype from the instruction stream
 		/// </summary>
 		/// <returns></returns>
-		MetadataToken IInstructionDecoder.DecodeTokenType()
+		Token IInstructionDecoder.DecodeTokenType()
 		{
-			return new MetadataToken((uint)codeReader.ReadInt32());
+			return new Token((uint)codeReader.ReadInt32());
 		}
 
 		#endregion

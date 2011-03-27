@@ -12,7 +12,7 @@ using System;
 namespace Mosa.Runtime.Metadata
 {
 
-	public struct MetadataToken
+	public struct Token
 	{
 		readonly uint token;
 
@@ -21,29 +21,29 @@ namespace Mosa.Runtime.Metadata
 			get { return (int)(token & 0x00ffffff); }
 		}
 
-		public MetadataTable Table
+		public TableTypes Table
 		{
-			get { return (MetadataTable)(token & 0xff000000); }
+			get { return (TableTypes)(token & 0xff000000); }
 		}
 
-		public static readonly MetadataToken Zero = new MetadataToken((uint)0);
+		public static readonly Token Zero = new Token((uint)0);
 
-		public MetadataToken(uint token)
+		public Token(uint token)
 		{
 			this.token = token;
 		}
 
-		public MetadataToken(MetadataTable type)
+		public Token(TableTypes type)
 			: this(type, 0)
 		{
 		}
 
-		public MetadataToken(MetadataTable type, uint rid)
+		public Token(TableTypes type, uint rid)
 		{
 			token = (uint)type | rid;
 		}
 
-		public MetadataToken(MetadataTable type, int rid)
+		public Token(TableTypes type, int rid)
 		{
 			token = (uint)type | (uint)rid;
 		}
@@ -81,21 +81,21 @@ namespace Mosa.Runtime.Metadata
 
 		public override bool Equals(object obj)
 		{
-			if (obj is MetadataToken)
+			if (obj is Token)
 			{
-				var other = (MetadataToken)obj;
+				var other = (Token)obj;
 				return other.token == token;
 			}
 
 			return false;
 		}
 
-		public static bool operator ==(MetadataToken one, MetadataToken other)
+		public static bool operator ==(Token one, Token other)
 		{
 			return one.token == other.token;
 		}
 
-		public static bool operator !=(MetadataToken one, MetadataToken other)
+		public static bool operator !=(Token one, Token other)
 		{
 			return one.token != other.token;
 		}
@@ -105,31 +105,31 @@ namespace Mosa.Runtime.Metadata
 			return string.Format("[{0}:0x{1}]", Table, RID.ToString("x4"));
 		}
 
-		public MetadataToken NextRow
+		public Token NextRow
 		{
 			get
 			{
-				return new MetadataToken(token + 1);
+				return new Token(token + 1);
 			}
 		}
 
-		public MetadataToken PreviousRow
+		public Token PreviousRow
 		{
 			get
 			{
 				if (RID != 0)
-					return new MetadataToken(token - 1);
+					return new Token(token - 1);
 				else
-					return new MetadataToken(token);
+					return new Token(token);
 			}
 		}
 
-		public System.Collections.Generic.IEnumerable<MetadataToken> Upto(MetadataToken last)
+		public System.Collections.Generic.IEnumerable<Token> Upto(Token last)
 		{
 			if (RID > last.RID)
 				yield break;
 
-			MetadataToken token = this;
+			Token token = this;
 
 			while (token != last)
 			{

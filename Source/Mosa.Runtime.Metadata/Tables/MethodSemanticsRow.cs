@@ -31,12 +31,12 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private MetadataToken _method;
+		private Token _method;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private MetadataToken _association;
+		private Token _association;
 
 		#endregion // Data members
 
@@ -48,8 +48,8 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <param name="semantics">The semantics.</param>
 		/// <param name="method">The method.</param>
 		/// <param name="association">The association.</param>
-		public MethodSemanticsRow(MethodSemanticsAttributes semantics, MetadataToken method,
-									MetadataToken association)
+		public MethodSemanticsRow(MethodSemanticsAttributes semantics, Token method,
+									Token association)
 		{
 			_semantics = semantics;
 			_method = method;
@@ -73,7 +73,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Gets the method.
 		/// </summary>
 		/// <value>The method.</value>
-		public MetadataToken Method
+		public Token Method
 		{
 			get { return _method; }
 		}
@@ -82,7 +82,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Gets the association.
 		/// </summary>
 		/// <value>The association.</value>
-		public MetadataToken Association
+		public Token Association
 		{
 			get { return _association; }
 		}

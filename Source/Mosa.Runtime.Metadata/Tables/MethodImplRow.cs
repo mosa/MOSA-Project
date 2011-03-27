@@ -24,17 +24,17 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private MetadataToken @class;
+		private Token @class;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private MetadataToken methodBody;
+		private Token methodBody;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private MetadataToken methodDeclaration;
+		private Token methodDeclaration;
 
 		#endregion // Data members
 
@@ -46,7 +46,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <param name="class">The @class.</param>
 		/// <param name="methodBody">The method body.</param>
 		/// <param name="methodDeclaration">The method declaration.</param>
-		public MethodImplRow(MetadataToken @class, MetadataToken methodBody, MetadataToken methodDeclaration)
+		public MethodImplRow(Token @class, Token methodBody, Token methodDeclaration)
 		{
 			this.@class = @class;
 			this.methodBody = methodBody;
@@ -61,7 +61,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Gets the class.
 		/// </summary>
 		/// <value>The class table idx.</value>
-		public MetadataToken @Class
+		public Token @Class
 		{
 			get { return @class; }
 		}
@@ -70,7 +70,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Gets the method body .
 		/// </summary>
 		/// <value>The method body.</value>
-		public MetadataToken MethodBody
+		public Token MethodBody
 		{
 			get { return methodBody; }
 		}
@@ -79,7 +79,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Gets the method declaration.
 		/// </summary>
 		/// <value>The method declaration.</value>
-		public MetadataToken MethodDeclaration
+		public Token MethodDeclaration
 		{
 			get { return methodDeclaration; }
 		}
