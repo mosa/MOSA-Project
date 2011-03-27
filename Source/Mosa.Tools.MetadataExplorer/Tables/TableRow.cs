@@ -48,17 +48,17 @@ namespace Mosa.Tools.MetadataExplorer.Tables
 			return Value(name, token.FormatToString());
 		}
 
-		protected KeyValuePair<string, string> Value(string name, TokenTypes token)
+		protected KeyValuePair<string, string> Value(string name, HeapIndexToken token)
 		{
 			return Value(name, token.FormatToString());
 		}
 
-		protected KeyValuePair<string, string> TokenString(string name, TokenTypes token)
+		protected KeyValuePair<string, string> TokenString(string name, HeapIndexToken token)
 		{
-			return Value(name, ReadString(token));
+			return Value(name, "[" + token.ToString("X") + "] " + ReadString(token));
 		}
 
-		private string ReadString(TokenTypes token)
+		private string ReadString(HeapIndexToken token)
 		{
 			return metadata.ReadString(token);
 		}

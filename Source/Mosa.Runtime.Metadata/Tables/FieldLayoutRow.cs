@@ -24,12 +24,12 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private uint _offset;
+		private uint offset;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private Token _field;
+		private Token field;
 
 		#endregion // Data members
 
@@ -42,8 +42,8 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <param name="field">The field.</param>
 		public FieldLayoutRow(uint offset, Token field)
 		{
-			_offset = offset;
-			_field = field;
+			this.offset = offset;
+			this.field = field;
 		}
 
 		#endregion // Construction
@@ -56,7 +56,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <value>The offset.</value>
 		public uint Offset
 		{
-			get { return _offset; }
+			get { return offset; }
 		}
 
 		/// <summary>
@@ -65,7 +65,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <value>The field.</value>
 		public Token Field
 		{
-			get { return _field; }
+			get { return field; }
 		}
 
 		#endregion // Properties

@@ -42,13 +42,13 @@ namespace Mosa.Runtime.Metadata
 		/// </summary>
 		/// <param name="token">The offset into the heap, where the string starts.</param>
 		/// <returns>The string at the given offset.</returns>
-		public string ReadString(TokenTypes token)
+		public string ReadString(HeapIndexToken token)
 		{
-			Debug.Assert((TokenTypes.TableMask & token) == TokenTypes.UserString);
-			if ((TokenTypes.TableMask & token) != TokenTypes.UserString)
+			Debug.Assert((HeapIndexToken.TableMask & token) == HeapIndexToken.UserString);
+			if ((HeapIndexToken.TableMask & token) != HeapIndexToken.UserString)
 				throw new ArgumentException(@"Invalid token value.", @"token");
 
-			int offset = (int)(token & TokenTypes.RowIndexMask);
+			int offset = (int)(token & HeapIndexToken.RowIndexMask);
 			// Argument checks
 			if (0 == offset)
 			{

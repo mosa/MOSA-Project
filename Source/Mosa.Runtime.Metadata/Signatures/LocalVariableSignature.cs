@@ -44,7 +44,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// </summary>
 		/// <param name="provider">The provider.</param>
 		/// <param name="token">The token.</param>
-		public LocalVariableSignature(IMetadataProvider provider, TokenTypes token)
+		public LocalVariableSignature(IMetadataProvider provider, HeapIndexToken token)
 			: base(provider, token)
 		{
 		}
@@ -55,7 +55,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// <param name="provider">The provider.</param>
 		/// <param name="token">The token.</param>
 		/// <param name="genericArguments">The generic arguments.</param>
-		public LocalVariableSignature(IMetadataProvider provider, TokenTypes token, SigType[] genericArguments)
+		public LocalVariableSignature(IMetadataProvider provider, HeapIndexToken token, SigType[] genericArguments)
 			: base(provider, token)
 		{
 			ApplyGenericArguments(genericArguments);

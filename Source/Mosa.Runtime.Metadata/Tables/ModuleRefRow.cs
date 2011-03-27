@@ -24,7 +24,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes _nameStringIdx;
+		private HeapIndexToken _nameStringIdx;
 
 		#endregion // Data members
 
@@ -34,7 +34,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Initializes a new instance of the <see cref="ModuleRefRow"/> struct.
 		/// </summary>
 		/// <param name="nameStringIdx">The name string idx.</param>
-		public ModuleRefRow(TokenTypes nameStringIdx)
+		public ModuleRefRow(HeapIndexToken nameStringIdx)
 		{
 			_nameStringIdx = nameStringIdx;
 		}
@@ -47,7 +47,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Gets the name string idx.
 		/// </summary>
 		/// <value>The name string idx.</value>
-		public TokenTypes NameStringIdx
+		public HeapIndexToken NameStringIdx
 		{
 			get { return _nameStringIdx; }
 		}

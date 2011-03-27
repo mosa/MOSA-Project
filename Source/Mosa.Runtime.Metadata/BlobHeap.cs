@@ -43,14 +43,14 @@ namespace Mosa.Runtime.Metadata
 		/// </summary>
 		/// <param name="token">The token where the blob begins.</param>
 		/// <returns>A byte array, which represents the blob at the specified location.</returns>
-		public byte[] ReadBlob(TokenTypes token)
+		public byte[] ReadBlob(HeapIndexToken token)
 		{
-			Debug.Assert((TokenTypes.TableMask & token) == TokenTypes.Blob);
-			if ((TokenTypes.TableMask & token) != TokenTypes.Blob)
+			Debug.Assert((HeapIndexToken.TableMask & token) == HeapIndexToken.Blob);
+			if ((HeapIndexToken.TableMask & token) != HeapIndexToken.Blob)
 				throw new ArgumentException(@"Invalid token value.", @"token");
 
 			// Argument checks
-			int offset = (int)(token & TokenTypes.RowIndexMask);
+			int offset = (int)(token & HeapIndexToken.RowIndexMask);
 			if (0 == offset)
 			{
 				token += 1;

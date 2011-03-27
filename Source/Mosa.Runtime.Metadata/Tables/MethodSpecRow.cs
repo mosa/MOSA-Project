@@ -29,7 +29,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// Holds the index into the blob instantiation.
 		/// </summary>
-		private TokenTypes _instantiationBlobIdx;
+		private HeapIndexToken _instantiationBlobIdx;
 
 		#endregion // Data members
 
@@ -40,7 +40,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// </summary>
 		/// <param name="method">The method table index of the MethodSpecRow.</param>
 		/// <param name="instantiationBlobIdx">The instantiation blob index of the MethodSpecRow.</param>
-		public MethodSpecRow(Token method, TokenTypes instantiationBlobIdx)
+		public MethodSpecRow(Token method, HeapIndexToken instantiationBlobIdx)
 		{
 			_method = method;
 			_instantiationBlobIdx = instantiationBlobIdx;
@@ -63,7 +63,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Gets the instantiation BLOB idx.
 		/// </summary>
 		/// <value>The instantiation BLOB idx.</value>
-		public TokenTypes InstantiationBlobIdx
+		public HeapIndexToken InstantiationBlobIdx
 		{
 			get { return _instantiationBlobIdx; }
 		}

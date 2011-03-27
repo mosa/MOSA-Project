@@ -29,22 +29,22 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes _nameStringIdx;
+		private HeapIndexToken _nameStringIdx;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes _mvidGuidIdx;
+		private HeapIndexToken _mvidGuidIdx;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes _encIdGuidIdx;
+		private HeapIndexToken _encIdGuidIdx;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes _encBaseIdGuidIdx;
+		private HeapIndexToken _encBaseIdGuidIdx;
 
 		#endregion // Data members
 
@@ -59,10 +59,10 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <param name="encIdGuidIdx">The enc id GUID idx.</param>
 		/// <param name="encBaseIdGuidIdx">The enc base id GUID idx.</param>
 		public ModuleRow(ushort generation,
-							TokenTypes nameStringIdx,
-							TokenTypes mvidGuidIdx,
-							TokenTypes encIdGuidIdx,
-							TokenTypes encBaseIdGuidIdx)
+							HeapIndexToken nameStringIdx,
+							HeapIndexToken mvidGuidIdx,
+							HeapIndexToken encIdGuidIdx,
+							HeapIndexToken encBaseIdGuidIdx)
 		{
 			_generation = generation;
 			_nameStringIdx = nameStringIdx;
@@ -79,7 +79,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Gets the enc base id GUID idx.
 		/// </summary>
 		/// <value>The enc base id GUID idx.</value>
-		public TokenTypes EncBaseIdGuidIdx
+		public HeapIndexToken EncBaseIdGuidIdx
 		{
 			get { return _encBaseIdGuidIdx; }
 		}
@@ -88,7 +88,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Gets the enc id GUID idx.
 		/// </summary>
 		/// <value>The enc id GUID idx.</value>
-		public TokenTypes EncIdGuidIdx
+		public HeapIndexToken EncIdGuidIdx
 		{
 			get { return _encIdGuidIdx; }
 		}
@@ -106,7 +106,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Gets the mvid GUID idx.
 		/// </summary>
 		/// <value>The mvid GUID idx.</value>
-		public TokenTypes MvidGuidIdx
+		public HeapIndexToken MvidGuidIdx
 		{
 			get { return _mvidGuidIdx; }
 		}
@@ -115,7 +115,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Gets the name string idx.
 		/// </summary>
 		/// <value>The name string idx.</value>
-		public TokenTypes NameStringIdx
+		public HeapIndexToken NameStringIdx
 		{
 			get { return _nameStringIdx; }
 		}

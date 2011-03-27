@@ -24,7 +24,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes _signatureBlobIdx;
+		private HeapIndexToken _signatureBlobIdx;
 
 		#endregion // Data members
 
@@ -34,7 +34,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Initializes a new instance of the <see cref="TypeSpecRow"/> struct.
 		/// </summary>
 		/// <param name="signatureBlobIdx">The signature BLOB idx.</param>
-		public TypeSpecRow(TokenTypes signatureBlobIdx)
+		public TypeSpecRow(HeapIndexToken signatureBlobIdx)
 		{
 			_signatureBlobIdx = signatureBlobIdx;
 		}
@@ -47,7 +47,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Gets the signature BLOB idx.
 		/// </summary>
 		/// <value>The signature BLOB idx.</value>
-		public TokenTypes SignatureBlobIdx
+		public HeapIndexToken SignatureBlobIdx
 		{
 			get { return _signatureBlobIdx; }
 		}

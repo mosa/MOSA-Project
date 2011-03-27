@@ -39,7 +39,7 @@ namespace Mosa.Tools.MetadataExplorer.Tables
 		{
 			yield return Value("ParentTableIdx", row.Parent);
 			yield return Value("TypeIdx", row.Type);
-			yield return Value("SignatureBlobIdx", row.ValueBlobIdx);
+			yield return Value("ValueBlobIdx", row.Value);
 		}
 	}
 }

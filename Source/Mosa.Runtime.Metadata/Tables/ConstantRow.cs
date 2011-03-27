@@ -26,17 +26,17 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private CilElementType _type; // FIXME: Enum?
+		private CilElementType type; 
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private Token _parent;
+		private Token parent;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes _valueBlobIdx;
+		private HeapIndexToken value;
 
 		#endregion // Data members
 
@@ -47,12 +47,12 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// </summary>
 		/// <param name="type">The type.</param>
 		/// <param name="parent">The parent.</param>
-		/// <param name="valueBlobIdx">The value BLOB idx.</param>
-		public ConstantRow(CilElementType type, Token parent, TokenTypes valueBlobIdx)
+		/// <param name="value">The value BLOB idx.</param>
+		public ConstantRow(CilElementType type, Token parent, HeapIndexToken value)
 		{
-			_type = type;
-			_parent = parent;
-			_valueBlobIdx = valueBlobIdx;
+			this.type = type;
+			this.parent = parent;
+			this.value = value;
 		}
 
 		#endregion // Construction
@@ -65,7 +65,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <value>The type.</value>
 		public CilElementType Type
 		{
-			get { return _type; }
+			get { return type; }
 		}
 
 		/// <summary>
@@ -74,16 +74,16 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <value>The parent.</value>
 		public Token Parent
 		{
-			get { return _parent; }
+			get { return parent; }
 		}
 
 		/// <summary>
 		/// Gets the value BLOB idx.
 		/// </summary>
 		/// <value>The value BLOB idx.</value>
-		public TokenTypes ValueBlobIdx
+		public HeapIndexToken Value
 		{
-			get { return _valueBlobIdx; }
+			get { return value; }
 		}
 
 		#endregion // Properties

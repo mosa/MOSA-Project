@@ -31,12 +31,12 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes _nameStringIdx;
+		private HeapIndexToken _nameStringIdx;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes _typeBlobIdx;
+		private HeapIndexToken _typeBlobIdx;
 
 		#endregion // Data members
 
@@ -48,7 +48,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <param name="flags">The flags.</param>
 		/// <param name="nameStringIdx">The name string idx.</param>
 		/// <param name="typeBlobIdx">The type BLOB idx.</param>
-		public PropertyRow(PropertyAttributes flags, TokenTypes nameStringIdx, TokenTypes typeBlobIdx)
+		public PropertyRow(PropertyAttributes flags, HeapIndexToken nameStringIdx, HeapIndexToken typeBlobIdx)
 		{
 			_flags = flags;
 			_nameStringIdx = nameStringIdx;
@@ -72,7 +72,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Gets the name string idx.
 		/// </summary>
 		/// <value>The name string idx.</value>
-		public TokenTypes NameStringIdx
+		public HeapIndexToken NameStringIdx
 		{
 			get { return _nameStringIdx; }
 		}
@@ -81,7 +81,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Gets the type BLOB idx.
 		/// </summary>
 		/// <value>The type BLOB idx.</value>
-		public TokenTypes TypeBlobIdx
+		public HeapIndexToken TypeBlobIdx
 		{
 			get { return _typeBlobIdx; }
 		}

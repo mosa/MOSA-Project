@@ -26,12 +26,12 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// An index into the String heap
 		/// </summary>
-		private TokenTypes typeNameIdx;
+		private HeapIndexToken typeNameIdx;
 
 		/// <summary>
 		/// An index into the String heap
 		/// </summary>
-		private TokenTypes typeNamespaceIdx;
+		private HeapIndexToken typeNamespaceIdx;
 
 		/// <summary>
 		/// Index into a <see cref="TypeDefRow"/>, <see cref="TypeRefRow"/>, or <see cref="TypeSpecRow"/> table.
@@ -62,7 +62,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <param name="extends">The extends.</param>
 		/// <param name="fieldList">The field list.</param>
 		/// <param name="methodList">The method list.</param>
-		public TypeDefRow(TypeAttributes flags, TokenTypes typeNameIdx, TokenTypes typeNamespaceIdx,
+		public TypeDefRow(TypeAttributes flags, HeapIndexToken typeNameIdx, HeapIndexToken typeNamespaceIdx,
 							Token extends, Token fieldList, Token methodList)
 		{
 			this.flags = flags;
@@ -90,7 +90,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Gets or sets the type name idx.
 		/// </summary>
 		/// <value>The type name idx.</value>
-		public TokenTypes TypeNameIdx
+		public HeapIndexToken TypeNameIdx
 		{
 			get { return typeNameIdx; }
 		}
@@ -99,7 +99,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Gets or sets the type namespace idx.
 		/// </summary>
 		/// <value>The type namespace idx.</value>
-		public TokenTypes TypeNamespaceIdx
+		public HeapIndexToken TypeNamespaceIdx
 		{
 			get { return typeNamespaceIdx; }
 		}

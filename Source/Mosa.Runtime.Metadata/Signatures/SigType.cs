@@ -352,7 +352,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// <returns></returns>
 		private static SigType ParseFunctionPointer(SignatureReader reader)
 		{
-			TokenTypes token = reader.ReadEncodedToken();
+			HeapIndexToken token = reader.ReadEncodedToken();
 			return new FnptrSigType(token);
 		}
 

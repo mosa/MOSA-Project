@@ -31,7 +31,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// The token holding the name of the parameter.
 		/// </summary>
-		private TokenTypes nameIdx;
+		private HeapIndexToken nameIdx;
 
 		/// <summary>
 		/// Holds the sequence index of the parameter.
@@ -48,7 +48,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <param name="flags">The flags.</param>
 		/// <param name="sequence">The sequence.</param>
 		/// <param name="nameIdx">The name idx.</param>
-		public ParamRow(ParameterAttributes flags, short sequence, TokenTypes nameIdx)
+		public ParamRow(ParameterAttributes flags, short sequence, HeapIndexToken nameIdx)
 		{
 			this.nameIdx = nameIdx;
 			this.sequence = sequence;
@@ -72,7 +72,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Retrieves the token of the parameter name.
 		/// </summary>
 		/// <value>The name idx.</value>
-		public TokenTypes NameIdx
+		public HeapIndexToken NameIdx
 		{
 			get
 			{

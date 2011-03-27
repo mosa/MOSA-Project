@@ -24,19 +24,19 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private uint _platformId;
+		private uint platformId;
 		/// <summary>
 		/// 
 		/// </summary>
-		private uint _majorVersion;
+		private uint majorVersion;
 		/// <summary>
 		/// 
 		/// </summary>
-		private uint _minorVersion;
+		private uint minorVersion;
 		/// <summary>
 		/// 
 		/// </summary>
-		private Token _assemblyRefIdx;
+		private Token assemblyRef;
 
 		#endregion // Data members
 
@@ -48,13 +48,13 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <param name="platformId">The platform id.</param>
 		/// <param name="majorVersion">The major version.</param>
 		/// <param name="minorVersion">The minor version.</param>
-		/// <param name="assemblyRefIdx">The assembly ref idx.</param>
-		public AssemblyRefOSRow(uint platformId, uint majorVersion, uint minorVersion, Token assemblyRefIdx)
+		/// <param name="assemblyRef">The assembly ref.</param>
+		public AssemblyRefOSRow(uint platformId, uint majorVersion, uint minorVersion, Token assemblyRef)
 		{
-			_platformId = platformId;
-			_majorVersion = majorVersion;
-			_minorVersion = minorVersion;
-			_assemblyRefIdx = assemblyRefIdx;
+			this.platformId = platformId;
+			this.majorVersion = majorVersion;
+			this.minorVersion = minorVersion;
+			this.assemblyRef = assemblyRef;
 		}
 
 		#endregion // Construction
@@ -65,36 +65,36 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Gets the platform id.
 		/// </summary>
 		/// <value>The platform id.</value>
-		public uint PlatformId
+		public uint OSPlatformId
 		{
-			get { return _platformId; }
+			get { return platformId; }
 		}
 
 		/// <summary>
 		/// Gets the major version.
 		/// </summary>
 		/// <value>The major version.</value>
-		public uint MajorVersion
+		public uint OSMajorVersion
 		{
-			get { return _majorVersion; }
+			get { return majorVersion; }
 		}
 
 		/// <summary>
 		/// Gets the minor version.
 		/// </summary>
 		/// <value>The minor version.</value>
-		public uint MinorVersion
+		public uint OSMinorVersion
 		{
-			get { return _minorVersion; }
+			get { return minorVersion; }
 		}
 
 		/// <summary>
 		/// Gets the assembly ref idx.
 		/// </summary>
 		/// <value>The assembly ref idx.</value>
-		public Token AssemblyRefIdx
+		public Token AssemblyRef
 		{
-			get { return _assemblyRefIdx; }
+			get { return assemblyRef; }
 		}
 
 		#endregion // Properties

@@ -125,7 +125,7 @@ namespace Mosa.Runtime.Metadata
 		/// <summary>
 		/// 
 		/// </summary>
-		private static readonly TableTypes[] _typeDefOrRefEncodedTables2 = new TableTypes[] { TableTypes.TypeDef, TableTypes.TypeRef, TableTypes.TypeSpec };
+		private static readonly TableType[] _typeDefOrRefEncodedTables2 = new TableType[] { TableType.TypeDef, TableType.TypeRef, TableType.TypeSpec };
 
 		/// <summary>
 		/// Reads the type def or ref encoded.
@@ -143,9 +143,9 @@ namespace Mosa.Runtime.Metadata
 		/// Reads the encoded token.
 		/// </summary>
 		/// <returns></returns>
-		public TokenTypes ReadEncodedToken()
+		public HeapIndexToken ReadEncodedToken()
 		{
-			TokenTypes token = (TokenTypes)ReadCompressedInt32();
+			HeapIndexToken token = (HeapIndexToken)ReadCompressedInt32();
 
 			return token;
 		}

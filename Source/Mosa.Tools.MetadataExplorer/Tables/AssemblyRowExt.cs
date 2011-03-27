@@ -33,20 +33,19 @@ namespace Mosa.Tools.MetadataExplorer.Tables
 			this.row = row;
 		}
 
-		public override string Name { get { return Metadata.ReadString(row.NameIdx); } }
+		public override string Name { get { return Metadata.ReadString(row.Name); } }
 
 		public override IEnumerable GetValues()
 		{
-			yield return TokenString("Name", row.NameIdx);
-			yield return Value("NameIdx", row.NameIdx);
+			yield return TokenString("Name", row.Name);
 			yield return Value("Flags", row.Flags.ToString());
 			yield return Value("BuildNumber", row.BuildNumber);
 			yield return Value("MajorVersion", row.MajorVersion);
 			yield return Value("MinorVersion", row.MinorVersion);
 			yield return Value("HashAlgId", row.HashAlgId.ToString());
 			yield return Value("Revision", row.Revision);
-			yield return Value("CultureIdx", row.CultureIdx);
-			yield return Value("PublicKeyIdx", row.PublicKeyIdx);
+			yield return Value("CultureIdx", row.Culture);
+			yield return Value("PublicKeyIdx", row.PublicKey);
 		}
 	}
 }

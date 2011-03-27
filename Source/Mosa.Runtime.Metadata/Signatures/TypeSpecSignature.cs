@@ -45,7 +45,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// </summary>
 		/// <param name="provider">The provider.</param>
 		/// <param name="token">The token.</param>
-		public TypeSpecSignature(IMetadataProvider provider, TokenTypes token)
+		public TypeSpecSignature(IMetadataProvider provider, HeapIndexToken token)
 			: base(provider, token)
 		{
 		}

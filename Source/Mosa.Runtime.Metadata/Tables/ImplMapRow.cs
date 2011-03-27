@@ -36,7 +36,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes _importNameStringIdx;
+		private HeapIndexToken _importNameStringIdx;
 
 		/// <summary>
 		/// 
@@ -55,7 +55,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <param name="importNameStringIdx">The import name string idx.</param>
 		/// <param name="importScopeTableIdx">The import scope table idx.</param>
 		public ImplMapRow(PInvokeAttributes mappingFlags, Token memberForwardedTableIdx,
-			TokenTypes importNameStringIdx, Token importScopeTableIdx)
+			HeapIndexToken importNameStringIdx, Token importScopeTableIdx)
 		{
 			_mappingFlags = mappingFlags;
 			_memberForwardedTableIdx = memberForwardedTableIdx;
@@ -89,7 +89,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Gets the import name string idx.
 		/// </summary>
 		/// <value>The import name string idx.</value>
-		public TokenTypes ImportNameStringIdx
+		public HeapIndexToken ImportNameStringIdx
 		{
 			get { return _importNameStringIdx; }
 		}

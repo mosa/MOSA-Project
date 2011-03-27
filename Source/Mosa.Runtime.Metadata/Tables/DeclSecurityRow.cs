@@ -25,17 +25,17 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private SecurityAction _action;
+		private SecurityAction action;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private Token _parent;
+		private Token parent;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes _permissionSetBlobIdx;
+		private HeapIndexToken permissionSet;
 
 		#endregion // Data members
 
@@ -46,12 +46,12 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// </summary>
 		/// <param name="action">The action.</param>
 		/// <param name="parent">The parent table idx.</param>
-		/// <param name="permissionSetBlobIdx">The permission set BLOB idx.</param>
-		public DeclSecurityRow(SecurityAction action, Token parent, TokenTypes permissionSetBlobIdx)
+		/// <param name="permissionSet">The permission set BLOB idx.</param>
+		public DeclSecurityRow(SecurityAction action, Token parent, HeapIndexToken permissionSet)
 		{
-			_action = action;
-			_parent = parent;
-			_permissionSetBlobIdx = permissionSetBlobIdx;
+			this.action = action;
+			this.parent = parent;
+			this.permissionSet = permissionSet;
 		}
 
 		#endregion // Construction
@@ -64,7 +64,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <value>The action.</value>
 		public SecurityAction Action
 		{
-			get { return _action; }
+			get { return action; }
 		}
 
 		/// <summary>
@@ -73,16 +73,16 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <value>The parent.</value>
 		public Token Parent
 		{
-			get { return _parent; }
+			get { return parent; }
 		}
 
 		/// <summary>
-		/// Gets the permission set BLOB idx.
+		/// Gets the permission set.
 		/// </summary>
-		/// <value>The permission set BLOB idx.</value>
-		public TokenTypes PermissionSetBlobIdx
+		/// <value>The permission set.</value>
+		public HeapIndexToken PermissionSet
 		{
-			get { return _permissionSetBlobIdx; }
+			get { return permissionSet; }
 		}
 
 		#endregion // Properties

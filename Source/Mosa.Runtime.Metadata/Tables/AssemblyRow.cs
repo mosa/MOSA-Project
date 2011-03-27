@@ -26,39 +26,39 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private AssemblyHashAlgorithm _hashAlgId;
+		private AssemblyHashAlgorithm hashAlgId;
 		/// <summary>
 		/// 
 		/// </summary>
-		private ushort _majorVersion;
+		private ushort majorVersion;
 		/// <summary>
 		/// 
 		/// </summary>
-		private ushort _minorVersion;
+		private ushort minorVersion;
 		/// <summary>
 		/// 
 		/// </summary>
-		private ushort _buildNumber;
+		private ushort buildNumber;
 		/// <summary>
 		/// 
 		/// </summary>
-		private ushort _revision;
+		private ushort revisionNumber;
 		/// <summary>
 		/// 
 		/// </summary>
-		private AssemblyAttributes _flags;
+		private AssemblyAttributes flags;
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes _publicKeyIdx;
+		private HeapIndexToken publicKey;
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes _nameIdx;
+		private HeapIndexToken name;
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes _cultureIdx;
+		private HeapIndexToken culture;
 
 		#endregion // Data members
 
@@ -73,22 +73,22 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <param name="buildNumber">The build number.</param>
 		/// <param name="revision">The revision.</param>
 		/// <param name="flags">The flags.</param>
-		/// <param name="publicKeyIdx">The public key idx.</param>
-		/// <param name="nameIdx">The name idx.</param>
-		/// <param name="cultureIdx">The culture idx.</param>
+		/// <param name="publicKey">The public key.</param>
+		/// <param name="name">The name.</param>
+		/// <param name="culture">The culture.</param>
 		public AssemblyRow(AssemblyHashAlgorithm hashAlgId,
 							ushort majorVersion, ushort minorVersion, ushort buildNumber, ushort revision,
-							AssemblyAttributes flags, TokenTypes publicKeyIdx, TokenTypes nameIdx, TokenTypes cultureIdx)
+							AssemblyAttributes flags, HeapIndexToken publicKey, HeapIndexToken name, HeapIndexToken culture)
 		{
-			_hashAlgId = hashAlgId;
-			_majorVersion = majorVersion;
-			_minorVersion = minorVersion;
-			_buildNumber = buildNumber;
-			_revision = revision;
-			_flags = flags;
-			_publicKeyIdx = publicKeyIdx;
-			_nameIdx = nameIdx;
-			_cultureIdx = cultureIdx;
+			this.hashAlgId = hashAlgId;
+			this.majorVersion = majorVersion;
+			this.minorVersion = minorVersion;
+			this.buildNumber = buildNumber;
+			this.revisionNumber = revision;
+			this.flags = flags;
+			this.publicKey = publicKey;
+			this.name = name;
+			this.culture = culture;
 		}
 
 		#endregion // Construction
@@ -101,8 +101,8 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <value>The hash alg id.</value>
 		public AssemblyHashAlgorithm HashAlgId
 		{
-			get { return _hashAlgId; }
-			set { _hashAlgId = value; }
+			get { return hashAlgId; }
+			set { hashAlgId = value; }
 		}
 
 		/// <summary>
@@ -111,8 +111,8 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <value>The major version.</value>
 		public ushort MajorVersion
 		{
-			get { return _majorVersion; }
-			set { _majorVersion = value; }
+			get { return majorVersion; }
+			set { majorVersion = value; }
 		}
 
 		/// <summary>
@@ -121,7 +121,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <value>The minor version.</value>
 		public ushort MinorVersion
 		{
-			get { return _minorVersion; }
+			get { return minorVersion; }
 		}
 
 		/// <summary>
@@ -130,7 +130,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <value>The build number.</value>
 		public ushort BuildNumber
 		{
-			get { return _buildNumber; }
+			get { return buildNumber; }
 		}
 
 		/// <summary>
@@ -139,7 +139,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <value>The revision.</value>
 		public ushort Revision
 		{
-			get { return _revision; }
+			get { return revisionNumber; }
 		}
 
 		/// <summary>
@@ -148,34 +148,30 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <value>The flags.</value>
 		public AssemblyAttributes Flags
 		{
-			get { return _flags; }
+			get { return flags; }
 		}
 
 		/// <summary>
-		/// Gets the public key idx.
+		/// Gets the public key.
 		/// </summary>
-		/// <value>The public key idx.</value>
-		public TokenTypes PublicKeyIdx
+		/// <value>The public key.</value>
+		public HeapIndexToken PublicKey
 		{
-			get { return _publicKeyIdx; }
+			get { return publicKey; }
 		}
 
 		/// <summary>
-		/// Gets the name idx.
+		/// Gets the name.
 		/// </summary>
-		/// <value>The name idx.</value>
-		public TokenTypes NameIdx
+		/// <value>The name.</value>
+		public HeapIndexToken Name
 		{
-			get { return _nameIdx; }
+			get { return name; }
 		}
 
-		/// <summary>
-		/// Gets the culture idx.
-		/// </summary>
-		/// <value>The culture idx.</value>
-		public TokenTypes CultureIdx
+		public HeapIndexToken Culture
 		{
-			get { return _cultureIdx; }
+			get { return culture; }
 		}
 
 		#endregion // Properties

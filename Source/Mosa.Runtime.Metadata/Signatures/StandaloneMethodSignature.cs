@@ -33,7 +33,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// </summary>
 		/// <param name="provider">The provider.</param>
 		/// <param name="token">The token.</param>
-		public StandaloneMethodSignature(IMetadataProvider provider, TokenTypes token)
+		public StandaloneMethodSignature(IMetadataProvider provider, HeapIndexToken token)
 			: base(provider, token)
 		{
 		}

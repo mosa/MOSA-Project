@@ -32,40 +32,40 @@ namespace Mosa.Runtime.Metadata
 		/// </summary>
 		/// <param name="table">The token type, whose maximum value is returned.</param>
 		/// <exception cref="System.ArgumentException">Invalid token type specified.</exception>
-		Token GetMaxTokenValue(TableTypes table);
+		Token GetMaxTokenValue(TableType table);
 
 		/// <summary>
 		/// Gets the row count.
 		/// </summary>
 		/// <param name="table">The table.</param>
 		/// <returns></returns>
-		int GetRowCount(TableTypes table);
+		int GetRowCount(TableType table);
 
 		/// <summary>
 		/// Reads a string heap or user string heap entry.
 		/// </summary>
 		/// <param name="token">The token of the user string to read.</param>
 		/// <returns></returns>
-		string ReadString(TokenTypes token);
+		string ReadString(HeapIndexToken token);
 
 		/// <summary>
 		/// Reads the user string.
 		/// </summary>
 		/// <param name="token">The token of the string to read.</param>
 		/// <returns></returns>
-		string ReadUserString(TokenTypes token);
+		string ReadUserString(HeapIndexToken token);
 
 		/// <summary>
 		/// Reads a guid heap entry.
 		/// </summary>
 		/// <param name="token">The token of the guid heap entry to read.</param>
-		Guid ReadGuid(TokenTypes token);
+		Guid ReadGuid(HeapIndexToken token);
 
 		/// <summary>
 		/// Reads a blob heap entry.
 		/// </summary>
 		/// <param name="token">The token of the blob heap entry to read.</param>
-		byte[] ReadBlob(TokenTypes token);
+		byte[] ReadBlob(HeapIndexToken token);
 
 		/// <summary>
 		/// Reads a module row from provider.

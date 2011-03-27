@@ -176,12 +176,12 @@ namespace Mosa.Runtime.Metadata.Loader.PE
 		/// </summary>
 		/// <param name="table">The table.</param>
 		/// <returns></returns>
-		int IMetadataProvider.GetRowCount(TableTypes table)
+		int IMetadataProvider.GetRowCount(TableType table)
 		{
 			return ((TableHeap)_streams[(int)HeapType.Tables]).GetRowCount(table);
 		}
 
-		Token IMetadataProvider.GetMaxTokenValue(TableTypes table)
+		Token IMetadataProvider.GetMaxTokenValue(TableType table)
 		{
 			return ((TableHeap)_streams[(int)HeapType.Tables]).GetMaxTokenValue(table);
 		}
@@ -191,7 +191,7 @@ namespace Mosa.Runtime.Metadata.Loader.PE
 		/// </summary>
 		/// <param name="token">The token of the string to read.</param>
 		/// <returns></returns>
-		string IMetadataProvider.ReadString(TokenTypes token)
+		string IMetadataProvider.ReadString(HeapIndexToken token)
 		{
 			StringHeap sheap = (StringHeap)_streams[(int)HeapType.String];
 			return sheap.ReadString(token);
@@ -202,7 +202,7 @@ namespace Mosa.Runtime.Metadata.Loader.PE
 		/// </summary>
 		/// <param name="token">The token of the string to read.</param>
 		/// <returns></returns>
-		string IMetadataProvider.ReadUserString(TokenTypes token)
+		string IMetadataProvider.ReadUserString(HeapIndexToken token)
 		{
 			UserStringHeap usheap = (UserStringHeap)_streams[(int)HeapType.UserString];
 			return usheap.ReadString(token);
@@ -213,7 +213,7 @@ namespace Mosa.Runtime.Metadata.Loader.PE
 		/// </summary>
 		/// <param name="token">The token of the guid heap entry to read.</param>
 		/// <returns></returns>
-		Guid IMetadataProvider.ReadGuid(TokenTypes token)
+		Guid IMetadataProvider.ReadGuid(HeapIndexToken token)
 		{
 			GuidHeap gheap = (GuidHeap)_streams[(int)HeapType.Guid];
 			return gheap.ReadGuid(token);
@@ -224,7 +224,7 @@ namespace Mosa.Runtime.Metadata.Loader.PE
 		/// </summary>
 		/// <param name="token">The token of the blob heap entry to read.</param>
 		/// <returns></returns>
-		byte[] IMetadataProvider.ReadBlob(TokenTypes token)
+		byte[] IMetadataProvider.ReadBlob(HeapIndexToken token)
 		{
 			BlobHeap bheap = (BlobHeap)_streams[(int)HeapType.Blob];
 			return bheap.ReadBlob(token);

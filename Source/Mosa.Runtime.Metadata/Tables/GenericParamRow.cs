@@ -41,7 +41,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes nameStringIdx;
+		private HeapIndexToken nameStringIdx;
 
 		#endregion // Data members
 
@@ -54,7 +54,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <param name="flags">The flags.</param>
 		/// <param name="owner">The owner table idx.</param>
 		/// <param name="nameStringIdx">The name string idx.</param>
-		public GenericParamRow(ushort number, GenericParameterAttributes flags, Token owner, TokenTypes nameStringIdx)
+		public GenericParamRow(ushort number, GenericParameterAttributes flags, Token owner, HeapIndexToken nameStringIdx)
 		{
 			this.number = number;
 			this.flags = flags;
@@ -97,7 +97,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Gets the name string idx.
 		/// </summary>
 		/// <value>The name string idx.</value>
-		public TokenTypes NameStringIdx
+		public HeapIndexToken NameStringIdx
 		{
 			get { return nameStringIdx; }
 		}

@@ -156,8 +156,8 @@ namespace Mosa.Runtime.Metadata.Loader.PE
 			{
 				if (name == null)
 				{
-					AssemblyRow arow = _metadataRoot.ReadAssemblyRow(new Token(TableTypes.Assembly, 1));
-					name = _metadataRoot.ReadString(arow.NameIdx);
+					AssemblyRow arow = _metadataRoot.ReadAssemblyRow(new Token(TableType.Assembly, 1));
+					name = _metadataRoot.ReadString(arow.Name);
 				}
 
 				// HACK: Presents Mosa.Test.Korlib as mscorlib

@@ -24,12 +24,12 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private Token _parent;
+		private Token parent;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes _nativeTypeBlobIdx;
+		private HeapIndexToken nativeType;
 
 		#endregion // Data members
 
@@ -39,11 +39,11 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Initializes a new instance of the <see cref="FieldMarshalRow"/> struct.
 		/// </summary>
 		/// <param name="parent">The parent.</param>
-		/// <param name="nativeTypeBlobIdx">The native type BLOB idx.</param>
-		public FieldMarshalRow(Token parent, TokenTypes nativeTypeBlobIdx)
+		/// <param name="nativeType">The native type BLOB idx.</param>
+		public FieldMarshalRow(Token parent, HeapIndexToken nativeType)
 		{
-			_parent = parent;
-			_nativeTypeBlobIdx = nativeTypeBlobIdx;
+			this.parent = parent;
+			this.nativeType = nativeType;
 		}
 
 		#endregion // Construction
@@ -56,16 +56,16 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <value>The parent.</value>
 		public Token Parent
 		{
-			get { return _parent; }
+			get { return parent; }
 		}
 
 		/// <summary>
-		/// Gets the native type BLOB idx.
+		/// Gets the type of the native.
 		/// </summary>
-		/// <value>The native type BLOB idx.</value>
-		public TokenTypes NativeTypeBlobIdx
+		/// <value>The type of the native.</value>
+		public HeapIndexToken NativeType
 		{
-			get { return _nativeTypeBlobIdx; }
+			get { return nativeType; }
 		}
 
 		#endregion // Properties

@@ -24,17 +24,17 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private FileAttributes _flags;
+		private FileAttributes flags;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes _nameStringIdx;
+		private HeapIndexToken name;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes _hashValueBlobIdx;
+		private HeapIndexToken hashValue;
 
 		#endregion // Data members
 
@@ -44,13 +44,13 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Initializes a new instance of the <see cref="FileRow"/> struct.
 		/// </summary>
 		/// <param name="flags">The flags.</param>
-		/// <param name="nameStringIdx">The name string idx.</param>
-		/// <param name="hashValueBlobIdx">The hash value BLOB idx.</param>
-		public FileRow(FileAttributes flags, TokenTypes nameStringIdx, TokenTypes hashValueBlobIdx)
+		/// <param name="name">The name string idx.</param>
+		/// <param name="hashValue">The hash value.</param>
+		public FileRow(FileAttributes flags, HeapIndexToken name, HeapIndexToken hashValue)
 		{
-			_flags = flags;
-			_nameStringIdx = nameStringIdx;
-			_hashValueBlobIdx = hashValueBlobIdx;
+			this.flags = flags;
+			this.name = name;
+			this.hashValue = hashValue;
 		}
 
 		#endregion // Construction
@@ -63,25 +63,25 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <value>The flags.</value>
 		public FileAttributes Flags
 		{
-			get { return _flags; }
+			get { return flags; }
 		}
 
 		/// <summary>
 		/// Gets the name string idx.
 		/// </summary>
 		/// <value>The name string idx.</value>
-		public TokenTypes NameStringIdx
+		public HeapIndexToken Name
 		{
-			get { return _nameStringIdx; }
+			get { return name; }
 		}
 
 		/// <summary>
 		/// Gets the hash value BLOB idx.
 		/// </summary>
 		/// <value>The hash value BLOB idx.</value>
-		public TokenTypes HashValueBlobIdx
+		public HeapIndexToken HashValue
 		{
-			get { return _hashValueBlobIdx; }
+			get { return hashValue; }
 		}
 
 		#endregion // Properties

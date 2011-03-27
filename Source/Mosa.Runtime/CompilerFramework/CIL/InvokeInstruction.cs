@@ -167,17 +167,17 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 			switch (callTarget.Table)
 			{
-				case TableTypes.MethodDef:
+				case TableType.MethodDef:
 					method = decoder.TypeModule.GetMethod(callTarget);
 					break;
 
-				case TableTypes.MemberRef:
+				case TableType.MemberRef:
 					method = decoder.TypeModule.GetMethod(callTarget, decoder.Method.DeclaringType);
 					if (method.DeclaringType.IsGeneric)
 						decoder.Compiler.Scheduler.ScheduleTypeForCompilation(method.DeclaringType);
 					break;
 
-				case TableTypes.MethodSpec:
+				case TableType.MethodSpec:
 					method = decoder.TypeModule.GetMethod(callTarget);
 					decoder.Compiler.Scheduler.ScheduleTypeForCompilation(method.DeclaringType);
 					break;
@@ -236,15 +236,15 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <returns>
 		/// 	<c>true</c> if [is call target supported] [the specified target type]; otherwise, <c>false</c>.
 		/// </returns>
-		private static bool IsCallTargetSupported(TableTypes targetType, InvokeSupportFlags flags)
+		private static bool IsCallTargetSupported(TableType targetType, InvokeSupportFlags flags)
 		{
 			bool result = false;
 
-			if (targetType == TableTypes.MethodDef && InvokeSupportFlags.MethodDef == (flags & InvokeSupportFlags.MethodDef))
+			if (targetType == TableType.MethodDef && InvokeSupportFlags.MethodDef == (flags & InvokeSupportFlags.MethodDef))
 				result = true;
-			else if (targetType == TableTypes.MemberRef && InvokeSupportFlags.MemberRef == (flags & InvokeSupportFlags.MemberRef))
+			else if (targetType == TableType.MemberRef && InvokeSupportFlags.MemberRef == (flags & InvokeSupportFlags.MemberRef))
 				result = true;
-			else if (targetType == TableTypes.MethodSpec && InvokeSupportFlags.MethodSpec == (flags & InvokeSupportFlags.MethodSpec))
+			else if (targetType == TableType.MethodSpec && InvokeSupportFlags.MethodSpec == (flags & InvokeSupportFlags.MethodSpec))
 				result = true;
 
 			return result;
@@ -258,7 +258,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <param name="nameIdx">The name idx.</param>
 		/// <param name="signatureIdx">The signature idx.</param>
 		/// <returns></returns>
-		private object FindInvokeOverload(IMetadataProvider metadata, SigType ownerType, TokenTypes nameIdx, TokenTypes signatureIdx)
+		private object FindInvokeOverload(IMetadataProvider metadata, SigType ownerType, HeapIndexToken nameIdx, HeapIndexToken signatureIdx)
 		{
 			throw new NotImplementedException();
 			/*
@@ -304,7 +304,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <returns>
 		/// 	<c>true</c> if [is same signature] [the specified metadata]; otherwise, <c>false</c>.
 		/// </returns>
-		private bool IsSameSignature(IMetadataProvider metadata, TokenTypes sig1, TokenTypes sig2)
+		private bool IsSameSignature(IMetadataProvider metadata, HeapIndexToken sig1, HeapIndexToken sig2)
 		{
 			byte[] src = metadata.ReadBlob(sig1);
 			byte[] dst = metadata.ReadBlob(sig2);

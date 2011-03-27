@@ -22,12 +22,12 @@ namespace Mosa.Tools.MetadataExplorer
 	public static class Extension
 	{
 
-		public static string FormatToString(this TokenTypes token)
+		public static string FormatToString(this HeapIndexToken token)
 		{
 			return ((int)token).ToString("X8");
 		}
 
-		public static string FormatToString(this TableTypes token)
+		public static string FormatToString(this TableType token)
 		{
 			return ((int)token).ToString("X8");
 		}

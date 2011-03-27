@@ -77,7 +77,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Gets or sets the type of the token.
 		/// </summary>
 		/// <value>The type of the token.</value>
-		public TokenTypes TokenType
+		public HeapIndexToken TokenType
 		{
 			get { return _instructionSet.Data[_index].TokenType; }
 			set { _instructionSet.Data[_index].TokenType = value; }

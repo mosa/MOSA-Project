@@ -50,7 +50,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			base.Decode(ctx, decoder);
 
 			// Set the result
-			ctx.TokenType = ((TokenTypes)decoder.DecodeInt()) | TokenTypes.UserString;
+			ctx.TokenType = ((HeapIndexToken)decoder.DecodeInt()) | HeapIndexToken.UserString;
 
 			ctx.Result = decoder.Compiler.CreateTemporary(BuiltInSigType.String);
 		}

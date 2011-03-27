@@ -52,7 +52,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 			//Console.WriteLine("Stfld used in {0}.{1}", decoder.Method.DeclaringType.FullName, decoder.Method.Name);
 
-			Debug.Assert(token.Table == TableTypes.Field || token.Table == TableTypes.MemberRef, @"Invalid token type.");
+			Debug.Assert(token.Table == TableType.Field || token.Table == TableType.MemberRef, @"Invalid token type.");
 
 			ctx.RuntimeField = decoder.TypeModule.GetField(token);
 

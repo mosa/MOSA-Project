@@ -181,9 +181,9 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Holds the token type.
 		/// </summary>
 		/// <value>The token.</value>
-		public TokenTypes TokenType
+		public HeapIndexToken TokenType
 		{
-			get { return (TokenTypes)Other; }
+			get { return (HeapIndexToken)Other; }
 			set { Other = value; }
 		}
 

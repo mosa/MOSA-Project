@@ -138,7 +138,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 		private static bool IsMemberRef(Token ctorToken)
 		{
-			return ctorToken.Table == TableTypes.MemberRef;
+			return ctorToken.Table == TableType.MemberRef;
 		}
 
 		/// <summary>

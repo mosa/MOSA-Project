@@ -21,9 +21,9 @@ namespace Mosa.Runtime.Metadata
 			get { return (int)(token & 0x00ffffff); }
 		}
 
-		public TableTypes Table
+		public TableType Table
 		{
-			get { return (TableTypes)(token & 0xff000000); }
+			get { return (TableType)(token & 0xff000000); }
 		}
 
 		public static readonly Token Zero = new Token((uint)0);
@@ -33,17 +33,17 @@ namespace Mosa.Runtime.Metadata
 			this.token = token;
 		}
 
-		public Token(TableTypes type)
+		public Token(TableType type)
 			: this(type, 0)
 		{
 		}
 
-		public Token(TableTypes type, uint rid)
+		public Token(TableType type, uint rid)
 		{
 			token = (uint)type | rid;
 		}
 
-		public Token(TableTypes type, int rid)
+		public Token(TableType type, int rid)
 		{
 			token = (uint)type | (uint)rid;
 		}

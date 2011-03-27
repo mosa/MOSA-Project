@@ -26,17 +26,17 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private EventAttributes _flags;
+		private EventAttributes flags;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes _nameStringIdx;
+		private HeapIndexToken name;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private Token _eventType;
+		private Token eventType;
 
 		#endregion // Data members
 
@@ -46,13 +46,13 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Initializes a new instance of the <see cref="EventRow"/> struct.
 		/// </summary>
 		/// <param name="flags">The flags.</param>
-		/// <param name="nameStringIdx">The name string idx.</param>
-		/// <param name="eventType">The event type table idx.</param>
-		public EventRow(EventAttributes flags, TokenTypes nameStringIdx, Token eventType)
+		/// <param name="name">The name.</param>
+		/// <param name="eventType">Type of the event.</param>
+		public EventRow(EventAttributes flags, HeapIndexToken name, Token eventType)
 		{
-			_flags = flags;
-			_nameStringIdx = nameStringIdx;
-			_eventType = eventType;
+			this.flags = flags;
+			this.name = name;
+			this.eventType = eventType;
 		}
 
 		#endregion // Construction
@@ -65,16 +65,16 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <value>The flags.</value>
 		public EventAttributes Flags
 		{
-			get { return _flags; }
+			get { return flags; }
 		}
 
 		/// <summary>
-		/// Gets the name string idx.
+		/// Gets the name.
 		/// </summary>
-		/// <value>The name string idx.</value>
-		public TokenTypes NameStringIdx
+		/// <value>The name.</value>
+		public HeapIndexToken Name
 		{
-			get { return _nameStringIdx; }
+			get { return name; }
 		}
 
 		/// <summary>
@@ -83,7 +83,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <value>The type of the event.</value>
 		public Token EventType
 		{
-			get { return _eventType; }
+			get { return eventType; }
 		}
 
 		#endregion // Properties

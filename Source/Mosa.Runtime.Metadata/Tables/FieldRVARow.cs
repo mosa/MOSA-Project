@@ -24,12 +24,12 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private uint _rva;
+		private uint rva;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private Token _field;
+		private Token field;
 
 		#endregion // Data members
 
@@ -39,11 +39,11 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Initializes a new instance of the <see cref="FieldRVARow"/> struct.
 		/// </summary>
 		/// <param name="rva">The rva.</param>
-		/// <param name="fieldTableIdx">The field table idx.</param>
-		public FieldRVARow(uint rva, Token fieldTableIdx)
+		/// <param name="field">The field table idx.</param>
+		public FieldRVARow(uint rva, Token field)
 		{
-			_rva = rva;
-			_field = fieldTableIdx;
+			this.rva = rva;
+			this.field = field;
 		}
 
 		#endregion // Construction
@@ -56,17 +56,17 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <value>The rva.</value>
 		public uint Rva
 		{
-			get { return _rva; }
+			get { return rva; }
 		}
 
 
 		/// <summary>
-		/// Gets the field table idx.
+		/// Gets the field.
 		/// </summary>
-		/// <value>The field table idx.</value>
+		/// <value>The field.</value>
 		public Token Field
 		{
-			get { return _field; }
+			get { return field; }
 		}
 
 		#endregion // Properties

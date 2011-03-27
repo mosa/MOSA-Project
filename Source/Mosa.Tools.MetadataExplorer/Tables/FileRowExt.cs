@@ -32,12 +32,12 @@ namespace Mosa.Tools.MetadataExplorer.Tables
 			this.row = row;
 		}
 
-		public override string Name { get { return Metadata.ReadString(row.NameStringIdx); } }
+		public override string Name { get { return Metadata.ReadString(row.Name); } }
 
 		public override IEnumerable GetValues()
 		{
-			yield return Value("NameStringIdx", row.NameStringIdx);
-			yield return TokenString("Name", row.NameStringIdx);
+			yield return Value("NameStringIdx", row.Name);
+			yield return TokenString("Name", row.Name);
 		}
 	}
 }

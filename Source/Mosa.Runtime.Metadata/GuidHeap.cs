@@ -43,13 +43,13 @@ namespace Mosa.Runtime.Metadata
 		/// </summary>
 		/// <param name="token">The Guid token, of the guid to retrieve.</param>
 		/// <returns>The GUID at the specified location.</returns>
-		public Guid ReadGuid(TokenTypes token)
+		public Guid ReadGuid(HeapIndexToken token)
 		{
-			Debug.Assert((TokenTypes.TableMask & token) == TokenTypes.Guid);
-			if ((TokenTypes.TableMask & token) != TokenTypes.Guid)
+			Debug.Assert((HeapIndexToken.TableMask & token) == HeapIndexToken.Guid);
+			if ((HeapIndexToken.TableMask & token) != HeapIndexToken.Guid)
 				throw new ArgumentException(@"Invalid token value.", @"token");
 
-			int index = (int)(token & TokenTypes.RowIndexMask);
+			int index = (int)(token & HeapIndexToken.RowIndexMask);
 			if (0 >= index--)
 				return Guid.Empty;
 

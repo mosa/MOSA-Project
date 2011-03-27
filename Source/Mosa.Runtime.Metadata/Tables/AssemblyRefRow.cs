@@ -26,47 +26,47 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private ushort _majorVersion;
+		private ushort majorVersion;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private ushort _minorVersion;
+		private ushort minorVersion;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private ushort _buildNumber;
+		private ushort buildNumber;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private ushort _revision;
+		private ushort revisionNumber;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private AssemblyAttributes _flags;
+		private AssemblyAttributes flags;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes _publicKeyOrTokenIdx;
+		private HeapIndexToken publicKeyOrToken;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes _nameIdx;
+		private HeapIndexToken name;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes _cultureIdx;
+		private HeapIndexToken culture;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes _hashValueIdx;
+		private HeapIndexToken hashValue;
 
 		#endregion // Data members
 
@@ -80,23 +80,23 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <param name="buildNumber">The build number.</param>
 		/// <param name="revisionNumber">The revision number.</param>
 		/// <param name="flags">The flags.</param>
-		/// <param name="publicKeyOrTokenIdx">The public key or token idx.</param>
-		/// <param name="nameIdx">The name idx.</param>
-		/// <param name="cultureIdx">The culture idx.</param>
-		/// <param name="hashValueIdx">The hash value idx.</param>
+		/// <param name="publicKeyOrToken">The public key or token.</param>
+		/// <param name="name">The name.</param>
+		/// <param name="culture">The culture.</param>
+		/// <param name="hashValue">The hash value.</param>
 		public AssemblyRefRow(ushort majorVersion, ushort minorVersion, ushort buildNumber, ushort revisionNumber,
-								AssemblyAttributes flags, TokenTypes publicKeyOrTokenIdx, TokenTypes nameIdx,
-								TokenTypes cultureIdx, TokenTypes hashValueIdx)
+								AssemblyAttributes flags, HeapIndexToken publicKeyOrToken, HeapIndexToken name,
+								HeapIndexToken culture, HeapIndexToken hashValue)
 		{
-			_majorVersion = majorVersion;
-			_minorVersion = minorVersion;
-			_buildNumber = buildNumber;
-			_revision = revisionNumber;
-			_flags = flags;
-			_publicKeyOrTokenIdx = publicKeyOrTokenIdx;
-			_nameIdx = nameIdx;
-			_cultureIdx = cultureIdx;
-			_hashValueIdx = hashValueIdx;
+			this.majorVersion = majorVersion;
+			this.minorVersion = minorVersion;
+			this.buildNumber = buildNumber;
+			this.revisionNumber = revisionNumber;
+			this.flags = flags;
+			this.publicKeyOrToken = publicKeyOrToken;
+			this.name = name;
+			this.culture = culture;
+			this.hashValue = hashValue;
 		}
 
 		#endregion // Construction
@@ -109,7 +109,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <value>The major version.</value>
 		public ushort MajorVersion
 		{
-			get { return _majorVersion; }
+			get { return majorVersion; }
 		}
 
 		/// <summary>
@@ -118,7 +118,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <value>The minor version.</value>
 		public ushort MinorVersion
 		{
-			get { return _minorVersion; }
+			get { return minorVersion; }
 		}
 
 		/// <summary>
@@ -127,16 +127,16 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <value>The build number.</value>
 		public ushort BuildNumber
 		{
-			get { return _buildNumber; }
+			get { return buildNumber; }
 		}
 
 		/// <summary>
 		/// Gets the revision.
 		/// </summary>
 		/// <value>The revision.</value>
-		public ushort Revision
+		public ushort RevisionNumber
 		{
-			get { return _revision; }
+			get { return revisionNumber; }
 		}
 
 		/// <summary>
@@ -145,43 +145,43 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <value>The flags.</value>
 		public AssemblyAttributes Flags
 		{
-			get { return _flags; }
+			get { return flags; }
 		}
 
 		/// <summary>
-		/// Gets the public key or token idx.
+		/// Gets the public key or token.
 		/// </summary>
-		/// <value>The public key or token idx.</value>
-		public TokenTypes PublicKeyOrTokenIdx
+		/// <value>The public key or token.</value>
+		public HeapIndexToken PublicKeyOrToken
 		{
-			get { return _publicKeyOrTokenIdx; }
+			get { return publicKeyOrToken; }
 		}
 
 		/// <summary>
-		/// Gets the name idx.
+		/// Gets the name.
 		/// </summary>
-		/// <value>The name idx.</value>
-		public TokenTypes NameIdx
+		/// <value>The name.</value>
+		public HeapIndexToken Name
 		{
-			get { return _nameIdx; }
+			get { return name; }
 		}
 
 		/// <summary>
-		/// Gets the culture idx.
+		/// Gets the culture.
 		/// </summary>
-		/// <value>The culture idx.</value>
-		public TokenTypes Culture
+		/// <value>The culture.</value>
+		public HeapIndexToken Culture
 		{
-			get { return _cultureIdx; }
+			get { return culture; }
 		}
 
 		/// <summary>
-		/// Gets the hash value idx.
+		/// Gets the hash value.
 		/// </summary>
-		/// <value>The hash value idx.</value>
-		public TokenTypes HashValue
+		/// <value>The hash value.</value>
+		public HeapIndexToken HashValue
 		{
-			get { return _hashValueIdx; }
+			get { return hashValue; }
 		}
 
 		#endregion // Properties

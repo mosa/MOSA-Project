@@ -37,7 +37,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// <summary>
 		/// Holds the parameter token.
 		/// </summary>
-		private readonly TokenTypes token;
+		private readonly HeapIndexToken token;
 
 		/// <summary>
 		/// Holds the parameter index.
@@ -56,7 +56,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// <param name="attributes">The attributes.</param>
 		public RuntimeParameter(string name, int position, ParameterAttributes attributes)
 		{
-			this.token = (TokenTypes)0;
+			this.token = (HeapIndexToken)0;
 			this.attributes = attributes;
 			this.name = name;
 			this.position = position;
@@ -101,7 +101,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// <summary>
 		/// Retrieves the metadata token of this parameter.
 		/// </summary>
-		public TokenTypes MetadataToken
+		public HeapIndexToken MetadataToken
 		{
 			get { return token; }
 		}

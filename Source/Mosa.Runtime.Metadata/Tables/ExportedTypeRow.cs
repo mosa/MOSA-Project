@@ -26,27 +26,27 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private TypeAttributes _flags;
+		private TypeAttributes flags;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes _typeDefTableIdx;
+		private HeapIndexToken typeDef;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes _typeNameStringIdx;
+		private HeapIndexToken typeName;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes _typeNamespaceStringIdx;
+		private HeapIndexToken typeNamespace;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private Token _implementation;
+		private Token implementation;
 
 		#endregion // Data members
 
@@ -56,18 +56,18 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Initializes a new instance of the <see cref="ExportedTypeRow"/> struct.
 		/// </summary>
 		/// <param name="flags">The flags.</param>
-		/// <param name="typeDefTableIdx">The type def table idx.</param>
-		/// <param name="typeNameStringIdx">The type name string idx.</param>
-		/// <param name="typeNamespaceStringIdx">The type namespace string idx.</param>
-		/// <param name="implementation">The implementation table idx.</param>
-		public ExportedTypeRow(TypeAttributes flags, TokenTypes typeDefTableIdx, TokenTypes typeNameStringIdx,
-								TokenTypes typeNamespaceStringIdx, Token implementation)
+		/// <param name="typeDef">The type def.</param>
+		/// <param name="typeName">Name of the type.</param>
+		/// <param name="typeNamespace">The type namespace.</param>
+		/// <param name="implementation">The implementation.</param>
+		public ExportedTypeRow(TypeAttributes flags, HeapIndexToken typeDef, HeapIndexToken typeName,
+								HeapIndexToken typeNamespace, Token implementation)
 		{
-			_flags = flags;
-			_typeDefTableIdx = typeDefTableIdx;
-			_typeNameStringIdx = typeNameStringIdx;
-			_typeNamespaceStringIdx = typeNamespaceStringIdx;
-			_implementation = implementation;
+			this.flags = flags;
+			this.typeDef = typeDef;
+			this.typeName = typeName;
+			this.typeNamespace = typeNamespace;
+			this.implementation = implementation;
 		}
 
 		#endregion // Construction
@@ -80,34 +80,34 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <value>The flags.</value>
 		public TypeAttributes Flags
 		{
-			get { return _flags; }
+			get { return flags; }
 		}
 
 		/// <summary>
-		/// Gets the type def table idx.
+		/// Gets the type def.
 		/// </summary>
-		/// <value>The type def table idx.</value>
-		public TokenTypes TypeDefTableIdx
+		/// <value>The type def.</value>
+		public HeapIndexToken TypeDef
 		{
-			get { return _typeDefTableIdx; }
+			get { return typeDef; }
 		}
 
 		/// <summary>
-		/// Gets the type name string idx.
+		/// Gets the name of the type.
 		/// </summary>
-		/// <value>The type name string idx.</value>
-		public TokenTypes TypeNameStringIdx
+		/// <value>The name of the type.</value>
+		public HeapIndexToken TypeName
 		{
-			get { return _typeNameStringIdx; }
+			get { return typeName; }
 		}
 
 		/// <summary>
-		/// Gets the type namespace string idx.
+		/// Gets the type namespace.
 		/// </summary>
-		/// <value>The type namespace string idx.</value>
-		public TokenTypes TypeNamespaceStringIdx
+		/// <value>The type namespace.</value>
+		public HeapIndexToken TypeNamespace
 		{
-			get { return _typeNamespaceStringIdx; }
+			get { return typeNamespace; }
 		}
 
 		/// <summary>
@@ -116,7 +116,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <value>The implementation.</value>
 		public Token Implementation
 		{
-			get { return _implementation; }
+			get { return implementation; }
 		}
 
 		#endregion // Properties

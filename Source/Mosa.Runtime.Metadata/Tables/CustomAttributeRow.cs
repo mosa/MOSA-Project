@@ -34,7 +34,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes valueBlobIdx;
+		private HeapIndexToken value;
 
 		#endregion // Data members
 
@@ -43,14 +43,14 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CustomAttributeRow"/> struct.
 		/// </summary>
-		/// <param name="parent">The parent table idx.</param>
-		/// <param name="type">The type idx.</param>
-		/// <param name="valueBlobIdx">The value BLOB idx.</param>
-		public CustomAttributeRow(Token parent, Token type, TokenTypes valueBlobIdx)
+		/// <param name="parent">The parent.</param>
+		/// <param name="type">The type.</param>
+		/// <param name="value">The value.</param>
+		public CustomAttributeRow(Token parent, Token type, HeapIndexToken value)
 		{
 			this.parent = parent;
 			this.type = type;
-			this.valueBlobIdx = valueBlobIdx;
+			this.value = value;
 		}
 
 		#endregion // Construction
@@ -58,30 +58,30 @@ namespace Mosa.Runtime.Metadata.Tables
 		#region Properties
 
 		/// <summary>
-		/// Gets the parent table idx.
+		/// Gets the parent.
 		/// </summary>
-		/// <value>The parent table idx.</value>
+		/// <value>The parent.</value>
 		public Token Parent
 		{
 			get { return parent; }
 		}
 
 		/// <summary>
-		/// Gets the type idx.
+		/// Gets the type.
 		/// </summary>
-		/// <value>The type idx.</value>
+		/// <value>The type.</value>
 		public Token Type
 		{
 			get { return type; }
 		}
 
 		/// <summary>
-		/// Gets the value BLOB idx.
+		/// Gets the value.
 		/// </summary>
-		/// <value>The value BLOB idx.</value>
-		public TokenTypes ValueBlobIdx
+		/// <value>The value.</value>
+		public HeapIndexToken Value
 		{
-			get { return valueBlobIdx; }
+			get { return value; }
 		}
 
 		#endregion // Properties

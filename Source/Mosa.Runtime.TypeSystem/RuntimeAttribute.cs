@@ -44,7 +44,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// <summary>
 		/// Holds the blob index
 		/// </summary>
-		private readonly TokenTypes blobIndex;
+		private readonly HeapIndexToken blobIndex;
 
 		/// <summary>
 		/// Holds the blob
@@ -62,7 +62,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// <param name="ctor">The ctor.</param>
 		/// <param name="ctorMethod">The ctor method.</param>
 		/// <param name="blobIndex">Index of the blob.</param>
-		public RuntimeAttribute(ITypeModule typeModule, Token ctor, RuntimeMethod ctorMethod, TokenTypes blobIndex)
+		public RuntimeAttribute(ITypeModule typeModule, Token ctor, RuntimeMethod ctorMethod, HeapIndexToken blobIndex)
 		{
 			this.typeModule = typeModule;
 			this.ctorMethod = ctorMethod;
@@ -103,7 +103,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// Gets the index of the blob.
 		/// </summary>
 		/// <value>The index of the blob.</value>
-		public TokenTypes BlobIndex { get { return blobIndex; } }
+		public HeapIndexToken BlobIndex { get { return blobIndex; } }
 
 		/// <summary>
 		/// Gets the blob.

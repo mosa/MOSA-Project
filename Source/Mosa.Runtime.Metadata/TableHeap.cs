@@ -38,43 +38,26 @@ namespace Mosa.Runtime.Metadata
 
 		private static readonly int[][] IndexTables = new[]
 		{
-			new[] { (int)TokenTypes.TypeDef, (int)TokenTypes.TypeRef, (int)TokenTypes.TypeSpec },
-			new[] { (int)TokenTypes.Field, (int)TokenTypes.Param, (int)TokenTypes.Property },
-			new[] { (int)TokenTypes.MethodDef, (int)TokenTypes.Field, (int)TokenTypes.TypeRef, (int)TokenTypes.TypeDef, (int)TokenTypes.Param, (int)TokenTypes.InterfaceImpl, (int)TokenTypes.MemberRef, (int)TokenTypes.Module, /*(int)TokenTypes.Permission,*/ (int)TokenTypes.Property, (int)TokenTypes.Event, (int)TokenTypes.StandAloneSig, (int)TokenTypes.ModuleRef, (int)TokenTypes.TypeSpec, (int)TokenTypes.Assembly, (int)TokenTypes.AssemblyRef, (int)TokenTypes.File, (int)TokenTypes.ExportedType, (int)TokenTypes.ManifestResource },
-			new[] { (int)TokenTypes.Field, (int)TokenTypes.Param },
-			new[] { (int)TokenTypes.TypeDef, (int)TokenTypes.MethodDef, (int)TokenTypes.Assembly },
-			new[] { (int)TokenTypes.TypeDef, (int)TokenTypes.TypeRef, (int)TokenTypes.ModuleRef, (int)TokenTypes.MethodDef, (int)TokenTypes.TypeSpec },
-			new[] { (int)TokenTypes.Event, (int)TokenTypes.Property },
-			new[] { (int)TokenTypes.MethodDef, (int)TokenTypes.MemberRef },
-			new[] { (int)TokenTypes.Field, (int)TokenTypes.MethodDef },
-			new[] { (int)TokenTypes.File, (int)TokenTypes.AssemblyRef, (int)TokenTypes.ExportedType },
-			new[] { -1, -1, (int)TokenTypes.MethodDef, (int)TokenTypes.MemberRef, -1 },
-			new[] { (int)TokenTypes.Module, (int)TokenTypes.ModuleRef, (int)TokenTypes.AssemblyRef, (int)TokenTypes.TypeRef },
-			new[] { (int)TokenTypes.TypeDef, (int)TokenTypes.MethodDef }
-		};
-
-		private static readonly TableTypes[][] IndexTables2 = new[]
-		{
-		    new[] { TableTypes.TypeDef, TableTypes.TypeRef, TableTypes.TypeSpec },
-		    new[] { TableTypes.Field, TableTypes.Param, TableTypes.Property },
-		    new[] { TableTypes.MethodDef, TableTypes.Field, TableTypes.TypeRef, TableTypes.TypeDef, TableTypes.Param, TableTypes.InterfaceImpl, TableTypes.MemberRef, TableTypes.Module, /*TableTypes.Permission,*/ TableTypes.Property, TableTypes.Event, TableTypes.StandAloneSig, TableTypes.ModuleRef, TableTypes.TypeSpec, TableTypes.Assembly, TableTypes.AssemblyRef, TableTypes.File, TableTypes.ExportedType, TableTypes.ManifestResource },
-		    new[] { TableTypes.Field, TableTypes.Param },
-		    new[] { TableTypes.TypeDef, TableTypes.MethodDef, TableTypes.Assembly },
-		    new[] { TableTypes.TypeDef, TableTypes.TypeRef, TableTypes.ModuleRef, TableTypes.MethodDef, TableTypes.TypeSpec },
-		    new[] { TableTypes.Event, TableTypes.Property },
-		    new[] { TableTypes.MethodDef, TableTypes.MemberRef },
-		    new[] { TableTypes.Field, TableTypes.MethodDef },
-		    new[] { TableTypes.File, TableTypes.AssemblyRef, TableTypes.ExportedType },
-		    new[] { TableTypes.Assembly, TableTypes.Assembly, TableTypes.MethodDef, TableTypes.MemberRef, TableTypes.Assembly },
-		    new[] { TableTypes.Module, TableTypes.ModuleRef, TableTypes.AssemblyRef, TableTypes.TypeRef },
-		    new[] { TableTypes.TypeDef, TableTypes.MethodDef }
+			new[] { (int)TableType.TypeDef, (int)TableType.TypeRef, (int)TableType.TypeSpec },
+			new[] { (int)TableType.Field, (int)TableType.Param, (int)TableType.Property },
+			new[] { (int)TableType.MethodDef, (int)TableType.Field, (int)TableType.TypeRef, (int)TableType.TypeDef, (int)TableType.Param, (int)TableType.InterfaceImpl, (int)TableType.MemberRef, (int)TableType.Module, /*(int)TableTypes.Permission,*/ (int)TableType.Property, (int)TableType.Event, (int)TableType.StandAloneSig, (int)TableType.ModuleRef, (int)TableType.TypeSpec, (int)TableType.Assembly, (int)TableType.AssemblyRef, (int)TableType.File, (int)TableType.ExportedType, (int)TableType.ManifestResource },
+			new[] { (int)TableType.Field, (int)TableType.Param },
+			new[] { (int)TableType.TypeDef, (int)TableType.MethodDef, (int)TableType.Assembly },
+			new[] { (int)TableType.TypeDef, (int)TableType.TypeRef, (int)TableType.ModuleRef, (int)TableType.MethodDef, (int)TableType.TypeSpec },
+			new[] { (int)TableType.Event, (int)TableType.Property },
+			new[] { (int)TableType.MethodDef, (int)TableType.MemberRef },
+			new[] { (int)TableType.Field, (int)TableType.MethodDef },
+			new[] { (int)TableType.File, (int)TableType.AssemblyRef, (int)TableType.ExportedType },
+			new[] { -1, -1, (int)TableType.MethodDef, (int)TableType.MemberRef, -1 },
+			new[] { (int)TableType.Module, (int)TableType.ModuleRef, (int)TableType.AssemblyRef, (int)TableType.TypeRef },
+			new[] { (int)TableType.TypeDef, (int)TableType.MethodDef }
 		};
 
 		private static readonly int[] IndexBits = new[] {
 			2, 2, 5, 1, 2, 3, 1, 1, 1, 2, 3, 2, 1
 		};
 
-		private const int TableCount = ((int)TableTypes.GenericParamConstraint >> 24) + 1;
+		private const int TableCount = ((int)TableType.GenericParamConstraint >> 24) + 1;
 
 		#endregion // Static members
 
@@ -221,44 +204,44 @@ namespace Mosa.Runtime.Metadata
 			int gheapIdx = GetIndexSize(IndexType.GuidHeap);
 			int bheapIdx = GetIndexSize(IndexType.BlobHeap);
 
-			sizes[(int)TableTypes.Module >> 24] = (2 + sheapIdx + 3 * gheapIdx);
-			sizes[(int)TableTypes.TypeRef >> 24] = (GetIndexSize(IndexType.ResolutionScope) + 2 * sheapIdx);
-			sizes[(int)TableTypes.TypeDef >> 24] = (4 + 2 * sheapIdx + GetIndexSize(IndexType.TypeDefOrRef) + GetIndexSize(TableTypes.Field) + GetIndexSize(TableTypes.MethodDef));
-			sizes[(int)TableTypes.Field >> 24] = (2 + sheapIdx + bheapIdx);
-			sizes[(int)TableTypes.MethodDef >> 24] = (4 + 2 + 2 + sheapIdx + bheapIdx + GetIndexSize(TableTypes.Param));
-			sizes[(int)TableTypes.Param >> 24] = (2 + 2 + sheapIdx);
-			sizes[(int)TableTypes.InterfaceImpl >> 24] = (GetIndexSize(TableTypes.TypeDef) + GetIndexSize(IndexType.TypeDefOrRef));
-			sizes[(int)TableTypes.MemberRef >> 24] = (GetIndexSize(IndexType.MemberRefParent) + sheapIdx + bheapIdx);
-			sizes[(int)TableTypes.Constant >> 24] = (2 + GetIndexSize(IndexType.HasConstant) + bheapIdx);
-			sizes[(int)TableTypes.CustomAttribute >> 24] = (GetIndexSize(IndexType.HasCustomAttribute) + GetIndexSize(IndexType.CustomAttributeType) + bheapIdx);
-			sizes[(int)TableTypes.FieldMarshal >> 24] = (GetIndexSize(IndexType.HasFieldMarshal) + bheapIdx);
-			sizes[(int)TableTypes.DeclSecurity >> 24] = (2 + GetIndexSize(IndexType.HasDeclSecurity) + bheapIdx);
-			sizes[(int)TableTypes.ClassLayout >> 24] = (2 + 4 + GetIndexSize(TableTypes.TypeDef));
-			sizes[(int)TableTypes.FieldLayout >> 24] = (4 + GetIndexSize(TableTypes.Field));
-			sizes[(int)TableTypes.StandAloneSig >> 24] = (bheapIdx);
-			sizes[(int)TableTypes.EventMap >> 24] = (GetIndexSize(TableTypes.TypeDef) + GetIndexSize(TableTypes.Event));
-			sizes[(int)TableTypes.Event >> 24] = (2 + sheapIdx + GetIndexSize(IndexType.TypeDefOrRef));
-			sizes[(int)TableTypes.PropertyMap >> 24] = (GetIndexSize(TableTypes.TypeDef) + GetIndexSize(TableTypes.Property));
-			sizes[(int)TableTypes.Property >> 24] = (2 + sheapIdx + bheapIdx);
-			sizes[(int)TableTypes.MethodSemantics >> 24] = (2 + GetIndexSize(TableTypes.MethodDef) + GetIndexSize(IndexType.HasSemantics));
-			sizes[(int)TableTypes.MethodImpl >> 24] = (GetIndexSize(TableTypes.TypeDef) + 2 * GetIndexSize(IndexType.MethodDefOrRef));
-			sizes[(int)TableTypes.ModuleRef >> 24] = (sheapIdx);
-			sizes[(int)TableTypes.TypeSpec >> 24] = (bheapIdx);
-			sizes[(int)TableTypes.ImplMap >> 24] = (2 + GetIndexSize(IndexType.MemberForwarded) + sheapIdx + GetIndexSize(TableTypes.ModuleRef));
-			sizes[(int)TableTypes.FieldRVA >> 24] = (4 + GetIndexSize(TableTypes.Field));
-			sizes[(int)TableTypes.Assembly >> 24] = (4 + 2 + 2 + 2 + 2 + 4 + bheapIdx + 2 * sheapIdx);
-			sizes[(int)TableTypes.AssemblyProcessor >> 24] = (4);
-			sizes[(int)TableTypes.AssemblyOS >> 24] = (4 + 4 + 4);
-			sizes[(int)TableTypes.AssemblyRef >> 24] = (2 + 2 + 2 + 2 + 4 + 2 * bheapIdx + 2 * sheapIdx);
-			sizes[(int)TableTypes.AssemblyRefProcessor >> 24] = (4 + GetIndexSize(TableTypes.AssemblyRef));
-			sizes[(int)TableTypes.AssemblyRefOS >> 24] = (4 + 4 + 4 + GetIndexSize(TableTypes.AssemblyRef));
-			sizes[(int)TableTypes.File >> 24] = (4 + sheapIdx + bheapIdx);
-			sizes[(int)TableTypes.ExportedType >> 24] = (4 + 4 + 2 * sheapIdx + GetIndexSize(IndexType.Implementation));
-			sizes[(int)TableTypes.ManifestResource >> 24] = (4 + 4 + sheapIdx + GetIndexSize(IndexType.Implementation));
-			sizes[(int)TableTypes.NestedClass >> 24] = (2 * GetIndexSize(TableTypes.TypeDef));
-			sizes[(int)TableTypes.GenericParam >> 24] = (2 + 2 + GetIndexSize(IndexType.TypeOrMethodDef) + sheapIdx);
-			sizes[(int)TableTypes.MethodSpec >> 24] = (GetIndexSize(IndexType.MethodDefOrRef) + bheapIdx);
-			sizes[(int)TableTypes.GenericParamConstraint >> 24] = (GetIndexSize(TableTypes.GenericParam) + GetIndexSize(IndexType.TypeDefOrRef));
+			sizes[(int)TableType.Module >> 24] = (2 + sheapIdx + 3 * gheapIdx);
+			sizes[(int)TableType.TypeRef >> 24] = (GetIndexSize(IndexType.ResolutionScope) + 2 * sheapIdx);
+			sizes[(int)TableType.TypeDef >> 24] = (4 + 2 * sheapIdx + GetIndexSize(IndexType.TypeDefOrRef) + GetIndexSize(TableType.Field) + GetIndexSize(TableType.MethodDef));
+			sizes[(int)TableType.Field >> 24] = (2 + sheapIdx + bheapIdx);
+			sizes[(int)TableType.MethodDef >> 24] = (4 + 2 + 2 + sheapIdx + bheapIdx + GetIndexSize(TableType.Param));
+			sizes[(int)TableType.Param >> 24] = (2 + 2 + sheapIdx);
+			sizes[(int)TableType.InterfaceImpl >> 24] = (GetIndexSize(TableType.TypeDef) + GetIndexSize(IndexType.TypeDefOrRef));
+			sizes[(int)TableType.MemberRef >> 24] = (GetIndexSize(IndexType.MemberRefParent) + sheapIdx + bheapIdx);
+			sizes[(int)TableType.Constant >> 24] = (2 + GetIndexSize(IndexType.HasConstant) + bheapIdx);
+			sizes[(int)TableType.CustomAttribute >> 24] = (GetIndexSize(IndexType.HasCustomAttribute) + GetIndexSize(IndexType.CustomAttributeType) + bheapIdx);
+			sizes[(int)TableType.FieldMarshal >> 24] = (GetIndexSize(IndexType.HasFieldMarshal) + bheapIdx);
+			sizes[(int)TableType.DeclSecurity >> 24] = (2 + GetIndexSize(IndexType.HasDeclSecurity) + bheapIdx);
+			sizes[(int)TableType.ClassLayout >> 24] = (2 + 4 + GetIndexSize(TableType.TypeDef));
+			sizes[(int)TableType.FieldLayout >> 24] = (4 + GetIndexSize(TableType.Field));
+			sizes[(int)TableType.StandAloneSig >> 24] = (bheapIdx);
+			sizes[(int)TableType.EventMap >> 24] = (GetIndexSize(TableType.TypeDef) + GetIndexSize(TableType.Event));
+			sizes[(int)TableType.Event >> 24] = (2 + sheapIdx + GetIndexSize(IndexType.TypeDefOrRef));
+			sizes[(int)TableType.PropertyMap >> 24] = (GetIndexSize(TableType.TypeDef) + GetIndexSize(TableType.Property));
+			sizes[(int)TableType.Property >> 24] = (2 + sheapIdx + bheapIdx);
+			sizes[(int)TableType.MethodSemantics >> 24] = (2 + GetIndexSize(TableType.MethodDef) + GetIndexSize(IndexType.HasSemantics));
+			sizes[(int)TableType.MethodImpl >> 24] = (GetIndexSize(TableType.TypeDef) + 2 * GetIndexSize(IndexType.MethodDefOrRef));
+			sizes[(int)TableType.ModuleRef >> 24] = (sheapIdx);
+			sizes[(int)TableType.TypeSpec >> 24] = (bheapIdx);
+			sizes[(int)TableType.ImplMap >> 24] = (2 + GetIndexSize(IndexType.MemberForwarded) + sheapIdx + GetIndexSize(TableType.ModuleRef));
+			sizes[(int)TableType.FieldRVA >> 24] = (4 + GetIndexSize(TableType.Field));
+			sizes[(int)TableType.Assembly >> 24] = (4 + 2 + 2 + 2 + 2 + 4 + bheapIdx + 2 * sheapIdx);
+			sizes[(int)TableType.AssemblyProcessor >> 24] = (4);
+			sizes[(int)TableType.AssemblyOS >> 24] = (4 + 4 + 4);
+			sizes[(int)TableType.AssemblyRef >> 24] = (2 + 2 + 2 + 2 + 4 + 2 * bheapIdx + 2 * sheapIdx);
+			sizes[(int)TableType.AssemblyRefProcessor >> 24] = (4 + GetIndexSize(TableType.AssemblyRef));
+			sizes[(int)TableType.AssemblyRefOS >> 24] = (4 + 4 + 4 + GetIndexSize(TableType.AssemblyRef));
+			sizes[(int)TableType.File >> 24] = (4 + sheapIdx + bheapIdx);
+			sizes[(int)TableType.ExportedType >> 24] = (4 + 4 + 2 * sheapIdx + GetIndexSize(IndexType.Implementation));
+			sizes[(int)TableType.ManifestResource >> 24] = (4 + 4 + sheapIdx + GetIndexSize(IndexType.Implementation));
+			sizes[(int)TableType.NestedClass >> 24] = (2 * GetIndexSize(TableType.TypeDef));
+			sizes[(int)TableType.GenericParam >> 24] = (2 + 2 + GetIndexSize(IndexType.TypeOrMethodDef) + sheapIdx);
+			sizes[(int)TableType.MethodSpec >> 24] = (GetIndexSize(IndexType.MethodDefOrRef) + bheapIdx);
+			sizes[(int)TableType.GenericParamConstraint >> 24] = (GetIndexSize(TableType.GenericParam) + GetIndexSize(IndexType.TypeDefOrRef));
 
 			return sizes;
 		}
@@ -307,7 +290,7 @@ namespace Mosa.Runtime.Metadata
 		/// </summary>
 		/// <param name="tokenTypes">The table to determine the index for.</param>
 		/// <returns>The index size in bytes.</returns>
-		private int GetIndexSize(TableTypes table)
+		private int GetIndexSize(TableType table)
 		{
 			int _table = (int)table >> 24;
 			if (_table < 0 || _table > TableCount)
@@ -325,22 +308,22 @@ namespace Mosa.Runtime.Metadata
 		/// <param name="reader">The reader to read From.</param>
 		/// <param name="index">The index type to read.</param>
 		/// <returns>The index value.</returns>
-		private TokenTypes ReadIndexValue(BinaryReader reader, IndexType index)
+		private HeapIndexToken ReadHeapToken(BinaryReader reader, IndexType index)
 		{
-			TokenTypes value = (TokenTypes)(GetIndexSize(index) == 2 ? (0x0000FFFF & (int)reader.ReadInt16()) : reader.ReadInt32());
+			HeapIndexToken value = (HeapIndexToken)(GetIndexSize(index) == 2 ? (0x0000FFFF & (int)reader.ReadInt16()) : reader.ReadInt32());
 
 			switch (index)
 			{
 				case IndexType.StringHeap:
-					value |= TokenTypes.String;
+					value |= HeapIndexToken.String;
 					break;
 
 				case IndexType.GuidHeap:
-					value |= TokenTypes.Guid;
+					value |= HeapIndexToken.Guid;
 					break;
 
 				case IndexType.BlobHeap:
-					value |= TokenTypes.Blob;
+					value |= HeapIndexToken.Blob;
 					break;
 
 				default:
@@ -350,7 +333,7 @@ namespace Mosa.Runtime.Metadata
 			return value;
 		}
 
-		private Token ReadIndexValue2(BinaryReader reader, IndexType index)
+		private Token ReadMetadataToken(BinaryReader reader, IndexType index)
 		{
 			int value = (GetIndexSize(index) == 2) ? (0x0000FFFF & (int)reader.ReadInt16()) : reader.ReadInt32();
 
@@ -367,7 +350,7 @@ namespace Mosa.Runtime.Metadata
 			// Correct the value
 			value = ((int)value >> bits);
 
-			return new Token(IndexTables2[(int)index][table], value);
+			return new Token((TableType)IndexTables[(int)index][table], value);
 		}
 
 		/// <summary>
@@ -376,7 +359,7 @@ namespace Mosa.Runtime.Metadata
 		/// <param name="reader">The reader to read From.</param>
 		/// <param name="table">The index type to read.</param>
 		/// <returns>The index value.</returns>
-		private Token ReadIndexValue(BinaryReader reader, TableTypes table)
+		private Token ReadIndexValue(BinaryReader reader, TableType table)
 		{
 			return new Token(table, GetIndexSize(table) == 2 ? reader.ReadInt16() : reader.ReadInt32());
 		}
@@ -405,7 +388,7 @@ namespace Mosa.Runtime.Metadata
 		/// </summary>
 		/// <param name="table">The table.</param>
 		/// <returns></returns>
-		public int GetRowCount(TableTypes table)
+		public int GetRowCount(TableType table)
 		{
 			return _rowCounts[((int)table >> 24)];
 		}
@@ -416,7 +399,7 @@ namespace Mosa.Runtime.Metadata
 		/// <param name="token">The metadata token.</param>
 		/// <returns>The row count in the table.</returns>
 		/// <exception cref="System.ArgumentException">Invalid token type specified for table.</exception>
-		public Token GetMaxTokenValue(TableTypes table)
+		public Token GetMaxTokenValue(TableType table)
 		{
 			return new Token(table, _rowCounts[((int)table >> 24)]);
 		}
@@ -428,17 +411,17 @@ namespace Mosa.Runtime.Metadata
 		/// <returns></returns>
 		public ModuleRow ReadModuleRow(Token token)
 		{
-			if (token.Table != TableTypes.Module)
+			if (token.Table != TableType.Module)
 				throw new ArgumentException("Invalid token type for ModuleRow.", @"token");
 
 			using (BinaryReader reader = CreateReaderForToken(token))
 			{
 				return new ModuleRow(
 					 reader.ReadUInt16(),
-					 ReadIndexValue(reader, IndexType.StringHeap),
-					 ReadIndexValue(reader, IndexType.GuidHeap),
-					 ReadIndexValue(reader, IndexType.GuidHeap),
-					 ReadIndexValue(reader, IndexType.GuidHeap)
+					 ReadHeapToken(reader, IndexType.StringHeap),
+					 ReadHeapToken(reader, IndexType.GuidHeap),
+					 ReadHeapToken(reader, IndexType.GuidHeap),
+					 ReadHeapToken(reader, IndexType.GuidHeap)
 				 );
 			}
 		}
@@ -450,15 +433,15 @@ namespace Mosa.Runtime.Metadata
 		/// <returns></returns>
 		public TypeRefRow ReadTypeRefRow(Token token)
 		{
-			if (token.Table != TableTypes.TypeRef)
+			if (token.Table != TableType.TypeRef)
 				throw new ArgumentException("Invalid token type for TypeRefRow.", @"token");
 
 			using (BinaryReader reader = CreateReaderForToken(token))
 			{
 				return new TypeRefRow(
-					ReadIndexValue2(reader, IndexType.ResolutionScope),
-					ReadIndexValue(reader, IndexType.StringHeap),
-					ReadIndexValue(reader, IndexType.StringHeap)
+					ReadMetadataToken(reader, IndexType.ResolutionScope),
+					ReadHeapToken(reader, IndexType.StringHeap),
+					ReadHeapToken(reader, IndexType.StringHeap)
 				);
 			}
 		}
@@ -470,18 +453,18 @@ namespace Mosa.Runtime.Metadata
 		/// <returns></returns>
 		public TypeDefRow ReadTypeDefRow(Token token)
 		{
-			if (token.Table != TableTypes.TypeDef)
+			if (token.Table != TableType.TypeDef)
 				throw new ArgumentException("Invalid token type for TypeDefRow.", @"token");
 
 			using (BinaryReader reader = CreateReaderForToken(token))
 			{
 				return new TypeDefRow(
 					(TypeAttributes)reader.ReadUInt32(),
-					ReadIndexValue(reader, IndexType.StringHeap),
-					ReadIndexValue(reader, IndexType.StringHeap),
-					ReadIndexValue2(reader, IndexType.TypeDefOrRef),
-					ReadIndexValue(reader, TableTypes.Field),
-					ReadIndexValue(reader, TableTypes.MethodDef)
+					ReadHeapToken(reader, IndexType.StringHeap),
+					ReadHeapToken(reader, IndexType.StringHeap),
+					ReadMetadataToken(reader, IndexType.TypeDefOrRef),
+					ReadIndexValue(reader, TableType.Field),
+					ReadIndexValue(reader, TableType.MethodDef)
 				);
 			}
 		}
@@ -493,15 +476,15 @@ namespace Mosa.Runtime.Metadata
 		/// <returns></returns>
 		public FieldRow ReadFieldRow(Token token)
 		{
-			if (token.Table != TableTypes.Field)
+			if (token.Table != TableType.Field)
 				throw new ArgumentException("Invalid token type for FieldRow.", @"token");
 
 			using (BinaryReader reader = CreateReaderForToken(token))
 			{
 				return new FieldRow(
 					(FieldAttributes)reader.ReadUInt16(),
-					ReadIndexValue(reader, IndexType.StringHeap),
-					ReadIndexValue(reader, IndexType.BlobHeap)
+					ReadHeapToken(reader, IndexType.StringHeap),
+					ReadHeapToken(reader, IndexType.BlobHeap)
 				);
 			}
 		}
@@ -513,7 +496,7 @@ namespace Mosa.Runtime.Metadata
 		/// <returns></returns>
 		public MethodDefRow ReadMethodDefRow(Token token)
 		{
-			if (token.Table != TableTypes.MethodDef)
+			if (token.Table != TableType.MethodDef)
 				throw new ArgumentException("Invalid token type for MethodDefRow.", @"token");
 
 			using (BinaryReader reader = CreateReaderForToken(token))
@@ -522,9 +505,9 @@ namespace Mosa.Runtime.Metadata
 					reader.ReadUInt32(),
 					(MethodImplAttributes)reader.ReadUInt16(),
 					(MethodAttributes)reader.ReadUInt16(),
-					ReadIndexValue(reader, IndexType.StringHeap),
-					ReadIndexValue(reader, IndexType.BlobHeap),
-					ReadIndexValue(reader, TableTypes.Param)
+					ReadHeapToken(reader, IndexType.StringHeap),
+					ReadHeapToken(reader, IndexType.BlobHeap),
+					ReadIndexValue(reader, TableType.Param)
 				);
 			}
 		}
@@ -536,7 +519,7 @@ namespace Mosa.Runtime.Metadata
 		/// <returns></returns>
 		public ParamRow ReadParamRow(Token token)
 		{
-			if (token.Table != TableTypes.Param)
+			if (token.Table != TableType.Param)
 				throw new ArgumentException("Invalid token type for ParamRow.", @"token");
 
 			using (BinaryReader reader = CreateReaderForToken(token))
@@ -544,7 +527,7 @@ namespace Mosa.Runtime.Metadata
 				return new ParamRow(
 					(ParameterAttributes)reader.ReadUInt16(),
 					reader.ReadInt16(),
-					ReadIndexValue(reader, IndexType.StringHeap)
+					ReadHeapToken(reader, IndexType.StringHeap)
 				);
 			}
 		}
@@ -556,14 +539,14 @@ namespace Mosa.Runtime.Metadata
 		/// <returns></returns>
 		public InterfaceImplRow ReadInterfaceImplRow(Token token)
 		{
-			if (token.Table != TableTypes.InterfaceImpl)
+			if (token.Table != TableType.InterfaceImpl)
 				throw new ArgumentException("Invalid token type for InterfaceImplRow.", @"token");
 
 			using (BinaryReader reader = CreateReaderForToken(token))
 			{
 				return new InterfaceImplRow(
-					ReadIndexValue(reader, TableTypes.TypeDef),
-					ReadIndexValue2(reader, IndexType.TypeDefOrRef)
+					ReadIndexValue(reader, TableType.TypeDef),
+					ReadMetadataToken(reader, IndexType.TypeDefOrRef)
 				);
 			}
 		}
@@ -575,15 +558,15 @@ namespace Mosa.Runtime.Metadata
 		/// <returns></returns>
 		public MemberRefRow ReadMemberRefRow(Token token)
 		{
-			if (token.Table != TableTypes.MemberRef)
+			if (token.Table != TableType.MemberRef)
 				throw new ArgumentException("Invalid token type for MemberRefRow.", @"token");
 
 			using (BinaryReader reader = CreateReaderForToken(token))
 			{
 				return new MemberRefRow(
-					ReadIndexValue2(reader, IndexType.MemberRefParent),
-					ReadIndexValue(reader, IndexType.StringHeap),
-					ReadIndexValue(reader, IndexType.BlobHeap)
+					ReadMetadataToken(reader, IndexType.MemberRefParent),
+					ReadHeapToken(reader, IndexType.StringHeap),
+					ReadHeapToken(reader, IndexType.BlobHeap)
 				);
 			}
 		}
@@ -595,7 +578,7 @@ namespace Mosa.Runtime.Metadata
 		/// <returns></returns>
 		public ConstantRow ReadConstantRow(Token token)
 		{
-			if (token.Table != TableTypes.Constant)
+			if (token.Table != TableType.Constant)
 				throw new ArgumentException("Invalid token type for ConstantRow.", @"token");
 
 			using (BinaryReader reader = CreateReaderForToken(token))
@@ -605,8 +588,8 @@ namespace Mosa.Runtime.Metadata
 
 				return new ConstantRow(
 					cet,
-					ReadIndexValue2(reader, IndexType.HasConstant),
-					ReadIndexValue(reader, IndexType.BlobHeap)
+					ReadMetadataToken(reader, IndexType.HasConstant),
+					ReadHeapToken(reader, IndexType.BlobHeap)
 				);
 			}
 		}
@@ -618,15 +601,15 @@ namespace Mosa.Runtime.Metadata
 		/// <returns></returns>
 		public CustomAttributeRow ReadCustomAttributeRow(Token token)
 		{
-			if (token.Table != TableTypes.CustomAttribute)
+			if (token.Table != TableType.CustomAttribute)
 				throw new ArgumentException("Invalid token type for CustomAttributeRow.", @"token");
 
 			using (BinaryReader reader = CreateReaderForToken(token))
 			{
 				return new CustomAttributeRow(
-					ReadIndexValue2(reader, IndexType.HasCustomAttribute),
-					ReadIndexValue2(reader, IndexType.CustomAttributeType),
-					ReadIndexValue(reader, IndexType.BlobHeap)
+					ReadMetadataToken(reader, IndexType.HasCustomAttribute),
+					ReadMetadataToken(reader, IndexType.CustomAttributeType),
+					ReadHeapToken(reader, IndexType.BlobHeap)
 				);
 			}
 		}
@@ -638,14 +621,14 @@ namespace Mosa.Runtime.Metadata
 		/// <returns></returns>
 		public FieldMarshalRow ReadFieldMarshalRow(Token token)
 		{
-			if (token.Table != TableTypes.FieldMarshal)
+			if (token.Table != TableType.FieldMarshal)
 				throw new ArgumentException("Invalid token type for FieldMarshalRow.", @"token");
 
 			using (BinaryReader reader = CreateReaderForToken(token))
 			{
 				return new FieldMarshalRow(
-					ReadIndexValue2(reader, IndexType.HasFieldMarshal),
-					ReadIndexValue(reader, IndexType.BlobHeap)
+					ReadMetadataToken(reader, IndexType.HasFieldMarshal),
+					ReadHeapToken(reader, IndexType.BlobHeap)
 				);
 			}
 		}
@@ -657,15 +640,15 @@ namespace Mosa.Runtime.Metadata
 		/// <returns></returns>
 		public DeclSecurityRow ReadDeclSecurityRow(Token token)
 		{
-			if (token.Table != TableTypes.DeclSecurity)
+			if (token.Table != TableType.DeclSecurity)
 				throw new ArgumentException("Invalid token type for DeclSecurityRow.", @"token");
 
 			using (BinaryReader reader = CreateReaderForToken(token))
 			{
 				return new DeclSecurityRow(
 					(System.Security.Permissions.SecurityAction)reader.ReadUInt16(),
-					ReadIndexValue2(reader, IndexType.HasDeclSecurity),
-					ReadIndexValue(reader, IndexType.BlobHeap)
+					ReadMetadataToken(reader, IndexType.HasDeclSecurity),
+					ReadHeapToken(reader, IndexType.BlobHeap)
 				);
 			}
 		}
@@ -677,7 +660,7 @@ namespace Mosa.Runtime.Metadata
 		/// <returns></returns>
 		public ClassLayoutRow ReadClassLayoutRow(Token token)
 		{
-			if (token.Table != TableTypes.ClassLayout)
+			if (token.Table != TableType.ClassLayout)
 				throw new ArgumentException("Invalid token type for ClassLayoutRow.", @"token");
 
 			using (BinaryReader reader = CreateReaderForToken(token))
@@ -685,7 +668,7 @@ namespace Mosa.Runtime.Metadata
 				return new ClassLayoutRow(
 					reader.ReadInt16(),
 					reader.ReadInt32(),
-					ReadIndexValue(reader, TableTypes.TypeDef)
+					ReadIndexValue(reader, TableType.TypeDef)
 				);
 			}
 		}
@@ -697,14 +680,14 @@ namespace Mosa.Runtime.Metadata
 		/// <returns></returns>
 		public FieldLayoutRow ReadFieldLayoutRow(Token token)
 		{
-			if (token.Table != TableTypes.FieldLayout)
+			if (token.Table != TableType.FieldLayout)
 				throw new ArgumentException("Invalid token type for FieldLayoutRow.", @"token");
 
 			using (BinaryReader reader = CreateReaderForToken(token))
 			{
 				return new FieldLayoutRow(
 					reader.ReadUInt32(),
-					ReadIndexValue(reader, TableTypes.Field)
+					ReadIndexValue(reader, TableType.Field)
 				);
 			}
 		}
@@ -716,13 +699,13 @@ namespace Mosa.Runtime.Metadata
 		/// <returns></returns>
 		public StandAloneSigRow ReadStandAloneSigRow(Token token)
 		{
-			if (token.Table != TableTypes.StandAloneSig)
+			if (token.Table != TableType.StandAloneSig)
 				throw new ArgumentException("Invalid token type for StandAloneSigRow.", @"token");
 
 			using (BinaryReader reader = CreateReaderForToken(token))
 			{
 				return new StandAloneSigRow(
-					ReadIndexValue(reader, IndexType.BlobHeap)
+					ReadHeapToken(reader, IndexType.BlobHeap)
 				);
 			}
 		}
@@ -734,14 +717,14 @@ namespace Mosa.Runtime.Metadata
 		/// <returns></returns>
 		public EventMapRow ReadEventMapRow(Token token)
 		{
-			if (token.Table != TableTypes.EventMap)
+			if (token.Table != TableType.EventMap)
 				throw new ArgumentException("Invalid token type for EventMapRow.", @"token");
 
 			using (BinaryReader reader = CreateReaderForToken(token))
 			{
 				return new EventMapRow(
-					ReadIndexValue(reader, TableTypes.TypeDef),
-					ReadIndexValue(reader, TableTypes.Event)
+					ReadIndexValue(reader, TableType.TypeDef),
+					ReadIndexValue(reader, TableType.Event)
 				);
 			}
 		}
@@ -753,15 +736,15 @@ namespace Mosa.Runtime.Metadata
 		/// <returns></returns>
 		public EventRow ReadEventRow(Token token)
 		{
-			if (token.Table != TableTypes.Event)
+			if (token.Table != TableType.Event)
 				throw new ArgumentException("Invalid token type for EventRow.", @"token");
 
 			using (BinaryReader reader = CreateReaderForToken(token))
 			{
 				return new EventRow(
 					(EventAttributes)reader.ReadUInt16(),
-					ReadIndexValue(reader, IndexType.StringHeap),
-					ReadIndexValue2(reader, IndexType.TypeDefOrRef)
+					ReadHeapToken(reader, IndexType.StringHeap),
+					ReadMetadataToken(reader, IndexType.TypeDefOrRef)
 				);
 			}
 		}
@@ -773,14 +756,14 @@ namespace Mosa.Runtime.Metadata
 		/// <returns></returns>
 		public PropertyMapRow ReadPropertyMapRow(Token token)
 		{
-			if (token.Table != TableTypes.PropertyMap)
+			if (token.Table != TableType.PropertyMap)
 				throw new ArgumentException("Invalid token type for PropertyMapRow.", @"token");
 
 			using (BinaryReader reader = CreateReaderForToken(token))
 			{
 				return new PropertyMapRow(
-					ReadIndexValue(reader, TableTypes.TypeDef),
-					ReadIndexValue(reader, TableTypes.Property)
+					ReadIndexValue(reader, TableType.TypeDef),
+					ReadIndexValue(reader, TableType.Property)
 				);
 			}
 		}
@@ -792,15 +775,15 @@ namespace Mosa.Runtime.Metadata
 		/// <returns></returns>
 		public PropertyRow ReadPropertyRow(Token token)
 		{
-			if (token.Table != TableTypes.Property)
+			if (token.Table != TableType.Property)
 				throw new ArgumentException("Invalid token type for PropertyRow.", @"token");
 
 			using (BinaryReader reader = CreateReaderForToken(token))
 			{
 				return new PropertyRow(
 					(PropertyAttributes)reader.ReadUInt16(),
-					ReadIndexValue(reader, IndexType.StringHeap),
-					ReadIndexValue(reader, IndexType.BlobHeap)
+					ReadHeapToken(reader, IndexType.StringHeap),
+					ReadHeapToken(reader, IndexType.BlobHeap)
 				);
 			}
 		}
@@ -814,13 +797,13 @@ namespace Mosa.Runtime.Metadata
 		{
 			using (BinaryReader reader = CreateReaderForToken(token))
 			{
-				if (token.Table != TableTypes.MethodSemantics)
+				if (token.Table != TableType.MethodSemantics)
 					throw new ArgumentException("Invalid token type for MethodSemanticsRow.", @"token");
 
 				return new MethodSemanticsRow(
 					(MethodSemanticsAttributes)reader.ReadInt16(),
-					ReadIndexValue(reader, TableTypes.MethodDef),
-					ReadIndexValue2(reader, IndexType.HasSemantics)
+					ReadIndexValue(reader, TableType.MethodDef),
+					ReadMetadataToken(reader, IndexType.HasSemantics)
 				);
 			}
 		}
@@ -832,15 +815,15 @@ namespace Mosa.Runtime.Metadata
 		/// <returns></returns>
 		public MethodImplRow ReadMethodImplRow(Token token)
 		{
-			if (token.Table != TableTypes.MethodImpl)
+			if (token.Table != TableType.MethodImpl)
 				throw new ArgumentException("Invalid token type for MethodImplRow.", @"token");
 
 			using (BinaryReader reader = CreateReaderForToken(token))
 			{
 				return new MethodImplRow(
-					ReadIndexValue(reader, TableTypes.TypeDef),
-					ReadIndexValue2(reader, IndexType.MethodDefOrRef),
-					ReadIndexValue2(reader, IndexType.MethodDefOrRef)
+					ReadIndexValue(reader, TableType.TypeDef),
+					ReadMetadataToken(reader, IndexType.MethodDefOrRef),
+					ReadMetadataToken(reader, IndexType.MethodDefOrRef)
 				);
 			}
 		}
@@ -852,13 +835,13 @@ namespace Mosa.Runtime.Metadata
 		/// <returns></returns>
 		public ModuleRefRow ReadModuleRefRow(Token token)
 		{
-			if (token.Table != TableTypes.ModuleRef)
+			if (token.Table != TableType.ModuleRef)
 				throw new ArgumentException("Invalid token type for ModuleRefRow.", @"token");
 
 			using (BinaryReader reader = CreateReaderForToken(token))
 			{
 				return new ModuleRefRow(
-					ReadIndexValue(reader, IndexType.StringHeap)
+					ReadHeapToken(reader, IndexType.StringHeap)
 				);
 			}
 		}
@@ -870,13 +853,13 @@ namespace Mosa.Runtime.Metadata
 		/// <returns></returns>
 		public TypeSpecRow ReadTypeSpecRow(Token token)
 		{
-			if (token.Table != TableTypes.TypeSpec)
+			if (token.Table != TableType.TypeSpec)
 				throw new ArgumentException("Invalid token type for TypeSpecRow.", @"token");
 
 			using (BinaryReader reader = CreateReaderForToken(token))
 			{
 				return new TypeSpecRow(
-					ReadIndexValue(reader, IndexType.BlobHeap)
+					ReadHeapToken(reader, IndexType.BlobHeap)
 				);
 			}
 		}
@@ -888,16 +871,16 @@ namespace Mosa.Runtime.Metadata
 		/// <returns></returns>
 		public ImplMapRow ReadImplMapRow(Token token)
 		{
-			if (token.Table != TableTypes.ImplMap)
+			if (token.Table != TableType.ImplMap)
 				throw new ArgumentException("Invalid token type for ImplMapRow.", @"token");
 
 			using (BinaryReader reader = CreateReaderForToken(token))
 			{
 				return new ImplMapRow(
 					(PInvokeAttributes)reader.ReadUInt16(),
-					ReadIndexValue2(reader, IndexType.MemberForwarded),
-					ReadIndexValue(reader, IndexType.StringHeap),
-					ReadIndexValue(reader, TableTypes.ModuleRef)
+					ReadMetadataToken(reader, IndexType.MemberForwarded),
+					ReadHeapToken(reader, IndexType.StringHeap),
+					ReadIndexValue(reader, TableType.ModuleRef)
 				);
 			}
 		}
@@ -909,14 +892,14 @@ namespace Mosa.Runtime.Metadata
 		/// <returns></returns>
 		public FieldRVARow ReadFieldRVARow(Token token)
 		{
-			if (token.Table != TableTypes.FieldRVA)
+			if (token.Table != TableType.FieldRVA)
 				throw new ArgumentException("Invalid token type for FieldRVARow.", @"token");
 
 			using (BinaryReader reader = CreateReaderForToken(token))
 			{
 				return new FieldRVARow(
 					reader.ReadUInt32(),
-					ReadIndexValue(reader, TableTypes.Field)
+					ReadIndexValue(reader, TableType.Field)
 				);
 			}
 		}
@@ -928,7 +911,7 @@ namespace Mosa.Runtime.Metadata
 		/// <returns></returns>
 		public AssemblyRow ReadAssemblyRow(Token token)
 		{
-			if (token.Table != TableTypes.Assembly)
+			if (token.Table != TableType.Assembly)
 				throw new ArgumentException("Invalid token type for AssemblyRow.", @"token");
 
 			using (BinaryReader reader = CreateReaderForToken(token))
@@ -940,9 +923,9 @@ namespace Mosa.Runtime.Metadata
 					reader.ReadUInt16(),
 					reader.ReadUInt16(),
 					(AssemblyAttributes)reader.ReadUInt32(),
-					ReadIndexValue(reader, IndexType.BlobHeap),
-					ReadIndexValue(reader, IndexType.StringHeap),
-					ReadIndexValue(reader, IndexType.StringHeap)
+					ReadHeapToken(reader, IndexType.BlobHeap),
+					ReadHeapToken(reader, IndexType.StringHeap),
+					ReadHeapToken(reader, IndexType.StringHeap)
 				);
 			}
 		}
@@ -954,7 +937,7 @@ namespace Mosa.Runtime.Metadata
 		/// <returns></returns>
 		public AssemblyProcessorRow ReadAssemblyProcessorRow(Token token)
 		{
-			if (token.Table != TableTypes.AssemblyProcessor)
+			if (token.Table != TableType.AssemblyProcessor)
 				throw new ArgumentException("Invalid token type for AssemblyProcessorRow.", @"token");
 
 			using (BinaryReader reader = CreateReaderForToken(token))
@@ -972,7 +955,7 @@ namespace Mosa.Runtime.Metadata
 		/// <returns></returns>
 		public AssemblyOSRow ReadAssemblyOSRow(Token token)
 		{
-			if (token.Table != TableTypes.AssemblyOS)
+			if (token.Table != TableType.AssemblyOS)
 				throw new ArgumentException("Invalid token type for AssemblyOSRow.", @"token");
 
 			using (BinaryReader reader = CreateReaderForToken(token))
@@ -992,7 +975,7 @@ namespace Mosa.Runtime.Metadata
 		/// <returns></returns>
 		public AssemblyRefRow ReadAssemblyRefRow(Token token)
 		{
-			if (token.Table != TableTypes.AssemblyRef)
+			if (token.Table != TableType.AssemblyRef)
 				throw new ArgumentException("Invalid token type for AssemblyRefRow.", @"token");
 
 			using (BinaryReader reader = CreateReaderForToken(token))
@@ -1003,10 +986,10 @@ namespace Mosa.Runtime.Metadata
 					reader.ReadUInt16(),
 					reader.ReadUInt16(),
 					(AssemblyAttributes)reader.ReadUInt32(),
-					ReadIndexValue(reader, IndexType.BlobHeap),
-					ReadIndexValue(reader, IndexType.StringHeap),
-					ReadIndexValue(reader, IndexType.StringHeap),
-					ReadIndexValue(reader, IndexType.BlobHeap)
+					ReadHeapToken(reader, IndexType.BlobHeap),
+					ReadHeapToken(reader, IndexType.StringHeap),
+					ReadHeapToken(reader, IndexType.StringHeap),
+					ReadHeapToken(reader, IndexType.BlobHeap)
 				);
 			}
 		}
@@ -1018,14 +1001,14 @@ namespace Mosa.Runtime.Metadata
 		/// <returns></returns>
 		public AssemblyRefProcessorRow ReadAssemblyRefProcessorRow(Token token)
 		{
-			if (token.Table != TableTypes.AssemblyRefProcessor)
+			if (token.Table != TableType.AssemblyRefProcessor)
 				throw new ArgumentException("Invalid token type for AssemblyRefProcessorRow.", @"token");
 
 			using (BinaryReader reader = CreateReaderForToken(token))
 			{
 				return new AssemblyRefProcessorRow(
 					reader.ReadUInt32(),
-					ReadIndexValue(reader, TableTypes.AssemblyRef)
+					ReadIndexValue(reader, TableType.AssemblyRef)
 				);
 			}
 		}
@@ -1037,7 +1020,7 @@ namespace Mosa.Runtime.Metadata
 		/// <returns></returns>
 		public AssemblyRefOSRow ReadAssemblyRefOSRow(Token token)
 		{
-			if (token.Table != TableTypes.AssemblyRefOS)
+			if (token.Table != TableType.AssemblyRefOS)
 				throw new ArgumentException("Invalid token type for AssemblyRefOSRow.", @"token");
 
 			using (BinaryReader reader = CreateReaderForToken(token))
@@ -1046,7 +1029,7 @@ namespace Mosa.Runtime.Metadata
 					reader.ReadUInt32(),
 					reader.ReadUInt32(),
 					reader.ReadUInt32(),
-					ReadIndexValue(reader, TableTypes.AssemblyRef)
+					ReadIndexValue(reader, TableType.AssemblyRef)
 				);
 			}
 		}
@@ -1058,15 +1041,15 @@ namespace Mosa.Runtime.Metadata
 		/// <returns></returns>
 		public FileRow ReadFileRow(Token token)
 		{
-			if (token.Table != TableTypes.File)
+			if (token.Table != TableType.File)
 				throw new ArgumentException("Invalid token type for FileRow.", @"token");
 
 			using (BinaryReader reader = CreateReaderForToken(token))
 			{
 				return new FileRow(
 					(FileAttributes)reader.ReadUInt32(),
-					ReadIndexValue(reader, IndexType.StringHeap),
-					ReadIndexValue(reader, IndexType.BlobHeap)
+					ReadHeapToken(reader, IndexType.StringHeap),
+					ReadHeapToken(reader, IndexType.BlobHeap)
 				);
 			}
 		}
@@ -1078,17 +1061,17 @@ namespace Mosa.Runtime.Metadata
 		/// <returns></returns>
 		public ExportedTypeRow ReadExportedTypeRow(Token token)
 		{
-			if (token.Table != TableTypes.ExportedType)
+			if (token.Table != TableType.ExportedType)
 				throw new ArgumentException("Invalid token type for ExportedTypeRow.", @"token");
 
 			using (BinaryReader reader = CreateReaderForToken(token))
 			{
 				return new ExportedTypeRow(
 					(TypeAttributes)reader.ReadUInt32(),
-					(TokenTypes)reader.ReadUInt32(),
-					ReadIndexValue(reader, IndexType.StringHeap),
-					ReadIndexValue(reader, IndexType.StringHeap),
-					ReadIndexValue2(reader, IndexType.Implementation)
+					(HeapIndexToken)reader.ReadUInt32(),
+					ReadHeapToken(reader, IndexType.StringHeap),
+					ReadHeapToken(reader, IndexType.StringHeap),
+					ReadMetadataToken(reader, IndexType.Implementation)
 				);
 			}
 		}
@@ -1100,7 +1083,7 @@ namespace Mosa.Runtime.Metadata
 		/// <returns></returns>
 		public ManifestResourceRow ReadManifestResourceRow(Token token)
 		{
-			if (token.Table != TableTypes.ManifestResource)
+			if (token.Table != TableType.ManifestResource)
 				throw new ArgumentException("Invalid token type for ManifestResourceRow.", @"token");
 
 			using (BinaryReader reader = CreateReaderForToken(token))
@@ -1108,8 +1091,8 @@ namespace Mosa.Runtime.Metadata
 				return new ManifestResourceRow(
 					reader.ReadUInt32(),
 					(ManifestResourceAttributes)reader.ReadUInt32(),
-					ReadIndexValue(reader, IndexType.StringHeap),
-					ReadIndexValue2(reader, IndexType.Implementation)
+					ReadHeapToken(reader, IndexType.StringHeap),
+					ReadMetadataToken(reader, IndexType.Implementation)
 				);
 			}
 		}
@@ -1121,14 +1104,14 @@ namespace Mosa.Runtime.Metadata
 		/// <returns></returns>
 		public NestedClassRow ReadNestedClassRow(Token token)
 		{
-			if (token.Table != TableTypes.NestedClass)
+			if (token.Table != TableType.NestedClass)
 				throw new ArgumentException("Invalid token type for NestedClassRow.", @"token");
 
 			using (BinaryReader reader = CreateReaderForToken(token))
 			{
 				return new NestedClassRow(
-					ReadIndexValue(reader, TableTypes.TypeDef),
-					ReadIndexValue(reader, TableTypes.TypeDef)
+					ReadIndexValue(reader, TableType.TypeDef),
+					ReadIndexValue(reader, TableType.TypeDef)
 				);
 			}
 		}
@@ -1140,7 +1123,7 @@ namespace Mosa.Runtime.Metadata
 		/// <returns></returns>
 		public GenericParamRow ReadGenericParamRow(Token token)
 		{
-			if (token.Table != TableTypes.GenericParam)
+			if (token.Table != TableType.GenericParam)
 				throw new ArgumentException("Invalid token type for GenericParamRow.", @"token");
 
 			using (BinaryReader reader = CreateReaderForToken(token))
@@ -1148,8 +1131,8 @@ namespace Mosa.Runtime.Metadata
 				return new GenericParamRow(
 					reader.ReadUInt16(),
 					(GenericParameterAttributes)reader.ReadUInt16(),
-					ReadIndexValue2(reader, IndexType.TypeOrMethodDef),
-					ReadIndexValue(reader, IndexType.StringHeap)
+					ReadMetadataToken(reader, IndexType.TypeOrMethodDef),
+					ReadHeapToken(reader, IndexType.StringHeap)
 				);
 			}
 		}
@@ -1161,14 +1144,14 @@ namespace Mosa.Runtime.Metadata
 		/// <returns></returns>
 		public MethodSpecRow ReadMethodSpecRow(Token token)
 		{
-			if (token.Table != TableTypes.MethodSpec)
+			if (token.Table != TableType.MethodSpec)
 				throw new ArgumentException("Invalid token type for MethodSpecRow.", @"token");
 
 			using (BinaryReader reader = CreateReaderForToken(token))
 			{
 				return new MethodSpecRow(
-					ReadIndexValue2(reader, IndexType.MethodDefOrRef),
-					ReadIndexValue(reader, IndexType.BlobHeap)
+					ReadMetadataToken(reader, IndexType.MethodDefOrRef),
+					ReadHeapToken(reader, IndexType.BlobHeap)
 				);
 			}
 		}
@@ -1180,14 +1163,14 @@ namespace Mosa.Runtime.Metadata
 		/// <returns></returns>
 		public GenericParamConstraintRow ReadGenericParamConstraintRow(Token token)
 		{
-			if (token.Table != TableTypes.GenericParamConstraint)
+			if (token.Table != TableType.GenericParamConstraint)
 				throw new ArgumentException("Invalid token type for GenericParamConstraintRow.", @"token");
 
 			using (BinaryReader reader = CreateReaderForToken(token))
 			{
 				return new GenericParamConstraintRow(
-					ReadIndexValue(reader, TableTypes.GenericParam),
-					ReadIndexValue2(reader, IndexType.TypeDefOrRef)
+					ReadIndexValue(reader, TableType.GenericParam),
+					ReadMetadataToken(reader, IndexType.TypeDefOrRef)
 				);
 			}
 		}

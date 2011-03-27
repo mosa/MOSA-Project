@@ -392,9 +392,9 @@ namespace Mosa.Runtime.TypeSystem
 		{
 			//TODO: rewrite so that access directly to metadata is not required, type system should assist instead
 			IMetadataProvider metadata = type.Module.MetadataModule.Metadata;
-			Token maxToken = metadata.GetMaxTokenValue(TableTypes.MethodImpl);
+			Token maxToken = metadata.GetMaxTokenValue(TableType.MethodImpl);
 
-			foreach (Token token in new Token(TableTypes.MethodImpl, 1).Upto(maxToken))
+			foreach (Token token in new Token(TableType.MethodImpl, 1).Upto(maxToken))
 			{
 				MethodImplRow row = metadata.ReadMethodImplRow(token);
 				if (row.@Class == type.Token)

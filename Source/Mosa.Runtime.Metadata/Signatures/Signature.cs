@@ -22,13 +22,13 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes token;
+		private HeapIndexToken token;
 
 		/// <summary>
 		/// Gets the token.
 		/// </summary>
 		/// <value>The token.</value>
-		public TokenTypes Token
+		public HeapIndexToken Token
 		{
 			get { return token; }
 		}
@@ -53,7 +53,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// Loads the signature.
 		/// </summary>
 		/// <param name="token">The token.</param>
-		protected Signature(TokenTypes token)
+		protected Signature(HeapIndexToken token)
 		{
 			this.token = token;
 		}
@@ -63,7 +63,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// </summary>
 		/// <param name="provider">The provider.</param>
 		/// <param name="token">The token.</param>
-		public Signature(IMetadataProvider provider, TokenTypes token)
+		public Signature(IMetadataProvider provider, HeapIndexToken token)
 		{
 			SignatureReader reader = new SignatureReader(provider.ReadBlob(token));
 
@@ -90,7 +90,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// </summary>
 		/// <param name="provider">The provider.</param>
 		/// <param name="token">The token.</param>
-		public void LoadSignature(IMetadataProvider provider, TokenTypes token)
+		public void LoadSignature(IMetadataProvider provider, HeapIndexToken token)
 		{
 			SignatureReader reader = new SignatureReader(provider.ReadBlob(token));
 
@@ -112,7 +112,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// <param name="provider">The provider.</param>
 		/// <param name="token">The token.</param>
 		/// <returns></returns>
-		public static Signature FromMemberRefSignatureToken(IMetadataProvider provider, TokenTypes token)
+		public static Signature FromMemberRefSignatureToken(IMetadataProvider provider, HeapIndexToken token)
 		{
 			SignatureReader reader = new SignatureReader(provider.ReadBlob(token));
 
@@ -126,7 +126,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 			}
 		}
 
-		public static Signature FromMemberRefSignatureToken(IMetadataProvider provider, TokenTypes token, SigType[] genericArguments)
+		public static Signature FromMemberRefSignatureToken(IMetadataProvider provider, HeapIndexToken token, SigType[] genericArguments)
 		{
 			SignatureReader reader = new SignatureReader(provider.ReadBlob(token));
 

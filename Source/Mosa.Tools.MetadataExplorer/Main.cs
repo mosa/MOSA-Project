@@ -36,19 +36,6 @@ namespace Mosa.Tools.MetadataExplorer
 			}
 		}
 
-		protected string TokenToString(TokenTypes token)
-		{
-			return ((int)token).ToString("X8");
-		}
-
-		protected string FormatToString(TokenTypes token)
-		{
-			if (!showTokenValues.Checked)
-				return string.Empty;
-
-			return "[" + TokenToString(token) + "] ";
-		}
-
 		protected void LoadAssembly(string filename)
 		{
 			IAssemblyLoader assemblyLoader = new AssemblyLoader();
@@ -65,9 +52,9 @@ namespace Mosa.Tools.MetadataExplorer
 			treeView.Nodes.Clear();
 
 			//Cycle through all metadata tables
-			foreach (TableTypes table in Enum.GetValues(typeof(TableTypes)))
+			foreach (TableType table in Enum.GetValues(typeof(TableType)))
 			{
-				if (table == TableTypes.Module)
+				if (table == TableType.Module)
 					continue;
 
 				int count = metadataModule.Metadata.GetRowCount(table);

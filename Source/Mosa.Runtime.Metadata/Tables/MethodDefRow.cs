@@ -42,12 +42,12 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes _nameStringIdx;
+		private HeapIndexToken _nameStringIdx;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes _signatureBlobIdx;
+		private HeapIndexToken _signatureBlobIdx;
 
 		/// <summary>
 		/// 
@@ -67,8 +67,8 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <param name="nameStringIdx">The name string idx.</param>
 		/// <param name="signatureBlobIdx">The signature BLOB idx.</param>
 		/// <param name="paramList">The param list.</param>
-		public MethodDefRow(uint rva, MethodImplAttributes implFlags, MethodAttributes flags, TokenTypes nameStringIdx,
-								TokenTypes signatureBlobIdx, Token paramList)
+		public MethodDefRow(uint rva, MethodImplAttributes implFlags, MethodAttributes flags, HeapIndexToken nameStringIdx,
+								HeapIndexToken signatureBlobIdx, Token paramList)
 		{
 			this._rva = rva;
 			this._implFlags = implFlags;
@@ -113,7 +113,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Gets the name string idx.
 		/// </summary>
 		/// <value>The name string idx.</value>
-		public TokenTypes NameStringIdx
+		public HeapIndexToken NameStringIdx
 		{
 			get { return _nameStringIdx; }
 		}
@@ -122,7 +122,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Gets the signature BLOB idx.
 		/// </summary>
 		/// <value>The signature BLOB idx.</value>
-		public TokenTypes SignatureBlobIdx
+		public HeapIndexToken SignatureBlobIdx
 		{
 			get { return _signatureBlobIdx; }
 		}

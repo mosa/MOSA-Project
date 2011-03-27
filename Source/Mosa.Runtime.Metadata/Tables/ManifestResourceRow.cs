@@ -36,7 +36,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes _nameStringIdx;
+		private HeapIndexToken _nameStringIdx;
 
 		/// <summary>
 		/// 
@@ -54,7 +54,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <param name="flags">The flags.</param>
 		/// <param name="nameStringIndex">Index of the name string.</param>
 		/// <param name="implementation">The implementation table idx.</param>
-		public ManifestResourceRow(uint offset, ManifestResourceAttributes flags, TokenTypes nameStringIndex,
+		public ManifestResourceRow(uint offset, ManifestResourceAttributes flags, HeapIndexToken nameStringIndex,
 			Token implementation)
 		{
 			_offset = offset;
@@ -89,7 +89,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Gets the name string idx.
 		/// </summary>
 		/// <value>The name string idx.</value>
-		public TokenTypes NameStringIdx
+		public HeapIndexToken NameStringIdx
 		{
 			get { return _nameStringIdx; }
 		}
