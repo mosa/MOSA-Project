@@ -25,7 +25,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// Initializes a new instance of the <see cref="ClassSigType"/> class.
 		/// </summary>
 		/// <param name="token">The class definition (a type definition, type reference or type specification) token.</param>
-		public ClassSigType(TokenTypes token)
+		public ClassSigType(MetadataToken token)
 			: base(token, CilElementType.Class)
 		{
 		}

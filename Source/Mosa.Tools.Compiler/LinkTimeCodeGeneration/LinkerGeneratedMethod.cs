@@ -36,7 +36,7 @@ namespace Mosa.Tools.Compiler
 		/// <param name="name">The name of the method.</param>
 		/// <param name="declaringType">Type of the declaring.</param>
 		public LinkerGeneratedMethod(ITypeModule typeSystem, string name, RuntimeType declaringType, MethodSignature signature) :
-			base(typeSystem, 0, declaringType)
+			base(typeSystem, MetadataToken.Zero, declaringType)
 		{
 			if (name == null)
 				throw new ArgumentNullException(@"name");

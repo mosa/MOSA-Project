@@ -24,7 +24,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private uint _processor;
+		private uint processor;
 
 		#endregion // Data members
 
@@ -36,7 +36,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <param name="processor">The processor.</param>
 		public AssemblyProcessorRow(uint processor)
 		{
-			_processor = processor;
+			this.processor = processor;
 		}
 
 		#endregion // Construction
@@ -49,7 +49,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <value>The processor.</value>
 		public uint Processor
 		{
-			get { return _processor; }
+			get { return processor; }
 		}
 
 		#endregion // Properties

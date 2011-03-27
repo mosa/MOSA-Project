@@ -43,9 +43,9 @@ namespace Mosa.Tools.MetadataExplorer.Tables
 			yield return Value("BuildNumber", row.BuildNumber);
 			yield return Value("MajorVersion", row.MajorVersion);
 			yield return Value("MinorVersion", row.MinorVersion);
-			yield return Value("HashValueIdx", row.HashValueIdx);
+			yield return Value("HashValueIdx", row.HashValue);
 			yield return Value("Revision", row.Revision);
-			yield return Value("CultureIdx", row.CultureIdx);
+			yield return Value("CultureIdx", row.Culture);
 			yield return Value("PublicKeyOrTokenIdx", row.PublicKeyOrTokenIdx);
 		}
 	}

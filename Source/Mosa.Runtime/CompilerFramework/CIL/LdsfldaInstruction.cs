@@ -37,7 +37,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			base.Decode(ctx, decoder);
 
 			// Read the _stackFrameIndex From the code
-			TokenTypes token = decoder.DecodeTokenType();
+			MetadataToken token = decoder.DecodeTokenType();
 	
 			ctx.RuntimeField = decoder.TypeModule.GetField(token);
 

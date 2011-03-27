@@ -19,17 +19,17 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private int _platformId;
+		private int platformID;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private int _majorVersion;
+		private int majorVersion;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private int _minorVersion;
+		private int minorVersion;
 
 		#endregion // Data members
 
@@ -43,9 +43,9 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <param name="minorVersion">The minor version.</param>
 		public AssemblyOSRow(int platformId, int majorVersion, int minorVersion)
 		{
-			_platformId = platformId;
-			_majorVersion = majorVersion;
-			_minorVersion = minorVersion;
+			this.platformID = platformId;
+			this.majorVersion = majorVersion;
+			this.minorVersion = minorVersion;
 		}
 
 		#endregion // Construction
@@ -56,27 +56,27 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Gets the platform id.
 		/// </summary>
 		/// <value>The platform id.</value>
-		public int PlatformId
+		public int OSPlatformID
 		{
-			get { return _platformId; }
+			get { return platformID; }
 		}
 
 		/// <summary>
 		/// Gets the major version.
 		/// </summary>
 		/// <value>The major version.</value>
-		public int MajorVersion
+		public int OSMajorVersion
 		{
-			get { return _majorVersion; }
+			get { return majorVersion; }
 		}
 
 		/// <summary>
 		/// Gets the minor version.
 		/// </summary>
 		/// <value>The minor version.</value>
-		public int MinorVersion
+		public int OSMinorVersion
 		{
-			get { return _minorVersion; }
+			get { return minorVersion; }
 		}
 
 		#endregion // Properties

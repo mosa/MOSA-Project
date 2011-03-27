@@ -459,7 +459,7 @@ namespace Mosa.Platform.x86
 			MemberOperand member = displacement as MemberOperand;
 			LabelOperand label = displacement as LabelOperand;
 			SymbolOperand symbol = displacement as SymbolOperand;
-			
+
 			if (label != null)
 			{
 				int pos = (int)(_codeStream.Position - _codeStreamBasePosition);
@@ -478,7 +478,7 @@ namespace Mosa.Platform.x86
 			else
 				disp = LittleEndianBitConverter.GetBytes((displacement as MemoryOperand).Offset.ToInt32());
 
-			  _codeStream.Write(disp, 0, disp.Length);
+			_codeStream.Write(disp, 0, disp.Length);
 		}
 
 		/// <summary>
@@ -514,7 +514,14 @@ namespace Mosa.Platform.x86
 					case CilElementType.I:
 						try
 						{
-							imm = LittleEndianBitConverter.GetBytes(Convert.ToInt32(co.Value));
+							if (co.Value is MetadataToken)
+							{
+								imm = LittleEndianBitConverter.GetBytes(((MetadataToken)co.Value).ToInt32());
+							}
+							else
+							{
+								imm = LittleEndianBitConverter.GetBytes(Convert.ToInt32(co.Value));
+							}
 						}
 						catch (OverflowException)
 						{

@@ -24,7 +24,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// Holds the index into the method table.
 		/// </summary>
-		private TokenTypes _methodTableIdx;
+		private MetadataToken _method;
 
 		/// <summary>
 		/// Holds the index into the blob instantiation.
@@ -38,11 +38,11 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// Initializes a new instance of <see cref="MethodSpecRow"/>.
 		/// </summary>
-		/// <param name="methodTableIdx">The method table index of the MethodSpecRow.</param>
+		/// <param name="method">The method table index of the MethodSpecRow.</param>
 		/// <param name="instantiationBlobIdx">The instantiation blob index of the MethodSpecRow.</param>
-		public MethodSpecRow(TokenTypes methodTableIdx, TokenTypes instantiationBlobIdx)
+		public MethodSpecRow(MetadataToken method, TokenTypes instantiationBlobIdx)
 		{
-			_methodTableIdx = methodTableIdx;
+			_method = method;
 			_instantiationBlobIdx = instantiationBlobIdx;
 		}
 
@@ -54,9 +54,9 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Gets the method table idx.
 		/// </summary>
 		/// <value>The method table idx.</value>
-		public TokenTypes MethodTableIdx
+		public MetadataToken Method
 		{
-			get { return _methodTableIdx; }
+			get { return _method; }
 		}
 
 		/// <summary>

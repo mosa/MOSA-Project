@@ -116,7 +116,7 @@ namespace Mosa.Tools.Compiler.Linker
 
 			ITypeModule mainModule = typeSystem.MainTypeModule;
 
-			if (mainModule.MetadataModule.EntryPoint != TokenTypes.Module)
+			if (mainModule.MetadataModule.EntryPoint.RID != 0)
 			{
 				RuntimeMethod entrypoint = mainModule.GetMethod(mainModule.MetadataModule.EntryPoint);
 

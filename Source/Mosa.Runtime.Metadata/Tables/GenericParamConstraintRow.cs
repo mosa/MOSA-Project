@@ -24,12 +24,12 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes _ownerTableIdx;
+		private MetadataToken _owner;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes _constraintTableIdx;
+		private MetadataToken _constraint;
 
 		#endregion // Data members
 
@@ -38,12 +38,12 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// Initializes a new instance of the <see cref="GenericParamConstraintRow"/> struct.
 		/// </summary>
-		/// <param name="ownerTableIdx">The owner table idx.</param>
-		/// <param name="constraintTableIdx">The constraint table idx.</param>
-		public GenericParamConstraintRow(TokenTypes ownerTableIdx, TokenTypes constraintTableIdx)
+		/// <param name="owner">The owner table idx.</param>
+		/// <param name="constraint">The constraint table idx.</param>
+		public GenericParamConstraintRow(MetadataToken owner, MetadataToken constraint)
 		{
-			_ownerTableIdx = ownerTableIdx;
-			_constraintTableIdx = constraintTableIdx;
+			_owner = owner;
+			_constraint = constraint;
 		}
 
 		#endregion // Construction
@@ -54,37 +54,21 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Gets the owner table idx.
 		/// </summary>
 		/// <value>The owner table idx.</value>
-		public TokenTypes OwnerTableIdx
+		public MetadataToken Owner
 		{
-			get { return _ownerTableIdx; }
+			get { return _owner; }
 		}
 
 		/// <summary>
 		/// Gets the constraint table idx.
 		/// </summary>
 		/// <value>The constraint table idx.</value>
-		public TokenTypes ConstraintTableIdx
+		public MetadataToken Constraint
 		{
-			get { return _constraintTableIdx; }
+			get { return _constraint; }
 		}
 
 		#endregion // Properties
 
-		#region Methods
-
-		/// <summary>
-		/// Loads a <see cref="Mosa.Runtime.Metadata.TokenTypes.GenericParamConstraint"/> from the given table heap.
-		/// </summary>
-		/// <param name="provider">The <see cref="Mosa.Runtime.Metadata.IMetadataProvider"/>, which contains the row.</param>
-		/// <param name="reader">The reader to read the row From.</param>
-		/// <param name="table">The table token type to read From.</param>
-		public void Load(IMetadataProvider provider, BinaryReader reader, TokenTypes table)
-		{
-			if (table != TokenTypes.GenericParamConstraint)
-				throw new ArgumentException("Invalid token type.", @"table");
-
-		}
-
-		#endregion // Methods
 	}
 }

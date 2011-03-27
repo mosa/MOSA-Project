@@ -24,7 +24,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes _parentTableIdx;
+		private MetadataToken _parent;
 
 		/// <summary>
 		/// 
@@ -38,11 +38,11 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// Initializes a new instance of the <see cref="FieldMarshalRow"/> struct.
 		/// </summary>
-		/// <param name="parentTableIdx">The parent table idx.</param>
+		/// <param name="parent">The parent.</param>
 		/// <param name="nativeTypeBlobIdx">The native type BLOB idx.</param>
-		public FieldMarshalRow(TokenTypes parentTableIdx, TokenTypes nativeTypeBlobIdx)
+		public FieldMarshalRow(MetadataToken parent, TokenTypes nativeTypeBlobIdx)
 		{
-			_parentTableIdx = parentTableIdx;
+			_parent = parent;
 			_nativeTypeBlobIdx = nativeTypeBlobIdx;
 		}
 
@@ -51,12 +51,12 @@ namespace Mosa.Runtime.Metadata.Tables
 		#region Properties
 
 		/// <summary>
-		/// Gets the parent table idx.
+		/// Gets the parent.
 		/// </summary>
-		/// <value>The parent table idx.</value>
-		public TokenTypes ParentTableIdx
+		/// <value>The parent.</value>
+		public MetadataToken Parent
 		{
-			get { return _parentTableIdx; }
+			get { return _parent; }
 		}
 
 		/// <summary>

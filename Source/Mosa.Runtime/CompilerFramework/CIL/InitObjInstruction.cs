@@ -46,13 +46,11 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			base.Decode(ctx, decoder);
 
 			// Retrieve the type reference
-			TokenTypes token = decoder.DecodeTokenType();
+			MetadataToken token = decoder.DecodeTokenType();
 
 			ctx.Token = token;
 
-			//throw new NotImplementedException();
 			decoder.TypeModule.GetType (token);
-			//Mosa.Runtime.Vm.RuntimeType type = decoder.ModuleTypeSystem.GetType(decoder.Method, token);
 		}
 
 		/// <summary>

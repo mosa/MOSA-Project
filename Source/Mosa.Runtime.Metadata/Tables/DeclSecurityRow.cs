@@ -30,7 +30,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes _parentTableIdx;
+		private MetadataToken _parent;
 
 		/// <summary>
 		/// 
@@ -45,12 +45,12 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Initializes a new instance of the <see cref="DeclSecurityRow"/> struct.
 		/// </summary>
 		/// <param name="action">The action.</param>
-		/// <param name="parentTableIdx">The parent table idx.</param>
+		/// <param name="parent">The parent table idx.</param>
 		/// <param name="permissionSetBlobIdx">The permission set BLOB idx.</param>
-		public DeclSecurityRow(SecurityAction action, TokenTypes parentTableIdx, TokenTypes permissionSetBlobIdx)
+		public DeclSecurityRow(SecurityAction action, MetadataToken parent, TokenTypes permissionSetBlobIdx)
 		{
 			_action = action;
-			_parentTableIdx = parentTableIdx;
+			_parent = parent;
 			_permissionSetBlobIdx = permissionSetBlobIdx;
 		}
 
@@ -68,12 +68,12 @@ namespace Mosa.Runtime.Metadata.Tables
 		}
 
 		/// <summary>
-		/// Gets the parent table idx.
+		/// Gets the parent.
 		/// </summary>
-		/// <value>The parent table idx.</value>
-		public TokenTypes ParentTableIdx
+		/// <value>The parent.</value>
+		public MetadataToken Parent
 		{
-			get { return _parentTableIdx; }
+			get { return _parent; }
 		}
 
 		/// <summary>

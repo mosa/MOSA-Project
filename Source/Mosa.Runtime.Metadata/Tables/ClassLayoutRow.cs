@@ -24,17 +24,17 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private short _packingSize;
+		private short packingSize;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private int _classSize;
+		private int classSize;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes _parentTypeDefIdx;
+		private MetadataToken parent;
 
 		#endregion // Data members
 
@@ -45,12 +45,12 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// </summary>
 		/// <param name="packingSize">Size of the packing.</param>
 		/// <param name="classSize">Size of the class.</param>
-		/// <param name="parentTypeDefIdx">The parent type def idx.</param>
-		public ClassLayoutRow(short packingSize, int classSize, TokenTypes parentTypeDefIdx)
+		/// <param name="parent">The parent type def idx.</param>
+		public ClassLayoutRow(short packingSize, int classSize, MetadataToken parent)
 		{
-			_packingSize = packingSize;
-			_classSize = classSize;
-			_parentTypeDefIdx = parentTypeDefIdx;
+			this.packingSize = packingSize;
+			this.classSize = classSize;
+			this.parent = parent;
 		}
 
 		#endregion // Construction
@@ -63,7 +63,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <value>The size of the packing.</value>
 		public short PackingSize
 		{
-			get { return _packingSize; }
+			get { return packingSize; }
 		}
 
 		/// <summary>
@@ -72,16 +72,16 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <value>The size of the class.</value>
 		public int ClassSize
 		{
-			get { return _classSize; }
+			get { return classSize; }
 		}
 
 		/// <summary>
 		/// Gets the parent type def idx.
 		/// </summary>
 		/// <value>The parent type def idx.</value>
-		public TokenTypes ParentTypeDefIdx
+		public MetadataToken Parent
 		{
-			get { return _parentTypeDefIdx; }
+			get { return parent; }
 		}
 
 		#endregion // Properties

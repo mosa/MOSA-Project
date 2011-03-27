@@ -41,7 +41,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes _implementationTableIdx;
+		private MetadataToken _implementation;
 
 		#endregion // Data members
 
@@ -53,14 +53,14 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <param name="offset">The offset.</param>
 		/// <param name="flags">The flags.</param>
 		/// <param name="nameStringIndex">Index of the name string.</param>
-		/// <param name="implementationTableIdx">The implementation table idx.</param>
+		/// <param name="implementation">The implementation table idx.</param>
 		public ManifestResourceRow(uint offset, ManifestResourceAttributes flags, TokenTypes nameStringIndex,
-			TokenTypes implementationTableIdx)
+			MetadataToken implementation)
 		{
 			_offset = offset;
 			_flags = flags;
 			_nameStringIdx = nameStringIndex;
-			_implementationTableIdx = implementationTableIdx;
+			_implementation = implementation;
 		}
 
 		#endregion // Construction
@@ -98,9 +98,9 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Gets the implementation table idx.
 		/// </summary>
 		/// <value>The implementation table idx.</value>
-		public TokenTypes ImplementationTableIdx
+		public MetadataToken Implementation
 		{
-			get { return _implementationTableIdx; }
+			get { return _implementation; }
 		}
 
 		#endregion // Properties

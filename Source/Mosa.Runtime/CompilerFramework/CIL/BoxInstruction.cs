@@ -48,9 +48,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			base.Decode(ctx, decoder);
 
 			// Retrieve the provider token to check against
-			TokenTypes token = decoder.DecodeTokenType();
+			MetadataToken token = decoder.DecodeTokenType();
 			
-			ctx.Other = decoder.TypeModule.GetType (token);
+			ctx.Other = decoder.TypeModule.GetType(token);
 		}
 
 		/// <summary>

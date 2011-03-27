@@ -5,11 +5,11 @@ namespace Mosa.Runtime.Metadata.Signatures
 {
 	public class TypeSigType : SigType
 	{
-		private readonly TokenTypes token;
+		private readonly MetadataToken token;
 
-		public TokenTypes Token { get { return this.token; } }
+		public MetadataToken Token { get { return this.token; } }
 
-		public TypeSigType(TokenTypes token, CilElementType type) :
+		public TypeSigType(MetadataToken token, CilElementType type) :
 			base(type)
 		{
 			this.token = token;
@@ -23,7 +23,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// </returns>
 		public override string ToString()
 		{
-			return base.ToString() + " [" + this.token.ToString("X") + "]";
+			return base.ToString() + " [" + this.token.ToString() + "]";
 		}
 
 	}

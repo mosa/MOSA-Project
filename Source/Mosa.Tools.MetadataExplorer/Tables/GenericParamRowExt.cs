@@ -39,7 +39,7 @@ namespace Mosa.Tools.MetadataExplorer.Tables
 		{
 			yield return TokenString("Name", row.NameStringIdx);
 			yield return Value("NameStringIdx", row.NameStringIdx);
-			yield return Value("OwnerTableIdx", row.OwnerTableIdx);
+			yield return Value("OwnerTableIdx", row.Owner);
 			yield return Value("Flags", row.Flags.ToString());
 			yield return Value("Number", row.Number);
 		}

@@ -49,12 +49,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			// Decode base classes first
 			base.Decode(ctx, decoder);
 
-			// Load the string value, it's a token
-			TokenTypes token = decoder.DecodeTokenType();
-			token |= TokenTypes.UserString;
-
 			// Set the result
-			ctx.Token = token;
+			ctx.TokenType = ((TokenTypes)decoder.DecodeInt()) | TokenTypes.UserString;
+
 			ctx.Result = decoder.Compiler.CreateTemporary(BuiltInSigType.String);
 		}
 
@@ -67,7 +64,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </returns>
 		public override string ToString(Context context)
 		{
-			return base.ToString(context) + " <- 0x" + context.Token.ToString(@"x");
+			return base.ToString(context) + " <- 0x" + context.TokenType.ToString();
 		}
 
 		/// <summary>

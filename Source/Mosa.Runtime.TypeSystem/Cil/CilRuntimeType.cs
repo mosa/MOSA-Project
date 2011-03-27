@@ -30,7 +30,7 @@ namespace Mosa.Runtime.TypeSystem.Cil
 		/// <summary>
 		/// Holds the token of the base type of this type.
 		/// </summary>
-		private readonly TokenTypes baseTypeToken;
+		private readonly MetadataToken baseTypeToken;
 
 		/// <summary>
 		/// Holds the enclosing type, if any.
@@ -54,7 +54,7 @@ namespace Mosa.Runtime.TypeSystem.Cil
 		/// <param name="enclosingType">Type of the enclosing.</param>
 		/// <param name="attributes">The attributes.</param>
 		/// <param name="baseToken">The base token.</param>
-		public CilRuntimeType(ITypeModule module, string name, string typeNamespace, int packing, int size, TokenTypes token, RuntimeType baseType, RuntimeType enclosingType, TypeAttributes attributes, TokenTypes baseToken) :
+		public CilRuntimeType(ITypeModule module, string name, string typeNamespace, int packing, int size, MetadataToken token, RuntimeType baseType, RuntimeType enclosingType, TypeAttributes attributes, MetadataToken baseToken) :
 			base(module, token, baseType)
 		{
 			this.baseTypeToken = baseToken;

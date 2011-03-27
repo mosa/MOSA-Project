@@ -273,7 +273,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// <returns></returns>
 		private static TypeSigType ParseValueType(SignatureReader reader)
 		{
-			TokenTypes token = reader.ReadEncodedTypeDefOrRef();
+			MetadataToken token = reader.ReadEncodedTypeDefOrRef();
 			return new ValueTypeSigType(token);
 		}
 
@@ -363,7 +363,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// <returns></returns>
 		private static TypeSigType ParseClassSignature(SignatureReader reader)
 		{
-			TokenTypes token = reader.ReadEncodedTypeDefOrRef();
+			MetadataToken token = reader.ReadEncodedTypeDefOrRef();
 			return new ClassSigType(token);
 		}
 

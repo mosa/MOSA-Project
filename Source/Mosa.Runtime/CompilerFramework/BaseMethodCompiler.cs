@@ -374,7 +374,7 @@ namespace Mosa.Runtime.CompilerFramework
 					return new ParameterOperand(
 						architecture.StackFrameRegister,
 						new RuntimeParameter(@"this", 2, ParameterAttributes.In),
-						new ClassSigType((TokenTypes)type.Token));
+						new ClassSigType(type.Token));
 				}
 				// Decrement the index, as the caller actually wants a real parameter
 				--index;

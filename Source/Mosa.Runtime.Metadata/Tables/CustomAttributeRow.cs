@@ -24,12 +24,12 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes parentTableIdx;
+		private MetadataToken parent;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes typeIdx;
+		private MetadataToken type;
 
 		/// <summary>
 		/// 
@@ -43,13 +43,13 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CustomAttributeRow"/> struct.
 		/// </summary>
-		/// <param name="parentTableIdx">The parent table idx.</param>
-		/// <param name="typeIdx">The type idx.</param>
+		/// <param name="parent">The parent table idx.</param>
+		/// <param name="type">The type idx.</param>
 		/// <param name="valueBlobIdx">The value BLOB idx.</param>
-		public CustomAttributeRow(TokenTypes parentTableIdx, TokenTypes typeIdx, TokenTypes valueBlobIdx)
+		public CustomAttributeRow(MetadataToken parent, MetadataToken type, TokenTypes valueBlobIdx)
 		{
-			this.parentTableIdx = parentTableIdx;
-			this.typeIdx = typeIdx;
+			this.parent = parent;
+			this.type = type;
 			this.valueBlobIdx = valueBlobIdx;
 		}
 
@@ -61,18 +61,18 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Gets the parent table idx.
 		/// </summary>
 		/// <value>The parent table idx.</value>
-		public TokenTypes ParentTableIdx
+		public MetadataToken Parent
 		{
-			get { return parentTableIdx; }
+			get { return parent; }
 		}
 
 		/// <summary>
 		/// Gets the type idx.
 		/// </summary>
 		/// <value>The type idx.</value>
-		public TokenTypes TypeIdx
+		public MetadataToken Type
 		{
-			get { return typeIdx; }
+			get { return type; }
 		}
 
 		/// <summary>

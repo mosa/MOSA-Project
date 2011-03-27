@@ -38,12 +38,12 @@ namespace Mosa.Tools.TypeExplorer
 			}
 		}
 
-		protected string TokenToString(TokenTypes token)
+		protected string TokenToString(MetadataToken token)
 		{
-			return ((int)token).ToString("X8");
+			return token.ToInt32().ToString("X8");
 		}
 
-		protected string FormatToString(TokenTypes token)
+		protected string FormatToString(MetadataToken token)
 		{
 			if (!showTokenValues.Checked)
 				return string.Empty;

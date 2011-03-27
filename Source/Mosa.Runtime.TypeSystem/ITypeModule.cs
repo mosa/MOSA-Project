@@ -64,21 +64,21 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		/// <param name="token">The token of the type to load. This can represent a typeref, typedef or typespec token.</param>
 		/// <returns>The runtime type of the specified token.</returns>
-		RuntimeType GetType(TokenTypes token);
+		RuntimeType GetType(MetadataToken token);
 
 		/// <summary>
 		/// Retrieves the field definition identified by the given token in the scope.
 		/// </summary>
 		/// <param name="token">The token of the field to retrieve.</param>
 		/// <returns></returns>
-		RuntimeField GetField(TokenTypes token);
+		RuntimeField GetField(MetadataToken token);
 
 		/// <summary>
 		/// Retrieves the method definition identified by the given token in the scope.
 		/// </summary>
 		/// <param name="token">The token of the method to retrieve.</param>
 		/// <returns></returns>
-		RuntimeMethod GetMethod(TokenTypes token);
+		RuntimeMethod GetMethod(MetadataToken token);
 
 		/// <summary>
 		/// Gets the method.
@@ -86,7 +86,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// <param name="token">The token.</param>
 		/// <param name="callingType">Type of the calling.</param>
 		/// <returns></returns>
-		RuntimeMethod GetMethod(TokenTypes token, RuntimeType callingType);
+		RuntimeMethod GetMethod(MetadataToken token, RuntimeType callingType);
 
 		/// <summary>
 		/// Gets the open generic.
@@ -100,7 +100,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		/// <param name="token">The token.</param>
 		/// <returns></returns>
-		string GetExternalName(TokenTypes token);
+		string GetExternalName(MetadataToken token);
 		
 	}
 }

@@ -105,7 +105,7 @@ namespace Mosa.Tools.Compiler.TypeInitializers
 		{
 			ITypeModule mainTypeModule = typeSystem.MainTypeModule;
 
-			if (mainTypeModule.MetadataModule.EntryPoint != TokenTypes.Module)
+			if (mainTypeModule.MetadataModule.EntryPoint.RID != 0)
 			{
 				RuntimeMethod entrypoint = mainTypeModule.GetMethod(mainTypeModule.MetadataModule.EntryPoint);
 

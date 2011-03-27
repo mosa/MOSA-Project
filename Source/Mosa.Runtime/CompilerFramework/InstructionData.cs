@@ -171,7 +171,17 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Holds the token type.
 		/// </summary>
 		/// <value>The token.</value>
-		public TokenTypes Token
+		public MetadataToken Token
+		{
+			get { return (MetadataToken)Other; }
+			set { Other = value; }
+		}
+
+		/// <summary>
+		/// Holds the token type.
+		/// </summary>
+		/// <value>The token.</value>
+		public TokenTypes TokenType
 		{
 			get { return (TokenTypes)Other; }
 			set { Other = value; }

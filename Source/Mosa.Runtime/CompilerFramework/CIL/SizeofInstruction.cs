@@ -49,7 +49,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 			// Get the size type
 			// Load the stackFrameIndex token from the immediate
-			TokenTypes token = decoder.DecodeTokenType();
+			MetadataToken token = decoder.DecodeTokenType();
 
 			RuntimeType type = decoder.TypeModule.GetType(token);
 

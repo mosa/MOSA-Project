@@ -12,6 +12,8 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 
+using Mosa.Runtime.Metadata;
+
 namespace Mosa.Runtime.Metadata.Tables
 {
 	/// <summary>
@@ -29,7 +31,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes _parent;
+		private MetadataToken _parent;
 
 		/// <summary>
 		/// 
@@ -46,7 +48,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <param name="type">The type.</param>
 		/// <param name="parent">The parent.</param>
 		/// <param name="valueBlobIdx">The value BLOB idx.</param>
-		public ConstantRow(CilElementType type, TokenTypes parent, TokenTypes valueBlobIdx)
+		public ConstantRow(CilElementType type, MetadataToken parent, TokenTypes valueBlobIdx)
 		{
 			_type = type;
 			_parent = parent;
@@ -70,7 +72,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Gets the parent.
 		/// </summary>
 		/// <value>The parent.</value>
-		public TokenTypes Parent
+		public MetadataToken Parent
 		{
 			get { return _parent; }
 		}

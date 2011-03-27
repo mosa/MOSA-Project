@@ -24,12 +24,12 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes _nestedClassTableIdx;
+		private MetadataToken nestedClass;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes _enclosingClassTableIdx;
+		private MetadataToken enclosingClass;
 
 		#endregion // Data members
 
@@ -40,10 +40,10 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// </summary>
 		/// <param name="nestedClassTableIdx">The nested class table idx.</param>
 		/// <param name="enclosingClassTableIdx">The enclosing class table idx.</param>
-		public NestedClassRow(TokenTypes nestedClassTableIdx, TokenTypes enclosingClassTableIdx)
+		public NestedClassRow(MetadataToken nestedClass, MetadataToken enclosingClass)
 		{
-			_nestedClassTableIdx = nestedClassTableIdx;
-			_enclosingClassTableIdx = enclosingClassTableIdx;
+			this.nestedClass = nestedClass;
+			this.enclosingClass = enclosingClass;
 		}
 
 		#endregion // Construction
@@ -51,21 +51,21 @@ namespace Mosa.Runtime.Metadata.Tables
 		#region Properties
 
 		/// <summary>
-		/// Gets the nested class table idx.
+		/// Gets the nested class.
 		/// </summary>
-		/// <value>The nested class table idx.</value>
-		public TokenTypes NestedClassTableIdx
+		/// <value>The nested class.</value>
+		public MetadataToken NestedClass
 		{
-			get { return _nestedClassTableIdx; }
+			get { return nestedClass; }
 		}
 
 		/// <summary>
-		/// Gets the enclosing class table idx.
+		/// Gets the enclosing class.
 		/// </summary>
-		/// <value>The enclosing class table idx.</value>
-		public TokenTypes EnclosingClassTableIdx
+		/// <value>The enclosing class .</value>
+		public MetadataToken EnclosingClass
 		{
-			get { return _enclosingClassTableIdx; }
+			get { return enclosingClass; }
 		}
 
 		#endregion // Properties

@@ -70,7 +70,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 					MethodHeader header = new MethodHeader();
 					ReadMethodHeader(codeReader, ref header);
 
-					if (header.localsSignature != 0)
+					if (header.localsSignature.RID != 0)
 					{
 						StandAloneSigRow row = methodCompiler.Method.Module.MetadataModule.Metadata.ReadStandAloneSigRow(header.localsSignature);
 
@@ -83,7 +83,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 						else
 						{
 							localsSignature = new LocalVariableSignature(methodCompiler.Method.Module.MetadataModule.Metadata, row.SignatureBlobIdx);
-						}	
+						}
 
 						methodCompiler.SetLocalVariableSignature(localsSignature);
 					}
@@ -110,7 +110,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		{
 			// Read first byte
 			header.flags = (MethodFlags)reader.ReadByte();
-			
+
 			// Check least significant 2 bits
 			switch (header.flags & MethodFlags.HeaderMask)
 			{
@@ -126,7 +126,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 						throw new InvalidDataException(@"Invalid method _header.");
 					header.maxStack = reader.ReadUInt16();
 					header.codeSize = reader.ReadUInt32();
-					header.localsSignature = (TokenTypes)reader.ReadUInt32();
+					header.localsSignature = new MetadataToken(reader.ReadUInt32()); // ReadStandAloneSigRow
 					break;
 
 				default:
@@ -205,7 +205,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 			// Setup context
 			Context ctx = new Context(InstructionSet, -1);
-			
+
 			while (codeEnd != codeReader.BaseStream.Position)
 			{
 				// Determine the instruction offset
@@ -221,10 +221,11 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 				if (instruction == null)
 					throw new Exception("CIL " + op + " is not yet supported");
 
-				if (instruction is PrefixInstruction) {
-				    prefix = instruction as PrefixInstruction;
+				if (instruction is PrefixInstruction)
+				{
+					prefix = instruction as PrefixInstruction;
 					prefix.Decode(ctx, this);
-				    continue;
+					continue;
 				}
 
 				// Create and initialize the corresponding instruction
@@ -364,9 +365,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// Decodes the tokentype from the instruction stream
 		/// </summary>
 		/// <returns></returns>
-		TokenTypes IInstructionDecoder.DecodeTokenType()
+		MetadataToken IInstructionDecoder.DecodeTokenType()
 		{
-			return (TokenTypes)codeReader.ReadInt32();
+			return new MetadataToken((uint)codeReader.ReadInt32());
 		}
 
 		#endregion

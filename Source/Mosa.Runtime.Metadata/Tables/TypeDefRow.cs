@@ -36,18 +36,18 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// Index into a <see cref="TypeDefRow"/>, <see cref="TypeRefRow"/>, or <see cref="TypeSpecRow"/> table.
 		/// </summary>
-		private TokenTypes extends;
+		private MetadataToken extends;
 
 		/// <summary>
 		/// An index into the <see cref="FieldRow"/>, it marks the first of a contiguous run of Fields
 		/// owned by this type.
 		/// </summary>
-		private TokenTypes fieldList;
+		private MetadataToken fieldList;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes methodList;
+		private MetadataToken methodList;
 
 		#endregion // Data members
 
@@ -63,7 +63,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <param name="fieldList">The field list.</param>
 		/// <param name="methodList">The method list.</param>
 		public TypeDefRow(TypeAttributes flags, TokenTypes typeNameIdx, TokenTypes typeNamespaceIdx,
-							TokenTypes extends, TokenTypes fieldList, TokenTypes methodList)
+							MetadataToken extends, MetadataToken fieldList, MetadataToken methodList)
 		{
 			this.flags = flags;
 			this.typeNameIdx = typeNameIdx;
@@ -84,7 +84,6 @@ namespace Mosa.Runtime.Metadata.Tables
 		public TypeAttributes Flags
 		{
 			get { return flags; }
-			set { flags = value; }
 		}
 
 		/// <summary>
@@ -94,7 +93,6 @@ namespace Mosa.Runtime.Metadata.Tables
 		public TokenTypes TypeNameIdx
 		{
 			get { return typeNameIdx; }
-			set { typeNameIdx = value; }
 		}
 
 		/// <summary>
@@ -104,37 +102,33 @@ namespace Mosa.Runtime.Metadata.Tables
 		public TokenTypes TypeNamespaceIdx
 		{
 			get { return typeNamespaceIdx; }
-			set { typeNamespaceIdx = value; }
 		}
 
 		/// <summary>
 		/// Gets or sets the extends.
 		/// </summary>
 		/// <value>The extends.</value>
-		public TokenTypes Extends
+		public MetadataToken Extends
 		{
 			get { return extends; }
-			set { extends = value; }
 		}
 
 		/// <summary>
 		/// Gets or sets the field list.
 		/// </summary>
 		/// <value>The field list.</value>
-		public TokenTypes FieldList
+		public MetadataToken FieldList
 		{
 			get { return fieldList; }
-			set { fieldList = value; }
 		}
 
 		/// <summary>
 		/// Gets or sets the method list.
 		/// </summary>
 		/// <value>The method list.</value>
-		public TokenTypes MethodList
+		public MetadataToken MethodList
 		{
 			get { return methodList; }
-			set { methodList = value; }
 		}
 
 		#endregion // Properties

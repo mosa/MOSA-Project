@@ -74,6 +74,16 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
+		/// Gets or sets the type of the token.
+		/// </summary>
+		/// <value>The type of the token.</value>
+		public TokenTypes TokenType
+		{
+			get { return _instructionSet.Data[_index].TokenType; }
+			set { _instructionSet.Data[_index].TokenType = value; }
+		}
+
+		/// <summary>
 		/// Gets the instruction.
 		/// </summary>
 		/// <value>The result operand.</value>
@@ -320,7 +330,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Gets or sets the token.
 		/// </summary>
 		/// <value>The token.</value>
-		public TokenTypes Token
+		public MetadataToken Token
 		{
 			get { return _instructionSet.Data[_index].Token; }
 			set { _instructionSet.Data[_index].Token = value; }

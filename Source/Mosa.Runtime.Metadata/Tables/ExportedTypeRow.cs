@@ -46,7 +46,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes _implementationTableIdx;
+		private MetadataToken _implementation;
 
 		#endregion // Data members
 
@@ -59,15 +59,15 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <param name="typeDefTableIdx">The type def table idx.</param>
 		/// <param name="typeNameStringIdx">The type name string idx.</param>
 		/// <param name="typeNamespaceStringIdx">The type namespace string idx.</param>
-		/// <param name="implementationTableIdx">The implementation table idx.</param>
+		/// <param name="implementation">The implementation table idx.</param>
 		public ExportedTypeRow(TypeAttributes flags, TokenTypes typeDefTableIdx, TokenTypes typeNameStringIdx,
-								TokenTypes typeNamespaceStringIdx, TokenTypes implementationTableIdx)
+								TokenTypes typeNamespaceStringIdx, MetadataToken implementation)
 		{
 			_flags = flags;
 			_typeDefTableIdx = typeDefTableIdx;
 			_typeNameStringIdx = typeNameStringIdx;
 			_typeNamespaceStringIdx = typeNamespaceStringIdx;
-			_implementationTableIdx = implementationTableIdx;
+			_implementation = implementation;
 		}
 
 		#endregion // Construction
@@ -111,12 +111,12 @@ namespace Mosa.Runtime.Metadata.Tables
 		}
 
 		/// <summary>
-		/// Gets the implementation table idx.
+		/// Gets the implementation.
 		/// </summary>
-		/// <value>The implementation table idx.</value>
-		public TokenTypes ImplementationTableIdx
+		/// <value>The implementation.</value>
+		public MetadataToken Implementation
 		{
-			get { return _implementationTableIdx; }
+			get { return _implementation; }
 		}
 
 		#endregion // Properties

@@ -29,7 +29,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes _assemblyRef;
+		private MetadataToken _assemblyRef;
 
 		#endregion // Data members
 
@@ -40,7 +40,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// </summary>
 		/// <param name="processor">The processor.</param>
 		/// <param name="assemblyRef">The assembly ref.</param>
-		public AssemblyRefProcessorRow(uint processor, TokenTypes assemblyRef)
+		public AssemblyRefProcessorRow(uint processor, MetadataToken assemblyRef)
 		{
 			_processor = processor;
 			_assemblyRef = assemblyRef;
@@ -63,7 +63,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Gets the assembly ref.
 		/// </summary>
 		/// <value>The assembly ref.</value>
-		public TokenTypes AssemblyRef
+		public MetadataToken AssemblyRef
 		{
 			get { return _assemblyRef; }
 		}

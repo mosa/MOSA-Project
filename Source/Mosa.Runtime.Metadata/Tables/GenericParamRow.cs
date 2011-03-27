@@ -26,22 +26,22 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private ushort _number;
+		private ushort number;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private GenericParameterAttributes _flags;
+		private GenericParameterAttributes flags;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes _ownerTableIdx;
+		private MetadataToken owner;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes _nameStringIdx;
+		private TokenTypes nameStringIdx;
 
 		#endregion // Data members
 
@@ -52,14 +52,14 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// </summary>
 		/// <param name="number">The number.</param>
 		/// <param name="flags">The flags.</param>
-		/// <param name="ownerTableIdx">The owner table idx.</param>
+		/// <param name="owner">The owner table idx.</param>
 		/// <param name="nameStringIdx">The name string idx.</param>
-		public GenericParamRow(ushort number, GenericParameterAttributes flags, TokenTypes ownerTableIdx, TokenTypes nameStringIdx)
+		public GenericParamRow(ushort number, GenericParameterAttributes flags, MetadataToken owner, TokenTypes nameStringIdx)
 		{
-			_number = number;
-			_flags = flags;
-			_ownerTableIdx = ownerTableIdx;
-			_nameStringIdx = nameStringIdx;
+			this.number = number;
+			this.flags = flags;
+			this.owner = owner;
+			this.nameStringIdx = nameStringIdx;
 		}
 
 		#endregion // Construction
@@ -72,7 +72,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <value>The number.</value>
 		public ushort Number
 		{
-			get { return _number; }
+			get { return number; }
 		}
 
 		/// <summary>
@@ -81,16 +81,16 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <value>The flags.</value>
 		public GenericParameterAttributes Flags
 		{
-			get { return _flags; }
+			get { return flags; }
 		}
 
 		/// <summary>
 		/// Gets the owner table idx.
 		/// </summary>
 		/// <value>The owner table idx.</value>
-		public TokenTypes OwnerTableIdx
+		public MetadataToken Owner
 		{
-			get { return _ownerTableIdx; }
+			get { return owner; }
 		}
 
 		/// <summary>
@@ -99,7 +99,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <value>The name string idx.</value>
 		public TokenTypes NameStringIdx
 		{
-			get { return _nameStringIdx; }
+			get { return nameStringIdx; }
 		}
 
 		#endregion // Properties

@@ -58,11 +58,6 @@ namespace Mosa.Tools.MetadataExplorer.Tables
 			return Value(name, ReadString(token));
 		}
 
-		private string ReadString(int index)
-		{
-			return metadata.ReadString((TokenTypes)index);
-		}
-
 		private string ReadString(TokenTypes token)
 		{
 			return metadata.ReadString(token);

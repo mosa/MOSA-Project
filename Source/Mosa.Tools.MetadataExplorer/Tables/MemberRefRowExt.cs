@@ -40,7 +40,7 @@ namespace Mosa.Tools.MetadataExplorer.Tables
 			yield return TokenString("Name", row.NameStringIdx);
 			yield return Value("NameStringIdx", row.NameStringIdx);
 			yield return Value("SignatureBlobIdx", row.SignatureBlobIdx);
-			yield return Value("ClassTableIdx", row.ClassTableIdx);
+			yield return Value("ClassTableIdx", row.Class);
 
 			//FieldSignature signature = new FieldSignature(metadata, row.SignatureBlobIdx);
 			//yield return TokenValue("Signature Token", signature.Token);

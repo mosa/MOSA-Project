@@ -36,7 +36,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes _eventTypeTableIdx;
+		private MetadataToken _eventType;
 
 		#endregion // Data members
 
@@ -47,12 +47,12 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// </summary>
 		/// <param name="flags">The flags.</param>
 		/// <param name="nameStringIdx">The name string idx.</param>
-		/// <param name="eventTypeTableIdx">The event type table idx.</param>
-		public EventRow(EventAttributes flags, TokenTypes nameStringIdx, TokenTypes eventTypeTableIdx)
+		/// <param name="eventType">The event type table idx.</param>
+		public EventRow(EventAttributes flags, TokenTypes nameStringIdx, MetadataToken eventType)
 		{
 			_flags = flags;
 			_nameStringIdx = nameStringIdx;
-			_eventTypeTableIdx = eventTypeTableIdx;
+			_eventType = eventType;
 		}
 
 		#endregion // Construction
@@ -78,12 +78,12 @@ namespace Mosa.Runtime.Metadata.Tables
 		}
 
 		/// <summary>
-		/// Gets the event type table idx.
+		/// Gets the type of the event.
 		/// </summary>
-		/// <value>The event type table idx.</value>
-		public TokenTypes EventTypeTableIdx
+		/// <value>The type of the event.</value>
+		public MetadataToken EventType
 		{
-			get { return _eventTypeTableIdx; }
+			get { return _eventType; }
 		}
 
 		#endregion // Properties

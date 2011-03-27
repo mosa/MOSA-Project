@@ -154,31 +154,30 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <param name="decoder">The IL decoder, which provides decoding functionality.</param>
 		/// <param name="flags">Flags, which control the</param>
 		/// <returns></returns>
-		protected static TokenTypes DecodeInvocationTarget(Context ctx, IInstructionDecoder decoder, InvokeSupportFlags flags)
+		protected static MetadataToken DecodeInvocationTarget(Context ctx, IInstructionDecoder decoder, InvokeSupportFlags flags)
 		{
 			// Retrieve the immediate argument - it contains the token
 			// of the methoddef, methodref, methodspec or callsite to call.
-			TokenTypes callTarget = decoder.DecodeTokenType();
-			TokenTypes targetType = (TokenTypes.TableMask & callTarget);
+			MetadataToken callTarget = decoder.DecodeTokenType();
 
-			if (!IsCallTargetSupported(targetType, flags))
+			if (!IsCallTargetSupported(callTarget.Table, flags))
 				throw new InvalidOperationException(@"Invalid IL call target specification.");
 
 			RuntimeMethod method = null;
 
-			switch (targetType)
+			switch (callTarget.Table)
 			{
-				case TokenTypes.MethodDef:
+				case MetadataTable.MethodDef:
 					method = decoder.TypeModule.GetMethod(callTarget);
 					break;
 
-				case TokenTypes.MemberRef:
+				case MetadataTable.MemberRef:
 					method = decoder.TypeModule.GetMethod(callTarget, decoder.Method.DeclaringType);
 					if (method.DeclaringType.IsGeneric)
 						decoder.Compiler.Scheduler.ScheduleTypeForCompilation(method.DeclaringType);
 					break;
 
-				case TokenTypes.MethodSpec:
+				case MetadataTable.MethodSpec:
 					method = decoder.TypeModule.GetMethod(callTarget);
 					decoder.Compiler.Scheduler.ScheduleTypeForCompilation(method.DeclaringType);
 					break;
@@ -237,15 +236,15 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <returns>
 		/// 	<c>true</c> if [is call target supported] [the specified target type]; otherwise, <c>false</c>.
 		/// </returns>
-		private static bool IsCallTargetSupported(TokenTypes targetType, InvokeSupportFlags flags)
+		private static bool IsCallTargetSupported(MetadataTable targetType, InvokeSupportFlags flags)
 		{
 			bool result = false;
 
-			if (TokenTypes.MethodDef == targetType && InvokeSupportFlags.MethodDef == (flags & InvokeSupportFlags.MethodDef))
+			if (targetType == MetadataTable.MethodDef && InvokeSupportFlags.MethodDef == (flags & InvokeSupportFlags.MethodDef))
 				result = true;
-			else if (TokenTypes.MemberRef == targetType && InvokeSupportFlags.MemberRef == (flags & InvokeSupportFlags.MemberRef))
+			else if (targetType == MetadataTable.MemberRef && InvokeSupportFlags.MemberRef == (flags & InvokeSupportFlags.MemberRef))
 				result = true;
-			else if (TokenTypes.MethodSpec == targetType && InvokeSupportFlags.MethodSpec == (flags & InvokeSupportFlags.MethodSpec))
+			else if (targetType == MetadataTable.MethodSpec && InvokeSupportFlags.MethodSpec == (flags & InvokeSupportFlags.MethodSpec))
 				result = true;
 
 			return result;

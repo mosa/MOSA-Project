@@ -115,8 +115,9 @@ namespace Mosa.Runtime.Metadata.Loader
 
 			if (!isLoaded(metadataModule.Name))
 			{
-				TokenTypes maxToken = metadataModule.Metadata.GetMaxTokenValue(TokenTypes.AssemblyRef);
-				for (TokenTypes token = TokenTypes.AssemblyRef + 1; token <= maxToken; token++)
+				MetadataToken maxToken = metadataModule.Metadata.GetMaxTokenValue(MetadataTable.AssemblyRef);
+				//for (TokenTypes token = TokenTypes.AssemblyRef + 1; token <= maxToken; token++)
+				foreach (MetadataToken token in new MetadataToken(MetadataTable.AssemblyRef, 1).Upto(maxToken))
 				{
 					AssemblyRefRow row = metadataModule.Metadata.ReadAssemblyRefRow(token);
 					string assembly = metadataModule.Metadata.ReadString(row.NameIdx);

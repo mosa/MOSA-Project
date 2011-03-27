@@ -10,6 +10,7 @@
 using System;
 using System.Collections.Generic;
 
+using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime.TypeSystem;
 
@@ -32,7 +33,7 @@ namespace Mosa.Tools.Compiler
 		/// <param name="name">The name.</param>
 		/// <param name="baseType">Type of the base.</param>
 		public LinkerGeneratedType(ITypeModule moduleTypeSystem, string nameSpace, string name, RuntimeType baseType) :
-			base(moduleTypeSystem, 0, baseType)
+			base(moduleTypeSystem, MetadataToken.Zero, baseType)
 		{
 			if (nameSpace == null)
 				throw new ArgumentNullException(@"namespace");

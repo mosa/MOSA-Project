@@ -24,17 +24,17 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes _classTableIdx;
+		private MetadataToken @class;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes _methodBodyTableIdx;
+		private MetadataToken methodBody;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes _methodDeclarationTableIdx;
+		private MetadataToken methodDeclaration;
 
 		#endregion // Data members
 
@@ -43,14 +43,14 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MethodImplRow"/> struct.
 		/// </summary>
-		/// <param name="classTableIdx">The class table idx.</param>
-		/// <param name="methodBodyTableIdx">The method body table idx.</param>
-		/// <param name="methodDeclarationTableIdx">The method declaration table idx.</param>
-		public MethodImplRow(TokenTypes classTableIdx, TokenTypes methodBodyTableIdx, TokenTypes methodDeclarationTableIdx)
+		/// <param name="class">The @class.</param>
+		/// <param name="methodBody">The method body.</param>
+		/// <param name="methodDeclaration">The method declaration.</param>
+		public MethodImplRow(MetadataToken @class, MetadataToken methodBody, MetadataToken methodDeclaration)
 		{
-			_classTableIdx = classTableIdx;
-			_methodBodyTableIdx = methodBodyTableIdx;
-			_methodDeclarationTableIdx = methodDeclarationTableIdx;
+			this.@class = @class;
+			this.methodBody = methodBody;
+			this.methodDeclaration = methodDeclaration;
 		}
 
 		#endregion // Construction
@@ -58,30 +58,30 @@ namespace Mosa.Runtime.Metadata.Tables
 		#region Properties
 
 		/// <summary>
-		/// Gets the class table idx.
+		/// Gets the class.
 		/// </summary>
 		/// <value>The class table idx.</value>
-		public TokenTypes ClassTableIdx
+		public MetadataToken @Class
 		{
-			get { return _classTableIdx; }
+			get { return @class; }
 		}
 
 		/// <summary>
-		/// Gets the method body table idx.
+		/// Gets the method body .
 		/// </summary>
-		/// <value>The method body table idx.</value>
-		public TokenTypes MethodBodyTableIdx
+		/// <value>The method body.</value>
+		public MetadataToken MethodBody
 		{
-			get { return _methodBodyTableIdx; }
+			get { return methodBody; }
 		}
 
 		/// <summary>
-		/// Gets the method declaration table idx.
+		/// Gets the method declaration.
 		/// </summary>
-		/// <value>The method declaration table idx.</value>
-		public TokenTypes MethodDeclarationTableIdx
+		/// <value>The method declaration.</value>
+		public MetadataToken MethodDeclaration
 		{
-			get { return _methodDeclarationTableIdx; }
+			get { return methodDeclaration; }
 		}
 
 		#endregion // Properties

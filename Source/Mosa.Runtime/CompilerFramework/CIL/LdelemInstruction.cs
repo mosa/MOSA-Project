@@ -90,7 +90,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			if (this.elementType == null)
 			{
 				// No, retrieve a type reference from the immediate argument
-				TokenTypes token = decoder.DecodeTokenType();
+				MetadataToken token = decoder.DecodeTokenType();
 				this.elementType = new ClassSigType(token);
 			}
 

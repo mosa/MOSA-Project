@@ -24,12 +24,12 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes classTableIdx;
+		private MetadataToken @class;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes interfaceTableIdx;
+		private MetadataToken @interface;
 
 		#endregion // Data members
 
@@ -38,12 +38,12 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// Initializes a new instance of the <see cref="InterfaceImplRow"/> struct.
 		/// </summary>
-		/// <param name="classTableIdx">The class table idx.</param>
-		/// <param name="interfaceTableIdx">The interface table idx.</param>
-		public InterfaceImplRow(TokenTypes classTableIdx, TokenTypes interfaceTableIdx)
+		/// <param name="class">The @class.</param>
+		/// <param name="interface">The @interface.</param>
+		public InterfaceImplRow(MetadataToken @class, MetadataToken @interface)
 		{
-			this.classTableIdx = classTableIdx;
-			this.interfaceTableIdx = interfaceTableIdx;
+			this.@class = @class;
+			this.@interface = @interface;
 		}
 
 		#endregion // Construction
@@ -51,21 +51,21 @@ namespace Mosa.Runtime.Metadata.Tables
 		#region Properties
 
 		/// <summary>
-		/// Gets the class table idx.
+		/// Gets the class.
 		/// </summary>
-		/// <value>The class table idx.</value>
-		public TokenTypes ClassTableIdx
+		/// <value>The class.</value>
+		public MetadataToken Class
 		{
-			get { return this.classTableIdx; }
+			get { return this.@class; }
 		}
 
 		/// <summary>
-		/// Gets the interface table idx.
+		/// Gets the interface.
 		/// </summary>
-		/// <value>The interface table idx.</value>
-		public TokenTypes InterfaceTableIdx
+		/// <value>The interface.</value>
+		public MetadataToken Interface
 		{
-			get { return this.interfaceTableIdx; }
+			get { return this.@interface; }
 		}
 
 		#endregion // Properties

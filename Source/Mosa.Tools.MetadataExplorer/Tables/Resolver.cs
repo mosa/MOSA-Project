@@ -26,20 +26,20 @@ namespace Mosa.Tools.MetadataExplorer.Tables
 
 			switch (token.Table)
 			{
-				case TableTypes.File: return new FileRowExt(metadata, metadata.ReadFileRow((TokenTypes)token.ToInt32()));
-				case TableTypes.TypeDef: return new TypeDefRowExt(metadata, metadata.ReadTypeDefRow((TokenTypes)token.ToInt32()));
-				case TableTypes.TypeSpec: return new TypeSpecRowExt(metadata, metadata.ReadTypeSpecRow((TokenTypes)token.ToInt32()));
-				case TableTypes.TypeRef: return new TypeRefRowExt(metadata, metadata.ReadTypeRefRow((TokenTypes)token.ToInt32()));
-				case TableTypes.Field: return new FieldRowExt(metadata, metadata.ReadFieldRow((TokenTypes)token.ToInt32()));
-				case TableTypes.MethodDef: return new MethodDefRowExt(metadata, metadata.ReadMethodDefRow((TokenTypes)token.ToInt32()));
-				case TableTypes.ImplMap: return new ImplMapRowExt(metadata, metadata.ReadImplMapRow((TokenTypes)token.ToInt32()));
-				case TableTypes.MemberRef: return new MemberRefRowExt(metadata, metadata.ReadMemberRefRow((TokenTypes)token.ToInt32()));
-				case TableTypes.InterfaceImpl: return new InterfaceImplRowExt(metadata, metadata.ReadInterfaceImplRow((TokenTypes)token.ToInt32()));
-				case TableTypes.CustomAttribute: return new CustomAttributeRowExt(metadata, metadata.ReadCustomAttributeRow((TokenTypes)token.ToInt32()));
-				case TableTypes.Assembly: return new AssemblyRowExt(metadata, metadata.ReadAssemblyRow((TokenTypes)token.ToInt32()));
-				case TableTypes.AssemblyRef: return new AssemblyRefRowExt(metadata, metadata.ReadAssemblyRefRow((TokenTypes)token.ToInt32()));
-				case TableTypes.GenericParam: return new GenericParamRowExt(metadata, metadata.ReadGenericParamRow((TokenTypes)token.ToInt32()));
-				case TableTypes.Param: return new ParamRowExt(metadata, metadata.ReadParamRow((TokenTypes)token.ToInt32()));
+				case MetadataTable.File: return new FileRowExt(metadata, metadata.ReadFileRow(token));
+				case MetadataTable.TypeDef: return new TypeDefRowExt(metadata, metadata.ReadTypeDefRow(token));
+				case MetadataTable.TypeSpec: return new TypeSpecRowExt(metadata, metadata.ReadTypeSpecRow(token));
+				case MetadataTable.TypeRef: return new TypeRefRowExt(metadata, metadata.ReadTypeRefRow(token));
+				case MetadataTable.Field: return new FieldRowExt(metadata, metadata.ReadFieldRow(token));
+				case MetadataTable.MethodDef: return new MethodDefRowExt(metadata, metadata.ReadMethodDefRow(token));
+				case MetadataTable.ImplMap: return new ImplMapRowExt(metadata, metadata.ReadImplMapRow(token));
+				case MetadataTable.MemberRef: return new MemberRefRowExt(metadata, metadata.ReadMemberRefRow(token));
+				case MetadataTable.InterfaceImpl: return new InterfaceImplRowExt(metadata, metadata.ReadInterfaceImplRow(token));
+				case MetadataTable.CustomAttribute: return new CustomAttributeRowExt(metadata, metadata.ReadCustomAttributeRow(token));
+				case MetadataTable.Assembly: return new AssemblyRowExt(metadata, metadata.ReadAssemblyRow(token));
+				case MetadataTable.AssemblyRef: return new AssemblyRefRowExt(metadata, metadata.ReadAssemblyRefRow(token));
+				case MetadataTable.GenericParam: return new GenericParamRowExt(metadata, metadata.ReadGenericParamRow(token));
+				case MetadataTable.Param: return new ParamRowExt(metadata, metadata.ReadParamRow(token));
 
 				default: return null;
 			}

@@ -91,6 +91,6 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// Decodes the tokentype from the instruction stream
 		/// </summary>
 		/// <returns></returns>
-		TokenTypes DecodeTokenType();
+		MetadataToken DecodeTokenType();
 	}
 }

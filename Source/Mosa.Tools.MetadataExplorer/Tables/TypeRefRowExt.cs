@@ -40,7 +40,7 @@ namespace Mosa.Tools.MetadataExplorer.Tables
 			yield return TokenString("Namespace", row.TypeNamespaceIdx);
 			yield return Value("TypeNameIdx", row.TypeNameIdx);
 			yield return Value("TypeNamespaceIdx", row.TypeNamespaceIdx);
-			yield return Value("ResolutionScopeIdx", row.ResolutionScopeIdx);
+			yield return Value("ResolutionScopeIdx", row.ResolutionScope);
 		}
 	}
 }

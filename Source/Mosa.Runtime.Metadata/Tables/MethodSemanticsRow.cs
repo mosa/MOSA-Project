@@ -31,12 +31,12 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes _methodTableIdx;
+		private MetadataToken _method;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes _associationTableIdx;
+		private MetadataToken _association;
 
 		#endregion // Data members
 
@@ -46,14 +46,14 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Initializes a new instance of the <see cref="MethodSemanticsRow"/> struct.
 		/// </summary>
 		/// <param name="semantics">The semantics.</param>
-		/// <param name="methodTableIdx">The method table idx.</param>
-		/// <param name="associationTableIdx">The association table idx.</param>
-		public MethodSemanticsRow(MethodSemanticsAttributes semantics, TokenTypes methodTableIdx,
-									TokenTypes associationTableIdx)
+		/// <param name="method">The method.</param>
+		/// <param name="association">The association.</param>
+		public MethodSemanticsRow(MethodSemanticsAttributes semantics, MetadataToken method,
+									MetadataToken association)
 		{
 			_semantics = semantics;
-			_methodTableIdx = methodTableIdx;
-			_associationTableIdx = associationTableIdx;
+			_method = method;
+			_association = association;
 		}
 
 		#endregion // Construction
@@ -70,21 +70,21 @@ namespace Mosa.Runtime.Metadata.Tables
 		}
 
 		/// <summary>
-		/// Gets the method table idx.
+		/// Gets the method.
 		/// </summary>
-		/// <value>The method table idx.</value>
-		public TokenTypes MethodTableIdx
+		/// <value>The method.</value>
+		public MetadataToken Method
 		{
-			get { return _methodTableIdx; }
+			get { return _method; }
 		}
 
 		/// <summary>
-		/// Gets the association table idx.
+		/// Gets the association.
 		/// </summary>
-		/// <value>The association table idx.</value>
-		public TokenTypes AssociationTableIdx
+		/// <value>The association.</value>
+		public MetadataToken Association
 		{
-			get { return _associationTableIdx; }
+			get { return _association; }
 		}
 
 		#endregion // Properties

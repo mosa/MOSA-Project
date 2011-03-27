@@ -170,7 +170,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Gets the culture idx.
 		/// </summary>
 		/// <value>The culture idx.</value>
-		public TokenTypes CultureIdx
+		public TokenTypes Culture
 		{
 			get { return _cultureIdx; }
 		}
@@ -179,7 +179,7 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// Gets the hash value idx.
 		/// </summary>
 		/// <value>The hash value idx.</value>
-		public TokenTypes HashValueIdx
+		public TokenTypes HashValue
 		{
 			get { return _hashValueIdx; }
 		}

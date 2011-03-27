@@ -16,14 +16,14 @@ namespace Mosa.Runtime.Metadata
 	{
 		readonly uint token;
 
-		public uint RID
+		public int RID
 		{
-			get { return token & 0x00ffffff; }
+			get { return (int)(token & 0x00ffffff); }
 		}
 
-		public TableTypes Table
+		public MetadataTable Table
 		{
-			get { return (TableTypes)(token & 0xff000000); }
+			get { return (MetadataTable)(token & 0xff000000); }
 		}
 
 		public static readonly MetadataToken Zero = new MetadataToken((uint)0);
@@ -33,20 +33,36 @@ namespace Mosa.Runtime.Metadata
 			this.token = token;
 		}
 
-		public MetadataToken(TableTypes type)
+		public MetadataToken(MetadataTable type)
 			: this(type, 0)
 		{
 		}
 
-		public MetadataToken(TableTypes type, uint rid)
+		public MetadataToken(MetadataTable type, uint rid)
 		{
 			token = (uint)type | rid;
 		}
 
-		public MetadataToken(TableTypes type, int rid)
+		public MetadataToken(MetadataTable type, int rid)
 		{
 			token = (uint)type | (uint)rid;
 		}
+
+		//public MetadataToken(IndexType index, int value)
+		//{
+		//    int bits = IndexBits[(int)index];
+		//    int mask = 1;
+
+		//    for (int i = 1; i < bits; i++) mask = (mask << 1) | 1;
+
+		//    // Get the table
+		//    int table = (int)value & mask;
+
+		//    // Correct the value
+		//    value = ((int)value >> bits);
+
+		//    token = (uint)IndexTables2[(int)index][table] | (uint)value;
+		//}
 
 		public int ToInt32()
 		{
@@ -88,5 +104,41 @@ namespace Mosa.Runtime.Metadata
 		{
 			return string.Format("[{0}:0x{1}]", Table, RID.ToString("x4"));
 		}
+
+		public MetadataToken NextRow
+		{
+			get
+			{
+				return new MetadataToken(token + 1);
+			}
+		}
+
+		public MetadataToken PreviousRow
+		{
+			get
+			{
+				if (RID != 0)
+					return new MetadataToken(token - 1);
+				else
+					return new MetadataToken(token);
+			}
+		}
+
+		public System.Collections.Generic.IEnumerable<MetadataToken> Upto(MetadataToken last)
+		{
+			if (RID > last.RID)
+				yield break;
+
+			MetadataToken token = this;
+
+			while (token != last)
+			{
+				yield return token;
+				token = token.NextRow;
+			}
+
+			yield return token;
+		}
+
 	}
 }

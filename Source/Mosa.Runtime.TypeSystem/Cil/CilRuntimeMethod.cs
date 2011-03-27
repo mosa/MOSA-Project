@@ -42,7 +42,7 @@ namespace Mosa.Runtime.TypeSystem.Cil
 		/// <param name="methodAttributes">The method attributes.</param>
 		/// <param name="methodImplAttributes">The method impl attributes.</param>
 		/// <param name="rva">The rva.</param>
-		public CilRuntimeMethod(ITypeModule module, string name, MethodSignature signature, TokenTypes token, RuntimeType declaringType, MethodAttributes methodAttributes, MethodImplAttributes methodImplAttributes, uint rva) :
+		public CilRuntimeMethod(ITypeModule module, string name, MethodSignature signature, MetadataToken token, RuntimeType declaringType, MethodAttributes methodAttributes, MethodImplAttributes methodImplAttributes, uint rva) :
 			base(module, token, declaringType)
 		{
 			base.Attributes = methodAttributes;

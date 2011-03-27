@@ -715,9 +715,9 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			IAssemblyLinker linker = this.methodCompiler.Linker;
 			IMetadataModule assembly = this.methodCompiler.Assembly;
 
-			string referencedString = assembly.Metadata.ReadString(context.Token);
+			string referencedString = assembly.Metadata.ReadString(context.TokenType);
 
-			string symbolName = @"$ldstr$" + assembly.Name + "$String" + context.Token.ToString(@"x");
+			string symbolName = @"$ldstr$" + assembly.Name + "$String" + context.TokenType.ToString("x");
 
 			if (!linker.HasSymbol(symbolName))
 			{

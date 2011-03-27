@@ -91,7 +91,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
 		public override void Decode(Context ctx, IInstructionDecoder decoder)
 		{
-			TokenTypes ctor = DecodeInvocationTarget(ctx, decoder, InvokeSupport);
+			MetadataToken ctor = DecodeInvocationTarget(ctx, decoder, InvokeSupport);
 
 			/*
 			 * HACK: We need to remove the this parameter from the operand list, as it
@@ -106,16 +106,16 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			ctx.OperandCount--;
 
 			// Get the type to allocate
-			SigType sigType = this.CreateSignatureTypeFor(decoder.Compiler.Assembly, ctor, ctx.InvokeTarget.DeclaringType);
+			SigType sigType = CreateSignatureTypeFor(decoder.Compiler.Assembly, ctor, ctx.InvokeTarget.DeclaringType);
 
 			// Set a return value according to the type of the object allocated
 			ctx.Result = decoder.Compiler.CreateTemporary(sigType);
 			ctx.ResultCount = 1;
 		}
 
-		private SigType CreateSignatureTypeFor(IMetadataModule module, TokenTypes ctorToken, RuntimeType declaringType)
+		private SigType CreateSignatureTypeFor(IMetadataModule module, MetadataToken ctorToken, RuntimeType declaringType)
 		{
-			TokenTypes typeToken = (TokenTypes)declaringType.Token;
+			MetadataToken typeToken = declaringType.Token;
 			if (IsMemberRef(ctorToken) == true)
 			{
 				typeToken = GetLocalTypeRefToken(module, ctorToken);
@@ -130,15 +130,15 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			return new ClassSigType(typeToken);
 		}
 
-		private static TokenTypes GetLocalTypeRefToken(IMetadataModule module, TokenTypes ctorToken)
+		private static MetadataToken GetLocalTypeRefToken(IMetadataModule module, MetadataToken ctorToken)
 		{
 			MemberRefRow memberRef = module.Metadata.ReadMemberRefRow(ctorToken);
-			return memberRef.ClassTableIdx;
+			return memberRef.Class;
 		}
 
-		private static bool IsMemberRef(TokenTypes ctorToken)
+		private static bool IsMemberRef(MetadataToken ctorToken)
 		{
-			return (ctorToken & TokenTypes.MemberRef) == TokenTypes.MemberRef;
+			return ctorToken.Table == MetadataTable.MemberRef;
 		}
 
 		/// <summary>

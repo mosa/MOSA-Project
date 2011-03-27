@@ -24,12 +24,12 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes _typeDefTableIdx;
+		private MetadataToken _typeDef;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private TokenTypes _eventListTableIdx;
+		private MetadataToken _eventList;
 
 		#endregion // Data members
 
@@ -38,12 +38,12 @@ namespace Mosa.Runtime.Metadata.Tables
 		/// <summary>
 		/// Initializes a new instance of the <see cref="EventMapRow"/> struct.
 		/// </summary>
-		/// <param name="typeDefTableIdx">The type def table idx.</param>
-		/// <param name="eventListTableIdx">The event list table idx.</param>
-		public EventMapRow(TokenTypes typeDefTableIdx, TokenTypes eventListTableIdx)
+		/// <param name="typeDef">The type def.</param>
+		/// <param name="eventList">The event list.</param>
+		public EventMapRow(MetadataToken typeDef, MetadataToken eventList)
 		{
-			_typeDefTableIdx = typeDefTableIdx;
-			_eventListTableIdx = eventListTableIdx;
+			_typeDef = typeDef;
+			_eventList = eventList;
 		}
 
 		#endregion // Construction
@@ -51,21 +51,21 @@ namespace Mosa.Runtime.Metadata.Tables
 		#region Properties
 
 		/// <summary>
-		/// Gets the type def table idx.
+		/// Gets the type def.
 		/// </summary>
-		/// <value>The type def table idx.</value>
-		public TokenTypes TypeDefTableIdx
+		/// <value>The type def.</value>
+		public MetadataToken TypeDef
 		{
-			get { return _typeDefTableIdx; }
+			get { return _typeDef; }
 		}
 
 		/// <summary>
-		/// Gets the event list table idx.
+		/// Gets the event list.
 		/// </summary>
-		/// <value>The event list table idx.</value>
-		public TokenTypes EventListTableIdx
+		/// <value>The event list.</value>
+		public MetadataToken EventList
 		{
-			get { return _eventListTableIdx; }
+			get { return _eventList; }
 		}
 
 		#endregion // Properties

@@ -30,7 +30,7 @@ namespace Mosa.Runtime.Metadata.Loader
 		/// Gets the entry point of the module.
 		/// </summary>
 		/// <value>The entry point.</value>
-		TokenTypes EntryPoint { get; }
+		MetadataToken EntryPoint { get; }
 
 		/// <summary>
 		/// Retrieves the load order index of the module.

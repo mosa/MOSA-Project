@@ -27,7 +27,7 @@ namespace Mosa.Tools.MetadataExplorer
 			return ((int)token).ToString("X8");
 		}
 
-		public static string FormatToString(this TableTypes token)
+		public static string FormatToString(this MetadataTable token)
 		{
 			return ((int)token).ToString("X8");
 		}

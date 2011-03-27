@@ -39,7 +39,7 @@
     <Compile Include="AssemblyHashAlgorithm.cs" />
     <Compile Include="BlobHeap.cs" />
     <Compile Include="CilElementType.cs" />
-    <Compile Include="TableTypes.cs" />
+    <Compile Include="MetadataTable.cs" />
     <Compile Include="EventAttributes.cs" />
     <Compile Include="FieldAttributes.cs" />
     <Compile Include="GenericParameterAttributes.cs" />
