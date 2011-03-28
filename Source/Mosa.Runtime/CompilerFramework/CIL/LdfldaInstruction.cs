@@ -50,7 +50,13 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 			Token token = decoder.DecodeTokenType();
 
-			ctx.RuntimeField = decoder.TypeModule.GetField(token);
+			ITypeModule module = null;
+			Mosa.Runtime.TypeSystem.Generic.CilGenericType genericType = decoder.Method.DeclaringType as Mosa.Runtime.TypeSystem.Generic.CilGenericType;
+			if (genericType != null)
+				module = (decoder.Method.DeclaringType as Mosa.Runtime.TypeSystem.Generic.CilGenericType).BaseGenericType.Module;
+			else
+				module = decoder.Method.Module;
+			ctx.RuntimeField = module.GetField(token);
 
 			if (ctx.RuntimeField.ContainsGenericParameter)
 			{

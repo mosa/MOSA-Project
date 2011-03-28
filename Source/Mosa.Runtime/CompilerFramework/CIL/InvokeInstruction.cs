@@ -164,21 +164,27 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 				throw new InvalidOperationException(@"Invalid IL call target specification.");
 
 			RuntimeMethod method = null;
+			ITypeModule module = null;
+			Mosa.Runtime.TypeSystem.Generic.CilGenericType genericType = decoder.Method.DeclaringType as Mosa.Runtime.TypeSystem.Generic.CilGenericType;
+			if (genericType != null)
+				module = (decoder.Method.DeclaringType as Mosa.Runtime.TypeSystem.Generic.CilGenericType).BaseGenericType.Module;
+			else
+				module = decoder.Method.Module;
 
 			switch (callTarget.Table)
 			{
 				case TableType.MethodDef:
-					method = decoder.TypeModule.GetMethod(callTarget);
+					method = module.GetMethod(callTarget);
 					break;
 
 				case TableType.MemberRef:
-					method = decoder.TypeModule.GetMethod(callTarget, decoder.Method.DeclaringType);
+					method = module.GetMethod(callTarget, decoder.Method.DeclaringType);
 					if (method.DeclaringType.IsGeneric)
 						decoder.Compiler.Scheduler.ScheduleTypeForCompilation(method.DeclaringType);
 					break;
 
 				case TableType.MethodSpec:
-					method = decoder.TypeModule.GetMethod(callTarget);
+					method = module.GetMethod(callTarget);
 					decoder.Compiler.Scheduler.ScheduleTypeForCompilation(method.DeclaringType);
 					break;
 
