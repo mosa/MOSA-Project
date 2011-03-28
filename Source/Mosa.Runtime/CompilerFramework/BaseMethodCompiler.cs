@@ -314,7 +314,15 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns>A stream, which represents the IL of the method.</returns>
 		public Stream GetInstructionStream()
 		{
-			return method.Module.MetadataModule.GetInstructionStream((long)method.Rva);
+			ITypeModule module;
+
+			CilGenericType genericType = method.DeclaringType as CilGenericType;
+			if (genericType != null)
+				module = (method.DeclaringType as CilGenericType).BaseGenericType.Module;
+			else
+				module = method.Module;
+
+			return module.MetadataModule.GetInstructionStream((long)method.Rva);
 		}
 
 		/// <summary>
