@@ -67,18 +67,18 @@ namespace Mosa.Runtime.Metadata.Tables
 		}
 
 		/// <summary>
-		/// Gets the name string idx.
+		/// Gets the name.
 		/// </summary>
-		/// <value>The name string idx.</value>
+		/// <value>The name.</value>
 		public HeapIndexToken Name
 		{
 			get { return name; }
 		}
 
 		/// <summary>
-		/// Gets the hash value BLOB idx.
+		/// Gets the hash value.
 		/// </summary>
-		/// <value>The hash value BLOB idx.</value>
+		/// <value>The hash value.</value>
 		public HeapIndexToken HashValue
 		{
 			get { return hashValue; }

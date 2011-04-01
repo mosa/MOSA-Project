@@ -865,7 +865,7 @@ namespace Mosa.Runtime.TypeSystem
 
 						case CilElementType.Class:
 							TypeSigType typeSigType = (TypeSigType)sigType;
-							genericType = types[typeSigType.Token.RID];	// NOTE: Should this be -1
+							genericType = types[typeSigType.Token.RID - 1];
 							break;
 
 						case CilElementType.GenericInst:
@@ -877,7 +877,7 @@ namespace Mosa.Runtime.TypeSystem
 							else if (genericSigType2.BaseType.Token.Table == TableType.TypeRef)
 								genericBaseType = typeRef[genericSigType2.BaseType.Token.RID - 1];
 
-							genericType = new CilGenericType(this, genericBaseType, genericSigType, token, this);
+							genericType = new CilGenericType(genericBaseType.Module, genericBaseType, genericSigType, token, this);
 							break;
 
 						default:
@@ -1090,22 +1090,20 @@ namespace Mosa.Runtime.TypeSystem
 			if (calledMethod.DeclaringType.Namespace != callingType.Namespace)
 				return calledMethod;
 
-			string declaringTypeName = calledMethod.DeclaringType.Name;
-			if (declaringTypeName.Contains("<"))
-				declaringTypeName = declaringTypeName.Substring(0, declaringTypeName.IndexOf('<'));
+			CilGenericType declaringGenericType = calledMethod.DeclaringType as CilGenericType;
+			string declaringTypeName = (declaringGenericType == null) ? calledMethod.DeclaringType.Name : declaringGenericType.BaseGenericType.Name;
 
-			string callingTypeName = callingType.Name;
-			if (callingTypeName.Contains("<"))
-				callingTypeName = callingTypeName.Substring(0, callingTypeName.IndexOf('<'));
+			CilGenericType callingGenericType = callingType.DeclaringType as CilGenericType;
+			string callingTypeName = (callingGenericType == null) ? callingType.Name : callingGenericType.BaseGenericType.Name;
 
 			if (declaringTypeName != callingTypeName)
 				return calledMethod;
 
-			foreach (RuntimeMethod m in callingType.Methods)
+			foreach (RuntimeMethod method in callingType.Methods)
 			{
-				if (calledMethod.Name == m.Name)
+				if (calledMethod.Name == method.Name)
 				{
-					return m;
+					return method;
 				}
 			}
 
