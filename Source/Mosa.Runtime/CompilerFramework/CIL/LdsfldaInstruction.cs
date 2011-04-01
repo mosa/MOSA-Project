@@ -9,6 +9,7 @@
 
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.TypeSystem;
+using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Runtime.CompilerFramework.CIL
 {
@@ -38,15 +39,15 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 			// Read the _stackFrameIndex From the code
 			Token token = decoder.DecodeTokenType();
-	
 			ctx.RuntimeField = decoder.TypeModule.GetField(token);
 
 			if (ctx.RuntimeField.ContainsGenericParameter)
 			{
+				//TODO
 				;
 			}
 
-			ctx.Result = decoder.Compiler.CreateTemporary(new Mosa.Runtime.Metadata.Signatures.SigType(CilElementType.Ptr));
+			ctx.Result = decoder.Compiler.CreateTemporary(new SigType(CilElementType.Ptr));
 		}
 
 		/// <summary>

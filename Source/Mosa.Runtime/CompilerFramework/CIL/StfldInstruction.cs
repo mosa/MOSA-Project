@@ -49,19 +49,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 			// Load the _stackFrameIndex token from the immediate
 			Token token = decoder.DecodeTokenType();
-
-			//Console.WriteLine("Stfld used in {0}.{1}", decoder.Method.DeclaringType.FullName, decoder.Method.Name);
-
 			Debug.Assert(token.Table == TableType.Field || token.Table == TableType.MemberRef, @"Invalid token type.");
-			
-			ITypeModule module = null;
-			Mosa.Runtime.TypeSystem.Generic.CilGenericType genericType = decoder.Method.DeclaringType as Mosa.Runtime.TypeSystem.Generic.CilGenericType;
-			if (genericType != null)
-				module = (decoder.Method.DeclaringType as Mosa.Runtime.TypeSystem.Generic.CilGenericType).BaseGenericType.Module;
-			else
-				module = decoder.Method.Module;
 
-			ctx.RuntimeField = module.GetField(token);
+			ctx.RuntimeField = decoder.Method.Module.GetField(token);
 
 			if (ctx.RuntimeField.ContainsGenericParameter)
 			{

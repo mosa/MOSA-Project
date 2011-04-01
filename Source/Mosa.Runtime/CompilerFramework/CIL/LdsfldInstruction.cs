@@ -47,11 +47,11 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			base.Decode(ctx, decoder);
 
 			Token token = decoder.DecodeTokenType();
-
 			ctx.RuntimeField = decoder.TypeModule.GetField(token);
 
 			if (ctx.RuntimeField.ContainsGenericParameter)
 			{
+				//TODO
 				;
 			}
 

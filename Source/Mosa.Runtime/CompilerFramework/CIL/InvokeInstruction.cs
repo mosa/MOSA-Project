@@ -163,13 +163,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			if (!IsCallTargetSupported(callTarget.Table, flags))
 				throw new InvalidOperationException(@"Invalid IL call target specification.");
 
+			ITypeModule module = decoder.Method.Module;
 			RuntimeMethod method = null;
-			ITypeModule module = null;
-			Mosa.Runtime.TypeSystem.Generic.CilGenericType genericType = decoder.Method.DeclaringType as Mosa.Runtime.TypeSystem.Generic.CilGenericType;
-			if (genericType != null)
-				module = (decoder.Method.DeclaringType as Mosa.Runtime.TypeSystem.Generic.CilGenericType).BaseGenericType.Module;
-			else
-				module = decoder.Method.Module;
 
 			switch (callTarget.Table)
 			{

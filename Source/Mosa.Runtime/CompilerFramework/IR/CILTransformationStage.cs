@@ -762,7 +762,6 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			Operand objectOperand = context.Operand1;
 
 			RuntimeField field = context.RuntimeField;
-			//IntPtr address = field.Address;
 			int offset = typeLayout.GetFieldOffset(field);
 			ConstantOperand offsetOperand = new ConstantOperand(BuiltInSigType.IntPtr, offset);
 
@@ -789,8 +788,8 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			Operand objectOperand = context.Operand1;
 
 			int offset = typeLayout.GetFieldOffset(context.RuntimeField);
-
 			Operand fixedOffset = new ConstantOperand(BuiltInSigType.Int32, offset);
+
 			context.SetInstruction(Instruction.AddUInstruction, fieldAddress, objectOperand, fixedOffset);
 		}
 
@@ -803,7 +802,6 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			Operand objectOperand = context.Operand1;
 			Operand valueOperand = context.Operand2;
 
-			//IntPtr address = context.RuntimeField.Address;
 			int offset = typeLayout.GetFieldOffset(context.RuntimeField);
 			ConstantOperand offsetOperand = new ConstantOperand(BuiltInSigType.IntPtr, offset);
 
