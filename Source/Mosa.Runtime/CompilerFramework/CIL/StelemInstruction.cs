@@ -28,7 +28,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// 
 		/// </summary>
-		private SigType _typeRef;
+		private readonly SigType typeRef;
 
 		#endregion // Data members
 
@@ -43,31 +43,31 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			switch (opcode)
 			{
 				case OpCode.Stelem_i1:
-					_typeRef = new SigType(CilElementType.I1);
+					typeRef = new SigType(CilElementType.I1);
 					break;
 				case OpCode.Stelem_i2:
-					_typeRef = new SigType(CilElementType.I2);
+					typeRef = new SigType(CilElementType.I2);
 					break;
 				case OpCode.Stelem_i4:
-					_typeRef = new SigType(CilElementType.I4);
+					typeRef = new SigType(CilElementType.I4);
 					break;
 				case OpCode.Stelem_i8:
-					_typeRef = new SigType(CilElementType.I8);
+					typeRef = new SigType(CilElementType.I8);
 					break;
 				case OpCode.Stelem_i:
-					_typeRef = new SigType(CilElementType.I);
+					typeRef = new SigType(CilElementType.I);
 					break;
 				case OpCode.Stelem_r4:
-					_typeRef = new SigType(CilElementType.R4);
+					typeRef = new SigType(CilElementType.R4);
 					break;
 				case OpCode.Stelem_r8:
-					_typeRef = new SigType(CilElementType.R8);
+					typeRef = new SigType(CilElementType.R8);
 					break;
 				case OpCode.Stelem_ref: // FIXME: Really object?
-					_typeRef = new SigType(CilElementType.Object);
+					typeRef = new SigType(CilElementType.Object);
 					break;
 				case OpCode.Stelem:
-					_typeRef = new SigType(CilElementType.Type);
+					typeRef = null;
 					break;
 				default:
 					throw new NotImplementedException("Not implemented: " + opcode);
@@ -88,12 +88,10 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			// Decode base classes first
 			base.Decode(ctx, decoder);
 
-			// Do we have a type?
-			if (this._typeRef == null)
+			//TODO:
+			if (typeRef == null)
 			{
-				// No, retrieve a type reference from the immediate argument
 				Token token = decoder.DecodeTokenType();
-				this._typeRef = new ClassSigType(token);
 			}
 		}
 
