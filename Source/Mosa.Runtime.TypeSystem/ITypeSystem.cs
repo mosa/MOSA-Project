@@ -13,6 +13,7 @@ using System.Text;
 
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Loader;
+using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.TypeSystem.Generic;
 
 namespace Mosa.Runtime.TypeSystem
@@ -93,5 +94,14 @@ namespace Mosa.Runtime.TypeSystem
 		/// <param name="baseGenericType">Type of the base generic.</param>
 		/// <returns></returns>
 		CilGenericType GetOpenGeneric(RuntimeType baseGenericType);
+
+		/// <summary>
+		/// Resolves the type of the generic.
+		/// </summary>
+		/// <param name="typeModule">The type module.</param>
+		/// <param name="typeSpecSignature">The type spec signature.</param>
+		/// <param name="token">The token.</param>
+		/// <returns></returns>
+		RuntimeType ResolveGenericType(ITypeModule typeModule, TypeSpecSignature typeSpecSignature, Token token);
 	}
 }

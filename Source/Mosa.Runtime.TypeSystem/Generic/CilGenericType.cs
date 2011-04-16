@@ -37,13 +37,12 @@ namespace Mosa.Runtime.TypeSystem.Generic
 		/// <summary>
 		/// Initializes a new instance of the <see cref="CilGenericType"/> class.
 		/// </summary>
-		/// <param name="module">The module.</param>
+		/// <param name="typeModule">The type module.</param>
+		/// <param name="token">The token.</param>
 		/// <param name="baseGenericType">Type of the base generic.</param>
 		/// <param name="genericTypeInstanceSignature">The generic type instance signature.</param>
-		/// <param name="token">The token.</param>
-		/// <param name="typeModule">The type module.</param>
-		public CilGenericType(ITypeModule module, RuntimeType baseGenericType, GenericInstSigType genericTypeInstanceSignature, Token token, ITypeModule typeModule) :
-			base(module, token, baseGenericType.BaseType)
+		public CilGenericType(ITypeModule typeModule, Token token, RuntimeType baseGenericType, GenericInstSigType genericTypeInstanceSignature) :
+			base(baseGenericType.Module, token, baseGenericType.BaseType)
 		{
 			Debug.Assert(baseGenericType is CilRuntimeType);
 
@@ -111,7 +110,7 @@ namespace Mosa.Runtime.TypeSystem.Generic
 			return sb.ToString();
 		}
 
-		private RuntimeType GetRuntimeTypeForSigType(SigType sigType, ITypeModule typeModule)
+		private static RuntimeType GetRuntimeTypeForSigType(SigType sigType, ITypeModule typeModule)
 		{
 			RuntimeType result = null;
 

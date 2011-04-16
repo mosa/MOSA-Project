@@ -851,50 +851,11 @@ namespace Mosa.Runtime.TypeSystem
 				TypeSpecRow row = metadataProvider.ReadTypeSpecRow(token);
 				TypeSpecSignature signature = GetTypeSpecSignature(row.SignatureBlobIdx);
 
-				GenericInstSigType genericSigType = signature.Type as GenericInstSigType;
+				RuntimeType genericType = typeSystem.ResolveGenericType(this, signature, token);
 
-				if (genericSigType != null)
-				{
-					RuntimeType genericType = null;
-					SigType sigType = genericSigType;
-
-					switch (genericSigType.Type)
-					{
-						case CilElementType.ValueType:
-							goto case CilElementType.Class;
-
-						case CilElementType.Class:
-							TypeSigType typeSigType = (TypeSigType)sigType;
-							genericType = types[typeSigType.Token.RID - 1];
-							break;
-
-						case CilElementType.GenericInst:
-							GenericInstSigType genericSigType2 = (GenericInstSigType)sigType;
-							RuntimeType genericBaseType = null;
-
-							if (genericSigType2.BaseType.Token.Table == TableType.TypeDef)
-								genericBaseType = types[genericSigType2.BaseType.Token.RID - 1];
-							else if (genericSigType2.BaseType.Token.Table == TableType.TypeRef)
-								genericBaseType = typeRef[genericSigType2.BaseType.Token.RID - 1];
-
-							genericType = new CilGenericType(genericBaseType.Module, genericBaseType, genericSigType, token, this);
-							break;
-
-						default:
-							throw new NotSupportedException(String.Format(@"LoadTypeSpecs does not support CilElementType.{0}", genericSigType.Type));
-					}
-
+				if (genericType != null)
 					typeSpecs[token.RID - 1] = genericType;
-				}
-				else
-				{
-					if (signature.Type is MVarSigType)
-						continue;
-					else if (signature.Type is SZArraySigType)
-						continue;
-					else
-						continue;
-				}
+				
 			}
 
 		}

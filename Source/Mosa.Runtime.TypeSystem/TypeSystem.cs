@@ -14,6 +14,7 @@ using System.Diagnostics;
 
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Loader;
+using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.TypeSystem.Generic;
 
 namespace Mosa.Runtime.TypeSystem
@@ -34,6 +35,8 @@ namespace Mosa.Runtime.TypeSystem
 		/// 
 		/// </summary>
 		private ITypeModule mainTypeModule;
+
+		#region ITypeSystem interface
 
 		/// <summary>
 		/// Loads the module.
@@ -204,6 +207,41 @@ namespace Mosa.Runtime.TypeSystem
 
 			return null;
 		}
+
+		RuntimeType ITypeSystem.ResolveGenericType(ITypeModule typeModule, TypeSpecSignature typeSpecSignature, Token token)
+		{
+			GenericInstSigType genericInstSigType = typeSpecSignature.Type as GenericInstSigType;
+
+			if (genericInstSigType == null)
+				return null;
+
+			RuntimeType genericType = null;
+			SigType sigType = genericInstSigType;
+
+			switch (genericInstSigType.Type)
+			{
+				case CilElementType.ValueType:
+					goto case CilElementType.Class;
+
+				case CilElementType.Class:
+					TypeSigType typeSigType = (TypeSigType)sigType;
+					genericType = typeModule.GetType(typeSigType.Token);
+					break;
+
+				case CilElementType.GenericInst:
+					RuntimeType genericBaseType = typeModule.GetType(genericInstSigType.BaseType.Token);
+
+					genericType = new CilGenericType(typeModule, token, genericBaseType, genericInstSigType);
+					break;
+
+				default:
+					throw new NotSupportedException(String.Format(@"LoadTypeSpecs does not support CilElementType.{0}", genericInstSigType.Type));
+			}
+
+			return genericType;
+		}
+
+		#endregion // ITypeSystem interface
 
 		/// <summary>
 		/// Initializes the internal type module.
