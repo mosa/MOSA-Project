@@ -10,7 +10,6 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Diagnostics;
 
 using Mosa.Runtime.Metadata;
 
@@ -22,8 +21,8 @@ namespace Mosa.Runtime.CompilerFramework
 	public sealed class InstructionLogger : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
 	{
 		public static readonly InstructionLogger Instance = new InstructionLogger();
-
-		public static bool output = false;
+        public static ILoggerWriter loggerWriter = new LoggerDebugWriter();
+		public static bool output = true;
 		public static string classfilter = string.Empty;
 
 		#region IPipelineStage
@@ -59,23 +58,23 @@ namespace Mosa.Runtime.CompilerFramework
 			// Line number
 			int index = 1;
 
-			Debug.WriteLine(String.Format("IR representation of method {0} after stage {1}", methodCompiler.Method, prevStage.Name));
+            loggerWriter.WriteLine(String.Format("IR representation of method {0} after stage {1}", methodCompiler.Method, prevStage.Name));
 
 			if (this.basicBlocks.Count > 0)
 			{
 				foreach (BasicBlock block in basicBlocks)
 				{
-					Debug.WriteLine(String.Format("Block #{0} - label L_{1:X4}", index, block.Label));
+                    loggerWriter.WriteLine(String.Format("Block #{0} - label L_{1:X4}", index, block.Label));
 
 					foreach (BasicBlock prev in block.PreviousBlocks)
-						Debug.WriteLine(String.Format("  Prev: L_{0:X4}", prev.Label));
+                        loggerWriter.WriteLine(String.Format("  Prev: L_{0:X4}", prev.Label));
 
-					Debug.Indent();
+                    loggerWriter.Indent();
 					LogInstructions(new Context(InstructionSet, block));
-					Debug.Unindent();
+                    loggerWriter.Unindent();
 
 					foreach (BasicBlock next in block.NextBlocks)
-						Debug.WriteLine(String.Format("  Next: L_{0:X4}", next.Label));
+                        loggerWriter.WriteLine(String.Format("  Next: L_{0:X4}", next.Label));
 
 					index++;
 				}
@@ -111,7 +110,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 				text.AppendFormat("L_{0:X4}: {1}", ctx.Label, ctx.Instruction.ToString(ctx));
 
-				Debug.WriteLine(text.ToString());
+                loggerWriter.WriteLine(text.ToString());
 			}
 		}
 

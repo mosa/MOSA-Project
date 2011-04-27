@@ -28,6 +28,7 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
+			this.components = new System.ComponentModel.Container();
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
 			this.treeView = new System.Windows.Forms.TreeView();
 			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
@@ -37,14 +38,17 @@
 			this.quitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.showTokenValues = new System.Windows.Forms.ToolStripMenuItem();
-			this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
 			this.showSizes = new System.Windows.Forms.ToolStripMenuItem();
+			this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
+			this.methodnodeContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
+			this.viewTheResultsFromDifferentCompileStagesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.menuStrip1.SuspendLayout();
+			this.methodnodeContextMenu.SuspendLayout();
 			this.SuspendLayout();
 			// 
 			// statusStrip1
 			// 
-			this.statusStrip1.Location = new System.Drawing.Point(0, 489);
+			this.statusStrip1.Location = new System.Drawing.Point(0, 450);
 			this.statusStrip1.Name = "statusStrip1";
 			this.statusStrip1.Size = new System.Drawing.Size(617, 22);
 			this.statusStrip1.TabIndex = 0;
@@ -55,10 +59,11 @@
 			this.treeView.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom)
 						| System.Windows.Forms.AnchorStyles.Left)
 						| System.Windows.Forms.AnchorStyles.Right)));
-			this.treeView.Location = new System.Drawing.Point(0, 29);
+			this.treeView.Location = new System.Drawing.Point(0, 27);
 			this.treeView.Name = "treeView";
-			this.treeView.Size = new System.Drawing.Size(616, 461);
+			this.treeView.Size = new System.Drawing.Size(616, 426);
 			this.treeView.TabIndex = 2;
+			this.treeView.MouseUp += new System.Windows.Forms.MouseEventHandler(this.treeView_MouseUp);
 			// 
 			// menuStrip1
 			// 
@@ -78,25 +83,25 @@
             this.toolStripMenuItem1,
             this.quitToolStripMenuItem});
 			this.fileToolStripMenuItem.Name = "fileToolStripMenuItem";
-			this.fileToolStripMenuItem.Size = new System.Drawing.Size(37, 20);
+			this.fileToolStripMenuItem.Size = new System.Drawing.Size(41, 20);
 			this.fileToolStripMenuItem.Text = "&File";
 			// 
 			// openToolStripMenuItem
 			// 
 			this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-			this.openToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.openToolStripMenuItem.Size = new System.Drawing.Size(94, 22);
 			this.openToolStripMenuItem.Text = "&Open";
 			this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
 			// 
 			// toolStripMenuItem1
 			// 
 			this.toolStripMenuItem1.Name = "toolStripMenuItem1";
-			this.toolStripMenuItem1.Size = new System.Drawing.Size(149, 6);
+			this.toolStripMenuItem1.Size = new System.Drawing.Size(91, 6);
 			// 
 			// quitToolStripMenuItem
 			// 
 			this.quitToolStripMenuItem.Name = "quitToolStripMenuItem";
-			this.quitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.quitToolStripMenuItem.Size = new System.Drawing.Size(94, 22);
 			this.quitToolStripMenuItem.Text = "&Quit";
 			this.quitToolStripMenuItem.Click += new System.EventHandler(this.quitToolStripMenuItem_Click);
 			// 
@@ -106,7 +111,7 @@
             this.showTokenValues,
             this.showSizes});
 			this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
-			this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
+			this.optionsToolStripMenuItem.Size = new System.Drawing.Size(59, 20);
 			this.optionsToolStripMenuItem.Text = "Options";
 			// 
 			// showTokenValues
@@ -115,14 +120,9 @@
 			this.showTokenValues.CheckOnClick = true;
 			this.showTokenValues.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.showTokenValues.Name = "showTokenValues";
-			this.showTokenValues.Size = new System.Drawing.Size(176, 22);
+			this.showTokenValues.Size = new System.Drawing.Size(172, 22);
 			this.showTokenValues.Text = "Show Token Values";
 			this.showTokenValues.Click += new System.EventHandler(this.showTokenValues_Click);
-			// 
-			// openFileDialog
-			// 
-			this.openFileDialog.DefaultExt = "exe";
-			this.openFileDialog.Filter = "Executable|*.exe|Library|*.dll|All Files|*.*";
 			// 
 			// showSizes
 			// 
@@ -130,15 +130,34 @@
 			this.showSizes.CheckOnClick = true;
 			this.showSizes.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.showSizes.Name = "showSizes";
-			this.showSizes.Size = new System.Drawing.Size(176, 22);
+			this.showSizes.Size = new System.Drawing.Size(172, 22);
 			this.showSizes.Text = "Show Sizes";
 			this.showSizes.Click += new System.EventHandler(this.showSizes_Click);
 			// 
+			// openFileDialog
+			// 
+			this.openFileDialog.DefaultExt = "exe";
+			this.openFileDialog.Filter = "Executable|*.exe|Library|*.dll|All Files|*.*";
+			// 
+			// methodnodeContextMenu
+			// 
+			this.methodnodeContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.viewTheResultsFromDifferentCompileStagesToolStripMenuItem});
+			this.methodnodeContextMenu.Name = "methodnodeContextMenu";
+			this.methodnodeContextMenu.Size = new System.Drawing.Size(347, 26);
+			// 
+			// viewTheResultsFromDifferentCompileStagesToolStripMenuItem
+			// 
+			this.viewTheResultsFromDifferentCompileStagesToolStripMenuItem.Name = "viewTheResultsFromDifferentCompileStagesToolStripMenuItem";
+			this.viewTheResultsFromDifferentCompileStagesToolStripMenuItem.Size = new System.Drawing.Size(346, 22);
+			this.viewTheResultsFromDifferentCompileStagesToolStripMenuItem.Text = "View the results from different compile stages";
+			this.viewTheResultsFromDifferentCompileStagesToolStripMenuItem.Click += new System.EventHandler(this.showCompileStage);
+			// 
 			// Main
 			// 
-			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(617, 511);
+			this.ClientSize = new System.Drawing.Size(617, 472);
 			this.Controls.Add(this.treeView);
 			this.Controls.Add(this.statusStrip1);
 			this.Controls.Add(this.menuStrip1);
@@ -148,6 +167,7 @@
 			this.Load += new System.EventHandler(this.Main_Load);
 			this.menuStrip1.ResumeLayout(false);
 			this.menuStrip1.PerformLayout();
+			this.methodnodeContextMenu.ResumeLayout(false);
 			this.ResumeLayout(false);
 			this.PerformLayout();
 
@@ -166,5 +186,7 @@
 		private System.Windows.Forms.ToolStripMenuItem optionsToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem showTokenValues;
 		private System.Windows.Forms.ToolStripMenuItem showSizes;
+		private System.Windows.Forms.ContextMenuStrip methodnodeContextMenu;
+		private System.Windows.Forms.ToolStripMenuItem viewTheResultsFromDifferentCompileStagesToolStripMenuItem;
 	}
 }

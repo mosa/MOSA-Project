@@ -215,6 +215,48 @@ namespace Mosa.Tools.TypeExplorer
 			treeView.EndUpdate();
 		}
 
+		private TreeNode m_OldSelectNode;
+		private TreeNode nodeInvokeMenu;
+		private void treeView_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
+		{
+			// Show menu only if the right mouse button is clicked.
+			if (e.Button == MouseButtons.Right)
+			{
+
+				// Point where the mouse is clicked.
+				Point p = new Point(e.X, e.Y);
+
+				// Get the node that the user has clicked.
+				TreeNode node = treeView.GetNodeAt(p);
+				if (node != null)
+				{
+
+					// Select the node the user has clicked.
+					// The node appears selected until the menu is displayed on the screen.
+					m_OldSelectNode = treeView.SelectedNode;
+					treeView.SelectedNode = node;
+					nodeInvokeMenu = node;
+					// make sure it's an end node
+					if (node.Nodes.Count == 0)
+						methodnodeContextMenu.Show(treeView, p);
+					// Highlight the selected node.
+					treeView.SelectedNode = m_OldSelectNode;
+					m_OldSelectNode = null;
+				}
+			}
+		}
+
+		private void showCompileStage(object sender, EventArgs e)
+		{
+			var startpoint = nodeInvokeMenu.Text.IndexOf("] ") +2;
+			var endpos = nodeInvokeMenu.Text.IndexOf(" [");
+			var endpoint = endpos >0 ? endpos : nodeInvokeMenu.Text.Length;
+			var methodname = nodeInvokeMenu.Text.Substring(startpoint, endpoint - startpoint );
+			nodeInvokeMenu = null;
+			var sf = new StageForm(typeSystem, methodname);
+			sf.Show();
+		}
+
 		private void quitToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			Application.Exit();
