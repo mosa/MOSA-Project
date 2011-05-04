@@ -47,22 +47,23 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			// Decode base classes first
 			base.Decode(ctx, decoder);
 
-			Token token = decoder.DecodeTokenType();
+			var token = decoder.DecodeTokenType();
 			ctx.RuntimeField = decoder.Method.Module.GetField(token);
 
 			if (ctx.RuntimeField.ContainsGenericParameter)
 			{
-				foreach (RuntimeField field in decoder.Method.DeclaringType.Fields)
+                foreach (var field in decoder.Method.DeclaringType.Fields)
 					if (field.Name == ctx.RuntimeField.Name)
 					{
 						ctx.RuntimeField = field;
 						break;
 					}
 
+                Console.WriteLine("Token: {0}", token);
 				Debug.Assert(!ctx.RuntimeField.ContainsGenericParameter);
 			}
 
-			SigType sigType = ctx.RuntimeField.SignatureType;
+            var sigType = ctx.RuntimeField.SignatureType;
 			ctx.Result = LoadInstruction.CreateResultOperand(decoder, Operand.StackTypeFromSigType(sigType), sigType);
 		}
 

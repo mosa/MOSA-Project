@@ -135,10 +135,10 @@ namespace Mosa.Runtime.TypeSystem
 		public override string ToString()
 		{
 			string name;
-			RuntimeType declaringType = this.DeclaringType;
+            var declaringType = this.DeclaringType;
 			if (declaringType != null)
 			{
-				string declaringTypeSymbolName = declaringType.ToString();
+                var declaringTypeSymbolName = declaringType.ToString();
 				name = String.Format("{0}.{1}", declaringTypeSymbolName, this.Name);
 			}
 			else

@@ -120,7 +120,7 @@ namespace Mosa.Runtime.TypeSystem
 			bool result = false;
 			if (this.attributes != null)
 			{
-				foreach (RuntimeAttribute attribute in this.attributes)
+                foreach (var attribute in this.attributes)
 				{
 					if (attribute.Type.Equals(attributeType) == true ||
 						attribute.Type.IsSubclassOf(attributeType) == true)

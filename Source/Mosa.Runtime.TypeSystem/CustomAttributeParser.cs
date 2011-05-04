@@ -65,14 +65,14 @@ namespace Mosa.Runtime.TypeSystem
 				return null;
 
 			// Create a binary reader for the blob
-			using (BinaryReader reader = new BinaryReader(new MemoryStream(blob), Encoding.UTF8))
+            using (var reader = new BinaryReader(new MemoryStream(blob), Encoding.UTF8))
 			{
-				ushort prologue = reader.ReadUInt16();
+                var prologue = reader.ReadUInt16();
 				Debug.Assert(prologue == ATTRIBUTE_BLOB_PROLOGUE, @"Attribute prologue doesn't match.");
 				if (prologue != ATTRIBUTE_BLOB_PROLOGUE)
 					throw new ArgumentException(@"Invalid custom attribute blob.", "attributeBlob");
 
-				int parameters = attributeCtor.Parameters.Count;
+                var parameters = attributeCtor.Parameters.Count;
 
 				object[] args = new object[parameters];
 				for (int idx = 0; idx < parameters; idx++)
@@ -99,7 +99,7 @@ namespace Mosa.Runtime.TypeSystem
 			object result = null;
 
 			// A vector?
-			SZArraySigType arraySigType = sigType as SZArraySigType;
+            var arraySigType = sigType as SZArraySigType;
 			if (arraySigType != null)
 				result = ParseSZArrayArg(reader, arraySigType);
 			else
@@ -241,7 +241,7 @@ namespace Mosa.Runtime.TypeSystem
 				return String.Empty;
 
 			// Read the string
-			char[] buffer = reader.ReadChars(packedLen);
+            var buffer = reader.ReadChars(packedLen);
 			return new String(buffer);
 		}
 

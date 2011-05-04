@@ -277,8 +277,8 @@ namespace Mosa.Runtime.TypeSystem
 			get
 			{
 				RuntimeMethod result = null;
-				MethodAttributes attrs = MethodAttributes.SpecialName | MethodAttributes.RTSpecialName | MethodAttributes.Static;
-				foreach (RuntimeMethod method in this.Methods)
+                var attrs = MethodAttributes.SpecialName | MethodAttributes.RTSpecialName | MethodAttributes.Static;
+                foreach (var method in this.Methods)
 				{
 					if ((method.Attributes & attrs) == attrs && method.Name == ".cctor")
 					{
@@ -359,13 +359,13 @@ namespace Mosa.Runtime.TypeSystem
 			if (c == null)
 				throw new ArgumentNullException(@"c");
 
-			RuntimeType baseType = BaseType;
+            var baseType = BaseType;
 			while (baseType != null)
 			{
 				if (baseType.Equals(c))
 					return true;
 
-				RuntimeType nextBaseType = baseType.BaseType;
+                var nextBaseType = baseType.BaseType;
 				if (baseType.Equals(nextBaseType))
 					break;
 
@@ -394,7 +394,7 @@ namespace Mosa.Runtime.TypeSystem
 
 		public RuntimeMethod FindMethod(string name)
 		{
-			foreach (RuntimeMethod method in Methods)
+            foreach (var method in Methods)
 			{
 				if (name == method.Name)
 				{

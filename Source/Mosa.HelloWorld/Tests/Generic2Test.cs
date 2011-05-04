@@ -28,7 +28,7 @@ namespace Mosa.HelloWorld.Tests
 
 		public static bool GenericTest1()
 		{
-			//LinkedList<int> list = new LinkedList<int>();
+			LinkedList<int> list = new LinkedList<int>();
 
 			//int a = Math.Min(10, 10);
 

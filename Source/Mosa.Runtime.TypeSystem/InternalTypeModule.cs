@@ -73,7 +73,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// <returns></returns>
 		IEnumerable<RuntimeType> ITypeModule.GetAllTypes()
 		{
-			foreach (RuntimeType type in types)
+            foreach (var type in types)
 				yield return type;
 		}
 
@@ -85,7 +85,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// <returns></returns>
 		RuntimeType ITypeModule.GetType(string nameSpace, string name)
 		{
-			foreach (RuntimeType type in types)
+            foreach (var type in types)
 			{
 				if (type.Name == name && type.Namespace == nameSpace)
 				{
