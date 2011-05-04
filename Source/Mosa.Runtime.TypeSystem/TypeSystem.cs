@@ -44,7 +44,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// <param name="modules">The modules.</param>
 		void ITypeSystem.LoadModules(IList<IMetadataModule> modules)
 		{
-			foreach (IMetadataModule module in modules)
+			foreach (var module in modules)
 			{
 				ITypeModule typeModule = new TypeModule(this, module);
 				typeModules.Add(typeModule);
@@ -68,7 +68,7 @@ namespace Mosa.Runtime.TypeSystem
 		ITypeModule ITypeSystem.ResolveModuleReference(string assembly)
 		{
 			// Search for reference first
-			foreach (ITypeModule typeModule in typeModules)
+			foreach (var typeModule in typeModules)
 			{
 				if (typeModule.Name == assembly)
 				{
@@ -94,9 +94,9 @@ namespace Mosa.Runtime.TypeSystem
 		/// <returns></returns>
 		RuntimeType ITypeSystem.GetType(string nameSpace, string name)
 		{
-			foreach (ITypeModule typeModule in typeModules)
+            foreach (var typeModule in typeModules)
 			{
-				RuntimeType type = typeModule.GetType(nameSpace, name);
+                var type = typeModule.GetType(nameSpace, name);
 				if (type != null)
 					return type;
 			}
@@ -113,7 +113,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// <returns></returns>
 		RuntimeType ITypeSystem.GetType(string assembly, string nameSpace, string name)
 		{
-			ITypeModule module = ((ITypeSystem)this).ResolveModuleReference(assembly);
+            var module = ((ITypeSystem)this).ResolveModuleReference(assembly);
 
 			if (module == null)
 				return null;
@@ -144,9 +144,9 @@ namespace Mosa.Runtime.TypeSystem
 		/// <returns></returns>
 		IEnumerable<RuntimeType> ITypeSystem.GetAllTypes()
 		{
-			foreach (ITypeModule typeModule in typeModules)
+            foreach (var typeModule in typeModules)
 			{
-				foreach (RuntimeType type in typeModule.GetAllTypes())
+                foreach (var type in typeModule.GetAllTypes())
 				{
 					if (type != null)
 						yield return type;
@@ -195,9 +195,9 @@ namespace Mosa.Runtime.TypeSystem
 		/// <returns></returns>
 		CilGenericType ITypeSystem.GetOpenGeneric(RuntimeType baseGenericType)
 		{
-			foreach (ITypeModule typeModule in typeModules)
+            foreach (var typeModule in typeModules)
 			{
-				CilGenericType type = typeModule.GetOpenGeneric(baseGenericType);
+                var type = typeModule.GetOpenGeneric(baseGenericType);
 
 				if (type != null)
 				{
@@ -210,7 +210,7 @@ namespace Mosa.Runtime.TypeSystem
 
 		RuntimeType ITypeSystem.ResolveGenericType(ITypeModule typeModule, TypeSpecSignature typeSpecSignature, Token token)
 		{
-			GenericInstSigType genericInstSigType = typeSpecSignature.Type as GenericInstSigType;
+            var genericInstSigType = typeSpecSignature.Type as GenericInstSigType;
 
 			if (genericInstSigType == null)
 				return null;
@@ -229,8 +229,7 @@ namespace Mosa.Runtime.TypeSystem
 					break;
 
 				case CilElementType.GenericInst:
-					RuntimeType genericBaseType = typeModule.GetType(genericInstSigType.BaseType.Token);
-
+                    var genericBaseType = typeModule.GetType(genericInstSigType.BaseType.Token);
 					genericType = new CilGenericType(typeModule, token, genericBaseType, genericInstSigType);
 					break;
 
