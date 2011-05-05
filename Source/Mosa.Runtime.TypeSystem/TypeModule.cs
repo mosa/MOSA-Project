@@ -1087,25 +1087,15 @@ namespace Mosa.Runtime.TypeSystem
             foreach (var type in typeSpecs)
 			{
                 var genericType = type as CilGenericType;
-				if (genericType != null)
-				{
-					if (genericType.BaseGenericType == baseGenericType)
-					{
-						if (genericType.ContainsOpenGenericParameters)
-						{
-							bool open = true;
-                            foreach (var sigType in genericType.GenericArguments)
-							{
-								if (!sigType.IsOpenGenericParameter)
-								{
-									open = false;
-									break;
-								}
-							}
 
-							if (open)
-								return genericType;
-						}
+                if (genericType == null || genericType.BaseGenericType != baseGenericType || !genericType.ContainsOpenGenericParameters)
+                    continue;
+
+                foreach (var sigType in genericType.GenericArguments)
+				{
+                    if (!sigType.IsOpenGenericParameter)
+					{
+                        return genericType;
 					}
 				}
 			}
