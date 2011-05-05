@@ -249,26 +249,26 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		private void LoadTypes()
 		{
-            var typeInfos = new List<TypeInfo>(GetTableRows(TableType.TypeDef));
+			var typeInfos = new List<TypeInfo>(GetTableRows(TableType.TypeDef));
 
 			var maxTypeDef = GetMaxTokenValue(TableType.TypeDef);
-            var maxMethod = GetMaxTokenValue(TableType.MethodDef);
-            var maxField = GetMaxTokenValue(TableType.Field);
-            var maxLayout = GetMaxTokenValue(TableType.ClassLayout);
-            var maxNestedClass = GetMaxTokenValue(TableType.NestedClass);
+			var maxMethod = GetMaxTokenValue(TableType.MethodDef);
+			var maxField = GetMaxTokenValue(TableType.Field);
+			var maxLayout = GetMaxTokenValue(TableType.ClassLayout);
+			var maxNestedClass = GetMaxTokenValue(TableType.NestedClass);
 
-            var tokenLayout = new Token(TableType.ClassLayout, 1);
-            var layoutRow = (maxLayout.RID != 0) ? metadataProvider.ReadClassLayoutRow(tokenLayout) : new ClassLayoutRow();
+			var tokenLayout = new Token(TableType.ClassLayout, 1);
+			var layoutRow = (maxLayout.RID != 0) ? metadataProvider.ReadClassLayoutRow(tokenLayout) : new ClassLayoutRow();
 
-            var tokenNested = new Token(TableType.NestedClass, 1);
-            var nestedRow = (maxNestedClass.RID != 0) ? metadataProvider.ReadNestedClassRow(tokenNested) : new NestedClassRow();
+			var tokenNested = new Token(TableType.NestedClass, 1);
+			var nestedRow = (maxNestedClass.RID != 0) ? metadataProvider.ReadNestedClassRow(tokenNested) : new NestedClassRow();
 
-            var nextTypeDefRow = new TypeDefRow();
-            var typeDefRow = metadataProvider.ReadTypeDefRow(new Token(TableType.TypeDef, 1));
+			var nextTypeDefRow = new TypeDefRow();
+			var typeDefRow = metadataProvider.ReadTypeDefRow(new Token(TableType.TypeDef, 1));
 
-            foreach (var token in new Token(TableType.TypeDef, 1).Upto(maxTypeDef))
+			foreach (var token in new Token(TableType.TypeDef, 1).Upto(maxTypeDef))
 			{
-                var info = new TypeInfo();
+				var info = new TypeInfo();
 
 				info.TypeDefRow = typeDefRow;
 				info.NestedClass = (nestedRow.NestedClass == token) ? nestedRow.NestedClass : Token.Zero;
@@ -314,7 +314,7 @@ namespace Mosa.Runtime.TypeSystem
 				typeDefRow = nextTypeDefRow;
 			}
 
-            foreach (var token in new Token(TableType.TypeDef, 1).Upto(maxTypeDef))
+			foreach (var token in new Token(TableType.TypeDef, 1).Upto(maxTypeDef))
 			{
 				LoadType(token, typeInfos);
 			}
@@ -322,7 +322,7 @@ namespace Mosa.Runtime.TypeSystem
 
 		private void LoadType(Token token, IList<TypeInfo> typeInfos)
 		{
-            var info = typeInfos[(int)token.RID - 1];
+			var info = typeInfos[(int)token.RID - 1];
 
 			if (types[token.RID - 1] != null)
 				return;
@@ -339,11 +339,11 @@ namespace Mosa.Runtime.TypeSystem
 				}
 			}
 
-            var baseType = GetType(info.TypeDefRow.Extends);
-            var enclosingType = (info.NestedClass == token) ? types[info.EnclosingClass.RID - 1] : null;
+			var baseType = GetType(info.TypeDefRow.Extends);
+			var enclosingType = (info.NestedClass == token) ? types[info.EnclosingClass.RID - 1] : null;
 
 			// Create and populate the runtime type
-            var type = new CilRuntimeType(
+			var type = new CilRuntimeType(
 				this,
 				GetString(info.TypeDefRow.TypeNameIdx),
 				GetString(info.TypeDefRow.TypeNamespaceIdx),
@@ -372,11 +372,11 @@ namespace Mosa.Runtime.TypeSystem
 			if (first.RID >= last.RID)
 				return;
 
-            var maxMethod = GetMaxTokenValue(TableType.MethodDef);
-            var methodDef = metadataProvider.ReadMethodDefRow(first);
-            var nextMethodDef = new MethodDefRow();
+			var maxMethod = GetMaxTokenValue(TableType.MethodDef);
+			var methodDef = metadataProvider.ReadMethodDefRow(first);
+			var nextMethodDef = new MethodDefRow();
 
-            foreach (var token in first.Upto(last.PreviousRow))
+			foreach (var token in first.Upto(last.PreviousRow))
 			{
 				Token maxParam;
 
@@ -390,7 +390,7 @@ namespace Mosa.Runtime.TypeSystem
 					maxParam = GetMaxTokenValue(TableType.Param).NextRow;
 				}
 
-                var method = new CilRuntimeMethod(
+				var method = new CilRuntimeMethod(
 					this,
 					GetString(methodDef.NameStringIdx),
 					GetMethodSignature(methodDef.SignatureBlobIdx),
@@ -417,10 +417,10 @@ namespace Mosa.Runtime.TypeSystem
 		/// <param name="max">The max.</param>
 		private void LoadParameters(RuntimeMethod method, Token first, Token max)
 		{
-            foreach (var token in first.Upto(max.PreviousRow))
+			foreach (var token in first.Upto(max.PreviousRow))
 			//for (TokenTypes token = first; token < max; token++)
 			{
-                var paramDef = metadataProvider.ReadParamRow(token);
+				var paramDef = metadataProvider.ReadParamRow(token);
 				method.Parameters.Add(new RuntimeParameter(GetString(paramDef.NameIdx), paramDef.Sequence, paramDef.Flags));
 			}
 		}
@@ -433,19 +433,19 @@ namespace Mosa.Runtime.TypeSystem
 		/// <param name="last">The last field token to load (non-inclusive.)</param>
 		private void LoadFields(RuntimeType declaringType, Token first, Token last)
 		{
-            var maxRVA = GetMaxTokenValue(TableType.FieldRVA);
-            var maxLayout = GetMaxTokenValue(TableType.FieldLayout);
-            var tokenRva = new Token(TableType.FieldRVA, 1);
-            var tokenLayout = new Token(TableType.FieldLayout, 1);
+			var maxRVA = GetMaxTokenValue(TableType.FieldRVA);
+			var maxLayout = GetMaxTokenValue(TableType.FieldLayout);
+			var tokenRva = new Token(TableType.FieldRVA, 1);
+			var tokenLayout = new Token(TableType.FieldLayout, 1);
 
-            var fieldRVA = (maxRVA.RID != 0) ? metadataProvider.ReadFieldRVARow(tokenRva) : new FieldRVARow();
-            var fieldLayout = (maxLayout.RID != 0) ? metadataProvider.ReadFieldLayoutRow(tokenLayout) : new FieldLayoutRow();
+			var fieldRVA = (maxRVA.RID != 0) ? metadataProvider.ReadFieldRVARow(tokenRva) : new FieldRVARow();
+			var fieldLayout = (maxLayout.RID != 0) ? metadataProvider.ReadFieldLayoutRow(tokenLayout) : new FieldLayoutRow();
 
-            foreach (var token in first.Upto(last.PreviousRow))
+			foreach (var token in first.Upto(last.PreviousRow))
 			{
-                var fieldRow = metadataProvider.ReadFieldRow(token);
-                uint rva = 0;
-                uint layout = 0;
+				var fieldRow = metadataProvider.ReadFieldRow(token);
+				uint rva = 0;
+				uint layout = 0;
 
 				// Static fields have an optional RVA, non-static may have a layout assigned
 				if ((fieldRow.Flags & FieldAttributes.HasFieldRVA) == FieldAttributes.HasFieldRVA)
@@ -498,7 +498,7 @@ namespace Mosa.Runtime.TypeSystem
 				}
 
 				// Load the field metadata
-                var field = new CilRuntimeField(
+				var field = new CilRuntimeField(
 					this,
 					GetString(fieldRow.Name),
 					GetFieldSignature(fieldRow.Signature),
@@ -525,13 +525,13 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		protected void LoadInterfaces()
 		{
-            var maxToken = GetMaxTokenValue(TableType.InterfaceImpl);
+			var maxToken = GetMaxTokenValue(TableType.InterfaceImpl);
 
-            foreach (var token in new Token(TableType.InterfaceImpl, 1).Upto(maxToken))
+			foreach (var token in new Token(TableType.InterfaceImpl, 1).Upto(maxToken))
 			{
-                var row = metadataProvider.ReadInterfaceImplRow(token);
+				var row = metadataProvider.ReadInterfaceImplRow(token);
 
-                var declaringType = types[row.Class.RID - 1];
+				var declaringType = types[row.Class.RID - 1];
 				RuntimeType interfaceType;
 
 				if (row.Interface.Table == TableType.TypeSpec)
@@ -551,9 +551,9 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		protected void LoadGenericInterfaces()
 		{
-            foreach (var type in typeSpecs)
+			foreach (var type in typeSpecs)
 			{
-                var genericType = type as CilGenericType;
+				var genericType = type as CilGenericType;
 				if (genericType != null)
 				{
 					genericType.ResolveInterfaces(this);
@@ -566,11 +566,11 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		protected void LoadMemberReferences()
 		{
-            var maxToken = GetMaxTokenValue(TableType.MemberRef);
-            foreach (var token in new Token(TableType.MemberRef, 1).Upto(maxToken))
+			var maxToken = GetMaxTokenValue(TableType.MemberRef);
+			foreach (var token in new Token(TableType.MemberRef, 1).Upto(maxToken))
 			{
-                var row = metadataProvider.ReadMemberRefRow(token);
-                var name = GetString(row.NameStringIdx);
+				var row = metadataProvider.ReadMemberRefRow(token);
+				var name = GetString(row.NameStringIdx);
 
 				RuntimeType ownerType = null;
 
@@ -595,9 +595,9 @@ namespace Mosa.Runtime.TypeSystem
 				if (ownerType == null)
 					throw new InvalidOperationException(String.Format(@"Failed to retrieve owner type for Token {0:x} (Table {1})", row.Class, row.Class.Table));
 
-                var signature = GetMemberRefSignature(row.SignatureBlobIdx);
+				var signature = GetMemberRefSignature(row.SignatureBlobIdx);
 
-                var genericOwnerType = ownerType as CilGenericType;
+				var genericOwnerType = ownerType as CilGenericType;
 
 				RuntimeMember runtimeMember = null;
 				if (signature is FieldSignature)
@@ -613,7 +613,7 @@ namespace Mosa.Runtime.TypeSystem
 				}
 				else
 				{
-                    var methodSignature = signature as MethodSignature;
+					var methodSignature = signature as MethodSignature;
 					Debug.Assert(signature is MethodSignature);
 
 					if ((genericOwnerType != null) && (genericOwnerType.GenericArguments.Length != 0))
@@ -621,7 +621,7 @@ namespace Mosa.Runtime.TypeSystem
 						methodSignature = new MethodSignature(methodSignature, genericOwnerType.GenericArguments);
 					}
 
-                    foreach (var method in ownerType.Methods)
+					foreach (var method in ownerType.Methods)
 					{
 						if (method.Name == name)
 						{
@@ -664,13 +664,13 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		protected void LoadTypeReferences()
 		{
-            var maxToken = GetMaxTokenValue(TableType.TypeRef);
-            foreach (var token in new Token(TableType.TypeRef, 1).Upto(maxToken))
+			var maxToken = GetMaxTokenValue(TableType.TypeRef);
+			foreach (var token in new Token(TableType.TypeRef, 1).Upto(maxToken))
 			{
 				RuntimeType runtimeType = null;
 
-                var row = metadataProvider.ReadTypeRefRow(token);
-                var typeName = GetString(row.TypeNameIdx);
+				var row = metadataProvider.ReadTypeRefRow(token);
+				var typeName = GetString(row.TypeNameIdx);
 
 				switch (row.ResolutionScope.Table)
 				{
@@ -682,13 +682,13 @@ namespace Mosa.Runtime.TypeSystem
 
 					case TableType.TypeRef:
 						{
-                            var row2 = metadataProvider.ReadTypeRefRow(row.ResolutionScope);
-                            var typeName2 = GetString(row2.TypeNameIdx);
-                            var typeNamespace2 = GetString(row2.TypeNamespaceIdx) + "." + typeName2;
+							var row2 = metadataProvider.ReadTypeRefRow(row.ResolutionScope);
+							var typeName2 = GetString(row2.TypeNameIdx);
+							var typeNamespace2 = GetString(row2.TypeNamespaceIdx) + "." + typeName2;
 
-                            var asmRefRow = metadataProvider.ReadAssemblyRefRow(row2.ResolutionScope);
-                            var assemblyName = GetString(asmRefRow.Name);
-                            var module = typeSystem.ResolveModuleReference(assemblyName);
+							var asmRefRow = metadataProvider.ReadAssemblyRefRow(row2.ResolutionScope);
+							var assemblyName = GetString(asmRefRow.Name);
+							var module = typeSystem.ResolveModuleReference(assemblyName);
 							runtimeType = module.GetType(typeNamespace2, typeName);
 
 							if (runtimeType == null)
@@ -705,11 +705,11 @@ namespace Mosa.Runtime.TypeSystem
 
 					case TableType.AssemblyRef:
 						{
-                            var typeNamespace = GetString(row.TypeNamespaceIdx);
+							var typeNamespace = GetString(row.TypeNamespaceIdx);
 
-                            var asmRefRow = metadataProvider.ReadAssemblyRefRow(row.ResolutionScope);
-                            var assemblyName = GetString(asmRefRow.Name);
-                            var module = typeSystem.ResolveModuleReference(assemblyName);
+							var asmRefRow = metadataProvider.ReadAssemblyRefRow(row.ResolutionScope);
+							var assemblyName = GetString(asmRefRow.Name);
+							var module = typeSystem.ResolveModuleReference(assemblyName);
 							runtimeType = module.GetType(typeNamespace, typeName);
 
 							if (runtimeType == null)
@@ -731,11 +731,11 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		private void LoadCustomAttributes()
 		{
-            var maxToken = GetMaxTokenValue(TableType.CustomAttribute);
-            foreach (var token in new Token(TableType.CustomAttribute, 1).Upto(maxToken))
+			var maxToken = GetMaxTokenValue(TableType.CustomAttribute);
+			foreach (var token in new Token(TableType.CustomAttribute, 1).Upto(maxToken))
 			{
-                var row = metadataProvider.ReadCustomAttributeRow(token);
-                var owner = row.Parent;
+				var row = metadataProvider.ReadCustomAttributeRow(token);
+				var owner = row.Parent;
 
 				RuntimeMethod ctorMethod;
 
@@ -816,11 +816,11 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		private void LoadGenericParams()
 		{
-            var maxToken = GetMaxTokenValue(TableType.GenericParam);
-            foreach (var token in new Token(TableType.GenericParam, 1).Upto(maxToken))
+			var maxToken = GetMaxTokenValue(TableType.GenericParam);
+			foreach (var token in new Token(TableType.GenericParam, 1).Upto(maxToken))
 			{
-                var row = metadataProvider.ReadGenericParamRow(token);
-                var name = GetString(row.NameStringIdx);
+				var row = metadataProvider.ReadGenericParamRow(token);
+				var name = GetString(row.NameStringIdx);
 
 				// The following switch matches the AttributeTargets enumeration against
 				// metadata tables, which make valid targets for an attribute.
@@ -845,13 +845,13 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		private void LoadTypeSpecs()
 		{
-            var maxToken = GetMaxTokenValue(TableType.TypeSpec);
-            foreach (var token in new Token(TableType.TypeSpec, 1).Upto(maxToken))
+			var maxToken = GetMaxTokenValue(TableType.TypeSpec);
+			foreach (var token in new Token(TableType.TypeSpec, 1).Upto(maxToken))
 			{
-                var row = metadataProvider.ReadTypeSpecRow(token);
-                var signature = GetTypeSpecSignature(row.SignatureBlobIdx);
+				var row = metadataProvider.ReadTypeSpecRow(token);
+				var signature = GetTypeSpecSignature(row.SignatureBlobIdx);
 
-                var genericType = typeSystem.ResolveGenericType(this, signature, token);
+				var genericType = typeSystem.ResolveGenericType(this, signature, token);
 
 				if (genericType != null)
 					typeSpecs[token.RID - 1] = genericType;
@@ -866,16 +866,16 @@ namespace Mosa.Runtime.TypeSystem
 		private void LoadExternals()
 		{
 
-            var maxToken = GetMaxTokenValue(TableType.ImplMap);
-            foreach (var token in new Token(TableType.ImplMap, 1).Upto(maxToken))
+			var maxToken = GetMaxTokenValue(TableType.ImplMap);
+			foreach (var token in new Token(TableType.ImplMap, 1).Upto(maxToken))
 			{
-                var row = metadataProvider.ReadImplMapRow(token);
+				var row = metadataProvider.ReadImplMapRow(token);
 
 				//TODO: verify row.ImportScopeTableIdx indexes MethodDef and nothing else
 
-                var moduleRow = metadataProvider.ReadModuleRefRow(row.ImportScopeTableIdx);
+				var moduleRow = metadataProvider.ReadModuleRefRow(row.ImportScopeTableIdx);
 
-                var external = GetString(moduleRow.NameStringIdx);
+				var external = GetString(moduleRow.NameStringIdx);
 
 				externals.Add(row.MemberForwarded, external);
 			}
@@ -937,10 +937,10 @@ namespace Mosa.Runtime.TypeSystem
 		/// <returns></returns>
 		IEnumerable<RuntimeType> ITypeModule.GetAllTypes()
 		{
-            foreach (var type in types)
+			foreach (var type in types)
 				yield return type;
 
-            foreach (var type in typeSpecs)
+			foreach (var type in typeSpecs)
 				if (type != null)
 					yield return type;
 		}
@@ -953,7 +953,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// <returns></returns>
 		RuntimeType ITypeModule.GetType(string nameSpace, string name)
 		{
-            foreach (var type in types)
+			foreach (var type in types)
 			{
 				if (type.Name == name && type.Namespace == nameSpace)
 				{
@@ -1043,7 +1043,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// <returns></returns>
 		RuntimeMethod ITypeModule.GetMethod(Token token, RuntimeType callingType)
 		{
-            var calledMethod = (this as ITypeModule).GetMethod(token);
+			var calledMethod = (this as ITypeModule).GetMethod(token);
 
 			if (callingType == null)
 				return calledMethod;
@@ -1051,16 +1051,16 @@ namespace Mosa.Runtime.TypeSystem
 			if (calledMethod.DeclaringType.Namespace != callingType.Namespace)
 				return calledMethod;
 
-            var declaringGenericType = calledMethod.DeclaringType as CilGenericType;
-            var declaringTypeName = (declaringGenericType == null) ? calledMethod.DeclaringType.Name : declaringGenericType.BaseGenericType.Name;
+			var declaringGenericType = calledMethod.DeclaringType as CilGenericType;
+			var declaringTypeName = (declaringGenericType == null) ? calledMethod.DeclaringType.Name : declaringGenericType.BaseGenericType.Name;
 
-            var callingGenericType = callingType.DeclaringType as CilGenericType;
-            var callingTypeName = (callingGenericType == null) ? callingType.Name : callingGenericType.BaseGenericType.Name;
+			var callingGenericType = callingType.DeclaringType as CilGenericType;
+			var callingTypeName = (callingGenericType == null) ? callingType.Name : callingGenericType.BaseGenericType.Name;
 
 			if (declaringTypeName != callingTypeName)
 				return calledMethod;
 
-            foreach (var method in callingType.Methods)
+			foreach (var method in callingType.Methods)
 			{
 				if (calledMethod.Name == method.Name)
 				{
@@ -1084,18 +1084,18 @@ namespace Mosa.Runtime.TypeSystem
 			if (baseGenericType.GenericParameters.Count == 0)
 				return null;
 
-            foreach (var type in typeSpecs)
+			foreach (var type in typeSpecs)
 			{
-                var genericType = type as CilGenericType;
+				var genericType = type as CilGenericType;
 
-                if (genericType == null || genericType.BaseGenericType != baseGenericType || !genericType.ContainsOpenGenericParameters)
-                    continue;
+				if (genericType == null || genericType.BaseGenericType != baseGenericType || !genericType.ContainsOpenGenericParameters)
+					continue;
 
-                foreach (var sigType in genericType.GenericArguments)
+				foreach (var sigType in genericType.GenericArguments)
 				{
-                    if (!sigType.IsOpenGenericParameter)
+					if (!sigType.IsOpenGenericParameter)
 					{
-                        return genericType;
+						return genericType;
 					}
 				}
 			}
