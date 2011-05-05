@@ -145,9 +145,7 @@ namespace Mosa.Runtime.Metadata
 		/// <returns></returns>
 		public HeapIndexToken ReadEncodedToken()
 		{
-			HeapIndexToken token = (HeapIndexToken)ReadCompressedInt32();
-
-			return token;
+			return (HeapIndexToken)ReadCompressedInt32();
 		}
 
 		/// <summary>

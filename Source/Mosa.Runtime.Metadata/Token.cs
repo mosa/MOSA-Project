@@ -129,7 +129,7 @@ namespace Mosa.Runtime.Metadata
 			if (RID > last.RID)
 				yield break;
 
-			Token token = this;
+			var token = this;
 
 			while (token != last)
 			{

@@ -102,7 +102,7 @@ namespace Mosa.Runtime.Metadata.Loader
 
 		private bool isLoaded(string name)
 		{
-			foreach (IMetadataModule module in modules)
+            foreach (var module in modules)
 				if (module.Name == name)
 					return true;
 
@@ -111,16 +111,16 @@ namespace Mosa.Runtime.Metadata.Loader
 
 		private IMetadataModule LoadDependencies(string file)
 		{
-			IMetadataModule metadataModule = LoadAssembly(file);
+            var metadataModule = LoadAssembly(file);
 
 			if (!isLoaded(metadataModule.Name))
 			{
-				Token maxToken = metadataModule.Metadata.GetMaxTokenValue(TableType.AssemblyRef);
-				//for (TokenTypes token = TokenTypes.AssemblyRef + 1; token <= maxToken; token++)
-				foreach (Token token in new Token(TableType.AssemblyRef, 1).Upto(maxToken))
+                var maxToken = metadataModule.Metadata.GetMaxTokenValue(TableType.AssemblyRef);
+
+                foreach (var token in new Token(TableType.AssemblyRef, 1).Upto(maxToken))
 				{
-					AssemblyRefRow row = metadataModule.Metadata.ReadAssemblyRefRow(token);
-					string assembly = metadataModule.Metadata.ReadString(row.Name);
+                    var row = metadataModule.Metadata.ReadAssemblyRefRow(token);
+                    var assembly = metadataModule.Metadata.ReadString(row.Name);
 
 					LoadDependencies(assembly);
 				}
@@ -147,7 +147,7 @@ namespace Mosa.Runtime.Metadata.Loader
 			if (!File.Exists(file))
 				return null;
 
-			string codeBase = CreateFileCodeBase(file);
+            var codeBase = CreateFileCodeBase(file);
 
 			return PortableExecutableImage.Load(new FileStream(file, FileMode.Open, FileAccess.Read), codeBase);
 		}
@@ -164,9 +164,7 @@ namespace Mosa.Runtime.Metadata.Loader
 			if (!file.EndsWith(".dll"))
 				file = file + ".dll";
 
-			IMetadataModule result = TryAssemblyLoadFromPaths(file, privatePaths);
-
-			return result;
+			return TryAssemblyLoadFromPaths(file, privatePaths);
 		}
 
 		/// <summary>
@@ -177,16 +175,14 @@ namespace Mosa.Runtime.Metadata.Loader
 		/// <returns></returns>
 		private IMetadataModule TryAssemblyLoadFromPaths(string name, IEnumerable<string> paths)
 		{
-			foreach (string path in paths)
+            foreach (var path in paths)
 			{
 				try
 				{
-					IMetadataModule result = LoadPEAssembly(Path.Combine(path, name));
+                    var result = LoadPEAssembly(Path.Combine(path, name));
 
 					if (result != null)
-					{ 
 						return result;
-					}
 				}
 				catch
 				{
@@ -204,11 +200,11 @@ namespace Mosa.Runtime.Metadata.Loader
 		/// <returns></returns>
 		private IEnumerable<string> FindPrivatePaths(IEnumerable<string> assemblyPaths)
 		{
-			List<string> privatePaths = new List<string>();
+            var privatePaths = new List<string>();
 
-			foreach (string assembly in assemblyPaths)
+            foreach (var assembly in assemblyPaths)
 			{
-				string path = Path.GetDirectoryName(assembly);
+                var path = Path.GetDirectoryName(assembly);
 				if (!privatePaths.Contains(path))
 					privatePaths.Add(path);
 			}

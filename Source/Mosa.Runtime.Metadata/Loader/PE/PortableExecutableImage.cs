@@ -127,8 +127,14 @@ namespace Mosa.Runtime.Metadata.Loader.PE
 
 		#region Properties
 
+        /// <summary>
+        /// 
+        /// </summary>
 		string IMetadataModule.CodeBase { get { return this.codeBase; } }
 
+        /// <summary>
+        /// 
+        /// </summary>
 		Token IMetadataModule.EntryPoint
 		{
 			get
@@ -250,7 +256,7 @@ namespace Mosa.Runtime.Metadata.Loader.PE
 			}
 			else
 			{
-				foreach (IMAGE_SECTION_HEADER section in _sections)
+                foreach (var section in _sections)
 				{
 					if (section.VirtualAddress <= address && address < section.VirtualAddress + section.VirtualSize)
 					{
