@@ -95,7 +95,7 @@ namespace Mosa.Runtime.TypeSystem
 		RuntimeType ITypeSystem.GetType(string nameSpace, string name)
 		{
 			foreach (var typeModule in typeModules)
-			{
+	      	{
 				var type = typeModule.GetType(nameSpace, name);
 				if (type != null)
 					return type;

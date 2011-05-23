@@ -156,6 +156,9 @@ namespace Mosa.Runtime.TypeSystem
 
 		#region Internals
 
+		/// <summary>
+		///	Computes the size of each table and stores it for faster lookup
+		/// </summary>
 		private void RetrieveAllTableSizes()
 		{
 			for (int i = 0; i < TableCount; i++)
@@ -179,11 +182,21 @@ namespace Mosa.Runtime.TypeSystem
 			return (HeapIndexToken)(tableRows[(int)(tokenType) >> 24]) | (tokenType & HeapIndexToken.TableMask);
 		}
 
+		/// <summary>
+		/// Get the last token for the table
+		/// </summary>
+		/// <param name="table">The table to lookup the token for</param>
+		/// <returns>The last token inside the table</returns>
 		private Token GetMaxTokenValue(TableType table)
 		{
 			return new Token(table, tableRows[(int)(table) >> 24]);
 		}
 
+		/// <summary>
+		/// Loads the string from the heap table for stringIdx
+		/// </summary>
+		/// <param name="stringIdx">The string's index</param>
+		/// <returns>The string at heap[stringIdx]</returns>
 		private string GetString(HeapIndexToken stringIdx)
 		{
 			string value;
