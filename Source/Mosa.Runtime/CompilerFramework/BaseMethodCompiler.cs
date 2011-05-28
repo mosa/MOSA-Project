@@ -13,13 +13,14 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 
-using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Compiler.Linker;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.TypeSystem.Generic;
+using Mosa.Runtime.CompilerFramework.Operands;
+using Mosa.Runtime.InternalLog;
 
 namespace Mosa.Runtime.CompilerFramework
 {
@@ -111,6 +112,11 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		protected ITypeModule moduleTypeSystem;
 
+		/// <summary>
+		/// Holds the internal logging interface
+		/// </summary>
+		protected IInternalLog internalLog;
+
 		#endregion // Data Members
 
 		#region Construction
@@ -129,7 +135,8 @@ namespace Mosa.Runtime.CompilerFramework
 			RuntimeType type,
 			RuntimeMethod method,
 			ITypeSystem typeSystem,
-			ITypeLayout typeLayout)
+			ITypeLayout typeLayout,
+			IInternalLog internalLog)
 		{
 			if (architecture == null)
 				throw new ArgumentNullException(@"architecture");
@@ -144,6 +151,11 @@ namespace Mosa.Runtime.CompilerFramework
 			this.architecture = architecture;
 			this.method = method;
 			this.type = type;
+			this.compilationScheduler = compilationScheduler;
+			this.moduleTypeSystem = method.Module;
+			this.typeSystem = typeSystem;
+			this.typeLayout = typeLayout;
+			this.internalLog = internalLog;
 
 			parameters = new List<Operand>(new Operand[method.Parameters.Count]);
 			nextStackSlot = 0;
@@ -151,11 +163,6 @@ namespace Mosa.Runtime.CompilerFramework
 			instructionSet = null; // this will be set later
 
 			pipeline = new CompilerPipeline();
-
-			this.compilationScheduler = compilationScheduler;
-			this.moduleTypeSystem = method.Module;
-			this.typeSystem = typeSystem;
-			this.typeLayout = typeLayout;
 		}
 
 		#endregion // Construction
@@ -225,6 +232,12 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <value>The type layout.</value>
 		public ITypeLayout TypeLayout { get { return typeLayout; } }
+
+		/// <summary>
+		/// Gets the internal logging interface
+		/// </summary>
+		/// <value>The log.</value>
+		public IInternalLog InternalLog { get { return internalLog;  } }
 
 		#endregion // Properties
 

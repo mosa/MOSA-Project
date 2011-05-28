@@ -85,6 +85,15 @@
     <Compile Include="CompilerFramework\CIL\BreakInstruction.cs" />
     <Compile Include="CompilerFramework\BaseAssemblyCompilerStage.cs" />
     <Compile Include="CompilerFramework\CIL\ExceptionClauseHeader.cs" />
+    <Compile Include="InternalLog\ConfigurableInstructionLogFilter.cs" />
+    <Compile Include="InternalLog\DebugInstructionLogListener.cs" />
+    <Compile Include="InternalLog\ICompilerStatusListener.cs" />
+    <Compile Include="InternalLog\DebugCompilerStatusListener.cs" />
+    <Compile Include="InternalLog\IInternalLog.cs" />
+    <Compile Include="InternalLog\BasicInternalLog.cs" />
+    <Compile Include="InternalLog\IInstructionLogListener.cs" />
+    <Compile Include="InternalLog\IInstructionLogFilter.cs" />
+    <Compile Include="InternalLog\InstructionLogger.cs" />
     <Compile Include="CompilerFramework\LoggerDebugWriter.cs" />
     <Compile Include="CompilerFramework\ILoggerWriter.cs" />
     <Compile Include="CompilerFramework\TypeLayoutStage.cs" />

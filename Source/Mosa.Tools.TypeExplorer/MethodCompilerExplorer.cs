@@ -17,42 +17,30 @@ using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.CompilerFramework;
+using Mosa.Runtime.InternalLog;
 using Mosa.Runtime.CompilerFramework.CIL;
 using Mosa.Runtime.CompilerFramework.IR;
 using Mosa.Tools.Compiler;
 using Mosa.Tools.Compiler.Stage;
 
-namespace Mosa.Tools.CompilerHelper
+namespace Mosa.Tools.TypeExplorer
 {
-    class MethodCompiler : BaseMethodCompiler
-    {
-        private readonly CompilerHelper assemblyCompiler;
+	class MethodCompilerExplorer : BaseMethodCompiler
+	{
+		private IntPtr address = IntPtr.Zero;
 
-        private IntPtr address = IntPtr.Zero;
+		public MethodCompilerExplorer(AssemblyCompilerExplorer compiler, IArchitecture architecture, ICompilationSchedulerStage compilationScheduler, RuntimeType type, RuntimeMethod method, IInternalLog internalLog)
+			: base(compiler.Pipeline.FindFirst<IAssemblyLinker>(), architecture, compilationScheduler, type, method, compiler.TypeSystem, compiler.TypeLayout, internalLog)
+		{
 
-        public IntPtr Address { get { return address; } }
-
-        public MethodCompiler(CompilerHelper compiler, IArchitecture architecture, ICompilationSchedulerStage compilationScheduler, RuntimeType type, RuntimeMethod method)
-			: base(compiler.Pipeline.FindFirst<IAssemblyLinker>(), architecture, compilationScheduler, type, method, compiler.TypeSystem, compiler.TypeLayout, null)
-        {
-            this.assemblyCompiler = compiler;
-
-            // Populate the pipeline
-            this.Pipeline.AddRange(new IMethodCompilerStage[] {
+			// Populate the pipeline
+			this.Pipeline.AddRange(new IMethodCompilerStage[] {
 				new DecodingStage(),
-				//new InstructionLogger(),
 				new BasicBlockBuilderStage(),
-				//new InstructionLogger(),
 				new OperandDeterminationStage(),
-				new InstructionLogger(),
 				new StaticAllocationResolutionStage(),
-				//new InstructionLogger(),
-				//new ConstantFoldingStage(),
 				new CILTransformationStage(),
-				new InstructionLogger(),
 				new CILLeakGuardStage() { MustThrowCompilationException = true },
-				//new InstructionLogger(),
-				//InstructionStatisticsStage.Instance,
 				//new DominanceCalculationStage(),
 				//new EnterSSA(),
 				//new ConstantPropagationStage(),
@@ -60,16 +48,14 @@ namespace Mosa.Tools.CompilerHelper
 				//new LeaveSSA(),
 				new StackLayoutStage(),
 				new PlatformStubStage(),
-				//new InstructionLogger(),
 				//new BlockReductionStage(),
 				new LoopAwareBlockOrderStage(),
 				//new SimpleTraceBlockOrderStage(),
 				//new ReverseBlockOrderStage(),  // reverse all the basic blocks and see if it breaks anything
 				//new BasicBlockOrderStage()	
 				//new CodeGenerationStage(),
-				new InstructionLogger(),
 			});
-        }
+		}
 
-    }
+	}
 }

@@ -8,9 +8,11 @@
  */
 
 using System;
+
 using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.TypeSystem;
+using Mosa.Runtime.InternalLog;
 
 namespace Mosa.Runtime.CompilerFramework
 {
@@ -42,6 +44,11 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Holds the current type layout during complication
 		/// </summary>
 		protected ITypeLayout typeLayout;
+		
+		/// <summary>
+		/// 
+		/// </summary>
+		protected IInternalLog internalLog;
 
 		#endregion // Data members
 
@@ -52,7 +59,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <param name="architecture">The compiler target architecture.</param>
 		/// <param name="typeSystem">The type system.</param>
-		protected AssemblyCompiler(IArchitecture architecture, ITypeSystem typeSystem, ITypeLayout typeLayout)
+		protected AssemblyCompiler(IArchitecture architecture, ITypeSystem typeSystem, ITypeLayout typeLayout, IInternalLog internalLog)
 		{
 			if (architecture == null)
 				throw new ArgumentNullException(@"architecture");
@@ -61,6 +68,7 @@ namespace Mosa.Runtime.CompilerFramework
 			this.pipeline = new CompilerPipeline();
 			this.typeSystem = typeSystem;
 			this.typeLayout = typeLayout;
+			this.internalLog = internalLog;
 		}
 
 		#endregion // Construction
@@ -116,9 +124,13 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Creates a method compiler
 		/// </summary>
+		/// <param name="schedulerStage">The scheduler stage.</param>
 		/// <param name="type">The type.</param>
 		/// <param name="method">The method to compile.</param>
-		/// <returns>An instance of a MethodCompilerBase for the given type/method pair.</returns>
+		/// <param name="internalLog">The internal log.</param>
+		/// <returns>
+		/// An instance of a MethodCompilerBase for the given type/method pair.
+		/// </returns>
 		public abstract IMethodCompiler CreateMethodCompiler(ICompilationSchedulerStage schedulerStage, RuntimeType type, RuntimeMethod method);
 
 		/// <summary>

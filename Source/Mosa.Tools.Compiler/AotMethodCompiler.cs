@@ -16,6 +16,7 @@ using Mosa.Compiler.Linker;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime.TypeSystem;
+using Mosa.Runtime.InternalLog;
 using Mosa.Tools.Compiler.Stage;
 
 namespace Mosa.Tools.Compiler
@@ -39,8 +40,8 @@ namespace Mosa.Tools.Compiler
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AotMethodCompiler"/> class.
 		/// </summary>
-		public AotMethodCompiler(AssemblyCompiler compiler, ICompilationSchedulerStage compilationScheduler, RuntimeType type, RuntimeMethod method)
-			: base(compiler.Pipeline.FindFirst<IAssemblyLinker>(), compiler.Architecture, compilationScheduler, type, method, compiler.TypeSystem, compiler.TypeLayout)
+		public AotMethodCompiler(AssemblyCompiler compiler, ICompilationSchedulerStage compilationScheduler, RuntimeType type, RuntimeMethod method, IInternalLog internalLog)
+			: base(compiler.Pipeline.FindFirst<IAssemblyLinker>(), compiler.Architecture, compilationScheduler, type, method, compiler.TypeSystem, compiler.TypeLayout, internalLog)
 		{
 			this.assemblyCompiler = compiler;
 			this.Pipeline.AddRange(
@@ -49,13 +50,10 @@ namespace Mosa.Tools.Compiler
 					new DecodingStage(),
 					//InstructionLogger.Instance,
 					new BasicBlockBuilderStage(),
-					InstructionLogger.Instance,
 					new OperandDeterminationStage(),
-					InstructionLogger.Instance,
 					StaticAllocationResolutionStageWrapper.Instance,
 					//InstructionLogger.Instance,
 					new CILTransformationStage(),
-					InstructionLogger.Instance,
 					//InstructionStatisticsStage.Instance,
 					//new DominanceCalculationStage(),
 					//InstructionLogger.Instance,
@@ -71,10 +69,8 @@ namespace Mosa.Tools.Compiler
 					new StackLayoutStage(),
 					//InstructionLogger.Instance,
 					new PlatformStubStage(),
-					InstructionLogger.Instance,
 					//new BlockReductionStage(),
 					new LoopAwareBlockOrderStage(),
-					InstructionLogger.Instance,
 					//new SimpleTraceBlockOrderStage(),
 					//new ReverseBlockOrderStage(),	
 					//new LocalCSE(),

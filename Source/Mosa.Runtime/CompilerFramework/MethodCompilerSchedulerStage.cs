@@ -116,6 +116,7 @@ namespace Mosa.Runtime.CompilerFramework
 			Console.ForegroundColor = ConsoleColor.White;
 			Console.WriteLine(method.ToString());
 			Debug.WriteLine(@"Compiling " + method.ToString());
+
 			using (IMethodCompiler mc = compiler.CreateMethodCompiler(this, method.DeclaringType, method))
 			{
 				mc.Compile();

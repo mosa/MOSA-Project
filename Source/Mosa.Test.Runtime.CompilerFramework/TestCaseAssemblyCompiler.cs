@@ -14,6 +14,7 @@ using Mosa.Runtime.CompilerFramework;
 using Mosa.Compiler.Linker;
 using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime.TypeSystem;
+using Mosa.Runtime.InternalLog;
 
 using x86 = Mosa.Platform.x86;
 
@@ -27,8 +28,8 @@ namespace Mosa.Test.Runtime.CompilerFramework
 
 		private readonly TestAssemblyLinker linker;
 
-		private TestCaseAssemblyCompiler(IArchitecture architecture, ITypeSystem typeSystem, ITypeLayout typeLayout) :
-			base(architecture, typeSystem, typeLayout)
+		private TestCaseAssemblyCompiler(IArchitecture architecture, ITypeSystem typeSystem, ITypeLayout typeLayout, IInternalLog internalLog) :
+			base(architecture, typeSystem, typeLayout, internalLog)
 		{
 			linker = new TestAssemblyLinker();
 
@@ -39,6 +40,7 @@ namespace Mosa.Test.Runtime.CompilerFramework
 				new TypeLayoutStage(),
 				linker
 			});
+
 			architecture.ExtendAssemblyCompilerPipeline(Pipeline);
 		}
 
@@ -49,7 +51,7 @@ namespace Mosa.Test.Runtime.CompilerFramework
 			// FIXME: get from architecture
 			TypeLayout typeLayout = new TypeLayout(typeSystem, 4, 4);
 
-			TestCaseAssemblyCompiler compiler = new TestCaseAssemblyCompiler(architecture, typeSystem, typeLayout);
+			TestCaseAssemblyCompiler compiler = new TestCaseAssemblyCompiler(architecture, typeSystem, typeLayout, null);
 			compiler.Compile();
 
 			return compiler.linker;
@@ -57,7 +59,7 @@ namespace Mosa.Test.Runtime.CompilerFramework
 
 		public override IMethodCompiler CreateMethodCompiler(ICompilationSchedulerStage schedulerStage, RuntimeType type, RuntimeMethod method)
 		{
-			IMethodCompiler mc = new TestCaseMethodCompiler(this, Architecture, schedulerStage, type, method);
+			IMethodCompiler mc = new TestCaseMethodCompiler(this, Architecture, schedulerStage, type, method, internalLog);
 			Architecture.ExtendMethodCompilerPipeline(mc.Pipeline);
 			return mc;
 		}
