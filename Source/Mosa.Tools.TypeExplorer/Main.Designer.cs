@@ -193,6 +193,8 @@
 			this.treeView.Name = "treeView";
 			this.treeView.Size = new System.Drawing.Size(295, 456);
 			this.treeView.TabIndex = 3;
+			this.treeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView_AfterSelect);
+			this.treeView.Click += new System.EventHandler(this.treeView_Click);
 			// 
 			// splitContainer1
 			// 
@@ -257,6 +259,7 @@
 			this.cbStages.Name = "cbStages";
 			this.cbStages.Size = new System.Drawing.Size(248, 21);
 			this.cbStages.TabIndex = 31;
+			this.cbStages.SelectedIndexChanged += new System.EventHandler(this.cbStages_SelectedIndexChanged);
 			// 
 			// tbResult
 			// 

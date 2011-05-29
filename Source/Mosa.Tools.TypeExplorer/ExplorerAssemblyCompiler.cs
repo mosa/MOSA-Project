@@ -28,7 +28,7 @@ namespace Mosa.Tools.TypeExplorer
 		private ExplorerAssemblyCompiler(IArchitecture architecture, ITypeSystem typeSystem, ITypeLayout typeLayout, IInternalLog internalLog) :
 			base(architecture, typeSystem, typeLayout, internalLog)
 		{
-			var linker = new LinkerStub();
+			var linker = new ExplorerLinker();
 
 			// Build the assembly compiler pipeline
 			Pipeline.AddRange(new IAssemblyCompilerStage[] {

@@ -259,17 +259,12 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			BeginCompile();
 
-			//Pipeline.Execute<IMethodCompilerStage>(delegate(IMethodCompilerStage stage)
-			//    {
-			//        stage.Setup(this);
-			//        stage.Run();
-			//    }
-			//);
-
 			foreach (IMethodCompilerStage stage in Pipeline)
 			{
 				stage.Setup(this);
 				stage.Run();
+
+				Mosa.Runtime.InternalLog.InstructionLogger.Run(this, stage);
 			}
 
 			EndCompile();

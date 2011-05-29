@@ -52,7 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="ExplorerAssemblyCompiler.cs" />
-    <Compile Include="LinkerStub.cs" />
+    <Compile Include="ExplorerLinker.cs" />
     <Compile Include="ExplorerMethodCompiler.cs" />
     <Compile Include="Main.cs">
       <SubType>Form</SubType>

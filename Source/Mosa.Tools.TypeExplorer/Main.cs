@@ -29,8 +29,8 @@ namespace Mosa.Tools.TypeExplorer
 
 		public class MethodStages
 		{
-			public List<IPipelineStage> PipelineStage = new List<IPipelineStage>();
-			public List<string> Logs = new List<string>();
+			public List<string> OrderedStageNames = new List<string>();
+			public Dictionary<string, string> Logs = new Dictionary<string, string>();
 		}
 
 		public Main()
@@ -251,11 +251,19 @@ namespace Mosa.Tools.TypeExplorer
 			{
 				var node = treeView.SelectedNode as ViewNode<RuntimeMethod>;
 
-				if (node == null)
+				if (node != null)
 				{
-					string name = treeView.SelectedNode.Text;
+					MethodStages methodStage;
 
-					return;
+					if (!methodStages.TryGetValue(node.Type, out methodStage))
+						return;
+
+					cbStages.Items.Clear();
+
+					foreach (string stage in methodStage.OrderedStageNames)
+						cbStages.Items.Add(stage);
+
+					cbStages.SelectedIndex = 0;
 				}
 			}
 		}
@@ -276,8 +284,8 @@ namespace Mosa.Tools.TypeExplorer
 				methodStages.Add(method, methodStage);
 			}
 
-			methodStage.PipelineStage.Add(stage);
-			methodStage.Logs.Add(log);
+			methodStage.OrderedStageNames.Add(stage.Name);
+			methodStage.Logs.Add(stage.Name, log);
 		}
 
 		void Compile()
@@ -293,6 +301,27 @@ namespace Mosa.Tools.TypeExplorer
 		private void nowToolStripMenuItem_Click(object sender, EventArgs e)
 		{
 			Compile();
+		}
+
+		private void treeView_AfterSelect(object sender, TreeViewEventArgs e)
+		{
+
+		}
+
+		private void cbStages_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (treeView.SelectedNode != null)
+			{
+				var node = treeView.SelectedNode as ViewNode<RuntimeMethod>;
+
+				if (node != null)
+				{
+					MethodStages methodStage;
+
+					if (methodStages.TryGetValue(node.Type, out methodStage))
+						tbResult.Text = methodStage.Logs[cbStages.SelectedItem.ToString()];
+				}
+			}
 		}
 
 

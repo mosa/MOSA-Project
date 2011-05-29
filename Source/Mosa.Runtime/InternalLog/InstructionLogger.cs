@@ -50,20 +50,28 @@ namespace Mosa.Runtime.InternalLog
 			int index = 1;
 
 			text.AppendLine(String.Format("IR representation of method {0} after stage {1}", method, stage.Name));
-
+			text.AppendLine();
+					
 			if (basicBlocks.Count > 0)
 			{
 				foreach (BasicBlock block in basicBlocks)
 				{
 					text.AppendFormat("Block #{0} - label L_{1:X4}", index, block.Label);
+					text.AppendLine();
 
 					foreach (BasicBlock prev in block.PreviousBlocks)
+					{
 						text.AppendFormat("  Prev: L_{0:X4}", prev.Label);
+						text.AppendLine();
+					}
 
 					LogInstructions(text, new Context(instructionSet, block));
 
 					foreach (BasicBlock next in block.NextBlocks)
+					{
 						text.AppendFormat("  Next: L_{0:X4}", next.Label);
+						text.AppendLine();
+					}
 
 					index++;
 				}
@@ -72,6 +80,8 @@ namespace Mosa.Runtime.InternalLog
 			{
 				LogInstructions(text, new Context(instructionSet, 0));
 			}
+
+			internalLog.InstructionLogListener.NotifyNewInstructionLog(method, stage, text.ToString());
 		}
 
 		/// <summary>
@@ -89,6 +99,7 @@ namespace Mosa.Runtime.InternalLog
 					text.Append("; ");
 
 				text.AppendFormat("L_{0:X4}: {1}", ctx.Label, ctx.Instruction.ToString(ctx));
+				text.AppendLine();
 			}
 		}
 

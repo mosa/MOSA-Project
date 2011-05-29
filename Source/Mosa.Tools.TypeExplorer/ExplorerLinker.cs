@@ -22,9 +22,9 @@ using x86 = Mosa.Platform.x86;
 
 namespace Mosa.Tools.TypeExplorer
 {
-	class LinkerStub : BaseAssemblyLinkerStage, IAssemblyLinker, IPipelineStage
+	class ExplorerLinker : BaseAssemblyLinkerStage, IAssemblyLinker, IPipelineStage
 	{
-		string IPipelineStage.Name { get { return @"Stub Linker"; } }
+		string IPipelineStage.Name { get { return @"Explorer Stub Linker"; } }
 
 		public override void Run()
 		{
