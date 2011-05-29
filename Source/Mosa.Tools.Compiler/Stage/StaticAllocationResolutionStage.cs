@@ -116,7 +116,7 @@ namespace Mosa.Tools.Compiler.Stage
 		{
 			foreach (BasicBlock block in this.basicBlocks)
 			{
-				Context context = new Context(InstructionSet, block);
+				Context context = new Context(instructionSet, block);
 				while (!context.EndOfInstruction)
 				{
 					if (context.Instruction is NewobjInstruction || context.Instruction is NewarrInstruction)

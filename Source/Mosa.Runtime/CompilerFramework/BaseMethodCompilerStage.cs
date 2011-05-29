@@ -40,7 +40,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Holds the instruction set
 		/// </summary>
-		protected InstructionSet InstructionSet;
+		protected InstructionSet instructionSet;
 
 		/// <summary>
 		/// List of basic blocks found during decoding
@@ -90,7 +90,7 @@ namespace Mosa.Runtime.CompilerFramework
 				throw new ArgumentNullException(@"compiler");
 
 			methodCompiler = compiler;
-			InstructionSet = compiler.InstructionSet;
+			instructionSet = compiler.InstructionSet;
 			basicBlocks = compiler.BasicBlocks;
 			architecture = compiler.Architecture;
 			typeModule = compiler.Method.Module;
@@ -122,7 +122,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns></returns>
 		protected Context CreateContext(BasicBlock block)
 		{
-			return new Context(InstructionSet, block);
+			return new Context(instructionSet, block);
 		}
 
 		/// <summary>
@@ -132,7 +132,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns></returns>
 		protected Context CreateContext(int index)
 		{
-			return new Context(InstructionSet, index);
+			return new Context(instructionSet, index);
 		}
 
 		/// <summary>

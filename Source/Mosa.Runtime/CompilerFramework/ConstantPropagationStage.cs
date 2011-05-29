@@ -48,7 +48,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 			foreach (BasicBlock block in basicBlocks)
 			{
-				for (Context ctx = new Context(InstructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
+				for (Context ctx = new Context(instructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
 				{
 					if (ctx.Instruction is IR.MoveInstruction || ctx.Instruction is CIL.StlocInstruction)
 					{
@@ -58,7 +58,7 @@ namespace Mosa.Runtime.CompilerFramework
 							if (ctx.Result is StackOperand)
 							{
 								Debug.Assert(ctx.Result.Definitions.Count == 1, @"Operand defined multiple times. Instruction stream not in SSA form!");
-								ctx.Result.Replace(ctx.Operand1, InstructionSet);
+								ctx.Result.Replace(ctx.Operand1, instructionSet);
 								remove = true;
 							}
 						}
@@ -75,7 +75,7 @@ namespace Mosa.Runtime.CompilerFramework
 							if (!ctx.Result.IsRegister)
 							{
 								Debug.Assert(ctx.Result.Definitions.Count == 1, @"Operand defined multiple times. Instruction stream not in SSA form!");
-								ctx.Result.Replace(co, InstructionSet);
+								ctx.Result.Replace(co, instructionSet);
 								remove = true;
 							}
 						}

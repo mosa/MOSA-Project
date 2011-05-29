@@ -148,7 +148,7 @@ namespace Mosa.Runtime.CompilerFramework
 			// Iterate all definition sites first
 			foreach (int index in lr.Op.Definitions.ToArray())
 			{
-				Context def = new Context(InstructionSet, index);
+				Context def = new Context(instructionSet, index);
 				if (def.Offset == lr.Start)
 				{
 					opIdx = 0;
@@ -168,7 +168,7 @@ namespace Mosa.Runtime.CompilerFramework
 			// Iterate all use sites
 			foreach (int index in lr.Op.Uses.ToArray())
 			{
-				Context instr = new Context(InstructionSet, index);
+				Context instr = new Context(instructionSet, index);
 
 				if (instr.Offset <= lr.Start)
 				{

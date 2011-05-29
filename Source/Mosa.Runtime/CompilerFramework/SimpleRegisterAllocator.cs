@@ -79,7 +79,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 				// Iterate all instructions in the block
 				// Assign registers to all operands, where this needs to be done
-				for (Context ctx = new Context(InstructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
+				for (Context ctx = new Context(instructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
 					AssignRegisters(ctx);
 
 				// Spill active registers at the end of a block (they're reloaded in the next, if necessary.)
@@ -99,7 +99,7 @@ namespace Mosa.Runtime.CompilerFramework
 				if (op != null && op is MemoryOperand)
 				{
 
-					Context ctx = new Context(InstructionSet, block);
+					Context ctx = new Context(instructionSet, block);
 					ctx.GotoLast();
 
 					InsertMove(ctx, op, new RegisterOperand(op.Type, _registerSet[regIdx]));

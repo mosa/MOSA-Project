@@ -82,13 +82,13 @@ namespace Mosa.Runtime.CompilerFramework
 			LayoutParameters(methodCompiler);
 
 			// Create a prologue instruction
-			Context prologueCtx = new Context(InstructionSet, FindBlock(-1)).InsertBefore();
+			Context prologueCtx = new Context(instructionSet, FindBlock(-1)).InsertBefore();
 			prologueCtx.SetInstruction(IR.Instruction.PrologueInstruction);
 			prologueCtx.Other = _localsSize;
 			prologueCtx.Label = -1;
 
 			// Create an epilogue instruction
-			Context epilogueCtx = new Context(InstructionSet, FindBlock(Int32.MaxValue));
+			Context epilogueCtx = new Context(instructionSet, FindBlock(Int32.MaxValue));
 			epilogueCtx.AppendInstruction(IR.Instruction.EpilogueInstruction);
 			epilogueCtx.Other = _localsSize;
 			epilogueCtx.Label = Int32.MaxValue;
@@ -112,7 +112,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="block">The block.</param>
 		private void CollectLocalVariables(List<StackOperand> locals, BasicBlock block)
 		{
-			for (Context ctx = new Context(InstructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
+			for (Context ctx = new Context(instructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
 			{
 				// Does this instruction define a new stack variable?
 				foreach (Operand op in ctx.Results)

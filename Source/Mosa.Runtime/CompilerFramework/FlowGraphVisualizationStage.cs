@@ -114,7 +114,7 @@ namespace Mosa.Runtime.CompilerFramework
 				int field = 0;
 				int i = 0;
 
-				for (Context ctx = new Context(InstructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
+				for (Context ctx = new Context(instructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
 				{
 					if (ctx.Instruction == null)
 						continue;

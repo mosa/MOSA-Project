@@ -62,7 +62,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 				methodCompiler.InstructionSet = new InstructionSet(256);
 
 				// update the base class 
-				InstructionSet = methodCompiler.InstructionSet;
+				instructionSet = methodCompiler.InstructionSet;
 
 				using (codeReader = new BinaryReader(code))
 				{
@@ -204,7 +204,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			PrefixInstruction prefix = null;
 
 			// Setup context
-			Context ctx = new Context(InstructionSet, -1);
+			Context ctx = new Context(instructionSet, -1);
 
 			while (codeEnd != codeReader.BaseStream.Position)
 			{

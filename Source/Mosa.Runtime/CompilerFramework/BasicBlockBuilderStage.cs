@@ -53,7 +53,7 @@ namespace Mosa.Runtime.CompilerFramework
 		public void Run()
 		{
 			// Create the prologue block
-			Context ctx = new Context(InstructionSet, -1);
+			Context ctx = new Context(instructionSet, -1);
 			// Add a jump instruction to the first block from the prologue
 			ctx.AppendInstruction(IR.Instruction.JmpInstruction);
 			//ctx.AppendInstruction(CIL.Instruction.Get(CIL.OpCode.Br));
@@ -64,7 +64,7 @@ namespace Mosa.Runtime.CompilerFramework
 			SplitIntoBlocks(0);
 
 			// Create the epilogue block
-			ctx = new Context(InstructionSet, -1);
+			ctx = new Context(instructionSet, -1);
 			// Add null instruction, necessary to generate a block index
 			ctx.AppendInstruction(null);
 			ctx.Ignore = true;
@@ -91,7 +91,7 @@ namespace Mosa.Runtime.CompilerFramework
 			targets.Add(index, -1);
 
 			// Find out all targets labels
-			for (Context ctx = new Context(InstructionSet, index); !ctx.EndOfInstruction; ctx.GotoNext())
+			for (Context ctx = new Context(instructionSet, index); !ctx.EndOfInstruction; ctx.GotoNext())
 			{
 				switch (ctx.Instruction.FlowControl)
 				{
@@ -124,7 +124,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 			bool slice = false;
 
-			for (Context ctx = new Context(InstructionSet, index); !ctx.EndOfInstruction; ctx.GotoNext())
+			for (Context ctx = new Context(instructionSet, index); !ctx.EndOfInstruction; ctx.GotoNext())
 			{
 				FlowControl flow;
 
@@ -196,9 +196,9 @@ namespace Mosa.Runtime.CompilerFramework
 						// Conditional blocks are at least two way branches. The old way of adding jumps didn't properly
 						// resolve operands under certain circumstances. This does.
 						int nextIndex = ctx.Index + 1;
-						if (nextIndex < this.InstructionSet.Used)
+						if (nextIndex < this.instructionSet.Used)
 						{
-							FindAndLinkBlock(block, this.InstructionSet.Data[nextIndex].Label);
+							FindAndLinkBlock(block, this.instructionSet.Data[nextIndex].Label);
 						}
 						continue;
 					default:

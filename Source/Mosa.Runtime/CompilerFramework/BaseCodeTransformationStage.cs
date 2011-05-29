@@ -52,7 +52,7 @@ namespace Mosa.Runtime.CompilerFramework
 		public virtual void Run()
 		{
 			for (int index = 0; index < basicBlocks.Count; index++)
-				for (Context ctx = new Context(InstructionSet, basicBlocks[index]); !ctx.EndOfInstruction; ctx.GotoNext())
+				for (Context ctx = new Context(instructionSet, basicBlocks[index]); !ctx.EndOfInstruction; ctx.GotoNext())
 					if (ctx.Instruction != null)
 						ctx.Clone().Visit(this);
 		}
@@ -137,7 +137,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns></returns>
 		protected Context CreateEmptyBlockContext(int label)
 		{
-			Context ctx = new Context(InstructionSet, -1);
+			Context ctx = new Context(instructionSet, -1);
 			BasicBlock block = CreateBlock(basicBlocks.Count + 0x10000000);
 			ctx.BasicBlock = block;
 

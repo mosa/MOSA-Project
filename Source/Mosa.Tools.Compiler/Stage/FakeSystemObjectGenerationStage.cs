@@ -63,7 +63,7 @@ namespace Mosa.Tools.Compiler.Stage
 
 		private void GenerateInstructionSet()
 		{
-			this.InstructionSet = new InstructionSet(1);
+			this.instructionSet = new InstructionSet(1);
 
 			Context ctx = this.CreateContext(-1);
 			ctx.AppendInstruction(Mosa.Platform.x86.CPUx86.Instruction.RetInstruction);
@@ -84,7 +84,7 @@ namespace Mosa.Tools.Compiler.Stage
 
 		private void Compile(RuntimeMethod method)
 		{
-			LinkerMethodCompiler methodCompiler = new LinkerMethodCompiler(this.compiler, this.compiler.Pipeline.FindFirst<ICompilationSchedulerStage>(), method, this.InstructionSet);
+			LinkerMethodCompiler methodCompiler = new LinkerMethodCompiler(this.compiler, this.compiler.Pipeline.FindFirst<ICompilationSchedulerStage>(), method, this.instructionSet);
 			methodCompiler.Compile();
 		}
 

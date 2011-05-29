@@ -142,7 +142,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 				// Transform the block
 				BasicBlock block = workItem.block;
-				bool schedule = TransformToSsaForm(new Context(InstructionSet, block), workItem.caller, workItem.liveIn, out liveIn);
+				bool schedule = TransformToSsaForm(new Context(instructionSet, block), workItem.caller, workItem.liveIn, out liveIn);
 				_liveness[block.Sequence] = liveIn;
 
 				if (schedule)
@@ -170,7 +170,7 @@ namespace Mosa.Runtime.CompilerFramework
 			BasicBlock epilogue = FindBlock(Int32.MaxValue);
 			Debug.Assert(epilogue != null, @"Method doesn't have epilogue block?");
 
-			Context ctxEpilogue = new Context(InstructionSet, epilogue);
+			Context ctxEpilogue = new Context(instructionSet, epilogue);
 			ctxEpilogue.GotoLast();
 
 			// Iterate all parameter definitions
@@ -235,7 +235,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 		private void MergePhiInstructions(BasicBlock block, BasicBlock caller, IDictionary<StackOperand, StackOperand> liveIn)
 		{
-			for (Context ctx = new Context(InstructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
+			for (Context ctx = new Context(instructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
 			{
 				IR.PhiInstruction phi = ctx.Instruction as IR.PhiInstruction;
 

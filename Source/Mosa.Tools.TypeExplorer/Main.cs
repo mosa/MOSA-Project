@@ -287,7 +287,25 @@ namespace Mosa.Tools.TypeExplorer
 
 		private void treeView_AfterSelect(object sender, TreeViewEventArgs e)
 		{
+			if (treeView.SelectedNode != null)
+			{
+				var node = treeView.SelectedNode as ViewNode<RuntimeMethod>;
 
+				if (node != null)
+				{
+					MethodStages methodStage;
+
+					if (!methodStages.TryGetValue(node.Type, out methodStage))
+						return;
+
+					cbStages.Items.Clear();
+
+					foreach (string stage in methodStage.OrderedStageNames)
+						cbStages.Items.Add(stage);
+
+					cbStages.SelectedIndex = 0;
+				}
+			}
 		}
 
 		private void cbStages_SelectedIndexChanged(object sender, EventArgs e)
@@ -308,25 +326,7 @@ namespace Mosa.Tools.TypeExplorer
 
 		private void treeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
 		{
-			if (treeView.SelectedNode != null)
-			{
-				var node = treeView.SelectedNode as ViewNode<RuntimeMethod>;
-
-				if (node != null)
-				{
-					MethodStages methodStage;
-
-					if (!methodStages.TryGetValue(node.Type, out methodStage))
-						return;
-
-					cbStages.Items.Clear();
-
-					foreach (string stage in methodStage.OrderedStageNames)
-						cbStages.Items.Add(stage);
-
-					cbStages.SelectedIndex = 0;
-				}
-			}
+			
 		}
 
 
