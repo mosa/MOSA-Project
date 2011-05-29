@@ -102,7 +102,7 @@ namespace Mosa.Tools.Compiler
 
 		private void CompileAssembly()
 		{
-			using (AotAssemblyCompiler assemblyCompiler = new AotAssemblyCompiler(architecture, typeInitializerSchedulerStage, linker, typeSystem, typeLayout))
+			using (AotAssemblyCompiler assemblyCompiler = new AotAssemblyCompiler(architecture, typeInitializerSchedulerStage, linker, typeSystem, typeLayout, compiler.InternalLog))
 			{
 				assemblyCompiler.Run();
 			}

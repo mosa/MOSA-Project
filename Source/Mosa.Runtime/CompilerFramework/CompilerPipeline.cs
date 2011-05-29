@@ -23,11 +23,6 @@ namespace Mosa.Runtime.CompilerFramework
 		#region Data members
 
 		/// <summary>
-		/// Holds the current stage of execution of the pipeline.
-		/// </summary>
-		private int _currentStage = -1;
-
-		/// <summary>
 		/// The stages in the compiler pipeline.
 		/// </summary>
 		private List<IPipelineStage> _pipeline;
@@ -54,14 +49,6 @@ namespace Mosa.Runtime.CompilerFramework
 		public int Count
 		{
 			get { return _pipeline.Count; }
-		}
-
-		/// <summary>
-		/// Retrieves the index of the current stage of execution.
-		/// </summary>
-		public int CurrentStage
-		{
-			get { return _currentStage; }
 		}
 
 		/// <summary>
@@ -189,20 +176,6 @@ namespace Mosa.Runtime.CompilerFramework
 				throw new ArgumentNullException(@"stage");
 
 			_pipeline.Remove(stage);
-		}
-
-		/// <summary>
-		/// Executes the specified action.
-		/// </summary>
-		/// <param name="action">The action.</param>
-		public void Execute<T>(Action<T> action)
-		{
-			_currentStage = 0;
-			foreach (T stage in _pipeline)
-			{
-				action(stage);
-				_currentStage++;
-			}
 		}
 
 		#endregion // Methods

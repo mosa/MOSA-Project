@@ -18,6 +18,7 @@ using Mosa.Compiler.Linker;
 using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.TypeSystem;
+using Mosa.Runtime.InternalLog;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.CompilerFramework.CIL;
 using Mosa.Runtime.CompilerFramework.IR;
@@ -34,8 +35,8 @@ namespace Mosa.Test.Runtime.CompilerFramework
 
 		public IntPtr Address { get { return address; } }
 
-		public TestCaseMethodCompiler(TestCaseAssemblyCompiler compiler, IArchitecture architecture, ICompilationSchedulerStage compilationScheduler, RuntimeType type, RuntimeMethod method)
-			: base(compiler.Pipeline.FindFirst<IAssemblyLinker>(), architecture, compilationScheduler, type, method, compiler.TypeSystem, compiler.TypeLayout)
+		public TestCaseMethodCompiler(TestCaseAssemblyCompiler compiler, IArchitecture architecture, ICompilationSchedulerStage compilationScheduler, RuntimeType type, RuntimeMethod method, IInternalLog internalLog)
+			: base(compiler.Pipeline.FindFirst<IAssemblyLinker>(), architecture, compilationScheduler, type, method, compiler.TypeSystem, compiler.TypeLayout, internalLog)
 		{
 			this.assemblyCompiler = compiler;
 

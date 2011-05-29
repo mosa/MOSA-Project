@@ -24,6 +24,7 @@ using Mosa.Compiler.Linker;
 using Mosa.Tools.Compiler.Boot;
 using Mosa.Tools.Compiler.Linker;
 using Mosa.Tools.Compiler.Stage;
+using Mosa.Runtime.InternalLog;
 
 namespace Mosa.Tools.Compiler
 {
@@ -283,8 +284,10 @@ namespace Mosa.Tools.Compiler
 
 			TypeLayout typeLayout = new TypeLayout(typeSystem, nativePointerSize, nativePointerAlignment);
 
+			IInternalLog internalLog = new BasicInternalLog();
+
 			// Create the compiler
-			using (AotCompiler aot = new AotCompiler(this.architectureSelector.Architecture, typeSystem, typeLayout))
+			using (AotCompiler aot = new AotCompiler(this.architectureSelector.Architecture, typeSystem, typeLayout, internalLog))
 			{
 				aot.Pipeline.AddRange(new IAssemblyCompilerStage[] 
 					{

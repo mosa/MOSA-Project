@@ -18,18 +18,18 @@ namespace Mosa.Runtime.CompilerFramework
 	public class MethodCompilationStageComposite : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
 	{
 		/// <summary>
-		/// List of _stages
+		/// List of stages
 		/// </summary>
-		private List<IMethodCompilerStage> _stages;
+		private List<IMethodCompilerStage> stages;
 
 		/// <summary>
-		/// List-Accessor
+		/// List of stages
 		/// </summary>
-		/// <value>The _stages.</value>
+		/// <value>The stages.</value>
 		public List<IMethodCompilerStage> Stages
 		{
-			get { return _stages; }
-			set { _stages = value; }
+			get { return stages; }
+			set { stages = value; }
 		}
 
 		/// <summary>

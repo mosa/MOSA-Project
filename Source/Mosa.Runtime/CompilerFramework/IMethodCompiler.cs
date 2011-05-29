@@ -15,6 +15,7 @@ using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Metadata.Loader;
 using Mosa.Compiler.Linker;
+using Mosa.Runtime.InternalLog;
 
 namespace Mosa.Runtime.CompilerFramework
 {
@@ -86,14 +87,11 @@ namespace Mosa.Runtime.CompilerFramework
 		Operand GetParameterOperand(int index);
 
 		/// <summary>
-		/// Finds a stage, which ran before the current one and supports the specified type.
+		/// Gets the stage.
 		/// </summary>
-		/// <param name="stageType">The (interface) type to look for.</param>
-		/// <returns>The previous compilation stage supporting the requested type.</returns>
-		/// <remarks>
-		/// This method is used by stages to access the results of a previous compilation stage.
-		/// </remarks>
-		IPipelineStage GetPreviousStage(Type stageType);
+		/// <param name="stageType">Type of the stage.</param>
+		/// <returns></returns>
+		IPipelineStage GetStage(Type stageType);
 
 		/// <summary>
 		/// Requests a stream to emit native instructions to.
@@ -156,5 +154,10 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value>The type layout.</value>
 		ITypeLayout TypeLayout { get; }
 
+		/// <summary>
+		/// Gets the internal logging interface
+		/// </summary>
+		/// <value>The log.</value>
+		IInternalLog InternalLog { get; }
 	}
 }

@@ -14,7 +14,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// Represents a compilation stage during compilation of the JIT or AOT compilers.
 	/// </summary>
 	/// <remarks>
-	/// Compilation stages are typically realised as individual components acting on fragments
+	/// Compilation stages are typically realized as individual components acting on fragments
 	/// of a .NET IL binary. The JIT compiler uses a defined subset of the AOT compilation stages
 	/// in order to provide fast code generation. Both compilers share a single compilation model 
 	/// consisting of a set of individual stages forming a compilation pipeline. The pipeline 

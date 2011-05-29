@@ -51,29 +51,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CompilerHelperSettings.cs" />
-    <Compile Include="CompilerHelper.cs" />
-    <Compile Include="MethodCompiler.cs" />
+    <Compile Include="ExplorerAssemblyCompiler.cs" />
+    <Compile Include="ExplorerLinker.cs" />
+    <Compile Include="ExplorerMethodCompiler.cs" />
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="Main.Designer.cs">
       <DependentUpon>Main.cs</DependentUpon>
     </Compile>
-    <Compile Include="Output.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="StageForm.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="StageForm.Designer.cs">
-      <DependentUpon>StageForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="StringLogger.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Main.resx">
@@ -82,9 +74,6 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
-    <EmbeddedResource Include="StageForm.resx">
-      <DependentUpon>StageForm.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>

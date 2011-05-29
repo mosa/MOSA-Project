@@ -13,21 +13,37 @@ using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime.TypeSystem.Generic;
+using Mosa.Runtime.InternalLog;
+using Mosa.Runtime.CompilerFramework;
 
 namespace Mosa.Tools.TypeExplorer
 {
-	public partial class Main : Form
+	public partial class Main : Form, ICompilerStatusListener, IInstructionLogListener
 	{
+		IInternalLog internalLog = new BasicInternalLog();
 		ITypeSystem typeSystem = new TypeSystem();
+		ConfigurableInstructionLogFilter filter = new ConfigurableInstructionLogFilter();
 		ITypeLayout typeLayout;
+
+		private Dictionary<RuntimeMethod, MethodStages> methodStages = new Dictionary<RuntimeMethod, MethodStages>();
+
+		public class MethodStages
+		{
+			public List<string> OrderedStageNames = new List<string>();
+			public Dictionary<string, string> Logs = new Dictionary<string, string>();
+		}
 
 		public Main()
 		{
 			InitializeComponent();
+			internalLog.CompilerStatusListener = this;
+			internalLog.InstructionLogListener = this;
+			internalLog.InstructionLogFilter = filter;
 		}
 
 		private void Main_Load(object sender, EventArgs e)
 		{
+			statusStrip1.Text = "Ready!";
 		}
 
 		private void openToolStripMenuItem_Click(object sender, EventArgs e)
@@ -64,7 +80,7 @@ namespace Mosa.Tools.TypeExplorer
 			if (!showTokenValues.Checked)
 				return method.Name;
 
-			return "[" + TokenToString(method.Token) + "] " + method.ToString();
+			return "[" + TokenToString(method.Token) + "] " + method.Name;
 		}
 
 		protected string FormatRuntimeType(RuntimeType type)
@@ -128,7 +144,6 @@ namespace Mosa.Tools.TypeExplorer
 						typeNode.Nodes.Add(genericOpenTypeNode);
 					}
 
-
 					if (type.GenericParameters.Count != 0)
 					{
 						TreeNode genericParameterNodes = new TreeNode("Generic Parameters");
@@ -187,7 +202,7 @@ namespace Mosa.Tools.TypeExplorer
 
 						foreach (RuntimeMethod method in type.Methods)
 						{
-							TreeNode methodNode = new TreeNode(FormatRuntimeMember(method));
+							TreeNode methodNode = new ViewNode<RuntimeMethod>(method, FormatRuntimeMember(method));
 							methodsNode.Nodes.Add(methodNode);
 
 							if ((method.Attributes & MethodAttributes.Static) == MethodAttributes.Static)
@@ -205,7 +220,7 @@ namespace Mosa.Tools.TypeExplorer
 
 						foreach (RuntimeMethod method in typeLayout.GetMethodTable(type))
 						{
-							TreeNode methodNode = new TreeNode(FormatRuntimeMember(method));
+							TreeNode methodNode = new ViewNode<RuntimeMethod>(method, FormatRuntimeMember(method));
 							methodTableNode.Nodes.Add(methodNode);
 						}
 					}
@@ -213,48 +228,6 @@ namespace Mosa.Tools.TypeExplorer
 			}
 
 			treeView.EndUpdate();
-		}
-
-		private TreeNode m_OldSelectNode;
-		private TreeNode nodeInvokeMenu;
-		private void treeView_MouseUp(object sender, System.Windows.Forms.MouseEventArgs e)
-		{
-			// Show menu only if the right mouse button is clicked.
-			if (e.Button == MouseButtons.Right)
-			{
-
-				// Point where the mouse is clicked.
-				Point p = new Point(e.X, e.Y);
-
-				// Get the node that the user has clicked.
-				TreeNode node = treeView.GetNodeAt(p);
-				if (node != null)
-				{
-
-					// Select the node the user has clicked.
-					// The node appears selected until the menu is displayed on the screen.
-					m_OldSelectNode = treeView.SelectedNode;
-					treeView.SelectedNode = node;
-					nodeInvokeMenu = node;
-					// make sure it's an end node
-					if (node.Nodes.Count == 0)
-						methodnodeContextMenu.Show(treeView, p);
-					// Highlight the selected node.
-					treeView.SelectedNode = m_OldSelectNode;
-					m_OldSelectNode = null;
-				}
-			}
-		}
-
-		private void showCompileStage(object sender, EventArgs e)
-		{
-			var startpoint = nodeInvokeMenu.Text.IndexOf("] ") +2;
-			var endpos = nodeInvokeMenu.Text.IndexOf(" [");
-			var endpoint = endpos >0 ? endpos : nodeInvokeMenu.Text.Length;
-			var methodname = nodeInvokeMenu.Text.Substring(startpoint, endpoint - startpoint );
-			nodeInvokeMenu = null;
-			var sf = new StageForm(typeSystem, methodname);
-			sf.Show();
 		}
 
 		private void quitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -272,5 +245,106 @@ namespace Mosa.Tools.TypeExplorer
 			UpdateTree();
 		}
 
+		private void treeView_Click(object sender, EventArgs e)
+		{
+			
+		}
+
+		void ICompilerStatusListener.NotifyCompilerStatus(CompilerStage compilerStage, string info)
+		{
+			toolStripStatusLabel1.Text = compilerStage.ToText() + ": " + info;
+			toolStripStatusLabel1.GetCurrentParent().Refresh();
+		}
+
+		void IInstructionLogListener.NotifyNewInstructionLog(RuntimeMethod method, IPipelineStage stage, string log)
+		{
+			MethodStages methodStage;
+
+			if (!methodStages.TryGetValue(method, out methodStage))
+			{
+				methodStage = new MethodStages();
+				methodStages.Add(method, methodStage);
+			}
+
+			methodStage.OrderedStageNames.Add(stage.Name);
+			methodStage.Logs.Add(stage.Name, log);
+		}
+
+		void Compile()
+		{
+			methodStages.Clear();
+
+			filter.IsLogging = true;
+			filter.MethodMatch = MatchType.Any;
+
+			ExplorerAssemblyCompiler.Compile(typeSystem, typeLayout, internalLog);
+		}
+
+		private void nowToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			Compile();
+		}
+
+		private void treeView_AfterSelect(object sender, TreeViewEventArgs e)
+		{
+
+		}
+
+		private void cbStages_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			if (treeView.SelectedNode != null)
+			{
+				var node = treeView.SelectedNode as ViewNode<RuntimeMethod>;
+
+				if (node != null)
+				{
+					MethodStages methodStage;
+
+					if (methodStages.TryGetValue(node.Type, out methodStage))
+						tbResult.Text = methodStage.Logs[cbStages.SelectedItem.ToString()];
+				}
+			}
+		}
+
+		private void treeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+		{
+			if (treeView.SelectedNode != null)
+			{
+				var node = treeView.SelectedNode as ViewNode<RuntimeMethod>;
+
+				if (node != null)
+				{
+					MethodStages methodStage;
+
+					if (!methodStages.TryGetValue(node.Type, out methodStage))
+						return;
+
+					cbStages.Items.Clear();
+
+					foreach (string stage in methodStage.OrderedStageNames)
+						cbStages.Items.Add(stage);
+
+					cbStages.SelectedIndex = 0;
+				}
+			}
+		}
+
+
+	}
+
+	public class ViewNode<T> : TreeNode
+	{
+		public T Type;
+
+		public ViewNode(T type, string name)
+			: base(name)
+		{
+			this.Type = type;
+		}
+
+		public override string ToString()
+		{
+			return Name;
+		}
 	}
 }

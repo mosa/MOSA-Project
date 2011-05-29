@@ -88,7 +88,11 @@ namespace Mosa.Runtime.CompilerFramework
 			methodName = methodName.Replace(">", "");
 			methodName = methodName.Replace("$", "");
 			methodName = methodName.Replace(".", "");
-			IPipelineStage previousStage = methodCompiler.GetPreviousStage(typeof(IMethodCompilerStage));
+			
+			//IPipelineStage previousStage = methodCompiler.GetPreviousStage(typeof(IMethodCompilerStage));
+			//BROKE THIS:
+			IPipelineStage previousStage = methodCompiler.GetStage(typeof(IMethodCompilerStage));
+
 			dotFile.WriteLine("subgraph cluster" + methodName + "_FlowGraph {");
 			dotFile.WriteLine("label = \"Method: " + methodName + "(" + methodCompiler.Method.Signature + ") after " + previousStage.Name + "\"");
 			//dotFile.WriteLine("graph [rankdir = \"TB\"];");
