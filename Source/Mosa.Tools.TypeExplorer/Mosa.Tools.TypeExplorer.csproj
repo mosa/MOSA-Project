@@ -51,9 +51,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssemblyCompilerExplorer.cs" />
+    <Compile Include="ExplorerAssemblyCompiler.cs" />
     <Compile Include="LinkerStub.cs" />
-    <Compile Include="MethodCompilerExplorer.cs" />
+    <Compile Include="ExplorerMethodCompiler.cs" />
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
     </Compile>

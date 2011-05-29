@@ -16,9 +16,18 @@ using Mosa.Runtime.TypeSystem;
 
 namespace Mosa.Runtime.InternalLog
 {
+	public enum CompilerStage { CompilingMethod, Linking };
 
-	public interface ICompilerStatusListener
+	public static class CompilerStageExtension
 	{
-		void NotifyCompilerStatus(CompilerStage compilerStage, string info);
+		public static string ToText(this CompilerStage stage)
+		{
+			switch (stage)
+			{
+				case CompilerStage.CompilingMethod: return "Compiling Method";
+				case CompilerStage.Linking: return "Linking";
+				default: return stage.ToString();
+			}
+		}
 	}
 }

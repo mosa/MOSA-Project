@@ -13,21 +13,37 @@ using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime.TypeSystem.Generic;
+using Mosa.Runtime.InternalLog;
+using Mosa.Runtime.CompilerFramework;
 
 namespace Mosa.Tools.TypeExplorer
 {
-	public partial class Main : Form
+	public partial class Main : Form, ICompilerStatusListener, IInstructionLogListener
 	{
+		IInternalLog internalLog = new BasicInternalLog();
 		ITypeSystem typeSystem = new TypeSystem();
+		ConfigurableInstructionLogFilter filter = new ConfigurableInstructionLogFilter();
 		ITypeLayout typeLayout;
+
+		private Dictionary<RuntimeMethod, MethodStages> methodStages = new Dictionary<RuntimeMethod, MethodStages>();
+
+		public class MethodStages
+		{
+			public List<IPipelineStage> PipelineStage = new List<IPipelineStage>();
+			public List<string> Logs = new List<string>();
+		}
 
 		public Main()
 		{
 			InitializeComponent();
+			internalLog.CompilerStatusListener = this;
+			internalLog.InstructionLogListener = this;
+			internalLog.InstructionLogFilter = filter;
 		}
 
 		private void Main_Load(object sender, EventArgs e)
 		{
+			statusStrip1.Text = "Ready!";
 		}
 
 		private void openToolStripMenuItem_Click(object sender, EventArgs e)
@@ -244,18 +260,52 @@ namespace Mosa.Tools.TypeExplorer
 			}
 		}
 
+		void ICompilerStatusListener.NotifyCompilerStatus(CompilerStage compilerStage, string info)
+		{
+			toolStripStatusLabel1.Text = compilerStage.ToText() + ": " + info;
+			toolStripStatusLabel1.GetCurrentParent().Refresh();
+		}
+
+		void IInstructionLogListener.NotifyNewInstructionLog(RuntimeMethod method, IPipelineStage stage, string log)
+		{
+			MethodStages methodStage;
+
+			if (!methodStages.TryGetValue(method, out methodStage))
+			{
+				methodStage = new MethodStages();
+				methodStages.Add(method, methodStage);
+			}
+
+			methodStage.PipelineStage.Add(stage);
+			methodStage.Logs.Add(log);
+		}
+
+		void Compile()
+		{
+			methodStages.Clear();
+
+			filter.IsLogging = true;
+			filter.MethodMatch = MatchType.Any;
+
+			ExplorerAssemblyCompiler.Compile(typeSystem, typeLayout, internalLog);
+		}
+
+		private void nowToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			Compile();
+		}
+
+
 	}
 
 	public class ViewNode<T> : TreeNode
 	{
 		public T Type;
-		public string Name;
 
 		public ViewNode(T type, string name)
 			: base(name)
 		{
 			this.Type = type;
-			this.Name = name;
 		}
 
 		public override string ToString()

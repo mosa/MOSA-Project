@@ -46,7 +46,7 @@ namespace Mosa.Runtime.CompilerFramework
 		protected ITypeLayout typeLayout;
 		
 		/// <summary>
-		/// 
+		/// Holds the current internal log
 		/// </summary>
 		protected IInternalLog internalLog;
 
@@ -117,6 +117,11 @@ namespace Mosa.Runtime.CompilerFramework
 			get { return typeLayout; }
 		}
 
+		public IInternalLog InternalLog
+		{
+			get { return internalLog; }
+		}
+
 		#endregion // Properties
 
 		#region Methods
@@ -127,7 +132,6 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="schedulerStage">The scheduler stage.</param>
 		/// <param name="type">The type.</param>
 		/// <param name="method">The method to compile.</param>
-		/// <param name="internalLog">The internal log.</param>
 		/// <returns>
 		/// An instance of a MethodCompilerBase for the given type/method pair.
 		/// </returns>
@@ -144,7 +148,11 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			BeginCompile();
 
-			Pipeline.Execute<IAssemblyCompilerStage>(stage => stage.Run());
+			//Pipeline.Execute<IAssemblyCompilerStage>(stage => stage.Run());
+			foreach (IAssemblyCompilerStage stage in Pipeline)
+			{
+				stage.Run();
+			}
 
 			EndCompile();
 		}
@@ -154,7 +162,11 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		protected virtual void BeginCompile()
 		{
-			Pipeline.Execute<IAssemblyCompilerStage>(stage => stage.Setup(this));
+			//Pipeline.Execute<IAssemblyCompilerStage>(stage => stage.Setup(this));
+			foreach (IAssemblyCompilerStage stage in Pipeline)
+			{
+				stage.Setup(this);
+			}
 		}
 
 		/// <summary>

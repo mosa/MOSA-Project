@@ -20,7 +20,7 @@ namespace Mosa.Runtime.InternalLog
 	public class DebugCompilerStatusListener : ICompilerStatusListener
 	{
 
-		void ICompilerStatusListener.NotifyCompilerStatus(ICompilerStage compilerStage, string info)
+		void ICompilerStatusListener.NotifyCompilerStatus(CompilerStage compilerStage, string info)
 		{
 			Debug.WriteLine(compilerStage.ToString() + ": " + info);
 		}

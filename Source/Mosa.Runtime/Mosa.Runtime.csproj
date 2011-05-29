@@ -86,6 +86,7 @@
     <Compile Include="CompilerFramework\BaseAssemblyCompilerStage.cs" />
     <Compile Include="CompilerFramework\CIL\ExceptionClauseHeader.cs" />
     <Compile Include="InternalLog\ConfigurableInstructionLogFilter.cs" />
+    <Compile Include="InternalLog\CompilerStage.cs" />
     <Compile Include="InternalLog\DebugInstructionLogListener.cs" />
     <Compile Include="InternalLog\ICompilerStatusListener.cs" />
     <Compile Include="InternalLog\DebugCompilerStatusListener.cs" />
@@ -347,9 +348,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CompilerFramework\IMethodCompilerStage.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompilerFramework\InstructionLogger.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CompilerFramework\IPlatformStage.cs">

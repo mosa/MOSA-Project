@@ -12,42 +12,36 @@ using System.Collections.Generic;
 using System.Text;
 
 using Mosa.Runtime.Metadata;
+using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.CompilerFramework;
 
 namespace Mosa.Runtime.InternalLog
 {
 	/// <summary>
-	/// Logs all incoming instructions.
+	/// Logs all instructions.
 	/// </summary>
-	public sealed class InstructionLogger : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
+	public static class InstructionLogger 
 	{
-		private IInstructionLogFilter filter = new ConfigurableInstructionLogFilter();
-		private IInstructionLogListener listener = null;
-
-		#region IPipelineStage
-
-		/// <summary>
-		/// Retrieves the name of the compilation stage.
-		/// </summary>
-		/// <value>The name of the compilation stage.</value>
-		string IPipelineStage.Name { get { return @"InstructionLogger"; } }
-
-		#endregion// IPipelineStage
-
-		#region IMethodCompilerStage Members
-
-		/// <summary>
-		/// Performs stage specific processing on the compiler context.
-		/// </summary>
-		public void Run()
+		public static void Run(IMethodCompiler methodCompiler, IPipelineStage stage)
 		{
-			if (listener == null)
+			Run(
+				methodCompiler.InternalLog,
+				stage,
+				methodCompiler.Method,
+				methodCompiler.InstructionSet,
+				methodCompiler.BasicBlocks
+			);
+		}
+
+		public static void Run(IInternalLog internalLog, IPipelineStage stage, RuntimeMethod method, InstructionSet instructionSet, List<BasicBlock> basicBlocks)
+		{
+			if (internalLog == null)
 				return;
 
-			// Previous stage
-			IPipelineStage prevStage = methodCompiler.GetPreviousStage(typeof(IMethodCompilerStage));
+			if (internalLog.InstructionLogListener == null)
+				return;
 
-			if (!filter.IsMatch(methodCompiler.Method, prevStage))
+			if (!internalLog.InstructionLogFilter.IsMatch(method, stage))
 				return;
 
 			StringBuilder text = new StringBuilder();
@@ -55,9 +49,9 @@ namespace Mosa.Runtime.InternalLog
 			// Line number
 			int index = 1;
 
-			text.AppendLine(String.Format("IR representation of method {0} after stage {1}", methodCompiler.Method, prevStage.Name));
+			text.AppendLine(String.Format("IR representation of method {0} after stage {1}", method, stage.Name));
 
-			if (this.basicBlocks.Count > 0)
+			if (basicBlocks.Count > 0)
 			{
 				foreach (BasicBlock block in basicBlocks)
 				{
@@ -66,7 +60,7 @@ namespace Mosa.Runtime.InternalLog
 					foreach (BasicBlock prev in block.PreviousBlocks)
 						text.AppendFormat("  Prev: L_{0:X4}", prev.Label);
 
-					LogInstructions(text, new Context(InstructionSet, block));
+					LogInstructions(text, new Context(instructionSet, block));
 
 					foreach (BasicBlock next in block.NextBlocks)
 						text.AppendFormat("  Next: L_{0:X4}", next.Label);
@@ -76,19 +70,15 @@ namespace Mosa.Runtime.InternalLog
 			}
 			else
 			{
-				LogInstructions(text, new Context(InstructionSet, 0));
+				LogInstructions(text, new Context(instructionSet, 0));
 			}
 		}
-
-		#endregion // IMethodCompilerStage Members
-
-		#region Internals
 
 		/// <summary>
 		/// Logs the instructions in the given enumerable to the trace.
 		/// </summary>
 		/// <param name="ctx">The context.</param>
-		private void LogInstructions(StringBuilder text, Context ctx)
+		private static void LogInstructions(StringBuilder text, Context ctx)
 		{
 			for (; !ctx.EndOfInstruction; ctx.GotoNext())
 			{
@@ -102,6 +92,5 @@ namespace Mosa.Runtime.InternalLog
 			}
 		}
 
-		#endregion // Internals
 	}
 }

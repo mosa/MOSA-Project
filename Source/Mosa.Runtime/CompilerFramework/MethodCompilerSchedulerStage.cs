@@ -11,8 +11,9 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.TypeSystem;
+using Mosa.Runtime.InternalLog;
+using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Runtime.CompilerFramework
 {
@@ -87,16 +88,6 @@ namespace Mosa.Runtime.CompilerFramework
 				ScheduleMethodForCompilation(method);
 			}
 			
-			//if (type.HasNestedTypes)
-			//{
-			//    System.Console.WriteLine ("Adding nested types");
-			//    foreach (RuntimeType nestedType in type.NestedTypes)
-			//    {
-			//        System.Console.WriteLine ("  Adding nested type " + nestedType + " from " + type);	
-			//        this.ScheduleTypeForCompilation (nestedType);
-			//    }
-			//}
-
 			CompilePendingMethods();
 		}
 
@@ -111,6 +102,8 @@ namespace Mosa.Runtime.CompilerFramework
 
 		private void CompileMethod(RuntimeMethod method)
 		{
+			compiler.InternalLog.CompilerStatusListener.NotifyCompilerStatus(CompilerStage.CompilingMethod, method.ToString());
+
 			Console.ForegroundColor = ConsoleColor.Yellow;
 			Console.Write(@"[Compiling]  ");
 			Console.ForegroundColor = ConsoleColor.White;

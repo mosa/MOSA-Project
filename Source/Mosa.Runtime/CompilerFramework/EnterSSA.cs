@@ -97,7 +97,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public void Run()
 		{
-			_dominanceProvider = (IDominanceProvider)methodCompiler.GetPreviousStage(typeof(IDominanceProvider));
+			_dominanceProvider = (IDominanceProvider)methodCompiler.GetStage(typeof(IDominanceProvider));
 			Debug.Assert(_dominanceProvider != null, @"SSA Conversion requires a dominance provider.");
 			if (_dominanceProvider == null)
 				throw new InvalidOperationException(@"SSA Conversion requires a dominance provider.");

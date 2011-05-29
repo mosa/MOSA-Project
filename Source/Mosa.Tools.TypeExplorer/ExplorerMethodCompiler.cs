@@ -25,11 +25,11 @@ using Mosa.Tools.Compiler.Stage;
 
 namespace Mosa.Tools.TypeExplorer
 {
-	class MethodCompilerExplorer : BaseMethodCompiler
+	class ExplorerMethodCompiler : BaseMethodCompiler
 	{
 		private IntPtr address = IntPtr.Zero;
 
-		public MethodCompilerExplorer(AssemblyCompilerExplorer compiler, IArchitecture architecture, ICompilationSchedulerStage compilationScheduler, RuntimeType type, RuntimeMethod method, IInternalLog internalLog)
+		public ExplorerMethodCompiler(ExplorerAssemblyCompiler compiler, IArchitecture architecture, ICompilationSchedulerStage compilationScheduler, RuntimeType type, RuntimeMethod method, IInternalLog internalLog)
 			: base(compiler.Pipeline.FindFirst<IAssemblyLinker>(), architecture, compilationScheduler, type, method, compiler.TypeSystem, compiler.TypeLayout, internalLog)
 		{
 

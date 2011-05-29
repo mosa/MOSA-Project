@@ -26,6 +26,12 @@ namespace Mosa.Tools.TypeExplorer
 	{
 		string IPipelineStage.Name { get { return @"Stub Linker"; } }
 
+		public override void Run()
+		{
+			// DO NOTHING
+			return; 
+		}
+
 		public override long LoadSectionAlignment
 		{
 			get { return 1; }

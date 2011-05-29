@@ -31,11 +31,14 @@
 			System.Windows.Forms.Label labelLabel;
 			System.Windows.Forms.Label stageLabel;
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
+			this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
 			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
 			this.fileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.openToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripSeparator();
 			this.quitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.compileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.nowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.showTokenValues = new System.Windows.Forms.ToolStripMenuItem();
 			this.showSizes = new System.Windows.Forms.ToolStripMenuItem();
@@ -48,24 +51,54 @@
 			this.tbResult = new System.Windows.Forms.RichTextBox();
 			labelLabel = new System.Windows.Forms.Label();
 			stageLabel = new System.Windows.Forms.Label();
+			this.statusStrip1.SuspendLayout();
 			this.menuStrip1.SuspendLayout();
 			this.splitContainer1.Panel1.SuspendLayout();
 			this.splitContainer1.Panel2.SuspendLayout();
 			this.splitContainer1.SuspendLayout();
 			this.SuspendLayout();
 			// 
+			// labelLabel
+			// 
+			labelLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			labelLabel.Location = new System.Drawing.Point(256, 2);
+			labelLabel.Margin = new System.Windows.Forms.Padding(4);
+			labelLabel.Name = "labelLabel";
+			labelLabel.Size = new System.Drawing.Size(43, 20);
+			labelLabel.TabIndex = 35;
+			labelLabel.Text = "Label:";
+			// 
+			// stageLabel
+			// 
+			stageLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			stageLabel.Location = new System.Drawing.Point(1, 2);
+			stageLabel.Margin = new System.Windows.Forms.Padding(4);
+			stageLabel.Name = "stageLabel";
+			stageLabel.Size = new System.Drawing.Size(158, 20);
+			stageLabel.TabIndex = 32;
+			stageLabel.Text = "Stage:";
+			// 
 			// statusStrip1
 			// 
+			this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.toolStripStatusLabel1});
 			this.statusStrip1.Location = new System.Drawing.Point(0, 489);
 			this.statusStrip1.Name = "statusStrip1";
 			this.statusStrip1.Size = new System.Drawing.Size(698, 22);
 			this.statusStrip1.TabIndex = 0;
 			this.statusStrip1.Text = "statusStrip1";
 			// 
+			// toolStripStatusLabel1
+			// 
+			this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
+			this.toolStripStatusLabel1.Size = new System.Drawing.Size(59, 17);
+			this.toolStripStatusLabel1.Text = "Loading...";
+			// 
 			// menuStrip1
 			// 
 			this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileToolStripMenuItem,
+            this.compileToolStripMenuItem,
             this.optionsToolStripMenuItem});
 			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip1.Name = "menuStrip1";
@@ -101,6 +134,21 @@
 			this.quitToolStripMenuItem.Size = new System.Drawing.Size(103, 22);
 			this.quitToolStripMenuItem.Text = "&Quit";
 			this.quitToolStripMenuItem.Click += new System.EventHandler(this.quitToolStripMenuItem_Click);
+			// 
+			// compileToolStripMenuItem
+			// 
+			this.compileToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.nowToolStripMenuItem});
+			this.compileToolStripMenuItem.Name = "compileToolStripMenuItem";
+			this.compileToolStripMenuItem.Size = new System.Drawing.Size(64, 20);
+			this.compileToolStripMenuItem.Text = "Compile";
+			// 
+			// nowToolStripMenuItem
+			// 
+			this.nowToolStripMenuItem.Name = "nowToolStripMenuItem";
+			this.nowToolStripMenuItem.Size = new System.Drawing.Size(99, 22);
+			this.nowToolStripMenuItem.Text = "Now";
+			this.nowToolStripMenuItem.Click += new System.EventHandler(this.nowToolStripMenuItem_Click);
 			// 
 			// optionsToolStripMenuItem
 			// 
@@ -174,16 +222,6 @@
 			this.splitContainer1.SplitterWidth = 5;
 			this.splitContainer1.TabIndex = 26;
 			// 
-			// labelLabel
-			// 
-			labelLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			labelLabel.Location = new System.Drawing.Point(256, 2);
-			labelLabel.Margin = new System.Windows.Forms.Padding(4);
-			labelLabel.Name = "labelLabel";
-			labelLabel.Size = new System.Drawing.Size(43, 20);
-			labelLabel.TabIndex = 35;
-			labelLabel.Text = "Label:";
-			// 
 			// cbLabel
 			// 
 			this.cbLabel.AutoSize = true;
@@ -220,16 +258,6 @@
 			this.cbStages.Size = new System.Drawing.Size(248, 21);
 			this.cbStages.TabIndex = 31;
 			// 
-			// stageLabel
-			// 
-			stageLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			stageLabel.Location = new System.Drawing.Point(1, 2);
-			stageLabel.Margin = new System.Windows.Forms.Padding(4);
-			stageLabel.Name = "stageLabel";
-			stageLabel.Size = new System.Drawing.Size(158, 20);
-			stageLabel.TabIndex = 32;
-			stageLabel.Text = "Stage:";
-			// 
 			// tbResult
 			// 
 			this.tbResult.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
@@ -256,6 +284,8 @@
 			this.Name = "Main";
 			this.Text = "MOSA Type Explorer";
 			this.Load += new System.EventHandler(this.Main_Load);
+			this.statusStrip1.ResumeLayout(false);
+			this.statusStrip1.PerformLayout();
 			this.menuStrip1.ResumeLayout(false);
 			this.menuStrip1.PerformLayout();
 			this.splitContainer1.Panel1.ResumeLayout(false);
@@ -285,5 +315,8 @@
 		private System.Windows.Forms.ComboBox cbLabels;
 		private System.Windows.Forms.ComboBox cbStages;
 		private System.Windows.Forms.RichTextBox tbResult;
+		private System.Windows.Forms.ToolStripMenuItem compileToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem nowToolStripMenuItem;
+		private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel1;
 	}
 }

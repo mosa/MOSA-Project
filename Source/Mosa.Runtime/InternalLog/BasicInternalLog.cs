@@ -17,9 +17,21 @@ namespace Mosa.Runtime.InternalLog
 {
 	public class BasicInternalLog : IInternalLog
 	{
-		protected IInstructionLogListener instructionLogListener = new DebugInstructionLogListener();
+		protected IInstructionLogListener instructionLogListener;
 		protected IInstructionLogFilter instructionLogFilter = new ConfigurableInstructionLogFilter();
-		protected ICompilerStatusListener compilerStatusListener = new DebugCompilerStatusListener();
+		protected ICompilerStatusListener compilerStatusListener;
+
+		public BasicInternalLog()
+		{
+			instructionLogListener = new DebugInstructionLogListener();
+			compilerStatusListener = new DebugCompilerStatusListener();
+		}
+
+		public BasicInternalLog(IInstructionLogListener instructionLogListener, ICompilerStatusListener compilerStatusListener)
+		{
+			this.instructionLogListener = instructionLogListener;
+			this.compilerStatusListener = compilerStatusListener;
+		}
 
 		IInstructionLogFilter IInternalLog.InstructionLogFilter
 		{

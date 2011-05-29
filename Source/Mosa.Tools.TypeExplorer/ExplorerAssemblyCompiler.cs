@@ -23,9 +23,9 @@ using x86 = Mosa.Platform.x86;
 namespace Mosa.Tools.TypeExplorer
 {
 
-	class AssemblyCompilerExplorer : AssemblyCompiler
+	class ExplorerAssemblyCompiler : AssemblyCompiler
 	{
-		private AssemblyCompilerExplorer(IArchitecture architecture, ITypeSystem typeSystem, ITypeLayout typeLayout, IInternalLog internalLog) :
+		private ExplorerAssemblyCompiler(IArchitecture architecture, ITypeSystem typeSystem, ITypeLayout typeLayout, IInternalLog internalLog) :
 			base(architecture, typeSystem, typeLayout, internalLog)
 		{
 			var linker = new LinkerStub();
@@ -43,19 +43,16 @@ namespace Mosa.Tools.TypeExplorer
 
 		public override IMethodCompiler CreateMethodCompiler(ICompilationSchedulerStage schedulerStage, RuntimeType type, RuntimeMethod method)
 		{
-			IMethodCompiler mc = new MethodCompilerExplorer(this, Architecture, schedulerStage, type, method, internalLog);
+			IMethodCompiler mc = new ExplorerMethodCompiler(this, Architecture, schedulerStage, type, method, internalLog);
 			Architecture.ExtendMethodCompilerPipeline(mc.Pipeline);
 			return mc;
 		}
 
-		public static void Compile(ITypeSystem typeSystem)
+		public static void Compile(ITypeSystem typeSystem, ITypeLayout typeLayout, IInternalLog internalLog)
 		{
 			IArchitecture architecture = x86.Architecture.CreateArchitecture(x86.ArchitectureFeatureFlags.AutoDetect);
 
-			// FIXME: get from architecture
-			TypeLayout typeLayout = new TypeLayout(typeSystem, 4, 4);
-
-			AssemblyCompilerExplorer compiler = new AssemblyCompilerExplorer(architecture, typeSystem, typeLayout, null);
+			ExplorerAssemblyCompiler compiler = new ExplorerAssemblyCompiler(architecture, typeSystem, typeLayout, internalLog);
 
 			compiler.Compile();
 		}

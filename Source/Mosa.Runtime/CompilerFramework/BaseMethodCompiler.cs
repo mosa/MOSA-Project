@@ -253,18 +253,24 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
-		/// Compiles the _method referenced by this method compiler.
+		/// Compiles the method referenced by this method compiler.
 		/// </summary>
 		public void Compile()
 		{
 			BeginCompile();
 
-			Pipeline.Execute<IMethodCompilerStage>(delegate(IMethodCompilerStage stage)
-				{
-					stage.Setup(this);
-					stage.Run();
-				}
-			);
+			//Pipeline.Execute<IMethodCompilerStage>(delegate(IMethodCompilerStage stage)
+			//    {
+			//        stage.Setup(this);
+			//        stage.Run();
+			//    }
+			//);
+
+			foreach (IMethodCompilerStage stage in Pipeline)
+			{
+				stage.Setup(this);
+				stage.Run();
+			}
 
 			EndCompile();
 		}
@@ -414,34 +420,6 @@ namespace Mosa.Runtime.CompilerFramework
 			return parameter;
 		}
 
-		// NOT USED
-		//private void ScheduleDependencyForCompilation(SigType signatureType)
-		//{
-		//    RuntimeType runtimeType = null;
-
-		//    TypeSigType typeSigType = signatureType as TypeSigType;
-		//    if (typeSigType != null)
-		//    {
-		//        runtimeType = moduleTypeSystem.GetType(typeSigType.Token);
-		//    }
-		//    else
-		//    {
-		//        GenericInstSigType genericSignatureType = signatureType as GenericInstSigType;
-		//        if (genericSignatureType != null)
-		//        {
-		//            RuntimeType genericType = moduleTypeSystem.GetType(genericSignatureType.BaseType.Token);
-		//            Console.WriteLine(@"Loaded generic type {0}", genericType.FullName);
-
-		//            runtimeType = new CilGenericType(moduleTypeSystem, genericType, genericSignatureType);
-		//        }
-		//    }
-
-		//    if (runtimeType != null)
-		//    {
-		//        compilationScheduler.ScheduleTypeForCompilation(runtimeType);
-		//    }
-		//}
-
 		/// <summary>
 		/// Sets the signature of local variables in the method.
 		/// </summary>
@@ -474,40 +452,21 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
-		/// Gets the previous stage.
+		/// Gets the stage.
 		/// </summary>
-		/// <param name="stage">The stage.</param>
-		/// <returns>
-		/// The previous compilation stage supporting the requested type or null.
-		/// </returns>
-		public IPipelineStage GetPreviousStage(IPipelineStage stage)
+		/// <param name="stageType">Type of the stage.</param>
+		/// <returns></returns>
+		public IPipelineStage GetStage(Type stageType)
 		{
-			return GetPreviousStage(typeof(IPipelineStage));
-		}
-
-		/// <summary>
-		/// Finds a stage, which ran before the current one and supports the specified type.
-		/// </summary>
-		/// <param name="stageType">The (interface) type to look for.</param>
-		/// <returns>The previous compilation stage supporting the requested type.</returns>
-		/// <remarks>
-		/// This method is used by stages to access the results of a previous compilation stage.
-		/// </remarks>
-		public IPipelineStage GetPreviousStage(Type stageType)
-		{
-			IPipelineStage result = null;
-
-			for (int stage = pipeline.CurrentStage - 1; -1 != stage; stage--)
+			foreach(IPipelineStage stage in pipeline)
 			{
-				IPipelineStage temp = pipeline[stage];
-				if (stageType.IsInstanceOfType(temp))
+				if (stageType.IsInstanceOfType(stage))
 				{
-					result = temp;
-					break;
+					return stage;
 				}
 			}
 
-			return result;
+			return null;
 		}
 
 		/// <summary>

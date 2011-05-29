@@ -120,13 +120,13 @@ namespace Mosa.Tools.CompilerHelper
 
 		public static void FilterMethod(string s)
 		{
-			InstructionLogger.classfilter = s;
+			//InstructionLogger.classfilter = s;
 		}
 
 		public static void SetLogger(ILoggerWriter ilw)
 		{
-			InstructionLogger.loggerWriter = ilw;
-			InstructionLogger.output = true;
+			//InstructionLogger.loggerWriter = ilw;
+			//InstructionLogger.output = true;
 		}
 
 		public override IMethodCompiler CreateMethodCompiler(ICompilationSchedulerStage schedulerStage, RuntimeType type, RuntimeMethod method)
