@@ -111,7 +111,7 @@ namespace Mosa.Platform.x86
 						ctxEpilogue.AppendInstruction(CPUx86.Instruction.LiteralInstruction);
 						ctxEpilogue.LiteralData = new IR.LiteralData(ctx.Label, co.Type, co.Value);
 
-						op.Replace(((ctxEpilogue.Instruction) as CPUx86.LiteralInstruction).CreateOperand(ctxEpilogue), InstructionSet);
+						op.Replace(((ctxEpilogue.Instruction) as CPUx86.LiteralInstruction).CreateOperand(ctxEpilogue), instructionSet);
 
 						_constantRemoved = true;
 					}

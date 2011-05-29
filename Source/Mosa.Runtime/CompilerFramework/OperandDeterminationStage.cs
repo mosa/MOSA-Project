@@ -69,7 +69,7 @@ namespace Mosa.Runtime.CompilerFramework
 				foreach (Operand operand in block.InitialStack)
 					_operandStack.Push(operand);
 
-			for (Context ctx = new Context(InstructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
+			for (Context ctx = new Context(instructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
 			{
 				if (!(ctx.Instruction is IBranchInstruction) && !(ctx.Instruction is ICILInstruction))
 					continue;

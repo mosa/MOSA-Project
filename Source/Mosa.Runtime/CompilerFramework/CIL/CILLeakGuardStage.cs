@@ -50,7 +50,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		{
 			for (int index = 0; index < this.basicBlocks.Count; index++)
 			{
-				for (Context ctx = new Context(InstructionSet, basicBlocks[index]); !ctx.EndOfInstruction; ctx.GotoNext())
+				for (Context ctx = new Context(instructionSet, basicBlocks[index]); !ctx.EndOfInstruction; ctx.GotoNext())
 				{
 					IInstruction instruction = ctx.Instruction;
 					if (instruction is ICILInstruction)

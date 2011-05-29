@@ -51,7 +51,9 @@ namespace Mosa.Test.Runtime.CompilerFramework
 			// FIXME: get from architecture
 			TypeLayout typeLayout = new TypeLayout(typeSystem, 4, 4);
 
-			TestCaseAssemblyCompiler compiler = new TestCaseAssemblyCompiler(architecture, typeSystem, typeLayout, null);
+			IInternalLog internalLog = new BasicInternalLog();
+
+			TestCaseAssemblyCompiler compiler = new TestCaseAssemblyCompiler(architecture, typeSystem, typeLayout, internalLog);
 			compiler.Compile();
 
 			return compiler.linker;

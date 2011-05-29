@@ -191,7 +191,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.treeView.Location = new System.Drawing.Point(3, 0);
 			this.treeView.Name = "treeView";
-			this.treeView.Size = new System.Drawing.Size(295, 456);
+			this.treeView.Size = new System.Drawing.Size(264, 456);
 			this.treeView.TabIndex = 3;
 			this.treeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView_AfterSelect);
 			this.treeView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.treeView_NodeMouseClick);
@@ -220,7 +220,7 @@
 			this.splitContainer1.Panel2.RightToLeft = System.Windows.Forms.RightToLeft.No;
 			this.splitContainer1.RightToLeft = System.Windows.Forms.RightToLeft.No;
 			this.splitContainer1.Size = new System.Drawing.Size(694, 459);
-			this.splitContainer1.SplitterDistance = 300;
+			this.splitContainer1.SplitterDistance = 269;
 			this.splitContainer1.SplitterWidth = 5;
 			this.splitContainer1.TabIndex = 26;
 			// 
@@ -270,7 +270,7 @@
 			this.tbResult.Location = new System.Drawing.Point(0, 60);
 			this.tbResult.Margin = new System.Windows.Forms.Padding(0);
 			this.tbResult.Name = "tbResult";
-			this.tbResult.Size = new System.Drawing.Size(389, 396);
+			this.tbResult.Size = new System.Drawing.Size(420, 396);
 			this.tbResult.TabIndex = 30;
 			this.tbResult.Text = "";
 			this.tbResult.WordWrap = false;
