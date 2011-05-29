@@ -247,25 +247,7 @@ namespace Mosa.Tools.TypeExplorer
 
 		private void treeView_Click(object sender, EventArgs e)
 		{
-			if (treeView.SelectedNode != null)
-			{
-				var node = treeView.SelectedNode as ViewNode<RuntimeMethod>;
-
-				if (node != null)
-				{
-					MethodStages methodStage;
-
-					if (!methodStages.TryGetValue(node.Type, out methodStage))
-						return;
-
-					cbStages.Items.Clear();
-
-					foreach (string stage in methodStage.OrderedStageNames)
-						cbStages.Items.Add(stage);
-
-					cbStages.SelectedIndex = 0;
-				}
-			}
+			
 		}
 
 		void ICompilerStatusListener.NotifyCompilerStatus(CompilerStage compilerStage, string info)
@@ -320,6 +302,29 @@ namespace Mosa.Tools.TypeExplorer
 
 					if (methodStages.TryGetValue(node.Type, out methodStage))
 						tbResult.Text = methodStage.Logs[cbStages.SelectedItem.ToString()];
+				}
+			}
+		}
+
+		private void treeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+		{
+			if (treeView.SelectedNode != null)
+			{
+				var node = treeView.SelectedNode as ViewNode<RuntimeMethod>;
+
+				if (node != null)
+				{
+					MethodStages methodStage;
+
+					if (!methodStages.TryGetValue(node.Type, out methodStage))
+						return;
+
+					cbStages.Items.Clear();
+
+					foreach (string stage in methodStage.OrderedStageNames)
+						cbStages.Items.Add(stage);
+
+					cbStages.SelectedIndex = 0;
 				}
 			}
 		}
