@@ -19,15 +19,15 @@ namespace Mosa.Runtime.InternalLog
 	{
 		protected IInstructionLogListener instructionLogListener;
 		protected IInstructionLogFilter instructionLogFilter = new ConfigurableInstructionLogFilter();
-		protected ICompilerStatusListener compilerStatusListener;
+		protected ICompilerEventListener compilerStatusListener;
 
 		public BasicInternalLog()
 		{
 			instructionLogListener = new DebugInstructionLogListener();
-			compilerStatusListener = new BasicCompilerStatusListener();
+			compilerStatusListener = new BasicCompilerEventListener();
 		}
 
-		public BasicInternalLog(IInstructionLogListener instructionLogListener, ICompilerStatusListener compilerStatusListener)
+		public BasicInternalLog(IInstructionLogListener instructionLogListener, ICompilerEventListener compilerStatusListener)
 		{
 			this.instructionLogListener = instructionLogListener;
 			this.compilerStatusListener = compilerStatusListener;
@@ -45,7 +45,7 @@ namespace Mosa.Runtime.InternalLog
 			set { instructionLogListener = value; }
 		}
 
-		ICompilerStatusListener IInternalLog.CompilerStatusListener
+		ICompilerEventListener IInternalLog.CompilerEventListener
 		{
 			get { return compilerStatusListener; }
 			set { compilerStatusListener = value; }

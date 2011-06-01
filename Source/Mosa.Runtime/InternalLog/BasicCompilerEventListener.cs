@@ -17,12 +17,12 @@ using Mosa.Runtime.CompilerFramework;
 
 namespace Mosa.Runtime.InternalLog
 {
-	public class BasicCompilerStatusListener : ICompilerStatusListener
+	public class BasicCompilerEventListener : ICompilerEventListener
 	{
 		public bool DebugOutput = false;
 		public bool ConsoleOutput = true;
 
-		void ICompilerStatusListener.NotifyCompilerStatus(CompilerStage compilerStage, string info)
+		void ICompilerEventListener.NotifyCompilerEvent(CompilerEvent compilerStage, string info)
 		{
 			if (DebugOutput)
 				Debug.WriteLine(compilerStage.ToString() + ": " + info);
@@ -32,7 +32,7 @@ namespace Mosa.Runtime.InternalLog
 
 			switch (compilerStage)
 			{
-				case CompilerStage.CompilingMethod:
+				case CompilerEvent.CompilingMethod:
 					{
 						Console.ForegroundColor = ConsoleColor.Yellow;
 						Console.Write(@"[Compiling]  ");
@@ -41,7 +41,7 @@ namespace Mosa.Runtime.InternalLog
 						break;
 					}
 
-				case CompilerStage.CompilingType:
+				case CompilerEvent.CompilingType:
 					{
 						Console.ForegroundColor = ConsoleColor.Yellow;
 						Console.Write(@"[Compiling]  ");
@@ -50,7 +50,7 @@ namespace Mosa.Runtime.InternalLog
 						break;
 					}
 
-				case CompilerStage.SchedulingType:
+				case CompilerEvent.SchedulingType:
 					{
 						Console.ForegroundColor = ConsoleColor.Blue;
 						Console.Write(@"[Scheduling]  ");
@@ -59,7 +59,7 @@ namespace Mosa.Runtime.InternalLog
 						break;
 					}
 
-				case CompilerStage.SchedulingMethod:
+				case CompilerEvent.SchedulingMethod:
 					{
 						Console.ForegroundColor = ConsoleColor.Blue;
 						Console.Write(@"[Scheduling]  ");

@@ -58,11 +58,11 @@ namespace Mosa.Runtime.CompilerFramework
 
 		private void CompileType(RuntimeType type)
 		{
-			compiler.InternalLog.CompilerStatusListener.NotifyCompilerStatus(CompilerStage.CompilingMethod, type.FullName);
+			compiler.InternalLog.CompilerEventListener.NotifyCompilerEvent(CompilerEvent.CompilingMethod, type.FullName);
 
 			if (type.IsDelegate)
 			{
-				compiler.InternalLog.CompilerStatusListener.NotifyCompilerStatus(CompilerStage.DebugInfo, "Skipping delegate type " + type.FullName);
+				compiler.InternalLog.CompilerEventListener.NotifyCompilerEvent(CompilerEvent.DebugInfo, "Skipping delegate type " + type.FullName);
 				//Console.WriteLine(@"Skipping delegate type " + type);
 				return;
 			}
@@ -77,8 +77,8 @@ namespace Mosa.Runtime.CompilerFramework
 			{
 				if (method.IsGeneric)
 				{
-					compiler.InternalLog.CompilerStatusListener.NotifyCompilerStatus(CompilerStage.DebugInfo, "Skipping generic method: " + type + "." + method.Name);
-					compiler.InternalLog.CompilerStatusListener.NotifyCompilerStatus(CompilerStage.DebugInfo, "Generic method will not be available in compiled image.");
+					compiler.InternalLog.CompilerEventListener.NotifyCompilerEvent(CompilerEvent.DebugInfo, "Skipping generic method: " + type + "." + method.Name);
+					compiler.InternalLog.CompilerEventListener.NotifyCompilerEvent(CompilerEvent.DebugInfo, "Generic method will not be available in compiled image.");
 					//Debug.WriteLine("Skipping generic method: " + type + "." + method.Name);
 					//Debug.WriteLine("Generic method will not be available in compiled image.");
 					continue;
@@ -86,8 +86,8 @@ namespace Mosa.Runtime.CompilerFramework
 
 				if (method.IsNative)
 				{
-					compiler.InternalLog.CompilerStatusListener.NotifyCompilerStatus(CompilerStage.DebugInfo, "Skipping native method: " + type + "." + method.Name);
-					compiler.InternalLog.CompilerStatusListener.NotifyCompilerStatus(CompilerStage.DebugInfo, "Method will not be available in compiled image.");
+					compiler.InternalLog.CompilerEventListener.NotifyCompilerEvent(CompilerEvent.DebugInfo, "Skipping native method: " + type + "." + method.Name);
+					compiler.InternalLog.CompilerEventListener.NotifyCompilerEvent(CompilerEvent.DebugInfo, "Method will not be available in compiled image.");
 					//Debug.WriteLine("Skipping native method: " + type + "." + method.Name);
 					//Debug.WriteLine("Method will not be available in compiled image.");
 					continue;
@@ -110,7 +110,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 		private void CompileMethod(RuntimeMethod method)
 		{
-			compiler.InternalLog.CompilerStatusListener.NotifyCompilerStatus(CompilerStage.CompilingMethod, method.ToString());
+			compiler.InternalLog.CompilerEventListener.NotifyCompilerEvent(CompilerEvent.CompilingMethod, method.ToString());
 
 			//Console.ForegroundColor = ConsoleColor.Yellow;
 			//Console.Write(@"[Compiling]  ");
@@ -153,7 +153,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 			if (!type.IsGeneric)
 			{
-				compiler.InternalLog.CompilerStatusListener.NotifyCompilerStatus(CompilerStage.SchedulingType, type.FullName);
+				compiler.InternalLog.CompilerEventListener.NotifyCompilerEvent(CompilerEvent.SchedulingType, type.FullName);
 
 				//Console.ForegroundColor = ConsoleColor.Blue;
 				//Console.Write(@"[Scheduling] ");
@@ -173,7 +173,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 			if (!method.IsGeneric)
 			{
-				compiler.InternalLog.CompilerStatusListener.NotifyCompilerStatus(CompilerStage.SchedulingMethod, method.ToString());
+				compiler.InternalLog.CompilerEventListener.NotifyCompilerEvent(CompilerEvent.SchedulingMethod, method.ToString());
 
 				//Console.ForegroundColor = ConsoleColor.Blue;
 				//Console.Write(@"[Scheduling] ");

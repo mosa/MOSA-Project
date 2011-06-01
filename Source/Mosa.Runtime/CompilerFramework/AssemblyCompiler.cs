@@ -151,9 +151,9 @@ namespace Mosa.Runtime.CompilerFramework
 			//Pipeline.Execute<IAssemblyCompilerStage>(stage => stage.Run());
 			foreach (IAssemblyCompilerStage stage in Pipeline)
 			{
-				internalLog.CompilerStatusListener.NotifyCompilerStatus(CompilerStage.AssemblyStageStart, stage.Name);
+				internalLog.CompilerEventListener.NotifyCompilerEvent(CompilerEvent.AssemblyStageStart, stage.Name);
 				stage.Run();
-				internalLog.CompilerStatusListener.NotifyCompilerStatus(CompilerStage.AssemblyStageEnd, stage.Name);
+				internalLog.CompilerEventListener.NotifyCompilerEvent(CompilerEvent.AssemblyStageEnd, stage.Name);
 			}
 
 			EndCompile();

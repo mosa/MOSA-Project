@@ -18,7 +18,7 @@ using Mosa.Runtime.CompilerFramework;
 
 namespace Mosa.Tools.TypeExplorer
 {
-	public partial class Main : Form, ICompilerStatusListener, IInstructionLogListener
+	public partial class Main : Form, ICompilerEventListener, IInstructionLogListener
 	{
 		IInternalLog internalLog = new BasicInternalLog();
 		ITypeSystem typeSystem = new TypeSystem();
@@ -37,7 +37,7 @@ namespace Mosa.Tools.TypeExplorer
 		public Main()
 		{
 			InitializeComponent();
-			internalLog.CompilerStatusListener = this;
+			internalLog.CompilerEventListener = this;
 			internalLog.InstructionLogListener = this;
 			internalLog.InstructionLogFilter = filter;
 		}
@@ -251,7 +251,7 @@ namespace Mosa.Tools.TypeExplorer
 
 		}
 
-		void ICompilerStatusListener.NotifyCompilerStatus(CompilerStage compilerStage, string info)
+		void ICompilerEventListener.NotifyCompilerEvent(CompilerEvent compilerStage, string info)
 		{
 			toolStripStatusLabel1.Text = compilerStage.ToText() + ": " + info;
 			toolStripStatusLabel1.GetCurrentParent().Refresh();

@@ -20,6 +20,6 @@ namespace Mosa.Runtime.InternalLog
 	{
 		IInstructionLogListener InstructionLogListener { get; set; }
 		IInstructionLogFilter InstructionLogFilter { get; set; }
-		ICompilerStatusListener CompilerStatusListener { get; set; }
+		ICompilerEventListener CompilerEventListener { get; set; }
 	}
 }

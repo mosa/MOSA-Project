@@ -86,11 +86,11 @@
     <Compile Include="CompilerFramework\BaseAssemblyCompilerStage.cs" />
     <Compile Include="CompilerFramework\CIL\ExceptionClauseHeader.cs" />
     <Compile Include="InternalLog\ConfigurableInstructionLogFilter.cs" />
-    <Compile Include="InternalLog\CompilerStage.cs" />
-    <Compile Include="InternalLog\BasicCompilerStatusListener.cs" />
+    <Compile Include="InternalLog\CompilerEvent.cs" />
+    <Compile Include="InternalLog\BasicCompilerEventListener.cs" />
     <Compile Include="InternalLog\DebugInstructionLogListener.cs" />
-    <Compile Include="InternalLog\ICompilerStatusListener.cs" />
-    <Compile Include="InternalLog\DebugCompilerStatusListener.cs" />
+    <Compile Include="InternalLog\ICompilerEventListener.cs" />
+    <Compile Include="InternalLog\DebugCompilerEventListener.cs" />
     <Compile Include="InternalLog\IInternalLog.cs" />
     <Compile Include="InternalLog\BasicInternalLog.cs" />
     <Compile Include="InternalLog\IInstructionLogListener.cs" />
@@ -322,9 +322,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CompilerFramework\FlowControl.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="CompilerFramework\FunctionCallInliningProcessor.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CompilerFramework\IArchitecture.cs">

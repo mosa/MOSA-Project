@@ -10,20 +10,15 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
-using System.Diagnostics;
 
-using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.CompilerFramework;
+using Mosa.Runtime.TypeSystem;
 
 namespace Mosa.Runtime.InternalLog
 {
-	public class DebugCompilerStatusListener : ICompilerStatusListener
+
+	public interface ICompilerEventListener
 	{
-
-		void ICompilerStatusListener.NotifyCompilerStatus(CompilerStage compilerStage, string info)
-		{
-			Debug.WriteLine(compilerStage.ToString() + ": " + info);
-		}
-
+		void NotifyCompilerEvent(CompilerEvent compilerStage, string info);
 	}
 }
