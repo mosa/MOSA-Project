@@ -58,36 +58,44 @@ namespace Mosa.Runtime.CompilerFramework
 
 		private void CompileType(RuntimeType type)
 		{
+			compiler.InternalLog.CompilerStatusListener.NotifyCompilerStatus(CompilerStage.CompilingMethod, type.FullName);
+
 			if (type.IsDelegate)
 			{
-				Console.WriteLine(@"Skipping delegate type " + type);
+				compiler.InternalLog.CompilerStatusListener.NotifyCompilerStatus(CompilerStage.DebugInfo, "Skipping delegate type " + type.FullName);
+				//Console.WriteLine(@"Skipping delegate type " + type);
 				return;
 			}
 
-			Console.ForegroundColor = ConsoleColor.Yellow;
-			Console.Write(@"[Compiling]  ");
-			Console.ForegroundColor = ConsoleColor.White;
-			Console.WriteLine(type.FullName);
-			Debug.WriteLine(@"Compiling " + type.FullName);
+			//Console.ForegroundColor = ConsoleColor.Yellow;
+			//Console.Write(@"[Compiling]  ");
+			//Console.ForegroundColor = ConsoleColor.White;
+			//Console.WriteLine(type.FullName);
+			//Debug.WriteLine(@"Compiling " + type.FullName);
+
 			foreach (RuntimeMethod method in type.Methods)
 			{
 				if (method.IsGeneric)
 				{
-					Debug.WriteLine("Skipping generic method: " + type + "." + method.Name);
-					Debug.WriteLine("Generic method will not be available in compiled image.");
+					compiler.InternalLog.CompilerStatusListener.NotifyCompilerStatus(CompilerStage.DebugInfo, "Skipping generic method: " + type + "." + method.Name);
+					compiler.InternalLog.CompilerStatusListener.NotifyCompilerStatus(CompilerStage.DebugInfo, "Generic method will not be available in compiled image.");
+					//Debug.WriteLine("Skipping generic method: " + type + "." + method.Name);
+					//Debug.WriteLine("Generic method will not be available in compiled image.");
 					continue;
 				}
 
 				if (method.IsNative)
 				{
-					Debug.WriteLine("Skipping native method: " + type + "." + method.Name);
-					Debug.WriteLine("Method will not be available in compiled image.");
+					compiler.InternalLog.CompilerStatusListener.NotifyCompilerStatus(CompilerStage.DebugInfo, "Skipping native method: " + type + "." + method.Name);
+					compiler.InternalLog.CompilerStatusListener.NotifyCompilerStatus(CompilerStage.DebugInfo, "Method will not be available in compiled image.");
+					//Debug.WriteLine("Skipping native method: " + type + "." + method.Name);
+					//Debug.WriteLine("Method will not be available in compiled image.");
 					continue;
 				}
 
 				ScheduleMethodForCompilation(method);
 			}
-			
+
 			CompilePendingMethods();
 		}
 
@@ -104,11 +112,11 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			compiler.InternalLog.CompilerStatusListener.NotifyCompilerStatus(CompilerStage.CompilingMethod, method.ToString());
 
-			Console.ForegroundColor = ConsoleColor.Yellow;
-			Console.Write(@"[Compiling]  ");
-			Console.ForegroundColor = ConsoleColor.White;
-			Console.WriteLine(method.ToString());
-			Debug.WriteLine(@"Compiling " + method.ToString());
+			//Console.ForegroundColor = ConsoleColor.Yellow;
+			//Console.Write(@"[Compiling]  ");
+			//Console.ForegroundColor = ConsoleColor.White;
+			//Console.WriteLine(method.ToString());
+			//Debug.WriteLine(@"Compiling " + method.ToString());
 
 			using (IMethodCompiler mc = compiler.CreateMethodCompiler(this, method.DeclaringType, method))
 			{
@@ -145,11 +153,13 @@ namespace Mosa.Runtime.CompilerFramework
 
 			if (!type.IsGeneric)
 			{
-				Console.ForegroundColor = ConsoleColor.Blue;
-				Console.Write(@"[Scheduling] ");
-				Console.ForegroundColor = ConsoleColor.White;
-				Console.WriteLine(type.FullName);
-				Debug.WriteLine(String.Format(@"Scheduling {0}", type.FullName));
+				compiler.InternalLog.CompilerStatusListener.NotifyCompilerStatus(CompilerStage.SchedulingType, type.FullName);
+
+				//Console.ForegroundColor = ConsoleColor.Blue;
+				//Console.Write(@"[Scheduling] ");
+				//Console.ForegroundColor = ConsoleColor.White;
+				//Console.WriteLine(type.FullName);
+				//Debug.WriteLine(String.Format(@"Scheduling {0}", type.FullName));
 
 				typeQueue.Enqueue(type);
 				compiled.Add(type, type);
@@ -163,11 +173,13 @@ namespace Mosa.Runtime.CompilerFramework
 
 			if (!method.IsGeneric)
 			{
-				Console.ForegroundColor = ConsoleColor.Blue;
-				Console.Write(@"[Scheduling] ");
-				Console.ForegroundColor = ConsoleColor.White;
-				Console.WriteLine("{1}.{0}", method.Name, method.DeclaringType.FullName);
-				Debug.WriteLine(String.Format(@"Scheduling {1}.{0}", method.Name, method.DeclaringType.FullName));
+				compiler.InternalLog.CompilerStatusListener.NotifyCompilerStatus(CompilerStage.SchedulingMethod, method.ToString());
+
+				//Console.ForegroundColor = ConsoleColor.Blue;
+				//Console.Write(@"[Scheduling] ");
+				//Console.ForegroundColor = ConsoleColor.White;
+				//Console.WriteLine("{1}.{0}", method.Name, method.DeclaringType.FullName);
+				//Debug.WriteLine(String.Format(@"Scheduling {1}.{0}", method.Name, method.DeclaringType.FullName));
 
 				methodQueue.Enqueue(method);
 			}

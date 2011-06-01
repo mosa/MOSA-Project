@@ -87,6 +87,7 @@
     <Compile Include="CompilerFramework\CIL\ExceptionClauseHeader.cs" />
     <Compile Include="InternalLog\ConfigurableInstructionLogFilter.cs" />
     <Compile Include="InternalLog\CompilerStage.cs" />
+    <Compile Include="InternalLog\BasicCompilerStatusListener.cs" />
     <Compile Include="InternalLog\DebugInstructionLogListener.cs" />
     <Compile Include="InternalLog\ICompilerStatusListener.cs" />
     <Compile Include="InternalLog\DebugCompilerStatusListener.cs" />

@@ -24,6 +24,7 @@ namespace Mosa.Tools.TypeExplorer
 		ITypeSystem typeSystem = new TypeSystem();
 		ConfigurableInstructionLogFilter filter = new ConfigurableInstructionLogFilter();
 		ITypeLayout typeLayout;
+		DateTime CompileStartTime;
 
 		private Dictionary<RuntimeMethod, MethodStages> methodStages = new Dictionary<RuntimeMethod, MethodStages>();
 
@@ -247,16 +248,18 @@ namespace Mosa.Tools.TypeExplorer
 
 		private void treeView_Click(object sender, EventArgs e)
 		{
-			
+
 		}
 
 		void ICompilerStatusListener.NotifyCompilerStatus(CompilerStage compilerStage, string info)
 		{
 			toolStripStatusLabel1.Text = compilerStage.ToText() + ": " + info;
 			toolStripStatusLabel1.GetCurrentParent().Refresh();
+
+			tbResult.AppendText(String.Format("{0:0.00}", (DateTime.Now - CompileStartTime).TotalSeconds) + " ms: " + compilerStage.ToText() + ": " + info + "\n");
 		}
 
-		void IInstructionLogListener.NotifyNewInstructionLog(RuntimeMethod method, IPipelineStage stage, string log)
+		void IInstructionLogListener.NotifyNewInstructionLog(RuntimeMethod method, string stage, string log)
 		{
 			MethodStages methodStage;
 
@@ -266,8 +269,8 @@ namespace Mosa.Tools.TypeExplorer
 				methodStages.Add(method, methodStage);
 			}
 
-			methodStage.OrderedStageNames.Add(stage.Name);
-			methodStage.Logs.Add(stage.Name, log);
+			methodStage.OrderedStageNames.Add(stage);
+			methodStage.Logs.Add(stage, log);
 		}
 
 		void Compile()
@@ -282,6 +285,7 @@ namespace Mosa.Tools.TypeExplorer
 
 		private void nowToolStripMenuItem_Click(object sender, EventArgs e)
 		{
+			CompileStartTime = DateTime.Now;
 			Compile();
 		}
 
@@ -326,7 +330,7 @@ namespace Mosa.Tools.TypeExplorer
 
 		private void treeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
 		{
-			
+
 		}
 
 

@@ -184,7 +184,7 @@ namespace Mosa.Runtime.TypeSystem
 			if (FullName != null)
 				return FullName;
 
-            var result = new StringBuilder();
+			var result = new StringBuilder();
 
 			result.Append(DeclaringType.ToString());
 			result.Append('.');
@@ -193,9 +193,9 @@ namespace Mosa.Runtime.TypeSystem
 
 			if (this.Parameters.Count != 0)
 			{
-                var sig = this.Signature;
+				var sig = this.Signature;
 				int i = 0;
-                foreach (var p in this.Parameters)
+				foreach (var p in this.Parameters)
 				{
 					result.AppendFormat("{0} {1},", sig.Parameters[i++].Type, p.Name);
 				}

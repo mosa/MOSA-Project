@@ -19,6 +19,6 @@ namespace Mosa.Runtime.InternalLog
 
 	public interface IInstructionLogListener
 	{
-		void NotifyNewInstructionLog(RuntimeMethod method, IPipelineStage stage, string log);
+		void NotifyNewInstructionLog(RuntimeMethod method, string stage, string log);
 	}
 }

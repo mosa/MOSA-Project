@@ -24,7 +24,7 @@ namespace Mosa.Runtime.InternalLog
 		public BasicInternalLog()
 		{
 			instructionLogListener = new DebugInstructionLogListener();
-			compilerStatusListener = new DebugCompilerStatusListener();
+			compilerStatusListener = new BasicCompilerStatusListener();
 		}
 
 		public BasicInternalLog(IInstructionLogListener instructionLogListener, ICompilerStatusListener compilerStatusListener)

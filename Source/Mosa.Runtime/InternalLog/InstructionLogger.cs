@@ -76,7 +76,7 @@ namespace Mosa.Runtime.InternalLog
 				LogInstructions(text, new Context(instructionSet, 0));
 			}
 
-			internalLog.InstructionLogListener.NotifyNewInstructionLog(method, stage, text.ToString());
+			internalLog.InstructionLogListener.NotifyNewInstructionLog(method, stage.Name, text.ToString());
 		}
 
 		private static string ListBlocks(IList<BasicBlock> blocks)

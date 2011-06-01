@@ -52,18 +52,18 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 			if (ctx.RuntimeField.ContainsGenericParameter)
 			{
-                foreach (var field in decoder.Method.DeclaringType.Fields)
+				foreach (var field in decoder.Method.DeclaringType.Fields)
 					if (field.Name == ctx.RuntimeField.Name)
 					{
 						ctx.RuntimeField = field;
 						break;
 					}
 
-                Console.WriteLine("Token: {0}", token);
+				//Console.WriteLine("Token: {0}", token);
 				Debug.Assert(!ctx.RuntimeField.ContainsGenericParameter);
 			}
 
-            var sigType = ctx.RuntimeField.SignatureType;
+			var sigType = ctx.RuntimeField.SignatureType;
 			ctx.Result = LoadInstruction.CreateResultOperand(decoder, Operand.StackTypeFromSigType(sigType), sigType);
 		}
 

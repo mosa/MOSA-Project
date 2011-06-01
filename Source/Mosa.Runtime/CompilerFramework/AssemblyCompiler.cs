@@ -44,7 +44,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Holds the current type layout during complication
 		/// </summary>
 		protected ITypeLayout typeLayout;
-		
+
 		/// <summary>
 		/// Holds the current internal log
 		/// </summary>
@@ -151,7 +151,9 @@ namespace Mosa.Runtime.CompilerFramework
 			//Pipeline.Execute<IAssemblyCompilerStage>(stage => stage.Run());
 			foreach (IAssemblyCompilerStage stage in Pipeline)
 			{
+				internalLog.CompilerStatusListener.NotifyCompilerStatus(CompilerStage.AssemblyStageStart, stage.Name);
 				stage.Run();
+				internalLog.CompilerStatusListener.NotifyCompilerStatus(CompilerStage.AssemblyStageEnd, stage.Name);
 			}
 
 			EndCompile();

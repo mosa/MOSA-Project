@@ -182,7 +182,7 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			int methodTableSize = ((headerlinks == null ? 0 : headerlinks.Count) + (methodTable == null ? 0 : methodTable.Count)) * typeLayout.NativePointerSize;
 
-			Debug.WriteLine("Method Table: " + methodTableName);
+			// Debug.WriteLine("Method Table: " + methodTableName);
 
 			using (Stream stream = linker.Allocate(methodTableName, SectionKind.Text, methodTableSize, typeLayout.NativePointerAlignment))
 			{
@@ -197,12 +197,12 @@ namespace Mosa.Runtime.CompilerFramework
 				{
 					if (!string.IsNullOrEmpty(link))
 					{
-						Debug.WriteLine("  # " + (offset / typeLayout.NativePointerSize).ToString() + " " + link);
+						// Debug.WriteLine("  # " + (offset / typeLayout.NativePointerSize).ToString() + " " + link);
 						linker.Link(LinkType.AbsoluteAddress | LinkType.I4, methodTableName, offset, 0, link, IntPtr.Zero);
 					}
 					else
 					{
-						Debug.WriteLine("  # " + (offset / typeLayout.NativePointerSize).ToString() + " [null]");
+						// Debug.WriteLine("  # " + (offset / typeLayout.NativePointerSize).ToString() + " [null]");
 					}
 					offset += typeLayout.NativePointerSize;
 				}
@@ -214,12 +214,12 @@ namespace Mosa.Runtime.CompilerFramework
 				{
 					if (!method.IsAbstract)
 					{
-						Debug.WriteLine("  # " + (offset / typeLayout.NativePointerSize).ToString() + " " + method.ToString());
+						// Debug.WriteLine("  # " + (offset / typeLayout.NativePointerSize).ToString() + " " + method.ToString());
 						linker.Link(LinkType.AbsoluteAddress | LinkType.I4, methodTableName, offset, 0, method.ToString(), IntPtr.Zero);
 					}
 					else
 					{
-						Debug.WriteLine("  # " + (offset / typeLayout.NativePointerSize).ToString() + " [null]");
+						// Debug.WriteLine("  # " + (offset / typeLayout.NativePointerSize).ToString() + " [null]");
 					}
 					offset += typeLayout.NativePointerSize;
 				}

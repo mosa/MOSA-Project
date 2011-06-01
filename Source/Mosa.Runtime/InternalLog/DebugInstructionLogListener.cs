@@ -19,7 +19,7 @@ namespace Mosa.Runtime.InternalLog
 {
 	public class DebugInstructionLogListener : IInstructionLogListener 
 	{
-		void IInstructionLogListener.NotifyNewInstructionLog(RuntimeMethod method, IPipelineStage stage, string log)
+		void IInstructionLogListener.NotifyNewInstructionLog(RuntimeMethod method, string stage, string log)
 		{
 			//Debug.WriteLine(String.Format("IR representation of method {0} after stage {1}", methodCompiler.Method, prevStage.Name));
 			Debug.WriteLine(log);
