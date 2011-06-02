@@ -68,7 +68,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Platform.x86", "Mosa.P
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Test.Prebuilt", "Mosa.Test.Prebuilt\Mosa.Test.Prebuilt.csproj", "{F9043097-AD68-4E7E-AD16-853A7DB2ECDD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Test.System", "Mosa.Test.Runtime.CompilerFramework\Mosa.Test.System.csproj", "{AD653B6B-EBB7-4E69-93F7-FADA40462648}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Test.System", "Mosa.Test.System\Mosa.Test.System.csproj", "{AD653B6B-EBB7-4E69-93F7-FADA40462648}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Runtime.Metadata", "Mosa.Runtime.Metadata\Mosa.Runtime.Metadata.csproj", "{7033B213-2055-4C6A-B008-D9856267F5D7}"
 EndProject

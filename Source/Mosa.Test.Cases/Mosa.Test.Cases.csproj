@@ -184,7 +184,7 @@
       <Project>{067AAB6B-447A-45BA-9E0D-DFEA886B4F69}</Project>
       <Name>Mosa.Test.Collection</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mosa.Test.Runtime.CompilerFramework\Mosa.Test.System.csproj">
+    <ProjectReference Include="..\Mosa.Test.System\Mosa.Test.System.csproj">
       <Project>{AD653B6B-EBB7-4E69-93F7-FADA40462648}</Project>
       <Name>Mosa.Test.System</Name>
     </ProjectReference>
