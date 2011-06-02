@@ -344,13 +344,17 @@ namespace Mosa.Tools.TypeExplorer
 				settings.AddReference("mscorlib.dll");
 				settings.AddReference("Mosa.Kernel.dll");
 
-				Mosa.Test.CodeDomCompiler.Compiler compiler = new Test.CodeDomCompiler.Compiler();
+				Mosa.Test.CodeDomCompiler.Compiler compiler = new Test.CodeDomCompiler.Compiler(settings);
 
-				string assembly = compiler.Compile(settings);
-
-				LoadAssembly(assembly);
-
-				Compile();
+				if (!compiler.HasError)
+				{
+					LoadAssembly(compiler.AssemblyFile);
+					Compile();
+				}
+				else
+				{
+					// TODO: Say something
+				}
 			}
 
 		}

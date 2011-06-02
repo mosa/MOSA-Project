@@ -28,29 +28,39 @@ namespace Mosa.Test.CodeDomCompiler
 		private static Dictionary<string, CodeDomProvider> providerCache = new Dictionary<string, CodeDomProvider>();
 
 		/// <summary>
+		/// Holds the temporary files collection.
+		/// </summary>
+		private static TempFileCollection temps = new TempFileCollection(TempDirectory, false);
+
+		/// <summary>
 		/// 
 		/// </summary>
 		private static string tempDirectory;
 
 		/// <summary>
-		/// Holds the temporary files collection.
+		/// 
 		/// </summary>
-		private static TempFileCollection temps = new TempFileCollection(TempDirectory, false);
+		private CompilerErrorCollection compilerErrors;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		private string assemblyFile;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		private bool hasError;
 
 		#endregion // Data members
 
-		#region Construction
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="Compiler"/> class.
-		/// </summary>
-		public Compiler()
-		{
-		}
-
-		#endregion // Construction
-
 		#region Properties
+
+		public CompilerErrorCollection CompilerErrors { get { return compilerErrors; } }
+
+		public string AssemblyFile { get { return assemblyFile; } }
+
+		public bool HasError { get { return hasError; } }
 
 		private static string TempDirectory
 		{
@@ -70,9 +80,14 @@ namespace Mosa.Test.CodeDomCompiler
 
 		#endregion Properties
 
-		public string Compile(CompilerSettings settings)
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Compiler"/> class.
+		/// </summary>
+		public Compiler(CompilerSettings settings)
 		{
-			Console.WriteLine("Executing {0} compiler...", settings.Language);
+			hasError = true;
 
 			CodeDomProvider provider;
 			if (!providerCache.TryGetValue(settings.Language, out provider))
@@ -89,7 +104,6 @@ namespace Mosa.Test.CodeDomCompiler
 			string[] references = new string[settings.References.Count];
 			settings.References.CopyTo(references, 0);
 
-			CompilerResults compileResults;
 			CompilerParameters parameters = new CompilerParameters(references, filename, false);
 			parameters.CompilerOptions = "/optimize-";
 
@@ -113,26 +127,18 @@ namespace Mosa.Test.CodeDomCompiler
 
 			if (settings.CodeSource != null)
 			{
-				//Console.WriteLine("Code: {0}", settings.CodeSource + settings.AdditionalSource);
-				compileResults = provider.CompileAssemblyFromSource(parameters, settings.CodeSource + settings.AdditionalSource);
+				CompilerResults compileResults = provider.CompileAssemblyFromSource(parameters, settings.CodeSource + settings.AdditionalSource);
+
+				hasError = compilerErrors.HasErrors;
+				compilerErrors = compileResults.Errors;
+				assemblyFile = compileResults.PathToAssembly;
 			}
 			else
 				throw new NotSupportedException();
 
-			if (compileResults.Errors.HasErrors)
-			{
-				StringBuilder sb = new StringBuilder();
-				sb.AppendLine("Code compile errors:");
-				foreach (CompilerError error in compileResults.Errors)
-				{
-					sb.AppendLine(error.ToString());
-				}
-				throw new Exception(sb.ToString());
-			}
-
-			return compileResults.PathToAssembly;
 		}
 
+		#endregion // Construction
 
 	}
 }

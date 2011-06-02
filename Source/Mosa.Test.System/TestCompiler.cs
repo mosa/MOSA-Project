@@ -59,11 +59,6 @@ namespace Mosa.Test.System
 		/// </summary>
 		private TestAssemblyLinker linker;
 
-		/// <summary>
-		/// 
-		/// </summary>
-		CodeDomCompiler.Compiler compiler = new CodeDomCompiler.Compiler();
-
 		#endregion // Data members
 
 		#region Construction
@@ -157,10 +152,13 @@ namespace Mosa.Test.System
 			{
 				cacheSettings = new CompilerSettings(settings);
 
-				string assembly = compiler.Compile(cacheSettings);
+				Mosa.Test.CodeDomCompiler.Compiler compiler = new CodeDomCompiler.Compiler(cacheSettings);
 
 				Console.WriteLine("Executing MOSA compiler...");
-				linker = RunMosaCompiler(settings, assembly);
+
+				Assert.IsFalse(compiler.HasError, "Failed to compile source code with native compiler");
+
+				linker = RunMosaCompiler(settings, compiler.AssemblyFile);
 			}
 		}
 
@@ -203,7 +201,7 @@ namespace Mosa.Test.System
 			assemblyLoader.InitializePrivatePaths(settings.References);
 
 			assemblyLoader.LoadModule(assemblyFile);
-			
+
 			foreach (string file in settings.References)
 			{
 				assemblyLoader.LoadModule(file);
