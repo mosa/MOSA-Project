@@ -13,6 +13,7 @@ using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime.TypeSystem.Generic;
 using Mosa.Runtime.InternalLog;
 using Mosa.Runtime.CompilerFramework;
+using Mosa.Test.CodeDomCompiler;
 
 namespace Mosa.Tools.TypeExplorer
 {
@@ -273,6 +274,7 @@ namespace Mosa.Tools.TypeExplorer
 
 		void Compile()
 		{
+			CompileStartTime = DateTime.Now;
 			methodStages.Clear();
 
 			filter.IsLogging = true;
@@ -283,7 +285,6 @@ namespace Mosa.Tools.TypeExplorer
 
 		private void nowToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			CompileStartTime = DateTime.Now;
 			Compile();
 		}
 
@@ -333,13 +334,24 @@ namespace Mosa.Tools.TypeExplorer
 
 		private void snippetToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			var form = new CodeForm();
-			form.ShowDialog();
+			//var form = new CodeForm();
+			//form.ShowDialog();
 
-			if (form.DialogResult == DialogResult.OK)
-			{
-				
-			}
+			//if (form.DialogResult == DialogResult.OK)
+			//{
+			//    CompilerSettings settings = new CompilerSettings();
+			//    settings.CodeSource = form.SourceCode;
+			//    settings.AddReference("mscorlib.dll");
+			//    settings.AddReference("Mosa.Kernel.dll");
+
+			//    Mosa.Test.CodeDomCompiler.Compiler compiler = new Test.CodeDomCompiler.Compiler();
+
+			//    string assembly = compiler.Compile(settings);
+
+			//    LoadAssembly(assembly);
+
+			//    Compile();
+			//}
 
 		}
 

@@ -72,7 +72,6 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="TestCompilerSettings.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="CodeForm.resx">
@@ -110,6 +109,10 @@
     <ProjectReference Include="..\Mosa.Runtime\Mosa.Runtime.csproj">
       <Project>{75A12A8A-8C8F-4D1E-801B-689D8F781BF4}</Project>
       <Name>Mosa.Runtime</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Test.CodeDomCompiler\Mosa.Test.CodeDomCompiler.csproj">
+      <Project>{7B8FBA4E-D6AC-4DAD-A607-43BA112F8EC1}</Project>
+      <Name>Mosa.Test.CodeDomCompiler</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mosa.Tools.Compiler\Mosa.Tools.Compiler.csproj">
       <Project>{B69C2F31-5161-47BB-9FD3-2F2F2BCBF659}</Project>

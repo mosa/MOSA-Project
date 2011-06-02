@@ -28,17 +28,17 @@
         /// </summary>
         private void InitializeComponent()
         {
-			this.richTextBox1 = new System.Windows.Forms.RichTextBox();
+			this.tbText = new System.Windows.Forms.RichTextBox();
 			this.button1 = new System.Windows.Forms.Button();
 			this.SuspendLayout();
 			// 
-			// richTextBox1
+			// tbText
 			// 
-			this.richTextBox1.Location = new System.Drawing.Point(12, 13);
-			this.richTextBox1.Name = "richTextBox1";
-			this.richTextBox1.Size = new System.Drawing.Size(521, 368);
-			this.richTextBox1.TabIndex = 0;
-			this.richTextBox1.Text = "";
+			this.tbText.Location = new System.Drawing.Point(12, 13);
+			this.tbText.Name = "tbText";
+			this.tbText.Size = new System.Drawing.Size(521, 368);
+			this.tbText.TabIndex = 0;
+			this.tbText.Text = "";
 			// 
 			// button1
 			// 
@@ -57,16 +57,16 @@
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(545, 427);
 			this.Controls.Add(this.button1);
-			this.Controls.Add(this.richTextBox1);
+			this.Controls.Add(this.tbText);
 			this.Name = "CodeForm";
-			this.Text = "Code Snip";
+			this.Text = "Code Snippet";
 			this.ResumeLayout(false);
 
         }
 
         #endregion
 
-        private System.Windows.Forms.RichTextBox richTextBox1;
+        private System.Windows.Forms.RichTextBox tbText;
         private System.Windows.Forms.Button button1;
     }
 }
