@@ -334,24 +334,24 @@ namespace Mosa.Tools.TypeExplorer
 
 		private void snippetToolStripMenuItem_Click(object sender, EventArgs e)
 		{
-			//var form = new CodeForm();
-			//form.ShowDialog();
+			var form = new CodeForm();
+			form.ShowDialog();
 
-			//if (form.DialogResult == DialogResult.OK)
-			//{
-			//    CompilerSettings settings = new CompilerSettings();
-			//    settings.CodeSource = form.SourceCode;
-			//    settings.AddReference("mscorlib.dll");
-			//    settings.AddReference("Mosa.Kernel.dll");
+			if (form.DialogResult == DialogResult.OK)
+			{
+				CompilerSettings settings = new CompilerSettings();
+				settings.CodeSource = form.SourceCode;
+				settings.AddReference("mscorlib.dll");
+				settings.AddReference("Mosa.Kernel.dll");
 
-			//    Mosa.Test.CodeDomCompiler.Compiler compiler = new Test.CodeDomCompiler.Compiler();
+				Mosa.Test.CodeDomCompiler.Compiler compiler = new Test.CodeDomCompiler.Compiler();
 
-			//    string assembly = compiler.Compile(settings);
+				string assembly = compiler.Compile(settings);
 
-			//    LoadAssembly(assembly);
+				LoadAssembly(assembly);
 
-			//    Compile();
-			//}
+				Compile();
+			}
 
 		}
 
