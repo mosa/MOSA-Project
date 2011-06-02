@@ -7,13 +7,13 @@
  *  Michael Fröhlich (grover) <sharpos@michaelruck.de>
  */
 
-using Mosa.Runtime.CompilerFramework;
 using Mosa.Compiler.Linker;
+using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime.TypeSystem;
+using Mosa.Runtime.InternalLog;
 using Mosa.Tools.Compiler.Linker;
 using Mosa.Tools.Compiler.TypeInitializers;
-using Mosa.Runtime.InternalLog;
 
 namespace Mosa.Tools.Compiler
 {

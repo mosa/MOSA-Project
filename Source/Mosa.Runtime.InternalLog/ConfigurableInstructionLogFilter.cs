@@ -12,7 +12,6 @@ using System.Collections.Generic;
 using System.Text;
 
 using Mosa.Runtime.TypeSystem;
-using Mosa.Runtime.CompilerFramework;
 
 namespace Mosa.Runtime.InternalLog
 {
@@ -31,9 +30,9 @@ namespace Mosa.Runtime.InternalLog
 		public MatchType MethodMatch = MatchType.Contains;
 		public MatchType StageMatch = MatchType.Any;
 
-		bool IInstructionLogFilter.IsMatch(RuntimeMethod method, IPipelineStage stage)
+		bool IInstructionLogFilter.IsMatch(RuntimeMethod method, string stage)
 		{
-			return IsMatch(method.DeclaringType.Name, method.Name, stage.Name);
+			return IsMatch(method.DeclaringType.Name, method.Name, stage);
 		}
 
 		protected bool IsMatch(string type, string method, string stage)

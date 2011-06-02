@@ -13,9 +13,10 @@ using System.Runtime.InteropServices;
 using System.Collections.Generic;
 
 using Mosa.Compiler.Linker;
-using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime.Metadata;
+using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime.TypeSystem;
+using Mosa.Runtime.InternalLog;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.CompilerFramework.CIL;
 using Mosa.Runtime.CompilerFramework.IR;
@@ -32,8 +33,8 @@ namespace Mosa.Tools.CompilerHelper
 
 		public IntPtr Address { get { return address; } }
 
-		public MethodCompiler(CompilerHelper compiler, IArchitecture architecture, ICompilationSchedulerStage compilationScheduler, RuntimeType type, RuntimeMethod method)
-			: base(compiler.Pipeline.FindFirst<IAssemblyLinker>(), architecture, compilationScheduler, type, method, compiler.TypeSystem, compiler.TypeLayout, null)
+		public MethodCompiler(CompilerHelper compiler, IArchitecture architecture, ICompilationSchedulerStage compilationScheduler, RuntimeType type, RuntimeMethod method, IInternalLog internalLog)
+			: base(compiler.Pipeline.FindFirst<IAssemblyLinker>(), architecture, compilationScheduler, type, method, compiler.TypeSystem, compiler.TypeLayout, internalLog)
 		{
 			this.assemblyCompiler = compiler;
 

@@ -13,7 +13,6 @@ using System.Text;
 using System.Diagnostics;
 
 using Mosa.Runtime.TypeSystem;
-using Mosa.Runtime.CompilerFramework;
 
 namespace Mosa.Runtime.InternalLog
 {

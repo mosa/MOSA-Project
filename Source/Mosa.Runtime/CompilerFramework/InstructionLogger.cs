@@ -11,7 +11,6 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using Mosa.Runtime.Metadata;
 using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.CompilerFramework;
 
@@ -41,7 +40,7 @@ namespace Mosa.Runtime.InternalLog
 			if (internalLog.InstructionLogListener == null)
 				return;
 
-			if (!internalLog.InstructionLogFilter.IsMatch(method, stage))
+			if (!internalLog.InstructionLogFilter.IsMatch(method, stage.Name))
 				return;
 
 			StringBuilder text = new StringBuilder();

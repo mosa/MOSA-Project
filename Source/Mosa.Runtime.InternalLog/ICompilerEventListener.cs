@@ -11,14 +11,13 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.TypeSystem;
 
 namespace Mosa.Runtime.InternalLog
 {
 
-	public interface IInstructionLogListener
+	public interface ICompilerEventListener
 	{
-		void NotifyNewInstructionLog(RuntimeMethod method, string stage, string log);
+		void NotifyCompilerEvent(CompilerEvent compilerStage, string info);
 	}
 }

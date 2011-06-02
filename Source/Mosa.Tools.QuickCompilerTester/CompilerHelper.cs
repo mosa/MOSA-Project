@@ -114,8 +114,6 @@ namespace Mosa.Tools.CompilerHelper
 
 			CompilerHelper compiler = new CompilerHelper(architecture, typeSystem, typeLayout);
 			compiler.Compile();
-
-			//return compiler.linker;
 		}
 
 		public static void FilterMethod(string s)
@@ -131,7 +129,7 @@ namespace Mosa.Tools.CompilerHelper
 
 		public override IMethodCompiler CreateMethodCompiler(ICompilationSchedulerStage schedulerStage, RuntimeType type, RuntimeMethod method)
 		{
-			IMethodCompiler mc = new MethodCompiler(this, Architecture, schedulerStage, type, method);
+			IMethodCompiler mc = new MethodCompiler(this, Architecture, schedulerStage, type, method, internalLog);
 			Architecture.ExtendMethodCompilerPipeline(mc.Pipeline);
 			return mc;
 		}
@@ -139,12 +137,6 @@ namespace Mosa.Tools.CompilerHelper
 		protected override void EndCompile()
 		{
 			base.EndCompile();
-
-			/*while (this.cctorQueue.Count > 0)
-			{
-				CCtor cctor = this.cctorQueue.Dequeue();
-				cctor();
-			}*/
 		}
 
 		public void QueueCCtorForInvocationAfterCompilation(CCtor cctor)

@@ -12,14 +12,12 @@ using System.Collections.Generic;
 using System.Text;
 
 using Mosa.Runtime.TypeSystem;
-using Mosa.Runtime.CompilerFramework;
 
 namespace Mosa.Runtime.InternalLog
 {
 	public interface IInstructionLogFilter
 	{
-//		bool IsMatch(string type, string method, string stage);
-
-		bool IsMatch(RuntimeMethod method, IPipelineStage stage);
+		//bool IsMatch(RuntimeMethod method, IPipelineStage stage);
+		bool IsMatch(RuntimeMethod method, string stage);
 	}
 }

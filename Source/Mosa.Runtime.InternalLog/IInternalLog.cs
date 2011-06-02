@@ -12,7 +12,6 @@ using System.Collections.Generic;
 using System.Text;
 
 using Mosa.Runtime.TypeSystem;
-using Mosa.Runtime.CompilerFramework;
 
 namespace Mosa.Runtime.InternalLog
 {

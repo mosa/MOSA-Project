@@ -85,17 +85,7 @@
     <Compile Include="CompilerFramework\CIL\BreakInstruction.cs" />
     <Compile Include="CompilerFramework\BaseAssemblyCompilerStage.cs" />
     <Compile Include="CompilerFramework\CIL\ExceptionClauseHeader.cs" />
-    <Compile Include="InternalLog\ConfigurableInstructionLogFilter.cs" />
-    <Compile Include="InternalLog\CompilerEvent.cs" />
-    <Compile Include="InternalLog\BasicCompilerEventListener.cs" />
-    <Compile Include="InternalLog\DebugInstructionLogListener.cs" />
-    <Compile Include="InternalLog\ICompilerEventListener.cs" />
-    <Compile Include="InternalLog\DebugCompilerEventListener.cs" />
-    <Compile Include="InternalLog\IInternalLog.cs" />
-    <Compile Include="InternalLog\BasicInternalLog.cs" />
-    <Compile Include="InternalLog\IInstructionLogListener.cs" />
-    <Compile Include="InternalLog\IInstructionLogFilter.cs" />
-    <Compile Include="InternalLog\InstructionLogger.cs" />
+    <Compile Include="CompilerFramework\InstructionLogger.cs" />
     <Compile Include="CompilerFramework\LoggerDebugWriter.cs" />
     <Compile Include="CompilerFramework\ILoggerWriter.cs" />
     <Compile Include="CompilerFramework\TypeLayoutStage.cs" />
@@ -437,6 +427,10 @@
     <ProjectReference Include="..\Mosa.Compiler.Linker\Mosa.Compiler.Linker.csproj">
       <Project>{65866A51-B229-44C5-AC81-87A90FA1741B}</Project>
       <Name>Mosa.Compiler.Linker</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Runtime.InternalLog\Mosa.Runtime.InternalLog.csproj">
+      <Project>{540BEAC7-A2C3-4C46-9F4A-E6E1DF4EF6FC}</Project>
+      <Name>Mosa.Runtime.InternalLog</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mosa.Runtime.Metadata\Mosa.Runtime.Metadata.csproj">
       <Project>{7033B213-2055-4C6A-B008-D9856267F5D7}</Project>
