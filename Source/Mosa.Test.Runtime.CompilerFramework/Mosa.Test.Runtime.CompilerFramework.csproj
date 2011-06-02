@@ -103,6 +103,10 @@
       <Project>{5F30A68E-05BF-40EA-B576-5EBCDE520449}</Project>
       <Name>Mosa.Runtime.TypeSystem</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mosa.Test.CodeDomCompiler\Mosa.Test.CodeDomCompiler.csproj">
+      <Project>{7B8FBA4E-D6AC-4DAD-A607-43BA112F8EC1}</Project>
+      <Name>Mosa.Test.CodeDomCompiler</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mosa.Tools.Compiler\Mosa.Tools.Compiler.csproj">
       <Project>{B69C2F31-5161-47BB-9FD3-2F2F2BCBF659}</Project>
       <Name>Mosa.Tools.Compiler</Name>
@@ -117,7 +121,6 @@
     <Compile Include="MbunitExtensions.cs" />
     <Compile Include="Numbers\B.cs" />
     <Compile Include="Numbers\Series.cs" />
-    <Compile Include="TestCompilerSettings.cs" />
     <Compile Include="DelegateUtility.cs" />
     <Compile Include="Numbers\C.cs" />
     <Compile Include="Numbers\R8.cs" />

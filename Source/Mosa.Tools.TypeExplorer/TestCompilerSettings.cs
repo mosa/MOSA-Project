@@ -7,6 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
  */
 
+// Copied from Mosa.Test.Runtime.CompilerFramework.TestCompilerSettings
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -16,13 +18,11 @@ using System.CodeDom.Compiler;
 using System.Runtime.InteropServices;
 using System.Diagnostics;
 
-using MbUnit.Framework;
-
 using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime;
 using Mosa.Runtime.TypeSystem;
 
-namespace Mosa.Test.Runtime.CompilerFramework
+namespace Mosa.Tools.TypeExplorer
 {
 	public class TestCompilerSettings
 	{

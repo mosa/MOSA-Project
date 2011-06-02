@@ -12,6 +12,7 @@ using System;
 using MbUnit.Framework;
 
 using Mosa.Test.Runtime.CompilerFramework;
+using Mosa.Test.CodeDomCompiler;
 
 namespace Mosa.Test.Cases.CIL
 {

@@ -176,6 +176,10 @@
     <Compile Include="OLD.IL\Xor.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Mosa.Test.CodeDomCompiler\Mosa.Test.CodeDomCompiler.csproj">
+      <Project>{7B8FBA4E-D6AC-4DAD-A607-43BA112F8EC1}</Project>
+      <Name>Mosa.Test.CodeDomCompiler</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mosa.Test.Collection\Mosa.Test.Collection.csproj">
       <Project>{067AAB6B-447A-45BA-9E0D-DFEA886B4F69}</Project>
       <Name>Mosa.Test.Collection</Name>

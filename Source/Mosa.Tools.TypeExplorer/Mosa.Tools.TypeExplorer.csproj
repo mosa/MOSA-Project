@@ -51,6 +51,12 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="CodeForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="CodeForm.Designer.cs">
+      <DependentUpon>CodeForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="ExplorerAssemblyCompiler.cs" />
     <Compile Include="ExplorerLinker.cs" />
     <Compile Include="ExplorerMethodCompiler.cs" />
@@ -66,8 +72,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="TestCompilerSettings.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="CodeForm.resx">
+      <DependentUpon>CodeForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
     </EmbeddedResource>

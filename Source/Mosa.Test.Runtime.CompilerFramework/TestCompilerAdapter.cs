@@ -11,13 +11,15 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
+using Mosa.Test.CodeDomCompiler;
+
 namespace Mosa.Test.Runtime.CompilerFramework
 {
 	public class TestCompilerAdapter
 	{
 		static private TestCompiler compiler = new TestCompiler();
 
-		protected TestCompilerSettings settings = new TestCompilerSettings();
+		protected CompilerSettings settings = new CompilerSettings();
 
 		protected TestCompilerAdapter()
 		{

@@ -1,6 +1,6 @@
 ﻿namespace Mosa.Tools.QuickCompilerTester
 {
-    partial class Form1
+    partial class CodeForm
     {
         /// <summary>
         /// Required designer variable.

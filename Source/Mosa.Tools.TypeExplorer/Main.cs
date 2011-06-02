@@ -7,8 +7,6 @@ using System.Linq;
 using System.Text;
 using System.Windows.Forms;
 
-//using Mono.Cecil;
-
 using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Loader;
@@ -330,6 +328,18 @@ namespace Mosa.Tools.TypeExplorer
 
 		private void treeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
 		{
+
+		}
+
+		private void snippetToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			var form = new CodeForm();
+			form.ShowDialog();
+
+			if (form.DialogResult == DialogResult.OK)
+			{
+				
+			}
 
 		}
 

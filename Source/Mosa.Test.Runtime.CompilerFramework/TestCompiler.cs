@@ -21,6 +21,7 @@ using MbUnit.Framework;
 using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime;
 using Mosa.Runtime.TypeSystem;
+using Mosa.Test.CodeDomCompiler;
 
 namespace Mosa.Test.Runtime.CompilerFramework
 {
@@ -36,7 +37,7 @@ namespace Mosa.Test.Runtime.CompilerFramework
 		/// <summary>
 		/// 
 		/// </summary>
-		private TestCompilerSettings cacheSettings = null;
+		private CompilerSettings cacheSettings = null;
 
 		/// <summary>
 		/// A cache of CodeDom providers.
@@ -57,6 +58,11 @@ namespace Mosa.Test.Runtime.CompilerFramework
 		/// 
 		/// </summary>
 		private TestAssemblyLinker linker;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		CodeDomCompiler.Compiler compiler = new CodeDomCompiler.Compiler();
 
 		#endregion // Data members
 
@@ -91,7 +97,7 @@ namespace Mosa.Test.Runtime.CompilerFramework
 
 		#endregion Properties
 
-		public T Run<T>(TestCompilerSettings settings, string ns, string type, string method, params object[] parameters)
+		public T Run<T>(CompilerSettings settings, string ns, string type, string method, params object[] parameters)
 		{
 			CompileTestCode(settings);
 
@@ -145,13 +151,13 @@ namespace Mosa.Test.Runtime.CompilerFramework
 		}
 
 		// Might not keep this as a public method
-		public void CompileTestCode(TestCompilerSettings settings)
+		public void CompileTestCode(CompilerSettings settings)
 		{
 			if (cacheSettings == null || !cacheSettings.IsEqual(settings))
 			{
-				cacheSettings = new TestCompilerSettings(settings);
+				cacheSettings = new CompilerSettings(settings);
 
-				string assembly = RunCodeDomCompiler(settings);
+				string assembly = compiler.Compile(cacheSettings);
 
 				Console.WriteLine("Executing MOSA compiler...");
 				linker = RunMosaCompiler(settings, assembly);
@@ -191,70 +197,7 @@ namespace Mosa.Test.Runtime.CompilerFramework
 			throw new MissingMethodException(ns + "." + type, method);
 		}
 
-		private string RunCodeDomCompiler(TestCompilerSettings settings)
-		{
-			Console.WriteLine("Executing {0} compiler...", settings.Language);
-
-			CodeDomProvider provider;
-			if (!providerCache.TryGetValue(settings.Language, out provider))
-			{
-				provider = CodeDomProvider.CreateProvider(settings.Language);
-				if (provider == null)
-					throw new NotSupportedException("The language '" + settings.Language + "' is not supported on this machine.");
-				providerCache.Add(settings.Language, provider);
-			}
-
-			string filename = Path.Combine(TempDirectory, Path.ChangeExtension(Path.GetRandomFileName(), "dll"));
-			temps.AddFile(filename, false);
-
-			string[] references = new string[settings.References.Count];
-			settings.References.CopyTo(references, 0);
-
-			CompilerResults compileResults;
-			CompilerParameters parameters = new CompilerParameters(references, filename, false);
-			parameters.CompilerOptions = "/optimize-";
-
-			if (settings.UnsafeCode)
-			{
-				if (settings.Language == "C#")
-					parameters.CompilerOptions = parameters.CompilerOptions + " /unsafe+";
-				else
-					throw new NotSupportedException();
-			}
-
-			if (settings.DoNotReferenceMscorlib)
-			{
-				if (settings.Language == "C#")
-					parameters.CompilerOptions = parameters.CompilerOptions + " /nostdlib";
-				else
-					throw new NotSupportedException();
-			}
-
-			parameters.GenerateInMemory = false;
-
-			if (settings.CodeSource != null)
-			{
-				//Console.WriteLine("Code: {0}", settings.CodeSource + settings.AdditionalSource);
-				compileResults = provider.CompileAssemblyFromSource(parameters, settings.CodeSource + settings.AdditionalSource);
-			}
-			else
-				throw new NotSupportedException();
-
-			if (compileResults.Errors.HasErrors)
-			{
-				StringBuilder sb = new StringBuilder();
-				sb.AppendLine("Code compile errors:");
-				foreach (CompilerError error in compileResults.Errors)
-				{
-					sb.AppendLine(error.ToString());
-				}
-				throw new Exception(sb.ToString());
-			}
-
-			return compileResults.PathToAssembly;
-		}
-
-		private TestAssemblyLinker RunMosaCompiler(TestCompilerSettings settings, string assemblyFile)
+		private TestAssemblyLinker RunMosaCompiler(CompilerSettings settings, string assemblyFile)
 		{
 			IAssemblyLoader assemblyLoader = new AssemblyLoader();
 			assemblyLoader.InitializePrivatePaths(settings.References);
