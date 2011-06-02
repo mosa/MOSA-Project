@@ -10,8 +10,8 @@
 using System;
 using MbUnit.Framework;
 
-using Mosa.Test.Runtime.CompilerFramework;
-using Mosa.Test.Runtime.CompilerFramework.Numbers;
+using Mosa.Test.System;
+using Mosa.Test.System.Numbers;
 using Mosa.Test.Collection;
 
 namespace Mosa.Test.Cases.CIL

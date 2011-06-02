@@ -13,9 +13,12 @@
 
 using System;
 using System.Runtime.InteropServices;
+using System.Globalization;
+
 using Gallio.Framework;
+
 using MbUnit.Framework;
-using Mosa.Test.Runtime.CompilerFramework;
+using Mosa.Test.System;
 
 namespace Mosa.Test.Cases.OLD.IL
 {
@@ -552,7 +555,7 @@ namespace Mosa.Test.Cases.OLD.IL
 		[Test]
 		public void SubConstantR4Right(float a, float b)
 		{
-			settings.CodeSource = CreateConstantTestCode("SubConstantR4Right", "float", "float", null, b.ToString(System.Globalization.CultureInfo.InvariantCulture) + "f");
+			settings.CodeSource = CreateConstantTestCode("SubConstantR4Right", "float", "float", null, b.ToString(CultureInfo.InvariantCulture) + "f");
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "SubConstantR4Right", (a - b), a));
 		}
 
@@ -564,7 +567,7 @@ namespace Mosa.Test.Cases.OLD.IL
 		[Test]
 		public void SubConstantR4Left(float a, float b)
 		{
-			settings.CodeSource = CreateConstantTestCode("SubConstantR4Left", "float", "float", a.ToString(System.Globalization.CultureInfo.InvariantCulture) + "f", null);
+			settings.CodeSource = CreateConstantTestCode("SubConstantR4Left", "float", "float", a.ToString(CultureInfo.InvariantCulture) + "f", null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "SubConstantR4Left", (a - b), b));
 		}
 		#endregion
@@ -635,7 +638,7 @@ namespace Mosa.Test.Cases.OLD.IL
 		[Test]
 		public void SubConstantR8Right(double a, double b)
 		{
-			settings.CodeSource = CreateConstantTestCode("SubConstantR8Right", "double", "double", null, b.ToString(System.Globalization.CultureInfo.InvariantCulture));
+			settings.CodeSource = CreateConstantTestCode("SubConstantR8Right", "double", "double", null, b.ToString(CultureInfo.InvariantCulture));
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "SubConstantR8Right", (a - b), a));
 		}
 
@@ -646,7 +649,7 @@ namespace Mosa.Test.Cases.OLD.IL
 		[Test]
 		public void SubConstantR8Left(double a, double b)
 		{
-			settings.CodeSource = CreateConstantTestCode("SubConstantR8Left", "double", "double", a.ToString(System.Globalization.CultureInfo.InvariantCulture), null);
+			settings.CodeSource = CreateConstantTestCode("SubConstantR8Left", "double", "double", a.ToString(CultureInfo.InvariantCulture), null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "SubConstantR8Left", (a - b), b));
 		}
 		#endregion

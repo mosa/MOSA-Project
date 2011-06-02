@@ -21,7 +21,7 @@ using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Linker;
 
-namespace Mosa.Test.Runtime.CompilerFramework
+namespace Mosa.Test.System
 {
 	/// <summary>
 	/// A specialized linker for in-memory tests. This linker performs live linking in memory without
@@ -186,10 +186,10 @@ namespace Mosa.Test.Runtime.CompilerFramework
 			*pAddress = (int)value;
 		}
 
-		[UnmanagedFunctionPointer(System.Runtime.InteropServices.CallingConvention.Cdecl)]
+		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 		private unsafe delegate void* AllocateObjectDelegate(void* methodTable, uint classSize);
 
-		[UnmanagedFunctionPointer(System.Runtime.InteropServices.CallingConvention.Cdecl)]
+		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 		private unsafe delegate void* AllocateArrayDelegate(void* methodTable, uint elementSize, uint elements);
 
 		protected override unsafe void AddVmCalls(IDictionary<string, LinkerSymbol> virtualMachineCalls)

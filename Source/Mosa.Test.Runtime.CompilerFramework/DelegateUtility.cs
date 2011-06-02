@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
 
-namespace Mosa.Test.Runtime.CompilerFramework
+namespace Mosa.Test.System
 {
 	static class DelegateUtility
 	{
@@ -49,7 +49,7 @@ namespace Mosa.Test.Runtime.CompilerFramework
 		{
 			if (t == null) return "V";
 
-			if (t is System.ValueType)
+			if (t is ValueType)
 			{
 				if (t is Boolean) return "B";
 				if (t is Char) return "C";

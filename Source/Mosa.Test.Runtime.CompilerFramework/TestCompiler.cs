@@ -23,7 +23,7 @@ using Mosa.Runtime;
 using Mosa.Runtime.TypeSystem;
 using Mosa.Test.CodeDomCompiler;
 
-namespace Mosa.Test.Runtime.CompilerFramework
+namespace Mosa.Test.System
 {
 	public class TestCompiler
 	{
@@ -115,7 +115,7 @@ namespace Mosa.Test.Runtime.CompilerFramework
 			// Get delegate name
 			string delegateName;
 
-			if (default(T) is System.ValueType)
+			if (default(T) is ValueType)
 				delegateName = "Mosa.Test.Prebuilt.Delegates+" + DelegateUtility.GetDelegteName(default(T), parameters);
 			else
 				delegateName = "Mosa.Test.Prebuilt.Delegates+" + DelegateUtility.GetDelegteName(null, parameters);
@@ -138,7 +138,7 @@ namespace Mosa.Test.Runtime.CompilerFramework
 
 			try
 			{
-				if (default(T) is System.ValueType)
+				if (default(T) is ValueType)
 					return (T)tempResult;
 				else
 					return default(T);

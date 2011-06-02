@@ -5,8 +5,8 @@ using System.Collections.Generic;
 using System.Text;
 using MbUnit.Framework;
 
-using Mosa.Test.Runtime.CompilerFramework;
-using Mosa.Test.Runtime.CompilerFramework.Numbers;
+using Mosa.Test.System;
+using Mosa.Test.System.Numbers;
 
 namespace Mosa.Test.Cases.IL
 {

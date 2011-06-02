@@ -10,9 +10,9 @@ using MbUnit.Framework.ContractVerifiers;
 using Gallio.Framework.Pattern;
 using Gallio.Common.Reflection;
 
-using Mosa.Test.Runtime.CompilerFramework.Numbers;
+using Mosa.Test.System.Numbers;
 
-namespace Mosa.Test.Runtime.CompilerFramework
+namespace Mosa.Test.System
 {
 	#region Series
 

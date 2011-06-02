@@ -13,7 +13,7 @@ using System.Text;
 
 using MbUnit.Framework;
 
-namespace Mosa.Test.Runtime.CompilerFramework.Numbers
+namespace Mosa.Test.System.Numbers
 {
 	public static class I1
 	{

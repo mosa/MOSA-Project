@@ -13,7 +13,7 @@ using System.Text;
 
 using Mosa.Test.CodeDomCompiler;
 
-namespace Mosa.Test.Runtime.CompilerFramework
+namespace Mosa.Test.System
 {
 	public class TestCompilerAdapter
 	{

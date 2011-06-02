@@ -25,7 +25,7 @@ using Mosa.Runtime.CompilerFramework.IR;
 using Mosa.Tools.Compiler;
 using Mosa.Tools.Compiler.Stage;
 
-namespace Mosa.Test.Runtime.CompilerFramework
+namespace Mosa.Test.System
 {
 	class TestCaseMethodCompiler : BaseMethodCompiler
 	{

@@ -17,7 +17,7 @@ using System.Text;
 using System.Runtime.InteropServices;
 using MbUnit.Framework;
 
-using Mosa.Test.Runtime.CompilerFramework;
+using Mosa.Test.System;
 using Mosa.Test.Collection;
 
 namespace Mosa.Test.Cases.IL

@@ -13,9 +13,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
+using System.Globalization;
+
 using MbUnit.Framework;
 
-using Mosa.Test.Runtime.CompilerFramework;
+using Mosa.Test.System;
 
 namespace Mosa.Test.Cases.OLD.IL
 {
@@ -498,7 +500,7 @@ namespace Mosa.Test.Cases.OLD.IL
 		[Test]
 		public void CgtConstantR4Right(float a, float b)
 		{
-			settings.CodeSource = CreateConstantTestCode("float", null, b.ToString(System.Globalization.CultureInfo.InvariantCulture) + "f");
+			settings.CodeSource = CreateConstantTestCode("float", null, b.ToString(CultureInfo.InvariantCulture) + "f");
 			bool res = Run<bool>(string.Empty, @"Test", @"CgtConstant", a);
 			Assert.IsTrue((a > b) == res);
 		}
@@ -510,7 +512,7 @@ namespace Mosa.Test.Cases.OLD.IL
 		[Test]
 		public void CgtConstantR4Left(float a, float b)
 		{
-			settings.CodeSource = CreateConstantTestCode("float", a.ToString(System.Globalization.CultureInfo.InvariantCulture) + "f", null);
+			settings.CodeSource = CreateConstantTestCode("float", a.ToString(CultureInfo.InvariantCulture) + "f", null);
 			bool res = Run<bool>(string.Empty, @"Test", @"CgtConstant", b);
 			Assert.IsTrue((a > b) == res);
 		}
@@ -543,7 +545,7 @@ namespace Mosa.Test.Cases.OLD.IL
 		[Test]
 		public void CgtConstantR8Right(double a, double b)
 		{
-			settings.CodeSource = CreateConstantTestCode("double", null, b.ToString(System.Globalization.CultureInfo.InvariantCulture));
+			settings.CodeSource = CreateConstantTestCode("double", null, b.ToString(CultureInfo.InvariantCulture));
 			bool res = Run<bool>(string.Empty, @"Test", @"CgtConstant", a);
 			Assert.IsTrue((a > b) == res);
 		}
@@ -555,7 +557,7 @@ namespace Mosa.Test.Cases.OLD.IL
 		[Test]
 		public void CgtConstantR8Left(double a, double b)
 		{
-			settings.CodeSource = CreateConstantTestCode("double", a.ToString(System.Globalization.CultureInfo.InvariantCulture), null);
+			settings.CodeSource = CreateConstantTestCode("double", a.ToString(CultureInfo.InvariantCulture), null);
 			bool res = Run<bool>(string.Empty, @"Test", @"CgtConstant", b);
 			Assert.IsTrue((a > b) == res);
 		}

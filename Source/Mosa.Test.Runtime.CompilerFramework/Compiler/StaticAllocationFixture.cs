@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using MbUnit.Framework;
 
-namespace Mosa.Test.Runtime.CompilerFramework.Compiler
+namespace Mosa.Test.System.Compiler
 {
 	[TestFixture]
 	public class StaticAllocationFixture : TestCompilerAdapter

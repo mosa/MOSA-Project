@@ -15,7 +15,7 @@ using System.Text;
 
 using Mosa.Runtime.Memory;
 
-namespace Mosa.Test.Runtime.CompilerFramework
+namespace Mosa.Test.System
 {
 	/// <summary>
 	/// Provides a stream around virtual memory.

@@ -13,7 +13,7 @@ using System.Text;
 using System.Runtime.InteropServices;
 using MbUnit.Framework;
 
-using Mosa.Test.Runtime.CompilerFramework;
+using Mosa.Test.System;
 
 namespace Mosa.Test.Cases.IL
 {

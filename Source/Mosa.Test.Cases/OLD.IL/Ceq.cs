@@ -13,9 +13,11 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Runtime.InteropServices;
+using System.Globalization;
+
 using MbUnit.Framework;
 
-using Mosa.Test.Runtime.CompilerFramework;
+using Mosa.Test.System;
 
 namespace Mosa.Test.Cases.OLD.IL
 {
@@ -525,7 +527,7 @@ namespace Mosa.Test.Cases.OLD.IL
 		[Test]
 		public void CeqConstantR4Right(bool result, float a, float b)
 		{
-			settings.CodeSource = CreateConstantTestCode("float", null, b.ToString(System.Globalization.CultureInfo.InvariantCulture) + "f");
+			settings.CodeSource = CreateConstantTestCode("float", null, b.ToString(CultureInfo.InvariantCulture) + "f");
 			bool res = Run<bool>(string.Empty, @"Test", @"CeqConstant", a);
 			Assert.IsTrue(result == res);
 		}
@@ -539,7 +541,7 @@ namespace Mosa.Test.Cases.OLD.IL
 		[Test]
 		public void CeqConstantR4Left(bool result, float a, float b)
 		{
-			settings.CodeSource = CreateConstantTestCode("float", a.ToString(System.Globalization.CultureInfo.InvariantCulture) + "f", null);
+			settings.CodeSource = CreateConstantTestCode("float", a.ToString(CultureInfo.InvariantCulture) + "f", null);
 			bool res = Run<bool>(string.Empty, @"Test", @"CeqConstant", b);
 			Assert.IsTrue(result == res);
 		}
@@ -572,7 +574,7 @@ namespace Mosa.Test.Cases.OLD.IL
 		[Test]
 		public void CeqConstantR8Right(bool result, double a, double b)
 		{
-			settings.CodeSource = CreateConstantTestCode("double", null, b.ToString(System.Globalization.CultureInfo.InvariantCulture));
+			settings.CodeSource = CreateConstantTestCode("double", null, b.ToString(CultureInfo.InvariantCulture));
 			bool res = Run<bool>(string.Empty, @"Test", @"CeqConstant", a);
 			Assert.IsTrue(result == res);
 		}
@@ -584,7 +586,7 @@ namespace Mosa.Test.Cases.OLD.IL
 		[Test]
 		public void CeqConstantR8Left(bool result, double a, double b)
 		{
-			settings.CodeSource = CreateConstantTestCode("double", a.ToString(System.Globalization.CultureInfo.InvariantCulture), null);
+			settings.CodeSource = CreateConstantTestCode("double", a.ToString(CultureInfo.InvariantCulture), null);
 			bool res = Run<bool>(string.Empty, @"Test", @"CeqConstant", b);
 			Assert.IsTrue(result == res);
 		}

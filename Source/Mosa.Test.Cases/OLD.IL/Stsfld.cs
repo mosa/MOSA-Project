@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text;
 using MbUnit.Framework;
 
-using Mosa.Test.Runtime.CompilerFramework;
+using Mosa.Test.System;
 
 namespace Mosa.Test.Cases.OLD.IL
 {

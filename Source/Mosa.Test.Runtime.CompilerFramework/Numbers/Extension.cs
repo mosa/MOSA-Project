@@ -11,7 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Mosa.Test.Runtime.CompilerFramework.Numbers
+namespace Mosa.Test.System.Numbers
 {
 	public static class Extension
 	{

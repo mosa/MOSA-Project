@@ -14,7 +14,7 @@ using Mosa.Runtime;
 using Mosa.Compiler.Linker;
 using Mosa.Runtime.Memory;
 
-namespace Mosa.Test.Runtime.CompilerFramework
+namespace Mosa.Test.System
 {
 	/// <summary>
 	/// 

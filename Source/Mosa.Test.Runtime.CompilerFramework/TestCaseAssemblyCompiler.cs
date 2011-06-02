@@ -18,7 +18,7 @@ using Mosa.Runtime.InternalLog;
 
 using x86 = Mosa.Platform.x86;
 
-namespace Mosa.Test.Runtime.CompilerFramework
+namespace Mosa.Test.System
 {
 	public delegate void CCtor();
 

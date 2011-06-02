@@ -13,11 +13,12 @@
 
 using System;
 using System.Runtime.InteropServices;
+using System.Globalization;
 
 using Gallio.Framework;
 using MbUnit.Framework;
 
-using Mosa.Test.Runtime.CompilerFramework;
+using Mosa.Test.System;
 
 namespace Mosa.Test.Cases.OLD.IL
 {
@@ -743,7 +744,7 @@ namespace Mosa.Test.Cases.OLD.IL
 		[Test]
 		public void AddConstantR4Right(float a, float b)
 		{
-			settings.CodeSource = CreateConstantTestCode("AddConstantR4Right", "float", "float", null, b.ToString(System.Globalization.CultureInfo.InvariantCulture) + "f");
+			settings.CodeSource = CreateConstantTestCode("AddConstantR4Right", "float", "float", null, b.ToString(CultureInfo.InvariantCulture) + "f");
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AddConstantR4Right", (a + b), a));
 		}
 
@@ -755,7 +756,7 @@ namespace Mosa.Test.Cases.OLD.IL
 		[Test]
 		public void AddConstantR4Left(float a, float b)
 		{
-			settings.CodeSource = CreateConstantTestCode("AddConstantR4Left", "float", "float", a.ToString(System.Globalization.CultureInfo.InvariantCulture) + "f", null);
+			settings.CodeSource = CreateConstantTestCode("AddConstantR4Left", "float", "float", a.ToString(CultureInfo.InvariantCulture) + "f", null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AddConstantR4Left", (a + b), b));
 		}
 
@@ -827,7 +828,7 @@ namespace Mosa.Test.Cases.OLD.IL
 		[Test]
 		public void AddConstantR8Right(double a, double b)
 		{
-			settings.CodeSource = CreateConstantTestCode("AddConstantR8Right", "double", "double", null, b.ToString(System.Globalization.CultureInfo.InvariantCulture));
+			settings.CodeSource = CreateConstantTestCode("AddConstantR8Right", "double", "double", null, b.ToString(CultureInfo.InvariantCulture));
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AddConstantR8Right", (a + b), a));
 		}
 
@@ -838,7 +839,7 @@ namespace Mosa.Test.Cases.OLD.IL
 		[Test]
 		public void AddConstantR8Left(double a, double b)
 		{
-			settings.CodeSource = CreateConstantTestCode("AddConstantR8Left", "double", "double", a.ToString(System.Globalization.CultureInfo.InvariantCulture), null);
+			settings.CodeSource = CreateConstantTestCode("AddConstantR8Left", "double", "double", a.ToString(CultureInfo.InvariantCulture), null);
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AddConstantR8Left", (a + b), b));
 		}
 
