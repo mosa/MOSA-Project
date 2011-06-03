@@ -20,11 +20,12 @@ namespace Mosa.Tools.TypeExplorer
 {
 	public partial class Main : Form, ICompilerEventListener, IInstructionLogListener
 	{
-		IInternalLog internalLog = new BasicInternalLog();
-		ITypeSystem typeSystem = new TypeSystem();
-		ConfigurableInstructionLogFilter filter = new ConfigurableInstructionLogFilter();
-		ITypeLayout typeLayout;
-		DateTime CompileStartTime;
+		private CodeForm form = new CodeForm();
+		private IInternalLog internalLog = new BasicInternalLog();
+		private ITypeSystem typeSystem = new TypeSystem();
+		private ConfigurableInstructionLogFilter filter = new ConfigurableInstructionLogFilter();
+		private ITypeLayout typeLayout;
+		private DateTime CompileStartTime;
 
 		private Dictionary<RuntimeMethod, MethodStages> methodStages = new Dictionary<RuntimeMethod, MethodStages>();
 
@@ -48,6 +49,17 @@ namespace Mosa.Tools.TypeExplorer
 		}
 
 		private void openToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			OpenFile();
+		}
+
+
+		private void toolStripButton1_Click(object sender, EventArgs e)
+		{
+			OpenFile();
+		}
+
+		private void OpenFile()
 		{
 			if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
 			{
@@ -94,17 +106,7 @@ namespace Mosa.Tools.TypeExplorer
 
 		protected void LoadAssembly(string filename)
 		{
-			IAssemblyLoader assemblyLoader = new AssemblyLoader();
-			assemblyLoader.AddPrivatePath(System.IO.Path.GetDirectoryName(filename));
-
-			assemblyLoader.LoadModule(filename);
-
-			typeSystem = new TypeSystem();
-			typeSystem.LoadModules(assemblyLoader.Modules);
-
-			typeLayout = new TypeLayout(typeSystem, 4, 4);
-
-			UpdateTree();
+			LoadAssembly(filename, false);
 		}
 
 		protected void UpdateTree()
@@ -323,12 +325,25 @@ namespace Mosa.Tools.TypeExplorer
 			}
 		}
 
-		protected void LoadAssembly2(string filename)
+		private void snippetToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			ShowCodeForm();
+		}
+
+		private void toolStripButton2_Click(object sender, EventArgs e)
+		{
+			ShowCodeForm();
+		}
+
+		protected void LoadAssembly(string filename, bool includeTestKorlib)
 		{
 			IAssemblyLoader assemblyLoader = new AssemblyLoader();
-			
-			assemblyLoader.AddPrivatePath(System.IO.Directory.GetCurrentDirectory());
-			assemblyLoader.LoadModule("Mosa.Test.Korlib");
+
+			if (includeTestKorlib)
+			{
+				assemblyLoader.AddPrivatePath(System.IO.Directory.GetCurrentDirectory());
+				assemblyLoader.LoadModule("Mosa.Test.Korlib");
+			}
 
 			assemblyLoader.AddPrivatePath(System.IO.Path.GetDirectoryName(filename));
 			assemblyLoader.LoadModule(filename);
@@ -341,34 +356,23 @@ namespace Mosa.Tools.TypeExplorer
 			UpdateTree();
 		}
 
-		private void snippetToolStripMenuItem_Click(object sender, EventArgs e)
+		private void ShowCodeForm()
 		{
-			var form = new CodeForm();
 			form.ShowDialog();
 
 			if (form.DialogResult == DialogResult.OK)
 			{
-				CompilerSettings settings = new CompilerSettings();
-				settings.CodeSource = form.SourceCode;
-				settings.AddReference("mscorlib.dll");
-				
-				//settings.AddReference("Mosa.Test.Korlib");
-				//settings.DoNotReferenceMscorlib = false;
-
-				CompilerResults results = Mosa.Test.CodeDomCompiler.Compiler.ExecuteCompiler(settings);
-
-				if (!results.Errors.HasErrors)
+				if (!string.IsNullOrEmpty(form.Assembly))
 				{
-					LoadAssembly2(results.PathToAssembly);
-					//UpdateTree();
-					Compile();
-				}
-				else
-				{
-					// TODO: Say something
+					LoadAssembly(form.Assembly, true);
+					//Compile();
 				}
 			}
+		}
 
+		private void toolStripButton3_Click(object sender, EventArgs e)
+		{
+			Compile();
 		}
 
 	}
