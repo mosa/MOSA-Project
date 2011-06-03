@@ -152,13 +152,13 @@ namespace Mosa.Test.System
 			{
 				cacheSettings = new CompilerSettings(settings);
 
-				Mosa.Test.CodeDomCompiler.Compiler compiler = new CodeDomCompiler.Compiler(cacheSettings);
+				CompilerResults results = Mosa.Test.CodeDomCompiler.Compiler.ExecuteCompiler(cacheSettings);
 
 				Console.WriteLine("Executing MOSA compiler...");
 
-				Assert.IsFalse(compiler.HasError, "Failed to compile source code with native compiler");
+				Assert.IsFalse(results.Errors.HasErrors, "Failed to compile source code with native compiler");
 
-				linker = RunMosaCompiler(settings, compiler.AssemblyFile);
+				linker = RunMosaCompiler(settings, results.PathToAssembly);
 			}
 		}
 

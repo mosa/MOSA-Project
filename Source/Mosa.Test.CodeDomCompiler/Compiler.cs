@@ -18,7 +18,7 @@ using System.Diagnostics;
 
 namespace Mosa.Test.CodeDomCompiler
 {
-	public class Compiler
+	public static class Compiler
 	{
 		#region Data members
 
@@ -37,30 +37,10 @@ namespace Mosa.Test.CodeDomCompiler
 		/// </summary>
 		private static string tempDirectory;
 
-		/// <summary>
-		/// 
-		/// </summary>
-		private CompilerErrorCollection compilerErrors;
-
-		/// <summary>
-		/// 
-		/// </summary>
-		private string assemblyFile;
-
-		/// <summary>
-		/// 
-		/// </summary>
-		private bool hasError;
 
 		#endregion // Data members
 
 		#region Properties
-
-		public CompilerErrorCollection CompilerErrors { get { return compilerErrors; } }
-
-		public string AssemblyFile { get { return assemblyFile; } }
-
-		public bool HasError { get { return hasError; } }
 
 		private static string TempDirectory
 		{
@@ -85,10 +65,8 @@ namespace Mosa.Test.CodeDomCompiler
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Compiler"/> class.
 		/// </summary>
-		public Compiler(CompilerSettings settings)
+		public static CompilerResults ExecuteCompiler(CompilerSettings settings)
 		{
-			hasError = true;
-
 			CodeDomProvider provider;
 			if (!providerCache.TryGetValue(settings.Language, out provider))
 			{
@@ -129,9 +107,7 @@ namespace Mosa.Test.CodeDomCompiler
 			{
 				CompilerResults compileResults = provider.CompileAssemblyFromSource(parameters, settings.CodeSource + settings.AdditionalSource);
 
-				hasError = compilerErrors.HasErrors;
-				compilerErrors = compileResults.Errors;
-				assemblyFile = compileResults.PathToAssembly;
+				return compileResults;
 			}
 			else
 				throw new NotSupportedException();

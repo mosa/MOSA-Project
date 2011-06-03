@@ -6,6 +6,7 @@ using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
+using System.CodeDom.Compiler;
 
 using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.Metadata;
@@ -245,11 +246,6 @@ namespace Mosa.Tools.TypeExplorer
 			UpdateTree();
 		}
 
-		private void treeView_Click(object sender, EventArgs e)
-		{
-
-		}
-
 		void ICompilerEventListener.NotifyCompilerEvent(CompilerEvent compilerStage, string info)
 		{
 			toolStripStatusLabel1.Text = compilerStage.ToText() + ": " + info;
@@ -327,9 +323,22 @@ namespace Mosa.Tools.TypeExplorer
 			}
 		}
 
-		private void treeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+		protected void LoadAssembly2(string filename)
 		{
+			IAssemblyLoader assemblyLoader = new AssemblyLoader();
+			
+			assemblyLoader.AddPrivatePath(System.IO.Directory.GetCurrentDirectory());
+			assemblyLoader.LoadModule("Mosa.Test.Korlib");
 
+			assemblyLoader.AddPrivatePath(System.IO.Path.GetDirectoryName(filename));
+			assemblyLoader.LoadModule(filename);
+
+			typeSystem = new TypeSystem();
+			typeSystem.LoadModules(assemblyLoader.Modules);
+
+			typeLayout = new TypeLayout(typeSystem, 4, 4);
+
+			UpdateTree();
 		}
 
 		private void snippetToolStripMenuItem_Click(object sender, EventArgs e)
@@ -342,13 +351,16 @@ namespace Mosa.Tools.TypeExplorer
 				CompilerSettings settings = new CompilerSettings();
 				settings.CodeSource = form.SourceCode;
 				settings.AddReference("mscorlib.dll");
-				settings.AddReference("Mosa.Kernel.dll");
+				
+				//settings.AddReference("Mosa.Test.Korlib");
+				//settings.DoNotReferenceMscorlib = false;
 
-				Mosa.Test.CodeDomCompiler.Compiler compiler = new Test.CodeDomCompiler.Compiler(settings);
+				CompilerResults results = Mosa.Test.CodeDomCompiler.Compiler.ExecuteCompiler(settings);
 
-				if (!compiler.HasError)
+				if (!results.Errors.HasErrors)
 				{
-					LoadAssembly(compiler.AssemblyFile);
+					LoadAssembly2(results.PathToAssembly);
+					//UpdateTree();
 					Compile();
 				}
 				else
@@ -358,7 +370,6 @@ namespace Mosa.Tools.TypeExplorer
 			}
 
 		}
-
 
 	}
 
