@@ -179,13 +179,32 @@ namespace Mosa.Platform.x86
 					{
 						window.Add(ctx);
 
-						//RemoveMultipleStores(window);
+						RemoveNop(window);
+						RemoveMultipleStores(window);
 						RemoveSingleLineJump(window);
-						//ImproveBranchAndJump(window);
+						ImproveBranchAndJump(window);
 					}
 		}
 
 		#endregion // IMethodCompilerStage Members
+
+		/// <summary>
+		/// Removes the nop.
+		/// </summary>
+		/// <param name="window">The window.</param>
+		/// <returns></returns>
+		private bool RemoveNop(Window window)
+		{
+			if (window.Size < 1)
+				return false;
+
+			if (!(window.Current.Instruction is CPUx86.NopInstruction))
+				return false;
+
+			window.DeleteCurrent();
+
+			return true;
+		}
 
 		/// <summary>
 		/// Remove multiple occuring stores, for e.g. before:
@@ -208,16 +227,15 @@ namespace Mosa.Platform.x86
 			if (window.Current.BasicBlock != window.Previous.BasicBlock)
 				return false;
 
-			if (window.Current.Instruction is CPUx86.MovInstruction && window.Previous.Instruction is CPUx86.MovInstruction)
-			{
-				if (window.Previous.Result == window.Current.Operand1 && window.Previous.Operand1 == window.Current.Result)
-				{
-					window.DeleteCurrent();
-					return true;
-				}
-			}
+			if (!(window.Current.Instruction is CPUx86.MovInstruction && window.Previous.Instruction is CPUx86.MovInstruction))
+				return false;
 
-			return false;
+			if (!(window.Previous.Result == window.Current.Operand1 && window.Previous.Operand1 == window.Current.Result))
+				return false;
+
+			window.DeleteCurrent();
+
+			return true;
 		}
 
 		/// <summary>
@@ -230,19 +248,22 @@ namespace Mosa.Platform.x86
 			if (window.Size < 2)
 				return false;
 
-			if (window.Previous.Instruction is CPUx86.JmpInstruction)
-				if (window.Current.BasicBlock != window.Previous.BasicBlock)	// should always be true
-					if (window.Previous.Branch.Targets[0] == window.Current.BasicBlock.Label)
-					{
-						window.DeletePrevious();
-						return true;
-					}
+			if (!(window.Previous.Instruction is CPUx86.JmpInstruction))
+				return false;
 
-			return false;
+			if (window.Current.BasicBlock == window.Previous.BasicBlock)
+				return false;
+
+			if (window.Previous.Branch.Targets[0] != window.Current.BasicBlock.Label)
+				return false;
+
+			window.DeletePrevious();
+
+			return true;
 		}
 
 		/// <summary>
-		/// Removes the single line jump.
+		/// Improves the branch and jump.
 		/// </summary>
 		/// <param name="window">The window.</param>
 		/// <returns></returns>
@@ -251,27 +272,33 @@ namespace Mosa.Platform.x86
 			if (window.Size < 3)
 				return false;
 
-			if (window.Previous.Instruction is CPUx86.JmpInstruction)
-				if (window.PreviousPrevious.Instruction is CPUx86.BranchInstruction)
-					if (window.Previous.BasicBlock == window.PreviousPrevious.BasicBlock)
-						if (window.Current.BasicBlock != window.Previous.BasicBlock)
-							if (window.PreviousPrevious.Branch.Targets[0] == window.Current.BasicBlock.Label)
-							{
-								Debug.Assert(window.PreviousPrevious.Branch.Targets.Length == 1);
+			if (!(window.Previous.Instruction is CPUx86.JmpInstruction))
+				return false;
 
-								// Negate branch condition
-								window.PreviousPrevious.ConditionCode = GetOppositeConditionCode(window.PreviousPrevious.ConditionCode);
+			if (!(window.PreviousPrevious.Instruction is CPUx86.BranchInstruction))
+				return false;
 
-								// Change branch target
-								window.PreviousPrevious.Branch.Targets[0] = window.Previous.Branch.Targets[0];
+			if (window.Previous.BasicBlock != window.PreviousPrevious.BasicBlock)
+				return false;
 
-								// Delete jump
-								window.DeletePrevious();
+			if (window.Current.BasicBlock == window.Previous.BasicBlock)
+				return false;
 
-								return true;
-							}
+			if (window.PreviousPrevious.Branch.Targets[0] != window.Current.BasicBlock.Label)
+				return false;
 
-			return false;
+			Debug.Assert(window.PreviousPrevious.Branch.Targets.Length == 1);
+
+			// Negate branch condition
+			window.PreviousPrevious.ConditionCode = GetOppositeConditionCode(window.PreviousPrevious.ConditionCode);
+
+			// Change branch target
+			window.PreviousPrevious.Branch.Targets[0] = window.Previous.Branch.Targets[0];
+
+			// Delete jump
+			window.DeletePrevious();
+
+			return true;
 		}
 	}
 }

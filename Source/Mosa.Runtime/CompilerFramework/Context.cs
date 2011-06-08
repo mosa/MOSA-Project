@@ -589,20 +589,6 @@ namespace Mosa.Runtime.CompilerFramework
 			NewInstruction = null;
 			Ignore = true;
 			Label = label;
-
-			return;
-
-			//int prev = _instructionSet.Previous(_index);
-
-			//// if this instruction was part of the head of the block, then don't remove it 
-			//if (prev <= 0) {
-			//    NewInstruction = null;
-			//    Ignore = true;
-			//    return;
-			//}
-
-			//_instructionSet.Remove(_index);
-			//_index = prev;
 		}
 
 		/// <summary>

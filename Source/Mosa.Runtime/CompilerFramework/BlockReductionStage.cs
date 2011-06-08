@@ -1,23 +1,30 @@
-/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
+///*
+// * (c) 2008 MOSA - The Managed Operating System Alliance
+// *
+// * Licensed under the terms of the New BSD License.
+// *
+// * Authors:
+// *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+// */
 
 //using System;
 //using System.Collections;
 //using System.Collections.Generic;
 //using System.Diagnostics;
 
+//using Mosa.Runtime.CompilerFramework;
+//using Mosa.Compiler.Linker;
+//using Mosa.Runtime.Metadata;
+//using Mosa.Runtime.Metadata.Signatures;
+
+//using IR = Mosa.Runtime.CompilerFramework.IR;
+
 //namespace Mosa.Runtime.CompilerFramework
 //{
 //    /// <summary>
 //    /// BasicBlockReduction attempts to eliminate useless control flow created as a side effect of other compiler optimizations.
 //    /// </summary>
-//    public class BlockReductionStage : IMethodCompilerStage
+//    public class BlockReductionStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
 //    {
 //        #region Data members
 
@@ -47,16 +54,15 @@
 
 //        #region Properties
 
-//        /// <summary>
-//        /// Retrieves the name of the compilation stage.
-//        /// </summary>
-//        /// <value>The name of the compilation stage.</value>
-//        public string Name
-//        {
-//            get { return @"Basic Block Reduction"; }
-//        }
+//        #region IPipelineStage Members
 
-//        #endregion // Properties
+//        //<summary>
+//        //Retrieves the name of the compilation stage.
+//        //</summary>
+//        //<value>The name of the compilation stage.</value>
+//        string IPipelineStage.Name { get { return @"Basic Block Reduction"; } }
+
+//        #endregion // IPipelineStage Members
 
 //        #region IMethodCompilerStage Members
 
@@ -66,30 +72,20 @@
 //        /// <param name="compiler">The compiler.</param>
 //        public void Run(IMethodCompiler compiler)
 //        {
-//            // Retrieve the basic block provider
-//            IBasicBlockProvider blockProvider = (IBasicBlockProvider)compiler.GetPreviousStage(typeof(IBasicBlockProvider));
-
-//            if (blockProvider == null)
-//                throw new InvalidOperationException(@"Block Reduction stage requires basic Blocks.");
-
-//            List<BasicBlock> blocks = blockProvider.Blocks;
-
-//            // Retreive the prologue and epilogue Blocks
-//            prologue = blockProvider.FromLabel(-1);
-//            epilogue = blockProvider.FromLabel(Int32.MaxValue);
-
-//            // Architecture
-//            arch = compiler.Architecture;
+//            // Retrieve the prologue and epilogue Blocks
+//            prologue = FindBlock(-1);
+//            epilogue = FindBlock(Int32.MaxValue);
 
 //            // Contains a list of Blocks which need to be review during the second pass
-//            workArray = new BitArray(blocks.Count);
+//            workArray = new BitArray(basicBlocks.Count);
 //            workList = new Stack<BasicBlock>();
 
 //            // Pass One
 //            // Iterate all Blocks, remove and/or combine Blocks
 //            // Loop backwards to improve performance and reduce looping
-//            for (int i = blocks.Count - 1; i >= 0; i--) {
-//                BasicBlock block = blocks[i];
+//            for (int i = basicBlocks.Count - 1; i >= 0; i--)
+//            {
+//                BasicBlock block = basicBlocks[i];
 
 //                while (ProcessBlock(block)) ;
 
@@ -97,25 +93,18 @@
 //            }
 
 //            // Pass Two
-//            while (workList.Count != 0) {
+//            while (workList.Count != 0)
+//            {
 //                BasicBlock block = workList.Pop();
 
-//                if (workArray.Get(block.Index)) {
+//                if (workArray.Get(block.Index))
+//                {
 
 //                    while (ProcessBlock(block)) ;
 
 //                    workArray.Set(block.Index, false);
 //                }
 //            }
-//        }
-
-//        /// <summary>
-//        /// Adds to pipeline.
-//        /// </summary>
-//        /// <param name="pipeline">The pipeline.</param>
-//        public void AddToPipeline(CompilerPipeline<IMethodCompilerStage> pipeline)
-//        {
-//            pipeline.RunBefore<CIL.CilToIrTransformationStage>(this);
 //        }
 
 //        /// <summary>
@@ -157,7 +146,8 @@
 //        /// <param name="block">The block.</param>
 //        protected void MarkBlockForReview(BasicBlock block)
 //        {
-//            if (!workArray.Get(block.Index)) {
+//            if (!workArray.Get(block.Index))
+//            {
 //                workArray.Set(block.Index, true);
 //                workList.Push(block);
 //            }
@@ -200,12 +190,13 @@
 //        /// <returns></returns>
 //        protected bool TryToRemoveUnreferencedBlock(BasicBlock block)
 //        {
-//            if ((block.PreviousBlocks.Count == 0) && (block != prologue) && (block != epilogue) && (block.Instructions.Count != 0)) {
+//            if ((block.PreviousBlocks.Count == 0) && (block != prologue) && (block != epilogue) && (block.instructions.Count != 0))
+//            {
 
 //                //Mark Blocks for review in second pass
 //                MarkBlocksForReview(block.NextBlocks);
 
-//                foreach (BasicBlock nextblock in block.NextBlocks) 
+//                foreach (BasicBlock nextblock in block.NextBlocks)
 //                    while (nextblock.PreviousBlocks.Remove(block)) ;
 
 //                block.Instructions.Clear();
@@ -222,8 +213,10 @@
 //        /// <returns></returns>
 //        protected bool TryToFoldRedundantBranch(BasicBlock block)
 //        {
-//            if (block.NextBlocks.Count == 2) {
-//                if (block.NextBlocks[0] == block.NextBlocks[1]) {
+//            if (block.NextBlocks.Count == 2)
+//            {
+//                if (block.NextBlocks[0] == block.NextBlocks[1])
+//                {
 //                    // Replace conditional branch instruction with an unconditional jump instruction
 
 //                    // Mark Blocks for review in second pass
@@ -262,10 +255,13 @@
 //        /// <returns></returns>
 //        protected bool TryToFoldRedundantBranch2(BasicBlock block)
 //        {
-//            if ((block.NextBlocks.Count != 0) && (block.Instructions.Count != 0)) {
+//            if ((block.NextBlocks.Count != 0) && (block.Instructions.Count != 0))
+//            {
 //                IBranchInstruction lastInstruction = block.LastInstruction as IBranchInstruction;
-//                if (lastInstruction.BranchTargets.Length == 2) {
-//                    if (lastInstruction.BranchTargets[0] == lastInstruction.BranchTargets[1]) {
+//                if (lastInstruction.BranchTargets.Length == 2)
+//                {
+//                    if (lastInstruction.BranchTargets[0] == lastInstruction.BranchTargets[1])
+//                    {
 //                        // Replace conditional branch instruction with an unconditional jump instruction
 
 //                        // Mark Blocks for review in second pass
@@ -304,7 +300,8 @@
 //        {
 //            if ((block.PreviousBlocks.Count == 1) && (block.NextBlocks.Count == 1))
 //                if (block.NextBlocks[0] == block)
-//                    if (block.PreviousBlocks[0] == block) {
+//                    if (block.PreviousBlocks[0] == block)
+//                    {
 //                        block.Instructions.Clear();
 //                        block.NextBlocks.Clear();
 //                        block.PreviousBlocks.Clear();
@@ -320,14 +317,16 @@
 //        /// <returns></returns>
 //        protected bool TryToRemoveEmptyBlock(BasicBlock block)
 //        {
-//            if ((block.Instructions.Count == 1) && (block != prologue) && (block != epilogue) && (block.NextBlocks.Count != 0)) {
+//            if ((block.Instructions.Count == 1) && (block != prologue) && (block != epilogue) && (block.NextBlocks.Count != 0))
+//            {
 //                // Sanity check, a block with one instruction (which should be a JUMP) can only have one branch
 //                //Debug.Assert(block.NextBlocks.Count == 1);
 
 //                // Mark Blocks for review in second pass
 //                MarkRelatedBlocksForReview(block, false);
 
-//                foreach (BasicBlock previousBlock in block.PreviousBlocks) {
+//                foreach (BasicBlock previousBlock in block.PreviousBlocks)
+//                {
 //                    // Sanity check, previous.next == block!
 //                    Debug.Assert(previousBlock.NextBlocks.Contains(block));
 
@@ -344,7 +343,8 @@
 //                    IBranchInstruction lastInstruction = previousBlock.LastInstruction as IBranchInstruction;
 
 //                    // Replace targets labels in the last instruction in the previous block with new label
-//                    for (int i = lastInstruction.BranchTargets.Length - 1; i >= 0; --i) {
+//                    for (int i = lastInstruction.BranchTargets.Length - 1; i >= 0; --i)
+//                    {
 //                        if (lastInstruction.BranchTargets[i] == block.Label)
 //                            lastInstruction.BranchTargets[i] = block.NextBlocks[0].Label;
 //                    }
@@ -373,8 +373,10 @@
 //        /// <returns></returns>
 //        protected bool TryToCombineBlocks(BasicBlock block)
 //        {
-//            if ((block.NextBlocks.Count == 1) && (block != prologue))  {
-//                if ((block.NextBlocks[0].PreviousBlocks.Count == 1) && (block.NextBlocks[0] != epilogue)) {
+//            if ((block.NextBlocks.Count == 1) && (block != prologue))
+//            {
+//                if ((block.NextBlocks[0].PreviousBlocks.Count == 1) && (block.NextBlocks[0] != epilogue))
+//                {
 //                    // Merge next block into current block
 //                    BasicBlock nextBlock = block.NextBlocks[0];
 
@@ -391,14 +393,16 @@
 //                    block.Instructions.RemoveAt(block.Instructions.Count - 1);
 
 //                    // Copy instructions from next block into the current block
-//                    foreach (LegacyInstruction instruction in nextBlock.Instructions) {
+//                    foreach (LegacyInstruction instruction in nextBlock.Instructions)
+//                    {
 //                        instruction.Block = block.Index;
 //                        block.Instructions.Add(instruction);
 //                    }
 
 //                    // Copy block list from next block to the current block
 //                    block.NextBlocks.Clear();
-//                    foreach (BasicBlock next in nextBlock.NextBlocks) {
+//                    foreach (BasicBlock next in nextBlock.NextBlocks)
+//                    {
 //                        if (!block.NextBlocks.Contains(next))
 //                            block.NextBlocks.Add(next);
 
@@ -435,8 +439,10 @@
 //        /// <returns></returns>
 //        protected bool TryToHoistBranch(BasicBlock block)
 //        {
-//            if ((block.NextBlocks.Count == 1) && (block != prologue)) {
-//                if ((block.NextBlocks[0].Instructions.Count == 1) && (block.NextBlocks[0] != epilogue)) {
+//            if ((block.NextBlocks.Count == 1) && (block != prologue))
+//            {
+//                if ((block.NextBlocks[0].Instructions.Count == 1) && (block.NextBlocks[0] != epilogue))
+//                {
 //                    // Copy instruction from next block into current block
 
 //                    // Sanity check, last instruction must have an IBranchInstruction interface
@@ -467,7 +473,7 @@
 //                    block.NextBlocks[0].PreviousBlocks.Remove(block);
 
 //                    // Add the next block's next block list to this block
-//                    foreach (BasicBlock nextBlock in block.NextBlocks[0].NextBlocks) 
+//                    foreach (BasicBlock nextBlock in block.NextBlocks[0].NextBlocks)
 //                        block.NextBlocks.Add(nextBlock);
 
 //                    // Remove next block from this block
@@ -487,43 +493,50 @@
 //        protected LegacyInstruction CloneBranchInstruction(IBranchInstruction branchInstruction)
 //        {
 //            LegacyInstruction result;
-//            if (branchInstruction is CIL.BinaryBranchInstruction) {
+//            if (branchInstruction is CIL.BinaryBranchInstruction)
+//            {
 //                result = arch.CreateInstruction(
 //                       typeof(CIL.BinaryBranchInstruction),
 //                       ((CIL.BinaryBranchInstruction)branchInstruction).Code
 //                );
 //            }
-//            else if (branchInstruction is CIL.LeaveInstruction) { // Must be before IL.BranchInstruction
+//            else if (branchInstruction is CIL.LeaveInstruction)
+//            { // Must be before IL.BranchInstruction
 //                result = arch.CreateInstruction(
 //                       typeof(CIL.LeaveInstruction),
 //                       ((CIL.LeaveInstruction)branchInstruction).Code
 //                );
 //            }
-//            else if (branchInstruction is IL.BranchInstruction) {
+//            else if (branchInstruction is IL.BranchInstruction)
+//            {
 //                result = arch.CreateInstruction(
 //                       typeof(IL.BranchInstruction),
 //                       ((CIL.BranchInstruction)branchInstruction).Code
 //                );
 //            }
-//            else if (branchInstruction is CIL.ReturnInstruction) {
+//            else if (branchInstruction is CIL.ReturnInstruction)
+//            {
 //                result = arch.CreateInstruction(
 //                       typeof(CIL.ReturnInstruction),
 //                       ((CIL.ReturnInstruction)branchInstruction).Code
 //                );
 //            }
-//            else if (branchInstruction is CIL.SwitchInstruction) { // Must be before IL.UnaryBranchInstruction
+//            else if (branchInstruction is CIL.SwitchInstruction)
+//            { // Must be before IL.UnaryBranchInstruction
 //                result = arch.CreateInstruction(
 //                       typeof(CIL.SwitchInstruction),
 //                       ((CIL.SwitchInstruction)branchInstruction).Code
 //                );
 //            }
-//            else if (branchInstruction is CIL.UnaryBranchInstruction) {
+//            else if (branchInstruction is CIL.UnaryBranchInstruction)
+//            {
 //                result = arch.CreateInstruction(
 //                       typeof(CIL.UnaryBranchInstruction),
 //                       ((CIL.UnaryBranchInstruction)branchInstruction).Code
 //                );
 //            }
-//            else {
+//            else
+//            {
 //                throw new NotImplementedException();
 //            }
 
