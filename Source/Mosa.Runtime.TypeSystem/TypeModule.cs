@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using System.Diagnostics;
+using System.Linq;
 
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Tables;
@@ -564,13 +565,9 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		protected void LoadGenericInterfaces()
 		{
-			foreach (var type in typeSpecs)
+			foreach (var genericType in typeSpecs.OfType<CilGenericType>())
 			{
-				var genericType = type as CilGenericType;
-				if (genericType != null)
-				{
-					genericType.ResolveInterfaces(this);
-				}
+				genericType.ResolveInterfaces(this);
 			}
 		}
 
@@ -1073,15 +1070,8 @@ namespace Mosa.Runtime.TypeSystem
 			if (declaringTypeName != callingTypeName)
 				return calledMethod;
 
-			foreach (var method in callingType.Methods)
-			{
-				if (calledMethod.Name == method.Name)
-				{
-					return method;
-				}
-			}
-
-			return calledMethod;
+			var method = callingType.Methods.First(x => x.Name == calledMethod.Name);
+			return method == null ? calledMethod : method;
 		}
 
 		/// <summary>
@@ -1097,20 +1087,10 @@ namespace Mosa.Runtime.TypeSystem
 			if (baseGenericType.GenericParameters.Count == 0)
 				return null;
 
-			foreach (var type in typeSpecs)
+			foreach (var genericType in typeSpecs.OfType<CilGenericType>().Where (t => t.BaseGenericType == baseGenericType && t.ContainsOpenGenericParameters))
 			{
-				var genericType = type as CilGenericType;
-
-				if (genericType == null || genericType.BaseGenericType != baseGenericType || !genericType.ContainsOpenGenericParameters)
-					continue;
-
-				foreach (var sigType in genericType.GenericArguments)
-				{
-					if (!sigType.IsOpenGenericParameter)
-					{
-						return genericType;
-					}
-				}
+				if (genericType.GenericArguments.First(x => !x.IsOpenGenericParameter) != null)
+					return genericType;
 			}
 
 			return null;
@@ -1144,3 +1124,5 @@ namespace Mosa.Runtime.TypeSystem
 		}
 	}
 }
+
+
