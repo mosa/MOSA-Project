@@ -67,23 +67,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// <returns></returns>
 		ITypeModule ITypeSystem.ResolveModuleReference(string assembly)
 		{
-			// Search for reference first
-			foreach (var typeModule in typeModules)
-			{
-				if (typeModule.Name == assembly)
-				{
-					return typeModule; // already referenced
-				}
-
-				// Handle pseudo mscorlib
-				if ((typeModule.Name == "mscorlib") && (assembly == "Mosa.Test.Korlib"))
-				{
-					return typeModule;
-				}
-
-			}
-
-			return null;
+			return typeModules.Find(typeModule => typeModule.Name == assembly || (typeModule.Name == "mscorlib" && assembly == "Mosa.Test.Korlib"));
 		}
 
 		/// <summary>
@@ -95,7 +79,7 @@ namespace Mosa.Runtime.TypeSystem
 		RuntimeType ITypeSystem.GetType(string nameSpace, string name)
 		{
 			foreach (var typeModule in typeModules)
-	      	{
+			{
 				var type = typeModule.GetType(nameSpace, name);
 				if (type != null)
 					return type;
