@@ -59,7 +59,12 @@ namespace Mosa.Runtime.TypeSystem
 		/// <summary>
 		/// Holds the full method name
 		/// </summary>
-		private string FullName;
+		private string fullName;
+
+		/// <summary>
+		/// Holds the method name
+		/// </summary>
+		private string methodName;
 
 		#endregion // Data members
 
@@ -169,6 +174,58 @@ namespace Mosa.Runtime.TypeSystem
 			get { return genericParameters; }
 		}
 
+		/// <summary>
+		/// Gets the full name.
+		/// </summary>
+		/// <value>The full name.</value>
+		public string FullName
+		{
+			get
+			{
+				if (fullName == null)
+				{
+					fullName = DeclaringType.ToString() + '.' + methodName;
+				}
+
+				return fullName;
+			}
+		}
+
+		/// <summary>
+		/// Gets the name of the method.
+		/// </summary>
+		/// <value>The name of the method.</value>
+		public string MethodName
+		{
+			get
+			{
+				if (methodName == null)
+				{
+					var sb = new StringBuilder();
+
+					sb.Append(Name);
+					sb.Append('(');
+
+					if (this.Parameters.Count != 0)
+					{
+						var sig = this.Signature;
+						int i = 0;
+						foreach (var p in this.Parameters)
+						{
+							sb.AppendFormat("{0} {1},", sig.Parameters[i++].Type, p.Name);
+						}
+						sb.Remove(sb.Length - 1, 1);
+					}
+
+					sb.Append(')');
+
+					methodName = sb.ToString();
+				}
+
+				return methodName;
+			}
+		}
+
 		#endregion // Properties
 
 		#region Object Overrides
@@ -181,31 +238,6 @@ namespace Mosa.Runtime.TypeSystem
 		/// </returns>
 		public override string ToString()
 		{
-			if (FullName != null)
-				return FullName;
-
-			var result = new StringBuilder();
-
-			result.Append(DeclaringType.ToString());
-			result.Append('.');
-			result.Append(Name);
-			result.Append('(');
-
-			if (this.Parameters.Count != 0)
-			{
-				var sig = this.Signature;
-				int i = 0;
-				foreach (var p in this.Parameters)
-				{
-					result.AppendFormat("{0} {1},", sig.Parameters[i++].Type, p.Name);
-				}
-				result.Remove(result.Length - 1, 1);
-			}
-
-			result.Append(')');
-
-			FullName =  result.ToString();
-
 			return FullName;
 		}
 

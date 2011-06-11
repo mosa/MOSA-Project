@@ -93,7 +93,7 @@ namespace Mosa.Tools.TypeExplorer
 			if (!showTokenValues.Checked)
 				return method.Name;
 
-			return "[" + TokenToString(method.Token) + "] " + method.Name;
+			return "[" + TokenToString(method.Token) + "] " + method.MethodName;
 		}
 
 		protected string FormatRuntimeType(RuntimeType type)
@@ -311,6 +311,8 @@ namespace Mosa.Tools.TypeExplorer
 
 		private void cbStages_SelectedIndexChanged(object sender, EventArgs e)
 		{
+			tbResult.Text = string.Empty;
+
 			if (treeView.SelectedNode != null)
 			{
 				var node = treeView.SelectedNode as ViewNode<RuntimeMethod>;
