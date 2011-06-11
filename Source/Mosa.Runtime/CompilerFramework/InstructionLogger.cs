@@ -48,14 +48,14 @@ namespace Mosa.Runtime.InternalLog
 			// Line number
 			int index = 1;
 
-			text.AppendLine(String.Format("IR representation of method {0} after stage {1}", method, stage.Name));
-			text.AppendLine();
+			//text.AppendLine(String.Format("IR representation of method {0} after stage {1}", method, stage.Name));
+			//text.AppendLine();
 
 			if (basicBlocks.Count > 0)
 			{
 				foreach (BasicBlock block in basicBlocks)
 				{
-					text.AppendFormat("Block #{0} - label L_{1:X4}", index, block.Label);
+					text.AppendFormat("Block #{0} - Label L_{1:X4}", index, block.Label);
 					text.AppendLine();
 
 					text.AppendFormat("  Prev: ");

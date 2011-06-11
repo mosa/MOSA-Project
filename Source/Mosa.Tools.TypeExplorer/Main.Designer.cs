@@ -28,8 +28,8 @@
 		/// </summary>
 		private void InitializeComponent()
 		{
-			System.Windows.Forms.Label labelLabel;
 			System.Windows.Forms.Label stageLabel;
+			System.Windows.Forms.Label label1;
 			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
 			this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
@@ -47,7 +47,6 @@
 			this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
 			this.treeView = new System.Windows.Forms.TreeView();
 			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
-			this.cbLabel = new System.Windows.Forms.CheckBox();
 			this.cbLabels = new System.Windows.Forms.ComboBox();
 			this.cbStages = new System.Windows.Forms.ComboBox();
 			this.tbResult = new System.Windows.Forms.RichTextBox();
@@ -56,8 +55,8 @@
 			this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
-			labelLabel = new System.Windows.Forms.Label();
 			stageLabel = new System.Windows.Forms.Label();
+			label1 = new System.Windows.Forms.Label();
 			this.statusStrip1.SuspendLayout();
 			this.menuStrip1.SuspendLayout();
 			this.splitContainer1.Panel1.SuspendLayout();
@@ -66,33 +65,33 @@
 			this.toolStrip1.SuspendLayout();
 			this.SuspendLayout();
 			// 
-			// labelLabel
-			// 
-			labelLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			labelLabel.Location = new System.Drawing.Point(256, 2);
-			labelLabel.Margin = new System.Windows.Forms.Padding(4);
-			labelLabel.Name = "labelLabel";
-			labelLabel.Size = new System.Drawing.Size(43, 20);
-			labelLabel.TabIndex = 35;
-			labelLabel.Text = "Label:";
-			// 
 			// stageLabel
 			// 
 			stageLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			stageLabel.Location = new System.Drawing.Point(1, 2);
+			stageLabel.Location = new System.Drawing.Point(1, 4);
 			stageLabel.Margin = new System.Windows.Forms.Padding(4);
 			stageLabel.Name = "stageLabel";
 			stageLabel.Size = new System.Drawing.Size(158, 20);
 			stageLabel.TabIndex = 32;
 			stageLabel.Text = "Stage:";
 			// 
+			// label1
+			// 
+			label1.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			label1.Location = new System.Drawing.Point(260, 4);
+			label1.Margin = new System.Windows.Forms.Padding(4);
+			label1.Name = "label1";
+			label1.Size = new System.Drawing.Size(120, 20);
+			label1.TabIndex = 35;
+			label1.Text = "Block Label:";
+			// 
 			// statusStrip1
 			// 
 			this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1});
-			this.statusStrip1.Location = new System.Drawing.Point(0, 489);
+			this.statusStrip1.Location = new System.Drawing.Point(0, 466);
 			this.statusStrip1.Name = "statusStrip1";
-			this.statusStrip1.Size = new System.Drawing.Size(698, 22);
+			this.statusStrip1.Size = new System.Drawing.Size(686, 22);
 			this.statusStrip1.TabIndex = 0;
 			this.statusStrip1.Text = "statusStrip1";
 			// 
@@ -110,7 +109,7 @@
             this.optionsToolStripMenuItem});
 			this.menuStrip1.Location = new System.Drawing.Point(0, 0);
 			this.menuStrip1.Name = "menuStrip1";
-			this.menuStrip1.Size = new System.Drawing.Size(698, 24);
+			this.menuStrip1.Size = new System.Drawing.Size(686, 24);
 			this.menuStrip1.TabIndex = 3;
 			this.menuStrip1.Text = "menuStrip1";
 			// 
@@ -207,7 +206,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
 			this.treeView.Location = new System.Drawing.Point(3, 3);
 			this.treeView.Name = "treeView";
-			this.treeView.Size = new System.Drawing.Size(264, 428);
+			this.treeView.Size = new System.Drawing.Size(259, 405);
 			this.treeView.TabIndex = 3;
 			this.treeView.AfterSelect += new System.Windows.Forms.TreeViewEventHandler(this.treeView_AfterSelect);
 			// 
@@ -226,30 +225,17 @@
 			// 
 			// splitContainer1.Panel2
 			// 
-			this.splitContainer1.Panel2.Controls.Add(labelLabel);
-			this.splitContainer1.Panel2.Controls.Add(this.cbLabel);
+			this.splitContainer1.Panel2.Controls.Add(label1);
 			this.splitContainer1.Panel2.Controls.Add(this.cbLabels);
 			this.splitContainer1.Panel2.Controls.Add(this.cbStages);
 			this.splitContainer1.Panel2.Controls.Add(stageLabel);
 			this.splitContainer1.Panel2.Controls.Add(this.tbResult);
 			this.splitContainer1.Panel2.RightToLeft = System.Windows.Forms.RightToLeft.No;
 			this.splitContainer1.RightToLeft = System.Windows.Forms.RightToLeft.No;
-			this.splitContainer1.Size = new System.Drawing.Size(694, 434);
-			this.splitContainer1.SplitterDistance = 269;
+			this.splitContainer1.Size = new System.Drawing.Size(682, 411);
+			this.splitContainer1.SplitterDistance = 264;
 			this.splitContainer1.SplitterWidth = 5;
 			this.splitContainer1.TabIndex = 26;
-			// 
-			// cbLabel
-			// 
-			this.cbLabel.AutoSize = true;
-			this.cbLabel.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			this.cbLabel.Location = new System.Drawing.Point(307, 2);
-			this.cbLabel.Margin = new System.Windows.Forms.Padding(4);
-			this.cbLabel.Name = "cbLabel";
-			this.cbLabel.Size = new System.Drawing.Size(73, 21);
-			this.cbLabel.TabIndex = 34;
-			this.cbLabel.Text = "Display";
-			this.cbLabel.UseVisualStyleBackColor = true;
 			// 
 			// cbLabels
 			// 
@@ -262,6 +248,7 @@
 			this.cbLabels.Name = "cbLabels";
 			this.cbLabels.Size = new System.Drawing.Size(121, 21);
 			this.cbLabels.TabIndex = 33;
+			this.cbLabels.SelectedIndexChanged += new System.EventHandler(this.cbLabels_SelectedIndexChanged);
 			// 
 			// cbStages
 			// 
@@ -285,7 +272,7 @@
 			this.tbResult.Location = new System.Drawing.Point(0, 60);
 			this.tbResult.Margin = new System.Windows.Forms.Padding(0);
 			this.tbResult.Name = "tbResult";
-			this.tbResult.Size = new System.Drawing.Size(420, 371);
+			this.tbResult.Size = new System.Drawing.Size(413, 348);
 			this.tbResult.TabIndex = 30;
 			this.tbResult.Text = "";
 			this.tbResult.WordWrap = false;
@@ -299,7 +286,7 @@
             this.toolStripButton3});
 			this.toolStrip1.Location = new System.Drawing.Point(0, 24);
 			this.toolStrip1.Name = "toolStrip1";
-			this.toolStrip1.Size = new System.Drawing.Size(698, 25);
+			this.toolStrip1.Size = new System.Drawing.Size(686, 25);
 			this.toolStrip1.TabIndex = 27;
 			this.toolStrip1.Text = "toolStrip1";
 			// 
@@ -342,7 +329,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(698, 511);
+			this.ClientSize = new System.Drawing.Size(686, 488);
 			this.Controls.Add(this.toolStrip1);
 			this.Controls.Add(this.statusStrip1);
 			this.Controls.Add(this.menuStrip1);
@@ -357,7 +344,6 @@
 			this.menuStrip1.PerformLayout();
 			this.splitContainer1.Panel1.ResumeLayout(false);
 			this.splitContainer1.Panel2.ResumeLayout(false);
-			this.splitContainer1.Panel2.PerformLayout();
 			this.splitContainer1.ResumeLayout(false);
 			this.toolStrip1.ResumeLayout(false);
 			this.toolStrip1.PerformLayout();
@@ -380,7 +366,6 @@
 		private System.Windows.Forms.ToolStripMenuItem showSizes;
 		private System.Windows.Forms.TreeView treeView;
 		private System.Windows.Forms.SplitContainer splitContainer1;
-		private System.Windows.Forms.CheckBox cbLabel;
 		private System.Windows.Forms.ComboBox cbLabels;
 		private System.Windows.Forms.ComboBox cbStages;
 		private System.Windows.Forms.RichTextBox tbResult;

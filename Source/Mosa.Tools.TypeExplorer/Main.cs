@@ -25,7 +25,9 @@ namespace Mosa.Tools.TypeExplorer
 		private ITypeSystem typeSystem = new TypeSystem();
 		private ConfigurableInstructionLogFilter filter = new ConfigurableInstructionLogFilter();
 		private ITypeLayout typeLayout;
-		private DateTime CompileStartTime;
+		private DateTime compileStartTime;
+		private string currentStageLog;
+		private string[] currentStageLogLines;
 
 		private Dictionary<RuntimeMethod, MethodStages> methodStages = new Dictionary<RuntimeMethod, MethodStages>();
 
@@ -176,6 +178,7 @@ namespace Mosa.Tools.TypeExplorer
 						TreeNode fieldsNode = new TreeNode("Fields");
 						if (showSizes.Checked)
 							fieldsNode.Text = fieldsNode.Text + " (Count: " + type.Fields.Count.ToString() + " - Size: " + typeLayout.GetTypeSize(type).ToString() + ")";
+
 						typeNode.Nodes.Add(fieldsNode);
 
 						foreach (RuntimeField field in type.Fields)
@@ -253,7 +256,7 @@ namespace Mosa.Tools.TypeExplorer
 			toolStripStatusLabel1.Text = compilerStage.ToText() + ": " + info;
 			toolStripStatusLabel1.GetCurrentParent().Refresh();
 
-			tbResult.AppendText(String.Format("{0:0.00}", (DateTime.Now - CompileStartTime).TotalSeconds) + " ms: " + compilerStage.ToText() + ": " + info + "\n");
+			tbResult.AppendText(String.Format("{0:0.00}", (DateTime.Now - compileStartTime).TotalSeconds) + " ms: " + compilerStage.ToText() + ": " + info + "\n");
 		}
 
 		void IInstructionLogListener.NotifyNewInstructionLog(RuntimeMethod method, string stage, string log)
@@ -272,7 +275,7 @@ namespace Mosa.Tools.TypeExplorer
 
 		void Compile()
 		{
-			CompileStartTime = DateTime.Now;
+			compileStartTime = DateTime.Now;
 			methodStages.Clear();
 
 			filter.IsLogging = true;
@@ -286,44 +289,73 @@ namespace Mosa.Tools.TypeExplorer
 			Compile();
 		}
 
+		private T GetCurrentNode<T>() where T : class
+		{
+			if (treeView.SelectedNode == null)
+				return null;
+
+			T node = treeView.SelectedNode as T;
+
+			return node;
+		}
+
 		private void treeView_AfterSelect(object sender, TreeViewEventArgs e)
 		{
-			if (treeView.SelectedNode != null)
-			{
-				var node = treeView.SelectedNode as ViewNode<RuntimeMethod>;
+			tbResult.Text = string.Empty;
 
-				if (node != null)
-				{
-					MethodStages methodStage;
+			var node = GetCurrentNode<ViewNode<RuntimeMethod>>();
 
-					if (!methodStages.TryGetValue(node.Type, out methodStage))
-						return;
+			if (node == null)
+				return;
 
-					cbStages.Items.Clear();
+			MethodStages methodStage;
 
-					foreach (string stage in methodStage.OrderedStageNames)
-						cbStages.Items.Add(stage);
+			if (!methodStages.TryGetValue(node.Type, out methodStage))
+				return;
 
-					cbStages.SelectedIndex = 0;
-				}
-			}
+			cbStages.Items.Clear();
+
+			foreach (string stage in methodStage.OrderedStageNames)
+				cbStages.Items.Add(stage);
+
+			cbStages.SelectedIndex = 0;
 		}
 
 		private void cbStages_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			tbResult.Text = string.Empty;
+			currentStageLog = string.Empty;
 
-			if (treeView.SelectedNode != null)
+			var node = GetCurrentNode<ViewNode<RuntimeMethod>>();
+
+			if (node == null)
+				return;
+
+			MethodStages methodStage;
+
+			if (methodStages.TryGetValue(node.Type, out methodStage))
 			{
-				var node = treeView.SelectedNode as ViewNode<RuntimeMethod>;
+				string stage = cbStages.SelectedItem.ToString();
 
-				if (node != null)
+				if (currentStageLog == methodStage.Logs[stage])
+					return;
+
+				currentStageLog = methodStage.Logs[stage];
+
+				currentStageLogLines = currentStageLog.Split('\n');
+
+				cbLabels.Items.Clear();
+				cbLabels.Items.Add("All");
+
+				foreach (string line in currentStageLogLines)
 				{
-					MethodStages methodStage;
-
-					if (methodStages.TryGetValue(node.Type, out methodStage))
-						tbResult.Text = methodStage.Logs[cbStages.SelectedItem.ToString()];
+					if (line.StartsWith("Block #"))
+					{
+						cbLabels.Items.Add(line.Substring(line.IndexOf("L_")));
+					}
 				}
+
+				cbLabels.SelectedIndex = 0;
+				cbLabels_SelectedIndexChanged(null, null);
 			}
 		}
 
@@ -375,6 +407,48 @@ namespace Mosa.Tools.TypeExplorer
 		private void toolStripButton3_Click(object sender, EventArgs e)
 		{
 			Compile();
+		}
+
+		private void cbLabels_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			tbResult.Text = string.Empty;
+			toolStripStatusLabel1.Text = string.Empty;
+
+			if (string.IsNullOrEmpty(currentStageLog))
+				return;
+
+			var node = GetCurrentNode<ViewNode<RuntimeMethod>>();
+
+			if (node == null)
+				return;
+
+			toolStripStatusLabel1.Text = node.Type.FullName;
+
+			if (cbLabels.SelectedIndex == 0)
+			{
+				tbResult.Text = currentStageLog;
+				return;
+			}
+
+			string blockLabel = cbLabels.SelectedItem as string;
+
+			bool inBlock = false;
+
+			foreach (string line in currentStageLogLines)
+			{
+				if ((!inBlock) && line.StartsWith("Block #") && line.EndsWith(blockLabel))
+				{
+					inBlock = true;
+				}
+
+				if (inBlock)
+				{
+					tbResult.AppendText(line);
+
+					if (line.StartsWith("  Next:"))
+						return;
+				}
+			}
 		}
 
 	}
