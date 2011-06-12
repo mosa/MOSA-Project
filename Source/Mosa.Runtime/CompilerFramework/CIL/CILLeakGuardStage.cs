@@ -25,23 +25,13 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Determines if this stage throws a compilation exception, if a CIL instruction is detected.
 		/// </summary>
-		public bool MustThrowCompilationException
-		{
-			get;
-			set;
-		}
+		public bool MustThrowCompilationException { get; set; }
 
 		/// <summary>
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
 		/// <value>The name of the compilation stage.</value>
-		public string Name
-		{
-			get
-			{
-				return @"CILLeakGuardStage";
-			}
-		}
+		public string Name { get { return @"CILLeakGuardStage"; } }
 
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
@@ -68,7 +58,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		private void ThrowCompilationException(Context context)
 		{
 			string message = @"Leaking CIL instruction to late stages. Instruction " + context.Instruction.ToString(context) + @" at " + context.Label + @" in method " + this.methodCompiler.Method;
-			Trace.WriteLine(message);
+
+			NotifyCompilerEvent(InternalLog.CompilerEvent.Error, message);
 
 			if (this.MustThrowCompilationException == true)
 			{

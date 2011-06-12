@@ -151,9 +151,9 @@ namespace Mosa.Runtime.CompilerFramework
 			//Pipeline.Execute<IAssemblyCompilerStage>(stage => stage.Run());
 			foreach (IAssemblyCompilerStage stage in Pipeline)
 			{
-				internalLog.CompilerEventListener.NotifyCompilerEvent(CompilerEvent.AssemblyStageStart, stage.Name);
+				NotifyCompilerEvent(CompilerEvent.AssemblyStageStart, stage.Name);
 				stage.Run();
-				internalLog.CompilerEventListener.NotifyCompilerEvent(CompilerEvent.AssemblyStageEnd, stage.Name);
+				NotifyCompilerEvent(CompilerEvent.AssemblyStageEnd, stage.Name);
 			}
 
 			EndCompile();
@@ -177,5 +177,14 @@ namespace Mosa.Runtime.CompilerFramework
 		protected virtual void EndCompile() { }
 
 		#endregion // Methods
+
+		#region Helper Methods
+
+		protected void NotifyCompilerEvent(CompilerEvent compilerEvent, string message)
+		{
+			internalLog.CompilerEventListener.NotifyCompilerEvent(compilerEvent, message);
+		}
+
+		#endregion
 	}
 }

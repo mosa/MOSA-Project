@@ -74,6 +74,7 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			// Changed flag
 			bool changed = true;
+
 			// Blocks in reverse post order topology
 			BasicBlock[] revPostOrder = ReversePostorder(basicBlocks);
 
@@ -87,7 +88,7 @@ namespace Mosa.Runtime.CompilerFramework
 				changed = false;
 				foreach (BasicBlock b in revPostOrder)
 				{
-					if (b != null) // Necessary ???
+					if (b != null)
 					{
 						BasicBlock idom = b.PreviousBlocks[0];
 						//Debug.Assert(-1 !=  Array.IndexOf(_doms, idom));

@@ -15,6 +15,7 @@ using System.Diagnostics;
 using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime.Metadata.Signatures;
+using Mosa.Runtime.InternalLog;
 
 using CIL = Mosa.Runtime.CompilerFramework.CIL;
 
@@ -55,7 +56,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Holds the modules type system
 		/// </summary>
-		protected ITypeModule typeModule; 
+		protected ITypeModule typeModule;
 
 		/// <summary>
 		/// Holds the assembly loader
@@ -95,7 +96,7 @@ namespace Mosa.Runtime.CompilerFramework
 			architecture = compiler.Architecture;
 			typeModule = compiler.Method.Module;
 			typeSystem = compiler.TypeSystem;
-			typeLayout = compiler.TypeLayout;	
+			typeLayout = compiler.TypeLayout;
 			callingConvention = architecture.GetCallingConvention();
 
 			architecture.GetTypeRequirements(BuiltInSigType.IntPtr, out nativePointerSize, out nativePointerAlignment);
@@ -154,6 +155,15 @@ namespace Mosa.Runtime.CompilerFramework
 		protected BasicBlock CreateBlock(int label)
 		{
 			return methodCompiler.CreateBlock(label, -1);
+		}
+
+		#endregion
+
+		#region Helper Methods
+
+		protected void NotifyCompilerEvent(CompilerEvent compilerEvent, string message)
+		{
+			methodCompiler.InternalLog.CompilerEventListener.NotifyCompilerEvent(compilerEvent, message);
 		}
 
 		#endregion

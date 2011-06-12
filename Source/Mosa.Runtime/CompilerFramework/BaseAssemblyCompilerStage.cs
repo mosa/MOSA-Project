@@ -18,6 +18,7 @@ using Mosa.Runtime.Metadata.Tables;
 using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Metadata.Loader;
+using Mosa.Runtime.InternalLog;
 
 namespace Mosa.Runtime.CompilerFramework
 {
@@ -79,6 +80,15 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		#endregion // Methods
+
+		#region Helper Methods
+
+		protected void NotifyCompilerEvent(CompilerEvent compilerEvent, string message)
+		{
+			compiler.InternalLog.CompilerEventListener.NotifyCompilerEvent(compilerEvent, message);
+		}
+
+		#endregion
 
 	}
 }

@@ -15,7 +15,7 @@ using Mosa.Runtime.TypeSystem;
 
 namespace Mosa.Runtime.InternalLog
 {
-	public enum CompilerEvent { CompilingMethod, CompilingType, Linking, AssemblyStageStart, AssemblyStageEnd, DebugInfo, SchedulingType, SchedulingMethod };
+	public enum CompilerEvent { CompilingMethod, CompilingType, Linking, AssemblyStageStart, AssemblyStageEnd, DebugInfo, SchedulingType, SchedulingMethod, Error, Warning };
 
 	public static class CompilerEventExtension
 	{
@@ -31,6 +31,8 @@ namespace Mosa.Runtime.InternalLog
 				case CompilerEvent.DebugInfo: return "DebugInfo";
 				case CompilerEvent.AssemblyStageStart: return "Assembly Stage Started";
 				case CompilerEvent.AssemblyStageEnd: return "Assembly Stage Ended";
+				case CompilerEvent.Error: return "Error";
+				case CompilerEvent.Warning: return "Warning";
 				default: return stage.ToString();
 			}
 		}
