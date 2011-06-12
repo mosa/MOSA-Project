@@ -184,7 +184,7 @@ namespace Mosa.Runtime.TypeSystem
 			{
 				if (fullName == null)
 				{
-					fullName = DeclaringType.ToString() + '.' + methodName;
+					fullName = DeclaringType.ToString() + '.' + MethodName;
 				}
 
 				return fullName;
