@@ -25,22 +25,22 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// The index of the block within the InstructionSet
 		/// </summary>
-		public int Index;
+		private int index;
 
 		/// <summary>
 		/// The label of the block. (For simplicity this is actually the original instruction offset.)
 		/// </summary>
-		private int _label;
+		private int label;
 
 		/// <summary>
 		/// The creation sequence number of the block; unique within a method. (For use with stage that require an integer id for blocks starting from 0).
 		/// </summary>
-		private int _sequence;
+		private int sequence;
 
 		/// <summary>
 		/// Hints at which target the block will most likely branch to
 		/// </summary>
-		public int HintTarget;
+		private int hintTarget;
 
 		/// <summary>
 		/// Links this block to all Blocks invoked by the final branch instruction.
@@ -50,22 +50,22 @@ namespace Mosa.Runtime.CompilerFramework
 		/// the immediately following block. If the final branch instruction is a
 		/// switch, there are potentially more Blocks in this list.
 		/// </remarks>
-		private List<BasicBlock> _nextBlocks;
+		private List<BasicBlock> nextBlocks;
 
 		/// <summary>
 		/// A list of all Blocks, whose final branch instruction refers to this block.
 		/// </summary>
-		private List<BasicBlock> _previousBlocks;
+		private List<BasicBlock> previousBlocks;
 
 		/// <summary>
 		///
 		/// </summary>
-		private Stack<Operand> _initialStack;
+		private Stack<Operand> initialStack;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private EhClause _exceptionHeaderClause;
+		private EhClause exceptionHeaderClause;
 
 		#endregion
 
@@ -76,8 +76,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		private BasicBlock()
 		{
-			_nextBlocks = new List<BasicBlock>();
-			_previousBlocks = new List<BasicBlock>();
+			nextBlocks = new List<BasicBlock>(2);
+			previousBlocks = new List<BasicBlock>(2);
 		}
 
 		/// <summary>
@@ -89,10 +89,10 @@ namespace Mosa.Runtime.CompilerFramework
 		public BasicBlock(int sequence, int label, int index)
 			: this()
 		{
-			_sequence = sequence;
-			_label = label;
-			Index = index;
-			HintTarget = -1;
+			this.sequence = sequence;
+			this.label = label;
+			this.index = index;
+			this.hintTarget = -1;
 		}
 
 		#endregion
@@ -100,12 +100,21 @@ namespace Mosa.Runtime.CompilerFramework
 		#region Properties
 
 		/// <summary>
+		/// The index of the block within the InstructionSet
+		/// </summary>
+		public int Index
+		{
+			get { return index; }
+			set { index = value; }
+		}
+
+		/// <summary>
 		/// Retrieves the label, which uniquely identifies this block.
 		/// </summary>
 		/// <value>The label.</value>
 		public int Label
 		{
-			get { return _label; }
+			get { return label; }
 		}
 
 		/// <summary>
@@ -114,7 +123,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value>The label.</value>
 		public int Sequence
 		{
-			get { return _sequence; }
+			get { return sequence; }
 		}
 
 		/// <summary>
@@ -123,7 +132,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public List<BasicBlock> NextBlocks
 		{
-			get { return _nextBlocks; }
+			get { return nextBlocks; }
 		}
 
 		/// <summary>
@@ -131,7 +140,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public List<BasicBlock> PreviousBlocks
 		{
-			get { return _previousBlocks; }
+			get { return previousBlocks; }
 		}
 
 		/// <summary>
@@ -151,12 +160,21 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
+		/// Hints at which target the block will most likely branch to
+		/// </summary>
+		public int HintTarget
+		{
+			get { return hintTarget; }
+			set { hintTarget = value; }
+		}
+
+		/// <summary>
 		/// Gets or sets the initial ingoing operand stack
 		/// </summary>
 		public Stack<Operand> InitialStack
 		{
-			get { return _initialStack; }
-			set { _initialStack = value; }
+			get { return initialStack; }
+			set { initialStack = value; }
 		}
 
 		/// <summary>
@@ -164,8 +182,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public EhClause ExceptionHeaderClause
 		{
-			get { return this._exceptionHeaderClause; }
-			set { this._exceptionHeaderClause = value; }
+			get { return this.exceptionHeaderClause; }
+			set { this.exceptionHeaderClause = value; }
 		}
 
 		#endregion
