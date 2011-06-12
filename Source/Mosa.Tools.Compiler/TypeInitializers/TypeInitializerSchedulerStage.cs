@@ -55,7 +55,7 @@ namespace Mosa.Tools.Compiler.TypeInitializers
 		public TypeInitializerSchedulerStage()
 		{
 			instructionSet = new InstructionSet(1024);
-			ctx = new Context(instructionSet, -1);
+			ctx = new Context(instructionSet);
 
 			ctx.AppendInstruction(IR.Instruction.PrologueInstruction);
 			ctx.Other = 0; // stacksize

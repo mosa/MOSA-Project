@@ -204,7 +204,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			PrefixInstruction prefix = null;
 
 			// Setup context
-			Context ctx = new Context(instructionSet, -1);
+			Context ctx = new Context(instructionSet);
 
 			while (codeEnd != codeReader.BaseStream.Position)
 			{

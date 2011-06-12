@@ -30,17 +30,17 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Holds the instruction index operated on.
 		/// </summary>
-		private int _index;
+		private int index;
 
 		/// <summary>
 		/// Holds the list of instructions
 		/// </summary>
-		private InstructionSet _instructionSet;
+		private InstructionSet instructionSet;
 
 		/// <summary>
 		/// Holds the block being operated on.
 		/// </summary>
-		private BasicBlock _block;
+		private BasicBlock block;
 
 		#endregion // Data members
 
@@ -51,8 +51,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public BasicBlock BasicBlock
 		{
-			get { return _block; }
-			set { _block = value; }
+			get { return block; }
+			set { block = value; }
 		}
 
 		/// <summary>
@@ -60,8 +60,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public InstructionSet InstructionSet
 		{
-			get { return _instructionSet; }
-			set { _instructionSet = value; }
+			get { return instructionSet; }
+			set { instructionSet = value; }
 		}
 
 		/// <summary>
@@ -69,8 +69,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public int Index
 		{
-			get { return _index; }
-			set { _index = value; }
+			get { return index; }
+			set { index = value; }
 		}
 
 		/// <summary>
@@ -79,8 +79,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value>The type of the token.</value>
 		public HeapIndexToken TokenType
 		{
-			get { return _instructionSet.Data[_index].TokenType; }
-			set { _instructionSet.Data[_index].TokenType = value; }
+			get { return instructionSet.Data[index].TokenType; }
+			set { instructionSet.Data[index].TokenType = value; }
 		}
 
 		/// <summary>
@@ -89,7 +89,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value>The result operand.</value>
 		public IInstruction Instruction
 		{
-			get { return _instructionSet.Data[_index].Instruction; }
+			get { return instructionSet.Data[index].Instruction; }
 			//set { _instructionSet.Data[_index].Instruction = value; }
 		}
 
@@ -99,7 +99,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value>The result operand.</value>
 		private IInstruction NewInstruction
 		{
-			set { _instructionSet.Data[_index].Instruction = value; }
+			set { instructionSet.Data[index].Instruction = value; }
 		}
 
 		/// <summary>
@@ -108,8 +108,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value>The offset.</value>
 		public int Label
 		{
-			get { return _instructionSet.Data[_index].Label; }
-			set { _instructionSet.Data[_index].Label = value; }
+			get { return instructionSet.Data[index].Label; }
+			set { instructionSet.Data[index].Label = value; }
 		}
 
 		/// <summary>
@@ -118,8 +118,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value>The offset.</value>
 		public int Offset
 		{
-			get { return _instructionSet.Data[_index].Offset; }
-			set { _instructionSet.Data[_index].Offset = value; }
+			get { return instructionSet.Data[index].Offset; }
+			set { instructionSet.Data[index].Offset = value; }
 		}
 
 		/// <summary>
@@ -128,8 +128,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value>The result operand.</value>
 		public IBranch Branch
 		{
-			get { return _instructionSet.Data[_index].Branch; }
-			set { _instructionSet.Data[_index].Branch = value; }
+			get { return instructionSet.Data[index].Branch; }
+			set { instructionSet.Data[index].Branch = value; }
 		}
 
 		/// <summary>
@@ -138,13 +138,13 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value>The first operand.</value>
 		public Operand Operand1
 		{
-			get { return _instructionSet.Data[_index].Operand1; }
+			get { return instructionSet.Data[index].Operand1; }
 			set
 			{
-				Operand current = _instructionSet.Data[_index].Operand1;
-				if (current != null) current.Uses.Remove(_index);
-				if (value != null) value.Uses.Add(_index);
-				_instructionSet.Data[_index].Operand1 = value;
+				Operand current = instructionSet.Data[index].Operand1;
+				if (current != null) current.Uses.Remove(index);
+				if (value != null) value.Uses.Add(index);
+				instructionSet.Data[index].Operand1 = value;
 			}
 		}
 
@@ -154,13 +154,13 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value>The first operand.</value>
 		public Operand Operand2
 		{
-			get { return _instructionSet.Data[_index].Operand2; }
+			get { return instructionSet.Data[index].Operand2; }
 			set
 			{
-				Operand current = _instructionSet.Data[_index].Operand2;
-				if (current != null) current.Uses.Remove(_index);
-				if (value != null) value.Uses.Add(_index);
-				_instructionSet.Data[_index].Operand2 = value;
+				Operand current = instructionSet.Data[index].Operand2;
+				if (current != null) current.Uses.Remove(index);
+				if (value != null) value.Uses.Add(index);
+				instructionSet.Data[index].Operand2 = value;
 			}
 		}
 
@@ -170,13 +170,13 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value>The first operand.</value>
 		public Operand Operand3
 		{
-			get { return _instructionSet.Data[_index].Operand3; }
+			get { return instructionSet.Data[index].Operand3; }
 			set
 			{
-				Operand current = _instructionSet.Data[_index].Operand3;
-				if (current != null) current.Uses.Remove(_index);
-				if (value != null) value.Uses.Add(_index);
-				_instructionSet.Data[_index].Operand3 = value;
+				Operand current = instructionSet.Data[index].Operand3;
+				if (current != null) current.Uses.Remove(index);
+				if (value != null) value.Uses.Add(index);
+				instructionSet.Data[index].Operand3 = value;
 			}
 		}
 
@@ -196,8 +196,8 @@ namespace Mosa.Runtime.CompilerFramework
 					yield return Operand3;
 
 				if (OperandCount >= 3)
-					for (int index = 3; index < OperandCount; index++)
-						yield return _instructionSet.Data[_index].GetAdditionalOperand(index);
+					for (int i = 3; i < OperandCount; i++)
+						yield return instructionSet.Data[index].GetAdditionalOperand(i);
 			}
 		}
 
@@ -207,13 +207,13 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value>The result operand.</value>
 		public Operand Result
 		{
-			get { return _instructionSet.Data[_index].Result; }
+			get { return instructionSet.Data[index].Result; }
 			set
 			{
-				Operand current = _instructionSet.Data[_index].Result;
-				if (current != null) current.Definitions.Remove(_index);
-				if (value != null) value.Definitions.Add(_index);
-				_instructionSet.Data[_index].Result = value;
+				Operand current = instructionSet.Data[index].Result;
+				if (current != null) current.Definitions.Remove(index);
+				if (value != null) value.Definitions.Add(index);
+				instructionSet.Data[index].Result = value;
 			}
 		}
 
@@ -257,8 +257,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value>The operand count.</value>
 		public byte OperandCount
 		{
-			get { return _instructionSet.Data[_index].OperandCount; }
-			set { _instructionSet.Data[_index].OperandCount = value; }
+			get { return instructionSet.Data[index].OperandCount; }
+			set { instructionSet.Data[index].OperandCount = value; }
 		}
 
 		/// <summary>
@@ -267,8 +267,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value>The result count.</value>
 		public byte ResultCount
 		{
-			get { return _instructionSet.Data[_index].ResultCount; }
-			set { _instructionSet.Data[_index].ResultCount = value; }
+			get { return instructionSet.Data[index].ResultCount; }
+			set { instructionSet.Data[index].ResultCount = value; }
 		}
 
 		/// <summary>
@@ -277,16 +277,17 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value><c>true</c> if ignore; otherwise, <c>false</c>.</value>
 		public bool Ignore
 		{
-			get { return _instructionSet.Data[_index].Ignore; }
-			set { _instructionSet.Data[_index].Ignore = value; }
+			get { return instructionSet.Data[index].Ignore; }
+			set { instructionSet.Data[index].Ignore = value; }
 		}
-		
+
 		/// <summary>
 		/// 
 		/// </summary>
 		public BaseInstruction Prefix
 		{
-			get; set;
+			get;
+			set;
 		}
 
 		/// <summary>
@@ -294,16 +295,16 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public bool BranchHint
 		{
-			get { return _instructionSet.Data[_index].BranchHint; }
+			get { return instructionSet.Data[index].BranchHint; }
 			set
 			{
-				_instructionSet.Data[_index].BranchHint = value;
-				if (_block != null && Branch != null)
+				instructionSet.Data[index].BranchHint = value;
+				if (block != null && Branch != null)
 					if (Branch.Targets.Length == 1)
 						if (value)
-							_block.HintTarget = Branch.Targets[0];
+							block.HintTarget = Branch.Targets[0];
 						else
-							_block.HintTarget = -1;
+							block.HintTarget = -1;
 			}
 		}
 
@@ -312,8 +313,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public RuntimeMethod InvokeTarget
 		{
-			get { return _instructionSet.Data[_index].InvokeTarget; }
-			set { _instructionSet.Data[_index].InvokeTarget = value; }
+			get { return instructionSet.Data[index].InvokeTarget; }
+			set { instructionSet.Data[index].InvokeTarget = value; }
 		}
 
 		/// <summary>
@@ -322,8 +323,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value>The runtime field.</value>
 		public RuntimeField RuntimeField
 		{
-			get { return _instructionSet.Data[_index].RuntimeField; }
-			set { _instructionSet.Data[_index].RuntimeField = value; }
+			get { return instructionSet.Data[index].RuntimeField; }
+			set { instructionSet.Data[index].RuntimeField = value; }
 		}
 
 		/// <summary>
@@ -332,8 +333,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value>The token.</value>
 		public Token Token
 		{
-			get { return _instructionSet.Data[_index].Token; }
-			set { _instructionSet.Data[_index].Token = value; }
+			get { return instructionSet.Data[index].Token; }
+			set { instructionSet.Data[index].Token = value; }
 		}
 
 		/// <summary>
@@ -342,8 +343,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value>The condition code.</value>
 		public IR.ConditionCode ConditionCode
 		{
-			get { return _instructionSet.Data[_index].ConditionCode; }
-			set { _instructionSet.Data[_index].ConditionCode = value; }
+			get { return instructionSet.Data[index].ConditionCode; }
+			set { instructionSet.Data[index].ConditionCode = value; }
 		}
 
 		/// <summary>
@@ -362,8 +363,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value>The other.</value>
 		public object Other
 		{
-			get { return _instructionSet.Data[_index].Other; }
-			set { _instructionSet.Data[_index].Other = value; }
+			get { return instructionSet.Data[index].Other; }
+			set { instructionSet.Data[index].Other = value; }
 		}
 
 		/// <summary>
@@ -374,7 +375,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </value>
 		public bool IsFirstInstruction
 		{
-			get { return _instructionSet.Previous(_index) < 0; }
+			get { return instructionSet.Previous(index) < 0; }
 		}
 
 		/// <summary>
@@ -383,7 +384,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value><c>true</c> if [last instruction]; otherwise, <c>false</c>.</value>
 		public bool IsLastInstruction
 		{
-			get { return _instructionSet.Next(_index) < 0; }
+			get { return instructionSet.Next(index) < 0; }
 		}
 
 		/// <summary>
@@ -392,7 +393,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value><c>true</c> if [end of instruction]; otherwise, <c>false</c>.</value>
 		public bool EndOfInstruction
 		{
-			get { return _index < 0; }
+			get { return index < 0; }
 		}
 
 		/// <summary>
@@ -402,7 +403,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns></returns>
 		public Context Next
 		{
-			get { return new Context(_instructionSet, _instructionSet.Next(_index)); }
+			get { return new Context(instructionSet, instructionSet.Next(index)); }
 		}
 
 		/// <summary>
@@ -412,7 +413,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns></returns>
 		public Context Previous
 		{
-			get { return new Context(_instructionSet, _instructionSet.Previous(_index)); }
+			get { return new Context(instructionSet, instructionSet.Previous(index)); }
 		}
 
 		#endregion // Properties
@@ -427,9 +428,9 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="index">The index.</param>
 		public Context(InstructionSet instructionSet, BasicBlock block, int index)
 		{
-			_instructionSet = instructionSet;
-			_index = index;
-			_block = block;
+			this.instructionSet = instructionSet;
+			this.index = index;
+			this.block = block;
 		}
 
 		/// <summary>
@@ -438,10 +439,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="instructionSet">The instruction set.</param>
 		/// <param name="index">The index.</param>
 		public Context(InstructionSet instructionSet, int index)
+			: this(instructionSet, null, index)
 		{
-			_instructionSet = instructionSet;
-			_index = index;
-			_block = null;
 		}
 
 		/// <summary>
@@ -450,12 +449,19 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="instructionSet">The instruction set.</param>
 		/// <param name="basicBlock">The basic block.</param>
 		public Context(InstructionSet instructionSet, BasicBlock basicBlock)
+			: this(instructionSet, basicBlock, basicBlock.Index)
 		{
-			_instructionSet = instructionSet;
-			_index = basicBlock.Index;
-			_block = basicBlock;
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="Context"/> class.
+		/// </summary>
+		/// <param name="instructionSet">The instruction set.</param>
+		/// <param name="index">The index.</param>
+		public Context(InstructionSet instructionSet)
+			: this(instructionSet, null, -1)
+		{
+		}
 		#endregion // Construction
 
 		#region Methods
@@ -475,7 +481,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns></returns>
 		public Context Clone()
 		{
-			return new Context(_instructionSet, _block, _index);
+			return new Context(instructionSet, block, index);
 		}
 
 		/// <summary>
@@ -484,7 +490,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns></returns>
 		public Context CloneAtStart()
 		{
-			return new Context(_instructionSet, _block, _block.Index);
+			return new Context(instructionSet, block, block.Index);
 		}
 
 		/// <summary>
@@ -492,7 +498,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public void GotoNext()
 		{
-			_index = _instructionSet.Next(_index);
+			index = instructionSet.Next(index);
 		}
 
 		/// <summary>
@@ -500,7 +506,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public void GotoPrevious()
 		{
-			_index = _instructionSet.Previous(_index);
+			index = instructionSet.Previous(index);
 		}
 
 		/// <summary>
@@ -508,16 +514,16 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public void GotoLast()
 		{
-			if (_index < 0)
+			if (index < 0)
 				return;
 
 			for (; ; )
 			{
-				int next = _instructionSet.Next(_index);
+				int next = instructionSet.Next(index);
 				if (next < 0)
 					break;
 
-				_index = next;
+				index = next;
 			}
 		}
 
@@ -530,7 +536,7 @@ namespace Mosa.Runtime.CompilerFramework
 			Operand2 = null;
 			Operand3 = null;
 			Result = null;
-			_instructionSet.Data[_index].Clear();
+			instructionSet.Data[index].Clear();
 
 			if (OperandCount >= 3)
 				for (int i = 3; i < OperandCount; i++)
@@ -544,19 +550,19 @@ namespace Mosa.Runtime.CompilerFramework
 		public Context InsertBefore()
 		{
 			int label = Label;
-			int index = -1;
+			int beforeIndex = -1;
 
 			if (IsFirstInstruction)
 			{
 				Debug.Assert(BasicBlock != null, @"Cannot insert before first instruction without basic block");
-				Debug.Assert(BasicBlock.Index == _index, @"Cannot be first instruction since basic block does not start here");
-				index = _instructionSet.InsertBefore(_index);
-				BasicBlock.Index = index;
+				Debug.Assert(BasicBlock.Index == index, @"Cannot be first instruction since basic block does not start here");
+				beforeIndex = instructionSet.InsertBefore(index);
+				BasicBlock.Index = beforeIndex;
 			}
 			else
-				index = _instructionSet.InsertBefore(_index);
+				beforeIndex = instructionSet.InsertBefore(index);
 
-			Context ctx = new Context(_instructionSet, index);
+			Context ctx = new Context(instructionSet, beforeIndex);
 			ctx.Clear();
 			ctx.Label = label;
 			return ctx;
@@ -567,7 +573,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public void SliceBefore()
 		{
-			_instructionSet.SliceBefore(_index);
+			instructionSet.SliceBefore(index);
 		}
 
 		/// <summary>
@@ -575,7 +581,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public void SliceAfter()
 		{
-			_instructionSet.SliceAfter(_index);
+			instructionSet.SliceAfter(index);
 		}
 
 		/// <summary>
@@ -610,8 +616,8 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			int label = -1;
 
-			if (_index == -1)
-				_index = _instructionSet.CreateRoot();
+			if (index == -1)
+				index = instructionSet.CreateRoot();
 			else
 			{
 				label = Label;
@@ -763,13 +769,13 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			int label = -1;
 
-			if (_index == -1)
-				_index = _instructionSet.InsertAfter(_index);
+			if (index == -1)
+				index = instructionSet.InsertAfter(index);
 			else
 			{
 				label = Label;
 				if (Instruction != null)
-					_index = _instructionSet.InsertAfter(_index);
+					index = instructionSet.InsertAfter(index);
 			}
 
 			Label = label;
@@ -1021,37 +1027,37 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Gets the operand by index
 		/// </summary>
-		/// <param name="index">The index.</param>
+		/// <param name="opIndex">The index.</param>
 		/// <returns></returns>
-		public Operand GetOperand(int index)
+		public Operand GetOperand(int opIndex)
 		{
-			switch (index)
+			switch (opIndex)
 			{
 				case 0: return Operand1;
 				case 1: return Operand2;
 				case 2: return Operand3;
-				default: return _instructionSet.Data[_index].GetAdditionalOperand(index);
+				default: return instructionSet.Data[index].GetAdditionalOperand(opIndex);
 			}
 		}
 
 		/// <summary>
 		/// Sets the operand by index
 		/// </summary>
-		/// <param name="index">The index.</param>
+		/// <param name="opIndex">The index.</param>
 		/// <param name="operand">The operand.</param>
-		public void SetOperand(int index, Operand operand)
+		public void SetOperand(int opIndex, Operand operand)
 		{
-			switch (index)
+			switch (opIndex)
 			{
 				case 0: Operand1 = operand; return;
 				case 1: Operand2 = operand; return;
 				case 2: Operand3 = operand; return;
 				default:
 					{
-						Operand current = _instructionSet.Data[_index].GetAdditionalOperand(index);
-						if (current != null) current.Uses.Remove(_index);
-						if (operand != null) operand.Uses.Add(_index);
-						_instructionSet.Data[_index].SetAdditionalOperand(index, operand);
+						Operand current = instructionSet.Data[index].GetAdditionalOperand(opIndex);
+						if (current != null) current.Uses.Remove(index);
+						if (operand != null) operand.Uses.Add(index);
+						instructionSet.Data[index].SetAdditionalOperand(opIndex, operand);
 						return;
 					}
 			}
@@ -1060,11 +1066,11 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Gets the result by index
 		/// </summary>
-		/// <param name="index">The index.</param>
+		/// <param name="opIndex">The index.</param>
 		/// <returns></returns>
-		public Operand GetResult(int index)
+		public Operand GetResult(int opIndex)
 		{
-			switch (index)
+			switch (opIndex)
 			{
 				case 0: return Result;
 				case 1: return Result2;
@@ -1077,11 +1083,11 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Sets the result by index
 		/// </summary>
-		/// <param name="index">The index.</param>
+		/// <param name="opIndex">The index.</param>
 		/// <param name="result">The result operand.</param>
-		public void SetResult(int index, Operand result)
+		public void SetResult(int opIndex, Operand result)
 		{
-			switch (index)
+			switch (opIndex)
 			{
 				case 0:
 					this.Result = result;

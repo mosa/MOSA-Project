@@ -53,7 +53,7 @@ namespace Mosa.Runtime.CompilerFramework
 		public void Run()
 		{
 			// Create the prologue block
-			Context ctx = new Context(instructionSet, -1);
+			Context ctx = new Context(instructionSet);
 			// Add a jump instruction to the first block from the prologue
 			ctx.AppendInstruction(IR.Instruction.JmpInstruction);
 			//ctx.AppendInstruction(CIL.Instruction.Get(CIL.OpCode.Br));
@@ -64,7 +64,7 @@ namespace Mosa.Runtime.CompilerFramework
 			SplitIntoBlocks(0);
 
 			// Create the epilogue block
-			ctx = new Context(instructionSet, -1);
+			ctx = new Context(instructionSet);
 			// Add null instruction, necessary to generate a block index
 			ctx.AppendInstruction(null);
 			ctx.Ignore = true;

@@ -175,7 +175,7 @@ namespace Mosa.Tools.Compiler.Boot
 				RegisterOperand ebx = new RegisterOperand(I4, GeneralPurposeRegister.EBX);
 
 				InstructionSet instructionSet = new InstructionSet(16);
-				Context ctx = new Context(instructionSet, -1);
+				Context ctx = new Context(instructionSet);
 
 				ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, ecx, new ConstantOperand(I4, 0x200000));
 				ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, new MemoryOperand(I4, ecx.Register, new IntPtr(0x0)), eax);

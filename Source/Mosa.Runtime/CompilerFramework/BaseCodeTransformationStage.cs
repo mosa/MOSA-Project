@@ -137,7 +137,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns></returns>
 		protected Context CreateEmptyBlockContext(int label)
 		{
-			Context ctx = new Context(instructionSet, -1);
+			Context ctx = new Context(instructionSet);
 			BasicBlock block = CreateBlock(basicBlocks.Count + 0x10000000);
 			ctx.BasicBlock = block;
 

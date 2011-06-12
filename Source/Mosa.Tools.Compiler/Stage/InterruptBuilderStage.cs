@@ -108,8 +108,8 @@ namespace Mosa.Tools.Compiler.Stage
 
 			for (int i = 0; i <= 255; i++)
 			{
-				InstructionSet set = new InstructionSet(100);
-				Context ctx = new Context(set, -1);
+				InstructionSet instructionSet = new InstructionSet(100);
+				Context ctx = new Context(instructionSet);
 
 				ctx.AppendInstruction(CPUx86.Instruction.CliInstruction);
 				if (i <= 7 || i >= 16 | i == 9) // For IRQ 8, 10, 11, 12, 13, 14 the cpu automatically pushed the error code
@@ -122,7 +122,7 @@ namespace Mosa.Tools.Compiler.Stage
 				ctx.AppendInstruction(CPUx86.Instruction.StiInstruction);
 				ctx.AppendInstruction(CPUx86.Instruction.IRetdInstruction);
 
-				LinkTimeCodeGenerator.Compile(this.compiler, @"InterruptISR" + i.ToString(), set, typeSystem);
+				LinkTimeCodeGenerator.Compile(this.compiler, @"InterruptISR" + i.ToString(), instructionSet, typeSystem);
 			}
 		}
 
