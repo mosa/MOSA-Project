@@ -58,9 +58,6 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		{
 			using (Stream code = methodCompiler.GetInstructionStream())
 			{
-				// Initialize the instruction
-				methodCompiler.InstructionSet = new InstructionSet(256);
-
 				// update the base class 
 				instructionSet = methodCompiler.InstructionSet;
 

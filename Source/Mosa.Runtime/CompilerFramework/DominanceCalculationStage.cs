@@ -237,7 +237,7 @@ namespace Mosa.Runtime.CompilerFramework
 			return f1;
 		}
 
-		private BasicBlock[] ReversePostorder(List<BasicBlock> blocks)
+		private BasicBlock[] ReversePostorder(IList<BasicBlock> blocks)
 		{
 			BasicBlock[] result = new BasicBlock[blocks.Count - 1];
 			int idx = 0;

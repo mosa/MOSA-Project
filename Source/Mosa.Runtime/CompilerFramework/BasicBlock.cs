@@ -89,7 +89,6 @@ namespace Mosa.Runtime.CompilerFramework
 			this.hintTarget = -1;
 		}
 
-
 		#endregion
 
 		#region Properties

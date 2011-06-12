@@ -50,6 +50,9 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		private readonly List<Operand> parameters;
 
+		/// <summary>
+		/// 
+		/// </summary>
 		private readonly ICompilationSchedulerStage compilationScheduler;
 
 		/// <summary>
@@ -117,6 +120,11 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		protected IInternalLog internalLog;
 
+		/// <summary>
+		/// Holds the blocks indexed by label
+		/// </summary>
+		private Dictionary<int, BasicBlock> basicBlocksByLabel = new Dictionary<int, BasicBlock>();
+
 		#endregion // Data Members
 
 		#region Construction
@@ -128,15 +136,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="architecture">The target compilation Architecture.</param>
 		/// <param name="type">The type, which owns the method to compile.</param>
 		/// <param name="method">The method to compile by this instance.</param>
-		protected BaseMethodCompiler(
-			IAssemblyLinker linker,
-			IArchitecture architecture,
-			ICompilationSchedulerStage compilationScheduler,
-			RuntimeType type,
-			RuntimeMethod method,
-			ITypeSystem typeSystem,
-			ITypeLayout typeLayout,
-			IInternalLog internalLog)
+		protected BaseMethodCompiler(RuntimeType type, RuntimeMethod method, IAssemblyLinker linker, IArchitecture architecture, ITypeSystem typeSystem, ITypeLayout typeLayout, InstructionSet instructionSet, ICompilationSchedulerStage compilationScheduler, IInternalLog internalLog)
 		{
 			if (architecture == null)
 				throw new ArgumentNullException(@"architecture");
@@ -157,12 +157,13 @@ namespace Mosa.Runtime.CompilerFramework
 			this.typeLayout = typeLayout;
 			this.internalLog = internalLog;
 
-			parameters = new List<Operand>(new Operand[method.Parameters.Count]);
-			nextStackSlot = 0;
-			basicBlocks = new List<BasicBlock>();
-			instructionSet = null; // this will be set later
+			this.parameters = new List<Operand>(new Operand[method.Parameters.Count]);
+			this.nextStackSlot = 0;
+			this.basicBlocks = new List<BasicBlock>();
 
-			pipeline = new CompilerPipeline();
+			this.instructionSet = instructionSet ?? new InstructionSet(256);
+
+			this.pipeline = new CompilerPipeline();
 		}
 
 		#endregion // Construction
@@ -198,21 +199,13 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Gets the instruction set.
 		/// </summary>
 		/// <value>The instruction set.</value>
-		public InstructionSet InstructionSet
-		{
-			get { return instructionSet; }
-			set { instructionSet = value; }
-		}
+		public InstructionSet InstructionSet { get { return instructionSet; } }
 
 		/// <summary>
-		/// Gets the basic Blocks.
+		/// Gets the basic blocks.
 		/// </summary>
 		/// <value>The basic blocks.</value>
-		public List<BasicBlock> BasicBlocks
-		{
-			get { return basicBlocks; }
-			set { basicBlocks = value; }
-		}
+		public IList<BasicBlock> BasicBlocks { get { return basicBlocks; } }
 
 		public ICompilationSchedulerStage Scheduler { get { return this.compilationScheduler; } }
 
@@ -237,7 +230,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Gets the internal logging interface
 		/// </summary>
 		/// <value>The log.</value>
-		public IInternalLog InternalLog { get { return internalLog;  } }
+		public IInternalLog InternalLog { get { return internalLog; } }
 
 		#endregion // Properties
 
@@ -453,7 +446,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns></returns>
 		public IPipelineStage GetStage(Type stageType)
 		{
-			foreach(IPipelineStage stage in pipeline)
+			foreach (IPipelineStage stage in pipeline)
 			{
 				if (stageType.IsInstanceOfType(stage))
 				{
@@ -469,14 +462,15 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <param name="label">The label of the basic block.</param>
 		/// <returns>
-		/// The basic block with the given label or null.
+		/// The basic block with the given label.
 		/// </returns>
 		public BasicBlock FromLabel(int label)
 		{
-			return basicBlocks.Find(delegate(BasicBlock block)
-			{
-				return (label == block.Label);
-			});
+			BasicBlock basicBlock = null;
+
+			basicBlocksByLabel.TryGetValue(label, out basicBlock);
+
+			return basicBlock;
 		}
 
 		/// <summary>
@@ -487,9 +481,9 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns></returns>
 		public BasicBlock CreateBlock(int label, int index)
 		{
-			// HACK: BasicBlock.Count for the sequence works for now since blocks are not removed
 			BasicBlock basicBlock = new BasicBlock(basicBlocks.Count, label, index);
 			basicBlocks.Add(basicBlock);
+			basicBlocksByLabel.Add(label, basicBlock);
 			return basicBlock;
 		}
 

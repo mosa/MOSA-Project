@@ -109,13 +109,13 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Gets the instruction set.
 		/// </summary>
 		/// <value>The instruction set.</value>
-		InstructionSet InstructionSet { get; set; }
+		InstructionSet InstructionSet { get; }
 
 		/// <summary>
 		/// Gets the basic Blocks.
 		/// </summary>
 		/// <value>The basic Blocks.</value>
-		List<BasicBlock> BasicBlocks { get; set; }
+		IList<BasicBlock> BasicBlocks { get; }
 
 		/// <summary>
 		/// Retrieves a basic block from its label.

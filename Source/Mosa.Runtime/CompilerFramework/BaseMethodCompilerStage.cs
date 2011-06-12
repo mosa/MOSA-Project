@@ -46,7 +46,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// List of basic blocks found during decoding
 		/// </summary>
-		protected List<BasicBlock> basicBlocks;
+		protected IList<BasicBlock> basicBlocks;
 
 		/// <summary>
 		/// Holds the type loader 

@@ -32,7 +32,7 @@ namespace Mosa.Runtime.InternalLog
 			);
 		}
 
-		public static void Run(IInternalLog internalLog, IPipelineStage stage, RuntimeMethod method, InstructionSet instructionSet, List<BasicBlock> basicBlocks)
+		public static void Run(IInternalLog internalLog, IPipelineStage stage, RuntimeMethod method, InstructionSet instructionSet, IList<BasicBlock> basicBlocks)
 		{
 			if (internalLog == null)
 				return;

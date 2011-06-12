@@ -44,10 +44,10 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public void Run()
 		{
-			// Retreive the first block
+			// Retrieve the first block
 			BasicBlock first = FindBlock(-1);
 
-			// Create dictionary of refereced blocks
+			// Create dictionary of referenced blocks
 			Dictionary<BasicBlock, int> referenced = new Dictionary<BasicBlock, int>(basicBlocks.Count);
 
 			// Allocate list of ordered Blocks

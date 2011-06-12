@@ -457,7 +457,6 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Initializes a new instance of the <see cref="Context"/> class.
 		/// </summary>
 		/// <param name="instructionSet">The instruction set.</param>
-		/// <param name="index">The index.</param>
 		public Context(InstructionSet instructionSet)
 			: this(instructionSet, null, -1)
 		{
