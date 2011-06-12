@@ -9,6 +9,8 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
+
 using Mosa.Runtime.CompilerFramework.CIL;
 using Mosa.Runtime.CompilerFramework.Operands;
 
@@ -23,7 +25,7 @@ namespace Mosa.Runtime.CompilerFramework
 		#region Data members
 
 		/// <summary>
-		/// The index of the block within the InstructionSet
+		/// The index of the block within the instruction set
 		/// </summary>
 		private int index;
 
@@ -74,33 +76,26 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Initializes common fields of the BasicBlock.
 		/// </summary>
-		private BasicBlock()
+		/// <param name="sequence">The sequence.</param>
+		/// <param name="label">The label.</param>
+		/// <param name="index">The index.</param>
+		public BasicBlock(int sequence, int label, int index)
 		{
 			nextBlocks = new List<BasicBlock>(2);
 			previousBlocks = new List<BasicBlock>(2);
-		}
-
-		/// <summary>
-		/// Initializes a new instance of <see cref="BasicBlock"/>.
-		/// </summary>
-		/// <param name="sequence">The sequence.</param>
-		/// <param name="label">The label of the block (IL instruction offset from the method start.)</param>
-		/// <param name="index">The index.</param>
-		public BasicBlock(int sequence, int label, int index)
-			: this()
-		{
 			this.sequence = sequence;
 			this.label = label;
 			this.index = index;
 			this.hintTarget = -1;
 		}
 
+
 		#endregion
 
 		#region Properties
 
 		/// <summary>
-		/// The index of the block within the InstructionSet
+		/// The index of the block within the instruction set
 		/// </summary>
 		public int Index
 		{
