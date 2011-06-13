@@ -59,4 +59,6 @@ namespace Mosa.Test.Quick.Tests
 	public class A<T> { }
 
 	public class B : A<int> { }
+
+	public class C<T> : A<int> { }
 }

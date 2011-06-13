@@ -351,7 +351,7 @@ namespace Mosa.Runtime.TypeSystem
 				{
 					LoadType(info.TypeDefRow.Extends, typeInfos);
 				}
-				else 
+				else if (info.TypeDefRow.Extends.Table != TableType.TypeRef)
 				{
 					throw new ArgumentException(@"unexpected token type.", @"extends");
 				}
@@ -869,7 +869,7 @@ namespace Mosa.Runtime.TypeSystem
 
 				if (genericType != null)
 					typeSpecs[token.RID - 1] = genericType;
-				
+
 			}
 
 		}
@@ -1091,7 +1091,7 @@ namespace Mosa.Runtime.TypeSystem
 			if (baseGenericType.GenericParameters.Count == 0)
 				return null;
 
-			foreach (var genericType in typeSpecs.OfType<CilGenericType>().Where (t => t.BaseGenericType == baseGenericType && t.ContainsOpenGenericParameters))
+			foreach (var genericType in typeSpecs.OfType<CilGenericType>().Where(t => t.BaseGenericType == baseGenericType && t.ContainsOpenGenericParameters))
 			{
 				if (genericType.GenericArguments.First(x => !x.IsOpenGenericParameter) != null)
 					return genericType;
