@@ -9,7 +9,7 @@ using System;
 
 namespace Mosa.Test.Quick.Tests
 {
-	
+
 	public interface IInterfaceAA<T>
 	{
 		T GetValue(T value);
@@ -56,4 +56,7 @@ namespace Mosa.Test.Quick.Tests
 		}
 	}
 
+	public class A<T> { }
+
+	public class B : A<int> { }
 }

@@ -347,7 +347,11 @@ namespace Mosa.Runtime.TypeSystem
 				{
 					LoadType(info.TypeDefRow.Extends, typeInfos);
 				}
-				else if (info.TypeDefRow.Extends.Table != TableType.TypeRef)
+				else if (info.TypeDefRow.Extends.Table == TableType.TypeSpec)
+				{
+					LoadType(info.TypeDefRow.Extends, typeInfos);
+				}
+				else 
 				{
 					throw new ArgumentException(@"unexpected token type.", @"extends");
 				}
