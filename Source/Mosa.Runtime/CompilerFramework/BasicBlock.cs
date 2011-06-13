@@ -60,11 +60,6 @@ namespace Mosa.Runtime.CompilerFramework
 		private List<BasicBlock> previousBlocks;
 
 		/// <summary>
-		///
-		/// </summary>
-		private Stack<Operand> initialStack;
-
-		/// <summary>
 		/// 
 		/// </summary>
 		private EhClause exceptionHeaderClause;
@@ -160,15 +155,6 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			get { return hintTarget; }
 			set { hintTarget = value; }
-		}
-
-		/// <summary>
-		/// Gets or sets the initial ingoing operand stack
-		/// </summary>
-		public Stack<Operand> InitialStack
-		{
-			get { return initialStack; }
-			set { initialStack = value; }
 		}
 
 		/// <summary>

@@ -25,11 +25,16 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// 
 		/// </summary>
-		private Stack<Operand> _operandStack = new Stack<Operand>();
+		private Stack<Operand> operandStack = new Stack<Operand>();
 		/// <summary>
 		/// 
 		/// </summary>
-		private List<BasicBlock> _processed = new List<BasicBlock>();
+		private List<BasicBlock> processed = new List<BasicBlock>();
+
+		/// <summary>
+		/// 
+		/// </summary>
+		private Stack<Operand>[] initialStack;
 
 		#endregion
 
@@ -53,9 +58,15 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public void Run()
 		{
+			initialStack = new Stack<Operand>[basicBlocks.Count];
+
 			BasicBlock firstBlock = FindBlock(-1);
 
 			AssignOperands(firstBlock);
+
+			initialStack = null;
+			operandStack = null;
+			processed = null;
 		}
 
 		/// <summary>
@@ -65,9 +76,10 @@ namespace Mosa.Runtime.CompilerFramework
 		private void AssignOperands(BasicBlock block)
 		{
 			//Debug.WriteLine(@"OperandDeterminationStage: Assigning operands to block " + block);
-			if (block.InitialStack != null)
-				foreach (Operand operand in block.InitialStack)
-					_operandStack.Push(operand);
+
+			if (initialStack[block.Sequence] != null)
+				foreach (Operand operand in initialStack[block.Sequence])
+					operandStack.Push(operand);
 
 			for (Context ctx = new Context(instructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
 			{
@@ -76,15 +88,15 @@ namespace Mosa.Runtime.CompilerFramework
 
 				if (!(ctx.Instruction is IR.JmpInstruction))
 				{
-					AssignOperandsFromCILStack(ctx, _operandStack);
+					AssignOperandsFromCILStack(ctx, operandStack);
 					(ctx.Instruction as ICILInstruction).Validate(ctx, methodCompiler);
-					PushResultOperands(ctx, _operandStack);
+					PushResultOperands(ctx, operandStack);
 				}
 
 				if (ctx.Instruction is IBranchInstruction)
 				{
-					Stack<Operand> initialStack = GetCurrentStack(_operandStack);
-					CreateTemporaryMoves(ctx, block, initialStack);
+					Stack<Operand> stack = GetCurrentStack(operandStack);
+					CreateTemporaryMoves(ctx, block, stack);
 					break;
 				}
 			}
@@ -104,9 +116,9 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="block">The block.</param>
 		private void MarkAsProcessed(BasicBlock block)
 		{
-			if (_processed.Contains(block))
+			if (processed.Contains(block))
 				return;
-			_processed.Add(block);
+			processed.Add(block);
 		}
 
 		/// <summary>
@@ -118,7 +130,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </returns>
 		private bool IsNotProcessed(BasicBlock block)
 		{
-			return !_processed.Contains(block);
+			return !processed.Contains(block);
 		}
 
 		/// <summary>
@@ -160,15 +172,15 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="block">The block.</param>
 		/// <param name="nextBlock">The next block.</param>
 		/// <returns></returns>
-		private static bool NextBlockHasInitialStack(BasicBlock block, out BasicBlock nextBlock)
+		private bool NextBlockHasInitialStack(BasicBlock block, out BasicBlock nextBlock)
 		{
 			nextBlock = null;
-			foreach (BasicBlock b in block.NextBlocks)
+			foreach (BasicBlock next in block.NextBlocks)
 			{
-				if (b.InitialStack == null)
+				if (initialStack[next.Sequence] == null)
 					continue;
 
-				nextBlock = b;
+				nextBlock = next;
 				return true;
 			}
 			return false;
@@ -183,15 +195,15 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="stack">The stack.</param>
 		private void LinkTemporaryMoves(Context ctx, BasicBlock block, BasicBlock nextBlock, Stack<Operand> stack)
 		{
-			Stack<Operand> initialStack = GetCurrentStack(stack);
-			Stack<Operand> nextInitialStack = GetCurrentStack(nextBlock.InitialStack);
+			Stack<Operand> currentStack = GetCurrentStack(stack);
+			Stack<Operand> nextInitialStack = GetCurrentStack(initialStack[nextBlock.Sequence]);
 
-			for (int i = 0; i < nextBlock.InitialStack.Count; ++i)
-				ctx.AppendInstruction(IR.Instruction.MoveInstruction, nextInitialStack.Pop(), initialStack.Pop());
+			for (int i = 0; i < initialStack[nextBlock.Sequence].Count; ++i)
+				ctx.AppendInstruction(IR.Instruction.MoveInstruction, nextInitialStack.Pop(), currentStack.Pop());
 
-			if (nextBlock.InitialStack.Count > 0)
+			if (initialStack[nextBlock.Sequence].Count > 0)
 				foreach (BasicBlock nBlock in block.NextBlocks)
-					nBlock.InitialStack = GetCurrentStack(nextBlock.InitialStack);
+					initialStack[nBlock.Sequence] = GetCurrentStack(initialStack[nextBlock.Sequence]);
 		}
 
 		/// <summary>
@@ -207,13 +219,13 @@ namespace Mosa.Runtime.CompilerFramework
 			{
 				Operand temp = methodCompiler.CreateTemporary(operand.Type);
 				nextStack.Push(temp);
-				_operandStack.Pop();
+				operandStack.Pop();
 				ctx.AppendInstruction(IR.Instruction.MoveInstruction, temp, operand);
 			}
 
 			if (nextStack.Count > 0)
 				foreach (BasicBlock nextBlock in block.NextBlocks)
-					nextBlock.InitialStack = GetCurrentStack(nextStack);
+					initialStack[nextBlock.Sequence] = GetCurrentStack(nextStack);
 		}
 
 		/// <summary>
