@@ -349,7 +349,7 @@ namespace Mosa.Runtime.TypeSystem
 				}
 				else if (info.TypeDefRow.Extends.Table == TableType.TypeSpec)
 				{
-					LoadType(info.TypeDefRow.Extends, typeInfos);
+					LoadTypeSpec(info.TypeDefRow.Extends);
 				}
 				else if (info.TypeDefRow.Extends.Table != TableType.TypeRef)
 				{
@@ -436,7 +436,6 @@ namespace Mosa.Runtime.TypeSystem
 		private void LoadParameters(RuntimeMethod method, Token first, Token max)
 		{
 			foreach (var token in first.Upto(max.PreviousRow))
-			//for (TokenTypes token = first; token < max; token++)
 			{
 				var paramDef = metadataProvider.ReadParamRow(token);
 				method.Parameters.Add(new RuntimeParameter(GetString(paramDef.NameIdx), paramDef.Sequence, paramDef.Flags));
@@ -860,18 +859,29 @@ namespace Mosa.Runtime.TypeSystem
 		private void LoadTypeSpecs()
 		{
 			var maxToken = GetMaxTokenValue(TableType.TypeSpec);
+
 			foreach (var token in new Token(TableType.TypeSpec, 1).Upto(maxToken))
 			{
-				var row = metadataProvider.ReadTypeSpecRow(token);
-				var signature = GetTypeSpecSignature(row.SignatureBlobIdx);
-
-				var genericType = typeSystem.ResolveGenericType(this, signature, token);
-
-				if (genericType != null)
-					typeSpecs[token.RID - 1] = genericType;
-
+				LoadTypeSpec(token);
 			}
+		}
 
+		private RuntimeType LoadTypeSpec(Token token)
+		{
+			var genericType = typeSpecs[token.RID - 1];
+
+			if (genericType != null)
+				return typeSpecs[token.RID - 1];
+
+			var row = metadataProvider.ReadTypeSpecRow(token);
+			var signature = GetTypeSpecSignature(row.SignatureBlobIdx);
+
+			genericType = typeSystem.ResolveGenericType(this, signature, token);
+
+			if (genericType != null)
+				typeSpecs[token.RID - 1] = genericType;
+
+			return genericType;
 		}
 
 		/// <summary>
@@ -879,7 +889,6 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		private void LoadExternals()
 		{
-
 			var maxToken = GetMaxTokenValue(TableType.ImplMap);
 			foreach (var token in new Token(TableType.ImplMap, 1).Upto(maxToken))
 			{
