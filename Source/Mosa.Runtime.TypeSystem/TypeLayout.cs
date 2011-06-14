@@ -143,7 +143,7 @@ namespace Mosa.Runtime.TypeSystem
 		{
 			ResolveType(type);
 
-            var size = 0;
+			var size = 0;
 			typeSizes.TryGetValue(type, out size);
 
 			return size;
@@ -156,7 +156,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// <returns></returns>
 		int ITypeLayout.GetFieldSize(RuntimeField field)
 		{
-            var size = 0;
+			var size = 0;
 
 			if (fieldSizes.TryGetValue(field, out size))
 			{
@@ -191,7 +191,7 @@ namespace Mosa.Runtime.TypeSystem
 		{
 			ResolveType(field.DeclaringType);
 
-            var size = 0;
+			var size = 0;
 
 			fieldOffets.TryGetValue(field, out size);
 
@@ -391,16 +391,16 @@ namespace Mosa.Runtime.TypeSystem
 		private void ScanExplicitInterfaceImplementations(RuntimeType type, RuntimeType interfaceType, RuntimeMethod[] methodTable)
 		{
 			//TODO: rewrite so that access directly to metadata is not required, type system should assist instead
-            var metadata = type.Module.MetadataModule.Metadata;
-            var maxToken = metadata.GetMaxTokenValue(TableType.MethodImpl);
+			var metadata = type.Module.MetadataModule.Metadata;
+			var maxToken = metadata.GetMaxTokenValue(TableType.MethodImpl);
 
-            foreach (var token in new Token(TableType.MethodImpl, 1).Upto(maxToken))
+			foreach (var token in new Token(TableType.MethodImpl, 1).Upto(maxToken))
 			{
 				MethodImplRow row = metadata.ReadMethodImplRow(token);
 				if (row.@Class == type.Token)
 				{
 					int slot = 0;
-                    foreach (var interfaceMethod in interfaceType.Methods)
+					foreach (var interfaceMethod in interfaceType.Methods)
 					{
 						if (interfaceMethod.Token == row.MethodDeclaration)
 						{
@@ -414,7 +414,7 @@ namespace Mosa.Runtime.TypeSystem
 
 		private RuntimeMethod FindMethodByToken(RuntimeType type, Token methodToken)
 		{
-            foreach (var method in type.Methods)
+			foreach (var method in type.Methods)
 			{
 				if (method.Token == methodToken)
 				{
@@ -427,9 +427,9 @@ namespace Mosa.Runtime.TypeSystem
 
 		private RuntimeMethod FindInterfaceMethod(RuntimeType type, RuntimeMethod interfaceMethod)
 		{
-            var cleanInterfaceMethodName = GetCleanMethodName(interfaceMethod.Name);
+			var cleanInterfaceMethodName = GetCleanMethodName(interfaceMethod.Name);
 
-            foreach (var method in type.Methods)
+			foreach (var method in type.Methods)
 			{
 				string cleanMethodName = GetCleanMethodName(method.Name);
 
@@ -472,7 +472,7 @@ namespace Mosa.Runtime.TypeSystem
 
 			methodTable = GetMethodTableFromBaseType(type);
 
-            foreach (var method in type.Methods)
+			foreach (var method in type.Methods)
 			{
 				if ((method.Attributes & MethodAttributes.Virtual) == MethodAttributes.Virtual)
 				{
@@ -503,7 +503,7 @@ namespace Mosa.Runtime.TypeSystem
 
 		private List<RuntimeMethod> GetMethodTableFromBaseType(RuntimeType type)
 		{
-            var methodTable = new List<RuntimeMethod>();
+			var methodTable = new List<RuntimeMethod>();
 
 			if (type.BaseType != null)
 			{
@@ -523,7 +523,7 @@ namespace Mosa.Runtime.TypeSystem
 
 		private int FindOverrideSlot(IList<RuntimeMethod> methodTable, RuntimeMethod method)
 		{
-            foreach (var baseMethod in methodTable)
+			foreach (var baseMethod in methodTable)
 			{
 				if (baseMethod.Name.Equals(method.Name) && baseMethod.Signature.Matches(method.Signature))
 				{
