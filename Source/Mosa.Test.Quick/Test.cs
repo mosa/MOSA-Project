@@ -61,4 +61,29 @@ namespace Mosa.Test.Quick.Tests
 	public class B : A<int> { }
 
 	public class C<T> : A<int> { }
+
+	public class Parent<T> 
+	{
+		public T value;
+
+		public T Get() { return value; }
+		public void Set(T value) { this.value = value; }
+
+		public class NestedClass
+		{
+			public T nestedValue;
+
+			public T Get() { return nestedValue; }
+			public void Set(T value) { this.nestedValue = value; }
+		}
+
+		public class GenericNestedClass<S>
+		{
+			public S nestedValue;
+
+			public S Get() { return nestedValue; }
+			public void Set(S value) { this.nestedValue = value; }
+		}
+	}
+
 }
