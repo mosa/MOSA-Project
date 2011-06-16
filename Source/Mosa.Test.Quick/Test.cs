@@ -62,7 +62,7 @@ namespace Mosa.Test.Quick.Tests
 
 	public class C<T> : A<int> { }
 
-	public class Parent<T> 
+	public class Parent<T>
 	{
 		public T value;
 
@@ -84,6 +84,11 @@ namespace Mosa.Test.Quick.Tests
 			public S Get() { return nestedValue; }
 			public void Set(S value) { this.nestedValue = value; }
 		}
+
 	}
 
+	public class ClosedClass : Parent<int>
+	{
+		public int integerValue;
+	}
 }
