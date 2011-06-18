@@ -343,17 +343,12 @@ namespace Mosa.Runtime.TypeSystem
 
 			if (info.TypeDefRow.Extends.RID != 0)
 			{
-				if (info.TypeDefRow.Extends.Table == TableType.TypeDef)
+				switch (info.TypeDefRow.Extends.Table)
 				{
-					LoadType(info.TypeDefRow.Extends, typeInfos);
-				}
-				else if (info.TypeDefRow.Extends.Table == TableType.TypeSpec)
-				{
-					LoadTypeSpec(info.TypeDefRow.Extends);
-				}
-				else if (info.TypeDefRow.Extends.Table != TableType.TypeRef)
-				{
-					throw new ArgumentException(@"unexpected token type.", @"extends");
+					case TableType.TypeDef: LoadType(info.TypeDefRow.Extends, typeInfos); break;
+					case TableType.TypeSpec: LoadTypeSpec(info.TypeDefRow.Extends); break;
+					case TableType.TypeRef: break;
+					default: throw new ArgumentException(@"unexpected token type.", @"extends");
 				}
 			}
 
@@ -551,12 +546,12 @@ namespace Mosa.Runtime.TypeSystem
 				var declaringType = types[row.Class.RID - 1];
 				RuntimeType interfaceType;
 
-				if (row.Interface.Table == TableType.TypeSpec)
-					interfaceType = typeSpecs[row.Interface.RID - 1];
-				else if (row.Interface.Table == TableType.TypeDef)
-					interfaceType = types[row.Interface.RID - 1];
-				else
-					interfaceType = typeRef[row.Interface.RID - 1];
+				switch (row.Interface.Table)
+				{
+					case TableType.TypeSpec: interfaceType = typeSpecs[row.Interface.RID - 1]; break;
+					case TableType.TypeDef: interfaceType = types[row.Interface.RID - 1]; break;
+					default: interfaceType = typeRef[row.Interface.RID - 1]; break;
+				}	
 
 				declaringType.Interfaces.Add(interfaceType);
 			}
