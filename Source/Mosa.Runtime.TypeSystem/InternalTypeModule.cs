@@ -18,6 +18,7 @@ using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.TypeSystem.Cil;
 using Mosa.Runtime.TypeSystem.Generic;
+using System.Linq;
 
 namespace Mosa.Runtime.TypeSystem
 {
@@ -35,6 +36,11 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		private readonly List<RuntimeType> types;
 
+		/// <summary>
+		/// 
+		/// </summary>
+		private readonly List<RuntimeMethod> methods;
+
 		#endregion // Data members
 
 		#region Construction
@@ -49,6 +55,7 @@ namespace Mosa.Runtime.TypeSystem
 
 			this.typeSystem = typeSystem;
 			this.types = new List<RuntimeType>();
+			this.methods = new List<RuntimeMethod>();
 		}
 
 		#endregion // Construction
@@ -73,7 +80,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// <returns></returns>
 		IEnumerable<RuntimeType> ITypeModule.GetAllTypes()
 		{
-            foreach (var type in types)
+			foreach (var type in types)
 				yield return type;
 		}
 
@@ -85,7 +92,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// <returns></returns>
 		RuntimeType ITypeModule.GetType(string nameSpace, string name)
 		{
-            foreach (var type in types)
+			foreach (var type in types)
 			{
 				if (type.Name == name && type.Namespace == nameSpace)
 				{
@@ -138,6 +145,9 @@ namespace Mosa.Runtime.TypeSystem
 		/// <returns></returns>
 		RuntimeMethod ITypeModule.GetMethod(Token token)
 		{
+			foreach (var method in methods)
+				if (method.Token == token)
+					return method;
 			return null;
 		}
 
@@ -186,7 +196,18 @@ namespace Mosa.Runtime.TypeSystem
 		/// <param name="type">The type.</param>
 		public void AddType(RuntimeType type)
 		{
-			types.Add(type);
+			if (!types.Contains(type))
+				types.Add(type);
+		}
+
+		/// <summary>
+		/// Adds the method.
+		/// </summary>
+		/// <param name="method">The method.</param>
+		public void AddMethod(RuntimeMethod method)
+		{
+			if (!methods.Contains(method))
+				methods.Add(method);
 		}
 	}
 }
