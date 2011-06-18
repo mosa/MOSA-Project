@@ -118,11 +118,22 @@ namespace Mosa.Runtime.TypeSystem
 		}
 
 		/// <summary>
-		/// 
+		/// Gets a value indicating whether this instance is native.
 		/// </summary>
+		/// <value>
+		///   <c>true</c> if this instance is native; otherwise, <c>false</c>.
+		/// </value>
 		public bool IsNative
 		{
 			get { return Rva == 0; }
+		}
+
+		/// <summary>
+		/// Gets the instruction stream.
+		/// </summary>
+		public InstructionStream InstructionStream
+		{
+			get { return new InstructionStream(this.Module.MetadataModule.GetInstructionStream(this.Rva), 0); }
 		}
 
 		/// <summary>
