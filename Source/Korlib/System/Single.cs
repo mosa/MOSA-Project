@@ -23,14 +23,14 @@ namespace System
 
 		internal float _value;
 
-		public static bool IsNaN(double d)
+		public static bool IsNaN(float d)
 		{
 #pragma warning disable 1718
 			return (d != d);
 #pragma warning restore
 		}
 
-		public static bool IsNegativeInfinity(double d)
+		public static bool IsNegativeInfinity(float d)
 		{
 			return (d < 0.0f && (d == NegativeInfinity || d == PositiveInfinity));
 		}
@@ -40,12 +40,12 @@ namespace System
 			return (d > 0.0f && (d == NegativeInfinity || d == PositiveInfinity));
 		}
 
-		public static bool IsInfinity(double d)
+		public static bool IsInfinity(float d)
 		{
 			return (d == PositiveInfinity || d == NegativeInfinity);
 		}
 
-		public int CompareTo(double value)
+		public int CompareTo(float value)
 		{
 			if (IsPositiveInfinity(_value) && IsPositiveInfinity(value))
 				return 0;
