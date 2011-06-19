@@ -20,15 +20,17 @@ namespace Mosa.Test.Collection
 
 	public class VirtualDerived : VirtualBase
 	{
-		public static readonly VirtualDerived Instance = new VirtualDerived();
+		public static VirtualDerived Instance;// = new VirtualDerived();
 
 		public static int TestVirtualCall()
 		{
+			Instance = new VirtualDerived();
 			return Instance.Test();
 		}
 
 		public static int TestBaseCall()
 		{
+			Instance = new VirtualDerived();
 			return Instance.TestBase();
 		}
 
