@@ -23,7 +23,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// </returns>
 		public override string ToString()
 		{
-			return base.ToString() + " [" + this.token.ToString() + "]";
+			return base.ToString() + " " + this.token.ToString();
 		}
 
 	}

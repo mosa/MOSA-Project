@@ -91,4 +91,25 @@ namespace Mosa.Test.Quick.Tests
 	{
 		public int integerValue;
 	}
+
+	public class K
+	{
+		public int Kvalue;
+
+		public void SetK(int kValue) { this.Kvalue = kValue; }
+	}
+
+	public class KK : K
+	{
+		public int KKvalue;
+
+		public void SetKK(int kkValue) { this.KKvalue = kkValue; }
+	}
+
+	public class KKK : KK
+	{
+		public int KKKvalue;
+
+		public void SetKKK(int kkkValue) { this.KKKvalue = kkkValue; }
+	}
 }

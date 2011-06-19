@@ -108,7 +108,7 @@ namespace Mosa.Tools.TypeExplorer
 
 		protected void LoadAssembly(string filename)
 		{
-			LoadAssembly(filename, false);
+			LoadAssembly(filename, includeTestKorlibToolStripMenuItem.Checked);
 		}
 
 		protected void UpdateTree()
@@ -399,7 +399,6 @@ namespace Mosa.Tools.TypeExplorer
 				if (!string.IsNullOrEmpty(form.Assembly))
 				{
 					LoadAssembly(form.Assembly, true);
-					//Compile();
 				}
 			}
 		}
