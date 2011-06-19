@@ -41,16 +41,5 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			visitor.AddUInstruction(context);
 		}
 
-		/// <summary>
-		/// Returns a <see cref="System.String"/> that represents this instance.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <returns>
-		/// A <see cref="System.String"/> that represents this instance.
-		/// </returns>
-		public override string ToString(Context context)
-		{
-			return String.Format(@"IR add.u{0} {1} = {2} + {3}", context.Result.Precision, context.Result, context.Operand1, context.Operand2);
-		}
 	}
 }

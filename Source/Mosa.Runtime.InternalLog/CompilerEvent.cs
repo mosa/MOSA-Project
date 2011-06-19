@@ -28,7 +28,7 @@ namespace Mosa.Runtime.InternalLog
 				case CompilerEvent.SchedulingType: return "Scheduling Type";
 				case CompilerEvent.SchedulingMethod: return "Scheduling Method";
 				case CompilerEvent.Linking: return "Linking";
-				case CompilerEvent.DebugInfo: return "DebugInfo";
+				case CompilerEvent.DebugInfo: return "Debug Info";
 				case CompilerEvent.AssemblyStageStart: return "Assembly Stage Started";
 				case CompilerEvent.AssemblyStageEnd: return "Assembly Stage Ended";
 				case CompilerEvent.Error: return "Error";

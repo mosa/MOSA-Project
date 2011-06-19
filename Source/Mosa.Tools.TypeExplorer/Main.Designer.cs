@@ -30,8 +30,8 @@
 		{
 			System.Windows.Forms.Label stageLabel;
 			System.Windows.Forms.Label label1;
-			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
 			System.Windows.Forms.Label label2;
+			System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Main));
 			this.statusStrip1 = new System.Windows.Forms.StatusStrip();
 			this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
 			this.menuStrip1 = new System.Windows.Forms.MenuStrip();
@@ -45,9 +45,11 @@
 			this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.showTokenValues = new System.Windows.Forms.ToolStripMenuItem();
 			this.showSizes = new System.Windows.Forms.ToolStripMenuItem();
+			this.includeTestKorlibToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
 			this.treeView = new System.Windows.Forms.TreeView();
 			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
+			this.textBox1 = new System.Windows.Forms.TextBox();
 			this.cbLabels = new System.Windows.Forms.ComboBox();
 			this.cbStages = new System.Windows.Forms.ComboBox();
 			this.tbResult = new System.Windows.Forms.RichTextBox();
@@ -56,7 +58,6 @@
 			this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
-			this.textBox1 = new System.Windows.Forms.TextBox();
 			stageLabel = new System.Windows.Forms.Label();
 			label1 = new System.Windows.Forms.Label();
 			label2 = new System.Windows.Forms.Label();
@@ -87,6 +88,17 @@
 			label1.Size = new System.Drawing.Size(120, 20);
 			label1.TabIndex = 35;
 			label1.Text = "Block Label:";
+			// 
+			// label2
+			// 
+			label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+			label2.Location = new System.Drawing.Point(388, 4);
+			label2.Margin = new System.Windows.Forms.Padding(4);
+			label2.Name = "label2";
+			label2.Size = new System.Drawing.Size(100, 20);
+			label2.TabIndex = 37;
+			label2.Text = "IL Label:";
+			label2.Visible = false;
 			// 
 			// statusStrip1
 			// 
@@ -157,14 +169,14 @@
 			// nowToolStripMenuItem
 			// 
 			this.nowToolStripMenuItem.Name = "nowToolStripMenuItem";
-			this.nowToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.nowToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
 			this.nowToolStripMenuItem.Text = "Now";
 			this.nowToolStripMenuItem.Click += new System.EventHandler(this.nowToolStripMenuItem_Click);
 			// 
 			// snippetToolStripMenuItem
 			// 
 			this.snippetToolStripMenuItem.Name = "snippetToolStripMenuItem";
-			this.snippetToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.snippetToolStripMenuItem.Size = new System.Drawing.Size(114, 22);
 			this.snippetToolStripMenuItem.Text = "Snippet";
 			this.snippetToolStripMenuItem.Click += new System.EventHandler(this.snippetToolStripMenuItem_Click);
 			// 
@@ -172,7 +184,8 @@
 			// 
 			this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.showTokenValues,
-            this.showSizes});
+            this.showSizes,
+            this.includeTestKorlibToolStripMenuItem});
 			this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
 			this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
 			this.optionsToolStripMenuItem.Text = "Options";
@@ -196,6 +209,13 @@
 			this.showSizes.Size = new System.Drawing.Size(176, 22);
 			this.showSizes.Text = "Show Sizes";
 			this.showSizes.Click += new System.EventHandler(this.showSizes_Click);
+			// 
+			// includeTestKorlibToolStripMenuItem
+			// 
+			this.includeTestKorlibToolStripMenuItem.CheckOnClick = true;
+			this.includeTestKorlibToolStripMenuItem.Name = "includeTestKorlibToolStripMenuItem";
+			this.includeTestKorlibToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
+			this.includeTestKorlibToolStripMenuItem.Text = "Include Test Korlib";
 			// 
 			// openFileDialog
 			// 
@@ -241,6 +261,14 @@
 			this.splitContainer1.SplitterDistance = 261;
 			this.splitContainer1.SplitterWidth = 5;
 			this.splitContainer1.TabIndex = 26;
+			// 
+			// textBox1
+			// 
+			this.textBox1.Location = new System.Drawing.Point(388, 25);
+			this.textBox1.Name = "textBox1";
+			this.textBox1.Size = new System.Drawing.Size(100, 20);
+			this.textBox1.TabIndex = 36;
+			this.textBox1.Visible = false;
 			// 
 			// cbLabels
 			// 
@@ -327,25 +355,6 @@
 			this.toolStripButton3.Text = "Compile";
 			this.toolStripButton3.Click += new System.EventHandler(this.toolStripButton3_Click);
 			// 
-			// textBox1
-			// 
-			this.textBox1.Location = new System.Drawing.Point(388, 25);
-			this.textBox1.Name = "textBox1";
-			this.textBox1.Size = new System.Drawing.Size(100, 20);
-			this.textBox1.TabIndex = 36;
-			this.textBox1.Visible = false;
-			// 
-			// label2
-			// 
-			label2.Font = new System.Drawing.Font("Microsoft Sans Serif", 10F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-			label2.Location = new System.Drawing.Point(388, 4);
-			label2.Margin = new System.Windows.Forms.Padding(4);
-			label2.Name = "label2";
-			label2.Size = new System.Drawing.Size(100, 20);
-			label2.TabIndex = 37;
-			label2.Text = "IL Label:";
-			label2.Visible = false;
-			// 
 			// Main
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -401,5 +410,6 @@
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
 		private System.Windows.Forms.ToolStripButton toolStripButton3;
 		private System.Windows.Forms.TextBox textBox1;
+		private System.Windows.Forms.ToolStripMenuItem includeTestKorlibToolStripMenuItem;
 	}
 }

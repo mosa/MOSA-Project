@@ -102,7 +102,7 @@ namespace Mosa.Runtime.Metadata
 
 		public override string ToString()
 		{
-			return string.Format("[{0}:0x{1}]", Table, RID.ToString("x4"));
+			return string.Format("{0}:0x{1}", Table, RID.ToString("x4"));
 		}
 
 		public Token NextRow
