@@ -290,19 +290,19 @@ namespace Mosa.Tools.Compiler
 			using (AotCompiler aot = new AotCompiler(this.architectureSelector.Architecture, typeSystem, typeLayout, internalLog))
 			{
 				aot.Pipeline.AddRange(new IAssemblyCompilerStage[] 
-					{
-						this.bootFormatStage,
-						new InterruptBuilderStage(),						
-						new AssemblyCompilationStage(), 
-						//new FakeSystemObjectGenerationStage(),
-						new MethodCompilerSchedulerStage(),
-						new TypeInitializers.TypeInitializerSchedulerStage(),
-						this.bootFormatStage,
-						new CilHeaderBuilderStage(),
-						new ObjectFileLayoutStage(),
-						this.linkerStage,
-						this.mapFileWrapper
-					});
+				{
+					this.bootFormatStage,
+					new InterruptBuilderStage(),						
+					new AssemblyCompilationStage(), 
+					//new FakeSystemObjectGenerationStage(),
+					new MethodCompilerSchedulerStage(),
+					new TypeInitializers.TypeInitializerSchedulerStage(),
+					this.bootFormatStage,
+					new CilHeaderBuilderStage(),
+					new ObjectFileLayoutStage(),
+					this.linkerStage,
+					this.mapFileWrapper
+				});
 
 				aot.Run();
 			}

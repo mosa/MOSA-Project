@@ -22,15 +22,14 @@ namespace Mosa.Tools.Compiler
 		public AotAssemblyCompiler(IArchitecture architecture, ITypeInitializerSchedulerStage typeInitializerSchedulerStage, IAssemblyLinker linker, ITypeSystem typeSystem, ITypeLayout typeLayout, IInternalLog internalLog)
 			: base(architecture, typeSystem, typeLayout, internalLog)
 		{
-			this.Pipeline.AddRange(
-				new IAssemblyCompilerStage[] 
-					{
-						new AssemblyMemberCompilationSchedulerStage(),
-						new MethodCompilerSchedulerStage(),
-						new TypeInitializerSchedulerStageProxy(typeInitializerSchedulerStage),
-						new TypeLayoutStage(),
-						new LinkerProxy(linker)
-					});
+			Pipeline.AddRange(new IAssemblyCompilerStage[] 
+			{
+				new AssemblyMemberCompilationSchedulerStage(),
+				new MethodCompilerSchedulerStage(),
+				new TypeInitializerSchedulerStageProxy(typeInitializerSchedulerStage),
+				new TypeLayoutStage(),
+				new LinkerProxy(linker)
+			});
 		}
 
 		public void Run()
