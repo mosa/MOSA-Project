@@ -16,11 +16,11 @@ namespace Mosa.Test.Cases.CIL
 {
 	[TestFixture]
 	[Importance(Importance.Critical)]
-	[Category(@"Method calls")]
-	[Description(@"Tests proper method table building and virtual call support.")]
-	public class CallvirtFixture : TestCompilerAdapter
+	//[Category(@"Method calls")]
+	//[Description(@"Tests proper method table building and virtual call support.")]
+	public class CallVirtualFixture : TestCompilerAdapter
 	{
-		public CallvirtFixture()
+		public CallVirtualFixture()
 		{
 			settings.AddReference("Mosa.Test.Collection.dll");
 		}
@@ -28,14 +28,14 @@ namespace Mosa.Test.Cases.CIL
 		[Test]
 		public void TestVirtualCall()
 		{
-			int result = Run<int>("Mosa.Test.Collection", @"VDerived", @"STest");
+			int result = Run<int>("Mosa.Test.Collection", @"VirtualDerived", @"TestVirtualCall");
 			Assert.AreEqual(7, result);
 		}
 
 		[Test]
 		public void TestBaseCall()
 		{
-			int result = Run<int>("Mosa.Test.Collection", @"VDerived", @"STestBaseCall");
+			int result = Run<int>("Mosa.Test.Collection", @"VirtualDerived", @"TestBaseCall");
 			Assert.AreEqual(12, result);
 		}
 
