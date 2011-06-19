@@ -22,7 +22,9 @@ using Mosa.Runtime.TypeSystem.Generic;
 namespace Mosa.Runtime.TypeSystem
 {
 	/// <summary>
-	/// 
+	///	Patches a generic type with the actual set of generic type parameters used in an instantiation.
+	///	E.g. an instantiation of Foo<T> with "int" for T will replace all occurences of T
+	///	inside Foo<T> with "int" in each member and each method's instruction stream.
 	/// </summary>
 	public class GenericTypePatcher
 	{
@@ -49,7 +51,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// <param name="patchedType">Type of the patched.</param>
 		private void PatchFields(CilGenericType patchedType)
 		{
-			//TODO: Patch members
+			//TODO: Patch members by replacing their signatures with the actual set generic type parameter
 		}
 
 		/// <summary>
@@ -63,6 +65,7 @@ namespace Mosa.Runtime.TypeSystem
 			foreach (RuntimeMethod method in patchedType.Methods)
 			{
 				var instructionStream = method.InstructionStream;
+				
 			}
 		}
 	}
