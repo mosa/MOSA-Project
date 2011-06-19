@@ -476,22 +476,27 @@ namespace Mosa.Runtime.TypeSystem
 			{
 				if ((method.Attributes & MethodAttributes.Virtual) == MethodAttributes.Virtual)
 				{
-					int slot = methodTable.Count;
-
 					if ((method.Attributes & MethodAttributes.NewSlot) != MethodAttributes.NewSlot)
 					{
-						slot = FindOverrideSlot(methodTable, method);
-					}
-
-					methodTableOffsets.Add(method, slot);
-
-					if (slot == methodTable.Count)
-					{
-						methodTable.Add(method);
+						int slot = FindOverrideSlot(methodTable, method);
+						methodTable[slot] = method;
+						methodTableOffsets.Add(method, slot);
 					}
 					else
 					{
-						methodTable[slot] = method;
+						int slot = methodTable.Count;
+						methodTable.Add(method);
+						methodTableOffsets.Add(method, slot);
+					}
+				}
+				else
+				{
+					if (((method.Attributes & MethodAttributes.Static) != MethodAttributes.Static)
+						&& ((method.Attributes & MethodAttributes.RTSpecialName) != MethodAttributes.RTSpecialName))
+					{
+						int slot = methodTable.Count;
+						methodTable.Add(method);
+						methodTableOffsets.Add(method, slot);
 					}
 				}
 			}
