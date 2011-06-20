@@ -160,7 +160,13 @@ end
 
 def create_project_buildfile (buildFile, sourceFiles, assemblyName, nostdlib, references, projectReferences, isLibrary, startupObject)
   fileHandle = File.new(@baseDir + buildFile, "w")
-  part1 = File.open('project.1.preset', 'rb') { |file| file.read }
+  part1 = nil
+  if buildFile.include? 'Tools/'
+    part1 = File.open('project.1.preset_sub', 'rb') { |file| file.read }
+  else
+    part1 = File.open('project.1.preset', 'rb') { |file| file.read }
+  end
+  part1 = part1.chop
   part2 = File.open('project.2.preset', 'rb') { |file| file.read }
   part3 = File.open('project.3.preset', 'rb') { |file| file.read }
   part4 = File.open('project.4.preset', 'rb') { |file| file.read }
