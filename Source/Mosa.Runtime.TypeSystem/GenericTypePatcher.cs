@@ -23,8 +23,8 @@ namespace Mosa.Runtime.TypeSystem
 {
 	/// <summary>
 	///	Patches a generic type with the actual set of generic type parameters used in an instantiation.
-	///	E.g. an instantiation of Foo<T> with "int" for T will replace all occurences of T
-	///	inside Foo<T> with "int" in each member and each method's instruction stream.
+	///	E.g. an instantiation of Foo&lt;T&gt; with "int" for T will replace all occurrences of T
+	///	inside Foo&lt;T&gt; with "int" in each member and each method's instruction stream.
 	/// </summary>
 	public class GenericTypePatcher : IGenericTypePatcher
 	{

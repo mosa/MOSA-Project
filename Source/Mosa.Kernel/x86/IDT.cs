@@ -377,7 +377,7 @@ namespace Mosa.Kernel.x86
 				// Page Fault!
 				PageFaultHandler.Fault(errorCode);
 			}
-			if (interrupt == 0x20)
+			else if (interrupt == 0x20)
 			{
 				// Timer Interrupt! Switch Tasks!
 
