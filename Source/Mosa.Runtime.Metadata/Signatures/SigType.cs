@@ -46,7 +46,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 		/// Gets the type.
 		/// </summary>
 		/// <value>The type.</value>
-		public CilElementType Type { get { return type; } }
+		public CilElementType Type { get { return type; } set { type = value; } }
 
 		/// <summary>
 		/// Gets a value indicating whether the type contains a generic type.

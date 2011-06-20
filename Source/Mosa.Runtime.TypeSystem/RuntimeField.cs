@@ -101,6 +101,7 @@ namespace Mosa.Runtime.TypeSystem
 		public SigType SignatureType
 		{
 			get { return this.Signature.Type; }
+			internal set { this.Signature.Type = value; }
 		}
 
 		public bool IsLiteralField
@@ -135,10 +136,10 @@ namespace Mosa.Runtime.TypeSystem
 		public override string ToString()
 		{
 			string name;
-            var declaringType = this.DeclaringType;
+			var declaringType = this.DeclaringType;
 			if (declaringType != null)
 			{
-                var declaringTypeSymbolName = declaringType.ToString();
+				var declaringTypeSymbolName = declaringType.ToString();
 				name = String.Format("{0}.{1}", declaringTypeSymbolName, this.Name);
 			}
 			else

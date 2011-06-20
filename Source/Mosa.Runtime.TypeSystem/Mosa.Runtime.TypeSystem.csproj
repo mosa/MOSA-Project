@@ -91,6 +91,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="GenericTypePatcher.cs" />
+    <Compile Include="IGenericTypePatcher.cs" />
     <Compile Include="InternalTypeModule.cs" />
     <Compile Include="GenericParameter.cs" />
     <Compile Include="ITypeLayout.cs" />

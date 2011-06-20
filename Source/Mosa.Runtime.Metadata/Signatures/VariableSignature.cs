@@ -79,7 +79,7 @@ namespace Mosa.Runtime.Metadata.Signatures
 		public SigType Type
 		{
 			get { return this.type; }
-			protected set { this.type = value; }
+			set { this.type = value; }
 		}
 
 		protected override void ParseSignature(SignatureReader reader)
