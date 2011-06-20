@@ -79,7 +79,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CIL\BooleanFixture.cs" />
-    <Compile Include="CIL\CallvirtFixture.cs" />
+    <Compile Include="CIL\CallVirtualFixture.cs" />
     <Compile Include="CIL\CharFixture.cs" />
     <Compile Include="CIL\GenericInterfaceFixture.cs" />
     <Compile Include="CIL\Int16Fixture.cs" />
@@ -94,7 +94,7 @@
     <Compile Include="CIL\Int32Fixture.cs" />
     <Compile Include="CIL\Int64Fixture.cs" />
     <Compile Include="CIL\InterfaceFixture.cs" />
-    <Compile Include="CIL\ObjectFixture.cs" />
+    <Compile Include="CIL\NewobjFixture.cs" />
     <Compile Include="OLD.CIL\PinnedFixture.cs" />
     <Compile Include="CIL\SingleFixture.cs" />
     <Compile Include="CIL\StringFixture.cs" />
