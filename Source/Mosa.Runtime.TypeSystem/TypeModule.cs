@@ -876,6 +876,13 @@ namespace Mosa.Runtime.TypeSystem
 			if (genericType != null)
 				typeSpecs[token.RID - 1] = genericType;
 
+			if (genericType != null && !genericType.ContainsOpenGenericParameters)
+			{
+				var patcher = this.typeSystem.GenericTypePatcher;
+				var genType = genericType as CilGenericType;
+				var patchedType = patcher.PatchGenericType(genType, null);
+			}
+
 			return genericType;
 		}
 

@@ -133,7 +133,17 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		public InstructionStream InstructionStream
 		{
-			get { return new InstructionStream(this.Module.MetadataModule.GetInstructionStream(this.Rva), 0); }
+			get 
+			{
+				try
+				{
+					return new InstructionStream(this.Module.MetadataModule.GetInstructionStream(this.Rva), 0);
+				}
+				catch (Exception)
+				{
+					return null;
+				}
+			}
 		}
 
 		/// <summary>
