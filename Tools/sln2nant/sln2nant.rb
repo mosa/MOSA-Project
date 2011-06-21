@@ -18,7 +18,7 @@ def sln2nant(solutionFile)
         if values[1].end_with?(".csproj\"")
           cleaned = values[1].strip.tr('\"', '').tr('\\', '/').tr('//', '/')
           projectFile = @baseDir + cleaned
-          if not (projectFile.include? 'Test')
+          if (not projectFile.include? 'Test') or (projectFile.include? 'CodeDom')
             projectFiles << projectFile
             @buildfiles << cleaned[0..cleaned.rindex('/')] + 'mosa.build'
           end
@@ -78,7 +78,11 @@ def proj2nant_preprocessing(projectFile)
   
   assemblyName = projectFile
   doc.elements.each('Project/PropertyGroup/AssemblyName') do |assembly|
-    assemblyName = assembly.text + ".dll"
+    if assembly.text.include? 'mosacl'
+	assemblyName = assembly.text + ".exe"
+    else
+	assemblyName = assembly.text + ".dll"
+    end
   end
   
   index = projectFile.rindex('/') + 1
@@ -144,7 +148,6 @@ def proj2nant(projectFile, nantFile)
   
   assemblyName = projectFile
   doc.elements.each('Project/PropertyGroup/AssemblyName') do |assembly|
-    puts "Is Library = " + isLibrary.to_s
     if isLibrary
       assemblyName = assembly.text + ".dll"
     else
@@ -157,7 +160,13 @@ end
 
 def create_project_buildfile (buildFile, sourceFiles, assemblyName, nostdlib, references, projectReferences, isLibrary, startupObject)
   fileHandle = File.new(@baseDir + buildFile, "w")
-  part1 = File.open('project.1.preset', 'rb') { |file| file.read }
+  part1 = nil
+  if buildFile.include? 'Tools/'
+    part1 = File.open('project.1.preset_sub', 'rb') { |file| file.read }
+  else
+    part1 = File.open('project.1.preset', 'rb') { |file| file.read }
+  end
+  part1 = part1.chop
   part2 = File.open('project.2.preset', 'rb') { |file| file.read }
   part3 = File.open('project.3.preset', 'rb') { |file| file.read }
   part4 = File.open('project.4.preset', 'rb') { |file| file.read }
@@ -185,6 +194,7 @@ def create_project_buildfile (buildFile, sourceFiles, assemblyName, nostdlib, re
   end
   
   projectReferences.each do |reference|
+    puts '  > ' + reference
     fileHandle.puts '                    <include name="${outputDirectory}/' + @project2Assembly[reference[reference.rindex('/') + 1..-1]] + '"/>'
   end
   
