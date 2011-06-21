@@ -37,6 +37,9 @@
                     <include name="CompilerFramework/CIL/BreakInstruction.cs"/>
                     <include name="CompilerFramework/BaseAssemblyCompilerStage.cs"/>
                     <include name="CompilerFramework/CIL/ExceptionClauseHeader.cs"/>
+                    <include name="CompilerFramework/InstructionLogger.cs"/>
+                    <include name="CompilerFramework/LoggerDebugWriter.cs"/>
+                    <include name="CompilerFramework/ILoggerWriter.cs"/>
                     <include name="CompilerFramework/TypeLayoutStage.cs"/>
                     <include name="CompilerFramework/ExceptionEngine.cs"/>
                     <include name="CompilerFramework/IR/ThrowInstruction.cs"/>
@@ -227,7 +230,6 @@
                     <include name="CompilerFramework/DominanceCalculationStage.cs"/>
                     <include name="CompilerFramework/EnterSSA.cs"/>
                     <include name="CompilerFramework/FlowControl.cs"/>
-                    <include name="CompilerFramework/FunctionCallInliningProcessor.cs"/>
                     <include name="CompilerFramework/IArchitecture.cs"/>
                     <include name="CompilerFramework/IAssemblyCompilerStage.cs"/>
                     <include name="CompilerFramework/ICallingConvention.cs"/>
@@ -236,7 +238,6 @@
                     <include name="CompilerFramework/CIL/IInstructionDecoder.cs"/>
                     <include name="CompilerFramework/IMethodCompilerBuilder.cs"/>
                     <include name="CompilerFramework/IMethodCompilerStage.cs"/>
-                    <include name="CompilerFramework/InstructionLogger.cs"/>
                     <include name="CompilerFramework/IPlatformStage.cs"/>
                     <include name="CompilerFramework/IRegisterConstraint.cs"/>
                     <include name="CompilerFramework/IStackLayoutProvider.cs"/>
@@ -266,10 +267,10 @@
 		</sources>
 		<references>
                     <include name="System.dll"/>
-                    <include name="../../3rdParty/Mono.Cecil.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Common.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.FileFormat.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Linker.dll"/>
+                    <include name="${outputDirectory}/Mosa.Runtime.InternalLog.dll"/>
                     <include name="${outputDirectory}/Mosa.Runtime.Metadata.dll"/>
                     <include name="${outputDirectory}/Mosa.Runtime.TypeSystem.dll"/>
 		</references>

@@ -18,6 +18,8 @@
                     <include name="Cil/CilRuntimeField.cs"/>
                     <include name="Cil/CilRuntimeMethod.cs"/>
                     <include name="Cil/CilRuntimeType.cs"/>
+                    <include name="GenericTypePatcher.cs"/>
+                    <include name="IGenericTypePatcher.cs"/>
                     <include name="InternalTypeModule.cs"/>
                     <include name="GenericParameter.cs"/>
                     <include name="ITypeLayout.cs"/>
@@ -41,7 +43,6 @@
 		</sources>
 		<references>
                     <include name="System.dll"/>
-                    <include name="../../3rdParty/Mono.Cecil.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Common.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.FileFormat.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Linker.dll"/>

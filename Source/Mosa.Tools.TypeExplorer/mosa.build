@@ -14,6 +14,11 @@
 	<target name="build">
 	    <csc target="exe" output="${outputDirectory}/Mosa.Tools.TypeExplorer.exe" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
+                    <include name="CodeForm.cs"/>
+                    <include name="CodeForm.Designer.cs"/>
+                    <include name="ExplorerAssemblyCompiler.cs"/>
+                    <include name="ExplorerLinker.cs"/>
+                    <include name="ExplorerMethodCompiler.cs"/>
                     <include name="Main.cs"/>
                     <include name="Main.Designer.cs"/>
                     <include name="Program.cs"/>
@@ -25,9 +30,14 @@
                     <include name="System.Drawing.dll"/>
                     <include name="System.Windows.Forms.dll"/>
                     <include name="System.Xml.dll"/>
-                    <include name="../../3rdParty/Mono.Cecil.dll"/>
+                    <include name="${outputDirectory}/Mosa.Compiler.Linker.dll"/>
+                    <include name="${outputDirectory}/Mosa.Platform.x86.dll"/>
+                    <include name="${outputDirectory}/Mosa.Runtime.InternalLog.dll"/>
                     <include name="${outputDirectory}/Mosa.Runtime.Metadata.dll"/>
                     <include name="${outputDirectory}/Mosa.Runtime.TypeSystem.dll"/>
+                    <include name="${outputDirectory}/Mosa.Runtime.dll"/>
+                    <include name="${outputDirectory}/Mosa.Test.CodeDomCompiler.dll"/>
+                    <include name="${outputDirectory}/mosacl.exe"/>
 		</references>
 		<!-- supress warnings -->
 		<nowarn><warning number="${suppresswarnings}"/></nowarn>
