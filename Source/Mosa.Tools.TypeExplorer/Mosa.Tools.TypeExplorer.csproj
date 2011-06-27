@@ -56,7 +56,9 @@
     <Compile Include="ExplorerAssemblyCompiler.cs" />
     <Compile Include="ExplorerLinker.cs" />
     <Compile Include="ExplorerMethodCompiler.cs" />
-    <Compile Include="Main.cs" />
+    <Compile Include="Main.cs">
+      <SubType>Form</SubType>
+    </Compile>
     <Compile Include="Main.Designer.cs">
       <DependentUpon>Main.cs</DependentUpon>
     </Compile>

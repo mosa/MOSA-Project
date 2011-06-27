@@ -13,4 +13,6 @@ CD ..\Tests
 
 CALL ExtractResults.BAT
 
+notepad.exe reports\Tests.txt
+
 pause

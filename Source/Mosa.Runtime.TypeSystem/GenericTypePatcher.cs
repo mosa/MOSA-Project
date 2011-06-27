@@ -112,7 +112,8 @@ namespace Mosa.Runtime.TypeSystem
 		/// <param name="patchedType">Type of the patched.</param>
 		private void PatchTypeModule(CilGenericType patchedType)
 		{
-			(this.typeSystem.InternalTypeModule as InternalTypeModule).AddType(patchedType);
+			//Remove the following line when GenericTypePatcher is fully implemented
+			//(this.typeSystem.InternalTypeModule as InternalTypeModule).AddType(patchedType);
 		}
 	}
 }
