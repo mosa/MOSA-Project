@@ -84,7 +84,7 @@
     <Compile Include="CompilerFramework\CIL\DecodingStage.cs" />
     <Compile Include="CompilerFramework\CIL\BreakInstruction.cs" />
     <Compile Include="CompilerFramework\BaseAssemblyCompilerStage.cs" />
-    <Compile Include="CompilerFramework\CIL\ExceptionClauseHeader.cs" />
+    <Compile Include="CompilerFramework\ExceptionClauseHeader.cs" />
     <Compile Include="CompilerFramework\InstructionLogger.cs" />
     <Compile Include="CompilerFramework\LoggerDebugWriter.cs" />
     <Compile Include="CompilerFramework\ILoggerWriter.cs" />
@@ -130,7 +130,7 @@
     <Compile Include="CompilerFramework\CIL\CpobjInstruction.cs" />
     <Compile Include="CompilerFramework\CIL\DivInstruction.cs" />
     <Compile Include="CompilerFramework\CIL\DupInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\EhClause.cs" />
+    <Compile Include="CompilerFramework\ExceptionClause.cs" />
     <Compile Include="CompilerFramework\CIL\EndfilterInstruction.cs" />
     <Compile Include="CompilerFramework\CIL\EndfinallyInstruction.cs" />
     <Compile Include="CompilerFramework\CIL\IBranchInstruction.cs" />

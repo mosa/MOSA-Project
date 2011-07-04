@@ -1087,7 +1087,8 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Endfinally(Context context)
 		{
-			throw new NotSupportedException();
+			//TODO
+			//throw new NotSupportedException();
 		}
 
 		/// <summary>

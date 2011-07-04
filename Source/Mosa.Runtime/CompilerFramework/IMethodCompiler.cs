@@ -159,5 +159,11 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <value>The log.</value>
 		IInternalLog InternalLog { get; }
+
+		/// <summary>
+		/// Gets the exception clause header.
+		/// </summary>
+		/// <value>The exception clause header.</value>
+		ExceptionClauseHeader ExceptionClauseHeader { get; }
 	}
 }

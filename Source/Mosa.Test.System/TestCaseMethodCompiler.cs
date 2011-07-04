@@ -48,7 +48,7 @@ namespace Mosa.Test.System
 				new StaticAllocationResolutionStage(),
 				//new ConstantFoldingStage(),
 				new CILTransformationStage(),
-				new CILLeakGuardStage() { MustThrowCompilationException = true },
+			//	new CILLeakGuardStage() { MustThrowCompilationException = true },
 				//InstructionStatisticsStage.Instance,
 				//new DominanceCalculationStage(),
 				//new EnterSSA(),

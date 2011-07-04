@@ -27,11 +27,11 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// 
 		/// </summary>
-		private BasicBlock _epilogue;
+		private BasicBlock epilogue;
 		/// <summary>
 		/// 
 		/// </summary>
-		private BasicBlock _prologue;
+		private BasicBlock prologue;
 
 		#endregion // Data members
 
@@ -59,7 +59,7 @@ namespace Mosa.Runtime.CompilerFramework
 			//ctx.AppendInstruction(CIL.Instruction.Get(CIL.OpCode.Br));
 			ctx.SetBranch(0);
 			ctx.Label = -1;
-			_prologue = CreateBlock(-1, ctx.Index);
+			prologue = CreateBlock(-1, ctx.Index);
 
 			SplitIntoBlocks(0);
 
@@ -69,13 +69,13 @@ namespace Mosa.Runtime.CompilerFramework
 			ctx.AppendInstruction(null);
 			ctx.Ignore = true;
 			ctx.Label = Int32.MaxValue;
-			_epilogue = CreateBlock(Int32.MaxValue, ctx.Index);
+			epilogue = CreateBlock(Int32.MaxValue, ctx.Index);
 
 			// Link all the blocks together
-			BuildBlockLinks(_prologue);
+			BuildBlockLinks(prologue);
 
 			// Link Exception Header Clauses
-			LinkExceptionHeaderClauses();
+			//LinkExceptionHeaderClauses();
 		}
 
 		#endregion // IMethodCompilerStage members
@@ -120,6 +120,16 @@ namespace Mosa.Runtime.CompilerFramework
 						Debug.Assert(false);
 						break;
 				}
+			}
+
+			// Add Exception Class targets
+			foreach (ExceptionClause exceptionClause in methodCompiler.ExceptionClauseHeader.Clauses)
+			{
+				if (!targets.ContainsKey(exceptionClause.HandlerOffset))
+					targets.Add(exceptionClause.HandlerOffset, -1);
+
+				if (!targets.ContainsKey(exceptionClause.TryOffset))
+					targets.Add(exceptionClause.TryOffset, -1);
 			}
 
 			bool slice = false;
@@ -176,8 +186,8 @@ namespace Mosa.Runtime.CompilerFramework
 					case FlowControl.Next: continue;
 					case FlowControl.Call: continue;
 					case FlowControl.Return:
-						if (!block.NextBlocks.Contains(_epilogue))
-							LinkBlocks(block, _epilogue);
+						if (!block.NextBlocks.Contains(epilogue))
+							LinkBlocks(block, epilogue);
 						return;
 					case FlowControl.Break: goto case FlowControl.Branch;
 					// FIXME: case FlowControl.Throw: goto case FlowControl.Branch;
@@ -230,16 +240,5 @@ namespace Mosa.Runtime.CompilerFramework
 			callee.PreviousBlocks.Add(caller);
 		}
 
-		/// <summary>
-		/// Links the exception header clauses.
-		/// </summary>
-		private void LinkExceptionHeaderClauses()
-		{
-			//foreach (BasicBlock block in this.basicBlocks)
-			//{
-			//    for (Context ctx = CreateContext(block); !ctx.EndOfInstruction; ctx.GotoNext())
-			//        this.methodCompiler.Method.ExceptionClauseHeader.LinkBlockToClause(ctx, block);
-			//}
-		}
 	}
 }

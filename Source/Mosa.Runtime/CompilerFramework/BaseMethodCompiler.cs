@@ -125,6 +125,11 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		private Dictionary<int, BasicBlock> basicBlocksByLabel = new Dictionary<int, BasicBlock>();
 
+		/// <summary>
+		/// 
+		/// </summary>
+		private ExceptionClauseHeader exceptionClauseHeader = new ExceptionClauseHeader();
+
 		#endregion // Data Members
 
 		#region Construction
@@ -181,7 +186,7 @@ namespace Mosa.Runtime.CompilerFramework
 		public IMetadataModule Assembly { get { return this.moduleTypeSystem.MetadataModule; } }
 
 		/// <summary>
-		/// Gets the _linker used to resolve external symbols.
+		/// Gets the linker used to resolve external symbols.
 		/// </summary>
 		public IAssemblyLinker Linker { get { return linker; } }
 
@@ -207,6 +212,10 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value>The basic blocks.</value>
 		public IList<BasicBlock> BasicBlocks { get { return basicBlocks; } }
 
+		/// <summary>
+		/// Retrieves the compilation scheduler.
+		/// </summary>
+		/// <value>The compilation scheduler.</value>
 		public ICompilationSchedulerStage Scheduler { get { return this.compilationScheduler; } }
 
 		/// <summary>
@@ -231,6 +240,12 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <value>The log.</value>
 		public IInternalLog InternalLog { get { return internalLog; } }
+
+		/// <summary>
+		/// Gets the exception clause header.
+		/// </summary>
+		/// <value>The exception clause header.</value>
+		public ExceptionClauseHeader ExceptionClauseHeader { get { return exceptionClauseHeader; } }
 
 		#endregion // Properties
 

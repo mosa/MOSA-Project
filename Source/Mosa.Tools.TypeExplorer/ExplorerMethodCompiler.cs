@@ -40,7 +40,7 @@ namespace Mosa.Tools.TypeExplorer
 				new OperandDeterminationStage(),
 				new StaticAllocationResolutionStage(),
 				new CILTransformationStage(),
-				new CILLeakGuardStage() { MustThrowCompilationException = true },
+				//new CILLeakGuardStage() { MustThrowCompilationException = true },
 				new DominanceCalculationStage(),
 				//new EnterSSA(),
 				//new ConstantPropagationStage(),

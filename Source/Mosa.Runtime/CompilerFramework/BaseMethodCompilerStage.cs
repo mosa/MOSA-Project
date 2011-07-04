@@ -73,8 +73,14 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		protected ICallingConvention callingConvention;
 
+		/// <summary>
+		/// Native Pointer Size
+		/// </summary>
 		protected int nativePointerSize;
 
+		/// <summary>
+		/// Native Pointer Alignment
+		/// </summary>
 		protected int nativePointerAlignment;
 
 		#endregion // Data members

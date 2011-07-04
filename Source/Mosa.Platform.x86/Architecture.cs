@@ -172,7 +172,7 @@ namespace Mosa.Platform.x86
 					new IRTransformationStage(),
 					new TweakTransformationStage(),
 					new MemToMemConversionStage(),
-					new ExceptionHeaderPreprocessingStage(),
+					//new ExceptionHeaderPreprocessingStage(),
 				});
 
 			methodCompilerPipeline.InsertAfter<IBlockOrderStage>(

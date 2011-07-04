@@ -11,7 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 
-namespace Mosa.Runtime.CompilerFramework.CIL
+namespace Mosa.Runtime.CompilerFramework
 {
 	/// <summary>
 	/// 
@@ -21,44 +21,32 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// 
 		/// </summary>
-		private List<EhClause> clauses = new List<EhClause>();
+		private List<ExceptionClause> clauses = new List<ExceptionClause>();
 
 		/// <summary>
-		/// 
+		/// Gets the clauses.
 		/// </summary>
-		public List<EhClause> Clauses
+		/// <value>The clauses.</value>
+		public List<ExceptionClause> Clauses
 		{
 			get { return this.clauses; }
 		}
 
 		/// <summary>
-		/// 
+		/// Adds the clause.
 		/// </summary>
-		/// <param name="clause"></param>
-		public void AddClause(EhClause clause)
+		/// <param name="clause">The clause.</param>
+		public void AddClause(ExceptionClause clause)
 		{
 			this.Clauses.Add(clause);
 		}
 
 		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="context"></param>
-		public void LinkBlockToClause(Context context, BasicBlock block)
-		{
-			foreach (EhClause clause in this.Clauses)
-			{
-				if (clause.LinkBlockToClause(context, block))
-					return;
-			}
-		}
-
-		/// <summary>
-		/// 
+		/// Sorts this instance.
 		/// </summary>
 		public void Sort()
 		{
-			this.Clauses.Sort(delegate(EhClause left, EhClause right) 
+			this.Clauses.Sort(delegate(ExceptionClause left, ExceptionClause right) 
 			{
 				if (left.HandlerEnd < right.HandlerOffset)
 					return -1;

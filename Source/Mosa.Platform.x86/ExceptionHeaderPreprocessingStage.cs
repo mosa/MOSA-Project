@@ -22,15 +22,12 @@ namespace Mosa.Platform.x86
 	/// <summary>
 	/// 
 	/// </summary>
-	/// <remarks>
-	/// 
-	/// </remarks>
 	public sealed class ExceptionHeaderPreprocessingStage : BaseMethodCompilerStage, IMethodCompilerStage, IPlatformStage, IPipelineStage
 	{
 		/// <summary>
 		/// 
 		/// </summary>
-		private Dictionary<int, EhClause> labelMapping = new Dictionary<int, EhClause>();
+		private Dictionary<int, ExceptionClause> labelMapping = new Dictionary<int, ExceptionClause>();
 
 		/// <summary>
 		/// Retrieves the name of the compilation stage.
@@ -67,7 +64,7 @@ namespace Mosa.Platform.x86
 		/// 
 		/// </summary>
 		/// <param name="clause"></param>
-		private void AddClauseLabels(EhClause clause)
+		private void AddClauseLabels(ExceptionClause clause)
 		{
 			AddClauseLabel(clause, clause.TryOffset);
 			AddClauseLabel(clause, clause.TryEnd);
@@ -80,7 +77,7 @@ namespace Mosa.Platform.x86
 		/// </summary>
 		/// <param name="clause"></param>
 		/// <param name="label"></param>
-		private void AddClauseLabel(EhClause clause, int label)
+		private void AddClauseLabel(ExceptionClause clause, int label)
 		{
 			this.labelMapping[label] = clause;
 		}
@@ -95,7 +92,7 @@ namespace Mosa.Platform.x86
 			{
 				if (this.labelMapping.ContainsKey(context.Label))
 				{
-					EhClause clause = this.labelMapping[context.Label];
+					ExceptionClause clause = this.labelMapping[context.Label];
 					if (clause.TryOffset == context.Label || clause.HandlerOffset == context.Label)
 					{
 

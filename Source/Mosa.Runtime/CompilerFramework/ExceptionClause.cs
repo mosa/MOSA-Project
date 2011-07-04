@@ -12,12 +12,12 @@ using System.Collections.Generic;
 using System.Text;
 using System.IO;
 
-namespace Mosa.Runtime.CompilerFramework.CIL
+namespace Mosa.Runtime.CompilerFramework
 {
 	/// <summary>
 	/// 
 	/// </summary>
-	public enum EhClauseType : byte
+	public enum ExceptionClauseType : byte
 	{
 		/// <summary>
 		/// A typed exception handler clause.
@@ -43,7 +43,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public class EhClause
+	public class ExceptionClause
 	{
 		/// <summary>
 		/// 
@@ -52,7 +52,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// 
 		/// </summary>
-		public EhClauseType Kind;
+		public ExceptionClauseType Kind;
 		/// <summary>
 		/// 
 		/// </summary>
@@ -103,7 +103,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		{
 			if (!isFat)
 			{
-				this.Kind = (EhClauseType)reader.ReadInt16();
+				this.Kind = (ExceptionClauseType)reader.ReadInt16();
 				this.TryOffset = reader.ReadInt16();
 				this.TryLength = reader.ReadByte();
 				this.HandlerOffset = reader.ReadInt16();
@@ -111,46 +111,28 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			}
 			else
 			{
-				this.Kind = (EhClauseType)reader.ReadInt32();
+				this.Kind = (ExceptionClauseType)reader.ReadInt32();
 				this.TryOffset = reader.ReadInt32();
 				this.TryLength = reader.ReadInt32();
 				this.HandlerOffset = reader.ReadInt32();
 				this.HandlerLength = reader.ReadInt32();
 			}
 
-			if (EhClauseType.Exception == this.Kind)
+			if (ExceptionClauseType.Exception == this.Kind)
 			{
 				this.ClassToken = reader.ReadInt32();
 			}
-			else if (EhClauseType.Filter == this.Kind)
+			else if (ExceptionClauseType.Filter == this.Kind)
 			{
 				this.FilterOffset = reader.ReadInt32();
 			}
 		}
 
 		/// <summary>
-		/// 
+		/// Updates the specified context.
 		/// </summary>
-		/// <param name="context"></param>
-		public bool LinkBlockToClause(Context context, BasicBlock block)
-		{
-			int label = context.Label;
-
-			if (this.TryOffset == label || this.TryEnd == label ||
-				this.HandlerOffset == label || this.HandlerEnd == label)
-			{
-				block.ExceptionHeaderClause = this;
-				return true;
-			}
-
-			return false;
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="context"></param>
-		/// <param name="stream"></param>
+		/// <param name="context">The context.</param>
+		/// <param name="stream">The stream.</param>
 		public void Update(Context context, Stream stream)
 		{
 			UpdateOffset(context, stream);
@@ -158,10 +140,10 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		}
 
 		/// <summary>
-		/// 
+		/// Updates the offset.
 		/// </summary>
-		/// <param name="context"></param>
-		/// <param name="stream"></param>
+		/// <param name="context">The context.</param>
+		/// <param name="stream">The stream.</param>
 		public void UpdateOffset(Context context, Stream stream)
 		{
 			if (context.Label == this.TryOffset)
@@ -177,10 +159,10 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		}
 
 		/// <summary>
-		/// 
+		/// Updates the end.
 		/// </summary>
-		/// <param name="context"></param>
-		/// <param name="stream"></param>
+		/// <param name="context">The context.</param>
+		/// <param name="stream">The stream.</param>
 		public void UpdateEnd(Context context, Stream stream)
 		{
 			if (context.Label == this.TryEnd)

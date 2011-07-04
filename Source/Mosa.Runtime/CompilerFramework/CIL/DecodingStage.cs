@@ -34,6 +34,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	{
 		private readonly DataConverter LittleEndianBitConverter = DataConverter.LittleEndian;
 
+		private ExceptionClauseHeader exceptionClauseHeader;
+
 		#region Data members
 
 		/// <summary>
@@ -56,20 +58,18 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </summary>
 		public void Run()
 		{
+			exceptionClauseHeader = methodCompiler.ExceptionClauseHeader;
+
 			using (Stream code = methodCompiler.GetInstructionStream())
 			{
-				// update the base class 
-				instructionSet = methodCompiler.InstructionSet;
-
 				using (codeReader = new BinaryReader(code))
 				{
 					// The size of the code in bytes
-					MethodHeader header = new MethodHeader();
-					ReadMethodHeader(codeReader, ref header);
+					MethodHeader header = ReadMethodHeader(codeReader);
 
-					if (header.localsSignature.RID != 0)
+					if (header.LocalsSignature.RID != 0)
 					{
-						StandAloneSigRow row = methodCompiler.Method.Module.MetadataModule.Metadata.ReadStandAloneSigRow(header.localsSignature);
+						StandAloneSigRow row = methodCompiler.Method.Module.MetadataModule.Metadata.ReadStandAloneSigRow(header.LocalsSignature);
 
 						LocalVariableSignature localsSignature;
 
@@ -86,7 +86,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 					}
 
 					/* Decode the instructions */
-					Decode(methodCompiler, ref header);
+					Decode(methodCompiler, header);
 
 					// When we leave, the operand stack must only contain the locals...
 					//Debug.Assert(_operandStack.Count == _method.Locals.Count);
@@ -102,100 +102,104 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// Reads the method header from the instruction stream.
 		/// </summary>
 		/// <param name="reader">The reader used to decode the instruction stream.</param>
-		/// <param name="header">The method header structure to populate.</param>
-		private void ReadMethodHeader(BinaryReader reader, ref MethodHeader header)
+		/// <returns></returns>
+		private MethodHeader ReadMethodHeader(BinaryReader reader)
 		{
+			MethodHeader header = new MethodHeader();
+
 			// Read first byte
-			header.flags = (MethodFlags)reader.ReadByte();
+			header.Flags = (MethodFlags)reader.ReadByte();
 
 			// Check least significant 2 bits
-			switch (header.flags & MethodFlags.HeaderMask)
+			switch (header.Flags & MethodFlags.HeaderMask)
 			{
 				case MethodFlags.TinyFormat:
-					header.codeSize = ((uint)(header.flags & MethodFlags.TinyCodeSizeMask) >> 2);
-					header.flags &= MethodFlags.HeaderMask;
+					header.CodeSize = ((uint)(header.Flags & MethodFlags.TinyCodeSizeMask) >> 2);
+					header.Flags &= MethodFlags.HeaderMask;
 					break;
 
 				case MethodFlags.FatFormat:
 					// Read second byte of flags
-					header.flags = (MethodFlags)(reader.ReadByte() << 8 | (byte)header.flags);
-					if (MethodFlags.ValidHeader != (header.flags & MethodFlags.HeaderSizeMask))
+					header.Flags = (MethodFlags)(reader.ReadByte() << 8 | (byte)header.Flags);
+					if (MethodFlags.ValidHeader != (header.Flags & MethodFlags.HeaderSizeMask))
 						throw new InvalidDataException(@"Invalid method _header.");
-					header.maxStack = reader.ReadUInt16();
-					header.codeSize = reader.ReadUInt32();
-					header.localsSignature = new Token(reader.ReadUInt32()); // ReadStandAloneSigRow
+					header.MaxStack = reader.ReadUInt16();
+					header.CodeSize = reader.ReadUInt32();
+					header.LocalsSignature = new Token(reader.ReadUInt32()); // ReadStandAloneSigRow
 					break;
 
 				default:
-					throw new InvalidDataException(@"Invalid method header while trying to decode " + this.methodCompiler.Method.ToString() + ". (Flags = " + header.flags.ToString("X") + ", Rva = " + this.methodCompiler.Method.Rva + ")");
+					throw new InvalidDataException(@"Invalid method header while trying to decode " + this.methodCompiler.Method.ToString() + ". (Flags = " + header.Flags.ToString("X") + ", Rva = " + this.methodCompiler.Method.Rva + ")");
 			}
 
 			// Are there sections following the code?
-			if (MethodFlags.MoreSections == (header.flags & MethodFlags.MoreSections))
+			if (MethodFlags.MoreSections != (header.Flags & MethodFlags.MoreSections))
+				return header;
+
+			// Yes, seek to them and process those sections
+			long codepos = reader.BaseStream.Position;
+
+			// Seek to the end of the code...
+			long dataSectPos = codepos + header.CodeSize;
+			if (0 != (dataSectPos & 3))
+				dataSectPos += (4 - (dataSectPos % 4));
+			reader.BaseStream.Position = dataSectPos;
+
+			// Read all headers, so the IL decoder knows how to handle these...
+			byte flags;
+
+			do
 			{
-				// Yes, seek to them and process those sections
-				long codepos = reader.BaseStream.Position;
-
-				// Seek to the end of the code...
-				long dataSectPos = codepos + header.codeSize;
-				if (0 != (dataSectPos & 3))
-					dataSectPos += (4 - (dataSectPos % 4));
-				reader.BaseStream.Position = dataSectPos;
-
-				// Read all headers, so the IL decoder knows how to handle these...
-				byte flags;
-
-				do
+				flags = reader.ReadByte();
+				bool isFat = (0x40 == (flags & 0x40));
+				int length;
+				int blocks;
+				if (isFat)
 				{
-					flags = reader.ReadByte();
-					bool isFat = (0x40 == (flags & 0x40));
-					int length;
-					int blocks;
-					if (isFat)
-					{
-						byte[] buffer = new byte[4];
-						reader.Read(buffer, 0, 3);
-						length = LittleEndianBitConverter.GetInt32(buffer, 0);
-						blocks = (length - 4) / 24;
-					}
-					else
-					{
-						length = reader.ReadByte();
-						blocks = (length - 4) / 12;
-
-						/* Read & skip the padding. */
-						reader.ReadInt16();
-					}
-
-					Debug.Assert(0x01 == (flags & 0x3F), @"Unsupported method data section.");
-					// Read the clause
-					for (int i = 0; i < blocks; i++)
-					{
-						EhClause clause = new EhClause();
-						clause.Read(reader, isFat);
-						//this.methodCompiler.Method.ExceptionClauseHeader.AddClause(clause);
-						// FIXME: Create proper basic Blocks for each item in the clause
-					}
+					byte[] buffer = new byte[4];
+					reader.Read(buffer, 0, 3);
+					length = LittleEndianBitConverter.GetInt32(buffer, 0);
+					blocks = (length - 4) / 24;
 				}
-				while (0x80 == (flags & 0x80));
+				else
+				{
+					length = reader.ReadByte();
+					blocks = (length - 4) / 12;
 
-				//methodCompiler.Method.ExceptionClauseHeader.Sort();
-				reader.BaseStream.Position = codepos;
+					/* Read & skip the padding. */
+					reader.ReadInt16();
+				}
+
+				Debug.Assert(0x01 == (flags & 0x3F), @"Unsupported method data section.");
+
+				// Read the clause
+				for (int i = 0; i < blocks; i++)
+				{
+					ExceptionClause clause = new ExceptionClause();
+					clause.Read(reader, isFat);
+					exceptionClauseHeader.AddClause(clause);
+				}
 			}
+			while (0x80 == (flags & 0x80));
+
+			//exceptionClauseHeader.Sort();
+			reader.BaseStream.Position = codepos;
+
+			return header;
 		}
 
 		/// <summary>
 		/// Decodes the instruction stream of the reader and populates the compiler.
 		/// </summary>
 		/// <param name="compiler">The compiler to populate.</param>
-		/// <param name="header">The method _header.</param>
-		private void Decode(IMethodCompiler compiler, ref MethodHeader header)
+		/// <param name="header">The method header.</param>
+		private void Decode(IMethodCompiler compiler, MethodHeader header)
 		{
 			// Start of the code stream
 			long codeStart = codeReader.BaseStream.Position;
 
 			// End of the code stream
-			long codeEnd = codeReader.BaseStream.Position + header.codeSize;
+			long codeEnd = codeReader.BaseStream.Position + header.CodeSize;
 
 			// Prefix instruction
 			PrefixInstruction prefix = null;

@@ -17,23 +17,23 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public struct MethodHeader
+	public class MethodHeader
 	{
 		/// <summary>
 		/// Header flags 
 		/// </summary>
-		public MethodFlags flags;
+		public MethodFlags Flags;
 		/// <summary>
 		/// Maximum stack size 
 		/// </summary>
-		public ushort maxStack;
+		public ushort MaxStack;
 		/// <summary>
 		/// Size of the code in bytes 
 		/// </summary>
-		public uint codeSize;
+		public uint CodeSize;
 		/// <summary>
 		/// Local variable signature token 
 		/// </summary>
-		public Token localsSignature;
+		public Token LocalsSignature;
 	}
 }

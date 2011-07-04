@@ -52,7 +52,6 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public void Run()
 		{
-
 			// Retrieve a stream to place the code into
 			using (codeStream = methodCompiler.RequestCodeStream())
 			{
@@ -88,11 +87,11 @@ namespace Mosa.Runtime.CompilerFramework
 					if (ctx.Instruction != null)
 						if (!ctx.Ignore)
 						{
-							if (block.ExceptionHeaderClause != null)
-							{
-								block.ExceptionHeaderClause.Update(ctx, codeStream);
-								block.ExceptionHeaderClause.AddLabelToCodeStream(codeEmitter);
-							}
+							//if (block.ExceptionHeaderClause != null)
+							//{
+							//    block.ExceptionHeaderClause.Update(ctx, codeStream);
+							//    block.ExceptionHeaderClause.AddLabelToCodeStream(codeEmitter);
+							//}
 							IPlatformInstruction instruction = ctx.Instruction as IPlatformInstruction;
 							if (instruction != null)
 								instruction.Emit(ctx, codeEmitter);
@@ -140,6 +139,5 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		#endregion // Methods
-
 	}
 }
