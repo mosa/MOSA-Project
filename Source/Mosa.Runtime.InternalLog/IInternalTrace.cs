@@ -13,11 +13,12 @@ using System.Text;
 
 using Mosa.Runtime.TypeSystem;
 
-namespace Mosa.Runtime.InternalLog
+namespace Mosa.Runtime.InternalTrace
 {
-	public interface IInstructionLogFilter
+	public interface IInternalTrace
 	{
-		//bool IsMatch(RuntimeMethod method, IPipelineStage stage);
-		bool IsMatch(RuntimeMethod method, string stage);
+		IInstructionTraceListener InstructionTraceListener { get; set; }
+		IInstructionTraceFilter InstructionTraceFilter { get; set; }
+		ICompilerEventListener CompilerEventListener { get; set; }
 	}
 }

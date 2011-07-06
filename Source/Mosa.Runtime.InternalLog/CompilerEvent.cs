@@ -13,7 +13,7 @@ using System.Text;
 
 using Mosa.Runtime.TypeSystem;
 
-namespace Mosa.Runtime.InternalLog
+namespace Mosa.Runtime.InternalTrace
 {
 	public enum CompilerEvent { CompilingMethod, CompilingType, Linking, AssemblyStageStart, AssemblyStageEnd, DebugInfo, SchedulingType, SchedulingMethod, Error, Warning };
 

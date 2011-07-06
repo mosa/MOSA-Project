@@ -74,6 +74,7 @@ namespace Mosa.Platform.x86.Intrinsic
 
 			// Save original ESP
 			context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, edx);
+
 			// Call catch handler
 			context.AppendInstruction(CPUx86.Instruction.CallInstruction, ecx);
 

@@ -515,7 +515,7 @@ namespace Mosa.Platform.x86
 			int stackSize = (int)context.Other;
 			Debug.Assert((stackSize % 4) == 0, @"Stack size of method can't be divided by 4!!");
 
-			/* If you want to stop at the _header of an emitted function, just uncomment
+			/* If you want to stop at the header of an emitted function, just uncomment
 			 * the following line. It will issue a breakpoint instruction. Note that if
 			 * you debug using visual studio you must enable unmanaged code debugging, 
 			 * otherwise the function will never return and the breakpoint will never
@@ -567,8 +567,6 @@ namespace Mosa.Platform.x86
 
 			// Save callee's EIP to the stack for exception handling
 			context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new ConstantOperand(I, (-stackSize) + 0x0C));
-
-			//context.AppendInstruction(CPUx86.Instruction.BreakInstruction);
 		}
 
 		/// <summary>

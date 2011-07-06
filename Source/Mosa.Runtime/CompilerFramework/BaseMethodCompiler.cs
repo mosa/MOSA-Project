@@ -20,7 +20,7 @@ using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.TypeSystem.Generic;
 using Mosa.Runtime.CompilerFramework.Operands;
-using Mosa.Runtime.InternalLog;
+using Mosa.Runtime.InternalTrace;
 
 namespace Mosa.Runtime.CompilerFramework
 {
@@ -118,7 +118,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Holds the internal logging interface
 		/// </summary>
-		protected IInternalLog internalLog;
+		protected IInternalTrace internalLog;
 
 		/// <summary>
 		/// Holds the blocks indexed by label
@@ -126,7 +126,7 @@ namespace Mosa.Runtime.CompilerFramework
 		private Dictionary<int, BasicBlock> basicBlocksByLabel = new Dictionary<int, BasicBlock>();
 
 		/// <summary>
-		/// 
+		/// Holds the exception clauses
 		/// </summary>
 		private ExceptionClauseHeader exceptionClauseHeader = new ExceptionClauseHeader();
 
@@ -141,7 +141,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="architecture">The target compilation Architecture.</param>
 		/// <param name="type">The type, which owns the method to compile.</param>
 		/// <param name="method">The method to compile by this instance.</param>
-		protected BaseMethodCompiler(RuntimeType type, RuntimeMethod method, IAssemblyLinker linker, IArchitecture architecture, ITypeSystem typeSystem, ITypeLayout typeLayout, InstructionSet instructionSet, ICompilationSchedulerStage compilationScheduler, IInternalLog internalLog)
+		protected BaseMethodCompiler(RuntimeType type, RuntimeMethod method, IAssemblyLinker linker, IArchitecture architecture, ITypeSystem typeSystem, ITypeLayout typeLayout, InstructionSet instructionSet, ICompilationSchedulerStage compilationScheduler, IInternalTrace internalLog)
 		{
 			if (architecture == null)
 				throw new ArgumentNullException(@"architecture");
@@ -239,7 +239,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Gets the internal logging interface
 		/// </summary>
 		/// <value>The log.</value>
-		public IInternalLog InternalLog { get { return internalLog; } }
+		public IInternalTrace InternalLog { get { return internalLog; } }
 
 		/// <summary>
 		/// Gets the exception clause header.
@@ -272,7 +272,7 @@ namespace Mosa.Runtime.CompilerFramework
 				stage.Setup(this);
 				stage.Run();
 
-				Mosa.Runtime.InternalLog.InstructionLogger.Run(this, stage);
+				Mosa.Runtime.InternalTrace.InstructionLogger.Run(this, stage);
 			}
 
 			EndCompile();

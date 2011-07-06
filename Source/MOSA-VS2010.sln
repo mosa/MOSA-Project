@@ -98,7 +98,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Tools.TypeExplorer", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Tools.MetadataExplorer", "Mosa.Tools.MetadataExplorer\Mosa.Tools.MetadataExplorer.csproj", "{59A68DB8-5C96-45BB-889A-DD35486E9077}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Runtime.InternalLog", "Mosa.Runtime.InternalLog\Mosa.Runtime.InternalLog.csproj", "{540BEAC7-A2C3-4C46-9F4A-E6E1DF4EF6FC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Runtime.InternalTrace", "Mosa.Runtime.InternalLog\Mosa.Runtime.InternalTrace.csproj", "{540BEAC7-A2C3-4C46-9F4A-E6E1DF4EF6FC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Test.CodeDomCompiler", "Mosa.Test.CodeDomCompiler\Mosa.Test.CodeDomCompiler.csproj", "{7B8FBA4E-D6AC-4DAD-A607-43BA112F8EC1}"
 EndProject

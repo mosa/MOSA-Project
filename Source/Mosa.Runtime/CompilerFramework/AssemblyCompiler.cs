@@ -12,7 +12,7 @@ using System;
 using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.TypeSystem;
-using Mosa.Runtime.InternalLog;
+using Mosa.Runtime.InternalTrace;
 
 namespace Mosa.Runtime.CompilerFramework
 {
@@ -48,7 +48,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Holds the current internal log
 		/// </summary>
-		protected IInternalLog internalLog;
+		protected IInternalTrace internalTrace;
 
 		#endregion // Data members
 
@@ -59,7 +59,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <param name="architecture">The compiler target architecture.</param>
 		/// <param name="typeSystem">The type system.</param>
-		protected AssemblyCompiler(IArchitecture architecture, ITypeSystem typeSystem, ITypeLayout typeLayout, IInternalLog internalLog)
+		protected AssemblyCompiler(IArchitecture architecture, ITypeSystem typeSystem, ITypeLayout typeLayout, IInternalTrace internalTrace)
 		{
 			if (architecture == null)
 				throw new ArgumentNullException(@"architecture");
@@ -68,7 +68,7 @@ namespace Mosa.Runtime.CompilerFramework
 			this.pipeline = new CompilerPipeline();
 			this.typeSystem = typeSystem;
 			this.typeLayout = typeLayout;
-			this.internalLog = internalLog;
+			this.internalTrace = internalTrace;
 		}
 
 		#endregion // Construction
@@ -117,9 +117,9 @@ namespace Mosa.Runtime.CompilerFramework
 			get { return typeLayout; }
 		}
 
-		public IInternalLog InternalLog
+		public IInternalTrace InternalLog
 		{
-			get { return internalLog; }
+			get { return internalTrace; }
 		}
 
 		#endregion // Properties
@@ -182,7 +182,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 		protected void NotifyCompilerEvent(CompilerEvent compilerEvent, string message)
 		{
-			internalLog.CompilerEventListener.NotifyCompilerEvent(compilerEvent, message);
+			internalTrace.CompilerEventListener.NotifyCompilerEvent(compilerEvent, message);
 		}
 
 		#endregion

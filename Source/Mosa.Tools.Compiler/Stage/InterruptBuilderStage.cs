@@ -112,7 +112,7 @@ namespace Mosa.Tools.Compiler.Stage
 				Context ctx = new Context(instructionSet);
 
 				ctx.AppendInstruction(CPUx86.Instruction.CliInstruction);
-				if (i <= 7 || i >= 16 | i == 9) // For IRQ 8, 10, 11, 12, 13, 14 the cpu automatically pushed the error code
+				if (i <= 7 || i >= 16 | i == 9) // For IRQ 8, 10, 11, 12, 13, 14 the cpu will automatically pushed the error code
 					ctx.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new ConstantOperand(I1, 0x0));
 				ctx.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new ConstantOperand(I1, (byte)i));
 				ctx.AppendInstruction(CPUx86.Instruction.PushadInstruction);

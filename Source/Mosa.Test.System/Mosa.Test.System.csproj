@@ -87,9 +87,9 @@
       <Project>{65866A51-B229-44C5-AC81-87A90FA1741B}</Project>
       <Name>Mosa.Compiler.Linker</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mosa.Runtime.InternalLog\Mosa.Runtime.InternalLog.csproj">
+    <ProjectReference Include="..\Mosa.Runtime.InternalLog\Mosa.Runtime.InternalTrace.csproj">
       <Project>{540BEAC7-A2C3-4C46-9F4A-E6E1DF4EF6FC}</Project>
-      <Name>Mosa.Runtime.InternalLog</Name>
+      <Name>Mosa.Runtime.InternalTrace</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mosa.Runtime.Metadata\Mosa.Runtime.Metadata.csproj">
       <Project>{7033B213-2055-4C6A-B008-D9856267F5D7}</Project>

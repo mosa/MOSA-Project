@@ -11,7 +11,7 @@ using Mosa.Compiler.Linker;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime.TypeSystem;
-using Mosa.Runtime.InternalLog;
+using Mosa.Runtime.InternalTrace;
 using Mosa.Tools.Compiler.Linker;
 using Mosa.Tools.Compiler.TypeInitializers;
 
@@ -19,7 +19,7 @@ namespace Mosa.Tools.Compiler
 {
 	public class AotAssemblyCompiler : AssemblyCompiler
 	{
-		public AotAssemblyCompiler(IArchitecture architecture, ITypeInitializerSchedulerStage typeInitializerSchedulerStage, IAssemblyLinker linker, ITypeSystem typeSystem, ITypeLayout typeLayout, IInternalLog internalLog)
+		public AotAssemblyCompiler(IArchitecture architecture, ITypeInitializerSchedulerStage typeInitializerSchedulerStage, IAssemblyLinker linker, ITypeSystem typeSystem, ITypeLayout typeLayout, IInternalTrace internalLog)
 			: base(architecture, typeSystem, typeLayout, internalLog)
 		{
 			Pipeline.AddRange(new IAssemblyCompilerStage[] 
@@ -50,7 +50,7 @@ namespace Mosa.Tools.Compiler
 		/// <returns></returns>
 		public override IMethodCompiler CreateMethodCompiler(ICompilationSchedulerStage compilationScheduler, RuntimeType type, RuntimeMethod method)
 		{
-			IMethodCompiler mc = new AotMethodCompiler(this, compilationScheduler, type, method, internalLog);
+			IMethodCompiler mc = new AotMethodCompiler(this, compilationScheduler, type, method, internalTrace);
 			this.Architecture.ExtendMethodCompilerPipeline(mc.Pipeline);
 			return mc;
 		}

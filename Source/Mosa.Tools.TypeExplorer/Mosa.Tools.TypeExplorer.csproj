@@ -86,8 +86,9 @@
     <ProjectReference Include="..\Mosa.Platform.x86\Mosa.Platform.x86.csproj">
       <Name>Mosa.Platform.x86</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mosa.Runtime.InternalLog\Mosa.Runtime.InternalLog.csproj">
-      <Name>Mosa.Runtime.InternalLog</Name>
+    <ProjectReference Include="..\Mosa.Runtime.InternalLog\Mosa.Runtime.InternalTrace.csproj">
+      <Name>Mosa.Runtime.InternalTrace</Name>
+      <Project>{540BEAC7-A2C3-4C46-9F4A-E6E1DF4EF6FC}</Project>
     </ProjectReference>
     <ProjectReference Include="..\Mosa.Runtime.Metadata\Mosa.Runtime.Metadata.csproj">
       <Name>Mosa.Runtime.Metadata</Name>

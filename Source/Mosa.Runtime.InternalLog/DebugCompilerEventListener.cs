@@ -14,7 +14,7 @@ using System.Diagnostics;
 
 using Mosa.Runtime.TypeSystem;
 
-namespace Mosa.Runtime.InternalLog
+namespace Mosa.Runtime.InternalTrace
 {
 	public class DebugCompilerEventListener : ICompilerEventListener
 	{

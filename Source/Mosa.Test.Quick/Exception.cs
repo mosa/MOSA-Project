@@ -12,20 +12,46 @@ namespace Mosa.Test.Quick.Tests
 
 	public class ExceptionTest
 	{
-		public static void Test1()
-		{
-			int a = 10;
-			int b = 13;
-			try
-			{
-				int i = 12;
-				a = a + i;
-			}
-			finally { }
-			b = 7;
-		}
+		//public static int Test1()
+		//{
+		//    int a = 10;
+		//    int b = 13;
+		//    try
+		//    {
+		//        int i = 12;
+		//        a = a + i;
+		//    }
+		//    finally
+		//    {
+		//        b = b + a;
+		//    }
 
-		//public static void Test2()
+		//    b = b + 1;
+
+		//    return b;
+		//}
+
+		//public static int Test2()
+		//{
+		//    int a = 10;
+		//    int b = 13;
+		//    try
+		//    {
+		//        int i = 12;
+		//        a = a + i;
+		//        throw new ArgumentNullException();
+		//    }
+		//    catch (Exception e)
+		//    {
+		//        b = b + a;
+		//    }
+
+		//    b = b + 1;
+
+		//    return b;
+		//}
+
+		//public static void Test3()
 		//{
 		//    int a = 10;
 		//    int b = 13;
@@ -40,7 +66,7 @@ namespace Mosa.Test.Quick.Tests
 		//    }
 		//}
 
-		//public static void Test3()
+		//public static void Test4()
 		//{
 		//    int a = 10;
 		//    int b = 13;

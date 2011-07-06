@@ -13,39 +13,39 @@ using System.Text;
 
 using Mosa.Runtime.TypeSystem;
 
-namespace Mosa.Runtime.InternalLog
+namespace Mosa.Runtime.InternalTrace
 {
-	public class BasicInternalLog : IInternalLog
+	public class BasicInternalTrace : IInternalTrace
 	{
-		protected IInstructionLogListener instructionLogListener;
-		protected IInstructionLogFilter instructionLogFilter = new ConfigurableInstructionLogFilter();
+		protected IInstructionTraceListener instructionLogListener;
+		protected IInstructionTraceFilter instructionLogFilter = new ConfigurableInstructionTraceFilter();
 		protected ICompilerEventListener compilerStatusListener;
 
-		public BasicInternalLog()
+		public BasicInternalTrace()
 		{
-			instructionLogListener = new DebugInstructionLogListener();
+			instructionLogListener = new DebugInstructionTraceListener();
 			compilerStatusListener = new BasicCompilerEventListener();
 		}
 
-		public BasicInternalLog(IInstructionLogListener instructionLogListener, ICompilerEventListener compilerStatusListener)
+		public BasicInternalTrace(IInstructionTraceListener instructionLogListener, ICompilerEventListener compilerStatusListener)
 		{
 			this.instructionLogListener = instructionLogListener;
 			this.compilerStatusListener = compilerStatusListener;
 		}
 
-		IInstructionLogFilter IInternalLog.InstructionLogFilter
+		IInstructionTraceFilter IInternalTrace.InstructionTraceFilter
 		{
 			get { return instructionLogFilter; }
 			set { instructionLogFilter = value; }
 		}
 
-		IInstructionLogListener IInternalLog.InstructionLogListener
+		IInstructionTraceListener IInternalTrace.InstructionTraceListener
 		{
 			get { return instructionLogListener; }
 			set { instructionLogListener = value; }
 		}
 
-		ICompilerEventListener IInternalLog.CompilerEventListener
+		ICompilerEventListener IInternalTrace.CompilerEventListener
 		{
 			get { return compilerStatusListener; }
 			set { compilerStatusListener = value; }

@@ -13,11 +13,11 @@ using System.Text;
 
 using Mosa.Runtime.TypeSystem;
 
-namespace Mosa.Runtime.InternalLog
+namespace Mosa.Runtime.InternalTrace
 {
 	public enum MatchType { Exact, Contains, StartsWith, Any };
 
-	public class ConfigurableInstructionLogFilter : IInstructionLogFilter
+	public class ConfigurableInstructionTraceFilter : IInstructionTraceFilter
 	{
 		public bool IsLogging = false;
 		public bool ExcludeInternalMethods = true;
@@ -30,7 +30,7 @@ namespace Mosa.Runtime.InternalLog
 		public MatchType MethodMatch = MatchType.Contains;
 		public MatchType StageMatch = MatchType.Any;
 
-		bool IInstructionLogFilter.IsMatch(RuntimeMethod method, string stage)
+		bool IInstructionTraceFilter.IsMatch(RuntimeMethod method, string stage)
 		{
 			return IsMatch(method.DeclaringType.Name, method.Name, stage);
 		}

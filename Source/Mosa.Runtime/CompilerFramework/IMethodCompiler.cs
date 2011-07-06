@@ -15,7 +15,7 @@ using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Metadata.Loader;
 using Mosa.Compiler.Linker;
-using Mosa.Runtime.InternalLog;
+using Mosa.Runtime.InternalTrace;
 
 namespace Mosa.Runtime.CompilerFramework
 {
@@ -158,7 +158,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Gets the internal logging interface
 		/// </summary>
 		/// <value>The log.</value>
-		IInternalLog InternalLog { get; }
+		IInternalTrace InternalLog { get; }
 
 		/// <summary>
 		/// Gets the exception clause header.

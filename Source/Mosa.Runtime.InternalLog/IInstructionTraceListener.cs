@@ -13,11 +13,11 @@ using System.Text;
 
 using Mosa.Runtime.TypeSystem;
 
-namespace Mosa.Runtime.InternalLog
+namespace Mosa.Runtime.InternalTrace
 {
 
-	public interface IInstructionLogListener
+	public interface IInstructionTraceListener
 	{
-		void NotifyNewInstructionLog(RuntimeMethod method, string stage, string log);
+		void NotifyNewInstructionTrace(RuntimeMethod method, string stage, string log);
 	}
 }

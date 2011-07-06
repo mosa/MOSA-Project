@@ -14,7 +14,7 @@ using System.Text;
 using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.CompilerFramework;
 
-namespace Mosa.Runtime.InternalLog
+namespace Mosa.Runtime.InternalTrace
 {
 	/// <summary>
 	/// Logs all instructions.
@@ -32,15 +32,15 @@ namespace Mosa.Runtime.InternalLog
 			);
 		}
 
-		public static void Run(IInternalLog internalLog, IPipelineStage stage, RuntimeMethod method, InstructionSet instructionSet, IList<BasicBlock> basicBlocks)
+		public static void Run(IInternalTrace internalLog, IPipelineStage stage, RuntimeMethod method, InstructionSet instructionSet, IList<BasicBlock> basicBlocks)
 		{
 			if (internalLog == null)
 				return;
 
-			if (internalLog.InstructionLogListener == null)
+			if (internalLog.InstructionTraceListener == null)
 				return;
 
-			if (!internalLog.InstructionLogFilter.IsMatch(method, stage.Name))
+			if (!internalLog.InstructionTraceFilter.IsMatch(method, stage.Name))
 				return;
 
 			StringBuilder text = new StringBuilder();
@@ -75,7 +75,7 @@ namespace Mosa.Runtime.InternalLog
 				LogInstructions(text, new Context(instructionSet, 0));
 			}
 
-			internalLog.InstructionLogListener.NotifyNewInstructionLog(method, stage.Name, text.ToString());
+			internalLog.InstructionTraceListener.NotifyNewInstructionTrace(method, stage.Name, text.ToString());
 		}
 
 		private static string ListBlocks(IList<BasicBlock> blocks)

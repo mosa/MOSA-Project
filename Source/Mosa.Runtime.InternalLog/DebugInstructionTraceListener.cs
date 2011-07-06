@@ -14,11 +14,11 @@ using System.Diagnostics;
 
 using Mosa.Runtime.TypeSystem;
 
-namespace Mosa.Runtime.InternalLog
+namespace Mosa.Runtime.InternalTrace
 {
-	public class DebugInstructionLogListener : IInstructionLogListener 
+	public class DebugInstructionTraceListener : IInstructionTraceListener 
 	{
-		void IInstructionLogListener.NotifyNewInstructionLog(RuntimeMethod method, string stage, string log)
+		void IInstructionTraceListener.NotifyNewInstructionTrace(RuntimeMethod method, string stage, string log)
 		{
 			//Debug.WriteLine(String.Format("IR representation of method {0} after stage {1}", methodCompiler.Method, prevStage.Name));
 			Debug.WriteLine(log);

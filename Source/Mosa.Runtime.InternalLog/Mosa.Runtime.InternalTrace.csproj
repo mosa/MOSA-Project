@@ -9,14 +9,14 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
-    <AssemblyName>Mosa.Runtime.InternalLog</AssemblyName>
+    <AssemblyName>Mosa.Runtime.InternalTrace</AssemblyName>
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
     <DelaySign>false</DelaySign>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <OutputType>Library</OutputType>
-    <RootNamespace>Mosa.Runtime.InternalLog</RootNamespace>
+    <RootNamespace>Mosa.Runtime.InternalTrace</RootNamespace>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
@@ -48,7 +48,7 @@
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
     <DefineConstants>TRACE</DefineConstants>
-    <DocumentationFile>..\..\bin\Mosa.Runtime.InternalLog.xml</DocumentationFile>
+    <DocumentationFile>..\..\bin\Mosa.Runtime.InternalTrace.xml</DocumentationFile>
     <FileAlignment>4096</FileAlignment>
     <Optimize>true</Optimize>
     <OutputPath>..\..\bin\</OutputPath>
@@ -63,15 +63,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BasicCompilerEventListener.cs" />
-    <Compile Include="BasicInternalLog.cs" />
+    <Compile Include="BasicInternalTrace.cs" />
     <Compile Include="CompilerEvent.cs" />
-    <Compile Include="ConfigurableInstructionLogFilter.cs" />
+    <Compile Include="ConfigurableInstructionTraceFilter.cs" />
     <Compile Include="DebugCompilerEventListener.cs" />
-    <Compile Include="DebugInstructionLogListener.cs" />
+    <Compile Include="DebugInstructionTraceListener.cs" />
     <Compile Include="ICompilerEventListener.cs" />
-    <Compile Include="IInstructionLogFilter.cs" />
-    <Compile Include="IInstructionLogListener.cs" />
-    <Compile Include="IInternalLog.cs" />
+    <Compile Include="IInstructionTraceFilter.cs" />
+    <Compile Include="IInstructionTraceListener.cs" />
+    <Compile Include="IInternalTrace.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mosa.Runtime.TypeSystem\Mosa.Runtime.TypeSystem.csproj">

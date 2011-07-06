@@ -37,7 +37,7 @@ namespace Mosa.Runtime.TypeSystem
 		private IGenericTypePatcher genericTypePatcher;
 
 		/// <summary>
-		/// 
+		/// Holds the main type module
 		/// </summary>
 		private ITypeModule mainTypeModule;
 

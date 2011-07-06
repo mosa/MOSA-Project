@@ -12,18 +12,18 @@ using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime.TypeSystem.Generic;
-using Mosa.Runtime.InternalLog;
+using Mosa.Runtime.InternalTrace;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Test.CodeDomCompiler;
 
 namespace Mosa.Tools.TypeExplorer
 {
-	public partial class Main : Form, ICompilerEventListener, IInstructionLogListener
+	public partial class Main : Form, ICompilerEventListener, IInstructionTraceListener
 	{
 		private CodeForm form = new CodeForm();
-		private IInternalLog internalLog = new BasicInternalLog();
+		private IInternalTrace internalTrace = new BasicInternalTrace();
 		private ITypeSystem typeSystem = new TypeSystem();
-		private ConfigurableInstructionLogFilter filter = new ConfigurableInstructionLogFilter();
+		private ConfigurableInstructionTraceFilter filter = new ConfigurableInstructionTraceFilter();
 		private ITypeLayout typeLayout;
 		private DateTime compileStartTime;
 		private string currentStageLog;
@@ -40,9 +40,9 @@ namespace Mosa.Tools.TypeExplorer
 		public Main()
 		{
 			InitializeComponent();
-			internalLog.CompilerEventListener = this;
-			internalLog.InstructionLogListener = this;
-			internalLog.InstructionLogFilter = filter;
+			internalTrace.CompilerEventListener = this;
+			internalTrace.InstructionTraceListener = this;
+			internalTrace.InstructionTraceFilter = filter;
 		}
 
 		private void Main_Load(object sender, EventArgs e)
@@ -259,7 +259,7 @@ namespace Mosa.Tools.TypeExplorer
 			tbResult.AppendText(String.Format("{0:0.00}", (DateTime.Now - compileStartTime).TotalSeconds) + " ms: " + compilerStage.ToText() + ": " + info + "\n");
 		}
 
-		void IInstructionLogListener.NotifyNewInstructionLog(RuntimeMethod method, string stage, string log)
+		void IInstructionTraceListener.NotifyNewInstructionTrace(RuntimeMethod method, string stage, string log)
 		{
 			MethodStages methodStage;
 
@@ -281,7 +281,7 @@ namespace Mosa.Tools.TypeExplorer
 			filter.IsLogging = true;
 			filter.MethodMatch = MatchType.Any;
 
-			ExplorerAssemblyCompiler.Compile(typeSystem, typeLayout, internalLog);
+			ExplorerAssemblyCompiler.Compile(typeSystem, typeLayout, internalTrace);
 		}
 
 		private void nowToolStripMenuItem_Click(object sender, EventArgs e)

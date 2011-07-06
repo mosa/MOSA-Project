@@ -26,19 +26,24 @@ namespace Mosa.Runtime.TypeSystem
 		#region Data members
 
 		/// <summary>
-		/// 
+		/// Holds the type system
 		/// </summary>
 		private ITypeSystem typeSystem;
 
 		/// <summary>
-		/// 
+		/// Holds the Native Pointer Size
+		/// </summary>
+		private int nativePointerSize;
+
+		/// <summary>
+		/// Holds the Native Pointer Alignment
 		/// </summary>
 		private int nativePointerAlignment;
 
 		/// <summary>
-		/// 
+		/// Holds the global id for each type
 		/// </summary>
-		private int nativePointerSize;
+		private Dictionary<RuntimeType, int> typeIDs = new Dictionary<RuntimeType, int>();
 
 		/// <summary>
 		/// Holds a list of interfaces
@@ -211,9 +216,6 @@ namespace Mosa.Runtime.TypeSystem
 			if (type.IsModule || type.IsGeneric || type.IsDelegate)
 				return null;
 
-			//if (type.IsInterface)
-			//    return null;
-
 			ResolveType(type);
 
 			return typeMethodTables[type];
@@ -249,6 +251,26 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		IList<RuntimeType> ITypeLayout.Interfaces { get { return interfaces.AsReadOnly(); } }
 
+		/// <summary>
+		/// Gets the type ID.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <returns></returns>
+		int ITypeLayout.GetTypeID(RuntimeType type)
+		{
+			int id;
+
+			if (typeIDs.TryGetValue(type, out id))
+				return id;
+
+			ResolveType(type);
+
+			if (!typeIDs.TryGetValue(type, out id))
+				Debug.Assert(false, "Expected type id");
+				
+			return id;
+		}
+
 		#endregion // ITypeLayout
 
 		#region Internal - Layout
@@ -270,8 +292,13 @@ namespace Mosa.Runtime.TypeSystem
 			if (type.IsModule || type.IsGeneric || type.IsDelegate)
 				return;
 
-			if (typeSizes.ContainsKey(type))
+			if (typeIDs.ContainsKey(type))
 				return;
+
+			typeIDs.Add(type, typeIDs.Count);
+
+			//if (typeSizes.ContainsKey(type))
+			//    return;
 
 			if (type.BaseType != null)
 				ResolveType(type.BaseType);

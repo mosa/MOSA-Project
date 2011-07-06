@@ -15,7 +15,7 @@ using System.Diagnostics;
 using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime.Metadata.Signatures;
-using Mosa.Runtime.InternalLog;
+using Mosa.Runtime.InternalTrace;
 
 using CIL = Mosa.Runtime.CompilerFramework.CIL;
 
@@ -49,7 +49,7 @@ namespace Mosa.Runtime.CompilerFramework
 		protected IList<BasicBlock> basicBlocks;
 
 		/// <summary>
-		/// Holds the type loader 
+		/// Holds the type system
 		/// </summary>
 		protected ITypeSystem typeSystem;
 
@@ -74,12 +74,12 @@ namespace Mosa.Runtime.CompilerFramework
 		protected ICallingConvention callingConvention;
 
 		/// <summary>
-		/// Native Pointer Size
+		/// Holds the Native Pointer Size
 		/// </summary>
 		protected int nativePointerSize;
 
 		/// <summary>
-		/// Native Pointer Alignment
+		/// Holds the Native Pointer Alignment
 		/// </summary>
 		protected int nativePointerAlignment;
 

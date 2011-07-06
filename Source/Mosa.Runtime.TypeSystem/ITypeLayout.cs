@@ -91,5 +91,12 @@ namespace Mosa.Runtime.TypeSystem
 		/// Get a list of interfaces
 		/// </summary>
 		IList<RuntimeType> Interfaces { get; }
+
+		/// <summary>
+		/// Gets the type ID.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <returns></returns>
+		int GetTypeID(RuntimeType type);
 	}
 }
