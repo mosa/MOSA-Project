@@ -428,7 +428,7 @@
       <Project>{65866A51-B229-44C5-AC81-87A90FA1741B}</Project>
       <Name>Mosa.Compiler.Linker</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mosa.Runtime.InternalLog\Mosa.Runtime.InternalTrace.csproj">
+    <ProjectReference Include="..\Mosa.Runtime.InternalTrace\Mosa.Runtime.InternalTrace.csproj">
       <Project>{540BEAC7-A2C3-4C46-9F4A-E6E1DF4EF6FC}</Project>
       <Name>Mosa.Runtime.InternalTrace</Name>
     </ProjectReference>
