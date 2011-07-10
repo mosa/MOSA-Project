@@ -70,6 +70,7 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="CallVirtualTests.cs" />
+    <Compile Include="FibonacciTests.cs" />
     <Compile Include="GenericInterfaceTests.cs" />
     <Compile Include="SwitchTests.cs">
       <DependentUpon>SwitchTests.tt</DependentUpon>
