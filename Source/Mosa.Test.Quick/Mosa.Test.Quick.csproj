@@ -44,7 +44,6 @@
   <ItemGroup>
     <Compile Include="Boot.cs" />
     <Compile Include="Exception.cs" />
-    <Compile Include="ExceptionTest.cs" />
     <Compile Include="Test.cs" />
     <Compile Include="Object.cs" />
     <Compile Include="Runtime.cs" />

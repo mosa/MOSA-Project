@@ -9,6 +9,22 @@ using System;
 
 namespace Mosa.Test.Quick.Tests
 {
+	public class AA { }
+	public class BB : AA { }
+	public class CC { }
+
+	public class Test
+	{
+		public bool BBisAA()
+		{
+			object b = new BB();
+
+			if (b is AA)
+				return true;
+
+			return false;
+		}
+	}
 
 	public interface IInterfaceAA<T>
 	{
@@ -112,4 +128,5 @@ namespace Mosa.Test.Quick.Tests
 
 		public void SetKKK(int kkkValue) { this.KKKvalue = kkkValue; }
 	}
+
 }

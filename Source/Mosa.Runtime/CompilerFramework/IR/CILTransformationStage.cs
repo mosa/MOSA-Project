@@ -260,7 +260,6 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		void CIL.ICILVisitor.Dup(Context context)
 		{
 			// We don't need the dup anymore.
-			//Remove(context);
 			context.Remove();
 		}
 
@@ -594,7 +593,27 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.IsInst(Context context)
 		{
+			Operand reference = context.Operand1;
+			Operand result = context.Result;
+
+			ClassSigType classSigType = (ClassSigType)result.Type;
+			RuntimeType classType = typeModule.GetType(classSigType.Token);
+			SymbolOperand methodTableSymbol = GetMethodTableSymbol(classType);
+
 			ReplaceWithVmCall(context, VmCall.IsInstanceOfType);
+
+			context.SetOperand(1, methodTableSymbol);
+			context.SetOperand(2, reference);
+			context.OperandCount = 3;
+			context.SetResult(methodCompiler.CreateTemporary(BuiltInSigType.Boolean));
+
+			//TODO - Incomplete: 
+			// if false, then result is null
+			// if true, then result is reference
+
+			//context.AppendInstruction()
+
+			//before.Result = thisReference;
 		}
 
 		/// <summary>
@@ -852,7 +871,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 				throw new NotSupportedException(@"CILTransformationStage.UnaryBranch doesn't support CIL opcode " + opcode);
 			}
 
-			Operand comparisonResult = this.methodCompiler.CreateTemporary(BuiltInSigType.Int32);
+			Operand comparisonResult = methodCompiler.CreateTemporary(BuiltInSigType.Int32);
 			context.SetInstruction(Instruction.IntegerCompareInstruction, comparisonResult, first, second);
 			context.ConditionCode = cc;
 
@@ -1838,6 +1857,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 
 			context.ReplaceInstructionOnly(IR.Instruction.CallInstruction);
 			context.SetOperand(0, SymbolOperand.FromMethod(method));
+			context.OperandCount = 1;
 		}
 
 		private bool ReplaceWithInternalCall(Context context, RuntimeMethod method)
