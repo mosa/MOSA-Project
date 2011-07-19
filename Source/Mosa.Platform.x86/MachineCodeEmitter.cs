@@ -56,6 +56,7 @@ namespace Mosa.Platform.x86
 			/// Patch label
 			/// </summary>
 			public int label;
+
 			/// <summary>
 			/// The patch's position in the stream
 			/// </summary>
@@ -169,7 +170,7 @@ namespace Mosa.Platform.x86
 
 			if (_labels.TryGetValue(label, out pos))
 			{
-				//				Debug.Assert(pos == currentPosition);
+				//Debug.Assert(pos == currentPosition);
 				if (pos != currentPosition)
 					throw new ArgumentException(@"Label already defined for another code point.", @"label");
 			}
@@ -204,7 +205,7 @@ namespace Mosa.Platform.x86
 				// HACK: The machine code emitter needs to replace FP constants
 				// with an EIP relative address, but these are not possible on x86,
 				// so we store the EIP via a call in the right place on the stack
-				//if (0 == label)
+				//if (label == 0)
 				//{
 				//    // FIXME: This code doesn't need to be emitted if there are no
 				//    // large constants used.

@@ -29,7 +29,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// </summary>
 	/// <remarks>
 	/// A method compiler is responsible for compiling a single function
-	/// of an object. There are various classes derived From MethodCompilerBase,
+	/// of an object. There are various classes derived from MethodCompilerBase,
 	/// which provide specific features, such as jit compilation, runtime
 	/// optimized jitting and others. MethodCompilerBase instances are usually
 	/// created by invoking CreateMethodCompiler on a specific compiler
@@ -86,7 +86,7 @@ namespace Mosa.Runtime.CompilerFramework
 		protected int nextStackSlot;
 
 		/// <summary>
-		/// Holds the _type, which owns the _method
+		/// Holds the type, which owns the method
 		/// </summary>
 		private RuntimeType type;
 
@@ -300,8 +300,7 @@ namespace Mosa.Runtime.CompilerFramework
 		public Operand CreateTemporary(SigType type)
 		{
 			int stackSlot = nextStackSlot++;
-			return new LocalVariableOperand(
-				architecture.StackFrameRegister, String.Format(@"T_{0}", stackSlot), stackSlot, type);
+			return new LocalVariableOperand(architecture.StackFrameRegister, String.Format(@"T_{0}", stackSlot), stackSlot, type);
 		}
 
 		/// <summary>

@@ -53,7 +53,6 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			RuntimeType type = decoder.TypeModule.GetType(token);
 
 			ctx.Result = decoder.Compiler.CreateTemporary(new ClassSigType(token));
-			//throw new NotImplementedException();
 		}
 
 		#endregion Methods

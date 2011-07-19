@@ -56,7 +56,6 @@ namespace Mosa.Runtime.CompilerFramework
 			Context ctx = new Context(instructionSet);
 			// Add a jump instruction to the first block from the prologue
 			ctx.AppendInstruction(IR.Instruction.JmpInstruction);
-			//ctx.AppendInstruction(CIL.Instruction.Get(CIL.OpCode.Br));
 			ctx.SetBranch(0);
 			ctx.Label = -1;
 			prologue = CreateBlock(-1, ctx.Index);
@@ -240,5 +239,18 @@ namespace Mosa.Runtime.CompilerFramework
 			callee.PreviousBlocks.Add(caller);
 		}
 
+		/// <summary>
+		/// Links the exception header clauses.
+		/// </summary>
+		private void LinkExceptionHeaderClauses()
+		{
+			foreach (BasicBlock block in this.basicBlocks)
+			{
+				for (Context ctx = CreateContext(block); !ctx.EndOfInstruction; ctx.GotoNext())
+				{
+				//	this.methodCompiler.Method.ExceptionClauseHeader.LinkBlockToClause(ctx, block);
+				}
+			}
+		}
 	}
 }

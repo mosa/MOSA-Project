@@ -148,24 +148,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <param name="compiler">The compiler.</param>
 		public override void Validate(Context ctx, IMethodCompiler compiler)
 		{
-			if (compiler == null)
-				throw new ArgumentNullException(@"compiler");
-
 			// Validate the operands...
 			int offset = (ctx.InvokeTarget.Signature.HasExplicitThis ? 1 : 0);
 			Debug.Assert(ctx.OperandCount == ctx.InvokeTarget.Parameters.Count - offset, @"Operand count doesn't match parameter count.");
-			for (int i = 0; i < ctx.OperandCount; i++)
-			{
-				/* FIXME: Check implicit conversions
-					if (ops[i] != null) {
-						Debug.Assert(_operands[i].Type == _parameterTypes[i]);
-						if (_operands[i].Type != _parameterTypes[i])
-						{
-							// FIXME: Determine if we can do an implicit conversion
-							throw new ExecutionEngineException(@"Invalid operand types.");
-						}
-				 */
-			}
 		}
 
 		/// <summary>

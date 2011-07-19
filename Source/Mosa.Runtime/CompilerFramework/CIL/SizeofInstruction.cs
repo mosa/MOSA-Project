@@ -47,10 +47,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			// Decode base classes first
 			base.Decode(ctx, decoder);
 
-			// Get the size type
-			// Load the stackFrameIndex token from the immediate
 			Token token = decoder.DecodeTokenType();
-
 			RuntimeType type = decoder.TypeModule.GetType(token);
 
 			uint size = (uint)decoder.Compiler.TypeLayout.GetTypeSize( type);
