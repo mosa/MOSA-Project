@@ -64,14 +64,30 @@ namespace Mosa.Internal
 
 		public static unsafe void* AllocateString(void* methodTable, uint length)
 		{
-			void* result = AllocateArray(methodTable, 2, length);
-			return result;
+			return AllocateArray(methodTable, 2, length);
 		}
 
-		public static unsafe bool IsInstanceOfType(void* methodTable, void* type)
+		public static unsafe void* IsInstanceOfType(void* methodTable, void* obj)
 		{
-			return false; // TODO
+			if (methodTable == null)
+				return null;
+
+			uint* objMethodTable = (uint*)((uint*)obj)[0];
+
+			while (objMethodTable != null)
+			{
+				if (objMethodTable == methodTable)
+					return methodTable;
+
+				objMethodTable = (uint*)objMethodTable[3];
+			}
+
+			return null;
 		}
 
+		public static unsafe void* IsInstanceOfInterfaceType(void* methodTable, int interfaceSlot, void* obj)
+		{
+			return null; // TODO
+		}
 	}
 }

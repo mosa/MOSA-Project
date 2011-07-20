@@ -24,6 +24,15 @@ namespace Mosa.Test.Quick.Tests
 
 			return false;
 		}
+
+		public CC BBasAA()
+		{
+			object b = new BB();
+
+			CC c = b as CC;
+
+			return c;
+		}
 	}
 
 	public interface IInterfaceAA<T>

@@ -9,8 +9,7 @@ namespace Mosa.HelloWorld.Tests
 	{
 		public static void Test()
 		{
-			Screen.Goto(23, 21);
-			Screen.Write("Interface Test: ");
+			Screen.Write(" Interface: ");
 
 			PrintResult(InterfaceTest1());
 			PrintResult(InterfaceTest2());

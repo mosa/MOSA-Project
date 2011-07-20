@@ -24,10 +24,13 @@ namespace Mosa.HelloWorld.Tests
 
 		public static void RunTests()
 		{
+			Screen.Goto(23, 0);
+			Screen.Write("[Tests]");
+
 			StringTest.Test();
 			InterfaceTest.Test();
 			GenericTest.Test();
-			Generic2Test.Test();
+			ObjectTest.Test();
 		}
 	}
 }

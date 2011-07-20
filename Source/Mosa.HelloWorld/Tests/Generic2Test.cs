@@ -20,8 +20,7 @@ namespace Mosa.HelloWorld.Tests
 	{
 		public static void Test()
 		{
-			Screen.Goto(23, 65);
-			Screen.Write("List Test: ");
+			Screen.Write("Generics2: ");
 
 			PrintResult(GenericTest1());
 		}

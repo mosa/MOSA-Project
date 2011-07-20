@@ -600,20 +600,18 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			RuntimeType classType = typeModule.GetType(classSigType.Token);
 			SymbolOperand methodTableSymbol = GetMethodTableSymbol(classType);
 
-			ReplaceWithVmCall(context, VmCall.IsInstanceOfType);
+			if (!classType.IsInterface)
+			{
+				ReplaceWithVmCall(context, VmCall.IsInstanceOfType);
 
-			context.SetOperand(1, methodTableSymbol);
-			context.SetOperand(2, reference);
-			context.OperandCount = 3;
-			context.SetResult(methodCompiler.CreateTemporary(BuiltInSigType.Boolean));
-
-			//TODO - Incomplete: 
-			// if false, then result is null
-			// if true, then result is reference
-
-			//context.AppendInstruction()
-
-			//before.Result = thisReference;
+				context.SetOperand(1, methodTableSymbol);
+				context.SetOperand(2, reference);
+				context.OperandCount = 3;
+				context.ResultCount = 1;
+			}
+			else
+			{
+			}
 		}
 
 		/// <summary>

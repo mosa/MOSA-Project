@@ -62,6 +62,11 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		IsInstanceOfType,
 
 		/// <summary>
+		/// Determines the instance of the interface type.
+		/// </summary>
+		IsInstanceOfInterfaceType,
+
+		/// <summary>
 		/// The method call represents a runtime defined memory copy method.
 		/// </summary>
 		/// <remarks>
