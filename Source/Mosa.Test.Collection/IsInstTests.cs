@@ -9,8 +9,12 @@
 
 namespace Mosa.Test.Collection
 {
-	public class AA { }
-	public class BB : AA { }
+	public interface IAA { }
+	public interface IBB { }
+	public interface ICC { }
+
+	public class AA : IAA { }
+	public class BB : AA, IBB { }
 	public class CC { }
 	public class DD : BB { }
 
@@ -64,6 +68,35 @@ namespace Mosa.Test.Collection
 			object o = new DD();
 
 			return (o is CC);
+		}
+
+
+		public static bool IsInstTest8()
+		{
+			object o = new AA();
+
+			return (o is IAA);
+		}
+
+		public static bool IsInstTest9()
+		{
+			object o = new BB();
+
+			return (o is IAA);
+		}
+
+		public static bool IsInstTest10()
+		{
+			object o = new CC();
+
+			return (o is IAA);
+		}
+
+		public static bool IsInstTest11()
+		{
+			object o = new CC();
+
+			return (o is IBB);
 		}
 	}
 

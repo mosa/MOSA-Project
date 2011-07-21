@@ -69,7 +69,7 @@ namespace Mosa.Internal
 
 		public static unsafe void* IsInstanceOfType(void* methodTable, void* obj)
 		{
-			if (methodTable == null)
+			if (obj == null)
 				return null;
 
 			uint* objMethodTable = (uint*)((uint*)obj)[0];
@@ -77,7 +77,7 @@ namespace Mosa.Internal
 			while (objMethodTable != null)
 			{
 				if (objMethodTable == methodTable)
-					return methodTable;
+					return obj;
 
 				objMethodTable = (uint*)objMethodTable[3];
 			}
@@ -85,9 +85,22 @@ namespace Mosa.Internal
 			return null;
 		}
 
-		public static unsafe void* IsInstanceOfInterfaceType(void* methodTable, int interfaceSlot, void* obj)
+		public static unsafe void* IsInstanceOfInterfaceType(int interfaceSlot, void* obj)
 		{
-			return null; // TODO
+			uint* objMethodTable = (uint*)((uint*)obj)[0];
+			uint* bitmap = (uint*)objMethodTable[2];
+
+			if (bitmap == null)
+				return null;
+
+			int index = interfaceSlot / sizeof(int);
+			int bit = interfaceSlot % sizeof(int);
+			uint value = bitmap[index] & (uint)(1 << bit);
+
+			if (value == 0)
+				return null;
+
+			return obj;
 		}
 	}
 }

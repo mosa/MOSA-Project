@@ -15,8 +15,12 @@ using Mosa.ClassLib;
 
 namespace Mosa.HelloWorld.Tests
 {
-	public class AA { }
-	public class BB : AA { }
+	public interface IAA { }
+	public interface IBB { }
+	public interface ICC { }
+
+	public class AA : IAA { }
+	public class BB : AA, IBB { }
 	public class CC { }
 	public class DD : BB { }
 
@@ -33,6 +37,11 @@ namespace Mosa.HelloWorld.Tests
 			PrintResult(IsInstTest5());
 			PrintResult(IsInstTest6());
 			PrintResult(IsInstTest7());
+
+			PrintResult(IsInstTest8());
+			PrintResult(IsInstTest9());
+			PrintResult(IsInstTest10());
+			PrintResult(IsInstTest11());
 		}
 
 		public static bool IsInstTest1()
@@ -82,6 +91,35 @@ namespace Mosa.HelloWorld.Tests
 			object o = new DD();
 
 			return !(o is CC);
+		}
+
+
+		public static bool IsInstTest8()
+		{
+			object o = new AA();
+
+			return (o is IAA);
+		}
+
+		public static bool IsInstTest9()
+		{
+			object o = new BB();
+
+			return (o is IAA);
+		}
+
+		public static bool IsInstTest10()
+		{
+			object o = new CC();
+
+			return !(o is IAA);
+		}
+
+		public static bool IsInstTest11()
+		{
+			object o = new CC();
+
+			return !(o is IBB);
 		}
 
 	}

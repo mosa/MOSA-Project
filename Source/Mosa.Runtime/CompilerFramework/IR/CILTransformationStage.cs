@@ -467,7 +467,12 @@ namespace Mosa.Runtime.CompilerFramework.IR
 
 		private int CalculateInterfaceSlotOffset(RuntimeMethod invokeTarget)
 		{
-			int slot = typeLayout.GetInterfaceSlotOffset(invokeTarget.DeclaringType);
+			return CalculateInterfaceSlotOffset(invokeTarget.DeclaringType);
+		}
+
+		private int CalculateInterfaceSlotOffset(RuntimeType interaceType)
+		{
+			int slot = typeLayout.GetInterfaceSlotOffset(interaceType);
 
 			return (nativePointerSize * slot);
 		}
@@ -611,6 +616,14 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			}
 			else
 			{
+				int slot = CalculateInterfaceSlotOffset(classType);
+
+				ReplaceWithVmCall(context, VmCall.IsInstanceOfInterfaceType);
+
+				context.SetOperand(1, new ConstantOperand(BuiltInSigType.UInt32, slot));
+				context.SetOperand(2, reference);
+				context.OperandCount = 3;
+				context.ResultCount = 1;
 			}
 		}
 

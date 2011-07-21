@@ -67,10 +67,34 @@ namespace Mosa.Test.Cases.IL
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "IsInstTests", "IsInstTest6"));
 		}
 
-        [Test]
-        public void IsInstTest7()
-        {
-            Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "IsInstTests", "IsInstTest7"));
-        }
+		[Test]
+		public void IsInstTest7()
+		{
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "IsInstTests", "IsInstTest7"));
+		}
+
+		[Test]
+		public void IsInstTest8()
+		{
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "IsInstTests", "IsInstTest8"));
+		}
+
+		[Test]
+		public void IsInstTest9()
+		{
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "IsInstTests", "IsInstTest9"));
+		}
+
+		[Test]
+		public void IsInstTest10()
+		{
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "IsInstTests", "IsInstTest10"));
+		}
+
+		[Test]
+		public void IsInstTest11()
+		{
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "IsInstTests", "IsInstTest11"));
+		}
 	}
 }
