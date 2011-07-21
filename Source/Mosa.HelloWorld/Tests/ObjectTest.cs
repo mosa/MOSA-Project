@@ -15,64 +15,75 @@ using Mosa.ClassLib;
 
 namespace Mosa.HelloWorld.Tests
 {
+    public class AA { }
+    public class BB : AA { }
+    public class CC { }
+    public class DD : BB { }
 
-	public class ObjectTest : KernelTest
-	{
-		public class AA { }
-		public class BB : AA { }
-		public class CC { }
+    public class ObjectTest : KernelTest
+    {
+        public static void Test()
+        {
+            Screen.Write(" Object: ");
 
-		public static void Test()
-		{
-			Screen.Write(" Object: ");
+            PrintResult(IsInstTest1());
+            PrintResult(IsInstTest2());
+            PrintResult(IsInstTest3());
+            PrintResult(IsInstTest4());
+            PrintResult(IsInstTest5());
+            PrintResult(IsInstTest6());
+            PrintResult(IsInstTest7());
+        }
 
-			PrintResult(ObjectTest1());
-			PrintResult(ObjectTest2());
-			PrintResult(ObjectTest3());
-			PrintResult(ObjectTest4());
-		}
+        public static bool IsInstTest1()
+        {
+            object o = new AA();
 
-		public static bool ObjectTest1()
-		{
-			object b = new BB();
+            return (o is AA);
+        }
 
-			if (b is AA)
-				return true;
+        public static bool IsInstTest2()
+        {
+            object o = new BB();
 
-			return false;
-		}
+            return (o is AA);
+        }
 
-		public static bool ObjectTest2()
-		{
-			object b = new AA();
+        public static bool IsInstTest3()
+        {
+            object o = new CC();
 
-			if (b is AA)
-				return true;
+            return !(o is AA);
+        }
 
-			return false;
-		}
+        public static bool IsInstTest4()
+        {
+            object o = new CC();
 
-		public static bool ObjectTest3()
-		{
-			object b = new CC();
+            return !(o is BB);
+        }
 
-			if (b is AA)
-				return false;
+        public static bool IsInstTest5()
+        {
+            object o = new DD();
 
-			return true;
-		}
+            return (o is AA);
+        }
 
-		public static bool ObjectTest4()
-		{
-			object b = new CC();
+        public static bool IsInstTest6()
+        {
+            object o = new DD();
 
-			if (b is BB)
-				return false;
+            return (o is BB);
+        }
 
-			return true;
-		}
+        public static bool IsInstTest7()
+        {
+            object o = new DD();
 
+            return !(o is CC);
+        }
 
-	}
+    }
 
 }

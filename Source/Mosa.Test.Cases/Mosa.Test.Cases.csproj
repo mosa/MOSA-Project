@@ -90,6 +90,7 @@
     <Compile Include="CIL\DoubleFixture.cs" />
     <Compile Include="CIL\EnumFixture.cs" />
     <Compile Include="CIL\ExceptionHandlingFixture.cs" />
+    <Compile Include="IL\IsInst.cs" />
     <Compile Include="OLD.CIL\GenericMethodMemberFixture.cs" />
     <Compile Include="OLD.CIL\GenericTypeFixture.cs" />
     <Compile Include="CIL\Int32Fixture.cs" />

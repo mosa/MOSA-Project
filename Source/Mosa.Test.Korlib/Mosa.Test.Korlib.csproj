@@ -37,6 +37,7 @@
     <NoStdLib>True</NoStdLib>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Runtime.cs" />
     <Compile Include="Core.cs" />
   </ItemGroup>
   <ItemGroup>
