@@ -192,33 +192,26 @@ namespace Mosa.Test.System
 		[UnmanagedFunctionPointer(CallingConvention.Cdecl)]
 		private unsafe delegate void* AllocateArrayDelegate(void* methodTable, uint elementSize, uint elements);
 
-		protected override unsafe void AddVmCalls(IDictionary<string, LinkerSymbol> virtualMachineCalls)
+		protected override void AddVmCalls(IDictionary<string, LinkerSymbol> virtualMachineCalls)
 		{
 			Trace.WriteLine(@"TestAssemblyLinker adding VM calls:");
 
-			IntPtr allocate = Marshal.GetFunctionPointerForDelegate(allocateArrayHandler);
+			AddVmCall(virtualMachineCalls, allocateArrayHandler, @"Mosa.Internal.Runtime.AllocateArray(Ptr methodTable,U4 elementSize,U4 elements)");
+			AddVmCall(virtualMachineCalls, allocateObjectHandler, @"Mosa.Internal.Runtime.AllocateObject(Ptr methodTable,U4 classSize)");
+		}
 
-			const string allocateArrayMethod = @"Mosa.Internal.Runtime.AllocateArray(Ptr methodTable,U4 elementSize,U4 elements)";
+		protected unsafe void AddVmCall(IDictionary<string, LinkerSymbol> virtualMachineCalls, Delegate handler, string method)
+		{
+			IntPtr allocate = Marshal.GetFunctionPointerForDelegate(handler);
+
 			long virtualAddress = allocate.ToInt64();
-			Trace.WriteLine(String.Format("\t{0} at 0x{1:x08}", allocateArrayMethod, virtualAddress));
+			Trace.WriteLine(String.Format("\t{0} at 0x{1:x08}", method, virtualAddress));
 
-			LinkerSymbol symbol = new LinkerSymbol(allocateArrayMethod, SectionKind.Text, virtualAddress);
+			LinkerSymbol symbol = new LinkerSymbol(method, SectionKind.Text, virtualAddress);
 			symbol.VirtualAddress = new IntPtr(symbol.SectionAddress);
 
-			virtualMachineCalls.Remove(allocateArrayMethod);
-			virtualMachineCalls.Add(allocateArrayMethod, symbol);
-
-			IntPtr allocateObject = Marshal.GetFunctionPointerForDelegate(allocateObjectHandler);
-
-			const string allocateObjectMethod = @"Mosa.Internal.Runtime.AllocateObject(Ptr methodTable,U4 classSize)";
-			virtualAddress = allocateObject.ToInt64();
-			Trace.WriteLine(String.Format("\t{0} at 0x{1:x08}", allocateObjectMethod, virtualAddress));
-
-			symbol = new LinkerSymbol(allocateObjectMethod, SectionKind.Text, virtualAddress);
-			symbol.VirtualAddress = new IntPtr(symbol.SectionAddress);
-
-			virtualMachineCalls.Remove(allocateObjectMethod);
-			virtualMachineCalls.Add(allocateObjectMethod, symbol);
+			virtualMachineCalls.Remove(method);
+			virtualMachineCalls.Add(method, symbol);
 		}
 
 		/// <summary>

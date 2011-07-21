@@ -30,7 +30,7 @@ namespace Mosa.HelloWorld.Tests
 			StringTest.Test();
 			InterfaceTest.Test();
 			GenericTest.Test();
-			ObjectTest.Test();
+			IsInstTest.Test();
 		}
 	}
 }
