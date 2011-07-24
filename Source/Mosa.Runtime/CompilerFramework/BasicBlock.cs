@@ -59,11 +59,6 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		private List<BasicBlock> previousBlocks;
 
-		/// <summary>
-		/// 
-		/// </summary>
-		private ExceptionClause exceptionCalue;
-
 		#endregion
 
 		#region Construction
@@ -155,12 +150,6 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			get { return hintTarget; }
 			set { hintTarget = value; }
-		}
-
-		public ExceptionClause ExceptionClause
-		{
-			get { return exceptionCalue; }
-			set { exceptionCalue = value; }
 		}
 
 		#endregion
