@@ -70,15 +70,32 @@ namespace Mosa.Runtime.CompilerFramework
 
 			var size = 3 * table.Count * this.typeLayout.NativePointerSize;
 			var offsetPointer = 0;
+			var offsets = new Dictionary<LinkerSymbol, long>();
 
 			using (var stream = this.linker.Allocate("methodTableStart", SectionKind.Text, size, this.typeLayout.NativePointerAlignment))
 			{
+				var position = stream.Position;
 				foreach (var entry in table)
 				{
-					var ptr = this.linker.Link(LinkType.AbsoluteAddress | LinkType.I4, "methodTableStart", offsetPointer, 0, entry.Name, IntPtr.Zero);
-					stream.Write(BitConverter.GetBytes(0xFFFFFFFF), 0, 4);
-					stream.Write(BitConverter.GetBytes(entry.Length), 0, 4);
+					offsets[entry] = offsetPointer;
+					this.linker.Link(LinkType.AbsoluteAddress | LinkType.I4, "methodTableStart", offsetPointer, 0, entry.Name, IntPtr.Zero);
+					this.linker.Link(LinkType.AbsoluteAddress | LinkType.I4, "methodTableStart", offsetPointer + 8, 0, entry.Name + "$methodDescriptionEntry", IntPtr.Zero);
 					offsetPointer += 3 * this.typeLayout.NativePointerSize;
+				}
+
+				stream.Position = position;
+				foreach (var entry in table)
+				{
+					stream.Seek(offsets[entry] + 4, System.IO.SeekOrigin.Begin);
+					stream.Write(BitConverter.GetBytes(entry.Length), 0, 4);
+				}
+			}
+
+			foreach (var entry in table)
+			{
+				using (var stream = this.linker.Allocate(entry.Name + "$methodDescriptionEntry", SectionKind.Text, 4, this.typeLayout.NativePointerAlignment))
+				{
+					stream.Write(BitConverter.GetBytes(0xFFEEDDCC), 0, 4);
 				}
 			}
 		}
