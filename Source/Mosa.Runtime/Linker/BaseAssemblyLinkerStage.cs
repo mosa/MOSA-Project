@@ -180,15 +180,6 @@ namespace Mosa.Runtime.Linker
 		}
 
 		/// <summary>
-		/// Gets the linker time stamp.
-		/// </summary>
-		/// <value>The time stamp.</value>
-		public DateTime TimeStamp
-		{
-			get { return DateTime.Now; }
-		}
-
-		/// <summary>
 		/// Retrieves the collection of sections created during compilation.
 		/// </summary>
 		/// <value>The sections collection.</value>

@@ -72,7 +72,7 @@ namespace Mosa.Tools.Compiler.Linker
 			// Emit map file _header
 			_writer.WriteLine(linker.OutputFile);
 			_writer.WriteLine();
-			_writer.WriteLine("Timestamp is {0}", this.linker.TimeStamp);
+			_writer.WriteLine("Timestamp is {0}", DateTime.Now);
 			_writer.WriteLine();
 			_writer.WriteLine("Preferred load address is {0:x16}", this.linker.BaseAddress);
 			_writer.WriteLine();

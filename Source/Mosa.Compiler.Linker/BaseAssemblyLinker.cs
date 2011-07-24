@@ -162,15 +162,6 @@ namespace Mosa.Compiler.Linker
 		}
 
 		/// <summary>
-		/// Gets the linker time stamp.
-		/// </summary>
-		/// <value>The time stamp.</value>
-		public DateTime TimeStamp
-		{
-			get { return DateTime.Now; }
-		}
-
-		/// <summary>
 		/// Retrieves the collection of sections created during compilation.
 		/// </summary>
 		/// <value>The sections collection.</value>
@@ -346,7 +337,7 @@ namespace Mosa.Compiler.Linker
 
 			foreach (LinkRequest request in requests)
 			{
-				if (IsResolved(request.LinkSymbol, out methodAddress) == false)
+				if (!IsResolved(request.LinkSymbol, out methodAddress))
 					throw new InvalidOperationException(@"Method not compiled - but making link requests??");
 
 				// Patch the code stream

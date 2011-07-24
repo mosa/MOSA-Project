@@ -269,19 +269,6 @@ namespace Mosa.Tools.Compiler.Linker
 		}
 
 		/// <summary>
-		/// Gets the time stamp.
-		/// </summary>
-		/// <value>The time stamp.</value>
-		public DateTime TimeStamp
-		{
-			get
-			{
-				CheckImplementation();
-				return this.implementation.TimeStamp;
-			}
-		}
-
-		/// <summary>
 		/// Gets the virtual alignment of sections.
 		/// </summary>
 		/// <value>The virtual section alignment.</value>

@@ -84,14 +84,6 @@ namespace Mosa.Tools.Compiler.Linker
 			}
 		}
 
-		public DateTime TimeStamp
-		{
-			get
-			{
-				return this.linker.TimeStamp;
-			}
-		}
-
 		public long VirtualSectionAlignment
 		{
 			get

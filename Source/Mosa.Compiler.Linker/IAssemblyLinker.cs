@@ -66,12 +66,6 @@ namespace Mosa.Compiler.Linker
 		string OutputFile { get; set; }
 
 		/// <summary>
-		/// Gets the time stamp.
-		/// </summary>
-		/// <value>The time stamp.</value>
-		DateTime TimeStamp { get; }
-
-		/// <summary>
 		/// Gets the virtual alignment of sections.
 		/// </summary>
 		/// <value>The virtual section alignment.</value>
