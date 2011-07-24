@@ -28,7 +28,8 @@ namespace Mosa.Tools.Compiler
 				new MethodCompilerSchedulerStage(),
 				new TypeInitializerSchedulerStageProxy(typeInitializerSchedulerStage),
 				new TypeLayoutStage(),
-				new LinkerProxy(linker)
+                new MethodTableBuilderStage(),
+				new LinkerProxy(linker),
 			});
 		}
 

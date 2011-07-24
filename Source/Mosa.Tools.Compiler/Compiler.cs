@@ -301,7 +301,7 @@ namespace Mosa.Tools.Compiler
 					new CilHeaderBuilderStage(),
 					new ObjectFileLayoutStage(),
 					this.linkerStage,
-					this.mapFileWrapper
+					this.mapFileWrapper,
 				});
 
 				aot.Run();

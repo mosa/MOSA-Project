@@ -88,6 +88,7 @@
     <Compile Include="CompilerFramework\InstructionLogger.cs" />
     <Compile Include="CompilerFramework\LoggerDebugWriter.cs" />
     <Compile Include="CompilerFramework\ILoggerWriter.cs" />
+    <Compile Include="CompilerFramework\MethodTableBuilderStage.cs" />
     <Compile Include="CompilerFramework\TypeLayoutStage.cs" />
     <Compile Include="CompilerFramework\ExceptionEngine.cs" />
     <Compile Include="CompilerFramework\IR\ThrowInstruction.cs" />
