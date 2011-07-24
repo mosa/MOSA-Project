@@ -5,6 +5,9 @@ using System.Text;
 
 using Mosa.Runtime.Linker;
 using Mosa.Compiler.Linker;
+using System.IO;
+using Mosa.Runtime.TypeSystem;
+using Mosa.Compiler.Common;
 
 namespace Mosa.Runtime.CompilerFramework
 {
@@ -13,6 +16,11 @@ namespace Mosa.Runtime.CompilerFramework
 	/// </summary>
 	public class MethodTableBuilderStage : BaseAssemblyCompilerStage, IAssemblyCompilerStage
 	{
+		/// <summary>
+		/// 
+		/// </summary>
+		private static readonly DataConverter LittleEndianBitConverter = DataConverter.LittleEndian;
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -53,7 +61,9 @@ namespace Mosa.Runtime.CompilerFramework
 		private void CreateTable()
 		{
 			var table = new List<LinkerSymbol>();
+			var methods = new List<RuntimeMethod>();
 
+			// Collect all methods that we can link to
 			foreach (var type in this.typeSystem.GetAllTypes())
 			{
 				if (type.ContainsOpenGenericParameters)
@@ -64,11 +74,27 @@ namespace Mosa.Runtime.CompilerFramework
 					continue;
 
 				foreach (var method in type.Methods)
+				{
 					if (this.linker.HasSymbol(method.ToString()))
+					{
 						table.Add(this.linker.GetSymbol(method.ToString()));
+						methods.Add(method);
+					}
+				}
 			}
 
-			var size = 3 * table.Count * this.typeLayout.NativePointerSize;
+			this.CreateMethodDescriptionTable(table);
+			this.CreateMethodDescriptionEntries(methods);
+		}
+
+		/// <summary>
+		/// Creates the method description table.
+		/// </summary>
+		/// <param name="table">The table.</param>
+		private void CreateMethodDescriptionTable(IList<LinkerSymbol> table)
+		{
+			// Allocate the table and fill it
+			var size = 3 * table.Count * this.typeLayout.NativePointerSize + this.typeLayout.NativePointerSize;
 			var offsetPointer = 0;
 			var offsets = new Dictionary<LinkerSymbol, long>();
 
@@ -77,27 +103,52 @@ namespace Mosa.Runtime.CompilerFramework
 				var position = stream.Position;
 				foreach (var entry in table)
 				{
+					// Store the offset pointer
 					offsets[entry] = offsetPointer;
+
+					// Store address and length of the method
 					this.linker.Link(LinkType.AbsoluteAddress | LinkType.I4, "methodTableStart", offsetPointer, 0, entry.Name, IntPtr.Zero);
 					this.linker.Link(LinkType.AbsoluteAddress | LinkType.I4, "methodTableStart", offsetPointer + 8, 0, entry.Name + "$methodDescriptionEntry", IntPtr.Zero);
 					offsetPointer += 3 * this.typeLayout.NativePointerSize;
 				}
 
+				// Store pointers to method description entries
 				stream.Position = position;
 				foreach (var entry in table)
 				{
-					stream.Seek(offsets[entry] + 4, System.IO.SeekOrigin.Begin);
-					stream.Write(BitConverter.GetBytes(entry.Length), 0, 4);
+					stream.Seek(offsets[entry] + 4, SeekOrigin.Begin);
+					stream.Write(LittleEndianBitConverter.GetBytes(entry.Length), 0, 4);
 				}
-			}
 
-			foreach (var entry in table)
+				// Mark end of table
+				stream.Seek(size - this.typeLayout.NativePointerSize, SeekOrigin.Begin);
+				stream.Write(new byte[] { 0, 0, 0, 0 }, 0, 4);
+			}
+		}
+
+		/// <summary>
+		/// Creates the method description entries.
+		/// </summary>
+		/// <param name="methods">The methods.</param>
+		private void CreateMethodDescriptionEntries(IList<RuntimeMethod> methods)
+		{
+			foreach (var method in methods)
 			{
-				using (var stream = this.linker.Allocate(entry.Name + "$methodDescriptionEntry", SectionKind.Text, 4, this.typeLayout.NativePointerAlignment))
+				using (var stream = this.linker.Allocate(method.ToString() + "$methodDescriptionEntry", SectionKind.Text, 4, this.typeLayout.NativePointerAlignment))
 				{
-					stream.Write(BitConverter.GetBytes(0xFFEEDDCC), 0, 4);
+					this.CreateMethodDescriptionEntry(stream, method);
 				}
 			}
+		}
+
+		/// <summary>
+		/// Creates the method description entry.
+		/// </summary>
+		/// <param name="stream">The stream.</param>
+		/// <param name="method">The method.</param>
+		private void CreateMethodDescriptionEntry(Stream stream, RuntimeMethod method)
+		{
+			stream.Write(LittleEndianBitConverter.GetBytes(0xFFEEDDCC), 0, 4);
 		}
 	}
 }
