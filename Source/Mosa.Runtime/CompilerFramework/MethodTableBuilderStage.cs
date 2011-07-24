@@ -12,7 +12,15 @@ using Mosa.Compiler.Common;
 namespace Mosa.Runtime.CompilerFramework
 {
 	/// <summary>
-	/// 
+	/// Builds the method table used for exception handling. The table has the following format:
+	///		4 bytes: Pointer to method
+	///		4 bytes: Length of method
+	///		4 bytes: Pointer to method description entry
+	///		
+	/// The method description entry has the format:
+	///		4 bytes: Pointer to exception clause table
+	///		4 bytes: GC tracking info
+	///		4 bytes: Method metadata token
 	/// </summary>
 	public class MethodTableBuilderStage : BaseAssemblyCompilerStage, IAssemblyCompilerStage
 	{
@@ -108,7 +116,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 					// Store address and length of the method
 					this.linker.Link(LinkType.AbsoluteAddress | LinkType.I4, "methodTableStart", offsetPointer, 0, entry.Name, IntPtr.Zero);
-					this.linker.Link(LinkType.AbsoluteAddress | LinkType.I4, "methodTableStart", offsetPointer + 8, 0, entry.Name + "$methodDescriptionEntry", IntPtr.Zero);
+					this.linker.Link(LinkType.AbsoluteAddress | LinkType.I4, "methodTableStart", offsetPointer + 8, 0, entry.Name + "$mdtable", IntPtr.Zero);
 					offsetPointer += 3 * this.typeLayout.NativePointerSize;
 				}
 
@@ -134,7 +142,7 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			foreach (var method in methods)
 			{
-				using (var stream = this.linker.Allocate(method.ToString() + "$methodDescriptionEntry", SectionKind.Text, 4, this.typeLayout.NativePointerAlignment))
+				using (var stream = this.linker.Allocate(method.ToString() + "$mdtable", SectionKind.Text, 3 * this.typeLayout.NativePointerSize, this.typeLayout.NativePointerAlignment))
 				{
 					this.CreateMethodDescriptionEntry(stream, method);
 				}
@@ -148,7 +156,14 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="method">The method.</param>
 		private void CreateMethodDescriptionEntry(Stream stream, RuntimeMethod method)
 		{
-			stream.Write(LittleEndianBitConverter.GetBytes(0xFFEEDDCC), 0, 4);
+			// Pointer to exception clause table
+			this.linker.Link(LinkType.AbsoluteAddress | LinkType.I4, method.ToString() + "$mdtable", 0, 0, method.ToString() + "$etable", IntPtr.Zero);
+			// GC tracking info
+			stream.Seek(1 * this.typeLayout.NativePointerSize, SeekOrigin.Begin);
+			stream.Write(LittleEndianBitConverter.GetBytes(0x00000000), 0, 4);
+			// Metadata token
+			stream.Seek(2 * this.typeLayout.NativePointerSize, SeekOrigin.Begin);
+			stream.Write(LittleEndianBitConverter.GetBytes(method.Token.ToInt32()), 0, 4);
 		}
 	}
 }
