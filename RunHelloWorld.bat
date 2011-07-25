@@ -1,4 +1,4 @@
 cd Source
-CALL Compile-Debug.bat
+CALL Compile.bat
 cd ..\Run
 CALL QEMU-CompileAndRun.bat

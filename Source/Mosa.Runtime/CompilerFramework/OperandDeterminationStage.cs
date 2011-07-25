@@ -58,15 +58,29 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public void Run()
 		{
-			initialStack = new Stack<Operand>[basicBlocks.Count];
+			// Main Code
+			Trace(-1);
 
-			BasicBlock firstBlock = FindBlock(-1);
-
-			AssignOperands(firstBlock);
+			// Handler Code
+			foreach (ExceptionClause clause in methodCompiler.ExceptionClauseHeader.Clauses)
+				Trace(clause.HandlerOffset);
 
 			initialStack = null;
 			operandStack = null;
 			processed = null;
+		}
+
+		/// <summary>
+		/// Traces the specified label.
+		/// </summary>
+		/// <param name="label">The label.</param>
+		private void Trace(int label)
+		{
+			initialStack = new Stack<Operand>[basicBlocks.Count];
+			operandStack.Clear();
+
+			BasicBlock firstBlock = FindBlock(label);
+			AssignOperands(firstBlock);
 		}
 
 		/// <summary>

@@ -12,24 +12,24 @@ namespace Mosa.Test.Quick.Tests
 
 	public class ExceptionTest
 	{
-		//public static int Test1()
-		//{
-		//    int a = 10;
-		//    int b = 13;
-		//    try
-		//    {
-		//        int i = 12;
-		//        a = a + i;
-		//    }
-		//    finally
-		//    {
-		//        b = b + a;
-		//    }
+		public static int Test1()
+		{
+			int a = 10;
+			int b = 13;
+			try
+			{
+				int i = 12;
+				a = a + i;
+			}
+			finally
+			{
+				b = b + a;
+			}
 
-		//    b = b + 1;
+			b = b + 1;
 
-		//    return b;
-		//}
+			return b;
+		}
 
 		//public static int Test2()
 		//{
