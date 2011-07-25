@@ -48,10 +48,6 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// 
 		/// </summary>
-		private int label;
-		/// <summary>
-		/// 
-		/// </summary>
 		public ExceptionClauseType Kind;
 		/// <summary>
 		/// 
@@ -128,62 +124,5 @@ namespace Mosa.Runtime.CompilerFramework
 			}
 		}
 
-		/// <summary>
-		/// Updates the specified context.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="stream">The stream.</param>
-		public void Update(Context context, Stream stream)
-		{
-			UpdateOffset(context, stream);
-			UpdateEnd(context, stream);
-		}
-
-		/// <summary>
-		/// Updates the offset.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="stream">The stream.</param>
-		public void UpdateOffset(Context context, Stream stream)
-		{
-			if (context.Label == this.TryOffset)
-			{
-				this.TryOffset = (int)stream.Position;
-				this.label = this.TryOffset;
-			}
-			else if (context.Label == this.HandlerOffset)
-			{
-				this.HandlerOffset = (int)stream.Position;
-				this.label = this.HandlerOffset;
-			}
-		}
-
-		/// <summary>
-		/// Updates the end.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="stream">The stream.</param>
-		public void UpdateEnd(Context context, Stream stream)
-		{
-			if (context.Label == this.TryEnd)
-			{
-				this.TryLength = (int)stream.Position - this.TryOffset;
-				this.label = this.TryEnd;
-			}
-			if (context.Label == this.HandlerEnd)
-			{
-				this.HandlerLength = (int)stream.Position - this.HandlerOffset;
-				this.label = this.HandlerLength;
-			}
-		}
-
-		/// <summary>
-		/// Adds the label to code stream.
-		/// </summary>
-		/// <param name="emitter">The emitter.</param>
-		public void AddLabelToCodeStream(ICodeEmitter emitter)
-		{
-			emitter.Label(0x50000000 + this.label);
-		}
 	}
 }
