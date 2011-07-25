@@ -127,7 +127,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="block">The completed block.</param>
 		protected virtual void BlockEnd(BasicBlock block)
 		{
-			codeEmitter.Label(block.Label & 0x0F000000);
+			codeEmitter.Label(block.Label + 0x0F000000);
 		}
 
 		/// <summary>
