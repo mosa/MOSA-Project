@@ -155,7 +155,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public void Run()
 		{
-			// Retreive the first block
+			// Retrieve the first block
 			_first = FindBlock(-1);
 
 			// Create list for loops
@@ -164,7 +164,7 @@ namespace Mosa.Runtime.CompilerFramework
 			// Create dictionary for the depth of basic Blocks
 			_depths = new Dictionary<BasicBlock, int>(basicBlocks.Count);
 
-			// Deteremine Loop Depths
+			// Determine Loop Depths
 			DetermineLoopDepths();
 
 			// Order the Blocks based on loop depth

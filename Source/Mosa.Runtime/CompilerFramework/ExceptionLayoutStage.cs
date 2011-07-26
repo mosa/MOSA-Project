@@ -24,8 +24,10 @@ namespace Mosa.Runtime.CompilerFramework
 
 		private List<ExceptionClauseNode> sortedClauses;
 
-		private Dictionary<BasicBlock, ExceptionClause> exceptionBlocks;
+		private Dictionary<BasicBlock, ExceptionClause> blockExceptions;
 		private Dictionary<int, ExceptionClause> exceptionLabelMap;
+
+		private Dictionary<ExceptionClause, List<BasicBlock>> exceptionBlocks = new Dictionary<ExceptionClause, List<BasicBlock>>();
 
 		#endregion // Data members
 
@@ -62,19 +64,44 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			BuildExceptionLabelMap();
 
-			exceptionBlocks = new Dictionary<BasicBlock, ExceptionClause>();
+			blockExceptions = new Dictionary<BasicBlock, ExceptionClause>();
 
-			Stack<int> exceptionLabelStack = new Stack<int>();
-
-			// Main Code
-			Trace(-1, exceptionLabelStack);
-
-			// Handler Code
-			foreach (ExceptionClause clause in methodCompiler.ExceptionClauseHeader.Clauses)
+			foreach (BasicBlock block in basicBlocks)
 			{
-				Trace(clause.HandlerOffset, exceptionLabelStack);
-				exceptionLabelStack.Clear();
+				ExceptionClause clause = FindExceptionClause(block);
+
+				if (clause != null)
+				{
+					List<BasicBlock> blocks;
+
+					if (!exceptionBlocks.TryGetValue(clause, out blocks))
+					{
+						blocks = new List<BasicBlock>();
+						exceptionBlocks.Add(clause, blocks);
+					}
+
+					blocks.Add(block);
+					blockExceptions.Add(block, clause);
+				}
 			}
+
+		}
+
+		private ExceptionClause FindExceptionClause(BasicBlock block)
+		{
+			Context ctx = new Context(instructionSet, block);
+			int label = ctx.Index;
+
+			foreach (ExceptionClauseNode node in sortedClauses)
+			{
+				if (label >= node.Clause.TryOffset && label < node.Clause.TryEnd)
+					return node.Clause;
+
+				//if (node.Clause.TryEnd > label)
+				//    return null; // early out
+			}
+
+			return null;
 		}
 
 		private void BuildExceptionLabelMap()
@@ -85,38 +112,30 @@ namespace Mosa.Runtime.CompilerFramework
 				exceptionLabelMap.Add(clause.TryOffset, clause);
 		}
 
-		private void Trace(int label, Stack<int> exceptionLabelStack)
-		{
-			ExceptionClause newTraceClause = null;
-			bool newTrace = exceptionLabelMap.TryGetValue(label, out newTraceClause);
-
-			// TODO
-
-			// Note: if newTrace is true, assign block to new clause
-			// if clause ends, pop from exception label stack
-			// how do we know a clause ends?
-		}
-
 		private void EmitExceptionTable()
 		{
+			if (exceptionBlocks.Count == 0)
+				return;
+
 			// TODO:
 
 			List<string> entries = new List<string>();
 
-			foreach (ExceptionClauseNode pair in sortedClauses)
+			foreach (ExceptionClauseNode node in sortedClauses)
 			{
-				ExceptionClause clause = pair.Clause;
+				ExceptionClause clause = node.Clause;
 
-				// foreach(BasicBlock block in clause)
-				// {
+				List<BasicBlock> blocks = this.exceptionBlocks[clause];
 
-				// 1. Start 
-				// 2. End
-				// 3. Handler
+				foreach (BasicBlock block in blocks)
+				{
 
-				// }
+					// 1. Start 
+					// 2. End
+					// 3. Handler
+
+				}
 			}
-
 
 			int tableSize = entries.Count * nativePointerSize;
 

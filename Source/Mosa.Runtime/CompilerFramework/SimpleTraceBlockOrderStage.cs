@@ -75,10 +75,21 @@ namespace Mosa.Runtime.CompilerFramework
 				}
 			}
 
-			// Place unreferenced Blocks at the end of the list
+			// Place unreferenced blocks at the end of the list
 			foreach (BasicBlock block in basicBlocks)
 				if (!referenced.ContainsKey(block))
 					_ordered[orderBlockCnt++] = block;
+
+			OrderBlocks();
+		}
+
+		/// <summary>
+		/// Orders the blocks.
+		/// </summary>
+		private void OrderBlocks()
+		{
+			for (int i = 0; i < basicBlocks.Count; i++)
+				basicBlocks[i] = _ordered[i];
 		}
 
 		#endregion // Methods

@@ -48,19 +48,19 @@ namespace Mosa.Platform.x86
 			/// <param name="position">The position.</param>
 			public Patch(int label, long position)
 			{
-				this.label = label;
-				this.position = position;
+				Label = label;
+				Position = position;
 			}
 
 			/// <summary>
 			/// Patch label
 			/// </summary>
-			public int label;
+			public int Label;
 
 			/// <summary>
 			/// The patch's position in the stream
 			/// </summary>
-			public long position;
+			public long Position;
 		}
 
 		#endregion // Types
@@ -68,39 +68,39 @@ namespace Mosa.Platform.x86
 		#region Data members
 
 		/// <summary>
-		/// The compiler thats generating the code.
+		/// The compiler that is generating the code.
 		/// </summary>
-		static IMethodCompiler _compiler;
+		private IMethodCompiler compiler;
 
 		/// <summary>
 		/// The stream used to write machine code bytes to.
 		/// </summary>
-		private Stream _codeStream;
+		private Stream codeStream;
 
 		/// <summary>
 		/// The position that the code stream starts.
 		/// </summary>
-		private long _codeStreamBasePosition;
+		private long codeStreamBasePosition;
 
 		/// <summary>
 		/// List of labels that were emitted.
 		/// </summary>
-		private readonly Dictionary<int, long> _labels = new Dictionary<int, long>();
+		private readonly Dictionary<int, long> labels = new Dictionary<int, long>();
 
 		/// <summary>
 		/// Holds the linker used to resolve externals.
 		/// </summary>
-		private IAssemblyLinker _linker;
+		private IAssemblyLinker linker;
 
 		/// <summary>
 		/// List of literal patches we need to perform.
 		/// </summary>
-		private readonly List<Patch> _literals = new List<Patch>();
+		private readonly List<Patch> literals = new List<Patch>();
 
 		/// <summary>
 		/// Patches we need to perform.
 		/// </summary>
-		private readonly List<Patch> _patches = new List<Patch>();
+		private readonly List<Patch> patches = new List<Patch>();
 
 		#endregion
 
@@ -113,7 +113,7 @@ namespace Mosa.Platform.x86
 		{
 			// Flush the stream - we're not responsible for disposing it, as it belongs
 			// to another component that gave it to the code generator.
-			_codeStream.Flush();
+			codeStream.Flush();
 		}
 
 		#endregion // IDisposable Members
@@ -138,10 +138,10 @@ namespace Mosa.Platform.x86
 			if (linker == null)
 				throw new ArgumentNullException(@"linker");
 
-			_compiler = compiler;
-			_codeStream = codeStream;
-			_codeStreamBasePosition = codeStream.Position;
-			_linker = linker;
+			this.compiler = compiler;
+			this.codeStream = codeStream;
+			this.codeStreamBasePosition = codeStream.Position;
+			this.linker = linker;
 		}
 
 		/// <summary>
@@ -164,62 +164,40 @@ namespace Mosa.Platform.x86
 			 */
 
 			// Save the current position
-			long currentPosition = _codeStream.Position, pos;
-			// Relative branch offset
-			int relOffset;
+			long currentPosition = codeStream.Position;
 
-			if (_labels.TryGetValue(label, out pos))
+			long pos;
+			if (labels.TryGetValue(label, out pos))
 			{
-				//Debug.Assert(pos == currentPosition);
 				if (pos != currentPosition)
 					throw new ArgumentException(@"Label already defined for another code point.", @"label");
 			}
 			else
 			{
-				// Check if this label has forward references on it...
-				_patches.RemoveAll(delegate(Patch p)
+				foreach (Patch p in patches)
 				{
-					if (p.label == label)
+					if (p.Label == label)
 					{
 						// Set new position
-						_codeStream.Position = p.position;
-						// Compute relative offset
-						relOffset = (int)currentPosition - ((int)p.position + 4);
+						codeStream.Position = p.Position;
+						
+						// Compute relative branch offset
+						int relOffset = (int)currentPosition - ((int)p.Position + 4);
+						
 						// Write relative offset to stream
 						byte[] bytes = LittleEndianBitConverter.GetBytes(relOffset);
-						_codeStream.Write(bytes, 0, bytes.Length);
+						codeStream.Write(bytes, 0, bytes.Length);
 
-						// Success
-						return true;
+						// TODO: Remove p in patches
+						// OR BETTER: resolve patches at the end
 					}
-					// Failed
-					return false;
-				});
+				}
 
 				// Add this label to the label list, so we can resolve the jump later on
-				_labels.Add(label, currentPosition);
+				labels.Add(label, currentPosition);
 
 				// Reset the position
-				_codeStream.Position = currentPosition;
-
-				// HACK: The machine code emitter needs to replace FP constants
-				// with an EIP relative address, but these are not possible on x86,
-				// so we store the EIP via a call in the right place on the stack
-				//if (label == 0)
-				//{
-				//    // FIXME: This code doesn't need to be emitted if there are no
-				//    // large constants used.
-				//    _codeStream.WriteByte(0xE8);
-				//    WriteImmediate(0);
-
-				//    SigType i4 = new SigType(CilElementType.I4);
-
-				//    RegisterOperand eax = new RegisterOperand(i4, GeneralPurposeRegister.EAX);
-				//    Pop(eax);
-
-				//    MemoryOperand mo = new MemoryOperand(i4, GeneralPurposeRegister.EBP, new IntPtr(-8));
-				//    Mov(mo, eax);
-				//}
+				codeStream.Position = currentPosition;
 			}
 		}
 
@@ -228,27 +206,27 @@ namespace Mosa.Platform.x86
 		/// </summary>
 		/// <param name="label">The label to apply to the data.</param>
 		/// <param name="LiteralData"></param>
-		void ICodeEmitter.Literal(int label, IR.LiteralData LiteralData) // SigType type, object data)
+		void ICodeEmitter.Literal(int label, IR.LiteralData LiteralData)
 		{
 			// Save the current position
-			long currentPosition = _codeStream.Position;
-			// Relative branch offset
-			//int relOffset;
+			long currentPosition = codeStream.Position;
+
 			// Flag, if we should really emit the literal (only if the literal is used!)
 			bool emit = false;
+	
 			// Byte representation of the literal
 			byte[] bytes;
 
 			// Check if this label has forward references on it...
-			emit = (0 != _literals.RemoveAll(delegate(Patch p)
+			emit = (0 != literals.RemoveAll(delegate(Patch p)
 			{
-				if (p.label == label)
+				if (p.Label == label)
 				{
-					_codeStream.Position = p.position;
+					codeStream.Position = p.Position;
 					// HACK: We can't do PIC right now
 					//relOffset = (int)currentPosition - ((int)p.position + 4);
 					bytes = LittleEndianBitConverter.GetBytes((int)currentPosition);
-					_codeStream.Write(bytes, 0, bytes.Length);
+					codeStream.Write(bytes, 0, bytes.Length);
 					return true;
 				}
 
@@ -257,7 +235,7 @@ namespace Mosa.Platform.x86
 
 			if (emit)
 			{
-				_codeStream.Position = currentPosition;
+				codeStream.Position = currentPosition;
 				switch (LiteralData.Type.Type)
 				{
 					case CilElementType.I8:
@@ -280,7 +258,7 @@ namespace Mosa.Platform.x86
 						throw new NotImplementedException();
 				}
 
-				_codeStream.Write(bytes, 0, bytes.Length);
+				codeStream.Write(bytes, 0, bytes.Length);
 			}
 		}
 
@@ -294,7 +272,7 @@ namespace Mosa.Platform.x86
 		/// <param name="data">The data.</param>
 		public void WriteByte(byte data)
 		{
-			_codeStream.WriteByte(data);
+			codeStream.WriteByte(data);
 		}
 
 		/// <summary>
@@ -305,7 +283,7 @@ namespace Mosa.Platform.x86
 		/// <param name="count">The count.</param>
 		public void Write(byte[] buffer, int offset, int count)
 		{
-			_codeStream.Write(buffer, offset, count);
+			codeStream.Write(buffer, offset, count);
 		}
 
 		/// <summary>
@@ -315,7 +293,7 @@ namespace Mosa.Platform.x86
 		/// <param name="dest">The destination label.</param>
 		public void EmitBranch(byte[] code, int dest)
 		{
-			_codeStream.Write(code, 0, code.Length);
+			codeStream.Write(code, 0, code.Length);
 			EmitRelativeBranchTarget(dest);
 		}
 
@@ -325,11 +303,11 @@ namespace Mosa.Platform.x86
 		/// <param name="symbolOperand">The symbol operand.</param>
 		public void Call(SymbolOperand symbolOperand)
 		{
-			long address = _linker.Link(
+			long address = linker.Link(
 				LinkType.RelativeOffset | LinkType.I4,
-				_compiler.Method.ToString(),
-				(int)(_codeStream.Position - _codeStreamBasePosition),
-				(int)(_codeStream.Position - _codeStreamBasePosition) + 4,
+				compiler.Method.ToString(),
+				(int)(codeStream.Position - codeStreamBasePosition),
+				(int)(codeStream.Position - codeStreamBasePosition) + 4,
 				symbolOperand.Name,
 				IntPtr.Zero
 			);
@@ -343,7 +321,7 @@ namespace Mosa.Platform.x86
 			}
 			else
 			{
-				this._codeStream.Position += 4;
+				this.codeStream.Position += 4;
 			}
 		}
 
@@ -358,15 +336,15 @@ namespace Mosa.Platform.x86
 			Operand displacement;
 
 			// Write the opcode
-			_codeStream.Write(opCode.Code, 0, opCode.Code.Length);
+			codeStream.Write(opCode.Code, 0, opCode.Code.Length);
 
 			// Write the mod R/M byte
 			modRM = CalculateModRM(opCode.RegField, dest, null, out sib, out displacement);
 			if (modRM != null)
 			{
-				_codeStream.WriteByte(modRM.Value);
+				codeStream.WriteByte(modRM.Value);
 				if (sib.HasValue)
-					_codeStream.WriteByte(sib.Value);
+					codeStream.WriteByte(sib.Value);
 			}
 
 			// Add displacement to the code
@@ -386,7 +364,7 @@ namespace Mosa.Platform.x86
 			Operand displacement;
 
 			// Write the opcode
-			_codeStream.Write(opCode.Code, 0, opCode.Code.Length);
+			codeStream.Write(opCode.Code, 0, opCode.Code.Length);
 
 			if (dest == null && src == null)
 				return;
@@ -395,9 +373,9 @@ namespace Mosa.Platform.x86
 			modRM = CalculateModRM(opCode.RegField, dest, src, out sib, out displacement);
 			if (modRM != null)
 			{
-				_codeStream.WriteByte(modRM.Value);
+				codeStream.WriteByte(modRM.Value);
 				if (sib.HasValue)
-					_codeStream.WriteByte(sib.Value);
+					codeStream.WriteByte(sib.Value);
 			}
 
 			// Add displacement to the code
@@ -426,7 +404,7 @@ namespace Mosa.Platform.x86
 			Operand displacement = null;
 
 			// Write the opcode
-			_codeStream.Write(opCode.Code, 0, opCode.Code.Length);
+			codeStream.Write(opCode.Code, 0, opCode.Code.Length);
 
 			if (dest == null && src == null)
 				return;
@@ -435,9 +413,9 @@ namespace Mosa.Platform.x86
 			modRM = CalculateModRM(opCode.RegField, dest, src, out sib, out displacement);
 			if (modRM != null)
 			{
-				_codeStream.WriteByte(modRM.Value);
+				codeStream.WriteByte(modRM.Value);
 				if (sib.HasValue)
-					_codeStream.WriteByte(sib.Value);
+					codeStream.WriteByte(sib.Value);
 			}
 
 			// Add displacement to the code
@@ -463,23 +441,23 @@ namespace Mosa.Platform.x86
 
 			if (label != null)
 			{
-				int pos = (int)(_codeStream.Position - _codeStreamBasePosition);
-				disp = LittleEndianBitConverter.GetBytes((uint)_linker.Link(LinkType.AbsoluteAddress | LinkType.I4, _compiler.Method.ToString(), pos, 0, label.Name, IntPtr.Zero));
+				int pos = (int)(codeStream.Position - codeStreamBasePosition);
+				disp = LittleEndianBitConverter.GetBytes((uint)linker.Link(LinkType.AbsoluteAddress | LinkType.I4, compiler.Method.ToString(), pos, 0, label.Name, IntPtr.Zero));
 			}
 			else if (member != null)
 			{
-				int pos = (int)(_codeStream.Position - _codeStreamBasePosition);
-				disp = LittleEndianBitConverter.GetBytes((uint)_linker.Link(LinkType.AbsoluteAddress | LinkType.I4, _compiler.Method.ToString(), pos, 0, member.Member.ToString(), member.Offset));
+				int pos = (int)(codeStream.Position - codeStreamBasePosition);
+				disp = LittleEndianBitConverter.GetBytes((uint)linker.Link(LinkType.AbsoluteAddress | LinkType.I4, compiler.Method.ToString(), pos, 0, member.Member.ToString(), member.Offset));
 			}
 			else if (symbol != null)
 			{
-				int pos = (int)(_codeStream.Position - _codeStreamBasePosition);
-				disp = LittleEndianBitConverter.GetBytes((uint)_linker.Link(LinkType.AbsoluteAddress | LinkType.I4, _compiler.Method.ToString(), pos, 0, symbol.Name, IntPtr.Zero));
+				int pos = (int)(codeStream.Position - codeStreamBasePosition);
+				disp = LittleEndianBitConverter.GetBytes((uint)linker.Link(LinkType.AbsoluteAddress | LinkType.I4, compiler.Method.ToString(), pos, 0, symbol.Name, IntPtr.Zero));
 			}
 			else
 				disp = LittleEndianBitConverter.GetBytes((displacement as MemoryOperand).Offset.ToInt32());
 
-			_codeStream.Write(disp, 0, disp.Length);
+			codeStream.Write(disp, 0, disp.Length);
 		}
 
 		/// <summary>
@@ -497,7 +475,7 @@ namespace Mosa.Platform.x86
 			}
 			else if (op is LabelOperand)
 			{
-				_literals.Add(new Patch((op as LabelOperand).Label, _codeStream.Position));
+				literals.Add(new Patch((op as LabelOperand).Label, codeStream.Position));
 				imm = new byte[4];
 			}
 			else if (op is MemoryOperand)
@@ -578,8 +556,8 @@ namespace Mosa.Platform.x86
 			}
 
 			// Emit the immediate constant to the code
-			if (null != imm)
-				_codeStream.Write(imm, 0, imm.Length);
+			if (imm != null)
+				codeStream.Write(imm, 0, imm.Length);
 		}
 
 		/// <summary>
@@ -590,24 +568,25 @@ namespace Mosa.Platform.x86
 		{
 			// The relative offset of the label
 			int relOffset = 0;
+
 			// The position in the code stream of the label
 			long position;
 
 			// Did we see the label?
-			if (_labels.TryGetValue(label, out position))
+			if (labels.TryGetValue(label, out position))
 			{
 				// Yes, calculate the relative offset
-				relOffset = (int)position - ((int)_codeStream.Position + 4);
+				relOffset = (int)position - ((int)codeStream.Position + 4);
 			}
 			else
 			{
 				// Forward jump, we can't resolve yet - store a patch
-				_patches.Add(new Patch(label, _codeStream.Position));
+				patches.Add(new Patch(label, codeStream.Position));
 			}
 
 			// Emit the relative jump offset (zero if we don't know it yet!)
 			byte[] bytes = LittleEndianBitConverter.GetBytes(relOffset);
-			_codeStream.Write(bytes, 0, bytes.Length);
+			codeStream.Write(bytes, 0, bytes.Length);
 		}
 
 		/// <summary>
@@ -615,18 +594,15 @@ namespace Mosa.Platform.x86
 		/// </summary>
 		public void EmitJumpToNextInstruction(int label)
 		{
-			_codeStream.Write(new byte[] { 0xEA }, 0, 1);
-
-			// The relative offset of the label
-			//int relOffset = 0;
+			codeStream.Write(new byte[] { 0xEA }, 0, 1);
 
 			// Forward jump, we can't resolve yet - store a patch
-			_patches.Add(new Patch(label, _codeStream.Position));
+			patches.Add(new Patch(label, codeStream.Position));
 
 			// Emit the relative jump offset (zero if we don't know it yet!)
-			byte[] bytes = LittleEndianBitConverter.GetBytes((int)(_linker.GetSection(SectionKind.Text).VirtualAddress.ToInt32() + _linker.GetSection(SectionKind.Text).Length + 6));
-			_codeStream.Write(bytes, 0, bytes.Length);
-			_codeStream.Write(new byte[] { 0x08, 0x00 }, 0, 2);
+			byte[] bytes = LittleEndianBitConverter.GetBytes((int)(linker.GetSection(SectionKind.Text).VirtualAddress.ToInt32() + linker.GetSection(SectionKind.Text).Length + 6));
+			codeStream.Write(bytes, 0, bytes.Length);
+			codeStream.Write(new byte[] { 0x08, 0x00 }, 0, 2);
 		}
 
 		/// <summary>
@@ -644,7 +620,7 @@ namespace Mosa.Platform.x86
 			}
 			else if (op is LabelOperand)
 			{
-				_literals.Add(new Patch((op as LabelOperand).Label, _codeStream.Position));
+				literals.Add(new Patch((op as LabelOperand).Label, codeStream.Position));
 				imm = new byte[4];
 			}
 			else if (op is MemoryOperand)
@@ -717,7 +693,7 @@ namespace Mosa.Platform.x86
 
 			// Emit the immediate constant to the code
 			if (null != imm)
-				_codeStream.Write(imm, 0, imm.Length);
+				codeStream.Write(imm, 0, imm.Length);
 		}
 
 		/// <summary>

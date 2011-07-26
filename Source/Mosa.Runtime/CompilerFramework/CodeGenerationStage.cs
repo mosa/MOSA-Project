@@ -87,11 +87,6 @@ namespace Mosa.Runtime.CompilerFramework
 					if (ctx.Instruction != null)
 						if (!ctx.Ignore)
 						{
-							//if (block.ExceptionHeaderClause != null)
-							//{
-							//    block.ExceptionHeaderClause.Update(ctx, codeStream);
-							//    block.ExceptionHeaderClause.AddLabelToCodeStream(codeEmitter);
-							//}
 							IPlatformInstruction instruction = ctx.Instruction as IPlatformInstruction;
 							if (instruction != null)
 								instruction.Emit(ctx, codeEmitter);
