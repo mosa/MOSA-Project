@@ -916,8 +916,8 @@ namespace Mosa.Runtime.CompilerFramework.IR
 				context.AppendInstruction(Instruction.BranchInstruction, comparisonResult);
 				context.ConditionCode = ConditionCode.Equal;
 				context.SetBranch(branch.Targets[0]);
-				context.AppendInstruction(Instruction.JmpInstruction);
-				context.SetBranch(context.Next.Label);
+				//context.AppendInstruction(Instruction.JmpInstruction);
+				//context.SetBranch(context.Next.Label);
 			}
 			else
 			{
