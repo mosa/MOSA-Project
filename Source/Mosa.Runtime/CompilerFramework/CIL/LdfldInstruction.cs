@@ -14,6 +14,7 @@ using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.TypeSystem;
+using Mosa.Runtime.TypeSystem.Generic;
 
 namespace Mosa.Runtime.CompilerFramework.CIL
 {
@@ -49,16 +50,23 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 			var token = decoder.DecodeTokenType();
 			ctx.RuntimeField = decoder.Method.Module.GetField(token);
+			var fieldName = ctx.RuntimeField.Name;
 
 			if (ctx.RuntimeField.ContainsGenericParameter)
 			{
-				foreach (var field in decoder.Method.DeclaringType.Fields)
+				/*foreach (var field in decoder.Method.DeclaringType.Fields)
+				{
 					if (field.Name == ctx.RuntimeField.Name)
 					{
 						ctx.RuntimeField = field;
 						break;
 					}
+				}*/
 
+				if (ctx.RuntimeField.ContainsGenericParameter)
+				{
+					ctx.RuntimeField = decoder.TypeModule.TypeSystem.GenericTypePatcher.PatchField(decoder.TypeModule, decoder.Method.DeclaringType as CilGenericType, ctx.RuntimeField);
+				}
 				//Console.WriteLine("Token: {0}", token);
 				Debug.Assert(!ctx.RuntimeField.ContainsGenericParameter);
 			}

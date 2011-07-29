@@ -22,12 +22,20 @@ using Mosa.Runtime.TypeSystem.Generic;
 namespace Mosa.Runtime.TypeSystem
 {
 	/// <summary>
-	///	Patches a generic type with the actual set of generic type parameters used in an instantiation.
-	///	E.g. an instantiation of Foo&lt;T&gt; with "int" for T will replace all occurrences of T
-	///	inside Foo&lt;T&gt; with "int" in each member and each method's instruction stream.
+	/// Patches a generic type with the actual set of generic type parameters used in an instantiation.
+	/// E.g. an instantiation of Foo&lt;T&gt; with "int" for T will replace all occurrences of T
+	/// inside Foo&lt;T&gt; with "int" in each member and each method's instruction stream.
 	/// </summary>
 	public class GenericTypePatcher : IGenericTypePatcher
 	{
+		/// <summary>
+		/// 
+		/// </summary>
+		private static uint typeTokenCounter = 1u;
+		/// <summary>
+		/// 
+		/// </summary>
+		private static uint signatureTokenCounter = 1u;
 		/// <summary>
 		/// 
 		/// </summary>
@@ -43,77 +51,52 @@ namespace Mosa.Runtime.TypeSystem
 		}
 
 		/// <summary>
-		/// Patches the type of the generic.
-		/// </summary>
-		/// <param name="typeToPatch">The type to patch.</param>
-		/// <param name="sigtypes">The sigtypes.</param>
-		/// <returns></returns>
-		CilGenericType IGenericTypePatcher.PatchGenericType(CilGenericType typeToPatch, params SigType[] sigtypes)
-		{
-			GenericInstSigType newSigType = new GenericInstSigType (null, typeToPatch.GenericArguments);
-			CilGenericType patchedType = typeToPatch; // new CilGenericType(typeToPatch.Module, typeToPatch.Token, typeToPatch.BaseGenericType, newSigType);
-
-			this.PatchFields(patchedType);
-			this.PatchMethods(patchedType);
-			this.PatchTypeModule(patchedType);
-
-			return patchedType;
-		}
-
-		/// <summary>
-		/// Patches the fields.
-		/// </summary>
-		/// <param name="patchedType">Type of the patched.</param>
-		private void PatchFields(CilGenericType patchedType)
-		{
-			var genericArguments = patchedType.GenericArguments;
-			//TODO: Patch members by replacing their signatures with the actual set generic type parameter
-			for (int i = 0; i < patchedType.Fields.Count; ++i)
-			{
-				var field = patchedType.Fields[i];
-				var signatureType = field.SignatureType as GenericInstSigType;
-
-				patchedType.Fields[i] = field;
-			}
-		}
-
-		/// <summary>
 		/// Patches the field.
 		/// </summary>
-		/// <param name="fieldToPatch">The field to patch.</param>
+		/// <param name="typeModule">The type module.</param>
+		/// <param name="enclosingType">Type of the closed.</param>
+		/// <param name="openType">Type of the open.</param>
+		/// <param name="openField">The open field.</param>
 		/// <returns></returns>
-		private RuntimeField PatchField(RuntimeField fieldToPatch)
+		RuntimeField IGenericTypePatcher.PatchField(ITypeModule typeModule, CilGenericType enclosingType, RuntimeField openField)
 		{
-			var reader = new SignatureReader(null);
-			var signature = new FieldSignature(reader, null);
-			return new CilRuntimeField(fieldToPatch.Module, fieldToPatch.Name, signature, fieldToPatch.Token, 0, 
-				fieldToPatch.RVA, fieldToPatch.DeclaringType, fieldToPatch.Attributes);
-		}
+			var openType = openField.DeclaringType as CilGenericType;
+			var genericParameters = enclosingType.GenericParameters;
 
-		/// <summary>
-		/// Patches the methods.
-		/// </summary>
-		/// <param name="patchedType">Type of the patched.</param>
-		private void PatchMethods(CilGenericType patchedType)
-		{
-			//TODO: Need to access the method's instruction stream, patch it,
-			//TODO: and store it in the internal type module
-			foreach (RuntimeMethod method in patchedType.Methods)
+			var typeToken = new Token(0xFE000000 | typeTokenCounter++);
+			var signatureToken = new Token(0xFD000000 | signatureTokenCounter++);
+			var sigtype = new TypeSigType(signatureToken, CilElementType.Var);
+			var genericArguments = CloseGenericArguments(enclosingType, openType);
+
+			var signature = new GenericInstSigType(sigtype, genericArguments);
+
+			var patchedType = new CilGenericType(typeModule, typeToken, openType.BaseGenericType, signature);
+
+			foreach (var field in patchedType.Fields)
 			{
-				var instructionStream = method.InstructionStream;
-				if (instructionStream == null)
-					continue;
+				if (field.Name == openField.Name)
+					return field;
 			}
+
+			throw new MissingFieldException();
 		}
 
 		/// <summary>
-		/// Patches the type module.
+		/// Closes the generic arguments.
 		/// </summary>
-		/// <param name="patchedType">Type of the patched.</param>
-		private void PatchTypeModule(CilGenericType patchedType)
+		/// <param name="enclosingType">Type of the closed.</param>
+		/// <param name="openType">Type of the open.</param>
+		/// <returns></returns>
+		private SigType[] CloseGenericArguments(CilGenericType enclosingType, CilGenericType openType)
 		{
-			//Remove the following line when GenericTypePatcher is fully implemented
-			//(this.typeSystem.InternalTypeModule as InternalTypeModule).AddType(patchedType);
+			var result = new SigType[openType.GenericArguments.Length];
+
+			for (var i = 0; i < openType.GenericArguments.Length; ++i)
+			{
+				result[i] = enclosingType.GenericArguments[(openType.GenericArguments[i] as VarSigType).Index];
+			}
+
+			return result;
 		}
 	}
 }

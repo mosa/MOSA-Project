@@ -85,10 +85,10 @@ namespace Mosa.Runtime.TypeSystem.Generic
 
 		private string GetName(ITypeModule typeModule)
 		{
-            var sb = new StringBuilder();
+			var sb = new StringBuilder();
 			sb.AppendFormat("{0}<", baseGenericType.Name);
 
-            foreach (var sigType in genericArguments)
+			foreach (var sigType in genericArguments)
 			{
 				if (sigType.IsOpenGenericParameter)
 				{
@@ -96,7 +96,7 @@ namespace Mosa.Runtime.TypeSystem.Generic
 				}
 				else
 				{
-                    var type = GetRuntimeTypeForSigType(sigType, typeModule);
+					var type = GetRuntimeTypeForSigType(sigType, typeModule);
 					if (type != null)
 						sb.AppendFormat("{0}, ", type.FullName);
 					else
@@ -139,7 +139,7 @@ namespace Mosa.Runtime.TypeSystem.Generic
 					return null;
 
 				default:
-                    var builtIn = sigType as BuiltInSigType;
+					var builtIn = sigType as BuiltInSigType;
 					if (builtIn != null)
 					{
 						ITypeModule mscorlib;
@@ -165,8 +165,8 @@ namespace Mosa.Runtime.TypeSystem.Generic
 		{
 			foreach (CilRuntimeMethod method in baseGenericType.Methods)
 			{
-                var signature = new MethodSignature(method.Signature, genericArguments);
-                var genericInstanceMethod = new CilGenericMethod(Module, method, signature, this);
+				var signature = new MethodSignature(method.Signature, genericArguments);
+				var genericInstanceMethod = new CilGenericMethod(Module, method, signature, this);
 				Methods.Add(genericInstanceMethod);
 			}
 		}
@@ -175,8 +175,8 @@ namespace Mosa.Runtime.TypeSystem.Generic
 		{
 			foreach (CilRuntimeField field in baseGenericType.Fields)
 			{
-                var signature = new FieldSignature(field.Signature, genericArguments);
-                var genericInstanceField = new CilGenericField(Module, field, signature, this);
+				var signature = new FieldSignature(field.Signature, genericArguments);
+				var genericInstanceField = new CilGenericField(Module, field, signature, this);
 				Fields.Add(genericInstanceField);
 			}
 
@@ -184,7 +184,7 @@ namespace Mosa.Runtime.TypeSystem.Generic
 
 		private bool CheckContainsOpenGenericParameters()
 		{
-            foreach (var sig in genericArguments)
+			foreach (var sig in genericArguments)
 				if (sig.IsOpenGenericParameter)
 					return true;
 
@@ -198,7 +198,7 @@ namespace Mosa.Runtime.TypeSystem.Generic
 
 		public void ResolveInterfaces(ITypeModule typeModule)
 		{
-            foreach (var type in baseGenericType.Interfaces)
+			foreach (var type in baseGenericType.Interfaces)
 			{
 				if (!type.ContainsOpenGenericParameters)
 				{
@@ -206,17 +206,17 @@ namespace Mosa.Runtime.TypeSystem.Generic
 				}
 				else
 				{
-                    var genericType = type as CilGenericType;
+					var genericType = type as CilGenericType;
 					Debug.Assert(genericType != null);
 
 					RuntimeType matchedInterfaceType = null;
 
 					// -- only needs to search generic type interfaces
-                    foreach (var runtimetype in typeModule.GetAllTypes())
+					foreach (var runtimetype in typeModule.GetAllTypes())
 					{
 						if (runtimetype.IsInterface)
 						{
-                            var runtimetypegeneric = runtimetype as CilGenericType;
+							var runtimetypegeneric = runtimetype as CilGenericType;
 							if (runtimetypegeneric != null)
 							{
 								if (genericType.baseGenericType == runtimetypegeneric.baseGenericType)

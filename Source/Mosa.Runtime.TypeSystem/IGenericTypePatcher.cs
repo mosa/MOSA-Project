@@ -27,11 +27,12 @@ namespace Mosa.Runtime.TypeSystem
 	public interface IGenericTypePatcher
 	{
 		/// <summary>
-		/// Patches the type of the generic.
+		/// Patches the field.
 		/// </summary>
-		/// <param name="typeToPatch">The type to patch.</param>
-		/// <param name="sigtypes">The sigtypes.</param>
+		/// <param name="typeModule">The type module.</param>
+		/// <param name="closedType">Type of the closed.</param>
+		/// <param name="openField">The open field.</param>
 		/// <returns></returns>
-		CilGenericType PatchGenericType(CilGenericType typeToPatch, params SigType[] sigtypes);
+		RuntimeField PatchField(ITypeModule typeModule, CilGenericType closedType, RuntimeField openField);
 	}
 }
