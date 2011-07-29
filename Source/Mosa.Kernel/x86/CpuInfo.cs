@@ -8,7 +8,7 @@
 using Mosa.Platform.x86.Intrinsic;
 using Mosa.Kernel.x86;
 
-namespace Mosa.HelloWorld
+namespace Mosa.Kernel.x86
 {
 	public class CpuInfo
 	{
