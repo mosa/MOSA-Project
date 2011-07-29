@@ -54,14 +54,14 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 			if (ctx.RuntimeField.ContainsGenericParameter)
 			{
-				/*foreach (var field in decoder.Method.DeclaringType.Fields)
+				foreach (var field in decoder.Method.DeclaringType.Fields)
 				{
 					if (field.Name == ctx.RuntimeField.Name)
 					{
 						ctx.RuntimeField = field;
 						break;
 					}
-				}*/
+				}
 
 				if (ctx.RuntimeField.ContainsGenericParameter)
 				{

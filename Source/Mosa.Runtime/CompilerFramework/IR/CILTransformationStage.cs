@@ -487,12 +487,26 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			Debug.Assert(thisReference != null, @"Newobj didn't specify class signature?");
 
 			SZArraySigType arrayType = (SZArraySigType)context.Result.Type;
-			ClassSigType elementSigType = arrayType.ElementType as ClassSigType;
-			RuntimeType elementType = typeModule.GetType(elementSigType.Token);
-			Debug.Assert(elementType != null, @"Newarr didn't specify class signature?");
+			int elementSize = 0;
+			var elementSigType = arrayType.ElementType;
+
+
+			// Handle builtin types
+			if (elementSigType is BuiltInSigType)
+			{
+				var builtInSigType = elementSigType as BuiltInSigType;
+				var alignment = 0;
+				this.architecture.GetTypeRequirements(builtInSigType, out elementSize, out alignment);
+			}
+			// Handle classes and structs
+			else if (elementSigType is ClassSigType)
+			{
+				var classSigType = elementSigType as ClassSigType;
+				var elementType = typeModule.GetType(classSigType.Token);
+				elementSize = typeLayout.GetTypeSize(elementType);
+			}
 
 			Operand lengthOperand = context.Operand1;
-			int elementSize = typeLayout.GetTypeSize(elementType);
 
 			// HACK: If we can't determine the size now, assume 16 bytes per array element.
 			if (elementSize == 0)

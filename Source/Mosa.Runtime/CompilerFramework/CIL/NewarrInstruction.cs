@@ -51,11 +51,15 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			// Read the type specification
 			Token token = decoder.DecodeTokenType();
 
+			// Patch usage of generic arguments
+			var enclosingType = decoder.Method.DeclaringType;
+			var signatureType = decoder.TypeModule.TypeSystem.GenericTypePatcher.PatchSignatureType(decoder.TypeModule, enclosingType, token);
+
 			// FIXME: If ctx.Operands1 is an integral constant, we can infer the maximum size of the array
 			// and instantiate an ArrayTypeSpecification with max. sizes. This way we could eliminate bounds
 			// checks in an optimization stage later on, if we find that a value never exceeds the array 
 			// bounds.
-			var resultType = new SZArraySigType(null, new ClassSigType(token));
+			var resultType = new SZArraySigType(null, signatureType);
 			ctx.Result = decoder.Compiler.CreateTemporary(resultType);
 		}
 
