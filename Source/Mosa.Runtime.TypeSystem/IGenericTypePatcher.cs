@@ -34,5 +34,11 @@ namespace Mosa.Runtime.TypeSystem
 		/// <param name="openField">The open field.</param>
 		/// <returns></returns>
 		RuntimeField PatchField(ITypeModule typeModule, CilGenericType closedType, RuntimeField openField);
+		/// <summary>
+		/// Patches the type of the signature.
+		/// </summary>
+		/// <param name="token">The token.</param>
+		/// <returns></returns>
+		SigType PatchSignatureType(ITypeModule typemodule, RuntimeType enclosingType, Token token);
 	}
 }

@@ -82,6 +82,30 @@ namespace Mosa.Runtime.TypeSystem
 		}
 
 		/// <summary>
+		/// Patches the type of the signature.
+		/// </summary>
+		/// <param name="typemodule"></param>
+		/// <param name="token">The token.</param>
+		/// <returns></returns>
+		public SigType PatchSignatureType(ITypeModule typemodule, RuntimeType enclosingType, Token token)
+		{
+			if (token.Table == TableType.TypeSpec)
+			{
+				var typespecRow = typemodule.MetadataModule.Metadata.ReadTypeSpecRow(token);
+				var signature = new TypeSpecSignature(typemodule.MetadataModule.Metadata, typespecRow.SignatureBlobIdx);
+
+				if (enclosingType is CilGenericType)
+				{
+					var enclosingGenericType = enclosingType as CilGenericType;
+					return enclosingGenericType.GenericArguments[(signature.Type as VarSigType).Index];
+				}
+
+				return signature.Type;
+			}
+			return new ClassSigType(token);
+		}
+
+		/// <summary>
 		/// Closes the generic arguments.
 		/// </summary>
 		/// <param name="enclosingType">Type of the closed.</param>
