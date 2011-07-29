@@ -61,6 +61,17 @@ namespace Mosa.Platform.x86
 			/// The patch's position in the stream
 			/// </summary>
 			public long Position;
+
+			/// <summary>
+			/// Returns a <see cref="System.String"/> that represents this instance.
+			/// </summary>
+			/// <returns>
+			/// A <see cref="System.String"/> that represents this instance.
+			/// </returns>
+			public override string ToString()
+			{
+				return "[@" + Position.ToString() + " -> " + Label.ToString() + "]";
+			}
 		}
 
 		#endregion // Types
@@ -151,115 +162,56 @@ namespace Mosa.Platform.x86
 		void ICodeEmitter.Label(int label)
 		{
 			/*
-			 * FIXME: Labels are used to resolve branches inside a procedure. Branches outside
+			 * Labels are used to resolve branches inside a procedure. Branches outside
 			 * of procedures are handled differently, t.b.d. 
 			 * 
 			 * So we store the current instruction offset with the label info to be able to 
-			 * resolve later backward jumps to this location.
+			 * resolve jumps to this location.
 			 *
-			 * Additionally there may have been forward branches to this location, which have not
-			 * been resolved yet, so we need to scan these and resolve them to the current
-			 * instruction offset.
-			 * 
 			 */
 
-			// Save the current position
-			long currentPosition = codeStream.Position;
-
-			long pos;
-			if (labels.TryGetValue(label, out pos))
+			long labelPosition;
+			if (labels.TryGetValue(label, out labelPosition))
 			{
-				if (pos != currentPosition)
+				if (labelPosition != codeStream.Position)
 					throw new ArgumentException(@"Label already defined for another code point.", @"label");
 			}
-			else
-			{
-				foreach (Patch p in patches)
-				{
-					if (p.Label == label)
-					{
-						// Set new position
-						codeStream.Position = p.Position;
-						
-						// Compute relative branch offset
-						int relOffset = (int)currentPosition - ((int)p.Position + 4);
-						
-						// Write relative offset to stream
-						byte[] bytes = LittleEndianBitConverter.GetBytes(relOffset);
-						codeStream.Write(bytes, 0, bytes.Length);
 
-						// TODO: Remove p in patches
-						// OR BETTER: resolve patches at the end
-					}
-				}
+			// Add this label to the label list, so we can resolve the jump later on
+			labels.Add(label, codeStream.Position);
 
-				// Add this label to the label list, so we can resolve the jump later on
-				labels.Add(label, currentPosition);
-
-				// Reset the position
-				codeStream.Position = currentPosition;
-			}
+			//Debug.WriteLine("LABEL: " + label.ToString() + " @" + codeStream.Position.ToString());
 		}
 
-		/// <summary>
-		/// Emits a literal constant into the code stream.
-		/// </summary>
-		/// <param name="label">The label to apply to the data.</param>
-		/// <param name="LiteralData"></param>
-		void ICodeEmitter.Literal(int label, IR.LiteralData LiteralData)
+		void ICodeEmitter.ResolvePatches()
 		{
 			// Save the current position
 			long currentPosition = codeStream.Position;
 
-			// Flag, if we should really emit the literal (only if the literal is used!)
-			bool emit = false;
-	
-			// Byte representation of the literal
-			byte[] bytes;
-
-			// Check if this label has forward references on it...
-			emit = (0 != literals.RemoveAll(delegate(Patch p)
+			foreach (Patch p in patches)
 			{
-				if (p.Label == label)
+				long labelPosition;
+				if (!labels.TryGetValue(p.Label, out labelPosition))
 				{
-					codeStream.Position = p.Position;
-					// HACK: We can't do PIC right now
-					//relOffset = (int)currentPosition - ((int)p.position + 4);
-					bytes = LittleEndianBitConverter.GetBytes((int)currentPosition);
-					codeStream.Write(bytes, 0, bytes.Length);
-					return true;
+					throw new ArgumentException(@"Missing label while resolving patches.", @"label");
 				}
 
-				return false;
-			}));
+				codeStream.Position = p.Position;
 
-			if (emit)
-			{
-				codeStream.Position = currentPosition;
-				switch (LiteralData.Type.Type)
-				{
-					case CilElementType.I8:
-						bytes = LittleEndianBitConverter.GetBytes((long)LiteralData.Data);
-						break;
+				// Compute relative branch offset
+				int relOffset = (int)labelPosition - ((int)p.Position + 4);
 
-					case CilElementType.U8:
-						bytes = LittleEndianBitConverter.GetBytes((ulong)LiteralData.Data);
-						break;
-
-					case CilElementType.R4:
-						bytes = LittleEndianBitConverter.GetBytes((float)LiteralData.Data);
-						break;
-
-					case CilElementType.R8:
-						bytes = LittleEndianBitConverter.GetBytes((double)LiteralData.Data);
-						break;
-
-					default:
-						throw new NotImplementedException();
-				}
-
+				// Write relative offset to stream
+				byte[] bytes = LittleEndianBitConverter.GetBytes(relOffset);
 				codeStream.Write(bytes, 0, bytes.Length);
+
+				//Debug.WriteLine("PATCH: " + p.ToString() + " Offset: " + relOffset.ToString());
 			}
+
+			patches.Clear();
+
+			// Reset the position
+			codeStream.Position = currentPosition;
 		}
 
 		#endregion // ICodeEmitter Members
@@ -594,15 +546,17 @@ namespace Mosa.Platform.x86
 		/// </summary>
 		public void EmitJumpToNextInstruction(int label)
 		{
-			codeStream.Write(new byte[] { 0xEA }, 0, 1);
+			codeStream.WriteByte(0xEA);
 
 			// Forward jump, we can't resolve yet - store a patch
-			patches.Add(new Patch(label, codeStream.Position));
+			//patches.Add(new Patch(label, codeStream.Position));
 
 			// Emit the relative jump offset (zero if we don't know it yet!)
-			byte[] bytes = LittleEndianBitConverter.GetBytes((int)(linker.GetSection(SectionKind.Text).VirtualAddress.ToInt32() + linker.GetSection(SectionKind.Text).Length + 6));
+			byte[] bytes = LittleEndianBitConverter.GetBytes((int)(linker.GetSection(SectionKind.Text).VirtualAddress.ToInt32() + linker.GetSection(SectionKind.Text).Length + 6));			
 			codeStream.Write(bytes, 0, bytes.Length);
-			codeStream.Write(new byte[] { 0x08, 0x00 }, 0, 2);
+
+			codeStream.WriteByte(0x08);
+			codeStream.WriteByte(0x00);
 		}
 
 		/// <summary>

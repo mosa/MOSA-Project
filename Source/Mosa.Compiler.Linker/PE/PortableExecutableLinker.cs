@@ -440,7 +440,7 @@ namespace Mosa.Compiler.Linker
 			ntHeaders.OptionalHeader.MinorSubsystemVersion = 0;
 			ntHeaders.OptionalHeader.Win32VersionValue = 0;
 			ntHeaders.OptionalHeader.SizeOfImage = CalculateSizeOfImage();
-			ntHeaders.OptionalHeader.SizeOfHeaders = this.fileAlignment; // FIXME: Use the full _header size
+			ntHeaders.OptionalHeader.SizeOfHeaders = this.fileAlignment; // FIXME: Use the full header size
 			ntHeaders.OptionalHeader.CheckSum = 0;
 			ntHeaders.OptionalHeader.Subsystem = 0x03;
 			ntHeaders.OptionalHeader.DllCharacteristics = 0x0540;

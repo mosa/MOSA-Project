@@ -52,6 +52,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public void Run()
 		{
+			Debug.WriteLine("METHOD: " + this.methodCompiler.Method.FullName);
+
 			// Retrieve a stream to place the code into
 			using (codeStream = methodCompiler.RequestCodeStream())
 			{
@@ -78,7 +80,6 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		protected virtual void EmitInstructions()
 		{
-			//ExceptionClauseHeader exceptionClauseHeader = this.methodCompiler.Method.ExceptionClauseHeader;
 			foreach (BasicBlock block in basicBlocks)
 			{
 				BlockStart(block);
@@ -122,7 +123,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="block">The completed block.</param>
 		protected virtual void BlockEnd(BasicBlock block)
 		{
-			codeEmitter.Label(block.Label + 0x0F000000);
+			//codeEmitter.Label(block.Label + 0x0F000000);
 		}
 
 		/// <summary>
@@ -130,6 +131,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		protected virtual void EndGenerate()
 		{
+			codeEmitter.ResolvePatches();
+
 			codeEmitter.Dispose();
 			codeEmitter = null;
 		}

@@ -60,7 +60,7 @@ namespace Mosa.Tools.Compiler
 		/// </remarks>
 		public void Run()
 		{
-			FlowGraphVisualizationStage.Instance.Open();
+            //FlowGraphVisualizationStage.Instance.Open();
 			InstructionStatisticsStage.Instance.Start();
 			// Build the default assembly compiler pipeline
 			this.Architecture.ExtendAssemblyCompilerPipeline(this.Pipeline);
@@ -69,7 +69,7 @@ namespace Mosa.Tools.Compiler
 			base.Compile();
 			InstructionStatisticsStage.Instance.End();
 			InstructionStatisticsStage.Instance.PrintStatistics();
-			FlowGraphVisualizationStage.Instance.Close();
+            //FlowGraphVisualizationStage.Instance.Close();
 		}
 
 		/// <summary>

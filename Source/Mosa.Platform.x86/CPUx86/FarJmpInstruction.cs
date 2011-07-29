@@ -20,13 +20,6 @@ namespace Mosa.Platform.x86.CPUx86
 	public sealed class FarJmpInstruction : BaseInstruction
 	{
 
-		#region Data Members
-		
-		//UNUSED:
-		//private static readonly byte[] JMP = new byte[] { 0xEA };
-
-		#endregion
-
 		#region Methods
 
 		/// <summary>
