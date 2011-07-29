@@ -542,16 +542,14 @@ namespace Mosa.Platform.x86
 		}
 
 		/// <summary>
-		/// 
+		/// Emits a far jump to next instruction.
 		/// </summary>
-		public void EmitJumpToNextInstruction(int label)
+		public void EmitFarJumpToNextInstruction()
 		{
 			codeStream.WriteByte(0xEA);
 
-			// Forward jump, we can't resolve yet - store a patch
-			//patches.Add(new Patch(label, codeStream.Position));
-
-			// Emit the relative jump offset (zero if we don't know it yet!)
+			// HACK: Determines the IP address of current instruction
+			// TODO: Link it instead
 			byte[] bytes = LittleEndianBitConverter.GetBytes((int)(linker.GetSection(SectionKind.Text).VirtualAddress.ToInt32() + linker.GetSection(SectionKind.Text).Length + 6));			
 			codeStream.Write(bytes, 0, bytes.Length);
 
