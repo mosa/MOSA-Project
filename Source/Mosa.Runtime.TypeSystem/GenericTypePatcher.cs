@@ -70,7 +70,7 @@ namespace Mosa.Runtime.TypeSystem
 
 			var signature = new GenericInstSigType(sigtype, genericArguments);
 
-			var patchedType = new CilGenericType(typeModule, typeToken, openType.BaseGenericType, signature);
+			var patchedType = new CilGenericType(openField.Module, typeToken, openType.BaseGenericType, signature);
 
 			foreach (var field in patchedType.Fields)
 			{
