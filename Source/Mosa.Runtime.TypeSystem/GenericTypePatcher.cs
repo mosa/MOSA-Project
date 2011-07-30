@@ -122,5 +122,29 @@ namespace Mosa.Runtime.TypeSystem
 
 			return result;
 		}
+
+
+		public RuntimeMethod PatchMethod(ITypeModule typeModule, CilGenericType enclosingType, RuntimeMethod openMethod)
+		{
+			var openType = openMethod.DeclaringType as CilGenericType;
+			var genericParameters = enclosingType.GenericParameters;
+
+			var typeToken = new Token(0xFE000000 | typeTokenCounter++);
+			var signatureToken = new Token(0xFD000000 | signatureTokenCounter++);
+			var sigtype = new TypeSigType(signatureToken, CilElementType.Var);
+			var genericArguments = CloseGenericArguments(enclosingType, openType);
+
+			var signature = new GenericInstSigType(sigtype, genericArguments);
+
+			var patchedType = new CilGenericType(openMethod.Module, typeToken, openType.BaseGenericType, signature);
+
+			foreach (var method in patchedType.Methods)
+			{
+				if (method.Name == method.Name)
+					return method;
+			}
+
+			throw new MissingMethodException();
+		}
 	}
 }

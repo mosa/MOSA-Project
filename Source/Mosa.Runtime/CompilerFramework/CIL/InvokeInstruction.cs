@@ -16,6 +16,7 @@ using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Tables;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.TypeSystem;
+using Mosa.Runtime.TypeSystem.Generic;
 
 namespace Mosa.Runtime.CompilerFramework.CIL
 {
@@ -187,6 +188,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 					Debug.Assert(false, @"Should never reach this!");
 					break;
 			}
+
+			if (method.DeclaringType.ContainsOpenGenericParameters)
+				method = decoder.TypeModule.TypeSystem.GenericTypePatcher.PatchMethod(method.DeclaringType.Module, decoder.Method.DeclaringType as CilGenericType, method);
 
 			SetInvokeTarget(ctx, decoder.Compiler, method);
 
