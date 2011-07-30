@@ -55,7 +55,6 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		/// <param name="typeModule">The type module.</param>
 		/// <param name="enclosingType">Type of the closed.</param>
-		/// <param name="openType">Type of the open.</param>
 		/// <param name="openField">The open field.</param>
 		/// <returns></returns>
 		RuntimeField IGenericTypePatcher.PatchField(ITypeModule typeModule, CilGenericType enclosingType, RuntimeField openField)
