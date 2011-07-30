@@ -63,6 +63,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CompilerFramework\AssemblyMemberCompilationSchedulerStage.cs" />
+    <Compile Include="CompilerFramework\BaseCodeEmitter.cs" />
     <Compile Include="CompilerFramework\BaseInstruction.cs" />
     <Compile Include="CompilerFramework\BasicBlockBuilderStage.cs" />
     <Compile Include="CompilerFramework\CIL\AddInstruction.cs" />

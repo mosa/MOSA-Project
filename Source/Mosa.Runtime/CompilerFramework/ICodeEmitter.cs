@@ -43,6 +43,13 @@ namespace Mosa.Runtime.CompilerFramework
         /// Resolves the patches.
         /// </summary>
         void ResolvePatches();
+
+		/// <summary>
+		/// Gets the position.
+		/// </summary>
+		/// <param name="label">The label.</param>
+		/// <returns></returns>
+		long GetPosition(int label);
 	}
 }
 
