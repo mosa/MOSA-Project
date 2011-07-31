@@ -24,6 +24,11 @@ namespace System
 			return CreateString((uint)_value, true, false);
 		}
 
+		public string ToString(string format)
+		{
+			return CreateString((uint)_value, false, true);
+		}
+
 		unsafe internal static string CreateString(uint value, bool signed, bool hex)
 		{
 			int offset = 0;
