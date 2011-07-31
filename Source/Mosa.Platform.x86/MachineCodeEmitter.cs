@@ -57,8 +57,6 @@ namespace Mosa.Platform.x86
 				// Write relative offset to stream
 				byte[] bytes = LittleEndianBitConverter.GetBytes(relOffset);
 				codeStream.Write(bytes, 0, bytes.Length);
-
-				//Debug.WriteLine("PATCH: " + p.ToString() + " Offset: " + relOffset.ToString());
 			}
 
 			patches.Clear();
@@ -401,10 +399,13 @@ namespace Mosa.Platform.x86
 		{
 			codeStream.WriteByte(0xEA);
 
-			// HACK: Determines the IP address of current instruction
-			// TODO: Link it instead
-			byte[] bytes = LittleEndianBitConverter.GetBytes((int)(linker.GetSection(SectionKind.Text).VirtualAddress.ToInt32() + linker.GetSection(SectionKind.Text).Length + 6));			
-			codeStream.Write(bytes, 0, bytes.Length);
+			// HACK: Determines the IP address of current instruction, should use the linker instead
+			LinkerSection linkerSection = linker.GetSection(SectionKind.Text);
+			if (linkerSection != null) // HACK: To assist TypeExplorer, which returns null from GetSection method
+			{
+				byte[] bytes = LittleEndianBitConverter.GetBytes((int)(linkerSection.VirtualAddress.ToInt32() + linkerSection.Length + 6));
+				codeStream.Write(bytes, 0, bytes.Length);
+			}
 
 			codeStream.WriteByte(0x08);
 			codeStream.WriteByte(0x00);

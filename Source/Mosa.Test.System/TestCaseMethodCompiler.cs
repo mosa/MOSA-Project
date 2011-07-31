@@ -48,7 +48,7 @@ namespace Mosa.Test.System
 				new StaticAllocationResolutionStage(),
 				//new ConstantFoldingStage(),
 				new CILTransformationStage(),
-			//	new CILLeakGuardStage() { MustThrowCompilationException = true },
+				//new CILLeakGuardStage() { MustThrowCompilationException = true },
 				//InstructionStatisticsStage.Instance,
 				//new DominanceCalculationStage(),
 				//new EnterSSA(),
@@ -59,11 +59,11 @@ namespace Mosa.Test.System
 				new PlatformStubStage(),
 				//new BlockReductionStage(),
 				new LoopAwareBlockOrderStage(),
-				new ExceptionLayoutStage(),
 				//new SimpleTraceBlockOrderStage(),
 				//new ReverseBlockOrderStage(),  // reverse all the basic blocks and see if it breaks anything
 				//new BasicBlockOrderStage()	
 				new CodeGenerationStage(),
+				new ExceptionLayoutStage(),
 			});
 		}
 

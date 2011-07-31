@@ -12,6 +12,7 @@ using System.IO;
 using System.Collections.Generic;
 using System.Diagnostics;
 
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Linker;
 
 using CIL = Mosa.Runtime.CompilerFramework.CIL;
@@ -22,12 +23,17 @@ namespace Mosa.Runtime.CompilerFramework
 	{
 		#region Data members
 
+		//FIXME: Assumes LittleEndian architecture 
+		private static readonly DataConverter LittleEndianBitConverter = DataConverter.LittleEndian;
+
 		private List<ExceptionClauseNode> sortedClauses;
 
 		private Dictionary<BasicBlock, ExceptionClause> blockExceptions;
 		private Dictionary<int, ExceptionClause> exceptionLabelMap;
 
 		private Dictionary<ExceptionClause, List<BasicBlock>> exceptionBlocks = new Dictionary<ExceptionClause, List<BasicBlock>>();
+
+		private ICodeEmitter codeEmitter;
 
 		#endregion // Data members
 
@@ -48,6 +54,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public void Run()
 		{
+			codeEmitter = methodCompiler.Pipeline.FindFirst<CodeGenerationStage>().CodeEmitter;
+
 			// Step 1 - Sort the exception clauses into postorder-traversal
 			BuildSort();
 
@@ -112,14 +120,41 @@ namespace Mosa.Runtime.CompilerFramework
 				exceptionLabelMap.Add(clause.TryOffset, clause);
 		}
 
+		private struct ExceptionEntry
+		{
+			public long Start;
+			public long Length;
+			public long Handler;
+			public long Filter;
+
+			public ExceptionEntry(long start, long length, long handler, long filter)
+			{
+				Start = start;
+				Length = length;
+				Handler = handler;
+				Filter = filter;
+			}
+
+			public void Write(Stream stream)
+			{
+				//FIXME:
+				WriteLittleEndian4(stream, (int)Start);
+				WriteLittleEndian4(stream, (int)Length);
+				WriteLittleEndian4(stream, (int)Handler);
+				WriteLittleEndian4(stream, (int)Filter);
+			}
+
+			public void WriteLittleEndian4(Stream stream, int value)
+			{
+				byte[] bytes = LittleEndianBitConverter.GetBytes(value);
+				stream.Write(bytes, 0, bytes.Length);
+			}
+
+		}
+
 		private void EmitExceptionTable()
 		{
-			if (exceptionBlocks.Count == 0)
-				return;
-
-			// TODO:
-
-			List<string> entries = new List<string>();
+			List<ExceptionEntry> entries = new List<ExceptionEntry>();
 
 			foreach (ExceptionClauseNode node in sortedClauses)
 			{
@@ -129,19 +164,33 @@ namespace Mosa.Runtime.CompilerFramework
 
 				foreach (BasicBlock block in blocks)
 				{
+					long start = codeEmitter.GetPosition(block.Label);
 
-					// 1. Start 
-					// 2. End
-					// 3. Handler
+					ExceptionEntry entry = new ExceptionEntry(
+						// 1. Start (relative to method start)
+						start,
+						// 2. Length
+						codeEmitter.GetPosition(block.Label + 0x0F000000) - start,
+						// 3. Handler
+						codeEmitter.GetPosition(clause.TryOffset),
+						// 4. Filter
+						codeEmitter.GetPosition(clause.FilterOffset)
+					);
 
+					entries.Add(entry);
 				}
 			}
 
-			int tableSize = entries.Count * nativePointerSize;
+			int tableSize = (entries.Count * nativePointerSize * 4) + nativePointerSize;
 
 			using (Stream stream = methodCompiler.Linker.Allocate(this.methodCompiler.Method.FullName + @"$etable", SectionKind.Text, tableSize, nativePointerAlignment))
 			{
-				stream.Position = tableSize;
+				foreach (ExceptionEntry entry in entries)
+				{
+					entry.Write(stream);
+				}
+				
+				stream.Write(new Byte[nativePointerSize], 0, nativePointerSize);
 			}
 
 		}

@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+
 using Mosa.Runtime.CompilerFramework.CIL;
 
 namespace Mosa.Runtime.CompilerFramework
@@ -45,6 +46,12 @@ namespace Mosa.Runtime.CompilerFramework
 
 		#endregion // IPipelineStage Members
 
+		#region Properties
+
+		public ICodeEmitter CodeEmitter { get { return codeEmitter; } }
+
+		#endregion // Properties
+
 		#region Methods
 
 		/// <summary>
@@ -52,8 +59,6 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public void Run()
 		{
-			Debug.WriteLine("METHOD: " + this.methodCompiler.Method.FullName);
-
 			// Retrieve a stream to place the code into
 			using (codeStream = methodCompiler.RequestCodeStream())
 			{
@@ -123,7 +128,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="block">The completed block.</param>
 		protected virtual void BlockEnd(BasicBlock block)
 		{
-			//codeEmitter.Label(block.Label + 0x0F000000);
+			codeEmitter.Label(block.Label + 0x0F000000);
 		}
 
 		/// <summary>
@@ -132,9 +137,7 @@ namespace Mosa.Runtime.CompilerFramework
 		protected virtual void EndGenerate()
 		{
 			codeEmitter.ResolvePatches();
-
 			codeEmitter.Dispose();
-			codeEmitter = null;
 		}
 
 		#endregion // Methods

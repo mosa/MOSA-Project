@@ -50,11 +50,11 @@ namespace Mosa.Tools.TypeExplorer
 				new PlatformStubStage(),
 				//new BlockReductionStage(),
 				new LoopAwareBlockOrderStage(),
-				new ExceptionLayoutStage(),
 				//new SimpleTraceBlockOrderStage(),
 				//new ReverseBlockOrderStage(),  // reverse all the basic blocks and see if it breaks anything
 				//new BasicBlockOrderStage()	
-				//new CodeGenerationStage(),
+				new CodeGenerationStage(),
+				new ExceptionLayoutStage(),
 			});
 		}
 

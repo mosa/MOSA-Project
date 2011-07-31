@@ -284,9 +284,6 @@
     <Compile Include="CompilerFramework\BlockReductionStage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\BlockOrderFlags.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="CompilerFramework\CodeGenerationStage.cs">
       <SubType>Code</SubType>
     </Compile>

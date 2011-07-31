@@ -63,11 +63,11 @@ namespace Mosa.Tools.Compiler
 					new PlatformStubStage(),
 					//new BlockReductionStage(),
 					new LoopAwareBlockOrderStage(),
-					new ExceptionLayoutStage(),
 					//new SimpleTraceBlockOrderStage(),
 					//new ReverseBlockOrderStage(),	
 					//new LocalCSE(),
 					new CodeGenerationStage(),
+					new ExceptionLayoutStage(),
 				});
 		}
 

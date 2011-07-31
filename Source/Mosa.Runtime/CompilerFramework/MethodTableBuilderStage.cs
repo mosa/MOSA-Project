@@ -157,9 +157,7 @@ namespace Mosa.Runtime.CompilerFramework
 		private void CreateMethodDescriptionEntry(Stream stream, RuntimeMethod method)
 		{
 			// Pointer to exception clause table
-			//TODO: Uncomment when etable is ready
-
-			//this.linker.Link(LinkType.AbsoluteAddress | LinkType.I4, method.ToString() + "$mdtable", 0, 0, method.ToString() + "$etable", IntPtr.Zero);
+			linker.Link(LinkType.AbsoluteAddress | LinkType.I4, method.ToString() + "$mdtable", 0, 0, method.ToString() + "$etable", IntPtr.Zero);
 			// GC tracking info
 			stream.Seek(1 * this.typeLayout.NativePointerSize, SeekOrigin.Begin);
 			stream.Write(LittleEndianBitConverter.GetBytes(0x00000000), 0, 4);

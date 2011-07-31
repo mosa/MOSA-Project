@@ -309,7 +309,8 @@ namespace Mosa.Runtime.CompilerFramework
 
 		private static void WriteDummyBytes(Stream stream, int size)
 		{
-			stream.Write(new byte[size], 0, size);
+			for (int i = 0; i < size; i++)
+				stream.WriteByte(0);
 		}
 
 	}

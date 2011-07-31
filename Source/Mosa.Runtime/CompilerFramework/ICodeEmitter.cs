@@ -39,10 +39,10 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="label">The label name to emit.</param>
 		void Label(int label);
 
-        /// <summary>
-        /// Resolves the patches.
-        /// </summary>
-        void ResolvePatches();
+		/// <summary>
+		/// Resolves the patches.
+		/// </summary>
+		void ResolvePatches();
 
 		/// <summary>
 		/// Gets the position.

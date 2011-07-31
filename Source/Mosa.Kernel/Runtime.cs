@@ -67,7 +67,7 @@ namespace Mosa.Internal
 			return AllocateArray(methodTable, 2, length);
 		}
 
-		public static unsafe void* IsInstanceOfType(void* methodTable, void* obj)
+		public static unsafe void* IsInstanceOfType2(void* methodTable, void* obj)
 		{
 			if (obj == null)
 				return null;
@@ -83,6 +83,25 @@ namespace Mosa.Internal
 			}
 
 			return null;
+		}
+
+		public static unsafe uint IsInstanceOfType(uint methodTable, uint obj)
+		{
+			if (obj == 0x0)
+				return 0;
+
+			uint objMethodTable = (uint)((uint*)obj)[0];
+
+			while (objMethodTable != 0x0)
+			{
+				if (objMethodTable == methodTable)
+					return obj;
+
+				objMethodTable = objMethodTable + 3 * 4;
+				objMethodTable = (uint)((uint*)objMethodTable)[0];
+			}
+
+			return 0x0;
 		}
 
 		public static unsafe void* IsInstanceOfInterfaceType(int interfaceSlot, void* obj)
