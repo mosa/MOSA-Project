@@ -7,6 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using System.Collections;
 using System.Collections.Generic;
 
 namespace Mosa.ClassLib
@@ -424,8 +425,9 @@ namespace Mosa.ClassLib
 		/// </returns>
 		IEnumerator<T> IEnumerable<T>.GetEnumerator()
 		{
+			return new Enumerator(this);/*
 			for (LinkedListNode<T> cur = first; cur != null; cur = cur.next)
-				yield return cur.value;
+				yield return cur.value;*/
 		}
 
 		/// <summary>
@@ -436,10 +438,79 @@ namespace Mosa.ClassLib
 		/// </returns>
 		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
 		{
+			return new Enumerator(this);/*
 			for (LinkedListNode<T> cur = first; cur != null; cur = cur.next)
-				yield return cur.value;
+				yield return cur.value;*/
 		}
 
+		public struct Enumerator : IEnumerator<T>, IEnumerator
+		{
+			const string VersionKey = "version";
+			const string IndexKey = "index";
+			const string ListKey = "list";
 
+			LinkedList<T> list;
+			LinkedListNode<T> current;
+			int index;
+
+			internal Enumerator(LinkedList<T> parent)
+			{
+				this.list = parent;
+				current = null;
+				index = -1;
+			}
+
+			public T Current
+			{
+				get
+				{
+					return current.value;
+				}
+			}
+
+			object IEnumerator.Current
+			{
+				get { return null; }
+			}
+
+			public bool MoveNext()
+			{
+				if (list == null)
+					return false;
+
+				if (current == null)
+					current = list.first;
+				else
+				{
+					current = current.next;
+					if (current == list.first)
+						current = null;
+				}
+				if (current == null)
+				{
+					index = -1;
+					return false;
+				}
+				++index;
+				return true;
+			}
+
+			void IEnumerator.Reset()
+			{
+				if (list == null)
+					return;
+
+				current = null;
+				index = -1;
+			}
+
+			public void Dispose()
+			{
+				if (list == null)
+					return;
+				current = null;
+				list = null;
+			}
+		}
 	}
 }
