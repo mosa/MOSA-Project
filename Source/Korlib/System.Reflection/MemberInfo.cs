@@ -12,9 +12,6 @@ namespace System.Reflection
 	/// <summary>
 	/// Implementation of the "System.Reflection.DefaultMemberAttribute" class
 	/// </summary>
-	/// <remarks>
-	///		!!! THIS IS STILL JUST A STUB !!!
-	/// </remarks>
 	[SerializableAttribute]
 	public abstract class MemberInfo
 	{
