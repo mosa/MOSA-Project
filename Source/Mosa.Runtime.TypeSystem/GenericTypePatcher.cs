@@ -40,10 +40,6 @@ namespace Mosa.Runtime.TypeSystem
 		/// 
 		/// </summary>
 		private readonly ITypeSystem typeSystem;
-		/// <summary>
-		/// 
-		/// </summary>
-		private readonly ITypeLayout typeLayout;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="GenericTypePatcher"/> class.
@@ -52,7 +48,6 @@ namespace Mosa.Runtime.TypeSystem
 		public GenericTypePatcher(ITypeSystem typeSystem)
 		{
 			this.typeSystem = typeSystem;
-			this.typeLayout = null;
 		}
 
 		/// <summary>

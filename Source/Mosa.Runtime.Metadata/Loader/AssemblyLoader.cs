@@ -102,7 +102,7 @@ namespace Mosa.Runtime.Metadata.Loader
 
 		private bool isLoaded(string name)
 		{
-            foreach (var module in modules)
+			foreach (var module in modules)
 				if (module.Name == name)
 					return true;
 
@@ -111,16 +111,16 @@ namespace Mosa.Runtime.Metadata.Loader
 
 		private IMetadataModule LoadDependencies(string file)
 		{
-            var metadataModule = LoadAssembly(file);
+			var metadataModule = LoadAssembly(file);
 
 			if (!isLoaded(metadataModule.Name))
 			{
-                var maxToken = metadataModule.Metadata.GetMaxTokenValue(TableType.AssemblyRef);
+				var maxToken = metadataModule.Metadata.GetMaxTokenValue(TableType.AssemblyRef);
 
-                foreach (var token in new Token(TableType.AssemblyRef, 1).Upto(maxToken))
+				foreach (var token in new Token(TableType.AssemblyRef, 1).Upto(maxToken))
 				{
-                    var row = metadataModule.Metadata.ReadAssemblyRefRow(token);
-                    var assembly = metadataModule.Metadata.ReadString(row.Name);
+					var row = metadataModule.Metadata.ReadAssemblyRefRow(token);
+					var assembly = metadataModule.Metadata.ReadString(row.Name);
 
 					LoadDependencies(assembly);
 				}
@@ -147,7 +147,7 @@ namespace Mosa.Runtime.Metadata.Loader
 			if (!File.Exists(file))
 				return null;
 
-            var codeBase = CreateFileCodeBase(file);
+			var codeBase = CreateFileCodeBase(file);
 
 			return PortableExecutableImage.Load(new FileStream(file, FileMode.Open, FileAccess.Read), codeBase);
 		}
@@ -175,11 +175,11 @@ namespace Mosa.Runtime.Metadata.Loader
 		/// <returns></returns>
 		private IMetadataModule TryAssemblyLoadFromPaths(string name, IEnumerable<string> paths)
 		{
-            foreach (var path in paths)
+			foreach (var path in paths)
 			{
 				try
 				{
-                    var result = LoadPEAssembly(Path.Combine(path, name));
+					var result = LoadPEAssembly(Path.Combine(path, name));
 
 					if (result != null)
 						return result;
@@ -200,11 +200,11 @@ namespace Mosa.Runtime.Metadata.Loader
 		/// <returns></returns>
 		private IEnumerable<string> FindPrivatePaths(IEnumerable<string> assemblyPaths)
 		{
-            var privatePaths = new List<string>();
+			var privatePaths = new List<string>();
 
-            foreach (var assembly in assemblyPaths)
+			foreach (var assembly in assemblyPaths)
 			{
-                var path = Path.GetDirectoryName(assembly);
+				var path = Path.GetDirectoryName(assembly);
 				if (!privatePaths.Contains(path))
 					privatePaths.Add(path);
 			}

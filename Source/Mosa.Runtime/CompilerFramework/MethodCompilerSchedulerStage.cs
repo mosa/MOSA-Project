@@ -28,6 +28,8 @@ namespace Mosa.Runtime.CompilerFramework
 
 		private readonly Dictionary<RuntimeType, RuntimeType> compiled;
 
+		private readonly HashSet<string> alreadyCompiled;
+
 		#region IPipelineStage
 
 		string IPipelineStage.Name { get { return @"MethodCompilerSchedulerStage"; } }
@@ -39,6 +41,7 @@ namespace Mosa.Runtime.CompilerFramework
 			methodQueue = new Queue<RuntimeMethod>();
 			typeQueue = new Queue<RuntimeType>();
 			compiled = new Dictionary<RuntimeType, RuntimeType>();
+			alreadyCompiled = new HashSet<string>();
 		}
 
 		#region IAssemblyCompilerStage members
@@ -131,7 +134,7 @@ namespace Mosa.Runtime.CompilerFramework
 			if (type == null)
 				throw new ArgumentNullException(@"type");
 
-			if (compiled.ContainsKey(type))
+			if (compiled.ContainsKey(type) || alreadyCompiled.Contains(type.ToString()))
 				return;
 
 			if (!type.IsGeneric)
@@ -140,6 +143,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 				typeQueue.Enqueue(type);
 				compiled.Add(type, type);
+				alreadyCompiled.Add(type.ToString());
 			}
 		}
 
