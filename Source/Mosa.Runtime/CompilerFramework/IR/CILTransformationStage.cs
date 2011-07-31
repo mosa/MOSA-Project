@@ -530,9 +530,19 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		{
 			Operand thisReference = context.Result;
 			Debug.Assert(thisReference != null, @"Newobj didn't specify class signature?");
+			RuntimeType classType = null;
 
-			ClassSigType classSigType = (ClassSigType)thisReference.Type;
-			RuntimeType classType = typeModule.GetType(classSigType.Token);
+			if (thisReference.Type is ClassSigType)
+			{
+				var classSigType = thisReference.Type as ClassSigType;
+				classType = typeModule.GetType(classSigType.Token);
+			}
+			else if (thisReference.Type is GenericInstSigType)
+			{
+				var genericInstSigType = thisReference.Type as GenericInstSigType;
+				var baseSigType = genericInstSigType.BaseType as ValueTypeSigType;
+				classType = typeModule.GetType(baseSigType.Token);
+			}
 
 			List<Operand> ctorOperands = new List<Operand>(context.Operands);
 			RuntimeMethod ctorMethod = context.InvokeTarget;
