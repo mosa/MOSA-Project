@@ -27,6 +27,14 @@ namespace Mosa.Runtime.TypeSystem
 	public interface IGenericTypePatcher
 	{
 		/// <summary>
+		/// Patches the type.
+		/// </summary>
+		/// <param name="typeModule">The type module.</param>
+		/// <param name="enclosingType">Type of the enclosing.</param>
+		/// <param name="openType">Type of the open.</param>
+		/// <returns></returns>
+		RuntimeType PatchType(ITypeModule typeModule, CilGenericType enclosingType, CilGenericType openType);
+		/// <summary>
 		/// Patches the field.
 		/// </summary>
 		/// <param name="typeModule">The type module.</param>

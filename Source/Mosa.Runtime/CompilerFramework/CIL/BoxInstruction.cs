@@ -48,7 +48,19 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			base.Decode(ctx, decoder);
 
 			// Retrieve the provider token to check against
-			Token token = decoder.DecodeTokenType();
+			var token = decoder.DecodeTokenType();
+			var type = decoder.TypeModule.GetType(token);
+
+			if (type == null)
+			{
+				var signatureType = decoder.TypeModule.TypeSystem.GenericTypePatcher.PatchSignatureType(decoder.TypeModule, decoder.Method.DeclaringType, token);
+				ctx.Result = decoder.Compiler.CreateTemporary(signatureType);
+			}
+			else if (type.ContainsOpenGenericParameters)
+			{
+				var signatureType = decoder.TypeModule.TypeSystem.GenericTypePatcher.PatchSignatureType(decoder.TypeModule, decoder.Method.DeclaringType, token);
+				ctx.Result = decoder.Compiler.CreateTemporary(signatureType);
+			}
 			
 			ctx.Other = decoder.TypeModule.GetType(token);
 		}

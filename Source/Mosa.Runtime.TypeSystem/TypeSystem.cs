@@ -124,7 +124,7 @@ namespace Mosa.Runtime.TypeSystem
 			if (dot < 0)
 				return null;
 
-			return ((ITypeSystem)this).GetType(name.Substring(0, dot), name.Substring(dot + 1));
+			return (this as ITypeSystem).GetType(name.Substring(0, dot), name.Substring(dot + 1));
 		}
 
 		/// <summary>

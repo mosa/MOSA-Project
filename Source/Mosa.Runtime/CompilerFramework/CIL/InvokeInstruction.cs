@@ -190,7 +190,10 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			}
 
 			if (method.DeclaringType.ContainsOpenGenericParameters)
+			{
 				method = decoder.TypeModule.TypeSystem.GenericTypePatcher.PatchMethod(method.DeclaringType.Module, decoder.Method.DeclaringType as CilGenericType, method);
+				decoder.Compiler.Scheduler.ScheduleTypeForCompilation(method.DeclaringType);
+			}
 
 			SetInvokeTarget(ctx, decoder.Compiler, method);
 

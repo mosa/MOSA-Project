@@ -107,7 +107,11 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 			// Get the type to allocate
 			SigType sigType = CreateSignatureTypeFor(decoder.Compiler.Assembly, ctor, ctx.InvokeTarget.DeclaringType);
-
+			if (sigType is ValueTypeSigType)
+			{
+				var vsig = (sigType as ValueTypeSigType);
+			}
+			//sigType = decoder.TypeModule.TypeSystem.GenericTypePatcher.PatchSignatureType(decoder.TypeModule, decoder.Method.DeclaringType, ctor);
 			// Set a return value according to the type of the object allocated
 			ctx.Result = decoder.Compiler.CreateTemporary(sigType);
 			ctx.ResultCount = 1;
@@ -124,7 +128,11 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			RuntimeType baseType = declaringType.BaseType;
 			if (baseType != null && baseType.FullName == @"System.ValueType")
 			{
-				return new ValueTypeSigType(typeToken);
+				// TODO
+				var typeSpecRow = module.Metadata.ReadTypeSpecRow(typeToken);
+				var typeSpecSignature = new TypeSpecSignature(module.Metadata, typeSpecRow.SignatureBlobIdx);
+				return typeSpecSignature.Type;
+				//return new ValueTypeSigType(typeToken);
 			}
 
 			return new ClassSigType(typeToken);

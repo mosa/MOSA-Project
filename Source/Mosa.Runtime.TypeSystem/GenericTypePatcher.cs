@@ -40,6 +40,10 @@ namespace Mosa.Runtime.TypeSystem
 		/// 
 		/// </summary>
 		private readonly ITypeSystem typeSystem;
+		/// <summary>
+		/// 
+		/// </summary>
+		private readonly ITypeLayout typeLayout;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="GenericTypePatcher"/> class.
@@ -48,6 +52,28 @@ namespace Mosa.Runtime.TypeSystem
 		public GenericTypePatcher(ITypeSystem typeSystem)
 		{
 			this.typeSystem = typeSystem;
+			this.typeLayout = null;
+		}
+
+		/// <summary>
+		/// Patches the type.
+		/// </summary>
+		/// <param name="typeModule">The type module.</param>
+		/// <param name="enclosingType">Type of the enclosing.</param>
+		/// <param name="openType">Type of the open.</param>
+		/// <returns></returns>
+		public RuntimeType PatchType(ITypeModule typeModule, CilGenericType enclosingType, CilGenericType openType)
+		{
+			var genericParameters = enclosingType.GenericParameters;
+
+			var typeToken = new Token(0xFE000000 | typeTokenCounter++);
+			var signatureToken = new Token(0xFD000000 | signatureTokenCounter++);
+			var sigtype = new TypeSigType(signatureToken, CilElementType.Var);
+			var genericArguments = CloseGenericArguments(enclosingType, openType);
+
+			var signature = new GenericInstSigType(sigtype, genericArguments);
+
+			return new CilGenericType(openType.Module, typeToken, openType.BaseGenericType, signature);
 		}
 
 		/// <summary>
@@ -57,7 +83,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// <param name="enclosingType">Type of the closed.</param>
 		/// <param name="openField">The open field.</param>
 		/// <returns></returns>
-		RuntimeField IGenericTypePatcher.PatchField(ITypeModule typeModule, CilGenericType enclosingType, RuntimeField openField)
+		public RuntimeField PatchField(ITypeModule typeModule, CilGenericType enclosingType, RuntimeField openField)
 		{
 			var openType = openField.DeclaringType as CilGenericType;
 			var genericParameters = enclosingType.GenericParameters;
@@ -96,7 +122,13 @@ namespace Mosa.Runtime.TypeSystem
 				if (enclosingType is CilGenericType)
 				{
 					var enclosingGenericType = enclosingType as CilGenericType;
-					return enclosingGenericType.GenericArguments[(signature.Type as VarSigType).Index];
+					if (signature.Type is VarSigType)
+						return enclosingGenericType.GenericArguments[(signature.Type as VarSigType).Index];
+					else if (signature.Type is GenericInstSigType)
+					{
+						var openGenericSigType = (signature.Type as GenericInstSigType);
+						return new GenericInstSigType(openGenericSigType.BaseType, this.CloseGenericArguments(enclosingGenericType, openGenericSigType));
+					}
 				}
 
 				return signature.Type;
@@ -112,17 +144,45 @@ namespace Mosa.Runtime.TypeSystem
 		/// <returns></returns>
 		private SigType[] CloseGenericArguments(CilGenericType enclosingType, CilGenericType openType)
 		{
-			var result = new SigType[openType.GenericArguments.Length];
+			return this.CloseGenericArguments(enclosingType.GenericArguments, openType.GenericArguments);
+		}
 
-			for (var i = 0; i < openType.GenericArguments.Length; ++i)
+		/// <summary>
+		/// Closes the generic arguments.
+		/// </summary>
+		/// <param name="enclosingType">Type of the enclosing.</param>
+		/// <param name="openType">Type of the open.</param>
+		/// <returns></returns>
+		private SigType[] CloseGenericArguments(CilGenericType enclosingType, GenericInstSigType openType)
+		{
+			return this.CloseGenericArguments(enclosingType.GenericArguments, openType.GenericArguments);
+		}
+
+		/// <summary>
+		/// Closes the generic arguments.
+		/// </summary>
+		/// <param name="enclosingType">Type of the enclosing.</param>
+		/// <param name="openType">Type of the open.</param>
+		/// <returns></returns>
+		private SigType[] CloseGenericArguments(SigType[] enclosingType, SigType[] openType)
+		{
+			var result = new SigType[openType.Length];
+
+			for (var i = 0; i < openType.Length; ++i)
 			{
-				result[i] = enclosingType.GenericArguments[(openType.GenericArguments[i] as VarSigType).Index];
+				result[i] = enclosingType[(openType[i] as VarSigType).Index];
 			}
 
 			return result;
 		}
 
-
+		/// <summary>
+		/// Patches the method.
+		/// </summary>
+		/// <param name="typeModule">The type module.</param>
+		/// <param name="enclosingType">Type of the enclosing.</param>
+		/// <param name="openMethod">The open method.</param>
+		/// <returns></returns>
 		public RuntimeMethod PatchMethod(ITypeModule typeModule, CilGenericType enclosingType, RuntimeMethod openMethod)
 		{
 			var openType = openMethod.DeclaringType as CilGenericType;

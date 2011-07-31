@@ -18,6 +18,5 @@ namespace Mosa.Runtime.CompilerFramework.IR
         {
             visitor.ThrowInstruction(context);
         }
-
     }
 }
