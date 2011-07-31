@@ -129,6 +129,9 @@ namespace Mosa.Runtime.CompilerFramework
 
 				if (!targets.ContainsKey(exceptionClause.TryOffset))
 					targets.Add(exceptionClause.TryOffset, -1);
+
+				if (!targets.ContainsKey(exceptionClause.FilterOffset))
+					targets.Add(exceptionClause.FilterOffset, -1);
 			}
 
 			bool slice = false;
@@ -192,10 +195,8 @@ namespace Mosa.Runtime.CompilerFramework
 					case FlowControl.Throw: continue;
 					case FlowControl.Switch: goto case FlowControl.ConditionalBranch;
 					case FlowControl.Branch:
-						{
-							FindAndLinkBlock(block, ctx.Branch.Targets[0]);
-							return;
-						}
+						FindAndLinkBlock(block, ctx.Branch.Targets[0]);
+						return;
 					case FlowControl.ConditionalBranch:
 						foreach (int target in ctx.Branch.Targets)
 						{
@@ -239,18 +240,5 @@ namespace Mosa.Runtime.CompilerFramework
 			callee.PreviousBlocks.Add(caller);
 		}
 
-		/// <summary>
-		/// Links the exception header clauses.
-		/// </summary>
-		private void LinkExceptionHeaderClauses()
-		{
-			foreach (BasicBlock block in this.basicBlocks)
-			{
-				for (Context ctx = CreateContext(block); !ctx.EndOfInstruction; ctx.GotoNext())
-				{
-				//	this.methodCompiler.Method.ExceptionClauseHeader.LinkBlockToClause(ctx, block);
-				}
-			}
-		}
 	}
 }

@@ -127,6 +127,8 @@ namespace Mosa.Runtime.CompilerFramework
 			public long Handler;
 			public long Filter;
 
+			public long End { get { return Start + Length - 1; } }
+
 			public ExceptionEntry(long start, long length, long handler, long filter)
 			{
 				Start = start;
@@ -162,22 +164,27 @@ namespace Mosa.Runtime.CompilerFramework
 
 				List<BasicBlock> blocks = this.exceptionBlocks[clause];
 
+				ExceptionEntry prev = new ExceptionEntry();
+
 				foreach (BasicBlock block in blocks)
 				{
 					long start = codeEmitter.GetPosition(block.Label);
+					long length = codeEmitter.GetPosition(block.Label + 0x0F000000) - start;
+					long handler = codeEmitter.GetPosition(clause.TryOffset);
+					long filter = codeEmitter.GetPosition(clause.FilterOffset);
 
-					ExceptionEntry entry = new ExceptionEntry(
-						// 1. Start (relative to method start)
-						start,
-						// 2. Length
-						codeEmitter.GetPosition(block.Label + 0x0F000000) - start,
-						// 3. Handler
-						codeEmitter.GetPosition(clause.TryOffset),
-						// 4. Filter
-						codeEmitter.GetPosition(clause.FilterOffset)
-					);
-
-					entries.Add(entry);
+					if (prev.End + 1 == start && prev.Handler == handler && prev.Filter == filter)
+					{
+						// merge protected blocks sequence
+						prev.Length = prev.Length + codeEmitter.GetPosition(block.Label + 0x0F000000) - start;
+					}
+					else
+					{
+						// new protection block sequence
+						ExceptionEntry entry = new ExceptionEntry(start, length, handler, filter);
+						entries.Add(entry);
+						prev = entry;
+					}
 				}
 			}
 
@@ -189,7 +196,7 @@ namespace Mosa.Runtime.CompilerFramework
 				{
 					entry.Write(stream);
 				}
-				
+
 				stream.Write(new Byte[nativePointerSize], 0, nativePointerSize);
 			}
 
