@@ -65,7 +65,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 				if (ctx.RuntimeField.ContainsGenericParameter)
 				{
-					ctx.RuntimeField = decoder.TypeModule.TypeSystem.GenericTypePatcher.PatchField(decoder.TypeModule, decoder.Method.DeclaringType as CilGenericType, ctx.RuntimeField);
+					ctx.RuntimeField = decoder.GenericTypePatcher.PatchField(decoder.TypeModule, decoder.Method.DeclaringType as CilGenericType, ctx.RuntimeField);
 				}
 				decoder.Compiler.Scheduler.ScheduleTypeForCompilation(ctx.RuntimeField.DeclaringType);
 				//Console.WriteLine("Token: {0}", token);

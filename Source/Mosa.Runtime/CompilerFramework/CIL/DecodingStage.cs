@@ -42,6 +42,10 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// The reader used to process the code stream.
 		/// </summary>
 		private BinaryReader codeReader;
+		/// <summary>
+		/// 
+		/// </summary>
+		private IGenericTypePatcher genericTypePatcher = new GenericTypePatcher();
 
 		#endregion // Data members
 
@@ -279,6 +283,11 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		ITypeModule IInstructionDecoder.TypeModule
 		{
 			get { return typeModule; }
+		}
+
+		IGenericTypePatcher IInstructionDecoder.GenericTypePatcher
+		{
+			get { return genericTypePatcher; }
 		}
 
 		/// <summary>

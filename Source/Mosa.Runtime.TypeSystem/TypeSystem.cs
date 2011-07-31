@@ -32,11 +32,6 @@ namespace Mosa.Runtime.TypeSystem
 		private InternalTypeModule internalTypeModule;
 
 		/// <summary>
-		/// 
-		/// </summary>
-		private IGenericTypePatcher genericTypePatcher;
-
-		/// <summary>
 		/// Holds the main type module
 		/// </summary>
 		private ITypeModule mainTypeModule;
@@ -158,18 +153,6 @@ namespace Mosa.Runtime.TypeSystem
 		}
 
 		/// <summary>
-		/// Gets the generic type patcher.
-		/// </summary>
-		IGenericTypePatcher ITypeSystem.GenericTypePatcher
-		{
-			get
-			{
-				InitializeInternalTypeModule();
-				return this.genericTypePatcher;
-			}
-		}
-
-		/// <summary>
 		/// Adds the internal compiler defined type to the type system
 		/// </summary>
 		/// <param name="type">The type.</param>
@@ -252,7 +235,6 @@ namespace Mosa.Runtime.TypeSystem
 			{
 				internalTypeModule = new InternalTypeModule(this);
 				typeModules.Add(internalTypeModule);
-				genericTypePatcher = new GenericTypePatcher(this);
 			}
 		}
 	}

@@ -36,19 +36,6 @@ namespace Mosa.Runtime.TypeSystem
 		/// 
 		/// </summary>
 		private static uint signatureTokenCounter = 1u;
-		/// <summary>
-		/// 
-		/// </summary>
-		private readonly ITypeSystem typeSystem;
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="GenericTypePatcher"/> class.
-		/// </summary>
-		/// <param name="typeSystem">The type system.</param>
-		public GenericTypePatcher(ITypeSystem typeSystem)
-		{
-			this.typeSystem = typeSystem;
-		}
 
 		/// <summary>
 		/// Patches the type.

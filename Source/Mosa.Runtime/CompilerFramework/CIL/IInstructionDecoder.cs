@@ -34,6 +34,11 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		ITypeModule TypeModule { get; }
 
 		/// <summary>
+		/// 
+		/// </summary>
+		IGenericTypePatcher GenericTypePatcher { get; }
+
+		/// <summary>
 		/// Decodes the byte value from the instruction stream
 		/// </summary>
 		/// <returns></returns>

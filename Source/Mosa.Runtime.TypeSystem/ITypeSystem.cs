@@ -77,11 +77,6 @@ namespace Mosa.Runtime.TypeSystem
 		ITypeModule InternalTypeModule { get; }
 
 		/// <summary>
-		/// Gets the generic type patcher.
-		/// </summary>
-		IGenericTypePatcher GenericTypePatcher { get; }
-
-		/// <summary>
 		/// Adds the internal compiler defined type to the type system
 		/// </summary>
 		/// <param name="type">The type.</param>

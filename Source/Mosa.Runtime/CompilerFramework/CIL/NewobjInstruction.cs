@@ -107,11 +107,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 			// Get the type to allocate
 			SigType sigType = CreateSignatureTypeFor(decoder.Compiler.Assembly, ctor, ctx.InvokeTarget.DeclaringType);
-			if (sigType is ValueTypeSigType)
-			{
-				var vsig = (sigType as ValueTypeSigType);
-			}
-			//sigType = decoder.TypeModule.TypeSystem.GenericTypePatcher.PatchSignatureType(decoder.TypeModule, decoder.Method.DeclaringType, ctor);
+			decoder.Compiler.Scheduler.ScheduleTypeForCompilation(ctx.InvokeTarget.DeclaringType);
+
 			// Set a return value according to the type of the object allocated
 			ctx.Result = decoder.Compiler.CreateTemporary(sigType);
 			ctx.ResultCount = 1;

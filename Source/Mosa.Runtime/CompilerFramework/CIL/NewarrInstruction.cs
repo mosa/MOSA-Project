@@ -53,7 +53,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 			// Patch usage of generic arguments
 			var enclosingType = decoder.Method.DeclaringType;
-			var signatureType = decoder.TypeModule.TypeSystem.GenericTypePatcher.PatchSignatureType(decoder.TypeModule, enclosingType, token);
+			var signatureType = decoder.GenericTypePatcher.PatchSignatureType(decoder.TypeModule, enclosingType, token);
 
 			// FIXME: If ctx.Operands1 is an integral constant, we can infer the maximum size of the array
 			// and instantiate an ArrayTypeSpecification with max. sizes. This way we could eliminate bounds

@@ -53,12 +53,12 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 			if (type == null)
 			{
-				var signatureType = decoder.TypeModule.TypeSystem.GenericTypePatcher.PatchSignatureType(decoder.TypeModule, decoder.Method.DeclaringType, token);
+				var signatureType = decoder.GenericTypePatcher.PatchSignatureType(decoder.TypeModule, decoder.Method.DeclaringType, token);
 				ctx.Result = decoder.Compiler.CreateTemporary(signatureType);
 			}
 			else if (type.ContainsOpenGenericParameters)
 			{
-				var signatureType = decoder.TypeModule.TypeSystem.GenericTypePatcher.PatchSignatureType(decoder.TypeModule, decoder.Method.DeclaringType, token);
+				var signatureType = decoder.GenericTypePatcher.PatchSignatureType(decoder.TypeModule, decoder.Method.DeclaringType, token);
 				ctx.Result = decoder.Compiler.CreateTemporary(signatureType);
 			}
 			
