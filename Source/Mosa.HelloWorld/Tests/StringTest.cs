@@ -9,6 +9,7 @@ namespace Mosa.HelloWorld.Tests
 	{
 		public static void Test()
 		{
+			Screen.Color = Colors.Gray;
 			Screen.Write(" String: ");
 
 			PrintResult(ConcatTest1());

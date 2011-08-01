@@ -113,6 +113,9 @@ namespace Mosa.Runtime.TypeSystem
 		/// <returns></returns>
 		public SigType PatchSignatureType(ITypeModule typemodule, RuntimeType enclosingType, Token token)
 		{
+			if (typemodule.MetadataModule == null)
+				return new ClassSigType(token);
+
 			if (token.Table == TableType.TypeSpec)
 			{
 				var typespecRow = typemodule.MetadataModule.Metadata.ReadTypeSpecRow(token);
@@ -126,7 +129,8 @@ namespace Mosa.Runtime.TypeSystem
 					else if (signature.Type is GenericInstSigType)
 					{
 						var openGenericSigType = (signature.Type as GenericInstSigType);
-						return new GenericInstSigType(openGenericSigType.BaseType, this.CloseGenericArguments(enclosingGenericType, openGenericSigType));
+						if (openGenericSigType.ContainsGenericParameters)
+							return new GenericInstSigType(openGenericSigType.BaseType, this.CloseGenericArguments(enclosingGenericType, openGenericSigType));
 					}
 				}
 

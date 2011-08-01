@@ -17,7 +17,8 @@ namespace Mosa.HelloWorld.Tests
 	{
 		public static void Test()
 		{
-			Screen.Write(" Generic: ");
+			Screen.Color = Colors.Gray;
+			Screen.Write(" Gen-T: ");
 
 			PrintResult(GenericTest1());
 			PrintResult(GenericTest2());

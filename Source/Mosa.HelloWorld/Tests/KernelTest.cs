@@ -25,8 +25,14 @@ namespace Mosa.HelloWorld.Tests
 		public static void RunTests()
 		{
 			Screen.Goto(23, 0);
-			Screen.Write("[Tests]");
+			Screen.Color = Colors.Yellow;
+			Screen.Write("[");
+			Screen.Color = Colors.White;
+			Screen.Write("Tests");
+			Screen.Color = Colors.Yellow;
+			Screen.Write("]");
 
+			Generic2Test.Test();
 			StringTest.Test();
 			InterfaceTest.Test();
 			GenericTest.Test();

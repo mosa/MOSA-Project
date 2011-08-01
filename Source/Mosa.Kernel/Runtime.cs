@@ -9,11 +9,16 @@
 
 using Mosa.Kernel;
 using Mosa.Kernel.x86;
+using System;
 
 namespace Mosa.Internal
 {
 	public static class Runtime
 	{
+		public static object Box(ValueType valueType)
+		{
+			return null;
+		}
 
 		private unsafe static uint* AllocateMemory(uint size)
 		{

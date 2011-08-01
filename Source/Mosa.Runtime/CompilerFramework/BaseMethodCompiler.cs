@@ -21,6 +21,7 @@ using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.TypeSystem.Generic;
 using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Runtime.InternalTrace;
+using Mosa.Runtime.CompilerFramework.CIL;
 
 namespace Mosa.Runtime.CompilerFramework
 {
@@ -392,10 +393,14 @@ namespace Mosa.Runtime.CompilerFramework
 			{
 				if (index == 0)
 				{
+					var classSigType = new ClassSigType(type.Token);
+					var decoder = this.Pipeline.FindFirst<IInstructionDecoder>();
+					var signatureType = decoder.GenericTypePatcher.PatchSignatureType(this.Method.Module, this.Method.DeclaringType as CilGenericType, type.Token);
+
 					return new ParameterOperand(
 						architecture.StackFrameRegister,
 						new RuntimeParameter(@"this", 2, ParameterAttributes.In),
-						new ClassSigType(type.Token));
+						signatureType);
 				}
 				// Decrement the index, as the caller actually wants a real parameter
 				--index;
@@ -415,6 +420,13 @@ namespace Mosa.Runtime.CompilerFramework
 			if (parameter == null)
 			{
 				SigType parameterType = sig.Parameters[index];
+
+				if (parameterType is GenericInstSigType && (parameterType as GenericInstSigType).ContainsGenericParameters)
+				{
+					var genericInstSigType = parameterType as GenericInstSigType;
+					var decoder = this.Pipeline.FindFirst<IInstructionDecoder>();
+					parameterType = decoder.GenericTypePatcher.PatchSignatureType(this.typeSystem.InternalTypeModule, this.Method.DeclaringType, genericInstSigType.BaseType.Token);
+				}
 				parameter = new ParameterOperand(architecture.StackFrameRegister, methodParameters[index], parameterType);
 				parameters[index] = parameter;
 			}

@@ -69,6 +69,9 @@ namespace Mosa.Runtime.CompilerFramework
 				return;
 			}
 
+			if (type.ContainsOpenGenericParameters)
+				return;
+
 			foreach (RuntimeMethod method in type.Methods)
 			{
 				if (method.IsGeneric)

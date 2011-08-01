@@ -20,18 +20,25 @@ namespace Mosa.HelloWorld.Tests
 	{
 		public static void Test()
 		{
-			Screen.Write("Generics2: ");
+			Screen.Color = Colors.Gray;
+			Screen.Write("Gen-N: ");
 
 			PrintResult(GenericTest1());
+			PrintResult(GenericTest2());
 		}
 
 		public static bool GenericTest1()
 		{
-			//LinkedList<int> list = new LinkedList<int>();
+			var list = new LinkedList<int>();
+			list.Add(10);
+			return list.Find(10).value == 10;
+		}
 
-			//int a = Math.Min(10, 10);
-
-			return true;
+		public static bool GenericTest2()
+		{
+			var list = new LinkedList<int>();
+			list.Add(10);
+			return list.First.value != 11;
 		}
 	}
 

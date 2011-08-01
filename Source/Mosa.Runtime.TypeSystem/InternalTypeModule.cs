@@ -41,6 +41,11 @@ namespace Mosa.Runtime.TypeSystem
 		/// </summary>
 		private readonly List<RuntimeMethod> methods;
 
+		/// <summary>
+		/// 
+		/// </summary>
+		private readonly HashSet<string> typeNames;
+
 		#endregion // Data members
 
 		#region Construction
@@ -56,6 +61,7 @@ namespace Mosa.Runtime.TypeSystem
 			this.typeSystem = typeSystem;
 			this.types = new List<RuntimeType>();
 			this.methods = new List<RuntimeMethod>();
+			this.typeNames = new HashSet<string>();
 		}
 
 		#endregion // Construction
@@ -196,8 +202,11 @@ namespace Mosa.Runtime.TypeSystem
 		/// <param name="type">The type.</param>
 		public void AddType(RuntimeType type)
 		{
-			if (!types.Contains(type))
+			if (!types.Contains(type) && !typeNames.Contains(type.FullName))
+			{
 				types.Add(type);
+				typeNames.Add(type.FullName);
+			}
 		}
 
 		/// <summary>
