@@ -25,6 +25,9 @@ using Mosa.Compiler.Linker;
 
 using IR = Mosa.Runtime.CompilerFramework.IR;
 using CIL = Mosa.Runtime.CompilerFramework.CIL;
+using Mosa.Runtime.CompilerFramework.CIL;
+using Mosa.Runtime.TypeSystem.Generic;
+using Mosa.Runtime.TypeSystem.Cil;
 
 namespace Mosa.Runtime.CompilerFramework.IR
 {
@@ -542,6 +545,14 @@ namespace Mosa.Runtime.CompilerFramework.IR
 				var genericInstSigType = thisReference.Type as GenericInstSigType;
 				var baseSigType = genericInstSigType.BaseType as ValueTypeSigType;
 				classType = typeModule.GetType(baseSigType.Token);
+			}
+
+			if (classType.ContainsOpenGenericParameters)
+			{
+				var decoder = this.methodCompiler.Pipeline.FindFirst<IInstructionDecoder>();
+				if (!(classType is CilGenericType))
+					classType = new CilGenericType(classType.Module, classType.Token, classType, thisReference.Type as GenericInstSigType);
+				classType = decoder.GenericTypePatcher.PatchType(this.typeModule, this.methodCompiler.Method.DeclaringType as CilGenericType, classType as CilGenericType);
 			}
 
 			List<Operand> ctorOperands = new List<Operand>(context.Operands);

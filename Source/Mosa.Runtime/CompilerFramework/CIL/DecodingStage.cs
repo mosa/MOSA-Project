@@ -45,8 +45,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// 
 		/// </summary>
-		private IGenericTypePatcher genericTypePatcher = new GenericTypePatcher();
-
+		private IGenericTypePatcher genericTypePatcher = null;
+		
 		#endregion // Data members
 
 		#region IPipelineStage Members
@@ -62,6 +62,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </summary>
 		public void Run()
 		{
+			this.genericTypePatcher = new GenericTypePatcher(this.typeSystem);
 			exceptionClauseHeader = methodCompiler.ExceptionClauseHeader;
 
 			using (Stream code = methodCompiler.GetInstructionStream())
@@ -84,6 +85,19 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 						else
 						{
 							localsSignature = new LocalVariableSignature(methodCompiler.Method.Module.MetadataModule.Metadata, row.SignatureBlobIdx);
+						}
+
+						var declaringType = this.methodCompiler.Method.DeclaringType;
+						var locals = localsSignature.Locals;
+						for (var i = 0; i < locals.Length; ++i)
+						{
+							var local = locals[i];
+							if (local.Type is GenericInstSigType && declaringType is CilGenericType)
+							{
+								var genericInstSigType = local.Type as GenericInstSigType;
+								var genericArguments = this.genericTypePatcher.CloseGenericArguments((declaringType as CilGenericType).GenericArguments, genericInstSigType.GenericArguments);
+								local = new VariableSignature(locals[i], genericArguments);
+							}
 						}
 
 						methodCompiler.SetLocalVariableSignature(localsSignature);

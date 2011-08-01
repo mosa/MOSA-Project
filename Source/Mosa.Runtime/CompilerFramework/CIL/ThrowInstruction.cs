@@ -34,6 +34,11 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 		#region Properties
 
+		public override void Decode(Context ctx, IInstructionDecoder decoder)
+		{
+			base.Decode(ctx, decoder);
+		}
+
 		/// <summary>
 		/// Determines flow behavior of this instruction.
 		/// </summary>

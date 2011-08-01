@@ -110,6 +110,15 @@ namespace Mosa.Runtime.Metadata.Signatures
 				if ((Type as VarSigType).Index < genericArguments.Length)
 					this.Type = genericArguments[(Type as VarSigType).Index];
 			}
+			else if (this.Type is GenericInstSigType)
+			{
+				var genericInstSigType = this.Type as GenericInstSigType;
+				for (var i = 0; i < genericInstSigType.GenericArguments.Length; ++i)
+				{
+					if (genericInstSigType.GenericArguments[i] is VarSigType)
+						genericInstSigType.GenericArguments[i] = genericArguments[(genericInstSigType.GenericArguments[i] as VarSigType).Index];
+				}
+			}
 		}
 
 	}

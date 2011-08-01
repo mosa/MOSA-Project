@@ -36,6 +36,19 @@ namespace Mosa.Runtime.TypeSystem
 		/// 
 		/// </summary>
 		private static uint signatureTokenCounter = 1u;
+		/// <summary>
+		/// 
+		/// </summary>
+		private ITypeSystem typeSystem = null;
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="GenericTypePatcher"/> class.
+		/// </summary>
+		/// <param name="typeSystem">The type system.</param>
+		public GenericTypePatcher(ITypeSystem typeSystem)
+		{
+			this.typeSystem = typeSystem;
+		}
 
 		/// <summary>
 		/// Patches the type.
@@ -55,7 +68,10 @@ namespace Mosa.Runtime.TypeSystem
 
 			var signature = new GenericInstSigType(sigtype, genericArguments);
 
-			return new CilGenericType(openType.Module, typeToken, openType.BaseGenericType, signature);
+			var type = new CilGenericType(openType.Module, typeToken, openType.BaseGenericType, signature);
+			(this.typeSystem.InternalTypeModule as InternalTypeModule).AddType(type);
+
+			return type;
 		}
 
 		/// <summary>
@@ -78,6 +94,7 @@ namespace Mosa.Runtime.TypeSystem
 			var signature = new GenericInstSigType(sigtype, genericArguments);
 
 			var patchedType = new CilGenericType(openField.Module, typeToken, openType.BaseGenericType, signature);
+			(this.typeSystem.InternalTypeModule as InternalTypeModule).AddType(patchedType);
 
 			foreach (var field in patchedType.Fields)
 			{
@@ -146,13 +163,14 @@ namespace Mosa.Runtime.TypeSystem
 		/// <param name="enclosingType">Type of the enclosing.</param>
 		/// <param name="openType">Type of the open.</param>
 		/// <returns></returns>
-		private SigType[] CloseGenericArguments(SigType[] enclosingType, SigType[] openType)
+		public SigType[] CloseGenericArguments(SigType[] enclosingType, SigType[] openType)
 		{
 			var result = new SigType[openType.Length];
 
 			for (var i = 0; i < openType.Length; ++i)
 			{
-				result[i] = enclosingType[(openType[i] as VarSigType).Index];
+				if (openType[i] is VarSigType)
+					result[i] = enclosingType[(openType[i] as VarSigType).Index];
 			}
 
 			return result;
@@ -178,6 +196,7 @@ namespace Mosa.Runtime.TypeSystem
 			var signature = new GenericInstSigType(sigtype, genericArguments);
 
 			var patchedType = new CilGenericType(openMethod.Module, typeToken, openType.BaseGenericType, signature);
+			(this.typeSystem.InternalTypeModule as InternalTypeModule).AddType(patchedType);
 
 			foreach (var method in patchedType.Methods)
 			{

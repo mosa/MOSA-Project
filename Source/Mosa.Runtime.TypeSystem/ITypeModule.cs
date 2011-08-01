@@ -101,6 +101,5 @@ namespace Mosa.Runtime.TypeSystem
 		/// <param name="token">The token.</param>
 		/// <returns></returns>
 		string GetExternalName(Token token);
-		
 	}
 }
