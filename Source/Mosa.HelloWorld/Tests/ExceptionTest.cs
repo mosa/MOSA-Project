@@ -15,6 +15,7 @@ namespace Mosa.HelloWorld.Tests
 			PrintResult(ExceptionTest1());
 			PrintResult(ExceptionTest2());
 			PrintResult(ExceptionTest3());
+			PrintResult(ExceptionTest4());
 		}
 
 		public static bool ExceptionTest1()
@@ -78,6 +79,49 @@ namespace Mosa.HelloWorld.Tests
 			a = a + 7;
 
 			return (a == 121);
+		}
+
+		public static bool ExceptionTest4()
+		{
+			int a = 10;
+
+			try
+			{
+				try
+				{
+					a = a + 1;
+				}
+				finally
+				{
+					a = a + 100;
+				}
+			}
+			finally
+			{
+				a = a + 3;
+			}
+
+			a = a + 7;
+
+			try
+			{
+				try
+				{
+					a = a + 1;
+				}
+				finally
+				{
+					a = a + 100;
+				}
+			}
+			finally
+			{
+				a = a + 3;
+			}
+
+			a = a + 7;
+
+			return (a == 232);
 		}
 	}
 }
