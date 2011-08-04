@@ -127,6 +127,10 @@ namespace Mosa.Runtime.CompilerFramework
 			{
 				this.FilterOffset = reader.ReadInt32();
 			}
+			else
+			{
+				reader.ReadInt32();				
+			}
 		}
 
 

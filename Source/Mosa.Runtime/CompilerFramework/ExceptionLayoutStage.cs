@@ -29,7 +29,6 @@ namespace Mosa.Runtime.CompilerFramework
 		private List<ExceptionClauseNode> sortedClauses;
 
 		private Dictionary<BasicBlock, ExceptionClause> blockExceptions;
-		private Dictionary<int, ExceptionClause> exceptionLabelMap;
 
 		private Dictionary<ExceptionClause, List<BasicBlock>> exceptionBlocks = new Dictionary<ExceptionClause, List<BasicBlock>>();
 
@@ -70,8 +69,6 @@ namespace Mosa.Runtime.CompilerFramework
 
 		private void AssignBlockstoClauses()
 		{
-			BuildExceptionLabelMap();
-
 			blockExceptions = new Dictionary<BasicBlock, ExceptionClause>();
 
 			foreach (BasicBlock block in basicBlocks)
@@ -110,14 +107,6 @@ namespace Mosa.Runtime.CompilerFramework
 			}
 
 			return null;
-		}
-
-		private void BuildExceptionLabelMap()
-		{
-			exceptionLabelMap = new Dictionary<int, ExceptionClause>();
-
-			foreach (ExceptionClause clause in methodCompiler.ExceptionClauseHeader.Clauses)
-				exceptionLabelMap.Add(clause.TryOffset, clause);
 		}
 
 		private struct ExceptionEntry

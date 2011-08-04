@@ -10,10 +10,11 @@ namespace Mosa.HelloWorld.Tests
 		public static void Test()
 		{
 			Screen.Color = Colors.Gray;
-			Screen.Write(" EX: ");
+			Screen.Write(" EX:");
 
 			PrintResult(ExceptionTest1());
 			PrintResult(ExceptionTest2());
+			PrintResult(ExceptionTest3());
 		}
 
 		public static bool ExceptionTest1()
@@ -52,6 +53,31 @@ namespace Mosa.HelloWorld.Tests
 			int c = b + a;
 
 			return (c == 41);
+		}
+
+
+		public static bool ExceptionTest3()
+		{
+			int a = 10;
+			try
+			{
+				try
+				{
+					a = a + 1;
+				}
+				finally
+				{
+					a = a + 100;
+				}
+			}
+			finally
+			{
+				a = a + 3;
+			}
+
+			a = a + 7;
+
+			return (a == 121);
 		}
 	}
 }
