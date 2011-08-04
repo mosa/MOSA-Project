@@ -41,19 +41,5 @@ namespace Mosa.Runtime.CompilerFramework
 			this.Clauses.Add(clause);
 		}
 
-		/// <summary>
-		/// Sorts this instance.
-		/// </summary>
-		public void Sort()
-		{
-			this.Clauses.Sort(delegate(ExceptionClause left, ExceptionClause right) 
-			{
-				if (left.HandlerEnd < right.HandlerOffset)
-					return -1;
-				if (left.HandlerOffset > right.HandlerLength && left.HandlerOffset < right.HandlerEnd)
-					return -1;
-				return 1;
-			});
-		}
 	}
 }

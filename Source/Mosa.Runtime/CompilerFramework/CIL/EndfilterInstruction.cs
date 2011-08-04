@@ -17,15 +17,15 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public sealed class EndfilterInstruction : UnaryInstruction
+	public sealed class EndFilterInstruction : UnaryInstruction
 	{
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="EndfilterInstruction"/> class.
+		/// Initializes a new instance of the <see cref="EndFilterInstruction"/> class.
 		/// </summary>
 		/// <param name="opcode">The opcode.</param>
-		public EndfilterInstruction(OpCode opcode)
+		public EndFilterInstruction(OpCode opcode)
 			: base(opcode)
 		{
 		}

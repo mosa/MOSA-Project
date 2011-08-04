@@ -17,20 +17,25 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public sealed class EndfinallyInstruction : BaseInstruction
+	public sealed class EndFinallyInstruction : BaseInstruction
 	{
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="EndfinallyInstruction"/> class.
+		/// Initializes a new instance of the <see cref="EndFinallyInstruction"/> class.
 		/// </summary>
 		/// <param name="opcode">The opcode.</param>
-		public EndfinallyInstruction(OpCode opcode)
+		public EndFinallyInstruction(OpCode opcode)
 			: base(opcode)
 		{
 		}
 
 		#endregion // Construction
+
+		public override FlowControl FlowControl
+		{
+			get { return FlowControl.EndFinally; }
+		}
 
 		#region Methods
 

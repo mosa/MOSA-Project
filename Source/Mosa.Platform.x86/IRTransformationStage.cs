@@ -575,11 +575,16 @@ namespace Mosa.Platform.x86
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.ReturnInstruction(Context context)
 		{
-			Operand op = context.Operand1;
-
-			if (op != null)
+			if (context.Branch == null)
 			{
-				callingConvention.MoveReturnValue(context, op);
+				// To return from an internal method call (usually from within a finally clause)
+				context.SetInstruction(CPUx86.Instruction.RetInstruction);
+				return;
+			}
+			
+			if (context.Operand1 != null)
+			{
+				callingConvention.MoveReturnValue(context, context.Operand1);
 				context.AppendInstruction(CPUx86.Instruction.JmpInstruction);
 				context.SetBranch(Int32.MaxValue);
 			}
@@ -893,7 +898,15 @@ namespace Mosa.Platform.x86
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.CallInstruction(Context context)
 		{
-			callingConvention.MakeCall(context);
+			if (context.OperandCount == 0 && context.Branch != null)
+			{
+				// inter-method call; usually for exception processing
+				context.ReplaceInstructionOnly(CPUx86.Instruction.CallInstruction);
+			}
+			else
+			{
+				callingConvention.MakeCall(context);
+			}
 		}
 
 		/// <summary>

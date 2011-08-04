@@ -26,18 +26,9 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		{
 		}
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="ReturnInstruction"/> class.
-		/// </summary>
-		/// <param name="op">The operand to return.</param>
-		public ReturnInstruction(Operand op) :
-			base(op)
-		{
-		}
-
 		#endregion // Construction
 
-		#region OneOperandInstruction Overrides
+		#region Overrides
 
 		/// <summary>
 		/// Determines flow behavior of this context.

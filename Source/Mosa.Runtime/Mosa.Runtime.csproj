@@ -92,7 +92,6 @@
     <Compile Include="CompilerFramework\ILoggerWriter.cs" />
     <Compile Include="CompilerFramework\MethodTableBuilderStage.cs" />
     <Compile Include="CompilerFramework\TypeLayoutStage.cs" />
-    <Compile Include="CompilerFramework\ExceptionEngine.cs" />
     <Compile Include="CompilerFramework\IR\ThrowInstruction.cs" />
     <Compile Include="CompilerFramework\GenericsResolverStage.cs" />
     <Compile Include="CompilerFramework\ICompilationSchedulerStage.cs" />
@@ -134,8 +133,8 @@
     <Compile Include="CompilerFramework\CIL\DivInstruction.cs" />
     <Compile Include="CompilerFramework\CIL\DupInstruction.cs" />
     <Compile Include="CompilerFramework\ExceptionClause.cs" />
-    <Compile Include="CompilerFramework\CIL\EndfilterInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\EndfinallyInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\EndFilterInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\EndFinallyInstruction.cs" />
     <Compile Include="CompilerFramework\CIL\IBranchInstruction.cs" />
     <Compile Include="CompilerFramework\CIL\InitblkInstruction.cs" />
     <Compile Include="CompilerFramework\CIL\InitObjInstruction.cs" />

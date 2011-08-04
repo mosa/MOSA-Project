@@ -1152,8 +1152,31 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Endfinally(Context context)
 		{
-			//TODO
-			//throw new NotSupportedException();
+			context.SetInstruction(IR.Instruction.ReturnInstruction);
+		}
+
+
+		private ExceptionClause FindFinallyInnerClause(Context context)
+		{
+			ExceptionClause innerClause = null;
+			int label = context.Label;
+
+			foreach (ExceptionClause clause in methodCompiler.ExceptionClauseHeader.Clauses)
+			{
+				if (clause.IsLabelWithinTry(label))
+				{
+					if (innerClause == null)
+					{
+						innerClause = clause;
+					}
+					else if (innerClause.TryLength > clause.TryLength)
+					{
+						innerClause = clause;
+					}
+				}
+			}
+
+			return (innerClause.Kind == ExceptionClauseType.Finally) ? innerClause : null;
 		}
 
 		/// <summary>
@@ -1162,6 +1185,18 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Leave(Context context)
 		{
+			// Find enclosing finally clause
+			ExceptionClause innerClause = FindFinallyInnerClause(context);
+
+			if (innerClause != null)
+			{
+				// Find finally block
+				BasicBlock finallyBlock = this.FindBlock(innerClause.HandlerOffset);
+
+				Context before = context.InsertBefore();
+				before.SetInstruction(IR.Instruction.CallInstruction, finallyBlock);
+			}
+
 			context.ReplaceInstructionOnly(IR.Instruction.JmpInstruction);
 		}
 
@@ -1786,12 +1821,12 @@ namespace Mosa.Runtime.CompilerFramework.IR
 
 			//TODO: Verify!
 
-			Type instrinsicType = Type.GetType(external);
+			Type intrinsicType = Type.GetType(external);
 
-			if (instrinsicType == null)
+			if (intrinsicType == null)
 				return false;
 
-			IIntrinsicMethod intrinsicMethod = Activator.CreateInstance(instrinsicType) as IIntrinsicMethod;
+			IIntrinsicMethod intrinsicMethod = Activator.CreateInstance(intrinsicType) as IIntrinsicMethod;
 
 			if (intrinsicMethod == null)
 				return false;

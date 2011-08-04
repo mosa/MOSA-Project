@@ -72,9 +72,6 @@ namespace Mosa.Runtime.CompilerFramework
 
 			// Link all the blocks together
 			BuildBlockLinks(prologue);
-
-			// Link Exception Header Clauses
-			//LinkExceptionHeaderClauses();
 		}
 
 		#endregion // IMethodCompilerStage members
@@ -114,6 +111,12 @@ namespace Mosa.Runtime.CompilerFramework
 						int next = ctx.Next.Label;
 						if (!targets.ContainsKey(next))
 							targets.Add(next, -1);
+						continue;
+					case FlowControl.EndFinally: continue;
+					case FlowControl.Leave:
+						Debug.Assert(ctx.Branch.Targets.Length == 1);
+						if (!targets.ContainsKey(ctx.Branch.Targets[0]))
+							targets.Add(ctx.Branch.Targets[0], -1);
 						continue;
 					default:
 						Debug.Assert(false);
@@ -166,7 +169,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 				flow = ctx.Instruction.FlowControl;
 
-				slice = (flow == FlowControl.Return || flow == FlowControl.Branch || flow == FlowControl.ConditionalBranch || flow == FlowControl.Break || flow == FlowControl.Throw);
+				slice = (flow == FlowControl.Return || flow == FlowControl.Branch || flow == FlowControl.ConditionalBranch || flow == FlowControl.Break || flow == FlowControl.Throw || flow == FlowControl.Leave || flow == FlowControl.EndFinally);
 			}
 
 			Debug.Assert(targets.Count <= 1);
@@ -211,6 +214,10 @@ namespace Mosa.Runtime.CompilerFramework
 							FindAndLinkBlock(block, this.instructionSet.Data[nextIndex].Label);
 						}
 						continue;
+					case FlowControl.EndFinally: continue;
+					case FlowControl.Leave:
+						FindAndLinkBlock(block, ctx.Branch.Targets[0]);
+						return;
 					default:
 						Debug.Assert(false);
 						break;
@@ -223,8 +230,8 @@ namespace Mosa.Runtime.CompilerFramework
 			BasicBlock next = this.FindBlock(target);
 			if (!block.NextBlocks.Contains(next))
 			{
-				this.LinkBlocks(block, next);
-				this.BuildBlockLinks(next);
+				LinkBlocks(block, next);
+				BuildBlockLinks(next);
 			}
 		}
 

@@ -29,7 +29,7 @@ namespace Mosa.HelloWorld.Tests
 		public static void Test()
 		{
 			Screen.Color = Colors.Gray;
-			Screen.Write(" Inst: ");
+			Screen.Write(" Inst:");
 
 			PrintResult(IsInstTest1());
 			PrintResult(IsInstTest2());

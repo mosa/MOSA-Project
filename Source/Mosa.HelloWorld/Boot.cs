@@ -22,7 +22,7 @@ namespace Mosa.HelloWorld
 	/// </summary>
 	public static class Boot
 	{
-
+		
 		/// <summary>
 		/// Mains this instance.
 		/// </summary>

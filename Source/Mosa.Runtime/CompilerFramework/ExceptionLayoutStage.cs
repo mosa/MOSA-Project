@@ -122,14 +122,14 @@ namespace Mosa.Runtime.CompilerFramework
 
 		private struct ExceptionEntry
 		{
-			public long Start;
-			public long Length;
-			public long Handler;
-			public long Filter;
+			public int Start;
+			public int Length;
+			public int Handler;
+			public int Filter;
 
-			public long End { get { return Start + Length - 1; } }
+			public int End { get { return Start + Length - 1; } }
 
-			public ExceptionEntry(long start, long length, long handler, long filter)
+			public ExceptionEntry(int start, int length, int handler, int filter)
 			{
 				Start = start;
 				Length = length;
@@ -137,21 +137,21 @@ namespace Mosa.Runtime.CompilerFramework
 				Filter = filter;
 			}
 
-			public void Write(Stream stream)
-			{
-				//FIXME:
-				WriteLittleEndian4(stream, (int)Start);
-				WriteLittleEndian4(stream, (int)Length);
-				WriteLittleEndian4(stream, (int)Handler);
-				WriteLittleEndian4(stream, (int)Filter);
-			}
+		}
 
-			public void WriteLittleEndian4(Stream stream, int value)
-			{
-				byte[] bytes = LittleEndianBitConverter.GetBytes(value);
-				stream.Write(bytes, 0, bytes.Length);
-			}
+		static private void Write(ExceptionEntry clause, Stream stream)
+		{
+			//FIXME:
+			WriteLittleEndian4(stream, clause.Start);
+			WriteLittleEndian4(stream, clause.Length);
+			WriteLittleEndian4(stream, clause.Handler);
+			WriteLittleEndian4(stream, clause.Filter);
+		}
 
+		static private void WriteLittleEndian4(Stream stream, int value)
+		{
+			byte[] bytes = LittleEndianBitConverter.GetBytes(value);
+			stream.Write(bytes, 0, bytes.Length);
 		}
 
 		private void EmitExceptionTable()
@@ -168,15 +168,15 @@ namespace Mosa.Runtime.CompilerFramework
 
 				foreach (BasicBlock block in blocks)
 				{
-					long start = codeEmitter.GetPosition(block.Label);
-					long length = codeEmitter.GetPosition(block.Label + 0x0F000000) - start;
-					long handler = codeEmitter.GetPosition(clause.TryOffset);
-					long filter = codeEmitter.GetPosition(clause.FilterOffset);
+					int start = (int)codeEmitter.GetPosition(block.Label);
+					int length = (int)codeEmitter.GetPosition(block.Label + 0x0F000000) - start;
+					int handler = (int)codeEmitter.GetPosition(clause.TryOffset);
+					int filter = (int)codeEmitter.GetPosition(clause.FilterOffset);
 
 					if (prev.End + 1 == start && prev.Handler == handler && prev.Filter == filter)
 					{
 						// merge protected blocks sequence
-						prev.Length = prev.Length + codeEmitter.GetPosition(block.Label + 0x0F000000) - start;
+						prev.Length = prev.Length + (int)codeEmitter.GetPosition(block.Label + 0x0F000000) - start;
 					}
 					else
 					{
@@ -194,7 +194,7 @@ namespace Mosa.Runtime.CompilerFramework
 			{
 				foreach (ExceptionEntry entry in entries)
 				{
-					entry.Write(stream);
+					Write(entry, stream);
 				}
 
 				stream.Write(new Byte[nativePointerSize], 0, nativePointerSize);

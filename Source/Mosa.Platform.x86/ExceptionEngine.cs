@@ -13,6 +13,8 @@ using System.Text;
 
 using Mosa.Platform.x86.Intrinsic;
 
+// TODO: Remove this file
+
 namespace Mosa.Platform.x86
 {
 	/// <summary>

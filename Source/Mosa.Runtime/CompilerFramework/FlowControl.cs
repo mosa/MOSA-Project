@@ -45,7 +45,7 @@ namespace Mosa.Runtime.CompilerFramework
 		Break = 0x10,
 
 		/// <summary>
-		/// The instruction returns from the method.
+		/// The instruction returns from the method
 		/// </summary>
 		Return = 0x20,
 
@@ -53,5 +53,15 @@ namespace Mosa.Runtime.CompilerFramework
 		/// The instruction throws an exception.
 		/// </summary>
 		Throw = 0x40,
+
+		/// <summary>
+		/// Leaves a try block
+		/// </summary>
+		Leave = 0x60,
+
+		/// <summary>
+		/// End of finally block
+		/// </summary>
+		EndFinally = 0x80,
 	}
 }

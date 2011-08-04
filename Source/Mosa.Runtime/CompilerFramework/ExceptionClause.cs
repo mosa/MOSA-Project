@@ -90,6 +90,11 @@ namespace Mosa.Runtime.CompilerFramework
 			get { return this.HandlerOffset + this.HandlerLength; }
 		}
 
+		public bool IsLabelWithinTry(int label)
+		{
+			return (label >= TryOffset && label < TryEnd);
+		}
+
 		/// <summary>
 		/// Reads the specified reader.
 		/// </summary>
@@ -123,6 +128,7 @@ namespace Mosa.Runtime.CompilerFramework
 				this.FilterOffset = reader.ReadInt32();
 			}
 		}
+
 
 	}
 }

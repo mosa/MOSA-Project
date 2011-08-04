@@ -10,7 +10,7 @@ namespace Mosa.HelloWorld.Tests
 		public static void Test()
 		{
 			Screen.Color = Colors.Gray;
-			Screen.Write(" String: ");
+			Screen.Write(" String:");
 
 			PrintResult(ConcatTest1());
 			PrintResult(ConcatTest2());
@@ -46,13 +46,13 @@ namespace Mosa.HelloWorld.Tests
 		{
 			string abcde = "abcddddd";
 			string combined = "abc";
-			
+
 			for (int i = 0; i < 5; ++i)
-				combined = string.Concat(combined, new string ('d', 1));
+				combined = string.Concat(combined, new string('d', 1));
 
 			return String.Equals(combined, abcde);
 		}
-		
+
 		public static bool ConcatTest4()
 		{
 			string abcde = "zzzzzzzzzz";

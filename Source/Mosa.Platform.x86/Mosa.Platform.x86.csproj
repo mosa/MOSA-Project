@@ -108,7 +108,6 @@
     <Compile Include="CPUx86\LeaveInstruction.cs" />
     <Compile Include="CPUx86\SseRoundInstruction.cs" />
     <Compile Include="ExceptionEngine.cs" />
-    <Compile Include="ExceptionHeaderPreprocessingStage.cs" />
     <Compile Include="Intrinsic\CallFilter.cs" />
     <Compile Include="Intrinsic\GetEip.cs" />
     <Compile Include="Intrinsic\Cli.cs" />
