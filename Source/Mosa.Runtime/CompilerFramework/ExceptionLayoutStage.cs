@@ -99,7 +99,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 			foreach (ExceptionClauseNode node in sortedClauses)
 			{
-				if (label >= node.Clause.TryOffset && label < node.Clause.TryEnd)
+				if (node.Clause.IsLabelWithinTry(label))
 					return node.Clause;
 
 				//if (node.Clause.TryEnd > label)
