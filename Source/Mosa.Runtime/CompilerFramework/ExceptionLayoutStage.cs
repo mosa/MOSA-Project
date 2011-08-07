@@ -17,6 +17,8 @@ using Mosa.Compiler.Linker;
 
 using CIL = Mosa.Runtime.CompilerFramework.CIL;
 
+// FIXME: Splits this class into platform dependent and independent classes. Move platform dependent code into Mosa.Platforms.x86
+
 namespace Mosa.Runtime.CompilerFramework
 {
 	public sealed class ExceptionLayoutStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
@@ -128,21 +130,6 @@ namespace Mosa.Runtime.CompilerFramework
 
 		}
 
-		static private void Write(ExceptionEntry clause, Stream stream)
-		{
-			//FIXME:
-			WriteLittleEndian4(stream, clause.Start);
-			WriteLittleEndian4(stream, clause.Length);
-			WriteLittleEndian4(stream, clause.Handler);
-			WriteLittleEndian4(stream, clause.Filter);
-		}
-
-		static private void WriteLittleEndian4(Stream stream, int value)
-		{
-			byte[] bytes = LittleEndianBitConverter.GetBytes(value);
-			stream.Write(bytes, 0, bytes.Length);
-		}
-
 		private void EmitExceptionTable()
 		{
 			List<ExceptionEntry> entries = new List<ExceptionEntry>();
@@ -183,12 +170,22 @@ namespace Mosa.Runtime.CompilerFramework
 			{
 				foreach (ExceptionEntry entry in entries)
 				{
-					Write(entry, stream);
+					// FIXME: Assumes platform
+					WriteLittleEndian4(stream, entry.Start);
+					WriteLittleEndian4(stream, entry.Length);
+					WriteLittleEndian4(stream, entry.Handler);
+					WriteLittleEndian4(stream, entry.Filter);
 				}
 
 				stream.Write(new Byte[nativePointerSize], 0, nativePointerSize);
 			}
 
+		}
+
+		static private void WriteLittleEndian4(Stream stream, int value)
+		{
+			byte[] bytes = LittleEndianBitConverter.GetBytes(value);
+			stream.Write(bytes, 0, bytes.Length);
 		}
 
 		#region Postorder-traversal Sort

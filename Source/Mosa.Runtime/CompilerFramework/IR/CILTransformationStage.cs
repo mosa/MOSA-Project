@@ -937,29 +937,22 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			ConditionCode cc = ConvertCondition(((CIL.ICILInstruction)context.Instruction).OpCode);
 			Operand first = context.Operand1;
 			Operand second = context.Operand2;
+			Operand comparisonResult = this.methodCompiler.CreateTemporary(BuiltInSigType.Int32);
 
-			IInstruction comparisonInstruction = Instruction.IntegerCompareInstruction;
 			if (first.StackType == StackTypeCode.F)
 			{
-				comparisonInstruction = Instruction.FloatingPointCompareInstruction;
-				Operand comparisonResult = this.methodCompiler.CreateTemporary(BuiltInSigType.Int32);
-				context.SetInstruction(comparisonInstruction, comparisonResult, first, second);
+				context.SetInstruction(Instruction.FloatingPointCompareInstruction, comparisonResult, first, second);
 				context.ConditionCode = cc;
-
 				context.AppendInstruction(Instruction.IntegerCompareInstruction, comparisonResult, comparisonResult, new ConstantOperand(new SigType(CilElementType.I), 1));
 				context.ConditionCode = ConditionCode.Equal;
 				context.AppendInstruction(Instruction.BranchInstruction, comparisonResult);
 				context.ConditionCode = ConditionCode.Equal;
 				context.SetBranch(branch.Targets[0]);
-				//context.AppendInstruction(Instruction.JmpInstruction);
-				//context.SetBranch(context.Next.Label);
 			}
 			else
 			{
-				Operand comparisonResult = this.methodCompiler.CreateTemporary(BuiltInSigType.Int32);
-				context.SetInstruction(comparisonInstruction, comparisonResult, first, second);
+				context.SetInstruction(Instruction.IntegerCompareInstruction, comparisonResult, first, second);
 				context.ConditionCode = cc;
-
 				context.AppendInstruction(Instruction.BranchInstruction, comparisonResult);
 				context.ConditionCode = cc;
 				context.SetBranch(branch.Targets[0]);
