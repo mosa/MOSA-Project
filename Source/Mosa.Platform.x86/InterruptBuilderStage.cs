@@ -16,14 +16,13 @@ using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.CompilerFramework.Operands;
-using Mosa.Tools.Compiler.LinkTimeCodeGeneration;
+using Mosa.Runtime.Linker;
 using Mosa.Compiler.Linker;
 
-using Mosa.Platform.x86;
 using IR = Mosa.Runtime.CompilerFramework.IR;
 using CPUx86 = Mosa.Platform.x86.CPUx86;
 
-namespace Mosa.Tools.Compiler.Stage
+namespace Mosa.Platform.x86
 {
 
 	/// <summary>

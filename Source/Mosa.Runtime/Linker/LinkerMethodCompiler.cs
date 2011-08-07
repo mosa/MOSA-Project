@@ -15,9 +15,9 @@ using Mosa.Compiler.Linker;
 using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime.TypeSystem;
 
-namespace Mosa.Tools.Compiler.LinkTimeCodeGeneration
+namespace Mosa.Runtime.Linker
 {
-	sealed class LinkerMethodCompiler : BaseMethodCompiler
+	public sealed class LinkerMethodCompiler : BaseMethodCompiler
 	{
 		#region Construction
 

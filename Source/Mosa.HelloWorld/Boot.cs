@@ -50,14 +50,7 @@ namespace Mosa.HelloWorld
 			Screen.Color = Colors.Green;
 			Screen.Write(@"Multibootaddress: ");
 			Screen.Color = Colors.Gray;
-			Screen.Write(Native.Get32(0x200004), 16, 8);
-
-			Screen.NextLine();
-			Screen.Color = Colors.Green;
-			Screen.Write(@"Magic number:     ");
-			Screen.Color = Colors.Gray;
-			Screen.Color = 0x07;
-			Screen.Write(Native.Get32(0x200000), 16, 8);
+			Screen.Write(Multiboot.MultibootStructure, 16, 8);
 
 			Screen.NextLine();
 			Screen.Color = Colors.Green;

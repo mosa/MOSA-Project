@@ -20,7 +20,7 @@ using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Compiler.Linker;
 using Mosa.Tools.Compiler.TypeInitializers;
 using Mosa.Tools.Compiler.Linker;
-using Mosa.Tools.Compiler.LinkTimeCodeGeneration;
+using Mosa.Runtime.Linker;
 using Mosa.Platform.x86;
 using Mosa.Runtime.Metadata;
 

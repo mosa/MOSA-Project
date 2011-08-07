@@ -260,6 +260,10 @@
     <Compile Include="CompilerFramework\LocalCSE.cs" />
     <Compile Include="CompilerFramework\IMethodCompiler.cs" />
     <Compile Include="Linker\BaseAssemblyLinkerStage.cs" />
+    <Compile Include="Linker\LinkerGeneratedMethod.cs" />
+    <Compile Include="Linker\LinkerGeneratedType.cs" />
+    <Compile Include="Linker\LinkerMethodCompiler.cs" />
+    <Compile Include="Linker\LinkTimeCodeGenerator.cs" />
     <Compile Include="Memory\IMemoryPageManager.cs" />
     <Compile Include="Memory\PageAccessFlags.cs" />
     <Compile Include="IJitService.cs">

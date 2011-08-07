@@ -16,7 +16,7 @@ using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Loader;
 
-namespace Mosa.Tools.Compiler
+namespace Mosa.Runtime.Linker
 {
 	/// <summary>
 	/// Represents compiler generated methods.

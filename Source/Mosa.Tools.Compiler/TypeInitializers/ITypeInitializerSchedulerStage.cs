@@ -8,13 +8,14 @@
  */
 
 using Mosa.Runtime.TypeSystem;
+using Mosa.Runtime.Linker;
 
 namespace Mosa.Tools.Compiler.TypeInitializers
 {
 	public interface ITypeInitializerSchedulerStage
 	{
 		/// <summary>
-		/// Gets the intializer method.
+		/// Gets the initializer method.
 		/// </summary>
 		/// <value>The method.</value>
 		LinkerGeneratedMethod Method { get; }

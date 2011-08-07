@@ -292,7 +292,7 @@ namespace Mosa.Tools.Compiler
 				aot.Pipeline.AddRange(new IAssemblyCompilerStage[] 
 				{
 					this.bootFormatStage,
-					new InterruptBuilderStage(),						
+					//new InterruptBuilderStage(),						
 					new AssemblyCompilationStage(), 
 					//new FakeSystemObjectGenerationStage(),
 					new MethodCompilerSchedulerStage(),

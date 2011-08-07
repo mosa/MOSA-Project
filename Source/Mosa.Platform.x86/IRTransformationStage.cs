@@ -1046,18 +1046,7 @@ namespace Mosa.Platform.x86
 			// Call exception handling
 			context.AppendInstruction(CPUx86.Instruction.CallInstruction, null, method);
 
-			// Compile exception handling if necessary
-			if (!exceptionHandlingCompiled)
-			{
-				//FIXME
-				//this.methodCompiler.Scheduler.ScheduleTypeForCompilation(typeSystem.GetType(@"Mosa.Platforms.x86.RegisterContext, Mosa.Platforms.x86"));
-				//this.methodCompiler.Scheduler.ScheduleTypeForCompilation(typeSystem.GetType(@"Mosa.Platforms.x86.ExceptionEngine, Mosa.Platforms.x86"));
-				//(this.typeLayout as TypeLayoutStage).CreateSequentialLayout(typeSystem.GetType(@"Mosa.Platforms.x86.RegisterContext, Mosa.Platforms.x86"));
-				//(this.typeLayout as TypeLayoutStage).CreateSequentialLayout(typeSystem.GetType(@"Mosa.Platforms.x86.ExceptionEngine, Mosa.Platforms.x86"));
-				//(this.typeLayout as TypeLayoutStage).BuildMethodTable(typeSystem.GetType(@"Mosa.Platforms.x86.RegisterContext, Mosa.Platforms.x86"));
-				//(this.typeLayout as TypeLayoutStage).BuildMethodTable(typeSystem.GetType(@"Mosa.Platforms.x86.ExceptionEngine, Mosa.Platforms.x86"));
-				exceptionHandlingCompiled = true;
-			}
+
 		}
 
 		#endregion //  IIRVisitor

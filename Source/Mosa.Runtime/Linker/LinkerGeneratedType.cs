@@ -14,7 +14,7 @@ using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime.TypeSystem;
 
-namespace Mosa.Tools.Compiler
+namespace Mosa.Runtime.Linker
 {
 	/// <summary>
 	/// Represents a compiler generated type.

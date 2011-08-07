@@ -82,7 +82,30 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <typeparam name="StageType">The type of stage.</typeparam>
 		/// <param name="stage">The stage.</param>
-		public void InsertAfter<StageType>(IPipelineStage stage) where StageType : class, IPipelineStage
+		public void InsertAfterFirst<StageType>(IPipelineStage stage) where StageType : class, IPipelineStage
+		{
+			if (stage == null)
+				throw new ArgumentNullException(@"stage");
+
+			for (int i = 0; i < _pipeline.Count; i++)
+			{
+				StageType result = _pipeline[i] as StageType;
+				if (result != null)
+				{
+					_pipeline.Insert(i + 1, stage);
+					return;
+				}
+			}
+
+			throw new ArgumentNullException(@"missing stage to insert after");
+		}
+
+		/// <summary>
+		/// Inserts the stage after StageType
+		/// </summary>
+		/// <typeparam name="StageType">The type of stage.</typeparam>
+		/// <param name="stage">The stage.</param>
+		public void InsertAfterLast<StageType>(IPipelineStage stage) where StageType : class, IPipelineStage
 		{
 			if (stage == null)
 				throw new ArgumentNullException(@"stage");
@@ -105,7 +128,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <typeparam name="StageType">The type of stage.</typeparam>
 		/// <param name="stages">The stages.</param>
-		public void InsertAfter<StageType>(IEnumerable<IPipelineStage> stages) where StageType : class, IPipelineStage
+		public void InsertAfterLast<StageType>(IEnumerable<IPipelineStage> stages) where StageType : class, IPipelineStage
 		{
 			if (stages == null)
 				throw new ArgumentNullException(@"stage");

@@ -153,6 +153,10 @@ namespace Mosa.Platform.x86
 		/// <param name="assemblyCompilerPipeline">The assembly compiler pipeline to extend.</param>
 		public override void ExtendAssemblyCompilerPipeline(CompilerPipeline assemblyCompilerPipeline)
 		{
+			// HACK: Always inserts after second entry in pipeline
+			assemblyCompilerPipeline.InsertAfterFirst<IAssemblyCompilerStage>(
+				new InterruptBuilderStage()
+			);
 		}
 
 		/// <summary>
@@ -164,7 +168,7 @@ namespace Mosa.Platform.x86
 			// FIXME: Create a specific code generator instance using requested feature flags.
 			// FIXME: Add some more optimization passes, which take advantage of advanced x86 instructions
 			// and packed operations available with MMX/SSE extensions
-			methodCompilerPipeline.InsertAfter<PlatformStubStage>(
+			methodCompilerPipeline.InsertAfterLast<PlatformStubStage>(
 				new IMethodCompilerStage[]
 				{
 					new LongOperandTransformationStage(),
@@ -172,16 +176,14 @@ namespace Mosa.Platform.x86
 					new IRTransformationStage(),
 					new TweakTransformationStage(),
 					new MemToMemConversionStage(),
-					//new ExceptionHeaderPreprocessingStage(),
 				});
 
-			methodCompilerPipeline.InsertAfter<IBlockOrderStage>(
+			methodCompilerPipeline.InsertAfterLast<IBlockOrderStage>(
 				new IMethodCompilerStage[]
 				{                   
 					new SimplePeepholeOptimizationStage(),
 				});
 
-			//FlowGraphVisualizationStage.Instance,
 		}
 
 		/// <summary>

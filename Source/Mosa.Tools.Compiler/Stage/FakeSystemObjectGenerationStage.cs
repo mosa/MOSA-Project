@@ -17,7 +17,7 @@ using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.CompilerFramework.IR;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Metadata;
-using Mosa.Tools.Compiler.LinkTimeCodeGeneration;
+using Mosa.Runtime.Linker;
 
 namespace Mosa.Tools.Compiler.Stage
 {
