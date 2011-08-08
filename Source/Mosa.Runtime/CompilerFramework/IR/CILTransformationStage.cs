@@ -937,29 +937,22 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			ConditionCode cc = ConvertCondition(((CIL.ICILInstruction)context.Instruction).OpCode);
 			Operand first = context.Operand1;
 			Operand second = context.Operand2;
+			Operand comparisonResult = this.methodCompiler.CreateTemporary(BuiltInSigType.Int32);
 
-			IInstruction comparisonInstruction = Instruction.IntegerCompareInstruction;
 			if (first.StackType == StackTypeCode.F)
 			{
-				comparisonInstruction = Instruction.FloatingPointCompareInstruction;
-				Operand comparisonResult = this.methodCompiler.CreateTemporary(BuiltInSigType.Int32);
-				context.SetInstruction(comparisonInstruction, comparisonResult, first, second);
+				context.SetInstruction(Instruction.FloatingPointCompareInstruction, comparisonResult, first, second);
 				context.ConditionCode = cc;
-
 				context.AppendInstruction(Instruction.IntegerCompareInstruction, comparisonResult, comparisonResult, new ConstantOperand(new SigType(CilElementType.I), 1));
 				context.ConditionCode = ConditionCode.Equal;
 				context.AppendInstruction(Instruction.BranchInstruction, comparisonResult);
 				context.ConditionCode = ConditionCode.Equal;
 				context.SetBranch(branch.Targets[0]);
-				//context.AppendInstruction(Instruction.JmpInstruction);
-				//context.SetBranch(context.Next.Label);
 			}
 			else
 			{
-				Operand comparisonResult = this.methodCompiler.CreateTemporary(BuiltInSigType.Int32);
-				context.SetInstruction(comparisonInstruction, comparisonResult, first, second);
+				context.SetInstruction(Instruction.IntegerCompareInstruction, comparisonResult, first, second);
 				context.ConditionCode = cc;
-
 				context.AppendInstruction(Instruction.BranchInstruction, comparisonResult);
 				context.ConditionCode = cc;
 				context.SetBranch(branch.Targets[0]);
@@ -1152,8 +1145,31 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Endfinally(Context context)
 		{
-			//TODO
-			//throw new NotSupportedException();
+			context.SetInstruction(IR.Instruction.ReturnInstruction);
+		}
+
+
+		private ExceptionClause FindFinallyInnerClause(Context context)
+		{
+			ExceptionClause innerClause = null;
+			int label = context.Label;
+
+			foreach (ExceptionClause clause in methodCompiler.ExceptionClauseHeader.Clauses)
+			{
+				if (clause.IsLabelWithinTry(label))
+				{
+					if (innerClause == null)
+					{
+						innerClause = clause;
+					}
+					else if (innerClause.TryLength > clause.TryLength)
+					{
+						innerClause = clause;
+					}
+				}
+			}
+
+			return (innerClause.Kind == ExceptionClauseType.Finally) ? innerClause : null;
 		}
 
 		/// <summary>
@@ -1162,6 +1178,18 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Leave(Context context)
 		{
+			// Find enclosing finally clause
+			ExceptionClause innerClause = FindFinallyInnerClause(context);
+
+			if (innerClause != null)
+			{
+				// Find finally block
+				BasicBlock finallyBlock = this.FindBlock(innerClause.HandlerOffset);
+
+				Context before = context.InsertBefore();
+				before.SetInstruction(IR.Instruction.CallInstruction, finallyBlock);
+			}
+
 			context.ReplaceInstructionOnly(IR.Instruction.JmpInstruction);
 		}
 
@@ -1786,12 +1814,12 @@ namespace Mosa.Runtime.CompilerFramework.IR
 
 			//TODO: Verify!
 
-			Type instrinsicType = Type.GetType(external);
+			Type intrinsicType = Type.GetType(external);
 
-			if (instrinsicType == null)
+			if (intrinsicType == null)
 				return false;
 
-			IIntrinsicMethod intrinsicMethod = Activator.CreateInstance(instrinsicType) as IIntrinsicMethod;
+			IIntrinsicMethod intrinsicMethod = Activator.CreateInstance(intrinsicType) as IIntrinsicMethod;
 
 			if (intrinsicMethod == null)
 				return false;

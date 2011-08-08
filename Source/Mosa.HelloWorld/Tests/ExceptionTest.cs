@@ -1,21 +1,24 @@
-﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
- */
-
+using Mosa.Platform.x86;
+using Mosa.Kernel;
+using Mosa.Kernel.x86;
 using System;
 
-namespace Mosa.Test.Collection
+namespace Mosa.HelloWorld.Tests
 {
-
-	public static class ExceptionHandlingTests
+	public class ExceptionTest : KernelTest
 	{
+		public static void Test()
+		{
+			Screen.Color = Colors.Gray;
+			Screen.Write(" EX:");
 
-		public static int TryFinally1()
+			PrintResult(ExceptionTest1());
+			PrintResult(ExceptionTest2());
+			PrintResult(ExceptionTest3());
+			PrintResult(ExceptionTest4());
+		}
+
+		public static bool ExceptionTest1()
 		{
 			int a = 10;
 			try
@@ -29,10 +32,10 @@ namespace Mosa.Test.Collection
 
 			a = a + 7;
 
-			return a;
+			return (a == 21);
 		}
 
-		public static int TryFinally2()
+		public static bool ExceptionTest2()
 		{
 			int a = 10;
 			int b = 13;
@@ -50,10 +53,11 @@ namespace Mosa.Test.Collection
 
 			int c = b + a;
 
-			return c;
+			return (c == 41);
 		}
 
-		public static int TryFinally3()
+
+		public static bool ExceptionTest3()
 		{
 			int a = 10;
 			try
@@ -74,10 +78,10 @@ namespace Mosa.Test.Collection
 
 			a = a + 7;
 
-			return a;
+			return (a == 121);
 		}
 
-		public static int TryFinally4()
+		public static bool ExceptionTest4()
 		{
 			int a = 10;
 
@@ -117,8 +121,7 @@ namespace Mosa.Test.Collection
 
 			a = a + 7;
 
-			return a;
+			return (a == 232);
 		}
-
 	}
 }

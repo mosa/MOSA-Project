@@ -17,6 +17,8 @@ using Mosa.Compiler.Linker;
 
 using CIL = Mosa.Runtime.CompilerFramework.CIL;
 
+// FIXME: Splits this class into platform dependent and independent classes. Move platform dependent code into Mosa.Platforms.x86
+
 namespace Mosa.Runtime.CompilerFramework
 {
 	public sealed class ExceptionLayoutStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
@@ -29,7 +31,6 @@ namespace Mosa.Runtime.CompilerFramework
 		private List<ExceptionClauseNode> sortedClauses;
 
 		private Dictionary<BasicBlock, ExceptionClause> blockExceptions;
-		private Dictionary<int, ExceptionClause> exceptionLabelMap;
 
 		private Dictionary<ExceptionClause, List<BasicBlock>> exceptionBlocks = new Dictionary<ExceptionClause, List<BasicBlock>>();
 
@@ -70,8 +71,6 @@ namespace Mosa.Runtime.CompilerFramework
 
 		private void AssignBlockstoClauses()
 		{
-			BuildExceptionLabelMap();
-
 			blockExceptions = new Dictionary<BasicBlock, ExceptionClause>();
 
 			foreach (BasicBlock block in basicBlocks)
@@ -102,7 +101,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 			foreach (ExceptionClauseNode node in sortedClauses)
 			{
-				if (label >= node.Clause.TryOffset && label < node.Clause.TryEnd)
+				if (node.Clause.IsLabelWithinTry(label))
 					return node.Clause;
 
 				//if (node.Clause.TryEnd > label)
@@ -112,44 +111,21 @@ namespace Mosa.Runtime.CompilerFramework
 			return null;
 		}
 
-		private void BuildExceptionLabelMap()
-		{
-			exceptionLabelMap = new Dictionary<int, ExceptionClause>();
-
-			foreach (ExceptionClause clause in methodCompiler.ExceptionClauseHeader.Clauses)
-				exceptionLabelMap.Add(clause.TryOffset, clause);
-		}
-
 		private struct ExceptionEntry
 		{
-			public long Start;
-			public long Length;
-			public long Handler;
-			public long Filter;
+			public int Start;
+			public int Length;
+			public int Handler;
+			public int Filter;
 
-			public long End { get { return Start + Length - 1; } }
+			public int End { get { return Start + Length - 1; } }
 
-			public ExceptionEntry(long start, long length, long handler, long filter)
+			public ExceptionEntry(int start, int length, int handler, int filter)
 			{
 				Start = start;
 				Length = length;
 				Handler = handler;
 				Filter = filter;
-			}
-
-			public void Write(Stream stream)
-			{
-				//FIXME:
-				WriteLittleEndian4(stream, (int)Start);
-				WriteLittleEndian4(stream, (int)Length);
-				WriteLittleEndian4(stream, (int)Handler);
-				WriteLittleEndian4(stream, (int)Filter);
-			}
-
-			public void WriteLittleEndian4(Stream stream, int value)
-			{
-				byte[] bytes = LittleEndianBitConverter.GetBytes(value);
-				stream.Write(bytes, 0, bytes.Length);
 			}
 
 		}
@@ -168,15 +144,15 @@ namespace Mosa.Runtime.CompilerFramework
 
 				foreach (BasicBlock block in blocks)
 				{
-					long start = codeEmitter.GetPosition(block.Label);
-					long length = codeEmitter.GetPosition(block.Label + 0x0F000000) - start;
-					long handler = codeEmitter.GetPosition(clause.TryOffset);
-					long filter = codeEmitter.GetPosition(clause.FilterOffset);
+					int start = (int)codeEmitter.GetPosition(block.Label);
+					int length = (int)codeEmitter.GetPosition(block.Label + 0x0F000000) - start;
+					int handler = (int)codeEmitter.GetPosition(clause.TryOffset);
+					int filter = (int)codeEmitter.GetPosition(clause.FilterOffset);
 
 					if (prev.End + 1 == start && prev.Handler == handler && prev.Filter == filter)
 					{
 						// merge protected blocks sequence
-						prev.Length = prev.Length + codeEmitter.GetPosition(block.Label + 0x0F000000) - start;
+						prev.Length = prev.Length + (int)codeEmitter.GetPosition(block.Label + 0x0F000000) - start;
 					}
 					else
 					{
@@ -194,12 +170,22 @@ namespace Mosa.Runtime.CompilerFramework
 			{
 				foreach (ExceptionEntry entry in entries)
 				{
-					entry.Write(stream);
+					// FIXME: Assumes platform
+					WriteLittleEndian4(stream, entry.Start);
+					WriteLittleEndian4(stream, entry.Length);
+					WriteLittleEndian4(stream, entry.Handler);
+					WriteLittleEndian4(stream, entry.Filter);
 				}
 
 				stream.Write(new Byte[nativePointerSize], 0, nativePointerSize);
 			}
 
+		}
+
+		static private void WriteLittleEndian4(Stream stream, int value)
+		{
+			byte[] bytes = LittleEndianBitConverter.GetBytes(value);
+			stream.Write(bytes, 0, bytes.Length);
 		}
 
 		#region Postorder-traversal Sort

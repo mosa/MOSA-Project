@@ -119,18 +119,6 @@
     <Compile Include="Boot\Multiboot0695AssemblyStage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="LinkTimeCodeGeneration\LinkerGeneratedMethod.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="LinkTimeCodeGeneration\LinkerGeneratedType.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="LinkTimeCodeGeneration\LinkerMethodCompiler.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="LinkTimeCodeGeneration\LinkTimeCodeGenerator.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Stage\FakeSystemObjectGenerationStage.cs" />
     <Compile Include="Stage\StaticAllocationResolutionStageWrapper.cs" />
     <Compile Include="Stage\StaticAllocationResolutionStage.cs" />
@@ -139,7 +127,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="TypeInitializers\TypeInitializerSchedulerStageProxy.cs" />
-    <Compile Include="Stage\InterruptBuilderStage.cs" />
     <ProjectReference Include="..\Mosa.Compiler.FileFormat\Mosa.Compiler.FileFormat.csproj">
       <Project>{CC2E6418-C325-4486-B50D-941EC27053F6}</Project>
       <Name>Mosa.Compiler.FileFormat</Name>

@@ -14,9 +14,11 @@ using MbUnit.Framework;
 using Mosa.Test.System;
 using Mosa.Test.CodeDomCompiler;
 
+using Mosa.Test.Collection;
+
 namespace Mosa.Test.Cases.CIL
 {
-	//[TestFixture]
+	[TestFixture]
 	public class ExceptionHandlingFixture : TestCompilerAdapter
 	{
 
@@ -25,11 +27,29 @@ namespace Mosa.Test.Cases.CIL
 			settings.AddReference("Mosa.Test.Collection.dll");
 		}
 
-		//[Test]
-		[Row(1)]
-		public void CatchException(int value)
+		[Test]
+		public void TryFinally1()
 		{
-			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "ExceptionHandlingTests", "CatchException", value));
+			Assert.AreEqual(ExceptionHandlingTests.TryFinally1(), Run<int>("Mosa.Test.Collection", "ExceptionHandlingTests", "TryFinally1"));
 		}
+
+		[Test]
+		public void TryFinally2()
+		{
+			Assert.AreEqual(ExceptionHandlingTests.TryFinally2(), Run<int>("Mosa.Test.Collection", "ExceptionHandlingTests", "TryFinally2"));
+		}
+
+		[Test]
+		public void TryFinally3()
+		{
+			Assert.AreEqual(ExceptionHandlingTests.TryFinally3(), Run<int>("Mosa.Test.Collection", "ExceptionHandlingTests", "TryFinally3"));
+		}
+		[Test]
+		public void TryFinally4()
+		{
+			Assert.AreEqual(ExceptionHandlingTests.TryFinally4(), Run<int>("Mosa.Test.Collection", "ExceptionHandlingTests", "TryFinally4"));
+		}
+
+
 	}
 }

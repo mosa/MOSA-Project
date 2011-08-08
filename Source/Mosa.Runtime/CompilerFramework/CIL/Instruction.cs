@@ -439,7 +439,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			/* 0x0DB */
 			opcodeMap[(int)OpCode.Sub_ovf_un] = new ArithmeticOverflowInstruction(OpCode.Sub_ovf_un);
 			/* 0x0DC */
-			opcodeMap[(int)OpCode.Endfinally] = new EndfinallyInstruction(OpCode.Endfinally);
+			opcodeMap[(int)OpCode.Endfinally] = new EndFinallyInstruction(OpCode.Endfinally);
 			/* 0x0DD */
 			opcodeMap[(int)OpCode.Leave] = new LeaveInstruction(OpCode.Leave);
 			/* 0x0DE */
@@ -482,7 +482,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			opcodeMap[(int)OpCode.Localalloc] = new LocalallocInstruction(OpCode.Localalloc);
 			/* Opcode 0x110 is undefined */
 			/* 0x111 */
-			opcodeMap[(int)OpCode.Endfilter] = new EndfilterInstruction(OpCode.Endfilter);
+			opcodeMap[(int)OpCode.Endfilter] = new EndFilterInstruction(OpCode.Endfilter);
 			/* 0x112 */
 			opcodeMap[(int)OpCode.PreUnaligned] = new UnalignedPrefixInstruction(OpCode.PreUnaligned);
 			/* 0x113 */

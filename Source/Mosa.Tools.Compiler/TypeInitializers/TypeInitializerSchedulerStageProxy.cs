@@ -9,6 +9,7 @@
 
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.TypeSystem;
+using Mosa.Runtime.Linker;
 
 namespace Mosa.Tools.Compiler.TypeInitializers
 {

@@ -31,25 +31,29 @@ namespace Mosa.Test.Quick.Tests
 			return b;
 		}
 
-		//public static int Test2()
-		//{
-		//    int a = 10;
-		//    int b = 13;
-		//    try
-		//    {
-		//        int i = 12;
-		//        a = a + i;
-		//        throw new ArgumentNullException();
-		//    }
-		//    catch (Exception e)
-		//    {
-		//        b = b + a;
-		//    }
+		public static int Test2()
+		{
+			int a = 10;
+			int b = 13;
+			try
+			{
+				int i = 12;
+				a = a + i;
+				throw new ArgumentNullException();
+			}
+			catch (IndexOutOfRangeException e)
+			{
+				b = b + a;
+			}
+			catch (InvalidCastException e)
+			{
+				b = b + a;
+			}
 
-		//    b = b + 1;
+			b = b + 1;
 
-		//    return b;
-		//}
+			return b;
+		}
 
 		//public static void Test3()
 		//{

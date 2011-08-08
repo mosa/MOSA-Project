@@ -126,5 +126,10 @@ namespace Mosa.Internal
 
 			return obj;
 		}
+
+		public static unsafe void Throw(uint something)
+		{
+
+		}
 	}
 }

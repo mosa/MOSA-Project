@@ -66,6 +66,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Boot.cs" />
+    <Compile Include="Tests\ExceptionTest.cs" />
     <Compile Include="Tests\Generic2Test.cs" />
     <Compile Include="Tests\KernelTest.cs" />
     <Compile Include="Tests\IsInstTest.cs" />
@@ -78,18 +79,6 @@
       <Project>{27A3C89C-1967-45FF-A77E-94F44995C42C}</Project>
       <Name>Mosa.ClassLib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mosa.DeviceDrivers\Mosa.DeviceDrivers.csproj">
-      <Project>{4DBD4C50-BEC5-48D9-B471-9FB0A7F69999}</Project>
-      <Name>Mosa.DeviceDrivers</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mosa.DeviceSystem\Mosa.DeviceSystem.csproj">
-      <Project>{6509477A-7360-4937-A1B9-26FED0A75CDA}</Project>
-      <Name>Mosa.DeviceSystem</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mosa.FileSystem\Mosa.FileSystem.csproj">
-      <Project>{D89972FD-A930-4D0C-B393-1895E78FAFAB}</Project>
-      <Name>Mosa.FileSystem</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Mosa.Kernel\Mosa.Kernel.csproj">
       <Project>{FF099D48-3FA5-4ED6-BBA0-1497D734962A}</Project>
       <Name>Mosa.Kernel</Name>
@@ -97,10 +86,6 @@
     <ProjectReference Include="..\Korlib\Korlib.csproj">
       <Project>{631BC4F3-E2D8-4319-814C-13904CAA17CE}</Project>
       <Name>Korlib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mosa.Platform.x86.Intrinsic\Mosa.Platform.x86.Intrinsic.csproj">
-      <Project>{A47B7998-4EE8-4AF8-9373-C664FDEDDC65}</Project>
-      <Name>Mosa.Platform.x86.Intrinsic</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

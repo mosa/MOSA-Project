@@ -10,7 +10,7 @@ namespace Mosa.HelloWorld.Tests
 		public static void Test()
 		{
 			Screen.Color = Colors.Gray;
-			Screen.Write(" Intf: ");
+			Screen.Write(" IF:");
 
 			PrintResult(InterfaceTest1());
 			PrintResult(InterfaceTest2());

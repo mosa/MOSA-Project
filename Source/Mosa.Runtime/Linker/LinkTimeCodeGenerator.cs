@@ -16,12 +16,12 @@ using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
 
-namespace Mosa.Tools.Compiler.LinkTimeCodeGeneration
+namespace Mosa.Runtime.Linker
 {
 	/// <summary>
 	/// Performs link time code generation for various parts of mosacl.
 	/// </summary>
-	public sealed class LinkTimeCodeGenerator
+	public static class LinkTimeCodeGenerator
 	{
 
 		#region Methods

@@ -25,6 +25,7 @@ namespace Mosa.Platform.x86.CPUx86
 	public sealed class CallInstruction : BaseInstruction
 	{
 		private static readonly OpCode RegCall = new OpCode(new byte[] { 0xFF }, 2);
+		private static readonly byte[] LabelCall = new byte[] { 0xE8 };
 
 		#region Methods
 
@@ -35,6 +36,12 @@ namespace Mosa.Platform.x86.CPUx86
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context ctx, MachineCodeEmitter emitter)
 		{
+			if (ctx.OperandCount == 0)
+			{
+				emitter.EmitBranch(LabelCall, ctx.Branch.Targets[0]);
+				return;
+			}
+
 			Operand destinationOperand = ctx.Operand1;
 			SymbolOperand destinationSymbol = destinationOperand as SymbolOperand;
 
