@@ -14,6 +14,7 @@ using System.Text;
 
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.TypeSystem;
+using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Runtime.CompilerFramework.CIL
 {
@@ -54,6 +55,25 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			if (type == null)
 			{
 				var signatureType = decoder.GenericTypePatcher.PatchSignatureType(decoder.TypeModule, decoder.Method.DeclaringType, token);
+
+				if (signatureType is BuiltInSigType)
+				{
+					var builtInSigType = signatureType as BuiltInSigType;
+					switch (builtInSigType.Type)
+					{
+						case CilElementType.I4:
+							{
+								var int32type = decoder.TypeModule.TypeSystem.GetType("mscorlib", "System", "Int32");
+								var valueTypeSignature = new ValueTypeSigType(int32type.Token);
+								ctx.Result = decoder.Compiler.CreateTemporary(valueTypeSignature);
+								ctx.Other = int32type;
+								return;
+							}
+						default:
+							break;
+					}
+				}
+
 				ctx.Result = decoder.Compiler.CreateTemporary(signatureType);
 			}
 			else if (type.ContainsOpenGenericParameters)

@@ -395,7 +395,10 @@ namespace Mosa.Runtime.CompilerFramework
 				{
 					var classSigType = new ClassSigType(type.Token);
 					var decoder = this.Pipeline.FindFirst<IInstructionDecoder>();
-					var signatureType = decoder.GenericTypePatcher.PatchSignatureType(this.Method.Module, this.Method.DeclaringType as CilGenericType, type.Token);
+					var signatureType = 
+						this.Method.DeclaringType.ContainsOpenGenericParameters ? 
+							decoder.GenericTypePatcher.PatchSignatureType(this.Method.Module, this.Method.DeclaringType as CilGenericType, type.Token) :
+							classSigType;
 
 					return new ParameterOperand(
 						architecture.StackFrameRegister,

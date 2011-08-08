@@ -374,7 +374,7 @@ namespace Mosa.Runtime.Metadata
 			int tableIdx = (int)(token.Table) >> 24;
 			int tableOffset = _tableOffsets[tableIdx] + ((int)(token.RID - 1) * _recordSize[tableIdx]);
 
-            var reader = new BinaryReader(new MemoryStream(_metadata), Encoding.UTF8);
+			var reader = new BinaryReader(new MemoryStream(_metadata), Encoding.UTF8);
 			reader.BaseStream.Position = tableOffset;
 			return reader;
 		}
@@ -414,7 +414,7 @@ namespace Mosa.Runtime.Metadata
 			if (token.Table != TableType.Module)
 				throw new ArgumentException("Invalid token type for ModuleRow.", @"token");
 
-            using (var reader = CreateReaderForToken(token))
+			using (var reader = CreateReaderForToken(token))
 			{
 				return new ModuleRow(
 					 reader.ReadUInt16(),
@@ -436,7 +436,7 @@ namespace Mosa.Runtime.Metadata
 			if (token.Table != TableType.TypeRef)
 				throw new ArgumentException("Invalid token type for TypeRefRow.", @"token");
 
-            using (var reader = CreateReaderForToken(token))
+			using (var reader = CreateReaderForToken(token))
 			{
 				return new TypeRefRow(
 					ReadMetadataToken(reader, IndexType.ResolutionScope),
@@ -456,7 +456,7 @@ namespace Mosa.Runtime.Metadata
 			if (token.Table != TableType.TypeDef)
 				throw new ArgumentException("Invalid token type for TypeDefRow.", @"token");
 
-            using (var reader = CreateReaderForToken(token))
+			using (var reader = CreateReaderForToken(token))
 			{
 				return new TypeDefRow(
 					(TypeAttributes)reader.ReadUInt32(),
@@ -479,7 +479,7 @@ namespace Mosa.Runtime.Metadata
 			if (token.Table != TableType.Field)
 				throw new ArgumentException("Invalid token type for FieldRow.", @"token");
 
-            using (var reader = CreateReaderForToken(token))
+			using (var reader = CreateReaderForToken(token))
 			{
 				return new FieldRow(
 					(FieldAttributes)reader.ReadUInt16(),
@@ -499,7 +499,7 @@ namespace Mosa.Runtime.Metadata
 			if (token.Table != TableType.MethodDef)
 				throw new ArgumentException("Invalid token type for MethodDefRow.", @"token");
 
-            using (var reader = CreateReaderForToken(token))
+			using (var reader = CreateReaderForToken(token))
 			{
 				return new MethodDefRow(
 					reader.ReadUInt32(),
@@ -522,7 +522,7 @@ namespace Mosa.Runtime.Metadata
 			if (token.Table != TableType.Param)
 				throw new ArgumentException("Invalid token type for ParamRow.", @"token");
 
-            using (var reader = CreateReaderForToken(token))
+			using (var reader = CreateReaderForToken(token))
 			{
 				return new ParamRow(
 					(ParameterAttributes)reader.ReadUInt16(),
@@ -542,7 +542,7 @@ namespace Mosa.Runtime.Metadata
 			if (token.Table != TableType.InterfaceImpl)
 				throw new ArgumentException("Invalid token type for InterfaceImplRow.", @"token");
 
-            using (var reader = CreateReaderForToken(token))
+			using (var reader = CreateReaderForToken(token))
 			{
 				return new InterfaceImplRow(
 					ReadIndexValue(reader, TableType.TypeDef),
@@ -561,7 +561,7 @@ namespace Mosa.Runtime.Metadata
 			if (token.Table != TableType.MemberRef)
 				throw new ArgumentException("Invalid token type for MemberRefRow.", @"token");
 
-            using (var reader = CreateReaderForToken(token))
+			using (var reader = CreateReaderForToken(token))
 			{
 				return new MemberRefRow(
 					ReadMetadataToken(reader, IndexType.MemberRefParent),
@@ -581,9 +581,9 @@ namespace Mosa.Runtime.Metadata
 			if (token.Table != TableType.Constant)
 				throw new ArgumentException("Invalid token type for ConstantRow.", @"token");
 
-            using (var reader = CreateReaderForToken(token))
+			using (var reader = CreateReaderForToken(token))
 			{
-                var cet = (CilElementType)reader.ReadByte();
+				var cet = (CilElementType)reader.ReadByte();
 				reader.ReadByte();
 
 				return new ConstantRow(
@@ -604,7 +604,7 @@ namespace Mosa.Runtime.Metadata
 			if (token.Table != TableType.CustomAttribute)
 				throw new ArgumentException("Invalid token type for CustomAttributeRow.", @"token");
 
-            using (var reader = CreateReaderForToken(token))
+			using (var reader = CreateReaderForToken(token))
 			{
 				return new CustomAttributeRow(
 					ReadMetadataToken(reader, IndexType.HasCustomAttribute),
@@ -624,7 +624,7 @@ namespace Mosa.Runtime.Metadata
 			if (token.Table != TableType.FieldMarshal)
 				throw new ArgumentException("Invalid token type for FieldMarshalRow.", @"token");
 
-            using (var reader = CreateReaderForToken(token))
+			using (var reader = CreateReaderForToken(token))
 			{
 				return new FieldMarshalRow(
 					ReadMetadataToken(reader, IndexType.HasFieldMarshal),
@@ -643,7 +643,7 @@ namespace Mosa.Runtime.Metadata
 			if (token.Table != TableType.DeclSecurity)
 				throw new ArgumentException("Invalid token type for DeclSecurityRow.", @"token");
 
-            using (var reader = CreateReaderForToken(token))
+			using (var reader = CreateReaderForToken(token))
 			{
 				return new DeclSecurityRow(
 					(System.Security.Permissions.SecurityAction)reader.ReadUInt16(),
@@ -663,7 +663,7 @@ namespace Mosa.Runtime.Metadata
 			if (token.Table != TableType.ClassLayout)
 				throw new ArgumentException("Invalid token type for ClassLayoutRow.", @"token");
 
-            using (var reader = CreateReaderForToken(token))
+			using (var reader = CreateReaderForToken(token))
 			{
 				return new ClassLayoutRow(
 					reader.ReadInt16(),
@@ -683,7 +683,7 @@ namespace Mosa.Runtime.Metadata
 			if (token.Table != TableType.FieldLayout)
 				throw new ArgumentException("Invalid token type for FieldLayoutRow.", @"token");
 
-            using (var reader = CreateReaderForToken(token))
+			using (var reader = CreateReaderForToken(token))
 			{
 				return new FieldLayoutRow(
 					reader.ReadUInt32(),
@@ -702,7 +702,7 @@ namespace Mosa.Runtime.Metadata
 			if (token.Table != TableType.StandAloneSig)
 				throw new ArgumentException("Invalid token type for StandAloneSigRow.", @"token");
 
-            using (var reader = CreateReaderForToken(token))
+			using (var reader = CreateReaderForToken(token))
 			{
 				return new StandAloneSigRow(
 					ReadHeapToken(reader, IndexType.BlobHeap)
@@ -720,7 +720,7 @@ namespace Mosa.Runtime.Metadata
 			if (token.Table != TableType.EventMap)
 				throw new ArgumentException("Invalid token type for EventMapRow.", @"token");
 
-            using (var reader = CreateReaderForToken(token))
+			using (var reader = CreateReaderForToken(token))
 			{
 				return new EventMapRow(
 					ReadIndexValue(reader, TableType.TypeDef),
@@ -739,7 +739,7 @@ namespace Mosa.Runtime.Metadata
 			if (token.Table != TableType.Event)
 				throw new ArgumentException("Invalid token type for EventRow.", @"token");
 
-            using (var reader = CreateReaderForToken(token))
+			using (var reader = CreateReaderForToken(token))
 			{
 				return new EventRow(
 					(EventAttributes)reader.ReadUInt16(),
@@ -759,7 +759,7 @@ namespace Mosa.Runtime.Metadata
 			if (token.Table != TableType.PropertyMap)
 				throw new ArgumentException("Invalid token type for PropertyMapRow.", @"token");
 
-            using (var reader = CreateReaderForToken(token))
+			using (var reader = CreateReaderForToken(token))
 			{
 				return new PropertyMapRow(
 					ReadIndexValue(reader, TableType.TypeDef),
@@ -778,7 +778,7 @@ namespace Mosa.Runtime.Metadata
 			if (token.Table != TableType.Property)
 				throw new ArgumentException("Invalid token type for PropertyRow.", @"token");
 
-            using (var reader = CreateReaderForToken(token))
+			using (var reader = CreateReaderForToken(token))
 			{
 				return new PropertyRow(
 					(PropertyAttributes)reader.ReadUInt16(),
@@ -795,7 +795,7 @@ namespace Mosa.Runtime.Metadata
 		/// <returns></returns>
 		public MethodSemanticsRow ReadMethodSemanticsRow(Token token)
 		{
-            using (var reader = CreateReaderForToken(token))
+			using (var reader = CreateReaderForToken(token))
 			{
 				if (token.Table != TableType.MethodSemantics)
 					throw new ArgumentException("Invalid token type for MethodSemanticsRow.", @"token");
@@ -818,7 +818,7 @@ namespace Mosa.Runtime.Metadata
 			if (token.Table != TableType.MethodImpl)
 				throw new ArgumentException("Invalid token type for MethodImplRow.", @"token");
 
-            using (var reader = CreateReaderForToken(token))
+			using (var reader = CreateReaderForToken(token))
 			{
 				return new MethodImplRow(
 					ReadIndexValue(reader, TableType.TypeDef),
@@ -838,7 +838,7 @@ namespace Mosa.Runtime.Metadata
 			if (token.Table != TableType.ModuleRef)
 				throw new ArgumentException("Invalid token type for ModuleRefRow.", @"token");
 
-            using (var reader = CreateReaderForToken(token))
+			using (var reader = CreateReaderForToken(token))
 			{
 				return new ModuleRefRow(
 					ReadHeapToken(reader, IndexType.StringHeap)
@@ -856,7 +856,7 @@ namespace Mosa.Runtime.Metadata
 			if (token.Table != TableType.TypeSpec)
 				throw new ArgumentException("Invalid token type for TypeSpecRow.", @"token");
 
-            using (var reader = CreateReaderForToken(token))
+			using (var reader = CreateReaderForToken(token))
 			{
 				return new TypeSpecRow(
 					ReadHeapToken(reader, IndexType.BlobHeap)
@@ -874,7 +874,7 @@ namespace Mosa.Runtime.Metadata
 			if (token.Table != TableType.ImplMap)
 				throw new ArgumentException("Invalid token type for ImplMapRow.", @"token");
 
-            using (var reader = CreateReaderForToken(token))
+			using (var reader = CreateReaderForToken(token))
 			{
 				return new ImplMapRow(
 					(PInvokeAttributes)reader.ReadUInt16(),
@@ -895,7 +895,7 @@ namespace Mosa.Runtime.Metadata
 			if (token.Table != TableType.FieldRVA)
 				throw new ArgumentException("Invalid token type for FieldRVARow.", @"token");
 
-            using (var reader = CreateReaderForToken(token))
+			using (var reader = CreateReaderForToken(token))
 			{
 				return new FieldRVARow(
 					reader.ReadUInt32(),
@@ -914,7 +914,7 @@ namespace Mosa.Runtime.Metadata
 			if (token.Table != TableType.Assembly)
 				throw new ArgumentException("Invalid token type for AssemblyRow.", @"token");
 
-            using (var reader = CreateReaderForToken(token))
+			using (var reader = CreateReaderForToken(token))
 			{
 				return new AssemblyRow(
 					(AssemblyHashAlgorithm)reader.ReadUInt32(),
@@ -940,7 +940,7 @@ namespace Mosa.Runtime.Metadata
 			if (token.Table != TableType.AssemblyProcessor)
 				throw new ArgumentException("Invalid token type for AssemblyProcessorRow.", @"token");
 
-            using (var reader = CreateReaderForToken(token))
+			using (var reader = CreateReaderForToken(token))
 			{
 				return new AssemblyProcessorRow(
 					reader.ReadUInt32()
@@ -958,7 +958,7 @@ namespace Mosa.Runtime.Metadata
 			if (token.Table != TableType.AssemblyOS)
 				throw new ArgumentException("Invalid token type for AssemblyOSRow.", @"token");
 
-            using (var reader = CreateReaderForToken(token))
+			using (var reader = CreateReaderForToken(token))
 			{
 				return new AssemblyOSRow(
 					reader.ReadInt32(),
@@ -978,7 +978,7 @@ namespace Mosa.Runtime.Metadata
 			if (token.Table != TableType.AssemblyRef)
 				throw new ArgumentException("Invalid token type for AssemblyRefRow.", @"token");
 
-            using (var reader = CreateReaderForToken(token))
+			using (var reader = CreateReaderForToken(token))
 			{
 				return new AssemblyRefRow(
 					reader.ReadUInt16(),
@@ -1004,7 +1004,7 @@ namespace Mosa.Runtime.Metadata
 			if (token.Table != TableType.AssemblyRefProcessor)
 				throw new ArgumentException("Invalid token type for AssemblyRefProcessorRow.", @"token");
 
-            using (var reader = CreateReaderForToken(token))
+			using (var reader = CreateReaderForToken(token))
 			{
 				return new AssemblyRefProcessorRow(
 					reader.ReadUInt32(),
@@ -1023,7 +1023,7 @@ namespace Mosa.Runtime.Metadata
 			if (token.Table != TableType.AssemblyRefOS)
 				throw new ArgumentException("Invalid token type for AssemblyRefOSRow.", @"token");
 
-            using (var reader = CreateReaderForToken(token))
+			using (var reader = CreateReaderForToken(token))
 			{
 				return new AssemblyRefOSRow(
 					reader.ReadUInt32(),
@@ -1044,7 +1044,7 @@ namespace Mosa.Runtime.Metadata
 			if (token.Table != TableType.File)
 				throw new ArgumentException("Invalid token type for FileRow.", @"token");
 
-            using (var reader = CreateReaderForToken(token))
+			using (var reader = CreateReaderForToken(token))
 			{
 				return new FileRow(
 					(FileAttributes)reader.ReadUInt32(),
@@ -1062,9 +1062,9 @@ namespace Mosa.Runtime.Metadata
 		public ExportedTypeRow ReadExportedTypeRow(Token token)
 		{
 			if (token.Table != TableType.ExportedType)
-                throw new ArgumentException("Invalid token type for ExportedTypeRow.", @"token");
+				throw new ArgumentException("Invalid token type for ExportedTypeRow.", @"token");
 
-            using (var reader = CreateReaderForToken(token))
+			using (var reader = CreateReaderForToken(token))
 			{
 				return new ExportedTypeRow(
 					(TypeAttributes)reader.ReadUInt32(),
@@ -1086,7 +1086,7 @@ namespace Mosa.Runtime.Metadata
 			if (token.Table != TableType.ManifestResource)
 				throw new ArgumentException("Invalid token type for ManifestResourceRow.", @"token");
 
-            using (var reader = CreateReaderForToken(token))
+			using (var reader = CreateReaderForToken(token))
 			{
 				return new ManifestResourceRow(
 					reader.ReadUInt32(),
@@ -1107,7 +1107,7 @@ namespace Mosa.Runtime.Metadata
 			if (token.Table != TableType.NestedClass)
 				throw new ArgumentException("Invalid token type for NestedClassRow.", @"token");
 
-            using (var reader = CreateReaderForToken(token))
+			using (var reader = CreateReaderForToken(token))
 			{
 				return new NestedClassRow(
 					ReadIndexValue(reader, TableType.TypeDef),
@@ -1126,7 +1126,7 @@ namespace Mosa.Runtime.Metadata
 			if (token.Table != TableType.GenericParam)
 				throw new ArgumentException("Invalid token type for GenericParamRow.", @"token");
 
-            using (var reader = CreateReaderForToken(token))
+			using (var reader = CreateReaderForToken(token))
 			{
 				return new GenericParamRow(
 					reader.ReadUInt16(),
@@ -1147,7 +1147,7 @@ namespace Mosa.Runtime.Metadata
 			if (token.Table != TableType.MethodSpec)
 				throw new ArgumentException("Invalid token type for MethodSpecRow.", @"token");
 
-            using (var reader = CreateReaderForToken(token))
+			using (var reader = CreateReaderForToken(token))
 			{
 				return new MethodSpecRow(
 					ReadMetadataToken(reader, IndexType.MethodDefOrRef),
@@ -1166,7 +1166,7 @@ namespace Mosa.Runtime.Metadata
 			if (token.Table != TableType.GenericParamConstraint)
 				throw new ArgumentException("Invalid token type for GenericParamConstraintRow.", @"token");
 
-            using (var reader = CreateReaderForToken(token))
+			using (var reader = CreateReaderForToken(token))
 			{
 				return new GenericParamConstraintRow(
 					ReadIndexValue(reader, TableType.GenericParam),

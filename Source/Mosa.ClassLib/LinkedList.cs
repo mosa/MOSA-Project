@@ -136,7 +136,6 @@ namespace Mosa.ClassLib
 		public LinkedListNode<T> Find(T value)
 		{
 			LinkedListNode<T> cur = first;
-
 			while (cur != null)
 			{
 				if (cur.value.Equals(value))
@@ -214,7 +213,6 @@ namespace Mosa.ClassLib
 				node.previous.next = node;
 				last = node;
 			}
-
 			count++;
 			return node;
 		}

@@ -16,7 +16,6 @@ using Mosa.HelloWorld.Tests;
 
 namespace Mosa.HelloWorld
 {
-
 	/// <summary>
 	/// 
 	/// </summary>

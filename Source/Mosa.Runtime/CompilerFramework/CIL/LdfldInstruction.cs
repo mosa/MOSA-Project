@@ -52,18 +52,12 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			ctx.RuntimeField = decoder.Method.Module.GetField(token);
 			var fieldName = ctx.RuntimeField.Name;
 
+			if (decoder.Method.FullName.Contains("Find") && decoder.Method.DeclaringType.FullName.Contains("LinkedList"))
+				System.Console.WriteLine();
+
 			if (ctx.RuntimeField.ContainsGenericParameter || ctx.RuntimeField.DeclaringType.ContainsOpenGenericParameters)
 			{
-				foreach (var field in decoder.Method.DeclaringType.Fields)
-				{
-					if (field.Name == ctx.RuntimeField.Name)
-					{
-						ctx.RuntimeField = field;
-						break;
-					}
-				}
-
-				if (ctx.RuntimeField.ContainsGenericParameter)
+				if (ctx.RuntimeField.ContainsGenericParameter || ctx.RuntimeField.DeclaringType.ContainsOpenGenericParameters)
 				{
 					ctx.RuntimeField = decoder.GenericTypePatcher.PatchField(decoder.TypeModule, decoder.Method.DeclaringType as CilGenericType, ctx.RuntimeField);
 				}

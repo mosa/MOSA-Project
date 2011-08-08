@@ -65,8 +65,6 @@
     <DebugType>none</DebugType>
   </PropertyGroup>
   <ItemGroup>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="BinaryFormat.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -76,6 +74,19 @@
     <Compile Include="Math.cs">
       <SubType>Code</SubType>
     </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Mosa.Kernel\Mosa.Kernel.csproj">
+      <Project>{FF099D48-3FA5-4ED6-BBA0-1497D734962A}</Project>
+      <Name>Mosa.Kernel</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Platform.x86.Intrinsic\Mosa.Platform.x86.Intrinsic.csproj">
+      <Project>{A47B7998-4EE8-4AF8-9373-C664FDEDDC65}</Project>
+      <Name>Mosa.Platform.x86.Intrinsic</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <PropertyGroup>

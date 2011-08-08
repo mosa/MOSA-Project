@@ -155,13 +155,13 @@ namespace Mosa.Platform.x86
 				int size, alignment;
 				architecture.GetTypeRequirements(operand.Type, out size, out alignment);
 
-				if (operand.Type.Type == CilElementType.ValueType)
+				/*if (operand.Type.Type == CilElementType.ValueType)
 				{
 					// FIXME
 					throw new System.NotImplementedException();
 					//size = typeLayout.GetTypeSize(typeSystem.GetType(context, (operand.Type as ValueTypeSigType).Token));
 					//size = ObjectModelUtility.ComputeTypeSize((operand.Type as ValueTypeSigType).Token, moduleTypeSystem, architecture);
-				}
+				}*/
 				
 				space -= size;
 				Push(ctx, operand, space, size);
@@ -292,13 +292,12 @@ namespace Mosa.Platform.x86
 				int size, alignment;
 				architecture.GetTypeRequirements(op.Type, out size, out alignment);
 
-				if (op.Type.Type == CilElementType.ValueType)
+				/*if (op.Type.Type == CilElementType.ValueType)
 				{
 					// FIXME
 					throw new System.NotImplementedException();
-					//size = typeLayout.GetTypeSize(typeSystem.GetType(context, (op.Type as ValueTypeSigType).Token));
 					//size = ObjectModelUtility.ComputeTypeSize((op.Type as ValueTypeSigType).Token, moduleTypeSystem, architecture);
-				}
+				}*/
 
 				result += size;
 			}

@@ -17,7 +17,7 @@ namespace Mosa.Internal
 	{
 		public static object Box(ValueType valueType)
 		{
-			return null;
+			return valueType;
 		}
 
 		private unsafe static uint* AllocateMemory(uint size)

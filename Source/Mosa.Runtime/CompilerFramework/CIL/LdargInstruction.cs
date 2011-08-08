@@ -79,6 +79,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			}
 
 			// Push the loaded value onto the evaluation stack
+			if (decoder.Method.DeclaringType.FullName.Contains("LinkedListNode"))
+				System.Console.WriteLine();
 			Operand parameterOperand = decoder.Compiler.GetParameterOperand(argIdx);
 			Operand result = LoadInstruction.CreateResultOperand(decoder, parameterOperand.StackType, parameterOperand.Type);
 

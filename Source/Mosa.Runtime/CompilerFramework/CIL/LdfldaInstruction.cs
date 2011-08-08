@@ -16,6 +16,7 @@ using Mosa.Runtime.Metadata;
 using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.CompilerFramework.Operands;
+using Mosa.Runtime.TypeSystem.Generic;
 
 namespace Mosa.Runtime.CompilerFramework.CIL
 {
@@ -51,10 +52,24 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			Token token = decoder.DecodeTokenType();
 			ctx.RuntimeField = decoder.Method.Module.GetField(token);
 
-			if (ctx.RuntimeField.ContainsGenericParameter)
+			if (ctx.RuntimeField.ContainsGenericParameter || ctx.RuntimeField.DeclaringType.ContainsOpenGenericParameters)
 			{
-				//TODO
-				;
+				foreach (var field in decoder.Method.DeclaringType.Fields)
+				{
+					if (field.Name == ctx.RuntimeField.Name)
+					{
+						ctx.RuntimeField = field;
+						break;
+					}
+				}
+
+				if (ctx.RuntimeField.ContainsGenericParameter)
+				{
+					ctx.RuntimeField = decoder.GenericTypePatcher.PatchField(decoder.TypeModule, decoder.Method.DeclaringType as CilGenericType, ctx.RuntimeField);
+				}
+				decoder.Compiler.Scheduler.ScheduleTypeForCompilation(ctx.RuntimeField.DeclaringType);
+				//Console.WriteLine("Token: {0}", token);
+				Debug.Assert(!ctx.RuntimeField.ContainsGenericParameter);
 			}
 
 			SigType sigType = new RefSigType(ctx.RuntimeField.SignatureType);

@@ -46,7 +46,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		public override void Decode(Context ctx, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
-			base.Decode(ctx, decoder);
+			//base.Decode(ctx, decoder);
 			// Retrieve the type token
 			Token token = decoder.DecodeTokenType();
 			ctx.Other = decoder.TypeModule.GetType (token);

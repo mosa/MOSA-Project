@@ -32,10 +32,10 @@ namespace Mosa.HelloWorld.Tests
 			Screen.Color = Colors.Yellow;
 			Screen.Write("]");
 
-			Generic2Test.Test();
 			StringTest.Test();
 			InterfaceTest.Test();
 			GenericTest.Test();
+			Generic2Test.Test();
 			IsInstTest.Test();
 		}
 	}
