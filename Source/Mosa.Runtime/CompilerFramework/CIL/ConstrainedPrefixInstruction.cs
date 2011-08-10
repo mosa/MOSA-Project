@@ -50,6 +50,26 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			// Retrieve the type token
 			Token token = decoder.DecodeTokenType();
 			ctx.Other = decoder.TypeModule.GetType (token);
+
+			if (ctx.Other == null)
+			{
+				var signature = decoder.GenericTypePatcher.PatchSignatureType(decoder.TypeModule, decoder.Method.DeclaringType, token);
+				if (signature is BuiltInSigType)
+				{
+					var builtInSigType = signature as BuiltInSigType;
+					switch (builtInSigType.Type)
+					{
+						case CilElementType.I4:
+							{
+								var int32type = decoder.TypeModule.TypeSystem.GetType("mscorlib", "System", "Int32");
+								ctx.Other = int32type;
+								return;
+							}
+						default:
+							break;
+					}
+				}
+			}
 			/*
 				_constraint = MetadataTypeReference.FromToken(decoder.Metadata, token);
 				Debug.Assert(null != _constraint);

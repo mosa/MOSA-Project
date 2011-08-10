@@ -82,5 +82,15 @@ namespace System
 
 			return result;
 		}
+
+		public override bool Equals(object obj)
+		{
+			return (int)obj == _value;
+		}
+
+		public override int GetHashCode()
+		{
+			return _value;
+		}
 	}
 }

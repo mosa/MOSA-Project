@@ -20,6 +20,23 @@ namespace Mosa.Internal
 			return valueType;
 		}
 
+		public unsafe static void* BoxInt32(void* methodTable, uint classSize, int value)
+		{
+			Screen.Write((uint)value, 10, 2);
+			void* memory = AllocateObject(methodTable, classSize);
+
+			uint* destination = (uint*)memory;
+			destination[2] = (uint)value;
+
+			return memory;
+		}
+
+		public unsafe static int UnboxInt32(void* data)
+		{
+			var dereferenced = (int*)data;
+			return dereferenced[0];
+		}
+
 		private unsafe static uint* AllocateMemory(uint size)
 		{
 			return (uint*)KernelGCMemory.AllocateMemory(size);

@@ -686,6 +686,26 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Box(Context context)
 		{
+			var value = context.Operand1;
+			var result = context.Result;
+
+			if (context.Operand1.Type.ToString() == "I4")
+			{
+				var type = this.typeSystem.GetType("mscorlib", "System", "Int32");
+				context.SetInstruction(Instruction.NopInstruction);
+
+				ReplaceWithVmCall(context, VmCall.BoxInt32);
+
+				var methodTableSymbol = GetMethodTableSymbol(type);
+				var classSize = typeLayout.GetTypeSize(type);
+
+				context.SetOperand(1, methodTableSymbol);
+				context.SetOperand(2, new ConstantOperand(BuiltInSigType.Int32, classSize));
+				context.SetOperand(3, value);
+				context.OperandCount = 4;
+				context.Result = result;
+				return;
+			}
 			ReplaceWithVmCall(context, VmCall.Box);
 		}
 
@@ -1101,7 +1121,17 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.UnboxAny(Context context)
 		{
-			throw new NotSupportedException();
+			var value = context.Operand1;
+			var type = context.Other as RuntimeType;
+			var result = context.Result;
+
+			if (type.FullName == "System.Int32")
+			{
+				ReplaceWithVmCall(context, VmCall.UnboxInt32);
+				context.SetOperand(1, value);
+				context.OperandCount = 2;
+				context.Result = result;
+			}
 		}
 
 		/// <summary>
