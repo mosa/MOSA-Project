@@ -92,6 +92,18 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
+		/// Gets or sets a value indicating whether this instance has prefix.
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if this instance has prefix; otherwise, <c>false</c>.
+		/// </value>
+		public bool HasPrefix
+		{
+			get { return (_packed & 0x02) == 0x02; }
+			set { if (value) _packed = _packed | 0x02; else _packed = (uint)(_packed & ~0x2); }
+		}
+
+		/// <summary>
 		/// Gets or sets the branch hint (true means branch likely)
 		/// </summary>
 		public bool BranchHint
@@ -99,7 +111,7 @@ namespace Mosa.Runtime.CompilerFramework
 			get { return (_packed & 0x04) == 0x04; }
 			set { if (value) _packed = _packed | 0x04; else _packed = (uint)(_packed & ~0x04); }
 		}
-
+		
 		/// <summary>
 		/// Gets or sets the number of operand results
 		/// </summary>

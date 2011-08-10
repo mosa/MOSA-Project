@@ -995,11 +995,23 @@ namespace Mosa.Platform.x86
 			context.ReplaceInstructionOnly(CPUx86.Instruction.PushInstruction);
 		}
 
+		
 		/// <summary>
 		/// Visitation function for ThrowInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.ThrowInstruction(Context context)
+		{
+			Operand exceptionObject = context.Operand1;
+
+			
+		}
+
+		/// <summary>
+		/// Visitation function for ThrowInstruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void xThrowInstruction(Context context)
 		{
 			int pointOfThrow = 4;
 			int exceptionObject = 12;

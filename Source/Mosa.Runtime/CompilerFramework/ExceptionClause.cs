@@ -68,7 +68,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// 
 		/// </summary>
-		public int ClassToken;
+		public uint ClassToken;
 		/// <summary>
 		/// 
 		/// </summary>
@@ -121,7 +121,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 			if (ExceptionClauseType.Exception == this.Kind)
 			{
-				this.ClassToken = reader.ReadInt32();
+				this.ClassToken = reader.ReadUInt32();
 			}
 			else if (ExceptionClauseType.Filter == this.Kind)
 			{

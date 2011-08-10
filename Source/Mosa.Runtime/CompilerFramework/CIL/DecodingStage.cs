@@ -220,7 +220,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			long codeEnd = codeReader.BaseStream.Position + header.CodeSize;
 
 			// Prefix instruction
-			PrefixInstruction prefix = null;
+			bool prefix = false;
 
 			// Setup context
 			Context ctx = new Context(instructionSet);
@@ -240,18 +240,11 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 				if (instruction == null)
 					throw new Exception("CIL " + op + " is not yet supported");
 
-				if (instruction is PrefixInstruction)
-				{
-					prefix = instruction as PrefixInstruction;
-					prefix.Decode(ctx, this);
-					continue;
-				}
-
 				// Create and initialize the corresponding instruction
 				ctx.AppendInstruction(instruction);
 				ctx.Label = instOffset;
 				instruction.Decode(ctx, this);
-				ctx.Prefix = prefix;
+				ctx.HasPrefix = prefix;
 
 				Debug.Assert(ctx.Instruction != null);
 
@@ -264,7 +257,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 						ctx.Branch.Targets[i] += pc;
 				}
 
-				prefix = null;
+				prefix = (instruction is PrefixInstruction);
 			}
 		}
 

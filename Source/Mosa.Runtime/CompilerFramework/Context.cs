@@ -282,12 +282,15 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
-		/// 
+		/// Gets or sets a value indicating whether this instance has prefix.
 		/// </summary>
-		public BaseInstruction Prefix
+		/// <value>
+		/// 	<c>true</c> if this instance has prefix; otherwise, <c>false</c>.
+		/// </value>
+		public bool HasPrefix
 		{
-			get;
-			set;
+			get { return instructionSet.Data[index].HasPrefix; }
+			set { instructionSet.Data[index].HasPrefix = value; }
 		}
 
 		/// <summary>

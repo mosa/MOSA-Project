@@ -10,6 +10,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 
+using Mosa.Runtime.Metadata;
 using Mosa.Runtime.CompilerFramework.CIL;
 using Mosa.Runtime.CompilerFramework.Operands;
 
@@ -59,11 +60,13 @@ namespace Mosa.Runtime.CompilerFramework
 		public void Run()
 		{
 			// Main Code
-			Trace(-1);
+			Trace(-1, null);
 
 			// Handler Code
 			foreach (ExceptionClause clause in methodCompiler.ExceptionClauseHeader.Clauses)
-				Trace(clause.HandlerOffset);
+			{
+				Trace(clause.HandlerOffset, clause);
+			}
 
 			initialStack = null;
 			operandStack = null;
@@ -74,10 +77,15 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Traces the specified label.
 		/// </summary>
 		/// <param name="label">The label.</param>
-		private void Trace(int label)
+		private void Trace(int label, ExceptionClause clause)
 		{
 			initialStack = new Stack<Operand>[basicBlocks.Count];
 			operandStack.Clear();
+
+			if (clause != null && clause.Kind != ExceptionClauseType.Finally)
+			{
+				Token token =  new Token(clause.ClassToken);
+			}
 
 			BasicBlock firstBlock = FindBlock(label);
 			AssignOperands(firstBlock);
