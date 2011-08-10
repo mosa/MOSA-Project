@@ -51,7 +51,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// Initializes a new instance of the <see cref="PrefixInstruction"/> class.
 		/// </summary>
 		/// <param name="opcode">The opcode.</param>
-		public PrefixInstruction(OpCode opcode)
+		protected PrefixInstruction(OpCode opcode)
 			: base(opcode)
 		{
 		}

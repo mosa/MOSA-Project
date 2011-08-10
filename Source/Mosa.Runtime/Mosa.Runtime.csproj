@@ -82,6 +82,9 @@
     <Compile Include="CompilerFramework\CIL\CallvirtInstruction.cs" />
     <Compile Include="CompilerFramework\CIL\CastclassInstruction.cs" />
     <Compile Include="CompilerFramework\CIL\CILLeakGuardStage.cs" />
+    <Compile Include="CompilerFramework\CIL\TailPrefixInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\VolatilePrefixInstruction.cs" />
+    <Compile Include="CompilerFramework\CIL\ReadOnlyPrefixInstruction.cs" />
     <Compile Include="CompilerFramework\CIL\DecodingStage.cs" />
     <Compile Include="CompilerFramework\CIL\BreakInstruction.cs" />
     <Compile Include="CompilerFramework\BaseAssemblyCompilerStage.cs" />
