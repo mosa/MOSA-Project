@@ -15,7 +15,9 @@ namespace Mosa.Kernel.x86.Smbios
 		///
 		/// </summary>
 		private uint clockFrequency = 0;
-		private uint dummy = 0;
+		/// <summary>
+		/// 
+		/// </summary>
 		private string vendor = null;
 		
 		/// <summary>
@@ -23,10 +25,9 @@ namespace Mosa.Kernel.x86.Smbios
 		/// </summary>
 		public CpuStructure () : base (SmbiosManager.GetStructureOfType (0x04))
 		{
-			clockFrequency = Native.Get16 (address + 0x12u);
-			maxSpeed = Native.Get16 (address + 0x14u);
-			vendor = GetStringFromIndex (Native.Get8 (address + 0x07u));
-			dummy = Native.Get16 (address + 0x16u);
+			this.clockFrequency = Native.Get16 (address + 0x12u);
+			this.maxSpeed = Native.Get16(address + 0x14u);
+			this.vendor = GetStringFromIndex(Native.Get8(address + 0x07u));
 		}
 		
 		/// <summary>

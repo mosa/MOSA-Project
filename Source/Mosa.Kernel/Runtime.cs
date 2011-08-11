@@ -30,9 +30,24 @@ namespace Mosa.Internal
 			return memory;
 		}
 
+		public unsafe static void* BoxInt32(void* methodTable, uint classSize, uint value)
+		{
+			void* memory = (void*)AllocateMemory(4);
+
+			uint* destination = (uint*)memory;
+			destination[0] = (uint)value;
+
+			return memory;
+		}
+
 		public unsafe static int UnboxInt32(void* data)
 		{
 			return ((int*)data)[0];
+		}
+
+		public unsafe static uint UnboxUInt32(void* data)
+		{
+			return ((uint*)data)[0];
 		}
 
 		private unsafe static uint* AllocateMemory(uint size)
