@@ -8,6 +8,7 @@
  */
 
 using System;
+using System.Text;
 
 namespace Mosa.Runtime.CompilerFramework
 {
@@ -136,49 +137,89 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </returns>
 		public virtual string ToString(Context context)
 		{
-			string s = ToString();
+			StringBuilder s = new StringBuilder(ToString());
 
 			if (context.Other is IR.ConditionCode)
-				s = s + " [" + GetConditionString(context.ConditionCode) + "]";
+			{
+				s.Append(" [");
+				s.Append(GetConditionString(context.ConditionCode));
+				s.Append("]");
+			}
 
 			string mod = GetModifier(context);
 			if (mod != null)
-				s = s + " [" + mod + "]";
+			{
+				s.Append(" [");
+				s.Append(mod);
+				s.Append("]");
+			}
 
 			if (context.ResultCount == 1)
-				s = s + " " + context.Result;
+			{
+				s.Append(" ");
+				s.Append(context.Result);
+			}
 			else if (context.ResultCount == 2)
-				s = s + " " + context.Result + ", " + context.Result2;
+			{
+				s.Append(" ");
+				s.Append(context.Result);
+				s.Append(", ");
+				s.Append(context.Result2);
+			}
 
 			if (context.ResultCount > 0 && context.OperandCount > 0)
-				s = s + " <-";
+			{
+				s.Append(" <-");
+			}
 
 			for (int i = 0; (i < 3) && (i < context.OperandCount); i++)
-				s = s + " " + context.GetOperand(i) + ",";
+			{
+				s.Append(" ");
+				s.Append(context.GetOperand(i));
+				s.Append(",");
+			}
 
 			if (context.OperandCount > 3)
-				s = s + " [more]";
+			{
+				s.Append(" [more]");
+			}
 			else
-				s = s.TrimEnd(',');
+			{
+				s.Length = s.Length - 1;
+			}
 
 			if (context.Branch != null)
 			{
 				for (int i = 0; (i < 2) && (i < context.Branch.Targets.Length); i++)
-					s = s + String.Format(@" L_{0:X4},", context.Branch.Targets[i]);
+				{
+					s.Append(String.Format(@" L_{0:X4},", context.Branch.Targets[i]));
+				}
 
 				if (context.Branch.Targets.Length > 2)
-					s = s + " [more]";
+				{
+					s.Append(" [more]");
+				}
 				else
-					s = s.TrimEnd(',');
+				{
+					s.Length = s.Length - 1;
+				}
 			}
 
 			if (context.InvokeTarget != null)
-				s = s + " {" + context.InvokeTarget.ToString() + "}";
+			{
+				s.Append(" {");
+				s.Append(context.InvokeTarget.ToString());
+				s.Append("}");
+			}
 
 			if (context.RuntimeField != null)
-				s = s + " {" + context.RuntimeField.ToString() + "}";
+			{
+				s.Append(" {");
+				s.Append(context.RuntimeField.ToString());
+				s.Append("}");
+			}
 
-			return s;
+			return s.ToString();
 		}
 
 		/// <summary>

@@ -70,6 +70,18 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 		}
 
+		public override string ToString(Context context)
+		{
+			string s = base.ToString(context); 
+
+			RuntimeType type = context.Other as RuntimeType;
+
+			if (type != null)
+				s = s + " {" + type.ToString() + "}";
+
+			return s;
+		}
+
 		#endregion Methods
 
 	}
