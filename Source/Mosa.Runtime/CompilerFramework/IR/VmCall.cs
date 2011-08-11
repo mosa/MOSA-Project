@@ -36,6 +36,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// </summary>
 		Box,
 		BoxInt32,
+		BoxUInt32,
 
 		/// <summary>
 		/// Casts an object references to a specific type.
@@ -99,6 +100,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// Unboxes a value type.
 		/// </summary>
 		Unbox,
-		UnboxInt32
+		UnboxInt32,
+		UnboxUInt32,
 	}
 }

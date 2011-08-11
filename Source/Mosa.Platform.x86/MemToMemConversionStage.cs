@@ -139,7 +139,7 @@ namespace Mosa.Platform.x86
 			}
 			else
 			{
-				result = new RegisterOperand(sigType, GeneralPurposeRegister.EDX);
+				result = new RegisterOperand(sigType, GeneralPurposeRegister.EAX);
 			}
 
 			return result;

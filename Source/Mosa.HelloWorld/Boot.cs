@@ -32,11 +32,11 @@ namespace Mosa.HelloWorld
 			Screen.GotoTop();
 			Screen.Color = Colors.Yellow;
 
-			Screen.Write(@"MOSA OS Version 0.9 '");
+			Screen.Write(@"MOSA OS Version 1.0 '");
 			Screen.Color = Colors.Red;
-			Screen.Write(@"Prophecy");
+			Screen.Write(@"Zaphod");
 			Screen.Color = Colors.Yellow;
-			Screen.Write(@"'                              Copyright 2008-2011");
+			Screen.Write(@"'                                Copyright 2008-2011");
 			Screen.NextLine();
 
 			Screen.Color = 0x0F;

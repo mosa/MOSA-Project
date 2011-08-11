@@ -420,6 +420,25 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			Operand resultOperand = context.Result;
 			var operands = new List<Operand>(context.Operands);
 
+			if (context.Previous.Instruction is ConstrainedPrefixInstruction)
+			{
+				var type = context.Previous.Other as RuntimeType;
+				foreach (var method in type.Methods)
+				{
+					if (method.Name == invokeTarget.Name)
+					{
+						if (method.Signature.Matches(invokeTarget.Signature))
+						{
+							invokeTarget = method;
+							break;
+						}
+					}
+				}
+				SymbolOperand symbolOperand = SymbolOperand.FromMethod(invokeTarget);
+				ProcessInvokeInstruction(context, symbolOperand, resultOperand, operands);
+				return;
+			}			
+
 			if ((invokeTarget.Attributes & MethodAttributes.Virtual) == MethodAttributes.Virtual)
 			{
 				Operand thisPtr = context.Operand1;
@@ -701,6 +720,23 @@ namespace Mosa.Runtime.CompilerFramework.IR
 
 				context.SetOperand(1, methodTableSymbol);
 				context.SetOperand(2, new ConstantOperand(BuiltInSigType.Int32, classSize));
+				context.SetOperand(3, value);
+				context.OperandCount = 4;
+				context.Result = result;
+				return;
+			}
+			else if (context.Operand1.Type.ToString() == "U4")
+			{
+				var type = this.typeSystem.GetType("mscorlib", "System", "UInt32");
+				context.SetInstruction(Instruction.NopInstruction);
+
+				ReplaceWithVmCall(context, VmCall.BoxUInt32);
+
+				var methodTableSymbol = GetMethodTableSymbol(type);
+				var classSize = typeLayout.GetTypeSize(type);
+
+				context.SetOperand(1, methodTableSymbol);
+				context.SetOperand(2, new ConstantOperand(BuiltInSigType.UInt32, classSize));
 				context.SetOperand(3, value);
 				context.OperandCount = 4;
 				context.Result = result;
@@ -1128,6 +1164,13 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			if (type.FullName == "System.Int32")
 			{
 				ReplaceWithVmCall(context, VmCall.UnboxInt32);
+				context.SetOperand(1, value);
+				context.OperandCount = 2;
+				context.Result = result;
+			}
+			else if (type.FullName == "System.UInt32")
+			{
+				ReplaceWithVmCall(context, VmCall.UnboxUInt32);
 				context.SetOperand(1, value);
 				context.OperandCount = 2;
 				context.Result = result;
