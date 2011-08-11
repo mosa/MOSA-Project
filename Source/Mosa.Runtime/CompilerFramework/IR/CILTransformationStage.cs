@@ -420,6 +420,25 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			Operand resultOperand = context.Result;
 			var operands = new List<Operand>(context.Operands);
 
+			if (context.Previous.Instruction is ConstrainedPrefixInstruction)
+			{
+				var type = context.Previous.Other as RuntimeType;
+				foreach (var method in type.Methods)
+				{
+					if (method.Name == invokeTarget.Name)
+					{
+						if (method.Signature.Matches(invokeTarget.Signature))
+						{
+							invokeTarget = method;
+							break;
+						}
+					}
+				}
+				SymbolOperand symbolOperand = SymbolOperand.FromMethod(invokeTarget);
+				ProcessInvokeInstruction(context, symbolOperand, resultOperand, operands);
+				return;
+			}			
+
 			if ((invokeTarget.Attributes & MethodAttributes.Virtual) == MethodAttributes.Virtual)
 			{
 				Operand thisPtr = context.Operand1;

@@ -22,19 +22,17 @@ namespace Mosa.Internal
 
 		public unsafe static void* BoxInt32(void* methodTable, uint classSize, int value)
 		{
-			Screen.Write((uint)value, 10, 2);
-			void* memory = AllocateObject(methodTable, classSize);
+			void* memory = (void*)AllocateMemory(4);
 
 			uint* destination = (uint*)memory;
-			destination[2] = (uint)value;
+			destination[0] = (uint)value;
 
 			return memory;
 		}
 
 		public unsafe static int UnboxInt32(void* data)
 		{
-			var dereferenced = (int*)data;
-			return dereferenced[0];
+			return ((int*)data)[0];
 		}
 
 		private unsafe static uint* AllocateMemory(uint size)
