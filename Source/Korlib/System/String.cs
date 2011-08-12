@@ -291,6 +291,16 @@ namespace System
 			return result;
 		}
 
+		public static string Concat(object[] objects)
+		{
+			string result = string.Empty;
+
+			for (int i = 0; i < objects.Length - 1; ++i)
+				result = Concat(result, objects[i], objects[i + 1]);
+
+			return result;
+		}
+
 		public unsafe string Substring(int startIndex)
 		{
 			if (startIndex == 0)
