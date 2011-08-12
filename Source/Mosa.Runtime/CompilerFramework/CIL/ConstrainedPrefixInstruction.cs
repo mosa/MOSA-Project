@@ -45,11 +45,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
 		public override void Decode(Context ctx, IInstructionDecoder decoder)
 		{
-			// Decode base classes first
-			//base.Decode(ctx, decoder);
-			// Retrieve the type token
 			Token token = decoder.DecodeTokenType();
-			ctx.Other = decoder.TypeModule.GetType (token);
+			ctx.Other = decoder.TypeModule.GetType(token);
 
 			if (ctx.Other == null)
 			{
@@ -70,10 +67,19 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 					}
 				}
 			}
-			/*
-				_constraint = MetadataTypeReference.FromToken(decoder.Metadata, token);
-				Debug.Assert(null != _constraint);
-			 */
+
+		}
+
+		public override string ToString(Context context)
+		{
+			string s = base.ToString(context); 
+
+			RuntimeType type = context.Other as RuntimeType;
+
+			if (type != null)
+				s = s + " {" + type.ToString() + "}";
+
+			return s;
 		}
 
 		#endregion Methods

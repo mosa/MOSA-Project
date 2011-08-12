@@ -45,7 +45,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BaseInstruction"/> class.
 		/// </summary>
-		/// <param name="opCode">The op code.</param>rr
+		/// <param name="opCode">The op code.</param>
 		public BaseInstruction(OpCode opCode)
 			: base()
 		{

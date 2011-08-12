@@ -37,5 +37,11 @@ namespace System
 		{
 			return new String(_value, 1);
 		}
+
+		public static bool IsUpper(char c)
+		{
+			//HACK - US only
+			return (c >= 'A' && c <= 'Z');
+		}
 	}
 }

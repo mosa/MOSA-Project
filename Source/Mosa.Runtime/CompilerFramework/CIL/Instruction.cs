@@ -486,9 +486,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			/* 0x112 */
 			opcodeMap[(int)OpCode.PreUnaligned] = new UnalignedPrefixInstruction(OpCode.PreUnaligned);
 			/* 0x113 */
-			opcodeMap[(int)OpCode.PreVolatile] = new PrefixInstruction(OpCode.PreVolatile);
+			opcodeMap[(int)OpCode.PreVolatile] = new VolatilePrefixInstruction(OpCode.PreVolatile);
 			/* 0x114 */
-			opcodeMap[(int)OpCode.PreTail] = new PrefixInstruction(OpCode.PreTail);
+			opcodeMap[(int)OpCode.PreTail] = new TailPrefixInstruction(OpCode.PreTail);
 			/* 0x115 */
 			opcodeMap[(int)OpCode.InitObj] = new InitObjInstruction(OpCode.InitObj);
 			/* 0x116 */
@@ -507,7 +507,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			/* 0x11D */
 			opcodeMap[(int)OpCode.Refanytype] = new RefanytypeInstruction(OpCode.Refanytype);
 			/* 0x11E */
-			opcodeMap[(int)OpCode.PreReadOnly] = new PrefixInstruction(OpCode.PreReadOnly);
+			opcodeMap[(int)OpCode.PreReadOnly] = new ReadOnlyPrefixInstruction(OpCode.PreReadOnly);
 
 			return opcodeMap;
 		}
