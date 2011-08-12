@@ -88,7 +88,7 @@ namespace System
 				return result;
 			}
 		}
-		
+
 		// FIXME: These should be char,int instead of int,int; but that doesn't compile in MOSA for type matching reasons
 		[MethodImplAttribute(MethodImplOptions.InternalCall)]
 		public extern String(char c, int count);
@@ -171,7 +171,7 @@ namespace System
 			return result;
 		}
 
-		/*public static bool operator ==(String a, String b)
+		public static bool operator ==(String a, String b)
 		{
 			return String.Equals(a, b);
 		}
@@ -181,7 +181,7 @@ namespace System
 			return !(a == b);
 		}
 
-		public bool Equals(System.String i)
+		public bool Equals(String i)
 		{
 			return i == this;
 		}
@@ -193,7 +193,7 @@ namespace System
 
 			String other = (String)o;
 			return other == this;
-		}*/
+		}
 
 		public static unsafe bool Equals(String a, String b)
 		{
@@ -211,6 +211,11 @@ namespace System
 					return false;
 
 			return true;
+		}
+
+		public override int GetHashCode()
+		{
+			return base.GetHashCode();
 		}
 
 		public unsafe static string Concat(String a, String b)
@@ -261,32 +266,32 @@ namespace System
 			return result;
 		}
 
-		public static string Concat (Object a)
+		public static string Concat(Object a)
 		{
 			return a.ToString();
 		}
 
-		public static string Concat (Object a, Object b)
+		public static string Concat(Object a, Object b)
 		{
-			return Concat (a.ToString(), b.ToString());
+			return Concat(a.ToString(), b.ToString());
 		}
 
-		public static string Concat (Object a, Object b, Object c)
+		public static string Concat(Object a, Object b, Object c)
 		{
-			return Concat (a.ToString(), b.ToString(), c.ToString());
+			return Concat(a.ToString(), b.ToString(), c.ToString());
 		}
 
-		public static string Concat (Object a, Object b, Object c, Object d)
+		public static string Concat(Object a, Object b, Object c, Object d)
 		{
-			return Concat (a.ToString(), b.ToString(), c.ToString(), d.ToString());
+			return Concat(a.ToString(), b.ToString(), c.ToString(), d.ToString());
 		}
 
-		public static string Concat (string[] objects)
+		public static string Concat(string[] objects)
 		{
 			string result = string.Empty;
 
 			for (int i = 0; i < objects.Length - 1; ++i)
-				result = Concat (result, objects[i], objects[i + 1]);
+				result = Concat(result, objects[i], objects[i + 1]);
 
 			return result;
 		}
