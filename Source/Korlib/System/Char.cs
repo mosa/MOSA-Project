@@ -19,6 +19,20 @@ namespace System
 
 		internal char _value;
 
+		public static bool IsUpper(char c)
+		{
+			unsafe
+			{
+				var value = (ushort)c;
+				return value >= 65 && value <= 90;
+			}
+		}
+
+		public static bool IsUpper(string s, int index)
+		{
+			return IsUpper(s[index]);
+		}
+
 		public override string ToString()
 		{
 			return new String(_value, 1);

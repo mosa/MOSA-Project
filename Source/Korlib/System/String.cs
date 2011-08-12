@@ -195,6 +195,16 @@ namespace System
 			return other == this;
 		}*/
 
+		public static bool operator == (String a, String b)
+		{
+			return a.Equals(b);
+		}
+
+		public static bool operator !=(String a, String b)
+		{
+			return !a.Equals(b);
+		}
+
 		public static unsafe bool Equals(String a, String b)
 		{
 			if (a == null || b == null)
@@ -279,6 +289,16 @@ namespace System
 		public static string Concat (Object a, Object b, Object c, Object d)
 		{
 			return Concat (a.ToString(), b.ToString(), c.ToString(), d.ToString());
+		}
+
+		public static string Concat(params object[] args)
+		{
+			string result = string.Empty;
+
+			for (int i = 0; i < args.Length - 1; ++i)
+				result = Concat(result, args[i], args[i + 1]);
+
+			return result;
 		}
 
 		public static string Concat (string[] objects)
@@ -506,5 +526,14 @@ namespace System
 			return -1;
 		}
 
+		public override int GetHashCode()
+		{
+			return base.GetHashCode();
+		}
+
+		public override bool Equals(object obj)
+		{
+			return string.Equals(this, obj);
+		}
 	}
 }
