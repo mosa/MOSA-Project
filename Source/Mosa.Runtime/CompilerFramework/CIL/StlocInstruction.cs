@@ -69,7 +69,6 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 						break;
 					}
 
-
 				case OpCode.Stloc_0:
 					locIdx = 0;
 					break;

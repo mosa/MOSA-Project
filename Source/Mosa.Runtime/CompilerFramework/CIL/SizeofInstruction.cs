@@ -14,6 +14,7 @@ using System.Text;
 
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.TypeSystem;
+using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Runtime.CompilerFramework.CIL
 {
@@ -50,9 +51,9 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			Token token = decoder.DecodeTokenType();
 			RuntimeType type = decoder.TypeModule.GetType(token);
 
-			uint size = (uint)decoder.Compiler.TypeLayout.GetTypeSize( type);
+			uint size = (uint)decoder.Compiler.TypeLayout.GetTypeSize(type);
 
-			ctx.Result = new Operands.ConstantOperand(new Mosa.Runtime.Metadata.Signatures.SigType(CilElementType.U4), size);
+			ctx.Result = new Operands.ConstantOperand(new SigType(CilElementType.U4), size);
 		}
 
 		/// <summary>

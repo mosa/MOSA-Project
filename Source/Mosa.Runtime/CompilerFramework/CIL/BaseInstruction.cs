@@ -26,7 +26,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Holds the CIL opcode
 		/// </summary>
-		protected OpCode opcode;
+		protected readonly OpCode opcode;
 
 		#endregion // Data members
 

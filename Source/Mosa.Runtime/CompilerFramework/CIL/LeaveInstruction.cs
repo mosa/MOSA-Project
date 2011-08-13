@@ -57,9 +57,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 					{
 						sbyte sb = decoder.DecodeSByte();
 						ctx.SetBranch(sb);
+						break;
 					}
-					break;
-
 				case OpCode.Leave:
 					{
 						int sb = decoder.DecodeInt();

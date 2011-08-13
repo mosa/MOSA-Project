@@ -28,7 +28,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// Specifies the type of the value.
 		/// </summary>
-		private SigType _valueType;
+		private readonly SigType valueType;
 
 		#endregion // Data members
 
@@ -44,28 +44,31 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			switch (opcode)
 			{
 				case OpCode.Stind_i1:
-					_valueType = new SigType(CilElementType.I1);
+					valueType = new SigType(CilElementType.I1);
 					break;
 				case OpCode.Stind_i2:
-					_valueType = new SigType(CilElementType.I2);
+					valueType = new SigType(CilElementType.I2);
 					break;
 				case OpCode.Stind_i4:
-					_valueType = new SigType(CilElementType.I4);
+					valueType = new SigType(CilElementType.I4);
 					break;
 				case OpCode.Stind_i8:
-					_valueType = new SigType(CilElementType.I8);
+					valueType = new SigType(CilElementType.I8);
 					break;
 				case OpCode.Stind_r4:
-					_valueType = new SigType(CilElementType.R4);
+					valueType = new SigType(CilElementType.R4);
 					break;
 				case OpCode.Stind_r8:
-					_valueType = new SigType(CilElementType.R8);
+					valueType = new SigType(CilElementType.R8);
 					break;
 				case OpCode.Stind_i:
-					_valueType = new SigType(CilElementType.I);
+					valueType = new SigType(CilElementType.I);
 					break;
 				case OpCode.Stind_ref: // FIXME: Really object?
-					_valueType = new SigType(CilElementType.Object);
+					valueType = new SigType(CilElementType.Object);
+					break;
+				case OpCode.Stobj:  // FIXME
+					valueType = null;
 					break;
 				default:
 					throw new NotImplementedException();
@@ -87,13 +90,13 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			base.Decode(ctx, decoder);
 
 			// Do we have a type?
-			if (_valueType == null)
+			if (valueType == null)
 			{
 				// No, retrieve a type reference from the immediate argument
 				Token token = decoder.DecodeTokenType();
+				RuntimeType type = decoder.TypeModule.GetType(token);
 
-				throw new NotImplementedException();
-				//_valueType = MetadataTypeReference.FromToken(decoder.Metadata, token);
+				ctx.Other = type;
 			}
 
 			// FIXME: Check the value/destinations
@@ -108,11 +111,12 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		{
 			base.Validate(ctx, compiler);
 
-			SigType destType = ctx.Operand1.Type;
+			//FIXME: Intent?
+			//SigType destType = ctx.Operand1.Type;
 
-			Debug.Assert(destType is PtrSigType || destType is RefSigType, @"Destination operand not a pointer or reference.");
-			if (!(destType is PtrSigType || destType is RefSigType))
-				throw new InvalidOperationException(@"Invalid operand.");
+			//Debug.Assert(destType is PtrSigType || destType is RefSigType, @"Destination operand not a pointer or reference.");
+			//if (!(destType is PtrSigType || destType is RefSigType))
+			//    throw new InvalidOperationException(@"Invalid operand.");
 		}
 
 		/// <summary>
