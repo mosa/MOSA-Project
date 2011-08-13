@@ -29,7 +29,7 @@ namespace Mosa.CoolWorld
 			Screen.GotoTop();
 			Screen.Color = Colors.Yellow;
 
-			Screen.Write(@"MOSA OS Version 1.0 '");
+			Screen.Write(@"MOSA OS CoolWorld Version 1.0");
 			
 			while (true)
 			{
