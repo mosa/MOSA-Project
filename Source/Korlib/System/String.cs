@@ -171,16 +171,6 @@ namespace System
 			return result;
 		}
 
-		public static bool operator ==(String a, String b)
-		{
-			return String.Equals(a, b);
-		}
-
-		public static bool operator !=(String a, String b)
-		{
-			return !(a == b);
-		}
-
 		public bool Equals(String i)
 		{
 			return i == this;
@@ -315,17 +305,7 @@ namespace System
 
 			return result;
 		}
-
-		public static string Concat(object[] objects)
-		{
-			string result = string.Empty;
-
-			for (int i = 0; i < objects.Length - 1; ++i)
-				result = Concat(result, objects[i], objects[i + 1]);
-
-			return result;
-		}
-
+		
 		public unsafe string Substring(int startIndex)
 		{
 			if (startIndex == 0)
@@ -539,16 +519,6 @@ namespace System
 						return startIndex + i;
 
 			return -1;
-		}
-
-		public override int GetHashCode()
-		{
-			return base.GetHashCode();
-		}
-
-		public override bool Equals(object obj)
-		{
-			return string.Equals(this, obj);
 		}
 	}
 }
