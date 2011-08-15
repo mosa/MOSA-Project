@@ -121,14 +121,23 @@ namespace Mosa.HelloWorld
 				Screen.Color = Colors.Gray;
 				Screen.Write(biosInformation.BiosVendor);
 				Screen.NextLine();
+				Screen.Color = Colors.White;
+				Screen.Write(@"Version: ");
+				Screen.Color = Colors.Gray;
+				Screen.Write(biosInformation.BiosVersion);
+				Screen.NextLine();
+				Screen.Color = Colors.White;
+				Screen.Write(@"Date: ");
+				Screen.Color = Colors.Gray;
+				Screen.Write(biosInformation.BiosDate);
 
 				Screen.Color = Colors.Yellow;
-				Screen.Row = 9;
-				Screen.Column = 25;
+				Screen.Row = 8;
+				Screen.Column = 35;
 				Screen.Write(@"[Cpu]");
 				Screen.Color = Colors.White;
 				Screen.NextLine();
-				Screen.Column = 25;
+				Screen.Column = 35;
 
 				CpuStructure cpuStructure = new CpuStructure();
 				Screen.Color = Colors.White;
@@ -136,21 +145,27 @@ namespace Mosa.HelloWorld
 				Screen.Color = Colors.Gray;
 				Screen.Write(cpuStructure.Vendor);
 				Screen.NextLine();
-				Screen.Column = 25;
+				Screen.Column = 35;
 				Screen.Color = Colors.White;
-				Screen.Write(@"Clock Freq.: ");
+				Screen.Write(@"Version: ");
 				Screen.Color = Colors.Gray;
-				Screen.Write(cpuStructure.ClockFrequency, 10, -1);
+				Screen.Write(cpuStructure.Version);
+				Screen.NextLine();
+				Screen.Column = 35;
+				Screen.Color = Colors.White;
+				Screen.Write(@"Socket: ");
+				Screen.Color = Colors.Gray;
+				Screen.Write(cpuStructure.Socket);
 				Screen.Write(@" MHz");
 				Screen.NextLine();
-				Screen.Column = 25;
+				Screen.Column = 35;
 				Screen.Color = Colors.White;
-				Screen.Write(@"Max. Speed: ");
+				Screen.Write(@"Cur. Speed: ");
 				Screen.Color = Colors.Gray;
 				Screen.Write(cpuStructure.MaxSpeed, 10, -1);
 				Screen.Write(@" MHz");
 				Screen.NextLine();
-				Screen.Column = 25;
+				Screen.Column = 35;
 			}
 			else
 			{
@@ -235,7 +250,7 @@ namespace Mosa.HelloWorld
 				Screen.Row = index;
 
 				Screen.Color = Colors.White;
-				if (index == 7)
+				if (index == 6)
 					Screen.Write((char)185);
 				else if (index == 17)
 					Screen.Write((char)185);
