@@ -21,7 +21,13 @@ namespace Mosa.HelloWorld
 	/// </summary>
 	public static class Boot
 	{
-		
+		//public static void Include()
+		//{
+		//    Mosa.DeviceSystem.KeyType key = DeviceSystem.KeyType.CapsLock;
+
+		//    key++;
+		//}
+
 		/// <summary>
 		/// Mains this instance.
 		/// </summary>

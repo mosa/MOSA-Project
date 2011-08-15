@@ -27,7 +27,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// <summary>
 		/// A fixed typeref for ldind.* instructions.
 		/// </summary>
-		private SigType typeRef;
+		private readonly SigType typeRef;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LdobjInstruction"/> class.
@@ -39,37 +39,40 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			switch (opcode)
 			{
 				case OpCode.Ldind_i1:
-					this.typeRef = BuiltInSigType.SByte;
+					typeRef = BuiltInSigType.SByte;
 					break;
 				case OpCode.Ldind_i2:
-					this.typeRef = BuiltInSigType.Int16;
+					typeRef = BuiltInSigType.Int16;
 					break;
 				case OpCode.Ldind_i4:
-					this.typeRef = BuiltInSigType.Int32;
+					typeRef = BuiltInSigType.Int32;
 					break;
 				case OpCode.Ldind_i8:
-					this.typeRef = BuiltInSigType.Int64;
+					typeRef = BuiltInSigType.Int64;
 					break;
 				case OpCode.Ldind_u1:
-					this.typeRef = BuiltInSigType.Byte;
+					typeRef = BuiltInSigType.Byte;
 					break;
 				case OpCode.Ldind_u2:
-					this.typeRef = BuiltInSigType.UInt16;
+					typeRef = BuiltInSigType.UInt16;
 					break;
 				case OpCode.Ldind_u4:
-					this.typeRef = BuiltInSigType.UInt32;
+					typeRef = BuiltInSigType.UInt32;
 					break;
 				case OpCode.Ldind_i:
-					this.typeRef = BuiltInSigType.IntPtr;
+					typeRef = BuiltInSigType.IntPtr;
 					break;
 				case OpCode.Ldind_r4:
-					this.typeRef = BuiltInSigType.Single;
+					typeRef = BuiltInSigType.Single;
 					break;
 				case OpCode.Ldind_r8:
-					this.typeRef = BuiltInSigType.Double;
+					typeRef = BuiltInSigType.Double;
 					break;
 				case OpCode.Ldind_ref: // FIXME: Really object?
-					this.typeRef = BuiltInSigType.Object;
+					typeRef = BuiltInSigType.Object;
+					break;
+				case OpCode.Ldobj: // FIXME
+					typeRef = null;
 					break;
 				default:
 					throw new NotImplementedException();
@@ -78,7 +81,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 		public SigType TypeReference
 		{
-			get { return this.typeRef; }
+			get { return typeRef; }
 		}
 
 		/// <summary>
@@ -91,16 +94,19 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			// Decode base classes first
 			base.Decode(ctx, decoder);
 
+			SigType sigType = typeRef;
+
 			// Do we have a type?
-			if (this.typeRef == null)
+			if (sigType == null)
 			{
-				// No, retrieve a type reference From the immediate argument
+				// No, retrieve a type reference from the immediate argument
 				Token token = decoder.DecodeTokenType();
-				this.typeRef = new ClassSigType(token);
+				sigType = new ClassSigType(token);
+				//ctx.Other = sigType;
 			}
 
 			// Push the loaded value
-			ctx.Result = LoadInstruction.CreateResultOperand(decoder, Operand.StackTypeFromSigType(this.typeRef), this.typeRef);
+			ctx.Result = LoadInstruction.CreateResultOperand(decoder, Operand.StackTypeFromSigType(sigType), sigType);
 		}
 
 		/// <summary>
@@ -113,7 +119,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			base.Validate(ctx, compiler);
 
 			// If we're ldind.i8, fix an IL deficiency that the result may be U8
-			if (opcode == OpCode.Ldind_i8 && this.typeRef.Type == CilElementType.I8)
+			if (opcode == OpCode.Ldind_i8 && typeRef.Type == CilElementType.I8)
 			{
 				SigType opType = ctx.Operand1.Type;
 				RefSigType rst = opType as RefSigType;

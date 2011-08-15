@@ -86,8 +86,8 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		public void RegisterBuiltInDeviceDrivers()
 		{
-			System.Reflection.Assembly assemblyInfo = typeof(DeviceDriverRegistry).Module.Assembly;
-			RegisterDeviceDrivers(assemblyInfo);
+			//System.Reflection.Assembly assemblyInfo = typeof(DeviceDriverRegistry).Module.Assembly;
+			//RegisterDeviceDrivers(assemblyInfo);
 		}
 
 		/// <summary>
@@ -96,25 +96,25 @@ namespace Mosa.DeviceSystem
 		/// <param name="assemblyInfo">The assembly info.</param>
 		public void RegisterDeviceDrivers(System.Reflection.Assembly assemblyInfo)
 		{
-			System.Type[] types = assemblyInfo.GetTypes();
+			//System.Type[] types = assemblyInfo.GetTypes();
 
-			foreach (System.Type type in types)
-			{
-				object[] attributes = type.GetCustomAttributes(typeof(IDeviceDriver), false);
+			//foreach (System.Type type in types)
+			//{
+			//    object[] attributes = type.GetCustomAttributes(typeof(IDeviceDriver), false);
 
-				foreach (object attribute in attributes)
-					if (((attribute as IDeviceDriver).Platforms & platformArchitecture) != 0)
-					{
-						DeviceDriver deviceDriver = new DeviceDriver(attribute as IDeviceDriver, type);
+			//    foreach (object attribute in attributes)
+			//        if (((attribute as IDeviceDriver).Platforms & platformArchitecture) != 0)
+			//        {
+			//            DeviceDriver deviceDriver = new DeviceDriver(attribute as IDeviceDriver, type);
 
-						object[] memAttributes = type.GetCustomAttributes(typeof(DeviceDriverPhysicalMemoryAttribute), false);
+			//            object[] memAttributes = type.GetCustomAttributes(typeof(DeviceDriverPhysicalMemoryAttribute), false);
 
-						foreach (object memAttribute in memAttributes)
-							deviceDriver.Add(memAttribute as DeviceDriverPhysicalMemoryAttribute);
+			//            foreach (object memAttribute in memAttributes)
+			//                deviceDriver.Add(memAttribute as DeviceDriverPhysicalMemoryAttribute);
 
-						deviceDrivers.Add(deviceDriver);
-					}
-			}
+			//            deviceDrivers.Add(deviceDriver);
+			//        }
+			//}
 		}
 	}
 

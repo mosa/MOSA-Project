@@ -286,7 +286,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			/* 0x070 */
 			opcodeMap[(int)OpCode.Cpobj] = new CpobjInstruction(OpCode.Cpobj);
 			/* 0x071 */
-			opcodeMap[(int)OpCode.Ldobj] = null; // new LdobjInstruction(OpCode.Ldobj);
+			opcodeMap[(int)OpCode.Ldobj] = new LdobjInstruction(OpCode.Ldobj);
 			/* 0x072 */
 			opcodeMap[(int)OpCode.Ldstr] = new LdstrInstruction(OpCode.Ldstr);
 			/* 0x073 */
@@ -315,7 +315,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			/* 0x080 */
 			opcodeMap[(int)OpCode.Stsfld] = new StsfldInstruction(OpCode.Stsfld);
 			/* 0x081 */
-			opcodeMap[(int)OpCode.Stobj] = null; // new StobjInstruction(OpCode.Stobj);
+			opcodeMap[(int)OpCode.Stobj] = new StobjInstruction(OpCode.Stobj);
 			/* 0x082 */
 			opcodeMap[(int)OpCode.Conv_ovf_i1_un] = new ConversionInstruction(OpCode.Conv_ovf_i1_un);
 			/* 0x083 */

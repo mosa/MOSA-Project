@@ -1,3 +1,3 @@
-CALL CompileHelloWorld.bat
 ..\bin\Mosa.Tools.CreateBootImage.exe IMG\mosaboot-img.config build\bootimage.img
-JPC-DEBUG-Run.bat
+CD jpc
+CALL LaunchJPCDebugger.bat

@@ -130,8 +130,13 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			Operand destination = context.Result;
 			Operand source = context.Operand1;
 
-			CIL.LdobjInstruction instruction = (CIL.LdobjInstruction)context.Instruction;
-			SigType elementType = instruction.TypeReference;
+			SigType elementType = context.Other as SigType;
+
+			if (elementType == null)
+			{
+				CIL.LdobjInstruction instruction = (CIL.LdobjInstruction)context.Instruction;
+				elementType = instruction.TypeReference;
+			}
 
 			// This is actually ldind.* and ldobj - the opcodes have the same meanings
 			if (MustSignExtendOnLoad(elementType.Type))

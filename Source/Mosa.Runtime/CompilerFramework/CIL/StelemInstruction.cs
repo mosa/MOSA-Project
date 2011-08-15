@@ -88,10 +88,12 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			// Decode base classes first
 			base.Decode(ctx, decoder);
 
-			//TODO:
 			if (typeRef == null)
 			{
 				Token token = decoder.DecodeTokenType();
+				RuntimeType type = decoder.TypeModule.GetType(token);
+
+				ctx.Other = type;
 			}
 		}
 

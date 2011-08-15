@@ -122,15 +122,14 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 				typeToken = GetLocalTypeRefToken(module, ctorToken);
 			}
 
-			RuntimeType baseType = declaringType.BaseType;
-			if (baseType != null && baseType.FullName == @"System.ValueType")
-			{
-				// TODO
-				var typeSpecRow = module.Metadata.ReadTypeSpecRow(typeToken);
-				var typeSpecSignature = new TypeSpecSignature(module.Metadata, typeSpecRow.SignatureBlobIdx);
-				return typeSpecSignature.Type;
-				//return new ValueTypeSigType(typeToken);
-			}
+			//if (declaringType.IsValueType)
+			//{
+			//    // TODO
+			//    var typeSpecRow = module.Metadata.ReadTypeSpecRow(typeToken);
+			//    var typeSpecSignature = new TypeSpecSignature(module.Metadata, typeSpecRow.SignatureBlobIdx);
+			//    return typeSpecSignature.Type;
+			//    //return new ValueTypeSigType(typeToken);
+			//}
 
 			return new ClassSigType(typeToken);
 		}

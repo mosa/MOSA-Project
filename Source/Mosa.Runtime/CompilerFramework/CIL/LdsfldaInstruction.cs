@@ -44,7 +44,6 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			if (ctx.RuntimeField.ContainsGenericParameter)
 			{
 				//TODO
-				;
 			}
 
 			ctx.Result = decoder.Compiler.CreateTemporary(new SigType(CilElementType.Ptr));

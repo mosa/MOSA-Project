@@ -52,9 +52,6 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			ctx.RuntimeField = decoder.Method.Module.GetField(token);
 			var fieldName = ctx.RuntimeField.Name;
 
-			if (decoder.Method.FullName.Contains("Find") && decoder.Method.DeclaringType.FullName.Contains("LinkedList"))
-				System.Console.WriteLine();
-
 			if (ctx.RuntimeField.ContainsGenericParameter || ctx.RuntimeField.DeclaringType.ContainsOpenGenericParameters)
 			{
 				if (ctx.RuntimeField.ContainsGenericParameter || ctx.RuntimeField.DeclaringType.ContainsOpenGenericParameters)
@@ -62,7 +59,6 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 					ctx.RuntimeField = decoder.GenericTypePatcher.PatchField(decoder.TypeModule, decoder.Method.DeclaringType as CilGenericType, ctx.RuntimeField);
 				}
 				decoder.Compiler.Scheduler.ScheduleTypeForCompilation(ctx.RuntimeField.DeclaringType);
-				//Console.WriteLine("Token: {0}", token);
 				Debug.Assert(!ctx.RuntimeField.ContainsGenericParameter);
 			}
 
