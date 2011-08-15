@@ -66,6 +66,46 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="Boot.cs" />
+    <Compile Include="DeviceDrivers\ISA\StandardKeyboard.cs" />
+    <Compile Include="DeviceDrivers\ISA\VGAText.cs" />
+    <Compile Include="DeviceDrivers\ScanCodeMap\US.cs" />
+    <Compile Include="DeviceSystem\Device.cs" />
+    <Compile Include="DeviceSystem\DeviceDriver.cs" />
+    <Compile Include="DeviceSystem\DeviceDriverPhysicalMemoryAttribute.cs" />
+    <Compile Include="DeviceSystem\DeviceDriverStartStatus.cs" />
+    <Compile Include="DeviceSystem\DeviceStatus.cs" />
+    <Compile Include="DeviceSystem\HAL.cs" />
+    <Compile Include="DeviceSystem\HardwareDevice.cs" />
+    <Compile Include="DeviceSystem\IDevice.cs" />
+    <Compile Include="DeviceSystem\IDeviceDriver.cs" />
+    <Compile Include="DeviceSystem\IHardwareAbstraction.cs" />
+    <Compile Include="DeviceSystem\IHardwareDevice.cs" />
+    <Compile Include="DeviceSystem\IHardwareResources.cs" />
+    <Compile Include="DeviceSystem\IIOPortRegion.cs" />
+    <Compile Include="DeviceSystem\IIOPorts.cs" />
+    <Compile Include="DeviceSystem\IKeyboard.cs" />
+    <Compile Include="DeviceSystem\IKeyboardDevice.cs" />
+    <Compile Include="DeviceSystem\IMemory.cs" />
+    <Compile Include="DeviceSystem\IMemoryRegion.cs" />
+    <Compile Include="DeviceSystem\IPCIController.cs" />
+    <Compile Include="DeviceSystem\ISADeviceDriverAttribute.cs" />
+    <Compile Include="DeviceSystem\IScanCodeMap.cs" />
+    <Compile Include="DeviceSystem\ITextDevice.cs" />
+    <Compile Include="DeviceSystem\ITextScreen.cs" />
+    <Compile Include="DeviceSystem\Key.cs" />
+    <Compile Include="DeviceSystem\Keyboard.cs" />
+    <Compile Include="DeviceSystem\KeyEvent.cs" />
+    <Compile Include="DeviceSystem\KeyType.cs" />
+    <Compile Include="DeviceSystem\PCI\AddressType.cs" />
+    <Compile Include="DeviceSystem\PCI\BaseAddress.cs" />
+    <Compile Include="DeviceSystem\PCI\ClassCodeTable.cs" />
+    <Compile Include="DeviceSystem\PCI\DeviceTable.cs" />
+    <Compile Include="DeviceSystem\PCI\IDeviceResource.cs" />
+    <Compile Include="DeviceSystem\PCI\IPCIDevice.cs" />
+    <Compile Include="DeviceSystem\PCI\PCIDevice.cs" />
+    <Compile Include="DeviceSystem\PCI\SubClassCodeTable.cs" />
+    <Compile Include="DeviceSystem\PlatformArchitecture.cs" />
+    <Compile Include="DeviceSystem\SpinLock.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mosa.ClassLib\Mosa.ClassLib.csproj">
