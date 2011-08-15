@@ -299,6 +299,9 @@ namespace Mosa.Platform.x86.Intrinsic
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.CallFilter, Mosa.Platform.x86")]
 		public extern static void CallFilter();
 
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.InvokeDelegate, Mosa.Platform.x86")]
+		public extern static void InvokeDelegate();
+
 		#endregion
 
 	}

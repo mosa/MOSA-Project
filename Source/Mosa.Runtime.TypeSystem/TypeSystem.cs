@@ -35,6 +35,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// Holds the main type module
 		/// </summary>
 		private ITypeModule mainTypeModule;
+		private DelegateTypePatcher delegateTypePatcher = null;
 
 		#region ITypeSystem interface
 
@@ -44,6 +45,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// <param name="modules">The modules.</param>
 		void ITypeSystem.LoadModules(IList<IMetadataModule> modules)
 		{
+			this.delegateTypePatcher = new DelegateTypePatcher(this);
 			foreach (var module in modules)
 			{
 				ITypeModule typeModule = new TypeModule(this, module);
@@ -53,6 +55,8 @@ namespace Mosa.Runtime.TypeSystem
 					mainTypeModule = typeModule;
 			}
 		}
+
+		DelegateTypePatcher ITypeSystem.DelegateTypePatcher { get { return delegateTypePatcher; } }
 
 		/// <summary>
 		/// Gets the type modules.
@@ -128,7 +132,11 @@ namespace Mosa.Runtime.TypeSystem
 		/// <returns></returns>
 		IEnumerable<RuntimeType> ITypeSystem.GetAllTypes()
 		{
-			foreach (var typeModule in typeModules)
+			var modules = new List<ITypeModule>(this.typeModules);
+			if (this.internalTypeModule == null)
+				this.InitializeInternalTypeModule();
+			modules.Add(this.internalTypeModule);
+			foreach (var typeModule in modules)
 			{
 				foreach (var type in typeModule.GetAllTypes())
 				{

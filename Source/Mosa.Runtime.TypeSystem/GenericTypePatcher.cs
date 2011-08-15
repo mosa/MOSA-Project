@@ -89,7 +89,7 @@ namespace Mosa.Runtime.TypeSystem
 			var patchedType = this.GetType(openType, ComputeSignatureHash(genericArguments));
 			if (patchedType == null)
 			{
-				patchedType = new CilGenericType(openType.Module, typeToken, openType.BaseGenericType, signature);
+				patchedType = new CilGenericType(enclosingType.InstantiationModule, typeToken, openType.BaseGenericType, signature);
 				(this.typeSystem.InternalTypeModule as InternalTypeModule).AddType(patchedType);
 				this.AddType(patchedType, ComputeSignatureHash(genericArguments));
 			}
@@ -115,11 +115,32 @@ namespace Mosa.Runtime.TypeSystem
 			var genericArguments = CloseGenericArguments(enclosingType, openType);
 
 			var signature = new GenericInstSigType(sigtype, genericArguments);
-
 			var patchedType = this.GetType(openType, ComputeSignatureHash(genericArguments));
+
+			//if (!openField.SignatureType.IsOpenGenericParameter)
+			//{
+			//    return GetFieldByName(openField.Name, enclosingType);
+			//}
+
 			if (patchedType == null)
 			{
-				patchedType = new CilGenericType(openField.Module, typeToken, openType.BaseGenericType, signature);
+				try
+				{
+					patchedType = new CilGenericType(enclosingType.Module, typeToken, openType.BaseGenericType, signature);
+				}
+				catch (Exception)
+				{
+					foreach (var module in typeModule.TypeSystem.TypeModules)
+					{
+						try
+						{
+							patchedType = new CilGenericType(module, typeToken, openType.BaseGenericType, signature);
+							break;
+						}
+						catch (Exception)
+						{ }
+					}
+				}
 				(this.typeSystem.InternalTypeModule as InternalTypeModule).AddType(patchedType);
 				this.AddType(patchedType, ComputeSignatureHash(genericArguments));
 			}
@@ -131,6 +152,14 @@ namespace Mosa.Runtime.TypeSystem
 			}
 
 			throw new MissingFieldException();
+		}
+
+		private RuntimeField GetFieldByName(string name, RuntimeType type)
+		{
+			foreach (var field in type.Fields)
+				if (field.Name == name)
+					return field;
+			return null;
 		}
 
 		/// <summary>
@@ -246,7 +275,7 @@ namespace Mosa.Runtime.TypeSystem
 			var patchedType = this.GetType(openType, ComputeSignatureHash(genericArguments));
 			if (patchedType == null)
 			{
-				patchedType = new CilGenericType(openMethod.Module, typeToken, openType.BaseGenericType, signature);
+				patchedType = new CilGenericType(enclosingType.InstantiationModule, typeToken, openType.BaseGenericType, signature);
 				(this.typeSystem.InternalTypeModule as InternalTypeModule).AddType(patchedType);
 				this.AddType(patchedType, ComputeSignatureHash(genericArguments));
 			}

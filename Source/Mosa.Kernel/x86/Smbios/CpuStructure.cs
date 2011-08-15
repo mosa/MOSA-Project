@@ -8,25 +8,30 @@ namespace Mosa.Kernel.x86.Smbios
 	public class CpuStructure : SmbiosStructure
 	{
 		/// <summary>
+		/// 
+		/// </summary>
+		private string vendor = null;
+		/// <summary>
+		/// 
+		/// </summary>
+		private string version = null;
+		/// <summary>
 		///
 		/// </summary>
 		private uint maxSpeed = 0;
 		/// <summary>
 		///
 		/// </summary>
-		private uint clockFrequency = 0;
-		/// <summary>
-		/// 
-		/// </summary>
-		private string vendor = null;
+		private string socket = null;
 		
 		/// <summary>
 		///
 		/// </summary>
 		public CpuStructure () : base (SmbiosManager.GetStructureOfType (0x04))
 		{
-			this.clockFrequency = Native.Get16 (address + 0x12u);
-			this.maxSpeed = Native.Get16(address + 0x14u);
+			this.version = GetStringFromIndex(Native.Get8(address + 0x10u));
+			this.socket = GetStringFromIndex(Native.Get8(address + 0x04u));
+			this.maxSpeed = Native.Get16(address + 0x16u);
 			this.vendor = GetStringFromIndex(Native.Get8(address + 0x07u));
 		}
 		
@@ -41,9 +46,9 @@ namespace Mosa.Kernel.x86.Smbios
 		/// <summary>
 		///
 		/// </summary>
-		public uint ClockFrequency
+		public string Socket
 		{
-			get { return this.clockFrequency; }
+			get { return this.socket; }
 		}
 		
 		/// <summary>
@@ -52,6 +57,14 @@ namespace Mosa.Kernel.x86.Smbios
 		public string Vendor
 		{
 			get { return this.vendor; }
+		}
+
+		/// <summary>
+		///
+		/// </summary>
+		public string Version
+		{
+			get { return this.version; }
 		}
 	}
 }

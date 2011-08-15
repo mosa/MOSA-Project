@@ -145,6 +145,8 @@ namespace Mosa.Runtime.CompilerFramework
 				NotifyCompilerEvent(CompilerEvent.SchedulingType, type.FullName);
 
 				typeQueue.Enqueue(type);
+				if (compiled.ContainsKey(type))
+					compiled.Remove(type);
 				compiled.Add(type, type);
 				alreadyCompiled.Add(type.ToString());
 			}

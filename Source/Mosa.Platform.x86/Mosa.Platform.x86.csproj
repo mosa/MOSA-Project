@@ -117,6 +117,7 @@
     <Compile Include="Intrinsic\GetCR2.cs" />
     <Compile Include="Intrinsic\GetCR3.cs" />
     <Compile Include="Intrinsic\GetCR4.cs" />
+    <Compile Include="Intrinsic\InvokeDelegate.cs" />
     <Compile Include="Intrinsic\JumpGlobalInterruptHandler.cs" />
     <Compile Include="Intrinsic\RestoreContext.cs" />
     <Compile Include="Intrinsic\SetControlRegisterBase.cs" />

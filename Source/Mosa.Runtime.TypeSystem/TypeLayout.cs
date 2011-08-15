@@ -213,7 +213,7 @@ namespace Mosa.Runtime.TypeSystem
 			if (type.ContainsOpenGenericParameters)
 				return null;
 
-			if (type.IsModule || type.IsGeneric || type.IsDelegate)
+			if (type.IsModule || type.IsGeneric)
 				return null;
 
 			ResolveType(type);
@@ -289,7 +289,7 @@ namespace Mosa.Runtime.TypeSystem
 			if (type.ContainsOpenGenericParameters)
 				return;
 
-			if (type.IsModule || type.IsGeneric || type.IsDelegate)
+			if (type.IsModule || type.IsGeneric)
 				return;
 
 			if (typeIDs.ContainsKey(type))
@@ -360,6 +360,9 @@ namespace Mosa.Runtime.TypeSystem
 
 			// Receives the size/alignment
 			int packingSize = type.Pack;
+
+			if (type.FullName.Contains("Int32"))
+				Console.WriteLine();
 
 			if (type.BaseType != null)
 			{
