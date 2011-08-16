@@ -10,6 +10,7 @@
 using Mosa.Runtime;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.TypeSystem;
+using System.Collections.Generic;
 
 namespace Mosa.Platform.x86.Intrinsic
 {
@@ -26,7 +27,7 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="typeSystem">The type system.</param>
-		public void ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem)
+		public void ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
 		{
 			context.SetInstruction(CPUx86.Instruction.NopInstruction);
 		}

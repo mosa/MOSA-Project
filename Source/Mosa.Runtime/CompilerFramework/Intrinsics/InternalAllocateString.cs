@@ -10,6 +10,7 @@
 using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.TypeSystem;
+using System.Collections.Generic;
 
 namespace Mosa.Runtime.CompilerFramework.Intrinsics
 {
@@ -23,7 +24,7 @@ namespace Mosa.Runtime.CompilerFramework.Intrinsics
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="typeSystem">The type system.</param>
-		public void ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem)
+		public void ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
 		{
 			SymbolOperand callTargetOperand = this.GetInternalAllocateStringCallTarget(typeSystem);
 			SymbolOperand methodTableOperand = new SymbolOperand(BuiltInSigType.IntPtr, StringClassMethodTableSymbolName);

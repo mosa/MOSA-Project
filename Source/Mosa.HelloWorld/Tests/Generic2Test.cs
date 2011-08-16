@@ -24,6 +24,7 @@ namespace Mosa.HelloWorld.Tests
 			testMethods.Add(GenericTest3);
 			testMethods.Add(GenericTest4);
 			testMethods.Add(GenericTest5);
+			testMethods.Add(GenericTest6);
 		}
 
 		public static bool GenericTest1()
@@ -91,5 +92,4 @@ namespace Mosa.HelloWorld.Tests
 			return list.FindLast(30) != list.First;
 		}
 	}
-
 }

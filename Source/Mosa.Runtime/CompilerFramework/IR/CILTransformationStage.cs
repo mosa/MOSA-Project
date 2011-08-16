@@ -1916,7 +1916,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			if (intrinsicMethod == null)
 				return false;
 
-			intrinsicMethod.ReplaceIntrinsicCall(context, typeSystem);
+			intrinsicMethod.ReplaceIntrinsicCall(context, typeSystem, this.methodCompiler.Method.Parameters);
 
 			return true;
 		}

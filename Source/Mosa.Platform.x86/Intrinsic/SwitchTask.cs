@@ -16,6 +16,7 @@ using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.TypeSystem;
 using IR = Mosa.Runtime.CompilerFramework.IR;
+using System.Collections.Generic;
 
 namespace Mosa.Platform.x86.Intrinsic
 {
@@ -32,7 +33,7 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="typeSystem">The type system.</param>
-		public void ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem)
+		public void ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
 		{
 			SigType I4 = new SigType(CilElementType.I4);
 			RegisterOperand esp = new RegisterOperand(I4, GeneralPurposeRegister.ESP);
