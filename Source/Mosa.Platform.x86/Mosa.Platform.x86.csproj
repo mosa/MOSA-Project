@@ -104,6 +104,7 @@
     <Compile Include="BaseTransformationStage.cs" />
     <Compile Include="AddressModeConversionStage.cs" />
     <Compile Include="ControlRegister.cs" />
+    <Compile Include="CPUx86\CallPointerInstruction.cs" />
     <Compile Include="CPUx86\FarJmpInstruction.cs" />
     <Compile Include="CPUx86\LeaveInstruction.cs" />
     <Compile Include="CPUx86\SseRoundInstruction.cs" />
@@ -118,6 +119,7 @@
     <Compile Include="Intrinsic\GetCR3.cs" />
     <Compile Include="Intrinsic\GetCR4.cs" />
     <Compile Include="Intrinsic\InvokeDelegate.cs" />
+    <Compile Include="Intrinsic\InvokeDelegateWithReturn.cs" />
     <Compile Include="Intrinsic\JumpGlobalInterruptHandler.cs" />
     <Compile Include="Intrinsic\RestoreContext.cs" />
     <Compile Include="Intrinsic\SetControlRegisterBase.cs" />

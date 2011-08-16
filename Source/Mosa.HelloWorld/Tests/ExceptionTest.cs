@@ -7,15 +7,13 @@ namespace Mosa.HelloWorld.Tests
 {
 	public class ExceptionTest : KernelTest
 	{
-		public static void Test()
+		public ExceptionTest()
+			: base("EX") 
 		{
-			Screen.Color = Colors.Gray;
-			Screen.Write(" EX:");
-
-			PrintResult(ExceptionTest1());
-			PrintResult(ExceptionTest2());
-			PrintResult(ExceptionTest3());
-			PrintResult(ExceptionTest4());
+			testMethods.Add(ExceptionTest1);
+			testMethods.Add(ExceptionTest2);
+			testMethods.Add(ExceptionTest3);
+			testMethods.Add(ExceptionTest4);
 		}
 
 		public static bool ExceptionTest1()

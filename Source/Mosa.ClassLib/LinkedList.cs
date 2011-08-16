@@ -136,12 +136,14 @@ namespace Mosa.ClassLib
 		public LinkedListNode<T> Find(T value)
 		{
 			LinkedListNode<T> cur = first;
+
 			while (cur != null)
 			{
 				if (cur.value.Equals(value))
 					return cur;
 				cur = cur.next;
 			}
+
 			return null;
 		}
 
@@ -182,7 +184,7 @@ namespace Mosa.ClassLib
 		/// <param name="value">The value.</param>
 		public void Add(T value)
 		{
-			AddLast(value);
+			var node = AddLast(value);
 		}
 
 		/// <summary>

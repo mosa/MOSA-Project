@@ -26,23 +26,20 @@ namespace Mosa.HelloWorld.Tests
 
 	public class IsInstTest : KernelTest
 	{
-		public static void Test()
+		public IsInstTest()
+			: base("Inst") 
 		{
-			Screen.Color = Colors.Gray;
-			Screen.Write(" Inst:");
-
-			PrintResult(IsInstTest1());
-			PrintResult(IsInstTest2());
-			PrintResult(IsInstTest3());
-			PrintResult(IsInstTest4());
-			PrintResult(IsInstTest5());
-			PrintResult(IsInstTest6());
-			PrintResult(IsInstTest7());
-
-			PrintResult(IsInstTest8());
-			PrintResult(IsInstTest9());
-			PrintResult(IsInstTest10());
-			PrintResult(IsInstTest11());
+			testMethods.Add(IsInstTest1);
+			testMethods.Add(IsInstTest2);
+			testMethods.Add(IsInstTest3);
+			testMethods.Add(IsInstTest4);
+			testMethods.Add(IsInstTest5);
+			testMethods.Add(IsInstTest6);
+			testMethods.Add(IsInstTest7);
+			testMethods.Add(IsInstTest8);
+			testMethods.Add(IsInstTest9);
+			testMethods.Add(IsInstTest10);
+			testMethods.Add(IsInstTest11);
 		}
 
 		public static bool IsInstTest1()

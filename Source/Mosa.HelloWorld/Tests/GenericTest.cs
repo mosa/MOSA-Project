@@ -15,20 +15,17 @@ namespace Mosa.HelloWorld.Tests
 
 	public class GenericTest : KernelTest
 	{
-		public static void Test()
+		public GenericTest() : base("Gen-T") 
 		{
-			Screen.Color = Colors.Gray;
-			Screen.Write(" Gen-T:");
-
-			PrintResult(GenericTest1());
-			PrintResult(GenericTest2());
-			PrintResult(GenericTest3());
-			PrintResult(GenericTest4());
-			PrintResult(GenericTest5());
-			PrintResult(GenericTest6());
-			PrintResult(GenericTest7());
-			PrintResult(GenericTest8());
-			PrintResult(GenericTest9());
+			testMethods.Add(GenericTest1);
+			testMethods.Add(GenericTest2);
+			testMethods.Add(GenericTest3);
+			testMethods.Add(GenericTest4);
+			testMethods.Add(GenericTest5);
+			testMethods.Add(GenericTest6);
+			testMethods.Add(GenericTest7);
+			testMethods.Add(GenericTest8);
+			testMethods.Add(GenericTest9);
 		}
 
 		public static bool GenericTest1()

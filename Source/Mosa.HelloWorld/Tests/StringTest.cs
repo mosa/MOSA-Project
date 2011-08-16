@@ -7,18 +7,16 @@ namespace Mosa.HelloWorld.Tests
 {
 	public class StringTest : KernelTest
 	{
-		public static void Test()
+		public StringTest()
+			: base("String") 
 		{
-			Screen.Color = Colors.Gray;
-			Screen.Write(" String:");
-
-			PrintResult(ConcatTest1());
-			PrintResult(ConcatTest2());
-			PrintResult(ConcatTest3());
-			PrintResult(ConcatTest4());
-			PrintResult(SubStringTest());
-			PrintResult(IndexOfTest());
-			PrintResult(LengthTest());
+			testMethods.Add(ConcatTest1);
+			testMethods.Add(ConcatTest2);
+			testMethods.Add(ConcatTest3);
+			testMethods.Add(ConcatTest4);
+			testMethods.Add(SubStringTest);
+			testMethods.Add(IndexOfTest);
+			testMethods.Add(LengthTest);
 		}
 
 		public static bool ConcatTest1()

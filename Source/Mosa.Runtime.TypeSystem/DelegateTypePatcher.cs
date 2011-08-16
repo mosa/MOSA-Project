@@ -27,6 +27,14 @@ namespace Mosa.Runtime.TypeSystem
 		/// <summary>
 		/// 
 		/// </summary>
+		private readonly string BeginInvokeMethodName = "BeginInvoke";
+		/// <summary>
+		/// 
+		/// </summary>
+		private readonly string EndInvokeMethodName = "EndInvoke";
+		/// <summary>
+		/// 
+		/// </summary>
 		private readonly string InstanceFieldName = "instance";
 		/// <summary>
 		/// 
@@ -134,7 +142,12 @@ namespace Mosa.Runtime.TypeSystem
 		private void GenerateAndReplaceMethods(RuntimeType type)
 		{
 			this.GenerateAndReplaceConstructor(type);
-			this.GenerateAndReplaceInvokeMethod(type);
+			if (type.Methods[1].Signature.ReturnType.Type == CilElementType.Void)
+				this.GenerateAndReplaceInvokeMethod(type);
+			else
+				this.GenerateAndReplaceInvokeWithReturnMethod(type);
+			this.GenerateAndReplaceBeginInvokeMethod(type);
+			this.GenerateAndReplaceEndInvokeMethod(type);
 		}
 
 		/// <summary>
@@ -147,7 +160,7 @@ namespace Mosa.Runtime.TypeSystem
 			type.Methods[0].Parameters.CopyTo(parameters, 0);
 			var stubConstructor = this.delegateStub.Methods[0];
 
-			var constructor = new CilRuntimeMethod(type.Module, this.ConstructorName,
+			var constructor = new CilRuntimeMethod(this.delegateStub.Module, this.ConstructorName,
 				type.Methods[0].Signature, stubConstructor.Token, type, stubConstructor.Attributes, stubConstructor.ImplAttributes, stubConstructor.Rva);
 
 			foreach (var parameter in parameters)
@@ -166,12 +179,68 @@ namespace Mosa.Runtime.TypeSystem
 			type.Methods[1].Parameters.CopyTo(parameters, 0);
 			var stubInvoke = this.delegateStub.Methods[1];
 
-			var invokeMethod = new CilRuntimeMethod(type.Module, this.InvokeMethodName,
+			var invokeMethod = new CilRuntimeMethod(this.delegateStub.Module, this.InvokeMethodName,
 				type.Methods[1].Signature, stubInvoke.Token, type, stubInvoke.Attributes, stubInvoke.ImplAttributes, stubInvoke.Rva);
 			foreach (var parameter in parameters)
 				invokeMethod.Parameters.Add(parameter);
 
 			this.SearchAndReplaceMethod(type, this.InvokeMethodName, invokeMethod);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="type"></param>
+		private void GenerateAndReplaceInvokeWithReturnMethod(RuntimeType type)
+		{
+			RuntimeParameter[] parameters = new RuntimeParameter[type.Methods[1].Parameters.Count];
+			type.Methods[1].Parameters.CopyTo(parameters, 0);
+			var stubInvoke = this.delegateStub.Methods[2];
+
+			var invokeMethod = new CilRuntimeMethod(this.delegateStub.Module, this.InvokeMethodName,
+				type.Methods[1].Signature, stubInvoke.Token, type, stubInvoke.Attributes, stubInvoke.ImplAttributes, stubInvoke.Rva);
+			foreach (var parameter in parameters)
+				invokeMethod.Parameters.Add(parameter);
+
+			this.SearchAndReplaceMethod(type, this.InvokeMethodName, invokeMethod);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="type"></param>
+		private void GenerateAndReplaceBeginInvokeMethod(RuntimeType type)
+		{
+			RuntimeParameter[] parameters = new RuntimeParameter[type.Methods[2].Parameters.Count];
+			type.Methods[2].Parameters.CopyTo(parameters, 0);
+			var stubMethod = this.delegateStub.Methods[2];
+
+			var method = new CilRuntimeMethod(this.delegateStub.Module, this.BeginInvokeMethodName,
+				type.Methods[2].Signature, stubMethod.Token, type, stubMethod.Attributes, stubMethod.ImplAttributes, stubMethod.Rva);
+
+			foreach (var parameter in parameters)
+				method.Parameters.Add(parameter);
+
+			this.SearchAndReplaceMethod(type, this.BeginInvokeMethodName, method);
+		}
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="type"></param>
+		private void GenerateAndReplaceEndInvokeMethod(RuntimeType type)
+		{
+			RuntimeParameter[] parameters = new RuntimeParameter[type.Methods[3].Parameters.Count];
+			type.Methods[3].Parameters.CopyTo(parameters, 0);
+			var stubMethod = this.delegateStub.Methods[3];
+
+			var method = new CilRuntimeMethod(this.delegateStub.Module, this.EndInvokeMethodName,
+				type.Methods[3].Signature, stubMethod.Token, type, stubMethod.Attributes, stubMethod.ImplAttributes, stubMethod.Rva);
+
+			foreach (var parameter in parameters)
+				method.Parameters.Add(parameter);
+
+			this.SearchAndReplaceMethod(type, this.EndInvokeMethodName, method);
 		}
 
 		/// <summary>

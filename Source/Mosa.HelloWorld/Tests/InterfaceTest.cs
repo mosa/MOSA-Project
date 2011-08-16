@@ -7,14 +7,12 @@ namespace Mosa.HelloWorld.Tests
 {
 	public class InterfaceTest : KernelTest
 	{
-		public static void Test()
+		public InterfaceTest()
+			: base("IF") 
 		{
-			Screen.Color = Colors.Gray;
-			Screen.Write(" IF:");
-
-			PrintResult(InterfaceTest1());
-			PrintResult(InterfaceTest2());
-			PrintResult(InterfaceTest3());
+			testMethods.Add(InterfaceTest1);
+			testMethods.Add(InterfaceTest2);
+			testMethods.Add(InterfaceTest3);
 		}
 
 		public static bool InterfaceTest1()
