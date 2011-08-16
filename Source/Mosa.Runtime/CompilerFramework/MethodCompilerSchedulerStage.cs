@@ -63,11 +63,11 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			NotifyCompilerEvent(CompilerEvent.CompilingMethod, type.FullName);
 
-			if (type.IsDelegate)
-			{
-				NotifyCompilerEvent(CompilerEvent.DebugInfo, "Skipping delegate type " + type.FullName);
-				return;
-			}
+			//if (type.IsDelegate)
+			//{
+			//    NotifyCompilerEvent(CompilerEvent.DebugInfo, "Skipping delegate type " + type.FullName);
+			//    return;
+			//}
 
 			if (type.ContainsOpenGenericParameters)
 				return;

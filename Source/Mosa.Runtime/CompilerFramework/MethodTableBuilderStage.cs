@@ -76,7 +76,7 @@ namespace Mosa.Runtime.CompilerFramework
 			{
 				if (type.ContainsOpenGenericParameters)
 					continue;
-				if (type.IsModule || type.IsGeneric || type.IsDelegate)
+				if (type.IsModule || type.IsGeneric)
 					continue;
 				if (type.IsInterface)
 					continue;

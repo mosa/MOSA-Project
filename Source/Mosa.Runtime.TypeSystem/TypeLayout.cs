@@ -267,7 +267,7 @@ namespace Mosa.Runtime.TypeSystem
 
 			if (!typeIDs.TryGetValue(type, out id))
 				Debug.Assert(false, "Expected type id");
-				
+
 			return id;
 		}
 
@@ -338,7 +338,7 @@ namespace Mosa.Runtime.TypeSystem
 			if (type.ContainsOpenGenericParameters)
 				return;
 
-			if (type.IsModule || type.IsGeneric || type.IsDelegate)
+			if (type.IsModule || type.IsGeneric)
 				return;
 
 			if (interfaces.Contains(type))
