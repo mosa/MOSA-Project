@@ -158,7 +158,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// <value>The parameters.</value>
 		public IList<RuntimeParameter> Parameters
 		{
-			get { return parameters; }
+			get { this.methodName = null; return parameters; }
 			protected set { parameters = value; }
 		}
 

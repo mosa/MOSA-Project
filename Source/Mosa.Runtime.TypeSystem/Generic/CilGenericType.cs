@@ -35,6 +35,11 @@ namespace Mosa.Runtime.TypeSystem.Generic
 		private readonly bool containsOpenGenericArguments;
 
 		/// <summary>
+		/// 
+		/// </summary>
+		public ITypeModule InstantiationModule { get; private set; }
+
+		/// <summary>
 		/// Initializes a new instance of the <see cref="CilGenericType"/> class.
 		/// </summary>
 		/// <param name="typeModule">The type module.</param>
@@ -48,6 +53,7 @@ namespace Mosa.Runtime.TypeSystem.Generic
 
 			this.signature = genericTypeInstanceSignature;
 			this.baseGenericType = baseGenericType as CilRuntimeType;
+			this.InstantiationModule = typeModule;
 			base.Attributes = baseGenericType.Attributes;
 			base.Namespace = baseGenericType.Namespace;
 

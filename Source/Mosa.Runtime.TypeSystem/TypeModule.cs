@@ -608,6 +608,7 @@ namespace Mosa.Runtime.TypeSystem
 				var genericOwnerType = ownerType as CilGenericType;
 
 				RuntimeMember runtimeMember = null;
+				MethodSignature methodSignature = null;
 				if (signature is FieldSignature)
 				{
 					foreach (RuntimeField field in ownerType.Fields)
@@ -621,7 +622,7 @@ namespace Mosa.Runtime.TypeSystem
 				}
 				else
 				{
-					var methodSignature = signature as MethodSignature;
+					methodSignature = signature as MethodSignature;
 					Debug.Assert(signature is MethodSignature);
 
 					if ((genericOwnerType != null) && (genericOwnerType.GenericArguments.Length != 0))

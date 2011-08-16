@@ -15,20 +15,39 @@ using Mosa.ClassLib;
 
 namespace Mosa.HelloWorld.Tests
 {
-
 	public class Generic2Test : KernelTest
 	{
+		//private class Bar { }
+		delegate bool TestMethod(int x);
+		//static LinkedList<Bar> testMethods = new LinkedList<Bar>();
+
 		public static void Test()
 		{
-			Screen.Color = Colors.Gray;
-			Screen.Write(" Gen-N: ");
+			/*Screen.Color = Colors.Gray;
+			Screen.Write(" Gen-N: ");*/
+			TestMethod method = Foo;
+			//testMethods.Add(method);
+			method(42);
 
+			/*testMethods.Add(GenericTest1);
+			testMethods.Add(GenericTest2);
+			testMethods.Add(GenericTest3);
+			testMethods.Add(GenericTest4);
+			testMethods.Add(GenericTest5);
+
+			foreach (var method in testMethods)
+				PrintResult(method());*/
+			/*
 			PrintResult(GenericTest1());
 			PrintResult(GenericTest2());
 			PrintResult(GenericTest3());
 			PrintResult(GenericTest4());
 			PrintResult(GenericTest5());
+			*/
 		}
+
+		public static bool Foo(int x)
+		{ return true; }
 
 		public static bool GenericTest1()
 		{

@@ -15,6 +15,7 @@ using System.Text;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.TypeSystem;
+using Mosa.Runtime.TypeSystem.Generic;
 
 namespace Mosa.Runtime.CompilerFramework.CIL
 {
@@ -65,6 +66,12 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 						default:
 							break;
 					}
+				}
+				else if (signature is ClassSigType)
+				{
+					var instantiationModule = (decoder.Method.DeclaringType as CilGenericType).InstantiationModule;
+					var classSigType = signature as ClassSigType;
+					ctx.Other = instantiationModule.GetType(classSigType.Token);
 				}
 			}
 

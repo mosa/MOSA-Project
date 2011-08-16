@@ -62,6 +62,7 @@
     <NoStdLib>true</NoStdLib>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="DelegateStub.cs" />
     <Compile Include="Native.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -69,6 +70,9 @@
       <Project>{631BC4F3-E2D8-4319-814C-13904CAA17CE}</Project>
       <Name>Korlib</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <PropertyGroup>

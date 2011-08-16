@@ -14,6 +14,7 @@ using System.Text;
 
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.TypeSystem;
+using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Runtime.CompilerFramework.CIL
 {
@@ -29,7 +30,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		/// </summary>
 		/// <param name="opcode">The opcode.</param>
 		public LdftnInstruction(OpCode opcode)
-			: base(opcode)
+			: base(opcode, 0)
 		{
 		}
 
@@ -49,7 +50,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 
 			// Read the fn token
 			Token token = decoder.DecodeTokenType();
-			throw new NotImplementedException();
+			ctx.Result = decoder.Compiler.CreateTemporary(BuiltInSigType.IntPtr);
+			ctx.InvokeTarget = decoder.TypeModule.GetMethod(token);
 			/*
 				_function = MetadataMemberReference.FromToken(decoder.Metadata, token);
 

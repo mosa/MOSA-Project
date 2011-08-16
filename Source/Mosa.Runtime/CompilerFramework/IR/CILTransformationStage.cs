@@ -203,7 +203,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Ldftn(Context context)
 		{
-			ReplaceWithVmCall(context, VmCall.GetFunctionPtr);
+			context.SetInstruction(Instruction.MoveInstruction, context.Result, SymbolOperand.FromMethod(context.InvokeTarget));
 		}
 
 		/// <summary>
@@ -422,6 +422,14 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		{
 			RuntimeMethod invokeTarget = context.InvokeTarget;
 
+			if (invokeTarget.DeclaringType.BaseType != null && invokeTarget.DeclaringType.BaseType.FullName.Contains("Delegate"))
+			{
+				this.typeSystem.DelegateTypePatcher.PatchType(invokeTarget.DeclaringType);
+				(this.typeSystem.InternalTypeModule as InternalTypeModule).AddType(invokeTarget.DeclaringType);
+				foreach (var method in invokeTarget.DeclaringType.Methods)
+					(this.typeSystem.InternalTypeModule as InternalTypeModule).AddMethod(method);
+			}
+
 			Operand resultOperand = context.Result;
 			var operands = new List<Operand>(context.Operands);
 
@@ -529,7 +537,10 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			else if (elementSigType is ClassSigType)
 			{
 				var classSigType = elementSigType as ClassSigType;
-				var elementType = typeModule.GetType(classSigType.Token);
+				var module = this.typeModule;
+				if (this.methodCompiler.Method.DeclaringType is CilGenericType)
+					module = (this.methodCompiler.Method.DeclaringType as CilGenericType).InstantiationModule;
+				var elementType = module.GetType(classSigType.Token);
 				elementSize = typeLayout.GetTypeSize(elementType);
 			}
 
@@ -570,6 +581,9 @@ namespace Mosa.Runtime.CompilerFramework.IR
 				var baseSigType = genericInstSigType.BaseType as ValueTypeSigType;
 				classType = typeModule.GetType(baseSigType.Token);
 			}
+
+			if (this.typeModule.Name.Contains("HelloWorld") && classType.Name.Contains("LinkedList"))
+				Console.WriteLine();
 
 			if (classType.ContainsOpenGenericParameters)
 			{
