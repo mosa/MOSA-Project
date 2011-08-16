@@ -15,20 +15,18 @@
 	    <csc target="exe" main="Mosa.HelloWorld.Boot" output="${outputDirectory}/Mosa.HelloWorld.exe" debug="${debug}" unsafe="true" nostdlib="true">
 		<sources>
                     <include name="Boot.cs"/>
+                    <include name="Tests/ExceptionTest.cs"/>
                     <include name="Tests/Generic2Test.cs"/>
                     <include name="Tests/KernelTest.cs"/>
+                    <include name="Tests/IsInstTest.cs"/>
                     <include name="Tests/StringTest.cs"/>
                     <include name="Tests/InterfaceTest.cs"/>
                     <include name="Tests/GenericTest.cs"/>
 		</sources>
 		<references>
                     <include name="${outputDirectory}/Mosa.ClassLib.dll"/>
-                    <include name="${outputDirectory}/Mosa.DeviceDrivers.dll"/>
-                    <include name="${outputDirectory}/Mosa.DeviceSystem.dll"/>
-                    <include name="${outputDirectory}/Mosa.FileSystem.dll"/>
                     <include name="${outputDirectory}/Mosa.Kernel.dll"/>
                     <include name="${outputDirectory}/mscorlib.dll"/>
-                    <include name="${outputDirectory}/Mosa.Platform.x86.Intrinsic.dll"/>
 		</references>
 		<!-- supress warnings -->
 		<nowarn><warning number="${suppresswarnings}"/></nowarn>

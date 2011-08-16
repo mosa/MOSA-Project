@@ -44,17 +44,12 @@
                     <include name="Program.cs"/>
                     <include name="Boot/BootFormatSelector.cs"/>
                     <include name="Boot/Multiboot0695AssemblyStage.cs"/>
-                    <include name="LinkTimeCodeGeneration/LinkerGeneratedMethod.cs"/>
-                    <include name="LinkTimeCodeGeneration/LinkerGeneratedType.cs"/>
-                    <include name="LinkTimeCodeGeneration/LinkerMethodCompiler.cs"/>
-                    <include name="LinkTimeCodeGeneration/LinkTimeCodeGenerator.cs"/>
                     <include name="Stage/FakeSystemObjectGenerationStage.cs"/>
                     <include name="Stage/StaticAllocationResolutionStageWrapper.cs"/>
                     <include name="Stage/StaticAllocationResolutionStage.cs"/>
                     <include name="TypeInitializers/ITypeInitializerSchedulerStage.cs"/>
                     <include name="TypeInitializers/TypeInitializerSchedulerStage.cs"/>
                     <include name="TypeInitializers/TypeInitializerSchedulerStageProxy.cs"/>
-                    <include name="Stage/InterruptBuilderStage.cs"/>
 		</sources>
 		<references>
                     <include name="System.dll"/>
@@ -62,7 +57,7 @@
                     <include name="${outputDirectory}/Mosa.Compiler.Linker.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Pdb.dll"/>
                     <include name="${outputDirectory}/Mosa.Platform.x86.dll"/>
-                    <include name="${outputDirectory}/Mosa.Runtime.InternalLog.dll"/>
+                    <include name="${outputDirectory}/Mosa.Runtime.InternalTrace.dll"/>
                     <include name="${outputDirectory}/Mosa.Runtime.Metadata.dll"/>
                     <include name="${outputDirectory}/Mosa.Runtime.TypeSystem.dll"/>
                     <include name="${outputDirectory}/Mosa.Runtime.dll"/>

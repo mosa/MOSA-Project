@@ -19,6 +19,9 @@
                     <include name="Math.cs"/>
 		</sources>
 		<references>
+                    <include name="System.dll"/>
+                    <include name="${outputDirectory}/Mosa.Kernel.dll"/>
+                    <include name="${outputDirectory}/Mosa.Platform.x86.Intrinsic.dll"/>
 		</references>
 		<!-- supress warnings -->
 		<nowarn><warning number="${suppresswarnings}"/></nowarn>

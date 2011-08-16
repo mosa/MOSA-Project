@@ -15,6 +15,9 @@
 	    <csc target="library" output="${outputDirectory}/mscorlib.dll" debug="${debug}" unsafe="true" nostdlib="true">
 		<sources>
                     <include name="System.Diagnostics/DebuggerHiddenAttribute.cs"/>
+                    <include name="System.Reflection/Assembly.cs"/>
+                    <include name="System.Reflection/MemberInfo.cs"/>
+                    <include name="System.Reflection/Module.cs"/>
                     <include name="System.Runtime.CompilerServices/CompilationRelaxationsAttribute.cs"/>
                     <include name="System.Runtime.CompilerServices/RuntimeCompatibilityAttribute.cs"/>
                     <include name="System.Runtime.InteropServices/CallingConvention.cs"/>
@@ -33,6 +36,9 @@
                     <include name="System/Convert.cs"/>
                     <include name="System/CLSCompliantAttribute.cs"/>
                     <include name="System.Diagnostics/DebuggableAttribute.cs"/>
+                    <include name="System/AsyncCallback.cs"/>
+                    <include name="System/IAsyncResult.cs"/>
+                    <include name="System/WaitHandle.cs"/>
                     <include name="System/IComparable.cs"/>
                     <include name="System/Delegate.cs"/>
                     <include name="System/Exception.cs"/>
