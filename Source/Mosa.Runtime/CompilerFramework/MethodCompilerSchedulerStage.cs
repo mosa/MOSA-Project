@@ -72,6 +72,9 @@ namespace Mosa.Runtime.CompilerFramework
 			if (type.ContainsOpenGenericParameters)
 				return;
 
+			if (type.IsDelegate && type.Name != "Delegate" && type.Name != "MulticastDelegate")
+				this.typeSystem.DelegateTypePatcher.PatchType(type);
+
 			foreach (RuntimeMethod method in type.Methods)
 			{
 				if (method.IsGeneric)
