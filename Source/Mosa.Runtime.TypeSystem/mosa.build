@@ -18,6 +18,7 @@
                     <include name="Cil/CilRuntimeField.cs"/>
                     <include name="Cil/CilRuntimeMethod.cs"/>
                     <include name="Cil/CilRuntimeType.cs"/>
+                    <include name="DelegateTypePatcher.cs"/>
                     <include name="GenericTypePatcher.cs"/>
                     <include name="IGenericTypePatcher.cs"/>
                     <include name="InternalTypeModule.cs"/>

@@ -14,9 +14,11 @@
 	<target name="build">
 	    <csc target="library" output="${outputDirectory}/Mosa.Platform.x86.Intrinsic.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
+                    <include name="DelegateStub.cs"/>
                     <include name="Native.cs"/>
 		</sources>
 		<references>
+                    <include name="System.dll"/>
                     <include name="${outputDirectory}/mscorlib.dll"/>
 		</references>
 		<!-- supress warnings -->
