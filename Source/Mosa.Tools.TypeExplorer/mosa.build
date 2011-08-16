@@ -32,7 +32,7 @@
                     <include name="System.Xml.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Linker.dll"/>
                     <include name="${outputDirectory}/Mosa.Platform.x86.dll"/>
-                    <include name="${outputDirectory}/Mosa.Runtime.InternalLog.dll"/>
+                    <include name="${outputDirectory}/Mosa.Runtime.InternalTrace.dll"/>
                     <include name="${outputDirectory}/Mosa.Runtime.Metadata.dll"/>
                     <include name="${outputDirectory}/Mosa.Runtime.TypeSystem.dll"/>
                     <include name="${outputDirectory}/Mosa.Runtime.dll"/>

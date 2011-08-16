@@ -23,7 +23,7 @@
                     <include name="CPUx86/LeaveInstruction.cs"/>
                     <include name="CPUx86/SseRoundInstruction.cs"/>
                     <include name="ExceptionEngine.cs"/>
-                    <include name="ExceptionHeaderPreprocessingStage.cs"/>
+                    <include name="InterruptBuilderStage.cs"/>
                     <include name="Intrinsic/CallFilter.cs"/>
                     <include name="Intrinsic/GetEip.cs"/>
                     <include name="Intrinsic/Cli.cs"/>

@@ -14,13 +14,52 @@
 	<target name="build">
 	    <csc target="exe" main="Mosa.CoolWorld.Boot" output="${outputDirectory}/Mosa.CoolWorld.exe" debug="${debug}" unsafe="true" nostdlib="true">
 		<sources>
-                    <include name="Boot.cs"/>                   
+                    <include name="Boot.cs"/>
+                    <include name="DeviceDrivers/ISA/StandardKeyboard.cs"/>
+                    <include name="DeviceDrivers/ISA/VGAText.cs"/>
+                    <include name="DeviceDrivers/ScanCodeMap/US.cs"/>
+                    <include name="DeviceSystem/Device.cs"/>
+                    <include name="DeviceSystem/DeviceDriver.cs"/>
+                    <include name="DeviceSystem/DeviceDriverPhysicalMemoryAttribute.cs"/>
+                    <include name="DeviceSystem/DeviceDriverStartStatus.cs"/>
+                    <include name="DeviceSystem/DeviceStatus.cs"/>
+                    <include name="DeviceSystem/HAL.cs"/>
+                    <include name="DeviceSystem/HardwareDevice.cs"/>
+                    <include name="DeviceSystem/IDevice.cs"/>
+                    <include name="DeviceSystem/IDeviceDriver.cs"/>
+                    <include name="DeviceSystem/IHardwareAbstraction.cs"/>
+                    <include name="DeviceSystem/IHardwareDevice.cs"/>
+                    <include name="DeviceSystem/IHardwareResources.cs"/>
+                    <include name="DeviceSystem/IIOPortRegion.cs"/>
+                    <include name="DeviceSystem/IIOPorts.cs"/>
+                    <include name="DeviceSystem/IKeyboard.cs"/>
+                    <include name="DeviceSystem/IKeyboardDevice.cs"/>
+                    <include name="DeviceSystem/IMemory.cs"/>
+                    <include name="DeviceSystem/IMemoryRegion.cs"/>
+                    <include name="DeviceSystem/IPCIController.cs"/>
+                    <include name="DeviceSystem/ISADeviceDriverAttribute.cs"/>
+                    <include name="DeviceSystem/IScanCodeMap.cs"/>
+                    <include name="DeviceSystem/ITextDevice.cs"/>
+                    <include name="DeviceSystem/ITextScreen.cs"/>
+                    <include name="DeviceSystem/Key.cs"/>
+                    <include name="DeviceSystem/Keyboard.cs"/>
+                    <include name="DeviceSystem/KeyEvent.cs"/>
+                    <include name="DeviceSystem/KeyType.cs"/>
+                    <include name="DeviceSystem/PCI/AddressType.cs"/>
+                    <include name="DeviceSystem/PCI/BaseAddress.cs"/>
+                    <include name="DeviceSystem/PCI/ClassCodeTable.cs"/>
+                    <include name="DeviceSystem/PCI/DeviceTable.cs"/>
+                    <include name="DeviceSystem/PCI/IDeviceResource.cs"/>
+                    <include name="DeviceSystem/PCI/IPCIDevice.cs"/>
+                    <include name="DeviceSystem/PCI/PCIDevice.cs"/>
+                    <include name="DeviceSystem/PCI/SubClassCodeTable.cs"/>
+                    <include name="DeviceSystem/PlatformArchitecture.cs"/>
+                    <include name="DeviceSystem/SpinLock.cs"/>
 		</sources>
 		<references>
                     <include name="${outputDirectory}/Mosa.ClassLib.dll"/>
                     <include name="${outputDirectory}/Mosa.Kernel.dll"/>
                     <include name="${outputDirectory}/mscorlib.dll"/>
-                    <include name="${outputDirectory}/Mosa.Platform.x86.Intrinsic.dll"/>
 		</references>
 		<!-- supress warnings -->
 		<nowarn><warning number="${suppresswarnings}"/></nowarn>

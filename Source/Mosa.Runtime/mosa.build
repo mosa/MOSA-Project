@@ -15,6 +15,7 @@
 	    <csc target="library" output="${outputDirectory}/Mosa.Runtime.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
                     <include name="CompilerFramework/AssemblyMemberCompilationSchedulerStage.cs"/>
+                    <include name="CompilerFramework/BaseCodeEmitter.cs"/>
                     <include name="CompilerFramework/BaseInstruction.cs"/>
                     <include name="CompilerFramework/BasicBlockBuilderStage.cs"/>
                     <include name="CompilerFramework/CIL/AddInstruction.cs"/>
@@ -33,15 +34,19 @@
                     <include name="CompilerFramework/CIL/CallvirtInstruction.cs"/>
                     <include name="CompilerFramework/CIL/CastclassInstruction.cs"/>
                     <include name="CompilerFramework/CIL/CILLeakGuardStage.cs"/>
+                    <include name="CompilerFramework/CIL/TailPrefixInstruction.cs"/>
+                    <include name="CompilerFramework/CIL/VolatilePrefixInstruction.cs"/>
+                    <include name="CompilerFramework/CIL/ReadOnlyPrefixInstruction.cs"/>
                     <include name="CompilerFramework/CIL/DecodingStage.cs"/>
                     <include name="CompilerFramework/CIL/BreakInstruction.cs"/>
                     <include name="CompilerFramework/BaseAssemblyCompilerStage.cs"/>
-                    <include name="CompilerFramework/CIL/ExceptionClauseHeader.cs"/>
+                    <include name="CompilerFramework/ExceptionLayoutStage.cs"/>
+                    <include name="CompilerFramework/ExceptionClauseHeader.cs"/>
                     <include name="CompilerFramework/InstructionLogger.cs"/>
                     <include name="CompilerFramework/LoggerDebugWriter.cs"/>
                     <include name="CompilerFramework/ILoggerWriter.cs"/>
+                    <include name="CompilerFramework/MethodTableBuilderStage.cs"/>
                     <include name="CompilerFramework/TypeLayoutStage.cs"/>
-                    <include name="CompilerFramework/ExceptionEngine.cs"/>
                     <include name="CompilerFramework/IR/ThrowInstruction.cs"/>
                     <include name="CompilerFramework/GenericsResolverStage.cs"/>
                     <include name="CompilerFramework/ICompilationSchedulerStage.cs"/>
@@ -82,9 +87,9 @@
                     <include name="CompilerFramework/CIL/CpobjInstruction.cs"/>
                     <include name="CompilerFramework/CIL/DivInstruction.cs"/>
                     <include name="CompilerFramework/CIL/DupInstruction.cs"/>
-                    <include name="CompilerFramework/CIL/EhClause.cs"/>
-                    <include name="CompilerFramework/CIL/EndfilterInstruction.cs"/>
-                    <include name="CompilerFramework/CIL/EndfinallyInstruction.cs"/>
+                    <include name="CompilerFramework/ExceptionClause.cs"/>
+                    <include name="CompilerFramework/CIL/EndFilterInstruction.cs"/>
+                    <include name="CompilerFramework/CIL/EndFinallyInstruction.cs"/>
                     <include name="CompilerFramework/CIL/IBranchInstruction.cs"/>
                     <include name="CompilerFramework/CIL/InitblkInstruction.cs"/>
                     <include name="CompilerFramework/CIL/InitObjInstruction.cs"/>
@@ -210,6 +215,10 @@
                     <include name="CompilerFramework/LocalCSE.cs"/>
                     <include name="CompilerFramework/IMethodCompiler.cs"/>
                     <include name="Linker/BaseAssemblyLinkerStage.cs"/>
+                    <include name="Linker/LinkerGeneratedMethod.cs"/>
+                    <include name="Linker/LinkerGeneratedType.cs"/>
+                    <include name="Linker/LinkerMethodCompiler.cs"/>
+                    <include name="Linker/LinkTimeCodeGenerator.cs"/>
                     <include name="Memory/IMemoryPageManager.cs"/>
                     <include name="Memory/PageAccessFlags.cs"/>
                     <include name="IJitService.cs"/>
@@ -219,7 +228,6 @@
                     <include name="CompilerFramework/BasicArchitecture.cs"/>
                     <include name="CompilerFramework/BasicBlock.cs"/>
                     <include name="CompilerFramework/BlockReductionStage.cs"/>
-                    <include name="CompilerFramework/BlockOrderFlags.cs"/>
                     <include name="CompilerFramework/CodeGenerationStage.cs"/>
                     <include name="CompilerFramework/BaseCodeTransformationStage.cs"/>
                     <include name="CompilerFramework/CompilationException.cs"/>
@@ -270,7 +278,7 @@
                     <include name="${outputDirectory}/Mosa.Compiler.Common.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.FileFormat.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Linker.dll"/>
-                    <include name="${outputDirectory}/Mosa.Runtime.InternalLog.dll"/>
+                    <include name="${outputDirectory}/Mosa.Runtime.InternalTrace.dll"/>
                     <include name="${outputDirectory}/Mosa.Runtime.Metadata.dll"/>
                     <include name="${outputDirectory}/Mosa.Runtime.TypeSystem.dll"/>
 		</references>
