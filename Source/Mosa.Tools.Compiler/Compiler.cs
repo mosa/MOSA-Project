@@ -70,9 +70,9 @@ namespace Mosa.Tools.Compiler
 		/// </summary>
 		private OptionSet optionSet;
 
-		private readonly int majorVersion = 0;
-		private readonly int minorVersion = 6;
-		private readonly string codeName = @"Tanigawa";
+		private readonly int majorVersion = 1;
+		private readonly int minorVersion = 0;
+		private readonly string codeName = @"Zaphod";
 
 		/// <summary>
 		/// A string holding a simple usage description.
