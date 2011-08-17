@@ -106,6 +106,8 @@ namespace Mosa.Runtime.CompilerFramework.Operands
 		/// <returns>A string representation of the operand.</returns>
 		public override string ToString()
 		{
+			if (_value == null)
+				return String.Format("const null [{0}]", _type);
 			return String.Format("const {0} [{1}]", _value, _type);
 		}
 

@@ -23,7 +23,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// <summary>
 	/// Representations the x86 cli instruction.
 	/// </summary>
-	public sealed class InvokeInstanceDelegateWithReturn : IIntrinsicMethod
+	public sealed class InvokeInstanceDelegate : IIntrinsicMethod
 	{
 
 		#region Methods
@@ -57,7 +57,6 @@ namespace Mosa.Platform.x86.Intrinsic
 			context.AppendInstruction(CPUx86.Instruction.MovInstruction, eax, op2);
 			context.AppendInstruction(CPUx86.Instruction.CallPointerInstruction, null, new RegisterOperand(new SigType(CilElementType.I), GeneralPurposeRegister.EAX));
 			context.AppendInstruction(CPUx86.Instruction.AddInstruction, esp, new ConstantOperand(new SigType(CilElementType.I), parameters.Count * 4 + 4));
-			context.AppendInstruction(CPUx86.Instruction.MovInstruction, result, new RegisterOperand(result.Type, GeneralPurposeRegister.EAX));
 		}
 
 		#endregion // Methods

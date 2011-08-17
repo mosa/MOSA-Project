@@ -18,12 +18,16 @@ namespace Mosa.Platform.x86.Intrinsic
 
 		public void Invoke()
 		{
+			if (instance == null)
+				Native.InvokeInstanceDelegate(instance, methodPointer);
 			Native.InvokeDelegate(instance, methodPointer);
 		}
 
 		public object InvokeWithReturn()
 		{
-			return Native.InvokeDelegateWithReturn(instance, methodPointer);
+			if (instance == null)
+				return Native.InvokeDelegateWithReturn(instance, methodPointer);
+			return Native.InvokeInstanceDelegateWithReturn(instance, methodPointer);
 		}
 
 		public IAsyncResult BeginInvoke(AsyncCallback callback, object arg)

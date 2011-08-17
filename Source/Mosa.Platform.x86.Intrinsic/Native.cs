@@ -302,6 +302,9 @@ namespace Mosa.Platform.x86.Intrinsic
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.InvokeDelegate, Mosa.Platform.x86")]
 		public extern static void InvokeDelegate(object obj, int ptr);
 
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.InvokeInstanceDelegate, Mosa.Platform.x86")]
+		public extern static void InvokeInstanceDelegate(object obj, int ptr);
+
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.InvokeDelegateWithReturn, Mosa.Platform.x86")]
 		public extern static object InvokeDelegateWithReturn(object obj, int ptr);
 
