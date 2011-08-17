@@ -6,7 +6,7 @@ CD ..\Tests
 IF EXIST "%ProgramFiles(x86)%\Gallio\bin\Gallio.Echo.exe" SET GALLIO="%ProgramFiles(x86)%\Gallio\bin\Gallio.Echo.exe"
 IF EXIST "%ProgramFiles%\Gallio\bin\Gallio.Echo.exe" SET GALLIO="%ProgramFiles%\Gallio\bin\Gallio.Echo.exe"
 
-if not exist reportsmkdir reports
+IF NOT EXIST reports MKDIR reports
 
 CD ..\bin
 
