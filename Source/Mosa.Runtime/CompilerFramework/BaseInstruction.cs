@@ -183,7 +183,7 @@ namespace Mosa.Runtime.CompilerFramework
 			{
 				s.Append(" [more]");
 			}
-			else
+			else if (context.OperandCount > 0)
 			{
 				s.Length = s.Length - 1;
 			}
@@ -199,7 +199,7 @@ namespace Mosa.Runtime.CompilerFramework
 				{
 					s.Append(" [more]");
 				}
-				else
+				else if (context.Branch.Targets.Length > 0)
 				{
 					s.Length = s.Length - 1;
 				}

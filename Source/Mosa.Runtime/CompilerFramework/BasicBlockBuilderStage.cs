@@ -72,6 +72,19 @@ namespace Mosa.Runtime.CompilerFramework
 
 			// Link all the blocks together
 			BuildBlockLinks(prologue);
+
+			foreach (ExceptionClause exceptionClause in methodCompiler.ExceptionClauseHeader.Clauses)
+			{
+				if (exceptionClause.HandlerOffset != 0)
+				{
+					BuildBlockLinks(FindBlock(exceptionClause.HandlerOffset));
+				}
+				if (exceptionClause.FilterOffset != 0)
+				{
+					BuildBlockLinks(FindBlock(exceptionClause.FilterOffset));
+				}
+			}
+
 		}
 
 		#endregion // IMethodCompilerStage members
@@ -202,19 +215,14 @@ namespace Mosa.Runtime.CompilerFramework
 						return;
 					case FlowControl.ConditionalBranch:
 						foreach (int target in ctx.Branch.Targets)
-						{
 							FindAndLinkBlock(block, target);
-						}
 
-						// Conditional blocks are at least two way branches. The old way of adding jumps didn't properly
-						// resolve operands under certain circumstances. This does.
 						int nextIndex = ctx.Index + 1;
 						if (nextIndex < this.instructionSet.Used)
-						{
 							FindAndLinkBlock(block, this.instructionSet.Data[nextIndex].Label);
-						}
+
 						continue;
-					case FlowControl.EndFinally: continue;
+					case FlowControl.EndFinally: return;
 					case FlowControl.Leave:
 						FindAndLinkBlock(block, ctx.Branch.Targets[0]);
 						return;

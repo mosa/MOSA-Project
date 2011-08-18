@@ -85,6 +85,11 @@ namespace Mosa.HelloWorld.Tests
 			Screen.Write(this.testName);
 			Screen.Write(": ");
 
+			//foreach (TestMethod node in testMethods)
+			//{
+			//    PrintResult(node());
+			//}
+
 			var node = testMethods.First;
 			while (node != null)
 			{
