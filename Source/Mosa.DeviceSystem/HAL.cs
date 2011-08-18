@@ -50,8 +50,7 @@ namespace Mosa.DeviceSystem
 		/// <param name="irq">The irq.</param>
 		public static void ProcessInterrupt(byte irq)
 		{
-			//DeviceDrivers.Setup.ResourceManager.InterruptManager.ProcessInterrupt(irq);
-			HAL.handleInterrupt(irq);
+			handleInterrupt(irq);
 		}
 
 		/// <summary>

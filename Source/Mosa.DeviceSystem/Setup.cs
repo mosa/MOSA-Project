@@ -94,9 +94,6 @@ namespace Mosa.DeviceSystem
 
 			IHardwareDevice hardwareDevice = System.Activator.CreateInstance(deviceDriver.DriverType) as IHardwareDevice;
 
-			// MR 07/21/09: Commenting out, causes mono xbuild to fail on MacOS X
-			// PCIDeviceDriverAttribute attribute = deviceDriver.Attribute as PCIDeviceDriverAttribute;
-
 			LinkedList<IIOPortRegion> ioPortRegions = new LinkedList<IIOPortRegion>();
 			LinkedList<IMemoryRegion> memoryRegions = new LinkedList<IMemoryRegion>();
 
@@ -152,8 +149,6 @@ namespace Mosa.DeviceSystem
 			if (driverAtttribute.AutoLoad)
 			{
 				IHardwareDevice hardwareDevice = System.Activator.CreateInstance(deviceDriver.DriverType) as IHardwareDevice;
-				//UNUSED:
-				//ISADeviceDriverAttribute attribute = deviceDriver.Attribute as ISADeviceDriverAttribute;
 
 				LinkedList<IIOPortRegion> ioPortRegions = new LinkedList<IIOPortRegion>();
 				LinkedList<IMemoryRegion> memoryRegions = new LinkedList<IMemoryRegion>();

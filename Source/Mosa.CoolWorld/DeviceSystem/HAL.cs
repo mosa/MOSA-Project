@@ -22,9 +22,9 @@ namespace Mosa.DeviceSystem
 		/// <summary>
 		/// 
 		/// </summary>
-		//public delegate void HandleInterrupt(byte irq);
+		public delegate void HandleInterrupt(byte irq);
 
-		//static private HandleInterrupt handleInterrupt;
+		static private HandleInterrupt handleInterrupt;
 
 		/// <summary>
 		/// Sets the hardware abstraction.
@@ -39,10 +39,10 @@ namespace Mosa.DeviceSystem
 		/// Sets the interrupt handler.
 		/// </summary>
 		/// <param name="handleInterrupt">The handle interrupt.</param>
-		//public static void SetInterruptHandler(HandleInterrupt handleInterrupt)
-		//{
-		//    HAL.handleInterrupt = handleInterrupt;
-		//}
+		public static void SetInterruptHandler(HandleInterrupt handleInterrupt)
+		{
+			HAL.handleInterrupt = handleInterrupt;
+		}
 
 		/// <summary>
 		/// Processes the interrupt.
@@ -50,8 +50,7 @@ namespace Mosa.DeviceSystem
 		/// <param name="irq">The irq.</param>
 		public static void ProcessInterrupt(byte irq)
 		{
-			//DeviceDrivers.Setup.ResourceManager.InterruptManager.ProcessInterrupt(irq);
-			//HAL.handleInterrupt(irq);
+			handleInterrupt(irq);
 		}
 
 		/// <summary>
