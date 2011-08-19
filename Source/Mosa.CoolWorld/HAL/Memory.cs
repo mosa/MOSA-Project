@@ -7,72 +7,103 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-namespace Mosa.DeviceSystem
+using Mosa.DeviceSystem;
+using Mosa.Platform.x86.Intrinsic;
+
+namespace Mosa.CoolWorld.HAL
 {
-	/// <summary>
-	/// Interface to a region of memory
-	/// </summary>
-	public interface IMemory
+	public class Memory : IMemory
 	{
+		private uint address;
+		private uint size;
+
+		public Memory(uint address, uint size)
+		{
+			this.address = address;
+			this.size = size;
+		}
+
 		/// <summary>
 		/// Gets the address.
 		/// </summary>
 		/// <value>The address.</value>
-		uint Address { get; }
+		public uint Address { get { return address; } }
 
 		/// <summary>
 		/// Gets the size.
 		/// </summary>
 		/// <value>The size.</value>
-		uint Size { get; }
+		public uint Size { get { return size; } }
 
 		/// <summary>
 		/// Gets or sets the <see cref="System.Byte"/> at the specified index.
 		/// </summary>
 		/// <value></value>
-		byte this[uint index] { get; set; }
+		public byte this[uint index]
+		{
+			get { return Read8(index); }
+			set { Write8(index, value); }
+		}
 
 		/// <summary>
 		/// Reads the specified index.
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <returns></returns>
-		byte Read8(uint index);
+		public byte Read8(uint index)
+		{
+			return Native.Get8(address + index);
+		}
 
 		/// <summary>
 		/// Writes the specified index.
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <param name="value">The value.</param>
-		void Write8(uint index, byte value);
+		public void Write8(uint index, byte value)
+		{
+			Native.Set8(address + index, value);
+		}
 
 		/// <summary>
 		/// Reads the specified index.
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <returns></returns>
-		ushort Read16(uint index);
+		public ushort Read16(uint index)
+		{
+			return Native.Get16(address + index);
+		}
 
 		/// <summary>
 		/// Writes the specified index.
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <param name="value">The value.</param>
-		void Write16(uint index, ushort value);
+		public void Write16(uint index, ushort value)
+		{
+			Native.Set16(address + index, value);
+		}
 
 		/// <summary>
 		/// Reads the specified index.
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <returns></returns>
-		uint Read32(uint index);
+		public uint Read32(uint index)
+		{
+			return Native.Get32(address + index);
+		}
 
 		/// <summary>
 		/// Writes the specified index.
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <param name="value">The value.</param>
-		void Write32(uint index, uint value);
+		public void Write32(uint index, uint value)
+		{
+			Native.Set32(address + index, value);
+		}
 
 	}
 

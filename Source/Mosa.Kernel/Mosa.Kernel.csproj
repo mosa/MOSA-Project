@@ -63,7 +63,7 @@
     <NoStdLib>true</NoStdLib>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="KernelGCMemory.cs" />
+    <Compile Include="KernelMemory.cs" />
     <Compile Include="Runtime.cs" />
     <Compile Include="x86\CMOS.cs" />
     <Compile Include="x86\Colors.cs" />

@@ -129,6 +129,9 @@
     <Compile Include="DeviceSystem\ResourceManager.cs" />
     <Compile Include="DeviceSystem\Setup2.cs" />
     <Compile Include="DeviceSystem\SpinLock.cs" />
+    <Compile Include="HAL\Memory.cs" />
+    <Compile Include="HAL\IOPort.cs" />
+    <Compile Include="HAL\HardwareAbstraction.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mosa.ClassLib\Mosa.ClassLib.csproj">
@@ -142,6 +145,10 @@
     <ProjectReference Include="..\Korlib\Korlib.csproj">
       <Project>{631BC4F3-E2D8-4319-814C-13904CAA17CE}</Project>
       <Name>Korlib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Platform.x86.Intrinsic\Mosa.Platform.x86.Intrinsic.csproj">
+      <Project>{A47B7998-4EE8-4AF8-9373-C664FDEDDC65}</Project>
+      <Name>Mosa.Platform.x86.Intrinsic</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />

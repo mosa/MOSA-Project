@@ -62,13 +62,13 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// Wraps the x86 in instruction to read from an 8-bit port.
 		/// </summary>
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.In, Mosa.Platform.x86")]
-		public extern static byte In(byte address);
+		public extern static byte In(ushort address);
 
 		/// <summary>
 		/// Wraps the x86 in instruction to read from an 8-bit port.
 		/// </summary>
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.In, Mosa.Platform.x86")]
-		public extern static byte In8(byte address) ;
+		public extern static byte In8(ushort address);
 
 		/// <summary>
 		/// Wraps the x86 in instruction to read from a 16-bit port.
@@ -80,19 +80,19 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// Wraps the x86 in instruction to read from a 32-bit port.
 		/// </summary>
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.In, Mosa.Platform.x86")]
-		public extern static uint In32(uint address);
+		public extern static uint In32(ushort address);
 
 		/// <summary>
 		/// Wraps the x86 out instruction to write to an 8-bit port.
 		/// </summary>
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Out, Mosa.Platform.x86")]
-		public extern static void Out8(byte address, byte value);
+		public extern static void Out8(ushort address, byte value);
 
 		/// <summary>
 		/// Wraps the x86 out instruction to write to an 8-bit port.
 		/// </summary>
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Out, Mosa.Platform.x86")]
-		public extern static void Out(byte address, byte value);
+		public extern static void Out(ushort address, byte value);
 
 		/// <summary>
 		/// Wraps the x86 out instruction to write to a 16-bit port.
@@ -104,7 +104,7 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// Wraps the x86 out instruction to write to a 32-bit port.
 		/// </summary>
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.Out, Mosa.Platform.x86")]
-		public extern static void Out32(uint address, uint value);
+		public extern static void Out32(ushort address, uint value);
 
 		/// <summary>
 		/// Wraps the x86 out instruction to write to a nop instruction.

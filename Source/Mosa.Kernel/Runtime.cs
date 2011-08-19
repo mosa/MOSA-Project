@@ -52,7 +52,7 @@ namespace Mosa.Internal
 
 		private unsafe static uint* AllocateMemory(uint size)
 		{
-			return (uint*)KernelGCMemory.AllocateMemory(size);
+			return (uint*)KernelMemory.AllocateMemory(size);
 		}
 
 		public static unsafe void* AllocateObject(void* methodTable, uint classSize)

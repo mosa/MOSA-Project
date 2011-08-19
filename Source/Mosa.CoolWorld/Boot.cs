@@ -10,6 +10,7 @@ using System;
 using Mosa.Platform.x86.Intrinsic;
 using Mosa.Kernel;
 using Mosa.Kernel.x86;
+using Mosa.DeviceSystem;
 
 namespace Mosa.CoolWorld
 {
@@ -30,7 +31,13 @@ namespace Mosa.CoolWorld
 			Screen.Color = Colors.Yellow;
 
 			Screen.Write(@"MOSA OS CoolWorld Version 1.0");
-			
+
+			// Setup hardware abstraction interface
+			IHardwareAbstraction hardwareAbstraction = new Mosa.CoolWorld.HAL.HardwareAbstraction();
+
+			// Set device driver system to the emulator port and memory methods
+			Mosa.DeviceSystem.HAL.SetHardwareAbstraction(hardwareAbstraction);
+
 			while (true)
 			{
 				
