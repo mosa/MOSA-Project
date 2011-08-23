@@ -202,17 +202,17 @@ namespace Mosa.Emulator
 
 					screen.Write("  Vendor:0x");
 					screen.Write(pciDevice.VendorID.ToString("X"));
-					screen.Write(" [");
-					screen.Write(DeviceTable.Lookup(pciDevice.VendorID));
-					screen.WriteLine("]");
+					//screen.Write(" [");
+					//screen.Write(DeviceTable.Lookup(pciDevice.VendorID));
+					//screen.WriteLine("]");
 
 					screen.Write("  Device:0x");
 					screen.Write(pciDevice.DeviceID.ToString("X"));
 					screen.Write(" Rev:0x");
 					screen.Write(pciDevice.RevisionID.ToString("X"));
-					screen.Write(" [");
-					screen.Write(DeviceTable.Lookup(pciDevice.VendorID, pciDevice.DeviceID));
-					screen.WriteLine("]");
+					//screen.Write(" [");
+					//screen.Write(DeviceTable.Lookup(pciDevice.VendorID, pciDevice.DeviceID));
+					//screen.WriteLine("]");
 
 					screen.Write("  Class:0x");
 					screen.Write(pciDevice.ClassCode.ToString("X"));

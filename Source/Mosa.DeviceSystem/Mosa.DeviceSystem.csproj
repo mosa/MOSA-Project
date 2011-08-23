@@ -280,9 +280,6 @@
     <Compile Include="PCI\ClassCodeTable.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="PCI\DeviceTable.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="PCI\SubClassCodeTable.cs">
       <SubType>Code</SubType>
     </Compile>

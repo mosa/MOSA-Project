@@ -12,7 +12,7 @@ using Mosa.ClassLib;
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
-	/// The Interrupt Manager dispatches interrupts to the approporate hardware device drivers
+	/// The Interrupt Manager dispatches interrupts to the appropriate hardware device drivers
 	/// </summary>
 	public class InterruptManager
 	{

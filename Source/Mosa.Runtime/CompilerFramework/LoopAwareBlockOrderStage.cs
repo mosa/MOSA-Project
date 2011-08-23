@@ -268,7 +268,7 @@ namespace Mosa.Runtime.CompilerFramework
 					if (visited.ContainsKey(at))
 						continue;
 
-					// Mark as visisted
+					// Mark as visited
 					if (!visited.ContainsKey(at))
 						visited.Add(at, 0);
 

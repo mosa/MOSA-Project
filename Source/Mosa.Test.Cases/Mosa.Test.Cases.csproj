@@ -90,6 +90,11 @@
     <Compile Include="CIL\DoubleFixture.cs" />
     <Compile Include="CIL\EnumFixture.cs" />
     <Compile Include="CIL\ExceptionHandlingFixture.cs" />
+    <Compile Include="IL\Structure.cs">
+      <DependentUpon>Structure.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
     <Compile Include="IL\IsInst.cs" />
     <Compile Include="OLD.CIL\GenericMethodMemberFixture.cs" />
     <Compile Include="OLD.CIL\GenericTypeFixture.cs" />
@@ -120,6 +125,10 @@
     <None Include="IL\Conv.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Conv.cs</LastGenOutput>
+    </None>
+    <None Include="IL\Structure.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Structure.cs</LastGenOutput>
     </None>
     <None Include="IL\Switch.tt">
       <Generator>TextTemplatingFileGenerator</Generator>

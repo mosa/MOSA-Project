@@ -582,9 +582,6 @@ namespace Mosa.Runtime.CompilerFramework.IR
 				classType = typeModule.GetType(baseSigType.Token);
 			}
 
-			if (this.typeModule.Name.Contains("HelloWorld") && classType.Name.Contains("LinkedList"))
-				Console.WriteLine();
-
 			if (classType.ContainsOpenGenericParameters)
 			{
 				var decoder = this.methodCompiler.Pipeline.FindFirst<IInstructionDecoder>();
