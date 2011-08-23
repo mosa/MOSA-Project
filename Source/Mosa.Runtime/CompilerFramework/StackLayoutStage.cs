@@ -20,25 +20,13 @@ namespace Mosa.Runtime.CompilerFramework
 	/// </summary>
 	public sealed class StackLayoutStage : BaseMethodCompilerStage, IMethodCompilerStage, IStackLayoutProvider, IPipelineStage
 	{
-		#region Tracing
-
-		/// <summary>
-		/// Controls the tracing of the <see cref="StackLayoutStage"/>.
-		/// </summary>
-		/// <remarks>
-		/// The stack layout tracing is done with the TraceLevel.Info. Set the TraceSwitch to this value
-		/// to receive full stack layout tracing.
-		/// </remarks>
-		private static readonly TraceSwitch TRACING = new TraceSwitch(@"Mosa.Runtime.CompilerFramework.StackLayoutStage", @"Controls tracing of the Mosa.Runtime.CompilerFramework.StackLayoutStage method compiler stage.");
-
-		#endregion // Tracing
 
 		#region Data members
 
 		/// <summary>
 		/// Holds the total stack requirements of local variables of the compiled method.
 		/// </summary>
-		private int _localsSize;
+		private int localsSize;
 
 		#endregion // Data members
 
@@ -71,12 +59,7 @@ namespace Mosa.Runtime.CompilerFramework
 			OrderVariables(locals, callingConvention);
 
 			// Now we assign increasing stack offsets to each variable
-			_localsSize = LayoutVariables(locals, callingConvention, callingConvention.OffsetOfFirstLocal, 1);
-			if (TRACING.TraceInfo == true)
-			{
-				Trace.WriteLine(String.Format(@"Stack layout for method {0}", methodCompiler.Method));
-				LogOperands(locals);
-			}
+			localsSize = LayoutVariables(locals, callingConvention, callingConvention.OffsetOfFirstLocal, 1);
 
 			// Layout parameters
 			LayoutParameters(methodCompiler);
@@ -84,13 +67,13 @@ namespace Mosa.Runtime.CompilerFramework
 			// Create a prologue instruction
 			Context prologueCtx = new Context(instructionSet, FindBlock(-1)).InsertBefore();
 			prologueCtx.SetInstruction(IR.Instruction.PrologueInstruction);
-			prologueCtx.Other = _localsSize;
+			prologueCtx.Other = localsSize;
 			prologueCtx.Label = -1;
 
 			// Create an epilogue instruction
 			Context epilogueCtx = new Context(instructionSet, FindBlock(Int32.MaxValue));
 			epilogueCtx.AppendInstruction(IR.Instruction.EpilogueInstruction);
-			epilogueCtx.Other = _localsSize;
+			epilogueCtx.Other = localsSize;
 			epilogueCtx.Label = Int32.MaxValue;
 		}
 
@@ -98,7 +81,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 		int IStackLayoutProvider.LocalsSize
 		{
-			get { return _localsSize; }
+			get { return localsSize; }
 		}
 
 		#endregion // IStackLayoutStage Members
@@ -144,9 +127,6 @@ namespace Mosa.Runtime.CompilerFramework
 				LayoutVariables(paramOps, cc, cc.OffsetOfFirstParameter + 4, -1);
 			else*/
 			LayoutVariables(paramOps, callingConvention, callingConvention.OffsetOfFirstParameter, -1);
-
-			if (TRACING.TraceInfo)
-				LogOperands(paramOps);
 		}
 
 		/// <summary>
@@ -170,7 +150,7 @@ namespace Mosa.Runtime.CompilerFramework
 				int thisOffset;
 
 				cc.GetStackRequirements(lvo, out size, out alignment);
-				if (1 == direction)
+				if (direction == 1)
 				{
 					padding = (offset % alignment);
 					offset -= (padding + size);
@@ -193,25 +173,14 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
-		/// Logs all operands in <paramref name="locals"/>.
-		/// </summary>
-		/// <param name="locals">The operands to log.</param>
-		private void LogOperands(List<StackOperand> locals)
-		{
-			foreach (StackOperand local in locals)
-				Trace.WriteLine(String.Format(@"\t{0} at {1}", local, local.Offset));
-		}
-
-		/// <summary>
 		/// Sorts all local variables by their size requirements.
 		/// </summary>
 		/// <param name="locals">Holds all local variables to sort..</param>
 		/// <param name="cc">The calling convention used to determine size and alignment requirements.</param>
 		private static void OrderVariables(List<StackOperand> locals, ICallingConvention cc)
 		{
-			/* Sort the list by stack size requirements - this moves equally sized operands closer together,
-			 * in the hope that this reduces padding on the stack to enforce HW alignment requirements.
-			 */
+			// Sort the list by stack size requirements - this moves equally sized operands closer together,
+			// in the hope that this reduces padding on the stack to enforce HW alignment requirements.			 
 			locals.Sort(delegate(StackOperand op1, StackOperand op2)
 			{
 				int size1, size2, alignment;
