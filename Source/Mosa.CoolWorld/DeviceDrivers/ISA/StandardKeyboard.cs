@@ -62,14 +62,17 @@ namespace Mosa.DeviceDrivers.ISA
 		{
 			this.hardwareResources = hardwareResources;
 			base.name = "StandardKeyboard";
-
+			Mosa.Kernel.x86.Screen.Write('C');
 			commandPort = base.hardwareResources.GetIOPort(0, 0);
+			Mosa.Kernel.x86.Screen.Write('D');
 			dataPort = base.hardwareResources.GetIOPort(1, 0);
+			Mosa.Kernel.x86.Screen.Write('E');
 
 			this.fifoBuffer = new byte[fifoSize];
+			Mosa.Kernel.x86.Screen.Write('F');
 			this.fifoStart = 0;
 			this.fifoEnd = 0;
-
+			
 			return true;
 		}
 

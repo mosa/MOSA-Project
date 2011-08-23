@@ -1,0 +1,35 @@
+﻿<#@ include file="../TemplateLibrary.txt" #>
+using System;
+using System.Collections.Generic;
+using System.Text;
+using MbUnit.Framework;
+
+using Mosa.Test.System;
+using Mosa.Test.System.Numbers;
+using Mosa.Test.Collection;
+
+namespace Mosa.Test.Cases.IL
+{
+	[TestFixture]
+	public class Structures : TestCompilerAdapter
+	{
+		public Structures()
+		{
+			settings.AddReference("Mosa.Test.Collection.dll");
+		}
+		<# foreach (KeyValuePair<string, string> number in NumbersWithChar) { #>
+
+		[Test]
+		public void Set1<#= number.Value #>([<#= number.Value #>]<#= number.Key #> one)
+		{
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "StructTests", "Set1<#= number.Value #>", one));
+		}
+		
+		[Test]
+		public void Set3<#= number.Value #>([<#= number.Value #>]<#= number.Key #> one, [<#= number.Value #>]<#= number.Key #> two, [<#= number.Value #>]<#= number.Key #> three)
+		{
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "StructTests", "Set3<#= number.Value #>", one, two, three));
+		}
+		<# } #>
+	}
+}

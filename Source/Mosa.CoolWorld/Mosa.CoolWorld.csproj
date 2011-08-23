@@ -127,7 +127,7 @@
     <Compile Include="DeviceSystem\PCI\SubClassCodeTable.cs" />
     <Compile Include="DeviceSystem\PlatformArchitecture.cs" />
     <Compile Include="DeviceSystem\ResourceManager.cs" />
-    <Compile Include="DeviceSystem\Setup2.cs" />
+    <Compile Include="Setup.cs" />
     <Compile Include="DeviceSystem\SpinLock.cs" />
     <Compile Include="HAL\Memory.cs" />
     <Compile Include="HAL\IOPort.cs" />

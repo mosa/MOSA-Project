@@ -110,7 +110,13 @@ namespace Mosa.DeviceSystem
 		/// <returns></returns>
 		public IReadWriteIOPort GetIOPort(byte region, ushort index)
 		{
-			return resourceManager.IOPortResources.GetIOPort(ioPortRegions[region].BaseIOPort, index);
+			Mosa.Kernel.x86.Screen.Write('X');
+			Mosa.Kernel.x86.Screen.Write(region.ToString());
+			ushort basePort = ioPortRegions[region].BaseIOPort;
+			Mosa.Kernel.x86.Screen.Write('Y');
+			IReadWriteIOPort port = resourceManager.IOPortResources.GetIOPort(basePort, index);
+			Mosa.Kernel.x86.Screen.Write('Z');
+			return port;
 		}
 
 		/// <summary>

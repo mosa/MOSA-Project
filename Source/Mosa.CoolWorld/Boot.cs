@@ -19,9 +19,22 @@ namespace Mosa.CoolWorld
 	/// </summary>
 	public static class Boot
 	{
-		
+		public struct Struct1U1
+		{
+			public byte One;
+		}
+
+		static bool Set1U1(byte one)
+		{
+			Struct1U1 structure;
+
+			structure.One = one;
+
+			return (structure.One == one);
+		}
+
 		/// <summary>
-		/// Mains this instance.
+		/// Main
 		/// </summary>
 		public static void Main()
 		{
@@ -32,16 +45,34 @@ namespace Mosa.CoolWorld
 
 			Screen.Write(@"MOSA OS CoolWorld Version 1.0");
 
-			// Setup hardware abstraction interface
-			IHardwareAbstraction hardwareAbstraction = new Mosa.CoolWorld.HAL.HardwareAbstraction();
+			Screen.NextLine();
+			Screen.NextLine();
+			
+			Screen.Write("Initializing...");
+			Setup.Initialize();
+			Screen.NextLine();
+			Screen.NextLine();
 
-			// Set device driver system to the emulator port and memory methods
-			Mosa.DeviceSystem.HAL.SetHardwareAbstraction(hardwareAbstraction);
+			if (Set1U1(0x11))
+				Screen.Write("TRUE");
+			else
+				Screen.Write("FALSE");
+			Screen.NextLine();
+			Screen.NextLine();
+
+
+			//Screen.Write("Starting...");
+			//Setup.Start();
+			//Screen.NextLine();
+			//Screen.NextLine();
+
+			Screen.Write("Done!");
+			Screen.NextLine();
+			Screen.NextLine();
 
 			while (true)
 			{
-				
-				
+				Native.Hlt();
 			}
 		}
 
