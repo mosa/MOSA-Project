@@ -53,18 +53,13 @@ namespace Mosa.CoolWorld
 			Screen.NextLine();
 			Screen.NextLine();
 
-			if (Set1U1(0x11))
-				Screen.Write("TRUE");
-			else
-				Screen.Write("FALSE");
 			Screen.NextLine();
 			Screen.NextLine();
 
-
-			//Screen.Write("Starting...");
-			//Setup.Start();
-			//Screen.NextLine();
-			//Screen.NextLine();
+			Screen.Write("Starting...");
+			Setup.Start();
+			Screen.NextLine();
+			Screen.NextLine();
 
 			Screen.Write("Done!");
 			Screen.NextLine();

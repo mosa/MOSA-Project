@@ -71,17 +71,6 @@ namespace Mosa.CoolWorld
 			keyboardDeviceAttributes.IRQ = 1;
 			keyboardDeviceAttributes.Platforms = PlatformArchitecture.X86AndX64;
 
-			Mosa.Kernel.x86.Screen.Write("I");
-			Mosa.Kernel.x86.Screen.Write(keyboardDeviceAttributes.AltBasePort.ToString());
-			Mosa.Kernel.x86.Screen.Write("I");
-
-			if (keyboardDeviceAttributes.AltBasePort != 0x00)
-			{
-				Mosa.Kernel.x86.Screen.Write('*');
-				Mosa.Kernel.x86.Screen.Write(keyboardDeviceAttributes.AltBasePort.ToString());
-				Mosa.Kernel.x86.Screen.Write('*');
-			}
-
 			StandardKeyboard keyboard = new StandardKeyboard();
 
 			StartDevice(keyboardDeviceAttributes, keyboard);
@@ -93,28 +82,16 @@ namespace Mosa.CoolWorld
 		/// <param name="deviceDriver">The device driver.</param>
 		static public void StartDevice(ISADeviceDriverAttribute driverAtttribute, IHardwareDevice hardwareDevice)
 		{
-			Mosa.Kernel.x86.Screen.Write("I");
-			Mosa.Kernel.x86.Screen.Write(driverAtttribute.AltBasePort.ToString());
-			Mosa.Kernel.x86.Screen.Write("I");
-
 			int ioRegionCount = 1;
 			int memoryRegionCount = 0;
 
 			if (driverAtttribute.AltBasePort != 0x00)
 			{
-				Mosa.Kernel.x86.Screen.Write(driverAtttribute.AltBasePort.ToString());
 				ioRegionCount++;
-				Mosa.Kernel.x86.Screen.Write('^');
 			}
 
 			if (driverAtttribute.BaseAddress != 0x00)
 				memoryRegionCount++;
-
-			Mosa.Kernel.x86.Screen.Write('[');
-			Mosa.Kernel.x86.Screen.Write(ioRegionCount.ToString());
-			Mosa.Kernel.x86.Screen.Write(',');
-			Mosa.Kernel.x86.Screen.Write(memoryRegionCount.ToString());
-			Mosa.Kernel.x86.Screen.Write(']');
 
 			IIOPortRegion[] ioPortRegions = new IIOPortRegion[ioRegionCount];
 			IMemoryRegion[] memoryRegions = new IMemoryRegion[memoryRegionCount];
@@ -133,13 +110,13 @@ namespace Mosa.CoolWorld
 
 			IHardwareResources hardwareResources = new HardwareResources(resourceManager, ioPortRegions, memoryRegions, new InterruptHandler(resourceManager.InterruptManager, driverAtttribute.IRQ, hardwareDevice));
 
+			hardwareDevice.Setup(hardwareResources);
+
 			Mosa.Kernel.x86.Screen.NextLine();
 			Mosa.Kernel.x86.Screen.Write('>');
 			Mosa.Kernel.x86.Screen.Write(hardwareDevice.Name);
 			Mosa.Kernel.x86.Screen.Write('<');
 			Mosa.Kernel.x86.Screen.NextLine();
-
-			hardwareDevice.Setup(hardwareResources);
 
 			if (resourceManager.ClaimResources(hardwareResources))
 			{
