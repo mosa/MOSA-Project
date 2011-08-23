@@ -931,7 +931,10 @@ namespace Mosa.Platform.x86
 					offsetPtr = new IntPtr(Convert.ToInt64(constantOffset.Value));
 				}
 
-				context.AppendInstruction(CPUx86.Instruction.AddInstruction, eax, offset);
+				if (elementType.Type == CilElementType.Char ||
+					elementType.Type == CilElementType.U1 ||
+					elementType.Type == CilElementType.U2)
+					context.AppendInstruction(CPUx86.Instruction.AddInstruction, eax, offset);
 				context.AppendInstruction(CPUx86.Instruction.MovzxInstruction, result, new MemoryOperand(elementType, GeneralPurposeRegister.EAX, offsetPtr));
 			}
 			else
@@ -1081,7 +1084,7 @@ namespace Mosa.Platform.x86
 		/// Visitation function for PhiInstruction"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.PhiInstruction(Context context) { }
+		void IR.IIRVisitor.PhiInstruction(Context context) {  }
 
 		#endregion // IIRVisitor - Unused
 
