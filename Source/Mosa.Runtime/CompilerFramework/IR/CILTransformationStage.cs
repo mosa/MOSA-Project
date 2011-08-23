@@ -897,8 +897,9 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		{
 			Operand resultOperand = context.Result;
 			Operand objectOperand = context.Operand1;
-
+			Operand temp = this.methodCompiler.CreateTemporary(context.RuntimeField.SignatureType);
 			RuntimeField field = context.RuntimeField;
+
 			int offset = typeLayout.GetFieldOffset(field);
 			ConstantOperand offsetOperand = new ConstantOperand(BuiltInSigType.IntPtr, offset);
 
@@ -912,7 +913,8 @@ namespace Mosa.Runtime.CompilerFramework.IR
 				loadInstruction = Instruction.ZeroExtendedMoveInstruction;
 			}
 
-			context.SetInstruction(loadInstruction, resultOperand, objectOperand, offsetOperand);
+			context.SetInstruction(loadInstruction, temp, objectOperand, offsetOperand);
+			context.AppendInstruction(Instruction.MoveInstruction, resultOperand, temp);
 		}
 
 		/// <summary>
@@ -938,11 +940,13 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		{
 			Operand objectOperand = context.Operand1;
 			Operand valueOperand = context.Operand2;
+			Operand temp = this.methodCompiler.CreateTemporary(context.RuntimeField.SignatureType);
 
 			int offset = typeLayout.GetFieldOffset(context.RuntimeField);
 			ConstantOperand offsetOperand = new ConstantOperand(BuiltInSigType.IntPtr, offset);
 
-			context.SetInstruction(Instruction.StoreInstruction, objectOperand, offsetOperand, valueOperand);
+			context.SetInstruction(Instruction.MoveInstruction, temp, valueOperand);
+			context.AppendInstruction(Instruction.StoreInstruction, objectOperand, offsetOperand, temp);
 		}
 
 		/// <summary>
