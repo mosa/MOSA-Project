@@ -230,6 +230,9 @@ namespace Mosa.Platform.x86
 				case CilElementType.Ptr: memorySize = alignment = 4; break;
 				case CilElementType.I: memorySize = alignment = 4; break;
 				case CilElementType.U: memorySize = alignment = 4; break;
+				case CilElementType.Object: memorySize = alignment = 4; break;
+				case CilElementType.Class: memorySize = alignment = 4; break;
+				case CilElementType.String: memorySize = alignment = 4; break;
 
 				default: memorySize = alignment = 4; break;
 			}
