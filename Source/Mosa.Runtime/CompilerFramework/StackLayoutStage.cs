@@ -63,6 +63,7 @@ namespace Mosa.Runtime.CompilerFramework
 			// Allocate a list of locals
 			List<StackOperand> locals = new List<StackOperand>();
 
+			CollectLocalVariablesFromIL(locals);
 			// Iterate all Blocks and collect locals From all Blocks
 			foreach (BasicBlock block in basicBlocks)
 				CollectLocalVariables(locals, block);
@@ -104,6 +105,15 @@ namespace Mosa.Runtime.CompilerFramework
 		#endregion // IStackLayoutStage Members
 
 		#region Internals
+
+		private void CollectLocalVariablesFromIL(List<StackOperand> locals)
+		{
+			var localVariables = (this.methodCompiler as BaseMethodCompiler).LocalVariables;
+			if (localVariables == null)
+				return;
+			foreach (var localVariable in localVariables)
+				locals.Add(localVariable as StackOperand);
+		}
 
 		/// <summary>
 		/// Collects all local variables assignments into a list.

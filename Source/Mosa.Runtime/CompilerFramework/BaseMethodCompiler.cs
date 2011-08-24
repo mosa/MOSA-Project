@@ -248,6 +248,11 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <value>The exception clause header.</value>
 		public ExceptionClauseHeader ExceptionClauseHeader { get { return exceptionClauseHeader; } }
 
+		/// <summary>
+		/// 
+		/// </summary>
+		public Operand[] LocalVariables { get { return this.locals; } }
+
 		#endregion // Properties
 
 		#region Methods
