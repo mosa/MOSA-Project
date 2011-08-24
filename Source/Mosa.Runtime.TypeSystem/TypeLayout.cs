@@ -361,9 +361,6 @@ namespace Mosa.Runtime.TypeSystem
 			// Receives the size/alignment
 			int packingSize = type.Pack;
 
-			if (type.FullName.Contains("Int32"))
-				Console.WriteLine();
-
 			if (type.BaseType != null)
 			{
 				if (!type.IsValueType)
