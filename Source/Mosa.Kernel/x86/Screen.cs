@@ -7,6 +7,7 @@
 
 using Mosa.Platform.x86.Intrinsic;
 using Mosa.Kernel;
+using System;
 
 namespace Mosa.Kernel.x86
 {
@@ -18,11 +19,7 @@ namespace Mosa.Kernel.x86
 	{
 		public static uint column = 0;
 		public static uint row = 0;
-
-		/// <summary>
-		/// 
-		/// </summary>
-		public static byte Color = 0x0A;
+		private static byte color = 0;
 
 		/// <summary>
 		/// 
@@ -50,6 +47,18 @@ namespace Mosa.Kernel.x86
 		{
 			get { return row; }
 			set { row = value; }
+		}
+
+		public static byte Color
+		{
+			get { return (byte)(color & 0x0F); }
+			set { color &= 0xF0; color |= (byte)(value & 0x0F); }
+		}
+
+		public static byte BackgroundColor
+		{
+			get { return (byte)(color >> 4); }
+			set { color &= 0x0F; color |= (byte)((value & 0x0F) << 4); }
 		}
 
 		/// <summary>
@@ -94,7 +103,7 @@ namespace Mosa.Kernel.x86
 			uint address = GetAddress();
 
 			Native.Set8(address, (byte)chr);
-			Native.Set8(address + 1, Color);
+			Native.Set8(address + 1, color);
 
 			Next();
 		}
@@ -128,6 +137,11 @@ namespace Mosa.Kernel.x86
 		{
 			Column = 0;
 			Row++;
+		}
+
+		public static void FillLine()
+		{
+			Screen.Write(new String(' ', (int)(80 - Column)));
 		}
 
 		/// <summary>
