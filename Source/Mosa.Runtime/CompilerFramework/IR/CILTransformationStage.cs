@@ -436,6 +436,8 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			if (context.Previous.Instruction is ConstrainedPrefixInstruction)
 			{
 				var type = context.Previous.Other as RuntimeType;
+				if (type == null)
+					Console.WriteLine();
 				foreach (var method in type.Methods)
 				{
 					if (method.Name == invokeTarget.Name)
@@ -758,7 +760,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 				context.Result = result;
 				return;
 			}
-			ReplaceWithVmCall(context, VmCall.Box);
+			context.ReplaceInstructionOnly(Instruction.MoveInstruction);
 		}
 
 		/// <summary>
@@ -1194,6 +1196,10 @@ namespace Mosa.Runtime.CompilerFramework.IR
 				context.SetOperand(1, value);
 				context.OperandCount = 2;
 				context.Result = result;
+			}
+			else
+			{
+				context.ReplaceInstructionOnly(Instruction.MoveInstruction);
 			}
 		}
 

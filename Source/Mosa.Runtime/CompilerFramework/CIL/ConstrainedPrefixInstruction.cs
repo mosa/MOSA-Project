@@ -63,6 +63,12 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 								ctx.Other = int32type;
 								return;
 							}
+						case CilElementType.String:
+							{
+								var stringType = decoder.TypeModule.TypeSystem.GetType("mscorlib", "System", "String");
+								ctx.Other = stringType;
+								return;
+							}
 						default:
 							break;
 					}
