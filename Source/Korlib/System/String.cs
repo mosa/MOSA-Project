@@ -173,7 +173,7 @@ namespace System
 
 		public bool Equals(String i)
 		{
-			return i == this;
+			return Equals(this, i);
 		}
 
 		public override bool Equals(object o)
@@ -187,12 +187,12 @@ namespace System
 
 		public static bool operator == (String a, String b)
 		{
-			return a.Equals(b);
+			return Equals(a, b);
 		}
 
 		public static bool operator !=(String a, String b)
 		{
-			return !a.Equals(b);
+			return !Equals(a, b);
 		}
 
 		public static unsafe bool Equals(String a, String b)

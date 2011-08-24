@@ -79,7 +79,20 @@ namespace Mosa.ClassLib
 		/// <returns>
 		/// The number of elements contained in the <see cref="T:ICollection`1"/>.
 		/// </returns>
-		public int Count { get { return count; } }
+		public int Count 
+		{ 
+			get 
+			{
+				var result = 0;
+				var node = First;
+				while (node != null)
+				{
+					node = node.next;
+					result++;
+				}
+				return result;
+			} 
+		}
 
 		/// <summary>
 		/// 
@@ -115,6 +128,7 @@ namespace Mosa.ClassLib
 		public LinkedList()
 		{
 			first = last = null;
+			count = 0;
 		}
 
 		/// <summary>
@@ -184,7 +198,7 @@ namespace Mosa.ClassLib
 		/// <param name="value">The value.</param>
 		public void Add(T value)
 		{
-			var node = AddLast(value);
+			AddLast(value);
 		}
 
 		/// <summary>
@@ -215,7 +229,7 @@ namespace Mosa.ClassLib
 				node.previous.next = node;
 				last = node;
 			}
-			count++;
+			++count;
 			return node;
 		}
 
