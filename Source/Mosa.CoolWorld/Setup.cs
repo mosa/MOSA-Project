@@ -54,7 +54,6 @@ namespace Mosa.CoolWorld
 
 			// Set the interrupt handler
 			Mosa.DeviceSystem.HAL.SetInterruptHandler(ResourceManager.InterruptManager.ProcessInterrupt);
-
 		}
 
 		/// <summary>
@@ -113,10 +112,10 @@ namespace Mosa.CoolWorld
 			hardwareDevice.Setup(hardwareResources);
 
 			Mosa.Kernel.x86.Screen.NextLine();
-			Mosa.Kernel.x86.Screen.Write('>');
-			Mosa.Kernel.x86.Screen.Write(hardwareDevice.Name);
-			Mosa.Kernel.x86.Screen.Write('<');
-			Mosa.Kernel.x86.Screen.NextLine();
+			Mosa.CoolWorld.Boot.BulletPoint();
+			Console.Write("Adding device ");
+			Boot.InBrackets(hardwareDevice.Name, Mosa.Kernel.Colors.White, Mosa.Kernel.Colors.LightGreen);
+			Console.WriteLine();
 
 			if (resourceManager.ClaimResources(hardwareResources))
 			{
