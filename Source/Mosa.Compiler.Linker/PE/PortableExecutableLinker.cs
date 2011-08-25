@@ -398,7 +398,7 @@ namespace Mosa.Compiler.Linker
 		}
 
 		/// <summary>
-		/// Writes the PE _header.
+		/// Writes the PE header.
 		/// </summary>
 		/// <param name="writer">The writer.</param>
 		private void WritePEHeader(BinaryWriter writer)
