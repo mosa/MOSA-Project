@@ -37,24 +37,14 @@ namespace Mosa.CoolWorld
 			Screen.Color = Colors.White;
 			Screen.BackgroundColor = Colors.Black;
 
-			Console.WriteLine("> Initializing kernel...");
-			BulletPoint(); Console.Write("Reading multiboot header..."); PrintDone();
-			BulletPoint(); Console.Write("Programmable Interrupt Controller..."); PrintDone();
-			BulletPoint(); Console.Write("Global Descriptor Table..."); PrintDone();
-			BulletPoint(); Console.Write("Interrupt Descriptor Table..."); PrintDone();
-			BulletPoint(); Console.Write("Memory..."); PrintDone();
-			BulletPoint(); Console.Write("Virtual Paging..."); PrintDone();
-			BulletPoint(); Console.Write("Process Manager..."); PrintDone();
-			BulletPoint(); Console.Write("Task Manager..."); PrintDone();
-
 			Mosa.Kernel.x86.Smbios.BiosInformationStructure biosInfo = new Kernel.x86.Smbios.BiosInformationStructure();
 			Mosa.Kernel.x86.Smbios.CpuStructure cpuInfo = new Kernel.x86.Smbios.CpuStructure();
 
-			Console.WriteLine("> Checking bios...");
+			Console.WriteLine("> Checking BIOS...");
 			BulletPoint(); Console.Write("Vendor  "); InBrackets(biosInfo.BiosVendor, Colors.White, Colors.LightBlue); Console.WriteLine();
 			BulletPoint(); Console.Write("Version "); InBrackets(biosInfo.BiosVersion, Colors.White, Colors.LightBlue); Console.WriteLine();
 
-			Console.WriteLine("> Checking cpu...");
+			Console.WriteLine("> Checking CPU...");
 			BulletPoint(); Console.Write("Vendor  "); InBrackets(cpuInfo.Vendor, Colors.White, Colors.LightBlue); Console.WriteLine();
 			BulletPoint(); Console.Write("Version "); InBrackets(cpuInfo.Version, Colors.White, Colors.LightBlue); Console.WriteLine();
 
@@ -65,14 +55,12 @@ namespace Mosa.CoolWorld
 			Setup.Start();
 
 			Console.WriteLine("> System ready");
-
+			Console.WriteLine();
 			Screen.Goto(24, 0);
 			Screen.Color = Colors.White;
 			Screen.BackgroundColor = Colors.Green;
 			Screen.Write("          Copyright (C) 2008-2001 [Managed Operating System Alliance]");
 			Screen.FillLine();
-
-			Console.Update();
 
 			while (true)
 			{
