@@ -112,6 +112,9 @@ namespace Mosa.CoolWorld
 			Screen.Row = 23;
 			Screen.Color = Colors.Cyan;
 			Screen.BackgroundColor = Colors.Black;
+			Screen.Write(new string(' ', 25));
+			Screen.Column = 55;
+			Screen.Row = 23;
 
 			counter++;
 			Screen.Write(counter, 10, 7);
