@@ -141,6 +141,7 @@ namespace Mosa.Kernel.x86
 
 		public static void FillLine()
 		{
+			// FIXME: 
 			Screen.Write(new String(' ', (int)(80 - Column)));
 		}
 

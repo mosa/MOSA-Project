@@ -54,7 +54,7 @@ namespace Mosa.CoolWorld
 			// Setup hardware abstraction interface
 			IHardwareAbstraction hardwareAbstraction = new Mosa.CoolWorld.HAL.HardwareAbstraction();
 
-			// Set device driver system to the emulator port and memory methods
+			// Set device driver system to the hardware HAL
 			Mosa.DeviceSystem.HAL.SetHardwareAbstraction(hardwareAbstraction);
 
 			// Set the interrupt handler
@@ -104,8 +104,8 @@ namespace Mosa.CoolWorld
 			PIC = new PIC();
 			PIT = new PIT();
 
-			StartDevice(picAttributes, PIC);
-			StartDevice(pitAttributes, PIT);
+			//StartDevice(picAttributes, PIC);
+			//StartDevice(pitAttributes, PIT);
 			StartDevice(pciAttributes, PCI);
 			StartDevice(keyboardDeviceAttributes, Keyboard);
 		}

@@ -26,6 +26,8 @@ namespace Mosa.CoolWorld
 		{
 			Mosa.Kernel.x86.Kernel.Setup();
 
+			IDT.handleInterrupt = ProcessInterrupt;
+
 			Console.Initialize();
 
 			Screen.GotoTop();
@@ -64,6 +66,7 @@ namespace Mosa.CoolWorld
 
 			while (true)
 			{
+				Native.Hlt();
 			}
 		}
 
@@ -88,5 +91,50 @@ namespace Mosa.CoolWorld
 			Screen.Color = outerColor; 
 			Console.Write("]"); 
 		}
+
+
+		private static uint counter = 0;
+
+		public static void ProcessInterrupt(byte interrupt, uint errorCode)
+		{
+			uint c = Screen.Column;
+			uint r = Screen.Row;
+			byte col = Screen.Color;
+
+			Screen.Column = 31;
+			Screen.Row = 2;
+			Screen.Color = Colors.Cyan;
+
+			counter++;
+			Screen.Write(counter, 10, 7);
+			Screen.Write(':');
+			Screen.Write(interrupt, 16, 2);
+			Screen.Write(':');
+			Screen.Write(errorCode, 16, 2);
+
+			if (interrupt == 14)
+			{
+				// Page Fault!
+				PageFaultHandler.Fault(errorCode);
+			}
+			else if (interrupt == 0x20)
+			{
+				// Timer Interrupt! Switch Tasks!	
+			}
+			else
+			{
+				Screen.Write('-');
+				Screen.Write(counter, 10, 7);
+				Screen.Write(':');
+				Screen.Write(interrupt, 16, 2);
+
+
+			}
+
+			Screen.Column = c;
+			Screen.Row = r;
+			Screen.Color = col;
+		}
+
 	}
 }
