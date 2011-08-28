@@ -26,7 +26,7 @@ namespace Mosa.CoolWorld
 		{
 			Mosa.Kernel.x86.Kernel.Setup();
 
-			IDT.handleInterrupt = ProcessInterrupt;
+			IDT.SetInterruptHandler(ProcessInterrupt);
 
 			Console.Initialize();
 
@@ -123,11 +123,16 @@ namespace Mosa.CoolWorld
 			Screen.Write(':');
 			Screen.Write(errorCode, 16, 2);
 
-			if (interrupt == 14)
+
+			if (interrupt == 0x00)
+			{
+				// ?
+			}
+			else if (interrupt == 14)
 			{
 				// Page Fault!
 				PageFaultHandler.Fault(errorCode);
-			}
+			} 
 			else if (interrupt == 0x20)
 			{
 				// Timer Interrupt! Switch Tasks!	

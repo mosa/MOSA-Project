@@ -16,13 +16,12 @@ namespace Mosa.Kernel.x86
 	/// </summary>
 	public static class IDT
 	{
+		public delegate void InterruptHandler(byte irq, uint error);
 
-		public delegate void HandleInterrupt(byte irq, uint error);
+		static private InterruptHandler interruptHandler;
 
-		static public HandleInterrupt handleInterrupt;
-
-		private static uint _idtTable = 0x1411000;
-		private static uint _idtEntries = _idtTable + 6;
+		private static uint idtTable = 0x1411000;
+		private static uint idtEntries = idtTable + 6;
 
 		#region Data members
 
@@ -41,14 +40,19 @@ namespace Mosa.Kernel.x86
 		public static void Setup()
 		{
 			// Setup IDT table
-			Memory.Clear(_idtTable, 6);
-			Native.Set16(_idtTable, (Offset.TotalSize * 256) - 1);
-			Native.Set32(_idtTable + 2, _idtEntries);
+			Memory.Clear(idtTable, 6);
+			Native.Set16(idtTable, (Offset.TotalSize * 256) - 1);
+			Native.Set32(idtTable + 2, idtEntries);
 
 			SetTableEntries();
 
-			Native.Lidt(_idtTable);
+			Native.Lidt(idtTable);
 			Native.Sti();
+		}
+
+		public static void SetInterruptHandler(InterruptHandler interruptHandler)
+		{
+			IDT.interruptHandler = interruptHandler;
 		}
 
 		/// <summary>
@@ -75,7 +79,7 @@ namespace Mosa.Kernel.x86
 		/// <returns></returns>
 		private static uint GetEntryLocation(uint index)
 		{
-			return (uint)(_idtEntries + (index * Offset.TotalSize));
+			return (uint)(idtEntries + (index * Offset.TotalSize));
 		}
 
 		/// <summary>
@@ -84,7 +88,7 @@ namespace Mosa.Kernel.x86
 		private static void SetTableEntries()
 		{
 			// Clear out idt table
-			Memory.Clear(_idtEntries, Offset.TotalSize * 256);
+			Memory.Clear(idtEntries, Offset.TotalSize * 256);
 
 			// Note: GetIDTJumpLocation parameter must be a constant and not a variable
 			Set(0, Native.GetIDTJumpLocation(0), 0x08, 0x8E);
@@ -358,10 +362,15 @@ namespace Mosa.Kernel.x86
 		/// <param name="eax">The eax.</param>
 		/// <param name="interrupt">The interrupt.</param>
 		/// <param name="errorCode">The error code.</param>
-		private static void InterruptHandler(uint edi, uint esi, uint ebp, uint esp, uint ebx, uint edx, uint ecx, uint eax, uint interrupt, uint errorCode)
+		private static void ProcessInterrupt(uint edi, uint esi, uint ebp, uint esp, uint ebx, uint edx, uint ecx, uint eax, uint interrupt, uint errorCode)
 		{
-			if (handleInterrupt != null)
-				handleInterrupt((byte)interrupt, errorCode);
+			if (interruptHandler != null)
+				interruptHandler((byte)interrupt, errorCode);
+			else if (interrupt == 14)
+			{
+				// Page Fault!
+				PageFaultHandler.Fault(errorCode);
+			}
 
 			PIC.SendEndOfInterrupt((byte)interrupt);
 		}

@@ -29,7 +29,7 @@ namespace Mosa.HelloWorld
 		{
 			Mosa.Kernel.x86.Kernel.Setup();
 
-			IDT.handleInterrupt = ProcessInterrupt;
+			IDT.SetInterruptHandler(ProcessInterrupt);
 
 			Screen.GotoTop();
 			Screen.Color = Colors.Yellow;
@@ -342,7 +342,11 @@ namespace Mosa.HelloWorld
 			Screen.Write(':');
 			Screen.Write(errorCode, 16, 2);
 
-			if (interrupt == 14)
+			if (interrupt == 0x00)
+			{
+				// ?
+			}
+			else if (interrupt == 14)
 			{
 				// Page Fault!
 				PageFaultHandler.Fault(errorCode);
