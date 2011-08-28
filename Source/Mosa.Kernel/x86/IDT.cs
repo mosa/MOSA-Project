@@ -16,7 +16,7 @@ namespace Mosa.Kernel.x86
 	/// </summary>
 	public static class IDT
 	{
-		public delegate void InterruptHandler(byte irq, uint error);
+		public delegate void InterruptHandler(byte irq, byte error);
 
 		static private InterruptHandler interruptHandler;
 
@@ -362,17 +362,17 @@ namespace Mosa.Kernel.x86
 		/// <param name="eax">The eax.</param>
 		/// <param name="interrupt">The interrupt.</param>
 		/// <param name="errorCode">The error code.</param>
-		private static void ProcessInterrupt(uint edi, uint esi, uint ebp, uint esp, uint ebx, uint edx, uint ecx, uint eax, uint interrupt, uint errorCode)
+		private static void ProcessInterrupt(uint edi, uint esi, uint ebp, uint esp, uint ebx, uint edx, uint ecx, uint eax, byte interrupt, byte errorCode)
 		{
 			if (interruptHandler != null)
-				interruptHandler((byte)interrupt, errorCode);
+				interruptHandler(interrupt, errorCode);
 			else if (interrupt == 14)
 			{
 				// Page Fault!
 				PageFaultHandler.Fault(errorCode);
 			}
 
-			PIC.SendEndOfInterrupt((byte)interrupt);
+			PIC.SendEndOfInterrupt(interrupt);
 		}
 
 	}

@@ -92,16 +92,16 @@ namespace Mosa.CoolWorld
 		{
 			Screen.Color = outerColor;
 			Console.Write("[");
-			Screen.Color = innerColor; 
+			Screen.Color = innerColor;
 			Console.Write(message);
-			Screen.Color = outerColor; 
-			Console.Write("]"); 
+			Screen.Color = outerColor;
+			Console.Write("]");
 		}
 
 
 		private static uint counter = 0;
 
-		public static void ProcessInterrupt(byte interrupt, uint errorCode)
+		public static void ProcessInterrupt(byte interrupt, byte errorCode)
 		{
 			uint c = Screen.Column;
 			uint r = Screen.Row;
@@ -123,16 +123,11 @@ namespace Mosa.CoolWorld
 			Screen.Write(':');
 			Screen.Write(errorCode, 16, 2);
 
-
-			if (interrupt == 0x00)
-			{
-				// ?
-			}
-			else if (interrupt == 14)
+			if (interrupt == 14)
 			{
 				// Page Fault!
 				PageFaultHandler.Fault(errorCode);
-			} 
+			}
 			else if (interrupt == 0x20)
 			{
 				// Timer Interrupt! Switch Tasks!	

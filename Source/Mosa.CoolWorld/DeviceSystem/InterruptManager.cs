@@ -46,7 +46,7 @@ namespace Mosa.DeviceSystem
 		/// Processes the interrupt.
 		/// </summary>
 		/// <param name="irq">The irq.</param>
-		public void ProcessInterrupt(byte irq, uint error)
+		public void ProcessInterrupt(byte irq, byte error)
 		{
 			try
 			{
