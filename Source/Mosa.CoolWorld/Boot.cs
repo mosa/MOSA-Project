@@ -100,10 +100,12 @@ namespace Mosa.CoolWorld
 			uint c = Screen.Column;
 			uint r = Screen.Row;
 			byte col = Screen.Color;
+			byte back = Screen.BackgroundColor;
 
-			Screen.Column = 31;
-			Screen.Row = 2;
+			Screen.Column = 55;
+			Screen.Row = 23;
 			Screen.Color = Colors.Cyan;
+			Screen.BackgroundColor = Colors.Black;
 
 			counter++;
 			Screen.Write(counter, 10, 7);
@@ -127,13 +129,12 @@ namespace Mosa.CoolWorld
 				Screen.Write(counter, 10, 7);
 				Screen.Write(':');
 				Screen.Write(interrupt, 16, 2);
-
-
 			}
 
 			Screen.Column = c;
 			Screen.Row = r;
 			Screen.Color = col;
+			Screen.BackgroundColor = back;
 		}
 
 	}
