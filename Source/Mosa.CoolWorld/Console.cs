@@ -67,7 +67,8 @@ namespace Mosa.CoolWorld
 				{
 					if (s[index] == '\n')
 					{
-						Screen.FillLine();
+						for (uint c = 80 - Screen.Column + 1; c != 0; c--)
+							Screen.Write(' ');
 					}
 					else
 						Screen.Write(s[index]);

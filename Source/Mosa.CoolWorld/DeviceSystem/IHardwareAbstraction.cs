@@ -49,7 +49,7 @@ namespace Mosa.DeviceSystem
 		/// Processes the interrupt.
 		/// </summary>
 		/// <param name="irq">The irq.</param>
-		void ProcessInterrupt(byte irq);
+		void ProcessInterrupt(byte irq, uint error);
 
 		/// <summary>
 		/// Allocates the memory.

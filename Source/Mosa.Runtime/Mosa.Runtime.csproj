@@ -269,12 +269,6 @@
     <Compile Include="Linker\LinkTimeCodeGenerator.cs" />
     <Compile Include="Memory\IMemoryPageManager.cs" />
     <Compile Include="Memory\PageAccessFlags.cs" />
-    <Compile Include="IJitService.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MethodCompilationStageComposite.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="CompilerFramework\ArchitectureSpecificAttribute.cs">
       <SubType>Code</SubType>
     </Compile>

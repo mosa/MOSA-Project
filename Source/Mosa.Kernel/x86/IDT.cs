@@ -16,6 +16,11 @@ namespace Mosa.Kernel.x86
 	/// </summary>
 	public static class IDT
 	{
+
+		public delegate void HandleInterrupt(byte irq, uint error);
+
+		static public HandleInterrupt handleInterrupt;
+
 		private static uint _idtTable = 0x1411000;
 		private static uint _idtEntries = _idtTable + 6;
 
@@ -340,8 +345,6 @@ namespace Mosa.Kernel.x86
 			Set(255, Native.GetIDTJumpLocation(255), 0x08, 0x8E);
 		}
 
-		private static uint _counter = 0;
-
 		/// <summary>
 		/// Interrupts the handler.
 		/// </summary>
@@ -357,49 +360,8 @@ namespace Mosa.Kernel.x86
 		/// <param name="errorCode">The error code.</param>
 		private static void InterruptHandler(uint edi, uint esi, uint ebp, uint esp, uint ebx, uint edx, uint ecx, uint eax, uint interrupt, uint errorCode)
 		{
-			uint c = Screen.Column;
-			uint r = Screen.Row;
-			byte col = Screen.Color;
-
-			Screen.Column = 31;
-			Screen.Row = 0;
-			Screen.Color = Colors.Cyan;
-
-			_counter++;
-			Screen.Write(_counter, 10, 7);
-			Screen.Write(':');
-			Screen.Write(interrupt, 16, 2);
-
-			if (interrupt == 14)
-			{
-				// Page Fault!
-				PageFaultHandler.Fault(errorCode);
-			}
-			else if (interrupt == 0x20)
-			{
-				// Timer Interrupt! Switch Tasks!
-
-			}
-			else
-			{
-				Screen.Write(':');
-				Screen.Write(_counter, 10, 8);
-				Screen.Write(':');
-				Screen.Write(interrupt, 16, 2);
-				Screen.Write('-');
-				Screen.Write(errorCode, 16, 2);
-
-				if (interrupt == 0x21)
-				{
-					byte scancode = Keyboard.ReadScanCode();
-					Screen.Write('-');
-					Screen.Write(scancode, 16, 2);
-				}
-			}
-
-			Screen.Column = c;
-			Screen.Row = r;
-			Screen.Color = col;
+			if (handleInterrupt != null)
+				handleInterrupt((byte)interrupt, errorCode);
 
 			PIC.SendEndOfInterrupt((byte)interrupt);
 		}

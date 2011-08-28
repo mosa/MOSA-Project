@@ -22,7 +22,7 @@ namespace Mosa.DeviceSystem
 		/// <summary>
 		/// 
 		/// </summary>
-		public delegate void HandleInterrupt(byte irq);
+		public delegate void HandleInterrupt(byte irq, uint error);
 
 		static private HandleInterrupt handleInterrupt;
 
@@ -48,9 +48,9 @@ namespace Mosa.DeviceSystem
 		/// Processes the interrupt.
 		/// </summary>
 		/// <param name="irq">The irq.</param>
-		public static void ProcessInterrupt(byte irq)
+		public static void ProcessInterrupt(byte irq, uint error)
 		{
-			handleInterrupt(irq);
+			handleInterrupt(irq, error);
 		}
 
 		/// <summary>
