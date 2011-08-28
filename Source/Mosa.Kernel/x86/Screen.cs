@@ -139,12 +139,6 @@ namespace Mosa.Kernel.x86
 			Row++;
 		}
 
-		public static void FillLine()
-		{
-			// FIXME: 
-			Screen.Write(new String(' ', (int)(80 - Column)));
-		}
-
 		/// <summary>
 		/// Clears this instance.
 		/// </summary>

@@ -35,7 +35,7 @@ namespace Mosa.CoolWorld
 			Screen.BackgroundColor = Colors.Green;
 
 			Screen.Write(@"                   MOSA OS Version 0.1 - Compiler Version 1.0");
-			Screen.FillLine();
+			FillLine();
 			Screen.Color = Colors.White;
 			Screen.BackgroundColor = Colors.Black;
 
@@ -62,12 +62,18 @@ namespace Mosa.CoolWorld
 			Screen.Color = Colors.White;
 			Screen.BackgroundColor = Colors.Green;
 			Screen.Write("          Copyright (C) 2008-2001 [Managed Operating System Alliance]");
-			Screen.FillLine();
+			FillLine();
 
 			while (true)
 			{
 				Native.Hlt();
 			}
+		}
+
+		public static void FillLine()
+		{
+			for (uint c = 80 - Screen.Column + 1; c != 0; c--)
+				Screen.Write(' ');
 		}
 
 		public static void PrintDone()
