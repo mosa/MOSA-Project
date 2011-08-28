@@ -138,6 +138,8 @@ namespace Mosa.CoolWorld
 				Screen.Write(counter, 10, 7);
 				Screen.Write(':');
 				Screen.Write(interrupt, 16, 2);
+
+				Mosa.DeviceSystem.HAL.ProcessInterrupt(interrupt, errorCode);
 			}
 
 			Screen.Column = c;
