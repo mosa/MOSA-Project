@@ -111,6 +111,68 @@ namespace Mosa.Runtime.CompilerFramework
 			var operandStack = workItem.IncomingStack;
 			var block = workItem.Block;
 
+			operandStack = this.CreateMovesForIncomingStack(block, operandStack);
+			this.AssignOperands(block, operandStack);
+			operandStack = this.CreateScheduledMoves(block, operandStack);
+			
+			this.outgoingStack[block.Sequence] = operandStack;
+			this.processed.Set(block.Sequence, true);
+
+			foreach (var b in block.NextBlocks)
+			{
+				if (this.enqueued.Get(b.Sequence))
+					continue;
+
+				this.workList.Enqueue(new WorkItem(b, new Stack<Operand>(operandStack)));
+				this.enqueued.Set(b.Sequence, true);
+			}
+		}
+
+		/// <summary>
+		/// Creates the scheduled moves.
+		/// </summary>
+		/// <param name="block">The block.</param>
+		/// <param name="operandStack">The operand stack.</param>
+		/// <returns></returns>
+		private Stack<Operand> CreateScheduledMoves(BasicBlock block, Stack<Operand> operandStack)
+		{
+			if (this.scheduledMoves[block.Sequence] != null)
+			{
+				this.CreateOutgoingMoves(block, new Stack<Operand>(operandStack), new Stack<Operand>(this.scheduledMoves[block.Sequence]));
+				operandStack = new Stack<Operand>(this.scheduledMoves[block.Sequence]);
+				this.scheduledMoves[block.Sequence] = null;
+			}
+			return operandStack;
+		}
+
+		/// <summary>
+		/// Assigns the operands.
+		/// </summary>
+		/// <param name="block">The block.</param>
+		/// <param name="operandStack">The operand stack.</param>
+		private void AssignOperands(BasicBlock block, Stack<Operand> operandStack)
+		{
+			for (var ctx = new Context(instructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
+			{
+				if (!(ctx.Instruction is IBranchInstruction) && !(ctx.Instruction is ICILInstruction))
+					continue;
+
+				if (!(ctx.Instruction is IR.JmpInstruction))
+				{
+					AssignOperandsFromCILStack(ctx, operandStack);
+					(ctx.Instruction as ICILInstruction).Validate(ctx, methodCompiler);
+					PushResultOperands(ctx, operandStack);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Creates the moves for incoming stack.
+		/// </summary>
+		/// <param name="operandStack">The operand stack.</param>
+		/// <returns></returns>
+		private Stack<Operand> CreateMovesForIncomingStack(BasicBlock block, Stack<Operand> operandStack)
+		{
 			var joinStack = new Stack<Operand>();
 			foreach (var operand in operandStack)
 			{
@@ -129,40 +191,7 @@ namespace Mosa.Runtime.CompilerFramework
 					this.scheduledMoves[b.Sequence] = new Stack<Operand>(joinStack);
 				}
 			}
-
-			operandStack = joinStack;
-
-			for (var ctx = new Context(instructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
-			{
-				if (!(ctx.Instruction is IBranchInstruction) && !(ctx.Instruction is ICILInstruction))
-					continue;
-
-				if (!(ctx.Instruction is IR.JmpInstruction))
-				{
-					AssignOperandsFromCILStack(ctx, operandStack);
-					(ctx.Instruction as ICILInstruction).Validate(ctx, methodCompiler);
-					PushResultOperands(ctx, operandStack);
-				}
-			}
-
-			if (this.scheduledMoves[block.Sequence] != null)
-			{
-				this.CreateOutgoingMoves(block, new Stack<Operand>(operandStack), new Stack<Operand>(this.scheduledMoves[block.Sequence]));
-				operandStack = new Stack<Operand>(this.scheduledMoves[block.Sequence]);
-				this.scheduledMoves[block.Sequence] = null;
-			}
-
-			this.outgoingStack[block.Sequence] = operandStack;
-			this.processed.Set(block.Sequence, true);
-
-			foreach (var b in block.NextBlocks)
-			{
-				if (this.enqueued.Get(b.Sequence))
-					continue;
-
-				this.workList.Enqueue(new WorkItem(b, new Stack<Operand>(operandStack)));
-				this.enqueued.Set(b.Sequence, true);
-			}
+			return joinStack;
 		}
 
 		/// <summary>
@@ -216,6 +245,12 @@ namespace Mosa.Runtime.CompilerFramework
 				currentStack.Push(operand);
 		}
 
+		/// <summary>
+		/// Retrieves the name of the compilation stage.
+		/// </summary>
+		/// <value>
+		/// The name of the compilation stage.
+		/// </value>
 		public string Name
 		{
 			get { return @"OperandDeterminationStage"; }

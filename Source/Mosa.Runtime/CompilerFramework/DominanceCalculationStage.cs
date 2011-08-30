@@ -68,9 +68,18 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public void Run()
 		{
+			var entryBlock = this.FindBlock(-1);
+			var exitBlock = this.FindBlock(int.MaxValue);
+
+			entryBlock.NextBlocks.Add(exitBlock);
+			exitBlock.PreviousBlocks.Add(entryBlock);
+
 			CalculateDominance();
 			CalculateChildren();
 			CalculateDominanceFrontier();
+
+			entryBlock.NextBlocks.Remove(exitBlock);
+			exitBlock.PreviousBlocks.Remove(entryBlock);
 		}
 
 		/// <summary>
