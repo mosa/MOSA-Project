@@ -13,6 +13,7 @@ using System.Linq;
 using System.Text;
 using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Runtime.CompilerFramework.IR;
+using System.Diagnostics;
 
 namespace Mosa.Runtime.CompilerFramework
 {
@@ -81,7 +82,17 @@ namespace Mosa.Runtime.CompilerFramework
 				this.variableInformation[name].Count = 1;
 			}
 
+			for (var i = 0; (this.methodCompiler as BaseMethodCompiler).LocalVariables != null && i < (this.methodCompiler as BaseMethodCompiler).LocalVariables.Length; ++i)
+			{
+				var op = (this.methodCompiler as BaseMethodCompiler).LocalVariables[i];
+				var name = NameForOperand(op);
+				if (!this.variableInformation.ContainsKey(name))
+					this.variableInformation[name] = new VariableInformation();
+				this.variableInformation[name].Stack.Push(0);
+				this.variableInformation[name].Count = 1;
+			}
 			this.RenameVariables(this.FindBlock(-1).NextBlocks[0]);
+			Debug.WriteLine("ESSA: " + this.methodCompiler.Method.FullName);
 		}
 
 		public string Name
@@ -105,6 +116,8 @@ namespace Mosa.Runtime.CompilerFramework
 						if (!(op is StackOperand))
 							continue;
 						var name = NameForOperand(context.GetOperand(i));
+						if (!this.variableInformation.ContainsKey(name))
+							throw new Exception(name + " is not in dictionary [block = " + block + "]");
 						var index = this.variableInformation[name].Stack.Peek();
 						context.SetOperand(i, new SsaOperand(context.GetOperand(i), index));
 					}
