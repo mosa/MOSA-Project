@@ -1,10 +1,10 @@
 /*
- * (c) 2008 MOSA - The Managed Operating System Alliance
+ * (c) 2011 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Simon Wollwage (rootnode) <simon_wollwage@yahoo.co.jp>
+ *  Simon Wollwage (rootnode) <rootnode@mosa-project.org>
  */
 
 using System;
