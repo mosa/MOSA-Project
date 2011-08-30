@@ -7,6 +7,7 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
+using System.Collections.Generic;
 namespace Mosa.Runtime.CompilerFramework
 {
 	/// <summary>
@@ -40,5 +41,19 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="block">The block to return the dominance frontier of.</param>
 		/// <returns>An array of Blocks, which represent the dominance frontier.</returns>
 		BasicBlock[] GetDominanceFrontierOfBlock(BasicBlock block);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="block"></param>
+		/// <returns></returns>
+		BasicBlock[] GetChildren(BasicBlock block);
+
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="s"></param>
+		/// <returns></returns>
+		List<BasicBlock> IteratedDominanceFrontier(List<BasicBlock> s);
 	}
 }

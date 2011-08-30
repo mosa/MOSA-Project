@@ -1,58 +1,65 @@
-/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- */
-
+﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-
+using System.Linq;
+using System.Text;
 using Mosa.Runtime.Metadata;
-using Mosa.Runtime.CompilerFramework.CIL;
 using Mosa.Runtime.CompilerFramework.Operands;
+using Mosa.Runtime.CompilerFramework.CIL;
+using System.Collections;
 
 namespace Mosa.Runtime.CompilerFramework
 {
 	/// <summary>
-	/// The Operand Determination Stage determines the operands for each instructions.
+	/// 
 	/// </summary>
 	public class OperandDeterminationStage : BaseMethodCompilerStage, IMethodCompilerStage
 	{
-		#region Data members
-
 		/// <summary>
 		/// 
 		/// </summary>
-		private Stack<Operand> operandStack = new Stack<Operand>();
-		/// <summary>
-		/// 
-		/// </summary>
-		private List<BasicBlock> processed = new List<BasicBlock>();
-
-		/// <summary>
-		/// 
-		/// </summary>
-		private Stack<Operand>[] initialStack;
-
-		#endregion
-
-		#region IPipelineStage
-
-		/// <summary>
-		/// Retrieves the name of the compilation stage.
-		/// </summary>
-		/// <value>The name of the compilation stage.</value>
-		string IPipelineStage.Name
+		private class WorkItem
 		{
-			get { return "Operand Determination Stage"; }
+			/// <summary>
+			/// 
+			/// </summary>
+			public BasicBlock Block;
+			/// <summary>
+			/// 
+			/// </summary>
+			public Stack<Operand> IncomingStack;
+
+			/// <summary>
+			/// Initializes a new instance of the <see cref="WorkItem"/> class.
+			/// </summary>
+			/// <param name="block">The block.</param>
+			/// <param name="incomingStack">The incoming stack.</param>
+			public WorkItem(BasicBlock block, Stack<Operand> incomingStack)
+			{
+				this.Block = block;
+				this.IncomingStack = incomingStack;
+			}
 		}
 
-		#endregion
-
-		#region IMethodCompilerStage Members
+		/// <summary>
+		/// 
+		/// </summary>
+		private Queue<WorkItem> workList = new Queue<WorkItem>();
+		/// <summary>
+		/// 
+		/// </summary>
+		private BitArray processed;
+		/// <summary>
+		/// 
+		/// </summary>
+		private BitArray enqueued;
+		/// <summary>
+		/// 
+		/// </summary>
+		private Stack<Operand>[] outgoingStack;
+		/// <summary>
+		/// 
+		/// </summary>
+		private Stack<Operand>[] scheduledMoves;
 
 		/// <summary>
 		/// Runs the specified compiler.
@@ -67,10 +74,6 @@ namespace Mosa.Runtime.CompilerFramework
 			{
 				Trace(clause.HandlerOffset, clause);
 			}
-
-			initialStack = null;
-			operandStack = null;
-			processed = null;
 		}
 
 		/// <summary>
@@ -79,31 +82,57 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="label">The label.</param>
 		private void Trace(int label, ExceptionClause clause)
 		{
-			initialStack = new Stack<Operand>[basicBlocks.Count];
-			operandStack.Clear();
+			this.outgoingStack = new Stack<Operand>[basicBlocks.Count];
+			this.scheduledMoves = new Stack<Operand>[basicBlocks.Count];
+			this.processed = new BitArray(basicBlocks.Count);
+			this.processed.SetAll(false);
+			this.enqueued = new BitArray(basicBlocks.Count);
+			this.enqueued.SetAll(false);
 
 			if (clause != null && clause.Kind != ExceptionClauseType.Finally)
 			{
-				Token token =  new Token(clause.ClassToken);
+				var token = new Token(clause.ClassToken);
 			}
 
-			BasicBlock firstBlock = FindBlock(label);
-			AssignOperands(firstBlock);
+			var firstBlock = FindBlock(label);
+			this.processed.Set(firstBlock.Sequence, true);
+			this.workList.Enqueue(new WorkItem(firstBlock, new Stack<Operand>()));	
+
+			while (workList.Count > 0)
+				AssignOperands(workList.Dequeue());
 		}
 
 		/// <summary>
 		/// Assigns the operands.
 		/// </summary>
-		/// <param name="block">The block.</param>
-		private void AssignOperands(BasicBlock block)
+		/// <param name="workItem">The work item.</param>
+		private void AssignOperands(WorkItem workItem)
 		{
-			//Debug.WriteLine(@"OperandDeterminationStage: Assigning operands to block " + block);
+			var operandStack = workItem.IncomingStack;
+			var block = workItem.Block;
 
-			if (initialStack[block.Sequence] != null)
-				foreach (Operand operand in initialStack[block.Sequence])
-					operandStack.Push(operand);
+			var joinStack = new Stack<Operand>();
+			foreach (var operand in operandStack)
+			{
+				joinStack.Push(this.methodCompiler.CreateTemporary(operand.Type));
+			}
 
-			for (Context ctx = new Context(instructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
+			foreach (var b in block.PreviousBlocks)
+			{
+				if (this.processed.Get(b.Sequence) && joinStack.Count > 0)
+				{
+					CreateOutgoingMoves(b, new Stack<Operand>(this.outgoingStack[b.Sequence]), new Stack<Operand>(joinStack));
+					this.outgoingStack[b.Sequence] = new Stack<Operand>(joinStack);
+				}
+				else if (joinStack.Count > 0)
+				{
+					this.scheduledMoves[b.Sequence] = new Stack<Operand>(joinStack);
+				}
+			}
+
+			operandStack = joinStack;
+
+			for (var ctx = new Context(instructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
 			{
 				if (!(ctx.Instruction is IBranchInstruction) && !(ctx.Instruction is ICILInstruction))
 					continue;
@@ -114,140 +143,47 @@ namespace Mosa.Runtime.CompilerFramework
 					(ctx.Instruction as ICILInstruction).Validate(ctx, methodCompiler);
 					PushResultOperands(ctx, operandStack);
 				}
-
-				if (ctx.Instruction is IBranchInstruction)
-				{
-					Stack<Operand> stack = GetCurrentStack(operandStack);
-					CreateTemporaryMoves(ctx, block, stack);
-					break;
-				}
 			}
 
-			MarkAsProcessed(block);
-
-			foreach (BasicBlock b in block.NextBlocks)
+			if (this.scheduledMoves[block.Sequence] != null)
 			{
-				if (IsNotProcessed(b))
-					AssignOperands(b);
+				this.CreateOutgoingMoves(block, new Stack<Operand>(operandStack), new Stack<Operand>(this.scheduledMoves[block.Sequence]));
+				operandStack = new Stack<Operand>(this.scheduledMoves[block.Sequence]);
+				this.scheduledMoves[block.Sequence] = null;
 			}
-		}
 
-		/// <summary>
-		/// Marks as processed.
-		/// </summary>
-		/// <param name="block">The block.</param>
-		private void MarkAsProcessed(BasicBlock block)
-		{
-			if (processed.Contains(block))
-				return;
-			processed.Add(block);
-		}
+			this.outgoingStack[block.Sequence] = operandStack;
+			this.processed.Set(block.Sequence, true);
 
-		/// <summary>
-		/// Determines whether [is not processed] [the specified block].
-		/// </summary>
-		/// <param name="block">The block.</param>
-		/// <returns>
-		/// 	<c>true</c> if [is not processed] [the specified block]; otherwise, <c>false</c>.
-		/// </returns>
-		private bool IsNotProcessed(BasicBlock block)
-		{
-			return !processed.Contains(block);
-		}
-
-		/// <summary>
-		/// Gets the current stack.
-		/// </summary>
-		/// <param name="stack">The stack.</param>
-		/// <returns></returns>
-		private static Stack<Operand> GetCurrentStack(Stack<Operand> stack)
-		{
-			Stack<Operand> result = new Stack<Operand>();
-
-			foreach (Operand operand in stack)
-				result.Push(operand);
-			return result;
-		}
-
-		/// <summary>
-		/// Creates the temporary moves.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		/// <param name="block">The block.</param>
-		/// <param name="stack">The stack.</param>
-		private void CreateTemporaryMoves(Context ctx, BasicBlock block, Stack<Operand> stack)
-		{
-			Context context = ctx.InsertBefore();
-			context.SetInstruction(IR.Instruction.NopInstruction);
-
-			BasicBlock nextBlock;
-
-			if (NextBlockHasInitialStack(block, out nextBlock))
-				LinkTemporaryMoves(context, block, nextBlock, stack);
-			else
-				CreateNewTemporaryMoves(context, block, stack);
-		}
-
-		/// <summary>
-		/// Nexts the block has initial stack.
-		/// </summary>
-		/// <param name="block">The block.</param>
-		/// <param name="nextBlock">The next block.</param>
-		/// <returns></returns>
-		private bool NextBlockHasInitialStack(BasicBlock block, out BasicBlock nextBlock)
-		{
-			nextBlock = null;
-			foreach (BasicBlock next in block.NextBlocks)
+			foreach (var b in block.NextBlocks)
 			{
-				if (initialStack[next.Sequence] == null)
+				if (this.enqueued.Get(b.Sequence))
 					continue;
 
-				nextBlock = next;
-				return true;
+				this.workList.Enqueue(new WorkItem(b, new Stack<Operand>(operandStack)));
+				this.enqueued.Set(b.Sequence, true);
 			}
-			return false;
 		}
 
 		/// <summary>
-		/// Links the temporary moves.
+		/// Creates the outgoing moves.
 		/// </summary>
-		/// <param name="ctx">The CTX.</param>
-		/// <param name="block">The block.</param>
-		/// <param name="nextBlock">The next block.</param>
+		/// <param name="b">The b.</param>
+		/// <param name="operandStack">The operand stack.</param>
 		/// <param name="stack">The stack.</param>
-		private void LinkTemporaryMoves(Context ctx, BasicBlock block, BasicBlock nextBlock, Stack<Operand> stack)
+		private void CreateOutgoingMoves(BasicBlock b, Stack<Operand> operandStack, Stack<Operand> joinStack)
 		{
-			Stack<Operand> currentStack = GetCurrentStack(stack);
-			Stack<Operand> nextInitialStack = GetCurrentStack(initialStack[nextBlock.Sequence]);
 
-			for (int i = 0; i < initialStack[nextBlock.Sequence].Count; ++i)
-				ctx.AppendInstruction(IR.Instruction.MoveInstruction, nextInitialStack.Pop(), currentStack.Pop());
+			var context = new Context(this.instructionSet, b);
+			while (!context.EndOfInstruction && !(context.Instruction is IBranchInstruction))
+				context.GotoNext();
 
-			if (initialStack[nextBlock.Sequence].Count > 0)
-				foreach (BasicBlock nBlock in block.NextBlocks)
-					initialStack[nBlock.Sequence] = GetCurrentStack(initialStack[nextBlock.Sequence]);
-		}
-
-		/// <summary>
-		/// Creates the new temporary moves.
-		/// </summary>
-		/// <param name="ctx">The CTX.</param>
-		/// <param name="block">The block.</param>
-		/// <param name="stack">The stack.</param>
-		private void CreateNewTemporaryMoves(Context ctx, BasicBlock block, Stack<Operand> stack)
-		{
-			Stack<Operand> nextStack = new Stack<Operand>();
-			foreach (Operand operand in stack)
+			while (operandStack.Count > 0)
 			{
-				Operand temp = methodCompiler.CreateTemporary(operand.Type);
-				nextStack.Push(temp);
-				operandStack.Pop();
-				ctx.AppendInstruction(IR.Instruction.MoveInstruction, temp, operand);
+				var operand = operandStack.Pop();
+				var destination = joinStack.Pop();
+				context.InsertBefore().SetInstruction(IR.Instruction.MoveInstruction, destination, operand);
 			}
-
-			if (nextStack.Count > 0)
-				foreach (BasicBlock nextBlock in block.NextBlocks)
-					initialStack[nextBlock.Sequence] = GetCurrentStack(nextStack);
 		}
 
 		/// <summary>
@@ -273,11 +209,16 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="currentStack">The current stack.</param>
 		private static void PushResultOperands(Context ctx, Stack<Operand> currentStack)
 		{
-			if ((ctx.Instruction as ICILInstruction).PushResult)
-				foreach (Operand operand in ctx.Results)
-					currentStack.Push(operand);
+			if (!(ctx.Instruction as ICILInstruction).PushResult)
+				return;
+
+			foreach (Operand operand in ctx.Results)
+				currentStack.Push(operand);
 		}
 
-		#endregion
+		public string Name
+		{
+			get { return @"OperandDeterminationStage"; }
+		}
 	}
 }
