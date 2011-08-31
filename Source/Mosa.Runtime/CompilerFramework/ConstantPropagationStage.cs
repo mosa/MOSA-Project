@@ -13,6 +13,7 @@ using System.Diagnostics;
 using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Metadata;
+using Mosa.Runtime.CompilerFramework.IR;
 
 namespace Mosa.Runtime.CompilerFramework
 {
@@ -29,15 +30,34 @@ namespace Mosa.Runtime.CompilerFramework
 	/// </remarks>
 	public sealed class ConstantPropagationStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
 	{
+		public enum PropagationStage
+		{
+			PreFolding,
+			PostFolding,
+		}
+
+		private PropagationStage stage = PropagationStage.PreFolding;
+		private HashSet<int> propagated = new HashSet<int>();
+
 		#region IPipelineStage Members
 
 		/// <summary>
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
 		/// <value>The name of the compilation stage.</value>
-		string IPipelineStage.Name { get { return @"ConstantPropagationStage"; } }
+		string IPipelineStage.Name { get { return @"ConstantPropagationStage [" + stage.ToString() + "]"; } }
 
 		#endregion // IPipelineStage Members
+
+		public ConstantPropagationStage() : this(PropagationStage.PreFolding)
+		{
+
+		}
+
+		public ConstantPropagationStage(PropagationStage stage)
+		{
+			this.stage = stage;
+		}
 
 		#region IMethodCompilerStage Members
 
@@ -52,32 +72,29 @@ namespace Mosa.Runtime.CompilerFramework
 
 			foreach (BasicBlock block in basicBlocks)
 			{
+				if (block == this.FindBlock(-1) || block == this.FindBlock(int.MaxValue))
+					continue;
+
 				for (Context ctx = new Context(instructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
 				{
-					if (ctx.Instruction is IR.MoveInstruction || ctx.Instruction is CIL.StlocInstruction)
-					{
-						if (ctx.Operand1 is ConstantOperand)
-						{
-							var sop = ctx.Result as SsaOperand;
+					//if (this.propagated.Contains(ctx.Index))
+					//	continue;
 
-							if (sop != null && sop.Operand is StackOperand)
-							{
-								if (!this.CheckResultsAreBuiltin(sop))
-								{
-									this.ReplaceUses(sop, ctx.Operand1 as ConstantOperand);
-									remove = true;
-								}
-							}
-						}
-					}
+					if (!(ctx.Instruction is IR.MoveInstruction || ctx.Instruction is CIL.StlocInstruction))
+						continue;
 
-					// Shall we remove this instruction?
-					if (remove)
-					{
-						ctx.Remove();
-						remove = false;
-					}
+					if (!(ctx.Operand1 is ConstantOperand))
+						continue;
 
+					var sop = ctx.Result as SsaOperand;
+					if (sop == null || !(sop.Operand is StackOperand))
+						continue;
+					
+					if (!this.CheckResultsAreBuiltin(sop))
+						continue;
+
+					this.ReplaceUses(sop, ctx.Operand1 as ConstantOperand);
+					ctx.SetInstruction(Instruction.NopInstruction);
 				}
 			}
 		}
@@ -95,15 +112,48 @@ namespace Mosa.Runtime.CompilerFramework
 					if (ctx.Result == null)
 						continue;
 
+					if (!this.InstructionUsesOperand(ctx, sop))
+						continue;
+
 					var ssaOp = ctx.Result as SsaOperand;
 					if (ssaOp != null)
 					{
-						if (!(ssaOp.Operand.Type is BuiltInSigType))
-							return true;
+						if (this.CheckOperand(ssaOp.Operand))
+							continue;
+						return false;
 					}
-					else if (!(ctx.Result.Type is BuiltInSigType))
-						return true;
+					else if (this.CheckOperand(ctx.Result))
+						continue;
+					return false;
 				}
+			}
+			return true;
+		}
+
+		/// <summary>
+		/// Checks the operand.
+		/// </summary>
+		/// <param name="operand">The operand.</param>
+		/// <returns></returns>
+		private bool CheckOperand(Operand operand)
+		{
+			return ((operand.Type is BuiltInSigType || operand.Type.GetType() == typeof(SigType)) && IsBuiltinType(operand.Type));
+		}
+
+		/// <summary>
+		/// Instructions the uses operand.
+		/// </summary>
+		/// <param name="ctx">The CTX.</param>
+		/// <param name="sop">The sop.</param>
+		/// <returns></returns>
+		private bool InstructionUsesOperand(Context ctx, SsaOperand sop)
+		{
+			foreach (var operand in ctx.Operands)
+			{
+				if (!(operand is SsaOperand))
+					continue;
+				var ssaOp = operand as SsaOperand;
+				return sop.Operand == ssaOp.Operand && sop.SsaVersion == ssaOp.SsaVersion;
 			}
 			return false;
 		}
@@ -129,6 +179,7 @@ namespace Mosa.Runtime.CompilerFramework
 						if (op.Operand == sop.Operand && op.SsaVersion == sop.SsaVersion)
 						{
 							ctx.SetOperand(i, constantOperand);
+							this.propagated.Add(ctx.Index);
 						}
 					}
 				}
@@ -150,11 +201,9 @@ namespace Mosa.Runtime.CompilerFramework
 				type.Type == CilElementType.I1 ||
 				type.Type == CilElementType.I2 ||
 				type.Type == CilElementType.I4 ||
-				type.Type == CilElementType.I8 ||
 				type.Type == CilElementType.U1 ||
 				type.Type == CilElementType.U2 ||
-				type.Type == CilElementType.U4 ||
-				type.Type == CilElementType.U8;
+				type.Type == CilElementType.U4;
 		}
 
 		#endregion // IMethodCompilerStage Members
