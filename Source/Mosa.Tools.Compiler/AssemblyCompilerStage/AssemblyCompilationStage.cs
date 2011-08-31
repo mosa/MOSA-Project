@@ -19,7 +19,7 @@ using Mosa.Runtime.Metadata.Loader;
 using Mosa.Compiler.Pdb;
 using Mosa.Tools.Compiler.TypeInitializers;
 
-namespace Mosa.Tools.Compiler
+namespace Mosa.Tools.Compiler.AssemblyCompilerStage
 {
 	public class AssemblyCompilationStage : BaseAssemblyCompilerStage, IAssemblyCompilerStage
 	{

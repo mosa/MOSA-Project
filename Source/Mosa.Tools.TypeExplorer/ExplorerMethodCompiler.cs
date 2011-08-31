@@ -21,7 +21,7 @@ using Mosa.Runtime.InternalTrace;
 using Mosa.Runtime.CompilerFramework.CIL;
 using Mosa.Runtime.CompilerFramework.IR;
 using Mosa.Tools.Compiler;
-using Mosa.Tools.Compiler.Stage;
+using Mosa.Tools.Compiler.MethodCompilerStage;
 
 namespace Mosa.Tools.TypeExplorer
 {

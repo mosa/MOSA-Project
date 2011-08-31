@@ -19,7 +19,7 @@ using Mosa.Compiler.Linker;
 using Mosa.Compiler.Linker.PE;
 using Mosa.Compiler.FileFormat.PE;
 
-namespace Mosa.Tools.Compiler
+namespace Mosa.Tools.Compiler.AssemblyCompilerStage
 {
 	/// <summary>
 	///  Writes the CIL header into the generated binary.

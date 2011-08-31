@@ -192,6 +192,15 @@ namespace Mosa.Runtime.CompilerFramework
 			return labels[label];
 		}
 
+		/// <summary>
+		/// Gets the current position.
+		/// </summary>
+		/// <value>The current position.</value>
+		public long CurrentPosition
+		{
+			get { return codeStream.Position; }
+		}
+
 		#endregion // ICodeEmitter Members
 
 	}

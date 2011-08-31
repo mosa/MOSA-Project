@@ -10,18 +10,18 @@
 using System;
 
 using Mosa.Runtime.CompilerFramework;
+using Mosa.Tools.Compiler.MethodCompilerStage;
+
 using CIL = Mosa.Runtime.CompilerFramework.CIL;
 
 using NDesk.Options;
 
-namespace Mosa.Tools.Compiler.Stage
+namespace Mosa.Tools.Compiler.MethodCompilerStage
 {
 	/// <summary>
 	/// Wraps the constant folding optimization stage and adds an option to disable it.
-	/// 
-	/// TODO: put this wrapper stage somewhere in the actual pipeline.
 	/// </summary>
-	public class InstructionStatisticsWrapper : MethodCompilerStageWrapper<ConstantFoldingStage>
+	public class InstructionStatisticsWrapper : MethodCompilerStageWrapper<InstructionStatisticsStage>
 	{
 		/// <summary>
 		/// Initializes a new instance of the ConstantFoldingWrapper class.

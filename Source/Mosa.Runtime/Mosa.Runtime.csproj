@@ -101,6 +101,7 @@
     <Compile Include="CompilerFramework\Operands\SsaOperand.cs" />
     <Compile Include="CompilerFramework\Operands\VirtualRegisterOperand.cs" />
     <Compile Include="CompilerFramework\PhiPlacementStage.cs" />
+    <Compile Include="CompilerFramework\StaticAllocationResolutionStage.cs" />
     <Compile Include="CompilerFramework\TypeLayoutStage.cs" />
     <Compile Include="CompilerFramework\IR\ThrowInstruction.cs" />
     <Compile Include="CompilerFramework\GenericsResolverStage.cs" />

@@ -13,7 +13,7 @@ using Mosa.Runtime.CompilerFramework;
 
 using NDesk.Options;
 
-namespace Mosa.Tools.Compiler.Stage
+namespace Mosa.Tools.Compiler.MethodCompilerStage
 {
 	/// <summary>
 	/// Abstract base class for method compiler stage wrappers.

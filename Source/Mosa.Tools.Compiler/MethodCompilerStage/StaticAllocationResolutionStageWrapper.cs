@@ -7,12 +7,16 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-namespace Mosa.Tools.Compiler.Stage
+using NDesk.Options;
+
+using Mosa.Runtime.CompilerFramework;
+
+namespace Mosa.Tools.Compiler.MethodCompilerStage
 {
-	using Mosa.Runtime.CompilerFramework;
 
 	public class StaticAllocationResolutionStageWrapper : MethodCompilerStageWrapper<StaticAllocationResolutionStage>
 	{
+		// TODO: Remove instance usage; it is not thread safe
 		public static readonly StaticAllocationResolutionStageWrapper Instance = new StaticAllocationResolutionStageWrapper();
 
 		private StaticAllocationResolutionStageWrapper()
@@ -20,7 +24,7 @@ namespace Mosa.Tools.Compiler.Stage
 			this.Enabled = false;
 		}
 
-		public override void AddOptions(NDesk.Options.OptionSet optionSet)
+		public override void AddOptions(OptionSet optionSet)
 		{
 			optionSet.Add(
 				@"sa|enable-static-alloc",

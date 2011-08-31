@@ -23,8 +23,10 @@ using Mosa.Runtime.TypeSystem;
 using Mosa.Compiler.Linker;
 using Mosa.Tools.Compiler.Boot;
 using Mosa.Tools.Compiler.Linker;
-using Mosa.Tools.Compiler.Stage;
 using Mosa.Runtime.InternalTrace;
+using Mosa.Tools.Compiler.AssemblyCompilerStage;
+using Mosa.Tools.Compiler.MethodCompilerStage;
+using Mosa.Tools.Compiler.TypeInitializers;
 
 namespace Mosa.Tools.Compiler
 {
@@ -292,11 +294,9 @@ namespace Mosa.Tools.Compiler
 				aot.Pipeline.AddRange(new IAssemblyCompilerStage[] 
 				{
 					this.bootFormatStage,
-					//new InterruptBuilderStage(),						
 					new AssemblyCompilationStage(), 
-					//new FakeSystemObjectGenerationStage(),
 					new MethodCompilerSchedulerStage(),
-					new TypeInitializers.TypeInitializerSchedulerStage(),
+					new TypeInitializerSchedulerStage(),
 					this.bootFormatStage,
 					new CilHeaderBuilderStage(),
 					new ObjectFileLayoutStage(),

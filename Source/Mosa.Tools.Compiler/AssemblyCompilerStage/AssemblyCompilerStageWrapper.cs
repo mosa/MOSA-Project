@@ -11,7 +11,7 @@ using Mosa.Runtime.CompilerFramework;
 
 using NDesk.Options;
 
-namespace Mosa.Tools.Compiler
+namespace Mosa.Tools.Compiler.AssemblyCompilerStage
 {
 	/// <summary>
 	/// Abstract base class for assembly compiler stage wrappers.

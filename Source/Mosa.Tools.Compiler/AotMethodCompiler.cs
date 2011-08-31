@@ -17,7 +17,9 @@ using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.InternalTrace;
-using Mosa.Tools.Compiler.Stage;
+using Mosa.Tools.Compiler.AssemblyCompilerStage;
+using Mosa.Tools.Compiler.MethodCompilerStage;
+using Mosa.Tools.Compiler.TypeInitializers;
 
 namespace Mosa.Tools.Compiler
 {
@@ -88,7 +90,7 @@ namespace Mosa.Tools.Compiler
 			const MethodAttributes attrs = MethodAttributes.SpecialName | MethodAttributes.RTSpecialName | MethodAttributes.Static;
 			if ((Method.Attributes & attrs) == attrs && Method.Name == ".cctor")
 			{
-				var tiss = this.assemblyCompiler.Pipeline.FindFirst<TypeInitializers.ITypeInitializerSchedulerStage>();
+				var tiss = this.assemblyCompiler.Pipeline.FindFirst<ITypeInitializerSchedulerStage>();
 				tiss.Schedule(Method);
 			}
 

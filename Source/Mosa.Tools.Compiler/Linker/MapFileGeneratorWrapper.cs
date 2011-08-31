@@ -63,15 +63,15 @@ namespace Mosa.Tools.Compiler.Linker
 		/// </summary>
 		public void Run()
 		{
-			if (this.mapFile != null)
+			if (mapFile != null)
 			{
 				try
 				{
-					using (FileStream fs = new FileStream(this.mapFile, FileMode.Create, FileAccess.Write, FileShare.Read))
+					using (FileStream fs = new FileStream(mapFile, FileMode.Create, FileAccess.Write, FileShare.Read))
 					using (StreamWriter writer = new StreamWriter(fs, Encoding.UTF8))
 					{
 						IAssemblyCompilerStage mapGenerator = new MapFileGenerationStage(writer);
-						mapGenerator.Setup(this.compiler);
+						mapGenerator.Setup(compiler);
 						mapGenerator.Run();
 					}
 				}

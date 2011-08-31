@@ -18,7 +18,7 @@ using Mosa.Compiler.Linker;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.CompilerFramework.Operands;
 
-namespace Mosa.Tools.Compiler.Stage
+namespace Mosa.Runtime.CompilerFramework
 {
 	public class StaticAllocationResolutionStage : BaseMethodCompilerStage, IMethodCompilerStage
 	{

@@ -13,7 +13,7 @@ using System.Collections.Generic;
 using Mosa.Tools.Compiler;
 using Mosa.Runtime.CompilerFramework;
 
-namespace Mosa.Tools.Compiler.Stage
+namespace Mosa.Tools.Compiler.MethodCompilerStage
 {
 	/// <summary>
 	/// This stage just saves statistics about the code we're compiling, for example
@@ -24,35 +24,37 @@ namespace Mosa.Tools.Compiler.Stage
 		/// <summary>
 		/// 
 		/// </summary>
-		private static DateTime _start;
+		private static DateTime start;
 		/// <summary>
 		/// 
 		/// </summary>
-		private static DateTime _end;
+		private static DateTime end;
+
 		/// <summary>
 		/// A reference to the running instance of this stage
 		/// </summary>
+		// TODO: Remove instance usage; it is not thread safe
 		public static readonly InstructionStatisticsStage Instance = new InstructionStatisticsStage();
 
 		/// <summary>
-		/// Every instructiontype is stored here to be able to count the number of compiled instructiontypes.
+		/// Every instruction type is stored here to be able to count the number of compiled instruction types.
 		/// </summary>
-		private readonly Dictionary<Type, int> _disjointInstructions = new Dictionary<Type, int>();
+		private readonly Dictionary<Type, int> disjointInstructions = new Dictionary<Type, int>();
 
 		/// <summary>
 		/// Every namespace is stored here to be able to iterate over all used
-		/// _namespaces (IL, IR, x86, etc)
+		/// namespaces (IL, IR, x86, etc)
 		/// </summary>
-		private readonly Dictionary<string, int> _namespaces = new Dictionary<string, int>();
+		private readonly Dictionary<string, int> namespaces = new Dictionary<string, int>();
 
 		/// <summary>
 		/// Total number of compiled instructions.
 		/// </summary>
-		private uint _numberOfInstructions;
+		private uint numberOfInstructions;
 		/// <summary>
 		/// 
 		/// </summary>
-		private uint _numberOfMethods;
+		private uint numberOfMethods;
 
 		/// <summary>
 		/// Retrieves the name of the compilation stage.
@@ -70,18 +72,18 @@ namespace Mosa.Tools.Compiler.Stage
 				return;
 
 			// Count disjoint instructions
-			if (_disjointInstructions.ContainsKey(ctx.Instruction.GetType()))
-				++_disjointInstructions[ctx.Instruction.GetType()];
+			if (disjointInstructions.ContainsKey(ctx.Instruction.GetType()))
+				++disjointInstructions[ctx.Instruction.GetType()];
 			else
-				_disjointInstructions.Add(ctx.Instruction.GetType(), 1);
+				disjointInstructions.Add(ctx.Instruction.GetType(), 1);
 
-			// Count _namespaces
-			if (_namespaces.ContainsKey(ctx.Instruction.GetType().Namespace))
-				++_namespaces[ctx.Instruction.GetType().Namespace];
+			// Count namespaces
+			if (namespaces.ContainsKey(ctx.Instruction.GetType().Namespace))
+				++namespaces[ctx.Instruction.GetType().Namespace];
 			else
-				_namespaces.Add(ctx.Instruction.GetType().Namespace, 1);
+				namespaces.Add(ctx.Instruction.GetType().Namespace, 1);
 
-			++_numberOfInstructions;
+			++numberOfInstructions;
 		}
 
 		/// <summary>
@@ -89,7 +91,7 @@ namespace Mosa.Tools.Compiler.Stage
 		/// </summary>
 		public void Run()
 		{
-			_numberOfMethods++;
+			numberOfMethods++;
 
 			foreach (BasicBlock block in basicBlocks)
 				for (Context ctx = CreateContext(block); !ctx.EndOfInstruction; ctx.GotoNext())
@@ -104,23 +106,23 @@ namespace Mosa.Tools.Compiler.Stage
 			System.IO.StreamWriter writer = System.IO.File.CreateText("statistics.txt");
 			writer.WriteLine("Instruction statistics:");
 			writer.WriteLine("-----------------------");
-			writer.WriteLine("  - Total number of methods:\t\t\t {0}", _numberOfMethods);
-			writer.WriteLine("  - Total number of instructions:\t\t\t {0}", _numberOfInstructions);
-			writer.WriteLine("  - Number of disjoint instructions:\t\t\t {0}", _disjointInstructions.Count);
-			writer.WriteLine("  - Ratio of disjoint instructions to total number:\t {0}", string.Format("{0:.00}%", ((double)_disjointInstructions.Count / (double)_numberOfInstructions)).Substring(1));
+			writer.WriteLine("  - Total number of methods:\t\t\t {0}", numberOfMethods);
+			writer.WriteLine("  - Total number of instructions:\t\t\t {0}", numberOfInstructions);
+			writer.WriteLine("  - Number of disjoint instructions:\t\t\t {0}", disjointInstructions.Count);
+			writer.WriteLine("  - Ratio of disjoint instructions to total number:\t {0}", string.Format("{0:.00}%", ((double)disjointInstructions.Count / (double)numberOfInstructions)).Substring(1));
 			writer.WriteLine();
 			writer.WriteLine("Namespace statistics:");
 			writer.WriteLine("---------------------");
 			writer.WriteLine("  - Number of instructions visited in namespace:");
-			foreach (string name in _namespaces.Keys)
+			
+			foreach (string name in namespaces.Keys)
 			{
 				string n = name.Substring(name.LastIndexOf('.') + 1, name.Length - name.LastIndexOf('.') - 1);
-				string percentage = string.Format("{00:.00}%", (double)((double)_namespaces[name] / (double)_numberOfInstructions) * 100);
-				writer.WriteLine("    + {0}\t: {1}\t[{2}]", n, _namespaces[name], percentage.Substring(1));
+				string percentage = string.Format("{00:.00}%", (double)((double)namespaces[name] / (double)numberOfInstructions) * 100);
+				writer.WriteLine("    + {0}\t: {1}\t[{2}]", n, namespaces[name], percentage.Substring(1));
 			}
 			writer.WriteLine();
-			writer.WriteLine("Compilation time: {0}", _end - _start);
-
+			writer.WriteLine("Compilation time: {0}", end - start);
 
 			writer.Close();
 		}
@@ -130,7 +132,7 @@ namespace Mosa.Tools.Compiler.Stage
 		/// </summary>
 		public void Start()
 		{
-			_start = DateTime.Now;
+			start = DateTime.Now;
 		}
 
 		/// <summary>
@@ -138,7 +140,7 @@ namespace Mosa.Tools.Compiler.Stage
 		/// </summary>
 		public void End()
 		{
-			_end = DateTime.Now;
+			end = DateTime.Now;
 		}
 	}
 }

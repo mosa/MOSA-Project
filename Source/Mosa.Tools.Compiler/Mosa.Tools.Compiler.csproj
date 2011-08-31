@@ -66,8 +66,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AotAssemblyCompiler.cs" />
-    <Compile Include="AssemblyCompilationStage.cs" />
-    <Compile Include="ConstantFoldingWrapper.cs" />
+    <Compile Include="AssemblyCompilerStage\AssemblyCompilationStage.cs" />
+    <Compile Include="MethodCompilerStage\ConstantFoldingWrapper.cs" />
     <Compile Include="Linker\Elf64LinkerStage.cs" />
     <Compile Include="Linker\Elf32LinkerStage.cs" />
     <Compile Include="Linker\Elf32LinkerWrapper.cs" />
@@ -78,8 +78,8 @@
     <Compile Include="Linker\ObjectFileLayoutStage.cs" />
     <Compile Include="Linker\PortableExecutableLinkerStage.cs" />
     <Compile Include="Linker\PortableExecutableLinkerWrapper.cs" />
-    <Compile Include="Stage\MethodCompilerStageWrapper.cs" />
-    <Compile Include="RegisterAllocatorSelector.cs" />
+    <Compile Include="MethodCompilerStage\MethodCompilerStageWrapper.cs" />
+    <Compile Include="MethodCompilerStage\RegisterAllocatorSelector.cs" />
     <Compile Include="AotCompiler.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -89,7 +89,7 @@
     <Compile Include="ArchitectureSelector.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="AssemblyCompilerStageWrapper.cs">
+    <Compile Include="AssemblyCompilerStage\AssemblyCompilerStageWrapper.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Compiler.cs">
@@ -98,15 +98,14 @@
     <Compile Include="IHasOptions.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="InstructionSchedulingWrapper.cs" />
-    <Compile Include="Stage\InstructionStatisticsStage.cs">
+    <Compile Include="MethodCompilerStage\InstructionStatisticsStage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Stage\InstructionStatisticsWrapper.cs" />
+    <Compile Include="MethodCompilerStage\InstructionStatisticsWrapper.cs" />
     <Compile Include="Linker\MapFileGeneratorWrapper.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CilHeaderBuilderStage.cs" />
+    <Compile Include="AssemblyCompilerStage\CilHeaderBuilderStage.cs" />
     <Compile Include="Options.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -119,9 +118,7 @@
     <Compile Include="Boot\Multiboot0695AssemblyStage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Stage\FakeSystemObjectGenerationStage.cs" />
-    <Compile Include="Stage\StaticAllocationResolutionStageWrapper.cs" />
-    <Compile Include="Stage\StaticAllocationResolutionStage.cs" />
+    <Compile Include="MethodCompilerStage\StaticAllocationResolutionStageWrapper.cs" />
     <Compile Include="TypeInitializers\ITypeInitializerSchedulerStage.cs" />
     <Compile Include="TypeInitializers\TypeInitializerSchedulerStage.cs">
       <SubType>Code</SubType>

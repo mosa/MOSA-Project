@@ -11,6 +11,7 @@ using System;
 
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.Linker.PE;
+using Mosa.Tools.Compiler.AssemblyCompilerStage;
 
 using NDesk.Options;
 

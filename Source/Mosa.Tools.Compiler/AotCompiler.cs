@@ -12,7 +12,7 @@ using System.Diagnostics;
 
 using Mosa.Runtime;
 using Mosa.Runtime.CompilerFramework;
-using Mosa.Tools.Compiler.Stage;
+using Mosa.Tools.Compiler.MethodCompilerStage;
 using Mosa.Compiler.Linker;
 using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime.TypeSystem;
@@ -62,11 +62,13 @@ namespace Mosa.Tools.Compiler
 		{
 			//FlowGraphVisualizationStage.Instance.Open();
 			InstructionStatisticsStage.Instance.Start();
+		
 			// Build the default assembly compiler pipeline
 			this.Architecture.ExtendAssemblyCompilerPipeline(this.Pipeline);
 
 			// Run the compiler
 			base.Compile();
+			
 			InstructionStatisticsStage.Instance.End();
 			InstructionStatisticsStage.Instance.PrintStatistics();
 			//FlowGraphVisualizationStage.Instance.Close();

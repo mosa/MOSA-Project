@@ -9,6 +9,7 @@
 
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.Linker.Elf32;
+using Mosa.Tools.Compiler.AssemblyCompilerStage;
 
 using NDesk.Options;
 

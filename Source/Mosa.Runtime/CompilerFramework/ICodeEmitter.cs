@@ -26,7 +26,7 @@ namespace Mosa.Runtime.CompilerFramework
 	public interface ICodeEmitter : IDisposable
 	{
 		/// <summary>
-		/// Initializes the specified emittter.
+		/// Initializes the specified emitter.
 		/// </summary>
 		/// <param name="compiler">The compiler.</param>
 		/// <param name="codeStream">The code stream.</param>
@@ -50,6 +50,12 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <param name="label">The label.</param>
 		/// <returns></returns>
 		long GetPosition(int label);
+
+		/// <summary>
+		/// Gets the current position.
+		/// </summary>
+		/// <value>The current position.</value>
+		long CurrentPosition { get; }
 	}
 }
 

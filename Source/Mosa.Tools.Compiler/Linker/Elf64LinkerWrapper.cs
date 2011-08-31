@@ -11,6 +11,7 @@ using NDesk.Options;
 
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.Linker.Elf64;
+using Mosa.Tools.Compiler.AssemblyCompilerStage;
 
 namespace Mosa.Tools.Compiler.Linker
 {
