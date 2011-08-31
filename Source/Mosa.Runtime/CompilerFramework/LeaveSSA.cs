@@ -75,8 +75,8 @@ namespace Mosa.Runtime.CompilerFramework
 		/// Inserts the copy statement.
 		/// </summary>
 		/// <param name="predecessor">The predecessor.</param>
+		/// <param name="result">The result.</param>
 		/// <param name="operand">The operand.</param>
-		/// <param name="operand_2">The operand_2.</param>
 		private void InsertCopyStatement(BasicBlock predecessor, Operand result, Operand operand)
 		{
 			var context = new Context(this.instructionSet, predecessor);

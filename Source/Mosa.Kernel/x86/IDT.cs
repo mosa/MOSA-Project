@@ -18,7 +18,7 @@ namespace Mosa.Kernel.x86
 	{
 		public delegate void InterruptHandler(byte irq, byte error);
 
-		static private InterruptHandler interruptHandler;
+		private static InterruptHandler interruptHandler;
 
 		private static uint idtTable = 0x1411000;
 		private static uint idtEntries = idtTable + 6;
@@ -365,7 +365,9 @@ namespace Mosa.Kernel.x86
 		private static void ProcessInterrupt(uint edi, uint esi, uint ebp, uint esp, uint ebx, uint edx, uint ecx, uint eax, byte interrupt, byte errorCode)
 		{
 			if (interruptHandler != null)
+			{
 				interruptHandler(interrupt, errorCode);
+			}
 			else if (interrupt == 14)
 			{
 				// Page Fault!

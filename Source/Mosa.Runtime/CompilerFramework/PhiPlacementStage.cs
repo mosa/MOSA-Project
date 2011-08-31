@@ -153,7 +153,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Adds to assignments.
 		/// </summary>
-		/// <param name="context">The context.</param>
+		/// <param name="operand">The operand.</param>
 		/// <param name="block">The block.</param>
 		private void AddToAssignments(Operand operand, BasicBlock block)
 		{

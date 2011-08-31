@@ -322,6 +322,7 @@ namespace Mosa.HelloWorld
 		}
 
 		private static uint counter = 0;
+		
 
 		public static void ProcessInterrupt(byte interrupt, byte errorCode)
 		{

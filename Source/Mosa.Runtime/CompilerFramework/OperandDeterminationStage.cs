@@ -199,7 +199,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <param name="b">The b.</param>
 		/// <param name="operandStack">The operand stack.</param>
-		/// <param name="stack">The stack.</param>
+		/// <param name="joinStack">The join stack.</param>
 		private void CreateOutgoingMoves(BasicBlock b, Stack<Operand> operandStack, Stack<Operand> joinStack)
 		{
 
