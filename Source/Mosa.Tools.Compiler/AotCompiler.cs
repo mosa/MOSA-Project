@@ -10,6 +10,8 @@
 
 using System.Diagnostics;
 
+using NDesk.Options;
+
 using Mosa.Runtime;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Tools.Compiler.MethodCompilerStage;
@@ -35,6 +37,8 @@ namespace Mosa.Tools.Compiler
 	public sealed class AotCompiler : AssemblyCompiler
 	{
 
+		private OptionSet optionSet;
+
 		#region Construction
 
 		/// <summary>
@@ -42,9 +46,10 @@ namespace Mosa.Tools.Compiler
 		/// </summary>
 		/// <param name="architecture">The target compilation architecture.</param>
 		/// <param name="typeSystem">The type system.</param>
-		public AotCompiler(IArchitecture architecture, ITypeSystem typeSystem, ITypeLayout typeLayout, IInternalTrace internalLog) :
+		public AotCompiler(IArchitecture architecture, ITypeSystem typeSystem, ITypeLayout typeLayout, IInternalTrace internalLog, OptionSet optionSet) :
 			base(architecture, typeSystem, typeLayout, internalLog)
 		{
+			this.optionSet = optionSet;
 		}
 
 		#endregion // Construction
@@ -61,7 +66,7 @@ namespace Mosa.Tools.Compiler
 		public void Run()
 		{
 			//FlowGraphVisualizationStage.Instance.Open();
-			InstructionStatisticsStage.Instance.Start();
+			//InstructionStatisticsStage.Instance.Start();
 		
 			// Build the default assembly compiler pipeline
 			this.Architecture.ExtendAssemblyCompilerPipeline(this.Pipeline);
@@ -69,8 +74,8 @@ namespace Mosa.Tools.Compiler
 			// Run the compiler
 			base.Compile();
 			
-			InstructionStatisticsStage.Instance.End();
-			InstructionStatisticsStage.Instance.PrintStatistics();
+			//InstructionStatisticsStage.Instance.End();
+			//InstructionStatisticsStage.Instance.PrintStatistics();
 			//FlowGraphVisualizationStage.Instance.Close();
 		}
 

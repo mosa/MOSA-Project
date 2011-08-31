@@ -26,8 +26,9 @@ namespace Mosa.Tools.Compiler.MethodCompilerStage
 		/// <summary>
 		/// Initializes a new instance of the ConstantFoldingWrapper class.
 		/// </summary>
-		public InstructionStatisticsWrapper()
+		public InstructionStatisticsWrapper(OptionSet optionSet)
 		{
+			AddOptions(optionSet);
 		}
 
 		/// <summary>

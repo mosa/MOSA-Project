@@ -67,7 +67,6 @@
   <ItemGroup>
     <Compile Include="AotAssemblyCompiler.cs" />
     <Compile Include="AssemblyCompilerStage\AssemblyCompilationStage.cs" />
-    <Compile Include="MethodCompilerStage\ConstantFoldingWrapper.cs" />
     <Compile Include="Linker\Elf64LinkerStage.cs" />
     <Compile Include="Linker\Elf32LinkerStage.cs" />
     <Compile Include="Linker\Elf32LinkerWrapper.cs" />

@@ -31,12 +31,6 @@ namespace Mosa.Tools.Compiler.MethodCompilerStage
 		private static DateTime end;
 
 		/// <summary>
-		/// A reference to the running instance of this stage
-		/// </summary>
-		// TODO: Remove instance usage; it is not thread safe
-		public static readonly InstructionStatisticsStage Instance = new InstructionStatisticsStage();
-
-		/// <summary>
 		/// Every instruction type is stored here to be able to count the number of compiled instruction types.
 		/// </summary>
 		private readonly Dictionary<Type, int> disjointInstructions = new Dictionary<Type, int>();

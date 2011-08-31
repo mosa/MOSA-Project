@@ -107,7 +107,7 @@ namespace Mosa.Tools.Compiler
 				{
 					if (v != null)
 					{
-						// only show _header and exit
+						// only show header and exit
 						Environment.Exit(0);
 					}
 				});
@@ -172,7 +172,7 @@ namespace Mosa.Tools.Compiler
 		{
 			// always print _header with version information
 			Console.WriteLine("MOSA AOT Compiler, Version {0}.{1} '{2}'", majorVersion, minorVersion, codeName);
-			Console.WriteLine("Copyright 2009 by the MOSA Project. Licensed under the New BSD License.");
+			Console.WriteLine("Copyright 2011 by the MOSA Project. Licensed under the New BSD License.");
 			Console.WriteLine("Copyright 2008 by Novell. NDesk.Options is released under the MIT/X11 license.");
 			Console.WriteLine();
 			Console.WriteLine("Parsing options...");
@@ -229,21 +229,21 @@ namespace Mosa.Tools.Compiler
 			Console.WriteLine("Compiling ...");
 
 			DateTime start = DateTime.Now;
-			Compile();
-			DateTime end = DateTime.Now;
-
-			TimeSpan time = end - start;
-			Console.WriteLine();
-			Console.WriteLine("Compilation time: " + time);
 
 			//try
 			//{
-			//    Compile();
+			Compile();
 			//}
 			//catch (CompilationException ce)
 			//{
 			//    this.ShowError(ce.Message);
 			//}
+
+			DateTime end = DateTime.Now;
+
+			TimeSpan time = end - start;
+			Console.WriteLine();
+			Console.WriteLine("Compilation time: " + time);
 		}
 
 		/// <summary>
@@ -289,7 +289,7 @@ namespace Mosa.Tools.Compiler
 			IInternalTrace internalLog = new BasicInternalTrace();
 
 			// Create the compiler
-			using (AotCompiler aot = new AotCompiler(this.architectureSelector.Architecture, typeSystem, typeLayout, internalLog))
+			using (AotCompiler aot = new AotCompiler(this.architectureSelector.Architecture, typeSystem, typeLayout, internalLog, optionSet))
 			{
 				aot.Pipeline.AddRange(new IAssemblyCompilerStage[] 
 				{
