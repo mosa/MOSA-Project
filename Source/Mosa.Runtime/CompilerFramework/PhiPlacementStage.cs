@@ -178,6 +178,7 @@ namespace Mosa.Runtime.CompilerFramework
 			context.SetResult(variable);
 			for (var i = 0; i < block.PreviousBlocks.Count; ++i)
 				context.SetOperand(i, variable);
+			context.OperandCount = (byte)block.PreviousBlocks.Count;
 		}
 
 		/// <summary>

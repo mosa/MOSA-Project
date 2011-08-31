@@ -53,8 +53,11 @@ namespace Mosa.Test.System
 				new DominanceCalculationStage(),
 				new PhiPlacementStage(),
 				new EnterSSA(),
-				new ConstantPropagationStage(),
-				//new ConstantFoldingStage(),
+				
+				new ConstantPropagationStage(ConstantPropagationStage.PropagationStage.PreFolding),
+				new ConstantFoldingStage(),
+				new ConstantPropagationStage(ConstantPropagationStage.PropagationStage.PostFolding),
+
 				new LeaveSSA(),
 				new StackLayoutStage(),
 				new PlatformStubStage(),

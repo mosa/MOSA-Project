@@ -57,8 +57,9 @@ namespace Mosa.Tools.Compiler
 					new PhiPlacementStage(),
 					new EnterSSA(),
 
-					new ConstantPropagationStage(),
+					new ConstantPropagationStage(ConstantPropagationStage.PropagationStage.PreFolding),
 					new ConstantFoldingStage(),
+					new ConstantPropagationStage(ConstantPropagationStage.PropagationStage.PostFolding),
 
 					new LeaveSSA(),
 					new StrengthReductionStage(),

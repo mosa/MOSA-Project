@@ -40,20 +40,22 @@ namespace Mosa.Tools.TypeExplorer
 				new OperandDeterminationStage(),
 				new StaticAllocationResolutionStage(),
 				new CILTransformationStage(),
-				//new CILLeakGuardStage() { MustThrowCompilationException = true },
+				
 				new DominanceCalculationStage(),
 				new PhiPlacementStage(),
 				new EnterSSA(),
-				new ConstantPropagationStage(),
+
+				new ConstantPropagationStage(ConstantPropagationStage.PropagationStage.PreFolding),
 				new ConstantFoldingStage(),
+				new ConstantPropagationStage(ConstantPropagationStage.PropagationStage.PostFolding),
+
 				new LeaveSSA(),
 				new StackLayoutStage(),
 				new PlatformStubStage(),
-				//new BlockReductionStage(),
+
 				new LoopAwareBlockOrderStage(),
-				//new SimpleTraceBlockOrderStage(),
-				//new ReverseBlockOrderStage(),  // reverse all the basic blocks and see if it breaks anything
-				//new BasicBlockOrderStage()	
+				new SimpleTraceBlockOrderStage(),
+				new ReverseBlockOrderStage(),  // reverse all the basic blocks and see if it breaks anything
 				new CodeGenerationStage(),
 				new ExceptionLayoutStage(),
 			});

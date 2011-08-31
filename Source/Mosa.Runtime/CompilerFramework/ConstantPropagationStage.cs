@@ -169,8 +169,6 @@ namespace Mosa.Runtime.CompilerFramework
 			{
 				for (Context ctx = new Context(instructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
 				{
-					if (ctx.Instruction is IR.AddressOfInstruction)
-						continue;
 					for (var i = 0; i < ctx.OperandCount; ++i)
 					{
 						var op = ctx.GetOperand(i) as SsaOperand;
