@@ -14,7 +14,7 @@
 	<target name="build">
 	    <csc target="library" output="${outputDirectory}/Mosa.Kernel.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
-                    <include name="KernelGCMemory.cs"/>
+                    <include name="KernelMemory.cs"/>
                     <include name="Runtime.cs"/>
                     <include name="x86/CMOS.cs"/>
                     <include name="x86/Colors.cs"/>
