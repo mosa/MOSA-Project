@@ -99,7 +99,6 @@
                     <include name="PCI/AddressType.cs"/>
                     <include name="PCI/BaseAddress.cs"/>
                     <include name="PCI/ClassCodeTable.cs"/>
-                    <include name="PCI/DeviceTable.cs"/>
                     <include name="PCI/SubClassCodeTable.cs"/>
                     <include name="VHD.cs"/>
 		</sources>

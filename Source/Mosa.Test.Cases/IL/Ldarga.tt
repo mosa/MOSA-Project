@@ -20,26 +20,26 @@ namespace Mosa.Test.Cases.IL
 
 		#region CheckValue
 		<# foreach (KeyValuePair<string, string> number in NumbersWithChar) { #>
-
 		[Test]
 		public void LdargaCheckValue<#= number.Value #>([<#= number.Value #>]<#= number.Key #> a)
-		{
+		{<# if (number.Value[0] == 'R') { #>
+			if (<#= number.Key #>.IsNaN(a)) return;
+		<# } #>
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaCheckValue<#= number.Value #>", a, a));
 		}
 		<# } #>
-
 		#endregion
 
 		#region ChangeValue
 		<# foreach (KeyValuePair<string, string> number in Numbers) { #>
-
 		[Test]
 		public void LdargaChangeValue<#= number.Value #>([<#= number.Value #>]<#= number.Key #> a)
-		{
+		{<# if (number.Value[0] == 'R') { #>
+			if (<#= number.Key #>.IsNaN(a)) return;
+		<# } #>
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaChangeValue<#= number.Value #>", a, a));
 		}
 		<# } #>
-
 		#endregion
 	}
 }

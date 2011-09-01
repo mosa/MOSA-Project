@@ -53,7 +53,7 @@
         <target name="Mosa.Tools.MetadataExplorer" depends="init,Mosa.Runtime.Metadata,Mosa.Runtime.TypeSystem,"><nant buildfile="Mosa.Tools.MetadataExplorer/mosa.build"/></target>
         <target name="Mosa.Test.CodeDomCompiler" depends="init,"><nant buildfile="Mosa.Test.CodeDomCompiler/mosa.build"/></target>
         <target name="Mosa.Runtime.InternalTrace" depends="init,Mosa.Runtime.TypeSystem,"><nant buildfile="Mosa.Runtime.InternalTrace/mosa.build"/></target>
-        <target name="Mosa.CoolWorld" depends="init,Mosa.ClassLib,Mosa.Kernel,Korlib,"><nant buildfile="Mosa.CoolWorld/mosa.build"/></target>
+        <target name="Mosa.CoolWorld" depends="init,Mosa.ClassLib,Mosa.Kernel,Korlib,Mosa.Platform.x86.Intrinsic,"><nant buildfile="Mosa.CoolWorld/mosa.build"/></target>
 
         <target name="all" depends ="
 Mosa.Tools.Compiler,Mosa.HelloWorld,ToolsCreatePCIList,Mosa.Runtime,Mosa.ClassLib,Mosa.DeviceDrivers,Mosa.FileSystem,Mosa.DeviceSystem,Mosa.Emulator,Mosa.EmulatedDevices,Mosa.EmulatedKernel,Pictor,Pictor.UI,ToolsXmlTo,ToolsMakeIsoImage,Mosa.Tools.CreateBootImage,ToolsMonoUpdateProject,ToolsMonoCreateProject,Korlib,Mosa.Kernel,ToolsMonoUpdateSource,Mosa.Platform.x86.Intrinsic,Mosa.Platform.x86,Mosa.Runtime.Metadata,Mosa.Compiler.Pdb,Mosa.Compiler.FileFormat,Mosa.Compiler.Linker,Mosa.Compiler.Common,Mosa.Runtime.TypeSystem,Mosa.Tools.TypeExplorer,Mosa.Tools.MetadataExplorer,Mosa.Test.CodeDomCompiler,Mosa.Runtime.InternalTrace,Mosa.CoolWorld,"/>
