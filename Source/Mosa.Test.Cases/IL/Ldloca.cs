@@ -9,6 +9,9 @@
  */
  
 
+
+
+
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -78,12 +81,16 @@ namespace Mosa.Test.Cases.IL
 		[Test]
 		public void LdlocaCheckValueR4([R4]float a)
 		{
+			if (float.IsNaN(a)) return;
+		
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdlocaTests", "LdlocaCheckValueR4", a, a));
 		}
 		
 		[Test]
 		public void LdlocaCheckValueR8([R8]double a)
 		{
+			if (double.IsNaN(a)) return;
+		
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdlocaTests", "LdlocaCheckValueR8", a, a));
 		}
 		
