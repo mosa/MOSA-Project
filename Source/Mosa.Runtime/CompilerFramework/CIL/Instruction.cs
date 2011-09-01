@@ -202,7 +202,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 			/* 0x046 */
 			opcodeMap[(int)OpCode.Ldind_i1] = new LdobjInstruction(OpCode.Ldind_i1);
 			/* 0x047 */
-			opcodeMap[(int)OpCode.Ldind_u1] = new LdobjInstruction(OpCode.Ldind_i1);
+			opcodeMap[(int)OpCode.Ldind_u1] = new LdobjInstruction(OpCode.Ldind_u1);
 			/* 0x048 */
 			opcodeMap[(int)OpCode.Ldind_i2] = new LdobjInstruction(OpCode.Ldind_i2);
 			/* 0x049 */
