@@ -35,6 +35,11 @@ namespace Mosa.CoolWorld
 		/// <value>The resource manager.</value>
 		static public IResourceManager ResourceManager { get { return resourceManager; } }
 
+		static public StandardKeyboard Keyboard = null;
+		static public PCIController PCI = null;
+		static public PIC PIC = null;
+		static public PIT PIT = null;
+
 		/// <summary>
 		/// Initializes the Device Driver System.
 		/// </summary>
@@ -49,7 +54,7 @@ namespace Mosa.CoolWorld
 			// Setup hardware abstraction interface
 			IHardwareAbstraction hardwareAbstraction = new Mosa.CoolWorld.HAL.HardwareAbstraction();
 
-			// Set device driver system to the emulator port and memory methods
+			// Set device driver system to the hardware HAL
 			Mosa.DeviceSystem.HAL.SetHardwareAbstraction(hardwareAbstraction);
 
 			// Set the interrupt handler
@@ -70,9 +75,39 @@ namespace Mosa.CoolWorld
 			keyboardDeviceAttributes.IRQ = 1;
 			keyboardDeviceAttributes.Platforms = PlatformArchitecture.X86AndX64;
 
-			StandardKeyboard keyboard = new StandardKeyboard();
+			//[ISADeviceDriver(AutoLoad = true, BasePort = 0x0CF8, PortRange = 8, Platforms = PlatformArchitecture.X86AndX64)]
+			ISADeviceDriverAttribute pciAttributes = new ISADeviceDriverAttribute();
+			pciAttributes.AutoLoad = true;
+			pciAttributes.BasePort = 0x0CF8;
+			pciAttributes.PortRange = 8;
+			pciAttributes.Platforms = PlatformArchitecture.X86AndX64;
 
-			StartDevice(keyboardDeviceAttributes, keyboard);
+			//[ISADeviceDriver(AutoLoad = true, BasePort = 0x20, PortRange = 2, AltBasePort = 0xA0, AltPortRange = 2, Platforms = PlatformArchitecture.X86AndX64)]
+			ISADeviceDriverAttribute picAttributes = new ISADeviceDriverAttribute();
+			picAttributes.AutoLoad = true;
+			picAttributes.BasePort = 0x20;
+			picAttributes.PortRange = 2;
+			picAttributes.AltBasePort = 0xA0;
+			picAttributes.AltPortRange = 2;
+			picAttributes.Platforms = PlatformArchitecture.X86AndX64;
+
+			//[ISADeviceDriver(AutoLoad = true, BasePort = 0x40, PortRange = 4, IRQ = 0, Platforms = PlatformArchitecture.X86AndX64)]
+			ISADeviceDriverAttribute pitAttributes = new ISADeviceDriverAttribute();
+			pitAttributes.AutoLoad = true;
+			pitAttributes.BasePort = 0x40;
+			pitAttributes.PortRange = 4;
+			pitAttributes.IRQ = 0;
+			pitAttributes.Platforms = PlatformArchitecture.X86AndX64;
+
+			Keyboard = new StandardKeyboard();
+			PCI = new PCIController();
+			PIC = new PIC();
+			PIT = new PIT();
+
+			//StartDevice(picAttributes, PIC);
+			//StartDevice(pitAttributes, PIT);
+			StartDevice(pciAttributes, PCI);
+			StartDevice(keyboardDeviceAttributes, Keyboard);
 		}
 
 		/// <summary>

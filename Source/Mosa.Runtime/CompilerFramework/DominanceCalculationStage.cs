@@ -1,10 +1,10 @@
 ﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
+ * (c) 2011 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Simon Wollwage (rootnode) <rootnode@mosa-project.org>
  */
 
 using System;
@@ -44,6 +44,11 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		private BasicBlock[][] _domFrontierOfBlock;
 
+		/// <summary>
+		/// 
+		/// </summary>
+		private List<BasicBlock>[] _children;
+
 		#endregion // Data members
 
 		#region IPipelineStage Members
@@ -63,8 +68,18 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public void Run()
 		{
+			var entryBlock = this.FindBlock(-1);
+			var exitBlock = this.FindBlock(int.MaxValue);
+
+			entryBlock.NextBlocks.Add(exitBlock);
+			exitBlock.PreviousBlocks.Add(entryBlock);
+
 			CalculateDominance();
+			CalculateChildren();
 			CalculateDominanceFrontier();
+
+			entryBlock.NextBlocks.Remove(exitBlock);
+			exitBlock.PreviousBlocks.Remove(entryBlock);
 		}
 
 		/// <summary>
@@ -80,7 +95,8 @@ namespace Mosa.Runtime.CompilerFramework
 
 			// Allocate a dominance array
 			_doms = new BasicBlock[basicBlocks.Count];
-			_doms[0] = basicBlocks[0];
+			_children = new List<BasicBlock>[basicBlocks.Count];
+			_doms[0] = this.FindBlock(-1);
 
 			// Calculate the dominance
 			while (changed)
@@ -110,6 +126,22 @@ namespace Mosa.Runtime.CompilerFramework
 			}
 		}
 
+		private void CalculateChildren()
+		{
+			foreach (var x in this.basicBlocks)
+			{
+				var immediateDominator = (this as IDominanceProvider).GetImmediateDominator(x);
+				if (immediateDominator == null)
+					continue;
+
+				if (this._children[immediateDominator.Sequence] == null)
+					this._children[immediateDominator.Sequence] = new List<BasicBlock>();
+
+				if (!this._children[immediateDominator.Sequence].Contains(x) && x != immediateDominator)
+					this._children[immediateDominator.Sequence].Add(x);
+			}
+		}
+
 		/// <summary>
 		/// Calculates the dominance frontier of all Blocks in the block list.
 		/// </summary>
@@ -133,7 +165,8 @@ namespace Mosa.Runtime.CompilerFramework
 
 							if (!domFrontier.Contains(b))
 								domFrontier.Add(b);
-							runnerFrontier.Add(b);
+							if (!runnerFrontier.Contains(b))
+								runnerFrontier.Add(b);
 							runner = _doms[runner.Sequence];
 						}
 					}
@@ -145,11 +178,62 @@ namespace Mosa.Runtime.CompilerFramework
 			foreach (List<BasicBlock> frontier in domFrontiers)
 			{
 				if (frontier != null)
-					_domFrontierOfBlock[idx] = frontier.ToArray();
-				idx++;
+					_domFrontierOfBlock[idx++] = frontier.ToArray();
+				else
+					_domFrontierOfBlock[idx++] = new BasicBlock[0];
 			}
 
 			_domFrontier = domFrontier.ToArray();
+
+			/*_domFrontierOfBlock = new BasicBlock[basicBlocks.Count][];
+			foreach (var block in this.basicBlocks)
+			{
+				var result = new List<BasicBlock>();
+				var dominatorChildren = this._children[block.Sequence];
+				if (dominatorChildren != null)
+				foreach (var child in dominatorChildren)
+				{
+					if (this._children[child.Sequence] != null)
+						result.AddRange(this._children[child.Sequence]);
+				}
+				_domFrontierOfBlock[block.Sequence] = result.ToArray();
+			}
+			_domFrontier = null;*/
+		}
+
+		/// <summary>
+		/// Iterateds the dominance frontier.
+		/// </summary>
+		/// <param name="s">The s.</param>
+		/// <returns></returns>
+		List<BasicBlock> IDominanceProvider.IteratedDominanceFrontier(List<BasicBlock> s)
+		{
+			var result = new List<BasicBlock>();
+			var workList = new Queue<BasicBlock>();
+
+			foreach (var block in s)
+			{
+				//result.Add(block);
+				workList.Enqueue(block);
+			}
+
+			while (workList.Count > 0)
+			{
+				var n = workList.Dequeue();
+				var dominanceFrontier = (this as IDominanceProvider).GetDominanceFrontierOfBlock(n);
+				if (dominanceFrontier == null)
+					continue;
+
+				foreach (var c in dominanceFrontier)
+				{
+					if (!result.Contains(c))
+					{
+						result.Add(c);
+						workList.Enqueue(c);
+					}
+				}
+			}
+			return result;
 		}
 
 		#endregion // IMethodCompilerStage Members
@@ -262,5 +346,13 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		#endregion // Internals
+
+
+		public BasicBlock[] GetChildren(BasicBlock block)
+		{
+			if (this._children[block.Sequence] == null)
+				return new BasicBlock[0];
+			return this._children[block.Sequence].ToArray();
+		}
 	}
 }

@@ -20,15 +20,15 @@ namespace Mosa.Test.Cases.IL
 		<# foreach (KeyValuePair<string, string> number in NumbersWithChar) { #>
 
 		//[Test]
-		public void Set1<#= number.Value #>([<#= number.Value #>]<#= number.Key #> one)
+		public void StructTestSet1<#= number.Value #>([<#= number.Value #>]<#= number.Key #> one)
 		{
-			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "StructTests", "Set1<#= number.Value #>", one));
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "StructTests", "StructTestSet1<#= number.Value #>", one));
 		}
 		
 		//[Test]
-		public void Set3<#= number.Value #>([<#= number.Value #>]<#= number.Key #> one, [<#= number.Value #>]<#= number.Key #> two, [<#= number.Value #>]<#= number.Key #> three)
+		public void StructTestSet3<#= number.Value #>([<#= number.Value #>]<#= number.Key #> one, [<#= number.Value #>]<#= number.Key #> two, [<#= number.Value #>]<#= number.Key #> three)
 		{
-			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "StructTests", "Set3<#= number.Value #>", one, two, three));
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "StructTests", "StructTestSet3<#= number.Value #>", one, two, three));
 		}
 		<# } #>
 	}

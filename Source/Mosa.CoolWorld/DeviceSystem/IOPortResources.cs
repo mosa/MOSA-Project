@@ -66,9 +66,9 @@ namespace Mosa.DeviceSystem
 		/// <returns></returns>
 		public IReadWriteIOPort GetIOPort(ushort port, ushort offset)
 		{
-			Mosa.Kernel.x86.Screen.Write('J');
+			//Mosa.Kernel.x86.Screen.Write('J');
 			IReadWriteIOPort port2 = HAL.RequestIOPort((ushort)(port + offset));
-			Mosa.Kernel.x86.Screen.Write('K');
+			//Mosa.Kernel.x86.Screen.Write('K');
 			return port2;
 		}
 

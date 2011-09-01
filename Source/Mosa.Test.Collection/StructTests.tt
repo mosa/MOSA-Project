@@ -8,7 +8,7 @@ namespace Mosa.Test.Collection
 	{
 	<# foreach (KeyValuePair<string, string> number in NumbersWithChar) { #>
 
-		static bool Set1<#= number.Value #>(<#= number.Key #> one)
+		static bool StructTestSet1<#= number.Value #>(<#= number.Key #> one)
 		{
 			Struct1<#= number.Value #> structure;
 			
@@ -17,7 +17,7 @@ namespace Mosa.Test.Collection
 			return (structure.One == one);
 		}
 	
-		static bool Set3<#= number.Value #>(<#= number.Key #> one, <#= number.Key #> two, <#= number.Key #> three)
+		static bool StructTestSet3<#= number.Value #>(<#= number.Key #> one, <#= number.Key #> two, <#= number.Key #> three)
 		{
 			Struct3<#= number.Value #> structure;
 			

@@ -26,6 +26,8 @@ namespace Mosa.CoolWorld
 		{
 			Mosa.Kernel.x86.Kernel.Setup();
 
+			IDT.SetInterruptHandler(ProcessInterrupt);
+
 			Console.Initialize();
 
 			Screen.GotoTop();
@@ -33,28 +35,18 @@ namespace Mosa.CoolWorld
 			Screen.BackgroundColor = Colors.Green;
 
 			Screen.Write(@"                   MOSA OS Version 0.1 - Compiler Version 1.0");
-			Screen.FillLine();
+			FillLine();
 			Screen.Color = Colors.White;
 			Screen.BackgroundColor = Colors.Black;
-
-			Console.WriteLine("> Initializing kernel...");
-			BulletPoint(); Console.Write("Reading multiboot header..."); PrintDone();
-			BulletPoint(); Console.Write("Programmable Interrupt Controller..."); PrintDone();
-			BulletPoint(); Console.Write("Global Descriptor Table..."); PrintDone();
-			BulletPoint(); Console.Write("Interrupt Descriptor Table..."); PrintDone();
-			BulletPoint(); Console.Write("Memory..."); PrintDone();
-			BulletPoint(); Console.Write("Virtual Paging..."); PrintDone();
-			BulletPoint(); Console.Write("Process Manager..."); PrintDone();
-			BulletPoint(); Console.Write("Task Manager..."); PrintDone();
 
 			Mosa.Kernel.x86.Smbios.BiosInformationStructure biosInfo = new Kernel.x86.Smbios.BiosInformationStructure();
 			Mosa.Kernel.x86.Smbios.CpuStructure cpuInfo = new Kernel.x86.Smbios.CpuStructure();
 
-			Console.WriteLine("> Checking bios...");
+			Console.WriteLine("> Checking BIOS...");
 			BulletPoint(); Console.Write("Vendor  "); InBrackets(biosInfo.BiosVendor, Colors.White, Colors.LightBlue); Console.WriteLine();
 			BulletPoint(); Console.Write("Version "); InBrackets(biosInfo.BiosVersion, Colors.White, Colors.LightBlue); Console.WriteLine();
 
-			Console.WriteLine("> Checking cpu...");
+			Console.WriteLine("> Checking CPU...");
 			BulletPoint(); Console.Write("Vendor  "); InBrackets(cpuInfo.Vendor, Colors.White, Colors.LightBlue); Console.WriteLine();
 			BulletPoint(); Console.Write("Version "); InBrackets(cpuInfo.Version, Colors.White, Colors.LightBlue); Console.WriteLine();
 
@@ -65,18 +57,23 @@ namespace Mosa.CoolWorld
 			Setup.Start();
 
 			Console.WriteLine("> System ready");
-
+			Console.WriteLine();
 			Screen.Goto(24, 0);
 			Screen.Color = Colors.White;
 			Screen.BackgroundColor = Colors.Green;
 			Screen.Write("          Copyright (C) 2008-2001 [Managed Operating System Alliance]");
-			Screen.FillLine();
-
-			Console.Update();
+			FillLine();
 
 			while (true)
 			{
+				Native.Hlt();
 			}
+		}
+
+		public static void FillLine()
+		{
+			for (uint c = 80 - Screen.Column + 1; c != 0; c--)
+				Screen.Write(' ');
 		}
 
 		public static void PrintDone()
@@ -95,10 +92,61 @@ namespace Mosa.CoolWorld
 		{
 			Screen.Color = outerColor;
 			Console.Write("[");
-			Screen.Color = innerColor; 
+			Screen.Color = innerColor;
 			Console.Write(message);
-			Screen.Color = outerColor; 
-			Console.Write("]"); 
+			Screen.Color = outerColor;
+			Console.Write("]");
 		}
+
+
+		private static uint counter = 0;
+
+		public static void ProcessInterrupt(byte interrupt, byte errorCode)
+		{
+			uint c = Screen.Column;
+			uint r = Screen.Row;
+			byte col = Screen.Color;
+			byte back = Screen.BackgroundColor;
+
+			Screen.Column = 55;
+			Screen.Row = 23;
+			Screen.Color = Colors.Cyan;
+			Screen.BackgroundColor = Colors.Black;
+			Screen.Write(new string(' ', 25));
+			Screen.Column = 55;
+			Screen.Row = 23;
+
+			counter++;
+			Screen.Write(counter, 10, 7);
+			Screen.Write(':');
+			Screen.Write(interrupt, 16, 2);
+			Screen.Write(':');
+			Screen.Write(errorCode, 16, 2);
+
+			if (interrupt == 14)
+			{
+				// Page Fault!
+				PageFaultHandler.Fault(errorCode);
+			}
+			else if (interrupt == 0x20)
+			{
+				// Timer Interrupt! Switch Tasks!	
+			}
+			else
+			{
+				Screen.Write('-');
+				Screen.Write(counter, 10, 7);
+				Screen.Write(':');
+				Screen.Write(interrupt, 16, 2);
+
+				Mosa.DeviceSystem.HAL.ProcessInterrupt(interrupt, errorCode);
+			}
+
+			Screen.Column = c;
+			Screen.Row = r;
+			Screen.Color = col;
+			Screen.BackgroundColor = back;
+		}
+
 	}
 }

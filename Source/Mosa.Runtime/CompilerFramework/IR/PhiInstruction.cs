@@ -55,7 +55,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <returns>
 		/// 	<c>true</c> if [contains] [the specified CTX]; otherwise, <c>false</c>.
 		/// </returns>
-		public static bool Contains(Context ctx, StackOperand operand)
+		public static bool Contains(Context ctx, Operand operand)
 		{
 			PhiData phiData = ctx.Other as PhiData;
 
@@ -72,7 +72,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 		/// <param name="ctx">The context.</param>
 		/// <param name="edge">The edge.</param>
 		/// <param name="op">The op.</param>
-		public static void AddValue(Context ctx, BasicBlock edge, StackOperand op)
+		public static void AddValue(Context ctx, BasicBlock edge, Operand op)
 		{
 			PhiData phiData = ctx.Other as PhiData;
 
@@ -88,6 +88,14 @@ namespace Mosa.Runtime.CompilerFramework.IR
 
 			blocks.Add(edge);
 			phiData.Operands.Add(op);
+		}
+
+		public override string ToString(Context context)
+		{
+			var result = context.Result + "<- phi (";
+			foreach (var op in context.Operands)
+				result += " " + op + ", ";
+			return result + ")";
 		}
 
 		#endregion // Methods

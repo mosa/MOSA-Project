@@ -21,12 +21,6 @@ namespace Mosa.HelloWorld
 	/// </summary>
 	public static class Boot
 	{
-		//public static void Include()
-		//{
-		//    Mosa.DeviceSystem.KeyType key = DeviceSystem.KeyType.CapsLock;
-
-		//    key++;
-		//}
 
 		/// <summary>
 		/// Mains this instance.
@@ -34,6 +28,8 @@ namespace Mosa.HelloWorld
 		public static void Main()
 		{
 			Mosa.Kernel.x86.Kernel.Setup();
+
+			IDT.SetInterruptHandler(ProcessInterrupt);
 
 			Screen.GotoTop();
 			Screen.Color = Colors.Yellow;
@@ -323,6 +319,57 @@ namespace Mosa.HelloWorld
 			Screen.Write(cmos.Year, bcd, 2);
 			Screen.Color = Colors.Gray;
 			Screen.Write(')');
+		}
+
+		private static uint counter = 0;
+
+		public static void ProcessInterrupt(byte interrupt, byte errorCode)
+		{
+			uint c = Screen.Column;
+			uint r = Screen.Row;
+			byte col = Screen.Color;
+			byte back = Screen.BackgroundColor;
+
+			Screen.Column = 31;
+			Screen.Row = 0;
+			Screen.Color = Colors.Cyan;
+			Screen.BackgroundColor = Colors.Black;
+
+			counter++;
+			Screen.Write(counter, 10, 7);
+			Screen.Write(':');
+			Screen.Write(interrupt, 16, 2);
+			Screen.Write(':');
+			Screen.Write(errorCode, 16, 2);
+
+			if (interrupt == 14)
+			{
+				// Page Fault!
+				PageFaultHandler.Fault(errorCode);
+			}
+			else if (interrupt == 0x20)
+			{
+				// Timer Interrupt! Switch Tasks!	
+			}
+			else
+			{
+				Screen.Write('-');
+				Screen.Write(counter, 10, 7);
+				Screen.Write(':');
+				Screen.Write(interrupt, 16, 2);
+
+				if (interrupt == 0x21)
+				{
+					byte scancode = Keyboard.ReadScanCode();
+					Screen.Write('-');
+					Screen.Write(scancode, 16, 2);
+				}
+			}
+
+			Screen.Column = c;
+			Screen.Row = r;
+			Screen.Color = col;
+			Screen.BackgroundColor = back;
 		}
 	}
 }

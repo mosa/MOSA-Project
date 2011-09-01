@@ -1,352 +1,201 @@
-/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
+﻿/*
+ * (c) 2011 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Simon Wollwage (rootnode) <rootnode@mosa-project.org>
  */
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.Linq;
+using System.Text;
 using Mosa.Runtime.CompilerFramework.Operands;
-using Mosa.Runtime.TypeSystem;
-using Mosa.Runtime.Metadata.Signatures;
-using IR = Mosa.Runtime.CompilerFramework.IR;
+using Mosa.Runtime.CompilerFramework.IR;
+using System.Diagnostics;
 
 namespace Mosa.Runtime.CompilerFramework
 {
 	/// <summary>
-	/// Transforms the intermediate representation into a minimal static single assignment form.
+	/// 
 	/// </summary>
-	/// <remarks>
-	/// The minimal form only inserts the really required PHI functions in order to reduce the 
-	/// number of live registers used by register allocation.
-	/// </remarks>
-	public sealed class EnterSSA : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
+	public class EnterSSA : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
 	{
-		#region Tracing
-
 		/// <summary>
-		/// Controls the tracing of the <see cref="EnterSSA"/> method compiler stage.
+		/// 
 		/// </summary>
-		/// <remarks>
-		/// The trace output happens at the TraceLevel.Info level.
-		/// </remarks>
-		public static readonly TraceSwitch TRACING = new TraceSwitch(@"Mosa.Runtime.CompilerFramework.EnterSSA", @"Controls tracing of the Mosa.Runtime.CompilerFramework.EnterSSA compilation stage.");
-
-		#endregion // Tracing
-
-		#region Types
-
-		struct WorkItem
+		private class AssignmentInformation
 		{
-			public WorkItem(BasicBlock block, BasicBlock caller, IDictionary<StackOperand, StackOperand> liveIn)
-			{
-				this.block = block;
-				this.caller = caller;
-				this.liveIn = liveIn;
-			}
+			public List<BasicBlock> AssigningBlocks = new List<BasicBlock>();
+			public Operand Operand;
 
-			public BasicBlock block;
-			public BasicBlock caller;
-			public IDictionary<StackOperand, StackOperand> liveIn;
+			public AssignmentInformation(Operand operand)
+			{
+				this.Operand = operand;
+			}
 		}
 
-		#endregion // Types
-
-		#region Data members
+		/// <summary>
+		/// 
+		/// </summary>
+		private class VariableInformation
+		{
+			public int Count = 0;
+			public Stack<int> Stack = new Stack<int>();
+		}
 
 		/// <summary>
-		/// Holds the dominance frontier Blocks of the stage.
+		/// 
 		/// </summary>
-		private BasicBlock[] _dominanceFrontierBlocks;
-
+		private Dictionary<string, Operand> oldLefHandSide = new Dictionary<string,Operand>();
 		/// <summary>
-		/// Holds the dominance provider.
+		/// 
 		/// </summary>
-		private IDominanceProvider _dominanceProvider;
-
+		private Dictionary<string, VariableInformation> variableInformation = new Dictionary<string, VariableInformation>();
 		/// <summary>
-		/// Holds the operand definitions after each block (array of block count length).
+		/// 
 		/// </summary>
-		private IDictionary<StackOperand, StackOperand>[] _liveness;
-
+		private IDominanceProvider dominanceCalculationStage;
 		/// <summary>
-		/// Holds the version of the next SSA variable. (We use a single version number for all of them)
+		/// 
 		/// </summary>
-		private int _ssaVersion;
+		private PhiPlacementStage phiPlacementStage;
 
-		#endregion // Data members
-
-		#region IPipelineStage Members
-
-		/// <summary>
-		/// Retrieves the name of the compilation stage.
-		/// </summary>
-		/// <value>The name of the compilation stage.</value>
-		string IPipelineStage.Name { get { return @"EnterSSA"; } }
-
-		#endregion // IPipelineStage Members
-
-		#region IMethodCompilerStage Members
-
-		/// <summary>
-		/// Performs stage specific processing on the compiler context.
-		/// </summary>
 		public void Run()
 		{
-			_dominanceProvider = (IDominanceProvider)methodCompiler.GetStage(typeof(IDominanceProvider));
-			Debug.Assert(_dominanceProvider != null, @"SSA Conversion requires a dominance provider.");
-			if (_dominanceProvider == null)
-				throw new InvalidOperationException(@"SSA Conversion requires a dominance provider.");
+			this.dominanceCalculationStage = this.methodCompiler.Pipeline.FindFirst<DominanceCalculationStage>() as IDominanceProvider;
+			this.phiPlacementStage = this.methodCompiler.Pipeline.FindFirst<PhiPlacementStage>();
 
-			// Allocate space for live outs
-			_liveness = new IDictionary<StackOperand, StackOperand>[basicBlocks.Count];
-			// Retrieve the dominance frontier Blocks
-			_dominanceFrontierBlocks = _dominanceProvider.GetDominanceFrontier();
+			var numberOfParameters = this.methodCompiler.Method.Parameters.Count;
+			if (this.methodCompiler.Method.Signature.HasThis)
+				++numberOfParameters;
 
-			// Add ref/out parameters to the epilogue block to have uses there...
-			AddPhiFunctionsForOutParameters();
+			foreach (var name in this.phiPlacementStage.Assignments.Keys)
+				this.variableInformation[name] = new VariableInformation();
 
-			// Transformation worklist 
-			Queue<WorkItem> workList = new Queue<WorkItem>();
-
-			/* Move parameter operands into the dictionary as version 0,
-			 * because they are live at entry and maybe referenced. Anyways, an
-			 * assignment to a parameter is also SSA related.
-			 */
-			IDictionary<StackOperand, StackOperand> liveIn = new Dictionary<StackOperand, StackOperand>(s_comparer);
-			int i = 0;
-			if (methodCompiler.Method.Signature.HasThis)
+			for (var i = 0; i < numberOfParameters; ++i)
 			{
-				StackOperand param = (StackOperand)methodCompiler.GetParameterOperand(0);
-				liveIn.Add(param, param);
-				i++;
-			}
-			for (int j = 0; j < methodCompiler.Method.Parameters.Count; j++)
-			{
-				StackOperand param = (StackOperand)methodCompiler.GetParameterOperand(i + j);
-				liveIn.Add(param, param);
+				var op = this.methodCompiler.GetParameterOperand(i);
+				var name = NameForOperand(op);
+				this.variableInformation[name].Stack.Push(0);
+				this.variableInformation[name].Count = 1;
 			}
 
-			// Start with the very first block
-			workList.Enqueue(new WorkItem(basicBlocks[0], null, liveIn));
-
-			// Iterate until the worklist is empty
-			while (workList.Count != 0)
+			for (var i = 0; (this.methodCompiler as BaseMethodCompiler).LocalVariables != null && i < (this.methodCompiler as BaseMethodCompiler).LocalVariables.Length; ++i)
 			{
-				// Remove the block from the queue
-				WorkItem workItem = workList.Dequeue();
+				var op = (this.methodCompiler as BaseMethodCompiler).LocalVariables[i];
+				var name = NameForOperand(op);
+				if (!this.variableInformation.ContainsKey(name))
+					this.variableInformation[name] = new VariableInformation();
+				this.variableInformation[name].Stack.Push(0);
+				this.variableInformation[name].Count = 1;
+			}
+			this.RenameVariables(this.FindBlock(-1).NextBlocks[0]);
+			Debug.WriteLine("ESSA: " + this.methodCompiler.Method.FullName);
+		}
 
-				// Transform the block
-				BasicBlock block = workItem.block;
-				bool schedule = TransformToSsaForm(new Context(instructionSet, block), workItem.caller, workItem.liveIn, out liveIn);
-				_liveness[block.Sequence] = liveIn;
+		public string Name
+		{
+			get { return @"Enter Static Single Assignment Form"; }
+		}
 
-				if (schedule)
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="block"></param>
+		private void RenameVariables(BasicBlock block)
+		{
+			for (var context = new Context(this.instructionSet, block); !context.EndOfInstruction; context.GotoNext())
+			{
+				if (!(context.Instruction is PhiInstruction))
 				{
-					// Add all branch targets to the work list
-					foreach (BasicBlock next in block.NextBlocks)
+					for (var i = 0; i < context.OperandCount; ++i)
 					{
-						// Only follow backward branches, if we've redefined a variable
-						// this may force us to reinsert a PHI function in a block we
-						// already have completed processing on.
-						workList.Enqueue(new WorkItem(next, block, liveIn));
+						var op = context.GetOperand(i);
+						if (!(op is StackOperand))
+							continue;
+						var name = NameForOperand(context.GetOperand(i));
+						if (!this.variableInformation.ContainsKey(name))
+							throw new Exception(name + " is not in dictionary [block = " + block + "]");
+						var index = this.variableInformation[name].Stack.Peek();
+						context.SetOperand(i, new SsaOperand(context.GetOperand(i), index));
+					}
+				}
+
+				if (PhiPlacementStage.IsAssignmentToStackVariable(context))
+				{
+					var name = NameForOperand(context.Result);
+					var index = this.variableInformation[name].Count;
+					context.SetResult(new SsaOperand(context.Result, index));
+					this.variableInformation[name].Stack.Push(index);
+					++this.variableInformation[name].Count;
+				}
+			}
+
+			foreach (var s in block.NextBlocks)
+			{
+				var j = this.WhichPredecessor(s, block);
+				for (var context = new Context(this.instructionSet, s); !context.EndOfInstruction; context.GotoNext())
+				{
+					if (!(context.Instruction is PhiInstruction))
+						continue;
+					var name = NameForOperand(context.GetOperand(j));
+					if (this.variableInformation[name].Stack.Count > 0)
+					{
+						var index = this.variableInformation[name].Stack.Peek();
+						context.SetOperand(j, new SsaOperand(context.GetOperand(j), index));
 					}
 				}
 			}
+
+			foreach (var s in this.dominanceCalculationStage.GetChildren(block))
+			{
+				this.RenameVariables(s);
+			}
+
+			for (var context = new Context(this.instructionSet, block); !context.EndOfInstruction; context.GotoNext())
+			{
+				if (PhiPlacementStage.IsAssignmentToStackVariable(context))
+				{
+					var instName = context.Label + "." + context.Index;
+					var op = this.oldLefHandSide[instName];
+					var name = NameForOperand(op);
+					this.variableInformation[name].Stack.Pop();
+				}
+			}
+		}
+
+		private int WhichPredecessor(BasicBlock y, BasicBlock x)
+		{
+			for (var i = 0; i < y.PreviousBlocks.Count; ++i)
+				if (y.PreviousBlocks[i].Sequence == x.Sequence)
+					return i;
+			return -1;
 		}
 
 		/// <summary>
-		/// Adds PHI functions for all ref/out parameters of the method being compiled.
+		/// 
 		/// </summary>
-		private void AddPhiFunctionsForOutParameters()
+		/// <param name="context"></param>
+		/// <returns></returns>
+		private bool IsAssignment(Context context)
 		{
-			Dictionary<StackOperand, StackOperand> liveIn = null;
-
-			// Retrieve the well known epilogue block
-			BasicBlock epilogue = FindBlock(Int32.MaxValue);
-			Debug.Assert(epilogue != null, @"Method doesn't have epilogue block?");
-
-			Context ctxEpilogue = new Context(instructionSet, epilogue);
-			ctxEpilogue.GotoLast();
-
-			// Iterate all parameter definitions
-			foreach (RuntimeParameter rp in methodCompiler.Method.Parameters)
-			{
-				// Retrieve the stack operand for the parameter
-				StackOperand paramOp = (StackOperand)methodCompiler.GetParameterOperand(rp.Position - 1);
-
-				// Only add a PHI if the runtime parameter is out or ref...
-				if (rp.IsOut || (paramOp.Type is RefSigType || paramOp.Type is PtrSigType))
-				{
-					ctxEpilogue.AppendInstruction(IR.Instruction.PhiInstruction, paramOp);
-
-					if (liveIn == null)
-						liveIn = new Dictionary<StackOperand, StackOperand>();
-
-					liveIn.Add(paramOp, paramOp);
-				}
-			}
-
-			// Save the in versions to force a merge later
-			if (liveIn != null)
-				_liveness[epilogue.Sequence] = liveIn;
-		}
-
-		private bool TransformToSsaForm(Context ctx, BasicBlock caller, IDictionary<StackOperand, StackOperand> liveIn, out IDictionary<StackOperand, StackOperand> liveOut)
-		{
-			// Is this another entry for this block?
-			IDictionary<StackOperand, StackOperand> liveOutPrev = _liveness[ctx.BasicBlock.Sequence];
-			if (liveOutPrev != null)
-			{
-				// FIXME: Merge PHIs with new incoming variables, add new incoming variables to out set
-				// and schedule the remaining out nodes/quit
-				MergePhiInstructions(ctx.BasicBlock, caller, liveIn);
-				liveOut = liveOutPrev;
-
+			var op = context.Result;
+			if (op == null)
 				return false;
-			}
-			// Is this a dominance frontier block?
-			if (Array.IndexOf(_dominanceFrontierBlocks, ctx.BasicBlock) != -1)
-				InsertPhiInstructions(ctx, caller, liveIn);
 
-			// Create a new live out dictionary
-			if (liveIn != null)
-				liveOut = new Dictionary<StackOperand, StackOperand>(liveIn, s_comparer);
-			else
-				liveOut = new Dictionary<StackOperand, StackOperand>(s_comparer);
-
-			// Iterate each instruction in the block
-			for (Context ctxBlock = CreateContext(ctx.BasicBlock); !ctxBlock.EndOfInstruction; ctxBlock.GotoNext())
-			{
-				// Replace all operands with their current SSA version
-				UpdateUses(ctxBlock, liveOut);
-
-				// Is this an instruction we ignore?
-				if (!ctx.Ignore)
-					RenameStackOperands(ctxBlock, liveOut);
-			}
-
-			return true;
+			return (op is StackOperand);
 		}
-
-		private void MergePhiInstructions(BasicBlock block, BasicBlock caller, IDictionary<StackOperand, StackOperand> liveIn)
-		{
-			for (Context ctx = new Context(instructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
-			{
-				IR.PhiInstruction phi = ctx.Instruction as IR.PhiInstruction;
-
-				if (phi != null && liveIn.ContainsKey(ctx.Result as StackOperand))
-				{
-					StackOperand value = liveIn[ctx.Result as StackOperand];
-
-					if (!IR.PhiInstruction.Contains(ctx, value) && (ctx.Result as StackOperand).Version != value.Version)
-						IR.PhiInstruction.AddValue(ctx, caller, value);
-				}
-			}
-
-		}
-
-		private void InsertPhiInstructions(Context ctx, BasicBlock caller, IDictionary<StackOperand, StackOperand> liveIn)
-		{
-			// Iterate all incoming variables
-			foreach (StackOperand key in liveIn.Keys)
-			{
-				ctx.AppendInstruction(IR.Instruction.PhiInstruction, key);
-				IR.PhiInstruction.AddValue(ctx, caller, key);
-			}
-		}
-
-		private void RenameStackOperands(Context ctx, IDictionary<StackOperand, StackOperand> liveOut)
-		{
-			int index = 0;
-
-			// Create new SSA variables for newly defined operands
-			foreach (Operand op1 in ctx.Results)
-			{
-				// Is this a stack operand?
-				StackOperand op = op1 as StackOperand;
-
-				if (op != null)
-				{
-					StackOperand ssa;
-					if (!liveOut.TryGetValue(op, out ssa))
-						ssa = op;
-
-					ssa = RedefineOperand(ssa);
-					liveOut[op] = ssa;
-					ctx.SetResult(index++, ssa);
-
-					if (TRACING.TraceInfo)
-						Trace.WriteLine(String.Format("\tStore to {0} redefined as {1}", op, ssa));
-				}
-			}
-		}
-
-		private void UpdateUses(Context ctx, IDictionary<StackOperand, StackOperand> liveOut)
-		{
-			int index = 0;
-
-			foreach (Operand op1 in ctx.Operands)
-			{
-				// Is this a stack operand?
-				StackOperand op = op1 as StackOperand;
-
-				if (op != null)
-				{
-					StackOperand ssa;
-					// Determine the most recent version
-					Debug.Assert(liveOut.TryGetValue(op, out ssa), @"Stack operand not in live variable list.");
-
-					ssa = liveOut[op];
-
-					// Replace the use with the most recent version
-					ctx.SetOperand(index++, ssa);
-
-					if (TRACING.TraceInfo)
-						Trace.WriteLine(String.Format(@"\tUse {0} has been replaced with {1}", op, ssa));
-				}
-			}
-		}
-
-		class StackOperandComparer : IEqualityComparer<StackOperand>
-		{
-			#region IEqualityComparer<StackOperand> Members
-
-			bool IEqualityComparer<StackOperand>.Equals(StackOperand x, StackOperand y)
-			{
-				return (x.Offset.ToInt32() == y.Offset.ToInt32());
-			}
-
-			int IEqualityComparer<StackOperand>.GetHashCode(StackOperand obj)
-			{
-				return obj.Offset.ToInt32();
-			}
-
-			#endregion // IEqualityComparer<StackOperand> Members
-		}
-
-		private static readonly IEqualityComparer<StackOperand> s_comparer = new StackOperandComparer();
 
 		/// <summary>
-		/// Redefines a <see cref="StackOperand"/> with a new SSA version.
+		/// 
 		/// </summary>
-		/// <param name="cur">The StackOperand to redefine.</param>
-		/// <returns>A new StackOperand.</returns>
-		private StackOperand RedefineOperand(StackOperand cur)
+		/// <param name="operand"></param>
+		/// <returns></returns>
+		private string NameForOperand(Operand operand)
 		{
-			string name = cur.Name;
-			if (cur.Version == 0)
-				name = String.Format(@"T_{0}", name);
-			StackOperand op = methodCompiler.CreateTemporary(cur.Type) as StackOperand;
-			//StackOperand op = new LocalVariableOperand(cur.Base, name, idx, cur.Type);
-			op.Version = ++_ssaVersion;
-			return op;
+			return PhiPlacementStage.NameForOperand(operand);
 		}
-
-		#endregion // IMethodCompilerStage Members
 	}
 }

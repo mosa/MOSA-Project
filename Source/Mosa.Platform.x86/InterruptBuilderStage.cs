@@ -92,7 +92,7 @@ namespace Mosa.Platform.x86
 				return;
 			}
 
-			RuntimeMethod InterruptMethod = FindMethod(rt, "InterruptHandler");
+			RuntimeMethod InterruptMethod = FindMethod(rt, "ProcessInterrupt");
 			if (InterruptMethod == null)
 			{
 				return;
