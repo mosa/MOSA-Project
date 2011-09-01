@@ -1031,18 +1031,18 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			{
 				context.SetInstruction(Instruction.IntegerCompareInstruction, comparisonResult, first, second);
 				context.ConditionCode = cc;
-                if (first.Type.Type == CilElementType.I8 || first.Type.Type == CilElementType.U8)
-                {
-                    context.AppendInstruction(Instruction.IntegerCompareInstruction, comparisonResult, comparisonResult, new ConstantOperand(new SigType(CilElementType.I), 1));
-                    context.ConditionCode = ConditionCode.Equal;
-                    context.AppendInstruction(Instruction.BranchInstruction, comparisonResult);
-                    context.ConditionCode = ConditionCode.Equal;
-                }
-                else
-                {
-                    context.AppendInstruction(Instruction.BranchInstruction, comparisonResult);
-                    context.ConditionCode = cc;
-                }
+				if (first.Type.Type == CilElementType.I8 || first.Type.Type == CilElementType.U8)
+				{
+					context.AppendInstruction(Instruction.IntegerCompareInstruction, comparisonResult, comparisonResult, new ConstantOperand(new SigType(CilElementType.I), 1));
+					context.ConditionCode = ConditionCode.Equal;
+					context.AppendInstruction(Instruction.BranchInstruction, comparisonResult);
+					context.ConditionCode = ConditionCode.Equal;
+				}
+				else
+				{
+					context.AppendInstruction(Instruction.BranchInstruction, comparisonResult);
+					context.ConditionCode = cc;
+				}
 				context.SetBranch(branch.Targets[0]);
 			}
 		}
