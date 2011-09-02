@@ -15,44 +15,10 @@ namespace Mosa.Internal
 {
 	public static class Runtime
 	{
-		public static object Box(ValueType valueType)
+
+		private unsafe static void* AllocateMemory(uint size)
 		{
-			return valueType;
-		}
-
-		public unsafe static void* BoxInt32(void* methodTable, uint classSize, int value)
-		{
-			void* memory = (void*)AllocateMemory(4);
-
-			uint* destination = (uint*)memory;
-			destination[0] = (uint)value;
-
-			return memory;
-		}
-
-		public unsafe static void* BoxInt32(void* methodTable, uint classSize, uint value)
-		{
-			void* memory = (void*)AllocateMemory(4);
-
-			uint* destination = (uint*)memory;
-			destination[0] = (uint)value;
-
-			return memory;
-		}
-
-		public unsafe static int UnboxInt32(void* data)
-		{
-			return ((int*)data)[0];
-		}
-
-		public unsafe static uint UnboxUInt32(void* data)
-		{
-			return ((uint*)data)[0];
-		}
-
-		private unsafe static uint* AllocateMemory(uint size)
-		{
-			return (uint*)KernelMemory.AllocateMemory(size);
+			return (void*)KernelMemory.AllocateMemory(size);
 		}
 
 		public static unsafe void* AllocateObject(void* methodTable, uint classSize)
@@ -155,6 +121,41 @@ namespace Mosa.Internal
 				return null;
 
 			return obj;
+		}
+
+		public static object Box(ValueType valueType)
+		{
+			return valueType;
+		}
+
+		public unsafe static void* BoxInt32(void* methodTable, uint classSize, int value)
+		{
+			void* memory = (void*)AllocateMemory(4);
+
+			uint* destination = (uint*)memory;
+			destination[0] = (uint)value;
+
+			return memory;
+		}
+
+		public unsafe static void* BoxInt32(void* methodTable, uint classSize, uint value)
+		{
+			void* memory = (void*)AllocateMemory(4);
+
+			uint* destination = (uint*)memory;
+			destination[0] = (uint)value;
+
+			return memory;
+		}
+
+		public unsafe static int UnboxInt32(void* data)
+		{
+			return ((int*)data)[0];
+		}
+
+		public unsafe static uint UnboxUInt32(void* data)
+		{
+			return ((uint*)data)[0];
 		}
 
 		public static unsafe void Throw(uint something)

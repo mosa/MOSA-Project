@@ -4,6 +4,12 @@ namespace Mosa.Internal
 {
 	public static class Runtime
 	{
+
+		private unsafe static void* AllocateMemory(uint size)
+		{
+			return null;
+		}
+
 		public static unsafe void* AllocateObject(void* methodTable, uint classSize)
 		{
 			return null;
@@ -14,17 +20,12 @@ namespace Mosa.Internal
 			return null;
 		}
 
-		public static object Box(ValueType valueType)
+		public static unsafe void* AllocateString(void* methodTable, uint length)
 		{
-			return null;
+			return AllocateArray(methodTable, 2, length);
 		}
 
-		public static object Castclass(object obj, UIntPtr typeHandle)
-		{
-			return null;
-		}
-
-		public static unsafe void* IsInstanceOfType(void* methodTable, void* obj)
+		public static unsafe void* IsInstanceOfType2(void* methodTable, void* obj)
 		{
 			if (obj == null)
 				return null;
@@ -42,7 +43,26 @@ namespace Mosa.Internal
 			return null;
 		}
 
-		public static unsafe void* IsInstanceOfInterfaceType(void* methodTable, int interfaceSlot, void* obj)
+		public static unsafe uint IsInstanceOfType(uint methodTable, uint obj)
+		{
+			if (obj == 0x0)
+				return 0;
+
+			uint objMethodTable = (uint)((uint*)obj)[0];
+
+			while (objMethodTable != 0x0)
+			{
+				if (objMethodTable == methodTable)
+					return obj;
+
+				objMethodTable = objMethodTable + 3 * 4;
+				objMethodTable = (uint)((uint*)objMethodTable)[0];
+			}
+
+			return 0x0;
+		}
+
+		public static unsafe void* IsInstanceOfInterfaceType(int interfaceSlot, void* obj)
 		{
 			uint* objMethodTable = (uint*)((uint*)obj)[0];
 			uint* bitmap = (uint*)objMethodTable[2];
@@ -60,24 +80,45 @@ namespace Mosa.Internal
 			return obj;
 		}
 
-		public unsafe static void Memcpy(byte* destination, byte* source, int count)
+		public static object Box(ValueType valueType)
 		{
+			return valueType;
 		}
 
-		public unsafe static void Memset(byte* destination, byte value, int count)
+		public unsafe static void* BoxInt32(void* methodTable, uint classSize, int value)
 		{
+			void* memory = (void*)AllocateMemory(4);
+
+			uint* destination = (uint*)memory;
+			destination[0] = (uint)value;
+
+			return memory;
 		}
 
-		public static void Rethrow()
+		public unsafe static void* BoxInt32(void* methodTable, uint classSize, uint value)
 		{
+			void* memory = (void*)AllocateMemory(4);
+
+			uint* destination = (uint*)memory;
+			destination[0] = (uint)value;
+
+			return memory;
 		}
 
-		public static void Throw(object exception)
+		public unsafe static int UnboxInt32(void* data)
 		{
+			return ((int*)data)[0];
 		}
 
-		public static void Unbox(object obj, ValueType valueType)
+		public unsafe static uint UnboxUInt32(void* data)
 		{
+			return ((uint*)data)[0];
 		}
+
+		public static unsafe void Throw(uint something)
+		{
+
+		}
+
 	}
 }
