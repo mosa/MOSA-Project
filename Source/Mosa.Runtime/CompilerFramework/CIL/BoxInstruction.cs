@@ -59,19 +59,61 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 				if (signatureType is BuiltInSigType)
 				{
 					var builtInSigType = signatureType as BuiltInSigType;
+					RuntimeType builtInType = null;
 					switch (builtInSigType.Type)
 					{
+						case CilElementType.I1:
+							{
+								builtInType = decoder.TypeModule.TypeSystem.GetType("mscorlib", "System", "SByte");
+								break;
+							}
+						case CilElementType.I2:
+							{
+								builtInType = decoder.TypeModule.TypeSystem.GetType("mscorlib", "System", "Int16");
+								break;
+							}
 						case CilElementType.I4:
 							{
-								var int32type = decoder.TypeModule.TypeSystem.GetType("mscorlib", "System", "Int32");
-								var valueTypeSignature = new ValueTypeSigType(int32type.Token);
-								ctx.Result = decoder.Compiler.CreateTemporary(valueTypeSignature);
-								ctx.Other = int32type;
-								return;
+								builtInType = decoder.TypeModule.TypeSystem.GetType("mscorlib", "System", "Int32");
+								break;
+							}
+						case CilElementType.I8:
+							{
+								builtInType = decoder.TypeModule.TypeSystem.GetType("mscorlib", "System", "Int64");
+								break;
+							}
+						case CilElementType.U1:
+							{
+								builtInType = decoder.TypeModule.TypeSystem.GetType("mscorlib", "System", "Byte");
+								break;
+							}
+						case CilElementType.U2:
+							{
+								builtInType = decoder.TypeModule.TypeSystem.GetType("mscorlib", "System", "UInt16");
+								break;
+							}
+						case CilElementType.U4:
+							{
+								builtInType = decoder.TypeModule.TypeSystem.GetType("mscorlib", "System", "UInt32");
+								break;
+							}
+						case CilElementType.U8:
+							{
+								builtInType = decoder.TypeModule.TypeSystem.GetType("mscorlib", "System", "UInt64");
+								break;
+							}
+						case CilElementType.Boolean:
+							{
+								builtInType = decoder.TypeModule.TypeSystem.GetType("mscorlib", "System", "Boolean");
+								break;
 							}
 						default:
 							break;
 					}
+					var valueTypeSignature = new ValueTypeSigType(builtInType.Token);
+					ctx.Result = decoder.Compiler.CreateTemporary(valueTypeSignature);
+					ctx.Other = builtInType;
+					return;
 				}
 
 				ctx.Result = decoder.Compiler.CreateTemporary(signatureType);
@@ -81,7 +123,8 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 				var signatureType = decoder.GenericTypePatcher.PatchSignatureType(decoder.TypeModule, decoder.Method.DeclaringType, token);
 				ctx.Result = decoder.Compiler.CreateTemporary(signatureType);
 			}
-			
+			else
+				ctx.Result = decoder.Compiler.CreateTemporary(decoder.GenericTypePatcher.PatchSignatureType(decoder.TypeModule, decoder.Method.DeclaringType, token));
 			ctx.Other = decoder.TypeModule.GetType(token);
 		}
 

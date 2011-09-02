@@ -30,13 +30,28 @@ namespace Mosa.Runtime.CompilerFramework
 	/// </remarks>
 	public sealed class ConstantPropagationStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
 	{
+		/// <summary>
+		/// 
+		/// </summary>
 		public enum PropagationStage
 		{
+			/// <summary>
+			/// 
+			/// </summary>
 			PreFolding,
+			/// <summary>
+			/// 
+			/// </summary>
 			PostFolding,
 		}
 
+		/// <summary>
+		/// 
+		/// </summary>
 		private PropagationStage stage = PropagationStage.PreFolding;
+		/// <summary>
+		/// 
+		/// </summary>
 		private HashSet<int> propagated = new HashSet<int>();
 
 		#region IPipelineStage Members
@@ -49,11 +64,17 @@ namespace Mosa.Runtime.CompilerFramework
 
 		#endregion // IPipelineStage Members
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ConstantPropagationStage"/> class.
+		/// </summary>
 		public ConstantPropagationStage() : this(PropagationStage.PreFolding)
 		{
-
 		}
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ConstantPropagationStage"/> class.
+		/// </summary>
+		/// <param name="stage">The stage.</param>
 		public ConstantPropagationStage(PropagationStage stage)
 		{
 			this.stage = stage;
@@ -66,8 +87,10 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public void Run()
 		{
-			if (this.methodCompiler.Method.Name == "PrintBrand")
-				System.Console.WriteLine();
+			foreach (var block in this.basicBlocks)
+				if (block.NextBlocks.Count == 0 && block.PreviousBlocks.Count == 0)
+					return;
+
 			bool remove = false;
 
 			foreach (BasicBlock block in basicBlocks)
@@ -107,22 +130,23 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			foreach (BasicBlock block in basicBlocks)
 			{
+				if (block == this.FindBlock(-1) || block == this.FindBlock(int.MaxValue))
+					continue;
+
 				for (Context ctx = new Context(instructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
 				{
-					if (ctx.Result == null)
-						continue;
-
 					if (!this.InstructionUsesOperand(ctx, sop))
 						continue;
 
-					var ssaOp = ctx.Result as SsaOperand;
-					if (ssaOp != null)
-					{
-						if (this.CheckOperand(ssaOp.Operand))
-							continue;
+					if (ctx.Result == null)
+						continue;
+
+					if (ctx.Instruction is IR.MoveInstruction)
 						return false;
-					}
-					else if (this.CheckOperand(ctx.Result))
+
+					var result = ctx.Result is SsaOperand ? (ctx.Result as SsaOperand).Operand : ctx.Result;
+					
+					if (this.CheckOperand(result))
 						continue;
 					return false;
 				}
@@ -137,7 +161,11 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns></returns>
 		private bool CheckOperand(Operand operand)
 		{
-			return ((operand.Type is BuiltInSigType || operand.Type.GetType() == typeof(SigType)) && IsBuiltinType(operand.Type));
+			if (operand.Type.GetType() == typeof(SigType))
+				return IsBuiltinType(operand.Type);
+			if (operand.Type is BuiltInSigType)
+				return IsBuiltinType(operand.Type);
+			return false;
 		}
 
 		/// <summary>
@@ -167,6 +195,9 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			foreach (BasicBlock block in basicBlocks)
 			{
+				if (block == this.FindBlock(-1) || block == this.FindBlock(int.MaxValue))
+					continue;
+
 				for (Context ctx = new Context(instructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
 				{
 					for (var i = 0; i < ctx.OperandCount; ++i)

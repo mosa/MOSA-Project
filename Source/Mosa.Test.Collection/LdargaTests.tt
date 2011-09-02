@@ -15,13 +15,13 @@ namespace Mosa.Test.Collection
 
 		private static bool LdargaCheckValueRef<#= number.Value #>(<#= number.Key #> expect, ref <#= number.Key #> a)
 		{
-			return (expect == a);
+			return (expect.Equals(a));
 		}
 
 		public static bool LdargaChangeValue<#= number.Value #>(<#= number.Key #> expect, <#= number.Key #> a) 
 		{
 			 LdargaChangeValueRef<#= number.Value #>(expect, ref a);
-			 return expect == a;
+			 return expect.Equals(a);
 		}
 
 		private static void  LdargaChangeValueRef<#= number.Value #>(<#= number.Key #> expect, ref <#= number.Key #> a)

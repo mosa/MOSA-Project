@@ -59,6 +59,16 @@ namespace System
 			else if (_value > value) return 1;
 			return 0;
 		}
+
+		public bool Equals(sbyte obj)
+		{
+			return Equals((object)obj);
+		}
+
+		public override bool Equals(object obj)
+		{
+			return ((sbyte)obj) == _value;
+		}
 	}
 
 	public struct Byte
@@ -73,6 +83,16 @@ namespace System
 			if (_value < value) return -1;
 			else if (_value > value) return 1;
 			return 0;
+		}
+
+		public bool Equals(byte obj)
+		{
+			return Equals((object)obj);
+		}
+
+		public override bool Equals(object obj)
+		{
+			return ((byte)obj) == _value;
 		}
 	}
 
@@ -89,6 +109,16 @@ namespace System
 			else if (_value > value) return 1;
 			return 0;
 		}
+
+		public bool Equals(short obj)
+		{
+			return Equals((object)obj);
+		}
+
+		public override bool Equals(object obj)
+		{
+			return ((short)obj) == _value;
+		}
 	}
 
 	public struct Int32
@@ -103,6 +133,16 @@ namespace System
 			if (_value < value) return -1;
 			else if (_value > value) return 1;
 			return 0;
+		}
+
+		public bool Equals(int obj)
+		{
+			return Equals((object)obj);
+		}
+
+		public override bool Equals(object obj)
+		{
+			return ((int)obj) == _value;
 		}
 	}
 
@@ -119,6 +159,16 @@ namespace System
 			else if (_value > value) return 1;
 			return 0;
 		}
+
+		public bool Equals(long obj)
+		{
+			return Equals((object)obj);
+		}
+
+		public override bool Equals(object obj)
+		{
+			return ((long)obj) == _value;
+		}
 	}
 
 	public struct UInt16
@@ -133,6 +183,16 @@ namespace System
 			if (_value < value) return -1;
 			else if (_value > value) return 1;
 			return 0;
+		}
+
+		public bool Equals(ushort obj)
+		{
+			return Equals((object)obj);
+		}
+
+		public override bool Equals(object obj)
+		{
+			return ((ushort)obj) == _value;
 		}
 	}
 
@@ -149,6 +209,16 @@ namespace System
 			else if (_value > value) return 1;
 			return 0;
 		}
+
+		public bool Equals(uint obj)
+		{
+			return Equals((object)obj);
+		}
+
+		public override bool Equals(object obj)
+		{
+			return ((uint)obj) == _value;
+		}
 	}
 
 	public struct UInt64
@@ -163,6 +233,16 @@ namespace System
 			if (_value < value) return -1;
 			else if (_value > value) return 1;
 			return 0;
+		}
+
+		public bool Equals(ulong obj)
+		{
+			return Equals((object)obj);
+		}
+
+		public override bool Equals(object obj)
+		{
+			return ((ulong)obj) == _value;
 		}
 	}
 
@@ -223,6 +303,21 @@ namespace System
 				return -1;
 			else
 				return 0;
+		}
+
+		public bool Equals(float obj)
+		{
+			return Equals((object)obj);
+		}
+
+		public override bool Equals(object obj)
+		{
+			float value = (float)obj;
+
+			if (IsNaN(value))
+				return IsNaN(_value);
+
+			return (value == _value);
 		}
 	}
 
@@ -286,6 +381,21 @@ namespace System
 			else
 				return 0;
 		}
+
+		public bool Equals(double obj)
+		{
+			return Equals((object)obj);
+		}
+
+		public override bool Equals(object obj)
+		{
+			double value = (double)obj;
+
+			if (IsNaN(value))
+				return IsNaN(_value);
+
+			return (value == _value);
+		}
 	}
 
 	public struct Char
@@ -300,6 +410,16 @@ namespace System
 			if (_value < value) return -1;
 			else if (_value > value) return 1;
 			return 0;
+		}
+
+		public bool Equals(char obj)
+		{
+			return Equals((object)obj);
+		}
+
+		public override bool Equals(object obj)
+		{
+			return ((char)obj) == _value;
 		}
 	}
 
@@ -316,6 +436,16 @@ namespace System
 				if (!value)
 					return 1;
 			return 0;
+		}
+
+		public bool Equals(bool obj)
+		{
+			return Equals((object)obj);
+		}
+
+		public override bool Equals(object obj)
+		{
+			return ((bool)obj) == _value;
 		}
 	}
 
@@ -703,4 +833,10 @@ namespace System.Runtime.CompilerServices
 			set { }
 		}
 	}
+}
+
+namespace System
+{
+	public interface IAsyncResult { }
+	public delegate void AsyncCallback(IAsyncResult ar);
 }

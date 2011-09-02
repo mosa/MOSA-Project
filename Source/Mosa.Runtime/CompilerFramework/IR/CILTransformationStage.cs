@@ -726,7 +726,75 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			var value = context.Operand1;
 			var result = context.Result;
 
-			if (context.Operand1.Type.ToString() == "I4")
+			if (context.Operand1.Type.ToString() == "I1")
+			{
+				var type = this.typeSystem.GetType("mscorlib", "System", "SByte");
+				context.SetInstruction(Instruction.NopInstruction);
+
+				ReplaceWithVmCall(context, VmCall.BoxInt32);
+
+				var methodTableSymbol = GetMethodTableSymbol(type);
+				var classSize = typeLayout.GetTypeSize(type);
+
+				context.SetOperand(1, methodTableSymbol);
+				context.SetOperand(2, new ConstantOperand(BuiltInSigType.Int32, classSize));
+				context.SetOperand(3, value);
+				context.OperandCount = 4;
+				context.Result = result;
+				return;
+			}
+			else if (context.Operand1.Type.ToString() == "U1")
+			{
+				var type = this.typeSystem.GetType("mscorlib", "System", "Byte");
+				context.SetInstruction(Instruction.NopInstruction);
+
+				ReplaceWithVmCall(context, VmCall.BoxUInt32);
+
+				var methodTableSymbol = GetMethodTableSymbol(type);
+				var classSize = typeLayout.GetTypeSize(type);
+
+				context.SetOperand(1, methodTableSymbol);
+				context.SetOperand(2, new ConstantOperand(BuiltInSigType.UInt32, classSize));
+				context.SetOperand(3, value);
+				context.OperandCount = 4;
+				context.Result = result;
+				return;
+			}
+			else if (context.Operand1.Type.ToString() == "I2")
+			{
+				var type = this.typeSystem.GetType("mscorlib", "System", "Int16");
+				context.SetInstruction(Instruction.NopInstruction);
+
+				ReplaceWithVmCall(context, VmCall.BoxInt32);
+
+				var methodTableSymbol = GetMethodTableSymbol(type);
+				var classSize = typeLayout.GetTypeSize(type);
+
+				context.SetOperand(1, methodTableSymbol);
+				context.SetOperand(2, new ConstantOperand(BuiltInSigType.Int32, classSize));
+				context.SetOperand(3, value);
+				context.OperandCount = 4;
+				context.Result = result;
+				return;
+			}
+			else if (context.Operand1.Type.ToString() == "U4")
+			{
+				var type = this.typeSystem.GetType("mscorlib", "System", "UInt16");
+				context.SetInstruction(Instruction.NopInstruction);
+
+				ReplaceWithVmCall(context, VmCall.BoxUInt32);
+
+				var methodTableSymbol = GetMethodTableSymbol(type);
+				var classSize = typeLayout.GetTypeSize(type);
+
+				context.SetOperand(1, methodTableSymbol);
+				context.SetOperand(2, new ConstantOperand(BuiltInSigType.UInt32, classSize));
+				context.SetOperand(3, value);
+				context.OperandCount = 4;
+				context.Result = result;
+				return;
+			}
+			else if (context.Operand1.Type.ToString() == "I4")
 			{
 				var type = this.typeSystem.GetType("mscorlib", "System", "Int32");
 				context.SetInstruction(Instruction.NopInstruction);

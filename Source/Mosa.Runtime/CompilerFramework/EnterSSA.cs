@@ -64,6 +64,10 @@ namespace Mosa.Runtime.CompilerFramework
 
 		public void Run()
 		{
+			foreach (var block in this.basicBlocks)
+				if (block.NextBlocks.Count == 0 && block.PreviousBlocks.Count == 0)
+					return;
+
 			this.dominanceCalculationStage = this.methodCompiler.Pipeline.FindFirst<DominanceCalculationStage>() as IDominanceProvider;
 			this.phiPlacementStage = this.methodCompiler.Pipeline.FindFirst<PhiPlacementStage>();
 
