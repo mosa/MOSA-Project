@@ -72,6 +72,8 @@ namespace Mosa.Runtime.TypeSystem
 
 			this.GenerateAndInsertFields(type);
 			this.GenerateAndReplaceMethods(type);
+
+			alreadyPatched.Add(type);
 		}
 
 		/// <summary>

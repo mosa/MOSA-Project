@@ -76,11 +76,13 @@
     <Reference Include="MbUnit, Version=3.2.0.0, Culture=neutral, PublicKeyToken=eb9cfa67ee6ab36e, processorArchitecture=MSIL">
       <HintPath>..\..\3rdParty\MbUnit.dll</HintPath>
     </Reference>
+    <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CIL\BooleanFixture.cs" />
     <Compile Include="CIL\CallVirtualFixture.cs" />
     <Compile Include="CIL\CharFixture.cs" />
+    <Compile Include="CIL\DelegateFixture.cs" />
     <Compile Include="CIL\FibonacciFixture.cs" />
     <Compile Include="CIL\GenericInterfaceFixture.cs" />
     <Compile Include="CIL\Int16Fixture.cs" />

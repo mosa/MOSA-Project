@@ -11,6 +11,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Linq;
 using System.Collections.Generic;
 
 using Mosa.Compiler.Linker;
@@ -29,6 +30,7 @@ namespace Mosa.Runtime.CompilerFramework
 		#region Data members
 
 		private IAssemblyLinker linker;
+		private HashSet<RuntimeType> processed = new HashSet<RuntimeType>();
 
 		#endregion // Data members
 
@@ -53,9 +55,11 @@ namespace Mosa.Runtime.CompilerFramework
 
 		void IAssemblyCompilerStage.Run()
 		{
-			// Enumerate all types and do an emit method tables
 			foreach (RuntimeType type in typeSystem.GetAllTypes())
 			{
+				if (processed.Contains(type))
+					continue;
+
 				if (type.ContainsOpenGenericParameters)
 					continue;
 
@@ -71,6 +75,7 @@ namespace Mosa.Runtime.CompilerFramework
 				}
 
 				AllocateStaticFields(type);
+				processed.Add(type);
 			}
 		}
 

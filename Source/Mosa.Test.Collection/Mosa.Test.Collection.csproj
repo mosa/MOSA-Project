@@ -74,6 +74,7 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>StructTests.cs</LastGenOutput>
     </None>
+    <Compile Include="DelegateTests.cs" />
     <Compile Include="StructTests.cs">
       <DependentUpon>StructTests.tt</DependentUpon>
       <AutoGen>True</AutoGen>
