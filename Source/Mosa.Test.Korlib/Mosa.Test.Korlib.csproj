@@ -37,8 +37,11 @@
     <NoStdLib>True</NoStdLib>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="System\AsyncCallback.cs" />
+    <Compile Include="System\IAsyncResult.cs" />
     <Compile Include="Runtime.cs" />
     <Compile Include="Core.cs" />
+    <Compile Include="System\WaitHandle.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
