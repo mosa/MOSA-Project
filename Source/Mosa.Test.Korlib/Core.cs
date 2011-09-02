@@ -834,9 +834,3 @@ namespace System.Runtime.CompilerServices
 		}
 	}
 }
-
-namespace System
-{
-	public interface IAsyncResult { }
-	public delegate void AsyncCallback(IAsyncResult ar);
-}
