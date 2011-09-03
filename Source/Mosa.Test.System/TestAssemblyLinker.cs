@@ -41,8 +41,8 @@ namespace Mosa.Test.System
 		private List<LinkerSection> sections;
 
 		private readonly AllocateMemoryDelegate allocateMemoryHandler;
-		private readonly AllocateArrayDelegate allocateArrayHandler;
-		private readonly AllocateObjectDelegate allocateObjectHandler;
+		//private readonly AllocateArrayDelegate allocateArrayHandler;
+		//private readonly AllocateObjectDelegate allocateObjectHandler;
 
 		#endregion // Data members
 
@@ -58,9 +58,9 @@ namespace Mosa.Test.System
 			for (int i = 0; i < maxSections; i++)
 				sections.Add(new TestLinkerSection((SectionKind)i, String.Empty, IntPtr.Zero));
 
-			this.allocateMemoryHandler = new AllocateMemoryDelegate(global::Mosa.Internal.Runtime.AllocateMemory);
-			this.allocateArrayHandler = new AllocateArrayDelegate(global::Mosa.Internal.Runtime.AllocateArray);
-			this.allocateObjectHandler = new AllocateObjectDelegate(global::Mosa.Internal.Runtime.AllocateObject);
+			this.allocateMemoryHandler = new AllocateMemoryDelegate(global::Mosa.Test.System.HostedRuntime.AllocateMemory);
+			//this.allocateArrayHandler = new AllocateArrayDelegate(global::Mosa.Internal.Runtime.AllocateArray);
+			//this.allocateObjectHandler = new AllocateObjectDelegate(global::Mosa.Internal.Runtime.AllocateObject);
 		}
 
 		#endregion // Construction
@@ -201,8 +201,8 @@ namespace Mosa.Test.System
 			Trace.WriteLine(@"TestAssemblyLinker adding VM calls:");
 
 			AddVmCall(virtualMachineCalls, allocateMemoryHandler, @"Mosa.Internal.Runtime.AllocateMemory(U4 size)");
-			AddVmCall(virtualMachineCalls, allocateArrayHandler, @"Mosa.Internal.Runtime.AllocateArray(Ptr methodTable,U4 elementSize,U4 elements)");
-			AddVmCall(virtualMachineCalls, allocateObjectHandler, @"Mosa.Internal.Runtime.AllocateObject(Ptr methodTable,U4 classSize)");
+			//AddVmCall(virtualMachineCalls, allocateArrayHandler, @"Mosa.Internal.Runtime.AllocateArray(Ptr methodTable,U4 elementSize,U4 elements)");
+			//AddVmCall(virtualMachineCalls, allocateObjectHandler, @"Mosa.Internal.Runtime.AllocateObject(Ptr methodTable,U4 classSize)");
 		}
 
 		protected unsafe void AddVmCall(IDictionary<string, LinkerSymbol> virtualMachineCalls, Delegate handler, string method)

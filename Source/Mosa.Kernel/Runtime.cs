@@ -5,11 +5,12 @@
  *
  * Authors:
  *  Michael Fröhlich (grover) <michael.ruck@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Kernel;
-using Mosa.Kernel.x86;
 using System;
+
+using Mosa.Kernel;
 
 namespace Mosa.Internal
 {
