@@ -24,12 +24,16 @@ namespace Mosa.Test.System
 		protected TestCompilerAdapter()
 		{
 <<<<<<< HEAD
-			settings.AddReference("mscorlib.dll");
-			settings.AddReference("Mosa.Test.Runtime.dll");
+<<<<<<< HEAD
 =======
-			settings.AddReference("Mosa.Test.Korlib.dll");
+>>>>>>> f1816ffd8b60479498231c1ffdb6eaa64c555bb6
+			settings.AddReference("mscorlib.dll");
 			settings.AddReference("Mosa.Platform.x86.Intrinsic.dll");
+<<<<<<< HEAD
 >>>>>>> 477a0f502b2f82cd1ed0f94fd3c7c2b9f6a2fe7f
+=======
+			settings.AddReference("Mosa.Test.Runtime.dll");
+>>>>>>> f1816ffd8b60479498231c1ffdb6eaa64c555bb6
 		}
 
 		protected T Run<T>(string ns, string type, string method, params object[] parameters)
