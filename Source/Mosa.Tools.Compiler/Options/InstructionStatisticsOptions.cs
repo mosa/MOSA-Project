@@ -18,17 +18,10 @@ namespace Mosa.Tools.Compiler.Options
 {
 	/// <summary>
 	/// </summary>
-	public class InstructionStatisticsOptions : BaseOptions
+	public class InstructionStatisticsOptions : BaseCompilerStageWithEnableOptions
 	{
-		
-		/// <summary>
-		/// Initializes a new instance of the ConstantFoldingWrapper class.
-		/// </summary>
-		/// <param name="optionSet"></param>
-		public InstructionStatisticsOptions(OptionSet optionSet)
-			: base(optionSet)
-		{
-		}
+
+		public string StatisticsFile { get; set; }
 
 		/// <summary>
 		/// Adds the additional options for the parsing process to the given OptionSet.
@@ -37,15 +30,15 @@ namespace Mosa.Tools.Compiler.Options
 		public override void AddOptions(OptionSet optionSet)
 		{
 			optionSet.Add(
-				"opt-stats",
-				"Enable instruction statistics.",
-				delegate(string v)
+				"stats=",
+				"Generate instruction statistics {file} of the produced binary.",
+				delegate(string file)
 				{
-					if (v != null)
-					{
-						this.Enabled = true;
-					}
-				});
+					this.StatisticsFile = file;
+					this.Enabled = string.IsNullOrEmpty(file);
+				}
+			);
+
 		}
 	}
 }

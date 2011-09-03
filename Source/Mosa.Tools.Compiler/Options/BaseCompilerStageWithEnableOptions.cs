@@ -4,26 +4,25 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using NDesk.Options;
 
 using Mosa.Runtime.CompilerFramework;
 
-namespace Mosa.Tools.Compiler.MethodCompilerStage
+namespace Mosa.Tools.Compiler.Options
 {
 
-	public abstract class BaseCompilerStageOptions
+	public abstract class BaseCompilerStageWithEnableOptions : BaseCompilerStageOptions
 	{
 
 		public bool Enabled { get; set; }
 
-		protected BaseCompilerStageOptions()
+		protected BaseCompilerStageWithEnableOptions()
 		{
 			this.Enabled = true;
 		}
 
-		public abstract void AddOptions(OptionSet optionSet);
 	}
 }

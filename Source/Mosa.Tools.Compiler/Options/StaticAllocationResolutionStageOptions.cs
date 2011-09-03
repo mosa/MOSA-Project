@@ -4,17 +4,17 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using NDesk.Options;
 
 using Mosa.Runtime.CompilerFramework;
 
-namespace Mosa.Tools.Compiler.MethodCompilerStage
+namespace Mosa.Tools.Compiler.Options
 {
 
-	public class StaticAllocationResolutionStageOptions : BaseCompilerStageOptions, IHasOptions
+	public class StaticAllocationResolutionStageOptions : BaseCompilerStageWithEnableOptions
 	{
 
 		private StaticAllocationResolutionStageOptions()

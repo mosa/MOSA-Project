@@ -14,7 +14,7 @@ using NDesk.Options;
 
 using Mosa.Runtime.CompilerFramework;
 
-namespace Mosa.Tools.Compiler.MethodCompilerStage
+namespace Mosa.Tools.Compiler.Options
 {
 
 	public class CompilerStageOptionSet
@@ -26,7 +26,7 @@ namespace Mosa.Tools.Compiler.MethodCompilerStage
 		{
 
 		}
-		
+
 		public void Add(Type stage, BaseCompilerStageOptions options)
 		{
 			compilerStageOptions.Add(stage, options);

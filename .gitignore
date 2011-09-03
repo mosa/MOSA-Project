@@ -25,3 +25,10 @@ obj
 /Bin/*
 /tmp
 /tags
+
+/Tools/peter-bochs/gluegen-rt.dll
+/Tools/peter-bochs/jogl.dll
+/Tools/peter-bochs/jogl_awt.dll
+/Tools/peter-bochs/jogl_cg.dll
+/Tools/peter-bochs/os.log
+/Tools/peter-bochs/run.txt

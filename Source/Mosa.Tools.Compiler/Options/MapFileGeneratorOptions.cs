@@ -18,27 +18,26 @@ namespace Mosa.Tools.Compiler.Options
 {
 	/// <summary>
 	/// </summary>
-	public abstract class BaseOptions
+	public class MapFileGeneratorOptions : BaseCompilerStageWithEnableOptions
 	{
-		/// <summary>
-		/// Gets or sets a value indicating whether this <see cref="BaseOptions"/> is enabled.
-		/// </summary>
-		/// <value><c>true</c> if enabled; otherwise, <c>false</c>.</value>
-		public bool Enabled { get; set; }
 
-		/// <summary>
-		/// Initializes a new instance of the ConstantFoldingWrapper class.
-		/// </summary>
-		public BaseOptions(OptionSet optionSet)
-		{
-			Enabled = false;
-			AddOptions(optionSet);
-		}
+		public string MapFile { get; set; }
 
 		/// <summary>
 		/// Adds the additional options for the parsing process to the given OptionSet.
 		/// </summary>
 		/// <param name="optionSet">A given OptionSet to add the options to.</param>
-		public abstract void AddOptions(OptionSet optionSet);
+		public override void AddOptions(OptionSet optionSet)
+		{
+			optionSet.Add(
+				"map=",
+				"Generate a map {file} of the produced binary.",
+				delegate(string file)
+				{
+					this.MapFile = file;
+					this.Enabled = string.IsNullOrEmpty(file);
+				}
+			);
+		}
 	}
 }
