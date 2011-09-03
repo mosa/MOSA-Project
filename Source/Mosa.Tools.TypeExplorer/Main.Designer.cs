@@ -196,7 +196,7 @@
 			this.showTokenValues.CheckOnClick = true;
 			this.showTokenValues.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.showTokenValues.Name = "showTokenValues";
-			this.showTokenValues.Size = new System.Drawing.Size(176, 22);
+			this.showTokenValues.Size = new System.Drawing.Size(210, 22);
 			this.showTokenValues.Text = "Show Token Values";
 			this.showTokenValues.Click += new System.EventHandler(this.showTokenValues_Click);
 			// 
@@ -206,7 +206,7 @@
 			this.showSizes.CheckOnClick = true;
 			this.showSizes.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.showSizes.Name = "showSizes";
-			this.showSizes.Size = new System.Drawing.Size(176, 22);
+			this.showSizes.Size = new System.Drawing.Size(210, 22);
 			this.showSizes.Text = "Show Sizes";
 			this.showSizes.Click += new System.EventHandler(this.showSizes_Click);
 			// 
@@ -214,8 +214,8 @@
 			// 
 			this.includeTestKorlibToolStripMenuItem.CheckOnClick = true;
 			this.includeTestKorlibToolStripMenuItem.Name = "includeTestKorlibToolStripMenuItem";
-			this.includeTestKorlibToolStripMenuItem.Size = new System.Drawing.Size(176, 22);
-			this.includeTestKorlibToolStripMenuItem.Text = "Include Test Korlib";
+			this.includeTestKorlibToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
+			this.includeTestKorlibToolStripMenuItem.Text = "Include Test Components";
 			// 
 			// openFileDialog
 			// 

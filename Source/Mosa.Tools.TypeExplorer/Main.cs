@@ -369,14 +369,16 @@ namespace Mosa.Tools.TypeExplorer
 			ShowCodeForm();
 		}
 
-		protected void LoadAssembly(string filename, bool includeTestKorlib)
+		protected void LoadAssembly(string filename, bool includeTestComponents)
 		{
 			IAssemblyLoader assemblyLoader = new AssemblyLoader();
 
-			if (includeTestKorlib)
+			if (includeTestComponents)
 			{
 				assemblyLoader.AddPrivatePath(System.IO.Directory.GetCurrentDirectory());
-				assemblyLoader.LoadModule("Mosa.Test.Runtime");
+				assemblyLoader.LoadModule("mscorlib.dll");
+				assemblyLoader.LoadModule("Mosa.Platform.x86.Intrinsic.dll");
+				assemblyLoader.LoadModule("Mosa.Test.Runtime.dll");
 			}
 
 			assemblyLoader.AddPrivatePath(System.IO.Path.GetDirectoryName(filename));
