@@ -72,7 +72,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 					typeRef = BuiltInSigType.Object;
 					break;
 				case OpCode.Ldobj: // FIXME
-					typeRef = null;
+					typeRef = BuiltInSigType.Object;
 					break;
 				default:
 					throw new NotImplementedException();
@@ -102,8 +102,10 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 				// No, retrieve a type reference from the immediate argument
 				Token token = decoder.DecodeTokenType();
 				sigType = new ClassSigType(token);
-				//ctx.Other = sigType;
+				ctx.Other = sigType;
 			}
+			else
+				ctx.Other = TypeReference;
 
 			// Push the loaded value
 			ctx.Result = LoadInstruction.CreateResultOperand(decoder, Operand.StackTypeFromSigType(sigType), sigType);
