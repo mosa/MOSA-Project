@@ -13,13 +13,13 @@ namespace Mosa.Test.Collection
 {
 	public static class DelegateTests
 	{
-        private static int status;
+		private static int status;
 
-        #region DelegateVoid
+		#region DelegateVoid
 
-        delegate void DelegateVoid();
+		delegate void DelegateVoid();
 
-        public static bool DefineDelegate()
+		public static bool DefineDelegate()
 		{
 			DelegateVoid d = DelegateVoidTarget1;
 			return d != null;
@@ -27,211 +27,211 @@ namespace Mosa.Test.Collection
 
 		public static int CallDelegateVoid1()
 		{
-            status = 0;
+			status = 0;
 			DelegateVoid d = DelegateVoidTarget1;
 			d();
 			return status;
 		}
 
-        public static int CallDelegateVoid2()
-        {
-            status = 0;
-            DelegateVoid d = DelegateVoidTarget2;
-            d();
-            return status;
-        }
-
-        public static int ReassignDelegateVoid()
-        {
-            status = 0;
-            DelegateVoid d = DelegateVoidTarget1;
-            d();
-            d = DelegateVoidTarget2;
-            d();
-            return status;
-        }
-
-        public static void DelegateVoidTarget1()
+		public static int CallDelegateVoid2()
 		{
-            status = 1;
+			status = 0;
+			DelegateVoid d = DelegateVoidTarget2;
+			d();
+			return status;
 		}
 
-        public static void DelegateVoidTarget2()
-        {
-            status += 2;
-        }
+		public static int ReassignDelegateVoid()
+		{
+			status = 0;
+			DelegateVoid d = DelegateVoidTarget1;
+			d();
+			d = DelegateVoidTarget2;
+			d();
+			return status;
+		}
 
-        #endregion
+		public static void DelegateVoidTarget1()
+		{
+			status = 1;
+		}
 
-        #region DelegateParameters
+		public static void DelegateVoidTarget2()
+		{
+			status += 2;
+		}
 
-        delegate void DelegateParameters(int a, int b);
+		#endregion
 
-        public static int CallDelegateParameters(int a, int b)
-        {
-            status = 0;
-            DelegateParameters d = DelegateParametersTarget;
-            d(a, b);
-            return status;
-        }
+		#region DelegateParameters
 
-        public static void DelegateParametersTarget(int a, int b)
-        {
-            status = a * 10 + b;
-        }
+		delegate void DelegateParameters(int a, int b);
 
-        #endregion
+		public static int CallDelegateParameters(int a, int b)
+		{
+			status = 0;
+			DelegateParameters d = DelegateParametersTarget;
+			d(a, b);
+			return status;
+		}
 
-        #region DelegateReturn
+		public static void DelegateParametersTarget(int a, int b)
+		{
+			status = a * 10 + b;
+		}
 
-        delegate int DelegateReturn();
+		#endregion
 
-        public static bool CallDelegateReturn()
-        {
-            status = 3;
-            DelegateReturn d = DelegateReturnTarget;
-            int result = d();
-            return result == 3;
-        }
+		#region DelegateReturn
 
-        public static int DelegateReturnTarget()
-        {
-            return status;
-        }
+		delegate int DelegateReturn();
 
-        #endregion
+		public static bool CallDelegateReturn()
+		{
+			status = 3;
+			DelegateReturn d = DelegateReturnTarget;
+			int result = d();
+			return result == 3;
+		}
 
-        #region DelegateParametersReturn
+		public static int DelegateReturnTarget()
+		{
+			return status;
+		}
 
-        delegate int DelegateParametersReturn(int p1, int p2);
+		#endregion
 
-        public static bool CallDelegateParametersReturn(int p1, int p2)
-        {
-            DelegateParametersReturn d = DelegateParametersReturnTarget;
-            int result = d(p1, p2);
-            return result == p1 * 10 + p2;
-        }
+		#region DelegateParametersReturn
 
-        public static int DelegateParametersReturnTarget(int p1, int p2)
-        {
-            return p1 * 10 + p2;
-        }
+		delegate int DelegateParametersReturn(int p1, int p2);
 
-        #endregion
+		public static bool CallDelegateParametersReturn(int p1, int p2)
+		{
+			DelegateParametersReturn d = DelegateParametersReturnTarget;
+			int result = d(p1, p2);
+			return result == p1 * 10 + p2;
+		}
 
-        #region DelegateBox
+		public static int DelegateParametersReturnTarget(int p1, int p2)
+		{
+			return p1 * 10 + p2;
+		}
 
-        delegate object DelegateBox(int p);
+		#endregion
 
-        public static bool CallDelegateBox(int p)
-        {
-            DelegateBox d = DelegateBoxTarget;
-            int result = (int)d(p);
-            return result == p;
-        }
+		#region DelegateBox
 
-        public static object DelegateBoxTarget(int p)
-        {
-            return p;
-        }
+		delegate object DelegateBox(int p);
 
-        #endregion
+		public static bool CallDelegateBox(int p)
+		{
+			DelegateBox d = DelegateBoxTarget;
+			int result = (int)d(p);
+			return result == p;
+		}
 
-        #region DelegateGenericReturn
+		public static object DelegateBoxTarget(int p)
+		{
+			return p;
+		}
 
-        delegate T DelegateGenericReturn<T>();
+		#endregion
 
-        public static bool CallDelegateGenericReturn()
-        {
-            status = 5;
-            DelegateGenericReturn<int> d = DelegateReturnTarget;
-            return d() == 5;
-        }
+		#region DelegateGenericReturn
 
-        public static bool CallDelegateGenericReturnStructA()
-        {
-            status = 5;
-            DelegateGenericReturn<A> d = DelegateReturnStructATarget;
-            A res = d();
-            return res.Value == 5;
-        }
+		delegate T DelegateGenericReturn<T>();
 
-        public struct A
-        {
-            public int Value;
+		public static bool CallDelegateGenericReturn()
+		{
+			status = 5;
+			DelegateGenericReturn<int> d = DelegateReturnTarget;
+			return d() == 5;
+		}
 
-            public A(int x)
-            {
-                Value = x;
-            }
-        }
+		public static bool CallDelegateGenericReturnStructA()
+		{
+			status = 5;
+			DelegateGenericReturn<A> d = DelegateReturnStructATarget;
+			A res = d();
+			return res.Value == 5;
+		}
 
-        public static A DelegateReturnStructATarget()
-        {
-            A a = new A(status);
-            return a;
-        }
+		public struct A
+		{
+			public int Value;
 
-        public static bool CallDelegateGenericReturnStructB()
-        {
-            status = 5;
-            DelegateGenericReturn<B> d = DelegateReturnStructBTarget;
-            B res = d();
-            return res.Value1 == 5 && res.Value2 == 10;
-        }
+			public A(int x)
+			{
+				Value = x;
+			}
+		}
 
-        public struct B
-        {
-            public int Value1;
-            public int Value2;
+		public static A DelegateReturnStructATarget()
+		{
+			A a = new A(status);
+			return a;
+		}
 
-            public B(int x)
-            {
-                Value1 = x;
-                Value2 = x * 2;
-            }
-        }
+		public static bool CallDelegateGenericReturnStructB()
+		{
+			status = 5;
+			DelegateGenericReturn<B> d = DelegateReturnStructBTarget;
+			B res = d();
+			return res.Value1 == 5 && res.Value2 == 10;
+		}
 
-        public static B DelegateReturnStructBTarget()
-        {
-            B b = new B(status);
-            return b;
-        }
+		public struct B
+		{
+			public int Value1;
+			public int Value2;
 
-        #endregion
+			public B(int x)
+			{
+				Value1 = x;
+				Value2 = x * 2;
+			}
+		}
 
-        #region DelegateGenericTarget (disabled)
+		public static B DelegateReturnStructBTarget()
+		{
+			B b = new B(status);
+			return b;
+		}
 
-        //delegate void DelegateGenericTarget(int p);
+		#endregion
 
-        //public static bool CallDelegateGenericTarget()
-        //{
-        //    DelegateGenericTarget d = DelegateGenericTargetTarget<int>;
-        //    d(1);
-        //    return true;
-        //}
+		#region DelegateGenericTarget (disabled)
 
-        //public static void DelegateGenericTargetTarget<T>(T p)
-        //{
-        //}
+		//delegate void DelegateGenericTarget(int p);
 
-        #endregion
+		//public static bool CallDelegateGenericTarget()
+		//{
+		//    DelegateGenericTarget d = DelegateGenericTargetTarget<int>;
+		//    d(1);
+		//    return true;
+		//}
 
-        #region DelegateGenericTargetReturn (disabled)
+		//public static void DelegateGenericTargetTarget<T>(T p)
+		//{
+		//}
 
-        //delegate T DelegateGenericTargetReturn<T>(T p);
+		#endregion
 
-        //public static bool CallDelegateGenericTargetReturn()
-        //{
-        //    DelegateGenericTargetReturn<int> d = DelegateGenericTargetReturnTarget<int>;
-        //    return d(50) == 50;
-        //}
+		#region DelegateGenericTargetReturn (disabled)
 
-        //public static T DelegateGenericTargetReturnTarget<T>(T p)
-        //{
-        //    return p;
-        //}
+		//delegate T DelegateGenericTargetReturn<T>(T p);
 
-        #endregion
-    }
+		//public static bool CallDelegateGenericTargetReturn()
+		//{
+		//    DelegateGenericTargetReturn<int> d = DelegateGenericTargetReturnTarget<int>;
+		//    return d(50) == 50;
+		//}
+
+		//public static T DelegateGenericTargetReturnTarget<T>(T p)
+		//{
+		//    return p;
+		//}
+
+		#endregion
+	}
 }
