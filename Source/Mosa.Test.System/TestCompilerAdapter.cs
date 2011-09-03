@@ -24,6 +24,7 @@ namespace Mosa.Test.System
 		protected TestCompilerAdapter()
 		{
 			settings.AddReference("Mosa.Test.Korlib.dll");
+			settings.AddReference("Mosa.Platform.x86.Intrinsic.dll");
 		}
 
 		protected T Run<T>(string ns, string type, string method, params object[] parameters)

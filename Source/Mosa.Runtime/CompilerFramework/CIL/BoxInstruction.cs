@@ -107,6 +107,11 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 								builtInType = decoder.TypeModule.TypeSystem.GetType("mscorlib", "System", "Boolean");
 								break;
 							}
+						case CilElementType.String:
+							{
+								builtInType = decoder.TypeModule.TypeSystem.GetType("mscorlib", "System", "String");
+								break;
+							}
 						default:
 							break;
 					}

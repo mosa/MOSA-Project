@@ -149,6 +149,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			}
 
 			context.SetInstruction(loadInstruction, destination, source, ConstantOperand.FromValue(0));
+			context.Other = elementType;
 		}
 
 		private SigType GetElementTypeFromSigType(SigType sigType)
@@ -737,7 +738,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 				var classSize = typeLayout.GetTypeSize(type);
 
 				context.SetOperand(1, methodTableSymbol);
-				context.SetOperand(2, new ConstantOperand(BuiltInSigType.Int32, classSize));
+				context.SetOperand(2, new ConstantOperand(BuiltInSigType.UInt32, classSize));
 				context.SetOperand(3, value);
 				context.OperandCount = 4;
 				context.Result = result;
@@ -771,7 +772,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 				var classSize = typeLayout.GetTypeSize(type);
 
 				context.SetOperand(1, methodTableSymbol);
-				context.SetOperand(2, new ConstantOperand(BuiltInSigType.Int32, classSize));
+				context.SetOperand(2, new ConstantOperand(BuiltInSigType.UInt32, classSize));
 				context.SetOperand(3, value);
 				context.OperandCount = 4;
 				context.Result = result;
@@ -805,7 +806,7 @@ namespace Mosa.Runtime.CompilerFramework.IR
 				var classSize = typeLayout.GetTypeSize(type);
 
 				context.SetOperand(1, methodTableSymbol);
-				context.SetOperand(2, new ConstantOperand(BuiltInSigType.Int32, classSize));
+				context.SetOperand(2, new ConstantOperand(BuiltInSigType.UInt32, classSize));
 				context.SetOperand(3, value);
 				context.OperandCount = 4;
 				context.Result = result;
@@ -817,6 +818,40 @@ namespace Mosa.Runtime.CompilerFramework.IR
 				context.SetInstruction(Instruction.NopInstruction);
 
 				ReplaceWithVmCall(context, VmCall.BoxUInt32);
+
+				var methodTableSymbol = GetMethodTableSymbol(type);
+				var classSize = typeLayout.GetTypeSize(type);
+
+				context.SetOperand(1, methodTableSymbol);
+				context.SetOperand(2, new ConstantOperand(BuiltInSigType.UInt32, classSize));
+				context.SetOperand(3, value);
+				context.OperandCount = 4;
+				context.Result = result;
+				return;
+			}
+			else if (context.Operand1.Type.ToString() == "R4")
+			{
+				var type = this.typeSystem.GetType("mscorlib", "System", "Single");
+				context.SetInstruction(Instruction.NopInstruction);
+
+				ReplaceWithVmCall(context, VmCall.BoxSingle);
+
+				var methodTableSymbol = GetMethodTableSymbol(type);
+				var classSize = typeLayout.GetTypeSize(type);
+
+				context.SetOperand(1, methodTableSymbol);
+				context.SetOperand(2, new ConstantOperand(BuiltInSigType.UInt32, classSize));
+				context.SetOperand(3, value);
+				context.OperandCount = 4;
+				context.Result = result;
+				return;
+			}
+			else if (context.Operand1.Type.ToString() == "R8")
+			{
+				var type = this.typeSystem.GetType("mscorlib", "System", "Double");
+				context.SetInstruction(Instruction.NopInstruction);
+
+				ReplaceWithVmCall(context, VmCall.BoxDouble);
 
 				var methodTableSymbol = GetMethodTableSymbol(type);
 				var classSize = typeLayout.GetTypeSize(type);
@@ -1261,7 +1296,49 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			var type = context.Other as RuntimeType;
 			var result = context.Result;
 
-			if (type.FullName == "System.Int32")
+			if (type.FullName == "System.Boolean")
+			{
+				ReplaceWithVmCall(context, VmCall.UnboxUInt32);
+				context.SetOperand(1, value);
+				context.OperandCount = 2;
+				context.Result = result;
+			}
+			else if (type.FullName == "System.Char")
+			{
+				ReplaceWithVmCall(context, VmCall.UnboxUInt32);
+				context.SetOperand(1, value);
+				context.OperandCount = 2;
+				context.Result = result;
+			}
+			else if (type.FullName == "System.SByte")
+			{
+				ReplaceWithVmCall(context, VmCall.UnboxInt32);
+				context.SetOperand(1, value);
+				context.OperandCount = 2;
+				context.Result = result;
+			}
+			else if (type.FullName == "System.Byte")
+			{
+				ReplaceWithVmCall(context, VmCall.UnboxUInt32);
+				context.SetOperand(1, value);
+				context.OperandCount = 2;
+				context.Result = result;
+			}
+			else if (type.FullName == "System.Int16")
+			{
+				ReplaceWithVmCall(context, VmCall.UnboxInt16);
+				context.SetOperand(1, value);
+				context.OperandCount = 2;
+				context.Result = result;
+			}
+			else if (type.FullName == "System.UInt16")
+			{
+				ReplaceWithVmCall(context, VmCall.UnboxUInt32);
+				context.SetOperand(1, value);
+				context.OperandCount = 2;
+				context.Result = result;
+			}
+			else if (type.FullName == "System.Int32")
 			{
 				ReplaceWithVmCall(context, VmCall.UnboxInt32);
 				context.SetOperand(1, value);
@@ -1271,6 +1348,20 @@ namespace Mosa.Runtime.CompilerFramework.IR
 			else if (type.FullName == "System.UInt32")
 			{
 				ReplaceWithVmCall(context, VmCall.UnboxUInt32);
+				context.SetOperand(1, value);
+				context.OperandCount = 2;
+				context.Result = result;
+			}
+			else if (type.FullName == "System.Single")
+			{
+				ReplaceWithVmCall(context, VmCall.UnboxSingle);
+				context.SetOperand(1, value);
+				context.OperandCount = 2;
+				context.Result = result;
+			}
+			else if (type.FullName == "System.Double")
+			{
+				ReplaceWithVmCall(context, VmCall.UnboxDouble);
 				context.SetOperand(1, value);
 				context.OperandCount = 2;
 				context.Result = result;

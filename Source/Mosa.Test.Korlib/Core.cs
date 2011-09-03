@@ -43,10 +43,6 @@ namespace System
 	{
 	}
 
-	public class Delegate : Object
-	{
-	}
-
 	public struct SByte
 	{
 		public const sbyte MinValue = -128;

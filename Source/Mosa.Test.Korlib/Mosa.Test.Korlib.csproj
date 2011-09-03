@@ -38,6 +38,7 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="System\AsyncCallback.cs" />
+    <Compile Include="System\Delegate.cs" />
     <Compile Include="System\IAsyncResult.cs" />
     <Compile Include="Runtime.cs" />
     <Compile Include="Core.cs" />
@@ -45,6 +46,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
 </Project>

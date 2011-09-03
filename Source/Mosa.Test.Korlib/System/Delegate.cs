@@ -10,7 +10,9 @@
 namespace System
 {
 	/// <summary>
-	/// 
+	/// Implementation of the "System.Delegate" class.
 	/// </summary>
-	public delegate void AsyncCallback(IAsyncResult ar);
+	public class Delegate
+	{
+	}
 }
