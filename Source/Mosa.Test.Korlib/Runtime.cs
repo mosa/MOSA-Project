@@ -125,9 +125,9 @@ namespace Mosa.Internal
 			return memory;
 		}
 
-		public unsafe static int UnboxInt16(void* data)
+		public unsafe static short UnboxInt16(void* data)
 		{
-			return ((int*)data)[0];
+			return ((short*)data)[0];
 		}
 
 		public unsafe static int UnboxInt32(void* data)
@@ -154,6 +154,5 @@ namespace Mosa.Internal
 		{
 
 		}
-
 	}
 }

@@ -148,12 +148,17 @@ namespace Mosa.Internal
 
 		public unsafe static void* BoxDouble(void* methodTable, uint classSize, double value)
 		{
-			void* memory = (void*)AllocateMemory(8);
+			void* memory = (void*)AllocateMemory(4);
 
 			double* destination = (double*)memory;
 			destination[0] = (double)value;
 
 			return memory;
+		}
+
+		public unsafe static short UnboxInt16(void* data)
+		{
+			return ((short*)data)[0];
 		}
 
 		public unsafe static int UnboxInt32(void* data)
