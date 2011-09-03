@@ -19,6 +19,23 @@ namespace System
 
 		internal int _value;
 
+		public int CompareTo(int value)
+		{
+			if (_value < value) return -1;
+			else if (_value > value) return 1;
+			return 0;
+		}
+
+		public bool Equals(int obj)
+		{
+			return Equals((object)obj);
+		}
+
+		public override bool Equals(object obj)
+		{
+			return ((int)obj) == _value;
+		}
+
 		public override string ToString()
 		{
 			return CreateString((uint)_value, true, false);
@@ -81,11 +98,6 @@ namespace System
 			}
 
 			return result;
-		}
-
-		public override bool Equals(object obj)
-		{
-			return (int)obj == _value;
 		}
 
 		public override int GetHashCode()

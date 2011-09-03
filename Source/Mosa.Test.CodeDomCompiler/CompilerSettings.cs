@@ -64,7 +64,6 @@ namespace Mosa.Test.CodeDomCompiler
 			unsafeCode = true;
 			doNotReferenceMscorlib = true;
 			references = new List<string>();
-			//AddReference(@"Mosa.Test.Korlib.dll");
 		}
 
 		/// <summary>

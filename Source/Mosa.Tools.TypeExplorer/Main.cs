@@ -376,7 +376,7 @@ namespace Mosa.Tools.TypeExplorer
 			if (includeTestKorlib)
 			{
 				assemblyLoader.AddPrivatePath(System.IO.Directory.GetCurrentDirectory());
-				assemblyLoader.LoadModule("Mosa.Test.Korlib");
+				assemblyLoader.LoadModule("Mosa.Test.Runtime");
 			}
 
 			assemblyLoader.AddPrivatePath(System.IO.Path.GetDirectoryName(filename));
