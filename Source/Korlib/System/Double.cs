@@ -73,10 +73,6 @@ namespace System
 				return 0;
 		}
 
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> f1816ffd8b60479498231c1ffdb6eaa64c555bb6
 		public bool Equals(double value)
 		{
 			//return Equals((object)obj);
@@ -99,16 +95,14 @@ namespace System
 		public override int GetHashCode()
 		{
 			return (int)_value;
-<<<<<<< HEAD
-=======
+		}
+
 		public static bool IsNaN(float f)
 		{
 #pragma warning disable 1718
 			return (f != f);
 #pragma warning restore
->>>>>>> 477a0f502b2f82cd1ed0f94fd3c7c2b9f6a2fe7f
-=======
->>>>>>> f1816ffd8b60479498231c1ffdb6eaa64c555bb6
 		}
+
 	}
 }
