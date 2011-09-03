@@ -37,35 +37,17 @@
     <NoStdLib>True</NoStdLib>
   </PropertyGroup>
   <ItemGroup>
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
-    <Compile Include="System\AsyncCallback.cs" />
-    <Compile Include="System\Delegate.cs" />
-    <Compile Include="System\IAsyncResult.cs" />
->>>>>>> 477a0f502b2f82cd1ed0f94fd3c7c2b9f6a2fe7f
-=======
->>>>>>> f1816ffd8b60479498231c1ffdb6eaa64c555bb6
     <Compile Include="Runtime.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
   </ItemGroup>
   <ItemGroup>
-<<<<<<< HEAD
-<<<<<<< HEAD
-=======
->>>>>>> f1816ffd8b60479498231c1ffdb6eaa64c555bb6
     <ProjectReference Include="..\Korlib\Korlib.csproj">
       <Project>{631BC4F3-E2D8-4319-814C-13904CAA17CE}</Project>
       <Name>Korlib</Name>
     </ProjectReference>
-<<<<<<< HEAD
-=======
     <Reference Include="System" />
->>>>>>> 477a0f502b2f82cd1ed0f94fd3c7c2b9f6a2fe7f
-=======
->>>>>>> f1816ffd8b60479498231c1ffdb6eaa64c555bb6
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.Targets" />
 </Project>
