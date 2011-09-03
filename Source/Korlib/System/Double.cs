@@ -73,7 +73,24 @@ namespace System
 				return 0;
 		}
 
+		public bool Equals(double value)
+		{
+			//return Equals((object)obj);
+			if (IsNaN(value))
+				return IsNaN(_value);
 
+			return (value == _value);
+		}
+
+		//public override bool Equals(object obj)
+		//{
+		//    double value = (double)obj;
+
+		//    if (IsNaN(value))
+		//        return IsNaN(_value);
+
+		//    return (value == _value);
+		//}
 
 		public override int GetHashCode()
 		{
