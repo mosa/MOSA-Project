@@ -19,7 +19,10 @@ namespace Mosa.Platform.x86.Intrinsic
 		public void Invoke()
 		{
 			if (instance == null)
+			{
 				Native.InvokeInstanceDelegate(instance, methodPointer);
+				return;
+			}
 			Native.InvokeDelegate(instance, methodPointer);
 		}
 
