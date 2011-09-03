@@ -95,7 +95,7 @@ namespace Mosa.Internal
 			return memory;
 		}
 
-		public unsafe static void* BoxInt32(void* methodTable, uint classSize, uint value)
+		public unsafe static void* BoxUInt32(void* methodTable, uint classSize, uint value)
 		{
 			void* memory = (void*)AllocateMemory(4);
 

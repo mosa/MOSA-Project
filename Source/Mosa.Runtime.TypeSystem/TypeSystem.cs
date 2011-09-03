@@ -71,7 +71,7 @@ namespace Mosa.Runtime.TypeSystem
 		/// <returns></returns>
 		ITypeModule ITypeSystem.ResolveModuleReference(string assembly)
 		{
-			return typeModules.Find(typeModule => typeModule.Name == assembly || (typeModule.Name == "mscorlib" && assembly == "Mosa.Test.Korlib"));
+			return typeModules.Find(typeModule => typeModule.Name == assembly);
 		}
 
 		/// <summary>

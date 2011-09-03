@@ -70,5 +70,10 @@ namespace System
 			else
 				return 0;
 		}
+
+		public override int GetHashCode()
+		{
+			return (int)_value;
+		}
 	}
 }

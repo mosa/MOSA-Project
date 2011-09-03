@@ -19,14 +19,36 @@ namespace System
 
 		internal uint _value;
 
+		public int CompareTo(uint value)
+		{
+			if (_value < value) return -1;
+			else if (_value > value) return 1;
+			return 0;
+		}
+
+		public bool Equals(uint obj)
+		{
+			return Equals((object)obj);
+		}
+
+		public override bool Equals(object obj)
+		{
+			return ((uint)obj) == _value;
+		}
+
 		public override string ToString()
 		{
 			return Int32.CreateString(_value, false, false);
 		}
-		
+
 		public string ToString(string format)
 		{
 			return null; // FIXME (rootnode)
+		}
+
+		public override int GetHashCode()
+		{
+			return (int)_value;
 		}
 	}
 }

@@ -23,7 +23,8 @@ namespace Mosa.Test.System
 
 		protected TestCompilerAdapter()
 		{
-			settings.AddReference("Mosa.Test.Korlib.dll");
+			settings.AddReference("mscorlib.dll");
+			settings.AddReference("Mosa.Test.Runtime.dll");
 		}
 
 		protected T Run<T>(string ns, string type, string method, params object[] parameters)

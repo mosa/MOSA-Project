@@ -167,8 +167,8 @@ namespace Mosa.Runtime.Metadata.Loader.PE
 				}
 
 				// HACK: Presents Mosa.Test.Korlib as mscorlib
-				if (name == @"Mosa.Test.Korlib")
-					return @"mscorlib";
+				//if (name == @"Mosa.Test.Korlib")
+				//    return @"mscorlib";
 
 				return name;
 			}

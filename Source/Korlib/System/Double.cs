@@ -32,12 +32,12 @@ namespace System
 
 		public static bool IsNegativeInfinity(double d)
 		{
-			return (d < 0.0d && (d == NegativeInfinity || d == PositiveInfinity));
+			return d == NegativeInfinity;
 		}
 
 		public static bool IsPositiveInfinity(double d)
 		{
-			return (d > 0.0d && (d == NegativeInfinity || d == PositiveInfinity));
+			return d == PositiveInfinity;
 		}
 
 		public static bool IsInfinity(double d)
@@ -47,10 +47,12 @@ namespace System
 
 		public int CompareTo(double value)
 		{
-			if (IsPositiveInfinity(_value) && IsPositiveInfinity(value))
-				return 0;
-			if (IsNegativeInfinity(_value) && IsNegativeInfinity(value))
-				return 0;
+			if (IsPositiveInfinity(_value))
+				if (IsPositiveInfinity(value))
+					return 0;
+			if (IsNegativeInfinity(_value))
+				if (IsNegativeInfinity(value))
+					return 0;
 
 			if (IsNaN(value)) if (IsNaN(_value))
 					return 0;
@@ -69,6 +71,13 @@ namespace System
 				return -1;
 			else
 				return 0;
+		}
+
+
+
+		public override int GetHashCode()
+		{
+			return (int)_value;
 		}
 	}
 }

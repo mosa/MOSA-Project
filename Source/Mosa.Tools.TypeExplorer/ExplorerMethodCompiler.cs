@@ -41,15 +41,15 @@ namespace Mosa.Tools.TypeExplorer
 				new StaticAllocationResolutionStage(),
 				new CILTransformationStage(),
 				
-				new DominanceCalculationStage(),
-				new PhiPlacementStage(),
-				new EnterSSA(),
+				//new DominanceCalculationStage(),
+				//new PhiPlacementStage(),
+				//new EnterSSA(),
 
-				new ConstantPropagationStage(ConstantPropagationStage.PropagationStage.PreFolding),
-				new ConstantFoldingStage(),
-				new ConstantPropagationStage(ConstantPropagationStage.PropagationStage.PostFolding),
+				//new ConstantPropagationStage(ConstantPropagationStage.PropagationStage.PreFolding),
+				//new ConstantFoldingStage(),
+				//new ConstantPropagationStage(ConstantPropagationStage.PropagationStage.PostFolding),
 
-				new LeaveSSA(),
+				//new LeaveSSA(),
 				new StackLayoutStage(),
 				new PlatformStubStage(),
 

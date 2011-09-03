@@ -19,6 +19,23 @@ namespace System
 
 		internal char _value;
 
+		public int CompareTo(char value)
+		{
+			if (_value < value) return -1;
+			else if (_value > value) return 1;
+			return 0;
+		}
+
+		public bool Equals(char obj)
+		{
+			return Equals((object)obj);
+		}
+
+		public override bool Equals(object obj)
+		{
+			return ((char)obj) == _value;
+		}
+
 		public static bool IsUpper(char c)
 		{
 			unsafe
@@ -38,5 +55,9 @@ namespace System
 			return new String(_value, 1);
 		}
 
+		public override int GetHashCode()
+		{
+			return (int)_value;
+		}
 	}
 }
