@@ -52,7 +52,7 @@ namespace Mosa.Tools.Compiler.Boot
 	/// the specification at 
 	/// http://www.gnu.org/software/grub/manual/multiboot/multiboot.html.
 	/// </remarks>
-	public sealed class Multiboot0695AssemblyStage : BaseAssemblyCompilerStage, IAssemblyCompilerStage, IHasOptions, IPipelineStage
+	public sealed class Multiboot0695AssemblyStage : BaseAssemblyCompilerStage, IAssemblyCompilerStage, IPipelineStage
 	{
 		#region Constants
 

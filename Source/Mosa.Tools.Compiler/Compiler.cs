@@ -12,21 +12,24 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Diagnostics;
+
 using NDesk.Options;
 
 using Mosa.Runtime;
+using Mosa.Runtime.Options;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime.TypeSystem;
+using Mosa.Runtime.InternalTrace;
 using Mosa.Compiler.Linker;
 using Mosa.Tools.Compiler.Boot;
 using Mosa.Tools.Compiler.Linker;
-using Mosa.Runtime.InternalTrace;
 using Mosa.Tools.Compiler.AssemblyCompilerStage;
 using Mosa.Tools.Compiler.MethodCompilerStage;
 using Mosa.Tools.Compiler.TypeInitializers;
+using Mosa.Tools.Compiler.Options;
 
 namespace Mosa.Tools.Compiler
 {
@@ -35,27 +38,12 @@ namespace Mosa.Tools.Compiler
 	/// </summary>
 	public class Compiler
 	{
-		#region Fields
+		#region Data
 
 		/// <summary>
-		/// Holds the stage responsible for the architecture.
+		/// 
 		/// </summary>
-		private ArchitectureSelector architectureSelector;
-
-		/// <summary>
-		/// Holds the stage responsible for the linker/binary format.
-		/// </summary>
-		private LinkerFormatSelector linkerStage;
-
-		/// <summary>
-		/// Holds the stage responsible for the boot format.
-		/// </summary>
-		private BootFormatSelector bootFormatStage;
-
-		/// <summary>
-		/// Holds the name of the map file to generate.
-		/// </summary>
-		private MapFileGeneratorWrapper mapFileWrapper;
+		CompilerOptionSet compilerOptionSet = new CompilerOptionSet();
 
 		/// <summary>
 		/// Holds a list of input files.
@@ -81,7 +69,7 @@ namespace Mosa.Tools.Compiler
 		/// </summary>
 		private readonly string usageString;
 
-		#endregion Fields
+		#endregion Data
 
 		#region Constructors
 
@@ -93,11 +81,6 @@ namespace Mosa.Tools.Compiler
 			usageString = "Usage: mosacl -o outputfile --Architecture=[x86] --format=[ELF32|ELF64|PE] {--boot=[mb0.7]} {additional options} inputfiles";
 			optionSet = new OptionSet();
 			inputFiles = new List<FileInfo>();
-
-			this.linkerStage = new LinkerFormatSelector();
-			this.bootFormatStage = new BootFormatSelector();
-			this.architectureSelector = new ArchitectureSelector();
-			this.mapFileWrapper = new MapFileGeneratorWrapper();
 
 			#region Setup general options
 			optionSet.Add(
@@ -152,12 +135,18 @@ namespace Mosa.Tools.Compiler
 
 			#endregion
 
-			this.linkerStage.AddOptions(optionSet);
-			this.bootFormatStage.AddOptions(optionSet);
-			this.architectureSelector.AddOptions(optionSet);
-			this.mapFileWrapper.AddOptions(optionSet);
-
-			StaticAllocationResolutionStageWrapper.Instance.AddOptions(optionSet);
+			compilerOptionSet.AddOptions(
+				new List<BaseCompilerOptions>()
+				{
+					new BootFormatOptions(optionSet),
+					new LinkerFormatOptions(optionSet),
+					new Elf32LinkerOptions(optionSet),
+					new MapFileGeneratorOptions(optionSet),
+					new PortableExecutableOptions(optionSet),
+					new StaticAllocationResolutionStageOptions(optionSet),
+					new InstructionStatisticsOptions(optionSet)
+				}
+			);
 		}
 
 		#endregion Constructors
@@ -196,24 +185,24 @@ namespace Mosa.Tools.Compiler
 				// Process boot format:
 				// Boot format only matters if it's an executable
 				// Process this only now, because input files must be known
-				if (isExecutable == false && bootFormatStage.IsConfigured == true)
+				if (!isExecutable && compilerOptionSet.GetOptions<BootFormatOptions>().BootCompilerStage == null)
 				{
 					Console.WriteLine("Warning: Ignoring boot format, because target is not an executable.");
 					Console.WriteLine();
 				}
 
 				// Check for missing options
-				if (!linkerStage.IsConfigured)
+				if (compilerOptionSet.GetOptions<LinkerFormatOptions>().LinkerStage == null)
 				{
 					throw new OptionException("No binary format specified.", "Architecture");
 				}
 
-				if (String.IsNullOrEmpty(this.linkerStage.OutputFile))
+				if (String.IsNullOrEmpty(compilerOptionSet.GetOptions<LinkerFormatOptions>().OutputFile))
 				{
 					throw new OptionException("No output file specified.", "o");
 				}
 
-				if (!architectureSelector.IsConfigured)
+				if (compilerOptionSet.GetOptions<ArchitectureOptions>().Architecture == null)
 				{
 					throw new OptionException("No architecture specified.", "Architecture");
 				}
@@ -253,11 +242,11 @@ namespace Mosa.Tools.Compiler
 		public override string ToString()
 		{
 			StringBuilder sb = new StringBuilder();
-			sb.Append(" > Output file: ").AppendLine(this.linkerStage.OutputFile);
+			sb.Append(" > Output file: ").AppendLine(compilerOptionSet.GetOptions<LinkerFormatOptions>().OutputFile);
 			sb.Append(" > Input file(s): ").AppendLine(String.Join(", ", new List<string>(GetInputFileNames()).ToArray()));
-			sb.Append(" > Architecture: ").AppendLine(architectureSelector.Architecture.GetType().FullName);
-			sb.Append(" > Binary format: ").AppendLine(((IPipelineStage)linkerStage).Name);
-			sb.Append(" > Boot format: ").AppendLine(((IPipelineStage)bootFormatStage).Name);
+			sb.Append(" > Architecture: ").AppendLine(compilerOptionSet.GetOptions<ArchitectureOptions>().Architecture.GetType().FullName);
+			sb.Append(" > Binary format: ").AppendLine(((IPipelineStage)compilerOptionSet.GetOptions<LinkerFormatOptions>().LinkerStage).Name);
+			sb.Append(" > Boot format: ").AppendLine(((IPipelineStage)compilerOptionSet.GetOptions<BootFormatOptions>().BootCompilerStage).Name);
 			sb.Append(" > Is executable: ").AppendLine(isExecutable.ToString());
 			return sb.ToString();
 		}
@@ -282,26 +271,27 @@ namespace Mosa.Tools.Compiler
 			int nativePointerSize;
 			int nativePointerAlignment;
 
-			this.architectureSelector.Architecture.GetTypeRequirements(BuiltInSigType.IntPtr, out nativePointerSize, out nativePointerAlignment);
+			IArchitecture architecture = compilerOptionSet.GetOptions<ArchitectureOptions>().Architecture;
+
+			architecture.GetTypeRequirements(BuiltInSigType.IntPtr, out nativePointerSize, out nativePointerAlignment);
 
 			TypeLayout typeLayout = new TypeLayout(typeSystem, nativePointerSize, nativePointerAlignment);
 
 			IInternalTrace internalLog = new BasicInternalTrace();
 
-			// Create the compiler
-			using (AotCompiler aot = new AotCompiler(this.architectureSelector.Architecture, typeSystem, typeLayout, internalLog, optionSet))
+			using (AotCompiler aot = new AotCompiler(architecture, typeSystem, typeLayout, internalLog, compilerOptionSet))
 			{
 				aot.Pipeline.AddRange(new IAssemblyCompilerStage[] 
 				{
-					this.bootFormatStage,
+					compilerOptionSet.GetOptions<BootFormatOptions>().BootCompilerStage,
 					new AssemblyCompilationStage(), 
 					new MethodCompilerSchedulerStage(),
 					new TypeInitializerSchedulerStage(),
-					this.bootFormatStage,
+					compilerOptionSet.GetOptions<BootFormatOptions>().BootCompilerStage,
 					new CilHeaderBuilderStage(),
 					new ObjectFileLayoutStage(),
-					this.linkerStage,
-					this.mapFileWrapper,
+					new LinkerProxy(compilerOptionSet.GetOptions<LinkerFormatOptions>().LinkerStage),
+					compilerOptionSet.GetOptions<MapFileGeneratorOptions>().Enabled ? new MapFileGenerationStage() : null
 				});
 
 				aot.Run();

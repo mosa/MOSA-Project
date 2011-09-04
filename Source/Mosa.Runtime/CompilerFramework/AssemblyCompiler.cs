@@ -13,6 +13,7 @@ using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.InternalTrace;
+using Mosa.Runtime.Options;
 
 namespace Mosa.Runtime.CompilerFramework
 {
@@ -50,6 +51,11 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		protected IInternalTrace internalTrace;
 
+		/// <summary>
+		/// Holds the compiler option set
+		/// </summary>
+		protected CompilerOptionSet compilerOptionSet;
+
 		#endregion // Data members
 
 		#region Construction
@@ -59,16 +65,17 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		/// <param name="architecture">The compiler target architecture.</param>
 		/// <param name="typeSystem">The type system.</param>
-		protected AssemblyCompiler(IArchitecture architecture, ITypeSystem typeSystem, ITypeLayout typeLayout, IInternalTrace internalTrace)
+		protected AssemblyCompiler(IArchitecture architecture, ITypeSystem typeSystem, ITypeLayout typeLayout, IInternalTrace internalTrace, CompilerOptionSet compilerOptionSet)
 		{
 			if (architecture == null)
 				throw new ArgumentNullException(@"architecture");
 
-			this.architecture = architecture;
 			this.pipeline = new CompilerPipeline();
+			this.architecture = architecture;
 			this.typeSystem = typeSystem;
 			this.typeLayout = typeLayout;
 			this.internalTrace = internalTrace;
+			this.compilerOptionSet = compilerOptionSet;
 		}
 
 		#endregion // Construction
@@ -122,6 +129,11 @@ namespace Mosa.Runtime.CompilerFramework
 			get { return internalTrace; }
 		}
 
+		public CompilerOptionSet CompilerOptionSet
+		{
+			get { return compilerOptionSet; }
+		}
+
 		#endregion // Properties
 
 		#region Methods
@@ -148,11 +160,13 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 			BeginCompile();
 
-			//Pipeline.Execute<IAssemblyCompilerStage>(stage => stage.Run());
 			foreach (IAssemblyCompilerStage stage in Pipeline)
 			{
 				NotifyCompilerEvent(CompilerEvent.AssemblyStageStart, stage.Name);
+
+				// Execute stage
 				stage.Run();
+
 				NotifyCompilerEvent(CompilerEvent.AssemblyStageEnd, stage.Name);
 			}
 
@@ -164,9 +178,12 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		protected virtual void BeginCompile()
 		{
-			//Pipeline.Execute<IAssemblyCompilerStage>(stage => stage.Setup(this));
 			foreach (IAssemblyCompilerStage stage in Pipeline)
 			{
+				// Apply Compiler Options
+				// TODO: 
+
+				// Setup Compiler
 				stage.Setup(this);
 			}
 		}

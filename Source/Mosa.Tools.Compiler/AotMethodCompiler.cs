@@ -52,7 +52,7 @@ namespace Mosa.Tools.Compiler
 					new DecodingStage(),
 					new BasicBlockBuilderStage(),
 					new OperandDeterminationStage(),
-					StaticAllocationResolutionStageWrapper.Instance,
+					//new StaticAllocationResolutionStage(),
 					new CILTransformationStage(),
 
 					//new DominanceCalculationStage(),

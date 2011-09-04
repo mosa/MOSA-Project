@@ -39,6 +39,14 @@ namespace Mosa.Tools.Compiler.Linker
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MapFileGenerationStage"/> class.
 		/// </summary>
+		/// <param name="writer">The writer.</param>
+		public MapFileGenerationStage()
+		{
+		}
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="MapFileGenerationStage"/> class.
+		/// </summary>
 		public MapFileGenerationStage(TextWriter writer)
 		{
 			if (writer == null)

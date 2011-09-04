@@ -69,39 +69,20 @@
     <Compile Include="AssemblyCompilerStage\AssemblyCompilationStage.cs" />
     <Compile Include="Linker\Elf64LinkerStage.cs" />
     <Compile Include="Linker\Elf32LinkerStage.cs" />
-    <Compile Include="Linker\Elf32LinkerWrapper.cs" />
-    <Compile Include="Linker\Elf64LinkerWrapper.cs" />
-    <Compile Include="Linker\LinkerFormatSelector.cs" />
     <Compile Include="Linker\LinkerProxy.cs" />
     <Compile Include="Linker\MapFileGenerationStage.cs" />
     <Compile Include="Linker\ObjectFileLayoutStage.cs" />
     <Compile Include="Linker\PortableExecutableLinkerStage.cs" />
-    <Compile Include="Linker\PortableExecutableLinkerWrapper.cs" />
-    <Compile Include="MethodCompilerStage\MethodCompilerStageWrapper.cs" />
-    <Compile Include="MethodCompilerStage\RegisterAllocatorSelector.cs" />
     <Compile Include="AotCompiler.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AotMethodCompiler.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ArchitectureSelector.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="AssemblyCompilerStage\AssemblyCompilerStageWrapper.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Compiler.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="IHasOptions.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="MethodCompilerStage\InstructionStatisticsStage.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="MethodCompilerStage\InstructionStatisticsWrapper.cs" />
-    <Compile Include="Linker\MapFileGeneratorWrapper.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="AssemblyCompilerStage\CilHeaderBuilderStage.cs" />
@@ -109,6 +90,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Options\BootFormatOptions.cs" />
+    <Compile Include="Options\ArchitectureOptions.cs" />
     <Compile Include="Options\MultibootOptions.cs" />
     <Compile Include="Options\Elf32LinkerOptions.cs" />
     <Compile Include="Options\PortableExecutableOptions.cs" />
@@ -118,13 +100,9 @@
     <Compile Include="Program.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Boot\BootFormatSelector.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Boot\Multiboot0695AssemblyStage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MethodCompilerStage\StaticAllocationResolutionStageWrapper.cs" />
     <Compile Include="Options\StaticAllocationResolutionStageOptions.cs" />
     <Compile Include="TypeInitializers\ITypeInitializerSchedulerStage.cs" />
     <Compile Include="TypeInitializers\TypeInitializerSchedulerStage.cs">

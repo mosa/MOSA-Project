@@ -11,10 +11,11 @@ using System;
 using System.Collections.Generic;
 
 using Mosa.Runtime.CompilerFramework;
-using Mosa.Compiler.Linker;
 using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.InternalTrace;
+using Mosa.Runtime.Options;
+using Mosa.Compiler.Linker;
 
 using x86 = Mosa.Platform.x86;
 
@@ -28,8 +29,8 @@ namespace Mosa.Test.System
 
 		private readonly TestAssemblyLinker linker;
 
-		private TestCaseAssemblyCompiler(IArchitecture architecture, ITypeSystem typeSystem, ITypeLayout typeLayout, IInternalTrace internalLog) :
-			base(architecture, typeSystem, typeLayout, internalLog)
+		private TestCaseAssemblyCompiler(IArchitecture architecture, ITypeSystem typeSystem, ITypeLayout typeLayout, IInternalTrace internalLog, CompilerOptionSet compilerOptionSet) :
+			base(architecture, typeSystem, typeLayout, internalLog, compilerOptionSet)
 		{
 			linker = new TestAssemblyLinker();
 
@@ -53,7 +54,9 @@ namespace Mosa.Test.System
 
 			IInternalTrace internalLog = new BasicInternalTrace();
 
-			TestCaseAssemblyCompiler compiler = new TestCaseAssemblyCompiler(architecture, typeSystem, typeLayout, internalLog);
+			CompilerOptionSet compilerOptionSet = new CompilerOptionSet();
+
+			TestCaseAssemblyCompiler compiler = new TestCaseAssemblyCompiler(architecture, typeSystem, typeLayout, internalLog, compilerOptionSet);
 			compiler.Compile();
 
 			return compiler.linker;

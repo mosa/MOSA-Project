@@ -30,7 +30,13 @@ namespace Mosa.Runtime.Options
 			options.Add(baseCompilerOptions);
 		}
 
-		public BaseCompilerOptions GetOptions<T>() where T : BaseCompilerOptions
+		public void AddOptions(IList<BaseCompilerOptions> baseCompilerOptions)
+		{
+			foreach(BaseCompilerOptions options in baseCompilerOptions)
+				AddOptions(options);
+		}
+
+		public T GetOptions<T>() where T : BaseCompilerOptions
 		{
 			foreach(BaseCompilerOptions opt in options)
 				if (opt is T)

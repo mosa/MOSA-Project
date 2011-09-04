@@ -25,7 +25,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// The stages in the compiler pipeline.
 		/// </summary>
-		private List<IPipelineStage> _pipeline;
+		private List<IPipelineStage> pipeline;
 
 		#endregion // Data members
 
@@ -36,7 +36,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public CompilerPipeline()
 		{
-			_pipeline = new List<IPipelineStage>();
+			pipeline = new List<IPipelineStage>();
 		}
 
 		#endregion // Construction
@@ -48,7 +48,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public int Count
 		{
-			get { return _pipeline.Count; }
+			get { return pipeline.Count; }
 		}
 
 		/// <summary>
@@ -58,7 +58,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <returns>The compilation stage at the requested index.</returns>
 		public IPipelineStage this[int index]
 		{
-			get { return _pipeline[index]; }
+			get { return pipeline[index]; }
 		}
 
 		#endregion // Properties
@@ -74,7 +74,7 @@ namespace Mosa.Runtime.CompilerFramework
 			if (stage == null)
 				throw new ArgumentNullException(@"stage");
 
-			_pipeline.Add(stage);
+			pipeline.Add(stage);
 		}
 
 		/// <summary>
@@ -87,12 +87,12 @@ namespace Mosa.Runtime.CompilerFramework
 			if (stage == null)
 				throw new ArgumentNullException(@"stage");
 
-			for (int i = 0; i < _pipeline.Count; i++)
+			for (int i = 0; i < pipeline.Count; i++)
 			{
-				StageType result = _pipeline[i] as StageType;
+				StageType result = pipeline[i] as StageType;
 				if (result != null)
 				{
-					_pipeline.Insert(i + 1, stage);
+					pipeline.Insert(i + 1, stage);
 					return;
 				}
 			}
@@ -110,12 +110,12 @@ namespace Mosa.Runtime.CompilerFramework
 			if (stage == null)
 				throw new ArgumentNullException(@"stage");
 
-			for (int i = _pipeline.Count - 1; i >= 0; i--)
+			for (int i = pipeline.Count - 1; i >= 0; i--)
 			{
-				StageType result = _pipeline[i] as StageType;
+				StageType result = pipeline[i] as StageType;
 				if (result != null)
 				{
-					_pipeline.Insert(i, stage);
+					pipeline.Insert(i, stage);
 					return;
 				}
 			}
@@ -133,12 +133,12 @@ namespace Mosa.Runtime.CompilerFramework
 			if (stages == null)
 				throw new ArgumentNullException(@"stage");
 
-			for (int i = _pipeline.Count - 1; i >= 0; i--)
+			for (int i = pipeline.Count - 1; i >= 0; i--)
 			{
-				StageType result = _pipeline[i] as StageType;
+				StageType result = pipeline[i] as StageType;
 				if (result != null)
 				{
-					_pipeline.InsertRange(i + 1, stages);
+					pipeline.InsertRange(i + 1, stages);
 					return;
 				}
 			}
@@ -156,12 +156,12 @@ namespace Mosa.Runtime.CompilerFramework
 			if (stage == null)
 				throw new ArgumentNullException(@"stage");
 
-			for (int i = 0; i < _pipeline.Count; i++)
+			for (int i = 0; i < pipeline.Count; i++)
 			{
-				StageType result = _pipeline[i] as StageType;
+				StageType result = pipeline[i] as StageType;
 				if (result != null)
 				{
-					_pipeline.Insert(i, stage);
+					pipeline.Insert(i, stage);
 					return;
 				}
 			}
@@ -178,7 +178,9 @@ namespace Mosa.Runtime.CompilerFramework
 			if (stages == null)
 				throw new ArgumentNullException(@"stages");
 
-			_pipeline.AddRange(stages);
+			foreach (IPipelineStage stage in stages)
+				if (stage != null)
+					Add(stage);
 		}
 
 		/// <summary>
@@ -186,7 +188,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		public void Clear()
 		{
-			_pipeline.Clear();
+			pipeline.Clear();
 		}
 
 		/// <summary>
@@ -198,7 +200,7 @@ namespace Mosa.Runtime.CompilerFramework
 			if (stage == null)
 				throw new ArgumentNullException(@"stage");
 
-			_pipeline.Remove(stage);
+			pipeline.Remove(stage);
 		}
 
 		#endregion // Methods
@@ -213,7 +215,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </returns>
 		System.Collections.IEnumerator System.Collections.IEnumerable.GetEnumerator()
 		{
-			return _pipeline.GetEnumerator();
+			return pipeline.GetEnumerator();
 		}
 
 		#endregion // IEnumerable members
@@ -226,7 +228,7 @@ namespace Mosa.Runtime.CompilerFramework
 		public StageType FindFirst<StageType>() where StageType : class
 		{
 			StageType result = default(StageType);
-			foreach (object o in _pipeline)
+			foreach (object o in pipeline)
 			{
 				result = o as StageType;
 				if (result != null)

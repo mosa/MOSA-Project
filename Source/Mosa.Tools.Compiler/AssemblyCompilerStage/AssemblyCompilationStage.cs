@@ -23,7 +23,7 @@ namespace Mosa.Tools.Compiler.AssemblyCompilerStage
 {
 	public class AssemblyCompilationStage : BaseAssemblyCompilerStage, IAssemblyCompilerStage
 	{
-		
+
 		private IAssemblyLinker linker;
 
 		private ITypeInitializerSchedulerStage typeInitializerSchedulerStage;
@@ -102,7 +102,7 @@ namespace Mosa.Tools.Compiler.AssemblyCompilerStage
 
 		private void CompileAssembly()
 		{
-			using (AotAssemblyCompiler assemblyCompiler = new AotAssemblyCompiler(architecture, typeInitializerSchedulerStage, linker, typeSystem, typeLayout, compiler.InternalLog))
+			using (AotAssemblyCompiler assemblyCompiler = new AotAssemblyCompiler(architecture, typeInitializerSchedulerStage, linker, typeSystem, typeLayout, compiler.InternalLog, compiler.CompilerOptionSet))
 			{
 				assemblyCompiler.Run();
 			}
