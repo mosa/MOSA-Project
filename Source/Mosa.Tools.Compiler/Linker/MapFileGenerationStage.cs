@@ -27,6 +27,8 @@ namespace Mosa.Tools.Compiler.Linker
 
 		private IAssemblyLinker linker;
 
+		public string MapFile { get; set; }
+
 		/// <summary>
 		/// Holds the text writer used to emit the map file.
 		/// </summary>
@@ -39,20 +41,8 @@ namespace Mosa.Tools.Compiler.Linker
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MapFileGenerationStage"/> class.
 		/// </summary>
-		/// <param name="writer">The writer.</param>
 		public MapFileGenerationStage()
 		{
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="MapFileGenerationStage"/> class.
-		/// </summary>
-		public MapFileGenerationStage(TextWriter writer)
-		{
-			if (writer == null)
-				throw new ArgumentNullException(@"writer");
-
-			this.writer = writer;
 		}
 
 		#endregion // Construction
@@ -77,20 +67,28 @@ namespace Mosa.Tools.Compiler.Linker
 		/// </summary>
 		void IAssemblyCompilerStage.Run()
 		{
-			// Emit map file _header
-			writer.WriteLine(linker.OutputFile);
-			writer.WriteLine();
-			writer.WriteLine("Timestamp is {0}", DateTime.Now);
-			writer.WriteLine();
-			writer.WriteLine("Preferred load address is {0:x16}", linker.BaseAddress);
-			writer.WriteLine();
+			if (string.IsNullOrEmpty(MapFile))
+				return;
 
-			// Emit the sections
-			EmitSections(linker);
-			writer.WriteLine();
+			using (writer = new StreamWriter(MapFile))
+			{
+				// Emit map file _header
+				writer.WriteLine(linker.OutputFile);
+				writer.WriteLine();
+				writer.WriteLine("Timestamp is {0}", DateTime.Now);
+				writer.WriteLine();
+				writer.WriteLine("Preferred load address is {0:x16}", linker.BaseAddress);
+				writer.WriteLine();
 
-			// Emit all symbols
-			EmitSymbols(linker);
+				// Emit the sections
+				EmitSections(linker);
+				writer.WriteLine();
+
+				// Emit all symbols
+				EmitSymbols(linker);
+
+				writer.Close();
+			}
 		}
 
 		#endregion // IAssemblyCompilerStage Members

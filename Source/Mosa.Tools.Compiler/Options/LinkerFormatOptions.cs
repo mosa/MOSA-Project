@@ -10,7 +10,7 @@
 using System;
 
 using Mosa.Runtime.CompilerFramework;
-using Mosa.Tools.Compiler.MethodCompilerStage;
+using Mosa.Tools.Compiler.Linker;
 using Mosa.Compiler.Linker;
 using Mosa.Runtime.Options;
 
@@ -32,7 +32,7 @@ namespace Mosa.Tools.Compiler.Options
 		/// <summary>
 		/// Holds the real stage implementation to use.
 		/// </summary>
-		public IAssemblyLinker LinkerStage { get; protected set; }
+		public IAssemblyCompilerStage LinkerStage { get; protected set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LinkerFormatOptions"/> class.
@@ -67,18 +67,18 @@ namespace Mosa.Tools.Compiler.Options
 		/// </summary>
 		/// <param name="format">The linker format.</param>
 		/// <returns>The implementation of the linker.</returns>
-		private IAssemblyLinker SelectImplementation(string format)
+		private IAssemblyCompilerStage SelectImplementation(string format)
 		{
 			switch (format.ToLower())
 			{
 				case "elf32":
-					return new Elf32Linker();
+					return new Elf32LinkerStage();
 
 				case "elf64":
-					return new Elf64Linker();
+					return new Elf64LinkerStage();
 
 				case "pe":
-					return new PortableExecutableLinker();
+					return new PortableExecutableLinkerStage();
 
 				default:
 					throw new OptionException(String.Format("Unknown or unsupported binary format {0}.", format), "format");
@@ -86,5 +86,17 @@ namespace Mosa.Tools.Compiler.Options
 		}
 
 		#endregion // Internals
+
+		public void ApplyTo(BaseAssemblyLinker linker)
+		{
+			linker.OutputFile = this.OutputFile;
+		}
+
+		public override void Apply(IPipelineStage options)
+		{
+			if (options is BaseAssemblyLinker)
+				ApplyTo(options);
+		}
+
 	}
 }

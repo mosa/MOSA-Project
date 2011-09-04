@@ -139,6 +139,7 @@ namespace Mosa.Tools.Compiler
 				new List<BaseCompilerOptions>()
 				{
 					new BootFormatOptions(optionSet),
+					new ArchitectureOptions(optionSet),
 					new LinkerFormatOptions(optionSet),
 					new Elf32LinkerOptions(optionSet),
 					new MapFileGeneratorOptions(optionSet),
@@ -219,14 +220,14 @@ namespace Mosa.Tools.Compiler
 
 			DateTime start = DateTime.Now;
 
-			//try
-			//{
-			Compile();
-			//}
-			//catch (CompilationException ce)
-			//{
-			//    this.ShowError(ce.Message);
-			//}
+			try
+			{
+				Compile();
+			}
+			catch (CompilationException ce)
+			{
+				this.ShowError(ce.Message);
+			}
 
 			DateTime end = DateTime.Now;
 
@@ -290,7 +291,7 @@ namespace Mosa.Tools.Compiler
 					compilerOptionSet.GetOptions<BootFormatOptions>().BootCompilerStage,
 					new CilHeaderBuilderStage(),
 					new ObjectFileLayoutStage(),
-					new LinkerProxy(compilerOptionSet.GetOptions<LinkerFormatOptions>().LinkerStage),
+					compilerOptionSet.GetOptions<LinkerFormatOptions>().LinkerStage,
 					compilerOptionSet.GetOptions<MapFileGeneratorOptions>().Enabled ? new MapFileGenerationStage() : null
 				});
 

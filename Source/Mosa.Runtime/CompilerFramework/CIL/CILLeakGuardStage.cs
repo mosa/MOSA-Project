@@ -59,7 +59,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		{
 			string message = @"Leaking CIL instruction to late stages. Instruction " + context.Instruction.ToString(context) + @" at " + context.Label + @" in method " + this.methodCompiler.Method;
 
-			NotifyCompilerEvent(InternalTrace.CompilerEvent.Error, message);
+			Trace(InternalTrace.CompilerEvent.Error, message);
 
 			if (this.MustThrowCompilationException == true)
 			{

@@ -122,8 +122,7 @@ namespace Mosa.Runtime.CompilerFramework
 			// Operand index
 			int opIdx;
 
-			if (rc == null && TRACING.TraceWarning)
-				Trace.WriteLine(String.Format(@"Failed to get register constraints for instruction {0}!", ctx.Instruction.ToString(ctx)));
+			Debug.Assert(rc != null, String.Format(@"Failed to get register constraints for instruction {0}!", ctx.Instruction.ToString(ctx)));
 
 			// Only process the instruction, if we have constraints...
 			if (rc != null)

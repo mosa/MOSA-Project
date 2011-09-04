@@ -18,11 +18,11 @@ namespace Mosa.Runtime.Options
 	public class CompilerOptionSet
 	{
 
-		protected List<BaseCompilerOptions> options = new List<BaseCompilerOptions>();
+		protected List<BaseCompilerOptions> options;
 
 		public CompilerOptionSet()
 		{
-			
+			options = new List<BaseCompilerOptions>();
 		}
 
 		public void AddOptions(BaseCompilerOptions baseCompilerOptions)
@@ -43,6 +43,12 @@ namespace Mosa.Runtime.Options
 					return (T)opt;
 
 			return (T)null;
+		}
+
+		public void AppyTo(IPipelineStage stage)
+		{
+			foreach (BaseCompilerOptions opt in options)
+				opt.Apply(stage);
 		}
 
 	}

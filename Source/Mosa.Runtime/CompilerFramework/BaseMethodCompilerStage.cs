@@ -167,7 +167,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 		#region Helper Methods
 
-		protected void NotifyCompilerEvent(CompilerEvent compilerEvent, string message)
+		protected void Trace(CompilerEvent compilerEvent, string message)
 		{
 			methodCompiler.InternalLog.CompilerEventListener.NotifyCompilerEvent(compilerEvent, message);
 		}

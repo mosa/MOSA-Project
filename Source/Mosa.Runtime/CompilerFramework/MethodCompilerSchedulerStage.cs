@@ -61,7 +61,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 		private void CompileType(RuntimeType type)
 		{
-			NotifyCompilerEvent(CompilerEvent.CompilingMethod, type.FullName);
+			Trace(CompilerEvent.CompilingMethod, type.FullName);
 
 			//if (type.IsDelegate)
 			//{
@@ -79,15 +79,15 @@ namespace Mosa.Runtime.CompilerFramework
 			{
 				if (method.IsGeneric)
 				{
-					NotifyCompilerEvent(CompilerEvent.DebugInfo, "Skipping generic method: " + type + "." + method.Name);
-					NotifyCompilerEvent(CompilerEvent.DebugInfo, "Generic method will not be available in compiled image.");
+					Trace(CompilerEvent.DebugInfo, "Skipping generic method: " + type + "." + method.Name);
+					Trace(CompilerEvent.DebugInfo, "Generic method will not be available in compiled image.");
 					continue;
 				}
 
 				if (method.IsNative)
 				{
-					NotifyCompilerEvent(CompilerEvent.DebugInfo, "Skipping native method: " + type + "." + method.Name);
-					NotifyCompilerEvent(CompilerEvent.DebugInfo, "Method will not be available in compiled image.");
+					Trace(CompilerEvent.DebugInfo, "Skipping native method: " + type + "." + method.Name);
+					Trace(CompilerEvent.DebugInfo, "Method will not be available in compiled image.");
 					continue;
 				}
 
@@ -108,7 +108,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 		private void CompileMethod(RuntimeMethod method)
 		{
-			NotifyCompilerEvent(CompilerEvent.CompilingMethod, method.ToString());
+			Trace(CompilerEvent.CompilingMethod, method.ToString());
 
 			using (IMethodCompiler mc = compiler.CreateMethodCompiler(this, method.DeclaringType, method))
 			{
@@ -145,7 +145,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 			if (!type.IsGeneric)
 			{
-				NotifyCompilerEvent(CompilerEvent.SchedulingType, type.FullName);
+				Trace(CompilerEvent.SchedulingType, type.FullName);
 
 				typeQueue.Enqueue(type);
 				if (compiled.ContainsKey(type))
@@ -162,7 +162,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 			if (!method.IsGeneric)
 			{
-				NotifyCompilerEvent(CompilerEvent.SchedulingMethod, method.ToString());
+				Trace(CompilerEvent.SchedulingMethod, method.ToString());
 				methodQueue.Enqueue(method);
 			}
 		}

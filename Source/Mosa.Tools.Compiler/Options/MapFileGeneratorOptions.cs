@@ -12,6 +12,7 @@ using System;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Tools.Compiler.MethodCompilerStage;
 using Mosa.Runtime.Options;
+using Mosa.Tools.Compiler.Linker;
 
 using NDesk.Options;
 
@@ -39,6 +40,17 @@ namespace Mosa.Tools.Compiler.Options
 					this.Enabled = string.IsNullOrEmpty(file);
 				}
 			);
+		}
+
+		public void ApplyTo(MapFileGenerationStage mapFileStage)
+		{
+			mapFileStage.MapFile = this.MapFile;
+		}
+
+		public override void Apply(IPipelineStage options)
+		{
+			if (options is MapFileGenerationStage)
+				Apply(options);
 		}
 	}
 }

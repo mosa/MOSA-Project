@@ -162,12 +162,12 @@ namespace Mosa.Runtime.CompilerFramework
 
 			foreach (IAssemblyCompilerStage stage in Pipeline)
 			{
-				NotifyCompilerEvent(CompilerEvent.AssemblyStageStart, stage.Name);
+				Trace(CompilerEvent.AssemblyStageStart, stage.Name);
 
 				// Execute stage
 				stage.Run();
 
-				NotifyCompilerEvent(CompilerEvent.AssemblyStageEnd, stage.Name);
+				Trace(CompilerEvent.AssemblyStageEnd, stage.Name);
 			}
 
 			EndCompile();
@@ -181,7 +181,7 @@ namespace Mosa.Runtime.CompilerFramework
 			foreach (IAssemblyCompilerStage stage in Pipeline)
 			{
 				// Apply Compiler Options
-				// TODO: 
+				this.compilerOptionSet.AppyTo(stage);
 
 				// Setup Compiler
 				stage.Setup(this);
@@ -197,7 +197,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 		#region Helper Methods
 
-		protected void NotifyCompilerEvent(CompilerEvent compilerEvent, string message)
+		protected void Trace(CompilerEvent compilerEvent, string message)
 		{
 			internalTrace.CompilerEventListener.NotifyCompilerEvent(compilerEvent, message);
 		}

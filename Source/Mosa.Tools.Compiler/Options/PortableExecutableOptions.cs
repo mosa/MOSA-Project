@@ -76,14 +76,16 @@ namespace Mosa.Tools.Compiler.Options
 
 		}
 
-		public void Apply(PortableExecutableOptions elf32Linker)
+		public void ApplyTo(PortableExecutableLinkerStage linker)
 		{
-			elf32Linker.FileAlignment = this.FileAlignment;
+			linker.FileAlignment = this.FileAlignment;
+			linker.SectionAlignment = this.SectionAlignment;
+			linker.SetChecksum = this.SetChecksum;
 		}
 
 		public override void Apply(IPipelineStage options)
 		{
-			if (options is PortableExecutableOptions)
+			if (options is PortableExecutableLinkerStage)
 				Apply(options);
 		}
 
