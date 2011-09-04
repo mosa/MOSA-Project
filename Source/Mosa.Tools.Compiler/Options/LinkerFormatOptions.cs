@@ -72,10 +72,10 @@ namespace Mosa.Tools.Compiler.Options
 			switch (format.ToLower())
 			{
 				case "elf32":
-					return new Elf64Linker();
+					return new Elf32Linker();
 
 				case "elf64":
-					return new Elf32Linker();
+					return new Elf64Linker();
 
 				case "pe":
 					return new PortableExecutableLinker();
