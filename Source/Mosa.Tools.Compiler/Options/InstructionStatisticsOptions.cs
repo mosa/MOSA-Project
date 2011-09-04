@@ -18,16 +18,16 @@ namespace Mosa.Tools.Compiler.Options
 {
 	/// <summary>
 	/// </summary>
-	public class InstructionStatisticsOptions : BaseCompilerStageWithEnableOptions
+	public class InstructionStatisticsOptions : BaseCompilerWithEnableOptions
 	{
 
-		public string StatisticsFile { get; set; }
+		public string StatisticsFile { get; protected set; }
 
 		/// <summary>
-		/// Adds the additional options for the parsing process to the given OptionSet.
+		/// Initializes a new instance of the <see cref="InstructionStatisticsOptions"/> class.
 		/// </summary>
-		/// <param name="optionSet">A given OptionSet to add the options to.</param>
-		public override void AddOptions(OptionSet optionSet)
+		/// <param name="optionSet">The option set.</param>
+		public InstructionStatisticsOptions(OptionSet optionSet)
 		{
 			optionSet.Add(
 				"stats=",

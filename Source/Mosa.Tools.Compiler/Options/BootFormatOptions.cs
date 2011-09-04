@@ -18,19 +18,19 @@ namespace Mosa.Tools.Compiler.Options
 {
 	/// <summary>
 	/// </summary>
-	public class BootFormatOptions : BaseCompilerStageOptions
+	public class BootFormatOptions : BaseCompilerOptions
 	{
 
 		/// <summary>
 		/// Holds the real stage implementation to use.
 		/// </summary>
-		public IAssemblyCompilerStage BootCompilerStage { get; set; }
+		public IAssemblyCompilerStage BootCompilerStage { get; protected set; }
 
 		/// <summary>
-		/// Adds the additional options for the parsing process to the given OptionSet.
+		/// Initializes a new instance of the <see cref="BootFormatOptions"/> class.
 		/// </summary>
-		/// <param name="optionSet">A given OptionSet to add the options to.</param>
-		public override void AddOptions(OptionSet optionSet)
+		/// <param name="optionSet">The option set.</param>
+		public BootFormatOptions(OptionSet optionSet)
 		{
 			optionSet.Add(
 				"b|boot=",

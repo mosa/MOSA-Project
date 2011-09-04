@@ -18,16 +18,16 @@ namespace Mosa.Tools.Compiler.Options
 {
 	/// <summary>
 	/// </summary>
-	public class MapFileGeneratorOptions : BaseCompilerStageWithEnableOptions
+	public class MapFileGeneratorOptions : BaseCompilerWithEnableOptions
 	{
 
-		public string MapFile { get; set; }
+		public string MapFile { get; protected set; }
 
 		/// <summary>
-		/// Adds the additional options for the parsing process to the given OptionSet.
+		/// Initializes a new instance of the <see cref="MapFileGeneratorOptions"/> class.
 		/// </summary>
-		/// <param name="optionSet">A given OptionSet to add the options to.</param>
-		public override void AddOptions(OptionSet optionSet)
+		/// <param name="optionSet">The option set.</param>
+		public MapFileGeneratorOptions(OptionSet optionSet)
 		{
 			optionSet.Add(
 				"map=",

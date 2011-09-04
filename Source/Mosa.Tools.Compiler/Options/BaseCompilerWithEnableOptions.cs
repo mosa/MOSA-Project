@@ -14,12 +14,12 @@ using Mosa.Runtime.CompilerFramework;
 namespace Mosa.Tools.Compiler.Options
 {
 
-	public abstract class BaseCompilerStageWithEnableOptions : BaseCompilerStageOptions
+	public abstract class BaseCompilerWithEnableOptions : BaseCompilerOptions
 	{
 
-		public bool Enabled { get; set; }
+		public bool Enabled { get; protected set; }
 
-		protected BaseCompilerStageWithEnableOptions()
+		protected BaseCompilerWithEnableOptions()
 		{
 			this.Enabled = true;
 		}

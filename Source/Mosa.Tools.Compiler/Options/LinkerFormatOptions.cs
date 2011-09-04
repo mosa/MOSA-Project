@@ -19,25 +19,25 @@ namespace Mosa.Tools.Compiler.Options
 {
 	/// <summary>
 	/// </summary>
-	public class LinkerFormatOptions : BaseCompilerStageOptions
+	public class LinkerFormatOptions : BaseCompilerOptions
 	{
 
 		/// <summary>
 		/// Gets or sets the output file.
 		/// </summary>
 		/// <value>The output file.</value>
-		public string OutputFile { get; set; }
+		public string OutputFile { get; protected set; }
 
 		/// <summary>
 		/// Holds the real stage implementation to use.
 		/// </summary>
-		public IAssemblyLinker LinkerStage { get; set; }
+		public IAssemblyLinker LinkerStage { get; protected set; }
 
 		/// <summary>
-		/// Adds the additional options for the parsing process to the given OptionSet.
+		/// Initializes a new instance of the <see cref="LinkerFormatOptions"/> class.
 		/// </summary>
-		/// <param name="optionSet">A given OptionSet to add the options to.</param>
-		public override void AddOptions(OptionSet optionSet)
+		/// <param name="optionSet">The option set.</param>
+		public LinkerFormatOptions(OptionSet optionSet)
 		{
 
 			optionSet.Add(

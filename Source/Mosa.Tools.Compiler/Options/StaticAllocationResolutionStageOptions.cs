@@ -14,22 +14,18 @@ using Mosa.Runtime.CompilerFramework;
 namespace Mosa.Tools.Compiler.Options
 {
 
-	public class StaticAllocationResolutionStageOptions : BaseCompilerStageWithEnableOptions
+	public class StaticAllocationResolutionStageOptions : BaseCompilerWithEnableOptions
 	{
 
-		private StaticAllocationResolutionStageOptions()
+		public StaticAllocationResolutionStageOptions(OptionSet optionSet)
 		{
 			this.Enabled = false;
-		}
 
-		public override void AddOptions(OptionSet optionSet)
-		{
 			optionSet.Add(
 				@"sa|enable-static-alloc",
 				@"Performs static allocations at compile time.",
 				enable => this.Enabled = enable != null);
 		}
-
 		
 	}
 }

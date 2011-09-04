@@ -13,9 +13,12 @@ using Mosa.Runtime.CompilerFramework;
 
 namespace Mosa.Tools.Compiler.Options
 {
-
-	public abstract class BaseCompilerStageOptions
+	public abstract class BaseCompilerOptions
 	{
-		public abstract void AddOptions(OptionSet optionSet);
+		public virtual void Apply(IPipelineStage options)
+		{
+			
+		}
+
 	}
 }
