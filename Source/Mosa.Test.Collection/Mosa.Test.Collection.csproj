@@ -70,11 +70,20 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="CallVirtualTests.cs" />
+    <None Include="GenericCallTests.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>GenericCallTests.cs</LastGenOutput>
+    </None>
     <None Include="StructTests.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>StructTests.cs</LastGenOutput>
     </None>
     <Compile Include="DelegateTests.cs" />
+    <Compile Include="GenericCallTests.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GenericCallTests.tt</DependentUpon>
+    </Compile>
     <Compile Include="StructTests.cs">
       <DependentUpon>StructTests.tt</DependentUpon>
       <AutoGen>True</AutoGen>

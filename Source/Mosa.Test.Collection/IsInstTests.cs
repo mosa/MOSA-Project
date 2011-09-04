@@ -98,6 +98,12 @@ namespace Mosa.Test.Collection
 
 			return (o is IBB);
 		}
+
+		public static bool IsInstTest12()
+		{
+			object o = 1;
+			return (o is int);
+		}
 	}
 
 }
