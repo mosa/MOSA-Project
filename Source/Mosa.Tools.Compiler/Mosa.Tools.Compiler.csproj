@@ -67,8 +67,6 @@
   <ItemGroup>
     <Compile Include="AotAssemblyCompiler.cs" />
     <Compile Include="AssemblyCompilerStage\AssemblyCompilationStage.cs" />
-    <Compile Include="Options\BaseCompilerOptions.cs" />
-    <Compile Include="Options\CompilerOptionSet.cs" />
     <Compile Include="Linker\Elf64LinkerStage.cs" />
     <Compile Include="Linker\Elf32LinkerStage.cs" />
     <Compile Include="Linker\Elf32LinkerWrapper.cs" />
@@ -110,8 +108,8 @@
     <Compile Include="Options.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Options\BaseCompilerWithEnableOptions.cs" />
     <Compile Include="Options\BootFormatOptions.cs" />
+    <Compile Include="Options\MultibootOptions.cs" />
     <Compile Include="Options\Elf32LinkerOptions.cs" />
     <Compile Include="Options\PortableExecutableOptions.cs" />
     <Compile Include="Options\LinkerFormatOptions.cs" />

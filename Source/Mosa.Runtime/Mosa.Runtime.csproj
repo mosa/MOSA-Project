@@ -411,6 +411,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="CompilerFramework\IR\VmCall.cs" />
+    <Compile Include="Options\BaseCompilerOptions.cs" />
+    <Compile Include="Options\BaseCompilerWithEnableOptions.cs" />
+    <Compile Include="Options\CompilerOptionSet.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj">

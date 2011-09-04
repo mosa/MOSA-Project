@@ -7,11 +7,9 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using NDesk.Options;
-
 using Mosa.Runtime.CompilerFramework;
 
-namespace Mosa.Tools.Compiler.Options
+namespace Mosa.Runtime.Options
 {
 
 	public abstract class BaseCompilerWithEnableOptions : BaseCompilerOptions

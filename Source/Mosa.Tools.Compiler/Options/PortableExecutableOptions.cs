@@ -12,6 +12,7 @@ using System;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Tools.Compiler.MethodCompilerStage;
 using Mosa.Tools.Compiler.Linker;
+using Mosa.Runtime.Options;
 
 using NDesk.Options;
 

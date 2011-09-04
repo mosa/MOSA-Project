@@ -10,6 +10,7 @@
 using NDesk.Options;
 
 using Mosa.Runtime.CompilerFramework;
+using Mosa.Runtime.Options;
 
 namespace Mosa.Tools.Compiler.Options
 {
