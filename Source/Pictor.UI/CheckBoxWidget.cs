@@ -21,7 +21,6 @@
 //
 //----------------------------------------------------------------------------
 using System;
-using Pictor;
 using Pictor.VertexSource;
 
 namespace Pictor.UI

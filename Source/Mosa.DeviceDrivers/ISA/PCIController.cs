@@ -8,8 +8,6 @@
  */
 
 using Mosa.DeviceSystem;
-using PCI = Mosa.DeviceSystem.PCI;
-using Mosa.ClassLib;
 
 namespace Mosa.DeviceDrivers.ISA
 {

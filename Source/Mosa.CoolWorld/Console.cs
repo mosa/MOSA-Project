@@ -1,6 +1,4 @@
-﻿using System;
-using Mosa.ClassLib;
-using Mosa.Kernel;
+﻿using Mosa.ClassLib;
 using Mosa.Kernel.x86;
 
 namespace Mosa.CoolWorld

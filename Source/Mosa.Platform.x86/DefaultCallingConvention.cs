@@ -10,12 +10,10 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.CompilerFramework.Operands;
-using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Metadata;
-using Mosa.Runtime.TypeSystem;
+using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Platform.x86
 {

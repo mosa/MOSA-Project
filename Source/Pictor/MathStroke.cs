@@ -8,7 +8,6 @@
  */
 
 using System;
-using line_cap_e = Pictor.MathStroke.ELineCap;
 
 namespace Pictor
 {

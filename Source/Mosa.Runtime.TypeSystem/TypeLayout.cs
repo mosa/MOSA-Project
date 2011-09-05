@@ -8,13 +8,11 @@
  */
 
 using System;
-using System.Diagnostics;
-using System.IO;
 using System.Collections.Generic;
-
+using System.Diagnostics;
 using Mosa.Runtime.Metadata;
-using Mosa.Runtime.Metadata.Tables;
 using Mosa.Runtime.Metadata.Signatures;
+using Mosa.Runtime.Metadata.Tables;
 
 namespace Mosa.Runtime.TypeSystem
 {

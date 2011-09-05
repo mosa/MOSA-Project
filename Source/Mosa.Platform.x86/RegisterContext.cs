@@ -7,9 +7,6 @@
  *  Simon Wollwage (rootnode) <rootnode@mosa-project.org>
  */
 
-using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Runtime.InteropServices;
 
 namespace Mosa.Platform.x86

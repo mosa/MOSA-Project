@@ -7,7 +7,6 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-using System;
 using poly_subpixel_scale_e = Pictor.Basics.PolySubpixelScale;
 
 namespace Pictor

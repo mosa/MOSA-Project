@@ -9,11 +9,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-
-using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.InternalTrace;
-using Mosa.Runtime.Metadata.Signatures;
+using Mosa.Runtime.TypeSystem;
 
 namespace Mosa.Runtime.CompilerFramework
 {

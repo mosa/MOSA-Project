@@ -7,9 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System.Collections.Generic;
-using System.Diagnostics;
-
 namespace Mosa.Runtime.CompilerFramework
 {
 	/// <summary>

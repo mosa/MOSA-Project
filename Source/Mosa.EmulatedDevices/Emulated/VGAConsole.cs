@@ -7,15 +7,9 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using System.IO;
-using System.Windows.Forms;
 using System.Drawing;
-using System.Drawing.Text;
-
-using Mosa.ClassLib;
-using Mosa.EmulatedKernel;
 using Mosa.EmulatedDevices.Synthetic;
+using Mosa.EmulatedKernel;
 
 namespace Mosa.EmulatedDevices.Emulated
 {

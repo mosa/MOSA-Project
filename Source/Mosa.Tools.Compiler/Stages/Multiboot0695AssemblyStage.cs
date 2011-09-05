@@ -9,25 +9,19 @@
  */
 
 using System;
-using System.Diagnostics;
 using System.IO;
 using System.Text;
-using System.Collections.Generic;
-
+using Mosa.Compiler.Linker;
+using Mosa.Platform.x86;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.CompilerFramework.Operands;
-using Mosa.Runtime.Metadata.Signatures;
-using Mosa.Compiler.Linker;
-using Mosa.Tools.Compiler.TypeInitializers;
-using Mosa.Tools.Compiler.Linker;
 using Mosa.Runtime.Linker;
-using Mosa.Platform.x86;
 using Mosa.Runtime.Metadata;
-
+using Mosa.Runtime.Metadata.Signatures;
+using Mosa.Tools.Compiler.Linker;
+using Mosa.Tools.Compiler.TypeInitializers;
 using CPUx86 = Mosa.Platform.x86.CPUx86;
-using IR = Mosa.Runtime.CompilerFramework.IR;
 
-using NDesk.Options;
 
 namespace Mosa.Tools.Compiler.Stages
 {

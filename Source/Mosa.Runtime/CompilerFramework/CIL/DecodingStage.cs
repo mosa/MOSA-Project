@@ -10,12 +10,10 @@
 using System;
 using System.Diagnostics;
 using System.IO;
-
-using Mosa.Runtime;
+using Mosa.Compiler.Common;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Metadata.Tables;
-using Mosa.Compiler.Common;
 using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.TypeSystem.Generic;
 

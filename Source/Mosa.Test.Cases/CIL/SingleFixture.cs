@@ -7,12 +7,9 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
  */
 
-using System;
 using MbUnit.Framework;
-
-using Mosa.Test.System;
-using Mosa.Test.System.Numbers;
 using Mosa.Test.Collection;
+using Mosa.Test.System;
 
 namespace Mosa.Test.Cases.CIL
 {

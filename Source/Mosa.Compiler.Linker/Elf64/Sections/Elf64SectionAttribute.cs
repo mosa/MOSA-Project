@@ -7,9 +7,6 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Mosa.Compiler.Linker.Elf64.Sections
 {

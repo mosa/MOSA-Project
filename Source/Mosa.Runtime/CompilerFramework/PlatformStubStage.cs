@@ -7,12 +7,6 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-
-using IR = Mosa.Runtime.CompilerFramework.IR;
-
 namespace Mosa.Runtime.CompilerFramework
 {
 

@@ -8,15 +8,11 @@
  */
 
 using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-
-using Mosa.Runtime;
-using Mosa.Runtime.CompilerFramework;
 using Mosa.Compiler.Linker;
-using Mosa.Runtime.Metadata.Loader;
 using Mosa.Compiler.Pdb;
+using Mosa.Runtime.CompilerFramework;
 using Mosa.Tools.Compiler.TypeInitializers;
 
 namespace Mosa.Tools.Compiler.Stages

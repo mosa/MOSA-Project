@@ -7,7 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
  */
 
-using System.Runtime.InteropServices;
 
 namespace Mosa.Test.Collection
 {

@@ -1,9 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using Mosa.Runtime.TypeSystem;
 using System.IO;
 using Mosa.Compiler.Linker;
+using Mosa.Runtime.TypeSystem;
 
 namespace Mosa.Runtime.CompilerFramework
 {

@@ -1,5 +1,4 @@
-﻿using System;
-
+﻿
 namespace Pictor.UI
 {
 	public enum Keys

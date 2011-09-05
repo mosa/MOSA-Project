@@ -7,7 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.TypeSystem;
 

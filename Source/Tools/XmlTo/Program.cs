@@ -9,8 +9,8 @@
 
 using System;
 using System.Xml;
-using System.Xml.Xsl;
 using System.Xml.XPath;
+using System.Xml.Xsl;
 
 namespace Mosa.Tools.XmlTo
 {

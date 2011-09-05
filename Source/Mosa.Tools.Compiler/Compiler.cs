@@ -11,23 +11,17 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
-using System.Diagnostics;
-
-using NDesk.Options;
-
-using Mosa.Runtime;
-using Mosa.Runtime.Options;
 using Mosa.Runtime.CompilerFramework;
-using Mosa.Runtime.Metadata;
-using Mosa.Runtime.Metadata.Signatures;
-using Mosa.Runtime.Metadata.Loader;
-using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.InternalTrace;
-using Mosa.Compiler.Linker;
+using Mosa.Runtime.Metadata.Loader;
+using Mosa.Runtime.Metadata.Signatures;
+using Mosa.Runtime.Options;
+using Mosa.Runtime.TypeSystem;
 using Mosa.Tools.Compiler.Linker;
+using Mosa.Tools.Compiler.Options;
 using Mosa.Tools.Compiler.Stages;
 using Mosa.Tools.Compiler.TypeInitializers;
-using Mosa.Tools.Compiler.Options;
+using NDesk.Options;
 
 namespace Mosa.Tools.Compiler
 {

@@ -7,7 +7,6 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-using System;
 
 namespace Mosa.Runtime.Metadata
 {

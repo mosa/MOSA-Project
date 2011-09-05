@@ -8,10 +8,8 @@
  */
 
 using System;
-using System.IO;
 using System.Collections.Generic;
 
-using Mosa.Runtime.Metadata;
 
 using Mosa.Runtime.Metadata.Tables;
 

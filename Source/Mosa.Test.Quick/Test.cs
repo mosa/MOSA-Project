@@ -5,7 +5,6 @@
  *
  */
 
-using System;
 
 namespace Mosa.Test.Quick.Tests
 {

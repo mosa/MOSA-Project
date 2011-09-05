@@ -9,15 +9,11 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using System.Diagnostics;
 using System.IO;
 using System.Text;
-
-using Mosa.Runtime.CompilerFramework;
-using Mosa.Compiler.Linker;
-using Mosa.Compiler.Linker.PE;
 using Mosa.Compiler.FileFormat.PE;
+using Mosa.Compiler.Linker;
+using Mosa.Runtime.CompilerFramework;
 
 namespace Mosa.Tools.Compiler.Stages
 {

@@ -7,14 +7,10 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Text;
 
 using Mosa.Runtime.Metadata;
-using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.Metadata.Signatures;
+using Mosa.Runtime.TypeSystem;
 
 namespace Mosa.Runtime.CompilerFramework.CIL
 {

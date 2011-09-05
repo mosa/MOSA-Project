@@ -9,7 +9,6 @@
 
 using System;
 using System.Text;
-using Mosa.Runtime.Metadata;
 
 namespace Mosa.Runtime.Metadata.Loader.PE
 {

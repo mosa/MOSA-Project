@@ -1,19 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Linq;
-using System.Text;
 using System.Windows.Forms;
-using System.CodeDom.Compiler;
-
-using Mosa.Runtime.TypeSystem;
+using Mosa.Runtime.InternalTrace;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Loader;
+using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.TypeSystem.Generic;
-using Mosa.Runtime.InternalTrace;
-using Mosa.Runtime.CompilerFramework;
-using Mosa.Test.CodeDomCompiler;
 
 namespace Mosa.Tools.TypeExplorer
 {

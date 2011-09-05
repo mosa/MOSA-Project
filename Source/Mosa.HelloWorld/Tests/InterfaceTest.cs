@@ -1,8 +1,4 @@
-﻿using Mosa.Platform.x86;
-using Mosa.Kernel;
-using Mosa.Kernel.x86;
-using System;
-
+﻿
 namespace Mosa.HelloWorld.Tests
 {
 	public class InterfaceTest : KernelTest

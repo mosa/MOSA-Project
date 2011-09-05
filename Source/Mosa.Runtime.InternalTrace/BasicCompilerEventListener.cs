@@ -8,11 +8,8 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
 
-using Mosa.Runtime.TypeSystem;
 
 namespace Mosa.Runtime.InternalTrace
 {

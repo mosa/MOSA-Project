@@ -9,8 +9,6 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 using Mosa.Compiler.Linker;
 using Mosa.Runtime.CompilerFramework;

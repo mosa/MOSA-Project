@@ -10,10 +10,8 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-
-using Mosa.Runtime.CompilerFramework;
 using Mosa.Compiler.Linker;
-using Mosa.Runtime.TypeSystem;
+using Mosa.Runtime.CompilerFramework;
 
 namespace Mosa.Tools.Compiler.Linker
 {

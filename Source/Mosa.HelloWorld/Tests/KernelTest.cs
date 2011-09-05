@@ -1,7 +1,6 @@
-﻿using Mosa.Platform.x86;
+﻿using Mosa.ClassLib;
 using Mosa.Kernel;
 using Mosa.Kernel.x86;
-using Mosa.ClassLib;
 
 namespace Mosa.HelloWorld.Tests
 {

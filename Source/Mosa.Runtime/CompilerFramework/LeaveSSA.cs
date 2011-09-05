@@ -7,13 +7,9 @@
  *  Simon Wollwage (rootnode) <rootnode@mosa-project.org>
  */
 
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Mosa.Runtime.CompilerFramework.Operands;
-using Mosa.Runtime.CompilerFramework.IR;
 using System.Diagnostics;
+using Mosa.Runtime.CompilerFramework.IR;
+using Mosa.Runtime.CompilerFramework.Operands;
 
 namespace Mosa.Runtime.CompilerFramework
 {

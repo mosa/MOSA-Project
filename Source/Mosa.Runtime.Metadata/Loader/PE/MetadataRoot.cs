@@ -8,12 +8,10 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
-using System.Collections.Generic;
-
-using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Tables;
 
 namespace Mosa.Runtime.Metadata.Loader.PE

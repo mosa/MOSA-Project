@@ -14,7 +14,6 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 
-using Mosa.Compiler.Linker;
 
 namespace Mosa.Compiler.Linker
 {

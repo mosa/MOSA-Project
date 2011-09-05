@@ -8,8 +8,6 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 
 using Mosa.Runtime.CompilerFramework;
 using IR = Mosa.Runtime.CompilerFramework.IR;

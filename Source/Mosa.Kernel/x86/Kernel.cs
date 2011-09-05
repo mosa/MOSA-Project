@@ -7,7 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Kernel.x86;
 using Mosa.Kernel.x86.Smbios;
 
 namespace Mosa.Kernel.x86

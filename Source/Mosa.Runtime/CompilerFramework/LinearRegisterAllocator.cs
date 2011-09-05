@@ -1,10 +1,7 @@
 using System;
 using System.Collections.Generic;
-using System.Text;
-using Mosa.Runtime.CompilerFramework.Operands;
-using IR = Mosa.Runtime.CompilerFramework.IR;
-using Mosa.Runtime.TypeSystem;
 using System.Diagnostics;
+using Mosa.Runtime.CompilerFramework.Operands;
 
 namespace Mosa.Runtime.CompilerFramework
 {

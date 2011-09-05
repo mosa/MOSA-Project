@@ -10,7 +10,6 @@
 using System;
 using System.Collections.Generic;
 
-using Mosa.Tools.Compiler;
 using Mosa.Runtime.CompilerFramework;
 
 namespace Mosa.Tools.Compiler.Stages

@@ -16,9 +16,7 @@
 //          mcseemagg@yahoo.com
 //          http://www.antigrain.com
 //----------------------------------------------------------------------------
-using System;
 using System.Collections.Generic;
-using Pictor.PixelFormat;
 using Pictor.Transform;
 using Pictor.VertexSource;
 

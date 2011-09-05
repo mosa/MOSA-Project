@@ -9,14 +9,12 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
 using System.Linq;
-
 using Mosa.Runtime.Metadata;
-using Mosa.Runtime.Metadata.Tables;
 using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime.Metadata.Signatures;
+using Mosa.Runtime.Metadata.Tables;
 using Mosa.Runtime.TypeSystem.Cil;
 using Mosa.Runtime.TypeSystem.Generic;
 

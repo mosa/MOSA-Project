@@ -11,14 +11,9 @@
  *  
  */
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Runtime.InteropServices;
 using MbUnit.Framework;
-
-using Mosa.Test.System;
 using Mosa.Test.Collection;
+using Mosa.Test.System;
 
 namespace Mosa.Test.Cases.IL
 {

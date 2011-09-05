@@ -11,7 +11,6 @@ using System;
 using System.Collections.Generic;
 
 using Mosa.Runtime.Metadata;
-using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime.TypeSystem;
 
 namespace Mosa.Runtime.Linker

@@ -7,18 +7,11 @@
  *  Michael Fröhlich (grover) <michael.ruck@michaelruck.de>
  */
 
-using System;
-using System.Collections.Generic;
-using System.IO;
 
 using Mosa.Runtime.CompilerFramework;
-using Mosa.Runtime.Metadata.Loader;
-using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.InternalTrace;
-using Mosa.Runtime.Linker;
 using Mosa.Runtime.Options;
-using Mosa.Compiler.Linker;
-
+using Mosa.Runtime.TypeSystem;
 using x86 = Mosa.Platform.x86;
 
 namespace Mosa.Tools.TypeExplorer

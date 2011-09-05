@@ -10,8 +10,6 @@
 using System;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.CompilerFramework.Operands;
-using Mosa.Runtime.Metadata;
-using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Platform.x86.CPUx86
 {

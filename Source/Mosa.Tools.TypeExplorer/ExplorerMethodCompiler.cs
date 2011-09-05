@@ -8,18 +8,12 @@
  */
 
 using System;
-using System.IO;
-using System.Runtime.InteropServices;
-using System.Collections.Generic;
-
 using Mosa.Compiler.Linker;
-using Mosa.Runtime.Metadata.Loader;
-using Mosa.Runtime.Metadata;
-using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.CompilerFramework;
-using Mosa.Runtime.InternalTrace;
 using Mosa.Runtime.CompilerFramework.CIL;
 using Mosa.Runtime.CompilerFramework.IR;
+using Mosa.Runtime.InternalTrace;
+using Mosa.Runtime.TypeSystem;
 
 namespace Mosa.Tools.TypeExplorer
 {

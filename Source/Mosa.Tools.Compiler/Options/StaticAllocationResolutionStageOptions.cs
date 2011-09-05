@@ -7,10 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using NDesk.Options;
-
-using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Options;
+using NDesk.Options;
 
 namespace Mosa.Tools.Compiler.Options
 {

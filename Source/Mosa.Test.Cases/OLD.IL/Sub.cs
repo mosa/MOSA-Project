@@ -12,10 +12,8 @@
  */
 
 using System;
-using System.Runtime.InteropServices;
 using System.Globalization;
 
-using Gallio.Framework;
 
 using MbUnit.Framework;
 using Mosa.Test.System;

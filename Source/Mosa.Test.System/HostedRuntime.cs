@@ -8,9 +8,7 @@
  */
 
 using System;
-using System.Runtime.CompilerServices;
 
-using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.Memory;
 
 namespace Mosa.Test.System

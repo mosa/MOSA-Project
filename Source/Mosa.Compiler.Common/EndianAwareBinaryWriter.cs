@@ -7,9 +7,7 @@
  *  Bruce Markham (illuminus) <illuminus86@gmail.com>
  */
 
-using System;
 using System.IO;
-using System.Text;
 
 namespace Mosa.Compiler.Common
 {

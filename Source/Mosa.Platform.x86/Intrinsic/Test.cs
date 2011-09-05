@@ -7,13 +7,10 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-using System;
 
-using Mosa.Runtime;
-using Mosa.Runtime.CompilerFramework;
-using Mosa.Runtime.CompilerFramework.Operands;
-using Mosa.Runtime.TypeSystem;
 using System.Collections.Generic;
+using Mosa.Runtime.CompilerFramework;
+using Mosa.Runtime.TypeSystem;
 
 namespace Mosa.Platform.x86.Intrinsic
 {

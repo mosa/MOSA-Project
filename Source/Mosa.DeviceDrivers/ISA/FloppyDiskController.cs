@@ -16,7 +16,6 @@
 // http://www.osdev.org/phpBB2/viewtopic.php?t=13538
 
 
-using Mosa.ClassLib;
 using Mosa.DeviceSystem;
 
 namespace Mosa.DeviceDrivers.ISA

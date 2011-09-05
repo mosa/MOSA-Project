@@ -8,7 +8,6 @@
  */
 
 using Mosa.ClassLib;
-using Mosa.DeviceSystem;
 using Mosa.DeviceSystem.PCI;
 
 namespace Mosa.DeviceSystem

@@ -7,12 +7,10 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-using System;
 using System.Collections.Generic;
-
 using Pictor.PixelFormat;
-using Pictor.VertexSource;
 using Pictor.Transform;
+using Pictor.VertexSource;
 
 namespace Pictor
 {

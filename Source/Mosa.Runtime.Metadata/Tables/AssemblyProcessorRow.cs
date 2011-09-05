@@ -7,10 +7,6 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.IO;
 
 namespace Mosa.Runtime.Metadata.Tables
 {

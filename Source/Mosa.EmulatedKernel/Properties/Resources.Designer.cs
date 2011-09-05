@@ -10,7 +10,6 @@
 
 namespace Mosa.EmulatedKernel.Properties
 {
-	using System;
 
 
 	/// <summary>

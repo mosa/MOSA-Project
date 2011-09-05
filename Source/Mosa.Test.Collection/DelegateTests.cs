@@ -7,7 +7,6 @@
  *  Kai Patrick Reisert <kpreisert@googlemail.com> 
  */
 
-using System;
 
 namespace Mosa.Test.Collection
 {

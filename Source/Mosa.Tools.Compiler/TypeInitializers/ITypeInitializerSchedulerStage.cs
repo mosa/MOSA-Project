@@ -7,8 +7,8 @@
  *  Michael Fröhlich (grover) <sharpos@michaelruck.de>
  */
 
-using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.Linker;
+using Mosa.Runtime.TypeSystem;
 
 namespace Mosa.Tools.Compiler.TypeInitializers
 {

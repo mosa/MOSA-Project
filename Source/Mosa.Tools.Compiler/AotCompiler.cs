@@ -8,17 +8,12 @@
  *  Alex Lyman <mail.alex.lyman@gmail.com>
  */
 
-using System.Diagnostics;
 
-using NDesk.Options;
 
-using Mosa.Runtime.Options;
 using Mosa.Runtime.CompilerFramework;
-using Mosa.Runtime.Metadata.Loader;
-using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.InternalTrace;
-using Mosa.Tools.Compiler.Stages;
-using Mosa.Compiler.Linker;
+using Mosa.Runtime.Options;
+using Mosa.Runtime.TypeSystem;
 
 namespace Mosa.Tools.Compiler
 {

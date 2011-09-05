@@ -8,7 +8,6 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-using System;
 using Mosa.Runtime.CompilerFramework;
 
 namespace Mosa.Platform.x86.CPUx86

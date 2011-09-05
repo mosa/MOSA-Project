@@ -7,10 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
 
 using Mosa.Runtime.CompilerFramework;
-using Mosa.Tools.Compiler.Stages;
 using Mosa.Runtime.Options;
 using Mosa.Tools.Compiler.Linker;
 

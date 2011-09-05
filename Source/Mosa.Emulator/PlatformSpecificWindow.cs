@@ -24,9 +24,8 @@
 
 using System;
 using System.Diagnostics;
-using System.Windows.Forms;
 using System.Drawing;
-using Pictor.PixelFormat;
+using System.Windows.Forms;
 
 namespace Pictor.UI.EmulatorPlatform
 {

@@ -1,5 +1,4 @@
 
-using System;
 
 namespace Mosa.Runtime.Metadata.Signatures
 {

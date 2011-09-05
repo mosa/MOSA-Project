@@ -8,8 +8,6 @@
  */
 
 using System;
-using System.IO;
-using System.Text;
 using System.Diagnostics;
 
 namespace Mosa.Runtime.Metadata

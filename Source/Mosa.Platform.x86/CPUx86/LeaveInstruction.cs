@@ -7,8 +7,6 @@
  *  Simon Wollwage (rootnode) <rootnode@mosa-project.org>
  */
 
-using System;
-using System.IO;
 
 using Mosa.Runtime.CompilerFramework;
 

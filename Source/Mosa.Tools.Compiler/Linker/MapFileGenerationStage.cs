@@ -8,13 +8,9 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.IO;
-using System.Diagnostics;
-
-using Mosa.Runtime.CompilerFramework;
 using Mosa.Compiler.Linker;
+using Mosa.Runtime.CompilerFramework;
 
 namespace Mosa.Tools.Compiler.Linker
 {

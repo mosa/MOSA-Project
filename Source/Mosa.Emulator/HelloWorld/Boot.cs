@@ -5,8 +5,8 @@
  *
  */
 
-using Mosa.Platform.x86;
 using Mosa.Kernel.x86;
+using Mosa.Platform.x86;
 
 namespace Mosa.HelloWorld
 {

@@ -6,7 +6,6 @@
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- *  
  */
 
 using System;
@@ -14,20 +13,14 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
-
+using Mosa.Compiler.Linker;
+using Mosa.Runtime.CompilerFramework.CIL;
 using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Runtime.Metadata;
+using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.TypeSystem;
-using Mosa.Runtime.CompilerFramework;
-using Mosa.Runtime.Metadata.Loader;
-using Mosa.Compiler.Linker;
-
-using IR = Mosa.Runtime.CompilerFramework.IR;
-using CIL = Mosa.Runtime.CompilerFramework.CIL;
-using Mosa.Runtime.CompilerFramework.CIL;
 using Mosa.Runtime.TypeSystem.Generic;
-using Mosa.Runtime.TypeSystem.Cil;
 
 namespace Mosa.Runtime.CompilerFramework.IR
 {

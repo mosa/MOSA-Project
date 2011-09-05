@@ -9,7 +9,6 @@
 
 namespace Mosa.Runtime.CompilerFramework.IR
 {
-	using System;
 
 	/// <summary>
 	/// Intermediate representation of the unsigned remainder operation.

@@ -10,9 +10,7 @@
 using System;
 using System.IO;
 
-using Mosa.Runtime;
 using Mosa.Compiler.Linker;
-using Mosa.Runtime.Memory;
 
 namespace Mosa.Test.System
 {

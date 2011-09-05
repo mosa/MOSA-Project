@@ -7,14 +7,11 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
+using System;
+using Mosa.Runtime.TypeSystem;
+
 namespace Mosa.Runtime.CompilerFramework
 {
-	using System;
-	using System.Collections.Generic;
-	using System.Diagnostics;
-
-	using Mosa.Runtime.TypeSystem;
-
 	/// <summary>
 	/// Schedules all types of an assembly for compilation.
 	/// </summary>

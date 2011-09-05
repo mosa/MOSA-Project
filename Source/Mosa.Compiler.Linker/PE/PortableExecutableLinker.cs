@@ -10,12 +10,10 @@
 
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
-using System.Diagnostics;
-
 using Mosa.Compiler.FileFormat.PE;
-using Mosa.Compiler.Linker;
 using Mosa.Compiler.Linker.PE;
 
 namespace Mosa.Compiler.Linker

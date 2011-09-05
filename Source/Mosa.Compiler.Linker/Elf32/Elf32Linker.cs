@@ -8,10 +8,8 @@
  */
 
 using System;
-using System.IO;
 using System.Collections.Generic;
-
-using Mosa.Compiler.Linker;
+using System.IO;
 using Mosa.Compiler.Linker.Elf32;
 using Mosa.Compiler.Linker.Elf32.Sections;
 

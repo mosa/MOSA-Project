@@ -7,8 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.DeviceSystem;
-using Mosa.EmulatedKernel;
 
 namespace Mosa.EmulatedKernel
 {

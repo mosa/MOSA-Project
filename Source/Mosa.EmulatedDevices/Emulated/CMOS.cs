@@ -8,8 +8,6 @@
  */
 
 using System;
-using System.IO;
-using Mosa.ClassLib;
 using Mosa.EmulatedKernel;
 
 namespace Mosa.EmulatedDevices.Emulated

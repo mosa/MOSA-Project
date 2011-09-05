@@ -9,9 +9,6 @@
  *
  */
 
-using System;
-using System.Runtime.InteropServices;
-using Gallio.Framework;
 using MbUnit.Framework;
 using Mosa.Test.System;
 

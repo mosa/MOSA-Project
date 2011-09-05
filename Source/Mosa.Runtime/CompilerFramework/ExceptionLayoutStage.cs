@@ -8,14 +8,11 @@
  */
 
 using System;
-using System.IO;
 using System.Collections.Generic;
-using System.Diagnostics;
-
+using System.IO;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Linker;
 
-using CIL = Mosa.Runtime.CompilerFramework.CIL;
 
 // FIXME: Splits this class into platform dependent and independent classes. Move platform dependent code into Mosa.Platforms.x86
 

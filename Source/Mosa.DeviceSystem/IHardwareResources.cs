@@ -7,7 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.DeviceSystem;
 using Mosa.DeviceSystem.PCI;
 
 namespace Mosa.DeviceSystem

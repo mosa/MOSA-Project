@@ -7,11 +7,8 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-using System;
-using System.Collections.Generic;
 
 using Mosa.Compiler.Linker;
-using Mosa.Compiler.Linker.PE;
 using Mosa.Runtime.CompilerFramework;
 
 namespace Mosa.Tools.Compiler.Linker

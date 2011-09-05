@@ -8,10 +8,6 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Text;
-using Mosa.Runtime.Metadata.Tables;
-using System.Diagnostics;
 
 namespace Mosa.Runtime.Metadata.Signatures
 {

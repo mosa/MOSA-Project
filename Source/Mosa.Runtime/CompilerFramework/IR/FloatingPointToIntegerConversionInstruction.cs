@@ -7,10 +7,6 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Diagnostics;
 
 namespace Mosa.Runtime.CompilerFramework.IR
 {

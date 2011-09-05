@@ -7,8 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using System.Runtime.InteropServices;
 
 namespace System.Collections.Generic
 {

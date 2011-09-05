@@ -6,7 +6,6 @@
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
-using System;
 
 namespace Pictor.Transform
 {

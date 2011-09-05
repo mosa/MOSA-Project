@@ -8,17 +8,10 @@
  *  Simon Wollwage (rootnode) <rootnode@mosa-project.org>
  */
 
-using System;
 using System.Diagnostics;
-using System.IO;
 
 using Mosa.Runtime.CompilerFramework;
-using Mosa.Compiler.Linker;
-using Mosa.Runtime.Metadata;
-using Mosa.Runtime.Metadata.Signatures;
 
-using IR = Mosa.Runtime.CompilerFramework.IR;
-using CIL = Mosa.Runtime.CompilerFramework.CIL;
 
 namespace Mosa.Platform.x86
 {

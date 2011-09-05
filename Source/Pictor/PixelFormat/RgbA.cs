@@ -7,9 +7,7 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 #define USE_BLENDER
-using ColorT = Pictor.OrderBGRA;
 
-using Pictor;
 
 namespace Pictor.PixelFormat
 {

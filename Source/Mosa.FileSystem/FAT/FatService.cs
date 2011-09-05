@@ -8,8 +8,6 @@
  */
 
 using Mosa.DeviceSystem;
-using Mosa.FileSystem;
-using Mosa.FileSystem.VFS;
 
 namespace Mosa.FileSystem.FAT
 {

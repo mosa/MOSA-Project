@@ -7,7 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Runtime.CompilerFramework;
 
 namespace Mosa.Runtime.Options
 {

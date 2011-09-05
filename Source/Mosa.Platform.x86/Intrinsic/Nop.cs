@@ -7,10 +7,9 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Runtime;
+using System.Collections.Generic;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.TypeSystem;
-using System.Collections.Generic;
 
 namespace Mosa.Platform.x86.Intrinsic
 {

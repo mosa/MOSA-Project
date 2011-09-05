@@ -11,12 +11,9 @@
 
 using System;
 using System.Diagnostics;
-using System.IO;
 
 using Mosa.Runtime.CompilerFramework;
-using Mosa.Runtime.CompilerFramework.IR;
 using Mosa.Runtime.CompilerFramework.Operands;
-using Mosa.Compiler.Linker;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.TypeSystem;

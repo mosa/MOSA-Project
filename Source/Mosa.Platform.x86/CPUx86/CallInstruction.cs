@@ -7,14 +7,8 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 using Mosa.Runtime.CompilerFramework;
-using CIL = Mosa.Runtime.CompilerFramework.CIL;
-using IR = Mosa.Runtime.CompilerFramework.IR;
-using System.Diagnostics;
 using Mosa.Runtime.CompilerFramework.Operands;
 
 namespace Mosa.Platform.x86.CPUx86

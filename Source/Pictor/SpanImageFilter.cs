@@ -6,7 +6,6 @@
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
-using System;
 using image_subpixel_scale_e = Pictor.ImageFilterLookUpTable.EImageSubpixelScale;
 
 namespace Pictor

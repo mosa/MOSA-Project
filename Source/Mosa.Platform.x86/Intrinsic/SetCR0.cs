@@ -8,13 +8,7 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-using System;
 
-using Mosa.Runtime.CompilerFramework;
-using Mosa.Runtime.CompilerFramework.Operands;
-using Mosa.Runtime.Metadata;
-using Mosa.Runtime.Metadata.Signatures;
-using IR = Mosa.Runtime.CompilerFramework.IR;
 
 namespace Mosa.Platform.x86.Intrinsic
 {

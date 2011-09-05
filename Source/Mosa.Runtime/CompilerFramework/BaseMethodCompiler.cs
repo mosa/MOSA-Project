@@ -12,16 +12,15 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-
 using Mosa.Compiler.Linker;
+using Mosa.Runtime.CompilerFramework.CIL;
+using Mosa.Runtime.CompilerFramework.Operands;
+using Mosa.Runtime.InternalTrace;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.TypeSystem.Generic;
-using Mosa.Runtime.CompilerFramework.Operands;
-using Mosa.Runtime.InternalTrace;
-using Mosa.Runtime.CompilerFramework.CIL;
 
 namespace Mosa.Runtime.CompilerFramework
 {

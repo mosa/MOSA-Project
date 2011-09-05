@@ -7,7 +7,6 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-using System;
 using Mosa.Runtime.CompilerFramework;
 
 namespace Mosa.Platform.x86.CPUx86

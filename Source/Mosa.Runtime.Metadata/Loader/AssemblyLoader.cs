@@ -8,15 +8,10 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
 using System.Collections.Generic;
-using System.IO;
 using System.Diagnostics;
-
-using Mosa.Runtime.Metadata;
+using System.IO;
 using Mosa.Runtime.Metadata.Loader.PE;
-using Mosa.Runtime.Metadata.Tables;
-using Mosa.Runtime.Metadata.Loader;
 
 namespace Mosa.Runtime.Metadata.Loader
 {

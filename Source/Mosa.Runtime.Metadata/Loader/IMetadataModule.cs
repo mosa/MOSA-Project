@@ -7,11 +7,8 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-using System;
 using System.IO;
-using System.Collections.Generic;
 
-using Mosa.Runtime.Metadata;
 
 namespace Mosa.Runtime.Metadata.Loader
 {

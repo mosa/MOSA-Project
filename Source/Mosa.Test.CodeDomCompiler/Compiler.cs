@@ -8,13 +8,9 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Text;
-using System.IO;
-using System.Reflection;
 using System.CodeDom.Compiler;
-using System.Runtime.InteropServices;
-using System.Diagnostics;
+using System.Collections.Generic;
+using System.IO;
 
 namespace Mosa.Test.CodeDomCompiler
 {

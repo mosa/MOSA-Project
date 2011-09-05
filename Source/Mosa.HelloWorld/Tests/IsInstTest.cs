@@ -6,12 +6,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
 
-using Mosa.Platform.x86;
-using Mosa.Kernel;
-using Mosa.Kernel.x86;
-using Mosa.ClassLib;
 
 namespace Mosa.HelloWorld.Tests
 {

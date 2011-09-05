@@ -6,10 +6,6 @@
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
-using System;
-using System.IO;
-using System.Collections.Generic;
-using System.Runtime.InteropServices;
 
 namespace Pictor
 {

@@ -1,12 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Windows.Forms;
 using System.CodeDom.Compiler;
-
+using System.Windows.Forms;
 using Mosa.Test.CodeDomCompiler;
 
 namespace Mosa.Tools.TypeExplorer

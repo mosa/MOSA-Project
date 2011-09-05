@@ -9,13 +9,9 @@
 */
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.IO;
 
 using Mosa.Compiler.FileFormat.PE;
-using Mosa.Runtime.Metadata;
-using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.Metadata.Tables;
 
 namespace Mosa.Runtime.Metadata.Loader.PE

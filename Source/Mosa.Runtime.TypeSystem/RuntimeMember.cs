@@ -9,11 +9,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Diagnostics;
 
 using Mosa.Runtime.Metadata;
-using Mosa.Runtime.Metadata.Loader;
 
 namespace Mosa.Runtime.TypeSystem
 {

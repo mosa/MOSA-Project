@@ -7,7 +7,6 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.TypeSystem;
 

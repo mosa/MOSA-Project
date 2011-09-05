@@ -9,10 +9,9 @@
 
 using Mosa.Compiler.Linker;
 using Mosa.Runtime.CompilerFramework;
-using Mosa.Runtime.Metadata.Loader;
-using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.InternalTrace;
 using Mosa.Runtime.Options;
+using Mosa.Runtime.TypeSystem;
 using Mosa.Tools.Compiler.Linker;
 using Mosa.Tools.Compiler.TypeInitializers;
 

@@ -7,8 +7,8 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 using System;
-using image_subpixel_scale_e = Pictor.ImageFilterLookUpTable.EImageSubpixelScale;
 using image_filter_scale_e = Pictor.ImageFilterLookUpTable.EImageFilterScale;
+using image_subpixel_scale_e = Pictor.ImageFilterLookUpTable.EImageSubpixelScale;
 
 namespace Pictor
 {

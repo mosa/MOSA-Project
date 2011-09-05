@@ -9,10 +9,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Text;
 using System.IO;
 
-using Mosa.Compiler.Linker;
 using Mosa.Compiler.Linker.Elf64;
 using Mosa.Compiler.Linker.Elf64.Sections;
 

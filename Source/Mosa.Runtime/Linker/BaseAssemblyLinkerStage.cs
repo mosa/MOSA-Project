@@ -18,7 +18,6 @@ using Mosa.Compiler.Linker;
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.TypeSystem;
-using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Runtime.Linker
 {

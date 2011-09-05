@@ -8,15 +8,9 @@
  */
 
 using System;
-using System.Collections.Generic;
-using System.Text;
 using System.IO;
 
-using Mosa.Runtime.CompilerFramework;
-using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Compiler.Linker;
-using Mosa.Runtime.TypeSystem;
-using IR = Mosa.Runtime.CompilerFramework.IR;
 
 namespace Mosa.Runtime.CompilerFramework
 {

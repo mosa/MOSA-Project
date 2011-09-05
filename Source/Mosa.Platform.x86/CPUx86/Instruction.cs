@@ -7,7 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Platform.x86.Intrinsic;
 
 namespace Mosa.Platform.x86.CPUx86
 {

@@ -7,13 +7,9 @@
 *  Phil Garcia (tgiphil) <phil@thinkedge.com>
 */
 
-using System;
-using System.IO;
 using System.Collections.Generic;
-using System.Text;
+using System.IO;
 using System.Xml;
-using System.Xml.Xsl;
-using System.Xml.XPath;
 
 namespace Mosa.Tools.Mono.UpdateProject
 {

@@ -10,14 +10,11 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-
-using Mosa.Runtime.TypeSystem;
+using Mosa.Runtime.InternalTrace;
 using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime.Metadata.Signatures;
-using Mosa.Runtime.InternalTrace;
+using Mosa.Runtime.TypeSystem;
 
-using CIL = Mosa.Runtime.CompilerFramework.CIL;
 
 namespace Mosa.Runtime.CompilerFramework
 {

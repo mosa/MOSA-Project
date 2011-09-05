@@ -7,7 +7,6 @@
  *  Michael Fröhlich (aka Michael Ruck or grover) <sharpos@michaelruck.de>
  */
 
-using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.TypeSystem;
 
 namespace Mosa.Runtime.CompilerFramework

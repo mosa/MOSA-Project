@@ -7,10 +7,10 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
+using System.Collections.Generic;
 using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Runtime.Metadata.Signatures;
 using Mosa.Runtime.TypeSystem;
-using System.Collections.Generic;
 
 namespace Mosa.Runtime.CompilerFramework.Intrinsics
 {

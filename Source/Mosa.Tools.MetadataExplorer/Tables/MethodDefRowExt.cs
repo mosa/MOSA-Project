@@ -7,15 +7,10 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using System.Collections.Generic;
-using System.Text;
-using System.IO;
 using System.Collections;
-
 using Mosa.Runtime.Metadata;
-using Mosa.Runtime.Metadata.Tables;
 using Mosa.Runtime.Metadata.Signatures;
+using Mosa.Runtime.Metadata.Tables;
 
 namespace Mosa.Tools.MetadataExplorer.Tables
 {

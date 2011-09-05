@@ -8,7 +8,6 @@
  */
 
 using System;
-
 using Mosa.Runtime.TypeSystem;
 
 namespace Mosa.Runtime.CompilerFramework.Operands

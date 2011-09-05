@@ -22,11 +22,8 @@
 //----------------------------------------------------------------------------
 //#define USE_OPENGL
 
-using System;
-using System.Windows.Forms;
 using System.Drawing;
 using System.Drawing.Imaging;
-using Pictor.PixelFormat;
 
 namespace Pictor.UI.EmulatorPlatform
 {

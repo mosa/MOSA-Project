@@ -12,9 +12,8 @@
 //
 //----------------------------------------------------------------------------
 using System;
-using Pictor;
-using Pictor.VertexSource;
 using Pictor.Transform;
+using Pictor.VertexSource;
 
 namespace Pictor.UI
 {

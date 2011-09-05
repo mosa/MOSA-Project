@@ -8,12 +8,10 @@
  */
 
 using System;
-
-using Mosa.Runtime.CompilerFramework;
-using Mosa.Tools.Compiler.Linker;
 using Mosa.Compiler.Linker;
+using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.Options;
-
+using Mosa.Tools.Compiler.Linker;
 using NDesk.Options;
 
 namespace Mosa.Tools.Compiler.Options

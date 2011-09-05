@@ -7,11 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.ClassLib;
-using Mosa.DeviceSystem;
-using Mosa.DeviceSystem.PCI;
-using Mosa.DeviceDrivers;
 using Mosa.DeviceDrivers.ISA;
+using Mosa.DeviceSystem;
 
 namespace Mosa.CoolWorld
 {

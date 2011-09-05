@@ -6,7 +6,6 @@
  * Authors:
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
-using Pictor;
 
 namespace Pictor.PixelFormat
 {

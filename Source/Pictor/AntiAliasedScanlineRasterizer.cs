@@ -7,10 +7,8 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-using System;
 using Pictor.VertexSource;
 using filling_rule_e = Pictor.Basics.FillingRule;
-using status = Pictor.AntiAliasedScanlineRasterizer.Status;
 using poly_subpixel_scale_e = Pictor.Basics.PolySubpixelScale;
 
 namespace Pictor

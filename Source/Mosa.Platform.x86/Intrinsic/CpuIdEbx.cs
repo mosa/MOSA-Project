@@ -7,15 +7,9 @@
  *  Simon Wollwage (rootnode) <rootnode@mosa-project.org>
  */
 
-using System;
 using System.Collections.Generic;
-using System.Text;
-using System.Diagnostics;
-
-using Mosa.Runtime;
-using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Runtime.CompilerFramework;
-using Mosa.Runtime.Metadata.Signatures;
+using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Runtime.TypeSystem;
 
 namespace Mosa.Platform.x86.Intrinsic

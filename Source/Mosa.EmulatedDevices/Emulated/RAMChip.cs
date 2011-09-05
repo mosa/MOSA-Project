@@ -8,7 +8,6 @@
  */
 
 using Mosa.EmulatedKernel;
-using Mosa.EmulatedDevices;
 
 namespace Mosa.EmulatedDevices.Emulated
 {

@@ -7,11 +7,8 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-using System;
-using System.Diagnostics;
 
 using Mosa.Runtime.CompilerFramework;
-using IR = Mosa.Runtime.CompilerFramework.IR;
 
 namespace Mosa.Platform.x86.CPUx86
 {

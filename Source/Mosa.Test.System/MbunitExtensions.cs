@@ -1,15 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Reflection;
-
-using Gallio.Framework;
-using MbUnit.Framework;
-using Gallio.Framework.Data;
-using MbUnit.Framework.ContractVerifiers;
-using Gallio.Framework.Pattern;
 using Gallio.Common.Reflection;
-
+using Gallio.Framework.Data;
+using Gallio.Framework.Pattern;
+using MbUnit.Framework;
 using Mosa.Test.System.Numbers;
 
 namespace Mosa.Test.System

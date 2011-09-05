@@ -12,9 +12,7 @@
 // References:
 // http://www.amd.com/files/connectivitysolutions/networking/archivednetworking/19436.pdf 
 
-using Mosa.ClassLib;
 using Mosa.DeviceSystem;
-using Mosa.DeviceSystem.PCI;
 
 namespace Mosa.DeviceDrivers.PCI.NetworkCard
 {

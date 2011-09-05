@@ -1,11 +1,8 @@
-﻿using System;
+﻿using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using Mosa.Runtime.Metadata;
-using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Runtime.CompilerFramework.CIL;
-using System.Collections;
+using Mosa.Runtime.CompilerFramework.Operands;
+using Mosa.Runtime.Metadata;
 
 namespace Mosa.Runtime.CompilerFramework
 {

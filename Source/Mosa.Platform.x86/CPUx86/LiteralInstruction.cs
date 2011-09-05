@@ -7,14 +7,9 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.CompilerFramework.Operands;
-using IR = Mosa.Runtime.CompilerFramework.IR;
-using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Platform.x86.CPUx86
 {

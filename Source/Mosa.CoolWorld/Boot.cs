@@ -5,12 +5,9 @@
  *
  */
 
-using System;
-
-using Mosa.Platform.x86.Intrinsic;
 using Mosa.Kernel;
 using Mosa.Kernel.x86;
-using Mosa.DeviceSystem;
+using Mosa.Platform.x86.Intrinsic;
 
 namespace Mosa.CoolWorld
 {

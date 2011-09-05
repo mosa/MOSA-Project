@@ -8,12 +8,9 @@
  */
 
 using System;
-
-using Mosa.Runtime.Metadata.Loader;
-using Mosa.Runtime.Metadata;
-using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.InternalTrace;
 using Mosa.Runtime.Options;
+using Mosa.Runtime.TypeSystem;
 
 namespace Mosa.Runtime.CompilerFramework
 {

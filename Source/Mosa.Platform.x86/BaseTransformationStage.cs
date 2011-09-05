@@ -9,12 +9,10 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
 
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Runtime.Metadata;
-using Mosa.Compiler.Common;
 
 namespace Mosa.Platform.x86
 {

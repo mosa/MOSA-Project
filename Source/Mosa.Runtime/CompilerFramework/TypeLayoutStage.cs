@@ -9,16 +9,11 @@
  */
 
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Collections.Generic;
-
 using Mosa.Compiler.Linker;
 using Mosa.Runtime.TypeSystem;
-using Mosa.Runtime.Metadata;
-using Mosa.Runtime.Metadata.Tables;
-using Mosa.Runtime.Metadata.Signatures;
 
 namespace Mosa.Runtime.CompilerFramework
 {

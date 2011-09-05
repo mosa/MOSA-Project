@@ -9,13 +9,11 @@
 */
 
 using System;
-using System.Collections.Generic;
 
 using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.CompilerFramework.Operands;
 using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Signatures;
-using Mosa.Platform.x86.Constraints;
 
 namespace Mosa.Platform.x86
 {

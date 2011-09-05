@@ -22,7 +22,6 @@
 //----------------------------------------------------------------------------
 using System;
 using Pictor.VertexSource;
-using System.Collections.Generic;
 
 namespace Pictor.UI
 {

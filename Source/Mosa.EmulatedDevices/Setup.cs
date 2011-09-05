@@ -9,11 +9,9 @@
 
 using System.Threading;
 using System.Windows.Forms;
-using System.Drawing;
-
-using Mosa.EmulatedKernel;
 using Mosa.EmulatedDevices.Emulated;
 using Mosa.EmulatedDevices.Synthetic;
+using Mosa.EmulatedKernel;
 
 namespace Mosa.EmulatedDevices
 {

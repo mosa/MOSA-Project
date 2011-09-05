@@ -9,7 +9,6 @@
  */
 
 using System;
-using System.Diagnostics;
 
 namespace Mosa.Runtime.Metadata.Signatures
 {

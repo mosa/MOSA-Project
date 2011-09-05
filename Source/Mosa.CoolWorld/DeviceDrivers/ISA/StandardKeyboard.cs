@@ -7,7 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.ClassLib;
 using Mosa.DeviceSystem;
 
 namespace Mosa.DeviceDrivers.ISA

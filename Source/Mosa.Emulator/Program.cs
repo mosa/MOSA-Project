@@ -8,15 +8,12 @@
  */
 
 using System;
-using System.Windows.Forms;
 using System.Threading;
-
+using System.Windows.Forms;
 using Mosa.ClassLib;
 using Mosa.DeviceSystem;
 using Mosa.DeviceSystem.PCI;
-using Mosa.FileSystem;
 using Mosa.FileSystem.FAT;
-using Mosa.EmulatedDevices.Synthetic;
 
 namespace Mosa.Emulator
 {

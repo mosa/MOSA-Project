@@ -7,9 +7,7 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-using Mosa.ClassLib;
 using Mosa.DeviceSystem;
-using Mosa.DeviceSystem.PCI;
 
 namespace Mosa.DeviceDrivers.PCI.VideoCard
 {
