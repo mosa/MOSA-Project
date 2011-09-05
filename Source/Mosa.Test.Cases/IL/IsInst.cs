@@ -7,7 +7,7 @@
  *  Alex Lyman <mail.alex.lymangmail.com>
  *  Simon Wollwage (rootnode) <kintarothink-in-co.de>
  *  Michael Fröhlich (grover) <michael.ruckmichaelruck.de>
- *  Kai P. Reisert <kpreisertgooglemail.com>
+ *  Kai Patrick Reisert <kpreisertgooglemail.com>
  *  
  */
 
@@ -96,5 +96,12 @@ namespace Mosa.Test.Cases.IL
 		{
 			Assert.AreEqual(IsInstTests.IsInstTest11(), Run<bool>("Mosa.Test.Collection", "IsInstTests", "IsInstTest11"));
 		}
+
+		[Test]
+		public void IsInstTest12()
+		{
+			Assert.AreEqual(IsInstTests.IsInstTest12(), Run<bool>("Mosa.Test.Collection", "IsInstTests", "IsInstTest12"));
+		}
+
 	}
 }

@@ -11,6 +11,7 @@ using System;
 using MbUnit.Framework;
 
 using Mosa.Test.System;
+using Mosa.Test.Collection;
 
 namespace Mosa.Test.Cases.CIL
 {
@@ -30,56 +31,61 @@ namespace Mosa.Test.Cases.CIL
 		[Test]
 		public void CallDelegateVoid1()
 		{
-			Assert.AreEqual(1, Run<int>("Mosa.Test.Collection", "DelegateTests", "CallDelegateVoid1"));
+			Assert.AreEqual(DelegateTests.CallDelegateVoid1(), Run<int>("Mosa.Test.Collection", "DelegateTests", "CallDelegateVoid1"));
 		}
 
 		[Test]
 		public void CallDelegateVoid2()
 		{
-			Assert.AreEqual(2, Run<int>("Mosa.Test.Collection", "DelegateTests", "CallDelegateVoid2"));
+			Assert.AreEqual(DelegateTests.CallDelegateVoid2(), Run<int>("Mosa.Test.Collection", "DelegateTests", "CallDelegateVoid2"));
 		}
 
 		[Test]
 		public void ReassignDelegateVoid()
 		{
-			Assert.AreEqual(3, Run<int>("Mosa.Test.Collection", "DelegateTests", "ReassignDelegateVoid"));
+			Assert.AreEqual(DelegateTests.ReassignDelegateVoid(), Run<int>("Mosa.Test.Collection", "DelegateTests", "ReassignDelegateVoid"));
 		}
 
 		[Test]
-		[Row(3,5)]
+		[Row(3, 5)]
 		public void CallDelegateParameters(int a, int b)
 		{
-			Assert.AreEqual(a * 10 + b, Run<int>("Mosa.Test.Collection", "DelegateTests", "CallDelegateParameters", a, b));
+			Assert.AreEqual(DelegateTests.CallDelegateParameters(a, b), Run<int>("Mosa.Test.Collection", "DelegateTests", "CallDelegateParameters", a, b));
 		}
 
 		[Test]
-		public void CallDelegateReturn()
+		[Row(5)]
+		public void CallDelegateReturn(int a)
 		{
-			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "DelegateTests", "CallDelegateReturn"));
+			Assert.AreEqual(DelegateTests.CallDelegateReturn(a), Run<int>("Mosa.Test.Collection", "DelegateTests", "CallDelegateReturn", a));
 		}
 
 		[Test]
-		public void CallDelegateParametersReturn()
+		[Row(3, 5)]
+		public void CallDelegateParametersReturn(int a, int b)
 		{
-			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "DelegateTests", "CallDelegateParametersReturn", 3, 5));
+			Assert.AreEqual(DelegateTests.CallDelegateParametersReturn(a, b), Run<int>("Mosa.Test.Collection", "DelegateTests", "CallDelegateParametersReturn", a, b));
 		}
 
 		[Test]
-		public void CallDelegateBox()
+		[Row(5)]
+		public void CallDelegateBox(int a)
 		{
-			 Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "DelegateTests", "CallDelegateBox", 99));
+			Assert.AreEqual(DelegateTests.CallDelegateBox(a), Run<int>("Mosa.Test.Collection", "DelegateTests", "CallDelegateBox", a));
 		}
 
 		[Test]
-		public void CallDelegateGenericReturn()
+		[Row(99)]
+		public void CallDelegateGenericReturn(int a)
 		{
-			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "DelegateTests", "CallDelegateGenericReturn"));
+			Assert.AreEqual(DelegateTests.CallDelegateGenericReturn(a), Run<int>("Mosa.Test.Collection", "DelegateTests", "CallDelegateGenericReturn", a));
 		}
 
 		[Test]
-		public void CallDelegateGenericReturnStructA()
+		[Row(123)]
+		public void CallDelegateGenericReturnStructA(int a)
 		{
-			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "DelegateTests", "CallDelegateGenericReturnStructA"));
+			Assert.AreEqual(DelegateTests.CallDelegateGenericReturnStructA(a), Run<int>("Mosa.Test.Collection", "DelegateTests", "CallDelegateGenericReturnStructA", a));
 		}
 
 		[Test]
@@ -138,6 +144,18 @@ namespace Mosa.Test.Code
 }";
 			Assert.IsTrue(Run<bool>("Mosa.Test.Code", "DelegateTests", "CallDelegateGenericTargetReturn"));
 			settings.CodeSource = string.Empty;
+		}
+
+		[Test]
+		public void CallInstanceDelegate()
+		{
+			Assert.AreEqual(DelegateTests.CallInstanceDelegate(), Run<int>("Mosa.Test.Collection", "DelegateTests", "CallInstanceDelegate"));
+		}
+
+		[Test]
+		public void CallInstanceDelegateStatic()
+		{
+			Assert.AreEqual(DelegateTests.CallInstanceDelegateStatic(), Run<int>("Mosa.Test.Collection", "DelegateTests", "CallInstanceDelegateStatic"));
 		}
 	}
 }
