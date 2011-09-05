@@ -47,12 +47,6 @@ namespace Mosa.Tools.Compiler.Linker
 
 		#endregion // Construction
 
-		#region IPipelineStage members
-
-		string IPipelineStage.Name { get { return @"MapFileGenerationStage"; } }
-
-		#endregion // IPipelineStage members
-
 		#region IAssemblyCompilerStage Members
 
 		void IAssemblyCompilerStage.Setup(AssemblyCompiler compiler)

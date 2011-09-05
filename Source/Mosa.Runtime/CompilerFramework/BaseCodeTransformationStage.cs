@@ -25,7 +25,7 @@ namespace Mosa.Runtime.CompilerFramework
 	/// <summary>
 	/// Base class for code transformation stages.
 	/// </summary>
-	public abstract class BaseCodeTransformationStage : BaseMethodCompilerStage, IMethodCompilerStage, IVisitor, IPipelineStage
+	public abstract class BaseCodeTransformationStage : BaseMethodCompilerStage, IMethodCompilerStage, IVisitor
 	{
 
 		#region Data members
@@ -33,16 +33,6 @@ namespace Mosa.Runtime.CompilerFramework
 		private readonly DataConverter LittleEndianBitConverter = DataConverter.LittleEndian;
 
 		#endregion // Data members
-
-		#region IPipelineStage Members
-
-		/// <summary>
-		/// Retrieves the name of the compilation stage.
-		/// </summary>
-		/// <value></value>
-		string IPipelineStage.Name { get { return @"CodeTransformationStage"; } }
-
-		#endregion // IPipelineStage Members
 
 		#region IMethodCompilerStage Members
 

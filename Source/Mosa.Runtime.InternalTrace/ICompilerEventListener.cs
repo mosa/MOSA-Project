@@ -18,6 +18,6 @@ namespace Mosa.Runtime.InternalTrace
 
 	public interface ICompilerEventListener
 	{
-		void NotifyCompilerEvent(CompilerEvent compilerStage, string info);
+		void SubmitTraceEvent(CompilerEvent compilerStage, string info);
 	}
 }

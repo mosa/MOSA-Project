@@ -35,17 +35,6 @@ namespace Mosa.Runtime.CompilerFramework
 		private IAssemblyLinker linker;
 
 		/// <summary>
-		/// Retrieves the name of the compilation stage.
-		/// </summary>
-		/// <value>
-		/// The name of the compilation stage.
-		/// </value>
-		public string Name
-		{
-			get { return @"MethodTableBuilderStage"; }
-		}
-
-		/// <summary>
 		/// Setups the specified compiler.
 		/// </summary>
 		/// <param name="compiler">The compiler.</param>

@@ -54,16 +54,6 @@ namespace Mosa.Runtime.CompilerFramework
 		/// </summary>
 		private HashSet<int> propagated = new HashSet<int>();
 
-		#region IPipelineStage Members
-
-		/// <summary>
-		/// Retrieves the name of the compilation stage.
-		/// </summary>
-		/// <value>The name of the compilation stage.</value>
-		string IPipelineStage.Name { get { return @"ConstantPropagationStage [" + stage.ToString() + "]"; } }
-
-		#endregion // IPipelineStage Members
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ConstantPropagationStage"/> class.
 		/// </summary>

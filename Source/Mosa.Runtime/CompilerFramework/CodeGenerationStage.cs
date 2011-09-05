@@ -36,16 +36,6 @@ namespace Mosa.Runtime.CompilerFramework
 
 		#endregion // Data members
 
-		#region IPipelineStage Members
-
-		/// <summary>
-		/// Retrieves the name of the compilation stage.
-		/// </summary>
-		/// <value></value>
-		string IPipelineStage.Name { get { return @"CodeGenerationStage"; } }
-
-		#endregion // IPipelineStage Members
-
 		#region Properties
 
 		public ICodeEmitter CodeEmitter { get { return codeEmitter; } }

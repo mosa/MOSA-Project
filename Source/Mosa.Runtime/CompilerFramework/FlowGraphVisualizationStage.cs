@@ -49,16 +49,6 @@ namespace Mosa.Runtime.CompilerFramework
 
 		#endregion // Data members
 
-		#region IPipelineStage Members
-
-		/// <summary>
-		/// Retrieves the name of the compilation stage.
-		/// </summary>
-		/// <value>The name of the compilation stage.</value>
-		string IPipelineStage.Name { get { return @"FlowGraph Visualization Stage"; } }
-
-		#endregion // IPipelineStage Members
-
 		#region IMethodCompilerStage Members
 
 		/// <summary>

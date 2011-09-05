@@ -245,15 +245,5 @@ namespace Mosa.Runtime.CompilerFramework
 				currentStack.Push(operand);
 		}
 
-		/// <summary>
-		/// Retrieves the name of the compilation stage.
-		/// </summary>
-		/// <value>
-		/// The name of the compilation stage.
-		/// </value>
-		public string Name
-		{
-			get { return @"OperandDeterminationStage"; }
-		}
 	}
 }

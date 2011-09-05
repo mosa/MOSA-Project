@@ -34,16 +34,6 @@ namespace Mosa.Platform.x86
 
 		#endregion // Data Members
 
-		#region IPipelineStage Members
-
-		/// <summary>
-		/// Retrieves the name of the compilation stage.
-		/// </summary>
-		/// <value>The name of the compilation stage.</value>
-		string IPipelineStage.Name { get { return @"Interrupt Stage"; } }
-
-		#endregion // IPipelineStage Members
-
 		#region IAssemblyCompilerStage Members
 
 		void IAssemblyCompilerStage.Setup(AssemblyCompiler compiler)

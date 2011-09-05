@@ -63,16 +63,6 @@ namespace Mosa.Test.System
 
 		#endregion // Construction
 
-		#region IPipelineStage
-
-		/// <summary>
-		/// Retrieves the name of the compilation stage.
-		/// </summary>
-		/// <value>The name of the compilation stage.</value>
-		string IPipelineStage.Name { get { return @"Test Linker"; } }
-
-		#endregion // IPipelineStage Members
-
 		#region AssemblyLinkerStageBase Overrides
 
 		/// <summary>

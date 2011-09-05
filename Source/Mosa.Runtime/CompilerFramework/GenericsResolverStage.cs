@@ -24,12 +24,6 @@ namespace Mosa.Runtime.CompilerFramework
 	public class GenericsResolverStage : BaseAssemblyCompilerStage, IAssemblyCompilerStage, IMethodCompilerBuilder, IPipelineStage
 	{
 
-		#region IPipelineStage members
-
-		string IPipelineStage.Name { get { return @"Generics Resolver"; } }
-
-		#endregion IPipelineStage members
-
 		#region IAssemblyCompilerStage members
 
 		void IAssemblyCompilerStage.Run()

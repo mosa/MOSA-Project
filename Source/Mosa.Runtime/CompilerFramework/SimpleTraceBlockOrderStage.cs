@@ -28,17 +28,6 @@ namespace Mosa.Runtime.CompilerFramework
 
 		#endregion // Data members
 
-		#region IMethodCompilerStage Members
-
-		/// <summary>
-		/// Retrieves the name of the compilation stage.
-		/// </summary>
-		/// <value>The name of the compilation stage.</value>
-		string IPipelineStage.Name
-		{
-			get { return @"Simple Trace Block Order"; }
-		}
-
 		/// <summary>
 		/// Runs the specified compiler.
 		/// </summary>
@@ -92,6 +81,5 @@ namespace Mosa.Runtime.CompilerFramework
 				basicBlocks[i] = _ordered[i];
 		}
 
-		#endregion // Methods
 	}
 }

@@ -22,8 +22,18 @@ namespace Mosa.Platform.x86
 	/// <summary>
 	/// 
 	/// </summary>
-	public abstract class BaseTransformationStage : BaseCodeTransformationStage, IPlatformStage
+	public abstract class BaseTransformationStage : BaseCodeTransformationStage
 	{
+
+		#region IPipelineStage Members
+
+		/// <summary>
+		/// Retrieves the name of the compilation stage.
+		/// </summary>
+		/// <value>The name of the compilation stage.</value>
+		public override string Name { get { return "x86." + this.GetType().Name; } }
+
+		#endregion // IPipelineStage Members
 
 		#region X86 Internals
 

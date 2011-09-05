@@ -30,12 +30,6 @@ namespace Mosa.Runtime.CompilerFramework
 
 		private readonly HashSet<string> alreadyCompiled;
 
-		#region IPipelineStage
-
-		string IPipelineStage.Name { get { return @"MethodCompilerSchedulerStage"; } }
-
-		#endregion // IPipelineStage
-
 		public MethodCompilerSchedulerStage()
 		{
 			methodQueue = new Queue<RuntimeMethod>();

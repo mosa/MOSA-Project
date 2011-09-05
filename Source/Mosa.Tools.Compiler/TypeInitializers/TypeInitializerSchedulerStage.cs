@@ -79,16 +79,6 @@ namespace Mosa.Tools.Compiler.TypeInitializers
 
 		#endregion
 
-		#region IPipelineStage Members
-
-		/// <summary>
-		/// Retrieves the name of the compilation stage.
-		/// </summary>
-		/// <value>The name of the compilation stage.</value>
-		string IPipelineStage.Name { get { return @"Type Initializer Scheduler"; } }
-
-		#endregion // IPipelineStage Members
-
 		#region IAssemblyCompilerStage Members
 
 		void IAssemblyCompilerStage.Setup(AssemblyCompiler compiler)

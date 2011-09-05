@@ -21,7 +21,7 @@ namespace Mosa.Runtime.InternalTrace
 		public bool DebugOutput = false;
 		public bool ConsoleOutput = true;
 
-		void ICompilerEventListener.NotifyCompilerEvent(CompilerEvent compilerStage, string info)
+		void ICompilerEventListener.SubmitTraceEvent(CompilerEvent compilerStage, string info)
 		{
 			if (DebugOutput)
 				Debug.WriteLine(compilerStage.ToString() + ": " + info);

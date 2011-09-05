@@ -38,16 +38,6 @@ namespace Mosa.Runtime.CompilerFramework
 
 		#endregion // Data members
 
-		#region IPipelineStage members
-
-		/// <summary>
-		/// Retrieves the name of the compilation stage.
-		/// </summary>
-		/// <value></value>
-		string IPipelineStage.Name { get { return @"ExceptionLayoutStage"; } }
-
-		#endregion // IPipelineStage Members
-
 		#region IMethodCompilerStage members
 
 		/// <summary>

@@ -199,7 +199,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 		protected void Trace(CompilerEvent compilerEvent, string message)
 		{
-			internalTrace.CompilerEventListener.NotifyCompilerEvent(compilerEvent, message);
+			internalTrace.CompilerEventListener.SubmitTraceEvent(compilerEvent, message);
 		}
 
 		#endregion

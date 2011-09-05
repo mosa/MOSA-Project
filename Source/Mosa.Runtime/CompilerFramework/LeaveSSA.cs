@@ -107,15 +107,5 @@ namespace Mosa.Runtime.CompilerFramework
 			return context.Instruction is BranchInstruction || context.Instruction is JmpInstruction;
 		}
 
-		/// <summary>
-		/// Retrieves the name of the compilation stage.
-		/// </summary>
-		/// <value>
-		/// The name of the compilation stage.
-		/// </value>
-		public string Name
-		{
-			get { return @"Leave Static Single Assignment Form"; }
-		}
 	}
 }

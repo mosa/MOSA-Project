@@ -135,16 +135,6 @@ namespace Mosa.Tools.Compiler.Stages
 
 		#endregion // Construction
 
-		#region IPipelineStage
-
-		/// <summary>
-		/// Retrieves the name of the compilation stage.
-		/// </summary>
-		/// <value>The name of the compilation stage.</value>
-		string IPipelineStage.Name { get { return @"MultibootAssemblyStage"; } }
-
-		#endregion // IPipelineStage Members
-
 		#region IAssemblyCompilerStage Members
 
 		void IAssemblyCompilerStage.Setup(AssemblyCompiler compiler)

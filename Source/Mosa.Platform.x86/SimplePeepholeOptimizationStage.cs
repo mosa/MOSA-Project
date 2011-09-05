@@ -28,16 +28,6 @@ namespace Mosa.Platform.x86
 	public sealed class SimplePeepholeOptimizationStage : BaseTransformationStage, IMethodCompilerStage, IPlatformStage, IPipelineStage
 	{
 
-		#region IPipelineStage Members
-
-		/// <summary>
-		/// Retrieves the name of the compilation stage.
-		/// </summary>
-		/// <value>The name of the compilation stage.</value>
-		string IPipelineStage.Name { get { return @"X86.SimplePeepholeOptimizationStage"; } }
-
-		#endregion // IPipelineStage Members
-
 		#region Window Class
 
 		/// <summary>

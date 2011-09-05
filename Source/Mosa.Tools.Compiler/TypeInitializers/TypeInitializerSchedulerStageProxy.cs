@@ -17,16 +17,6 @@ namespace Mosa.Tools.Compiler.TypeInitializers
 	{
 		private readonly ITypeInitializerSchedulerStage realStage;
 
-		#region IPipelineStage
-
-		/// <summary>
-		/// Retrieves the name of the compilation stage.
-		/// </summary>
-		/// <value>The name of the compilation stage.</value>
-		public string Name { get { return @"TypeInitializerSchedulerStageProxy"; } }
-
-		#endregion // IPipelineStage Members
-
 		#region IAssemblyCompilerStage Members
 
 		/// <summary>

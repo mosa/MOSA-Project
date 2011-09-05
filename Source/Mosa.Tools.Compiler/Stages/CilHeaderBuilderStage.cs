@@ -35,12 +35,6 @@ namespace Mosa.Tools.Compiler.Stages
 
 		#endregion // Data members
 
-		#region IPipelineStage members
-
-		string IPipelineStage.Name { get { return @"CILHeaderStage"; } }
-
-		#endregion // IPipelineStage members
-
 		#region IAssemblyCompilerStage Members
 
 		void IAssemblyCompilerStage.Setup(AssemblyCompiler compiler)

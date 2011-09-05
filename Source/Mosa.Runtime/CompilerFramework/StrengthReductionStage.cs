@@ -23,16 +23,6 @@ namespace Mosa.Runtime.CompilerFramework
 	public sealed class StrengthReductionStage : BaseCodeTransformationStage, CIL.ICILVisitor, IPipelineStage
 	{
 
-		#region IPipelineStage
-
-		/// <summary>
-		/// Retrieves the name of the compilation stage.
-		/// </summary>
-		/// <value>The name of the compilation stage.</value>
-		string IPipelineStage.Name { get { return @"Strength Reduction"; } }
-
-		#endregion
-
 		#region ICILVisitor
 
 		/// <summary>

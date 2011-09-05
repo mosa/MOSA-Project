@@ -251,7 +251,7 @@ namespace Mosa.Tools.TypeExplorer
 			UpdateTree();
 		}
 
-		void ICompilerEventListener.NotifyCompilerEvent(CompilerEvent compilerStage, string info)
+		void ICompilerEventListener.SubmitTraceEvent(CompilerEvent compilerStage, string info)
 		{
 			toolStripStatusLabel1.Text = compilerStage.ToText() + ": " + info;
 			toolStripStatusLabel1.GetCurrentParent().Refresh();

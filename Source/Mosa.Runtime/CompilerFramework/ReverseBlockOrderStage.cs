@@ -17,20 +17,6 @@ namespace Mosa.Runtime.CompilerFramework
 	/// </summary>
 	public class ReverseBlockOrderStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage, IBlockOrderStage
 	{
-
-		#region IPipelineStage Members
-
-		/// <summary>
-		/// Retrieves the name of the compilation stage.
-		/// </summary>
-		/// <value>The name of the compilation stage.</value>
-		string IPipelineStage.Name
-		{
-			get { return @"ReverseBlockOrderStage"; }
-		}
-
-		#endregion // IPipelineStage Methods
-
 		/// <summary>
 		/// Runs the specified compiler.
 		/// </summary>

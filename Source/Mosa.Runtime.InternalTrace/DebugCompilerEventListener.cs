@@ -19,7 +19,7 @@ namespace Mosa.Runtime.InternalTrace
 	public class DebugCompilerEventListener : ICompilerEventListener
 	{
 
-		void ICompilerEventListener.NotifyCompilerEvent(CompilerEvent compilerStage, string info)
+		void ICompilerEventListener.SubmitTraceEvent(CompilerEvent compilerStage, string info)
 		{
 			Debug.WriteLine(compilerStage.ToString() + ": " + info);
 		}

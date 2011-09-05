@@ -113,15 +113,5 @@ namespace Mosa.Runtime.CompilerFramework
 			return 0;
 		}
 
-		/// <summary>
-		/// Retrieves the name of the compilation stage.
-		/// </summary>
-		/// <value>
-		/// The name of the compilation stage.
-		/// </value>
-		public string Name
-		{
-			get { return @"ConstantFoldingStage"; }
-		}
 	}
 }

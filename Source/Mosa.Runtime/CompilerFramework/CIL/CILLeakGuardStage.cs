@@ -28,12 +28,6 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		public bool MustThrowCompilationException { get; set; }
 
 		/// <summary>
-		/// Retrieves the name of the compilation stage.
-		/// </summary>
-		/// <value>The name of the compilation stage.</value>
-		public string Name { get { return @"CILLeakGuardStage"; } }
-
-		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
 		public void Run()

@@ -70,16 +70,6 @@ namespace Mosa.Runtime.Linker
 
 		#endregion // Construction
 
-		#region IPipelineStage Members
-
-		/// <summary>
-		/// Retrieves the name of the compilation stage.
-		/// </summary>
-		/// <value></value>
-		string IPipelineStage.Name { get { return @"AssemblyLinkerStageBase"; } }
-
-		#endregion //  IPipelineStage Members
-
 		#region IAssemblyCompilerStage Members
 
 		/// <summary>

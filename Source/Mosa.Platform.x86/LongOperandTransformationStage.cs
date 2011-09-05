@@ -30,17 +30,8 @@ namespace Mosa.Platform.x86
 	/// This stage translates all 64-bit operations to appropriate 32-bit operations on
 	/// architectures without appropriate 64-bit integral operations.
 	/// </remarks>
-	public sealed class LongOperandTransformationStage : BaseCodeTransformationStage, IR.IIRVisitor, IPlatformStage, IPipelineStage
+	public sealed class LongOperandTransformationStage : BaseTransformationStage, IR.IIRVisitor, IPlatformStage, IPipelineStage
 	{
-		#region IPipelineStage Members
-
-		/// <summary>
-		/// Retrieves the name of the compilation stage.
-		/// </summary>
-		/// <value>The name of the compilation stage.</value>
-		string IPipelineStage.Name { get { return @"X86.LongOperandTransformationStage"; } }
-
-		#endregion // IPipelineStage Members
 
 		#region Utility Methods
 
@@ -2186,7 +2177,6 @@ namespace Mosa.Platform.x86
 		void IR.IIRVisitor.ThrowInstruction(Context context) { }
 
 		#endregion // IIRVisitor - Unused
-
 
 	}
 }

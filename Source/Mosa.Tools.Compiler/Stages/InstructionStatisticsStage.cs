@@ -51,12 +51,6 @@ namespace Mosa.Tools.Compiler.Stages
 		private uint numberOfMethods;
 
 		/// <summary>
-		/// Retrieves the name of the compilation stage.
-		/// </summary>
-		/// <value>The name of the compilation stage.</value>
-		string IPipelineStage.Name { get { return "InstructionStatisticsStage"; } }
-
-		/// <summary>
 		/// Visitation method for instructions not caught by more specific visitation methods.
 		/// </summary>
 		/// <param name="ctx">The context.</param>

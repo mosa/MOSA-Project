@@ -85,6 +85,16 @@ namespace Mosa.Runtime.CompilerFramework
 
 		#endregion // Data members
 
+		#region IPipelineStage Members
+
+		/// <summary>
+		/// Retrieves the name of the compilation stage.
+		/// </summary>
+		/// <value>The name of the compilation stage.</value>
+		public virtual string Name { get { return this.GetType().Name; } }
+
+		#endregion // IPipelineStage Members
+
 		#region IMethodCompilerStage members
 
 		/// <summary>
@@ -169,7 +179,7 @@ namespace Mosa.Runtime.CompilerFramework
 
 		protected void Trace(CompilerEvent compilerEvent, string message)
 		{
-			methodCompiler.InternalLog.CompilerEventListener.NotifyCompilerEvent(compilerEvent, message);
+			methodCompiler.InternalLog.CompilerEventListener.SubmitTraceEvent(compilerEvent, message);
 		}
 
 		#endregion

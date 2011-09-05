@@ -86,12 +86,6 @@ namespace Mosa.Tools.Compiler.Linker
 
 		#endregion // Methods
 
-		#region IPipelineStage members
-
-		string IPipelineStage.Name { get { return @"Linker Layout Stage"; } }
-
-		#endregion // IPipelineStage members
-
 		#region IAssemblyCompilerStage Overrides
 
 		void IAssemblyCompilerStage.Setup(AssemblyCompiler compiler)

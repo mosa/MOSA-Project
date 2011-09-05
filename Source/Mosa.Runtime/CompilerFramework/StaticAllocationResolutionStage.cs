@@ -28,14 +28,6 @@ namespace Mosa.Runtime.CompilerFramework
 		{
 		}
 
-		public string Name
-		{
-			get
-			{
-				return @"StaticAllocationResolutionStage";
-			}
-		}
-
 		public void Run()
 		{
 			this.linker = this.methodCompiler.Linker;

@@ -29,16 +29,6 @@ namespace Mosa.Platform.x86
 	public sealed class TweakTransformationStage : BaseTransformationStage, CPUx86.IX86Visitor, IMethodCompilerStage, IPlatformStage, IPipelineStage
 	{
 
-		#region IPipelineStage Members
-
-		/// <summary>
-		/// Retrieves the name of the compilation stage.
-		/// </summary>
-		/// <value>The name of the compilation stage.</value>
-		string IPipelineStage.Name { get { return @"X86.TweakTransformationStage"; } }
-
-		#endregion // IPipelineStage Members
-
 		#region IX86Visitor
 
 		/// <summary>

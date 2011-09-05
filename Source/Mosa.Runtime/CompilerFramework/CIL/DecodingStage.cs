@@ -49,13 +49,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		
 		#endregion // Data members
 
-		#region IPipelineStage Members
-
-		/// <summary>
-		/// Retrieves the name of the compilation stage.
-		/// </summary>
-		/// <value>The name of the compilation stage.</value>
-		string IPipelineStage.Name { get { return @"CIL.DecodingStage"; } }
+		#region IMethodCompilerStage Members
 
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.

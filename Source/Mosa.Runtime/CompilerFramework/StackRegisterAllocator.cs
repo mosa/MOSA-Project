@@ -84,12 +84,6 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
-		/// Gets the name of the compilation stage.
-		/// </summary>
-		/// <value>The name of the compilation stage.</value>
-		string IPipelineStage.Name { get { return @"StackRegisterAllocator"; } }
-
-		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
 		public void Run()

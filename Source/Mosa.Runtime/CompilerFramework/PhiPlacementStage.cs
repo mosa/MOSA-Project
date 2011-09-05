@@ -99,17 +99,6 @@ namespace Mosa.Runtime.CompilerFramework
 		}
 
 		/// <summary>
-		/// Retrieves the name of the compilation stage.
-		/// </summary>
-		/// <value>
-		/// The name of the compilation stage.
-		/// </value>
-		public string Name
-		{
-			get { return @"PhiInstructionPlacementStage"; }
-		}
-
-		/// <summary>
 		/// Determines whether [is assignment to stack variable] [the specified instruction].
 		/// </summary>
 		/// <param name="instruction">The instruction.</param>

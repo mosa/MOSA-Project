@@ -32,16 +32,6 @@ namespace Mosa.Tools.Compiler.Stages
 		{
 		}
 
-		#region IPipelineStage members
-
-		/// <summary>
-		/// Retrieves the name of the compilation stage.
-		/// </summary>
-		/// <value>The name of the compilation stage.</value>
-		string IPipelineStage.Name { get { return @"AssemblyCompilationStage"; } }
-
-		#endregion // IPipelineStage
-
 		#region IAssemblyCompilerStage
 
 		void IAssemblyCompilerStage.Setup(AssemblyCompiler compiler)

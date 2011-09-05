@@ -99,11 +99,6 @@ namespace Mosa.Runtime.CompilerFramework
 			Debug.WriteLine("ESSA: " + this.methodCompiler.Method.FullName);
 		}
 
-		public string Name
-		{
-			get { return @"Enter Static Single Assignment Form"; }
-		}
-
 		/// <summary>
 		/// 
 		/// </summary>
