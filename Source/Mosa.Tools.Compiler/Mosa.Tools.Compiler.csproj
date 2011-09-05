@@ -66,7 +66,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AotAssemblyCompiler.cs" />
-    <Compile Include="AssemblyCompilerStage\AssemblyCompilationStage.cs" />
+    <Compile Include="Stages\AssemblyCompilationStage.cs" />
     <Compile Include="Linker\Elf64LinkerStage.cs" />
     <Compile Include="Linker\Elf32LinkerStage.cs" />
     <Compile Include="Linker\LinkerProxy.cs" />
@@ -82,10 +82,10 @@
     <Compile Include="Compiler.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="MethodCompilerStage\InstructionStatisticsStage.cs">
+    <Compile Include="Stages\InstructionStatisticsStage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="AssemblyCompilerStage\CilHeaderBuilderStage.cs" />
+    <Compile Include="Stages\CilHeaderBuilderStage.cs" />
     <Compile Include="Options.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -100,7 +100,7 @@
     <Compile Include="Program.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Boot\Multiboot0695AssemblyStage.cs">
+    <Compile Include="Stages\Multiboot0695AssemblyStage.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Options\StaticAllocationResolutionStageOptions.cs" />

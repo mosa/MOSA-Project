@@ -10,7 +10,7 @@
 using System;
 
 using Mosa.Runtime.CompilerFramework;
-using Mosa.Tools.Compiler.MethodCompilerStage;
+using Mosa.Tools.Compiler.Stages;
 using Mosa.Runtime.Options;
 
 using NDesk.Options;

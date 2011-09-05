@@ -29,7 +29,7 @@ namespace Mosa.Platform.x86
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
 		/// <value>The name of the compilation stage.</value>
-		string IPipelineStage.Name { get { return @"x86.AddressModeConversionStage"; } }
+		string IPipelineStage.Name { get { return @"X86.AddressModeConversionStage"; } }
 
 		#endregion // IPipelineStage Members
 

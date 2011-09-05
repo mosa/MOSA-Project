@@ -34,12 +34,12 @@ namespace Mosa.Compiler.FileFormat.PE
 		public uint Signature;
 
 		/// <summary>
-		/// Holds the image file _header.
+		/// Holds the image file header.
 		/// </summary>
 		public IMAGE_FILE_HEADER FileHeader;
 
 		/// <summary>
-		/// Holds the image optional _header.
+		/// Holds the image optional header.
 		/// </summary>
 		public IMAGE_OPTIONAL_HEADER OptionalHeader;
 
@@ -48,7 +48,7 @@ namespace Mosa.Compiler.FileFormat.PE
 		#region Methods
 
 		/// <summary>
-		/// Loads and validates the image file _header.
+		/// Loads and validates the image file header.
 		/// </summary>
 		/// <param name="reader">The reader, to read From.</param>
 		public void Read(BinaryReader reader)

@@ -72,7 +72,7 @@ namespace Mosa.Tools.Compiler.Linker
 
 			using (writer = new StreamWriter(MapFile))
 			{
-				// Emit map file _header
+				// Emit map file header
 				writer.WriteLine(linker.OutputFile);
 				writer.WriteLine();
 				writer.WriteLine("Timestamp is {0}", DateTime.Now);

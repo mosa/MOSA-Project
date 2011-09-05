@@ -10,7 +10,7 @@
 using System;
 
 using Mosa.Runtime.CompilerFramework;
-using Mosa.Tools.Compiler.MethodCompilerStage;
+using Mosa.Tools.Compiler.Stages;
 using Mosa.Runtime.Options;
 using Mosa.Tools.Compiler.Linker;
 
@@ -47,10 +47,11 @@ namespace Mosa.Tools.Compiler.Options
 			mapFileStage.MapFile = this.MapFile;
 		}
 
-		public override void Apply(IPipelineStage options)
+		public override void Apply(IPipelineStage stage)
 		{
-			if (options is MapFileGenerationStage)
-				Apply(options);
+			MapFileGenerationStage map = stage as MapFileGenerationStage;
+			if (map != null)
+				ApplyTo(map);
 		}
 	}
 }

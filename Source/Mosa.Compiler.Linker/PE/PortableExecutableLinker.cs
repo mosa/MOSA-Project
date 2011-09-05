@@ -42,7 +42,7 @@ namespace Mosa.Compiler.Linker
 		#region Data members
 
 		/// <summary>
-		/// Holds the DOS _header of the generated PE file.
+		/// Holds the DOS header of the generated PE file.
 		/// </summary>
 		private IMAGE_DOS_HEADER dosHeader;
 
@@ -52,7 +52,7 @@ namespace Mosa.Compiler.Linker
 		private IMAGE_NT_HEADERS ntHeaders;
 
 		///// <summary>
-		///// Holds the CLI _header.
+		///// Holds the CLI header.
 		///// </summary>
 		//private CLI_HEADER cilHeader;
 
@@ -366,13 +366,13 @@ namespace Mosa.Compiler.Linker
 		}
 
 		/// <summary>
-		/// Writes the dos _header of the PE file.
+		/// Writes the dos header of the PE file.
 		/// </summary>
 		/// <param name="writer">The writer.</param>
 		private void WriteDosHeader(BinaryWriter writer)
 		{
 			/*
-			 * This code block generates the default DOS _header of a PE image.
+			 * This code block generates the default DOS header of a PE image.
 			 * These constants are not further documented here, please consult
 			 * MSDN for their meaning.
 			 */
@@ -406,7 +406,7 @@ namespace Mosa.Compiler.Linker
 			// Write the PE signature and headers
 			ntHeaders.Signature = IMAGE_NT_HEADERS.PE_SIGNATURE;
 
-			// Prepare the file _header
+			// Prepare the file header
 			ntHeaders.FileHeader.Machine = IMAGE_FILE_HEADER.IMAGE_FILE_MACHINE_I386;
 			ntHeaders.FileHeader.NumberOfSections = CountSections();
 			ntHeaders.FileHeader.TimeDateStamp = (uint)(DateTime.Now - new DateTime(1970, 1, 1, 0, 0, 0)).TotalSeconds;

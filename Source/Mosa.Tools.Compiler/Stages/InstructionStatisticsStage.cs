@@ -13,7 +13,7 @@ using System.Collections.Generic;
 using Mosa.Tools.Compiler;
 using Mosa.Runtime.CompilerFramework;
 
-namespace Mosa.Tools.Compiler.MethodCompilerStage
+namespace Mosa.Tools.Compiler.Stages
 {
 	/// <summary>
 	/// This stage just saves statistics about the code we're compiling, for example

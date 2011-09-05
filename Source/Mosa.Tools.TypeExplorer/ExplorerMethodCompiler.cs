@@ -20,8 +20,6 @@ using Mosa.Runtime.CompilerFramework;
 using Mosa.Runtime.InternalTrace;
 using Mosa.Runtime.CompilerFramework.CIL;
 using Mosa.Runtime.CompilerFramework.IR;
-using Mosa.Tools.Compiler;
-using Mosa.Tools.Compiler.MethodCompilerStage;
 
 namespace Mosa.Tools.TypeExplorer
 {
@@ -44,18 +42,15 @@ namespace Mosa.Tools.TypeExplorer
 				//new DominanceCalculationStage(),
 				//new PhiPlacementStage(),
 				//new EnterSSA(),
-
 				//new ConstantPropagationStage(ConstantPropagationStage.PropagationStage.PreFolding),
 				//new ConstantFoldingStage(),
 				//new ConstantPropagationStage(ConstantPropagationStage.PropagationStage.PostFolding),
-
 				//new LeaveSSA(),
+
 				new StackLayoutStage(),
 				new PlatformStubStage(),
 
 				new LoopAwareBlockOrderStage(),
-				new SimpleTraceBlockOrderStage(),
-				new ReverseBlockOrderStage(),  // reverse all the basic blocks and see if it breaks anything
 				new CodeGenerationStage(),
 				new ExceptionLayoutStage(),
 			});

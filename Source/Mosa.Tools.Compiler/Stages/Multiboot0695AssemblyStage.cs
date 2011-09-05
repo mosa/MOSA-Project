@@ -29,7 +29,7 @@ using IR = Mosa.Runtime.CompilerFramework.IR;
 
 using NDesk.Options;
 
-namespace Mosa.Tools.Compiler.Boot
+namespace Mosa.Tools.Compiler.Stages
 {
 	
 	/*
@@ -42,13 +42,13 @@ namespace Mosa.Tools.Compiler.Boot
 	 */
 
 	/// <summary>
-	/// Writes a multiboot v0.6.95 _header into the generated binary.
+	/// Writes a multiboot v0.6.95 header into the generated binary.
 	/// </summary>
 	/// <remarks>
-	/// This assembly compiler stage writes a multiboot _header into the
+	/// This assembly compiler stage writes a multiboot header into the
 	/// the data section of the binary file and also creates a multiboot
 	/// compliant entry point into the binary.<para/>
-	/// The _header and entry point written by this stage is compliant with
+	/// The header and entry point written by this stage is compliant with
 	/// the specification at 
 	/// http://www.gnu.org/software/grub/manual/multiboot/multiboot.html.
 	/// </remarks>
@@ -57,7 +57,7 @@ namespace Mosa.Tools.Compiler.Boot
 		#region Constants
 
 		/// <summary>
-		/// Magic value in the multiboot _header.
+		/// Magic value in the multiboot header.
 		/// </summary>
 		private const uint HEADER_MB_MAGIC = 0x1BADB002U;
 
@@ -81,8 +81,8 @@ namespace Mosa.Tools.Compiler.Boot
 
 		/// <summary>
 		/// Multiboot flag, which indicates a non-elf binary to boot and that
-		/// settings for the executable file should be read From the boot _header
-		/// instead of the executable _header.
+		/// settings for the executable file should be read From the boot header
+		/// instead of the executable header.
 		/// </summary>
 		private const uint HEADER_MB_FLAG_NON_ELF_BINARY = 0x00010000U;
 
@@ -95,22 +95,22 @@ namespace Mosa.Tools.Compiler.Boot
 		/// <summary>
 		/// Holds the multiboot video mode.
 		/// </summary>
-		private uint videoMode;
+		public uint VideoMode { get; set; }
 
 		/// <summary>
 		/// Holds the videoWidth of the screen for the video mode.
 		/// </summary>
-		private uint videoWidth;
+		public uint VideoWidth { get; set; }
 
 		/// <summary>
 		/// Holds the height of the screen for the video mode.
 		/// </summary>
-		private uint videoHeight;
+		public uint VideoHeight { get; set; }
 
 		/// <summary>
 		/// Holds the depth of the video mode in bits per pixel.
 		/// </summary>
-		private uint videoDepth;
+		public uint VideoDepth { get; set; }
 
 		/// <summary>
 		/// Holds true if the second stage is reached
@@ -126,10 +126,10 @@ namespace Mosa.Tools.Compiler.Boot
 		/// </summary>
 		public Multiboot0695AssemblyStage()
 		{
-			videoMode = 1;
-			videoWidth = 80;
-			videoHeight = 25;
-			videoDepth = 0;
+			VideoMode = 1;
+			VideoWidth = 80;
+			VideoHeight = 25;
+			VideoDepth = 0;
 			secondStage = false;
 		}
 
@@ -216,24 +216,24 @@ namespace Mosa.Tools.Compiler.Boot
 			return IntPtr.Zero;
 		}
 
-		private const string MultibootHeaderSymbolName = @"<$>mosa-multiboot-_header";
+		private const string MultibootHeaderSymbolName = @"<$>mosa-multiboot-header";
 
 		/// <summary>
-		/// Writes the multiboot _header.
+		/// Writes the multiboot header.
 		/// </summary>
 		/// <param name="entryPoint">The virtualAddress of the multiboot compliant entry point.</param>
 		private void WriteMultibootHeader(IntPtr entryPoint)
 		{
-			// HACK: According to the multiboot specification this _header must be within the first 8K of the
+			// HACK: According to the multiboot specification this header must be within the first 8K of the
 			// kernel binary. Since the text section is always first, this should take care of the problem.
 			using (Stream stream = this.linker.Allocate(MultibootHeaderSymbolName, SectionKind.Text, 64, 4))
 			using (BinaryWriter bw = new BinaryWriter(stream, Encoding.ASCII))
 			{
 				// flags - multiboot flags
 				uint flags = /*HEADER_MB_FLAG_VIDEO_MODES_REQUIRED | */HEADER_MB_FLAG_MEMORY_INFO_REQUIRED | HEADER_MB_FLAG_MODULES_PAGE_ALIGNED;
-				// The multiboot _header checksum 
+				// The multiboot header checksum 
 				uint csum = 0;
-				// header_addr is the load virtualAddress of the multiboot _header
+				// header_addr is the load virtualAddress of the multiboot header
 				uint header_addr = 0;
 				// load_addr is the base virtualAddress of the binary in memory
 				uint load_addr = 0;
@@ -274,100 +274,13 @@ namespace Mosa.Tools.Compiler.Boot
 				// HACK: Symbol has been hacked. What's the correct way to do this?
 				this.linker.Link(LinkType.AbsoluteAddress | LinkType.I4, MultibootHeaderSymbolName, (int)stream.Position, 0, @"Mosa.Tools.Compiler.LinkerGenerated.<$>MultibootInit()", IntPtr.Zero);
 
-				bw.Write(videoMode);
-				bw.Write(videoWidth);
-				bw.Write(videoHeight);
-				bw.Write(videoDepth);
+				bw.Write(VideoMode);
+				bw.Write(VideoWidth);
+				bw.Write(VideoHeight);
+				bw.Write(VideoDepth);
 			}
 		}
 
 		#endregion // Internals
-
-		#region IHasOptions Members
-		/// <summary>
-		/// Adds the additional options for the parsing process to the given OptionSet.
-		/// </summary>
-		/// <param name="optionSet">A given OptionSet to add the options to.</param>
-		public void AddOptions(OptionSet optionSet)
-		{
-			optionSet.Add(
-				"multiboot-video-mode=",
-				"Specify the video mode for multiboot [{text|graphics}].",
-				delegate(string v)
-				{
-					switch (v.ToLower())
-					{
-						case "text":
-							videoMode = 1;
-							break;
-						case "graphics":
-							videoMode = 0;
-							break;
-						default:
-							throw new OptionException("Invalid value for multiboot video mode: " + v, "multiboot-video-mode");
-					}
-				});
-
-			optionSet.Add(
-				"multiboot-video-width=",
-				"Specify the {width} for video output, in pixels for graphics mode or in characters for text mode.",
-				delegate(string v)
-				{
-					uint val;
-					if (uint.TryParse(v, out val))
-					{
-						// TODO: this probably needs further validation
-						videoWidth = val;
-					}
-					else
-					{
-						throw new OptionException("Invalid value for multiboot video width: " + v, "multiboot-video-width");
-					}
-				});
-
-			optionSet.Add(
-				"multiboot-video-height=",
-				"Specify the {height} for video output, in pixels for graphics mode or in characters for text mode.",
-				delegate(string v)
-				{
-					uint val;
-					if (uint.TryParse(v, out val))
-					{
-						// TODO: this probably needs further validation
-						videoHeight = val;
-					}
-					else
-					{
-						throw new OptionException("Invalid value for multiboot video height: " + v, "multiboot-video-height");
-					}
-				});
-
-			optionSet.Add(
-				"multiboot-video-depth=",
-				"Specify the {depth} (number of bits per pixel) for graphics mode.",
-				delegate(string v)
-				{
-					uint val;
-					if (uint.TryParse(v, out val))
-					{
-						// TODO: this probably needs further validation
-						videoDepth = val;
-					}
-					else
-					{
-						throw new OptionException("Invalid value for multiboot video depth: " + v, "multiboot-video-depth");
-					}
-				});
-
-			optionSet.Add(
-				"multiboot-module=",
-				"Adds a {0:module} to multiboot, to be loaded at a given {1:virtualAddress} (can be used multiple times).",
-				delegate(string file, string address)
-				{
-					// TODO: validate and add this to a list or something
-					Console.WriteLine("Adding multiboot module " + file + " at virtualAddress " + address);
-				});
-		}
-		#endregion
 	}
 }

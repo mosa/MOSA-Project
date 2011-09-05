@@ -10,7 +10,7 @@
 using System;
 
 using Mosa.Runtime.CompilerFramework;
-using Mosa.Tools.Compiler.MethodCompilerStage;
+using Mosa.Tools.Compiler.Stages;
 using Mosa.Tools.Compiler.Linker;
 using Mosa.Runtime.Options;
 
@@ -49,15 +49,16 @@ namespace Mosa.Tools.Compiler.Options
 
 		}
 
-		public void Apply(Elf32LinkerStage elf32Linker)
+		public void ApplyTo(Elf32LinkerStage elf32Linker)
 		{
 			elf32Linker.FileAlignment = this.FileAlignment;
 		}
 
-		public override void Apply(IPipelineStage options)
+		public override void Apply(IPipelineStage stage)
 		{
-			if (options is Elf32LinkerStage)
-				Apply(options);
+			Elf32LinkerStage linker = stage as Elf32LinkerStage;
+			if (linker != null)
+				ApplyTo(linker);
 		}
 	}
 }

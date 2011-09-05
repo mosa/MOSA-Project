@@ -189,7 +189,7 @@ namespace Mosa.Runtime.CompilerFramework
 			Dictionary<BasicBlock, int> visited = new Dictionary<BasicBlock, int>(basicBlocks.Count);
 			Dictionary<BasicBlock, int> active = new Dictionary<BasicBlock, int>(basicBlocks.Count);
 
-			// Create dictionary for loop _header index assignments
+			// Create dictionary for loop header index assignments
 			Dictionary<BasicBlock, int> loopHeaderIndexes = new Dictionary<BasicBlock, int>();
 
 			while (queue.Count != 0)
@@ -199,7 +199,7 @@ namespace Mosa.Runtime.CompilerFramework
 				if (active.ContainsKey(at.to))
 				{
 					// Found a loop -
-					//     the loop-_header block is in at.to 
+					//     the loop-header block is in at.to 
 					// and the loop-end is in at.From
 
 					// Add loop-end to list

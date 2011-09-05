@@ -56,9 +56,9 @@ namespace Mosa.Compiler.Linker.Elf32.Sections
 		}
 
 		/// <summary>
-		/// Gets the _header.
+		/// Gets the header.
 		/// </summary>
-		/// <value>The _header.</value>
+		/// <value>The header.</value>
 		public Elf32SectionHeader Header
 		{
 			get
@@ -93,7 +93,7 @@ namespace Mosa.Compiler.Linker.Elf32.Sections
 		}
 
 		/// <summary>
-		/// Writes the _header.
+		/// Writes the header.
 		/// </summary>
 		/// <param name="writer">The writer.</param>
 		public virtual void WriteHeader(System.IO.BinaryWriter writer)

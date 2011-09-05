@@ -140,7 +140,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 					// Read second byte of flags
 					header.Flags = (MethodFlags)(reader.ReadByte() << 8 | (byte)header.Flags);
 					if (MethodFlags.ValidHeader != (header.Flags & MethodFlags.HeaderSizeMask))
-						throw new InvalidDataException(@"Invalid method _header.");
+						throw new InvalidDataException(@"Invalid method header.");
 					header.MaxStack = reader.ReadUInt16();
 					header.CodeSize = reader.ReadUInt32();
 					header.LocalsSignature = new Token(reader.ReadUInt32()); // ReadStandAloneSigRow

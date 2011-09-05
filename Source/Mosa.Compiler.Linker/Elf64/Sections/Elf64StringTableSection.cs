@@ -58,7 +58,7 @@ namespace Mosa.Compiler.Linker.Elf64.Sections
 		}
 
 		/// <summary>
-		/// Writes the _header.
+		/// Writes the header.
 		/// </summary>
 		/// <param name="writer">The writer.</param>
 		public override void WriteHeader(System.IO.BinaryWriter writer)

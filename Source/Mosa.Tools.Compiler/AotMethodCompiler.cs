@@ -17,8 +17,7 @@ using Mosa.Runtime.Metadata;
 using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.InternalTrace;
-using Mosa.Tools.Compiler.AssemblyCompilerStage;
-using Mosa.Tools.Compiler.MethodCompilerStage;
+using Mosa.Tools.Compiler.Stages;
 using Mosa.Tools.Compiler.TypeInitializers;
 
 namespace Mosa.Tools.Compiler

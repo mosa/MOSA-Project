@@ -19,8 +19,8 @@ namespace Mosa.Compiler.Linker.Elf32.Sections
 	public enum Elf32SectionType : uint
 	{
 		/// <summary>
-		/// This value marks the section _header as inactive; it does not have an 
-		///associated section. Other members of the section _header have undefined 
+		/// This value marks the section header as inactive; it does not have an 
+		///associated section. Other members of the section header have undefined 
 		///values. 
 		/// </summary>
 		Null = 0x00,
@@ -58,7 +58,7 @@ namespace Mosa.Compiler.Linker.Elf32.Sections
 		/// <summary>
 		/// A section of this type occupies no space in the file but otherwise resembles 
 		/// ProgBits.  Although this section contains no bytes, the 
-		/// section _header's Offset member contains the conceptual file offset. 
+		/// section header's Offset member contains the conceptual file offset. 
 		/// </summary>
 		NoBits = 0x08,
 		/// <summary>

@@ -13,7 +13,7 @@ namespace Mosa.Runtime.Options
 {
 	public abstract class BaseCompilerOptions
 	{
-		public virtual void Apply(IPipelineStage options)
+		public virtual void Apply(IPipelineStage stage)
 		{
 			
 		}

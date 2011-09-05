@@ -51,17 +51,17 @@ namespace Mosa.Runtime.Metadata.Loader.PE
 		private BinaryReader _assemblyReader;
 
 		/// <summary>
-		/// The DOS _header of the Mosa.Runtime.Metadata.Loader.PE image.
+		/// The DOS header of the Mosa.Runtime.Metadata.Loader.PE image.
 		/// </summary>
 		private IMAGE_DOS_HEADER _dosHeader;
 
 		/// <summary>
-		/// The Mosa.Runtime.Metadata.Loader.PE file _header.
+		/// The Mosa.Runtime.Metadata.Loader.PE file header.
 		/// </summary>
 		private IMAGE_NT_HEADERS _ntHeader;
 
 		/// <summary>
-		/// The CLI _header of the assembly.
+		/// The CLI header of the assembly.
 		/// </summary>
 		private CLI_HEADER _cliHeader;
 

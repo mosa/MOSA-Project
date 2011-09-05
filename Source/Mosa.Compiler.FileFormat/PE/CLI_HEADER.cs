@@ -30,14 +30,14 @@ namespace Mosa.Compiler.FileFormat.PE
 		/// <summary>
 		/// Name for symbol
 		/// </summary>
-		public const string SymbolName = @".cil._header";
+		public const string SymbolName = @".cil.header";
 
 		#endregion // Constants
 
 		#region Data members
 
 		/// <summary>
-		/// The size of the CLI _header in bytes.
+		/// The size of the CLI header in bytes.
 		/// </summary>
 		public uint Cb;
 
@@ -92,7 +92,7 @@ namespace Mosa.Compiler.FileFormat.PE
 		public IMAGE_DATA_DIRECTORY ExportAddressTableJumps;
 
 		/// <summary>
-		/// The data directory of the managed native _header.
+		/// The data directory of the managed native header.
 		/// </summary>
 		public IMAGE_DATA_DIRECTORY ManagedNativeHeader;
 

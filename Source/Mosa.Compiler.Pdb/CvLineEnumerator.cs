@@ -57,7 +57,7 @@ namespace Mosa.Compiler.Pdb
 		public IEnumerator<CvLine> GetEnumerator()
 		{
 			// These are fields from a line number table structure
-			// header: The _header of the line number table - always 0x000000F2
+			// header: The header of the line number table - always 0x000000F2
 			// nextBlockOffset: The number of bytes to skip to get to the next block (skip after reading nextBlockOffset!)
 			// start: The function start address whose line number information is provided.
 			// seg: The segment of the function
@@ -74,7 +74,7 @@ namespace Mosa.Compiler.Pdb
 				do
 				{
 					header = reader.ReadInt32();
-					//Debug.Assert(_header == 0x000000F2, @"CvLineEnumerator: Header magic invalid for PDB v7.00");
+					//Debug.Assert(header == 0x000000F2, @"CvLineEnumerator: Header magic invalid for PDB v7.00");
 					if (header != 0x000000F2)
 						// Skip this, assume no line numbers
 						yield break;

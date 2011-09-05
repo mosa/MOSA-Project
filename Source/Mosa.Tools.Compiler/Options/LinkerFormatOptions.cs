@@ -92,10 +92,11 @@ namespace Mosa.Tools.Compiler.Options
 			linker.OutputFile = this.OutputFile;
 		}
 
-		public override void Apply(IPipelineStage options)
+		public override void Apply(IPipelineStage stage)
 		{
-			if (options is BaseAssemblyLinker)
-				ApplyTo(options);
+			BaseAssemblyLinker linker = stage as BaseAssemblyLinker;
+			if (linker != null)
+				ApplyTo(linker);
 		}
 
 	}

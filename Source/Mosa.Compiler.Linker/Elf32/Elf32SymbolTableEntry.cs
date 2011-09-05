@@ -40,7 +40,7 @@ namespace Mosa.Compiler.Linker.Elf32
 		public byte Other;
 		/// <summary>
 		/// Every symbol table entry is "defined'' in relation to some section; this member holds 
-		/// the relevant section _header table index.
+		/// the relevant section header table index.
 		/// </summary>
 		public ushort SectionHeaderTableIndex;
 	}

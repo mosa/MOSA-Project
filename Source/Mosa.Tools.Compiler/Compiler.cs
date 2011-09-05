@@ -24,10 +24,8 @@ using Mosa.Runtime.Metadata.Loader;
 using Mosa.Runtime.TypeSystem;
 using Mosa.Runtime.InternalTrace;
 using Mosa.Compiler.Linker;
-using Mosa.Tools.Compiler.Boot;
 using Mosa.Tools.Compiler.Linker;
-using Mosa.Tools.Compiler.AssemblyCompilerStage;
-using Mosa.Tools.Compiler.MethodCompilerStage;
+using Mosa.Tools.Compiler.Stages;
 using Mosa.Tools.Compiler.TypeInitializers;
 using Mosa.Tools.Compiler.Options;
 
@@ -160,7 +158,7 @@ namespace Mosa.Tools.Compiler
 		/// <param name="args">The command line arguments.</param>
 		public void Run(string[] args)
 		{
-			// always print _header with version information
+			// always print header with version information
 			Console.WriteLine("MOSA AOT Compiler, Version {0}.{1} '{2}'", majorVersion, minorVersion, codeName);
 			Console.WriteLine("Copyright 2011 by the MOSA Project. Licensed under the New BSD License.");
 			Console.WriteLine("Copyright 2008 by Novell. NDesk.Options is released under the MIT/X11 license.");

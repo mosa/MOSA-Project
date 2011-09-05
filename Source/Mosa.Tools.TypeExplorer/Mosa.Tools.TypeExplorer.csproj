@@ -102,9 +102,6 @@
     <ProjectReference Include="..\Mosa.Test.CodeDomCompiler\Mosa.Test.CodeDomCompiler.csproj">
       <Name>Mosa.Test.CodeDomCompiler</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mosa.Tools.Compiler\Mosa.Tools.Compiler.csproj">
-      <Name>Mosa.Tools.Compiler</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -10,7 +10,7 @@
 using System;
 
 using Mosa.Runtime.CompilerFramework;
-using Mosa.Tools.Compiler.MethodCompilerStage;
+using Mosa.Tools.Compiler.Stages;
 using Mosa.Tools.Compiler.Linker;
 using Mosa.Runtime.Options;
 
@@ -23,9 +23,9 @@ namespace Mosa.Tools.Compiler.Options
 	public class PortableExecutableOptions : BaseCompilerOptions
 	{
 
-		public bool SetChecksum { get; protected set; }
-		public uint FileAlignment { get; protected set; }
-		public uint SectionAlignment { get; protected set; }
+		public bool? SetChecksum { get; protected set; }
+		public uint? FileAlignment { get; protected set; }
+		public uint? SectionAlignment { get; protected set; }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PortableExecutableOptions"/> class.
@@ -78,15 +78,21 @@ namespace Mosa.Tools.Compiler.Options
 
 		public void ApplyTo(PortableExecutableLinkerStage linker)
 		{
-			linker.FileAlignment = this.FileAlignment;
-			linker.SectionAlignment = this.SectionAlignment;
-			linker.SetChecksum = this.SetChecksum;
+			if (this.FileAlignment.HasValue)
+				linker.FileAlignment = this.FileAlignment.Value;
+
+			if (this.SectionAlignment.HasValue)
+				linker.SectionAlignment = this.SectionAlignment.Value;
+
+			if (this.SetChecksum.HasValue)
+				linker.SetChecksum = this.SetChecksum.Value;
 		}
 
-		public override void Apply(IPipelineStage options)
+		public override void Apply(IPipelineStage stage)
 		{
-			if (options is PortableExecutableLinkerStage)
-				Apply(options);
+			PortableExecutableLinkerStage linker = stage as PortableExecutableLinkerStage;
+			if (linker != null)
+				ApplyTo(linker);
 		}
 
 	}

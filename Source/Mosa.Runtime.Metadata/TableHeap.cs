@@ -129,7 +129,7 @@ namespace Mosa.Runtime.Metadata
 				_valid = reader.ReadInt64();
 				_sorted = reader.ReadInt64();
 
-				// Adjust the table offset for the _header so far
+				// Adjust the table offset for the header so far
 				nextTableOffset += 4 + 2 + 1 + 1 + 8 + 8;
 
 				CreateRowCountArray(reader, ref nextTableOffset);

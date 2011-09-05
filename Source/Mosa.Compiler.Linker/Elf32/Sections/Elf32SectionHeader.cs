@@ -20,7 +20,7 @@ namespace Mosa.Compiler.Linker.Elf32.Sections
 	{
 		/// <summary>
 		/// This member specifies the name of the section. Its value is an index into 
-		/// the section _header string table section , giving 
+		/// the section header string table section , giving 
 		/// the location of a null-terminated string. 
 		/// </summary>
 		public uint Name;
@@ -51,7 +51,7 @@ namespace Mosa.Compiler.Linker.Elf32.Sections
 		/// </summary>
 		public uint Size;
 		/// <summary>
-		/// This member holds a section _header table index link, whose interpretation 
+		/// This member holds a section header table index link, whose interpretation 
 		/// depends on the section type. 
 		/// </summary>
 		public uint Link;

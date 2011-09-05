@@ -15,14 +15,14 @@ using System.IO;
 namespace Mosa.Compiler.FileFormat.PE
 {
 	/// <summary>
-	/// The DOS _header structure of a portable executable file.
+	/// The DOS header structure of a portable executable file.
 	/// </summary>
 	public struct IMAGE_DOS_HEADER
 	{
 		#region Constants
 
 		/// <summary>
-		/// MZ magic dos _header value.
+		/// MZ magic dos header value.
 		/// </summary>
 		public const ushort DOS_HEADER_MAGIC = 0x5A4D;
 
@@ -51,7 +51,7 @@ namespace Mosa.Compiler.FileFormat.PE
 		public ushort e_crlc;
 
 		/// <summary>
-		/// Size of _header in paragraphs
+		/// Size of header in paragraphs
 		/// </summary>
 		public ushort e_cparhdr;
 
@@ -181,7 +181,7 @@ namespace Mosa.Compiler.FileFormat.PE
 		public ushort e_res29;
 
 		/// <summary>
-		/// File address of new exe _header
+		/// File address of new exe header
 		/// </summary>
 		public uint e_lfanew;
 
@@ -194,7 +194,7 @@ namespace Mosa.Compiler.FileFormat.PE
 		#region Methods
 
 		/// <summary>
-		/// Loads and validates the DOS _header.
+		/// Loads and validates the DOS header.
 		/// </summary>
 		public void Read(BinaryReader reader)
 		{
@@ -235,7 +235,7 @@ namespace Mosa.Compiler.FileFormat.PE
 		}
 
 		/// <summary>
-		/// Writes the _header to the given binary writer.
+		/// Writes the header to the given binary writer.
 		/// </summary>
 		/// <param name="writer">The binary writer to write to.</param>
 		public void Write(BinaryWriter writer)

@@ -34,7 +34,7 @@ namespace Mosa.Compiler.Pdb
 		private short unknown1;
 
 		/// <summary>
-		/// Defines the size of the modules following this symbol _header.
+		/// Defines the size of the modules following this symbol header.
 		/// </summary>
 		public int module_size;
 		private int offset_size;

@@ -10,7 +10,7 @@
 using System;
 
 using Mosa.Runtime.CompilerFramework;
-using Mosa.Tools.Compiler.MethodCompilerStage;
+using Mosa.Tools.Compiler.Stages;
 using Mosa.Runtime.Options;
 
 using NDesk.Options;
@@ -56,7 +56,7 @@ namespace Mosa.Tools.Compiler.Options
 			{
 				case "multiboot-0.7":
 				case "mb0.7":
-					return new Boot.Multiboot0695AssemblyStage();
+					return new Multiboot0695AssemblyStage();
 
 				default:
 					throw new OptionException(String.Format("Unknown or unsupported boot format {0}.", format), "boot");
