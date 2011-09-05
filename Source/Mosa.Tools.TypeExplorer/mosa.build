@@ -37,7 +37,6 @@
                     <include name="${outputDirectory}/Mosa.Runtime.TypeSystem.dll"/>
                     <include name="${outputDirectory}/Mosa.Runtime.dll"/>
                     <include name="${outputDirectory}/Mosa.Test.CodeDomCompiler.dll"/>
-                    <include name="${outputDirectory}/mosacl.exe"/>
 		</references>
 		<!-- supress warnings -->
 		<nowarn><warning number="${suppresswarnings}"/></nowarn>

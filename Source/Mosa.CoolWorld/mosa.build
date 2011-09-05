@@ -84,6 +84,7 @@
                     <include name="HAL/HardwareAbstraction.cs"/>
 		</sources>
 		<references>
+                    <include name="System.dll"/>
                     <include name="${outputDirectory}/Mosa.ClassLib.dll"/>
                     <include name="${outputDirectory}/Mosa.Kernel.dll"/>
                     <include name="${outputDirectory}/mscorlib.dll"/>

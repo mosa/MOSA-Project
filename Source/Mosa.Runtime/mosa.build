@@ -40,12 +40,20 @@
                     <include name="CompilerFramework/CIL/DecodingStage.cs"/>
                     <include name="CompilerFramework/CIL/BreakInstruction.cs"/>
                     <include name="CompilerFramework/BaseAssemblyCompilerStage.cs"/>
+                    <include name="CompilerFramework/ConstantFoldingStage.cs"/>
+                    <include name="CompilerFramework/EnterSSA.cs"/>
                     <include name="CompilerFramework/ExceptionLayoutStage.cs"/>
                     <include name="CompilerFramework/ExceptionClauseHeader.cs"/>
                     <include name="CompilerFramework/InstructionLogger.cs"/>
+                    <include name="CompilerFramework/LeaveSSA.cs"/>
                     <include name="CompilerFramework/LoggerDebugWriter.cs"/>
                     <include name="CompilerFramework/ILoggerWriter.cs"/>
                     <include name="CompilerFramework/MethodTableBuilderStage.cs"/>
+                    <include name="CompilerFramework/OperandDeterminationStage.cs"/>
+                    <include name="CompilerFramework/Operands/SsaOperand.cs"/>
+                    <include name="CompilerFramework/Operands/VirtualRegisterOperand.cs"/>
+                    <include name="CompilerFramework/PhiPlacementStage.cs"/>
+                    <include name="CompilerFramework/StaticAllocationResolutionStage.cs"/>
                     <include name="CompilerFramework/TypeLayoutStage.cs"/>
                     <include name="CompilerFramework/IR/ThrowInstruction.cs"/>
                     <include name="CompilerFramework/GenericsResolverStage.cs"/>
@@ -192,7 +200,6 @@
                     <include name="CompilerFramework/IR/ThreeOperandInstruction.cs"/>
                     <include name="CompilerFramework/IR/TwoOperandInstruction.cs"/>
                     <include name="CompilerFramework/IR/ZeroExtendedMoveInstruction.cs"/>
-                    <include name="CompilerFramework/IR/ConstantFoldingStage.cs"/>
                     <include name="CompilerFramework/IVisitor.cs"/>
                     <include name="CompilerFramework/IBranch.cs"/>
                     <include name="CompilerFramework/IIRnstruction.cs"/>
@@ -206,7 +213,6 @@
                     <include name="CompilerFramework/CIL/BaseInstruction.cs"/>
                     <include name="CompilerFramework/Operands/StringOperand.cs"/>
                     <include name="CompilerFramework/ReverseBlockOrderStage.cs"/>
-                    <include name="CompilerFramework/OperandDeterminationStage.cs"/>
                     <include name="CompilerFramework/RuntimeMethodData.cs"/>
                     <include name="CompilerFramework/StackRegisterAllocator.cs"/>
                     <include name="CompilerFramework/StrengthReductionStage.cs"/>
@@ -221,8 +227,6 @@
                     <include name="Linker/LinkTimeCodeGenerator.cs"/>
                     <include name="Memory/IMemoryPageManager.cs"/>
                     <include name="Memory/PageAccessFlags.cs"/>
-                    <include name="IJitService.cs"/>
-                    <include name="MethodCompilationStageComposite.cs"/>
                     <include name="CompilerFramework/ArchitectureSpecificAttribute.cs"/>
                     <include name="CompilerFramework/AssemblyCompiler.cs"/>
                     <include name="CompilerFramework/BasicArchitecture.cs"/>
@@ -232,11 +236,9 @@
                     <include name="CompilerFramework/BaseCodeTransformationStage.cs"/>
                     <include name="CompilerFramework/CompilationException.cs"/>
                     <include name="CompilerFramework/CompilerPipeline.cs"/>
-                    <include name="CompilerFramework/CIL/ConstantFoldingStage.cs"/>
                     <include name="CompilerFramework/Operands/ConstantOperand.cs"/>
                     <include name="CompilerFramework/ConstantPropagationStage.cs"/>
                     <include name="CompilerFramework/DominanceCalculationStage.cs"/>
-                    <include name="CompilerFramework/EnterSSA.cs"/>
                     <include name="CompilerFramework/FlowControl.cs"/>
                     <include name="CompilerFramework/IArchitecture.cs"/>
                     <include name="CompilerFramework/IAssemblyCompilerStage.cs"/>
@@ -251,7 +253,6 @@
                     <include name="CompilerFramework/IStackLayoutProvider.cs"/>
                     <include name="CompilerFramework/JitTrampolineAttribute.cs"/>
                     <include name="CompilerFramework/Operands/LabelOperand.cs"/>
-                    <include name="CompilerFramework/LeaveSSA.cs"/>
                     <include name="CompilerFramework/LinearRegisterAllocator.cs"/>
                     <include name="CompilerFramework/Operands/MemberOperand.cs"/>
                     <include name="CompilerFramework/Operands/MemoryOperand.cs"/>
@@ -272,6 +273,9 @@
                     <include name="CompilerFramework/Operands/TemporaryOperand.cs"/>
                     <include name="CompilerFramework/Operands/LocalVariableOperand.cs"/>
                     <include name="CompilerFramework/IR/VmCall.cs"/>
+                    <include name="Options/BaseCompilerOptions.cs"/>
+                    <include name="Options/BaseCompilerWithEnableOptions.cs"/>
+                    <include name="Options/CompilerOptionSet.cs"/>
 		</sources>
 		<references>
                     <include name="System.dll"/>
