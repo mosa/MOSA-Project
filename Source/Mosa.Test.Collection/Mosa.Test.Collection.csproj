@@ -125,17 +125,6 @@
     <Compile Include="NewobjTests.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="Gallio, Version=3.2.0.0, Culture=neutral, PublicKeyToken=eb9cfa67ee6ab36e, processorArchitecture=MSIL">
-      <HintPath>..\..\3rdParty\Gallio.dll</HintPath>
-    </Reference>
-    <Reference Include="MbUnit, Version=3.2.0.0, Culture=neutral, PublicKeyToken=eb9cfa67ee6ab36e, processorArchitecture=MSIL">
-      <HintPath>..\..\3rdParty\MbUnit.dll</HintPath>
-    </Reference>
-    <Reference Include="System" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="ConditionalOperatorTests.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>ConditionalOperatorTests.cs</LastGenOutput>

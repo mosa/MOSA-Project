@@ -40,8 +40,7 @@ namespace Mosa.Tools.Compiler.Stages
 		void IAssemblyCompilerStage.Setup(AssemblyCompiler compiler)
 		{
 			base.Setup(compiler);
-
-			linker = RetrieveAssemblyLinkerFromCompiler();
+			this.linker = RetrieveAssemblyLinkerFromCompiler();
 		}
 
 		/// <summary>

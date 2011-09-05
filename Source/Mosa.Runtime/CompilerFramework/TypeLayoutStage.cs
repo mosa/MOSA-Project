@@ -39,8 +39,7 @@ namespace Mosa.Runtime.CompilerFramework
 		void IAssemblyCompilerStage.Setup(AssemblyCompiler compiler)
 		{
 			base.Setup(compiler);
-
-			linker = RetrieveAssemblyLinkerFromCompiler();
+			this.linker = RetrieveAssemblyLinkerFromCompiler();
 		}
 
 		void IAssemblyCompilerStage.Run()

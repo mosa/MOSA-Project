@@ -28,68 +28,39 @@ namespace Mosa.Tools.Compiler.Linker
 
 		public long BaseAddress
 		{
-			get
-			{
-				return this.linker.BaseAddress;
-			}
+			get { return this.linker.BaseAddress; }
 		}
 
 		public LinkerSymbol EntryPoint
 		{
-			get
-			{
-				return this.linker.EntryPoint;
-			}
-
-			set
-			{
-				this.linker.EntryPoint = value;
-			}
+			get { return this.linker.EntryPoint; }
+			set { this.linker.EntryPoint = value; }
 		}
 
 		public long LoadSectionAlignment
 		{
-			get
-			{
-				return this.linker.LoadSectionAlignment;
-			}
+			get { return this.linker.LoadSectionAlignment; }
 		}
 
 		public ICollection<LinkerSection> Sections
 		{
-			get
-			{
-				return this.linker.Sections;
-			}
+			get { return this.linker.Sections; }
 		}
 
 		public ICollection<LinkerSymbol> Symbols
 		{
-			get
-			{
-				return this.linker.Symbols;
-			}
+			get { return this.linker.Symbols; }
 		}
 
 		public string OutputFile
 		{
-			get
-			{
-				return this.linker.OutputFile;
-			}
-
-			set
-			{
-				this.linker.OutputFile = value;
-			}
+			get { return this.linker.OutputFile; }
+			set { this.linker.OutputFile = value; }
 		}
 
 		public long VirtualSectionAlignment
 		{
-			get
-			{
-				return this.linker.VirtualSectionAlignment;
-			}
+			get { return this.linker.VirtualSectionAlignment; }
 		}
 
 		public Stream Allocate(string name, SectionKind section, int size, int alignment)
@@ -127,10 +98,12 @@ namespace Mosa.Tools.Compiler.Linker
 
 		public void Run()
 		{
+			// Nothing
 		}
 
 		public void Setup(AssemblyCompiler compiler)
 		{
+			// Nothing
 		}
 	}
 }

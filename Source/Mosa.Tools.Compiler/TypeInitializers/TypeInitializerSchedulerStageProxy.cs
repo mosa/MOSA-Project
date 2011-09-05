@@ -40,10 +40,7 @@ namespace Mosa.Tools.Compiler.TypeInitializers
 		/// <value>The method.</value>
 		public LinkerGeneratedMethod Method
 		{
-			get
-			{
-				return this.realStage.Method;
-			}
+			get { return this.realStage.Method; }
 		}
 
 		/// <summary>
@@ -54,7 +51,6 @@ namespace Mosa.Tools.Compiler.TypeInitializers
 		{
 			this.realStage.Schedule(method);
 		}
-
 
 	}
 }

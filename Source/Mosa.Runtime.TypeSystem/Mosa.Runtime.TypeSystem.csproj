@@ -62,18 +62,6 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj">
-      <Project>{0B1011A6-8FCD-4F9E-BBB8-8DB86E23D2E8}</Project>
-      <Name>Mosa.Compiler.Common</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mosa.Compiler.FileFormat\Mosa.Compiler.FileFormat.csproj">
-      <Project>{CC2E6418-C325-4486-B50D-941EC27053F6}</Project>
-      <Name>Mosa.Compiler.FileFormat</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mosa.Compiler.Linker\Mosa.Compiler.Linker.csproj">
-      <Project>{65866A51-B229-44C5-AC81-87A90FA1741B}</Project>
-      <Name>Mosa.Compiler.Linker</Name>
-    </ProjectReference>
     <ProjectReference Include="..\Mosa.Runtime.Metadata\Mosa.Runtime.Metadata.csproj">
       <Project>{7033B213-2055-4C6A-B008-D9856267F5D7}</Project>
       <Name>Mosa.Runtime.Metadata</Name>

@@ -71,10 +71,7 @@ namespace Mosa.Tools.Compiler.TypeInitializers
 		/// <value>The method.</value>
 		public LinkerGeneratedMethod Method
 		{
-			get
-			{
-				return method;
-			}
+			get { return method; }
 		}
 
 		#endregion
@@ -84,8 +81,6 @@ namespace Mosa.Tools.Compiler.TypeInitializers
 		void IAssemblyCompilerStage.Setup(AssemblyCompiler compiler)
 		{
 			base.Setup(compiler);
-
-			this.compiler = compiler;
 		}
 
 		/// <summary>

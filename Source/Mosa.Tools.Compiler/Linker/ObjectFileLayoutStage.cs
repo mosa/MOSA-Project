@@ -91,7 +91,6 @@ namespace Mosa.Tools.Compiler.Linker
 		void IAssemblyCompilerStage.Setup(AssemblyCompiler compiler)
 		{
 			base.Setup(compiler);
-
 			linker = RetrieveAssemblyLinkerFromCompiler();
 		}
 

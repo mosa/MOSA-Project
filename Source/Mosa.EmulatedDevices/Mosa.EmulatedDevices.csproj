@@ -61,10 +61,8 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
-    <Reference Include="System.Data" />
     <Reference Include="System.Drawing" />
     <Reference Include="System.Windows.Forms" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mosa.DeviceSystem\Mosa.DeviceSystem.csproj">
@@ -74,10 +72,6 @@
     <ProjectReference Include="..\Mosa.ClassLib\Mosa.ClassLib.csproj">
       <Project>{27A3C89C-1967-45FF-A77E-94F44995C42C}</Project>
       <Name>Mosa.ClassLib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mosa.DeviceDrivers\Mosa.DeviceDrivers.csproj">
-      <Project>{4DBD4C50-BEC5-48D9-B471-9FB0A7F69999}</Project>
-      <Name>Mosa.DeviceDrivers</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mosa.EmulatedKernel\Mosa.EmulatedKernel.csproj">
       <Project>{A6C1F330-B858-44DE-89E6-C89D2B80DA62}</Project>

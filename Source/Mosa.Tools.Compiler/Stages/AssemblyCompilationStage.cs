@@ -43,7 +43,7 @@ namespace Mosa.Tools.Compiler.Stages
 			if (typeInitializerSchedulerStage == null)
 				throw new InvalidOperationException(@"AssemblyCompilationStage needs a ITypeInitializerSchedulerStage.");
 
-			linker = RetrieveAssemblyLinkerFromCompiler();
+			this.linker = RetrieveAssemblyLinkerFromCompiler();
 		}
 
 		void IAssemblyCompilerStage.Run()

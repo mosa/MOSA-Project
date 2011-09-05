@@ -34,9 +34,6 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="PE\CLI_HEADER.cs" />
     <Compile Include="PE\IMAGE_DATA_DIRECTORY.cs" />
     <Compile Include="PE\IMAGE_DOS_HEADER.cs" />

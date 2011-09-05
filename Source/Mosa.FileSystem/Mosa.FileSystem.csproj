@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
@@ -58,9 +58,6 @@
     <DebugType>none</DebugType>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="System" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\Mosa.ClassLib\Mosa.ClassLib.csproj">
       <Project>{27A3C89C-1967-45FF-A77E-94F44995C42C}</Project>
       <Name>Mosa.ClassLib</Name>
@@ -68,10 +65,6 @@
     <ProjectReference Include="..\Mosa.DeviceSystem\Mosa.DeviceSystem.csproj">
       <Project>{6509477A-7360-4937-A1B9-26FED0A75CDA}</Project>
       <Name>Mosa.DeviceSystem</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mosa.DeviceDrivers\Mosa.DeviceDrivers.csproj">
-      <Project>{4DBD4C50-BEC5-48D9-B471-9FB0A7F69999}</Project>
-      <Name>Mosa.DeviceDrivers</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
