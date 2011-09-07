@@ -34,7 +34,16 @@ namespace Mosa.Tools.Compiler.Linker
 
 		public void Setup(AssemblyCompiler compiler)
 		{
-			// Nothing
+			this.OutputFile = compiler.CompilerOptions.OutputFile;
+			
+			if (compiler.CompilerOptions.PortableExecutable.FileAlignment.HasValue)
+				this.FileAlignment = compiler.CompilerOptions.PortableExecutable.FileAlignment.Value;
+
+			if (compiler.CompilerOptions.PortableExecutable.SectionAlignment.HasValue)
+				this.SectionAlignment = compiler.CompilerOptions.PortableExecutable.SectionAlignment.Value;
+
+			if (compiler.CompilerOptions.PortableExecutable.SetChecksum.HasValue)
+				this.SetChecksum = compiler.CompilerOptions.PortableExecutable.SetChecksum.Value;
 		}
 
 		#endregion // IAssemblyCompilerStage members

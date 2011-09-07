@@ -49,6 +49,7 @@ namespace Mosa.Tools.Compiler.Linker
 		{
 			base.Setup(compiler);
 			this.linker = RetrieveAssemblyLinkerFromCompiler();
+			this.MapFile = compiler.CompilerOptions.MapFile;
 		}
 
 		/// <summary>

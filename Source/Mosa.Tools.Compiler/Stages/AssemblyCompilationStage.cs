@@ -88,7 +88,7 @@ namespace Mosa.Tools.Compiler.Stages
 
 		private void CompileAssembly()
 		{
-			using (AotAssemblyCompiler assemblyCompiler = new AotAssemblyCompiler(architecture, typeInitializerSchedulerStage, linker, typeSystem, typeLayout, compiler.InternalLog, compiler.CompilerOptionSet))
+			using (AotAssemblyCompiler assemblyCompiler = new AotAssemblyCompiler(architecture, typeInitializerSchedulerStage, linker, typeSystem, typeLayout, compiler.InternalLog, compiler.CompilerOptions))
 			{
 				assemblyCompiler.Run();
 			}

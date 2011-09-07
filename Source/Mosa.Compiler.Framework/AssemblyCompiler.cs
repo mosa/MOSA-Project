@@ -9,7 +9,6 @@
 
 using System;
 using Mosa.Compiler.InternalTrace;
-using Mosa.Compiler.Options;
 using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.Compiler.Framework
@@ -51,7 +50,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Holds the compiler option set
 		/// </summary>
-		protected CompilerOptionSet compilerOptionSet;
+		protected CompilerOptions compilerOptions;
 
 		#endregion // Data members
 
@@ -62,7 +61,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="architecture">The compiler target architecture.</param>
 		/// <param name="typeSystem">The type system.</param>
-		protected AssemblyCompiler(IArchitecture architecture, ITypeSystem typeSystem, ITypeLayout typeLayout, IInternalTrace internalTrace, CompilerOptionSet compilerOptionSet)
+		protected AssemblyCompiler(IArchitecture architecture, ITypeSystem typeSystem, ITypeLayout typeLayout, IInternalTrace internalTrace, CompilerOptions compilerOptions)
 		{
 			if (architecture == null)
 				throw new ArgumentNullException(@"architecture");
@@ -72,7 +71,7 @@ namespace Mosa.Compiler.Framework
 			this.typeSystem = typeSystem;
 			this.typeLayout = typeLayout;
 			this.internalTrace = internalTrace;
-			this.compilerOptionSet = compilerOptionSet;
+			this.compilerOptions = compilerOptions;
 		}
 
 		#endregion // Construction
@@ -126,9 +125,9 @@ namespace Mosa.Compiler.Framework
 			get { return internalTrace; }
 		}
 
-		public CompilerOptionSet CompilerOptionSet
+		public CompilerOptions CompilerOptions
 		{
-			get { return compilerOptionSet; }
+			get { return compilerOptions; }
 		}
 
 		#endregion // Properties
@@ -177,9 +176,6 @@ namespace Mosa.Compiler.Framework
 		{
 			foreach (IAssemblyCompilerStage stage in Pipeline)
 			{
-				// Apply Compiler Options
-				this.compilerOptionSet.AppyTo(stage);
-
 				// Setup Compiler
 				stage.Setup(this);
 			}

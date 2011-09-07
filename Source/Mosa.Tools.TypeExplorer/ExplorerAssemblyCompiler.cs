@@ -10,7 +10,6 @@
 
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.InternalTrace;
-using Mosa.Compiler.Options;
 using Mosa.Compiler.TypeSystem;
 using x86 = Mosa.Platform.x86;
 
@@ -19,8 +18,8 @@ namespace Mosa.Tools.TypeExplorer
 
 	class ExplorerAssemblyCompiler : AssemblyCompiler
 	{
-		private ExplorerAssemblyCompiler(IArchitecture architecture, ITypeSystem typeSystem, ITypeLayout typeLayout, IInternalTrace internalTrace, CompilerOptionSet compilerOptionSet) :
-			base(architecture, typeSystem, typeLayout, internalTrace, compilerOptionSet)
+		private ExplorerAssemblyCompiler(IArchitecture architecture, ITypeSystem typeSystem, ITypeLayout typeLayout, IInternalTrace internalTrace, CompilerOptions compilerOptions) :
+			base(architecture, typeSystem, typeLayout, internalTrace, compilerOptions)
 		{
 			var linker = new ExplorerLinker();
 
@@ -46,9 +45,9 @@ namespace Mosa.Tools.TypeExplorer
 		{
 			IArchitecture architecture = x86.Architecture.CreateArchitecture(x86.ArchitectureFeatureFlags.AutoDetect);
 
-			CompilerOptionSet compilerOptionSet = new CompilerOptionSet();
+			CompilerOptions compilerOptions = new CompilerOptions();
 
-			ExplorerAssemblyCompiler compiler = new ExplorerAssemblyCompiler(architecture, typeSystem, typeLayout, internalTrace, compilerOptionSet);
+			ExplorerAssemblyCompiler compiler = new ExplorerAssemblyCompiler(architecture, typeSystem, typeLayout, internalTrace, compilerOptions);
 
 			compiler.Compile();
 		}

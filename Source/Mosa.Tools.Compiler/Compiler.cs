@@ -15,10 +15,8 @@ using Mosa.Compiler.Framework;
 using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.Metadata.Loader;
 using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Compiler.Options;
 using Mosa.Compiler.TypeSystem;
 using Mosa.Tools.Compiler.Linker;
-using Mosa.Tools.Compiler.Options;
 using Mosa.Tools.Compiler.Stages;
 using Mosa.Tools.Compiler.TypeInitializers;
 using NDesk.Options;
@@ -35,7 +33,7 @@ namespace Mosa.Tools.Compiler
 		/// <summary>
 		/// 
 		/// </summary>
-		CompilerOptionSet compilerOptionSet = new CompilerOptionSet();
+		CompilerOptions compilerOptions = new CompilerOptions();
 
 		/// <summary>
 		/// Holds a list of input files.
@@ -127,19 +125,209 @@ namespace Mosa.Tools.Compiler
 
 			#endregion
 
-			compilerOptionSet.AddOptions(
-				new List<BaseCompilerOptions>()
+			#region Setup options
+
+			optionSet.Add(
+				"b|boot=",
+				"Specify the bootable format of the produced binary [{mb0.7}].",
+				delegate(string format)
 				{
-					new BootFormatOptions(optionSet),
-					new ArchitectureOptions(optionSet),
-					new LinkerFormatOptions(optionSet),
-					new Elf32LinkerOptions(optionSet),
-					new MapFileGeneratorOptions(optionSet),
-					new PortableExecutableOptions(optionSet),
-					new StaticAllocationResolutionStageOptions(optionSet),
-					new InstructionStatisticsOptions(optionSet)
+					compilerOptions.BootCompilerStage = SelectBootStage(format);
 				}
 			);
+
+			optionSet.Add(
+				"a|Architecture=",
+				"Select one of the MOSA architectures to compile for [{x86}].",
+				delegate(string arch)
+				{
+					compilerOptions.Architecture = SelectArchitecture(arch);
+				}
+			);
+
+			optionSet.Add(
+				"f|format=",
+				"Select the format of the binary file to create [{ELF32|ELF64|PE}].",
+				delegate(string format)
+				{
+					compilerOptions.LinkerStage = SelectLinkerStage(format);
+				}
+			);
+
+			optionSet.Add(
+				"o|out=",
+				"The name of the output {file}.",
+				delegate(string file)
+				{
+					compilerOptions.OutputFile = file;
+				}
+			);
+
+			optionSet.Add<uint>(
+				"elf-file-alignment=",
+				"Determines the alignment of sections within the ELF file. Must be a multiple of 512 bytes.",
+				delegate(uint alignment)
+				{
+					try
+					{
+						compilerOptions.Elf32.FileAlignment = alignment;
+					}
+					catch (System.Exception x)
+					{
+						throw new OptionException(@"The specified file alignment is invalid.", @"elf-file-alignment", x);
+					}
+				}
+			);
+
+			optionSet.Add(
+				"map=",
+				"Generate a map {file} of the produced binary.",
+				delegate(string file)
+				{
+					compilerOptions.MapFile = file;
+				}
+			);
+
+			optionSet.Add(
+				"pe-no-checksum",
+				"Causes no checksum to be written in the generated PE file. MOSA requires the checksum to be set. It is on by default, use this switch to turn it off.",
+				delegate(string value)
+				{
+					compilerOptions.PortableExecutable.SetChecksum = false;
+				}
+			);
+
+			optionSet.Add<uint>(
+				"pe-file-alignment=",
+				"Determines the alignment of sections within the PE file. Must be a multiple of 512 bytes.",
+				delegate(uint alignment)
+				{
+					try
+					{
+						compilerOptions.PortableExecutable.FileAlignment = alignment;
+					}
+					catch (Exception x)
+					{
+						throw new OptionException(@"The specified file alignment is invalid.", @"pe-file-alignment", x);
+					}
+				}
+			);
+
+			optionSet.Add<uint>(
+				"pe-section-alignment=",
+				"Determines the alignment of sections in memory. Must be a multiple of 4096 bytes.",
+				delegate(uint alignment)
+				{
+					try
+					{
+						compilerOptions.PortableExecutable.SectionAlignment = alignment;
+					}
+					catch (Exception x)
+					{
+						throw new OptionException(@"The specified section alignment is invalid.", @"pe-section-alignment", x);
+					}
+				}
+			);
+
+			optionSet.Add(
+				@"sa|enable-static-alloc",
+				@"Performs static allocations at compile time.",
+				enable => compilerOptions.EnableSSA = enable != null
+			);
+
+			optionSet.Add(
+				"stats=",
+				"Generate instruction statistics {file} of the produced binary.",
+				delegate(string file)
+				{
+					compilerOptions.StatisticsFile = file;
+				}
+			);
+
+			optionSet.Add(
+				"multiboot-video-mode=",
+				"Specify the video mode for multiboot [{text|graphics}].",
+				delegate(string v)
+				{
+					switch (v.ToLower())
+					{
+						case "text":
+							compilerOptions.Multiboot.VideoMode = 1;
+							break;
+						case "graphics":
+							compilerOptions.Multiboot.VideoMode = 0;
+							break;
+						default:
+							throw new OptionException("Invalid value for multiboot video mode: " + v, "multiboot-video-mode");
+					}
+				}
+			);
+
+			optionSet.Add(
+				"multiboot-video-width=",
+				"Specify the {width} for video output, in pixels for graphics mode or in characters for text mode.",
+				delegate(string v)
+				{
+					uint val;
+					if (uint.TryParse(v, out val))
+					{
+						// TODO: this probably needs further validation
+						compilerOptions.Multiboot.VideoWidth = val;
+					}
+					else
+					{
+						throw new OptionException("Invalid value for multiboot video width: " + v, "multiboot-video-width");
+					}
+				}
+			);
+
+			optionSet.Add(
+				"multiboot-video-height=",
+				"Specify the {height} for video output, in pixels for graphics mode or in characters for text mode.",
+				delegate(string v)
+				{
+					uint val;
+					if (uint.TryParse(v, out val))
+					{
+						// TODO: this probably needs further validation
+						compilerOptions.Multiboot.VideoHeight = val;
+					}
+					else
+					{
+						throw new OptionException("Invalid value for multiboot video height: " + v, "multiboot-video-height");
+					}
+				}
+			);
+
+			optionSet.Add(
+				"multiboot-video-depth=",
+				"Specify the {depth} (number of bits per pixel) for graphics mode.",
+				delegate(string v)
+				{
+					uint val;
+					if (uint.TryParse(v, out val))
+					{
+						compilerOptions.Multiboot.VideoDepth = val;
+					}
+					else
+					{
+						throw new OptionException("Invalid value for multiboot video depth: " + v, "multiboot-video-depth");
+					}
+				}
+			);
+
+			optionSet.Add(
+				"multiboot-module=",
+				"Adds a {0:module} to multiboot, to be loaded at a given {1:virtualAddress} (can be used multiple times).",
+				delegate(string file, string address)
+				{
+					// TODO: validate and add this to a list or something
+					Console.WriteLine("Adding multiboot module " + file + " at virtualAddress " + address);
+				}
+			);
+
+			#endregion // Setup options
+
 		}
 
 		#endregion Constructors
@@ -178,24 +366,24 @@ namespace Mosa.Tools.Compiler
 				// Process boot format:
 				// Boot format only matters if it's an executable
 				// Process this only now, because input files must be known
-				if (!isExecutable && compilerOptionSet.GetOptions<BootFormatOptions>().BootCompilerStage == null)
+				if (!isExecutable && compilerOptions.BootCompilerStage == null)
 				{
 					Console.WriteLine("Warning: Ignoring boot format, because target is not an executable.");
 					Console.WriteLine();
 				}
 
 				// Check for missing options
-				if (compilerOptionSet.GetOptions<LinkerFormatOptions>().LinkerStage == null)
+				if (compilerOptions.LinkerStage == null)
 				{
 					throw new OptionException("No binary format specified.", "Architecture");
 				}
 
-				if (String.IsNullOrEmpty(compilerOptionSet.GetOptions<LinkerFormatOptions>().OutputFile))
+				if (String.IsNullOrEmpty(compilerOptions.OutputFile))
 				{
 					throw new OptionException("No output file specified.", "o");
 				}
 
-				if (compilerOptionSet.GetOptions<ArchitectureOptions>().Architecture == null)
+				if (compilerOptions.Architecture == null)
 				{
 					throw new OptionException("No architecture specified.", "Architecture");
 				}
@@ -235,11 +423,11 @@ namespace Mosa.Tools.Compiler
 		public override string ToString()
 		{
 			StringBuilder sb = new StringBuilder();
-			sb.Append(" > Output file: ").AppendLine(compilerOptionSet.GetOptions<LinkerFormatOptions>().OutputFile);
+			sb.Append(" > Output file: ").AppendLine(compilerOptions.OutputFile);
 			sb.Append(" > Input file(s): ").AppendLine(String.Join(", ", new List<string>(GetInputFileNames()).ToArray()));
-			sb.Append(" > Architecture: ").AppendLine(compilerOptionSet.GetOptions<ArchitectureOptions>().Architecture.GetType().FullName);
-			sb.Append(" > Binary format: ").AppendLine(((IPipelineStage)compilerOptionSet.GetOptions<LinkerFormatOptions>().LinkerStage).Name);
-			sb.Append(" > Boot format: ").AppendLine(((IPipelineStage)compilerOptionSet.GetOptions<BootFormatOptions>().BootCompilerStage).Name);
+			sb.Append(" > Architecture: ").AppendLine(compilerOptions.Architecture.GetType().FullName);
+			sb.Append(" > Binary format: ").AppendLine(((IPipelineStage)compilerOptions.LinkerStage).Name);
+			sb.Append(" > Boot format: ").AppendLine(((IPipelineStage)compilerOptions.BootCompilerStage).Name);
 			sb.Append(" > Is executable: ").AppendLine(isExecutable.ToString());
 			return sb.ToString();
 		}
@@ -264,7 +452,7 @@ namespace Mosa.Tools.Compiler
 			int nativePointerSize;
 			int nativePointerAlignment;
 
-			IArchitecture architecture = compilerOptionSet.GetOptions<ArchitectureOptions>().Architecture;
+			IArchitecture architecture = compilerOptions.Architecture;
 
 			architecture.GetTypeRequirements(BuiltInSigType.IntPtr, out nativePointerSize, out nativePointerAlignment);
 
@@ -272,19 +460,19 @@ namespace Mosa.Tools.Compiler
 
 			IInternalTrace internalLog = new BasicInternalTrace();
 
-			using (AotCompiler aot = new AotCompiler(architecture, typeSystem, typeLayout, internalLog, compilerOptionSet))
+			using (AotCompiler aot = new AotCompiler(architecture, typeSystem, typeLayout, internalLog, compilerOptions))
 			{
 				aot.Pipeline.AddRange(new IAssemblyCompilerStage[] 
 				{
-					compilerOptionSet.GetOptions<BootFormatOptions>().BootCompilerStage,
+					compilerOptions.BootCompilerStage,
 					new AssemblyCompilationStage(), 
 					new MethodCompilerSchedulerStage(),
 					new TypeInitializerSchedulerStage(),
-					compilerOptionSet.GetOptions<BootFormatOptions>().BootCompilerStage,
+					compilerOptions.BootCompilerStage,
 					new CilHeaderBuilderStage(),
 					new ObjectFileLayoutStage(),
-					compilerOptionSet.GetOptions<LinkerFormatOptions>().LinkerStage,
-					compilerOptionSet.GetOptions<MapFileGeneratorOptions>().Enabled ? new MapFileGenerationStage() : null
+					compilerOptions.LinkerStage,
+					compilerOptions.MapFile != null ? new MapFileGenerationStage() : null
 				});
 
 				aot.Run();
@@ -337,5 +525,68 @@ namespace Mosa.Tools.Compiler
 		}
 
 		#endregion Private Methods
+
+		#region Internal Methods
+
+		/// <summary>
+		/// Selects the architecture.
+		/// </summary>
+		/// <param name="architecture">The architecture.</param>
+		/// <returns></returns>
+		private static IArchitecture SelectArchitecture(string architecture)
+		{
+			switch (architecture.ToLower())
+			{
+				case "x86":
+					return Mosa.Platform.x86.Architecture.CreateArchitecture(Mosa.Platform.x86.ArchitectureFeatureFlags.AutoDetect);
+
+				case "x64":
+				default:
+					throw new OptionException(String.Format("Unknown or unsupported architecture {0}.", architecture), "Architecture");
+			}
+		}
+
+		/// <summary>
+		/// Selects the boot stage.
+		/// </summary>
+		/// <param name="format">The format.</param>
+		/// <returns></returns>
+		private static IAssemblyCompilerStage SelectBootStage(string format)
+		{
+			switch (format.ToLower())
+			{
+				case "multiboot-0.7":
+				case "mb0.7":
+					return new Multiboot0695AssemblyStage();
+
+				default:
+					throw new OptionException(String.Format("Unknown or unsupported boot format {0}.", format), "boot");
+			}
+		}
+
+		/// <summary>
+		/// Selects the linker implementation to use.
+		/// </summary>
+		/// <param name="format">The linker format.</param>
+		/// <returns>The implementation of the linker.</returns>
+		private static IAssemblyCompilerStage SelectLinkerStage(string format)
+		{
+			switch (format.ToLower())
+			{
+				case "elf32":
+					return new Elf32LinkerStage();
+
+				case "elf64":
+					return new Elf64LinkerStage();
+
+				case "pe":
+					return new PortableExecutableLinkerStage();
+
+				default:
+					throw new OptionException(String.Format("Unknown or unsupported binary format {0}.", format), "format");
+			}
+		}
+
+		#endregion
 	}
 }

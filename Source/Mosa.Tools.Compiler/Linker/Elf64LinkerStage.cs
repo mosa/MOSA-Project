@@ -16,7 +16,7 @@ namespace Mosa.Tools.Compiler.Linker
 	/// <summary>
 	/// 
 	/// </summary>
-	public class Elf32LinkerStage : Elf32Linker, IPipelineStage, IAssemblyCompilerStage, IAssemblyLinker
+	public class Elf64LinkerStage : Elf64Linker, IPipelineStage, IAssemblyCompilerStage, IAssemblyLinker
 	{
 
 		#region IPipelineStage
@@ -25,7 +25,7 @@ namespace Mosa.Tools.Compiler.Linker
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
 		/// <value>The name of the compilation stage.</value>
-		string IPipelineStage.Name { get { return @"Executable and Linking Format (ELF) Linker [32 Bit]"; } }
+		string IPipelineStage.Name { get { return @"Executable and Linking Format (ELF) Linker [64 Bit]"; } }
 
 		#endregion // IPipelineStage Members
 
@@ -33,7 +33,8 @@ namespace Mosa.Tools.Compiler.Linker
 
 		public void Setup(AssemblyCompiler compiler)
 		{
-			// Nothing
+			this.OutputFile = compiler.CompilerOptions.OutputFile;
+			//this.FileAlignment = compiler.CompilerOptions.Elf64.FileAlignment;
 		}
 
 		#endregion // IAssemblyCompilerStage members

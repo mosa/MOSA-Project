@@ -24,7 +24,7 @@ using CPUx86 = Mosa.Platform.x86.CPUx86;
 
 namespace Mosa.Tools.Compiler.Stages
 {
-	
+
 	/*
 	 * FIXME:
 	 * - Allow video mode options to be controlled by the command line
@@ -134,6 +134,15 @@ namespace Mosa.Tools.Compiler.Stages
 		{
 			base.Setup(compiler);
 			linker = RetrieveAssemblyLinkerFromCompiler();
+
+			if (compiler.CompilerOptions.Multiboot.VideoDepth.HasValue)
+				this.VideoDepth = compiler.CompilerOptions.Multiboot.VideoDepth.Value;
+			if (compiler.CompilerOptions.Multiboot.VideoHeight.HasValue)
+				this.VideoHeight = compiler.CompilerOptions.Multiboot.VideoHeight.Value;
+			if (compiler.CompilerOptions.Multiboot.VideoMode.HasValue) 
+				this.VideoMode = compiler.CompilerOptions.Multiboot.VideoMode.Value;
+			if (compiler.CompilerOptions.Multiboot.VideoWidth.HasValue) 
+				this.VideoWidth = compiler.CompilerOptions.Multiboot.VideoWidth.Value;
 		}
 
 		/// <summary>

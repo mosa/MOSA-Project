@@ -100,6 +100,7 @@
     <Compile Include="OperandDeterminationStage.cs" />
     <Compile Include="Operands\SsaOperand.cs" />
     <Compile Include="Operands\VirtualRegisterOperand.cs" />
+    <Compile Include="CompilerOptions.cs" />
     <Compile Include="PhiPlacementStage.cs" />
     <Compile Include="StaticAllocationResolutionStage.cs" />
     <Compile Include="TypeLayoutStage.cs" />
@@ -411,9 +412,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IR\VmCall.cs" />
-    <Compile Include="Options\BaseCompilerOptions.cs" />
-    <Compile Include="Options\BaseCompilerWithEnableOptions.cs" />
-    <Compile Include="Options\CompilerOptionSet.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj">

@@ -67,8 +67,8 @@
   <ItemGroup>
     <Compile Include="AotAssemblyCompiler.cs" />
     <Compile Include="Stages\AssemblyCompilationStage.cs" />
-    <Compile Include="Linker\Elf64LinkerStage.cs" />
     <Compile Include="Linker\Elf32LinkerStage.cs" />
+    <Compile Include="Linker\Elf64LinkerStage.cs" />
     <Compile Include="Linker\LinkerProxy.cs" />
     <Compile Include="Linker\MapFileGenerationStage.cs" />
     <Compile Include="Linker\ObjectFileLayoutStage.cs" />
@@ -89,21 +89,12 @@
     <Compile Include="Options.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Options\BootFormatOptions.cs" />
-    <Compile Include="Options\ArchitectureOptions.cs" />
-    <Compile Include="Options\MultibootOptions.cs" />
-    <Compile Include="Options\Elf32LinkerOptions.cs" />
-    <Compile Include="Options\PortableExecutableOptions.cs" />
-    <Compile Include="Options\LinkerFormatOptions.cs" />
-    <Compile Include="Options\MapFileGeneratorOptions.cs" />
-    <Compile Include="Options\InstructionStatisticsOptions.cs" />
     <Compile Include="Program.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Stages\Multiboot0695AssemblyStage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Options\StaticAllocationResolutionStageOptions.cs" />
     <Compile Include="TypeInitializers\ITypeInitializerSchedulerStage.cs" />
     <Compile Include="TypeInitializers\TypeInitializerSchedulerStage.cs">
       <SubType>Code</SubType>

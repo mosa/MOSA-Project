@@ -12,7 +12,6 @@
 
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.InternalTrace;
-using Mosa.Compiler.Options;
 using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.Tools.Compiler
@@ -39,8 +38,8 @@ namespace Mosa.Tools.Compiler
 		/// </summary>
 		/// <param name="architecture">The target compilation architecture.</param>
 		/// <param name="typeSystem">The type system.</param>
-		public AotCompiler(IArchitecture architecture, ITypeSystem typeSystem, ITypeLayout typeLayout, IInternalTrace internalLog, CompilerOptionSet compilerOptionSet) :
-			base(architecture, typeSystem, typeLayout, internalLog, compilerOptionSet)
+		public AotCompiler(IArchitecture architecture, ITypeSystem typeSystem, ITypeLayout typeLayout, IInternalTrace internalLog, CompilerOptions compilerOptions) :
+			base(architecture, typeSystem, typeLayout, internalLog, compilerOptions)
 		{
 		}
 
