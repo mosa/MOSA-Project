@@ -11,7 +11,7 @@ using System;
 using System.Diagnostics;
 using System.Text;
 
-namespace Mosa.Runtime.Metadata
+namespace Mosa.Compiler.Metadata
 {
 
 	/// <summary>

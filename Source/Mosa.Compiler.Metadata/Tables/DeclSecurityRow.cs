@@ -9,7 +9,7 @@
 
 using System.Security.Permissions;
 
-namespace Mosa.Runtime.Metadata.Tables
+namespace Mosa.Compiler.Metadata.Tables
 {
 	/// <summary>
 	/// 

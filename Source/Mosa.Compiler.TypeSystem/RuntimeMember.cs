@@ -10,9 +10,9 @@
 using System;
 using System.Collections.Generic;
 
-using Mosa.Runtime.Metadata;
+using Mosa.Compiler.Metadata;
 
-namespace Mosa.Runtime.TypeSystem
+namespace Mosa.Compiler.TypeSystem
 {
 	/// <summary>
 	/// 

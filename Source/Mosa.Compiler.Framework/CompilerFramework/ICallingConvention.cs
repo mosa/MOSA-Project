@@ -7,9 +7,9 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-using Mosa.Runtime.CompilerFramework.Operands;
+using Mosa.Compiler.Framework.Operands;
 
-namespace Mosa.Runtime.CompilerFramework
+namespace Mosa.Compiler.Framework
 {
 	/// <summary>
 	/// This interface provides support to emit calling convention 

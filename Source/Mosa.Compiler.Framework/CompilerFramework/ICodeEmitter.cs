@@ -12,7 +12,7 @@ using System.IO;
 
 using Mosa.Compiler.Linker;
 
-namespace Mosa.Runtime.CompilerFramework
+namespace Mosa.Compiler.Framework
 {
 	/// <summary>
 	/// Interface of a code emitter.

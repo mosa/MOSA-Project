@@ -7,7 +7,7 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-namespace Mosa.Runtime.Metadata.Tables
+namespace Mosa.Compiler.Metadata.Tables
 {
 	/// <summary>
 	/// 

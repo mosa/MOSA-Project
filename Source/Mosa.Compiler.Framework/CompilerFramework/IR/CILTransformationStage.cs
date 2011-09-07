@@ -14,15 +14,15 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 using Mosa.Compiler.Linker;
-using Mosa.Runtime.CompilerFramework.CIL;
-using Mosa.Runtime.CompilerFramework.Operands;
-using Mosa.Runtime.Metadata;
-using Mosa.Runtime.Metadata.Loader;
-using Mosa.Runtime.Metadata.Signatures;
-using Mosa.Runtime.TypeSystem;
-using Mosa.Runtime.TypeSystem.Generic;
+using Mosa.Compiler.Framework.CIL;
+using Mosa.Compiler.Framework.Operands;
+using Mosa.Compiler.Metadata;
+using Mosa.Compiler.Metadata.Loader;
+using Mosa.Compiler.Metadata.Signatures;
+using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.TypeSystem.Generic;
 
-namespace Mosa.Runtime.CompilerFramework.IR
+namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
 	/// Transforms CIL instructions into their appropriate IR.

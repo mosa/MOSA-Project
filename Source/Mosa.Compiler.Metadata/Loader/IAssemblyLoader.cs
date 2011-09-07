@@ -9,7 +9,7 @@
 
 using System.Collections.Generic;
 
-namespace Mosa.Runtime.Metadata.Loader
+namespace Mosa.Compiler.Metadata.Loader
 {
 	/// <summary>
 	/// Interface to the assembly loader.

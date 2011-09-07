@@ -8,9 +8,9 @@
  */
 
 using System.Collections.Generic;
-using Mosa.Runtime.CompilerFramework.Operands;
+using Mosa.Compiler.Framework.Operands;
 
-namespace Mosa.Runtime.CompilerFramework
+namespace Mosa.Compiler.Framework
 {
 	/// <summary>
 	/// A stage to compute local common subexpression elimination

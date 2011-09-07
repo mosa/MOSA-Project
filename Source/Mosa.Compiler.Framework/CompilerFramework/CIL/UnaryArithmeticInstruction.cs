@@ -8,7 +8,7 @@
  */
 
 
-namespace Mosa.Runtime.CompilerFramework.CIL
+namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
 	/// Represents a unary instruction, which performs an operation on the operand and places

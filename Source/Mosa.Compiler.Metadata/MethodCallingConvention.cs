@@ -5,7 +5,7 @@
  *
  */
 
-namespace Mosa.Runtime.Metadata
+namespace Mosa.Compiler.Metadata
 {
 
 	public enum MethodCallingConvention : byte

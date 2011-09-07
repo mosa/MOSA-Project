@@ -7,10 +7,10 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Runtime.Metadata;
-using Mosa.Runtime.Metadata.Signatures;
+using Mosa.Compiler.Metadata;
+using Mosa.Compiler.Metadata.Signatures;
 
-namespace Mosa.Runtime.CompilerFramework.CIL
+namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
 	/// 

@@ -9,7 +9,7 @@
 
 using System.Text;
 
-namespace Mosa.Runtime.Metadata.Signatures
+namespace Mosa.Compiler.Metadata.Signatures
 {
 	/// <summary>
 	/// Specifies an instance of a generic type as a signature type.

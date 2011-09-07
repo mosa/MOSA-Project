@@ -8,9 +8,9 @@
  */
 
 using System;
-using Mosa.Runtime.Metadata.Signatures;
+using Mosa.Compiler.Metadata.Signatures;
 
-namespace Mosa.Runtime.CompilerFramework.Operands
+namespace Mosa.Compiler.Framework.Operands
 {
 	/// <summary>
 	/// Represents an operand stored in a machine specific register.

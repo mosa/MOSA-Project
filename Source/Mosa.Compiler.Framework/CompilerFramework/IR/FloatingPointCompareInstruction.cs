@@ -9,7 +9,7 @@
  */
 
 
-namespace Mosa.Runtime.CompilerFramework.IR
+namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
 	/// Represents a floating point comparison context.

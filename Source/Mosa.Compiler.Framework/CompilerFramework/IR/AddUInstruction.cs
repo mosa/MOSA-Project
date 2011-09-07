@@ -7,7 +7,7 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-namespace Mosa.Runtime.CompilerFramework.IR
+namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
 	/// Intermediate representation of the unsigned add operation.

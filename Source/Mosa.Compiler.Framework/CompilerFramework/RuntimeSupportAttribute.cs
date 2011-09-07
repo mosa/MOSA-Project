@@ -8,9 +8,9 @@
  */
 
 using System;
-using Mosa.Runtime.CompilerFramework.CIL;
+using Mosa.Compiler.Framework.CIL;
 
-namespace Mosa.Runtime.CompilerFramework
+namespace Mosa.Compiler.Framework
 {
 
 	/// <summary>

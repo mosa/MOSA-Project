@@ -1,6 +1,6 @@
 
 
-namespace Mosa.Runtime.Metadata.Signatures
+namespace Mosa.Compiler.Metadata.Signatures
 {
 	public class BuiltInSigType : SigType
 	{

@@ -8,8 +8,8 @@
  */
 
 
-using Mosa.Runtime.CompilerFramework;
-using Mosa.Runtime.TypeSystem;
+using Mosa.Compiler.Framework;
+using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.Platform.x86.Intrinsic
 {

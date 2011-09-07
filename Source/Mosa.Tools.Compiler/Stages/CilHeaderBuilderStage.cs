@@ -13,7 +13,7 @@ using System.IO;
 using System.Text;
 using Mosa.Compiler.FileFormat.PE;
 using Mosa.Compiler.Linker;
-using Mosa.Runtime.CompilerFramework;
+using Mosa.Compiler.Framework;
 
 namespace Mosa.Tools.Compiler.Stages
 {
@@ -50,7 +50,7 @@ namespace Mosa.Tools.Compiler.Stages
 			cliHeader.Flags = RuntimeImageFlags.ILOnly;
 			cliHeader.EntryPointToken = 0x06000001; // FIXME: ??
 
-			//LinkerSymbol metadata = this.linker.GetSymbol(Mosa.Runtime.Metadata.Symbol.Name);
+			//LinkerSymbol metadata = this.linker.GetSymbol(Mosa.Compiler.Metadata.Symbol.Name);
 			//cliHeader.Metadata.VirtualAddress = (uint)(this.linker.GetSection(SectionKind.Text).VirtualAddress.ToInt64() + metadata.SectionAddress);
 			//cliHeader.Metadata.Size = (int)metadata.Length;
 

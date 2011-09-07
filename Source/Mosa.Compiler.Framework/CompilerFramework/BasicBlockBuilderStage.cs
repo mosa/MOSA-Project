@@ -13,7 +13,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 
 
-namespace Mosa.Runtime.CompilerFramework
+namespace Mosa.Compiler.Framework
 {
 	/// <summary>
 	/// This compilation stage is used by method compilers after the

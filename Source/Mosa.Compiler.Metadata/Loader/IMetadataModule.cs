@@ -10,7 +10,7 @@
 using System.IO;
 
 
-namespace Mosa.Runtime.Metadata.Loader
+namespace Mosa.Compiler.Metadata.Loader
 {
 	/// <summary>
 	/// Interface to the metadata loaded by a file loader.

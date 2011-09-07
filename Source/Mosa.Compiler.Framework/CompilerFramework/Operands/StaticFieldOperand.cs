@@ -8,9 +8,9 @@
  */
 
 using System;
-using Mosa.Runtime.TypeSystem;
+using Mosa.Compiler.TypeSystem;
 
-namespace Mosa.Runtime.CompilerFramework.Operands
+namespace Mosa.Compiler.Framework.Operands
 {
 	/// <summary>
 	/// 

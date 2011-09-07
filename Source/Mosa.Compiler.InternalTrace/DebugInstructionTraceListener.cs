@@ -9,9 +9,9 @@
 
 using System.Diagnostics;
 
-using Mosa.Runtime.TypeSystem;
+using Mosa.Compiler.TypeSystem;
 
-namespace Mosa.Runtime.InternalTrace
+namespace Mosa.Compiler.InternalTrace
 {
 	public class DebugInstructionTraceListener : IInstructionTraceListener 
 	{

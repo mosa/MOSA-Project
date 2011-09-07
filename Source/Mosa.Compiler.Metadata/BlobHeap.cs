@@ -10,7 +10,7 @@
 using System;
 using System.Diagnostics;
 
-namespace Mosa.Runtime.Metadata
+namespace Mosa.Compiler.Metadata
 {
 
 	/// <summary>
@@ -22,7 +22,7 @@ namespace Mosa.Runtime.Metadata
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="Mosa.Runtime.Metadata.BlobHeap"/>.
+		/// Initializes a new instance of <see cref="Mosa.Compiler.Metadata.BlobHeap"/>.
 		/// </summary>
 		/// <param name="metadata">The provider buffer, which contains the blob heap.</param>
 		/// <param name="offset">The offset into the buffer, where the heap starts.</param>

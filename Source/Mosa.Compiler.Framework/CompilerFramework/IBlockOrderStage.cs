@@ -1,5 +1,5 @@
 ﻿
-namespace Mosa.Runtime.CompilerFramework
+namespace Mosa.Compiler.Framework
 {
 	/// <summary>
 	/// This stage orders blocks

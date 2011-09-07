@@ -13,16 +13,16 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using Mosa.Compiler.Linker;
-using Mosa.Runtime.CompilerFramework.CIL;
-using Mosa.Runtime.CompilerFramework.Operands;
-using Mosa.Runtime.InternalTrace;
-using Mosa.Runtime.Metadata;
-using Mosa.Runtime.Metadata.Loader;
-using Mosa.Runtime.Metadata.Signatures;
-using Mosa.Runtime.TypeSystem;
-using Mosa.Runtime.TypeSystem.Generic;
+using Mosa.Compiler.Framework.CIL;
+using Mosa.Compiler.Framework.Operands;
+using Mosa.Compiler.InternalTrace;
+using Mosa.Compiler.Metadata;
+using Mosa.Compiler.Metadata.Loader;
+using Mosa.Compiler.Metadata.Signatures;
+using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.TypeSystem.Generic;
 
-namespace Mosa.Runtime.CompilerFramework
+namespace Mosa.Compiler.Framework
 {
 	/// <summary>
 	/// Base class of a method compiler.
@@ -277,7 +277,7 @@ namespace Mosa.Runtime.CompilerFramework
 				stage.Setup(this);
 				stage.Run();
 
-				Mosa.Runtime.InternalTrace.InstructionLogger.Run(this, stage);
+				Mosa.Compiler.InternalTrace.InstructionLogger.Run(this, stage);
 			}
 
 			EndCompile();

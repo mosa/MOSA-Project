@@ -7,7 +7,7 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-namespace Mosa.Runtime.CompilerFramework
+namespace Mosa.Compiler.Framework
 {
 	/// <summary>
 	/// Holds the branch target information

@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Mosa.Compiler.Linker;
-using Mosa.Runtime.TypeSystem;
+using Mosa.Compiler.TypeSystem;
 
-namespace Mosa.Runtime.CompilerFramework
+namespace Mosa.Compiler.Framework
 {
 	/// <summary>
 	/// Base class for object file builders.

@@ -12,7 +12,7 @@ using System.Diagnostics;
 using System.IO;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.Pdb;
-using Mosa.Runtime.CompilerFramework;
+using Mosa.Compiler.Framework;
 using Mosa.Tools.Compiler.TypeInitializers;
 
 namespace Mosa.Tools.Compiler.Stages

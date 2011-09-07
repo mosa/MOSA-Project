@@ -7,7 +7,7 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-namespace Mosa.Runtime.Metadata.Signatures
+namespace Mosa.Compiler.Metadata.Signatures
 {
 	/// <summary>
 	/// Represents a value type in a signature.

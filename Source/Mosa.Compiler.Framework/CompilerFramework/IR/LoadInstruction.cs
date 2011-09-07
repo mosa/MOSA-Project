@@ -8,7 +8,7 @@
  */
 
 
-namespace Mosa.Runtime.CompilerFramework.IR
+namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
 	/// Loads a value From a memory pointer.

@@ -8,7 +8,7 @@
  */
 
 using System.Collections.Generic;
-namespace Mosa.Runtime.CompilerFramework
+namespace Mosa.Compiler.Framework
 {
 	/// <summary>
 	/// A dominance provider allows other compilation stages to retrieve dominance relationships.

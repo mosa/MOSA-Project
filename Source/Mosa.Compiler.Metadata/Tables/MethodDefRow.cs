@@ -10,7 +10,7 @@
 //using System.Reflection;
 
 
-namespace Mosa.Runtime.Metadata.Tables
+namespace Mosa.Compiler.Metadata.Tables
 {
 	/// <summary>
 	/// 

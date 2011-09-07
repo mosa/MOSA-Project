@@ -8,12 +8,12 @@
  */
 
 using System.Collections.Generic;
-using Mosa.Runtime.CompilerFramework.IR;
-using Mosa.Runtime.CompilerFramework.Operands;
-using Mosa.Runtime.Metadata;
-using Mosa.Runtime.Metadata.Signatures;
+using Mosa.Compiler.Framework.IR;
+using Mosa.Compiler.Framework.Operands;
+using Mosa.Compiler.Metadata;
+using Mosa.Compiler.Metadata.Signatures;
 
-namespace Mosa.Runtime.CompilerFramework
+namespace Mosa.Compiler.Framework
 {
 	/// <summary>
 	/// This method compiler stage performs constant propagation, e.g. it removes

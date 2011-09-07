@@ -9,7 +9,7 @@
 
 using System.Text;
 
-namespace Mosa.Runtime.Metadata.Signatures
+namespace Mosa.Compiler.Metadata.Signatures
 {
 	/// <summary>
 	/// The signature type of a zero-based, single-dimensional array type.

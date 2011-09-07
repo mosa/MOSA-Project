@@ -8,10 +8,10 @@
  */
 
 using System.Collections.Generic;
-using Mosa.Runtime.CompilerFramework.Operands;
+using Mosa.Compiler.Framework.Operands;
 
 
-namespace Mosa.Runtime.CompilerFramework.IR
+namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
 	/// 

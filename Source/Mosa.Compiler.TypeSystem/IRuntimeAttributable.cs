@@ -9,7 +9,7 @@
 
 using System.Collections.Generic;
 
-namespace Mosa.Runtime.TypeSystem
+namespace Mosa.Compiler.TypeSystem
 {
 	/// <summary>
 	/// 

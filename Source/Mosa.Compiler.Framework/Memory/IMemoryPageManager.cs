@@ -9,7 +9,7 @@
 
 // NOTE: This interface is being replaced with IVirtualMemoryManager...
 
-namespace Mosa.Runtime.Memory
+namespace Mosa.Compiler.Memory
 {
 	/// <summary>
 	/// Interface of a memory page manager.

@@ -8,7 +8,7 @@
  */
 
 
-using Mosa.Runtime.Metadata;
+using Mosa.Compiler.Metadata;
 
 namespace Mosa.Tools.MetadataExplorer
 {

@@ -12,9 +12,9 @@ using System.Diagnostics;
 using System.IO;
 using System.Text;
 
-using Mosa.Runtime.Metadata.Tables;
+using Mosa.Compiler.Metadata.Tables;
 
-namespace Mosa.Runtime.Metadata
+namespace Mosa.Compiler.Metadata
 {
 
 	/// <summary>

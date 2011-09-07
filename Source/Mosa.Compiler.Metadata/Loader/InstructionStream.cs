@@ -10,7 +10,7 @@
 using System;
 using System.IO;
 
-namespace Mosa.Runtime.Metadata.Loader
+namespace Mosa.Compiler.Metadata.Loader
 {
 	/// <summary>
 	/// 

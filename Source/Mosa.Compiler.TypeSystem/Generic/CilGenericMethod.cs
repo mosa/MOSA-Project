@@ -9,10 +9,10 @@
  */
 
 
-using Mosa.Runtime.Metadata.Signatures;
-using Mosa.Runtime.TypeSystem.Cil;
+using Mosa.Compiler.Metadata.Signatures;
+using Mosa.Compiler.TypeSystem.Cil;
 
-namespace Mosa.Runtime.TypeSystem.Generic
+namespace Mosa.Compiler.TypeSystem.Generic
 {
 
 	internal class CilGenericMethod : RuntimeMethod

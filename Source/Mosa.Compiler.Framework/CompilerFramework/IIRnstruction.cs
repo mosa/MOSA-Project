@@ -8,7 +8,7 @@
  */
 
 
-namespace Mosa.Runtime.CompilerFramework
+namespace Mosa.Compiler.Framework
 {
 	/// <summary>
 	/// Interface to a intermediary instruction (IR) instruction

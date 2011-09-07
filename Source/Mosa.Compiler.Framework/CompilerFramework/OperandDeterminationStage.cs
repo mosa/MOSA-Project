@@ -1,10 +1,10 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
-using Mosa.Runtime.CompilerFramework.CIL;
-using Mosa.Runtime.CompilerFramework.Operands;
-using Mosa.Runtime.Metadata;
+using Mosa.Compiler.Framework.CIL;
+using Mosa.Compiler.Framework.Operands;
+using Mosa.Compiler.Metadata;
 
-namespace Mosa.Runtime.CompilerFramework
+namespace Mosa.Compiler.Framework
 {
 	/// <summary>
 	/// 

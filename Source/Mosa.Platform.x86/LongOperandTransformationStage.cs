@@ -12,12 +12,12 @@
 
 using System;
 using System.Diagnostics;
-using Mosa.Runtime.CompilerFramework;
-using Mosa.Runtime.CompilerFramework.Operands;
-using Mosa.Runtime.Metadata;
-using Mosa.Runtime.Metadata.Signatures;
-using CIL = Mosa.Runtime.CompilerFramework.CIL;
-using IR = Mosa.Runtime.CompilerFramework.IR;
+using Mosa.Compiler.Framework;
+using Mosa.Compiler.Framework.Operands;
+using Mosa.Compiler.Metadata;
+using Mosa.Compiler.Metadata.Signatures;
+using CIL = Mosa.Compiler.Framework.CIL;
+using IR = Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Platform.x86
 {

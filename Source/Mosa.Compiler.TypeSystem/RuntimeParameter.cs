@@ -8,9 +8,9 @@
  */
 
 
-using Mosa.Runtime.Metadata;
+using Mosa.Compiler.Metadata;
 
-namespace Mosa.Runtime.TypeSystem
+namespace Mosa.Compiler.TypeSystem
 {
 	/// <summary>
 	/// Holds method parameters for reflection and compilation.

@@ -7,8 +7,8 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-using Mosa.Runtime.Metadata;
-using Mosa.Runtime.Metadata.Signatures;
+using Mosa.Compiler.Metadata;
+using Mosa.Compiler.Metadata.Signatures;
 
 namespace Mosa.Platform.x86
 {

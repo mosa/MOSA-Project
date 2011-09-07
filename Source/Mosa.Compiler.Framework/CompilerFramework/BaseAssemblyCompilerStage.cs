@@ -9,10 +9,10 @@
 
 using System;
 using Mosa.Compiler.Linker;
-using Mosa.Runtime.InternalTrace;
-using Mosa.Runtime.TypeSystem;
+using Mosa.Compiler.InternalTrace;
+using Mosa.Compiler.TypeSystem;
 
-namespace Mosa.Runtime.CompilerFramework
+namespace Mosa.Compiler.Framework
 {
 	/// <summary>
 	/// Basic base class for assembly compiler pipeline stages

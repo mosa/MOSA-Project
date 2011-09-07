@@ -1,6 +1,6 @@
 using System;
 
-namespace Mosa.Runtime.Metadata
+namespace Mosa.Compiler.Metadata
 {
 
 	[Flags]

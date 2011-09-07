@@ -7,7 +7,7 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-namespace Mosa.Runtime.Memory
+namespace Mosa.Compiler.Memory
 {
 	/// <summary>
 	/// Specifies memory protection flags.

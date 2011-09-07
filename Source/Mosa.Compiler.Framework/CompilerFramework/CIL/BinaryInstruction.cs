@@ -8,7 +8,7 @@
  */
 
 
-namespace Mosa.Runtime.CompilerFramework.CIL
+namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
 	/// Intermediate representation of an instruction, which takes two stack arguments.

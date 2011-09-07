@@ -13,9 +13,9 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using Mosa.Compiler.Linker;
-using Mosa.Runtime.TypeSystem;
+using Mosa.Compiler.TypeSystem;
 
-namespace Mosa.Runtime.CompilerFramework
+namespace Mosa.Compiler.Framework
 {
 	/// <summary>
 	/// Performs memory layout of a type for compilation.

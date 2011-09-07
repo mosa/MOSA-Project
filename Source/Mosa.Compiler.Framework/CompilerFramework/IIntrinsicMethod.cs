@@ -8,9 +8,9 @@
  */
 
 using System.Collections.Generic;
-using Mosa.Runtime.TypeSystem;
+using Mosa.Compiler.TypeSystem;
 
-namespace Mosa.Runtime.CompilerFramework
+namespace Mosa.Compiler.Framework
 {
 	/// <summary>
 	/// Interface to an intrinsic instruction

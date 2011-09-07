@@ -10,10 +10,10 @@
 
 
 
-using Mosa.Runtime.CompilerFramework;
-using Mosa.Runtime.InternalTrace;
-using Mosa.Runtime.Options;
-using Mosa.Runtime.TypeSystem;
+using Mosa.Compiler.Framework;
+using Mosa.Compiler.InternalTrace;
+using Mosa.Compiler.Options;
+using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.Tools.Compiler
 {
@@ -23,7 +23,7 @@ namespace Mosa.Tools.Compiler
 	/// </summary>
 	/// <remarks>
 	/// This class implements the ahead of time compiler for MOSA. The AoT uses 
-	/// the compiler services offered in Mosa.Runtime.CompilerFramework in order
+	/// the compiler services offered in Mosa.Compiler.Framework in order
 	/// to share as much code as possible with assembly jit compiler in MOSA. The 
 	/// primary difference between the two compilers is primarily the number and
 	/// quality of compilation stages used. The AoT compiler makes use of assembly lot

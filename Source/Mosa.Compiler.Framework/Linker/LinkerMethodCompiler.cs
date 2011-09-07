@@ -9,10 +9,10 @@
 
 
 using Mosa.Compiler.Linker;
-using Mosa.Runtime.CompilerFramework;
-using Mosa.Runtime.TypeSystem;
+using Mosa.Compiler.Framework;
+using Mosa.Compiler.TypeSystem;
 
-namespace Mosa.Runtime.Linker
+namespace Mosa.Compiler.Linker
 {
 	public sealed class LinkerMethodCompiler : BaseMethodCompiler
 	{

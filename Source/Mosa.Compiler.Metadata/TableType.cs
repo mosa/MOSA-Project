@@ -8,7 +8,7 @@
  */
 
 
-namespace Mosa.Runtime.Metadata
+namespace Mosa.Compiler.Metadata
 {
 
 	/// <summary>

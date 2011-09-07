@@ -8,10 +8,10 @@
  */
 
 
-using Mosa.Runtime.Metadata;
-using Mosa.Runtime.Metadata.Signatures;
+using Mosa.Compiler.Metadata;
+using Mosa.Compiler.Metadata.Signatures;
 
-namespace Mosa.Runtime.TypeSystem.Cil
+namespace Mosa.Compiler.TypeSystem.Cil
 {
 	/// <summary>
 	/// A CIL specialization of <see cref="RuntimeField"/>.

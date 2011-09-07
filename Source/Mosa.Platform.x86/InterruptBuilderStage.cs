@@ -8,12 +8,12 @@
  */
 
 using System;
-using Mosa.Runtime.CompilerFramework;
-using Mosa.Runtime.CompilerFramework.Operands;
-using Mosa.Runtime.Linker;
-using Mosa.Runtime.Metadata;
-using Mosa.Runtime.Metadata.Signatures;
-using Mosa.Runtime.TypeSystem;
+using Mosa.Compiler.Framework;
+using Mosa.Compiler.Framework.Operands;
+using Mosa.Compiler.Linker;
+using Mosa.Compiler.Metadata;
+using Mosa.Compiler.Metadata.Signatures;
+using Mosa.Compiler.TypeSystem;
 
 
 namespace Mosa.Platform.x86

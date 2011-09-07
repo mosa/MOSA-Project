@@ -8,7 +8,7 @@
  */
 
 
-namespace Mosa.Runtime.CompilerFramework.IR
+namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
 	/// Retrieves the address of the variable represented by its operand.

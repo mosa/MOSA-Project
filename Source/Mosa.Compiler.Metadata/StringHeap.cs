@@ -11,7 +11,7 @@ using System;
 using System.Diagnostics;
 using System.Text;
 
-namespace Mosa.Runtime.Metadata
+namespace Mosa.Compiler.Metadata
 {
 
 	/// <summary>
@@ -22,7 +22,7 @@ namespace Mosa.Runtime.Metadata
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="Mosa.Runtime.Metadata.StringHeap"/>.
+		/// Initializes a new instance of <see cref="Mosa.Compiler.Metadata.StringHeap"/>.
 		/// </summary>
 		/// <param name="metadata">The byte array, which holds the provider.</param>
 		/// <param name="offset">The offset into the byte array, where the heap starts.</param>

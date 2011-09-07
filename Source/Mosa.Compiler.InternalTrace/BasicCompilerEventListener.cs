@@ -11,7 +11,7 @@ using System;
 using System.Diagnostics;
 
 
-namespace Mosa.Runtime.InternalTrace
+namespace Mosa.Compiler.InternalTrace
 {
 	public class BasicCompilerEventListener : ICompilerEventListener
 	{

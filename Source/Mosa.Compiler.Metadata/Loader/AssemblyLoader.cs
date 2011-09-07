@@ -11,9 +11,9 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using Mosa.Runtime.Metadata.Loader.PE;
+using Mosa.Compiler.Metadata.Loader.PE;
 
-namespace Mosa.Runtime.Metadata.Loader
+namespace Mosa.Compiler.Metadata.Loader
 {
 	/// <summary>
 	/// Provides a default implementation of the IAssemblyLoader interface.

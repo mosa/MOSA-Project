@@ -7,9 +7,9 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Runtime.CompilerFramework;
+using Mosa.Compiler.Framework;
 
-namespace Mosa.Runtime.Options
+namespace Mosa.Compiler.Options
 {
 	public abstract class BaseCompilerOptions
 	{

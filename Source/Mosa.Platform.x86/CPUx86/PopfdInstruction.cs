@@ -8,7 +8,7 @@
  */
 
 
-using Mosa.Runtime.CompilerFramework;
+using Mosa.Compiler.Framework;
 
 
 namespace Mosa.Platform.x86.CPUx86
@@ -28,7 +28,7 @@ namespace Mosa.Platform.x86.CPUx86
         /// <param name="source"></param>
         /// <param name="third"></param>
         /// <returns></returns>
-        protected override OpCode ComputeOpCode(Runtime.CompilerFramework.Operands.Operand destination, Runtime.CompilerFramework.Operands.Operand source, Runtime.CompilerFramework.Operands.Operand third)
+        protected override OpCode ComputeOpCode(Compiler.Framework.Operands.Operand destination, Compiler.Framework.Operands.Operand source, Compiler.Framework.Operands.Operand third)
         {
             return new OpCode(new byte[] { 0x9D });
         }

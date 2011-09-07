@@ -10,11 +10,11 @@
 using System.Collections.Generic;
 using System.Text;
 
-using Mosa.Runtime.Metadata;
-using Mosa.Runtime.Metadata.Loader;
-using Mosa.Runtime.Metadata.Signatures;
+using Mosa.Compiler.Metadata;
+using Mosa.Compiler.Metadata.Loader;
+using Mosa.Compiler.Metadata.Signatures;
 
-namespace Mosa.Runtime.TypeSystem
+namespace Mosa.Compiler.TypeSystem
 {
 	/// <summary>
 	/// Base class for the runtime representation of methods.

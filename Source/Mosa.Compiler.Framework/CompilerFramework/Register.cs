@@ -7,9 +7,9 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-using Mosa.Runtime.Metadata.Signatures;
+using Mosa.Compiler.Metadata.Signatures;
 
-namespace Mosa.Runtime.CompilerFramework
+namespace Mosa.Compiler.Framework
 {
 	/// <summary>
 	/// Represents a machine specific abstract register.

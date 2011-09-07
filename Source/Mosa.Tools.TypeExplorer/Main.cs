@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using Mosa.Runtime.InternalTrace;
-using Mosa.Runtime.Metadata;
-using Mosa.Runtime.Metadata.Loader;
-using Mosa.Runtime.TypeSystem;
-using Mosa.Runtime.TypeSystem.Generic;
+using Mosa.Compiler.InternalTrace;
+using Mosa.Compiler.Metadata;
+using Mosa.Compiler.Metadata.Loader;
+using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.TypeSystem.Generic;
 
 namespace Mosa.Tools.TypeExplorer
 {

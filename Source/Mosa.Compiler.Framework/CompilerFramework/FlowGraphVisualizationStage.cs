@@ -10,7 +10,7 @@
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Mosa.Runtime.CompilerFramework
+namespace Mosa.Compiler.Framework
 {
 	/// <summary>
 	/// The FlowGraph Visualization Stage emits flowgraphs for graphviz.

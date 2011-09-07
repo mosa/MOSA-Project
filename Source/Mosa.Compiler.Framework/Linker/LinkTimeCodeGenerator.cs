@@ -8,12 +8,12 @@
  */
 
 using System;
-using Mosa.Runtime.CompilerFramework;
-using Mosa.Runtime.Metadata;
-using Mosa.Runtime.Metadata.Signatures;
-using Mosa.Runtime.TypeSystem;
+using Mosa.Compiler.Framework;
+using Mosa.Compiler.Metadata;
+using Mosa.Compiler.Metadata.Signatures;
+using Mosa.Compiler.TypeSystem;
 
-namespace Mosa.Runtime.Linker
+namespace Mosa.Compiler.Linker
 {
 	/// <summary>
 	/// Performs link time code generation for various parts of mosacl.

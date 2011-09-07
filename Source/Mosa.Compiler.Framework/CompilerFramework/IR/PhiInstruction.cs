@@ -9,9 +9,9 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
-using Mosa.Runtime.CompilerFramework.Operands;
+using Mosa.Compiler.Framework.Operands;
 
-namespace Mosa.Runtime.CompilerFramework.IR
+namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
 	/// Used in the single static assignment form of the instruction stream to

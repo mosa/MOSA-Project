@@ -9,10 +9,10 @@
 
 using System;
 using System.Collections.Generic;
-using Mosa.Runtime.CompilerFramework;
-using Mosa.Runtime.CompilerFramework.Operands;
-using Mosa.Runtime.Metadata.Signatures;
-using Mosa.Runtime.TypeSystem;
+using Mosa.Compiler.Framework;
+using Mosa.Compiler.Framework.Operands;
+using Mosa.Compiler.Metadata.Signatures;
+using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.Platform.x86.Intrinsic
 {
@@ -30,7 +30,7 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// <param name="typeSystem">The type system.</param>
 		public void ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
 		{
-			SigType u4 = new SigType(Runtime.Metadata.CilElementType.U4);
+			SigType u4 = new SigType(Compiler.Metadata.CilElementType.U4);
 
 			RegisterOperand ebp = new RegisterOperand(u4, GeneralPurposeRegister.EBP);
 			RegisterOperand esp = new RegisterOperand(u4, GeneralPurposeRegister.ESP);

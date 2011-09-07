@@ -8,9 +8,9 @@
  */
 
 using System;
-using Mosa.Runtime.CompilerFramework;
+using Mosa.Compiler.Framework;
 
-using IR = Mosa.Runtime.CompilerFramework.IR;
+using IR = Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Platform.x86.CPUx86
 {

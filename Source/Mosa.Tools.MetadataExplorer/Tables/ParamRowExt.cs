@@ -9,8 +9,8 @@
 
 using System.Collections;
 
-using Mosa.Runtime.Metadata;
-using Mosa.Runtime.Metadata.Tables;
+using Mosa.Compiler.Metadata;
+using Mosa.Compiler.Metadata.Tables;
 
 namespace Mosa.Tools.MetadataExplorer.Tables
 {

@@ -12,10 +12,10 @@ using System;
 using System.IO;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Linker;
-using Mosa.Runtime.CompilerFramework.Operands;
-using Mosa.Runtime.Metadata;
+using Mosa.Compiler.Framework.Operands;
+using Mosa.Compiler.Metadata;
 
-namespace Mosa.Runtime.CompilerFramework
+namespace Mosa.Compiler.Framework
 {
 	/// <summary>
 	/// Base class for code transformation stages.

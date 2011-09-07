@@ -7,9 +7,9 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-using Mosa.Runtime.Metadata.Signatures;
+using Mosa.Compiler.Metadata.Signatures;
 
-namespace Mosa.Runtime.CompilerFramework.Operands
+namespace Mosa.Compiler.Framework.Operands
 {
 	/// <summary>
 	/// A temporary stack local operand used to capture results from CIL operations.

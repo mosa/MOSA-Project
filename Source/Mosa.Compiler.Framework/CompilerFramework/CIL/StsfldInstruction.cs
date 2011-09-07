@@ -9,9 +9,9 @@
 
 using System.Diagnostics;
 
-using Mosa.Runtime.Metadata;
+using Mosa.Compiler.Metadata;
 
-namespace Mosa.Runtime.CompilerFramework.CIL
+namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
 	/// Intermediate representation of the CIL stsfld operation.

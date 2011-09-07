@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
-using Mosa.Runtime.CompilerFramework.Operands;
+using Mosa.Compiler.Framework.Operands;
 
-namespace Mosa.Runtime.CompilerFramework
+namespace Mosa.Compiler.Framework
 {
 	/// <summary>
 	///		Places phi instructions for the SSA transformation

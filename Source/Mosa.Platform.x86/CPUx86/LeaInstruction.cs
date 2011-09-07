@@ -7,8 +7,8 @@
  *  Simon Wollwage (rootnode) <rootnode@mosa-project.org>
  */
 
-using Mosa.Runtime.CompilerFramework;
-using Mosa.Runtime.CompilerFramework.Operands;
+using Mosa.Compiler.Framework;
+using Mosa.Compiler.Framework.Operands;
 
 namespace Mosa.Platform.x86.CPUx86
 {

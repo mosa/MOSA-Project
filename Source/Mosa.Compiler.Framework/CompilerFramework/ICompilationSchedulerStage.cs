@@ -7,9 +7,9 @@
  *  Michael Fröhlich (aka Michael Ruck or grover) <sharpos@michaelruck.de>
  */
 
-using Mosa.Runtime.TypeSystem;
+using Mosa.Compiler.TypeSystem;
 
-namespace Mosa.Runtime.CompilerFramework
+namespace Mosa.Compiler.Framework
 {
 
 	public interface ICompilationSchedulerStage

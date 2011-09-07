@@ -9,9 +9,9 @@
 
 using System;
 using System.Collections.Generic;
-using Mosa.Runtime.CompilerFramework.Operands;
+using Mosa.Compiler.Framework.Operands;
 
-namespace Mosa.Runtime.CompilerFramework
+namespace Mosa.Compiler.Framework
 {
 	/// <summary>
 	/// Calculates the layout of the stack of the method.

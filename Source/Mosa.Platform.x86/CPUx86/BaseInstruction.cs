@@ -7,15 +7,15 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Runtime.CompilerFramework;
-using Mosa.Runtime.CompilerFramework.Operands;
+using Mosa.Compiler.Framework;
+using Mosa.Compiler.Framework.Operands;
 
 namespace Mosa.Platform.x86.CPUx86
 {
 	/// <summary>
 	/// 
 	/// </summary>
-	public abstract class BaseInstruction : Runtime.CompilerFramework.BaseInstruction, IX86Instruction
+	public abstract class BaseInstruction : Compiler.Framework.BaseInstruction, IX86Instruction
 	{
 
 		#region Construction
@@ -137,7 +137,7 @@ namespace Mosa.Platform.x86.CPUx86
 		/// <returns>True if it is an unsigned byte</returns>
 		private static bool IsUnsignedByte(Operand operand)
 		{
-			return (operand.Type.Type == Runtime.Metadata.CilElementType.U1);
+			return (operand.Type.Type == Compiler.Metadata.CilElementType.U1);
 		}
 
 		/// <summary>
@@ -147,7 +147,7 @@ namespace Mosa.Platform.x86.CPUx86
 		/// <returns>True if it is a signed byte</returns>
 		private static bool IsSignedByte(Operand operand)
 		{
-			return (operand.Type.Type == Runtime.Metadata.CilElementType.I1);
+			return (operand.Type.Type == Compiler.Metadata.CilElementType.I1);
 		}
 
 		/// <summary>
@@ -157,7 +157,7 @@ namespace Mosa.Platform.x86.CPUx86
 		/// <returns>True if it is an unsigned short</returns>
 		private static bool IsUnsignedShort(Operand operand)
 		{
-			return (operand.Type.Type == Runtime.Metadata.CilElementType.U2);
+			return (operand.Type.Type == Compiler.Metadata.CilElementType.U2);
 		}
 
 		/// <summary>
@@ -167,7 +167,7 @@ namespace Mosa.Platform.x86.CPUx86
 		/// <returns>True if it is a signed short</returns>
 		private static bool IsSignedShort(Operand operand)
 		{
-			return (operand.Type.Type == Runtime.Metadata.CilElementType.I2);
+			return (operand.Type.Type == Compiler.Metadata.CilElementType.I2);
 		}
 
 		/// <summary>
@@ -177,7 +177,7 @@ namespace Mosa.Platform.x86.CPUx86
 		/// <returns>True if it is an unsigned integer</returns>
 		private static bool IsUnsignedInt(Operand operand)
 		{
-			return (operand.Type.Type == Runtime.Metadata.CilElementType.U4);
+			return (operand.Type.Type == Compiler.Metadata.CilElementType.U4);
 		}
 
 		/// <summary>
@@ -187,7 +187,7 @@ namespace Mosa.Platform.x86.CPUx86
 		/// <returns>True if it is a signed integer</returns>
 		private static bool IsSignedInt(Operand operand)
 		{
-			return (operand.Type.Type == Runtime.Metadata.CilElementType.I4);
+			return (operand.Type.Type == Compiler.Metadata.CilElementType.I4);
 		}
 
 		/// <summary>
@@ -197,7 +197,7 @@ namespace Mosa.Platform.x86.CPUx86
 		/// <returns>True if it is an unsigned long</returns>
 		private static bool IsUnsignedLong(Operand operand)
 		{
-			return (operand.Type.Type == Runtime.Metadata.CilElementType.U8);
+			return (operand.Type.Type == Compiler.Metadata.CilElementType.U8);
 		}
 
 		/// <summary>
@@ -207,7 +207,7 @@ namespace Mosa.Platform.x86.CPUx86
 		/// <returns>True if it is a signed long</returns>
 		private static bool IsSignedLong(Operand operand)
 		{
-			return (operand.Type.Type == Runtime.Metadata.CilElementType.I8);
+			return (operand.Type.Type == Compiler.Metadata.CilElementType.I8);
 		}
 
 		/// <summary>
@@ -237,7 +237,7 @@ namespace Mosa.Platform.x86.CPUx86
 		/// <returns>True if it is a char</returns>
 		protected static bool IsChar(Operand operand)
 		{
-			return operand.Type.Type == Runtime.Metadata.CilElementType.Char;
+			return operand.Type.Type == Compiler.Metadata.CilElementType.Char;
 		}
 
 		/// <summary>

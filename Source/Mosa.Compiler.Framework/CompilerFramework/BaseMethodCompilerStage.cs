@@ -10,13 +10,13 @@
 
 using System;
 using System.Collections.Generic;
-using Mosa.Runtime.InternalTrace;
-using Mosa.Runtime.Metadata.Loader;
-using Mosa.Runtime.Metadata.Signatures;
-using Mosa.Runtime.TypeSystem;
+using Mosa.Compiler.InternalTrace;
+using Mosa.Compiler.Metadata.Loader;
+using Mosa.Compiler.Metadata.Signatures;
+using Mosa.Compiler.TypeSystem;
 
 
-namespace Mosa.Runtime.CompilerFramework
+namespace Mosa.Compiler.Framework
 {
 	/// <summary>
 	/// Basic base class for method compiler pipeline stages

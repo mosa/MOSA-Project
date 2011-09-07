@@ -8,7 +8,7 @@
  */
 
 
-using Mosa.Runtime.Options;
+using Mosa.Compiler.Options;
 
 using NDesk.Options;
 

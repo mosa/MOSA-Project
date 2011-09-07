@@ -9,7 +9,7 @@
 
 using System.IO;
 
-namespace Mosa.Runtime.CompilerFramework
+namespace Mosa.Compiler.Framework
 {
 	/// <summary>
 	/// 

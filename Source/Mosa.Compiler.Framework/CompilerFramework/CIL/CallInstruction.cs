@@ -9,7 +9,7 @@
 
 
 
-namespace Mosa.Runtime.CompilerFramework.CIL
+namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
 	/// Intermediate representation for various IL call operations.

@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 
-namespace Mosa.Runtime.CompilerFramework
+namespace Mosa.Compiler.Framework
 {
     class LoggerDebugWriter : ILoggerWriter
     {

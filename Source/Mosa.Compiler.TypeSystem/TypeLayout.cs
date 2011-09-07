@@ -10,11 +10,11 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using Mosa.Runtime.Metadata;
-using Mosa.Runtime.Metadata.Signatures;
-using Mosa.Runtime.Metadata.Tables;
+using Mosa.Compiler.Metadata;
+using Mosa.Compiler.Metadata.Signatures;
+using Mosa.Compiler.Metadata.Tables;
 
-namespace Mosa.Runtime.TypeSystem
+namespace Mosa.Compiler.TypeSystem
 {
 	/// <summary>
 	/// Performs memory layout of a type for compilation.

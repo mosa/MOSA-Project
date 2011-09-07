@@ -7,7 +7,7 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-namespace Mosa.Runtime.Metadata.Loader
+namespace Mosa.Compiler.Metadata.Loader
 {
 	/// <summary>
 	/// Specifies the type of the module.

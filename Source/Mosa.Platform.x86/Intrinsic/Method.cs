@@ -10,7 +10,7 @@
 using System;
 using System.Collections.Generic;
 
-using Mosa.Runtime.CompilerFramework;
+using Mosa.Compiler.Framework;
 
 namespace Mosa.Platform.x86.Intrinsic
 {

@@ -11,9 +11,9 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-using Mosa.Runtime.Metadata;
+using Mosa.Compiler.Metadata;
 
-namespace Mosa.Runtime.TypeSystem
+namespace Mosa.Compiler.TypeSystem
 {
 	/// <summary>
 	/// Internal runtime representation of a type.

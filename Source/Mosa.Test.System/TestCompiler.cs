@@ -14,8 +14,8 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using MbUnit.Framework;
-using Mosa.Runtime.Metadata.Loader;
-using Mosa.Runtime.TypeSystem;
+using Mosa.Compiler.Metadata.Loader;
+using Mosa.Compiler.TypeSystem;
 using Mosa.Test.CodeDomCompiler;
 
 namespace Mosa.Test.System

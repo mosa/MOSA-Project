@@ -15,11 +15,11 @@ using System.IO;
 using System.Text;
 
 using Mosa.Compiler.Linker;
-using Mosa.Runtime.CompilerFramework;
-using Mosa.Runtime.Metadata;
-using Mosa.Runtime.TypeSystem;
+using Mosa.Compiler.Framework;
+using Mosa.Compiler.Metadata;
+using Mosa.Compiler.TypeSystem;
 
-namespace Mosa.Runtime.Linker
+namespace Mosa.Compiler.Linker
 {
 	/// <summary>
 	/// This compilation stage links all external labels together, which were previously registered.

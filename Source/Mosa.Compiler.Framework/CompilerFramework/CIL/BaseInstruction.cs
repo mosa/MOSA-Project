@@ -7,14 +7,14 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Runtime.CompilerFramework.Operands;
+using Mosa.Compiler.Framework.Operands;
 
-namespace Mosa.Runtime.CompilerFramework.CIL
+namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
 	/// 
 	/// </summary>
-	public abstract class BaseInstruction : CompilerFramework.BaseInstruction, ICILInstruction
+	public abstract class BaseInstruction : Framework.BaseInstruction, ICILInstruction
 	{
 		#region Data members
 

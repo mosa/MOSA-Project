@@ -8,9 +8,9 @@
  *  Simon Wollwage (rootnode) <simon_wollwage@yahoo.co.jp>
  */
 
-using Mosa.Runtime.CompilerFramework.Operands;
+using Mosa.Compiler.Framework.Operands;
 
-namespace Mosa.Runtime.CompilerFramework
+namespace Mosa.Compiler.Framework
 {
 	/// <summary>
 	/// Performs IR constant folding of arithmetic instructions to optimize

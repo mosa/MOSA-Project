@@ -9,11 +9,11 @@
 
 using System.Collections.Generic;
 
-using Mosa.Runtime.Metadata;
-using Mosa.Runtime.Metadata.Loader;
-using Mosa.Runtime.TypeSystem.Generic;
+using Mosa.Compiler.Metadata;
+using Mosa.Compiler.Metadata.Loader;
+using Mosa.Compiler.TypeSystem.Generic;
 
-namespace Mosa.Runtime.TypeSystem
+namespace Mosa.Compiler.TypeSystem
 {
 	public interface ITypeModule
 	{

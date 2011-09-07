@@ -1,5 +1,5 @@
 
-namespace Mosa.Runtime.Metadata
+namespace Mosa.Compiler.Metadata
 {
 
 	public enum AssemblyHashAlgorithm : uint

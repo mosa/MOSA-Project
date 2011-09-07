@@ -10,7 +10,7 @@
 using System;
 using System.Runtime.Serialization;
 
-namespace Mosa.Runtime.CompilerFramework
+namespace Mosa.Compiler.Framework
 {
 	/// <summary>
 	/// Base class for all compiler and linker exceptions.

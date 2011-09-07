@@ -11,13 +11,13 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using Mosa.Compiler.Common;
-using Mosa.Runtime.Metadata;
-using Mosa.Runtime.Metadata.Signatures;
-using Mosa.Runtime.Metadata.Tables;
-using Mosa.Runtime.TypeSystem;
-using Mosa.Runtime.TypeSystem.Generic;
+using Mosa.Compiler.Metadata;
+using Mosa.Compiler.Metadata.Signatures;
+using Mosa.Compiler.Metadata.Tables;
+using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.TypeSystem.Generic;
 
-namespace Mosa.Runtime.CompilerFramework.CIL
+namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
 	/// Represents the IL decoding compilation stage.

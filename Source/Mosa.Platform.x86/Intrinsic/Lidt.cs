@@ -8,9 +8,9 @@
  */
 
 using System.Collections.Generic;
-using Mosa.Runtime.CompilerFramework;
-using Mosa.Runtime.CompilerFramework.Operands;
-using Mosa.Runtime.TypeSystem;
+using Mosa.Compiler.Framework;
+using Mosa.Compiler.Framework.Operands;
+using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.Platform.x86.Intrinsic
 {
@@ -29,8 +29,8 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// <param name="typeSystem">The type system.</param>
 		public void ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
 		{
-			MemoryOperand operand = new MemoryOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.Ptr), GeneralPurposeRegister.EAX, new System.IntPtr(0));
-			context.SetInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.Ptr), GeneralPurposeRegister.EAX), context.Operand1);
+			MemoryOperand operand = new MemoryOperand(new Mosa.Compiler.Metadata.Signatures.SigType(Mosa.Compiler.Metadata.CilElementType.Ptr), GeneralPurposeRegister.EAX, new System.IntPtr(0));
+			context.SetInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(new Mosa.Compiler.Metadata.Signatures.SigType(Mosa.Compiler.Metadata.CilElementType.Ptr), GeneralPurposeRegister.EAX), context.Operand1);
 			context.AppendInstruction(CPUx86.Instruction.LidtInstruction, null, operand);
 		}
 

@@ -8,12 +8,12 @@
  */
 
 
-namespace Mosa.Runtime.CompilerFramework.IR
+namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
 	/// Abstract base class for all instructions in the intermediate representation.
 	/// </summary>
-	public abstract class BaseInstruction : Mosa.Runtime.CompilerFramework.BaseInstruction, IIRInstruction
+	public abstract class BaseInstruction : Mosa.Compiler.Framework.BaseInstruction, IIRInstruction
 	{
 		#region Construction
 

@@ -9,7 +9,7 @@
 
 using System;
 
-namespace Mosa.Runtime.CompilerFramework.IR
+namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
 	/// Used to represent labelled literal data in the instruction stream.

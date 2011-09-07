@@ -1,7 +1,7 @@
-﻿using Mosa.Runtime.CompilerFramework.Operands;
-using Mosa.Runtime.TypeSystem;
+﻿using Mosa.Compiler.Framework.Operands;
+using Mosa.Compiler.TypeSystem;
 
-namespace Mosa.Runtime.CompilerFramework
+namespace Mosa.Compiler.Framework
 {
 	/// <summary>
 	/// 

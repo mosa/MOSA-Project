@@ -8,11 +8,11 @@
  */
 
 using System.Collections.Generic;
-using Mosa.Runtime.CompilerFramework.Operands;
-using Mosa.Runtime.Metadata.Signatures;
-using Mosa.Runtime.TypeSystem;
+using Mosa.Compiler.Framework.Operands;
+using Mosa.Compiler.Metadata.Signatures;
+using Mosa.Compiler.TypeSystem;
 
-namespace Mosa.Runtime.CompilerFramework.Intrinsics
+namespace Mosa.Compiler.Framework.Intrinsics
 {
 
 	public sealed class InternalAllocateString : IIntrinsicMethod

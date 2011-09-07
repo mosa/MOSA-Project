@@ -1,7 +1,7 @@
 
-using Mosa.Runtime.Metadata.Signatures;
+using Mosa.Compiler.Metadata.Signatures;
 
-namespace Mosa.Runtime.TypeSystem.Generic
+namespace Mosa.Compiler.TypeSystem.Generic
 {
 	public class CilGenericField : RuntimeField
 	{

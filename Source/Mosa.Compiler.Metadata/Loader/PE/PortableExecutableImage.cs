@@ -12,9 +12,9 @@ using System;
 using System.IO;
 
 using Mosa.Compiler.FileFormat.PE;
-using Mosa.Runtime.Metadata.Tables;
+using Mosa.Compiler.Metadata.Tables;
 
-namespace Mosa.Runtime.Metadata.Loader.PE
+namespace Mosa.Compiler.Metadata.Loader.PE
 {
 	/// <summary>
 	/// 

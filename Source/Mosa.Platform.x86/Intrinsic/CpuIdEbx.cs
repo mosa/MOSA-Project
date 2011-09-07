@@ -8,9 +8,9 @@
  */
 
 using System.Collections.Generic;
-using Mosa.Runtime.CompilerFramework;
-using Mosa.Runtime.CompilerFramework.Operands;
-using Mosa.Runtime.TypeSystem;
+using Mosa.Compiler.Framework;
+using Mosa.Compiler.Framework.Operands;
+using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.Platform.x86.Intrinsic
 {
@@ -31,9 +31,9 @@ namespace Mosa.Platform.x86.Intrinsic
 		{
 			Operand result = context.Result;
 			Operand operand = context.Operand1;
-			RegisterOperand eax = new RegisterOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.I4), GeneralPurposeRegister.EAX);
-			RegisterOperand ecx = new RegisterOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.I4), GeneralPurposeRegister.ECX);
-			RegisterOperand reg = new RegisterOperand(new Mosa.Runtime.Metadata.Signatures.SigType(Mosa.Runtime.Metadata.CilElementType.I4), GeneralPurposeRegister.EBX);
+			RegisterOperand eax = new RegisterOperand(new Mosa.Compiler.Metadata.Signatures.SigType(Mosa.Compiler.Metadata.CilElementType.I4), GeneralPurposeRegister.EAX);
+			RegisterOperand ecx = new RegisterOperand(new Mosa.Compiler.Metadata.Signatures.SigType(Mosa.Compiler.Metadata.CilElementType.I4), GeneralPurposeRegister.ECX);
+			RegisterOperand reg = new RegisterOperand(new Mosa.Compiler.Metadata.Signatures.SigType(Mosa.Compiler.Metadata.CilElementType.I4), GeneralPurposeRegister.EBX);
 			context.SetInstruction(CPUx86.Instruction.MovInstruction, eax, operand);
 			context.AppendInstruction(CPUx86.Instruction.XorInstruction, ecx, ecx);
 			context.AppendInstruction(CPUx86.Instruction.CpuIdEbxInstruction);

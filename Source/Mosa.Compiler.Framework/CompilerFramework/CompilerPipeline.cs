@@ -11,7 +11,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 
-namespace Mosa.Runtime.CompilerFramework
+namespace Mosa.Compiler.Framework
 {
 	/// <summary>
 	/// Container class used to define the pipeline of a compiler.

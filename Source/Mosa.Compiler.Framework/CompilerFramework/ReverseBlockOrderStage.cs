@@ -7,7 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-namespace Mosa.Runtime.CompilerFramework
+namespace Mosa.Compiler.Framework
 {
 	/// <summary>
 	/// This class orders blocks in reverse order. This stage is used for testing.

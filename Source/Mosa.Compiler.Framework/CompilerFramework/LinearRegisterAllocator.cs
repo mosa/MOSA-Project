@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using Mosa.Runtime.CompilerFramework.Operands;
+using Mosa.Compiler.Framework.Operands;
 
-namespace Mosa.Runtime.CompilerFramework
+namespace Mosa.Compiler.Framework
 {
 	/// <summary>
 	/// A minimalistic register assignment allocator.

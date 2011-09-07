@@ -1,7 +1,7 @@
-﻿using Mosa.Runtime.CompilerFramework.IR;
-using Mosa.Runtime.CompilerFramework.Operands;
+﻿using Mosa.Compiler.Framework.IR;
+using Mosa.Compiler.Framework.Operands;
 
-namespace Mosa.Runtime.CompilerFramework
+namespace Mosa.Compiler.Framework
 {
 	public sealed class ConstantFoldingStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
 	{

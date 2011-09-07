@@ -7,10 +7,10 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-using Mosa.Runtime.Metadata.Signatures;
-using Mosa.Runtime.TypeSystem;
+using Mosa.Compiler.Metadata.Signatures;
+using Mosa.Compiler.TypeSystem;
 
-namespace Mosa.Runtime.CompilerFramework.Operands
+namespace Mosa.Compiler.Framework.Operands
 {
 	/// <summary>
 	/// An operand, which represents a parameter of a method.

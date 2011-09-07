@@ -9,9 +9,9 @@
 
 using System.Diagnostics;
 
-using Mosa.Runtime.Metadata;
+using Mosa.Compiler.Metadata;
 
-namespace Mosa.Runtime.TypeSystem.Cil
+namespace Mosa.Compiler.TypeSystem.Cil
 {
 	/// <summary>
 	/// Runtime representation of a CIL type.

@@ -10,10 +10,10 @@
 using System;
 using System.Collections.Generic;
 
-using Mosa.Runtime.Metadata;
-using Mosa.Runtime.TypeSystem;
+using Mosa.Compiler.Metadata;
+using Mosa.Compiler.TypeSystem;
 
-namespace Mosa.Runtime.Linker
+namespace Mosa.Compiler.Linker
 {
 	/// <summary>
 	/// Represents a compiler generated type.

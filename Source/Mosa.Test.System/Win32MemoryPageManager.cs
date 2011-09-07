@@ -10,7 +10,7 @@
 using System;
 using System.Runtime.InteropServices;
 
-using Mosa.Runtime.Memory;
+using Mosa.Compiler.Memory;
 
 namespace Mosa.Test.System
 {

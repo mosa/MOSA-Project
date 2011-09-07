@@ -9,10 +9,10 @@
 
 using System.Diagnostics;
 
-using Mosa.Runtime.Metadata;
-using Mosa.Runtime.TypeSystem.Generic;
+using Mosa.Compiler.Metadata;
+using Mosa.Compiler.TypeSystem.Generic;
 
-namespace Mosa.Runtime.CompilerFramework.CIL
+namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
 	/// Intermediate representation for the CIL stfld opcode.

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Linker;
-using Mosa.Runtime.TypeSystem;
+using Mosa.Compiler.TypeSystem;
 
-namespace Mosa.Runtime.CompilerFramework
+namespace Mosa.Compiler.Framework
 {
 	/// <summary>
 	/// Builds the method table used for exception handling. The table has the following format:

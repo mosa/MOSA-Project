@@ -14,8 +14,7 @@ using System.IO;
 using System.Runtime.InteropServices;
 
 using Mosa.Compiler.Linker;
-using Mosa.Runtime.CompilerFramework;
-using Mosa.Runtime.Linker;
+using Mosa.Compiler.Framework;
 
 namespace Mosa.Test.System
 {

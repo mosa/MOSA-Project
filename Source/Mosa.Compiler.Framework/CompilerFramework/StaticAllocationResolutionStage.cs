@@ -11,12 +11,12 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Mosa.Compiler.Linker;
-using Mosa.Runtime.CompilerFramework.CIL;
-using Mosa.Runtime.CompilerFramework.Operands;
-using Mosa.Runtime.Metadata.Signatures;
-using Mosa.Runtime.TypeSystem;
+using Mosa.Compiler.Framework.CIL;
+using Mosa.Compiler.Framework.Operands;
+using Mosa.Compiler.Metadata.Signatures;
+using Mosa.Compiler.TypeSystem;
 
-namespace Mosa.Runtime.CompilerFramework
+namespace Mosa.Compiler.Framework
 {
 	public class StaticAllocationResolutionStage : BaseMethodCompilerStage, IMethodCompilerStage
 	{

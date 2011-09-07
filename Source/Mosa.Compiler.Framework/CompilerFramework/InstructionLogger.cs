@@ -9,10 +9,10 @@
 
 using System.Collections.Generic;
 using System.Text;
-using Mosa.Runtime.CompilerFramework;
-using Mosa.Runtime.TypeSystem;
+using Mosa.Compiler.Framework;
+using Mosa.Compiler.TypeSystem;
 
-namespace Mosa.Runtime.InternalTrace
+namespace Mosa.Compiler.InternalTrace
 {
 	/// <summary>
 	/// Logs all instructions.

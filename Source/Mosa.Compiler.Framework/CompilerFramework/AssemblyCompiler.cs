@@ -8,16 +8,16 @@
  */
 
 using System;
-using Mosa.Runtime.InternalTrace;
-using Mosa.Runtime.Options;
-using Mosa.Runtime.TypeSystem;
+using Mosa.Compiler.InternalTrace;
+using Mosa.Compiler.Options;
+using Mosa.Compiler.TypeSystem;
 
-namespace Mosa.Runtime.CompilerFramework
+namespace Mosa.Compiler.Framework
 {
 
 	/// <summary>
 	/// Base class for just-in-time and ahead-of-time compilers, which use
-	/// the Mosa.Runtime.CompilerFramework framework.
+	/// the Mosa.Compiler.Framework framework.
 	/// </summary>
 	public abstract class AssemblyCompiler : IDisposable
 	{

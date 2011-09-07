@@ -11,12 +11,12 @@ using System;
 using System.IO;
 using System.Runtime.InteropServices;
 using Mosa.Compiler.Linker;
-using Mosa.Runtime.CompilerFramework;
-using Mosa.Runtime.CompilerFramework.CIL;
-using Mosa.Runtime.CompilerFramework.IR;
-using Mosa.Runtime.InternalTrace;
-using Mosa.Runtime.Metadata;
-using Mosa.Runtime.TypeSystem;
+using Mosa.Compiler.Framework;
+using Mosa.Compiler.Framework.CIL;
+using Mosa.Compiler.Framework.IR;
+using Mosa.Compiler.InternalTrace;
+using Mosa.Compiler.Metadata;
+using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.Test.System
 {

@@ -10,7 +10,7 @@
 
 using System;
 
-namespace Mosa.Runtime.Metadata.Signatures
+namespace Mosa.Compiler.Metadata.Signatures
 {
 	/// <summary>
 	/// Base class of a type signature.

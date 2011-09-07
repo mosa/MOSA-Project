@@ -11,9 +11,9 @@ using System;
 using System.Collections.Generic;
 
 
-using Mosa.Runtime.Metadata.Tables;
+using Mosa.Compiler.Metadata.Tables;
 
-namespace Mosa.Runtime.Metadata
+namespace Mosa.Compiler.Metadata
 {
 	/// <summary>
 	/// Metadata root interface.

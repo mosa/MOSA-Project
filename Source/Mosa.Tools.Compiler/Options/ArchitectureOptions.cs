@@ -9,8 +9,8 @@
 
 using System;
 
-using Mosa.Runtime.CompilerFramework;
-using Mosa.Runtime.Options;
+using Mosa.Compiler.Framework;
+using Mosa.Compiler.Options;
 
 using NDesk.Options;
 

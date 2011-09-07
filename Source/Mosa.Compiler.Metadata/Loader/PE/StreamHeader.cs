@@ -10,7 +10,7 @@
 using System;
 using System.Text;
 
-namespace Mosa.Runtime.Metadata.Loader.PE
+namespace Mosa.Compiler.Metadata.Loader.PE
 {
 	/// <summary>
 	/// A stream header gibes the names, and the position and length of

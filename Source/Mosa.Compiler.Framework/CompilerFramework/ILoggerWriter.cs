@@ -1,5 +1,5 @@
 ﻿
-namespace Mosa.Runtime.CompilerFramework
+namespace Mosa.Compiler.Framework
 {
     public interface ILoggerWriter
     {

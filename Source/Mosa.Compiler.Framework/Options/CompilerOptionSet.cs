@@ -9,9 +9,9 @@
 
 using System.Collections.Generic;
 
-using Mosa.Runtime.CompilerFramework;
+using Mosa.Compiler.Framework;
 
-namespace Mosa.Runtime.Options
+namespace Mosa.Compiler.Options
 {
 
 	public class CompilerOptionSet

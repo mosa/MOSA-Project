@@ -10,7 +10,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Mosa.Runtime.Metadata.Signatures
+namespace Mosa.Compiler.Metadata.Signatures
 {
 	/// <summary>
 	/// Specifies various custom modifier types.

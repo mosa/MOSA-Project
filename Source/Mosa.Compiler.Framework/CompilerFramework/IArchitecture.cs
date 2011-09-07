@@ -8,10 +8,10 @@
  */
 
 using System;
-using Mosa.Runtime.CompilerFramework.Operands;
-using Mosa.Runtime.Metadata.Signatures;
+using Mosa.Compiler.Framework.Operands;
+using Mosa.Compiler.Metadata.Signatures;
 
-namespace Mosa.Runtime.CompilerFramework
+namespace Mosa.Compiler.Framework
 {
 
 	/// <summary>

@@ -10,7 +10,7 @@
 using System;
 using System.Text;
 
-namespace Mosa.Runtime.Metadata.Signatures
+namespace Mosa.Compiler.Metadata.Signatures
 {
 	/// <summary>
 	/// Pointer signature type.

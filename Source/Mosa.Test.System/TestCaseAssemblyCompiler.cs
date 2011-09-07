@@ -8,10 +8,10 @@
  */
 
 using System.Collections.Generic;
-using Mosa.Runtime.CompilerFramework;
-using Mosa.Runtime.InternalTrace;
-using Mosa.Runtime.Options;
-using Mosa.Runtime.TypeSystem;
+using Mosa.Compiler.Framework;
+using Mosa.Compiler.InternalTrace;
+using Mosa.Compiler.Options;
+using Mosa.Compiler.TypeSystem;
 using x86 = Mosa.Platform.x86;
 
 namespace Mosa.Test.System

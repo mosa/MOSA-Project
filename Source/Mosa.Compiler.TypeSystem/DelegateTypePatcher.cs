@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
-using Mosa.Runtime.Metadata;
-using Mosa.Runtime.TypeSystem.Cil;
+using Mosa.Compiler.Metadata;
+using Mosa.Compiler.TypeSystem.Cil;
 
-namespace Mosa.Runtime.TypeSystem
+namespace Mosa.Compiler.TypeSystem
 {
 	/// <summary>
 	/// 

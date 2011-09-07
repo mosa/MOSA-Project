@@ -9,7 +9,7 @@
 
 using System.Diagnostics;
 
-namespace Mosa.Runtime.CompilerFramework
+namespace Mosa.Compiler.Framework
 {
 	/// <summary>
 	/// Class maintenances an array of sorted instruction

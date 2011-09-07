@@ -9,7 +9,7 @@
 
 using System;
 
-namespace Mosa.Runtime.Metadata.Signatures
+namespace Mosa.Compiler.Metadata.Signatures
 {
 	/// <summary>
 	/// Represents a class type in a signature.

@@ -8,11 +8,11 @@
  */
 
 
-using Mosa.Runtime.CompilerFramework;
-using Mosa.Runtime.CompilerFramework.Operands;
-using Mosa.Runtime.Linker;
-using Mosa.Runtime.TypeSystem;
-using IR = Mosa.Runtime.CompilerFramework.IR;
+using Mosa.Compiler.Framework;
+using Mosa.Compiler.Framework.Operands;
+using Mosa.Compiler.Linker;
+using Mosa.Compiler.TypeSystem;
+using IR = Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Tools.Compiler.TypeInitializers
 {

@@ -9,11 +9,11 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Runtime.CompilerFramework;
-using Mosa.Runtime.CompilerFramework.Operands;
-using Mosa.Runtime.Metadata;
-using CIL = Mosa.Runtime.CompilerFramework.CIL;
-using IR = Mosa.Runtime.CompilerFramework.IR;
+using Mosa.Compiler.Framework;
+using Mosa.Compiler.Framework.Operands;
+using Mosa.Compiler.Metadata;
+using CIL = Mosa.Compiler.Framework.CIL;
+using IR = Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Platform.x86
 {

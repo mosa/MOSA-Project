@@ -9,9 +9,9 @@
 
 using System;
 
-using Mosa.Runtime.TypeSystem;
+using Mosa.Compiler.TypeSystem;
 
-namespace Mosa.Runtime.InternalTrace
+namespace Mosa.Compiler.InternalTrace
 {
 	public enum MatchType { Exact, Contains, StartsWith, Any };
 

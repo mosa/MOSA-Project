@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
-using Mosa.Runtime.CompilerFramework.Operands;
-using Mosa.Runtime.Metadata.Signatures;
+using Mosa.Compiler.Framework.Operands;
+using Mosa.Compiler.Metadata.Signatures;
 
 // FIXME PG - Probably very buggy after modifications!
 
-namespace Mosa.Runtime.CompilerFramework
+namespace Mosa.Compiler.Framework
 {
 	/// <summary>
 	/// A simple register allocator.
@@ -27,7 +27,7 @@ namespace Mosa.Runtime.CompilerFramework
 		/// <summary>
 		/// Controls tracing of the <see cref="SimpleRegisterAllocator"/>.
 		/// </summary>
-		public static readonly TraceSwitch TRACING = new TraceSwitch(@"Mosa.Runtime.CompilerFramework.SimpleRegisterAllocator", @"Controls traces of the simple register allocator.", "Info");
+		public static readonly TraceSwitch TRACING = new TraceSwitch(@"Mosa.Compiler.Framework.SimpleRegisterAllocator", @"Controls traces of the simple register allocator.", "Info");
 
 		#endregion // Tracing Switch
 

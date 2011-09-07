@@ -117,7 +117,7 @@ namespace System
 		////[MethodImplAttribute(MethodImplOptions.InternalCall)]
 		////public unsafe extern String(char* value, int startIndex, int length);
 
-		[DllImportAttribute(@"Mosa.Runtime.CompilerFramework.Intrinsics.InternalAllocateString, Mosa.Runtime")]
+		[DllImportAttribute(@"Mosa.Compiler.Framework.Intrinsics.InternalAllocateString, Mosa.Compiler.Framework")]
 		internal static extern string InternalAllocateString(int length);
 
 		private static unsafe string CreateString(char c, int count)

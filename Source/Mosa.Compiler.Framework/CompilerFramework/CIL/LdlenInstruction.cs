@@ -9,10 +9,10 @@
 
 using System;
 
-using Mosa.Runtime.Metadata;
-using Mosa.Runtime.Metadata.Signatures;
+using Mosa.Compiler.Metadata;
+using Mosa.Compiler.Metadata.Signatures;
 
-namespace Mosa.Runtime.CompilerFramework.CIL
+namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
 	/// 
@@ -43,7 +43,7 @@ namespace Mosa.Runtime.CompilerFramework.CIL
 		{
 			base.Validate(ctx, compiler);
 
-			Mosa.Runtime.Metadata.Signatures.SZArraySigType arrayType = ctx.Operand1.Type as Mosa.Runtime.Metadata.Signatures.SZArraySigType;
+			Mosa.Compiler.Metadata.Signatures.SZArraySigType arrayType = ctx.Operand1.Type as Mosa.Compiler.Metadata.Signatures.SZArraySigType;
 			if (arrayType == null)
 				throw new InvalidProgramException(@"Operand to ldlen is not a vector.");
 

@@ -12,14 +12,14 @@
 //using System.Collections.Generic;
 //using System.Diagnostics;
 
-//using Mosa.Runtime.CompilerFramework;
+//using Mosa.Compiler.CompilerFramework;
 //using Mosa.Compiler.Linker;
-//using Mosa.Runtime.Metadata;
-//using Mosa.Runtime.Metadata.Signatures;
+//using Mosa.Compiler.Metadata;
+//using Mosa.Compiler.Metadata.Signatures;
 
-//using IR = Mosa.Runtime.CompilerFramework.IR;
+//using IR = Mosa.Compiler.CompilerFramework.IR;
 
-//namespace Mosa.Runtime.CompilerFramework
+//namespace Mosa.Compiler.CompilerFramework
 //{
 //    /// <summary>
 //    /// BasicBlockReduction attempts to eliminate useless control flow created as a side effect of other compiler optimizations.
@@ -230,7 +230,7 @@
 //                    targets[0] = block.NextBlocks[0].Label;
 
 //                    // Create JUMP instruction
-//                    LegacyInstruction instruction = arch.CreateInstruction(typeof(Mosa.Runtime.CompilerFramework.CIL.BranchInstruction), Mosa.Runtime.CompilerFramework.CIL.OpCode.Br, targets);
+//                    LegacyInstruction instruction = arch.CreateInstruction(typeof(Mosa.Compiler.Framework.CIL.BranchInstruction), Mosa.Compiler.Framework.CIL.OpCode.Br, targets);
 
 //                    // Assign block index to instruction
 //                    instruction.Block = block.Index;
@@ -275,7 +275,7 @@
 //                        targets[0] = block.NextBlocks[0].Label;
 
 //                        // Create JUMP instruction
-//                        LegacyInstruction instruction = arch.CreateInstruction(typeof(Mosa.Runtime.CompilerFramework.CIL.BranchInstruction), Mosa.Runtime.CompilerFramework.CIL.OpCode.Br, targets);
+//                        LegacyInstruction instruction = arch.CreateInstruction(typeof(Mosa.Compiler.Framework.CIL.BranchInstruction), Mosa.Compiler.Framework.CIL.OpCode.Br, targets);
 
 //                        // Assign block index to instruction
 //                        instruction.Block = block.Index;

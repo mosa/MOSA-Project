@@ -8,7 +8,7 @@
  */
 
 
-namespace Mosa.Runtime.Metadata.Signatures
+namespace Mosa.Compiler.Metadata.Signatures
 {
 	/// <summary>
 	/// Represents a generic parameter type of a generic member definition.

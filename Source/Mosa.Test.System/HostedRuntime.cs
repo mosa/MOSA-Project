@@ -9,7 +9,7 @@
 
 using System;
 
-using Mosa.Runtime.Memory;
+using Mosa.Compiler.Memory;
 
 namespace Mosa.Test.System
 {

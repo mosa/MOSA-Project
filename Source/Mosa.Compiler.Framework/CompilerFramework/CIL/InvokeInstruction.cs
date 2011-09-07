@@ -10,12 +10,12 @@
 using System;
 using System.Diagnostics;
 
-using Mosa.Runtime.Metadata;
-using Mosa.Runtime.Metadata.Signatures;
-using Mosa.Runtime.TypeSystem;
-using Mosa.Runtime.TypeSystem.Generic;
+using Mosa.Compiler.Metadata;
+using Mosa.Compiler.Metadata.Signatures;
+using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.TypeSystem.Generic;
 
-namespace Mosa.Runtime.CompilerFramework.CIL
+namespace Mosa.Compiler.Framework.CIL
 {
 	/* FIXME:
 	 * - Schedule compilation of invocation target

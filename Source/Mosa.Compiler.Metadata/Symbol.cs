@@ -7,7 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-namespace Mosa.Runtime.Metadata
+namespace Mosa.Compiler.Metadata
 {
 	/// <summary>
 	/// Hold the symbol name for the CIL metadata

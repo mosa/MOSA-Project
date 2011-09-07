@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Windows.Forms;
 
-using Mosa.Runtime.Metadata;
-using Mosa.Runtime.Metadata.Loader;
+using Mosa.Compiler.Metadata;
+using Mosa.Compiler.Metadata.Loader;
 using Mosa.Tools.MetadataExplorer.Tables;
 
 namespace Mosa.Tools.MetadataExplorer

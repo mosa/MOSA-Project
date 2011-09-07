@@ -10,7 +10,7 @@
 using System.Diagnostics;
 
 
-namespace Mosa.Runtime.InternalTrace
+namespace Mosa.Compiler.InternalTrace
 {
 	public class DebugCompilerEventListener : ICompilerEventListener
 	{

@@ -12,9 +12,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
 using System.Text;
-using Mosa.Runtime.Metadata.Tables;
+using Mosa.Compiler.Metadata.Tables;
 
-namespace Mosa.Runtime.Metadata.Loader.PE
+namespace Mosa.Compiler.Metadata.Loader.PE
 {
 
 	/// <summary>

@@ -10,7 +10,7 @@
 using System;
 using System.IO;
 using Mosa.Compiler.Linker;
-using Mosa.Runtime.CompilerFramework;
+using Mosa.Compiler.Framework;
 
 namespace Mosa.Tools.Compiler.Linker
 {

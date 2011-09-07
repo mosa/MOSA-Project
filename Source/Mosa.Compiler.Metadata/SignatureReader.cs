@@ -11,7 +11,7 @@
 using System;
 using System.Diagnostics;
 
-namespace Mosa.Runtime.Metadata
+namespace Mosa.Compiler.Metadata
 {
 	public sealed class SignatureReader
 	{

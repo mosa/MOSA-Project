@@ -2,11 +2,11 @@ using System;
 using System.Diagnostics;
 using System.Text;
 
-using Mosa.Runtime.Metadata;
-using Mosa.Runtime.Metadata.Signatures;
-using Mosa.Runtime.TypeSystem.Cil;
+using Mosa.Compiler.Metadata;
+using Mosa.Compiler.Metadata.Signatures;
+using Mosa.Compiler.TypeSystem.Cil;
 
-namespace Mosa.Runtime.TypeSystem.Generic
+namespace Mosa.Compiler.TypeSystem.Generic
 {
 
 	public class CilGenericType : RuntimeType

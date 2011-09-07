@@ -1,5 +1,5 @@
 ﻿
-namespace Mosa.Runtime.CompilerFramework.Operands
+namespace Mosa.Compiler.Framework.Operands
 {
 	public sealed class SsaOperand : Operand
 	{

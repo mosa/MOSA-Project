@@ -9,7 +9,7 @@
 
 
 
-namespace Mosa.Runtime.InternalTrace
+namespace Mosa.Compiler.InternalTrace
 {
 	public interface IInternalTrace
 	{

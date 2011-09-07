@@ -9,10 +9,10 @@
 
 using System.Diagnostics;
 
-using Mosa.Runtime.CompilerFramework.Operands;
-using Mosa.Runtime.TypeSystem.Generic;
+using Mosa.Compiler.Framework.Operands;
+using Mosa.Compiler.TypeSystem.Generic;
 
-namespace Mosa.Runtime.CompilerFramework.CIL
+namespace Mosa.Compiler.Framework.CIL
 {
 	/// <summary>
 	/// 

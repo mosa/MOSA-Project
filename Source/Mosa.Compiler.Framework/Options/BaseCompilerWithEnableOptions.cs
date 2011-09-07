@@ -8,7 +8,7 @@
  */
 
 
-namespace Mosa.Runtime.Options
+namespace Mosa.Compiler.Options
 {
 
 	public abstract class BaseCompilerWithEnableOptions : BaseCompilerOptions

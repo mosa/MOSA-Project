@@ -10,7 +10,7 @@
 
 // TODO: Find a better namespace for this and correct this type
 
-namespace Mosa.Runtime.TypeSystem
+namespace Mosa.Compiler.TypeSystem
 {
 	public class AssemblyInfo
 	{

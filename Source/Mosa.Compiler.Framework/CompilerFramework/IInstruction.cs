@@ -7,7 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-namespace Mosa.Runtime.CompilerFramework
+namespace Mosa.Compiler.Framework
 {
 	/// <summary>
 	/// Interface to an instruction

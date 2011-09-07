@@ -8,9 +8,9 @@
  */
 
 
-using Mosa.Runtime.TypeSystem;
+using Mosa.Compiler.TypeSystem;
 
-namespace Mosa.Runtime.InternalTrace
+namespace Mosa.Compiler.InternalTrace
 {
 	public interface IInstructionTraceFilter
 	{

@@ -9,7 +9,7 @@
 
 using System.Collections;
 using System.Collections.Generic;
-using Mosa.Runtime.Metadata;
+using Mosa.Compiler.Metadata;
 
 namespace Mosa.Tools.MetadataExplorer.Tables
 {
