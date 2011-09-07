@@ -4,19 +4,19 @@
     <ProjectType>Local</ProjectType>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{540BEAC7-A2C3-4C46-9F4A-E6E1DF4EF6FC}</ProjectGuid>
+    <ProjectGuid>{5F30A68E-05BF-40EA-B576-5EBCDE520449}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
-    <AssemblyName>Mosa.Runtime.InternalTrace</AssemblyName>
+    <AssemblyName>Mosa.Compiler.TypeSystem</AssemblyName>
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
     <DelaySign>false</DelaySign>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <OutputType>Library</OutputType>
-    <RootNamespace>Mosa.Runtime.InternalTrace</RootNamespace>
+    <RootNamespace>Mosa.Compiler.TypeSystem</RootNamespace>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
@@ -48,7 +48,7 @@
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
     <DefineConstants>TRACE</DefineConstants>
-    <DocumentationFile>..\..\bin\Mosa.Runtime.InternalTrace.xml</DocumentationFile>
+    <DocumentationFile>..\..\bin\Mosa.Compiler.TypeSystem.xml</DocumentationFile>
     <FileAlignment>4096</FileAlignment>
     <Optimize>true</Optimize>
     <OutputPath>..\..\bin\</OutputPath>
@@ -62,22 +62,48 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="BasicCompilerEventListener.cs" />
-    <Compile Include="BasicInternalTrace.cs" />
-    <Compile Include="CompilerEvent.cs" />
-    <Compile Include="ConfigurableInstructionTraceFilter.cs" />
-    <Compile Include="DebugCompilerEventListener.cs" />
-    <Compile Include="DebugInstructionTraceListener.cs" />
-    <Compile Include="ICompilerEventListener.cs" />
-    <Compile Include="IInstructionTraceFilter.cs" />
-    <Compile Include="IInstructionTraceListener.cs" />
-    <Compile Include="IInternalTrace.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Mosa.Runtime.TypeSystem\Mosa.Runtime.TypeSystem.csproj">
-      <Project>{5F30A68E-05BF-40EA-B576-5EBCDE520449}</Project>
-      <Name>Mosa.Runtime.TypeSystem</Name>
+    <ProjectReference Include="..\Mosa.Compiler.Metadata\Mosa.Compiler.Metadata.csproj">
+      <Project>{7033B213-2055-4C6A-B008-D9856267F5D7}</Project>
+      <Name>Mosa.Compiler.Metadata</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Compile Include="AssemblyInfo.cs" />
+    <Compile Include="Cil\CilRuntimeField.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Cil\CilRuntimeMethod.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Cil\CilRuntimeType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="DelegateTypePatcher.cs" />
+    <Compile Include="GenericTypePatcher.cs" />
+    <Compile Include="IGenericTypePatcher.cs" />
+    <Compile Include="InternalTypeModule.cs" />
+    <Compile Include="GenericParameter.cs" />
+    <Compile Include="ITypeLayout.cs" />
+    <Compile Include="TypeLayout.cs" />
+    <Compile Include="TypeSystem.cs" />
+    <Compile Include="CustomAttributeParser.cs" />
+    <Compile Include="Generic\CilGenericField.cs" />
+    <Compile Include="Generic\CilGenericMethod.cs" />
+    <Compile Include="Generic\CilGenericType.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="IRuntimeAttributable.cs" />
+    <Compile Include="ITypeModule.cs" />
+    <Compile Include="TypeModule.cs" />
+    <Compile Include="RuntimeAttribute.cs" />
+    <Compile Include="RuntimeField.cs" />
+    <Compile Include="RuntimeMember.cs" />
+    <Compile Include="RuntimeMethod.cs" />
+    <Compile Include="RuntimeObject.cs" />
+    <Compile Include="RuntimeParameter.cs" />
+    <Compile Include="RuntimeType.cs" />
+    <Compile Include="ITypeSystem.cs" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

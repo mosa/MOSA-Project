@@ -8,8 +8,8 @@
     <ProjectGuid>{7033B213-2055-4C6A-B008-D9856267F5D7}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Mosa.Runtime.Metadata</RootNamespace>
-    <AssemblyName>Mosa.Runtime.Metadata</AssemblyName>
+    <RootNamespace>Mosa.Compiler.Metadata</RootNamespace>
+    <AssemblyName>Mosa.Compiler.Metadata</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
