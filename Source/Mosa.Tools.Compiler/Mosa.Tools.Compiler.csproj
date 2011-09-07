@@ -121,6 +121,10 @@
       <Project>{F970F8CB-8FF1-4244-9A31-D00C6D7AABE5}</Project>
       <Name>Mosa.Compiler.Pdb</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mosa.Compiler.TypeSystem\Mosa.Compiler.TypeSystem.csproj">
+      <Project>{5F30A68E-05BF-40EA-B576-5EBCDE520449}</Project>
+      <Name>Mosa.Compiler.TypeSystem</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mosa.Platform.x86\Mosa.Platform.x86.csproj">
       <Project>{56CA38E7-0883-4461-A10E-386D0C58DBF9}</Project>
       <Name>Mosa.Platform.x86</Name>
@@ -132,10 +136,6 @@
     <ProjectReference Include="..\Mosa.Compiler.Metadata\Mosa.Compiler.Metadata.csproj">
       <Project>{7033B213-2055-4C6A-B008-D9856267F5D7}</Project>
       <Name>Mosa.Compiler.Metadata</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mosa.Compiler.TypeSystem\Mosa.Compiler.TypeSystem.csproj">
-      <Project>{5F30A68E-05BF-40EA-B576-5EBCDE520449}</Project>
-      <Name>Mosa.Runtime.TypeSystem</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj">
       <Project>{75A12A8A-8C8F-4D1E-801B-689D8F781BF4}</Project>

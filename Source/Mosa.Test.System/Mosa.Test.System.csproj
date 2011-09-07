@@ -93,13 +93,13 @@
       <Project>{7033B213-2055-4C6A-B008-D9856267F5D7}</Project>
       <Name>Mosa.Compiler.Metadata</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mosa.Compiler.TypeSystem\Mosa.Compiler.TypeSystem.csproj">
+      <Project>{5F30A68E-05BF-40EA-B576-5EBCDE520449}</Project>
+      <Name>Mosa.Compiler.TypeSystem</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mosa.Platform.x86\Mosa.Platform.x86.csproj">
       <Project>{56CA38E7-0883-4461-A10E-386D0C58DBF9}</Project>
       <Name>Mosa.Platform.x86</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Mosa.Compiler.TypeSystem\Mosa.Compiler.TypeSystem.csproj">
-      <Project>{5F30A68E-05BF-40EA-B576-5EBCDE520449}</Project>
-      <Name>Mosa.Runtime.TypeSystem</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mosa.Test.CodeDomCompiler\Mosa.Test.CodeDomCompiler.csproj">
       <Project>{7B8FBA4E-D6AC-4DAD-A607-43BA112F8EC1}</Project>
