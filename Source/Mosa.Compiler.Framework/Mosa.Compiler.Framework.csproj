@@ -62,212 +62,212 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="CompilerFramework\AssemblyMemberCompilationSchedulerStage.cs" />
-    <Compile Include="CompilerFramework\BaseCodeEmitter.cs" />
-    <Compile Include="CompilerFramework\BaseInstruction.cs" />
-    <Compile Include="CompilerFramework\BasicBlockBuilderStage.cs" />
-    <Compile Include="CompilerFramework\CIL\AddInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\ArglistInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\ArithmeticInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\ArithmeticOverflowInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\BinaryBranchInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\BinaryComparisonInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\BinaryInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\BinaryLogicInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\BoxingInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\BoxInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\BranchInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\CalliInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\CallInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\CallvirtInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\CastclassInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\CILLeakGuardStage.cs" />
-    <Compile Include="CompilerFramework\CIL\TailPrefixInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\VolatilePrefixInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\ReadOnlyPrefixInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\DecodingStage.cs" />
-    <Compile Include="CompilerFramework\CIL\BreakInstruction.cs" />
-    <Compile Include="CompilerFramework\BaseAssemblyCompilerStage.cs" />
-    <Compile Include="CompilerFramework\ConstantFoldingStage.cs" />
-    <Compile Include="CompilerFramework\EnterSSA.cs" />
-    <Compile Include="CompilerFramework\ExceptionLayoutStage.cs" />
-    <Compile Include="CompilerFramework\ExceptionClauseHeader.cs" />
-    <Compile Include="CompilerFramework\InstructionLogger.cs" />
-    <Compile Include="CompilerFramework\LeaveSSA.cs" />
-    <Compile Include="CompilerFramework\LoggerDebugWriter.cs" />
-    <Compile Include="CompilerFramework\ILoggerWriter.cs" />
-    <Compile Include="CompilerFramework\MethodTableBuilderStage.cs" />
-    <Compile Include="CompilerFramework\OperandDeterminationStage.cs" />
-    <Compile Include="CompilerFramework\Operands\SsaOperand.cs" />
-    <Compile Include="CompilerFramework\Operands\VirtualRegisterOperand.cs" />
-    <Compile Include="CompilerFramework\PhiPlacementStage.cs" />
-    <Compile Include="CompilerFramework\StaticAllocationResolutionStage.cs" />
-    <Compile Include="CompilerFramework\TypeLayoutStage.cs" />
-    <Compile Include="CompilerFramework\IR\ThrowInstruction.cs" />
-    <Compile Include="CompilerFramework\GenericsResolverStage.cs" />
-    <Compile Include="CompilerFramework\ICompilationSchedulerStage.cs" />
-    <Compile Include="CompilerFramework\Intrinsics\InternalAllocateString.cs" />
-    <Compile Include="CompilerFramework\IR\AddFInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\AddSInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\AddUInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\BreakInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\DivFInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\DivSInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\DivUInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\MulFInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\MulSInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\MulUInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\RemFInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\RemSInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\RemUInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\SubFInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\SubSInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\SubUInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\SwitchInstruction.cs" />
-    <Compile Include="CompilerFramework\MethodCompilerSchedulerStage.cs" />
-    <Compile Include="CompilerFramework\Operands\SymbolOperand.cs" />
-    <Compile Include="CompilerFramework\PlatformStubStage.cs" />
-    <Compile Include="CompilerFramework\IIntrinsicMethod.cs" />
-    <Compile Include="CompilerFramework\IBlockOrderStage.cs" />
-    <Compile Include="CompilerFramework\IPipelineStage.cs" />
-    <Compile Include="CompilerFramework\IR\CILTransformationStage.cs" />
-    <Compile Include="CompilerFramework\CIL\ConstrainedPrefixInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\ConversionInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\Instruction.cs" />
-    <Compile Include="CompilerFramework\CIL\MethodFlags.cs" />
-    <Compile Include="CompilerFramework\CIL\MethodHeader.cs" />
-    <Compile Include="CompilerFramework\CIL\StoreInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\ICILVisitor.cs" />
-    <Compile Include="CompilerFramework\CIL\Prefix.cs" />
-    <Compile Include="CompilerFramework\CIL\CpblkInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\CpobjInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\DivInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\DupInstruction.cs" />
-    <Compile Include="CompilerFramework\ExceptionClause.cs" />
-    <Compile Include="CompilerFramework\CIL\EndFilterInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\EndFinallyInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\IBranchInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\InitblkInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\InitObjInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\InvokeInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\IsInstInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\JumpInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\LdargaInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\LdargInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\LdcInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\LdelemaInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\LdelemInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\LdfldaInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\LdfldInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\LdftnInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\LdlenInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\LdlocaInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\LdlocInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\LdobjInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\LdsfldaInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\LdsfldInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\LdstrInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\LdtokenInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\LdvirtftnInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\LeaveInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\LoadInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\LocalallocInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\MkrefanyInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\MulInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\NaryInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\NegInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\NewarrInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\NewobjInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\NoPrefixInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\NotInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\OpCode.cs" />
-    <Compile Include="CompilerFramework\CIL\PopInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\PrefixInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\RefanytypeInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\RefanyvalInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\RemInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\RethrowInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\ReturnInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\ShiftInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\SizeofInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\StargInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\StelemInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\StfldInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\StlocInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\StobjInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\StsfldInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\SubInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\SwitchInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\ThrowInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\UnalignedPrefixInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\UnaryArithmeticInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\UnaryBranchInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\UnaryInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\UnboxAnyInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\UnboxInstruction.cs" />
-    <Compile Include="CompilerFramework\Branch.cs" />
-    <Compile Include="CompilerFramework\Context.cs" />
-    <Compile Include="CompilerFramework\BaseMethodCompilerStage.cs" />
-    <Compile Include="CompilerFramework\ICodeEmitter.cs" />
-    <Compile Include="CompilerFramework\IR\AddressOfInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\ArithmeticShiftRightInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\BranchInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\CallInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\ConditionCode.cs" />
-    <Compile Include="CompilerFramework\IR\NopInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\IConditionalInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\LiteralData.cs" />
-    <Compile Include="CompilerFramework\IR\Instruction.cs" />
-    <Compile Include="CompilerFramework\IR\EpilogueInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\FloatingPointCompareInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\FloatingPointToIntegerConversionInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\IIRInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\IIRVisitor.cs" />
-    <Compile Include="CompilerFramework\IR\IntegerCompareInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\IntegerToFloatingPointConversionInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\BaseInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\JmpInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\LiteralInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\LoadInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\LogicalAndInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\LogicalNotInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\LogicalOrInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\LogicalXorInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\MoveInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\OneOperandInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\PhiData.cs" />
-    <Compile Include="CompilerFramework\IR\PhiInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\PopInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\PrologueInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\PushInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\ReturnInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\ShiftLeftInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\ShiftRightInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\SignExtendedMoveInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\StoreInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\ThreeOperandInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\TwoOperandInstruction.cs" />
-    <Compile Include="CompilerFramework\IR\ZeroExtendedMoveInstruction.cs" />
-    <Compile Include="CompilerFramework\IVisitor.cs" />
-    <Compile Include="CompilerFramework\IBranch.cs" />
-    <Compile Include="CompilerFramework\IIRnstruction.cs" />
-    <Compile Include="CompilerFramework\IPlatformInstruction.cs" />
-    <Compile Include="CompilerFramework\CIL\ICILInstruction.cs" />
-    <Compile Include="CompilerFramework\IInstruction.cs" />
-    <Compile Include="CompilerFramework\FlowGraphVisualizationStage.cs" />
-    <Compile Include="CompilerFramework\CIL\NopInstruction.cs" />
-    <Compile Include="CompilerFramework\InstructionSet.cs" />
-    <Compile Include="CompilerFramework\InstructionData.cs" />
-    <Compile Include="CompilerFramework\CIL\BaseInstruction.cs" />
-    <Compile Include="CompilerFramework\Operands\StringOperand.cs" />
-    <Compile Include="CompilerFramework\ReverseBlockOrderStage.cs" />
-    <Compile Include="CompilerFramework\RuntimeMethodData.cs" />
-    <Compile Include="CompilerFramework\StackRegisterAllocator.cs" />
-    <Compile Include="CompilerFramework\StrengthReductionStage.cs" />
-    <Compile Include="CompilerFramework\SimpleTraceBlockOrderStage.cs" />
-    <Compile Include="CompilerFramework\LoopAwareBlockOrderStage.cs" />
-    <Compile Include="CompilerFramework\LocalCSE.cs" />
-    <Compile Include="CompilerFramework\IMethodCompiler.cs" />
+    <Compile Include="AssemblyMemberCompilationSchedulerStage.cs" />
+    <Compile Include="BaseCodeEmitter.cs" />
+    <Compile Include="BaseInstruction.cs" />
+    <Compile Include="BasicBlockBuilderStage.cs" />
+    <Compile Include="CIL\AddInstruction.cs" />
+    <Compile Include="CIL\ArglistInstruction.cs" />
+    <Compile Include="CIL\ArithmeticInstruction.cs" />
+    <Compile Include="CIL\ArithmeticOverflowInstruction.cs" />
+    <Compile Include="CIL\BinaryBranchInstruction.cs" />
+    <Compile Include="CIL\BinaryComparisonInstruction.cs" />
+    <Compile Include="CIL\BinaryInstruction.cs" />
+    <Compile Include="CIL\BinaryLogicInstruction.cs" />
+    <Compile Include="CIL\BoxingInstruction.cs" />
+    <Compile Include="CIL\BoxInstruction.cs" />
+    <Compile Include="CIL\BranchInstruction.cs" />
+    <Compile Include="CIL\CalliInstruction.cs" />
+    <Compile Include="CIL\CallInstruction.cs" />
+    <Compile Include="CIL\CallvirtInstruction.cs" />
+    <Compile Include="CIL\CastclassInstruction.cs" />
+    <Compile Include="CIL\CILLeakGuardStage.cs" />
+    <Compile Include="CIL\TailPrefixInstruction.cs" />
+    <Compile Include="CIL\VolatilePrefixInstruction.cs" />
+    <Compile Include="CIL\ReadOnlyPrefixInstruction.cs" />
+    <Compile Include="CIL\DecodingStage.cs" />
+    <Compile Include="CIL\BreakInstruction.cs" />
+    <Compile Include="BaseAssemblyCompilerStage.cs" />
+    <Compile Include="ConstantFoldingStage.cs" />
+    <Compile Include="EnterSSA.cs" />
+    <Compile Include="ExceptionLayoutStage.cs" />
+    <Compile Include="ExceptionClauseHeader.cs" />
+    <Compile Include="InstructionLogger.cs" />
+    <Compile Include="LeaveSSA.cs" />
+    <Compile Include="LoggerDebugWriter.cs" />
+    <Compile Include="ILoggerWriter.cs" />
+    <Compile Include="MethodTableBuilderStage.cs" />
+    <Compile Include="OperandDeterminationStage.cs" />
+    <Compile Include="Operands\SsaOperand.cs" />
+    <Compile Include="Operands\VirtualRegisterOperand.cs" />
+    <Compile Include="PhiPlacementStage.cs" />
+    <Compile Include="StaticAllocationResolutionStage.cs" />
+    <Compile Include="TypeLayoutStage.cs" />
+    <Compile Include="IR\ThrowInstruction.cs" />
+    <Compile Include="GenericsResolverStage.cs" />
+    <Compile Include="ICompilationSchedulerStage.cs" />
+    <Compile Include="Intrinsics\InternalAllocateString.cs" />
+    <Compile Include="IR\AddFInstruction.cs" />
+    <Compile Include="IR\AddSInstruction.cs" />
+    <Compile Include="IR\AddUInstruction.cs" />
+    <Compile Include="IR\BreakInstruction.cs" />
+    <Compile Include="IR\DivFInstruction.cs" />
+    <Compile Include="IR\DivSInstruction.cs" />
+    <Compile Include="IR\DivUInstruction.cs" />
+    <Compile Include="IR\MulFInstruction.cs" />
+    <Compile Include="IR\MulSInstruction.cs" />
+    <Compile Include="IR\MulUInstruction.cs" />
+    <Compile Include="IR\RemFInstruction.cs" />
+    <Compile Include="IR\RemSInstruction.cs" />
+    <Compile Include="IR\RemUInstruction.cs" />
+    <Compile Include="IR\SubFInstruction.cs" />
+    <Compile Include="IR\SubSInstruction.cs" />
+    <Compile Include="IR\SubUInstruction.cs" />
+    <Compile Include="IR\SwitchInstruction.cs" />
+    <Compile Include="MethodCompilerSchedulerStage.cs" />
+    <Compile Include="Operands\SymbolOperand.cs" />
+    <Compile Include="PlatformStubStage.cs" />
+    <Compile Include="IIntrinsicMethod.cs" />
+    <Compile Include="IBlockOrderStage.cs" />
+    <Compile Include="IPipelineStage.cs" />
+    <Compile Include="IR\CILTransformationStage.cs" />
+    <Compile Include="CIL\ConstrainedPrefixInstruction.cs" />
+    <Compile Include="CIL\ConversionInstruction.cs" />
+    <Compile Include="CIL\Instruction.cs" />
+    <Compile Include="CIL\MethodFlags.cs" />
+    <Compile Include="CIL\MethodHeader.cs" />
+    <Compile Include="CIL\StoreInstruction.cs" />
+    <Compile Include="CIL\ICILVisitor.cs" />
+    <Compile Include="CIL\Prefix.cs" />
+    <Compile Include="CIL\CpblkInstruction.cs" />
+    <Compile Include="CIL\CpobjInstruction.cs" />
+    <Compile Include="CIL\DivInstruction.cs" />
+    <Compile Include="CIL\DupInstruction.cs" />
+    <Compile Include="ExceptionClause.cs" />
+    <Compile Include="CIL\EndFilterInstruction.cs" />
+    <Compile Include="CIL\EndFinallyInstruction.cs" />
+    <Compile Include="CIL\IBranchInstruction.cs" />
+    <Compile Include="CIL\InitblkInstruction.cs" />
+    <Compile Include="CIL\InitObjInstruction.cs" />
+    <Compile Include="CIL\InvokeInstruction.cs" />
+    <Compile Include="CIL\IsInstInstruction.cs" />
+    <Compile Include="CIL\JumpInstruction.cs" />
+    <Compile Include="CIL\LdargaInstruction.cs" />
+    <Compile Include="CIL\LdargInstruction.cs" />
+    <Compile Include="CIL\LdcInstruction.cs" />
+    <Compile Include="CIL\LdelemaInstruction.cs" />
+    <Compile Include="CIL\LdelemInstruction.cs" />
+    <Compile Include="CIL\LdfldaInstruction.cs" />
+    <Compile Include="CIL\LdfldInstruction.cs" />
+    <Compile Include="CIL\LdftnInstruction.cs" />
+    <Compile Include="CIL\LdlenInstruction.cs" />
+    <Compile Include="CIL\LdlocaInstruction.cs" />
+    <Compile Include="CIL\LdlocInstruction.cs" />
+    <Compile Include="CIL\LdobjInstruction.cs" />
+    <Compile Include="CIL\LdsfldaInstruction.cs" />
+    <Compile Include="CIL\LdsfldInstruction.cs" />
+    <Compile Include="CIL\LdstrInstruction.cs" />
+    <Compile Include="CIL\LdtokenInstruction.cs" />
+    <Compile Include="CIL\LdvirtftnInstruction.cs" />
+    <Compile Include="CIL\LeaveInstruction.cs" />
+    <Compile Include="CIL\LoadInstruction.cs" />
+    <Compile Include="CIL\LocalallocInstruction.cs" />
+    <Compile Include="CIL\MkrefanyInstruction.cs" />
+    <Compile Include="CIL\MulInstruction.cs" />
+    <Compile Include="CIL\NaryInstruction.cs" />
+    <Compile Include="CIL\NegInstruction.cs" />
+    <Compile Include="CIL\NewarrInstruction.cs" />
+    <Compile Include="CIL\NewobjInstruction.cs" />
+    <Compile Include="CIL\NoPrefixInstruction.cs" />
+    <Compile Include="CIL\NotInstruction.cs" />
+    <Compile Include="CIL\OpCode.cs" />
+    <Compile Include="CIL\PopInstruction.cs" />
+    <Compile Include="CIL\PrefixInstruction.cs" />
+    <Compile Include="CIL\RefanytypeInstruction.cs" />
+    <Compile Include="CIL\RefanyvalInstruction.cs" />
+    <Compile Include="CIL\RemInstruction.cs" />
+    <Compile Include="CIL\RethrowInstruction.cs" />
+    <Compile Include="CIL\ReturnInstruction.cs" />
+    <Compile Include="CIL\ShiftInstruction.cs" />
+    <Compile Include="CIL\SizeofInstruction.cs" />
+    <Compile Include="CIL\StargInstruction.cs" />
+    <Compile Include="CIL\StelemInstruction.cs" />
+    <Compile Include="CIL\StfldInstruction.cs" />
+    <Compile Include="CIL\StlocInstruction.cs" />
+    <Compile Include="CIL\StobjInstruction.cs" />
+    <Compile Include="CIL\StsfldInstruction.cs" />
+    <Compile Include="CIL\SubInstruction.cs" />
+    <Compile Include="CIL\SwitchInstruction.cs" />
+    <Compile Include="CIL\ThrowInstruction.cs" />
+    <Compile Include="CIL\UnalignedPrefixInstruction.cs" />
+    <Compile Include="CIL\UnaryArithmeticInstruction.cs" />
+    <Compile Include="CIL\UnaryBranchInstruction.cs" />
+    <Compile Include="CIL\UnaryInstruction.cs" />
+    <Compile Include="CIL\UnboxAnyInstruction.cs" />
+    <Compile Include="CIL\UnboxInstruction.cs" />
+    <Compile Include="Branch.cs" />
+    <Compile Include="Context.cs" />
+    <Compile Include="BaseMethodCompilerStage.cs" />
+    <Compile Include="ICodeEmitter.cs" />
+    <Compile Include="IR\AddressOfInstruction.cs" />
+    <Compile Include="IR\ArithmeticShiftRightInstruction.cs" />
+    <Compile Include="IR\BranchInstruction.cs" />
+    <Compile Include="IR\CallInstruction.cs" />
+    <Compile Include="IR\ConditionCode.cs" />
+    <Compile Include="IR\NopInstruction.cs" />
+    <Compile Include="IR\IConditionalInstruction.cs" />
+    <Compile Include="IR\LiteralData.cs" />
+    <Compile Include="IR\Instruction.cs" />
+    <Compile Include="IR\EpilogueInstruction.cs" />
+    <Compile Include="IR\FloatingPointCompareInstruction.cs" />
+    <Compile Include="IR\FloatingPointToIntegerConversionInstruction.cs" />
+    <Compile Include="IR\IIRInstruction.cs" />
+    <Compile Include="IR\IIRVisitor.cs" />
+    <Compile Include="IR\IntegerCompareInstruction.cs" />
+    <Compile Include="IR\IntegerToFloatingPointConversionInstruction.cs" />
+    <Compile Include="IR\BaseInstruction.cs" />
+    <Compile Include="IR\JmpInstruction.cs" />
+    <Compile Include="IR\LiteralInstruction.cs" />
+    <Compile Include="IR\LoadInstruction.cs" />
+    <Compile Include="IR\LogicalAndInstruction.cs" />
+    <Compile Include="IR\LogicalNotInstruction.cs" />
+    <Compile Include="IR\LogicalOrInstruction.cs" />
+    <Compile Include="IR\LogicalXorInstruction.cs" />
+    <Compile Include="IR\MoveInstruction.cs" />
+    <Compile Include="IR\OneOperandInstruction.cs" />
+    <Compile Include="IR\PhiData.cs" />
+    <Compile Include="IR\PhiInstruction.cs" />
+    <Compile Include="IR\PopInstruction.cs" />
+    <Compile Include="IR\PrologueInstruction.cs" />
+    <Compile Include="IR\PushInstruction.cs" />
+    <Compile Include="IR\ReturnInstruction.cs" />
+    <Compile Include="IR\ShiftLeftInstruction.cs" />
+    <Compile Include="IR\ShiftRightInstruction.cs" />
+    <Compile Include="IR\SignExtendedMoveInstruction.cs" />
+    <Compile Include="IR\StoreInstruction.cs" />
+    <Compile Include="IR\ThreeOperandInstruction.cs" />
+    <Compile Include="IR\TwoOperandInstruction.cs" />
+    <Compile Include="IR\ZeroExtendedMoveInstruction.cs" />
+    <Compile Include="IVisitor.cs" />
+    <Compile Include="IBranch.cs" />
+    <Compile Include="IIRnstruction.cs" />
+    <Compile Include="IPlatformInstruction.cs" />
+    <Compile Include="CIL\ICILInstruction.cs" />
+    <Compile Include="IInstruction.cs" />
+    <Compile Include="FlowGraphVisualizationStage.cs" />
+    <Compile Include="CIL\NopInstruction.cs" />
+    <Compile Include="InstructionSet.cs" />
+    <Compile Include="InstructionData.cs" />
+    <Compile Include="CIL\BaseInstruction.cs" />
+    <Compile Include="Operands\StringOperand.cs" />
+    <Compile Include="ReverseBlockOrderStage.cs" />
+    <Compile Include="RuntimeMethodData.cs" />
+    <Compile Include="StackRegisterAllocator.cs" />
+    <Compile Include="StrengthReductionStage.cs" />
+    <Compile Include="SimpleTraceBlockOrderStage.cs" />
+    <Compile Include="LoopAwareBlockOrderStage.cs" />
+    <Compile Include="LocalCSE.cs" />
+    <Compile Include="IMethodCompiler.cs" />
     <Compile Include="Linker\BaseAssemblyLinkerStage.cs" />
     <Compile Include="Linker\LinkerGeneratedMethod.cs" />
     <Compile Include="Linker\LinkerGeneratedType.cs" />
@@ -275,142 +275,142 @@
     <Compile Include="Linker\LinkTimeCodeGenerator.cs" />
     <Compile Include="Memory\IMemoryPageManager.cs" />
     <Compile Include="Memory\PageAccessFlags.cs" />
-    <Compile Include="CompilerFramework\ArchitectureSpecificAttribute.cs">
+    <Compile Include="ArchitectureSpecificAttribute.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\AssemblyCompiler.cs">
+    <Compile Include="AssemblyCompiler.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\BasicArchitecture.cs">
+    <Compile Include="BasicArchitecture.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\BasicBlock.cs">
+    <Compile Include="BasicBlock.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\BlockReductionStage.cs">
+    <Compile Include="BlockReductionStage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\CodeGenerationStage.cs">
+    <Compile Include="CodeGenerationStage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\BaseCodeTransformationStage.cs">
+    <Compile Include="BaseCodeTransformationStage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\CompilationException.cs">
+    <Compile Include="CompilationException.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\CompilerPipeline.cs">
+    <Compile Include="CompilerPipeline.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\Operands\ConstantOperand.cs">
+    <Compile Include="Operands\ConstantOperand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\ConstantPropagationStage.cs">
+    <Compile Include="ConstantPropagationStage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\DominanceCalculationStage.cs">
+    <Compile Include="DominanceCalculationStage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\FlowControl.cs">
+    <Compile Include="FlowControl.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\IArchitecture.cs">
+    <Compile Include="IArchitecture.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\IAssemblyCompilerStage.cs">
+    <Compile Include="IAssemblyCompilerStage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\ICallingConvention.cs">
+    <Compile Include="ICallingConvention.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\ICodeGenerationStage.cs">
+    <Compile Include="ICodeGenerationStage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\IDominanceProvider.cs">
+    <Compile Include="IDominanceProvider.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\CIL\IInstructionDecoder.cs">
+    <Compile Include="CIL\IInstructionDecoder.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\IMethodCompilerBuilder.cs">
+    <Compile Include="IMethodCompilerBuilder.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\IMethodCompilerStage.cs">
+    <Compile Include="IMethodCompilerStage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\IPlatformStage.cs">
+    <Compile Include="IPlatformStage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\IRegisterConstraint.cs">
+    <Compile Include="IRegisterConstraint.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\IStackLayoutProvider.cs">
+    <Compile Include="IStackLayoutProvider.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\JitTrampolineAttribute.cs">
+    <Compile Include="JitTrampolineAttribute.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\Operands\LabelOperand.cs">
+    <Compile Include="Operands\LabelOperand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\LinearRegisterAllocator.cs">
+    <Compile Include="LinearRegisterAllocator.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\Operands\MemberOperand.cs">
+    <Compile Include="Operands\MemberOperand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\Operands\MemoryOperand.cs">
+    <Compile Include="Operands\MemoryOperand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\BaseMethodCompiler.cs">
+    <Compile Include="BaseMethodCompiler.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\NakedAttribute.cs">
+    <Compile Include="NakedAttribute.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\Operands\ObjectFieldOperand.cs">
+    <Compile Include="Operands\ObjectFieldOperand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\ObjectFileBuilderBase.cs">
+    <Compile Include="ObjectFileBuilderBase.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\Operands\Operand.cs">
+    <Compile Include="Operands\Operand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\Operands\ParameterOperand.cs">
+    <Compile Include="Operands\ParameterOperand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\Register.cs">
+    <Compile Include="Register.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\Operands\RegisterOperand.cs">
+    <Compile Include="Operands\RegisterOperand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\RuntimeSupportAttribute.cs">
+    <Compile Include="RuntimeSupportAttribute.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\SimpleRegisterAllocator.cs">
+    <Compile Include="SimpleRegisterAllocator.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\StackLayoutStage.cs">
+    <Compile Include="StackLayoutStage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\Operands\StackOperand.cs">
+    <Compile Include="Operands\StackOperand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\StackTypeCode.cs">
+    <Compile Include="StackTypeCode.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\Operands\StaticFieldOperand.cs">
+    <Compile Include="Operands\StaticFieldOperand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\Operands\TemporaryOperand.cs">
+    <Compile Include="Operands\TemporaryOperand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\Operands\LocalVariableOperand.cs">
+    <Compile Include="Operands\LocalVariableOperand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CompilerFramework\IR\VmCall.cs" />
+    <Compile Include="IR\VmCall.cs" />
     <Compile Include="Options\BaseCompilerOptions.cs" />
     <Compile Include="Options\BaseCompilerWithEnableOptions.cs" />
     <Compile Include="Options\CompilerOptionSet.cs" />
