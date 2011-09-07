@@ -18,8 +18,6 @@ namespace Mosa.Tools.TypeExplorer
 {
 	class ExplorerLinker : BaseAssemblyLinkerStage, IAssemblyLinker, IPipelineStage
 	{
-		string IPipelineStage.Name { get { return @"Explorer Stub Linker"; } }
-
 		public override void Run()
 		{
 			// DO NOTHING
