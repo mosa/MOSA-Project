@@ -18,7 +18,6 @@
                     <include name="Native.cs"/>
 		</sources>
 		<references>
-                    <include name="System.dll"/>
                     <include name="${outputDirectory}/mscorlib.dll"/>
 		</references>
 		<!-- supress warnings -->

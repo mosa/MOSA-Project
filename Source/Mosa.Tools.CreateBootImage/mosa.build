@@ -17,9 +17,7 @@
                     <include name="Program.cs"/>
 		</sources>
 		<references>
-                    <include name="System.dll"/>
                     <include name="${outputDirectory}/Mosa.ClassLib.dll"/>
-                    <include name="${outputDirectory}/Mosa.DeviceDrivers.dll"/>
                     <include name="${outputDirectory}/Mosa.DeviceSystem.dll"/>
                     <include name="${outputDirectory}/Mosa.EmulatedDevices.dll"/>
                     <include name="${outputDirectory}/Mosa.FileSystem.dll"/>

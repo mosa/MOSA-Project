@@ -12,7 +12,7 @@
 	
 	<!-- Main build target -->
 	<target name="build">
-	    <csc target="library" output="${outputDirectory}/Mosa.Runtime.InternalTrace.dll" debug="${debug}" unsafe="true" nostdlib="false">
+	    <csc target="library" output="${outputDirectory}/Mosa.Compiler.InternalTrace.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
                     <include name="BasicCompilerEventListener.cs"/>
                     <include name="BasicInternalTrace.cs"/>
@@ -27,7 +27,7 @@
 		</sources>
 		<references>
                     <include name="System.dll"/>
-                    <include name="${outputDirectory}/Mosa.Runtime.TypeSystem.dll"/>
+                    <include name="${outputDirectory}/Mosa.Compiler.TypeSystem.dll"/>
 		</references>
 		<!-- supress warnings -->
 		<nowarn><warning number="${suppresswarnings}"/></nowarn>

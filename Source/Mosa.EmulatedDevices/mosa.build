@@ -30,13 +30,10 @@
 		</sources>
 		<references>
                     <include name="System.dll"/>
-                    <include name="System.Data.dll"/>
                     <include name="System.Drawing.dll"/>
                     <include name="System.Windows.Forms.dll"/>
-                    <include name="System.Xml.dll"/>
                     <include name="${outputDirectory}/Mosa.DeviceSystem.dll"/>
                     <include name="${outputDirectory}/Mosa.ClassLib.dll"/>
-                    <include name="${outputDirectory}/Mosa.DeviceDrivers.dll"/>
                     <include name="${outputDirectory}/Mosa.EmulatedKernel.dll"/>
 		</references>
 		<!-- supress warnings -->

@@ -24,7 +24,6 @@
                     <include name="PE/RuntimeImageFlags.cs"/>
 		</sources>
 		<references>
-                    <include name="System.dll"/>
 		</references>
 		<!-- supress warnings -->
 		<nowarn><warning number="${suppresswarnings}"/></nowarn>

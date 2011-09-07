@@ -90,8 +90,6 @@
 		</sources>
 		<references>
                     <include name="System.dll"/>
-                    <include name="System.Data.dll"/>
-                    <include name="System.Xml.dll"/>
 		</references>
 		<!-- supress warnings -->
 		<nowarn><warning number="${suppresswarnings}"/></nowarn>

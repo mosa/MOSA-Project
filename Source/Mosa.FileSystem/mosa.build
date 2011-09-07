@@ -50,10 +50,8 @@
                     <include name="VFS/VirtualFileSystem.cs"/>
 		</sources>
 		<references>
-                    <include name="System.dll"/>
                     <include name="${outputDirectory}/Mosa.ClassLib.dll"/>
                     <include name="${outputDirectory}/Mosa.DeviceSystem.dll"/>
-                    <include name="${outputDirectory}/Mosa.DeviceDrivers.dll"/>
 		</references>
 		<!-- supress warnings -->
 		<nowarn><warning number="${suppresswarnings}"/></nowarn>

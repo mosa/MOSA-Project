@@ -26,16 +26,14 @@
 		</sources>
 		<references>
                     <include name="System.dll"/>
-                    <include name="System.Data.dll"/>
                     <include name="System.Drawing.dll"/>
                     <include name="System.Windows.Forms.dll"/>
-                    <include name="System.Xml.dll"/>
+                    <include name="${outputDirectory}/Mosa.Compiler.Framework.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Linker.dll"/>
+                    <include name="${outputDirectory}/Mosa.Compiler.Metadata.dll"/>
+                    <include name="${outputDirectory}/Mosa.Compiler.TypeSystem.dll"/>
                     <include name="${outputDirectory}/Mosa.Platform.x86.dll"/>
-                    <include name="${outputDirectory}/Mosa.Runtime.InternalTrace.dll"/>
-                    <include name="${outputDirectory}/Mosa.Runtime.Metadata.dll"/>
-                    <include name="${outputDirectory}/Mosa.Runtime.TypeSystem.dll"/>
-                    <include name="${outputDirectory}/Mosa.Runtime.dll"/>
+                    <include name="${outputDirectory}/Mosa.Compiler.InternalTrace.dll"/>
                     <include name="${outputDirectory}/Mosa.Test.CodeDomCompiler.dll"/>
 		</references>
 		<!-- supress warnings -->

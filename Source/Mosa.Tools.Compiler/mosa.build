@@ -16,8 +16,8 @@
 		<sources>
                     <include name="AotAssemblyCompiler.cs"/>
                     <include name="Stages/AssemblyCompilationStage.cs"/>
-                    <include name="Linker/Elf64LinkerStage.cs"/>
                     <include name="Linker/Elf32LinkerStage.cs"/>
+                    <include name="Linker/Elf64LinkerStage.cs"/>
                     <include name="Linker/LinkerProxy.cs"/>
                     <include name="Linker/MapFileGenerationStage.cs"/>
                     <include name="Linker/ObjectFileLayoutStage.cs"/>
@@ -28,17 +28,8 @@
                     <include name="Stages/InstructionStatisticsStage.cs"/>
                     <include name="Stages/CilHeaderBuilderStage.cs"/>
                     <include name="Options.cs"/>
-                    <include name="Options/BootFormatOptions.cs"/>
-                    <include name="Options/ArchitectureOptions.cs"/>
-                    <include name="Options/MultibootOptions.cs"/>
-                    <include name="Options/Elf32LinkerOptions.cs"/>
-                    <include name="Options/PortableExecutableOptions.cs"/>
-                    <include name="Options/LinkerFormatOptions.cs"/>
-                    <include name="Options/MapFileGeneratorOptions.cs"/>
-                    <include name="Options/InstructionStatisticsOptions.cs"/>
                     <include name="Program.cs"/>
                     <include name="Stages/Multiboot0695AssemblyStage.cs"/>
-                    <include name="Options/StaticAllocationResolutionStageOptions.cs"/>
                     <include name="TypeInitializers/ITypeInitializerSchedulerStage.cs"/>
                     <include name="TypeInitializers/TypeInitializerSchedulerStage.cs"/>
                     <include name="TypeInitializers/TypeInitializerSchedulerStageProxy.cs"/>
@@ -48,11 +39,11 @@
                     <include name="${outputDirectory}/Mosa.Compiler.FileFormat.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Linker.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Pdb.dll"/>
+                    <include name="${outputDirectory}/Mosa.Compiler.TypeSystem.dll"/>
                     <include name="${outputDirectory}/Mosa.Platform.x86.dll"/>
-                    <include name="${outputDirectory}/Mosa.Runtime.InternalTrace.dll"/>
-                    <include name="${outputDirectory}/Mosa.Runtime.Metadata.dll"/>
-                    <include name="${outputDirectory}/Mosa.Runtime.TypeSystem.dll"/>
-                    <include name="${outputDirectory}/Mosa.Runtime.dll"/>
+                    <include name="${outputDirectory}/Mosa.Compiler.InternalTrace.dll"/>
+                    <include name="${outputDirectory}/Mosa.Compiler.Metadata.dll"/>
+                    <include name="${outputDirectory}/Mosa.Compiler.Framework.dll"/>
 		</references>
 		<!-- supress warnings -->
 		<nowarn><warning number="${suppresswarnings}"/></nowarn>

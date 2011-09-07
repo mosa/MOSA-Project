@@ -12,7 +12,7 @@
 	
 	<!-- Main build target -->
 	<target name="build">
-	    <csc target="library" output="${outputDirectory}/Mosa.Runtime.Metadata.dll" debug="${debug}" unsafe="true" nostdlib="false">
+	    <csc target="library" output="${outputDirectory}/Mosa.Compiler.Metadata.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
                     <include name="AssemblyFlags.cs"/>
                     <include name="AssemblyHashAlgorithm.cs"/>

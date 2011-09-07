@@ -191,14 +191,11 @@
 		</sources>
 		<references>
                     <include name="System.dll"/>
-                    <include name="../../3rdParty/Gallio.dll"/>
-                    <include name="../../3rdParty/MbUnit.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Common.dll"/>
-                    <include name="${outputDirectory}/Mosa.Compiler.FileFormat.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Linker.dll"/>
-                    <include name="${outputDirectory}/Mosa.Runtime.Metadata.dll"/>
-                    <include name="${outputDirectory}/Mosa.Runtime.TypeSystem.dll"/>
-                    <include name="${outputDirectory}/Mosa.Runtime.dll"/>
+                    <include name="${outputDirectory}/Mosa.Compiler.Metadata.dll"/>
+                    <include name="${outputDirectory}/Mosa.Compiler.Framework.dll"/>
+                    <include name="${outputDirectory}/Mosa.Compiler.TypeSystem.dll"/>
 		</references>
 		<!-- supress warnings -->
 		<nowarn><warning number="${suppresswarnings}"/></nowarn>

@@ -18,7 +18,6 @@
                     <include name="Properties/AssemblyInfo.cs"/>
 		</sources>
 		<references>
-                    <include name="System.dll"/>
                     <include name="System.Xml.dll"/>
 		</references>
 		<!-- supress warnings -->
