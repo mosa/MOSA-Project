@@ -115,16 +115,28 @@ namespace Mosa.Compiler.Framework
 			get { return typeSystem; }
 		}
 
+		/// <summary>
+		/// Gets the type layout.
+		/// </summary>
+		/// <value>The type layout.</value>
 		public ITypeLayout TypeLayout
 		{
 			get { return typeLayout; }
 		}
 
+		/// <summary>
+		/// Gets the internal log.
+		/// </summary>
+		/// <value>The internal log.</value>
 		public IInternalTrace InternalLog
 		{
 			get { return internalTrace; }
 		}
 
+		/// <summary>
+		/// Gets the compiler options.
+		/// </summary>
+		/// <value>The compiler options.</value>
 		public CompilerOptions CompilerOptions
 		{
 			get { return compilerOptions; }

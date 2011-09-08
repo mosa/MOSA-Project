@@ -8,6 +8,7 @@
  */
 
 using System.Collections.Generic;
+using Mosa.Compiler.Linker;
 
 namespace Mosa.Compiler.Framework
 {
@@ -57,7 +58,7 @@ namespace Mosa.Compiler.Framework
 		/// Gets or sets the linker stage.
 		/// </summary>
 		/// <value>The linker stage.</value>
-		public IAssemblyCompilerStage LinkerStage { get; set; }
+		public IAssemblyLinker Linker { get; set; }
 
 		/// <summary>
 		/// 

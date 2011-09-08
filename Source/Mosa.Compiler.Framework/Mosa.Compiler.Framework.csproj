@@ -94,7 +94,6 @@
     <Compile Include="ExceptionClauseHeader.cs" />
     <Compile Include="InstructionLogger.cs" />
     <Compile Include="LeaveSSA.cs" />
-    <Compile Include="LoggerDebugWriter.cs" />
     <Compile Include="ILoggerWriter.cs" />
     <Compile Include="MethodTableBuilderStage.cs" />
     <Compile Include="OperandDeterminationStage.cs" />

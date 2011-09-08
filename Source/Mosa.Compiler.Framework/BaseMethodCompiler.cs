@@ -216,7 +216,7 @@ namespace Mosa.Compiler.Framework
 		/// Retrieves the compilation scheduler.
 		/// </summary>
 		/// <value>The compilation scheduler.</value>
-		public ICompilationSchedulerStage Scheduler { get { return this.compilationScheduler; } }
+		public ICompilationSchedulerStage Scheduler { get { return compilationScheduler; } }
 
 		/// <summary>
 		/// Provides access to the pipeline of this compiler.
