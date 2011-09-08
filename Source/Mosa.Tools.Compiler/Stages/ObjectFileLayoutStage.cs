@@ -13,7 +13,7 @@ using System;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Tools.Compiler.Linker
+namespace Mosa.Tools.Compiler.Stages
 {
 	/// <summary>
 	/// Lays out sections and symbols sequentially in an object file.

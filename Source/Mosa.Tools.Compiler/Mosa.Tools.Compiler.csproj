@@ -66,16 +66,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AotAssemblyCompiler.cs" />
-    <Compile Include="Stages\AssemblyCompilationStage.cs" />
-    <Compile Include="Linker\Elf32LinkerStage.cs" />
-    <Compile Include="Linker\Elf64LinkerStage.cs" />
-    <Compile Include="Linker\LinkerProxy.cs" />
-    <Compile Include="Linker\MapFileGenerationStage.cs" />
-    <Compile Include="Linker\ObjectFileLayoutStage.cs" />
-    <Compile Include="Linker\PortableExecutableLinkerStage.cs" />
-    <Compile Include="AotCompiler.cs">
-      <SubType>Code</SubType>
-    </Compile>
+    <Compile Include="Stages\Elf32LinkerStage.cs" />
+    <Compile Include="Stages\Elf64LinkerStage.cs" />
+    <Compile Include="Stages\MapFileGenerationStage.cs" />
+    <Compile Include="Stages\ObjectFileLayoutStage.cs" />
+    <Compile Include="Stages\PortableExecutableLinkerStage.cs" />
     <Compile Include="AotMethodCompiler.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -86,7 +81,7 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Stages\CilHeaderBuilderStage.cs" />
-    <Compile Include="Options.cs">
+    <Compile Include="NDesk.Options.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Program.cs">
@@ -95,11 +90,10 @@
     <Compile Include="Stages\Multiboot0695AssemblyStage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="TypeInitializers\ITypeInitializerSchedulerStage.cs" />
-    <Compile Include="TypeInitializers\TypeInitializerSchedulerStage.cs">
+    <Compile Include="ITypeInitializerSchedulerStage.cs" />
+    <Compile Include="Stages\TypeInitializerSchedulerStage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="TypeInitializers\TypeInitializerSchedulerStageProxy.cs" />
     <ProjectReference Include="..\Mosa.Compiler.FileFormat\Mosa.Compiler.FileFormat.csproj">
       <Project>{CC2E6418-C325-4486-B50D-941EC27053F6}</Project>
       <Name>Mosa.Compiler.FileFormat</Name>

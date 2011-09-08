@@ -11,7 +11,7 @@
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Tools.Compiler.Linker
+namespace Mosa.Tools.Compiler.Stages
 {
 	/// <summary>
 	/// 

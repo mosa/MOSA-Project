@@ -15,10 +15,9 @@ using Mosa.Compiler.Framework;
 using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.Metadata.Loader;
 using Mosa.Compiler.Metadata.Signatures;
+using Mosa.Compiler.Linker;
 using Mosa.Compiler.TypeSystem;
-using Mosa.Tools.Compiler.Linker;
 using Mosa.Tools.Compiler.Stages;
-using Mosa.Tools.Compiler.TypeInitializers;
 using NDesk.Options;
 
 namespace Mosa.Tools.Compiler
@@ -31,9 +30,9 @@ namespace Mosa.Tools.Compiler
 		#region Data
 
 		/// <summary>
-		/// 
+		/// Holds the compiler options
 		/// </summary>
-		CompilerOptions compilerOptions = new CompilerOptions();
+		private CompilerOptions compilerOptions = new CompilerOptions();
 
 		/// <summary>
 		/// Holds a list of input files.
@@ -150,7 +149,7 @@ namespace Mosa.Tools.Compiler
 				"Select the format of the binary file to create [{ELF32|ELF64|PE}].",
 				delegate(string format)
 				{
-					compilerOptions.LinkerStage = SelectLinkerStage(format);
+					compilerOptions.Linker = SelectLinkerStage(format);
 				}
 			);
 
@@ -373,7 +372,7 @@ namespace Mosa.Tools.Compiler
 				}
 
 				// Check for missing options
-				if (compilerOptions.LinkerStage == null)
+				if (compilerOptions.Linker == null)
 				{
 					throw new OptionException("No binary format specified.", "Architecture");
 				}
@@ -426,7 +425,7 @@ namespace Mosa.Tools.Compiler
 			sb.Append(" > Output file: ").AppendLine(compilerOptions.OutputFile);
 			sb.Append(" > Input file(s): ").AppendLine(String.Join(", ", new List<string>(GetInputFileNames()).ToArray()));
 			sb.Append(" > Architecture: ").AppendLine(compilerOptions.Architecture.GetType().FullName);
-			sb.Append(" > Binary format: ").AppendLine(((IPipelineStage)compilerOptions.LinkerStage).Name);
+			sb.Append(" > Binary format: ").AppendLine(((IPipelineStage)compilerOptions.Linker).Name);
 			sb.Append(" > Boot format: ").AppendLine(((IPipelineStage)compilerOptions.BootCompilerStage).Name);
 			sb.Append(" > Is executable: ").AppendLine(isExecutable.ToString());
 			return sb.ToString();
@@ -438,45 +437,7 @@ namespace Mosa.Tools.Compiler
 
 		private void Compile()
 		{
-			IAssemblyLoader assemblyLoader = new AssemblyLoader();
-			assemblyLoader.InitializePrivatePaths(this.GetInputFileNames());
-
-			foreach (string file in this.GetInputFileNames())
-			{
-				assemblyLoader.LoadModule(file);
-			}
-
-			ITypeSystem typeSystem = new TypeSystem();
-			typeSystem.LoadModules(assemblyLoader.Modules);
-
-			int nativePointerSize;
-			int nativePointerAlignment;
-
-			IArchitecture architecture = compilerOptions.Architecture;
-
-			architecture.GetTypeRequirements(BuiltInSigType.IntPtr, out nativePointerSize, out nativePointerAlignment);
-
-			TypeLayout typeLayout = new TypeLayout(typeSystem, nativePointerSize, nativePointerAlignment);
-
-			IInternalTrace internalLog = new BasicInternalTrace();
-
-			using (AotCompiler aot = new AotCompiler(architecture, typeSystem, typeLayout, internalLog, compilerOptions))
-			{
-				aot.Pipeline.AddRange(new IAssemblyCompilerStage[] 
-				{
-					compilerOptions.BootCompilerStage,
-					new AssemblyCompilationStage(), 
-					new MethodCompilerSchedulerStage(),
-					new TypeInitializerSchedulerStage(),
-					compilerOptions.BootCompilerStage,
-					new CilHeaderBuilderStage(),
-					new ObjectFileLayoutStage(),
-					compilerOptions.LinkerStage,
-					compilerOptions.MapFile != null ? new MapFileGenerationStage() : null
-				});
-
-				aot.Run();
-			}
+			AotAssemblyCompiler.Compile(compilerOptions, inputFiles);
 		}
 
 		/// <summary>
@@ -569,7 +530,7 @@ namespace Mosa.Tools.Compiler
 		/// </summary>
 		/// <param name="format">The linker format.</param>
 		/// <returns>The implementation of the linker.</returns>
-		private static IAssemblyCompilerStage SelectLinkerStage(string format)
+		private static IAssemblyLinker SelectLinkerStage(string format)
 		{
 			switch (format.ToLower())
 			{
