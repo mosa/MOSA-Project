@@ -46,7 +46,6 @@
                     <include name="ExceptionClauseHeader.cs"/>
                     <include name="InstructionLogger.cs"/>
                     <include name="LeaveSSA.cs"/>
-                    <include name="LoggerDebugWriter.cs"/>
                     <include name="ILoggerWriter.cs"/>
                     <include name="MethodTableBuilderStage.cs"/>
                     <include name="OperandDeterminationStage.cs"/>
