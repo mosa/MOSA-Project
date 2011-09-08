@@ -15,24 +15,20 @@
 	    <csc target="exe" main="Mosa.Tools.Compiler.Program" output="${outputDirectory}/mosacl.exe" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
                     <include name="AotAssemblyCompiler.cs"/>
-                    <include name="Stages/AssemblyCompilationStage.cs"/>
-                    <include name="Linker/Elf32LinkerStage.cs"/>
-                    <include name="Linker/Elf64LinkerStage.cs"/>
-                    <include name="Linker/LinkerProxy.cs"/>
-                    <include name="Linker/MapFileGenerationStage.cs"/>
-                    <include name="Linker/ObjectFileLayoutStage.cs"/>
-                    <include name="Linker/PortableExecutableLinkerStage.cs"/>
-                    <include name="AotCompiler.cs"/>
+                    <include name="Stages/Elf32LinkerStage.cs"/>
+                    <include name="Stages/Elf64LinkerStage.cs"/>
+                    <include name="Stages/MapFileGenerationStage.cs"/>
+                    <include name="Stages/ObjectFileLayoutStage.cs"/>
+                    <include name="Stages/PortableExecutableLinkerStage.cs"/>
                     <include name="AotMethodCompiler.cs"/>
                     <include name="Compiler.cs"/>
                     <include name="Stages/InstructionStatisticsStage.cs"/>
                     <include name="Stages/CilHeaderBuilderStage.cs"/>
-                    <include name="Options.cs"/>
+                    <include name="NDesk.Options.cs"/>
                     <include name="Program.cs"/>
                     <include name="Stages/Multiboot0695AssemblyStage.cs"/>
-                    <include name="TypeInitializers/ITypeInitializerSchedulerStage.cs"/>
-                    <include name="TypeInitializers/TypeInitializerSchedulerStage.cs"/>
-                    <include name="TypeInitializers/TypeInitializerSchedulerStageProxy.cs"/>
+                    <include name="ITypeInitializerSchedulerStage.cs"/>
+                    <include name="Stages/TypeInitializerSchedulerStage.cs"/>
 		</sources>
 		<references>
                     <include name="System.dll"/>
