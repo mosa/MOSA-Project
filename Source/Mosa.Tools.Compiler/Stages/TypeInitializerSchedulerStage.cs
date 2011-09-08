@@ -14,7 +14,7 @@ using Mosa.Compiler.Linker;
 using Mosa.Compiler.TypeSystem;
 using IR = Mosa.Compiler.Framework.IR;
 
-namespace Mosa.Tools.Compiler.TypeInitializers
+namespace Mosa.Tools.Compiler.Stages
 {
 	/// <summary>
 	/// Schedules type initializers and creates a hidden mosacl_main method,
