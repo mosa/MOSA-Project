@@ -42,6 +42,8 @@ namespace Mosa.Tools.Compiler
 			: base(type, method, compiler.Pipeline.FindFirst<IAssemblyLinker>(), compiler.Architecture, compiler.TypeSystem, compiler.TypeLayout, null, compilationScheduler, internalLog)
 		{
 			this.assemblyCompiler = compiler;
+			CompilerOptions compilerOptions = this.assemblyCompiler.CompilerOptions;
+
 			this.Pipeline.AddRange(
 				new IMethodCompilerStage[] 
 				{
@@ -51,22 +53,22 @@ namespace Mosa.Tools.Compiler
 					new StaticAllocationResolutionStage(),
 					new CILTransformationStage(),
 
-					//new DominanceCalculationStage(),
-					//new PhiPlacementStage(),
-					//new EnterSSA(),
+					(compilerOptions.EnableSSA) ? new DominanceCalculationStage() : null,
+					(compilerOptions.EnableSSA) ? new PhiPlacementStage() : null,
+					(compilerOptions.EnableSSA) ? new EnterSSA() : null,
 
-					//new ConstantPropagationStage(ConstantPropagationStage.PropagationStage.PreFolding),
-					//new ConstantFoldingStage(),
-					//new ConstantPropagationStage(ConstantPropagationStage.PropagationStage.PostFolding),
+					(compilerOptions.EnableSSA) ? new ConstantPropagationStage(ConstantPropagationStage.PropagationStage.PreFolding) : null,
+					(compilerOptions.EnableSSA) ? new ConstantFoldingStage() : null,
+					(compilerOptions.EnableSSA) ? new ConstantPropagationStage(ConstantPropagationStage.PropagationStage.PostFolding) : null,
 
-					//new LeaveSSA(),
-					//new StrengthReductionStage(),
+					(compilerOptions.EnableSSA) ? new LeaveSSA() : null,
+					(compilerOptions.EnableSSA) ? new StrengthReductionStage() : null,
+
 					new StackLayoutStage(),
 					new PlatformStubStage(),
-					//new BlockReductionStage(),
 					new LoopAwareBlockOrderStage(),
-					new SimpleTraceBlockOrderStage(),
-					new ReverseBlockOrderStage(),	
+					//new SimpleTraceBlockOrderStage(),
+					//new ReverseBlockOrderStage(),	
 					new LocalCSE(),
 					new CodeGenerationStage(),
 					new ExceptionLayoutStage(),

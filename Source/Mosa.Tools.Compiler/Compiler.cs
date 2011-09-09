@@ -231,6 +231,12 @@ namespace Mosa.Tools.Compiler
 			optionSet.Add(
 				@"sa|enable-static-alloc",
 				@"Performs static allocations at compile time.",
+				enable => compilerOptions.EnableStaticAllocations = enable != null
+			);
+
+			optionSet.Add(
+				@"ssa|enable-single-static-assignment-form",
+				@"Performs single static assignments at compile time.",
 				enable => compilerOptions.EnableSSA = enable != null
 			);
 
