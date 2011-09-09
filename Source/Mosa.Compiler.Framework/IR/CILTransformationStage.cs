@@ -812,6 +812,40 @@ namespace Mosa.Compiler.Framework.IR
 				context.Result = result;
 				return;
 			}
+			else if (context.Operand1.Type.ToString() == "I8")
+			{
+				var type = this.typeSystem.GetType("mscorlib", "System", "Int64");
+				context.SetInstruction(Instruction.NopInstruction);
+
+				ReplaceWithVmCall(context, VmCall.BoxInt64);
+
+				var methodTableSymbol = GetMethodTableSymbol(type);
+				var classSize = typeLayout.GetTypeSize(type);
+
+				context.SetOperand(1, methodTableSymbol);
+				context.SetOperand(2, new ConstantOperand(BuiltInSigType.Int32, classSize));
+				context.SetOperand(3, value);
+				context.OperandCount = 4;
+				context.Result = result;
+				return;
+			}
+			else if (context.Operand1.Type.ToString() == "U8")
+			{
+				var type = this.typeSystem.GetType("mscorlib", "System", "UInt64");
+				context.SetInstruction(Instruction.NopInstruction);
+
+				ReplaceWithVmCall(context, VmCall.BoxUInt64);
+
+				var methodTableSymbol = GetMethodTableSymbol(type);
+				var classSize = typeLayout.GetTypeSize(type);
+
+				context.SetOperand(1, methodTableSymbol);
+				context.SetOperand(2, new ConstantOperand(BuiltInSigType.UInt32, classSize));
+				context.SetOperand(3, value);
+				context.OperandCount = 4;
+				context.Result = result;
+				return;
+			}
 			else if (context.Operand1.Type.ToString() == "R4")
 			{
 				var type = this.typeSystem.GetType("mscorlib", "System", "Single");
@@ -1331,6 +1365,20 @@ namespace Mosa.Compiler.Framework.IR
 			else if (type.FullName == "System.UInt32")
 			{
 				ReplaceWithVmCall(context, VmCall.UnboxUInt32);
+				context.SetOperand(1, value);
+				context.OperandCount = 2;
+				context.Result = result;
+			}
+			else if (type.FullName == "System.Int64")
+			{
+				ReplaceWithVmCall(context, VmCall.UnboxInt64);
+				context.SetOperand(1, value);
+				context.OperandCount = 2;
+				context.Result = result;
+			}
+			else if (type.FullName == "System.UInt64")
+			{
+				ReplaceWithVmCall(context, VmCall.UnboxUInt64);
 				context.SetOperand(1, value);
 				context.OperandCount = 2;
 				context.Result = result;
