@@ -7,14 +7,13 @@ namespace Mosa.Test.Collection
 	public class StructTests
 	{
 	<# foreach (KeyValuePair<string, string> number in NumbersWithChar) { #>
-
 		static bool StructTestSet1<#= number.Value #>(<#= number.Key #> one)
 		{
 			Struct1<#= number.Value #> structure;
 			
 			structure.One = one;
 	
-			return (structure.One == one);
+			return (structure.One.Equals(one));
 		}
 	
 		static bool StructTestSet3<#= number.Value #>(<#= number.Key #> one, <#= number.Key #> two, <#= number.Key #> three)
@@ -25,14 +24,13 @@ namespace Mosa.Test.Collection
 			structure.Two = two;
 			structure.Three = three;
 			
-			return (structure.One == one && structure.Two == two && structure.Three == three);
+			return (structure.One.Equals(one) && structure.Two.Equals(two) && structure.Three.Equals(three));
 		}
 		<# } #>
 
 	}
 
 	<# foreach (KeyValuePair<string, string> number in NumbersWithChar) { #>
-
 	public struct Struct1<#= number.Value #>
 	{
 		public <#= number.Key #> One;

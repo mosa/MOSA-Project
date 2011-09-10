@@ -7,15 +7,22 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
  *
  */
+ 
 
+
+
+using System;
+using System.Collections.Generic;
+using System.Text;
 using MbUnit.Framework;
 
 using Mosa.Test.System;
 using Mosa.Test.System.Numbers;
+using Mosa.Test.Collection;
 
 namespace Mosa.Test.Cases.IL
 {
-	//[TestFixture]
+	[TestFixture]
 	public class Structures : TestCompilerAdapter
 	{
 		public Structures()
@@ -23,7 +30,7 @@ namespace Mosa.Test.Cases.IL
 			settings.AddReference("Mosa.Test.Collection.dll");
 		}
 		
-		//[Test]
+		[Test]
 		public void StructTestSet1U1([U1]byte one)
 		{
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "StructTests", "StructTestSet1U1", one));
@@ -35,7 +42,7 @@ namespace Mosa.Test.Cases.IL
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "StructTests", "StructTestSet3U1", one, two, three));
 		}
 		
-		//[Test]
+		[Test]
 		public void StructTestSet1U2([U2]ushort one)
 		{
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "StructTests", "StructTestSet1U2", one));
@@ -47,7 +54,7 @@ namespace Mosa.Test.Cases.IL
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "StructTests", "StructTestSet3U2", one, two, three));
 		}
 		
-		//[Test]
+		[Test]
 		public void StructTestSet1U4([U4]uint one)
 		{
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "StructTests", "StructTestSet1U4", one));
@@ -71,7 +78,7 @@ namespace Mosa.Test.Cases.IL
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "StructTests", "StructTestSet3U8", one, two, three));
 		}
 		
-		//[Test]
+		[Test]
 		public void StructTestSet1I1([I1]sbyte one)
 		{
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "StructTests", "StructTestSet1I1", one));
@@ -83,7 +90,7 @@ namespace Mosa.Test.Cases.IL
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "StructTests", "StructTestSet3I1", one, two, three));
 		}
 		
-		//[Test]
+		[Test]
 		public void StructTestSet1I2([I2]short one)
 		{
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "StructTests", "StructTestSet1I2", one));
@@ -95,7 +102,7 @@ namespace Mosa.Test.Cases.IL
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "StructTests", "StructTestSet3I2", one, two, three));
 		}
 		
-		//[Test]
+		[Test]
 		public void StructTestSet1I4([I4]int one)
 		{
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "StructTests", "StructTestSet1I4", one));
@@ -119,7 +126,7 @@ namespace Mosa.Test.Cases.IL
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "StructTests", "StructTestSet3I8", one, two, three));
 		}
 		
-		//[Test]
+		[Test]
 		public void StructTestSet1R4([R4]float one)
 		{
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "StructTests", "StructTestSet1R4", one));
@@ -143,7 +150,7 @@ namespace Mosa.Test.Cases.IL
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "StructTests", "StructTestSet3R8", one, two, three));
 		}
 		
-		//[Test]
+		[Test]
 		public void StructTestSet1C([C]char one)
 		{
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "StructTests", "StructTestSet1C", one));
@@ -154,5 +161,6 @@ namespace Mosa.Test.Cases.IL
 		{
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "StructTests", "StructTestSet3C", one, two, three));
 		}
-			}
+		
+	}
 }
