@@ -69,57 +69,43 @@ namespace Mosa.Internal
 			return AllocateArray(methodTable, 2, length);
 		}
 
-		public static unsafe void* IsInstanceOfType2(void* methodTable, void* obj)
-		{
-			if (obj == null)
-				return null;
-
-			uint* objMethodTable = (uint*)((uint*)obj)[0];
-
-			while (objMethodTable != null)
-			{
-				if (objMethodTable == methodTable)
-					return obj;
-
-				objMethodTable = (uint*)objMethodTable[3];
-			}
-
-			return null;
-		}
-
 		public static unsafe uint IsInstanceOfType(uint methodTable, uint obj)
 		{
-			if (obj == 0x0)
+			if (obj == 0)
 				return 0;
 
-			uint objMethodTable = (uint)((uint*)obj)[0];
+			uint objMethodTable = ((uint*)obj)[0];
 
-			while (objMethodTable != 0x0)
+			while (objMethodTable != 0)
 			{
 				if (objMethodTable == methodTable)
 					return obj;
 
-				objMethodTable = objMethodTable + 3 * 4;
-				objMethodTable = (uint)((uint*)objMethodTable)[0];
+				objMethodTable = ((uint*)objMethodTable)[3];
 			}
 
-			return 0x0;
+			return 0;
 		}
 
-		public static unsafe void* IsInstanceOfInterfaceType(int interfaceSlot, void* obj)
+		public static unsafe uint IsInstanceOfInterfaceType(int interfaceSlot, uint obj)
 		{
-			uint* objMethodTable = (uint*)((uint*)obj)[0];
-			uint* bitmap = (uint*)objMethodTable[2];
+			uint objMethodTable = ((uint*)obj)[0];
 
-			if (bitmap == null)
-				return null;
+			if (objMethodTable == 0)
+				return 0;
 
-			int index = interfaceSlot / sizeof(int);
-			int bit = interfaceSlot % sizeof(int);
-			uint value = bitmap[index] & (uint)(1 << bit);
+			uint bitmap = ((uint*)(objMethodTable))[2];
 
-			if (value == 0)
-				return null;
+			if (bitmap == 0)
+				return 0;
+
+			int index = interfaceSlot / 32;
+			int bit = interfaceSlot % 32;
+			uint value =  ((uint*)bitmap)[index];
+			uint result = value & (uint)(1 << bit);
+
+			if (result == 0)
+				return 0;
 
 			return obj;
 		}

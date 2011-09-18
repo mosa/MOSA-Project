@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using System.IO;
+
 using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Loader;
 using Mosa.Compiler.TypeSystem;
 using Mosa.Compiler.TypeSystem.Generic;
+using Mosa.Compiler.Pdb;
 
 namespace Mosa.Tools.TypeExplorer
 {
@@ -375,12 +378,60 @@ namespace Mosa.Tools.TypeExplorer
 			assemblyLoader.AddPrivatePath(System.IO.Path.GetDirectoryName(filename));
 			assemblyLoader.LoadModule(filename);
 
+			//foreach(var module in assemblyLoader.Modules)
+			//{
+			//    string name = module.CodeBase.Substring(7);
+			//    LoadAssemblyDebugInfo(name);
+			//}
+
 			typeSystem = new TypeSystem();
 			typeSystem.LoadModules(assemblyLoader.Modules);
 
 			typeLayout = new TypeLayout(typeSystem, 4, 4);
 
 			UpdateTree();
+		}
+
+		protected void LoadAssemblyDebugInfo(string assemblyFileName)
+		{
+			string dbgFile = Path.ChangeExtension(assemblyFileName, "pdb");
+
+			if (File.Exists(dbgFile))
+			{
+				tbResult.AppendText("File: " + dbgFile + "\n");
+				tbResult.AppendText("======================\n");
+				using (FileStream fileStream = new FileStream(dbgFile, FileMode.Open, FileAccess.Read, FileShare.Read))
+				{
+					using (PdbReader reader = new PdbReader(fileStream))
+					{
+
+						tbResult.AppendText("Global symbols: \n");
+						tbResult.AppendText("======================\n");
+						foreach (CvSymbol symbol in reader.GlobalSymbols)
+						{
+							tbResult.AppendText(symbol.ToString() + "\n");
+						}
+
+						tbResult.AppendText("Types:\n");
+						foreach (PdbType type in reader.Types)
+						{
+							tbResult.AppendText(type.Name + "\n");
+							tbResult.AppendText("======================\n");
+							tbResult.AppendText("Symbols:\n");
+							foreach (CvSymbol symbol in type.Symbols)
+							{
+								tbResult.AppendText("\t" + symbol.ToString() + "\n");
+							}
+
+							tbResult.AppendText("Lines:\n");
+							foreach (CvLine line in type.LineNumbers)
+							{
+								tbResult.AppendText("\t" + line.ToString() + "\n");
+							}
+						}
+					}
+				}
+			}
 		}
 
 		private void ShowCodeForm()
