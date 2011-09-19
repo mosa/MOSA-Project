@@ -96,6 +96,8 @@ namespace Mosa.Compiler.Framework
 			byte bit = 0;
 			foreach (RuntimeType interfaceType in typeLayout.Interfaces)
 			{
+				//FIXME: Does not check base classes
+
 				if (type.Interfaces.Contains(interfaceType))
 					bitmap[at] = (byte)(bitmap[at] | (byte)(1 << bit));
 
