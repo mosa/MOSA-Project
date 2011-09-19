@@ -90,7 +90,7 @@ namespace Mosa.Compiler.Framework
 			if (type.Interfaces.Count == 0)
 				return;
 
-			byte[] bitmap = new byte[(((typeLayout.Interfaces.Count - 1) / sizeof(byte)) + 1)];
+			byte[] bitmap = new byte[(((typeLayout.Interfaces.Count - 1) / 8) + 1)];
 
 			int at = 0;
 			byte bit = 0;
@@ -100,7 +100,7 @@ namespace Mosa.Compiler.Framework
 					bitmap[at] = (byte)(bitmap[at] | (byte)(1 << bit));
 
 				bit++;
-				if (bit == sizeof(byte))
+				if (bit == 8)
 				{
 					bit = 0;
 					at++;
