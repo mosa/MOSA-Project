@@ -37,7 +37,7 @@ namespace Mosa.Test.System
 		/// <summary>
 		/// A cache of CodeDom providers.
 		/// </summary>
-		private static Dictionary<string, CodeDomProvider> providerCache = new Dictionary<string, CodeDomProvider>();
+		//private static Dictionary<string, CodeDomProvider> providerCache = new Dictionary<string, CodeDomProvider>();
 
 		/// <summary>
 		/// 
@@ -47,7 +47,7 @@ namespace Mosa.Test.System
 		/// <summary>
 		/// Holds the temporary files collection.
 		/// </summary>
-		private static TempFileCollection temps = new TempFileCollection(TempDirectory, false);
+		//private static TempFileCollection temps = new TempFileCollection(TempDirectory, false);
 
 		/// <summary>
 		/// 

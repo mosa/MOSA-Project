@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
@@ -24,7 +24,6 @@
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation />
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -96,7 +95,7 @@
     </ProjectReference>
     <ProjectReference Include="..\Pictor\Pictor.csproj">
       <Project>{1D756AD8-07A2-44F3-9A69-B6573A339CB4}</Project>
-      <Name>Pictor %28Pictor\Pictor%29</Name>
+      <Name>Pictor</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
@@ -137,9 +136,6 @@
     <EmbeddedResource Include="MemoryForm.resx">
       <DependentUpon>MemoryForm.cs</DependentUpon>
     </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="app.config" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <PropertyGroup>
