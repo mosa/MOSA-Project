@@ -134,8 +134,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="type">The type.</param>
 		public void BuildMethodTable(RuntimeType type)
 		{
-
-			// HINT: The method table is offset by a four pointers:
+			// The method table is offset by a four pointers:
 			// 1. interface dispatch table pointer
 			// 2. type pointer - contains the type information pointer, used to realize object.GetType().
 			// 3. interface bitmap
