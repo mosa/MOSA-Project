@@ -333,7 +333,6 @@ namespace Mosa.Test.Cases.OLD.IL
 		[Test]
 		public void XorI2(short a, short b)
 		{
-			short e = (short)(a ^ b);
 			settings.CodeSource = CreateTestCode("XorI2", "short", "int");
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "XorI2", (a ^ b), a, b));
 		}
@@ -394,7 +393,6 @@ namespace Mosa.Test.Cases.OLD.IL
 		[Test]
 		public void XorU2(ushort a, ushort b)
 		{
-			ushort e = (ushort)(a ^ b);
 			settings.CodeSource = CreateTestCode("XorU2", "ushort", "uint");
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "XorU2", (uint)(a ^ b), a, b));
 		}
