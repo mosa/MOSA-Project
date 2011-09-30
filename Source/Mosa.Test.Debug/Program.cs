@@ -1,6 +1,7 @@
 ﻿
 using Mosa.Test.Cases.FIX.IL;
 using Mosa.Test.Cases.OLD.IL;
+using Mosa.Test.Cases.CIL;
 
 namespace Mosa.Test.Debug
 {
@@ -20,6 +21,10 @@ namespace Mosa.Test.Debug
 			add.AddConstantCLeft('a', 'Z');
 			add.AddConstantCLeft('a', 'Z');
 			add.AddConstantCLeft('a', 'Z');
+
+			Int32Fixture int32fixture = new Int32Fixture();
+
+			int32fixture.Ldlen(10);
 
 			return;
 		}

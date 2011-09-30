@@ -64,6 +64,25 @@ namespace Mosa.Compiler.InternalTrace
 						break;
 					}
 
+				case CompilerEvent.Error:
+					{
+						Console.ForegroundColor = ConsoleColor.Red;
+						Console.Write(@"[Error]  ");
+						Console.ForegroundColor = ConsoleColor.White;
+						Console.WriteLine(info);
+						break;
+					}
+
+
+				case CompilerEvent.Warning:
+					{
+						Console.ForegroundColor = ConsoleColor.Yellow;
+						Console.Write(@"[Warning]  ");
+						Console.ForegroundColor = ConsoleColor.White;
+						Console.WriteLine(info);
+						break;
+					}
+
 				default: break;
 			}
 

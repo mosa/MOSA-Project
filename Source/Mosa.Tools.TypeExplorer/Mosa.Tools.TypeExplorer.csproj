@@ -74,6 +74,7 @@
       <Name>Mosa.Compiler.Framework</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mosa.Compiler.Linker\Mosa.Compiler.Linker.csproj">
+      <Project>{65866A51-B229-44C5-AC81-87A90FA1741B}</Project>
       <Name>Mosa.Compiler.Linker</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mosa.Compiler.Metadata\Mosa.Compiler.Metadata.csproj">

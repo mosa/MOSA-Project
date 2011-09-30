@@ -62,12 +62,6 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Mosa.Compiler.Metadata\Mosa.Compiler.Metadata.csproj">
-      <Project>{7033B213-2055-4C6A-B008-D9856267F5D7}</Project>
-      <Name>Mosa.Compiler.Metadata</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <Compile Include="AssemblyInfo.cs" />
     <Compile Include="Cil\CilRuntimeField.cs">
       <SubType>Code</SubType>
@@ -104,6 +98,11 @@
     <Compile Include="RuntimeType.cs" />
     <Compile Include="ITypeSystem.cs" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\Mosa.Compiler.Metadata\Mosa.Compiler.Metadata.csproj">
+      <Project>{7033B213-2055-4C6A-B008-D9856267F5D7}</Project>
+      <Name>Mosa.Compiler.Metadata</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

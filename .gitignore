@@ -21,8 +21,9 @@
 Thumbs.db
 build.force
 obj
-/bin/*
-/Bin/*
+/bin
+/Bin
+/bin2
 /tmp
 /tags
 
