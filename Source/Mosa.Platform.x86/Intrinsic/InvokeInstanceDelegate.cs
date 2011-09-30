@@ -33,7 +33,7 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// <param name="typeSystem">The type system.</param>
 		public void ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
 		{
-			var result = context.Result;
+			//var result = context.Result;
 			var op1 = context.Operand1;
 			var op2 = context.Operand2;
 

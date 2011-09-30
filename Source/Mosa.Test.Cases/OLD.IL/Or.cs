@@ -186,33 +186,33 @@ namespace Mosa.Test.Cases.OLD.IL
 		// Extremvaluecases
 		[Row(sbyte.MinValue, sbyte.MaxValue)]
 		[Row(sbyte.MaxValue, sbyte.MinValue)]
-		[Test]
+		//[Test]
 		public void OrI1(sbyte a, sbyte b)
 		{
-			settings.CodeSource = CreateTestCode("OrI1", "sbyte", "int");
-			Assert.IsTrue(Run<bool>(string.Empty, "Test", "OrI1", a | b, a, b));
+			//settings.CodeSource = CreateTestCode("OrI1", "sbyte", "int");
+			//Assert.IsTrue(Run<bool>(string.Empty, "Test", "OrI1", a | b, a, b));
 		}
 
 		[Row(-42, 48)]
 		[Row(17, 1)]
 		[Row(0, 0)]
 		[Row(sbyte.MinValue, sbyte.MaxValue)]
-		[Test]
+		//[Test]
 		public void OrConstantI1Right(sbyte a, sbyte b)
 		{
-			settings.CodeSource = CreateConstantTestCode("OrConstantI1Right", "sbyte", "int", null, b.ToString());
-			Assert.IsTrue(Run<bool>(string.Empty, "Test", "OrConstantI1Right", (a | b), a));
+			//settings.CodeSource = CreateConstantTestCode("OrConstantI1Right", "sbyte", "int", null, b.ToString());
+			//Assert.IsTrue(Run<bool>(string.Empty, "Test", "OrConstantI1Right", (a | b), a));
 		}
 
 		[Row(-42, 48)]
 		[Row(17, 1)]
 		[Row(0, 0)]
 		[Row(sbyte.MinValue, sbyte.MaxValue)]
-		[Test]
+		//[Test]
 		public void OrConstantI1Left(sbyte a, sbyte b)
 		{
-			settings.CodeSource = CreateConstantTestCode("OrConstantI1Left", "sbyte", "int", a.ToString(), null);
-			Assert.IsTrue(Run<bool>(string.Empty, "Test", "OrConstantI1Left", (a | b), b));
+			//settings.CodeSource = CreateConstantTestCode("OrConstantI1Left", "sbyte", "int", a.ToString(), null);
+			//Assert.IsTrue(Run<bool>(string.Empty, "Test", "OrConstantI1Left", (a | b), b));
 		}
 		#endregion
 
@@ -332,7 +332,6 @@ namespace Mosa.Test.Cases.OLD.IL
 		[Test]
 		public void OrI2(short a, short b)
 		{
-			short e = (short)(a | b);
 			settings.CodeSource = CreateTestCode("OrI2", "short", "int");
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "OrI2", (a | b), a, b));
 		}
@@ -393,7 +392,6 @@ namespace Mosa.Test.Cases.OLD.IL
 		[Test]
 		public void OrU2(ushort a, ushort b)
 		{
-			ushort e = (ushort)(a | b);
 			settings.CodeSource = CreateTestCode("OrU2", "ushort", "uint");
 			Assert.IsTrue(Run<bool>(string.Empty, "Test", "OrU2", (uint)(a | b), a, b));
 		}

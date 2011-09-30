@@ -123,8 +123,8 @@ namespace Mosa.Test.Collection
 
 		public static int CallDelegateBox(int p)
 		{
-			DelegateBox d = DelegateBoxTarget;
-			int result = (int)d(p);
+			DelegateBox d = DelegateBoxTarget;			
+			d(p);			
 			return p;
 		}
 

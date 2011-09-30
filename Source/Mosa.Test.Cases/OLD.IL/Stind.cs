@@ -45,10 +45,9 @@ namespace Mosa.Test.Cases.OLD.IL
 		public unsafe void DereffedVoidPtrAssign_I1(sbyte a)
 		{
 			settings.CodeSource = CreateDereferencedVoidPointerAssignmentTestCode("sbyte", "I1");
-			
 
 			void* address = (void*)Marshal.AllocHGlobal(sizeof(sbyte));
-			bool runResult = Run<bool>(string.Empty, "Test", "DereffedVoidPtrAssign_I1", a, (IntPtr)address);
+			Run<bool>(string.Empty, "Test", "DereffedVoidPtrAssign_I1", a, (IntPtr)address);
 			bool success = (*(sbyte*)address == a);
 			Marshal.FreeHGlobal((IntPtr)address);
 
@@ -69,9 +68,9 @@ namespace Mosa.Test.Cases.OLD.IL
 		{
 			settings.CodeSource = CreateDereferencedVoidPointerAssignmentTestCode("short", "I2");
 			
-
 			void* address = (void*)Marshal.AllocHGlobal(sizeof(short));
-			bool runResult = Run<bool>(string.Empty, "Test", "DereffedVoidPtrAssign_I2", a, (IntPtr)address);
+			
+			Run<bool>(string.Empty, "Test", "DereffedVoidPtrAssign_I2", a, (IntPtr)address);
 			bool success = (*(short*)address == a);
 			Marshal.FreeHGlobal((IntPtr)address);
 
@@ -91,10 +90,9 @@ namespace Mosa.Test.Cases.OLD.IL
 		public unsafe void DereffedVoidPtrAssign_I4(int a)
 		{
 			settings.CodeSource = CreateDereferencedVoidPointerAssignmentTestCode("int", "I4");
-			
 
 			void* address = (void*)Marshal.AllocHGlobal(sizeof(int));
-			bool runResult = Run<bool>(string.Empty, "Test", "DereffedVoidPtrAssign_I4", a, (IntPtr)address);
+			Run<bool>(string.Empty, "Test", "DereffedVoidPtrAssign_I4", a, (IntPtr)address);
 			bool success = (*(int*)address == a);
 			Marshal.FreeHGlobal((IntPtr)address);
 
@@ -114,10 +112,9 @@ namespace Mosa.Test.Cases.OLD.IL
 		public unsafe void DereffedVoidPtrAssign_I8(long a)
 		{
 			settings.CodeSource = CreateDereferencedVoidPointerAssignmentTestCode("long", "I8");
-			
 
 			void* address = (void*)Marshal.AllocHGlobal(sizeof(long));
-			bool runResult = Run<bool>(string.Empty, "Test", "DereffedVoidPtrAssign_I8", a, (IntPtr)address);
+			Run<bool>(string.Empty, "Test", "DereffedVoidPtrAssign_I8", a, (IntPtr)address);
 			bool success = (*(long*)address == a);
 			Marshal.FreeHGlobal((IntPtr)address);
 
@@ -135,11 +132,10 @@ namespace Mosa.Test.Cases.OLD.IL
 		[Test]
 		public unsafe void DereffedVoidPtrAssign_U1(byte a)
 		{
-			settings.CodeSource = CreateDereferencedVoidPointerAssignmentTestCode("byte", "U1");
-			
+			settings.CodeSource = CreateDereferencedVoidPointerAssignmentTestCode("byte", "U1");			
 
 			void* address = (void*)Marshal.AllocHGlobal(sizeof(byte));
-			bool runResult = Run<bool>(string.Empty, "Test", "DereffedVoidPtrAssign_U1", a, (IntPtr)address);
+			Run<bool>(string.Empty, "Test", "DereffedVoidPtrAssign_U1", a, (IntPtr)address);
 			bool success = (*(byte*)address == a);
 			Marshal.FreeHGlobal((IntPtr)address);
 
@@ -159,10 +155,9 @@ namespace Mosa.Test.Cases.OLD.IL
 		public unsafe void DereffedVoidPtrAssign_U2(ushort a)
 		{
 			settings.CodeSource = CreateDereferencedVoidPointerAssignmentTestCode("ushort", "U2");
-			
 
 			void* address = (void*)Marshal.AllocHGlobal(sizeof(ushort));
-			bool runResult = Run<bool>(string.Empty, "Test", "DereffedVoidPtrAssign_U2", a, (IntPtr)address);
+			Run<bool>(string.Empty, "Test", "DereffedVoidPtrAssign_U2", a, (IntPtr)address);
 			bool success = (*(ushort*)address == a);
 			Marshal.FreeHGlobal((IntPtr)address);
 
@@ -182,9 +177,8 @@ namespace Mosa.Test.Cases.OLD.IL
 		{
 			settings.CodeSource = CreateDereferencedVoidPointerAssignmentTestCode("uint", "U4");
 			
-
 			void* address = (void*)Marshal.AllocHGlobal(sizeof(uint));
-			bool runResult = Run<bool>(string.Empty, "Test", "DereffedVoidPtrAssign_U4", a, (IntPtr)address);
+			Run<bool>(string.Empty, "Test", "DereffedVoidPtrAssign_U4", a, (IntPtr)address);
 			bool success = (*(uint*)address == a);
 			Marshal.FreeHGlobal((IntPtr)address);
 
@@ -203,9 +197,8 @@ namespace Mosa.Test.Cases.OLD.IL
 		{
 			settings.CodeSource = CreateDereferencedVoidPointerAssignmentTestCode("ulong", "U8");
 			
-
 			void* address = (void*)Marshal.AllocHGlobal(sizeof(ulong));
-			bool runResult = Run<bool>(string.Empty, "Test", "DereffedVoidPtrAssign_U8", a, (IntPtr)address);
+			Run<bool>(string.Empty, "Test", "DereffedVoidPtrAssign_U8", a, (IntPtr)address);
 			bool success = (*(ulong*)address == a);
 			Marshal.FreeHGlobal((IntPtr)address);
 

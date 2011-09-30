@@ -72,7 +72,7 @@ namespace Mosa.Compiler.TypeSystem
 		/// <returns></returns>
 		public RuntimeType PatchType(ITypeModule typeModule, CilGenericType enclosingType, CilGenericType openType)
 		{
-			var genericParameters = enclosingType.GenericParameters;
+			//var genericParameters = enclosingType.GenericParameters;
 
 			var typeToken = new Token(0xFE000000 | typeTokenCounter++);
 			var signatureToken = new Token(0xFD000000 | signatureTokenCounter++);
@@ -102,7 +102,7 @@ namespace Mosa.Compiler.TypeSystem
 		public RuntimeField PatchField(ITypeModule typeModule, CilGenericType enclosingType, RuntimeField openField)
 		{
 			var openType = openField.DeclaringType as CilGenericType;
-			var genericParameters = enclosingType.GenericParameters;
+			//var genericParameters = enclosingType.GenericParameters;
 
 			var typeToken = new Token(0xFE000000 | typeTokenCounter++);
 			var signatureToken = new Token(0xFD000000 | signatureTokenCounter++);
@@ -258,7 +258,7 @@ namespace Mosa.Compiler.TypeSystem
 		public RuntimeMethod PatchMethod(ITypeModule typeModule, CilGenericType enclosingType, RuntimeMethod openMethod)
 		{
 			var openType = openMethod.DeclaringType as CilGenericType;
-			var genericParameters = enclosingType.GenericParameters;
+			//var genericParameters = enclosingType.GenericParameters;
 
 			var typeToken = new Token(0xFE000000 | typeTokenCounter++);
 			var signatureToken = new Token(0xFD000000 | signatureTokenCounter++);
