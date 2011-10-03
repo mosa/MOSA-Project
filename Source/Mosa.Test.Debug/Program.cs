@@ -16,15 +16,27 @@ namespace Mosa.Test.Debug
 			s.CompareEqualI1((sbyte)1, (sbyte)0, (sbyte)1, (sbyte)2);
 			s.CompareEqualI1((sbyte)2, (sbyte)2, (sbyte)2, (sbyte)1);
 
-			Add add = new Add();
+			//Add add = new Add();
 
-			add.AddConstantCLeft('a', 'Z');
-			add.AddConstantCLeft('a', 'Z');
-			add.AddConstantCLeft('a', 'Z');
+			//add.AddConstantCLeft('a', 'Z');
+			//add.AddConstantCLeft('a', 'Z');
+			//add.AddConstantCLeft('a', 'Z');
 
-			Int32Fixture int32fixture = new Int32Fixture();
+			Int32Fixture int32Fixture = new Int32Fixture();
+			BooleanFixture booleanFixture = new BooleanFixture();
 
-			int32fixture.Ldlen(10);
+			for (int i = 0; i < 1000; i++)
+			{
+				int32Fixture.Ldlen(i);
+				int32Fixture.Newarr();
+				int32Fixture.LdelemaI4(i, i);
+
+				booleanFixture.Ldlen(i);
+				booleanFixture.Newarr();
+				booleanFixture.LdelemB(i, true);
+				booleanFixture.LdelemaB(i, true);
+				booleanFixture.StelemB(i, true);
+			}
 
 			return;
 		}

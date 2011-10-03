@@ -99,8 +99,6 @@ namespace Mosa.Test.System
 			);
 
 			Debug.Assert(runtimeMethod != null, runtimeMethod.ToString());
-			//Debug.Assert(runtimeMethod.Address != null, runtimeMethod.ToString());
-			//Debug.Assert(runtimeMethod.Address != IntPtr.Zero, runtimeMethod.ToString());
 
 			// Get delegate name
 			string delegateName;
@@ -149,7 +147,7 @@ namespace Mosa.Test.System
 
 				CompilerResults results = Mosa.Test.CodeDomCompiler.Compiler.ExecuteCompiler(cacheSettings);
 
-				Console.WriteLine("Executing MOSA compiler...");
+				//Console.WriteLine("Executing MOSA compiler...");
 
 				Assert.IsFalse(results.Errors.HasErrors, "Failed to compile source code with native compiler");
 
