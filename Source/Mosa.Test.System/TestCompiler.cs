@@ -75,7 +75,7 @@ namespace Mosa.Test.System
 			{
 				if (tempDirectory == null)
 				{
-					tempDirectory = Path.Combine(Path.GetTempPath(), "mosa");
+					tempDirectory = Path.Combine(Path.GetTempPath(), "mosa.tmp");
 					if (!Directory.Exists(tempDirectory))
 					{
 						Directory.CreateDirectory(tempDirectory);

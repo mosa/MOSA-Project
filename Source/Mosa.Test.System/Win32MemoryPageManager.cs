@@ -10,20 +10,30 @@
 using System;
 using System.Runtime.InteropServices;
 
-using Mosa.Compiler.Memory;
-
 namespace Mosa.Test.System
 {
 	/// <summary>
-	/// Provides implementation of Mosa.Kernel.Memory.IMemoryPageManager based on Win32 virtual memory.
+	/// Provides implementation of IMemoryPageManager based on Win32 virtual memory.
 	/// </summary>
 	sealed class Win32MemoryPageManager : IMemoryPageManager
 	{
+		// Useful for debugging
+		private ulong total = 0;
+		private uint count = 0;
+
 		#region IMemoryPageManager Members
 
 		IntPtr IMemoryPageManager.Allocate(IntPtr address, ulong size, PageProtectionFlags accessMode)
 		{
-			return VirtualAlloc(address, (uint)size, VirtualAllocTypes.MEM_COMMIT | VirtualAllocTypes.MEM_RESERVE, AccessProtectionFlags.PAGE_EXECUTE_READWRITE);
+			total += size;
+			count++;
+
+			IntPtr memory = VirtualAlloc(address, (uint)size, VirtualAllocTypes.MEM_COMMIT | VirtualAllocTypes.MEM_RESERVE, AccessProtectionFlags.PAGE_EXECUTE_READWRITE);
+
+			if (IntPtr.Zero == memory)
+				return IntPtr.Zero;
+
+			return memory;
 		}
 
 		void IMemoryPageManager.Free(IntPtr address, ulong size)
@@ -37,21 +47,6 @@ namespace Mosa.Test.System
 		PageProtectionFlags IMemoryPageManager.Protect(IntPtr address, ulong size, PageProtectionFlags accessMode)
 		{
 			throw new NotImplementedException();
-		}
-
-		ulong IMemoryPageManager.PageSize
-		{
-			get { return 4096; }
-		}
-
-		ulong IMemoryPageManager.TotalMemory
-		{
-			get { return 1024 * 1024 * 1024; }
-		}
-
-		ulong IMemoryPageManager.TotalMemoryInUse
-		{
-			get { return 0; }
 		}
 
 		#endregion // IMemoryPageManager Members

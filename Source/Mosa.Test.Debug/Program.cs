@@ -24,6 +24,7 @@ namespace Mosa.Test.Debug
 
 			Int32Fixture int32Fixture = new Int32Fixture();
 			BooleanFixture booleanFixture = new BooleanFixture();
+			CallVirtualFixture callVirtualFixture = new CallVirtualFixture();
 
 			for (int i = 0; i < 1000; i++)
 			{
@@ -36,6 +37,9 @@ namespace Mosa.Test.Debug
 				booleanFixture.LdelemB(i, true);
 				booleanFixture.LdelemaB(i, true);
 				booleanFixture.StelemB(i, true);
+
+				callVirtualFixture.TestBaseCall();
+				callVirtualFixture.TestVirtualCall();
 			}
 
 			return;

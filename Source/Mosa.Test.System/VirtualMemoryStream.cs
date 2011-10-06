@@ -10,8 +10,6 @@
 using System;
 using System.IO;
 
-using Mosa.Compiler.Memory;
-
 namespace Mosa.Test.System
 {
 	/// <summary>
@@ -45,8 +43,9 @@ namespace Mosa.Test.System
 		/// <param name="allocationSize">The number of bytes to allocate from virtual memory.</param>
 		public unsafe VirtualMemoryStream(IMemoryPageManager pageManager, uint allocationSize)
 		{
-			memory = pageManager.Allocate(IntPtr.Zero, allocationSize, PageProtectionFlags.Read | PageProtectionFlags.Write | PageProtectionFlags.Execute);
-			if (IntPtr.Zero == memory)
+			this.memory = pageManager.Allocate(IntPtr.Zero, allocationSize, PageProtectionFlags.Read | PageProtectionFlags.Write | PageProtectionFlags.Execute);
+			
+			if (this.memory == IntPtr.Zero)
 				throw new OutOfMemoryException();
 
 			base.Initialize((byte*)memory.ToPointer(), allocationSize, allocationSize, FileAccess.Write);

@@ -9,8 +9,6 @@
 
 using System;
 
-using Mosa.Compiler.Memory;
-
 namespace Mosa.Test.System
 {
 
@@ -26,17 +24,39 @@ namespace Mosa.Test.System
 		/// </summary>
 		public static IMemoryPageManager MemoryPageManager = new Win32MemoryPageManager();
 
+		private static unsafe void* memory = null;
+		private static uint remaining = 0;
+
 		#endregion // Data members
 
 		#region Internal Call Prototypes
 
 		public unsafe static void* AllocateMemory(uint size)
 		{
-			void* memory = MemoryPageManager.Allocate(IntPtr.Zero, size, PageProtectionFlags.Read | PageProtectionFlags.Write | PageProtectionFlags.WriteCombine).ToPointer();
-			if (memory == null)
+			if (size >= 1024 * 10)
 			{
-				throw new OutOfMemoryException();
+				void* large = MemoryPageManager.Allocate(IntPtr.Zero, 1024, PageProtectionFlags.Read | PageProtectionFlags.Write | PageProtectionFlags.WriteCombine).ToPointer();
+
+				if (large == null)
+				{
+					throw new OutOfMemoryException();
+				}
+
+				return large;
 			}
+
+			if (memory == null || remaining < size)
+			{
+				// 4Mb increments
+				memory = MemoryPageManager.Allocate(IntPtr.Zero, 1024 * 1024 * 4, PageProtectionFlags.Read | PageProtectionFlags.Write | PageProtectionFlags.WriteCombine).ToPointer();
+
+				if (memory == null)
+				{
+					throw new OutOfMemoryException();
+				}
+			}
+
+			remaining -= size;
 
 			return memory;
 		}

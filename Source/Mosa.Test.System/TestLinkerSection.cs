@@ -53,14 +53,13 @@ namespace Mosa.Test.System
 		/// <returns></returns>
 		public Stream Allocate(int size, int alignment)
 		{
-			Stream stream = this.stream;
 			if (stream == null)
 			{
-				// Request 4Mb of memory
+				// Allocate 4Mb for this stream
 				VirtualMemoryStream vms = new VirtualMemoryStream(global::Mosa.Test.System.HostedRuntime.MemoryPageManager, 1024 * 1024 * 4);
 
 				// Save the stream for further references
-				this.stream = stream = vms;
+				this.stream = vms;
 				base.VirtualAddress = vms.Base;
 			}
 

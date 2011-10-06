@@ -7,12 +7,14 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-namespace Mosa.Compiler.Memory
+using System;
+
+namespace Mosa.Test.System
 {
 	/// <summary>
 	/// Specifies memory protection flags.
 	/// </summary>
-	[System.Flags]
+	[Flags]
 	public enum PageProtectionFlags
 	{
 		/// <summary>
