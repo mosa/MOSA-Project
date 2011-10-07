@@ -8,6 +8,7 @@
  */
 
 using System;
+using System.Diagnostics;
 
 namespace Mosa.Test.System
 {
@@ -33,6 +34,11 @@ namespace Mosa.Test.System
 
 		public unsafe static void* AllocateMemory(uint size)
 		{
+			//if (size != size + 1)
+			//    throw new Exception("AllocateMemory: " + size.ToString());
+
+			//Debug.WriteLine("AllocateMemory: " + size.ToString());
+
 			if (size >= 1024 * 10)
 			{
 				void* large = MemoryPageManager.Allocate(IntPtr.Zero, 1024 * 10, PageProtectionFlags.Read | PageProtectionFlags.Write | PageProtectionFlags.WriteCombine).ToPointer();
@@ -48,7 +54,8 @@ namespace Mosa.Test.System
 			if (memory == null || remaining < size)
 			{
 				// 4Mb increments
-				memory = MemoryPageManager.Allocate(IntPtr.Zero, 1024 * 1024 * 4, PageProtectionFlags.Read | PageProtectionFlags.Write | PageProtectionFlags.WriteCombine).ToPointer();
+				remaining = 1024 * 1024 * 4;
+				memory = MemoryPageManager.Allocate(IntPtr.Zero, remaining, PageProtectionFlags.Read | PageProtectionFlags.Write | PageProtectionFlags.WriteCombine).ToPointer();
 
 				if (memory == null)
 				{
@@ -56,9 +63,11 @@ namespace Mosa.Test.System
 				}
 			}
 
+			void* alloc = memory;
 			remaining -= size;
+			memory = ((byte*)memory) + size;
 
-			return memory;
+			return alloc;
 		}
 
 		#endregion // Virtual Machine Call Prototypes

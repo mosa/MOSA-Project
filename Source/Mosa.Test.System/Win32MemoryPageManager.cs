@@ -17,21 +17,11 @@ namespace Mosa.Test.System
 	/// </summary>
 	sealed class Win32MemoryPageManager : IMemoryPageManager
 	{
-		// Useful for debugging
-		private ulong total = 0;
-		private uint count = 0;
-
 		#region IMemoryPageManager Members
 
 		IntPtr IMemoryPageManager.Allocate(IntPtr address, ulong size, PageProtectionFlags accessMode)
 		{
-			total += size;
-			count++;
-
 			IntPtr memory = VirtualAlloc(address, (uint)size, VirtualAllocTypes.MEM_COMMIT | VirtualAllocTypes.MEM_RESERVE, AccessProtectionFlags.PAGE_EXECUTE_READWRITE);
-
-			if (IntPtr.Zero == memory)
-				return IntPtr.Zero;
 
 			return memory;
 		}
@@ -83,7 +73,7 @@ namespace Mosa.Test.System
 			PAGE_WRITECOMBINE = 0x400
 		}
 
-		[DllImport(@"kernel32.dll", SetLastError = true, PreserveSig = true)]
+		[DllImport("kernel32.dll", SetLastError = true, PreserveSig = true)]
 		private static extern unsafe bool VirtualFree(IntPtr lpAddress, uint dwSize, VirtualAllocTypes dwFreeType);
 
 		[DllImport("kernel32.dll", SetLastError = true, PreserveSig = true)]
