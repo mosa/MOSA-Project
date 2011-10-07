@@ -84,7 +84,7 @@ namespace Mosa.Compiler.Framework
 		private ExceptionClause FindExceptionClause(BasicBlock block)
 		{
 			Context ctx = new Context(instructionSet, block);
-			int label = ctx.Index;
+			int label = ctx.Label;
 
 			foreach (ExceptionClauseNode node in sortedClauses)
 			{

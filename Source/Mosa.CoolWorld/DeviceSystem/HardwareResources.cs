@@ -153,7 +153,7 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		public void DisableIRQ()
 		{
-			interruptHandler.Enable();
+			interruptHandler.Disable();
 		}
 
 		/// <summary>
