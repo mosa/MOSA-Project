@@ -35,7 +35,7 @@ namespace Mosa.Test.System
 		{
 			if (size >= 1024 * 10)
 			{
-				void* large = MemoryPageManager.Allocate(IntPtr.Zero, 1024, PageProtectionFlags.Read | PageProtectionFlags.Write | PageProtectionFlags.WriteCombine).ToPointer();
+				void* large = MemoryPageManager.Allocate(IntPtr.Zero, 1024 * 10, PageProtectionFlags.Read | PageProtectionFlags.Write | PageProtectionFlags.WriteCombine).ToPointer();
 
 				if (large == null)
 				{

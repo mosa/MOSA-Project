@@ -1,7 +1,8 @@
 ﻿
+using Mosa.Test.Cases.CIL;
+using Mosa.Test.Cases.IL;
 using Mosa.Test.Cases.FIX.IL;
 using Mosa.Test.Cases.OLD.IL;
-using Mosa.Test.Cases.CIL;
 
 namespace Mosa.Test.Debug
 {
@@ -25,9 +26,12 @@ namespace Mosa.Test.Debug
 			Int32Fixture int32Fixture = new Int32Fixture();
 			BooleanFixture booleanFixture = new BooleanFixture();
 			CallVirtualFixture callVirtualFixture = new CallVirtualFixture();
+			Call call = new Call();
 
-			for (int i = 0; i < 1000; i++)
+			for (int i = 0; i < 2000; i++)
 			{
+				call.CallI4(i);
+				call.CallU4((uint)i);
 				int32Fixture.Ldlen(i);
 				int32Fixture.Newarr();
 				int32Fixture.LdelemaI4(i, i);
