@@ -194,11 +194,11 @@ namespace Mosa.Compiler.TypeSystem
 		{
 			ResolveType(field.DeclaringType);
 
-			var size = 0;
+			var offset = 0;
 
-			fieldOffets.TryGetValue(field, out size);
+			fieldOffets.TryGetValue(field, out offset);
 
-			return size;
+			return offset;
 		}
 
 		/// <summary>
