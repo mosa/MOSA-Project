@@ -7,7 +7,11 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
  *
  */
+ 
 
+
+
+using System;
 
 namespace Mosa.Test.Collection
 {
@@ -21,7 +25,7 @@ namespace Mosa.Test.Collection
 			
 			structure.One = one;
 	
-			return (structure.One == one);
+			return (structure.One.Equals(one));
 		}
 	
 		static bool StructTestSet3U1(byte one, byte two, byte three)
@@ -32,7 +36,7 @@ namespace Mosa.Test.Collection
 			structure.Two = two;
 			structure.Three = three;
 			
-			return (structure.One == one && structure.Two == two && structure.Three == three);
+			return (structure.One.Equals(one) && structure.Two.Equals(two) && structure.Three.Equals(three));
 		}
 		
 		static bool StructTestSet1U2(ushort one)
@@ -41,7 +45,7 @@ namespace Mosa.Test.Collection
 			
 			structure.One = one;
 	
-			return (structure.One == one);
+			return (structure.One.Equals(one));
 		}
 	
 		static bool StructTestSet3U2(ushort one, ushort two, ushort three)
@@ -52,7 +56,7 @@ namespace Mosa.Test.Collection
 			structure.Two = two;
 			structure.Three = three;
 			
-			return (structure.One == one && structure.Two == two && structure.Three == three);
+			return (structure.One.Equals(one) && structure.Two.Equals(two) && structure.Three.Equals(three));
 		}
 		
 		static bool StructTestSet1U4(uint one)
@@ -61,7 +65,7 @@ namespace Mosa.Test.Collection
 			
 			structure.One = one;
 	
-			return (structure.One == one);
+			return (structure.One.Equals(one));
 		}
 	
 		static bool StructTestSet3U4(uint one, uint two, uint three)
@@ -72,7 +76,7 @@ namespace Mosa.Test.Collection
 			structure.Two = two;
 			structure.Three = three;
 			
-			return (structure.One == one && structure.Two == two && structure.Three == three);
+			return (structure.One.Equals(one) && structure.Two.Equals(two) && structure.Three.Equals(three));
 		}
 		
 		static bool StructTestSet1U8(ulong one)
@@ -81,7 +85,7 @@ namespace Mosa.Test.Collection
 			
 			structure.One = one;
 	
-			return (structure.One == one);
+			return (structure.One.Equals(one));
 		}
 	
 		static bool StructTestSet3U8(ulong one, ulong two, ulong three)
@@ -92,7 +96,7 @@ namespace Mosa.Test.Collection
 			structure.Two = two;
 			structure.Three = three;
 			
-			return (structure.One == one && structure.Two == two && structure.Three == three);
+			return (structure.One.Equals(one) && structure.Two.Equals(two) && structure.Three.Equals(three));
 		}
 		
 		static bool StructTestSet1I1(sbyte one)
@@ -101,7 +105,7 @@ namespace Mosa.Test.Collection
 			
 			structure.One = one;
 	
-			return (structure.One == one);
+			return (structure.One.Equals(one));
 		}
 	
 		static bool StructTestSet3I1(sbyte one, sbyte two, sbyte three)
@@ -112,7 +116,7 @@ namespace Mosa.Test.Collection
 			structure.Two = two;
 			structure.Three = three;
 			
-			return (structure.One == one && structure.Two == two && structure.Three == three);
+			return (structure.One.Equals(one) && structure.Two.Equals(two) && structure.Three.Equals(three));
 		}
 		
 		static bool StructTestSet1I2(short one)
@@ -121,7 +125,7 @@ namespace Mosa.Test.Collection
 			
 			structure.One = one;
 	
-			return (structure.One == one);
+			return (structure.One.Equals(one));
 		}
 	
 		static bool StructTestSet3I2(short one, short two, short three)
@@ -132,7 +136,7 @@ namespace Mosa.Test.Collection
 			structure.Two = two;
 			structure.Three = three;
 			
-			return (structure.One == one && structure.Two == two && structure.Three == three);
+			return (structure.One.Equals(one) && structure.Two.Equals(two) && structure.Three.Equals(three));
 		}
 		
 		static bool StructTestSet1I4(int one)
@@ -141,7 +145,7 @@ namespace Mosa.Test.Collection
 			
 			structure.One = one;
 	
-			return (structure.One == one);
+			return (structure.One.Equals(one));
 		}
 	
 		static bool StructTestSet3I4(int one, int two, int three)
@@ -152,7 +156,7 @@ namespace Mosa.Test.Collection
 			structure.Two = two;
 			structure.Three = three;
 			
-			return (structure.One == one && structure.Two == two && structure.Three == three);
+			return (structure.One.Equals(one) && structure.Two.Equals(two) && structure.Three.Equals(three));
 		}
 		
 		static bool StructTestSet1I8(long one)
@@ -161,7 +165,7 @@ namespace Mosa.Test.Collection
 			
 			structure.One = one;
 	
-			return (structure.One == one);
+			return (structure.One.Equals(one));
 		}
 	
 		static bool StructTestSet3I8(long one, long two, long three)
@@ -172,7 +176,7 @@ namespace Mosa.Test.Collection
 			structure.Two = two;
 			structure.Three = three;
 			
-			return (structure.One == one && structure.Two == two && structure.Three == three);
+			return (structure.One.Equals(one) && structure.Two.Equals(two) && structure.Three.Equals(three));
 		}
 		
 		static bool StructTestSet1R4(float one)
@@ -181,7 +185,7 @@ namespace Mosa.Test.Collection
 			
 			structure.One = one;
 	
-			return (structure.One == one);
+			return (structure.One.Equals(one));
 		}
 	
 		static bool StructTestSet3R4(float one, float two, float three)
@@ -192,7 +196,7 @@ namespace Mosa.Test.Collection
 			structure.Two = two;
 			structure.Three = three;
 			
-			return (structure.One == one && structure.Two == two && structure.Three == three);
+			return (structure.One.Equals(one) && structure.Two.Equals(two) && structure.Three.Equals(three));
 		}
 		
 		static bool StructTestSet1R8(double one)
@@ -201,7 +205,7 @@ namespace Mosa.Test.Collection
 			
 			structure.One = one;
 	
-			return (structure.One == one);
+			return (structure.One.Equals(one));
 		}
 	
 		static bool StructTestSet3R8(double one, double two, double three)
@@ -212,7 +216,7 @@ namespace Mosa.Test.Collection
 			structure.Two = two;
 			structure.Three = three;
 			
-			return (structure.One == one && structure.Two == two && structure.Three == three);
+			return (structure.One.Equals(one) && structure.Two.Equals(two) && structure.Three.Equals(three));
 		}
 		
 		static bool StructTestSet1C(char one)
@@ -221,7 +225,7 @@ namespace Mosa.Test.Collection
 			
 			structure.One = one;
 	
-			return (structure.One == one);
+			return (structure.One.Equals(one));
 		}
 	
 		static bool StructTestSet3C(char one, char two, char three)
@@ -232,9 +236,10 @@ namespace Mosa.Test.Collection
 			structure.Two = two;
 			structure.Three = three;
 			
-			return (structure.One == one && structure.Two == two && structure.Three == three);
+			return (structure.One.Equals(one) && structure.Two.Equals(two) && structure.Three.Equals(three));
 		}
 		
+
 	}
 
 	
@@ -369,5 +374,6 @@ namespace Mosa.Test.Collection
 		public char Two;
 		public char Three;
 	}
-		
+	
+	
 }

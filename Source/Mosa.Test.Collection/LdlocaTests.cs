@@ -7,7 +7,11 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
  *
  */
+ 
 
+
+
+using System;
 
 namespace Mosa.Test.Collection
 {
@@ -23,7 +27,7 @@ namespace Mosa.Test.Collection
 
 		private static bool LdlocaCheckValueRefU1(byte expect, ref byte a)
 		{
-			return (expect == a);
+			return (expect.Equals(a));
 		}
 	
 		public static bool LdlocaCheckValueU2(ushort expect) 
@@ -34,7 +38,7 @@ namespace Mosa.Test.Collection
 
 		private static bool LdlocaCheckValueRefU2(ushort expect, ref ushort a)
 		{
-			return (expect == a);
+			return (expect.Equals(a));
 		}
 	
 		public static bool LdlocaCheckValueU4(uint expect) 
@@ -45,7 +49,7 @@ namespace Mosa.Test.Collection
 
 		private static bool LdlocaCheckValueRefU4(uint expect, ref uint a)
 		{
-			return (expect == a);
+			return (expect.Equals(a));
 		}
 	
 		public static bool LdlocaCheckValueU8(ulong expect) 
@@ -56,7 +60,7 @@ namespace Mosa.Test.Collection
 
 		private static bool LdlocaCheckValueRefU8(ulong expect, ref ulong a)
 		{
-			return (expect == a);
+			return (expect.Equals(a));
 		}
 	
 		public static bool LdlocaCheckValueI1(sbyte expect) 
@@ -67,7 +71,7 @@ namespace Mosa.Test.Collection
 
 		private static bool LdlocaCheckValueRefI1(sbyte expect, ref sbyte a)
 		{
-			return (expect == a);
+			return (expect.Equals(a));
 		}
 	
 		public static bool LdlocaCheckValueI2(short expect) 
@@ -78,7 +82,7 @@ namespace Mosa.Test.Collection
 
 		private static bool LdlocaCheckValueRefI2(short expect, ref short a)
 		{
-			return (expect == a);
+			return (expect.Equals(a));
 		}
 	
 		public static bool LdlocaCheckValueI4(int expect) 
@@ -89,7 +93,7 @@ namespace Mosa.Test.Collection
 
 		private static bool LdlocaCheckValueRefI4(int expect, ref int a)
 		{
-			return (expect == a);
+			return (expect.Equals(a));
 		}
 	
 		public static bool LdlocaCheckValueI8(long expect) 
@@ -100,7 +104,7 @@ namespace Mosa.Test.Collection
 
 		private static bool LdlocaCheckValueRefI8(long expect, ref long a)
 		{
-			return (expect == a);
+			return (expect.Equals(a));
 		}
 	
 		public static bool LdlocaCheckValueR4(float expect) 
@@ -111,7 +115,7 @@ namespace Mosa.Test.Collection
 
 		private static bool LdlocaCheckValueRefR4(float expect, ref float a)
 		{
-			return (expect == a);
+			return (expect.Equals(a));
 		}
 	
 		public static bool LdlocaCheckValueR8(double expect) 
@@ -122,7 +126,7 @@ namespace Mosa.Test.Collection
 
 		private static bool LdlocaCheckValueRefR8(double expect, ref double a)
 		{
-			return (expect == a);
+			return (expect.Equals(a));
 		}
 	
 		public static bool LdlocaCheckValueC(char expect) 
@@ -133,7 +137,8 @@ namespace Mosa.Test.Collection
 
 		private static bool LdlocaCheckValueRefC(char expect, ref char a)
 		{
-			return (expect == a);
+			return (expect.Equals(a));
 		}
-		}
+	
+	}
 }

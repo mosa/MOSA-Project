@@ -135,6 +135,26 @@ namespace Mosa.Internal
 			return memory;
 		}
 
+		public unsafe static void* BoxInt64(void* methodTable, uint classSize, long value)
+		{
+			void* memory = (void*)AllocateMemory(8);
+
+			long* destination = (long*)memory;
+			destination[0] = (long)value;
+
+			return memory;
+		}
+
+		public unsafe static void* BoxUInt64(void* methodTable, uint classSize, ulong value)
+		{
+			void* memory = (void*)AllocateMemory(8);
+
+			ulong* destination = (ulong*)memory;
+			destination[0] = (ulong)value;
+
+			return memory;
+		}
+
 		public unsafe static void* BoxSingle(void* methodTable, uint classSize, float value)
 		{
 			void* memory = (void*)AllocateMemory(4);
@@ -168,6 +188,16 @@ namespace Mosa.Internal
 		public unsafe static uint UnboxUInt32(void* data)
 		{
 			return ((uint*)data)[0];
+		}
+
+		public unsafe static long UnboxInt64(void* data)
+		{
+			return ((long*)data)[0];
+		}
+
+		public unsafe static ulong UnboxUInt64(void* data)
+		{
+			return ((ulong*)data)[0];
 		}
 
 		public unsafe static float UnboxSingle(void* data)

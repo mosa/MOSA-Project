@@ -36,6 +36,8 @@ namespace Mosa.Compiler.Framework.IR
 		Box,
 		BoxInt32,
 		BoxUInt32,
+		BoxInt64,
+		BoxUInt64,
 		BoxSingle,
 		BoxDouble,
 
@@ -104,6 +106,8 @@ namespace Mosa.Compiler.Framework.IR
 		UnboxInt16,
 		UnboxInt32,
 		UnboxUInt32,
+		UnboxInt64,
+		UnboxUInt64,
 		UnboxSingle,
 		UnboxDouble,
 	}
