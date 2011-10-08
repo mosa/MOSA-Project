@@ -7,11 +7,14 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
  *
  */
+ 
 
 
 
 
-
+using System;
+using System.Collections.Generic;
+using System.Text;
 using MbUnit.Framework;
 
 using Mosa.Test.System;
@@ -80,16 +83,12 @@ namespace Mosa.Test.Cases.IL
 		[Test]
 		public void LdargaCheckValueR4([R4]float a)
 		{
-			if (float.IsNaN(a)) return;
-		
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaCheckValueR4", a, a));
 		}
 		
 		[Test]
 		public void LdargaCheckValueR8([R8]double a)
 		{
-			if (double.IsNaN(a)) return;
-		
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaCheckValueR8", a, a));
 		}
 		
@@ -154,16 +153,12 @@ namespace Mosa.Test.Cases.IL
 		[Test]
 		public void LdargaChangeValueR4([R4]float a)
 		{
-			if (float.IsNaN(a)) return;
-		
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaChangeValueR4", a, a));
 		}
 		
 		[Test]
 		public void LdargaChangeValueR8([R8]double a)
 		{
-			if (double.IsNaN(a)) return;
-		
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdargaTests", "LdargaChangeValueR8", a, a));
 		}
 		

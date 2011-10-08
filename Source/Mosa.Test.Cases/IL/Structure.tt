@@ -10,16 +10,17 @@ using Mosa.Test.Collection;
 
 namespace Mosa.Test.Cases.IL
 {
-	//[TestFixture]
+	[TestFixture]
 	public class Structures : TestCompilerAdapter
 	{
 		public Structures()
 		{
 			settings.AddReference("Mosa.Test.Collection.dll");
 		}
-		<# foreach (KeyValuePair<string, string> number in NumbersWithChar) { #>
-
-		//[Test]
+		<# foreach (KeyValuePair<string, string> number in NumbersWithChar) {
+			if (number.Value.EndsWith("8")) { #>
+		//[Test]<# } else { #>
+		[Test]<# } #>
 		public void StructTestSet1<#= number.Value #>([<#= number.Value #>]<#= number.Key #> one)
 		{
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "StructTests", "StructTestSet1<#= number.Value #>", one));
