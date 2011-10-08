@@ -44,10 +44,9 @@ namespace Mosa.Test.System
 		/// </summary>
 		private TestAssemblyLinker linker;
 
-		/// <summary>
-		/// 
-		/// </summary>
-		private static bool initalizedFlag = false;
+		private static uint memoryPtr = 0x21700000; // Location for pointer to allocated memory!
+		private static uint memorySize = 1024 * 1024 * 2; // 2Mb
+		private IntPtr memoryAllocated = IntPtr.Zero;
 
 		#endregion // Data members
 
@@ -58,32 +57,7 @@ namespace Mosa.Test.System
 		/// </summary>
 		public TestCompiler()
 		{
-			uint memoryPtr = 0x21700000; // Location for pointer to allocated memory!
-			uint allocate = 1024 * 1024 * 256; // 256Mb
-
-			lock (this.GetType())
-			{
-				if (!initalizedFlag)
-				{
-					IntPtr allocated = HostedRuntime.MemoryPageManager.Allocate(new IntPtr(memoryPtr), 1024, PageProtectionFlags.Read | PageProtectionFlags.Write | PageProtectionFlags.WriteCombine);
-
-					if (allocated.ToInt32() != memoryPtr)
-						throw new OutOfMemoryException();
-
-					allocated = HostedRuntime.MemoryPageManager.Allocate(IntPtr.Zero, allocate, PageProtectionFlags.Read | PageProtectionFlags.Write | PageProtectionFlags.WriteCombine);
-
-					if (allocated == IntPtr.Zero)
-						throw new OutOfMemoryException();
-
-					unsafe
-					{
-						((uint*)memoryPtr)[0] = (uint)allocated.ToInt32();
-						((uint*)memoryPtr)[1] = allocate;
-					}
-
-					initalizedFlag = true;
-				}
-			}
+			ResetMemory();
 		}
 
 		#endregion // Construction
@@ -107,6 +81,28 @@ namespace Mosa.Test.System
 		}
 
 		#endregion Properties
+
+		protected void ResetMemory()
+		{
+			if (memoryAllocated == IntPtr.Zero)
+			{
+				if (Memory.MemoryPageManager.Allocate(new IntPtr(memoryPtr), 1024, PageProtectionFlags.Read | PageProtectionFlags.Write | PageProtectionFlags.WriteCombine).ToInt32() != memoryPtr)
+					throw new OutOfMemoryException();
+
+				memoryAllocated = Memory.MemoryPageManager.Allocate(IntPtr.Zero, memorySize, PageProtectionFlags.Read | PageProtectionFlags.Write | PageProtectionFlags.WriteCombine);
+
+				if (memoryAllocated == IntPtr.Zero)
+					throw new OutOfMemoryException();
+
+			}
+
+			unsafe
+			{
+				((uint*)memoryPtr)[0] = (uint)memoryAllocated.ToInt32();
+				((uint*)memoryPtr)[1] = (uint)memoryAllocated.ToInt32(); 
+				((uint*)memoryPtr)[2] = memorySize;
+			}
+		}
 
 		public T Run<T>(CompilerSettings settings, string ns, string type, string method, params object[] parameters)
 		{
@@ -141,6 +137,9 @@ namespace Mosa.Test.System
 				address,
 				delegateType
 			);
+
+			// Reset Memory
+			ResetMemory();
 
 			// Execute the test method
 			object tempResult = fn.DynamicInvoke(parameters);
