@@ -12,10 +12,20 @@ namespace Mosa.Kernel
 {
 	public class KernelMemory
 	{
-		// Never called - Necessary for reference
-		static public uint AllocateMemory(uint size)
+		const uint memoryptr = 0x21700000;	// Location for pointer to allocated memory!
+
+		static private uint memory = 0;
+
+		static unsafe public uint AllocateMemory(uint size)
 		{
-			return 0;
+			if (memory == 0)
+			{
+				memory = ((uint*)memoryptr)[0];
+			}
+
+			uint alloc = memory;
+			memory += size;
+			return alloc;
 		}
 
 	}

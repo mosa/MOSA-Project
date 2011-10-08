@@ -30,9 +30,9 @@ namespace Mosa.Test.Debug
 
 			for (int i = 0; i < 2000; i++)
 			{
+				int32Fixture.Ldlen(i);
 				call.CallI4(i);
 				call.CallU4((uint)i);
-				int32Fixture.Ldlen(i);
 				int32Fixture.Newarr();
 				int32Fixture.LdelemaI4(i, i);
 

@@ -32,12 +32,10 @@ namespace Mosa.Internal
 			//   - IntPtr SyncBlock
 			//   - 0 .. n object data fields
 
-			uint allocationSize = ((2 * nativeIntSize) + classSize);
-
+			uint allocationSize = (2 * nativeIntSize) + classSize;
 			void* memory = (void*)AllocateMemory(allocationSize);
 
 			uint* destination = (uint*)memory;
-			// FIXME: Memset((byte*)destination, 0, (int)allocationSize);
 			destination[0] = (uint)methodTable;
 			destination[1] = 0; // No sync block initially
 
@@ -55,10 +53,12 @@ namespace Mosa.Internal
 			//   - int length
 			//   - ElementType[length] elements
 
-			uint allocationSize = nativeIntSize + (uint)(elements * elementSize);
-			void* memory = AllocateObject(methodTable, allocationSize);
+			uint allocationSize = (nativeIntSize * 3) + (uint)(elements * elementSize);
+			void* memory = AllocateMemory(allocationSize);
 
 			uint* destination = (uint*)memory;
+			destination[0] = (uint)methodTable;
+			destination[1] = 0; // No sync block initially
 			destination[2] = elements;
 
 			return memory;

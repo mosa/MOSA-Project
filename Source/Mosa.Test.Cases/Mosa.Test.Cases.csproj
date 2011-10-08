@@ -117,7 +117,7 @@
     <Compile Include="OLD.IL\Add.cs" />
     <Compile Include="OLD.IL\AddPtr.cs" />
     <Compile Include="OLD.IL\And.cs" />
-    <Compile Include="IL\CallWithConstant.cs" />
+    <Compile Include="OLD.IL\CallWithConstant.cs" />
     <Compile Include="OLD.IL\Ceq.cs" />
     <Compile Include="OLD.IL\Cgt.cs" />
     <Compile Include="OLD.IL\Clt.cs" />

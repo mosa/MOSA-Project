@@ -22,22 +22,20 @@ namespace Mosa.Internal
 			return (void*)KernelMemory.AllocateMemory(size);
 		}
 
+
 		public static unsafe void* AllocateObject(void* methodTable, uint classSize)
 		{
-			// HACK: Add compiler architecture to the runtime
-			uint nativeIntSize = 4;
+			uint nativeIntSize = 4; // HACK: Add compiler architecture to the runtime
 
 			// An object has the following memory layout:
 			//   - IntPtr MTable
 			//   - IntPtr SyncBlock
 			//   - 0 .. n object data fields
 
-			uint allocationSize = ((2 * nativeIntSize) + classSize);
-
+			uint allocationSize = (2 * nativeIntSize) + classSize;
 			void* memory = (void*)AllocateMemory(allocationSize);
 
 			uint* destination = (uint*)memory;
-			// FIXME: Memset((byte*)destination, 0, (int)allocationSize);
 			destination[0] = (uint)methodTable;
 			destination[1] = 0; // No sync block initially
 
@@ -46,8 +44,7 @@ namespace Mosa.Internal
 
 		public static unsafe void* AllocateArray(void* methodTable, uint elementSize, uint elements)
 		{
-			// HACK: Add compiler architecture to the runtime
-			uint nativeIntSize = 4;
+			uint nativeIntSize = 4; // HACK: Add compiler architecture to the runtime
 
 			// An array has the following memory layout:
 			//   - IntPtr MTable
@@ -55,10 +52,12 @@ namespace Mosa.Internal
 			//   - int length
 			//   - ElementType[length] elements
 
-			uint allocationSize = nativeIntSize + (uint)(elements * elementSize);
-			void* memory = AllocateObject(methodTable, allocationSize);
+			uint allocationSize = (nativeIntSize * 3) + (uint)(elements * elementSize);
+			void* memory = AllocateMemory(allocationSize);
 
 			uint* destination = (uint*)memory;
+			destination[0] = (uint)methodTable;
+			destination[1] = 0; // No sync block initially
 			destination[2] = elements;
 
 			return memory;

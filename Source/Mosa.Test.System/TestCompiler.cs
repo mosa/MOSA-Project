@@ -35,24 +35,19 @@ namespace Mosa.Test.System
 		private CompilerSettings cacheSettings = null;
 
 		/// <summary>
-		/// A cache of CodeDom providers.
-		/// </summary>
-		//private static Dictionary<string, CodeDomProvider> providerCache = new Dictionary<string, CodeDomProvider>();
-
-		/// <summary>
 		/// 
 		/// </summary>
 		private static string tempDirectory;
 
 		/// <summary>
-		/// Holds the temporary files collection.
+		/// 
 		/// </summary>
-		//private static TempFileCollection temps = new TempFileCollection(TempDirectory, false);
+		private TestAssemblyLinker linker;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private TestAssemblyLinker linker;
+		private static bool initalizedFlag = false;
 
 		#endregion // Data members
 
@@ -63,6 +58,32 @@ namespace Mosa.Test.System
 		/// </summary>
 		public TestCompiler()
 		{
+			uint memoryPtr = 0x21700000; // Location for pointer to allocated memory!
+			uint allocate = 1024 * 1024 * 256; // 256Mb
+
+			lock (this.GetType())
+			{
+				if (!initalizedFlag)
+				{
+					IntPtr allocated = HostedRuntime.MemoryPageManager.Allocate(new IntPtr(memoryPtr), 1024, PageProtectionFlags.Read | PageProtectionFlags.Write | PageProtectionFlags.WriteCombine);
+
+					if (allocated.ToInt32() != memoryPtr)
+						throw new OutOfMemoryException();
+
+					allocated = HostedRuntime.MemoryPageManager.Allocate(IntPtr.Zero, allocate, PageProtectionFlags.Read | PageProtectionFlags.Write | PageProtectionFlags.WriteCombine);
+
+					if (allocated == IntPtr.Zero)
+						throw new OutOfMemoryException();
+
+					unsafe
+					{
+						((uint*)memoryPtr)[0] = (uint)allocated.ToInt32();
+						((uint*)memoryPtr)[1] = allocate;
+					}
+
+					initalizedFlag = true;
+				}
+			}
 		}
 
 		#endregion // Construction

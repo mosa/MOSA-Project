@@ -35,7 +35,7 @@ namespace Mosa.Test.System
 		/// </summary>
 		private List<LinkerSection> sections;
 
-		private readonly AllocateMemoryDelegate allocateMemoryHandler;
+		//private readonly AllocateMemoryDelegate allocateMemoryHandler;
 
 		#endregion // Data members
 
@@ -51,7 +51,7 @@ namespace Mosa.Test.System
 			for (int i = 0; i < maxSections; i++)
 				sections.Add(new TestLinkerSection((SectionKind)i, String.Empty, IntPtr.Zero));
 
-			this.allocateMemoryHandler = new AllocateMemoryDelegate(global::Mosa.Test.System.HostedRuntime.AllocateMemory);
+			//this.allocateMemoryHandler = new AllocateMemoryDelegate(global::Mosa.Test.System.HostedRuntime.AllocateMemory);
 		}
 
 		#endregion // Construction
@@ -173,7 +173,7 @@ namespace Mosa.Test.System
 
 		protected override void AddVmCalls(IDictionary<string, LinkerSymbol> virtualMachineCalls)
 		{
-			AddVmCall(virtualMachineCalls, allocateMemoryHandler, @"Mosa.Internal.Runtime.AllocateMemory(U4 size)");
+			//AddVmCall(virtualMachineCalls, allocateMemoryHandler, @"Mosa.Internal.Runtime.AllocateMemory(U4 size)");
 		}
 
 		protected unsafe void AddVmCall(IDictionary<string, LinkerSymbol> virtualMachineCalls, Delegate handler, string method)
