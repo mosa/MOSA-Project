@@ -17,10 +17,10 @@ namespace Mosa.Platform.x86.Intrinsic
 		{
 			if (instance == null)
 			{
-				Native.InvokeInstanceDelegate(instance, methodPointer);
+				Native.InvokeDelegate(instance, methodPointer);
 				return;
 			}
-			Native.InvokeDelegate(instance, methodPointer);
+			Native.InvokeInstanceDelegate(instance, methodPointer);
 		}
 
 		public object InvokeWithReturn()

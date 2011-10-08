@@ -58,8 +58,8 @@ namespace Mosa.Compiler.Framework
 		/// <param name="context">The context.</param>
 		private void FoldMulSInstruction(Context context)
 		{
-			var cA = (int)(context.Operand1 as ConstantOperand).Value;
-			var cB = (int)(context.Operand2 as ConstantOperand).Value;
+			var cA = this.LoadSignedInteger(context.Operand1);
+			var cB = this.LoadSignedInteger(context.Operand2);
 
 			context.SetInstruction(Instruction.MoveInstruction, context.Result, new ConstantOperand(context.Result.Type, cA * cB));
 		}

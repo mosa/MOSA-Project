@@ -84,6 +84,14 @@ namespace Mosa.Compiler.Framework
 		public bool EnableSSA { get; set; }
 
 		/// <summary>
+		/// Gets or sets a value indicating whether [enable static allocations].
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if [enable static allocations]; otherwise, <c>false</c>.
+		/// </value>
+		public bool EnableStaticAllocations { get; set; }
+
+		/// <summary>
 		/// Gets or sets the multiboot.
 		/// </summary>
 		/// <value>The multiboot.</value>

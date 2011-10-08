@@ -37,7 +37,7 @@ namespace Mosa.Test.System
 		/// <summary>
 		/// A cache of CodeDom providers.
 		/// </summary>
-		private static Dictionary<string, CodeDomProvider> providerCache = new Dictionary<string, CodeDomProvider>();
+		//private static Dictionary<string, CodeDomProvider> providerCache = new Dictionary<string, CodeDomProvider>();
 
 		/// <summary>
 		/// 
@@ -47,7 +47,7 @@ namespace Mosa.Test.System
 		/// <summary>
 		/// Holds the temporary files collection.
 		/// </summary>
-		private static TempFileCollection temps = new TempFileCollection(TempDirectory, false);
+		//private static TempFileCollection temps = new TempFileCollection(TempDirectory, false);
 
 		/// <summary>
 		/// 
@@ -75,7 +75,7 @@ namespace Mosa.Test.System
 			{
 				if (tempDirectory == null)
 				{
-					tempDirectory = Path.Combine(Path.GetTempPath(), "mosa");
+					tempDirectory = Path.Combine(Path.GetTempPath(), "mosa.tmp");
 					if (!Directory.Exists(tempDirectory))
 					{
 						Directory.CreateDirectory(tempDirectory);
@@ -99,8 +99,6 @@ namespace Mosa.Test.System
 			);
 
 			Debug.Assert(runtimeMethod != null, runtimeMethod.ToString());
-			//Debug.Assert(runtimeMethod.Address != null, runtimeMethod.ToString());
-			//Debug.Assert(runtimeMethod.Address != IntPtr.Zero, runtimeMethod.ToString());
 
 			// Get delegate name
 			string delegateName;
@@ -149,7 +147,7 @@ namespace Mosa.Test.System
 
 				CompilerResults results = Mosa.Test.CodeDomCompiler.Compiler.ExecuteCompiler(cacheSettings);
 
-				Console.WriteLine("Executing MOSA compiler...");
+				//Console.WriteLine("Executing MOSA compiler...");
 
 				Assert.IsFalse(results.Errors.HasErrors, "Failed to compile source code with native compiler");
 

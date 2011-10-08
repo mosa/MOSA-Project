@@ -10,8 +10,6 @@
 using System;
 using System.IO;
 
-using Mosa.Compiler.Memory;
-
 namespace Mosa.Test.System
 {
 	/// <summary>
@@ -28,11 +26,11 @@ namespace Mosa.Test.System
 		/// <summary>
 		/// Pointer to the allocated virtual memory to be able to free it later on.
 		/// </summary>
-		private IntPtr _memory;
+		private IntPtr memory;
 
-		private uint _allocationSize;
+		private uint allocationSize;
 
-		private IMemoryPageManager _pageManager;
+		private IMemoryPageManager pageManager;
 
 		#endregion // Data members
 
@@ -45,13 +43,14 @@ namespace Mosa.Test.System
 		/// <param name="allocationSize">The number of bytes to allocate from virtual memory.</param>
 		public unsafe VirtualMemoryStream(IMemoryPageManager pageManager, uint allocationSize)
 		{
-			_memory = pageManager.Allocate(IntPtr.Zero, allocationSize, PageProtectionFlags.Read | PageProtectionFlags.Write | PageProtectionFlags.Execute);
-			if (IntPtr.Zero == _memory)
+			this.memory = pageManager.Allocate(IntPtr.Zero, allocationSize, PageProtectionFlags.Read | PageProtectionFlags.Write | PageProtectionFlags.Execute);
+			
+			if (this.memory == IntPtr.Zero)
 				throw new OutOfMemoryException();
 
-			base.Initialize((byte*)_memory.ToPointer(), allocationSize, allocationSize, FileAccess.Write);
-			_allocationSize = allocationSize;
-			_pageManager = pageManager;
+			base.Initialize((byte*)memory.ToPointer(), allocationSize, allocationSize, FileAccess.Write);
+			this.allocationSize = allocationSize;
+			this.pageManager = pageManager;
 		}
 
 		#endregion // Construction
@@ -65,10 +64,10 @@ namespace Mosa.Test.System
 		protected unsafe override void Dispose(bool disposing)
 		{
 			base.Dispose(disposing);
-			if (_memory != IntPtr.Zero)
+			if (memory != IntPtr.Zero)
 			{
-				_pageManager.Free(_memory, _allocationSize);
-				_memory = IntPtr.Zero;
+				pageManager.Free(memory, allocationSize);
+				memory = IntPtr.Zero;
 			}
 		}
 
@@ -82,7 +81,7 @@ namespace Mosa.Test.System
 		/// <value>The memory base pointer.</value>
 		public IntPtr Base
 		{
-			get { return this._memory; }
+			get { return this.memory; }
 		}
 
 		#endregion // Properties

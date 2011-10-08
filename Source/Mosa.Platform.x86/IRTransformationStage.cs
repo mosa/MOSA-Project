@@ -1081,7 +1081,7 @@ namespace Mosa.Platform.x86
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.ThrowInstruction(Context context)
 		{
-			Operand exceptionObject = context.Operand1;
+			//Operand exceptionObject = context.Operand1;
 
 			
 		}

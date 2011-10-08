@@ -109,7 +109,7 @@ namespace Mosa.CoolWorld
 			Screen.Row = 23;
 			Screen.Color = Colors.Cyan;
 			Screen.BackgroundColor = Colors.Black;
-			Screen.Write(new string(' ', 25));
+			Screen.Write(new string(' ', 13));
 			Screen.Column = 55;
 			Screen.Row = 23;
 
@@ -129,14 +129,14 @@ namespace Mosa.CoolWorld
 			{
 				// Timer Interrupt! Switch Tasks!	
 			}
-			else
+			else if (interrupt >= 0x20 && interrupt < 0x30)
 			{
 				Screen.Write('-');
 				Screen.Write(counter, 10, 7);
 				Screen.Write(':');
 				Screen.Write(interrupt, 16, 2);
 
-				Mosa.DeviceSystem.HAL.ProcessInterrupt(interrupt, errorCode);
+				Mosa.DeviceSystem.HAL.ProcessInterrupt((byte)(interrupt - 0x20), errorCode);
 			}
 
 			Screen.Column = c;

@@ -47,6 +47,8 @@ namespace Mosa.Test.System
 			TypeLayout typeLayout = new TypeLayout(typeSystem, 4, 4);
 
 			IInternalTrace internalLog = new BasicInternalTrace();
+			(internalLog.CompilerEventListener as BasicCompilerEventListener).DebugOutput = false;
+			(internalLog.CompilerEventListener as BasicCompilerEventListener).ConsoleOutput = false;
 
 			CompilerOptions compilerOptions = new CompilerOptions();
 

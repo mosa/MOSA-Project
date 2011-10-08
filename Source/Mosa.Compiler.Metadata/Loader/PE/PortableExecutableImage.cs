@@ -32,49 +32,49 @@ namespace Mosa.Compiler.Metadata.Loader.PE
 
 		#region Data members
 
-		private int _loadOrder = -1;
+		private int loadOrder = -1;
 
 		private string name;
 
 		/// <summary>
 		/// The stream, which provides the assembly data.
 		/// </summary>
-		private Stream _assemblyStream;
+		private Stream assemblyStream;
 
 		/// <summary>
 		/// Reader used to read the assembly data.
 		/// </summary>
-		private BinaryReader _assemblyReader;
+		private BinaryReader assemblyReader;
 
 		/// <summary>
 		/// The DOS header of the Mosa.Runtime.Metadata.Loader.PE image.
 		/// </summary>
-		private IMAGE_DOS_HEADER _dosHeader;
+		private IMAGE_DOS_HEADER dosHeader;
 
 		/// <summary>
 		/// The Mosa.Runtime.Metadata.Loader.PE file header.
 		/// </summary>
-		private IMAGE_NT_HEADERS _ntHeader;
+		private IMAGE_NT_HEADERS ntHeader;
 
 		/// <summary>
 		/// The CLI header of the assembly.
 		/// </summary>
-		private CLI_HEADER _cliHeader;
+		private CLI_HEADER cliHeader;
 
 		/// <summary>
 		/// Sections in the Mosa.Runtime.Metadata.Loader.PE file.
 		/// </summary>
-		private IMAGE_SECTION_HEADER[] _sections;
+		private IMAGE_SECTION_HEADER[] sections;
 
 		/// <summary>
 		/// Metadata of the assembly
 		/// </summary>
-		private IMetadataProvider _metadataRoot;
+		private IMetadataProvider metadataRoot;
 
 		/// <summary>
 		/// Metadata of the assembly
 		/// </summary>
-		private byte[] _metadata;
+		private byte[] metadata;
 
 		private string codeBase;
 
@@ -91,32 +91,32 @@ namespace Mosa.Compiler.Metadata.Loader.PE
 		{
 			this.codeBase = codeBase;
 
-			_assemblyStream = stream;
-			_assemblyReader = new BinaryReader(stream);
+			assemblyStream = stream;
+			assemblyReader = new BinaryReader(stream);
 
 			// Load all headers by visiting them sequentially
-			_dosHeader.Read(_assemblyReader);
+			dosHeader.Read(assemblyReader);
 
-			_assemblyReader.BaseStream.Seek(_dosHeader.e_lfanew, SeekOrigin.Begin);
-			_ntHeader.Read(_assemblyReader);
+			assemblyReader.BaseStream.Seek(dosHeader.e_lfanew, SeekOrigin.Begin);
+			ntHeader.Read(assemblyReader);
 
-			if (CLI_HEADER_DATA_DIRECTORY >= _ntHeader.OptionalHeader.NumberOfRvaAndSizes)
+			if (CLI_HEADER_DATA_DIRECTORY >= ntHeader.OptionalHeader.NumberOfRvaAndSizes)
 				throw new BadImageFormatException();
 
-			_sections = new IMAGE_SECTION_HEADER[_ntHeader.FileHeader.NumberOfSections];
-			for (int i = 0; i < _ntHeader.FileHeader.NumberOfSections; i++)
-				_sections[i].Read(_assemblyReader);
+			sections = new IMAGE_SECTION_HEADER[ntHeader.FileHeader.NumberOfSections];
+			for (int i = 0; i < ntHeader.FileHeader.NumberOfSections; i++)
+				sections[i].Read(assemblyReader);
 
-			long position = ResolveVirtualAddress(_ntHeader.OptionalHeader.DataDirectory[CLI_HEADER_DATA_DIRECTORY].VirtualAddress);
-			_assemblyReader.BaseStream.Seek(position, SeekOrigin.Begin);
-			_cliHeader.Read(_assemblyReader);
+			long position = ResolveVirtualAddress(ntHeader.OptionalHeader.DataDirectory[CLI_HEADER_DATA_DIRECTORY].VirtualAddress);
+			assemblyReader.BaseStream.Seek(position, SeekOrigin.Begin);
+			cliHeader.Read(assemblyReader);
 
 			// Load the provider...
-			position = ResolveVirtualAddress(_cliHeader.Metadata.VirtualAddress);
-			_assemblyReader.BaseStream.Position = position;
-			_metadata = _assemblyReader.ReadBytes(_cliHeader.Metadata.Size);
+			position = ResolveVirtualAddress(cliHeader.Metadata.VirtualAddress);
+			assemblyReader.BaseStream.Position = position;
+			metadata = assemblyReader.ReadBytes(cliHeader.Metadata.Size);
 
-			_metadataRoot = new MetadataRoot(_metadata);
+			metadataRoot = new MetadataRoot(metadata);
 		}
 
 		#endregion // Construction
@@ -135,10 +135,10 @@ namespace Mosa.Compiler.Metadata.Loader.PE
 		{
 			get
 			{
-				if (_cliHeader.EntryPointToken == 0)
+				if (cliHeader.EntryPointToken == 0)
 					return Token.Zero;
 
-				return new Token(_cliHeader.EntryPointToken);
+				return new Token(cliHeader.EntryPointToken);
 			}
 		}
 
@@ -146,7 +146,7 @@ namespace Mosa.Compiler.Metadata.Loader.PE
 		/// Retrieves the load order index of the module.
 		/// </summary>
 		/// <value></value>
-		int IMetadataModule.LoadOrder { get { return _loadOrder; } set { _loadOrder = value; } }
+		int IMetadataModule.LoadOrder { get { return loadOrder; } set { loadOrder = value; } }
 
 		/// <summary>
 		/// Retrieves the name of the module.
@@ -158,8 +158,8 @@ namespace Mosa.Compiler.Metadata.Loader.PE
 			{
 				if (name == null)
 				{
-					AssemblyRow arow = _metadataRoot.ReadAssemblyRow(new Token(TableType.Assembly, 1));
-					name = _metadataRoot.ReadString(arow.Name);
+					AssemblyRow arow = metadataRoot.ReadAssemblyRow(new Token(TableType.Assembly, 1));
+					name = metadataRoot.ReadString(arow.Name);
 				}
 
 				// HACK: Presents Mosa.Test.Korlib as mscorlib
@@ -174,7 +174,7 @@ namespace Mosa.Compiler.Metadata.Loader.PE
 		/// Provides access to the provider contained in the assembly.
 		/// </summary>
 		/// <value></value>
-		IMetadataProvider IMetadataModule.Metadata { get { return _metadataRoot; } }
+		IMetadataProvider IMetadataModule.Metadata { get { return metadataRoot; } }
 
 		/// <summary>
 		/// Gets the type of the module.
@@ -184,7 +184,7 @@ namespace Mosa.Compiler.Metadata.Loader.PE
 		{
 			get
 			{
-				if ((_ntHeader.FileHeader.Characteristics & IMAGE_FILE_HEADER.IMAGE_FILE_DLL) == IMAGE_FILE_HEADER.IMAGE_FILE_DLL)
+				if ((ntHeader.FileHeader.Characteristics & IMAGE_FILE_HEADER.IMAGE_FILE_DLL) == IMAGE_FILE_HEADER.IMAGE_FILE_DLL)
 					return ModuleType.Library;
 
 				return ModuleType.Executable;
@@ -195,7 +195,7 @@ namespace Mosa.Compiler.Metadata.Loader.PE
 		/// Provides access to the metadata binary array.
 		/// </summary>
 		/// <value></value>
-		public byte[] MetadataBinary { get { return _metadata; } }
+		public byte[] MetadataBinary { get { return metadata; } }
 
 		#endregion // Properties
 
@@ -208,7 +208,7 @@ namespace Mosa.Compiler.Metadata.Loader.PE
 		/// <returns>A new instance of CILInstructionStream, which represents the stream.</returns>
 		Stream IMetadataModule.GetInstructionStream(long rva)
 		{
-			return new InstructionStream(_assemblyStream, ResolveVirtualAddress(rva));
+			return new InstructionStream(assemblyStream, ResolveVirtualAddress(rva));
 		}
 
 		/// <summary>
@@ -220,7 +220,7 @@ namespace Mosa.Compiler.Metadata.Loader.PE
 		/// </returns>
 		Stream IMetadataModule.GetDataSection(long rva)
 		{
-			return new InstructionStream(_assemblyStream, ResolveVirtualAddress(rva));
+			return new InstructionStream(assemblyStream, ResolveVirtualAddress(rva));
 		}
 
 		/// <summary>
@@ -246,13 +246,13 @@ namespace Mosa.Compiler.Metadata.Loader.PE
 		/// <returns></returns>
 		internal long ResolveVirtualAddress(long address)
 		{
-			if (_sections == null)
+			if (sections == null)
 			{
-				return ((address / _ntHeader.OptionalHeader.SectionAlignment) * _ntHeader.OptionalHeader.FileAlignment) + (address % _ntHeader.OptionalHeader.SectionAlignment);
+				return ((address / ntHeader.OptionalHeader.SectionAlignment) * ntHeader.OptionalHeader.FileAlignment) + (address % ntHeader.OptionalHeader.SectionAlignment);
 			}
 			else
 			{
-				foreach (var section in _sections)
+				foreach (var section in sections)
 				{
 					if (section.VirtualAddress <= address && address < section.VirtualAddress + section.VirtualSize)
 					{
@@ -273,10 +273,10 @@ namespace Mosa.Compiler.Metadata.Loader.PE
 		/// </summary>
 		void IDisposable.Dispose()
 		{
-			if (null != _assemblyReader)
-				_assemblyReader.Close();
-			_assemblyReader = null;
-			_assemblyStream = null;
+			if (null != assemblyReader)
+				assemblyReader.Close();
+			assemblyReader = null;
+			assemblyStream = null;
 		}
 
 		#endregion // IDisposable Members

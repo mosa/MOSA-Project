@@ -21,12 +21,12 @@ namespace Mosa.Tools.Compiler
 {
 	public class AotAssemblyCompiler : AssemblyCompiler
 	{
-		IAssemblyLinker linker;
+		//IAssemblyLinker linker;
 
 		public AotAssemblyCompiler(IArchitecture architecture, IAssemblyLinker linker, ITypeSystem typeSystem, ITypeLayout typeLayout, IInternalTrace internalLog, CompilerOptions compilerOptions)
 			: base(architecture, typeSystem, typeLayout, internalLog, compilerOptions)
 		{
-			this.linker = linker;
+			//this.linker = linker;
 
 		}
 

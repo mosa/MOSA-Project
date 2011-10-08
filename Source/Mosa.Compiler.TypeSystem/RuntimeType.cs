@@ -406,6 +406,17 @@ namespace Mosa.Compiler.TypeSystem
 			get { return genericParameters.Count != 0; }
 		}
 
+		public bool ImplementsInterface(RuntimeType interfaceType)
+		{
+			Debug.Assert(interfaceType.IsInterface);
+
+			if (interfaces.Contains(interfaceType))
+				return true;
+			else if (baseType != null)
+				return baseType.ImplementsInterface(interfaceType);
+			else
+				return false;
+		}
 
 	}
 }

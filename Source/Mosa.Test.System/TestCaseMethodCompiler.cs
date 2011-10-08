@@ -43,7 +43,7 @@ namespace Mosa.Test.System
 				new CILTransformationStage(),
 				//new CILLeakGuardStage() { MustThrowCompilationException = true },
 				//InstructionStatisticsStage.Instance,
-				new DominanceCalculationStage(),
+				//new DominanceCalculationStage(),
 				//new PhiPlacementStage(),
 				//new EnterSSA(),
 				

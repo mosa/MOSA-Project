@@ -74,11 +74,16 @@
       <Name>Mosa.Compiler.Framework</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mosa.Compiler.Linker\Mosa.Compiler.Linker.csproj">
+      <Project>{65866A51-B229-44C5-AC81-87A90FA1741B}</Project>
       <Name>Mosa.Compiler.Linker</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mosa.Compiler.Metadata\Mosa.Compiler.Metadata.csproj">
       <Project>{7033B213-2055-4C6A-B008-D9856267F5D7}</Project>
       <Name>Mosa.Compiler.Metadata</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Compiler.Pdb\Mosa.Compiler.Pdb.csproj">
+      <Project>{F970F8CB-8FF1-4244-9A31-D00C6D7AABE5}</Project>
+      <Name>Mosa.Compiler.Pdb</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mosa.Compiler.TypeSystem\Mosa.Compiler.TypeSystem.csproj">
       <Project>{5F30A68E-05BF-40EA-B576-5EBCDE520449}</Project>

@@ -90,17 +90,17 @@ namespace Mosa.Compiler.Framework
 			if (type.Interfaces.Count == 0)
 				return;
 
-			byte[] bitmap = new byte[(((typeLayout.Interfaces.Count - 1) / sizeof(byte)) + 1)];
+			byte[] bitmap = new byte[(((typeLayout.Interfaces.Count - 1) / 8) + 1)];
 
 			int at = 0;
 			byte bit = 0;
 			foreach (RuntimeType interfaceType in typeLayout.Interfaces)
 			{
-				if (type.Interfaces.Contains(interfaceType))
+				if (type.ImplementsInterface(interfaceType))
 					bitmap[at] = (byte)(bitmap[at] | (byte)(1 << bit));
 
 				bit++;
-				if (bit == sizeof(byte))
+				if (bit == 8)
 				{
 					bit = 0;
 					at++;
@@ -134,8 +134,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="type">The type.</param>
 		public void BuildMethodTable(RuntimeType type)
 		{
-
-			// HINT: The method table is offset by a four pointers:
+			// The method table is offset by a four pointers:
 			// 1. interface dispatch table pointer
 			// 2. type pointer - contains the type information pointer, used to realize object.GetType().
 			// 3. interface bitmap

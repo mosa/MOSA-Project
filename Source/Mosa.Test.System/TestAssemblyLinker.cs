@@ -36,8 +36,6 @@ namespace Mosa.Test.System
 		private List<LinkerSection> sections;
 
 		private readonly AllocateMemoryDelegate allocateMemoryHandler;
-		//private readonly AllocateArrayDelegate allocateArrayHandler;
-		//private readonly AllocateObjectDelegate allocateObjectHandler;
 
 		#endregion // Data members
 
