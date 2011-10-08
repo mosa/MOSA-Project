@@ -100,7 +100,7 @@ namespace Mosa.Compiler.Framework
 		/// </returns>
 		private bool IsBranchInstruction(Context context)
 		{
-			return context.Instruction is BranchInstruction || context.Instruction is JmpInstruction;
+			return context.Instruction is JmpInstruction || context.Instruction is IntegerCompareBranchInstruction;
 		}
 
 	}

@@ -41,8 +41,6 @@ namespace Mosa.Compiler.Framework.IR
 		/// <summary>
 		/// 
 		/// </summary>
-		public static BranchInstruction BranchInstruction = new BranchInstruction();
-
 		public static BreakInstruction BreakInstruction = new BreakInstruction();
 
 		public static readonly DivFInstruction DivFInstruction = new DivFInstruction();
@@ -63,6 +61,10 @@ namespace Mosa.Compiler.Framework.IR
 		/// 
 		/// </summary>
 		public static FloatingPointToIntegerConversionInstruction FloatingPointToIntegerConversionInstruction = new FloatingPointToIntegerConversionInstruction();
+		/// <summary>
+		/// 
+		/// </summary>
+		public static readonly IntegerCompareBranchInstruction IntegerCompareBranchInstruction = new IntegerCompareBranchInstruction();
 		/// <summary>
 		/// 
 		/// </summary>

@@ -28,12 +28,6 @@ namespace Mosa.Compiler.Framework.IR
 		void ArithmeticShiftRightInstruction(Context context);
 
 		/// <summary>
-		/// Visitation function for BranchInstruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void BranchInstruction(Context context);
-
-		/// <summary>
 		/// Visitation function for CallInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
@@ -56,6 +50,12 @@ namespace Mosa.Compiler.Framework.IR
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void FloatingPointToIntegerConversionInstruction(Context context);
+
+		/// <summary>
+		/// Visitation function for IntegerCompareInstruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IntegerCompareBranchInstruction(Context context);
 
 		/// <summary>
 		/// Visitation function for IntegerCompareInstruction.

@@ -1,19 +1,23 @@
 ﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
+ * (c) 2011 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
 namespace Mosa.Compiler.Framework.IR
 {
-	/// <summary>
-	/// Intermediate representation of a branch instruction.
-	/// </summary>
-	public sealed class BranchInstruction : BaseInstruction
+	public sealed class IntegerCompareBranchInstruction : BaseInstruction
 	{
+		#region Construction
+	
+		public IntegerCompareBranchInstruction() : base(2)
+		{
+		}
+
+		#endregion // Construction
+		
+		#region Methods
+
 		/// <summary>
 		/// Abstract visitor method for intermediate representation visitors.
 		/// </summary>
@@ -21,7 +25,9 @@ namespace Mosa.Compiler.Framework.IR
 		/// <param name="context">The context.</param>
 		public override void Visit(IIRVisitor visitor, Context context)
 		{
-			visitor.BranchInstruction(context);
+			visitor.IntegerCompareBranchInstruction(context);
 		}
+
+		#endregion
 	}
 }

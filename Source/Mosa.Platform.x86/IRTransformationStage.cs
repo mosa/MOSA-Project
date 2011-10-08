@@ -324,6 +324,31 @@ namespace Mosa.Platform.x86
 		}
 
 		/// <summary>
+		/// Visitation function for IntegerCompareBranchInstruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IR.IIRVisitor.IntegerCompareBranchInstruction(Context context)
+		{
+			EmitOperandConstants(context);
+
+			IBranch branch = context.Branch;
+			var condition = context.ConditionCode;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+
+			context.SetInstruction(CPUx86.Instruction.NopInstruction);
+
+			if (OperandTypesNotEqual(operand1, operand2))
+			{
+				ExtendSmallerOperand(context, ref operand1, ref operand2);
+			}
+
+			context.AppendInstruction(CPUx86.Instruction.CmpInstruction, operand1, operand2);
+			context.AppendInstruction(CPUx86.Instruction.BranchInstruction, condition);
+			context.SetBranch(branch.Targets[0]);
+		}
+
+		/// <summary>
 		/// Visitation function for IntegerCompareInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
@@ -1017,15 +1042,6 @@ namespace Mosa.Platform.x86
 			{
 				context.ReplaceInstructionOnly(CPUx86.Instruction.MovzxInstruction);
 			}
-		}
-
-		/// <summary>
-		/// Visitation function for BranchInstruction"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.BranchInstruction(Context context)
-		{
-			context.ReplaceInstructionOnly(CPUx86.Instruction.BranchInstruction);
 		}
 
 		/// <summary>

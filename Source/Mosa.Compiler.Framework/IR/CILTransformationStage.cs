@@ -1113,11 +1113,7 @@ namespace Mosa.Compiler.Framework.IR
 				throw new NotSupportedException(@"CILTransformationStage.UnaryBranch doesn't support CIL opcode " + opcode);
 			}
 
-			Operand comparisonResult = methodCompiler.CreateTemporary(BuiltInSigType.Int32);
-			context.SetInstruction(Instruction.IntegerCompareInstruction, comparisonResult, first, second);
-			context.ConditionCode = cc;
-
-			context.AppendInstruction(Instruction.BranchInstruction, comparisonResult);
+			context.SetInstruction(Instruction.IntegerCompareBranchInstruction, null, first, second);
 			context.ConditionCode = cc;
 			context.SetBranch(branch.Targets[0]);
 		}
@@ -1133,34 +1129,20 @@ namespace Mosa.Compiler.Framework.IR
 			ConditionCode cc = ConvertCondition(((CIL.ICILInstruction)context.Instruction).OpCode);
 			Operand first = context.Operand1;
 			Operand second = context.Operand2;
-			Operand comparisonResult = this.methodCompiler.CreateTemporary(BuiltInSigType.Int32);
 
 			if (first.StackType == StackTypeCode.F)
 			{
+				Operand comparisonResult = this.methodCompiler.CreateTemporary(BuiltInSigType.Int32);
 				context.SetInstruction(Instruction.FloatingPointCompareInstruction, comparisonResult, first, second);
 				context.ConditionCode = cc;
-				context.AppendInstruction(Instruction.IntegerCompareInstruction, comparisonResult, comparisonResult, new ConstantOperand(new SigType(CilElementType.I), 1));
-				context.ConditionCode = ConditionCode.Equal;
-				context.AppendInstruction(Instruction.BranchInstruction, comparisonResult);
+				context.SetInstruction(Instruction.IntegerCompareBranchInstruction, null, comparisonResult, new ConstantOperand(new SigType(CilElementType.I), 1));
 				context.ConditionCode = ConditionCode.Equal;
 				context.SetBranch(branch.Targets[0]);
 			}
 			else
 			{
-				context.SetInstruction(Instruction.IntegerCompareInstruction, comparisonResult, first, second);
+				context.SetInstruction(Instruction.IntegerCompareBranchInstruction, null, first, second);
 				context.ConditionCode = cc;
-				if (first.Type.Type == CilElementType.I8 || first.Type.Type == CilElementType.U8)
-				{
-					context.AppendInstruction(Instruction.IntegerCompareInstruction, comparisonResult, comparisonResult, new ConstantOperand(new SigType(CilElementType.I), 1));
-					context.ConditionCode = ConditionCode.Equal;
-					context.AppendInstruction(Instruction.BranchInstruction, comparisonResult);
-					context.ConditionCode = ConditionCode.Equal;
-				}
-				else
-				{
-					context.AppendInstruction(Instruction.BranchInstruction, comparisonResult);
-					context.ConditionCode = cc;
-				}
 				context.SetBranch(branch.Targets[0]);
 			}
 		}

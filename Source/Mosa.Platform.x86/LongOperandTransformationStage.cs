@@ -1573,42 +1573,36 @@ namespace Mosa.Platform.x86
 		{
 			Debug.Assert(context.Branch.Targets.Length == 1);
 
-			int target = context.Branch.Targets[0];
+			BasicBlock target = FindBlock(context.Branch.Targets[0]);
 
-			Operand op1H, op1L, op2H, op2L;
+			//SigType I4 = new SigType(CilElementType.I4);
+			Operand op1L, op1H, op2L, op2H;
 			SplitLongOperand(context.Operand1, out op1L, out op1H);
 			SplitLongOperand(context.Operand2, out op2L, out op2H);
 
-			Context[] newBlocks = CreateEmptyBlockContexts(context.Label, 3);
+			Context[] newBlocks = CreateEmptyBlockContexts(context.Label, 2);
+			IR.ConditionCode conditionCode = context.ConditionCode;
 			Context nextBlock = SplitContext(context, false);
 
-			IR.ConditionCode conditionCode = ConvertCondition((context.Instruction as CIL.ICILInstruction).OpCode);
-			//UNUSED:
-			//IR.ConditionCode conditionHigh = GetHighCondition(conditionCode);
-
-			// TODO: optimize by removing this jump and merge with next block
-			context.SetInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[0].BasicBlock);
-			LinkBlocks(context, newBlocks[0]);
-
 			// Compare high dwords
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.DirectCompareInstruction, op1H, op2H);
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.Equal, newBlocks[2].BasicBlock);
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[1].BasicBlock);
-			LinkBlocks(newBlocks[0], newBlocks[1], newBlocks[2]);
+			context.SetInstruction(CPUx86.Instruction.CmpInstruction, op1H, op2H);
+			context.AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.Equal, newBlocks[1].BasicBlock);
+			context.AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[0].BasicBlock);
+			LinkBlocks(context, newBlocks[0], newBlocks[1]);
 
 			// Branch if check already gave results
-			newBlocks[1].AppendInstruction(CPUx86.Instruction.BranchInstruction, conditionCode);
-			newBlocks[1].SetBranch(target);
-			newBlocks[1].AppendInstruction(CPUx86.Instruction.JmpInstruction, nextBlock.BasicBlock);
-			LinkBlocks(newBlocks[1], FindBlock(target), nextBlock.BasicBlock);
+			newBlocks[0].SetInstruction(CPUx86.Instruction.BranchInstruction, conditionCode, target);
+			newBlocks[0].AppendInstruction(CPUx86.Instruction.JmpInstruction, nextBlock.BasicBlock);
+			LinkBlocks(newBlocks[0], target);
+			LinkBlocks(newBlocks[0], nextBlock);
 
 			// Compare low dwords
-			newBlocks[2].SetInstruction(CPUx86.Instruction.DirectCompareInstruction, op1L, op2L);
-			// Set the unsigned result
-			newBlocks[2].AppendInstruction(CPUx86.Instruction.BranchInstruction, conditionCode);
-			newBlocks[2].SetBranch(target);
-			newBlocks[2].AppendInstruction(CPUx86.Instruction.JmpInstruction, nextBlock.BasicBlock);
-			LinkBlocks(newBlocks[2], FindBlock(target), nextBlock.BasicBlock);
+			newBlocks[1].SetInstruction(CPUx86.Instruction.CmpInstruction, op1L, op2L);
+			// Set the unsigned result...
+			newBlocks[1].AppendInstruction(CPUx86.Instruction.BranchInstruction, GetUnsignedConditionCode(conditionCode), target);
+			newBlocks[1].AppendInstruction(CPUx86.Instruction.JmpInstruction, nextBlock.BasicBlock);
+			LinkBlocks(newBlocks[1], target);
+			LinkBlocks(newBlocks[1], nextBlock);
 		}
 
 		/// <summary>
@@ -1744,6 +1738,18 @@ namespace Mosa.Platform.x86
 			}
 		}
 
+		/// <summary>
+		/// Integers the compare instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IR.IIRVisitor.IntegerCompareBranchInstruction(Context context)
+		{
+			if (IsInt64(context.Operand1) || IsInt64(context.Operand2))
+			{
+				ExpandBinaryBranch(context);
+			}
+		}
+		
 		/// <summary>
 		/// Integers the compare instruction.
 		/// </summary>
@@ -2095,12 +2101,6 @@ namespace Mosa.Platform.x86
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.AddressOfInstruction(Context context) { }
-
-		/// <summary>
-		/// Visitation function for BranchInstruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.BranchInstruction(Context context) { }
 
 		/// <summary>
 		/// Visitation function for CallInstruction.

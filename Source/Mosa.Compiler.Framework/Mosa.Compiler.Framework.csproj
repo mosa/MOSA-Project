@@ -211,7 +211,6 @@
     <Compile Include="ICodeEmitter.cs" />
     <Compile Include="IR\AddressOfInstruction.cs" />
     <Compile Include="IR\ArithmeticShiftRightInstruction.cs" />
-    <Compile Include="IR\BranchInstruction.cs" />
     <Compile Include="IR\CallInstruction.cs" />
     <Compile Include="IR\ConditionCode.cs" />
     <Compile Include="IR\NopInstruction.cs" />
@@ -223,6 +222,7 @@
     <Compile Include="IR\FloatingPointToIntegerConversionInstruction.cs" />
     <Compile Include="IR\IIRInstruction.cs" />
     <Compile Include="IR\IIRVisitor.cs" />
+    <Compile Include="IR\IntegerCompareBranchInstruction.cs" />
     <Compile Include="IR\IntegerCompareInstruction.cs" />
     <Compile Include="IR\IntegerToFloatingPointConversionInstruction.cs" />
     <Compile Include="IR\BaseInstruction.cs" />
