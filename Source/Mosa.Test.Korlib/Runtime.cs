@@ -128,23 +128,23 @@ namespace Mosa.Internal
 			return memory;
 		}
 
-		public unsafe static void* BoxInt8(void* methodTable, uint classSize, byte value)
-		{
-			byte* memory = (byte*)AllocateObject(methodTable, classSize);
-			byte* data = memory + (nativeIntSize * 2);
-
-			byte* destination = (byte*)data;
-			destination[0] = value;
-
-			return memory;
-		}
-
-		public unsafe static void* BoxUInt8(void* methodTable, uint classSize, sbyte value)
+		public unsafe static void* BoxInt8(void* methodTable, uint classSize, sbyte value)
 		{
 			byte* memory = (byte*)AllocateObject(methodTable, classSize);
 			byte* data = memory + (nativeIntSize * 2);
 
 			sbyte* destination = (sbyte*)data;
+			destination[0] = value;
+
+			return memory;
+		}
+
+		public unsafe static void* BoxUInt8(void* methodTable, uint classSize, byte value)
+		{
+			byte* memory = (byte*)AllocateObject(methodTable, classSize);
+			byte* data = memory + (nativeIntSize * 2);
+
+			byte* destination = (byte*)data;
 			destination[0] = value;
 
 			return memory;
@@ -250,22 +250,28 @@ namespace Mosa.Internal
 			return ((bool*)memory)[0];
 		}
 
-		public unsafe static byte UnboxUInt8(void* data)
-		{
-			byte* memory = (byte*)data + (nativeIntSize * 2);
-			return ((byte*)memory)[0];
-		}
-
 		public unsafe static sbyte UnboxInt8(void* data)
 		{
 			byte* memory = (byte*)data + (nativeIntSize * 2);
 			return ((sbyte*)memory)[0];
 		}
 
+		public unsafe static byte UnboxUInt8(void* data)
+		{
+			byte* memory = (byte*)data + (nativeIntSize * 2);
+			return ((byte*)memory)[0];
+		}
+
 		public unsafe static short UnboxInt16(void* data)
 		{
 			byte* memory = (byte*)data + (nativeIntSize * 2);
 			return ((short*)memory)[0];
+		}
+
+		public unsafe static ushort UnboxUInt16(void* data)
+		{
+			byte* memory = (byte*)data + (nativeIntSize * 2);
+			return ((ushort*)memory)[0];
 		}
 
 		public unsafe static int UnboxInt32(void* data)
