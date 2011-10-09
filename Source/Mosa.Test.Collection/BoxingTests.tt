@@ -1,0 +1,20 @@
+﻿<#@ include file="TemplateLibrary.txt" #>
+using System;
+
+namespace Mosa.Test.Collection
+{
+
+	public static class BoxingTests 
+	{
+		<# foreach (KeyValuePair<string, string> number in NumbersWithChar) { #>
+	
+		public static bool Box<#= number.Value #>(<#= number.Key #> value) 
+		{
+			object o = value;
+			return (<#= number.Key #>)o == value;
+		}
+
+	<# } #>
+	}
+}
+			

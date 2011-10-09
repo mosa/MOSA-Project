@@ -1,13 +1,10 @@
 ﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
+ * (c) 2011 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Alex Lyman <mail.alex.lymangmail.com>
- *  Simon Wollwage (rootnode) <kintarothink-in-co.de>
- *  Michael Fröhlich (grover) <michael.ruckmichaelruck.de>
- *  Kai Patrick Reisert <kpreisertgooglemail.com>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
  *  
  */
 
@@ -116,5 +113,16 @@ namespace Mosa.Test.Cases.IL
 			Assert.AreEqual(IsInstTests.IsInstTest15(), Run<bool>("Mosa.Test.Collection", "IsInstTests", "IsInstTest15"));
 		}
 
+		[Test]
+		public void IsInstTest16()
+		{
+			Assert.AreEqual(IsInstTests.IsInstTest16(), Run<bool>("Mosa.Test.Collection", "IsInstTests", "IsInstTest16"));
+		}
+
+		[Test]
+		public void IsInstTest17()
+		{
+			Assert.AreEqual(IsInstTests.IsInstTest17(), Run<bool>("Mosa.Test.Collection", "IsInstTests", "IsInstTest17"));
+		}
 	}
 }

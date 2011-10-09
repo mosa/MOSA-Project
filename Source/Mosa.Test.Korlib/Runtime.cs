@@ -106,9 +106,75 @@ namespace Mosa.Internal
 			return obj;
 		}
 
+		public unsafe static void* BoxChar(void* methodTable, uint classSize, char value)
+		{
+			byte* memory = (byte*)AllocateObject(methodTable, classSize);
+			byte* data = memory + (nativeIntSize * 2);
+
+			char* destination = (char*)data;
+			destination[0] = value;
+
+			return memory;
+		}
+
+		public unsafe static void* BoxBoolean(void* methodTable, uint classSize, bool value)
+		{
+			byte* memory = (byte*)AllocateObject(methodTable, classSize);
+			byte* data = memory + (nativeIntSize * 2);
+
+			bool* destination = (bool*)data;
+			destination[0] = value;
+
+			return memory;
+		}
+
+		public unsafe static void* BoxInt8(void* methodTable, uint classSize, byte value)
+		{
+			byte* memory = (byte*)AllocateObject(methodTable, classSize);
+			byte* data = memory + (nativeIntSize * 2);
+
+			byte* destination = (byte*)data;
+			destination[0] = value;
+
+			return memory;
+		}
+
+		public unsafe static void* BoxUInt8(void* methodTable, uint classSize, sbyte value)
+		{
+			byte* memory = (byte*)AllocateObject(methodTable, classSize);
+			byte* data = memory + (nativeIntSize * 2);
+
+			sbyte* destination = (sbyte*)data;
+			destination[0] = value;
+
+			return memory;
+		}
+
+		public unsafe static void* BoxInt16(void* methodTable, uint classSize, short value)
+		{
+			byte* memory = (byte*)AllocateObject(methodTable, classSize);
+			byte* data = memory + (nativeIntSize * 2);
+
+			short* destination = (short*)data;
+			destination[0] = value;
+
+			return memory;
+		}
+
+		public unsafe static void* BoxUInt16(void* methodTable, uint classSize, ushort value)
+		{
+			byte* memory = (byte*)AllocateObject(methodTable, classSize);
+			byte* data = memory + (nativeIntSize * 2);
+
+			ushort* destination = (ushort*)data;
+			destination[0] = value;
+
+			return memory;
+		}
+
 		public unsafe static void* BoxInt32(void* methodTable, uint classSize, int value)
 		{
-			byte* memory = (byte*)AllocateObject(methodTable, 4);
+			byte* memory = (byte*)AllocateObject(methodTable, classSize);
 			byte* data = memory + (nativeIntSize * 2);
 
 			int* destination = (int*)data;
@@ -119,7 +185,7 @@ namespace Mosa.Internal
 
 		public unsafe static void* BoxUInt32(void* methodTable, uint classSize, uint value)
 		{
-			byte* memory = (byte*)AllocateObject(methodTable, 4);
+			byte* memory = (byte*)AllocateObject(methodTable, classSize);
 			byte* data = memory + (nativeIntSize * 2);
 
 			uint* destination = (uint*)data;
@@ -130,7 +196,7 @@ namespace Mosa.Internal
 
 		public unsafe static void* BoxInt64(void* methodTable, uint classSize, long value)
 		{
-			byte* memory = (byte*)AllocateObject(methodTable, 8);
+			byte* memory = (byte*)AllocateObject(methodTable, classSize);
 			byte* data = memory + (nativeIntSize * 2);
 
 			long* destination = (long*)data;
@@ -141,7 +207,7 @@ namespace Mosa.Internal
 
 		public unsafe static void* BoxUInt64(void* methodTable, uint classSize, ulong value)
 		{
-			byte* memory = (byte*)AllocateObject(methodTable, 8);
+			byte* memory = (byte*)AllocateObject(methodTable, classSize);
 			byte* data = memory + (nativeIntSize * 2);
 
 			ulong* destination = (ulong*)data;
@@ -152,7 +218,7 @@ namespace Mosa.Internal
 
 		public unsafe static void* BoxSingle(void* methodTable, uint classSize, float value)
 		{
-			byte* memory = (byte*)AllocateObject(methodTable, 3);
+			byte* memory = (byte*)AllocateObject(methodTable, classSize);
 			byte* data = memory + (nativeIntSize * 2);
 
 			float* destination = (float*)data;
@@ -163,13 +229,37 @@ namespace Mosa.Internal
 
 		public unsafe static void* BoxDouble(void* methodTable, uint classSize, double value)
 		{
-			byte* memory = (byte*)AllocateObject(methodTable, 8);
+			byte* memory = (byte*)AllocateObject(methodTable, classSize);
 			byte* data = memory + (nativeIntSize * 2);
 
 			double* destination = (double*)data;
 			destination[0] = value;
 
 			return memory;
+		}
+
+		public unsafe static char UnboxChar(void* data)
+		{
+			byte* memory = (byte*)data + (nativeIntSize * 2);
+			return ((char*)memory)[0];
+		}
+
+		public unsafe static bool UnboxBoolean(void* data)
+		{
+			byte* memory = (byte*)data + (nativeIntSize * 2);
+			return ((bool*)memory)[0];
+		}
+
+		public unsafe static byte UnboxUInt8(void* data)
+		{
+			byte* memory = (byte*)data + (nativeIntSize * 2);
+			return ((byte*)memory)[0];
+		}
+
+		public unsafe static sbyte UnboxInt8(void* data)
+		{
+			byte* memory = (byte*)data + (nativeIntSize * 2);
+			return ((sbyte*)memory)[0];
 		}
 
 		public unsafe static short UnboxInt16(void* data)

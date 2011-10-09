@@ -84,6 +84,11 @@
     <Compile Include="CIL\CharFixture.cs" />
     <Compile Include="CIL\DelegateFixture.cs" />
     <Compile Include="CIL\FibonacciFixture.cs" />
+    <Compile Include="IL\Boxing.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Boxing.tt</DependentUpon>
+    </Compile>
     <Compile Include="IL\GenericCall.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -121,6 +126,10 @@
     <Compile Include="OLD.IL\Ceq.cs" />
     <Compile Include="OLD.IL\Cgt.cs" />
     <Compile Include="OLD.IL\Clt.cs" />
+    <None Include="IL\Boxing.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Boxing.cs</LastGenOutput>
+    </None>
     <None Include="IL\GenericCall.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>GenericCall.cs</LastGenOutput>

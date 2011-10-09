@@ -123,6 +123,18 @@ namespace Mosa.Test.Collection
 			return (o is ulong);
 		}
 
+		public static bool IsInstTest16()
+		{
+			object o = (int)1;
+			return (o is uint);
+		}
+
+		public static bool IsInstTest17()
+		{
+			object o = (uint)1;
+			return (o is int);
+		}
+
 		//public static bool IsInstTest16()
 		//{
 		//    object o = (char)'A';

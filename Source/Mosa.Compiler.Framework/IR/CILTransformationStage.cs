@@ -436,7 +436,7 @@ namespace Mosa.Compiler.Framework.IR
 				SymbolOperand symbolOperand = SymbolOperand.FromMethod(invokeTarget);
 				ProcessInvokeInstruction(context, symbolOperand, resultOperand, operands);
 				return;
-			}			
+			}
 
 			if ((invokeTarget.Attributes & MethodAttributes.Virtual) == MethodAttributes.Virtual)
 			{
@@ -709,177 +709,87 @@ namespace Mosa.Compiler.Framework.IR
 			var value = context.Operand1;
 			var result = context.Result;
 
-			if (context.Operand1.Type.ToString() == "I1")
+			RuntimeType type;
+			VmCall vmCall;
+
+			if (context.Operand1.Type.Type == CilElementType.Char)
 			{
-				var type = this.typeSystem.GetType("mscorlib", "System", "SByte");
-				context.SetInstruction(Instruction.NopInstruction);
-
-				ReplaceWithVmCall(context, VmCall.BoxInt32);
-
-				var methodTableSymbol = GetMethodTableSymbol(type);
-				var classSize = typeLayout.GetTypeSize(type);
-
-				context.SetOperand(1, methodTableSymbol);
-				context.SetOperand(2, new ConstantOperand(BuiltInSigType.UInt32, classSize));
-				context.SetOperand(3, value);
-				context.OperandCount = 4;
-				context.Result = result;
+				type = typeSystem.GetType("mscorlib", "System", "Char");
+				vmCall = VmCall.BoxChar;
+			}
+			else if (context.Operand1.Type.Type == CilElementType.Boolean)
+			{
+				type = typeSystem.GetType("mscorlib", "System", "Boolean");
+				vmCall = VmCall.BoxBool;
+			}
+			else if (context.Operand1.Type.Type == CilElementType.I1)
+			{
+				type = typeSystem.GetType("mscorlib", "System", "SByte");
+				vmCall = VmCall.BoxInt8;
+			}
+			else if (context.Operand1.Type.Type == CilElementType.U1)
+			{
+				type = typeSystem.GetType("mscorlib", "System", "Byte");
+				vmCall = VmCall.BoxUInt8;
+			}
+			else if (context.Operand1.Type.Type == CilElementType.I2)
+			{
+				type = typeSystem.GetType("mscorlib", "System", "Int16");
+				vmCall = VmCall.BoxInt16;
+			}
+			else if (context.Operand1.Type.Type == CilElementType.U2)
+			{
+				type = typeSystem.GetType("mscorlib", "System", "UInt16");
+				vmCall = VmCall.BoxUInt16;
+			}
+			else if (context.Operand1.Type.Type == CilElementType.I4)
+			{
+				type = typeSystem.GetType("mscorlib", "System", "Int32");
+				vmCall = VmCall.BoxInt32;
+			}
+			else if (context.Operand1.Type.Type == CilElementType.U4)
+			{
+				type = typeSystem.GetType("mscorlib", "System", "UInt32");
+				vmCall = VmCall.BoxUInt32;
+			}
+			else if (context.Operand1.Type.Type == CilElementType.I8)
+			{
+				type = typeSystem.GetType("mscorlib", "System", "Int64");
+				vmCall = VmCall.BoxInt64;
+			}
+			else if (context.Operand1.Type.Type == CilElementType.U8)
+			{
+				type = typeSystem.GetType("mscorlib", "System", "UInt64");
+				vmCall = VmCall.BoxUInt64;
+			}
+			else if (context.Operand1.Type.Type == CilElementType.R4)
+			{
+				type = typeSystem.GetType("mscorlib", "System", "Single");
+				vmCall = VmCall.BoxSingle;
+			}
+			else if (context.Operand1.Type.Type == CilElementType.R8)
+			{
+				type = typeSystem.GetType("mscorlib", "System", "Double");
+				vmCall = VmCall.BoxDouble;
+			}
+			else
+			{
+				context.ReplaceInstructionOnly(Instruction.MoveInstruction);
 				return;
 			}
-			else if (context.Operand1.Type.ToString() == "U1")
-			{
-				var type = this.typeSystem.GetType("mscorlib", "System", "Byte");
-				context.SetInstruction(Instruction.NopInstruction);
 
-				ReplaceWithVmCall(context, VmCall.BoxUInt32);
+			context.SetInstruction(Instruction.NopInstruction);
+			ReplaceWithVmCall(context, vmCall);
 
-				var methodTableSymbol = GetMethodTableSymbol(type);
-				var classSize = typeLayout.GetTypeSize(type);
+			var methodTableSymbol = GetMethodTableSymbol(type);
+			var classSize = typeLayout.GetTypeSize(type);
 
-				context.SetOperand(1, methodTableSymbol);
-				context.SetOperand(2, new ConstantOperand(BuiltInSigType.UInt32, classSize));
-				context.SetOperand(3, value);
-				context.OperandCount = 4;
-				context.Result = result;
-				return;
-			}
-			else if (context.Operand1.Type.ToString() == "I2")
-			{
-				var type = this.typeSystem.GetType("mscorlib", "System", "Int16");
-				context.SetInstruction(Instruction.NopInstruction);
-
-				ReplaceWithVmCall(context, VmCall.BoxInt32);
-
-				var methodTableSymbol = GetMethodTableSymbol(type);
-				var classSize = typeLayout.GetTypeSize(type);
-
-				context.SetOperand(1, methodTableSymbol);
-				context.SetOperand(2, new ConstantOperand(BuiltInSigType.UInt32, classSize));
-				context.SetOperand(3, value);
-				context.OperandCount = 4;
-				context.Result = result;
-				return;
-			}
-			else if (context.Operand1.Type.ToString() == "U4")
-			{
-				var type = this.typeSystem.GetType("mscorlib", "System", "UInt16");
-				context.SetInstruction(Instruction.NopInstruction);
-
-				ReplaceWithVmCall(context, VmCall.BoxUInt32);
-
-				var methodTableSymbol = GetMethodTableSymbol(type);
-				var classSize = typeLayout.GetTypeSize(type);
-
-				context.SetOperand(1, methodTableSymbol);
-				context.SetOperand(2, new ConstantOperand(BuiltInSigType.UInt32, classSize));
-				context.SetOperand(3, value);
-				context.OperandCount = 4;
-				context.Result = result;
-				return;
-			}
-			else if (context.Operand1.Type.ToString() == "I4")
-			{
-				var type = this.typeSystem.GetType("mscorlib", "System", "Int32");
-				context.SetInstruction(Instruction.NopInstruction);
-
-				ReplaceWithVmCall(context, VmCall.BoxInt32);
-
-				var methodTableSymbol = GetMethodTableSymbol(type);
-				var classSize = typeLayout.GetTypeSize(type);
-
-				context.SetOperand(1, methodTableSymbol);
-				context.SetOperand(2, new ConstantOperand(BuiltInSigType.UInt32, classSize));
-				context.SetOperand(3, value);
-				context.OperandCount = 4;
-				context.Result = result;
-				return;
-			}
-			else if (context.Operand1.Type.ToString() == "U4")
-			{
-				var type = this.typeSystem.GetType("mscorlib", "System", "UInt32");
-				context.SetInstruction(Instruction.NopInstruction);
-
-				ReplaceWithVmCall(context, VmCall.BoxUInt32);
-
-				var methodTableSymbol = GetMethodTableSymbol(type);
-				var classSize = typeLayout.GetTypeSize(type);
-
-				context.SetOperand(1, methodTableSymbol);
-				context.SetOperand(2, new ConstantOperand(BuiltInSigType.UInt32, classSize));
-				context.SetOperand(3, value);
-				context.OperandCount = 4;
-				context.Result = result;
-				return;
-			}
-			else if (context.Operand1.Type.ToString() == "I8")
-			{
-				var type = this.typeSystem.GetType("mscorlib", "System", "Int64");
-				context.SetInstruction(Instruction.NopInstruction);
-
-				ReplaceWithVmCall(context, VmCall.BoxInt64);
-
-				var methodTableSymbol = GetMethodTableSymbol(type);
-				var classSize = typeLayout.GetTypeSize(type);
-
-				context.SetOperand(1, methodTableSymbol);
-				context.SetOperand(2, new ConstantOperand(BuiltInSigType.Int32, classSize));
-				context.SetOperand(3, value);
-				context.OperandCount = 4;
-				context.Result = result;
-				return;
-			}
-			else if (context.Operand1.Type.ToString() == "U8")
-			{
-				var type = this.typeSystem.GetType("mscorlib", "System", "UInt64");
-				context.SetInstruction(Instruction.NopInstruction);
-
-				ReplaceWithVmCall(context, VmCall.BoxUInt64);
-
-				var methodTableSymbol = GetMethodTableSymbol(type);
-				var classSize = typeLayout.GetTypeSize(type);
-
-				context.SetOperand(1, methodTableSymbol);
-				context.SetOperand(2, new ConstantOperand(BuiltInSigType.UInt32, classSize));
-				context.SetOperand(3, value);
-				context.OperandCount = 4;
-				context.Result = result;
-				return;
-			}
-			else if (context.Operand1.Type.ToString() == "R4")
-			{
-				var type = this.typeSystem.GetType("mscorlib", "System", "Single");
-				context.SetInstruction(Instruction.NopInstruction);
-
-				ReplaceWithVmCall(context, VmCall.BoxSingle);
-
-				var methodTableSymbol = GetMethodTableSymbol(type);
-				var classSize = typeLayout.GetTypeSize(type);
-
-				context.SetOperand(1, methodTableSymbol);
-				context.SetOperand(2, new ConstantOperand(BuiltInSigType.UInt32, classSize));
-				context.SetOperand(3, value);
-				context.OperandCount = 4;
-				context.Result = result;
-				return;
-			}
-			else if (context.Operand1.Type.ToString() == "R8")
-			{
-				var type = this.typeSystem.GetType("mscorlib", "System", "Double");
-				context.SetInstruction(Instruction.NopInstruction);
-
-				ReplaceWithVmCall(context, VmCall.BoxDouble);
-
-				var methodTableSymbol = GetMethodTableSymbol(type);
-				var classSize = typeLayout.GetTypeSize(type);
-
-				context.SetOperand(1, methodTableSymbol);
-				context.SetOperand(2, new ConstantOperand(BuiltInSigType.UInt32, classSize));
-				context.SetOperand(3, value);
-				context.OperandCount = 4;
-				context.Result = result;
-				return;
-			}
-			context.ReplaceInstructionOnly(Instruction.MoveInstruction);
+			context.SetOperand(1, methodTableSymbol);
+			context.SetOperand(2, new ConstantOperand(BuiltInSigType.UInt32, classSize));
+			context.SetOperand(3, value);
+			context.OperandCount = 4;
+			context.Result = result;
+			return;
 		}
 
 		/// <summary>
@@ -1296,92 +1206,61 @@ namespace Mosa.Compiler.Framework.IR
 
 			if (type.FullName == "System.Boolean")
 			{
-				ReplaceWithVmCall(context, VmCall.UnboxUInt32);
-				context.SetOperand(1, value);
-				context.OperandCount = 2;
-				context.Result = result;
+				ReplaceWithVmCall(context, VmCall.UnboxBool);
 			}
 			else if (type.FullName == "System.Char")
 			{
-				ReplaceWithVmCall(context, VmCall.UnboxUInt32);
-				context.SetOperand(1, value);
-				context.OperandCount = 2;
-				context.Result = result;
+				ReplaceWithVmCall(context, VmCall.UnboxChar);
 			}
 			else if (type.FullName == "System.SByte")
 			{
-				ReplaceWithVmCall(context, VmCall.UnboxInt32);
-				context.SetOperand(1, value);
-				context.OperandCount = 2;
-				context.Result = result;
+				ReplaceWithVmCall(context, VmCall.UnboxInt8);
 			}
 			else if (type.FullName == "System.Byte")
 			{
-				ReplaceWithVmCall(context, VmCall.UnboxUInt32);
-				context.SetOperand(1, value);
-				context.OperandCount = 2;
-				context.Result = result;
+				ReplaceWithVmCall(context, VmCall.UnboxUInt8);
 			}
 			else if (type.FullName == "System.Int16")
 			{
 				ReplaceWithVmCall(context, VmCall.UnboxInt16);
-				context.SetOperand(1, value);
-				context.OperandCount = 2;
-				context.Result = result;
 			}
 			else if (type.FullName == "System.UInt16")
 			{
 				ReplaceWithVmCall(context, VmCall.UnboxUInt32);
-				context.SetOperand(1, value);
-				context.OperandCount = 2;
-				context.Result = result;
 			}
 			else if (type.FullName == "System.Int32")
 			{
 				ReplaceWithVmCall(context, VmCall.UnboxInt32);
-				context.SetOperand(1, value);
-				context.OperandCount = 2;
-				context.Result = result;
 			}
 			else if (type.FullName == "System.UInt32")
 			{
 				ReplaceWithVmCall(context, VmCall.UnboxUInt32);
-				context.SetOperand(1, value);
-				context.OperandCount = 2;
-				context.Result = result;
 			}
 			else if (type.FullName == "System.Int64")
 			{
 				ReplaceWithVmCall(context, VmCall.UnboxInt64);
-				context.SetOperand(1, value);
-				context.OperandCount = 2;
-				context.Result = result;
 			}
 			else if (type.FullName == "System.UInt64")
 			{
 				ReplaceWithVmCall(context, VmCall.UnboxUInt64);
-				context.SetOperand(1, value);
-				context.OperandCount = 2;
-				context.Result = result;
 			}
 			else if (type.FullName == "System.Single")
 			{
 				ReplaceWithVmCall(context, VmCall.UnboxSingle);
-				context.SetOperand(1, value);
-				context.OperandCount = 2;
-				context.Result = result;
 			}
 			else if (type.FullName == "System.Double")
 			{
 				ReplaceWithVmCall(context, VmCall.UnboxDouble);
-				context.SetOperand(1, value);
-				context.OperandCount = 2;
-				context.Result = result;
 			}
 			else
 			{
 				context.ReplaceInstructionOnly(Instruction.MoveInstruction);
+				return;
 			}
+
+			context.SetOperand(1, value);
+			context.OperandCount = 2;
+			context.Result = result;
 		}
 
 		/// <summary>
