@@ -33,7 +33,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// <summary>
 		/// Boxes a value type.
 		/// </summary>
-		Box,
+		//Box,
 		BoxInt32,
 		BoxUInt32,
 		BoxInt64,
@@ -102,7 +102,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// <summary>
 		/// Unboxes a value type.
 		/// </summary>
-		Unbox,
+		//Unbox,
 		UnboxInt16,
 		UnboxInt32,
 		UnboxUInt32,

@@ -101,9 +101,33 @@ namespace Mosa.Test.Collection
 
 		public static bool IsInstTest12()
 		{
-			object o = 1;
+			object o = (int)1;
 			return (o is int);
 		}
+
+		public static bool IsInstTest13()
+		{
+			object o = (uint)1;
+			return (o is uint);
+		}
+
+		public static bool IsInstTest14()
+		{
+			object o = (long)1;
+			return (o is long);
+		}
+
+		public static bool IsInstTest15()
+		{
+			object o = (ulong)1;
+			return (o is ulong);
+		}
+
+		//public static bool IsInstTest16()
+		//{
+		//    object o = (char)'A';
+		//    return (o is char);
+		//}
 	}
 
 }

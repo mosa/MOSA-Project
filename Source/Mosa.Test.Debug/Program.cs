@@ -10,23 +10,23 @@ namespace Mosa.Test.Debug
 	{
 		public static void Main()
 		{
-			ConditionalOperator s = new ConditionalOperator();
-
-			s.CompareEqualI1((sbyte)0x02, (sbyte)0x02, (sbyte)0x05, (sbyte)0x01);
-			s.CompareEqualI1((sbyte)0x60, (sbyte)0x00, (sbyte)0x60, (sbyte)0x06);
-			s.CompareEqualI1((sbyte)1, (sbyte)0, (sbyte)1, (sbyte)2);
-			s.CompareEqualI1((sbyte)2, (sbyte)2, (sbyte)2, (sbyte)1);
+			//ConditionalOperator s = new ConditionalOperator();
+			//s.CompareEqualI1((sbyte)0x02, (sbyte)0x02, (sbyte)0x05, (sbyte)0x01);
+			//s.CompareEqualI1((sbyte)0x60, (sbyte)0x00, (sbyte)0x60, (sbyte)0x06);
+			//s.CompareEqualI1((sbyte)1, (sbyte)0, (sbyte)1, (sbyte)2);
+			//s.CompareEqualI1((sbyte)2, (sbyte)2, (sbyte)2, (sbyte)1);
 
 			//Add add = new Add();
+			//add.AddConstantCLeft('a', 'Z');
+			//add.AddConstantCLeft('a', 'Z');
+			//add.AddConstantCLeft('a', 'Z');
 
-			//add.AddConstantCLeft('a', 'Z');
-			//add.AddConstantCLeft('a', 'Z');
-			//add.AddConstantCLeft('a', 'Z');
+			Call call = new Call();
+			call.CallU1(1);
 
 			Int32Fixture int32Fixture = new Int32Fixture();
 			BooleanFixture booleanFixture = new BooleanFixture();
 			CallVirtualFixture callVirtualFixture = new CallVirtualFixture();
-			Call call = new Call();
 
 			for (int i = 0; i < 2000; i++)
 			{

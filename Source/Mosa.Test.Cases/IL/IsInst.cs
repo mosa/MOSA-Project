@@ -98,5 +98,23 @@ namespace Mosa.Test.Cases.IL
 			Assert.AreEqual(IsInstTests.IsInstTest12(), Run<bool>("Mosa.Test.Collection", "IsInstTests", "IsInstTest12"));
 		}
 
+		[Test]
+		public void IsInstTest13()
+		{
+			Assert.AreEqual(IsInstTests.IsInstTest13(), Run<bool>("Mosa.Test.Collection", "IsInstTests", "IsInstTest13"));
+		}
+
+		[Test]
+		public void IsInstTest14()
+		{
+			Assert.AreEqual(IsInstTests.IsInstTest14(), Run<bool>("Mosa.Test.Collection", "IsInstTests", "IsInstTest14"));
+		}
+
+		[Test]
+		public void IsInstTest15()
+		{
+			Assert.AreEqual(IsInstTests.IsInstTest15(), Run<bool>("Mosa.Test.Collection", "IsInstTests", "IsInstTest15"));
+		}
+
 	}
 }

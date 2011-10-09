@@ -687,7 +687,8 @@ namespace Mosa.Compiler.Framework.IR
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Unbox(Context context)
 		{
-			ReplaceWithVmCall(context, VmCall.Unbox);
+			throw new NotSupportedException();
+			//ReplaceWithVmCall(context, VmCall.Unbox);
 		}
 
 		/// <summary>
