@@ -43,7 +43,7 @@ namespace Mosa.DeviceSystem
 		/// <summary>
 		/// Creates the partition devices.
 		/// </summary>
-		public void CreatePartitionDevices()
+		public void CreatePCIDevices()
 		{
 			// Find PCI controller devices
 			LinkedList<IDevice> devices = deviceManager.GetDevices(new FindDevice.IsPCIController(), new FindDevice.IsOnline());

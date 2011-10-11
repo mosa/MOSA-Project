@@ -52,11 +52,11 @@ namespace Mosa.EmulatedDevices
 			IOPortDispatch.RegisterDevice(new VGAConsole(PrimaryDisplayForm));
 
 			// Add IDE Controller
-			string[] files = new string[1];
-			files[0] = @"..\Data\HardDriveImage\hd.img";
+			//string[] files = new string[1];
+			//files[0] = @"..\Data\HardDriveImage\hd.img";
 
 			// Fix for Linux
-			files[0] = files[0].Replace('\\', System.IO.Path.DirectorySeparatorChar);
+			//files[0] = files[0].Replace('\\', System.IO.Path.DirectorySeparatorChar);
 
 			//IOPortDispatch.RegisterDevice(new IDEController(IDEController.PrimaryIOBase, files));
 

@@ -102,7 +102,7 @@ namespace Mosa.CoolWorld
 			PIT = new PIT();
 
 			//StartDevice(picAttributes, PIC);
-			//StartDevice(pitAttributes, PIT);
+			StartDevice(pitAttributes, PIT);
 			StartDevice(pciAttributes, PCI);
 			StartDevice(keyboardDeviceAttributes, Keyboard);
 		}

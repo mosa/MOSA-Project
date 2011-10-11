@@ -83,7 +83,7 @@ namespace Mosa.Emulator
 			PCIControllerManager pciControllerManager = new PCIControllerManager(Mosa.DeviceSystem.Setup.DeviceManager);
 
 			// Create pci controller devices
-			pciControllerManager.CreatePartitionDevices();
+			pciControllerManager.CreatePCIDevices();
 
 			// Create synthetic graphic pixel device
 			Mosa.EmulatedDevices.Synthetic.PixelGraphicDevice pixelGraphicDevice = new Mosa.EmulatedDevices.Synthetic.PixelGraphicDevice(Mosa.EmulatedDevices.Setup.PrimaryDisplayForm);
