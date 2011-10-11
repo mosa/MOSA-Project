@@ -447,7 +447,7 @@ namespace Mosa.Compiler.Framework.IR
 
 				if (!invokeTarget.DeclaringType.IsInterface)
 				{
-					int methodTableOffset = CalculateMethodTableOffset(invokeTarget) + (nativePointerSize * 4);
+					int methodTableOffset = CalculateMethodTableOffset(invokeTarget) + (nativePointerSize * 5);
 					context.SetInstruction(Instruction.LoadInstruction, methodTable, thisPtr, ConstantOperand.FromValue(0));
 					context.AppendInstruction(Instruction.LoadInstruction, methodPtr, methodTable, new ConstantOperand(BuiltInSigType.Int32, methodTableOffset));
 				}
