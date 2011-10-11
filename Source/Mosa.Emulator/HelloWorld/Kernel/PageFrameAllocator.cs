@@ -7,7 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Platform.x86;
+using Mosa.Platform.x86.Intrinsic;
 
 namespace Mosa.Kernel.x86
 {
@@ -119,7 +119,7 @@ namespace Mosa.Kernel.x86
 		/// <summary>
 		/// Releases a page to the free list
 		/// </summary>
-		/// <param name="page">The page.</param>
+		/// <param name="address">The address.</param>
 		public static void Free(uint address)
 		{
 			_totalUsedPages--;

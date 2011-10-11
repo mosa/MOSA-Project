@@ -7,7 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Platform.x86;
+using Mosa.Platform.x86.Intrinsic;
 
 namespace Mosa.Kernel.x86
 {
@@ -70,7 +70,7 @@ namespace Mosa.Kernel.x86
 		/// <param name="irq">The irq.</param>
 		public static void SendEndOfInterrupt(byte irq)
 		{
-			if (irq >= 40) /// or untranslated IRQ >= 8
+			if (irq >= 40) // or untranslated IRQ >= 8
 				Native.Out8(PIC2_Command, EOI);
 
 			Native.Out8(PIC1_Command, EOI);

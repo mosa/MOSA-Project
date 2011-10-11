@@ -7,7 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Platform.x86;
+using Mosa.Platform.x86.Intrinsic;
 
 namespace Mosa.Kernel.x86
 {
@@ -22,7 +22,7 @@ namespace Mosa.Kernel.x86
 		/// <summary>
 		/// Location of the Multiboot Structure 
 		/// </summary>
-		private static uint MultibootStructure = 0x0;
+		public static uint MultibootStructure {get ; private set; }
 
 		/// <summary>
 		/// Magic value that indicates that kernel was loaded by a Multiboot-compliant boot loader 
@@ -45,6 +45,7 @@ namespace Mosa.Kernel.x86
 		/// </summary>
 		public static void Setup()
 		{
+			MultibootStructure = 0x0;
 			SetMultibootLocation(Native.Get32(_multibootptr), Native.Get32(_multibootsignature));
 		}
 
@@ -58,16 +59,7 @@ namespace Mosa.Kernel.x86
 			Screen.Row = row;
 			Screen.Column = col;
 			Screen.Color = 0x0A;
-			Screen.Write('M');
-			Screen.Write('e');
-			Screen.Write('m');
-			Screen.Write('o');
-			Screen.Write('r');
-			Screen.Write('y');
-			Screen.Write('d');
-			Screen.Write('u');
-			Screen.Write('m');
-			Screen.Write('p');
+			Screen.Write(@"Memory Dump");
 			Screen.NextLine();
 			Screen.NextLine();
 

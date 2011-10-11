@@ -7,7 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Platform.x86;
+using Mosa.Platform.x86.Intrinsic;
 
 namespace Mosa.Kernel.x86
 {
@@ -39,9 +39,9 @@ namespace Mosa.Kernel.x86
 		/// </summary>
 		/// <param name="address">The address.</param>
 		/// <returns></returns>
-		private static uint GetPageIndex(uint address)
+		private static unsafe uint GetPageIndex(void* address)
 		{
-			return (address - PageFrameAllocator.ReserveMemory) / PageFrameAllocator.PageSize;
+			return (((uint)address) - PageFrameAllocator.ReserveMemory) / PageFrameAllocator.PageSize;
 		}
 
 		/// <summary>
@@ -84,7 +84,7 @@ namespace Mosa.Kernel.x86
 		/// <summary>
 		/// Reserves the pages.
 		/// </summary>
-		/// <param name="count">The count.</param>
+		/// <param name="size">The size.</param>
 		/// <returns></returns>
 		public static uint Reserve(uint size)
 		{
@@ -104,7 +104,7 @@ namespace Mosa.Kernel.x86
 						for (uint index = 0; index < pages; index++)
 							SetPageStatus(first + index, false);
 
-						return (first * PageFrameAllocator.PageSize) + PageFrameAllocator.ReserveMemory;
+						return ((first * PageFrameAllocator.PageSize) + PageFrameAllocator.ReserveMemory);
 					}
 				}
 				else
@@ -119,7 +119,7 @@ namespace Mosa.Kernel.x86
 		/// </summary>
 		/// <param name="address">The address.</param>
 		/// <param name="count">The count.</param>
-		public static void Release(uint address, uint count)
+		public static unsafe void Release(void* address, uint count)
 		{
 			uint start = GetPageIndex(address);
 			for (uint index = 0; index < count; index++)

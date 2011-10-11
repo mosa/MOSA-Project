@@ -7,7 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Platform.x86;
+using Mosa.Platform.x86.Intrinsic;
 
 namespace Mosa.Kernel.x86
 {
@@ -70,10 +70,10 @@ namespace Mosa.Kernel.x86
 		/// <summary>
 		/// Setups the task manager.
 		/// </summary>
-		public static void Setup()
+		public static unsafe void Setup()
 		{
 			// Allocate memory for the task table
-			_table = VirtualPageAllocator.Reserve((uint)(_slots * Offset.TotalSize));
+			_table = (uint)VirtualPageAllocator.Reserve((uint)(_slots * Offset.TotalSize));
 
 			uint stack = ProcessManager.AllocateMemory(0, _defaultStackSize);
 
@@ -148,7 +148,7 @@ namespace Mosa.Kernel.x86
 		/// <summary>
 		/// Terminates the task.
 		/// </summary>
-		/// <param name="pid">The pid.</param>
+		/// <param name="process">The process.</param>
 		public static void TerminateTask(uint process)
 		{
 			// TODO
@@ -193,7 +193,7 @@ namespace Mosa.Kernel.x86
 		/// <summary>
 		/// Switches the specified esp.
 		/// </summary>
-		/// <param name="esp">The esp.</param>
+		/// <param name="nexttask">The nexttask.</param>
 		public static void Switch(uint nexttask)
 		{
 			PIC.SendEndOfInterrupt(0x20);

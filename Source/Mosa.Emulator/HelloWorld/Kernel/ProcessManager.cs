@@ -7,7 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Platform.x86;
+using Mosa.Platform.x86.Intrinsic;
 
 namespace Mosa.Kernel.x86
 {
@@ -46,10 +46,10 @@ namespace Mosa.Kernel.x86
 		/// <summary>
 		/// Setups the process manager.
 		/// </summary>
-		public static void Setup()
+		public static unsafe void Setup()
 		{
 			// Allocate memory for the process table
-			_table = VirtualPageAllocator.Reserve((uint)(_slots * Offset.TotalSize));
+			_table = (uint)VirtualPageAllocator.Reserve((uint)(_slots * Offset.TotalSize));
 
 			// Create idle process
 			CreateProcess(0);
@@ -79,13 +79,13 @@ namespace Mosa.Kernel.x86
 		/// Creates the process.
 		/// </summary>
 		/// <returns></returns>
-		private static uint CreateProcess(uint slot)
+		private static unsafe uint CreateProcess(uint slot)
 		{
 			uint process = GetProcessLocation(slot);
 
 			Native.Set32(process + Offset.Status, Status.Running);
 			Native.Set32(process + Offset.ProcessID, slot);
-			Native.Set32(process + Offset.MemoryMap, VirtualPageAllocator.Reserve(32 * 4096));
+			Native.Set32(process + Offset.MemoryMap, (uint)VirtualPageAllocator.Reserve(32U * 4096U));
 			Native.Set32(process + Offset.Lock, 0);
 
 			return slot;
@@ -94,7 +94,7 @@ namespace Mosa.Kernel.x86
 		/// <summary>
 		/// Terminates the process.
 		/// </summary>
-		/// <param name="pid">The pid.</param>
+		/// <param name="process">The process.</param>
 		public static void TerminateProcess(uint process)
 		{
 			// TODO
@@ -122,9 +122,9 @@ namespace Mosa.Kernel.x86
 		/// <summary>
 		/// Updates the memory bit map.
 		/// </summary>
-		/// <param name="process">The process.</param>
+		/// <param name="slot">The slot.</param>
 		/// <param name="address">The address.</param>
-		/// <param name="pages">The pages.</param>
+		/// <param name="size">The size.</param>
 		/// <param name="free">if set to <c>true</c> [free].</param>
 		private static void UpdateMemoryBitMap(uint slot, uint address, uint size, bool free)
 		{

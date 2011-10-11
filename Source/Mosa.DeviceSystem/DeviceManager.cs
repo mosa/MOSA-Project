@@ -46,9 +46,9 @@ namespace Mosa.DeviceSystem
 		}
 
 		/// <summary>
-		/// 
+		/// Gets the devices.
 		/// </summary>
-		/// <param name="match"></param>
+		/// <param name="match">The match.</param>
 		/// <returns></returns>
 		public LinkedList<IDevice> GetDevices(IFindDevice match)
 		{
@@ -66,10 +66,10 @@ namespace Mosa.DeviceSystem
 		}
 
 		/// <summary>
-		/// 
+		/// Gets the devices.
 		/// </summary>
-		/// <param name="match1"></param>
-		/// <param name="match2"></param>
+		/// <param name="match1">The match1.</param>
+		/// <param name="match2">The match2.</param>
 		/// <returns></returns>
 		public LinkedList<IDevice> GetDevices(IFindDevice match1, IFindDevice match2)
 		{
@@ -87,11 +87,11 @@ namespace Mosa.DeviceSystem
 		}
 
 		/// <summary>
-		/// 
+		/// Gets the devices.
 		/// </summary>
-		/// <param name="match1"></param>
-		/// <param name="match2"></param>
-		/// <param name="match3"></param>
+		/// <param name="match1">The match1.</param>
+		/// <param name="match2">The match2.</param>
+		/// <param name="match3">The match3.</param>
 		/// <returns></returns>
 		public LinkedList<IDevice> GetDevices(IFindDevice match1, IFindDevice match2, IFindDevice match3)
 		{
@@ -109,9 +109,9 @@ namespace Mosa.DeviceSystem
 		}
 
 		/// <summary>
-		/// 
+		/// Gets the devices.
 		/// </summary>
-		/// <param name="matches"></param>
+		/// <param name="matches">The matches.</param>
 		/// <returns></returns>
 		public LinkedList<IDevice> GetDevices(IFindDevice[] matches)
 		{
@@ -140,9 +140,9 @@ namespace Mosa.DeviceSystem
 		}
 
 		/// <summary>
-		/// 
+		/// Gets the children of.
 		/// </summary>
-		/// <param name="parent"></param>
+		/// <param name="parent">The parent.</param>
 		/// <returns></returns>
 		public LinkedList<IDevice> GetChildrenOf(IDevice parent)
 		{
@@ -150,7 +150,7 @@ namespace Mosa.DeviceSystem
 		}
 
 		/// <summary>
-		/// 
+		/// Gets all devices.
 		/// </summary>
 		/// <returns></returns>
 		public LinkedList<IDevice> GetAllDevices()

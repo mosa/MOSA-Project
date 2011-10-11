@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
@@ -100,22 +100,36 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="HelloWorld\Boot.cs" />
-    <Compile Include="HelloWorld\CMOS.cs" />
-    <Compile Include="HelloWorld\GDT.cs" />
-    <Compile Include="HelloWorld\IDT.cs" />
-    <Compile Include="HelloWorld\Kernel.cs" />
-    <Compile Include="HelloWorld\Keyboard.cs" />
-    <Compile Include="HelloWorld\Memory.cs" />
-    <Compile Include="HelloWorld\PageFaultHandler.cs" />
-    <Compile Include="HelloWorld\PageFrameAllocator.cs" />
-    <Compile Include="HelloWorld\Panic.cs" />
-    <Compile Include="HelloWorld\PIC.cs" />
-    <Compile Include="HelloWorld\ProcessManager.cs" />
-    <Compile Include="HelloWorld\TaskManager.cs" />
-    <Compile Include="HelloWorld\VirtualPageAllocator.cs" />
-    <Compile Include="HelloWorld\Multiboot.cs" />
-    <Compile Include="HelloWorld\PageTable.cs" />
-    <Compile Include="HelloWorld\Screen.cs" />
+    <Compile Include="HelloWorld\Kernel\CMOS.cs" />
+    <Compile Include="HelloWorld\Kernel\Colors.cs" />
+    <Compile Include="HelloWorld\Kernel\CpuInfo.cs" />
+    <Compile Include="HelloWorld\Kernel\GDT.cs" />
+    <Compile Include="HelloWorld\Kernel\IdleTask.cs" />
+    <Compile Include="HelloWorld\Kernel\IDT.cs" />
+    <Compile Include="HelloWorld\Kernel\Kernel.cs" />
+    <Compile Include="HelloWorld\Kernel\Keyboard.cs" />
+    <Compile Include="HelloWorld\Kernel\Memory.cs" />
+    <Compile Include="HelloWorld\Kernel\PageFaultHandler.cs" />
+    <Compile Include="HelloWorld\Kernel\PageFrameAllocator.cs" />
+    <Compile Include="HelloWorld\Kernel\Panic.cs" />
+    <Compile Include="HelloWorld\Kernel\PIC.cs" />
+    <Compile Include="HelloWorld\Kernel\ProcessManager.cs" />
+    <Compile Include="HelloWorld\Smbios\BiosInformationStructure.cs" />
+    <Compile Include="HelloWorld\Smbios\CpuStructure.cs" />
+    <Compile Include="HelloWorld\Smbios\SmbiosManager.cs" />
+    <Compile Include="HelloWorld\Smbios\SmbiosStructure.cs" />
+    <Compile Include="HelloWorld\Kernel\TaskManager.cs" />
+    <Compile Include="HelloWorld\Tests\ExceptionTest.cs" />
+    <Compile Include="HelloWorld\Tests\Generic2Test.cs" />
+    <Compile Include="HelloWorld\Tests\GenericTest.cs" />
+    <Compile Include="HelloWorld\Tests\InterfaceTest.cs" />
+    <Compile Include="HelloWorld\Tests\IsInstTest.cs" />
+    <Compile Include="HelloWorld\Tests\KernelTest.cs" />
+    <Compile Include="HelloWorld\Tests\StringTest.cs" />
+    <Compile Include="HelloWorld\Kernel\VirtualPageAllocator.cs" />
+    <Compile Include="HelloWorld\Kernel\Multiboot.cs" />
+    <Compile Include="HelloWorld\Kernel\PageTable.cs" />
+    <Compile Include="HelloWorld\Kernel\Screen.cs" />
     <Compile Include="MemoryForm.cs">
       <SubType>Form</SubType>
     </Compile>
