@@ -28,6 +28,7 @@ namespace Mosa.DeviceSystem
 		/// </summary>
 		/// <value>The base address.</value>
 		public uint BaseAddress { get { return baseAddress; } }
+
 		/// <summary>
 		/// Gets the size.
 		/// </summary>

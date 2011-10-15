@@ -21,7 +21,7 @@ namespace Mosa.EmulatedKernel
 		/// </summary>
 		/// <param name="port">The port number.</param>
 		/// <returns></returns>
-		public IReadWriteIOPort RequestIOPort(ushort port)
+		IReadWriteIOPort IHardwareAbstraction.RequestIOPort(ushort port)
 		{
 			return IOPortDispatch.RegisterIOPort(port);
 		}
@@ -32,7 +32,7 @@ namespace Mosa.EmulatedKernel
 		/// <param name="address">The address.</param>
 		/// <param name="size">The size.</param>
 		/// <returns></returns>
-		public IMemory RequestMemory(uint address, uint size)
+		IMemory IHardwareAbstraction.RequestMemory(uint address, uint size)
 		{
 			return MemoryDispatch.RegisterMemory(address, size);
 		}
@@ -40,14 +40,14 @@ namespace Mosa.EmulatedKernel
 		/// <summary>
 		/// Disables all interrupts.
 		/// </summary>
-		public void DisableAllInterrupts()
+		void IHardwareAbstraction.DisableAllInterrupts()
 		{
 		}
 
 		/// <summary>
 		/// Enables all interrupts.
 		/// </summary>
-		public void EnableAllInterrupts()
+		void IHardwareAbstraction.EnableAllInterrupts()
 		{
 		}
 
@@ -55,7 +55,7 @@ namespace Mosa.EmulatedKernel
 		/// Processes the interrupt.
 		/// </summary>
 		/// <param name="irq">The irq.</param>
-		public void ProcessInterrupt(byte irq)
+		void IHardwareAbstraction.ProcessInterrupt(byte irq)
 		{
 			HAL.ProcessInterrupt(irq);
 		}
@@ -64,7 +64,7 @@ namespace Mosa.EmulatedKernel
 		/// Sleeps the specified milliseconds.
 		/// </summary>
 		/// <param name="milliseconds">The milliseconds.</param>
-		public void Sleep(uint milliseconds)
+		void IHardwareAbstraction.Sleep(uint milliseconds)
 		{
 		}
 
@@ -74,11 +74,20 @@ namespace Mosa.EmulatedKernel
 		/// <param name="size">The size.</param>
 		/// <param name="alignment">The alignment.</param>
 		/// <returns></returns>
-		public IMemory AllocateMemory(uint size, uint alignment)
+		IMemory IHardwareAbstraction.AllocateMemory(uint size, uint alignment)
 		{
 			return null;
 		}
 
+		/// <summary>
+		/// Gets the physical address.
+		/// </summary>
+		/// <param name="memory">The memory.</param>
+		/// <returns></returns>
+		uint IHardwareAbstraction.GetPhysicalAddress(IMemory memory)
+		{
+			return memory.Address;
+		}
 	}
 }
 

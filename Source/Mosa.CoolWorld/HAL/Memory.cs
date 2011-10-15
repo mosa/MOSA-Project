@@ -27,22 +27,22 @@ namespace Mosa.CoolWorld.HAL
 		/// Gets the address.
 		/// </summary>
 		/// <value>The address.</value>
-		public uint Address { get { return address; } }
+		uint IMemory.Address { get { return address; } }
 
 		/// <summary>
 		/// Gets the size.
 		/// </summary>
 		/// <value>The size.</value>
-		public uint Size { get { return size; } }
+		uint IMemory.Size { get { return size; } }
 
 		/// <summary>
 		/// Gets or sets the <see cref="System.Byte"/> at the specified index.
 		/// </summary>
 		/// <value></value>
-		public byte this[uint index]
+		byte IMemory.this[uint index]
 		{
-			get { return Read8(index); }
-			set { Write8(index, value); }
+			get { return Native.Get8(address + index); }
+			set { Native.Set8(address + index, value); }
 		}
 
 		/// <summary>
@@ -50,7 +50,7 @@ namespace Mosa.CoolWorld.HAL
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <returns></returns>
-		public byte Read8(uint index)
+		byte IMemory.Read8(uint index)
 		{
 			return Native.Get8(address + index);
 		}
@@ -60,7 +60,7 @@ namespace Mosa.CoolWorld.HAL
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <param name="value">The value.</param>
-		public void Write8(uint index, byte value)
+		void IMemory.Write8(uint index, byte value)
 		{
 			Native.Set8(address + index, value);
 		}
@@ -70,7 +70,7 @@ namespace Mosa.CoolWorld.HAL
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <returns></returns>
-		public ushort Read16(uint index)
+		ushort IMemory.Read16(uint index)
 		{
 			return Native.Get16(address + index);
 		}
@@ -80,7 +80,7 @@ namespace Mosa.CoolWorld.HAL
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <param name="value">The value.</param>
-		public void Write16(uint index, ushort value)
+		void IMemory.Write16(uint index, ushort value)
 		{
 			Native.Set16(address + index, value);
 		}
@@ -90,7 +90,7 @@ namespace Mosa.CoolWorld.HAL
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <returns></returns>
-		public uint Read32(uint index)
+		uint IMemory.Read32(uint index)
 		{
 			return Native.Get32(address + index);
 		}
@@ -100,7 +100,7 @@ namespace Mosa.CoolWorld.HAL
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <param name="value">The value.</param>
-		public void Write32(uint index, uint value)
+		void IMemory.Write32(uint index, uint value)
 		{
 			Native.Set32(address + index, value);
 		}

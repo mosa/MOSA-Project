@@ -23,7 +23,7 @@ namespace Mosa.CoolWorld.HAL
 		/// </summary>
 		/// <param name="port">The port number.</param>
 		/// <returns></returns>
-		public IReadWriteIOPort RequestIOPort(ushort port)
+		IReadWriteIOPort IHardwareAbstraction.RequestIOPort(ushort port)
 		{
 			return new IOPort(port);
 		}
@@ -34,7 +34,7 @@ namespace Mosa.CoolWorld.HAL
 		/// <param name="address">The address.</param>
 		/// <param name="size">The size.</param>
 		/// <returns></returns>
-		public IMemory RequestMemory(uint address, uint size)
+		IMemory IHardwareAbstraction.RequestMemory(uint address, uint size)
 		{
 			return new Memory(address, size);
 		}
@@ -42,7 +42,7 @@ namespace Mosa.CoolWorld.HAL
 		/// <summary>
 		/// Disables all interrupts.
 		/// </summary>
-		public void DisableAllInterrupts()
+		void IHardwareAbstraction.DisableAllInterrupts()
 		{
 			Native.Cli();
 		}
@@ -50,7 +50,7 @@ namespace Mosa.CoolWorld.HAL
 		/// <summary>
 		/// Enables all interrupts.
 		/// </summary>
-		public void EnableAllInterrupts()
+		void IHardwareAbstraction.EnableAllInterrupts()
 		{
 			Native.Sti();
 		}
@@ -59,7 +59,7 @@ namespace Mosa.CoolWorld.HAL
 		/// Processes the interrupt.
 		/// </summary>
 		/// <param name="irq">The irq.</param>
-		public void ProcessInterrupt(byte irq, byte error)
+		void IHardwareAbstraction.ProcessInterrupt(byte irq, byte error)
 		{
 			Mosa.DeviceSystem.HAL.ProcessInterrupt(irq, error);
 		}
@@ -68,7 +68,7 @@ namespace Mosa.CoolWorld.HAL
 		/// Sleeps the specified milliseconds.
 		/// </summary>
 		/// <param name="milliseconds">The milliseconds.</param>
-		public void Sleep(uint milliseconds)
+		void IHardwareAbstraction.Sleep(uint milliseconds)
 		{
 		}
 
@@ -78,11 +78,21 @@ namespace Mosa.CoolWorld.HAL
 		/// <param name="size">The size.</param>
 		/// <param name="alignment">The alignment.</param>
 		/// <returns></returns>
-		public IMemory AllocateMemory(uint size, uint alignment)
+		IMemory IHardwareAbstraction.AllocateMemory(uint size, uint alignment)
 		{
 			uint address = KernelMemory.AllocateMemory(size);
 
 			return new Memory(address, size);
+		}
+
+		/// <summary>
+		/// Gets the physical address.
+		/// </summary>
+		/// <param name="memory">The memory.</param>
+		/// <returns></returns>
+		uint IHardwareAbstraction.GetPhysicalAddress(IMemory memory)
+		{
+			return Mosa.Kernel.x86.PageTable.GetPhysicalAddressFromVirtual(memory.Address);
 		}
 
 	}

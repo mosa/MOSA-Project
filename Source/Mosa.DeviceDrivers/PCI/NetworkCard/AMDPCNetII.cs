@@ -81,6 +81,11 @@ namespace Mosa.DeviceDrivers.PCI.NetworkCard
 		/// </summary>
 		protected NetworkDevicePacketBuffer packetBuffer;
 
+		/// <summary>
+		/// 
+		/// </summary>
+		protected uint physicalBufferAddress;
+
 		#endregion
 
 		/// <summary>
@@ -112,12 +117,14 @@ namespace Mosa.DeviceDrivers.PCI.NetworkCard
 			uint len = (ushort)(~bufferSize);
 			len = (len + 1) & 0x0FFF | 0x8000F000;
 
+			physicalBufferAddress = HAL.GetPhysicalAddress(buffers);
+
 			for (uint index = 0; index < 16; index++)
 			{
 				uint offset = index * 4;
 				rxDescriptor.Write32((offset + 1) * 4, len);
-				rxDescriptor.Write32((offset + 2) * 4, buffers.Address + (bufferSize * index));
-				txDescriptor.Write32((offset + 2) * 4, buffers.Address + (bufferSize * (index + 16)));
+				rxDescriptor.Write32((offset + 2) * 4, physicalBufferAddress + (bufferSize * index));
+				txDescriptor.Write32((offset + 2) * 4, physicalBufferAddress + (bufferSize * (index + 16)));
 			}
 
 			nextTXDesc = 0;
@@ -150,7 +157,7 @@ namespace Mosa.DeviceDrivers.PCI.NetworkCard
 
 			macAddress = new MACAddress(eepromMac);
 
-			// Fill in the Initialization block
+			// Fill in the initialization block
 			initBlock.Write32(0, (0x4 << 28) | (0x4 << 30));
 			initBlock.Write32(4, (uint)(eepromMac[0] | (eepromMac[1] << 8) | (eepromMac[2] << 16) | (eepromMac[3] << 24)));
 			initBlock.Write32(8, (uint)(eepromMac[4] | (eepromMac[5] << 8))); // Fill in the hardware MAC address
@@ -159,8 +166,8 @@ namespace Mosa.DeviceDrivers.PCI.NetworkCard
 			initBlock.Write32(28, rxDescriptor.Address);
 			initBlock.Write32(32, txDescriptor.Address);
 
-			// Write the Initialization blocks address to the registers on the card
-			InitializationBlockAddress = initBlock.Address;
+			// Write the initialization blocks address to the registers on the card
+			InitializationBlockAddress = HAL.GetPhysicalAddress(initBlock);
 
 			// Set the device to PCNet-PCI II Controller mode (full 32-bit mode)
 			SoftwareStyleRegister = 0x03;

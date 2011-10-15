@@ -58,6 +58,13 @@ namespace Mosa.DeviceSystem
 		/// <param name="alignment">The alignment.</param>
 		/// <returns></returns>
 		IMemory AllocateMemory(uint size, uint alignment);
+
+		/// <summary>
+		/// Gets the physical address.
+		/// </summary>
+		/// <param name="memory">The memory.</param>
+		/// <returns></returns>
+		uint GetPhysicalAddress(IMemory memory);
 	}
 }
 

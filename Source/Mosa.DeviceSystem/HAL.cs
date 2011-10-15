@@ -99,6 +99,16 @@ namespace Mosa.DeviceSystem
 			hardwareAbstraction.Sleep(milliseconds);
 		}
 
+		/// <summary>
+		/// Gets the physical address.
+		/// </summary>
+		/// <param name="memory">The memory.</param>
+		/// <returns></returns>
+		public static uint GetPhysicalAddress(IMemory memory)
+		{
+			return hardwareAbstraction.GetPhysicalAddress(memory);
+		}
+
 	}
 }
 
