@@ -48,6 +48,7 @@ namespace Mosa.DeviceSystem
 		/// <param name="region">The region.</param>
 		/// <returns></returns>
 		IMemory GetMemory(byte region);
+
 		/// <summary>
 		/// Gets the IO port.
 		/// </summary>

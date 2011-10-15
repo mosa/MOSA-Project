@@ -27,7 +27,7 @@ namespace Mosa.DeviceSystem
 		/// <param name="address">The address.</param>
 		/// <param name="size">The size.</param>
 		/// <returns></returns>
-		IMemory RequestMemory(uint address, uint size);
+		IMemory RequestPhysicalMemory(uint address, uint size);
 
 		/// <summary>
 		/// Disables all interrupts.

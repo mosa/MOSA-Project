@@ -32,7 +32,7 @@ namespace Mosa.EmulatedKernel
 		/// <param name="address">The address.</param>
 		/// <param name="size">The size.</param>
 		/// <returns></returns>
-		IMemory IHardwareAbstraction.RequestMemory(uint address, uint size)
+		IMemory IHardwareAbstraction.RequestPhysicalMemory(uint address, uint size)
 		{
 			return MemoryDispatch.RegisterMemory(address, size);
 		}

@@ -34,7 +34,7 @@ namespace Mosa.CoolWorld.HAL
 		/// <param name="address">The address.</param>
 		/// <param name="size">The size.</param>
 		/// <returns></returns>
-		IMemory IHardwareAbstraction.RequestMemory(uint address, uint size)
+		IMemory IHardwareAbstraction.RequestPhysicalMemory(uint address, uint size)
 		{
 			return new Memory(address, size);
 		}

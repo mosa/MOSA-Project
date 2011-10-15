@@ -107,7 +107,7 @@ namespace Mosa.DeviceSystem
 			foreach (DeviceDriverPhysicalMemoryAttribute memoryAttribute in deviceDriver.MemoryAttributes)
 				if (memoryAttribute.MemorySize > 0)
 				{
-					IMemory memory = HAL.RequestPhysicalMemory(memoryAttribute.MemorySize, memoryAttribute.MemoryAlignment);
+					IMemory memory = HAL.AllocateMemory(memoryAttribute.MemorySize, memoryAttribute.MemoryAlignment);
 					memoryRegions.Add(new MemoryRegion(memory.Address, memory.Size));
 				}
 
@@ -163,7 +163,7 @@ namespace Mosa.DeviceSystem
 				foreach (DeviceDriverPhysicalMemoryAttribute memoryAttribute in deviceDriver.MemoryAttributes)
 					if (memoryAttribute.MemorySize > 0)
 					{
-						IMemory memory = HAL.RequestPhysicalMemory(memoryAttribute.MemorySize, memoryAttribute.MemoryAlignment);
+						IMemory memory = HAL.AllocateMemory(memoryAttribute.MemorySize, memoryAttribute.MemoryAlignment);
 						memoryRegions.Add(new MemoryRegion(memory.Address, memory.Size));
 					}
 

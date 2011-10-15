@@ -108,10 +108,10 @@ namespace Mosa.DeviceDrivers.PCI.NetworkCard
 			rap = hardwareResources.GetIOPort(0, 0x14);
 			bdp = hardwareResources.GetIOPort(0, 0x1C);
 
-			initBlock = hardwareResources.GetMemory(1);
-			txDescriptor = hardwareResources.GetMemory(2);
-			rxDescriptor = hardwareResources.GetMemory(3);
-			buffers = hardwareResources.GetMemory(4);
+			initBlock = hardwareResources.GetMemory(0);
+			txDescriptor = hardwareResources.GetMemory(1);
+			rxDescriptor = hardwareResources.GetMemory(2);
+			buffers = hardwareResources.GetMemory(3);
 
 			bufferSize = 2048;
 			uint len = (ushort)(~bufferSize);
