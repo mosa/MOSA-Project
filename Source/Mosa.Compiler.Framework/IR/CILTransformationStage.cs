@@ -509,7 +509,6 @@ namespace Mosa.Compiler.Framework.IR
 			int elementSize = 0;
 			var elementSigType = arrayType.ElementType;
 
-
 			// Handle builtin types
 			if (elementSigType is BuiltInSigType)
 			{

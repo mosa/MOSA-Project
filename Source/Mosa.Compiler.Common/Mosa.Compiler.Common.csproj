@@ -37,6 +37,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="StreamExtension.cs" />
     <Compile Include="DataConverter.cs" />
     <Compile Include="EndianAwareBinaryReader.cs" />
     <Compile Include="EndianAwareBinaryWriter.cs" />

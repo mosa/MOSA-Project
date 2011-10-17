@@ -15,7 +15,7 @@ namespace Mosa.DeviceSystem
 	public interface IDiskControllerDevice
 	{
 		/// <summary>
-		/// Gets the maximun drive count.
+		/// Gets the maximum drive count.
 		/// </summary>
 		/// <value>The drive count.</value>
 		uint MaximunDriveCount { get; }

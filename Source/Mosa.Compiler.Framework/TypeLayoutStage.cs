@@ -180,7 +180,7 @@ namespace Mosa.Compiler.Framework
 
 			// Debug.WriteLine("Method Table: " + methodTableName);
 
-			using (Stream stream = linker.Allocate(methodTableName, SectionKind.Text, methodTableSize, typeLayout.NativePointerAlignment))
+			using (Stream stream = linker.Allocate(methodTableName, SectionKind.ROData, methodTableSize, typeLayout.NativePointerAlignment))
 			{
 				if (typeSize != 0)
 				{

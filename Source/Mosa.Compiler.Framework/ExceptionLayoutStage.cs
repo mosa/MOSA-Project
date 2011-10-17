@@ -153,7 +153,7 @@ namespace Mosa.Compiler.Framework
 
 			int tableSize = (entries.Count * nativePointerSize * 4) + nativePointerSize;
 
-			using (Stream stream = methodCompiler.Linker.Allocate(this.methodCompiler.Method.FullName + @"$etable", SectionKind.Text, tableSize, nativePointerAlignment))
+			using (Stream stream = methodCompiler.Linker.Allocate(this.methodCompiler.Method.FullName + @"$etable", SectionKind.ROData, tableSize, nativePointerAlignment))
 			{
 				foreach (ExceptionEntry entry in entries)
 				{

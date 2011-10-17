@@ -115,7 +115,7 @@ namespace Mosa.DeviceDrivers.ISA
 		}
 
 		/// <summary>
-		/// Reads from configuraton space
+		/// Reads from configuration space
 		/// </summary>
 		/// <param name="bus">The bus.</param>
 		/// <param name="slot">The slot.</param>
@@ -129,7 +129,7 @@ namespace Mosa.DeviceDrivers.ISA
 		}
 
 		/// <summary>
-		/// Reads from configuraton space
+		/// Reads from configuration space
 		/// </summary>
 		/// <param name="bus">The bus.</param>
 		/// <param name="slot">The slot.</param>
@@ -143,7 +143,7 @@ namespace Mosa.DeviceDrivers.ISA
 		}
 
 		/// <summary>
-		/// Reads from configuraton space
+		/// Reads from configuration space
 		/// </summary>
 		/// <param name="bus">The bus.</param>
 		/// <param name="slot">The slot.</param>
@@ -157,7 +157,7 @@ namespace Mosa.DeviceDrivers.ISA
 		}
 
 		/// <summary>
-		/// Writes to configuraton space
+		/// Writes to configuration space
 		/// </summary>
 		/// <param name="bus">The bus.</param>
 		/// <param name="slot">The slot.</param>
@@ -171,7 +171,7 @@ namespace Mosa.DeviceDrivers.ISA
 		}
 
 		/// <summary>
-		/// Writes to configuraton space
+		/// Writes to configuration space
 		/// </summary>
 		/// <param name="bus">The bus.</param>
 		/// <param name="slot">The slot.</param>
@@ -185,7 +185,7 @@ namespace Mosa.DeviceDrivers.ISA
 		}
 
 		/// <summary>
-		/// Writes to configuraton space
+		/// Writes to configuration space
 		/// </summary>
 		/// <param name="bus">The bus.</param>
 		/// <param name="slot">The slot.</param>
