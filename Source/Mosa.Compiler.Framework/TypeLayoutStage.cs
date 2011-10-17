@@ -86,7 +86,7 @@ namespace Mosa.Compiler.Framework
 					slots.Add(null);
 			}
 
-			AskLinkerToCreateMethodTable(type.FullName + @"$itable", null, 0, slots);
+			AskLinkerToCreateMethodTable(type.FullName + @"$itable", null, slots);
 		}
 
 		private void BuildTypeInterfaceBitmap(RuntimeType type)
@@ -129,7 +129,7 @@ namespace Mosa.Compiler.Framework
 			if (methodTable == null)
 				return;
 
-			AskLinkerToCreateMethodTable(type.FullName + @"$mtable$" + interfaceType.FullName, methodTable, 0, null);
+			AskLinkerToCreateMethodTable(type.FullName + @"$mtable$" + interfaceType.FullName, methodTable, null);
 		}
 
 		/// <summary>
@@ -167,27 +167,21 @@ namespace Mosa.Compiler.Framework
 			else
 				headerlinks.Add(type.BaseType + @"$mtable");
 
-			// 5. size
-			int typeSize = this.TypeLayout.GetTypeSize(type);
+			// 5. Type Metadata
+			headerlinks.Add(type.FullName + @"$dtable");
 
 			IList<RuntimeMethod> methodTable = typeLayout.GetMethodTable(type);
-			AskLinkerToCreateMethodTable(type.FullName + @"$mtable", methodTable, typeSize, headerlinks);
+			AskLinkerToCreateMethodTable(type.FullName + @"$mtable", methodTable, headerlinks);
 		}
 
-		private void AskLinkerToCreateMethodTable(string methodTableName, IList<RuntimeMethod> methodTable, int typeSize, IList<string> headerlinks)
+		private void AskLinkerToCreateMethodTable(string methodTableName, IList<RuntimeMethod> methodTable, IList<string> headerlinks)
 		{
-			int methodTableSize = ((typeSize == 0 ? 0 : 1) + (headerlinks == null ? 0 : headerlinks.Count) + (methodTable == null ? 0 : methodTable.Count)) * typeLayout.NativePointerSize;
+			int methodTableSize = ((headerlinks == null ? 0 : headerlinks.Count) + (methodTable == null ? 0 : methodTable.Count)) * typeLayout.NativePointerSize;
 
 			// Debug.WriteLine("Method Table: " + methodTableName);
 
 			using (Stream stream = linker.Allocate(methodTableName, SectionKind.ROData, methodTableSize, typeLayout.NativePointerAlignment))
 			{
-				if (typeSize != 0)
-				{
-					stream.Position = (headerlinks == null ? 0 : headerlinks.Count) * typeLayout.NativePointerSize;
-					byte[] buffer = LittleEndianBitConverter.GetBytes(typeSize);
-					stream.Write(buffer, 0, buffer.Length);
-				}
 				stream.Position = methodTableSize;
 			}
 
@@ -208,11 +202,6 @@ namespace Mosa.Compiler.Framework
 					}
 					offset += typeLayout.NativePointerSize;
 				}
-			}
-
-			if (typeSize != 0)
-			{
-				offset += typeLayout.NativePointerSize;
 			}
 
 			if (methodTable != null)
