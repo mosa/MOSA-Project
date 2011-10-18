@@ -53,18 +53,14 @@ namespace Mosa.Compiler.Framework
 		private void CompileType(RuntimeType type)
 		{
 			Trace(CompilerEvent.CompilingMethod, type.FullName);
-
-			//if (type.IsDelegate)
-			//{
-			//    NotifyCompilerEvent(CompilerEvent.DebugInfo, "Skipping delegate type " + type.FullName);
-			//    return;
-			//}
-
+			
 			if (type.ContainsOpenGenericParameters)
 				return;
 
-			if (type.IsDelegate && type.Name != "Delegate" && type.Name != "MulticastDelegate")
-				this.typeSystem.DelegateTypePatcher.PatchType(type);
+			if (type.IsDelegate && type.FullName != "System.Delegate" && type.FullName != "System.MulticastDelegate")
+			{
+				typeSystem.DelegateTypePatcher.PatchType(type);
+			}
 
 			foreach (RuntimeMethod method in type.Methods)
 			{

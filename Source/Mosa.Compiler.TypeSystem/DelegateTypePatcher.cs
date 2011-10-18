@@ -80,6 +80,7 @@ namespace Mosa.Compiler.TypeSystem
 		{
 			foreach (var t in typeSystem.GetAllTypes())
 			{
+				// FIXME:
 				if (t.FullName == "Mosa.Platform.x86.Intrinsic.DelegateStub")
 				{
 					delegateStub = t;

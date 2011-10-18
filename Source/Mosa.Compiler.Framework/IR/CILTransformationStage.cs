@@ -406,7 +406,8 @@ namespace Mosa.Compiler.Framework.IR
 		{
 			RuntimeMethod invokeTarget = context.InvokeTarget;
 
-			if (invokeTarget.DeclaringType.BaseType != null && invokeTarget.DeclaringType.BaseType.FullName == "System.MulticastDelegate")
+			//if (invokeTarget.DeclaringType.BaseType != null && invokeTarget.DeclaringType.BaseType.FullName == "System.MulticastDelegate")
+			if (invokeTarget.DeclaringType.IsDelegate)
 			{
 				typeSystem.DelegateTypePatcher.PatchType(invokeTarget.DeclaringType);
 				(typeSystem.InternalTypeModule as InternalTypeModule).AddType(invokeTarget.DeclaringType);
@@ -420,8 +421,7 @@ namespace Mosa.Compiler.Framework.IR
 			if (context.Previous.Instruction is ConstrainedPrefixInstruction)
 			{
 				var type = context.Previous.Other as RuntimeType;
-				if (type == null)
-					Console.WriteLine();
+
 				foreach (var method in type.Methods)
 				{
 					if (method.Name == invokeTarget.Name)
@@ -433,8 +433,10 @@ namespace Mosa.Compiler.Framework.IR
 						}
 					}
 				}
+
 				SymbolOperand symbolOperand = SymbolOperand.FromMethod(invokeTarget);
 				ProcessInvokeInstruction(context, symbolOperand, resultOperand, operands);
+				
 				return;
 			}
 
