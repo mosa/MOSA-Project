@@ -36,6 +36,8 @@ namespace Mosa.Tools.CreateBootImage
 			Console.WriteLine("Written by Philipp Garcia (phil@thinkedge.com)");
 			Console.WriteLine();
 
+			Guid mediaGuid = Guid.NewGuid();
+			Guid mediaLastSnapGuid = Guid.NewGuid();
 			string mbrFilename = string.Empty;
 			string fatcodeFilename = string.Empty;
 			string volumeLabel = string.Empty;
@@ -47,12 +49,12 @@ namespace Mosa.Tools.CreateBootImage
 			FileSystem fileSystem = FileSystem.FAT12;
 			List<IncludeFile> includeFiles = new List<IncludeFile>();
 
-			bool valid = (args.Length < 2);
+			bool valid = args.Length == 2;
 
 			if (valid)
 				valid = System.IO.File.Exists(args[0]);
 
-			if (valid)
+			if (!valid)
 			{
 				Console.WriteLine("Usage: CreateBootImage <boot.config file> <image name>");
 				Console.Error.WriteLine("ERROR: Missing arguments");
@@ -74,7 +76,7 @@ namespace Mosa.Tools.CreateBootImage
 					if (string.IsNullOrEmpty(line))
 						continue;
 
-					string[] parts = line.Split('\t');
+					string[] parts = line.Split(new char[] { '\t', ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
 					switch (parts[0].Trim())
 					{
@@ -84,6 +86,8 @@ namespace Mosa.Tools.CreateBootImage
 						case "-img": imageFormat = ImageFormat.IMG; break;
 						case "-vdi": imageFormat = ImageFormat.VDI; break;
 						case "-syslinux": patchSyslinuxOption = true; break;
+						case "-guid": if (parts.Length > 1) mediaGuid = new Guid(parts[1]); break;
+						case "-snapguid": if (parts.Length > 1) mediaLastSnapGuid = new Guid(parts[1]); break;
 						case "-fat12": fileSystem = FileSystem.FAT12; break;
 						case "-fat16": fileSystem = FileSystem.FAT16; break;
 						case "-fat32": fileSystem = FileSystem.FAT32; break;
@@ -114,8 +118,8 @@ namespace Mosa.Tools.CreateBootImage
 					// Create header
 					byte[] header = Mosa.DeviceSystem.VDI.CreateHeader(
 						blockCount,
-						Guid.NewGuid().ToByteArray(),
-						Guid.NewGuid().ToByteArray(),
+						mediaGuid.ToByteArray(),
+						mediaLastSnapGuid.ToByteArray(),
 						diskGeometry
 					);
 
@@ -187,7 +191,11 @@ namespace Mosa.Tools.CreateBootImage
 
 				// Create FAT file system
 				FatFileSystem fat = new FatFileSystem(partitionDevice);
-				fat.Format(fatSettings);
+				if (!fat.Format(fatSettings))
+				{
+					Console.WriteLine("ERROR: Invalid FAT settings");
+					return -1;
+				}
 
 				fat.SetVolumeName(volumeLabel);
 
@@ -202,7 +210,7 @@ namespace Mosa.Tools.CreateBootImage
 					if (includeFile.System) fileAttributes |= Mosa.FileSystem.FAT.FatFileAttributes.System;
 
 					byte[] file = ReadFile(filename);
-					string newname = (Path.GetFileNameWithoutExtension(includeFile.Newname).PadRight(8).Substring(0, 8) + Path.GetExtension(includeFile.Newname).PadRight(3).Substring(1, 3)).ToUpper();
+					string newname = (Path.GetFileNameWithoutExtension(includeFile.Newname).PadRight(8).Substring(0, 8) + Path.GetExtension(includeFile.Newname).PadRight(4).Substring(1, 3)).ToUpper();
 					FatFileLocation location = fat.CreateFile(newname, fileAttributes, 0);
 
 					if (!location.Valid)
@@ -217,7 +225,7 @@ namespace Mosa.Tools.CreateBootImage
 				{
 					// Locate ldlinux.sys file for patching
 					string filename = "ldlinux.sys";
-					string name = (Path.GetFileNameWithoutExtension(filename) + Path.GetExtension(filename).PadRight(3).Substring(0, 4)).ToUpper();
+					string name = (Path.GetFileNameWithoutExtension(filename) + Path.GetExtension(filename).PadRight(4).Substring(0, 4)).ToUpper();
 
 					FatFileLocation location = fat.FindEntry(new Mosa.FileSystem.FAT.Find.WithName(name), 0);
 
@@ -279,7 +287,7 @@ namespace Mosa.Tools.CreateBootImage
 							// Write back the updated cluster
 							fat.WriteCluster(location.FirstCluster, firstCluster.Data);
 
-							// Re-Calculate checksum by openning the file
+							// Re-Calculate checksum by opening the file
 							FatFileStream file = new FatFileStream(fat, location);
 
 							uint csum = 0x3EB202FE;
@@ -305,7 +313,7 @@ namespace Mosa.Tools.CreateBootImage
 					byte[] footer = Mosa.DeviceSystem.VHD.CreateFooter(
 						blockCount,
 						(uint)(DateTime.Now - (new DateTime(2000, 1, 1, 0, 0, 0))).Seconds,
-						Guid.NewGuid().ToByteArray(),
+						mediaGuid.ToByteArray(),
 						diskGeometry
 					);
 
