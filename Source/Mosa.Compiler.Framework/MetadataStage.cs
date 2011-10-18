@@ -124,7 +124,13 @@ namespace Mosa.Compiler.Framework
 			foreach (var type in typeModule.GetAllTypes())
 			{
 				if (!type.IsModule)
+				{
+					// FOR DEBUGGING
+					if (type.ToString().Contains("Delegate"))
+						Console.WriteLine(type.Module.Name + " : " + type.ToString());
+
 					CreateTypeDefinitionTable(type, assemblyTableSymbol);
+				}
 			}
 		}
 
@@ -162,6 +168,7 @@ namespace Mosa.Compiler.Framework
 				stream.WriteByte((byte)(type.IsInterface ? 1 : 0));
 
 				// 6. Constructor that accept no parameters, if any, for this type
+				// TODO
 			}
 
 		}

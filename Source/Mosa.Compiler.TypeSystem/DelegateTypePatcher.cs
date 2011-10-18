@@ -64,11 +64,11 @@ namespace Mosa.Compiler.TypeSystem
 			if (alreadyPatched.Contains(type))
 				return;
 
-			if (this.delegateStub == null)
-				this.LoadDelegateStub();
+			if (delegateStub == null)
+				LoadDelegateStub();
 
-			this.GenerateAndInsertFields(type);
-			this.GenerateAndReplaceMethods(type);
+			GenerateAndInsertFields(type);
+			GenerateAndReplaceMethods(type);
 
 			alreadyPatched.Add(type);
 		}
@@ -78,13 +78,11 @@ namespace Mosa.Compiler.TypeSystem
 		/// </summary>
 		private void LoadDelegateStub()
 		{
-			var types = this.typeSystem.GetAllTypes();
-
-			foreach (var t in types)
+			foreach (var t in typeSystem.GetAllTypes())
 			{
-				if (t.FullName.Contains("DelegateStub"))
+				if (t.FullName == "Mosa.Platform.x86.Intrinsic.DelegateStub")
 				{
-					this.delegateStub = t;
+					delegateStub = t;
 					return;
 				}
 			}
@@ -96,8 +94,8 @@ namespace Mosa.Compiler.TypeSystem
 		/// <param name="type">The type.</param>
 		private void GenerateAndInsertFields(RuntimeType type)
 		{
-			this.GenerateAndInsertInstanceField(type);
-			this.GenerateAndInsertMethodPtrField(type);
+			GenerateAndInsertInstanceField(type);
+			GenerateAndInsertMethodPtrField(type);
 		}
 
 		/// <summary>
@@ -106,10 +104,10 @@ namespace Mosa.Compiler.TypeSystem
 		/// <param name="type">The type.</param>
 		private void GenerateAndInsertInstanceField(RuntimeType type)
 		{
-			var stubObjectField = this.delegateStub.Fields[0];
-			var objectField = new CilRuntimeField(this.typeSystem.InternalTypeModule, this.InstanceFieldName,
+			var stubObjectField = delegateStub.Fields[0];
+			var objectField = new CilRuntimeField(typeSystem.InternalTypeModule, InstanceFieldName,
 				stubObjectField.Signature, stubObjectField.Token, 0, stubObjectField.RVA, type, stubObjectField.Attributes);
-			this.InsertField(type, objectField);
+			InsertField(type, objectField);
 		}
 
 		/// <summary>
@@ -118,10 +116,10 @@ namespace Mosa.Compiler.TypeSystem
 		/// <param name="type">The type.</param>
 		private void GenerateAndInsertMethodPtrField(RuntimeType type)
 		{
-			var stubObjectField = this.delegateStub.Fields[1];
-			var objectField = new CilRuntimeField(this.typeSystem.InternalTypeModule, this.MethodPtrFieldName,
+			var stubObjectField = delegateStub.Fields[1];
+			var objectField = new CilRuntimeField(typeSystem.InternalTypeModule, MethodPtrFieldName,
 				stubObjectField.Signature, stubObjectField.Token, 0, stubObjectField.RVA, type, stubObjectField.Attributes);
-			this.InsertField(type, objectField);
+			InsertField(type, objectField);
 		}
 
 		/// <summary>
@@ -140,13 +138,15 @@ namespace Mosa.Compiler.TypeSystem
 		/// <param name="type">The type.</param>
 		private void GenerateAndReplaceMethods(RuntimeType type)
 		{
-			this.GenerateAndReplaceConstructor(type);
+			GenerateAndReplaceConstructor(type);
+
 			if (type.Methods[1].Signature.ReturnType.Type == CilElementType.Void)
-				this.GenerateAndReplaceInvokeMethod(type);
+				GenerateAndReplaceInvokeMethod(type);
 			else
-				this.GenerateAndReplaceInvokeWithReturnMethod(type);
-			this.GenerateAndReplaceBeginInvokeMethod(type);
-			this.GenerateAndReplaceEndInvokeMethod(type);
+				GenerateAndReplaceInvokeWithReturnMethod(type);
+
+			GenerateAndReplaceBeginInvokeMethod(type);
+			GenerateAndReplaceEndInvokeMethod(type);
 		}
 
 		/// <summary>
@@ -157,15 +157,15 @@ namespace Mosa.Compiler.TypeSystem
 		{
 			RuntimeParameter[] parameters = new RuntimeParameter[type.Methods[0].Parameters.Count];
 			type.Methods[0].Parameters.CopyTo(parameters, 0);
-			var stubConstructor = this.delegateStub.Methods[0];
+			var stubConstructor = delegateStub.Methods[0];
 
-			var constructor = new CilRuntimeMethod(this.delegateStub.Module, this.ConstructorName,
+			var constructor = new CilRuntimeMethod(delegateStub.Module, ConstructorName,
 				type.Methods[0].Signature, stubConstructor.Token, type, stubConstructor.Attributes, stubConstructor.ImplAttributes, stubConstructor.Rva);
 
 			foreach (var parameter in parameters)
 				constructor.Parameters.Add(parameter);
 
-			this.SearchAndReplaceMethod(type, this.ConstructorName, constructor);
+			SearchAndReplaceMethod(type, ConstructorName, constructor);
 		}
 
 		/// <summary>
@@ -176,70 +176,70 @@ namespace Mosa.Compiler.TypeSystem
 		{
 			RuntimeParameter[] parameters = new RuntimeParameter[type.Methods[1].Parameters.Count];
 			type.Methods[1].Parameters.CopyTo(parameters, 0);
-			var stubInvoke = this.delegateStub.Methods[1];
+			var stubInvoke = delegateStub.Methods[1];
 
-			var invokeMethod = new CilRuntimeMethod(this.delegateStub.Module, this.InvokeMethodName,
+			var invokeMethod = new CilRuntimeMethod(delegateStub.Module, InvokeMethodName,
 				type.Methods[1].Signature, stubInvoke.Token, type, stubInvoke.Attributes, stubInvoke.ImplAttributes, stubInvoke.Rva);
 			foreach (var parameter in parameters)
 				invokeMethod.Parameters.Add(parameter);
 
-			this.SearchAndReplaceMethod(type, this.InvokeMethodName, invokeMethod);
+			SearchAndReplaceMethod(type, InvokeMethodName, invokeMethod);
 		}
 
 		/// <summary>
-		/// 
+		/// Generates the and replace invoke with return method.
 		/// </summary>
-		/// <param name="type"></param>
+		/// <param name="type">The type.</param>
 		private void GenerateAndReplaceInvokeWithReturnMethod(RuntimeType type)
 		{
 			RuntimeParameter[] parameters = new RuntimeParameter[type.Methods[1].Parameters.Count];
 			type.Methods[1].Parameters.CopyTo(parameters, 0);
-			var stubInvoke = this.delegateStub.Methods[2];
+			var stubInvoke = delegateStub.Methods[2];
 
-			var invokeMethod = new CilRuntimeMethod(this.delegateStub.Module, this.InvokeMethodName,
+			var invokeMethod = new CilRuntimeMethod(delegateStub.Module, InvokeMethodName,
 				type.Methods[1].Signature, stubInvoke.Token, type, stubInvoke.Attributes, stubInvoke.ImplAttributes, stubInvoke.Rva);
 			foreach (var parameter in parameters)
 				invokeMethod.Parameters.Add(parameter);
 
-			this.SearchAndReplaceMethod(type, this.InvokeMethodName, invokeMethod);
+			SearchAndReplaceMethod(type, InvokeMethodName, invokeMethod);
 		}
 
 		/// <summary>
-		/// 
+		/// Generates the and replace begin invoke method.
 		/// </summary>
-		/// <param name="type"></param>
+		/// <param name="type">The type.</param>
 		private void GenerateAndReplaceBeginInvokeMethod(RuntimeType type)
 		{
 			RuntimeParameter[] parameters = new RuntimeParameter[type.Methods[2].Parameters.Count];
 			type.Methods[2].Parameters.CopyTo(parameters, 0);
-			var stubMethod = this.delegateStub.Methods[2];
+			var stubMethod = delegateStub.Methods[2];
 
-			var method = new CilRuntimeMethod(this.delegateStub.Module, this.BeginInvokeMethodName,
+			var method = new CilRuntimeMethod(delegateStub.Module, BeginInvokeMethodName,
 				type.Methods[2].Signature, stubMethod.Token, type, stubMethod.Attributes, stubMethod.ImplAttributes, stubMethod.Rva);
 
 			foreach (var parameter in parameters)
 				method.Parameters.Add(parameter);
 
-			this.SearchAndReplaceMethod(type, this.BeginInvokeMethodName, method);
+			SearchAndReplaceMethod(type, BeginInvokeMethodName, method);
 		}
 
 		/// <summary>
-		/// 
+		/// Generates the and replace end invoke method.
 		/// </summary>
-		/// <param name="type"></param>
+		/// <param name="type">The type.</param>
 		private void GenerateAndReplaceEndInvokeMethod(RuntimeType type)
 		{
 			RuntimeParameter[] parameters = new RuntimeParameter[type.Methods[3].Parameters.Count];
 			type.Methods[3].Parameters.CopyTo(parameters, 0);
-			var stubMethod = this.delegateStub.Methods[3];
+			var stubMethod = delegateStub.Methods[3];
 
-			var method = new CilRuntimeMethod(this.delegateStub.Module, this.EndInvokeMethodName,
+			var method = new CilRuntimeMethod(delegateStub.Module, EndInvokeMethodName,
 				type.Methods[3].Signature, stubMethod.Token, type, stubMethod.Attributes, stubMethod.ImplAttributes, stubMethod.Rva);
 
 			foreach (var parameter in parameters)
 				method.Parameters.Add(parameter);
 
-			this.SearchAndReplaceMethod(type, this.EndInvokeMethodName, method);
+			SearchAndReplaceMethod(type, EndInvokeMethodName, method);
 		}
 
 		/// <summary>

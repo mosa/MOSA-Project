@@ -15,7 +15,7 @@ namespace Mosa.DeviceSystem
 	public interface IPCIController
 	{
 		/// <summary>
-		/// Reads from configuraton space
+		/// Reads from configuration space
 		/// </summary>
 		/// <param name="bus">The bus.</param>
 		/// <param name="slot">The slot.</param>
@@ -24,7 +24,7 @@ namespace Mosa.DeviceSystem
 		/// <returns></returns>
 		uint ReadConfig32(byte bus, byte slot, byte function, byte register);
 		/// <summary>
-		/// Reads from configuraton space
+		/// Reads from configuration space
 		/// </summary>
 		/// <param name="bus">The bus.</param>
 		/// <param name="slot">The slot.</param>
@@ -33,7 +33,7 @@ namespace Mosa.DeviceSystem
 		/// <returns></returns>
 		ushort ReadConfig16(byte bus, byte slot, byte function, byte register);
 		/// <summary>
-		/// Reads from configuraton space
+		/// Reads from configuration space
 		/// </summary>
 		/// <param name="bus">The bus.</param>
 		/// <param name="slot">The slot.</param>
@@ -42,7 +42,7 @@ namespace Mosa.DeviceSystem
 		/// <returns></returns>
 		byte ReadConfig8(byte bus, byte slot, byte function, byte register);
 		/// <summary>
-		/// Writes to configuraton space
+		/// Writes to configuration space
 		/// </summary>
 		/// <param name="bus">The bus.</param>
 		/// <param name="slot">The slot.</param>
@@ -51,7 +51,7 @@ namespace Mosa.DeviceSystem
 		/// <param name="value">The value.</param>
 		void WriteConfig32(byte bus, byte slot, byte function, byte register, uint value);
 		/// <summary>
-		/// Writes to configuraton space
+		/// Writes to configuration space
 		/// </summary>
 		/// <param name="bus">The bus.</param>
 		/// <param name="slot">The slot.</param>
@@ -60,7 +60,7 @@ namespace Mosa.DeviceSystem
 		/// <param name="value">The value.</param>
 		void WriteConfig16(byte bus, byte slot, byte function, byte register, ushort value);
 		/// <summary>
-		/// Writes to configuraton space
+		/// Writes to configuration space
 		/// </summary>
 		/// <param name="bus">The bus.</param>
 		/// <param name="slot">The slot.</param>

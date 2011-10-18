@@ -85,8 +85,8 @@ namespace Mosa.Compiler.TypeSystem
 			if (patchedType == null)
 			{
 				patchedType = new CilGenericType(enclosingType.InstantiationModule, typeToken, openType.BaseGenericType, signature);
-				(this.typeSystem.InternalTypeModule as InternalTypeModule).AddType(patchedType);
-				this.AddType(patchedType, ComputeSignatureHash(genericArguments));
+				(typeSystem.InternalTypeModule as InternalTypeModule).AddType(patchedType);
+				AddType(patchedType, ComputeSignatureHash(genericArguments));
 			}
 
 			return patchedType;
@@ -133,11 +133,13 @@ namespace Mosa.Compiler.TypeSystem
 							break;
 						}
 						catch (Exception)
-						{ }
+						{
+							;
+						}
 					}
 				}
-				(this.typeSystem.InternalTypeModule as InternalTypeModule).AddType(patchedType);
-				this.AddType(patchedType, ComputeSignatureHash(genericArguments));
+				(typeSystem.InternalTypeModule as InternalTypeModule).AddType(patchedType);
+				AddType(patchedType, ComputeSignatureHash(genericArguments));
 			}
 
 			foreach (var field in patchedType.Fields)
@@ -271,8 +273,8 @@ namespace Mosa.Compiler.TypeSystem
 			if (patchedType == null)
 			{
 				patchedType = new CilGenericType(enclosingType.InstantiationModule, typeToken, openType.BaseGenericType, signature);
-				(this.typeSystem.InternalTypeModule as InternalTypeModule).AddType(patchedType);
-				this.AddType(patchedType, ComputeSignatureHash(genericArguments));
+				(typeSystem.InternalTypeModule as InternalTypeModule).AddType(patchedType);
+				AddType(patchedType, ComputeSignatureHash(genericArguments));
 			}
 
 			var methodIndex = GetMethodIndex(openMethod);

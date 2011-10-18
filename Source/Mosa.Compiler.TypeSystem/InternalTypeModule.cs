@@ -196,6 +196,11 @@ namespace Mosa.Compiler.TypeSystem
 		/// <param name="type">The type.</param>
 		public void AddType(RuntimeType type)
 		{
+			//Debug.Assert(type.Module != this);
+
+			if (type.Module != this)
+				System.Console.WriteLine("ERROR/FIXME: Type added to Internal Type but Type.Module != InternalTypeModule");
+
 			if (!types.Contains(type) && !typeNames.Contains(type.FullName))
 			{
 				types.Add(type);

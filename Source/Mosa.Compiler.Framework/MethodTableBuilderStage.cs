@@ -68,16 +68,18 @@ namespace Mosa.Compiler.Framework
 
 				foreach (var method in type.Methods)
 				{
-					if (this.linker.HasSymbol(method.ToString()))
+					if (linker.HasSymbol(method.ToString()))
 					{
-						table.Add(this.linker.GetSymbol(method.ToString()));
-						methods.Add(method);
+						table.Add(linker.GetSymbol(method.ToString()));
+
+						if (!methods.Contains(method))
+							methods.Add(method);
 					}
 				}
 			}
 
-			this.CreateMethodDescriptionTable(table);
-			this.CreateMethodDescriptionEntries(methods);
+			CreateMethodDescriptionTable(table);
+			CreateMethodDescriptionEntries(methods);
 		}
 
 		/// <summary>
