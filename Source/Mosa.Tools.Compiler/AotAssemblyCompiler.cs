@@ -97,7 +97,7 @@ namespace Mosa.Tools.Compiler
 					new TypeInitializerSchedulerStage(),
 					new TypeLayoutStage(),
 					new MethodTableBuilderStage(),
-					new MetadataStage(),
+					//new MetadataStage(),
 					compilerOptions.BootCompilerStage,
 					new CilHeaderBuilderStage(),
 					new ObjectFileLayoutStage(),

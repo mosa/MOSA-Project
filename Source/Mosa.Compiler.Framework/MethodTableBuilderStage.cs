@@ -16,7 +16,6 @@ namespace Mosa.Compiler.Framework
 	/// The method description entry has the format:
 	///		4 bytes: Pointer to exception clause table
 	///		4 bytes: GC tracking info
-	///		4 bytes: Method metadata token
 	/// </summary>
 	public class MethodTableBuilderStage : BaseAssemblyCompilerStage, IAssemblyCompilerStage
 	{
@@ -89,11 +88,11 @@ namespace Mosa.Compiler.Framework
 		private void CreateMethodDescriptionTable(IList<LinkerSymbol> table)
 		{
 			// Allocate the table and fill it
-			var size = 3 * table.Count * this.typeLayout.NativePointerSize + this.typeLayout.NativePointerSize;
+			var size = 3 * table.Count * typeLayout.NativePointerSize + typeLayout.NativePointerSize;
 			var offsetPointer = 0;
 			var offsets = new Dictionary<LinkerSymbol, long>();
 
-			using (var stream = this.linker.Allocate("methodTableStart", SectionKind.Text, size, this.typeLayout.NativePointerAlignment))
+			using (var stream = this.linker.Allocate("methodTableStart", SectionKind.Text, size, typeLayout.NativePointerAlignment))
 			{
 				var position = stream.Position;
 				foreach (var entry in table)
@@ -104,7 +103,7 @@ namespace Mosa.Compiler.Framework
 					// Store address and length of the method
 					this.linker.Link(LinkType.AbsoluteAddress | LinkType.I4, "methodTableStart", offsetPointer, 0, entry.Name, IntPtr.Zero);
 					this.linker.Link(LinkType.AbsoluteAddress | LinkType.I4, "methodTableStart", offsetPointer + 8, 0, entry.Name + "$mdtable", IntPtr.Zero);
-					offsetPointer += 3 * this.typeLayout.NativePointerSize;
+					offsetPointer += 3 * typeLayout.NativePointerSize;
 				}
 
 				// Store pointers to method description entries
@@ -116,7 +115,7 @@ namespace Mosa.Compiler.Framework
 				}
 
 				// Mark end of table
-				stream.Seek(size - this.typeLayout.NativePointerSize, SeekOrigin.Begin);
+				stream.Seek(size - typeLayout.NativePointerSize, SeekOrigin.Begin);
 				stream.Write(new byte[] { 0, 0, 0, 0 }, 0, 4);
 			}
 		}
@@ -129,28 +128,16 @@ namespace Mosa.Compiler.Framework
 		{
 			foreach (var method in methods)
 			{
-				using (var stream = this.linker.Allocate(method.ToString() + "$mdtable", SectionKind.Text, 3 * this.typeLayout.NativePointerSize, this.typeLayout.NativePointerAlignment))
+				using (var stream = this.linker.Allocate(method.FullName + "$mdtable", SectionKind.Text, 2 * typeLayout.NativePointerSize, typeLayout.NativePointerAlignment))
 				{
-					this.CreateMethodDescriptionEntry(stream, method);
+					// Pointer to exception clause table
+					linker.Link(LinkType.AbsoluteAddress | LinkType.I4, method.FullName + "$mdtable", 0, 0, method.FullName + "$etable", IntPtr.Zero);
+					// GC tracking info
+					stream.Seek(1 * typeLayout.NativePointerSize, SeekOrigin.Begin);
+					stream.Write(LittleEndianBitConverter.GetBytes(0x00000000), 0, 4);
 				}
 			}
 		}
 
-		/// <summary>
-		/// Creates the method description entry.
-		/// </summary>
-		/// <param name="stream">The stream.</param>
-		/// <param name="method">The method.</param>
-		private void CreateMethodDescriptionEntry(Stream stream, RuntimeMethod method)
-		{
-			// Pointer to exception clause table
-			linker.Link(LinkType.AbsoluteAddress | LinkType.I4, method.ToString() + "$mdtable", 0, 0, method.ToString() + "$etable", IntPtr.Zero);
-			// GC tracking info
-			stream.Seek(1 * this.typeLayout.NativePointerSize, SeekOrigin.Begin);
-			stream.Write(LittleEndianBitConverter.GetBytes(0x00000000), 0, 4);
-			// Metadata token
-			stream.Seek(2 * this.typeLayout.NativePointerSize, SeekOrigin.Begin);
-			stream.Write(LittleEndianBitConverter.GetBytes(method.Token.ToInt32()), 0, 4);
-		}
 	}
 }

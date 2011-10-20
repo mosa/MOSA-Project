@@ -410,9 +410,12 @@ namespace Mosa.Compiler.Framework.IR
 			if (invokeTarget.DeclaringType.IsDelegate)
 			{
 				typeSystem.DelegateTypePatcher.PatchType(invokeTarget.DeclaringType);
-				(typeSystem.InternalTypeModule as InternalTypeModule).AddType(invokeTarget.DeclaringType);
+
+				InternalTypeModule internalTypeModule = typeSystem.InternalTypeModule as InternalTypeModule;
+
+				internalTypeModule.AddType(invokeTarget.DeclaringType);
 				foreach (var method in invokeTarget.DeclaringType.Methods)
-					(typeSystem.InternalTypeModule as InternalTypeModule).AddMethod(method);
+					internalTypeModule.AddMethod(method);
 			}
 
 			Operand resultOperand = context.Result;

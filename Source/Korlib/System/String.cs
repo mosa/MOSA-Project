@@ -89,7 +89,6 @@ namespace System
 			}
 		}
 
-		// FIXME: These should be char,int instead of int,int; but that doesn't compile in MOSA for type matching reasons
 		[MethodImplAttribute(MethodImplOptions.InternalCall)]
 		public extern String(char c, int count);
 
@@ -123,13 +122,12 @@ namespace System
 		private static unsafe string CreateString(char c, int count)
 		{
 			String result = InternalAllocateString(count);
-			char ch = (char)c;
 
 			char* chars = result.first_char;
 
 			while (count > 0)
 			{
-				*chars = ch;
+				*chars = c;
 				count--;
 				chars++;
 			}

@@ -12,7 +12,7 @@ namespace Mosa.Compiler.TypeSystem
 		/// <summary>
 		/// 
 		/// </summary>
-		private static readonly HashSet<RuntimeType> alreadyPatched = new HashSet<RuntimeType>();
+		private HashSet<RuntimeType> alreadyPatched = new HashSet<RuntimeType>();
 		/// <summary>
 		/// 
 		/// </summary>
@@ -29,6 +29,7 @@ namespace Mosa.Compiler.TypeSystem
 		/// 
 		/// </summary>
 		private readonly string EndInvokeMethodName = "EndInvoke";
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -80,7 +81,7 @@ namespace Mosa.Compiler.TypeSystem
 		{
 			foreach (var t in typeSystem.GetAllTypes())
 			{
-				// FIXME:
+				// FIXME: This is not platform independent
 				if (t.FullName == "Mosa.Platform.x86.Intrinsic.DelegateStub")
 				{
 					delegateStub = t;

@@ -117,7 +117,7 @@ namespace Mosa.Compiler.TypeSystem
 			bool result = false;
 			if (this.attributes != null)
 			{
-                foreach (var attribute in this.attributes)
+				foreach (var attribute in this.attributes)
 				{
 					if (attribute.Type.Equals(attributeType) == true ||
 						attribute.Type.IsSubclassOf(attributeType) == true)

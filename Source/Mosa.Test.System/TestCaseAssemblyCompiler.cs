@@ -34,7 +34,7 @@ namespace Mosa.Test.System
 				new MethodCompilerSchedulerStage(),
 				new TypeLayoutStage(),
 				new MethodTableBuilderStage(),
-				new MetadataStage(),
+				//new MetadataStage(),
 				linker
 			});
 
