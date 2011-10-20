@@ -17,7 +17,7 @@ namespace Mosa.Compiler.TypeSystem.Cil
 	/// <summary>
 	/// A CIL specialization of <see cref="RuntimeMethod"/>.
 	/// </summary>
-	sealed class CilRuntimeMethod : RuntimeMethod
+	sealed public class CilRuntimeMethod : RuntimeMethod
 	{
 		#region Data Members
 

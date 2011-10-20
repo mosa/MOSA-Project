@@ -92,12 +92,13 @@ namespace Mosa.Tools.Compiler
 				aot.Pipeline.AddRange(new IAssemblyCompilerStage[] 
 				{
 					compilerOptions.BootCompilerStage,
+					new DelegateTypePatchStage(),
 					new AssemblyMemberCompilationSchedulerStage(), 
 					new MethodCompilerSchedulerStage(),
 					new TypeInitializerSchedulerStage(),
 					new TypeLayoutStage(),
 					new MethodTableBuilderStage(),
-					//new MetadataStage(),
+					new MetadataStage(),
 					compilerOptions.BootCompilerStage,
 					new CilHeaderBuilderStage(),
 					new ObjectFileLayoutStage(),

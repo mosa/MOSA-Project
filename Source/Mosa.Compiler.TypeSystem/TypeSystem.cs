@@ -48,7 +48,6 @@ namespace Mosa.Compiler.TypeSystem
 		/// <param name="modules">The modules.</param>
 		void ITypeSystem.LoadModules(IList<IMetadataModule> modules)
 		{
-			this.delegateTypePatcher = new DelegateTypePatcher(this);
 			foreach (var module in modules)
 			{
 				ITypeModule typeModule = new TypeModule(this, module);
@@ -58,11 +57,6 @@ namespace Mosa.Compiler.TypeSystem
 					mainTypeModule = typeModule;
 			}
 		}
-
-		/// <summary>
-		/// </summary>
-		/// <value></value>
-		DelegateTypePatcher ITypeSystem.DelegateTypePatcher { get { return delegateTypePatcher; } }
 
 		/// <summary>
 		/// Gets the type modules.

@@ -57,10 +57,10 @@ namespace Mosa.Compiler.Framework
 			if (type.ContainsOpenGenericParameters)
 				return;
 
-			if (type.IsDelegate && type.FullName != "System.Delegate" && type.FullName != "System.MulticastDelegate")
-			{
-				typeSystem.DelegateTypePatcher.PatchType(type);
-			}
+			//if (type.IsDelegate && type.FullName != "System.Delegate" && type.FullName != "System.MulticastDelegate")
+			//{
+			//    typeSystem.DelegateTypePatcher.PatchType(type);
+			//}
 
 			foreach (RuntimeMethod method in type.Methods)
 			{

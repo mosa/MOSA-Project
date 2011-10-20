@@ -75,11 +75,6 @@ namespace Mosa.Compiler.TypeSystem
 		ITypeModule InternalTypeModule { get; }
 
 		/// <summary>
-		/// 
-		/// </summary>
-		DelegateTypePatcher DelegateTypePatcher { get; }
-
-		/// <summary>
 		/// Adds the internal compiler defined type to the type system
 		/// </summary>
 		/// <param name="type">The type.</param>

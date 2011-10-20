@@ -1,10 +1,9 @@
 /*
- * (c) 2008 MOSA - The Managed Operating System Alliance
+ * (c) 2011 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Michael Ruck (grover) <sharpos@michaelruck.de>
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
@@ -98,7 +97,8 @@ namespace Mosa.Compiler.Framework
 
 			foreach (RuntimeType type in typeModule.GetAllTypes())
 			{
-				moduleTypes++;
+				if (!type.IsModule)
+					moduleTypes++;
 			}
 
 			string assemblyTableSymbol = typeModule.Name + @"$atable";
@@ -109,14 +109,14 @@ namespace Mosa.Compiler.Framework
 				linker.Link(LinkType.AbsoluteAddress | LinkType.I4, assemblyTableSymbol, 0, 0, assemblyNameSymbol, IntPtr.Zero);
 
 				// 2. Number of types
-				EmitInteger(stream, moduleTypes - 1);	// minus one to exclude module type
+				EmitInteger(stream, moduleTypes);
 
 				// 3. Pointer to list of types
 				int offset = typeLayout.NativePointerSize * 2;
 
 				foreach (var type in typeModule.GetAllTypes())
 				{
-					if (!type.IsModule)
+					if (!type.IsModule && !(type.Module is InternalTypeModule))
 						linker.Link(LinkType.AbsoluteAddress | LinkType.I4, assemblyTableSymbol, offset, 0, type.FullName + @"$dtable", IntPtr.Zero);
 				}
 			}
@@ -125,10 +125,6 @@ namespace Mosa.Compiler.Framework
 			{
 				if (!type.IsModule)
 				{
-					// FOR DEBUGGING
-					if (type.ToString().Contains("Delegate"))
-						Console.WriteLine(type.Module.Name + " : " + type.ToString());
-
 					CreateTypeDefinitionTable(type, assemblyTableSymbol);
 				}
 			}

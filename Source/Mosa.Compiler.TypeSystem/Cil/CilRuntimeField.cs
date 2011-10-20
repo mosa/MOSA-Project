@@ -16,7 +16,7 @@ namespace Mosa.Compiler.TypeSystem.Cil
 	/// <summary>
 	/// A CIL specialization of <see cref="RuntimeField"/>.
 	/// </summary>
-	sealed class CilRuntimeField : RuntimeField
+	sealed public class CilRuntimeField : RuntimeField
 	{
 		#region Data Members
 

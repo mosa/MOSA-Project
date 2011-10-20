@@ -30,11 +30,12 @@ namespace Mosa.Test.System
 
 			// Build the assembly compiler pipeline
 			Pipeline.AddRange(new IAssemblyCompilerStage[] {
+				new DelegateTypePatchStage(),
 				new AssemblyMemberCompilationSchedulerStage(),
 				new MethodCompilerSchedulerStage(),
 				new TypeLayoutStage(),
 				new MethodTableBuilderStage(),
-				//new MetadataStage(),
+				new MetadataStage(),
 				linker
 			});
 

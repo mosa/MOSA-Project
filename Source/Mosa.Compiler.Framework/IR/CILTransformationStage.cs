@@ -406,17 +406,17 @@ namespace Mosa.Compiler.Framework.IR
 		{
 			RuntimeMethod invokeTarget = context.InvokeTarget;
 
-			//if (invokeTarget.DeclaringType.BaseType != null && invokeTarget.DeclaringType.BaseType.FullName == "System.MulticastDelegate")
-			if (invokeTarget.DeclaringType.IsDelegate)
-			{
-				typeSystem.DelegateTypePatcher.PatchType(invokeTarget.DeclaringType);
+			////if (invokeTarget.DeclaringType.BaseType != null && invokeTarget.DeclaringType.BaseType.FullName == "System.MulticastDelegate")
+			//if (invokeTarget.DeclaringType.IsDelegate)
+			//{
+			//    typeSystem.DelegateTypePatcher.PatchType(invokeTarget.DeclaringType);
 
-				InternalTypeModule internalTypeModule = typeSystem.InternalTypeModule as InternalTypeModule;
+			//    //InternalTypeModule internalTypeModule = typeSystem.InternalTypeModule as InternalTypeModule;
 
-				internalTypeModule.AddType(invokeTarget.DeclaringType);
-				foreach (var method in invokeTarget.DeclaringType.Methods)
-					internalTypeModule.AddMethod(method);
-			}
+			//    //internalTypeModule.AddType(invokeTarget.DeclaringType);
+			//    //foreach (var method in invokeTarget.DeclaringType.Methods)
+			//    //    internalTypeModule.AddMethod(method);
+			//}
 
 			Operand resultOperand = context.Result;
 			var operands = new List<Operand>(context.Operands);

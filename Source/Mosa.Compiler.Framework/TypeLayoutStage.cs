@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 
+using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.TypeSystem;
@@ -168,8 +169,10 @@ namespace Mosa.Compiler.Framework
 				headerlinks.Add(type.BaseType + @"$mtable");
 
 			// 5. Type Metadata
-			//headerlinks.Add(type.FullName + @"$dtable");
-			headerlinks.Add(null);
+			if (!type.IsModule && !(type.Module is InternalTypeModule))
+				headerlinks.Add(type.FullName + @"$dtable");
+			else
+				headerlinks.Add(null);
 
 			IList<RuntimeMethod> methodTable = typeLayout.GetMethodTable(type);
 			AskLinkerToCreateMethodTable(type.FullName + @"$mtable", methodTable, headerlinks);
@@ -179,7 +182,7 @@ namespace Mosa.Compiler.Framework
 		{
 			int methodTableSize = ((headerlinks == null ? 0 : headerlinks.Count) + (methodTable == null ? 0 : methodTable.Count)) * typeLayout.NativePointerSize;
 
-			Debug.WriteLine("Method Table: " + methodTableName);
+			Trace(CompilerEvent.DebugInfo, "Method Table: " + methodTableName);
 
 			using (Stream stream = linker.Allocate(methodTableName, SectionKind.ROData, methodTableSize, typeLayout.NativePointerAlignment))
 			{
@@ -194,13 +197,13 @@ namespace Mosa.Compiler.Framework
 				{
 					if (!string.IsNullOrEmpty(link))
 					{
-						Debug.WriteLine("  # " + (offset / typeLayout.NativePointerSize).ToString() + " " + link);
+						Trace(CompilerEvent.DebugInfo, "  # " + (offset / typeLayout.NativePointerSize).ToString() + " " + link);
 
 						linker.Link(LinkType.AbsoluteAddress | LinkType.I4, methodTableName, offset, 0, link, IntPtr.Zero);
 					}
 					else
 					{
-						Debug.WriteLine("  # " + (offset / typeLayout.NativePointerSize).ToString() + " [null]");
+						Trace(CompilerEvent.DebugInfo, "  # " + (offset / typeLayout.NativePointerSize).ToString() + " [null]");
 					}
 					offset += typeLayout.NativePointerSize;
 				}
@@ -212,12 +215,12 @@ namespace Mosa.Compiler.Framework
 				{
 					if (!method.IsAbstract)
 					{
-						Debug.WriteLine("  # " + (offset / typeLayout.NativePointerSize).ToString() + " " + method.ToString());
+						Trace(CompilerEvent.DebugInfo, "  # " + (offset / typeLayout.NativePointerSize).ToString() + " " + method.ToString());
 						linker.Link(LinkType.AbsoluteAddress | LinkType.I4, methodTableName, offset, 0, method.ToString(), IntPtr.Zero);
 					}
 					else
 					{
-						Debug.WriteLine("  # " + (offset / typeLayout.NativePointerSize).ToString() + " [null]");
+						Trace(CompilerEvent.DebugInfo, "  # " + (offset / typeLayout.NativePointerSize).ToString() + " [null]");
 					}
 					offset += typeLayout.NativePointerSize;
 				}

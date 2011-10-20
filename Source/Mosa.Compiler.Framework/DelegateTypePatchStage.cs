@@ -1,14 +1,31 @@
-﻿using System.Collections.Generic;
+/*
+ * (c) 2011 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ */
+
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+
+using Mosa.Compiler.Common;
+using Mosa.Compiler.Linker;
+using Mosa.Compiler.TypeSystem;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.TypeSystem.Cil;
 
-namespace Mosa.Compiler.TypeSystem
+namespace Mosa.Compiler.Framework
 {
 	/// <summary>
-	/// 
+	/// Emits metadata for assemblies and types
 	/// </summary>
-	public class DelegateTypePatcher
+	public sealed class DelegateTypePatchStage : BaseAssemblyCompilerStage, IAssemblyCompilerStage
 	{
+		#region Data members
 		/// <summary>
 		/// 
 		/// </summary>
@@ -41,20 +58,35 @@ namespace Mosa.Compiler.TypeSystem
 		/// <summary>
 		/// 
 		/// </summary>
-		private ITypeSystem typeSystem = null;
-		/// <summary>
-		/// 
-		/// </summary>
 		private RuntimeType delegateStub = null;
 
-		/// <summary>
-		/// Initializes a new instance of the <see cref="DelegateTypePatcher"/> class.
-		/// </summary>
-		/// <param name="typeSystem">The type system.</param>
-		public DelegateTypePatcher(ITypeSystem typeSystem)
+		#endregion // Data members
+
+		#region IAssemblyCompilerStage members
+
+		void IAssemblyCompilerStage.Setup(AssemblyCompiler compiler)
 		{
-			this.typeSystem = typeSystem;
+			base.Setup(compiler);
 		}
+
+		void IAssemblyCompilerStage.Run()
+		{
+			DelegateTypePatcher delegateTypePatcher = new DelegateTypePatcher(typeSystem);
+
+			foreach (var type in typeSystem.GetAllTypes())
+			{
+
+				if (type.IsDelegate && type.FullName != "System.Delegate" && type.FullName != "System.MulticastDelegate")
+				//if (type.IsDelegate) 
+				{
+					delegateTypePatcher.PatchType(type);
+				}
+			}
+		}
+
+		#endregion // IAssemblyCompilerStage members
+
+		#region Internal
 
 		/// <summary>
 		/// Patches the type.
@@ -246,5 +278,7 @@ namespace Mosa.Compiler.TypeSystem
 				if (type.Methods[i].Name == methodName)
 					type.Methods[i] = methodToReplace;
 		}
+
+		#endregion
 	}
 }

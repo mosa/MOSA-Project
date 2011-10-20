@@ -450,6 +450,7 @@ namespace Mosa.Tools.TypeExplorer
 		private void toolStripButton3_Click(object sender, EventArgs e)
 		{
 			Compile();
+			UpdateTree();
 		}
 
 		private void cbLabels_SelectedIndexChanged(object sender, EventArgs e)
