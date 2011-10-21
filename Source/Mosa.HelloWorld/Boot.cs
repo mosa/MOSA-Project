@@ -20,7 +20,7 @@ namespace Mosa.HelloWorld
 	{
 		public static void Test()
 		{
-			Mosa.Test.Collection.FibonacciTests.Fibonacci(1);
+			//Mosa.Test.Collection.FibonacciTests.Fibonacci(1);
 		}
 
 		/// <summary>
