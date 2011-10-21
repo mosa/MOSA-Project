@@ -139,12 +139,12 @@ namespace Mosa.Internal
 			return memory;
 		}
 
-		public unsafe static void* BoxUInt8(void* methodTable, uint classSize, byte value)
+		public unsafe static void* BoxUInt8(void* methodTable, uint classSize, uint value)
 		{
-			byte* memory = (byte*)AllocateObject(methodTable, classSize);
+			byte* memory = (byte*)AllocateObject(methodTable, 4);
 			byte* data = memory + (nativeIntSize * 2);
 
-			byte* destination = (byte*)data;
+			uint* destination = (uint*)data;
 			destination[0] = value;
 
 			return memory;

@@ -87,7 +87,7 @@ namespace Mosa.Compiler.Framework
 
 		protected void Trace(CompilerEvent compilerEvent, string message)
 		{
-			compiler.InternalLog.CompilerEventListener.SubmitTraceEvent(compilerEvent, message);
+			compiler.InternalTrace.CompilerEventListener.SubmitTraceEvent(compilerEvent, message);
 		}
 
 		#endregion

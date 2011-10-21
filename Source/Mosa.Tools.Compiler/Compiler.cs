@@ -188,6 +188,15 @@ namespace Mosa.Tools.Compiler
 			);
 
 			optionSet.Add(
+				"method-pipeline-export-dir|mped=",
+				"The method pipeline export directory {file}.",
+				delegate(string dir)
+				{
+					compilerOptions.MethodPipelineExportDirectory = dir;
+				}
+			);
+
+			optionSet.Add(
 				"pe-no-checksum",
 				"Causes no checksum to be written in the generated PE file. MOSA requires the checksum to be set. It is on by default, use this switch to turn it off.",
 				delegate(string value)

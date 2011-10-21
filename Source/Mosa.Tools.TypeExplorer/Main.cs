@@ -25,7 +25,7 @@ namespace Mosa.Tools.TypeExplorer
 
 		private Dictionary<RuntimeMethod, MethodStages> methodStages = new Dictionary<RuntimeMethod, MethodStages>();
 
-		public class MethodStages
+		private class MethodStages
 		{
 			public List<string> OrderedStageNames = new List<string>();
 			public Dictionary<string, string> Logs = new Dictionary<string, string>();
@@ -247,8 +247,11 @@ namespace Mosa.Tools.TypeExplorer
 
 		void ICompilerEventListener.SubmitTraceEvent(CompilerEvent compilerStage, string info)
 		{
-			toolStripStatusLabel1.Text = compilerStage.ToText() + ": " + info;
-			toolStripStatusLabel1.GetCurrentParent().Refresh();
+			if (compilerStage != CompilerEvent.DebugInfo)
+			{
+				toolStripStatusLabel1.Text = compilerStage.ToText() + ": " + info;
+				toolStripStatusLabel1.GetCurrentParent().Refresh();
+			}
 
 			tbResult.AppendText(String.Format("{0:0.00}", (DateTime.Now - compileStartTime).TotalSeconds) + " ms: " + compilerStage.ToText() + ": " + info + "\n");
 		}

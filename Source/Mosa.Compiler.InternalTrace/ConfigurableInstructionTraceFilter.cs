@@ -13,7 +13,7 @@ using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.Compiler.InternalTrace
 {
-	public enum MatchType { Exact, Contains, StartsWith, Any };
+	public enum MatchType { Exact, Contains, StartsWith, Any, Except, NotContains, NotStartsWith, Exclude };
 
 	public class ConfigurableInstructionTraceFilter : IInstructionTraceFilter
 	{
@@ -61,6 +61,12 @@ namespace Mosa.Compiler.InternalTrace
 				case MatchType.Contains: return name.Contains(matchString);
 				case MatchType.StartsWith: return name.Contains(matchString);
 				case MatchType.Exact: return String.Compare(name, matchString) == 0;
+				case MatchType.Except: return String.Compare(name, matchString) != 0;
+				case MatchType.NotContains: return !name.Contains(matchString);
+				case MatchType.NotStartsWith: return !name.Contains(matchString);
+
+				case MatchType.Exclude: return !matchString.Contains(name);
+
 				default: return false;
 			}
 		}

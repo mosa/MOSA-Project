@@ -109,6 +109,11 @@ namespace Mosa.Compiler.Framework
 		/// <value>The portable executable.</value>
 		public PortableExecutableStruct PortableExecutable;
 
+		/// <summary>
+		/// Gets or sets the method pipeline export directory, used for debugging
+		/// </summary>
+		public string MethodPipelineExportDirectory { get; set; }
+
 		#endregion // Properties
 
 		public CompilerOptions()

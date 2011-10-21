@@ -128,7 +128,7 @@ namespace Mosa.Compiler.Framework
 		/// Gets the internal log.
 		/// </summary>
 		/// <value>The internal log.</value>
-		public IInternalTrace InternalLog
+		public IInternalTrace InternalTrace
 		{
 			get { return internalTrace; }
 		}
