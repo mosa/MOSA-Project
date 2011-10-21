@@ -41,6 +41,8 @@
                     <include name="CIL/BreakInstruction.cs"/>
                     <include name="BaseAssemblyCompilerStage.cs"/>
                     <include name="ConstantFoldingStage.cs"/>
+                    <include name="DelegateTypePatchStage.cs"/>
+                    <include name="MetadataStage.cs"/>
                     <include name="EnterSSA.cs"/>
                     <include name="ExceptionLayoutStage.cs"/>
                     <include name="ExceptionClauseHeader.cs"/>
@@ -163,7 +165,6 @@
                     <include name="ICodeEmitter.cs"/>
                     <include name="IR/AddressOfInstruction.cs"/>
                     <include name="IR/ArithmeticShiftRightInstruction.cs"/>
-                    <include name="IR/BranchInstruction.cs"/>
                     <include name="IR/CallInstruction.cs"/>
                     <include name="IR/ConditionCode.cs"/>
                     <include name="IR/NopInstruction.cs"/>
@@ -175,6 +176,7 @@
                     <include name="IR/FloatingPointToIntegerConversionInstruction.cs"/>
                     <include name="IR/IIRInstruction.cs"/>
                     <include name="IR/IIRVisitor.cs"/>
+                    <include name="IR/IntegerCompareBranchInstruction.cs"/>
                     <include name="IR/IntegerCompareInstruction.cs"/>
                     <include name="IR/IntegerToFloatingPointConversionInstruction.cs"/>
                     <include name="IR/BaseInstruction.cs"/>
@@ -225,8 +227,6 @@
                     <include name="Linker/LinkerGeneratedType.cs"/>
                     <include name="Linker/LinkerMethodCompiler.cs"/>
                     <include name="Linker/LinkTimeCodeGenerator.cs"/>
-                    <include name="Memory/IMemoryPageManager.cs"/>
-                    <include name="Memory/PageAccessFlags.cs"/>
                     <include name="ArchitectureSpecificAttribute.cs"/>
                     <include name="AssemblyCompiler.cs"/>
                     <include name="BasicArchitecture.cs"/>

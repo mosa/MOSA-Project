@@ -31,6 +31,7 @@
                     <include name="${outputDirectory}/Mosa.Compiler.Framework.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Linker.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Metadata.dll"/>
+                    <include name="${outputDirectory}/Mosa.Compiler.Pdb.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.TypeSystem.dll"/>
                     <include name="${outputDirectory}/Mosa.Platform.x86.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.InternalTrace.dll"/>

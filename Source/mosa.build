@@ -48,7 +48,7 @@
         <target name="Mosa.Compiler.Linker" depends="init,Mosa.Compiler.Common,Mosa.Compiler.FileFormat,"><nant buildfile="Mosa.Compiler.Linker/mosa.build"/></target>
         <target name="Mosa.Compiler.Common" depends="init,"><nant buildfile="Mosa.Compiler.Common/mosa.build"/></target>
         <target name="Mosa.Compiler.TypeSystem" depends="init,Mosa.Compiler.Metadata,"><nant buildfile="Mosa.Compiler.TypeSystem/mosa.build"/></target>
-        <target name="Mosa.Tools.TypeExplorer" depends="init,Mosa.Compiler.Framework,Mosa.Compiler.Linker,Mosa.Compiler.Metadata,Mosa.Compiler.TypeSystem,Mosa.Platform.x86,Mosa.Compiler.InternalTrace,Mosa.Test.CodeDomCompiler,"><nant buildfile="Mosa.Tools.TypeExplorer/mosa.build"/></target>
+        <target name="Mosa.Tools.TypeExplorer" depends="init,Mosa.Compiler.Framework,Mosa.Compiler.Linker,Mosa.Compiler.Metadata,Mosa.Compiler.Pdb,Mosa.Compiler.TypeSystem,Mosa.Platform.x86,Mosa.Compiler.InternalTrace,Mosa.Test.CodeDomCompiler,"><nant buildfile="Mosa.Tools.TypeExplorer/mosa.build"/></target>
         <target name="Mosa.Tools.MetadataExplorer" depends="init,Mosa.Compiler.Metadata,Mosa.Compiler.TypeSystem,"><nant buildfile="Mosa.Tools.MetadataExplorer/mosa.build"/></target>
         <target name="Mosa.Test.CodeDomCompiler" depends="init,"><nant buildfile="Mosa.Test.CodeDomCompiler/mosa.build"/></target>
         <target name="Mosa.Compiler.InternalTrace" depends="init,Mosa.Compiler.TypeSystem,"><nant buildfile="Mosa.Compiler.InternalTrace/mosa.build"/></target>
