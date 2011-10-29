@@ -29,7 +29,7 @@ namespace Mosa.Platform.x86
 	/// </remarks>
 	public sealed class IRTransformationStage : BaseTransformationStage, IR.IIRVisitor, IMethodCompilerStage, IPlatformStage, IPipelineStage
 	{
-		
+
 		#region IIRVisitor
 
 		/// <summary>
@@ -336,14 +336,7 @@ namespace Mosa.Platform.x86
 			var operand1 = context.Operand1;
 			var operand2 = context.Operand2;
 
-			context.SetInstruction(CPUx86.Instruction.NopInstruction);
-
-			if (OperandTypesNotEqual(operand1, operand2))
-			{
-				ExtendSmallerOperand(context, ref operand1, ref operand2);
-			}
-
-			context.AppendInstruction(CPUx86.Instruction.CmpInstruction, operand1, operand2);
+			context.SetInstruction(CPUx86.Instruction.CmpInstruction, operand1, operand2);
 			context.AppendInstruction(CPUx86.Instruction.BranchInstruction, condition);
 			context.SetBranch(branch.Targets[0]);
 		}
@@ -361,14 +354,7 @@ namespace Mosa.Platform.x86
 			var operand1 = context.Operand1;
 			var operand2 = context.Operand2;
 
-			context.SetInstruction(CPUx86.Instruction.NopInstruction);
-
-			if (OperandTypesNotEqual(operand1, operand2))
-			{
-				ExtendSmallerOperand(context, ref operand1, ref operand2);
-			}
-
-			context.AppendInstruction(CPUx86.Instruction.CmpInstruction, operand1, operand2);
+			context.SetInstruction(CPUx86.Instruction.CmpInstruction, operand1, operand2);
 
 			if (resultOperand != null)
 			{
@@ -381,79 +367,6 @@ namespace Mosa.Platform.x86
 
 				context.AppendInstruction(CPUx86.Instruction.MovzxInstruction, resultOperand, eax);
 			}
-		}
-
-		private void ExtendSmallerOperand(Context context, ref Operand operand1, ref Operand operand2)
-		{
-			var smallerOperand = GetSmallerOperand(operand1, operand2);
-			var referenceOperand = operand1;
-			var op1IsSmaller = smallerOperand == operand1;
-			if (op1IsSmaller)
-			{
-				referenceOperand = operand2;
-			}
-
-			if (smallerOperand.Type.Type == CilElementType.I1 ||
-				smallerOperand.Type.Type == CilElementType.I2)
-			{
-				var source = smallerOperand is ConstantOperand ? this.methodCompiler.CreateTemporary(smallerOperand.Type) : smallerOperand;
-				var temp = this.methodCompiler.CreateTemporary(referenceOperand.Type);
-
-				if (smallerOperand is ConstantOperand)
-				{
-					context.AppendInstruction(CPUx86.Instruction.MovInstruction, source, smallerOperand);
-				}
-
-				context.AppendInstruction(CPUx86.Instruction.MovsxInstruction, temp, source);
-				smallerOperand = temp;
-
-				if (op1IsSmaller)
-					operand1 = temp;
-				else
-					operand2 = temp;
-			}
-			else if (smallerOperand.Type.Type == CilElementType.U1 ||
-				smallerOperand.Type.Type == CilElementType.U2)
-			{
-				var source = smallerOperand is ConstantOperand ? this.methodCompiler.CreateTemporary(smallerOperand.Type) : smallerOperand;
-				var temp = this.methodCompiler.CreateTemporary(referenceOperand.Type);
-
-				if (operand1 is ConstantOperand)
-				{
-					context.AppendInstruction(CPUx86.Instruction.MovInstruction, source, smallerOperand);
-				}
-
-				context.AppendInstruction(CPUx86.Instruction.MovzxInstruction, temp, source);
-
-				if (op1IsSmaller)
-					operand1 = temp;
-				else
-					operand2 = temp;
-			}
-		}
-
-		/// <summary>
-		/// Gets the smaller operand.
-		/// </summary>
-		/// <param name="operand1">The operand1.</param>
-		/// <param name="operand2">The operand2.</param>
-		/// <returns></returns>
-		private Operand GetSmallerOperand(Operand operand1, Operand operand2)
-		{
-			if (operand1.Type.Type == CilElementType.I4 || operand1.Type.Type == CilElementType.U4 || operand1.Type.Type == CilElementType.I)
-				return operand2;
-			return operand1;
-		}
-
-		/// <summary>
-		/// Operands the types not equal.
-		/// </summary>
-		/// <param name="operand1">The operand1.</param>
-		/// <param name="operand2">The operand2.</param>
-		/// <returns></returns>
-		private bool OperandTypesNotEqual(Operand operand1, Operand operand2)
-		{
-			return operand1.Type.Type != operand2.Type.Type;
 		}
 
 		/// <summary>
@@ -677,7 +590,7 @@ namespace Mosa.Platform.x86
 				context.SetInstruction(CPUx86.Instruction.RetInstruction);
 				return;
 			}
-			
+
 			if (context.Operand1 != null)
 			{
 				callingConvention.MoveReturnValue(context, context.Operand1);
@@ -825,10 +738,10 @@ namespace Mosa.Platform.x86
 			//UNUSED:
 			//RegisterOperand eax = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EAX);
 			RegisterOperand edx = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EDX);
-			
+
 			//UNUSED:
 			//RegisterOperand uedx = new RegisterOperand(new SigType(CilElementType.U4), GeneralPurposeRegister.EDX);
-			
+
 			//UNUSED:
 			//Context before = context.InsertBefore();
 
@@ -954,9 +867,6 @@ namespace Mosa.Platform.x86
 				var elementType = type == null ? GetElementType(source.Type) : GetElementType(type);
 				var constantOffset = offset as ConstantOperand;
 				var offsetPtr = IntPtr.Zero;
-
-				if (elementType.Type == CilElementType.ByRef)
-					Console.WriteLine();
 
 				context.SetInstruction(CPUx86.Instruction.MovInstruction, eax, source);
 				if (constantOffset != null)
@@ -1090,7 +1000,7 @@ namespace Mosa.Platform.x86
 			context.ReplaceInstructionOnly(CPUx86.Instruction.PushInstruction);
 		}
 
-		
+
 		/// <summary>
 		/// Visitation function for ThrowInstruction.
 		/// </summary>
@@ -1099,7 +1009,7 @@ namespace Mosa.Platform.x86
 		{
 			//Operand exceptionObject = context.Operand1;
 
-			
+
 		}
 
 		/// <summary>
@@ -1115,7 +1025,7 @@ namespace Mosa.Platform.x86
 			RuntimeType runtimeType = typeSystem.GetType(@"Mosa.Platforms.x86.ExceptionEngine, Mosa.Platforms.x86");
 			RuntimeMethod runtimeMethod = runtimeType.FindMethod(@"ThrowException");
 			SymbolOperand method = SymbolOperand.FromMethod(runtimeMethod);
-			
+
 			//UNUSED:
 			//Operand callTarget = context.Result;
 
@@ -1176,7 +1086,7 @@ namespace Mosa.Platform.x86
 		/// Visitation function for PhiInstruction"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.PhiInstruction(Context context) {  }
+		void IR.IIRVisitor.PhiInstruction(Context context) { }
 
 		#endregion // IIRVisitor - Unused
 

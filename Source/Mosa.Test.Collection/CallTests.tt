@@ -12,7 +12,7 @@ namespace Mosa.Test.Collection
 		{ 
 			return value == CallTarget<#= number.Value #>(value); 
 		} 
-		
+
 		private static <#= number.Key #> CallTarget<#= number.Value #>(<#= number.Key #> value) 
 		{ 
 			return value; 

@@ -22,29 +22,29 @@ namespace Mosa.Test.Debug
 			//add.AddConstantCLeft('a', 'Z');
 
 			Call call = new Call();
-			call.CallU1(1);
+			call.CallU1((byte)1);
 
-			Int32Fixture int32Fixture = new Int32Fixture();
-			BooleanFixture booleanFixture = new BooleanFixture();
-			CallVirtualFixture callVirtualFixture = new CallVirtualFixture();
+			//Int32Fixture int32Fixture = new Int32Fixture();
+			//BooleanFixture booleanFixture = new BooleanFixture();
+			//CallVirtualFixture callVirtualFixture = new CallVirtualFixture();
 
-			for (int i = 0; i < 2000; i++)
-			{
-				int32Fixture.Ldlen(i);
-				call.CallI4(i);
-				call.CallU4((uint)i);
-				int32Fixture.Newarr();
-				int32Fixture.LdelemaI4(i, i);
+			//for (int i = 0; i < 2000; i++)
+			//{
+			//    int32Fixture.Ldlen(i);
+			//    call.CallI4(i);
+			//    call.CallU4((uint)i);
+			//    int32Fixture.Newarr();
+			//    int32Fixture.LdelemaI4(i, i);
 
-				booleanFixture.Ldlen(i);
-				booleanFixture.Newarr();
-				booleanFixture.LdelemB(i, true);
-				booleanFixture.LdelemaB(i, true);
-				booleanFixture.StelemB(i, true);
+			//    booleanFixture.Ldlen(i);
+			//    booleanFixture.Newarr();
+			//    booleanFixture.LdelemB(i, true);
+			//    booleanFixture.LdelemaB(i, true);
+			//    booleanFixture.StelemB(i, true);
 
-				callVirtualFixture.TestBaseCall();
-				callVirtualFixture.TestVirtualCall();
-			}
+			//    callVirtualFixture.TestBaseCall();
+			//    callVirtualFixture.TestVirtualCall();
+			//}
 
 			return;
 		}

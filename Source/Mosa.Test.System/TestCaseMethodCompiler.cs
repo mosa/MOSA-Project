@@ -9,6 +9,7 @@
 
 using System;
 using System.IO;
+using System.Diagnostics;
 using System.Runtime.InteropServices;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.Framework;
@@ -82,7 +83,7 @@ namespace Mosa.Test.System
 		{
 			// If we're compiling a type initializer, run it immediately.
 			MethodAttributes attrs = MethodAttributes.SpecialName | MethodAttributes.RTSpecialName | MethodAttributes.Static;
-			if ((this.Method.Attributes & attrs) == attrs && Method.Name == ".cctor")
+			if ((Method.Attributes & attrs) == attrs && Method.Name == ".cctor")
 			{
 				CCtor cctor = (CCtor)Marshal.GetDelegateForFunctionPointer(address, typeof(CCtor));
 				assemblyCompiler.QueueCCtorForInvocationAfterCompilation(cctor);

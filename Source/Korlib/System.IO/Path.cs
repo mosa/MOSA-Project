@@ -15,12 +15,12 @@ namespace System.IO
 	public static class Path
 	{
 		/// <summary>
-		/// Directory Seperator
+		/// Directory Separator
 		/// </summary>
 		public static readonly char DirectorySeparatorChar = '/';
 
 		/// <summary>
-		/// Alterative Directory Seperator
+		/// Alterative Directory Separator
 		/// </summary>
 		public static readonly char AltDirectorySeparatorChar = '\\';
 

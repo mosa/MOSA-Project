@@ -14,17 +14,17 @@ using Mosa.Kernel;
 
 namespace Mosa.Internal
 {
-	public static class Runtime
+	public unsafe static class Runtime
 	{
 		// HACK: Add compiler architecture to the runtime
 		private const uint nativeIntSize = 4;
 
-		private unsafe static void* AllocateMemory(uint size)
+		private static void* AllocateMemory(uint size)
 		{
 			return (void*)KernelMemory.AllocateMemory(size);
 		}
 
-		public static unsafe void* AllocateObject(void* methodTable, uint classSize)
+		public static void* AllocateObject(void* methodTable, uint classSize)
 		{
 			// An object has the following memory layout:
 			//   - IntPtr MTable
@@ -41,7 +41,7 @@ namespace Mosa.Internal
 			return memory;
 		}
 
-		public static unsafe void* AllocateArray(void* methodTable, uint elementSize, uint elements)
+		public static void* AllocateArray(void* methodTable, uint elementSize, uint elements)
 		{
 			// An array has the following memory layout:
 			//   - IntPtr MTable
@@ -60,12 +60,12 @@ namespace Mosa.Internal
 			return memory;
 		}
 
-		public static unsafe void* AllocateString(void* methodTable, uint length)
+		public static void* AllocateString(void* methodTable, uint length)
 		{
 			return AllocateArray(methodTable, 2, length);
 		}
 
-		public static unsafe uint IsInstanceOfType(uint methodTable, uint obj)
+		public static uint IsInstanceOfType(uint methodTable, uint obj)
 		{
 			if (obj == 0)
 				return 0;
@@ -83,7 +83,7 @@ namespace Mosa.Internal
 			return 0;
 		}
 
-		public static unsafe uint IsInstanceOfInterfaceType(int interfaceSlot, uint obj)
+		public static uint IsInstanceOfInterfaceType(int interfaceSlot, uint obj)
 		{
 			uint objMethodTable = ((uint*)obj)[0];
 
@@ -106,213 +106,196 @@ namespace Mosa.Internal
 			return obj;
 		}
 
-		public unsafe static void* BoxChar(void* methodTable, uint classSize, char value)
+		public static void* BoxChar(void* methodTable, uint classSize, char value)
 		{
 			byte* memory = (byte*)AllocateObject(methodTable, classSize);
-			byte* data = memory + (nativeIntSize * 2);
-
-			char* destination = (char*)data;
+			char* destination = (char*)(memory + (nativeIntSize * 2));
 			destination[0] = value;
-
 			return memory;
 		}
 
-		public unsafe static void* BoxBoolean(void* methodTable, uint classSize, bool value)
+		public static void* BoxBoolean(void* methodTable, uint classSize, bool value)
 		{
 			byte* memory = (byte*)AllocateObject(methodTable, classSize);
-			byte* data = memory + (nativeIntSize * 2);
-
-			bool* destination = (bool*)data;
+			bool* destination = (bool*)(memory + (nativeIntSize * 2));
 			destination[0] = value;
-
 			return memory;
 		}
 
-		public unsafe static void* BoxInt8(void* methodTable, uint classSize, sbyte value)
+		public static void* BoxInt8(void* methodTable, uint classSize, sbyte value)
 		{
 			byte* memory = (byte*)AllocateObject(methodTable, classSize);
-			byte* data = memory + (nativeIntSize * 2);
-
-			sbyte* destination = (sbyte*)data;
+			sbyte* destination = (sbyte*)(memory + (nativeIntSize * 2));
 			destination[0] = value;
-
 			return memory;
 		}
 
-		public unsafe static void* BoxUInt8(void* methodTable, uint classSize, uint value)
+		public static void* BoxUInt8(void* methodTable, uint classSize, uint value)
 		{
 			byte* memory = (byte*)AllocateObject(methodTable, 4);
-			byte* data = memory + (nativeIntSize * 2);
-
-			uint* destination = (uint*)data;
+			uint* destination = (uint*)(memory + (nativeIntSize * 2));
 			destination[0] = value;
-
 			return memory;
 		}
 
-		public unsafe static void* BoxInt16(void* methodTable, uint classSize, short value)
+		public static void* BoxInt16(void* methodTable, uint classSize, short value)
 		{
 			byte* memory = (byte*)AllocateObject(methodTable, classSize);
-			byte* data = memory + (nativeIntSize * 2);
-
-			short* destination = (short*)data;
+			short* destination = (short*)(memory + (nativeIntSize * 2));
 			destination[0] = value;
-
 			return memory;
 		}
 
-		public unsafe static void* BoxUInt16(void* methodTable, uint classSize, ushort value)
+		public static void* BoxUInt16(void* methodTable, uint classSize, ushort value)
 		{
 			byte* memory = (byte*)AllocateObject(methodTable, classSize);
-			byte* data = memory + (nativeIntSize * 2);
-
-			ushort* destination = (ushort*)data;
+			ushort* destination = (ushort*)(memory + (nativeIntSize * 2));
 			destination[0] = value;
-
 			return memory;
 		}
 
-		public unsafe static void* BoxInt32(void* methodTable, uint classSize, int value)
+		public static void* BoxInt32(void* methodTable, uint classSize, int value)
 		{
 			byte* memory = (byte*)AllocateObject(methodTable, classSize);
-			byte* data = memory + (nativeIntSize * 2);
-
-			int* destination = (int*)data;
+			int* destination = (int*)(memory + (nativeIntSize * 2));
 			destination[0] = value;
-
 			return memory;
 		}
 
-		public unsafe static void* BoxUInt32(void* methodTable, uint classSize, uint value)
+		public static void* BoxUInt32(void* methodTable, uint classSize, uint value)
 		{
 			byte* memory = (byte*)AllocateObject(methodTable, classSize);
-			byte* data = memory + (nativeIntSize * 2);
-
-			uint* destination = (uint*)data;
+			uint* destination = (uint*)(memory + (nativeIntSize * 2));
 			destination[0] = value;
-
 			return memory;
 		}
 
-		public unsafe static void* BoxInt64(void* methodTable, uint classSize, long value)
+		public static void* BoxInt64(void* methodTable, uint classSize, long value)
 		{
 			byte* memory = (byte*)AllocateObject(methodTable, classSize);
-			byte* data = memory + (nativeIntSize * 2);
-
-			long* destination = (long*)data;
+			long* destination = (long*)(memory + (nativeIntSize * 2));
 			destination[0] = value;
-
 			return memory;
 		}
 
-		public unsafe static void* BoxUInt64(void* methodTable, uint classSize, ulong value)
+		public static void* BoxUInt64(void* methodTable, uint classSize, ulong value)
 		{
 			byte* memory = (byte*)AllocateObject(methodTable, classSize);
-			byte* data = memory + (nativeIntSize * 2);
-
-			ulong* destination = (ulong*)data;
+			ulong* destination = (ulong*)(memory + (nativeIntSize * 2));
 			destination[0] = value;
-
 			return memory;
 		}
 
-		public unsafe static void* BoxSingle(void* methodTable, uint classSize, float value)
+		public static void* BoxSingle(void* methodTable, uint classSize, float value)
 		{
 			byte* memory = (byte*)AllocateObject(methodTable, classSize);
-			byte* data = memory + (nativeIntSize * 2);
-
-			float* destination = (float*)data;
+			float* destination = (float*)(memory + (nativeIntSize * 2));
 			destination[0] = value;
-
 			return memory;
 		}
 
-		public unsafe static void* BoxDouble(void* methodTable, uint classSize, double value)
+		public static void* BoxDouble(void* methodTable, uint classSize, double value)
 		{
 			byte* memory = (byte*)AllocateObject(methodTable, classSize);
-			byte* data = memory + (nativeIntSize * 2);
-
-			double* destination = (double*)data;
+			double* destination = (double*)(memory + (nativeIntSize * 2));
 			destination[0] = value;
-
 			return memory;
 		}
 
-		public unsafe static char UnboxChar(void* data)
+		public static char UnboxChar(void* obj)
 		{
-			byte* memory = (byte*)data + (nativeIntSize * 2);
+			byte* memory = (byte*)obj + (nativeIntSize * 2);
 			return ((char*)memory)[0];
 		}
 
-		public unsafe static bool UnboxBoolean(void* data)
+		public static bool UnboxBoolean(void* obj)
 		{
-			byte* memory = (byte*)data + (nativeIntSize * 2);
+			byte* memory = (byte*)obj + (nativeIntSize * 2);
 			return ((bool*)memory)[0];
 		}
 
-		public unsafe static sbyte UnboxInt8(void* data)
+		public static sbyte UnboxInt8(void* obj)
 		{
-			byte* memory = (byte*)data + (nativeIntSize * 2);
+			byte* memory = (byte*)obj + (nativeIntSize * 2);
 			return ((sbyte*)memory)[0];
 		}
 
-		public unsafe static byte UnboxUInt8(void* data)
+		public static byte UnboxUInt8(void* obj)
 		{
-			byte* memory = (byte*)data + (nativeIntSize * 2);
+			byte* memory = (byte*)obj + (nativeIntSize * 2);
 			return ((byte*)memory)[0];
 		}
 
-		public unsafe static short UnboxInt16(void* data)
+		public static short UnboxInt16(void* obj)
 		{
-			byte* memory = (byte*)data + (nativeIntSize * 2);
+			byte* memory = (byte*)obj + (nativeIntSize * 2);
 			return ((short*)memory)[0];
 		}
 
-		public unsafe static ushort UnboxUInt16(void* data)
+		public static ushort UnboxUInt16(void* obj)
 		{
-			byte* memory = (byte*)data + (nativeIntSize * 2);
+			byte* memory = (byte*)obj + (nativeIntSize * 2);
 			return ((ushort*)memory)[0];
 		}
 
-		public unsafe static int UnboxInt32(void* data)
+		public static int UnboxInt32(void* obj)
 		{
-			byte* memory = (byte*)data + (nativeIntSize * 2);
+			byte* memory = (byte*)obj + (nativeIntSize * 2);
 			return ((int*)memory)[0];
 		}
 
-		public unsafe static uint UnboxUInt32(void* data)
+		public static uint UnboxUInt32(void* obj)
 		{
-			byte* memory = (byte*)data + (nativeIntSize * 2);
+			byte* memory = (byte*)obj + (nativeIntSize * 2);
 			return ((uint*)memory)[0];
 		}
 
-		public unsafe static long UnboxInt64(void* data)
+		public static long UnboxInt64(void* obj)
 		{
-			byte* memory = (byte*)data + (nativeIntSize * 2);
+			byte* memory = (byte*)obj + (nativeIntSize * 2);
 			return ((long*)memory)[0];
 		}
 
-		public unsafe static ulong UnboxUInt64(void* data)
+		public static ulong UnboxUInt64(void* obj)
 		{
-			byte* memory = (byte*)data + (nativeIntSize * 2);
+			byte* memory = (byte*)obj + (nativeIntSize * 2);
 			return ((ulong*)memory)[0];
 		}
 
-		public unsafe static float UnboxSingle(void* data)
+		public static float UnboxSingle(void* obj)
 		{
-			byte* memory = (byte*)data + (nativeIntSize * 2);
+			byte* memory = (byte*)obj + (nativeIntSize * 2);
 			return ((float*)memory)[0];
 		}
 
-		public unsafe static double UnboxDouble(void* data)
+		public static double UnboxDouble(void* obj)
 		{
-			byte* memory = (byte*)data + (nativeIntSize * 2);
+			byte* memory = (byte*)obj + (nativeIntSize * 2);
 			return ((double*)memory)[0];
 		}
 
-		public static unsafe void Throw(uint something)
+		public static void Throw(uint something)
 		{
 
+		}
+
+		public static uint GetSizeOfObject(void* obj)
+		{
+			void* methodTable = (void*)((uint*)obj)[0];
+
+			return GetSizeOfType((void*)methodTable);
+		}
+
+		public static uint GetSizeOfType(void* methodTable)
+		{
+			uint definitionTable = ((uint*)methodTable)[4];
+
+			if (definitionTable == 0)
+				return 0; // Not good
+
+			uint sizeOf = ((uint*)definitionTable)[0];
+
+			return sizeOf;
 		}
 	}
 }

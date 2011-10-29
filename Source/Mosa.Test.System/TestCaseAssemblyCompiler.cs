@@ -7,7 +7,9 @@
  *  Michael Fröhlich (grover) <michael.ruck@michaelruck.de>
  */
 
+using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.TypeSystem;
@@ -72,9 +74,9 @@ namespace Mosa.Test.System
 		{
 			base.EndCompile();
 
-			while (this.cctorQueue.Count > 0)
+			while (cctorQueue.Count > 0)
 			{
-				CCtor cctor = this.cctorQueue.Dequeue();
+				CCtor cctor = cctorQueue.Dequeue();
 				cctor();
 			}
 		}

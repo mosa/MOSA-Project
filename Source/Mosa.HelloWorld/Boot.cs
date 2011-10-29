@@ -18,10 +18,6 @@ namespace Mosa.HelloWorld
 	/// </summary>
 	public static class Boot
 	{
-		public static void Test()
-		{
-			//Mosa.Test.Collection.FibonacciTests.Fibonacci(1);
-		}
 
 		/// <summary>
 		/// Mains this instance.

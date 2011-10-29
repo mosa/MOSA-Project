@@ -7,7 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
  *
  */
-
+ 
+using System;
 
 namespace Mosa.Test.Collection
 {
@@ -19,7 +20,7 @@ namespace Mosa.Test.Collection
 		{ 
 			return value == CallTargetU1(value); 
 		} 
-		
+
 		private static byte CallTargetU1(byte value) 
 		{ 
 			return value; 
@@ -29,7 +30,7 @@ namespace Mosa.Test.Collection
 		{ 
 			return value == CallTargetU2(value); 
 		} 
-		
+
 		private static ushort CallTargetU2(ushort value) 
 		{ 
 			return value; 
@@ -39,7 +40,7 @@ namespace Mosa.Test.Collection
 		{ 
 			return value == CallTargetU4(value); 
 		} 
-		
+
 		private static uint CallTargetU4(uint value) 
 		{ 
 			return value; 
@@ -49,7 +50,7 @@ namespace Mosa.Test.Collection
 		{ 
 			return value == CallTargetU8(value); 
 		} 
-		
+
 		private static ulong CallTargetU8(ulong value) 
 		{ 
 			return value; 
@@ -59,7 +60,7 @@ namespace Mosa.Test.Collection
 		{ 
 			return value == CallTargetI1(value); 
 		} 
-		
+
 		private static sbyte CallTargetI1(sbyte value) 
 		{ 
 			return value; 
@@ -69,7 +70,7 @@ namespace Mosa.Test.Collection
 		{ 
 			return value == CallTargetI2(value); 
 		} 
-		
+
 		private static short CallTargetI2(short value) 
 		{ 
 			return value; 
@@ -79,7 +80,7 @@ namespace Mosa.Test.Collection
 		{ 
 			return value == CallTargetI4(value); 
 		} 
-		
+
 		private static int CallTargetI4(int value) 
 		{ 
 			return value; 
@@ -89,7 +90,7 @@ namespace Mosa.Test.Collection
 		{ 
 			return value == CallTargetI8(value); 
 		} 
-		
+
 		private static long CallTargetI8(long value) 
 		{ 
 			return value; 
@@ -99,7 +100,7 @@ namespace Mosa.Test.Collection
 		{ 
 			return value == CallTargetC(value); 
 		} 
-		
+
 		private static char CallTargetC(char value) 
 		{ 
 			return value; 
