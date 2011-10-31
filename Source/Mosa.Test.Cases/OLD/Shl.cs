@@ -16,28 +16,12 @@ using MbUnit.Framework;
 
 using Mosa.Test.System;
 
-namespace Mosa.Test.Cases.OLD.IL
+namespace Mosa.Test.Cases.OLD
 {
 	[TestFixture]
 	public class Shl : TestCompilerAdapter
 	{
-		private static string CreateTestCode(string name, string typeIn, string typeOut)
-		{
-			return CreateTestCode(name, typeIn, typeIn, typeOut);
-		}
-
-		private static string CreateTestCode(string name, string typeInA, string typeInB, string typeOut)
-		{
-			return @"
-				static class Test
-				{
-					static bool " + name + "(" + typeOut + " expect, " + typeInA + " a, " + typeInB + @" b)
-					{
-						return expect == (a << b);
-					}
-				}";
-		}
-
+		
 		private static string CreateTestCodeWithReturn(string name, string typeInA, string typeInB, string typeOut)
 		{
 			return @"
@@ -111,17 +95,6 @@ namespace Mosa.Test.Cases.OLD.IL
 		}
 
 		#region C
-		
-		[Row(0, 0)]
-		[Row(17, 128)]
-		[Row('a', 'Z')]
-		[Row(char.MinValue, char.MaxValue)]
-		[Test]
-		public void ShlC(char a, char b)
-		{
-			settings.CodeSource = CreateTestCode("AddC", "char", "int");
-			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AddC", (a << b), a, b));
-		}
 
 		[Row(0, 'a')]
 		[Row('-', '.')]
@@ -146,41 +119,6 @@ namespace Mosa.Test.Cases.OLD.IL
 
 		#region I1
 		
-		[Row(1, 2)]
-		[Row(23, 21)]
-		// And reverse
-		[Row(2, 1)]
-		[Row(21, 23)]
-		// (MinValue, X) Cases
-		[Row(sbyte.MinValue, 0)]
-		[Row(sbyte.MinValue, 1)]
-		[Row(sbyte.MinValue, 17)]
-		[Row(sbyte.MinValue, 123)]
-		// (MaxValue, X) Cases
-		[Row(sbyte.MaxValue, 0)]
-		[Row(sbyte.MaxValue, 1)]
-		[Row(sbyte.MaxValue, 17)]
-		[Row(sbyte.MaxValue, 123)]
-		// (X, MinValue) Cases
-		[Row(0, sbyte.MinValue)]
-		[Row(1, sbyte.MinValue)]
-		[Row(17, sbyte.MinValue)]
-		[Row(123, sbyte.MinValue)]
-		// (X, MaxValue) Cases
-		[Row(0, sbyte.MaxValue)]
-		[Row(1, sbyte.MaxValue)]
-		[Row(17, sbyte.MaxValue)]
-		[Row(123, sbyte.MaxValue)]
-		// Extremvaluecases
-		[Row(sbyte.MinValue, sbyte.MaxValue)]
-		[Row(sbyte.MaxValue, sbyte.MinValue)]
-		[Test]
-		public void ShlI1(sbyte a, sbyte b)
-		{
-			settings.CodeSource = CreateTestCode("ShlI1", "sbyte", "int");
-			Assert.IsTrue(Run<bool>(string.Empty, "Test", "ShlI1", a << b, a, b));
-		}
-
 		[Row(-42, 48)]
 		[Row(17, 1)]
 		[Row(0, 0)]
@@ -206,41 +144,6 @@ namespace Mosa.Test.Cases.OLD.IL
 
 		#region I2
 		
-		[Row(1, 2)]
-		[Row(23, 21)]
-		// And reverse
-		[Row(2, 1)]
-		[Row(21, 23)]
-		// (MinValue, X) Cases
-		[Row(short.MinValue, 0)]
-		[Row(short.MinValue, 1)]
-		[Row(short.MinValue, 17)]
-		[Row(short.MinValue, 123)]
-		// (MaxValue, X) Cases
-		[Row(short.MaxValue, 0)]
-		[Row(short.MaxValue, 1)]
-		[Row(short.MaxValue, 17)]
-		[Row(short.MaxValue, 123)]
-		// (X, MinValue) Cases
-		[Row(0, short.MinValue)]
-		[Row(1, short.MinValue)]
-		[Row(17, short.MinValue)]
-		[Row(123, short.MinValue)]
-		// (X, MaxValue) Cases
-		[Row(0, short.MaxValue)]
-		[Row(1, short.MaxValue)]
-		[Row(17, short.MaxValue)]
-		[Row(123, short.MaxValue)]
-		// Extremvaluecases
-		[Row(short.MinValue, short.MaxValue)]
-		[Row(short.MaxValue, short.MinValue)]
-		[Test]
-		public void ShlI2(short a, short b)
-		{
-			settings.CodeSource = CreateTestCode("ShlI2", "short", "int");
-			Assert.IsTrue(Run<bool>(string.Empty, "Test", "ShlI2", (a << b), a, b));
-		}
-
 		[Row(-23, 148)]
 		[Row(17, 1)]
 		[Row(0, 0)]
@@ -266,41 +169,6 @@ namespace Mosa.Test.Cases.OLD.IL
 
 		#region I4
 	
-		[Row(1, 2)]
-		[Row(23, 21)]
-		// And reverse
-		[Row(2, 1)]
-		[Row(21, 23)]
-		// (MinValue, X) Cases
-		[Row(int.MinValue, 0)]
-		[Row(int.MinValue, 1)]
-		[Row(int.MinValue, 17)]
-		[Row(int.MinValue, 123)]
-		// (MaxValue, X) Cases
-		[Row(int.MaxValue, 0)]
-		[Row(int.MaxValue, 1)]
-		[Row(int.MaxValue, 17)]
-		[Row(int.MaxValue, 123)]
-		// (X, MinValue) Cases
-		[Row(0, int.MinValue)]
-		[Row(1, int.MinValue)]
-		[Row(17, int.MinValue)]
-		[Row(123, int.MinValue)]
-		// (X, MaxValue) Cases
-		[Row(0, int.MaxValue)]
-		[Row(1, int.MaxValue)]
-		[Row(17, int.MaxValue)]
-		[Row(123, int.MaxValue)]
-		// Extremvaluecases
-		[Row(int.MinValue, int.MaxValue)]
-		[Row(int.MaxValue, int.MinValue)]
-		[Test]
-		public void ShlI4(int a, int b)
-		{
-			settings.CodeSource = CreateTestCode("ShlI4", "int", "int");
-			Assert.IsTrue(Run<bool>(string.Empty, "Test", "ShlI4", (a << b), a, b));
-		}
-
 		[Row(-23, 148)]
 		[Row(17, 1)]
 		[Row(0, 0)]

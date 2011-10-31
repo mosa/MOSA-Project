@@ -4,7 +4,7 @@ using MbUnit.Framework;
 
 using Mosa.Test.System;
 
-namespace Mosa.Test.Cases.OLD.IL
+namespace Mosa.Test.Cases.OLD
 {
 
 	[TestFixture]

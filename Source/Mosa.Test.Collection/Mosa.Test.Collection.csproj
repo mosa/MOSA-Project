@@ -48,6 +48,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CharTests.cs" />
+    <Compile Include="ComparisonTests.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ComparisonTests.tt</DependentUpon>
+    </Compile>
     <Compile Include="ConvI2Tests.cs" />
     <Compile Include="ConvI1Tests.cs" />
     <Compile Include="ConvI4Tests.cs" />
@@ -78,6 +83,10 @@
     <None Include="BoxingTests.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>BoxingTests.cs</LastGenOutput>
+    </None>
+    <None Include="ComparisonTests.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>ComparisonTests.cs</LastGenOutput>
     </None>
     <None Include="GenericCallTests.tt">
       <Generator>TextTemplatingFileGenerator</Generator>

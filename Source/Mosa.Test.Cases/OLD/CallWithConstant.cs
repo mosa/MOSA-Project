@@ -15,19 +15,11 @@ using MbUnit.Framework;
 
 using Mosa.Test.System;
 
-namespace Mosa.Test.Cases.OLD.IL
+namespace Mosa.Test.Cases.OLD
 {
 	[TestFixture]
 	public class CallWithConstant : TestCompilerAdapter
 	{
-		private static string CreateTestCode(string name, string type)
-		{
-			return @"
-				static class Test {
-					static bool " + name + "(" + type + " value) { return value == " + name + @"_Target(value); } 
-					static " + type + " " + name + "_Target(" + type + @" value) { return value; }
-				}";
-		}
 
 		private static string CreateConstantTestCode(string name, string type, string constant)
 		{
@@ -43,15 +35,6 @@ namespace Mosa.Test.Cases.OLD.IL
 		[Row(true)]
 		[Row(false)]
 		[Test]
-		public void CallB(bool value)
-		{
-			settings.CodeSource = CreateTestCode("CallB", "bool");
-			Assert.IsTrue(Run<bool>(string.Empty, "Test", "CallB", value));
-		}
-
-		[Row(true)]
-		[Row(false)]
-		[Test]
 		public void CallConstantB(bool value)
 		{
 			settings.CodeSource = CreateConstantTestCode("CallConstantB", "bool", value.ToString().ToLower());
@@ -61,17 +44,6 @@ namespace Mosa.Test.Cases.OLD.IL
 
 		#region C
 		
-		[Row(0)]
-		[Row('a')]
-		[Row('Z')]
-		[Row(char.MaxValue)]
-		[Test]
-		public void CallC(char value)
-		{
-			settings.CodeSource = CreateTestCode("CallC", "char");
-			Assert.IsTrue(Run<bool>(string.Empty, "Test", "CallC", value));
-		}
-
 		[Row('a')]
 		[Row('Z')]
 		[Row('-')]
@@ -86,29 +58,6 @@ namespace Mosa.Test.Cases.OLD.IL
 
 		#region I1
 		
-		[Row(0)]
-		[Row(1)]
-		[Row(2)]
-		[Row(5)]
-		[Row(10)]
-		[Row(11)]
-		[Row(100)]
-		[Row(-0)]
-		[Row(-1)]
-		[Row(-2)]
-		[Row(-5)]
-		[Row(-10)]
-		[Row(-11)]
-		[Row(-100)]
-		[Row(sbyte.MinValue)]
-		[Row(sbyte.MaxValue)]
-		[Test]
-		public void CallI1(sbyte value)
-		{
-			settings.CodeSource = CreateTestCode("CallI1", "sbyte");
-			Assert.IsTrue(Run<bool>(string.Empty, "Test", "CallI1", value));
-		}
-
 		[Row(0)]
 		[Row(-48)]
 		[Row(sbyte.MinValue)]
@@ -134,23 +83,6 @@ namespace Mosa.Test.Cases.OLD.IL
 		[Row(byte.MinValue)]
 		[Row(byte.MaxValue)]
 		[Test]
-		public void CallU1(byte value)
-		{
-			settings.CodeSource = CreateTestCode("CallU1", "byte");
-			Assert.IsTrue(Run<bool>(string.Empty, "Test", "CallU1", value));
-		}
-
-		[Row(1)]
-		[Row(2)]
-		[Row(5)]
-		[Row(10)]
-		[Row(11)]
-		[Row(100)]
-		[Row(127)]
-		[Row(128)]
-		[Row(byte.MinValue)]
-		[Row(byte.MaxValue)]
-		[Test]
 		public void CallConstantU1(byte value)
 		{
 			settings.CodeSource = CreateConstantTestCode("CallConstantU1", "byte", value.ToString());
@@ -160,29 +92,6 @@ namespace Mosa.Test.Cases.OLD.IL
 
 		#region I2
 		
-		[Row(0)]
-		[Row(1)]
-		[Row(2)]
-		[Row(5)]
-		[Row(10)]
-		[Row(11)]
-		[Row(100)]
-		[Row(-0)]
-		[Row(-1)]
-		[Row(-2)]
-		[Row(-5)]
-		[Row(-10)]
-		[Row(-11)]
-		[Row(-100)]
-		[Row(short.MinValue)]
-		[Row(short.MaxValue)]
-		[Test]
-		public void CallI2(short value)
-		{
-			settings.CodeSource = CreateTestCode("CallI2", "short");
-			Assert.IsTrue(Run<bool>(string.Empty, "Test", "CallI2", value));
-		}
-
 		[Row(0)]
 		[Row(-48)]
 		[Row(short.MinValue)]
@@ -197,22 +106,6 @@ namespace Mosa.Test.Cases.OLD.IL
 
 		#region U2
 		
-		[Row(0)]
-		[Row(1)]
-		[Row(2)]
-		[Row(5)]
-		[Row(10)]
-		[Row(11)]
-		[Row(100)]
-		[Row(ushort.MinValue)]
-		[Row(ushort.MaxValue)]
-		[Test]
-		public void CallU2(ushort value)
-		{
-			settings.CodeSource = CreateTestCode("CallU2", "ushort");
-			Assert.IsTrue(Run<bool>(string.Empty, "Test", "CallU2", value));
-		}
-
 		[Row(1)]
 		[Row(2)]
 		[Row(5)]
@@ -231,29 +124,6 @@ namespace Mosa.Test.Cases.OLD.IL
 
 		#region I4
 	
-		[Row(0)]
-		[Row(1)]
-		[Row(2)]
-		[Row(5)]
-		[Row(10)]
-		[Row(11)]
-		[Row(100)]
-		[Row(-0)]
-		[Row(-1)]
-		[Row(-2)]
-		[Row(-5)]
-		[Row(-10)]
-		[Row(-11)]
-		[Row(-100)]
-		[Row(int.MinValue)]
-		[Row(int.MaxValue)]
-		[Test]
-		public void CallI4(int value)
-		{
-			settings.CodeSource = CreateTestCode("CallI4", "int");
-			Assert.IsTrue(Run<bool>(string.Empty, "Test", "CallI4", value));
-		}
-
 		[Row(0)]
 		[Row(-48)]
 		[Row(int.MinValue)]
@@ -278,22 +148,6 @@ namespace Mosa.Test.Cases.OLD.IL
 		[Row(uint.MinValue)]
 		[Row(uint.MaxValue)]
 		[Test]
-		public void CallU4(uint value)
-		{
-			settings.CodeSource = CreateTestCode("CallU4", "uint");
-			Assert.IsTrue(Run<bool>(string.Empty, "Test", "CallU4", value));
-		}
-
-		[Row(0)]
-		[Row(1)]
-		[Row(2)]
-		[Row(5)]
-		[Row(10)]
-		[Row(11)]
-		[Row(100)]
-		[Row(uint.MinValue)]
-		[Row(uint.MaxValue)]
-		[Test]
 		public void CallConstantU4(uint value)
 		{
 			settings.CodeSource = CreateConstantTestCode("CallConstantU4", "uint", value.ToString());
@@ -303,29 +157,6 @@ namespace Mosa.Test.Cases.OLD.IL
 
 		#region I8
 		
-		[Row(0)]
-		[Row(1)]
-		[Row(2)]
-		[Row(5)]
-		[Row(10)]
-		[Row(11)]
-		[Row(100)]
-		[Row(-0)]
-		[Row(-1)]
-		[Row(-2)]
-		[Row(-5)]
-		[Row(-10)]
-		[Row(-11)]
-		[Row(-100)]
-		[Row(long.MinValue)]
-		[Row(long.MaxValue)]
-		[Test]
-		public void CallI8(long value)
-		{
-			settings.CodeSource = CreateTestCode("CallI8", "long");
-			Assert.IsTrue(Run<bool>(string.Empty, "Test", "CallI8", value));
-		}
-
 		[Row(0)]
 		[Row(-48)]
 		[Row(long.MinValue)]
@@ -340,22 +171,6 @@ namespace Mosa.Test.Cases.OLD.IL
 
 		#region U8
 		
-		[Row(0)]
-		[Row(1)]
-		[Row(2)]
-		[Row(5)]
-		[Row(10)]
-		[Row(11)]
-		[Row(100)]
-		[Row(ulong.MinValue)]
-		[Row(ulong.MaxValue)]
-		[Test]
-		public void CallU8(ulong value)
-		{
-			settings.CodeSource = CreateTestCode("CallU8", "ulong");
-			Assert.IsTrue(Run<bool>(string.Empty, "Test", "CallU8", value));
-		}
-
 		[Row(0)]
 		[Row(1)]
 		[Row(2)]

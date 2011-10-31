@@ -16,23 +16,12 @@ using MbUnit.Framework;
 
 using Mosa.Test.System;
 
-namespace Mosa.Test.Cases.OLD.IL
+namespace Mosa.Test.Cases.OLD
 {
 	[TestFixture]
 	public class OrFixture : TestCompilerAdapter
 	{
-		private static string CreateTestCode(string name, string typeIn, string typeOut)
-		{
-			return @"
-				static class Test
-				{
-					static bool " + name + "(" + typeOut + " expect, " + typeIn + " a, " + typeIn + @" b)
-					{
-						return expect == (a | b);
-					}
-				}";
-		}
-
+		
 		private static string CreateConstantTestCode(string name, string typeIn, string typeOut, string constLeft, string constRight)
 		{
 			if (String.IsNullOrEmpty(constRight))
@@ -64,29 +53,7 @@ namespace Mosa.Test.Cases.OLD.IL
 		}
 
 		#region B
-		
-		[Row(true, true)]
-		[Row(true, false)]
-		[Row(false, false)]
-		[Row(false, true)]
-		[Test]
-		public void OrB(bool a, bool b)
-		{
-			settings.CodeSource = CreateTestCode("OrB", "bool", "bool");
-			Assert.IsTrue(Run<bool>(string.Empty, "Test", "OrB", (a | b), a, b));
-		}
 	
-		[Row(true, true)]
-		[Row(true, false)]
-		[Row(false, false)]
-		[Row(false, true)]
-		[Test]
-		public void OrConstantBRight(bool a, bool b)
-		{
-			settings.CodeSource = CreateConstantTestCode("OrConstantBRight", "bool", "bool", null, b.ToString().ToLower());
-			Assert.IsTrue(Run<bool>(string.Empty, "Test", "OrConstantBRight", (a | b), a));
-		}
-
 		[Row(true, true)]
 		[Row(true, false)]
 		[Row(false, false)]
@@ -101,17 +68,6 @@ namespace Mosa.Test.Cases.OLD.IL
 
 		#region C
 		
-		[Row(0, 0)]
-		[Row(17, 128)]
-		[Row('a', 'Z')]
-		[Row(char.MinValue, char.MaxValue)]
-		[Test]
-		public void OrC(char a, char b)
-		{
-			settings.CodeSource = CreateTestCode("OrC", "char", "char");
-			Assert.IsTrue(Run<bool>(string.Empty, "Test", "OrC", (char)(a | b), a, b));
-		}
-
 		[Row(0, 'a')]
 		[Row('-', '.')]
 		[Row('a', 'Z')]
@@ -218,41 +174,6 @@ namespace Mosa.Test.Cases.OLD.IL
 
 		#region U1
 		
-		[Row(1, 2)]
-		[Row(23, 21)]
-		// And reverse
-		[Row(2, 1)]
-		[Row(21, 23)]
-		// (MinValue, X) Cases
-		[Row(byte.MinValue, 0)]
-		[Row(byte.MinValue, 1)]
-		[Row(byte.MinValue, 17)]
-		[Row(byte.MinValue, 123)]
-		// (MaxValue, X) Cases
-		[Row(byte.MaxValue, 0)]
-		[Row(byte.MaxValue, 1)]
-		[Row(byte.MaxValue, 17)]
-		[Row(byte.MaxValue, 123)]
-		// (X, MinValue) Cases
-		[Row(0, byte.MinValue)]
-		[Row(1, byte.MinValue)]
-		[Row(17, byte.MinValue)]
-		[Row(123, byte.MinValue)]
-		// (X, MaxValue) Cases
-		[Row(0, byte.MaxValue)]
-		[Row(1, byte.MaxValue)]
-		[Row(17, byte.MaxValue)]
-		[Row(123, byte.MaxValue)]
-		// Extremvaluecases
-		[Row(byte.MinValue, byte.MaxValue)]
-		[Row(byte.MaxValue, byte.MinValue)]
-		[Test]
-		public void OrU1(byte a, byte b)
-		{
-			settings.CodeSource = CreateTestCode("OrU1", "byte", "uint");
-			Assert.IsTrue(Run<bool>(string.Empty, "Test", "OrU1", (uint)(a | b), a, b));
-		}
-
 		[Row(23, 148)]
 		[Row(17, 1)]
 		[Row(0, 0)]
@@ -278,64 +199,6 @@ namespace Mosa.Test.Cases.OLD.IL
 
 		#region I2
 		
-		[Row(1, 2)]
-		[Row(23, 21)]
-		[Row(1, -2)]
-		[Row(-1, 2)]
-		[Row(0, 0)]
-		[Row(-17, -2)]
-		// And reverse
-		[Row(2, 1)]
-		[Row(21, 23)]
-		[Row(-2, 1)]
-		[Row(2, -1)]
-		[Row(-2, -17)]
-		// (MinValue, X) Cases
-		[Row(short.MinValue, 0)]
-		[Row(short.MinValue, 1)]
-		[Row(short.MinValue, 17)]
-		[Row(short.MinValue, 123)]
-		[Row(short.MinValue, -0)]
-		[Row(short.MinValue, -1)]
-		[Row(short.MinValue, -17)]
-		[Row(short.MinValue, -123)]
-		// (MaxValue, X) Cases
-		[Row(short.MaxValue, 0)]
-		[Row(short.MaxValue, 1)]
-		[Row(short.MaxValue, 17)]
-		[Row(short.MaxValue, 123)]
-		[Row(short.MaxValue, -0)]
-		[Row(short.MaxValue, -1)]
-		[Row(short.MaxValue, -17)]
-		[Row(short.MaxValue, -123)]
-		// (X, MinValue) Cases
-		[Row(0, short.MinValue)]
-		[Row(1, short.MinValue)]
-		[Row(17, short.MinValue)]
-		[Row(123, short.MinValue)]
-		[Row(-0, short.MinValue)]
-		[Row(-1, short.MinValue)]
-		[Row(-17, short.MinValue)]
-		[Row(-123, short.MinValue)]
-		// (X, MaxValue) Cases
-		[Row(0, short.MaxValue)]
-		[Row(1, short.MaxValue)]
-		[Row(17, short.MaxValue)]
-		[Row(123, short.MaxValue)]
-		[Row(-0, short.MaxValue)]
-		[Row(-1, short.MaxValue)]
-		[Row(-17, short.MaxValue)]
-		[Row(-123, short.MaxValue)]
-		// Extremvaluecases
-		[Row(short.MinValue, short.MaxValue)]
-		[Row(short.MaxValue, short.MinValue)]
-		[Test]
-		public void OrI2(short a, short b)
-		{
-			settings.CodeSource = CreateTestCode("OrI2", "short", "int");
-			Assert.IsTrue(Run<bool>(string.Empty, "Test", "OrI2", (a | b), a, b));
-		}
-
 		[Row(-23, 148)]
 		[Row(17, 1)]
 		[Row(0, 0)]
@@ -361,41 +224,6 @@ namespace Mosa.Test.Cases.OLD.IL
 
 		#region U2
 		
-		[Row(1, 2)]
-		[Row(23, 21)]
-		// And reverse
-		[Row(2, 1)]
-		[Row(21, 23)]
-		// (MinValue, X) Cases
-		[Row(ushort.MinValue, 0)]
-		[Row(ushort.MinValue, 1)]
-		[Row(ushort.MinValue, 17)]
-		[Row(ushort.MinValue, 123)]
-		// (MaxValue, X) Cases
-		[Row(ushort.MaxValue, 0)]
-		[Row(ushort.MaxValue, 1)]
-		[Row(ushort.MaxValue, 17)]
-		[Row(ushort.MaxValue, 123)]
-		// (X, MinValue) Cases
-		[Row(0, ushort.MinValue)]
-		[Row(1, ushort.MinValue)]
-		[Row(17, ushort.MinValue)]
-		[Row(123, ushort.MinValue)]
-		// (X, MaxValue) Cases
-		[Row(0, ushort.MaxValue)]
-		[Row(1, ushort.MaxValue)]
-		[Row(17, ushort.MaxValue)]
-		[Row(123, ushort.MaxValue)]
-		// Extremvaluecases
-		[Row(ushort.MinValue, ushort.MaxValue)]
-		[Row(ushort.MaxValue, ushort.MinValue)]
-		[Test]
-		public void OrU2(ushort a, ushort b)
-		{
-			settings.CodeSource = CreateTestCode("OrU2", "ushort", "uint");
-			Assert.IsTrue(Run<bool>(string.Empty, "Test", "OrU2", (uint)(a | b), a, b));
-		}
-
 		[Row(23, 148)]
 		[Row(17, 1)]
 		[Row(0, 0)]
@@ -421,64 +249,6 @@ namespace Mosa.Test.Cases.OLD.IL
 
 		#region I4
 		
-		[Row(1, 2)]
-		[Row(23, 21)]
-		[Row(1, -2)]
-		[Row(-1, 2)]
-		[Row(0, 0)]
-		[Row(-17, -2)]
-		// And reverse
-		[Row(2, 1)]
-		[Row(21, 23)]
-		[Row(-2, 1)]
-		[Row(2, -1)]
-		[Row(-2, -17)]
-		// (MinValue, X) Cases
-		[Row(int.MinValue, 0)]
-		[Row(int.MinValue, 1)]
-		[Row(int.MinValue, 17)]
-		[Row(int.MinValue, 123)]
-		[Row(int.MinValue, -0)]
-		[Row(int.MinValue, -1)]
-		[Row(int.MinValue, -17)]
-		[Row(int.MinValue, -123)]
-		// (MaxValue, X) Cases
-		[Row(int.MaxValue, 0)]
-		[Row(int.MaxValue, 1)]
-		[Row(int.MaxValue, 17)]
-		[Row(int.MaxValue, 123)]
-		[Row(int.MaxValue, -0)]
-		[Row(int.MaxValue, -1)]
-		[Row(int.MaxValue, -17)]
-		[Row(int.MaxValue, -123)]
-		// (X, MinValue) Cases
-		[Row(0, int.MinValue)]
-		[Row(1, int.MinValue)]
-		[Row(17, int.MinValue)]
-		[Row(123, int.MinValue)]
-		[Row(-0, int.MinValue)]
-		[Row(-1, int.MinValue)]
-		[Row(-17, int.MinValue)]
-		[Row(-123, int.MinValue)]
-		// (X, MaxValue) Cases
-		[Row(0, int.MaxValue)]
-		[Row(1, int.MaxValue)]
-		[Row(17, int.MaxValue)]
-		[Row(123, int.MaxValue)]
-		[Row(-0, int.MaxValue)]
-		[Row(-1, int.MaxValue)]
-		[Row(-17, int.MaxValue)]
-		[Row(-123, int.MaxValue)]
-		// Extremvaluecases
-		[Row(int.MinValue, int.MaxValue)]
-		[Row(int.MaxValue, int.MinValue)]
-		[Test]
-		public void OrI4(int a, int b)
-		{
-			settings.CodeSource = CreateTestCode("OrI4", "int", "int");
-			Assert.IsTrue(Run<bool>(string.Empty, "Test", "OrI4", (a | b), a, b));
-		}
-
 		[Row(-23, 148)]
 		[Row(17, 1)]
 		[Row(0, 0)]
@@ -504,41 +274,6 @@ namespace Mosa.Test.Cases.OLD.IL
 
 		#region U4
 		
-		[Row(1, 2)]
-		[Row(23, 21)]
-		// And reverse
-		[Row(2, 1)]
-		[Row(21, 23)]
-		// (MinValue, X) Cases
-		[Row(uint.MinValue, 0)]
-		[Row(uint.MinValue, 1)]
-		[Row(uint.MinValue, 17)]
-		[Row(uint.MinValue, 123)]
-		// (MaxValue, X) Cases
-		[Row(uint.MaxValue, 0)]
-		[Row(uint.MaxValue, 1)]
-		[Row(uint.MaxValue, 17)]
-		[Row(uint.MaxValue, 123)]
-		// (X, MinValue) Cases
-		[Row(0, uint.MinValue)]
-		[Row(1, uint.MinValue)]
-		[Row(17, uint.MinValue)]
-		[Row(123, uint.MinValue)]
-		// (X, MaxValue) Cases
-		[Row(0, uint.MaxValue)]
-		[Row(1, uint.MaxValue)]
-		[Row(17, uint.MaxValue)]
-		[Row(123, uint.MaxValue)]
-		// Extremvaluecases
-		[Row(uint.MinValue, uint.MaxValue)]
-		[Row(uint.MaxValue, uint.MinValue)]
-		[Test]
-		public void OrU4(uint a, uint b)
-		{
-			settings.CodeSource = CreateTestCode("OrU4", "uint", "uint");
-			Assert.IsTrue(Run<bool>(string.Empty, "Test", "OrU4", (uint)(a | b), a, b));
-		}
-
 		[Row(23, 148)]
 		[Row(17, 1)]
 		[Row(0, 0)]
@@ -564,64 +299,6 @@ namespace Mosa.Test.Cases.OLD.IL
 
 		#region I8
 	
-		[Row(1, 2)]
-		[Row(23, 21)]
-		[Row(1, -2)]
-		[Row(-1, 2)]
-		[Row(0, 0)]
-		[Row(-17, -2)]
-		// And reverse
-		[Row(2, 1)]
-		[Row(21, 23)]
-		[Row(-2, 1)]
-		[Row(2, -1)]
-		[Row(-2, -17)]
-		// (MinValue, X) Cases
-		[Row(long.MinValue, 0)]
-		[Row(long.MinValue, 1)]
-		[Row(long.MinValue, 17)]
-		[Row(long.MinValue, 123)]
-		[Row(long.MinValue, -0)]
-		[Row(long.MinValue, -1)]
-		[Row(long.MinValue, -17)]
-		[Row(long.MinValue, -123)]
-		// (MaxValue, X) Cases
-		[Row(long.MaxValue, 0)]
-		[Row(long.MaxValue, 1)]
-		[Row(long.MaxValue, 17)]
-		[Row(long.MaxValue, 123)]
-		[Row(long.MaxValue, -0)]
-		[Row(long.MaxValue, -1)]
-		[Row(long.MaxValue, -17)]
-		[Row(long.MaxValue, -123)]
-		// (X, MinValue) Cases
-		[Row(0, long.MinValue)]
-		[Row(1, long.MinValue)]
-		[Row(17, long.MinValue)]
-		[Row(123, long.MinValue)]
-		[Row(-0, long.MinValue)]
-		[Row(-1, long.MinValue)]
-		[Row(-17, long.MinValue)]
-		[Row(-123, long.MinValue)]
-		// (X, MaxValue) Cases
-		[Row(0, long.MaxValue)]
-		[Row(1, long.MaxValue)]
-		[Row(17, long.MaxValue)]
-		[Row(123, long.MaxValue)]
-		[Row(-0, long.MaxValue)]
-		[Row(-1, long.MaxValue)]
-		[Row(-17, long.MaxValue)]
-		[Row(-123, long.MaxValue)]
-		// Extremvaluecases
-		[Row(long.MinValue, long.MaxValue)]
-		[Row(long.MaxValue, long.MinValue)]
-		[Test]
-		public void OrI8(long a, long b)
-		{
-			settings.CodeSource = CreateTestCode("OrI8", "long", "long");
-			Assert.IsTrue(Run<bool>(string.Empty, "Test", "OrI8", (a | b), a, b));
-		}
-
 		[Row(-23, 148)]
 		[Row(17, 1)]
 		[Row(0, 0)]
@@ -647,41 +324,6 @@ namespace Mosa.Test.Cases.OLD.IL
 
 		#region U8
 	
-		[Row(1, 2)]
-		[Row(23, 21)]
-		// And reverse
-		[Row(2, 1)]
-		[Row(21, 23)]
-		// (MinValue, X) Cases
-		[Row(ulong.MinValue, 0)]
-		[Row(ulong.MinValue, 1)]
-		[Row(ulong.MinValue, 17)]
-		[Row(ulong.MinValue, 123)]
-		// (MaxValue, X) Cases
-		[Row(ulong.MaxValue, 0)]
-		[Row(ulong.MaxValue, 1)]
-		[Row(ulong.MaxValue, 17)]
-		[Row(ulong.MaxValue, 123)]
-		// (X, MinValue) Cases
-		[Row(0, ulong.MinValue)]
-		[Row(1, ulong.MinValue)]
-		[Row(17, ulong.MinValue)]
-		[Row(123, ulong.MinValue)]
-		// (X, MaxValue) Cases
-		[Row(0, ulong.MaxValue)]
-		[Row(1, ulong.MaxValue)]
-		[Row(17, ulong.MaxValue)]
-		[Row(123, ulong.MaxValue)]
-		// Extremvaluecases
-		[Row(ulong.MinValue, ulong.MaxValue)]
-		[Row(ulong.MaxValue, ulong.MinValue)]
-		[Test]
-		public void OrU8(ulong a, ulong b)
-		{
-			settings.CodeSource = CreateTestCode("OrU8", "ulong", "ulong");
-			Assert.IsTrue(Run<bool>(string.Empty, "Test", "OrU8", (ulong)(a | b), a, b));
-		}
-
 		[Row(23, 148)]
 		[Row(17, 1)]
 		[Row(0, 0)]

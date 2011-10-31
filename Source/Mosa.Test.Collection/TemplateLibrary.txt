@@ -26,6 +26,9 @@
 	List<KeyValuePair<string, string>> Integers = new List<KeyValuePair<string, string>>(PositiveIntegers);
 	Integers.AddRange(NegativeIntegers);
 	
+	List<KeyValuePair<string, string>> PositiveIntegersWithChar = new List<KeyValuePair<string, string>>(PositiveIntegers);
+	PositiveIntegersWithChar.Add(new KeyValuePair<string, string>("char", "C"));	
+	
 	List<KeyValuePair<string, string>> IntegersWithChar = new List<KeyValuePair<string, string>>(Integers);
 	IntegersWithChar.Add(new KeyValuePair<string, string>("char", "C"));	
 	

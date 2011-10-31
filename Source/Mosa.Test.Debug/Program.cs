@@ -1,8 +1,6 @@
 ﻿
 using Mosa.Test.Cases.CIL;
 using Mosa.Test.Cases.IL;
-using Mosa.Test.Cases.FIX.IL;
-using Mosa.Test.Cases.OLD.IL;
 
 namespace Mosa.Test.Debug
 {

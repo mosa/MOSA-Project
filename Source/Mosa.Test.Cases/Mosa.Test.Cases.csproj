@@ -89,6 +89,11 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Boxing.tt</DependentUpon>
     </Compile>
+    <Compile Include="IL\Comparison.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Comparison.tt</DependentUpon>
+    </Compile>
     <Compile Include="IL\GenericCall.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -108,24 +113,28 @@
       <DesignTime>True</DesignTime>
     </Compile>
     <Compile Include="IL\IsInst.cs" />
-    <Compile Include="OLD.CIL\GenericMethodMemberFixture.cs" />
-    <Compile Include="OLD.CIL\GenericTypeFixture.cs" />
+    <Compile Include="OLD\GenericMethodMemberFixture.cs" />
+    <Compile Include="OLD\GenericTypeFixture.cs" />
     <Compile Include="CIL\Int32Fixture.cs" />
     <Compile Include="CIL\Int64Fixture.cs" />
     <Compile Include="CIL\InterfaceFixture.cs" />
     <Compile Include="CIL\NewobjFixture.cs" />
-    <Compile Include="OLD.CIL\PinnedFixture.cs" />
+    <Compile Include="OLD\PinnedFixture.cs" />
     <Compile Include="CIL\SingleFixture.cs" />
     <Compile Include="CIL\StringFixture.cs" />
     <Compile Include="CIL\UInt32Fixture.cs" />
     <Compile Include="CIL\UInt64Fixture.cs" />
-    <Compile Include="OLD.IL\Add.cs" />
-    <Compile Include="OLD.IL\AddPtr.cs" />
-    <Compile Include="OLD.IL\And.cs" />
-    <Compile Include="OLD.IL\CallWithConstant.cs" />
-    <Compile Include="OLD.IL\Ceq.cs" />
-    <Compile Include="OLD.IL\Cgt.cs" />
-    <Compile Include="OLD.IL\Clt.cs" />
+    <Compile Include="OLD\Add.cs" />
+    <Compile Include="OLD\AddPtr.cs" />
+    <Compile Include="OLD\And.cs" />
+    <Compile Include="OLD\CallWithConstant.cs" />
+    <Compile Include="OLD\Ceq.cs" />
+    <Compile Include="OLD\Cgt.cs" />
+    <Compile Include="OLD\Clt.cs" />
+    <None Include="IL\Comparison.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Comparison.cs</LastGenOutput>
+    </None>
     <None Include="IL\Boxing.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Boxing.cs</LastGenOutput>
@@ -134,7 +143,7 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>GenericCall.cs</LastGenOutput>
     </None>
-    <None Include="IL\ConditionalOperator.tt">
+    <None Include="OLD\ConditionalOperator.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>ConditionalOperator.cs</LastGenOutput>
     </None>
@@ -162,7 +171,7 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Ldarga.cs</LastGenOutput>
     </None>
-    <Compile Include="IL\ConditionalOperator.cs">
+    <Compile Include="OLD\ConditionalOperator.cs">
       <DependentUpon>ConditionalOperator.tt</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -183,28 +192,28 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
     </Compile>
-    <Compile Include="OLD.IL\Div.cs" />
+    <Compile Include="OLD\Div.cs" />
     <Compile Include="IL\Ldarga.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Ldarga.tt</DependentUpon>
     </Compile>
-    <Compile Include="OLD.IL\Mul.cs" />
-    <Compile Include="OLD.IL\Or.cs" />
-    <Compile Include="OLD.IL\Rem.cs" />
-    <Compile Include="OLD.IL\Shl.cs" />
-    <Compile Include="OLD.IL\Shr.cs" />
-    <Compile Include="OLD.IL\StaticFieldInit.cs" />
-    <Compile Include="OLD.IL\Stind.cs" />
-    <Compile Include="OLD.IL\Stsfld.cs" />
-    <Compile Include="OLD.IL\Sub.cs" />
+    <Compile Include="OLD\Mul.cs" />
+    <Compile Include="OLD\Or.cs" />
+    <Compile Include="OLD\Rem.cs" />
+    <Compile Include="OLD\Shl.cs" />
+    <Compile Include="OLD\Shr.cs" />
+    <Compile Include="OLD\StaticFieldInit.cs" />
+    <Compile Include="OLD\Stind.cs" />
+    <Compile Include="OLD\Stsfld.cs" />
+    <Compile Include="OLD\Sub.cs" />
     <Compile Include="IL\Switch.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Switch.tt</DependentUpon>
     </Compile>
     <Compile Include="IL\While.cs" />
-    <Compile Include="OLD.IL\Xor.cs" />
+    <Compile Include="OLD\Xor.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Mosa.Test.CodeDomCompiler\Mosa.Test.CodeDomCompiler.csproj">

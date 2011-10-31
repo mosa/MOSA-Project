@@ -16,19 +16,12 @@ using MbUnit.Framework;
 
 using Mosa.Test.System;
 
-namespace Mosa.Test.Cases.OLD.IL
+namespace Mosa.Test.Cases.OLD
 {
 	[TestFixture]
 	public class Cgt : TestCompilerAdapter
 	{
-		private static string testCode = @"
-			static class Test {
-				public static bool Cgt(#t1 a, #t2 b) {
-					return (a > b);
-				}
-			}
-		";
-
+		
 		private static string CreateConstantTestCode(string typeIn, string constLeft, string constRight)
 		{
 			if (String.IsNullOrEmpty(constRight))
@@ -61,17 +54,6 @@ namespace Mosa.Test.Cases.OLD.IL
 		
 		#region C
 	
-		[Row(0, 0)]
-		[Row(17, 128)]
-		[Row('a', 'Z')]
-		[Row(char.MinValue, char.MaxValue)]
-		[Test]
-		public void CgtC(char a, char b)
-		{
-			settings.CodeSource = testCode.Replace("#t1", "char").Replace("#t2", "char");
-			bool res = Run<bool>(string.Empty, @"Test", @"Cgt", a, b);
-			Assert.IsTrue((a > b) == res);
-		}
 
 		[Row(0, 'a')]
 		[Row('-', '.')]
@@ -98,25 +80,6 @@ namespace Mosa.Test.Cases.OLD.IL
 
 		#region I1
 		
-		[Row(0, 0)]
-		[Row(1, 1)]
-		[Row(2, 1)]
-		[Row(SByte.MinValue, SByte.MinValue + 10)]
-		[Row(SByte.MaxValue, SByte.MaxValue)]
-		[Row(0, SByte.MinValue)]
-		[Row(0, SByte.MaxValue)]
-		[Row(0, 1)]
-		[Row(SByte.MinValue, 0)]
-		[Row(SByte.MaxValue, 0)]
-		[Row(1, 0)]
-		[Test, Importance(Importance.Critical)]
-		public void CgtI1(sbyte a, sbyte b)
-		{
-			settings.CodeSource = testCode.Replace("#t1", "sbyte").Replace("#t2", "sbyte");
-			bool res = Run<bool>(string.Empty, @"Test", @"Cgt", a, b);
-			Assert.IsTrue((a > b) == res);
-		}
-
 		[Row(0, 0)]
 		[Row(-17, 42)]
 		[Row(sbyte.MinValue, sbyte.MinValue)]
@@ -145,25 +108,6 @@ namespace Mosa.Test.Cases.OLD.IL
 		#region I2
 		
 		[Row(0, 0)]
-		[Row(1, 1)]
-		[Row(2, 1)]
-		[Row(Int16.MinValue, Int16.MinValue + 10)]
-		[Row(Int16.MaxValue, Int16.MaxValue)]
-		[Row(0, Int16.MinValue)]
-		[Row(0, Int16.MaxValue)]
-		[Row(0, 1)]
-		[Row(Int16.MinValue, 0)]
-		[Row(Int16.MaxValue, 0)]
-		[Row(1, 0)]
-		[Test, Importance(Importance.Critical)]
-		public void CgtI2(short a, short b)
-		{
-			settings.CodeSource = testCode.Replace("#t1", "short").Replace("#t2", "short");
-			bool res = Run<bool>(string.Empty, @"Test", @"Cgt", a, b);
-			Assert.IsTrue((a > b) == res);
-		}
-
-		[Row(0, 0)]
 		[Row(-17, 42)]
 		[Row(short.MinValue, short.MinValue)]
 		[Row(short.MinValue, short.MaxValue)]
@@ -191,25 +135,6 @@ namespace Mosa.Test.Cases.OLD.IL
 		#region I4
 		
 		[Row(0, 0)]
-		[Row(1, 1)]
-		[Row(2, 1)]
-		[Row(Int32.MinValue, Int32.MinValue + 10)]
-		[Row(Int32.MaxValue, Int32.MaxValue)]
-		[Row(0, Int32.MinValue)]
-		[Row(0, Int32.MaxValue)]
-		[Row(0, 1)]
-		[Row(Int32.MinValue, 0)]
-		[Row(Int32.MaxValue, 0)]
-		[Row(1, 0)]
-		[Test, Importance(Importance.Critical)]
-		public void CgtI4(int a, int b)
-		{
-			settings.CodeSource = testCode.Replace("#t1", "int").Replace("#t2", "int");
-			bool res = Run<bool>(string.Empty, @"Test", @"Cgt", a, b);
-			Assert.IsTrue((a > b) == res);
-		}
-
-		[Row(0, 0)]
 		[Row(-17, 42)]
 		[Row(int.MinValue, int.MinValue)]
 		[Row(int.MinValue, int.MaxValue)]
@@ -236,24 +161,6 @@ namespace Mosa.Test.Cases.OLD.IL
 
 		#region I8
 		
-		[Row(0L, 0L)]
-		[Row(1L, 1L)]
-		[Row(Int64.MinValue, Int64.MinValue + 10)]
-		[Row(Int64.MaxValue, Int64.MaxValue)]
-		[Row(0L, Int64.MinValue)]
-		[Row(0L, Int64.MaxValue)]
-		[Row(0L, 1L)]
-		[Row(Int64.MinValue, 0L)]
-		[Row(Int64.MaxValue, 0L)]
-		[Row(1L, 0L)]
-		[Test, Importance(Importance.Critical)]
-		public void CgtI8(long a, long b)
-		{
-			settings.CodeSource = testCode.Replace("#t1", "long").Replace("#t2", "long");
-			bool res = Run<bool>(string.Empty, @"Test", @"Cgt", a, b);
-			Assert.IsTrue((a > b) == res);
-		}
-
 		[Row(0, 0)]
 		[Row(-17, 42)]
 		[Row(long.MinValue + 1, long.MinValue)]
@@ -288,24 +195,6 @@ namespace Mosa.Test.Cases.OLD.IL
 		#region U1
 		
 		[Row(0, 0)]
-		[Row(1, 1)]
-		[Row(Byte.MinValue, Byte.MinValue + 10)]
-		[Row(Byte.MaxValue, Byte.MaxValue)]
-		[Row(1, Byte.MinValue)]
-		[Row(0, Byte.MaxValue)]
-		[Row(0, 1)]
-		[Row(Byte.MinValue, 1)]
-		[Row(Byte.MaxValue, 0)]
-		[Row(1, 0)]
-		[Test, Importance(Importance.Critical)]
-		public void CgtU1(byte a, byte b)
-		{
-			settings.CodeSource = testCode.Replace("#t1", "byte").Replace("#t2", "byte");
-			bool res = Run<bool>(string.Empty, @"Test", @"Cgt", a, b);
-			Assert.IsTrue((a > b) == res);
-		}
-
-		[Row(0, 0)]
 		[Row(17, 142)]
 		[Row(byte.MaxValue, byte.MaxValue)]
 		[Row(byte.MinValue, byte.MaxValue)]
@@ -332,24 +221,6 @@ namespace Mosa.Test.Cases.OLD.IL
 
 		#region U2
 	
-		[Row(0, 0)]
-		[Row(1, 1)]
-		[Row(UInt16.MinValue, UInt16.MinValue + 10)]
-		[Row(UInt16.MaxValue, UInt16.MaxValue)]
-		[Row(1, UInt16.MinValue)]
-		[Row(0, UInt16.MaxValue)]
-		[Row(0, 1)]
-		[Row(UInt16.MinValue, 2)]
-		[Row(UInt16.MaxValue, 0)]
-		[Row(1, 0)]
-		[Test, Importance(Importance.Critical)]
-		public void CgtU2(ushort a, ushort b)
-		{
-			settings.CodeSource = testCode.Replace("#t1", "ushort").Replace("#t2", "ushort");
-			bool res = Run<bool>(string.Empty, @"Test", @"Cgt", a, b);
-			Assert.IsTrue((a > b) == res);
-		}
-
 		[Row(0, 0)]
 		[Row(17, 142)]
 		[Row(ushort.MaxValue, ushort.MaxValue)]
@@ -378,24 +249,6 @@ namespace Mosa.Test.Cases.OLD.IL
 		#region U4
 	
 		[Row(0, 0)]
-		[Row(1, 1)]
-		[Row(UInt32.MinValue, UInt32.MinValue + 10)]
-		[Row(UInt32.MaxValue, UInt32.MaxValue)]
-		[Row(1, UInt32.MinValue)]
-		[Row(0, UInt32.MaxValue)]
-		[Row(3, 1)]
-		[Row(UInt32.MinValue, 1)]
-		[Row(UInt32.MaxValue, 0)]
-		[Row(1, 0)]
-		[Test, Importance(Importance.Critical)]
-		public void CgtU4(uint a, uint b)
-		{
-			settings.CodeSource = testCode.Replace("#t1", "uint").Replace("#t2", "uint");
-			bool res = Run<bool>(string.Empty, @"Test", @"Cgt", a, b);
-			Assert.IsTrue((a > b) == res);
-		}
-
-		[Row(0, 0)]
 		[Row(17, 142)]
 		[Row(uint.MaxValue, uint.MaxValue)]
 		[Row(uint.MinValue, uint.MaxValue)]
@@ -423,24 +276,6 @@ namespace Mosa.Test.Cases.OLD.IL
 		#region U8
 		
 		[Row(0, 0)]
-		[Row(1, 1)]
-		[Row(UInt64.MinValue, UInt64.MinValue + 10)]
-		[Row(UInt64.MaxValue, UInt64.MaxValue)]
-		[Row(1, UInt64.MinValue)]
-		[Row(0, UInt64.MaxValue)]
-		[Row(3, 2)]
-		[Row(UInt64.MinValue, 1)]
-		[Row(UInt64.MaxValue, 0)]
-		[Row(1, 0)]
-		[Test, Importance(Importance.Critical)]
-		public void CgtU8(ulong a, ulong b)
-		{
-			settings.CodeSource = testCode.Replace("#t1", "ulong").Replace("#t2", "ulong");
-			bool res = Run<bool>(string.Empty, @"Test", @"Cgt", a, b);
-			Assert.IsTrue((a > b) == res);
-		}
-
-		[Row(0, 0)]
 		[Row(17, 142)]
 		[Row(ulong.MaxValue, ulong.MaxValue)]
 		[Row(ulong.MinValue, ulong.MaxValue)]
@@ -467,24 +302,6 @@ namespace Mosa.Test.Cases.OLD.IL
 
 		#region R4
 	
-		[Row(0.0f, 0.0f)]
-		[Row(1.0f, 1.0f)]
-		[Row(Single.MinValue, Single.MinValue + 10)]
-		[Row(Single.MaxValue, Single.MaxValue)]
-		[Row(0.0f, Single.MinValue)]
-		[Row(0.0f, Single.MaxValue)]
-		[Row(3.0f, 1.0f)]
-		[Row(Single.MinValue, 0.0f)]
-		[Row(Single.MaxValue, 0.0f)]
-		[Row(1.0f, 0.0f)]
-		[Test, Importance(Importance.Critical)]
-		public void CgtR4(float a, float b)
-		{
-			settings.CodeSource = testCode.Replace("#t1", "float").Replace("#t2", "float");
-			bool res = Run<bool>(string.Empty, @"Test", @"Cgt", a, b);
-			Assert.IsTrue((a > b) == res);
-		}
-
 		[Row(0.0f, 0.0f)]
 		[Row(1.0f, 1.0f)]
 		[Row(Single.MinValue, Single.MinValue + 10)]
@@ -516,24 +333,6 @@ namespace Mosa.Test.Cases.OLD.IL
 		#endregion
 
 		#region R8
-	
-		[Row(0.0, 0.5)]
-		[Row(1.0, 2.0)]
-		[Row(Double.MinValue, Double.MinValue + 1)]
-		[Row(Double.MaxValue - 1, Double.MaxValue)]
-		[Row(0.0, Double.MinValue)]
-		[Row(0.0, Double.MaxValue)]
-		[Row(3.0, 1.0)]
-		[Row(Double.MinValue, 0.0)]
-		[Row(Double.MaxValue, 0.0)]
-		[Row(1.0, 0.0)]
-		[Test, Importance(Importance.Critical)]
-		public void CgtR8(double a, double b)
-		{
-			settings.CodeSource = testCode.Replace("#t1", "double").Replace("#t2", "double");
-			bool res = Run<bool>(string.Empty, @"Test", @"Cgt", a, b);
-			Assert.IsTrue((a > b) == res);
-		}
 
 		[Row(0.0, 0.0)]
 		[Row(-17.0, 42.5)]

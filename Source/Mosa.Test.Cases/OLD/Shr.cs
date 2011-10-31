@@ -15,29 +15,13 @@ using MbUnit.Framework;
 
 using Mosa.Test.System;
 
-namespace Mosa.Test.Cases.OLD.IL
+namespace Mosa.Test.Cases.OLD
 {
 	
 	[TestFixture]
 	public class Shr : TestCompilerAdapter
 	{
-		private static string CreateTestCode(string name, string typeIn, string typeOut)
-		{
-			return CreateTestCode(name, typeIn, typeIn, typeOut);
-		}
-
-		private static string CreateTestCode(string name, string typeInA, string typeInB, string typeOut)
-		{
-			return @"
-				static class Test
-				{
-					static bool " + name + "(" + typeOut + " expect, " + typeInA + " a, " + typeInB + @" b)
-					{
-						return expect == (a >> b);
-					}
-				}";
-		}
-
+		
 		private static string CreateConstantTestCode(string name, string typeIn, string typeOut, string constLeft, string constRight)
 		{
 			if (String.IsNullOrEmpty(constRight))
@@ -70,16 +54,6 @@ namespace Mosa.Test.Cases.OLD.IL
 
 		#region C
 	
-		[Row(0, 0)]
-		[Row(17, 128)]
-		[Row('a', 'Z')]
-		[Row(char.MinValue, char.MaxValue)]
-		[Test]
-		public void ShrC(char a, char b)
-		{
-			settings.CodeSource = CreateTestCode("AddC", "char", "char");
-			Assert.IsTrue(Run<bool>(string.Empty, "Test", "AddC", (char)(a >> b), a, b));
-		}
 
 		[Row(0, 'a')]
 		[Row('-', '.')]
@@ -104,42 +78,6 @@ namespace Mosa.Test.Cases.OLD.IL
 
 		#region I1
 		
-		[Row(1, 2)]
-		[Row(23, 3)]
-		// And reverse
-		[Row(2, 0)]
-		[Row(21, -1)]
-		// (MinValue, X) Cases
-		[Row(sbyte.MinValue, 0)]
-		[Row(sbyte.MinValue, 1)]
-		[Row(sbyte.MinValue, 17)]
-		[Row(sbyte.MinValue, 123)]
-		// (MaxValue, X) Cases
-		[Row(sbyte.MaxValue, 0)]
-		[Row(sbyte.MaxValue, 1)]
-		[Row(sbyte.MaxValue, 17)]
-		[Row(sbyte.MaxValue, 123)]
-		// (X, MinValue) Cases
-		[Row(0, sbyte.MinValue)]
-		[Row(1, sbyte.MinValue)]
-		[Row(17, sbyte.MinValue)]
-		[Row(123, sbyte.MinValue)]
-		// (X, MaxValue) Cases
-		[Row(0, sbyte.MaxValue)]
-		[Row(1, sbyte.MaxValue)]
-		[Row(17, sbyte.MaxValue)]
-		[Row(123, sbyte.MaxValue)]
-		// Extremvaluecases
-		[Row(sbyte.MinValue, sbyte.MaxValue)]
-		[Row(sbyte.MaxValue, sbyte.MinValue)]
-		[Row(unchecked((sbyte)0x80), 8)]
-		[Test]
-		public void ShrI1(sbyte a, sbyte b)
-		{
-			settings.CodeSource = CreateTestCode("ShrI1", "sbyte", "int");
-			Assert.IsTrue(Run<bool>(string.Empty, "Test", "ShrI1", a >> b, a, b));
-		}
-
 		[Row(-42, 48)]
 		[Row(17, 1)]
 		[Row(0, 0)]
@@ -165,43 +103,6 @@ namespace Mosa.Test.Cases.OLD.IL
 
 		#region I2
 	
-		[Row(1, 2)]
-		[Row(23, 3)]
-		// And reverse
-		[Row(2, 0)]
-		[Row(21, -1)]
-		// (MinValue, X) Cases
-		[Row(short.MinValue, 0)]
-		[Row(short.MinValue, 1)]
-		[Row(short.MinValue, 17)]
-		[Row(short.MinValue, 123)]
-		// (MaxValue, X) Cases
-		[Row(short.MaxValue, 0)]
-		[Row(short.MaxValue, 1)]
-		[Row(short.MaxValue, 17)]
-		[Row(short.MaxValue, 123)]
-		// (X, MinValue) Cases
-		[Row(0, short.MinValue)]
-		[Row(1, short.MinValue)]
-		[Row(17, short.MinValue)]
-		[Row(123, short.MinValue)]
-		// (X, MaxValue) Cases
-		[Row(0, short.MaxValue)]
-		[Row(1, short.MaxValue)]
-		[Row(17, short.MaxValue)]
-		[Row(123, short.MaxValue)]
-		// Extremvaluecases
-		[Row(short.MinValue, short.MaxValue)]
-		[Row(short.MaxValue, short.MinValue)]
-		[Row(unchecked((short)0x8000), 16)]
-		[Test]
-		public void ShrI2(short a, short b)
-		{
-			settings.CodeSource = CreateTestCode("ShrI2", "short", "int");
-			int v = (a >> b);
-			Assert.IsTrue(Run<bool>(string.Empty, "Test", "ShrI2", v, a, b));
-		}
-
 		[Row(-23, 148)]
 		[Row(17, 1)]
 		[Row(0, 0)]
@@ -227,42 +128,6 @@ namespace Mosa.Test.Cases.OLD.IL
 
 		#region I4
 	
-		[Row(1, 2)]
-		[Row(23, 3)]
-		// And reverse
-		[Row(2, 0)]
-		[Row(21, -1)]
-		// (MinValue, X) Cases
-		[Row(int.MinValue, 0)]
-		[Row(int.MinValue, 1)]
-		[Row(int.MinValue, 17)]
-		[Row(int.MinValue, 123)]
-		// (MaxValue, X) Cases
-		[Row(int.MaxValue, 0)]
-		[Row(int.MaxValue, 1)]
-		[Row(int.MaxValue, 17)]
-		[Row(int.MaxValue, 123)]
-		// (X, MinValue) Cases
-		[Row(0, int.MinValue)]
-		[Row(1, int.MinValue)]
-		[Row(17, int.MinValue)]
-		[Row(123, int.MinValue)]
-		// (X, MaxValue) Cases
-		[Row(0, int.MaxValue)]
-		[Row(1, int.MaxValue)]
-		[Row(17, int.MaxValue)]
-		[Row(123, int.MaxValue)]
-		// Extremvaluecases
-		[Row(int.MinValue, int.MaxValue)]
-		[Row(int.MaxValue, int.MinValue)]
-		[Row(unchecked((int)0x80000000), 32)]
-		[Test]
-		public void ShrI4(int a, int b)
-		{
-			settings.CodeSource = CreateTestCode("ShrI4", "int", "int");
-			Assert.IsTrue(Run<bool>(string.Empty, "Test", "ShrI4", (a >> b), a, b));
-		}
-
 		[Row(-23, 148)]
 		[Row(17, 1)]
 		[Row(0, 0)]
@@ -287,42 +152,6 @@ namespace Mosa.Test.Cases.OLD.IL
 		#endregion
 
 		#region I8
-		
-		[Row(1, 2)]
-		[Row(23, 3)]
-		// And reverse
-		[Row(2, 0)]
-		[Row(21, -1)]
-		// (MinValue, X) Cases
-		[Row(long.MinValue, 0)]
-		[Row(long.MinValue, 1)]
-		[Row(long.MinValue, 17)]
-		[Row(long.MinValue, 123)]
-		// (MaxValue, X) Cases
-		[Row(long.MaxValue, 0)]
-		[Row(long.MaxValue, 1)]
-		[Row(long.MaxValue, 17)]
-		[Row(long.MaxValue, 123)]
-		// (X, MinValue) Cases
-		[Row(0, int.MinValue)]
-		[Row(1, int.MinValue)]
-		[Row(17, int.MinValue)]
-		[Row(123, int.MinValue)]
-		// (X, MaxValue) Cases
-		[Row(0, int.MaxValue)]
-		[Row(1, int.MaxValue)]
-		[Row(17, int.MaxValue)]
-		[Row(123, int.MaxValue)]
-		// Extremvaluecases
-		[Row(long.MinValue, int.MaxValue)]
-		[Row(long.MaxValue, int.MinValue)]
-		[Row(unchecked((long)0x8000000000000000), 64)]
-		[Test]
-		public void ShrI8(long a, int b)
-		{
-			settings.CodeSource = CreateTestCode("ShrI8", "long", "int", "long");
-			Assert.IsTrue(Run<bool>(string.Empty, "Test", "ShrI8", (a >> b), a, b));
-		}
 
 		[Row(-23, 148)]
 		[Row(17, 1)]
