@@ -44,9 +44,6 @@
 		<StartupObject />
 	</PropertyGroup>
 	<ItemGroup>
-		<Folder Include="Properties\" />
-	</ItemGroup>
-	<ItemGroup>
 		<Compile Include="CharTests.cs" />
 		<Compile Include="ComparisonTests.cs">
 			<AutoGen>True</AutoGen>
