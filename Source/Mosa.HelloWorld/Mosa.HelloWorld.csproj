@@ -88,9 +88,10 @@
       <Project>{631BC4F3-E2D8-4319-814C-13904CAA17CE}</Project>
       <Name>Korlib</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="Mosa.Test.Collection, Version=0.0.0.0, Culture=neutral, processorArchitecture=MSIL" />
+    <ProjectReference Include="..\Mosa.Test.Collection\Mosa.Test.Collection.csproj">
+      <Project>{067AAB6B-447A-45BA-9E0D-DFEA886B4F69}</Project>
+      <Name>Mosa.Test.Collection</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
