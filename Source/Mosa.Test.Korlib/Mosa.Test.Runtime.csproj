@@ -38,7 +38,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="KernelMemory.cs" />
-    <Compile Include="Runtime.cs" />
+    <Compile Include="..\Mosa.Test.Runtime\Runtime.cs">
+      <Link>Runtime.cs</Link>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
