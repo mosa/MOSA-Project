@@ -49,7 +49,7 @@ namespace Mosa.Compiler.Framework.CIL
 
 			uint size = (uint)decoder.Compiler.TypeLayout.GetTypeSize(type);
 
-			ctx.Result = new Operands.ConstantOperand(new SigType(CilElementType.U4), size);
+			ctx.Result = new Operands.ConstantOperand(BuiltInSigType.UInt32, size);
 		}
 
 		/// <summary>

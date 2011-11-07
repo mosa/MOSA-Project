@@ -157,7 +157,7 @@ namespace Mosa.Tools.Compiler.Stages
 			{
 				ITypeInitializerSchedulerStage typeInitializerSchedulerStage = this.compiler.Pipeline.FindFirst<ITypeInitializerSchedulerStage>();
 
-				SigType I4 = new SigType(CilElementType.I4);
+				SigType I4 = BuiltInSigType.Int32;
 				RegisterOperand ecx = new RegisterOperand(I4, GeneralPurposeRegister.ECX);
 				RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
 				RegisterOperand ebx = new RegisterOperand(I4, GeneralPurposeRegister.EBX);

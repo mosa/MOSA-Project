@@ -187,7 +187,7 @@ namespace Mosa.Platform.x86
 
 			if (op is ConstantOperand)
 			{
-				RegisterOperand ebx = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EBX);
+				RegisterOperand ebx = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.EBX);
 				ctx.SetInstruction(CPUx86.Instruction.PushInstruction, null, ebx);
 				ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, ebx, op);
 				ctx.AppendInstruction(CPUx86.Instruction.DivInstruction, ebx);
@@ -217,7 +217,7 @@ namespace Mosa.Platform.x86
 			}
 			if (right is ConstantOperand && !Is32Bit(left))
 			{
-				RegisterOperand edx = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EBX);
+				RegisterOperand edx = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.EBX);
 				Context before = ctx.InsertBefore();
 				before.SetInstruction(CPUx86.Instruction.PushInstruction, null, edx);
 				if (IsSigned(left))
@@ -252,7 +252,7 @@ namespace Mosa.Platform.x86
 		/// <param name="context">The context.</param>
 		void CPUx86.IX86Visitor.UDiv(Context context)
 		{
-			RegisterOperand edx = new RegisterOperand(new SigType(CilElementType.I), GeneralPurposeRegister.EDX);
+			RegisterOperand edx = new RegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.EDX);
 			Context before = context.InsertBefore();
 			before.SetInstruction(CPUx86.Instruction.XorInstruction, edx, edx);
 
@@ -272,7 +272,7 @@ namespace Mosa.Platform.x86
 		{
 			if (context.Operand1 is ConstantOperand)
 				return;
-			RegisterOperand ecx = new RegisterOperand(new SigType(CilElementType.I), GeneralPurposeRegister.ECX);
+			RegisterOperand ecx = new RegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.ECX);
 			Context before = context.InsertBefore();
 			before.SetInstruction(CPUx86.Instruction.MovInstruction, ecx, context.Operand1);
 			context.Operand1 = context.Result;
@@ -286,7 +286,7 @@ namespace Mosa.Platform.x86
 		{
 			if (context.Operand1 is ConstantOperand)
 				return;
-			RegisterOperand ecx = new RegisterOperand(new SigType(CilElementType.I), GeneralPurposeRegister.ECX);
+			RegisterOperand ecx = new RegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.ECX);
 			Context before = context.InsertBefore();
 			before.SetInstruction(CPUx86.Instruction.MovInstruction, ecx, context.Operand1);
 			context.Operand1 = context.Result;
@@ -300,7 +300,7 @@ namespace Mosa.Platform.x86
 		{
 			if (context.Operand1 is ConstantOperand)
 				return;
-			RegisterOperand ecx = new RegisterOperand(new SigType(CilElementType.I), GeneralPurposeRegister.ECX);
+			RegisterOperand ecx = new RegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.ECX);
 			Context before = context.InsertBefore();
 			before.SetInstruction(CPUx86.Instruction.MovInstruction, ecx, context.Operand1);
 			context.Operand1 = context.Result;

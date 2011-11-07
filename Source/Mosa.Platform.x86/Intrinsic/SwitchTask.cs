@@ -32,7 +32,7 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// <param name="typeSystem">The type system.</param>
 		public void ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
 		{
-			SigType I4 = new SigType(CilElementType.I4);
+			SigType I4 = BuiltInSigType.Int32;
 			RegisterOperand esp = new RegisterOperand(I4, GeneralPurposeRegister.ESP);
 
 			context.SetInstruction(CPUx86.Instruction.MovInstruction, esp, context.Operand1);

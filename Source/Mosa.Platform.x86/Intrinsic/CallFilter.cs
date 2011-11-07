@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Operands;
+using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
 
@@ -30,16 +31,14 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// <param name="typeSystem">The type system.</param>
 		public void ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
 		{
-			SigType u4 = new SigType(Compiler.Metadata.CilElementType.U4);
-
-			RegisterOperand ebp = new RegisterOperand(u4, GeneralPurposeRegister.EBP);
-			RegisterOperand esp = new RegisterOperand(u4, GeneralPurposeRegister.ESP);
-			RegisterOperand eax = new RegisterOperand(u4, GeneralPurposeRegister.EAX);
-			RegisterOperand ebx = new RegisterOperand(u4, GeneralPurposeRegister.EBX);
-			RegisterOperand ecx = new RegisterOperand(u4, GeneralPurposeRegister.ECX);
-			RegisterOperand edx = new RegisterOperand(u4, GeneralPurposeRegister.EDX);
-			RegisterOperand esi = new RegisterOperand(u4, GeneralPurposeRegister.ESI);
-			RegisterOperand edi = new RegisterOperand(u4, GeneralPurposeRegister.EDI);
+			RegisterOperand ebp = new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.EBP);
+			RegisterOperand esp = new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.ESP);
+			RegisterOperand eax = new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.EAX);
+			RegisterOperand ebx = new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.EBX);
+			RegisterOperand ecx = new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.ECX);
+			RegisterOperand edx = new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.EDX);
+			RegisterOperand esi = new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.ESI);
+			RegisterOperand edi = new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.EDI);
 
 			context.SetInstruction(CPUx86.Instruction.PushInstruction, null, ebp);
 			context.AppendInstruction(CPUx86.Instruction.MovInstruction, ebp, esp);
@@ -48,22 +47,22 @@ namespace Mosa.Platform.x86.Intrinsic
 			context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, edi);
 
 			// Load register context
-			context.AppendInstruction(CPUx86.Instruction.MovInstruction, eax, new MemoryOperand(u4, GeneralPurposeRegister.ESP, new IntPtr(28)));
+			context.AppendInstruction(CPUx86.Instruction.MovInstruction, eax, new MemoryOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.ESP, new IntPtr(28)));
 			// Load exception handler
-			context.AppendInstruction(CPUx86.Instruction.MovInstruction, ecx, new MemoryOperand(u4, GeneralPurposeRegister.ESP, new IntPtr(32)));
+			context.AppendInstruction(CPUx86.Instruction.MovInstruction, ecx, new MemoryOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.ESP, new IntPtr(32)));
 			// Save EBP
 			context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, ebp);
 
 			// Restore register values
-			context.AppendInstruction(CPUx86.Instruction.MovInstruction, ebp, new MemoryOperand(u4, GeneralPurposeRegister.EAX, new IntPtr(24)));
-			context.AppendInstruction(CPUx86.Instruction.MovInstruction, ebx, new MemoryOperand(u4, GeneralPurposeRegister.EAX, new IntPtr(4)));
-			context.AppendInstruction(CPUx86.Instruction.MovInstruction, esi, new MemoryOperand(u4, GeneralPurposeRegister.EAX, new IntPtr(16)));
-			context.AppendInstruction(CPUx86.Instruction.MovInstruction, edi, new MemoryOperand(u4, GeneralPurposeRegister.EAX, new IntPtr(20)));
+			context.AppendInstruction(CPUx86.Instruction.MovInstruction, ebp, new MemoryOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.EAX, new IntPtr(24)));
+			context.AppendInstruction(CPUx86.Instruction.MovInstruction, ebx, new MemoryOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.EAX, new IntPtr(4)));
+			context.AppendInstruction(CPUx86.Instruction.MovInstruction, esi, new MemoryOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.EAX, new IntPtr(16)));
+			context.AppendInstruction(CPUx86.Instruction.MovInstruction, edi, new MemoryOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.EAX, new IntPtr(20)));
 
 			// Align ESP
 			context.AppendInstruction(CPUx86.Instruction.MovInstruction, edx, esp);
-			context.AppendInstruction(CPUx86.Instruction.AndInstruction, esp, new ConstantOperand(u4, 0xFFFFFFF0u));
-			context.AppendInstruction(CPUx86.Instruction.SubInstruction, esp, new ConstantOperand(u4, 0x8u));
+			context.AppendInstruction(CPUx86.Instruction.AndInstruction, esp, new ConstantOperand(BuiltInSigType.UInt32, 0xFFFFFFF0u));
+			context.AppendInstruction(CPUx86.Instruction.SubInstruction, esp, new ConstantOperand(BuiltInSigType.UInt32, 0x8u));
 
 			// Save original ESP
 			context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, edx);

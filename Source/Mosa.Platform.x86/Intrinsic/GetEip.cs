@@ -32,7 +32,7 @@ namespace Mosa.Platform.x86.Intrinsic
         public void ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
         {
             Operand result = context.Result;
-            SigType u4 = new SigType(CilElementType.U4);
+            SigType u4 = BuiltInSigType.UInt32;
             RegisterOperand eax = new RegisterOperand(u4, GeneralPurposeRegister.EAX);
 
             context.SetInstruction(CPUx86.Instruction.PopInstruction, eax);

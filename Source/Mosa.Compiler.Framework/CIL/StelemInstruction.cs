@@ -40,28 +40,28 @@ namespace Mosa.Compiler.Framework.CIL
 			switch (opcode)
 			{
 				case OpCode.Stelem_i1:
-					typeRef = new SigType(CilElementType.I1);
+					typeRef = BuiltInSigType.SByte;
 					break;
 				case OpCode.Stelem_i2:
-					typeRef = new SigType(CilElementType.I2);
+					typeRef = BuiltInSigType.Int16;
 					break;
 				case OpCode.Stelem_i4:
-					typeRef = new SigType(CilElementType.I4);
+					typeRef = BuiltInSigType.Int32;
 					break;
 				case OpCode.Stelem_i8:
-					typeRef = new SigType(CilElementType.I8);
+					typeRef = BuiltInSigType.Int64;
 					break;
 				case OpCode.Stelem_i:
-					typeRef = new SigType(CilElementType.I);
+					typeRef = BuiltInSigType.IntPtr;
 					break;
 				case OpCode.Stelem_r4:
-					typeRef = new SigType(CilElementType.R4);
+					typeRef = BuiltInSigType.Single;
 					break;
 				case OpCode.Stelem_r8:
-					typeRef = new SigType(CilElementType.R8);
+					typeRef = BuiltInSigType.Double;
 					break;
 				case OpCode.Stelem_ref: // FIXME: Really object?
-					typeRef = new SigType(CilElementType.Object);
+					typeRef = BuiltInSigType.Object;
 					break;
 				case OpCode.Stelem:
 					typeRef = null;

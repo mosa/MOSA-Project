@@ -40,6 +40,8 @@ namespace Mosa.Compiler.Metadata.Signatures
 
 		public static readonly BuiltInSigType TypedByRef = new BuiltInSigType(@"System.TypedByRef", CilElementType.TypedByRef);
 
+		public static readonly BuiltInSigType Ptr = new BuiltInSigType(@"System.Ptr", CilElementType.Ptr);
+
 		private readonly string typeName;
 
 		public BuiltInSigType(string typeName, CilElementType type) :
@@ -48,12 +50,7 @@ namespace Mosa.Compiler.Metadata.Signatures
 			this.typeName = typeName;
 		}
 
-		public string TypeName
-		{
-			get
-			{
-				return this.typeName;
-			}
-		}
+		public string TypeName { get { return this.typeName; } }
+
 	}
 }

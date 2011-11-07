@@ -10,6 +10,7 @@
 
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Operands;
+using Mosa.Compiler.Metadata;
 
 namespace Mosa.Platform.x86.CPUx86
 {
@@ -45,7 +46,7 @@ namespace Mosa.Platform.x86.CPUx86
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-			if (source.Type.Type == Mosa.Compiler.Metadata.CilElementType.R4)
+			if (source.Type.Type == CilElementType.R4)
 				return F;
 
 			return I;

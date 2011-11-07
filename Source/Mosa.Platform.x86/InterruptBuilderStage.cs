@@ -84,8 +84,8 @@ namespace Mosa.Platform.x86
 
 			SymbolOperand interruptMethod = SymbolOperand.FromMethod(InterruptMethod);
 
-			SigType I1 = new SigType(CilElementType.I1);
-			SigType I4 = new SigType(CilElementType.I4);
+			SigType I1 = BuiltInSigType.SByte;
+			SigType I4 = BuiltInSigType.Int32;
 
 			RegisterOperand esp = new RegisterOperand(I4, GeneralPurposeRegister.ESP);
 

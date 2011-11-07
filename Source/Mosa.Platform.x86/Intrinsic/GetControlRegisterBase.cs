@@ -46,9 +46,9 @@ namespace Mosa.Platform.x86.Intrinsic
 		{
 			Operand result = context.Result;
 
-			RegisterOperand imm = new RegisterOperand(new SigType(CilElementType.U4), GeneralPurposeRegister.EAX);
+			RegisterOperand imm = new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.EAX);
 
-			context.SetInstruction(IR.Instruction.MoveInstruction, imm, new RegisterOperand(new SigType(CilElementType.U4), _control));
+			context.SetInstruction(IR.Instruction.MoveInstruction, imm, new RegisterOperand(BuiltInSigType.UInt32, _control));
 			context.AppendInstruction(IR.Instruction.MoveInstruction, result, imm);
 		}
 

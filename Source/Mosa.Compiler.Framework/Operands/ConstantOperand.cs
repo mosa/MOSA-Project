@@ -70,7 +70,7 @@ namespace Mosa.Compiler.Framework.Operands
 		/// <returns>A new ConstantOperand representing the value <paramref name="value"/>.</returns>
 		public static ConstantOperand FromValue(int value)
 		{
-			return new ConstantOperand(new SigType(CilElementType.I4), value);
+			return new ConstantOperand(BuiltInSigType.Int32, value);
 		}
 
 		/// <summary>
@@ -80,7 +80,7 @@ namespace Mosa.Compiler.Framework.Operands
 		public static ConstantOperand GetNull()
 		{
 			if (_sObject == null)
-				_sObject = new SigType(CilElementType.Object);
+				_sObject = BuiltInSigType.Object;
 
 			return new ConstantOperand(_sObject, null);
 		}

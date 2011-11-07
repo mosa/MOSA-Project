@@ -109,7 +109,7 @@ namespace Mosa.Platform.x86
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.EpilogueInstruction(Context context)
 		{
-			SigType I = new SigType(CilElementType.I);
+			SigType I = BuiltInSigType.IntPtr;
 			RegisterOperand ebx = new RegisterOperand(I, GeneralPurposeRegister.EBX);
 			RegisterOperand edx = new RegisterOperand(I, GeneralPurposeRegister.EDX);
 			RegisterOperand ebp = new RegisterOperand(I, GeneralPurposeRegister.EBP);
@@ -196,13 +196,13 @@ namespace Mosa.Platform.x86
 			// Compare using the smallest precision
 			if (left.Type.Type == CilElementType.R4 && right.Type.Type == CilElementType.R8)
 			{
-				RegisterOperand rop = new RegisterOperand(new SigType(CilElementType.R4), SSE2Register.XMM4);
+				RegisterOperand rop = new RegisterOperand(BuiltInSigType.Single, SSE2Register.XMM4);
 				context.AppendInstruction(CPUx86.Instruction.Cvtsd2ssInstruction, rop, right);
 				right = rop;
 			}
 			if (left.Type.Type == CilElementType.R8 && right.Type.Type == CilElementType.R4)
 			{
-				RegisterOperand rop = new RegisterOperand(new SigType(CilElementType.R4), SSE2Register.XMM3);
+				RegisterOperand rop = new RegisterOperand(BuiltInSigType.Single, SSE2Register.XMM3);
 				context.AppendInstruction(CPUx86.Instruction.Cvtsd2ssInstruction, rop, left);
 				left = rop;
 			}
@@ -267,7 +267,7 @@ namespace Mosa.Platform.x86
 				context.AppendInstruction(CPUx86.Instruction.OrInstruction, ebx, ecx);
 				context.AppendInstruction(CPUx86.Instruction.OrInstruction, ebx, edx);
 				context.AppendInstruction(CPUx86.Instruction.AndInstruction, eax, ebx);
-				context.AppendInstruction(CPUx86.Instruction.AndInstruction, eax, new ConstantOperand(new SigType(CilElementType.I4), (int)1));
+				context.AppendInstruction(CPUx86.Instruction.AndInstruction, eax, new ConstantOperand(BuiltInSigType.Int32, (int)1));
 			}
 			else if (code == IR.ConditionCode.NotEqual)
 			{
@@ -281,7 +281,7 @@ namespace Mosa.Platform.x86
 				context.AppendInstruction(CPUx86.Instruction.OrInstruction, ebx, edx);
 				context.AppendInstruction(CPUx86.Instruction.NotInstruction, ebx, ebx);
 				context.AppendInstruction(CPUx86.Instruction.OrInstruction, eax, ebx);
-				context.AppendInstruction(CPUx86.Instruction.AndInstruction, eax, new ConstantOperand(new SigType(CilElementType.I4), (int)1));
+				context.AppendInstruction(CPUx86.Instruction.AndInstruction, eax, new ConstantOperand(BuiltInSigType.Int32, (int)1));
 			}
 			else if (code == IR.ConditionCode.GreaterThan)
 			{
@@ -441,9 +441,9 @@ namespace Mosa.Platform.x86
 
 			context.SetInstruction(CPUx86.Instruction.MovInstruction, context.Result, context.Operand1);
 			if (dest.Type.Type == CilElementType.U1)
-				context.AppendInstruction(CPUx86.Instruction.XorInstruction, dest, new ConstantOperand(new SigType(CilElementType.U4), (uint)0xFF));
+				context.AppendInstruction(CPUx86.Instruction.XorInstruction, dest, new ConstantOperand(BuiltInSigType.UInt32, (uint)0xFF));
 			else if (dest.Type.Type == CilElementType.U2)
-				context.AppendInstruction(CPUx86.Instruction.XorInstruction, dest, new ConstantOperand(new SigType(CilElementType.U4), (uint)0xFFFF));
+				context.AppendInstruction(CPUx86.Instruction.XorInstruction, dest, new ConstantOperand(BuiltInSigType.UInt32, (uint)0xFFFF));
 			else
 				context.AppendInstruction(CPUx86.Instruction.NotInstruction, dest);
 
@@ -482,7 +482,7 @@ namespace Mosa.Platform.x86
 			{
 				if (context.Result is MemoryOperand && context.Operand1 is MemoryOperand)
 				{
-					RegisterOperand load = new RegisterOperand(new SigType(CilElementType.I), GeneralPurposeRegister.EDX);
+					RegisterOperand load = new RegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.EDX);
 					RegisterOperand store = new RegisterOperand(operand.Type, GeneralPurposeRegister.EDX);
 
 					if (!Is32Bit(operand) && IsSigned(operand))
@@ -514,7 +514,7 @@ namespace Mosa.Platform.x86
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.PrologueInstruction(Context context)
 		{
-			SigType I = new SigType(CilElementType.I4);
+			SigType I = BuiltInSigType.Int32;
 			RegisterOperand eax = new RegisterOperand(I, GeneralPurposeRegister.EAX);
 			RegisterOperand ebx = new RegisterOperand(I, GeneralPurposeRegister.EBX);
 			RegisterOperand ecx = new RegisterOperand(I, GeneralPurposeRegister.ECX);
@@ -733,14 +733,14 @@ namespace Mosa.Platform.x86
 			Context[] newBlocks = CreateEmptyBlockContexts(context.Label, 3);
 			Context nextBlock = SplitContext(context, false);
 
-			RegisterOperand xmm5 = new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM5);
-			RegisterOperand xmm6 = new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM6);
+			RegisterOperand xmm5 = new RegisterOperand(BuiltInSigType.Double, SSE2Register.XMM5);
+			RegisterOperand xmm6 = new RegisterOperand(BuiltInSigType.Double, SSE2Register.XMM6);
 			//UNUSED:
-			//RegisterOperand eax = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EAX);
-			RegisterOperand edx = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EDX);
+			//RegisterOperand eax = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.EAX);
+			RegisterOperand edx = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.EDX);
 
 			//UNUSED:
-			//RegisterOperand uedx = new RegisterOperand(new SigType(CilElementType.U4), GeneralPurposeRegister.EDX);
+			//RegisterOperand uedx = new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.EDX);
 
 			//UNUSED:
 			//Context before = context.InsertBefore();
@@ -754,7 +754,7 @@ namespace Mosa.Platform.x86
 			newBlocks[0].AppendInstruction(CPUx86.Instruction.SseDivInstruction, destination, source);
 			newBlocks[0].AppendInstruction(CPUx86.Instruction.Cvttsd2siInstruction, edx, destination);
 
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.CmpInstruction, edx, new ConstantOperand(new SigType(CilElementType.I4), 0));
+			newBlocks[0].AppendInstruction(CPUx86.Instruction.CmpInstruction, edx, new ConstantOperand(BuiltInSigType.Int32, 0));
 			newBlocks[0].AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.Equal, newBlocks[2].BasicBlock);
 			newBlocks[0].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[1].BasicBlock);
 			LinkBlocks(newBlocks[0], newBlocks[1], newBlocks[2]);
@@ -779,8 +779,8 @@ namespace Mosa.Platform.x86
 		{
 			Operand result = context.Result;
 			Operand operand = context.Operand1;
-			RegisterOperand eax = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EAX);
-			RegisterOperand ecx = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.ECX);
+			RegisterOperand eax = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.EAX);
+			RegisterOperand ecx = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.ECX);
 			RegisterOperand eaxSource = new RegisterOperand(result.Type, GeneralPurposeRegister.EAX);
 			RegisterOperand ecxSource = new RegisterOperand(operand.Type, GeneralPurposeRegister.ECX);
 
@@ -789,7 +789,7 @@ namespace Mosa.Platform.x86
 			context.AppendInstruction(CPUx86.Instruction.MovInstruction, ecxSource, operand);
 			context.AppendInstruction(IR.Instruction.SignExtendedMoveInstruction, ecx, ecxSource);
 			context.AppendInstruction(CPUx86.Instruction.DivInstruction, eax, ecx);
-			context.AppendInstruction(CPUx86.Instruction.MovInstruction, result, new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EDX));
+			context.AppendInstruction(CPUx86.Instruction.MovInstruction, result, new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.EDX));
 		}
 
 		/// <summary>
@@ -800,8 +800,8 @@ namespace Mosa.Platform.x86
 		{
 			Operand result = context.Result;
 			Operand operand = context.Operand1;
-			RegisterOperand eax = new RegisterOperand(new SigType(CilElementType.U4), GeneralPurposeRegister.EAX);
-			RegisterOperand ecx = new RegisterOperand(new SigType(CilElementType.U4), GeneralPurposeRegister.ECX);
+			RegisterOperand eax = new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.EAX);
+			RegisterOperand ecx = new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.ECX);
 			RegisterOperand eaxSource = new RegisterOperand(result.Type, GeneralPurposeRegister.EAX);
 			RegisterOperand ecxSource = new RegisterOperand(operand.Type, GeneralPurposeRegister.ECX);
 
@@ -810,7 +810,7 @@ namespace Mosa.Platform.x86
 			context.AppendInstruction(CPUx86.Instruction.MovInstruction, ecxSource, operand);
 			context.AppendInstruction(IR.Instruction.ZeroExtendedMoveInstruction, ecx, ecxSource);
 			context.AppendInstruction(CPUx86.Instruction.UDivInstruction, eax, ecx);
-			context.AppendInstruction(CPUx86.Instruction.MovInstruction, result, new RegisterOperand(new SigType(CilElementType.U4), GeneralPurposeRegister.EDX));
+			context.AppendInstruction(CPUx86.Instruction.MovInstruction, result, new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.EDX));
 		}
 
 		/// <summary>
@@ -826,7 +826,7 @@ namespace Mosa.Platform.x86
 
 			for (int i = 0; i < branch.Targets.Length - 1; ++i)
 			{
-				context.AppendInstruction(CPUx86.Instruction.CmpInstruction, operand, new ConstantOperand(new SigType(CilElementType.I), i));
+				context.AppendInstruction(CPUx86.Instruction.CmpInstruction, operand, new ConstantOperand(BuiltInSigType.IntPtr, i));
 				context.AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.Equal);
 				context.SetBranch(branch.Targets[i]);
 			}
@@ -1020,7 +1020,7 @@ namespace Mosa.Platform.x86
 		{
 			int pointOfThrow = 4;
 			int exceptionObject = 12;
-			SigType u4 = new SigType(CilElementType.U4);
+			SigType u4 = BuiltInSigType.UInt32;
 
 			RuntimeType runtimeType = typeSystem.GetType(@"Mosa.Platforms.x86.ExceptionEngine, Mosa.Platforms.x86");
 			RuntimeMethod runtimeMethod = runtimeType.FindMethod(@"ThrowException");
@@ -1098,8 +1098,8 @@ namespace Mosa.Platform.x86
 		/// <param name="context">The context.</param>
 		private static void ExtendToR8(Context context)
 		{
-			RegisterOperand xmm5 = new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM5);
-			RegisterOperand xmm6 = new RegisterOperand(new SigType(CilElementType.R8), SSE2Register.XMM6);
+			RegisterOperand xmm5 = new RegisterOperand(BuiltInSigType.Double, SSE2Register.XMM5);
+			RegisterOperand xmm6 = new RegisterOperand(BuiltInSigType.Double, SSE2Register.XMM6);
 			Context before = context.InsertBefore();
 
 			if (context.Result.Type.Type == CilElementType.R4)

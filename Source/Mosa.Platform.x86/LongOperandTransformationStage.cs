@@ -45,7 +45,7 @@ namespace Mosa.Platform.x86
 			if (operand.Type.Type != CilElementType.I8 && operand.Type.Type != CilElementType.U8)
 			{
 				operandLow = operand;
-				operandHigh = new ConstantOperand(new SigType(CilElementType.I4), (int)0);
+				operandHigh = new ConstantOperand(BuiltInSigType.Int32, (int)0);
 				return;
 			}
 
@@ -59,8 +59,8 @@ namespace Mosa.Platform.x86
 
 		private static void SplitFromConstantOperand(Operand operand, out Operand operandLow, out Operand operandHigh)
 		{
-			SigType HighType = (operand.Type.Type == CilElementType.I8) ? new SigType(CilElementType.I4) : new SigType(CilElementType.U4);
-			SigType U4 = new SigType(CilElementType.U4);
+			SigType HighType = (operand.Type.Type == CilElementType.I8) ? BuiltInSigType.Int32 : BuiltInSigType.UInt32;
+			SigType U4 = BuiltInSigType.UInt32;
 
 			ConstantOperand constantOperand = operand as ConstantOperand;
 
@@ -80,8 +80,8 @@ namespace Mosa.Platform.x86
 
 		private static void SplitFromNonConstantOperand(Operand operand, out Operand operandLow, out Operand operandHigh)
 		{
-			SigType HighType = (operand.Type.Type == CilElementType.I8) ? new SigType(CilElementType.I4) : new SigType(CilElementType.U4);
-			SigType U4 = new SigType(CilElementType.U4);
+			SigType HighType = (operand.Type.Type == CilElementType.I8) ? BuiltInSigType.Int32 : BuiltInSigType.UInt32;
+			SigType U4 = BuiltInSigType.UInt32;
 
 			// No, could be a member or a plain memory operand
 			MemberOperand memberOperand = operand as MemberOperand;
@@ -121,8 +121,8 @@ namespace Mosa.Platform.x86
 			// This only works for memory operands (can't store I8/U8 in a register.)
 			// This fails for constant operands right now, which need to be extracted into memory
 			// with a literal/literal operand first - TODO
-			RegisterOperand eaxH = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EAX);
-			RegisterOperand eaxL = new RegisterOperand(new SigType(CilElementType.U4), GeneralPurposeRegister.EAX);
+			RegisterOperand eaxH = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.EAX);
+			RegisterOperand eaxL = new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.EAX);
 
 			Operand op1H, op1L, op2H, op2L, resH, resL;
 			SplitLongOperand(context.Operand1, out op1L, out op1H);
@@ -157,8 +157,8 @@ namespace Mosa.Platform.x86
 			// This only works for memory operands (can't store I8/U8 in a register.)
 			// This fails for constant operands right now, which need to be extracted into memory
 			// with a literal/literal operand first - TODO
-			RegisterOperand eaxH = new RegisterOperand(new SigType(CilElementType.I4), GeneralPurposeRegister.EAX);
-			RegisterOperand eaxL = new RegisterOperand(new SigType(CilElementType.U4), GeneralPurposeRegister.EAX);
+			RegisterOperand eaxH = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.EAX);
+			RegisterOperand eaxL = new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.EAX);
 
 			Operand op1L, op1H, op2L, op2H, resL, resH;
 			SplitLongOperand(context.Operand1, out op1L, out op1H);
@@ -184,7 +184,7 @@ namespace Mosa.Platform.x86
 			Operand op2 = context.Operand2;
 			Debug.Assert(op0 != null && op1 != null && op2 != null, @"Operands to 64 bit multiplication are not MemoryOperands.");
 
-			SigType I4 = new SigType(CilElementType.I4);
+			SigType I4 = BuiltInSigType.Int32;
 			Operand op0H, op1H, op2H, op0L, op1L, op2L;
 			SplitLongOperand(context.Result, out op0L, out op0H);
 			SplitLongOperand(context.Operand1, out op1L, out op1H);
@@ -239,9 +239,9 @@ namespace Mosa.Platform.x86
 		/// <param name="context">The context.</param>
 		private void ExpandDiv(Context context)
 		{
-			SigType I4 = new SigType(CilElementType.I4);
-			SigType U4 = new SigType(CilElementType.U4);
-			SigType U1 = new SigType(CilElementType.U1);
+			SigType I4 = BuiltInSigType.Int32;
+			SigType U4 = BuiltInSigType.UInt32;
+			SigType U1 = BuiltInSigType.Byte;
 
 			Operand op0H, op1H, op2H, op0L, op1L, op2L;
 			//Operand op1 = EmitConstant(context.Operand1);
@@ -489,8 +489,8 @@ namespace Mosa.Platform.x86
 		/// <param name="context">The context.</param>
 		private void ExpandRem(Context context)
 		{
-			SigType I4 = new SigType(CilElementType.I4);
-			SigType U1 = new SigType(CilElementType.U1);
+			SigType I4 = BuiltInSigType.Int32;
+			SigType U1 = BuiltInSigType.Byte;
 
 			Operand op0H, op1H, op2H, op0L, op1L, op2L;
 			SplitLongOperand(context.Result, out op0L, out op0H);
@@ -731,8 +731,8 @@ namespace Mosa.Platform.x86
 		/// <param name="context">The context.</param>
 		private void ExpandUDiv(Context context)
 		{
-			SigType U4 = new SigType(CilElementType.U4);
-			SigType U1 = new SigType(CilElementType.U1);
+			SigType U4 = BuiltInSigType.UInt32;
+			SigType U1 = BuiltInSigType.Byte;
 
 			Operand op0H, op1H, op2H, op0L, op1L, op2L;
 			SplitLongOperand(context.Result, out op0L, out op0H);
@@ -838,8 +838,8 @@ namespace Mosa.Platform.x86
 		/// <param name="context">The context.</param>
 		private void ExpandURem(Context context)
 		{
-			SigType U4 = new SigType(CilElementType.U4);
-			SigType U1 = new SigType(CilElementType.U1);
+			SigType U4 = BuiltInSigType.UInt32;
+			SigType U1 = BuiltInSigType.Byte;
 
 			Operand op0H, op1H, op2H, op0L, op1L, op2L;
 			SplitLongOperand(context.Result, out op0L, out op0H);
@@ -961,8 +961,8 @@ namespace Mosa.Platform.x86
 		/// <param name="context">The context.</param>
 		private void ExpandArithmeticShiftRight(Context context)
 		{
-			SigType I4 = new SigType(CilElementType.I4);
-			SigType U1 = new SigType(CilElementType.U1);
+			SigType I4 = BuiltInSigType.Int32;
+			SigType U1 = BuiltInSigType.Byte;
 			Operand count = context.Operand2;
 
 			Operand op0H, op1H, op0L, op1L;
@@ -973,7 +973,7 @@ namespace Mosa.Platform.x86
 			RegisterOperand ecx = new RegisterOperand(I4, GeneralPurposeRegister.ECX);
 			
 			//UNUSED:
-			//RegisterOperand cl = new RegisterOperand(new SigType(CilElementType.U1), GeneralPurposeRegister.ECX);
+			//RegisterOperand cl = new RegisterOperand(BuiltInSigType.Byte, GeneralPurposeRegister.ECX);
 
 			Context[] newBlocks = CreateEmptyBlockContexts(context.Label, 6);
 			Context nextBlock = SplitContext(context, true);
@@ -1032,7 +1032,7 @@ namespace Mosa.Platform.x86
 		/// <param name="context">The context.</param>
 		private void ExpandShiftLeft(Context context)
 		{
-			SigType I4 = new SigType(CilElementType.I4);
+			SigType I4 = BuiltInSigType.Int32;
 			Operand count = context.Operand2;  //  FIXME PG
 
 			Operand op0H, op1H, op0L, op1L;
@@ -1042,7 +1042,7 @@ namespace Mosa.Platform.x86
 			RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
 			RegisterOperand ecx = new RegisterOperand(I4, GeneralPurposeRegister.ECX);
 
-			RegisterOperand cl = new RegisterOperand(new SigType(CilElementType.U1), GeneralPurposeRegister.ECX);
+			RegisterOperand cl = new RegisterOperand(BuiltInSigType.Byte, GeneralPurposeRegister.ECX);
 
 			Context nextBlock = SplitContext(context, true);
 			Context[] newBlocks = CreateEmptyBlockContexts(context.Label, 6);
@@ -1101,9 +1101,9 @@ namespace Mosa.Platform.x86
 		/// <param name="context">The context.</param>
 		private void ExpandShiftRight(Context context)
 		{
-			SigType I4 = new SigType(CilElementType.I4);
-			SigType I1 = new SigType(CilElementType.I1);
-			SigType U1 = new SigType(CilElementType.U1);
+			SigType I4 = BuiltInSigType.Int32;
+			SigType I1 = BuiltInSigType.SByte;
+			SigType U1 = BuiltInSigType.Byte;
 			Operand count = context.Operand2;
 
 			Operand op0H, op1H, op0L, op1L;
@@ -1114,7 +1114,7 @@ namespace Mosa.Platform.x86
 			RegisterOperand ecx = new RegisterOperand(U1, GeneralPurposeRegister.ECX);
 			
 			//UNUSED:
-			//RegisterOperand cl = new RegisterOperand(new SigType(CilElementType.U1), GeneralPurposeRegister.ECX);
+			//RegisterOperand cl = new RegisterOperand(BuiltInSigType.Byte, GeneralPurposeRegister.ECX);
 
 			Context[] newBlocks = CreateEmptyBlockContexts(context.Label, 6);
 			Context nextBlock = SplitContext(context, true);
@@ -1288,7 +1288,7 @@ namespace Mosa.Platform.x86
 			Operand op1 = context.Operand1;
 			Debug.Assert(op0 != null, @"I8 not in a memory operand!");
 
-			SigType U4 = new SigType(CilElementType.U4);
+			SigType U4 = BuiltInSigType.UInt32;
 			Operand op0L, op0H, op1L, op1H;
 			SplitLongOperand(op0, out op0L, out op0H);
 			SplitLongOperand(op1, out op1L, out op1H);
@@ -1350,7 +1350,7 @@ namespace Mosa.Platform.x86
 			Operand op0 = context.Result;
 			Operand op1 = context.Operand1;
 			Debug.Assert(op0 != null, @"I8 not in a memory operand!");
-			SigType I4 = new SigType(CilElementType.I4);
+			SigType I4 = BuiltInSigType.Int32;
 			Operand op0L, op0H;
 			SplitLongOperand(op0, out op0L, out op0H);
 			RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
@@ -1420,7 +1420,7 @@ namespace Mosa.Platform.x86
 			Operand offsetOperand = context.Operand2;
 			Debug.Assert(op0 != null && op1 != null, @"Operands to I8 LoadInstruction are not MemoryOperand.");
 
-			SigType I4 = new SigType(CilElementType.I4);
+			SigType I4 = BuiltInSigType.Int32;
 			Operand op0L, op0H;
 			SplitLongOperand(op0, out op0L, out op0H);
 
@@ -1446,8 +1446,8 @@ namespace Mosa.Platform.x86
 			MemoryOperand op2 = context.Operand2 as MemoryOperand;
 			Debug.Assert(op0 != null && op2 != null, @"Operands to I8 LoadInstruction are not MemoryOperand.");
 
-			SigType I4 = new SigType(CilElementType.I4);
-			SigType U4 = new SigType(CilElementType.U4);
+			SigType I4 = BuiltInSigType.Int32;
+			SigType U4 = BuiltInSigType.UInt32;
 			Operand op1L, op1H;
 			SplitLongOperand(op2, out op1L, out op1H);
 			RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
@@ -1493,7 +1493,7 @@ namespace Mosa.Platform.x86
 			int target = context.Branch.Targets[0];
 
 			Operand op1H, op1L, op2H, op2L;
-			Operand zero = new ConstantOperand(new SigType(CilElementType.I4), (int)0);
+			Operand zero = new ConstantOperand(BuiltInSigType.Int32, (int)0);
 			SplitLongOperand(context.Operand1, out op1L, out op1H);
 			SplitLongOperand(zero, out op2L, out op2H);
 			IR.ConditionCode code;
@@ -1575,7 +1575,7 @@ namespace Mosa.Platform.x86
 
 			BasicBlock target = FindBlock(context.Branch.Targets[0]);
 
-			//SigType I4 = new SigType(CilElementType.I4);
+			//SigType I4 = BuiltInSigType.Int32;
 			Operand op1L, op1H, op2L, op2H;
 			SplitLongOperand(context.Operand1, out op1L, out op1H);
 			SplitLongOperand(context.Operand2, out op2L, out op2H);
@@ -1637,9 +1637,9 @@ namespace Mosa.Platform.x86
 			Debug.Assert(op1 != null && op2 != null, @"IntegerCompareInstruction operand not memory!");
 			Debug.Assert(op0 is MemoryOperand || op0 is RegisterOperand, @"IntegerCompareInstruction result not memory and not register!");
 
-			SigType I4 = new SigType(CilElementType.I4);
+			SigType I4 = BuiltInSigType.Int32;
 			//UNUSED:
-			//SigType U4 = new SigType(CilElementType.U4);
+			//SigType U4 = BuiltInSigType.UInt32;
 
 			Operand op1L, op1H, op2L, op2H;
 			SplitLongOperand(op1, out op1L, out op1H);

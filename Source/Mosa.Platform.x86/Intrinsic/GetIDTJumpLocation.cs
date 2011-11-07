@@ -50,9 +50,7 @@ namespace Mosa.Platform.x86.Intrinsic
 			if ((irq > 256) || (irq < 0))
 				throw new InvalidOperationException();
 
-			SigType PTR = new SigType(CilElementType.Ptr);
-
-			context.SetInstruction(IR.Instruction.MoveInstruction, context.Result, new SymbolOperand(PTR, @"Mosa.Tools.Compiler.LinkerGenerated.<$>InterruptISR" + irq.ToString() + "()"));
+			context.SetInstruction(IR.Instruction.MoveInstruction, context.Result, new SymbolOperand(BuiltInSigType.Ptr, @"Mosa.Tools.Compiler.LinkerGenerated.<$>InterruptISR" + irq.ToString() + "()"));
 		}
 
 		#endregion // Methods

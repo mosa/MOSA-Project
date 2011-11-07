@@ -47,10 +47,10 @@ namespace Mosa.Platform.x86.Intrinsic
 		{
 			Operand operand1 = context.Operand1;
 
-			RegisterOperand imm = new RegisterOperand(new SigType(CilElementType.U4), GeneralPurposeRegister.EAX);
+			RegisterOperand imm = new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.EAX);
 
 			context.SetInstruction(IR.Instruction.MoveInstruction, imm, operand1);
-			context.AppendInstruction(IR.Instruction.MoveInstruction, new RegisterOperand(new SigType(CilElementType.U4), _control), imm);
+			context.AppendInstruction(IR.Instruction.MoveInstruction, new RegisterOperand(BuiltInSigType.UInt32, _control), imm);
 		}
 
 		#endregion // Methods

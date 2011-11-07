@@ -89,13 +89,7 @@ namespace Mosa.Compiler.Framework.Operands
 		/// <summary>
 		/// Returns the stack type of the operand.
 		/// </summary>
-		public StackTypeCode StackType
-		{
-			get
-			{
-				return StackTypeFromSigType(_type);
-			}
-		}
+		public StackTypeCode StackType { get { return StackTypeFromSigType(_type); } }
 
 		/// <summary>
 		/// Retrieves the stack type From a sig type.
@@ -153,11 +147,11 @@ namespace Mosa.Compiler.Framework.Operands
 			SigType result = null;
 			switch (typeCode)
 			{
-				case StackTypeCode.Int32: result = new SigType(CilElementType.I4); break;
-				case StackTypeCode.Int64: result = new SigType(CilElementType.I8); break;
-				case StackTypeCode.F: result = new SigType(CilElementType.R8); break;
-				case StackTypeCode.O: result = new SigType(CilElementType.Object); break;
-				case StackTypeCode.N: result = new SigType(CilElementType.I); break;
+				case StackTypeCode.Int32: result = BuiltInSigType.Int32; break;
+				case StackTypeCode.Int64: result = BuiltInSigType.Int64; break;
+				case StackTypeCode.F: result = BuiltInSigType.Double; break;
+				case StackTypeCode.O: result = BuiltInSigType.Object; break;
+				case StackTypeCode.N: result = BuiltInSigType.IntPtr; break;
 				default:
 					throw new NotSupportedException(@"Can't convert stack type code to SigType.");
 			}

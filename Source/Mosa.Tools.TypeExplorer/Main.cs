@@ -59,6 +59,11 @@ namespace Mosa.Tools.TypeExplorer
 		{
 			if (openFileDialog.ShowDialog() == System.Windows.Forms.DialogResult.OK)
 			{
+				if (Path.GetFileName(openFileDialog.FileName) == "Mosa.Test.Collection.dll")
+				{
+					includeTestKorlibToolStripMenuItem.Checked = true;
+				}
+
 				LoadAssembly(openFileDialog.FileName);
 			}
 		}

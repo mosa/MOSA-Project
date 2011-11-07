@@ -1050,7 +1050,7 @@ namespace Mosa.Compiler.Framework.IR
 				Operand comparisonResult = this.methodCompiler.CreateTemporary(BuiltInSigType.Int32);
 				context.SetInstruction(Instruction.FloatingPointCompareInstruction, comparisonResult, first, second);
 				context.ConditionCode = cc;
-				context.SetInstruction(Instruction.IntegerCompareBranchInstruction, null, comparisonResult, new ConstantOperand(new SigType(CilElementType.I), 1));
+				context.SetInstruction(Instruction.IntegerCompareBranchInstruction, null, comparisonResult, new ConstantOperand(BuiltInSigType.IntPtr, 1));
 				context.ConditionCode = ConditionCode.Equal;
 				context.SetBranch(branch.Targets[0]);
 			}
@@ -1226,6 +1226,7 @@ namespace Mosa.Compiler.Framework.IR
 			}
 			else if (type.FullName == "System.Int16")
 			{
+				//ReplaceWithVmCall(context, VmCall.UnboxInt32); 
 				ReplaceWithVmCall(context, VmCall.UnboxInt16);
 			}
 			else if (type.FullName == "System.UInt16")
@@ -1578,12 +1579,12 @@ namespace Mosa.Compiler.Framework.IR
 			{
 				case CilElementType.I1: goto case CilElementType.I2;
 				case CilElementType.I2:
-					result = new SigType(CilElementType.I4);
+					result = BuiltInSigType.Int32;
 					break;
 
 				case CilElementType.U1: goto case CilElementType.U2;
 				case CilElementType.U2:
-					result = new SigType(CilElementType.U4);
+					result = BuiltInSigType.UInt32;
 					break;
 
 				case CilElementType.Char: goto case CilElementType.U2;
@@ -1933,7 +1934,7 @@ namespace Mosa.Compiler.Framework.IR
 		private void ProcessMixedTypeConversion(Context context, IInstruction instruction, uint mask, Operand destinationOperand, Operand sourceOperand)
 		{
 			context.SetInstruction(instruction, destinationOperand, sourceOperand);
-			context.AppendInstruction(IR.Instruction.LogicalAndInstruction, destinationOperand, /*sourceOperand,*/ new ConstantOperand(new SigType(CilElementType.U4), mask));
+			context.AppendInstruction(IR.Instruction.LogicalAndInstruction, destinationOperand, /*sourceOperand,*/ new ConstantOperand(BuiltInSigType.UInt32, mask));
 		}
 
 		private void ProcessSingleTypeTruncation(Context context, IInstruction instruction, uint mask, Operand destinationOperand, Operand sourceOperand)
@@ -1941,17 +1942,17 @@ namespace Mosa.Compiler.Framework.IR
 			if (sourceOperand.Type.Type == CilElementType.I8 || sourceOperand.Type.Type == CilElementType.U8)
 			{
 				context.SetInstruction(IR.Instruction.MoveInstruction, destinationOperand, sourceOperand);
-				context.AppendInstruction(instruction, destinationOperand, sourceOperand, new ConstantOperand(new SigType(CilElementType.U4), mask));
+				context.AppendInstruction(instruction, destinationOperand, sourceOperand, new ConstantOperand(BuiltInSigType.UInt32, mask));
 			}
 			else
-				context.SetInstruction(instruction, destinationOperand, sourceOperand, new ConstantOperand(new SigType(CilElementType.U4), mask));
+				context.SetInstruction(instruction, destinationOperand, sourceOperand, new ConstantOperand(BuiltInSigType.UInt32, mask));
 		}
 
 		private void ExtendAndTruncateResult(Context context, IInstruction instruction, Operand destinationOperand)
 		{
 			if (instruction != null && destinationOperand is RegisterOperand)
 			{
-				RegisterOperand resultOperand = new RegisterOperand(new SigType(CilElementType.I4), ((RegisterOperand)destinationOperand).Register);
+				RegisterOperand resultOperand = new RegisterOperand(BuiltInSigType.Int32, ((RegisterOperand)destinationOperand).Register);
 				context.AppendInstruction(instruction, resultOperand, destinationOperand);
 			}
 		}

@@ -53,11 +53,11 @@ namespace Mosa.Compiler.Framework
 					switch (bits)
 					{
 						case 32:
-							_nativeType = new SigType(CilElementType.I4);
+							_nativeType = BuiltInSigType.Int32;
 							break;
 
 						case 64:
-							_nativeType = new SigType(CilElementType.I8);
+							_nativeType = BuiltInSigType.Int64;
 							break;
 
 						default:

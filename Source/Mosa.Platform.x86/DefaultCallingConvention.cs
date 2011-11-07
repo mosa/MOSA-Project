@@ -184,8 +184,8 @@ namespace Mosa.Platform.x86
 		/// <param name="ctx">The context.</param>
 		private void MoveReturnValueTo64Bit(Operand resultOperand, Context ctx)
 		{
-			SigType I4 = new SigType(CilElementType.I4);
-			SigType U4 = new SigType(CilElementType.U4);
+			SigType I4 = BuiltInSigType.Int32;
+			SigType U4 = BuiltInSigType.UInt32;
 			MemoryOperand memoryOperand = resultOperand as MemoryOperand;
 
 			if (memoryOperand == null) return;
@@ -235,7 +235,7 @@ namespace Mosa.Platform.x86
 
 					case StackTypeCode.Int64:
 						{
-							SigType I4 = new SigType(CilElementType.I4);
+							SigType I4 = BuiltInSigType.Int32;
 							MemoryOperand mop = op as MemoryOperand;
 							Debug.Assert(null != mop, @"I8/U8 arg is not in a memory operand.");
 							RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
@@ -261,7 +261,7 @@ namespace Mosa.Platform.x86
 			else if (op is ConstantOperand && op.StackType == StackTypeCode.Int64)
 			{
 				Operand opL, opH;
-				SigType I4 = new SigType(CilElementType.I4);
+				SigType I4 = BuiltInSigType.Int32;
 				RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
 				LongOperandTransformationStage.SplitLongOperand(op, out opL, out opH);
 
@@ -333,8 +333,8 @@ namespace Mosa.Platform.x86
 			}
 			else if (8 == size && (operand.Type.Type == CilElementType.I8 || operand.Type.Type == CilElementType.U8))
 			{
-				SigType HighType = (operand.Type.Type == CilElementType.I8) ? new SigType(CilElementType.I4) : new SigType(CilElementType.U4);
-				SigType U4 = new SigType(CilElementType.U4);
+				SigType HighType = (operand.Type.Type == CilElementType.I8) ? BuiltInSigType.Int32 : BuiltInSigType.UInt32;
+				SigType U4 = BuiltInSigType.UInt32;
 
 				Operand opL, opH;
 				LongOperandTransformationStage.SplitLongOperand(operand, out opL, out opH);

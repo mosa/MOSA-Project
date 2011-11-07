@@ -63,7 +63,7 @@ namespace Mosa.Compiler.Linker
 				typeSystem.AddInternalType(compilerGeneratedType);
 			}
 
-			MethodSignature signature = new MethodSignature(new SigType(CilElementType.Void), new SigType[0]);
+			MethodSignature signature = new MethodSignature(BuiltInSigType.Void, new SigType[0]);
 
 			// Create the method
 			// HACK: <$> prevents the method from being called from CIL

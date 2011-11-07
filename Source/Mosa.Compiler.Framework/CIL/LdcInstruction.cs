@@ -50,35 +50,35 @@ namespace Mosa.Compiler.Framework.CIL
 				case OpCode.Ldc_i4:
 					{
 						int i = decoder.DecodeInt();
-						constantValueOperand = new ConstantOperand(new SigType(CilElementType.I4), i);
+						constantValueOperand = new ConstantOperand(BuiltInSigType.Int32, i);
 					}
 					break;
 
 				case OpCode.Ldc_i4_s:
 					{
 						sbyte sb = decoder.DecodeSByte();
-						constantValueOperand = new ConstantOperand(new SigType(CilElementType.I4), sb);
+						constantValueOperand = new ConstantOperand(BuiltInSigType.Int32, sb);
 					}
 					break;
 
 				case OpCode.Ldc_i8:
 					{
 						long l = decoder.DecodeLong();
-						constantValueOperand = new ConstantOperand(new SigType(CilElementType.I8), l);
+						constantValueOperand = new ConstantOperand(BuiltInSigType.Int64, l);
 					}
 					break;
 
 				case OpCode.Ldc_r4:
 					{
 						float f = decoder.DecodeFloat();
-						constantValueOperand = new ConstantOperand(new SigType(CilElementType.R4), f);
+						constantValueOperand = new ConstantOperand(BuiltInSigType.Single, f);
 					}
 					break;
 
 				case OpCode.Ldc_r8:
 					{
 						double d = decoder.DecodeDouble();
-						constantValueOperand = new ConstantOperand(new SigType(CilElementType.R8), d);
+						constantValueOperand = new ConstantOperand(BuiltInSigType.Double, d);
 					}
 					break;
 

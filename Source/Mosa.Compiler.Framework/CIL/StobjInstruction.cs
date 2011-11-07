@@ -41,28 +41,28 @@ namespace Mosa.Compiler.Framework.CIL
 			switch (opcode)
 			{
 				case OpCode.Stind_i1:
-					valueType = new SigType(CilElementType.I1);
+					valueType = BuiltInSigType.SByte;
 					break;
 				case OpCode.Stind_i2:
-					valueType = new SigType(CilElementType.I2);
+					valueType = BuiltInSigType.Int16;
 					break;
 				case OpCode.Stind_i4:
-					valueType = new SigType(CilElementType.I4);
+					valueType = BuiltInSigType.Int32;
 					break;
 				case OpCode.Stind_i8:
-					valueType = new SigType(CilElementType.I8);
+					valueType = BuiltInSigType.Int64;
 					break;
 				case OpCode.Stind_r4:
-					valueType = new SigType(CilElementType.R4);
+					valueType = BuiltInSigType.Single;
 					break;
 				case OpCode.Stind_r8:
-					valueType = new SigType(CilElementType.R8);
+					valueType = BuiltInSigType.Double;
 					break;
 				case OpCode.Stind_i:
-					valueType = new SigType(CilElementType.I);
+					valueType = BuiltInSigType.IntPtr;
 					break;
 				case OpCode.Stind_ref: // FIXME: Really object?
-					valueType = new SigType(CilElementType.Object);
+					valueType = BuiltInSigType.Object;
 					break;
 				case OpCode.Stobj:  // FIXME
 					valueType = null;

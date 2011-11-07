@@ -159,14 +159,14 @@
   <data name="toolStripButton2.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
-        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAGfSURBVDhPjZJNSwJRFIaHoJW0ahv0A1q1qE3UvnLTumX9
-        CSHoB9SmQiGtCDPQAqEPiIKsqCCTkPCDMS0RTTE/upamzYzzdsdxroZpXjicy537Puee9wzH1RchsxVR
-        nOFh4QAfB1GcjhKiF7TvHXOV1x0KBiqEETimOajua2fF8b1/IRKve2CCbSo64FQxhZDQGJwuPxynXtiO
-        3Ng5ci+1AIVletlIY0URKcuuvsRMw66dARv7lxidmm+FkCAnEr5fxqraP156gQuaK8NAfKAOpTVspzi7
-        9dcg1sO7ZfYSSdJ7WAtKRVqdeYJFBlizntTEWjQAxYkrJtikgEhPw0SsM4AoVaFANNAvL+Ts0EI13GeC
-        kwISg0DOQCdgYWJZllEqC0jnSjXAyOQc/pzOlvOaiZo334KEfKGMWKrQGWB2uFoAUlXGR+kbyUwRT7F8
-        Z4Bp96wFUK6IyLx/IfpK4AtnOgOU/pqXYhz5rCCe/gAfzcETSHUPaDYuEn/HY+gNN95E94Bm4wLPWbh9
-        SZzfx7oDaPNul9uOUZuxcuG/UP6DH1pTN6DeHh6KAAAAAElFTkSuQmCC
+        YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAGgSURBVDhPjZJLSwJRFMeHoJW0ahv0AVq1qE3UvnLTumV9
+        CSHoA9SmQiF7EGXQA4Q0CIVeVJBFRGg29hKxFPMxaprjvP7dcZrbxNTkhcO53Ln/37nnf4ZhvhbHjfKi
+        OMJigQHCDERxOM5xdkH/bpll1uYTHEQIJ7BLclTbN84q/Vv/QiTWdkUFK0S0w2hiAinG+uA9iGAzcA2P
+        P4Q1f2jKBBSmyWUniRlVpK4N7SVuEhv6GbC4fYTeoXEzhIsyInfXrmBW6x/PrcAhyXw3kOz4gpIangCC
+        Z5EGZNV3Pk1fIkn2S9qCWpFUp55gkgLmVvcaYj2+AZWBYypYIoDHlm8TMU8BoiRDheigH14oua4J+aHN
+        BS8BvHQCeQeZwAIVK4qCak1AJl9tAHoGx/DrdJa9J1Rk3NQFCYVSDYl0yRrg3jwwASRZQblaRypbwX2i
+        YA1wrQdNgBovIst9IP5aRPghaw1Q+zMu1bjiO49kpgw2nsflbbp5gNG4xySHm9gbTq9fmgcYjbt9yiEU
+        TmH/ItEcQJ/3X/nPMeozVi/8F+p/8AlBVTeZ7ba6pAAAAABJRU5ErkJggg==
 </value>
   </data>
   <data name="toolStripButton3.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">

@@ -63,43 +63,43 @@ namespace Mosa.Compiler.Framework.CIL
 					break;
 
 				case OpCode.Conv_i1:
-					resultType = new SigType(CilElementType.I1);
+					resultType = BuiltInSigType.SByte;
 					break;
 
 				case OpCode.Conv_i2:
-					resultType = new SigType(CilElementType.I2);
+					resultType = BuiltInSigType.Int16;
 					break;
 
 				case OpCode.Conv_i4:
-					resultType = new SigType(CilElementType.I4);
+					resultType = BuiltInSigType.Int32;
 					break;
 
 				case OpCode.Conv_i8:
-					resultType = new SigType(CilElementType.I8);
+					resultType = BuiltInSigType.Int64;
 					break;
 
 				case OpCode.Conv_r4:
-					resultType = new SigType(CilElementType.R4);
+					resultType = BuiltInSigType.Single;
 					break;
 
 				case OpCode.Conv_r8:
-					resultType = new SigType(CilElementType.R8);
+					resultType = BuiltInSigType.Double;
 					break;
 
 				case OpCode.Conv_u1:
-					resultType = new SigType(CilElementType.U1);
+					resultType = BuiltInSigType.Byte;
 					break;
 
 				case OpCode.Conv_u2:
-					resultType = new SigType(CilElementType.U2);
+					resultType = BuiltInSigType.UInt16;
 					break;
 
 				case OpCode.Conv_u4:
-					resultType = new SigType(CilElementType.U4);
+					resultType = BuiltInSigType.UInt32;
 					break;
 
 				case OpCode.Conv_u8:
-					resultType = new SigType(CilElementType.U8);
+					resultType = BuiltInSigType.UInt64;
 					break;
 
 				case OpCode.Conv_ovf_i: goto case OpCode.Conv_i;

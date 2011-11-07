@@ -1,5 +1,15 @@
-﻿using Mosa.Compiler.Framework;
+﻿/*
+ * (c) 2008 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
+ */
+
+using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Operands;
+using Mosa.Compiler.Metadata;
 
 namespace Mosa.Platform.x86.CPUx86
 {
@@ -29,7 +39,7 @@ namespace Mosa.Platform.x86.CPUx86
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-			if (source.Type.Type == Mosa.Compiler.Metadata.CilElementType.R4)
+			if (source.Type.Type == CilElementType.R4)
 				return R4;
 
 			return R8;

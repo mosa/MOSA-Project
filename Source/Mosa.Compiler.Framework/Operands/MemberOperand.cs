@@ -51,7 +51,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="method">The method to reference.</param>
 		/// <exception cref="System.ArgumentNullException"><paramref name="method"/> is null.</exception>
 		public MemberOperand(RuntimeMethod method) :
-			base(new SigType(CilElementType.I), null, IntPtr.Zero)
+			base(BuiltInSigType.IntPtr, null, IntPtr.Zero)
 		{
 			if (method == null)
 				throw new ArgumentNullException(@"method");

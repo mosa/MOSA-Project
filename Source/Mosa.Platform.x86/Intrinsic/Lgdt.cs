@@ -11,6 +11,8 @@ using System.Collections.Generic;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Operands;
 using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.Metadata;
+using Mosa.Compiler.Metadata.Signatures;
 
 namespace Mosa.Platform.x86.Intrinsic
 {
@@ -29,25 +31,24 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// <param name="typeSystem">The type system.</param>
 		public void ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
 		{
-			MemoryOperand operand = new MemoryOperand(new Mosa.Compiler.Metadata.Signatures.SigType(Mosa.Compiler.Metadata.CilElementType.Ptr), GeneralPurposeRegister.EAX, new System.IntPtr(0));
-			context.SetInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(new Mosa.Compiler.Metadata.Signatures.SigType(Mosa.Compiler.Metadata.CilElementType.Ptr), GeneralPurposeRegister.EAX), context.Operand1);
+			MemoryOperand operand = new MemoryOperand(BuiltInSigType.Ptr, GeneralPurposeRegister.EAX, new System.IntPtr(0));
+			context.SetInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(BuiltInSigType.Ptr, GeneralPurposeRegister.EAX), context.Operand1);
 			context.AppendInstruction(CPUx86.Instruction.LgdtInstruction, null, operand);
 
-			RegisterOperand ax = new RegisterOperand(new Mosa.Compiler.Metadata.Signatures.SigType(Mosa.Compiler.Metadata.CilElementType.I2), GeneralPurposeRegister.EAX);
-			RegisterOperand ds = new RegisterOperand(new Mosa.Compiler.Metadata.Signatures.SigType(Mosa.Compiler.Metadata.CilElementType.I2), SegmentRegister.DS);
-			RegisterOperand es = new RegisterOperand(new Mosa.Compiler.Metadata.Signatures.SigType(Mosa.Compiler.Metadata.CilElementType.I2), SegmentRegister.ES);
-			RegisterOperand fs = new RegisterOperand(new Mosa.Compiler.Metadata.Signatures.SigType(Mosa.Compiler.Metadata.CilElementType.I2), SegmentRegister.FS);
-			RegisterOperand gs = new RegisterOperand(new Mosa.Compiler.Metadata.Signatures.SigType(Mosa.Compiler.Metadata.CilElementType.I2), SegmentRegister.GS);
-			RegisterOperand ss = new RegisterOperand(new Mosa.Compiler.Metadata.Signatures.SigType(Mosa.Compiler.Metadata.CilElementType.I2), SegmentRegister.SS);
+			RegisterOperand ax = new RegisterOperand(BuiltInSigType.Int16, GeneralPurposeRegister.EAX);
+			RegisterOperand ds = new RegisterOperand(BuiltInSigType.Int16, SegmentRegister.DS);
+			RegisterOperand es = new RegisterOperand(BuiltInSigType.Int16, SegmentRegister.ES);
+			RegisterOperand fs = new RegisterOperand(BuiltInSigType.Int16, SegmentRegister.FS);
+			RegisterOperand gs = new RegisterOperand(BuiltInSigType.Int16, SegmentRegister.GS);
+			RegisterOperand ss = new RegisterOperand(BuiltInSigType.Int16, SegmentRegister.SS);
 
-			context.AppendInstruction(CPUx86.Instruction.MovInstruction, ax, new ConstantOperand(new Mosa.Compiler.Metadata.Signatures.SigType(Mosa.Compiler.Metadata.CilElementType.I4), (int)0x00000010));
+			context.AppendInstruction(CPUx86.Instruction.MovInstruction, ax, new ConstantOperand(BuiltInSigType.Int32, (int)0x00000010));
 			context.AppendInstruction(CPUx86.Instruction.MovInstruction, ds, ax);
 			context.AppendInstruction(CPUx86.Instruction.MovInstruction, es, ax);
 			context.AppendInstruction(CPUx86.Instruction.MovInstruction, fs, ax);
 			context.AppendInstruction(CPUx86.Instruction.MovInstruction, gs, ax);
 			context.AppendInstruction(CPUx86.Instruction.MovInstruction, ss, ax);
 			context.AppendInstruction(CPUx86.Instruction.FarJmpInstruction);
-			//context.AppendInstruction(CPUx86.Instruction.NopInstruction);
 		}
 
 		#endregion // Methods

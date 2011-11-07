@@ -12,6 +12,8 @@ using System.Collections.Generic;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Operands;
 using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.Metadata;
+using Mosa.Compiler.Metadata.Signatures;
 
 namespace Mosa.Platform.x86.Intrinsic
 {
@@ -32,7 +34,7 @@ namespace Mosa.Platform.x86.Intrinsic
 		{
 			Operand result = context.Result;
 
-			RegisterOperand tmp = new RegisterOperand(new Mosa.Compiler.Metadata.Signatures.SigType(Mosa.Compiler.Metadata.CilElementType.Ptr), GeneralPurposeRegister.EDX);
+			RegisterOperand tmp = new RegisterOperand(BuiltInSigType.Ptr, GeneralPurposeRegister.EDX);
 			MemoryOperand operand = new MemoryOperand(context.Operand1.Type, GeneralPurposeRegister.EDX, new System.IntPtr(0));
 
 			context.SetInstruction(CPUx86.Instruction.MovInstruction, tmp, context.Operand1);

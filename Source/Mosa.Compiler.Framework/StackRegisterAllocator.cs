@@ -125,8 +125,8 @@ namespace Mosa.Compiler.Framework
 			 * for integers and the second set for floating point values.
 			 * 
 			 */
-			SigType i = new SigType(CilElementType.I);
-			SigType fp = new SigType(CilElementType.R8);
+			SigType i = BuiltInSigType.IntPtr;
+			SigType fp = BuiltInSigType.Double;
 			Register[] registerSet = architecture.RegisterSet;
 			int iregs = 0, fpregs = 0;
 

@@ -10,6 +10,8 @@
 using System;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Operands;
+using Mosa.Compiler.Metadata;
+using Mosa.Compiler.Metadata.Signatures;
 
 namespace Mosa.Platform.x86.CPUx86
 {
@@ -54,7 +56,7 @@ namespace Mosa.Platform.x86.CPUx86
 			if (ctx.Operand2 is ConstantOperand)
 			{
 				ConstantOperand op = ctx.Operand2 as ConstantOperand;
-				op = new ConstantOperand(new Mosa.Compiler.Metadata.Signatures.SigType(Mosa.Compiler.Metadata.CilElementType.U1), op.Value);
+				op = new ConstantOperand(BuiltInSigType.Byte, op.Value);
 				emitter.Emit(opCode, ctx.Result, ctx.Operand1, op);
 			}
 			else
