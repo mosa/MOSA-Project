@@ -87,9 +87,11 @@ namespace Mosa.Compiler.Metadata.Loader.PE
 		/// </summary>
 		/// <param name="stream">The stream.</param>
 		/// <param name="codeBase">The code base.</param>
-		private PortableExecutableImage(Stream stream, string codeBase)
+		public PortableExecutableImage(Stream stream)
 		{
-			this.codeBase = codeBase;
+			// Check preconditions
+			if (stream == null)
+				throw new ArgumentNullException("stream");
 
 			assemblyStream = stream;
 			assemblyReader = new BinaryReader(stream);
@@ -122,11 +124,6 @@ namespace Mosa.Compiler.Metadata.Loader.PE
 		#endregion // Construction
 
 		#region Properties
-
-		/// <summary>
-		/// 
-		/// </summary>
-		string IMetadataModule.CodeBase { get { return this.codeBase; } }
 
 		/// <summary>
 		/// 
@@ -217,22 +214,6 @@ namespace Mosa.Compiler.Metadata.Loader.PE
 		Stream IMetadataModule.GetDataSection(long rva)
 		{
 			return new InstructionStream(assemblyStream, ResolveVirtualAddress(rva));
-		}
-
-		/// <summary>
-		/// Loads the specified load order.
-		/// </summary>
-		/// <param name="stream">The stream.</param>
-		/// <param name="codeBase">The code base.</param>
-		/// <returns></returns>
-		public static PortableExecutableImage Load(Stream stream, string codeBase)
-		{
-			// Check preconditions
-			if (stream == null)
-				throw new ArgumentNullException("stream");
-
-			// Create a new assembly instance
-			return new PortableExecutableImage(stream, codeBase);
 		}
 
 		/// <summary>

@@ -55,7 +55,6 @@
     <Compile Include="Loader\ModuleType.cs" />
     <Compile Include="Loader\PE\MetadataRoot.cs" />
     <Compile Include="Loader\PE\PortableExecutableImage.cs" />
-    <Compile Include="Loader\PE\StreamHeader.cs" />
     <Compile Include="ManifestResourceAttributes.cs" />
     <Compile Include="MethodAttributes.cs" />
     <Compile Include="MethodCallingConvention.cs" />

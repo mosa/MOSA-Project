@@ -127,11 +127,6 @@ namespace Mosa.Compiler.Metadata.Loader
 			return metadataModule;
 		}
 
-		public static string CreateFileCodeBase(string file)
-		{
-			return @"file://" + file.Replace('\\', '/');
-		}
-
 		/// <summary>
 		/// Loads the PE assembly.
 		/// </summary>
@@ -142,9 +137,7 @@ namespace Mosa.Compiler.Metadata.Loader
 			if (!File.Exists(file))
 				return null;
 
-			var codeBase = CreateFileCodeBase(file);
-
-			return PortableExecutableImage.Load(new FileStream(file, FileMode.Open, FileAccess.Read), codeBase);
+			return new PortableExecutableImage(new FileStream(file, FileMode.Open, FileAccess.Read));
 		}
 
 		private IMetadataModule LoadAssembly(string file)
