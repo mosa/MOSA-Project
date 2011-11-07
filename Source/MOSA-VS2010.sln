@@ -40,7 +40,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pictor", "Pictor\Pictor.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Pictor.UI", "Pictor.UI\Pictor.UI.csproj", "{79BA50A4-B1A8-45E0-B6C2-65FDC165C147}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Tools.XMLTo", "Tools\XmlTo\Mosa.Tools.XMLTo.csproj", "{0647E3DC-6386-4457-AFAC-CEF32F7E031E}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Tools.XMLTo", "Mosa.Tools.XmlTo\Mosa.Tools.XMLTo.csproj", "{0647E3DC-6386-4457-AFAC-CEF32F7E031E}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Tools.MakeIsoImage", "Tools\MakeIsoImage\Mosa.Tools.MakeIsoImage.csproj", "{7EB8E856-2D85-44BA-8F90-201C8D1A17EA}"
 EndProject
