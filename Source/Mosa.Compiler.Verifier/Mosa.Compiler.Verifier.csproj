@@ -68,7 +68,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="VerificationError.cs" />
+    <Compile Include="VerificationEntry.cs" />
     <Compile Include="VerifierOptions.cs" />
     <Compile Include="Verify.cs" />
   </ItemGroup>
