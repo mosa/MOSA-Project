@@ -469,7 +469,7 @@ namespace Mosa.Compiler.TypeSystem
 
 			if (type.BaseType != null)
 			{
-				System.Console.WriteLine("Descending from " + type + " to " + type.BaseType);
+				//System.Console.WriteLine("Descending from " + type + " to " + type.BaseType);
 				return FindInterfaceMethod(type.BaseType, interfaceMethod);
 			}
 			throw new InvalidOperationException(@"Failed to find implicit interface implementation for type " + type + " and interface method " + interfaceMethod);

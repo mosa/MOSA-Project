@@ -34,10 +34,6 @@ namespace Mosa.DeviceSystem
 			devices = new LinkedList<IDevice>();
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="device"></param>
 		public void Add(IDevice device)
 		{
 			spinLock.Enter();
@@ -45,11 +41,6 @@ namespace Mosa.DeviceSystem
 			spinLock.Exit();
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="match"></param>
-		/// <returns></returns>
 		public LinkedList<IDevice> GetDevices(IFindDevice match)
 		{
 			spinLock.Enter();
@@ -65,12 +56,6 @@ namespace Mosa.DeviceSystem
 			return list;
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="match1"></param>
-		/// <param name="match2"></param>
-		/// <returns></returns>
 		public LinkedList<IDevice> GetDevices(IFindDevice match1, IFindDevice match2)
 		{
 			spinLock.Enter();
@@ -85,14 +70,7 @@ namespace Mosa.DeviceSystem
 
 			return list;
 		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="match1"></param>
-		/// <param name="match2"></param>
-		/// <param name="match3"></param>
-		/// <returns></returns>
+	
 		public LinkedList<IDevice> GetDevices(IFindDevice match1, IFindDevice match2, IFindDevice match3)
 		{
 			spinLock.Enter();
@@ -108,11 +86,6 @@ namespace Mosa.DeviceSystem
 			return list;
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="matches"></param>
-		/// <returns></returns>
 		public LinkedList<IDevice> GetDevices(IFindDevice[] matches)
 		{
 			spinLock.Enter();
@@ -139,20 +112,11 @@ namespace Mosa.DeviceSystem
 			return list;
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="parent"></param>
-		/// <returns></returns>
 		public LinkedList<IDevice> GetChildrenOf(IDevice parent)
 		{
 			return GetDevices(new FindDevice.WithParent(parent));
 		}
 
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <returns></returns>
 		public LinkedList<IDevice> GetAllDevices()
 		{
 			spinLock.Enter();

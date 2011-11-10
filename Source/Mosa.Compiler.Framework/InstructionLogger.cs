@@ -7,8 +7,10 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System.Collections.Generic;
+using System;
 using System.Text;
+using System.Collections.Generic;
+
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.TypeSystem;
 
@@ -46,8 +48,8 @@ namespace Mosa.Compiler.InternalTrace
 			// Line number
 			int index = 1;
 
-			//text.AppendLine(String.Format("IR representation of method {0} after stage {1}", method, stage.Name));
-			//text.AppendLine();
+			text.AppendLine(String.Format("IR representation of method {0} after stage {1}:", method, stage.Name));
+			text.AppendLine();
 
 			if (basicBlocks.Count > 0)
 			{

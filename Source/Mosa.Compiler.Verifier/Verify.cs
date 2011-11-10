@@ -130,8 +130,8 @@ namespace Mosa.Compiler.Verifier
 				return;
 			}
 
-			AssemblyRow row = metadata.ReadAssemblyRow(new Token(TableType.Assembly, 0));
-			
+			AssemblyRow row = metadata.ReadAssemblyRow(new Token(TableType.Assembly, 1));
+
 			// 2. HashAlgId shall be one of the specified values
 			// Note: Microsoft treats this as a WARNING rather than an error
 			if (!IsValidHashAlgID((int)row.HashAlgId))
@@ -148,21 +148,33 @@ namespace Mosa.Compiler.Verifier
 			}
 
 			// 6. Name shall index a non-empty string in the String heap
+			if (row.Name == 0)
+			{
+				AddSpecificationError("22.2-6", "AssemblyTable/Entry: Name shall index a non-empty string in the String heap", "Empty name");
+				return;
+			}
+
 			string name = metadata.ReadString(row.Name);
 
 			if (string.IsNullOrEmpty(name))
 			{
-				AddSpecificationError("22.2-6", "AssemblyTable/Entry: Name shall index a non-empty string in the String heap", "Empty Name");
+				AddSpecificationError("22.2-6", "AssemblyTable/Entry: Name shall index a non-empty string in the String heap", "Empty name");
 				return;
 			}
 
-			// 9. If Culture is non-null, it shall index a single string from the list specified (§23.1.3) 
-			string culture = metadata.ReadString(row.Culture);
-
-			if (IsValidCulture(culture))
+			// 9. If Culture is non-null, it shall index a single string from the list specified
+			if (row.Culture != 0)
 			{
-				AddSpecificationError("22.2-6", "AssemblyTable/Entry: If Culture is non-null, it shall index a single string from the list specified", "Invalid or Missing Culture");
-				return;
+				string culture = metadata.ReadString(row.Culture);
+
+				if (!string.IsNullOrEmpty(culture))
+				{
+					if (IsValidCulture(culture))
+					{
+						AddSpecificationError("22.2-9", "AssemblyTable/Entry: If Culture is non-null, it shall index a single string from the list specified", "Invalid or Missing Culture");
+						return;
+					}
+				}
 			}
 
 		}
@@ -180,6 +192,7 @@ namespace Mosa.Compiler.Verifier
 			"pt-PT","ro-RO","ru-RU","hr-HR","lt-sr-SP","cy-sr-SP","sk-SK","sq-AL","sv-SE","sv-FI","th-TH","tr-TR",
 			"ur-PK","id-ID","uk-UA","be-BY","sl-SI"
 		};
+
 		protected static bool IsValidHashAlgID(int hash)
 		{
 			return validHashAlgID.Contains(hash);
@@ -192,9 +205,6 @@ namespace Mosa.Compiler.Verifier
 
 		protected static bool IsValidCulture(string culture)
 		{
-			if (string.IsNullOrEmpty(culture))
-				return false;
-
 			foreach (string entry in validCultures)
 				if (string.Equals(culture, entry, StringComparison.OrdinalIgnoreCase))
 					return true;

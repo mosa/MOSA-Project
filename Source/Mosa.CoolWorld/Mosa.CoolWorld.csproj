@@ -77,6 +77,7 @@
     <Compile Include="DeviceSystem\Device.cs" />
     <Compile Include="DeviceSystem\DeviceDriver.cs" />
     <Compile Include="DeviceSystem\DeviceDriverPhysicalMemoryAttribute.cs" />
+    <Compile Include="DeviceSystem\DeviceDriverRegistry.cs" />
     <Compile Include="DeviceSystem\DeviceDriverStartStatus.cs" />
     <Compile Include="DeviceSystem\DeviceManager.cs" />
     <Compile Include="DeviceSystem\DeviceStatus.cs" />
@@ -119,6 +120,8 @@
     <Compile Include="DeviceSystem\KeyType.cs" />
     <Compile Include="DeviceSystem\MemoryRegion.cs" />
     <Compile Include="DeviceSystem\MemoryResources.cs" />
+    <Compile Include="DeviceSystem\PCIControllerManager.cs" />
+    <Compile Include="DeviceSystem\PCIDeviceDriverAttribute.cs" />
     <Compile Include="DeviceSystem\PCI\AddressType.cs" />
     <Compile Include="DeviceSystem\PCI\BaseAddress.cs" />
     <Compile Include="DeviceSystem\PCI\ClassCodeTable.cs" />
@@ -151,9 +154,6 @@
       <Project>{A47B7998-4EE8-4AF8-9373-C664FDEDDC65}</Project>
       <Name>Mosa.Platform.x86.Intrinsic</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Reference Include="System" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

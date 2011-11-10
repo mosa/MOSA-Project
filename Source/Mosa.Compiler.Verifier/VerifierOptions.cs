@@ -35,6 +35,12 @@ namespace Mosa.Compiler.Verifier
 		/// <value><c>true</c> if [IL validation]; otherwise, <c>false</c>.</value>
 		public bool ILValidation { get; set; }
 
+		/// <summary>
+		/// Gets or sets a value indicating whether [including warnings].
+		/// </summary>
+		/// <value><c>true</c> if [including warnings]; otherwise, <c>false</c>.</value>
+		public bool IncludingWarnings { get; set; }
+
 		#endregion // Properties
 
 		/// <summary>
@@ -44,6 +50,7 @@ namespace Mosa.Compiler.Verifier
 		{
 			MetadataValidation = true;
 			ILValidation = true;
+			IncludingWarnings = true;
 		}
 	}
 }

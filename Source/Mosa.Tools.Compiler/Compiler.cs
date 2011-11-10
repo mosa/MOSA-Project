@@ -50,7 +50,7 @@ namespace Mosa.Tools.Compiler
 		private OptionSet optionSet;
 
 		private readonly int majorVersion = 1;
-		private readonly int minorVersion = 0;
+		private readonly int minorVersion = 1;
 		private readonly string codeName = @"Zaphod";
 
 		/// <summary>

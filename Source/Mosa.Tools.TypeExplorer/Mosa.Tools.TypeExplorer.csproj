@@ -89,6 +89,10 @@
       <Project>{5F30A68E-05BF-40EA-B576-5EBCDE520449}</Project>
       <Name>Mosa.Compiler.TypeSystem</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mosa.Compiler.Verifier\Mosa.Compiler.Verifier.csproj">
+      <Project>{5EB8CFE8-69AD-4B79-9E21-FDED65A8EA3F}</Project>
+      <Name>Mosa.Compiler.Verifier</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mosa.Platform.x86\Mosa.Platform.x86.csproj">
       <Name>Mosa.Platform.x86</Name>
     </ProjectReference>

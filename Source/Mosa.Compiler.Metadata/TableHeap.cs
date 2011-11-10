@@ -366,7 +366,7 @@ namespace Mosa.Compiler.Metadata
 
 		private BinaryReader CreateReaderForToken(Token token)
 		{
-			if (token.RID > GetMaxTokenValue(token.Table).RID)
+			if (token.RID > GetRowCount(token.Table))
 				throw new ArgumentException(@"Row is out of bounds.", @"token");
 			if (token.RID == 0)
 				throw new ArgumentException(@"Invalid row index.", @"token");

@@ -17,6 +17,20 @@ namespace Mosa.Compiler.InternalTrace
 	{
 		public bool DebugOutput = false;
 		public bool ConsoleOutput = true;
+		public bool Quiet = true;
+
+		protected string supressed = null;
+
+		protected void DisplayCompilingMethod(string info)
+		{
+			if (string.IsNullOrEmpty(info))
+				return;
+
+			Console.ForegroundColor = ConsoleColor.Yellow;
+			Console.Write(@"[Compiling]  ");
+			Console.ForegroundColor = ConsoleColor.White;
+			Console.WriteLine(info);
+		}
 
 		void ICompilerEventListener.SubmitTraceEvent(CompilerEvent compilerStage, string info)
 		{
@@ -30,15 +44,18 @@ namespace Mosa.Compiler.InternalTrace
 			{
 				case CompilerEvent.CompilingMethod:
 					{
-						Console.ForegroundColor = ConsoleColor.Yellow;
-						Console.Write(@"[Compiling]  ");
-						Console.ForegroundColor = ConsoleColor.White;
-						Console.WriteLine(info);
+						if (Quiet)
+						{
+							supressed = info;
+							break;
+						}
+						DisplayCompilingMethod(info);
 						break;
 					}
 
 				case CompilerEvent.CompilingType:
 					{
+						if (Quiet) break;
 						Console.ForegroundColor = ConsoleColor.Yellow;
 						Console.Write(@"[Compiling]  ");
 						Console.ForegroundColor = ConsoleColor.White;
@@ -48,6 +65,7 @@ namespace Mosa.Compiler.InternalTrace
 
 				case CompilerEvent.SchedulingType:
 					{
+						if (Quiet) break;
 						Console.ForegroundColor = ConsoleColor.Blue;
 						Console.Write(@"[Scheduling]  ");
 						Console.ForegroundColor = ConsoleColor.White;
@@ -57,6 +75,7 @@ namespace Mosa.Compiler.InternalTrace
 
 				case CompilerEvent.SchedulingMethod:
 					{
+						if (Quiet) break;
 						Console.ForegroundColor = ConsoleColor.Blue;
 						Console.Write(@"[Scheduling]  ");
 						Console.ForegroundColor = ConsoleColor.White;
@@ -66,6 +85,12 @@ namespace Mosa.Compiler.InternalTrace
 
 				case CompilerEvent.Error:
 					{
+						if (Quiet && !string.IsNullOrEmpty(supressed))
+						{
+							DisplayCompilingMethod(supressed);
+							supressed = null;
+						}
+
 						Console.ForegroundColor = ConsoleColor.Red;
 						Console.Write(@"[Error]  ");
 						Console.ForegroundColor = ConsoleColor.White;
@@ -73,9 +98,14 @@ namespace Mosa.Compiler.InternalTrace
 						break;
 					}
 
-
 				case CompilerEvent.Warning:
 					{
+						if (Quiet && !string.IsNullOrEmpty(supressed))
+						{
+							DisplayCompilingMethod(supressed);
+							supressed = null;
+						}
+
 						Console.ForegroundColor = ConsoleColor.Yellow;
 						Console.Write(@"[Warning]  ");
 						Console.ForegroundColor = ConsoleColor.White;

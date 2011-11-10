@@ -18,14 +18,15 @@ namespace Mosa.Tools.Verifier
 		{
 			foreach (string arg in args)
 			{
-				switch (arg)
+				switch (arg.ToLower())
 				{
-					case "/ML":
 					case "/ml":
 						options.MetadataValidation = true; break;
-					case "/IL":
 					case "/il":
 						options.ILValidation = true; break;
+					case "/warnings":
+					case "/w":
+						options.IncludingWarnings = true; break;
 					default:
 						options.InputFile = arg; break;
 				}

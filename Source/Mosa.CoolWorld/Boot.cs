@@ -136,7 +136,7 @@ namespace Mosa.CoolWorld
 				Screen.Write(':');
 				Screen.Write(interrupt, 16, 2);
 
-				Mosa.DeviceSystem.HAL.ProcessInterrupt((byte)(interrupt - 0x20), errorCode);
+				//Mosa.DeviceSystem.HAL.ProcessInterrupt((byte)(interrupt - 0x20), errorCode);
 			}
 
 			Screen.Column = c;
