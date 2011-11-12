@@ -97,7 +97,7 @@ namespace Mosa.Compiler.Metadata.Tables
 		public AssemblyHashAlgorithm HashAlgId
 		{
 			get { return hashAlgId; }
-			set { hashAlgId = value; }
+			//set { hashAlgId = value; }
 		}
 
 		/// <summary>
@@ -107,7 +107,7 @@ namespace Mosa.Compiler.Metadata.Tables
 		public ushort MajorVersion
 		{
 			get { return majorVersion; }
-			set { majorVersion = value; }
+			//set { majorVersion = value; }
 		}
 
 		/// <summary>

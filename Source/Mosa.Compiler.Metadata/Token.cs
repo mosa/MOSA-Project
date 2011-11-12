@@ -139,5 +139,20 @@ namespace Mosa.Compiler.Metadata
 			yield return token;
 		}
 
+		public System.Collections.Generic.IEnumerable<Token> Upto(int last)
+		{
+			if (RID > last)
+				yield break;
+
+			var token = this;
+
+			while (token.RID != last)
+			{
+				yield return token;
+				token = token.NextRow;
+			}
+
+			yield return token;
+		}
 	}
 }

@@ -8,7 +8,6 @@
  */
 
 using System.Collections.Generic;
-using Mosa.Compiler.Verifier;
 
 namespace Mosa.Compiler.Verifier.TableStage
 {
