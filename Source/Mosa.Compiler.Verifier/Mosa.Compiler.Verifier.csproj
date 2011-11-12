@@ -68,6 +68,9 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BaseVerificationStage.cs" />
+    <Compile Include="TableStage\Assembly.cs" />
+    <Compile Include="TableStage\MetadataTables.cs" />
     <Compile Include="VerificationEntry.cs" />
     <Compile Include="VerifierOptions.cs" />
     <Compile Include="Verify.cs" />
