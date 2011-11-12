@@ -9,8 +9,8 @@
 
 using System;
 using System.IO;
-using Mosa.Compiler.Linker;
 using Mosa.Compiler.Framework;
+using Mosa.Compiler.Linker;
 
 namespace Mosa.Tools.Compiler.Stages
 {

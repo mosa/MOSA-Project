@@ -10,7 +10,6 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using Mosa.Compiler.Framework.Operands;
-using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 
 namespace Mosa.Compiler.Framework

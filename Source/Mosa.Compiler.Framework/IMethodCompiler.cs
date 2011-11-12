@@ -10,9 +10,9 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Mosa.Compiler.Linker;
 using Mosa.Compiler.Framework.Operands;
 using Mosa.Compiler.InternalTrace;
+using Mosa.Compiler.Linker;
 using Mosa.Compiler.Metadata.Loader;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;

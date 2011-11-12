@@ -12,9 +12,8 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
-
-using Mosa.Compiler.Linker;
 using Mosa.Compiler.Framework;
+using Mosa.Compiler.Linker;
 
 namespace Mosa.Test.System
 {

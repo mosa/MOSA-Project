@@ -8,7 +8,6 @@
  */
 
 
-using Mosa.Compiler.Linker;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.TypeSystem;
 

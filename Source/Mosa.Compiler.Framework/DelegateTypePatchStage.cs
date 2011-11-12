@@ -7,15 +7,9 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
-using System.IO;
-
-using Mosa.Compiler.Common;
-using Mosa.Compiler.Linker;
-using Mosa.Compiler.TypeSystem;
 using Mosa.Compiler.Metadata;
+using Mosa.Compiler.TypeSystem;
 using Mosa.Compiler.TypeSystem.Cil;
 
 namespace Mosa.Compiler.Framework

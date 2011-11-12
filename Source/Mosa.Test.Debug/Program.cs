@@ -1,5 +1,4 @@
 ﻿
-using Mosa.Test.Cases.CIL;
 using Mosa.Test.Cases.IL;
 
 namespace Mosa.Test.Debug

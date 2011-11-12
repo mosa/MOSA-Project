@@ -8,8 +8,8 @@
  */
 
 using System;
-using Mosa.Compiler.Linker;
 using Mosa.Compiler.InternalTrace;
+using Mosa.Compiler.Linker;
 using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.Compiler.Framework

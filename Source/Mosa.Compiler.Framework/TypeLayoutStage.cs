@@ -12,9 +12,8 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-
-using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.Common;
+using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.TypeSystem;
 

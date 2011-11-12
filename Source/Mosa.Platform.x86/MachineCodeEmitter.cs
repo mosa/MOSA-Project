@@ -12,9 +12,9 @@
 
 using System;
 using Mosa.Compiler.Common;
-using Mosa.Compiler.Linker;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Operands;
+using Mosa.Compiler.Linker;
 using Mosa.Compiler.Metadata;
 
 

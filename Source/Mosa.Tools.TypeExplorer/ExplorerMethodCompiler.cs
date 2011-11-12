@@ -8,11 +8,11 @@
  */
 
 using System;
-using Mosa.Compiler.Linker;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.CIL;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.InternalTrace;
+using Mosa.Compiler.Linker;
 using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.Tools.TypeExplorer

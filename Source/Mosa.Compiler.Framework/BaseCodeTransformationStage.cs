@@ -11,8 +11,8 @@
 using System;
 using System.IO;
 using Mosa.Compiler.Common;
-using Mosa.Compiler.Linker;
 using Mosa.Compiler.Framework.Operands;
+using Mosa.Compiler.Linker;
 using Mosa.Compiler.Metadata;
 
 namespace Mosa.Compiler.Framework

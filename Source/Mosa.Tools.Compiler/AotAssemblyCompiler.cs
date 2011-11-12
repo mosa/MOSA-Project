@@ -9,13 +9,13 @@
 
 using System.Collections.Generic;
 using System.IO;
-using Mosa.Compiler.Linker;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.InternalTrace;
-using Mosa.Compiler.TypeSystem;
-using Mosa.Tools.Compiler.Stages;
+using Mosa.Compiler.Linker;
 using Mosa.Compiler.Metadata.Loader;
 using Mosa.Compiler.Metadata.Signatures;
+using Mosa.Compiler.TypeSystem;
+using Mosa.Tools.Compiler.Stages;
 
 namespace Mosa.Tools.Compiler
 {

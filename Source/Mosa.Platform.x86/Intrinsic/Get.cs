@@ -8,12 +8,10 @@
  */
 
 using System.Collections.Generic;
-
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Operands;
-using Mosa.Compiler.TypeSystem;
-using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
+using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.Platform.x86.Intrinsic
 {

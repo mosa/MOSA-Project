@@ -8,9 +8,8 @@
  */
 
 using System;
-using System.Text;
 using System.Collections.Generic;
-
+using System.Text;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.TypeSystem;
 

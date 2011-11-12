@@ -7,8 +7,6 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-using System;
-using System.Diagnostics;
 
 namespace Mosa.Test.System
 {

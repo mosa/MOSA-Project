@@ -9,9 +9,7 @@
 
 using System;
 using System.IO;
-using System.Collections.Generic;
 
-using Mosa.Compiler.Linker;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.TypeSystem;

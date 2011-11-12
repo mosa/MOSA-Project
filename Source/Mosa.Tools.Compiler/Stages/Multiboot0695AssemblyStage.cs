@@ -11,12 +11,11 @@
 using System;
 using System.IO;
 using System.Text;
-using Mosa.Platform.x86;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Operands;
 using Mosa.Compiler.Linker;
-using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
+using Mosa.Platform.x86;
 using CPUx86 = Mosa.Platform.x86.CPUx86;
 
 namespace Mosa.Tools.Compiler.Stages

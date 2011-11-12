@@ -12,11 +12,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.InternalTrace;
-using Mosa.Compiler.Metadata.Loader;
-using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.Linker;
-using Mosa.Compiler.TypeSystem;
 using Mosa.Tools.Compiler.Stages;
 using NDesk.Options;
 

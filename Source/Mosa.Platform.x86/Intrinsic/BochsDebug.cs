@@ -11,7 +11,6 @@
 using System.Collections.Generic;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Operands;
-using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
 

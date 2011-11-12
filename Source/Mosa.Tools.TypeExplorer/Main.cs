@@ -1,14 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows.Forms;
 using System.IO;
-
+using System.Windows.Forms;
 using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Loader;
+using Mosa.Compiler.Pdb;
 using Mosa.Compiler.TypeSystem;
 using Mosa.Compiler.TypeSystem.Generic;
-using Mosa.Compiler.Pdb;
 
 namespace Mosa.Tools.TypeExplorer
 {

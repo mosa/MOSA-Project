@@ -7,9 +7,7 @@
  *  Michael Fröhlich (grover) <michael.ruck@michaelruck.de>
  */
 
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.TypeSystem;
