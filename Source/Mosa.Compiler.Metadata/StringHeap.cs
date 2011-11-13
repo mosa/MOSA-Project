@@ -49,7 +49,7 @@ namespace Mosa.Compiler.Metadata
 
 			// Offset of the requested string
 			int offset = (int)(token & HeapIndexToken.RowIndexMask);
-			if (0 == offset)
+			if (offset == 0)
 				return String.Empty;
 
 			// Validate the offset & calculate the real offset

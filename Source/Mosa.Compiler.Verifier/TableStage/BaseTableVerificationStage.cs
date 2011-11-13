@@ -16,18 +16,62 @@ namespace Mosa.Compiler.Verifier
 	public abstract class BaseTableVerificationStage : BaseVerificationStage
 	{
 
-		protected bool IsValidString(HeapIndexToken token)
+		protected bool IsValidStringIndex(HeapIndexToken token)
 		{
 			// TODO:
 
 			return true;
 		}
 
-		protected bool IsValidHeapIndex(HeapIndexToken  token)
+		protected bool IsValidHeapIndex(HeapIndexToken token)
 		{
 			// TODO:
 
 			return true;
+		}
+
+		protected int CheckName(HeapIndexToken nameIndex)
+		{
+			if (nameIndex == 0)
+			{
+				return 1;
+			}
+			else
+			{
+				if (!IsValidStringIndex(nameIndex))
+				{
+					return 2;
+				}
+				else
+				{
+					string name = metadata.ReadString(nameIndex);
+
+					if (string.IsNullOrEmpty(name))
+					{
+						return 3;
+					}
+				}
+			}
+
+			return 0;
+		}
+
+		protected int CheckCulture(HeapIndexToken cultureIndex)
+		{
+			if (cultureIndex != 0)
+			{
+				string culture = metadata.ReadString(cultureIndex);
+
+				if (!string.IsNullOrEmpty(culture))
+				{
+					if (IsValidCulture(culture))
+					{
+						return 1;
+					}
+				}
+			}
+
+			return 0;
 		}
 
 		protected static List<string> validCultures = new List<string> {

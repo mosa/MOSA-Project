@@ -45,7 +45,17 @@ namespace Mosa.Tools.Verifier
 			Verify verify = new Verify(options);
 			verify.Run();
 
-			return (verify.HasErrors ? -1 : 0);
+			if (!verify.HasErrors)
+				return 0;
+
+			Console.WriteLine();
+			Console.WriteLine("Errors:");
+			Console.WriteLine();
+
+			foreach (VerificationEntry entry in verify.Entries)
+				Console.WriteLine(entry.ToString());
+
+			return -1;
 		}
 	}
 }

@@ -26,9 +26,14 @@ namespace Mosa.Compiler.Verifier
 
 		protected abstract void Run();
 
-		protected void AddSpecificationError(string section, string error, string data)
+		protected void AddSpecificationError(string section, string error, string description, Token location)
 		{
-			verify.AddVerificationEntry(new VerificationEntry(VerificationType.Error, section, error, data));
+			verify.AddVerificationEntry(new VerificationEntry(VerificationType.Error, section, error, description, location));
+		}
+
+		protected void AddSpecificationError(string section, string error, string description)
+		{
+			verify.AddVerificationEntry(new VerificationEntry(VerificationType.Error, section, error, description));
 		}
 
 		protected void AddSpecificationError(string section, string error)

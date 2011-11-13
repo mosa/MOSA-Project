@@ -26,6 +26,12 @@ namespace Mosa.Compiler.Verifier
 		private List<VerificationEntry> entries = new List<VerificationEntry>();
 
 		/// <summary>
+		/// Gets the verification entries.
+		/// </summary>
+		/// <value>The verification entries.</value>
+		public IList<VerificationEntry> Entries { get { return entries; } }
+
+		/// <summary>
 		/// Gets a value indicating whether [any errors].
 		/// </summary>
 		/// <value><c>true</c> if [any errors]; otherwise, <c>false</c>.</value>
