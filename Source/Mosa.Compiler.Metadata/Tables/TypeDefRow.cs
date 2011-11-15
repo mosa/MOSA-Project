@@ -89,7 +89,7 @@ namespace Mosa.Compiler.Metadata.Tables
 		/// Gets or sets the type name idx.
 		/// </summary>
 		/// <value>The type name idx.</value>
-		public HeapIndexToken TypeNameIdx
+		public HeapIndexToken TypeName
 		{
 			get { return typeNameIdx; }
 		}
@@ -98,7 +98,7 @@ namespace Mosa.Compiler.Metadata.Tables
 		/// Gets or sets the type namespace idx.
 		/// </summary>
 		/// <value>The type namespace idx.</value>
-		public HeapIndexToken TypeNamespaceIdx
+		public HeapIndexToken TypeNamespace
 		{
 			get { return typeNamespaceIdx; }
 		}

@@ -13,7 +13,7 @@ namespace Mosa.Tools.Verifier
 {
 	static class ParseOptions
 	{
-		public static bool Parse(VerifierOptions options, string[] args)
+		public static bool Parse(VerificationOptions options, string[] args)
 		{
 			foreach (string arg in args)
 			{

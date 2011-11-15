@@ -21,40 +21,47 @@ namespace Mosa.Compiler.Verifier
 	public class Verify
 	{
 
-		public VerifierOptions Options { get; protected set; }
-		public IMetadataProvider Metadata { get; protected set; }
-		private List<VerificationEntry> entries = new List<VerificationEntry>();
-
-		/// <summary>
-		/// Gets the verification entries.
-		/// </summary>
-		/// <value>The verification entries.</value>
-		public IList<VerificationEntry> Entries { get { return entries; } }
-
-		/// <summary>
-		/// Gets a value indicating whether [any errors].
-		/// </summary>
-		/// <value><c>true</c> if [any errors]; otherwise, <c>false</c>.</value>
-		public bool HasErrors
-		{
-			get
-			{
-				foreach (VerificationEntry entry in entries)
-					if (entry.Type == VerificationType.Error)
-						return true;
-
-				return false;
-			}
-		}
+		protected VerificationOptions options { get; private set; }
+		protected IAssemblyLoader assemblyLoader { get; private set; }
+		protected List<VerificationEntry> entries = new List<VerificationEntry>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Verify"/> class.
 		/// </summary>
 		/// <param name="options">The options.</param>
-		public Verify(VerifierOptions options)
+		public Verify(VerificationOptions options)
 		{
-			this.Options = options;
+			this.options = options;
+			assemblyLoader = new AssemblyLoader();
+
+			assemblyLoader.AddPrivatePath(Path.GetDirectoryName(options.InputFile));
+			assemblyLoader.InitializePrivatePaths(options.Paths);
+			assemblyLoader.LoadModule(options.InputFile);
+
+			HasError = false;
 		}
+
+		public IEnumerable<VerificationEntry> Entries
+		{
+			get
+			{
+				foreach (VerificationEntry entry in entries)
+					yield return entry;
+			}
+		}
+
+		internal void AddVerificationEntry(VerificationEntry entry)
+		{
+			entries.Add(entry);
+			if (entry.Type == VerificationType.Error)
+				HasError = true;
+		}
+
+		/// <summary>
+		/// Gets a value indicating whether [any errors].
+		/// </summary>
+		/// <value><c>true</c> if [any errors]; otherwise, <c>false</c>.</value>
+		public bool HasError { get; private set;}
 
 		/// <summary>
 		/// Runs this instance.
@@ -62,75 +69,16 @@ namespace Mosa.Compiler.Verifier
 		/// <returns></returns>
 		public bool Run()
 		{
-			string file = Options.InputFile;
-
-			try
+			foreach (IMetadataModule module in assemblyLoader.Modules)
 			{
-				if (!File.Exists(file))
-				{
-					AddNonSpecificationError("File not found");
-					return false;
-				}
+				VerifyAssembly verifyAssembly = new VerifyAssembly(this, options, module);
 
-				IMetadataModule module = LoadPE(file);
-				Metadata = module.Metadata;
-
-				VerifyMetadata();
-
-			}
-			catch (Exception e)
-			{
-				AddNonSpecificationError("Exception thrown", e.ToString());
+				verifyAssembly.Run();
 			}
 
-			return !HasErrors;
+			return !HasError;
 		}
 
-		public void AddVerificationEntry(VerificationEntry entry)
-		{
-			entries.Add(entry);
-		}
-
-		protected void AddNonSpecificationError(string error)
-		{
-			entries.Add(new VerificationEntry(VerificationType.Error, "0", error));
-		}
-
-		protected void AddNonSpecificationError(string error, string data)
-		{
-			entries.Add(new VerificationEntry(VerificationType.Error, "0", error, data));
-		}
-
-		protected PortableExecutableImage LoadPE(string file)
-		{
-			try
-			{
-				Stream stream = new FileStream(file, FileMode.Open, FileAccess.Read);
-				PortableExecutableImage peImage = new PortableExecutableImage(stream);
-
-				return peImage;
-			}
-			catch
-			{
-				AddNonSpecificationError("Unable to load PE image", file);
-				throw;
-			}
-		}
-
-		protected void VerifyMetadata()
-		{
-			List<BaseVerificationStage> stages = new List<BaseVerificationStage>() { 
-				new MetadataTables()
-			};
-
-			foreach (BaseVerificationStage stage in stages)
-			{
-				stage.Run(this);
-
-				if (HasErrors)
-					return;
-			}
-		}
 
 	}
 }

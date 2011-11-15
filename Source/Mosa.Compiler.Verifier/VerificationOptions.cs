@@ -7,10 +7,12 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using System.Collections.Generic;
+
 namespace Mosa.Compiler.Verifier
 {
 
-	public class VerifierOptions
+	public class VerificationOptions
 	{
 
 		#region Properties
@@ -20,6 +22,12 @@ namespace Mosa.Compiler.Verifier
 		/// </summary>
 		/// <value>The input file.</value>
 		public string InputFile { get; set; }
+
+		/// <summary>
+		/// Gets or sets the paths.
+		/// </summary>
+		/// <value>The paths.</value>
+		public IList<string> Paths { get; set;}
 
 		/// <summary>
 		/// Gets or sets a value indicating whether [metadata validation].
@@ -42,10 +50,11 @@ namespace Mosa.Compiler.Verifier
 		#endregion // Properties
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="VerifierOptions"/> class.
+		/// Initializes a new instance of the <see cref="VerificationOptions"/> class.
 		/// </summary>
-		public VerifierOptions()
+		public VerificationOptions()
 		{
+			Paths = new List<string>();
 			MetadataValidation = true;
 			ILValidation = true;
 			IncludingWarnings = true;

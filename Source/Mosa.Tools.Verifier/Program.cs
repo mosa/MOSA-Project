@@ -29,7 +29,7 @@ namespace Mosa.Tools.Verifier
 			Console.WriteLine("Written by Philipp Garcia (phil@thinkedge.com)");
 			Console.WriteLine();
 
-			VerifierOptions options = new VerifierOptions();
+			VerificationOptions options = new VerificationOptions();
 
 			bool valid = ParseOptions.Parse(options, args);
 
@@ -45,7 +45,7 @@ namespace Mosa.Tools.Verifier
 			Verify verify = new Verify(options);
 			verify.Run();
 
-			if (!verify.HasErrors)
+			if (!verify.HasError)
 				return 0;
 
 			Console.WriteLine();

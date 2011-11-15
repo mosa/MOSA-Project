@@ -385,12 +385,6 @@ namespace Mosa.Tools.TypeExplorer
 			assemblyLoader.AddPrivatePath(System.IO.Path.GetDirectoryName(filename));
 			assemblyLoader.LoadModule(filename);
 
-			//foreach(var module in assemblyLoader.Modules)
-			//{
-			//    string name = module.CodeBase.Substring(7);
-			//    LoadAssemblyDebugInfo(name);
-			//}
-
 			typeSystem = new TypeSystem();
 			typeSystem.LoadModules(assemblyLoader.Modules);
 

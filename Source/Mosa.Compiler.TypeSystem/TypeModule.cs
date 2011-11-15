@@ -356,8 +356,8 @@ namespace Mosa.Compiler.TypeSystem
 			// Create and populate the runtime type
 			var type = new CilRuntimeType(
 				this,
-				GetString(info.TypeDefRow.TypeNameIdx),
-				GetString(info.TypeDefRow.TypeNamespaceIdx),
+				GetString(info.TypeDefRow.TypeName),
+				GetString(info.TypeDefRow.TypeNamespace),
 				info.PackingSize,
 				info.Size,
 				token,

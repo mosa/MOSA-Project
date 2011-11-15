@@ -28,9 +28,9 @@ namespace Mosa.Compiler.Verifier.TableStage
 				AssemblyRefRow row = metadata.ReadAssemblyRefRow(token);
 
 				// 2. Flags shall have only one bit set, the PublicKey bit (§23.1.2). All other bits shall be zero. [ERROR]
-				if ((int)row.Flags != 0x0001)
+				if (!((int)row.Flags == 0x0001 || (int)row.Flags == 0x0000))
 				{
-					AddSpecificationError("22.5-2", "Flags shall have only one bit set, the PublicKey bit (§23.1.2). All other bits shall be zero. ", "Empty name", token);
+					AddSpecificationError("22.5-2", "Flags shall have only one bit set, the PublicKey bit. All other bits shall be zero.", "PublicKey bit not set", token);
 				}
 
 				// 3. PublicKeyOrToken can be null, or non-null (note that the Flags.PublicKey bit specifies whether the 'blob' is a full public key, or the short hashed token)
@@ -74,17 +74,17 @@ namespace Mosa.Compiler.Verifier.TableStage
 
 					AssemblyRefRow otherrow = metadata.ReadAssemblyRefRow(othertoken);
 
-					if (row.MajorVersion != row.MajorVersion ||
-						row.MinorVersion != row.MinorVersion ||
-						row.BuildNumber != row.BuildNumber ||
-						row.MajorVersion != row.MajorVersion ||
-						row.PublicKeyOrToken != row.PublicKeyOrToken)
+					if (row.MajorVersion != otherrow.MajorVersion ||
+						row.MinorVersion != otherrow.MinorVersion ||
+						row.BuildNumber != otherrow.BuildNumber ||
+						row.MajorVersion != otherrow.MajorVersion ||
+						row.PublicKeyOrToken != otherrow.PublicKeyOrToken)
 						continue;
 
-					if (string.CompareOrdinal(metadata.ReadString(row.Name), metadata.ReadString(row.Name)) != 0)
+					if (string.CompareOrdinal(metadata.ReadString(row.Name), metadata.ReadString(otherrow.Name)) != 0)
 						continue;
 
-					if (string.CompareOrdinal(metadata.ReadString(row.Culture), metadata.ReadString(row.Culture)) != 0)
+					if (string.CompareOrdinal(metadata.ReadString(row.Culture), metadata.ReadString(otherrow.Culture)) != 0)
 						continue;
 
 					AddSpecificationError("22.5-7", "The AssemblyRef table shall contain no duplicates", "Duplicate found", token);

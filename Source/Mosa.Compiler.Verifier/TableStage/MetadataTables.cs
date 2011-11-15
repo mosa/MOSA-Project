@@ -17,14 +17,16 @@ namespace Mosa.Compiler.Verifier.TableStage
 		protected override void Run()
 		{
 			List<BaseVerificationStage> stages = new List<BaseVerificationStage>() { 
-				new Assembly()
+				new Assembly(),
+				new AssemblyRef(),
+				new ClassLayout()
 			};
 
 			foreach (BaseVerificationStage stage in stages)
 			{
-				stage.Run(verify);
+				stage.Run(verifyAssembly);
 
-				if (verify.HasErrors)
+				if (verifyAssembly.Verify.HasError)
 					return;
 			}
 

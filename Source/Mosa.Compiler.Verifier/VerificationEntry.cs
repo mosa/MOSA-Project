@@ -15,14 +15,16 @@ namespace Mosa.Compiler.Verifier
 
 	public class VerificationEntry
 	{
+		public string Assembly { get; private set; }
 		public VerificationType Type { get; private set; }
 		public string Section { get; private set; }
 		public string Rule { get; private set; }
 		public string Description { get; private set; }
 		public Token Location { get; private set; }
 
-		public VerificationEntry(VerificationType type, string section, string error, string description, Token token)
+		public VerificationEntry(string assembly, VerificationType type, string section, string error, string description, Token token)
 		{
+			this.Assembly = assembly;
 			this.Type = type;
 			this.Section = section;
 			this.Rule = error;
@@ -30,20 +32,20 @@ namespace Mosa.Compiler.Verifier
 			this.Location = token;
 		}
 
-		public VerificationEntry(VerificationType type, string section, string error, string description)
-			: this(type, section, error, description, Token.Zero)
-		{
-		}
-
-		public VerificationEntry(VerificationType type, string section, string error)
-			: this(type, section, error, null, Token.Zero)
+		public VerificationEntry(string assembly, VerificationType type, string section, string error, string description)
+			: this(assembly, type, section, error, description, Token.Zero)
 		{
 		}
 
 		public override string ToString()
 		{
-			return "[" + this.Type.ToString() + "] " + Rule + " (" + Section + ")." + (string.IsNullOrEmpty(Description) ? string.Empty : " " + Description + (Location == Token.Zero ? string.Empty : " at " + Location.ToString()));
-
+			return
+				"[" + this.Type.ToString().ToUpper() + "] "
+				+ Description
+				+ (string.IsNullOrEmpty(Assembly) ? string.Empty : " in " + Assembly)
+				+ (Location == Token.Zero ? string.Empty : " at " + Location.ToString())
+				+ ". (" + Section + ") " 
+				+ Rule;
 		}
 	}
 }

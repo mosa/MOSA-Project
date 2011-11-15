@@ -14,13 +14,13 @@ namespace Mosa.Compiler.Verifier
 	public abstract class BaseVerificationStage
 	{
 
-		protected Verify verify;
+		protected VerifyAssembly verifyAssembly;
 		protected IMetadataProvider metadata;
 
-		public void Run(Verify verify)
+		public void Run(VerifyAssembly verifyAssembly)
 		{
-			this.verify = verify;
-			this.metadata = verify.Metadata;
+			this.verifyAssembly = verifyAssembly;
+			this.metadata = verifyAssembly.Metadata;
 			Run();
 		}
 
@@ -28,17 +28,12 @@ namespace Mosa.Compiler.Verifier
 
 		protected void AddSpecificationError(string section, string error, string description, Token location)
 		{
-			verify.AddVerificationEntry(new VerificationEntry(VerificationType.Error, section, error, description, location));
+			verifyAssembly.AddVerificationEntry(new VerificationEntry(verifyAssembly.Module.Name, VerificationType.Error, section, error, description, location));
 		}
 
 		protected void AddSpecificationError(string section, string error, string description)
 		{
-			verify.AddVerificationEntry(new VerificationEntry(VerificationType.Error, section, error, description));
-		}
-
-		protected void AddSpecificationError(string section, string error)
-		{
-			verify.AddVerificationEntry(new VerificationEntry(VerificationType.Error, section, error));
+			verifyAssembly.AddVerificationEntry(new VerificationEntry(verifyAssembly.Module.Name, VerificationType.Error, section, error, description));
 		}
 
 	}

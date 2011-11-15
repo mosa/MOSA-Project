@@ -28,14 +28,14 @@ namespace Mosa.Tools.MetadataExplorer.Tables
 			this.row = row;
 		}
 
-		public override string Name { get { return Metadata.ReadString(row.TypeNameIdx); } }
+		public override string Name { get { return Metadata.ReadString(row.TypeName); } }
 
 		public override IEnumerable GetValues()
 		{
-			yield return TokenString("Name", row.TypeNameIdx);
-			yield return TokenString("Namespace", row.TypeNamespaceIdx);
-			yield return Value("TypeNameIdx", row.TypeNameIdx);
-			yield return Value("TypeNamespaceIdx", row.TypeNamespaceIdx);
+			yield return TokenString("Name", row.TypeName);
+			yield return TokenString("Namespace", row.TypeNamespace);
+			yield return Value("TypeNameIdx", row.TypeName);
+			yield return Value("TypeNamespaceIdx", row.TypeNamespace);
 			yield return Value("Extends", row.Extends);
 			yield return Value("FieldList", row.FieldList);
 			yield return Value("Flags", row.Flags.ToString());
