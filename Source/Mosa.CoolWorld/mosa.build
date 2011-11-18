@@ -26,6 +26,7 @@
                     <include name="DeviceSystem/Device.cs"/>
                     <include name="DeviceSystem/DeviceDriver.cs"/>
                     <include name="DeviceSystem/DeviceDriverPhysicalMemoryAttribute.cs"/>
+                    <include name="DeviceSystem/DeviceDriverRegistry.cs"/>
                     <include name="DeviceSystem/DeviceDriverStartStatus.cs"/>
                     <include name="DeviceSystem/DeviceManager.cs"/>
                     <include name="DeviceSystem/DeviceStatus.cs"/>
@@ -68,6 +69,8 @@
                     <include name="DeviceSystem/KeyType.cs"/>
                     <include name="DeviceSystem/MemoryRegion.cs"/>
                     <include name="DeviceSystem/MemoryResources.cs"/>
+                    <include name="DeviceSystem/PCIControllerManager.cs"/>
+                    <include name="DeviceSystem/PCIDeviceDriverAttribute.cs"/>
                     <include name="DeviceSystem/PCI/AddressType.cs"/>
                     <include name="DeviceSystem/PCI/BaseAddress.cs"/>
                     <include name="DeviceSystem/PCI/ClassCodeTable.cs"/>
@@ -84,7 +87,6 @@
                     <include name="HAL/HardwareAbstraction.cs"/>
 		</sources>
 		<references>
-                    <include name="System.dll"/>
                     <include name="${outputDirectory}/Mosa.ClassLib.dll"/>
                     <include name="${outputDirectory}/Mosa.Kernel.dll"/>
                     <include name="${outputDirectory}/mscorlib.dll"/>

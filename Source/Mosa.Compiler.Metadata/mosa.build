@@ -34,7 +34,6 @@
                     <include name="Loader/ModuleType.cs"/>
                     <include name="Loader/PE/MetadataRoot.cs"/>
                     <include name="Loader/PE/PortableExecutableImage.cs"/>
-                    <include name="Loader/PE/StreamHeader.cs"/>
                     <include name="ManifestResourceAttributes.cs"/>
                     <include name="MethodAttributes.cs"/>
                     <include name="MethodCallingConvention.cs"/>
