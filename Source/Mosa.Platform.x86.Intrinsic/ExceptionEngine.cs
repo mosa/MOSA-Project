@@ -9,10 +9,7 @@
 
 using System;
 
-
-// TODO: Remove this file
-
-namespace Mosa.Platform.x86
+namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
 	/// 
@@ -20,7 +17,7 @@ namespace Mosa.Platform.x86
 	public static class ExceptionEngine
 	{
 		/// <summary>
-		/// Saves the context and handles the excpetion.
+		/// Saves the context and handles the exceptions.
 		/// </summary>
 		/// <param name="eax">Current status of eax</param>
 		/// <param name="ebx">Current status of ebx</param>
@@ -36,10 +33,13 @@ namespace Mosa.Platform.x86
 		{
 			// Read callee's EIP from method header
 			//eip = Native.GetEip();
+
 			// Create context
 			RegisterContext registerContext = new RegisterContext(eax, ebx, ecx, edx, esi, edi, ebp, eip, esp + 40);
+
 			// Try to handle the exception
 			HandleException(registerContext, exception, eip);
+
 			// Return after exception has been handled
 			RestoreContext(registerContext);
 		}

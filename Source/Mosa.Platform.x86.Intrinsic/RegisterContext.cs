@@ -9,7 +9,7 @@
 
 using System.Runtime.InteropServices;
 
-namespace Mosa.Platform.x86
+namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
 	/// 

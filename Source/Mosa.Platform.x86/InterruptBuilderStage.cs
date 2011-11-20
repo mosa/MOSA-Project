@@ -83,10 +83,7 @@ namespace Mosa.Platform.x86
 
 			SymbolOperand interruptMethod = SymbolOperand.FromMethod(InterruptMethod);
 
-			SigType I1 = BuiltInSigType.SByte;
-			SigType I4 = BuiltInSigType.Int32;
-
-			RegisterOperand esp = new RegisterOperand(I4, GeneralPurposeRegister.ESP);
+			RegisterOperand esp = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.ESP);
 
 			for (int i = 0; i <= 255; i++)
 			{
@@ -95,12 +92,12 @@ namespace Mosa.Platform.x86
 
 				ctx.AppendInstruction(CPUx86.Instruction.CliInstruction);
 				if (i <= 7 || i >= 16 | i == 9) // For IRQ 8, 10, 11, 12, 13, 14 the cpu will automatically pushed the error code
-					ctx.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new ConstantOperand(I1, 0x0));
-				ctx.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new ConstantOperand(I1, (byte)i));
+					ctx.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new ConstantOperand(BuiltInSigType.SByte, 0x0));
+				ctx.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new ConstantOperand(BuiltInSigType.SByte, (byte)i));
 				ctx.AppendInstruction(CPUx86.Instruction.PushadInstruction);
 				ctx.AppendInstruction(CPUx86.Instruction.CallInstruction, null, interruptMethod);
 				ctx.AppendInstruction(CPUx86.Instruction.PopadInstruction);
-				ctx.AppendInstruction(CPUx86.Instruction.AddInstruction, esp, new ConstantOperand(I4, 0x08));
+				ctx.AppendInstruction(CPUx86.Instruction.AddInstruction, esp, new ConstantOperand(BuiltInSigType.Int32, 0x08));
 				ctx.AppendInstruction(CPUx86.Instruction.StiInstruction);
 				ctx.AppendInstruction(CPUx86.Instruction.IRetdInstruction);
 

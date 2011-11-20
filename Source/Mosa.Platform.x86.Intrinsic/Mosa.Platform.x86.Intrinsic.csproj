@@ -63,7 +63,9 @@
   </PropertyGroup>
   <ItemGroup>
     <Compile Include="DelegateStub.cs" />
+    <Compile Include="ExceptionEngine.cs" />
     <Compile Include="Native.cs" />
+    <Compile Include="RegisterContext.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Korlib\Korlib.csproj">
