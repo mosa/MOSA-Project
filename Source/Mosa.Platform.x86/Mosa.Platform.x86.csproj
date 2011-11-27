@@ -108,6 +108,7 @@
     <Compile Include="Intrinsic\GetCR2.cs" />
     <Compile Include="Intrinsic\GetCR3.cs" />
     <Compile Include="Intrinsic\GetCR4.cs" />
+    <Compile Include="Intrinsic\In.cs" />
     <Compile Include="Intrinsic\InvokeDelegate.cs" />
     <Compile Include="Intrinsic\InvokeDelegateWithReturn.cs" />
     <Compile Include="Intrinsic\InvokeInstanceDelegate.cs" />
@@ -130,7 +131,6 @@
     <Compile Include="Intrinsic\CpuIdEcx.cs" />
     <Compile Include="Intrinsic\CpuIdEdx.cs" />
     <Compile Include="Intrinsic\CpuId.cs" />
-    <Compile Include="Intrinsic\In.cs" />
     <Compile Include="Intrinsic\Invlpg.cs" />
     <Compile Include="Intrinsic\GetIDTJumpLocation.cs" />
     <Compile Include="Intrinsic\Lgdt.cs" />

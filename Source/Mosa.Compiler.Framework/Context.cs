@@ -146,9 +146,9 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Gets the first operand.
+		/// Gets the second operand.
 		/// </summary>
-		/// <value>The first operand.</value>
+		/// <value>The second operand.</value>
 		public Operand Operand2
 		{
 			get { return instructionSet.Data[index].Operand2; }
@@ -162,9 +162,9 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Gets the first operand.
+		/// Gets the third operand.
 		/// </summary>
-		/// <value>The first operand.</value>
+		/// <value>The third operand.</value>
 		public Operand Operand3
 		{
 			get { return instructionSet.Data[index].Operand3; }

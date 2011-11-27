@@ -78,15 +78,18 @@ namespace Mosa.Kernel.x86
 		/// <summary>
 		/// Creates the process.
 		/// </summary>
-		/// <returns></returns>
+        /// <param name="slot">The slot.</param>
+		/// <returns>The slot.</returns>
 		private static unsafe uint CreateProcess(uint slot)
 		{
 			uint process = GetProcessLocation(slot);
 
 			Native.Set32(process + Offset.Status, Status.Running);
 			Native.Set32(process + Offset.ProcessID, slot);
-			Native.Set32(process + Offset.MemoryMap, (uint)VirtualPageAllocator.Reserve(32U * 4096U));
+			Native.Set32(process + Offset.MemoryMap, (uint)AllocateMemory(slot, 32U * 4096U));
 			Native.Set32(process + Offset.Lock, 0);
+            Native.Set32(process + Offset.DefaultPriority, 7);
+            Native.Set32(process + Offset.MaximumPriority, 255);
 
 			return slot;
 		}
@@ -94,30 +97,51 @@ namespace Mosa.Kernel.x86
 		/// <summary>
 		/// Terminates the process.
 		/// </summary>
-		/// <param name="process">The process.</param>
-		public static void TerminateProcess(uint process)
+		/// <param name="slot">The slot.</param>
+		public static void TerminateProcess(uint slot)
 		{
-			// TODO
+            uint process = GetProcessLocation(slot);
 
-			// 1. Set status to terminating
-			// 2. Stop all threads
-			// 3. Release all memory
+            // Set status to terminating 
+            Native.Set32(process + Offset.Status, Status.Terminating);
+
+            // Deallocate used memory (pages)
+            uint address = Native.Get32(process + Offset.MemoryMap);
+            DeallocateMemory(slot, address, 32U * 4096U);
+
+            // Now heres the weird part, what do we want to do?
+            // For the moment I haved decided to set the status to
+            // terminated and just leave it, then the process manager
+            // can sift through in the next few cycles and see
+            // whether or not it wants to free the slot.
+            Native.Set32(process + Offset.Status, Status.Terminated);
 		}
 
 		/// <summary>
 		/// Allocates the memory.
 		/// </summary>
-		/// <param name="process">The process.</param>
+		/// <param name="slot">The slot.</param>
 		/// <param name="size">The size.</param>
-		/// <returns></returns>
-		public static uint AllocateMemory(uint process, uint size)
+		/// <returns>The address.</returns>
+		public static uint AllocateMemory(uint slot, uint size)
 		{
 			uint address = VirtualPageAllocator.Reserve(size);
 
-			UpdateMemoryBitMap(process, address, size, false);
+			UpdateMemoryBitMap(slot, address, size, false);
 
 			return address;
 		}
+
+        /// <summary>
+        /// Deallocates the memory.
+        /// </summary>
+        /// <param name="slot">The slot.</param>
+        /// <param name="address">The address.</param>
+        /// <param name="size">The size.</param>
+        public static void DeallocateMemory(uint slot, uint address, uint size)
+        {
+            UpdateMemoryBitMap(slot, address, size, true);
+        }
 
 		/// <summary>
 		/// Updates the memory bit map.
