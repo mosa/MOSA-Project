@@ -18,7 +18,7 @@ using Mosa.Compiler.TypeSystem;
 namespace Mosa.Platform.x86.Intrinsic
 {
 	/// <summary>
-	/// Representations the x86 cli instruction.
+	/// 
 	/// </summary>
 	public sealed class InvokeDelegate : IIntrinsicMethod
 	{

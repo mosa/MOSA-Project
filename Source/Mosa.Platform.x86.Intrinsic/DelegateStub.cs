@@ -5,9 +5,9 @@ namespace Mosa.Platform.x86.Intrinsic
 	public class DelegateStub
 	{
 		private object instance = null;
-		private int methodPointer = 0;
+		private uint methodPointer = 0;
 
-		public DelegateStub(object instance, int methodPointer)
+		public DelegateStub(object instance, uint methodPointer)
 		{
 			this.instance = instance;
 			this.methodPointer = methodPointer;
@@ -18,22 +18,31 @@ namespace Mosa.Platform.x86.Intrinsic
 			if (instance == null)
 			{
 				Native.InvokeDelegate(instance, methodPointer);
-				return;
 			}
-			Native.InvokeInstanceDelegate(instance, methodPointer);
+			else
+			{
+				Native.InvokeInstanceDelegate(instance, methodPointer);
+			}
 		}
 
 		public object InvokeWithReturn()
 		{
 			if (instance == null)
+			{
 				return Native.InvokeDelegateWithReturn(instance, methodPointer);
-			return Native.InvokeInstanceDelegateWithReturn(instance, methodPointer);
+			}
+			else
+			{
+				return Native.InvokeInstanceDelegateWithReturn(instance, methodPointer);
+			}
 		}
 
 		public IAsyncResult BeginInvoke(AsyncCallback callback, object arg)
-		{ return null; }
+		{
+			return null;
+		}
 
 		public void EndInvoke(AsyncCallback result)
-		{}
+		{ }
 	}
 }

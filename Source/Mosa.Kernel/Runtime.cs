@@ -8,8 +8,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 using Mosa.Kernel;
+using Mosa.Platform.x86.Intrinsic;
 
 namespace Mosa.Internal
 {
@@ -296,5 +296,32 @@ namespace Mosa.Internal
 
 			return sizeOf;
 		}
+
+		public static uint GetMethodDescriptionTable(uint ptr)
+		{
+			uint* entry = (uint*)Native.GetBaseMethodDescriptionTable(ptr);
+
+			while (entry[0] != 0)
+			{
+				if (entry[0] >= ptr)
+				{
+					if ((entry[0] + entry[1]) < ptr)
+					{
+						return entry[3];
+					}
+				}
+
+				entry = entry + (nativeIntSize * 3);
+			}
+
+			return 0;
+		}
+
+		public static uint GetExceptionClauseTable(uint ptr)
+		{
+			uint* descriptionTable = (uint*)GetMethodDescriptionTable(ptr);
+			return descriptionTable[0];
+		}
+
 	}
 }

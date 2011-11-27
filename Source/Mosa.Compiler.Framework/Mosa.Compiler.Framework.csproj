@@ -97,7 +97,6 @@
     <Compile Include="InstructionLogger.cs" />
     <Compile Include="LeaveSSA.cs" />
     <Compile Include="ILoggerWriter.cs" />
-    <Compile Include="MethodTableBuilderStage.cs" />
     <Compile Include="OperandDeterminationStage.cs" />
     <Compile Include="Operands\SsaOperand.cs" />
     <Compile Include="Operands\VirtualRegisterOperand.cs" />

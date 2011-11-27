@@ -155,6 +155,10 @@ namespace Mosa.Platform.x86
 			assemblyCompilerPipeline.InsertAfterFirst<IAssemblyCompilerStage>(
 				new InterruptBuilderStage()
 			);
+
+			assemblyCompilerPipeline.InsertAfterLast<TypeLayoutStage>(
+				new MethodTableBuilderStage()
+			);
 		}
 
 		/// <summary>
@@ -181,7 +185,6 @@ namespace Mosa.Platform.x86
 				{                   
 					new SimplePeepholeOptimizationStage(),
 				});
-
 		}
 
 		/// <summary>

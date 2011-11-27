@@ -451,8 +451,8 @@ namespace Mosa.Compiler.Linker
 			ntHeaders.OptionalHeader.DataDirectory = new IMAGE_DATA_DIRECTORY[IMAGE_OPTIONAL_HEADER.IMAGE_NUMBEROF_DIRECTORY_ENTRIES];
 
 			// Populate the CIL data directory 
-			ntHeaders.OptionalHeader.DataDirectory[14].VirtualAddress = (uint)GetSymbol(CLI_HEADER.SymbolName).VirtualAddress.ToInt64();
-			ntHeaders.OptionalHeader.DataDirectory[14].Size = CLI_HEADER.Length;
+			ntHeaders.OptionalHeader.DataDirectory[14].VirtualAddress = 0;// (uint)GetSymbol(CLI_HEADER.SymbolName).VirtualAddress.ToInt64();
+			ntHeaders.OptionalHeader.DataDirectory[14].Size = 0; // CLI_HEADER.Length;
 
 			ntHeaders.Write(writer);
 

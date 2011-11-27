@@ -4,8 +4,9 @@ using System.IO;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.Framework
+namespace Mosa.Platform.x86
 {
 	/// <summary>
 	/// Builds the method table used for exception handling. The table has the following format:
@@ -30,13 +31,18 @@ namespace Mosa.Compiler.Framework
 		private IAssemblyLinker linker;
 
 		/// <summary>
+		/// 
+		/// </summary>
+		public static readonly byte[] blank4 = new byte[4];
+
+		/// <summary>
 		/// Setups the specified compiler.
 		/// </summary>
 		/// <param name="compiler">The compiler.</param>
 		void IAssemblyCompilerStage.Setup(AssemblyCompiler compiler)
 		{
 			base.Setup(compiler);
-			this.linker = this.RetrieveAssemblyLinkerFromCompiler();
+			linker = RetrieveAssemblyLinkerFromCompiler();
 		}
 
 		/// <summary>
@@ -77,7 +83,7 @@ namespace Mosa.Compiler.Framework
 				}
 			}
 
-			CreateMethodDescriptionTable(table);
+			CreateMethodLookupTable(table);
 			CreateMethodDescriptionEntries(methods);
 		}
 
@@ -85,38 +91,40 @@ namespace Mosa.Compiler.Framework
 		/// Creates the method description table.
 		/// </summary>
 		/// <param name="table">The table.</param>
-		private void CreateMethodDescriptionTable(IList<LinkerSymbol> table)
+		private void CreateMethodLookupTable(IList<LinkerSymbol> table)
 		{
 			// Allocate the table and fill it
 			var size = 3 * table.Count * typeLayout.NativePointerSize + typeLayout.NativePointerSize;
 			var offsetPointer = 0;
 			var offsets = new Dictionary<LinkerSymbol, long>();
 
-			using (var stream = this.linker.Allocate("methodTableStart", SectionKind.Text, size, typeLayout.NativePointerAlignment))
+			using (var stream = linker.Allocate("<$>methodLookupTable", SectionKind.Text, size, typeLayout.NativePointerAlignment))
 			{
-				var position = stream.Position;
 				foreach (var entry in table)
 				{
 					// Store the offset pointer
 					offsets[entry] = offsetPointer;
 
-					// Store address and length of the method
-					this.linker.Link(LinkType.AbsoluteAddress | LinkType.I4, "methodTableStart", offsetPointer, 0, entry.Name, IntPtr.Zero);
-					this.linker.Link(LinkType.AbsoluteAddress | LinkType.I4, "methodTableStart", offsetPointer + 8, 0, entry.Name + "$mdtable", IntPtr.Zero);
+					// Store address (the linker writes the actual entry)
+					linker.Link(LinkType.AbsoluteAddress | LinkType.I4, "<$>methodLookupTable", offsetPointer, 0, entry.Name, IntPtr.Zero);
+					// Store the length (it copied in by the next loop)
+
+					// Store the pointer to the method description table (the linker writes the actual entry)
+					linker.Link(LinkType.AbsoluteAddress | LinkType.I4, "<$>methodLookupTable", offsetPointer + 8, 0, entry.Name + "$mdtable", IntPtr.Zero);
 					offsetPointer += 3 * typeLayout.NativePointerSize;
 				}
 
+				// Mark end of table
+				stream.Position = offsetPointer;
+				stream.Write(blank4);
+
 				// Store pointers to method description entries
-				stream.Position = position;
 				foreach (var entry in table)
 				{
-					stream.Seek(offsets[entry] + 4, SeekOrigin.Begin);
+					stream.Position = offsets[entry] + typeLayout.NativePointerSize;
 					stream.Write(LittleEndianBitConverter.GetBytes(entry.Length), 0, 4);
 				}
 
-				// Mark end of table
-				stream.Seek(size - typeLayout.NativePointerSize, SeekOrigin.Begin);
-				stream.Write(new byte[] { 0, 0, 0, 0 }, 0, 4);
 			}
 		}
 
@@ -128,13 +136,16 @@ namespace Mosa.Compiler.Framework
 		{
 			foreach (var method in methods)
 			{
-				using (var stream = this.linker.Allocate(method.FullName + "$mdtable", SectionKind.Text, 2 * typeLayout.NativePointerSize, typeLayout.NativePointerAlignment))
+				int size = 2 * typeLayout.NativePointerSize;
+
+				using (var stream = linker.Allocate(method.FullName + "$mdtable", SectionKind.Text, size, typeLayout.NativePointerAlignment))
 				{
 					// Pointer to exception clause table
 					linker.Link(LinkType.AbsoluteAddress | LinkType.I4, method.FullName + "$mdtable", 0, 0, method.FullName + "$etable", IntPtr.Zero);
-					// GC tracking info
-					stream.Seek(1 * typeLayout.NativePointerSize, SeekOrigin.Begin);
-					stream.Write(LittleEndianBitConverter.GetBytes(0x00000000), 0, 4);
+					stream.Position += typeLayout.NativePointerSize;
+
+					// GC tracking info (not implemented yet)
+					stream.Write(blank4);
 				}
 			}
 		}

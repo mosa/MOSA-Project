@@ -300,16 +300,19 @@ namespace Mosa.Platform.x86.Intrinsic
 		public extern static void CallFilter();
 
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.InvokeDelegate, Mosa.Platform.x86")]
-		public extern static void InvokeDelegate(object obj, int ptr);
+		public extern static void InvokeDelegate(object obj, uint ptr);
 
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.InvokeInstanceDelegate, Mosa.Platform.x86")]
-		public extern static void InvokeInstanceDelegate(object obj, int ptr);
+		public extern static void InvokeInstanceDelegate(object obj, uint ptr);
 
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.InvokeDelegateWithReturn, Mosa.Platform.x86")]
-		public extern static object InvokeDelegateWithReturn(object obj, int ptr);
+		public extern static object InvokeDelegateWithReturn(object obj, uint ptr);
 
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.InvokeInstanceDelegateWithReturn, Mosa.Platform.x86")]
-		public extern static object InvokeInstanceDelegateWithReturn(object obj, int ptr);
+		public extern static object InvokeInstanceDelegateWithReturn(object obj, uint ptr);
+
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.GetBaseMethodDescriptionTable, Mosa.Platform.x86")]
+		public extern static uint GetBaseMethodDescriptionTable(uint ptr);
 
 		#endregion
 

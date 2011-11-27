@@ -100,6 +100,7 @@
     <Compile Include="CPUx86\SseRoundInstruction.cs" />
     <Compile Include="InterruptBuilderStage.cs" />
     <Compile Include="Intrinsic\CallFilter.cs" />
+    <Compile Include="Intrinsic\GetBaseMethodDescriptionTable.cs" />
     <Compile Include="Intrinsic\GetEip.cs" />
     <Compile Include="Intrinsic\Cli.cs" />
     <Compile Include="Intrinsic\GetControlRegisterBase.cs" />
@@ -111,7 +112,6 @@
     <Compile Include="Intrinsic\InvokeDelegateWithReturn.cs" />
     <Compile Include="Intrinsic\InvokeInstanceDelegate.cs" />
     <Compile Include="Intrinsic\InvokeInstanceDelegateWithReturn.cs" />
-    <Compile Include="Intrinsic\JumpGlobalInterruptHandler.cs" />
     <Compile Include="Intrinsic\RestoreContext.cs" />
     <Compile Include="Intrinsic\SetControlRegisterBase.cs" />
     <Compile Include="Intrinsic\SetCR0.cs" />
@@ -137,6 +137,7 @@
     <Compile Include="Intrinsic\Nop.cs" />
     <Compile Include="Intrinsic\Out.cs" />
     <Compile Include="Intrinsic\Sti.cs" />
+    <Compile Include="MethodTableBuilderStage.cs" />
     <Compile Include="SegmentRegister.cs" />
     <Compile Include="CPUx86\BranchInstruction.cs" />
     <Compile Include="Intrinsic\Test.cs" />
