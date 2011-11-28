@@ -116,6 +116,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="block">The completed block.</param>
 		protected virtual void BlockEnd(BasicBlock block)
 		{
+			// TODO: Adjust ICodeEmitter interface to mark the end of label sections, rather than create this special label:
 			codeEmitter.Label(block.Label + 0x0F000000);
 		}
 

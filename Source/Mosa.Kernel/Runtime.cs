@@ -6,6 +6,7 @@
  * Authors:
  *  Michael Fröhlich (grover) <michael.ruck@michaelruck.de>
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
 using Mosa.Kernel;

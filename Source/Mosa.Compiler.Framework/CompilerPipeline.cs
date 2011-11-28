@@ -113,7 +113,7 @@ namespace Mosa.Compiler.Framework
 				StageType result = pipeline[i] as StageType;
 				if (result != null)
 				{
-					pipeline.Insert(i, stage);
+					pipeline.Insert(i + 1, stage);
 					return;
 				}
 			}

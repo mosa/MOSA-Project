@@ -151,7 +151,6 @@ namespace Mosa.Platform.x86
 		/// <param name="assemblyCompilerPipeline">The assembly compiler pipeline to extend.</param>
 		public override void ExtendAssemblyCompilerPipeline(CompilerPipeline assemblyCompilerPipeline)
 		{
-			// HACK: Always inserts after second entry in pipeline
 			assemblyCompilerPipeline.InsertAfterFirst<IAssemblyCompilerStage>(
 				new InterruptBuilderStage()
 			);
@@ -159,6 +158,7 @@ namespace Mosa.Platform.x86
 			assemblyCompilerPipeline.InsertAfterLast<TypeLayoutStage>(
 				new MethodTableBuilderStage()
 			);
+
 		}
 
 		/// <summary>
@@ -181,10 +181,12 @@ namespace Mosa.Platform.x86
 				});
 
 			methodCompilerPipeline.InsertAfterLast<IBlockOrderStage>(
-				new IMethodCompilerStage[]
-				{                   
-					new SimplePeepholeOptimizationStage(),
-				});
+				new SimplePeepholeOptimizationStage()
+			);
+
+			methodCompilerPipeline.InsertAfterLast<CodeGenerationStage>(
+				new ExceptionLayoutStage()
+			);
 		}
 
 		/// <summary>

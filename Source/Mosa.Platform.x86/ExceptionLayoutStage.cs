@@ -12,17 +12,17 @@ using System.Collections.Generic;
 using System.IO;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Linker;
+using Mosa.Compiler.Framework;
 
+// FIXME: Splits this class into platform dependent and independent classes. Move platform independent code into Mosa.Compiler.Framework
 
-// FIXME: Splits this class into platform dependent and independent classes. Move platform dependent code into Mosa.Platforms.x86
-
-namespace Mosa.Compiler.Framework
+namespace Mosa.Platform.x86
 {
 	public sealed class ExceptionLayoutStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
 	{
 		#region Data members
 
-		//FIXME: Assumes LittleEndian architecture 
+		//FIXME: Assumes LittleEndian architecture (okay for x86 but not for platform independent code)
 		private static readonly DataConverter LittleEndianBitConverter = DataConverter.LittleEndian;
 
 		private List<ExceptionClauseNode> sortedClauses;
@@ -48,7 +48,7 @@ namespace Mosa.Compiler.Framework
 			BuildSort();
 
 			// Step 2 - Assign blocks to innermost exception clause
-			AssignBlockstoClauses();
+			AssignBlocksToClauses();
 
 			// Step 3 - Emit table of PC ranges and the clause handler
 			EmitExceptionTable();
@@ -56,7 +56,7 @@ namespace Mosa.Compiler.Framework
 
 		#endregion // IMethodCompilerStage members
 
-		private void AssignBlockstoClauses()
+		private void AssignBlocksToClauses()
 		{
 			blockExceptions = new Dictionary<BasicBlock, ExceptionClause>();
 
@@ -74,7 +74,7 @@ namespace Mosa.Compiler.Framework
 						exceptionBlocks.Add(clause, blocks);
 					}
 
-					blocks.Add(block);
+					blocks.Add(block); // TODO: Shouldn't this list be sorted by block's position?
 					blockExceptions.Add(block, clause);
 				}
 			}
@@ -125,11 +125,9 @@ namespace Mosa.Compiler.Framework
 			{
 				ExceptionClause clause = node.Clause;
 
-				List<BasicBlock> blocks = this.exceptionBlocks[clause];
-
 				ExceptionEntry prev = new ExceptionEntry();
 
-				foreach (BasicBlock block in blocks)
+				foreach (BasicBlock block in this.exceptionBlocks[clause])
 				{
 					int start = (int)codeEmitter.GetPosition(block.Label);
 					int length = (int)codeEmitter.GetPosition(block.Label + 0x0F000000) - start;
@@ -153,18 +151,20 @@ namespace Mosa.Compiler.Framework
 
 			int tableSize = (entries.Count * nativePointerSize * 4) + nativePointerSize;
 
+			byte[] blank = new Byte[nativePointerSize];
+
 			using (Stream stream = methodCompiler.Linker.Allocate(this.methodCompiler.Method.FullName + @"$etable", SectionKind.ROData, tableSize, nativePointerAlignment))
 			{
 				foreach (ExceptionEntry entry in entries)
 				{
-					// FIXME: Assumes platform
+					// FIXME: Assumes x86 platform
 					WriteLittleEndian4(stream, entry.Start);
 					WriteLittleEndian4(stream, entry.Length);
 					WriteLittleEndian4(stream, entry.Handler);
 					WriteLittleEndian4(stream, entry.Filter);
 				}
 
-				stream.Write(new Byte[nativePointerSize], 0, nativePointerSize);
+				stream.Write(blank);
 			}
 
 		}
@@ -210,6 +210,8 @@ namespace Mosa.Compiler.Framework
 
 			foreach (ExceptionClause clause in methodCompiler.ExceptionClauseHeader.Clauses)
 				sortedClauses.Add(new ExceptionClauseNode(clause));
+
+			// TODO: Sort? Seems to be missing here
 		}
 
 		private List<ExceptionClauseNode> Sort(List<ExceptionClauseNode> listToSort)

@@ -47,6 +47,16 @@ namespace Mosa.Compiler.Verifier
 		/// <value><c>true</c> if [including warnings]; otherwise, <c>false</c>.</value>
 		public bool IncludingWarnings { get; set; }
 
+		/// <summary>
+		/// Gets or sets a value indicating whether [mosa specific validation] to performed. 
+		/// This might might be necessary when MOSA does not implement a specific feature and 
+		/// wish the verifier to detected it early.
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if [mosa specific validation]; otherwise, <c>false</c>.
+		/// </value>
+		public bool MosaSpecificValidation { get; set; }
+
 		#endregion // Properties
 
 		/// <summary>
@@ -58,6 +68,7 @@ namespace Mosa.Compiler.Verifier
 			MetadataValidation = true;
 			ILValidation = true;
 			IncludingWarnings = true;
+			MosaSpecificValidation = true;
 		}
 	}
 }

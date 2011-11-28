@@ -92,7 +92,6 @@
     <Compile Include="DelegateTypePatchStage.cs" />
     <Compile Include="MetadataStage.cs" />
     <Compile Include="EnterSSA.cs" />
-    <Compile Include="ExceptionLayoutStage.cs" />
     <Compile Include="ExceptionClauseHeader.cs" />
     <Compile Include="InstructionLogger.cs" />
     <Compile Include="LeaveSSA.cs" />

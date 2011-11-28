@@ -46,7 +46,6 @@ namespace Mosa.Tools.TypeExplorer
 
 				new LoopAwareBlockOrderStage(),
 				new CodeGenerationStage(),
-				new ExceptionLayoutStage(),
 			});
 		}
 
