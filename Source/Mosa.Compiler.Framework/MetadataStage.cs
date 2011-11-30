@@ -65,12 +65,10 @@ namespace Mosa.Compiler.Framework
 				EmitInteger(stream, (uint)typeSystem.TypeModules.Count);
 
 				// 2. Pointers to assemblies
-				int offset = typeLayout.NativePointerSize;
-
 				foreach (var module in typeSystem.TypeModules)
 				{
-					linker.Link(LinkType.AbsoluteAddress | LinkType.I4, assemblyListSymbol, offset, 0, module.Name + "$atable", IntPtr.Zero);
-					offset += typeLayout.NativePointerSize;
+					linker.Link(LinkType.AbsoluteAddress | LinkType.I4, assemblyListSymbol, (int)stream.Position, 0, module.Name + "$atable", IntPtr.Zero);
+					stream.Position += typeLayout.NativePointerSize;
 				}
 			}
 
@@ -105,17 +103,16 @@ namespace Mosa.Compiler.Framework
 			{
 				// 1. Pointer to Assembly Name
 				linker.Link(LinkType.AbsoluteAddress | LinkType.I4, assemblyTableSymbol, 0, 0, assemblyNameSymbol, IntPtr.Zero);
+				stream.Position += typeLayout.NativePointerSize;
 
 				// 2. Number of types
 				EmitInteger(stream, moduleTypes);
 
 				// 3. Pointer to list of types
-				int offset = typeLayout.NativePointerSize * 2;
-
 				foreach (var type in typeModule.GetAllTypes())
 				{
 					if (!type.IsModule && !(type.Module is InternalTypeModule))
-						linker.Link(LinkType.AbsoluteAddress | LinkType.I4, assemblyTableSymbol, offset, 0, type.FullName + @"$dtable", IntPtr.Zero);
+						linker.Link(LinkType.AbsoluteAddress | LinkType.I4, assemblyTableSymbol, (int)stream.Position, 0, type.FullName + @"$dtable", IntPtr.Zero);
 				}
 			}
 
@@ -148,15 +145,13 @@ namespace Mosa.Compiler.Framework
 				// 2. Metadata Token
 				EmitInteger(stream, (uint)type.Token.ToUInt32());
 
-				int offset = typeLayout.NativePointerSize * 2;
-
 				// 3. Pointer to Name
-				linker.Link(LinkType.AbsoluteAddress | LinkType.I4, typeTableSymbol, offset, 0, typeNameSymbol, IntPtr.Zero);
-
-				offset += typeLayout.NativePointerSize;
+				linker.Link(LinkType.AbsoluteAddress | LinkType.I4, typeTableSymbol, (int)stream.Position, 0, typeNameSymbol, IntPtr.Zero);
+				stream.Position = +typeLayout.NativePointerSize;
 
 				// 4. Pointer to Assembly Definition
-				linker.Link(LinkType.AbsoluteAddress | LinkType.I4, typeTableSymbol, offset, 0, assemblySymbol, IntPtr.Zero);
+				linker.Link(LinkType.AbsoluteAddress | LinkType.I4, typeTableSymbol, (int)stream.Position, 0, assemblySymbol, IntPtr.Zero);
+				stream.Position = +typeLayout.NativePointerSize;
 
 				// 5. isInterface
 				stream.WriteByte((byte)(type.IsInterface ? 1 : 0));

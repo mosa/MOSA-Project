@@ -13,6 +13,8 @@ using System.IO;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.Framework;
+using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.Metadata;
 
 // FIXME: Splits this class into platform dependent and independent classes. Move platform independent code into Mosa.Compiler.Framework
 
@@ -74,7 +76,7 @@ namespace Mosa.Platform.x86
 						exceptionBlocks.Add(clause, blocks);
 					}
 
-					blocks.Add(block); // TODO: Shouldn't this list be sorted by block's position?
+					blocks.Add(block);
 					blockExceptions.Add(block, clause);
 				}
 			}
@@ -100,18 +102,23 @@ namespace Mosa.Platform.x86
 
 		private struct ExceptionEntry
 		{
-			public int Start;
-			public int Length;
-			public int Handler;
-			public int Filter;
+			public ExceptionClauseType Kind;
+			public uint Start;
+			public uint Length;
+			public uint Handler;
 
-			public int End { get { return Start + Length - 1; } }
+			public uint Filter;
+			public RuntimeType Type;
 
-			public ExceptionEntry(int start, int length, int handler, int filter)
+			public uint End { get { return Start + Length - 1; } }
+
+			public ExceptionEntry(uint start, uint length, uint handler, ExceptionClauseType kind, RuntimeType type, uint filter)
 			{
 				Start = start;
 				Length = length;
+				Kind = kind;
 				Handler = handler;
+				Type = type;
 				Filter = filter;
 			}
 
@@ -129,51 +136,90 @@ namespace Mosa.Platform.x86
 
 				foreach (BasicBlock block in this.exceptionBlocks[clause])
 				{
-					int start = (int)codeEmitter.GetPosition(block.Label);
-					int length = (int)codeEmitter.GetPosition(block.Label + 0x0F000000) - start;
-					int handler = (int)codeEmitter.GetPosition(clause.TryOffset);
-					int filter = (int)codeEmitter.GetPosition(clause.FilterOffset);
+					uint start = (uint)codeEmitter.GetPosition(block.Label);
+					uint length = (uint)codeEmitter.GetPosition(block.Label + 0x0F000000) - start;
+					uint handler = (uint)codeEmitter.GetPosition(clause.TryOffset);
 
-					if (prev.End + 1 == start && prev.Handler == handler && prev.Filter == filter)
+					uint filter = 0;
+					RuntimeType type = null;
+
+					if (clause.Kind == ExceptionClauseType.Exception)
+					{
+						// Convert token to method table pointer (linker request needs to be involved)
+
+						// Get runtime type
+						type = typeModule.GetType(new Token(clause.ClassToken));
+					}
+					else if (clause.Kind == ExceptionClauseType.Filter)
+					{
+						filter = (uint)codeEmitter.GetPosition(clause.FilterOffset);
+					}
+
+					// TODO: Optimization - Search for existing exception protected region  (before or after) to merge the current block
+
+					// Simple optimization assuming blocks are somewhat sorted by position
+					if (prev.End + 1 == start && prev.Kind == clause.Kind && prev.Handler == handler && prev.Filter == filter && prev.Type == type)
 					{
 						// merge protected blocks sequence
-						prev.Length = prev.Length + (int)codeEmitter.GetPosition(block.Label + 0x0F000000) - start;
+						prev.Length = prev.Length + (uint)codeEmitter.GetPosition(block.Label + 0x0F000000) - start;
 					}
 					else
 					{
 						// new protection block sequence
-						ExceptionEntry entry = new ExceptionEntry(start, length, handler, filter);
+						ExceptionEntry entry = new ExceptionEntry(start, length, handler, clause.Kind, type, filter);
 						entries.Add(entry);
 						prev = entry;
 					}
 				}
 			}
 
-			int tableSize = (entries.Count * nativePointerSize * 4) + nativePointerSize;
+			int tableSize = (entries.Count * nativePointerSize * 5) + nativePointerSize;
 
 			byte[] blank = new Byte[nativePointerSize];
 
-			using (Stream stream = methodCompiler.Linker.Allocate(this.methodCompiler.Method.FullName + @"$etable", SectionKind.ROData, tableSize, nativePointerAlignment))
+			string section = this.methodCompiler.Method.FullName + @"$etable";
+
+			using (Stream stream = methodCompiler.Linker.Allocate(section, SectionKind.ROData, tableSize, nativePointerAlignment))
 			{
 				foreach (ExceptionEntry entry in entries)
 				{
 					// FIXME: Assumes x86 platform
+					WriteLittleEndian4(stream, (uint)entry.Kind);
 					WriteLittleEndian4(stream, entry.Start);
 					WriteLittleEndian4(stream, entry.Length);
 					WriteLittleEndian4(stream, entry.Handler);
-					WriteLittleEndian4(stream, entry.Filter);
+
+					if (entry.Kind == ExceptionClauseType.Exception)
+					{
+						// TODO: Store method table pointer here
+						this.methodCompiler.Linker.Link(LinkType.AbsoluteAddress | LinkType.I4, section, (int)stream.Position, 0, entry.Type.FullName + "$etable", IntPtr.Zero);
+
+						stream.Position += nativePointerSize;
+					}
+					else if (entry.Kind == ExceptionClauseType.Filter)
+					{
+						// TODO: There are no plans in the short term to support filtered exception clause - C# doesn't use them 
+						stream.Position += nativePointerSize;
+					}
+					else
+					{
+						stream.Position += nativePointerSize;
+					}
 				}
 
-				stream.Write(blank);
+				// Mark end of table
+				stream.Write(blank); //stream.Position += typeLayout.NativePointerSize;
 			}
 
 		}
 
-		static private void WriteLittleEndian4(Stream stream, int value)
+
+		static private void WriteLittleEndian4(Stream stream, uint value)
 		{
 			byte[] bytes = LittleEndianBitConverter.GetBytes(value);
 			stream.Write(bytes, 0, bytes.Length);
 		}
+
 
 		#region Postorder-traversal Sort
 

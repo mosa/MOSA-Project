@@ -235,23 +235,24 @@ namespace Mosa.Platform.x86
 			LabelOperand label = displacement as LabelOperand;
 			SymbolOperand symbol = displacement as SymbolOperand;
 
+			int pos = (int)(codeStream.Position - codeStreamBasePosition);
+
 			if (label != null)
 			{
-				int pos = (int)(codeStream.Position - codeStreamBasePosition);
 				disp = LittleEndianBitConverter.GetBytes((uint)linker.Link(LinkType.AbsoluteAddress | LinkType.I4, compiler.Method.ToString(), pos, 0, label.Name, IntPtr.Zero));
 			}
 			else if (member != null)
 			{
-				int pos = (int)(codeStream.Position - codeStreamBasePosition);
 				disp = LittleEndianBitConverter.GetBytes((uint)linker.Link(LinkType.AbsoluteAddress | LinkType.I4, compiler.Method.ToString(), pos, 0, member.Member.ToString(), member.Offset));
 			}
 			else if (symbol != null)
 			{
-				int pos = (int)(codeStream.Position - codeStreamBasePosition);
 				disp = LittleEndianBitConverter.GetBytes((uint)linker.Link(LinkType.AbsoluteAddress | LinkType.I4, compiler.Method.ToString(), pos, 0, symbol.Name, IntPtr.Zero));
 			}
 			else
+			{
 				disp = LittleEndianBitConverter.GetBytes((displacement as MemoryOperand).Offset.ToInt32());
+			}
 
 			codeStream.Write(disp, 0, disp.Length);
 		}

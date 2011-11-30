@@ -258,7 +258,6 @@ namespace Mosa.Tools.Compiler.Stages
 				bw.Write(load_end_addr);
 				bw.Write(bss_end_addr);
 
-				// HACK: Symbol has been hacked. What's the correct way to do this?
 				this.linker.Link(LinkType.AbsoluteAddress | LinkType.I4, MultibootHeaderSymbolName, (int)stream.Position, 0, @"Mosa.Tools.Compiler.LinkerGenerated.<$>MultibootInit()", IntPtr.Zero);
 
 				bw.Write(VideoMode);

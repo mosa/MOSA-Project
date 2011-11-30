@@ -60,13 +60,13 @@ namespace Mosa.Platform.x86
 		/// </summary>
 		void IAssemblyCompilerStage.Run()
 		{
-			this.CreateTable();
+			CreateTables();
 		}
 
 		/// <summary>
 		/// Creates the table.
 		/// </summary>
-		private void CreateTable()
+		private void CreateTables()
 		{
 			var table = new List<LinkerSymbol>();
 			var methods = new List<RuntimeMethod>();
@@ -105,36 +105,27 @@ namespace Mosa.Platform.x86
 		{
 			// Allocate the table and fill it
 			var size = 3 * table.Count * typeLayout.NativePointerSize + typeLayout.NativePointerSize;
-			var offsetPointer = 0;
-			var offsets = new Dictionary<LinkerSymbol, long>();
 
-			using (var stream = linker.Allocate("<$>methodLookupTable", SectionKind.Text, size, typeLayout.NativePointerAlignment))
+			string section = "<$>methodLookupTable";
+
+			using (var stream = linker.Allocate(section, SectionKind.Text, size, typeLayout.NativePointerAlignment))
 			{
 				foreach (var entry in table)
 				{
-					// Store the offset pointer
-					offsets[entry] = offsetPointer;
+					// 1. Store address (the linker writes the actual entry)
+					linker.Link(LinkType.AbsoluteAddress | LinkType.I4, section, (int)stream.Position, 0, entry.Name, IntPtr.Zero);
+					stream.Position += typeLayout.NativePointerSize;
+					
+					// 2. Store the length (it copied in by the next loop)
+					stream.Write(LittleEndianBitConverter.GetBytes(entry.Length), 0, 4);
 
-					// Store address (the linker writes the actual entry)
-					linker.Link(LinkType.AbsoluteAddress | LinkType.I4, "<$>methodLookupTable", offsetPointer, 0, entry.Name, IntPtr.Zero);
-					// Store the length (it copied in by the next loop)
-
-					// Store the pointer to the method description table (the linker writes the actual entry)
-					linker.Link(LinkType.AbsoluteAddress | LinkType.I4, "<$>methodLookupTable", offsetPointer + 8, 0, entry.Name + "$mdtable", IntPtr.Zero);
-					offsetPointer += 3 * typeLayout.NativePointerSize;
+					// 3. Store the pointer to the method description table (the linker writes the actual entry)
+					linker.Link(LinkType.AbsoluteAddress | LinkType.I4, section, (int)stream.Position, 0, entry.Name + "$mdtable", IntPtr.Zero);
+					stream.Position += typeLayout.NativePointerSize;
 				}
 
 				// Mark end of table
-				stream.Position = offsetPointer;
-				stream.Write(blank4);
-
-				// Store pointers to method description entries
-				foreach (var entry in table)
-				{
-					stream.Position = offsets[entry] + typeLayout.NativePointerSize;
-					stream.Write(LittleEndianBitConverter.GetBytes(entry.Length), 0, 4);
-				}
-
+				stream.Write(blank4); //stream.Position += typeLayout.NativePointerSize;
 			}
 		}
 
@@ -148,10 +139,12 @@ namespace Mosa.Platform.x86
 			{
 				int size = 2 * typeLayout.NativePointerSize;
 
-				using (var stream = linker.Allocate(method.FullName + "$mdtable", SectionKind.Text, size, typeLayout.NativePointerAlignment))
+				string section = method.FullName + "$mdtable";
+
+				using (var stream = linker.Allocate(section, SectionKind.Text, size, typeLayout.NativePointerAlignment))
 				{
 					// Pointer to exception clause table
-					linker.Link(LinkType.AbsoluteAddress | LinkType.I4, method.FullName + "$mdtable", 0, 0, method.FullName + "$etable", IntPtr.Zero);
+					linker.Link(LinkType.AbsoluteAddress | LinkType.I4, section, 0, 0, method.FullName + "$etable", IntPtr.Zero);
 					stream.Position += typeLayout.NativePointerSize;
 
 					// GC tracking info (not implemented yet)
