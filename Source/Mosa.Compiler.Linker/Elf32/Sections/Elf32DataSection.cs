@@ -22,8 +22,8 @@ namespace Mosa.Compiler.Linker.Elf32.Sections
 		public Elf32DataSection()
 			: base(SectionKind.Data, @".data", IntPtr.Zero)
 		{
-			_header.Type = Elf32SectionType.ProgBits;
-			_header.Flags = Elf32SectionAttribute.Alloc | Elf32SectionAttribute.Write;
+			header.Type = Elf32SectionType.ProgBits;
+			header.Flags = Elf32SectionAttribute.Alloc | Elf32SectionAttribute.Write;
 		}
 	}
 }

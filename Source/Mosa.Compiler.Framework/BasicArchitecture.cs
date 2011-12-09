@@ -22,7 +22,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Holds the native type of the architecture.
 		/// </summary>
-		private SigType _nativeType;
+		private SigType nativeType;
 
 		/// <summary>
 		/// Gets the width of a native integer in bits.
@@ -46,17 +46,17 @@ namespace Mosa.Compiler.Framework
 		{
 			get
 			{
-				if (null == _nativeType)
+				if (null == nativeType)
 				{
 					int bits = NativeIntegerSize;
 					switch (bits)
 					{
 						case 32:
-							_nativeType = BuiltInSigType.Int32;
+							nativeType = BuiltInSigType.Int32;
 							break;
 
 						case 64:
-							_nativeType = BuiltInSigType.Int64;
+							nativeType = BuiltInSigType.Int64;
 							break;
 
 						default:
@@ -64,7 +64,7 @@ namespace Mosa.Compiler.Framework
 					}
 				}
 
-				return _nativeType;
+				return nativeType;
 			}
 		}
 
@@ -98,7 +98,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Factory method for result operands of instructions.
 		/// </summary>
-		/// <param name="type">The datatype held in the result operand.</param>
+		/// <param name="type">The data type held in the result operand.</param>
 		/// <param name="label">The label.</param>
 		/// <param name="index">The index.</param>
 		/// <returns>

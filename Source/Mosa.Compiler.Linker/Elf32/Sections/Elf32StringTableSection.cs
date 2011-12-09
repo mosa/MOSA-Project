@@ -40,8 +40,8 @@ namespace Mosa.Compiler.Linker.Elf32.Sections
 		public Elf32StringTableSection()
 			: base(Mosa.Compiler.Linker.SectionKind.Text, @".shstrtab", IntPtr.Zero)
 		{
-			_header.Type = Elf32SectionType.StringTable;
-			_header.Flags = (Elf32SectionAttribute)0;
+			header.Type = Elf32SectionType.StringTable;
+			header.Flags = (Elf32SectionAttribute)0;
 		}
 
 		/// <summary>
@@ -50,7 +50,7 @@ namespace Mosa.Compiler.Linker.Elf32.Sections
 		/// <param name="writer">The writer.</param>
 		public override void Write(System.IO.BinaryWriter writer)
 		{
-			_header.Offset = (uint)writer.BaseStream.Position;
+			header.Offset = (uint)writer.BaseStream.Position;
 			byte initial = (byte)'\0';
 			writer.Write(initial);
 			writer.Write(stringTable.ToArray());

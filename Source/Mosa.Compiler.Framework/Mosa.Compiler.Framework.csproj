@@ -273,9 +273,6 @@
     <Compile Include="Linker\LinkerGeneratedType.cs" />
     <Compile Include="Linker\LinkerMethodCompiler.cs" />
     <Compile Include="Linker\LinkTimeCodeGenerator.cs" />
-    <Compile Include="ArchitectureSpecificAttribute.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="AssemblyCompiler.cs">
       <SubType>Code</SubType>
     </Compile>

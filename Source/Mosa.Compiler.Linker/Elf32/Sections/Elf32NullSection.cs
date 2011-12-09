@@ -34,16 +34,16 @@ namespace Mosa.Compiler.Linker.Elf32.Sections
 		public Elf32NullSection()
 			: base(SectionKind.Text, @"", IntPtr.Zero)
 		{
-			_header.Name = 0;
-			_header.Type = Elf32SectionType.Null;
-			_header.Flags = 0;
-			_header.Address = 0;
-			_header.Offset = 0;
-			_header.Size = 0;
-			_header.Link = 0;
-			_header.Info = 0;
-			_header.AddressAlignment = 0;
-			_header.EntrySize = 0;
+			header.Name = 0;
+			header.Type = Elf32SectionType.Null;
+			header.Flags = 0;
+			header.Address = 0;
+			header.Offset = 0;
+			header.Size = 0;
+			header.Link = 0;
+			header.Info = 0;
+			header.AddressAlignment = 0;
+			header.EntrySize = 0;
 		}
 
 		/// <summary>

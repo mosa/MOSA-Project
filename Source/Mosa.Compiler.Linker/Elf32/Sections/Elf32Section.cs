@@ -18,16 +18,16 @@ namespace Mosa.Compiler.Linker.Elf32.Sections
 	/// </summary>
 	public class Elf32Section : Mosa.Compiler.Linker.LinkerSection
 	{
-		private readonly DataConverter _littleEndianBitConverter = DataConverter.LittleEndian;
+		private readonly DataConverter LittleEndianBitConverter = DataConverter.LittleEndian;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		protected Elf32SectionHeader _header = new Elf32SectionHeader();
+		protected Elf32SectionHeader header = new Elf32SectionHeader();
 		/// <summary>
 		/// 
 		/// </summary>
-		protected System.IO.MemoryStream _sectionStream;
+		protected System.IO.MemoryStream sectionStream;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Elf32Section"/> class.
@@ -38,9 +38,9 @@ namespace Mosa.Compiler.Linker.Elf32.Sections
 		public Elf32Section(SectionKind kind, string name, IntPtr virtualAddress)
 			: base(kind, name, virtualAddress)
 		{
-			_header = new Elf32SectionHeader();
-			_header.Name = Elf32StringTableSection.AddString(name);
-			_sectionStream = new System.IO.MemoryStream();
+			header = new Elf32SectionHeader();
+			header.Name = Elf32StringTableSection.AddString(name);
+			sectionStream = new System.IO.MemoryStream();
 		}
 
 		/// <summary>
@@ -51,7 +51,7 @@ namespace Mosa.Compiler.Linker.Elf32.Sections
 		{
 			get
 			{
-				return _sectionStream.Length;
+				return sectionStream.Length;
 			}
 		}
 
@@ -63,7 +63,7 @@ namespace Mosa.Compiler.Linker.Elf32.Sections
 		{
 			get
 			{
-				return _header;
+				return header;
 			}
 		}
 
@@ -79,7 +79,7 @@ namespace Mosa.Compiler.Linker.Elf32.Sections
 			if (alignment > 1)
 				InsertPadding(alignment);
 
-			return _sectionStream;
+			return sectionStream;
 		}
 
 		/// <summary>
@@ -89,7 +89,7 @@ namespace Mosa.Compiler.Linker.Elf32.Sections
 		public virtual void Write(System.IO.BinaryWriter writer)
 		{
 			Header.Offset = (uint)writer.BaseStream.Position;
-			_sectionStream.WriteTo(writer.BaseStream);
+			sectionStream.WriteTo(writer.BaseStream);
 		}
 
 		/// <summary>
@@ -110,30 +110,30 @@ namespace Mosa.Compiler.Linker.Elf32.Sections
 		/// <param name="value">The value.</param>
 		public void ApplyPatch(long offset, LinkType linkType, long value)
 		{
-			long pos = _sectionStream.Position;
-			_sectionStream.Position = offset;
+			long pos = sectionStream.Position;
+			sectionStream.Position = offset;
 
 			// Apply the patch
 			switch (linkType & LinkType.SizeMask)
 			{
 				case LinkType.I1:
-					_sectionStream.WriteByte((byte)value);
+					sectionStream.WriteByte((byte)value);
 					break;
 
 				case LinkType.I2:
-					_sectionStream.Write(_littleEndianBitConverter.GetBytes((ushort)value), 0, 2);
+					sectionStream.Write(LittleEndianBitConverter.GetBytes((ushort)value), 0, 2);
 					break;
 
 				case LinkType.I4:
-					_sectionStream.Write(_littleEndianBitConverter.GetBytes((uint)value), 0, 4);
+					sectionStream.Write(LittleEndianBitConverter.GetBytes((uint)value), 0, 4);
 					break;
 
 				case LinkType.I8:
-					_sectionStream.Write(_littleEndianBitConverter.GetBytes(value), 0, 8);
+					sectionStream.Write(LittleEndianBitConverter.GetBytes(value), 0, 8);
 					break;
 			}
 
-			_sectionStream.Position = pos;
+			sectionStream.Position = pos;
 		}
 
 		#region Internals
@@ -144,9 +144,9 @@ namespace Mosa.Compiler.Linker.Elf32.Sections
 		/// <param name="alignment">The alignment.</param>
 		private void InsertPadding(int alignment)
 		{
-			long address = VirtualAddress.ToInt64() + _sectionStream.Length;
+			long address = VirtualAddress.ToInt64() + sectionStream.Length;
 			int pad = (int)(alignment - (address % alignment));
-			_sectionStream.Write(new byte[pad], 0, pad);
+			sectionStream.Write(new byte[pad], 0, pad);
 		}
 
 		#endregion // Internals

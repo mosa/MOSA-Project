@@ -75,7 +75,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Factory method for result operands of instructions.
 		/// </summary>
-		/// <param name="type">The datatype held in the result operand.</param>
+		/// <param name="type">The data type held in the result operand.</param>
 		/// <param name="label">The label.</param>
 		/// <param name="index">The index.</param>
 		/// <returns>

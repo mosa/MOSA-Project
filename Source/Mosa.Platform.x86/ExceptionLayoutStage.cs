@@ -175,9 +175,7 @@ namespace Mosa.Platform.x86
 
 			int tableSize = (entries.Count * nativePointerSize * 5) + nativePointerSize;
 
-			byte[] blank = new Byte[nativePointerSize];
-
-			string section = this.methodCompiler.Method.FullName + @"$etable";
+			string section = methodCompiler.Method.FullName + @"$etable";
 
 			using (Stream stream = methodCompiler.Linker.Allocate(section, SectionKind.ROData, tableSize, nativePointerAlignment))
 			{
@@ -192,7 +190,7 @@ namespace Mosa.Platform.x86
 					if (entry.Kind == ExceptionClauseType.Exception)
 					{
 						// TODO: Store method table pointer here
-						this.methodCompiler.Linker.Link(LinkType.AbsoluteAddress | LinkType.I4, section, (int)stream.Position, 0, entry.Type.FullName + "$etable", IntPtr.Zero);
+						methodCompiler.Linker.Link(LinkType.AbsoluteAddress | LinkType.I4, section, (int)stream.Position, 0, entry.Type.FullName + "$mtable", IntPtr.Zero);
 
 						stream.Position += nativePointerSize;
 					}
@@ -208,18 +206,15 @@ namespace Mosa.Platform.x86
 				}
 
 				// Mark end of table
-				stream.Write(blank); //stream.Position += typeLayout.NativePointerSize;
+				stream.Position += typeLayout.NativePointerSize;
 			}
 
 		}
 
-
 		static private void WriteLittleEndian4(Stream stream, uint value)
 		{
-			byte[] bytes = LittleEndianBitConverter.GetBytes(value);
-			stream.Write(bytes, 0, bytes.Length);
+			stream.Write(LittleEndianBitConverter.GetBytes(value));
 		}
-
 
 		#region Postorder-traversal Sort
 

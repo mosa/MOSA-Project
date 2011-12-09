@@ -24,5 +24,15 @@ namespace Mosa.Compiler.Common
 			stream.Write(buffer, 0, buffer.Length);
 		}
 
+		/// <summary>
+		/// Writes the zero bytes.
+		/// </summary>
+		/// <param name="stream">The stream.</param>
+		/// <param name="size">The size.</param>
+		public static void WriteZeroBytes(this Stream stream, int size)
+		{
+			for (int i = 0; i < size; i++)
+				stream.WriteByte(0);
+		}
 	}
 }

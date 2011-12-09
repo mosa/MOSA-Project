@@ -40,10 +40,6 @@ namespace Mosa.Platform.x86
 		/// </summary>
 		private IAssemblyLinker linker;
 
-		/// <summary>
-		/// 
-		/// </summary>
-		public static readonly byte[] blank4 = new byte[4];
 
 		/// <summary>
 		/// Setups the specified compiler.
@@ -125,7 +121,7 @@ namespace Mosa.Platform.x86
 				}
 
 				// Mark end of table
-				stream.Write(blank4); //stream.Position += typeLayout.NativePointerSize;
+				stream.Position += typeLayout.NativePointerSize;
 			}
 		}
 
@@ -148,7 +144,7 @@ namespace Mosa.Platform.x86
 					stream.Position += typeLayout.NativePointerSize;
 
 					// GC tracking info (not implemented yet)
-					stream.Write(blank4);
+					stream.WriteZeroBytes(typeLayout.NativePointerSize);
 				}
 			}
 		}

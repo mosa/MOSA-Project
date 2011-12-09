@@ -258,7 +258,7 @@ namespace Mosa.Tools.Compiler.Stages
 				bw.Write(load_end_addr);
 				bw.Write(bss_end_addr);
 
-				this.linker.Link(LinkType.AbsoluteAddress | LinkType.I4, MultibootHeaderSymbolName, (int)stream.Position, 0, @"Mosa.Tools.Compiler.LinkerGenerated.<$>MultibootInit()", IntPtr.Zero);
+				linker.Link(LinkType.AbsoluteAddress | LinkType.I4, MultibootHeaderSymbolName, (int)stream.Position, 0, @"Mosa.Tools.Compiler.LinkerGenerated.<$>MultibootInit()", IntPtr.Zero);
 
 				bw.Write(VideoMode);
 				bw.Write(VideoWidth);

@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.CIL;
 using Mosa.Compiler.Framework.Operands;
 using Mosa.Compiler.Linker;
@@ -911,7 +912,7 @@ namespace Mosa.Compiler.Framework.IR
 					// String data
 					byte[] stringData = Encoding.Unicode.GetBytes(referencedString);
 					Debug.Assert(stringData.Length == stringDataLength, @"Byte array of string data doesn't match expected string data length");
-					stream.Write(stringData, 0, stringData.Length);
+					stream.Write(stringData);
 				}
 
 				string stringMethodTableSymbol = @"System.String$mtable";

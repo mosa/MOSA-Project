@@ -141,9 +141,9 @@ namespace Mosa.Compiler.Framework
 			// The method table is offset by a four pointers:
 			// 1. interface dispatch table pointer
 			// 2. type pointer - contains the type information pointer, used to realize object.GetType().
-			// 3. interface bitmap
+			// 3. interface implementation bitmap
 			// 4. parent type (if any)
-			// 5. size
+			// 5. type metadata
 			List<string> headerlinks = new List<string>();
 
 			// 1. interface dispatch table pointer
@@ -292,7 +292,7 @@ namespace Mosa.Compiler.Framework
 				}
 				else
 				{
-					WriteDummyBytes(stream, size);
+					stream.WriteZeroBytes(size);
 				}
 			}
 		}
@@ -305,12 +305,6 @@ namespace Mosa.Compiler.Framework
 				source.Read(data, 0, size);
 				stream.Write(data, 0, size);
 			}
-		}
-
-		private static void WriteDummyBytes(Stream stream, int size)
-		{
-			for (int i = 0; i < size; i++)
-				stream.WriteByte(0);
 		}
 
 	}

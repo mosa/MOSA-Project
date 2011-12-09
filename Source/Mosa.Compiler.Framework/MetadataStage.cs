@@ -57,7 +57,7 @@ namespace Mosa.Compiler.Framework
 
 		private void CreateAssemblyListTable()
 		{
-			string assemblyListSymbol = @"$assembly-list";
+			string assemblyListSymbol = @"<$>AssemblyList";
 
 			using (Stream stream = linker.Allocate(assemblyListSymbol, SectionKind.ROData, 0, typeLayout.NativePointerAlignment))
 			{
@@ -113,6 +113,7 @@ namespace Mosa.Compiler.Framework
 				{
 					if (!type.IsModule && !(type.Module is InternalTypeModule))
 						linker.Link(LinkType.AbsoluteAddress | LinkType.I4, assemblyTableSymbol, (int)stream.Position, 0, type.FullName + @"$dtable", IntPtr.Zero);
+					stream.Position += typeLayout.NativePointerSize;
 				}
 			}
 
@@ -147,17 +148,18 @@ namespace Mosa.Compiler.Framework
 
 				// 3. Pointer to Name
 				linker.Link(LinkType.AbsoluteAddress | LinkType.I4, typeTableSymbol, (int)stream.Position, 0, typeNameSymbol, IntPtr.Zero);
-				stream.Position = +typeLayout.NativePointerSize;
+				stream.Position += typeLayout.NativePointerSize;
 
 				// 4. Pointer to Assembly Definition
 				linker.Link(LinkType.AbsoluteAddress | LinkType.I4, typeTableSymbol, (int)stream.Position, 0, assemblySymbol, IntPtr.Zero);
-				stream.Position = +typeLayout.NativePointerSize;
+				stream.Position += typeLayout.NativePointerSize;
 
-				// 5. isInterface
+				// 5. TODO: Constructor that accept no parameters, if any, for this type
+				stream.WriteZeroBytes(typeLayout.NativePointerSize);
+
+				// 6. Flag: IsInterface
 				stream.WriteByte((byte)(type.IsInterface ? 1 : 0));
 
-				// 6. Constructor that accept no parameters, if any, for this type
-				// TODO
 			}
 
 		}
