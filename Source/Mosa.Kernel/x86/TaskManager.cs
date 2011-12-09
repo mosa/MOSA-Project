@@ -148,8 +148,8 @@ namespace Mosa.Kernel.x86
 		/// <summary>
 		/// Terminates the task.
 		/// </summary>
-		/// <param name="process">The process.</param>
-		public static void TerminateTask(uint process)
+		/// <param name="slot">The slot.</param>
+		public static void TerminateTask(uint slot)
 		{
 			// TODO
 
