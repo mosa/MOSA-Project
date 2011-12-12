@@ -35,11 +35,6 @@ namespace Mosa.Compiler.TypeSystem
 		/// </summary>
 		private ITypeModule mainTypeModule;
 
-		/// <summary>
-		/// 
-		/// </summary>
-		private DelegateTypePatcher delegateTypePatcher = null;
-
 		#region ITypeSystem interface
 
 		/// <summary>

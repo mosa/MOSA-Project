@@ -113,14 +113,13 @@ namespace Mosa.Compiler.Framework
 			List<StackOperand> paramOps = new List<StackOperand>();
 
 			int offset = 0;
+
 			if (compiler.Method.Signature.HasThis || compiler.Method.Signature.HasExplicitThis)
 				++offset;
+
 			for (int i = 0; i < compiler.Method.Parameters.Count + offset; ++i)
 				paramOps.Add((StackOperand)compiler.GetParameterOperand(i));
 
-			/*if (compiler.Method.Signature.HasThis || compiler.Method.Signature.HasExplicitThis)
-				LayoutVariables(paramOps, cc, cc.OffsetOfFirstParameter + 4, -1);
-			else*/
 			LayoutVariables(paramOps, callingConvention, callingConvention.OffsetOfFirstParameter, -1);
 		}
 
@@ -154,7 +153,7 @@ namespace Mosa.Compiler.Framework
 				else
 				{
 					padding = (offset % alignment);
-					if (0 != padding)
+					if (padding != 0)
 						padding = alignment - padding;
 
 					thisOffset = offset;

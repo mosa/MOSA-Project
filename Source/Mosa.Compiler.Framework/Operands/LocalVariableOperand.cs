@@ -27,7 +27,7 @@ namespace Mosa.Compiler.Framework.Operands
 		/// <summary>
 		/// The name of the variable.
 		/// </summary>
-		private string _name;
+		private string name;
 
 		#endregion // Data members
 
@@ -43,7 +43,7 @@ namespace Mosa.Compiler.Framework.Operands
 		public LocalVariableOperand(Register register, string name, int index, SigType type)
 			: base(type, register, -index) // HACK: Redo this with Architecture support!
 		{
-			_name = name;
+			this.name = name;
 		}
 
 		#endregion // Construction
@@ -55,7 +55,7 @@ namespace Mosa.Compiler.Framework.Operands
 		/// </summary>
 		public override string Name
 		{
-			get { return _name; }
+			get { return name; }
 		}
 
 		#endregion // StackOperand overrides

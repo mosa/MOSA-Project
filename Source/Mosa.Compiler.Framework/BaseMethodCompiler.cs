@@ -29,7 +29,7 @@ namespace Mosa.Compiler.Framework
 	/// </summary>
 	/// <remarks>
 	/// A method compiler is responsible for compiling a single function
-	/// of an object. There are various classes derived from MethodCompilerBase,
+	/// of an object. There are various classes derived from BaseMethodCompiler,
 	/// which provide specific features, such as jit compilation, runtime
 	/// optimized jitting and others. MethodCompilerBase instances are usually
 	/// created by invoking CreateMethodCompiler on a specific compiler

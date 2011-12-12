@@ -67,9 +67,13 @@ namespace Mosa.Compiler.TypeSystem
 		public CilGenericType GetType(CilGenericType type, long signatureHash)
 		{
 			if (typeDictionary.ContainsKey(type.FullName) && typeDictionary[type.FullName].ContainsKey(signatureHash))
+			{
 				return typeDictionary[type.FullName][signatureHash];
+			}
 			else
+			{
 				return null;
+			}
 		}
 
 		/// <summary>

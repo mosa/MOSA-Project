@@ -69,9 +69,7 @@ namespace Mosa.Compiler.Framework
 
 			foreach (var type in typeSystem.GetAllTypes())
 			{
-
 				if (type.IsDelegate && type.FullName != "System.Delegate" && type.FullName != "System.MulticastDelegate")
-				//if (type.IsDelegate) 
 				{
 					delegateTypePatcher.PatchType(type);
 				}

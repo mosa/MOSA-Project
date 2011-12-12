@@ -104,41 +104,6 @@ namespace Mosa.Platform.x86
 		}
 
 		/// <summary>
-		/// Visitation function for EpilogueInstruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.EpilogueInstruction(Context context)
-		{
-			SigType I = BuiltInSigType.IntPtr;
-			RegisterOperand ebx = new RegisterOperand(I, GeneralPurposeRegister.EBX);
-			RegisterOperand edx = new RegisterOperand(I, GeneralPurposeRegister.EDX);
-			RegisterOperand ebp = new RegisterOperand(I, GeneralPurposeRegister.EBP);
-			RegisterOperand esp = new RegisterOperand(I, GeneralPurposeRegister.ESP);
-			int stackSize = (int)context.Other;
-
-			if (methodCompiler.Method.Signature.ReturnType.Type == CilElementType.I8
-				|| methodCompiler.Method.Signature.ReturnType.Type == CilElementType.U8)
-			{
-				// pop ebx
-				context.SetInstruction(CPUx86.Instruction.PopInstruction, ebx);
-			}
-			else
-			{
-				// pop edx
-				context.SetInstruction(CPUx86.Instruction.PopInstruction, edx);
-				// pop ebx
-				context.AppendInstruction(CPUx86.Instruction.PopInstruction, ebx);
-			}
-
-			// add esp, -localsSize
-			context.AppendInstruction(CPUx86.Instruction.AddInstruction, esp, new ConstantOperand(I, -stackSize));
-			// pop ebp
-			context.AppendInstruction(CPUx86.Instruction.PopInstruction, ebp);
-			// ret
-			context.AppendInstruction(CPUx86.Instruction.RetInstruction);
-		}
-
-		/// <summary>
 		/// Floating point compare instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
@@ -147,10 +112,9 @@ namespace Mosa.Platform.x86
 			Operand resultOperand = context.Result;
 			Operand left = EmitConstant(context.Operand1);
 			Operand right = EmitConstant(context.Operand2);
-			//context.Remove();
+
 			context.Operand1 = left;
 			context.Operand2 = right;
-
 
 			// Swap the operands if necessary...
 			if (left is MemoryOperand && right is RegisterOperand)
@@ -443,7 +407,6 @@ namespace Mosa.Platform.x86
 				context.AppendInstruction(CPUx86.Instruction.XorInstruction, dest, new ConstantOperand(BuiltInSigType.UInt32, (uint)0xFFFF));
 			else
 				context.AppendInstruction(CPUx86.Instruction.NotInstruction, dest);
-
 		}
 
 		/// <summary>
@@ -534,20 +497,19 @@ namespace Mosa.Platform.x86
 			{
 				// int 3
 				context.SetInstruction(CPUx86.Instruction.BreakInstruction);
-	
-				// Uncomment this line to enable breakpoints within Bochs
-				//context.XXX(CPUx86.Instruction.BochsDebug);
-
 				context.AppendInstruction(CPUx86.Instruction.NopInstruction);
+
+				// Uncomment this line to enable breakpoints within Bochs
+				//context.AppendInstruction(CPUx86.Instruction.BochsDebug);
 			}
 
 			// push ebp
 			context.SetInstruction(CPUx86.Instruction.PushInstruction, null, ebp);
-
 			// mov ebp, esp
 			context.AppendInstruction(CPUx86.Instruction.MovInstruction, ebp, esp);
 			// sub esp, localsSize
 			context.AppendInstruction(CPUx86.Instruction.SubInstruction, esp, new ConstantOperand(I, -stackSize));
+			// push ebx
 			context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, ebx);
 
 			// Initialize all locals to zero
@@ -561,16 +523,8 @@ namespace Mosa.Platform.x86
 			context.AppendInstruction(CPUx86.Instruction.StosdInstruction);
 			context.AppendInstruction(CPUx86.Instruction.PopInstruction, ecx);
 			context.AppendInstruction(CPUx86.Instruction.PopInstruction, edi);
-			
-			/*
-			 * This move adds the runtime method identification token onto the stack. This
-			 * allows us to perform call stack identification and gives the garbage collector 
-			 * the possibility to identify roots into the managed heap. 
-			 */
-			// mov [ebp-4], token
-			//context.AppendInstruction(CPUx86.Instruction.MovInstruction, new MemoryOperand(I, GeneralPurposeRegister.EBP, new IntPtr(-4)), new ConstantOperand(I, methodCompiler.Method.Token));
 
-			// Do not save EDX for non-int64 return values
+			// Save EDX for int32 return values (or do not save EDX for non-int64 return values)
 			if (methodCompiler.Method.Signature.ReturnType.Type != CilElementType.I8 &&
 				methodCompiler.Method.Signature.ReturnType.Type != CilElementType.U8)
 			{
@@ -578,6 +532,38 @@ namespace Mosa.Platform.x86
 				context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new RegisterOperand(I, GeneralPurposeRegister.EDX));
 			}
 
+		}
+
+		/// <summary>
+		/// Visitation function for EpilogueInstruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IR.IIRVisitor.EpilogueInstruction(Context context)
+		{
+			SigType I = BuiltInSigType.IntPtr;
+			RegisterOperand ebx = new RegisterOperand(I, GeneralPurposeRegister.EBX);
+			RegisterOperand edx = new RegisterOperand(I, GeneralPurposeRegister.EDX);
+			RegisterOperand ebp = new RegisterOperand(I, GeneralPurposeRegister.EBP);
+			RegisterOperand esp = new RegisterOperand(I, GeneralPurposeRegister.ESP);
+			int stackSize = (int)context.Other;
+
+			// Load EDX for int32 return values
+			if (methodCompiler.Method.Signature.ReturnType.Type != CilElementType.I8 &&
+				methodCompiler.Method.Signature.ReturnType.Type != CilElementType.U8)
+			{
+				// pop edx
+				context.SetInstruction(CPUx86.Instruction.PopInstruction, edx);
+				context.AppendInstruction(CPUx86.Instruction.NopInstruction);
+			}
+
+			// pop ebx
+			context.SetInstruction(CPUx86.Instruction.PopInstruction, ebx);
+			// add esp, -localsSize
+			context.AppendInstruction(CPUx86.Instruction.AddInstruction, esp, new ConstantOperand(I, -stackSize));
+			// pop ebp
+			context.AppendInstruction(CPUx86.Instruction.PopInstruction, ebp);
+			// ret
+			context.AppendInstruction(CPUx86.Instruction.RetInstruction);
 		}
 
 		/// <summary>
@@ -737,15 +723,7 @@ namespace Mosa.Platform.x86
 
 			RegisterOperand xmm5 = new RegisterOperand(BuiltInSigType.Double, SSE2Register.XMM5);
 			RegisterOperand xmm6 = new RegisterOperand(BuiltInSigType.Double, SSE2Register.XMM6);
-			//UNUSED:
-			//RegisterOperand eax = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.EAX);
 			RegisterOperand edx = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.EDX);
-
-			//UNUSED:
-			//RegisterOperand uedx = new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.EDX);
-
-			//UNUSED:
-			//Context before = context.InsertBefore();
 
 			context.SetInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[0].BasicBlock);
 			LinkBlocks(context, newBlocks[0]);
@@ -947,7 +925,9 @@ namespace Mosa.Platform.x86
 				if (elementType.Type == CilElementType.Char ||
 					elementType.Type == CilElementType.U1 ||
 					elementType.Type == CilElementType.U2)
+				{
 					context.AppendInstruction(CPUx86.Instruction.AddInstruction, eax, offset);
+				}
 				context.AppendInstruction(CPUx86.Instruction.MovzxInstruction, result, new MemoryOperand(elementType, GeneralPurposeRegister.EAX, offsetPtr));
 			}
 			else
@@ -1002,7 +982,6 @@ namespace Mosa.Platform.x86
 			context.ReplaceInstructionOnly(CPUx86.Instruction.PushInstruction);
 		}
 
-
 		/// <summary>
 		/// Visitation function for ThrowInstruction.
 		/// </summary>
@@ -1049,8 +1028,6 @@ namespace Mosa.Platform.x86
 
 			// Call exception handling
 			context.AppendInstruction(CPUx86.Instruction.CallInstruction, null, method);
-
-
 		}
 
 		#endregion //  IIRVisitor
