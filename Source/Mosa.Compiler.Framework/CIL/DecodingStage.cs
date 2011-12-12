@@ -32,14 +32,13 @@ namespace Mosa.Compiler.Framework.CIL
 	{
 		private readonly DataConverter LittleEndianBitConverter = DataConverter.LittleEndian;
 
-		private ExceptionClauseHeader exceptionClauseHeader;
-
 		#region Data members
 
 		/// <summary>
 		/// The reader used to process the code stream.
 		/// </summary>
 		private BinaryReader codeReader;
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -54,14 +53,12 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		public void Run()
 		{
-			this.genericTypePatcher = new GenericTypePatcher(this.typeSystem);
-			exceptionClauseHeader = methodCompiler.ExceptionClauseHeader;
+			genericTypePatcher = new GenericTypePatcher(typeSystem);
 
 			using (Stream code = methodCompiler.GetInstructionStream())
 			{
 				using (codeReader = new BinaryReader(code))
 				{
-					// The size of the code in bytes
 					MethodHeader header = ReadMethodHeader(codeReader);
 
 					if (header.LocalsSignature.RID != 0)
@@ -87,7 +84,7 @@ namespace Mosa.Compiler.Framework.CIL
 							if (local.Type is GenericInstSigType && declaringType is CilGenericType)
 							{
 								var genericInstSigType = local.Type as GenericInstSigType;
-								var genericArguments = this.genericTypePatcher.CloseGenericArguments((declaringType as CilGenericType).GenericArguments, genericInstSigType.GenericArguments);
+								var genericArguments = genericTypePatcher.CloseGenericArguments((declaringType as CilGenericType).GenericArguments, genericInstSigType.GenericArguments);
 								local = new VariableSignature(locals[i], genericArguments);
 							}
 						}
@@ -97,9 +94,6 @@ namespace Mosa.Compiler.Framework.CIL
 
 					/* Decode the instructions */
 					Decode(methodCompiler, header);
-
-					// When we leave, the operand stack must only contain the locals...
-					//Debug.Assert(_operandStack.Count == _method.Locals.Count);
 				}
 			}
 		}
@@ -187,12 +181,11 @@ namespace Mosa.Compiler.Framework.CIL
 				{
 					ExceptionClause clause = new ExceptionClause();
 					clause.Read(reader, isFat);
-					exceptionClauseHeader.AddClause(clause);
+					methodCompiler.ExceptionClauseHeader.AddClause(clause);
 				}
 			}
 			while (0x80 == (flags & 0x80));
 
-			//exceptionClauseHeader.Sort();
 			reader.BaseStream.Position = codepos;
 
 			return header;
@@ -284,6 +277,9 @@ namespace Mosa.Compiler.Framework.CIL
 			get { return typeModule; }
 		}
 
+		/// <summary>
+		/// Gets the generic type patcher.
+		/// </summary>
 		IGenericTypePatcher IInstructionDecoder.GenericTypePatcher
 		{
 			get { return genericTypePatcher; }

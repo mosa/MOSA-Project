@@ -76,8 +76,6 @@ namespace Mosa.Compiler.Metadata.Loader.PE
 		/// </summary>
 		private byte[] metadata;
 
-		private string codeBase;
-
 		#endregion // Data members
 
 		#region Construction

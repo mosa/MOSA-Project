@@ -95,7 +95,7 @@ namespace Mosa.Platform.x86
 		}
 
 		/// <summary>
-		/// Arithmetics the shift right instruction.
+		/// Arithmetic the shift right instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.ArithmeticShiftRightInstruction(Context context)
@@ -116,19 +116,16 @@ namespace Mosa.Platform.x86
 			RegisterOperand esp = new RegisterOperand(I, GeneralPurposeRegister.ESP);
 			int stackSize = (int)context.Other;
 
-			// Pop callee's EIP that has been used for instruction handling
-			context.SetInstruction(CPUx86.Instruction.PopInstruction, ebx);
-
 			if (methodCompiler.Method.Signature.ReturnType.Type == CilElementType.I8
 				|| methodCompiler.Method.Signature.ReturnType.Type == CilElementType.U8)
 			{
 				// pop ebx
-				context.AppendInstruction(CPUx86.Instruction.PopInstruction, ebx);
+				context.SetInstruction(CPUx86.Instruction.PopInstruction, ebx);
 			}
 			else
 			{
 				// pop edx
-				context.AppendInstruction(CPUx86.Instruction.PopInstruction, edx);
+				context.SetInstruction(CPUx86.Instruction.PopInstruction, edx);
 				// pop ebx
 				context.AppendInstruction(CPUx86.Instruction.PopInstruction, ebx);
 			}
@@ -142,7 +139,7 @@ namespace Mosa.Platform.x86
 		}
 
 		/// <summary>
-		/// Floatings the point compare instruction.
+		/// Floating point compare instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.FloatingPointCompareInstruction(Context context)
@@ -524,19 +521,25 @@ namespace Mosa.Platform.x86
 			int stackSize = (int)context.Other;
 			Debug.Assert((stackSize % 4) == 0, @"Stack size of method can't be divided by 4!!");
 
-			/* If you want to stop at the header of an emitted function, just uncomment
-			 * the following line. It will issue a breakpoint instruction. Note that if
-			 * you debug using visual studio you must enable unmanaged code debugging, 
-			 * otherwise the function will never return and the breakpoint will never
-			 * appear.
+			/* 
+			 * If you want to stop at the header of an emitted function, just set breakFlag 
+			 * to true in the following line. It will issue a breakpoint instruction. Note 
+			 * that if you debug using visual studio you must enable unmanaged code 
+			 * debugging, otherwise the function will never return and the breakpoint will 
+			 * never appear. 
 			 */
-			// int 3
-			//context.SetInstruction(CPUx86.Instruction.BreakInstruction);
-			//context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, ebp);
-			//context.AppendInstruction(CPUx86.Instruction.NopInstruction);
+			bool breakFlag = false; // TODO: Turn this into a compiler option
 
-			// Uncomment this line to enable breakpoints within Bochs
-			//context.XXX(CPUx86.Instruction.BochsDebug);
+			if (breakFlag)
+			{
+				// int 3
+				context.SetInstruction(CPUx86.Instruction.BreakInstruction);
+	
+				// Uncomment this line to enable breakpoints within Bochs
+				//context.XXX(CPUx86.Instruction.BochsDebug);
+
+				context.AppendInstruction(CPUx86.Instruction.NopInstruction);
+			}
 
 			// push ebp
 			context.SetInstruction(CPUx86.Instruction.PushInstruction, null, ebp);
@@ -558,13 +561,14 @@ namespace Mosa.Platform.x86
 			context.AppendInstruction(CPUx86.Instruction.StosdInstruction);
 			context.AppendInstruction(CPUx86.Instruction.PopInstruction, ecx);
 			context.AppendInstruction(CPUx86.Instruction.PopInstruction, edi);
+			
 			/*
 			 * This move adds the runtime method identification token onto the stack. This
 			 * allows us to perform call stack identification and gives the garbage collector 
 			 * the possibility to identify roots into the managed heap. 
 			 */
 			// mov [ebp-4], token
-			context.AppendInstruction(CPUx86.Instruction.MovInstruction, new MemoryOperand(I, GeneralPurposeRegister.EBP, new IntPtr(-4)), new ConstantOperand(I, methodCompiler.Method.Token));
+			//context.AppendInstruction(CPUx86.Instruction.MovInstruction, new MemoryOperand(I, GeneralPurposeRegister.EBP, new IntPtr(-4)), new ConstantOperand(I, methodCompiler.Method.Token));
 
 			// Do not save EDX for non-int64 return values
 			if (methodCompiler.Method.Signature.ReturnType.Type != CilElementType.I8 &&
@@ -574,8 +578,6 @@ namespace Mosa.Platform.x86
 				context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new RegisterOperand(I, GeneralPurposeRegister.EDX));
 			}
 
-			// Save callee's EIP to the stack for exception handling
-			context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new ConstantOperand(I, (-stackSize) + 0x0C));
 		}
 
 		/// <summary>
@@ -586,7 +588,7 @@ namespace Mosa.Platform.x86
 		{
 			if (context.Branch == null)
 			{
-				// To return from an internal method call (usually from within a finally clause)
+				// To return from an internal method call (usually from within a finally or exception clause)
 				context.SetInstruction(CPUx86.Instruction.RetInstruction);
 				return;
 			}

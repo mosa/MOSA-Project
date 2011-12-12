@@ -10,11 +10,10 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 using Mosa.Compiler.Common;
+using Mosa.Compiler.Framework;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.TypeSystem;
-using Mosa.Compiler.Framework;
 
 namespace Mosa.Platform.x86
 {

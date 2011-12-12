@@ -501,6 +501,11 @@ namespace Mosa.Tools.TypeExplorer
 			// TODO
 		}
 
+		private void toolStripButton4_Click(object sender, EventArgs e)
+		{
+			Compile();
+		}
+
 	}
 
 	public class ViewNode<T> : TreeNode

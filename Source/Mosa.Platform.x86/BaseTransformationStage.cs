@@ -12,10 +12,10 @@
 using System;
 using System.IO;
 using Mosa.Compiler.Common;
+using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Operands;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.Metadata;
-using Mosa.Compiler.Framework;
 
 namespace Mosa.Platform.x86
 {

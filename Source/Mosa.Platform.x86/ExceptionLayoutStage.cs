@@ -11,10 +11,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Mosa.Compiler.Common;
-using Mosa.Compiler.Linker;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.Linker;
 using Mosa.Compiler.Metadata;
+using Mosa.Compiler.TypeSystem;
 
 // FIXME: Splits this class into platform dependent and independent classes. Move platform independent code into Mosa.Compiler.Framework
 

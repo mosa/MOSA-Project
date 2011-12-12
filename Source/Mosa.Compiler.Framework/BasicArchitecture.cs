@@ -46,10 +46,9 @@ namespace Mosa.Compiler.Framework
 		{
 			get
 			{
-				if (null == nativeType)
+				if (nativeType == null)
 				{
-					int bits = NativeIntegerSize;
-					switch (bits)
+					switch (NativeIntegerSize)
 					{
 						case 32:
 							nativeType = BuiltInSigType.Int32;

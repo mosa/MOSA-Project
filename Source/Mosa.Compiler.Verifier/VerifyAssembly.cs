@@ -9,11 +9,9 @@
 
 using System;
 using System.Collections.Generic;
-using System.IO;
 
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Loader;
-using Mosa.Compiler.Metadata.Loader.PE;
 using Mosa.Compiler.Verifier.TableStage;
 
 namespace Mosa.Compiler.Verifier

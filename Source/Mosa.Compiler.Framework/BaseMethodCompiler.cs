@@ -451,9 +451,8 @@ namespace Mosa.Compiler.Framework
 				throw new ArgumentNullException(@"localVariableSignature");
 
 			localsSig = localVariableSignature;
-
-			int count = localsSig.Locals.Length;
-			locals = new Operand[count];
+												
+			locals = new Operand[localsSig.Locals.Length];
 
 			nextStackSlot = locals.Length + 1;
 		}

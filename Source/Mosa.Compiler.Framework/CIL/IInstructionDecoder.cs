@@ -34,7 +34,7 @@ namespace Mosa.Compiler.Framework.CIL
 		ITypeModule TypeModule { get; }
 
 		/// <summary>
-		/// 
+		/// Gets the generic type patcher.
 		/// </summary>
 		IGenericTypePatcher GenericTypePatcher { get; }
 
