@@ -37,7 +37,8 @@ namespace Mosa.Compiler.Framework
 			List<StackOperand> locals = new List<StackOperand>();
 
 			CollectLocalVariablesFromIL(locals);
-			// Iterate all Blocks and collect locals From all Blocks
+
+			// Iterate and collect locals from all blocks
 			foreach (BasicBlock block in basicBlocks)
 				CollectLocalVariables(locals, block);
 

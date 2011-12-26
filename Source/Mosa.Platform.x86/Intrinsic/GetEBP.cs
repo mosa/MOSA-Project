@@ -4,7 +4,7 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using System.Collections.Generic;
@@ -19,19 +19,8 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// <summary>
 	///
 	/// </summary>
-	internal class GetControlRegisterBase : IIntrinsicMethod
+	public class GetEBP : IIntrinsicMethod
 	{
-
-		private ControlRegister control;
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="GetControlRegisterBase"/> class.
-		/// </summary>
-		/// <param name="control">The control.</param>
-		protected GetControlRegisterBase(ControlRegister control)
-		{
-			this.control = control;
-		}
 
 		#region Methods
 
@@ -42,12 +31,7 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// <param name="typeSystem">The type system.</param>
 		public void ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
 		{
-			Operand result = context.Result;
-
-			RegisterOperand imm = new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.EAX);
-
-			context.SetInstruction(IR.Instruction.MoveInstruction, imm, new RegisterOperand(BuiltInSigType.UInt32, control));
-			context.AppendInstruction(IR.Instruction.MoveInstruction, result, imm);
+			context.SetInstruction(IR.Instruction.MoveInstruction, context.Result, new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.EBP));
 		}
 
 		#endregion // Methods

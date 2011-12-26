@@ -31,9 +31,6 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// <param name="esp">Current status of esp</param>
 		public static void ThrowException(uint eax, uint ebx, uint ecx, uint edx, uint esi, uint edi, uint ebp, Exception exception, uint eip, uint esp)
 		{
-			// Read callee's EIP from method header
-			//eip = Native.GetEip();
-
 			// Create context
 			RegisterContext registerContext = new RegisterContext(eax, ebx, ecx, edx, esi, edi, ebp, eip, esp + 40);
 
@@ -73,6 +70,10 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// <param name="eip">EIP to return to when handled</param>
 		private static void HandlerIdentificationPass(RegisterContext registerContext, Exception exception, uint eip)
 		{
+
+
+
+
 		}
 
 		/// <summary>
