@@ -988,7 +988,7 @@ namespace Mosa.Platform.x86
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.ThrowInstruction(Context context)
 		{
-			RuntimeType runtimeType = typeSystem.GetType(@"Mosa.Platforms.x86.ExceptionEngine, Mosa.Platforms.x86");
+			RuntimeType runtimeType = typeSystem.GetType(@"Mosa.Platform.x86.Intrinsic.ExceptionEngine");
 			RuntimeMethod runtimeMethod = runtimeType.FindMethod(@"ThrowException");
 			SymbolOperand throwMethod = SymbolOperand.FromMethod(runtimeMethod);
 
@@ -1021,6 +1021,12 @@ namespace Mosa.Platform.x86
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.PhiInstruction(Context context) { }
+
+		/// <summary>
+		/// Visitation function for ExceptionPrologueInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IR.IIRVisitor.ExceptionPrologueInstruction(Context context) { }
 
 		#endregion // IIRVisitor - Unused
 

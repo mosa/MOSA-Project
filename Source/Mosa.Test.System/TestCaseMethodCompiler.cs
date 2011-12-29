@@ -37,6 +37,7 @@ namespace Mosa.Test.System
 			this.Pipeline.AddRange(new IMethodCompilerStage[] {
 				new DecodingStage(),
 				new BasicBlockBuilderStage(),
+				new ExceptionPrologueStage(),
 				new OperandDeterminationStage(),
 				new StaticAllocationResolutionStage(),
 				//new ConstantFoldingStage(),

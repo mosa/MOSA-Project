@@ -29,6 +29,7 @@ namespace Mosa.Tools.TypeExplorer
 			this.Pipeline.AddRange(new IMethodCompilerStage[] {
 				new DecodingStage(),
 				new BasicBlockBuilderStage(),
+				new ExceptionPrologueStage(),
 				new OperandDeterminationStage(),
 				new StaticAllocationResolutionStage(),
 				new CILTransformationStage(),

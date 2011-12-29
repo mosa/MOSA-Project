@@ -290,5 +290,11 @@ namespace Mosa.Compiler.Framework.IR
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void ThrowInstruction(Context context);
+
+		/// <summary>
+		/// Visitation function for ExceptionPrologueInstruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void ExceptionPrologueInstruction(Context context);
 	}
 }

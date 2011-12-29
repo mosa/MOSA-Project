@@ -4,24 +4,27 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	/// Intermediate representation of a push instruction, that moves 
-	/// its argument on the top of a stack.
+	/// An abstract intermediate representation of the method prologue.
 	/// </summary>
-	public sealed class PushInstruction : BaseInstruction
+	/// <remarks>
+	/// This instruction is usually derived by the architecture and expanded appropriately
+	/// for the calling convention of the method.
+	/// </remarks>
+	public sealed class ExceptionPrologueInstruction : BaseInstruction
 	{
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="PushInstruction"/>.
+		/// Initializes a new instance of <see cref="PrologueInstruction"/>.
 		/// </summary>
-		public PushInstruction() :
-			base(1, 0)
+		public ExceptionPrologueInstruction() :
+			base(0, 1)
 		{
 		}
 
@@ -36,7 +39,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// <param name="context">The context.</param>
 		public override void Visit(IIRVisitor visitor, Context context)
 		{
-			visitor.PushInstruction(context);
+			visitor.ExceptionPrologueInstruction(context);
 		}
 
 		#endregion // Instruction Overrides

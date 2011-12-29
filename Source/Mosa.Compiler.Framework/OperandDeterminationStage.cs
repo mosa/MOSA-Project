@@ -99,20 +99,7 @@ namespace Mosa.Compiler.Framework
 
 			var firstBlock = FindBlock(label);
 			processed.Set(firstBlock.Sequence, true);
-
-			Stack<Operand> initialStack = new Stack<Operand>();
-
-			if (clause != null && clause.Kind == ExceptionClauseType.Exception)
-			{
-				// Exception blocks assume the stack contains the exception object
-				var token = new Token(clause.ClassToken);
-
-				RuntimeType type = methodCompiler.Method.Module.GetType(token);
-
-				//initialStack.Push();
-			}
-
-			workList.Enqueue(new WorkItem(firstBlock, initialStack));
+			workList.Enqueue(new WorkItem(firstBlock, new Stack<Operand>()));
 
 			while (workList.Count > 0)
 			{
@@ -132,7 +119,7 @@ namespace Mosa.Compiler.Framework
 			operandStack = CreateMovesForIncomingStack(block, operandStack);
 			AssignOperands(block, operandStack);
 			operandStack = CreateScheduledMoves(block, operandStack);
-			
+
 			outgoingStack[block.Sequence] = operandStack;
 			processed.Set(block.Sequence, true);
 
@@ -172,10 +159,21 @@ namespace Mosa.Compiler.Framework
 		{
 			for (var ctx = new Context(instructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
 			{
-				if (!(ctx.Instruction is IBranchInstruction) && !(ctx.Instruction is ICILInstruction))
+				if (ctx.Instruction == null)
 					continue;
 
-				if (!(ctx.Instruction is IR.JmpInstruction))
+				if (ctx.Instruction is IR.JmpInstruction)
+					continue;
+
+				if (!(ctx.Instruction is IBranchInstruction) && !(ctx.Instruction is ICILInstruction) && !(ctx.Instruction is IR.ExceptionPrologueInstruction))
+					continue;
+
+				if (ctx.Instruction is IR.ExceptionPrologueInstruction)
+				{
+					AssignOperandsFromCILStack(ctx, operandStack);
+					PushResultOperands(ctx, operandStack);
+				}
+				else //if (!(ctx.Instruction is IR.JmpInstruction))
 				{
 					AssignOperandsFromCILStack(ctx, operandStack);
 					(ctx.Instruction as ICILInstruction).Validate(ctx, methodCompiler);
@@ -216,12 +214,12 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Creates the outgoing moves.
 		/// </summary>
-		/// <param name="b">The b.</param>
+		/// <param name="block">The block.</param>
 		/// <param name="operandStack">The operand stack.</param>
 		/// <param name="joinStack">The join stack.</param>
-		private void CreateOutgoingMoves(BasicBlock b, Stack<Operand> operandStack, Stack<Operand> joinStack)
+		private void CreateOutgoingMoves(BasicBlock block, Stack<Operand> operandStack, Stack<Operand> joinStack)
 		{
-			var context = new Context(instructionSet, b);
+			var context = new Context(instructionSet, block);
 
 			while (!context.EndOfInstruction && !(context.Instruction is IBranchInstruction))
 			{
@@ -259,8 +257,9 @@ namespace Mosa.Compiler.Framework
 		/// <param name="currentStack">The current stack.</param>
 		private static void PushResultOperands(Context ctx, Stack<Operand> currentStack)
 		{
-			if (!(ctx.Instruction as ICILInstruction).PushResult)
-				return;
+			if (!(ctx.Instruction is IR.ExceptionPrologueInstruction))
+				if (!(ctx.Instruction as ICILInstruction).PushResult)
+					return;
 
 			foreach (Operand operand in ctx.Results)
 			{

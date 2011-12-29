@@ -49,6 +49,7 @@ namespace Mosa.Tools.Compiler
 				{
 					new DecodingStage(),
 					new BasicBlockBuilderStage(),
+					new ExceptionPrologueStage(),
 					new OperandDeterminationStage(),
 					new StaticAllocationResolutionStage(),
 					new CILTransformationStage(),

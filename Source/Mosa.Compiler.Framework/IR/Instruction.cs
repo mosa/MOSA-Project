@@ -19,17 +19,14 @@ namespace Mosa.Compiler.Framework.IR
 		/// 
 		/// </summary>
 		public static readonly AddFInstruction AddFInstruction = new AddFInstruction();
-
 		/// <summary>
 		/// 
 		/// </summary>
 		public static readonly AddSInstruction AddSInstruction = new AddSInstruction();
-
 		/// <summary>
 		/// 
 		/// </summary>
 		public static readonly AddUInstruction AddUInstruction = new AddUInstruction();
-
 		/// <summary>
 		/// 
 		/// </summary>
@@ -101,22 +98,18 @@ namespace Mosa.Compiler.Framework.IR
 		/// 
 		/// </summary>
 		public static MoveInstruction MoveInstruction = new MoveInstruction();
-
 		/// <summary>
 		/// 
 		/// </summary>
 		public static MulFInstruction MulFInstruction = new MulFInstruction();
-
 		/// <summary>
 		/// 
 		/// </summary>
 		public static MulSInstruction MulSInstruction = new MulSInstruction();
-
 		/// <summary>
 		/// 
 		/// </summary>
 		public static MulUInstruction MulUInstruction = new MulUInstruction();
-
 		/// <summary>
 		/// 
 		/// </summary>
@@ -166,7 +159,6 @@ namespace Mosa.Compiler.Framework.IR
 		public static readonly SubSInstruction SubSInstruction = new SubSInstruction();
 
 		public static readonly SubUInstruction SubUInstruction = new SubUInstruction();
-
 		/// <summary>
 		/// 
 		/// </summary>
@@ -187,5 +179,9 @@ namespace Mosa.Compiler.Framework.IR
 		/// 
 		/// </summary>
 		public static readonly ThrowInstruction ThrowInstruction = new ThrowInstruction();
+		/// <summary>
+		/// 
+		/// </summary>
+		public static readonly ExceptionPrologueInstruction ExceptionPrologueInstruction = new ExceptionPrologueInstruction();
 	}
 }

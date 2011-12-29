@@ -6,117 +6,117 @@ namespace Mosa.HelloWorld.Tests
 		public ExceptionTest()
 			: base("EX")
 		{
-			//testMethods.Add(ExceptionTest1);
-			//testMethods.Add(ExceptionTest2);
-			//testMethods.Add(ExceptionTest3);
-			//testMethods.Add(ExceptionTest4);
+			testMethods.Add(ExceptionTest1);
+			testMethods.Add(ExceptionTest2);
+			testMethods.Add(ExceptionTest3);
+			testMethods.Add(ExceptionTest4);
 		}
 
-		//public static bool ExceptionTest1()
-		//{
-		//    int a = 10;
-		//    try
-		//    {
-		//        a = a + 1;
-		//    }
-		//    finally
-		//    {
-		//        a = a + 3;
-		//    }
+		public static bool ExceptionTest1()
+		{
+			int a = 10;
+			try
+			{
+				a = a + 1;
+			}
+			finally
+			{
+				a = a + 3;
+			}
 
-		//    a = a + 7;
+			a = a + 7;
 
-		//    return (a == 21);
-		//}
+			return (a == 21);
+		}
 
-		//public static bool ExceptionTest2()
-		//{
-		//    int a = 10;
-		//    int b = 13;
-		//    try
-		//    {
-		//        a = a + 1;
-		//    }
-		//    finally
-		//    {
-		//        b = b + a;
-		//    }
+		public static bool ExceptionTest2()
+		{
+			int a = 10;
+			int b = 13;
+			try
+			{
+				a = a + 1;
+			}
+			finally
+			{
+				b = b + a;
+			}
 
-		//    b = b + 3;
-		//    a = a + 3;
+			b = b + 3;
+			a = a + 3;
 
-		//    int c = b + a;
+			int c = b + a;
 
-		//    return (c == 41);
-		//}
+			return (c == 41);
+		}
 
 
-		//public static bool ExceptionTest3()
-		//{
-		//    int a = 10;
-		//    try
-		//    {
-		//        try
-		//        {
-		//            a = a + 1;
-		//        }
-		//        finally
-		//        {
-		//            a = a + 100;
-		//        }
-		//    }
-		//    finally
-		//    {
-		//        a = a + 3;
-		//    }
+		public static bool ExceptionTest3()
+		{
+			int a = 10;
+			try
+			{
+				try
+				{
+					a = a + 1;
+				}
+				finally
+				{
+					a = a + 100;
+				}
+			}
+			finally
+			{
+				a = a + 3;
+			}
 
-		//    a = a + 7;
+			a = a + 7;
 
-		//    return (a == 121);
-		//}
+			return (a == 121);
+		}
 
-		//public static bool ExceptionTest4()
-		//{
-		//    int a = 10;
+		public static bool ExceptionTest4()
+		{
+			int a = 10;
 
-		//    try
-		//    {
-		//        try
-		//        {
-		//            a = a + 1;
-		//        }
-		//        finally
-		//        {
-		//            a = a + 100;
-		//        }
-		//    }
-		//    finally
-		//    {
-		//        a = a + 3;
-		//    }
+			try
+			{
+				try
+				{
+					a = a + 1;
+				}
+				finally
+				{
+					a = a + 100;
+				}
+			}
+			finally
+			{
+				a = a + 3;
+			}
 
-		//    a = a + 7;
+			a = a + 7;
 
-		//    try
-		//    {
-		//        try
-		//        {
-		//            a = a + 1;
-		//        }
-		//        finally
-		//        {
-		//            a = a + 100;
-		//        }
-		//    }
-		//    finally
-		//    {
-		//        a = a + 3;
-		//    }
+			try
+			{
+				try
+				{
+					a = a + 1;
+				}
+				finally
+				{
+					a = a + 100;
+				}
+			}
+			finally
+			{
+				a = a + 3;
+			}
 
-		//    a = a + 7;
+			a = a + 7;
 
-		//    return (a == 232);
-		//}
+			return (a == 232);
+		}
 
 		public static bool ExceptionTest5()
 		{

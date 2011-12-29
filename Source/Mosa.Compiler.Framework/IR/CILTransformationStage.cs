@@ -1314,27 +1314,20 @@ namespace Mosa.Compiler.Framework.IR
 		}
 
 
-		private ExceptionClause FindFinallyInnerClause(Context context)
+		private ExceptionClause FindImmediateClause(Context context)
 		{
 			ExceptionClause innerClause = null;
 			int label = context.Label;
 
 			foreach (ExceptionClause clause in methodCompiler.ExceptionClauseHeader.Clauses)
 			{
-				if (clause.IsLabelWithinTry(label))
+				if (clause.IsLabelWithinTry(label) || clause.IsLabelWithinHandler(label))
 				{
-					if (innerClause == null)
-					{
-						innerClause = clause;
-					}
-					else if (innerClause.TryLength > clause.TryLength)
-					{
-						innerClause = clause;
-					}
+					return clause;				
 				}
 			}
 
-			return (innerClause.Kind == ExceptionClauseType.Finally) ? innerClause : null;
+			return null;
 		}
 
 		/// <summary>
@@ -1344,15 +1337,26 @@ namespace Mosa.Compiler.Framework.IR
 		void CIL.ICILVisitor.Leave(Context context)
 		{
 			// Find enclosing finally clause
-			ExceptionClause innerClause = FindFinallyInnerClause(context);
+			ExceptionClause clause = FindImmediateClause(context);
 
-			if (innerClause != null)
+			if (clause.IsLabelWithinTry(context.Label))
 			{
-				// Find finally block
-				BasicBlock finallyBlock = this.FindBlock(innerClause.HandlerOffset);
+				if (clause != null)
+				{
+					// Find finally block
+					BasicBlock finallyBlock = this.FindBlock(clause.HandlerOffset);
 
-				Context before = context.InsertBefore();
-				before.SetInstruction(IR.Instruction.CallInstruction, finallyBlock);
+					Context before = context.InsertBefore();
+					before.SetInstruction(IR.Instruction.CallInstruction, finallyBlock);
+				}
+			}
+			else if (clause.IsLabelWithinHandler(context.Label))
+			{
+				// nothing!
+			}
+			else
+			{
+				throw new Exception("can not find leave clause");
 			}
 
 			context.ReplaceInstructionOnly(IR.Instruction.JmpInstruction);

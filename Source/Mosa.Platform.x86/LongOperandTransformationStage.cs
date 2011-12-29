@@ -2174,6 +2174,12 @@ namespace Mosa.Platform.x86
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.ThrowInstruction(Context context) { }
 
+		/// <summary>
+		/// Visitation function for ExceptionPrologueInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IR.IIRVisitor.ExceptionPrologueInstruction(Context context) { }
+
 		#endregion // IIRVisitor - Unused
 
 	}

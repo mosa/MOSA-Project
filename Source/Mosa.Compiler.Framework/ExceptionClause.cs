@@ -87,9 +87,28 @@ namespace Mosa.Compiler.Framework
 			get { return this.HandlerOffset + this.HandlerLength; }
 		}
 
+		/// <summary>
+		/// Determines whether [is label within try] [the specified label].
+		/// </summary>
+		/// <param name="label">The label.</param>
+		/// <returns>
+		///   <c>true</c> if [is label within try] [the specified label]; otherwise, <c>false</c>.
+		/// </returns>
 		public bool IsLabelWithinTry(int label)
 		{
 			return (label >= TryOffset && label < TryEnd);
+		}
+
+		/// <summary>
+		/// Determines whether [is label within handler] [the specified label].
+		/// </summary>
+		/// <param name="label">The label.</param>
+		/// <returns>
+		///   <c>true</c> if [is label within handler] [the specified label]; otherwise, <c>false</c>.
+		/// </returns>
+		public bool IsLabelWithinHandler(int label)
+		{
+			return (label >= HandlerOffset && label < HandlerEnd);
 		}
 
 		/// <summary>

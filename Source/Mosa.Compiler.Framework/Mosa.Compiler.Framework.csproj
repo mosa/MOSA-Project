@@ -89,7 +89,9 @@
     <Compile Include="CIL\BreakInstruction.cs" />
     <Compile Include="BaseAssemblyCompilerStage.cs" />
     <Compile Include="ConstantFoldingStage.cs" />
+    <Compile Include="ExceptionPrologueStage.cs" />
     <Compile Include="DelegateTypePatchStage.cs" />
+    <Compile Include="IR\ExceptionPrologueInstruction.cs" />
     <Compile Include="MetadataStage.cs" />
     <Compile Include="EnterSSA.cs" />
     <Compile Include="ExceptionClauseHeader.cs" />
