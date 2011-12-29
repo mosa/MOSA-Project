@@ -988,46 +988,16 @@ namespace Mosa.Platform.x86
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.ThrowInstruction(Context context)
 		{
-			int pointOfThrow = 4;
-			int exceptionObject = 12;
-
 			RuntimeType runtimeType = typeSystem.GetType(@"Mosa.Platforms.x86.ExceptionEngine, Mosa.Platforms.x86");
 			RuntimeMethod runtimeMethod = runtimeType.FindMethod(@"ThrowException");
-			SymbolOperand method = SymbolOperand.FromMethod(runtimeMethod);
+			SymbolOperand throwMethod = SymbolOperand.FromMethod(runtimeMethod);
 
-			MemoryOperand pointOfThrowOperand = new MemoryOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.ESP, new IntPtr(pointOfThrow));
-			MemoryOperand exceptionObjectOperand = new MemoryOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.ESP, new IntPtr(exceptionObject));
-
-			RegisterOperand esp = new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.ESP);
-			RegisterOperand eax = new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.EAX);
-
-			// Save current stack
-			context.SetInstruction(CPUx86.Instruction.PushInstruction, null, new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.ESP));
-			// Save point of call
-			context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, pointOfThrowOperand);
-			// Pass thrown exception
-			context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, exceptionObjectOperand);
-			// Save registers
-			context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.EBP));
-			context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.EDI));
-			context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.ESI));
-			context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.EBX));
-			context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.EDX));
-			context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.ECX));
-			context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.EAX));
-
-			// Pass them to the exception handling routine as parameters
-			context.AppendInstruction(CPUx86.Instruction.SubInstruction, esp, new ConstantOperand(esp.Type, 40));
-			context.AppendInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.EDX), esp);
-
-			for (int i = 0; i < 10; ++i)
-			{
-				context.AppendInstruction(CPUx86.Instruction.PopInstruction, eax);
-				context.AppendInstruction(CPUx86.Instruction.MovInstruction, new MemoryOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.EDX, new IntPtr(i * 4)), eax);
-			}
-
+			// Push exception object onto stack
+			context.SetInstruction(CPUx86.Instruction.PushInstruction, null, context.Operand1);
+			// Save CPU context onto stack
+			context.AppendInstruction(CPUx86.Instruction.PushadInstruction);
 			// Call exception handling
-			context.AppendInstruction(CPUx86.Instruction.CallInstruction, null, method);
+			context.AppendInstruction(CPUx86.Instruction.CallInstruction, null, throwMethod);
 		}
 
 		#endregion //  IIRVisitor

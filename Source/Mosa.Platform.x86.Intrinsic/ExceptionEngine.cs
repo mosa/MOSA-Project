@@ -19,20 +19,27 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// <summary>
 		/// Saves the context and handles the exceptions.
 		/// </summary>
-		/// <param name="eax">Current status of eax</param>
-		/// <param name="ebx">Current status of ebx</param>
-		/// <param name="ecx">Current status of ecx</param>
-		/// <param name="edx">Current status of edx</param>
-		/// <param name="esi">Current status of esi</param>
-		/// <param name="edi">Current status of edi</param>
-		/// <param name="ebp">Current status of ebp</param>
-		/// <param name="exception">The exception object</param>
-		/// <param name="eip">Current status of eip</param>
-		/// <param name="esp">Current status of esp</param>
-		public static void ThrowException(uint eax, uint ebx, uint ecx, uint edx, uint esi, uint edi, uint ebp, Exception exception, uint eip, uint esp)
+		/// <param name="edi">The edi.</param>
+		/// <param name="esi">The esi.</param>
+		/// <param name="ebp">The ebp.</param>
+		/// <param name="esp">The esp.</param>
+		/// <param name="ebx">The ebx.</param>
+		/// <param name="edx">The edx.</param>
+		/// <param name="ecx">The ecx.</param>
+		/// <param name="eax">The eax.</param>
+		public unsafe static void ThrowException(uint edi, uint esi, uint ebp, uint esp, uint ebx, uint edx, uint ecx, uint eax, Exception exception)
 		{
+			// EIP is on the stack
+
+			// Two ways to get this:
+			// 1. As an offset from the ESP stored on the stack; offset is -36 (just after the 9 x 32-bit values that the pushad operand pushed)
+			uint eip = (uint)((uint*)(esp - (9 * 4)));
+
+			// 2. As an offset from GetEBP(); offset is +4 (the EIP stored by the CALL operand)
+			uint eip2 = (uint)((uint*)(Native.GetEBP() + 4));
+
 			// Create context
-			RegisterContext registerContext = new RegisterContext(eax, ebx, ecx, edx, esi, edi, ebp, eip, esp + 40);
+			RegisterContext registerContext = new RegisterContext(eax, ebx, ecx, edx, esi, edi, ebp, eip, esp);
 
 			// Try to handle the exception
 			HandleException(registerContext, exception, eip);

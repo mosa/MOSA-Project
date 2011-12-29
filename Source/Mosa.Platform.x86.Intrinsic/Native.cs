@@ -293,8 +293,11 @@ namespace Mosa.Platform.x86.Intrinsic
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.RestoreContext, Mosa.Platform.x86")]
 		public extern static void RestoreContext();
 
-		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.GetEip, Mosa.Platform.x86")]
-		public extern static uint GetEip();
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.GetEIP, Mosa.Platform.x86")]
+		public extern static uint GetEIP();
+
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.GetEBP, Mosa.Platform.x86")]
+		public extern static uint GetEBP();
 
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.CallFilter, Mosa.Platform.x86")]
 		public extern static void CallFilter();

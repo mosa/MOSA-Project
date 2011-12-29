@@ -1,8 +1,19 @@
-﻿using System.Collections;
+﻿/*
+ * (c) 2011 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
+*/
+
+using System.Collections;
 using System.Collections.Generic;
 using Mosa.Compiler.Framework.CIL;
 using Mosa.Compiler.Framework.Operands;
 using Mosa.Compiler.Metadata;
+using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.Compiler.Framework
 {
@@ -32,8 +43,8 @@ namespace Mosa.Compiler.Framework
 			/// <param name="incomingStack">The incoming stack.</param>
 			public WorkItem(BasicBlock block, Stack<Operand> incomingStack)
 			{
-				this.Block = block;
-				this.IncomingStack = incomingStack;
+				Block = block;
+				IncomingStack = incomingStack;
 			}
 		}
 
@@ -79,24 +90,34 @@ namespace Mosa.Compiler.Framework
 		/// <param name="label">The label.</param>
 		private void Trace(int label, ExceptionClause clause)
 		{
-			this.outgoingStack = new Stack<Operand>[basicBlocks.Count];
-			this.scheduledMoves = new Stack<Operand>[basicBlocks.Count];
-			this.processed = new BitArray(basicBlocks.Count);
-			this.processed.SetAll(false);
-			this.enqueued = new BitArray(basicBlocks.Count);
-			this.enqueued.SetAll(false);
-
-			if (clause != null && clause.Kind != ExceptionClauseType.Finally)
-			{
-				var token = new Token(clause.ClassToken);
-			}
+			outgoingStack = new Stack<Operand>[basicBlocks.Count];
+			scheduledMoves = new Stack<Operand>[basicBlocks.Count];
+			processed = new BitArray(basicBlocks.Count);
+			processed.SetAll(false);
+			enqueued = new BitArray(basicBlocks.Count);
+			enqueued.SetAll(false);
 
 			var firstBlock = FindBlock(label);
-			this.processed.Set(firstBlock.Sequence, true);
-			this.workList.Enqueue(new WorkItem(firstBlock, new Stack<Operand>()));	
+			processed.Set(firstBlock.Sequence, true);
+
+			Stack<Operand> initialStack = new Stack<Operand>();
+
+			if (clause != null && clause.Kind == ExceptionClauseType.Exception)
+			{
+				// Exception blocks assume the stack contains the exception object
+				var token = new Token(clause.ClassToken);
+
+				RuntimeType type = methodCompiler.Method.Module.GetType(token);
+
+				//initialStack.Push();
+			}
+
+			workList.Enqueue(new WorkItem(firstBlock, initialStack));
 
 			while (workList.Count > 0)
+			{
 				AssignOperands(workList.Dequeue());
+			}
 		}
 
 		/// <summary>
@@ -108,20 +129,20 @@ namespace Mosa.Compiler.Framework
 			var operandStack = workItem.IncomingStack;
 			var block = workItem.Block;
 
-			operandStack = this.CreateMovesForIncomingStack(block, operandStack);
-			this.AssignOperands(block, operandStack);
-			operandStack = this.CreateScheduledMoves(block, operandStack);
+			operandStack = CreateMovesForIncomingStack(block, operandStack);
+			AssignOperands(block, operandStack);
+			operandStack = CreateScheduledMoves(block, operandStack);
 			
-			this.outgoingStack[block.Sequence] = operandStack;
-			this.processed.Set(block.Sequence, true);
+			outgoingStack[block.Sequence] = operandStack;
+			processed.Set(block.Sequence, true);
 
 			foreach (var b in block.NextBlocks)
 			{
-				if (this.enqueued.Get(b.Sequence))
+				if (enqueued.Get(b.Sequence))
 					continue;
 
-				this.workList.Enqueue(new WorkItem(b, new Stack<Operand>(operandStack)));
-				this.enqueued.Set(b.Sequence, true);
+				workList.Enqueue(new WorkItem(b, new Stack<Operand>(operandStack)));
+				enqueued.Set(b.Sequence, true);
 			}
 		}
 
@@ -133,11 +154,11 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		private Stack<Operand> CreateScheduledMoves(BasicBlock block, Stack<Operand> operandStack)
 		{
-			if (this.scheduledMoves[block.Sequence] != null)
+			if (scheduledMoves[block.Sequence] != null)
 			{
-				this.CreateOutgoingMoves(block, new Stack<Operand>(operandStack), new Stack<Operand>(this.scheduledMoves[block.Sequence]));
-				operandStack = new Stack<Operand>(this.scheduledMoves[block.Sequence]);
-				this.scheduledMoves[block.Sequence] = null;
+				CreateOutgoingMoves(block, new Stack<Operand>(operandStack), new Stack<Operand>(scheduledMoves[block.Sequence]));
+				operandStack = new Stack<Operand>(scheduledMoves[block.Sequence]);
+				scheduledMoves[block.Sequence] = null;
 			}
 			return operandStack;
 		}
@@ -171,21 +192,22 @@ namespace Mosa.Compiler.Framework
 		private Stack<Operand> CreateMovesForIncomingStack(BasicBlock block, Stack<Operand> operandStack)
 		{
 			var joinStack = new Stack<Operand>();
+
 			foreach (var operand in operandStack)
 			{
-				joinStack.Push(this.methodCompiler.CreateTemporary(operand.Type));
+				joinStack.Push(methodCompiler.CreateTemporary(operand.Type));
 			}
 
 			foreach (var b in block.PreviousBlocks)
 			{
-				if (this.processed.Get(b.Sequence) && joinStack.Count > 0)
+				if (processed.Get(b.Sequence) && joinStack.Count > 0)
 				{
-					CreateOutgoingMoves(b, new Stack<Operand>(this.outgoingStack[b.Sequence]), new Stack<Operand>(joinStack));
-					this.outgoingStack[b.Sequence] = new Stack<Operand>(joinStack);
+					CreateOutgoingMoves(b, new Stack<Operand>(outgoingStack[b.Sequence]), new Stack<Operand>(joinStack));
+					outgoingStack[b.Sequence] = new Stack<Operand>(joinStack);
 				}
 				else if (joinStack.Count > 0)
 				{
-					this.scheduledMoves[b.Sequence] = new Stack<Operand>(joinStack);
+					scheduledMoves[b.Sequence] = new Stack<Operand>(joinStack);
 				}
 			}
 			return joinStack;
@@ -199,10 +221,12 @@ namespace Mosa.Compiler.Framework
 		/// <param name="joinStack">The join stack.</param>
 		private void CreateOutgoingMoves(BasicBlock b, Stack<Operand> operandStack, Stack<Operand> joinStack)
 		{
+			var context = new Context(instructionSet, b);
 
-			var context = new Context(this.instructionSet, b);
 			while (!context.EndOfInstruction && !(context.Instruction is IBranchInstruction))
+			{
 				context.GotoNext();
+			}
 
 			while (operandStack.Count > 0)
 			{
@@ -239,7 +263,9 @@ namespace Mosa.Compiler.Framework
 				return;
 
 			foreach (Operand operand in ctx.Results)
+			{
 				currentStack.Push(operand);
+			}
 		}
 
 	}
