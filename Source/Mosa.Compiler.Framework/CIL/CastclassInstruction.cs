@@ -49,6 +49,18 @@ namespace Mosa.Compiler.Framework.CIL
 			RuntimeType type = decoder.TypeModule.GetType(token);
 
 			ctx.Result = decoder.Compiler.CreateTemporary(new ClassSigType(token));
+
+			
+		}
+
+		/// <summary>
+		/// Allows visitor based dispatch for this instruction object.
+		/// </summary>
+		/// <param name="visitor">The visitor.</param>
+		/// <param name="context">The context.</param>
+		public override void Visit (ICILVisitor visitor, Context context)
+		{
+			visitor.Castclass (context);
 		}
 
 		#endregion Methods

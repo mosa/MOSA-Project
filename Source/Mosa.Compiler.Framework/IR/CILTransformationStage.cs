@@ -438,6 +438,8 @@ namespace Mosa.Compiler.Framework.IR
 					}
 				}
 
+				context.Previous.ReplaceInstructionOnly (IR.Instruction.NopInstruction);
+
 				SymbolOperand symbolOperand = SymbolOperand.FromMethod(invokeTarget);
 				ProcessInvokeInstruction(context, symbolOperand, resultOperand, operands);
 				
@@ -648,7 +650,8 @@ namespace Mosa.Compiler.Framework.IR
 		{
 			// We don't need to check the result, if the icall fails, it'll happily throw
 			// the InvalidCastException.
-			ReplaceWithVmCall(context, VmCall.Castclass);
+			context.ReplaceInstructionOnly (IR.Instruction.NopInstruction);
+			//ReplaceWithVmCall(context, VmCall.Castclass);
 		}
 
 		/// <summary>
