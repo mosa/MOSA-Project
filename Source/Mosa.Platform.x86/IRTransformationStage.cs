@@ -1000,6 +1000,19 @@ namespace Mosa.Platform.x86
 			context.AppendInstruction(CPUx86.Instruction.CallInstruction, null, throwMethod);
 		}
 
+		/// <summary>
+		/// Visitation function for ExceptionPrologueInstruction"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IR.IIRVisitor.ExceptionPrologueInstruction(Context context) 
+		{
+			// Exception Handler will pass the exception object in the register - EDX was choose
+			context.SetInstruction(CPUx86.Instruction.MovInstruction, context.Result, new RegisterOperand(BuiltInSigType.Object, GeneralPurposeRegister.EDX));
+
+			// Alternative method is to pop it off the stack instead, going passing via register for now
+			//context.SetInstruction(CPUx86.Instruction.PopInstruction, context.Result);
+		}
+
 		#endregion //  IIRVisitor
 
 		#region IIRVisitor - Unused
@@ -1021,12 +1034,6 @@ namespace Mosa.Platform.x86
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.PhiInstruction(Context context) { }
-
-		/// <summary>
-		/// Visitation function for ExceptionPrologueInstruction"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.ExceptionPrologueInstruction(Context context) { }
 
 		#endregion // IIRVisitor - Unused
 

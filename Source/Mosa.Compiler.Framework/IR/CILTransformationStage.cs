@@ -702,7 +702,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Throw(Context context)
 		{
-			context.SetInstruction(IR.Instruction.ThrowInstruction);
+			context.SetInstruction(IR.Instruction.ThrowInstruction, context.Result, context.Operand1);
 		}
 
 		/// <summary>
