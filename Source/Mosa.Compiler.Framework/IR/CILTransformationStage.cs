@@ -308,6 +308,20 @@ namespace Mosa.Compiler.Framework.IR
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.BinaryLogic(Context context)
 		{
+			if (context.Operand1.Type is ValueTypeSigType)
+			{
+				var type = this.methodCompiler.Method.Module.GetType ((context.Operand1.Type as ValueTypeSigType).Token);
+				var operand = new MemberOperand (type.Fields[0], type.Fields[0].SignatureType, new IntPtr (0));
+				context.SetOperand (0, operand);
+			}
+
+			if (context.Operand2.Type is ValueTypeSigType)
+			{
+				var type = this.methodCompiler.Method.Module.GetType ((context.Operand2.Type as ValueTypeSigType).Token);
+				var operand = new MemberOperand (type.Fields[0], type.Fields[0].SignatureType, new IntPtr (0));
+				context.SetOperand (1, operand);
+			}
+
 			switch ((context.Instruction as CIL.BaseInstruction).OpCode)
 			{
 				case CIL.OpCode.And:
