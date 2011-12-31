@@ -9,6 +9,8 @@
 
 using System;
 using Mosa.Compiler.Framework.Operands;
+using Mosa.Compiler.Metadata.Signatures;
+using Mosa.Compiler.Metadata;
 
 namespace Mosa.Compiler.Framework.CIL
 {
@@ -59,11 +61,44 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 			base.Validate(ctx, compiler);
 
-			StackTypeCode result = _opTable[(int)ctx.Operand1.StackType][(int)ctx.Operand2.StackType];
+			var stackTypeForOperand1 = ctx.Operand1.StackType;
+			var stackTypeForOperand2 = ctx.Operand2.StackType;
+
+			if (ctx.Operand1.Type is ValueTypeSigType)
+			{
+				var op1Type = compiler.Method.Module.GetType ((ctx.Operand1.Type as ValueTypeSigType).Token);
+				if (op1Type.BaseType.FullName == "System.Enum")
+					stackTypeForOperand1 = this.FromSigType (op1Type.Fields[0].SignatureType.Type);
+			}
+
+			if (ctx.Operand2.Type is ValueTypeSigType)
+			{
+				var op2Type = compiler.Method.Module.GetType ((ctx.Operand2.Type as ValueTypeSigType).Token);
+				if (op2Type.BaseType.FullName == "System.Enum")
+					stackTypeForOperand2 = this.FromSigType (op2Type.Fields[0].SignatureType.Type);
+			}
+
+			var result = _opTable[(int)stackTypeForOperand1][(int)stackTypeForOperand2];
+
 			if (result == StackTypeCode.Unknown)
-				throw new InvalidOperationException(@"Invalid stack result of instruction.");
+				throw new InvalidOperationException (@"Invalid stack result of instruction: " + result.ToString () + " (" + ctx.Operand1.ToString () + ")");
 
 			ctx.Result = compiler.CreateTemporary(Operand.SigTypeFromStackType(result));
+		}
+
+		private StackTypeCode FromSigType (CilElementType type)
+		{
+			switch(type)
+			{
+				case CilElementType.I1: goto case CilElementType.U4;
+				case CilElementType.I2: goto case CilElementType.U4;
+				case CilElementType.I4: goto case CilElementType.U4;
+				case CilElementType.U1: goto case CilElementType.U4;
+				case CilElementType.U2: goto case CilElementType.U4;
+				case CilElementType.U4: return StackTypeCode.Int32;
+			}
+
+			throw new NotSupportedException ();
 		}
 
 		/// <summary>
