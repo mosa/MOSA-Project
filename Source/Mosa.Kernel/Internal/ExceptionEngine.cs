@@ -68,16 +68,20 @@ namespace Mosa.Internal
 		/// <param name="registerContext">The register status right before the throw</param>
 		/// <param name="exception">The thrown exception</param>
 		/// <param name="eip">EIP to return to when handled</param>
-		private static void HandleException(RegisterContext registerContext, uint exception, uint eip)
+		private unsafe static void HandleException(RegisterContext registerContext, uint exception, uint eip)
 		{
-			// Find the method description
-			uint methodDescription = GetMethodDescription(registerContext.Eip);
+			// Get the method lookup entry
+			uint methodLookupEntry = GetMethodLookupEntry(registerContext.Eip);
 
-			if (methodDescription == 0)
+			if (methodLookupEntry == 0)
 			{
 				// We're not in a compiled method - where are we?
-				// TODO
+
+				// Go panic!
 			}
+
+			// Find the method description
+			uint methodDescription = GetMethodDescription(methodLookupEntry);
 
 			// Get the protected block table
 			uint exceptionHandlerTable = GetExceptionHandlerTable(methodDescription);
@@ -85,6 +89,11 @@ namespace Mosa.Internal
 			if (exceptionHandlerTable == 0)
 			{
 				// Method does not have any protected blocks
+
+				// At-the-moment: All methods have this table, even if the method doesn't have any exceptions.
+
+				// Go panic!
+
 				// TODO
 				// 1. Unwind stack 
 				//   A. If at top of stack then notify kernel to terminate this thread
@@ -106,29 +115,48 @@ namespace Mosa.Internal
 				// 3. Re-execute this method to look for a protected block
 			}
 
+			uint* entry = (uint*)protectedBlock;
+			uint exceptionType = entry[0];
+			uint handlerOffset = entry[3];
+
+			uint methodStart = GetMethodStartAddress(methodLookupEntry);
+
+			uint handler = methodStart + handlerOffset;
+
 			// TODO:
 
-			// 1. If protected block has a finally handler
-			//   A. Call finally
-			//   B. Find next protected section or exception
-			// 2. If protected block has an exception handler (and it matches)
-			//   A. Set EIP to exception handler
-			//   B. Place exception object in EDX
-			//   C. Restore Context (e.g. execute RET)
+			if (exceptionType == 0) // exception handler type
+			{
+				// TODO
+				// Set next EIP to exception handler
+				// Place exception object in EDX
+				// Restore Context (e.g. execute return)
+
+			}
+			else if (exceptionType == 2) // finally handler type
+			{
+				// TODO
+				// Set next EIP to exception handler
+				// Call finally handler (with return address on stack to resume search for next protected block or exception)
+			}
+			else
+			{  
+				// Go panic!
+			}
 
 		}
 
-		public unsafe static uint GetMethodDescription(uint ptr)
+		public unsafe static uint GetMethodLookupEntry(uint methodLookupTable)
 		{
-			uint* entry = (uint*)Native.GetMethodLookupTable(ptr);
+			uint* entry = (uint*)Native.GetMethodLookupTable(methodLookupTable);
 
 			while (entry[0] != 0)
 			{
-				if (entry[0] >= ptr)
+				if (entry[0] >= methodLookupTable)
 				{
-					if ((entry[0] + entry[1]) < ptr)
+					if ((entry[0] + entry[1]) < methodLookupTable)
 					{
-						return entry[3];
+						return (uint)entry;
 					}
 				}
 
@@ -136,6 +164,16 @@ namespace Mosa.Internal
 			}
 
 			return 0;
+		}
+
+		public unsafe static uint GetMethodDescription(uint methodLookupEntry)
+		{
+			return ((uint*)methodLookupEntry)[2];
+		}
+
+		public unsafe static uint GetMethodStartAddress(uint methodLookupEntry)
+		{
+			return ((uint*)methodLookupEntry)[0];
 		}
 
 		public unsafe static uint GetExceptionHandlerTable(uint methodDscr)
@@ -155,7 +193,6 @@ namespace Mosa.Internal
 				if (start == 0)
 					return 0;
 
-				uint exceptionKind = entry[0];
 				uint length = entry[2];
 
 				if (eip >= start && eip < start + length)
@@ -167,7 +204,7 @@ namespace Mosa.Internal
 						return (uint)entry;
 					}
 
-					if (Runtime.IsInstanceOfType(exceptionMethod,exception) != 0)
+					if (Runtime.IsInstanceOfType(exceptionMethod, exception) != 0)
 					{
 						return (uint)entry;
 					}
