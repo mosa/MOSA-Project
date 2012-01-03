@@ -1,0 +1,111 @@
+digraph g {
+graph [
+rankdir = "LR"
+];
+node [
+fontsize = "16"
+shape = "ellipse"
+];
+edge [
+];
+
+"node0" [
+label = "<f0>Assembly Table|Number of Assemblies|<f1>Pointer to Assembly 1|..|Pointer to Assembly N"
+shape = "record"
+];
+
+"node1" [
+label = "<f0>Assembly|<f2>Pointer to Assembly Name| Number of Types|<f1>Pointer to Type  Definition 1|...|Pointer to Type  Definition N"
+shape = "record"
+];
+
+"node2" [
+label = "<f0>Type Definition|Size|Metadata Token|<f2>Pointer to Type Name|<f1>Pointer to Assembly|Pointer to Default Constructor Method (if any)|Flag: Is Interface"
+shape = "record"
+];
+
+"node3" [
+label = "<f0>Assembly Name|Assembly Name Length|Assembly Name"
+shape = "record"
+];
+
+"node4" [
+label = "<f0>Type Name|Type Name Length|Type Name"
+shape = "record"
+];
+
+"node5" [
+label = "<f0>Method Lookup Table|Pointer to Method (Starting Address)|Method Size|<f1>Pointer to Method Description Table"
+shape = "record"
+];
+
+"node6" [
+label = "<f0>Method Description|<f1>Pointer to Exception Handler Table|<f2>Pointer to GC Tracking Information"
+shape = "record"
+];
+
+"node7" [
+label = "<f0>Exception Handler Table|Handler Type|Pointer to Protected Block|Length of Protected Block|Offset of Handler from Method Start Address|<f1>Pointer to Exception Type's Method Table|Offset of Filter from Method Start Address"
+shape = "record"
+];
+
+"node8" [
+label = "<f0>Method Table|<f2>Pointer to Interface Slot Table|Pointer to Type Instance|Pointer to Interface Bitmap|<f1>Pointer to Method Table of Parent Type|Type Metadata Pointer|Pointer to Method 1|..|Pointer to Method N"
+shape = "record"
+];
+
+"node9" [
+label = "<f0>Interface Slot Table|<f1>Pointer to Interface Method Table 1|...|Pointer to Interface Method Table N"
+shape = "record"
+];
+
+"node10" [
+label = "<f0>Interface Method Table|Pointer to Interface Method 1|..|Pointer to Interface Method N"
+shape = "record"
+];
+
+"node0":f1 -> "node1":f0 [
+id = 0
+];
+
+"node1":f1 -> "node2":f0 [
+id = 0
+];
+
+"node2":f1 -> "node1":f0 [
+id = 0
+];
+
+"node1":f2 -> "node3":f0 [
+id = 0
+];
+
+"node2":f2 -> "node4":f0 [
+id = 0
+];
+
+"node5":f1 -> "node6":f0 [
+id = 0
+];
+
+"node6":f1 -> "node7":f0 [
+id = 0
+];
+
+"node7":f1 -> "node8":f0 [
+id = 0
+];
+
+"node8":f1 -> "node8":f0 [
+id = 0
+];
+
+"node8":f2 -> "node9":f0 [
+id = 0
+];
+
+"node9":f1 -> "node10":f0 [
+id = 0
+];
+
+}
