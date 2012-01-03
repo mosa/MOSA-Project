@@ -14,7 +14,7 @@ namespace Mosa.Compiler.Framework
 	/// <summary>
 	/// 
 	/// </summary>
-	public enum ExceptionClauseType : byte
+	public enum ExceptionHandlerType : byte
 	{
 		/// <summary>
 		/// A typed exception handler clause.
@@ -40,12 +40,12 @@ namespace Mosa.Compiler.Framework
 	/// <summary>
 	/// 
 	/// </summary>
-	public class ExceptionClause
+	public class ExceptionHandlingClause
 	{
 		/// <summary>
 		/// 
 		/// </summary>
-		public ExceptionClauseType Kind;
+		public ExceptionHandlerType ExceptionHandler;
 		/// <summary>
 		/// 
 		/// </summary>
@@ -120,7 +120,7 @@ namespace Mosa.Compiler.Framework
 		{
 			if (!isFat)
 			{
-				this.Kind = (ExceptionClauseType)reader.ReadInt16();
+				this.ExceptionHandler = (ExceptionHandlerType)reader.ReadInt16();
 				this.TryOffset = reader.ReadInt16();
 				this.TryLength = reader.ReadByte();
 				this.HandlerOffset = reader.ReadInt16();
@@ -128,18 +128,18 @@ namespace Mosa.Compiler.Framework
 			}
 			else
 			{
-				this.Kind = (ExceptionClauseType)reader.ReadInt32();
+				this.ExceptionHandler = (ExceptionHandlerType)reader.ReadInt32();
 				this.TryOffset = reader.ReadInt32();
 				this.TryLength = reader.ReadInt32();
 				this.HandlerOffset = reader.ReadInt32();
 				this.HandlerLength = reader.ReadInt32();
 			}
 
-			if (ExceptionClauseType.Exception == this.Kind)
+			if (ExceptionHandlerType.Exception == this.ExceptionHandler)
 			{
 				this.ClassToken = reader.ReadUInt32();
 			}
-			else if (ExceptionClauseType.Filter == this.Kind)
+			else if (ExceptionHandlerType.Filter == this.ExceptionHandler)
 			{
 				this.FilterOffset = reader.ReadInt32();
 			}

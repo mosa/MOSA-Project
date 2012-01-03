@@ -138,7 +138,8 @@ namespace Mosa.Platform.x86
 
 				using (var stream = linker.Allocate(section, SectionKind.Text, size, typeLayout.NativePointerAlignment))
 				{
-					// Pointer to exception clause table
+					// Pointer to Exception Handler Table
+					// TODO: If there is no exception clause table, set to 0 and do not involve linker
 					linker.Link(LinkType.AbsoluteAddress | LinkType.I4, section, 0, 0, method.FullName + "$etable", IntPtr.Zero);
 					stream.Position += typeLayout.NativePointerSize;
 

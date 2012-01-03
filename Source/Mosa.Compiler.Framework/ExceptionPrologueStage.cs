@@ -30,9 +30,9 @@ namespace Mosa.Compiler.Framework
 		{
 			
 			// Handler Code
-			foreach (ExceptionClause clause in methodCompiler.ExceptionClauseHeader.Clauses)
+			foreach (ExceptionHandlingClause clause in methodCompiler.ExceptionClauseHeader.Clauses)
 			{
-				if (clause.Kind == ExceptionClauseType.Exception)
+				if (clause.ExceptionHandler == ExceptionHandlerType.Exception)
 				{
 					var typeToken = new Token(clause.ClassToken);
 

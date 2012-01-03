@@ -80,7 +80,7 @@ namespace Mosa.Platform.x86.Intrinsic
 			map.Add(typeof(RestoreContext), new RestoreContext());
 			map.Add(typeof(GetEIP), new GetEIP());
 			map.Add(typeof(CallFilter), new CallFilter());
-			map.Add(typeof(GetBaseMethodDescriptionTable), new GetBaseMethodDescriptionTable());
+			map.Add(typeof(GetMethodLookupTable), new GetMethodLookupTable());
 			map.Add(typeof(GetEBP), new GetEBP());
 
 			return map;

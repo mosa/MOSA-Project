@@ -102,7 +102,7 @@
     <Compile Include="InterruptBuilderStage.cs" />
     <Compile Include="Intrinsic\CallFilter.cs" />
     <Compile Include="Intrinsic\GetEBP.cs" />
-    <Compile Include="Intrinsic\GetBaseMethodDescriptionTable.cs" />
+    <Compile Include="Intrinsic\GetMethodLookupTable.cs" />
     <Compile Include="Intrinsic\GetEIP.cs" />
     <Compile Include="Intrinsic\Cli.cs" />
     <Compile Include="Intrinsic\GetControlRegisterBase.cs" />

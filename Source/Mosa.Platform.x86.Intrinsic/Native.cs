@@ -314,8 +314,8 @@ namespace Mosa.Platform.x86.Intrinsic
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.InvokeInstanceDelegateWithReturn, Mosa.Platform.x86")]
 		public extern static object InvokeInstanceDelegateWithReturn(object obj, uint ptr);
 
-		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.GetBaseMethodDescriptionTable, Mosa.Platform.x86")]
-		public extern static uint GetBaseMethodDescriptionTable(uint ptr);
+		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.GetMethodLookupTable, Mosa.Platform.x86")]
+		public extern static uint GetMethodLookupTable(uint ptr);
 
 		#endregion
 

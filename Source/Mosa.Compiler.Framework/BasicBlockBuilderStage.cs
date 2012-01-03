@@ -62,7 +62,7 @@ namespace Mosa.Compiler.Framework
 			// Link all the blocks together
 			BuildBlockLinks(prologue);
 
-			foreach (ExceptionClause exceptionClause in methodCompiler.ExceptionClauseHeader.Clauses)
+			foreach (ExceptionHandlingClause exceptionClause in methodCompiler.ExceptionClauseHeader.Clauses)
 			{
 				if (exceptionClause.HandlerOffset != 0)
 				{
@@ -127,7 +127,7 @@ namespace Mosa.Compiler.Framework
 			}
 
 			// Add Exception Class targets
-			foreach (ExceptionClause exceptionClause in methodCompiler.ExceptionClauseHeader.Clauses)
+			foreach (ExceptionHandlingClause exceptionClause in methodCompiler.ExceptionClauseHeader.Clauses)
 			{
 				if (!targets.ContainsKey(exceptionClause.HandlerOffset))
 					targets.Add(exceptionClause.HandlerOffset, -1);

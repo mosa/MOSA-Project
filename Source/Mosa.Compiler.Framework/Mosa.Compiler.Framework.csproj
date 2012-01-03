@@ -145,7 +145,7 @@
     <Compile Include="CIL\CpobjInstruction.cs" />
     <Compile Include="CIL\DivInstruction.cs" />
     <Compile Include="CIL\DupInstruction.cs" />
-    <Compile Include="ExceptionClause.cs" />
+    <Compile Include="ExceptionHandlingClause.cs" />
     <Compile Include="CIL\EndFilterInstruction.cs" />
     <Compile Include="CIL\EndFinallyInstruction.cs" />
     <Compile Include="CIL\IBranchInstruction.cs" />

@@ -179,7 +179,7 @@ namespace Mosa.Compiler.Framework.CIL
 				// Read the clause
 				for (int i = 0; i < blocks; i++)
 				{
-					ExceptionClause clause = new ExceptionClause();
+					ExceptionHandlingClause clause = new ExceptionHandlingClause();
 					clause.Read(reader, isFat);
 					methodCompiler.ExceptionClauseHeader.AddClause(clause);
 				}

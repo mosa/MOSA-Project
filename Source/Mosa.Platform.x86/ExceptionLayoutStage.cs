@@ -27,9 +27,9 @@ namespace Mosa.Platform.x86
 		//FIXME: Assumes LittleEndian architecture (okay for x86 but not for platform independent code)
 		private static readonly DataConverter LittleEndianBitConverter = DataConverter.LittleEndian;
 
-		private Dictionary<BasicBlock, ExceptionClause> blockExceptions;
+		private Dictionary<BasicBlock, ExceptionHandlingClause> blockExceptions;
 
-		private Dictionary<ExceptionClause, List<BasicBlock>> exceptionBlocks = new Dictionary<ExceptionClause, List<BasicBlock>>();
+		private Dictionary<ExceptionHandlingClause, List<BasicBlock>> exceptionBlocks = new Dictionary<ExceptionHandlingClause, List<BasicBlock>>();
 
 		private ICodeEmitter codeEmitter;
 
@@ -52,18 +52,21 @@ namespace Mosa.Platform.x86
 			AssignBlocksToClauses();
 
 			// Step 3 - Emit table of PC ranges and the clause handler
-			EmitExceptionTable();
+			EmitProtectedBlockTable();
 		}
 
 		#endregion // IMethodCompilerStage members
 
 		private void AssignBlocksToClauses()
 		{
-			blockExceptions = new Dictionary<BasicBlock, ExceptionClause>();
+			if (methodCompiler.ExceptionClauseHeader.Clauses.Count == 0)
+				return;
+
+			blockExceptions = new Dictionary<BasicBlock, ExceptionHandlingClause>();
 
 			foreach (BasicBlock block in basicBlocks)
 			{
-				ExceptionClause clause = FindExceptionClause(block);
+				ExceptionHandlingClause clause = FindExceptionClause(block);
 
 				if (clause != null)
 				{
@@ -82,39 +85,38 @@ namespace Mosa.Platform.x86
 
 		}
 
-		private ExceptionClause FindExceptionClause(BasicBlock block)
+		private ExceptionHandlingClause FindExceptionClause(BasicBlock block)
 		{
 			Context ctx = new Context(instructionSet, block);
 			int label = ctx.Label;
 
-			foreach (ExceptionClause clause in methodCompiler.ExceptionClauseHeader.Clauses)
+			foreach (ExceptionHandlingClause clause in methodCompiler.ExceptionClauseHeader.Clauses)
 			{
 				if (clause.IsLabelWithinTry(label))
 					return clause;
 
-				//if (node.Clause.TryEnd > label)
-				//    return null; // early out
+				//if (clause.IsLabelWithinHandler(label))
+				//    return null;
 			}
 
 			return null;
 		}
 
-		private struct ExceptionEntry
+		private struct ProtectedBlock
 		{
-			public ExceptionClauseType Kind;
+			public ExceptionHandlerType Kind;
 			public uint Start;
-			public uint Length;
+			public uint End;
+			public uint Length { get { return End - Start; } }
 			public uint Handler;
 
 			public uint Filter;
 			public RuntimeType Type;
 
-			public uint End { get { return Start + Length - 1; } }
-
-			public ExceptionEntry(uint start, uint length, uint handler, ExceptionClauseType kind, RuntimeType type, uint filter)
+			public ProtectedBlock(uint start, uint end, uint handler, ExceptionHandlerType kind, RuntimeType type, uint filter)
 			{
 				Start = start;
-				Length = length;
+				End = end;
 				Kind = kind;
 				Handler = handler;
 				Type = type;
@@ -123,31 +125,34 @@ namespace Mosa.Platform.x86
 
 		}
 
-		private void EmitExceptionTable()
+		private void EmitProtectedBlockTable()
 		{
-			List<ExceptionEntry> entries = new List<ExceptionEntry>();
+			List<ProtectedBlock> entries = new List<ProtectedBlock>();
 
-			foreach (ExceptionClause clause in methodCompiler.ExceptionClauseHeader.Clauses)
+			foreach (ExceptionHandlingClause clause in methodCompiler.ExceptionClauseHeader.Clauses)
 			{
-				ExceptionEntry prev = new ExceptionEntry();
+				ProtectedBlock prev = new ProtectedBlock();
 
-				foreach (BasicBlock block in this.exceptionBlocks[clause])
+				foreach (BasicBlock block in exceptionBlocks[clause])
 				{
 					uint start = (uint)codeEmitter.GetPosition(block.Label);
-					uint length = (uint)codeEmitter.GetPosition(block.Label + 0x0F000000) - start;
-					uint handler = (uint)codeEmitter.GetPosition(clause.TryOffset);
+					uint end = (uint)codeEmitter.GetPosition(block.Label + 0x0F000000);
 
+					ExceptionHandlerType kind = clause.ExceptionHandler;
+
+					uint handler = 0;
 					uint filter = 0;
 					RuntimeType type = null;
 
-					if (clause.Kind == ExceptionClauseType.Exception)
-					{
-						// Convert token to method table pointer (linker request needs to be involved)
 
+					handler = (uint)codeEmitter.GetPosition(clause.HandlerOffset);
+
+					if (kind == ExceptionHandlerType.Exception)
+					{
 						// Get runtime type
 						type = typeModule.GetType(new Token(clause.ClassToken));
 					}
-					else if (clause.Kind == ExceptionClauseType.Filter)
+					else if (kind == ExceptionHandlerType.Filter)
 					{
 						filter = (uint)codeEmitter.GetPosition(clause.FilterOffset);
 					}
@@ -155,15 +160,20 @@ namespace Mosa.Platform.x86
 					// TODO: Optimization - Search for existing exception protected region  (before or after) to merge the current block
 
 					// Simple optimization assuming blocks are somewhat sorted by position
-					if (prev.End + 1 == start && prev.Kind == clause.Kind && prev.Handler == handler && prev.Filter == filter && prev.Type == type)
+					if (prev.End == start && prev.Kind == kind && prev.Handler == handler && prev.Filter == filter && prev.Type == type)
 					{
 						// merge protected blocks sequence
-						prev.Length = prev.Length + (uint)codeEmitter.GetPosition(block.Label + 0x0F000000) - start;
+						prev.End = end;
+					}
+					else if (prev.Start == end && prev.Kind == kind && prev.Handler == handler && prev.Filter == filter && prev.Type == type)
+					{
+						// merge protected blocks sequence						
+						prev.Start = start;
 					}
 					else
 					{
 						// new protection block sequence
-						ExceptionEntry entry = new ExceptionEntry(start, length, handler, clause.Kind, type, filter);
+						ProtectedBlock entry = new ProtectedBlock(start, end, handler, kind, type, filter);
 						entries.Add(entry);
 						prev = entry;
 					}
@@ -176,7 +186,7 @@ namespace Mosa.Platform.x86
 
 			using (Stream stream = methodCompiler.Linker.Allocate(section, SectionKind.ROData, tableSize, nativePointerAlignment))
 			{
-				foreach (ExceptionEntry entry in entries)
+				foreach (ProtectedBlock entry in entries)
 				{
 					// FIXME: Assumes x86 platform
 					WriteLittleEndian4(stream, (uint)entry.Kind);
@@ -184,16 +194,17 @@ namespace Mosa.Platform.x86
 					WriteLittleEndian4(stream, entry.Length);
 					WriteLittleEndian4(stream, entry.Handler);
 
-					if (entry.Kind == ExceptionClauseType.Exception)
+					if (entry.Kind == ExceptionHandlerType.Exception)
 					{
-						// TODO: Store method table pointer here
+						// Store method table pointer of the exception object type
+						// The VES exception runtime will uses this to compare exception object types
 						methodCompiler.Linker.Link(LinkType.AbsoluteAddress | LinkType.I4, section, (int)stream.Position, 0, entry.Type.FullName + "$mtable", IntPtr.Zero);
 
 						stream.Position += nativePointerSize;
 					}
-					else if (entry.Kind == ExceptionClauseType.Filter)
+					else if (entry.Kind == ExceptionHandlerType.Filter)
 					{
-						// TODO: There are no plans in the short term to support filtered exception clause - C# doesn't use them 
+						// TODO: There are no plans in the short term to support filtered exception clause as C# does not use them 
 						stream.Position += nativePointerSize;
 					}
 					else

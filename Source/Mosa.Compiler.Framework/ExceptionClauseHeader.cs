@@ -19,13 +19,13 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// 
 		/// </summary>
-		private List<ExceptionClause> clauses = new List<ExceptionClause>();
+		private List<ExceptionHandlingClause> clauses = new List<ExceptionHandlingClause>();
 
 		/// <summary>
 		/// Gets the clauses.
 		/// </summary>
 		/// <value>The clauses.</value>
-		public List<ExceptionClause> Clauses
+		public List<ExceptionHandlingClause> Clauses
 		{
 			get { return this.clauses; }
 		}
@@ -34,7 +34,7 @@ namespace Mosa.Compiler.Framework
 		/// Adds the clause.
 		/// </summary>
 		/// <param name="clause">The clause.</param>
-		public void AddClause(ExceptionClause clause)
+		public void AddClause(ExceptionHandlingClause clause)
 		{
 			this.Clauses.Add(clause);
 		}

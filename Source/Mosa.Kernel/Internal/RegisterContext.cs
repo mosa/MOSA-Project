@@ -7,14 +7,12 @@
  *  Simon Wollwage (rootnode) <rootnode@mosa-project.org>
  */
 
-using System.Runtime.InteropServices;
-
-namespace Mosa.Platform.x86.Intrinsic
+namespace Mosa.Internal
 {
 	/// <summary>
 	/// 
 	/// </summary>
-	[StructLayout(LayoutKind.Sequential, Pack=1)]
+	//[StructLayout(LayoutKind.Sequential, Pack=1)]
 	public sealed class RegisterContext
 	{
 		/// <summary>

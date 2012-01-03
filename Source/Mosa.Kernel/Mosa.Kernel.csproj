@@ -63,8 +63,10 @@
     <NoStdLib>true</NoStdLib>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="Internal\ExceptionEngine.cs" />
     <Compile Include="KernelMemory.cs" />
-    <Compile Include="Runtime.cs" />
+    <Compile Include="Internal\RegisterContext.cs" />
+    <Compile Include="Internal\Runtime.cs" />
     <Compile Include="x86\CMOS.cs" />
     <Compile Include="x86\Colors.cs" />
     <Compile Include="x86\CpuInfo.cs" />

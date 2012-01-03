@@ -988,7 +988,7 @@ namespace Mosa.Platform.x86
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.ThrowInstruction(Context context)
 		{
-			RuntimeType runtimeType = typeSystem.GetType(@"Mosa.Platform.x86.Intrinsic.ExceptionEngine");
+			RuntimeType runtimeType = typeSystem.GetType(@"Mosa.Internal.ExceptionEngine");
 			RuntimeMethod runtimeMethod = runtimeType.FindMethod(@"ThrowException");
 			SymbolOperand throwMethod = SymbolOperand.FromMethod(runtimeMethod);
 

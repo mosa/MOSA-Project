@@ -78,7 +78,7 @@ namespace Mosa.Compiler.Framework
 			Trace(-1, null);
 
 			// Handler Code
-			foreach (ExceptionClause clause in methodCompiler.ExceptionClauseHeader.Clauses)
+			foreach (ExceptionHandlingClause clause in methodCompiler.ExceptionClauseHeader.Clauses)
 			{
 				Trace(clause.HandlerOffset, clause);
 			}
@@ -88,7 +88,7 @@ namespace Mosa.Compiler.Framework
 		/// Traces the specified label.
 		/// </summary>
 		/// <param name="label">The label.</param>
-		private void Trace(int label, ExceptionClause clause)
+		private void Trace(int label, ExceptionHandlingClause clause)
 		{
 			outgoingStack = new Stack<Operand>[basicBlocks.Count];
 			scheduledMoves = new Stack<Operand>[basicBlocks.Count];

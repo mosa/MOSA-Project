@@ -1331,12 +1331,12 @@ namespace Mosa.Compiler.Framework.IR
 		}
 
 
-		private ExceptionClause FindImmediateClause(Context context)
+		private ExceptionHandlingClause FindImmediateClause(Context context)
 		{
-			ExceptionClause innerClause = null;
+			ExceptionHandlingClause innerClause = null;
 			int label = context.Label;
 
-			foreach (ExceptionClause clause in methodCompiler.ExceptionClauseHeader.Clauses)
+			foreach (ExceptionHandlingClause clause in methodCompiler.ExceptionClauseHeader.Clauses)
 			{
 				if (clause.IsLabelWithinTry(label) || clause.IsLabelWithinHandler(label))
 				{
@@ -1354,7 +1354,7 @@ namespace Mosa.Compiler.Framework.IR
 		void CIL.ICILVisitor.Leave(Context context)
 		{
 			// Find enclosing finally clause
-			ExceptionClause clause = FindImmediateClause(context);
+			ExceptionHandlingClause clause = FindImmediateClause(context);
 
 			if (clause.IsLabelWithinTry(context.Label))
 			{
