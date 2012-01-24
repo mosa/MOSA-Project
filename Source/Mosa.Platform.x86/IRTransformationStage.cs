@@ -30,6 +30,27 @@ namespace Mosa.Platform.x86
 	public sealed class IRTransformationStage : BaseTransformationStage, IR.IIRVisitor, IMethodCompilerStage, IPlatformStage, IPipelineStage
 	{
 
+		private int stackSize;
+
+		#region IMethodCompilerStage
+
+		/// <summary>
+		/// Setup stage specific processing on the compiler context.
+		/// </summary>
+		/// <param name="compiler">The compiler context to perform processing in.</param>
+		void IMethodCompilerStage.Setup(IMethodCompiler compiler)
+		{
+			base.Setup(compiler);
+
+			IStackLayoutProvider stackLayoutProvider = methodCompiler.Pipeline.FindFirst<IStackLayoutProvider>();
+
+			stackSize = (stackLayoutProvider == null) ? 0 : stackLayoutProvider.LocalsSize;
+
+			Debug.Assert((stackSize % 4) == 0, @"Stack size of method can't be divided by 4!!");
+		}
+
+		#endregion // IMethodCompilerStage
+
 		#region IIRVisitor
 
 		/// <summary>
@@ -481,8 +502,6 @@ namespace Mosa.Platform.x86
 			RegisterOperand ebp = new RegisterOperand(I, GeneralPurposeRegister.EBP);
 			RegisterOperand esp = new RegisterOperand(I, GeneralPurposeRegister.ESP);
 			RegisterOperand edi = new RegisterOperand(I, GeneralPurposeRegister.EDI);
-			int stackSize = (int)context.Other;
-			Debug.Assert((stackSize % 4) == 0, @"Stack size of method can't be divided by 4!!");
 
 			/* 
 			 * If you want to stop at the header of an emitted function, just set breakFlag 
@@ -545,7 +564,6 @@ namespace Mosa.Platform.x86
 			RegisterOperand edx = new RegisterOperand(I, GeneralPurposeRegister.EDX);
 			RegisterOperand ebp = new RegisterOperand(I, GeneralPurposeRegister.EBP);
 			RegisterOperand esp = new RegisterOperand(I, GeneralPurposeRegister.ESP);
-			int stackSize = (int)context.Other;
 
 			// Load EDX for int32 return values
 			if (methodCompiler.Method.Signature.ReturnType.Type != CilElementType.I8 &&
@@ -1004,7 +1022,7 @@ namespace Mosa.Platform.x86
 		/// Visitation function for ExceptionPrologueInstruction"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.ExceptionPrologueInstruction(Context context) 
+		void IR.IIRVisitor.ExceptionPrologueInstruction(Context context)
 		{
 			// Exception Handler will pass the exception object in the register - EDX was choose
 			context.SetInstruction(CPUx86.Instruction.MovInstruction, context.Result, new RegisterOperand(BuiltInSigType.Object, GeneralPurposeRegister.EDX));

@@ -100,7 +100,6 @@
     <Compile Include="CPUx86\SseRoundInstruction.cs" />
     <Compile Include="ExceptionLayoutStage.cs" />
     <Compile Include="InterruptBuilderStage.cs" />
-    <Compile Include="Intrinsic\CallFilter.cs" />
     <Compile Include="Intrinsic\GetEBP.cs" />
     <Compile Include="Intrinsic\GetMethodLookupTable.cs" />
     <Compile Include="Intrinsic\GetEIP.cs" />

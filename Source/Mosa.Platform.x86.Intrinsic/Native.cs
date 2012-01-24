@@ -291,16 +291,14 @@ namespace Mosa.Platform.x86.Intrinsic
 		public extern static void SwitchTask(uint esp);
 
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.RestoreContext, Mosa.Platform.x86")]
-		public extern static void RestoreContext();
+		public extern static void RestoreContext(uint ebp, uint esp, uint eip);
+		//public extern static void RestoreContext(uint edi, uint esi, uint ebp, uint esp, uint ebx, uint edx, uint ecx, uint eax);
 
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.GetEIP, Mosa.Platform.x86")]
 		public extern static uint GetEIP();
 
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.GetEBP, Mosa.Platform.x86")]
 		public extern static uint GetEBP();
-
-		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.CallFilter, Mosa.Platform.x86")]
-		public extern static void CallFilter();
 
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.InvokeDelegate, Mosa.Platform.x86")]
 		public extern static void InvokeDelegate(object obj, uint ptr);

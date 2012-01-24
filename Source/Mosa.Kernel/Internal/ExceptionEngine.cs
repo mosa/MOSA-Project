@@ -59,7 +59,8 @@ namespace Mosa.Internal
 		/// <param name="context">The register context to restore the state from</param>
 		private static void RestoreContext(RegisterContext context)
 		{
-			//Native.RestoreContext();
+			Native.RestoreContext(context.Ebp, context.Esp, context.Eip);
+			//Native.RestoreContext(context.edi, context.esi, context.ebp, context.esp, context.ebx, context.edx, context.ecx, context.eax);
 		}
 
 		/// <summary>
@@ -140,7 +141,7 @@ namespace Mosa.Internal
 				// Call finally handler (with return address on stack to resume search for next protected block or exception)
 			}
 			else
-			{  
+			{
 				// Go panic!
 			}
 

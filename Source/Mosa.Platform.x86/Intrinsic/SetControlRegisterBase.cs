@@ -24,7 +24,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	public class SetControlRegisterBase : IIntrinsicMethod
 	{
 
-		private ControlRegister _control;
+		private ControlRegister control;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SetControlRegisterBase"/> class.
@@ -32,7 +32,7 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// <param name="control">The control.</param>
 		protected SetControlRegisterBase(ControlRegister control)
 		{
-			_control = control;
+			this.control = control;
 		}
 
 		#region Methods
@@ -42,14 +42,15 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="typeSystem">The type system.</param>
-		public void ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
+		void IIntrinsicMethod.ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
 		{
 			Operand operand1 = context.Operand1;
 
-			RegisterOperand imm = new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.EAX);
+			RegisterOperand eax = new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.EAX);
+			RegisterOperand cr = new RegisterOperand(BuiltInSigType.UInt32, control);
 
-			context.SetInstruction(IR.Instruction.MoveInstruction, imm, operand1);
-			context.AppendInstruction(IR.Instruction.MoveInstruction, new RegisterOperand(BuiltInSigType.UInt32, _control), imm);
+			context.SetInstruction(IR.Instruction.MoveInstruction, eax, operand1);
+			context.AppendInstruction(IR.Instruction.MoveInstruction, cr, eax);
 		}
 
 		#endregion // Methods

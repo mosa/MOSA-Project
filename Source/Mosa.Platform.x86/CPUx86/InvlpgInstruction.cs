@@ -45,17 +45,7 @@ namespace Mosa.Platform.x86.CPUx86
 		{
 			visitor.Invlpg(context);
 		}
-
-		/// <summary>
-		/// Replaces the intrinsic call site
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="typeSystem">The type system.</param>
-		public void ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
-		{
-			context.SetInstruction(CPUx86.Instruction.InvlpgInstruction, null, context.Operand1);
-		}
-
+		
 		#endregion // Methods
 	}
 }

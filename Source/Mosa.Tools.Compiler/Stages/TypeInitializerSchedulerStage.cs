@@ -54,7 +54,7 @@ namespace Mosa.Tools.Compiler.Stages
 			ctx = new Context(instructionSet);
 
 			ctx.AppendInstruction(IR.Instruction.PrologueInstruction);
-			ctx.Other = 0; // stacksize
+			//ctx.Other = 0; // stacksize
 		}
 
 		#endregion // Construction
@@ -94,7 +94,7 @@ namespace Mosa.Tools.Compiler.Stages
 			}
 
 			ctx.AppendInstruction(IR.Instruction.EpilogueInstruction);
-			ctx.Other = 0;
+			//ctx.Other = 0;
 
 			method = LinkTimeCodeGenerator.Compile(compiler, @"AssemblyInit", instructionSet, typeSystem);
 		}

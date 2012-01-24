@@ -33,14 +33,13 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public void Run()
 		{
-			// Allocate a list of locals
-			List<StackOperand> locals = new List<StackOperand>();
-
-			CollectLocalVariablesFromIL(locals);
+			List<StackOperand> locals = CollectLocalVariablesFromIL();
 
 			// Iterate and collect locals from all blocks
 			foreach (BasicBlock block in basicBlocks)
+			{
 				CollectLocalVariables(locals, block);
+			}
 
 			// Sort all found locals
 			OrderVariables(locals, callingConvention);
@@ -54,13 +53,13 @@ namespace Mosa.Compiler.Framework
 			// Create a prologue instruction
 			Context prologueCtx = new Context(instructionSet, FindBlock(-1)).InsertBefore();
 			prologueCtx.SetInstruction(IR.Instruction.PrologueInstruction);
-			prologueCtx.Other = localsSize;
+			//prologueCtx.Other = localsSize;
 			prologueCtx.Label = -1;
 
 			// Create an epilogue instruction
 			Context epilogueCtx = new Context(instructionSet, FindBlock(Int32.MaxValue));
 			epilogueCtx.AppendInstruction(IR.Instruction.EpilogueInstruction);
-			epilogueCtx.Other = localsSize;
+			//epilogueCtx.Other = localsSize;
 			epilogueCtx.Label = Int32.MaxValue;
 		}
 
@@ -75,13 +74,20 @@ namespace Mosa.Compiler.Framework
 
 		#region Internals
 
-		private void CollectLocalVariablesFromIL(List<StackOperand> locals)
+		private List<StackOperand> CollectLocalVariablesFromIL()
 		{
-			var localVariables = (this.methodCompiler as BaseMethodCompiler).LocalVariables;
+			// Allocate a list of locals
+			List<StackOperand> locals = new List<StackOperand>();
+
+			var localVariables = (methodCompiler as BaseMethodCompiler).LocalVariables;
+
 			if (localVariables == null)
-				return;
+				return locals;
+
 			foreach (var localVariable in localVariables)
 				locals.Add(localVariable as StackOperand);
+
+			return locals;
 		}
 
 		/// <summary>
