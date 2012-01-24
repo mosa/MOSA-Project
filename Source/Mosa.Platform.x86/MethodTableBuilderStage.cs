@@ -39,7 +39,6 @@ namespace Mosa.Platform.x86
 		/// </summary>
 		private IAssemblyLinker linker;
 
-
 		/// <summary>
 		/// Setups the specified compiler.
 		/// </summary>
@@ -132,7 +131,7 @@ namespace Mosa.Platform.x86
 		{
 			foreach (var method in methods)
 			{
-				int size = 2 * typeLayout.NativePointerSize;
+				int size = 4 * typeLayout.NativePointerSize;
 
 				string section = method.FullName + "$mdtable";
 
@@ -145,6 +144,12 @@ namespace Mosa.Platform.x86
 
 					// GC tracking info (not implemented yet)
 					stream.WriteZeroBytes(typeLayout.NativePointerSize);
+
+					// TODO: Local stack size
+					stream.Position += typeLayout.NativePointerSize;
+
+					// TODO: Parameter stack size
+					stream.Position += typeLayout.NativePointerSize;
 				}
 			}
 		}

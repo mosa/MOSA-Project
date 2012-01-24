@@ -107,7 +107,7 @@ namespace Mosa.Platform.x86
 		void IR.IIRVisitor.AddressOfInstruction(Context context)
 		{
 			var opRes = context.Result;
-			//var register = new VirtualRegisterOperand(opRes.Type);
+			
 			RegisterOperand register = new RegisterOperand(opRes.Type, GeneralPurposeRegister.EAX);
 			context.Result = register;
 			context.ReplaceInstructionOnly(CPUx86.Instruction.LeaInstruction);

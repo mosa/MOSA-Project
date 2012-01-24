@@ -40,7 +40,7 @@ shape = "record"
 ];
 
 "node6" [
-label = "<f0>Method Description|<f1>Pointer to Exception Handler Table|<f2>Pointer to GC Tracking Information"
+label = "<f0>Method Description|<f1>Pointer to Exception Handler Table|<f2>Pointer to GC Tracking Information|Local Stack Size|Parameter Stack Size"
 shape = "record"
 ];
 
