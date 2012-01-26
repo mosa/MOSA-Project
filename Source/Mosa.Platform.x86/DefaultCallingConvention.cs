@@ -63,16 +63,19 @@ namespace Mosa.Platform.x86
 			 * Calling convention is right-to-left, pushed on the stack. Return value in EAX for integral
 			 * types 4 bytes or less, XMM0 for floating point and EAX:EDX for 64-bit. If this is a method
 			 * of a type, the this argument is moved to ECX right before the call.
-			 * 
 			 */
 
 			Operand invokeTarget = ctx.Operand1;
 			Operand result = ctx.Result;
+
+			int stackSize = CalculateStackSizeForParameters(ctx.Operands);
+
 			Stack<Operand> operands = BuildOperandStack(ctx);
 
 			ctx.SetInstruction(CPUx86.Instruction.NopInstruction);
 
-			int stackSize = ReserveStackSizeForCall(ctx, operands);
+			ReserveStackSizeForCall(ctx, stackSize);
+
 			if (stackSize != 0)
 			{
 				PushOperands(ctx, operands, stackSize);
@@ -104,9 +107,8 @@ namespace Mosa.Platform.x86
 			return operandStack;
 		}
 
-		private int ReserveStackSizeForCall(Context ctx, IEnumerable<Operand> operands)
+		private void ReserveStackSizeForCall(Context ctx, int stackSize)
 		{
-			int stackSize = CalculateStackSizeForParameters(operands);
 			if (stackSize != 0)
 			{
 				RegisterOperand esp = new RegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.ESP);
@@ -114,8 +116,6 @@ namespace Mosa.Platform.x86
 				ctx.AppendInstruction(CPUx86.Instruction.SubInstruction, esp, new ConstantOperand(esp.Type, stackSize));
 				ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, new RegisterOperand(architecture.NativeType, GeneralPurposeRegister.EDX), esp);
 			}
-
-			return stackSize;
 		}
 
 		private void FreeStackAfterCall(Context ctx, int stackSize)
@@ -272,9 +272,13 @@ namespace Mosa.Platform.x86
 		private int CalculateStackSizeForParameters(IEnumerable<Operand> operands)
 		{
 			int result = 0;
+			int count = 0;
 
 			foreach (Operand op in operands)
 			{
+				if (count++ == 0)
+					continue;
+
 				int size, alignment;
 				architecture.GetTypeRequirements(op.Type, out size, out alignment);
 
