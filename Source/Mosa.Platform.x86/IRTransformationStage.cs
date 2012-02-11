@@ -1012,7 +1012,7 @@ namespace Mosa.Platform.x86
 
 			// Push exception object onto stack
 			context.SetInstruction(CPUx86.Instruction.PushInstruction, null, context.Operand1);
-			// Save CPU context onto stack
+			// Save entire CPU context onto stack
 			context.AppendInstruction(CPUx86.Instruction.PushadInstruction);
 			// Call exception handling
 			context.AppendInstruction(CPUx86.Instruction.CallInstruction, null, throwMethod);

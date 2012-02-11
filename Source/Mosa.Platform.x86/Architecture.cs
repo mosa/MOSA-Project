@@ -152,7 +152,11 @@ namespace Mosa.Platform.x86
 		public override void ExtendAssemblyCompilerPipeline(CompilerPipeline assemblyCompilerPipeline)
 		{
 			assemblyCompilerPipeline.InsertAfterFirst<IAssemblyCompilerStage>(
-				new InterruptBuilderStage()
+				new InterruptVectorStage()
+			);
+
+			assemblyCompilerPipeline.InsertAfterFirst<InterruptVectorStage>(
+				new ExceptionVectorStage()
 			);
 
 			assemblyCompilerPipeline.InsertAfterLast<TypeLayoutStage>(

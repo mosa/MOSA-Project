@@ -21,19 +21,14 @@ namespace Mosa.Platform.x86
 	/// <summary>
 	/// 
 	/// </summary>
-	public sealed class InterruptBuilderStage : BaseAssemblyCompilerStage, IAssemblyCompilerStage, IPipelineStage
+	public sealed class InterruptVectorStage : BaseAssemblyCompilerStage, IAssemblyCompilerStage, IPipelineStage
 	{
-		#region Data Members
-
-		#endregion // Data Members
 
 		#region IAssemblyCompilerStage Members
 
 		void IAssemblyCompilerStage.Setup(AssemblyCompiler compiler)
 		{
 			base.Setup(compiler);
-
-			//linker = RetrieveAssemblyLinkerFromCompiler();
 		}
 
 		/// <summary>
@@ -41,7 +36,7 @@ namespace Mosa.Platform.x86
 		/// </summary>
 		void IAssemblyCompilerStage.Run()
 		{
-			CreateISRMethods();
+			CreateInterruptVectors();
 		}
 
 		#endregion // IAssemblyCompilerStage Members
@@ -49,39 +44,21 @@ namespace Mosa.Platform.x86
 		#region Internal
 
 		/// <summary>
-		/// Finds the method.
+		/// Creates the interrupt service routine (ISR) methods.
 		/// </summary>
-		/// <param name="rt">The runtime type.</param>
-		/// <param name="name">The name.</param>
-		/// <returns></returns>
-		private RuntimeMethod FindMethod(RuntimeType rt, string name)
+		private void CreateInterruptVectors()
 		{
-			foreach (RuntimeMethod method in rt.Methods)
-				if (name == method.Name)
-					return method;
+			RuntimeType runtimeType = typeSystem.GetType(@"Mosa.Kernel.x86.IDT");
 
-			throw new MissingMethodException(rt.Name, name);
-		}
-
-		/// <summary>
-		/// Creates the ISR methods.
-		/// </summary>
-		private void CreateISRMethods()
-		{
-			// Get RuntimeMethod for the Mosa.Kernel.x86.IDT.InterruptHandler
-			RuntimeType rt = typeSystem.GetType(@"Mosa.Kernel.x86.IDT");
-			if (rt == null)
-			{
+			if (runtimeType == null)
 				return;
-			}
 
-			RuntimeMethod InterruptMethod = FindMethod(rt, "ProcessInterrupt");
-			if (InterruptMethod == null)
-			{
+			RuntimeMethod runtimeMethod = runtimeType.FindMethod(@"ProcessInterrupt");
+
+			if (runtimeMethod == null)
 				return;
-			}
 
-			SymbolOperand interruptMethod = SymbolOperand.FromMethod(InterruptMethod);
+			SymbolOperand interruptMethod = SymbolOperand.FromMethod(runtimeMethod);
 
 			RegisterOperand esp = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.ESP);
 

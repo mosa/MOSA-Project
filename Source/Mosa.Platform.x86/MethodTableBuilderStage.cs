@@ -131,7 +131,7 @@ namespace Mosa.Platform.x86
 		{
 			foreach (var method in methods)
 			{
-				int size = 4 * typeLayout.NativePointerSize;
+				int size = 3 * typeLayout.NativePointerSize;
 
 				string section = method.FullName + "$mdtable";
 
@@ -145,13 +145,16 @@ namespace Mosa.Platform.x86
 					// GC tracking info (not implemented yet)
 					stream.WriteZeroBytes(typeLayout.NativePointerSize);
 
-					// TODO: Local stack size
-					stream.Position += typeLayout.NativePointerSize;
-
-					// TODO: Parameter stack size
-					stream.Position += typeLayout.NativePointerSize;
+					// Method's Parameter stack size
+					stream.Write(LittleEndianBitConverter.GetBytes(DetermineSizeOfMethodParameters(method)), 0, 4);
 				}
 			}
+		}
+
+		protected int DetermineSizeOfMethodParameters(RuntimeMethod method)
+		{
+			// TODO
+			return 0;
 		}
 
 	}

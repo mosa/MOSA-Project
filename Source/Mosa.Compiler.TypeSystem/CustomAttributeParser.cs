@@ -52,24 +52,21 @@ namespace Mosa.Compiler.TypeSystem
 		/// </returns>
 		public static object[] Parse(byte[] blob, RuntimeMethod attributeCtor)
 		{
-
 			if (blob == null)
-			{
 				throw new ArgumentException(@"Invalid attribute blob token.", @"attributeBlob");
-			}
 
 			if (blob.Length == 0)
 				return null;
 
 			// Create a binary reader for the blob
-            using (var reader = new BinaryReader(new MemoryStream(blob), Encoding.UTF8))
+			using (var reader = new BinaryReader(new MemoryStream(blob), Encoding.UTF8))
 			{
-                var prologue = reader.ReadUInt16();
+				var prologue = reader.ReadUInt16();
 				Debug.Assert(prologue == ATTRIBUTE_BLOB_PROLOGUE, @"Attribute prologue doesn't match.");
 				if (prologue != ATTRIBUTE_BLOB_PROLOGUE)
 					throw new ArgumentException(@"Invalid custom attribute blob.", "attributeBlob");
 
-                var parameters = attributeCtor.Parameters.Count;
+				var parameters = attributeCtor.Parameters.Count;
 
 				object[] args = new object[parameters];
 				for (int idx = 0; idx < parameters; idx++)
@@ -96,7 +93,7 @@ namespace Mosa.Compiler.TypeSystem
 			object result = null;
 
 			// A vector?
-            var arraySigType = sigType as SZArraySigType;
+			var arraySigType = sigType as SZArraySigType;
 			if (arraySigType != null)
 				result = ParseSZArrayArg(reader, arraySigType);
 			else
@@ -238,7 +235,7 @@ namespace Mosa.Compiler.TypeSystem
 				return String.Empty;
 
 			// Read the string
-            var buffer = reader.ReadChars(packedLen);
+			var buffer = reader.ReadChars(packedLen);
 			return new String(buffer);
 		}
 

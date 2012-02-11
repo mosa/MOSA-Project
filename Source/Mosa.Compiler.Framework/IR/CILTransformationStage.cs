@@ -268,9 +268,6 @@ namespace Mosa.Compiler.Framework.IR
 				return;
 			}
 
-			//if (ProcessVmCall(context))
-			//    return;
-
 			if (ProcessExternalCall(context))
 				return;
 
@@ -1989,7 +1986,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// <remarks>
 		/// This method checks if the call target has an Intrinsic-Attribute applied with
 		/// the current architecture. If it has, the method call is replaced by the specified
-		/// native  instruction.
+		/// native instruction.
 		/// </remarks>
 		private bool ProcessExternalCall(Context context)
 		{
@@ -2005,6 +2002,7 @@ namespace Mosa.Compiler.Framework.IR
 			if (intrinsicType == null)
 				return false;
 
+			// TODO: Cache this
 			IIntrinsicMethod intrinsicMethod = Activator.CreateInstance(intrinsicType) as IIntrinsicMethod;
 
 			if (intrinsicMethod == null)

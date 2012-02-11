@@ -63,10 +63,10 @@
     <NoStdLib>true</NoStdLib>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Internal\ExceptionEngine.cs" />
+    <Compile Include="Mosa.Internal\ExceptionEngine.cs" />
     <Compile Include="KernelMemory.cs" />
-    <Compile Include="Internal\RegisterContext.cs" />
-    <Compile Include="Internal\Runtime.cs" />
+    <Compile Include="Mosa.Internal\RegisterContext.cs" />
+    <Compile Include="Mosa.Internal\Runtime.cs" />
     <Compile Include="x86\CMOS.cs" />
     <Compile Include="x86\Colors.cs" />
     <Compile Include="x86\CpuInfo.cs" />

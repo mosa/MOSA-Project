@@ -398,7 +398,8 @@ namespace Mosa.Compiler.TypeSystem
 				}
 			}
 
-			throw new MissingMethodException(Name, name);
+			return null;
+			//throw new MissingMethodException(Name, name);
 		}
 
 		public virtual bool ContainsOpenGenericParameters

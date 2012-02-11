@@ -94,6 +94,7 @@ namespace Mosa.Tools.Compiler
 					compilerOptions.BootCompilerStage,
 					new MethodPipelineExportStage(),
 					new DelegateTypePatchStage(),
+					new PlugStage(),
 					new AssemblyMemberCompilationSchedulerStage(), 
 					new MethodCompilerSchedulerStage(),
 					new TypeInitializerSchedulerStage(),

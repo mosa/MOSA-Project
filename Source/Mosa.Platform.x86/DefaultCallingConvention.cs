@@ -68,9 +68,9 @@ namespace Mosa.Platform.x86
 			Operand invokeTarget = ctx.Operand1;
 			Operand result = ctx.Result;
 
-			int stackSize = CalculateStackSizeForParameters(ctx.Operands);
-
 			Stack<Operand> operands = BuildOperandStack(ctx);
+
+			int stackSize = CalculateStackSizeForParameters(operands);
 
 			ctx.SetInstruction(CPUx86.Instruction.NopInstruction);
 
@@ -272,22 +272,11 @@ namespace Mosa.Platform.x86
 		private int CalculateStackSizeForParameters(IEnumerable<Operand> operands)
 		{
 			int result = 0;
-			int count = 0;
 
 			foreach (Operand op in operands)
 			{
-				if (count++ == 0)
-					continue;
-
 				int size, alignment;
 				architecture.GetTypeRequirements(op.Type, out size, out alignment);
-
-				/*if (op.Type.Type == CilElementType.ValueType)
-				{
-					// FIXME
-					throw new System.NotImplementedException();
-					//size = ObjectModelUtility.ComputeTypeSize((op.Type as ValueTypeSigType).Token, moduleTypeSystem, architecture);
-				}*/
 
 				result += size;
 			}
