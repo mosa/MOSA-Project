@@ -1,7 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿/*
+ * (c) 2012 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ */
+
+using System;
 using System.Text;
+
+using Mosa.Compiler.Framework;
+using Mosa.Platform.x86;
 
 namespace Mosa.Platform.x86.XSharp
 {
@@ -23,6 +33,12 @@ namespace Mosa.Platform.x86.XSharp
 			Below
 		};
 
+		private IMethodCompiler methodCompiler;
+		private Context currentContext;
+
+		//private InstructionSet InstructionSet;
+		//private BasicBlock[] blocks;
+
 		private ESPRegister espRegister;
 		private EBPRegister ebpRegister;
 		private EDXRegister edxRegister;
@@ -35,6 +51,7 @@ namespace Mosa.Platform.x86.XSharp
 
 		public XSharpMethod()
 		{
+				
 			espRegister = new ESPRegister(this);
 			ebpRegister = new EBPRegister(this);
 			edxRegister = new EDXRegister(this);
@@ -42,6 +59,12 @@ namespace Mosa.Platform.x86.XSharp
 			ecxRegister = new ECXRegister(this);
 			esiRegister = new ESIRegister(this);
 			ediRegister = new EDIRegister(this);
+		}
+
+		public void Execute(IMethodCompiler methodCompiler)
+		{
+			this.methodCompiler = methodCompiler;
+			this.Assemble();
 		}
 
 		#region CPU Registers
@@ -156,20 +179,17 @@ namespace Mosa.Platform.x86.XSharp
 
 		protected void PopAll()
 		{
-			// TODO
-			Console.WriteLine("POPAL");
+			currentContext.AppendInstruction(CPUx86.Instruction.PopadInstruction);
 		}
 
 		protected void PushAll()
 		{
-			// TODO
-			Console.WriteLine("PUSHAL");
+			currentContext.AppendInstruction(CPUx86.Instruction.PushadInstruction);
 		}
 
 		protected void Return()
 		{
-			// TODO
-			Console.WriteLine("RET");
+			currentContext.AppendInstruction(CPUx86.Instruction.RetInstruction);
 		}
 
 		protected void Return(int value)
