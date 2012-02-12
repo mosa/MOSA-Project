@@ -62,6 +62,7 @@
     <NoStdLib>true</NoStdLib>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="XSharp.cs" />
     <Compile Include="DelegateStub.cs" />
     <Compile Include="Native.cs" />
   </ItemGroup>

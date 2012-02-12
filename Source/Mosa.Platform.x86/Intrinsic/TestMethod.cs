@@ -11,7 +11,7 @@ using System;
 
 using Mosa.Platform.x86.XSharp;
 
-namespace Mosa.Platform.x86.XSharp.Intrinsic
+namespace Mosa.Platform.x86.Intrinsic
 {
 	class TestMethod : XSharpMethod
 	{

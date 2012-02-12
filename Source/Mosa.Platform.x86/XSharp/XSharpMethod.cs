@@ -50,8 +50,7 @@ namespace Mosa.Platform.x86.XSharp
 		private string label;
 
 		public XSharpMethod()
-		{
-				
+		{				
 			espRegister = new ESPRegister(this);
 			ebpRegister = new EBPRegister(this);
 			edxRegister = new EDXRegister(this);
@@ -65,6 +64,8 @@ namespace Mosa.Platform.x86.XSharp
 		{
 			this.methodCompiler = methodCompiler;
 			this.Assemble();
+
+			currentContext = null; // TODO
 		}
 
 		#region CPU Registers

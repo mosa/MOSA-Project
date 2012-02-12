@@ -24,7 +24,7 @@ namespace Mosa.Platform.x86.XSharp
 
 		internal IndexedRegister(Register register, int index) { this.register = register; this.index = index; }
 
-		public int Value
+		public object Value
 		{
 			set
 			{
