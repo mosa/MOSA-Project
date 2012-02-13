@@ -2002,15 +2002,15 @@ namespace Mosa.Compiler.Framework.IR
 			if (intrinsicType == null)
 				return false;
 
-			// TODO: Cache this
-			IIntrinsicMethod intrinsicMethod = Activator.CreateInstance(intrinsicType) as IIntrinsicMethod;
+			var instance = Activator.CreateInstance(intrinsicType);
 
-			if (intrinsicMethod == null)
-				return false;
+			if (instance is IIntrinsicMethod)
+			{
+				(instance as IIntrinsicMethod).ReplaceIntrinsicCall(context, typeSystem, methodCompiler.Method.Parameters);
+				return true;
+			}
 
-			intrinsicMethod.ReplaceIntrinsicCall(context, typeSystem, methodCompiler.Method.Parameters);
-
-			return true;
+			return false;
 		}
 
 		/// <summary>

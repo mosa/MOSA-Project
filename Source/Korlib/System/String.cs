@@ -98,8 +98,8 @@ namespace System
 		[MethodImplAttribute(MethodImplOptions.InternalCall)]
 		public extern String(char[] value, int startIndex, int length);
 
-		[MethodImplAttribute(MethodImplOptions.InternalCall)]
-		public extern unsafe String(sbyte* value, int startIndex, int length);
+		//[MethodImplAttribute(MethodImplOptions.InternalCall)]
+		//public extern unsafe String(sbyte* value, int startIndex, int length);
 
 		////[MethodImplAttribute(MethodImplOptions.InternalCall)]
 		////public unsafe extern String(sbyte* value);

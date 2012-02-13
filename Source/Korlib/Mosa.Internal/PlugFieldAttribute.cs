@@ -14,7 +14,12 @@ namespace Mosa.Internal
 	[AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false)]
 	public sealed class PlugFieldAttribute : Attribute
 	{
-		public string Target;
+		private string target;
+
+		public PlugFieldAttribute(string target)
+		{
+			this.target = target;
+		}
 	}
 
 }

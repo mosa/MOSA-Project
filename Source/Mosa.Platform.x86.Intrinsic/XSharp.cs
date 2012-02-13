@@ -18,7 +18,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	{
 
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.TestMethod, Mosa.Platform.x86")]
-		public extern static void Test();
+		public extern static void TestMethod();
 
 
 	}

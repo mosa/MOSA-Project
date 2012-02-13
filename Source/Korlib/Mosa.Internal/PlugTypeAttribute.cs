@@ -14,7 +14,12 @@ namespace Mosa.Internal
 	[AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
 	public sealed class PlugTypeAttribute : Attribute
 	{
-		public string Target;
+		private string target;
+
+		public PlugTypeAttribute(string target)
+		{
+			this.target = target;
+		}
 	}
 
 }

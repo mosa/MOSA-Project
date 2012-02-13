@@ -47,27 +47,41 @@ namespace Mosa.Compiler.Framework
 		{
 			foreach (RuntimeType type in this.typeSystem.GetAllTypes())
 			{
-				bool plugType = false;
+				string plugTypeTarget = null;
 
 				RuntimeAttribute typeAttribute = GetAttribute(type.CustomAttributes, plugTypeAttribute);
 
-				// TODO: Read attribute, what type is being plugged?
 				if (typeAttribute != null)
 				{
 					object[] parameters = CustomAttributeParser.Parse(typeAttribute.Blob, typeAttribute.CtorMethod);
 
-					int len = parameters.Length;
+					if (parameters.Length >= 1)
+					{
+						plugTypeTarget = (string)parameters[0];
+					}
+
 				}
 
 				foreach (RuntimeMethod method in type.Methods)
 				{
-					bool plugMethod = plugType;
+					string plugMethodTarget = null;
 
 					RuntimeAttribute methodAttribute = GetAttribute(method.CustomAttributes, plugMethodAttribute);
 
-					// TODO: Read attribute, what method is being plugged?
+					if (methodAttribute != null)
+					{
+						object[] parameters = CustomAttributeParser.Parse(methodAttribute.Blob, methodAttribute.CtorMethod);
 
-					//CustomAttributeParser
+						if (parameters.Length >= 1)
+						{
+							plugMethodTarget = (string)parameters[0];
+						}
+					}
+
+					if (plugTypeTarget != null || plugMethodTarget != null)
+					{
+						// TODO
+					}
 				}
 			}
 		}

@@ -853,7 +853,6 @@ namespace Mosa.Compiler.TypeSystem
 		private void LoadTypeSpecs()
 		{
 			var maxToken = GetMaxTokenValue(TableType.TypeSpec);
-
 			foreach (var token in new Token(TableType.TypeSpec, 1).Upto(maxToken))
 			{
 				LoadTypeSpec(token);

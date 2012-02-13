@@ -14,8 +14,19 @@ namespace Mosa.Internal
 	[AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
 	public sealed class PlugMethodAttribute : Attribute
 	{
-		public string Target;
-		public string Signature = null;
+		private string target;
+		private string signature = null;
+
+		public PlugMethodAttribute(string target, string signature)
+		{
+			this.target = target;
+			this.signature = signature;
+		}
+
+		public PlugMethodAttribute(string target)
+		{
+			this.target = target;
+		}
 	}
 
 }
