@@ -104,6 +104,8 @@ namespace Mosa.Tool.CreateBootImage
 					return -1;
 				}
 
+				options.DiskImageFileName = args[1];
+
 				BootImageCreator.Create(options);
 
 				Console.WriteLine("Completed!");
