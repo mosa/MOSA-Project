@@ -7,7 +7,7 @@
  *  Royce Mitchell III (royce3) <royce3 [at] gmail [dot] com>
  */
 
-namespace Mosa.Tool.MakeIsoImage
+namespace Mosa.Utility.IsoImage
 {
 	static class ConvertTo
 	{

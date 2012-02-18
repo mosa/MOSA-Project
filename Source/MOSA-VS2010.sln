@@ -108,6 +108,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Utilities", "Utilities", "{
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Utility.BootImage", "Mosa.Utility.BootImage\Mosa.Utility.BootImage.csproj", "{65F7691A-B355-4D98-BB97-0B19F13E2190}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Utility.IsoImage", "Mosa.Utility.IsoImage\Mosa.Utility.IsoImage.csproj", "{3BF17C10-F7FB-4517-923E-B609C2FD8282}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -548,6 +550,16 @@ Global
 		{65F7691A-B355-4D98-BB97-0B19F13E2190}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
 		{65F7691A-B355-4D98-BB97-0B19F13E2190}.Release|Mixed Platforms.Build.0 = Release|Any CPU
 		{65F7691A-B355-4D98-BB97-0B19F13E2190}.Release|x86.ActiveCfg = Release|Any CPU
+		{3BF17C10-F7FB-4517-923E-B609C2FD8282}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3BF17C10-F7FB-4517-923E-B609C2FD8282}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3BF17C10-F7FB-4517-923E-B609C2FD8282}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{3BF17C10-F7FB-4517-923E-B609C2FD8282}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{3BF17C10-F7FB-4517-923E-B609C2FD8282}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{3BF17C10-F7FB-4517-923E-B609C2FD8282}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3BF17C10-F7FB-4517-923E-B609C2FD8282}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3BF17C10-F7FB-4517-923E-B609C2FD8282}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{3BF17C10-F7FB-4517-923E-B609C2FD8282}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{3BF17C10-F7FB-4517-923E-B609C2FD8282}.Release|x86.ActiveCfg = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -597,5 +609,6 @@ Global
 		{631BC4F3-E2D8-4319-814C-13904CAA17CE} = {E808AF53-3054-497B-B7C5-DEA4FDED0806}
 		{27A3C89C-1967-45FF-A77E-94F44995C42C} = {E808AF53-3054-497B-B7C5-DEA4FDED0806}
 		{65F7691A-B355-4D98-BB97-0B19F13E2190} = {90065B0F-1BFE-40D8-AED5-11096B2535B0}
+		{3BF17C10-F7FB-4517-923E-B609C2FD8282} = {90065B0F-1BFE-40D8-AED5-11096B2535B0}
 	EndGlobalSection
 EndGlobal
