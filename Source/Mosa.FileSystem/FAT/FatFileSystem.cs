@@ -497,7 +497,6 @@ namespace Mosa.FileSystem.FAT
 
 			if (fatType != FatType.FAT32)
 			{
-
 				bootSector.SetUShort(BootSector.SectorsPerFAT, (ushort)sectorsPerFat);
 				if (fatSettings.FloppyMedia)
 					bootSector.SetByte(BootSector.PhysicalDriveNbr, 0x00);

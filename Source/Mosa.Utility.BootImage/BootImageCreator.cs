@@ -30,8 +30,19 @@ namespace Mosa.Utility.BootImage
 			if (System.IO.File.Exists(options.DiskImageFileName))
 				System.IO.File.Delete(options.DiskImageFileName);
 
+			uint blockCount = options.BlockCount;
+
+			if (blockCount == 0)
+			{
+				blockCount = 8400 + 1;
+				foreach (var file in options.IncludeFiles)
+				{
+					blockCount += ((uint)file.Content.Length / 512) + 1;
+				}
+			}
+
 			DiskGeometry diskGeometry = new Mosa.DeviceSystem.DiskGeometry();
-			diskGeometry.GuessGeometry(options.BlockCount);
+			diskGeometry.GuessGeometry(blockCount);
 
 			// Create disk image file
 			Mosa.EmulatedDevices.Synthetic.DiskDevice diskDevice = new Mosa.EmulatedDevices.Synthetic.DiskDevice(options.DiskImageFileName);
@@ -40,7 +51,7 @@ namespace Mosa.Utility.BootImage
 			{
 				// Create header
 				byte[] header = Mosa.DeviceSystem.VDI.CreateHeader(
-					options.BlockCount,
+					blockCount,
 					options.MediaGuid.ToByteArray(),
 					options.MediaLastSnapGuid.ToByteArray(),
 					diskGeometry
@@ -48,7 +59,7 @@ namespace Mosa.Utility.BootImage
 
 				diskDevice.WriteBlock(0, 1, header);
 
-				byte[] map = Mosa.DeviceSystem.VDI.CreateImageMap(options.BlockCount);
+				byte[] map = Mosa.DeviceSystem.VDI.CreateImageMap(blockCount);
 
 				diskDevice.WriteBlock(1, (uint)(map.Length / 512), map);
 
@@ -56,7 +67,7 @@ namespace Mosa.Utility.BootImage
 			}
 
 			// Expand disk image
-			diskDevice.WriteBlock(options.BlockCount - 1, 1, new byte[512]);
+			diskDevice.WriteBlock(blockCount - 1, 1, new byte[512]);
 
 			// Create partition device
 			PartitionDevice partitionDevice;
@@ -70,7 +81,7 @@ namespace Mosa.Utility.BootImage
 				mbr.DiskSignature = 0x12345678;
 				mbr.Partitions[0].Bootable = true;
 				mbr.Partitions[0].StartLBA = diskGeometry.SectorsPerTrack;
-				mbr.Partitions[0].TotalBlocks = options.BlockCount - mbr.Partitions[0].StartLBA;
+				mbr.Partitions[0].TotalBlocks = blockCount - mbr.Partitions[0].StartLBA;
 
 				switch (options.FileSystem)
 				{
@@ -102,7 +113,7 @@ namespace Mosa.Utility.BootImage
 				default: break;
 			}
 
-			fatSettings.FloppyMedia = options.FloppyMedia;
+			fatSettings.FloppyMedia = false;
 			fatSettings.VolumeLabel = options.VolumeLabel;
 			fatSettings.SerialID = new byte[4] { 0x01, 0x02, 0x03, 0x04 };
 			fatSettings.SectorsPerTrack = diskGeometry.SectorsPerTrack;
@@ -229,13 +240,13 @@ namespace Mosa.Utility.BootImage
 			{
 				// Create footer
 				byte[] footer = Mosa.DeviceSystem.VHD.CreateFooter(
-					options.BlockCount,
+					blockCount,
 					(uint)(DateTime.Now - (new DateTime(2000, 1, 1, 0, 0, 0))).Seconds,
 					options.MediaGuid.ToByteArray(),
 					diskGeometry
 				);
 
-				diskDevice.WriteBlock(options.BlockCount, 1, footer);
+				diskDevice.WriteBlock(blockCount, 1, footer);
 			}
 
 		}

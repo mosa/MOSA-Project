@@ -53,7 +53,6 @@ namespace Mosa.Tool.CreateBootImage
 						else options.IncludeFiles.Add(new IncludeFile(parts[1])); break;
 					case "-blocks": options.BlockCount = Convert.ToUInt32(parts[1]); break;
 					case "-volume": options.VolumeLabel = parts[1]; break;
-					case "-floppy": options.FloppyMedia = true; break;
 					default: break;
 				}
 			}

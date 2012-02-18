@@ -31,14 +31,12 @@ namespace Mosa.Utility.BootImage
 		public Guid MediaGuid = Guid.NewGuid();
 		public Guid MediaLastSnapGuid = Guid.NewGuid();
 		public byte[] MBRCode = null;
-		//public string FatBootCodeFileName = string.Empty;
 		public byte[] FatBootCode = null;
 		public string VolumeLabel = string.Empty;
 		public ImageFormatType ImageFormat = ImageFormatType.VHD;
 		public bool MBROption = true;
 		public bool PatchSyslinuxOption = false;
-		public bool FloppyMedia = false;
-		public uint BlockCount = 1024 * 1024 / 512;
+		public uint BlockCount = 0;
 		public FileSystemType FileSystem = FileSystemType.FAT12;
 		public List<IncludeFile> IncludeFiles = new List<IncludeFile>();
 
