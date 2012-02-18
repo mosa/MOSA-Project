@@ -5,14 +5,15 @@
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProductVersion>9.0.30729</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{BE9A5A27-22C4-4664-A8BD-388B30B5972C}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <ProjectGuid>{65F7691A-B355-4D98-BB97-0B19F13E2190}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Mosa.Tool.CreateBootImage</RootNamespace>
-    <AssemblyName>Mosa.Tool.CreateBootImage</AssemblyName>
+    <RootNamespace>Mosa.Utility.BootImage</RootNamespace>
+    <AssemblyName>Mosa.Utility.BootImage</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <StartupObject>Mosa.Tool.CreateBootImage.Program</StartupObject>
+    <StartupObject>
+    </StartupObject>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
@@ -36,15 +37,29 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <DocumentationFile>..\..\bin\Mosa.Tool.CreateBootImage.xml</DocumentationFile>
+    <DocumentationFile>..\..\bin\Mosa.Utility.BootImage.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Program.cs" />
+    <Compile Include="BootImageOptions.cs" />
+    <Compile Include="BootImageCreator.cs" />
+    <Compile Include="IncludeFile.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\Mosa.Utility.BootImage\Mosa.Utility.BootImage.csproj">
-      <Project>{65F7691A-B355-4D98-BB97-0B19F13E2190}</Project>
-      <Name>Mosa.Utility.BootImage</Name>
+    <ProjectReference Include="..\Mosa.ClassLib\Mosa.ClassLib.csproj">
+      <Project>{27A3C89C-1967-45FF-A77E-94F44995C42C}</Project>
+      <Name>Mosa.ClassLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.DeviceSystem\Mosa.DeviceSystem.csproj">
+      <Project>{6509477A-7360-4937-A1B9-26FED0A75CDA}</Project>
+      <Name>Mosa.DeviceSystem</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.EmulatedDevices\Mosa.EmulatedDevices.csproj">
+      <Project>{4BCC3783-8374-4E44-A843-22C0C5624C92}</Project>
+      <Name>Mosa.EmulatedDevices</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.FileSystem\Mosa.FileSystem.csproj">
+      <Project>{D89972FD-A930-4D0C-B393-1895E78FAFAB}</Project>
+      <Name>Mosa.FileSystem</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -12,14 +12,13 @@ using System.Collections.Generic;
 using System.IO;
 using Mosa.DeviceSystem;
 using Mosa.FileSystem.FAT;
-using Mosa.Tool.BootImage;
 
-namespace Mosa.Tool.BootImage
+namespace Mosa.Utility.BootImage
 {
 	/// <summary>
 	/// 
 	/// </summary>
-	class BootImageCreator
+	public class BootImageCreator
 	{
 		/// <summary>
 		/// Main

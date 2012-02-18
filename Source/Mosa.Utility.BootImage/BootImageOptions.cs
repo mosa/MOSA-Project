@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Mosa.Tool.BootImage
+namespace Mosa.Utility.BootImage
 {
 	/// <summary>
 	/// 
@@ -26,7 +26,7 @@ namespace Mosa.Tool.BootImage
 	/// <summary>
 	/// 
 	/// </summary>
-	class BootImageOptions
+	public class BootImageOptions
 	{
 		public Guid MediaGuid = Guid.NewGuid();
 		public Guid MediaLastSnapGuid = Guid.NewGuid();

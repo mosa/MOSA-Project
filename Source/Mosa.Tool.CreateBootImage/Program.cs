@@ -10,9 +10,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Mosa.DeviceSystem;
-using Mosa.FileSystem.FAT;
-using Mosa.Tool.BootImage;
+using Mosa.Utility.BootImage;
 
 namespace Mosa.Tool.CreateBootImage
 {
@@ -22,7 +20,7 @@ namespace Mosa.Tool.CreateBootImage
 	class Program
 	{
 
-		static BootImageOptions Parse(string filename)
+		public static BootImageOptions Parse(string filename)
 		{
 			BootImageOptions options = new BootImageOptions();
 
