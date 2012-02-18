@@ -13,10 +13,10 @@ using System.IO;
 using System.Text;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Linker;
-using Mosa.Tools.Compiler.Stages;
+using Mosa.Tool.Compiler.Stages;
 using NDesk.Options;
 
-namespace Mosa.Tools.Compiler
+namespace Mosa.Tool.Compiler
 {
 	/// <summary>
 	/// Class containing the Compiler.

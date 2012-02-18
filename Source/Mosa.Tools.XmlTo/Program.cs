@@ -12,7 +12,7 @@ using System.Xml;
 using System.Xml.XPath;
 using System.Xml.Xsl;
 
-namespace Mosa.Tools.XmlTo
+namespace Mosa.Tool.XmlTo
 {
 	class Program
 	{

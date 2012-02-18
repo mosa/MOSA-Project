@@ -9,7 +9,7 @@
 
 using Mosa.Compiler.Verifier;
 
-namespace Mosa.Tools.Verifier
+namespace Mosa.Tool.Verifier
 {
 	static class ParseOptions
 	{

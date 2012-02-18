@@ -15,9 +15,9 @@ using Mosa.Compiler.Linker;
 using Mosa.Compiler.Metadata.Loader;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
-using Mosa.Tools.Compiler.Stages;
+using Mosa.Tool.Compiler.Stages;
 
-namespace Mosa.Tools.Compiler
+namespace Mosa.Tool.Compiler
 {
 	public class AotAssemblyCompiler : AssemblyCompiler
 	{

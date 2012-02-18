@@ -13,7 +13,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace Mosa.Tools.MakeIsoImage
+namespace Mosa.Tool.MakeIsoImage
 {
 	/// <summary>
 	/// Generates ISO9660 images

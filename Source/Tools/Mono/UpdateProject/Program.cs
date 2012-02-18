@@ -9,7 +9,7 @@
 
 using System;
 
-namespace Mosa.Tools.Mono.UpdateProject
+namespace Mosa.Tool.Mono.UpdateProject
 {
 	/// <summary>
 	/// Program class for Mosa.Tools.Mono.UpdateProject

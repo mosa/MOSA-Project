@@ -12,9 +12,9 @@ using System.Collections.Generic;
 using System.IO;
 using Mosa.DeviceSystem;
 using Mosa.FileSystem.FAT;
-using Mosa.Tools.BootImage;
+using Mosa.Tool.BootImage;
 
-namespace Mosa.Tools.BootImage
+namespace Mosa.Tool.BootImage
 {
 	/// <summary>
 	/// 

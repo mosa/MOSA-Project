@@ -18,7 +18,7 @@ using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Platform.x86;
 using CPUx86 = Mosa.Platform.x86.CPUx86;
 
-namespace Mosa.Tools.Compiler.Stages
+namespace Mosa.Tool.Compiler.Stages
 {
 
 	/*

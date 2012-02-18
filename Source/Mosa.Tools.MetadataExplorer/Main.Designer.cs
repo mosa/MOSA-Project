@@ -1,4 +1,4 @@
-﻿namespace Mosa.Tools.MetadataExplorer
+﻿namespace Mosa.Tool.MetadataExplorer
 {
 	partial class Main
 	{

@@ -11,7 +11,7 @@ using System.Collections;
 using System.Collections.Generic;
 using Mosa.Compiler.Metadata;
 
-namespace Mosa.Tools.MetadataExplorer.Tables
+namespace Mosa.Tool.MetadataExplorer.Tables
 {
 
 	public abstract class TableRow

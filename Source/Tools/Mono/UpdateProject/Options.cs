@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Mosa.Tools.Mono.UpdateProject
+namespace Mosa.Tool.Mono.UpdateProject
 {
 	class Options
 	{

@@ -4,12 +4,12 @@ using System.Runtime.InteropServices;
 // General Information about an assembly is controlled through the following 
 // set of attributes. Change these attribute values to modify the information
 // associated with an assembly.
-[assembly: AssemblyTitle("Mosa.MakeIsoImage")]
+[assembly: AssemblyTitle("")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("Mosa.MakeIsoImage")]
-[assembly: AssemblyCopyright("Copyright © 2009")]
+[assembly: AssemblyProduct("")]
+[assembly: AssemblyCopyright("")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

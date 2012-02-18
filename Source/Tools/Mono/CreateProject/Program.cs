@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace Mosa.Tools.Mono.CreateProject
+namespace Mosa.Tool.Mono.CreateProject
 {
 	/// <summary>
 	/// Program class for Mono.CreateProject

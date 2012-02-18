@@ -12,7 +12,7 @@ using System.IO;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Linker;
 
-namespace Mosa.Tools.Compiler.Stages
+namespace Mosa.Tool.Compiler.Stages
 {
 	/// <summary>
 	/// An assembly compilation stage, which generates a map file of the built binary file.

@@ -10,7 +10,7 @@
 using System;
 using Mosa.Compiler.Verifier;
 
-namespace Mosa.Tools.Verifier
+namespace Mosa.Tool.Verifier
 {
 	/// <summary>
 	/// Class containing the entry point of the program.

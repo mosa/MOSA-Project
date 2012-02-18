@@ -9,7 +9,7 @@ using Mosa.Compiler.Pdb;
 using Mosa.Compiler.TypeSystem;
 using Mosa.Compiler.TypeSystem.Generic;
 
-namespace Mosa.Tools.TypeExplorer
+namespace Mosa.Tool.TypeExplorer
 {
 	public partial class Main : Form, ICompilerEventListener, IInstructionTraceListener
 	{

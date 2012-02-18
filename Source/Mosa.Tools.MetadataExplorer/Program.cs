@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace Mosa.Tools.MetadataExplorer
+namespace Mosa.Tool.MetadataExplorer
 {
 	static class Program
 	{

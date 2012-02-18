@@ -12,7 +12,7 @@
 using System;
 using System.IO;
 
-namespace Mosa.Tools.MakeIsoImage
+namespace Mosa.Tool.MakeIsoImage
 {
 
 	/// <summary>

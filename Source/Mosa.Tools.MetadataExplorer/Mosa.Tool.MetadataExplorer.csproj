@@ -8,8 +8,8 @@
     <ProjectGuid>{59A68DB8-5C96-45BB-889A-DD35486E9077}</ProjectGuid>
     <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Mosa.Tools.MetadataExplorer</RootNamespace>
-    <AssemblyName>Mosa.Tools.MetadataExplorer</AssemblyName>
+    <RootNamespace>Mosa.Tool.MetadataExplorer</RootNamespace>
+    <AssemblyName>Mosa.Tool.MetadataExplorer</AssemblyName>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <FileUpgradeFlags>
@@ -33,6 +33,9 @@
     <DefineConstants>TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject>Mosa.Tool.MetadataExplorer.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />

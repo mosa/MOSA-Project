@@ -18,7 +18,7 @@
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>
     </AppDesignerFolder>
-    <RootNamespace>Mosa.Tools.Compiler</RootNamespace>
+    <RootNamespace>Mosa.Tool.Compiler</RootNamespace>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
@@ -59,7 +59,7 @@
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
   </PropertyGroup>
   <PropertyGroup>
-    <StartupObject>Mosa.Tools.Compiler.Program</StartupObject>
+    <StartupObject>Mosa.Tool.Compiler.Program</StartupObject>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />

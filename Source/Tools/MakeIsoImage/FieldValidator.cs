@@ -11,7 +11,7 @@
 
 using System;
 
-namespace Mosa.Tools.MakeIsoImage
+namespace Mosa.Tool.MakeIsoImage
 {
 
 	/// <summary>

@@ -13,7 +13,7 @@ using System.IO;
 using System.Text;
 using System.Xml;
 
-namespace Mosa.Tools.Mono.UpdateProject
+namespace Mosa.Tool.Mono.UpdateProject
 {
 	/// <summary>
 	/// Transforms the Mono source code

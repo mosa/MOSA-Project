@@ -10,7 +10,7 @@
 
 using Mosa.Compiler.Metadata;
 
-namespace Mosa.Tools.MetadataExplorer.Tables
+namespace Mosa.Tool.MetadataExplorer.Tables
 {
 
 	public static class Resolver

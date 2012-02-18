@@ -13,7 +13,7 @@ using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.TypeSystem;
 using x86 = Mosa.Platform.x86;
 
-namespace Mosa.Tools.TypeExplorer
+namespace Mosa.Tool.TypeExplorer
 {
 
 	class ExplorerAssemblyCompiler : AssemblyCompiler

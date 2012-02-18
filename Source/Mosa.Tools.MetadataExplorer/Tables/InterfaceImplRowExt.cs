@@ -12,7 +12,7 @@ using System.Collections;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Tables;
 
-namespace Mosa.Tools.MetadataExplorer.Tables
+namespace Mosa.Tool.MetadataExplorer.Tables
 {
 
 	/// <summary>

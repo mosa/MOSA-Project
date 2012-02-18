@@ -17,7 +17,7 @@ using Mosa.Compiler.Linker;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.TypeSystem;
 
-namespace Mosa.Tools.Compiler
+namespace Mosa.Tool.Compiler
 {
 	/// <summary>
 	/// Specializes <see cref="AotMethodCompiler"/> for AOT purposes.

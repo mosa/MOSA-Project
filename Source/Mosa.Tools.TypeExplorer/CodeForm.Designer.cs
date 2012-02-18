@@ -1,4 +1,4 @@
-﻿namespace Mosa.Tools.TypeExplorer
+﻿namespace Mosa.Tool.TypeExplorer
 {
     partial class CodeForm
     {

@@ -10,7 +10,7 @@
 
 using Mosa.Compiler.Metadata;
 
-namespace Mosa.Tools.MetadataExplorer
+namespace Mosa.Tool.MetadataExplorer
 {
 
 	public static class Extension

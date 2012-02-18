@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Windows.Forms;
 
-namespace Mosa.Tools.TypeExplorer
+namespace Mosa.Tool.TypeExplorer
 {
 	static class Program
 	{

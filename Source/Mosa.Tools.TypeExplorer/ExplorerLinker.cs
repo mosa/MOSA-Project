@@ -12,7 +12,7 @@ using System.IO;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Linker;
 
-namespace Mosa.Tools.TypeExplorer
+namespace Mosa.Tool.TypeExplorer
 {
 	class ExplorerLinker : BaseAssemblyLinkerStage, IAssemblyLinker, IPipelineStage
 	{

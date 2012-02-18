@@ -9,7 +9,7 @@
  */
 
 
-namespace Mosa.Tools.Compiler
+namespace Mosa.Tool.Compiler
 {
 	/// <summary>
 	/// Class containing the entry point of the program.

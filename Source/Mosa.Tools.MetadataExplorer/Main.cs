@@ -4,9 +4,9 @@ using System.Windows.Forms;
 
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Loader;
-using Mosa.Tools.MetadataExplorer.Tables;
+using Mosa.Tool.MetadataExplorer.Tables;
 
-namespace Mosa.Tools.MetadataExplorer
+namespace Mosa.Tool.MetadataExplorer
 {
 	public partial class Main : Form
 	{

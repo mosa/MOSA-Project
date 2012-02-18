@@ -11,7 +11,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 
-namespace Mosa.Tools.Mono.UpdateProject
+namespace Mosa.Tool.Mono.UpdateProject
 {
 	/// <summary>
 	/// 

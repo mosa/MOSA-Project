@@ -14,7 +14,7 @@ using Mosa.Compiler.Framework;
 using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.TypeSystem;
 
-namespace Mosa.Tools.Compiler.Stages
+namespace Mosa.Tool.Compiler.Stages
 {
 	/// <summary>
 	/// An assembly compilation stage, which exports each method pipeline stage

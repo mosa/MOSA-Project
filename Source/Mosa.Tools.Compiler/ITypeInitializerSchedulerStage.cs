@@ -10,7 +10,7 @@
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.TypeSystem;
 
-namespace Mosa.Tools.Compiler
+namespace Mosa.Tool.Compiler
 {
 	public interface ITypeInitializerSchedulerStage
 	{

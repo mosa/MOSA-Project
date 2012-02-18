@@ -1,6 +1,6 @@
 ﻿using System.IO;
 
-namespace Mosa.Tools.Mono.UpdateProject
+namespace Mosa.Tool.Mono.UpdateProject
 {
 	static public class CompareFile
 	{

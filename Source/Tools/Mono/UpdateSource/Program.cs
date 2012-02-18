@@ -11,7 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace Mosa.Tools.Mono.UpdateSource
+namespace Mosa.Tool.Mono.UpdateSource
 {
 	/// <summary>
 	/// Program class for Mono.CreateProject
