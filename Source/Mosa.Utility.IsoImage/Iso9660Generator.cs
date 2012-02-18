@@ -32,7 +32,7 @@ namespace Mosa.Utility.IsoImage
 		// this class's current target is to automatically support Rock Ridge and El Torito. Eventually Joliet will be added I'm sure.
 		// there's no real need to make them optional, as the specs are designed to be backwards compatible.
 
-		// the only real optional item is the "pedantic" option. When enabled, I plan to force strict adherance to the ISO9660 file Name
+		// the only real optional item is the "pedantic" option. When enabled, I plan to force strict adherence to the ISO9660 file Name
 		// spec. Specifically:
 		// * file names must have ";1" appended to them ( windows violates this )
 		// * directory names cannot have "." in them ( some linux distros violate this )

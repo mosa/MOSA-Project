@@ -1268,24 +1268,39 @@ namespace Mosa.FileSystem.FAT
 			return at;
 		}
 
+		protected uint lastFreeHint = 0;
+
 		/// <summary>
 		/// Allocates the cluster.
 		/// </summary>
 		/// <returns></returns>
 		protected uint AllocateCluster()
 		{
-			uint at = 2;
+			uint at = lastFreeHint + 1;
 
-			while (at < fatEntries)
+			if (at < 2)
+				at = 2;
+
+			uint last = at - 1;
+
+			if (last == 1)
+				last = fatEntries;
+
+			while (at != last)
 			{
 				uint value = GetClusterEntryValue(at);
 
 				if (IsClusterFree(value))
 				{
 					SetClusterEntryValue(at, 0xFFFFFFFF /*endOfClusterMark*/);
+					lastFreeHint = at;
 					return at;
 				}
+
 				at++;
+
+				if (at >= fatEntries)
+					at = 2;
 			}
 
 			return 0;	// mean no free space
