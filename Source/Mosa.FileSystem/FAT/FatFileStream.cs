@@ -490,6 +490,8 @@ namespace Mosa.FileSystem.FAT
 			if (buffer.Length - offset < count)
 				count = buffer.Length - offset;
 
+			// TODO: Need much faster implementation
+
 			for (int i = 0; i < count; i++)
 				WriteByte(buffer[offset + i]);
 		}

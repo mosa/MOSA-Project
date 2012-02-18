@@ -39,6 +39,9 @@
     <DocumentationFile>..\..\bin\Mosa.Tools.CreateBootImage.XML</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="BootImageOptions.cs" />
+    <Compile Include="BootImageCreator.cs" />
+    <Compile Include="IncludeFile.cs" />
     <Compile Include="Program.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -61,6 +64,9 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
