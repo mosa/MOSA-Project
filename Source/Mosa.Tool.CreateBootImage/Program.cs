@@ -40,8 +40,8 @@ namespace Mosa.Tool.CreateBootImage
 
 				switch (parts[0].Trim())
 				{
-					case "-mbr": options.MBROption = true; options.MBRFileName = (parts.Length > 1) ? parts[1] : null; break;
-					case "-boot": options.FatCodeFileName = (parts.Length > 1) ? parts[1] : null; break;
+					case "-mbr": options.MBROption = true; options.MBRCode = (parts.Length > 1) ? File.ReadAllBytes(parts[1]) : null; break;
+					case "-boot": options.FatBootCode = (parts.Length > 1) ? File.ReadAllBytes(parts[1]) : null; break;
 					case "-vhd": options.ImageFormat = ImageFormatType.VHD; break;
 					case "-img": options.ImageFormat = ImageFormatType.IMG; break;
 					case "-vdi": options.ImageFormat = ImageFormatType.VDI; break;
@@ -118,6 +118,6 @@ namespace Mosa.Tool.CreateBootImage
 
 			return 0;
 		}
-		
+
 	}
 }

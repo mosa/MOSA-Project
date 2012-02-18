@@ -81,8 +81,7 @@ namespace Mosa.Tool.BootImage
 					default: break;
 				}
 
-				if (!string.IsNullOrEmpty(options.MBRFileName))
-					mbr.Code = File.ReadAllBytes(options.MBRFileName);
+				mbr.Code = options.MBRCode;
 
 				mbr.Write();
 
@@ -110,8 +109,7 @@ namespace Mosa.Tool.BootImage
 			fatSettings.SectorsPerTrack = diskGeometry.SectorsPerTrack;
 			fatSettings.NumberOfHeads = diskGeometry.Heads;
 			fatSettings.HiddenSectors = diskGeometry.SectorsPerTrack;
-			if (!string.IsNullOrEmpty(options.FatCodeFileName))
-				fatSettings.OSBootCode = File.ReadAllBytes(options.FatCodeFileName);
+			fatSettings.OSBootCode = options.FatBootCode;
 
 			// Create FAT file system
 			FatFileSystem fat = new FatFileSystem(partitionDevice);
@@ -130,7 +128,7 @@ namespace Mosa.Tool.BootImage
 				if (includeFile.Hidden) fileAttributes |= Mosa.FileSystem.FAT.FatFileAttributes.Hidden;
 				if (includeFile.System) fileAttributes |= Mosa.FileSystem.FAT.FatFileAttributes.System;
 
-				byte[] file = File.ReadAllBytes(includeFile.Filename);
+				//byte[] file = File.ReadAllBytes(includeFile.Filename);
 				string newname = (Path.GetFileNameWithoutExtension(includeFile.Newname).PadRight(8).Substring(0, 8) + Path.GetExtension(includeFile.Newname).PadRight(4).Substring(1, 3)).ToUpper();
 				FatFileLocation location = fat.CreateFile(newname, fileAttributes, 0);
 
@@ -138,7 +136,7 @@ namespace Mosa.Tool.BootImage
 					throw new Exception("Unable to write file");
 
 				FatFileStream fatFileStream = new FatFileStream(fat, location);
-				fatFileStream.Write(file, 0, file.Length);
+				fatFileStream.Write(includeFile.Content, 0, includeFile.Content.Length);
 				fatFileStream.Flush();
 			}
 

@@ -30,8 +30,9 @@ namespace Mosa.Tool.BootImage
 	{
 		public Guid MediaGuid = Guid.NewGuid();
 		public Guid MediaLastSnapGuid = Guid.NewGuid();
-		public string MBRFileName = string.Empty;
-		public string FatCodeFileName = string.Empty;
+		public byte[] MBRCode = null;
+		//public string FatBootCodeFileName = string.Empty;
+		public byte[] FatBootCode = null;
 		public string VolumeLabel = string.Empty;
 		public ImageFormatType ImageFormat = ImageFormatType.VHD;
 		public bool MBROption = true;

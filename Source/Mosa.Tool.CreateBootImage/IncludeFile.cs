@@ -9,8 +9,8 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
+using System.IO;
 
 namespace Mosa.Tool.BootImage
 {
@@ -19,12 +19,28 @@ namespace Mosa.Tool.BootImage
 	/// </summary>
 	public class IncludeFile
 	{
-		public string Filename;
+		public string filename;
+
+		public string Filename
+		{
+			get
+			{
+				return filename;
+			}
+			set
+			{
+				filename = value;
+				Content = File.ReadAllBytes(filename);
+			}
+		}
+
 		public string Newname;
+
 		public bool ReadOnly = false;
 		public bool Hidden = false;
 		public bool Archive = true;
 		public bool System = false;
+		public byte[] Content = null;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="IncludeFile"/> class.
