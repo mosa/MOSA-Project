@@ -8,11 +8,11 @@
 	<property name="debug" value="none" overwrite="false"/>
 	
 	<!-- Speaks for itself, I should hope -->
-	<property name="outputDirectory" value="../../bin" overwrite="false"/>
+	<property name="outputDirectory" value="../bin" overwrite="false"/>
 	
 	<!-- Main build target -->
 	<target name="build">
-	    <csc target="exe" output="${outputDirectory}/Mosa.Tools.Mono.UpdateProject.exe" debug="${debug}" unsafe="true" nostdlib="false">
+	    <csc target="exe" main="Mosa.Tool.Mono.UpdateProject.Program" output="${outputDirectory}/Mosa.Tool.Mono.UpdateProject.exe" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
                     <include name="Add.cs"/>
                     <include name="CompareFile.cs"/>

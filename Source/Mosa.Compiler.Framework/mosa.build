@@ -41,15 +41,16 @@
                     <include name="CIL/BreakInstruction.cs"/>
                     <include name="BaseAssemblyCompilerStage.cs"/>
                     <include name="ConstantFoldingStage.cs"/>
+                    <include name="PlugStage.cs"/>
+                    <include name="ExceptionPrologueStage.cs"/>
                     <include name="DelegateTypePatchStage.cs"/>
+                    <include name="IR/ExceptionPrologueInstruction.cs"/>
                     <include name="MetadataStage.cs"/>
                     <include name="EnterSSA.cs"/>
-                    <include name="ExceptionLayoutStage.cs"/>
                     <include name="ExceptionClauseHeader.cs"/>
                     <include name="InstructionLogger.cs"/>
                     <include name="LeaveSSA.cs"/>
                     <include name="ILoggerWriter.cs"/>
-                    <include name="MethodTableBuilderStage.cs"/>
                     <include name="OperandDeterminationStage.cs"/>
                     <include name="Operands/SsaOperand.cs"/>
                     <include name="Operands/VirtualRegisterOperand.cs"/>
@@ -97,7 +98,7 @@
                     <include name="CIL/CpobjInstruction.cs"/>
                     <include name="CIL/DivInstruction.cs"/>
                     <include name="CIL/DupInstruction.cs"/>
-                    <include name="ExceptionClause.cs"/>
+                    <include name="ExceptionHandlingClause.cs"/>
                     <include name="CIL/EndFilterInstruction.cs"/>
                     <include name="CIL/EndFinallyInstruction.cs"/>
                     <include name="CIL/IBranchInstruction.cs"/>
@@ -227,7 +228,6 @@
                     <include name="Linker/LinkerGeneratedType.cs"/>
                     <include name="Linker/LinkerMethodCompiler.cs"/>
                     <include name="Linker/LinkTimeCodeGenerator.cs"/>
-                    <include name="ArchitectureSpecificAttribute.cs"/>
                     <include name="AssemblyCompiler.cs"/>
                     <include name="BasicArchitecture.cs"/>
                     <include name="BasicBlock.cs"/>

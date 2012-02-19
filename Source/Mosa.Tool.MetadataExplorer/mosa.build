@@ -12,7 +12,7 @@
 	
 	<!-- Main build target -->
 	<target name="build">
-	    <csc target="exe" output="${outputDirectory}/Mosa.Tools.MetadataExplorer.exe" debug="${debug}" unsafe="true" nostdlib="false">
+	    <csc target="exe" main="Mosa.Tool.MetadataExplorer.Program" output="${outputDirectory}/Mosa.Tool.MetadataExplorer.exe" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
                     <include name="Main.cs"/>
                     <include name="Main.Designer.cs"/>

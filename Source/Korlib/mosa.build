@@ -14,6 +14,9 @@
 	<target name="build">
 	    <csc target="library" output="${outputDirectory}/mscorlib.dll" debug="${debug}" unsafe="true" nostdlib="true">
 		<sources>
+                    <include name="Mosa.Internal/PlugFieldAttribute.cs"/>
+                    <include name="Mosa.Internal/PlugMethodAttribute.cs"/>
+                    <include name="Mosa.Internal/PlugTypeAttribute.cs"/>
                     <include name="System.Diagnostics/DebuggerHiddenAttribute.cs"/>
                     <include name="System.Reflection/Assembly.cs"/>
                     <include name="System.Reflection/MemberInfo.cs"/>

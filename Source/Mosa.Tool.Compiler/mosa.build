@@ -12,7 +12,7 @@
 	
 	<!-- Main build target -->
 	<target name="build">
-	    <csc target="exe" main="Mosa.Tools.Compiler.Program" output="${outputDirectory}/mosacl.exe" debug="${debug}" unsafe="true" nostdlib="false">
+	    <csc target="exe" main="Mosa.Tool.Compiler.Program" output="${outputDirectory}/mosacl.exe" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
                     <include name="AotAssemblyCompiler.cs"/>
                     <include name="Stages/MethodPipelineExportStage.cs"/>

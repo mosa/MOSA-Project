@@ -16,8 +16,6 @@
 		<sources>
                     <include name="StreamExtension.cs"/>
                     <include name="DataConverter.cs"/>
-                    <include name="EndianAwareBinaryReader.cs"/>
-                    <include name="EndianAwareBinaryWriter.cs"/>
 		</sources>
 		<references>
                     <include name="System.dll"/>

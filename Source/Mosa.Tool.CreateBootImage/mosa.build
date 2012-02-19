@@ -12,15 +12,13 @@
 	
 	<!-- Main build target -->
 	<target name="build">
-	    <csc target="exe" main="Mosa.Tools.CreateBootImage.Program" output="${outputDirectory}/Mosa.Tools.CreateBootImage.exe" debug="${debug}" unsafe="true" nostdlib="false">
+	    <csc target="exe" main="Mosa.Tool.CreateBootImage.Program" output="${outputDirectory}/Mosa.Tool.CreateBootImage.exe" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
                     <include name="Program.cs"/>
 		</sources>
 		<references>
-                    <include name="${outputDirectory}/Mosa.ClassLib.dll"/>
-                    <include name="${outputDirectory}/Mosa.DeviceSystem.dll"/>
-                    <include name="${outputDirectory}/Mosa.EmulatedDevices.dll"/>
-                    <include name="${outputDirectory}/Mosa.FileSystem.dll"/>
+                    <include name="System.dll"/>
+                    <include name="${outputDirectory}/Mosa.Utility.BootImage.dll"/>
 		</references>
 		<!-- supress warnings -->
 		<nowarn><warning number="${suppresswarnings}"/></nowarn>

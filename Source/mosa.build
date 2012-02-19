@@ -20,7 +20,7 @@
 	<target name="init">
 		<mkdir dir="${outputDirectory}"/>
 	</target>
-        <target name="Mosa.Tools.Compiler" depends="init,Mosa.Compiler.FileFormat,Mosa.Compiler.Linker,Mosa.Compiler.Pdb,Mosa.Compiler.TypeSystem,Mosa.Platform.x86,Mosa.Compiler.InternalTrace,Mosa.Compiler.Metadata,Mosa.Compiler.Framework,"><nant buildfile="Mosa.Tools.Compiler/mosa.build"/></target>
+        <target name="Mosa.Tool.Compiler" depends="init,Mosa.Compiler.FileFormat,Mosa.Compiler.Linker,Mosa.Compiler.Pdb,Mosa.Compiler.TypeSystem,Mosa.Platform.x86,Mosa.Compiler.InternalTrace,Mosa.Compiler.Metadata,Mosa.Compiler.Framework,"><nant buildfile="Mosa.Tool.Compiler/mosa.build"/></target>
         <target name="Mosa.HelloWorld" depends="init,Mosa.ClassLib,Mosa.Kernel,Korlib,"><nant buildfile="Mosa.HelloWorld/mosa.build"/></target>
         <target name="Mosa.Compiler.Framework" depends="init,Mosa.Compiler.Common,Mosa.Compiler.Linker,Mosa.Compiler.InternalTrace,Mosa.Compiler.Metadata,Mosa.Compiler.TypeSystem,"><nant buildfile="Mosa.Compiler.Framework/mosa.build"/></target>
         <target name="Mosa.ClassLib" depends="init,Mosa.Kernel,Mosa.Platform.x86.Intrinsic,"><nant buildfile="Mosa.ClassLib/mosa.build"/></target>
@@ -32,14 +32,11 @@
         <target name="Mosa.EmulatedKernel" depends="init,Mosa.DeviceSystem,"><nant buildfile="Mosa.EmulatedKernel/mosa.build"/></target>
         <target name="Pictor" depends="init,"><nant buildfile="Pictor/mosa.build"/></target>
         <target name="Pictor.UI" depends="init,Pictor,"><nant buildfile="Pictor.UI/mosa.build"/></target>
-        <target name="Mosa.Tools.XmlTo" depends="init,"><nant buildfile="Mosa.Tools.XmlTo/mosa.build"/></target>
-        <target name="ToolsMakeIsoImage" depends="init,"><nant buildfile="Tools/MakeIsoImage/mosa.build"/></target>
-        <target name="Mosa.Tools.CreateBootImage" depends="init,Mosa.ClassLib,Mosa.DeviceSystem,Mosa.EmulatedDevices,Mosa.FileSystem,"><nant buildfile="Mosa.Tools.CreateBootImage/mosa.build"/></target>
-        <target name="ToolsMonoUpdateProject" depends="init,"><nant buildfile="Tools/Mono/UpdateProject/mosa.build"/></target>
-        <target name="ToolsMonoCreateProject" depends="init,"><nant buildfile="Tools/Mono/CreateProject/mosa.build"/></target>
+        <target name="Mosa.Tool.XmlTo" depends="init,"><nant buildfile="Mosa.Tool.XmlTo/mosa.build"/></target>
+        <target name="Mosa.Tool.MakeIsoImage" depends="init,Mosa.Utility.IsoImage,"><nant buildfile="Mosa.Tool.MakeIsoImage/mosa.build"/></target>
+        <target name="Mosa.Tool.CreateBootImage" depends="init,Mosa.Utility.BootImage,"><nant buildfile="Mosa.Tool.CreateBootImage/mosa.build"/></target>
         <target name="Korlib" depends="init,"><nant buildfile="Korlib/mosa.build"/></target>
         <target name="Mosa.Kernel" depends="init,Korlib,Mosa.Platform.x86.Intrinsic,"><nant buildfile="Mosa.Kernel/mosa.build"/></target>
-        <target name="ToolsMonoUpdateSource" depends="init,"><nant buildfile="Tools/Mono/UpdateSource/mosa.build"/></target>
         <target name="Mosa.Platform.x86.Intrinsic" depends="init,Korlib,"><nant buildfile="Mosa.Platform.x86.Intrinsic/mosa.build"/></target>
         <target name="Mosa.Platform.x86" depends="init,Mosa.Compiler.Common,Mosa.Compiler.Linker,Mosa.Compiler.Metadata,Mosa.Compiler.Framework,Mosa.Compiler.TypeSystem,"><nant buildfile="Mosa.Platform.x86/mosa.build"/></target>
         <target name="Mosa.Compiler.Metadata" depends="init,Mosa.Compiler.FileFormat,"><nant buildfile="Mosa.Compiler.Metadata/mosa.build"/></target>
@@ -48,14 +45,19 @@
         <target name="Mosa.Compiler.Linker" depends="init,Mosa.Compiler.Common,Mosa.Compiler.FileFormat,"><nant buildfile="Mosa.Compiler.Linker/mosa.build"/></target>
         <target name="Mosa.Compiler.Common" depends="init,"><nant buildfile="Mosa.Compiler.Common/mosa.build"/></target>
         <target name="Mosa.Compiler.TypeSystem" depends="init,Mosa.Compiler.Metadata,"><nant buildfile="Mosa.Compiler.TypeSystem/mosa.build"/></target>
-        <target name="Mosa.Tools.TypeExplorer" depends="init,Mosa.Compiler.Framework,Mosa.Compiler.Linker,Mosa.Compiler.Metadata,Mosa.Compiler.Pdb,Mosa.Compiler.TypeSystem,Mosa.Compiler.Verifier,Mosa.Platform.x86,Mosa.Compiler.InternalTrace,Mosa.Test.CodeDomCompiler,"><nant buildfile="Mosa.Tools.TypeExplorer/mosa.build"/></target>
-        <target name="Mosa.Tools.MetadataExplorer" depends="init,Mosa.Compiler.Metadata,Mosa.Compiler.TypeSystem,"><nant buildfile="Mosa.Tools.MetadataExplorer/mosa.build"/></target>
+        <target name="Mosa.Tool.TypeExplorer" depends="init,Mosa.Compiler.Framework,Mosa.Compiler.Linker,Mosa.Compiler.Metadata,Mosa.Compiler.Pdb,Mosa.Compiler.TypeSystem,Mosa.Compiler.Verifier,Mosa.Platform.x86,Mosa.Compiler.InternalTrace,Mosa.Test.CodeDomCompiler,"><nant buildfile="Mosa.Tool.TypeExplorer/mosa.build"/></target>
+        <target name="Mosa.Tool.MetadataExplorer" depends="init,Mosa.Compiler.Metadata,Mosa.Compiler.TypeSystem,"><nant buildfile="Mosa.Tool.MetadataExplorer/mosa.build"/></target>
         <target name="Mosa.Test.CodeDomCompiler" depends="init,"><nant buildfile="Mosa.Test.CodeDomCompiler/mosa.build"/></target>
         <target name="Mosa.Compiler.InternalTrace" depends="init,Mosa.Compiler.TypeSystem,"><nant buildfile="Mosa.Compiler.InternalTrace/mosa.build"/></target>
         <target name="Mosa.CoolWorld" depends="init,Mosa.ClassLib,Mosa.Kernel,Korlib,Mosa.Platform.x86.Intrinsic,"><nant buildfile="Mosa.CoolWorld/mosa.build"/></target>
         <target name="Mosa.Compiler.Verifier" depends="init,Mosa.Compiler.Metadata,"><nant buildfile="Mosa.Compiler.Verifier/mosa.build"/></target>
-        <target name="Mosa.Tools.Verifier" depends="init,Mosa.Compiler.Verifier,"><nant buildfile="Mosa.Tools.Verifier/mosa.build"/></target>
+        <target name="Mosa.Tool.Verifier" depends="init,Mosa.Compiler.Verifier,"><nant buildfile="Mosa.Tool.Verifier/mosa.build"/></target>
+        <target name="Mosa.Tool.MonoMosa.Tool.Mono.CreateProject" depends="init,"><nant buildfile="Mosa.Tool.Mono/Mosa.Tool.Mono.CreateProject/mosa.build"/></target>
+        <target name="Mosa.Tool.MonoMosa.Tool.Mono.UpdateProject" depends="init,"><nant buildfile="Mosa.Tool.Mono/Mosa.Tool.Mono.UpdateProject/mosa.build"/></target>
+        <target name="Mosa.Tool.MonoMosa.Tool.Mono.UpdateSource" depends="init,"><nant buildfile="Mosa.Tool.Mono/Mosa.Tool.Mono.UpdateSource/mosa.build"/></target>
+        <target name="Mosa.Utility.BootImage" depends="init,Mosa.ClassLib,Mosa.DeviceSystem,Mosa.EmulatedDevices,Mosa.FileSystem,"><nant buildfile="Mosa.Utility.BootImage/mosa.build"/></target>
+        <target name="Mosa.Utility.IsoImage" depends="init,"><nant buildfile="Mosa.Utility.IsoImage/mosa.build"/></target>
 
         <target name="all" depends ="
-Mosa.Tools.Compiler,Mosa.HelloWorld,Mosa.Compiler.Framework,Mosa.ClassLib,Mosa.DeviceDrivers,Mosa.FileSystem,Mosa.DeviceSystem,Mosa.Emulator,Mosa.EmulatedDevices,Mosa.EmulatedKernel,Pictor,Pictor.UI,Mosa.Tools.XmlTo,ToolsMakeIsoImage,Mosa.Tools.CreateBootImage,ToolsMonoUpdateProject,ToolsMonoCreateProject,Korlib,Mosa.Kernel,ToolsMonoUpdateSource,Mosa.Platform.x86.Intrinsic,Mosa.Platform.x86,Mosa.Compiler.Metadata,Mosa.Compiler.Pdb,Mosa.Compiler.FileFormat,Mosa.Compiler.Linker,Mosa.Compiler.Common,Mosa.Compiler.TypeSystem,Mosa.Tools.TypeExplorer,Mosa.Tools.MetadataExplorer,Mosa.Test.CodeDomCompiler,Mosa.Compiler.InternalTrace,Mosa.CoolWorld,Mosa.Compiler.Verifier,Mosa.Tools.Verifier,"/>
+Mosa.Tool.Compiler,Mosa.HelloWorld,Mosa.Compiler.Framework,Mosa.ClassLib,Mosa.DeviceDrivers,Mosa.FileSystem,Mosa.DeviceSystem,Mosa.Emulator,Mosa.EmulatedDevices,Mosa.EmulatedKernel,Pictor,Pictor.UI,Mosa.Tool.XmlTo,Mosa.Tool.MakeIsoImage,Mosa.Tool.CreateBootImage,Korlib,Mosa.Kernel,Mosa.Platform.x86.Intrinsic,Mosa.Platform.x86,Mosa.Compiler.Metadata,Mosa.Compiler.Pdb,Mosa.Compiler.FileFormat,Mosa.Compiler.Linker,Mosa.Compiler.Common,Mosa.Compiler.TypeSystem,Mosa.Tool.TypeExplorer,Mosa.Tool.MetadataExplorer,Mosa.Test.CodeDomCompiler,Mosa.Compiler.InternalTrace,Mosa.CoolWorld,Mosa.Compiler.Verifier,Mosa.Tool.Verifier,Mosa.Tool.MonoMosa.Tool.Mono.CreateProject,Mosa.Tool.MonoMosa.Tool.Mono.UpdateProject,Mosa.Tool.MonoMosa.Tool.Mono.UpdateSource,Mosa.Utility.BootImage,Mosa.Utility.IsoImage,"/>
 </project>

@@ -8,22 +8,18 @@
 	<property name="debug" value="none" overwrite="false"/>
 	
 	<!-- Speaks for itself, I should hope -->
-	<property name="outputDirectory" value="../../bin" overwrite="false"/>
+	<property name="outputDirectory" value="../bin" overwrite="false"/>
 	
 	<!-- Main build target -->
 	<target name="build">
-	    <csc target="exe" output="${outputDirectory}/Mosa.MakeIsoImage.exe" debug="${debug}" unsafe="true" nostdlib="false">
+	    <csc target="exe" main="Mosa.Tool.MakeIsoImage.Program" output="${outputDirectory}/Mosa.Tool.MakeIsoImage.exe" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
-                    <include name="ConvertTo.cs"/>
-                    <include name="FieldValidator.cs"/>
-                    <include name="Generator.cs"/>
-                    <include name="Iso.cs"/>
-                    <include name="Iso9660Generator.cs"/>
                     <include name="Program.cs"/>
                     <include name="Properties/AssemblyInfo.cs"/>
 		</sources>
 		<references>
                     <include name="System.dll"/>
+                    <include name="${outputDirectory}/Mosa.Utility.IsoImage.dll"/>
 		</references>
 		<!-- supress warnings -->
 		<nowarn><warning number="${suppresswarnings}"/></nowarn>
