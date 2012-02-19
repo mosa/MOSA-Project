@@ -38,7 +38,8 @@ namespace Mosa.Utility.BootImage
 				foreach (var file in options.IncludeFiles)
 				{
 					blockCount += ((uint)file.Content.Length / 512) + 1;
-				}
+				}				
+
 			}
 
 			DiskGeometry diskGeometry = new Mosa.DeviceSystem.DiskGeometry();
