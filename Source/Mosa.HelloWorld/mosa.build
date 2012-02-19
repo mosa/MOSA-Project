@@ -19,7 +19,6 @@
                     <include name="Tests/Generic2Test.cs"/>
                     <include name="Tests/KernelTest.cs"/>
                     <include name="Tests/IsInstTest.cs"/>
-                    <include name="Tests/PlugTest.cs"/>
                     <include name="Tests/StringTest.cs"/>
                     <include name="Tests/InterfaceTest.cs"/>
                     <include name="Tests/GenericTest.cs"/>

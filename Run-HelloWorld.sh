@@ -1,4 +1,5 @@
 cd Source
-./Compile.sh Mosa.HelloWorld.exe
+./Compile.sh 
 cd ../Run
+./Compile.sh Mosa.HelloWorld.exe
 ./Run-QEMU.sh
