@@ -58,6 +58,9 @@
     <WarningLevel>2</WarningLevel>
     <DebugType>none</DebugType>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
   </ItemGroup>

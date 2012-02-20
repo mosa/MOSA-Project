@@ -540,7 +540,7 @@ namespace Mosa.Utility.IsoImage
 			}
 			if (e.IsFolder)
 				flags |= 2; // directory
-#if false // I'm disabling this because analysing of a working ISO never sets this bit...
+#if false // I'm disabling this because analyzing of a working ISO never sets this bit...
 			if (real_name.Length == 0)
 				flags |= 128; // final
 #endif
