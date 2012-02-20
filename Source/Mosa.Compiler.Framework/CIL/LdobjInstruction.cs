@@ -68,7 +68,7 @@ namespace Mosa.Compiler.Framework.CIL
 					typeRef = BuiltInSigType.Object;
 					break;
 				case OpCode.Ldobj: // FIXME
-					typeRef = BuiltInSigType.Object;
+					typeRef = null; // BuiltInSigType.Object;
 					break;
 				default:
 					throw new NotImplementedException();
