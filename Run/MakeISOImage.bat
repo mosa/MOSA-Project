@@ -1,12 +1,15 @@
+del /q /f /s build\iso
+
 mkdir build\iso
 mkdir build\iso\boot
-mkdir build\iso\boot\grub
 
 del /q /f build\bootimage.iso
 
-copy iso\menu.lst build\iso\boot\grub
-copy ..\Tools\grub\stage2_eltorito build\iso\boot\grub
-copy build\main.exe build\iso\boot
+copy ..\Tools\syslinux\mboot.c32 build\iso
+copy ..\Tools\syslinux\isolinux.bin build\iso
+copy iso\syslinux\isolinux.cfg build\iso
+copy build\main.exe build\iso
 
-..\bin\Mosa.Tool.MakeIsoImage.exe -label mosa -boot ..\Tools\grub\stage2_eltorito -boot-info-table -boot-load-size 4 build\bootimage.iso build\iso
+..\bin\Mosa.Tool.MakeIsoImage.exe -label mosa -boot ..\Tools\syslinux\isolinux.bin -boot-info-table -boot-load-size 4 build\bootimage.iso build\iso
 
+pause

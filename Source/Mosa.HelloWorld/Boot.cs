@@ -35,7 +35,7 @@ namespace Mosa.HelloWorld
 			Screen.Color = Colors.Red;
 			Screen.Write(@"Zaphod");
 			Screen.Color = Colors.Yellow;
-			Screen.Write(@"'                                Copyright 2008-2011");
+			Screen.Write(@"'                                Copyright 2008-2012");
 			Screen.NextLine();
 
 			Screen.Color = 0x0F;

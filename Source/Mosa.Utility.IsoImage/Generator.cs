@@ -157,6 +157,8 @@ namespace Mosa.Utility.IsoImage
 
 			if (f.BootInfoTable)
 			{
+				uint checksum = CalculateChecksum(b);
+
 				// TODO FIXME - this is TERRIBLE. This should be implemented at a higher level, and
 				// doing it here requires passing the primaryVolumeDescriptor to every call of WriteFile()
 				// The reason it is here is because this is the only place where the file actually gets
@@ -165,12 +167,24 @@ namespace Mosa.Utility.IsoImage
 				Bytes(ConvertTo.Int2LSB(primaryVolumeDescriptor));
 				Bytes(ConvertTo.Int2LSB(f.DataBlock));
 				Bytes(ConvertTo.Int2LSB((int)f.fileInfo.Length));
-				Bytes(ConvertTo.Int2LSB(0)); // TODO FIXME - checksum
+				Bytes(ConvertTo.Int2LSB((int)checksum));
 				DupByte(0, 40); // reserved
 				Bytes(b, 64, bytes - 64);
 			}
 			else
 				Bytes(b);
+		}
+
+		private static uint CalculateChecksum(byte[] b)
+		{
+			int sum = 0;
+
+			for (int i = 64; i < b.Length; i = i + 4)
+			{
+				sum += b[i + 0] + (b[i + 1] << 8) + (b[i + 2] << 16) + (b[i + 3] << 24);
+			}
+
+			return (uint)sum;
 		}
 	}
 }
