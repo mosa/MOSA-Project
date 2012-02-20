@@ -7,55 +7,12 @@
  *  Royce Mitchell III (royce3) <royce3 [at] gmail [dot] com>
  */
 
-#define ROCKRIDGE
-
 using System;
 using System.Collections.Generic;
 using System.IO;
 
 namespace Mosa.Utility.IsoImage
 {
-	internal class IsoEntry
-	{
-		public string Name;
-		public int DataBlock;
-		public int DataLength;
-		public byte RrFlags;
-
-		public IsoEntry()
-		{
-			DataBlock = 0;
-			DataLength = 0;
-			this.RrFlags = 0;
-		}
-
-		public virtual bool IsFile { get { return false; } }
-		public virtual bool IsFolder { get { return false; } }
-	}
-
-	internal class IsoFolder : IsoEntry
-	{
-		//public DirectoryInfo dirInfo;
-		public Dictionary<string, IsoEntry> entries;
-		public short PathTableEntry;
-
-		public IsoFolder()
-		{
-			entries = new Dictionary<string, IsoEntry>();
-		}
-
-		public void AddEntry(string path, IsoEntry e)
-		{
-			var tmp = path.IndexOf('/');
-			if (tmp >= 0)
-			{
-				string subpath = path.Substring(tmp + 1).Trim();
-				path = path.Substring(0, tmp).Trim();
-			}
-		}
-
-		public override bool IsFolder { get { return true; } }
-	}
 
 	internal class IsoFile : IsoEntry
 	{
@@ -89,6 +46,7 @@ namespace Mosa.Utility.IsoImage
 					flags &= ~Flags.BootFile;
 			}
 		}
+
 		public bool BootInfoTable
 		{
 			get

@@ -26,7 +26,7 @@ namespace Mosa.Utility.BootImage
 	/// <summary>
 	/// 
 	/// </summary>
-	public class BootImageOptions
+	public class Options
 	{
 		public Guid MediaGuid = Guid.NewGuid();
 		public Guid MediaLastSnapGuid = Guid.NewGuid();
@@ -42,7 +42,7 @@ namespace Mosa.Utility.BootImage
 
 		public string DiskImageFileName = null;
 
-		public BootImageOptions()
+		public Options()
 		{
 		}
 

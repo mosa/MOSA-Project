@@ -2,6 +2,8 @@ mkdir build\iso
 mkdir build\iso\boot
 mkdir build\iso\boot\grub
 
+del /q /f build\bootimage.iso
+
 copy iso\menu.lst build\iso\boot\grub
 copy ..\Tools\grub\stage2_eltorito build\iso\boot\grub
 copy build\main.exe build\iso\boot

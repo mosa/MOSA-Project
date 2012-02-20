@@ -20,9 +20,9 @@ namespace Mosa.Tool.CreateBootImage
 	class Program
 	{
 
-		public static BootImageOptions Parse(string filename)
+		public static Options Parse(string filename)
 		{
-			BootImageOptions options = new BootImageOptions();
+			Options options = new Options();
 
 			StreamReader reader = File.OpenText(filename);
 
@@ -92,7 +92,7 @@ namespace Mosa.Tool.CreateBootImage
 
 			try
 			{
-				BootImageOptions options = Parse(args[0]);
+				Options options = Parse(args[0]);
 
 				if (options == null)
 				{
@@ -103,7 +103,7 @@ namespace Mosa.Tool.CreateBootImage
 
 				options.DiskImageFileName = args[1];
 
-				BootImageCreator.Create(options);
+				Generator.Create(options);
 
 				Console.WriteLine("Completed!");
 			}

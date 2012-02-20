@@ -28,39 +28,34 @@ namespace Mosa.Tool.MakeIsoImage
 			Console.WriteLine();
 
 			// TODO FIXME - support remappings something like -map boot/boot.bin=c:/muos/build/debug/bin/iso9660_boot.bin
-#if false
-			var test = new Mosa.MakeIsoImage.Iso9660Generator(false);
-			test.AddFile("Long File Name.txt",new System.IO.FileInfo("C:\\cvs\\mosa\\Mosa\\Tools\\MakeIsoImage\\bin\\Debug\\Long File Name.txt"));
-			test.Generate("Iso9660Generator.iso");
-			return;
-#endif
 
 			try
 			{
-				Iso9660Generator iso = new Iso9660Generator(false);
+				Options options = new Options();
+
 				int i;
 
 				for (i = 0; i < args.Length; i++)
 				{
 					if (args[i].Trim()[0] != '-')
 						break;
+
 					switch (args[i].Trim())
 					{
 						case "-boot":
-							i++;
-							iso.AddBootFile(args[i], new System.IO.FileInfo(args[i]));
+//							iso.AddBootFile(args[i], new System.IO.FileInfo(args[i]));
+							options.BootFileName = args[++i];
 							break;
 						case "-boot-load-size":
 							short bootLoadSize;
 							if (short.TryParse(args[++i], out bootLoadSize))
-								iso.BootLoadSize(bootLoadSize);
+								options.BootLoadSize = bootLoadSize;
 							break;
 						case "-boot-info-table":
-							iso.SetBootInfoTable(true);
+							options.BootInfoTable = true;
 							break;
 						case "-label":
-							i++;
-							iso.SetVolumeLabel(args[i]);
+							options.VolumeLabel = args[++i];
 							break;
 						default:
 							break;
@@ -74,7 +69,7 @@ namespace Mosa.Tool.MakeIsoImage
 					return -1;
 				}
 
-				string isoFileName = args[i++];
+				options.IsoFileName = args[i++];
 
 				// now args[i] is root folder
 				if (i >= args.Length)
@@ -84,9 +79,10 @@ namespace Mosa.Tool.MakeIsoImage
 				}
 
 				while (i < args.Length)
-					AddDirectoryTree(iso, args[i++], "");
+					options.IncludeFiles.Add(args[i++]);
 
-				iso.Generate(isoFileName);
+				Iso9660Generator iso = new Iso9660Generator(options);
+				iso.Generate();
 
 				Console.WriteLine("Completed!");
 			}
@@ -100,21 +96,5 @@ namespace Mosa.Tool.MakeIsoImage
 			return 0;
 		}
 
-		static private void AddDirectoryTree(Iso9660Generator iso, string root, string virtualPrepend)
-		{
-			if (Environment.OSVersion.Platform == PlatformID.Win32Windows || Environment.OSVersion.Platform == PlatformID.Win32NT)
-				root = root.Replace('/', '\\');
-
-			DirectoryInfo dirinfo = new DirectoryInfo(root);
-
-			foreach (FileInfo file in dirinfo.GetFiles())
-				iso.AddFile(virtualPrepend + file.Name, file);
-
-			foreach (DirectoryInfo dir in dirinfo.GetDirectories())
-			{
-				iso.MkDir(virtualPrepend + dir.Name);
-				AddDirectoryTree(iso, root + '/' + dir.Name, virtualPrepend + dir.Name + '/');
-			}
-		}
 	}
 }

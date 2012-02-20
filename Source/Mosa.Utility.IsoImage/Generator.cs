@@ -11,6 +11,7 @@
 
 using System;
 using System.IO;
+using System.Text;
 
 namespace Mosa.Utility.IsoImage
 {
@@ -24,7 +25,7 @@ namespace Mosa.Utility.IsoImage
 		private bool pedantic;
 		public int Index;
 		private FileStream fs;
-		public System.Text.ASCIIEncoding Ascii;
+		public ASCIIEncoding Ascii;
 
 		public Generator(bool pedantic)
 		{
@@ -33,6 +34,7 @@ namespace Mosa.Utility.IsoImage
 			this.fs = null;
 			this.Ascii = new System.Text.ASCIIEncoding();
 		}
+
 		public void ResetWithFileStream(FileStream fs)
 		{
 			this.Index = 0;

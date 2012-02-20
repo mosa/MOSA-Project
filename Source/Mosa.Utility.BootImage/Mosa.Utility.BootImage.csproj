@@ -40,8 +40,8 @@
     <DocumentationFile>..\..\bin\Mosa.Utility.BootImage.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="BootImageOptions.cs" />
-    <Compile Include="BootImageCreator.cs" />
+    <Compile Include="Options.cs" />
+    <Compile Include="Generator.cs" />
     <Compile Include="IncludeFile.cs" />
   </ItemGroup>
   <ItemGroup>

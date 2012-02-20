@@ -50,10 +50,13 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IsoEntry.cs" />
+    <Compile Include="IsoFolder.cs" />
+    <Compile Include="Options.cs" />
     <Compile Include="ConvertTo.cs" />
     <Compile Include="FieldValidator.cs" />
     <Compile Include="Generator.cs" />
-    <Compile Include="Iso.cs" />
+    <Compile Include="IsoFile.cs" />
     <Compile Include="Iso9660Generator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

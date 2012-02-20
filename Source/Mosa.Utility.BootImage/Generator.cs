@@ -18,14 +18,13 @@ namespace Mosa.Utility.BootImage
 	/// <summary>
 	/// 
 	/// </summary>
-	public class BootImageCreator
+	public class Generator
 	{
 		/// <summary>
-		/// Main
+		/// Creates the specified options.
 		/// </summary>
-		/// <param name="args">The args.</param>
-		/// <returns></returns>
-		static public void Create(BootImageOptions options)
+		/// <param name="options">The options.</param>
+		static public void Create(Options options)
 		{
 			if (System.IO.File.Exists(options.DiskImageFileName))
 				System.IO.File.Delete(options.DiskImageFileName);

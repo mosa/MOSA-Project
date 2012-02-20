@@ -39,21 +39,51 @@ namespace Mosa.Utility.IsoImage
 		// * maximum directory depth is 8 ( I can't find any reason why this limitation should exist, and I think one of the specs above relax this anyway )
 		// * (I'm thinking something else, too, haven't decided yet...)
 
+		string isoFileName;
+
 		/// <summary>
 		/// Constructor
 		/// </summary>
-		public Iso9660Generator(bool pedantic)
+		public Iso9660Generator(Options options)
 		{
 			this.isoRoot = new IsoFolder();
 			this.isoRoot.Name = ".";
-			this.pedantic = pedantic;
+			this.pedantic = options.Pedantic;
+			this.isoFileName = options.IsoFileName;
+
+			SetVolumeLabel(options.VolumeLabel);
+			SetBootInfoTable(options.BootInfoTable);
+			BootLoadSize(options.BootLoadSize);
+
+			if (options.BootFileName != null)
+				AddBootFile(options.BootFileName, new FileInfo(options.BootFileName));
+
+			foreach (string file in options.IncludeFiles)
+				AddDirectoryTree(file, string.Empty);
+		}
+
+		protected void AddDirectoryTree(string root, string virtualPrepend)
+		{
+			if (Environment.OSVersion.Platform == PlatformID.Win32Windows || Environment.OSVersion.Platform == PlatformID.Win32NT)
+				root = root.Replace('/', '\\');
+
+			DirectoryInfo dirinfo = new DirectoryInfo(root);
+
+			foreach (FileInfo file in dirinfo.GetFiles())
+				AddFile(virtualPrepend + file.Name, file);
+
+			foreach (DirectoryInfo dir in dirinfo.GetDirectories())
+			{
+				MkDir(virtualPrepend + dir.Name);
+				AddDirectoryTree(root + '/' + dir.Name, virtualPrepend + dir.Name + '/');
+			}
 		}
 
 		/// <summary>
 		/// sets the volume label of the image
 		/// </summary>
 		/// <param Name="volumeLabel">the requested volume label</param>
-		public void SetVolumeLabel(string volumeLabel)
+		protected void SetVolumeLabel(string volumeLabel)
 		{
 			// TODO FIXME - fixup label to make sure it's compatible...
 			int maxLength = 72 - 41 + 1;
@@ -64,11 +94,11 @@ namespace Mosa.Utility.IsoImage
 		}
 
 		/// <summary>
-		/// create directory in ISO file
+		/// Create directory in ISO file
 		/// </summary>
-		public void MkDir(string path)
+		protected void MkDir(string path)
 		{
-			IsoFolder f = this.isoRoot;
+			IsoFolder f = isoRoot;
 			string[] ar = NormalizePath(path).Split('/');
 			for (int i = 0; i < ar.Length; i++)
 			{
@@ -92,7 +122,7 @@ namespace Mosa.Utility.IsoImage
 		/// <summary>
 		/// add a "normal" file to the ISO ( not a boot file )
 		/// </summary>
-		public void AddFile(string sPath, FileInfo fileInfo)
+		protected void AddFile(string sPath, FileInfo fileInfo)
 		{
 			AddFileEx(NormalizePath(sPath), fileInfo);
 		}
@@ -101,21 +131,21 @@ namespace Mosa.Utility.IsoImage
 		/// add a boot file to the ISO
 		/// TODO FIXME - add support for boot images other than x86
 		/// </summary>
-		public void AddBootFile(string path, FileInfo fileInfo)
+		protected void AddBootFile(string path, FileInfo fileInfo)
 		{
-			if (this.boot != null)
+			if (boot != null)
 				throw new Exception("only one boot file can be added to an ISO");
 
-			this.boot = AddFileEx(NormalizePath(path), fileInfo);
-			this.boot.BootFile = true;
-			this.boot.BootInfoTable = this.bootInfoTable;
+			boot = AddFileEx(NormalizePath(path), fileInfo);
+			boot.BootFile = true;
+			boot.BootInfoTable = bootInfoTable;
 		}
 
 		/// <summary>
 		/// sets the boot load size, see El Torito spec figure 3 offset 6-7
 		/// </summary>
 		/// <param Name="bootLoadSize">the number of 512-byte sectors to load during boot</param>
-		public void BootLoadSize(short bootLoadSize)
+		protected void BootLoadSize(short bootLoadSize)
 		{
 			this.bootLoadSize = bootLoadSize;
 		}
@@ -124,7 +154,7 @@ namespace Mosa.Utility.IsoImage
 		/// enables support for a boot info table within the boot image
 		/// </summary>
 		/// <param Name="bootInfoTable"></param>
-		public void SetBootInfoTable(bool bootInfoTable)
+		protected void SetBootInfoTable(bool bootInfoTable)
 		{
 			this.bootInfoTable = bootInfoTable;
 			if (boot != null)
@@ -134,15 +164,15 @@ namespace Mosa.Utility.IsoImage
 		/// <summary>
 		/// generate the iso image
 		/// </summary>
-		public void Generate(string isoFileName)
+		public void Generate()
 		{
 			LogicalBlockSize = 2048;
 
-			this.generator = new Generator(this.pedantic);
+			generator = new Generator(pedantic);
 			GenerateIso(); // 1st pass to calculate offsets
 			using (FileStream stream = File.OpenWrite(isoFileName))
 			{
-				this.generator.ResetWithFileStream(stream);
+				generator.ResetWithFileStream(stream);
 				GenerateIso(); // 2nd pass to actually write the data
 			}
 		}
@@ -180,7 +210,7 @@ namespace Mosa.Utility.IsoImage
 			string key;
 			string[] ar = NormalizePath(path).Split('/');
 			int i;
-			IsoFolder f = this.isoRoot;
+			IsoFolder f = isoRoot;
 			for (i = 0; i < ar.Length - 1; i++)
 			{
 				key = ar[i].Trim().ToLower();
@@ -231,13 +261,13 @@ namespace Mosa.Utility.IsoImage
 		private void GenerateIso()
 		{
 			// note - a comment followed by numbers in parenthesis is the Name of the field and the number in parenthesis is the section number in ECMA-119
-			this.generator.DupByte(0, 0x8000);
+			generator.DupByte(0, 0x8000);
 
 			// BEGIN Volume Descriptors...
 
 			GenPrimaryVolumeDescriptor();
 
-			if (this.boot != null)
+			if (boot != null)
 				GenBootRecordDescriptor(); // Boot Record MUST be right after PVD ( see El Torito section 2.0 )
 
 			// TODO FIXME - generate any other needed Volume Descriptors here
@@ -245,33 +275,33 @@ namespace Mosa.Utility.IsoImage
 
 			// END Volume Descriptors
 
-			if (this.boot != null)
-				GenBootCatalog(this.boot);
+			if (boot != null)
+				GenBootCatalog(boot);
 
 			GenPathTables();
 
 			NextPathTableEntry = 1;
-			GenDirectoryTree(this.isoRoot, this.isoRoot, 2);
+			GenDirectoryTree(isoRoot, isoRoot, 2);
 
 #if ROCKRIDGE
 			GenContinuationBlock();
 #endif
 
-			GenFiles(this.isoRoot);
+			GenFiles(isoRoot);
 
-			TotalSize = this.generator.Index;
+			TotalSize = generator.Index;
 		}
 
 		private void GenPrimaryVolumeDescriptor() // ( 8.4 )
 		{
-			PrimaryVolumeDescriptor = this.generator.Index / LogicalBlockSize;
-			var pvd = new FieldValidator(this.generator);
+			PrimaryVolumeDescriptor = generator.Index / LogicalBlockSize;
+			var pvd = new FieldValidator(generator);
 			pvd.Byte(1, 1); // Volume Descriptor Type ( 8.4.1 )
 			pvd.AString("CD001", 2, 6); // Standard Identifier ( 8.4.2 )
 			pvd.Byte(1, 7); // Volume Descriptor Version ( 8.4.3 )
 			pvd.Zero(8, 8); // Unused Field ( 8.4.4 )
 			pvd.AString("?", 9, 40); // System Identifier ( 8.4.5 )
-			pvd.DString(this.volumeLabel, 41, 72); // Volume Identifier ( 8.4.6 )
+			pvd.DString(volumeLabel, 41, 72); // Volume Identifier ( 8.4.6 )
 			pvd.Zero(73, 80); // Unused Field ( 8.4.7 )
 			pvd.IntLSBMSB((TotalSize + LogicalBlockSize - 1) / LogicalBlockSize, 81, 88); // Volume Space Size ( 8.4.8 )
 			pvd.Zero(89, 120); // Unused Field ( 8.4.9 )
@@ -284,7 +314,7 @@ namespace Mosa.Utility.IsoImage
 			pvd.IntMSB(MPathTable, 149, 152); // M Path Table ( 8.4.16 )
 			pvd.IntMSB(0, 153, 156); // Optional M Path Table ( 8.4.17 )
 			pvd.BeginField(157);
-			DirectoryRecord(".", this.isoRoot, 1); // Directory Record for Root Directory ( 8.4.18 )
+			DirectoryRecord(".", isoRoot, 1); // Directory Record for Root Directory ( 8.4.18 )
 			pvd.EndField(190);
 			pvd.DupByte(0x20, 191, 318); // Volume Set Identifier ( 8.4.19 )
 			pvd.DupByte(0x20, 319, 446); // Publisher Identifier ( 8.4.20 )
@@ -306,30 +336,30 @@ namespace Mosa.Utility.IsoImage
 
 		private void GenVolumeDescriptorTerminator() // ISO 9660 - 8.3
 		{
-			var vdt = new FieldValidator(this.generator);
+			var vdt = new FieldValidator(generator);
 			vdt.Byte(255, 1); // Volume Descriptor Type ( 8.3.1 )
 			vdt.AString("CD001", 2, 6); // Standard Identifier ( 8.4.2 )
 			vdt.Byte(1, 7); // Volume Descriptor Version ( 8.4.3 )
-			this.generator.FinishBlock();
+			generator.FinishBlock();
 		}
 
 		private void GenBootRecordDescriptor() // ( ISO 9660 - 8.2, El Torito Figure 7 )
 		{
-			var br = new FieldValidator(this.generator);
+			var br = new FieldValidator(generator);
 			br.Byte(0, 1); // Volume Descriptor Type ( 8.2.1 ), Boot Record Indicator - must be 0 ( offset 0x00 )
 			br.AString("CD001", 2, 6); // Standard Identifier ( 8.2.2 ), ( offset 0x01-0x05 )
 			br.Byte(1, 7); // Volume Descriptor Version ( 8.2.3 ), must be 1 for El Torito also ( offset 0x06 )
 			br.AString("EL TORITO SPECIFICATION", 8, 39); // Boot System Identifier ( 8.2.4 ), ( offset 0x07-0x26 )
 			br.Zero(40, 71); // Boot Identifier ( 8.2.5 ), Unused - must be 0 ( offset 0x27-0x46 )
 			br.IntLSB(BootCatalog, 72, 75); // Boot System Use ( 8.2.6 ), Absolute Pointer to first sector of Boot Catalog ( offset 0x47-0x4A )
-			this.generator.FinishBlock();
+			generator.FinishBlock();
 		}
 
 		private void GenBootCatalog(IsoFile f)
 		{
-			BootCatalog = this.generator.Index / LogicalBlockSize;
+			BootCatalog = generator.Index / LogicalBlockSize;
 			// write validation entry first... see El Torito section 2.1
-			var ve = new FieldValidator(this.generator);
+			var ve = new FieldValidator(generator);
 			ve.Byte(1, 1); // Header ID, must be 0x01
 			ve.Byte(0, 2); // 0 == x86 - TODO FIXME: 1 == PowerPC, 2 == Mac, see El Torito figure 2
 			ve.DupByte(0, 3, 4); // Reserved
@@ -339,7 +369,7 @@ namespace Mosa.Utility.IsoImage
 			ve.Byte(0xAA, 0x20); // 2nd Key Byte
 
 			// initial/default entry... see El Torito section 2.2 and figure 3
-			var ide = new FieldValidator(this.generator);
+			var ide = new FieldValidator(generator);
 			ide.Byte(0x88, 1); // 0x88 = bootable, 0x00 = not bootable
 
 			// TODO FIXME - this is extremely hackish... fix me...
@@ -357,32 +387,32 @@ namespace Mosa.Utility.IsoImage
 			ide.ShortLSB(0, 3, 4); // Load Segment - 0 == default of 0x7C0
 			ide.Byte(0, 5); // System Type, according to El Torito figure 3 this MUST be a copy of the "System Type" from the boot image. In practice this appears to not be the case.
 			ide.Byte(0, 6); // Unused, must be 0
-			if (this.bootLoadSize == 0)
-				this.bootLoadSize = (short)((f.fileInfo.Length - 1) / 0x200 + 1);
-			ide.ShortLSB(this.bootLoadSize, 7, 8); // Sector Count
-			ide.IntLSB(this.boot.DataBlock, 9, 12); // Logical Block of boot image
+			if (bootLoadSize == 0)
+				bootLoadSize = (short)((f.fileInfo.Length - 1) / 0x200 + 1);
+			ide.ShortLSB(bootLoadSize, 7, 8); // Sector Count
+			ide.IntLSB(boot.DataBlock, 9, 12); // Logical Block of boot image
 			ide.Zero(13, 32); // unused
 
-			this.generator.FinishBlock();
+			generator.FinishBlock();
 		}
 
 		private void GenPathTables()
 		{
-			LPathTable = this.generator.Index / LogicalBlockSize;
-			GenPathTableEx(this.isoRoot, this.isoRoot, true);
-			PathTableSize = this.generator.Index - LPathTable * LogicalBlockSize;
-			this.generator.FinishBlock();
+			LPathTable = generator.Index / LogicalBlockSize;
+			GenPathTableEx(isoRoot, isoRoot, true);
+			PathTableSize = generator.Index - LPathTable * LogicalBlockSize;
+			generator.FinishBlock();
 
-			MPathTable = this.generator.Index / LogicalBlockSize;
-			GenPathTableEx(this.isoRoot, this.isoRoot, false);
-			this.generator.FinishBlock();
+			MPathTable = generator.Index / LogicalBlockSize;
+			GenPathTableEx(isoRoot, isoRoot, false);
+			generator.FinishBlock();
 		}
 
 		private void GenPathTableEx(IsoFolder parentFolder, IsoFolder thisFolder, bool lsb)
 		{
-			var di = new FieldValidator(this.generator);
+			var di = new FieldValidator(generator);
 			// Path table record ( ECMA-119 section 9.4 )
-			byte[] b_di = this.generator.IsoName(thisFolder.Name, true);
+			byte[] b_di = generator.IsoName(thisFolder.Name, true);
 			di.Byte((byte)b_di.Length, 1);
 			di.Byte(0, 2); // Extended Attribute Record Length
 			if (lsb)
@@ -407,15 +437,15 @@ namespace Mosa.Utility.IsoImage
 		private void GenDirectoryTree(IsoFolder parent_folder, IsoFolder this_folder, byte root)
 		{
 			this_folder.PathTableEntry = NextPathTableEntry++;
-			this_folder.DataBlock = this.generator.Index / LogicalBlockSize;
+			this_folder.DataBlock = generator.Index / LogicalBlockSize;
 			DirectoryRecord(".", this_folder, root);
 			DirectoryRecord("..", parent_folder, 0);
 
 			foreach (KeyValuePair<string, IsoEntry> it in this_folder.entries)
 				DirectoryRecord(it.Value.Name, it.Value, 0);
 
-			this_folder.DataLength = this.generator.Index - this_folder.DataBlock * LogicalBlockSize;
-			this.generator.FinishBlock();
+			this_folder.DataLength = generator.Index - this_folder.DataBlock * LogicalBlockSize;
+			generator.FinishBlock();
 
 			foreach (KeyValuePair<string, IsoEntry> it in this_folder.entries)
 				if (it.Value.IsFolder)
@@ -424,14 +454,14 @@ namespace Mosa.Utility.IsoImage
 
 		private void GenContinuationBlock()
 		{
-			ContinuationBlock = this.generator.Index / LogicalBlockSize;
-			ContinuationLength = -this.generator.Index; // HACK ALERT: we will add the final offset when done, and that will give us the length
+			ContinuationBlock = generator.Index / LogicalBlockSize;
+			ContinuationLength = -generator.Index; // HACK ALERT: we will add the final offset when done, and that will give us the length
 
 			// ER - Extensions Reference - see P1281 section 5.5
-			byte[] b_id = this.generator.Ascii.GetBytes("RRIP_1991A"); // I can't find documentation anywhere for these values, but they came from an ISO I analyzed.
-			byte[] b_des = this.generator.Ascii.GetBytes("THE ROCK RIDGE INTERCHANGE PROTOCOL PROVIDES SUPPORT FOR POSIX FILE SYSTEM SEMANTICS");
-			byte[] b_src = this.generator.Ascii.GetBytes("PLEASE CONTACT DISC PUBLISHER FOR SPECIFICATION SOURCE.  SEE PUBLISHER IDENTIFIER IN PRIMARY VOLUME DESCRIPTOR FOR CONTACT INFORMATION.");
-			var er = new FieldValidator(this.generator);
+			byte[] b_id = generator.Ascii.GetBytes("RRIP_1991A"); // I can't find documentation anywhere for these values, but they came from an ISO I analyzed.
+			byte[] b_des = generator.Ascii.GetBytes("THE ROCK RIDGE INTERCHANGE PROTOCOL PROVIDES SUPPORT FOR POSIX FILE SYSTEM SEMANTICS");
+			byte[] b_src = generator.Ascii.GetBytes("PLEASE CONTACT DISC PUBLISHER FOR SPECIFICATION SOURCE.  SEE PUBLISHER IDENTIFIER IN PRIMARY VOLUME DESCRIPTOR FOR CONTACT INFORMATION.");
+			var er = new FieldValidator(generator);
 			er.Byte((byte)'E', 1);
 			er.Byte((byte)'R', 2);
 			System.Diagnostics.Debug.Assert((9 + b_id.Length + b_des.Length + b_src.Length) < 256);
@@ -445,8 +475,8 @@ namespace Mosa.Utility.IsoImage
 			er.Bytes(b_des, 9 + b_id.Length, 9 + b_id.Length + b_des.Length - 1);
 			er.Bytes(b_src, 9 + b_id.Length + b_des.Length, 9 + b_id.Length + b_des.Length + b_src.Length - 1);
 
-			ContinuationLength += this.generator.Index;
-			this.generator.FinishBlock();
+			ContinuationLength += generator.Index;
+			generator.FinishBlock();
 		}
 
 		private void GenFiles(IsoFolder thisFolder)
@@ -468,7 +498,7 @@ namespace Mosa.Utility.IsoImage
 		/// <param Name="root">1==PVD's root entry, 2==root's "." entry, 0==everything else ( special stuff needs to happen for the root entries )</param>
 		private void DirectoryRecord(string name, IsoEntry e, byte root)
 		{
-			byte[] fileName = this.generator.IsoName(name, true);
+			byte[] fileName = generator.IsoName(name, true);
 			string cont = DirectoryRecordEx(fileName, name, e, root, false);
 #if ROCKRIDGE
 			while (cont.Length > 0)
@@ -513,7 +543,7 @@ namespace Mosa.Utility.IsoImage
 #endif
 			LEN_DR += LEN_SU;
 
-			var dr = new FieldValidator(this.generator);
+			var dr = new FieldValidator(generator);
 			dr.Byte(LEN_DR, 1); // Length of Directory Record ( 9.1.1 )
 			dr.Byte(0, 2); // Extended Attribute Record Length ( 9.1.2 )
 			dr.IntLSBMSB(e.DataBlock, 3, 10); // Location of Extent ( 9.1.3 )
@@ -650,17 +680,17 @@ namespace Mosa.Utility.IsoImage
 			m.WriteByte((byte)(name.Length + 5));
 			m.WriteByte(1); // version?
 			m.WriteByte(flags);
-			m.Write(this.generator.Ascii.GetBytes(name), 0, name.Length);
+			m.Write(generator.Ascii.GetBytes(name), 0, name.Length);
 			System.Diagnostics.Debug.Assert((m.Length - start) == (name.Length + 5));
 			return cont;
 		}
 
 		private void GenFile(IsoFile f)
 		{
-			f.DataBlock = this.generator.Index / LogicalBlockSize;
+			f.DataBlock = generator.Index / LogicalBlockSize;
 			f.DataLength = (int)f.fileInfo.Length;
-			this.generator.WriteFile(f, PrimaryVolumeDescriptor);
-			this.generator.FinishBlock();
+			generator.WriteFile(f, PrimaryVolumeDescriptor);
+			generator.FinishBlock();
 		}
 
 	}
