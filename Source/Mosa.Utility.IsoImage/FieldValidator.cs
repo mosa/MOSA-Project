@@ -73,17 +73,7 @@ namespace Mosa.Utility.IsoImage
 
 		public void AString(string s, int start, int end)
 		{
-			// TODO FIXME - validate contents of string against legal a-string character set
-			BeginField(start);
-			int need = end - start + 1;
-			int have = s.Length;
-			if (have > need)
-				s = s.Substring(0, need);
-			else
-				s = s.PadRight(need);
-			this.generator.String(s);
-
-			EndField(end);
+			AString(s, start, end, ' ');
 		}
 
 		public void AString(string s, int start, int end, char pad)
