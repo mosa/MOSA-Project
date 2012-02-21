@@ -181,10 +181,18 @@ namespace Mosa.Utility.IsoImage
 
 			for (int i = 64; i < b.Length; i = i + 4)
 			{
-				sum += b[i + 0] + (b[i + 1] << 8) + (b[i + 2] << 16) + (b[i + 3] << 24);
+				sum += GetByte(b, i + 0) + (GetByte(b, i + 1) << 8) + (GetByte(b, i + 2) << 16) + (GetByte(b, i + 3) << 24);
 			}
 
 			return (uint)sum;
+		}
+
+		private static byte GetByte(byte[] b, int offset)
+		{
+			if (offset >= b.Length)
+				return 0;
+
+			return b[offset];
 		}
 	}
 }

@@ -86,6 +86,21 @@ namespace Mosa.Utility.IsoImage
 			EndField(end);
 		}
 
+		public void AString(string s, int start, int end, char pad)
+		{
+			// TODO FIXME - validate contents of string against legal a-string character set
+			BeginField(start);
+			int need = end - start + 1;
+			int have = s.Length;
+			if (have > need)
+				s = s.Substring(0, need);
+			else
+				s = s.PadRight(need, pad);
+			this.generator.String(s);
+
+			EndField(end);
+		}
+
 		public void DString(string s, int start, int end)
 		{
 			// TODO FIXME - validate contents of string against legal d-string character set

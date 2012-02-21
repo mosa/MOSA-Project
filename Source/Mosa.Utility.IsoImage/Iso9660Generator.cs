@@ -349,7 +349,7 @@ namespace Mosa.Utility.IsoImage
 			br.Byte(0, 1); // Volume Descriptor Type ( 8.2.1 ), Boot Record Indicator - must be 0 ( offset 0x00 )
 			br.AString("CD001", 2, 6); // Standard Identifier ( 8.2.2 ), ( offset 0x01-0x05 )
 			br.Byte(1, 7); // Volume Descriptor Version ( 8.2.3 ), must be 1 for El Torito also ( offset 0x06 )
-			br.AString("EL TORITO SPECIFICATION", 8, 39); // Boot System Identifier ( 8.2.4 ), ( offset 0x07-0x26 )
+			br.AString("EL TORITO SPECIFICATION", 8, 39, '\0'); // Boot System Identifier ( 8.2.4 ), ( offset 0x07-0x26 )
 			br.Zero(40, 71); // Boot Identifier ( 8.2.5 ), Unused - must be 0 ( offset 0x27-0x46 )
 			br.IntLSB(BootCatalog, 72, 75); // Boot System Use ( 8.2.6 ), Absolute Pointer to first sector of Boot Catalog ( offset 0x47-0x4A )
 			generator.FinishBlock();

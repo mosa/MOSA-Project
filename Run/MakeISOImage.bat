@@ -1,7 +1,6 @@
 del /q /f /s build\iso
 
 mkdir build\iso
-mkdir build\iso\boot
 
 del /q /f build\bootimage.iso
 

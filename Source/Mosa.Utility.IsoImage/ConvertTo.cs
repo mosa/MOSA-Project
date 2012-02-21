@@ -9,7 +9,7 @@
 
 namespace Mosa.Utility.IsoImage
 {
-	static class ConvertTo
+	static internal class ConvertTo
 	{
 		/// <summary>
 		/// converts a short integer value to an LSB byte array
