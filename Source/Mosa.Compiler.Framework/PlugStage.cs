@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.Metadata.Signatures;
 
 namespace Mosa.Compiler.Framework
 {
@@ -25,7 +26,8 @@ namespace Mosa.Compiler.Framework
 
 		private IAssemblyLinker linker;
 
-		protected Dictionary<RuntimeMethod, string> plugMethods = new Dictionary<RuntimeMethod, string>();
+		// Method to Plug -> Plug
+		protected Dictionary<RuntimeMethod, RuntimeMethod> plugMethods = new Dictionary<RuntimeMethod, RuntimeMethod>();
 
 		protected RuntimeType plugTypeAttribute;
 		protected RuntimeType plugMethodAttribute;
@@ -64,6 +66,9 @@ namespace Mosa.Compiler.Framework
 
 				foreach (RuntimeMethod method in type.Methods)
 				{
+					if (!method.IsStatic)
+						continue;
+
 					string plugMethodTarget = null;
 
 					RuntimeAttribute methodAttribute = GetAttribute(method.CustomAttributes, plugMethodAttribute);
@@ -80,13 +85,62 @@ namespace Mosa.Compiler.Framework
 
 					if (plugTypeTarget != null || plugMethodTarget != null)
 					{
-						// TODO
+						string targetAssemblyName;
+						string targetFullTypeName;
+						string targetMethodName;
+
+						if (plugMethodTarget != null)
+						{
+							targetAssemblyName = ParseAssembly(plugMethodTarget);
+							targetFullTypeName = ParseFullTypeName(plugMethodTarget);
+							targetMethodName = ParseMethod(plugMethodTarget);
+						}
+						else
+						{
+							targetAssemblyName = ParseAssembly(plugTypeTarget);
+							targetFullTypeName = RemoveAssembly(plugTypeTarget);
+							targetMethodName = method.Name;
+						}
+
+						string targetNameSpace = ParseNameSpace(targetFullTypeName);
+						string targetTypeName = ParseType(targetFullTypeName);
+
+						RuntimeType targetType;
+
+						if (targetAssemblyName != null)
+							targetType = typeSystem.GetType(targetAssemblyName, targetNameSpace, targetTypeName);
+						else
+							targetType = typeSystem.GetType(targetNameSpace, targetTypeName);
+
+						foreach (var targetMethod in targetType.Methods)
+						{
+							if (targetMethod.Name == targetMethodName)
+							{
+								if (targetMethod.IsStatic)
+								{
+									if (targetMethod.Signature.Matches(method.Signature))
+									{
+										plugMethods.Add(targetMethod, method);
+										break;
+									}
+								}
+								else
+								{
+									if (MatchesWithStaticThis(targetMethod, method))
+									{
+										plugMethods.Add(targetMethod, method);
+										break;
+									}
+								}
+							}
+						}
+
 					}
 				}
 			}
 		}
 
-		protected RuntimeAttribute GetAttribute(List<RuntimeAttribute> attributes, RuntimeType plugAttribute)
+		private RuntimeAttribute GetAttribute(List<RuntimeAttribute> attributes, RuntimeType plugAttribute)
 		{
 			foreach (RuntimeAttribute attribute in attributes)
 			{
@@ -97,6 +151,85 @@ namespace Mosa.Compiler.Framework
 			return null;
 		}
 
+		private bool MatchesWithStaticThis(RuntimeMethod targetMethod, RuntimeMethod plugMethod)
+		{
+			MethodSignature target = targetMethod.Signature;
+			MethodSignature plug = plugMethod.Signature;
+
+			if (!target.ReturnType.Matches(plug.ReturnType))
+				return false;
+
+			if (target.Parameters.Length != plug.Parameters.Length - 1)
+				return false;
+
+			if (plug.Parameters[0].Type != Metadata.CilElementType.ByRef)
+				return false;
+
+			// TODO: Compare plug.Parameters[0].Type to the target's type
+
+			for (int i = 0; i < target.Parameters.Length; i++)
+			{
+				if (!target.Parameters[i].Matches(plug.Parameters[i + 1]))
+					return false;
+			}
+
+			return true;
+		}
+
+		private string RemoveAssembly(string target)
+		{
+			int pos = target.IndexOf(',');
+
+			if (pos < 0)
+				return target;
+
+			return target.Substring(target.Length - pos - 1).Trim(' ');
+		}
+
+		private string ParseAssembly(string target)
+		{
+			int pos = target.IndexOf(',');
+
+			if (pos < 0)
+				return null;
+
+			return target.Substring(pos + 1).Trim(' ');
+		}
+
+		private string ParseFullTypeName(string target)
+		{
+			target = RemoveAssembly(target);
+
+			int pos = target.LastIndexOf('.');
+
+			return target.Substring(0, pos);
+		}
+
+		private string ParseMethod(string target)
+		{
+			target = RemoveAssembly(target);
+
+			int pos = target.LastIndexOf('.');
+
+			return target.Substring(pos + 1);
+		}
+
+		private string ParseNameSpace(string type)
+		{
+			int pos = type.LastIndexOf('.');
+
+			if (pos < 0)
+				return string.Empty;
+
+			return type.Substring(0, pos);
+		}
+
+		private string ParseType(string target)
+		{
+			int pos = target.LastIndexOf('.');
+
+			return target.Substring(pos + 1);
+		}
 		#endregion // IAssemblyCompilerStage members
 
 

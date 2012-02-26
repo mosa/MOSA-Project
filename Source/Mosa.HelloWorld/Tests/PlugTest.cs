@@ -9,13 +9,19 @@ namespace Mosa.HelloWorld.Tests
 {
 	class PlugTestCase
 	{
-		public int Double(int a) { return 0; } // incomplete implementation
+		public static int Double(int a) { return 0; } // incomplete implementation
+		public static int AddOne(int a) { return 0; } // incomplete implementation
+		public int AddZZZ(int z) { return 0; } // incomplete implementation
 	}
 
 	[PlugType("Mosa.HelloWorld.Tests.PlugTestCase")]
-	class PlugTestImplementation
+	static class PlugTestImplementation
 	{
+		public static int AddOne(int a) { return a + 1; }
+
 		[PlugMethod("Mosa.HelloWorld.Tests.PlugTestCase.Double")]
-		public int Double(int a) { return a + a; }
+		public static int Double(int a) { return a + a; }
+
+		public static int AddZZZ(ref PlugTestCase plugTestCase, int z) { return z; }
 	}
 }

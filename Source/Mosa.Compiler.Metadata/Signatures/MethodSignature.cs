@@ -9,7 +9,6 @@
 
 using System;
 
-
 namespace Mosa.Compiler.Metadata.Signatures
 {
 	/// <summary>
@@ -276,11 +275,9 @@ namespace Mosa.Compiler.Metadata.Signatures
 			if (!this.ReturnType.Matches(other.ReturnType))
 				return false;
 
-			SigType[] thisParameters = this.Parameters;
-			SigType[] otherParameters = other.Parameters;
-			for (int i = 0; i < thisParameters.Length; i++)
+			for (int i = 0; i < this.Parameters.Length; i++)
 			{
-				if (!thisParameters[i].Matches(otherParameters[i]))
+				if (!this.Parameters[i].Matches(other.Parameters[i]))
 					return false;
 			}
 

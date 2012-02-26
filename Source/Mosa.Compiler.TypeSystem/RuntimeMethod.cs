@@ -104,7 +104,7 @@ namespace Mosa.Compiler.TypeSystem
 		}
 
 		/// <summary>
-		/// Gets a value indicating whether this instance is abstract.
+		/// Gets a value indicating whether this method is abstract.
 		/// </summary>
 		/// <value>
 		/// 	<c>true</c> if this instance is abstract; otherwise, <c>false</c>.
@@ -112,6 +112,17 @@ namespace Mosa.Compiler.TypeSystem
 		public bool IsAbstract
 		{
 			get { return (attributes & MethodAttributes.Abstract) == MethodAttributes.Abstract; }
+		}
+
+		/// <summary>
+		/// Gets a value indicating whether this method is static.
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if this instance is static; otherwise, <c>false</c>.
+		/// </value>
+		public bool IsStatic
+		{
+			get { return (attributes & MethodAttributes.Static) == MethodAttributes.Static; }
 		}
 
 		/// <summary>
