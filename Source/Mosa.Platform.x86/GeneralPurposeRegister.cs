@@ -128,7 +128,7 @@ namespace Mosa.Platform.x86
 		/// <param name="index"></param>
 		/// <param name="gpr">The general purpose register index.</param>
 		private GeneralPurposeRegister(int index, GPR gpr) :
-			base(index, gpr == GPR.EAX)
+			base(index)
 		{
 			_gpr = gpr;
 		}

@@ -116,15 +116,6 @@ namespace Mosa.Platform.x86
 		}
 
 		/// <summary>
-		/// Gets the caller-save status of this register.
-		/// </summary>
-		/// <value>True if the register is caller saved; otherwise false.</value>
-		public override sealed bool IsCallerSaved
-		{
-			get { return false; }
-		}
-
-		/// <summary>
 		/// Returns the width of general purpose registers in bits.
 		/// </summary>
 		public override int Width

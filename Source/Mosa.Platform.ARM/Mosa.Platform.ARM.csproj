@@ -84,6 +84,10 @@
       <Name>Mosa.Compiler.TypeSystem</Name>
     </ProjectReference>
   </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Architecture.cs" />
+    <Compile Include="ArchitectureFeatureFlags.cs" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <PropertyGroup>
     <PreBuildEvent>

@@ -87,6 +87,10 @@
   <ItemGroup>
     <Folder Include="CPUx64\" />
   </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Architecture.cs" />
+    <Compile Include="ArchitectureFeatureFlags.cs" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <PropertyGroup>
     <PreBuildEvent>

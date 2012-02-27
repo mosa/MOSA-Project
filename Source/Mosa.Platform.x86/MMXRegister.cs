@@ -79,7 +79,7 @@ namespace Mosa.Platform.x86
 		/// <param name="index"></param>
 		/// <param name="registerCode">The MMX register index.</param>
 		private MMXRegister(int index, int registerCode) :
-			base(index, false)
+			base(index)
 		{
 			_registerCode = registerCode;
 		}

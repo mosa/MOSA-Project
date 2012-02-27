@@ -4,9 +4,8 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Michael Ruck (grover) <sharpos@michaelruck.de>
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
-*/
+ */
 
 using System;
 
@@ -15,7 +14,7 @@ using Mosa.Compiler.Framework.Operands;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 
-namespace Mosa.Platform.x86
+namespace Mosa.Platform.AVR32
 {
 
 	/// <summary>
@@ -35,27 +34,7 @@ namespace Mosa.Platform.x86
 		/// </summary>
 		private static readonly Register[] Registers = new Register[]
 		{
-			////////////////////////////////////////////////////////
-			// 32-bit general purpose registers
-			////////////////////////////////////////////////////////
-			GeneralPurposeRegister.EAX,
-			GeneralPurposeRegister.ECX,
-			GeneralPurposeRegister.EDX,
-			GeneralPurposeRegister.EBX,
-			GeneralPurposeRegister.ESI,
-			GeneralPurposeRegister.EDI,
-
-			////////////////////////////////////////////////////////
-			// 128-bit floating point registers
-			////////////////////////////////////////////////////////
-			SSE2Register.XMM0,
-			SSE2Register.XMM1,
-			SSE2Register.XMM2,
-			SSE2Register.XMM3,
-			SSE2Register.XMM4,
-			SSE2Register.XMM5,
-			SSE2Register.XMM6,
-			SSE2Register.XMM7
+			//TODO
 		};
 
 		/// <summary>
@@ -73,16 +52,16 @@ namespace Mosa.Platform.x86
 		}
 
 		/// <summary>
-		/// Retrieves the native integer size of the x86 platform.
+		/// Retrieves the native integer size of the x64 platform.
 		/// </summary>
-		/// <value>This property always returns 32.</value>
+		/// <value>This property always returns 64.</value>
 		public override int NativeIntegerSize
 		{
-			get { return 32; }
+			get { return 64; }
 		}
 
 		/// <summary>
-		/// Retrieves the register set of the x86 platform.
+		/// Retrieves the register set of the x64 platform.
 		/// </summary>
 		public override Register[] RegisterSet
 		{
@@ -90,11 +69,16 @@ namespace Mosa.Platform.x86
 		}
 
 		/// <summary>
-		/// Retrieves the stack frame register of the x86.
+		/// Retrieves the stack frame register of the x64.
 		/// </summary>
 		public override Register StackFrameRegister
 		{
-			get { return GeneralPurposeRegister.EBP; }
+			get
+			{
+				// TODO
+				return null;
+				// return GeneralPurposeRegister.EBP; 
+			}
 		}
 
 		/// <summary>
@@ -109,7 +93,7 @@ namespace Mosa.Platform.x86
 		public static IArchitecture CreateArchitecture(ArchitectureFeatureFlags architectureFeatures)
 		{
 			if (architectureFeatures == ArchitectureFeatureFlags.AutoDetect)
-				architectureFeatures = ArchitectureFeatureFlags.MMX | ArchitectureFeatureFlags.SSE | ArchitectureFeatureFlags.SSE2;
+				architectureFeatures = ArchitectureFeatureFlags.AutoDetect; // FIXME
 
 			return new Architecture(architectureFeatures);
 		}
@@ -123,55 +107,55 @@ namespace Mosa.Platform.x86
 		/// <returns>A new operand usable as a result operand.</returns>
 		public override Operand CreateResultOperand(SigType signatureType, int instructionLabel, int operandStackIndex)
 		{
-			return new RegisterOperand(signatureType, GeneralPurposeRegister.EAX);
+			// TODO
+			return null;
+			//return new RegisterOperand(signatureType, GeneralPurposeRegister.EAX);
 		}
 
 		/// <summary>
-		/// Extends the assembly compiler pipeline with x86 specific stages.
+		/// Extends the assembly compiler pipeline with AVR32 specific stages.
 		/// </summary>
 		/// <param name="assemblyCompilerPipeline">The assembly compiler pipeline to extend.</param>
 		public override void ExtendAssemblyCompilerPipeline(CompilerPipeline assemblyCompilerPipeline)
 		{
-			assemblyCompilerPipeline.InsertAfterFirst<IAssemblyCompilerStage>(
-				new InterruptVectorStage()
-			);
+			//assemblyCompilerPipeline.InsertAfterFirst<IAssemblyCompilerStage>(
+			//    new InterruptVectorStage()
+			//);
 
-			assemblyCompilerPipeline.InsertAfterFirst<InterruptVectorStage>(
-				new ExceptionVectorStage()
-			);
+			//assemblyCompilerPipeline.InsertAfterFirst<InterruptVectorStage>(
+			//    new ExceptionVectorStage()
+			//);
 
-			assemblyCompilerPipeline.InsertAfterLast<TypeLayoutStage>(
-				new MethodTableBuilderStage()
-			);
+			//assemblyCompilerPipeline.InsertAfterLast<TypeLayoutStage>(
+			//    new MethodTableBuilderStage()
+			//);
 
 		}
 
 		/// <summary>
-		/// Extends the method compiler pipeline with x86 specific stages.
+		/// Extends the method compiler pipeline with AVR32 specific stages.
 		/// </summary>
 		/// <param name="methodCompilerPipeline">The method compiler pipeline to extend.</param>
 		public override void ExtendMethodCompilerPipeline(CompilerPipeline methodCompilerPipeline)
 		{
-			// FIXME: Create a specific code generator instance using requested feature flags.
-			// FIXME: Add some more optimization passes, which take advantage of advanced x86 instructions
-			// and packed operations available with MMX/SSE extensions
-			methodCompilerPipeline.InsertAfterLast<PlatformStubStage>(
-				new IMethodCompilerStage[]
-				{
-					new LongOperandTransformationStage(),
-					new AddressModeConversionStage(),
-					new IRTransformationStage(),
-					new TweakTransformationStage(),
-					new MemToMemConversionStage(),
-				});
 
-			methodCompilerPipeline.InsertAfterLast<IBlockOrderStage>(
-				new SimplePeepholeOptimizationStage()
-			);
+			//methodCompilerPipeline.InsertAfterLast<PlatformStubStage>(
+			//    new IMethodCompilerStage[]
+			//    {
+			//        new LongOperandTransformationStage(),
+			//        new AddressModeConversionStage(),
+			//        new IRTransformationStage(),
+			//        new TweakTransformationStage(),
+			//        new MemToMemConversionStage(),
+			//    });
 
-			methodCompilerPipeline.InsertAfterLast<CodeGenerationStage>(
-				new ExceptionLayoutStage()
-			);
+			//methodCompilerPipeline.InsertAfterLast<IBlockOrderStage>(
+			//    new SimplePeepholeOptimizationStage()
+			//);
+
+			//methodCompilerPipeline.InsertAfterLast<CodeGenerationStage>(
+			//    new ExceptionLayoutStage()
+			//);
 		}
 
 		/// <summary>
@@ -182,10 +166,13 @@ namespace Mosa.Platform.x86
 		/// </returns>
 		public override ICallingConvention GetCallingConvention()
 		{
-			if (callingConvention == null)
-				callingConvention = new DefaultCallingConvention(this);
+			// TODO
+			return null;
 
-			return callingConvention;
+			//if (callingConvention == null)
+			//    callingConvention = new DefaultCallingConvention(this);
+
+			//return callingConvention;
 		}
 
 		/// <summary>
@@ -233,7 +220,9 @@ namespace Mosa.Platform.x86
 		/// <returns></returns>
 		public override IIntrinsicMethod GetIntrinsicMethod(Type type)
 		{
-			return Intrinsic.Method.Get(type);
+			// TODO
+			return null;
+			//return Intrinsic.Method.Get(type);
 		}
 
 		/// <summary>
@@ -242,7 +231,9 @@ namespace Mosa.Platform.x86
 		/// <returns></returns>
 		public override ICodeEmitter GetCodeEmitter()
 		{
-			return new MachineCodeEmitter();
+			// TODO
+			return null;
+			//return new MachineCodeEmitter();
 		}
 	}
 }

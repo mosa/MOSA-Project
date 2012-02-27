@@ -49,11 +49,6 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Determines if this register is caller saved.
-		/// </summary>
-		public abstract bool IsCallerSaved { get; }
-
-		/// <summary>
 		/// Determines if this is a floating point register.
 		/// </summary>
 		public abstract bool IsFloatingPoint { get; }
