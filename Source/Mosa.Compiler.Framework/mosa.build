@@ -217,7 +217,6 @@
                     <include name="Operands/StringOperand.cs"/>
                     <include name="ReverseBlockOrderStage.cs"/>
                     <include name="RuntimeMethodData.cs"/>
-                    <include name="StackRegisterAllocator.cs"/>
                     <include name="StrengthReductionStage.cs"/>
                     <include name="SimpleTraceBlockOrderStage.cs"/>
                     <include name="LoopAwareBlockOrderStage.cs"/>
@@ -253,7 +252,6 @@
                     <include name="IStackLayoutProvider.cs"/>
                     <include name="JitTrampolineAttribute.cs"/>
                     <include name="Operands/LabelOperand.cs"/>
-                    <include name="LinearRegisterAllocator.cs"/>
                     <include name="Operands/MemberOperand.cs"/>
                     <include name="Operands/MemoryOperand.cs"/>
                     <include name="BaseMethodCompiler.cs"/>
@@ -265,7 +263,6 @@
                     <include name="Register.cs"/>
                     <include name="Operands/RegisterOperand.cs"/>
                     <include name="RuntimeSupportAttribute.cs"/>
-                    <include name="SimpleRegisterAllocator.cs"/>
                     <include name="StackLayoutStage.cs"/>
                     <include name="Operands/StackOperand.cs"/>
                     <include name="StackTypeCode.cs"/>

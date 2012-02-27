@@ -14,8 +14,8 @@
 	<target name="build">
 	    <csc target="library" output="${outputDirectory}/Mosa.Utility.BootImage.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
-                    <include name="BootImageOptions.cs"/>
-                    <include name="BootImageCreator.cs"/>
+                    <include name="Options.cs"/>
+                    <include name="Generator.cs"/>
                     <include name="IncludeFile.cs"/>
 		</sources>
 		<references>
