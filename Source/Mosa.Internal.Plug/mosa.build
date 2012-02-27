@@ -12,11 +12,11 @@
 	
 	<!-- Main build target -->
 	<target name="build">
-	    <csc target="library" output="${outputDirectory}/Mosa.Platform.x86.Intrinsic.dll" debug="${debug}" unsafe="true" nostdlib="false">
+	    <csc target="library" output="${outputDirectory}/Mosa.Internal.Plug.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
-                    <include name="XSharp.cs"/>
-                    <include name="DelegateStub.cs"/>
-                    <include name="Native.cs"/>
+                    <include name="PlugFieldAttribute.cs"/>
+                    <include name="PlugMethodAttribute.cs"/>
+                    <include name="PlugTypeAttribute.cs"/>
 		</sources>
 		<references>
                     <include name="${outputDirectory}/mscorlib.dll"/>
