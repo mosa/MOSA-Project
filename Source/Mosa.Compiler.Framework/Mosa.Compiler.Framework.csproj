@@ -265,7 +265,6 @@
     <Compile Include="Operands\StringOperand.cs" />
     <Compile Include="ReverseBlockOrderStage.cs" />
     <Compile Include="RuntimeMethodData.cs" />
-    <Compile Include="StackRegisterAllocator.cs" />
     <Compile Include="StrengthReductionStage.cs" />
     <Compile Include="SimpleTraceBlockOrderStage.cs" />
     <Compile Include="LoopAwareBlockOrderStage.cs" />
@@ -351,9 +350,6 @@
     <Compile Include="Operands\LabelOperand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="LinearRegisterAllocator.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Operands\MemberOperand.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -385,9 +381,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="RuntimeSupportAttribute.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="SimpleRegisterAllocator.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="StackLayoutStage.cs">
