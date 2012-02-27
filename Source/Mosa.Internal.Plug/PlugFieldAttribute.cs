@@ -9,7 +9,7 @@
 
 using System;
 
-namespace Mosa.Internal
+namespace Mosa.Internal.Plug
 {
 	[AttributeUsage(AttributeTargets.Parameter, AllowMultiple = false)]
 	public sealed class PlugFieldAttribute : Attribute

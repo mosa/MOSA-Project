@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-using Mosa.Internal;
+using Mosa.Internal.Plug;
 
 namespace Mosa.HelloWorld.Tests
 {

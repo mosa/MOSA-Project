@@ -41,12 +41,15 @@ namespace Mosa.Compiler.Framework
 			base.Setup(compiler);
 			this.linker = RetrieveAssemblyLinkerFromCompiler();
 
-			plugTypeAttribute = typeSystem.GetType("Mosa.Internal", "PlugTypeAttribute");
-			plugMethodAttribute = typeSystem.GetType("Mosa.Internal", "PlugMethodAttribute");
+			plugTypeAttribute = typeSystem.GetType("Mosa.Internal.Plug", "Mosa.Internal.Plug", "PlugTypeAttribute");
+			plugMethodAttribute = typeSystem.GetType("Mosa.Internal.Plug", "Mosa.Internal.Plug", "PlugMethodAttribute");
 		}
 
 		void IAssemblyCompilerStage.Run()
 		{
+			if (plugTypeAttribute == null | plugMethodAttribute == null)
+				return;
+
 			foreach (RuntimeType type in this.typeSystem.GetAllTypes())
 			{
 				string plugTypeTarget = null;

@@ -56,9 +56,6 @@
     </NoWarn>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Mosa.Internal\PlugFieldAttribute.cs" />
-    <Compile Include="Mosa.Internal\PlugMethodAttribute.cs" />
-    <Compile Include="Mosa.Internal\PlugTypeAttribute.cs" />
     <Compile Include="System.Diagnostics\DebuggerHiddenAttribute.cs" />
     <Compile Include="System.Reflection\Assembly.cs" />
     <Compile Include="System.Reflection\MemberInfo.cs" />
