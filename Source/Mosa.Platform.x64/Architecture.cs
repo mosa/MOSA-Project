@@ -48,7 +48,7 @@ namespace Mosa.Platform.x64
 		/// <param name="architectureFeatures">The features this architecture supports.</param>
 		private Architecture(ArchitectureFeatureFlags architectureFeatures)
 		{
-			architectureFeatures = architectureFeatures;
+			this.architectureFeatures = architectureFeatures;
 		}
 
 		/// <summary>
@@ -167,12 +167,10 @@ namespace Mosa.Platform.x64
 		public override ICallingConvention GetCallingConvention()
 		{
 			// TODO
-			return null;
+			if (callingConvention == null)
+				callingConvention = null; // new DefaultCallingConvention(this);
 
-			//if (callingConvention == null)
-			//    callingConvention = new DefaultCallingConvention(this);
-
-			//return callingConvention;
+			return callingConvention;
 		}
 
 		/// <summary>

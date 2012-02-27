@@ -69,7 +69,7 @@ namespace Mosa.Platform.x86
 		/// <param name="architectureFeatures">The features this architecture supports.</param>
 		private Architecture(ArchitectureFeatureFlags architectureFeatures)
 		{
-			architectureFeatures = architectureFeatures;
+			this.architectureFeatures = architectureFeatures;
 		}
 
 		/// <summary>
