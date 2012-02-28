@@ -139,15 +139,15 @@ namespace Mosa.Platform.AVR32
 		public override void ExtendMethodCompilerPipeline(CompilerPipeline methodCompilerPipeline)
 		{
 
-			//methodCompilerPipeline.InsertAfterLast<PlatformStubStage>(
-			//    new IMethodCompilerStage[]
-			//    {
-			//        new LongOperandTransformationStage(),
-			//        new AddressModeConversionStage(),
-			//        new IRTransformationStage(),
-			//        new TweakTransformationStage(),
-			//        new MemToMemConversionStage(),
-			//    });
+			methodCompilerPipeline.InsertAfterLast<PlatformStubStage>(
+				new IMethodCompilerStage[]
+			    {
+					//new LongOperandTransformationStage(),
+					//new AddressModeConversionStage(),
+			        new IRTransformationStage(),
+					//new TweakTransformationStage(),
+					//new MemToMemConversionStage(),
+			    });
 
 			//methodCompilerPipeline.InsertAfterLast<IBlockOrderStage>(
 			//    new SimplePeepholeOptimizationStage()

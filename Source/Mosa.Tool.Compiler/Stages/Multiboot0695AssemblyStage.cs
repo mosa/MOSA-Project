@@ -16,7 +16,7 @@ using Mosa.Compiler.Framework.Operands;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Platform.x86;
-using CPUx86 = Mosa.Platform.x86.CPUx86;
+using CPUx86 = Mosa.Platform.x86.OpCodes;
 
 namespace Mosa.Tool.Compiler.Stages
 {

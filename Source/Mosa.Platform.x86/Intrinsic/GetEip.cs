@@ -34,11 +34,11 @@ namespace Mosa.Platform.x86.Intrinsic
 			SigType u4 = BuiltInSigType.UInt32;
 			RegisterOperand eax = new RegisterOperand(u4, GeneralPurposeRegister.EAX);
 
-			context.SetInstruction(CPUx86.Instruction.PopInstruction, eax);
-			context.AppendInstruction(CPUx86.Instruction.AddInstruction, eax, new RegisterOperand(u4, GeneralPurposeRegister.ESP));
-			context.AppendInstruction(CPUx86.Instruction.MovInstruction, eax, new MemoryOperand(u4, GeneralPurposeRegister.EAX, new IntPtr(0)));
-			context.AppendInstruction(CPUx86.Instruction.MovInstruction, result, eax);
-			context.AppendInstruction(CPUx86.Instruction.PushInstruction, null, eax);
+			context.SetInstruction(OpCodes.Instruction.PopInstruction, eax);
+			context.AppendInstruction(OpCodes.Instruction.AddInstruction, eax, new RegisterOperand(u4, GeneralPurposeRegister.ESP));
+			context.AppendInstruction(OpCodes.Instruction.MovInstruction, eax, new MemoryOperand(u4, GeneralPurposeRegister.EAX, new IntPtr(0)));
+			context.AppendInstruction(OpCodes.Instruction.MovInstruction, result, eax);
+			context.AppendInstruction(OpCodes.Instruction.PushInstruction, null, eax);
 		}
 
 		#endregion // Methods

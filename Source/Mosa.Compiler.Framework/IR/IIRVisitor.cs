@@ -76,12 +76,6 @@ namespace Mosa.Compiler.Framework.IR
 		void JmpInstruction(Context context);
 
 		/// <summary>
-		/// Visitation function for LiteralInstruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void LiteralInstruction(Context context);
-
-		/// <summary>
 		/// Visitation function for LoadInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>

@@ -129,12 +129,12 @@ namespace Mosa.Platform.x86
 			SplitLongOperand(context.Operand2, out op2L, out op2H);
 			SplitLongOperand(context.Result, out resL, out resH);
 
-			context.SetInstruction(CPUx86.Instruction.MovInstruction, eaxL, op1L);
-			context.AppendInstruction(CPUx86.Instruction.AddInstruction, eaxL, op2L);
-			context.AppendInstruction(CPUx86.Instruction.MovInstruction, resL, eaxL);
-			context.AppendInstruction(CPUx86.Instruction.MovInstruction, eaxH, op1H);
-			context.AppendInstruction(CPUx86.Instruction.AdcInstruction, eaxH, op2H);
-			context.AppendInstruction(CPUx86.Instruction.MovInstruction, resH, eaxH);
+			context.SetInstruction(OpCodes.Instruction.MovInstruction, eaxL, op1L);
+			context.AppendInstruction(OpCodes.Instruction.AddInstruction, eaxL, op2L);
+			context.AppendInstruction(OpCodes.Instruction.MovInstruction, resL, eaxL);
+			context.AppendInstruction(OpCodes.Instruction.MovInstruction, eaxH, op1H);
+			context.AppendInstruction(OpCodes.Instruction.AdcInstruction, eaxH, op2H);
+			context.AppendInstruction(OpCodes.Instruction.MovInstruction, resH, eaxH);
 		}
 
 		/// <summary>
@@ -165,12 +165,12 @@ namespace Mosa.Platform.x86
 			SplitLongOperand(context.Operand2, out op2L, out op2H);
 			SplitLongOperand(context.Result, out resL, out resH);
 
-			context.SetInstruction(CPUx86.Instruction.MovInstruction, eaxL, op1L);
-			context.AppendInstruction(CPUx86.Instruction.SubInstruction, eaxL, op2L);
-			context.AppendInstruction(CPUx86.Instruction.MovInstruction, resL, eaxL);
-			context.AppendInstruction(CPUx86.Instruction.MovInstruction, eaxH, op1H);
-			context.AppendInstruction(CPUx86.Instruction.SbbInstruction, eaxH, op2H);
-			context.AppendInstruction(CPUx86.Instruction.MovInstruction, resH, eaxH);
+			context.SetInstruction(OpCodes.Instruction.MovInstruction, eaxL, op1L);
+			context.AppendInstruction(OpCodes.Instruction.SubInstruction, eaxL, op2L);
+			context.AppendInstruction(OpCodes.Instruction.MovInstruction, resL, eaxL);
+			context.AppendInstruction(OpCodes.Instruction.MovInstruction, eaxH, op1H);
+			context.AppendInstruction(OpCodes.Instruction.SbbInstruction, eaxH, op2H);
+			context.AppendInstruction(OpCodes.Instruction.MovInstruction, resH, eaxH);
 		}
 
 		/// <summary>
@@ -198,38 +198,38 @@ namespace Mosa.Platform.x86
 			Context nextBlock = SplitContext(context, false);
 			Context[] newBlocks = CreateEmptyBlockContexts(context.Label, 4);
 
-			context.SetInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[0].BasicBlock);
+			context.SetInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[0].BasicBlock);
 			LinkBlocks(context, newBlocks[0]);
 
-			newBlocks[0].SetInstruction(CPUx86.Instruction.MovInstruction, eax, op1H);
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.MovInstruction, ecx, op2H);
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.OrInstruction, ecx, eax);
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.MovInstruction, ecx, op2L);
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.NotEqual, newBlocks[2].BasicBlock);
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[1].BasicBlock);
+			newBlocks[0].SetInstruction(OpCodes.Instruction.MovInstruction, eax, op1H);
+			newBlocks[0].AppendInstruction(OpCodes.Instruction.MovInstruction, ecx, op2H);
+			newBlocks[0].AppendInstruction(OpCodes.Instruction.OrInstruction, ecx, eax);
+			newBlocks[0].AppendInstruction(OpCodes.Instruction.MovInstruction, ecx, op2L);
+			newBlocks[0].AppendInstruction(OpCodes.Instruction.BranchInstruction, IR.ConditionCode.NotEqual, newBlocks[2].BasicBlock);
+			newBlocks[0].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[1].BasicBlock);
 			LinkBlocks(newBlocks[0], newBlocks[1], newBlocks[2]);
 
-			newBlocks[1].AppendInstruction(CPUx86.Instruction.MovInstruction, eax, op1L);
-			newBlocks[1].AppendInstruction(CPUx86.Instruction.MulInstruction, null, ecx);
-			newBlocks[1].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[3].BasicBlock);
+			newBlocks[1].AppendInstruction(OpCodes.Instruction.MovInstruction, eax, op1L);
+			newBlocks[1].AppendInstruction(OpCodes.Instruction.MulInstruction, null, ecx);
+			newBlocks[1].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[3].BasicBlock);
 			LinkBlocks(newBlocks[1], newBlocks[3]);
 
-			newBlocks[2].AppendInstruction(CPUx86.Instruction.PushInstruction, null, ebx);
-			newBlocks[2].AppendInstruction(CPUx86.Instruction.MulInstruction, null, ecx);
-			newBlocks[2].AppendInstruction(CPUx86.Instruction.MovInstruction, ebx, eax);
-			newBlocks[2].AppendInstruction(CPUx86.Instruction.MovInstruction, eax, op1L);
-			newBlocks[2].AppendInstruction(CPUx86.Instruction.MulInstruction, null, op2H);
-			newBlocks[2].AppendInstruction(CPUx86.Instruction.AddInstruction, ebx, eax);
-			newBlocks[2].AppendInstruction(CPUx86.Instruction.MovInstruction, eax, op1L);
-			newBlocks[2].AppendInstruction(CPUx86.Instruction.MulInstruction, null, ecx);
-			newBlocks[2].AppendInstruction(CPUx86.Instruction.AddInstruction, edx, ebx);
-			newBlocks[2].AppendInstruction(CPUx86.Instruction.PopInstruction, ebx);
-			newBlocks[2].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[3].BasicBlock);
+			newBlocks[2].AppendInstruction(OpCodes.Instruction.PushInstruction, null, ebx);
+			newBlocks[2].AppendInstruction(OpCodes.Instruction.MulInstruction, null, ecx);
+			newBlocks[2].AppendInstruction(OpCodes.Instruction.MovInstruction, ebx, eax);
+			newBlocks[2].AppendInstruction(OpCodes.Instruction.MovInstruction, eax, op1L);
+			newBlocks[2].AppendInstruction(OpCodes.Instruction.MulInstruction, null, op2H);
+			newBlocks[2].AppendInstruction(OpCodes.Instruction.AddInstruction, ebx, eax);
+			newBlocks[2].AppendInstruction(OpCodes.Instruction.MovInstruction, eax, op1L);
+			newBlocks[2].AppendInstruction(OpCodes.Instruction.MulInstruction, null, ecx);
+			newBlocks[2].AppendInstruction(OpCodes.Instruction.AddInstruction, edx, ebx);
+			newBlocks[2].AppendInstruction(OpCodes.Instruction.PopInstruction, ebx);
+			newBlocks[2].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[3].BasicBlock);
 			LinkBlocks(newBlocks[2], newBlocks[3]);
 
-			newBlocks[3].AppendInstruction(CPUx86.Instruction.MovInstruction, op0L, eax);
-			newBlocks[3].AppendInstruction(CPUx86.Instruction.MovInstruction, op0H, edx);
-			newBlocks[3].AppendInstruction(CPUx86.Instruction.JmpInstruction, nextBlock.BasicBlock);
+			newBlocks[3].AppendInstruction(OpCodes.Instruction.MovInstruction, op0L, eax);
+			newBlocks[3].AppendInstruction(OpCodes.Instruction.MovInstruction, op0H, edx);
+			newBlocks[3].AppendInstruction(OpCodes.Instruction.JmpInstruction, nextBlock.BasicBlock);
 			LinkBlocks(newBlocks[2], nextBlock);
 		}
 
@@ -281,26 +281,26 @@ namespace Mosa.Platform.x86
 			// sbb     eax,0
 			// mov     HIWORD(DVND),eax ; save positive value
 			// mov     LOWORD(DVND),edx
-			context.SetInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[0].BasicBlock);
+			context.SetInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[0].BasicBlock);
 			LinkBlocks(context, newBlocks[0]);
-			newBlocks[0].SetInstruction(CPUx86.Instruction.PushInstruction, null, edi);
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.PushInstruction, null, esi);
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.PushInstruction, null, ebx);
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.XorInstruction, edi, edi);
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.MovInstruction, eax, op1H);
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.OrInstruction, eax, eax);
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.GreaterOrEqual, newBlocks[2].BasicBlock);
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[1].BasicBlock);
+			newBlocks[0].SetInstruction(OpCodes.Instruction.PushInstruction, null, edi);
+			newBlocks[0].AppendInstruction(OpCodes.Instruction.PushInstruction, null, esi);
+			newBlocks[0].AppendInstruction(OpCodes.Instruction.PushInstruction, null, ebx);
+			newBlocks[0].AppendInstruction(OpCodes.Instruction.XorInstruction, edi, edi);
+			newBlocks[0].AppendInstruction(OpCodes.Instruction.MovInstruction, eax, op1H);
+			newBlocks[0].AppendInstruction(OpCodes.Instruction.OrInstruction, eax, eax);
+			newBlocks[0].AppendInstruction(OpCodes.Instruction.BranchInstruction, IR.ConditionCode.GreaterOrEqual, newBlocks[2].BasicBlock);
+			newBlocks[0].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[1].BasicBlock);
 			LinkBlocks(newBlocks[0], newBlocks[1], newBlocks[2]);
 
-			newBlocks[1].SetInstruction(CPUx86.Instruction.IncInstruction, edi);
-			newBlocks[1].AppendInstruction(CPUx86.Instruction.MovInstruction, uedx, op1L);
-			newBlocks[1].AppendInstruction(CPUx86.Instruction.NegInstruction, eax);
-			newBlocks[1].AppendInstruction(CPUx86.Instruction.NegInstruction, edx);
-			newBlocks[1].AppendInstruction(CPUx86.Instruction.SbbInstruction, eax, new ConstantOperand(I4, 0));
-			newBlocks[1].AppendInstruction(CPUx86.Instruction.MovInstruction, op1H, eax);
-			newBlocks[1].AppendInstruction(CPUx86.Instruction.MovInstruction, op1L, uedx);
-			newBlocks[1].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[2].BasicBlock);
+			newBlocks[1].SetInstruction(OpCodes.Instruction.IncInstruction, edi);
+			newBlocks[1].AppendInstruction(OpCodes.Instruction.MovInstruction, uedx, op1L);
+			newBlocks[1].AppendInstruction(OpCodes.Instruction.NegInstruction, eax);
+			newBlocks[1].AppendInstruction(OpCodes.Instruction.NegInstruction, edx);
+			newBlocks[1].AppendInstruction(OpCodes.Instruction.SbbInstruction, eax, new ConstantOperand(I4, 0));
+			newBlocks[1].AppendInstruction(OpCodes.Instruction.MovInstruction, op1H, eax);
+			newBlocks[1].AppendInstruction(OpCodes.Instruction.MovInstruction, op1L, uedx);
+			newBlocks[1].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[2].BasicBlock);
 			LinkBlocks(newBlocks[1], newBlocks[2]);
 
 			// L1:
@@ -315,20 +315,20 @@ namespace Mosa.Platform.x86
 			// sbb     eax,0
 			// mov     HIWORD(DVSR),eax ; save positive value
 			// mov     LOWORD(DVSR),edx
-			newBlocks[2].SetInstruction(CPUx86.Instruction.MovInstruction, eax, op2H);
-			newBlocks[2].AppendInstruction(CPUx86.Instruction.OrInstruction, eax, eax);
-			newBlocks[2].AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.GreaterOrEqual, newBlocks[4].BasicBlock);
-			newBlocks[2].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[3].BasicBlock);
+			newBlocks[2].SetInstruction(OpCodes.Instruction.MovInstruction, eax, op2H);
+			newBlocks[2].AppendInstruction(OpCodes.Instruction.OrInstruction, eax, eax);
+			newBlocks[2].AppendInstruction(OpCodes.Instruction.BranchInstruction, IR.ConditionCode.GreaterOrEqual, newBlocks[4].BasicBlock);
+			newBlocks[2].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[3].BasicBlock);
 			LinkBlocks(newBlocks[2], newBlocks[3], newBlocks[4]);
 
-			newBlocks[3].SetInstruction(CPUx86.Instruction.IncInstruction, edi);
-			newBlocks[3].AppendInstruction(CPUx86.Instruction.MovInstruction, uedx, op2L);
-			newBlocks[3].AppendInstruction(CPUx86.Instruction.NegInstruction, eax);
-			newBlocks[3].AppendInstruction(CPUx86.Instruction.NegInstruction, edx);
-			newBlocks[3].AppendInstruction(CPUx86.Instruction.SbbInstruction, eax, new ConstantOperand(I4, 0));
-			newBlocks[3].AppendInstruction(CPUx86.Instruction.MovInstruction, op2H, eax);
-			newBlocks[3].AppendInstruction(CPUx86.Instruction.MovInstruction, op2L, uedx);
-			newBlocks[3].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[4].BasicBlock);
+			newBlocks[3].SetInstruction(OpCodes.Instruction.IncInstruction, edi);
+			newBlocks[3].AppendInstruction(OpCodes.Instruction.MovInstruction, uedx, op2L);
+			newBlocks[3].AppendInstruction(OpCodes.Instruction.NegInstruction, eax);
+			newBlocks[3].AppendInstruction(OpCodes.Instruction.NegInstruction, edx);
+			newBlocks[3].AppendInstruction(OpCodes.Instruction.SbbInstruction, eax, new ConstantOperand(I4, 0));
+			newBlocks[3].AppendInstruction(OpCodes.Instruction.MovInstruction, op2H, eax);
+			newBlocks[3].AppendInstruction(OpCodes.Instruction.MovInstruction, op2L, uedx);
+			newBlocks[3].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[4].BasicBlock);
 			LinkBlocks(newBlocks[3], newBlocks[4]);
 
 			// L2:
@@ -352,20 +352,20 @@ namespace Mosa.Platform.x86
 			// div     ecx             ; eax <- low order bits of quotient
 			// mov     edx,ebx         ; edx:eax <- quotient
 			// jmp     short L4        ; set sign, restore stack and return
-			newBlocks[4].SetInstruction(CPUx86.Instruction.OrInstruction, eax, eax);
-			newBlocks[4].AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.NotEqual, newBlocks[6].BasicBlock);
-			newBlocks[4].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[5].BasicBlock);
+			newBlocks[4].SetInstruction(OpCodes.Instruction.OrInstruction, eax, eax);
+			newBlocks[4].AppendInstruction(OpCodes.Instruction.BranchInstruction, IR.ConditionCode.NotEqual, newBlocks[6].BasicBlock);
+			newBlocks[4].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[5].BasicBlock);
 			LinkBlocks(newBlocks[4], newBlocks[5], newBlocks[6]);
 
-			newBlocks[5].SetInstruction(CPUx86.Instruction.MovInstruction, uecx, op2L);
-			newBlocks[5].AppendInstruction(CPUx86.Instruction.MovInstruction, eax, op1H);
-			newBlocks[5].AppendInstruction(CPUx86.Instruction.XorInstruction, edx, edx);
-			newBlocks[5].AppendInstruction(CPUx86.Instruction.DirectDivisionInstruction, eax, ecx);
-			newBlocks[5].AppendInstruction(CPUx86.Instruction.MovInstruction, ebx, eax);
-			newBlocks[5].AppendInstruction(CPUx86.Instruction.MovInstruction, ueax, op1L);
-			newBlocks[5].AppendInstruction(CPUx86.Instruction.DirectDivisionInstruction, eax, ecx);
-			newBlocks[5].AppendInstruction(CPUx86.Instruction.MovInstruction, edx, ebx);
-			newBlocks[5].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[14].BasicBlock);
+			newBlocks[5].SetInstruction(OpCodes.Instruction.MovInstruction, uecx, op2L);
+			newBlocks[5].AppendInstruction(OpCodes.Instruction.MovInstruction, eax, op1H);
+			newBlocks[5].AppendInstruction(OpCodes.Instruction.XorInstruction, edx, edx);
+			newBlocks[5].AppendInstruction(OpCodes.Instruction.DirectDivisionInstruction, eax, ecx);
+			newBlocks[5].AppendInstruction(OpCodes.Instruction.MovInstruction, ebx, eax);
+			newBlocks[5].AppendInstruction(OpCodes.Instruction.MovInstruction, ueax, op1L);
+			newBlocks[5].AppendInstruction(OpCodes.Instruction.DirectDivisionInstruction, eax, ecx);
+			newBlocks[5].AppendInstruction(OpCodes.Instruction.MovInstruction, edx, ebx);
+			newBlocks[5].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[14].BasicBlock);
 			LinkBlocks(newBlocks[5], newBlocks[14]);
 
 			// Here we do it the hard way.  Remember, eax contains the high word of DVSR
@@ -375,11 +375,11 @@ namespace Mosa.Platform.x86
 			//        mov     ecx,LOWORD(DVSR)
 			//        mov     edx,HIWORD(DVND) ; edx:eax <- dividend
 			//        mov     eax,LOWORD(DVND)
-			newBlocks[6].SetInstruction(CPUx86.Instruction.MovInstruction, ebx, eax);
-			newBlocks[6].AppendInstruction(CPUx86.Instruction.MovInstruction, uecx, op2L);
-			newBlocks[6].AppendInstruction(CPUx86.Instruction.MovInstruction, edx, op1H);
-			newBlocks[6].AppendInstruction(CPUx86.Instruction.MovInstruction, ueax, op1L);
-			newBlocks[6].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[7].BasicBlock);
+			newBlocks[6].SetInstruction(OpCodes.Instruction.MovInstruction, ebx, eax);
+			newBlocks[6].AppendInstruction(OpCodes.Instruction.MovInstruction, uecx, op2L);
+			newBlocks[6].AppendInstruction(OpCodes.Instruction.MovInstruction, edx, op1H);
+			newBlocks[6].AppendInstruction(OpCodes.Instruction.MovInstruction, ueax, op1L);
+			newBlocks[6].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[7].BasicBlock);
 			LinkBlocks(newBlocks[6], newBlocks[7]);
 
 			// L5:
@@ -408,49 +408,49 @@ namespace Mosa.Platform.x86
 			// mul     esi             ; QUOT * LOWORD(DVSR)
 			// add     edx,ecx         ; EDX:EAX = QUOT * DVSR
 			// jc      short L6        ; carry means Quotient is off by 1
-			newBlocks[7].SetInstruction(CPUx86.Instruction.ShrInstruction, ebx, new ConstantOperand(U1, 1));
-			newBlocks[7].AppendInstruction(CPUx86.Instruction.RcrInstruction, ecx, new ConstantOperand(U1, 1)); // RCR
-			newBlocks[7].AppendInstruction(CPUx86.Instruction.ShrInstruction, edx, new ConstantOperand(U1, 1));
-			newBlocks[7].AppendInstruction(CPUx86.Instruction.RcrInstruction, eax, new ConstantOperand(U1, 1));
-			newBlocks[7].AppendInstruction(CPUx86.Instruction.OrInstruction, ebx, ebx);
-			newBlocks[7].AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.NotEqual, newBlocks[7].BasicBlock);
-			newBlocks[7].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[8].BasicBlock);
+			newBlocks[7].SetInstruction(OpCodes.Instruction.ShrInstruction, ebx, new ConstantOperand(U1, 1));
+			newBlocks[7].AppendInstruction(OpCodes.Instruction.RcrInstruction, ecx, new ConstantOperand(U1, 1)); // RCR
+			newBlocks[7].AppendInstruction(OpCodes.Instruction.ShrInstruction, edx, new ConstantOperand(U1, 1));
+			newBlocks[7].AppendInstruction(OpCodes.Instruction.RcrInstruction, eax, new ConstantOperand(U1, 1));
+			newBlocks[7].AppendInstruction(OpCodes.Instruction.OrInstruction, ebx, ebx);
+			newBlocks[7].AppendInstruction(OpCodes.Instruction.BranchInstruction, IR.ConditionCode.NotEqual, newBlocks[7].BasicBlock);
+			newBlocks[7].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[8].BasicBlock);
 			LinkBlocks(newBlocks[7], newBlocks[7], newBlocks[8]);
 
-			newBlocks[8].SetInstruction(CPUx86.Instruction.DirectDivisionInstruction, eax, ecx);
-			newBlocks[8].AppendInstruction(CPUx86.Instruction.MovInstruction, esi, eax);
-			newBlocks[8].AppendInstruction(CPUx86.Instruction.MulInstruction, null, op2H);
-			newBlocks[8].AppendInstruction(CPUx86.Instruction.MovInstruction, ecx, eax);
-			newBlocks[8].AppendInstruction(CPUx86.Instruction.MovInstruction, ueax, op2L);
-			newBlocks[8].AppendInstruction(CPUx86.Instruction.MulInstruction, null, esi);
-			newBlocks[8].AppendInstruction(CPUx86.Instruction.AddInstruction, edx, ecx);
-			newBlocks[8].AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.UnsignedLessThan, newBlocks[12].BasicBlock);
-			newBlocks[8].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[9].BasicBlock);
+			newBlocks[8].SetInstruction(OpCodes.Instruction.DirectDivisionInstruction, eax, ecx);
+			newBlocks[8].AppendInstruction(OpCodes.Instruction.MovInstruction, esi, eax);
+			newBlocks[8].AppendInstruction(OpCodes.Instruction.MulInstruction, null, op2H);
+			newBlocks[8].AppendInstruction(OpCodes.Instruction.MovInstruction, ecx, eax);
+			newBlocks[8].AppendInstruction(OpCodes.Instruction.MovInstruction, ueax, op2L);
+			newBlocks[8].AppendInstruction(OpCodes.Instruction.MulInstruction, null, esi);
+			newBlocks[8].AppendInstruction(OpCodes.Instruction.AddInstruction, edx, ecx);
+			newBlocks[8].AppendInstruction(OpCodes.Instruction.BranchInstruction, IR.ConditionCode.UnsignedLessThan, newBlocks[12].BasicBlock);
+			newBlocks[8].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[9].BasicBlock);
 			LinkBlocks(newBlocks[8], newBlocks[9], newBlocks[12]);
 
-			newBlocks[9].SetInstruction(CPUx86.Instruction.DirectCompareInstruction, edx, op1H);
-			newBlocks[9].AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.UnsignedGreaterThan, newBlocks[12].BasicBlock);
-			newBlocks[9].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[10].BasicBlock);
+			newBlocks[9].SetInstruction(OpCodes.Instruction.DirectCompareInstruction, edx, op1H);
+			newBlocks[9].AppendInstruction(OpCodes.Instruction.BranchInstruction, IR.ConditionCode.UnsignedGreaterThan, newBlocks[12].BasicBlock);
+			newBlocks[9].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[10].BasicBlock);
 			LinkBlocks(newBlocks[9], newBlocks[10], newBlocks[12]);
 
-			newBlocks[10].SetInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.UnsignedLessThan, newBlocks[13].BasicBlock);
-			newBlocks[10].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[11].BasicBlock);
+			newBlocks[10].SetInstruction(OpCodes.Instruction.BranchInstruction, IR.ConditionCode.UnsignedLessThan, newBlocks[13].BasicBlock);
+			newBlocks[10].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[11].BasicBlock);
 			LinkBlocks(newBlocks[10], newBlocks[11], newBlocks[13]);
 
-			newBlocks[11].SetInstruction(CPUx86.Instruction.DirectCompareInstruction, ueax, op1L);
-			newBlocks[11].AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.UnsignedLessOrEqual, newBlocks[13].BasicBlock);
-			newBlocks[11].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[12].BasicBlock);
+			newBlocks[11].SetInstruction(OpCodes.Instruction.DirectCompareInstruction, ueax, op1L);
+			newBlocks[11].AppendInstruction(OpCodes.Instruction.BranchInstruction, IR.ConditionCode.UnsignedLessOrEqual, newBlocks[13].BasicBlock);
+			newBlocks[11].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[12].BasicBlock);
 			LinkBlocks(newBlocks[11], newBlocks[12], newBlocks[13]);
 
 			// L6:
-			newBlocks[12].SetInstruction(CPUx86.Instruction.DecInstruction, esi);
-			newBlocks[12].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[13].BasicBlock);
+			newBlocks[12].SetInstruction(OpCodes.Instruction.DecInstruction, esi);
+			newBlocks[12].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[13].BasicBlock);
 			LinkBlocks(newBlocks[12], newBlocks[13]);
 
 			// L7:
-			newBlocks[13].SetInstruction(CPUx86.Instruction.XorInstruction, edx, edx);
-			newBlocks[13].AppendInstruction(CPUx86.Instruction.MovInstruction, eax, esi);
-			newBlocks[13].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[14].BasicBlock);
+			newBlocks[13].SetInstruction(OpCodes.Instruction.XorInstruction, edx, edx);
+			newBlocks[13].AppendInstruction(OpCodes.Instruction.MovInstruction, eax, esi);
+			newBlocks[13].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[14].BasicBlock);
 			LinkBlocks(newBlocks[13], newBlocks[14]);
 
 			;
@@ -463,23 +463,23 @@ namespace Mosa.Platform.x86
 			//        neg     edx             ; otherwise, negate the result
 			//        neg     eax
 			//        sbb     edx,0
-			newBlocks[14].SetInstruction(CPUx86.Instruction.DecInstruction, edi);
-			newBlocks[14].AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.NotEqual, newBlocks[16].BasicBlock);
-			newBlocks[14].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[15].BasicBlock);
+			newBlocks[14].SetInstruction(OpCodes.Instruction.DecInstruction, edi);
+			newBlocks[14].AppendInstruction(OpCodes.Instruction.BranchInstruction, IR.ConditionCode.NotEqual, newBlocks[16].BasicBlock);
+			newBlocks[14].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[15].BasicBlock);
 			LinkBlocks(newBlocks[14], newBlocks[15], newBlocks[16]);
 
-			newBlocks[15].SetInstruction(CPUx86.Instruction.NegInstruction, edx);
-			newBlocks[15].AppendInstruction(CPUx86.Instruction.NegInstruction, eax);
-			newBlocks[15].AppendInstruction(CPUx86.Instruction.SbbInstruction, edx, new ConstantOperand(I4, 0));
-			newBlocks[15].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[16].BasicBlock);
+			newBlocks[15].SetInstruction(OpCodes.Instruction.NegInstruction, edx);
+			newBlocks[15].AppendInstruction(OpCodes.Instruction.NegInstruction, eax);
+			newBlocks[15].AppendInstruction(OpCodes.Instruction.SbbInstruction, edx, new ConstantOperand(I4, 0));
+			newBlocks[15].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[16].BasicBlock);
 			LinkBlocks(newBlocks[15], newBlocks[16]);
 
-			newBlocks[16].SetInstruction(CPUx86.Instruction.MovInstruction, op0L, ueax);
-			newBlocks[16].AppendInstruction(CPUx86.Instruction.MovInstruction, op0H, edx);
-			newBlocks[16].AppendInstruction(CPUx86.Instruction.PopInstruction, ebx);
-			newBlocks[16].AppendInstruction(CPUx86.Instruction.PopInstruction, esi);
-			newBlocks[16].AppendInstruction(CPUx86.Instruction.PopInstruction, edi);
-			newBlocks[15].AppendInstruction(CPUx86.Instruction.JmpInstruction, nextBlock.BasicBlock);
+			newBlocks[16].SetInstruction(OpCodes.Instruction.MovInstruction, op0L, ueax);
+			newBlocks[16].AppendInstruction(OpCodes.Instruction.MovInstruction, op0H, edx);
+			newBlocks[16].AppendInstruction(OpCodes.Instruction.PopInstruction, ebx);
+			newBlocks[16].AppendInstruction(OpCodes.Instruction.PopInstruction, esi);
+			newBlocks[16].AppendInstruction(OpCodes.Instruction.PopInstruction, edi);
+			newBlocks[15].AppendInstruction(OpCodes.Instruction.JmpInstruction, nextBlock.BasicBlock);
 			LinkBlocks(newBlocks[16], nextBlock);
 		}
 
@@ -519,25 +519,25 @@ namespace Mosa.Platform.x86
 			//sbb     eax,0
 			//mov     HIWORD(DVND),eax ; save positive value
 			//mov     LOWORD(DVND),edx
-			context.SetInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[0].BasicBlock);
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.PushInstruction, null, edi);
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.PushInstruction, null, esi);
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.PushInstruction, null, ebx);
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.XorInstruction, edi, edi);
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.MovInstruction, eax, op1H);
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.OrInstruction, eax, eax);
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.GreaterOrEqual, newBlocks[2].BasicBlock);
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[1].BasicBlock);
+			context.SetInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[0].BasicBlock);
+			newBlocks[0].AppendInstruction(OpCodes.Instruction.PushInstruction, null, edi);
+			newBlocks[0].AppendInstruction(OpCodes.Instruction.PushInstruction, null, esi);
+			newBlocks[0].AppendInstruction(OpCodes.Instruction.PushInstruction, null, ebx);
+			newBlocks[0].AppendInstruction(OpCodes.Instruction.XorInstruction, edi, edi);
+			newBlocks[0].AppendInstruction(OpCodes.Instruction.MovInstruction, eax, op1H);
+			newBlocks[0].AppendInstruction(OpCodes.Instruction.OrInstruction, eax, eax);
+			newBlocks[0].AppendInstruction(OpCodes.Instruction.BranchInstruction, IR.ConditionCode.GreaterOrEqual, newBlocks[2].BasicBlock);
+			newBlocks[0].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[1].BasicBlock);
 			LinkBlocks(newBlocks[0], newBlocks[2], newBlocks[1]);
 
-			newBlocks[1].AppendInstruction(CPUx86.Instruction.IncInstruction, edi);
-			newBlocks[1].AppendInstruction(CPUx86.Instruction.MovInstruction, edx, op1L);
-			newBlocks[1].AppendInstruction(CPUx86.Instruction.NegInstruction, eax);
-			newBlocks[1].AppendInstruction(CPUx86.Instruction.NegInstruction, edx);
-			newBlocks[1].AppendInstruction(CPUx86.Instruction.SbbInstruction, eax, new ConstantOperand(I4, 0));
-			newBlocks[1].AppendInstruction(CPUx86.Instruction.MovInstruction, op1H, eax);
-			newBlocks[1].AppendInstruction(CPUx86.Instruction.MovInstruction, op1L, edx);
-			newBlocks[1].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[2].BasicBlock);
+			newBlocks[1].AppendInstruction(OpCodes.Instruction.IncInstruction, edi);
+			newBlocks[1].AppendInstruction(OpCodes.Instruction.MovInstruction, edx, op1L);
+			newBlocks[1].AppendInstruction(OpCodes.Instruction.NegInstruction, eax);
+			newBlocks[1].AppendInstruction(OpCodes.Instruction.NegInstruction, edx);
+			newBlocks[1].AppendInstruction(OpCodes.Instruction.SbbInstruction, eax, new ConstantOperand(I4, 0));
+			newBlocks[1].AppendInstruction(OpCodes.Instruction.MovInstruction, op1H, eax);
+			newBlocks[1].AppendInstruction(OpCodes.Instruction.MovInstruction, op1L, edx);
+			newBlocks[1].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[2].BasicBlock);
 			LinkBlocks(newBlocks[1], newBlocks[2]);
 
 			// L1:
@@ -551,19 +551,19 @@ namespace Mosa.Platform.x86
 			// sbb     eax,0
 			// mov     HIWORD(DVSR),eax ; save positive value
 			// mov     LOWORD(DVSR),edx
-			newBlocks[2].AppendInstruction(CPUx86.Instruction.MovInstruction, eax, op2H);
-			newBlocks[2].AppendInstruction(CPUx86.Instruction.OrInstruction, eax, eax);
-			newBlocks[2].AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.GreaterOrEqual, newBlocks[4].BasicBlock);
-			newBlocks[2].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[3].BasicBlock);
+			newBlocks[2].AppendInstruction(OpCodes.Instruction.MovInstruction, eax, op2H);
+			newBlocks[2].AppendInstruction(OpCodes.Instruction.OrInstruction, eax, eax);
+			newBlocks[2].AppendInstruction(OpCodes.Instruction.BranchInstruction, IR.ConditionCode.GreaterOrEqual, newBlocks[4].BasicBlock);
+			newBlocks[2].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[3].BasicBlock);
 			LinkBlocks(newBlocks[2], newBlocks[4], newBlocks[3]);
 
-			newBlocks[3].AppendInstruction(CPUx86.Instruction.MovInstruction, edx, op2L);
-			newBlocks[3].AppendInstruction(CPUx86.Instruction.NegInstruction, eax);
-			newBlocks[3].AppendInstruction(CPUx86.Instruction.NegInstruction, edx);
-			newBlocks[3].AppendInstruction(CPUx86.Instruction.SbbInstruction, eax, new ConstantOperand(I4, 0));
-			newBlocks[3].AppendInstruction(CPUx86.Instruction.MovInstruction, op2H, eax);
-			newBlocks[3].AppendInstruction(CPUx86.Instruction.MovInstruction, op2L, edx);
-			newBlocks[3].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[4].BasicBlock);
+			newBlocks[3].AppendInstruction(OpCodes.Instruction.MovInstruction, edx, op2L);
+			newBlocks[3].AppendInstruction(OpCodes.Instruction.NegInstruction, eax);
+			newBlocks[3].AppendInstruction(OpCodes.Instruction.NegInstruction, edx);
+			newBlocks[3].AppendInstruction(OpCodes.Instruction.SbbInstruction, eax, new ConstantOperand(I4, 0));
+			newBlocks[3].AppendInstruction(OpCodes.Instruction.MovInstruction, op2H, eax);
+			newBlocks[3].AppendInstruction(OpCodes.Instruction.MovInstruction, op2L, edx);
+			newBlocks[3].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[4].BasicBlock);
 			LinkBlocks(newBlocks[3], newBlocks[4]);
 
 			// L2:
@@ -586,22 +586,22 @@ namespace Mosa.Platform.x86
 			// div     ecx             ; eax <- low order bits of quotient
 			// mov     edx,ebx         ; edx:eax <- quotient
 			// jmp     short L4        ; set sign, restore stack and return
-			newBlocks[4].AppendInstruction(CPUx86.Instruction.OrInstruction, eax, eax);
-			newBlocks[4].AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.NotEqual, newBlocks[6].BasicBlock);
-			newBlocks[4].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[5].BasicBlock);
+			newBlocks[4].AppendInstruction(OpCodes.Instruction.OrInstruction, eax, eax);
+			newBlocks[4].AppendInstruction(OpCodes.Instruction.BranchInstruction, IR.ConditionCode.NotEqual, newBlocks[6].BasicBlock);
+			newBlocks[4].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[5].BasicBlock);
 			LinkBlocks(newBlocks[4], newBlocks[6], newBlocks[5]);
 
-			newBlocks[5].AppendInstruction(CPUx86.Instruction.MovInstruction, ecx, op2L);
-			newBlocks[5].AppendInstruction(CPUx86.Instruction.MovInstruction, eax, op1H);
-			newBlocks[5].AppendInstruction(CPUx86.Instruction.XorInstruction, edx, edx);
-			newBlocks[5].AppendInstruction(CPUx86.Instruction.DirectDivisionInstruction, eax, ecx);
-			newBlocks[5].AppendInstruction(CPUx86.Instruction.MovInstruction, eax, op1L);
-			newBlocks[5].AppendInstruction(CPUx86.Instruction.DirectDivisionInstruction, eax, ecx);
-			newBlocks[5].AppendInstruction(CPUx86.Instruction.MovInstruction, eax, edx);
-			newBlocks[5].AppendInstruction(CPUx86.Instruction.XorInstruction, edx, edx);
-			newBlocks[5].AppendInstruction(CPUx86.Instruction.DecInstruction, edi);
-			newBlocks[5].AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.NotSigned, newBlocks[14].BasicBlock);
-			newBlocks[5].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[15].BasicBlock);
+			newBlocks[5].AppendInstruction(OpCodes.Instruction.MovInstruction, ecx, op2L);
+			newBlocks[5].AppendInstruction(OpCodes.Instruction.MovInstruction, eax, op1H);
+			newBlocks[5].AppendInstruction(OpCodes.Instruction.XorInstruction, edx, edx);
+			newBlocks[5].AppendInstruction(OpCodes.Instruction.DirectDivisionInstruction, eax, ecx);
+			newBlocks[5].AppendInstruction(OpCodes.Instruction.MovInstruction, eax, op1L);
+			newBlocks[5].AppendInstruction(OpCodes.Instruction.DirectDivisionInstruction, eax, ecx);
+			newBlocks[5].AppendInstruction(OpCodes.Instruction.MovInstruction, eax, edx);
+			newBlocks[5].AppendInstruction(OpCodes.Instruction.XorInstruction, edx, edx);
+			newBlocks[5].AppendInstruction(OpCodes.Instruction.DecInstruction, edi);
+			newBlocks[5].AppendInstruction(OpCodes.Instruction.BranchInstruction, IR.ConditionCode.NotSigned, newBlocks[14].BasicBlock);
+			newBlocks[5].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[15].BasicBlock);
 			LinkBlocks(newBlocks[5], newBlocks[14], newBlocks[15]);
 
 			// Here we do it the hard way.  Remember, eax contains the high word of DVSR
@@ -611,11 +611,11 @@ namespace Mosa.Platform.x86
 			//        mov     ecx,LOWORD(DVSR)
 			//        mov     edx,HIWORD(DVND) ; edx:eax <- dividend
 			//        mov     eax,LOWORD(DVND)
-			newBlocks[6].AppendInstruction(CPUx86.Instruction.MovInstruction, ebx, eax);
-			newBlocks[6].AppendInstruction(CPUx86.Instruction.MovInstruction, ecx, op2L);
-			newBlocks[6].AppendInstruction(CPUx86.Instruction.MovInstruction, edx, op1H);
-			newBlocks[6].AppendInstruction(CPUx86.Instruction.MovInstruction, eax, op1L);
-			newBlocks[6].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[7].BasicBlock);
+			newBlocks[6].AppendInstruction(OpCodes.Instruction.MovInstruction, ebx, eax);
+			newBlocks[6].AppendInstruction(OpCodes.Instruction.MovInstruction, ecx, op2L);
+			newBlocks[6].AppendInstruction(OpCodes.Instruction.MovInstruction, edx, op1H);
+			newBlocks[6].AppendInstruction(OpCodes.Instruction.MovInstruction, eax, op1L);
+			newBlocks[6].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[7].BasicBlock);
 			LinkBlocks(newBlocks[6], newBlocks[7]);
 
 			// L5:
@@ -654,43 +654,43 @@ namespace Mosa.Platform.x86
 			//  cmp     eax,LOWORD(DVND) ; hi words are equal, compare lo words
 			//  jbe     short L7        ; if less or equal we are ok, else subtract
 
-			newBlocks[7].AppendInstruction(CPUx86.Instruction.ShrInstruction, ebx, new ConstantOperand(U1, 1));
-			newBlocks[7].AppendInstruction(CPUx86.Instruction.RcrInstruction, ecx, new ConstantOperand(U1, 1)); // RCR
-			newBlocks[7].AppendInstruction(CPUx86.Instruction.ShrInstruction, edx, new ConstantOperand(U1, 1));
-			newBlocks[7].AppendInstruction(CPUx86.Instruction.RcrInstruction, eax, new ConstantOperand(U1, 1));
-			newBlocks[7].AppendInstruction(CPUx86.Instruction.OrInstruction, ebx, ebx);
-			newBlocks[7].AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.NotEqual, newBlocks[7].BasicBlock);
-			newBlocks[7].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[8].BasicBlock);
+			newBlocks[7].AppendInstruction(OpCodes.Instruction.ShrInstruction, ebx, new ConstantOperand(U1, 1));
+			newBlocks[7].AppendInstruction(OpCodes.Instruction.RcrInstruction, ecx, new ConstantOperand(U1, 1)); // RCR
+			newBlocks[7].AppendInstruction(OpCodes.Instruction.ShrInstruction, edx, new ConstantOperand(U1, 1));
+			newBlocks[7].AppendInstruction(OpCodes.Instruction.RcrInstruction, eax, new ConstantOperand(U1, 1));
+			newBlocks[7].AppendInstruction(OpCodes.Instruction.OrInstruction, ebx, ebx);
+			newBlocks[7].AppendInstruction(OpCodes.Instruction.BranchInstruction, IR.ConditionCode.NotEqual, newBlocks[7].BasicBlock);
+			newBlocks[7].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[8].BasicBlock);
 			LinkBlocks(newBlocks[7], newBlocks[7], newBlocks[8]);
 
-			newBlocks[8].AppendInstruction(CPUx86.Instruction.DirectDivisionInstruction, eax, ecx);
-			newBlocks[8].AppendInstruction(CPUx86.Instruction.MovInstruction, ecx, eax);
-			newBlocks[8].AppendInstruction(CPUx86.Instruction.MulInstruction, null, op2H);
-			newBlocks[8].AppendInstruction(CPUx86.Instruction.XchgInstruction, ecx, eax);
-			newBlocks[8].AppendInstruction(CPUx86.Instruction.MulInstruction, null, op2L);
-			newBlocks[8].AppendInstruction(CPUx86.Instruction.AddInstruction, edx, ecx);
-			newBlocks[8].AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.UnsignedLessThan, newBlocks[12].BasicBlock);
-			newBlocks[8].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[9].BasicBlock);
+			newBlocks[8].AppendInstruction(OpCodes.Instruction.DirectDivisionInstruction, eax, ecx);
+			newBlocks[8].AppendInstruction(OpCodes.Instruction.MovInstruction, ecx, eax);
+			newBlocks[8].AppendInstruction(OpCodes.Instruction.MulInstruction, null, op2H);
+			newBlocks[8].AppendInstruction(OpCodes.Instruction.XchgInstruction, ecx, eax);
+			newBlocks[8].AppendInstruction(OpCodes.Instruction.MulInstruction, null, op2L);
+			newBlocks[8].AppendInstruction(OpCodes.Instruction.AddInstruction, edx, ecx);
+			newBlocks[8].AppendInstruction(OpCodes.Instruction.BranchInstruction, IR.ConditionCode.UnsignedLessThan, newBlocks[12].BasicBlock);
+			newBlocks[8].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[9].BasicBlock);
 			LinkBlocks(newBlocks[8], newBlocks[12], newBlocks[9]);
 
-			newBlocks[9].AppendInstruction(CPUx86.Instruction.DirectCompareInstruction, edx, op1H);
-			newBlocks[9].AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.UnsignedGreaterThan, newBlocks[12].BasicBlock);
-			newBlocks[9].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[10].BasicBlock);
+			newBlocks[9].AppendInstruction(OpCodes.Instruction.DirectCompareInstruction, edx, op1H);
+			newBlocks[9].AppendInstruction(OpCodes.Instruction.BranchInstruction, IR.ConditionCode.UnsignedGreaterThan, newBlocks[12].BasicBlock);
+			newBlocks[9].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[10].BasicBlock);
 			LinkBlocks(newBlocks[9], newBlocks[12], newBlocks[10]);
 
-			newBlocks[10].AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.UnsignedLessThan, newBlocks[13].BasicBlock);
-			newBlocks[10].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[11].BasicBlock);
+			newBlocks[10].AppendInstruction(OpCodes.Instruction.BranchInstruction, IR.ConditionCode.UnsignedLessThan, newBlocks[13].BasicBlock);
+			newBlocks[10].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[11].BasicBlock);
 			LinkBlocks(newBlocks[10], newBlocks[13], newBlocks[11]);
 
-			newBlocks[11].AppendInstruction(CPUx86.Instruction.DirectCompareInstruction, eax, op1L);
-			newBlocks[11].AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.UnsignedLessOrEqual, newBlocks[13].BasicBlock);
-			newBlocks[11].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[12].BasicBlock);
+			newBlocks[11].AppendInstruction(OpCodes.Instruction.DirectCompareInstruction, eax, op1L);
+			newBlocks[11].AppendInstruction(OpCodes.Instruction.BranchInstruction, IR.ConditionCode.UnsignedLessOrEqual, newBlocks[13].BasicBlock);
+			newBlocks[11].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[12].BasicBlock);
 			LinkBlocks(newBlocks[11], newBlocks[13], newBlocks[12]);
 
 			// L6:
-			newBlocks[12].AppendInstruction(CPUx86.Instruction.SubInstruction, eax, op2L);
-			newBlocks[12].AppendInstruction(CPUx86.Instruction.SbbInstruction, edx, op2H);
-			newBlocks[12].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[13].BasicBlock);
+			newBlocks[12].AppendInstruction(OpCodes.Instruction.SubInstruction, eax, op2L);
+			newBlocks[12].AppendInstruction(OpCodes.Instruction.SbbInstruction, edx, op2H);
+			newBlocks[12].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[13].BasicBlock);
 			LinkBlocks(newBlocks[13], newBlocks[13]);
 
 			// L7:
@@ -699,29 +699,29 @@ namespace Mosa.Platform.x86
 			// Since the result is already in a register, we will do the subtract in the
 			// opposite direction and negate the result if necessary.
 			//
-			newBlocks[13].AppendInstruction(CPUx86.Instruction.SubInstruction, eax, op1L);
-			newBlocks[13].AppendInstruction(CPUx86.Instruction.SbbInstruction, edx, op1H);
-			newBlocks[13].AppendInstruction(CPUx86.Instruction.DecInstruction, edi);
-			newBlocks[13].AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.NotSigned, newBlocks[15].BasicBlock);
-			newBlocks[13].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[14].BasicBlock);
+			newBlocks[13].AppendInstruction(OpCodes.Instruction.SubInstruction, eax, op1L);
+			newBlocks[13].AppendInstruction(OpCodes.Instruction.SbbInstruction, edx, op1H);
+			newBlocks[13].AppendInstruction(OpCodes.Instruction.DecInstruction, edi);
+			newBlocks[13].AppendInstruction(OpCodes.Instruction.BranchInstruction, IR.ConditionCode.NotSigned, newBlocks[15].BasicBlock);
+			newBlocks[13].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[14].BasicBlock);
 			LinkBlocks(newBlocks[13], newBlocks[14], newBlocks[15]);
 
 			// L4:
 			//        neg     edx             ; otherwise, negate the result
 			//        neg     eax
 			//        sbb     edx,0
-			newBlocks[14].AppendInstruction(CPUx86.Instruction.NegInstruction, edx);
-			newBlocks[14].AppendInstruction(CPUx86.Instruction.NegInstruction, eax);
-			newBlocks[14].AppendInstruction(CPUx86.Instruction.SbbInstruction, edx, new ConstantOperand(I4, 0));
-			newBlocks[14].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[15].BasicBlock);
+			newBlocks[14].AppendInstruction(OpCodes.Instruction.NegInstruction, edx);
+			newBlocks[14].AppendInstruction(OpCodes.Instruction.NegInstruction, eax);
+			newBlocks[14].AppendInstruction(OpCodes.Instruction.SbbInstruction, edx, new ConstantOperand(I4, 0));
+			newBlocks[14].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[15].BasicBlock);
 			LinkBlocks(newBlocks[14], newBlocks[15]);
 
-			newBlocks[15].SetInstruction(CPUx86.Instruction.MovInstruction, op0L, eax);
-			newBlocks[15].AppendInstruction(CPUx86.Instruction.MovInstruction, op0H, edx);
-			newBlocks[15].AppendInstruction(CPUx86.Instruction.PopInstruction, ebx);
-			newBlocks[15].AppendInstruction(CPUx86.Instruction.PopInstruction, esi);
-			newBlocks[15].AppendInstruction(CPUx86.Instruction.PopInstruction, edi);
-			newBlocks[15].AppendInstruction(CPUx86.Instruction.JmpInstruction, nextBlock.BasicBlock);
+			newBlocks[15].SetInstruction(OpCodes.Instruction.MovInstruction, op0L, eax);
+			newBlocks[15].AppendInstruction(OpCodes.Instruction.MovInstruction, op0H, edx);
+			newBlocks[15].AppendInstruction(OpCodes.Instruction.PopInstruction, ebx);
+			newBlocks[15].AppendInstruction(OpCodes.Instruction.PopInstruction, esi);
+			newBlocks[15].AppendInstruction(OpCodes.Instruction.PopInstruction, edi);
+			newBlocks[15].AppendInstruction(OpCodes.Instruction.JmpInstruction, nextBlock.BasicBlock);
 			LinkBlocks(newBlocks[15], nextBlock);
 		}
 
@@ -747,88 +747,88 @@ namespace Mosa.Platform.x86
 
 			Context[] newBlocks = CreateEmptyBlockContexts(context.Label, 12);
 			Context nextBlock = SplitContext(context, false);
-			context.SetInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[0].BasicBlock);
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.PushInstruction, null, edi);
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.PushInstruction, null, esi);
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.PushInstruction, null, ebx);
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.MovInstruction, eax, op2H);
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.OrInstruction, eax, eax);
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.NotEqual, newBlocks[2].BasicBlock); // JNZ
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[1].BasicBlock);
+			context.SetInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[0].BasicBlock);
+			newBlocks[0].AppendInstruction(OpCodes.Instruction.PushInstruction, null, edi);
+			newBlocks[0].AppendInstruction(OpCodes.Instruction.PushInstruction, null, esi);
+			newBlocks[0].AppendInstruction(OpCodes.Instruction.PushInstruction, null, ebx);
+			newBlocks[0].AppendInstruction(OpCodes.Instruction.MovInstruction, eax, op2H);
+			newBlocks[0].AppendInstruction(OpCodes.Instruction.OrInstruction, eax, eax);
+			newBlocks[0].AppendInstruction(OpCodes.Instruction.BranchInstruction, IR.ConditionCode.NotEqual, newBlocks[2].BasicBlock); // JNZ
+			newBlocks[0].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[1].BasicBlock);
 			LinkBlocks(newBlocks[0], newBlocks[2], newBlocks[1]);
 
-			newBlocks[1].AppendInstruction(CPUx86.Instruction.MovInstruction, ecx, op2L);
-			newBlocks[1].AppendInstruction(CPUx86.Instruction.MovInstruction, eax, op1H);
-			newBlocks[1].AppendInstruction(CPUx86.Instruction.XorInstruction, edx, edx);
-			newBlocks[1].AppendInstruction(CPUx86.Instruction.DirectDivisionInstruction, eax, ecx);
-			newBlocks[1].AppendInstruction(CPUx86.Instruction.MovInstruction, ebx, eax);
-			newBlocks[1].AppendInstruction(CPUx86.Instruction.MovInstruction, eax, op1L);
-			newBlocks[1].AppendInstruction(CPUx86.Instruction.DirectDivisionInstruction, eax, ecx);
-			newBlocks[1].AppendInstruction(CPUx86.Instruction.MovInstruction, edx, ebx);
-			newBlocks[1].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[10].BasicBlock);
+			newBlocks[1].AppendInstruction(OpCodes.Instruction.MovInstruction, ecx, op2L);
+			newBlocks[1].AppendInstruction(OpCodes.Instruction.MovInstruction, eax, op1H);
+			newBlocks[1].AppendInstruction(OpCodes.Instruction.XorInstruction, edx, edx);
+			newBlocks[1].AppendInstruction(OpCodes.Instruction.DirectDivisionInstruction, eax, ecx);
+			newBlocks[1].AppendInstruction(OpCodes.Instruction.MovInstruction, ebx, eax);
+			newBlocks[1].AppendInstruction(OpCodes.Instruction.MovInstruction, eax, op1L);
+			newBlocks[1].AppendInstruction(OpCodes.Instruction.DirectDivisionInstruction, eax, ecx);
+			newBlocks[1].AppendInstruction(OpCodes.Instruction.MovInstruction, edx, ebx);
+			newBlocks[1].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[10].BasicBlock);
 			LinkBlocks(newBlocks[0], newBlocks[10]);
 
 			// L1
-			newBlocks[2].AppendInstruction(CPUx86.Instruction.MovInstruction, ecx, eax);
-			newBlocks[2].AppendInstruction(CPUx86.Instruction.MovInstruction, ebx, op2L);
-			newBlocks[2].AppendInstruction(CPUx86.Instruction.MovInstruction, edx, op1H);
-			newBlocks[2].AppendInstruction(CPUx86.Instruction.MovInstruction, eax, op1L);
-			newBlocks[2].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[3].BasicBlock);
+			newBlocks[2].AppendInstruction(OpCodes.Instruction.MovInstruction, ecx, eax);
+			newBlocks[2].AppendInstruction(OpCodes.Instruction.MovInstruction, ebx, op2L);
+			newBlocks[2].AppendInstruction(OpCodes.Instruction.MovInstruction, edx, op1H);
+			newBlocks[2].AppendInstruction(OpCodes.Instruction.MovInstruction, eax, op1L);
+			newBlocks[2].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[3].BasicBlock);
 			LinkBlocks(newBlocks[2], newBlocks[3]);
 
 			// L3
-			newBlocks[3].AppendInstruction(CPUx86.Instruction.ShrInstruction, ecx, new ConstantOperand(U1, 1));
-			newBlocks[3].AppendInstruction(CPUx86.Instruction.RcrInstruction, ebx, new ConstantOperand(U1, 1)); // RCR
-			newBlocks[3].AppendInstruction(CPUx86.Instruction.ShrInstruction, edx, new ConstantOperand(U1, 1));
-			newBlocks[3].AppendInstruction(CPUx86.Instruction.RcrInstruction, eax, new ConstantOperand(U1, 1));
-			newBlocks[3].AppendInstruction(CPUx86.Instruction.OrInstruction, ecx, ecx);
-			newBlocks[3].AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.NotEqual, newBlocks[3].BasicBlock); // JNZ
-			newBlocks[3].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[4].BasicBlock);
+			newBlocks[3].AppendInstruction(OpCodes.Instruction.ShrInstruction, ecx, new ConstantOperand(U1, 1));
+			newBlocks[3].AppendInstruction(OpCodes.Instruction.RcrInstruction, ebx, new ConstantOperand(U1, 1)); // RCR
+			newBlocks[3].AppendInstruction(OpCodes.Instruction.ShrInstruction, edx, new ConstantOperand(U1, 1));
+			newBlocks[3].AppendInstruction(OpCodes.Instruction.RcrInstruction, eax, new ConstantOperand(U1, 1));
+			newBlocks[3].AppendInstruction(OpCodes.Instruction.OrInstruction, ecx, ecx);
+			newBlocks[3].AppendInstruction(OpCodes.Instruction.BranchInstruction, IR.ConditionCode.NotEqual, newBlocks[3].BasicBlock); // JNZ
+			newBlocks[3].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[4].BasicBlock);
 			LinkBlocks(newBlocks[3], newBlocks[3], newBlocks[4]);
 
-			newBlocks[4].AppendInstruction(CPUx86.Instruction.DirectDivisionInstruction, eax, ebx);
-			newBlocks[4].AppendInstruction(CPUx86.Instruction.MovInstruction, esi, eax);
-			newBlocks[4].AppendInstruction(CPUx86.Instruction.MulInstruction, null, op2H);
-			newBlocks[4].AppendInstruction(CPUx86.Instruction.MovInstruction, ecx, eax);
-			newBlocks[4].AppendInstruction(CPUx86.Instruction.MovInstruction, eax, op2L);
-			newBlocks[4].AppendInstruction(CPUx86.Instruction.MulInstruction, null, esi);
-			newBlocks[4].AppendInstruction(CPUx86.Instruction.AddInstruction, edx, ecx);
-			newBlocks[4].AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.UnsignedLessThan, newBlocks[8].BasicBlock);
-			newBlocks[4].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[5].BasicBlock);
+			newBlocks[4].AppendInstruction(OpCodes.Instruction.DirectDivisionInstruction, eax, ebx);
+			newBlocks[4].AppendInstruction(OpCodes.Instruction.MovInstruction, esi, eax);
+			newBlocks[4].AppendInstruction(OpCodes.Instruction.MulInstruction, null, op2H);
+			newBlocks[4].AppendInstruction(OpCodes.Instruction.MovInstruction, ecx, eax);
+			newBlocks[4].AppendInstruction(OpCodes.Instruction.MovInstruction, eax, op2L);
+			newBlocks[4].AppendInstruction(OpCodes.Instruction.MulInstruction, null, esi);
+			newBlocks[4].AppendInstruction(OpCodes.Instruction.AddInstruction, edx, ecx);
+			newBlocks[4].AppendInstruction(OpCodes.Instruction.BranchInstruction, IR.ConditionCode.UnsignedLessThan, newBlocks[8].BasicBlock);
+			newBlocks[4].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[5].BasicBlock);
 			LinkBlocks(newBlocks[4], newBlocks[8], newBlocks[5]);
 
-			newBlocks[5].AppendInstruction(CPUx86.Instruction.DirectCompareInstruction, edx, op1H);
-			newBlocks[5].AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.UnsignedGreaterThan, newBlocks[8].BasicBlock);
-			newBlocks[5].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[6].BasicBlock);
+			newBlocks[5].AppendInstruction(OpCodes.Instruction.DirectCompareInstruction, edx, op1H);
+			newBlocks[5].AppendInstruction(OpCodes.Instruction.BranchInstruction, IR.ConditionCode.UnsignedGreaterThan, newBlocks[8].BasicBlock);
+			newBlocks[5].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[6].BasicBlock);
 			LinkBlocks(newBlocks[5], newBlocks[8], newBlocks[6]);
 
-			newBlocks[6].AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.UnsignedLessThan, newBlocks[9].BasicBlock);
-			newBlocks[6].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[7].BasicBlock);
+			newBlocks[6].AppendInstruction(OpCodes.Instruction.BranchInstruction, IR.ConditionCode.UnsignedLessThan, newBlocks[9].BasicBlock);
+			newBlocks[6].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[7].BasicBlock);
 			LinkBlocks(newBlocks[6], newBlocks[9], newBlocks[7]);
 
-			newBlocks[7].AppendInstruction(CPUx86.Instruction.DirectCompareInstruction, eax, op1L);
-			newBlocks[7].AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.UnsignedLessOrEqual, newBlocks[9].BasicBlock);
-			newBlocks[7].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[8].BasicBlock);
+			newBlocks[7].AppendInstruction(OpCodes.Instruction.DirectCompareInstruction, eax, op1L);
+			newBlocks[7].AppendInstruction(OpCodes.Instruction.BranchInstruction, IR.ConditionCode.UnsignedLessOrEqual, newBlocks[9].BasicBlock);
+			newBlocks[7].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[8].BasicBlock);
 			LinkBlocks(newBlocks[7], newBlocks[9], newBlocks[8]);
 
 			// L4:
-			newBlocks[8].AppendInstruction(CPUx86.Instruction.DecInstruction, esi);
-			newBlocks[8].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[9].BasicBlock);
+			newBlocks[8].AppendInstruction(OpCodes.Instruction.DecInstruction, esi);
+			newBlocks[8].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[9].BasicBlock);
 			LinkBlocks(newBlocks[8], newBlocks[9]);
 
 			// L5
-			newBlocks[9].AppendInstruction(CPUx86.Instruction.XorInstruction, edx, edx);
-			newBlocks[9].AppendInstruction(CPUx86.Instruction.MovInstruction, eax, esi);
-			newBlocks[9].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[10].BasicBlock);
+			newBlocks[9].AppendInstruction(OpCodes.Instruction.XorInstruction, edx, edx);
+			newBlocks[9].AppendInstruction(OpCodes.Instruction.MovInstruction, eax, esi);
+			newBlocks[9].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[10].BasicBlock);
 			LinkBlocks(newBlocks[9], newBlocks[10]);
 
 			// L2
-			newBlocks[10].SetInstruction(CPUx86.Instruction.MovInstruction, op0L, eax);
-			newBlocks[10].AppendInstruction(CPUx86.Instruction.MovInstruction, op0H, edx);
-			newBlocks[10].AppendInstruction(CPUx86.Instruction.PopInstruction, ebx);
-			newBlocks[10].AppendInstruction(CPUx86.Instruction.PopInstruction, esi);
-			newBlocks[10].AppendInstruction(CPUx86.Instruction.PopInstruction, edi);
-			newBlocks[10].AppendInstruction(CPUx86.Instruction.JmpInstruction, nextBlock.BasicBlock);
+			newBlocks[10].SetInstruction(OpCodes.Instruction.MovInstruction, op0L, eax);
+			newBlocks[10].AppendInstruction(OpCodes.Instruction.MovInstruction, op0H, edx);
+			newBlocks[10].AppendInstruction(OpCodes.Instruction.PopInstruction, ebx);
+			newBlocks[10].AppendInstruction(OpCodes.Instruction.PopInstruction, esi);
+			newBlocks[10].AppendInstruction(OpCodes.Instruction.PopInstruction, edi);
+			newBlocks[10].AppendInstruction(OpCodes.Instruction.JmpInstruction, nextBlock.BasicBlock);
 			LinkBlocks(newBlocks[10], nextBlock);
 		}
 
@@ -868,90 +868,90 @@ namespace Mosa.Platform.x86
 			//sbb     eax,0
 			//mov     HIWORD(DVND),eax ; save positive value
 			//mov     LOWORD(DVND),edx
-			context.SetInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[0].BasicBlock);
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.PushInstruction, null, edi);
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.PushInstruction, null, esi);
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.PushInstruction, null, ebx);
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.MovInstruction, eax, op2H);
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.OrInstruction, eax, eax);
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.NotEqual, newBlocks[2].BasicBlock);
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[1].BasicBlock);
+			context.SetInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[0].BasicBlock);
+			newBlocks[0].AppendInstruction(OpCodes.Instruction.PushInstruction, null, edi);
+			newBlocks[0].AppendInstruction(OpCodes.Instruction.PushInstruction, null, esi);
+			newBlocks[0].AppendInstruction(OpCodes.Instruction.PushInstruction, null, ebx);
+			newBlocks[0].AppendInstruction(OpCodes.Instruction.MovInstruction, eax, op2H);
+			newBlocks[0].AppendInstruction(OpCodes.Instruction.OrInstruction, eax, eax);
+			newBlocks[0].AppendInstruction(OpCodes.Instruction.BranchInstruction, IR.ConditionCode.NotEqual, newBlocks[2].BasicBlock);
+			newBlocks[0].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[1].BasicBlock);
 			LinkBlocks(newBlocks[0], newBlocks[2], newBlocks[1]);
 
-			newBlocks[1].AppendInstruction(CPUx86.Instruction.MovInstruction, ecx, op2L);
-			newBlocks[1].AppendInstruction(CPUx86.Instruction.MovInstruction, eax, op1H);
-			newBlocks[1].AppendInstruction(CPUx86.Instruction.XorInstruction, edx, edx);
-			newBlocks[1].AppendInstruction(CPUx86.Instruction.DirectDivisionInstruction, eax, ecx);
-			newBlocks[1].AppendInstruction(CPUx86.Instruction.MovInstruction, eax, op1L);
-			newBlocks[1].AppendInstruction(CPUx86.Instruction.DirectDivisionInstruction, eax, ecx);
-			newBlocks[1].AppendInstruction(CPUx86.Instruction.MovInstruction, eax, edx);
-			newBlocks[1].AppendInstruction(CPUx86.Instruction.XorInstruction, edx, edx);
-			newBlocks[1].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[10].BasicBlock);
+			newBlocks[1].AppendInstruction(OpCodes.Instruction.MovInstruction, ecx, op2L);
+			newBlocks[1].AppendInstruction(OpCodes.Instruction.MovInstruction, eax, op1H);
+			newBlocks[1].AppendInstruction(OpCodes.Instruction.XorInstruction, edx, edx);
+			newBlocks[1].AppendInstruction(OpCodes.Instruction.DirectDivisionInstruction, eax, ecx);
+			newBlocks[1].AppendInstruction(OpCodes.Instruction.MovInstruction, eax, op1L);
+			newBlocks[1].AppendInstruction(OpCodes.Instruction.DirectDivisionInstruction, eax, ecx);
+			newBlocks[1].AppendInstruction(OpCodes.Instruction.MovInstruction, eax, edx);
+			newBlocks[1].AppendInstruction(OpCodes.Instruction.XorInstruction, edx, edx);
+			newBlocks[1].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[10].BasicBlock);
 			LinkBlocks(newBlocks[1], newBlocks[10]);
 
 			// L1:
-			newBlocks[2].AppendInstruction(CPUx86.Instruction.MovInstruction, ecx, eax);
-			newBlocks[2].AppendInstruction(CPUx86.Instruction.MovInstruction, ebx, op2L);
-			newBlocks[2].AppendInstruction(CPUx86.Instruction.MovInstruction, edx, op1H);
-			newBlocks[2].AppendInstruction(CPUx86.Instruction.MovInstruction, eax, op1L);
-			newBlocks[2].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[3].BasicBlock);
+			newBlocks[2].AppendInstruction(OpCodes.Instruction.MovInstruction, ecx, eax);
+			newBlocks[2].AppendInstruction(OpCodes.Instruction.MovInstruction, ebx, op2L);
+			newBlocks[2].AppendInstruction(OpCodes.Instruction.MovInstruction, edx, op1H);
+			newBlocks[2].AppendInstruction(OpCodes.Instruction.MovInstruction, eax, op1L);
+			newBlocks[2].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[3].BasicBlock);
 			LinkBlocks(newBlocks[2], newBlocks[3]);
 
 			// L3:
-			newBlocks[3].AppendInstruction(CPUx86.Instruction.ShrInstruction, ecx, new ConstantOperand(U1, 1));
-			newBlocks[3].AppendInstruction(CPUx86.Instruction.RcrInstruction, ebx, new ConstantOperand(U1, 1)); // RCR
-			newBlocks[3].AppendInstruction(CPUx86.Instruction.ShrInstruction, edx, new ConstantOperand(U1, 1));
-			newBlocks[3].AppendInstruction(CPUx86.Instruction.RcrInstruction, eax, new ConstantOperand(U1, 1));
-			newBlocks[3].AppendInstruction(CPUx86.Instruction.OrInstruction, ecx, ecx);
-			newBlocks[3].AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.NotEqual, newBlocks[3].BasicBlock);
-			newBlocks[3].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[4].BasicBlock);
+			newBlocks[3].AppendInstruction(OpCodes.Instruction.ShrInstruction, ecx, new ConstantOperand(U1, 1));
+			newBlocks[3].AppendInstruction(OpCodes.Instruction.RcrInstruction, ebx, new ConstantOperand(U1, 1)); // RCR
+			newBlocks[3].AppendInstruction(OpCodes.Instruction.ShrInstruction, edx, new ConstantOperand(U1, 1));
+			newBlocks[3].AppendInstruction(OpCodes.Instruction.RcrInstruction, eax, new ConstantOperand(U1, 1));
+			newBlocks[3].AppendInstruction(OpCodes.Instruction.OrInstruction, ecx, ecx);
+			newBlocks[3].AppendInstruction(OpCodes.Instruction.BranchInstruction, IR.ConditionCode.NotEqual, newBlocks[3].BasicBlock);
+			newBlocks[3].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[4].BasicBlock);
 			LinkBlocks(newBlocks[3], newBlocks[3], newBlocks[4]);
 
-			newBlocks[4].AppendInstruction(CPUx86.Instruction.DirectDivisionInstruction, eax, ebx);
-			newBlocks[4].AppendInstruction(CPUx86.Instruction.MovInstruction, ecx, eax);
-			newBlocks[4].AppendInstruction(CPUx86.Instruction.MulInstruction, null, op2H);
-			newBlocks[4].AppendInstruction(CPUx86.Instruction.XchgInstruction, ecx, eax);
-			newBlocks[4].AppendInstruction(CPUx86.Instruction.MulInstruction, null, op2L);
-			newBlocks[4].AppendInstruction(CPUx86.Instruction.AddInstruction, edx, ecx);
-			newBlocks[4].AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.UnsignedLessThan, newBlocks[8].BasicBlock);
-			newBlocks[4].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[5].BasicBlock);
+			newBlocks[4].AppendInstruction(OpCodes.Instruction.DirectDivisionInstruction, eax, ebx);
+			newBlocks[4].AppendInstruction(OpCodes.Instruction.MovInstruction, ecx, eax);
+			newBlocks[4].AppendInstruction(OpCodes.Instruction.MulInstruction, null, op2H);
+			newBlocks[4].AppendInstruction(OpCodes.Instruction.XchgInstruction, ecx, eax);
+			newBlocks[4].AppendInstruction(OpCodes.Instruction.MulInstruction, null, op2L);
+			newBlocks[4].AppendInstruction(OpCodes.Instruction.AddInstruction, edx, ecx);
+			newBlocks[4].AppendInstruction(OpCodes.Instruction.BranchInstruction, IR.ConditionCode.UnsignedLessThan, newBlocks[8].BasicBlock);
+			newBlocks[4].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[5].BasicBlock);
 			LinkBlocks(newBlocks[4], newBlocks[8], newBlocks[5]);
 
-			newBlocks[5].AppendInstruction(CPUx86.Instruction.DirectCompareInstruction, edx, op1H);
-			newBlocks[5].AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.UnsignedGreaterThan, newBlocks[8].BasicBlock);
-			newBlocks[5].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[6].BasicBlock);
+			newBlocks[5].AppendInstruction(OpCodes.Instruction.DirectCompareInstruction, edx, op1H);
+			newBlocks[5].AppendInstruction(OpCodes.Instruction.BranchInstruction, IR.ConditionCode.UnsignedGreaterThan, newBlocks[8].BasicBlock);
+			newBlocks[5].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[6].BasicBlock);
 			LinkBlocks(newBlocks[5], newBlocks[8], newBlocks[6]);
 
-			newBlocks[6].AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.UnsignedLessThan, newBlocks[9].BasicBlock);
-			newBlocks[6].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[7].BasicBlock);
+			newBlocks[6].AppendInstruction(OpCodes.Instruction.BranchInstruction, IR.ConditionCode.UnsignedLessThan, newBlocks[9].BasicBlock);
+			newBlocks[6].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[7].BasicBlock);
 			LinkBlocks(newBlocks[6], newBlocks[6], newBlocks[7]);
 
-			newBlocks[7].AppendInstruction(CPUx86.Instruction.DirectCompareInstruction, eax, op1L);
-			newBlocks[7].AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.UnsignedLessOrEqual, newBlocks[9].BasicBlock);
-			newBlocks[7].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[3].BasicBlock);
+			newBlocks[7].AppendInstruction(OpCodes.Instruction.DirectCompareInstruction, eax, op1L);
+			newBlocks[7].AppendInstruction(OpCodes.Instruction.BranchInstruction, IR.ConditionCode.UnsignedLessOrEqual, newBlocks[9].BasicBlock);
+			newBlocks[7].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[3].BasicBlock);
 			LinkBlocks(newBlocks[7], newBlocks[9], newBlocks[3]);
 
 			// L4:
-			newBlocks[8].AppendInstruction(CPUx86.Instruction.SubInstruction, eax, op2L);
-			newBlocks[8].AppendInstruction(CPUx86.Instruction.SbbInstruction, edx, op2H);
-			newBlocks[8].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[9].BasicBlock);
+			newBlocks[8].AppendInstruction(OpCodes.Instruction.SubInstruction, eax, op2L);
+			newBlocks[8].AppendInstruction(OpCodes.Instruction.SbbInstruction, edx, op2H);
+			newBlocks[8].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[9].BasicBlock);
 			LinkBlocks(newBlocks[8], newBlocks[9]);
 
 			// L5:
-			newBlocks[9].AppendInstruction(CPUx86.Instruction.SubInstruction, eax, op1L);
-			newBlocks[9].AppendInstruction(CPUx86.Instruction.SbbInstruction, edx, op1H);
-			newBlocks[9].AppendInstruction(CPUx86.Instruction.NegInstruction, edx);
-			newBlocks[9].AppendInstruction(CPUx86.Instruction.NegInstruction, eax);
-			newBlocks[9].AppendInstruction(CPUx86.Instruction.SbbInstruction, edx, new ConstantOperand(U4, (int)0));
-			newBlocks[9].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[10].BasicBlock);
+			newBlocks[9].AppendInstruction(OpCodes.Instruction.SubInstruction, eax, op1L);
+			newBlocks[9].AppendInstruction(OpCodes.Instruction.SbbInstruction, edx, op1H);
+			newBlocks[9].AppendInstruction(OpCodes.Instruction.NegInstruction, edx);
+			newBlocks[9].AppendInstruction(OpCodes.Instruction.NegInstruction, eax);
+			newBlocks[9].AppendInstruction(OpCodes.Instruction.SbbInstruction, edx, new ConstantOperand(U4, (int)0));
+			newBlocks[9].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[10].BasicBlock);
 			LinkBlocks(newBlocks[9], newBlocks[10]);
 
-			newBlocks[10].SetInstruction(CPUx86.Instruction.MovInstruction, op0L, eax);
-			newBlocks[10].AppendInstruction(CPUx86.Instruction.MovInstruction, op0H, edx);
-			newBlocks[10].AppendInstruction(CPUx86.Instruction.PopInstruction, ebx);
-			newBlocks[10].AppendInstruction(CPUx86.Instruction.PopInstruction, esi);
-			newBlocks[10].AppendInstruction(CPUx86.Instruction.PopInstruction, edi);
-			newBlocks[10].AppendInstruction(CPUx86.Instruction.JmpInstruction, nextBlock.BasicBlock);
+			newBlocks[10].SetInstruction(OpCodes.Instruction.MovInstruction, op0L, eax);
+			newBlocks[10].AppendInstruction(OpCodes.Instruction.MovInstruction, op0H, edx);
+			newBlocks[10].AppendInstruction(OpCodes.Instruction.PopInstruction, ebx);
+			newBlocks[10].AppendInstruction(OpCodes.Instruction.PopInstruction, esi);
+			newBlocks[10].AppendInstruction(OpCodes.Instruction.PopInstruction, edi);
+			newBlocks[10].AppendInstruction(OpCodes.Instruction.JmpInstruction, nextBlock.BasicBlock);
 			LinkBlocks(newBlocks[10], nextBlock);
 		}
 
@@ -980,49 +980,49 @@ namespace Mosa.Platform.x86
 
 			// Handle shifts of 64 bits or more (if shifting 64 bits or more, the result
 			// depends only on the high order bit of edx).
-			context.SetInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[0].BasicBlock);
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.PushInstruction, null, ecx);
+			context.SetInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[0].BasicBlock);
+			newBlocks[0].AppendInstruction(OpCodes.Instruction.PushInstruction, null, ecx);
 			newBlocks[0].AppendInstruction(IR.Instruction.LogicalAndInstruction, count, count, new ConstantOperand(I4, 0x3F));
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.MovInstruction, ecx, count);
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.MovInstruction, edx, op1H);
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.MovInstruction, eax, op1L);
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.DirectCompareInstruction, ecx, new ConstantOperand(I4, 64));
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.UnsignedGreaterOrEqual, newBlocks[4].BasicBlock);
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[1].BasicBlock);
+			newBlocks[0].AppendInstruction(OpCodes.Instruction.MovInstruction, ecx, count);
+			newBlocks[0].AppendInstruction(OpCodes.Instruction.MovInstruction, edx, op1H);
+			newBlocks[0].AppendInstruction(OpCodes.Instruction.MovInstruction, eax, op1L);
+			newBlocks[0].AppendInstruction(OpCodes.Instruction.DirectCompareInstruction, ecx, new ConstantOperand(I4, 64));
+			newBlocks[0].AppendInstruction(OpCodes.Instruction.BranchInstruction, IR.ConditionCode.UnsignedGreaterOrEqual, newBlocks[4].BasicBlock);
+			newBlocks[0].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[1].BasicBlock);
 			LinkBlocks(newBlocks[0], newBlocks[4], newBlocks[1]);
 
-			newBlocks[1].AppendInstruction(CPUx86.Instruction.DirectCompareInstruction, ecx, new ConstantOperand(U1, 32));
-			newBlocks[1].AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.UnsignedGreaterOrEqual, newBlocks[3].BasicBlock);
-			newBlocks[1].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[2].BasicBlock);
+			newBlocks[1].AppendInstruction(OpCodes.Instruction.DirectCompareInstruction, ecx, new ConstantOperand(U1, 32));
+			newBlocks[1].AppendInstruction(OpCodes.Instruction.BranchInstruction, IR.ConditionCode.UnsignedGreaterOrEqual, newBlocks[3].BasicBlock);
+			newBlocks[1].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[2].BasicBlock);
 			LinkBlocks(newBlocks[1], newBlocks[3], newBlocks[2]);
 
-			newBlocks[2].AppendInstruction(CPUx86.Instruction.ShrdInstruction, edx, eax, ecx);
-			newBlocks[2].AppendInstruction(CPUx86.Instruction.SarInstruction, edx, ecx);
-			newBlocks[2].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[5].BasicBlock);
+			newBlocks[2].AppendInstruction(OpCodes.Instruction.ShrdInstruction, edx, eax, ecx);
+			newBlocks[2].AppendInstruction(OpCodes.Instruction.SarInstruction, edx, ecx);
+			newBlocks[2].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[5].BasicBlock);
 			LinkBlocks(newBlocks[2], newBlocks[5]);
 
 			// Handle shifts of between 32 and 63 bits
 			// MORE32:
-			newBlocks[3].AppendInstruction(CPUx86.Instruction.MovInstruction, eax, edx);
-			newBlocks[3].AppendInstruction(CPUx86.Instruction.SarInstruction, edx, new ConstantOperand(U1, (sbyte)0x1F));
-			newBlocks[3].AppendInstruction(CPUx86.Instruction.AndInstruction, ecx, new ConstantOperand(I4, 0x1F));
-			newBlocks[3].AppendInstruction(CPUx86.Instruction.SarInstruction, eax, ecx);
-			newBlocks[3].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[5].BasicBlock);
+			newBlocks[3].AppendInstruction(OpCodes.Instruction.MovInstruction, eax, edx);
+			newBlocks[3].AppendInstruction(OpCodes.Instruction.SarInstruction, edx, new ConstantOperand(U1, (sbyte)0x1F));
+			newBlocks[3].AppendInstruction(OpCodes.Instruction.AndInstruction, ecx, new ConstantOperand(I4, 0x1F));
+			newBlocks[3].AppendInstruction(OpCodes.Instruction.SarInstruction, eax, ecx);
+			newBlocks[3].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[5].BasicBlock);
 			LinkBlocks(newBlocks[3], nextBlock);
 
 			// Return double precision 0 or -1, depending on the sign of edx
 			// RETSIGN:
-			newBlocks[4].AppendInstruction(CPUx86.Instruction.SarInstruction, edx, new ConstantOperand(U1, (sbyte)0x1F));
-			newBlocks[4].AppendInstruction(CPUx86.Instruction.MovInstruction, eax, edx);
-			newBlocks[4].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[5].BasicBlock);
+			newBlocks[4].AppendInstruction(OpCodes.Instruction.SarInstruction, edx, new ConstantOperand(U1, (sbyte)0x1F));
+			newBlocks[4].AppendInstruction(OpCodes.Instruction.MovInstruction, eax, edx);
+			newBlocks[4].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[5].BasicBlock);
 			LinkBlocks(newBlocks[4], newBlocks[5]);
 
 			// done:
 			// ; remaining code from current basic block
-			newBlocks[5].SetInstruction(CPUx86.Instruction.MovInstruction, op0H, edx);
-			newBlocks[5].AppendInstruction(CPUx86.Instruction.MovInstruction, op0L, eax);
-			newBlocks[5].AppendInstruction(CPUx86.Instruction.PopInstruction, ecx);
-			newBlocks[5].AppendInstruction(CPUx86.Instruction.JmpInstruction, nextBlock.BasicBlock);
+			newBlocks[5].SetInstruction(OpCodes.Instruction.MovInstruction, op0H, edx);
+			newBlocks[5].AppendInstruction(OpCodes.Instruction.MovInstruction, op0L, eax);
+			newBlocks[5].AppendInstruction(OpCodes.Instruction.PopInstruction, ecx);
+			newBlocks[5].AppendInstruction(OpCodes.Instruction.JmpInstruction, nextBlock.BasicBlock);
 			LinkBlocks(newBlocks[5], nextBlock);
 		}
 
@@ -1049,49 +1049,49 @@ namespace Mosa.Platform.x86
 
 			// Handle shifts of 64 bits or more (if shifting 64 bits or more, the result
 			// depends only on the high order bit of edx).
-			context.SetInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[0].BasicBlock);
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.PushInstruction, null, ecx);
+			context.SetInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[0].BasicBlock);
+			newBlocks[0].AppendInstruction(OpCodes.Instruction.PushInstruction, null, ecx);
 			newBlocks[0].AppendInstruction(IR.Instruction.LogicalAndInstruction, count, count, new ConstantOperand(I4, 0x3F));
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.MovInstruction, ecx, count);
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.MovInstruction, edx, op1H);
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.MovInstruction, eax, op1L);
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.DirectCompareInstruction, ecx, new ConstantOperand(I4, 64));
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.UnsignedGreaterOrEqual, newBlocks[4].BasicBlock);
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[1].BasicBlock);
+			newBlocks[0].AppendInstruction(OpCodes.Instruction.MovInstruction, ecx, count);
+			newBlocks[0].AppendInstruction(OpCodes.Instruction.MovInstruction, edx, op1H);
+			newBlocks[0].AppendInstruction(OpCodes.Instruction.MovInstruction, eax, op1L);
+			newBlocks[0].AppendInstruction(OpCodes.Instruction.DirectCompareInstruction, ecx, new ConstantOperand(I4, 64));
+			newBlocks[0].AppendInstruction(OpCodes.Instruction.BranchInstruction, IR.ConditionCode.UnsignedGreaterOrEqual, newBlocks[4].BasicBlock);
+			newBlocks[0].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[1].BasicBlock);
 			LinkBlocks(newBlocks[0], newBlocks[4], newBlocks[1]);
 
-			newBlocks[1].AppendInstruction(CPUx86.Instruction.DirectCompareInstruction, ecx, new ConstantOperand(I4, 32));
-			newBlocks[1].AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.UnsignedGreaterOrEqual, newBlocks[3].BasicBlock);
-			newBlocks[1].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[2].BasicBlock);
+			newBlocks[1].AppendInstruction(OpCodes.Instruction.DirectCompareInstruction, ecx, new ConstantOperand(I4, 32));
+			newBlocks[1].AppendInstruction(OpCodes.Instruction.BranchInstruction, IR.ConditionCode.UnsignedGreaterOrEqual, newBlocks[3].BasicBlock);
+			newBlocks[1].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[2].BasicBlock);
 			LinkBlocks(newBlocks[1], newBlocks[3], newBlocks[2]);
 
-			newBlocks[2].AppendInstruction(CPUx86.Instruction.ShldInstruction, eax, edx, cl);
-			newBlocks[2].AppendInstruction(CPUx86.Instruction.ShlInstruction, eax, cl);
-			newBlocks[2].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[5].BasicBlock);
+			newBlocks[2].AppendInstruction(OpCodes.Instruction.ShldInstruction, eax, edx, cl);
+			newBlocks[2].AppendInstruction(OpCodes.Instruction.ShlInstruction, eax, cl);
+			newBlocks[2].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[5].BasicBlock);
 			LinkBlocks(newBlocks[2], newBlocks[5]);
 
 			// Handle shifts of between 32 and 63 bits
 			// MORE32:
-			newBlocks[3].AppendInstruction(CPUx86.Instruction.MovInstruction, edx, eax);
-			newBlocks[3].AppendInstruction(CPUx86.Instruction.XorInstruction, eax, eax);
-			newBlocks[3].AppendInstruction(CPUx86.Instruction.AndInstruction, ecx, new ConstantOperand(I4, 0x1F));
-			newBlocks[3].AppendInstruction(CPUx86.Instruction.ShlInstruction, edx, ecx);
-			newBlocks[3].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[5].BasicBlock);
+			newBlocks[3].AppendInstruction(OpCodes.Instruction.MovInstruction, edx, eax);
+			newBlocks[3].AppendInstruction(OpCodes.Instruction.XorInstruction, eax, eax);
+			newBlocks[3].AppendInstruction(OpCodes.Instruction.AndInstruction, ecx, new ConstantOperand(I4, 0x1F));
+			newBlocks[3].AppendInstruction(OpCodes.Instruction.ShlInstruction, edx, ecx);
+			newBlocks[3].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[5].BasicBlock);
 			LinkBlocks(newBlocks[3], newBlocks[5]);
 
 			// Return double precision 0 or -1, depending on the sign of edx
 			// RETZERO:
-			newBlocks[4].AppendInstruction(CPUx86.Instruction.XorInstruction, eax, eax);
-			newBlocks[4].AppendInstruction(CPUx86.Instruction.XorInstruction, edx, edx);
-			newBlocks[4].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[5].BasicBlock);
+			newBlocks[4].AppendInstruction(OpCodes.Instruction.XorInstruction, eax, eax);
+			newBlocks[4].AppendInstruction(OpCodes.Instruction.XorInstruction, edx, edx);
+			newBlocks[4].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[5].BasicBlock);
 			LinkBlocks(newBlocks[4], newBlocks[5]);
 
 			// done:
 			// ; remaining code from current basic block
-			newBlocks[5].AppendInstruction(CPUx86.Instruction.MovInstruction, op0H, edx);
-			newBlocks[5].AppendInstruction(CPUx86.Instruction.MovInstruction, op0L, eax);
-			newBlocks[5].AppendInstruction(CPUx86.Instruction.PopInstruction, ecx);
-			newBlocks[5].AppendInstruction(CPUx86.Instruction.JmpInstruction, nextBlock.BasicBlock);
+			newBlocks[5].AppendInstruction(OpCodes.Instruction.MovInstruction, op0H, edx);
+			newBlocks[5].AppendInstruction(OpCodes.Instruction.MovInstruction, op0L, eax);
+			newBlocks[5].AppendInstruction(OpCodes.Instruction.PopInstruction, ecx);
+			newBlocks[5].AppendInstruction(OpCodes.Instruction.JmpInstruction, nextBlock.BasicBlock);
 			LinkBlocks(newBlocks[5], nextBlock);
 		}
 
@@ -1121,55 +1121,55 @@ namespace Mosa.Platform.x86
 
 			// Handle shifts of 64 bits or more (if shifting 64 bits or more, the result
 			// depends only on the high order bit of edx).
-			context.SetInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[0].BasicBlock);
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.PushInstruction, null, ecx);
+			context.SetInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[0].BasicBlock);
+			newBlocks[0].AppendInstruction(OpCodes.Instruction.PushInstruction, null, ecx);
 			newBlocks[0].AppendInstruction(IR.Instruction.LogicalAndInstruction, count, count, new ConstantOperand(I4, 0x3F));
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.MovInstruction, ecx, count);
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.MovInstruction, edx, op1H);
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.MovInstruction, eax, op1L);
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.CmpInstruction, ecx, new ConstantOperand(I4, 64));
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.UnsignedGreaterOrEqual, newBlocks[4].BasicBlock);
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[1].BasicBlock);
+			newBlocks[0].AppendInstruction(OpCodes.Instruction.MovInstruction, ecx, count);
+			newBlocks[0].AppendInstruction(OpCodes.Instruction.MovInstruction, edx, op1H);
+			newBlocks[0].AppendInstruction(OpCodes.Instruction.MovInstruction, eax, op1L);
+			newBlocks[0].AppendInstruction(OpCodes.Instruction.CmpInstruction, ecx, new ConstantOperand(I4, 64));
+			newBlocks[0].AppendInstruction(OpCodes.Instruction.BranchInstruction, IR.ConditionCode.UnsignedGreaterOrEqual, newBlocks[4].BasicBlock);
+			newBlocks[0].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[1].BasicBlock);
 			LinkBlocks(newBlocks[0], newBlocks[4], newBlocks[1]);
 
-			newBlocks[1].AppendInstruction(CPUx86.Instruction.CmpInstruction, ecx, new ConstantOperand(I4, 32));
-			newBlocks[1].AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.UnsignedGreaterOrEqual, newBlocks[3].BasicBlock);
-			newBlocks[1].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[2].BasicBlock);
+			newBlocks[1].AppendInstruction(OpCodes.Instruction.CmpInstruction, ecx, new ConstantOperand(I4, 32));
+			newBlocks[1].AppendInstruction(OpCodes.Instruction.BranchInstruction, IR.ConditionCode.UnsignedGreaterOrEqual, newBlocks[3].BasicBlock);
+			newBlocks[1].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[2].BasicBlock);
 			LinkBlocks(newBlocks[3], newBlocks[2], newBlocks[1]);
 
-			newBlocks[2].AppendInstruction(CPUx86.Instruction.ShrdInstruction, eax, edx, ecx);
-			newBlocks[2].AppendInstruction(CPUx86.Instruction.SarInstruction, edx, ecx);
-			newBlocks[2].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[5].BasicBlock);
+			newBlocks[2].AppendInstruction(OpCodes.Instruction.ShrdInstruction, eax, edx, ecx);
+			newBlocks[2].AppendInstruction(OpCodes.Instruction.SarInstruction, edx, ecx);
+			newBlocks[2].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[5].BasicBlock);
 			LinkBlocks(newBlocks[2], newBlocks[5]);
 
 			// Handle shifts of between 32 and 63 bits
 			// MORE32:
-			newBlocks[3].AppendInstruction(CPUx86.Instruction.MovInstruction, eax, edx);
-			newBlocks[3].AppendInstruction(CPUx86.Instruction.PushInstruction, null, ecx);
-			newBlocks[3].AppendInstruction(CPUx86.Instruction.MovInstruction, ecx, new ConstantOperand(I1, (sbyte)0x1F));
-			newBlocks[3].AppendInstruction(CPUx86.Instruction.SarInstruction, edx, ecx);
-			newBlocks[3].AppendInstruction(CPUx86.Instruction.PopInstruction, ecx);
-			newBlocks[3].AppendInstruction(CPUx86.Instruction.AndInstruction, ecx, new ConstantOperand(I4, 0x1F));
-			newBlocks[3].AppendInstruction(CPUx86.Instruction.PushInstruction, null, ecx);
-			newBlocks[3].AppendInstruction(CPUx86.Instruction.MovInstruction, ecx, new ConstantOperand(I1, (sbyte)0x1F));
-			newBlocks[3].AppendInstruction(CPUx86.Instruction.SarInstruction, eax, ecx);
-			newBlocks[3].AppendInstruction(CPUx86.Instruction.PopInstruction, ecx);
-			newBlocks[3].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[5].BasicBlock);
+			newBlocks[3].AppendInstruction(OpCodes.Instruction.MovInstruction, eax, edx);
+			newBlocks[3].AppendInstruction(OpCodes.Instruction.PushInstruction, null, ecx);
+			newBlocks[3].AppendInstruction(OpCodes.Instruction.MovInstruction, ecx, new ConstantOperand(I1, (sbyte)0x1F));
+			newBlocks[3].AppendInstruction(OpCodes.Instruction.SarInstruction, edx, ecx);
+			newBlocks[3].AppendInstruction(OpCodes.Instruction.PopInstruction, ecx);
+			newBlocks[3].AppendInstruction(OpCodes.Instruction.AndInstruction, ecx, new ConstantOperand(I4, 0x1F));
+			newBlocks[3].AppendInstruction(OpCodes.Instruction.PushInstruction, null, ecx);
+			newBlocks[3].AppendInstruction(OpCodes.Instruction.MovInstruction, ecx, new ConstantOperand(I1, (sbyte)0x1F));
+			newBlocks[3].AppendInstruction(OpCodes.Instruction.SarInstruction, eax, ecx);
+			newBlocks[3].AppendInstruction(OpCodes.Instruction.PopInstruction, ecx);
+			newBlocks[3].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[5].BasicBlock);
 			LinkBlocks(newBlocks[3], newBlocks[5]);
 
 			// Return double precision 0 or -1, depending on the sign of edx
 			// RETSIGN:
-			newBlocks[4].AppendInstruction(CPUx86.Instruction.SarInstruction, edx, new ConstantOperand(I1, (sbyte)0x1F));
-			newBlocks[4].AppendInstruction(CPUx86.Instruction.MovInstruction, eax, edx);
-			newBlocks[4].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[5].BasicBlock);
+			newBlocks[4].AppendInstruction(OpCodes.Instruction.SarInstruction, edx, new ConstantOperand(I1, (sbyte)0x1F));
+			newBlocks[4].AppendInstruction(OpCodes.Instruction.MovInstruction, eax, edx);
+			newBlocks[4].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[5].BasicBlock);
 			LinkBlocks(newBlocks[4], newBlocks[5]);
 
 			// done:
 			// ; remaining code from current basic block
-			newBlocks[5].SetInstruction(CPUx86.Instruction.MovInstruction, op0H, edx);
-			newBlocks[5].AppendInstruction(CPUx86.Instruction.MovInstruction, op0L, eax);
-			newBlocks[5].AppendInstruction(CPUx86.Instruction.PopInstruction, ecx);
-			newBlocks[5].AppendInstruction(CPUx86.Instruction.JmpInstruction, nextBlock.BasicBlock);
+			newBlocks[5].SetInstruction(OpCodes.Instruction.MovInstruction, op0H, edx);
+			newBlocks[5].AppendInstruction(OpCodes.Instruction.MovInstruction, op0L, eax);
+			newBlocks[5].AppendInstruction(OpCodes.Instruction.PopInstruction, ecx);
+			newBlocks[5].AppendInstruction(OpCodes.Instruction.JmpInstruction, nextBlock.BasicBlock);
 			LinkBlocks(newBlocks[5], nextBlock);
 		}
 
@@ -1209,15 +1209,15 @@ namespace Mosa.Platform.x86
 
 			if (context.Result.StackType != StackTypeCode.Int64)
 			{
-				context.AppendInstruction(CPUx86.Instruction.MovInstruction, op0L, op1L);
-				context.AppendInstruction(CPUx86.Instruction.AndInstruction, op0L, op2L);
+				context.AppendInstruction(OpCodes.Instruction.MovInstruction, op0L, op1L);
+				context.AppendInstruction(OpCodes.Instruction.AndInstruction, op0L, op2L);
 			}
 			else
 			{
-				context.SetInstruction(CPUx86.Instruction.MovInstruction, op0H, op1H);
-				context.AppendInstruction(CPUx86.Instruction.MovInstruction, op0L, op1L);
-				context.AppendInstruction(CPUx86.Instruction.AndInstruction, op0H, op2H);
-				context.AppendInstruction(CPUx86.Instruction.AndInstruction, op0L, op2L);
+				context.SetInstruction(OpCodes.Instruction.MovInstruction, op0H, op1H);
+				context.AppendInstruction(OpCodes.Instruction.MovInstruction, op0L, op1L);
+				context.AppendInstruction(OpCodes.Instruction.AndInstruction, op0H, op2H);
+				context.AppendInstruction(OpCodes.Instruction.AndInstruction, op0L, op2L);
 			}
 		}
 
@@ -1232,10 +1232,10 @@ namespace Mosa.Platform.x86
 			SplitLongOperand(context.Operand1, out op1L, out op1H);
 			SplitLongOperand(context.Operand2, out op2L, out op2H);
 
-			context.SetInstruction(CPUx86.Instruction.MovInstruction, op0H, op1H);
-			context.AppendInstruction(CPUx86.Instruction.MovInstruction, op0L, op1L);
-			context.AppendInstruction(CPUx86.Instruction.OrInstruction, op0H, op2H);
-			context.AppendInstruction(CPUx86.Instruction.OrInstruction, op0L, op2L);
+			context.SetInstruction(OpCodes.Instruction.MovInstruction, op0H, op1H);
+			context.AppendInstruction(OpCodes.Instruction.MovInstruction, op0L, op1L);
+			context.AppendInstruction(OpCodes.Instruction.OrInstruction, op0H, op2H);
+			context.AppendInstruction(OpCodes.Instruction.OrInstruction, op0L, op2L);
 		}
 
 		/// <summary>
@@ -1249,10 +1249,10 @@ namespace Mosa.Platform.x86
 			SplitLongOperand(context.Operand1, out op1L, out op1H);
 			SplitLongOperand(context.Operand2, out op2L, out op2H);
 
-			context.SetInstruction(CPUx86.Instruction.MovInstruction, op0H, op1H);
-			context.AppendInstruction(CPUx86.Instruction.MovInstruction, op0L, op1L);
-			context.AppendInstruction(CPUx86.Instruction.XorInstruction, op0H, op2H);
-			context.AppendInstruction(CPUx86.Instruction.XorInstruction, op0L, op2L);
+			context.SetInstruction(OpCodes.Instruction.MovInstruction, op0H, op1H);
+			context.AppendInstruction(OpCodes.Instruction.MovInstruction, op0L, op1L);
+			context.AppendInstruction(OpCodes.Instruction.XorInstruction, op0H, op2H);
+			context.AppendInstruction(OpCodes.Instruction.XorInstruction, op0L, op2L);
 		}
 
 		/// <summary>
@@ -1268,13 +1268,13 @@ namespace Mosa.Platform.x86
 				SplitLongOperand(context.Result, out op0L, out op0H);
 				SplitLongOperand(context.Operand1, out op1L, out op1H);
 
-				context.SetInstruction(CPUx86.Instruction.MovInstruction, op0L, op1L);
-				context.AppendInstruction(CPUx86.Instruction.MovInstruction, op0H, op1H);
+				context.SetInstruction(OpCodes.Instruction.MovInstruction, op0L, op1L);
+				context.AppendInstruction(OpCodes.Instruction.MovInstruction, op0H, op1H);
 			}
 			else
 			{
 				SplitLongOperand(context.Operand1, out op1L, out op1H);
-				context.SetInstruction(CPUx86.Instruction.MovInstruction, context.Result, op1L);
+				context.SetInstruction(OpCodes.Instruction.MovInstruction, context.Result, op1L);
 			}
 		}
 
@@ -1304,8 +1304,8 @@ namespace Mosa.Platform.x86
 
 				case CilElementType.U1:
 					context.SetInstruction(IR.Instruction.ZeroExtendedMoveInstruction, eax, op1L);
-					context.AppendInstruction(CPUx86.Instruction.CdqInstruction);
-					context.AppendInstruction(CPUx86.Instruction.MovInstruction, op0L, eax);
+					context.AppendInstruction(OpCodes.Instruction.CdqInstruction);
+					context.AppendInstruction(OpCodes.Instruction.MovInstruction, op0L, eax);
 					context.AppendInstruction(IR.Instruction.LogicalXorInstruction, op0H, op0H, op0H);
 					break;
 
@@ -1313,15 +1313,15 @@ namespace Mosa.Platform.x86
 
 				case CilElementType.I4:
 					context.SetInstruction(IR.Instruction.ZeroExtendedMoveInstruction, eax, op1L);
-					context.AppendInstruction(CPUx86.Instruction.XorInstruction, edx, edx);
-					context.AppendInstruction(CPUx86.Instruction.MovInstruction, op0L, eax);
-					context.AppendInstruction(CPUx86.Instruction.MovInstruction, op0H, edx);
+					context.AppendInstruction(OpCodes.Instruction.XorInstruction, edx, edx);
+					context.AppendInstruction(OpCodes.Instruction.MovInstruction, op0L, eax);
+					context.AppendInstruction(OpCodes.Instruction.MovInstruction, op0H, edx);
 					break;
 				case CilElementType.U4:
 					context.SetInstruction(IR.Instruction.ZeroExtendedMoveInstruction, eax, op1L);
-					context.AppendInstruction(CPUx86.Instruction.CdqInstruction);
-					context.AppendInstruction(CPUx86.Instruction.MovInstruction, op0L, eax);
-					context.AppendInstruction(CPUx86.Instruction.MovInstruction, op0H, edx);
+					context.AppendInstruction(OpCodes.Instruction.CdqInstruction);
+					context.AppendInstruction(OpCodes.Instruction.MovInstruction, op0L, eax);
+					context.AppendInstruction(OpCodes.Instruction.MovInstruction, op0H, edx);
 					break;
 
 				case CilElementType.U8:
@@ -1365,28 +1365,28 @@ namespace Mosa.Platform.x86
 
 				case CilElementType.I1:
 					context.SetInstruction(IR.Instruction.SignExtendedMoveInstruction, eax, op1);
-					context.AppendInstruction(CPUx86.Instruction.CdqInstruction);
-					context.AppendInstruction(CPUx86.Instruction.MovInstruction, op0L, eax);
-					context.AppendInstruction(CPUx86.Instruction.MovInstruction, op0H, edx);
+					context.AppendInstruction(OpCodes.Instruction.CdqInstruction);
+					context.AppendInstruction(OpCodes.Instruction.MovInstruction, op0L, eax);
+					context.AppendInstruction(OpCodes.Instruction.MovInstruction, op0H, edx);
 					break;
 
 				case CilElementType.I2: goto case CilElementType.I1;
 
 				case CilElementType.I4:
-					context.SetInstruction(CPUx86.Instruction.MovInstruction, eax, op1);
-					context.AppendInstruction(CPUx86.Instruction.CdqInstruction);
-					context.AppendInstruction(CPUx86.Instruction.MovInstruction, op0L, eax);
-					context.AppendInstruction(CPUx86.Instruction.MovInstruction, op0H, edx);
+					context.SetInstruction(OpCodes.Instruction.MovInstruction, eax, op1);
+					context.AppendInstruction(OpCodes.Instruction.CdqInstruction);
+					context.AppendInstruction(OpCodes.Instruction.MovInstruction, op0L, eax);
+					context.AppendInstruction(OpCodes.Instruction.MovInstruction, op0H, edx);
 					break;
 
 				case CilElementType.I8:
-					context.SetInstruction(CPUx86.Instruction.MovInstruction, op0, op1);
+					context.SetInstruction(OpCodes.Instruction.MovInstruction, op0, op1);
 					break;
 
 				case CilElementType.U1:
 					context.SetInstruction(IR.Instruction.ZeroExtendedMoveInstruction, eax, op1);
-					context.AppendInstruction(CPUx86.Instruction.CdqInstruction);
-					context.AppendInstruction(CPUx86.Instruction.MovInstruction, op0L, eax);
+					context.AppendInstruction(OpCodes.Instruction.CdqInstruction);
+					context.AppendInstruction(OpCodes.Instruction.MovInstruction, op0L, eax);
 					context.AppendInstruction(IR.Instruction.LogicalXorInstruction, op0H, op0H, op0H);
 					break;
 
@@ -1427,12 +1427,12 @@ namespace Mosa.Platform.x86
 			RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
 			RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
 
-			context.SetInstruction(CPUx86.Instruction.MovInstruction, eax, op1);
-			context.AppendInstruction(CPUx86.Instruction.AddInstruction, eax, offsetOperand);
-			context.AppendInstruction(CPUx86.Instruction.MovInstruction, edx, new MemoryOperand(op0L.Type, GeneralPurposeRegister.EAX, IntPtr.Zero));
-			context.AppendInstruction(CPUx86.Instruction.MovInstruction, op0L, edx);
-			context.AppendInstruction(CPUx86.Instruction.MovInstruction, edx, new MemoryOperand(op0H.Type, GeneralPurposeRegister.EAX, new IntPtr(4)));
-			context.AppendInstruction(CPUx86.Instruction.MovInstruction, op0H, edx);
+			context.SetInstruction(OpCodes.Instruction.MovInstruction, eax, op1);
+			context.AppendInstruction(OpCodes.Instruction.AddInstruction, eax, offsetOperand);
+			context.AppendInstruction(OpCodes.Instruction.MovInstruction, edx, new MemoryOperand(op0L.Type, GeneralPurposeRegister.EAX, IntPtr.Zero));
+			context.AppendInstruction(OpCodes.Instruction.MovInstruction, op0L, edx);
+			context.AppendInstruction(OpCodes.Instruction.MovInstruction, edx, new MemoryOperand(op0H.Type, GeneralPurposeRegister.EAX, new IntPtr(4)));
+			context.AppendInstruction(OpCodes.Instruction.MovInstruction, op0H, edx);
 		}
 
 		/// <summary>
@@ -1453,15 +1453,15 @@ namespace Mosa.Platform.x86
 			RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
 			RegisterOperand edx = new RegisterOperand(I4, GeneralPurposeRegister.EDX);
 
-			context.SetInstruction(CPUx86.Instruction.MovInstruction, edx, op0);
+			context.SetInstruction(OpCodes.Instruction.MovInstruction, edx, op0);
 
 			// Fortunately in 32-bit mode, we can't have 64-bit offsets, so this plain add should suffice.
-			context.AppendInstruction(CPUx86.Instruction.AddInstruction, edx, offsetOperand);
+			context.AppendInstruction(OpCodes.Instruction.AddInstruction, edx, offsetOperand);
 
-			context.AppendInstruction(CPUx86.Instruction.MovInstruction, eax, op1L);
-			context.AppendInstruction(CPUx86.Instruction.MovInstruction, new MemoryOperand(U4, GeneralPurposeRegister.EDX, IntPtr.Zero), eax);
-			context.AppendInstruction(CPUx86.Instruction.MovInstruction, eax, op1H);
-			context.AppendInstruction(CPUx86.Instruction.MovInstruction, new MemoryOperand(I4, GeneralPurposeRegister.EDX, new IntPtr(4)), eax);
+			context.AppendInstruction(OpCodes.Instruction.MovInstruction, eax, op1L);
+			context.AppendInstruction(OpCodes.Instruction.MovInstruction, new MemoryOperand(U4, GeneralPurposeRegister.EDX, IntPtr.Zero), eax);
+			context.AppendInstruction(OpCodes.Instruction.MovInstruction, eax, op1H);
+			context.AppendInstruction(OpCodes.Instruction.MovInstruction, new MemoryOperand(I4, GeneralPurposeRegister.EDX, new IntPtr(4)), eax);
 		}
 
 		/// <summary>
@@ -1538,28 +1538,28 @@ namespace Mosa.Platform.x86
 			Context[] newBlocks = CreateEmptyBlockContexts(context.Label, 3);
 			Context nextBlock = SplitContext(context, false);
 
-			context.SetInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[0].BasicBlock);
+			context.SetInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[0].BasicBlock);
 			LinkBlocks(context, newBlocks[0]);
 			// Compare high dwords
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.DirectCompareInstruction, op1H, op2H);
+			newBlocks[0].AppendInstruction(OpCodes.Instruction.DirectCompareInstruction, op1H, op2H);
 			// Branch if check already gave results
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.Equal, newBlocks[2].BasicBlock);
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[1].BasicBlock);
+			newBlocks[0].AppendInstruction(OpCodes.Instruction.BranchInstruction, IR.ConditionCode.Equal, newBlocks[2].BasicBlock);
+			newBlocks[0].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[1].BasicBlock);
 			LinkBlocks(newBlocks[0], newBlocks[1], newBlocks[2]);
 
-			newBlocks[1].AppendInstruction(CPUx86.Instruction.BranchInstruction, code, FindBlock(target));
+			newBlocks[1].AppendInstruction(OpCodes.Instruction.BranchInstruction, code, FindBlock(target));
 			//            newBlocks[1].SetBranch(target);
-			newBlocks[1].AppendInstruction(CPUx86.Instruction.JmpInstruction);
+			newBlocks[1].AppendInstruction(OpCodes.Instruction.JmpInstruction);
 			newBlocks[1].SetBranch(nextBlock.BasicBlock);
 			LinkBlocks(newBlocks[1], FindBlock(target));
 			LinkBlocks(newBlocks[1], nextBlock);
 
 			// Compare low dwords
-			newBlocks[2].SetInstruction(CPUx86.Instruction.DirectCompareInstruction, op1L, op2L);
+			newBlocks[2].SetInstruction(OpCodes.Instruction.DirectCompareInstruction, op1L, op2L);
 			// Set the unsigned result...
-			newBlocks[2].AppendInstruction(CPUx86.Instruction.BranchInstruction, code, FindBlock(target));
+			newBlocks[2].AppendInstruction(OpCodes.Instruction.BranchInstruction, code, FindBlock(target));
 			//            newBlocks[1].SetBranch(target);
-			newBlocks[2].AppendInstruction(CPUx86.Instruction.JmpInstruction);
+			newBlocks[2].AppendInstruction(OpCodes.Instruction.JmpInstruction);
 			newBlocks[2].SetBranch(nextBlock.BasicBlock);
 			LinkBlocks(newBlocks[2], FindBlock(target));
 			LinkBlocks(newBlocks[2], nextBlock);
@@ -1585,22 +1585,22 @@ namespace Mosa.Platform.x86
 			Context nextBlock = SplitContext(context, false);
 
 			// Compare high dwords
-			context.SetInstruction(CPUx86.Instruction.CmpInstruction, op1H, op2H);
-			context.AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.Equal, newBlocks[1].BasicBlock);
-			context.AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[0].BasicBlock);
+			context.SetInstruction(OpCodes.Instruction.CmpInstruction, op1H, op2H);
+			context.AppendInstruction(OpCodes.Instruction.BranchInstruction, IR.ConditionCode.Equal, newBlocks[1].BasicBlock);
+			context.AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[0].BasicBlock);
 			LinkBlocks(context, newBlocks[0], newBlocks[1]);
 
 			// Branch if check already gave results
-			newBlocks[0].SetInstruction(CPUx86.Instruction.BranchInstruction, conditionCode, target);
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.JmpInstruction, nextBlock.BasicBlock);
+			newBlocks[0].SetInstruction(OpCodes.Instruction.BranchInstruction, conditionCode, target);
+			newBlocks[0].AppendInstruction(OpCodes.Instruction.JmpInstruction, nextBlock.BasicBlock);
 			LinkBlocks(newBlocks[0], target);
 			LinkBlocks(newBlocks[0], nextBlock);
 
 			// Compare low dwords
-			newBlocks[1].SetInstruction(CPUx86.Instruction.CmpInstruction, op1L, op2L);
+			newBlocks[1].SetInstruction(OpCodes.Instruction.CmpInstruction, op1L, op2L);
 			// Set the unsigned result...
-			newBlocks[1].AppendInstruction(CPUx86.Instruction.BranchInstruction, GetUnsignedConditionCode(conditionCode), target);
-			newBlocks[1].AppendInstruction(CPUx86.Instruction.JmpInstruction, nextBlock.BasicBlock);
+			newBlocks[1].AppendInstruction(OpCodes.Instruction.BranchInstruction, GetUnsignedConditionCode(conditionCode), target);
+			newBlocks[1].AppendInstruction(OpCodes.Instruction.JmpInstruction, nextBlock.BasicBlock);
 			LinkBlocks(newBlocks[1], target);
 			LinkBlocks(newBlocks[1], nextBlock);
 		}
@@ -1650,31 +1650,31 @@ namespace Mosa.Platform.x86
 			Context nextBlock = SplitContext(context, false);
 
 			// Compare high dwords
-			context.SetInstruction(CPUx86.Instruction.CmpInstruction, op1H, op2H);
-			context.AppendInstruction(CPUx86.Instruction.BranchInstruction, IR.ConditionCode.Equal, newBlocks[1].BasicBlock);
-			context.AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[0].BasicBlock);
+			context.SetInstruction(OpCodes.Instruction.CmpInstruction, op1H, op2H);
+			context.AppendInstruction(OpCodes.Instruction.BranchInstruction, IR.ConditionCode.Equal, newBlocks[1].BasicBlock);
+			context.AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[0].BasicBlock);
 			LinkBlocks(context, newBlocks[0], newBlocks[1]);
 
 			// Branch if check already gave results
-			newBlocks[0].SetInstruction(CPUx86.Instruction.BranchInstruction, conditionCode, newBlocks[2].BasicBlock);
-			newBlocks[0].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[3].BasicBlock);
+			newBlocks[0].SetInstruction(OpCodes.Instruction.BranchInstruction, conditionCode, newBlocks[2].BasicBlock);
+			newBlocks[0].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[3].BasicBlock);
 			LinkBlocks(newBlocks[0], newBlocks[2], newBlocks[3]);
 
 			// Compare low dwords
-			newBlocks[1].SetInstruction(CPUx86.Instruction.CmpInstruction, op1L, op2L);
+			newBlocks[1].SetInstruction(OpCodes.Instruction.CmpInstruction, op1L, op2L);
 			// Set the unsigned result...
-			newBlocks[1].AppendInstruction(CPUx86.Instruction.BranchInstruction, GetUnsignedConditionCode(conditionCode), newBlocks[2].BasicBlock);
-			newBlocks[1].AppendInstruction(CPUx86.Instruction.JmpInstruction, newBlocks[3].BasicBlock);
+			newBlocks[1].AppendInstruction(OpCodes.Instruction.BranchInstruction, GetUnsignedConditionCode(conditionCode), newBlocks[2].BasicBlock);
+			newBlocks[1].AppendInstruction(OpCodes.Instruction.JmpInstruction, newBlocks[3].BasicBlock);
 			LinkBlocks(newBlocks[1], newBlocks[2], newBlocks[3]);
 
 			// Success
-			newBlocks[2].SetInstruction(CPUx86.Instruction.MovsxInstruction, op0, new ConstantOperand(I4, 1));
-			newBlocks[2].AppendInstruction(CPUx86.Instruction.JmpInstruction, nextBlock.BasicBlock);
+			newBlocks[2].SetInstruction(OpCodes.Instruction.MovsxInstruction, op0, new ConstantOperand(I4, 1));
+			newBlocks[2].AppendInstruction(OpCodes.Instruction.JmpInstruction, nextBlock.BasicBlock);
 			LinkBlocks(newBlocks[2], nextBlock);
 
 			// Failed
-			newBlocks[3].SetInstruction(CPUx86.Instruction.MovsxInstruction, op0, new ConstantOperand(I4, 0));
-			newBlocks[3].AppendInstruction(CPUx86.Instruction.JmpInstruction, nextBlock.BasicBlock);
+			newBlocks[3].SetInstruction(OpCodes.Instruction.MovsxInstruction, op0, new ConstantOperand(I4, 0));
+			newBlocks[3].AppendInstruction(OpCodes.Instruction.JmpInstruction, nextBlock.BasicBlock);
 			LinkBlocks(newBlocks[3], nextBlock);
 		}
 
@@ -1982,7 +1982,7 @@ namespace Mosa.Platform.x86
 				if (context.Operand2 is ConstantOperand && context.Operand1.Type.Type == CilElementType.Char)
 				{
 					RegisterOperand ecx = new RegisterOperand(context.Operand1.Type, GeneralPurposeRegister.ECX);
-					context.InsertBefore().SetInstruction(CPUx86.Instruction.MovInstruction, ecx, context.Operand2);
+					context.InsertBefore().SetInstruction(OpCodes.Instruction.MovInstruction, ecx, context.Operand2);
 					context.Operand2 = ecx;
 				}
 			}
@@ -2137,12 +2137,6 @@ namespace Mosa.Platform.x86
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.JmpInstruction(Context context) { }
-
-		/// <summary>
-		/// Visitation function for LiteralInstruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.LiteralInstruction(Context context) { }
 
 		/// <summary>
 		/// Visitation function for PhiInstruction.

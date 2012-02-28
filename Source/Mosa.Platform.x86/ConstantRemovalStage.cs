@@ -95,10 +95,10 @@ namespace Mosa.Platform.x86
 					if (co != null && IsLargeConstant(co))
 					{
 						// Move the constant out of the code stream and place it right after the code.
-						ctxEpilogue.AppendInstruction(CPUx86.Instruction.LiteralInstruction);
+						ctxEpilogue.AppendInstruction(OpCodes.Instruction.LiteralInstruction);
 						ctxEpilogue.LiteralData = new IR.LiteralData(ctx.Label, co.Type, co.Value);
 
-						op.Replace(((ctxEpilogue.Instruction) as CPUx86.LiteralInstruction).CreateOperand(ctxEpilogue), instructionSet);
+						op.Replace(((ctxEpilogue.Instruction) as OpCodes.LiteralInstruction).CreateOperand(ctxEpilogue), instructionSet);
 
 						_constantRemoved = true;
 					}

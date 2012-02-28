@@ -67,16 +67,16 @@ namespace Mosa.Platform.x86
 				InstructionSet instructionSet = new InstructionSet(100);
 				Context ctx = new Context(instructionSet);
 
-				ctx.AppendInstruction(CPUx86.Instruction.CliInstruction);
+				ctx.AppendInstruction(OpCodes.Instruction.CliInstruction);
 				if (i <= 7 || i >= 16 | i == 9) // For IRQ 8, 10, 11, 12, 13, 14 the cpu will automatically pushed the error code
-					ctx.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new ConstantOperand(BuiltInSigType.SByte, 0x0));
-				ctx.AppendInstruction(CPUx86.Instruction.PushInstruction, null, new ConstantOperand(BuiltInSigType.SByte, (byte)i));
-				ctx.AppendInstruction(CPUx86.Instruction.PushadInstruction);
-				ctx.AppendInstruction(CPUx86.Instruction.CallInstruction, null, interruptMethod);
-				ctx.AppendInstruction(CPUx86.Instruction.PopadInstruction);
-				ctx.AppendInstruction(CPUx86.Instruction.AddInstruction, esp, new ConstantOperand(BuiltInSigType.Int32, 0x08));
-				ctx.AppendInstruction(CPUx86.Instruction.StiInstruction);
-				ctx.AppendInstruction(CPUx86.Instruction.IRetdInstruction);
+					ctx.AppendInstruction(OpCodes.Instruction.PushInstruction, null, new ConstantOperand(BuiltInSigType.SByte, 0x0));
+				ctx.AppendInstruction(OpCodes.Instruction.PushInstruction, null, new ConstantOperand(BuiltInSigType.SByte, (byte)i));
+				ctx.AppendInstruction(OpCodes.Instruction.PushadInstruction);
+				ctx.AppendInstruction(OpCodes.Instruction.CallInstruction, null, interruptMethod);
+				ctx.AppendInstruction(OpCodes.Instruction.PopadInstruction);
+				ctx.AppendInstruction(OpCodes.Instruction.AddInstruction, esp, new ConstantOperand(BuiltInSigType.Int32, 0x08));
+				ctx.AppendInstruction(OpCodes.Instruction.StiInstruction);
+				ctx.AppendInstruction(OpCodes.Instruction.IRetdInstruction);
 
 				LinkTimeCodeGenerator.Compile(this.compiler, @"InterruptISR" + i.ToString(), instructionSet, typeSystem);
 			}

@@ -85,7 +85,7 @@ namespace Mosa.Platform.x86
 				else if (IsUnsigned(op1) && !(op1 is ConstantOperand))
 					ctx.InsertBefore().SetInstruction(IR.Instruction.ZeroExtendedMoveInstruction, eax, op1);
 				else
-					ctx.InsertBefore().SetInstruction(CPUx86.Instruction.MovInstruction, eax, op1);
+					ctx.InsertBefore().SetInstruction(OpCodes.Instruction.MovInstruction, eax, op1);
 			}
 			else
 			{
@@ -94,21 +94,21 @@ namespace Mosa.Platform.x86
 					if (op1 is ConstantOperand)
 					{
 						Context before = ctx.InsertBefore();
-						before.SetInstruction(CPUx86.Instruction.MovInstruction, eax, op1);
-						before.AppendInstruction(CPUx86.Instruction.Cvtss2sdInstruction, eax, eax);
+						before.SetInstruction(OpCodes.Instruction.MovInstruction, eax, op1);
+						before.AppendInstruction(OpCodes.Instruction.Cvtss2sdInstruction, eax, eax);
 					}
 					else
 					{
-						ctx.InsertBefore().SetInstruction(CPUx86.Instruction.Cvtss2sdInstruction, eax, op1);
+						ctx.InsertBefore().SetInstruction(OpCodes.Instruction.Cvtss2sdInstruction, eax, op1);
 					}
 				}
 				else
 				{
-					ctx.InsertBefore().SetInstruction(CPUx86.Instruction.MovInstruction, eax, op1);
+					ctx.InsertBefore().SetInstruction(OpCodes.Instruction.MovInstruction, eax, op1);
 				}
 			}
 
-			ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, result, eax);
+			ctx.AppendInstruction(OpCodes.Instruction.MovInstruction, result, eax);
 		}
 
 	}

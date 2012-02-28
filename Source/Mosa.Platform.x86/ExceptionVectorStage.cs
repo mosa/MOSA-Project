@@ -72,7 +72,7 @@ namespace Mosa.Platform.x86
 			//2. 
 			
 			//3. Call the managed exception handler
-			ctx.AppendInstruction(CPUx86.Instruction.CallInstruction, null, exceptionMethod);			
+			ctx.AppendInstruction(OpCodes.Instruction.CallInstruction, null, exceptionMethod);			
 
 			LinkTimeCodeGenerator.Compile(this.compiler, @"ExceptionVector", instructionSet, typeSystem);
 

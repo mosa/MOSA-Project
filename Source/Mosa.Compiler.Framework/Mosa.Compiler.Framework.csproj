@@ -230,7 +230,6 @@
     <Compile Include="IR\IntegerToFloatingPointConversionInstruction.cs" />
     <Compile Include="IR\BaseInstruction.cs" />
     <Compile Include="IR\JmpInstruction.cs" />
-    <Compile Include="IR\LiteralInstruction.cs" />
     <Compile Include="IR\LoadInstruction.cs" />
     <Compile Include="IR\LogicalAndInstruction.cs" />
     <Compile Include="IR\LogicalNotInstruction.cs" />

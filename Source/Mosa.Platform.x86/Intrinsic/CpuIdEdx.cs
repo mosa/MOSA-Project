@@ -35,10 +35,10 @@ namespace Mosa.Platform.x86.Intrinsic
 			RegisterOperand eax = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.EAX);
 			RegisterOperand ecx = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.ECX);
 			RegisterOperand reg = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.EDX);
-			context.SetInstruction(CPUx86.Instruction.MovInstruction, eax, operand);
-			context.AppendInstruction(CPUx86.Instruction.XorInstruction, ecx, ecx);
-			context.AppendInstruction(CPUx86.Instruction.CpuIdEdxInstruction);
-			context.AppendInstruction(CPUx86.Instruction.MovInstruction, result, reg);
+			context.SetInstruction(OpCodes.Instruction.MovInstruction, eax, operand);
+			context.AppendInstruction(OpCodes.Instruction.XorInstruction, ecx, ecx);
+			context.AppendInstruction(OpCodes.Instruction.CpuIdEdxInstruction);
+			context.AppendInstruction(OpCodes.Instruction.MovInstruction, result, reg);
 		}
 
 		#endregion // Methods

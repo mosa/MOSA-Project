@@ -37,7 +37,7 @@ namespace Mosa.Platform.x86
 				{
 					if (ctx.Instruction != null)
 					{
-						if (!ctx.Ignore && ctx.Instruction is CPUx86.IX86Instruction)
+						if (!ctx.Ignore && ctx.Instruction is OpCodes.IX86Instruction)
 						{
 							if (IsMemoryOperand(ctx.Result) && IsMemoryOperand(ctx.Operand1))
 							{
@@ -92,24 +92,24 @@ namespace Mosa.Platform.x86
 			{
 				if (MustSignExtendOnLoad(sigType.Type) == true)
 				{
-					moveInstruction = CPUx86.Instruction.MovsxInstruction;
+					moveInstruction = OpCodes.Instruction.MovsxInstruction;
 				}
 				else if (MustZeroExtendOnLoad(sigType.Type) == true)
 				{
-					moveInstruction = CPUx86.Instruction.MovzxInstruction;
+					moveInstruction = OpCodes.Instruction.MovzxInstruction;
 				}
 				else
 				{
-					moveInstruction = CPUx86.Instruction.MovInstruction;
+					moveInstruction = OpCodes.Instruction.MovInstruction;
 				}
 			}
 			else if (sigType.Type == CilElementType.R8)
 			{
-				moveInstruction = CPUx86.Instruction.MovsdInstruction;
+				moveInstruction = OpCodes.Instruction.MovsdInstruction;
 			}
 			else
 			{
-				moveInstruction = CPUx86.Instruction.MovssInstruction;
+				moveInstruction = OpCodes.Instruction.MovssInstruction;
 			}
 
 			return moveInstruction;
