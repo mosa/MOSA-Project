@@ -111,6 +111,10 @@
       <Project>{5F30A68E-05BF-40EA-B576-5EBCDE520449}</Project>
       <Name>Mosa.Compiler.TypeSystem</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mosa.Platform.AVR32\Mosa.Platform.AVR32.csproj">
+      <Project>{F3BB1082-13E3-4B37-ABF4-A3E42C9E7ED9}</Project>
+      <Name>Mosa.Platform.AVR32</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Mosa.Platform.x86\Mosa.Platform.x86.csproj">
       <Project>{56CA38E7-0883-4461-A10E-386D0C58DBF9}</Project>
       <Name>Mosa.Platform.x86</Name>

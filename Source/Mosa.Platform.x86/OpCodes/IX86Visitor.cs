@@ -337,14 +337,14 @@ namespace Mosa.Platform.x86.OpCodes
 		/// <param name="context">The context.</param>
 		void Movsx(Context context);
 		/// <summary>
-		/// 
+		/// Movsses the specified context.
 		/// </summary>
-		/// <param name="context"></param>
+		/// <param name="context">The context.</param>
 		void Movss(Context context);
 		/// <summary>
-		/// 
+		/// Movsds the specified context.
 		/// </summary>
-		/// <param name="context"></param>
+		/// <param name="context">The context.</param>
 		void Movsd(Context context);
 		/// <summary>
 		/// Move with Zero-Extension

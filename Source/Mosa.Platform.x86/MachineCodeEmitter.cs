@@ -25,40 +25,11 @@ namespace Mosa.Platform.x86
 	/// </summary>
 	public sealed class MachineCodeEmitter : BaseCodeEmitter, ICodeEmitter, IDisposable
 	{
-		private static readonly DataConverter LittleEndianBitConverter = DataConverter.LittleEndian;
 
-		#region ICodeEmitter Members
-
-		void ICodeEmitter.ResolvePatches()
+		public MachineCodeEmitter()
 		{
-			// Save the current position
-			long currentPosition = codeStream.Position;
-
-			foreach (Patch p in patches)
-			{
-				long labelPosition;
-				if (!labels.TryGetValue(p.Label, out labelPosition))
-				{
-					throw new ArgumentException(@"Missing label while resolving patches.", @"label");
-				}
-
-				codeStream.Position = p.Position;
-
-				// Compute relative branch offset
-				int relOffset = (int)labelPosition - ((int)p.Position + 4);
-
-				// Write relative offset to stream
-				byte[] bytes = LittleEndianBitConverter.GetBytes(relOffset);
-				codeStream.Write(bytes, 0, bytes.Length);
-			}
-
-			patches.Clear();
-
-			// Reset the position
-			codeStream.Position = currentPosition;
+			bitConverter = DataConverter.LittleEndian;
 		}
-
-		#endregion // ICodeEmitter Members
 
 		#region Code Generation
 	
@@ -219,19 +190,19 @@ namespace Mosa.Platform.x86
 
 			if (label != null)
 			{
-				disp = LittleEndianBitConverter.GetBytes((uint)linker.Link(LinkType.AbsoluteAddress | LinkType.I4, compiler.Method.ToString(), pos, 0, label.Name, IntPtr.Zero));
+				disp = bitConverter.GetBytes((uint)linker.Link(LinkType.AbsoluteAddress | LinkType.I4, compiler.Method.ToString(), pos, 0, label.Name, IntPtr.Zero));
 			}
 			else if (member != null)
 			{
-				disp = LittleEndianBitConverter.GetBytes((uint)linker.Link(LinkType.AbsoluteAddress | LinkType.I4, compiler.Method.ToString(), pos, 0, member.Member.ToString(), member.Offset));
+				disp = bitConverter.GetBytes((uint)linker.Link(LinkType.AbsoluteAddress | LinkType.I4, compiler.Method.ToString(), pos, 0, member.Member.ToString(), member.Offset));
 			}
 			else if (symbol != null)
 			{
-				disp = LittleEndianBitConverter.GetBytes((uint)linker.Link(LinkType.AbsoluteAddress | LinkType.I4, compiler.Method.ToString(), pos, 0, symbol.Name, IntPtr.Zero));
+				disp = bitConverter.GetBytes((uint)linker.Link(LinkType.AbsoluteAddress | LinkType.I4, compiler.Method.ToString(), pos, 0, symbol.Name, IntPtr.Zero));
 			}
 			else
 			{
-				disp = LittleEndianBitConverter.GetBytes((displacement as MemoryOperand).Offset.ToInt32());
+				disp = bitConverter.GetBytes((displacement as MemoryOperand).Offset.ToInt32());
 			}
 
 			codeStream.Write(disp, 0, disp.Length);
@@ -248,7 +219,7 @@ namespace Mosa.Platform.x86
 			{
 				// Add the displacement
 				StackOperand so = (StackOperand)op;
-				imm = LittleEndianBitConverter.GetBytes(so.Offset.ToInt32());
+				imm = bitConverter.GetBytes(so.Offset.ToInt32());
 			}
 			else if (op is LabelOperand)
 			{
@@ -259,7 +230,7 @@ namespace Mosa.Platform.x86
 			{
 				// Add the displacement
 				MemoryOperand mo = (MemoryOperand)op;
-				imm = LittleEndianBitConverter.GetBytes(mo.Offset.ToInt32());
+				imm = bitConverter.GetBytes(mo.Offset.ToInt32());
 			}
 			else if (op is ConstantOperand)
 			{
@@ -272,50 +243,50 @@ namespace Mosa.Platform.x86
 						{
 							if (co.Value is Token)
 							{
-								imm = LittleEndianBitConverter.GetBytes(((Token)co.Value).ToInt32());
+								imm = bitConverter.GetBytes(((Token)co.Value).ToInt32());
 							}
 							else
 							{
-								imm = LittleEndianBitConverter.GetBytes(Convert.ToInt32(co.Value));
+								imm = bitConverter.GetBytes(Convert.ToInt32(co.Value));
 							}
 						}
 						catch (OverflowException)
 						{
-							imm = LittleEndianBitConverter.GetBytes(Convert.ToUInt64(co.Value));
+							imm = bitConverter.GetBytes(Convert.ToUInt64(co.Value));
 						}
 						break;
 
 					case CilElementType.I1:
-						//imm = LittleEndianBitConverter.GetBytes(Convert.ToSByte(co.Value));
+						//imm = bitConverter.GetBytes(Convert.ToSByte(co.Value));
 						imm = new byte[1] { Convert.ToByte(co.Value) };
 						break;
 
 					case CilElementType.I2:
-						imm = LittleEndianBitConverter.GetBytes(Convert.ToInt16(co.Value));
+						imm = bitConverter.GetBytes(Convert.ToInt16(co.Value));
 						break;
 					case CilElementType.I4: goto case CilElementType.I;
 
 					case CilElementType.U1:
-						//imm = LittleEndianBitConverter.GetBytes(Convert.ToByte(co.Value));
+						//imm = bitConverter.GetBytes(Convert.ToByte(co.Value));
 						imm = new byte[1] { Convert.ToByte(co.Value) };
 						break;
 					case CilElementType.Char:
 						goto case CilElementType.U2;
 					case CilElementType.U2:
-						imm = LittleEndianBitConverter.GetBytes((ushort)Convert.ToUInt64(co.Value));
+						imm = bitConverter.GetBytes((ushort)Convert.ToUInt64(co.Value));
 						break;
 					case CilElementType.Ptr:
 					case CilElementType.U4:
-						imm = LittleEndianBitConverter.GetBytes((uint)Convert.ToUInt64(co.Value));
+						imm = bitConverter.GetBytes((uint)Convert.ToUInt64(co.Value));
 						break;
 					case CilElementType.I8:
-						imm = LittleEndianBitConverter.GetBytes(Convert.ToInt64(co.Value));
+						imm = bitConverter.GetBytes(Convert.ToInt64(co.Value));
 						break;
 					case CilElementType.U8:
-						imm = LittleEndianBitConverter.GetBytes(Convert.ToUInt64(co.Value));
+						imm = bitConverter.GetBytes(Convert.ToUInt64(co.Value));
 						break;
 					case CilElementType.R4:
-						imm = LittleEndianBitConverter.GetBytes(Convert.ToSingle(co.Value));
+						imm = bitConverter.GetBytes(Convert.ToSingle(co.Value));
 						break;
 					case CilElementType.R8: goto default;
 					case CilElementType.Object: goto case CilElementType.I;
@@ -362,7 +333,7 @@ namespace Mosa.Platform.x86
 			}
 
 			// Emit the relative jump offset (zero if we don't know it yet!)
-			byte[] bytes = LittleEndianBitConverter.GetBytes(relOffset);
+			byte[] bytes = bitConverter.GetBytes(relOffset);
 			codeStream.Write(bytes, 0, bytes.Length);
 		}
 
@@ -377,7 +348,7 @@ namespace Mosa.Platform.x86
 			LinkerSection linkerSection = linker.GetSection(SectionKind.Text);
 			if (linkerSection != null) // HACK: To assist TypeExplorer, which returns null from GetSection method
 			{
-				byte[] bytes = LittleEndianBitConverter.GetBytes((int)(linkerSection.VirtualAddress.ToInt32() + linkerSection.Length + 6));
+				byte[] bytes = bitConverter.GetBytes((int)(linkerSection.VirtualAddress.ToInt32() + linkerSection.Length + 6));
 				codeStream.Write(bytes, 0, bytes.Length);
 			}
 
@@ -396,7 +367,7 @@ namespace Mosa.Platform.x86
 			{
 				// Add the displacement
 				StackOperand so = (StackOperand)op;
-				imm = LittleEndianBitConverter.GetBytes(so.Offset.ToInt32());
+				imm = bitConverter.GetBytes(so.Offset.ToInt32());
 			}
 			else if (op is LabelOperand)
 			{
@@ -407,7 +378,7 @@ namespace Mosa.Platform.x86
 			{
 				// Add the displacement
 				MemoryOperand mo = (MemoryOperand)op;
-				imm = LittleEndianBitConverter.GetBytes(mo.Offset.ToInt32());
+				imm = bitConverter.GetBytes(mo.Offset.ToInt32());
 			}
 			else if (op is ConstantOperand)
 			{
@@ -418,44 +389,44 @@ namespace Mosa.Platform.x86
 					case CilElementType.I:
 						try
 						{
-							imm = LittleEndianBitConverter.GetBytes(Convert.ToInt32(co.Value));
+							imm = bitConverter.GetBytes(Convert.ToInt32(co.Value));
 						}
 						catch (OverflowException)
 						{
-							imm = LittleEndianBitConverter.GetBytes(Convert.ToUInt32(co.Value));
+							imm = bitConverter.GetBytes(Convert.ToUInt32(co.Value));
 						}
 						break;
 
 					case CilElementType.I1:
-						//imm = LittleEndianBitConverter.GetBytes(Convert.ToSByte(co.Value));
+						//imm = bitConverter.GetBytes(Convert.ToSByte(co.Value));
 						imm = new byte[1] { Convert.ToByte(co.Value) };
 						break;
 
 					case CilElementType.I2:
-						imm = LittleEndianBitConverter.GetBytes(Convert.ToInt16(co.Value));
+						imm = bitConverter.GetBytes(Convert.ToInt16(co.Value));
 						break;
 					case CilElementType.I4: goto case CilElementType.I;
 
 					case CilElementType.U1:
-						//imm = LittleEndianBitConverter.GetBytes(Convert.ToByte(co.Value));
+						//imm = bitConverter.GetBytes(Convert.ToByte(co.Value));
 						imm = new byte[1] { Convert.ToByte(co.Value) };
 						break;
 					case CilElementType.Char:
 						goto case CilElementType.U2;
 					case CilElementType.U2:
-						imm = LittleEndianBitConverter.GetBytes(Convert.ToUInt16(co.Value));
+						imm = bitConverter.GetBytes(Convert.ToUInt16(co.Value));
 						break;
 					case CilElementType.U4:
-						imm = LittleEndianBitConverter.GetBytes(Convert.ToUInt32(co.Value));
+						imm = bitConverter.GetBytes(Convert.ToUInt32(co.Value));
 						break;
 					case CilElementType.I8:
-						imm = LittleEndianBitConverter.GetBytes(Convert.ToInt64(co.Value));
+						imm = bitConverter.GetBytes(Convert.ToInt64(co.Value));
 						break;
 					case CilElementType.U8:
-						imm = LittleEndianBitConverter.GetBytes(Convert.ToUInt64(co.Value));
+						imm = bitConverter.GetBytes(Convert.ToUInt64(co.Value));
 						break;
 					case CilElementType.R4:
-						imm = LittleEndianBitConverter.GetBytes(Convert.ToSingle(co.Value));
+						imm = bitConverter.GetBytes(Convert.ToSingle(co.Value));
 						break;
 					case CilElementType.R8: goto default;
 					default:

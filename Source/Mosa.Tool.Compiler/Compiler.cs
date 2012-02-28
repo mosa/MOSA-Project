@@ -512,6 +512,9 @@ namespace Mosa.Tool.Compiler
 				case "x86":
 					return Mosa.Platform.x86.Architecture.CreateArchitecture(Mosa.Platform.x86.ArchitectureFeatureFlags.AutoDetect);
 
+				case "avr32":
+					return Mosa.Platform.AVR32.Architecture.CreateArchitecture(Mosa.Platform.AVR32.ArchitectureFeatureFlags.AutoDetect);
+
 				case "x64":
 				default:
 					throw new OptionException(String.Format("Unknown or unsupported architecture {0}.", architecture), "Architecture");

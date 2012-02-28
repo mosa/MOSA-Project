@@ -21,40 +21,11 @@ namespace Mosa.Platform.AVR32
 	/// </summary>
 	public sealed class MachineCodeEmitter : BaseCodeEmitter, ICodeEmitter, IDisposable
 	{
-		private static readonly DataConverter LittleEndianBitConverter = DataConverter.LittleEndian;
 
-		#region ICodeEmitter Members
-
-		void ICodeEmitter.ResolvePatches()
+		public MachineCodeEmitter()
 		{
-			// Save the current position
-			long currentPosition = codeStream.Position;
-
-			foreach (Patch p in patches)
-			{
-				long labelPosition;
-				if (!labels.TryGetValue(p.Label, out labelPosition))
-				{
-					throw new ArgumentException(@"Missing label while resolving patches.", @"label");
-				}
-
-				codeStream.Position = p.Position;
-
-				// Compute relative branch offset
-				int relOffset = (int)labelPosition - ((int)p.Position + 4);
-
-				// Write relative offset to stream
-				byte[] bytes = LittleEndianBitConverter.GetBytes(relOffset);
-				codeStream.Write(bytes, 0, bytes.Length);
-			}
-
-			patches.Clear();
-
-			// Reset the position
-			codeStream.Position = currentPosition;
+			bitConverter = DataConverter.BigEndian;
 		}
-
-		#endregion // ICodeEmitter Members
 
 		#region Code Generation Members
 

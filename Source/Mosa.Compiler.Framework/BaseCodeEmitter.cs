@@ -16,7 +16,7 @@ using System.Diagnostics;
 using System.IO;
 
 using Mosa.Compiler.Linker;
-
+using Mosa.Compiler.Common;
 
 namespace Mosa.Compiler.Framework
 {
@@ -69,6 +69,8 @@ namespace Mosa.Compiler.Framework
 		#endregion // Types
 
 		#region Data members
+
+		protected DataConverter bitConverter;
 
 		/// <summary>
 		/// The compiler that is generating the code.
@@ -145,8 +147,37 @@ namespace Mosa.Compiler.Framework
 			this.codeStream = codeStream;
 			this.codeStreamBasePosition = codeStream.Position;
 			this.linker = linker;
-		}
+		}		
 
+		public void ResolvePatches()
+		{
+			// Save the current position
+			long currentPosition = codeStream.Position;
+
+			foreach (Patch p in patches)
+			{
+				long labelPosition;
+				if (!labels.TryGetValue(p.Label, out labelPosition))
+				{
+					throw new ArgumentException(@"Missing label while resolving patches.", @"label");
+				}
+
+				codeStream.Position = p.Position;
+
+				// Compute relative branch offset
+				int relOffset = (int)labelPosition - ((int)p.Position + 4);
+
+				// Write relative offset to stream
+				byte[] bytes = BitConverter.GetBytes(relOffset);
+				codeStream.Write(bytes, 0, bytes.Length);
+			}
+
+			patches.Clear();
+
+			// Reset the position
+			codeStream.Position = currentPosition;
+		}
+	
 		/// <summary>
 		/// Emits a label into the code stream.
 		/// </summary>
