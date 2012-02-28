@@ -25,6 +25,7 @@ namespace Mosa.Platform.x86.OpCodes
 		private static readonly OpCode R_R_8 = new OpCode(new byte[] { 0xEC });
 		private static readonly OpCode R_C_32 = new OpCode(new byte[] { 0xE5 });
 		private static readonly OpCode R_R_32 = new OpCode(new byte[] { 0xED });
+		private static readonly OpCode opcode = new OpCode(new byte[] { 0xEC });
 
 		#endregion // Data Members
 
@@ -59,7 +60,7 @@ namespace Mosa.Platform.x86.OpCodes
 		/// <param name="emitter"></param>
 		protected override void Emit(Context ctx, MachineCodeEmitter emitter)
 		{
-			emitter.Emit(new OpCode(new byte[] { 0xEC }), null, null);
+			emitter.Emit(opcode, null, null);
 		}
 
 		/// <summary>

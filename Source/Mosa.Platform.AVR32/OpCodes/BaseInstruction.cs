@@ -90,7 +90,7 @@ namespace Mosa.Platform.AVR32.OpCodes
 		/// <param name="source">The source operand.</param>
 		/// <param name="third">The third operand.</param>
 		/// <returns></returns>
-		protected virtual OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
+		protected virtual int ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
 			throw new System.Exception("opcode not implemented for this instruction");
 		}
@@ -102,10 +102,7 @@ namespace Mosa.Platform.AVR32.OpCodes
 		/// <param name="emitter">The emitter.</param>
 		protected virtual void Emit(Context context, MachineCodeEmitter emitter)
 		{
-			OpCode opCode = ComputeOpCode(context.Result, context.Operand1, context.Operand2);
-			//TODO
-			//emitter.Emit(opCode, context.Result, context.Operand1, context.Operand2);
-			
+			// TODO
 		}
 
 		/// <summary>

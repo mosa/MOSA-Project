@@ -18,6 +18,11 @@ namespace Mosa.Platform.x86.OpCodes
 	/// </summary>
 	public sealed class PopfdInstruction : BaseInstruction
 	{
+		#region Data members
+
+		private static readonly OpCode opcode = new OpCode(new byte[] { 0x9D });
+
+		#endregion
 
 		#region Methods
 
@@ -30,7 +35,7 @@ namespace Mosa.Platform.x86.OpCodes
         /// <returns></returns>
         protected override OpCode ComputeOpCode(Compiler.Framework.Operands.Operand destination, Compiler.Framework.Operands.Operand source, Compiler.Framework.Operands.Operand third)
         {
-            return new OpCode(new byte[] { 0x9D });
+			return opcode;
         }
 
 		/// <summary>

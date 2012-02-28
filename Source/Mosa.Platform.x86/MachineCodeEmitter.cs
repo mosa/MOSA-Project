@@ -61,27 +61,7 @@ namespace Mosa.Platform.x86
 		#endregion // ICodeEmitter Members
 
 		#region Code Generation
-
-		/// <summary>
-		/// Writes the byte.
-		/// </summary>
-		/// <param name="data">The data.</param>
-		public void WriteByte(byte data)
-		{
-			codeStream.WriteByte(data);
-		}
-
-		/// <summary>
-		/// Writes the byte.
-		/// </summary>
-		/// <param name="buffer">The buffer.</param>
-		/// <param name="offset">The offset.</param>
-		/// <param name="count">The count.</param>
-		public void Write(byte[] buffer, int offset, int count)
-		{
-			codeStream.Write(buffer, offset, count);
-		}
-
+	
 		/// <summary>
 		/// Emits relative branch code.
 		/// </summary>

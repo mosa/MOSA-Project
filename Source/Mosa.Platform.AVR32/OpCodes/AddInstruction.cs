@@ -14,7 +14,7 @@ namespace Mosa.Platform.AVR32.OpCodes
 	/// <summary>
 	/// 
 	/// </summary>
-	public class NopInstruction : BaseInstruction
+	public class AddInstruction : BaseInstruction
 	{
 
 		#region Methods
@@ -26,7 +26,7 @@ namespace Mosa.Platform.AVR32.OpCodes
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
-			emitter.WriteUShort(0x00);
+			// TODO
 		}
 
 		#endregion // Methods

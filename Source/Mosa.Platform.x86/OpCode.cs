@@ -12,24 +12,24 @@ namespace Mosa.Platform.x86
 	/// <summary>
 	/// x86 OpCode
 	/// </summary>
-	public struct OpCode
+	public class OpCode
 	{
 		/// <summary>
 		/// Byte code
 		/// </summary>
-		public byte[] Code;
+		internal byte[] Code;
 
 		/// <summary>
 		/// Register field to extend the operation
 		/// </summary>
-		public byte? RegField;
+		internal byte? RegField;
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="OpCode"/> struct.
+		/// Initializes a new instance of the <see cref="OpCode"/> class.
 		/// </summary>
 		/// <param name="code">The corresponding opcodes</param>
-		/// <param name="regField">Additonal parameter field</param>
-		public OpCode(byte[] code, byte? regField)
+		/// <param name="regField">Additional parameter field</param>
+		internal OpCode(byte[] code, byte? regField)
 		{
 			Code = code;
 			RegField = regField;
@@ -39,7 +39,7 @@ namespace Mosa.Platform.x86
 		/// Initializes a new instance of the <see cref="OpCode"/> struct.
 		/// </summary>
 		/// <param name="code">The corresponding opcodes</param>
-		public OpCode(byte[] code)
+		internal OpCode(byte[] code)
 		{
 			Code = code;
 			RegField = null;

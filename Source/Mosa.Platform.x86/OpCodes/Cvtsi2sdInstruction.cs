@@ -17,19 +17,25 @@ namespace Mosa.Platform.x86.OpCodes
 	/// </summary>
 	public sealed class Cvtsi2sdInstruction : TwoOperandInstruction
 	{
+		#region Data members
+
+		private static readonly OpCode opcode = new OpCode(new byte[] { 0xF2, 0x0F, 0x2A });
+
+		#endregion
 
 		#region Methods
-        /// <summary>
-        /// Computes the opcode.
-        /// </summary>
-        /// <param name="destination">The destination operand.</param>
-        /// <param name="source">The source operand.</param>
-        /// <param name="third">The third operand.</param>
-        /// <returns></returns>
-        protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
-        {
-            return new OpCode(new byte[] { 0xF2, 0x0F, 0x2A });
-        }
+
+		/// <summary>
+		/// Computes the opcode.
+		/// </summary>
+		/// <param name="destination">The destination operand.</param>
+		/// <param name="source">The source operand.</param>
+		/// <param name="third">The third operand.</param>
+		/// <returns></returns>
+		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
+		{
+			return opcode;
+		}
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.

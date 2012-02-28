@@ -10,22 +10,10 @@
 namespace Mosa.Platform.AVR32
 {
 	/// <summary>
-	/// x86 OpCode
+	/// AVR32 OpCode
 	/// </summary>
-	public struct OpCode
+	internal class OpCode
 	{
-		/// <summary>
-		/// Byte code
-		/// </summary>
-		public byte[] Code;
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="OpCode"/> struct.
-		/// </summary>
-		/// <param name="code">The corresponding opcodes</param>
-		public OpCode(byte[] code)
-		{
-			Code = code;
-		}
+		
 	}
 }

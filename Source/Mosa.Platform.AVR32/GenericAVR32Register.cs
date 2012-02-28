@@ -9,12 +9,12 @@
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.x86
+namespace Mosa.Platform.AVR32
 {
 	/// <summary>
-	/// Base class for x86 registers.
+	/// Base class for AVR32 registers.
 	/// </summary>
-	public abstract class GenericX86Register : Register
+	public abstract class GenericAVR32Register : Register
 	{
 		#region Data members
 
@@ -26,7 +26,7 @@ namespace Mosa.Platform.x86
 		/// Initializes a new instance of <see cref="GenericX86Register"/>.
 		/// </summary>
 		/// <param name="index"></param>
-		protected GenericX86Register(int index) :
+		protected GenericAVR32Register(int index) :
 			base(index)
 		{
 		}

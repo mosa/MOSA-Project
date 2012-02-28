@@ -7,9 +7,7 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-
 using Mosa.Compiler.Framework;
-
 
 namespace Mosa.Platform.x86.OpCodes
 {
@@ -18,6 +16,11 @@ namespace Mosa.Platform.x86.OpCodes
 	/// </summary>
 	public sealed class PushfdInstruction : BaseInstruction
 	{
+		#region Data members
+
+		private static readonly OpCode opcode = new OpCode(new byte[] { 0x9C });
+
+		#endregion
 
 		#region Methods
 
@@ -30,7 +33,7 @@ namespace Mosa.Platform.x86.OpCodes
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Compiler.Framework.Operands.Operand destination, Compiler.Framework.Operands.Operand source, Compiler.Framework.Operands.Operand third)
 		{
-			return new OpCode(new byte[] { 0x9C });
+			return opcode;
 		}
 
 		/// <summary>

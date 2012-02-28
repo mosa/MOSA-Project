@@ -56,5 +56,31 @@ namespace Mosa.Platform.AVR32
 
 		#endregion // ICodeEmitter Members
 
+		#region Code Generation Members
+
+		/// <summary>
+		/// Writes the unsigned short.
+		/// </summary>
+		/// <param name="data">The data.</param>
+		public void WriteUShort(ushort data)
+		{
+			codeStream.WriteByte((byte)((data >> 8) & 0xFF));
+			codeStream.WriteByte((byte)(data & 0xFF));
+		}
+
+		/// <summary>
+		/// Writes the unsigned int.
+		/// </summary>
+		/// <param name="data">The data.</param>
+		public void WriteUShort(uint data)
+		{
+			codeStream.WriteByte((byte)((data >> 24) & 0xFF));
+			codeStream.WriteByte((byte)((data >> 16) & 0xFF));
+			codeStream.WriteByte((byte)((data >> 8) & 0xFF));
+			codeStream.WriteByte((byte)(data & 0xFF));
+		}
+
+		#endregion
+
 	}
 }
