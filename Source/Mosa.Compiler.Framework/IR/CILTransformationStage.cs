@@ -307,16 +307,16 @@ namespace Mosa.Compiler.Framework.IR
 		{
 			if (context.Operand1.Type is ValueTypeSigType)
 			{
-				var type = this.methodCompiler.Method.Module.GetType ((context.Operand1.Type as ValueTypeSigType).Token);
-				var operand = new MemberOperand (type.Fields[0], type.Fields[0].SignatureType, new IntPtr (0));
-				context.SetOperand (0, operand);
+				var type = this.methodCompiler.Method.Module.GetType((context.Operand1.Type as ValueTypeSigType).Token);
+				var operand = new MemberOperand(type.Fields[0], type.Fields[0].SignatureType, new IntPtr(0));
+				context.SetOperand(0, operand);
 			}
 
 			if (context.Operand2.Type is ValueTypeSigType)
 			{
-				var type = this.methodCompiler.Method.Module.GetType ((context.Operand2.Type as ValueTypeSigType).Token);
-				var operand = new MemberOperand (type.Fields[0], type.Fields[0].SignatureType, new IntPtr (0));
-				context.SetOperand (1, operand);
+				var type = this.methodCompiler.Method.Module.GetType((context.Operand2.Type as ValueTypeSigType).Token);
+				var operand = new MemberOperand(type.Fields[0], type.Fields[0].SignatureType, new IntPtr(0));
+				context.SetOperand(1, operand);
 			}
 
 			switch ((context.Instruction as CIL.BaseInstruction).OpCode)
@@ -449,11 +449,11 @@ namespace Mosa.Compiler.Framework.IR
 					}
 				}
 
-				context.Previous.ReplaceInstructionOnly (IR.Instruction.NopInstruction);
+				context.Previous.ReplaceInstructionOnly(IR.Instruction.NopInstruction);
 
 				SymbolOperand symbolOperand = SymbolOperand.FromMethod(invokeTarget);
 				ProcessInvokeInstruction(context, symbolOperand, resultOperand, operands);
-				
+
 				return;
 			}
 
@@ -661,7 +661,7 @@ namespace Mosa.Compiler.Framework.IR
 		{
 			// We don't need to check the result, if the icall fails, it'll happily throw
 			// the InvalidCastException.
-			context.ReplaceInstructionOnly (IR.Instruction.NopInstruction);
+			context.ReplaceInstructionOnly(IR.Instruction.NopInstruction);
 			//ReplaceWithVmCall(context, VmCall.Castclass);
 		}
 
@@ -908,29 +908,22 @@ namespace Mosa.Compiler.Framework.IR
 
 			if (!linker.HasSymbol(symbolName))
 			{
-				const int nativePtrSize = 4;
-				const int nativePtrAlignment = 4;
-
-				int stringHeaderLength = nativePtrSize * 3;
-				int stringDataLength = referencedString.Length * 2;
-
 				// HACK: These strings should actually go into .rodata, but we can't link that right now.
-				using (Stream stream = linker.Allocate(symbolName, SectionKind.Text, stringHeaderLength + stringDataLength, nativePtrAlignment))
+				using (Stream stream = linker.Allocate(symbolName, SectionKind.Text, 0, nativePointerAlignment))
 				{
 					// Method table and sync block
-					stream.Write(new byte[8], 0, 8);
+					linker.Link(LinkType.AbsoluteAddress | LinkType.I4, symbolName, 0, 0, @"System.String$mtable", IntPtr.Zero);
+					stream.WriteZeroBytes(8);
 
 					// String length field
-					stream.Write(BitConverter.GetBytes(referencedString.Length), 0, nativePtrSize);
+					stream.Write(BitConverter.GetBytes(referencedString.Length), 0, nativePointerSize);
 
 					// String data
 					byte[] stringData = Encoding.Unicode.GetBytes(referencedString);
-					Debug.Assert(stringData.Length == stringDataLength, @"Byte array of string data doesn't match expected string data length");
+					Debug.Assert(stringData.Length == referencedString.Length * 2, @"Byte array of string data doesn't match expected string data length");
 					stream.Write(stringData);
 				}
 
-				string stringMethodTableSymbol = @"System.String$mtable";
-				linker.Link(LinkType.AbsoluteAddress | LinkType.I4, symbolName, 0, 0, stringMethodTableSymbol, IntPtr.Zero);
 			}
 
 			Operand source = new SymbolOperand(BuiltInSigType.String, symbolName);
@@ -1337,7 +1330,7 @@ namespace Mosa.Compiler.Framework.IR
 			{
 				if (clause.IsLabelWithinTry(label) || clause.IsLabelWithinHandler(label))
 				{
-					return clause;				
+					return clause;
 				}
 			}
 
