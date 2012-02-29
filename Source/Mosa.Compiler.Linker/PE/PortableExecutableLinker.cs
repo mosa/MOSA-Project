@@ -263,7 +263,7 @@ namespace Mosa.Compiler.Linker
 		/// </summary>
 		public override void Run()
 		{
-			if (String.IsNullOrEmpty(this.OutputFile) == true)
+			if (String.IsNullOrEmpty(this.OutputFile))
 				throw new ArgumentException(@"Invalid argument.", @"outputFile");
 
 			// Layout the sections in memory

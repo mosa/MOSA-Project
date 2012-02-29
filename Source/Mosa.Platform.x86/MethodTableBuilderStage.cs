@@ -135,7 +135,7 @@ namespace Mosa.Platform.x86
 
 				string section = method.FullName + "$mdtable";
 
-				using (var stream = linker.Allocate(section, SectionKind.Text, size, typeLayout.NativePointerAlignment))
+				using (var stream = linker.Allocate(section, SectionKind.ROData, size, typeLayout.NativePointerAlignment))
 				{
 					// Pointer to Exception Handler Table
 					// TODO: If there is no exception clause table, set to 0 and do not involve linker

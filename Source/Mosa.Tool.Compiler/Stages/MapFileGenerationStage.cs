@@ -9,6 +9,7 @@
 
 using System;
 using System.IO;
+using System.Collections.Generic;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Linker;
 
@@ -98,15 +99,33 @@ namespace Mosa.Tool.Compiler.Stages
 			}
 		}
 
+		private class LinkerSymbolComparerByVirtualAddress : IComparer<LinkerSymbol>
+		{
+			public int Compare(LinkerSymbol x, LinkerSymbol y)
+			{
+				return (int)(x.VirtualAddress.ToInt64() - y.VirtualAddress.ToInt64());
+			}
+		}
+
 		/// <summary>
 		/// Emits all symbols emitted in the binary file.
 		/// </summary>
 		/// <param name="linker">The assembly linker.</param>
 		private void EmitSymbols(IAssemblyLinker linker)
 		{
-			writer.WriteLine("Offset           Virtual          Length           Symbol");
+			List<LinkerSymbol> sorted = new List<LinkerSymbol>();
+
 			foreach (LinkerSymbol symbol in linker.Symbols)
-				writer.WriteLine("{0:x16} {1:x16} {2:x16} {3}", symbol.Offset, symbol.VirtualAddress.ToInt64(), symbol.Length, symbol.Name);
+				sorted.Add(symbol);
+
+			var comparer = new LinkerSymbolComparerByVirtualAddress();
+			sorted.Sort(comparer);
+
+			writer.WriteLine("Offset           Virtual          Length           Section Symbol");
+			foreach (var symbol in sorted)
+			{
+				writer.WriteLine("{0:x16} {1:x16} {2:x16} {3} {4}", symbol.Offset, symbol.VirtualAddress.ToInt64(), symbol.Length, symbol.Section.ToString().PadRight(7), symbol.Name);
+			}
 
 			LinkerSymbol entryPoint = linker.EntryPoint;
 			if (entryPoint != null)
