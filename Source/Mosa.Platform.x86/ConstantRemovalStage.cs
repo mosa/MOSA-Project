@@ -98,7 +98,7 @@ namespace Mosa.Platform.x86
 						ctxEpilogue.AppendInstruction(Instruction.LiteralInstruction);
 						ctxEpilogue.LiteralData = new IR.LiteralData(ctx.Label, co.Type, co.Value);
 
-						op.Replace(((ctxEpilogue.Instruction) as OpCodes.LiteralInstruction).CreateOperand(ctxEpilogue), instructionSet);
+						op.Replace(((ctxEpilogue.Instruction) as Instructions.LiteralInstruction).CreateOperand(ctxEpilogue), instructionSet);
 
 						_constantRemoved = true;
 					}

@@ -181,7 +181,7 @@ namespace Mosa.Platform.x86
 			if (window.Size < 1)
 				return false;
 
-			if (!(window.Current.Instruction is OpCodes.NopInstruction))
+			if (!(window.Current.Instruction is Instructions.NopInstruction))
 				return false;
 
 			window.DeleteCurrent();
@@ -210,7 +210,7 @@ namespace Mosa.Platform.x86
 			if (window.Current.BasicBlock != window.Previous.BasicBlock)
 				return false;
 
-			if (!(window.Current.Instruction is OpCodes.MovInstruction && window.Previous.Instruction is OpCodes.MovInstruction))
+			if (!(window.Current.Instruction is Instructions.MovInstruction && window.Previous.Instruction is Instructions.MovInstruction))
 				return false;
 
 			if (!(window.Previous.Result == window.Current.Operand1 && window.Previous.Operand1 == window.Current.Result))
@@ -231,7 +231,7 @@ namespace Mosa.Platform.x86
 			if (window.Size < 2)
 				return false;
 
-			if (!(window.Previous.Instruction is OpCodes.JmpInstruction))
+			if (!(window.Previous.Instruction is Instructions.JmpInstruction))
 				return false;
 
 			if (window.Current.BasicBlock == window.Previous.BasicBlock)
@@ -255,10 +255,10 @@ namespace Mosa.Platform.x86
 			if (window.Size < 3)
 				return false;
 
-			if (!(window.Previous.Instruction is OpCodes.JmpInstruction))
+			if (!(window.Previous.Instruction is Instructions.JmpInstruction))
 				return false;
 
-			if (!(window.PreviousPrevious.Instruction is OpCodes.BranchInstruction))
+			if (!(window.PreviousPrevious.Instruction is Instructions.BranchInstruction))
 				return false;
 
 			if (window.Previous.BasicBlock != window.PreviousPrevious.BasicBlock)

@@ -7,7 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Platform.x86.OpCodes;
+using Mosa.Platform.x86.Instructions;
 
 namespace Mosa.Platform.x86
 {

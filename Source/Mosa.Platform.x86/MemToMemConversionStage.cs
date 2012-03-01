@@ -37,7 +37,7 @@ namespace Mosa.Platform.x86
 				{
 					if (ctx.Instruction != null)
 					{
-						if (!ctx.Ignore && ctx.Instruction is OpCodes.IX86Instruction)
+						if (!ctx.Ignore && ctx.Instruction is Instructions.IX86Instruction)
 						{
 							if (IsMemoryOperand(ctx.Result) && IsMemoryOperand(ctx.Operand1))
 							{
