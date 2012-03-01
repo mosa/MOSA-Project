@@ -121,7 +121,7 @@ namespace Mosa.Compiler.Linker
 		/// code. On 32-bit systems, only the lower 32 bits are valid. The above are not used. An implementation of
 		/// IAssemblyLinker may not rely on 64-bits being stored in the memory defined by position.
 		/// </returns>
-		long Link(LinkType linkType, string symbolName, int methodOffset, int methodRelativeBase, string targetSymbol, IntPtr offset);
+		void Link(LinkType linkType, string symbolName, int methodOffset, int methodRelativeBase, string targetSymbol, IntPtr offset);
 
 		#endregion // Methods
 	}

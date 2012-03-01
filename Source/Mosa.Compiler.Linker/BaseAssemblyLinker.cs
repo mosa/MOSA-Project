@@ -283,7 +283,7 @@ namespace Mosa.Compiler.Linker
 		/// code. On 32-bit systems, only the lower 32 bits are valid. The above are not used. An implementation of
 		/// IAssemblyLinker may not rely on 64-bits being stored in the memory defined by position.
 		/// </returns>
-		public virtual long Link(LinkType linkType, string symbolName, int methodOffset, int methodRelativeBase, string targetSymbol, IntPtr offset)
+		public virtual void Link(LinkType linkType, string symbolName, int methodOffset, int methodRelativeBase, string targetSymbol, IntPtr offset)
 		{
 			Debug.Assert(symbolName != null, @"Symbol can't be null.");
 			if (symbolName == null)
@@ -297,8 +297,6 @@ namespace Mosa.Compiler.Linker
 			}
 
 			list.Add(new LinkRequest(linkType, symbolName, methodOffset, methodRelativeBase, targetSymbol, offset));
-
-			return 0;
 		}
 
 		#endregion // IAssemblyLinker Members

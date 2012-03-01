@@ -17,7 +17,6 @@ using Mosa.Compiler.Framework.Operands;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.Metadata;
 
-
 namespace Mosa.Platform.x86
 {
 	/// <summary>
@@ -32,7 +31,7 @@ namespace Mosa.Platform.x86
 		}
 
 		#region Code Generation
-	
+
 		/// <summary>
 		/// Emits relative branch code.
 		/// </summary>
@@ -50,7 +49,7 @@ namespace Mosa.Platform.x86
 		/// <param name="symbolOperand">The symbol operand.</param>
 		public void Call(SymbolOperand symbolOperand)
 		{
-			long address = linker.Link(
+			linker.Link(
 				LinkType.RelativeOffset | LinkType.I4,
 				compiler.Method.ToString(),
 				(int)(codeStream.Position - codeStreamBasePosition),
@@ -59,17 +58,7 @@ namespace Mosa.Platform.x86
 				IntPtr.Zero
 			);
 
-			if (address == 0L)
-			{
-				this.WriteByte(0);
-				this.WriteByte(0);
-				this.WriteByte(0);
-				this.WriteByte(0);
-			}
-			else
-			{
-				this.codeStream.Position += 4;
-			}
+			codeStream.Position += 4;
 		}
 
 		/// <summary>
@@ -180,7 +169,6 @@ namespace Mosa.Platform.x86
 		/// <param name="displacement">The displacement operand.</param>
 		public void WriteDisplacement(Operand displacement)
 		{
-			byte[] disp;
 
 			MemberOperand member = displacement as MemberOperand;
 			LabelOperand label = displacement as LabelOperand;
@@ -190,22 +178,25 @@ namespace Mosa.Platform.x86
 
 			if (label != null)
 			{
-				disp = bitConverter.GetBytes((uint)linker.Link(LinkType.AbsoluteAddress | LinkType.I4, compiler.Method.ToString(), pos, 0, label.Name, IntPtr.Zero));
+				linker.Link(LinkType.AbsoluteAddress | LinkType.I4, compiler.Method.ToString(), pos, 0, label.Name, IntPtr.Zero);
+				codeStream.Position += 4;
 			}
 			else if (member != null)
 			{
-				disp = bitConverter.GetBytes((uint)linker.Link(LinkType.AbsoluteAddress | LinkType.I4, compiler.Method.ToString(), pos, 0, member.Member.ToString(), member.Offset));
+				linker.Link(LinkType.AbsoluteAddress | LinkType.I4, compiler.Method.ToString(), pos, 0, member.Member.ToString(), member.Offset);
+				codeStream.Position += 4;
 			}
 			else if (symbol != null)
 			{
-				disp = bitConverter.GetBytes((uint)linker.Link(LinkType.AbsoluteAddress | LinkType.I4, compiler.Method.ToString(), pos, 0, symbol.Name, IntPtr.Zero));
+				linker.Link(LinkType.AbsoluteAddress | LinkType.I4, compiler.Method.ToString(), pos, 0, symbol.Name, IntPtr.Zero);
+				codeStream.Position += 4;
 			}
 			else
 			{
-				disp = bitConverter.GetBytes((displacement as MemoryOperand).Offset.ToInt32());
+				byte[] disp = bitConverter.GetBytes((displacement as MemoryOperand).Offset.ToInt32());
+				codeStream.Write(disp, 0, disp.Length);
 			}
 
-			codeStream.Write(disp, 0, disp.Length);
 		}
 
 		/// <summary>
