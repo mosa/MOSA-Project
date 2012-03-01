@@ -83,6 +83,10 @@
       <Project>{BDBF6F75-2247-461A-929B-F9366324BB34}</Project>
       <Name>Mosa.Compiler.Platform.Common</Name>
     </ProjectReference>
+    <ProjectReference Include="..\Mosa.Compiler.TypeSystem\Mosa.Compiler.TypeSystem.csproj">
+      <Project>{5F30A68E-05BF-40EA-B576-5EBCDE520449}</Project>
+      <Name>Mosa.Compiler.TypeSystem</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Architecture.cs" />
@@ -148,7 +152,7 @@
     <Compile Include="OpCodes\IjmpInstruction.cs" />
     <Compile Include="OpCodes\IncInstruction.cs" />
     <Compile Include="OpCodes\InInstruction.cs" />
-    <Compile Include="OpCodes\Instruction.cs" />
+    <Compile Include="Instruction.cs" />
     <Compile Include="OpCodes\JmpInstruction.cs" />
     <Compile Include="OpCodes\LddInstruction.cs" />
     <Compile Include="OpCodes\LdiInstruction.cs" />

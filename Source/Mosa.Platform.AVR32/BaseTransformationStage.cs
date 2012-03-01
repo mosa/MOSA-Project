@@ -7,6 +7,9 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Compiler.Common;
+using Mosa.Compiler.Framework;
+using Mosa.Compiler.Platform.Common;
 
 namespace Mosa.Platform.AVR32
 {

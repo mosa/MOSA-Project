@@ -7,6 +7,11 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Compiler.Framework;
+using Mosa.Compiler.Platform;
+using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.Metadata;
+using Mosa.Compiler.Metadata.Signatures;
 
 namespace Mosa.Platform.AVR32
 {

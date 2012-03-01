@@ -14,7 +14,6 @@ using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Operands;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Compiler.TypeSystem;
 using IR = Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Platform.AVR32
@@ -337,6 +336,7 @@ namespace Mosa.Platform.AVR32
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.NopInstruction(Context context)
 		{
+			context.SetInstruction(Instruction.NopInstruction);
 		}
 
 		/// <summary>

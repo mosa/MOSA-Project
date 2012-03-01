@@ -7,7 +7,9 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-namespace Mosa.Platform.AVR32.OpCodes
+using Mosa.Platform.AVR32.OpCodes;
+
+namespace Mosa.Platform.AVR32
 {
 	/// <summary>
 	/// 

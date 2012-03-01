@@ -8,6 +8,9 @@
  */
 
 using System;
+using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.Framework;
+using Mosa.Compiler.Framework.Operands;
 
 namespace Mosa.Platform.AVR32
 {

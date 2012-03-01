@@ -20,7 +20,7 @@ namespace Mosa.Platform.AVR32.OpCodes
 		#region Methods
 
 		/// <summary>
-		/// Emits the specified opcode.
+		/// Emits the specified platform instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="emitter">The emitter.</param>

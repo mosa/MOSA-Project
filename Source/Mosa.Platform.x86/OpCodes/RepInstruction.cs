@@ -19,7 +19,7 @@ namespace Mosa.Platform.x86.OpCodes
 		#region Methods
 
 		/// <summary>
-		/// Emits the specified CTX.
+		/// Emits the specified platform instruction.
 		/// </summary>
 		/// <param name="ctx">The CTX.</param>
 		/// <param name="emitter">The emitter.</param>
