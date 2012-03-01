@@ -28,7 +28,7 @@ namespace System
 		 * the memory layout of String must match:
 		 * 
 		 * Object:
-		 *      - Methot Table Ptr
+		 *      - Method Table Ptr
 		 *      - Sync Block
 		 * String:
 		 *      - Length

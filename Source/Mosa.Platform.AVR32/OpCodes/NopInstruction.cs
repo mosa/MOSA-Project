@@ -20,13 +20,23 @@ namespace Mosa.Platform.AVR32.OpCodes
 		#region Methods
 
 		/// <summary>
-		/// Emits the specified CTX.
+		/// Emits the specified opcode.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
 			emitter.WriteUShort(0x00);
+		}
+
+		/// <summary>
+		/// Allows visitor based dispatch for this instruction object.
+		/// </summary>
+		/// <param name="visitor">The visitor object.</param>
+		/// <param name="context">The context.</param>
+		public override void Visit(IAVR32Visitor visitor, Context context)
+		{
+			visitor.Nop(context);
 		}
 
 		#endregion // Methods
