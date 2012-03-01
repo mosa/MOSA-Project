@@ -31,8 +31,8 @@ namespace Mosa.Platform.x86.Intrinsic
 		void IIntrinsicMethod.ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
 		{
 			MemoryOperand operand = new MemoryOperand(BuiltInSigType.Ptr, GeneralPurposeRegister.EAX, new System.IntPtr(0));
-			context.SetInstruction(OpCodes.Instruction.MovInstruction, new RegisterOperand(BuiltInSigType.Ptr, GeneralPurposeRegister.EAX), context.Operand1);
-			context.AppendInstruction(OpCodes.Instruction.LgdtInstruction, null, operand);
+			context.SetInstruction(Instruction.MovInstruction, new RegisterOperand(BuiltInSigType.Ptr, GeneralPurposeRegister.EAX), context.Operand1);
+			context.AppendInstruction(Instruction.LgdtInstruction, null, operand);
 
 			RegisterOperand ax = new RegisterOperand(BuiltInSigType.Int16, GeneralPurposeRegister.EAX);
 			RegisterOperand ds = new RegisterOperand(BuiltInSigType.Int16, SegmentRegister.DS);
@@ -41,13 +41,13 @@ namespace Mosa.Platform.x86.Intrinsic
 			RegisterOperand gs = new RegisterOperand(BuiltInSigType.Int16, SegmentRegister.GS);
 			RegisterOperand ss = new RegisterOperand(BuiltInSigType.Int16, SegmentRegister.SS);
 
-			context.AppendInstruction(OpCodes.Instruction.MovInstruction, ax, new ConstantOperand(BuiltInSigType.Int32, (int)0x00000010));
-			context.AppendInstruction(OpCodes.Instruction.MovInstruction, ds, ax);
-			context.AppendInstruction(OpCodes.Instruction.MovInstruction, es, ax);
-			context.AppendInstruction(OpCodes.Instruction.MovInstruction, fs, ax);
-			context.AppendInstruction(OpCodes.Instruction.MovInstruction, gs, ax);
-			context.AppendInstruction(OpCodes.Instruction.MovInstruction, ss, ax);
-			context.AppendInstruction(OpCodes.Instruction.FarJmpInstruction);
+			context.AppendInstruction(Instruction.MovInstruction, ax, new ConstantOperand(BuiltInSigType.Int32, (int)0x00000010));
+			context.AppendInstruction(Instruction.MovInstruction, ds, ax);
+			context.AppendInstruction(Instruction.MovInstruction, es, ax);
+			context.AppendInstruction(Instruction.MovInstruction, fs, ax);
+			context.AppendInstruction(Instruction.MovInstruction, gs, ax);
+			context.AppendInstruction(Instruction.MovInstruction, ss, ax);
+			context.AppendInstruction(Instruction.FarJmpInstruction);
 		}
 
 		#endregion // Methods

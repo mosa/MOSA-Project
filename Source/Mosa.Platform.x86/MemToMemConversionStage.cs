@@ -92,24 +92,24 @@ namespace Mosa.Platform.x86
 			{
 				if (MustSignExtendOnLoad(sigType.Type) == true)
 				{
-					moveInstruction = OpCodes.Instruction.MovsxInstruction;
+					moveInstruction = Instruction.MovsxInstruction;
 				}
 				else if (MustZeroExtendOnLoad(sigType.Type) == true)
 				{
-					moveInstruction = OpCodes.Instruction.MovzxInstruction;
+					moveInstruction = Instruction.MovzxInstruction;
 				}
 				else
 				{
-					moveInstruction = OpCodes.Instruction.MovInstruction;
+					moveInstruction = Instruction.MovInstruction;
 				}
 			}
 			else if (sigType.Type == CilElementType.R8)
 			{
-				moveInstruction = OpCodes.Instruction.MovsdInstruction;
+				moveInstruction = Instruction.MovsdInstruction;
 			}
 			else
 			{
-				moveInstruction = OpCodes.Instruction.MovssInstruction;
+				moveInstruction = Instruction.MovssInstruction;
 			}
 
 			return moveInstruction;

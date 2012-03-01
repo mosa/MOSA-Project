@@ -32,7 +32,7 @@ namespace Mosa.Platform.x86.Intrinsic
 		void IIntrinsicMethod.ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
 		{
 			// xchg	bx, bx 
-			context.SetInstruction(OpCodes.Instruction.XchgInstruction, new RegisterOperand(BuiltInSigType.UInt16, GeneralPurposeRegister.EBX), new RegisterOperand(BuiltInSigType.UInt16, GeneralPurposeRegister.EBX));
+			context.SetInstruction(Instruction.XchgInstruction, new RegisterOperand(BuiltInSigType.UInt16, GeneralPurposeRegister.EBX), new RegisterOperand(BuiltInSigType.UInt16, GeneralPurposeRegister.EBX));
 		}
 
 		#endregion // Methods

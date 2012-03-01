@@ -95,7 +95,7 @@ namespace Mosa.Platform.x86
 					if (co != null && IsLargeConstant(co))
 					{
 						// Move the constant out of the code stream and place it right after the code.
-						ctxEpilogue.AppendInstruction(OpCodes.Instruction.LiteralInstruction);
+						ctxEpilogue.AppendInstruction(Instruction.LiteralInstruction);
 						ctxEpilogue.LiteralData = new IR.LiteralData(ctx.Label, co.Type, co.Value);
 
 						op.Replace(((ctxEpilogue.Instruction) as OpCodes.LiteralInstruction).CreateOperand(ctxEpilogue), instructionSet);

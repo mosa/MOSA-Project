@@ -180,17 +180,17 @@ namespace Mosa.Platform.x86.XSharp
 
 		protected void PopAll()
 		{
-			currentContext.AppendInstruction(OpCodes.Instruction.PopadInstruction);
+			currentContext.AppendInstruction(Instruction.PopadInstruction);
 		}
 
 		protected void PushAll()
 		{
-			currentContext.AppendInstruction(OpCodes.Instruction.PushadInstruction);
+			currentContext.AppendInstruction(Instruction.PushadInstruction);
 		}
 
 		protected void Return()
 		{
-			currentContext.AppendInstruction(OpCodes.Instruction.RetInstruction);
+			currentContext.AppendInstruction(Instruction.RetInstruction);
 		}
 
 		protected void Return(int value)

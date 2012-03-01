@@ -16,7 +16,6 @@ using Mosa.Compiler.Framework.Operands;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Platform.x86;
-using CPUx86 = Mosa.Platform.x86.OpCodes;
 
 namespace Mosa.Tool.Compiler.Stages
 {
@@ -164,14 +163,14 @@ namespace Mosa.Tool.Compiler.Stages
 				InstructionSet instructionSet = new InstructionSet(16);
 				Context ctx = new Context(instructionSet);
 
-				ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, ecx, new ConstantOperand(I4, 0x200000));
-				ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, new MemoryOperand(I4, ecx.Register, new IntPtr(0x0)), eax);
-				ctx.AppendInstruction(CPUx86.Instruction.MovInstruction, new MemoryOperand(I4, ecx.Register, new IntPtr(0x4)), ebx);
+				ctx.AppendInstruction(Instruction.MovInstruction, ecx, new ConstantOperand(I4, 0x200000));
+				ctx.AppendInstruction(Instruction.MovInstruction, new MemoryOperand(I4, ecx.Register, new IntPtr(0x0)), eax);
+				ctx.AppendInstruction(Instruction.MovInstruction, new MemoryOperand(I4, ecx.Register, new IntPtr(0x4)), ebx);
 
 				SymbolOperand entryPoint = SymbolOperand.FromMethod(typeInitializerSchedulerStage.Method);
 
-				ctx.AppendInstruction(CPUx86.Instruction.CallInstruction, null, entryPoint);
-				ctx.AppendInstruction(CPUx86.Instruction.RetInstruction);
+				ctx.AppendInstruction(Instruction.CallInstruction, null, entryPoint);
+				ctx.AppendInstruction(Instruction.RetInstruction);
 
 				LinkerGeneratedMethod method = LinkTimeCodeGenerator.Compile(this.compiler, @"MultibootInit", instructionSet, typeSystem);
 				this.linker.EntryPoint = this.linker.GetSymbol(method.ToString());

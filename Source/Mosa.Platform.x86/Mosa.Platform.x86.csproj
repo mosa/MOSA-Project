@@ -183,7 +183,7 @@
     <Compile Include="OpCodes\DecInstruction.cs" />
     <Compile Include="OpCodes\DivInstruction.cs" />
     <Compile Include="OpCodes\IncInstruction.cs" />
-    <Compile Include="OpCodes\Instruction.cs" />
+    <Compile Include="Instruction.cs" />
     <Compile Include="OpCodes\IntInstruction.cs" />
     <Compile Include="Intrinsic\BochsDebug.cs" />
     <Compile Include="OpCodes\CldInstruction.cs" />
