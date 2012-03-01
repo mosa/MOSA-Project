@@ -83,20 +83,16 @@
       <Project>{BDBF6F75-2247-461A-929B-F9366324BB34}</Project>
       <Name>Mosa.Compiler.Platform.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mosa.Compiler.TypeSystem\Mosa.Compiler.TypeSystem.csproj">
-      <Project>{5F30A68E-05BF-40EA-B576-5EBCDE520449}</Project>
-      <Name>Mosa.Compiler.TypeSystem</Name>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Architecture.cs" />
     <Compile Include="ArchitectureFeatureFlags.cs" />
     <Compile Include="BaseTransformationStage.cs" />
     <Compile Include="DefaultCallingConvention.cs" />
+    <Compile Include="GeneralPurposeRegister.cs" />
     <Compile Include="GenericAVR32Register.cs" />
     <Compile Include="IRTransformationStage.cs" />
     <Compile Include="MachineCodeEmitter.cs" />
-    <Compile Include="OpCode.cs" />
     <Compile Include="OpCodes\AdcInstruction.cs" />
     <Compile Include="OpCodes\AddInstruction.cs" />
     <Compile Include="OpCodes\AdiwInstruction.cs" />

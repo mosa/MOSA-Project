@@ -1,13 +1,12 @@
 /*
- * (c) 2008 MOSA - The Managed Operating System Alliance
+ * (c) 2012 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Compiler.Framework;
 
 namespace Mosa.Platform.AVR32
 {
@@ -23,7 +22,7 @@ namespace Mosa.Platform.AVR32
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="GenericX86Register"/>.
+		/// Initializes a new instance of <see cref="GenericAVR32Register"/>.
 		/// </summary>
 		/// <param name="index"></param>
 		protected GenericAVR32Register(int index) :

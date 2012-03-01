@@ -116,7 +116,7 @@ namespace Mosa.Platform.x86
 		/// <summary>
 		/// Stores the general purpose register identified by this object instance.
 		/// </summary>
-		private readonly GPR _gpr;
+		private readonly GPR gpr;
 
 		#endregion // Data members
 
@@ -130,7 +130,7 @@ namespace Mosa.Platform.x86
 		private GeneralPurposeRegister(int index, GPR gpr) :
 			base(index)
 		{
-			_gpr = gpr;
+			this.gpr = gpr;
 		}
 
 		#endregion // Construction
@@ -150,7 +150,7 @@ namespace Mosa.Platform.x86
 		/// </summary>
 		public override int RegisterCode
 		{
-			get { return (int)_gpr; }
+			get { return (int)gpr; }
 		}
 
 		/// <summary>
@@ -191,7 +191,7 @@ namespace Mosa.Platform.x86
 		/// <returns>The name of the general purpose register.</returns>
 		public override string ToString()
 		{
-			return _gpr.ToString();
+			return gpr.ToString();
 		}
 
 		#endregion // Methods
