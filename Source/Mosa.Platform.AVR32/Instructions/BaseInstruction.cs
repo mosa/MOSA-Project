@@ -48,39 +48,6 @@ namespace Mosa.Platform.AVR32.Instructions
 
 		#endregion // Construction
 
-		#region IPlatformInstruction Overrides
-
-		/// <summary>
-		/// Emits the specified platform instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="emitter">The emitter.</param>
-		public void Emit(Context context, ICodeEmitter emitter)
-		{
-			Emit(context, emitter as MachineCodeEmitter);
-		}
-
-		/// <summary>
-		/// Gets the instruction latency.
-		/// </summary>
-		/// <value>The latency.</value>
-		public virtual int Latency { get { return -1; } }
-
-		#endregion // IPlatformInstruction Overrides
-
-		#region Operand Overrides
-
-		/// <summary>
-		/// Returns a string representation of <see cref="ConstantOperand"/>.
-		/// </summary>
-		/// <returns>A string representation of the operand.</returns>
-		public override string ToString()
-		{
-			return "AVR32." + base.ToString();
-		}
-
-		#endregion // Operand Overrides
-
 		#region Methods
 
 		/// <summary>
@@ -90,7 +57,7 @@ namespace Mosa.Platform.AVR32.Instructions
 		/// <param name="source">The source operand.</param>
 		/// <param name="third">The third operand.</param>
 		/// <returns></returns>
-		protected virtual int ComputeOpCode(Operand destination, Operand source, Operand third)
+		protected virtual uint ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
 			throw new System.Exception("opcode not implemented for this instruction");
 		}
@@ -102,7 +69,37 @@ namespace Mosa.Platform.AVR32.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected virtual void Emit(Context context, MachineCodeEmitter emitter)
 		{
-			// TODO
+			uint opCode = ComputeOpCode(context.Result, context.Operand1, context.Operand2);
+			emitter.WriteOpcode(opCode);
+		}
+
+		/// <summary>
+		/// Emits the specified platform instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="emitter">The emitter.</param>
+		public void Emit(Context context, ICodeEmitter emitter)
+		{
+			Emit(context, emitter as MachineCodeEmitter);
+		}
+
+		#endregion // Methods
+
+		/// <summary>
+		/// Gets the instruction latency.
+		/// </summary>
+		/// <value>The latency.</value>
+		public virtual int Latency { get { return -1; } }
+
+		#region Operand Overrides
+
+		/// <summary>
+		/// Returns a string representation of <see cref="ConstantOperand"/>.
+		/// </summary>
+		/// <returns>A string representation of the operand.</returns>
+		public override string ToString()
+		{
+			return "AVR32." + base.ToString();
 		}
 
 		/// <summary>
@@ -126,6 +123,11 @@ namespace Mosa.Platform.AVR32.Instructions
 		}
 
 		#endregion // Overrides
+
+		protected bool Is21Bit(uint value)
+		{
+			return ((value & 0x001FFFFF) != value);
+		}
 
 	}
 }

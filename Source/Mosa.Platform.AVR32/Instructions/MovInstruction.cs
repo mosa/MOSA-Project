@@ -8,6 +8,7 @@
  */
 
 using Mosa.Compiler.Framework;
+using Mosa.Compiler.Framework.Operands;
 
 namespace Mosa.Platform.AVR32.Instructions
 {
@@ -20,14 +21,34 @@ namespace Mosa.Platform.AVR32.Instructions
 		#region Methods
 
 		/// <summary>
-		/// Emits the specified platform instruction.
+		/// Computes the opcode.
 		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="emitter">The emitter.</param>
-		protected override void Emit(Context context, MachineCodeEmitter emitter)
+		/// <param name="destination">The destination operand.</param>
+		/// <param name="source">The source operand.</param>
+		/// <param name="third">The third operand.</param>
+		/// <returns></returns>
+		protected override uint ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-			// TODO
+			if ((destination is RegisterOperand) && (source is ConstantOperand))
+			{
+				ConstantOperand constantOperand = (ConstantOperand)source;
+
+				uint value = (uint)constantOperand.Value;
+
+				if (Is21Bit(value))
+				{
+					return (uint)(0xE0600000 | ((uint)((RegisterOperand)destination).Register.Index << 16));
+				}
+				else
+				{
+					// TODO: raise exception
+				}
+
+			}
+
+			return 0;
 		}
+
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.

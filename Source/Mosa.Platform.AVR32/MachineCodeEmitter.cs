@@ -34,7 +34,7 @@ namespace Mosa.Platform.AVR32
 		/// Writes the unsigned short.
 		/// </summary>
 		/// <param name="data">The data.</param>
-		public void WriteUShort(ushort data)
+		public void Write(ushort data)
 		{
 			codeStream.WriteByte((byte)((data >> 8) & 0xFF));
 			codeStream.WriteByte((byte)(data & 0xFF));
@@ -44,12 +44,25 @@ namespace Mosa.Platform.AVR32
 		/// Writes the unsigned int.
 		/// </summary>
 		/// <param name="data">The data.</param>
-		public void WriteUShort(uint data)
+		public void Write(uint data)
 		{
 			codeStream.WriteByte((byte)((data >> 24) & 0xFF));
 			codeStream.WriteByte((byte)((data >> 16) & 0xFF));
 			codeStream.WriteByte((byte)((data >> 8) & 0xFF));
 			codeStream.WriteByte((byte)(data & 0xFF));
+		}
+
+		private bool Is32Opcode(uint opcode)
+		{
+			return ((opcode & 0xE0000000) == 0xE000000);
+		}
+
+		public void WriteOpcode(uint opcode)
+		{
+			if (Is32Opcode(opcode))
+				Write(opcode);
+			else
+				Write((ushort)opcode);
 		}
 
 		#endregion

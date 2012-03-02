@@ -48,7 +48,13 @@ namespace Mosa.Platform.x86.Instructions
 
 		#endregion // Construction
 
-		#region IPlatformInstruction Overrides
+		/// <summary>
+		/// Gets the instruction latency.
+		/// </summary>
+		/// <value>The latency.</value>
+		public virtual int Latency { get { return -1; } }
+
+		#region Methods
 
 		/// <summary>
 		/// Emits the specified platform instruction.
@@ -59,29 +65,6 @@ namespace Mosa.Platform.x86.Instructions
 		{
 			Emit(context, emitter as MachineCodeEmitter);
 		}
-
-		/// <summary>
-		/// Gets the instruction latency.
-		/// </summary>
-		/// <value>The latency.</value>
-		public virtual int Latency { get { return -1; } }
-
-		#endregion // IPlatformInstruction Overrides
-
-		#region Operand Overrides
-
-		/// <summary>
-		/// Returns a string representation of <see cref="ConstantOperand"/>.
-		/// </summary>
-		/// <returns>A string representation of the operand.</returns>
-		public override string ToString()
-		{
-			return "X86." + base.ToString();
-		}
-
-		#endregion // Operand Overrides
-
-		#region Methods
 
 		/// <summary>
 		/// Computes the opcode.
@@ -106,6 +89,10 @@ namespace Mosa.Platform.x86.Instructions
 			emitter.Emit(opCode, context.Result, context.Operand1, context.Operand2);
 		}
 
+		#endregion // Methods
+
+		#region Operand Overrides
+
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
 		/// </summary>
@@ -126,7 +113,16 @@ namespace Mosa.Platform.x86.Instructions
 				Visit(visitor as IX86Visitor, context);
 		}
 
-		#endregion // Overrides
+		/// <summary>
+		/// Returns a string representation of <see cref="ConstantOperand"/>.
+		/// </summary>
+		/// <returns>A string representation of the operand.</returns>
+		public override string ToString()
+		{
+			return "X86." + base.ToString();
+		}
+
+		#endregion // Operand Overrides
 
 		#region Typesizes
 
@@ -261,5 +257,6 @@ namespace Mosa.Platform.x86.Instructions
 		}
 
 		#endregion
+
 	}
 }

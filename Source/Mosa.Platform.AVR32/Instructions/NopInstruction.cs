@@ -26,7 +26,7 @@ namespace Mosa.Platform.AVR32.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
-			emitter.WriteUShort(0x00);
+			emitter.Write(0x00);
 		}
 
 		/// <summary>

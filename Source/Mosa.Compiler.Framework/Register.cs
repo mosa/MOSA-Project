@@ -21,7 +21,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Holds the register index.
 		/// </summary>
-		private int _index;
+		private int index;
 
 		#endregion // Data members
 
@@ -33,7 +33,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="index">The numeric index of the register.</param>
 		protected Register(int index)
 		{
-			_index = index;
+			this.index = index;
 		}
 
 		#endregion // Construction
@@ -45,7 +45,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public int Index
 		{
-			get { return _index; }
+			get { return index; }
 		}
 
 		/// <summary>

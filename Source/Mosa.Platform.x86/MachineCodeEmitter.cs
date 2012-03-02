@@ -248,17 +248,14 @@ namespace Mosa.Platform.x86
 						break;
 
 					case CilElementType.I1:
-						//imm = bitConverter.GetBytes(Convert.ToSByte(co.Value));
 						imm = new byte[1] { Convert.ToByte(co.Value) };
 						break;
-
 					case CilElementType.I2:
 						imm = bitConverter.GetBytes(Convert.ToInt16(co.Value));
 						break;
-					case CilElementType.I4: goto case CilElementType.I;
-
+					case CilElementType.I4: 
+						goto case CilElementType.I;
 					case CilElementType.U1:
-						//imm = bitConverter.GetBytes(Convert.ToByte(co.Value));
 						imm = new byte[1] { Convert.ToByte(co.Value) };
 						break;
 					case CilElementType.Char:

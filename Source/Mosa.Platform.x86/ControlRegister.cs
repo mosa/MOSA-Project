@@ -75,7 +75,7 @@ namespace Mosa.Platform.x86
 		/// <summary>
 		/// Stores the general purpose register identified by this object instance.
 		/// </summary>
-		private readonly ControlRegisterType _control;
+		private readonly ControlRegisterType control;
 
 		#region Construction
 
@@ -86,7 +86,7 @@ namespace Mosa.Platform.x86
 		private ControlRegister(ControlRegisterType control) :
 			base((int)control)
 		{
-			_control = control;
+			this.control = control;
 		}
 
 		#endregion // Construction
@@ -97,7 +97,7 @@ namespace Mosa.Platform.x86
 		/// Gets the control.
 		/// </summary>
 		/// <value>The control.</value>
-		public ControlRegisterType Control { get { return _control; } }
+		public ControlRegisterType Control { get { return control; } }
 
 		/// <summary>
 		/// Returns the index of this register.
@@ -153,7 +153,7 @@ namespace Mosa.Platform.x86
 		/// <returns>The name of the control register.</returns>
 		public override string ToString()
 		{
-			return _control.ToString();
+			return control.ToString();
 		}
 
 		#endregion // Methods

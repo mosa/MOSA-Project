@@ -22,7 +22,7 @@ namespace Mosa.Compiler.Framework.Operands
 		/// <summary>
 		/// The register, where the operand is stored.
 		/// </summary>
-		private Register _register;
+		private Register register;
 
 		#endregion // Data members
 
@@ -36,10 +36,10 @@ namespace Mosa.Compiler.Framework.Operands
 		public RegisterOperand(SigType type, Register register) :
 			base(type)
 		{
-			if (null == register)
+			if (register == null)
 				throw new ArgumentNullException(@"register");
 
-			_register = register;
+			this.register = register;
 		}
 
 		#endregion // Construction
@@ -59,7 +59,7 @@ namespace Mosa.Compiler.Framework.Operands
 		/// </summary>
 		public Register Register
 		{
-			get { return _register; }
+			get { return register; }
 		}
 
 		#endregion // Properties
@@ -83,7 +83,7 @@ namespace Mosa.Compiler.Framework.Operands
 		/// <returns>A string representation of the operand.</returns>
 		public override string ToString()
 		{
-			return String.Format("{0} {1}", _register, base.ToString());
+			return String.Format("{0} {1}", register, base.ToString());
 		}
 
 		#endregion // Operand Overrides
