@@ -14,7 +14,7 @@ namespace Mosa.Platform.AVR32.Instructions
 	/// <summary>
 	/// 
 	/// </summary>
-	public class BrhcInstruction : BaseInstruction
+	public class BranchInstruction : BaseInstruction
 	{
 
 		#region Methods
@@ -36,7 +36,7 @@ namespace Mosa.Platform.AVR32.Instructions
 		/// <param name="context">The context.</param>
 		public override void Visit(IAVR32Visitor visitor, Context context)
 		{
-			visitor.Brhc(context);
+			visitor.Branch(context);
 		}
 
 		#endregion // Methods
