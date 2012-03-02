@@ -49,19 +49,19 @@ namespace Mosa.Platform.x86.Instructions
 		/// <summary>
 		/// 
 		/// </summary>
-		/// <param name="ctx"></param>
+		/// <param name="context"></param>
 		/// <param name="emitter"></param>
-		protected override void Emit(Context ctx, MachineCodeEmitter emitter)
+		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
-			OpCode opCode = ComputeOpCode(ctx.Result, ctx.Operand1, ctx.Operand2);
-			if (ctx.Operand1 is ConstantOperand)
+			OpCode opCode = ComputeOpCode(context.Result, context.Operand1, context.Operand2);
+			if (context.Operand1 is ConstantOperand)
 			{
-				ConstantOperand op = ctx.Operand1 as ConstantOperand;
+				ConstantOperand op = context.Operand1 as ConstantOperand;
 				op = new ConstantOperand(BuiltInSigType.Byte, op.Value);
-				emitter.Emit(opCode, ctx.Result, op);
+				emitter.Emit(opCode, context.Result, op);
 			}
 			else
-				emitter.Emit(opCode, ctx.Operand1, null);
+				emitter.Emit(opCode, context.Operand1, null);
 		}
 
 		/// <summary>

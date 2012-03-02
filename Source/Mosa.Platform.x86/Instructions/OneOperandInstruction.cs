@@ -38,10 +38,10 @@ namespace Mosa.Platform.x86.Instructions
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <param name="emitter">The emitter.</param>
-		protected override void Emit(Context ctx, MachineCodeEmitter emitter)
+		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
-			OpCode opCode = ComputeOpCode(ctx.Result, null, null);
-			emitter.Emit(opCode, ctx.Result, null);
+			OpCode opCode = ComputeOpCode(context.Result, null, null);
+			emitter.Emit(opCode, context.Result, null);
 		}
 	}
 }

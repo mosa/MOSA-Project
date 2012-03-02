@@ -33,11 +33,11 @@ namespace Mosa.Platform.x86.Instructions
 		private static readonly OpCode ULE = new OpCode(new byte[] { 0x0F, 0x96 });
 		private static readonly OpCode ULT = new OpCode(new byte[] { 0x0F, 0x92 });
 		private static readonly OpCode P = new OpCode(new byte[] { 0x0F, 0x9A });
-        private static readonly OpCode NP = new OpCode(new byte[] { 0x0F, 0x9B });
-        private static readonly OpCode NC = new OpCode(new byte[] { 0x0F, 0x93 });
-        private static readonly OpCode C = new OpCode(new byte[] { 0x0F, 0x92 });
-        private static readonly OpCode Z = new OpCode(new byte[] { 0x0F, 0x94 });
-        private static readonly OpCode NZ = new OpCode(new byte[] { 0x0F, 0x95 });
+		private static readonly OpCode NP = new OpCode(new byte[] { 0x0F, 0x9B });
+		private static readonly OpCode NC = new OpCode(new byte[] { 0x0F, 0x93 });
+		private static readonly OpCode C = new OpCode(new byte[] { 0x0F, 0x92 });
+		private static readonly OpCode Z = new OpCode(new byte[] { 0x0F, 0x94 });
+		private static readonly OpCode NZ = new OpCode(new byte[] { 0x0F, 0x95 });
 
 		#endregion
 
@@ -58,11 +58,11 @@ namespace Mosa.Platform.x86.Instructions
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <param name="emitter">The emitter.</param>
-		protected override void Emit(Context ctx, MachineCodeEmitter emitter)
+		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
 			OpCode opcode;
 
-			switch (ctx.ConditionCode)
+			switch (context.ConditionCode)
 			{
 				case IR.ConditionCode.Equal: opcode = E; break;
 				case IR.ConditionCode.LessThan: opcode = LT; break;
@@ -75,15 +75,15 @@ namespace Mosa.Platform.x86.Instructions
 				case IR.ConditionCode.UnsignedLessOrEqual: opcode = ULE; break;
 				case IR.ConditionCode.UnsignedLessThan: opcode = ULT; break;
 				case IR.ConditionCode.Parity: opcode = P; break;
-                case IR.ConditionCode.NoParity: opcode = NP; break;
-                case IR.ConditionCode.NoCarry: opcode = NC; break;
-                case IR.ConditionCode.Carry: opcode = C; break;
-                case IR.ConditionCode.Zero: opcode = Z; break;
-                case IR.ConditionCode.NoZero: opcode = NZ; break;
+				case IR.ConditionCode.NoParity: opcode = NP; break;
+				case IR.ConditionCode.NoCarry: opcode = NC; break;
+				case IR.ConditionCode.Carry: opcode = C; break;
+				case IR.ConditionCode.Zero: opcode = Z; break;
+				case IR.ConditionCode.NoZero: opcode = NZ; break;
 				default: throw new NotSupportedException();
 			}
 
-			emitter.Emit(opcode, ctx.Result, null);
+			emitter.Emit(opcode, context.Result, null);
 		}
 
 		/// <summary>

@@ -26,11 +26,11 @@ namespace Mosa.Platform.x86.Instructions
 		/// <summary>
 		/// Emits the specified platform instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="context">The context.</param>
 		/// <param name="emitter">The emitter.</param>
-		protected override void Emit(Context ctx, MachineCodeEmitter emitter)
+		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
-			Operand destinationOperand = ctx.Operand1;
+			Operand destinationOperand = context.Operand1;
 			SymbolOperand destinationSymbol = destinationOperand as SymbolOperand;
 
 			if (destinationSymbol != null)

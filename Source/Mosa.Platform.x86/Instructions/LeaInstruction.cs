@@ -23,10 +23,10 @@ namespace Mosa.Platform.x86.Instructions
 		/// </summary>
 		/// <param name="ctx"></param>
 		/// <param name="emitter"></param>
-		protected override void Emit(Context ctx, MachineCodeEmitter emitter)
+		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
-			RegisterOperand rop = (RegisterOperand)ctx.Result;
-			MemoryOperand mop = (MemoryOperand)ctx.Operand1;
+			RegisterOperand rop = (RegisterOperand)context.Result;
+			MemoryOperand mop = (MemoryOperand)context.Operand1;
 			byte[] code;
 
 			if (mop.Base != null)

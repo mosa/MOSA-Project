@@ -34,14 +34,14 @@ namespace Mosa.Platform.x86.Instructions
 		/// <summary>
 		/// Emits the specified platform instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="context">The context.</param>
 		/// <param name="emitter">The emitter.</param>
-		protected override void Emit(Context ctx, MachineCodeEmitter emitter)
+		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
-			if (ctx.Result is RegisterOperand)
+			if (context.Result is RegisterOperand)
 			{
-				if ((ctx.Result as RegisterOperand).Register is SegmentRegister)
-					switch (((ctx.Result as RegisterOperand).Register as SegmentRegister).Segment)
+				if ((context.Result as RegisterOperand).Register is SegmentRegister)
+					switch (((context.Result as RegisterOperand).Register as SegmentRegister).Segment)
 					{
 						case SegmentRegister.SegmentType.DS: emitter.Emit(POP_DS, null, null); return;
 						case SegmentRegister.SegmentType.ES: emitter.Emit(POP_ES, null, null); return;
@@ -51,10 +51,10 @@ namespace Mosa.Platform.x86.Instructions
 						default: throw new InvalidOperationException(@"unable to emit opcode for segment register");
 					}
 				else
-					emitter.WriteByte((byte)(0x58 + (ctx.Result as RegisterOperand).Register.RegisterCode));
+					emitter.WriteByte((byte)(0x58 + (context.Result as RegisterOperand).Register.RegisterCode));
 			}
 			else
-				emitter.Emit(POP, ctx.Result, null);
+				emitter.Emit(POP, context.Result, null);
 		}
 
 		/// <summary>

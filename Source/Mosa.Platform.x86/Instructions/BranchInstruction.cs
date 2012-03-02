@@ -42,59 +42,59 @@ namespace Mosa.Platform.x86.Instructions
 		/// <summary>
 		/// Emits the specified platform instruction.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="context">The context.</param>
 		/// <param name="emitter">The emitter.</param>
-		protected override void Emit(Context ctx, MachineCodeEmitter emitter)
+		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
 
-			switch (ctx.ConditionCode)
+			switch (context.ConditionCode)
 			{
 				case IR.ConditionCode.Equal:
-					emitter.EmitBranch(JE, ctx.Branch.Targets[0]);
+					emitter.EmitBranch(JE, context.Branch.Targets[0]);
 					break;
 
 				case IR.ConditionCode.GreaterOrEqual:
-					emitter.EmitBranch(JGE, ctx.Branch.Targets[0]);
+					emitter.EmitBranch(JGE, context.Branch.Targets[0]);
 					break;
 
 				case IR.ConditionCode.GreaterThan:
-					emitter.EmitBranch(JG, ctx.Branch.Targets[0]);
+					emitter.EmitBranch(JG, context.Branch.Targets[0]);
 					break;
 
 				case IR.ConditionCode.LessOrEqual:
-					emitter.EmitBranch(JLE, ctx.Branch.Targets[0]);
+					emitter.EmitBranch(JLE, context.Branch.Targets[0]);
 					break;
 
 				case IR.ConditionCode.LessThan:
-					emitter.EmitBranch(JL, ctx.Branch.Targets[0]);
+					emitter.EmitBranch(JL, context.Branch.Targets[0]);
 					break;
 
 				case IR.ConditionCode.NotEqual:
-					emitter.EmitBranch(JNE, ctx.Branch.Targets[0]);
+					emitter.EmitBranch(JNE, context.Branch.Targets[0]);
 					break;
 
 				case IR.ConditionCode.UnsignedGreaterOrEqual:
-					emitter.EmitBranch(JAE, ctx.Branch.Targets[0]);
+					emitter.EmitBranch(JAE, context.Branch.Targets[0]);
 					break;
 
 				case IR.ConditionCode.UnsignedGreaterThan:
-					emitter.EmitBranch(JA, ctx.Branch.Targets[0]);
+					emitter.EmitBranch(JA, context.Branch.Targets[0]);
 					break;
 
 				case IR.ConditionCode.UnsignedLessOrEqual:
-					emitter.EmitBranch(JBE, ctx.Branch.Targets[0]);
+					emitter.EmitBranch(JBE, context.Branch.Targets[0]);
 					break;
 
 				case IR.ConditionCode.UnsignedLessThan:
-					emitter.EmitBranch(JB, ctx.Branch.Targets[0]);
+					emitter.EmitBranch(JB, context.Branch.Targets[0]);
 					break;
 
 				case IR.ConditionCode.NotSigned:
-					emitter.EmitBranch(JNS, ctx.Branch.Targets[0]);
+					emitter.EmitBranch(JNS, context.Branch.Targets[0]);
 					break;
 
 				case IR.ConditionCode.Signed:
-					emitter.EmitBranch(JS, ctx.Branch.Targets[0]);
+					emitter.EmitBranch(JS, context.Branch.Targets[0]);
 					break;
 
 				default:

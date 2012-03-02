@@ -77,15 +77,15 @@ namespace Mosa.Compiler.Framework
 			{
 				BlockStart(block);
 
-				for (Context ctx = new Context(instructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
-					if (ctx.Instruction != null)
-						if (!ctx.Ignore)
+				for (Context context = new Context(instructionSet, block); !context.EndOfInstruction; context.GotoNext())
+					if (context.Instruction != null)
+						if (!context.Ignore)
 						{
-							IPlatformInstruction instruction = ctx.Instruction as IPlatformInstruction;
+							IPlatformInstruction instruction = context.Instruction as IPlatformInstruction;
 							if (instruction != null)
-								instruction.Emit(ctx, codeEmitter);
+								instruction.Emit(context, codeEmitter);
 							else
-								Trace(InternalTrace.CompilerEvent.Error, "Missing Code Transformation: " + ctx.ToString());
+								Trace(InternalTrace.CompilerEvent.Error, "Missing Code Transformation: " + context.ToString());
 						}
 
 				BlockEnd(block);

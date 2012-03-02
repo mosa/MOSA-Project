@@ -23,7 +23,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// </summary>
 		/// <param name="ctx">The CTX.</param>
 		/// <param name="emitter">The emitter.</param>
-		protected override void Emit(Context ctx, MachineCodeEmitter emitter)
+		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
 			emitter.WriteByte(0xF3);
 		}

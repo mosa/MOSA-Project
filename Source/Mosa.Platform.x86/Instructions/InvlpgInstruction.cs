@@ -31,9 +31,9 @@ namespace Mosa.Platform.x86.Instructions
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <param name="emitter">The emitter.</param>
-		protected override void Emit(Context ctx, MachineCodeEmitter emitter)
+		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
-			emitter.Emit(INVLPG, ctx.Operand1, null);
+			emitter.Emit(INVLPG, context.Operand1, null);
 		}
 
 		/// <summary>
