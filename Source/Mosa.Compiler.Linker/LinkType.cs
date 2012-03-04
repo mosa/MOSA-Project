@@ -20,7 +20,7 @@ namespace Mosa.Compiler.Linker
 		/// <summary>
 		/// Specifies the kind of link to perform.
 		/// </summary>
-		KindMask = 0xF0,
+		KindMask = 0xE0,
 
 		/// <summary>
 		/// The link destination receives a relative address.
@@ -31,6 +31,11 @@ namespace Mosa.Compiler.Linker
 		/// The link destination receives the absolute address.
 		/// </summary>
 		AbsoluteAddress = 0x40,
+
+		/// <summary>
+		/// The link requires a platform specific type of patch
+		/// </summary>
+		PlatformSpecificPatch = 0x10,
 
 		/// <summary>
 		/// Mask to retrieve the size of the address to store.

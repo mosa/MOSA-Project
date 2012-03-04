@@ -16,7 +16,7 @@ using Mosa.Compiler.Framework.Operands;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.Metadata;
 
-namespace Mosa.Compiler.Platform.Common
+namespace Mosa.Compiler.Platform
 {
 
 	/// <summary>

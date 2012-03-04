@@ -16,7 +16,7 @@ using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Operands;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.Metadata;
-using Mosa.Compiler.Platform.Common;
+using Mosa.Compiler.Platform;
 
 namespace Mosa.Platform.x86
 {
