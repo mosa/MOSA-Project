@@ -272,10 +272,11 @@ namespace Mosa.Compiler.Linker
 					section.WriteHeader(writer);
 
 				Elf32ProgramHeader pheader = new Elf32ProgramHeader
-												 {
-													 Alignment = 0,
-													 FileSize = (uint)GetSection(SectionKind.Text).Length
-												 };
+				{
+					Alignment = 0,
+					FileSize = (uint)GetSection(SectionKind.Text).Length
+				};
+
 				pheader.MemorySize = pheader.FileSize;
 				pheader.VirtualAddress = 0xFF0000;
 				pheader.Flags = Elf32ProgramHeaderFlags.Execute | Elf32ProgramHeaderFlags.Read | Elf32ProgramHeaderFlags.Write;

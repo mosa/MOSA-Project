@@ -23,7 +23,7 @@ namespace Mosa.Compiler.Framework
 	/// <summary>
 	/// Base code emitter.
 	/// </summary>
-	public class BaseCodeEmitter : IDisposable
+	public class BaseCodeEmitter : IDisposable, ICodeEmitter
 	{
 
 		#region Types
@@ -131,7 +131,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="compiler">The compiler.</param>
 		/// <param name="codeStream">The stream the machine code is written to.</param>
 		/// <param name="linker">The linker used to resolve external addresses.</param>
-		public void Initialize(IMethodCompiler compiler, Stream codeStream, IAssemblyLinker linker)
+		void ICodeEmitter.Initialize(IMethodCompiler compiler, Stream codeStream, IAssemblyLinker linker)
 		{
 			Debug.Assert(null != compiler, @"MachineCodeEmitter needs a method compiler.");
 			if (compiler == null)
@@ -147,9 +147,9 @@ namespace Mosa.Compiler.Framework
 			this.codeStream = codeStream;
 			this.codeStreamBasePosition = codeStream.Position;
 			this.linker = linker;
-		}		
+		}
 
-		public void ResolvePatches()
+		void ICodeEmitter.ResolvePatches()
 		{
 			// Save the current position
 			long currentPosition = codeStream.Position;
@@ -182,7 +182,7 @@ namespace Mosa.Compiler.Framework
 		/// Emits a label into the code stream.
 		/// </summary>
 		/// <param name="label">The label name to emit.</param>
-		public void Label(int label)
+		void ICodeEmitter.Label(int label)
 		{
 			/*
 			 * Labels are used to resolve branches inside a procedure. Branches outside
@@ -211,7 +211,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="label">The label.</param>
 		/// <returns></returns>
-		public long GetPosition(int label)
+		long ICodeEmitter.GetPosition(int label)
 		{
 			return labels[label];
 		}
@@ -220,7 +220,7 @@ namespace Mosa.Compiler.Framework
 		/// Gets the current position.
 		/// </summary>
 		/// <value>The current position.</value>
-		public long CurrentPosition
+		long ICodeEmitter.CurrentPosition
 		{
 			get { return codeStream.Position; }
 		}
