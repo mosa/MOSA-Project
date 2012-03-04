@@ -79,7 +79,7 @@
       <Project>{75A12A8A-8C8F-4D1E-801B-689D8F781BF4}</Project>
       <Name>Mosa.Compiler.Framework</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mosa.Compiler.Platform.Common\Mosa.Compiler.Platform.csproj">
+    <ProjectReference Include="..\Mosa.Compiler.Platform\Mosa.Compiler.Platform.csproj">
       <Project>{BDBF6F75-2247-461A-929B-F9366324BB34}</Project>
       <Name>Mosa.Compiler.Platform</Name>
     </ProjectReference>

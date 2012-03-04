@@ -118,7 +118,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Platform.x64", "Mosa.P
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Internal.Plug", "Mosa.Internal.Plug\Mosa.Internal.Plug.csproj", "{77961864-DB33-4189-804F-D774022C96E2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Compiler.Platform", "Mosa.Compiler.Platform.Common\Mosa.Compiler.Platform.csproj", "{BDBF6F75-2247-461A-929B-F9366324BB34}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Compiler.Platform", "Mosa.Compiler.Platform\Mosa.Compiler.Platform.csproj", "{BDBF6F75-2247-461A-929B-F9366324BB34}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
