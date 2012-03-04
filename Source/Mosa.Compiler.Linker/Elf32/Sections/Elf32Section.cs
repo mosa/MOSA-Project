@@ -8,7 +8,7 @@
  */
 
 using System;
-
+using System.IO;
 using Mosa.Compiler.Common;
 
 namespace Mosa.Compiler.Linker.Elf32.Sections
@@ -27,7 +27,7 @@ namespace Mosa.Compiler.Linker.Elf32.Sections
 		/// <summary>
 		/// 
 		/// </summary>
-		protected System.IO.MemoryStream sectionStream;
+		protected MemoryStream sectionStream;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Elf32Section"/> class.
@@ -40,7 +40,7 @@ namespace Mosa.Compiler.Linker.Elf32.Sections
 		{
 			header = new Elf32SectionHeader();
 			header.Name = Elf32StringTableSection.AddString(name);
-			sectionStream = new System.IO.MemoryStream();
+			sectionStream = new MemoryStream();
 		}
 
 		/// <summary>
@@ -73,7 +73,7 @@ namespace Mosa.Compiler.Linker.Elf32.Sections
 		/// <param name="size">The size.</param>
 		/// <param name="alignment">The alignment.</param>
 		/// <returns></returns>
-		public System.IO.Stream Allocate(int size, int alignment)
+		public Stream Allocate(int size, int alignment)
 		{
 			// Do we need to ensure a specific alignment?
 			if (alignment > 1)
@@ -86,7 +86,7 @@ namespace Mosa.Compiler.Linker.Elf32.Sections
 		/// Writes the specified fs.
 		/// </summary>
 		/// <param name="writer">The writer.</param>
-		public virtual void Write(System.IO.BinaryWriter writer)
+		public virtual void Write(BinaryWriter writer)
 		{
 			Header.Offset = (uint)writer.BaseStream.Position;
 			sectionStream.WriteTo(writer.BaseStream);
@@ -96,7 +96,7 @@ namespace Mosa.Compiler.Linker.Elf32.Sections
 		/// Writes the header.
 		/// </summary>
 		/// <param name="writer">The writer.</param>
-		public virtual void WriteHeader(System.IO.BinaryWriter writer)
+		public virtual void WriteHeader(BinaryWriter writer)
 		{
 			Header.Size = (uint)Length;
 			Header.Write(writer);

@@ -15,7 +15,6 @@ namespace Mosa.Compiler.Linker
 	/// <summary>
 	/// Indicates linker exceptions, such as unresolved symbols or duplicate symbols.
 	/// </summary>
-	[Serializable]
 	public class LinkerException : Exception // : CompilationException
 	{
 		#region Construction

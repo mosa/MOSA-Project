@@ -60,7 +60,7 @@ namespace Mosa.Compiler.Linker.PE
 			if (alignment > 1)
 				InsertPadding(alignment);
 
-			return this.sectionStream;
+			return sectionStream;
 		}
 
 		/// <summary>
@@ -71,30 +71,30 @@ namespace Mosa.Compiler.Linker.PE
 		/// <param name="value">The value.</param>
 		public void ApplyPatch(long offset, LinkType linkType, long value)
 		{
-			long pos = this.sectionStream.Position;
-			this.sectionStream.Position = offset;
+			long pos = sectionStream.Position;
+			sectionStream.Position = offset;
 
 			// Apply the patch
 			switch (linkType & LinkType.SizeMask)
 			{
 				case LinkType.I1:
-					this.sectionStream.WriteByte((byte)value);
+					sectionStream.WriteByte((byte)value);
 					break;
 
 				case LinkType.I2:
-					this.sectionStream.Write(LittleEndianBitConverter.GetBytes((ushort)value), 0, 2);
+					sectionStream.Write(LittleEndianBitConverter.GetBytes((ushort)value), 0, 2);
 					break;
 
 				case LinkType.I4:
-					this.sectionStream.Write(LittleEndianBitConverter.GetBytes((uint)value), 0, 4);
+					sectionStream.Write(LittleEndianBitConverter.GetBytes((uint)value), 0, 4);
 					break;
 
 				case LinkType.I8:
-					this.sectionStream.Write(LittleEndianBitConverter.GetBytes(value), 0, 8);
+					sectionStream.Write(LittleEndianBitConverter.GetBytes(value), 0, 8);
 					break;
 			}
 
-			this.sectionStream.Position = pos;
+			sectionStream.Position = pos;
 		}
 
 		/// <summary>
@@ -103,7 +103,7 @@ namespace Mosa.Compiler.Linker.PE
 		/// <param name="writer">The writer.</param>
 		public void Write(BinaryWriter writer)
 		{
-			this.sectionStream.WriteTo(writer.BaseStream);
+			sectionStream.WriteTo(writer.BaseStream);
 		}
 
 		#endregion // Methods
@@ -116,7 +116,7 @@ namespace Mosa.Compiler.Linker.PE
 		/// <value>The length of the section in bytes.</value>
 		public override long Length
 		{
-			get { return this.sectionStream.Length; }
+			get { return sectionStream.Length; }
 		}
 
 		#endregion // LinkerSection Overrides
@@ -129,11 +129,11 @@ namespace Mosa.Compiler.Linker.PE
 		/// <param name="alignment">The alignment.</param>
 		private void InsertPadding(int alignment)
 		{
-			long address = this.VirtualAddress.ToInt64() + this.sectionStream.Length;
+			long address = this.VirtualAddress.ToInt64() + sectionStream.Length;
 			int pad = (int)(alignment - (address % alignment));
 			if (pad < alignment)
 			{
-				this.sectionStream.Write(new byte[pad], 0, pad);
+				sectionStream.Write(new byte[pad], 0, pad);
 			}
 		}
 

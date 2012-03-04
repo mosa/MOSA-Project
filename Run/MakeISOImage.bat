@@ -1,6 +1,6 @@
-del /q /f /s build\iso
+if exist build\iso del /q /f /s build\iso 
 
-mkdir build\iso
+if not exist build\iso mkdir build\iso 
 
 del /q /f build\bootimage.iso
 

@@ -3,7 +3,7 @@ Echo "#### Compile the Solution First!!! ####"
 
 if not exist build mkdir build
 
-del /q /f build\main.exe
+if exist build\main.exe del /q /f build\main.exe 
 
 cd build
 
