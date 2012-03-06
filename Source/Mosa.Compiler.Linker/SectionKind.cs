@@ -7,7 +7,6 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-
 namespace Mosa.Compiler.Linker
 {
 	/// <summary>

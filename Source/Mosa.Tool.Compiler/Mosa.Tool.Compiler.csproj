@@ -91,7 +91,6 @@
     <Compile Include="Stages\Multiboot0695AssemblyStage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ITypeInitializerSchedulerStage.cs" />
     <Compile Include="Stages\TypeInitializerSchedulerStage.cs">
       <SubType>Code</SubType>
     </Compile>

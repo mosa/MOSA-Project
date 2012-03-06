@@ -26,7 +26,7 @@ namespace Mosa.Compiler.Framework
 		#region Properties
 
 		/// <summary>
-		/// Returns the type, which represents a native (unsigned) int on the VES stack.
+		/// Returns the type, which represents a native (unsigned) on the VES stack.
 		/// </summary>
 		SigType NativeType { get; }
 

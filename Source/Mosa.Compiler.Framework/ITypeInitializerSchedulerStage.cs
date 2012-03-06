@@ -10,15 +10,14 @@
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.TypeSystem;
 
-namespace Mosa.Tool.Compiler
+namespace Mosa.Compiler.Framework
 {
 	public interface ITypeInitializerSchedulerStage
 	{
 		/// <summary>
-		/// Gets the initializer method.
+		/// Gets the type initializer method.
 		/// </summary>
-		/// <value>The method.</value>
-		LinkerGeneratedMethod Method { get; }
+		LinkerGeneratedMethod TypeInitializerMethod { get; }
 
 		/// <summary>
 		/// Schedules the specified method for invocation in the main.

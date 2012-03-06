@@ -8,6 +8,7 @@
  */
 
 using System;
+using System.IO;
 
 namespace Mosa.Compiler.Linker.Elf32
 {
@@ -107,9 +108,9 @@ namespace Mosa.Compiler.Linker.Elf32
 		/// Writes the specified fs.
 		/// </summary>
 		/// <param name="writer">The writer.</param>
-		public void Write(System.IO.BinaryWriter writer)
+		public void Write(BinaryWriter writer)
 		{
-			writer.Seek(0, System.IO.SeekOrigin.Begin);
+			writer.Seek(0, SeekOrigin.Begin);
 			writer.Write(Ident);
 			writer.Write((ushort)Type);
 			writer.Write((ushort)Machine);
@@ -130,7 +131,7 @@ namespace Mosa.Compiler.Linker.Elf32
 		/// Reads the specified reader.
 		/// </summary>
 		/// <param name="reader">The reader.</param>
-		public void Read(System.IO.BinaryReader reader)
+		public void Read(BinaryReader reader)
 		{
 			Ident = reader.ReadBytes(16);
 

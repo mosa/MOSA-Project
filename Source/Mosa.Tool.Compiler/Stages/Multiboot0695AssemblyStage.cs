@@ -167,7 +167,7 @@ namespace Mosa.Tool.Compiler.Stages
 				ctx.AppendInstruction(Instruction.MovInstruction, new MemoryOperand(I4, ecx.Register, new IntPtr(0x0)), eax);
 				ctx.AppendInstruction(Instruction.MovInstruction, new MemoryOperand(I4, ecx.Register, new IntPtr(0x4)), ebx);
 
-				SymbolOperand entryPoint = SymbolOperand.FromMethod(typeInitializerSchedulerStage.Method);
+				SymbolOperand entryPoint = SymbolOperand.FromMethod(typeInitializerSchedulerStage.TypeInitializerMethod);
 
 				ctx.AppendInstruction(Instruction.CallInstruction, null, entryPoint);
 				ctx.AppendInstruction(Instruction.RetInstruction);

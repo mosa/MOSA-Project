@@ -63,7 +63,7 @@ namespace Mosa.Tool.Compiler
 		/// </summary>
 		public Compiler()
 		{
-			usageString = "Usage: mosacl -o outputfile --Architecture=[x86] --format=[ELF32|ELF64|PE] {--boot=[mb0.7]} {additional options} inputfiles";
+			usageString = "Usage: mosacl -o outputfile --Architecture=[x86|avr32] --format=[ELF32|ELF64|PE] {--boot=[mb0.7]} {additional options} inputfiles";
 			optionSet = new OptionSet();
 			inputFiles = new List<FileInfo>();
 
@@ -516,6 +516,7 @@ namespace Mosa.Tool.Compiler
 					return Mosa.Platform.AVR32.Architecture.CreateArchitecture(Mosa.Platform.AVR32.ArchitectureFeatureFlags.AutoDetect);
 
 				case "x64":
+
 				default:
 					throw new OptionException(String.Format("Unknown or unsupported architecture {0}.", architecture), "Architecture");
 			}
