@@ -5,9 +5,12 @@
  *
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ *  Pascal Delprat (pdelprat) <pascal.delprat@online.fr>  
  */
 
 using Mosa.Compiler.Framework;
+using Mosa.Compiler.Framework.Operands;
+using Mosa.Compiler.Metadata.Signatures;
 
 namespace Mosa.Platform.AVR32.Instructions
 {
@@ -26,7 +29,10 @@ namespace Mosa.Platform.AVR32.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
-			// TODO
+			// st.w --Rp, Rs
+			RegisterOperand sp = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.SP);
+			RegisterOperand register = context.Operand1 as RegisterOperand;
+			emitter.EmitTwoRegisterInstructions((byte)0x0D, (byte)sp.Register.RegisterCode, (byte)register.Register.RegisterCode);
 		}
 
 		/// <summary>

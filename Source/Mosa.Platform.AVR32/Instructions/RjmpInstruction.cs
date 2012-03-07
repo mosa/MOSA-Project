@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ *  Pascal Delprat (pdelprat) <pascal.delprat@online.fr> 
  */
 
 using Mosa.Compiler.Framework;
@@ -12,7 +13,9 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.AVR32.Instructions
 {
 	/// <summary>
-	/// 
+	/// Rjump Indtruction
+    /// Supported Format:
+    ///     rjump PC[disp]
 	/// </summary>
 	public class RjmpInstruction : BaseInstruction
 	{
@@ -26,7 +29,7 @@ namespace Mosa.Platform.AVR32.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
-			// TODO
+            emitter.EmitRelativeJumpAndCall(0x00, context.Branch.Targets[0]);
 		}
 
 		/// <summary>

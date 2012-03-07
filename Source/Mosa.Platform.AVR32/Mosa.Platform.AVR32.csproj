@@ -97,6 +97,7 @@
     <Compile Include="GenericAVR32Register.cs" />
     <Compile Include="Instructions\BranchInstruction.cs" />
     <Compile Include="IRTransformationStage.cs" />
+    <Compile Include="LongOperandTransformationStage.cs" />
     <Compile Include="MachineCodeEmitter.cs" />
     <Compile Include="Instructions\AdcInstruction.cs" />
     <Compile Include="Instructions\AddInstruction.cs" />
@@ -147,7 +148,7 @@
     <Compile Include="Instructions\NegInstruction.cs" />
     <Compile Include="Instructions\NopInstruction.cs" />
     <Compile Include="Instructions\BaseInstruction.cs" />
-    <Compile Include="Instructions\OriInstruction.cs" />
+    <Compile Include="Instructions\OrhInstruction.cs" />
     <Compile Include="Instructions\OrInstruction.cs" />
     <Compile Include="Instructions\OutInstruction.cs" />
     <Compile Include="Instructions\PopInstruction.cs" />

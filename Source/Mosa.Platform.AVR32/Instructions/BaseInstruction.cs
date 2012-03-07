@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ *  Pascal Delprat (pdelprat) <pascal.delprat@online.fr>    
  */
 
 using Mosa.Compiler.Framework;
@@ -124,9 +125,19 @@ namespace Mosa.Platform.AVR32.Instructions
 
 		#endregion // Overrides
 
+		protected bool Is8Bit(uint value)
+		{
+			return ((value & 0x0000FFFF) != value);
+		}
+
 		protected bool Is21Bit(uint value)
 		{
 			return ((value & 0x001FFFFF) != value);
+		}
+
+		protected bool IsBetween(int value, int lo, int hi)
+		{
+			return value >= lo && value <= hi;
 		}
 
 	}
