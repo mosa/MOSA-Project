@@ -9,6 +9,7 @@
 
 using System;
 using System.IO;
+using Mosa.Compiler.Common;
 
 namespace Mosa.Compiler.LinkerFormat.PE
 {
@@ -51,7 +52,7 @@ namespace Mosa.Compiler.LinkerFormat.PE
 		/// Loads and validates the image file header.
 		/// </summary>
 		/// <param name="reader">The reader, to read From.</param>
-		public void Read(BinaryReader reader)
+		public void Read(EndianAwareBinaryReader reader)
 		{
 			this.Signature = reader.ReadUInt32();
 			if (this.Signature != PE_SIGNATURE)
@@ -65,7 +66,7 @@ namespace Mosa.Compiler.LinkerFormat.PE
 		/// Writes the structure to the given writer.
 		/// </summary>
 		/// <param name="writer">The writer.</param>
-		public void Write(BinaryWriter writer)
+		public void Write(EndianAwareBinaryWriter writer)
 		{
 			if (writer == null)
 				throw new ArgumentNullException(@"writer");

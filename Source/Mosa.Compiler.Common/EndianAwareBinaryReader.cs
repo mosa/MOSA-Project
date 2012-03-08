@@ -13,12 +13,12 @@ using System.IO;
 namespace Mosa.Compiler.Common
 {
 
-	public class EndianAwareReader : BinaryReader
+	public class EndianAwareBinaryReader : BinaryReader
 	{
 
 		private bool swap = false;
 
-		public EndianAwareReader(Stream input, bool isLittleEndian)
+		public EndianAwareBinaryReader(Stream input, bool isLittleEndian)
 			: base(input)
 		{
 			swap = (isLittleEndian != Endian.NativeIsLittleEndian);

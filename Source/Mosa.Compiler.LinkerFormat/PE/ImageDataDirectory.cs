@@ -9,6 +9,7 @@
 
 using System;
 using System.IO;
+using Mosa.Compiler.Common;
 
 namespace Mosa.Compiler.LinkerFormat.PE
 {
@@ -37,7 +38,7 @@ namespace Mosa.Compiler.LinkerFormat.PE
 		/// Loads the IMAGE_DATA_DIRECTORY from the reader.
 		/// </summary>
 		/// <param name="reader">The reader.</param>
-		public void Read(BinaryReader reader)
+		public void Read(EndianAwareBinaryReader reader)
 		{
 			VirtualAddress = reader.ReadUInt32();
 			Size = reader.ReadInt32();
@@ -47,7 +48,7 @@ namespace Mosa.Compiler.LinkerFormat.PE
 		/// Writes the structure to the given writer.
 		/// </summary>
 		/// <param name="writer">The writer.</param>
-		public void Write(BinaryWriter writer)
+		public void Write(EndianAwareBinaryWriter writer)
 		{
 			if (writer == null)
 				throw new ArgumentNullException(@"writer");

@@ -9,16 +9,23 @@
 
 using System;
 using System.IO;
+using System.Text;
 
 namespace Mosa.Compiler.Common
 {
 
-	public class EndianAwareWriter : BinaryWriter
+	public class EndianAwareBinaryWriter : BinaryWriter
 	{
 
 		private bool swap = false;
 
-		public EndianAwareWriter(Stream input, bool isLittleEndian)
+		public EndianAwareBinaryWriter(Stream input, Encoding encoding, bool isLittleEndian)
+			: base(input, encoding)
+		{
+			swap = (isLittleEndian != Endian.NativeIsLittleEndian);
+		}
+
+		public EndianAwareBinaryWriter(Stream input, bool isLittleEndian)
 			: base(input)
 		{
 			swap = (isLittleEndian != Endian.NativeIsLittleEndian);

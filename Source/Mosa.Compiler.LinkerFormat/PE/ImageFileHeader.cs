@@ -9,6 +9,7 @@
 
 using System;
 using System.IO;
+using Mosa.Compiler.Common;
 
 namespace Mosa.Compiler.LinkerFormat.PE
 {

@@ -9,6 +9,7 @@
  */
 
 using System.IO;
+using Mosa.Compiler.Common;
 
 namespace Mosa.Compiler.LinkerFormat.PE
 {
@@ -103,7 +104,7 @@ namespace Mosa.Compiler.LinkerFormat.PE
 		/// Loads the CLI_HEADER from the reader.
 		/// </summary>
 		/// <param name="reader">The reader.</param>
-		public void Read(BinaryReader reader)
+		public void Read(EndianAwareBinaryReader reader)
 		{
 			Cb = reader.ReadUInt32();
 			MajorRuntimeVersion = reader.ReadUInt16();
@@ -123,7 +124,7 @@ namespace Mosa.Compiler.LinkerFormat.PE
 		/// Writes the header to the given binary writer.
 		/// </summary>
 		/// <param name="writer">The binary writer to write to.</param>
-		public void WriteTo(BinaryWriter writer)
+		public void WriteTo(EndianAwareBinaryWriter writer)
 		{
 			writer.Write(Cb);
 			writer.Write(MajorRuntimeVersion);

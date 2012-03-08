@@ -11,6 +11,7 @@
 using System;
 using System.IO;
 
+using Mosa.Compiler.Common;
 using Mosa.Compiler.LinkerFormat.PE;
 using Mosa.Compiler.Metadata.Tables;
 
@@ -44,7 +45,7 @@ namespace Mosa.Compiler.Metadata.Loader.PE
 		/// <summary>
 		/// Reader used to read the assembly data.
 		/// </summary>
-		private BinaryReader assemblyReader;
+		private EndianAwareBinaryReader assemblyReader;
 
 		/// <summary>
 		/// The DOS header of the Mosa.Runtime.Metadata.Loader.PE image.
@@ -92,7 +93,7 @@ namespace Mosa.Compiler.Metadata.Loader.PE
 				throw new ArgumentNullException("stream");
 
 			assemblyStream = stream;
-			assemblyReader = new BinaryReader(stream);
+			assemblyReader = new EndianAwareBinaryReader(stream, true);
 
 			// Load all headers by visiting them sequentially
 			dosHeader.Read(assemblyReader);

@@ -9,6 +9,7 @@
 
 using System;
 using System.IO;
+using Mosa.Compiler.Common;
 
 namespace Mosa.Compiler.LinkerFormat.PE
 {
@@ -194,7 +195,7 @@ namespace Mosa.Compiler.LinkerFormat.PE
 		/// <summary>
 		/// Loads and validates the DOS header.
 		/// </summary>
-		public void Read(BinaryReader reader)
+		public void Read(EndianAwareBinaryReader reader)
 		{
 			e_magic = reader.ReadUInt16();
 			e_cblp = reader.ReadUInt16();
@@ -236,7 +237,7 @@ namespace Mosa.Compiler.LinkerFormat.PE
 		/// Writes the header to the given binary writer.
 		/// </summary>
 		/// <param name="writer">The binary writer to write to.</param>
-		public void Write(BinaryWriter writer)
+		public void Write(EndianAwareBinaryWriter writer)
 		{
 			writer.Write(e_magic);
 			writer.Write(e_cblp);

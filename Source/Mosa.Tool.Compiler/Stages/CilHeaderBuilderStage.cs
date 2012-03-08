@@ -11,6 +11,7 @@
 
 using System.IO;
 using System.Text;
+using Mosa.Compiler.Common;
 using Mosa.Compiler.LinkerFormat.PE;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Linker;
@@ -71,7 +72,7 @@ namespace Mosa.Tool.Compiler.Stages
 		{
 			using (Stream stream = linker.Allocate(CliHeader.SymbolName, SectionKind.Text, CliHeader.Length, 4))
 			{
-				using (BinaryWriter bw = new BinaryWriter(stream, Encoding.ASCII))
+				using (EndianAwareBinaryWriter bw = new EndianAwareBinaryWriter(stream, Encoding.ASCII, true))
 				{
 					cliHeader.WriteTo(bw);
 				}

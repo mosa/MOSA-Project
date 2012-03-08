@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
+using Mosa.Compiler.Common;
 using Mosa.Compiler.LinkerFormat.PE;
 
 namespace Mosa.Compiler.Linker.PE
@@ -286,38 +287,40 @@ namespace Mosa.Compiler.Linker.PE
 		{
 			// Open the output file
 			using (FileStream fs = new FileStream(this.OutputFile, FileMode.Create, FileAccess.ReadWrite, FileShare.Read))
-			using (BinaryWriter writer = new BinaryWriter(fs, Encoding.Unicode))
 			{
-				// Write the PE headers
-				WriteDosHeader(writer);
-				WritePEHeader(writer);
-
-				// Iterate all sections and store their data
-				long position = writer.BaseStream.Position;
-				foreach (Section section in this.sections.Values)
+				using (EndianAwareBinaryWriter writer = new EndianAwareBinaryWriter(fs, Encoding.Unicode, true))
 				{
-					if (section.Length > 0)
+					// Write the PE headers
+					WriteDosHeader(writer);
+					WritePEHeader(writer);
+
+					// Iterate all sections and store their data
+					long position = writer.BaseStream.Position;
+					foreach (Section section in this.sections.Values)
 					{
-						// Write the section
-						section.Write(writer);
+						if (section.Length > 0)
+						{
+							// Write the section
+							section.Write(writer);
 
-						// Add padding...
-						position += section.Length;
-						position += (this.fileAlignment - (position % this.fileAlignment));
-						WritePaddingToPosition(writer, position);
+							// Add padding...
+							position += section.Length;
+							position += (this.fileAlignment - (position % this.fileAlignment));
+							WritePaddingToPosition(writer, position);
+						}
 					}
-				}
 
-				// Do we need to set the checksum?
-				if (this.setChecksum)
-				{
-					// Flush all data to disk
-					writer.Flush();
+					// Do we need to set the checksum?
+					if (this.setChecksum)
+					{
+						// Flush all data to disk
+						writer.Flush();
 
-					// Write the checksum to the file
-					ntHeaders.OptionalHeader.CheckSum = CalculateChecksum(this.OutputFile);
-					fs.Position = this.dosHeader.e_lfanew;
-					ntHeaders.Write(writer);
+						// Write the checksum to the file
+						ntHeaders.OptionalHeader.CheckSum = CalculateChecksum(this.OutputFile);
+						fs.Position = this.dosHeader.e_lfanew;
+						ntHeaders.Write(writer);
+					}
 				}
 			}
 		}
@@ -366,7 +369,7 @@ namespace Mosa.Compiler.Linker.PE
 		/// Writes the dos header of the PE file.
 		/// </summary>
 		/// <param name="writer">The writer.</param>
-		private void WriteDosHeader(BinaryWriter writer)
+		private void WriteDosHeader(EndianAwareBinaryWriter writer)
 		{
 			/*
 			 * This code block generates the default DOS header of a PE image.
@@ -398,7 +401,7 @@ namespace Mosa.Compiler.Linker.PE
 		/// Writes the PE header.
 		/// </summary>
 		/// <param name="writer">The writer.</param>
-		private void WritePEHeader(BinaryWriter writer)
+		private void WritePEHeader(EndianAwareBinaryWriter writer)
 		{
 			// Write the PE signature and headers
 			ntHeaders.Signature = ImageNtHeaders.PE_SIGNATURE;
@@ -598,7 +601,7 @@ namespace Mosa.Compiler.Linker.PE
 
 			using (FileStream stream = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
 			{
-				using (BinaryReader reader = new BinaryReader(stream))
+				using (BinaryReader reader = new EndianAwareBinaryReader(stream, true))
 				{
 					uint l = (uint)stream.Length;
 					for (uint p = 0; p < l; p += 2)
