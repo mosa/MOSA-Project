@@ -8,6 +8,7 @@
  */
 
 using System;
+using System.IO;
 
 namespace Mosa.Compiler.Linker.Elf32
 {
@@ -50,7 +51,7 @@ namespace Mosa.Compiler.Linker.Elf32
 		/// Writes the specified fs.
 		/// </summary>
 		/// <param name="writer">The writer.</param>
-		public override void Write(System.IO.BinaryWriter writer)
+		public override void Write(BinaryWriter writer)
 		{
 		}
 	}

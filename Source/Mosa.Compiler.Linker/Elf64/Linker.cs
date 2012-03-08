@@ -45,19 +45,18 @@ namespace Mosa.Compiler.Linker.Elf64
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="Elf64Linker"/> class.
+		/// Initializes a new instance of the <see cref="Linker"/> class.
 		/// </summary>
 		public Linker()
 		{
-			this.sections = new List<LinkerSection>();
-
 			// Create the default section set
-			Section[] sections = new Section[(int)SectionKind.Max];
-			sections[(int)SectionKind.Text] = new CodeSection();
-			sections[(int)SectionKind.Data] = new DataSection();
-			sections[(int)SectionKind.ROData] = new RoDataSection();
-			sections[(int)SectionKind.BSS] = new BssSection();
-			this.sections.AddRange(sections);
+			sections = new List<LinkerSection>()
+			{
+				new CodeSection(),
+				new DataSection(),
+				new RoDataSection(),
+				new BssSection()
+			};
 
 			nullSection = new NullSection();
 			stringTableSection = new StringTableSection();

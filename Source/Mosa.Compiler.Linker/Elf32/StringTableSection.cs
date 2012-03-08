@@ -8,6 +8,7 @@
  */
 
 using System;
+using System.IO;
 using System.Collections.Generic;
 
 namespace Mosa.Compiler.Linker.Elf32
@@ -48,7 +49,7 @@ namespace Mosa.Compiler.Linker.Elf32
 		/// Writes the specified fs.
 		/// </summary>
 		/// <param name="writer">The writer.</param>
-		public override void Write(System.IO.BinaryWriter writer)
+		public override void Write(BinaryWriter writer)
 		{
 			header.Offset = (uint)writer.BaseStream.Position;
 			byte initial = (byte)'\0';
@@ -60,7 +61,7 @@ namespace Mosa.Compiler.Linker.Elf32
 		/// Writes the header.
 		/// </summary>
 		/// <param name="writer">The writer.</param>
-		public override void WriteHeader(System.IO.BinaryWriter writer)
+		public override void WriteHeader(BinaryWriter writer)
 		{
 			Header.Size = (uint)Length;
 			Header.Write(writer);

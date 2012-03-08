@@ -8,14 +8,16 @@
  */
 
 using System;
+using System.IO;
 using Mosa.Compiler.Common;
+using Mosa.Compiler.Linker;
 
 namespace Mosa.Compiler.Linker.Elf64
 {
 	/// <summary>
 	/// 
 	/// </summary>
-	public class Section : Mosa.Compiler.Linker.LinkerSection
+	public class Section : LinkerSection
 	{
 		private readonly DataConverter LittleEndianBitConverter = DataConverter.LittleEndian;
 
@@ -26,7 +28,7 @@ namespace Mosa.Compiler.Linker.Elf64
 		/// <summary>
 		/// 
 		/// </summary>
-		protected System.IO.MemoryStream sectionStream;
+		protected MemoryStream sectionStream;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Section"/> class.
@@ -39,7 +41,7 @@ namespace Mosa.Compiler.Linker.Elf64
 		{
 			header = new SectionHeader();
 			header.Name = StringTableSection.AddString(name);
-			sectionStream = new System.IO.MemoryStream();
+			sectionStream = new MemoryStream();
 		}
 
 		/// <summary>
@@ -72,7 +74,7 @@ namespace Mosa.Compiler.Linker.Elf64
 		/// <param name="size">The size.</param>
 		/// <param name="alignment">The alignment.</param>
 		/// <returns></returns>
-		public System.IO.Stream Allocate(int size, int alignment)
+		public Stream Allocate(int size, int alignment)
 		{
 			// Do we need to ensure a specific alignment?
 			if (alignment > 1)
@@ -119,7 +121,7 @@ namespace Mosa.Compiler.Linker.Elf64
 		/// Writes the specified fs.
 		/// </summary>
 		/// <param name="writer">The writer.</param>
-		public virtual void Write(System.IO.BinaryWriter writer)
+		public virtual void Write(BinaryWriter writer)
 		{
 			Header.Offset = (uint)writer.BaseStream.Position;
 			this.sectionStream.WriteTo(writer.BaseStream);
@@ -129,7 +131,7 @@ namespace Mosa.Compiler.Linker.Elf64
 		/// Writes the header.
 		/// </summary>
 		/// <param name="writer">The writer.</param>
-		public virtual void WriteHeader(System.IO.BinaryWriter writer)
+		public virtual void WriteHeader(BinaryWriter writer)
 		{
 			Header.Size = (uint)Length;
 			Header.Write(writer);

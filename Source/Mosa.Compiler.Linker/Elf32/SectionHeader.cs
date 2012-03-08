@@ -7,6 +7,7 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
+using System.IO;
 
 namespace Mosa.Compiler.Linker.Elf32
 {
@@ -77,7 +78,7 @@ namespace Mosa.Compiler.Linker.Elf32
 		/// Writes the specified fs.
 		/// </summary>
 		/// <param name="writer">The writer.</param>
-		public void Write(System.IO.BinaryWriter writer)
+		public void Write(BinaryWriter writer)
 		{
 			Address = (uint)writer.BaseStream.Position;
 			writer.Write(Name);
@@ -96,7 +97,7 @@ namespace Mosa.Compiler.Linker.Elf32
 		/// Reads the specified writer.
 		/// </summary>
 		/// <param name="reader">The reader.</param>
-		public void Read(System.IO.BinaryReader reader)
+		public void Read(BinaryReader reader)
 		{
 			Address = reader.ReadUInt16();
 			Name = reader.ReadUInt32();

@@ -7,7 +7,6 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-
 namespace Mosa.Compiler.Linker.Elf64
 {
 	/// <summary>

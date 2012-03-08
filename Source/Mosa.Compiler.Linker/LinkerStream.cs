@@ -148,9 +148,7 @@ namespace Mosa.Compiler.Linker
 		/// <summary>
 		/// Gets or sets a value, in miliseconds, that determines how long the stream will attempt to read before timing out.
 		/// </summary>
-		/// <value></value>
 		/// <returns>A value, in miliseconds, that determines how long the stream will attempt to read before timing out.</returns>
-		/// <exception cref="T:System.InvalidOperationException">The <see cref="P:System.IO.Stream.ReadTimeout"/> method always throws an <see cref="T:System.InvalidOperationException"/>. </exception>
 		public override int ReadTimeout
 		{
 			get
@@ -175,7 +173,6 @@ namespace Mosa.Compiler.Linker
 		/// </summary>
 		/// <value></value>
 		/// <returns>A value, in miliseconds, that determines how long the stream will attempt to write before timing out.</returns>
-		/// <exception cref="T:System.InvalidOperationException">The <see cref="P:System.IO.Stream.WriteTimeout"/> method always throws an <see cref="T:System.InvalidOperationException"/>. </exception>
 		public override int WriteTimeout
 		{
 			get
@@ -247,11 +244,7 @@ namespace Mosa.Compiler.Linker
 		/// <summary>
 		/// When overridden in a derived class, gets or sets the position within the current stream.
 		/// </summary>
-		/// <value></value>
 		/// <returns>The current position within the stream.</returns>
-		/// <exception cref="T:System.IO.IOException">An I/O error occurs. </exception>
-		/// <exception cref="T:System.NotSupportedException">The stream does not support seeking. </exception>
-		/// <exception cref="T:System.ObjectDisposedException">Methods were called after the stream was closed. </exception>
 		public override long Position
 		{
 			get
@@ -281,14 +274,29 @@ namespace Mosa.Compiler.Linker
 		/// <returns>
 		/// The total number of bytes read into the buffer. This can be less than the number of bytes requested if that many bytes are not currently available, or zero (0) if the end of the stream has been reached.
 		/// </returns>
-		/// <exception cref="T:System.ArgumentException">The sum of <paramref name="offset"/> and <paramref name="count"/> is larger than the buffer length. </exception>
+		/// <exception cref="T:System.ArgumentException">
+		/// The sum of <paramref name="offset"/> and <paramref name="count"/> is larger than the buffer length.
+		///   </exception>
+		///   
 		/// <exception cref="T:System.ArgumentNullException">
-		/// 	<paramref name="buffer"/> is null. </exception>
+		///   <paramref name="buffer"/> is null.
+		///   </exception>
+		///   
 		/// <exception cref="T:System.ArgumentOutOfRangeException">
-		/// 	<paramref name="offset"/> or <paramref name="count"/> is negative. </exception>
-		/// <exception cref="T:System.IO.IOException">An I/O error occurs. </exception>
-		/// <exception cref="T:System.NotSupportedException">The stream does not support reading. </exception>
-		/// <exception cref="T:System.ObjectDisposedException">Methods were called after the stream was closed. </exception>
+		///   <paramref name="offset"/> or <paramref name="count"/> is negative.
+		///   </exception>
+		///   
+		/// <exception cref="T:System.IO.IOException">
+		/// An I/O error occurs.
+		///   </exception>
+		///   
+		/// <exception cref="T:System.NotSupportedException">
+		/// The stream does not support reading.
+		///   </exception>
+		///   
+		/// <exception cref="T:System.ObjectDisposedException">
+		/// Methods were called after the stream was closed.
+		///   </exception>
 		public override int Read(byte[] buffer, int offset, int count)
 		{
 			if (stream == null)
@@ -340,10 +348,17 @@ namespace Mosa.Compiler.Linker
 		/// <returns>
 		/// The new position within the current stream.
 		/// </returns>
-		/// <exception cref="T:System.ArgumentException">Stream doesn't support the specified <paramref name="origin"/>.</exception>
-		/// <exception cref="T:System.IO.IOException">An I/O error occurs. </exception>
-		/// <exception cref="T:System.NotSupportedException">The stream does not support seeking, such as if the stream is constructed from a pipe or console output. </exception>
-		/// <exception cref="T:System.ObjectDisposedException">Methods were called after the stream was closed. </exception>
+		/// <exception cref="T:System.IO.IOException">
+		/// An I/O error occurs.
+		///   </exception>
+		///   
+		/// <exception cref="T:System.NotSupportedException">
+		/// The stream does not support seeking, such as if the stream is constructed from a pipe or console output.
+		///   </exception>
+		///   
+		/// <exception cref="T:System.ObjectDisposedException">
+		/// Methods were called after the stream was closed.
+		///   </exception>
 		public override long Seek(long offset, SeekOrigin origin)
 		{
 			if (stream == null)
@@ -381,7 +396,9 @@ namespace Mosa.Compiler.Linker
 		/// </summary>
 		/// <param name="value">The desired length of the current stream in bytes.</param>
 		/// <exception cref="T:System.IO.IOException">An I/O error occurs. </exception>
+		///   
 		/// <exception cref="T:System.NotSupportedException">The stream does not support both writing and seeking, such as if the stream is constructed from a pipe or console output. </exception>
+		///   
 		/// <exception cref="T:System.ObjectDisposedException">Methods were called after the stream was closed. </exception>
 		public override void SetLength(long value)
 		{
@@ -397,12 +414,17 @@ namespace Mosa.Compiler.Linker
 		/// <param name="offset">The zero-based byte offset in <paramref name="buffer"/> at which to begin copying bytes to the current stream.</param>
 		/// <param name="count">The number of bytes to be written to the current stream.</param>
 		/// <exception cref="T:System.ArgumentException">The sum of <paramref name="offset"/> and <paramref name="count"/> is greater than the buffer length. </exception>
+		///   
 		/// <exception cref="T:System.ArgumentNullException">
-		/// 	<paramref name="buffer"/> is null. </exception>
+		///   <paramref name="buffer"/> is null. </exception>
+		///   
 		/// <exception cref="T:System.ArgumentOutOfRangeException">
-		/// 	<paramref name="offset"/> or <paramref name="count"/> is negative. </exception>
+		///   <paramref name="offset"/> or <paramref name="count"/> is negative. </exception>
+		///   
 		/// <exception cref="T:System.IO.IOException">An I/O error occurs. </exception>
+		///   
 		/// <exception cref="T:System.NotSupportedException">The stream does not support writing. </exception>
+		///   
 		/// <exception cref="T:System.ObjectDisposedException">Methods were called after the stream was closed. </exception>
 		public override void Write(byte[] buffer, int offset, int count)
 		{

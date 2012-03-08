@@ -83,7 +83,7 @@ namespace Mosa.Compiler.Linker.PE
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="PortableExecutableLinkerStage"/> class.
+		/// Initializes a new instance of the <see cref="Linker"/> class.
 		/// </summary>
 		public Linker()
 		{
@@ -179,7 +179,7 @@ namespace Mosa.Compiler.Linker.PE
 			{
 				// FIXME: Need a .reloc section with a relocation entry if the module is moved in virtual memory
 				// the runtime loader must patch this link request, we'll fail it until we can do relocations.
-				//throw new NotSupportedException(@".reloc section not supported.");
+				throw new NotSupportedException(@".reloc section not supported.");
 			}
 			else
 			{
