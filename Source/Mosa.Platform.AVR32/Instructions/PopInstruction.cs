@@ -5,14 +5,18 @@
  *
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ *  Pascal Delprat (pdelprat) <pascal.delprat@online.fr>  
  */
 
 using Mosa.Compiler.Framework;
+using Mosa.Compiler.Framework.Operands;
+using Mosa.Compiler.Metadata.Signatures;
 
 namespace Mosa.Platform.AVR32.Instructions
 {
 	/// <summary>
-	/// 
+	/// Pop Instruction
+	/// Substituded by ld.w Rd, sp++
 	/// </summary>
 	public class PopInstruction : BaseInstruction
 	{
@@ -26,7 +30,10 @@ namespace Mosa.Platform.AVR32.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
-			// TODO
+			// ld.w Rd, Rp++
+            RegisterOperand sp = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.SP);
+            RegisterOperand register = context.Result as RegisterOperand;
+			emitter.EmitTwoRegisterInstructions((byte)0x10, (byte)sp.Register.RegisterCode, (byte)register.Register.RegisterCode);        // ld.w Rd, sp++
 		}
 
 		/// <summary>

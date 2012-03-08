@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Kai P. Reisert <kpreisert@googlemail.com>
+ *  Pascal Delprat (pdelprat) <pascal.delprat@online.fr>  
  */
 
 using System;
@@ -133,7 +134,7 @@ namespace Mosa.Tool.Compiler
 
 			optionSet.Add(
 				"a|Architecture=",
-				"Select one of the MOSA architectures to compile for [{x86}].",
+				"Select one of the MOSA architectures to compile for [{x86|avr32}].",
 				delegate(string arch)
 				{
 					compilerOptions.Architecture = SelectArchitecture(arch);

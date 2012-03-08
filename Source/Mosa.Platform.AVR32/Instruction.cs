@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ *  Pascal Delprat (pdelprat) <pascal.delprat@online.fr>  
  */
 
 using Mosa.Platform.AVR32.Instructions;
@@ -254,7 +255,7 @@ namespace Mosa.Platform.AVR32
 		/// <summary>
 		/// 
 		/// </summary>
-		public static readonly OriInstruction OriInstruction = new OriInstruction();
+		public static readonly OrhInstruction OriInstruction = new OrhInstruction();
 
 		/// <summary>
 		/// 

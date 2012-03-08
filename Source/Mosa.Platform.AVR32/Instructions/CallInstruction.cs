@@ -5,18 +5,19 @@
  *
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ *  Pascal Delprat (pdelprat) <pascal.delprat@online.fr>   
  */
 
 using Mosa.Compiler.Framework;
+using Mosa.Compiler.Framework.Operands;
 
 namespace Mosa.Platform.AVR32.Instructions
 {
 	/// <summary>
-	/// 
+	/// Call Instruction
 	/// </summary>
 	public class CallInstruction : BaseInstruction
 	{
-
 		#region Methods
 
 		/// <summary>
@@ -26,7 +27,30 @@ namespace Mosa.Platform.AVR32.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
-			// TODO
+			if (context.OperandCount == 0)
+			{
+				// TODO:
+				//emitter.EmitBranch(LabelCall, context.Branch.Targets[0]);
+				return;
+			}
+
+			Operand destinationOperand = context.Operand1;
+			SymbolOperand destinationSymbol = destinationOperand as SymbolOperand;
+
+			if (destinationSymbol != null)
+			{
+				emitter.Call(destinationSymbol);
+			}
+			else
+			{
+				if (destinationOperand is MemoryOperand)
+				{
+					//RegisterOperand register = destinationOperand as RegisterOperand;
+					//emitter.EmitSingleRegisterInstructions(0x11, (byte)register.Register.RegisterCode);
+					MemoryOperand memory = destinationOperand as MemoryOperand;
+					emitter.EmitRegisterOperandWithK16(0x101, (byte)memory.Base.RegisterCode, (ushort)memory.Offset);
+				}
+			}
 		}
 
 		/// <summary>

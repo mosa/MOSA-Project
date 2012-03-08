@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ *  Pascal Delprat (pdelprat) <pascal.delprat@online.fr>    
  */
 
 using Mosa.Compiler.Framework;
@@ -299,10 +300,10 @@ namespace Mosa.Platform.AVR32.Instructions
 		void Or(Context context);
 
 		/// <summary>
-		/// Ori instruction
+		/// Orh instruction
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void Ori(Context context);
+		void Orh(Context context);
 
 		/// <summary>
 		/// Out instruction

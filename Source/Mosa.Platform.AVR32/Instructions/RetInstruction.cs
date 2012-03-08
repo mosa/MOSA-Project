@@ -17,6 +17,16 @@ namespace Mosa.Platform.AVR32.Instructions
 	public class RetInstruction : BaseInstruction
 	{
 
+        #region Properties
+
+        /// <summary>
+        /// Gets the instruction latency.
+        /// </summary>
+        /// <value>The latency.</value>
+        public override int Latency { get { return 1; } }
+
+        #endregion // Properties
+
 		#region Methods
 
 		/// <summary>
@@ -26,7 +36,7 @@ namespace Mosa.Platform.AVR32.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
-			// TODO
+            emitter.EmitReturnAndTest(0x00);
 		}
 
 		/// <summary>

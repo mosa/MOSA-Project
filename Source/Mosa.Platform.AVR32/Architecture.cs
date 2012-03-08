@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ *  Pascal Delprat (pdelprat) <pascal.delprat@online.fr> 
  */
 
 using System;
@@ -34,7 +35,22 @@ namespace Mosa.Platform.AVR32
 		/// </summary>
 		private static readonly Register[] Registers = new Register[]
 		{
-			//TODO
+			////////////////////////////////////////////////////////
+			// 32-bit general purpose registers
+			////////////////////////////////////////////////////////
+			GeneralPurposeRegister.R0,
+			GeneralPurposeRegister.R1,
+			GeneralPurposeRegister.R2,
+			GeneralPurposeRegister.R3,
+			GeneralPurposeRegister.R4,
+			GeneralPurposeRegister.R5,
+			GeneralPurposeRegister.R6,
+			GeneralPurposeRegister.R7,
+			GeneralPurposeRegister.R8,
+			GeneralPurposeRegister.R9,
+			GeneralPurposeRegister.R10,
+			GeneralPurposeRegister.R11,
+			GeneralPurposeRegister.R12
 		};
 
 		/// <summary>
@@ -52,16 +68,16 @@ namespace Mosa.Platform.AVR32
 		}
 
 		/// <summary>
-		/// Retrieves the native integer size of the x64 platform.
+		/// Retrieves the native integer size of the AVR32 platform.
 		/// </summary>
-		/// <value>This property always returns 64.</value>
+		/// <value>This property always returns 32.</value>
 		public override int NativeIntegerSize
 		{
-			get { return 64; }
+			get { return 32; }
 		}
 
 		/// <summary>
-		/// Retrieves the register set of the x64 platform.
+		/// Retrieves the register set of the AVR32 platform.
 		/// </summary>
 		public override Register[] RegisterSet
 		{
@@ -69,16 +85,11 @@ namespace Mosa.Platform.AVR32
 		}
 
 		/// <summary>
-		/// Retrieves the stack frame register of the x64.
+		/// Retrieves the stack frame register of the AVR32.
 		/// </summary>
 		public override Register StackFrameRegister
 		{
-			get
-			{
-				// TODO
-				return null;
-				// return GeneralPurposeRegister.EBP; 
-			}
+			get { return GeneralPurposeRegister.R8; }
 		}
 
 		/// <summary>
@@ -107,9 +118,7 @@ namespace Mosa.Platform.AVR32
 		/// <returns>A new operand usable as a result operand.</returns>
 		public override Operand CreateResultOperand(SigType signatureType, int instructionLabel, int operandStackIndex)
 		{
-			// TODO
-			return null;
-			//return new RegisterOperand(signatureType, GeneralPurposeRegister.EAX);
+			return new RegisterOperand(signatureType, GeneralPurposeRegister.R9);
 		}
 
 		/// <summary>
@@ -141,13 +150,13 @@ namespace Mosa.Platform.AVR32
 
 			methodCompilerPipeline.InsertAfterLast<PlatformStubStage>(
 				new IMethodCompilerStage[]
-			    {
+				{
 					//new LongOperandTransformationStage(),
 					//new AddressModeConversionStage(),
-			        new IRTransformationStage(),
+					new IRTransformationStage(),
 					//new TweakTransformationStage(),
 					//new MemToMemConversionStage(),
-			    });
+				});
 
 			//methodCompilerPipeline.InsertAfterLast<IBlockOrderStage>(
 			//    new SimplePeepholeOptimizationStage()
@@ -166,9 +175,8 @@ namespace Mosa.Platform.AVR32
 		/// </returns>
 		public override ICallingConvention GetCallingConvention()
 		{
-			// TODO
 			if (callingConvention == null)
-				callingConvention = null; // new DefaultCallingConvention(this);
+				callingConvention = new DefaultCallingConvention(this);
 
 			return callingConvention;
 
@@ -230,9 +238,7 @@ namespace Mosa.Platform.AVR32
 		/// <returns></returns>
 		public override ICodeEmitter GetCodeEmitter()
 		{
-			// TODO
-			return null;
-			//return new MachineCodeEmitter();
+			return new MachineCodeEmitter();
 		}
 	}
 }

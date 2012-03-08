@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ *  Pascal Delprat (pdelprat) <pascal.delprat@online.fr>    
  */
 
 using Mosa.Compiler.Framework;
@@ -26,7 +27,7 @@ namespace Mosa.Platform.AVR32.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
-			emitter.Write(0x00);
+			emitter.Write(0xD703);
 		}
 
 		/// <summary>

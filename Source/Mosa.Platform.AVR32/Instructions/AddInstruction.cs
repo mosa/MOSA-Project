@@ -5,14 +5,18 @@
  *
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ *  Pascal Delprat (pdelprat) <pascal.delprat@online.fr>   
  */
 
 using Mosa.Compiler.Framework;
+using Mosa.Compiler.Framework.Operands;
 
 namespace Mosa.Platform.AVR32.Instructions
 {
 	/// <summary>
-	/// 
+	/// Add Instruction
+    /// Suported format:
+    ///     add Rd, Rs
 	/// </summary>
 	public class AddInstruction : BaseInstruction
 	{
@@ -26,7 +30,9 @@ namespace Mosa.Platform.AVR32.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
-			// TODO
+            RegisterOperand destinationRegister = context.Result as RegisterOperand;
+            RegisterOperand sourceRegiter = context.Operand1 as RegisterOperand;
+			emitter.EmitTwoRegisterInstructions((byte)0x00, (byte)sourceRegiter.Register.RegisterCode, (byte)destinationRegister.Register.RegisterCode);
 		}
 
 		/// <summary>
