@@ -7,6 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using System;
 using System.IO;
 
 namespace Mosa.Compiler.Common
@@ -33,6 +34,23 @@ namespace Mosa.Compiler.Common
 		{
 			for (int i = 0; i < size; i++)
 				stream.WriteByte(0);
+		}
+
+		/// <summary>
+		/// Writes to from MemoryStream to stream
+		/// </summary>
+		/// <param name="stream">The stream.</param>
+		/// <param name="memoryStream">The memory stream.</param>
+		public static void WriteTo(this Stream src, Stream dest)
+		{
+			int size = (src.CanSeek) ? System.Math.Min((int)(src.Length - src.Position), 0x2000) : 0x2000;
+			byte[] buffer = new byte[size];
+			int n;
+			do
+			{
+				n = src.Read(buffer, 0, buffer.Length);
+				dest.Write(buffer, 0, n);
+			} while (n != 0);
 		}
 	}
 }
