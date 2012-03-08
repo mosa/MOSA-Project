@@ -167,7 +167,7 @@ namespace Mosa.Compiler.Linker.PE
 		/// <param name="targetAddress">The position in code, where it should be patched.</param>
 		protected override void ApplyPatch(LinkType linkType, long methodAddress, long methodOffset, long methodRelativeBase, long targetAddress)
 		{
-			if (this.symbolsResolved == false)
+			if (!symbolsResolved)
 				throw new InvalidOperationException(@"Can't apply patches - symbols not resolved.");
 
 			// Retrieve the text section
@@ -179,7 +179,7 @@ namespace Mosa.Compiler.Linker.PE
 			{
 				// FIXME: Need a .reloc section with a relocation entry if the module is moved in virtual memory
 				// the runtime loader must patch this link request, we'll fail it until we can do relocations.
-				throw new NotSupportedException(@".reloc section not supported.");
+				//throw new NotSupportedException(@".reloc section not supported.");
 			}
 			else
 			{
@@ -359,7 +359,7 @@ namespace Mosa.Compiler.Linker.PE
 						this.sections = usedSections;
 			*/
 			// We've resolved all symbols, allow IsResolved to succeed
-			this.symbolsResolved = true;
+			symbolsResolved = true;
 		}
 
 		/// <summary>
@@ -542,7 +542,7 @@ namespace Mosa.Compiler.Linker.PE
 		private long GetSectionAddress(SectionKind sectionKind)
 		{
 			LinkerSection section;
-			if (this.sections.TryGetValue(sectionKind, out section) == true && section.Length > 0)
+			if (this.sections.TryGetValue(sectionKind, out section) && section.Length > 0)
 			{
 				return (uint)section.VirtualAddress.ToInt64();
 			}
@@ -553,7 +553,7 @@ namespace Mosa.Compiler.Linker.PE
 		private uint GetSectionLength(SectionKind sectionKind)
 		{
 			LinkerSection section;
-			if (this.sections.TryGetValue(sectionKind, out section) == true && section.Length > 0)
+			if (this.sections.TryGetValue(sectionKind, out section) && section.Length > 0)
 				return (uint)section.Length;
 
 			return 0;
@@ -597,20 +597,22 @@ namespace Mosa.Compiler.Linker.PE
 			uint csum = 0;
 
 			using (FileStream stream = new FileStream(file, FileMode.Open, FileAccess.Read, FileShare.ReadWrite))
-			using (BinaryReader reader = new BinaryReader(stream))
 			{
-				uint l = (uint)stream.Length;
-				for (uint p = 0; p < l; p += 2)
+				using (BinaryReader reader = new BinaryReader(stream))
 				{
-					csum += reader.ReadUInt16();
-					if (csum > 0x0000FFFF)
+					uint l = (uint)stream.Length;
+					for (uint p = 0; p < l; p += 2)
 					{
-						csum = (csum & 0xFFFF) + (csum >> 16);
+						csum += reader.ReadUInt16();
+						if (csum > 0x0000FFFF)
+						{
+							csum = (csum & 0xFFFF) + (csum >> 16);
+						}
 					}
-				}
 
-				csum = (csum & 0xFFFF) + (csum >> 16);
-				csum += l;
+					csum = (csum & 0xFFFF) + (csum >> 16);
+					csum += l;
+				}
 			}
 
 			return csum;

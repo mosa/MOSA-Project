@@ -5,6 +5,8 @@
  *
  */
 
+using System.IO;
+
 namespace Mosa.Compiler.LinkerFormat.Elf32
 {
 	/// <summary>
@@ -55,7 +57,7 @@ namespace Mosa.Compiler.LinkerFormat.Elf32
 		/// Writes the specified writer.
 		/// </summary>
 		/// <param name="writer">The writer.</param>
-		public virtual void Write(System.IO.BinaryWriter writer)
+		public virtual void Write(BinaryWriter writer)
 		{
 			writer.Write((uint)Type);
 			writer.Write(Offset);

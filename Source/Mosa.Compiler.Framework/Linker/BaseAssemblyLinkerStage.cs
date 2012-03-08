@@ -284,11 +284,6 @@ namespace Mosa.Compiler.Linker
 		/// <param name="methodRelativeBase">The base virtualAddress, if a relative link is required.</param>
 		/// <param name="targetSymbol">The linker symbol to link against.</param>
 		/// <param name="offset">An offset to apply to the link target.</param>
-		/// <returns>
-		/// The return value is the preliminary virtualAddress to place in the generated machine
-		/// code. On 32-bit systems, only the lower 32 bits are valid. The above are not used. An implementation of
-		/// IAssemblyLinker may not rely on 64-bits being stored in the memory defined by position.
-		/// </returns>
 		public virtual void Link(LinkType linkType, string symbolName, int methodOffset, int methodRelativeBase, string targetSymbol, IntPtr offset)
 		{
 			Debug.Assert(symbolName != null, @"Symbol can't be null.");

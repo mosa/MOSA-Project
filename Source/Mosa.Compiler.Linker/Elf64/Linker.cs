@@ -119,6 +119,9 @@ namespace Mosa.Compiler.Linker.Elf64
 		/// <param name="targetAddress">The position in code, where it should be patched.</param>
 		protected override void ApplyPatch(LinkType linkType, long methodAddress, long methodOffset, long methodRelativeBase, long targetAddress)
 		{
+//			if (!symbolsResolved)
+//				throw new InvalidOperationException(@"Can't apply patches - symbols not resolved.");
+
 			// Retrieve the text section
 			Section text = (Section)GetSection(SectionKind.Text);
 			// Calculate the patch offset
@@ -128,7 +131,7 @@ namespace Mosa.Compiler.Linker.Elf64
 			{
 				// FIXME: Need a .reloc section with a relocation entry if the module is moved in virtual memory
 				// the runtime loader must patch this link request, we'll fail it until we can do relocations.
-				throw new NotSupportedException(@".reloc section not supported.");
+				//throw new NotSupportedException(@".reloc section not supported.");
 			}
 			else
 			{

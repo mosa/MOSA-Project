@@ -37,6 +37,9 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="EndianAwareWriter.cs" />
+    <Compile Include="EndianAwareReader.cs" />
+    <Compile Include="Endian.cs" />
     <Compile Include="StreamExtension.cs" />
     <Compile Include="DataConverter.cs" />
   </ItemGroup>
