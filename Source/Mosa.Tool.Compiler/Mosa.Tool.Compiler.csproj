@@ -94,9 +94,9 @@
     <Compile Include="Stages\TypeInitializerSchedulerStage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <ProjectReference Include="..\Mosa.Compiler.FileFormat\Mosa.Compiler.FileFormat.csproj">
+    <ProjectReference Include="..\Mosa.Compiler.LinkerFormat\Mosa.Compiler.LinkerFormat.csproj">
       <Project>{CC2E6418-C325-4486-B50D-941EC27053F6}</Project>
-      <Name>Mosa.Compiler.FileFormat</Name>
+      <Name>Mosa.Compiler.LinkerFormat</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mosa.Compiler.Linker\Mosa.Compiler.Linker.csproj">
       <Project>{65866A51-B229-44C5-AC81-87A90FA1741B}</Project>

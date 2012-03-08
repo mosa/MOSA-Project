@@ -11,7 +11,7 @@
 
 using System.IO;
 using System.Text;
-using Mosa.Compiler.FileFormat.PE;
+using Mosa.Compiler.LinkerFormat.PE;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Linker;
 
@@ -27,7 +27,7 @@ namespace Mosa.Tool.Compiler.Stages
 
 		private IAssemblyLinker linker;
 
-		private CLI_HEADER cliHeader;
+		private CliHeader cliHeader;
 
 		#endregion // Data members
 
@@ -69,10 +69,12 @@ namespace Mosa.Tool.Compiler.Stages
 		/// </summary>
 		private void WriteCilHeader()
 		{
-			using (Stream stream = this.linker.Allocate(CLI_HEADER.SymbolName, SectionKind.Text, CLI_HEADER.Length, 4))
-			using (BinaryWriter bw = new BinaryWriter(stream, Encoding.ASCII))
+			using (Stream stream = linker.Allocate(CliHeader.SymbolName, SectionKind.Text, CliHeader.Length, 4))
 			{
-				cliHeader.WriteTo(bw);
+				using (BinaryWriter bw = new BinaryWriter(stream, Encoding.ASCII))
+				{
+					cliHeader.WriteTo(bw);
+				}
 			}
 		}
 

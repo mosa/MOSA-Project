@@ -16,7 +16,7 @@ namespace Mosa.Tool.Compiler.Stages
 	/// <summary>
 	/// 
 	/// </summary>
-	public class PortableExecutableLinkerStage : PortableExecutableLinker, IPipelineStage, IAssemblyCompilerStage, IAssemblyLinker
+	public class PortableExecutableLinkerStage : Mosa.Compiler.Linker.PE.Linker, IPipelineStage, IAssemblyCompilerStage, IAssemblyLinker
 	{
 
 		#region IPipelineStage

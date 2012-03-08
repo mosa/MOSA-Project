@@ -11,7 +11,7 @@
 using System;
 using System.IO;
 
-using Mosa.Compiler.FileFormat.PE;
+using Mosa.Compiler.LinkerFormat.PE;
 using Mosa.Compiler.Metadata.Tables;
 
 namespace Mosa.Compiler.Metadata.Loader.PE
@@ -49,22 +49,22 @@ namespace Mosa.Compiler.Metadata.Loader.PE
 		/// <summary>
 		/// The DOS header of the Mosa.Runtime.Metadata.Loader.PE image.
 		/// </summary>
-		private IMAGE_DOS_HEADER dosHeader;
+		private ImageDosHeader dosHeader;
 
 		/// <summary>
 		/// The Mosa.Runtime.Metadata.Loader.PE file header.
 		/// </summary>
-		private IMAGE_NT_HEADERS ntHeader;
+		private ImageNtHeaders ntHeader;
 
 		/// <summary>
 		/// The CLI header of the assembly.
 		/// </summary>
-		private CLI_HEADER cliHeader;
+		private CliHeader cliHeader;
 
 		/// <summary>
 		/// Sections in the Mosa.Runtime.Metadata.Loader.PE file.
 		/// </summary>
-		private IMAGE_SECTION_HEADER[] sections;
+		private ImageSectionHeader[] sections;
 
 		/// <summary>
 		/// Metadata of the assembly
@@ -103,7 +103,7 @@ namespace Mosa.Compiler.Metadata.Loader.PE
 			if (CLI_HEADER_DATA_DIRECTORY >= ntHeader.OptionalHeader.NumberOfRvaAndSizes)
 				throw new BadImageFormatException();
 
-			sections = new IMAGE_SECTION_HEADER[ntHeader.FileHeader.NumberOfSections];
+			sections = new ImageSectionHeader[ntHeader.FileHeader.NumberOfSections];
 			for (int i = 0; i < ntHeader.FileHeader.NumberOfSections; i++)
 				sections[i].Read(assemblyReader);
 
@@ -175,7 +175,7 @@ namespace Mosa.Compiler.Metadata.Loader.PE
 		{
 			get
 			{
-				if ((ntHeader.FileHeader.Characteristics & IMAGE_FILE_HEADER.IMAGE_FILE_DLL) == IMAGE_FILE_HEADER.IMAGE_FILE_DLL)
+				if ((ntHeader.FileHeader.Characteristics & ImageFileHeader.IMAGE_FILE_DLL) == ImageFileHeader.IMAGE_FILE_DLL)
 					return ModuleType.Library;
 
 				return ModuleType.Executable;
