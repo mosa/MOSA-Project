@@ -12,15 +12,12 @@
 	
 	<!-- Main build target -->
 	<target name="build">
-	    <csc target="library" output="${outputDirectory}/Mosa.Platform.AVR32.dll" debug="${debug}" unsafe="true" nostdlib="false">
+	    <csc target="library" output="${outputDirectory}/Mosa.Compiler.Platform.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
-                    <include name="Architecture.cs"/>
-                    <include name="ArchitectureFeatureFlags.cs"/>
+                    <include name="BasePlatformTransformationStage.cs"/>
 		</sources>
 		<references>
                     <include name="System.dll"/>
-                    <include name="${outputDirectory}/Mosa.Compiler.Common.dll"/>
-                    <include name="${outputDirectory}/Mosa.Compiler.Linker.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Metadata.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Framework.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.TypeSystem.dll"/>

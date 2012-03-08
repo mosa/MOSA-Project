@@ -41,6 +41,7 @@
                     <include name="CIL/BreakInstruction.cs"/>
                     <include name="BaseAssemblyCompilerStage.cs"/>
                     <include name="ConstantFoldingStage.cs"/>
+                    <include name="ITypeInitializerSchedulerStage.cs"/>
                     <include name="PlugStage.cs"/>
                     <include name="ExceptionPrologueStage.cs"/>
                     <include name="DelegateTypePatchStage.cs"/>
@@ -182,7 +183,6 @@
                     <include name="IR/IntegerToFloatingPointConversionInstruction.cs"/>
                     <include name="IR/BaseInstruction.cs"/>
                     <include name="IR/JmpInstruction.cs"/>
-                    <include name="IR/LiteralInstruction.cs"/>
                     <include name="IR/LoadInstruction.cs"/>
                     <include name="IR/LogicalAndInstruction.cs"/>
                     <include name="IR/LogicalNotInstruction.cs"/>

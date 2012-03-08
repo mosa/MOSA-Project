@@ -12,15 +12,35 @@
 	
 	<!-- Main build target -->
 	<target name="build">
-	    <csc target="library" output="${outputDirectory}/Mosa.Compiler.FileFormat.dll" debug="${debug}" unsafe="true" nostdlib="false">
+	    <csc target="library" output="${outputDirectory}/Mosa.Compiler.LinkerFormat.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
-                    <include name="PE/CLI_HEADER.cs"/>
-                    <include name="PE/IMAGE_DATA_DIRECTORY.cs"/>
-                    <include name="PE/IMAGE_DOS_HEADER.cs"/>
-                    <include name="PE/IMAGE_FILE_HEADER.cs"/>
-                    <include name="PE/IMAGE_NT_HEADERS.cs"/>
-                    <include name="PE/IMAGE_OPTIONAL_HEADER.cs"/>
-                    <include name="PE/IMAGE_SECTION_HEADER.cs"/>
+                    <include name="Elf32/FileType.cs"/>
+                    <include name="Elf32/Header.cs"/>
+                    <include name="Elf32/IdentClass.cs"/>
+                    <include name="Elf32/IdentData.cs"/>
+                    <include name="Elf32/IdentIndex.cs"/>
+                    <include name="Elf32/MachineType.cs"/>
+                    <include name="Elf32/ProgramHeader.cs"/>
+                    <include name="Elf32/ProgramHeaderFlags.cs"/>
+                    <include name="Elf32/ProgramHeaderType.cs"/>
+                    <include name="Elf32/SymbolTableEntry.cs"/>
+                    <include name="Elf32/Version.cs"/>
+                    <include name="Elf64/FileType.cs"/>
+                    <include name="Elf64/Header.cs"/>
+                    <include name="Elf64/IdentClass.cs"/>
+                    <include name="Elf64/IdentData.cs"/>
+                    <include name="Elf64/IdentIndex.cs"/>
+                    <include name="Elf64/MachineType.cs"/>
+                    <include name="Elf64/ProgramHeader.cs"/>
+                    <include name="Elf64/SymbolTableEntry.cs"/>
+                    <include name="Elf64/Version.cs"/>
+                    <include name="PE/CliHeader.cs"/>
+                    <include name="PE/ImageDataDirectory.cs"/>
+                    <include name="PE/ImageDosHeader.cs"/>
+                    <include name="PE/ImageFileHeader.cs"/>
+                    <include name="PE/ImageNtHeaders.cs"/>
+                    <include name="PE/ImageOptionalHeader.cs"/>
+                    <include name="PE/ImageSectionHeader.cs"/>
                     <include name="PE/RuntimeImageFlags.cs"/>
 		</sources>
 		<references>
