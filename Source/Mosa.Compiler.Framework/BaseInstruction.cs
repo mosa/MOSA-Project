@@ -115,15 +115,16 @@ namespace Mosa.Compiler.Framework
 		public override string ToString()
 		{
 			string inst = GetType().ToString();
-			int index = inst.IndexOf("Instruction");
 
-			if (index > 0)
-				inst = inst.Substring(0, index);
-
-			index = inst.LastIndexOf(".");
+			int index = inst.LastIndexOf(".");
 
 			if (index > 0)
 				inst = inst.Substring(index + 1);
+
+			index = inst.IndexOf("Instruction");
+
+			if (index > 0)
+				inst = inst.Substring(0, index);
 
 			return inst;
 		}
