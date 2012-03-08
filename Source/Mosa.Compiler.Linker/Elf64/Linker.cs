@@ -128,7 +128,7 @@ namespace Mosa.Compiler.Linker.Elf64
 			{
 				// FIXME: Need a .reloc section with a relocation entry if the module is moved in virtual memory
 				// the runtime loader must patch this link request, we'll fail it until we can do relocations.
-				//throw new NotSupportedException(@".reloc section not supported.");
+				throw new NotSupportedException(@".reloc section not supported.");
 			}
 			else
 			{
