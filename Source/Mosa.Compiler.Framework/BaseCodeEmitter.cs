@@ -69,9 +69,7 @@ namespace Mosa.Compiler.Framework
 		#endregion // Types
 
 		#region Data members
-
-		protected DataConverter bitConverter;
-
+		
 		/// <summary>
 		/// The compiler that is generating the code.
 		/// </summary>

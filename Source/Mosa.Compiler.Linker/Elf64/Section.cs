@@ -19,8 +19,6 @@ namespace Mosa.Compiler.Linker.Elf64
 	/// </summary>
 	public class Section : LinkerSection
 	{
-		private readonly DataConverter LittleEndianBitConverter = DataConverter.LittleEndian;
-
 		/// <summary>
 		/// 
 		/// </summary>
@@ -28,7 +26,7 @@ namespace Mosa.Compiler.Linker.Elf64
 		/// <summary>
 		/// 
 		/// </summary>
-		protected MemoryStream sectionStream;
+		protected MemoryStream stream;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Section"/> class.
@@ -41,32 +39,20 @@ namespace Mosa.Compiler.Linker.Elf64
 		{
 			header = new SectionHeader();
 			header.Name = StringTableSection.AddString(name);
-			sectionStream = new MemoryStream();
+			stream = new MemoryStream();
 		}
 
 		/// <summary>
 		/// Gets the length of the section in bytes.
 		/// </summary>
 		/// <value>The length of the section in bytes.</value>
-		public override long Length
-		{
-			get
-			{
-				return this.sectionStream.Length;
-			}
-		}
+		public override long Length { get { return this.stream.Length; } }
 
 		/// <summary>
 		/// Gets the header.
 		/// </summary>
 		/// <value>The header.</value>
-		public SectionHeader Header
-		{
-			get
-			{
-				return header;
-			}
-		}
+		public SectionHeader Header { get { return header; } }
 
 		/// <summary>
 		/// Allocates the specified size.
@@ -80,7 +66,7 @@ namespace Mosa.Compiler.Linker.Elf64
 			if (alignment > 1)
 				InsertPadding(alignment);
 
-			return this.sectionStream;
+			return stream;
 		}
 
 		/// <summary>
@@ -91,30 +77,30 @@ namespace Mosa.Compiler.Linker.Elf64
 		/// <param name="value">The value.</param>
 		public void ApplyPatch(long offset, LinkType linkType, long value)
 		{
-			long pos = this.sectionStream.Position;
-			this.sectionStream.Position = offset;
+			long pos = this.stream.Position;
+			stream.Position = offset;
 
 			// Apply the patch
 			switch (linkType & LinkType.SizeMask)
 			{
 				case LinkType.I1:
-					this.sectionStream.WriteByte((byte)value);
+					stream.WriteByte((byte)value);
 					break;
 
 				case LinkType.I2:
-					this.sectionStream.Write(LittleEndianBitConverter.GetBytes((ushort)value), 0, 2);
+					stream.Write((ushort)value, true); // FIXME
 					break;
 
 				case LinkType.I4:
-					this.sectionStream.Write(LittleEndianBitConverter.GetBytes((uint)value), 0, 4);
+					stream.Write((uint)value, true); // FIXME
 					break;
 
 				case LinkType.I8:
-					this.sectionStream.Write(LittleEndianBitConverter.GetBytes(value), 0, 8);
+					stream.Write((ulong)value, true); // FIXME
 					break;
 			}
 
-			this.sectionStream.Position = pos;
+			stream.Position = pos;
 		}
 
 		/// <summary>
@@ -124,7 +110,7 @@ namespace Mosa.Compiler.Linker.Elf64
 		public virtual void Write(BinaryWriter writer)
 		{
 			Header.Offset = (uint)writer.BaseStream.Position;
-			this.sectionStream.WriteTo(writer.BaseStream);
+			stream.WriteTo(writer.BaseStream);
 		}
 
 		/// <summary>
@@ -145,9 +131,9 @@ namespace Mosa.Compiler.Linker.Elf64
 		/// <param name="alignment">The alignment.</param>
 		private void InsertPadding(int alignment)
 		{
-			long address = this.VirtualAddress.ToInt64() + this.sectionStream.Length;
+			long address = this.VirtualAddress.ToInt64() + this.stream.Length;
 			int pad = (int)(alignment - (address % alignment));
-			this.sectionStream.Write(new byte[pad], 0, pad);
+			this.stream.Write(new byte[pad], 0, pad);
 		}
 
 		#endregion // Internals

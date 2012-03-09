@@ -24,10 +24,11 @@ namespace Mosa.Platform.x86
 	/// </summary>
 	public sealed class MachineCodeEmitter : BaseCodeEmitter, IDisposable
 	{
+		static private DataConverter bitConverter = DataConverter.LittleEndian;
 
 		public MachineCodeEmitter()
 		{
-			bitConverter = DataConverter.LittleEndian;
+			
 		}
 
 		#region Code Generation
@@ -169,7 +170,6 @@ namespace Mosa.Platform.x86
 		/// <param name="displacement">The displacement operand.</param>
 		public void WriteDisplacement(Operand displacement)
 		{
-
 			MemberOperand member = displacement as MemberOperand;
 			LabelOperand label = displacement as LabelOperand;
 			SymbolOperand symbol = displacement as SymbolOperand;

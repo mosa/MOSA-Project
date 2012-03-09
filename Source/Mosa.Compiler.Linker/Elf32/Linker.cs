@@ -10,6 +10,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using Mosa.Compiler.Common;
 using Mosa.Compiler.LinkerFormat.Elf32;
 
 namespace Mosa.Compiler.Linker.Elf32
@@ -244,7 +245,7 @@ namespace Mosa.Compiler.Linker.Elf32
 				header.ProgramHeaderNumber = 1;
 				header.SectionHeaderStringIndex = 1;
 
-				BinaryWriter writer = new BinaryWriter(fs);
+				EndianAwareBinaryWriter writer = new EndianAwareBinaryWriter(fs, true); // FIXME: true should depend on architecture
 
 				// Write the ELF Header
 				header.Write(writer);

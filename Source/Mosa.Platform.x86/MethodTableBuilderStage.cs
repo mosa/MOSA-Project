@@ -29,10 +29,6 @@ namespace Mosa.Platform.x86
 	/// </summary>
 	public class MethodTableBuilderStage : BaseAssemblyCompilerStage, IAssemblyCompilerStage
 	{
-		/// <summary>
-		/// 
-		/// </summary>
-		private static readonly DataConverter LittleEndianBitConverter = DataConverter.LittleEndian;
 
 		/// <summary>
 		/// 
@@ -111,7 +107,7 @@ namespace Mosa.Platform.x86
 					stream.Position += typeLayout.NativePointerSize;
 					
 					// 2. Store the length (it copied in by the next loop)
-					stream.Write(LittleEndianBitConverter.GetBytes(entry.Length), 0, 4);
+					stream.Write((uint)entry.Length, true); 
 
 					// 3. Store the pointer to the method description table (the linker writes the actual entry)
 					linker.Link(LinkType.AbsoluteAddress | LinkType.I4, section, (int)stream.Position, 0, entry.Name + "$mdtable", IntPtr.Zero);
@@ -146,12 +142,12 @@ namespace Mosa.Platform.x86
 					stream.WriteZeroBytes(typeLayout.NativePointerSize);
 
 					// Method's Parameter stack size
-					stream.Write(LittleEndianBitConverter.GetBytes(DetermineSizeOfMethodParameters(method)), 0, 4);
+					stream.Write(DetermineSizeOfMethodParameters(method), true); // FIXME
 				}
 			}
 		}
 
-		protected int DetermineSizeOfMethodParameters(RuntimeMethod method)
+		protected uint DetermineSizeOfMethodParameters(RuntimeMethod method)
 		{
 			// TODO
 			return 0;

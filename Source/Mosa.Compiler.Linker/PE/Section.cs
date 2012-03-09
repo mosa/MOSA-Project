@@ -19,14 +19,13 @@ namespace Mosa.Compiler.Linker.PE
 	/// </summary>
 	public class Section : LinkerSection
 	{
-		private readonly DataConverter LittleEndianBitConverter = DataConverter.LittleEndian;
 
 		#region Data members
 
 		/// <summary>
 		/// Holds the sections data.
 		/// </summary>
-		private MemoryStream sectionStream;
+		private MemoryStream stream;
 
 		#endregion // Data members
 
@@ -41,7 +40,7 @@ namespace Mosa.Compiler.Linker.PE
 		public Section(SectionKind kind, string name, IntPtr virtualAddress) :
 			base(kind, name, virtualAddress)
 		{
-			sectionStream = new MemoryStream();
+			stream = new MemoryStream();
 		}
 
 		#endregion // Construction
@@ -60,7 +59,7 @@ namespace Mosa.Compiler.Linker.PE
 			if (alignment > 1)
 				InsertPadding(alignment);
 
-			return sectionStream;
+			return stream;
 		}
 
 		/// <summary>
@@ -71,30 +70,30 @@ namespace Mosa.Compiler.Linker.PE
 		/// <param name="value">The value.</param>
 		public void ApplyPatch(long offset, LinkType linkType, long value)
 		{
-			long pos = sectionStream.Position;
-			sectionStream.Position = offset;
+			long pos = stream.Position;
+			stream.Position = offset;
 
 			// Apply the patch
 			switch (linkType & LinkType.SizeMask)
 			{
 				case LinkType.I1:
-					sectionStream.WriteByte((byte)value);
+					stream.WriteByte((byte)value);
 					break;
 
 				case LinkType.I2:
-					sectionStream.Write(LittleEndianBitConverter.GetBytes((ushort)value), 0, 2);
+					stream.Write((ushort)value, true); // FIXME
 					break;
 
 				case LinkType.I4:
-					sectionStream.Write(LittleEndianBitConverter.GetBytes((uint)value), 0, 4);
+					stream.Write((uint)value, true); // FIXME
 					break;
 
 				case LinkType.I8:
-					sectionStream.Write(LittleEndianBitConverter.GetBytes(value), 0, 8);
+					stream.Write((ulong)value, true); // FIXME
 					break;
 			}
 
-			sectionStream.Position = pos;
+			stream.Position = pos;
 		}
 
 		/// <summary>
@@ -103,7 +102,7 @@ namespace Mosa.Compiler.Linker.PE
 		/// <param name="writer">The writer.</param>
 		public void Write(BinaryWriter writer)
 		{
-			sectionStream.WriteTo(writer.BaseStream);
+			stream.WriteTo(writer.BaseStream);
 		}
 
 		#endregion // Methods
@@ -116,7 +115,7 @@ namespace Mosa.Compiler.Linker.PE
 		/// <value>The length of the section in bytes.</value>
 		public override long Length
 		{
-			get { return sectionStream.Length; }
+			get { return stream.Length; }
 		}
 
 		#endregion // LinkerSection Overrides
@@ -129,11 +128,11 @@ namespace Mosa.Compiler.Linker.PE
 		/// <param name="alignment">The alignment.</param>
 		private void InsertPadding(int alignment)
 		{
-			long address = this.VirtualAddress.ToInt64() + sectionStream.Length;
+			long address = this.VirtualAddress.ToInt64() + stream.Length;
 			int pad = (int)(alignment - (address % alignment));
 			if (pad < alignment)
 			{
-				sectionStream.Write(new byte[pad], 0, pad);
+				stream.Write(new byte[pad], 0, pad);
 			}
 		}
 

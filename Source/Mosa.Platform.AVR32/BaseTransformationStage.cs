@@ -22,8 +22,6 @@ namespace Mosa.Platform.AVR32
 
 		#region Data members
 
-		protected DataConverter Converter = DataConverter.LittleEndian;
-
 		#endregion // Data members
 
 		#region IPipelineStage Members

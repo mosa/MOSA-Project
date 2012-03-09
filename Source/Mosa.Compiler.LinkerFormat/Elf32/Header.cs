@@ -9,6 +9,7 @@
 
 using System;
 using System.IO;
+using Mosa.Compiler.Common;
 
 namespace Mosa.Compiler.LinkerFormat.Elf32
 {
@@ -108,7 +109,7 @@ namespace Mosa.Compiler.LinkerFormat.Elf32
 		/// Writes the specified fs.
 		/// </summary>
 		/// <param name="writer">The writer.</param>
-		public void Write(BinaryWriter writer)
+		public void Write(EndianAwareBinaryWriter writer)
 		{
 			writer.Seek(0, SeekOrigin.Begin);
 			writer.Write(Ident);
@@ -131,7 +132,7 @@ namespace Mosa.Compiler.LinkerFormat.Elf32
 		/// Reads the specified reader.
 		/// </summary>
 		/// <param name="reader">The reader.</param>
-		public void Read(BinaryReader reader)
+		public void Read(EndianAwareBinaryReader reader)
 		{
 			Ident = reader.ReadBytes(16);
 

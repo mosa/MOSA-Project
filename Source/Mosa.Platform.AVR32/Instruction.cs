@@ -255,7 +255,7 @@ namespace Mosa.Platform.AVR32
 		/// <summary>
 		/// 
 		/// </summary>
-		public static readonly OrhInstruction OriInstruction = new OrhInstruction();
+		//public static readonly OrhInstruction OriInstruction = new OrhInstruction();
 
 		/// <summary>
 		/// 

@@ -42,6 +42,31 @@ namespace Mosa.Compiler.Common
 			value = swap ? Endian.Swap(value) : value;
 			base.Write(value);
 		}
+
+		public override void Write(double value)
+		{
+			// TODO
+			base.Write(value);
+		}
+
+		public override void Write(float value)
+		{
+			// TODO
+			base.Write(value);
+		}
+
+		public void WriteByte(byte value)
+		{
+			Write(value);
+		}
+
+		public void WriteZeroBytes(int size)
+		{
+			for (int i = 0; i < size; i++)
+				Write((byte)0);
+		}
+
+		public long Position { get { return BaseStream.Position; } set { BaseStream.Position = value; } }
 	}
 
 }

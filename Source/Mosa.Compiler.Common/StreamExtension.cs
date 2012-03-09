@@ -52,5 +52,94 @@ namespace Mosa.Compiler.Common
 				dest.Write(buffer, 0, n);
 			} while (n != 0);
 		}
+
+		public static uint ReadUInt32(this Stream src, bool asLittleEndian)
+		{
+			int a = src.ReadByte();
+			int b = src.ReadByte();
+			int c = src.ReadByte();
+			int d = src.ReadByte();
+
+			if (a == -1 || b == -1 || c == -1 || d == -1)
+				throw new EndOfStreamException();
+
+			if (asLittleEndian)
+				return (uint)(a | (b << 8) | (c << 16) | (d << 24));
+			else
+				return (uint)(d | (c << 8) | (b << 16) | (a << 24));
+		}
+
+		public static ushort ReadUInt16(this Stream src, bool asLittleEndian)
+		{
+			int a = src.ReadByte();
+			int b = src.ReadByte();
+
+			if (a == -1 || b == -1)
+				throw new EndOfStreamException();
+
+			if (asLittleEndian)
+				return (ushort)(a | (b << 8));
+			else
+				return (ushort)(b | (a << 8));
+		}
+
+		public static void Write(this Stream src, ushort value, bool asLittleEndian)
+		{
+			if (asLittleEndian)
+			{
+				src.WriteByte((byte)(value & 0xFF));
+				src.WriteByte((byte)((value >> 8) & 0xFF));
+			}
+			else
+			{
+				src.WriteByte((byte)((value >> 8) & 0xFF));
+				src.WriteByte((byte)(value & 0xFF));
+			}
+		}
+
+		public static void Write(this Stream src, uint value, bool asLittleEndian)
+		{
+			if (asLittleEndian)
+			{
+				src.WriteByte((byte)(value & 0xFF));
+				src.WriteByte((byte)((value >> 8) & 0xFF));
+				src.WriteByte((byte)((value >> 16) & 0xFF));
+				src.WriteByte((byte)((value >> 24) & 0xFF));
+			}
+			else
+			{
+				src.WriteByte((byte)((value >> 24) & 0xFF));
+				src.WriteByte((byte)((value >> 16) & 0xFF));
+				src.WriteByte((byte)((value >> 8) & 0xFF));
+				src.WriteByte((byte)(value & 0xFF));
+			}
+		}
+
+		public static void Write(this Stream src, ulong value, bool asLittleEndian)
+		{
+			if (asLittleEndian)
+			{
+				src.WriteByte((byte)(value & 0xFF));
+				src.WriteByte((byte)((value >> 8) & 0xFF));
+				src.WriteByte((byte)((value >> 16) & 0xFF));
+				src.WriteByte((byte)((value >> 24) & 0xFF));
+				src.WriteByte((byte)((value >> 32) & 0xFF));
+				src.WriteByte((byte)((value >> 40) & 0xFF));
+				src.WriteByte((byte)((value >> 48) & 0xFF));
+				src.WriteByte((byte)((value >> 56) & 0xFF));
+			}
+			else
+			{
+				src.WriteByte((byte)((value >> 56) & 0xFF));
+				src.WriteByte((byte)((value >> 48) & 0xFF));
+				src.WriteByte((byte)((value >> 40) & 0xFF));
+				src.WriteByte((byte)((value >> 32) & 0xFF));
+				src.WriteByte((byte)((value >> 24) & 0xFF));
+				src.WriteByte((byte)((value >> 16) & 0xFF));
+				src.WriteByte((byte)((value >> 8) & 0xFF));
+				src.WriteByte((byte)(value & 0xFF));
+			}
+		}
+
 	}
 }

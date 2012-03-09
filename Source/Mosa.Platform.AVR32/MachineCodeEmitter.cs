@@ -25,7 +25,6 @@ namespace Mosa.Platform.AVR32
 
 		public MachineCodeEmitter()
 		{
-			bitConverter = DataConverter.BigEndian;
 		}
 
 		#region Code Generation Members

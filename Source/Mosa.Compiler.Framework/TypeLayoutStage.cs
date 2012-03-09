@@ -29,8 +29,6 @@ namespace Mosa.Compiler.Framework
 		private IAssemblyLinker linker;
 		private HashSet<RuntimeType> processed = new HashSet<RuntimeType>();
 
-		private readonly DataConverter LittleEndianBitConverter = DataConverter.LittleEndian;
-
 		#endregion // Data members
 
 		#region IAssemblyCompilerStage members
@@ -302,7 +300,11 @@ namespace Mosa.Compiler.Framework
 			using (Stream source = field.Module.MetadataModule.GetDataSection((long)field.RVA))
 			{
 				byte[] data = new byte[size];
-				source.Read(data, 0, size);
+				int wrote = source.Read(data, 0, size);
+
+				if (wrote != size)
+					throw new InvalidDataException(); // FIXME
+
 				stream.Write(data, 0, size);
 			}
 		}
