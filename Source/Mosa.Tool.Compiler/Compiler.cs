@@ -64,7 +64,7 @@ namespace Mosa.Tool.Compiler
 		/// </summary>
 		public Compiler()
 		{
-			usageString = "Usage: mosacl -o outputfile --Architecture=[x86|avr32] --format=[ELF32|ELF64|PE] {--boot=[mb0.7]} {additional options} inputfiles";
+			usageString = "Usage: mosacl -o outputfile --Architecture=[x86|avr32] --format=[ELF32|ELF64|PE] {--boot=[mb0.7|null]} {additional options} inputfiles";
 			optionSet = new OptionSet();
 			inputFiles = new List<FileInfo>();
 
@@ -125,7 +125,7 @@ namespace Mosa.Tool.Compiler
 
 			optionSet.Add(
 				"b|boot=",
-				"Specify the bootable format of the produced binary [{mb0.7}].",
+				"Specify the bootable format of the produced binary [{mb0.7|null}].",
 				delegate(string format)
 				{
 					compilerOptions.BootCompilerStage = SelectBootStage(format);
@@ -534,6 +534,9 @@ namespace Mosa.Tool.Compiler
 				case "multiboot-0.7":
 				case "mb0.7":
 					return new Multiboot0695AssemblyStage();
+
+				case "null":
+					return new NullbootAssemblyStage();
 
 				default:
 					throw new OptionException(String.Format("Unknown or unsupported boot format {0}.", format), "boot");
