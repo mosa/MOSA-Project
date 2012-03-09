@@ -97,6 +97,11 @@ namespace Mosa.Compiler.Common
 			}
 		}
 
+		public static void Write(this Stream src, short value, bool asLittleEndian)
+		{
+			src.Write((ushort)value, asLittleEndian);
+		}
+
 		public static void Write(this Stream src, uint value, bool asLittleEndian)
 		{
 			if (asLittleEndian)
@@ -113,6 +118,11 @@ namespace Mosa.Compiler.Common
 				src.WriteByte((byte)((value >> 8) & 0xFF));
 				src.WriteByte((byte)(value & 0xFF));
 			}
+		}
+
+		public static void Write(this Stream src, int value, bool asLittleEndian)
+		{
+			src.Write((uint)value, asLittleEndian);
 		}
 
 		public static void Write(this Stream src, ulong value, bool asLittleEndian)
@@ -140,6 +150,12 @@ namespace Mosa.Compiler.Common
 				src.WriteByte((byte)(value & 0xFF));
 			}
 		}
+
+		public static void Write(this Stream src, long value, bool asLittleEndian)
+		{
+			src.Write((ulong)value, asLittleEndian);
+		}
+
 
 	}
 }

@@ -24,11 +24,10 @@ namespace Mosa.Platform.x86
 	/// </summary>
 	public sealed class MachineCodeEmitter : BaseCodeEmitter, IDisposable
 	{
-		static private DataConverter bitConverter = DataConverter.LittleEndian;
 
 		public MachineCodeEmitter()
 		{
-			
+
 		}
 
 		#region Code Generation
@@ -193,8 +192,7 @@ namespace Mosa.Platform.x86
 			}
 			else
 			{
-				byte[] disp = bitConverter.GetBytes((displacement as MemoryOperand).Offset.ToInt32());
-				codeStream.Write(disp, 0, disp.Length);
+				codeStream.Write((displacement as MemoryOperand).Offset.ToInt32(), true);
 			}
 
 		}
@@ -205,23 +203,23 @@ namespace Mosa.Platform.x86
 		/// <param name="op">The immediate operand to emit.</param>
 		private void WriteImmediate(Operand op)
 		{
-			byte[] imm = null;
+
 			if (op is LocalVariableOperand)
 			{
 				// Add the displacement
 				StackOperand so = (StackOperand)op;
-				imm = bitConverter.GetBytes(so.Offset.ToInt32());
+				codeStream.Write(so.Offset.ToInt32(), true);
 			}
 			else if (op is LabelOperand)
 			{
 				literals.Add(new Patch((op as LabelOperand).Label, codeStream.Position));
-				imm = new byte[4];
+				codeStream.WriteZeroBytes(4); // or codeStream.Position += 4;
 			}
 			else if (op is MemoryOperand)
 			{
 				// Add the displacement
-				MemoryOperand mo = (MemoryOperand)op;
-				imm = bitConverter.GetBytes(mo.Offset.ToInt32());
+				MemoryOperand mo = (MemoryOperand)op;	// Odd??
+				codeStream.Write(mo.Offset.ToInt32(), true);
 			}
 			else if (op is ConstantOperand)
 			{
@@ -234,50 +232,53 @@ namespace Mosa.Platform.x86
 						{
 							if (co.Value is Token)
 							{
-								imm = bitConverter.GetBytes(((Token)co.Value).ToInt32());
+								codeStream.Write(((Token)co.Value).ToInt32(), true);
 							}
 							else
 							{
-								imm = bitConverter.GetBytes(Convert.ToInt32(co.Value));
+								codeStream.Write(Convert.ToInt32(co.Value), true);
 							}
 						}
-						catch (OverflowException)
+						catch (OverflowException) // Odd??
 						{
-							imm = bitConverter.GetBytes(Convert.ToUInt64(co.Value));
+							codeStream.Write(Convert.ToUInt64(co.Value), true);
 						}
 						break;
 
 					case CilElementType.I1:
-						imm = new byte[1] { Convert.ToByte(co.Value) };
+						codeStream.WriteByte(Convert.ToByte(co.Value));
 						break;
 					case CilElementType.I2:
-						imm = bitConverter.GetBytes(Convert.ToInt16(co.Value));
+						codeStream.Write(Convert.ToInt16(co.Value), true);
 						break;
-					case CilElementType.I4: 
+					case CilElementType.I4:
 						goto case CilElementType.I;
 					case CilElementType.U1:
-						imm = new byte[1] { Convert.ToByte(co.Value) };
+						codeStream.WriteByte(Convert.ToByte(co.Value));
 						break;
 					case CilElementType.Char:
 						goto case CilElementType.U2;
 					case CilElementType.U2:
-						imm = bitConverter.GetBytes((ushort)Convert.ToUInt64(co.Value));
+						codeStream.Write((ushort)Convert.ToUInt64(co.Value), true);
 						break;
 					case CilElementType.Ptr:
 					case CilElementType.U4:
-						imm = bitConverter.GetBytes((uint)Convert.ToUInt64(co.Value));
+						codeStream.Write((uint)Convert.ToUInt64(co.Value), true);
 						break;
 					case CilElementType.I8:
-						imm = bitConverter.GetBytes(Convert.ToInt64(co.Value));
+						codeStream.Write(Convert.ToInt64(co.Value), true);
 						break;
 					case CilElementType.U8:
-						imm = bitConverter.GetBytes(Convert.ToUInt64(co.Value));
+						codeStream.Write(Convert.ToUInt64(co.Value), true);
 						break;
 					case CilElementType.R4:
-						imm = bitConverter.GetBytes(Convert.ToSingle(co.Value));
+						byte[] imm = DataConverter.LittleEndian.GetBytes(Convert.ToSingle(co.Value));
+						codeStream.Write(imm, 0, imm.Length);
 						break;
-					case CilElementType.R8: goto default;
-					case CilElementType.Object: goto case CilElementType.I;
+					case CilElementType.R8:
+						goto default;
+					case CilElementType.Object:
+						goto case CilElementType.I;
 					default:
 						throw new NotSupportedException(String.Format(@"CilElementType.{0} is not supported.", op.Type.Type));
 				}
@@ -291,9 +292,6 @@ namespace Mosa.Platform.x86
 				throw new NotImplementedException();
 			}
 
-			// Emit the immediate constant to the code
-			if (imm != null)
-				codeStream.Write(imm, 0, imm.Length);
 		}
 
 		/// <summary>
@@ -321,8 +319,7 @@ namespace Mosa.Platform.x86
 			}
 
 			// Emit the relative jump offset (zero if we don't know it yet!)
-			byte[] bytes = bitConverter.GetBytes(relOffset);
-			codeStream.Write(bytes, 0, bytes.Length);
+			codeStream.Write(relOffset, true);
 		}
 
 		/// <summary>
@@ -336,8 +333,7 @@ namespace Mosa.Platform.x86
 			LinkerSection linkerSection = linker.GetSection(SectionKind.Text);
 			if (linkerSection != null) // HACK: To assist TypeExplorer, which returns null from GetSection method
 			{
-				byte[] bytes = bitConverter.GetBytes((int)(linkerSection.VirtualAddress.ToInt32() + linkerSection.Length + 6));
-				codeStream.Write(bytes, 0, bytes.Length);
+				codeStream.Write((int)(linkerSection.VirtualAddress.ToInt32() + linkerSection.Length + 6), true);
 			}
 
 			codeStream.WriteByte(0x08);
@@ -350,23 +346,22 @@ namespace Mosa.Platform.x86
 		/// <param name="op">The immediate operand to emit.</param>
 		public void EmitImmediate(Operand op)
 		{
-			byte[] imm = null;
 			if (op is LocalVariableOperand)
 			{
 				// Add the displacement
 				StackOperand so = (StackOperand)op;
-				imm = bitConverter.GetBytes(so.Offset.ToInt32());
+				codeStream.Write(so.Offset.ToInt32(), true);
 			}
 			else if (op is LabelOperand)
 			{
 				literals.Add(new Patch((op as LabelOperand).Label, codeStream.Position));
-				imm = new byte[4];
+				codeStream.WriteZeroBytes(4);
 			}
 			else if (op is MemoryOperand)
 			{
 				// Add the displacement
 				MemoryOperand mo = (MemoryOperand)op;
-				imm = bitConverter.GetBytes(mo.Offset.ToInt32());
+				codeStream.Write(mo.Offset.ToInt32(), true);
 			}
 			else if (op is ConstantOperand)
 			{
@@ -377,46 +372,45 @@ namespace Mosa.Platform.x86
 					case CilElementType.I:
 						try
 						{
-							imm = bitConverter.GetBytes(Convert.ToInt32(co.Value));
+							codeStream.Write(Convert.ToInt32(co.Value), true);
 						}
 						catch (OverflowException)
 						{
-							imm = bitConverter.GetBytes(Convert.ToUInt32(co.Value));
+							codeStream.Write(Convert.ToUInt32(co.Value), true);
 						}
 						break;
-
 					case CilElementType.I1:
-						//imm = bitConverter.GetBytes(Convert.ToSByte(co.Value));
-						imm = new byte[1] { Convert.ToByte(co.Value) };
+						codeStream.WriteByte(Convert.ToByte(co.Value));
 						break;
 
 					case CilElementType.I2:
-						imm = bitConverter.GetBytes(Convert.ToInt16(co.Value));
+						codeStream.Write(Convert.ToInt16(co.Value), true);
 						break;
-					case CilElementType.I4: goto case CilElementType.I;
-
+					case CilElementType.I4:
+						goto case CilElementType.I;
 					case CilElementType.U1:
-						//imm = bitConverter.GetBytes(Convert.ToByte(co.Value));
-						imm = new byte[1] { Convert.ToByte(co.Value) };
+						codeStream.WriteByte(Convert.ToByte(co.Value));
 						break;
 					case CilElementType.Char:
 						goto case CilElementType.U2;
 					case CilElementType.U2:
-						imm = bitConverter.GetBytes(Convert.ToUInt16(co.Value));
+						codeStream.Write(Convert.ToUInt16(co.Value), true);
 						break;
 					case CilElementType.U4:
-						imm = bitConverter.GetBytes(Convert.ToUInt32(co.Value));
+						codeStream.Write(Convert.ToUInt32(co.Value), true);
 						break;
 					case CilElementType.I8:
-						imm = bitConverter.GetBytes(Convert.ToInt64(co.Value));
+						codeStream.Write(Convert.ToInt64(co.Value), true);
 						break;
 					case CilElementType.U8:
-						imm = bitConverter.GetBytes(Convert.ToUInt64(co.Value));
+						codeStream.Write(Convert.ToUInt64(co.Value), true);
 						break;
 					case CilElementType.R4:
-						imm = bitConverter.GetBytes(Convert.ToSingle(co.Value));
+						byte[] imm = DataConverter.LittleEndian.GetBytes(Convert.ToSingle(co.Value));
+						codeStream.Write(imm, 0, imm.Length);
 						break;
-					case CilElementType.R8: goto default;
+					case CilElementType.R8:
+						goto default;
 					default:
 						throw new NotSupportedException();
 				}
@@ -429,10 +423,6 @@ namespace Mosa.Platform.x86
 			{
 				throw new NotImplementedException();
 			}
-
-			// Emit the immediate constant to the code
-			if (null != imm)
-				codeStream.Write(imm, 0, imm.Length);
 		}
 
 		/// <summary>
