@@ -72,7 +72,6 @@
                     <include name="Instructions/NegInstruction.cs"/>
                     <include name="Instructions/NopInstruction.cs"/>
                     <include name="Instructions/BaseInstruction.cs"/>
-                    <include name="Instructions/OriInstruction.cs"/>
                     <include name="Instructions/OrInstruction.cs"/>
                     <include name="Instructions/OutInstruction.cs"/>
                     <include name="Instructions/PopInstruction.cs"/>

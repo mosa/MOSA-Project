@@ -20,7 +20,7 @@
 	<target name="init">
 		<mkdir dir="${outputDirectory}"/>
 	</target>
-        <target name="Mosa.Tool.Compiler" depends="init,Mosa.Compiler.LinkerFormat,Mosa.Compiler.Linker,Mosa.Compiler.Pdb,Mosa.Compiler.TypeSystem,Mosa.Platform.AVR32,Mosa.Platform.x86,Mosa.Compiler.InternalTrace,Mosa.Compiler.Metadata,Mosa.Compiler.Framework,"><nant buildfile="Mosa.Tool.Compiler/mosa.build"/></target>
+        <target name="Mosa.Tool.Compiler" depends="init,Mosa.Compiler.Common,Mosa.Compiler.LinkerFormat,Mosa.Compiler.Linker,Mosa.Compiler.Pdb,Mosa.Compiler.TypeSystem,Mosa.Platform.AVR32,Mosa.Platform.x86,Mosa.Compiler.InternalTrace,Mosa.Compiler.Metadata,Mosa.Compiler.Framework,"><nant buildfile="Mosa.Tool.Compiler/mosa.build"/></target>
         <target name="Mosa.HelloWorld" depends="init,Mosa.ClassLib,Mosa.Internal.Plug,Mosa.Kernel,Korlib,"><nant buildfile="Mosa.HelloWorld/mosa.build"/></target>
         <target name="Mosa.Compiler.Framework" depends="init,Mosa.Compiler.Common,Mosa.Compiler.Linker,Mosa.Compiler.InternalTrace,Mosa.Compiler.Metadata,Mosa.Compiler.TypeSystem,"><nant buildfile="Mosa.Compiler.Framework/mosa.build"/></target>
         <target name="Mosa.ClassLib" depends="init,Mosa.Kernel,Mosa.Platform.x86.Intrinsic,"><nant buildfile="Mosa.ClassLib/mosa.build"/></target>
@@ -39,9 +39,9 @@
         <target name="Mosa.Kernel" depends="init,Korlib,Mosa.Platform.x86.Intrinsic,"><nant buildfile="Mosa.Kernel/mosa.build"/></target>
         <target name="Mosa.Platform.x86.Intrinsic" depends="init,Korlib,"><nant buildfile="Mosa.Platform.x86.Intrinsic/mosa.build"/></target>
         <target name="Mosa.Platform.x86" depends="init,Mosa.Compiler.Common,Mosa.Compiler.Linker,Mosa.Compiler.Metadata,Mosa.Compiler.Framework,Mosa.Compiler.Platform,Mosa.Compiler.TypeSystem,"><nant buildfile="Mosa.Platform.x86/mosa.build"/></target>
-        <target name="Mosa.Compiler.Metadata" depends="init,Mosa.Compiler.LinkerFormat,"><nant buildfile="Mosa.Compiler.Metadata/mosa.build"/></target>
+        <target name="Mosa.Compiler.Metadata" depends="init,Mosa.Compiler.Common,Mosa.Compiler.LinkerFormat,"><nant buildfile="Mosa.Compiler.Metadata/mosa.build"/></target>
         <target name="Mosa.Compiler.Pdb" depends="init,"><nant buildfile="Mosa.Compiler.Pdb/mosa.build"/></target>
-        <target name="Mosa.Compiler.LinkerFormat" depends="init,"><nant buildfile="Mosa.Compiler.LinkerFormat/mosa.build"/></target>
+        <target name="Mosa.Compiler.LinkerFormat" depends="init,Mosa.Compiler.Common,"><nant buildfile="Mosa.Compiler.LinkerFormat/mosa.build"/></target>
         <target name="Mosa.Compiler.Linker" depends="init,Mosa.Compiler.Common,Mosa.Compiler.LinkerFormat,"><nant buildfile="Mosa.Compiler.Linker/mosa.build"/></target>
         <target name="Mosa.Compiler.Common" depends="init,"><nant buildfile="Mosa.Compiler.Common/mosa.build"/></target>
         <target name="Mosa.Compiler.TypeSystem" depends="init,Mosa.Compiler.Metadata,"><nant buildfile="Mosa.Compiler.TypeSystem/mosa.build"/></target>

@@ -44,6 +44,7 @@
                     <include name="PE/RuntimeImageFlags.cs"/>
 		</sources>
 		<references>
+                    <include name="${outputDirectory}/Mosa.Compiler.Common.dll"/>
 		</references>
 		<!-- supress warnings -->
 		<nowarn><warning number="${suppresswarnings}"/></nowarn>

@@ -32,6 +32,7 @@
 		</sources>
 		<references>
                     <include name="System.dll"/>
+                    <include name="${outputDirectory}/Mosa.Compiler.Common.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.LinkerFormat.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Linker.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Pdb.dll"/>
