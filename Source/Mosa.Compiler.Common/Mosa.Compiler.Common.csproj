@@ -41,7 +41,6 @@
     <Compile Include="EndianAwareBinaryReader.cs" />
     <Compile Include="Endian.cs" />
     <Compile Include="StreamExtension.cs" />
-    <Compile Include="DataConverter.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Properties\" />

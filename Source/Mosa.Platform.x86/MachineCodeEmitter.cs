@@ -272,8 +272,7 @@ namespace Mosa.Platform.x86
 						codeStream.Write(Convert.ToUInt64(co.Value), true);
 						break;
 					case CilElementType.R4:
-						byte[] imm = DataConverter.LittleEndian.GetBytes(Convert.ToSingle(co.Value));
-						codeStream.Write(imm, 0, imm.Length);
+						codeStream.Write(Endian.ConvertToUInt32(Convert.ToSingle(co.Value)), true);
 						break;
 					case CilElementType.R8:
 						goto default;
@@ -406,8 +405,7 @@ namespace Mosa.Platform.x86
 						codeStream.Write(Convert.ToUInt64(co.Value), true);
 						break;
 					case CilElementType.R4:
-						byte[] imm = DataConverter.LittleEndian.GetBytes(Convert.ToSingle(co.Value));
-						codeStream.Write(imm, 0, imm.Length);
+						codeStream.Write(Endian.ConvertToUInt32(Convert.ToSingle(co.Value)), true);
 						break;
 					case CilElementType.R8:
 						goto default;

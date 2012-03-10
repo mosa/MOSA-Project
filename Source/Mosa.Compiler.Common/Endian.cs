@@ -9,6 +9,7 @@
 
 using System;
 using System.IO;
+using System.Runtime.InteropServices;
 
 namespace Mosa.Compiler.Common
 {
@@ -32,5 +33,23 @@ namespace Mosa.Compiler.Common
 				 | ((value & 0x00000000FF000000) << 16) | ((value & 0x0000000000FF0000) << 32) | ((value & 0x000000000000FF00) << 48) | ((value & 0x00000000000000FF) << 56);
 		}
 
+		[StructLayout(LayoutKind.Explicit)]
+		private struct Union4
+		{
+		
+			[FieldOffset(0)]
+			public float Single;
+			[FieldOffset(0)]
+			public int Int32;
+			[FieldOffset(0)]
+			public uint UInt32;
+		}
+
+		public static uint ConvertToUInt32(float value)
+		{
+			Union4 v = new Union4();
+			v.Single = value;
+			return v.UInt32;
+		}
 	}
 }
