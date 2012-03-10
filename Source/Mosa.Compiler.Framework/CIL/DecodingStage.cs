@@ -41,7 +41,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// 
 		/// </summary>
 		private IGenericTypePatcher genericTypePatcher = null;
-		
+
 		#endregion // Data members
 
 		#region IMethodCompilerStage Members
@@ -158,7 +158,11 @@ namespace Mosa.Compiler.Framework.CIL
 				int blocks;
 				if (isFat)
 				{
-					length = reader.ReadInt32();
+					byte a = reader.ReadByte();
+					byte b = reader.ReadByte();
+					byte c = reader.ReadByte();
+
+					length = (c << 24) | (b << 16) | a;
 					blocks = (length - 4) / 24;
 				}
 				else
