@@ -10,13 +10,14 @@
 
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Operands;
+using System;
 
 namespace Mosa.Platform.AVR32.Instructions
 {
 	/// <summary>
 	/// Add Instruction
-    /// Suported format:
-    ///     add Rd, Rs
+	/// Suported format:
+	///     add Rd, Rs
 	/// </summary>
 	public class AddInstruction : BaseInstruction
 	{
@@ -30,9 +31,14 @@ namespace Mosa.Platform.AVR32.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
-            RegisterOperand destinationRegister = context.Result as RegisterOperand;
-            RegisterOperand sourceRegiter = context.Operand1 as RegisterOperand;
-			emitter.EmitTwoRegisterInstructions((byte)0x00, (byte)sourceRegiter.Register.RegisterCode, (byte)destinationRegister.Register.RegisterCode);
+			if (context.Result is RegisterOperand && context.Operand1 is RegisterOperand)
+			{
+				RegisterOperand destinationRegister = context.Result as RegisterOperand;
+				RegisterOperand sourceRegiter = context.Operand1 as RegisterOperand;
+				emitter.EmitTwoRegisterInstructions((byte)0x00, (byte)sourceRegiter.Register.RegisterCode, (byte)destinationRegister.Register.RegisterCode);
+			}
+			else
+				throw new Exception("Not supported combination of operands");
 		}
 
 		/// <summary>

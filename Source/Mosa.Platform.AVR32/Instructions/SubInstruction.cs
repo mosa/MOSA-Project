@@ -30,56 +30,6 @@ namespace Mosa.Platform.AVR32.Instructions
         #region Methods
 
         /// <summary>
-        /// Convert operand to int32
-        /// </summary>
-        /// <param name="op"></param>
-        /// <returns></returns>
-        protected int ComputeValue(ConstantOperand op)
-        {
-            switch (op.Type.Type)
-            {
-                case CilElementType.I:
-                    try
-                    {
-                        if (op.Value is Token)
-                        {
-                            return ((Token)op.Value).ToInt32();
-                        }
-                        else
-                        {
-                            return Convert.ToInt32(op.Value);
-                        }
-                    }
-                    catch (OverflowException)
-                    {
-                        // TODO: Exception
-                    }
-                    break;
-                case CilElementType.I1:
-                case CilElementType.I2:
-                    return (int)op.Value;
-                case CilElementType.I4:
-                    goto case CilElementType.I;
-                case CilElementType.U1:
-                    return (int)op.Value;
-                case CilElementType.Char:
-                case CilElementType.U2:
-                case CilElementType.Ptr:
-                case CilElementType.U4:
-                case CilElementType.I8:
-                case CilElementType.U8:
-                case CilElementType.R4:
-                case CilElementType.R8:
-                    goto default;
-                case CilElementType.Object:
-                    goto case CilElementType.I;
-                default:
-                    throw new NotSupportedException(String.Format(@"CilElementType.{0} is not supported.", op.Type.Type));
-            }
-            return 0;
-        }
-
-        /// <summary>
         /// Emits the specified platform instruction.
         /// </summary>
         /// <param name="context">The context.</param>
@@ -88,71 +38,66 @@ namespace Mosa.Platform.AVR32.Instructions
         {
             if (context.Result is RegisterOperand && context.Operand1 is ConstantOperand)
             {
-                RegisterOperand reg = context.Result as RegisterOperand;
-                ConstantOperand op = context.Operand1 as ConstantOperand;
+                RegisterOperand destination = context.Result as RegisterOperand;
+                ConstantOperand immediate = context.Operand1 as ConstantOperand;
 
-                int value = ComputeValue(op);
+                int value = 0;
 
-                if (reg.Register.RegisterCode == GeneralPurposeRegister.SP.Index)
+                if (destination.Register.RegisterCode == GeneralPurposeRegister.SP.Index)
                 {
-                    if (IsBetween(value, -512, 508))
+                    if (IsConstantBetween(immediate, -512, 508, out value))
                     {
-                        emitter.EmitK8immediateAndSingleRegister(0x00, (sbyte)(value >> 2), (byte)reg.Register.RegisterCode); // sub Sp, Imm (k8)
+                        emitter.EmitK8immediateAndSingleRegister(0x00, (sbyte)(value >> 2), (byte)destination.Register.RegisterCode); // sub Sp, Imm (k8)
                     }
                     else
-                        if (IsBetween(value, -1048576, 1048575))
+                        if (IsConstantBetween(immediate, -1048576, 1048575, out value))
                         {
-                            emitter.EmitRegisterOrConditionCodeAndK21(0x01, (byte)reg.Register.RegisterCode, value); // sub Sp, Imm (k21)
+                            emitter.EmitRegisterOrConditionCodeAndK21(0x01, (byte)destination.Register.RegisterCode, value); // sub Sp, Imm (k21)
                         }
                         else
                             throw new OverflowException();
                 }
                 else
                 {
-                    if (IsBetween(value, -128, 127))
+                    if (IsConstantBetween(immediate, -128, 127, out value))
                     {
-                        emitter.EmitK8immediateAndSingleRegister(0x00, (sbyte)value, (byte)reg.Register.RegisterCode); // sub Rd, Imm (k8)
+                        emitter.EmitK8immediateAndSingleRegister(0x00, (sbyte)value, (byte)destination.Register.RegisterCode); // sub Rd, Imm (k8)
                     }
                     else
-                        if (IsBetween(value, -32768, 32767))
+                        if (IsConstantBetween(immediate, -1048576, 1048575, out value))
                         {
-
+                            emitter.EmitRegisterOrConditionCodeAndK21(0x01, (byte)destination.Register.RegisterCode, value); // sub Rd, Imm (k21)
                         }
                         else
-                        {
-                            if (IsBetween(value, -1048576, 1048575))
-                            {
-                                emitter.EmitRegisterOrConditionCodeAndK21(0x01, (byte)reg.Register.RegisterCode, value); // sub Rd, Imm (k21)
-                            }
-                            else
-                                throw new OverflowException();
-                        }
+                            throw new OverflowException();
                 }
             }
-
-            if (context.Result is RegisterOperand && context.Operand1 is RegisterOperand && context.Operand2 is ConstantOperand)
-            {
-                RegisterOperand destination = context.Result as RegisterOperand;
-                RegisterOperand source = context.Operand1 as RegisterOperand;
-                ConstantOperand op = context.Operand2 as ConstantOperand;
-
-                int value = ComputeValue(op);
-
-                if (IsBetween(value, -32768, 32767))
+            else
+                if (context.Result is RegisterOperand && context.Operand1 is RegisterOperand && context.Operand2 is ConstantOperand)
                 {
-                    emitter.EmitTwoRegistersAndK16(0x0C, (byte)source.Register.RegisterCode, (byte)destination.Register.RegisterCode, (short)op.Value); // sub Rd, Rs, Imm (k16)
+                    RegisterOperand destination = context.Result as RegisterOperand;
+                    RegisterOperand source = context.Operand1 as RegisterOperand;
+                    ConstantOperand immediate = context.Operand2 as ConstantOperand;
+
+                    int value = 0;
+
+                    if (IsConstantBetween(immediate, -32768, 32767, out value))
+                    {
+                        emitter.EmitTwoRegistersAndK16(0x0C, (byte)source.Register.RegisterCode, (byte)destination.Register.RegisterCode, (short)value); // sub Rd, Rs, Imm (k16)
+                    }
+                    else
+                        throw new OverflowException();
                 }
                 else
-                    throw new OverflowException();
-            }
+                    if ((context.Result is RegisterOperand) && (context.Operand1 is RegisterOperand))
+                    {
+                        RegisterOperand destination = context.Result as RegisterOperand;
+                        RegisterOperand source = context.Operand1 as RegisterOperand;
 
-            if ((context.Result is RegisterOperand) && (context.Operand1 is RegisterOperand))
-            {
-                RegisterOperand destination = context.Result as RegisterOperand;
-                RegisterOperand source = context.Operand1 as RegisterOperand;
-
-                emitter.EmitTwoRegisterInstructions(0x01, (byte)destination.Register.RegisterCode, (byte)source.Register.RegisterCode); // sub Rd, Rs
-            }
+                        emitter.EmitTwoRegisterInstructions(0x01, (byte)destination.Register.RegisterCode, (byte)source.Register.RegisterCode); // sub Rd, Rs
+                    }
+                    else
+                        throw new Exception("Not supported combination of operands");
         }
 
         /// <summary>

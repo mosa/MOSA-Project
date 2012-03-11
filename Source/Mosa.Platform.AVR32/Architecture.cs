@@ -151,7 +151,7 @@ namespace Mosa.Platform.AVR32
 			methodCompilerPipeline.InsertAfterLast<PlatformStubStage>(
 				new IMethodCompilerStage[]
 				{
-					//new LongOperandTransformationStage(),
+					new LongOperandTransformationStage(),
 					//new AddressModeConversionStage(),
 					new IRTransformationStage(),
 					//new TweakTransformationStage(),

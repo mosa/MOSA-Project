@@ -5,14 +5,19 @@
  *
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ *  Pascal Delprat (pdelprat) <pascal.delprat@online.fr>
  */
 
 using Mosa.Compiler.Framework;
+using Mosa.Compiler.Framework.Operands;
+using System;
 
 namespace Mosa.Platform.AVR32.Instructions
 {
 	/// <summary>
-	/// 
+	/// Eor instruction
+	/// Supported format:
+	///     eor Rd, Rs
 	/// </summary>
 	public class EorInstruction : BaseInstruction
 	{
@@ -26,7 +31,14 @@ namespace Mosa.Platform.AVR32.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
-			// TODO
+			if (context.Result is RegisterOperand && context.Operand1 is RegisterOperand)
+			{
+				RegisterOperand destination = context.Result as RegisterOperand;
+				RegisterOperand source = context.Operand1 as RegisterOperand;
+				emitter.EmitTwoRegisterInstructions(0x05, (byte)source.Register.RegisterCode, (byte)destination.Register.RegisterCode);
+			}
+			else
+				throw new Exception("Not supported combination of operands");
 		}
 
 		/// <summary>

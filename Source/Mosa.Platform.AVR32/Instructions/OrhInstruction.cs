@@ -5,23 +5,23 @@
  *
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- *  Pascal Delprat (pdelprat) <pascal.delprat@online.fr>  
+ *  Pascal Delprat (pdelprat) <pascal.delprat@online.fr>    
  */
 
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Operands;
-using Mosa.Compiler.Metadata.Signatures;
+using Mosa.Compiler.Metadata;
 using System;
 
 namespace Mosa.Platform.AVR32.Instructions
 {
 	/// <summary>
-	/// Push Instruction
-	/// Substituded by st.w --Rp, Rs
+	/// Orh Instruction
+	/// Supported Format:
+	///     orh Rd, Imm 16 bits
 	/// </summary>
-	public class PushInstruction : BaseInstruction
+	public class OrhInstruction : BaseInstruction
 	{
-
 		#region Methods
 
 		/// <summary>
@@ -31,11 +31,19 @@ namespace Mosa.Platform.AVR32.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
-			if (context.Result is RegisterOperand)
+			if (context.Result is RegisterOperand && context.Operand1 is ConstantOperand)
 			{
-				RegisterOperand sp = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.SP);
-				RegisterOperand register = context.Operand1 as RegisterOperand;
-				emitter.EmitTwoRegisterInstructions((byte)0x0D, (byte)sp.Register.RegisterCode, (byte)register.Register.RegisterCode); // st.w --Rp, Rs
+				RegisterOperand destination = context.Result as RegisterOperand;
+				ConstantOperand immediate = context.Operand1 as ConstantOperand;
+
+				int value = 0;
+
+				if (IsConstantBetween(immediate, 0, 65535, out value))
+				{
+					emitter.EmitRegisterOperandWithK16(0xA1, (byte)destination.Register.RegisterCode, (ushort)value);
+				}
+				else
+					throw new OverflowException();
 			}
 			else
 				throw new Exception("Not supported combination of operands");
@@ -48,7 +56,7 @@ namespace Mosa.Platform.AVR32.Instructions
 		/// <param name="context">The context.</param>
 		public override void Visit(IAVR32Visitor visitor, Context context)
 		{
-			visitor.Push(context);
+			visitor.Orh(context);
 		}
 
 		#endregion // Methods

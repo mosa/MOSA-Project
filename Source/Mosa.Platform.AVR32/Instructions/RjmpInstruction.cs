@@ -9,13 +9,14 @@
  */
 
 using Mosa.Compiler.Framework;
+using System;
 
 namespace Mosa.Platform.AVR32.Instructions
 {
 	/// <summary>
 	/// Rjump Indtruction
-    /// Supported Format:
-    ///     rjump PC[disp]
+	/// Supported Format:
+	///     rjump PC[disp]
 	/// </summary>
 	public class RjmpInstruction : BaseInstruction
 	{
@@ -29,7 +30,12 @@ namespace Mosa.Platform.AVR32.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
-            emitter.EmitRelativeJumpAndCall(0x00, context.Branch.Targets[0]);
+			if (context.OperandCount == 0)
+			{
+				emitter.EmitRelativeJumpAndCall(0x00, context.Branch.Targets[0]);
+			}
+			else
+				throw new Exception("Not supported combination of operands");
 		}
 
 		/// <summary>

@@ -10,6 +10,8 @@
 
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Operands;
+using Mosa.Compiler.Metadata;
+using System;
 
 namespace Mosa.Platform.AVR32.Instructions
 {
@@ -138,6 +140,50 @@ namespace Mosa.Platform.AVR32.Instructions
 		protected bool IsBetween(int value, int lo, int hi)
 		{
 			return value >= lo && value <= hi;
+		}
+
+		protected bool IsConstantBetween(ConstantOperand op, int lo, int hi, out int value)
+		{
+			value = 0;
+			switch (op.Type.Type)
+			{
+				case CilElementType.I:
+					try
+					{
+						if (op.Value is Token)
+						{
+							value = ((Token)op.Value).ToInt32();
+							return value >= lo && value <= hi;
+						}
+						else
+						{
+							value = Convert.ToInt32(op.Value);
+							return value >= lo && value <= hi;
+						}
+					}
+					catch (OverflowException)
+					{
+						return false;
+					}
+				case CilElementType.I1:
+				case CilElementType.I2:
+				case CilElementType.I4:
+				case CilElementType.U1:
+				case CilElementType.Char:
+				case CilElementType.U2:
+				case CilElementType.Ptr:
+				case CilElementType.U4:
+					goto case CilElementType.I;
+				case CilElementType.I8:
+				case CilElementType.U8:
+				case CilElementType.R4:
+				case CilElementType.R8:
+					goto default;
+				case CilElementType.Object:
+					goto case CilElementType.I;
+				default:
+					throw new NotSupportedException(String.Format(@"CilElementType.{0} is not supported.", op.Type.Type));
+			}
 		}
 
 	}

@@ -206,6 +206,46 @@ namespace Mosa.Platform.AVR32
 		}
 
 		/// <summary>
+		/// Emit with format 9.2.20
+		/// </summary>
+		/// <param name="opcode"></param>
+		/// <param name="firstSourceRegister"></param>
+		/// <param name="secondSourceRegister"></param>
+		/// <param name="destinationRegister"></param>
+		public void EmitThreeRegistersUnshifted(byte opcode, byte firstSourceRegister, byte secondSourceRegister, byte destinationRegister)
+		{
+			ushort buffer = 0;
+
+			buffer |= 0xE000;
+			buffer |= (ushort)((firstSourceRegister & 0x0F) << 25);
+			buffer |= (ushort)((secondSourceRegister & 0x0F) << 16);
+			buffer |= (ushort)((opcode & 0xFF) << 4);
+			buffer |= (ushort)(destinationRegister & 0x0F);
+
+			Write(buffer);
+		}
+
+		/// <summary>
+		/// Emit with format 9.2.23
+		/// </summary>
+		/// <param name="opcode"></param>
+		/// <param name="sourceRegister"></param>
+		/// <param name="destinationRegister"></param>
+		/// <param name="k8"></param>
+		public void EmitTwoRegisterOperandsWithK8Immediate(byte opcode, byte sourceRegister, byte destinationRegister, sbyte k8)
+		{
+			ushort buffer = 0;
+
+			buffer |= 0xE000;
+			buffer |= (ushort)((sourceRegister & 0x0F) << 25);
+			buffer |= (ushort)((destinationRegister & 0x0F) << 16);
+			buffer |= (ushort)((opcode & 0x0F) << 8);
+			buffer |= (ushort)(k8 & 0xFF);
+
+			Write(buffer);
+		}
+
+		/// <summary>
 		/// Emit with format 9.2.28
 		/// </summary>
 		/// <param name="opcode"></param>

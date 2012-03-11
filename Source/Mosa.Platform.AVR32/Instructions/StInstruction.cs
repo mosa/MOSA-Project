@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ *  Pascal Delprat (pdelprat) <pascal.delprat@online.fr>
  */
 
 using Mosa.Compiler.Framework;
@@ -31,19 +32,24 @@ namespace Mosa.Platform.AVR32.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
-			MemoryOperand destination = context.Result as MemoryOperand;
-			RegisterOperand source = context.Operand1 as RegisterOperand;
+			if (context.Result is MemoryOperand && context.Operand1 is RegisterOperand)
+			{
+				MemoryOperand destination = context.Result as MemoryOperand;
+				RegisterOperand source = context.Operand1 as RegisterOperand;
 
-			if (IsBetween(destination.Offset.ToInt32(), 0, 60))
-			{
-				emitter.EmitTwoRegistersWithK4((byte)destination.Base.RegisterCode, (byte)source.Register.RegisterCode, (sbyte)destination.Offset.ToInt32());
-			}
-			else if (IsBetween(destination.Offset.ToInt32(), -32768, 32767))
-			{
-				emitter.EmitTwoRegistersAndK16(0x14, (byte)destination.Base.RegisterCode, (byte)source.Register.RegisterCode, (short)destination.Offset.ToInt32());
+				if (IsBetween(destination.Offset.ToInt32(), 0, 60))
+				{
+					emitter.EmitTwoRegistersWithK4((byte)destination.Base.RegisterCode, (byte)source.Register.RegisterCode, (sbyte)destination.Offset.ToInt32());
+				}
+				else if (IsBetween(destination.Offset.ToInt32(), -32768, 32767))
+				{
+					emitter.EmitTwoRegistersAndK16(0x14, (byte)destination.Base.RegisterCode, (byte)source.Register.RegisterCode, (short)destination.Offset.ToInt32());
+				}
+				else
+					throw new OverflowException();
 			}
 			else
-				throw new OverflowException();
+				throw new Exception("Not supported combination of operands");
 
 		}
 
