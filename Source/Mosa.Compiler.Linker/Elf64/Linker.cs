@@ -37,13 +37,7 @@ namespace Mosa.Compiler.Linker.Elf64
 		/// Retrieves the collection of sections created during compilation.
 		/// </summary>
 		/// <value>The sections collection.</value>
-		public override ICollection<LinkerSection> Sections
-		{
-			get
-			{
-				return this.sections;
-			}
-		}
+		public override ICollection<LinkerSection> Sections { get { return sections; } }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Linker"/> class.
@@ -120,8 +114,8 @@ namespace Mosa.Compiler.Linker.Elf64
 		/// <param name="targetAddress">The position in code, where it should be patched.</param>
 		protected override void ApplyPatch(LinkType linkType, long methodAddress, long methodOffset, long methodRelativeBase, long targetAddress)
 		{
-//			if (!symbolsResolved)
-//				throw new InvalidOperationException(@"Can't apply patches - symbols not resolved.");
+			//			if (!symbolsResolved)
+			//				throw new InvalidOperationException(@"Can't apply patches - symbols not resolved.");
 
 			// Retrieve the text section
 			Section text = (Section)GetSection(SectionKind.Text);
@@ -197,7 +191,7 @@ namespace Mosa.Compiler.Linker.Elf64
 				header.ProgramHeaderOffset = (uint)header.ElfHeaderSize + (uint)header.SectionHeaderEntrySize * (uint)header.SectionHeaderNumber + offset;
 				header.SectionHeaderStringIndex = (ushort)((ushort)header.ProgramHeaderOffset + (ushort)header.ProgramHeaderNumber * (ushort)header.ProgramHeaderEntrySize);
 
-				EndianAwareBinaryWriter writer = new EndianAwareBinaryWriter(fs, true); // FIXME: true should depend on architecture
+				EndianAwareBinaryWriter writer = new EndianAwareBinaryWriter(fs, IsLittleEndian);
 
 				// Write the ELF Header
 				header.Write(writer);

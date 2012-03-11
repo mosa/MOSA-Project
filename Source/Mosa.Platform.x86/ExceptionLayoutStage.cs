@@ -183,7 +183,7 @@ namespace Mosa.Platform.x86
 
 			using (Stream stream = methodCompiler.Linker.Allocate(section, SectionKind.ROData, tableSize, nativePointerAlignment))
 			{
-				using (EndianAwareBinaryWriter writer = new EndianAwareBinaryWriter(stream, true))
+				using (EndianAwareBinaryWriter writer = new EndianAwareBinaryWriter(stream, architecture.IsLittleEndian))
 				{
 					foreach (ProtectedBlock entry in entries)
 					{

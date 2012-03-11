@@ -35,7 +35,8 @@ namespace Mosa.Tool.Compiler.Stages
 		public void Setup(AssemblyCompiler compiler)
 		{
 			this.OutputFile = compiler.CompilerOptions.OutputFile;
-			
+			this.IsLittleEndian = compiler.Architecture.IsLittleEndian;
+
 			if (compiler.CompilerOptions.PortableExecutable.FileAlignment.HasValue)
 				this.FileAlignment = compiler.CompilerOptions.PortableExecutable.FileAlignment.Value;
 

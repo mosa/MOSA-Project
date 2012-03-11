@@ -57,7 +57,7 @@ namespace Mosa.Compiler.Framework
 
 			using (Stream stream = linker.Allocate(assemblyListSymbol, SectionKind.ROData, 0, typeLayout.NativePointerAlignment))
 			{
-				using (EndianAwareBinaryWriter writer = new EndianAwareBinaryWriter(stream, true)) // FIXME
+				using (EndianAwareBinaryWriter writer = new EndianAwareBinaryWriter(stream, architecture.IsLittleEndian))
 				{
 					// 1. Number of assemblies (modules)
 					writer.Write((uint)typeSystem.TypeModules.Count);
@@ -85,7 +85,7 @@ namespace Mosa.Compiler.Framework
 			// Emit assembly name
 			using (Stream stream = linker.Allocate(assemblyNameSymbol, SectionKind.ROData, 0, typeLayout.NativePointerAlignment))
 			{
-				using (EndianAwareBinaryWriter writer = new EndianAwareBinaryWriter(stream, true)) // FIXME
+				using (EndianAwareBinaryWriter writer = new EndianAwareBinaryWriter(stream, architecture.IsLittleEndian))
 				{
 					EmitStringWithLength(writer, typeModule.Name);
 				}
@@ -103,7 +103,7 @@ namespace Mosa.Compiler.Framework
 
 			using (Stream stream = linker.Allocate(assemblyTableSymbol, SectionKind.ROData, 0, typeLayout.NativePointerAlignment))
 			{
-				using (EndianAwareBinaryWriter writer = new EndianAwareBinaryWriter(stream, true)) // FIXME
+				using (EndianAwareBinaryWriter writer = new EndianAwareBinaryWriter(stream, architecture.IsLittleEndian))
 				{
 					// 1. Pointer to Assembly Name
 					linker.Link(LinkType.AbsoluteAddress | LinkType.I4, assemblyTableSymbol, 0, 0, assemblyNameSymbol, IntPtr.Zero);
@@ -139,7 +139,7 @@ namespace Mosa.Compiler.Framework
 			// Emit type name
 			using (Stream stream = linker.Allocate(typeNameSymbol, SectionKind.ROData, 0, typeLayout.NativePointerAlignment))
 			{
-				using (EndianAwareBinaryWriter writer = new EndianAwareBinaryWriter(stream, true)) // FIXME
+				using (EndianAwareBinaryWriter writer = new EndianAwareBinaryWriter(stream, architecture.IsLittleEndian))
 				{
 					EmitStringWithLength(writer, type.FullName);
 				}
@@ -149,7 +149,7 @@ namespace Mosa.Compiler.Framework
 
 			using (Stream stream = linker.Allocate(typeTableSymbol, SectionKind.ROData, 0, typeLayout.NativePointerAlignment))
 			{
-				using (EndianAwareBinaryWriter writer = new EndianAwareBinaryWriter(stream, true)) // FIXME
+				using (EndianAwareBinaryWriter writer = new EndianAwareBinaryWriter(stream, architecture.IsLittleEndian))
 				{
 					// 1. Size
 					writer.Write((uint)typeLayout.GetTypeSize(type));

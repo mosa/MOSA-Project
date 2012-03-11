@@ -66,7 +66,6 @@ namespace Mosa.Compiler.Linker.Elf32
 				return sections;
 			}
 		}
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="Linker"/> class.
 		/// </summary>
@@ -245,7 +244,7 @@ namespace Mosa.Compiler.Linker.Elf32
 				header.ProgramHeaderNumber = 1;
 				header.SectionHeaderStringIndex = 1;
 
-				EndianAwareBinaryWriter writer = new EndianAwareBinaryWriter(fs, true); // FIXME: true should depend on architecture
+				EndianAwareBinaryWriter writer = new EndianAwareBinaryWriter(fs, IsLittleEndian);
 
 				// Write the ELF Header
 				header.Write(writer);

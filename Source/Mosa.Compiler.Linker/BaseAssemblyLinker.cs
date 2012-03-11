@@ -48,6 +48,11 @@ namespace Mosa.Compiler.Linker
 		/// A dictionary containing all symbol seen in the assembly.
 		/// </summary>
 		private readonly Dictionary<string, LinkerSymbol> symbols;
+	
+		/// <summary>
+		/// Flag is the target platform is little-endian
+		/// </summary>
+		protected bool IsLittleEndian;
 
 		#endregion // Data members
 

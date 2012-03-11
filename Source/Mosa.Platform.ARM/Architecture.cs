@@ -23,6 +23,14 @@ namespace Mosa.Platform.ARM
 	/// </summary>
 	public class Architecture : BasicArchitecture
 	{
+		
+		/// <summary>
+		/// Gets a value indicating whether this architecture is little-endian.
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if this instance is architecture is little-endian; otherwise, <c>false</c>.
+		/// </value>
+		public override bool IsLittleEndian { get { return false; } }
 
 		/// <summary>
 		/// Holds the calling conversion

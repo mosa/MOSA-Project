@@ -35,6 +35,7 @@ namespace Mosa.Tool.Compiler.Stages
 		{
 			this.OutputFile = compiler.CompilerOptions.OutputFile;
 			//this.FileAlignment = compiler.CompilerOptions.Elf64.FileAlignment;
+			this.IsLittleEndian = compiler.Architecture.IsLittleEndian;
 		}
 
 		#endregion // IAssemblyCompilerStage members
