@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ *  Pascal Delprat (pdelprat) <pascal.delprat@online.fr> 
  */
 
 using System;
@@ -136,6 +137,24 @@ namespace Mosa.Platform.AVR32
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.IntegerCompareInstruction(Context context)
 		{
+			var condition = context.ConditionCode;
+			var resultOperand = context.Result;
+			var operand1 = context.Operand1;
+			var operand2 = context.Operand2;
+
+			context.SetInstruction(Instruction.CpInstruction, operand1, operand2);
+
+			if (resultOperand != null)
+			{
+				RegisterOperand r8 = new RegisterOperand(BuiltInSigType.Byte, GeneralPurposeRegister.R8);
+
+				//if (IsUnsigned(resultOperand))
+					//context.AppendInstruction(Instruction.SetccInstruction, GetUnsignedConditionCode(condition), r8);
+				//else
+				  //  context.AppendInstruction(Instruction.SetccInstruction, condition, r8);
+
+				//context.AppendInstruction(Instruction.MovzxInstruction, resultOperand, r8);
+			}
 		}
 
 		/// <summary>
@@ -261,6 +280,17 @@ namespace Mosa.Platform.AVR32
 									context.SetInstruction(Instruction.MovInstruction, load, operand);
 									context.AppendInstruction(Instruction.StInstruction, result, load);
 								}
+								else
+									if (context.Result is MemoryOperand && context.Operand1 is SymbolOperand)
+									{
+										//context.SetInstruction(Instruction.StInstruction, result, operand);
+									}
+									else
+										if (context.Result is MemoryOperand && context.Operand1 is LabelOperand)
+										{
+											//context.SetInstruction(Instruction.StInstruction, result, operand);
+										}
+
 			}
 		}
 
@@ -622,6 +652,34 @@ namespace Mosa.Platform.AVR32
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.ZeroExtendedMoveInstruction(Context context)
 		{
+			Operand offset = context.Operand2;
+			if (offset != null)
+			{
+				RegisterOperand r8 = new RegisterOperand(context.Operand1.Type, GeneralPurposeRegister.R8);
+				Operand result = context.Result;
+				Operand source = context.Operand1;
+				SigType elementType = GetElementType(source.Type);
+				ConstantOperand constantOffset = offset as ConstantOperand;
+				IntPtr offsetPtr = IntPtr.Zero;
+
+				context.SetInstruction(Instruction.MovInstruction, r8, source);
+				if (constantOffset != null)
+				{
+					offsetPtr = new IntPtr(Convert.ToInt64(constantOffset.Value));
+				}
+
+				if (elementType.Type == CilElementType.Char ||
+					elementType.Type == CilElementType.U1 ||
+					elementType.Type == CilElementType.U2)
+				{
+					context.AppendInstruction(Instruction.AddInstruction, r8, offset);
+				}
+				//context.AppendInstruction(Instruction.MovzxInstruction, result, new MemoryOperand(elementType, GeneralPurposeRegister.R8, offsetPtr));
+			}
+			else
+			{
+				//context.ReplaceInstructionOnly(Instruction.MovzxInstruction);
+			}
 		}
 
 		/// <summary>
