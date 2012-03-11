@@ -37,6 +37,7 @@
     <NoStdLib>True</NoStdLib>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="KernelMemory.cs" />
     <Compile Include="Runtime.cs" />
   </ItemGroup>
   <ItemGroup>

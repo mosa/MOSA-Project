@@ -62,7 +62,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Test.System", "Mosa.Te
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Compiler.Metadata", "Mosa.Compiler.Metadata\Mosa.Compiler.Metadata.csproj", "{7033B213-2055-4C6A-B008-D9856267F5D7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Test.Runtime", "Mosa.Test.Korlib\Mosa.Test.Runtime.csproj", "{76CD55B8-DB16-4DF5-849C-8E2CBEF8A81B}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Test.Runtime", "Mosa.Test.Runtime\Mosa.Test.Runtime.csproj", "{76CD55B8-DB16-4DF5-849C-8E2CBEF8A81B}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Test.Debug", "Mosa.Test.Debug\Mosa.Test.Debug.csproj", "{38D90F00-5CFB-4AF8-85CE-84FCCE20123F}"
 EndProject
