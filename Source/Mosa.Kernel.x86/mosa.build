@@ -12,35 +12,35 @@
 	
 	<!-- Main build target -->
 	<target name="build">
-	    <csc target="library" output="${outputDirectory}/Mosa.Kernel.dll" debug="${debug}" unsafe="true" nostdlib="false">
+	    <csc target="library" output="${outputDirectory}/Mosa.Kernel.x86.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
                     <include name="Mosa.Internal/ExceptionEngine.cs"/>
                     <include name="KernelMemory.cs"/>
                     <include name="Mosa.Internal/RegisterContext.cs"/>
                     <include name="Mosa.Internal/Runtime.cs"/>
-                    <include name="x86/CMOS.cs"/>
-                    <include name="x86/Colors.cs"/>
-                    <include name="x86/CpuInfo.cs"/>
-                    <include name="x86/GDT.cs"/>
-                    <include name="x86/IdleTask.cs"/>
-                    <include name="x86/IDT.cs"/>
-                    <include name="x86/Kernel.cs"/>
-                    <include name="x86/Keyboard.cs"/>
-                    <include name="x86/Memory.cs"/>
-                    <include name="x86/Multiboot.cs"/>
-                    <include name="x86/PageFaultHandler.cs"/>
-                    <include name="x86/PageFrameAllocator.cs"/>
-                    <include name="x86/PageTable.cs"/>
-                    <include name="x86/Panic.cs"/>
-                    <include name="x86/PIC.cs"/>
-                    <include name="x86/ProcessManager.cs"/>
-                    <include name="x86/Screen.cs"/>
-                    <include name="x86/Smbios/BiosInformationStructure.cs"/>
-                    <include name="x86/Smbios/CpuStructure.cs"/>
-                    <include name="x86/Smbios/SmbiosManager.cs"/>
-                    <include name="x86/Smbios/SmbiosStructure.cs"/>
-                    <include name="x86/TaskManager.cs"/>
-                    <include name="x86/VirtualPageAllocator.cs"/>
+                    <include name="CMOS.cs"/>
+                    <include name="Colors.cs"/>
+                    <include name="CpuInfo.cs"/>
+                    <include name="GDT.cs"/>
+                    <include name="IdleTask.cs"/>
+                    <include name="IDT.cs"/>
+                    <include name="Kernel.cs"/>
+                    <include name="Keyboard.cs"/>
+                    <include name="Memory.cs"/>
+                    <include name="Multiboot.cs"/>
+                    <include name="PageFaultHandler.cs"/>
+                    <include name="PageFrameAllocator.cs"/>
+                    <include name="PageTable.cs"/>
+                    <include name="Panic.cs"/>
+                    <include name="PIC.cs"/>
+                    <include name="ProcessManager.cs"/>
+                    <include name="Screen.cs"/>
+                    <include name="Smbios/BiosInformationStructure.cs"/>
+                    <include name="Smbios/CpuStructure.cs"/>
+                    <include name="Smbios/SmbiosManager.cs"/>
+                    <include name="Smbios/SmbiosStructure.cs"/>
+                    <include name="TaskManager.cs"/>
+                    <include name="VirtualPageAllocator.cs"/>
 		</sources>
 		<references>
                     <include name="${outputDirectory}/mscorlib.dll"/>

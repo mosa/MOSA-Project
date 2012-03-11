@@ -88,7 +88,7 @@
 		</sources>
 		<references>
                     <include name="${outputDirectory}/Mosa.ClassLib.dll"/>
-                    <include name="${outputDirectory}/Mosa.Kernel.dll"/>
+                    <include name="${outputDirectory}/Mosa.Kernel.x86.dll"/>
                     <include name="${outputDirectory}/mscorlib.dll"/>
                     <include name="${outputDirectory}/Mosa.Platform.x86.Intrinsic.dll"/>
 		</references>
