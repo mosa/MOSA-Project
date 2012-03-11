@@ -1,89 +1,89 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
-	<PropertyGroup>
-		<ProjectType>Local</ProjectType>
-		<ProductVersion>9.0.30729</ProductVersion>
-		<SchemaVersion>2.0</SchemaVersion>
-		<ProjectGuid>{27A3C89C-1967-45FF-A77E-94F44995C42C}</ProjectGuid>
-		<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-		<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-		<AssemblyKeyContainerName>
-		</AssemblyKeyContainerName>
-		<AssemblyName>Mosa.ClassLib</AssemblyName>
-		<DefaultClientScript>JScript</DefaultClientScript>
-		<DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
-		<DefaultTargetSchema>IE50</DefaultTargetSchema>
-		<DelaySign>false</DelaySign>
-		<TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-		<OutputType>Library</OutputType>
-		<AppDesignerFolder>
-		</AppDesignerFolder>
-		<RootNamespace>Mosa.ClassLib</RootNamespace>
-		<OldToolsVersion>3.5</OldToolsVersion>
-		<UpgradeBackupLocation />
-		<TargetFrameworkProfile />
-	</PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-		<BaseAddress>285212672</BaseAddress>
-		<ConfigurationOverrideFile>
-		</ConfigurationOverrideFile>
-		<DefineConstants>DEBUG;TRACE</DefineConstants>
-		<DocumentationFile>
-		</DocumentationFile>
-		<DebugSymbols>true</DebugSymbols>
-		<FileAlignment>4096</FileAlignment>
-		<Optimize>false</Optimize>
-		<OutputPath>..\..\bin\</OutputPath>
-		<RegisterForComInterop>False</RegisterForComInterop>
-		<RemoveIntegerChecks>False</RemoveIntegerChecks>
-		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-		<WarningLevel>4</WarningLevel>
-		<DebugType>full</DebugType>
-	</PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-		<BaseAddress>285212672</BaseAddress>
-		<ConfigurationOverrideFile>
-		</ConfigurationOverrideFile>
-		<DefineConstants>TRACE</DefineConstants>
-		<DocumentationFile>..\..\bin\Mosa.ClassLib.xml</DocumentationFile>
-		<FileAlignment>4096</FileAlignment>
-		<Optimize>true</Optimize>
-		<OutputPath>..\..\bin\</OutputPath>
-		<RegisterForComInterop>False</RegisterForComInterop>
-		<RemoveIntegerChecks>False</RemoveIntegerChecks>
-		<TreatWarningsAsErrors>true</TreatWarningsAsErrors>
-		<WarningLevel>2</WarningLevel>
-		<DebugType>none</DebugType>
-	</PropertyGroup>
-	<ItemGroup>
-		<Compile Include="BinaryFormat.cs">
-			<SubType>Code</SubType>
-		</Compile>
-		<Compile Include="LinkedList.cs">
-			<SubType>Code</SubType>
-		</Compile>
-		<Compile Include="Math.cs">
-			<SubType>Code</SubType>
-		</Compile>
-	</ItemGroup>
-	<ItemGroup>
-		<Reference Include="System" />
-	</ItemGroup>
-	<ItemGroup>
-		<ProjectReference Include="..\Mosa.Kernel\Mosa.Kernel.csproj">
-			<Project>{FF099D48-3FA5-4ED6-BBA0-1497D734962A}</Project>
-			<Name>Mosa.Kernel</Name>
-		</ProjectReference>
-		<ProjectReference Include="..\Mosa.Platform.x86.Intrinsic\Mosa.Platform.x86.Intrinsic.csproj">
-			<Project>{A47B7998-4EE8-4AF8-9373-C664FDEDDC65}</Project>
-			<Name>Mosa.Platform.x86.Intrinsic</Name>
-		</ProjectReference>
-	</ItemGroup>
-	<Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
-	<PropertyGroup>
-		<PreBuildEvent>
-		</PreBuildEvent>
-		<PostBuildEvent>
-		</PostBuildEvent>
-	</PropertyGroup>
+  <PropertyGroup>
+    <ProjectType>Local</ProjectType>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{27A3C89C-1967-45FF-A77E-94F44995C42C}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <AssemblyKeyContainerName>
+    </AssemblyKeyContainerName>
+    <AssemblyName>Mosa.ClassLib</AssemblyName>
+    <DefaultClientScript>JScript</DefaultClientScript>
+    <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
+    <DefaultTargetSchema>IE50</DefaultTargetSchema>
+    <DelaySign>false</DelaySign>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>
+    </AppDesignerFolder>
+    <RootNamespace>Mosa.ClassLib</RootNamespace>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <BaseAddress>285212672</BaseAddress>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <DocumentationFile>
+    </DocumentationFile>
+    <DebugSymbols>true</DebugSymbols>
+    <FileAlignment>4096</FileAlignment>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\bin\</OutputPath>
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <RemoveIntegerChecks>False</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <DebugType>full</DebugType>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <BaseAddress>285212672</BaseAddress>
+    <ConfigurationOverrideFile>
+    </ConfigurationOverrideFile>
+    <DefineConstants>TRACE</DefineConstants>
+    <DocumentationFile>..\..\bin\Mosa.ClassLib.xml</DocumentationFile>
+    <FileAlignment>4096</FileAlignment>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\bin\</OutputPath>
+    <RegisterForComInterop>False</RegisterForComInterop>
+    <RemoveIntegerChecks>False</RemoveIntegerChecks>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningLevel>2</WarningLevel>
+    <DebugType>none</DebugType>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="BinaryFormat.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="LinkedList.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="Math.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Mosa.Kernel\Mosa.Kernel.x86.csproj">
+      <Project>{FF099D48-3FA5-4ED6-BBA0-1497D734962A}</Project>
+      <Name>Mosa.Kernel.x86</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Platform.x86.Intrinsic\Mosa.Platform.x86.Intrinsic.csproj">
+      <Project>{A47B7998-4EE8-4AF8-9373-C664FDEDDC65}</Project>
+      <Name>Mosa.Platform.x86.Intrinsic</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
+  <PropertyGroup>
+    <PreBuildEvent>
+    </PreBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
+  </PropertyGroup>
 </Project>

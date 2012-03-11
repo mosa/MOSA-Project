@@ -70,7 +70,6 @@
     <Compile Include="Stages\Elf32LinkerStage.cs" />
     <Compile Include="Stages\Elf64LinkerStage.cs" />
     <Compile Include="Stages\MapFileGenerationStage.cs" />
-    <Compile Include="Stages\NullbootAssemblyStage.cs" />
     <Compile Include="Stages\ObjectFileLayoutStage.cs" />
     <Compile Include="Stages\PortableExecutableLinkerStage.cs" />
     <Compile Include="AotMethodCompiler.cs">

@@ -142,9 +142,9 @@
       <Project>{27A3C89C-1967-45FF-A77E-94F44995C42C}</Project>
       <Name>Mosa.ClassLib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mosa.Kernel\Mosa.Kernel.csproj">
+    <ProjectReference Include="..\Mosa.Kernel\Mosa.Kernel.x86.csproj">
       <Project>{FF099D48-3FA5-4ED6-BBA0-1497D734962A}</Project>
-      <Name>Mosa.Kernel</Name>
+      <Name>Mosa.Kernel.x86</Name>
     </ProjectReference>
     <ProjectReference Include="..\Korlib\Korlib.csproj">
       <Project>{631BC4F3-E2D8-4319-814C-13904CAA17CE}</Project>
