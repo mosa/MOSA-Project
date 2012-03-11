@@ -10,7 +10,7 @@
 
 using System;
 
-namespace Mosa.Platform.x86.Intrinsic
+namespace Mosa.Platform.AVR32.Intrinsic
 {
 	public class DelegateStub
 	{
