@@ -84,7 +84,7 @@
       <Project>{77961864-DB33-4189-804F-D774022C96E2}</Project>
       <Name>Mosa.Internal.Plug</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mosa.Kernel\Mosa.Kernel.x86.csproj">
+    <ProjectReference Include="..\Mosa.Kernel.x86\Mosa.Kernel.x86.csproj">
       <Project>{FF099D48-3FA5-4ED6-BBA0-1497D734962A}</Project>
       <Name>Mosa.Kernel.x86</Name>
     </ProjectReference>

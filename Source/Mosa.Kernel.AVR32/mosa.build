@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<project name="Mosa" default="build" basedir=".">
+	
+	<!-- Comma-separated list of warnings that should be surpressed in all modules. Warning: no spaces allowed! -->
+	<property name="suppresswarnings" value="0414,0219,0169,0162,0168"/>
+	
+	<!-- Toggle debug output by setting this to true (nant -D:debug=true) -->
+	<property name="debug" value="none" overwrite="false"/>
+	
+	<!-- Speaks for itself, I should hope -->
+	<property name="outputDirectory" value="../bin" overwrite="false"/>
+	
+	<!-- Main build target -->
+	<target name="build">
+	    <csc target="library" output="${outputDirectory}/Mosa.Kernel.dll" debug="${debug}" unsafe="true" nostdlib="false">
+		<sources>
+                    <include name="Mosa.Internal/ExceptionEngine.cs"/>
+                    <include name="KernelMemory.cs"/>
+                    <include name="Mosa.Internal/RegisterContext.cs"/>
+                    <include name="Mosa.Internal/Runtime.cs"/>
+                    <include name="x86/CMOS.cs"/>
+                    <include name="x86/Colors.cs"/>
+                    <include name="x86/CpuInfo.cs"/>
+                    <include name="x86/GDT.cs"/>
+                    <include name="x86/IdleTask.cs"/>
+                    <include name="x86/IDT.cs"/>
+                    <include name="x86/Kernel.cs"/>
+                    <include name="x86/Keyboard.cs"/>
+                    <include name="x86/Memory.cs"/>
+                    <include name="x86/Multiboot.cs"/>
+                    <include name="x86/PageFaultHandler.cs"/>
+                    <include name="x86/PageFrameAllocator.cs"/>
+                    <include name="x86/PageTable.cs"/>
+                    <include name="x86/Panic.cs"/>
+                    <include name="x86/PIC.cs"/>
+                    <include name="x86/ProcessManager.cs"/>
+                    <include name="x86/Screen.cs"/>
+                    <include name="x86/Smbios/BiosInformationStructure.cs"/>
+                    <include name="x86/Smbios/CpuStructure.cs"/>
+                    <include name="x86/Smbios/SmbiosManager.cs"/>
+                    <include name="x86/Smbios/SmbiosStructure.cs"/>
+                    <include name="x86/TaskManager.cs"/>
+                    <include name="x86/VirtualPageAllocator.cs"/>
+		</sources>
+		<references>
+                    <include name="${outputDirectory}/mscorlib.dll"/>
+                    <include name="${outputDirectory}/Mosa.Platform.x86.Intrinsic.dll"/>
+		</references>
+		<!-- supress warnings -->
+		<nowarn><warning number="${suppresswarnings}"/></nowarn>
+        </csc>
+	</target>
+</project>
