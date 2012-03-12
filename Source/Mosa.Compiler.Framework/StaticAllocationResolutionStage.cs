@@ -66,7 +66,7 @@ namespace Mosa.Compiler.Framework
 				string methodTableSymbol = GetMethodTableForType(allocatedType);
 				
 				if (methodTableSymbol != null)
-					linker.Link(LinkType.AbsoluteAddress | LinkType.I4, symbolName, 0, 0, methodTableSymbol, IntPtr.Zero);
+					linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, symbolName, 0, 0, methodTableSymbol, IntPtr.Zero);
 			}
 
 			// Issue a load request before the newobj and before the assignment.

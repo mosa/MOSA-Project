@@ -71,7 +71,7 @@ namespace Mosa.Platform.AVR32
 		public void Call(SymbolOperand symbolOperand)
 		{
 			linker.Link(
-				LinkType.RelativeOffset | LinkType.I4,
+				LinkType.RelativeOffset | LinkType.NativeI4,
 				compiler.Method.ToString(),
 				(int)(codeStream.Position - codeStreamBasePosition),
 				(int)(codeStream.Position - codeStreamBasePosition) + 4,

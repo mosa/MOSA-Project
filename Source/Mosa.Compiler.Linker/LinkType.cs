@@ -38,23 +38,23 @@ namespace Mosa.Compiler.Linker
 		SizeMask = 0x0F,
 
 		/// <summary>
-		/// An 8-bit offset link.
+		/// An platform dependent (native) 8-bit offset link.
 		/// </summary>
-		I1 = 0x01,
+		NativeI1 = 0x01,
 
 		/// <summary>
-		/// A 16-bit offset link.
+		/// A platform dependent (native) 16-bit offset link.
 		/// </summary>
-		I2 = 0x02,
+		NativeI2 = 0x02,
 
 		/// <summary>
-		/// A 32-bit offset link.
+		/// A platform dependent (native) 32-bit offset link.
 		/// </summary>
-		I4 = 0x04,
+		NativeI4 = 0x04,
 
 		/// <summary>
-		/// A 64-bit offset link.
+		/// A platform dependent (native) 64-bit offset link.
 		/// </summary>
-		I8 = 0x08,
+		NativeI8 = 0x08,
 	}
 }

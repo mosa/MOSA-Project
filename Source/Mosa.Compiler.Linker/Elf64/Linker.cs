@@ -135,7 +135,7 @@ namespace Mosa.Compiler.Linker.Elf64
 			}
 
 			// Save the stream position
-			text.ApplyPatch(offset, linkType, targetAddress);
+			text.ApplyPatch(offset, linkType, targetAddress, IsLittleEndian);
 		}
 
 		/// <summary>

@@ -76,19 +76,19 @@ namespace Mosa.Compiler.Linker.PE
 			// Apply the patch
 			switch (linkType & LinkType.SizeMask)
 			{
-				case LinkType.I1:
+				case LinkType.NativeI1:
 					stream.WriteByte((byte)value);
 					break;
 
-				case LinkType.I2:
+				case LinkType.NativeI2:
 					stream.Write((ushort)value, true); // FIXME
 					break;
 
-				case LinkType.I4:
+				case LinkType.NativeI4:
 					stream.Write((uint)value, true); // FIXME
 					break;
 
-				case LinkType.I8:
+				case LinkType.NativeI8:
 					stream.Write((ulong)value, true); // FIXME
 					break;
 			}

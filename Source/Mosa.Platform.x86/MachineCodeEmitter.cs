@@ -50,7 +50,7 @@ namespace Mosa.Platform.x86
 		public void Call(SymbolOperand symbolOperand)
 		{
 			linker.Link(
-				LinkType.RelativeOffset | LinkType.I4,
+				LinkType.RelativeOffset | LinkType.NativeI4,
 				compiler.Method.ToString(),
 				(int)(codeStream.Position - codeStreamBasePosition),
 				(int)(codeStream.Position - codeStreamBasePosition) + 4,
@@ -177,17 +177,17 @@ namespace Mosa.Platform.x86
 
 			if (label != null)
 			{
-				linker.Link(LinkType.AbsoluteAddress | LinkType.I4, compiler.Method.ToString(), pos, 0, label.Name, IntPtr.Zero);
+				linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, compiler.Method.ToString(), pos, 0, label.Name, IntPtr.Zero);
 				codeStream.Position += 4;
 			}
 			else if (member != null)
 			{
-				linker.Link(LinkType.AbsoluteAddress | LinkType.I4, compiler.Method.ToString(), pos, 0, member.Member.ToString(), member.Offset);
+				linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, compiler.Method.ToString(), pos, 0, member.Member.ToString(), member.Offset);
 				codeStream.Position += 4;
 			}
 			else if (symbol != null)
 			{
-				linker.Link(LinkType.AbsoluteAddress | LinkType.I4, compiler.Method.ToString(), pos, 0, symbol.Name, IntPtr.Zero);
+				linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, compiler.Method.ToString(), pos, 0, symbol.Name, IntPtr.Zero);
 				codeStream.Position += 4;
 			}
 			else

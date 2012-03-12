@@ -96,7 +96,7 @@ namespace Mosa.Compiler.Linker.Elf32
 		/// <param name="offset">The offset.</param>
 		/// <param name="linkType">Type of the link.</param>
 		/// <param name="value">The value.</param>
-		public void ApplyPatch(long offset, LinkType linkType, long value)
+		public void ApplyPatch(long offset, LinkType linkType, long value, bool isLittleEndian)
 		{
 			long pos = stream.Position;
 			stream.Position = offset;
@@ -104,20 +104,20 @@ namespace Mosa.Compiler.Linker.Elf32
 			// Apply the patch
 			switch (linkType & LinkType.SizeMask)
 			{
-				case LinkType.I1:
+				case LinkType.NativeI1:
 					stream.WriteByte((byte)value);
 					break;
 
-				case LinkType.I2:
-					stream.Write((ushort)value, true); // FIXME
+				case LinkType.NativeI2:
+					stream.Write((ushort)value, isLittleEndian);
 					break;
 
-				case LinkType.I4:
-					stream.Write((uint)value, true); // FIXME
+				case LinkType.NativeI4:
+					stream.Write((uint)value, isLittleEndian);
 					break;
 
-				case LinkType.I8:
-					stream.Write((ulong)value, true); // FIXME
+				case LinkType.NativeI8:
+					stream.Write((ulong)value, isLittleEndian);
 					break;
 			}
 

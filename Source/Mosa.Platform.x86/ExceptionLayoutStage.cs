@@ -197,7 +197,7 @@ namespace Mosa.Platform.x86
 						{
 							// Store method table pointer of the exception object type
 							// The VES exception runtime will uses this to compare exception object types
-							methodCompiler.Linker.Link(LinkType.AbsoluteAddress | LinkType.I4, section, (int)writer.Position, 0, entry.Type.FullName + "$mtable", IntPtr.Zero);
+							methodCompiler.Linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, section, (int)writer.Position, 0, entry.Type.FullName + "$mtable", IntPtr.Zero);
 
 							writer.Position += nativePointerSize;
 						}

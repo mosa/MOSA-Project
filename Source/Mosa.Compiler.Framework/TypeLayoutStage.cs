@@ -196,7 +196,7 @@ namespace Mosa.Compiler.Framework
 					{
 						Trace(CompilerEvent.DebugInfo, "  # " + (offset / typeLayout.NativePointerSize).ToString() + " " + link);
 
-						linker.Link(LinkType.AbsoluteAddress | LinkType.I4, methodTableName, offset, 0, link, IntPtr.Zero);
+						linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, methodTableName, offset, 0, link, IntPtr.Zero);
 					}
 					else
 					{
@@ -213,7 +213,7 @@ namespace Mosa.Compiler.Framework
 					if (!method.IsAbstract)
 					{
 						Trace(CompilerEvent.DebugInfo, "  # " + (offset / typeLayout.NativePointerSize).ToString() + " " + method.ToString());
-						linker.Link(LinkType.AbsoluteAddress | LinkType.I4, methodTableName, offset, 0, method.ToString(), IntPtr.Zero);
+						linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, methodTableName, offset, 0, method.ToString(), IntPtr.Zero);
 					}
 					else
 					{

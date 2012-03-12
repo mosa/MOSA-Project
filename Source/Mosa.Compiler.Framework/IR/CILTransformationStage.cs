@@ -912,7 +912,7 @@ namespace Mosa.Compiler.Framework.IR
 				using (Stream stream = linker.Allocate(symbolName, SectionKind.Text, 0, nativePointerAlignment))
 				{
 					// Method table and sync block
-					linker.Link(LinkType.AbsoluteAddress | LinkType.I4, symbolName, 0, 0, @"System.String$mtable", IntPtr.Zero);
+					linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, symbolName, 0, 0, @"System.String$mtable", IntPtr.Zero);
 					stream.WriteZeroBytes(8);
 
 					// String length field
