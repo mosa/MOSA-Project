@@ -18,6 +18,7 @@
 		</sources>
 		<references>
                     <include name="${outputDirectory}/mscorlib.dll"/>
+                    <include name="${outputDirectory}/Mosa.Platform.AVR32.Intrinsic.dll"/>
 		</references>
 		<!-- supress warnings -->
 		<nowarn><warning number="${suppresswarnings}"/></nowarn>

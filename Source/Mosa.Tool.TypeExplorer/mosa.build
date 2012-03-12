@@ -34,6 +34,7 @@
                     <include name="${outputDirectory}/Mosa.Compiler.Pdb.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.TypeSystem.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Verifier.dll"/>
+                    <include name="${outputDirectory}/Mosa.Platform.AVR32.dll"/>
                     <include name="${outputDirectory}/Mosa.Platform.x86.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.InternalTrace.dll"/>
                     <include name="${outputDirectory}/Mosa.Test.CodeDomCompiler.dll"/>

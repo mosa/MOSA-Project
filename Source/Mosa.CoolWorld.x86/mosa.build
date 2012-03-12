@@ -12,7 +12,7 @@
 	
 	<!-- Main build target -->
 	<target name="build">
-	    <csc target="exe" main="Mosa.CoolWorld.Boot" output="${outputDirectory}/Mosa.CoolWorld.exe" debug="${debug}" unsafe="true" nostdlib="true">
+	    <csc target="exe" main="Mosa.CoolWorld.x86.Boot" output="${outputDirectory}/Mosa.CoolWorld.x86.exe" debug="${debug}" unsafe="true" nostdlib="true">
 		<sources>
                     <include name="Boot.cs"/>
                     <include name="Console.cs"/>
