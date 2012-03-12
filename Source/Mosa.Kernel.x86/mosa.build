@@ -32,7 +32,7 @@
                     <include name="PageFrameAllocator.cs"/>
                     <include name="PageTable.cs"/>
                     <include name="Panic.cs"/>
-                    <include name="PIC.cs"/>
+                    <include name="ProgrammableInterruptController.cs"/>
                     <include name="ProcessManager.cs"/>
                     <include name="Screen.cs"/>
                     <include name="Smbios/BiosInformationStructure.cs"/>

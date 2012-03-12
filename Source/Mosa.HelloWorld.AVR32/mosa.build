@@ -12,23 +12,15 @@
 	
 	<!-- Main build target -->
 	<target name="build">
-	    <csc target="exe" main="Mosa.HelloWorld.x86.Boot" output="${outputDirectory}/Mosa.HelloWorld.x86.exe" debug="${debug}" unsafe="true" nostdlib="true">
+	    <csc target="exe" main="Mosa.HelloWorld.AVR32.Boot" output="${outputDirectory}/Mosa.HelloWorld.AVR32.exe" debug="${debug}" unsafe="true" nostdlib="true">
 		<sources>
                     <include name="Boot.cs"/>
-                    <include name="Tests/ExceptionTest.cs"/>
-                    <include name="Tests/Generic2Test.cs"/>
-                    <include name="Tests/KernelTest.cs"/>
-                    <include name="Tests/IsInstTest.cs"/>
-                    <include name="Tests/PlugTest.cs"/>
-                    <include name="Tests/StringTest.cs"/>
-                    <include name="Tests/InterfaceTest.cs"/>
-                    <include name="Tests/GenericTest.cs"/>
 		</sources>
 		<references>
                     <include name="${outputDirectory}/Mosa.ClassLib.dll"/>
                     <include name="${outputDirectory}/Mosa.Internal.Plug.dll"/>
-                    <include name="${outputDirectory}/Mosa.Kernel.x86.dll"/>
                     <include name="${outputDirectory}/mscorlib.dll"/>
+                    <include name="${outputDirectory}/Mosa.Kernel.AVR32.dll"/>
 		</references>
 		<!-- supress warnings -->
 		<nowarn><warning number="${suppresswarnings}"/></nowarn>
