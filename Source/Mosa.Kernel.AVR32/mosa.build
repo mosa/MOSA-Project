@@ -14,6 +14,7 @@
 	<target name="build">
 	    <csc target="library" output="${outputDirectory}/Mosa.Kernel.AVR32.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
+                    <include name="Kernel.cs"/>
                     <include name="KernelMemory.cs"/>
                     <include name="Mosa.Internal/Runtime.cs"/>
 		</sources>
