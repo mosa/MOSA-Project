@@ -17,6 +17,9 @@ namespace Mosa.Compiler.Framework
 
 		#region Structures
 
+		/// <summary>
+		/// Struct for multiboot options.
+		/// </summary>
 		public struct MultibootStruct
 		{
 			public uint? VideoMode { get; set; }
@@ -25,6 +28,9 @@ namespace Mosa.Compiler.Framework
 			public uint? VideoDepth { get; set; }
 		}
 
+		/// <summary>
+		/// Struct for PE options.
+		/// </summary>
 		public struct PortableExecutableStruct
 		{
 			public bool? SetChecksum { get; set; }
@@ -32,6 +38,9 @@ namespace Mosa.Compiler.Framework
 			public uint? SectionAlignment { get; set; }
 		}
 
+		/// <summary>
+		///  Struct for ELF32 options.
+		/// </summary>
 		public struct Elf32Struct
 		{
 			public uint FileAlignment { get; set; }
@@ -60,7 +69,7 @@ namespace Mosa.Compiler.Framework
 		public IAssemblyLinker Linker { get; set; }
 
 		/// <summary>
-		/// 
+		/// Gets or sets the compiler stage responsible for booting.
 		/// </summary>
 		public IAssemblyCompilerStage BootCompilerStage { get; set; }
 
@@ -77,35 +86,35 @@ namespace Mosa.Compiler.Framework
 		public string MapFile { get; set; }
 
 		/// <summary>
-		/// Gets or sets a value indicating whether [enable SSA].
+		/// Gets or sets a value indicating whether SSA is enabled.
 		/// </summary>
-		/// <value><c>true</c> if [enable SSA]; otherwise, <c>false</c>.</value>
+		/// <value><c>true</c> if SSA is enabled; otherwise, <c>false</c>.</value>
 		public bool EnableSSA { get; set; }
 
 		/// <summary>
-		/// Gets or sets a value indicating whether [enable static allocations].
+		/// Gets or sets a value indicating whether static allocations are enabled.
 		/// </summary>
 		/// <value>
-		/// 	<c>true</c> if [enable static allocations]; otherwise, <c>false</c>.
+		/// 	<c>true</c> if static allocations are enabled; otherwise, <c>false</c>.
 		/// </value>
 		public bool EnableStaticAllocations { get; set; }
 
 		/// <summary>
-		/// Gets or sets the multiboot.
+		/// Holds a struct with additional options for Multiboot.
 		/// </summary>
-		/// <value>The multiboot.</value>
+		/// <value>The multiboot struct.</value>
 		public MultibootStruct Multiboot;
 
 		/// <summary>
-		/// Gets or sets the elf32.
+		/// Holds a struct with additional options for ELF32.
 		/// </summary>
-		/// <value>The elf32.</value>
+		/// <value>The ELF32 struct.</value>
 		public Elf32Struct Elf32;
 
 		/// <summary>
-		/// Gets or sets the portable executable.
+		/// Holds a struct with additional options for the PE format.
 		/// </summary>
-		/// <value>The portable executable.</value>
+		/// <value>The portable executable (PE) struct.</value>
 		public PortableExecutableStruct PortableExecutable;
 
 		/// <summary>
@@ -115,6 +124,9 @@ namespace Mosa.Compiler.Framework
 
 		#endregion // Properties
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="CompilerOptions"/> class.
+		/// </summary>
 		public CompilerOptions()
 		{
 			EnableSSA = false;

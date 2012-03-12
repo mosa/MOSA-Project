@@ -83,26 +83,17 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the instruction.
 		/// </summary>
-		/// <value>The result operand.</value>
+		/// <value>The instruction at the current index.</value>
 		public IInstruction Instruction
 		{
 			get { return instructionSet.Data[index].Instruction; }
-			//set { _instructionSet.Data[_index].Instruction = value; }
+			private set { instructionSet.Data[index].Instruction = value; }
 		}
 
 		/// <summary>
-		/// Sets the new instruction.
+		/// Gets or sets the label.
 		/// </summary>
-		/// <value>The result operand.</value>
-		private IInstruction NewInstruction
-		{
-			set { instructionSet.Data[index].Instruction = value; }
-		}
-
-		/// <summary>
-		/// Gets the offset.
-		/// </summary>
-		/// <value>The offset.</value>
+		/// <value>The label.</value>
 		public int Label
 		{
 			get { return instructionSet.Data[index].Label; }
@@ -110,7 +101,7 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Gets the offset.
+		/// Gets or sets the offset.
 		/// </summary>
 		/// <value>The offset.</value>
 		public int Offset
@@ -120,7 +111,7 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Gets the result operand.
+		/// Gets or sets the result operand.
 		/// </summary>
 		/// <value>The result operand.</value>
 		public IBranch Branch
@@ -130,7 +121,7 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Gets the first operand.
+		/// Gets or sets the first operand.
 		/// </summary>
 		/// <value>The first operand.</value>
 		public Operand Operand1
@@ -146,7 +137,7 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Gets the second operand.
+		/// Gets or sets the second operand.
 		/// </summary>
 		/// <value>The second operand.</value>
 		public Operand Operand2
@@ -162,7 +153,7 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Gets the third operand.
+		/// Gets or sets the third operand.
 		/// </summary>
 		/// <value>The third operand.</value>
 		public Operand Operand3
@@ -178,7 +169,7 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Gets the operands.
+		/// Gets all operands.
 		/// </summary>
 		/// <value>The operands.</value>
 		public IEnumerable<Operand> Operands
@@ -199,7 +190,7 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Gets the result operand.
+		/// Gets or sets the result operand.
 		/// </summary>
 		/// <value>The result operand.</value>
 		public Operand Result
@@ -215,7 +206,7 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Gets the second result operand.
+		/// Gets or sets the second result operand.
 		/// </summary>
 		/// <value>The second result operand.</value>
 		public Operand Result2
@@ -234,7 +225,7 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Gets the operands.
+		/// Gets all result operands
 		/// </summary>
 		/// <value>The operands.</value>
 		public IEnumerable<Operand> Results
@@ -249,9 +240,9 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Gets the operand count.
+		/// Gets or sets the number of operands.
 		/// </summary>
-		/// <value>The operand count.</value>
+		/// <value>The number of operands.</value>
 		public byte OperandCount
 		{
 			get { return instructionSet.Data[index].OperandCount; }
@@ -259,9 +250,9 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Gets the result count.
+		/// Gets or sets number of operand results.
 		/// </summary>
-		/// <value>The result count.</value>
+		/// <value>The number of operand results.</value>
 		public byte ResultCount
 		{
 			get { return instructionSet.Data[index].ResultCount; }
@@ -269,9 +260,9 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Gets or sets a value indicating whether this <see cref="Context"/> is ignore.
+		/// Gets or sets the ignored attribute.
 		/// </summary>
-		/// <value><c>true</c> if ignore; otherwise, <c>false</c>.</value>
+		/// <value>The ignored attribute.</value>
 		public bool Ignore
 		{
 			get { return instructionSet.Data[index].Ignore; }
@@ -291,8 +282,9 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Gets or sets the branch hint (true means branch likely)
+		/// Gets or sets the branch hint (true means branch likely).
 		/// </summary>
+		/// <value><c>true</c> if the branch is likely; otherwise <c>false</c>.</value>
 		public bool BranchHint
 		{
 			get { return instructionSet.Data[index].BranchHint; }
@@ -350,7 +342,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets or sets the literal data.
 		/// </summary>
-		/// <value>The token.</value>
+		/// <value>The literal data.</value>
 		public IR.LiteralData LiteralData
 		{
 			get { return (IR.LiteralData)Other; }
@@ -358,9 +350,9 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Gets the other object.
+		/// Gets or sets the "other" object.
 		/// </summary>
-		/// <value>The other.</value>
+		/// <value>The "other" object.</value>
 		public object Other
 		{
 			get { return instructionSet.Data[index].Other; }
@@ -368,10 +360,10 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Gets a value indicating whether this instance is first instruction.
+		/// Gets a value indicating whether this is the first instruction.
 		/// </summary>
 		/// <value>
-		/// 	<c>true</c> if this instance is first instruction; otherwise, <c>false</c>.
+		/// 	<c>true</c> if this is the first instruction; otherwise, <c>false</c>.
 		/// </value>
 		public bool IsFirstInstruction
 		{
@@ -379,38 +371,36 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Gets a value indicating whether [last instruction].
+		/// Gets a value indicating whether this is the last instruction.
 		/// </summary>
-		/// <value><c>true</c> if [last instruction]; otherwise, <c>false</c>.</value>
+		/// <value><c>true</c> if this is the last instruction; otherwise, <c>false</c>.</value>
 		public bool IsLastInstruction
 		{
 			get { return instructionSet.Next(index) < 0; }
 		}
 
 		/// <summary>
-		/// Gets a value indicating whether [end of instruction].
+		/// Gets a value indicating whether the end of the instruction is reached.
 		/// </summary>
-		/// <value><c>true</c> if [end of instruction]; otherwise, <c>false</c>.</value>
+		/// <value><c>true</c> if the end of the instruction is reached; otherwise, <c>false</c>.</value>
 		public bool EndOfInstruction
 		{
 			get { return index < 0; }
 		}
 
 		/// <summary>
-		/// Returns the contexts of the next instruction
+		/// Gets the context of the next instruction.
 		/// </summary>
-		/// <value>The next.</value>
-		/// <returns></returns>
+		/// <value>The context of the next instruction.</value>
 		public Context Next
 		{
 			get { return new Context(instructionSet, instructionSet.Next(index)); }
 		}
 
 		/// <summary>
-		/// Returns the contexts of the previous instruction
+		/// Gets the context of the previous instruction.
 		/// </summary>
-		/// <value>The next.</value>
-		/// <returns></returns>
+		/// <value>The context of the previous instruction.</value>
 		public Context Previous
 		{
 			get { return new Context(instructionSet, instructionSet.Previous(index)); }
@@ -424,7 +414,7 @@ namespace Mosa.Compiler.Framework
 		/// Initializes a new instance of the <see cref="Context"/> class.
 		/// </summary>
 		/// <param name="instructionSet">The instruction set.</param>
-		/// <param name="block">The block.</param>
+		/// <param name="block">The basic block.</param>
 		/// <param name="index">The index.</param>
 		public Context(InstructionSet instructionSet, BasicBlock block, int index)
 		{
@@ -466,7 +456,7 @@ namespace Mosa.Compiler.Framework
 		#region Methods
 
 		/// <summary>
-		/// Visits the specified visitor.
+		/// Visits the instruction by the specified visitor.
 		/// </summary>
 		/// <param name="visitor">The visitor.</param>
 		public void Visit(IVisitor visitor)
@@ -477,14 +467,14 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Clones this instance.
 		/// </summary>
-		/// <returns></returns>
+		/// <returns>A new instance with the same instruction set, basic block and index.</returns>
 		public Context Clone()
 		{
 			return new Context(instructionSet, block, index);
 		}
 
 		/// <summary>
-		/// Clones this context 
+		/// Clones this context, beginning at the start of the basic block.
 		/// </summary>
 		/// <returns></returns>
 		public Context CloneAtStart()
@@ -493,7 +483,7 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Nexts this instance.
+		/// Goes to the next instruction.
 		/// </summary>
 		public void GotoNext()
 		{
@@ -501,7 +491,7 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Gotos the previous instruction.
+		/// Gotos to the previous instruction.
 		/// </summary>
 		public void GotoPrevious()
 		{
@@ -509,7 +499,7 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Gotos the last instruction.
+		/// Goes to the last instruction.
 		/// </summary>
 		public void GotoLast()
 		{
@@ -527,7 +517,7 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Clears the specified context.
+		/// Clears this context.
 		/// </summary>
 		public void Clear()
 		{
@@ -543,7 +533,7 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Inserts an instruction the before the current instruction.
+		/// Inserts an instruction before the current instruction.
 		/// </summary>
 		/// <returns></returns>
 		public Context InsertBefore()
@@ -568,7 +558,7 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Slices the instruction flow before the current instruction
+		/// Slices the instruction flow before the current instruction.
 		/// </summary>
 		public void SliceBefore()
 		{
@@ -576,7 +566,7 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Slices the instruction flow after the current instruction
+		/// Slices the instruction flow after the current instruction.
 		/// </summary>
 		public void SliceAfter()
 		{
@@ -591,7 +581,7 @@ namespace Mosa.Compiler.Framework
 			int label = Label;
 			Clear();
 
-			NewInstruction = null;
+			Instruction = null;
 			Ignore = true;
 			Label = label;
 		}
@@ -602,7 +592,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="instruction">The instruction.</param>
 		public void ReplaceInstructionOnly(IInstruction instruction)
 		{
-			NewInstruction = instruction;
+			Instruction = instruction;
 		}
 
 		/// <summary>
@@ -623,7 +613,7 @@ namespace Mosa.Compiler.Framework
 				Clear();
 			}
 
-			NewInstruction = instruction;
+			Instruction = instruction;
 			OperandCount = operandCount;
 			ResultCount = resultCount;
 			Ignore = false;
@@ -762,7 +752,7 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Inserts the instruction after.
+		/// Appends an (empty) instruction after the current index.
 		/// </summary>
 		private void AppendInstruction()
 		{
@@ -781,10 +771,10 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Inserts the instruction after.
+		/// Appends an instruction after the current index.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
-		/// <param name="code">The code.</param>
+		/// <param name="instruction">The instruction to append.</param>
+		/// <param name="code">The condition code.</param>
 		public void AppendInstruction(IInstruction instruction, IR.ConditionCode code)
 		{
 			AppendInstruction();
@@ -793,11 +783,11 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Inserts the instruction after.
+		/// Appends an instruction after the current index.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
-		/// <param name="code">The code.</param>
-		/// <param name="result">The result.</param>
+		/// <param name="instruction">The instruction to append.</param>
+		/// <param name="code">The condition code.</param>
+		/// <param name="result">The result operand.</param>
 		public void AppendInstruction(IInstruction instruction, IR.ConditionCode code, Operand result)
 		{
 			AppendInstruction();
@@ -807,9 +797,9 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Inserts the instruction after.
+		/// Appends an instructionafter the current index.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
+		/// <param name="instruction">The instruction to append.</param>
 		public void AppendInstruction(IInstruction instruction)
 		{
 			AppendInstruction();
@@ -817,10 +807,10 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Sets the instruction.
+		/// Appends an instruction after the current index.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
-		/// <param name="target">The target.</param>
+		/// <param name="instruction">The instruction to append.</param>
+		/// <param name="target">The invoke target.</param>
 		public void AppendInstruction(IInstruction instruction, RuntimeMethod target)
 		{
 			AppendInstruction(instruction);
@@ -828,10 +818,10 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Inserts the instruction after.
+		/// Appends an instruction after the current index.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
-		/// <param name="block">The block.</param>
+		/// <param name="instruction">The instruction to append.</param>
+		/// <param name="block">The basic block.</param>
 		public void AppendInstruction(IInstruction instruction, BasicBlock block)
 		{
 			AppendInstruction();
@@ -839,11 +829,11 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Inserts the instruction after.
+		/// Appends an instruction after the current index.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
-		/// <param name="code">The code.</param>
-		/// <param name="block">The block.</param>
+		/// <param name="instruction">The instruction to append.</param>
+		/// <param name="code">The condition code.</param>
+		/// <param name="block">The basic block.</param>
 		public void AppendInstruction(IInstruction instruction, IR.ConditionCode code, BasicBlock block)
 		{
 			AppendInstruction();
@@ -851,12 +841,12 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Inserts the instruction after.
+		/// Appends an instruction after the current index.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
-		/// <param name="code">The code.</param>
-		/// <param name="block">The block.</param>
-		/// <param name="branchHint">if set to <c>true</c> [branch hint].</param>
+		/// <param name="instruction">The instruction to append.</param>
+		/// <param name="code">The condition code.</param>
+		/// <param name="block">The basic block.</param>
+		/// <param name="branchHint">The branch hint value.</param>
 		public void AppendInstruction(IInstruction instruction, IR.ConditionCode code, BasicBlock block, bool branchHint)
 		{
 			AppendInstruction(instruction, code, block);
@@ -864,10 +854,10 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Inserts the instruction after.
+		/// Appends an instruction after the current index.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
-		/// <param name="result">The result.</param>
+		/// <param name="instruction">The instruction to append.</param>
+		/// <param name="result">The operand result.</param>
 		public void AppendInstruction(IInstruction instruction, Operand result)
 		{
 			AppendInstruction();
@@ -876,11 +866,11 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Inserts the instruction after.
+		/// Appends an instruction after the current index.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
-		/// <param name="result">The result.</param>
-		/// <param name="operand1">The operand1.</param>
+		/// <param name="instruction">The instruction to append.</param>
+		/// <param name="result">The result operand.</param>
+		/// <param name="operand1">The first operand.</param>
 		public void AppendInstruction(IInstruction instruction, Operand result, Operand operand1)
 		{
 			AppendInstruction();
@@ -888,12 +878,12 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Inserts the instruction after.
+		/// Appends an instruction after the current index.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
-		/// <param name="result">The result.</param>
-		/// <param name="operand1">The operand1.</param>
-		/// <param name="operand2">The operand2.</param>
+		/// <param name="instruction">The instruction to append.</param>
+		/// <param name="result">The result operand.</param>
+		/// <param name="operand1">The first operand.</param>
+		/// <param name="operand2">The second operand.</param>
 		public void AppendInstruction(IInstruction instruction, Operand result, Operand operand1, Operand operand2)
 		{
 			AppendInstruction();
@@ -901,13 +891,13 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Sets the instruction.
+		/// Appends an instruction after the current index.
 		/// </summary>
-		/// <param name="instruction">The instruction.</param>
-		/// <param name="result">The result.</param>
-		/// <param name="operand1">The operand1.</param>
-		/// <param name="operand2">The operand2.</param>
-		/// <param name="operand3">The operand3.</param>
+		/// <param name="instruction">The instruction to append.</param>
+		/// <param name="result">The result operand.</param>
+		/// <param name="operand1">The first operand.</param>
+		/// <param name="operand2">The second operand.</param>
+		/// <param name="operand3">The third operand.</param>
 		public void AppendInstruction(IInstruction instruction, Operand result, Operand operand1, Operand operand2, Operand operand3)
 		{
 			AppendInstruction();
@@ -915,9 +905,9 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Sets the result.
+		/// Sets the result operand.
 		/// </summary>
-		/// <param name="result">The result.</param>
+		/// <param name="result">The result operand.</param>
 		public void SetResult(Operand result)
 		{
 			Result = result;
@@ -927,8 +917,8 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Sets the results.
 		/// </summary>
-		/// <param name="result">The result.</param>
-		/// <param name="result2">The result2.</param>
+		/// <param name="result">The result operand.</param>
+		/// <param name="result2">The second result operand.</param>
 		public void SetResults(Operand result, Operand result2)
 		{
 			Result = result;
@@ -939,8 +929,8 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Sets the operands.
 		/// </summary>
-		/// <param name="result">The result.</param>
-		/// <param name="operand1">The operand1.</param>
+		/// <param name="result">The result operand.</param>
+		/// <param name="operand1">The first operand.</param>
 		public void SetOperands(Operand result, Operand operand1)
 		{
 			Result = result;
@@ -952,9 +942,9 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Sets the operands.
 		/// </summary>
-		/// <param name="result">The result.</param>
-		/// <param name="operand1">The operand1.</param>
-		/// <param name="operand2">The operand2.</param>
+		/// <param name="result">The result operand.</param>
+		/// <param name="operand1">The first operand.</param>
+		/// <param name="operand2">The second operand.</param>
 		public void SetOperands(Operand result, Operand operand1, Operand operand2)
 		{
 			Result = result;
@@ -967,10 +957,10 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Sets the operands.
 		/// </summary>
-		/// <param name="result">The result.</param>
-		/// <param name="operand1">The operand1.</param>
-		/// <param name="operand2">The operand2.</param>
-		/// <param name="operand3">The operand3.</param>
+		/// <param name="result">The result operand.</param>
+		/// <param name="operand1">The first operand.</param>
+		/// <param name="operand2">The second operand.</param>
+		/// <param name="operand3">The third operand.</param>
 		public void SetOperands(Operand result, Operand operand1, Operand operand2, Operand operand3)
 		{
 			Result = result;
@@ -982,18 +972,18 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Sets the branch.
+		/// Sets the branch target.
 		/// </summary>
-		/// <param name="block">The block.</param>
+		/// <param name="block">The basic block.</param>
 		public void SetBranch(BasicBlock block)
 		{
 			SetBranch(block.Label);
 		}
 
 		/// <summary>
-		/// Sets the branch.
+		/// Sets the branch target.
 		/// </summary>
-		/// <param name="target1">The target1.</param>
+		/// <param name="target1">The first target.</param>
 		public void SetBranch(int target1)
 		{
 			if (Branch == null)
@@ -1003,10 +993,10 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Sets the branch.
+		/// Sets the branch target.
 		/// </summary>
-		/// <param name="target1">The target1.</param>
-		/// <param name="target2">The target2.</param>
+		/// <param name="target1">The first target.</param>
+		/// <param name="target2">The second target.</param>
 		public void SetBranch(int target1, int target2)
 		{
 			if (Branch == null)
@@ -1024,7 +1014,7 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Gets the operand by index
+		/// Gets the operand by index.
 		/// </summary>
 		/// <param name="opIndex">The index.</param>
 		/// <returns></returns>
@@ -1040,7 +1030,7 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Sets the operand by index
+		/// Sets the operand by index.
 		/// </summary>
 		/// <param name="opIndex">The index.</param>
 		/// <param name="operand">The operand.</param>
@@ -1063,9 +1053,9 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Gets the result by index
+		/// Gets the result by index.
 		/// </summary>
-		/// <param name="opIndex">The index.</param>
+		/// <param name="opIndex">The index (0 or 1).</param>
 		/// <returns></returns>
 		public Operand GetResult(int opIndex)
 		{
@@ -1080,9 +1070,9 @@ namespace Mosa.Compiler.Framework
 			return null;
 		}
 		/// <summary>
-		/// Sets the result by index
+		/// Sets the result by index.
 		/// </summary>
-		/// <param name="opIndex">The index.</param>
+		/// <param name="opIndex">The index (0 or 1).</param>
 		/// <param name="result">The result operand.</param>
 		public void SetResult(int opIndex, Operand result)
 		{
