@@ -107,7 +107,7 @@ namespace Mosa.Tool.TypeExplorer
 
 		protected void LoadAssembly(string filename)
 		{
-			LoadAssembly(filename, includeTestKorlibToolStripMenuItem.Checked);
+			LoadAssembly(filename, includeTestKorlibToolStripMenuItem.Checked, cbPlatform.Text);
 		}
 
 		protected void UpdateTree()
@@ -371,7 +371,7 @@ namespace Mosa.Tool.TypeExplorer
 			ShowCodeForm();
 		}
 
-		protected void LoadAssembly(string filename, bool includeTestComponents)
+		protected void LoadAssembly(string filename, bool includeTestComponents, string platform)
 		{
 			IAssemblyLoader assemblyLoader = new AssemblyLoader();
 
@@ -379,7 +379,7 @@ namespace Mosa.Tool.TypeExplorer
 			{
 				assemblyLoader.AddPrivatePath(System.IO.Directory.GetCurrentDirectory());
 				assemblyLoader.LoadModule("mscorlib.dll");
-				assemblyLoader.LoadModule("Mosa.Platform.x86.Intrinsic.dll");
+				assemblyLoader.LoadModule("Mosa.Platform." + platform + ".Intrinsic.dll");
 				assemblyLoader.LoadModule("Mosa.Test.Runtime.dll");
 			}
 
@@ -444,7 +444,7 @@ namespace Mosa.Tool.TypeExplorer
 			{
 				if (!string.IsNullOrEmpty(form.Assembly))
 				{
-					LoadAssembly(form.Assembly, true);
+					LoadAssembly(form.Assembly, true, cbPlatform.Text);
 				}
 			}
 		}
