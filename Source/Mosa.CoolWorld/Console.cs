@@ -1,7 +1,7 @@
 ﻿using Mosa.ClassLib;
 using Mosa.Kernel.x86;
 
-namespace Mosa.CoolWorld
+namespace Mosa.CoolWorld.x86
 {
 	public class Console
 	{

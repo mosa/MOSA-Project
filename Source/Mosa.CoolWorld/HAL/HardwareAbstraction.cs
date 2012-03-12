@@ -11,7 +11,7 @@ using Mosa.DeviceSystem;
 using Mosa.Kernel;
 using Mosa.Platform.x86.Intrinsic;
 
-namespace Mosa.CoolWorld.HAL
+namespace Mosa.CoolWorld.x86.HAL
 {
 	/// <summary>
 	/// 

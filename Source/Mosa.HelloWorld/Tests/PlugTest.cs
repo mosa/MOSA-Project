@@ -5,7 +5,7 @@ using System.Text;
 
 using Mosa.Internal.Plug;
 
-namespace Mosa.HelloWorld.Tests
+namespace Mosa.HelloWorld.x86.Tests
 {
 	class PlugTestCase
 	{
@@ -14,12 +14,12 @@ namespace Mosa.HelloWorld.Tests
 		public int AddZZZ(int z) { return 0; } // incomplete implementation
 	}
 
-	[PlugType("Mosa.HelloWorld.Tests.PlugTestCase")]
+	[PlugType("Mosa.HelloWorld.x86.Tests.PlugTestCase")]
 	static class PlugTestImplementation
 	{
 		public static int AddOne(int a) { return a + 1; }
 
-		[PlugMethod("Mosa.HelloWorld.Tests.PlugTestCase.Double")]
+		[PlugMethod("Mosa.HelloWorld.x86.Tests.PlugTestCase.Double")]
 		public static int Double(int a) { return a + a; }
 
 		public static int AddZZZ(ref PlugTestCase plugTestCase, int z) { return z; }

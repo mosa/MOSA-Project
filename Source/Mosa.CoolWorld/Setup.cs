@@ -11,7 +11,7 @@ using Mosa.DeviceDrivers.ISA;
 using Mosa.DeviceSystem;
 using Mosa.DeviceSystem.PCI;
 
-namespace Mosa.CoolWorld
+namespace Mosa.CoolWorld.x86
 {
 	/// <summary>
 	/// Setup for the Device Driver System.
@@ -60,7 +60,7 @@ namespace Mosa.CoolWorld
 			deviceDriverRegistry = new DeviceDriverRegistry(PlatformArchitecture.X86);
 
 			// Setup hardware abstraction interface
-			IHardwareAbstraction hardwareAbstraction = new Mosa.CoolWorld.HAL.HardwareAbstraction();
+			IHardwareAbstraction hardwareAbstraction = new Mosa.CoolWorld.x86.HAL.HardwareAbstraction();
 
 			// Set device driver system to the hardware HAL
 			Mosa.DeviceSystem.HAL.SetHardwareAbstraction(hardwareAbstraction);
@@ -189,7 +189,7 @@ namespace Mosa.CoolWorld
 			hardwareDevice.Setup(hardwareResources);
 
 			Mosa.Kernel.x86.Screen.NextLine();
-			Mosa.CoolWorld.Boot.BulletPoint();
+			Mosa.CoolWorld.x86.Boot.BulletPoint();
 			Console.Write("Adding device ");
 			Boot.InBrackets(hardwareDevice.Name, Mosa.Kernel.Colors.White, Mosa.Kernel.Colors.LightGreen);
 			Console.WriteLine();

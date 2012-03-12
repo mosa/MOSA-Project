@@ -2,7 +2,7 @@
 using Mosa.Kernel;
 using Mosa.Kernel.x86;
 
-namespace Mosa.HelloWorld.Tests
+namespace Mosa.HelloWorld.x86.Tests
 {
 	public class KernelTest
 	{

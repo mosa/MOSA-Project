@@ -5,7 +5,7 @@
  *
  */
 
-namespace Mosa.HelloWorld.Tests
+namespace Mosa.HelloWorld.x86.Tests
 {
 
 	public class GenericTest : KernelTest

@@ -18,7 +18,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Kernel", "Kernel", "{FF773B
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Tool.Compiler", "Mosa.Tool.Compiler\Mosa.Tool.Compiler.csproj", "{B69C2F31-5161-47BB-9FD3-2F2F2BCBF659}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.HelloWorld", "Mosa.HelloWorld\Mosa.HelloWorld.csproj", "{F1776FF2-A727-4FAF-B6BE-D37D6B019038}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.HelloWorld.x86", "Mosa.HelloWorld\Mosa.HelloWorld.x86.csproj", "{F1776FF2-A727-4FAF-B6BE-D37D6B019038}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Compiler.Framework", "Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj", "{75A12A8A-8C8F-4D1E-801B-689D8F781BF4}"
 EndProject
@@ -92,7 +92,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Test.CodeDomCompiler",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Compiler.InternalTrace", "Mosa.Compiler.InternalTrace\Mosa.Compiler.InternalTrace.csproj", "{540BEAC7-A2C3-4C46-9F4A-E6E1DF4EF6FC}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.CoolWorld", "Mosa.CoolWorld\Mosa.CoolWorld.csproj", "{B21130AE-311F-4F15-B763-0E91EE4C9646}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.CoolWorld.x86", "Mosa.CoolWorld\Mosa.CoolWorld.x86.csproj", "{B21130AE-311F-4F15-B763-0E91EE4C9646}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mosa.Compiler.Verifier", "Mosa.Compiler.Verifier\Mosa.Compiler.Verifier.csproj", "{5EB8CFE8-69AD-4B79-9E21-FDED65A8EA3F}"
 EndProject

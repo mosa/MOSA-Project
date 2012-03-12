@@ -6,12 +6,12 @@
  */
 
 using System;
-using Mosa.HelloWorld.Tests;
+using Mosa.HelloWorld.x86.Tests;
 using Mosa.Kernel;
 using Mosa.Kernel.x86;
 using Mosa.Kernel.x86.Smbios;
 
-namespace Mosa.HelloWorld
+namespace Mosa.HelloWorld.x86
 {
 	/// <summary>
 	/// 
