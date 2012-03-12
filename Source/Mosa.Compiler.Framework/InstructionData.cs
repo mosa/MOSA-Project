@@ -88,10 +88,10 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Gets or sets a value indicating whether this instance has prefix.
+		/// Gets or sets a value indicating whether this instance has a prefix.
 		/// </summary>
 		/// <value>
-		/// 	<c>true</c> if this instance has prefix; otherwise, <c>false</c>.
+		/// 	<c>true</c> if this instance has a prefix; otherwise, <c>false</c>.
 		/// </value>
 		public bool HasPrefix
 		{
@@ -127,7 +127,7 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Gets or sets the label of the instruction.
+		/// Gets or sets the offset of the instruction.
 		/// </summary>
 		/// <remarks>
 		/// Offsets are used by branch instructions to define their target. During basic block
@@ -176,7 +176,7 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Holds the token type.
+		/// Gets or sets the token.
 		/// </summary>
 		/// <value>The token.</value>
 		public Token Token
@@ -186,9 +186,9 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Holds the token type.
+		/// Gets or sets the token type.
 		/// </summary>
-		/// <value>The token.</value>
+		/// <value>The token type.</value>
 		public HeapIndexToken TokenType
 		{
 			get { return (HeapIndexToken)Other; }
@@ -253,7 +253,7 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Sets the addition operand.
+		/// Sets the additional operand.
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <param name="operand">The operand.</param>
@@ -268,7 +268,7 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Gets the addition operand.
+		/// Gets the additional operand.
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <returns></returns>
