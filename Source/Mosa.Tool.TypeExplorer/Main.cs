@@ -283,7 +283,7 @@ namespace Mosa.Tool.TypeExplorer
 			filter.IsLogging = true;
 			filter.MethodMatch = MatchType.Any;
 
-			ExplorerAssemblyCompiler.Compile(typeSystem, typeLayout, internalTrace, cbPlatform.SelectedText);
+			ExplorerAssemblyCompiler.Compile(typeSystem, typeLayout, internalTrace, cbPlatform.Text);
 		}
 
 		private void nowToolStripMenuItem_Click(object sender, EventArgs e)
