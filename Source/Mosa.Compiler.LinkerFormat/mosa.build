@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<project name="Mosa" default="build" basedir=".">
+	
+	<!-- Comma-separated list of warnings that should be surpressed in all modules. Warning: no spaces allowed! -->
+	<property name="suppresswarnings" value="0414,0219,0169,0162,0168"/>
+	
+	<!-- Toggle debug output by setting this to true (nant -D:debug=true) -->
+	<property name="debug" value="none" overwrite="false"/>
+	
+	<!-- Speaks for itself, I should hope -->
+	<property name="outputDirectory" value="../bin" overwrite="false"/>
+	
+	<!-- Main build target -->
+	<target name="build">
+	    <csc target="library" output="${outputDirectory}/Mosa.Compiler.LinkerFormat.dll" debug="${debug}" unsafe="true" nostdlib="false">
+		<sources>
+                    <include name="Elf32/FileType.cs"/>
+                    <include name="Elf32/Header.cs"/>
+                    <include name="Elf32/IdentClass.cs"/>
+                    <include name="Elf32/IdentData.cs"/>
+                    <include name="Elf32/IdentIndex.cs"/>
+                    <include name="Elf32/MachineType.cs"/>
+                    <include name="Elf32/ProgramHeader.cs"/>
+                    <include name="Elf32/ProgramHeaderFlags.cs"/>
+                    <include name="Elf32/ProgramHeaderType.cs"/>
+                    <include name="Elf32/SymbolTableEntry.cs"/>
+                    <include name="Elf32/Version.cs"/>
+                    <include name="Elf64/FileType.cs"/>
+                    <include name="Elf64/Header.cs"/>
+                    <include name="Elf64/IdentClass.cs"/>
+                    <include name="Elf64/IdentData.cs"/>
+                    <include name="Elf64/IdentIndex.cs"/>
+                    <include name="Elf64/MachineType.cs"/>
+                    <include name="Elf64/ProgramHeader.cs"/>
+                    <include name="Elf64/SymbolTableEntry.cs"/>
+                    <include name="Elf64/Version.cs"/>
+                    <include name="PE/CliHeader.cs"/>
+                    <include name="PE/ImageDataDirectory.cs"/>
+                    <include name="PE/ImageDosHeader.cs"/>
+                    <include name="PE/ImageFileHeader.cs"/>
+                    <include name="PE/ImageNtHeaders.cs"/>
+                    <include name="PE/ImageOptionalHeader.cs"/>
+                    <include name="PE/ImageSectionHeader.cs"/>
+                    <include name="PE/RuntimeImageFlags.cs"/>
+		</sources>
+		<references>
+                    <include name="${outputDirectory}/Mosa.Compiler.Common.dll"/>
+		</references>
+		<!-- supress warnings -->
+		<nowarn><warning number="${suppresswarnings}"/></nowarn>
+        </csc>
+	</target>
+</project>

@@ -8,7 +8,7 @@
 
 
 
-namespace Mosa.HelloWorld.Tests
+namespace Mosa.HelloWorld.x86.Tests
 {
 	public interface IAA { }
 	public interface IBB { }

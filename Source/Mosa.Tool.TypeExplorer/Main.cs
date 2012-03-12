@@ -40,6 +40,7 @@ namespace Mosa.Tool.TypeExplorer
 
 		private void Main_Load(object sender, EventArgs e)
 		{
+			cbPlatform.SelectedIndex = 0;
 			statusStrip1.Text = "Ready!";
 		}
 
@@ -282,7 +283,7 @@ namespace Mosa.Tool.TypeExplorer
 			filter.IsLogging = true;
 			filter.MethodMatch = MatchType.Any;
 
-			ExplorerAssemblyCompiler.Compile(typeSystem, typeLayout, internalTrace);
+			ExplorerAssemblyCompiler.Compile(typeSystem, typeLayout, internalTrace, cbPlatform.Text);
 		}
 
 		private void nowToolStripMenuItem_Click(object sender, EventArgs e)

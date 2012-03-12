@@ -1,0 +1,83 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{CC2E6418-C325-4486-B50D-941EC27053F6}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Mosa.Compiler.LinkerFormat</RootNamespace>
+    <AssemblyName>Mosa.Compiler.LinkerFormat</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="Elf32\FileType.cs" />
+    <Compile Include="Elf32\Header.cs" />
+    <Compile Include="Elf32\IdentClass.cs" />
+    <Compile Include="Elf32\IdentData.cs" />
+    <Compile Include="Elf32\IdentIndex.cs" />
+    <Compile Include="Elf32\MachineType.cs" />
+    <Compile Include="Elf32\ProgramHeader.cs" />
+    <Compile Include="Elf32\ProgramHeaderFlags.cs" />
+    <Compile Include="Elf32\ProgramHeaderType.cs" />
+    <Compile Include="Elf32\SymbolTableEntry.cs" />
+    <Compile Include="Elf32\Version.cs" />
+    <Compile Include="Elf64\FileType.cs" />
+    <Compile Include="Elf64\Header.cs" />
+    <Compile Include="Elf64\IdentClass.cs" />
+    <Compile Include="Elf64\IdentData.cs" />
+    <Compile Include="Elf64\IdentIndex.cs" />
+    <Compile Include="Elf64\MachineType.cs" />
+    <Compile Include="Elf64\ProgramHeader.cs" />
+    <Compile Include="Elf64\SymbolTableEntry.cs" />
+    <Compile Include="Elf64\Version.cs" />
+    <Compile Include="PE\CliHeader.cs" />
+    <Compile Include="PE\ImageDataDirectory.cs" />
+    <Compile Include="PE\ImageDosHeader.cs" />
+    <Compile Include="PE\ImageFileHeader.cs" />
+    <Compile Include="PE\ImageNtHeaders.cs" />
+    <Compile Include="PE\ImageOptionalHeader.cs" />
+    <Compile Include="PE\ImageSectionHeader.cs" />
+    <Compile Include="PE\RuntimeImageFlags.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Mosa.Compiler.Common\Mosa.Compiler.Common.csproj">
+      <Project>{0B1011A6-8FCD-4F9E-BBB8-8DB86E23D2E8}</Project>
+      <Name>Mosa.Compiler.Common</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>

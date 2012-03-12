@@ -134,9 +134,9 @@ namespace Mosa.Tool.Compiler.Stages
 				this.VideoDepth = compiler.CompilerOptions.Multiboot.VideoDepth.Value;
 			if (compiler.CompilerOptions.Multiboot.VideoHeight.HasValue)
 				this.VideoHeight = compiler.CompilerOptions.Multiboot.VideoHeight.Value;
-			if (compiler.CompilerOptions.Multiboot.VideoMode.HasValue) 
+			if (compiler.CompilerOptions.Multiboot.VideoMode.HasValue)
 				this.VideoMode = compiler.CompilerOptions.Multiboot.VideoMode.Value;
-			if (compiler.CompilerOptions.Multiboot.VideoWidth.HasValue) 
+			if (compiler.CompilerOptions.Multiboot.VideoWidth.HasValue)
 				this.VideoWidth = compiler.CompilerOptions.Multiboot.VideoWidth.Value;
 		}
 
@@ -167,13 +167,13 @@ namespace Mosa.Tool.Compiler.Stages
 				ctx.AppendInstruction(Instruction.MovInstruction, new MemoryOperand(I4, ecx.Register, new IntPtr(0x0)), eax);
 				ctx.AppendInstruction(Instruction.MovInstruction, new MemoryOperand(I4, ecx.Register, new IntPtr(0x4)), ebx);
 
-				SymbolOperand entryPoint = SymbolOperand.FromMethod(typeInitializerSchedulerStage.Method);
+				SymbolOperand entryPoint = SymbolOperand.FromMethod(typeInitializerSchedulerStage.TypeInitializerMethod);
 
 				ctx.AppendInstruction(Instruction.CallInstruction, null, entryPoint);
 				ctx.AppendInstruction(Instruction.RetInstruction);
 
 				LinkerGeneratedMethod method = LinkTimeCodeGenerator.Compile(this.compiler, @"MultibootInit", instructionSet, typeSystem);
-				this.linker.EntryPoint = this.linker.GetSymbol(method.ToString());
+				linker.EntryPoint = linker.GetSymbol(method.ToString());
 			}
 		}
 
@@ -212,57 +212,59 @@ namespace Mosa.Tool.Compiler.Stages
 		{
 			// HACK: According to the multiboot specification this header must be within the first 8K of the
 			// kernel binary. Since the text section is always first, this should take care of the problem.
-			using (Stream stream = this.linker.Allocate(MultibootHeaderSymbolName, SectionKind.Text, 64, 4))
-			using (BinaryWriter bw = new BinaryWriter(stream, Encoding.ASCII))
+			using (Stream stream = linker.Allocate(MultibootHeaderSymbolName, SectionKind.Text, 64, 4))
 			{
-				// flags - multiboot flags
-				uint flags = /*HEADER_MB_FLAG_VIDEO_MODES_REQUIRED | */HEADER_MB_FLAG_MEMORY_INFO_REQUIRED | HEADER_MB_FLAG_MODULES_PAGE_ALIGNED;
-				// The multiboot header checksum 
-				uint csum = 0;
-				// header_addr is the load virtualAddress of the multiboot header
-				uint header_addr = 0;
-				// load_addr is the base virtualAddress of the binary in memory
-				uint load_addr = 0;
-				// load_end_addr holds the virtualAddress past the last byte to load From the image
-				uint load_end_addr = 0;
-				// bss_end_addr is the virtualAddress of the last byte to be zeroed out
-				uint bss_end_addr = 0;
-				// entry_point the load virtualAddress of the entry point to invoke
-				//uint entry_point = (uint)entryPoint.ToInt32();
-
-				// Are we linking an ELF binary?
-				if (!(this.linker is Elf32LinkerStage || this.linker is Elf64LinkerStage))
+				using (BinaryWriter bw = new BinaryWriter(stream, Encoding.ASCII))
 				{
-					// Check the linker layout settings
-					if (this.linker.LoadSectionAlignment != this.linker.VirtualSectionAlignment)
-						throw new LinkerException(@"Load and virtual section alignment must be identical if you are booting non-ELF binaries with a multiboot bootloader.");
+					// flags - multiboot flags
+					uint flags = /*HEADER_MB_FLAG_VIDEO_MODES_REQUIRED | */HEADER_MB_FLAG_MEMORY_INFO_REQUIRED | HEADER_MB_FLAG_MODULES_PAGE_ALIGNED;
+					// The multiboot header checksum 
+					uint csum = 0;
+					// header_addr is the load virtualAddress of the multiboot header
+					uint header_addr = 0;
+					// load_addr is the base virtualAddress of the binary in memory
+					uint load_addr = 0;
+					// load_end_addr holds the virtualAddress past the last byte to load From the image
+					uint load_end_addr = 0;
+					// bss_end_addr is the virtualAddress of the last byte to be zeroed out
+					uint bss_end_addr = 0;
+					// entry_point the load virtualAddress of the entry point to invoke
 
-					// No, special multiboot treatment required
-					flags |= HEADER_MB_FLAG_NON_ELF_BINARY;
+					// entry_point the load virtualAddress of the entry point to invoke
+					// Are we linking an ELF binary?
+					if (!(linker is Elf32LinkerStage || linker is Elf64LinkerStage))
+					{
+						// Check the linker layout settings
+						if (linker.LoadSectionAlignment != linker.VirtualSectionAlignment)
+							throw new LinkerException(@"Load and virtual section alignment must be identical if you are booting non-ELF binaries with a multiboot bootloader.");
 
-					header_addr = (uint)(this.linker.GetSection(SectionKind.Text).VirtualAddress.ToInt64() + this.linker.GetSymbol(MultibootHeaderSymbolName).SectionAddress);
-					load_addr = (uint)this.linker.BaseAddress;
-					load_end_addr = 0;
-					bss_end_addr = 0;
+						// No, special multiboot treatment required
+						flags |= HEADER_MB_FLAG_NON_ELF_BINARY;
+
+						header_addr = (uint)(linker.GetSection(SectionKind.Text).VirtualAddress.ToInt64() + linker.GetSymbol(MultibootHeaderSymbolName).SectionAddress);
+						load_addr = (uint)linker.BaseAddress;
+						load_end_addr = 0;
+						bss_end_addr = 0;
+					}
+
+					// Calculate the checksum
+					csum = unchecked(0U - HEADER_MB_MAGIC - flags);
+
+					bw.Write(HEADER_MB_MAGIC);
+					bw.Write(flags);
+					bw.Write(csum);
+					bw.Write(header_addr);
+					bw.Write(load_addr);
+					bw.Write(load_end_addr);
+					bw.Write(bss_end_addr);
+
+					linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, MultibootHeaderSymbolName, (int)stream.Position, 0, @"Mosa.Tools.Compiler.LinkerGenerated.<$>MultibootInit()", IntPtr.Zero);
+
+					bw.Write(VideoMode);
+					bw.Write(VideoWidth);
+					bw.Write(VideoHeight);
+					bw.Write(VideoDepth);
 				}
-
-				// Calculate the checksum
-				csum = unchecked(0U - HEADER_MB_MAGIC - flags);
-
-				bw.Write(HEADER_MB_MAGIC);
-				bw.Write(flags);
-				bw.Write(csum);
-				bw.Write(header_addr);
-				bw.Write(load_addr);
-				bw.Write(load_end_addr);
-				bw.Write(bss_end_addr);
-
-				linker.Link(LinkType.AbsoluteAddress | LinkType.I4, MultibootHeaderSymbolName, (int)stream.Position, 0, @"Mosa.Tools.Compiler.LinkerGenerated.<$>MultibootInit()", IntPtr.Zero);
-
-				bw.Write(VideoMode);
-				bw.Write(VideoWidth);
-				bw.Write(VideoHeight);
-				bw.Write(VideoDepth);
 			}
 		}
 

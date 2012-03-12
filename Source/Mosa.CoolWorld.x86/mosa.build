@@ -1,0 +1,99 @@
+<?xml version="1.0"?>
+<project name="Mosa" default="build" basedir=".">
+	
+	<!-- Comma-separated list of warnings that should be surpressed in all modules. Warning: no spaces allowed! -->
+	<property name="suppresswarnings" value="0414,0219,0169,0162,0168"/>
+	
+	<!-- Toggle debug output by setting this to true (nant -D:debug=true) -->
+	<property name="debug" value="none" overwrite="false"/>
+	
+	<!-- Speaks for itself, I should hope -->
+	<property name="outputDirectory" value="../bin" overwrite="false"/>
+	
+	<!-- Main build target -->
+	<target name="build">
+	    <csc target="exe" main="Mosa.CoolWorld.x86.Boot" output="${outputDirectory}/Mosa.CoolWorld.x86.exe" debug="${debug}" unsafe="true" nostdlib="true">
+		<sources>
+                    <include name="Boot.cs"/>
+                    <include name="Console.cs"/>
+                    <include name="DeviceDrivers/ISA/CMOS.cs"/>
+                    <include name="DeviceDrivers/ISA/PCIController.cs"/>
+                    <include name="DeviceDrivers/ISA/PIC.cs"/>
+                    <include name="DeviceDrivers/ISA/PIT.cs"/>
+                    <include name="DeviceDrivers/ISA/StandardKeyboard.cs"/>
+                    <include name="DeviceDrivers/ISA/VGAText.cs"/>
+                    <include name="DeviceDrivers/ScanCodeMap/US.cs"/>
+                    <include name="DeviceSystem/Device.cs"/>
+                    <include name="DeviceSystem/DeviceDriver.cs"/>
+                    <include name="DeviceSystem/DeviceDriverPhysicalMemoryAttribute.cs"/>
+                    <include name="DeviceSystem/DeviceDriverRegistry.cs"/>
+                    <include name="DeviceSystem/DeviceDriverStartStatus.cs"/>
+                    <include name="DeviceSystem/DeviceManager.cs"/>
+                    <include name="DeviceSystem/DeviceStatus.cs"/>
+                    <include name="DeviceSystem/FindDevice.cs"/>
+                    <include name="DeviceSystem/HAL.cs"/>
+                    <include name="DeviceSystem/HardwareDevice.cs"/>
+                    <include name="DeviceSystem/HardwareResources.cs"/>
+                    <include name="DeviceSystem/IDevice.cs"/>
+                    <include name="DeviceSystem/IDeviceDriver.cs"/>
+                    <include name="DeviceSystem/IDeviceManager.cs"/>
+                    <include name="DeviceSystem/IDiskControllerDevice.cs"/>
+                    <include name="DeviceSystem/IDiskDevice.cs"/>
+                    <include name="DeviceSystem/IFindDevice.cs"/>
+                    <include name="DeviceSystem/IHardwareAbstraction.cs"/>
+                    <include name="DeviceSystem/IHardwareDevice.cs"/>
+                    <include name="DeviceSystem/IHardwareResources.cs"/>
+                    <include name="DeviceSystem/IInterruptHandler.cs"/>
+                    <include name="DeviceSystem/IIOPortRegion.cs"/>
+                    <include name="DeviceSystem/IIOPorts.cs"/>
+                    <include name="DeviceSystem/IKeyboard.cs"/>
+                    <include name="DeviceSystem/IKeyboardDevice.cs"/>
+                    <include name="DeviceSystem/IMemory.cs"/>
+                    <include name="DeviceSystem/IMemoryRegion.cs"/>
+                    <include name="DeviceSystem/InterruptHandler.cs"/>
+                    <include name="DeviceSystem/InterruptManager.cs"/>
+                    <include name="DeviceSystem/IOPortRegion.cs"/>
+                    <include name="DeviceSystem/IOPortRegister.cs"/>
+                    <include name="DeviceSystem/IOPortResources.cs"/>
+                    <include name="DeviceSystem/IPartitionDevice.cs"/>
+                    <include name="DeviceSystem/IPCIController.cs"/>
+                    <include name="DeviceSystem/IResourceManager.cs"/>
+                    <include name="DeviceSystem/ISADeviceDriverAttribute.cs"/>
+                    <include name="DeviceSystem/IScanCodeMap.cs"/>
+                    <include name="DeviceSystem/ISerialDevice.cs"/>
+                    <include name="DeviceSystem/ITextDevice.cs"/>
+                    <include name="DeviceSystem/ITextScreen.cs"/>
+                    <include name="DeviceSystem/Key.cs"/>
+                    <include name="DeviceSystem/Keyboard.cs"/>
+                    <include name="DeviceSystem/KeyEvent.cs"/>
+                    <include name="DeviceSystem/KeyType.cs"/>
+                    <include name="DeviceSystem/MemoryRegion.cs"/>
+                    <include name="DeviceSystem/MemoryResources.cs"/>
+                    <include name="DeviceSystem/PCIControllerManager.cs"/>
+                    <include name="DeviceSystem/PCIDeviceDriverAttribute.cs"/>
+                    <include name="DeviceSystem/PCI/AddressType.cs"/>
+                    <include name="DeviceSystem/PCI/BaseAddress.cs"/>
+                    <include name="DeviceSystem/PCI/ClassCodeTable.cs"/>
+                    <include name="DeviceSystem/PCI/IDeviceResource.cs"/>
+                    <include name="DeviceSystem/PCI/IPCIDevice.cs"/>
+                    <include name="DeviceSystem/PCI/PCIDevice.cs"/>
+                    <include name="DeviceSystem/PCI/SubClassCodeTable.cs"/>
+                    <include name="DeviceSystem/PlatformArchitecture.cs"/>
+                    <include name="DeviceSystem/ResourceManager.cs"/>
+                    <include name="Setup.cs"/>
+                    <include name="DeviceSystem/SpinLock.cs"/>
+                    <include name="HAL/Memory.cs"/>
+                    <include name="HAL/IOPort.cs"/>
+                    <include name="HAL/HardwareAbstraction.cs"/>
+		</sources>
+		<references>
+                    <include name="${outputDirectory}/Mosa.ClassLib.dll"/>
+                    <include name="${outputDirectory}/Mosa.Kernel.x86.dll"/>
+                    <include name="${outputDirectory}/mscorlib.dll"/>
+                    <include name="${outputDirectory}/Mosa.Platform.x86.Intrinsic.dll"/>
+		</references>
+		<!-- supress warnings -->
+		<nowarn><warning number="${suppresswarnings}"/></nowarn>
+        </csc>
+	</target>
+</project>

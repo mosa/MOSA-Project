@@ -49,7 +49,7 @@ namespace Mosa.Compiler.Framework
 		#region Properties
 
 		/// <summary>
-		/// 
+		/// Gets the size.
 		/// </summary>
 		public int Size
 		{
@@ -60,7 +60,7 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// 
+		/// Gets the amount of used indices.
 		/// </summary>
 		public int Used
 		{
@@ -71,7 +71,7 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// 
+		/// Gets an array that maps each index to its corresponding next index.
 		/// </summary>
 		public int[] NextArray
 		{
@@ -82,7 +82,7 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// 
+		/// Gets an array that maps each index to its corresponding previous index.
 		/// </summary>
 		public int[] PrevArray
 		{
@@ -130,9 +130,9 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Resizes the specified newsize.
+		/// Resizes the instruction set.
 		/// </summary>
-		/// <param name="newsize">The newsize.</param>
+		/// <param name="newsize">The new size.</param>
 		public void Resize(int newsize)
 		{
 			int[] newNext = new int[newsize];
@@ -159,10 +159,10 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Nexts the specified index.
+		/// Gets the next index after the specified index.
 		/// </summary>
 		/// <param name="index">The index.</param>
-		/// <returns></returns>
+		/// <returns>The next index, or -1.</returns>
 		public int Next(int index)
 		{
 			Debug.Assert(index < _size);
@@ -175,10 +175,10 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Previouses the specified index.
+		/// Gets the previous index before the specified index.
 		/// </summary>
 		/// <param name="index">The index.</param>
-		/// <returns></returns>
+		/// <returns>The previous index, or -1.</returns>
 		public int Previous(int index)
 		{
 			Debug.Assert(index < _size);
@@ -191,7 +191,7 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Gets the free.
+		/// Gets the next free index.
 		/// </summary>
 		/// <returns></returns>
 		public int GetFree()
@@ -234,10 +234,10 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Inserts the after.
+		/// Inserts a node after a specified index.
 		/// </summary>
 		/// <param name="index">The index.</param>
-		/// <returns></returns>
+		/// <returns>The inserted index.</returns>
 		public int InsertAfter(int index)
 		{
 			if (index == -1)
@@ -260,10 +260,10 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Inserts the after.
+		/// Inserts a node before a specified index.
 		/// </summary>
 		/// <param name="index">The index.</param>
-		/// <returns></returns>
+		/// <returns>The inserted index.</returns>
 		public int InsertBefore(int index)
 		{
 			if (index == -1)
@@ -311,7 +311,7 @@ namespace Mosa.Compiler.Framework
 
 
 		/// <summary>
-		/// Slices the instruction flow before the current instruction
+		/// Slices the instruction flow before the current instruction.
 		/// </summary>
 		/// <param name="index">The index.</param>
 		public void SliceBefore(int index)
@@ -324,7 +324,7 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Slices the instruction flow after the current instruction
+		/// Slices the instruction flow after the current instruction.
 		/// </summary>
 		/// <param name="index">The index.</param>
 		public void SliceAfter(int index)

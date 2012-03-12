@@ -30,20 +30,18 @@ namespace Mosa.Compiler.Framework.CIL
 	/// </remarks>
 	public sealed class DecodingStage : BaseMethodCompilerStage, IMethodCompilerStage, IInstructionDecoder, IPipelineStage
 	{
-		private readonly DataConverter LittleEndianBitConverter = DataConverter.LittleEndian;
-
 		#region Data members
 
 		/// <summary>
 		/// The reader used to process the code stream.
 		/// </summary>
-		private BinaryReader codeReader;
+		private EndianAwareBinaryReader codeReader;
 
 		/// <summary>
 		/// 
 		/// </summary>
 		private IGenericTypePatcher genericTypePatcher = null;
-		
+
 		#endregion // Data members
 
 		#region IMethodCompilerStage Members
@@ -57,7 +55,7 @@ namespace Mosa.Compiler.Framework.CIL
 
 			using (Stream code = methodCompiler.GetInstructionStream())
 			{
-				using (codeReader = new BinaryReader(code))
+				using (codeReader = new EndianAwareBinaryReader(code, true))
 				{
 					MethodHeader header = ReadMethodHeader(codeReader);
 
@@ -107,7 +105,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		/// <param name="reader">The reader used to decode the instruction stream.</param>
 		/// <returns></returns>
-		private MethodHeader ReadMethodHeader(BinaryReader reader)
+		private MethodHeader ReadMethodHeader(EndianAwareBinaryReader reader)
 		{
 			MethodHeader header = new MethodHeader();
 
@@ -160,9 +158,11 @@ namespace Mosa.Compiler.Framework.CIL
 				int blocks;
 				if (isFat)
 				{
-					byte[] buffer = new byte[4];
-					reader.Read(buffer, 0, 3);
-					length = LittleEndianBitConverter.GetInt32(buffer, 0);
+					byte a = reader.ReadByte();
+					byte b = reader.ReadByte();
+					byte c = reader.ReadByte();
+
+					length = (c << 24) | (b << 16) | a;
 					blocks = (length - 4) / 24;
 				}
 				else

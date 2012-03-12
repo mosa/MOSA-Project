@@ -24,9 +24,6 @@ namespace Mosa.Platform.x86
 	{
 		#region Data members
 
-		//FIXME: Assumes LittleEndian architecture (okay for x86 but not for platform independent code)
-		private static readonly DataConverter LittleEndianBitConverter = DataConverter.LittleEndian;
-
 		private Dictionary<BasicBlock, ExceptionHandlingClause> blockExceptions;
 
 		private Dictionary<ExceptionHandlingClause, List<BasicBlock>> exceptionBlocks = new Dictionary<ExceptionHandlingClause, List<BasicBlock>>();
@@ -186,42 +183,40 @@ namespace Mosa.Platform.x86
 
 			using (Stream stream = methodCompiler.Linker.Allocate(section, SectionKind.ROData, tableSize, nativePointerAlignment))
 			{
-				foreach (ProtectedBlock entry in entries)
+				using (EndianAwareBinaryWriter writer = new EndianAwareBinaryWriter(stream, architecture.IsLittleEndian))
 				{
-					// FIXME: Assumes x86 platform
-					WriteLittleEndian4(stream, (uint)entry.Kind);
-					WriteLittleEndian4(stream, entry.Start);
-					WriteLittleEndian4(stream, entry.Length);
-					WriteLittleEndian4(stream, entry.Handler);
+					foreach (ProtectedBlock entry in entries)
+					{
+						// FIXME: Assumes x86 platform
+						writer.Write((uint)entry.Kind);
+						writer.Write(entry.Start);
+						writer.Write(entry.Length);
+						writer.Write(entry.Handler);
 
-					if (entry.Kind == ExceptionHandlerType.Exception)
-					{
-						// Store method table pointer of the exception object type
-						// The VES exception runtime will uses this to compare exception object types
-						methodCompiler.Linker.Link(LinkType.AbsoluteAddress | LinkType.I4, section, (int)stream.Position, 0, entry.Type.FullName + "$mtable", IntPtr.Zero);
+						if (entry.Kind == ExceptionHandlerType.Exception)
+						{
+							// Store method table pointer of the exception object type
+							// The VES exception runtime will uses this to compare exception object types
+							methodCompiler.Linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, section, (int)writer.Position, 0, entry.Type.FullName + "$mtable", IntPtr.Zero);
 
-						stream.Position += nativePointerSize;
+							writer.Position += nativePointerSize;
+						}
+						else if (entry.Kind == ExceptionHandlerType.Filter)
+						{
+							// TODO: There are no plans in the short term to support filtered exception clause as C# does not use them 
+							writer.Position += nativePointerSize;
+						}
+						else
+						{
+							writer.Position += nativePointerSize;
+						}
 					}
-					else if (entry.Kind == ExceptionHandlerType.Filter)
-					{
-						// TODO: There are no plans in the short term to support filtered exception clause as C# does not use them 
-						stream.Position += nativePointerSize;
-					}
-					else
-					{
-						stream.Position += nativePointerSize;
-					}
+
+					// Mark end of table
+					writer.Position += typeLayout.NativePointerSize;
 				}
-
-				// Mark end of table
-				stream.Position += typeLayout.NativePointerSize;
 			}
 
-		}
-
-		static private void WriteLittleEndian4(Stream stream, uint value)
-		{
-			stream.Write(LittleEndianBitConverter.GetBytes(value));
 		}
 
 	}

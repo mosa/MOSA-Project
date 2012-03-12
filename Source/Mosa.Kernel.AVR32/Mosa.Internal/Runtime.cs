@@ -1,15 +1,14 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Michael Fröhlich (grover) <michael.ruck@michaelruck.de>
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-using Mosa.Kernel;
+//using Mosa.Kernel.AVR32;
+//using Mosa.Platform.AVR32.Intrinsic;
 
 namespace Mosa.Internal
 {
@@ -20,7 +19,8 @@ namespace Mosa.Internal
 
 		private static void* AllocateMemory(uint size)
 		{
-			return (void*)KernelMemory.AllocateMemory(size);
+			//return (void*)KernelMemory.AllocateMemory(size);  // TODO for AVR32
+			return (void*)0;
 		}
 
 		public static void* AllocateObject(void* methodTable, uint classSize)

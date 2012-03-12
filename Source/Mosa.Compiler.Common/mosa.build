@@ -14,8 +14,10 @@
 	<target name="build">
 	    <csc target="library" output="${outputDirectory}/Mosa.Compiler.Common.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
+                    <include name="EndianAwareBinaryWriter.cs"/>
+                    <include name="EndianAwareBinaryReader.cs"/>
+                    <include name="Endian.cs"/>
                     <include name="StreamExtension.cs"/>
-                    <include name="DataConverter.cs"/>
 		</sources>
 		<references>
                     <include name="System.dll"/>

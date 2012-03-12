@@ -16,7 +16,7 @@ using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Operands;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.Metadata;
-using Mosa.Compiler.Platform.Common;
+using Mosa.Compiler.Platform;
 
 namespace Mosa.Platform.x86
 {
@@ -28,8 +28,6 @@ namespace Mosa.Platform.x86
 	{
 
 		#region Data members
-
-		protected DataConverter Converter = DataConverter.LittleEndian;
 
 		#endregion // Data members
 
@@ -94,32 +92,30 @@ namespace Mosa.Platform.x86
 				string name = String.Format("C_{0}", Guid.NewGuid());
 				using (Stream stream = methodCompiler.Linker.Allocate(name, SectionKind.ROData, size, alignment))
 				{
-					byte[] buffer;
-
-					switch (cop.Type.Type)
+					using (BinaryWriter writer = new BinaryWriter(stream))
 					{
-						case CilElementType.R4:
-							buffer = Converter.GetBytes((float)cop.Value);
-							break;
+						switch (cop.Type.Type)
+						{
+							case CilElementType.R4:
+								writer.Write((float)cop.Value);
+								break;
 
-						case CilElementType.R8:
-							buffer = Converter.GetBytes((double)cop.Value);
-							break;
+							case CilElementType.R8:
+								writer.Write((double)cop.Value);
+								break;
 
-						case CilElementType.I8:
-							buffer = Converter.GetBytes((long)cop.Value);
-							break;
+							case CilElementType.I8:
+								writer.Write((long)cop.Value);
+								break;
 
-						case CilElementType.U8:
-							buffer = Converter.GetBytes((ulong)cop.Value);
-							break;
-						default:
-							throw new NotSupportedException();
+							case CilElementType.U8:
+								writer.Write((ulong)cop.Value);
+								break;
+							default:
+								throw new NotSupportedException();
+						}
 					}
-
-					stream.Write(buffer, 0, buffer.Length);
 				}
-
 				// FIXME: Attach the label operand to the linker symbol
 				// FIXME: Rename the operand to SymbolOperand
 				// FIXME: Use the provided name to link

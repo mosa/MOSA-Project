@@ -26,7 +26,15 @@ namespace Mosa.Compiler.Framework
 		#region Properties
 
 		/// <summary>
-		/// Returns the type, which represents a native (unsigned) int on the VES stack.
+		/// Gets a value indicating whether this architecture is little-endian.
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if this instance is architecture is little-endian; otherwise, <c>false</c>.
+		/// </value>
+		bool IsLittleEndian { get; }
+
+		/// <summary>
+		/// Returns the type, which represents a native (unsigned) on the VES stack.
 		/// </summary>
 		SigType NativeType { get; }
 

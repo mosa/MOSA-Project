@@ -29,8 +29,6 @@ namespace Mosa.Compiler.Framework
 		private IAssemblyLinker linker;
 		private HashSet<RuntimeType> processed = new HashSet<RuntimeType>();
 
-		private readonly DataConverter LittleEndianBitConverter = DataConverter.LittleEndian;
-
 		#endregion // Data members
 
 		#region IAssemblyCompilerStage members
@@ -198,7 +196,7 @@ namespace Mosa.Compiler.Framework
 					{
 						Trace(CompilerEvent.DebugInfo, "  # " + (offset / typeLayout.NativePointerSize).ToString() + " " + link);
 
-						linker.Link(LinkType.AbsoluteAddress | LinkType.I4, methodTableName, offset, 0, link, IntPtr.Zero);
+						linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, methodTableName, offset, 0, link, IntPtr.Zero);
 					}
 					else
 					{
@@ -215,7 +213,7 @@ namespace Mosa.Compiler.Framework
 					if (!method.IsAbstract)
 					{
 						Trace(CompilerEvent.DebugInfo, "  # " + (offset / typeLayout.NativePointerSize).ToString() + " " + method.ToString());
-						linker.Link(LinkType.AbsoluteAddress | LinkType.I4, methodTableName, offset, 0, method.ToString(), IntPtr.Zero);
+						linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, methodTableName, offset, 0, method.ToString(), IntPtr.Zero);
 					}
 					else
 					{
@@ -302,7 +300,11 @@ namespace Mosa.Compiler.Framework
 			using (Stream source = field.Module.MetadataModule.GetDataSection((long)field.RVA))
 			{
 				byte[] data = new byte[size];
-				source.Read(data, 0, size);
+				int wrote = source.Read(data, 0, size);
+
+				if (wrote != size)
+					throw new InvalidDataException(); // FIXME
+
 				stream.Write(data, 0, size);
 			}
 		}

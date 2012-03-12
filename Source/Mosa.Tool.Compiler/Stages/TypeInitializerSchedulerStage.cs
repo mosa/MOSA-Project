@@ -65,7 +65,7 @@ namespace Mosa.Tool.Compiler.Stages
 		/// Gets the intializer method.
 		/// </summary>
 		/// <value>The method.</value>
-		public LinkerGeneratedMethod Method
+		public LinkerGeneratedMethod TypeInitializerMethod
 		{
 			get { return method; }
 		}

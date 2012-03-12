@@ -78,16 +78,13 @@ namespace Mosa.Tool.Compiler
 			int nativePointerSize;
 			int nativePointerAlignment;
 
-			IArchitecture architecture = compilerOptions.Architecture;
-			architecture.GetTypeRequirements(BuiltInSigType.IntPtr, out nativePointerSize, out nativePointerAlignment);
+			compilerOptions.Architecture.GetTypeRequirements(BuiltInSigType.IntPtr, out nativePointerSize, out nativePointerAlignment);
 
 			TypeLayout typeLayout = new TypeLayout(typeSystem, nativePointerSize, nativePointerAlignment);
 
 			IInternalTrace internalLog = new BasicInternalTrace();
 
-			IAssemblyLinker linker = compilerOptions.Linker;
-
-			using (AotAssemblyCompiler aot = new AotAssemblyCompiler(architecture, linker, typeSystem, typeLayout, internalLog, compilerOptions))
+			using (AotAssemblyCompiler aot = new AotAssemblyCompiler(compilerOptions.Architecture, compilerOptions.Linker, typeSystem, typeLayout, internalLog, compilerOptions))
 			{
 				aot.Pipeline.AddRange(new IAssemblyCompilerStage[] 
 				{

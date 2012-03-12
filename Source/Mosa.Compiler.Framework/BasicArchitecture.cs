@@ -20,6 +20,14 @@ namespace Mosa.Compiler.Framework
 	public abstract class BasicArchitecture : IArchitecture
 	{
 		/// <summary>
+		/// Gets a value indicating whether this architecture is little-endian.
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if this instance is architecture is little-endian; otherwise, <c>false</c>.
+		/// </value>
+		public abstract bool IsLittleEndian { get; }
+
+		/// <summary>
 		/// Holds the native type of the architecture.
 		/// </summary>
 		private SigType nativeType;

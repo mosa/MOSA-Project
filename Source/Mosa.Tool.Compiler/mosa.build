@@ -28,15 +28,16 @@
                     <include name="NDesk.Options.cs"/>
                     <include name="Program.cs"/>
                     <include name="Stages/Multiboot0695AssemblyStage.cs"/>
-                    <include name="ITypeInitializerSchedulerStage.cs"/>
                     <include name="Stages/TypeInitializerSchedulerStage.cs"/>
 		</sources>
 		<references>
                     <include name="System.dll"/>
-                    <include name="${outputDirectory}/Mosa.Compiler.FileFormat.dll"/>
+                    <include name="${outputDirectory}/Mosa.Compiler.Common.dll"/>
+                    <include name="${outputDirectory}/Mosa.Compiler.LinkerFormat.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Linker.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Pdb.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.TypeSystem.dll"/>
+                    <include name="${outputDirectory}/Mosa.Platform.AVR32.dll"/>
                     <include name="${outputDirectory}/Mosa.Platform.x86.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.InternalTrace.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Metadata.dll"/>

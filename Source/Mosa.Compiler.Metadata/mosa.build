@@ -116,7 +116,8 @@
 		</sources>
 		<references>
                     <include name="System.dll"/>
-                    <include name="${outputDirectory}/Mosa.Compiler.FileFormat.dll"/>
+                    <include name="${outputDirectory}/Mosa.Compiler.Common.dll"/>
+                    <include name="${outputDirectory}/Mosa.Compiler.LinkerFormat.dll"/>
 		</references>
 		<!-- supress warnings -->
 		<nowarn><warning number="${suppresswarnings}"/></nowarn>

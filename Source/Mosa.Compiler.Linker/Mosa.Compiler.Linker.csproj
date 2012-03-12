@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -35,48 +35,28 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BaseAssemblyLinker.cs" />
-    <Compile Include="Elf32\Elf32FileType.cs" />
-    <Compile Include="Elf32\Elf32Header.cs" />
-    <Compile Include="Elf32\Elf32IdentClass.cs" />
-    <Compile Include="Elf32\Elf32IdentData.cs" />
-    <Compile Include="Elf32\Elf32IdentIndex.cs" />
-    <Compile Include="Elf32\Elf32Linker.cs" />
-    <Compile Include="Elf32\Elf32MachineType.cs" />
-    <Compile Include="Elf32\Elf32ProgramHeader.cs" />
-    <Compile Include="Elf32\Elf32ProgramHeaderFlags.cs" />
-    <Compile Include="Elf32\Elf32ProgramHeaderType.cs" />
-    <Compile Include="Elf32\Elf32SymbolTableEntry.cs" />
-    <Compile Include="Elf32\Elf32Version.cs" />
-    <Compile Include="Elf32\Sections\Elf32BssSection.cs" />
-    <Compile Include="Elf32\Sections\Elf32CodeSection.cs" />
-    <Compile Include="Elf32\Sections\Elf32DataSection.cs" />
-    <Compile Include="Elf32\Sections\Elf32NullSection.cs" />
-    <Compile Include="Elf32\Sections\Elf32RoDataSection.cs" />
-    <Compile Include="Elf32\Sections\Elf32Section.cs" />
-    <Compile Include="Elf32\Sections\Elf32SectionAttribute.cs" />
-    <Compile Include="Elf32\Sections\Elf32SectionHeader.cs" />
-    <Compile Include="Elf32\Sections\Elf32SectionType.cs" />
-    <Compile Include="Elf32\Sections\Elf32StringTableSection.cs" />
-    <Compile Include="Elf64\Elf64FileType.cs" />
-    <Compile Include="Elf64\Elf64Header.cs" />
-    <Compile Include="Elf64\Elf64IdentClass.cs" />
-    <Compile Include="Elf64\Elf64IdentData.cs" />
-    <Compile Include="Elf64\Elf64IdentIndex.cs" />
-    <Compile Include="Elf64\Elf64Linker.cs" />
-    <Compile Include="Elf64\Elf64MachineType.cs" />
-    <Compile Include="Elf64\Elf64ProgramHeader.cs" />
-    <Compile Include="Elf64\Elf64SymbolTableEntry.cs" />
-    <Compile Include="Elf64\Elf64Version.cs" />
-    <Compile Include="Elf64\Sections\Elf64BssSection.cs" />
-    <Compile Include="Elf64\Sections\Elf64CodeSection.cs" />
-    <Compile Include="Elf64\Sections\Elf64DataSection.cs" />
-    <Compile Include="Elf64\Sections\Elf64NullSection.cs" />
-    <Compile Include="Elf64\Sections\Elf64RoDataSection.cs" />
-    <Compile Include="Elf64\Sections\Elf64Section.cs" />
-    <Compile Include="Elf64\Sections\Elf64SectionAttribute.cs" />
-    <Compile Include="Elf64\Sections\Elf64SectionHeader.cs" />
-    <Compile Include="Elf64\Sections\Elf64SectionType.cs" />
-    <Compile Include="Elf64\Sections\Elf64StringTableSection.cs" />
+    <Compile Include="Elf32\Linker.cs" />
+    <Compile Include="Elf32\BssSection.cs" />
+    <Compile Include="Elf32\CodeSection.cs" />
+    <Compile Include="Elf32\DataSection.cs" />
+    <Compile Include="Elf32\NullSection.cs" />
+    <Compile Include="Elf32\RoDataSection.cs" />
+    <Compile Include="Elf32\Section.cs" />
+    <Compile Include="Elf32\SectionAttribute.cs" />
+    <Compile Include="Elf32\SectionHeader.cs" />
+    <Compile Include="Elf32\SectionType.cs" />
+    <Compile Include="Elf32\StringTableSection.cs" />
+    <Compile Include="Elf64\Linker.cs" />
+    <Compile Include="Elf64\BssSection.cs" />
+    <Compile Include="Elf64\CodeSection.cs" />
+    <Compile Include="Elf64\DataSection.cs" />
+    <Compile Include="Elf64\NullSection.cs" />
+    <Compile Include="Elf64\RoDataSection.cs" />
+    <Compile Include="Elf64\Section.cs" />
+    <Compile Include="Elf64\SectionAttribute.cs" />
+    <Compile Include="Elf64\SectionHeader.cs" />
+    <Compile Include="Elf64\SectionType.cs" />
+    <Compile Include="Elf64\StringTableSection.cs" />
     <Compile Include="IAssemblyLinker.cs" />
     <Compile Include="LinkerException.cs" />
     <Compile Include="LinkerSection.cs" />
@@ -84,8 +64,8 @@
     <Compile Include="LinkerSymbol.cs" />
     <Compile Include="LinkRequest.cs" />
     <Compile Include="LinkType.cs" />
-    <Compile Include="PE\PortableExecutableLinkerSection.cs" />
-    <Compile Include="PE\PortableExecutableLinker.cs" />
+    <Compile Include="PE\Section.cs" />
+    <Compile Include="PE\Linker.cs" />
     <Compile Include="SectionKind.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -93,9 +73,9 @@
       <Project>{0B1011A6-8FCD-4F9E-BBB8-8DB86E23D2E8}</Project>
       <Name>Mosa.Compiler.Common</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mosa.Compiler.FileFormat\Mosa.Compiler.FileFormat.csproj">
+    <ProjectReference Include="..\Mosa.Compiler.LinkerFormat\Mosa.Compiler.LinkerFormat.csproj">
       <Project>{CC2E6418-C325-4486-B50D-941EC27053F6}</Project>
-      <Name>Mosa.Compiler.FileFormat</Name>
+      <Name>Mosa.Compiler.LinkerFormat</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

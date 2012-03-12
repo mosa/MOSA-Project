@@ -1,4 +1,4 @@
-﻿/*
+/*
  * (c) 2008 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -7,7 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-namespace Mosa.Kernel
+namespace Mosa.Kernel.AVR32
 {
 	/// <summary>
 	/// Kernel Memory Allocator - This is a pure HACK!
@@ -25,8 +25,7 @@ namespace Mosa.Kernel
 				// Go allocate memory
 
 				_size = 1024 * 1024 * 64; // 64Mb
-				// TODO
-				// _heap = x86.ProcessManager.AllocateMemory(0, _size);
+				_heap = 0; // TODO: x86.ProcessManager.AllocateMemory(0, _size);
 				_used = 0;
 			}
 

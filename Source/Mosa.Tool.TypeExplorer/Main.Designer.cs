@@ -58,7 +58,7 @@
 			this.toolStripButton2 = new System.Windows.Forms.ToolStripButton();
 			this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
 			this.toolStripButton4 = new System.Windows.Forms.ToolStripButton();
-			this.toolStripButton3 = new System.Windows.Forms.ToolStripButton();
+			this.cbPlatform = new System.Windows.Forms.ComboBox();
 			stageLabel = new System.Windows.Forms.Label();
 			label1 = new System.Windows.Forms.Label();
 			label2 = new System.Windows.Forms.Label();
@@ -317,8 +317,7 @@
             this.toolStripButton1,
             this.toolStripButton2,
             this.toolStripSeparator1,
-            this.toolStripButton4,
-            this.toolStripButton3});
+            this.toolStripButton4});
 			this.toolStrip1.Location = new System.Drawing.Point(0, 24);
 			this.toolStrip1.Name = "toolStrip1";
 			this.toolStrip1.Size = new System.Drawing.Size(811, 25);
@@ -353,25 +352,28 @@
 			this.toolStripButton4.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton4.Image")));
 			this.toolStripButton4.ImageTransparentColor = System.Drawing.Color.Magenta;
 			this.toolStripButton4.Name = "toolStripButton4";
-			this.toolStripButton4.Size = new System.Drawing.Size(72, 22);
-			this.toolStripButton4.Text = "Compile";
+			this.toolStripButton4.Size = new System.Drawing.Size(75, 22);
+			this.toolStripButton4.Text = "Compile:";
 			this.toolStripButton4.Click += new System.EventHandler(this.toolStripButton4_Click);
 			// 
-			// toolStripButton3
+			// cbPlatform
 			// 
-			this.toolStripButton3.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton3.Image")));
-			this.toolStripButton3.ImageTransparentColor = System.Drawing.Color.Magenta;
-			this.toolStripButton3.Name = "toolStripButton3";
-			this.toolStripButton3.Size = new System.Drawing.Size(57, 22);
-			this.toolStripButton3.Text = "Verify";
-			this.toolStripButton3.Visible = false;
-			this.toolStripButton3.Click += new System.EventHandler(this.toolStripButton3_Click_1);
+			this.cbPlatform.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+			this.cbPlatform.FormattingEnabled = true;
+			this.cbPlatform.Items.AddRange(new object[] {
+            "x86",
+            "AVR32"});
+			this.cbPlatform.Location = new System.Drawing.Point(213, 26);
+			this.cbPlatform.Name = "cbPlatform";
+			this.cbPlatform.Size = new System.Drawing.Size(58, 21);
+			this.cbPlatform.TabIndex = 28;
 			// 
 			// Main
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(811, 488);
+			this.Controls.Add(this.cbPlatform);
 			this.Controls.Add(this.toolStrip1);
 			this.Controls.Add(this.statusStrip1);
 			this.Controls.Add(this.menuStrip1);
@@ -420,9 +422,9 @@
 		private System.Windows.Forms.ToolStripButton toolStripButton1;
 		private System.Windows.Forms.ToolStripButton toolStripButton2;
 		private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
-		private System.Windows.Forms.ToolStripButton toolStripButton3;
 		private System.Windows.Forms.TextBox textBox1;
 		private System.Windows.Forms.ToolStripMenuItem includeTestKorlibToolStripMenuItem;
 		private System.Windows.Forms.ToolStripButton toolStripButton4;
+		private System.Windows.Forms.ComboBox cbPlatform;
 	}
 }

@@ -14,7 +14,7 @@ namespace Mosa.Compiler.Linker
 	/// <summary>
 	/// Represents a linking request to the assembly linker.
 	/// </summary>
-	public struct LinkRequest
+	public sealed class LinkRequest
 	{
 		#region Data members
 
@@ -80,7 +80,7 @@ namespace Mosa.Compiler.Linker
 		/// </summary>
 		public string LinkSymbol
 		{
-			get { return this.symbolName; }
+			get { return symbolName; }
 		}
 
 		/// <summary>
@@ -88,7 +88,7 @@ namespace Mosa.Compiler.Linker
 		/// </summary>
 		public int MethodRelativeBase
 		{
-			get { return this.methodRelativeBase; }
+			get { return methodRelativeBase; }
 		}
 
 		/// <summary>
@@ -96,7 +96,7 @@ namespace Mosa.Compiler.Linker
 		/// </summary>
 		public LinkType LinkType
 		{
-			get { return this.linkType; }
+			get { return linkType; }
 		}
 
 		/// <summary>
@@ -104,7 +104,7 @@ namespace Mosa.Compiler.Linker
 		/// </summary>
 		public int MethodOffset
 		{
-			get { return this.methodOffset; }
+			get { return methodOffset; }
 		}
 
 		/// <summary>
@@ -113,7 +113,7 @@ namespace Mosa.Compiler.Linker
 		/// <value>The name of the symbol.</value>
 		public string TargetSymbolName
 		{
-			get { return this.targetSymbolName; }
+			get { return targetSymbolName; }
 		}
 
 		/// <summary>
@@ -122,7 +122,7 @@ namespace Mosa.Compiler.Linker
 		/// <value>The offset.</value>
 		public IntPtr Offset
 		{
-			get { return this.offset; }
+			get { return offset; }
 		}
 
 		#endregion // Properties

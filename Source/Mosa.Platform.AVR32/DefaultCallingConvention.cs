@@ -186,14 +186,14 @@ namespace Mosa.Platform.AVR32
 			if (memoryOperand == null)
 				return;
 
-			Operand opL, opH;
-			LongOperandTransformationStage.SplitLongOperand(memoryOperand, out opL, out opH);
+			//Operand opL, opH;
+			//LongOperandTransformationStage.SplitLongOperand(memoryOperand, out opL, out opH);
 
-			RegisterOperand r8 = new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.R8);
-			RegisterOperand r9 = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.R9);
+			//RegisterOperand r8 = new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.R8);
+			//RegisterOperand r9 = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.R9);
 
-			ctx.AppendInstruction(Instruction.MovInstruction, opL, r8);
-			ctx.AppendInstruction(Instruction.MovInstruction, opH, r9);
+			//ctx.AppendInstruction(Instruction.MovInstruction, opL, r8);
+			//ctx.AppendInstruction(Instruction.MovInstruction, opH, r9);
 		}
 
 		/// <summary>
@@ -237,13 +237,13 @@ namespace Mosa.Platform.AVR32
 							Debug.Assert(null != mop, @"I8/U8 arg is not in a memory operand.");
 							RegisterOperand r8 = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.R8);
 
-							Operand opL, opH;
-							LongOperandTransformationStage.SplitLongOperand(mop, out opL, out opH);
+							//Operand opL, opH;
+							//LongOperandTransformationStage.SplitLongOperand(mop, out opL, out opH);
 
-							ctx.AppendInstruction(Instruction.MovInstruction, r8, opL);
-							ctx.AppendInstruction(Instruction.MovInstruction, new MemoryOperand(op.Type, GeneralPurposeRegister.R9, new IntPtr(stackSize)), r8);
-							ctx.AppendInstruction(Instruction.MovInstruction, r8, opH);
-							ctx.AppendInstruction(Instruction.MovInstruction, new MemoryOperand(op.Type, GeneralPurposeRegister.R9, new IntPtr(stackSize + 4)), r8);
+							//ctx.AppendInstruction(Instruction.MovInstruction, r8, opL);
+							//ctx.AppendInstruction(Instruction.MovInstruction, new MemoryOperand(op.Type, GeneralPurposeRegister.R9, new IntPtr(stackSize)), r8);
+							//ctx.AppendInstruction(Instruction.MovInstruction, r8, opH);
+							//ctx.AppendInstruction(Instruction.MovInstruction, new MemoryOperand(op.Type, GeneralPurposeRegister.R9, new IntPtr(stackSize + 4)), r8);
 						}
 						return;
 
@@ -256,14 +256,14 @@ namespace Mosa.Platform.AVR32
 			}
 			else if (op is ConstantOperand && op.StackType == StackTypeCode.Int64)
 			{
-				Operand opL, opH;
-				RegisterOperand r8 = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.R8);
-				LongOperandTransformationStage.SplitLongOperand(op, out opL, out opH);
+				//Operand opL, opH;
+				//RegisterOperand r8 = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.R8);
+				//LongOperandTransformationStage.SplitLongOperand(op, out opL, out opH);
 
-				ctx.AppendInstruction(Instruction.MovInstruction, r8, opL);
-				ctx.AppendInstruction(Instruction.MovInstruction, new MemoryOperand(BuiltInSigType.Int32, GeneralPurposeRegister.R9, new IntPtr(stackSize)), r8);
-				ctx.AppendInstruction(Instruction.MovInstruction, r8, opH);
-				ctx.AppendInstruction(Instruction.MovInstruction, new MemoryOperand(BuiltInSigType.Int32, GeneralPurposeRegister.R9, new IntPtr(stackSize + 4)), r8);
+				//ctx.AppendInstruction(Instruction.MovInstruction, r8, opL);
+				//ctx.AppendInstruction(Instruction.MovInstruction, new MemoryOperand(BuiltInSigType.Int32, GeneralPurposeRegister.R9, new IntPtr(stackSize)), r8);
+				//ctx.AppendInstruction(Instruction.MovInstruction, r8, opH);
+				//ctx.AppendInstruction(Instruction.MovInstruction, new MemoryOperand(BuiltInSigType.Int32, GeneralPurposeRegister.R9, new IntPtr(stackSize + 4)), r8);
 
 				return;
 			}
@@ -324,12 +324,12 @@ namespace Mosa.Platform.AVR32
 			{
 				SigType HighType = (operand.Type.Type == CilElementType.I8) ? BuiltInSigType.Int32 : BuiltInSigType.UInt32;
 
-				Operand opL, opH;
-				LongOperandTransformationStage.SplitLongOperand(operand, out opL, out opH);
+				//Operand opL, opH;
+				//LongOperandTransformationStage.SplitLongOperand(operand, out opL, out opH);
 
-				// Like Win32: EDX:EAX
-				ctx.SetInstruction(Instruction.MovInstruction, new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.R8), opL);
-				ctx.AppendInstruction(Instruction.MovInstruction, new RegisterOperand(HighType, GeneralPurposeRegister.R9), opH);
+				//// Like Win32: EDX:EAX
+				//ctx.SetInstruction(Instruction.MovInstruction, new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.R8), opL);
+				//ctx.AppendInstruction(Instruction.MovInstruction, new RegisterOperand(HighType, GeneralPurposeRegister.R9), opH);
 
 				return;
 			}
