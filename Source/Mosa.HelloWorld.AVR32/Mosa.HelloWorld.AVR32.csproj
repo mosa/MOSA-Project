@@ -2,28 +2,30 @@
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
-    <ProductVersion>9.0.30729</ProductVersion>
+    <ProductVersion>9.0.21022</ProductVersion>
     <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{FF099D48-3FA5-4ED6-BBA0-1497D734962A}</ProjectGuid>
+    <ProjectGuid>{F5C47C68-67C3-47D2-8846-DD817C2E3999}</ProjectGuid>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <AssemblyKeyContainerName>
     </AssemblyKeyContainerName>
-    <AssemblyName>Mosa.Kernel.x86</AssemblyName>
+    <AssemblyName>Mosa.HelloWorld.AVR32</AssemblyName>
     <DefaultClientScript>JScript</DefaultClientScript>
     <DefaultHTMLPageLayout>Grid</DefaultHTMLPageLayout>
     <DefaultTargetSchema>IE50</DefaultTargetSchema>
     <DelaySign>false</DelaySign>
     <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-    <OutputType>Library</OutputType>
+    <OutputType>Exe</OutputType>
     <AppDesignerFolder>
     </AppDesignerFolder>
-    <RootNamespace>Mosa.Kernel.x86</RootNamespace>
+    <RootNamespace>Mosa.HelloWorld.AVR32</RootNamespace>
+    <StartupObject>Mosa.HelloWorld.AVR32.Boot</StartupObject>
     <FileUpgradeFlags>
     </FileUpgradeFlags>
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation />
     <TargetFrameworkProfile />
+    <NoStdLib>True</NoStdLib>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -41,9 +43,8 @@
     <RemoveIntegerChecks>False</RemoveIntegerChecks>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningLevel>4</WarningLevel>
-    <NoStdLib>true</NoStdLib>
+    <NoStdLib>True</NoStdLib>
     <DebugType>full</DebugType>
-    <NoWarn>0219,0414</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -51,7 +52,8 @@
     <ConfigurationOverrideFile>
     </ConfigurationOverrideFile>
     <DefineConstants>TRACE</DefineConstants>
-    <DocumentationFile>..\..\bin\Mosa.Kernel.x86.xml</DocumentationFile>
+    <DocumentationFile>
+    </DocumentationFile>
     <FileAlignment>4096</FileAlignment>
     <Optimize>true</Optimize>
     <OutputPath>..\..\bin\</OutputPath>
@@ -59,54 +61,29 @@
     <RemoveIntegerChecks>False</RemoveIntegerChecks>
     <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningLevel>2</WarningLevel>
+    <NoStdLib>True</NoStdLib>
     <DebugType>none</DebugType>
-    <NoStdLib>true</NoStdLib>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="Mosa.Internal\ExceptionEngine.cs" />
-    <Compile Include="KernelMemory.cs" />
-    <Compile Include="Mosa.Internal\RegisterContext.cs" />
-    <Compile Include="Mosa.Internal\Runtime.cs" />
-    <Compile Include="CMOS.cs" />
-    <Compile Include="Colors.cs" />
-    <Compile Include="CpuInfo.cs" />
-    <Compile Include="GDT.cs" />
-    <Compile Include="IdleTask.cs" />
-    <Compile Include="IDT.cs" />
-    <Compile Include="Kernel.cs" />
-    <Compile Include="Keyboard.cs" />
-    <Compile Include="Memory.cs" />
-    <Compile Include="Multiboot.cs" />
-    <Compile Include="PageFaultHandler.cs" />
-    <Compile Include="PageFrameAllocator.cs" />
-    <Compile Include="PageTable.cs" />
-    <Compile Include="Panic.cs" />
-    <Compile Include="ProgrammableInterruptController.cs" />
-    <Compile Include="ProcessManager.cs" />
-    <Compile Include="Screen.cs" />
-    <Compile Include="Smbios\BiosInformationStructure.cs" />
-    <Compile Include="Smbios\CpuStructure.cs" />
-    <Compile Include="Smbios\SmbiosManager.cs" />
-    <Compile Include="Smbios\SmbiosStructure.cs" />
-    <Compile Include="TaskManager.cs" />
-    <Compile Include="VirtualPageAllocator.cs" />
+    <Compile Include="Boot.cs" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Mosa.ClassLib\Mosa.ClassLib.csproj">
+      <Project>{27A3C89C-1967-45FF-A77E-94F44995C42C}</Project>
+      <Name>Mosa.ClassLib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Internal.Plug\Mosa.Internal.Plug.csproj">
+      <Project>{77961864-DB33-4189-804F-D774022C96E2}</Project>
+      <Name>Mosa.Internal.Plug</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Korlib\Korlib.csproj">
       <Project>{631BC4F3-E2D8-4319-814C-13904CAA17CE}</Project>
       <Name>Korlib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\Mosa.Platform.x86.Intrinsic\Mosa.Platform.x86.Intrinsic.csproj">
-      <Project>{A47B7998-4EE8-4AF8-9373-C664FDEDDC65}</Project>
-      <Name>Mosa.Platform.x86.Intrinsic</Name>
+    <ProjectReference Include="..\Mosa.Kernel.AVR32\Mosa.Kernel.AVR32.csproj">
+      <Project>{4CFF6607-4D83-46E6-A1D0-EF945311C98B}</Project>
+      <Name>Mosa.Kernel.AVR32</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
-  <PropertyGroup>
-    <PreBuildEvent>
-    </PreBuildEvent>
-    <PostBuildEvent>
-    </PostBuildEvent>
-  </PropertyGroup>
+  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

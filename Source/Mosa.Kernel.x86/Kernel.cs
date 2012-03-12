@@ -27,7 +27,7 @@ namespace Mosa.Kernel.x86
 			Multiboot.Setup();
 			Screen.Goto(24, 1);
 			//Screen.Write('2');
-			PIC.Setup();
+			ProgrammableInterruptController.Setup();
 			Screen.Goto(24, 2);
 			//Screen.Write('3');
 			GDT.Setup();

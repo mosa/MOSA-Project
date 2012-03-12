@@ -8,7 +8,7 @@
  */
 
 using Mosa.DeviceSystem;
-using Mosa.Kernel;
+using Mosa.Kernel.x86;
 using Mosa.Platform.x86.Intrinsic;
 
 namespace Mosa.CoolWorld.x86.HAL

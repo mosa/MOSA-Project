@@ -9,7 +9,7 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-using Mosa.Kernel;
+using Mosa.Kernel.x86;
 using Mosa.Platform.x86.Intrinsic;
 
 namespace Mosa.Internal

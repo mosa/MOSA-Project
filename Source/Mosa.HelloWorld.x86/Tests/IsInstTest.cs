@@ -6,8 +6,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
-
 namespace Mosa.HelloWorld.x86.Tests
 {
 	public interface IAA { }

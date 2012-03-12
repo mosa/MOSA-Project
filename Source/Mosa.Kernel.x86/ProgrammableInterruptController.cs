@@ -14,7 +14,7 @@ namespace Mosa.Kernel.x86
 	/// <summary>
 	/// Programmable Interrupt Controller (PIC) 
 	/// </summary>
-	public static class PIC
+	public static class ProgrammableInterruptController
 	{
 		private const byte ICW1_ICW4 = 0x01;
 		private const byte ICW1_SingleCascadeMode = 0x02;

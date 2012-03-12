@@ -7,7 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-namespace Mosa.Kernel.x86
+namespace Mosa.Kernel.AVR32
 {
 	/// <summary>
 	/// Kernel Memory Allocator - This is a pure HACK!
@@ -25,7 +25,7 @@ namespace Mosa.Kernel.x86
 				// Go allocate memory
 
 				_size = 1024 * 1024 * 64; // 64Mb
-				_heap = x86.ProcessManager.AllocateMemory(0, _size);
+				_heap = 0; // TODO: x86.ProcessManager.AllocateMemory(0, _size);
 				_used = 0;
 			}
 

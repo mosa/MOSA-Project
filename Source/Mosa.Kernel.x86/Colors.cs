@@ -5,7 +5,7 @@
  *
  */
 
-namespace Mosa.Kernel
+namespace Mosa.Kernel.x86
 {
 	public static class Colors
 	{

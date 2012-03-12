@@ -10,6 +10,7 @@
 using Mosa.DeviceDrivers.ISA;
 using Mosa.DeviceSystem;
 using Mosa.DeviceSystem.PCI;
+using Mosa.Kernel.x86;
 
 namespace Mosa.CoolWorld.x86
 {
@@ -191,7 +192,7 @@ namespace Mosa.CoolWorld.x86
 			Mosa.Kernel.x86.Screen.NextLine();
 			Mosa.CoolWorld.x86.Boot.BulletPoint();
 			Console.Write("Adding device ");
-			Boot.InBrackets(hardwareDevice.Name, Mosa.Kernel.Colors.White, Mosa.Kernel.Colors.LightGreen);
+			Boot.InBrackets(hardwareDevice.Name, Colors.White, Colors.LightGreen);
 			Console.WriteLine();
 
 			if (resourceManager.ClaimResources(hardwareResources))

@@ -63,6 +63,7 @@
     <NoStdLib>true</NoStdLib>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="KernelMemory.cs" />
     <Compile Include="Mosa.Internal\Runtime.cs" />
   </ItemGroup>
   <ItemGroup>
