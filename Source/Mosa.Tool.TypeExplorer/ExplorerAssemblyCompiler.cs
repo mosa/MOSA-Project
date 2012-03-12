@@ -11,6 +11,7 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.TypeSystem;
+using AVR32 = Mosa.Platform.AVR32;
 using x86 = Mosa.Platform.x86;
 
 namespace Mosa.Tool.TypeExplorer
@@ -41,9 +42,17 @@ namespace Mosa.Tool.TypeExplorer
 			return mc;
 		}
 
-		public static void Compile(ITypeSystem typeSystem, ITypeLayout typeLayout, IInternalTrace internalTrace)
+		public static void Compile(ITypeSystem typeSystem, ITypeLayout typeLayout, IInternalTrace internalTrace, string platform)
 		{
-			IArchitecture architecture = x86.Architecture.CreateArchitecture(x86.ArchitectureFeatureFlags.AutoDetect);
+			IArchitecture architecture;
+
+			switch (platform.ToLower())
+			{
+				case "x86": architecture = x86.Architecture.CreateArchitecture(x86.ArchitectureFeatureFlags.AutoDetect); break;
+				case "avr32": architecture = AVR32.Architecture.CreateArchitecture(AVR32.ArchitectureFeatureFlags.AutoDetect); break;
+				default:
+					architecture = x86.Architecture.CreateArchitecture(x86.ArchitectureFeatureFlags.AutoDetect); break;
+			}
 
 			CompilerOptions compilerOptions = new CompilerOptions();
 
