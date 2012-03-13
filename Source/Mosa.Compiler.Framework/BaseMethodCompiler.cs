@@ -490,7 +490,7 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Retrieves a basic block From its label.
+		/// Retrieves a basic block from its label.
 		/// </summary>
 		/// <param name="label">The label of the basic block.</param>
 		/// <returns>

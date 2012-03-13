@@ -59,6 +59,7 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 			base.Setup(compiler);
 
+			// FIXME: Below doesn't work. Need to get from the assembly pipeline (not the method pipeline)
 			plugStage = compiler.Pipeline.FindFirst<IPlugStage>();
 		}
 
@@ -67,6 +68,17 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		void IMethodCompilerStage.Run()
 		{
+			if (plugStage != null)
+			{
+				RuntimeMethod plug = plugStage.GetPlug(this.methodCompiler.Method);
+
+				if (plug != null)
+				{
+					// TODO: insert JMP instruction
+					return;
+				}
+			}
+
 			// TODO: Move genericTypePatcher to compiler level (from method level)
 			genericTypePatcher = new GenericTypePatcher(typeSystem);
 

@@ -15,7 +15,6 @@ using Mosa.Compiler.Metadata.Loader;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
 
-
 namespace Mosa.Compiler.Framework
 {
 	/// <summary>

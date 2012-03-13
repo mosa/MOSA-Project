@@ -28,10 +28,10 @@ namespace Mosa.Test.System
 
 		public IntPtr Address { get { return address; } }
 
-		public TestCaseMethodCompiler(TestCaseAssemblyCompiler compiler, IArchitecture architecture, ICompilationSchedulerStage compilationScheduler, RuntimeType type, RuntimeMethod method, IInternalTrace internalLog)
-			: base(type, method, compiler.Pipeline.FindFirst<IAssemblyLinker>(), architecture, compiler.TypeSystem, compiler.TypeLayout, null, compilationScheduler, internalLog)
+		public TestCaseMethodCompiler(TestCaseAssemblyCompiler assemblyCompiler, IArchitecture architecture, ICompilationSchedulerStage compilationScheduler, RuntimeType type, RuntimeMethod method, IInternalTrace internalLog)
+			: base(type, method, assemblyCompiler.Pipeline.FindFirst<IAssemblyLinker>(), architecture, assemblyCompiler.TypeSystem, assemblyCompiler.TypeLayout, null, compilationScheduler, internalLog)
 		{
-			this.assemblyCompiler = compiler;
+			this.assemblyCompiler = assemblyCompiler;
 
 			// Populate the pipeline
 			this.Pipeline.AddRange(new IMethodCompilerStage[] {

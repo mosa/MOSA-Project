@@ -100,7 +100,6 @@
     <Compile Include="ExceptionClauseHeader.cs" />
     <Compile Include="InstructionLogger.cs" />
     <Compile Include="LeaveSSA.cs" />
-    <Compile Include="ILoggerWriter.cs" />
     <Compile Include="OperandDeterminationStage.cs" />
     <Compile Include="Operands\SsaOperand.cs" />
     <Compile Include="Operands\VirtualRegisterOperand.cs" />
@@ -254,7 +253,7 @@
     <Compile Include="IR\ZeroExtendedMoveInstruction.cs" />
     <Compile Include="IVisitor.cs" />
     <Compile Include="IBranch.cs" />
-    <Compile Include="IIRnstruction.cs" />
+    <Compile Include="IIRInstruction.cs" />
     <Compile Include="IPlatformInstruction.cs" />
     <Compile Include="CIL\ICILInstruction.cs" />
     <Compile Include="IInstruction.cs" />
