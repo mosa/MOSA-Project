@@ -7,9 +7,9 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Linker;
+using Mosa.Compiler.LinkerFormat.Elf;
 
 namespace Mosa.Tool.Compiler.Stages
 {
@@ -36,6 +36,7 @@ namespace Mosa.Tool.Compiler.Stages
 			this.OutputFile = compiler.CompilerOptions.OutputFile;
 			this.FileAlignment = compiler.CompilerOptions.Elf32.FileAlignment;
 			this.IsLittleEndian = compiler.Architecture.IsLittleEndian;
+			this.Machine = (MachineType)compiler.Architecture.ElfMachineType;
 		}
 
 		#endregion // IAssemblyCompilerStage members

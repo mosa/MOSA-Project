@@ -34,6 +34,14 @@ namespace Mosa.Platform.x86
 		public override bool IsLittleEndian { get { return true; } }
 
 		/// <summary>
+		/// Gets the type of the elf machine.
+		/// </summary>
+		/// <value>
+		/// The type of the elf machine.
+		/// </value>
+		public override ushort ElfMachineType { get { return 3; } }
+
+		/// <summary>
 		/// Holds the calling conversion
 		/// </summary>
 		private ICallingConvention callingConvention;

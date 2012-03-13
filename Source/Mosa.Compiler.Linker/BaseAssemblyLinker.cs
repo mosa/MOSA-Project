@@ -13,7 +13,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Text;
-
+using Mosa.Compiler.LinkerFormat.Elf;
 
 namespace Mosa.Compiler.Linker
 {
@@ -54,6 +54,11 @@ namespace Mosa.Compiler.Linker
 		/// </summary>
 		protected bool IsLittleEndian;
 
+		/// <summary>
+		/// 
+		/// </summary>
+		protected MachineType Machine;
+
 		#endregion // Data members
 
 		#region Construction
@@ -76,8 +81,6 @@ namespace Mosa.Compiler.Linker
 		public virtual void Run()
 		{
 			long address;
-
-			AddVmCalls(symbols);
 
 			// Check if we have unresolved requests and try to link them
 			List<string> members = new List<string>(linkRequests.Keys);
@@ -118,10 +121,6 @@ namespace Mosa.Compiler.Linker
 		/// <param name="methodRelativeBase">The method relative base.</param>
 		/// <param name="targetAddress">The position in code, where it should be patched.</param>
 		protected abstract void ApplyPatch(LinkType linkType, long methodAddress, long methodOffset, long methodRelativeBase, long targetAddress);
-
-		protected virtual void AddVmCalls(IDictionary<string, LinkerSymbol> virtualMachineCalls)
-		{
-		}
 
 		#endregion // Methods
 

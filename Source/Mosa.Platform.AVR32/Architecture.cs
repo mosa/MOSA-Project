@@ -34,6 +34,14 @@ namespace Mosa.Platform.AVR32
 		public override bool IsLittleEndian { get { return false; } }
 
 		/// <summary>
+		/// Gets the type of the elf machine.
+		/// </summary>
+		/// <value>
+		/// The type of the elf machine.
+		/// </value>
+		public override ushort ElfMachineType { get { return 0x18AD; } }
+
+		/// <summary>
 		/// Holds the calling conversion
 		/// </summary>
 		private ICallingConvention callingConvention;

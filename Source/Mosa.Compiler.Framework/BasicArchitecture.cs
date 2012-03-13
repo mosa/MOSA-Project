@@ -28,6 +28,14 @@ namespace Mosa.Compiler.Framework
 		public abstract bool IsLittleEndian { get; }
 
 		/// <summary>
+		/// Gets the type of the elf machine.
+		/// </summary>
+		/// <value>
+		/// The type of the elf machine.
+		/// </value>
+		public abstract ushort ElfMachineType { get; }
+
+		/// <summary>
 		/// Holds the native type of the architecture.
 		/// </summary>
 		private SigType nativeType;

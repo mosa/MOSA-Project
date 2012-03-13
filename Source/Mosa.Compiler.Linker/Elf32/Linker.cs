@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Mosa.Compiler.Common;
+using Mosa.Compiler.LinkerFormat.Elf;
 using Mosa.Compiler.LinkerFormat.Elf32;
 
 namespace Mosa.Compiler.Linker.Elf32
@@ -224,7 +225,7 @@ namespace Mosa.Compiler.Linker.Elf32
 			{
 				Header header = new Header();
 				header.Type = FileType.Executable;
-				header.Machine = MachineType.Intel386;
+				header.Machine = Machine;
 				header.SectionHeaderNumber = (ushort)(Sections.Count + 2);
 				header.SectionHeaderOffset = header.ElfHeaderSize;
 

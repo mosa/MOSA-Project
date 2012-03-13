@@ -10,6 +10,7 @@
 using System;
 using System.IO;
 using Mosa.Compiler.Common;
+using Mosa.Compiler.LinkerFormat.Elf;
 
 namespace Mosa.Compiler.LinkerFormat.Elf32
 {

@@ -39,7 +39,7 @@
     <Compile Include="Elf32\IdentClass.cs" />
     <Compile Include="Elf32\IdentData.cs" />
     <Compile Include="Elf32\IdentIndex.cs" />
-    <Compile Include="Elf32\MachineType.cs" />
+    <Compile Include="Elf\MachineType.cs" />
     <Compile Include="Elf32\ProgramHeader.cs" />
     <Compile Include="Elf32\ProgramHeaderFlags.cs" />
     <Compile Include="Elf32\ProgramHeaderType.cs" />
@@ -50,7 +50,6 @@
     <Compile Include="Elf64\IdentClass.cs" />
     <Compile Include="Elf64\IdentData.cs" />
     <Compile Include="Elf64\IdentIndex.cs" />
-    <Compile Include="Elf64\MachineType.cs" />
     <Compile Include="Elf64\ProgramHeader.cs" />
     <Compile Include="Elf64\SymbolTableEntry.cs" />
     <Compile Include="Elf64\Version.cs" />

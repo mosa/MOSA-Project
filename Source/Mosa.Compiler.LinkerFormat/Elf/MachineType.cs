@@ -7,7 +7,7 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-namespace Mosa.Compiler.LinkerFormat.Elf64
+namespace Mosa.Compiler.LinkerFormat.Elf
 {
 	/// <summary>
 	/// 
@@ -50,5 +50,9 @@ namespace Mosa.Compiler.LinkerFormat.Elf64
 		/// MIPS RS4000 Big-Endian
 		/// </summary>
 		MipsRS4000 = 0xA,
+		/// <summary>
+		/// Atmel AVR32
+		/// </summary>
+		AVR32 = 0x18AD
 	}
 }

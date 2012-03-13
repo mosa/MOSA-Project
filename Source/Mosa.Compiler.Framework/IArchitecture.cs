@@ -34,6 +34,14 @@ namespace Mosa.Compiler.Framework
 		bool IsLittleEndian { get; }
 
 		/// <summary>
+		/// Gets the type of the elf machine.
+		/// </summary>
+		/// <value>
+		/// The type of the elf machine.
+		/// </value>
+		ushort ElfMachineType { get; }
+
+		/// <summary>
 		/// Returns the type, which represents a native (unsigned) on the VES stack.
 		/// </summary>
 		SigType NativeType { get; }
