@@ -41,6 +41,7 @@
                     <include name="CIL/BreakInstruction.cs"/>
                     <include name="BaseAssemblyCompilerStage.cs"/>
                     <include name="ConstantFoldingStage.cs"/>
+                    <include name="IPlugStage.cs"/>
                     <include name="ITypeInitializerSchedulerStage.cs"/>
                     <include name="PlugStage.cs"/>
                     <include name="ExceptionPrologueStage.cs"/>
@@ -51,7 +52,6 @@
                     <include name="ExceptionClauseHeader.cs"/>
                     <include name="InstructionLogger.cs"/>
                     <include name="LeaveSSA.cs"/>
-                    <include name="ILoggerWriter.cs"/>
                     <include name="OperandDeterminationStage.cs"/>
                     <include name="Operands/SsaOperand.cs"/>
                     <include name="Operands/VirtualRegisterOperand.cs"/>
@@ -205,7 +205,7 @@
                     <include name="IR/ZeroExtendedMoveInstruction.cs"/>
                     <include name="IVisitor.cs"/>
                     <include name="IBranch.cs"/>
-                    <include name="IIRnstruction.cs"/>
+                    <include name="IIRInstruction.cs"/>
                     <include name="IPlatformInstruction.cs"/>
                     <include name="CIL/ICILInstruction.cs"/>
                     <include name="IInstruction.cs"/>

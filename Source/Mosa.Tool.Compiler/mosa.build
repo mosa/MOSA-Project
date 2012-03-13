@@ -24,7 +24,6 @@
                     <include name="AotMethodCompiler.cs"/>
                     <include name="Compiler.cs"/>
                     <include name="Stages/InstructionStatisticsStage.cs"/>
-                    <include name="Stages/CilHeaderBuilderStage.cs"/>
                     <include name="NDesk.Options.cs"/>
                     <include name="Program.cs"/>
                     <include name="Stages/Multiboot0695AssemblyStage.cs"/>

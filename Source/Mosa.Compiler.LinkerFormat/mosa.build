@@ -19,7 +19,7 @@
                     <include name="Elf32/IdentClass.cs"/>
                     <include name="Elf32/IdentData.cs"/>
                     <include name="Elf32/IdentIndex.cs"/>
-                    <include name="Elf32/MachineType.cs"/>
+                    <include name="Elf/MachineType.cs"/>
                     <include name="Elf32/ProgramHeader.cs"/>
                     <include name="Elf32/ProgramHeaderFlags.cs"/>
                     <include name="Elf32/ProgramHeaderType.cs"/>
@@ -30,7 +30,6 @@
                     <include name="Elf64/IdentClass.cs"/>
                     <include name="Elf64/IdentData.cs"/>
                     <include name="Elf64/IdentIndex.cs"/>
-                    <include name="Elf64/MachineType.cs"/>
                     <include name="Elf64/ProgramHeader.cs"/>
                     <include name="Elf64/SymbolTableEntry.cs"/>
                     <include name="Elf64/Version.cs"/>
