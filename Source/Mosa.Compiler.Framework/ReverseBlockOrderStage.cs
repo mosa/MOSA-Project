@@ -17,7 +17,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Runs the specified compiler.
 		/// </summary>
-		public void Run()
+		void IMethodCompilerStage.Run()
 		{
 			for (int i = 1; i <= basicBlocks.Count / 2; i++)
 			{

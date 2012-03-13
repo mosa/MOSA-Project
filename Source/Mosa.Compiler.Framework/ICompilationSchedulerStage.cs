@@ -14,8 +14,16 @@ namespace Mosa.Compiler.Framework
 
 	public interface ICompilationSchedulerStage
 	{
+		/// <summary>
+		/// Schedules the type for compilation.
+		/// </summary>
+		/// <param name="type">The type.</param>
 		void ScheduleTypeForCompilation(RuntimeType type);
 
-		//void ScheduleMethodForCompilation(RuntimeMethod method);
+		/// <summary>
+		/// Schedules the method for compilation.
+		/// </summary>
+		/// <param name="method">The method.</param>
+		void ScheduleMethodForCompilation(RuntimeMethod method);
 	}
 }

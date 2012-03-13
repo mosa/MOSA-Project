@@ -20,15 +20,9 @@ namespace Mosa.Compiler.Framework
 {
 	public class StaticAllocationResolutionStage : BaseMethodCompilerStage, IMethodCompilerStage
 	{
-		private IAssemblyLinker linker;
 
-		public StaticAllocationResolutionStage()
+		void IMethodCompilerStage.Run()
 		{
-		}
-
-		public void Run()
-		{
-			this.linker = this.methodCompiler.Linker;
 
 			if (this.methodCompiler.Method.Name == @".cctor")
 			{
@@ -60,13 +54,13 @@ namespace Mosa.Compiler.Framework
 
 			// Allocate a linker symbol to refer to for this allocation. Use the destination field name as the linker symbol name.
 			string symbolName = assignment.RuntimeField.ToString() + @"<<$cctor";
-			using (var stream = this.linker.Allocate(symbolName, SectionKind.BSS, typeLayout.GetTypeSize(allocatedType), 4))
+			using (var stream = methodCompiler.Linker.Allocate(symbolName, SectionKind.BSS, typeLayout.GetTypeSize(allocatedType), 4))
 			{
 				// FIXME: Do we have to initialize this?
 				string methodTableSymbol = GetMethodTableForType(allocatedType);
 				
 				if (methodTableSymbol != null)
-					linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, symbolName, 0, 0, methodTableSymbol, IntPtr.Zero);
+					methodCompiler.Linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, symbolName, 0, 0, methodTableSymbol, IntPtr.Zero);
 			}
 
 			// Issue a load request before the newobj and before the assignment.

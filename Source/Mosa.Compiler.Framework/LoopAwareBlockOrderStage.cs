@@ -143,7 +143,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Runs the specified compiler.
 		/// </summary>
-		public void Run()
+		void IMethodCompilerStage.Run()
 		{
 			// Retrieve the first block
 			_first = FindBlock(-1);

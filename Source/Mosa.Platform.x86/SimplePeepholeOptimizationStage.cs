@@ -152,7 +152,7 @@ namespace Mosa.Platform.x86
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		public override void Run()
+		void IMethodCompilerStage.Run()
 		{
 			Window window = new Window(5);
 

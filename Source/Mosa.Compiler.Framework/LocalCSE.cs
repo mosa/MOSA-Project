@@ -97,7 +97,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		public void Run()
+		void IMethodCompilerStage.Run()
 		{
 			foreach (BasicBlock block in basicBlocks)
 				EliminateCommonSubexpressions(new Context(instructionSet, block));

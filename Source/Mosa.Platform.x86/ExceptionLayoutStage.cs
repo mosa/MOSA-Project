@@ -37,7 +37,7 @@ namespace Mosa.Platform.x86
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		public void Run()
+		void IMethodCompilerStage.Run()
 		{
 			codeEmitter = methodCompiler.Pipeline.FindFirst<CodeGenerationStage>().CodeEmitter;
 

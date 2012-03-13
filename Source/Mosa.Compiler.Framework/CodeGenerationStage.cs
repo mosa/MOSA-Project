@@ -45,7 +45,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		public void Run()
+		void IMethodCompilerStage.Run()
 		{
 			// Retrieve a stream to place the code into
 			using (codeStream = methodCompiler.RequestCodeStream())

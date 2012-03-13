@@ -61,7 +61,7 @@ namespace Mosa.Platform.x86
 		/// <summary>
 		/// Runs the specified method compiler.
 		/// </summary>
-		public void Run()
+		void IMethodCompilerStage.Run()
 		{
 			Context ctxEpilogue = CreateContext(FindBlock(Int32.MaxValue));
 			ctxEpilogue.GotoLast();

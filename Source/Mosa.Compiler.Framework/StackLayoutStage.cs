@@ -31,7 +31,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Runs the specified method compiler.
 		/// </summary>
-		public void Run()
+		void IMethodCompilerStage.Run()
 		{
 			List<StackOperand> locals = CollectLocalVariablesFromIL();
 

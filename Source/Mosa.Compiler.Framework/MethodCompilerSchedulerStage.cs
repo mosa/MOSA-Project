@@ -19,6 +19,9 @@ namespace Mosa.Compiler.Framework
 	/// </summary>
 	public class MethodCompilerSchedulerStage : BaseAssemblyCompilerStage, IAssemblyCompilerStage, ICompilationSchedulerStage, IPipelineStage
 	{
+
+		#region Data Members
+
 		private readonly Queue<RuntimeMethod> methodQueue;
 
 		private readonly Queue<RuntimeType> typeQueue;
@@ -26,6 +29,8 @@ namespace Mosa.Compiler.Framework
 		private readonly Dictionary<RuntimeType, RuntimeType> compiled;
 
 		private readonly HashSet<string> alreadyCompiled;
+
+		#endregion // Data Members
 
 		public MethodCompilerSchedulerStage()
 		{
@@ -50,10 +55,46 @@ namespace Mosa.Compiler.Framework
 
 		#endregion // IAssemblyCompilerStage members
 
+		#region ICompilationSchedulerStage members
+
+		void ICompilationSchedulerStage.ScheduleMethodForCompilation(RuntimeMethod method)
+		{
+			if (method == null)
+				throw new ArgumentNullException(@"method");
+
+			if (!method.IsGeneric)
+			{
+				Trace(CompilerEvent.SchedulingMethod, method.ToString());
+				methodQueue.Enqueue(method);
+			}
+		}
+
+		void ICompilationSchedulerStage.ScheduleTypeForCompilation(RuntimeType type)
+		{
+			if (type == null)
+				throw new ArgumentNullException(@"type");
+
+			if (compiled.ContainsKey(type) || alreadyCompiled.Contains(type.ToString()))
+				return;
+
+			if (!type.IsGeneric)
+			{
+				Trace(CompilerEvent.SchedulingType, type.FullName);
+
+				typeQueue.Enqueue(type);
+				if (compiled.ContainsKey(type))
+					compiled.Remove(type);
+				compiled.Add(type, type);
+				alreadyCompiled.Add(type.ToString());
+			}
+		}
+
+		#endregion // ICompilationSchedulerStage members
+
 		private void CompileType(RuntimeType type)
 		{
 			Trace(CompilerEvent.CompilingMethod, type.FullName);
-			
+
 			if (type.ContainsOpenGenericParameters)
 				return;
 
@@ -78,7 +119,7 @@ namespace Mosa.Compiler.Framework
 					continue;
 				}
 
-				ScheduleMethodForCompilation(method);
+				((ICompilationSchedulerStage)this).ScheduleMethodForCompilation(method);
 			}
 
 			CompilePendingMethods();
@@ -115,43 +156,8 @@ namespace Mosa.Compiler.Framework
 
 		protected virtual void HandleCompilationException(Exception e)
 		{
+			// TODO
 		}
 
-		void ICompilationSchedulerStage.ScheduleTypeForCompilation(RuntimeType type)
-		{
-			ScheduleTypeForCompilation(type);
-		}
-
-		public void ScheduleTypeForCompilation(RuntimeType type)
-		{
-			if (type == null)
-				throw new ArgumentNullException(@"type");
-
-			if (compiled.ContainsKey(type) || alreadyCompiled.Contains(type.ToString()))
-				return;
-
-			if (!type.IsGeneric)
-			{
-				Trace(CompilerEvent.SchedulingType, type.FullName);
-
-				typeQueue.Enqueue(type);
-				if (compiled.ContainsKey(type))
-					compiled.Remove(type);
-				compiled.Add(type, type);
-				alreadyCompiled.Add(type.ToString());
-			}
-		}
-
-		protected void ScheduleMethodForCompilation(RuntimeMethod method)
-		{
-			if (method == null)
-				throw new ArgumentNullException(@"method");
-
-			if (!method.IsGeneric)
-			{
-				Trace(CompilerEvent.SchedulingMethod, method.ToString());
-				methodQueue.Enqueue(method);
-			}
-		}
 	}
 }

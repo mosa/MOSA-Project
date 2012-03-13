@@ -11,7 +11,20 @@
 
 namespace Mosa.Compiler.InternalTrace
 {
-	public enum CompilerEvent { CompilingMethod, CompilingType, Linking, AssemblyStageStart, AssemblyStageEnd, DebugInfo, SchedulingType, SchedulingMethod, Error, Warning };
+	public enum CompilerEvent
+	{
+		CompilingMethod,
+		CompilingType,
+		Linking,
+		AssemblyStageStart,
+		AssemblyStageEnd,
+		DebugInfo,
+		SchedulingType,
+		SchedulingMethod,
+		Plug,
+		Error,
+		Warning
+	};
 
 	public static class CompilerEventExtension
 	{

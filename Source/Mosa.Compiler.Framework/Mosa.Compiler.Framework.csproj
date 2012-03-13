@@ -89,6 +89,7 @@
     <Compile Include="CIL\BreakInstruction.cs" />
     <Compile Include="BaseAssemblyCompilerStage.cs" />
     <Compile Include="ConstantFoldingStage.cs" />
+    <Compile Include="IPlugStage.cs" />
     <Compile Include="ITypeInitializerSchedulerStage.cs" />
     <Compile Include="PlugStage.cs" />
     <Compile Include="ExceptionPrologueStage.cs" />

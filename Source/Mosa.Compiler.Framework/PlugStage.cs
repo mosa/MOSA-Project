@@ -20,7 +20,7 @@ namespace Mosa.Compiler.Framework
 	/// <summary>
 	/// Emits metadata for assemblies and types
 	/// </summary>
-	public class PlugStage : BaseAssemblyCompilerStage, IAssemblyCompilerStage
+	public class PlugStage : BaseAssemblyCompilerStage, IAssemblyCompilerStage, IPlugStage
 	{
 		#region Data members
 
@@ -33,6 +33,20 @@ namespace Mosa.Compiler.Framework
 		protected RuntimeType plugMethodAttribute;
 
 		#endregion // Data members
+
+		#region IPlugStage members
+
+		/// <summary>
+		/// Gets the plug.
+		/// </summary>
+		/// <param name="method">The method.</param>
+		/// <returns></returns>
+		RuntimeMethod IPlugStage.GetPlug(RuntimeMethod method)
+		{
+			return plugMethods[method];
+		}
+
+		#endregion // IPlugStage members
 
 		#region IAssemblyCompilerStage members
 
@@ -123,7 +137,7 @@ namespace Mosa.Compiler.Framework
 								{
 									if (targetMethod.Signature.Matches(method.Signature))
 									{
-										plugMethods.Add(targetMethod, method);
+										Patch(targetMethod, method);
 										break;
 									}
 								}
@@ -131,7 +145,7 @@ namespace Mosa.Compiler.Framework
 								{
 									if (MatchesWithStaticThis(targetMethod, method))
 									{
-										plugMethods.Add(targetMethod, method);
+										Patch(targetMethod, method);
 										break;
 									}
 								}
@@ -141,6 +155,12 @@ namespace Mosa.Compiler.Framework
 					}
 				}
 			}
+		}
+
+		private void Patch(RuntimeMethod targetMethod, RuntimeMethod method)
+		{
+			Trace(InternalTrace.CompilerEvent.Plug, targetMethod.ToString() + " with " + method.ToString());
+			plugMethods.Add(targetMethod, method);
 		}
 
 		private RuntimeAttribute GetAttribute(List<RuntimeAttribute> attributes, RuntimeType plugAttribute)
@@ -234,7 +254,6 @@ namespace Mosa.Compiler.Framework
 			return target.Substring(pos + 1);
 		}
 		#endregion // IAssemblyCompilerStage members
-
 
 	}
 }

@@ -28,7 +28,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		public void Run()
+		void IMethodCompilerStage.Run()
 		{
 			for (int index = 0; index < this.basicBlocks.Count; index++)
 			{

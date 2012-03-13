@@ -40,14 +40,6 @@ namespace Mosa.Compiler.Framework.IR
 
 		#region IMethodCompilerStage Members
 
-		/// <summary>
-		/// Performs stage specific processing on the compiler context.
-		/// </summary>
-		public override void Run()
-		{
-			base.Run();
-		}
-
 		#endregion // IMethodCompilerStage Members
 
 		#region ICILVisitor

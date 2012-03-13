@@ -76,7 +76,7 @@ namespace Mosa.Tool.Compiler.Stages
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		public void Run()
+		void IMethodCompilerStage.Run()
 		{
 			numberOfMethods++;
 

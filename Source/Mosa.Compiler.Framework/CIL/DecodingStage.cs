@@ -40,17 +40,34 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// 
 		/// </summary>
-		private IGenericTypePatcher genericTypePatcher = null;
+		private IGenericTypePatcher genericTypePatcher;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		private IPlugStage plugStage;
 
 		#endregion // Data members
 
 		#region IMethodCompilerStage Members
 
 		/// <summary>
+		/// Setup stage specific processing on the compiler context.
+		/// </summary>
+		/// <param name="compiler">The compiler context to perform processing in.</param>
+		void IMethodCompilerStage.Setup(IMethodCompiler compiler)
+		{
+			base.Setup(compiler);
+
+			plugStage = compiler.Pipeline.FindFirst<IPlugStage>();
+		}
+
+		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		public void Run()
+		void IMethodCompilerStage.Run()
 		{
+			// TODO: Move genericTypePatcher to compiler level (from method level)
 			genericTypePatcher = new GenericTypePatcher(typeSystem);
 
 			using (Stream code = methodCompiler.GetInstructionStream())

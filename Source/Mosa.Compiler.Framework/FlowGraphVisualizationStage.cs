@@ -56,7 +56,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Runs the specified compiler.
 		/// </summary>
-		public void Run()
+		void IMethodCompilerStage.Run()
 		{
 			if (!methodCount.ContainsKey(methodCompiler.Method.Name))
 				methodCount[methodCompiler.Method.Name] = 0;

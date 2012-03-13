@@ -39,7 +39,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		public void Run()
+		void IMethodCompilerStage.Run()
 		{
 			// Create the prologue block
 			Context ctx = new Context(instructionSet);

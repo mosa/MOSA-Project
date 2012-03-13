@@ -78,7 +78,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		public void Run()
+		void IMethodCompilerStage.Run()
 		{
 			this.CollectAssignments();
 			switch (this.strategy)
