@@ -51,6 +51,8 @@ namespace Mosa.Platform.AVR32.Instructions
 					else
 						throw new OverflowException();
 			}
+			else
+				throw new Exception("Not supported combination of operands");
 		}
 
 		/// <summary>
@@ -60,7 +62,7 @@ namespace Mosa.Platform.AVR32.Instructions
 		/// <param name="context">The context.</param>
 		public override void Visit(IAVR32Visitor visitor, Context context)
 		{
-			visitor.Mov(context);
+			visitor.Ld(context);
 		}
 
 		#endregion // Methods

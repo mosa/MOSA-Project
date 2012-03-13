@@ -13,7 +13,7 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.AVR32.Instructions
 {
 	/// <summary>
-	/// 
+	/// Nop instruction
 	/// </summary>
 	public class NopInstruction : BaseInstruction
 	{

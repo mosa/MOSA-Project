@@ -7,8 +7,7 @@
 
 using System;
 using Mosa.Kernel;
-using Mosa.Kernel.x86;
-using Mosa.Kernel.x86.Smbios;
+using Mosa.Kernel.AVR32;
 
 namespace Mosa.Minimal
 {
@@ -16,6 +15,7 @@ namespace Mosa.Minimal
     {
         static void Main()
         {
+            Mosa.Kernel.AVR32.Kernel.Setup();
         }
     }
 }

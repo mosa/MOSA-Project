@@ -31,22 +31,24 @@ namespace Mosa.Platform.AVR32.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
-            if (context.OperandCount == 0)
-            {
-                int displacement = context.Branch.Targets[0];
+			if (context.OperandCount == 0)
+			{
+				int displacement = context.Branch.Targets[0];
 
-                if (IsBetween(displacement, -1024, 1022))
-                {
-                    emitter.EmitRelativeJumpAndCall(0x01, context.Branch.Targets[0]);
-                }
-                else
-                    if (IsBetween(displacement, -2097151, 2097150))
-                    {
-                        emitter.EmitNoRegisterAndK21(0x50, context.Branch.Targets[0]);
-                    }
-                    else
-                        throw new OverflowException();
-            }
+				if (IsBetween(displacement, -1024, 1022))
+				{
+					emitter.EmitRelativeJumpAndCall(0x01, context.Branch.Targets[0]);
+				}
+				else
+					if (IsBetween(displacement, -2097151, 2097150))
+					{
+						emitter.EmitNoRegisterAndK21(0x50, context.Branch.Targets[0]);
+					}
+					else
+						throw new OverflowException();
+			}
+			else
+				throw new Exception("Not supported combination of operands");
 		}
 
 		/// <summary>
