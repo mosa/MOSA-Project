@@ -438,7 +438,7 @@ namespace Mosa.Tool.Compiler
 			sb.Append(" > Input file(s): ").AppendLine(String.Join(", ", new List<string>(GetInputFileNames()).ToArray()));
 			sb.Append(" > Architecture: ").AppendLine(compilerOptions.Architecture.GetType().FullName);
 			sb.Append(" > Binary format: ").AppendLine(((IPipelineStage)compilerOptions.Linker).Name);
-			sb.Append(" > Boot format: ").AppendLine(((IPipelineStage)compilerOptions.BootCompilerStage).Name);
+			sb.Append(" > Boot format: ").AppendLine((compilerOptions.BootCompilerStage == null) ? "None" : ((IPipelineStage)compilerOptions.BootCompilerStage).Name);
 			sb.Append(" > Is executable: ").AppendLine(isExecutable.ToString());
 			return sb.ToString();
 		}
@@ -536,8 +536,8 @@ namespace Mosa.Tool.Compiler
 				case "mb0.7":
 					return new Multiboot0695AssemblyStage();
 
-				//case "null":
-				//    return new NullbootAssemblyStage();
+				case "null":
+					return null;
 
 				default:
 					throw new OptionException(String.Format("Unknown or unsupported boot format {0}.", format), "boot");

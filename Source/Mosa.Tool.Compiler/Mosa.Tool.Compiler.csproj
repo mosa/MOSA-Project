@@ -81,7 +81,6 @@
     <Compile Include="Stages\InstructionStatisticsStage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Stages\CilHeaderBuilderStage.cs" />
     <Compile Include="NDesk.Options.cs">
       <SubType>Code</SubType>
     </Compile>
