@@ -130,6 +130,11 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		private ExceptionClauseHeader exceptionClauseHeader = new ExceptionClauseHeader();
 
+		/// <summary>
+		/// Holds the assembly compiler
+		/// </summary>
+		private AssemblyCompiler assemblyCompiler;
+
 		#endregion // Data Members
 
 		#region Construction
@@ -141,7 +146,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="architecture">The target compilation Architecture.</param>
 		/// <param name="type">The type, which owns the method to compile.</param>
 		/// <param name="method">The method to compile by this instance.</param>
-		protected BaseMethodCompiler(RuntimeType type, RuntimeMethod method, IAssemblyLinker linker, IArchitecture architecture, ITypeSystem typeSystem, ITypeLayout typeLayout, InstructionSet instructionSet, ICompilationSchedulerStage compilationScheduler, IInternalTrace internalLog)
+		protected BaseMethodCompiler(AssemblyCompiler assemblyCompiler, RuntimeType type, RuntimeMethod method, IAssemblyLinker linker, IArchitecture architecture, ITypeSystem typeSystem, ITypeLayout typeLayout, InstructionSet instructionSet, ICompilationSchedulerStage compilationScheduler, IInternalTrace internalLog)
 		{
 			if (architecture == null)
 				throw new ArgumentNullException(@"architecture");
@@ -152,6 +157,7 @@ namespace Mosa.Compiler.Framework
 			if (compilationScheduler == null)
 				throw new ArgumentNullException(@"compilationScheduler");
 
+			this.assemblyCompiler = assemblyCompiler;
 			this.linker = linker;
 			this.architecture = architecture;
 			this.method = method;
@@ -248,9 +254,14 @@ namespace Mosa.Compiler.Framework
 		public ExceptionClauseHeader ExceptionClauseHeader { get { return exceptionClauseHeader; } }
 
 		/// <summary>
-		/// 
+		/// Gets the local variables.
 		/// </summary>
 		public Operand[] LocalVariables { get { return this.locals; } }
+
+		/// <summary>
+		/// Gets the assembly compiler.
+		/// </summary>
+		public AssemblyCompiler AssemblyCompiler { get { return assemblyCompiler; } }
 
 		#endregion // Properties
 
@@ -399,8 +410,8 @@ namespace Mosa.Compiler.Framework
 				{
 					var classSigType = new ClassSigType(type.Token);
 					var decoder = this.Pipeline.FindFirst<IInstructionDecoder>();
-					var signatureType = 
-						this.Method.DeclaringType.ContainsOpenGenericParameters ? 
+					var signatureType =
+						this.Method.DeclaringType.ContainsOpenGenericParameters ?
 							decoder.GenericTypePatcher.PatchSignatureType(this.Method.Module, this.Method.DeclaringType as CilGenericType, type.Token) :
 							classSigType;
 
@@ -451,7 +462,7 @@ namespace Mosa.Compiler.Framework
 				throw new ArgumentNullException(@"localVariableSignature");
 
 			localsSig = localVariableSignature;
-												
+
 			locals = new Operand[localsSig.Locals.Length];
 
 			nextStackSlot = locals.Length + 1;

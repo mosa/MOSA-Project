@@ -37,10 +37,10 @@ namespace Mosa.Platform.x86
 		/// <summary>
 		/// Setup stage specific processing on the compiler context.
 		/// </summary>
-		/// <param name="compiler">The compiler context to perform processing in.</param>
-		void IMethodCompilerStage.Setup(IMethodCompiler compiler)
+		/// <param name="methodCompiler">The compiler context to perform processing in.</param>
+		void IMethodCompilerStage.Setup(IMethodCompiler methodCompiler)
 		{
-			base.Setup(compiler);
+			base.Setup(methodCompiler);
 
 			IStackLayoutProvider stackLayoutProvider = methodCompiler.Pipeline.FindFirst<IStackLayoutProvider>();
 

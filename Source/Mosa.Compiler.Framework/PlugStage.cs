@@ -43,7 +43,11 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		RuntimeMethod IPlugStage.GetPlug(RuntimeMethod method)
 		{
-			return plugMethods[method];
+			RuntimeMethod plug = null;
+
+			plugMethods.TryGetValue(method, out plug);
+
+			return plug;
 		}
 
 		#endregion // IPlugStage members

@@ -170,5 +170,10 @@ namespace Mosa.Compiler.Framework
 		/// Gets the local variables.
 		/// </summary>
 		Operand[] LocalVariables { get; }
+
+		/// <summary>
+		/// Gets the assembly compiler.
+		/// </summary>
+		AssemblyCompiler AssemblyCompiler { get; }
 	}
 }

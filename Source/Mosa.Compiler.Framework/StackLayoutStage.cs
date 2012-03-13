@@ -77,7 +77,7 @@ namespace Mosa.Compiler.Framework
 			// Allocate a list of locals
 			List<StackOperand> locals = new List<StackOperand>();
 
-			var localVariables = (methodCompiler as BaseMethodCompiler).LocalVariables;
+			var localVariables = methodCompiler.LocalVariables;
 
 			if (localVariables == null)
 				return locals;

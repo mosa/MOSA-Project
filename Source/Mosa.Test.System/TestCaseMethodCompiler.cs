@@ -22,17 +22,14 @@ namespace Mosa.Test.System
 {
 	class TestCaseMethodCompiler : BaseMethodCompiler
 	{
-		private readonly TestCaseAssemblyCompiler assemblyCompiler;
 
 		private IntPtr address = IntPtr.Zero;
 
 		public IntPtr Address { get { return address; } }
 
 		public TestCaseMethodCompiler(TestCaseAssemblyCompiler assemblyCompiler, IArchitecture architecture, ICompilationSchedulerStage compilationScheduler, RuntimeType type, RuntimeMethod method, IInternalTrace internalLog)
-			: base(type, method, assemblyCompiler.Pipeline.FindFirst<IAssemblyLinker>(), architecture, assemblyCompiler.TypeSystem, assemblyCompiler.TypeLayout, null, compilationScheduler, internalLog)
+			: base(assemblyCompiler, type, method, assemblyCompiler.Pipeline.FindFirst<IAssemblyLinker>(), architecture, assemblyCompiler.TypeSystem, assemblyCompiler.TypeLayout, null, compilationScheduler, internalLog)
 		{
-			this.assemblyCompiler = assemblyCompiler;
-
 			// Populate the pipeline
 			this.Pipeline.AddRange(new IMethodCompilerStage[] {
 				new DecodingStage(),
@@ -85,7 +82,7 @@ namespace Mosa.Test.System
 			if ((Method.Attributes & attrs) == attrs && Method.Name == ".cctor")
 			{
 				CCtor cctor = (CCtor)Marshal.GetDelegateForFunctionPointer(address, typeof(CCtor));
-				assemblyCompiler.QueueCCtorForInvocationAfterCompilation(cctor);
+				(AssemblyCompiler as TestCaseAssemblyCompiler).QueueCCtorForInvocationAfterCompilation(cctor);
 			}
 
 			base.EndCompile();

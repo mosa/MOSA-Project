@@ -54,13 +54,12 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// Setup stage specific processing on the compiler context.
 		/// </summary>
-		/// <param name="compiler">The compiler context to perform processing in.</param>
-		void IMethodCompilerStage.Setup(IMethodCompiler compiler)
+		/// <param name="methodCompiler">The compiler context to perform processing in.</param>
+		void IMethodCompilerStage.Setup(IMethodCompiler methodCompiler)
 		{
-			base.Setup(compiler);
+			base.Setup(methodCompiler);
 
-			// FIXME: Below doesn't work. Need to get from the assembly pipeline (not the method pipeline)
-			plugStage = compiler.Pipeline.FindFirst<IPlugStage>();
+			plugStage = methodCompiler.AssemblyCompiler.Pipeline.FindFirst<IPlugStage>();
 		}
 
 		/// <summary>
