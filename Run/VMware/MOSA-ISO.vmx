@@ -1,0 +1,19 @@
+.encoding = "windows-1252"
+config.version = "8"
+virtualHW.version = "4"
+scsi0.present = "TRUE"
+memsize = "256"
+displayName = "MOSA"
+guestOS = "other"
+priority.grabbed = "normal"
+priority.ungrabbed = "normal"
+
+
+virtualHW.productCompatibility = "hosted"
+ide0:0.present = "TRUE"
+ide0:0.fileName = "..\build\bootimage.iso"
+ide0:0.deviceType = "cdrom-image"
+
+uuid.location = "56 4d 67 cf 16 18 14 c3-0f 3f 31 7d b7 97 e6 8e"
+uuid.bios = "56 4d e7 2a dc 32 ba 37-f3 5a d2 f4 c3 74 71 d2"
+extendedConfigFile = "MOSA-ISO.vmxf"
