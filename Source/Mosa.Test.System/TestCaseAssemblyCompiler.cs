@@ -23,8 +23,8 @@ namespace Mosa.Test.System
 
 		private readonly TestAssemblyLinker linker;
 
-		private TestCaseAssemblyCompiler(IArchitecture architecture, ITypeSystem typeSystem, ITypeLayout typeLayout, IInternalTrace internalLog, CompilerOptions compilerOptions) :
-			base(architecture, typeSystem, typeLayout, internalLog, compilerOptions)
+		private TestCaseAssemblyCompiler(IArchitecture architecture, ITypeSystem typeSystem, ITypeLayout typeLayout, IInternalTrace internalTrace, CompilerOptions compilerOptions) :
+			base(architecture, typeSystem, typeLayout, internalTrace, compilerOptions)
 		{
 			linker = new TestAssemblyLinker();
 
@@ -63,7 +63,7 @@ namespace Mosa.Test.System
 
 		public override IMethodCompiler CreateMethodCompiler(ICompilationSchedulerStage schedulerStage, RuntimeType type, RuntimeMethod method)
 		{
-			IMethodCompiler mc = new TestCaseMethodCompiler(this, Architecture, schedulerStage, type, method, internalTrace);
+			IMethodCompiler mc = new TestCaseMethodCompiler(this, schedulerStage, type, method);
 			Architecture.ExtendMethodCompilerPipeline(mc.Pipeline);
 			return mc;
 		}

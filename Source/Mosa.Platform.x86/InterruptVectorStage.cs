@@ -14,7 +14,6 @@ using Mosa.Compiler.Linker;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
 
-
 namespace Mosa.Platform.x86
 {
 

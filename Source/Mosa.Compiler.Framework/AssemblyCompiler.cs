@@ -35,22 +35,22 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Holds the current type system during compilation.
 		/// </summary>
-		protected ITypeSystem typeSystem;
+		private ITypeSystem typeSystem;
 
 		/// <summary>
 		/// Holds the current type layout during complication
 		/// </summary>
-		protected ITypeLayout typeLayout;
+		private ITypeLayout typeLayout;
 
 		/// <summary>
 		/// Holds the current internal log
 		/// </summary>
-		protected IInternalTrace internalTrace;
+		private IInternalTrace internalTrace;
 
 		/// <summary>
 		/// Holds the compiler option set
 		/// </summary>
-		protected CompilerOptions compilerOptions;
+		private CompilerOptions compilerOptions;
 
 		#endregion // Data members
 
@@ -141,7 +141,7 @@ namespace Mosa.Compiler.Framework
 		{
 			get { return compilerOptions; }
 		}
-
+		
 		#endregion // Properties
 
 		#region Methods

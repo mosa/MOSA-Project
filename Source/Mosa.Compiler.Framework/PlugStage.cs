@@ -20,7 +20,7 @@ namespace Mosa.Compiler.Framework
 	/// <summary>
 	/// Emits metadata for assemblies and types
 	/// </summary>
-	public class PlugStage : BaseAssemblyCompilerStage, IAssemblyCompilerStage, IPlugStage
+	public class PlugStage : BaseAssemblyCompilerStage, IAssemblyCompilerStage, IPlugSystem
 	{
 		#region Data members
 
@@ -41,7 +41,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="method">The method.</param>
 		/// <returns></returns>
-		RuntimeMethod IPlugStage.GetPlug(RuntimeMethod method)
+		RuntimeMethod IPlugSystem.GetPlugMethod(RuntimeMethod method)
 		{
 			RuntimeMethod plug = null;
 

@@ -37,7 +37,7 @@ namespace Mosa.Tool.TypeExplorer
 
 		public override IMethodCompiler CreateMethodCompiler(ICompilationSchedulerStage schedulerStage, RuntimeType type, RuntimeMethod method)
 		{
-			IMethodCompiler mc = new ExplorerMethodCompiler(this, Architecture, schedulerStage, type, method, internalTrace);
+			IMethodCompiler mc = new ExplorerMethodCompiler(this, schedulerStage, type, method);
 			Architecture.ExtendMethodCompilerPipeline(mc.Pipeline);
 			return mc;
 		}

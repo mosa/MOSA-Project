@@ -45,10 +45,19 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
-			if (context.Operand1 is RegisterOperand)
-				emitter.Emit(JmpReg, context.Operand1);
+			Operand destinationOperand = context.Operand1;
+			SymbolOperand destinationSymbol = destinationOperand as SymbolOperand;
+
+			if (destinationSymbol != null)
+			{
+				emitter.WriteByte(0xE9);
+				emitter.Call(destinationSymbol);
+			}
 			else
-				emitter.EmitBranch(JMP, context.Branch.Targets[0]);
+				if (context.Operand1 is RegisterOperand)
+					emitter.Emit(JmpReg, context.Operand1);
+				else
+					emitter.EmitBranch(JMP, context.Branch.Targets[0]);
 		}
 
 		/// <summary>

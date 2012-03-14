@@ -118,7 +118,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Holds the internal logging interface
 		/// </summary>
-		protected IInternalTrace internalLog;
+		protected IInternalTrace internalTrace;
 
 		/// <summary>
 		/// Holds the blocks indexed by label
@@ -135,6 +135,11 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		private AssemblyCompiler assemblyCompiler;
 
+		/// <summary>
+		/// Holds the plug system
+		/// </summary>
+		private IPlugSystem plugSystem;
+
 		#endregion // Data Members
 
 		#region Construction
@@ -146,27 +151,24 @@ namespace Mosa.Compiler.Framework
 		/// <param name="architecture">The target compilation Architecture.</param>
 		/// <param name="type">The type, which owns the method to compile.</param>
 		/// <param name="method">The method to compile by this instance.</param>
-		protected BaseMethodCompiler(AssemblyCompiler assemblyCompiler, RuntimeType type, RuntimeMethod method, IAssemblyLinker linker, IArchitecture architecture, ITypeSystem typeSystem, ITypeLayout typeLayout, InstructionSet instructionSet, ICompilationSchedulerStage compilationScheduler, IInternalTrace internalLog)
+		protected BaseMethodCompiler(AssemblyCompiler assemblyCompiler, RuntimeType type, RuntimeMethod method, InstructionSet instructionSet, ICompilationSchedulerStage compilationScheduler)
 		{
-			if (architecture == null)
-				throw new ArgumentNullException(@"architecture");
-
-			if (linker == null)
-				throw new ArgumentNullException(@"linker");
-
 			if (compilationScheduler == null)
 				throw new ArgumentNullException(@"compilationScheduler");
 
 			this.assemblyCompiler = assemblyCompiler;
-			this.linker = linker;
-			this.architecture = architecture;
 			this.method = method;
 			this.type = type;
 			this.compilationScheduler = compilationScheduler;
 			this.moduleTypeSystem = method.Module;
-			this.typeSystem = typeSystem;
-			this.typeLayout = typeLayout;
-			this.internalLog = internalLog;
+
+			this.architecture = assemblyCompiler.Architecture;
+			this.typeSystem = assemblyCompiler.TypeSystem;
+			this.typeLayout = AssemblyCompiler.TypeLayout;
+			this.internalTrace = AssemblyCompiler.InternalTrace;
+
+			this.linker = assemblyCompiler.Pipeline.FindFirst<IAssemblyLinker>();
+			this.plugSystem = assemblyCompiler.Pipeline.FindFirst<IPlugSystem>();
 
 			this.parameters = new List<Operand>(new Operand[method.Parameters.Count]);
 			this.nextStackSlot = 0;
@@ -245,7 +247,7 @@ namespace Mosa.Compiler.Framework
 		/// Gets the internal logging interface
 		/// </summary>
 		/// <value>The log.</value>
-		public IInternalTrace InternalLog { get { return internalLog; } }
+		public IInternalTrace InternalLog { get { return internalTrace; } }
 
 		/// <summary>
 		/// Gets the exception clause header.
@@ -262,6 +264,11 @@ namespace Mosa.Compiler.Framework
 		/// Gets the assembly compiler.
 		/// </summary>
 		public AssemblyCompiler AssemblyCompiler { get { return assemblyCompiler; } }
+
+		/// <summary>
+		/// Gets the plug system.
+		/// </summary>
+		public IPlugSystem PlugSystem { get { return plugSystem; } }
 
 		#endregion // Properties
 

@@ -25,7 +25,7 @@ namespace Mosa.Compiler.Linker
 		/// <param name="instructionSet">The instruction set.</param>
 		/// <exception cref="System.ArgumentNullException"><paramref name="assemblyCompiler"/>, <paramref name="method"/> or <paramref name="instructionSet"/> is null.</exception>
 		public LinkerMethodCompiler(AssemblyCompiler assemblyCompiler, ICompilationSchedulerStage compilationScheduler, RuntimeMethod method, InstructionSet instructionSet)
-			: base(assemblyCompiler, method.DeclaringType, method, assemblyCompiler.Pipeline.FindFirst<IAssemblyLinker>(), assemblyCompiler.Architecture, assemblyCompiler.TypeSystem, assemblyCompiler.TypeLayout, instructionSet, compilationScheduler, null)
+			: base(assemblyCompiler, method.DeclaringType, method,  instructionSet, compilationScheduler)
 		{
 			this.CreateBlock(-1, 0);
 

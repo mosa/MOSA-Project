@@ -175,5 +175,10 @@ namespace Mosa.Compiler.Framework
 		/// Gets the assembly compiler.
 		/// </summary>
 		AssemblyCompiler AssemblyCompiler { get; }
+
+		/// <summary>
+		/// Gets the plug.
+		/// </summary>
+		IPlugSystem PlugSystem { get; }
 	}
 }

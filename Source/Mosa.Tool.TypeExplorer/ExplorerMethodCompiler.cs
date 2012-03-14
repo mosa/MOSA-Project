@@ -21,8 +21,8 @@ namespace Mosa.Tool.TypeExplorer
 	{
 		private IntPtr address = IntPtr.Zero;
 
-		public ExplorerMethodCompiler(ExplorerAssemblyCompiler assemblyCompiler, IArchitecture architecture, ICompilationSchedulerStage compilationScheduler, RuntimeType type, RuntimeMethod method, IInternalTrace internalTrace)
-			: base(assemblyCompiler, type, method, assemblyCompiler.Pipeline.FindFirst<IAssemblyLinker>(), architecture, assemblyCompiler.TypeSystem, assemblyCompiler.TypeLayout, null, compilationScheduler, internalTrace)
+		public ExplorerMethodCompiler(ExplorerAssemblyCompiler assemblyCompiler, ICompilationSchedulerStage compilationScheduler, RuntimeType type, RuntimeMethod method)
+			: base(assemblyCompiler, type, method, null, compilationScheduler)
 		{
 
 			// Populate the pipeline

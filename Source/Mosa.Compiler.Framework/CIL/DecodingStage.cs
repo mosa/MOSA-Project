@@ -16,6 +16,8 @@ using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.Metadata.Tables;
 using Mosa.Compiler.TypeSystem;
 using Mosa.Compiler.TypeSystem.Generic;
+using Mosa.Compiler.Framework.Operands;
+using IR = Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Compiler.Framework.CIL
 {
@@ -45,7 +47,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// 
 		/// </summary>
-		private IPlugStage plugStage;
+		private IPlugSystem plugSystem;
 
 		#endregion // Data members
 
@@ -59,7 +61,7 @@ namespace Mosa.Compiler.Framework.CIL
 		{
 			base.Setup(methodCompiler);
 
-			plugStage = methodCompiler.AssemblyCompiler.Pipeline.FindFirst<IPlugStage>();
+			plugSystem = methodCompiler.AssemblyCompiler.Pipeline.FindFirst<IPlugSystem>();
 		}
 
 		/// <summary>
@@ -67,13 +69,19 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		void IMethodCompilerStage.Run()
 		{
-			if (plugStage != null)
+			if (plugSystem != null)
 			{
-				RuntimeMethod plug = plugStage.GetPlug(this.methodCompiler.Method);
+				RuntimeMethod plugMethod = plugSystem.GetPlugMethod(this.methodCompiler.Method);
 
-				if (plug != null)
+				if (plugMethod != null)
 				{
-					// TODO: insert JMP instruction
+					SymbolOperand plugSymbol = SymbolOperand.FromMethod(plugMethod);
+
+					Context ctx = new Context(instructionSet);
+					ctx.AppendInstruction(IR.Instruction.JmpInstruction, null, plugSymbol);
+					ctx.Label = -1;
+					CreateBlock(-1, ctx.Index);
+
 					return;
 				}
 			}
