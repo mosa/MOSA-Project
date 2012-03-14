@@ -75,6 +75,7 @@ namespace Mosa.HelloWorld.x86.Tests
 			var generics2Test = new Generic2Test();
 			var isInstanceTest = new IsInstTest();
 			var exceptionTest = new ExceptionTest();
+			var plugTestTest = new PlugTestTest();
 
 			stringTest.Test();
 			interfaceTest.Test();
@@ -82,6 +83,7 @@ namespace Mosa.HelloWorld.x86.Tests
 			generics2Test.Test();
 			isInstanceTest.Test();
 			exceptionTest.Test();
+			plugTestTest.Test();
 		}
 
 		public void Test()
