@@ -41,7 +41,7 @@
                     <include name="CIL/BreakInstruction.cs"/>
                     <include name="BaseAssemblyCompilerStage.cs"/>
                     <include name="ConstantFoldingStage.cs"/>
-                    <include name="IPlugStage.cs"/>
+                    <include name="IPlugSystem.cs"/>
                     <include name="ITypeInitializerSchedulerStage.cs"/>
                     <include name="PlugStage.cs"/>
                     <include name="ExceptionPrologueStage.cs"/>
