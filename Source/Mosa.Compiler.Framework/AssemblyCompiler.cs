@@ -52,6 +52,11 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		private CompilerOptions compilerOptions;
 
+		/// <summary>
+		/// Holds the generic type patcher
+		/// </summary>
+		private IGenericTypePatcher genericTypePatcher;
+
 		#endregion // Data members
 
 		#region Construction
@@ -72,6 +77,7 @@ namespace Mosa.Compiler.Framework
 			this.typeLayout = typeLayout;
 			this.internalTrace = internalTrace;
 			this.compilerOptions = compilerOptions;
+			this.genericTypePatcher = new GenericTypePatcher(typeSystem);
 		}
 
 		#endregion // Construction
@@ -141,7 +147,18 @@ namespace Mosa.Compiler.Framework
 		{
 			get { return compilerOptions; }
 		}
-		
+
+		/// <summary>
+		/// Gets the generic type patcher.
+		/// </summary>
+		public IGenericTypePatcher GenericTypePatcher
+		{
+			get
+			{
+				return genericTypePatcher;
+			}
+		}
+
 		#endregion // Properties
 
 		#region Methods

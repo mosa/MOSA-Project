@@ -207,8 +207,7 @@ namespace Mosa.Platform.x86
 			if (op is LocalVariableOperand)
 			{
 				// Add the displacement
-				StackOperand so = (StackOperand)op;
-				codeStream.Write(so.Offset.ToInt32(), true);
+				codeStream.Write((op as StackOperand).Offset.ToInt32(), true);
 			}
 			else if (op is LabelOperand)
 			{
@@ -218,8 +217,7 @@ namespace Mosa.Platform.x86
 			else if (op is MemoryOperand)
 			{
 				// Add the displacement
-				MemoryOperand mo = (MemoryOperand)op;	// Odd??
-				codeStream.Write(mo.Offset.ToInt32(), true);
+				codeStream.Write((op as MemoryOperand).Offset.ToInt32(), true);
 			}
 			else if (op is ConstantOperand)
 			{
@@ -330,7 +328,7 @@ namespace Mosa.Platform.x86
 
 			// HACK: Determines the IP address of current instruction, should use the linker instead
 			LinkerSection linkerSection = linker.GetSection(SectionKind.Text);
-			if (linkerSection != null) // HACK: To assist TypeExplorer, which returns null from GetSection method
+			if (linkerSection != null) // To assist TypeExplorer, which returns null from GetSection method
 			{
 				codeStream.Write((int)(linkerSection.VirtualAddress.ToInt32() + linkerSection.Length + 6), true);
 			}
@@ -348,8 +346,7 @@ namespace Mosa.Platform.x86
 			if (op is LocalVariableOperand)
 			{
 				// Add the displacement
-				StackOperand so = (StackOperand)op;
-				codeStream.Write(so.Offset.ToInt32(), true);
+				codeStream.Write((op as StackOperand).Offset.ToInt32(), true);
 			}
 			else if (op is LabelOperand)
 			{
@@ -359,8 +356,7 @@ namespace Mosa.Platform.x86
 			else if (op is MemoryOperand)
 			{
 				// Add the displacement
-				MemoryOperand mo = (MemoryOperand)op;
-				codeStream.Write(mo.Offset.ToInt32(), true);
+				codeStream.Write((op as MemoryOperand).Offset.ToInt32(), true);
 			}
 			else if (op is ConstantOperand)
 			{

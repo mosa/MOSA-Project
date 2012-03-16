@@ -16,7 +16,7 @@ using Mosa.Compiler.TypeSystem.Generic;
 
 namespace Mosa.Compiler.TypeSystem
 {
-	public class InternalTypeModule : ITypeModule
+	public sealed class InternalTypeModule : ITypeModule
 	{
 		#region Data members
 
@@ -196,16 +196,12 @@ namespace Mosa.Compiler.TypeSystem
 		/// <param name="type">The type.</param>
 		public void AddType(RuntimeType type)
 		{
-			//Debug.Assert(type.Module != this);
-
-			//if (type.Module != this)
-			//    System.Console.WriteLine("ERROR/FIXME: Added internal type but Type.Module != InternalTypeModule");
-
-			if (!types.Contains(type) && !typeNames.Contains(type.FullName))
+			if (!types.Contains(type) && !typeNames.Contains(type.FullName)) // FIXME: Remove this line when generic patch is fixed! It duplicates generic types
 			{
 				types.Add(type);
 				typeNames.Add(type.FullName);
 			}
+			
 		}
 
 		/// <summary>

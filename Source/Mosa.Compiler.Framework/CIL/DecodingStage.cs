@@ -62,6 +62,7 @@ namespace Mosa.Compiler.Framework.CIL
 			base.Setup(methodCompiler);
 
 			plugSystem = methodCompiler.AssemblyCompiler.Pipeline.FindFirst<IPlugSystem>();
+			genericTypePatcher = methodCompiler.AssemblyCompiler.GenericTypePatcher;
 		}
 
 		/// <summary>
@@ -85,9 +86,6 @@ namespace Mosa.Compiler.Framework.CIL
 					return;
 				}
 			}
-
-			// TODO: Move genericTypePatcher to compiler level (from method level)
-			genericTypePatcher = new GenericTypePatcher(typeSystem);
 
 			using (Stream code = methodCompiler.GetInstructionStream())
 			{

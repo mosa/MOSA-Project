@@ -18,7 +18,7 @@ using Mosa.Compiler.TypeSystem.Generic;
 
 namespace Mosa.Compiler.TypeSystem
 {
-	public class TypeSystem : ITypeSystem
+	public sealed class TypeSystem : ITypeSystem
 	{
 		/// <summary>
 		/// 
@@ -127,11 +127,7 @@ namespace Mosa.Compiler.TypeSystem
 		/// <returns></returns>
 		IEnumerable<RuntimeType> ITypeSystem.GetAllTypes()
 		{
-			var modules = new List<ITypeModule>(this.typeModules);
-			if (this.internalTypeModule == null)
-				this.InitializeInternalTypeModule();
-			modules.Add(this.internalTypeModule);
-			foreach (var typeModule in modules)
+			foreach (var typeModule in typeModules)
 			{
 				foreach (var type in typeModule.GetAllTypes())
 				{
@@ -232,7 +228,7 @@ namespace Mosa.Compiler.TypeSystem
 		/// <summary>
 		/// Initializes the internal type module.
 		/// </summary>
-		public void InitializeInternalTypeModule()
+		private void InitializeInternalTypeModule()
 		{
 			if (internalTypeModule == null)
 			{

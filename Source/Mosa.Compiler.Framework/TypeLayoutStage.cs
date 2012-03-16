@@ -27,7 +27,7 @@ namespace Mosa.Compiler.Framework
 		#region Data members
 
 		private IAssemblyLinker linker;
-		private HashSet<RuntimeType> processed = new HashSet<RuntimeType>();
+		//private HashSet<RuntimeType> processed = new HashSet<RuntimeType>();
 
 		#endregion // Data members
 
@@ -43,8 +43,8 @@ namespace Mosa.Compiler.Framework
 		{
 			foreach (RuntimeType type in typeSystem.GetAllTypes())
 			{
-				if (processed.Contains(type))
-					continue;
+				//if (processed.Contains(type))
+				//    continue;
 
 				if (type.ContainsOpenGenericParameters)
 					continue;
@@ -61,7 +61,7 @@ namespace Mosa.Compiler.Framework
 				}
 
 				AllocateStaticFields(type);
-				processed.Add(type);
+				//processed.Add(type);
 			}
 		}
 

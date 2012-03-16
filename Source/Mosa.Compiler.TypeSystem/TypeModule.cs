@@ -20,7 +20,7 @@ using Mosa.Compiler.TypeSystem.Generic;
 
 namespace Mosa.Compiler.TypeSystem
 {
-	public class TypeModule : ITypeModule
+	public sealed class TypeModule : ITypeModule
 	{
 		#region Data members
 
@@ -533,7 +533,7 @@ namespace Mosa.Compiler.TypeSystem
 		/// <summary>
 		/// Loads the interfaces.
 		/// </summary>
-		protected void LoadInterfaces()
+		private void LoadInterfaces()
 		{
 			var maxToken = GetMaxTokenValue(TableType.InterfaceImpl);
 
@@ -559,7 +559,7 @@ namespace Mosa.Compiler.TypeSystem
 		/// <summary>
 		/// Loads the generic interfaces.
 		/// </summary>
-		protected void LoadGenericInterfaces()
+		private void LoadGenericInterfaces()
 		{
 			foreach (var genericType in typeSpecs.OfType<CilGenericType>())
 			{
@@ -570,7 +570,7 @@ namespace Mosa.Compiler.TypeSystem
 		/// <summary>
 		/// Loads the interfaces.
 		/// </summary>
-		protected void LoadMemberReferences()
+		private void LoadMemberReferences()
 		{
 			var maxToken = GetMaxTokenValue(TableType.MemberRef);
 			foreach (var token in new Token(TableType.MemberRef, 1).Upto(maxToken))
@@ -669,7 +669,7 @@ namespace Mosa.Compiler.TypeSystem
 		/// <summary>
 		/// Loads the interfaces.
 		/// </summary>
-		protected void LoadTypeReferences()
+		private void LoadTypeReferences()
 		{
 			var maxToken = GetMaxTokenValue(TableType.TypeRef);
 			foreach (var token in new Token(TableType.TypeRef, 1).Upto(maxToken))

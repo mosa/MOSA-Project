@@ -32,36 +32,20 @@ namespace Mosa.Compiler.Metadata
 			this.token = token;
 		}
 
-		public Token(TableType type)
-			: this(type, 0)
-		{
-		}
+		//public Token(TableType type)
+		//    : this(type, 0)
+		//{
+		//}
 
-		public Token(TableType type, uint rid)
-		{
-			token = (uint)type | rid;
-		}
+		//public Token(TableType type, uint rid)
+		//{
+		//    token = (uint)type | rid;
+		//}
 
 		public Token(TableType type, int rid)
 		{
 			token = (uint)type | (uint)rid;
 		}
-
-		//public MetadataToken(IndexType index, int value)
-		//{
-		//    int bits = IndexBits[(int)index];
-		//    int mask = 1;
-
-		//    for (int i = 1; i < bits; i++) mask = (mask << 1) | 1;
-
-		//    // Get the table
-		//    int table = (int)value & mask;
-
-		//    // Correct the value
-		//    value = ((int)value >> bits);
-
-		//    token = (uint)IndexTables2[(int)index][table] | (uint)value;
-		//}
 
 		public int ToInt32()
 		{

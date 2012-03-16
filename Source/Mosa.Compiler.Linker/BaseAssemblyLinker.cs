@@ -211,7 +211,7 @@ namespace Mosa.Compiler.Linker
 				LinkerSymbol symbol = new LinkerSymbol(name, section, baseStream.Position);
 				
 				// Save the symbol for later use
-				if (!symbols.ContainsKey(symbol.Name))
+				if (!symbols.ContainsKey(symbol.Name)) // FIXME: Remove this line when generic patch is fixed! It duplicates generic types
 					symbols.Add(symbol.Name, symbol);
 
 				// Wrap the stream to catch premature disposal
