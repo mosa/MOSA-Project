@@ -52,20 +52,29 @@ namespace Mosa.Compiler.TypeSystem
 		/// <summary>
 		/// Adds the type.
 		/// </summary>
-		/// <param name="type">The type.</param>
-		/// <param name="signatureHash">The signature hash.</param>
-		private void AddType(CilGenericType type, long signatureHash)
+		/// <param name="patchedType">The type.</param>
+		/// <param name="signature">The signature.</param>
+		private void AddType(CilGenericType patchedType, SigType[] signature)
 		{
-			if (!typeDictionary.ContainsKey(type.BaseGenericType.FullName))
+			(typeSystem.InternalTypeModule as InternalTypeModule).AddType(patchedType);
+
+			long signatureHash = ComputeSignatureHash(signature);
+
+			if (!typeDictionary.ContainsKey(patchedType.BaseGenericType.FullName))
 			{
-				typeDictionary[type.BaseGenericType.FullName] = new Dictionary<long, CilGenericType>();
+				typeDictionary[patchedType.BaseGenericType.FullName] = new Dictionary<long, CilGenericType>();
 			}
 
-			typeDictionary[type.BaseGenericType.FullName][signatureHash] = type;
+			typeDictionary[patchedType.BaseGenericType.FullName][signatureHash] = patchedType;
 		}
 
-		private CilGenericType GetType(CilGenericType type, long signatureHash)
+		private CilGenericType GetType(CilGenericType type, SigType[] signature)
 		{
+			// TODO: Look up in typeSpecs first!
+
+			// FIXME: Do not use a hash based lookup without handling of collision 
+			long signatureHash = ComputeSignatureHash(signature);
+
 			if (typeDictionary.ContainsKey(type.FullName) && typeDictionary[type.FullName].ContainsKey(signatureHash))
 			{
 				return typeDictionary[type.FullName][signatureHash];
@@ -86,7 +95,7 @@ namespace Mosa.Compiler.TypeSystem
 		RuntimeType IGenericTypePatcher.PatchType(ITypeModule typeModule, CilGenericType enclosingType, CilGenericType openType)
 		{
 			var genericArguments = CloseGenericArguments(enclosingType, openType);
-			var patchedType = this.GetType(openType, ComputeSignatureHash(genericArguments));
+			var patchedType = GetType(openType, genericArguments);
 
 			if (patchedType == null)
 			{
@@ -96,8 +105,7 @@ namespace Mosa.Compiler.TypeSystem
 				var typeToken = new Token(0xFE000000 | ++typeTokenCounter);
 
 				patchedType = new CilGenericType(enclosingType.InstantiationModule, typeToken, openType.BaseGenericType, signature);
-				(typeSystem.InternalTypeModule as InternalTypeModule).AddType(patchedType);
-				AddType(patchedType, ComputeSignatureHash(genericArguments));
+				AddType(patchedType, genericArguments);
 			}
 
 			return patchedType;
@@ -114,7 +122,7 @@ namespace Mosa.Compiler.TypeSystem
 		{
 			var openType = openField.DeclaringType as CilGenericType;
 			var genericArguments = CloseGenericArguments(enclosingType, openType);
-			var patchedType = this.GetType(openType, ComputeSignatureHash(genericArguments));
+			var patchedType = GetType(openType, genericArguments);
 
 			if (patchedType == null)
 			{
@@ -123,27 +131,8 @@ namespace Mosa.Compiler.TypeSystem
 				var sigtype = new TypeSigType(signatureToken, CilElementType.Var);
 				var signature = new GenericInstSigType(sigtype, genericArguments);
 
-				try
-				{
-					patchedType = new CilGenericType(enclosingType.Module, typeToken, openType.BaseGenericType, signature);
-				}
-				catch (Exception)
-				{
-					foreach (var module in typeModule.TypeSystem.TypeModules)
-					{
-						try
-						{
-							patchedType = new CilGenericType(module, typeToken, openType.BaseGenericType, signature);
-							break;
-						}
-						catch (Exception)
-						{
-							;
-						}
-					}
-				}
-				(typeSystem.InternalTypeModule as InternalTypeModule).AddType(patchedType);
-				AddType(patchedType, ComputeSignatureHash(genericArguments));
+				patchedType = new CilGenericType(enclosingType.Module, typeToken, openType.BaseGenericType, signature);
+				AddType(patchedType, genericArguments);
 			}
 
 			foreach (var field in patchedType.Fields)
@@ -176,6 +165,7 @@ namespace Mosa.Compiler.TypeSystem
 		/// <returns></returns>
 		private long ComputeSignatureHash(SigType[] signature)
 		{
+			// FIXME: There might be collisions!
 			var result = 0;
 
 			foreach (SigType sig in signature)
@@ -300,13 +290,12 @@ namespace Mosa.Compiler.TypeSystem
 			var sigtype = new TypeSigType(signatureToken, CilElementType.Var);
 			var genericArguments = CloseGenericArguments(enclosingType, openType);			
 
-			var patchedType = this.GetType(openType, ComputeSignatureHash(genericArguments));
+			var patchedType = GetType(openType, genericArguments);
 			if (patchedType == null)
 			{
 				var signature = new GenericInstSigType(sigtype, genericArguments);
 				patchedType = new CilGenericType(enclosingType.InstantiationModule, typeToken, openType.BaseGenericType, signature);
-				(typeSystem.InternalTypeModule as InternalTypeModule).AddType(patchedType);
-				AddType(patchedType, ComputeSignatureHash(genericArguments));
+				AddType(patchedType, genericArguments);
 			}
 
 			var methodIndex = GetMethodIndex(openMethod);

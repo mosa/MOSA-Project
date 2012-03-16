@@ -201,7 +201,6 @@ namespace Mosa.Compiler.TypeSystem
 				types.Add(type);
 				typeNames.Add(type.FullName);
 			}
-			
 		}
 
 		/// <summary>
