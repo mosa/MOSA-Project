@@ -48,6 +48,10 @@
 	List<KeyValuePair<string, string>> Primitives = new List<KeyValuePair<string, string>>(Numbers);
 	Primitives.Add(new KeyValuePair<string, string>("bool", "B"));
 
+	List<KeyValuePair<string, string>> PrimitivesWithCharAndObject = new List<KeyValuePair<string, string>>(Primitives);
+	PrimitivesWithCharAndObject.Add(new KeyValuePair<string, string>("char", "C"));
+	PrimitivesWithCharAndObject.Add(new KeyValuePair<string, string>("object", "O"));
+
 	List<KeyValuePair<string, string>> Comparisons = new List<KeyValuePair<string, string>>();
 	Comparisons.Add(new KeyValuePair<string, string>("==", "Equal"));
 	Comparisons.Add(new KeyValuePair<string, string>("!=", "NotEqual"));

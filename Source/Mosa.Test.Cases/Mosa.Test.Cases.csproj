@@ -107,6 +107,15 @@
     <Compile Include="CIL\DoubleFixture.cs" />
     <Compile Include="CIL\EnumFixture.cs" />
     <Compile Include="CIL\ExceptionHandlingFixture.cs" />
+    <None Include="IL\Initobj.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Initobj.cs</LastGenOutput>
+    </None>
+    <Compile Include="IL\Initobj.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Initobj.tt</DependentUpon>
+    </Compile>
     <Compile Include="IL\Structure.cs">
       <DependentUpon>Structure.tt</DependentUpon>
       <AutoGen>True</AutoGen>

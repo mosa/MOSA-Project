@@ -1,4 +1,5 @@
-﻿/*
+﻿<#
+/*
  * (c) 2011 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
@@ -7,6 +8,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
  *
  */
+ #>
 <#@ template language="C#" #> 
 <#@ import namespace="System.Collections" #>
 <#@ import namespace="System.Collections.Generic" #>
@@ -47,6 +49,10 @@
 
 	List<KeyValuePair<string, string>> Primitives = new List<KeyValuePair<string, string>>(Numbers);
 	Primitives.Add(new KeyValuePair<string, string>("bool", "B"));
+
+	List<KeyValuePair<string, string>> PrimitivesWithCharAndObject = new List<KeyValuePair<string, string>>(Primitives);
+	PrimitivesWithCharAndObject.Add(new KeyValuePair<string, string>("char", "C"));
+	PrimitivesWithCharAndObject.Add(new KeyValuePair<string, string>("object", "O"));
 
 	List<KeyValuePair<string, string>> Comparisons = new List<KeyValuePair<string, string>>();
 	Comparisons.Add(new KeyValuePair<string, string>("==", "Equal"));
