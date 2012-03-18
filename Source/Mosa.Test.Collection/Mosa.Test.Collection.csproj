@@ -1,181 +1,190 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-	<PropertyGroup>
-		<Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-		<Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-		<ProductVersion>9.0.30729</ProductVersion>
-		<SchemaVersion>2.0</SchemaVersion>
-		<ProjectGuid>{067AAB6B-447A-45BA-9E0D-DFEA886B4F69}</ProjectGuid>
-		<OutputType>Library</OutputType>
-		<AppDesignerFolder>Properties</AppDesignerFolder>
-		<RootNamespace>Mosa.Test.Collection</RootNamespace>
-		<AssemblyName>Mosa.Test.Collection</AssemblyName>
-		<TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
-		<FileAlignment>512</FileAlignment>
-		<FileUpgradeFlags>
-		</FileUpgradeFlags>
-		<OldToolsVersion>3.5</OldToolsVersion>
-		<UpgradeBackupLocation />
-		<TargetFrameworkProfile />
-	</PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-		<DebugSymbols>true</DebugSymbols>
-		<DebugType>full</DebugType>
-		<Optimize>false</Optimize>
-		<OutputPath>..\..\bin\</OutputPath>
-		<DefineConstants>DEBUG;TRACE</DefineConstants>
-		<ErrorReport>prompt</ErrorReport>
-		<WarningLevel>4</WarningLevel>
-		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-		<NoStdLib>false</NoStdLib>
-	</PropertyGroup>
-	<PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
-		<DebugType>pdbonly</DebugType>
-		<Optimize>true</Optimize>
-		<OutputPath>..\..\bin\</OutputPath>
-		<DefineConstants>TRACE</DefineConstants>
-		<ErrorReport>prompt</ErrorReport>
-		<WarningLevel>4</WarningLevel>
-		<AllowUnsafeBlocks>true</AllowUnsafeBlocks>
-	</PropertyGroup>
-	<PropertyGroup>
-	</PropertyGroup>
-	<PropertyGroup>
-		<StartupObject />
-	</PropertyGroup>
-	<ItemGroup>
-		<Compile Include="CharTests.cs" />
-		<Compile Include="ComparisonTests.cs">
-			<AutoGen>True</AutoGen>
-			<DesignTime>True</DesignTime>
-			<DependentUpon>ComparisonTests.tt</DependentUpon>
-		</Compile>
-		<Compile Include="ConvI2Tests.cs" />
-		<Compile Include="ConvI1Tests.cs" />
-		<Compile Include="ConvI4Tests.cs" />
-		<Compile Include="ConvI8Tests.cs" />
-		<Compile Include="BoxingTests.cs">
-			<DependentUpon>BoxingTests.tt</DependentUpon>
-			<AutoGen>True</AutoGen>
-			<DesignTime>True</DesignTime>
-		</Compile>
-		<Compile Include="BooleanTests.cs" />
-		<Compile Include="ConditionalOperatorTests.cs">
-			<DependentUpon>ConditionalOperatorTests.tt</DependentUpon>
-			<AutoGen>True</AutoGen>
-			<DesignTime>True</DesignTime>
-		</Compile>
-		<Compile Include="CallOrderTests.cs" />
-		<Compile Include="CallTests.cs">
-			<DependentUpon>CallTests.tt</DependentUpon>
-			<AutoGen>True</AutoGen>
-			<DesignTime>True</DesignTime>
-		</Compile>
-		<Compile Include="ConvTests.cs">
-			<DependentUpon>ConvTests.tt</DependentUpon>
-			<AutoGen>True</AutoGen>
-			<DesignTime>True</DesignTime>
-		</Compile>
-		<Compile Include="CallVirtualTests.cs" />
-		<None Include="BoxingTests.tt">
-			<Generator>TextTemplatingFileGenerator</Generator>
-			<LastGenOutput>BoxingTests.cs</LastGenOutput>
-		</None>
-		<None Include="ComparisonTests.tt">
-			<Generator>TextTemplatingFileGenerator</Generator>
-			<LastGenOutput>ComparisonTests.cs</LastGenOutput>
-		</None>
-		<None Include="GenericCallTests.tt">
-			<Generator>TextTemplatingFileGenerator</Generator>
-			<LastGenOutput>GenericCallTests.cs</LastGenOutput>
-		</None>
-		<None Include="StructTests.tt">
-			<Generator>TextTemplatingFileGenerator</Generator>
-			<LastGenOutput>StructTests.cs</LastGenOutput>
-		</None>
-		<Compile Include="DelegateTests.cs" />
-		<Compile Include="GenericCallTests.cs">
-			<AutoGen>True</AutoGen>
-			<DesignTime>True</DesignTime>
-			<DependentUpon>GenericCallTests.tt</DependentUpon>
-		</Compile>
-		<Compile Include="StructTests.cs">
-			<DependentUpon>StructTests.tt</DependentUpon>
-			<AutoGen>True</AutoGen>
-			<DesignTime>True</DesignTime>
-		</Compile>
-		<Compile Include="IsInstTests.cs" />
-		<Compile Include="FibonacciTests.cs" />
-		<Compile Include="GenericInterfaceTests.cs" />
-		<Compile Include="SwitchTests.cs">
-			<DependentUpon>SwitchTests.tt</DependentUpon>
-			<AutoGen>True</AutoGen>
-			<DesignTime>True</DesignTime>
-		</Compile>
-		<Compile Include="LdlocaTests.cs">
-			<DependentUpon>LdlocaTests.tt</DependentUpon>
-			<AutoGen>True</AutoGen>
-			<DesignTime>True</DesignTime>
-		</Compile>
-		<Compile Include="LdargaTests.cs">
-			<AutoGen>True</AutoGen>
-			<DesignTime>True</DesignTime>
-			<DependentUpon>LdargaTests.tt</DependentUpon>
-		</Compile>
-		<Compile Include="WhileTests.cs" />
-		<Compile Include="StringTests.cs" />
-		<Compile Include="ExceptionHandlingTests.cs" />
-		<Compile Include="SingleTests.cs" />
-		<Compile Include="DoubleTests.cs" />
-		<Compile Include="Int16Tests.cs" />
-		<Compile Include="Int32Tests.cs" />
-		<Compile Include="Int64Tests.cs" />
-		<Compile Include="Int8Tests.cs" />
-		<Compile Include="UInt16Tests.cs" />
-		<Compile Include="UInt32Tests.cs" />
-		<Compile Include="UInt64Tests.cs" />
-		<Compile Include="UInt8Tests.cs" />
-		<Compile Include="InterfaceTests.cs" />
-		<Compile Include="EnumTests.cs" />
-		<Compile Include="NewobjTests.cs" />
-	</ItemGroup>
-	<ItemGroup>
-		<None Include="ConditionalOperatorTests.tt">
-			<Generator>TextTemplatingFileGenerator</Generator>
-			<LastGenOutput>ConditionalOperatorTests.cs</LastGenOutput>
-		</None>
-		<None Include="CallTests.tt">
-			<Generator>TextTemplatingFileGenerator</Generator>
-			<LastGenOutput>CallTests.cs</LastGenOutput>
-		</None>
-		<None Include="ConvTests.tt">
-			<Generator>TextTemplatingFileGenerator</Generator>
-			<LastGenOutput>ConvTests.cs</LastGenOutput>
-		</None>
-		<None Include="SwitchTests.tt">
-			<Generator>TextTemplatingFileGenerator</Generator>
-			<LastGenOutput>SwitchTests.cs</LastGenOutput>
-		</None>
-		<None Include="LdlocaTests.tt">
-			<Generator>TextTemplatingFileGenerator</Generator>
-			<LastGenOutput>LdlocaTests.cs</LastGenOutput>
-		</None>
-		<None Include="LdargaTests.tt">
-			<Generator>TextTemplatingFileGenerator</Generator>
-			<LastGenOutput>LdargaTests.cs</LastGenOutput>
-		</None>
-	</ItemGroup>
-	<ItemGroup>
-		<Content Include="TemplateLibrary.txt" />
-	</ItemGroup>
-	<ItemGroup>
-		<Reference Include="System" />
-	</ItemGroup>
-	<ItemGroup>
-		<Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
-	</ItemGroup>
-	<Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
-	<!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.30729</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{067AAB6B-447A-45BA-9E0D-DFEA886B4F69}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>Mosa.Test.Collection</RootNamespace>
+    <AssemblyName>Mosa.Test.Collection</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <UpgradeBackupLocation />
+    <TargetFrameworkProfile />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>..\..\bin\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+    <NoStdLib>false</NoStdLib>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>..\..\bin\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
+  </PropertyGroup>
+  <PropertyGroup>
+  </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
+  <ItemGroup>
+    <Compile Include="CharTests.cs" />
+    <Compile Include="ComparisonTests.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ComparisonTests.tt</DependentUpon>
+    </Compile>
+    <Compile Include="ConvI2Tests.cs" />
+    <Compile Include="ConvI1Tests.cs" />
+    <Compile Include="ConvI4Tests.cs" />
+    <Compile Include="ConvI8Tests.cs" />
+    <Compile Include="BoxingTests.cs">
+      <DependentUpon>BoxingTests.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="BooleanTests.cs" />
+    <Compile Include="ConditionalOperatorTests.cs">
+      <DependentUpon>ConditionalOperatorTests.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="CallOrderTests.cs" />
+    <Compile Include="CallTests.cs">
+      <DependentUpon>CallTests.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="ConvTests.cs">
+      <DependentUpon>ConvTests.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="CallVirtualTests.cs" />
+    <None Include="BoxingTests.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>BoxingTests.cs</LastGenOutput>
+    </None>
+    <None Include="ComparisonTests.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>ComparisonTests.cs</LastGenOutput>
+    </None>
+    <None Include="GenericCallTests.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>GenericCallTests.cs</LastGenOutput>
+    </None>
+    <None Include="StructTests.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>StructTests.cs</LastGenOutput>
+    </None>
+    <Compile Include="DelegateTests.cs" />
+    <Compile Include="GenericCallTests.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GenericCallTests.tt</DependentUpon>
+    </Compile>
+    <None Include="InitobjTests.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>InitobjTests.cs</LastGenOutput>
+    </None>
+    <Compile Include="InitobjTests.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>InitobjTests.tt</DependentUpon>
+    </Compile>
+    <Compile Include="StructTests.cs">
+      <DependentUpon>StructTests.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="IsInstTests.cs" />
+    <Compile Include="FibonacciTests.cs" />
+    <Compile Include="GenericInterfaceTests.cs" />
+    <Compile Include="SwitchTests.cs">
+      <DependentUpon>SwitchTests.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="LdlocaTests.cs">
+      <DependentUpon>LdlocaTests.tt</DependentUpon>
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <Compile Include="LdargaTests.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LdargaTests.tt</DependentUpon>
+    </Compile>
+    <Compile Include="WhileTests.cs" />
+    <Compile Include="StringTests.cs" />
+    <Compile Include="ExceptionHandlingTests.cs" />
+    <Compile Include="SingleTests.cs" />
+    <Compile Include="DoubleTests.cs" />
+    <Compile Include="Int16Tests.cs" />
+    <Compile Include="Int32Tests.cs" />
+    <Compile Include="Int64Tests.cs" />
+    <Compile Include="Int8Tests.cs" />
+    <Compile Include="UInt16Tests.cs" />
+    <Compile Include="UInt32Tests.cs" />
+    <Compile Include="UInt64Tests.cs" />
+    <Compile Include="UInt8Tests.cs" />
+    <Compile Include="InterfaceTests.cs" />
+    <Compile Include="EnumTests.cs" />
+    <Compile Include="NewobjTests.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ConditionalOperatorTests.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>ConditionalOperatorTests.cs</LastGenOutput>
+    </None>
+    <None Include="CallTests.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>CallTests.cs</LastGenOutput>
+    </None>
+    <None Include="ConvTests.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>ConvTests.cs</LastGenOutput>
+    </None>
+    <None Include="SwitchTests.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>SwitchTests.cs</LastGenOutput>
+    </None>
+    <None Include="LdlocaTests.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>LdlocaTests.cs</LastGenOutput>
+    </None>
+    <None Include="LdargaTests.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>LdargaTests.cs</LastGenOutput>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="TemplateLibrary.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
 			 Other similar extension points exist, see Microsoft.Common.targets.
 	<Target Name="BeforeBuild">
 	</Target>
