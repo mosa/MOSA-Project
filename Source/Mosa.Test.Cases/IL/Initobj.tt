@@ -1,4 +1,13 @@
-﻿<#@ include file="../TemplateLibrary.txt" #>
+﻿/*
+ * (c) 2011 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Kai Patrick Reisert (Boddlnagg) <kpreisert@googlemail.com> 
+ *
+ */
+ <#@ include file="../TemplateLibrary.txt" #>
 
 using MbUnit.Framework;
 
@@ -17,9 +26,10 @@ namespace Mosa.Test.Cases.IL
 <# foreach (KeyValuePair<string, string> primitive in PrimitivesWithCharAndObject) { #>
 
 		[Test]
+		[Pending("Commented out until implemented")]
 		public void Initobj<#= primitive.Value #>()
 		{
-			Assert.AreEqual(InitobjTests.InitobjTest<#= primitive.Value #>(), Run<<#= primitive.Key #>>("Mosa.Test.Collection", "InitobjTests", "InitobjTest<#= primitive.Value #>"));
+			//Assert.AreEqual(InitobjTests.InitobjTest<#= primitive.Value #>(), Run<<#= primitive.Key #>>("Mosa.Test.Collection", "InitobjTests", "InitobjTest<#= primitive.Value #>"));
 		}
 <# } #>
 
