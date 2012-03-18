@@ -416,10 +416,9 @@ namespace Mosa.Compiler.Framework
 				if (index == 0)
 				{
 					var classSigType = new ClassSigType(type.Token);
-					var decoder = this.Pipeline.FindFirst<IInstructionDecoder>();
 					var signatureType =
 						this.Method.DeclaringType.ContainsOpenGenericParameters ?
-							decoder.GenericTypePatcher.PatchSignatureType(this.Method.Module, this.Method.DeclaringType as CilGenericType, type.Token) :
+							assemblyCompiler.GenericTypePatcher.PatchSignatureType(this.Method.Module, this.Method.DeclaringType as CilGenericType, type.Token) :
 							classSigType;
 
 					return new ParameterOperand(
@@ -449,8 +448,7 @@ namespace Mosa.Compiler.Framework
 				if (parameterType is GenericInstSigType && (parameterType as GenericInstSigType).ContainsGenericParameters)
 				{
 					var genericInstSigType = parameterType as GenericInstSigType;
-					var decoder = this.Pipeline.FindFirst<IInstructionDecoder>();
-					parameterType = decoder.GenericTypePatcher.PatchSignatureType(this.typeSystem.InternalTypeModule, this.Method.DeclaringType, genericInstSigType.BaseType.Token);
+					parameterType = assemblyCompiler.GenericTypePatcher.PatchSignatureType(typeSystem.InternalTypeModule, Method.DeclaringType, genericInstSigType.BaseType.Token);
 				}
 				parameter = new ParameterOperand(architecture.StackFrameRegister, methodParameters[index], parameterType);
 				parameters[index] = parameter;

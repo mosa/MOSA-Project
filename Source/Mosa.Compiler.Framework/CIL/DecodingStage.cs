@@ -42,11 +42,6 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// 
 		/// </summary>
-		private IGenericTypePatcher genericTypePatcher;
-
-		/// <summary>
-		/// 
-		/// </summary>
 		private IPlugSystem plugSystem;
 
 		#endregion // Data members
@@ -62,7 +57,6 @@ namespace Mosa.Compiler.Framework.CIL
 			base.Setup(methodCompiler);
 
 			plugSystem = methodCompiler.AssemblyCompiler.Pipeline.FindFirst<IPlugSystem>();
-			genericTypePatcher = methodCompiler.AssemblyCompiler.GenericTypePatcher;
 		}
 
 		/// <summary>
@@ -116,7 +110,7 @@ namespace Mosa.Compiler.Framework.CIL
 							if (local.Type is GenericInstSigType && declaringType is CilGenericType)
 							{
 								var genericInstSigType = local.Type as GenericInstSigType;
-								var genericArguments = genericTypePatcher.CloseGenericArguments((declaringType as CilGenericType).GenericArguments, genericInstSigType.GenericArguments);
+								var genericArguments = methodCompiler.AssemblyCompiler.GenericTypePatcher.CloseGenericArguments((declaringType as CilGenericType).GenericArguments, genericInstSigType.GenericArguments);
 								local = new VariableSignature(locals[i], genericArguments);
 							}
 						}
@@ -316,7 +310,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		IGenericTypePatcher IInstructionDecoder.GenericTypePatcher
 		{
-			get { return genericTypePatcher; }
+			get { return methodCompiler.AssemblyCompiler.GenericTypePatcher; }
 		}
 
 		/// <summary>

@@ -578,10 +578,9 @@ namespace Mosa.Compiler.Framework.IR
 
 			if (classType.ContainsOpenGenericParameters)
 			{
-				var decoder = this.methodCompiler.Pipeline.FindFirst<IInstructionDecoder>();
 				if (!(classType is CilGenericType))
 					classType = new CilGenericType(classType.Module, classType.Token, classType, thisReference.Type as GenericInstSigType);
-				classType = decoder.GenericTypePatcher.PatchType(this.typeModule, this.methodCompiler.Method.DeclaringType as CilGenericType, classType as CilGenericType);
+				classType = methodCompiler.AssemblyCompiler.GenericTypePatcher.PatchType(this.typeModule, this.methodCompiler.Method.DeclaringType as CilGenericType, classType as CilGenericType);
 			}
 
 			List<Operand> ctorOperands = new List<Operand>(context.Operands);
