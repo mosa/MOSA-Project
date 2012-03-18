@@ -32,15 +32,15 @@ namespace Mosa.Compiler.Metadata
 			this.token = token;
 		}
 
-		//public Token(TableType type)
-		//    : this(type, 0)
-		//{
-		//}
+		public Token(TableType type)
+			: this(type, 0)
+		{
+		}
 
-		//public Token(TableType type, uint rid)
-		//{
-		//    token = (uint)type | rid;
-		//}
+		public Token(TableType type, uint rid)
+		{
+			token = (uint)type | rid;
+		}
 
 		public Token(TableType type, int rid)
 		{

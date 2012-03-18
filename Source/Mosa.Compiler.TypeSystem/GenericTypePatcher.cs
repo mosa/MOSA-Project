@@ -72,7 +72,7 @@ namespace Mosa.Compiler.TypeSystem
 		{
 			// TODO: Look up in typeSpecs first!
 
-			// FIXME: Do not use a hash based lookup without handling of collision 
+			// FIXME: Do not use a hash based lookup without handling of collision
 			long signatureHash = ComputeSignatureHash(signature);
 
 			if (typeDictionary.ContainsKey(type.FullName) && typeDictionary[type.FullName].ContainsKey(signatureHash))

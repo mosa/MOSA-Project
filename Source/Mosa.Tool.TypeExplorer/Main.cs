@@ -496,15 +496,11 @@ namespace Mosa.Tool.TypeExplorer
 				}
 			}
 		}
-
-		private void toolStripButton3_Click_1(object sender, EventArgs e)
-		{
-			// TODO
-		}
-
+		
 		private void toolStripButton4_Click(object sender, EventArgs e)
 		{
 			Compile();
+			UpdateTree();
 		}
 
 	}
