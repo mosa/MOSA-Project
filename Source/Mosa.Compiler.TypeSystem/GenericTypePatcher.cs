@@ -131,9 +131,30 @@ namespace Mosa.Compiler.TypeSystem
 				var sigtype = new TypeSigType(signatureToken, CilElementType.Var);
 				var signature = new GenericInstSigType(sigtype, genericArguments);
 
-				patchedType = new CilGenericType(enclosingType.Module, typeToken, openType.BaseGenericType, signature);
+				// FIXME: There has got to be a better way to do this...
+				try
+				{
+					patchedType = new CilGenericType(enclosingType.Module, typeToken, openType.BaseGenericType, signature);
+				}
+				catch (Exception)
+				{
+					foreach (var module in typeModule.TypeSystem.TypeModules)
+					{
+						try
+						{
+							patchedType = new CilGenericType(module, typeToken, openType.BaseGenericType, signature);
+							break;
+						}
+						catch (Exception)
+						{
+							;
+						}
+					}
+				}
+
 				AddType(patchedType, genericArguments);
 			}
+
 
 			foreach (var field in patchedType.Fields)
 			{
