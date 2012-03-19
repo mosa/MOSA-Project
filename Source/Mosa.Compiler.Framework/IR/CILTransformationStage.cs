@@ -1393,7 +1393,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.InitObj(Context context)
 		{
-			throw new NotSupportedException();
+			// TODO: Not implemented!
 		}
 
 		/// <summary>

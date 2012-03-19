@@ -21,11 +21,11 @@ namespace Mosa.Test.Collection
 	public static class InitobjTests
 	{
 <# foreach (KeyValuePair<string, string> primitives in PrimitivesWithCharAndObject) {#>
-		//public static <#= primitives.Key #> InitobjTest<#= primitives.Value #>()
-		//{
-		//	InitobjTestsStruct d = new InitobjTestsStruct();
-		//	return d.Value<#= primitives.Value #>;
-		//}
+		public static <#= primitives.Key #> InitobjTest<#= primitives.Value #>()
+		{
+			InitobjTestsStruct d = new InitobjTestsStruct();
+			return d.Value<#= primitives.Value #>;
+		}
 
 <# } #>
 	}
