@@ -34,11 +34,6 @@ namespace Mosa.Compiler.Framework
 		public int Label;
 
 		/// <summary>
-		/// Offset of the instruction from the start of the method.
-		/// </summary>
-		private int _offset;
-
-		/// <summary>
 		/// Holds the first operand of the instruction.
 		/// </summary>
 		public Operand Operand1;
@@ -63,6 +58,16 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public IBranch Branch;
 
+		/// <summary>
+		/// Gets or sets the offset of the instruction.
+		/// </summary>
+		/// <remarks>
+		/// Offsets are used by branch instructions to define their target. During basic block
+		/// building these offsets are used to insert labels at appropriate positions and the
+		/// jumps or modified to target one of these labels. During code generation, the offset
+		/// can be used to indicate native code offsets.
+		/// </remarks>
+		public int Offset;
 
 		/// <summary>
 		/// Holds the "other" object
@@ -72,7 +77,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// 
 		/// </summary>
-		private uint _packed;
+		private uint packed;
 
 		#endregion // Data members
 
@@ -83,8 +88,8 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public bool Ignore
 		{
-			get { return (_packed & 0x01) == 0x01; }
-			set { if (value) _packed = _packed | 0x01; else _packed = (uint)(_packed & ~0x1); }
+			get { return (packed & 0x01) == 0x01; }
+			set { if (value) packed = packed | 0x01; else packed = (uint)(packed & ~0x1); }
 		}
 
 		/// <summary>
@@ -95,8 +100,8 @@ namespace Mosa.Compiler.Framework
 		/// </value>
 		public bool HasPrefix
 		{
-			get { return (_packed & 0x02) == 0x02; }
-			set { if (value) _packed = _packed | 0x02; else _packed = (uint)(_packed & ~0x2); }
+			get { return (packed & 0x02) == 0x02; }
+			set { if (value) packed = packed | 0x02; else packed = (uint)(packed & ~0x2); }
 		}
 
 		/// <summary>
@@ -104,8 +109,17 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public bool BranchHint
 		{
-			get { return (_packed & 0x04) == 0x04; }
-			set { if (value) _packed = _packed | 0x04; else _packed = (uint)(_packed & ~0x04); }
+			get { return (packed & 0x04) == 0x04; }
+			set { if (value) packed = packed | 0x04; else packed = (uint)(packed & ~0x04); }
+		}
+
+		/// <summary>
+		/// Gets or sets a value indicating whether this <see cref="InstructionData"/> is marked.
+		/// </summary>
+		public bool Marked
+		{
+			get { return (packed & 0x08) == 0x08; }
+			set { if (value) packed = packed | 0x08; else packed = (uint)(packed & ~0x08); }
 		}
 		
 		/// <summary>
@@ -113,8 +127,8 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public byte ResultCount
 		{
-			get { return (byte)((_packed >> 16) & 0xF); }
-			set { _packed = (uint)((_packed & 0xFF00FFFF) | ((uint)value << 16)); }
+			get { return (byte)((packed >> 16) & 0xF); }
+			set { packed = (uint)((packed & 0xFF00FFFF) | ((uint)value << 16)); }
 		}
 
 		/// <summary>
@@ -122,29 +136,8 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public byte OperandCount
 		{
-			get { return (byte)((_packed >> 24) & 0xF); }
-			set { _packed = (uint)((_packed & 0x00FFFFFF) | ((uint)value << 24)); }
-		}
-
-		/// <summary>
-		/// Gets or sets the offset of the instruction.
-		/// </summary>
-		/// <remarks>
-		/// Offsets are used by branch instructions to define their target. During basic block
-		/// building these offsets are used to insert labels at appropriate positions and the
-		/// jumps or modified to target one of these labels. During code generation, the offset
-		/// can be used to indicate native code offsets.
-		/// </remarks>
-		public int Offset
-		{
-			get { return _offset; }
-			set
-			{
-				if (value < -1)
-					throw new ArgumentOutOfRangeException(@"Offset can not be negative.", @"value");
-
-				_offset = value;
-			}
+			get { return (byte)((packed >> 24) & 0xF); }
+			set { packed = (uint)((packed & 0x00FFFFFF) | ((uint)value << 24)); }
 		}
 
 		/// <summary>
@@ -231,7 +224,7 @@ namespace Mosa.Compiler.Framework
 			this.Operand2 = null;
 			this.Operand3 = null;
 			this.Result = null;
-			this._packed = 0;
+			this.packed = 0;
 			this.Branch = null;
 			this.Other = null;
 			this.BranchHint = false;

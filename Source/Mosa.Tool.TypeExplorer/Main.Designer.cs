@@ -46,6 +46,7 @@
 			this.showTokenValues = new System.Windows.Forms.ToolStripMenuItem();
 			this.showSizes = new System.Windows.Forms.ToolStripMenuItem();
 			this.includeTestKorlibToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.enableSSAToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.openFileDialog = new System.Windows.Forms.OpenFileDialog();
 			this.treeView = new System.Windows.Forms.TreeView();
 			this.splitContainer1 = new System.Windows.Forms.SplitContainer();
@@ -186,7 +187,8 @@
 			this.optionsToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.showTokenValues,
             this.showSizes,
-            this.includeTestKorlibToolStripMenuItem});
+            this.includeTestKorlibToolStripMenuItem,
+            this.enableSSAToolStripMenuItem});
 			this.optionsToolStripMenuItem.Name = "optionsToolStripMenuItem";
 			this.optionsToolStripMenuItem.Size = new System.Drawing.Size(61, 20);
 			this.optionsToolStripMenuItem.Text = "Options";
@@ -217,6 +219,12 @@
 			this.includeTestKorlibToolStripMenuItem.Name = "includeTestKorlibToolStripMenuItem";
 			this.includeTestKorlibToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
 			this.includeTestKorlibToolStripMenuItem.Text = "Include Test Components";
+			// 
+			// enableSSAToolStripMenuItem
+			// 
+			this.enableSSAToolStripMenuItem.Name = "enableSSAToolStripMenuItem";
+			this.enableSSAToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
+			this.enableSSAToolStripMenuItem.Text = "Enable SSA";
 			// 
 			// openFileDialog
 			// 
@@ -426,5 +434,6 @@
 		private System.Windows.Forms.ToolStripMenuItem includeTestKorlibToolStripMenuItem;
 		private System.Windows.Forms.ToolStripButton toolStripButton4;
 		private System.Windows.Forms.ComboBox cbPlatform;
+		private System.Windows.Forms.ToolStripMenuItem enableSSAToolStripMenuItem;
 	}
 }

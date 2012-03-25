@@ -101,6 +101,16 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
+		/// Gets or sets the label.
+		/// </summary>
+		/// <value>The label.</value>
+		public bool Marked
+		{
+			get { return instructionSet.Data[index].Marked; }
+			set { instructionSet.Data[index].Marked = value; }
+		}
+
+		/// <summary>
 		/// Gets or sets the offset.
 		/// </summary>
 		/// <value>The offset.</value>
@@ -797,7 +807,7 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Appends an instructionafter the current index.
+		/// Appends an instruction after the current index.
 		/// </summary>
 		/// <param name="instruction">The instruction to append.</param>
 		public void AppendInstruction(IInstruction instruction)

@@ -106,7 +106,11 @@ namespace Mosa.Compiler.InternalTrace
 				if (ctx.Ignore)
 					text.Append("; ");
 
-				text.AppendFormat("L_{0:X4}: {1}", ctx.Label, ctx.Instruction.ToString(ctx));
+				if (ctx.Marked)
+					text.AppendFormat("L_{0:X4}* {1}", ctx.Label, ctx.Instruction.ToString(ctx));
+				else
+					text.AppendFormat("L_{0:X4}: {1}", ctx.Label, ctx.Instruction.ToString(ctx));
+
 				text.AppendLine();
 			}
 

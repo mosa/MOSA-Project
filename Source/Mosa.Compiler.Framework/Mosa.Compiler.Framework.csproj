@@ -89,6 +89,7 @@
     <Compile Include="CIL\BreakInstruction.cs" />
     <Compile Include="BaseAssemblyCompilerStage.cs" />
     <Compile Include="ConstantFoldingStage.cs" />
+    <Compile Include="SingleUseMarker.cs" />
     <Compile Include="IPlugSystem.cs" />
     <Compile Include="ITypeInitializerSchedulerStage.cs" />
     <Compile Include="PlugStage.cs" />
@@ -344,9 +345,6 @@
     <Compile Include="IStackLayoutProvider.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="JitTrampolineAttribute.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Operands\LabelOperand.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -359,13 +357,7 @@
     <Compile Include="BaseMethodCompiler.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="NakedAttribute.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Operands\ObjectFieldOperand.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ObjectFileBuilderBase.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Operands\Operand.cs">
@@ -378,9 +370,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Operands\RegisterOperand.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="RuntimeSupportAttribute.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="StackLayoutStage.cs">

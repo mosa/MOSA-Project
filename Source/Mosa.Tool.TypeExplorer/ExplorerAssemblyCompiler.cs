@@ -37,12 +37,12 @@ namespace Mosa.Tool.TypeExplorer
 
 		public override IMethodCompiler CreateMethodCompiler(ICompilationSchedulerStage schedulerStage, RuntimeType type, RuntimeMethod method)
 		{
-			IMethodCompiler mc = new ExplorerMethodCompiler(this, schedulerStage, type, method);
+			IMethodCompiler mc = new ExplorerMethodCompiler(this, schedulerStage, type, method, CompilerOptions);
 			Architecture.ExtendMethodCompilerPipeline(mc.Pipeline);
 			return mc;
 		}
 
-		public static void Compile(ITypeSystem typeSystem, ITypeLayout typeLayout, IInternalTrace internalTrace, string platform)
+		public static void Compile(ITypeSystem typeSystem, ITypeLayout typeLayout, IInternalTrace internalTrace, string platform, bool enabledSSA)
 		{
 			IArchitecture architecture;
 
@@ -55,6 +55,7 @@ namespace Mosa.Tool.TypeExplorer
 			}
 
 			CompilerOptions compilerOptions = new CompilerOptions();
+			compilerOptions.EnableSSA = enabledSSA;
 
 			ExplorerAssemblyCompiler compiler = new ExplorerAssemblyCompiler(architecture, typeSystem, typeLayout, internalTrace, compilerOptions);
 

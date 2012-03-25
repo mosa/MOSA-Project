@@ -257,7 +257,7 @@ namespace Mosa.Tool.TypeExplorer
 				toolStripStatusLabel1.GetCurrentParent().Refresh();
 			}
 
-			tbResult.AppendText(String.Format("{0:0.00}", (DateTime.Now - compileStartTime).TotalSeconds) + " ms: " + compilerStage.ToText() + ": " + info + "\n");
+			tbResult.AppendText(String.Format("{0:0.00}", (DateTime.Now - compileStartTime).TotalSeconds) + " secs: " + compilerStage.ToText() + ": " + info + "\n");
 		}
 
 		void IInstructionTraceListener.NotifyNewInstructionTrace(RuntimeMethod method, string stage, string log)
@@ -282,7 +282,7 @@ namespace Mosa.Tool.TypeExplorer
 			filter.IsLogging = true;
 			filter.MethodMatch = MatchType.Any;
 
-			ExplorerAssemblyCompiler.Compile(typeSystem, typeLayout, internalTrace, cbPlatform.Text);
+			ExplorerAssemblyCompiler.Compile(typeSystem, typeLayout, internalTrace, cbPlatform.Text, enableSSAToolStripMenuItem.Checked);
 		}
 
 		private void nowToolStripMenuItem_Click(object sender, EventArgs e)
@@ -495,7 +495,7 @@ namespace Mosa.Tool.TypeExplorer
 				}
 			}
 		}
-		
+
 		private void toolStripButton4_Click(object sender, EventArgs e)
 		{
 			Compile();
