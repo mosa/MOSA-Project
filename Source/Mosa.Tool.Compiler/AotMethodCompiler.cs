@@ -40,6 +40,7 @@ namespace Mosa.Tool.Compiler
 					new BasicBlockBuilderStage(),
 					new ExceptionPrologueStage(),
 					new OperandDeterminationStage(),
+					new SingleUseMarker(),
 					new StaticAllocationResolutionStage(),
 					new CILTransformationStage(),
 
@@ -52,7 +53,8 @@ namespace Mosa.Tool.Compiler
 					(compilerOptions.EnableSSA) ? new ConstantPropagationStage(ConstantPropagationStage.PropagationStage.PostFolding) : null,
 
 					(compilerOptions.EnableSSA) ? new LeaveSSA() : null,
-					(compilerOptions.EnableSSA) ? new StrengthReductionStage() : null,
+					
+					new StrengthReductionStage(),
 
 					new StackLayoutStage(),
 					new PlatformStubStage(),

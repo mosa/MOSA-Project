@@ -80,6 +80,9 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		void IMethodCompilerStage.Run()
 		{
+			if (AreExceptions)
+				return;
+
 			this.CollectAssignments();
 			switch (this.strategy)
 			{

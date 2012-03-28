@@ -57,6 +57,9 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		void IMethodCompilerStage.Run()
 		{
+			if (AreExceptions)
+				return;
+
 			var entryBlock = this.FindBlock(-1);
 			var exitBlock = this.FindBlock(int.MaxValue);
 

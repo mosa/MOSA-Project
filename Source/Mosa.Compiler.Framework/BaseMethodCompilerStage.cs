@@ -119,6 +119,20 @@ namespace Mosa.Compiler.Framework
 		#region Methods
 
 		/// <summary>
+		/// Gets a value indicating whether [are exceptions].
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if [are exceptions]; otherwise, <c>false</c>.
+		/// </value>
+		protected bool AreExceptions
+		{
+			get
+			{
+				return methodCompiler.ExceptionClauseHeader.Clauses.Count != 0;
+			}
+		}
+
+		/// <summary>
 		/// Gets block by label
 		/// </summary>
 		/// <param name="label">The label.</param>

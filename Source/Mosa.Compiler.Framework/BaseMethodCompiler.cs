@@ -147,10 +147,11 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BaseMethodCompiler"/> class.
 		/// </summary>
-		/// <param name="linker">The _linker.</param>
-		/// <param name="architecture">The target compilation Architecture.</param>
+		/// <param name="assemblyCompiler">The assembly compiler.</param>
 		/// <param name="type">The type, which owns the method to compile.</param>
 		/// <param name="method">The method to compile by this instance.</param>
+		/// <param name="instructionSet">The instruction set.</param>
+		/// <param name="compilationScheduler">The compilation scheduler.</param>
 		protected BaseMethodCompiler(AssemblyCompiler assemblyCompiler, RuntimeType type, RuntimeMethod method, InstructionSet instructionSet, ICompilationSchedulerStage compilationScheduler)
 		{
 			if (compilationScheduler == null)

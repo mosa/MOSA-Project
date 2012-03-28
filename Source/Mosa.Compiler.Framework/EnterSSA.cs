@@ -62,6 +62,9 @@ namespace Mosa.Compiler.Framework
 
 		void IMethodCompilerStage.Run()
 		{
+			if (AreExceptions)
+				return;
+
 			foreach (var block in this.basicBlocks)
 				if (block.NextBlocks.Count == 0 && block.PreviousBlocks.Count == 0)
 					return;

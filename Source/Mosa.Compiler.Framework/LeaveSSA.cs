@@ -24,6 +24,9 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		void IMethodCompilerStage.Run()
 		{
+			if (AreExceptions)
+				return;
+
 			foreach (var block in this.basicBlocks)
 			{
 				if (block.Label == Int32.MaxValue)
