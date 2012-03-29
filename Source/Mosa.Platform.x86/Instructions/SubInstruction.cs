@@ -70,6 +70,14 @@ namespace Mosa.Platform.x86.Instructions
 			throw new ArgumentException(@"No opcode for operand type.");
 		}
 
+		/// <summary>
+		/// Gets the usable registers.
+		/// </summary>
+		public override Register[] UsableRegisters
+		{
+			get { return GeneralPurpose32BitRegisters; }
+		}
+
 		#endregion // Methods
 	}
 }

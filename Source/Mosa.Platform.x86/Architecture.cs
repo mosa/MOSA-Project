@@ -49,7 +49,7 @@ namespace Mosa.Platform.x86
 		/// <summary>
 		/// Defines the register set of the target architecture.
 		/// </summary>
-		private static readonly Register[] Registers = new Register[]
+		private static readonly Register[] registers = new Register[]
 		{
 			////////////////////////////////////////////////////////
 			// 32-bit general purpose registers
@@ -60,6 +60,9 @@ namespace Mosa.Platform.x86
 			GeneralPurposeRegister.EBX,
 			GeneralPurposeRegister.ESI,
 			GeneralPurposeRegister.EDI,
+
+			GeneralPurposeRegister.EBP,
+			GeneralPurposeRegister.ESP,
 
 			////////////////////////////////////////////////////////
 			// 128-bit floating point registers
@@ -102,7 +105,7 @@ namespace Mosa.Platform.x86
 		/// </summary>
 		public override Register[] RegisterSet
 		{
-			get { return Registers; }
+			get { return registers; }
 		}
 
 		/// <summary>

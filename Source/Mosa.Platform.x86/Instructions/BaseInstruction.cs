@@ -18,6 +18,41 @@ namespace Mosa.Platform.x86.Instructions
 	public abstract class BaseInstruction : Mosa.Compiler.Framework.BaseInstruction, IX86Instruction
 	{
 
+		#region Data Members
+		
+		/// <summary>
+		/// Defines the register set of the target architecture.
+		/// </summary>
+		protected static readonly Register[] GeneralPurpose32BitRegisters = new Register[]
+		{
+			////////////////////////////////////////////////////////
+			// 32-bit general purpose registers
+			////////////////////////////////////////////////////////
+			GeneralPurposeRegister.EAX,
+			GeneralPurposeRegister.ECX,
+			GeneralPurposeRegister.EDX,
+			GeneralPurposeRegister.EBX,
+			GeneralPurposeRegister.ESI,
+			GeneralPurposeRegister.EDI,
+		};
+
+		protected static readonly Register[] FloatingPoint128BitRegisters = new Register[]
+		{
+			////////////////////////////////////////////////////////
+			// 128-bit floating point registers
+			////////////////////////////////////////////////////////
+			SSE2Register.XMM0,
+			SSE2Register.XMM1,
+			SSE2Register.XMM2,
+			SSE2Register.XMM3,
+			SSE2Register.XMM4,
+			SSE2Register.XMM5,
+			SSE2Register.XMM6,
+			SSE2Register.XMM7
+		};
+
+		#endregion //  Data Members
+
 		#region Construction
 
 		/// <summary>
@@ -116,6 +151,9 @@ namespace Mosa.Platform.x86.Instructions
 			return "X86." + base.ToString();
 		}
 
+		/// <summary>
+		/// Gets the usable registers.
+		/// </summary>
 		public virtual Register[] UsableRegisters
 		{
 			get { return null; }
