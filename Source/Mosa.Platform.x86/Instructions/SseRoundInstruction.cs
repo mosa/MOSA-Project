@@ -25,17 +25,11 @@ namespace Mosa.Platform.x86.Instructions
 		private static readonly OpCode R8 = new OpCode(new byte[] { 0x66, 0x0F, 0x3A, 0x0B });
 
 		/// <summary>
-		/// Gets the instruction latency.
+		/// Computes the opcode.
 		/// </summary>
-		/// <value>The latency.</value>
-		public override int Latency { get { return 3; } }
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="destination"></param>
-		/// <param name="source"></param>
-		/// <param name="third"></param>
+		/// <param name="destination">The destination operand.</param>
+		/// <param name="source">The source operand.</param>
+		/// <param name="third">The third operand.</param>
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{

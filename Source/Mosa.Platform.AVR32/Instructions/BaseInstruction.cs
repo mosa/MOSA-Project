@@ -88,12 +88,6 @@ namespace Mosa.Platform.AVR32.Instructions
 
 		#endregion // Methods
 
-		/// <summary>
-		/// Gets the instruction latency.
-		/// </summary>
-		/// <value>The latency.</value>
-		public virtual int Latency { get { return -1; } }
-
 		#region Operand Overrides
 
 		/// <summary>

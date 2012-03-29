@@ -26,16 +26,6 @@ namespace Mosa.Platform.x86.Instructions
 
 		#endregion // Data Members
 
-		#region Properties
-
-		/// <summary>
-		/// Gets the instruction latency.
-		/// </summary>
-		/// <value>The latency.</value>
-		public override int Latency { get { return 5; } }
-
-		#endregion // Properties
-
 		#region Methods
 		/// <summary>
 		/// Computes the opcode.

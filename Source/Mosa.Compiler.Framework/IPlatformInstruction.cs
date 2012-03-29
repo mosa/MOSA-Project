@@ -22,10 +22,5 @@ namespace Mosa.Compiler.Framework
 		/// <param name="emitter">The emitter.</param>
 		void Emit(Context context, ICodeEmitter emitter);
 
-		/// <summary>
-		/// Gets the instruction latency.
-		/// </summary>
-		/// <value>The latency.</value>
-		int Latency { get; }
 	}
 }

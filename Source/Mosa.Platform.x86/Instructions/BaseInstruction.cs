@@ -48,12 +48,6 @@ namespace Mosa.Platform.x86.Instructions
 
 		#endregion // Construction
 
-		/// <summary>
-		/// Gets the instruction latency.
-		/// </summary>
-		/// <value>The latency.</value>
-		public virtual int Latency { get { return -1; } }
-
 		#region Methods
 
 		/// <summary>
@@ -120,6 +114,11 @@ namespace Mosa.Platform.x86.Instructions
 		public override string ToString()
 		{
 			return "X86." + base.ToString();
+		}
+
+		public virtual Register[] UsableRegisters
+		{
+			get { return null; }
 		}
 
 		#endregion // Operand Overrides
