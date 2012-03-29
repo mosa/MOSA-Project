@@ -1719,14 +1719,6 @@ namespace Mosa.Platform.x86
 		#region IIRVisitor
 
 		/// <summary>
-		/// Visitation function for BreakInstruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.BreakInstruction(Context context)
-		{
-		}
-
-		/// <summary>
 		/// Arithmetics the shift right instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
@@ -1832,30 +1824,6 @@ namespace Mosa.Platform.x86
 			if (IsInt64(context.Operand1))
 			{
 				ExpandMove(context);
-			}
-		}
-
-		/// <summary>
-		/// Pops the instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.PopInstruction(Context context)
-		{
-			if (IsInt64(context.Operand1))
-			{
-				ExpandPop(context);
-			}
-		}
-
-		/// <summary>
-		/// Pushes the instruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.PushInstruction(Context context)
-		{
-			if (IsInt64(context.Operand1))
-			{
-				ExpandPush(context);
 			}
 		}
 
@@ -2095,6 +2063,12 @@ namespace Mosa.Platform.x86
 		#endregion // IIRVisitor
 
 		#region IIRVisitor - Unused
+
+		/// <summary>
+		/// Visitation function for BreakInstruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IR.IIRVisitor.BreakInstruction(Context context) { }
 
 		/// <summary>
 		/// Visitation function for AddressOfInstruction.

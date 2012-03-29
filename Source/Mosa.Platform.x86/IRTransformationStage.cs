@@ -983,24 +983,6 @@ namespace Mosa.Platform.x86
 		}
 
 		/// <summary>
-		/// Visitation function for PopInstruction"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.PopInstruction(Context context)
-		{
-			context.ReplaceInstructionOnly(Instruction.PopInstruction);
-		}
-
-		/// <summary>
-		/// Visitation function for PushInstruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.PushInstruction(Context context)
-		{
-			context.ReplaceInstructionOnly(Instruction.PushInstruction);
-		}
-
-		/// <summary>
 		/// Visitation function for ThrowInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>

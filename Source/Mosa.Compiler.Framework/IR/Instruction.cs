@@ -117,15 +117,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// <summary>
 		/// 
 		/// </summary>
-		public static PopInstruction PopInstruction = new PopInstruction();
-		/// <summary>
-		/// 
-		/// </summary>
 		public static PrologueInstruction PrologueInstruction = new PrologueInstruction();
-		/// <summary>
-		/// 
-		/// </summary>
-		public static PushInstruction PushInstruction = new PushInstruction();
 
 		public static readonly RemFInstruction RemFInstruction = new RemFInstruction();
 

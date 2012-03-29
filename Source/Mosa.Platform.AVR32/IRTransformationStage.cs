@@ -776,22 +776,6 @@ namespace Mosa.Platform.AVR32
 		}
 
 		/// <summary>
-		/// Visitation function for PopInstruction"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.PopInstruction(Context context)
-		{
-		}
-
-		/// <summary>
-		/// Visitation function for PushInstruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.PushInstruction(Context context)
-		{
-		}
-
-		/// <summary>
 		/// Visitation function for ThrowInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>

@@ -118,22 +118,10 @@ namespace Mosa.Compiler.Framework.IR
 		void PhiInstruction(Context context);
 
 		/// <summary>
-		/// Visitation function for PopInstruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void PopInstruction(Context context);
-
-		/// <summary>
 		/// Visitation function for PrologueInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void PrologueInstruction(Context context);
-
-		/// <summary>
-		/// Visitation function for PushInstruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void PushInstruction(Context context);
 
 		/// <summary>
 		/// Visitation function for ReturnInstruction.

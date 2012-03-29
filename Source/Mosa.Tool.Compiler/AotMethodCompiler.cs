@@ -40,7 +40,8 @@ namespace Mosa.Tool.Compiler
 					new BasicBlockBuilderStage(),
 					new ExceptionPrologueStage(),
 					new OperandDeterminationStage(),
-					new SingleUseMarker(),
+					new SingleUseMarkerStage(),
+					new OperandUsageAnalyzerStage(),
 					new StaticAllocationResolutionStage(),
 					new CILTransformationStage(),
 

@@ -1,5 +1,5 @@
 ﻿/*
- * (c) 2011 MOSA - The Managed Operating System Alliance
+ * (c) 2012 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
@@ -17,7 +17,7 @@ namespace Mosa.Compiler.Framework
 	/// <summary>
 	/// 
 	/// </summary>
-	public class SingleUseMarker : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
+	public class SingleUseMarkerStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
 	{
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
