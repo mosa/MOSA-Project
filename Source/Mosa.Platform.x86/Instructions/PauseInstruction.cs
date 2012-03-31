@@ -16,7 +16,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Representations the x86 pause instruction.
 	/// </summary>
-	public sealed class PauseInstruction : BaseInstruction
+	public sealed class PauseInstruction : X86Instruction
 	{
 
 		#region Methods

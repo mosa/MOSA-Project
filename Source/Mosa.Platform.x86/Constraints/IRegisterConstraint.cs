@@ -9,7 +9,9 @@
 
 using Mosa.Compiler.Framework.Operands;
 
-namespace Mosa.Compiler.Framework
+using Mosa.Compiler.Framework;
+
+namespace Mosa.Platform.x86.Constraints
 {
 	/// <summary>
 	/// This interface is used to present register constraints by native

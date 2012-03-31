@@ -16,7 +16,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Representation the x86 jump instruction.
 	/// </summary>
-	public sealed class JmpInstruction : BaseInstruction
+	public sealed class JmpInstruction : X86Instruction
 	{
 
 		#region Data Members

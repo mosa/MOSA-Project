@@ -15,7 +15,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// 
 	/// </summary>
-	public sealed class LeaveInstruction : BaseInstruction
+	public sealed class LeaveInstruction : X86Instruction
 	{
 
 		#region Methods

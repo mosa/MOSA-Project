@@ -16,7 +16,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Representations the x86 cli instruction.
 	/// </summary>
-	public sealed class PushadInstruction : BaseInstruction
+	public sealed class PushadInstruction : X86Instruction
 	{
 
 		#region Methods

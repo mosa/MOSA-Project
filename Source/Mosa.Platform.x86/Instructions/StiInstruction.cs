@@ -15,7 +15,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Representations the x86 sti instruction.
 	/// </summary>
-	public sealed class StiInstruction : BaseInstruction
+	public sealed class StiInstruction : X86Instruction
 	{
 		#region Methods
 

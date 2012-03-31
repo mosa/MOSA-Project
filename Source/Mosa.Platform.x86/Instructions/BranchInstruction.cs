@@ -17,7 +17,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Representation a x86 branch instruction.
 	/// </summary>
-	public sealed class BranchInstruction : BaseInstruction
+	public sealed class BranchInstruction : X86Instruction
 	{
 
 		#region Data Members

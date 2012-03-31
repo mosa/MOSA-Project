@@ -60,9 +60,9 @@ namespace Mosa.Platform.x86.Instructions
 		}
 
 		/// <summary>
-		/// Gets the usable registers.
+		/// Gets the usable result registers.
 		/// </summary>
-		public override Register[] UsableRegisters
+		public override Register[] UsableResultRegisters
 		{
 			get { return GeneralPurpose32BitRegisters; }
 		}

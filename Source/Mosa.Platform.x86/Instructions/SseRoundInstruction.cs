@@ -16,7 +16,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// 
 	/// </summary>
-	public class SseRoundInstruction : BaseInstruction
+	public class SseRoundInstruction : X86Instruction
 	{
 		// ROUNDSS
 		private static readonly OpCode R4 = new OpCode(new byte[] { 0x66, 0x0F, 0x3A, 0x0A });

@@ -16,7 +16,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Intermediate representation of the literal instruction.
 	/// </summary>
-	public sealed class LiteralInstruction : BaseInstruction
+	public sealed class LiteralInstruction : X86Instruction
 	{
 
 		#region Methods

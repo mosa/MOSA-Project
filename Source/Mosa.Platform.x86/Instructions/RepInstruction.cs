@@ -14,7 +14,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Representations the x86 rep instruction.
 	/// </summary>
-	public sealed class RepInstruction : BaseInstruction
+	public sealed class RepInstruction : X86Instruction
 	{
 		#region Methods
 

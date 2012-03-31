@@ -16,7 +16,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Representations the x86 iretd instruction.
 	/// </summary>
-	public sealed class IRetdInstruction : BaseInstruction
+	public sealed class IRetdInstruction : X86Instruction
 	{
 
 		/// <summary>

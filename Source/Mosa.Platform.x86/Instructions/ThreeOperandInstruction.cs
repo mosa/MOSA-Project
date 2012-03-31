@@ -17,7 +17,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// x86 instructions using three operands. It provides properties to
 	/// easily access the individual operands.
 	/// </remarks>
-	public abstract class ThreeOperandInstruction : BaseInstruction
+	public abstract class ThreeOperandInstruction : X86Instruction
 	{
 
 		#region Construction

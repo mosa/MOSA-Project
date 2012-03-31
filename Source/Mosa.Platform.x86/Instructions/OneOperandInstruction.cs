@@ -18,7 +18,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// The <see cref="OneOperandInstruction"/> is the base class for
 	/// x86 instructions using one operand.
 	/// </remarks>
-	public abstract class OneOperandInstruction : BaseInstruction
+	public abstract class OneOperandInstruction : X86Instruction
 	{
 
 		#region Construction

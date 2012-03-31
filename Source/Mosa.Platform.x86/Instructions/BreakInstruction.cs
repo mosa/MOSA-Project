@@ -14,7 +14,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// 
 	/// </summary>
-	public class BreakInstruction : BaseInstruction
+	public class BreakInstruction : X86Instruction
 	{
 
 		#region Methods

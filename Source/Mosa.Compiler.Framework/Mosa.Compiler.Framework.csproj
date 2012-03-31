@@ -89,6 +89,7 @@
     <Compile Include="CIL\BreakInstruction.cs" />
     <Compile Include="BaseAssemblyCompilerStage.cs" />
     <Compile Include="ConstantFoldingStage.cs" />
+    <Compile Include="BasePlatformInstruction.cs" />
     <Compile Include="OperandUsageAnalyzerStage.cs" />
     <Compile Include="SingleUseMarkerStage.cs" />
     <Compile Include="IPlugSystem.cs" />
@@ -336,9 +337,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IPlatformStage.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="IRegisterConstraint.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IStackLayoutProvider.cs">

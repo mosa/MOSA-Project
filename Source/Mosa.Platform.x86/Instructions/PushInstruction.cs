@@ -16,7 +16,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Representations the x86 push instruction.
 	/// </summary>
-	public sealed class PushInstruction : BaseInstruction
+	public sealed class PushInstruction : X86Instruction
 	{
 		#region Data Members
 

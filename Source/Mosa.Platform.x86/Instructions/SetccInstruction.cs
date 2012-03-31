@@ -17,7 +17,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Representations the x86 setcc instruction.
 	/// </summary>
-	public sealed class SetccInstruction : BaseInstruction
+	public sealed class SetccInstruction : X86Instruction
 	{
 
 		#region Data Members

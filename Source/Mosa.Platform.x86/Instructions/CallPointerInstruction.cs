@@ -16,7 +16,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Representations the x86 call instruction.
 	/// </summary>
-	public sealed class CallPointerInstruction : BaseInstruction
+	public sealed class CallPointerInstruction : X86Instruction
 	{
 		private static readonly OpCode RegCall = new OpCode(new byte[] { 0xFF }, 2);
 		private static readonly byte[] LabelCall = new byte[] { 0xE8 };

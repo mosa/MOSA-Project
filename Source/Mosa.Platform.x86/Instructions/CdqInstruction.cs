@@ -14,7 +14,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Representations the x86 cdq instruction.
 	/// </summary>
-	public sealed class CdqInstruction : BaseInstruction
+	public sealed class CdqInstruction : X86Instruction
 	{
 		#region Methods
 

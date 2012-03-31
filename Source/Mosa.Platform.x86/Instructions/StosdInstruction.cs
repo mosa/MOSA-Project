@@ -15,7 +15,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Intermediate represenation of the x86 stosd instruction.
 	/// </summary>
-	public sealed class StosdInstruction : BaseInstruction
+	public sealed class StosdInstruction : X86Instruction
 	{
 
 		#region Methods

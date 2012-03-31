@@ -15,7 +15,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Representations the x86 lock instruction.
 	/// </summary>
-	public sealed class LockIntruction : BaseInstruction
+	public sealed class LockIntruction : X86Instruction
 	{
 
 		#region Methods

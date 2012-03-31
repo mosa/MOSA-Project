@@ -480,7 +480,7 @@ namespace Mosa.Platform.x86
 			}
 		}
 
-		private void MoveFloatingPoint(Context context, Instructions.BaseInstruction instruction)
+		private void MoveFloatingPoint(Context context, Instructions.X86Instruction instruction)
 		{
 			RegisterOperand xmm0 = new RegisterOperand(context.Result.Type, SSE2Register.XMM0);
 			Operand result = context.Result;

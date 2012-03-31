@@ -15,7 +15,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Representations the x86 stosb instruction.
 	/// </summary>
-	public sealed class StosbInstruction : BaseInstruction
+	public sealed class StosbInstruction : X86Instruction
 	{
 
 		#region Methods

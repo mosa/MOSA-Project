@@ -21,7 +21,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// x86 instructions using two operands. It provides properties to
 	/// easily access the individual operands.
 	/// </remarks>
-	public abstract class TwoOperandInstruction : BaseInstruction
+	public abstract class TwoOperandInstruction : X86Instruction
 	{
 		#region Construction
 

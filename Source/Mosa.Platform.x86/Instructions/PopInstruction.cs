@@ -16,7 +16,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Representations the x86 pop instruction.
 	/// </summary>
-	public sealed class PopInstruction : BaseInstruction
+	public sealed class PopInstruction : X86Instruction
 	{
 		#region Data Members
 

@@ -16,7 +16,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Representations the x86 cld instruction.
 	/// </summary>
-	public sealed class CldInstruction : BaseInstruction
+	public sealed class CldInstruction : X86Instruction
 	{
 
 		#region Methods

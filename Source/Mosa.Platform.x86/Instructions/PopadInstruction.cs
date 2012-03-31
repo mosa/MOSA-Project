@@ -16,7 +16,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Representations the x86 popad instruction.
 	/// </summary>
-	public sealed class PopadInstruction : BaseInstruction
+	public sealed class PopadInstruction : X86Instruction
 	{
 
 		#region Methods

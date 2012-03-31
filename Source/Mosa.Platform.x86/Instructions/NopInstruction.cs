@@ -14,7 +14,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// 
 	/// </summary>
-	public class NopInstruction : BaseInstruction
+	public class NopInstruction : X86Instruction
 	{
 
 		#region Methods

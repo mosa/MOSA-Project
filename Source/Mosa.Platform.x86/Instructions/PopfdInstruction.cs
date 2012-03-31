@@ -16,7 +16,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Representations the x86 popfd instruction.
 	/// </summary>
-	public sealed class PopfdInstruction : BaseInstruction
+	public sealed class PopfdInstruction : X86Instruction
 	{
 		#region Data members
 

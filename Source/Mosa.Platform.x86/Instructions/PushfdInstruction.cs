@@ -14,7 +14,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Representations the x86 pushfd instruction.
 	/// </summary>
-	public sealed class PushfdInstruction : BaseInstruction
+	public sealed class PushfdInstruction : X86Instruction
 	{
 		#region Data members
 

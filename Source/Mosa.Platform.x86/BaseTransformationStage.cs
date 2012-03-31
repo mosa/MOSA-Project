@@ -63,10 +63,8 @@ namespace Mosa.Platform.x86
 		/// <param name="ctx">The context.</param>
 		protected void EmitResultConstants(Context ctx)
 		{
-			if (ctx.ResultCount > 0)
+			if (ctx.ResultCount == 1)
 				ctx.Result = EmitConstant(ctx.Result);
-			else if (ctx.OperandCount > 1)
-				ctx.Result2 = EmitConstant(ctx.Result2);
 		}
 
 		/// <summary>
