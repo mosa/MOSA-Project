@@ -119,10 +119,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns>
 		/// The operand, which holds the instruction result.
 		/// </returns>
-		public virtual Operand CreateResultOperand(SigType type, int label, int index)
-		{
-			return new TemporaryOperand(label, type, StackFrameRegister, index);
-		}
+		public abstract Operand CreateResultOperand(SigType type);
 
 		/// <summary>
 		/// Gets the intrinsic instruction by type

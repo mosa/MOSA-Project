@@ -97,7 +97,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns>
 		/// The operand, which holds the instruction result.
 		/// </returns>
-		Operand CreateResultOperand(SigType type, int label, int index);
+		Operand CreateResultOperand(SigType type);
 
 		/// <summary>
 		/// Gets the type memory requirements.

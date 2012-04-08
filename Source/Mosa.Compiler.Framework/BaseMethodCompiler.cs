@@ -81,11 +81,6 @@ namespace Mosa.Compiler.Framework
 		private RuntimeMethod method;
 
 		/// <summary>
-		/// Holds the next free stack slot index
-		/// </summary>
-		protected int nextStackSlot;
-
-		/// <summary>
 		/// Holds the type, which owns the method
 		/// </summary>
 		private RuntimeType type;
@@ -177,7 +172,6 @@ namespace Mosa.Compiler.Framework
 			this.plugSystem = assemblyCompiler.Pipeline.FindFirst<IPlugSystem>();
 
 			this.parameters = new List<Operand>(new Operand[method.Parameters.Count]);
-			this.nextStackSlot = 0;
 			this.basicBlocks = new List<BasicBlock>();
 
 			this.instructionSet = instructionSet ?? new InstructionSet(256);
@@ -294,12 +288,15 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		protected void EvaluateLocalVariables()
 		{
+			int index = 0;
+			locals = new Operand[localsSig.Locals.Length];
+
 			foreach (var localVariable in localsSig.Locals)
 			{
-				stackLayout.AllocateStackOperand(localVariable.Type);
-
+				locals[index++] = stackLayout.AllocateStackOperand(localVariable.Type);
 				//Scheduler.ScheduleTypeForCompilation(localVariable.Type); // TODO
 			}
+
 		}
 
 		/// <summary>
@@ -311,11 +308,9 @@ namespace Mosa.Compiler.Framework
 
 			if (method.Signature.HasThis || method.Signature.HasExplicitThis)
 			{
-				var classSigType = new ClassSigType(type.Token);
-				var signatureType =
-					Method.DeclaringType.ContainsOpenGenericParameters ?
-						assemblyCompiler.GenericTypePatcher.PatchSignatureType(Method.Module, Method.DeclaringType as CilGenericType, type.Token) :
-						classSigType;
+				var signatureType = Method.DeclaringType.ContainsOpenGenericParameters
+					? assemblyCompiler.GenericTypePatcher.PatchSignatureType(Method.Module, Method.DeclaringType as CilGenericType, type.Token)
+					: new ClassSigType(type.Token);
 
 				stackLayout.SetStackParameter(index++, new RuntimeParameter(@"this", 2, ParameterAttributes.In), signatureType);
 			}
@@ -328,10 +323,8 @@ namespace Mosa.Compiler.Framework
 				{
 					parameterType = assemblyCompiler.GenericTypePatcher.PatchSignatureType(typeSystem.InternalTypeModule, Method.DeclaringType, (parameterType as GenericInstSigType).BaseType.Token);
 				}
-				else
-				{
-					stackLayout.SetStackParameter(index++, method.Parameters[paramIndex], parameterType);
-				}
+
+				stackLayout.SetStackParameter(index++, method.Parameters[paramIndex], parameterType);
 			}
 
 		}
@@ -372,7 +365,7 @@ namespace Mosa.Compiler.Framework
 		{
 			if (type.Type != CilElementType.I8 && type.Type != CilElementType.U8)
 			{
-				return architecture.CreateResultOperand(type, nextStackSlot, nextStackSlot++);
+				return architecture.CreateResultOperand(type);
 			}
 			return CreateTemporary(type);
 		}
@@ -384,8 +377,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns>An operand, which represents the temporary.</returns>
 		public Operand CreateTemporary(SigType type)
 		{
-			int stackSlot = nextStackSlot++;
-			return new LocalVariableOperand(architecture.StackFrameRegister, String.Format(@"T_{0}", stackSlot), stackSlot, type);
+			return stackLayout.AllocateStackOperand(type);
 		}
 
 		/// <summary>
@@ -403,15 +395,15 @@ namespace Mosa.Compiler.Framework
 					d.Dispose();
 			}
 
-			pipeline.Clear();
 			pipeline = null;
-
 			architecture = null;
 			linker = null;
 			method = null;
 			type = null;
 			instructionSet = null;
 			basicBlocks = null;
+			stackLayout = null;
+			locals = null;
 		}
 
 		/// <summary>
@@ -431,31 +423,7 @@ namespace Mosa.Compiler.Framework
 		/// <exception cref="System.ArgumentOutOfRangeException">The <paramref name="index"/> is not valid.</exception>
 		public Operand GetLocalOperand(int index)
 		{
-			// HACK: Returning a new instance here breaks object identity. We should reuse operands,
-			// which represent the same memory location. If we need to move a variable in an optimization
-			// stage to a different memory location, it should actually be a new one so sharing object
-			// only saves runtime space/perf.
-
-			Debug.Assert(localsSig != null, @"Method doesn't have locals.");
-			Debug.Assert(index < localsSig.Locals.Length, @"Invalid local index requested.");
-
-			if (localsSig == null || localsSig.Locals.Length < index)
-				throw new ArgumentOutOfRangeException(@"index", index, @"Invalid parameter index");
-
-			Operand local = locals[index];
-
-			if (local == null)
-			{
-				VariableSignature localVariable = localsSig.Locals[index];
-
-				//Scheduler.ScheduleTypeForCompilation(localVariable.Type); // TODO
-
-				local = new LocalVariableOperand(architecture.StackFrameRegister, String.Format("L_{0}", index), index, localVariable.Type);
-
-				locals[index] = local;
-			}
-
-			return local;
+			return stackLayout.GetStackOperand(index);
 		}
 
 		/// <summary>
@@ -466,54 +434,7 @@ namespace Mosa.Compiler.Framework
 		/// <exception cref="System.ArgumentOutOfRangeException">The <paramref name="index"/> is not valid.</exception>
 		public Operand GetParameterOperand(int index)
 		{
-			// HACK: Returning a new instance here breaks object identity. We should reuse operands,
-			// which represent the same memory location. If we need to move a variable in an optimization
-			// stage to a different memory location, it should actually be a new one so sharing object
-			// only saves runtime space/perf.			
-
-			if (method.Signature.HasThis || method.Signature.HasExplicitThis)
-			{
-				if (index == 0)
-				{
-					var classSigType = new ClassSigType(type.Token);
-					var signatureType =
-						Method.DeclaringType.ContainsOpenGenericParameters ?
-							assemblyCompiler.GenericTypePatcher.PatchSignatureType(Method.Module, Method.DeclaringType as CilGenericType, type.Token) :
-							classSigType;
-
-					return new ParameterOperand(
-						architecture.StackFrameRegister,
-						new RuntimeParameter(@"this", 2, ParameterAttributes.In),
-						signatureType);
-				}
-				// Decrement the index, as the caller actually wants a real parameter
-				--index;
-			}
-
-			// A normal argument, decode it...
-			IList<RuntimeParameter> methodParameters = method.Parameters;
-			Debug.Assert(methodParameters != null, @"Method doesn't have arguments.");
-			Debug.Assert(index < methodParameters.Count, @"Invalid argument index requested.");
-			if (methodParameters == null || methodParameters.Count <= index)
-				throw new ArgumentOutOfRangeException(@"index", index, @"Invalid parameter index");
-
-			Operand parameter = null;
-			if (parameters.Count > index)
-				parameter = parameters[index];
-
-			if (parameter == null)
-			{
-				SigType parameterType = method.Signature.Parameters[index];
-
-				if (parameterType is GenericInstSigType && (parameterType as GenericInstSigType).ContainsGenericParameters)
-				{
-					parameterType = assemblyCompiler.GenericTypePatcher.PatchSignatureType(typeSystem.InternalTypeModule, Method.DeclaringType, (parameterType as GenericInstSigType).BaseType.Token);
-				}
-				parameter = new ParameterOperand(architecture.StackFrameRegister, methodParameters[index], parameterType);
-				parameters[index] = parameter;
-			}
-
-			return parameter;
+			return stackLayout.GetStackParameter(index);
 		}
 
 		/// <summary>
@@ -526,10 +447,6 @@ namespace Mosa.Compiler.Framework
 				throw new ArgumentNullException(@"localVariableSignature");
 
 			localsSig = localVariableSignature;
-
-			locals = new Operand[localsSig.Locals.Length];
-
-			nextStackSlot = locals.Length + 1;
 
 			EvaluateLocalVariables();
 		}

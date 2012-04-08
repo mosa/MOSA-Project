@@ -121,7 +121,7 @@ namespace Mosa.Platform.x64
 		/// <param name="instructionLabel">The label of the instruction requesting the operand.</param>
 		/// <param name="operandStackIndex">The stack index of the operand.</param>
 		/// <returns>A new operand usable as a result operand.</returns>
-		public override Operand CreateResultOperand(SigType signatureType, int instructionLabel, int operandStackIndex)
+		public override Operand CreateResultOperand(SigType signatureType)
 		{
 			// TODO
 			return null;
