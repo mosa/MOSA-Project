@@ -180,5 +180,10 @@ namespace Mosa.Compiler.Framework
 		/// Gets the plug.
 		/// </summary>
 		IPlugSystem PlugSystem { get; }
+
+		/// <summary>
+		/// Gets the stack layout.
+		/// </summary>
+		StackLayout StackLayout { get; }
 	}
 }

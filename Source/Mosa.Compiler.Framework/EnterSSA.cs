@@ -81,7 +81,7 @@ namespace Mosa.Compiler.Framework
 
 			for (var i = 0; i < numberOfParameters; ++i)
 			{
-				var op = this.methodCompiler.GetParameterOperand(i);
+				var op = methodCompiler.GetParameterOperand(i);
 				var name = NameForOperand(op);
 				this.variableInformation[name].Stack.Push(0);
 				this.variableInformation[name].Count = 1;

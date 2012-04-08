@@ -90,6 +90,10 @@
     <Compile Include="BaseAssemblyCompilerStage.cs" />
     <Compile Include="ConstantFoldingStage.cs" />
     <Compile Include="BasePlatformInstruction.cs" />
+    <Compile Include="Bitmap64Bit.cs" />
+    <Compile Include="Operands\StackSizeOperand.cs" />
+    <Compile Include="StackLayout.cs" />
+    <Compile Include="RegisterMap.cs" />
     <Compile Include="OperandUsageAnalyzerStage.cs" />
     <Compile Include="SingleUseMarkerStage.cs" />
     <Compile Include="IPlugSystem.cs" />

@@ -32,7 +32,7 @@ namespace Mosa.Tool.TypeExplorer
 				new ExceptionPrologueStage(),
 				new OperandDeterminationStage(),
 				new SingleUseMarkerStage(),
-				new OperandUsageAnalyzerStage(),
+				//new OperandUsageAnalyzerStage(),
 				new StaticAllocationResolutionStage(),
 				new CILTransformationStage(),
 

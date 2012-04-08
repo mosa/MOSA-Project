@@ -18,18 +18,13 @@ namespace Mosa.Compiler.Framework.Operands
 	/// </summary>
 	public sealed class ConstantOperand : Operand
 	{
-		#region Static data members
-
-		private static SigType _sObject;
-
-		#endregion // Static data members
 
 		#region Data members
 
 		/// <summary>
 		/// Constant value.
 		/// </summary>
-		private object _value;
+		private object value;
 
 		#endregion // Data members
 
@@ -39,11 +34,11 @@ namespace Mosa.Compiler.Framework.Operands
 		/// Initializes a new instance of the <see cref="ConstantOperand"/> class.
 		/// </summary>
 		/// <param name="typeRef">The type ref.</param>
-		/// <param name="value">The value of the contant.</param>
+		/// <param name="value">The value of the constant.</param>
 		public ConstantOperand(SigType typeRef, object value)
 			: base(typeRef)
 		{
-			_value = value;
+			this.value = value;
 		}
 
 		#endregion // Construction
@@ -55,7 +50,7 @@ namespace Mosa.Compiler.Framework.Operands
 		/// </summary>
 		public object Value
 		{
-			get { return _value; }
+			get { return value; }
 		}
 
 		#endregion // Properties
@@ -78,10 +73,7 @@ namespace Mosa.Compiler.Framework.Operands
 		/// <returns>A new instance of <see cref="ConstantOperand"/>, that represents the null value.</returns>
 		public static ConstantOperand GetNull()
 		{
-			if (_sObject == null)
-				_sObject = BuiltInSigType.Object;
-
-			return new ConstantOperand(_sObject, null);
+			return new ConstantOperand(BuiltInSigType.Object, null);
 		}
 
 		#endregion // Methods
@@ -105,9 +97,9 @@ namespace Mosa.Compiler.Framework.Operands
 		/// <returns>A string representation of the operand.</returns>
 		public override string ToString()
 		{
-			if (_value == null)
+			if (value == null)
 				return String.Format("const null [{0}]", _type);
-			return String.Format("const {0} [{1}]", _value, _type);
+			return String.Format("const {0} [{1}]", value, _type);
 		}
 
 		#endregion // Operand Overrides

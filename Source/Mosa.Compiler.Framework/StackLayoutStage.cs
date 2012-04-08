@@ -34,7 +34,7 @@ namespace Mosa.Compiler.Framework
 		void IMethodCompilerStage.Run()
 		{
 			if (methodCompiler.PlugSystem != null)
-				if (methodCompiler.PlugSystem.GetPlugMethod(this.methodCompiler.Method) != null)
+				if (methodCompiler.PlugSystem.GetPlugMethod(methodCompiler.Method) != null)
 					return;
 
 			List<StackOperand> locals = CollectLocalVariablesFromIL();

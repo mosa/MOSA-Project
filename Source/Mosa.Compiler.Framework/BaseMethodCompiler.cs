@@ -140,6 +140,11 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		private IPlugSystem plugSystem;
 
+		/// <summary>
+		/// Holds the stack layout
+		/// </summary>
+		private StackLayout stackLayout;
+
 		#endregion // Data Members
 
 		#region Construction
@@ -178,6 +183,10 @@ namespace Mosa.Compiler.Framework
 			this.instructionSet = instructionSet ?? new InstructionSet(256);
 
 			this.pipeline = new CompilerPipeline();
+
+			this.stackLayout = new StackLayout(architecture, method.Parameters.Count + (method.Signature.HasThis || method.Signature.HasExplicitThis ? 1 : 0));
+
+			EvaluateParameterOperands();
 		}
 
 		#endregion // Construction
@@ -192,7 +201,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the assembly, which contains the method.
 		/// </summary>
-		public IMetadataModule Assembly { get { return this.moduleTypeSystem.MetadataModule; } }
+		public IMetadataModule Assembly { get { return moduleTypeSystem.MetadataModule; } }
 
 		/// <summary>
 		/// Gets the linker used to resolve external symbols.
@@ -259,7 +268,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the local variables.
 		/// </summary>
-		public Operand[] LocalVariables { get { return this.locals; } }
+		public Operand[] LocalVariables { get { return locals; } }
 
 		/// <summary>
 		/// Gets the assembly compiler.
@@ -271,9 +280,61 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public IPlugSystem PlugSystem { get { return plugSystem; } }
 
+		/// <summary>
+		/// Gets the stack layout.
+		/// </summary>
+		public StackLayout StackLayout { get { return stackLayout; } }
+
 		#endregion // Properties
 
 		#region Methods
+
+		/// <summary>
+		/// Evaluates the local operands.
+		/// </summary>
+		protected void EvaluateLocalVariables()
+		{
+			foreach (var localVariable in localsSig.Locals)
+			{
+				stackLayout.AllocateStackOperand(localVariable.Type);
+
+				//Scheduler.ScheduleTypeForCompilation(localVariable.Type); // TODO
+			}
+		}
+
+		/// <summary>
+		/// Evaluates the parameter operands.
+		/// </summary>
+		protected void EvaluateParameterOperands()
+		{
+			int index = 0;
+
+			if (method.Signature.HasThis || method.Signature.HasExplicitThis)
+			{
+				var classSigType = new ClassSigType(type.Token);
+				var signatureType =
+					Method.DeclaringType.ContainsOpenGenericParameters ?
+						assemblyCompiler.GenericTypePatcher.PatchSignatureType(Method.Module, Method.DeclaringType as CilGenericType, type.Token) :
+						classSigType;
+
+				stackLayout.SetStackParameter(index++, new RuntimeParameter(@"this", 2, ParameterAttributes.In), signatureType);
+			}
+
+			for (int paramIndex = 0; paramIndex < method.Signature.Parameters.Length; paramIndex++)
+			{
+				var parameterType = method.Signature.Parameters[paramIndex];
+
+				if (parameterType is GenericInstSigType && (parameterType as GenericInstSigType).ContainsGenericParameters)
+				{
+					parameterType = assemblyCompiler.GenericTypePatcher.PatchSignatureType(typeSystem.InternalTypeModule, Method.DeclaringType, (parameterType as GenericInstSigType).BaseType.Token);
+				}
+				else
+				{
+					stackLayout.SetStackParameter(index++, method.Parameters[paramIndex], parameterType);
+				}
+			}
+
+		}
 
 		/// <summary>
 		/// Requests a stream to emit native instructions to.
@@ -338,7 +399,7 @@ namespace Mosa.Compiler.Framework
 			foreach (IMethodCompilerStage mcs in pipeline)
 			{
 				IDisposable d = mcs as IDisposable;
-				if (null != d)
+				if (d != null)
 					d.Dispose();
 			}
 
@@ -374,7 +435,6 @@ namespace Mosa.Compiler.Framework
 			// which represent the same memory location. If we need to move a variable in an optimization
 			// stage to a different memory location, it should actually be a new one so sharing object
 			// only saves runtime space/perf.
-			// PG: Isn't that implemented below? Comment seems out of date with code
 
 			Debug.Assert(localsSig != null, @"Method doesn't have locals.");
 			Debug.Assert(index < localsSig.Locals.Length, @"Invalid local index requested.");
@@ -388,7 +448,7 @@ namespace Mosa.Compiler.Framework
 			{
 				VariableSignature localVariable = localsSig.Locals[index];
 
-				//ScheduleDependencyForCompilation(localVariable.Type);
+				//Scheduler.ScheduleTypeForCompilation(localVariable.Type); // TODO
 
 				local = new LocalVariableOperand(architecture.StackFrameRegister, String.Format("L_{0}", index), index, localVariable.Type);
 
@@ -409,17 +469,16 @@ namespace Mosa.Compiler.Framework
 			// HACK: Returning a new instance here breaks object identity. We should reuse operands,
 			// which represent the same memory location. If we need to move a variable in an optimization
 			// stage to a different memory location, it should actually be a new one so sharing object
-			// only saves runtime space/perf.
-			MethodSignature sig = method.Signature;
+			// only saves runtime space/perf.			
 
-			if (sig.HasThis || sig.HasExplicitThis)
+			if (method.Signature.HasThis || method.Signature.HasExplicitThis)
 			{
 				if (index == 0)
 				{
 					var classSigType = new ClassSigType(type.Token);
 					var signatureType =
-						this.Method.DeclaringType.ContainsOpenGenericParameters ?
-							assemblyCompiler.GenericTypePatcher.PatchSignatureType(this.Method.Module, this.Method.DeclaringType as CilGenericType, type.Token) :
+						Method.DeclaringType.ContainsOpenGenericParameters ?
+							assemblyCompiler.GenericTypePatcher.PatchSignatureType(Method.Module, Method.DeclaringType as CilGenericType, type.Token) :
 							classSigType;
 
 					return new ParameterOperand(
@@ -444,12 +503,11 @@ namespace Mosa.Compiler.Framework
 
 			if (parameter == null)
 			{
-				SigType parameterType = sig.Parameters[index];
+				SigType parameterType = method.Signature.Parameters[index];
 
 				if (parameterType is GenericInstSigType && (parameterType as GenericInstSigType).ContainsGenericParameters)
 				{
-					var genericInstSigType = parameterType as GenericInstSigType;
-					parameterType = assemblyCompiler.GenericTypePatcher.PatchSignatureType(typeSystem.InternalTypeModule, Method.DeclaringType, genericInstSigType.BaseType.Token);
+					parameterType = assemblyCompiler.GenericTypePatcher.PatchSignatureType(typeSystem.InternalTypeModule, Method.DeclaringType, (parameterType as GenericInstSigType).BaseType.Token);
 				}
 				parameter = new ParameterOperand(architecture.StackFrameRegister, methodParameters[index], parameterType);
 				parameters[index] = parameter;
@@ -472,6 +530,8 @@ namespace Mosa.Compiler.Framework
 			locals = new Operand[localsSig.Locals.Length];
 
 			nextStackSlot = locals.Length + 1;
+
+			EvaluateLocalVariables();
 		}
 
 		/// <summary>

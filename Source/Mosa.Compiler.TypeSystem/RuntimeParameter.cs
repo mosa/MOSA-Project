@@ -7,7 +7,6 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-
 using Mosa.Compiler.Metadata;
 
 namespace Mosa.Compiler.TypeSystem

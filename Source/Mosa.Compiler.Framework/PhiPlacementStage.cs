@@ -126,17 +126,17 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		private void CollectAssignments()
 		{
-			foreach (var block in this.basicBlocks)
-				for (var context = new Context(this.instructionSet, block); !context.EndOfInstruction; context.GotoNext())
+			foreach (var block in basicBlocks)
+				for (var context = new Context(instructionSet, block); !context.EndOfInstruction; context.GotoNext())
 					if (IsAssignmentToStackVariable(context))
 						this.AddToAssignments(context.Result, block);
 
-			var numberOfParameters = this.methodCompiler.Method.Parameters.Count;
-			if (this.methodCompiler.Method.Signature.HasThis)
+			var numberOfParameters = methodCompiler.Method.Parameters.Count;
+			if (methodCompiler.Method.Signature.HasThis)
 				++numberOfParameters;
 
 			for (var i = 0; i < numberOfParameters; ++i)
-				this.AddToAssignments(this.methodCompiler.GetParameterOperand(i), this.FindBlock(-1));
+				AddToAssignments(methodCompiler.GetParameterOperand(i), this.FindBlock(-1));
 		}
 
 		/// <summary>
