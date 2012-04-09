@@ -26,14 +26,24 @@ namespace Mosa.Platform.x86
 		public enum SegmentType
 		{
 			/// <summary>
-			/// The x86 DS register instruction encoding.
-			/// </summary>
-			DS = 3,
-
-			/// <summary>
 			/// The x86 ES register instruction encoding.
 			/// </summary>
 			ES = 0,
+
+			/// <summary>
+			/// The x86 CS register instruction encoding.
+			/// </summary>
+			CS = 1,
+
+			/// <summary>
+			/// The x86 SS register instruction encoding.
+			/// </summary>
+			SS = 2,
+
+			/// <summary>
+			/// The x86 DS register instruction encoding.
+			/// </summary>
+			DS = 3,
 
 			/// <summary>
 			/// The x86 FS register instruction encoding.
@@ -43,17 +53,7 @@ namespace Mosa.Platform.x86
 			/// <summary>
 			/// The x86 GS register instruction encoding.
 			/// </summary>
-			GS = 5,
-
-			/// <summary>
-			/// The x86 SS register instruction encoding.
-			/// </summary>
-			SS = 2,
-
-			/// <summary>
-			/// The x86 CS register instruction encoding.
-			/// </summary>
-			CS = 1,
+			GS = 5
 		}
 
 		#endregion // Types
@@ -124,7 +124,7 @@ namespace Mosa.Platform.x86
 		/// </summary>
 		public override int RegisterCode
 		{
-			get { return base.Index; }
+			get { return (int)segment; }
 		}
 
 		/// <summary>
