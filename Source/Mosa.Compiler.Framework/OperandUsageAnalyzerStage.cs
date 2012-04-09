@@ -42,17 +42,16 @@ namespace Mosa.Compiler.Framework
 					if (ctx.Ignore || ctx.Instruction == null)
 						continue;
 
-					Debug.WriteLine(String.Format("L_{0:X4}: {1}", ctx.Label, ctx.Instruction.ToString(ctx)));
+					RegisterBitmap resultRegisters = GetResultAssignment(ctx);
+					RegisterBitmap operandRegisters = GetOperandAssignments(ctx);
 
-					Bitmap64Bit resultRegisters = GetResultAssignment(ctx);
+					Debug.WriteLine(String.Format("L_{0:X4}: {1}", ctx.Label, ctx.Instruction.ToString(ctx)));
 
 					if (resultRegisters.HasValue)
 					{
 						Debug.Write("\t ASSIGN: ");
 						Debug.Write(GetRegisterNames(resultRegisters));
 					}
-
-					Bitmap64Bit operandRegisters = GetOperandAssignments(ctx);
 
 					if (operandRegisters.HasValue)
 					{
@@ -71,7 +70,7 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		public List<Register> GetRegisters(Bitmap64Bit registers)
+		public List<Register> GetRegisters(RegisterBitmap registers)
 		{
 			List<Register> list = new List<Register>();
 
@@ -83,7 +82,7 @@ namespace Mosa.Compiler.Framework
 			return list;
 		}
 
-		protected string GetRegisterNames(Bitmap64Bit registers)
+		protected string GetRegisterNames(RegisterBitmap registers)
 		{
 			StringBuilder list = new StringBuilder();
 
@@ -98,9 +97,9 @@ namespace Mosa.Compiler.Framework
 			return list.ToString();
 		}
 
-		protected Bitmap64Bit GetResultAssignment(Context ctx)
+		protected RegisterBitmap GetResultAssignment(Context ctx)
 		{
-			Bitmap64Bit registers = new Bitmap64Bit();
+			RegisterBitmap registers = new RegisterBitmap();
 
 			RegisterOperand regOperand = ctx.Result as RegisterOperand;
 
@@ -151,9 +150,9 @@ namespace Mosa.Compiler.Framework
 			return null;
 		}
 
-		protected Bitmap64Bit GetOperandAssignments(Context ctx)
+		protected RegisterBitmap GetOperandAssignments(Context ctx)
 		{
-			Bitmap64Bit registers = new Bitmap64Bit();
+			RegisterBitmap registers = new RegisterBitmap();
 
 			registers.Set(GetRegister(ctx.Operand1));
 			registers.Set(GetRegister(ctx.Operand2));

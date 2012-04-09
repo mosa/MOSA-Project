@@ -15,7 +15,7 @@ namespace Mosa.Compiler.Framework
 {
 	/// <summary>
 	/// </summary>
-	public struct Bitmap64Bit : IEnumerable<int>
+	public struct RegisterBitmap : IEnumerable<int>
 	{
 		#region Data members
 
@@ -51,12 +51,12 @@ namespace Mosa.Compiler.Framework
 			map = ~((ulong)0);
 		}
 
-		public void And(Bitmap64Bit bitmap64Bit)
+		public void And(RegisterBitmap bitmap64Bit)
 		{
 			map &= bitmap64Bit.map;
 		}
 
-		public void Or(Bitmap64Bit bitmap64Bit)
+		public void Or(RegisterBitmap bitmap64Bit)
 		{
 			map |= bitmap64Bit.map;
 		}
@@ -64,6 +64,12 @@ namespace Mosa.Compiler.Framework
 		public void Not()
 		{
 			map = ~map;
+		}
+
+		public bool IsSet(Register register)
+		{
+			ulong result = map & ((ulong)1 << register.Index);
+			return (result != 0);
 		}
 
 		IEnumerator<int> IEnumerable<int>.GetEnumerator()

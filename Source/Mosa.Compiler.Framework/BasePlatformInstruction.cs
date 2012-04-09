@@ -20,16 +20,6 @@ namespace Mosa.Compiler.Framework
 
 		#region  Data members
 
-		/// <summary>
-		/// Gets the usable result registers.
-		/// </summary>
-		public virtual Register[] UsableResultRegisters { get { return null; } }
-
-		/// <summary>
-		/// Gets the usable operand registers.
-		/// </summary>
-		public virtual Register[] UsableOperandRegisters { get { return null; } }
-
 		#endregion
 
 		#region Construction
@@ -64,61 +54,6 @@ namespace Mosa.Compiler.Framework
 		#endregion // Construction
 
 		#region Methods
-
-		/// <summary>
-		/// Gets the used registers.
-		/// </summary>
-		/// <param name="results">The results.</param>
-		/// <param name="operand1">The operand1.</param>
-		/// <returns></returns>
-		public virtual Register[] GetUsedRegisters(Register results, Register operand1)
-		{
-			return GetUsedRegisters(results, operand1, null);
-		}
-
-		/// <summary>
-		/// Determines whether [is valid operand] [the specified result].
-		/// </summary>
-		/// <param name="result">The result.</param>
-		/// <returns>
-		///   <c>true</c> if [is valid operand] [the specified result]; otherwise, <c>false</c>.
-		/// </returns>
-		public bool IsValidOperand(Register result)
-		{
-			foreach (var register in UsableOperandRegisters)
-				if (result == register)
-					return true;
-
-			return false;
-		}
-
-		/// <summary>
-		/// Determines whether [is valid result operand] [the specified result].
-		/// </summary>
-		/// <param name="result">The result.</param>
-		/// <returns>
-		///   <c>true</c> if [is valid result operand] [the specified result]; otherwise, <c>false</c>.
-		/// </returns>
-		public bool IsValidResult(Register result)
-		{
-			foreach (var register in UsableResultRegisters)
-				if (result == register)
-					return true;
-
-			return false;
-		}
-
-		/// <summary>
-		/// Gets the used registers.
-		/// </summary>
-		/// <param name="results">The results.</param>
-		/// <param name="operand1">The operand1.</param>
-		/// <param name="operand2">The operand2.</param>
-		/// <returns></returns>
-		public virtual Register[] GetUsedRegisters(Register results, Register operand1, Register operand2)
-		{
-			return null;
-		}
 
 		#endregion //  Methods
 	}

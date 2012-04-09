@@ -15,7 +15,7 @@ namespace Mosa.Compiler.Framework
 	{
 		#region Data members
 
-		protected Bitmap64Bit[] map;
+		protected RegisterBitmap[] map;
 
 		protected InstructionSet instructionSet;
 
@@ -24,7 +24,7 @@ namespace Mosa.Compiler.Framework
 		RegisterMap(InstructionSet instructionSet)
 		{
 			this.instructionSet = instructionSet;
-			map = new Bitmap64Bit[instructionSet.Size];
+			map = new RegisterBitmap[instructionSet.Size];
 		}
 
 		protected void CheckAndResize()
@@ -32,7 +32,7 @@ namespace Mosa.Compiler.Framework
 			if (instructionSet.Size <= map.Length)
 				return;
 
-			Bitmap64Bit[] newmap = new Bitmap64Bit[instructionSet.Size];
+			RegisterBitmap[] newmap = new RegisterBitmap[instructionSet.Size];
 			map.CopyTo(newmap, 0);
 			map = newmap;
 		}

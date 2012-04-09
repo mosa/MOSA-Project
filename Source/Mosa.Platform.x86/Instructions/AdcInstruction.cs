@@ -57,14 +57,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.Adc(context);
 		}
 
-		/// <summary>
-		/// Gets the usable result registers.
-		/// </summary>
-		public override Register[] UsableResultRegisters
-		{
-			get { return GeneralPurpose32BitRegisters; }
-		}
-
 		#endregion // Methods
 	}
 }

@@ -64,6 +64,18 @@ namespace Mosa.Platform.x86
 			GeneralPurposeRegister.EDI,
 
 			////////////////////////////////////////////////////////
+			// MMX floating point registers
+			////////////////////////////////////////////////////////			
+			MMXRegister.MM0,
+			MMXRegister.MM1,
+			MMXRegister.MM2,
+			MMXRegister.MM3,
+			MMXRegister.MM4,
+			MMXRegister.MM5,
+			MMXRegister.MM6,
+			MMXRegister.MM7,
+
+			////////////////////////////////////////////////////////
 			// 128-bit floating point registers
 			////////////////////////////////////////////////////////
 			SSE2Register.XMM0,
@@ -73,7 +85,17 @@ namespace Mosa.Platform.x86
 			SSE2Register.XMM4,
 			SSE2Register.XMM5,
 			SSE2Register.XMM6,
-			SSE2Register.XMM7
+			SSE2Register.XMM7,
+
+			////////////////////////////////////////////////////////
+			// Segmentation Registers
+			////////////////////////////////////////////////////////
+			SegmentRegister.CS,
+			SegmentRegister.DS,
+			SegmentRegister.ES,
+			SegmentRegister.FS,
+			SegmentRegister.GS,
+			SegmentRegister.SS
 		};
 
 		/// <summary>

@@ -194,7 +194,9 @@ namespace Mosa.Platform.x86
 				ctx.AppendInstruction(Instruction.PopInstruction, ebx);
 			}
 			else
+			{
 				ctx.SetInstruction(Instruction.DivInstruction, null, op);
+			}
 		}
 
 		/// <summary>

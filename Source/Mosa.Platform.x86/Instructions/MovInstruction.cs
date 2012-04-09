@@ -108,14 +108,6 @@ namespace Mosa.Platform.x86.Instructions
 			visitor.Mov(context);
 		}
 
-		/// <summary>
-		/// Gets the usable result registers.
-		/// </summary>
-		public override Register[] UsableResultRegisters
-		{
-			get { return GeneralPurpose32BitRegisters; }
-		}
-
 		#endregion
 	}
 }
