@@ -56,6 +56,14 @@ namespace Mosa.Compiler.Framework
 		public abstract Register StackFrameRegister { get; }
 
 		/// <summary>
+		/// Gets the name of the platform.
+		/// </summary>
+		/// <value>
+		/// The name of the platform.
+		/// </value>
+		public abstract string PlatformName { get; }
+
+		/// <summary>
 		/// Gets the signature type of the native integer.
 		/// </summary>
 		public SigType NativeType

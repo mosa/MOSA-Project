@@ -30,6 +30,9 @@ namespace Mosa.Platform.AVR32.Intrinsic
 		[DllImportAttribute(@"Mosa.Platform.AVR32.Intrinsic.InvokeInstanceDelegateWithReturn, Mosa.Platform.AVR32")]
 		public extern static object InvokeInstanceDelegateWithReturn(object obj, uint ptr);
 
+		[DllImportAttribute(@"Mosa.Platform.AVR32.Intrinsic.Nop, Mosa.Platform.AVR32")]
+		public extern static void Nop();
+
 		#endregion
 
 	}

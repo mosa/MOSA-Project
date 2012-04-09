@@ -98,6 +98,14 @@ namespace Mosa.Platform.ARM
 		}
 
 		/// <summary>
+		/// Gets the name of the platform.
+		/// </summary>
+		/// <value>
+		/// The name of the platform.
+		/// </value>
+		public override string PlatformName { get { return "ARM"; } }
+
+		/// <summary>
 		/// Factory method for the Architecture class.
 		/// </summary>
 		/// <returns>The created architecture instance.</returns>

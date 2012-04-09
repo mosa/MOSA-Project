@@ -7,6 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Platform.AVR32.Intrinsic;
+
 namespace Mosa.Kernel.AVR32
 {
 	/// <summary>
@@ -17,7 +19,7 @@ namespace Mosa.Kernel.AVR32
 
 		public static void Setup()
 		{
-			// TODO
+			Native.Nop();
 		}
 	}
 }

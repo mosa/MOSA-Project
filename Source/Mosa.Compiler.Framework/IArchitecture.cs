@@ -60,6 +60,14 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		Register StackFrameRegister { get; }
 
+		/// <summary>
+		/// Gets the name of the platform.
+		/// </summary>
+		/// <value>
+		/// The name of the platform.
+		/// </value>
+		string PlatformName { get; }
+
 		#endregion // Properties
 
 		#region Methods

@@ -1,5 +1,16 @@
-﻿using System.Collections.Generic;
+﻿/*
+ * (c) 2012 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
+ */
+
+using System.Collections.Generic;
 using Mosa.Compiler.Metadata;
+
 using Mosa.Compiler.TypeSystem.Cil;
 
 namespace Mosa.Compiler.TypeSystem
@@ -47,13 +58,16 @@ namespace Mosa.Compiler.TypeSystem
 		/// </summary>
 		private RuntimeType delegateStub = null;
 
+		private string platform;
+
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DelegateTypePatcher"/> class.
 		/// </summary>
 		/// <param name="typeSystem">The type system.</param>
-		public DelegateTypePatcher(ITypeSystem typeSystem)
+		public DelegateTypePatcher(ITypeSystem typeSystem, string platform)
 		{
 			this.typeSystem = typeSystem;
+			this.platform = platform;
 		}
 
 		/// <summary>
@@ -79,10 +93,11 @@ namespace Mosa.Compiler.TypeSystem
 		/// </summary>
 		private void LoadDelegateStub()
 		{
+
 			foreach (var t in typeSystem.GetAllTypes())
 			{
 				// FIXME: This is not platform independent
-				if (t.FullName == "Mosa.Platform.x86.Intrinsic.DelegateStub")
+				if (t.FullName == "Mosa.Platform." + platform + ".Intrinsic.DelegateStub")
 				{
 					delegateStub = t;
 					return;

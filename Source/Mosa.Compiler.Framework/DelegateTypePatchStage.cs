@@ -65,7 +65,7 @@ namespace Mosa.Compiler.Framework
 
 		void IAssemblyCompilerStage.Run()
 		{
-			DelegateTypePatcher delegateTypePatcher = new DelegateTypePatcher(typeSystem);
+			DelegateTypePatcher delegateTypePatcher = new DelegateTypePatcher(typeSystem, architecture.PlatformName);
 
 			foreach (var type in typeSystem.GetAllTypes())
 			{
@@ -106,7 +106,7 @@ namespace Mosa.Compiler.Framework
 			foreach (var t in typeSystem.GetAllTypes())
 			{
 				// FIXME: This is not platform independent
-				if (t.FullName == "Mosa.Platform.x86.Intrinsic.DelegateStub")
+				if (t.FullName == "Mosa.Platform.Intrinsic.DelegateStub")
 				{
 					delegateStub = t;
 					return;
