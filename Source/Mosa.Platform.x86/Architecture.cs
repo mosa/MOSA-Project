@@ -58,11 +58,10 @@ namespace Mosa.Platform.x86
 			GeneralPurposeRegister.ECX,
 			GeneralPurposeRegister.EDX,
 			GeneralPurposeRegister.EBX,
+			GeneralPurposeRegister.ESP,
+			GeneralPurposeRegister.EBP,
 			GeneralPurposeRegister.ESI,
 			GeneralPurposeRegister.EDI,
-
-			GeneralPurposeRegister.EBP,
-			GeneralPurposeRegister.ESP,
 
 			////////////////////////////////////////////////////////
 			// 128-bit floating point registers

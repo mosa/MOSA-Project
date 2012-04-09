@@ -299,14 +299,14 @@ namespace Mosa.Compiler.Framework.IR
 		{
 			if (context.Operand1.Type is ValueTypeSigType)
 			{
-				var type = this.methodCompiler.Method.Module.GetType((context.Operand1.Type as ValueTypeSigType).Token);
+				var type = methodCompiler.Method.Module.GetType((context.Operand1.Type as ValueTypeSigType).Token);
 				var operand = new MemberOperand(type.Fields[0], type.Fields[0].SignatureType, new IntPtr(0));
 				context.SetOperand(0, operand);
 			}
 
 			if (context.Operand2.Type is ValueTypeSigType)
 			{
-				var type = this.methodCompiler.Method.Module.GetType((context.Operand2.Type as ValueTypeSigType).Token);
+				var type = methodCompiler.Method.Module.GetType((context.Operand2.Type as ValueTypeSigType).Token);
 				var operand = new MemberOperand(type.Fields[0], type.Fields[0].SignatureType, new IntPtr(0));
 				context.SetOperand(1, operand);
 			}
@@ -532,8 +532,8 @@ namespace Mosa.Compiler.Framework.IR
 			{
 				var classSigType = elementSigType as ClassSigType;
 				var module = this.typeModule;
-				if (this.methodCompiler.Method.DeclaringType is CilGenericType)
-					module = (this.methodCompiler.Method.DeclaringType as CilGenericType).InstantiationModule;
+				if (methodCompiler.Method.DeclaringType is CilGenericType)
+					module = (methodCompiler.Method.DeclaringType as CilGenericType).InstantiationModule;
 				var elementType = module.GetType(classSigType.Token);
 				elementSize = typeLayout.GetTypeSize(elementType);
 			}
@@ -580,7 +580,7 @@ namespace Mosa.Compiler.Framework.IR
 			{
 				if (!(classType is CilGenericType))
 					classType = new CilGenericType(classType.Module, classType.Token, classType, thisReference.Type as GenericInstSigType);
-				classType = methodCompiler.AssemblyCompiler.GenericTypePatcher.PatchType(this.typeModule, this.methodCompiler.Method.DeclaringType as CilGenericType, classType as CilGenericType);
+				classType = methodCompiler.AssemblyCompiler.GenericTypePatcher.PatchType(this.typeModule, methodCompiler.Method.DeclaringType as CilGenericType, classType as CilGenericType);
 			}
 
 			List<Operand> ctorOperands = new List<Operand>(context.Operands);
@@ -890,8 +890,8 @@ namespace Mosa.Compiler.Framework.IR
 			 * 
 			 */
 
-			IAssemblyLinker linker = this.methodCompiler.Linker;
-			IMetadataModule assembly = this.methodCompiler.Assembly;
+			IAssemblyLinker linker = methodCompiler.Linker;
+			IMetadataModule assembly = methodCompiler.Assembly;
 
 			string referencedString = assembly.Metadata.ReadUserString(context.TokenType);
 
@@ -931,7 +931,7 @@ namespace Mosa.Compiler.Framework.IR
 		{
 			Operand resultOperand = context.Result;
 			Operand objectOperand = context.Operand1;
-			Operand temp = this.methodCompiler.CreateTemporary(context.RuntimeField.SignatureType);
+			Operand temp = methodCompiler.CreateTemporary(context.RuntimeField.SignatureType);
 			RuntimeField field = context.RuntimeField;
 
 			int offset = typeLayout.GetFieldOffset(field);
@@ -974,7 +974,7 @@ namespace Mosa.Compiler.Framework.IR
 		{
 			Operand objectOperand = context.Operand1;
 			Operand valueOperand = context.Operand2;
-			Operand temp = this.methodCompiler.CreateTemporary(context.RuntimeField.SignatureType);
+			Operand temp = methodCompiler.CreateTemporary(context.RuntimeField.SignatureType);
 
 			int offset = typeLayout.GetFieldOffset(context.RuntimeField);
 			ConstantOperand offsetOperand = new ConstantOperand(BuiltInSigType.IntPtr, offset);
@@ -1046,7 +1046,7 @@ namespace Mosa.Compiler.Framework.IR
 
 			if (first.StackType == StackTypeCode.F)
 			{
-				Operand comparisonResult = this.methodCompiler.CreateTemporary(BuiltInSigType.Int32);
+				Operand comparisonResult = methodCompiler.CreateTemporary(BuiltInSigType.Int32);
 				context.SetInstruction(Instruction.FloatingPointCompareInstruction, comparisonResult, first, second);
 				context.ConditionCode = cc;
 				context.SetInstruction(Instruction.IntegerCompareBranchInstruction, null, comparisonResult, new ConstantOperand(BuiltInSigType.IntPtr, 1));
@@ -1089,7 +1089,7 @@ namespace Mosa.Compiler.Framework.IR
 			Operand arrayLength = context.Result;
 			ConstantOperand constantOffset = ConstantOperand.FromValue(8);
 
-			Operand arrayAddress = this.methodCompiler.CreateTemporary(new PtrSigType(BuiltInSigType.Int32));
+			Operand arrayAddress = methodCompiler.CreateTemporary(new PtrSigType(BuiltInSigType.Int32));
 			context.SetInstruction(Instruction.MoveInstruction, arrayAddress, arrayOperand);
 			context.AppendInstruction(Instruction.LoadInstruction, arrayLength, arrayAddress, constantOffset);
 		}
@@ -1131,7 +1131,7 @@ namespace Mosa.Compiler.Framework.IR
 			// of x86, which might change for other platforms. We need to refactor this into some helper classes.
 			//
 
-			Operand elementOffset = this.methodCompiler.CreateTemporary(BuiltInSigType.Int32);
+			Operand elementOffset = methodCompiler.CreateTemporary(BuiltInSigType.Int32);
 			Operand elementSizeOperand = new ConstantOperand(BuiltInSigType.Int32, elementSizeInBytes);
 			context.AppendInstruction(Instruction.MulSInstruction, elementOffset, arrayIndexOperand, elementSizeOperand);
 
@@ -1140,7 +1140,7 @@ namespace Mosa.Compiler.Framework.IR
 
 		private Operand LoadArrayBaseAddress(Context context, SZArraySigType arraySignatureType, Operand arrayOperand)
 		{
-			Operand arrayAddress = this.methodCompiler.CreateTemporary(new PtrSigType(arraySignatureType.ElementType));
+			Operand arrayAddress = methodCompiler.CreateTemporary(new PtrSigType(arraySignatureType.ElementType));
 			Operand fixedOffset = new ConstantOperand(BuiltInSigType.Int32, 12);
 			context.SetInstruction(Instruction.AddSInstruction, arrayAddress, arrayOperand, fixedOffset);
 			return arrayAddress;
@@ -2021,7 +2021,7 @@ namespace Mosa.Compiler.Framework.IR
 
 		private bool CanSkipDueToRecursiveSystemObjectCtorCall(Context context)
 		{
-			RuntimeMethod currentMethod = this.methodCompiler.Method;
+			RuntimeMethod currentMethod = methodCompiler.Method;
 			RuntimeMethod invokeTarget = context.InvokeTarget;
 
 			// Skip recursive System.Object ctor calls.
@@ -2065,7 +2065,7 @@ namespace Mosa.Compiler.Framework.IR
 
 			if (extension != null)
 			{
-				Operand temp = this.methodCompiler.CreateTemporary(extendedType);
+				Operand temp = methodCompiler.CreateTemporary(extendedType);
 				destination.Replace(temp, context.InstructionSet);
 				context.SetInstruction(extension, temp, source);
 			}
