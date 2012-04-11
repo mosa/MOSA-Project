@@ -17,7 +17,7 @@ using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.TypeSystem;
 
-namespace Mosa.Compiler.Framework
+namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
 	/// Performs memory layout of a type for compilation.

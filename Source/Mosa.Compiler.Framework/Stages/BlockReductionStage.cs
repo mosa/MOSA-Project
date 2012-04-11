@@ -19,7 +19,7 @@
 
 //using IR = Mosa.Compiler.CompilerFramework.IR;
 
-//namespace Mosa.Compiler.CompilerFramework
+//namespace Mosa.Compiler.CompilerFramework.Stages
 //{
 //    /// <summary>
 //    /// BasicBlockReduction attempts to eliminate useless control flow created as a side effect of other compiler optimizations.

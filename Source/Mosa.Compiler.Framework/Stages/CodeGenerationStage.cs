@@ -4,7 +4,7 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ *  Simon Wollwage (rootnode) <rootnode@mosa-project.org>
  */
 
 using System;
@@ -12,7 +12,7 @@ using System.Diagnostics;
 using System.IO;
 using Mosa.Compiler.Framework.Platform;
 
-namespace Mosa.Compiler.Framework
+namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
 	/// Base class for code generation stages.

@@ -49,7 +49,7 @@ namespace Mosa.Compiler.Framework.Operands
 		/// </summary>
 		public int Value
 		{
-			get { return stackLayout.StackSize; }
+			get { return stackLayout.StackMemorySize; }
 		}
 
 		#endregion // Properties
@@ -72,7 +72,7 @@ namespace Mosa.Compiler.Framework.Operands
 		/// <returns>A string representation of the operand.</returns>
 		public override string ToString()
 		{
-			return String.Format("stacksize {0}", stackLayout.StackSize);
+			return String.Format("stackmemorysize {0}", stackLayout.StackMemorySize);
 		}
 
 		#endregion // Operand Overrides

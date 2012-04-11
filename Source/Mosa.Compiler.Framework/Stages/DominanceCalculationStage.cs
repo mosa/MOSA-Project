@@ -11,8 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 
-
-namespace Mosa.Compiler.Framework
+namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
 	/// Performs dominance calculations on basic Blocks built by a previous compilation stage.

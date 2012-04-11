@@ -1,7 +1,16 @@
-﻿using Mosa.Compiler.Framework.IR;
+﻿/*
+ * (c) 2011 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Simon Wollwage (rootnode) <rootnode@mosa-project.org>
+ */
+
+using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Operands;
 
-namespace Mosa.Compiler.Framework
+namespace Mosa.Compiler.Framework.Stages
 {
 	public sealed class ConstantFoldingStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
 	{

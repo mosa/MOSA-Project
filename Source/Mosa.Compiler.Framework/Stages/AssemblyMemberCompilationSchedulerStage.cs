@@ -10,7 +10,7 @@
 using System;
 using Mosa.Compiler.TypeSystem;
 
-namespace Mosa.Compiler.Framework
+namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
 	/// Schedules all types of an assembly for compilation.

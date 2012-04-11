@@ -9,19 +9,18 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Operands;
+using Mosa.Compiler.Framework.Platform;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
-
 
 namespace Mosa.Platform.x86
 {
 	/// <summary>
 	/// 
 	/// </summary>
-	public sealed class TweakTransformationStage : BaseTransformationStage, Instructions.IX86Visitor, IMethodCompilerStage, IPlatformStage, IPipelineStage
+	public sealed class TweakTransformationStage : BaseTransformationStage, Instructions.IX86Visitor, IMethodCompilerStage, IPlatformStage
 	{
 
 		#region IX86Visitor

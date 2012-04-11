@@ -24,7 +24,7 @@ namespace Mosa.Compiler.Framework
 
 		private IArchitecture architecture;
 
-		private int stackSize = 0;
+		private int stackMemorySize = 0;
 
 		private List<StackOperand> stack = new List<StackOperand>();
 		
@@ -42,7 +42,7 @@ namespace Mosa.Compiler.Framework
 		/// <value>
 		/// The size of the stack.
 		/// </value>
-		public int StackSize { get { return stackSize; } }
+		public int StackMemorySize { get { return stackMemorySize; } set { stackMemorySize = value; } }
 
 		/// <summary>
 		/// Gets the stack size operand.

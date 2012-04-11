@@ -1,7 +1,17 @@
-﻿using System.Collections.Generic;
-using Mosa.Compiler.Framework.Operands;
+﻿/*
+ * (c) 2011 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Simon Wollwage (rootnode) <rootnode@mosa-project.org>
+ */
 
-namespace Mosa.Compiler.Framework
+using System.Collections.Generic;
+using Mosa.Compiler.Framework.Operands;
+using Mosa.Compiler.Framework.Stages;
+
+namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
 	///		Places phi instructions for the SSA transformation

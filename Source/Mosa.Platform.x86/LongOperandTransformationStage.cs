@@ -14,6 +14,7 @@ using System;
 using System.Diagnostics;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Operands;
+using Mosa.Compiler.Framework.Platform;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 using CIL = Mosa.Compiler.Framework.CIL;
@@ -28,7 +29,7 @@ namespace Mosa.Platform.x86
 	/// This stage translates all 64-bit operations to appropriate 32-bit operations on
 	/// architectures without appropriate 64-bit integral operations.
 	/// </remarks>
-	public sealed class LongOperandTransformationStage : BaseTransformationStage, IR.IIRVisitor, IPlatformStage, IPipelineStage
+	public sealed class LongOperandTransformationStage : BaseTransformationStage, IR.IIRVisitor, IPlatformStage
 	{
 
 		#region Utility Methods

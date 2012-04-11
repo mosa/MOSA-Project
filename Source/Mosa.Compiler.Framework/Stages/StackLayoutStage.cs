@@ -11,7 +11,7 @@ using System;
 using System.Collections.Generic;
 using Mosa.Compiler.Framework.Operands;
 
-namespace Mosa.Compiler.Framework
+namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
 	/// Calculates the layout of the stack of the method.

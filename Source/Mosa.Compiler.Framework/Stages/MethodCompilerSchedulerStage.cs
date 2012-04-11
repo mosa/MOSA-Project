@@ -12,7 +12,7 @@ using System.Collections.Generic;
 using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.TypeSystem;
 
-namespace Mosa.Compiler.Framework
+namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
 	/// Schedules compilation of types/methods.

@@ -9,6 +9,7 @@
 
 using System.Collections.Generic;
 using Mosa.Compiler.Framework;
+using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.TypeSystem;
 using x86 = Mosa.Platform.x86;

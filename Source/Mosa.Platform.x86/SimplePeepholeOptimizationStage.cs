@@ -11,14 +11,14 @@
 using System.Diagnostics;
 
 using Mosa.Compiler.Framework;
-
+using Mosa.Compiler.Framework.Platform;
 
 namespace Mosa.Platform.x86
 {
 	/// <summary>
 	/// 
 	/// </summary>
-	public sealed class SimplePeepholeOptimizationStage : BaseTransformationStage, IMethodCompilerStage, IPlatformStage, IPipelineStage
+	public sealed class SimplePeepholeOptimizationStage : BaseTransformationStage, IMethodCompilerStage, IPlatformStage 
 	{
 
 		#region Window Class

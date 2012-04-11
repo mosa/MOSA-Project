@@ -15,7 +15,7 @@ using Mosa.Compiler.Linker;
 using Mosa.Compiler.TypeSystem;
 using Mosa.Compiler.Metadata.Signatures;
 
-namespace Mosa.Compiler.Framework
+namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
 	/// Emits metadata for assemblies and types

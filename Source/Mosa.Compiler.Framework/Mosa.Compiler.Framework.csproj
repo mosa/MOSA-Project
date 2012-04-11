@@ -62,10 +62,10 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AssemblyMemberCompilationSchedulerStage.cs" />
+    <Compile Include="Stages\AssemblyMemberCompilationSchedulerStage.cs" />
     <Compile Include="BaseCodeEmitter.cs" />
     <Compile Include="BaseInstruction.cs" />
-    <Compile Include="BasicBlockBuilderStage.cs" />
+    <Compile Include="Stages\BasicBlockBuilderStage.cs" />
     <Compile Include="CIL\AddInstruction.cs" />
     <Compile Include="CIL\ArglistInstruction.cs" />
     <Compile Include="CIL\ArithmeticInstruction.cs" />
@@ -88,7 +88,7 @@
     <Compile Include="CIL\DecodingStage.cs" />
     <Compile Include="CIL\BreakInstruction.cs" />
     <Compile Include="BaseAssemblyCompilerStage.cs" />
-    <Compile Include="ConstantFoldingStage.cs" />
+    <Compile Include="Stages\ConstantFoldingStage.cs" />
     <Compile Include="Platform\BasePlatformInstruction.cs" />
     <Compile Include="Platform\BasePlatformTransformationStage.cs" />
     <Compile Include="Platform\IOpcodeRegisterUsage.cs" />
@@ -97,28 +97,28 @@
     <Compile Include="Operands\StackSizeOperand.cs" />
     <Compile Include="StackLayout.cs" />
     <Compile Include="RegisterMap.cs" />
-    <Compile Include="OperandUsageAnalyzerStage.cs" />
-    <Compile Include="SingleUseMarkerStage.cs" />
+    <Compile Include="Stages\OperandUsageAnalyzerStage.cs" />
+    <Compile Include="Stages\SingleUseMarkerStage.cs" />
     <Compile Include="IPlugSystem.cs" />
     <Compile Include="ITypeInitializerSchedulerStage.cs" />
-    <Compile Include="PlugStage.cs" />
-    <Compile Include="ExceptionPrologueStage.cs" />
-    <Compile Include="DelegateTypePatchStage.cs" />
+    <Compile Include="Stages\PlugStage.cs" />
+    <Compile Include="Stages\ExceptionPrologueStage.cs" />
+    <Compile Include="Stages\DelegateTypePatchStage.cs" />
     <Compile Include="IR\ExceptionPrologueInstruction.cs" />
-    <Compile Include="MetadataStage.cs" />
-    <Compile Include="EnterSSA.cs" />
+    <Compile Include="Stages\MetadataStage.cs" />
+    <Compile Include="Stages\EnterSSAStage.cs" />
     <Compile Include="ExceptionClauseHeader.cs" />
     <Compile Include="InstructionLogger.cs" />
-    <Compile Include="LeaveSSA.cs" />
-    <Compile Include="OperandDeterminationStage.cs" />
+    <Compile Include="Stages\LeaveSSAStage.cs" />
+    <Compile Include="Stages\OperandDeterminationStage.cs" />
     <Compile Include="Operands\SsaOperand.cs" />
     <Compile Include="Operands\VirtualRegisterOperand.cs" />
     <Compile Include="CompilerOptions.cs" />
-    <Compile Include="PhiPlacementStage.cs" />
-    <Compile Include="StaticAllocationResolutionStage.cs" />
-    <Compile Include="TypeLayoutStage.cs" />
+    <Compile Include="Stages\PhiPlacementStage.cs" />
+    <Compile Include="Stages\StaticAllocationResolutionStage.cs" />
+    <Compile Include="Stages\TypeLayoutStage.cs" />
     <Compile Include="IR\ThrowInstruction.cs" />
-    <Compile Include="GenericsResolverStage.cs" />
+    <Compile Include="Stages\GenericsResolverStage.cs" />
     <Compile Include="ICompilationSchedulerStage.cs" />
     <Compile Include="Intrinsics\InternalAllocateString.cs" />
     <Compile Include="IR\AddFInstruction.cs" />
@@ -138,9 +138,9 @@
     <Compile Include="IR\SubSInstruction.cs" />
     <Compile Include="IR\SubUInstruction.cs" />
     <Compile Include="IR\SwitchInstruction.cs" />
-    <Compile Include="MethodCompilerSchedulerStage.cs" />
+    <Compile Include="Stages\MethodCompilerSchedulerStage.cs" />
     <Compile Include="Operands\SymbolOperand.cs" />
-    <Compile Include="PlatformStubStage.cs" />
+    <Compile Include="Platform\PlatformStubStage.cs" />
     <Compile Include="IIntrinsicMethod.cs" />
     <Compile Include="IBlockOrderStage.cs" />
     <Compile Include="IPipelineStage.cs" />
@@ -265,18 +265,18 @@
     <Compile Include="Platform\IPlatformInstruction.cs" />
     <Compile Include="CIL\ICILInstruction.cs" />
     <Compile Include="IInstruction.cs" />
-    <Compile Include="FlowGraphVisualizationStage.cs" />
+    <Compile Include="Stages\FlowGraphVisualizationStage.cs" />
     <Compile Include="CIL\NopInstruction.cs" />
     <Compile Include="InstructionSet.cs" />
     <Compile Include="InstructionData.cs" />
     <Compile Include="CIL\BaseInstruction.cs" />
     <Compile Include="Operands\StringOperand.cs" />
-    <Compile Include="ReverseBlockOrderStage.cs" />
+    <Compile Include="Stages\ReverseBlockOrderStage.cs" />
     <Compile Include="RuntimeMethodData.cs" />
-    <Compile Include="StrengthReductionStage.cs" />
-    <Compile Include="SimpleTraceBlockOrderStage.cs" />
-    <Compile Include="LoopAwareBlockOrderStage.cs" />
-    <Compile Include="LocalCSE.cs" />
+    <Compile Include="Stages\StrengthReductionStage.cs" />
+    <Compile Include="Stages\SimpleTraceBlockOrderStage.cs" />
+    <Compile Include="Stages\LoopAwareBlockOrderStage.cs" />
+    <Compile Include="Stages\LocalCSEStage.cs" />
     <Compile Include="IMethodCompiler.cs" />
     <Compile Include="Linker\BaseAssemblyLinkerStage.cs" />
     <Compile Include="Linker\LinkerGeneratedMethod.cs" />
@@ -292,10 +292,10 @@
     <Compile Include="BasicBlock.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="BlockReductionStage.cs">
+    <Compile Include="Stages\BlockReductionStage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="CodeGenerationStage.cs">
+    <Compile Include="Stages\CodeGenerationStage.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BaseCodeTransformationStage.cs">
@@ -310,10 +310,10 @@
     <Compile Include="Operands\ConstantOperand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="ConstantPropagationStage.cs">
+    <Compile Include="Stages\ConstantPropagationStage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="DominanceCalculationStage.cs">
+    <Compile Include="Stages\DominanceCalculationStage.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="FlowControl.cs">
@@ -337,13 +337,10 @@
     <Compile Include="CIL\IInstructionDecoder.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="IMethodCompilerBuilder.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="IMethodCompilerStage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="IPlatformStage.cs">
+    <Compile Include="Platform\IPlatformStage.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IStackLayoutProvider.cs">
@@ -376,7 +373,7 @@
     <Compile Include="Operands\RegisterOperand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="StackLayoutStage.cs">
+    <Compile Include="Stages\StackLayoutStage.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Operands\StackOperand.cs">

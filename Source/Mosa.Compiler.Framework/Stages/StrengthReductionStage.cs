@@ -10,7 +10,7 @@
 
 using Mosa.Compiler.Framework.Operands;
 
-namespace Mosa.Compiler.Framework
+namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
 	/// Performs IR constant folding of arithmetic instructions to optimize

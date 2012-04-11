@@ -13,6 +13,7 @@ using System.Diagnostics;
 
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Operands;
+using Mosa.Compiler.Framework.Platform;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 
@@ -21,7 +22,7 @@ namespace Mosa.Platform.x86
 	/// <summary>
 	/// 
 	/// </summary>
-	public sealed class MemToMemConversionStage : BaseTransformationStage, IMethodCompilerStage, IPlatformStage, IPipelineStage
+	public sealed class MemToMemConversionStage : BaseTransformationStage, IMethodCompilerStage, IPlatformStage
 	{
 
 		#region IMethodCompilerStage Members

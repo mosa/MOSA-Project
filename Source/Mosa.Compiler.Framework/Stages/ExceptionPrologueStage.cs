@@ -15,7 +15,7 @@ using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Compiler.Framework
+namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
 	/// This stage inserts the ExceptionPrologue IR instruction at the beginning of each exception block.

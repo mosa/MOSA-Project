@@ -10,6 +10,7 @@
 using System.Collections.Generic;
 using System.IO;
 using Mosa.Compiler.Framework;
+using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.Metadata.Loader;

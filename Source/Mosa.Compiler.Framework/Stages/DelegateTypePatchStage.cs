@@ -12,7 +12,7 @@ using Mosa.Compiler.Metadata;
 using Mosa.Compiler.TypeSystem;
 using Mosa.Compiler.TypeSystem.Cil;
 
-namespace Mosa.Compiler.Framework
+namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
 	/// Emits metadata for assemblies and types

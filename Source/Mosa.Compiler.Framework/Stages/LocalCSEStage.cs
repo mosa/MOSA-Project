@@ -10,7 +10,7 @@
 using System.Collections.Generic;
 using Mosa.Compiler.Framework.Operands;
 
-namespace Mosa.Compiler.Framework
+namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
 	/// A stage to compute local common subexpression elimination

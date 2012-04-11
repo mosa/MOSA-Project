@@ -13,14 +13,14 @@ using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
 
-namespace Mosa.Compiler.Framework
+namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
 	/// This stage is used to resolve methods inside generic classes or structs.
 	/// For every type instantiation, a new method is created with the
 	/// generic parameter substituted with the corresponding type.
 	/// </summary>
-	public class GenericsResolverStage : BaseAssemblyCompilerStage, IAssemblyCompilerStage, IMethodCompilerBuilder, IPipelineStage
+	public class GenericsResolverStage : BaseAssemblyCompilerStage, IAssemblyCompilerStage, IPipelineStage
 	{
 
 		#region IAssemblyCompilerStage members
@@ -49,12 +49,6 @@ namespace Mosa.Compiler.Framework
 		}
 
 		#endregion IAssemblyCompilerStage members
-
-		#region IMethodCompilerBuilder members
-
-		IEnumerable<IMethodCompiler> IMethodCompilerBuilder.Scheduled { get { return null; } }
-
-		#endregion IMethodCompilerBuilder members
 
 		/// <summary>
 		/// Determines if the given method is a method 

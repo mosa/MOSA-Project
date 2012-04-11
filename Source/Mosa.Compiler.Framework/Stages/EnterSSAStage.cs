@@ -13,12 +13,12 @@ using System.Diagnostics;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Operands;
 
-namespace Mosa.Compiler.Framework
+namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
 	/// 
 	/// </summary>
-	public class EnterSSA : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
+	public class EnterSSAStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
 	{
 		/// <summary>
 		/// 

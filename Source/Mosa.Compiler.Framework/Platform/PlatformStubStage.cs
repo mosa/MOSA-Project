@@ -7,7 +7,7 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-namespace Mosa.Compiler.Framework
+namespace Mosa.Compiler.Framework.Platform
 {
 
 	/// <summary>

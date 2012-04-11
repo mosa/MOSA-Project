@@ -10,6 +10,7 @@
 using System;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Operands;
+using Mosa.Compiler.Framework.Platform;
 using Mosa.Compiler.Metadata;
 using IR = Mosa.Compiler.Framework.IR;
 
@@ -23,7 +24,7 @@ namespace Mosa.Platform.x86
 	/// embedding floating point values as immediate inside the code, so these have to be moved outside
 	/// and referenced through a memory offset starting at the 
 	/// </remarks>
-	public sealed class ConstantRemovalStage : BaseMethodCompilerStage, IMethodCompilerStage, IPlatformStage, IPipelineStage
+	public sealed class ConstantRemovalStage : BaseMethodCompilerStage, IMethodCompilerStage, IPlatformStage
 	{
 		#region Data members
 
