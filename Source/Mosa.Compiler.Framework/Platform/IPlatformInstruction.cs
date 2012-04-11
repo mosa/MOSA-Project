@@ -7,8 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
-namespace Mosa.Compiler.Framework
+namespace Mosa.Compiler.Framework.Platform
 {
 	/// <summary>
 	/// Interface to a platform instruction

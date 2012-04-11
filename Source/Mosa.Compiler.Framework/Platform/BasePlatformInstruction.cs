@@ -10,7 +10,7 @@
 using System;
 using System.Text;
 
-namespace Mosa.Compiler.Framework
+namespace Mosa.Compiler.Framework.Platform
 {
 	/// <summary>
 	/// 

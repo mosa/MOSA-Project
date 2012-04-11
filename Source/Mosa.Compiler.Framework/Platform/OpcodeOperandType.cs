@@ -9,7 +9,7 @@
 
 using System;
 
-namespace Mosa.Platform.x86.Constraints
+namespace Mosa.Compiler.Framework.Platform
 {
 	/// <summary>
 	/// This enum represents the type of operand type

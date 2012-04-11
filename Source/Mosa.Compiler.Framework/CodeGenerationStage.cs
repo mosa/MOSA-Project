@@ -10,7 +10,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
-
+using Mosa.Compiler.Framework.Platform;
 
 namespace Mosa.Compiler.Framework
 {

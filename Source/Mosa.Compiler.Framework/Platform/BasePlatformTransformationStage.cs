@@ -13,7 +13,7 @@ using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Operands;
 using Mosa.Compiler.Metadata;
 
-namespace Mosa.Compiler.Platform
+namespace Mosa.Compiler.Framework.Platform
 {
 
 	/// <summary>

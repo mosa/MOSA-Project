@@ -89,7 +89,10 @@
     <Compile Include="CIL\BreakInstruction.cs" />
     <Compile Include="BaseAssemblyCompilerStage.cs" />
     <Compile Include="ConstantFoldingStage.cs" />
-    <Compile Include="BasePlatformInstruction.cs" />
+    <Compile Include="Platform\BasePlatformInstruction.cs" />
+    <Compile Include="Platform\BasePlatformTransformationStage.cs" />
+    <Compile Include="Platform\IOpcodeRegisterUsage.cs" />
+    <Compile Include="Platform\OpcodeOperandType.cs" />
     <Compile Include="RegisterBitmap.cs" />
     <Compile Include="Operands\StackSizeOperand.cs" />
     <Compile Include="StackLayout.cs" />
@@ -259,7 +262,7 @@
     <Compile Include="IVisitor.cs" />
     <Compile Include="IBranch.cs" />
     <Compile Include="IIRInstruction.cs" />
-    <Compile Include="IPlatformInstruction.cs" />
+    <Compile Include="Platform\IPlatformInstruction.cs" />
     <Compile Include="CIL\ICILInstruction.cs" />
     <Compile Include="IInstruction.cs" />
     <Compile Include="FlowGraphVisualizationStage.cs" />

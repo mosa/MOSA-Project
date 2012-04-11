@@ -4,14 +4,13 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Michael Ruck (grover) <sharpos@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Operands;
 
-using Mosa.Compiler.Framework;
-
-namespace Mosa.Platform.x86.Constraints
+namespace Mosa.Compiler.Framework.Platform
 {
 	/// <summary>
 	/// This interface is used to present opcode constraints to the register allocator.

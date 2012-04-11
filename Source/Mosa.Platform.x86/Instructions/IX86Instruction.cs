@@ -7,14 +7,14 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Compiler.Framework;
+using Mosa.Compiler.Framework.Platform;
 
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
 	/// Interface to a X86 instruction
 	/// </summary>
-	public interface IX86Instruction : IInstruction, IPlatformInstruction
+	public interface IX86Instruction : IPlatformInstruction
 	{
 
 	}

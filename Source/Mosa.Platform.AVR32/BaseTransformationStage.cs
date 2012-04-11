@@ -9,7 +9,7 @@
 
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Platform;
+using Mosa.Compiler.Framework.Platform;
 
 namespace Mosa.Platform.AVR32
 {

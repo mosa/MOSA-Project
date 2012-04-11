@@ -7,14 +7,14 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Compiler.Framework;
+using Mosa.Compiler.Framework.Platform;
 
 namespace Mosa.Platform.AVR32.Instructions
 {
 	/// <summary>
 	/// Interface to a AVR32 instruction
 	/// </summary>
-	public interface IAVR32Instruction : IInstruction, IPlatformInstruction
+	public interface IAVR32Instruction : IPlatformInstruction
 	{
 
 	}
