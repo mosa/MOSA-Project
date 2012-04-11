@@ -216,40 +216,6 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Gets or sets the second result operand.
-		/// </summary>
-		/// <value>The second result operand.</value>
-		public Operand Result2
-		{
-			get
-			{
-				if (ResultCount == 2)
-					return Result;
-				else
-					return null;
-			}
-			set
-			{
-				Debug.Assert(Result == value);
-			}
-		}
-
-		/// <summary>
-		/// Gets all result operands
-		/// </summary>
-		/// <value>The operands.</value>
-		public IEnumerable<Operand> Results
-		{
-			get
-			{
-				if (Result != null)
-					yield return Result;
-				if (ResultCount == 2)
-					yield return Result;
-			}
-		}
-
-		/// <summary>
 		/// Gets or sets the number of operands.
 		/// </summary>
 		/// <value>The number of operands.</value>
@@ -923,19 +889,7 @@ namespace Mosa.Compiler.Framework
 			Result = result;
 			ResultCount = 1;
 		}
-
-		/// <summary>
-		/// Sets the results.
-		/// </summary>
-		/// <param name="result">The result operand.</param>
-		/// <param name="result2">The second result operand.</param>
-		public void SetResults(Operand result, Operand result2)
-		{
-			Result = result;
-			Result2 = result2;
-			ResultCount = 2;
-		}
-
+		
 		/// <summary>
 		/// Sets the operands.
 		/// </summary>
@@ -1059,46 +1013,6 @@ namespace Mosa.Compiler.Framework
 						instructionSet.Data[index].SetAdditionalOperand(opIndex, operand);
 						return;
 					}
-			}
-		}
-
-		/// <summary>
-		/// Gets the result by index.
-		/// </summary>
-		/// <param name="opIndex">The index (0 or 1).</param>
-		/// <returns></returns>
-		public Operand GetResult(int opIndex)
-		{
-			switch (opIndex)
-			{
-				case 0: return Result;
-				case 1: return Result2;
-				default: break;
-			}
-
-			Debug.Assert(false, @"No index");
-			return null;
-		}
-		/// <summary>
-		/// Sets the result by index.
-		/// </summary>
-		/// <param name="opIndex">The index (0 or 1).</param>
-		/// <param name="result">The result operand.</param>
-		public void SetResult(int opIndex, Operand result)
-		{
-			switch (opIndex)
-			{
-				case 0:
-					this.Result = result;
-					break;
-
-				case 1:
-					this.Result2 = result;
-					break;
-
-				default:
-					Debug.Assert(false, @"No index");
-					break;
 			}
 		}
 

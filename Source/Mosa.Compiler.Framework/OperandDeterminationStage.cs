@@ -261,10 +261,16 @@ namespace Mosa.Compiler.Framework
 				if (!(ctx.Instruction as ICILInstruction).PushResult)
 					return;
 
-			foreach (Operand operand in ctx.Results)
-			{
-				currentStack.Push(operand);
-			}
+			//if (ctx.Result != null && ctx.ResultCount == 0)
+			//    return;
+
+			if (ctx.ResultCount == 0)
+				return;
+
+			currentStack.Push(ctx.Result);
+
+			if (ctx.Instruction is CIL.DupInstruction)
+				currentStack.Push(ctx.Result);
 		}
 
 	}

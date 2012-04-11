@@ -236,22 +236,20 @@ namespace Mosa.Compiler.Framework.Operands
 		/// <param name="instructionSet">The instruction set.</param>
 		public void Replace(Operand replacement, InstructionSet instructionSet)
 		{
-			int opIdx;
 
 			// Iterate all definition sites first
 			foreach (int instructionIndex in this.Definitions.ToArray())
 			{
 				Context def = new Context(instructionSet, instructionIndex);
-				opIdx = 0;
-				foreach (Operand r in def.Results)
+
+				if (def.Result != null)
 				{
 					// Is this the operand?
-					if (ReferenceEquals(r, this))
+					if (ReferenceEquals(def.Result, this)) 
 					{
-						def.SetResult(opIdx, replacement);
+						def.Result = replacement;
 					}
-
-					opIdx++;
+			
 				}
 			}
 
@@ -260,13 +258,13 @@ namespace Mosa.Compiler.Framework.Operands
 			{
 				Context instr = new Context(instructionSet, instructionIndex);
 
-				opIdx = 0;
+				int opIdx = 0;
 				foreach (Operand r in instr.Operands)
 				{
 					// Is this the operand?
 					if (ReferenceEquals(r, this))
 					{
-						instr.SetOperand(opIdx, replacement);
+						instr.SetOperand(opIdx, replacement); 
 					}
 
 					opIdx++;

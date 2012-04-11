@@ -97,6 +97,8 @@
     </Compile>
     <Compile Include="BaseTransformationStage.cs" />
     <Compile Include="AddressModeConversionStage.cs" />
+    <Compile Include="Constraints\OpcodeOperandType.cs" />
+    <Compile Include="Constraints\IOpcodeRegisterUsage.cs" />
     <Compile Include="Constraints\IRegisterConstraint.cs" />
     <Compile Include="ControlRegister.cs" />
     <Compile Include="ExceptionVectorStage.cs" />

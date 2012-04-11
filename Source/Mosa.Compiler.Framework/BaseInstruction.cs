@@ -155,17 +155,10 @@ namespace Mosa.Compiler.Framework
 				s.Append("]");
 			}
 
-			if (context.ResultCount == 1)
+			if (context.ResultCount != 0)
 			{
 				s.Append(" ");
 				s.Append(context.Result);
-			}
-			else if (context.ResultCount == 2)
-			{
-				s.Append(" ");
-				s.Append(context.Result);
-				s.Append(", ");
-				s.Append(context.Result2);
 			}
 
 			if (context.ResultCount > 0 && context.OperandCount > 0)

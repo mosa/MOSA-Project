@@ -101,12 +101,11 @@ namespace Mosa.Compiler.Framework
 		{
 			for (Context ctx = new Context(instructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
 			{
-				// Does this instruction define a new stack variable?
-				foreach (Operand op in ctx.Results)
+				if (ctx.Result != null)
 				{
 					// The instruction list may not be in SSA form, so we have to check existence again here unfortunately.
 					// FIXME: Allow us to detect the state of blocks
-					LocalVariableOperand lvop = op as LocalVariableOperand;
+					LocalVariableOperand lvop = ctx.Result as LocalVariableOperand;
 					if (lvop != null && !locals.Contains(lvop))
 						locals.Add(lvop);
 				}

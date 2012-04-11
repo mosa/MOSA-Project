@@ -44,11 +44,10 @@ namespace Mosa.Compiler.Framework
 							context.SetOperand(i, (op as SsaOperand).Operand);
 					}
 
-					for (var i = 0; i < context.ResultCount; ++i)
+					if (context.Result != null)
 					{
-						var op = context.GetResult(i);
-						if (op is SsaOperand)
-							context.SetResult(i, (op as SsaOperand).Operand);
+						if (context.Result is SsaOperand)
+							context.Result = (context.Result as SsaOperand).Operand;
 					}
 				}
 			}

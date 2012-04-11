@@ -30,7 +30,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		/// <param name="opcode">The opcode.</param>
 		public LdelemInstruction(OpCode opcode)
-			: base(opcode)
+			: base(opcode, 1)
 		{
 			switch (opcode)
 			{

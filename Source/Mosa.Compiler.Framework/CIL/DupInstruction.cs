@@ -39,7 +39,7 @@ namespace Mosa.Compiler.Framework.CIL
 			base.Validate(ctx, compiler);
 
 			ctx.Result = ctx.Operand1;
-			ctx.Result2 = ctx.Operand1;
+			ctx.ResultCount = 2;
 		}
 
 		/// <summary>

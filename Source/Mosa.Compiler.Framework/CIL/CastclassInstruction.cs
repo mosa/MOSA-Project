@@ -26,7 +26,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		/// <param name="opcode">The opcode.</param>
 		public CastclassInstruction(OpCode opcode)
-			: base(opcode)
+			: base(opcode, 1)
 		{
 		}
 
@@ -56,9 +56,9 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		/// <param name="visitor">The visitor.</param>
 		/// <param name="context">The context.</param>
-		public override void Visit (ICILVisitor visitor, Context context)
+		public override void Visit(ICILVisitor visitor, Context context)
 		{
-			visitor.Castclass (context);
+			visitor.Castclass(context);
 		}
 
 		#endregion Methods
