@@ -92,7 +92,7 @@
     <Compile Include="Platform\BasePlatformInstruction.cs" />
     <Compile Include="Platform\BasePlatformTransformationStage.cs" />
     <Compile Include="Platform\IOpcodeRegisterUsage.cs" />
-    <Compile Include="Platform\OpcodeOperandType.cs" />
+    <Compile Include="Platform\OperandAddressMode.cs" />
     <Compile Include="RegisterBitmap.cs" />
     <Compile Include="Operands\StackSizeOperand.cs" />
     <Compile Include="StackLayout.cs" />

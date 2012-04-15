@@ -40,9 +40,16 @@ namespace Mosa.Platform.x86
 					{
 						if (!ctx.Ignore && ctx.Instruction is Instructions.IX86Instruction)
 						{
-							if (IsMemoryOperand(ctx.Result) && IsMemoryOperand(ctx.Operand1))
+							if (ctx.Operand1 is MemoryOperand)
 							{
-								this.HandleMemoryToMemoryOperation(ctx);
+								if (ctx.Result is MemoryOperand)
+								{
+									HandleMemoryToMemoryOperation(ctx);
+								}
+								if (ctx.Result == null && ctx.Operand2 is MemoryOperand)
+								{
+									HandleMemoryToMemoryOperation2(ctx);
+								}
 							}
 						}
 					}
@@ -51,12 +58,7 @@ namespace Mosa.Platform.x86
 		}
 
 		#endregion // IMethodCompilerStage Members
-
-		private bool IsMemoryOperand(Operand op)
-		{
-			return op is MemoryOperand;
-		}
-
+		
 		private void HandleMemoryToMemoryOperation(Context ctx)
 		{
 			Operand destination = ctx.Result;
@@ -68,20 +70,48 @@ namespace Mosa.Platform.x86
 
 			if (this.RequiresSseOperation(destinationSigType))
 			{
-				IInstruction moveInstruction = this.GetMoveInstruction(destinationSigType);
-				RegisterOperand destinationRegister = this.AllocateRegister(destinationSigType);
+				IInstruction moveInstruction = GetMoveInstruction(destinationSigType);
+				RegisterOperand destinationRegister = AllocateRegister(destinationSigType);
 
 				ctx.Result = destinationRegister;
 				ctx.AppendInstruction(moveInstruction, destination, destinationRegister);
 			}
 			else
 			{
-				SigType sourceSigType = ctx.Operand1.Type;
-				IInstruction moveInstruction = this.GetMoveInstruction(sourceSigType);
-				RegisterOperand sourceRegister = this.AllocateRegister(sourceSigType);
+				SigType sourceSigType = source.Type;
+				IInstruction moveInstruction = GetMoveInstruction(sourceSigType);
+				RegisterOperand sourceRegister = AllocateRegister(sourceSigType);
 
 				ctx.Operand1 = sourceRegister;
 
+				ctx.InsertBefore().SetInstruction(moveInstruction, sourceRegister, source);
+			}
+		}
+
+		private void HandleMemoryToMemoryOperation2(Context ctx)
+		{
+			Operand destination = ctx.Operand1;
+			Operand source = ctx.Operand2;
+
+			Debug.Assert(destination is MemoryOperand && source is MemoryOperand);
+
+			SigType destinationSigType = destination.Type;
+
+			if (this.RequiresSseOperation(destinationSigType))
+			{
+				IInstruction moveInstruction = GetMoveInstruction(destinationSigType);
+				RegisterOperand destinationRegister = AllocateRegister(destinationSigType);
+
+				ctx.Operand1 = destinationRegister;
+				ctx.AppendInstruction(moveInstruction, destination, destinationRegister);
+			}
+			else
+			{
+				SigType sourceSigType = source.Type;
+				IInstruction moveInstruction = GetMoveInstruction(sourceSigType);
+				RegisterOperand sourceRegister = AllocateRegister(sourceSigType);
+
+				ctx.Operand2 = sourceRegister;
 				ctx.InsertBefore().SetInstruction(moveInstruction, sourceRegister, source);
 			}
 		}

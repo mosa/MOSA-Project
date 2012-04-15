@@ -204,8 +204,8 @@ namespace Mosa.Platform.x86
 		/// <param name="ctx">The context.</param>
 		void Instructions.IX86Visitor.Cmp(Context ctx)
 		{
-			Operand left = ctx.Result;
-			Operand right = ctx.Operand1;
+			Operand left = ctx.Operand1;
+			Operand right = ctx.Operand2;
 
 			if (left is ConstantOperand)
 			{
@@ -213,7 +213,7 @@ namespace Mosa.Platform.x86
 				Context before = ctx.InsertBefore();
 				before.SetInstruction(Instruction.PushInstruction, null, ecx);
 				before.AppendInstruction(Instruction.MovInstruction, ecx, left);
-				ctx.Result = ecx;
+				ctx.Operand1 = ecx;
 				ctx.AppendInstruction(Instruction.PopInstruction, ecx);
 			}
 			if (right is ConstantOperand && !Is32Bit(left))
@@ -225,7 +225,7 @@ namespace Mosa.Platform.x86
 					before.AppendInstruction(Instruction.MovsxInstruction, edx, left);
 				else
 					before.AppendInstruction(Instruction.MovzxInstruction, edx, left);
-				ctx.Result = edx;
+				ctx.Operand1 = edx;
 				ctx.AppendInstruction(Instruction.PopInstruction, edx);
 			}
 		}

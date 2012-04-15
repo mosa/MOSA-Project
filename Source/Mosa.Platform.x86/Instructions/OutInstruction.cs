@@ -16,7 +16,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Representations the x86 out instruction.
 	/// </summary>
-	public sealed class OutInstruction : ThreeOperandInstruction
+	public sealed class OutInstruction : X86Instruction
 	{
 		#region Data Members
 
@@ -26,29 +26,38 @@ namespace Mosa.Platform.x86.Instructions
 		private static readonly OpCode R_R_32 = new OpCode(new byte[] { 0xEF });
 
 		#endregion // Data Members
+		
+		/// <summary>
+		/// Initializes a new instance of <see cref="ComisdInstruction"/>.
+		/// </summary>
+		public OutInstruction() :
+			base(0, 2)
+		{
+		}
 
 		#region Methods
-		/// <summary>
-		/// Computes the opcode.
-		/// </summary>
-		/// <param name="empty">The empty.</param>
-		/// <param name="destination">The destination.</param>
-		/// <param name="source">The source.</param>
-		/// <returns></returns>
-		protected override OpCode ComputeOpCode(Operand empty, Operand destination, Operand source)
-		{
-			if (IsByte(source))
-			{
-				if ((destination is ConstantOperand) && (source is RegisterOperand)) return C_R_8;
-				if ((destination is RegisterOperand) && (source is RegisterOperand)) return R_R_8;
-			}
-			else
-			{
-				if ((destination is ConstantOperand) && (source is RegisterOperand)) return C_R_32;
-				if ((destination is RegisterOperand) && (source is RegisterOperand)) return R_R_32;
-			}
-			throw new ArgumentException(@"No opcode for operand type.");
-		}
+
+		///// <summary>
+		///// Computes the opcode.
+		///// </summary>
+		///// <param name="destination">The empty.</param>
+		///// <param name="source">The destination.</param>
+		///// <param name="third">The source.</param>
+		///// <returns></returns>
+		//protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
+		//{
+		//    if (IsByte(third))
+		//    {
+		//        if ((source is ConstantOperand) && (third is RegisterOperand)) return C_R_8;
+		//        if ((source is RegisterOperand) && (third is RegisterOperand)) return R_R_8;
+		//    }
+		//    else
+		//    {
+		//        if ((source is ConstantOperand) && (third is RegisterOperand)) return C_R_32;
+		//        if ((source is RegisterOperand) && (third is RegisterOperand)) return R_R_32;
+		//    }
+		//    throw new ArgumentException(@"No opcode for operand type.");
+		//}
 
 		/// <summary>
 		/// Emits the specified platform instruction.
@@ -57,7 +66,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
-			emitter.Emit(new OpCode(new byte[] { 0xEE }), null, null);
+			emitter.Emit(R_R_8, null, null);
 		}
 
 		/// <summary>

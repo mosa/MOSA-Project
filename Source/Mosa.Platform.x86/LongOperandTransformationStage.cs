@@ -1096,12 +1096,12 @@ namespace Mosa.Platform.x86
 			newBlocks[0].AppendInstruction(Instruction.MovInstruction, ecx, count);
 			newBlocks[0].AppendInstruction(Instruction.MovInstruction, edx, op1H);
 			newBlocks[0].AppendInstruction(Instruction.MovInstruction, eax, op1L);
-			newBlocks[0].AppendInstruction(Instruction.CmpInstruction, ecx, new ConstantOperand(BuiltInSigType.Int32, 64));
+			newBlocks[0].AppendInstruction(Instruction.CmpInstruction, null, ecx, new ConstantOperand(BuiltInSigType.Int32, 64));
 			newBlocks[0].AppendInstruction(Instruction.BranchInstruction, IR.ConditionCode.UnsignedGreaterOrEqual, newBlocks[4].BasicBlock);
 			newBlocks[0].AppendInstruction(Instruction.JmpInstruction, newBlocks[1].BasicBlock);
 			LinkBlocks(newBlocks[0], newBlocks[4], newBlocks[1]);
 
-			newBlocks[1].AppendInstruction(Instruction.CmpInstruction, ecx, new ConstantOperand(BuiltInSigType.Int32, 32));
+			newBlocks[1].AppendInstruction(Instruction.CmpInstruction, null, ecx, new ConstantOperand(BuiltInSigType.Int32, 32));
 			newBlocks[1].AppendInstruction(Instruction.BranchInstruction, IR.ConditionCode.UnsignedGreaterOrEqual, newBlocks[3].BasicBlock);
 			newBlocks[1].AppendInstruction(Instruction.JmpInstruction, newBlocks[2].BasicBlock);
 			LinkBlocks(newBlocks[3], newBlocks[2], newBlocks[1]);
@@ -1544,7 +1544,7 @@ namespace Mosa.Platform.x86
 			Context nextBlock = SplitContext(context, false);
 
 			// Compare high dwords
-			context.SetInstruction(Instruction.CmpInstruction, op1H, op2H);
+			context.SetInstruction(Instruction.CmpInstruction, null, op1H, op2H);
 			context.AppendInstruction(Instruction.BranchInstruction, IR.ConditionCode.Equal, newBlocks[1].BasicBlock);
 			context.AppendInstruction(Instruction.JmpInstruction, newBlocks[0].BasicBlock);
 			LinkBlocks(context, newBlocks[0], newBlocks[1]);
@@ -1556,7 +1556,7 @@ namespace Mosa.Platform.x86
 			LinkBlocks(newBlocks[0], nextBlock);
 
 			// Compare low dwords
-			newBlocks[1].SetInstruction(Instruction.CmpInstruction, op1L, op2L);
+			newBlocks[1].SetInstruction(Instruction.CmpInstruction, null, op1L, op2L);
 			// Set the unsigned result...
 			newBlocks[1].AppendInstruction(Instruction.BranchInstruction, GetUnsignedConditionCode(conditionCode), target);
 			newBlocks[1].AppendInstruction(Instruction.JmpInstruction, nextBlock.BasicBlock);
@@ -1605,7 +1605,7 @@ namespace Mosa.Platform.x86
 			Context nextBlock = SplitContext(context, false);
 
 			// Compare high dwords
-			context.SetInstruction(Instruction.CmpInstruction, op1H, op2H);
+			context.SetInstruction(Instruction.CmpInstruction, null, op1H, op2H);
 			context.AppendInstruction(Instruction.BranchInstruction, IR.ConditionCode.Equal, newBlocks[1].BasicBlock);
 			context.AppendInstruction(Instruction.JmpInstruction, newBlocks[0].BasicBlock);
 			LinkBlocks(context, newBlocks[0], newBlocks[1]);
@@ -1616,7 +1616,7 @@ namespace Mosa.Platform.x86
 			LinkBlocks(newBlocks[0], newBlocks[2], newBlocks[3]);
 
 			// Compare low dwords
-			newBlocks[1].SetInstruction(Instruction.CmpInstruction, op1L, op2L);
+			newBlocks[1].SetInstruction(Instruction.CmpInstruction, null, op1L, op2L);
 			// Set the unsigned result...
 			newBlocks[1].AppendInstruction(Instruction.BranchInstruction, GetUnsignedConditionCode(conditionCode), newBlocks[2].BasicBlock);
 			newBlocks[1].AppendInstruction(Instruction.JmpInstruction, newBlocks[3].BasicBlock);

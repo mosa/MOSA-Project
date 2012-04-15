@@ -215,7 +215,7 @@ namespace Mosa.Platform.x86
 				switch (code)
 				{
 					case IR.ConditionCode.Equal:
-						context.AppendInstruction(Instruction.ComisdInstruction, left, right);
+						context.AppendInstruction(Instruction.ComisdInstruction, null, left, right);
 						break;
 					case IR.ConditionCode.NotEqual: goto case IR.ConditionCode.Equal;
 					case IR.ConditionCode.UnsignedGreaterOrEqual: goto case IR.ConditionCode.Equal;
@@ -223,7 +223,7 @@ namespace Mosa.Platform.x86
 					case IR.ConditionCode.UnsignedLessOrEqual: goto case IR.ConditionCode.Equal;
 					case IR.ConditionCode.UnsignedLessThan: goto case IR.ConditionCode.Equal;
 					case IR.ConditionCode.GreaterOrEqual:
-						context.AppendInstruction(Instruction.ComisdInstruction, left, right);
+						context.AppendInstruction(Instruction.ComisdInstruction, null, left, right);
 						break;
 					case IR.ConditionCode.GreaterThan: goto case IR.ConditionCode.GreaterOrEqual;
 					case IR.ConditionCode.LessOrEqual: goto case IR.ConditionCode.GreaterOrEqual;
@@ -319,7 +319,7 @@ namespace Mosa.Platform.x86
 			var operand1 = context.Operand1;
 			var operand2 = context.Operand2;
 
-			context.SetInstruction(Instruction.CmpInstruction, operand1, operand2);
+			context.SetInstruction(Instruction.CmpInstruction, null, operand1, operand2);
 			context.AppendInstruction(Instruction.BranchInstruction, condition);
 			context.SetBranch(branch.Targets[0]);
 		}
@@ -337,7 +337,7 @@ namespace Mosa.Platform.x86
 			var operand1 = context.Operand1;
 			var operand2 = context.Operand2;
 
-			context.SetInstruction(Instruction.CmpInstruction, operand1, operand2);
+			context.SetInstruction(Instruction.CmpInstruction, null, operand1, operand2);
 
 			if (resultOperand != null)
 			{
@@ -753,7 +753,7 @@ namespace Mosa.Platform.x86
 			newBlocks[0].AppendInstruction(Instruction.SseDivInstruction, destination, source);
 			newBlocks[0].AppendInstruction(Instruction.Cvttsd2siInstruction, edx, destination);
 
-			newBlocks[0].AppendInstruction(Instruction.CmpInstruction, edx, new ConstantOperand(BuiltInSigType.Int32, 0));
+			newBlocks[0].AppendInstruction(Instruction.CmpInstruction, null, edx, new ConstantOperand(BuiltInSigType.Int32, 0));
 			newBlocks[0].AppendInstruction(Instruction.BranchInstruction, IR.ConditionCode.Equal, newBlocks[2].BasicBlock);
 			newBlocks[0].AppendInstruction(Instruction.JmpInstruction, newBlocks[1].BasicBlock);
 			LinkBlocks(newBlocks[0], newBlocks[1], newBlocks[2]);
@@ -826,7 +826,7 @@ namespace Mosa.Platform.x86
 
 			for (int i = 0; i < branch.Targets.Length - 1; ++i)
 			{
-				context.AppendInstruction(Instruction.CmpInstruction, operand, new ConstantOperand(BuiltInSigType.IntPtr, i));
+				context.AppendInstruction(Instruction.CmpInstruction, null, operand, new ConstantOperand(BuiltInSigType.IntPtr, i));
 				context.AppendInstruction(Instruction.BranchInstruction, IR.ConditionCode.Equal);
 				context.SetBranch(branch.Targets[i]);
 			}

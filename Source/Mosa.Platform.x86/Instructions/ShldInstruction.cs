@@ -45,17 +45,19 @@ namespace Mosa.Platform.x86.Instructions
 		}
 
 		/// <summary>
-		/// 
+		/// Emits the specified platform instruction.
 		/// </summary>
-		/// <param name="context"></param>
-		/// <param name="emitter"></param>
+		/// <param name="context">The context.</param>
+		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
 			OpCode opCode = ComputeOpCode(context.Result, context.Operand1, context.Operand2);
 			if (context.Operand2 is ConstantOperand)
 			{
+				// TODO/FIXME: Move these two lines into a stage
 				ConstantOperand op = context.Operand2 as ConstantOperand;
 				op = new ConstantOperand(BuiltInSigType.Byte, op.Value);
+				
 				emitter.Emit(opCode, context.Result, context.Operand1, op);
 			}
 			else

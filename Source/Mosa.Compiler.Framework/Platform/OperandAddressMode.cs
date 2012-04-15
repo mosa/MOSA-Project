@@ -12,13 +12,14 @@ using System;
 namespace Mosa.Compiler.Framework.Platform
 {
 	/// <summary>
-	/// This enum represents the type of operand type
+	/// This enum represents the address mode of an operand 
 	/// </summary>
 	[Flags]
-	public enum OpcodeOperandType 
+	public enum OperandAddressMode 
 	{
-		Register,
-		Memory,
-		Immediate
+		Register = 1,
+		Memory = 2,
+		Immediate = 4,
+		All = Register | Memory | Immediate
 	}
 }

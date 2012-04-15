@@ -13,6 +13,7 @@ using System.Diagnostics;
 using System.Collections.Generic;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Operands;
+using Mosa.Compiler.Framework.Platform;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -42,30 +43,65 @@ namespace Mosa.Compiler.Framework.Stages
 					if (ctx.Ignore || ctx.Instruction == null)
 						continue;
 
-					RegisterBitmap resultRegisters = GetResultAssignment(ctx);
-					RegisterBitmap operandRegisters = GetOperandAssignments(ctx);
+					RegisterBitmap assignedRegisters = GetResultAssignment(ctx);
+					RegisterBitmap usedRegisters = GetOperandAssignments(ctx);
+
+					UpdateOpcodeRegisterUsage(ctx, ref assignedRegisters, ref usedRegisters);
 
 					Debug.WriteLine(String.Format("L_{0:X4}: {1}", ctx.Label, ctx.Instruction.ToString(ctx)));
 
-					if (resultRegisters.HasValue)
+					if (ctx.Instruction.ToString().Contains(".Div"))
+						Debug.Write("");
+
+					if (assignedRegisters.HasValue)
 					{
-						Debug.Write("\t ASSIGN: ");
-						Debug.Write(GetRegisterNames(resultRegisters));
+						Debug.Write("\t ASSIGNED: ");
+						Debug.Write(GetRegisterNames(assignedRegisters));
 					}
 
-					if (operandRegisters.HasValue)
+					if (usedRegisters.HasValue)
 					{
-						Debug.Write("\t USE: ");
+						Debug.Write("\t USED: ");
 
-						Debug.Write(GetRegisterNames(operandRegisters));
+						Debug.Write(GetRegisterNames(usedRegisters));
 					}
 
-					if (resultRegisters.HasValue | operandRegisters.HasValue)
+					if (assignedRegisters.HasValue | usedRegisters.HasValue)
 					{
 						Debug.WriteLine("");
 					}
 
 					continue;
+				}
+			}
+		}
+
+		protected void UpdateOpcodeRegisterUsage(Context context, ref RegisterBitmap assignedRegisters, ref RegisterBitmap usedRegisters)
+		{
+			IOpcodeRegisterUsage usage = context.Instruction as IOpcodeRegisterUsage;
+			
+			if (usage == null)
+				return;
+
+			RegisterOperand resultOperand = context.Result as RegisterOperand;
+
+			if (resultOperand != null)
+			{
+
+				Register[] modifiedRegister = usage.GetModifiedRegisters(resultOperand.Register);
+
+				if (modifiedRegister != null)
+				{
+					foreach (Register register in modifiedRegister)
+						assignedRegisters.Set(register);
+				}
+			
+				Register[] unspecifiedRegisters = usage.GetUnspecifiedSourceRegisters(resultOperand.Register);
+
+				if (unspecifiedRegisters != null)
+				{
+					foreach (Register register in modifiedRegister)
+						usedRegisters.Set(register);
 				}
 			}
 		}

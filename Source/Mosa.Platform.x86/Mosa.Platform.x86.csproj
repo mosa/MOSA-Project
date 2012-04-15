@@ -97,6 +97,7 @@
     <Compile Include="ControlRegister.cs" />
     <Compile Include="ExceptionVectorStage.cs" />
     <Compile Include="Instructions\CallPointerInstruction.cs" />
+    <Compile Include="Instructions\TwoOperandNoResultInstruction.cs" />
     <Compile Include="Instructions\FarJmpInstruction.cs" />
     <Compile Include="Instructions\LeaveInstruction.cs" />
     <Compile Include="Instructions\SseRoundInstruction.cs" />
@@ -243,7 +244,7 @@
     <Compile Include="Instructions\UcomisdInstruction.cs" />
     <Compile Include="Instructions\UcomissInstruction.cs" />
     <Compile Include="OpCode.cs" />
-    <Compile Include="Instructions\BaseInstruction.cs" />
+    <Compile Include="Instructions\X86Instruction.cs" />
     <Compile Include="Instructions\IX86Visitor.cs" />
     <Compile Include="Instructions\NopInstruction.cs" />
     <Compile Include="DefaultCallingConvention.cs">

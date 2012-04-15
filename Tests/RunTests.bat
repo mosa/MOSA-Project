@@ -16,6 +16,6 @@ CD ..\Tests
 
 CALL ExtractResults.BAT
 
-notepad.exe reports\Tests.txt
+notepad.exe reports\Failed.txt
 
 pause
