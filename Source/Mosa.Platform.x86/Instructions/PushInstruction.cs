@@ -34,6 +34,18 @@ namespace Mosa.Platform.x86.Instructions
 
 		#endregion
 
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="PushInstruction"/>.
+		/// </summary>
+		public PushInstruction() :
+			base(1, 0)
+		{
+		}
+
+		#endregion // Construction
+
 		#region Methods
 
 		/// <summary>
@@ -51,7 +63,7 @@ namespace Mosa.Platform.x86.Instructions
 					emitter.Emit(CONST16, context.Operand1, null);
 				else if (IsInt(context.Operand1))
 					emitter.Emit(CONST32, context.Operand1, null);
-                return;
+				return;
 			}
 			if (context.Operand1 is RegisterOperand)
 			{

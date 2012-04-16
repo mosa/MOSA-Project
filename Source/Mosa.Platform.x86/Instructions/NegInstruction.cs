@@ -29,10 +29,10 @@ namespace Mosa.Platform.x86.Instructions
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="DecInstruction"/>.
+		/// Initializes a new instance of <see cref="NegInstruction"/>.
 		/// </summary>
 		public NegInstruction() :
-			base(1, 1)
+			base(0, 1)
 		{
 		}
 
@@ -40,11 +40,11 @@ namespace Mosa.Platform.x86.Instructions
 
 		#region Methods
 		/// <summary>
-		/// 
+		/// Computes the opcode.
 		/// </summary>
-		/// <param name="destination"></param>
-		/// <param name="source"></param>
-		/// <param name="third"></param>
+		/// <param name="destination">The destination operand.</param>
+		/// <param name="source">The source operand.</param>
+		/// <param name="third">The third operand.</param>
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{

@@ -41,8 +41,23 @@ namespace Mosa.Compiler.Framework.Stages
 						odd = true;
 					if (ctx.Instruction.DefaultResultCount == 1 && ctx.Result == null)
 						odd = true;
+					
+					if (ctx.Instruction.DefaultOperandCount == 0 && ctx.Operand1 != null)
+						odd = true;
+					if (ctx.Instruction.DefaultOperandCount == 0 && ctx.Operand2 != null)
+						odd = true;
+					if (ctx.Instruction.DefaultOperandCount == 1 && ctx.Operand1 == null)
+						odd = true;
+					if (ctx.Instruction.DefaultOperandCount == 1 && ctx.Operand2 != null)
+						odd = true;
 
 					if (!odd)
+						continue;
+
+					if (ctx.Instruction.ToString().Contains("X86.Call"))
+						continue;
+
+					if (ctx.Instruction.ToString().Contains("X86.Jmp"))
 						continue;
 
 					Debug.WriteLine(String.Format("===> L_{0:X4}: {1}", ctx.Label, ctx.Instruction.ToString(ctx)));

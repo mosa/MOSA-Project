@@ -28,10 +28,10 @@ namespace Mosa.Platform.x86.Instructions
 		#endregion // Data Members
 		
 		/// <summary>
-		/// Initializes a new instance of <see cref="ComisdInstruction"/>.
+		/// Initializes a new instance of <see cref="OutInstruction"/>.
 		/// </summary>
 		public OutInstruction() :
-			base(0, 2)
+			base(2, 0)
 		{
 		}
 

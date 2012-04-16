@@ -18,8 +18,12 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class CallInstruction : X86Instruction
 	{
+		#region Data Member
+
 		private static readonly OpCode RegCall = new OpCode(new byte[] { 0xFF }, 2);
 		private static readonly byte[] LabelCall = new byte[] { 0xE8 };
+
+		#endregion // Data Member
 
 		#region Methods
 

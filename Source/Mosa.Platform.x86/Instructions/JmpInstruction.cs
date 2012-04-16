@@ -25,6 +25,18 @@ namespace Mosa.Platform.x86.Instructions
 		private static readonly OpCode JmpReg = new OpCode(new byte[] { 0xFF }, 4);
 
 		#endregion
+		
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="JmpInstruction"/>.
+		/// </summary>
+		public JmpInstruction() :
+			base(1, 0)
+		{
+		}
+
+		#endregion // Construction
 
 		#region Methods
 

@@ -32,7 +32,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// Initializes a new instance of <see cref="DecInstruction"/>.
 		/// </summary>
 		public DecInstruction() :
-			base(1, 1)
+			base(0, 1)
 		{
 		}
 

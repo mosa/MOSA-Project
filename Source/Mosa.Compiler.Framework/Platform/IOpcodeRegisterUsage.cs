@@ -28,8 +28,10 @@ namespace Mosa.Compiler.Framework.Platform
 		/// <summary>
 		/// Gets the available result registers.
 		/// </summary>
-		/// <param name="type">The type.</param>
-		/// <returns>Returns list of available (primary) registers for result, given opcode address mode</returns>
+		/// <param name="addressMode">The address mode.</param>
+		/// <returns>
+		/// Returns list of available (primary) registers for result, given opcode address mode
+		/// </returns>
 		Register[] GetAvailableResultRegisters(OperandAddressMode addressMode);
 
 		/// <summary>
@@ -43,7 +45,7 @@ namespace Mosa.Compiler.Framework.Platform
 		/// <summary>
 		/// Gets the available operand1 registers.
 		/// </summary>
-		/// <param name="type">The type.</param>
+		/// <param name="addressMode">The address mode.</param>
 		/// <returns>
 		/// Returns list of available (primary) registers for operand 1, given opcode address mode
 		/// </returns>
