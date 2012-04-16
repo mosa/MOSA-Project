@@ -16,7 +16,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Representations the x86 cmp instruction.
 	/// </summary>
-	public sealed class DirectCompareInstruction : TwoOperandInstruction
+	public sealed class DirectCompareInstruction : TwoOperandNoResultInstruction
 	{
 		#region Data Member
 
@@ -45,31 +45,31 @@ namespace Mosa.Platform.x86.Instructions
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-			if ((destination is MemoryOperand) && (source is RegisterOperand))
+			if ((source is MemoryOperand) && (third is RegisterOperand))
 			{
-				if (IsByte(destination) || IsByte(source))
+				if (IsByte(source) || IsByte(third))
 					return M_R_8;
-				if (IsChar(destination) || IsChar(source))
+				if (IsChar(source) || IsChar(third))
 					return M_R_16;
 				return M_R;
 			}
 
-			if ((destination is RegisterOperand) && (source is MemoryOperand))
+			if ((source is RegisterOperand) && (third is MemoryOperand))
 			{
-				if (IsByte(source) || IsByte(destination))
+				if (IsByte(third) || IsByte(source))
 					return R_M_8;
-				if (IsChar(source) || IsShort(source))
+				if (IsChar(third) || IsShort(third))
 					return R_M_16;
 				return R_M;
 			}
 
-			if ((destination is RegisterOperand) && (source is RegisterOperand)) return R_R;
-			if ((destination is MemoryOperand) && (source is ConstantOperand)) return M_C;
-			if ((destination is RegisterOperand) && (source is ConstantOperand))
+			if ((source is RegisterOperand) && (third is RegisterOperand)) return R_R;
+			if ((source is MemoryOperand) && (third is ConstantOperand)) return M_C;
+			if ((source is RegisterOperand) && (third is ConstantOperand))
 			{
-				if (IsByte(source) || IsByte(destination))
+				if (IsByte(third) || IsByte(source))
 					return R_C_8;
-				if (IsChar(source) || IsShort(source))
+				if (IsChar(third) || IsShort(third))
 					return R_C_16;
 				return R_C;
 			}

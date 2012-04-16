@@ -418,7 +418,7 @@ namespace Mosa.Platform.x86
 			newBlocks[8].AppendInstruction(Instruction.JmpInstruction, newBlocks[9].BasicBlock);
 			LinkBlocks(newBlocks[8], newBlocks[9], newBlocks[12]);
 
-			newBlocks[9].SetInstruction(Instruction.DirectCompareInstruction, edx, op1H);
+			newBlocks[9].SetInstruction(Instruction.DirectCompareInstruction, null, edx, op1H);
 			newBlocks[9].AppendInstruction(Instruction.BranchInstruction, IR.ConditionCode.UnsignedGreaterThan, newBlocks[12].BasicBlock);
 			newBlocks[9].AppendInstruction(Instruction.JmpInstruction, newBlocks[10].BasicBlock);
 			LinkBlocks(newBlocks[9], newBlocks[10], newBlocks[12]);
@@ -427,7 +427,7 @@ namespace Mosa.Platform.x86
 			newBlocks[10].AppendInstruction(Instruction.JmpInstruction, newBlocks[11].BasicBlock);
 			LinkBlocks(newBlocks[10], newBlocks[11], newBlocks[13]);
 
-			newBlocks[11].SetInstruction(Instruction.DirectCompareInstruction, ueax, op1L);
+			newBlocks[11].SetInstruction(Instruction.DirectCompareInstruction, null, ueax, op1L);
 			newBlocks[11].AppendInstruction(Instruction.BranchInstruction, IR.ConditionCode.UnsignedLessOrEqual, newBlocks[13].BasicBlock);
 			newBlocks[11].AppendInstruction(Instruction.JmpInstruction, newBlocks[12].BasicBlock);
 			LinkBlocks(newBlocks[11], newBlocks[12], newBlocks[13]);
@@ -660,7 +660,7 @@ namespace Mosa.Platform.x86
 			newBlocks[8].AppendInstruction(Instruction.JmpInstruction, newBlocks[9].BasicBlock);
 			LinkBlocks(newBlocks[8], newBlocks[12], newBlocks[9]);
 
-			newBlocks[9].AppendInstruction(Instruction.DirectCompareInstruction, edx, op1H);
+			newBlocks[9].AppendInstruction(Instruction.DirectCompareInstruction, null, edx, op1H);
 			newBlocks[9].AppendInstruction(Instruction.BranchInstruction, IR.ConditionCode.UnsignedGreaterThan, newBlocks[12].BasicBlock);
 			newBlocks[9].AppendInstruction(Instruction.JmpInstruction, newBlocks[10].BasicBlock);
 			LinkBlocks(newBlocks[9], newBlocks[12], newBlocks[10]);
@@ -669,7 +669,7 @@ namespace Mosa.Platform.x86
 			newBlocks[10].AppendInstruction(Instruction.JmpInstruction, newBlocks[11].BasicBlock);
 			LinkBlocks(newBlocks[10], newBlocks[13], newBlocks[11]);
 
-			newBlocks[11].AppendInstruction(Instruction.DirectCompareInstruction, eax, op1L);
+			newBlocks[11].AppendInstruction(Instruction.DirectCompareInstruction, null, eax, op1L);
 			newBlocks[11].AppendInstruction(Instruction.BranchInstruction, IR.ConditionCode.UnsignedLessOrEqual, newBlocks[13].BasicBlock);
 			newBlocks[11].AppendInstruction(Instruction.JmpInstruction, newBlocks[12].BasicBlock);
 			LinkBlocks(newBlocks[11], newBlocks[13], newBlocks[12]);
@@ -781,7 +781,7 @@ namespace Mosa.Platform.x86
 			newBlocks[4].AppendInstruction(Instruction.JmpInstruction, newBlocks[5].BasicBlock);
 			LinkBlocks(newBlocks[4], newBlocks[8], newBlocks[5]);
 
-			newBlocks[5].AppendInstruction(Instruction.DirectCompareInstruction, edx, op1H);
+			newBlocks[5].AppendInstruction(Instruction.DirectCompareInstruction, null, edx, op1H);
 			newBlocks[5].AppendInstruction(Instruction.BranchInstruction, IR.ConditionCode.UnsignedGreaterThan, newBlocks[8].BasicBlock);
 			newBlocks[5].AppendInstruction(Instruction.JmpInstruction, newBlocks[6].BasicBlock);
 			LinkBlocks(newBlocks[5], newBlocks[8], newBlocks[6]);
@@ -790,7 +790,7 @@ namespace Mosa.Platform.x86
 			newBlocks[6].AppendInstruction(Instruction.JmpInstruction, newBlocks[7].BasicBlock);
 			LinkBlocks(newBlocks[6], newBlocks[9], newBlocks[7]);
 
-			newBlocks[7].AppendInstruction(Instruction.DirectCompareInstruction, eax, op1L);
+			newBlocks[7].AppendInstruction(Instruction.DirectCompareInstruction, null, eax, op1L);
 			newBlocks[7].AppendInstruction(Instruction.BranchInstruction, IR.ConditionCode.UnsignedLessOrEqual, newBlocks[9].BasicBlock);
 			newBlocks[7].AppendInstruction(Instruction.JmpInstruction, newBlocks[8].BasicBlock);
 			LinkBlocks(newBlocks[7], newBlocks[9], newBlocks[8]);
@@ -898,7 +898,7 @@ namespace Mosa.Platform.x86
 			newBlocks[4].AppendInstruction(Instruction.JmpInstruction, newBlocks[5].BasicBlock);
 			LinkBlocks(newBlocks[4], newBlocks[8], newBlocks[5]);
 
-			newBlocks[5].AppendInstruction(Instruction.DirectCompareInstruction, edx, op1H);
+			newBlocks[5].AppendInstruction(Instruction.DirectCompareInstruction, null, edx, op1H);
 			newBlocks[5].AppendInstruction(Instruction.BranchInstruction, IR.ConditionCode.UnsignedGreaterThan, newBlocks[8].BasicBlock);
 			newBlocks[5].AppendInstruction(Instruction.JmpInstruction, newBlocks[6].BasicBlock);
 			LinkBlocks(newBlocks[5], newBlocks[8], newBlocks[6]);
@@ -907,7 +907,7 @@ namespace Mosa.Platform.x86
 			newBlocks[6].AppendInstruction(Instruction.JmpInstruction, newBlocks[7].BasicBlock);
 			LinkBlocks(newBlocks[6], newBlocks[6], newBlocks[7]);
 
-			newBlocks[7].AppendInstruction(Instruction.DirectCompareInstruction, eax, op1L);
+			newBlocks[7].AppendInstruction(Instruction.DirectCompareInstruction, null, eax, op1L);
 			newBlocks[7].AppendInstruction(Instruction.BranchInstruction, IR.ConditionCode.UnsignedLessOrEqual, newBlocks[9].BasicBlock);
 			newBlocks[7].AppendInstruction(Instruction.JmpInstruction, newBlocks[3].BasicBlock);
 			LinkBlocks(newBlocks[7], newBlocks[9], newBlocks[3]);
@@ -962,12 +962,12 @@ namespace Mosa.Platform.x86
 			newBlocks[0].AppendInstruction(Instruction.MovInstruction, ecx, count);
 			newBlocks[0].AppendInstruction(Instruction.MovInstruction, edx, op1H);
 			newBlocks[0].AppendInstruction(Instruction.MovInstruction, eax, op1L);
-			newBlocks[0].AppendInstruction(Instruction.DirectCompareInstruction, ecx, new ConstantOperand(BuiltInSigType.Int32, 64));
+			newBlocks[0].AppendInstruction(Instruction.DirectCompareInstruction, null, ecx, new ConstantOperand(BuiltInSigType.Int32, 64));
 			newBlocks[0].AppendInstruction(Instruction.BranchInstruction, IR.ConditionCode.UnsignedGreaterOrEqual, newBlocks[4].BasicBlock);
 			newBlocks[0].AppendInstruction(Instruction.JmpInstruction, newBlocks[1].BasicBlock);
 			LinkBlocks(newBlocks[0], newBlocks[4], newBlocks[1]);
 
-			newBlocks[1].AppendInstruction(Instruction.DirectCompareInstruction, ecx, new ConstantOperand(BuiltInSigType.Byte, 32));
+			newBlocks[1].AppendInstruction(Instruction.DirectCompareInstruction, null, ecx, new ConstantOperand(BuiltInSigType.Byte, 32));
 			newBlocks[1].AppendInstruction(Instruction.BranchInstruction, IR.ConditionCode.UnsignedGreaterOrEqual, newBlocks[3].BasicBlock);
 			newBlocks[1].AppendInstruction(Instruction.JmpInstruction, newBlocks[2].BasicBlock);
 			LinkBlocks(newBlocks[1], newBlocks[3], newBlocks[2]);
@@ -1030,12 +1030,12 @@ namespace Mosa.Platform.x86
 			newBlocks[0].AppendInstruction(Instruction.MovInstruction, ecx, count);
 			newBlocks[0].AppendInstruction(Instruction.MovInstruction, edx, op1H);
 			newBlocks[0].AppendInstruction(Instruction.MovInstruction, eax, op1L);
-			newBlocks[0].AppendInstruction(Instruction.DirectCompareInstruction, ecx, new ConstantOperand(BuiltInSigType.Int32, 64));
+			newBlocks[0].AppendInstruction(Instruction.DirectCompareInstruction, null, ecx, new ConstantOperand(BuiltInSigType.Int32, 64));
 			newBlocks[0].AppendInstruction(Instruction.BranchInstruction, IR.ConditionCode.UnsignedGreaterOrEqual, newBlocks[4].BasicBlock);
 			newBlocks[0].AppendInstruction(Instruction.JmpInstruction, newBlocks[1].BasicBlock);
 			LinkBlocks(newBlocks[0], newBlocks[4], newBlocks[1]);
 
-			newBlocks[1].AppendInstruction(Instruction.DirectCompareInstruction, ecx, new ConstantOperand(BuiltInSigType.Int32, 32));
+			newBlocks[1].AppendInstruction(Instruction.DirectCompareInstruction, null, ecx, new ConstantOperand(BuiltInSigType.Int32, 32));
 			newBlocks[1].AppendInstruction(Instruction.BranchInstruction, IR.ConditionCode.UnsignedGreaterOrEqual, newBlocks[3].BasicBlock);
 			newBlocks[1].AppendInstruction(Instruction.JmpInstruction, newBlocks[2].BasicBlock);
 			LinkBlocks(newBlocks[1], newBlocks[3], newBlocks[2]);
@@ -1318,7 +1318,7 @@ namespace Mosa.Platform.x86
 			Operand op0 = context.Result;
 			Operand op1 = context.Operand1;
 			Debug.Assert(op0 != null, @"I8 not in a memory operand!");
-			
+
 			Operand op0L, op0H;
 			SplitLongOperand(op0, out op0L, out op0H);
 			RegisterOperand eax = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.EAX);
@@ -1503,7 +1503,7 @@ namespace Mosa.Platform.x86
 			context.SetInstruction(Instruction.JmpInstruction, newBlocks[0].BasicBlock);
 			LinkBlocks(context, newBlocks[0]);
 			// Compare high dwords
-			newBlocks[0].AppendInstruction(Instruction.DirectCompareInstruction, op1H, op2H);
+			newBlocks[0].AppendInstruction(Instruction.DirectCompareInstruction, null, op1H, op2H);
 			// Branch if check already gave results
 			newBlocks[0].AppendInstruction(Instruction.BranchInstruction, IR.ConditionCode.Equal, newBlocks[2].BasicBlock);
 			newBlocks[0].AppendInstruction(Instruction.JmpInstruction, newBlocks[1].BasicBlock);
@@ -1516,7 +1516,7 @@ namespace Mosa.Platform.x86
 			LinkBlocks(newBlocks[1], nextBlock);
 
 			// Compare low dwords
-			newBlocks[2].SetInstruction(Instruction.DirectCompareInstruction, op1L, op2L);
+			newBlocks[2].SetInstruction(Instruction.DirectCompareInstruction, null, op1L, op2L);
 			// Set the unsigned result...
 			newBlocks[2].AppendInstruction(Instruction.BranchInstruction, code, targetBlock);
 			newBlocks[2].AppendInstruction(Instruction.JmpInstruction);
