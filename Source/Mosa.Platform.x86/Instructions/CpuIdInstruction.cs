@@ -14,14 +14,24 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Representations the x86 CPUID instruction.
 	/// </summary>
-	public sealed class CpuIdInstruction : TwoOperandInstruction
+	public sealed class CpuIdInstruction : X86Instruction
 	{
 		#region Data Members
 
 		private static readonly OpCode opcode = new OpCode(new byte[] { 0x0F, 0xA2 }); // Move imm32 to r/m32
 
 		#endregion // Data Members
+		#region Construction
 
+		/// <summary>
+		/// Initializes a new instance of <see cref="CpuIdInstruction"/>.
+		/// </summary>
+		public CpuIdInstruction() :
+			base(1, 1)
+		{
+		}
+
+		#endregion // Construction
 		#region Methods
 
 		/// <summary>

@@ -29,6 +29,18 @@ namespace Mosa.Platform.x86.Instructions
 
 		#endregion
 
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="X86Instruction"/> class.
+		/// </summary>
+		public PopInstruction()
+			: base(0, 1)
+		{
+		}
+
+		#endregion // Construction
+
 		#region Methods
 
 		/// <summary>

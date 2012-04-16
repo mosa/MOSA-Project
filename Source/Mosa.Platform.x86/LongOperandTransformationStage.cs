@@ -208,18 +208,18 @@ namespace Mosa.Platform.x86
 			LinkBlocks(newBlocks[0], newBlocks[1], newBlocks[2]);
 
 			newBlocks[1].AppendInstruction(Instruction.MovInstruction, eax, op1L);
-			newBlocks[1].AppendInstruction(Instruction.MulInstruction, null, ecx);
+			newBlocks[1].AppendInstruction(Instruction.MulInstruction, eax, ecx);
 			newBlocks[1].AppendInstruction(Instruction.JmpInstruction, newBlocks[3].BasicBlock);
 			LinkBlocks(newBlocks[1], newBlocks[3]);
 
 			newBlocks[2].AppendInstruction(Instruction.PushInstruction, null, ebx);
-			newBlocks[2].AppendInstruction(Instruction.MulInstruction, null, ecx);
+			newBlocks[2].AppendInstruction(Instruction.MulInstruction, eax, ecx);
 			newBlocks[2].AppendInstruction(Instruction.MovInstruction, ebx, eax);
 			newBlocks[2].AppendInstruction(Instruction.MovInstruction, eax, op1L);
-			newBlocks[2].AppendInstruction(Instruction.MulInstruction, null, op2H);
+			newBlocks[2].AppendInstruction(Instruction.MulInstruction, eax, op2H);
 			newBlocks[2].AppendInstruction(Instruction.AddInstruction, ebx, eax);
 			newBlocks[2].AppendInstruction(Instruction.MovInstruction, eax, op1L);
-			newBlocks[2].AppendInstruction(Instruction.MulInstruction, null, ecx);
+			newBlocks[2].AppendInstruction(Instruction.MulInstruction, eax, ecx);
 			newBlocks[2].AppendInstruction(Instruction.AddInstruction, edx, ebx);
 			newBlocks[2].AppendInstruction(Instruction.PopInstruction, ebx);
 			newBlocks[2].AppendInstruction(Instruction.JmpInstruction, newBlocks[3].BasicBlock);
@@ -409,10 +409,10 @@ namespace Mosa.Platform.x86
 
 			newBlocks[8].SetInstruction(Instruction.DirectDivisionInstruction, eax, ecx);
 			newBlocks[8].AppendInstruction(Instruction.MovInstruction, esi, eax);
-			newBlocks[8].AppendInstruction(Instruction.MulInstruction, null, op2H);
+			newBlocks[8].AppendInstruction(Instruction.MulInstruction, eax, op2H);
 			newBlocks[8].AppendInstruction(Instruction.MovInstruction, ecx, eax);
 			newBlocks[8].AppendInstruction(Instruction.MovInstruction, ueax, op2L);
-			newBlocks[8].AppendInstruction(Instruction.MulInstruction, null, esi);
+			newBlocks[8].AppendInstruction(Instruction.MulInstruction, eax, esi);
 			newBlocks[8].AppendInstruction(Instruction.AddInstruction, edx, ecx);
 			newBlocks[8].AppendInstruction(Instruction.BranchInstruction, IR.ConditionCode.UnsignedLessThan, newBlocks[12].BasicBlock);
 			newBlocks[8].AppendInstruction(Instruction.JmpInstruction, newBlocks[9].BasicBlock);
@@ -652,9 +652,9 @@ namespace Mosa.Platform.x86
 
 			newBlocks[8].AppendInstruction(Instruction.DirectDivisionInstruction, eax, ecx);
 			newBlocks[8].AppendInstruction(Instruction.MovInstruction, ecx, eax);
-			newBlocks[8].AppendInstruction(Instruction.MulInstruction, null, op2H);
+			newBlocks[8].AppendInstruction(Instruction.MulInstruction, eax, op2H);
 			newBlocks[8].AppendInstruction(Instruction.XchgInstruction, ecx, eax);
-			newBlocks[8].AppendInstruction(Instruction.MulInstruction, null, op2L);
+			newBlocks[8].AppendInstruction(Instruction.MulInstruction, eax, op2L);
 			newBlocks[8].AppendInstruction(Instruction.AddInstruction, edx, ecx);
 			newBlocks[8].AppendInstruction(Instruction.BranchInstruction, IR.ConditionCode.UnsignedLessThan, newBlocks[12].BasicBlock);
 			newBlocks[8].AppendInstruction(Instruction.JmpInstruction, newBlocks[9].BasicBlock);
@@ -772,10 +772,10 @@ namespace Mosa.Platform.x86
 
 			newBlocks[4].AppendInstruction(Instruction.DirectDivisionInstruction, eax, ebx);
 			newBlocks[4].AppendInstruction(Instruction.MovInstruction, esi, eax);
-			newBlocks[4].AppendInstruction(Instruction.MulInstruction, null, op2H);
+			newBlocks[4].AppendInstruction(Instruction.MulInstruction, eax, op2H);
 			newBlocks[4].AppendInstruction(Instruction.MovInstruction, ecx, eax);
 			newBlocks[4].AppendInstruction(Instruction.MovInstruction, eax, op2L);
-			newBlocks[4].AppendInstruction(Instruction.MulInstruction, null, esi);
+			newBlocks[4].AppendInstruction(Instruction.MulInstruction, eax, esi);
 			newBlocks[4].AppendInstruction(Instruction.AddInstruction, edx, ecx);
 			newBlocks[4].AppendInstruction(Instruction.BranchInstruction, IR.ConditionCode.UnsignedLessThan, newBlocks[8].BasicBlock);
 			newBlocks[4].AppendInstruction(Instruction.JmpInstruction, newBlocks[5].BasicBlock);
@@ -890,9 +890,9 @@ namespace Mosa.Platform.x86
 
 			newBlocks[4].AppendInstruction(Instruction.DirectDivisionInstruction, eax, ebx);
 			newBlocks[4].AppendInstruction(Instruction.MovInstruction, ecx, eax);
-			newBlocks[4].AppendInstruction(Instruction.MulInstruction, null, op2H);
+			newBlocks[4].AppendInstruction(Instruction.MulInstruction, eax, op2H);
 			newBlocks[4].AppendInstruction(Instruction.XchgInstruction, ecx, eax);
-			newBlocks[4].AppendInstruction(Instruction.MulInstruction, null, op2L);
+			newBlocks[4].AppendInstruction(Instruction.MulInstruction, eax, op2L);
 			newBlocks[4].AppendInstruction(Instruction.AddInstruction, edx, ecx);
 			newBlocks[4].AppendInstruction(Instruction.BranchInstruction, IR.ConditionCode.UnsignedLessThan, newBlocks[8].BasicBlock);
 			newBlocks[4].AppendInstruction(Instruction.JmpInstruction, newBlocks[5].BasicBlock);

@@ -27,6 +27,31 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		void IMethodCompilerStage.Run()
 		{
+
+			foreach (var block in this.basicBlocks)
+			{
+				for (var ctx = new Context(instructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
+				{
+					if (ctx.Ignore || ctx.Instruction == null)
+						continue;
+
+					bool odd = false;
+
+					if (ctx.Instruction.DefaultResultCount == 0 && ctx.Result != null)
+						odd = true;
+					if (ctx.Instruction.DefaultResultCount == 1 && ctx.Result == null)
+						odd = true;
+
+					if (!odd)
+						continue;
+
+					Debug.WriteLine(String.Format("===> L_{0:X4}: {1}", ctx.Label, ctx.Instruction.ToString(ctx)));
+				}
+			}
+
+			if (basicBlocks.Count >= 0)
+				return;
+
 			// Create a list of end blocks
 			List<BasicBlock> endBlocks = new List<BasicBlock>();
 
@@ -79,7 +104,7 @@ namespace Mosa.Compiler.Framework.Stages
 		protected void UpdateOpcodeRegisterUsage(Context context, ref RegisterBitmap assignedRegisters, ref RegisterBitmap usedRegisters)
 		{
 			IOpcodeRegisterUsage usage = context.Instruction as IOpcodeRegisterUsage;
-			
+
 			if (usage == null)
 				return;
 
@@ -95,7 +120,7 @@ namespace Mosa.Compiler.Framework.Stages
 					foreach (Register register in modifiedRegister)
 						assignedRegisters.Set(register);
 				}
-			
+
 				Register[] unspecifiedRegisters = usage.GetUnspecifiedSourceRegisters(resultOperand.Register);
 
 				if (unspecifiedRegisters != null)

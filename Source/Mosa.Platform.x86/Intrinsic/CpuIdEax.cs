@@ -37,7 +37,7 @@ namespace Mosa.Platform.x86.Intrinsic
 			RegisterOperand reg = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.EAX);
 			context.SetInstruction(Instruction.MovInstruction, eax, operand);
 			context.AppendInstruction(Instruction.XorInstruction, ecx, ecx);
-			context.AppendInstruction(Instruction.CpuIdInstruction);
+			context.AppendInstruction(Instruction.CpuIdInstruction, eax, eax);
 			context.AppendInstruction(Instruction.MovInstruction, result, reg);
 		}
 

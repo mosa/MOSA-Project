@@ -8,7 +8,6 @@
  *
  */
 
-
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Operands;
 
@@ -17,7 +16,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Intermediate representation for the x86 ucomisd instruction.
 	/// </summary>
-	public class UcomisdInstruction : TwoOperandInstruction
+	public class UcomisdInstruction : TwoOperandNoResultInstruction
 	{
 		#region Data Members
 

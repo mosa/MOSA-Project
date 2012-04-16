@@ -17,7 +17,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Intermediate representation of the x86 not instruction.
 	/// </summary>
-	public sealed class NotInstruction : OneOperandInstruction
+	public sealed class NotInstruction : X86Instruction
 	{
 		#region Data Members
 
@@ -26,6 +26,18 @@ namespace Mosa.Platform.x86.Instructions
 		private static readonly OpCode MR = new OpCode(new byte[] { 0xF7 }, 2);
 
 		#endregion // Data Members
+		
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="NotInstruction"/>.
+		/// </summary>
+		public NotInstruction() :
+			base(1, 1)
+		{
+		}
+
+		#endregion // Construction
 
 		#region Methods
 

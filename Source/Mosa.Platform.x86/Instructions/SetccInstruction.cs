@@ -40,6 +40,18 @@ namespace Mosa.Platform.x86.Instructions
 		private static readonly OpCode NZ = new OpCode(new byte[] { 0x0F, 0x95 });
 
 		#endregion
+		
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of the <see cref="X86Instruction"/> class.
+		/// </summary>
+		public SetccInstruction()
+			: base(0, 1)
+		{
+		}
+
+		#endregion // Construction
 
 		#region Methods
 

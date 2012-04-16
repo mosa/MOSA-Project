@@ -428,7 +428,7 @@ namespace Mosa.Platform.x86
 			else if (dest.Type.Type == CilElementType.U2)
 				context.AppendInstruction(Instruction.XorInstruction, dest, new ConstantOperand(BuiltInSigType.UInt32, (uint)0xFFFF));
 			else
-				context.AppendInstruction(Instruction.NotInstruction, dest);
+				context.AppendInstruction(Instruction.NotInstruction, dest, dest);
 		}
 
 		/// <summary>
