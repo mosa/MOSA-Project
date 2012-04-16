@@ -15,14 +15,28 @@ using Mosa.Compiler.Framework.Operands;
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
-	/// Representations the x86 int instruction.
+	/// Representations the x86 neg instruction.
 	/// </summary>
-	public sealed class NegInstruction : OneOperandInstruction
+	public sealed class NegInstruction : X86Instruction
 	{
-		#region Codes
+		#region Data Members
+
 		private static readonly OpCode R = new OpCode(new byte[] { 0xF7 }, 3);
 		private static readonly OpCode M = new OpCode(new byte[] { 0xF7 }, 3);
-		#endregion
+
+		#endregion // Data Members
+
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="DecInstruction"/>.
+		/// </summary>
+		public NegInstruction() :
+			base(1, 1)
+		{
+		}
+
+		#endregion // Construction
 
 		#region Methods
 		/// <summary>

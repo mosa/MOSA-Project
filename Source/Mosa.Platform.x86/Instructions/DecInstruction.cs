@@ -16,7 +16,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Representations the x86 int instruction.
 	/// </summary>
-	public sealed class DecInstruction : OneOperandInstruction
+	public sealed class DecInstruction : X86Instruction
 	{
 		#region Data Members
 
@@ -25,6 +25,18 @@ namespace Mosa.Platform.x86.Instructions
 		private static readonly OpCode DEC32 = new OpCode(new byte[] { 0xFF }, 1);
 
 		#endregion
+
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="DecInstruction"/>.
+		/// </summary>
+		public DecInstruction() :
+			base(1, 1)
+		{
+		}
+
+		#endregion // Construction
 
 		#region Methods
 		/// <summary>
@@ -52,6 +64,7 @@ namespace Mosa.Platform.x86.Instructions
 		{
 			visitor.Dec(context);
 		}
+
 		#endregion // Methods
 	}
 }

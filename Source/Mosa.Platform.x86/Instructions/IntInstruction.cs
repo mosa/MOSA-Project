@@ -15,13 +15,25 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Representations the x86 int instruction.
 	/// </summary>
-	public sealed class IntInstruction : OneOperandInstruction
+	public sealed class IntInstruction : X86Instruction
 	{
 		#region Data Members
 
 		private static readonly OpCode opcode = new OpCode(new byte[] { 0xCD });
 
 		#endregion // Data Members
+		
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="DecInstruction"/>.
+		/// </summary>
+		public IntInstruction() :
+			base(1, 0)
+		{
+		}
+
+		#endregion // Construction
 
 		#region Methods
 

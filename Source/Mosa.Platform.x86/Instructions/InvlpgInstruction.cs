@@ -16,13 +16,25 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Representations the x86 Invlpg instruction.
 	/// </summary>
-	public sealed class InvlpgInstruction : OneOperandInstruction
+	public sealed class InvlpgInstruction : X86Instruction
 	{
 		#region Data Members
 
 		private static readonly OpCode INVLPG = new OpCode(new byte[] { 0x0F, 0x01 }, 7);
 
 		#endregion // Data Members
+		
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="DecInstruction"/>.
+		/// </summary>
+		public InvlpgInstruction() :
+			base(1, 0)
+		{
+		}
+
+		#endregion // Construction
 
 		#region Methods
 

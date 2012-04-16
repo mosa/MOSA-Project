@@ -15,9 +15,9 @@ using Mosa.Compiler.Framework.Operands;
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
-	/// Representations the x86 int instruction.
+	/// Representations the x86 inc instruction.
 	/// </summary>
-	public sealed class IncInstruction : OneOperandInstruction
+	public sealed class IncInstruction : X86Instruction
 	{
 		#region Data Members
 
@@ -26,6 +26,18 @@ namespace Mosa.Platform.x86.Instructions
 		private static readonly OpCode INC32 = new OpCode(new byte[] { 0xFF }, 0);
 
 		#endregion // Data Members
+		
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="DecInstruction"/>.
+		/// </summary>
+		public IncInstruction() :
+			base(0, 1)
+		{
+		}
+
+		#endregion // Construction
 
 		#region Methods
 
