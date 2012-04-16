@@ -27,7 +27,7 @@ namespace Mosa.Platform.x86.Instructions
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of <see cref="DecInstruction"/>.
+		/// Initializes a new instance of <see cref="InvlpgInstruction"/>.
 		/// </summary>
 		public InvlpgInstruction() :
 			base(1, 0)

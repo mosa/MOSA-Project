@@ -15,13 +15,25 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Representations the x86 Lgdt instruction.
 	/// </summary>
-	public sealed class LgdtInstruction : OneOperandInstruction
+	public sealed class LgdtInstruction : X86Instruction
 	{
 		#region Data Members
 
 		private static readonly OpCode opcode = new OpCode(new byte[] { 0x0F, 0x01 }, 2);
 
 		#endregion // Data Members
+		
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="LgdtInstruction"/>.
+		/// </summary>
+		public LgdtInstruction() :
+			base(1, 0)
+		{
+		}
+
+		#endregion // Construction
 
 		#region Methods
 

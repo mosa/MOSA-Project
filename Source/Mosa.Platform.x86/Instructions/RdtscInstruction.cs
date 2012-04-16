@@ -7,17 +7,27 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-
 using Mosa.Compiler.Framework;
-
 
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
 	/// Representations the x86 pause instruction.
 	/// </summary>
-	public sealed class RdtscInstruction : OneOperandInstruction
+	public sealed class RdtscInstruction : X86Instruction
 	{
+		
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="RdtscInstruction"/>.
+		/// </summary>
+		public RdtscInstruction() :
+			base(0, 1)
+		{
+		}
+
+		#endregion // Construction
 
 		#region Methods
 

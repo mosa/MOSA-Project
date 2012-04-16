@@ -221,7 +221,6 @@
     <Compile Include="Instructions\MovInstruction.cs" />
     <Compile Include="Instructions\MulInstruction.cs" />
     <Compile Include="Instructions\NegInstruction.cs" />
-    <Compile Include="Instructions\OneOperandInstruction.cs" />
     <Compile Include="Instructions\SalInstruction.cs" />
     <Compile Include="Instructions\SarInstruction.cs" />
     <Compile Include="Instructions\SbbInstruction.cs" />

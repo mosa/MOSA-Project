@@ -14,13 +14,25 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Representations the x86 Lidt instruction.
 	/// </summary>
-	public sealed class LidtInstruction : OneOperandInstruction
+	public sealed class LidtInstruction : X86Instruction
 	{
 		#region Data Members
 
 		private static readonly OpCode opcode = new OpCode(new byte[] { 0x0F, 0x01 }, 3);
 
 		#endregion // Data Members
+		
+		#region Construction
+
+		/// <summary>
+		/// Initializes a new instance of <see cref="LidtInstruction"/>.
+		/// </summary>
+		public LidtInstruction() :
+			base(1, 0)
+		{
+		}
+
+		#endregion // Construction
 
 		#region Methods
 
