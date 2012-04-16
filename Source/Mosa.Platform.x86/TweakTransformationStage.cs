@@ -485,26 +485,6 @@ namespace Mosa.Platform.x86
 		/// <param name="context">The context.</param>
 		void Instructions.IX86Visitor.CpuId(Context context) { }
 		/// <summary>
-		/// Visitation function for <see cref="Instructions.IX86Visitor.CpuIdEax"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Instructions.IX86Visitor.CpuIdEax(Context context) { }
-		/// <summary>
-		/// Visitation function for <see cref="Instructions.IX86Visitor.CpuIdEbx"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Instructions.IX86Visitor.CpuIdEbx(Context context) { }
-		/// <summary>
-		/// Visitation function for <see cref="Instructions.IX86Visitor.CpuIdEcx"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Instructions.IX86Visitor.CpuIdEcx(Context context) { }
-		/// <summary>
-		/// Visitation function for <see cref="Instructions.IX86Visitor.CpuIdEdx"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Instructions.IX86Visitor.CpuIdEdx(Context context) { }
-		/// <summary>
 		/// Visitation function for <see cref="Instructions.IX86Visitor.Hlt"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>

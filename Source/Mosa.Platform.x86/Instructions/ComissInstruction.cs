@@ -18,7 +18,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Intermediate representation for the x86 comisd instruction.
 	/// </summary>
-	public class ComissInstruction : TwoOperandInstruction
+	public class ComissInstruction : TwoOperandNoResultInstruction
 	{
 		#region Data Members
 
@@ -37,10 +37,10 @@ namespace Mosa.Platform.x86.Instructions
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-			if ((destination is RegisterOperand) && (source is RegisterOperand)) return opcode;
-			if ((destination is RegisterOperand) && (source is MemoryOperand)) return opcode;
-			if ((destination is RegisterOperand) && (source is LabelOperand)) return opcode;
-			if ((destination is RegisterOperand) && (source is ConstantOperand)) return opcode;
+			if ((source is RegisterOperand) && (third is RegisterOperand)) return opcode;
+			if ((source is RegisterOperand) && (third is MemoryOperand)) return opcode;
+			if ((source is RegisterOperand) && (third is LabelOperand)) return opcode;
+			if ((source is RegisterOperand) && (third is ConstantOperand)) return opcode;
 			throw new ArgumentException(@"No opcode for operand type.");
 		}
 

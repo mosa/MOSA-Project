@@ -195,7 +195,7 @@ namespace Mosa.Platform.x86
 				switch (code)
 				{
 					case IR.ConditionCode.Equal:
-						context.AppendInstruction(Instruction.ComissInstruction, left, right);
+						context.AppendInstruction(Instruction.ComissInstruction, null, left, right);
 						break;
 					case IR.ConditionCode.NotEqual: goto case IR.ConditionCode.Equal;
 					case IR.ConditionCode.UnsignedGreaterOrEqual: goto case IR.ConditionCode.Equal;
@@ -203,7 +203,7 @@ namespace Mosa.Platform.x86
 					case IR.ConditionCode.UnsignedLessOrEqual: goto case IR.ConditionCode.Equal;
 					case IR.ConditionCode.UnsignedLessThan: goto case IR.ConditionCode.Equal;
 					case IR.ConditionCode.GreaterOrEqual:
-						context.AppendInstruction(Instruction.ComissInstruction, left, right);
+						context.AppendInstruction(Instruction.ComissInstruction, null, left, right);
 						break;
 					case IR.ConditionCode.GreaterThan: goto case IR.ConditionCode.GreaterOrEqual;
 					case IR.ConditionCode.LessOrEqual: goto case IR.ConditionCode.GreaterOrEqual;

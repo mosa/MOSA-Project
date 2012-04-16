@@ -247,22 +247,6 @@ namespace Mosa.Platform.x86
 		/// <summary>
 		/// 
 		/// </summary>
-		public static readonly CpuIdEaxInstruction CpuIdEaxInstruction = new CpuIdEaxInstruction();
-		/// <summary>
-		/// 
-		/// </summary>
-		public static readonly CpuIdEbxInstruction CpuIdEbxInstruction = new CpuIdEbxInstruction();
-		/// <summary>
-		/// 
-		/// </summary>
-		public static readonly CpuIdEcxInstruction CpuIdEcxInstruction = new CpuIdEcxInstruction();
-		/// <summary>
-		/// 
-		/// </summary>
-		public static readonly CpuIdEdxInstruction CpuIdEdxInstruction = new CpuIdEdxInstruction();
-		/// <summary>
-		/// 
-		/// </summary>
 		public static readonly CpuIdInstruction CpuIdInstruction = new CpuIdInstruction();
 		/// <summary>
 		/// 

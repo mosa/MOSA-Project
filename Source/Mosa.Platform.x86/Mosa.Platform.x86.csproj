@@ -187,10 +187,6 @@
     <Compile Include="Instructions\CldInstruction.cs" />
     <Compile Include="Instructions\CliInstruction.cs" />
     <Compile Include="Instructions\CmpXchgInstruction.cs" />
-    <Compile Include="Instructions\CpuIdEaxInstruction.cs" />
-    <Compile Include="Instructions\CpuIdEbxInstruction.cs" />
-    <Compile Include="Instructions\CpuIdEcxInstruction.cs" />
-    <Compile Include="Instructions\CpuIdEdxInstruction.cs" />
     <Compile Include="Instructions\CpuIdInstruction.cs" />
     <Compile Include="Instructions\HltInstruction.cs" />
     <Compile Include="Instructions\InInstruction.cs" />

@@ -127,12 +127,6 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// <summary>
 		/// Wraps the x86 CPUID instruction.
 		/// </summary>
-		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.CpuId, Mosa.Platform.x86")]
-		public extern static byte CpuId(uint function);
-
-		/// <summary>
-		/// Wraps the x86 CPUID instruction.
-		/// </summary>
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.CpuIdEax, Mosa.Platform.x86")]
 		public extern static int CpuIdEax(uint function);
 

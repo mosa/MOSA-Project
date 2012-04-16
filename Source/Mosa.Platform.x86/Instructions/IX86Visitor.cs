@@ -247,26 +247,6 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="context">The context.</param>
 		void CpuId(Context context);
 		/// <summary>
-		/// Cpus the id eax.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void CpuIdEax(Context context);
-		/// <summary>
-		/// Cpus the id ebx.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void CpuIdEbx(Context context);
-		/// <summary>
-		/// Cpus the id ecx.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void CpuIdEcx(Context context);
-		/// <summary>
-		/// Cpus the id edx.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void CpuIdEdx(Context context);
-		/// <summary>
 		/// Halts the machine
 		/// </summary>
 		/// <param name="context">The context.</param>
