@@ -28,41 +28,57 @@ namespace Mosa.Compiler.Framework.Stages
 		void IMethodCompilerStage.Run()
 		{
 
-			foreach (var block in this.basicBlocks)
-			{
-				for (var ctx = new Context(instructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
-				{
-					if (ctx.Ignore || ctx.Instruction == null)
-						continue;
+			//foreach (var block in this.basicBlocks)
+			//{
+			//    for (var ctx = new Context(instructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
+			//    {
+			//        if (ctx.Ignore || ctx.Instruction == null)
+			//            continue;
 
-					bool odd = false;
+			//        bool odd = false;
 
-					if (ctx.Instruction.DefaultResultCount == 0 && ctx.Result != null)
-						odd = true;
-					if (ctx.Instruction.DefaultResultCount == 1 && ctx.Result == null)
-						odd = true;
-					
-					if (ctx.Instruction.DefaultOperandCount == 0 && ctx.Operand1 != null)
-						odd = true;
-					if (ctx.Instruction.DefaultOperandCount == 0 && ctx.Operand2 != null)
-						odd = true;
-					if (ctx.Instruction.DefaultOperandCount == 1 && ctx.Operand1 == null)
-						odd = true;
-					if (ctx.Instruction.DefaultOperandCount == 1 && ctx.Operand2 != null)
-						odd = true;
+			//        if (ctx.Instruction.DefaultResultCount == 0 && ctx.Result != null)
+			//            odd = true;
+			//        if (ctx.Instruction.DefaultResultCount == 1 && ctx.Result == null)
+			//            odd = true;
+			//        if (ctx.Instruction.DefaultOperandCount == 0 && ctx.Operand1 != null)
+			//            odd = true;
+			//        if (ctx.Instruction.DefaultOperandCount == 0 && ctx.Operand2 != null)
+			//            odd = true;
+			//        if (ctx.Instruction.DefaultOperandCount == 1 && ctx.Operand1 == null)
+			//            odd = true;
+			//        if (ctx.Instruction.DefaultOperandCount == 1 && ctx.Operand2 != null)
+			//            odd = true;
 
-					if (!odd)
-						continue;
+			//        if (ctx.ResultCount == 0 && ctx.Result != null)
+			//            odd = true;
+			//        if (ctx.ResultCount == 1 && ctx.Result == null)
+			//            odd = true;
+			//        if (ctx.OperandCount == 0 && ctx.Operand1 != null)
+			//            odd = true;
+			//        if (ctx.OperandCount == 0 && ctx.Operand2 != null)
+			//            odd = true;
+			//        if (ctx.OperandCount == 1 && ctx.Operand1 == null)
+			//            odd = true;
+			//        if (ctx.OperandCount == 1 && ctx.Operand2 != null)
+			//            odd = true;
+			//        if (ctx.OperandCount == 2 && ctx.Operand1 == null)
+			//            odd = true;
+			//        if (ctx.OperandCount == 2 && ctx.Operand2 == null)
+			//            odd = true;
 
-					if (ctx.Instruction.ToString().Contains("X86.Call"))
-						continue;
+			//        if (!odd)
+			//            continue;
 
-					if (ctx.Instruction.ToString().Contains("X86.Jmp"))
-						continue;
+			//        //if (ctx.Instruction.ToString().Contains("X86.Call"))
+			//        //    continue;
 
-					Debug.WriteLine(String.Format("===> L_{0:X4}: {1}", ctx.Label, ctx.Instruction.ToString(ctx)));
-				}
-			}
+			//        //if (ctx.Instruction.ToString().Contains("X86.Jmp"))
+			//        //    continue;
+
+			//        Debug.WriteLine(String.Format("===> L_{0:X4}: {1}", ctx.Label, ctx.Instruction.ToString(ctx)));
+			//    }
+			//}
 
 			if (basicBlocks.Count >= 0)
 				return;

@@ -60,7 +60,7 @@ namespace Mosa.Tool.Compiler
 
 					new StackLayoutStage(),
 					new PlatformStubStage(),
-					new OperandUsageAnalyzerStage(),
+					//new OperandUsageAnalyzerStage(),
 
 					new LoopAwareBlockOrderStage(),
 					//new SimpleTraceBlockOrderStage(),

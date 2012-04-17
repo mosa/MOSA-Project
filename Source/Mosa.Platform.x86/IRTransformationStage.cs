@@ -108,7 +108,7 @@ namespace Mosa.Platform.x86
 		void IR.IIRVisitor.AddressOfInstruction(Context context)
 		{
 			var opRes = context.Result;
-			
+
 			RegisterOperand register = new RegisterOperand(opRes.Type, GeneralPurposeRegister.EAX);
 			context.Result = register;
 			context.ReplaceInstructionOnly(Instruction.LeaInstruction);
@@ -453,11 +453,11 @@ namespace Mosa.Platform.x86
 				}
 				else if (context.Result.Type.Type == CilElementType.R8)
 				{
-					context.SetInstruction(Instruction.Cvtss2sdInstruction, context.Result, context.Operand1, context.Operand2);
+					context.SetInstruction(Instruction.Cvtss2sdInstruction, context.Result, context.Operand1);
 				}
 				else if (context.Result.Type.Type == CilElementType.R4)
 				{
-					context.SetInstruction(Instruction.Cvtsd2ssInstruction, context.Result, context.Operand1, context.Operand2);
+					context.SetInstruction(Instruction.Cvtsd2ssInstruction, context.Result, context.Operand1);
 				}
 			}
 			else
