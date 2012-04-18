@@ -349,10 +349,7 @@ namespace Mosa.Platform.x86
 		/// 
 		/// </summary>
 		public static readonly SseRoundInstruction SseRoundInstruction = new SseRoundInstruction();
-		/// <summary>
-		/// 
-		/// </summary>
-		public static readonly CallPointerInstruction CallPointerInstruction = new CallPointerInstruction();
+		
 	}
 }
 

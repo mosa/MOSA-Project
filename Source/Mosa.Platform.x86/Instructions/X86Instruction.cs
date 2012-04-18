@@ -19,69 +19,6 @@ namespace Mosa.Platform.x86.Instructions
 	public abstract class X86Instruction : BasePlatformInstruction, IX86Instruction
 	{
 
-		#region Data Members
-
-		/// <summary>
-		/// Defines the register set of the target architecture.
-		/// </summary>
-		protected static readonly Register[] GeneralPurpose32BitRegisters = new Register[]
-		{
-			////////////////////////////////////////////////////////
-			// 32-bit general purpose registers
-			////////////////////////////////////////////////////////
-			GeneralPurposeRegister.EAX,
-			GeneralPurposeRegister.ECX,
-			GeneralPurposeRegister.EDX,
-			GeneralPurposeRegister.EBX,
-			GeneralPurposeRegister.ESI,
-			GeneralPurposeRegister.EDI,
-		};
-
-		protected static readonly Register[] MMXloatingPoint128BitRegisters = new Register[]
-		{
-			////////////////////////////////////////////////////////
-			// MMX floating point registers
-			////////////////////////////////////////////////////////			
-			MMXRegister.MM0,
-			MMXRegister.MM1,
-			MMXRegister.MM2,
-			MMXRegister.MM3,
-			MMXRegister.MM4,
-			MMXRegister.MM5,
-			MMXRegister.MM6,
-			MMXRegister.MM7,
-		};
-
-		protected static readonly Register[] SSEFloatingPoint128BitRegisters = new Register[]
-		{
-			////////////////////////////////////////////////////////
-			// SSE 128-bit floating point registers
-			////////////////////////////////////////////////////////
-			SSE2Register.XMM0,
-			SSE2Register.XMM1,
-			SSE2Register.XMM2,
-			SSE2Register.XMM3,
-			SSE2Register.XMM4,
-			SSE2Register.XMM5,
-			SSE2Register.XMM6,
-			SSE2Register.XMM7
-		};
-		
-		protected static readonly Register[] SegmentationRegisters = new Register[]
-		{
-			////////////////////////////////////////////////////////
-			// Segmentation Registers
-			////////////////////////////////////////////////////////
-			SegmentRegister.CS,
-			SegmentRegister.DS,
-			SegmentRegister.ES,
-			SegmentRegister.FS,
-			SegmentRegister.GS,
-			SegmentRegister.SS
-		};
-
-		#endregion //  Data Members
-
 		#region Construction
 
 		/// <summary>
@@ -319,11 +256,7 @@ namespace Mosa.Platform.x86.Instructions
 			return IsUnsignedLong(operand) || IsSignedLong(operand);
 		}
 
-		#endregion
+		#endregion		
 
-		protected static bool IsMemoryToMemory(OperandAddressMode source, OperandAddressMode destination)
-		{
-			return (source == OperandAddressMode.Memory && destination == OperandAddressMode.Memory);
-		}
 	}
 }

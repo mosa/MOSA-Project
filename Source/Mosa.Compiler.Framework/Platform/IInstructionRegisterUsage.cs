@@ -16,7 +16,7 @@ namespace Mosa.Compiler.Framework.Platform
 	/// <summary>
 	/// This interface is used to present opcode constraints to the register allocator.
 	/// </summary>
-	public interface IOpcodeRegisterUsage
+	public interface IInstructionRegisterUsage
 	{
 		
 		/// <summary>

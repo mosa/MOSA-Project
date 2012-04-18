@@ -53,6 +53,12 @@ namespace Mosa.Compiler.Framework.Platform
 
 		#endregion // Construction
 
+		#region Properties
+
+		public virtual IInstructionRegisterUsage InstructionRegisterUsage { get { return null; } }
+
+		#endregion
+
 		#region Methods
 
 		#endregion //  Methods

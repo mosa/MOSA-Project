@@ -91,7 +91,7 @@
     <Compile Include="Stages\ConstantFoldingStage.cs" />
     <Compile Include="Platform\BasePlatformInstruction.cs" />
     <Compile Include="Platform\BasePlatformTransformationStage.cs" />
-    <Compile Include="Platform\IOpcodeRegisterUsage.cs" />
+    <Compile Include="Platform\IInstructionRegisterUsage.cs" />
     <Compile Include="Platform\OperandAddressMode.cs" />
     <Compile Include="RegisterBitmap.cs" />
     <Compile Include="Operands\StackSizeOperand.cs" />
@@ -140,7 +140,7 @@
     <Compile Include="IR\SwitchInstruction.cs" />
     <Compile Include="Stages\MethodCompilerSchedulerStage.cs" />
     <Compile Include="Operands\SymbolOperand.cs" />
-    <Compile Include="Platform\PlatformStubStage.cs" />
+    <Compile Include="Stages\PlatformStubStage.cs" />
     <Compile Include="IIntrinsicMethod.cs" />
     <Compile Include="IBlockOrderStage.cs" />
     <Compile Include="IPipelineStage.cs" />

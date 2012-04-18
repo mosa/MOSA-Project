@@ -134,7 +134,12 @@ namespace Mosa.Compiler.Framework.Stages
 
 		protected void UpdateOpcodeRegisterUsage(Context context, ref RegisterBitmap assignedRegisters, ref RegisterBitmap usedRegisters)
 		{
-			IOpcodeRegisterUsage usage = context.Instruction as IOpcodeRegisterUsage;
+			BasePlatformInstruction instruction = context.Instruction as BasePlatformInstruction;
+
+			if (instruction == null)
+				return;
+
+			IInstructionRegisterUsage usage = instruction.InstructionRegisterUsage;
 
 			if (usage == null)
 				return;

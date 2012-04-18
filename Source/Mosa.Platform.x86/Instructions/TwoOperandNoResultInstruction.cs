@@ -49,6 +49,17 @@ namespace Mosa.Platform.x86.Instructions
 			throw new NotSupportedException();
 		}
 
+		/// <summary>
+		/// Emits the specified platform instruction.
+		/// </summary>
+		/// <param name="ctx">The context.</param>
+		/// <param name="emitter">The emitter.</param>
+		protected override void Emit(Context context, MachineCodeEmitter emitter)
+		{
+			Debug.Assert(context.Result == null);
 
+			OpCode opCode = ComputeOpCode(null, context.Operand1, context.Operand2);
+			emitter.Emit(opCode, context.Operand1, context.Operand2);
+		}
 	}
 }

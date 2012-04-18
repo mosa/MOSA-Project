@@ -9,7 +9,7 @@
 
 using System;
 using Mosa.Compiler.Framework;
-
+using Mosa.Compiler.Framework.Platform;
 using IR = Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Platform.x86.Instructions

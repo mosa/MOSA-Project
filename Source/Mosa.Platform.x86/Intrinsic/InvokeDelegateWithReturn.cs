@@ -51,7 +51,7 @@ namespace Mosa.Platform.x86.Intrinsic
 			}	
 
 			context.AppendInstruction(Instruction.MovInstruction, eax, op2);
-			context.AppendInstruction(Instruction.CallPointerInstruction, null, new RegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.EAX));
+			context.AppendInstruction(Instruction.CallInstruction, null, new RegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.EAX));
 			context.AppendInstruction(Instruction.AddInstruction, esp, new ConstantOperand(BuiltInSigType.IntPtr, parameters.Count * 4));
 			context.AppendInstruction(Instruction.MovInstruction,result, new RegisterOperand(result.Type, GeneralPurposeRegister.EAX));
 		}

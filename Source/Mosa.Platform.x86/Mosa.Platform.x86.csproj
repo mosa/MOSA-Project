@@ -96,7 +96,8 @@
     <Compile Include="Constraints\IRegisterConstraint.cs" />
     <Compile Include="ControlRegister.cs" />
     <Compile Include="ExceptionVectorStage.cs" />
-    <Compile Include="Instructions\CallPointerInstruction.cs" />
+    <Compile Include="Instructions\Registers\DivUsage.cs" />
+    <Compile Include="Instructions\Registers\GeneralPurposeUsage.cs" />
     <Compile Include="Instructions\TwoOperandNoResultInstruction.cs" />
     <Compile Include="Instructions\FarJmpInstruction.cs" />
     <Compile Include="Instructions\LeaveInstruction.cs" />
@@ -314,6 +315,7 @@
     <Compile Include="XSharp\Registers.cs" />
     <Compile Include="XSharp\XSharpMethod.cs" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildBinPath)\Microsoft.CSHARP.Targets" />
   <PropertyGroup>
     <PreBuildEvent>
