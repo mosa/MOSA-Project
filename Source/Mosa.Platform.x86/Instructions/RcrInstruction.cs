@@ -19,23 +19,24 @@ namespace Mosa.Platform.x86.Instructions
 	public sealed class RcrInstruction : TwoOperandInstruction
 	{
 		#region Codes
-		private static readonly OpCode R = new OpCode(new byte[] { 0xD1 }, 3);
-		private static readonly OpCode M = new OpCode(new byte[] { 0xD1 }, 3);
+
+		private static readonly OpCode opcode = new OpCode(new byte[] { 0xD1 }, 3);
+
 		#endregion
 
 		#region Methods
 
 		/// <summary>
-		/// 
+		/// Computes the opcode.
 		/// </summary>
-		/// <param name="destination"></param>
-		/// <param name="source"></param>
-		/// <param name="third"></param>
+		/// <param name="destination">The destination operand.</param>
+		/// <param name="source">The source operand.</param>
+		/// <param name="third">The third operand.</param>
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-			if (destination is RegisterOperand) return R;
-			if (destination is MemoryOperand) return M;
+			if (destination is RegisterOperand || destination is MemoryOperand) return opcode;
+
 			throw new ArgumentException(@"No opcode for operand type.");
 		}
 
@@ -46,7 +47,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
-			OpCode opCode = ComputeOpCode(context.Result, context.Operand1, context.Operand2);
+			OpCode opCode = ComputeOpCode(context.Result, context.Operand1, null);
 			emitter.Emit(opCode, context.Result, null);
 		}
 

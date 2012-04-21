@@ -7,9 +7,7 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-
 using Mosa.Compiler.Framework;
-
 
 namespace Mosa.Platform.x86.Instructions
 {

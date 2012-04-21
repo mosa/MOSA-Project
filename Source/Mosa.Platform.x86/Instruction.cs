@@ -332,11 +332,14 @@ namespace Mosa.Platform.x86
 		/// 
 		/// </summary>
 		public static readonly LeaInstruction LeaInstruction = new LeaInstruction();
-
 		/// <summary>
 		/// 
 		/// </summary>
 		public static readonly SseRoundInstruction SseRoundInstruction = new SseRoundInstruction();
+		/// <summary>
+		/// 
+		/// </summary>
+		public static readonly LockIntruction LockIntruction = new LockIntruction();
 		
 	}
 }

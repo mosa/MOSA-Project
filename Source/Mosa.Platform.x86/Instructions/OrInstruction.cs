@@ -19,6 +19,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class OrInstruction : TwoOperandInstruction
 	{
+
 		#region Data Members
 
 		private static readonly OpCode R_C = new OpCode(new byte[] { 0x81 }, 1);

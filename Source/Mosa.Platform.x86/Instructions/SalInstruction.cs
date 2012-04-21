@@ -18,6 +18,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class SalInstruction : TwoOperandInstruction
 	{
+
 		#region Data Members
 
 		private static readonly OpCode RM = new OpCode(new byte[] { 0xD3 }, 4);
@@ -26,7 +27,6 @@ namespace Mosa.Platform.x86.Instructions
 		#endregion
 
 		#region Methods
-
 
 		/// <summary>
 		/// Computes the opcode.

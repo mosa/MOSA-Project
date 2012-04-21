@@ -45,6 +45,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand empty)
 		{
+			// FIXME: This method is not called. 
 			if (IsByte(source))
 			{
 				if ((destination is RegisterOperand) && (source is ConstantOperand)) return R_C_8;
@@ -55,17 +56,19 @@ namespace Mosa.Platform.x86.Instructions
 				if ((destination is RegisterOperand) && (source is ConstantOperand)) return R_C_32;
 				if ((destination is RegisterOperand) && (source is RegisterOperand)) return R_R_32;
 			}
+
 			throw new ArgumentException(@"No opcode for operand type.");
 		}
 
 		/// <summary>
-		/// 
+		/// Emits the specified platform instruction.
 		/// </summary>
-		/// <param name="ctx"></param>
-		/// <param name="emitter"></param>
+		/// <param name="context">The context.</param>
+		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
-			emitter.Emit(opcode, null, null);
+			// FIXME: Incoming operands are incorrect. This method ignores them.
+			emitter.Emit(R_R_8, null, null);
 		}
 
 		/// <summary>

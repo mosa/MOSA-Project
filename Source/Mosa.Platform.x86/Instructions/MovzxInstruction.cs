@@ -20,6 +20,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class MovzxInstruction : TwoOperandInstruction
 	{
+
 		#region Data Members
 
 		private static readonly OpCode R_X8 = new OpCode(new byte[] { 0x0F, 0xB6 });

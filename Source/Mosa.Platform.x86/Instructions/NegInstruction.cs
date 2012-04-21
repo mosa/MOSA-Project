@@ -21,8 +21,7 @@ namespace Mosa.Platform.x86.Instructions
 	{
 		#region Data Members
 
-		private static readonly OpCode R = new OpCode(new byte[] { 0xF7 }, 3);
-		private static readonly OpCode M = new OpCode(new byte[] { 0xF7 }, 3);
+		private static readonly OpCode opcode = new OpCode(new byte[] { 0xF7 }, 3);
 
 		#endregion // Data Members
 
@@ -48,8 +47,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-			if (destination is RegisterOperand) return R;
-			if (destination is MemoryOperand) return M;
+			if (destination is RegisterOperand || destination is MemoryOperand) return opcode;
 
 			throw new ArgumentException(@"No opcode for operand type.");
 		}

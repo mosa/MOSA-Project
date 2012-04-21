@@ -7,9 +7,7 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-
 using Mosa.Compiler.Framework;
-
 
 namespace Mosa.Platform.x86.Instructions
 {
@@ -20,6 +18,18 @@ namespace Mosa.Platform.x86.Instructions
 	{
 
 		#region Methods
+
+		/// <summary>
+		/// Gets the additional input registers.
+		/// </summary>
+		public override RegisterBitmap AdditionalInputRegisters
+		{
+			get
+			{
+				return new RegisterBitmap(GeneralPurposeRegister.EDI, GeneralPurposeRegister.ESI, GeneralPurposeRegister.EBP,
+					GeneralPurposeRegister.EBX, GeneralPurposeRegister.EDX, GeneralPurposeRegister.ECX, GeneralPurposeRegister.EAX);
+			}
+		}
 
 		/// <summary>
 		/// Emits the specified platform instruction.

@@ -16,12 +16,13 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class RepInstruction : X86Instruction
 	{
+		
 		#region Methods
 
 		/// <summary>
 		/// Emits the specified platform instruction.
 		/// </summary>
-		/// <param name="ctx">The CTX.</param>
+		/// <param name="context">The context.</param>
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{

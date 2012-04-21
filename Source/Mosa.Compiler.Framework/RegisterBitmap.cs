@@ -38,6 +38,13 @@ namespace Mosa.Compiler.Framework
 			map = ((ulong)1 << register1.Index) | ((ulong)1 << register2.Index) | ((ulong)1 << register3.Index);
 		}
 
+		public RegisterBitmap(Register register1, Register register2, Register register3, Register register4, Register register5, Register register6, Register register7)
+		{
+			map = ((ulong)1 << register1.Index) | ((ulong)1 << register2.Index) | ((ulong)1 << register3.Index) |
+				((ulong)1 << register4.Index) | ((ulong)1 << register5.Index) | ((ulong)1 << register6.Index) |
+				((ulong)1 << register7.Index);
+		}
+
 		public bool HasValue { get { return map != 0; } }
 
 		public void Set(Register register)

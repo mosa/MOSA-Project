@@ -18,6 +18,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class PopfdInstruction : X86Instruction
 	{
+
 		#region Data members
 
 		private static readonly OpCode opcode = new OpCode(new byte[] { 0x9D });
