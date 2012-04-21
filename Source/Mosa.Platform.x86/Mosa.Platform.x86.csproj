@@ -93,11 +93,8 @@
     </Compile>
     <Compile Include="BaseTransformationStage.cs" />
     <Compile Include="AddressModeConversionStage.cs" />
-    <Compile Include="Constraints\IRegisterConstraint.cs" />
     <Compile Include="ControlRegister.cs" />
     <Compile Include="ExceptionVectorStage.cs" />
-    <Compile Include="Instructions\Registers\DivUsage.cs" />
-    <Compile Include="Instructions\Registers\GeneralPurposeUsage.cs" />
     <Compile Include="Instructions\TwoOperandNoResultInstruction.cs" />
     <Compile Include="Instructions\FarJmpInstruction.cs" />
     <Compile Include="Instructions\LeaveInstruction.cs" />
@@ -211,8 +208,7 @@
     <Compile Include="Instructions\RdtscInstruction.cs" />
     <Compile Include="Instructions\RepInstruction.cs" />
     <Compile Include="Instructions\StiInstruction.cs" />
-    <Compile Include="Instructions\StosbInstruction.cs" />
-    <Compile Include="Instructions\StosdInstruction.cs" />
+    <Compile Include="Instructions\StosInstruction.cs" />
     <Compile Include="Instructions\XchgInstruction.cs" />
     <Compile Include="Instructions\LiteralInstruction.cs" />
     <Compile Include="Instructions\AndInstruction.cs" />
@@ -265,48 +261,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="SSE2Register.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Constraints\CmpXchgConstraint.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Constraints\DivConstraint.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Constraints\GPRConstraint.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Constraints\IntConstraint.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Constraints\LogicalAndConstraint.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Constraints\LogicalNotConstraint.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Constraints\LogicalOrConstraint.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Constraints\LogicalXorConstraint.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Constraints\MoveConstraint.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Constraints\MulConstraint.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Constraints\ShiftConstraint.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Constraints\SseAddConstraint.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Constraints\SSEConstraint.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Constraints\SseSubConstraint.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="XSharp\CPURegister.cs" />

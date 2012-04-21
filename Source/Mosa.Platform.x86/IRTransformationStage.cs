@@ -540,7 +540,7 @@ namespace Mosa.Platform.x86
 			context.AppendInstruction(Instruction.MovInstruction, ecx, new ConstantOperand(I, -(int)(stackSize >> 2)));
 			context.AppendInstruction(Instruction.XorInstruction, eax, eax);
 			context.AppendInstruction(Instruction.RepInstruction);
-			context.AppendInstruction(Instruction.StosdInstruction);
+			context.AppendInstruction(Instruction.StosInstruction);
 			context.AppendInstruction(Instruction.PopInstruction, ecx);
 			context.AppendInstruction(Instruction.PopInstruction, edi);
 

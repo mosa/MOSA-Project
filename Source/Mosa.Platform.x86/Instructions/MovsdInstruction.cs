@@ -19,6 +19,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class MovsdInstruction : TwoOperandInstruction
 	{
+
 		#region Data Members
 
 		private static readonly OpCode R_L = new OpCode(new byte[] { 0xF2, 0x0F, 0x10 });
@@ -29,6 +30,14 @@ namespace Mosa.Platform.x86.Instructions
 		#endregion
 
 		#region Methods
+
+		/// <summary>
+		/// Gets a value indicating whether [result is input].
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if [result is input]; otherwise, <c>false</c>.
+		/// </value>
+		public override bool ResultIsInput { get { return false; } }
 
 		/// <summary>
 		/// Computes the opcode.

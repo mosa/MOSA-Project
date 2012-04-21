@@ -36,12 +36,6 @@ namespace Mosa.Platform.x86.Instructions
 
 		#endregion // Construction
 
-		#region Properties
-
-		public override IInstructionRegisterUsage InstructionRegisterUsage { get { return Registers.GeneralPurposeUsage.Instance; } }
-
-		#endregion // Properties
-
 		/// <summary>
 		/// Computes the opcode.
 		/// </summary>

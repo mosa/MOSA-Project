@@ -44,7 +44,7 @@ namespace Mosa.Platform.x86.Instructions
 		#region Construction
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="X86Instruction"/> class.
+		/// Initializes a new instance of the <see cref="SetccInstruction"/> class.
 		/// </summary>
 		public SetccInstruction()
 			: base(0, 1)
@@ -54,6 +54,14 @@ namespace Mosa.Platform.x86.Instructions
 		#endregion // Construction
 
 		#region Methods
+
+		/// <summary>
+		/// Gets a value indicating whether [result is input].
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if [result is input]; otherwise, <c>false</c>.
+		/// </value>
+		public override bool ResultIsInput { get { return false; } }
 
 		/// <summary>
 		/// Emits the specified platform instruction.

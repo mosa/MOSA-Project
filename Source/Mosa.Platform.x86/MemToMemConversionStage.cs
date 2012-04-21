@@ -68,7 +68,7 @@ namespace Mosa.Platform.x86
 
 			SigType destinationSigType = destination.Type;
 
-			if (this.RequiresSseOperation(destinationSigType))
+			if (RequiresSseOperation(destinationSigType))
 			{
 				IInstruction moveInstruction = GetMoveInstruction(destinationSigType);
 				RegisterOperand destinationRegister = AllocateRegister(destinationSigType);
@@ -97,7 +97,7 @@ namespace Mosa.Platform.x86
 
 			SigType destinationSigType = destination.Type;
 
-			if (this.RequiresSseOperation(destinationSigType))
+			if (RequiresSseOperation(destinationSigType))
 			{
 				IInstruction moveInstruction = GetMoveInstruction(destinationSigType);
 				RegisterOperand destinationRegister = AllocateRegister(destinationSigType);
@@ -119,7 +119,7 @@ namespace Mosa.Platform.x86
 		private IInstruction GetMoveInstruction(SigType sigType)
 		{
 			IInstruction moveInstruction;
-			if (this.RequiresSseOperation(sigType) == false)
+			if (RequiresSseOperation(sigType) == false)
 			{
 				if (MustSignExtendOnLoad(sigType.Type) == true)
 				{

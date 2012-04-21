@@ -27,62 +27,6 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		void IMethodCompilerStage.Run()
 		{
-
-			//foreach (var block in this.basicBlocks)
-			//{
-			//    for (var ctx = new Context(instructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
-			//    {
-			//        if (ctx.Ignore || ctx.Instruction == null)
-			//            continue;
-
-			//        bool odd = false;
-
-			//        if (ctx.Instruction.DefaultResultCount == 0 && ctx.Result != null)
-			//            odd = true;
-			//        if (ctx.Instruction.DefaultResultCount == 1 && ctx.Result == null)
-			//            odd = true;
-			//        if (ctx.Instruction.DefaultOperandCount == 0 && ctx.Operand1 != null)
-			//            odd = true;
-			//        if (ctx.Instruction.DefaultOperandCount == 0 && ctx.Operand2 != null)
-			//            odd = true;
-			//        if (ctx.Instruction.DefaultOperandCount == 1 && ctx.Operand1 == null)
-			//            odd = true;
-			//        if (ctx.Instruction.DefaultOperandCount == 1 && ctx.Operand2 != null)
-			//            odd = true;
-
-			//        if (ctx.ResultCount == 0 && ctx.Result != null)
-			//            odd = true;
-			//        if (ctx.ResultCount == 1 && ctx.Result == null)
-			//            odd = true;
-			//        if (ctx.OperandCount == 0 && ctx.Operand1 != null)
-			//            odd = true;
-			//        if (ctx.OperandCount == 0 && ctx.Operand2 != null)
-			//            odd = true;
-			//        if (ctx.OperandCount == 1 && ctx.Operand1 == null)
-			//            odd = true;
-			//        if (ctx.OperandCount == 1 && ctx.Operand2 != null)
-			//            odd = true;
-			//        if (ctx.OperandCount == 2 && ctx.Operand1 == null)
-			//            odd = true;
-			//        if (ctx.OperandCount == 2 && ctx.Operand2 == null)
-			//            odd = true;
-
-			//        if (!odd)
-			//            continue;
-
-			//        //if (ctx.Instruction.ToString().Contains("X86.Call"))
-			//        //    continue;
-
-			//        //if (ctx.Instruction.ToString().Contains("X86.Jmp"))
-			//        //    continue;
-
-			//        Debug.WriteLine(String.Format("===> L_{0:X4}: {1}", ctx.Label, ctx.Instruction.ToString(ctx)));
-			//    }
-			//}
-
-			if (basicBlocks.Count >= 0)
-				return;
-
 			// Create a list of end blocks
 			List<BasicBlock> endBlocks = new List<BasicBlock>();
 
@@ -99,30 +43,27 @@ namespace Mosa.Compiler.Framework.Stages
 					if (ctx.Ignore || ctx.Instruction == null)
 						continue;
 
-					RegisterBitmap assignedRegisters = GetResultAssignment(ctx);
-					RegisterBitmap usedRegisters = GetOperandAssignments(ctx);
+					RegisterBitmap inputRegisters = new RegisterBitmap();
+					RegisterBitmap outputRegisters = new RegisterBitmap();
 
-					UpdateOpcodeRegisterUsage(ctx, ref assignedRegisters, ref usedRegisters);
+					GetRegisterUsage(ctx, ref inputRegisters, ref outputRegisters);
 
 					Debug.WriteLine(String.Format("L_{0:X4}: {1}", ctx.Label, ctx.Instruction.ToString(ctx)));
-
-					if (ctx.Instruction.ToString().Contains(".Div"))
-						Debug.Write("");
-
-					if (assignedRegisters.HasValue)
+					
+					if (outputRegisters.HasValue)
 					{
-						Debug.Write("\t ASSIGNED: ");
-						Debug.Write(GetRegisterNames(assignedRegisters));
+						Debug.Write("\t OUTPUT: ");
+
+						Debug.Write(GetRegisterNames(outputRegisters));
 					}
 
-					if (usedRegisters.HasValue)
+					if (inputRegisters.HasValue)
 					{
-						Debug.Write("\t USED: ");
-
-						Debug.Write(GetRegisterNames(usedRegisters));
+						Debug.Write("\t INPUT: ");
+						Debug.Write(GetRegisterNames(inputRegisters));
 					}
 
-					if (assignedRegisters.HasValue | usedRegisters.HasValue)
+					if (inputRegisters.HasValue | outputRegisters.HasValue)
 					{
 						Debug.WriteLine("");
 					}
@@ -132,39 +73,20 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		protected void UpdateOpcodeRegisterUsage(Context context, ref RegisterBitmap assignedRegisters, ref RegisterBitmap usedRegisters)
+		protected void GetRegisterUsage(Context context,  ref RegisterBitmap inputRegisters, ref RegisterBitmap outputRegisters)
 		{
 			BasePlatformInstruction instruction = context.Instruction as BasePlatformInstruction;
 
 			if (instruction == null)
 				return;
 
-			IInstructionRegisterUsage usage = instruction.InstructionRegisterUsage;
+			IRegisterUsage usage = instruction as IRegisterUsage;
 
 			if (usage == null)
 				return;
 
-			RegisterOperand resultOperand = context.Result as RegisterOperand;
-
-			if (resultOperand != null)
-			{
-
-				Register[] modifiedRegister = usage.GetModifiedRegisters(resultOperand.Register);
-
-				if (modifiedRegister != null)
-				{
-					foreach (Register register in modifiedRegister)
-						assignedRegisters.Set(register);
-				}
-
-				Register[] unspecifiedRegisters = usage.GetUnspecifiedSourceRegisters(resultOperand.Register);
-
-				if (unspecifiedRegisters != null)
-				{
-					foreach (Register register in modifiedRegister)
-						usedRegisters.Set(register);
-				}
-			}
+			outputRegisters = usage.GetOutputRegisters(context);
+			inputRegisters = usage.GetInputRegisters(context);
 		}
 
 		public List<Register> GetRegisters(RegisterBitmap registers)
@@ -194,70 +116,6 @@ namespace Mosa.Compiler.Framework.Stages
 			return list.ToString();
 		}
 
-		protected RegisterBitmap GetResultAssignment(Context ctx)
-		{
-			RegisterBitmap registers = new RegisterBitmap();
-
-			RegisterOperand regOperand = ctx.Result as RegisterOperand;
-
-			if (regOperand != null)
-				registers.Set(regOperand.Register);
-
-			return registers;
-		}
-
-		protected Register GetRegister(Operand operand)
-		{
-			if (operand == null)
-				return null;
-
-			RegisterOperand regOperand = operand as RegisterOperand;
-
-			if (regOperand != null)
-				return regOperand.Register;
-
-			MemoryOperand memOperand = operand as MemoryOperand;
-
-			if (memOperand != null)
-				return memOperand.Base;
-
-			ParameterOperand paramOperand = operand as ParameterOperand;
-
-			if (paramOperand != null)
-				return paramOperand.Base;
-
-			return null;
-		}
-
-		protected Register GetResultUseRegister(Operand operand)
-		{
-			if (operand == null)
-				return null;
-
-			MemoryOperand memOperand = operand as MemoryOperand;
-
-			if (memOperand != null)
-				return memOperand.Base;
-
-			ParameterOperand paramOperand = operand as ParameterOperand;
-
-			if (paramOperand != null)
-				return paramOperand.Base;
-
-			return null;
-		}
-
-		protected RegisterBitmap GetOperandAssignments(Context ctx)
-		{
-			RegisterBitmap registers = new RegisterBitmap();
-
-			registers.Set(GetRegister(ctx.Operand1));
-			registers.Set(GetRegister(ctx.Operand2));
-			registers.Set(GetRegister(ctx.Operand3));
-			registers.Set(GetResultUseRegister(ctx.Result));
-
-			return registers;
-		}
 
 	}
 }

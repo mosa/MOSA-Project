@@ -13,12 +13,22 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
-	/// Intermediate represenation of the x86 stosd instruction.
+	/// Representations of the x86 stos instruction.
 	/// </summary>
-	public sealed class StosdInstruction : X86Instruction
+	public sealed class StosInstruction : X86Instruction
 	{
 
 		#region Methods
+
+		/// <summary>
+		/// Gets the additional input registers.
+		/// </summary>
+		public override RegisterBitmap AdditionalInputRegisters { get { return new RegisterBitmap(GeneralPurposeRegister.ECX, GeneralPurposeRegister.EDI, GeneralPurposeRegister.EAX); } }
+
+		/// <summary>
+		/// Gets the additional input registers.
+		/// </summary>
+		public override RegisterBitmap AdditionalOutputRegisters { get { return new RegisterBitmap(GeneralPurposeRegister.EDI); } }
 
 		/// <summary>
 		/// Emits the specified platform instruction.

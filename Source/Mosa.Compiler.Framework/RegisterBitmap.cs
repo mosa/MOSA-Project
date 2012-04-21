@@ -23,6 +23,21 @@ namespace Mosa.Compiler.Framework
 
 		#endregion
 
+		public RegisterBitmap(Register register)
+		{
+			map = ((ulong)1 << register.Index);
+		}
+
+		public RegisterBitmap(Register register1, Register register2)
+		{
+			map = ((ulong)1 << register1.Index) | ((ulong)1 << register2.Index);
+		}
+
+		public RegisterBitmap(Register register1, Register register2, Register register3)
+		{
+			map = ((ulong)1 << register1.Index) | ((ulong)1 << register2.Index) | ((ulong)1 << register3.Index);
+		}
+
 		public bool HasValue { get { return map != 0; } }
 
 		public void Set(Register register)

@@ -44,6 +44,14 @@ namespace Mosa.Platform.x86.Instructions
 		#region Methods
 
 		/// <summary>
+		/// Gets a value indicating whether [result is input].
+		/// </summary>
+		/// <value>
+		///   <c>true</c> if [result is input]; otherwise, <c>false</c>.
+		/// </value>
+		public override bool ResultIsInput { get { return false; } }
+
+		/// <summary>
 		/// Emits the specified platform instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>

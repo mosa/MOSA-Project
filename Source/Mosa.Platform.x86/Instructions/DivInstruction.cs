@@ -25,13 +25,17 @@ namespace Mosa.Platform.x86.Instructions
 
 		#endregion // Data Members
 
-		#region Properties
-
-		public override IInstructionRegisterUsage InstructionRegisterUsage { get { return Registers.DivUsage.Instance; } }
-
-		#endregion // Properties
-
 		#region Methods
+
+		/// <summary>
+		/// Gets the additional output registers.
+		/// </summary>
+		public override RegisterBitmap AdditionalOutputRegisters { get { return new RegisterBitmap(GeneralPurposeRegister.EAX,GeneralPurposeRegister.EDX); } }
+
+		/// <summary>
+		/// Gets the additional input registers.
+		/// </summary>
+		public override RegisterBitmap AdditionalInputRegisters { get { return new RegisterBitmap(GeneralPurposeRegister.EAX, GeneralPurposeRegister.EDX); } }
 
 		/// <summary>
 		/// Computes the opcode.
@@ -42,7 +46,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-			if (destination == null || destination is RegisterOperand || destination is MemoryOperand) return DIV;
+			if (/*destination == null || */destination is RegisterOperand || destination is MemoryOperand) return DIV;
 
 			throw new ArgumentException(@"No opcode for operand type.");
 		}

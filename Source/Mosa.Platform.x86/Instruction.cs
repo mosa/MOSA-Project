@@ -328,14 +328,10 @@ namespace Mosa.Platform.x86
 		/// 
 		/// </summary>
 		public static readonly StiInstruction StiInstruction = new StiInstruction();
-		/// <summary>
+			/// <summary>
 		/// 
 		/// </summary>
-		public static readonly StosbInstruction StosbInstrucion = new StosbInstruction();
-		/// <summary>
-		/// 
-		/// </summary>
-		public static readonly StosdInstruction StosdInstruction = new StosdInstruction();
+		public static readonly StosInstruction StosInstruction = new StosInstruction();
 		/// <summary>
 		/// 
 		/// </summary>

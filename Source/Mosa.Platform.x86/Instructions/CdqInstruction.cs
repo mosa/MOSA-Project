@@ -8,6 +8,7 @@
  */
 
 using Mosa.Compiler.Framework;
+using Mosa.Compiler.Framework.Platform;
 
 namespace Mosa.Platform.x86.Instructions
 {
@@ -16,6 +17,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class CdqInstruction : X86Instruction
 	{
+		
 		#region Methods
 
 		/// <summary>
