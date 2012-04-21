@@ -32,7 +32,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// Initializes a new instance of <see cref="JmpInstruction"/>.
 		/// </summary>
 		public JmpInstruction() :
-			base(0, 0)
+			base(1, 0)
 		{
 		}
 

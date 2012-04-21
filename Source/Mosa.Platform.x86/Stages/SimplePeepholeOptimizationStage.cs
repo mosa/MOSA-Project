@@ -13,7 +13,7 @@ using System.Diagnostics;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Platform;
 
-namespace Mosa.Platform.x86
+namespace Mosa.Platform.x86.Stages
 {
 	/// <summary>
 	/// 

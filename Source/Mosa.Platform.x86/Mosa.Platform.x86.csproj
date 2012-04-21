@@ -92,15 +92,15 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BaseTransformationStage.cs" />
-    <Compile Include="AddressModeConversionStage.cs" />
+    <Compile Include="Stages\AddressModeConversionStage.cs" />
     <Compile Include="ControlRegister.cs" />
-    <Compile Include="ExceptionVectorStage.cs" />
+    <Compile Include="Stages\ExceptionVectorStage.cs" />
     <Compile Include="Instructions\TwoOperandNoResultInstruction.cs" />
     <Compile Include="Instructions\FarJmpInstruction.cs" />
     <Compile Include="Instructions\LeaveInstruction.cs" />
     <Compile Include="Instructions\SseRoundInstruction.cs" />
-    <Compile Include="ExceptionLayoutStage.cs" />
-    <Compile Include="InterruptVectorStage.cs" />
+    <Compile Include="Stages\ExceptionLayoutStage.cs" />
+    <Compile Include="Stages\InterruptVectorStage.cs" />
     <Compile Include="Intrinsic\GetEBP.cs" />
     <Compile Include="Intrinsic\GetMethodLookupTable.cs" />
     <Compile Include="Intrinsic\GetEIP.cs" />
@@ -140,18 +140,18 @@
     <Compile Include="Intrinsic\Out.cs" />
     <Compile Include="Intrinsic\Sti.cs" />
     <Compile Include="Intrinsic\TestMethod.cs" />
-    <Compile Include="MethodTableBuilderStage.cs" />
+    <Compile Include="Stages\MethodTableBuilderStage.cs" />
     <Compile Include="SegmentRegister.cs" />
     <Compile Include="Instructions\BranchInstruction.cs" />
     <Compile Include="Intrinsic\Test.cs" />
     <Compile Include="Instructions\Cvttsd2siInstruction.cs" />
     <Compile Include="Instructions\Cvttss2si.cs" />
-    <Compile Include="Instructions\DirectDivisionInstruction.cs" />
+    <Compile Include="Instructions\DivInstruction.cs" />
     <Compile Include="Instructions\JmpInstruction.cs" />
     <Compile Include="Instructions\LeaInstruction.cs" />
     <Compile Include="Instructions\UDivInstruction.cs" />
-    <Compile Include="SimplePeepholeOptimizationStage.cs" />
-    <Compile Include="MemToMemConversionStage.cs" />
+    <Compile Include="Stages\SimplePeepholeOptimizationStage.cs" />
+    <Compile Include="Stages\MemToMemConversionStage.cs" />
     <Compile Include="Instructions\CallInstruction.cs" />
     <Compile Include="Instructions\IX86Instruction.cs" />
     <Compile Include="Instructions\MovsdInstruction.cs" />
@@ -160,10 +160,7 @@
     <Compile Include="Instructions\MovzxInstruction.cs" />
     <Compile Include="Instructions\MovsxInstruction.cs" />
     <Compile Include="MachineCodeEmitter.cs" />
-    <Compile Include="ConstantRemovalStage.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="TweakTransformationStage.cs" />
+    <Compile Include="Stages\TweakTransformationStage.cs" />
     <Compile Include="Instructions\AdcInstruction.cs" />
     <Compile Include="Instructions\AddInstruction.cs" />
     <Compile Include="Instructions\CdqInstruction.cs" />
@@ -176,7 +173,7 @@
     <Compile Include="Instructions\Cvtsi2ssInstruction.cs" />
     <Compile Include="Instructions\Cvtss2sdInstruction.cs" />
     <Compile Include="Instructions\DecInstruction.cs" />
-    <Compile Include="Instructions\DivInstruction.cs" />
+    <Compile Include="Instructions\IDivInstruction.cs" />
     <Compile Include="Instructions\IncInstruction.cs" />
     <Compile Include="Instruction.cs" />
     <Compile Include="Instructions\IntInstruction.cs" />
@@ -209,7 +206,6 @@
     <Compile Include="Instructions\StiInstruction.cs" />
     <Compile Include="Instructions\StosInstruction.cs" />
     <Compile Include="Instructions\XchgInstruction.cs" />
-    <Compile Include="Instructions\LiteralInstruction.cs" />
     <Compile Include="Instructions\AndInstruction.cs" />
     <Compile Include="Instructions\NotInstruction.cs" />
     <Compile Include="Instructions\OrInstruction.cs" />
@@ -247,10 +243,10 @@
     <Compile Include="GenericX86Register.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="IRTransformationStage.cs">
+    <Compile Include="Stages\IRTransformationStage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="LongOperandTransformationStage.cs">
+    <Compile Include="Stages\LongOperandTransformationStage.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="MMXRegister.cs">

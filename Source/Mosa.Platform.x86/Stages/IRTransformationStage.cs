@@ -20,7 +20,7 @@ using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
 using IR = Mosa.Compiler.Framework.IR;
 
-namespace Mosa.Platform.x86
+namespace Mosa.Platform.x86.Stages
 {
 	/// <summary>
 	/// Transforms IR instructions into their appropriate X86.

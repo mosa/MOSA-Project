@@ -15,7 +15,7 @@ using Mosa.Compiler.Metadata;
 using CIL = Mosa.Compiler.Framework.CIL;
 using IR = Mosa.Compiler.Framework.IR;
 
-namespace Mosa.Platform.x86
+namespace Mosa.Platform.x86.Stages
 {
 	/// <summary>
 	/// 

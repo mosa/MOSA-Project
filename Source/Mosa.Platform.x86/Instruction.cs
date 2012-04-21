@@ -103,10 +103,6 @@ namespace Mosa.Platform.x86
 		/// <summary>
 		/// 
 		/// </summary>
-		public static readonly LiteralInstruction LiteralInstruction = new LiteralInstruction();
-		/// <summary>
-		/// 
-		/// </summary>
 		public static readonly AndInstruction AndInstruction = new AndInstruction();
 		/// <summary>
 		/// 

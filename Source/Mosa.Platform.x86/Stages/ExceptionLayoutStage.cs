@@ -19,7 +19,7 @@ using Mosa.Compiler.TypeSystem;
 
 // FIXME: Splits this class into platform dependent and independent classes. Move platform independent code into Mosa.Compiler.Framework
 
-namespace Mosa.Platform.x86
+namespace Mosa.Platform.x86.Stages
 {
 	public sealed class ExceptionLayoutStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
 	{

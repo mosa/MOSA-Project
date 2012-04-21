@@ -20,7 +20,7 @@ using Mosa.Compiler.Metadata.Signatures;
 using CIL = Mosa.Compiler.Framework.CIL;
 using IR = Mosa.Compiler.Framework.IR;
 
-namespace Mosa.Platform.x86
+namespace Mosa.Platform.x86.Stages
 {
 	/// <summary>
 	/// Transforms 64-bit arithmetic to 32-bit operations.
