@@ -16,6 +16,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class HltInstruction : X86Instruction
 	{
+
 		#region Methods
 
 		/// <summary>

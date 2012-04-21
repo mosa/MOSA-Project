@@ -98,7 +98,7 @@ namespace Mosa.Platform.x86
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.DivSInstruction(Context context)
 		{
-			HandleNonCommutativeOperation(context, Instruction.DivInstruction);
+			HandleNonCommutativeOperation(context, Instruction.IDivInstruction);
 		}
 
 		/// <summary>
@@ -788,7 +788,7 @@ namespace Mosa.Platform.x86
 			context.AppendInstruction(IR.Instruction.SignExtendedMoveInstruction, eax, eaxSource);
 			context.AppendInstruction(Instruction.MovInstruction, ecxSource, operand);
 			context.AppendInstruction(IR.Instruction.SignExtendedMoveInstruction, ecx, ecxSource);
-			context.AppendInstruction(Instruction.DivInstruction, eax, ecx);
+			context.AppendInstruction(Instruction.IDivInstruction, eax, ecx);
 			context.AppendInstruction(Instruction.MovInstruction, result, edx);
 		}
 

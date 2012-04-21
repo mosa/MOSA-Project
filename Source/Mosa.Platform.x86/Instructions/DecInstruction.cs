@@ -18,6 +18,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class DecInstruction : X86Instruction
 	{
+
 		#region Data Members
 
 		private static readonly OpCode DEC8 = new OpCode(new byte[] { 0xFE }, 1);

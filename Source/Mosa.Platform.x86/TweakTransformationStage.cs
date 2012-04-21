@@ -189,12 +189,12 @@ namespace Mosa.Platform.x86
 				RegisterOperand ebx = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.EBX);
 				ctx.SetInstruction(Instruction.PushInstruction, null, ebx);
 				ctx.AppendInstruction(Instruction.MovInstruction, ebx, op);
-				ctx.AppendInstruction(Instruction.DivInstruction, ebx);
+				ctx.AppendInstruction(Instruction.IDivInstruction, ebx);
 				ctx.AppendInstruction(Instruction.PopInstruction, ebx);
 			}
 			else
 			{
-				ctx.SetInstruction(Instruction.DivInstruction, null, op);
+				ctx.SetInstruction(Instruction.IDivInstruction, null, op);
 			}
 		}
 

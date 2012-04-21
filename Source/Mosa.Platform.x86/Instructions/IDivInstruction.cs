@@ -10,21 +10,32 @@
 using System;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Operands;
+using Mosa.Compiler.Framework.Platform;
 
 namespace Mosa.Platform.x86.Instructions
 {
 	/// <summary>
-	/// Intermediate representation of the div instruction.
+	/// Intermediate representation of the idiv instruction.
 	/// </summary>
-	public sealed class DirectDivisionInstruction : TwoOperandInstruction
+	public sealed class IDivInstruction : TwoOperandInstruction
 	{
 		#region Data Members
 
-		private static readonly OpCode DIV = new OpCode(new byte[] { 0xF7 }, 6);
+		private static readonly OpCode DIV = new OpCode(new byte[] { 0xF7 }, 7);
 
 		#endregion // Data Members
 
 		#region Methods
+
+		/// <summary>
+		/// Gets the additional output registers.
+		/// </summary>
+		public override RegisterBitmap AdditionalOutputRegisters { get { return new RegisterBitmap(GeneralPurposeRegister.EAX,GeneralPurposeRegister.EDX); } }
+
+		/// <summary>
+		/// Gets the additional input registers.
+		/// </summary>
+		public override RegisterBitmap AdditionalInputRegisters { get { return new RegisterBitmap(GeneralPurposeRegister.EAX, GeneralPurposeRegister.EDX); } }
 
 		/// <summary>
 		/// Computes the opcode.
@@ -35,7 +46,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-			if (destination == null || destination is RegisterOperand || destination is MemoryOperand) return DIV;
+			if (/*destination == null || */destination is RegisterOperand || destination is MemoryOperand) return DIV;
 
 			throw new ArgumentException(@"No opcode for operand type.");
 		}
@@ -58,9 +69,10 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="context">The context.</param>
 		public override void Visit(IX86Visitor visitor, Context context)
 		{
-			visitor.DirectDivision(context);
+			visitor.Div(context);
 		}
 
 		#endregion // Methods
+
 	}
 }

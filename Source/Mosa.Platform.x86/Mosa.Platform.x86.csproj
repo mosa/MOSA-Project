@@ -146,7 +146,6 @@
     <Compile Include="Intrinsic\Test.cs" />
     <Compile Include="Instructions\Cvttsd2siInstruction.cs" />
     <Compile Include="Instructions\Cvttss2si.cs" />
-    <Compile Include="Instructions\DirectCompareInstruction.cs" />
     <Compile Include="Instructions\DirectDivisionInstruction.cs" />
     <Compile Include="Instructions\JmpInstruction.cs" />
     <Compile Include="Instructions\LeaInstruction.cs" />

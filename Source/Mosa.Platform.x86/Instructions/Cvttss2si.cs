@@ -19,6 +19,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public class Cvttss2siInstruction : TwoOperandInstruction
 	{
+
 		#region Data Members
 
 		private static readonly OpCode opcode = new OpCode(new byte[] { 0xF3, 0x0F, 0x2C });

@@ -43,10 +43,6 @@ namespace Mosa.Platform.x86
 		/// <summary>
 		/// 
 		/// </summary>
-		public static readonly DirectCompareInstruction DirectCompareInstruction = new DirectCompareInstruction();
-		/// <summary>
-		/// 
-		/// </summary>
 		public static readonly ComisdInstruction ComisdInstruction = new ComisdInstruction();
 		/// <summary>
 		/// 
@@ -83,11 +79,11 @@ namespace Mosa.Platform.x86
 		/// <summary>
 		/// 
 		/// </summary>
-		public static readonly DivInstruction DivInstruction = new DivInstruction();
+		public static readonly IDivInstruction IDivInstruction = new IDivInstruction();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static readonly DirectDivisionInstruction DirectDivisionInstruction = new DirectDivisionInstruction();
+		public static readonly DivInstruction DivInstruction = new DivInstruction();
 		/// <summary>
 		/// 
 		/// </summary>

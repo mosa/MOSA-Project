@@ -8,8 +8,7 @@
  */
 
 using Mosa.Compiler.Framework;
-
-// INCOMPLETE
+using Mosa.Compiler.Framework.Operands;
 
 namespace Mosa.Platform.x86.Instructions
 {
@@ -22,8 +21,35 @@ namespace Mosa.Platform.x86.Instructions
 	/// </remarks>
 	public sealed class CmpXchgInstruction : ThreeOperandInstruction
 	{
+		#region Data Member
+
+		private static readonly OpCode RM_R = new OpCode(new byte[] { 0x0F, 0xB1 });
+
+		#endregion //Data Member
 
 		#region Methods
+
+		/// <summary>
+		/// Gets the additional output registers.
+		/// </summary>
+		public override RegisterBitmap AdditionalOutputRegisters { get { return new RegisterBitmap(GeneralPurposeRegister.EAX); } }
+
+		/// <summary>
+		/// Gets the additional input registers.
+		/// </summary>
+		public override RegisterBitmap AdditionalInputRegisters { get { return new RegisterBitmap(GeneralPurposeRegister.EAX); } }
+
+		/// <summary>
+		/// Computes the opcode.
+		/// </summary>
+		/// <param name="destination">The destination operand.</param>
+		/// <param name="source">The source operand.</param>
+		/// <param name="third">The third operand.</param>
+		/// <returns></returns>
+		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
+		{
+			return RM_R;
+		}
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
