@@ -93,6 +93,7 @@
     </Compile>
     <Compile Include="BaseTransformationStage.cs" />
     <Compile Include="Instructions\AddSD.cs" />
+    <Compile Include="Instructions\RoundSD.cs" />
     <Compile Include="Instructions\SubSD.cs" />
     <Compile Include="Stages\AddressModeConversionStage.cs" />
     <Compile Include="ControlRegister.cs" />
@@ -100,7 +101,7 @@
     <Compile Include="Instructions\TwoOperandNoResultInstruction.cs" />
     <Compile Include="Instructions\FarJmp.cs" />
     <Compile Include="Instructions\Leave.cs" />
-    <Compile Include="Instructions\SseRound.cs" />
+    <Compile Include="Instructions\RoundSS.cs" />
     <Compile Include="Stages\ExceptionLayoutStage.cs" />
     <Compile Include="Stages\InterruptVectorStage.cs" />
     <Compile Include="Intrinsic\GetEBP.cs" />

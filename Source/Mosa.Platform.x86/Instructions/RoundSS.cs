@@ -16,13 +16,10 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// 
 	/// </summary>
-	public class SseRound : X86Instruction
+	public class RoundSS : X86Instruction
 	{
-		// ROUNDSS
-		private static readonly OpCode R4 = new OpCode(new byte[] { 0x66, 0x0F, 0x3A, 0x0A });
-
-		// ROUNDSD
-		private static readonly OpCode R8 = new OpCode(new byte[] { 0x66, 0x0F, 0x3A, 0x0B });
+		
+		private static readonly OpCode opcode = new OpCode(new byte[] { 0x66, 0x0F, 0x3A, 0x0A });
 
 		/// <summary>
 		/// Computes the opcode.
@@ -33,10 +30,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-			if (source.Type.Type == CilElementType.R4)
-				return R4;
-
-			return R8;
+			return opcode;
 		}
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
@@ -45,7 +39,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="context">The context.</param>
 		public override void Visit(IX86Visitor visitor, Context context)
 		{
-			visitor.SseRound(context);
+			visitor.RoundSS(context);
 		}
 	}
 }

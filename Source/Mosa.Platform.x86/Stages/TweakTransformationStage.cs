@@ -298,11 +298,32 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Visitation function for <see cref="Instructions.IX86Visitor.Out"/> instructions.
+		/// Visitation function for <see cref="Instructions.IX86Visitor.Call"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void Instructions.IX86Visitor.Out(Context context)
+		void Instructions.IX86Visitor.Call(Context context)
 		{
+			Operand destinationOperand = context.Operand1;
+
+			if (destinationOperand == null)
+			{
+				return;
+			}
+
+			if (destinationOperand is SymbolOperand)
+			{
+				return;
+			}
+
+			if (!(destinationOperand is RegisterOperand))
+			{
+				Context before = context.InsertBefore();
+				RegisterOperand eax = new RegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.EAX);
+
+				before.SetInstruction(X86.Mov, eax, destinationOperand);
+				context.Operand1 = eax;
+			}
+
 		}
 
 		#endregion // IX86Visitor
@@ -609,36 +630,6 @@ namespace Mosa.Platform.x86.Stages
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Instructions.IX86Visitor.Jump(Context context) { }
-
-		/// <summary>
-		/// Visitation function for <see cref="Instructions.IX86Visitor.Call"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Instructions.IX86Visitor.Call(Context context)
-		{
-			Operand destinationOperand = context.Operand1;
-
-			if (destinationOperand == null)
-			{
-				return;
-			}
-
-			if (destinationOperand is SymbolOperand)
-			{
-				return;
-			}
-
-			if (!(destinationOperand is RegisterOperand))
-			{
-				Context before = context.InsertBefore();
-				RegisterOperand eax = new RegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.EAX);
-
-				before.SetInstruction(X86.Mov, eax, destinationOperand);
-				context.Operand1 = eax;
-			}
-
-		}
-
 		/// <summary>
 		/// Visitation function for <see cref="Instructions.IX86Visitor.Branch"/> instructions.
 		/// </summary>
@@ -649,8 +640,21 @@ namespace Mosa.Platform.x86.Stages
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Instructions.IX86Visitor.Not(Context context) { }
-
-		void Instructions.IX86Visitor.SseRound(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="Instructions.IX86Visitor.RoundSS"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Instructions.IX86Visitor.RoundSS(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="Instructions.IX86Visitor.RoundSD"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Instructions.IX86Visitor.RoundSD(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="Instructions.IX86Visitor.Out"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Instructions.IX86Visitor.Out(Context context) { }
 
 		#endregion // IX86Visitor - Unused
 

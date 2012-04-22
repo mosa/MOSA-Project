@@ -339,7 +339,7 @@ namespace Mosa.Platform.x86
 		/// <summary>
 		/// 
 		/// </summary>
-		public static readonly SseRound SseRound = new SseRound();
+		public static readonly RoundSS SseRound = new RoundSS();
 		/// <summary>
 		/// 
 		/// </summary>

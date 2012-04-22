@@ -422,9 +422,14 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="context">The context.</param>
 		void Not(Context context);
 		/// <summary>
-		/// Sses round instruction
+		/// RoundSS instruction
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void SseRound(Context context);
+		void RoundSS(Context context);
+		/// <summary>
+		/// RoundSD instruction
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void RoundSD(Context context);
 	}
 }
