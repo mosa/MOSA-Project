@@ -25,9 +25,11 @@ namespace Mosa.Platform.x86
 	public sealed class MachineCodeEmitter : BaseCodeEmitter, IDisposable
 	{
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="MachineCodeEmitter"/> class.
+		/// </summary>
 		public MachineCodeEmitter()
 		{
-
 		}
 
 		#region Code Generation

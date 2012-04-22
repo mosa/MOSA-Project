@@ -16,7 +16,7 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// 
 	/// </summary>
-	public abstract class X86Instruction : BasePlatformInstruction, IRegisterUsage
+	public abstract class X86Instruction : BasePlatformInstruction, IRegisterUsage, IPlatformInstruction
 	{
 
 		static protected RegisterBitmap NoRegisters = new RegisterBitmap();

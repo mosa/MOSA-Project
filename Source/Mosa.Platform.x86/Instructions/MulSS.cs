@@ -16,12 +16,11 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Intermediate representation of the SSE multiplication operation.
 	/// </summary>
-	public sealed class SseMul : TwoOperandInstruction
+	public sealed class MulSS : TwoOperandInstruction
 	{
 		#region Data Members
 
-		private static readonly OpCode F = new OpCode(new byte[] { 0xF3, 0x0F, 0x59 });
-		private static readonly OpCode I = new OpCode(new byte[] { 0xF2, 0x0F, 0x59 });
+		private static readonly OpCode opcode = new OpCode(new byte[] { 0xF3, 0x0F, 0x59 });
 
 		#endregion // Data Members
 
@@ -35,10 +34,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-			if (source.Type.Type == CilElementType.R4)
-				return F;
-
-			return I;
+			return opcode;
 		}
 
 		/// <summary>
@@ -48,7 +44,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="context">The context.</param>
 		public override void Visit(IX86Visitor visitor, Context context)
 		{
-			visitor.SseMul(context);
+			visitor.MulSS(context);
 		}
 
 		#endregion // Methods

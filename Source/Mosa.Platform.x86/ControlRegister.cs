@@ -14,7 +14,7 @@ using Mosa.Compiler.Metadata.Signatures;
 namespace Mosa.Platform.x86
 {
 	/// <summary>
-	/// Base class for x86 segment registers.
+	/// Base class for x86 control registers.
 	/// </summary>
 	public sealed class ControlRegister : Register
 	{

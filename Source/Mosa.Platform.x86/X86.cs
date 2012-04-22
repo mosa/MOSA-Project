@@ -175,7 +175,11 @@ namespace Mosa.Platform.x86
 		/// <summary>
 		/// 
 		/// </summary>
-		public static readonly SseMul SseMul = new SseMul();
+		public static readonly MulSS MulSS = new MulSS();
+		/// <summary>
+		/// 
+		/// </summary>
+		public static readonly MulSD MulSD = new MulSD();
 		/// <summary>
 		/// 
 		/// </summary>

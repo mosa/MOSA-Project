@@ -703,7 +703,11 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.MulFInstruction(Context context)
 		{
-			HandleCommutativeOperation(context, X86.SseMul);
+			if (context.Result.Type.Type == CilElementType.R4)
+				HandleCommutativeOperation(context, X86.MulSS);
+			else
+				HandleCommutativeOperation(context, X86.MulSD);
+
 			ExtendToR8(context);
 		}
 
@@ -790,7 +794,11 @@ namespace Mosa.Platform.x86.Stages
 			LinkBlocks(newBlocks[0], newBlocks[1], newBlocks[2]);
 
 			newBlocks[1].AppendInstruction(X86.Cvtsi2sd, destination, edx);
-			newBlocks[1].AppendInstruction(X86.SseMul, destination, xmm5);
+
+			if (xmm5.Type.Type == CilElementType.R4)
+				newBlocks[1].AppendInstruction(X86.MulSS, destination, xmm5);
+			else
+				newBlocks[1].AppendInstruction(X86.MulSD, destination, xmm5);
 
 			if (destination.Type.Type == CilElementType.R4)
 				newBlocks[1].AppendInstruction(X86.SubSS, xmm6, destination);

@@ -7,6 +7,7 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
+using Mosa.Compiler.Framework;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 
@@ -15,7 +16,7 @@ namespace Mosa.Platform.x86
 	/// <summary>
 	/// Represents integral general purpose x86 registers.
 	/// </summary>
-	public sealed class GeneralPurposeRegister : GenericX86Register
+	public sealed class GeneralPurposeRegister : Register
 	{
 		#region Types
 

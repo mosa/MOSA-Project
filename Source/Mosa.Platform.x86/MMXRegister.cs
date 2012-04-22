@@ -8,6 +8,7 @@
  */
 
 using System;
+using Mosa.Compiler.Framework;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 
@@ -16,7 +17,7 @@ namespace Mosa.Platform.x86
 	/// <summary>
 	/// Represents an MMX register.
 	/// </summary>
-	public sealed class MMXRegister : GenericX86Register
+	public sealed class MMXRegister : Register
 	{
 		#region Static data members
 

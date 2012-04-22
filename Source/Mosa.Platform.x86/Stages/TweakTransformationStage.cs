@@ -391,10 +391,15 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void Instructions.IX86Visitor.AddSs(Context context) { }
 		/// <summary>
-		/// Visitation function for <see cref="Instructions.IX86Visitor.SseMul"/> instructions.
+		/// Visitation function for <see cref="Instructions.IX86Visitor.MulSS"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void Instructions.IX86Visitor.SseMul(Context context) { }
+		void Instructions.IX86Visitor.MulSS(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="Instructions.IX86Visitor.MulSD"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Instructions.IX86Visitor.MulSD(Context context) { }
 		/// <summary>
 		/// Visitation function for <see cref="Instructions.IX86Visitor.DivSS"/> instructions.
 		/// </summary>

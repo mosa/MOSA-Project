@@ -102,10 +102,15 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="context">The context.</param>
 		void SubSD(Context context);
 		/// <summary>
-		/// Sses the mul.
+		/// MulSS instruction
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void SseMul(Context context);
+		void MulSS(Context context);
+		/// <summary>
+		/// MulSD instruction
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void MulSD(Context context);
 		/// <summary>
 		/// DivSS instruction
 		/// </summary>

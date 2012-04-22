@@ -19,7 +19,7 @@ namespace Mosa.Platform.AVR32
 	/// <summary>
 	/// Represents integral general purpose AVR32 registers.
 	/// </summary>
-	public sealed class GeneralPurposeRegister : GenericAVR32Register
+	public sealed class GeneralPurposeRegister : Register
 	{
 		#region Types
 

@@ -93,6 +93,7 @@
     </Compile>
     <Compile Include="BaseTransformationStage.cs" />
     <Compile Include="Instructions\AddSD.cs" />
+    <Compile Include="Instructions\MulSD.cs" />
     <Compile Include="Instructions\DivSD.cs" />
     <Compile Include="Instructions\RoundSD.cs" />
     <Compile Include="Instructions\SubSD.cs" />
@@ -177,7 +178,7 @@
     <Compile Include="Instructions\Dec.cs" />
     <Compile Include="Instructions\IDiv.cs" />
     <Compile Include="Instructions\Inc.cs" />
-    <Compile Include="Instruction.cs" />
+    <Compile Include="X86.cs" />
     <Compile Include="Instructions\Int.cs" />
     <Compile Include="Intrinsic\BochsDebug.cs" />
     <Compile Include="Instructions\Cld.cs" />
@@ -225,7 +226,7 @@
     <Compile Include="Instructions\Shr.cs" />
     <Compile Include="Instructions\AddSS.cs" />
     <Compile Include="Instructions\DivSS.cs" />
-    <Compile Include="Instructions\SseMul.cs" />
+    <Compile Include="Instructions\MulSS.cs" />
     <Compile Include="Instructions\SubSS.cs" />
     <Compile Include="Instructions\Sub.cs" />
     <Compile Include="Instructions\ThreeOperandInstruction.cs" />
@@ -240,9 +241,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="GeneralPurposeRegister.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="GenericX86Register.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Stages\IRTransformationStage.cs">
