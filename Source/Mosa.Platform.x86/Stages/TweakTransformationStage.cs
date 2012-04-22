@@ -33,7 +33,7 @@ namespace Mosa.Platform.x86.Stages
 		{
 			if (ctx.Result is ConstantOperand)
 			{
-				ctx.SetInstruction(Instruction.NopInstruction);
+				ctx.SetInstruction(X86.Nop);
 				return;
 			}
 
@@ -43,9 +43,9 @@ namespace Mosa.Platform.x86.Stages
 			// Check that we're not dealing with floating point values
 			if (ctx.Result.StackType == StackTypeCode.F || ctx.Operand1.StackType == StackTypeCode.F)
 				if (ctx.Result.Type.Type == CilElementType.R4)
-					ctx.SetInstruction(Instruction.MovssInstruction, ctx.Result, ctx.Operand1);
+					ctx.SetInstruction(X86.Movss, ctx.Result, ctx.Operand1);
 				else if (ctx.Result.Type.Type == CilElementType.R8)
-					ctx.SetInstruction(Instruction.MovsdInstruction, ctx.Result, ctx.Operand1);
+					ctx.SetInstruction(X86.Movsd, ctx.Result, ctx.Operand1);
 		}
 
 		/// <summary>
@@ -58,11 +58,11 @@ namespace Mosa.Platform.x86.Stages
 			{
 				RegisterOperand ecx = new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.ECX);
 				Context before = ctx.InsertBefore();
-				before.SetInstruction(Instruction.PushInstruction, null, ecx);
-				before.AppendInstruction(Instruction.MovInstruction, ecx, ctx.Operand1);
+				before.SetInstruction(X86.Push, null, ecx);
+				before.AppendInstruction(X86.Mov, ecx, ctx.Operand1);
 
 				ctx.Operand1 = ecx;
-				ctx.AppendInstruction(Instruction.PopInstruction, ecx);
+				ctx.AppendInstruction(X86.Pop, ecx);
 			}
 
 			if (ctx.Operand1 == null || ctx.Result == null)
@@ -76,7 +76,7 @@ namespace Mosa.Platform.x86.Stages
 		void Instructions.IX86Visitor.Cvtss2sd(Context ctx)
 		{
 			if (ctx.Operand2 is ConstantOperand)
-				ctx.SetInstruction(Instruction.Cvtss2sdInstruction, ctx.Operand1, EmitConstant(ctx.Operand2));
+				ctx.SetInstruction(X86.Cvtss2sd, ctx.Operand1, EmitConstant(ctx.Operand2));
 		}
 
 		/// <summary>
@@ -91,7 +91,7 @@ namespace Mosa.Platform.x86.Stages
 			if (!(result is RegisterOperand))
 			{
 				ctx.Result = register;
-				ctx.AppendInstruction(Instruction.MovInstruction, result, register);
+				ctx.AppendInstruction(X86.Mov, result, register);
 			}
 		}
 
@@ -107,7 +107,7 @@ namespace Mosa.Platform.x86.Stages
 			if (!(result is RegisterOperand))
 			{
 				ctx.Result = register;
-				ctx.AppendInstruction(Instruction.MovInstruction, result, register);
+				ctx.AppendInstruction(X86.Mov, result, register);
 			}
 		}
 
@@ -126,7 +126,7 @@ namespace Mosa.Platform.x86.Stages
 		void Instructions.IX86Visitor.Movsx(Context context)
 		{
 			if (Is32Bit(context.Operand1))
-				context.ReplaceInstructionOnly(Instruction.MovInstruction);
+				context.ReplaceInstructionOnly(X86.Mov);
 			else
 			{
 				Operand result = context.Result;
@@ -135,7 +135,7 @@ namespace Mosa.Platform.x86.Stages
 					RegisterOperand ecx = new RegisterOperand(context.Result.Type, GeneralPurposeRegister.ECX);
 					context.Result = ecx;
 					//context.SetInstruction(CPUx86.Instruction.MovsxInstruction, ecx, context.Operand1);
-					context.AppendInstruction(Instruction.MovInstruction, result, ecx);
+					context.AppendInstruction(X86.Mov, result, ecx);
 				}
 			}
 		}
@@ -163,15 +163,15 @@ namespace Mosa.Platform.x86.Stages
 		void Instructions.IX86Visitor.Movzx(Context context)
 		{
 			if (Is32Bit(context.Operand1))
-				context.ReplaceInstructionOnly(Instruction.MovInstruction);
+				context.ReplaceInstructionOnly(X86.Mov);
 			else
 			{
 				Operand result = context.Result;
 				if (!(result is RegisterOperand))
 				{
 					RegisterOperand ecx = new RegisterOperand(context.Result.Type, GeneralPurposeRegister.ECX);
-					context.SetInstruction(Instruction.MovzxInstruction, ecx, context.Operand1);
-					context.AppendInstruction(Instruction.MovInstruction, result, ecx);
+					context.SetInstruction(X86.Movzx, ecx, context.Operand1);
+					context.AppendInstruction(X86.Mov, result, ecx);
 				}
 			}
 		}
@@ -187,14 +187,14 @@ namespace Mosa.Platform.x86.Stages
 			if (op is ConstantOperand)
 			{
 				RegisterOperand ebx = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.EBX);
-				ctx.SetInstruction(Instruction.PushInstruction, null, ebx);
-				ctx.AppendInstruction(Instruction.MovInstruction, ebx, op);
-				ctx.AppendInstruction(Instruction.IDivInstruction, ebx);
-				ctx.AppendInstruction(Instruction.PopInstruction, ebx);
+				ctx.SetInstruction(X86.Push, null, ebx);
+				ctx.AppendInstruction(X86.Mov, ebx, op);
+				ctx.AppendInstruction(X86.IDiv, ebx);
+				ctx.AppendInstruction(X86.Pop, ebx);
 			}
 			else
 			{
-				ctx.SetInstruction(Instruction.IDivInstruction, null, op);
+				ctx.SetInstruction(X86.IDiv, null, op);
 			}
 		}
 
@@ -211,22 +211,22 @@ namespace Mosa.Platform.x86.Stages
 			{
 				RegisterOperand ecx = new RegisterOperand(left.Type, GeneralPurposeRegister.ECX);
 				Context before = ctx.InsertBefore();
-				before.SetInstruction(Instruction.PushInstruction, null, ecx);
-				before.AppendInstruction(Instruction.MovInstruction, ecx, left);
+				before.SetInstruction(X86.Push, null, ecx);
+				before.AppendInstruction(X86.Mov, ecx, left);
 				ctx.Operand1 = ecx;
-				ctx.AppendInstruction(Instruction.PopInstruction, ecx);
+				ctx.AppendInstruction(X86.Pop, ecx);
 			}
 			if (right is ConstantOperand && !Is32Bit(left))
 			{
 				RegisterOperand edx = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.EBX);
 				Context before = ctx.InsertBefore();
-				before.SetInstruction(Instruction.PushInstruction, null, edx);
+				before.SetInstruction(X86.Push, null, edx);
 				if (IsSigned(left))
-					before.AppendInstruction(Instruction.MovsxInstruction, edx, left);
+					before.AppendInstruction(X86.Movsx, edx, left);
 				else
-					before.AppendInstruction(Instruction.MovzxInstruction, edx, left);
+					before.AppendInstruction(X86.Movzx, edx, left);
 				ctx.Operand1 = edx;
-				ctx.AppendInstruction(Instruction.PopInstruction, edx);
+				ctx.AppendInstruction(X86.Pop, edx);
 			}
 		}
 
@@ -237,12 +237,12 @@ namespace Mosa.Platform.x86.Stages
 		void Instructions.IX86Visitor.Div(Context context)
 		{
 			Context before = context.InsertBefore();
-			before.SetInstruction(Instruction.CdqInstruction);
+			before.SetInstruction(X86.Cdq);
 
 			if (context.Operand1 is ConstantOperand)
 			{
 				RegisterOperand ecx = new RegisterOperand(context.Operand1.Type, GeneralPurposeRegister.ECX);
-				before.AppendInstruction(Instruction.MovInstruction, ecx, context.Operand1);
+				before.AppendInstruction(X86.Mov, ecx, context.Operand1);
 				context.Operand1 = ecx;
 			}
 		}
@@ -255,12 +255,12 @@ namespace Mosa.Platform.x86.Stages
 		{
 			RegisterOperand edx = new RegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.EDX);
 			Context before = context.InsertBefore();
-			before.SetInstruction(Instruction.XorInstruction, edx, edx);
+			before.SetInstruction(X86.Xor, edx, edx);
 
 			if (context.Operand1 is ConstantOperand)
 			{
 				RegisterOperand ecx = new RegisterOperand(context.Operand1.Type, GeneralPurposeRegister.ECX);
-				before.AppendInstruction(Instruction.MovInstruction, ecx, context.Operand1);
+				before.AppendInstruction(X86.Mov, ecx, context.Operand1);
 				context.Operand1 = ecx;
 			}
 		}
@@ -275,7 +275,7 @@ namespace Mosa.Platform.x86.Stages
 				return;
 			RegisterOperand ecx = new RegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.ECX);
 			Context before = context.InsertBefore();
-			before.SetInstruction(Instruction.MovInstruction, ecx, context.Operand1);
+			before.SetInstruction(X86.Mov, ecx, context.Operand1);
 			context.Operand1 = context.Result;
 		}
 
@@ -289,7 +289,7 @@ namespace Mosa.Platform.x86.Stages
 				return;
 			RegisterOperand ecx = new RegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.ECX);
 			Context before = context.InsertBefore();
-			before.SetInstruction(Instruction.MovInstruction, ecx, context.Operand1);
+			before.SetInstruction(X86.Mov, ecx, context.Operand1);
 			context.Operand1 = context.Result;
 		}
 
@@ -303,7 +303,7 @@ namespace Mosa.Platform.x86.Stages
 				return;
 			RegisterOperand ecx = new RegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.ECX);
 			Context before = context.InsertBefore();
-			before.SetInstruction(Instruction.MovInstruction, ecx, context.Operand1);
+			before.SetInstruction(X86.Mov, ecx, context.Operand1);
 			context.Operand1 = context.Result;
 		}
 
@@ -375,10 +375,10 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void Instructions.IX86Visitor.DirectDivision(Context context) { }
 		/// <summary>
-		/// Visitation function for <see cref="Instructions.IX86Visitor.SseAdd"/> instructions.
+		/// Visitation function for <see cref="Instructions.IX86Visitor.AddSs"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void Instructions.IX86Visitor.SseAdd(Context context) { }
+		void Instructions.IX86Visitor.AddSs(Context context) { }
 		/// <summary>
 		/// Visitation function for <see cref="Instructions.IX86Visitor.SseMul"/> instructions.
 		/// </summary>
@@ -643,7 +643,7 @@ namespace Mosa.Platform.x86.Stages
 				Context before = context.InsertBefore();
 				RegisterOperand eax = new RegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.EAX);
 
-				before.SetInstruction(Instruction.MovInstruction, eax, destinationOperand);
+				before.SetInstruction(X86.Mov, eax, destinationOperand);
 				context.Operand1 = eax;
 			}
 

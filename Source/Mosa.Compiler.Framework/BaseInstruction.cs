@@ -121,11 +121,6 @@ namespace Mosa.Compiler.Framework
 			if (index > 0)
 				inst = inst.Substring(index + 1);
 
-			index = inst.IndexOf("Instruction");
-
-			if (index > 0)
-				inst = inst.Substring(0, index);
-
 			return inst;
 		}
 

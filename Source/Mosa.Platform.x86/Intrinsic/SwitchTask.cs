@@ -34,11 +34,11 @@ namespace Mosa.Platform.x86.Intrinsic
 			SigType I4 = BuiltInSigType.Int32;
 			RegisterOperand esp = new RegisterOperand(I4, GeneralPurposeRegister.ESP);
 
-			context.SetInstruction(Instruction.MovInstruction, esp, context.Operand1);
-			context.AppendInstruction(Instruction.PopadInstruction);
-			context.AppendInstruction(Instruction.AddInstruction, esp, new ConstantOperand(I4, 0x08));
-			context.AppendInstruction(Instruction.StiInstruction);
-			context.AppendInstruction(Instruction.IRetdInstruction);
+			context.SetInstruction(X86.Mov, esp, context.Operand1);
+			context.AppendInstruction(X86.Popad);
+			context.AppendInstruction(X86.Add, esp, new ConstantOperand(I4, 0x08));
+			context.AppendInstruction(X86.Sti);
+			context.AppendInstruction(X86.IRetd);
 		}
 
 		#endregion // Methods

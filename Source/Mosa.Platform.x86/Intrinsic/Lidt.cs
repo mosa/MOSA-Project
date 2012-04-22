@@ -31,8 +31,8 @@ namespace Mosa.Platform.x86.Intrinsic
 		void IIntrinsicMethod.ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
 		{
 			MemoryOperand operand = new MemoryOperand(BuiltInSigType.Ptr, GeneralPurposeRegister.EAX, new System.IntPtr(0));
-			context.SetInstruction(Instruction.MovInstruction, new RegisterOperand(BuiltInSigType.Ptr, GeneralPurposeRegister.EAX), context.Operand1);
-			context.AppendInstruction(Instruction.LidtInstruction, null, operand);
+			context.SetInstruction(X86.Mov, new RegisterOperand(BuiltInSigType.Ptr, GeneralPurposeRegister.EAX), context.Operand1);
+			context.AppendInstruction(X86.Lidt, null, operand);
 		}
 
 		#endregion // Methods

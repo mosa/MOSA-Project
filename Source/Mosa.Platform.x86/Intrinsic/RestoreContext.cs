@@ -49,11 +49,11 @@ namespace Mosa.Platform.x86.Intrinsic
 			RegisterOperand esp = new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.ESP);
 
 			// Restore registers
-			context.AppendInstruction(Instruction.MovInstruction, new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.ESP), context.Operand1);
+			context.AppendInstruction(X86.Mov, new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.ESP), context.Operand1);
 
 
 			// Jmp to EIP (stored in EDX)
-			context.AppendInstruction(Instruction.JmpInstruction, null, edx);
+			context.AppendInstruction(X86.Jmp, null, edx);
 			//context.SetOperand(0, edx);
 		}
 

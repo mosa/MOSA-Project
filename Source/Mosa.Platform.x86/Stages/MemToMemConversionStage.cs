@@ -58,7 +58,7 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		#endregion // IMethodCompilerStage Members
-		
+
 		private void HandleMemoryToMemoryOperation(Context ctx)
 		{
 			Operand destination = ctx.Result;
@@ -123,24 +123,24 @@ namespace Mosa.Platform.x86.Stages
 			{
 				if (MustSignExtendOnLoad(sigType.Type) == true)
 				{
-					moveInstruction = Instruction.MovsxInstruction;
+					moveInstruction = X86.Movsx;
 				}
 				else if (MustZeroExtendOnLoad(sigType.Type) == true)
 				{
-					moveInstruction = Instruction.MovzxInstruction;
+					moveInstruction = X86.Movzx;
 				}
 				else
 				{
-					moveInstruction = Instruction.MovInstruction;
+					moveInstruction = X86.Mov;
 				}
 			}
 			else if (sigType.Type == CilElementType.R8)
 			{
-				moveInstruction = Instruction.MovsdInstruction;
+				moveInstruction = X86.Movsd;
 			}
 			else
 			{
-				moveInstruction = Instruction.MovssInstruction;
+				moveInstruction = X86.Movss;
 			}
 
 			return moveInstruction;

@@ -95,7 +95,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// Sses the add.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void SseAdd(Context context);
+		void AddSs(Context context);
 		/// <summary>
 		/// Sses the sub.
 		/// </summary>

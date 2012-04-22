@@ -40,21 +40,21 @@ namespace Mosa.Platform.x86.Intrinsic
 			var edx = new RegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.EDX);
 			var esp = new RegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.ESP);
 			var ebp = new RegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.EBP);
-			context.SetInstruction(Instruction.SubInstruction, esp, new ConstantOperand(BuiltInSigType.IntPtr, parameters.Count * 4 + 4));
-			context.AppendInstruction(Instruction.MovInstruction, edx, esp);
+			context.SetInstruction(X86.Sub, esp, new ConstantOperand(BuiltInSigType.IntPtr, parameters.Count * 4 + 4));
+			context.AppendInstruction(X86.Mov, edx, esp);
 
 			var size = parameters.Count * 4 + 4;
 			foreach (var parameter in parameters)
 			{
-				context.AppendInstruction(Instruction.MovInstruction, new MemoryOperand(BuiltInSigType.IntPtr, edx.Register, new IntPtr(size - 4)), new MemoryOperand(BuiltInSigType.IntPtr, ebp.Register, new IntPtr(size + 4)));
+				context.AppendInstruction(X86.Mov, new MemoryOperand(BuiltInSigType.IntPtr, edx.Register, new IntPtr(size - 4)), new MemoryOperand(BuiltInSigType.IntPtr, ebp.Register, new IntPtr(size + 4)));
 				size -= 4;
 			}
-			context.AppendInstruction(Instruction.MovInstruction, new MemoryOperand(BuiltInSigType.IntPtr, edx.Register, new IntPtr(size - 4)), op1);
+			context.AppendInstruction(X86.Mov, new MemoryOperand(BuiltInSigType.IntPtr, edx.Register, new IntPtr(size - 4)), op1);
 
-			context.AppendInstruction(Instruction.MovInstruction, eax, op2);
-			context.AppendInstruction(Instruction.CallInstruction, null, new RegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.EAX));
-			context.AppendInstruction(Instruction.AddInstruction, esp, new ConstantOperand(BuiltInSigType.IntPtr, parameters.Count * 4 + 4));
-			context.AppendInstruction(Instruction.MovInstruction, result, new RegisterOperand(result.Type, GeneralPurposeRegister.EAX));
+			context.AppendInstruction(X86.Mov, eax, op2);
+			context.AppendInstruction(X86.Call, null, new RegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.EAX));
+			context.AppendInstruction(X86.Add, esp, new ConstantOperand(BuiltInSigType.IntPtr, parameters.Count * 4 + 4));
+			context.AppendInstruction(X86.Mov, result, new RegisterOperand(result.Type, GeneralPurposeRegister.EAX));
 		}
 
 		#endregion // Methods

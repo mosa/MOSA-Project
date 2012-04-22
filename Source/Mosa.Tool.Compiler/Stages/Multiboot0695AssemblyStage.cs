@@ -163,14 +163,14 @@ namespace Mosa.Tool.Compiler.Stages
 				InstructionSet instructionSet = new InstructionSet(16);
 				Context ctx = new Context(instructionSet);
 
-				ctx.AppendInstruction(Instruction.MovInstruction, ecx, new ConstantOperand(I4, 0x200000));
-				ctx.AppendInstruction(Instruction.MovInstruction, new MemoryOperand(I4, ecx.Register, new IntPtr(0x0)), eax);
-				ctx.AppendInstruction(Instruction.MovInstruction, new MemoryOperand(I4, ecx.Register, new IntPtr(0x4)), ebx);
+				ctx.AppendInstruction(X86.Mov, ecx, new ConstantOperand(I4, 0x200000));
+				ctx.AppendInstruction(X86.Mov, new MemoryOperand(I4, ecx.Register, new IntPtr(0x0)), eax);
+				ctx.AppendInstruction(X86.Mov, new MemoryOperand(I4, ecx.Register, new IntPtr(0x4)), ebx);
 
 				SymbolOperand entryPoint = SymbolOperand.FromMethod(typeInitializerSchedulerStage.TypeInitializerMethod);
 
-				ctx.AppendInstruction(Instruction.CallInstruction, null, entryPoint);
-				ctx.AppendInstruction(Instruction.RetInstruction);
+				ctx.AppendInstruction(X86.Call, null, entryPoint);
+				ctx.AppendInstruction(X86.Ret);
 
 				LinkerGeneratedMethod method = LinkTimeCodeGenerator.Compile(this.compiler, @"MultibootInit", instructionSet, typeSystem);
 				linker.EntryPoint = linker.GetSymbol(method.ToString());
