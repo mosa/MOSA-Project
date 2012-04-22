@@ -167,7 +167,11 @@ namespace Mosa.Platform.x86
 		/// <summary>
 		/// 
 		/// </summary>
-		public static readonly SseDiv SseDiv = new SseDiv();
+		public static readonly DivSS DivSS = new DivSS();
+		/// <summary>
+		/// 
+		/// </summary>
+		public static readonly DivSD DivSD = new DivSD();
 		/// <summary>
 		/// 
 		/// </summary>

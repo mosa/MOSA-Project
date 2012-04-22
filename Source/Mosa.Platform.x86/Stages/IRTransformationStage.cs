@@ -92,7 +92,11 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.DivFInstruction(Context context)
 		{
-			HandleNonCommutativeOperation(context, X86.SseDiv);
+			if (context.Result.Type.Type == CilElementType.R4)
+				HandleCommutativeOperation(context, X86.DivSS);
+			else
+				HandleCommutativeOperation(context, X86.DivSD);
+
 			ExtendToR8(context);
 		}
 
@@ -750,7 +754,11 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.RemFInstruction(Context context)
 		{
-			HandleNonCommutativeOperation(context, X86.SseDiv);
+			if (context.Result.Type.Type == CilElementType.R4)
+				HandleCommutativeOperation(context, X86.DivSS);
+			else
+				HandleCommutativeOperation(context, X86.DivSD);
+
 			ExtendToR8(context);
 
 			Operand destination = context.Result;
@@ -769,7 +777,11 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[0].SetInstruction(X86.Movsd, xmm5, source);
 			newBlocks[0].AppendInstruction(X86.Movsd, xmm6, destination);
 
-			newBlocks[0].AppendInstruction(X86.SseDiv, destination, source);
+			if (source.Type.Type == CilElementType.R4)
+				newBlocks[0].AppendInstruction(X86.DivSS, destination, source);
+			else
+				newBlocks[0].AppendInstruction(X86.DivSD, destination, source);
+
 			newBlocks[0].AppendInstruction(X86.Cvttsd2si, edx, destination);
 
 			newBlocks[0].AppendInstruction(X86.Cmp, null, edx, new ConstantOperand(BuiltInSigType.Int32, 0));
@@ -784,7 +796,7 @@ namespace Mosa.Platform.x86.Stages
 				newBlocks[1].AppendInstruction(X86.SubSS, xmm6, destination);
 			else
 				newBlocks[1].AppendInstruction(X86.SubSD, xmm6, destination);
-	
+
 			newBlocks[1].AppendInstruction(X86.Movsd, destination, xmm6);
 			newBlocks[1].AppendInstruction(X86.Jmp, nextBlock.BasicBlock);
 			LinkBlocks(newBlocks[1], nextBlock);
@@ -949,7 +961,7 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Visitation function for ZeroExtendedMoveInstruction"/> instructions.
+		/// Visitation function for ZeroExtendedMoveInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.ZeroExtendedMoveInstruction(Context context)
@@ -985,7 +997,7 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Visitation function for FloatingPointToIntegerConversionInstruction"/> instructions.
+		/// Visitation function for FloatingPointToIntegerConversionInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.FloatingPointToIntegerConversionInstruction(Context context)
@@ -1031,12 +1043,12 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Visitation function for ExceptionPrologueInstruction"/> instructions.
+		/// Visitation function for ExceptionPrologueInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.ExceptionPrologueInstruction(Context context)
 		{
-			// Exception Handler will pass the exception object in the register - EDX was choose
+			// Exception Handler will pass the exception object in the register - EDX was choosen
 			context.SetInstruction(X86.Mov, context.Result, new RegisterOperand(BuiltInSigType.Object, GeneralPurposeRegister.EDX));
 
 			// Alternative method is to pop it off the stack instead, going passing via register for now
@@ -1135,7 +1147,7 @@ namespace Mosa.Platform.x86.Stages
 			context.Operand1 = context.Operand2;
 			context.Operand2 = op1;
 
-			// Negate the condition code if necessary...
+			// Negate the condition code if necessary.
 			switch (context.ConditionCode)
 			{
 				case IR.ConditionCode.Equal: break;

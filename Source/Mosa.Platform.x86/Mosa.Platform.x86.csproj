@@ -93,6 +93,7 @@
     </Compile>
     <Compile Include="BaseTransformationStage.cs" />
     <Compile Include="Instructions\AddSD.cs" />
+    <Compile Include="Instructions\DivSD.cs" />
     <Compile Include="Instructions\RoundSD.cs" />
     <Compile Include="Instructions\SubSD.cs" />
     <Compile Include="Stages\AddressModeConversionStage.cs" />
@@ -155,7 +156,6 @@
     <Compile Include="Stages\SimplePeepholeOptimizationStage.cs" />
     <Compile Include="Stages\MemToMemConversionStage.cs" />
     <Compile Include="Instructions\Call.cs" />
-    <Compile Include="Instructions\IX86Instruction.cs" />
     <Compile Include="Instructions\Movsd.cs" />
     <Compile Include="Instructions\Movss.cs" />
     <Compile Include="Instructions\Ret.cs" />
@@ -224,7 +224,7 @@
     <Compile Include="Instructions\Shrd.cs" />
     <Compile Include="Instructions\Shr.cs" />
     <Compile Include="Instructions\AddSS.cs" />
-    <Compile Include="Instructions\SseDiv.cs" />
+    <Compile Include="Instructions\DivSS.cs" />
     <Compile Include="Instructions\SseMul.cs" />
     <Compile Include="Instructions\SubSS.cs" />
     <Compile Include="Instructions\Sub.cs" />
