@@ -80,17 +80,12 @@ namespace Mosa.Platform.x86.Instructions
 		/// Directs the division.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void DirectDivision(Context context);
-		/// <summary>
-		/// Divs instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
 		void Div(Context context);
 		/// <summary>
-		/// Us the div.
+		/// IDiv instruction
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void UDiv(Context context);
+		void IDiv(Context context);
 		/// <summary>
 		/// Sses the add.
 		/// </summary>

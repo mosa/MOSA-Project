@@ -150,7 +150,6 @@
     <Compile Include="Instructions\Div.cs" />
     <Compile Include="Instructions\Jmp.cs" />
     <Compile Include="Instructions\Lea.cs" />
-    <Compile Include="Instructions\UDiv.cs" />
     <Compile Include="Stages\SimplePeepholeOptimizationStage.cs" />
     <Compile Include="Stages\MemToMemConversionStage.cs" />
     <Compile Include="Instructions\Call.cs" />

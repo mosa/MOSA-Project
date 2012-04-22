@@ -231,10 +231,10 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Visitation function for <see cref="Instructions.IX86Visitor.Div"/> instructions.
+		/// Visitation function for <see cref="Instructions.IX86Visitor.IDiv"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void Instructions.IX86Visitor.Div(Context context)
+		void Instructions.IX86Visitor.IDiv(Context context)
 		{
 			Context before = context.InsertBefore();
 			before.SetInstruction(X86.Cdq);
@@ -251,7 +251,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for <see cref="Instructions.IX86Visitor.UDiv"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void Instructions.IX86Visitor.UDiv(Context context)
+		void Instructions.IX86Visitor.Div(Context context)
 		{
 			RegisterOperand edx = new RegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.EDX);
 			Context before = context.InsertBefore();
@@ -369,11 +369,6 @@ namespace Mosa.Platform.x86.Stages
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Instructions.IX86Visitor.Sbb(Context context) { }
-		/// <summary>
-		/// Visitation function for <see cref="Instructions.IX86Visitor.DirectDivision"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Instructions.IX86Visitor.DirectDivision(Context context) { }
 		/// <summary>
 		/// Visitation function for <see cref="Instructions.IX86Visitor.AddSs"/> instructions.
 		/// </summary>

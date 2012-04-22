@@ -69,7 +69,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="context">The context.</param>
 		public override void Visit(IX86Visitor visitor, Context context)
 		{
-			visitor.Div(context);
+			visitor.IDiv(context);
 		}
 
 		#endregion // Methods

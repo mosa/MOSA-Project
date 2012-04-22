@@ -670,7 +670,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.DivUInstruction(Context context)
 		{
-			context.ReplaceInstructionOnly(X86.UDiv);
+			context.ReplaceInstructionOnly(X86.Div);
 		}
 
 		/// <summary>
@@ -813,7 +813,7 @@ namespace Mosa.Platform.x86.Stages
 			context.AppendInstruction(IR.Instruction.ZeroExtendedMoveInstruction, eax, eaxSource);
 			context.AppendInstruction(X86.Mov, ecxSource, operand);
 			context.AppendInstruction(IR.Instruction.ZeroExtendedMoveInstruction, ecx, ecxSource);
-			context.AppendInstruction(X86.UDiv, eax, ecx);
+			context.AppendInstruction(X86.Div, eax, ecx);
 			context.AppendInstruction(X86.Mov, result, new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.EDX));
 		}
 
