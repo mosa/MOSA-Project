@@ -21,6 +21,7 @@
                     <include name="GeneralPurposeRegister.cs"/>
                     <include name="GenericAVR32Register.cs"/>
                     <include name="Instructions/BranchInstruction.cs"/>
+                    <include name="Intrinsic/Nop.cs"/>
                     <include name="IRTransformationStage.cs"/>
                     <include name="MachineCodeEmitter.cs"/>
                     <include name="Instructions/AdcInstruction.cs"/>
@@ -116,7 +117,6 @@
                     <include name="${outputDirectory}/Mosa.Compiler.Linker.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Metadata.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Framework.dll"/>
-                    <include name="${outputDirectory}/Mosa.Compiler.Platform.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.TypeSystem.dll"/>
 		</references>
 		<!-- supress warnings -->
