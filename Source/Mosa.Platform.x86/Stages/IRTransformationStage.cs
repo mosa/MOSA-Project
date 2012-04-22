@@ -671,6 +671,17 @@ namespace Mosa.Platform.x86.Stages
 		void IR.IIRVisitor.DivUInstruction(Context context)
 		{
 			context.ReplaceInstructionOnly(X86.Div);
+
+			RegisterOperand edx = new RegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.EDX);
+			Context before = context.InsertBefore();
+			before.SetInstruction(X86.Xor, edx, edx);
+
+			if (context.Operand1 is ConstantOperand)
+			{
+				RegisterOperand ecx = new RegisterOperand(context.Operand1.Type, GeneralPurposeRegister.ECX);
+				before.AppendInstruction(X86.Mov, ecx, context.Operand1);
+				context.Operand1 = ecx;
+			}
 		}
 
 		/// <summary>
@@ -707,7 +718,11 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.SubFInstruction(Context context)
 		{
-			HandleNonCommutativeOperation(context, X86.SseSub);
+			if (context.Result.Type.Type == CilElementType.R4)
+				HandleCommutativeOperation(context, X86.SubSS);
+			else
+				HandleCommutativeOperation(context, X86.SubSD);
+
 			ExtendToR8(context);
 		}
 
@@ -764,7 +779,12 @@ namespace Mosa.Platform.x86.Stages
 
 			newBlocks[1].AppendInstruction(X86.Cvtsi2sd, destination, edx);
 			newBlocks[1].AppendInstruction(X86.SseMul, destination, xmm5);
-			newBlocks[1].AppendInstruction(X86.SseSub, xmm6, destination);
+
+			if (destination.Type.Type == CilElementType.R4)
+				newBlocks[1].AppendInstruction(X86.SubSS, xmm6, destination);
+			else
+				newBlocks[1].AppendInstruction(X86.SubSD, xmm6, destination);
+	
 			newBlocks[1].AppendInstruction(X86.Movsd, destination, xmm6);
 			newBlocks[1].AppendInstruction(X86.Jmp, nextBlock.BasicBlock);
 			LinkBlocks(newBlocks[1], nextBlock);
@@ -806,6 +826,7 @@ namespace Mosa.Platform.x86.Stages
 			Operand operand = context.Operand1;
 			RegisterOperand eax = new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.EAX);
 			RegisterOperand ecx = new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.ECX);
+			RegisterOperand edx = new RegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.EDX);
 			RegisterOperand eaxSource = new RegisterOperand(result.Type, GeneralPurposeRegister.EAX);
 			RegisterOperand ecxSource = new RegisterOperand(operand.Type, GeneralPurposeRegister.ECX);
 
@@ -813,7 +834,10 @@ namespace Mosa.Platform.x86.Stages
 			context.AppendInstruction(IR.Instruction.ZeroExtendedMoveInstruction, eax, eaxSource);
 			context.AppendInstruction(X86.Mov, ecxSource, operand);
 			context.AppendInstruction(IR.Instruction.ZeroExtendedMoveInstruction, ecx, ecxSource);
+
+			context.AppendInstruction(X86.Xor, edx, edx);
 			context.AppendInstruction(X86.Div, eax, ecx);
+
 			context.AppendInstruction(X86.Mov, result, new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.EDX));
 		}
 

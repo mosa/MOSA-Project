@@ -248,21 +248,11 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Visitation function for <see cref="Instructions.IX86Visitor.UDiv"/> instructions.
+		/// Visitation function for <see cref="Instructions.IX86Visitor.Div"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Instructions.IX86Visitor.Div(Context context)
 		{
-			RegisterOperand edx = new RegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.EDX);
-			Context before = context.InsertBefore();
-			before.SetInstruction(X86.Xor, edx, edx);
-
-			if (context.Operand1 is ConstantOperand)
-			{
-				RegisterOperand ecx = new RegisterOperand(context.Operand1.Type, GeneralPurposeRegister.ECX);
-				before.AppendInstruction(X86.Mov, ecx, context.Operand1);
-				context.Operand1 = ecx;
-			}
 		}
 
 		/// <summary>
@@ -325,10 +315,15 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context"></param>
 		void Instructions.IX86Visitor.Lea(Context context) { }
 		/// <summary>
-		/// Visitation function for <see cref="Instructions.IX86Visitor.SseSub"/> instructions.
+		/// Visitation function for <see cref="Instructions.IX86Visitor.SubSD"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void Instructions.IX86Visitor.SseSub(Context context) { }
+		void Instructions.IX86Visitor.SubSD(Context context) { }
+		/// <summary>
+		/// Visitation function for <see cref="Instructions.IX86Visitor.SubSS"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Instructions.IX86Visitor.SubSS(Context context) { }
 		/// <summary>
 		/// Visitation function for <see cref="Instructions.IX86Visitor.DirectCompare"/> instructions.
 		/// </summary>

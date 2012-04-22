@@ -87,15 +87,20 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="context">The context.</param>
 		void IDiv(Context context);
 		/// <summary>
-		/// Sses the add.
+		/// AddSs instruction
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void AddSs(Context context);
 		/// <summary>
-		/// Sses the sub.
+		/// SubSS instruction
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void SseSub(Context context);
+		void SubSS(Context context);
+		/// <summary>
+		/// SubSD instruction
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void SubSD(Context context);
 		/// <summary>
 		/// Sses the mul.
 		/// </summary>

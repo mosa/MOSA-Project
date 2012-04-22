@@ -175,7 +175,11 @@ namespace Mosa.Platform.x86
 		/// <summary>
 		/// 
 		/// </summary>
-		public static readonly SseSub SseSub = new SseSub();
+		public static readonly SubSS SubSS = new SubSS();
+		/// <summary>
+		/// 
+		/// </summary>
+		public static readonly SubSD SubSD = new SubSD();
 		/// <summary>
 		/// 
 		/// </summary>

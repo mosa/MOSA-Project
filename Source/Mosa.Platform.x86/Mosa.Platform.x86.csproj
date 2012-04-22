@@ -93,6 +93,7 @@
     </Compile>
     <Compile Include="BaseTransformationStage.cs" />
     <Compile Include="Instructions\AddSD.cs" />
+    <Compile Include="Instructions\SubSD.cs" />
     <Compile Include="Stages\AddressModeConversionStage.cs" />
     <Compile Include="ControlRegister.cs" />
     <Compile Include="Stages\ExceptionVectorStage.cs" />
@@ -224,7 +225,7 @@
     <Compile Include="Instructions\AddSS.cs" />
     <Compile Include="Instructions\SseDiv.cs" />
     <Compile Include="Instructions\SseMul.cs" />
-    <Compile Include="Instructions\SseSub.cs" />
+    <Compile Include="Instructions\SubSS.cs" />
     <Compile Include="Instructions\Sub.cs" />
     <Compile Include="Instructions\ThreeOperandInstruction.cs" />
     <Compile Include="Instructions\TwoOperandInstruction.cs" />

@@ -16,12 +16,11 @@ namespace Mosa.Platform.x86.Instructions
 	/// <summary>
 	/// Intermediate representation of an SSE based subtraction instruction.
 	/// </summary>
-	public sealed class SseSub : TwoOperandInstruction
+	public sealed class SubSD : TwoOperandInstruction
 	{
 		#region Data Members
 
-		private static readonly OpCode F = new OpCode(new byte[] { 0xF3, 0x0F, 0x5C });
-		private static readonly OpCode I = new OpCode(new byte[] { 0xF2, 0x0F, 0x5C });
+		private static readonly OpCode opcode = new OpCode(new byte[] { 0xF2, 0x0F, 0x5C });
 
 		#endregion // Data Members
 
@@ -35,9 +34,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-			if (source.Type.Type == CilElementType.R4)
-				return F;
-			return I;
+			return opcode;
 		}
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.
@@ -46,7 +43,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="context">The context.</param>
 		public override void Visit(IX86Visitor visitor, Context context)
 		{
-			visitor.SseSub(context);
+			visitor.SubSD(context);
 		}
 
 		#endregion // Methods
