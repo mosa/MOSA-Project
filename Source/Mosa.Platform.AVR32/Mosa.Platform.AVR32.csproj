@@ -90,7 +90,6 @@
     <Compile Include="BaseTransformationStage.cs" />
     <Compile Include="DefaultCallingConvention.cs" />
     <Compile Include="GeneralPurposeRegister.cs" />
-    <Compile Include="GenericAVR32Register.cs" />
     <Compile Include="Instructions\BranchInstruction.cs" />
     <Compile Include="Intrinsic\Nop.cs" />
     <Compile Include="IRTransformationStage.cs" />

@@ -54,11 +54,11 @@ namespace Mosa.Platform.x86
 		/// <summary>
 		/// Expands the given invoke instruction to perform the method call.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="context">The context.</param>
 		/// <returns>
 		/// A single instruction or an array of instructions, which appropriately represent the method call.
 		/// </returns>
-		void ICallingConvention.MakeCall(Context ctx)
+		void ICallingConvention.MakeCall(Context context)
 		{
 			/*
 			 * Calling convention is right-to-left, pushed on the stack. Return value in EAX for integral
@@ -66,30 +66,30 @@ namespace Mosa.Platform.x86
 			 * of a type, the this argument is moved to ECX right before the call.
 			 */
 
-			Operand invokeTarget = ctx.Operand1;
-			Operand result = ctx.Result;
+			Operand invokeTarget = context.Operand1;
+			Operand result = context.Result;
 
-			Stack<Operand> operands = BuildOperandStack(ctx);
+			Stack<Operand> operands = BuildOperandStack(context);
 
 			int stackSize = CalculateStackSizeForParameters(operands);
 
-			ctx.SetInstruction(X86.Nop);
+			context.SetInstruction(X86.Nop);
 
-			ReserveStackSizeForCall(ctx, stackSize);
-
-			if (stackSize != 0)
-			{
-				PushOperands(ctx, operands, stackSize);
-			}
-
-			ctx.AppendInstruction(X86.Call, null, invokeTarget);
+			ReserveStackSizeForCall(context, stackSize);
 
 			if (stackSize != 0)
 			{
-				FreeStackAfterCall(ctx, stackSize);
+				PushOperands(context, operands, stackSize);
 			}
 
-			CleanupReturnValue(ctx, result);
+			context.AppendInstruction(X86.Call, null, invokeTarget);
+
+			if (stackSize != 0)
+			{
+				FreeStackAfterCall(context, stackSize);
+			}
+
+			CleanupReturnValue(context, result);
 		}
 
 		private Stack<Operand> BuildOperandStack(Context ctx)
@@ -288,9 +288,9 @@ namespace Mosa.Platform.x86
 		/// Requests the calling convention to create an appropriate move instruction to populate the return
 		/// value of a method.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="context">The context.</param>
 		/// <param name="operand">The operand, that's holding the return value.</param>
-		void ICallingConvention.MoveReturnValue(Context ctx, Operand operand)
+		void ICallingConvention.MoveReturnValue(Context context, Operand operand)
 		{
 			int size, alignment;
 			architecture.GetTypeRequirements(operand.Type, out size, out alignment);
@@ -298,19 +298,12 @@ namespace Mosa.Platform.x86
 			// FIXME: Do not issue a move, if the operand is already the destination register
 			if (size == 4 || size == 2 || size == 1)
 			{
-				ctx.SetInstruction(X86.Mov, new RegisterOperand(operand.Type, GeneralPurposeRegister.EAX), operand);
+				context.SetInstruction(X86.Mov, new RegisterOperand(operand.Type, GeneralPurposeRegister.EAX), operand);
 				return;
 			}
 			else if (size == 8 && (operand.Type.Type == CilElementType.R4 || operand.Type.Type == CilElementType.R8))
 			{
-
-				if (!(operand is MemoryOperand))
-				{
-					// Move the operand to memory by prepending an instruction
-				}
-
-				// BUG: Return values are in FP0, not XMM#0
-				ctx.SetInstruction(X86.Mov, new RegisterOperand(operand.Type, SSE2Register.XMM0), operand);
+				context.SetInstruction(X86.Mov, new RegisterOperand(operand.Type, SSE2Register.XMM0), operand);
 				return;
 			}
 			else if (size == 8 && (operand.Type.Type == CilElementType.I8 || operand.Type.Type == CilElementType.U8))
@@ -321,8 +314,8 @@ namespace Mosa.Platform.x86
 				LongOperandTransformationStage.SplitLongOperand(operand, out opL, out opH);
 
 				// Like Win32: EDX:EAX
-				ctx.SetInstruction(X86.Mov, new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.EAX), opL);
-				ctx.AppendInstruction(X86.Mov, new RegisterOperand(HighType, GeneralPurposeRegister.EDX), opH);
+				context.SetInstruction(X86.Mov, new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.EAX), opL);
+				context.AppendInstruction(X86.Mov, new RegisterOperand(HighType, GeneralPurposeRegister.EDX), opH);
 
 				return;
 			}

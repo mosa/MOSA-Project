@@ -39,13 +39,18 @@ namespace Mosa.Compiler.Framework.IR
 		/// 
 		/// </summary>
 		public static BreakInstruction BreakInstruction = new BreakInstruction();
-
+		/// <summary>
+		/// 
+		/// </summary>
 		public static readonly DivFInstruction DivFInstruction = new DivFInstruction();
-
+		/// <summary>
+		/// 
+		/// </summary>
 		public static readonly DivSInstruction DivSInstruction = new DivSInstruction();
-
+		/// <summary>
+		/// 
+		/// </summary>
 		public static readonly DivUInstruction DivUInstruction = new DivUInstruction();
-
 		/// <summary>
 		/// 
 		/// </summary>
@@ -118,13 +123,18 @@ namespace Mosa.Compiler.Framework.IR
 		/// 
 		/// </summary>
 		public static PrologueInstruction PrologueInstruction = new PrologueInstruction();
-
+		/// <summary>
+		/// 
+		/// </summary>
 		public static readonly RemFInstruction RemFInstruction = new RemFInstruction();
-
+		/// <summary>
+		/// 
+		/// </summary>
 		public static readonly RemSInstruction RemSInstruction = new RemSInstruction();
-
+		/// <summary>
+		/// 
+		/// </summary>
 		public static readonly RemUInstruction RemUInstruction = new RemUInstruction();
-
 		/// <summary>
 		/// 
 		/// </summary>
@@ -145,11 +155,17 @@ namespace Mosa.Compiler.Framework.IR
 		/// 
 		/// </summary>
 		public static StoreInstruction StoreInstruction = new StoreInstruction();
-
+		/// <summary>
+		/// 
+		/// </summary>
 		public static readonly SubFInstruction SubFInstruction = new SubFInstruction();
-
+		/// <summary>
+		/// 
+		/// </summary>
 		public static readonly SubSInstruction SubSInstruction = new SubSInstruction();
-
+		/// <summary>
+		/// 
+		/// </summary>
 		public static readonly SubUInstruction SubUInstruction = new SubUInstruction();
 		/// <summary>
 		/// 

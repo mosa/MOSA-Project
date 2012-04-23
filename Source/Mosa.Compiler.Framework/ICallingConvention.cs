@@ -39,9 +39,9 @@ namespace Mosa.Compiler.Framework
 		/// Requests the calling convention to create an appropriate move instruction to populate the return
 		/// value of a method.
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="context">The context.</param>
 		/// <param name="operand">The operand, that's holding the return value.</param>
-		void MoveReturnValue(Context ctx, Operand operand);
+		void MoveReturnValue(Context context, Operand operand);
 
 		/// <summary>
 		/// Retrieves the offset of the first local variable from the stack frame start.

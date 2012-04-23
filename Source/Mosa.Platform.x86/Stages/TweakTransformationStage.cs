@@ -112,14 +112,6 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Visitation function for <see cref="Instructions.IX86Visitor.In"/> instructions.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Instructions.IX86Visitor.In(Context context)
-		{
-		}
-
-		/// <summary>
 		/// Visitation function for <see cref="Instructions.IX86Visitor.Movsx"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
@@ -138,22 +130,6 @@ namespace Mosa.Platform.x86.Stages
 					context.AppendInstruction(X86.Mov, result, ecx);
 				}
 			}
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="context"></param>
-		void Instructions.IX86Visitor.Movss(Context context)
-		{
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
-		/// <param name="context"></param>
-		void Instructions.IX86Visitor.Movsd(Context context)
-		{
 		}
 
 		/// <summary>
@@ -306,14 +282,10 @@ namespace Mosa.Platform.x86.Stages
 			Operand destinationOperand = context.Operand1;
 
 			if (destinationOperand == null)
-			{
 				return;
-			}
 
 			if (destinationOperand is SymbolOperand)
-			{
 				return;
-			}
 
 			if (!(destinationOperand is RegisterOperand))
 			{
@@ -330,6 +302,11 @@ namespace Mosa.Platform.x86.Stages
 
 		#region IX86Visitor - Unused
 
+		/// <summary>
+		/// Visitation function for <see cref="Instructions.IX86Visitor.In"/> instructions.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Instructions.IX86Visitor.In(Context context) { }
 		/// <summary>
 		/// Visitation function for <see cref="Instructions.IX86Visitor.Lea"/> instructions.
 		/// </summary>
@@ -665,6 +642,16 @@ namespace Mosa.Platform.x86.Stages
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Instructions.IX86Visitor.Out(Context context) { }
+		/// <summary>
+		/// Movsses instruction
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Instructions.IX86Visitor.Movss(Context context) { }
+		/// <summary>
+		/// Movsds instruction
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Instructions.IX86Visitor.Movsd(Context context) { }
 
 		#endregion // IX86Visitor - Unused
 

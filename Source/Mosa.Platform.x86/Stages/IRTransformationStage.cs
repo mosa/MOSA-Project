@@ -504,13 +504,12 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.PrologueInstruction(Context context)
 		{
-			SigType I = BuiltInSigType.Int32;
-			RegisterOperand eax = new RegisterOperand(I, GeneralPurposeRegister.EAX);
-			RegisterOperand ebx = new RegisterOperand(I, GeneralPurposeRegister.EBX);
-			RegisterOperand ecx = new RegisterOperand(I, GeneralPurposeRegister.ECX);
-			RegisterOperand ebp = new RegisterOperand(I, GeneralPurposeRegister.EBP);
-			RegisterOperand esp = new RegisterOperand(I, GeneralPurposeRegister.ESP);
-			RegisterOperand edi = new RegisterOperand(I, GeneralPurposeRegister.EDI);
+			RegisterOperand eax = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.EAX);
+			RegisterOperand ebx = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.EBX);
+			RegisterOperand ecx = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.ECX);
+			RegisterOperand ebp = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.EBP);
+			RegisterOperand esp = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.ESP);
+			RegisterOperand edi = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.EDI);
 
 			/* 
 			 * If you want to stop at the header of an emitted function, just set breakFlag 
@@ -536,7 +535,7 @@ namespace Mosa.Platform.x86.Stages
 			// mov ebp, esp
 			context.AppendInstruction(X86.Mov, ebp, esp);
 			// sub esp, localsSize
-			context.AppendInstruction(X86.Sub, esp, new ConstantOperand(I, -stackSize));
+			context.AppendInstruction(X86.Sub, esp, new ConstantOperand(BuiltInSigType.Int32, -stackSize));
 			// push ebx
 			context.AppendInstruction(X86.Push, null, ebx);
 
@@ -544,8 +543,8 @@ namespace Mosa.Platform.x86.Stages
 			context.AppendInstruction(X86.Push, null, edi);
 			context.AppendInstruction(X86.Mov, edi, esp);
 			context.AppendInstruction(X86.Push, null, ecx);
-			context.AppendInstruction(X86.Add, edi, new ConstantOperand(I, 8));
-			context.AppendInstruction(X86.Mov, ecx, new ConstantOperand(I, -(int)(stackSize >> 2)));
+			context.AppendInstruction(X86.Add, edi, new ConstantOperand(BuiltInSigType.Int32, 8));
+			context.AppendInstruction(X86.Mov, ecx, new ConstantOperand(BuiltInSigType.Int32, -(int)(stackSize >> 2)));
 			context.AppendInstruction(X86.Xor, eax, eax);
 			context.AppendInstruction(X86.Rep);
 			context.AppendInstruction(X86.Stos);
@@ -557,7 +556,7 @@ namespace Mosa.Platform.x86.Stages
 				methodCompiler.Method.Signature.ReturnType.Type != CilElementType.U8)
 			{
 				// push edx
-				context.AppendInstruction(X86.Push, null, new RegisterOperand(I, GeneralPurposeRegister.EDX));
+				context.AppendInstruction(X86.Push, null, new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.EDX));
 			}
 
 		}
@@ -568,11 +567,10 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.EpilogueInstruction(Context context)
 		{
-			SigType I = BuiltInSigType.IntPtr;
-			RegisterOperand ebx = new RegisterOperand(I, GeneralPurposeRegister.EBX);
-			RegisterOperand edx = new RegisterOperand(I, GeneralPurposeRegister.EDX);
-			RegisterOperand ebp = new RegisterOperand(I, GeneralPurposeRegister.EBP);
-			RegisterOperand esp = new RegisterOperand(I, GeneralPurposeRegister.ESP);
+			RegisterOperand ebx = new RegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.EBX);
+			RegisterOperand edx = new RegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.EDX);
+			RegisterOperand ebp = new RegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.EBP);
+			RegisterOperand esp = new RegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.ESP);
 
 			// Load EDX for int32 return values
 			if (methodCompiler.Method.Signature.ReturnType.Type != CilElementType.I8 &&
@@ -586,7 +584,7 @@ namespace Mosa.Platform.x86.Stages
 			// pop ebx
 			context.SetInstruction(X86.Pop, ebx);
 			// add esp, -localsSize
-			context.AppendInstruction(X86.Add, esp, new ConstantOperand(I, -stackSize));
+			context.AppendInstruction(X86.Add, esp, new ConstantOperand(BuiltInSigType.IntPtr, -stackSize));
 			// pop ebp
 			context.AppendInstruction(X86.Pop, ebp);
 			// ret
