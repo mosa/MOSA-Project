@@ -55,6 +55,12 @@ namespace Mosa.Compiler.Framework
 			map |= ((ulong)1 << register.Index);
 		}
 
+		public void Set(Register[] registers)
+		{
+			foreach (Register register in registers)
+				Set(register);
+		}
+
 		public void Clear(Register register)
 		{
 			if (register == null)

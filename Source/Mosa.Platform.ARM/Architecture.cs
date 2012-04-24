@@ -23,7 +23,7 @@ namespace Mosa.Platform.ARM
 	/// </summary>
 	public class Architecture : BasicArchitecture
 	{
-		
+
 		/// <summary>
 		/// Gets a value indicating whether this architecture is little-endian.
 		/// </summary>
@@ -39,11 +39,6 @@ namespace Mosa.Platform.ARM
 		/// The type of the elf machine.
 		/// </value>
 		public override ushort ElfMachineType { get { return 0; } }
-
-		/// <summary>
-		/// Holds the calling conversion
-		/// </summary>
-		private ICallingConvention callingConvention;
 
 		/// <summary>
 		/// Defines the register set of the target architecture.
@@ -62,7 +57,7 @@ namespace Mosa.Platform.ARM
 		/// Initializes a new instance of the <see cref="Architecture"/> class.
 		/// </summary>
 		/// <param name="architectureFeatures">The features this architecture supports.</param>
-		private Architecture(ArchitectureFeatureFlags architectureFeatures)
+		private Architecture(ArchitectureFeatureFlags architectureFeatures) 
 		{
 			this.architectureFeatures = architectureFeatures;
 		}
@@ -89,12 +84,15 @@ namespace Mosa.Platform.ARM
 		/// </summary>
 		public override Register StackFrameRegister
 		{
-			get
-			{
-				// TODO
-				return null;
-				// return GeneralPurposeRegister.EBP; 
-			}
+			get { return null; /* GeneralPurposeRegister.EBP; */ }
+		}
+
+		/// <summary>
+		/// Returns the stack pointer register of the architecture.
+		/// </summary>
+		public override Register StackPointerRegister
+		{
+			get { return null; /* GeneralPurposeRegister.ESP; */ }
 		}
 
 		/// <summary>
@@ -180,21 +178,6 @@ namespace Mosa.Platform.ARM
 			//methodCompilerPipeline.InsertAfterLast<CodeGenerationStage>(
 			//    new ExceptionLayoutStage()
 			//);
-		}
-
-		/// <summary>
-		/// Retrieves a calling convention object for the requested calling convention.
-		/// </summary>
-		/// <returns>
-		/// An instance of <see cref="ICallingConvention"/>.
-		/// </returns>
-		public override ICallingConvention GetCallingConvention()
-		{
-			// TODO
-			if (callingConvention == null)
-				callingConvention = null; // new DefaultCallingConvention(this);
-
-			return callingConvention;
 		}
 
 		/// <summary>

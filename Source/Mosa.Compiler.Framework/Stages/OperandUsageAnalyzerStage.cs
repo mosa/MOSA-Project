@@ -27,15 +27,6 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		void IMethodCompilerStage.Run()
 		{
-			// Create a list of end blocks
-			List<BasicBlock> endBlocks = new List<BasicBlock>();
-
-			foreach (var block in this.basicBlocks)
-			{
-				if (block.NextBlocks.Count == 0)
-					endBlocks.Add(block);
-			}
-
 			foreach (var block in this.basicBlocks)
 			{
 				for (var ctx = new Context(instructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
@@ -53,7 +44,6 @@ namespace Mosa.Compiler.Framework.Stages
 					if (outputRegisters.HasValue)
 					{
 						Debug.Write("\t OUTPUT: ");
-
 						Debug.Write(GetRegisterNames(outputRegisters));
 					}
 
@@ -68,7 +58,6 @@ namespace Mosa.Compiler.Framework.Stages
 						Debug.WriteLine("");
 					}
 
-					continue;
 				}
 			}
 		}

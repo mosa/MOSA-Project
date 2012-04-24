@@ -96,6 +96,7 @@
     <Compile Include="Operands\StackSizeOperand.cs" />
     <Compile Include="StackLayout.cs" />
     <Compile Include="RegisterMap.cs" />
+    <Compile Include="Stages\RegisterUsageAnalyzerStage.cs" />
     <Compile Include="Stages\OperandUsageAnalyzerStage.cs" />
     <Compile Include="Stages\SingleUseMarkerStage.cs" />
     <Compile Include="IPlugSystem.cs" />

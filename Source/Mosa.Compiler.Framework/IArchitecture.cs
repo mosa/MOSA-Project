@@ -61,6 +61,11 @@ namespace Mosa.Compiler.Framework
 		Register StackFrameRegister { get; }
 
 		/// <summary>
+		/// Returns the stack pointer register of the architecture. 
+		/// </summary>
+		Register StackPointerRegister { get; }
+
+		/// <summary>
 		/// Gets the name of the platform.
 		/// </summary>
 		/// <value>
@@ -76,7 +81,7 @@ namespace Mosa.Compiler.Framework
 		/// Retrieves an object, that is able to translate the CIL calling convention into appropriate native code.
 		/// </summary>
 		/// <returns>A calling convention implementation.</returns>
-		ICallingConvention GetCallingConvention();
+		ICallingConvention CallingConvention { get; }
 
 		/// <summary>
 		/// Requests the architecture to add architecture specific compilation stages to the assembly compiler 

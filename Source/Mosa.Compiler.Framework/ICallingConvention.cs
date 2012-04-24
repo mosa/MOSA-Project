@@ -7,6 +7,9 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
+using System.Collections.Generic;
+using Mosa.Compiler.Metadata;
+using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.Framework.Operands;
 
 namespace Mosa.Compiler.Framework
@@ -52,5 +55,12 @@ namespace Mosa.Compiler.Framework
 		/// Retrieves the offset of the first parameter From the stack frame start.
 		/// </summary>
 		int OffsetOfFirstParameter { get; }
+
+		/// <summary>
+		/// Gets the return registers.
+		/// </summary>
+		/// <param name="returnType">Type of the return.</param>
+		/// <returns></returns>
+		Register[] GetReturnRegisters(CilElementType returnType);
 	}
 }

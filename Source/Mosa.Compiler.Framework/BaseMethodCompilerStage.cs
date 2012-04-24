@@ -109,7 +109,7 @@ namespace Mosa.Compiler.Framework
 			typeModule = compiler.Method.Module;
 			typeSystem = compiler.TypeSystem;
 			typeLayout = compiler.TypeLayout;
-			callingConvention = architecture.GetCallingConvention();
+			callingConvention = architecture.CallingConvention;
 
 			architecture.GetTypeRequirements(BuiltInSigType.IntPtr, out nativePointerSize, out nativePointerAlignment);
 		}

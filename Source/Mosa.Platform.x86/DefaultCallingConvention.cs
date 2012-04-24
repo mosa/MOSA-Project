@@ -30,6 +30,11 @@ namespace Mosa.Platform.x86
 		/// </summary>
 		private IArchitecture architecture;
 
+		private static readonly Register[] ReturnRegistersVoid = new Register[] { };
+		private static readonly Register[] ReturnRegisters32Bit = new Register[] { GeneralPurposeRegister.EAX };
+		private static readonly Register[] ReturnRegisters64Bit = new Register[] { GeneralPurposeRegister.EAX, GeneralPurposeRegister.EDX };
+		private static readonly Register[] ReturnRegistersFP = new Register[] { SSE2Register.XMM0 };
+
 		#endregion // Data members
 
 		#region Construction
@@ -364,6 +369,25 @@ namespace Mosa.Platform.x86
 				 */
 				return 8;
 			}
+		}
+
+		/// <summary>
+		/// Gets the return registers.
+		/// </summary>
+		/// <param name="returnType">Type of the return.</param>
+		/// <returns></returns>
+		Register[] ICallingConvention.GetReturnRegisters(CilElementType returnType)
+		{
+			if (returnType == CilElementType.Void)
+				return ReturnRegistersVoid;
+
+			if (returnType == CilElementType.R4 || returnType == CilElementType.R8)
+				return ReturnRegistersFP;
+
+			if (returnType == CilElementType.I8 || returnType == CilElementType.U8)
+				return ReturnRegisters64Bit;
+
+			return ReturnRegisters32Bit;
 		}
 
 		#endregion // ICallingConvention Members

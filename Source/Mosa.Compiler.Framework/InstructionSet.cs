@@ -26,23 +26,23 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// 
 		/// </summary>
-		private int _size;
+		private int size;
 		/// <summary>
 		/// 
 		/// </summary>
-		private int[] _next;
+		private int[] next;
 		/// <summary>
 		/// 
 		/// </summary>
-		private int[] _prev;
+		private int[] prev;
 		/// <summary>
 		/// 
 		/// </summary>
-		private int _used;
+		private int used;
 		/// <summary>
 		/// 
 		/// </summary>
-		private int _free;
+		private int free;
 
 		#endregion // Data Members
 
@@ -51,46 +51,22 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the size.
 		/// </summary>
-		public int Size
-		{
-			get
-			{
-				return _size;
-			}
-		}
+		public int Size { get { return size; } }
 
 		/// <summary>
 		/// Gets the amount of used indices.
 		/// </summary>
-		public int Used
-		{
-			get
-			{
-				return _used;
-			}
-		}
+		public int Used { get { return used; } }
 
 		/// <summary>
 		/// Gets an array that maps each index to its corresponding next index.
 		/// </summary>
-		public int[] NextArray
-		{
-			get
-			{
-				return _next;
-			}
-		}
+		public int[] NextArray { get { return next; } }
 
 		/// <summary>
 		/// Gets an array that maps each index to its corresponding previous index.
 		/// </summary>
-		public int[] PrevArray
-		{
-			get
-			{
-				return _prev;
-			}
-		}
+		public int[] PrevArray { get { return prev; } }
 
 		#endregion
 
@@ -102,9 +78,9 @@ namespace Mosa.Compiler.Framework
 		/// <param name="size">The size.</param>
 		public InstructionSet(int size)
 		{
-			_size = size;
-			_next = new int[size];
-			_prev = new int[size + 2];
+			this.size = size;
+			this.next = new int[size];
+			this.prev = new int[size + 2];
 			Data = new InstructionData[size];
 			Clear();
 		}
@@ -114,19 +90,19 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public void Clear()
 		{
-			_used = 0;
-			_free = 0;
+			used = 0;
+			free = 0;
 
 			// setup free list
-			for (int i = 0; i < _size; i++)
+			for (int i = 0; i < size; i++)
 			{
-				_next[i] = _prev[i + 2] = i + 1;
+				next[i] = prev[i + 2] = i + 1;
 			}
 
-			_prev[0] = -1;
-			_prev[1] = 0;
+			prev[0] = -1;
+			prev[1] = 0;
 
-			_next[_size - 1] = -1;
+			next[size - 1] = -1;
 		}
 
 		/// <summary>
@@ -139,22 +115,22 @@ namespace Mosa.Compiler.Framework
 			int[] newPrev = new int[newsize + 2];
 			InstructionData[] newInstructions = new InstructionData[newsize];
 
-			_next.CopyTo(newNext, 0);
-			_prev.CopyTo(newPrev, 0);
+			next.CopyTo(newNext, 0);
+			prev.CopyTo(newPrev, 0);
 
-			for (int i = _size; i < newsize; ++i)
+			for (int i = size; i < newsize; ++i)
 			{
 				newNext[i] = i + 1;
 				newPrev[i] = i - 1;
 			}
 			newNext[newsize - 1] = -1;
-			newPrev[_size] = -1;
+			newPrev[size] = -1;
 			Data.CopyTo(newInstructions, 0);
 
-			_free = _size;
-			_next = newNext;
-			_prev = newPrev;
-			_size = newsize;
+			free = size;
+			next = newNext;
+			prev = newPrev;
+			size = newsize;
 			Data = newInstructions;
 		}
 
@@ -165,13 +141,13 @@ namespace Mosa.Compiler.Framework
 		/// <returns>The next index, or -1.</returns>
 		public int Next(int index)
 		{
-			Debug.Assert(index < _size);
+			Debug.Assert(index < size);
 			Debug.Assert(index >= 0);
 
-			if (_used == 0)
+			if (used == 0)
 				return -1;
 
-			return _next[index];
+			return next[index];
 		}
 
 		/// <summary>
@@ -181,13 +157,13 @@ namespace Mosa.Compiler.Framework
 		/// <returns>The previous index, or -1.</returns>
 		public int Previous(int index)
 		{
-			Debug.Assert(index < _size);
+			Debug.Assert(index < size);
 			Debug.Assert(index >= 0);
 
-			if (_used == 0)
+			if (used == 0)
 				return -1;
 
-			return _prev[index];
+			return prev[index];
 		}
 
 		/// <summary>
@@ -197,26 +173,26 @@ namespace Mosa.Compiler.Framework
 		public int GetFree()
 		{
 			//	if (_used + 1 == _size)
-			if (_free == -1)
-				Resize(_size * 2);
+			if (free == -1)
+				Resize(size * 2);
 
-			int free = _free;
+			int beforeFree = free;
 
-			_free = _next[free];
+			free = next[beforeFree];
 			//_prev[_free] = -1;
-			Data[free].Ignore = true;
-			_used++;
+			Data[beforeFree].Ignore = true;
+			used++;
 
-			return free;
+			return beforeFree;
 		}
 
 		private void AddFree(int index)
 		{
-			_next[index] = _free;
-			_prev[index] = -1;
+			next[index] = free;
+			prev[index] = -1;
 			//_prev[_free] = index;
-			_free = index;
-			_used--;
+			free = index;
+			used--;
 		}
 
 		/// <summary>
@@ -227,8 +203,8 @@ namespace Mosa.Compiler.Framework
 		{
 			int free = GetFree();
 
-			_next[free] = -1;
-			_prev[free] = -1;
+			next[free] = -1;
+			prev[free] = -1;
 
 			return free;
 		}
@@ -248,13 +224,13 @@ namespace Mosa.Compiler.Framework
 			int free = GetFree();
 
 			// setup new node's prev/next
-			_next[free] = _next[index];
-			_prev[free] = index;
+			next[free] = next[index];
+			prev[free] = index;
 
-			_next[index] = free;
+			next[index] = free;
 
-			if (_next[free] >= 0)
-				_prev[_next[free]] = free;
+			if (next[free] >= 0)
+				prev[next[free]] = free;
 
 			return free;
 		}
@@ -268,17 +244,17 @@ namespace Mosa.Compiler.Framework
 		{
 			if (index == -1)
 				return CreateRoot();
-			
+
 			int free = GetFree();
 
 			// setup new node's prev/next
-			_next[free] = index;
-			_prev[free] = _prev[index];
+			next[free] = index;
+			prev[free] = prev[index];
 
-			if (_prev[index] >= 0)
-				_next[_prev[index]] = free;
+			if (prev[index] >= 0)
+				next[prev[index]] = free;
 
-			_prev[index] = free;
+			prev[index] = free;
 
 			return free;
 		}
@@ -289,22 +265,22 @@ namespace Mosa.Compiler.Framework
 		/// <param name="index">The index.</param>
 		public void Remove(int index)
 		{
-			if (_next[index] < 0)
+			if (next[index] < 0)
 			{
-				if (_prev[index] >= 0)
-					_next[_prev[index]] = -1;
+				if (prev[index] >= 0)
+					next[prev[index]] = -1;
 				AddFree(index);
 				return;
 			}
-			if (_prev[index] < 0)
+			if (prev[index] < 0)
 			{
-				_prev[_next[index]] = -1;
+				prev[next[index]] = -1;
 				AddFree(index);
 				return;
 			}
 
-			_next[_prev[index]] = _next[index];
-			_prev[_next[index]] = _prev[index];
+			next[prev[index]] = next[index];
+			prev[next[index]] = prev[index];
 
 			AddFree(index);
 		}
@@ -316,11 +292,11 @@ namespace Mosa.Compiler.Framework
 		/// <param name="index">The index.</param>
 		public void SliceBefore(int index)
 		{
-			if (_prev[index] == -1)
+			if (prev[index] == -1)
 				return;
 
-			_next[_prev[index]] = -1;
-			_prev[index] = -1;
+			next[prev[index]] = -1;
+			prev[index] = -1;
 		}
 
 		/// <summary>
@@ -329,11 +305,11 @@ namespace Mosa.Compiler.Framework
 		/// <param name="index">The index.</param>
 		public void SliceAfter(int index)
 		{
-			if (_next[index] == -1)
+			if (next[index] == -1)
 				return;
 
-			_prev[_next[index]] = -1;
-			_next[index] = -1;
+			prev[next[index]] = -1;
+			next[index] = -1;
 		}
 
 		#endregion // Methods

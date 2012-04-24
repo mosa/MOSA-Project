@@ -43,11 +43,6 @@ namespace Mosa.Platform.AVR32
 		public override ushort ElfMachineType { get { return 0x18AD; } }
 
 		/// <summary>
-		/// Holds the calling conversion
-		/// </summary>
-		private ICallingConvention callingConvention;
-
-		/// <summary>
 		/// Defines the register set of the target architecture.
 		/// </summary>
 		private static readonly Register[] Registers = new Register[]
@@ -107,6 +102,14 @@ namespace Mosa.Platform.AVR32
 		public override Register StackFrameRegister
 		{
 			get { return GeneralPurposeRegister.R8; }
+		}
+
+		/// <summary>
+		/// Returns the stack pointer register of the architecture.
+		/// </summary>
+		public override Register StackPointerRegister
+		{
+			get { return GeneralPurposeRegister.SP; }
 		}
 
 		/// <summary>
@@ -190,21 +193,6 @@ namespace Mosa.Platform.AVR32
 			//methodCompilerPipeline.InsertAfterLast<CodeGenerationStage>(
 			//    new ExceptionLayoutStage()
 			//);
-		}
-
-		/// <summary>
-		/// Retrieves a calling convention object for the requested calling convention.
-		/// </summary>
-		/// <returns>
-		/// An instance of <see cref="ICallingConvention"/>.
-		/// </returns>
-		public override ICallingConvention GetCallingConvention()
-		{
-			if (callingConvention == null)
-				callingConvention = new DefaultCallingConvention(this);
-
-			return callingConvention;
-
 		}
 
 		/// <summary>

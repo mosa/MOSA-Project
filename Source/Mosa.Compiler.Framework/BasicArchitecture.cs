@@ -19,6 +19,12 @@ namespace Mosa.Compiler.Framework
 	/// </summary>
 	public abstract class BasicArchitecture : IArchitecture
 	{
+
+		/// <summary>
+		/// Holds the calling conversion
+		/// </summary>
+		public ICallingConvention CallingConvention { get; protected set; }
+
 		/// <summary>
 		/// Gets a value indicating whether this architecture is little-endian.
 		/// </summary>
@@ -54,6 +60,11 @@ namespace Mosa.Compiler.Framework
 		/// Gets the stack frame register of the architecture.
 		/// </summary>
 		public abstract Register StackFrameRegister { get; }
+
+		/// <summary>
+		/// Returns the stack pointer register of the architecture.
+		/// </summary>
+		public abstract Register StackPointerRegister { get; }
 
 		/// <summary>
 		/// Gets the name of the platform.
@@ -103,12 +114,6 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="methodPipeline">The pipeline of the method compiler to add architecture specific compilation stages to.</param>
 		public abstract void ExtendMethodCompilerPipeline(CompilerPipeline methodPipeline);
-
-		/// <summary>
-		/// Retrieves an object, that is able to translate the CIL calling convention into appropriate native code.
-		/// </summary>
-		/// <returns>A calling convention implementation.</returns>
-		public abstract ICallingConvention GetCallingConvention();
 
 		/// <summary>
 		/// Gets the type memory requirements.

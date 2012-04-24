@@ -41,11 +41,6 @@ namespace Mosa.Platform.x64
 		public override ushort ElfMachineType { get { return 3; } }
 
 		/// <summary>
-		/// Holds the calling conversion
-		/// </summary>
-		private ICallingConvention callingConvention;
-
-		/// <summary>
 		/// Defines the register set of the target architecture.
 		/// </summary>
 		private static readonly Register[] Registers = new Register[]
@@ -89,12 +84,15 @@ namespace Mosa.Platform.x64
 		/// </summary>
 		public override Register StackFrameRegister
 		{
-			get
-			{
-				// TODO
-				return null;
-				// return GeneralPurposeRegister.EBP; 
-			}
+			get { return null; /* GeneralPurposeRegister.EBP;*/ }
+		}
+
+		/// <summary>
+		/// Retrieves the stack pointer register of the x64.
+		/// </summary>
+		public override Register StackPointerRegister
+		{
+			get { return null; /* GeneralPurposeRegister.ESP;*/ }
 		}
 
 		/// <summary>
@@ -180,21 +178,6 @@ namespace Mosa.Platform.x64
 			//methodCompilerPipeline.InsertAfterLast<CodeGenerationStage>(
 			//    new ExceptionLayoutStage()
 			//);
-		}
-
-		/// <summary>
-		/// Retrieves a calling convention object for the requested calling convention.
-		/// </summary>
-		/// <returns>
-		/// An instance of <see cref="ICallingConvention"/>.
-		/// </returns>
-		public override ICallingConvention GetCallingConvention()
-		{
-			// TODO
-			if (callingConvention == null)
-				callingConvention = null; // new DefaultCallingConvention(this);
-
-			return callingConvention;
 		}
 
 		/// <summary>
