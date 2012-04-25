@@ -89,6 +89,11 @@ namespace Mosa.Compiler.Framework
 			map |= bitmap64Bit.map;
 		}
 
+		public void Xor(RegisterBitmap bitmap64Bit)
+		{
+			map ^= bitmap64Bit.map;
+		}
+
 		public void Not()
 		{
 			map = ~map;
@@ -119,6 +124,9 @@ namespace Mosa.Compiler.Framework
 			return ((IEnumerable<int>)this).GetEnumerator();
 		}
 
-
+		public override string ToString()
+		{
+			return Convert.ToString((long)map, 2).PadLeft(64, '0');
+		}
 	}
 }

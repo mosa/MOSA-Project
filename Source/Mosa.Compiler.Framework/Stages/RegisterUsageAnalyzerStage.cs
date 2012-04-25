@@ -27,6 +27,7 @@ namespace Mosa.Compiler.Framework.Stages
 		protected RegisterBitmap[] top;
 		protected RegisterBitmap[] bottom;
 		protected BitArray analyzed;
+		protected BitArray traversed;
 		protected RegisterBitmap[] usage;
 
 		/// <summary>
@@ -34,29 +35,77 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		void IMethodCompilerStage.Run()
 		{
+			//Debug.WriteLine("METHOD: " + this.methodCompiler.Method.ToString());
+
 			// Initialize arrays
 			top = new RegisterBitmap[basicBlocks.Count];
 			bottom = new RegisterBitmap[basicBlocks.Count];
 			analyzed = new BitArray(basicBlocks.Count);
+			traversed = new BitArray(basicBlocks.Count);
 			usage = new RegisterBitmap[instructionSet.Size];
 
 			foreach (var block in basicBlocks)
 			{
-				if (block.NextBlocks.Count == 0)
-					AnalyzeBlock(block);
+				AnalyzeBlock(block);
 			}
 
 
+			Debug.WriteLine("METHOD: " + this.methodCompiler.Method.ToString());
+			Debug.WriteLine(string.Empty);
 
+			var registers = new Dictionary<int, Register>();
+			foreach (var register in architecture.RegisterSet)
+				registers.Add(register.Index, register);
+
+			for (int l = 0; l < 3; l++)
+			{
+				Debug.Write("[");
+				for (int r = 15; r >= 0; r--)
+				{
+					Debug.Write(registers[r].ToString()[l]);
+				}
+
+				Debug.WriteLine("]");
+			}
+
+			foreach (var block in this.basicBlocks)
+			{
+				Debug.WriteLine(String.Format("Block #{0} - Label L_{1:X4}", block.Index, block.Label));
+
+				Debug.WriteLine("[" + top[block.Sequence].ToString().Substring(64 - 16, 16) + "] Top");
+
+				for (var ctx = new Context(instructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
+				{
+					if (ctx.Ignore || ctx.Instruction == null)
+						continue;
+
+					Debug.Write("[" + usage[ctx.Index].ToString().Substring(64 - 16, 16) + "] ");
+					Debug.WriteLine(String.Format("L_{0:X4}: {1}", ctx.Label, ctx.Instruction.ToString(ctx)));
+				}
+
+				Debug.WriteLine("[" + bottom[block.Sequence].ToString().Substring(64 - 16, 16) + "] Bottom");
+				Debug.WriteLine(string.Empty);
+			}
+
+			return;
 		}
-
 		protected void AnalyzeBlock(BasicBlock block)
 		{
-			if (analyzed.Get(block.Index))
+			if (analyzed.Get(block.Sequence))
 				return;
 
+			//Debug.WriteLine(String.Format("Analyzing Block #{0} - Label L_{1:X4}", block.Index, block.Label));
+
+			traversed.Set(block.Sequence, true);
+
+			// Analysis all child blocks first
 			foreach (BasicBlock nextBlock in block.NextBlocks)
-				AnalyzeBlock(nextBlock);
+			{
+				if (!traversed.Get(nextBlock.Sequence))
+					AnalyzeBlock(nextBlock);
+			}
+
+			//Debug.WriteLine(String.Format("Working Block #{0} - Label L_{1:X4}", block.Index, block.Label));
 
 			RegisterBitmap used = new RegisterBitmap();
 
@@ -73,10 +122,10 @@ namespace Mosa.Compiler.Framework.Stages
 			else
 			{
 				foreach (BasicBlock nextBlock in block.NextBlocks)
-					used.Or(top[nextBlock.Index]);
+					used.Or(top[nextBlock.Sequence]);
 			}
 
-			bottom[block.Index] = used;
+			bottom[block.Sequence] = used;
 
 			var ctx = new Context(instructionSet, block);
 			ctx.GotoLast();
@@ -84,20 +133,32 @@ namespace Mosa.Compiler.Framework.Stages
 			for (; ; ctx.GotoPrevious())
 			{
 				if (ctx.Ignore || ctx.Instruction == null)
-					continue;
+					if (ctx.IsFirstInstruction)
+						break;
+					else
+						continue;
 
-				RegisterBitmap inputRegisters = GetRegisterInputUsage(ctx);
+				RegisterBitmap inputRegisters = new RegisterBitmap();
+				RegisterBitmap outputRegisters = new RegisterBitmap();
 
-				// TODO: ADD MAGIC HERE
+				GetRegisterUsage(ctx, ref inputRegisters, ref outputRegisters);
 
-				usage[block.Index] = used;
+				RegisterBitmap assignment = inputRegisters;
+				assignment.Xor(outputRegisters);
+				assignment.Not();
+
+				used.And(assignment);
+
+				used.Or(inputRegisters);
+
+				usage[ctx.Index] = used;
 
 				if (ctx.IsFirstInstruction)
 					break;
 			}
 
-			top[block.Index] = used;
-			analyzed.Set(block.Index, true);
+			top[block.Sequence] = used;
+			analyzed.Set(block.Sequence, true);
 		}
 
 		protected RegisterBitmap GetRegisterInputUsage(Context context)

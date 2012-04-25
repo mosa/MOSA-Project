@@ -67,6 +67,7 @@ namespace Mosa.Tool.Compiler
 					//new ReverseBlockOrderStage(),	
 					new LocalCSE(),
 					new CodeGenerationStage(),
+					//new RegisterUsageAnalyzerStage(),
 				});
 		}
 

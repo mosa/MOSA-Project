@@ -62,6 +62,11 @@ namespace Mosa.Compiler.Framework
 			map[dest].And(map[src]);
 		}
 
+		public void Xor(int dest, int src)
+		{
+			map[dest].Xor(map[src]);
+		}
+
 		public void ClearAll(int index)
 		{
 			map[index].ClearAll();
