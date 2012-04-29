@@ -30,10 +30,11 @@ namespace Mosa.Platform.x86
 		/// </summary>
 		private IArchitecture architecture;
 
-		private static readonly Register[] ReturnRegistersVoid = new Register[] { };
-		private static readonly Register[] ReturnRegisters32Bit = new Register[] { GeneralPurposeRegister.EAX };
-		private static readonly Register[] ReturnRegisters64Bit = new Register[] { GeneralPurposeRegister.EAX, GeneralPurposeRegister.EDX };
-		private static readonly Register[] ReturnRegistersFP = new Register[] { SSE2Register.XMM0 };
+		private static readonly Register[] ReturnVoidRegisters = new Register[] { };
+		private static readonly Register[] Return32BitRegisters = new Register[] { GeneralPurposeRegister.EAX };
+		private static readonly Register[] Return64BitRegisters = new Register[] { GeneralPurposeRegister.EAX, GeneralPurposeRegister.EDX };
+		private static readonly Register[] ReturnFPRegisters = new Register[] { SSE2Register.XMM0 };
+		private static readonly Register[] CalleeSavedRegisters = new Register[] { GeneralPurposeRegister.EDX, GeneralPurposeRegister.EBX, GeneralPurposeRegister.EDI };
 
 		#endregion // Data members
 
@@ -372,6 +373,14 @@ namespace Mosa.Platform.x86
 		}
 
 		/// <summary>
+		/// Gets the callee saved registers.
+		/// </summary>
+		Register[] ICallingConvention.CalleeSavedRegisters
+		{
+			get { return CalleeSavedRegisters; }
+		}
+
+		/// <summary>
 		/// Gets the return registers.
 		/// </summary>
 		/// <param name="returnType">Type of the return.</param>
@@ -379,15 +388,15 @@ namespace Mosa.Platform.x86
 		Register[] ICallingConvention.GetReturnRegisters(CilElementType returnType)
 		{
 			if (returnType == CilElementType.Void)
-				return ReturnRegistersVoid;
+				return ReturnVoidRegisters;
 
 			if (returnType == CilElementType.R4 || returnType == CilElementType.R8)
-				return ReturnRegistersFP;
+				return ReturnFPRegisters;
 
 			if (returnType == CilElementType.I8 || returnType == CilElementType.U8)
-				return ReturnRegisters64Bit;
+				return Return64BitRegisters;
 
-			return ReturnRegisters32Bit;
+			return Return32BitRegisters;
 		}
 
 		#endregion // ICallingConvention Members

@@ -17,8 +17,8 @@ using Mosa.Compiler.Framework.Operands;
 using Mosa.Compiler.Framework.Platform;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
+using Mosa.Compiler.Framework.IR;
 using CIL = Mosa.Compiler.Framework.CIL;
-using IR = Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Platform.x86.Stages
 {
@@ -29,7 +29,7 @@ namespace Mosa.Platform.x86.Stages
 	/// This stage translates all 64-bit operations to appropriate 32-bit operations on
 	/// architectures without appropriate 64-bit integral operations.
 	/// </remarks>
-	public sealed class LongOperandTransformationStage : BaseTransformationStage, IR.IIRVisitor, IPlatformStage
+	public sealed class LongOperandTransformationStage : BaseTransformationStage, IIRVisitor, IPlatformStage
 	{
 
 		#region Utility Methods
@@ -203,7 +203,7 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[0].AppendInstruction(X86.Mov, ecx, op2H);
 			newBlocks[0].AppendInstruction(X86.Or, ecx, eax);
 			newBlocks[0].AppendInstruction(X86.Mov, ecx, op2L);
-			newBlocks[0].AppendInstruction(X86.Branch, IR.ConditionCode.NotEqual, newBlocks[2].BasicBlock);
+			newBlocks[0].AppendInstruction(X86.Branch, ConditionCode.NotEqual, newBlocks[2].BasicBlock);
 			newBlocks[0].AppendInstruction(X86.Jmp, newBlocks[1].BasicBlock);
 			LinkBlocks(newBlocks[0], newBlocks[1], newBlocks[2]);
 
@@ -279,7 +279,7 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[0].AppendInstruction(X86.Xor, edi, edi);
 			newBlocks[0].AppendInstruction(X86.Mov, eax, op1H);
 			newBlocks[0].AppendInstruction(X86.Or, eax, eax);
-			newBlocks[0].AppendInstruction(X86.Branch, IR.ConditionCode.GreaterOrEqual, newBlocks[2].BasicBlock);
+			newBlocks[0].AppendInstruction(X86.Branch, ConditionCode.GreaterOrEqual, newBlocks[2].BasicBlock);
 			newBlocks[0].AppendInstruction(X86.Jmp, newBlocks[1].BasicBlock);
 			LinkBlocks(newBlocks[0], newBlocks[1], newBlocks[2]);
 
@@ -307,7 +307,7 @@ namespace Mosa.Platform.x86.Stages
 			// mov     LOWORD(DVSR),edx
 			newBlocks[2].SetInstruction(X86.Mov, eax, op2H);
 			newBlocks[2].AppendInstruction(X86.Or, eax, eax);
-			newBlocks[2].AppendInstruction(X86.Branch, IR.ConditionCode.GreaterOrEqual, newBlocks[4].BasicBlock);
+			newBlocks[2].AppendInstruction(X86.Branch, ConditionCode.GreaterOrEqual, newBlocks[4].BasicBlock);
 			newBlocks[2].AppendInstruction(X86.Jmp, newBlocks[3].BasicBlock);
 			LinkBlocks(newBlocks[2], newBlocks[3], newBlocks[4]);
 
@@ -343,7 +343,7 @@ namespace Mosa.Platform.x86.Stages
 			// mov     edx,ebx         ; edx:eax <- quotient
 			// jmp     short L4        ; set sign, restore stack and return
 			newBlocks[4].SetInstruction(X86.Or, eax, eax);
-			newBlocks[4].AppendInstruction(X86.Branch, IR.ConditionCode.NotEqual, newBlocks[6].BasicBlock);
+			newBlocks[4].AppendInstruction(X86.Branch, ConditionCode.NotEqual, newBlocks[6].BasicBlock);
 			newBlocks[4].AppendInstruction(X86.Jmp, newBlocks[5].BasicBlock);
 			LinkBlocks(newBlocks[4], newBlocks[5], newBlocks[6]);
 
@@ -403,7 +403,7 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[7].AppendInstruction(X86.Shr, edx, new ConstantOperand(BuiltInSigType.Byte, 1));
 			newBlocks[7].AppendInstruction(X86.Rcr, eax, new ConstantOperand(BuiltInSigType.Byte, 1));
 			newBlocks[7].AppendInstruction(X86.Or, ebx, ebx);
-			newBlocks[7].AppendInstruction(X86.Branch, IR.ConditionCode.NotEqual, newBlocks[7].BasicBlock);
+			newBlocks[7].AppendInstruction(X86.Branch, ConditionCode.NotEqual, newBlocks[7].BasicBlock);
 			newBlocks[7].AppendInstruction(X86.Jmp, newBlocks[8].BasicBlock);
 			LinkBlocks(newBlocks[7], newBlocks[7], newBlocks[8]);
 
@@ -414,21 +414,21 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[8].AppendInstruction(X86.Mov, ueax, op2L);
 			newBlocks[8].AppendInstruction(X86.Mul, eax, esi);
 			newBlocks[8].AppendInstruction(X86.Add, edx, ecx);
-			newBlocks[8].AppendInstruction(X86.Branch, IR.ConditionCode.UnsignedLessThan, newBlocks[12].BasicBlock);
+			newBlocks[8].AppendInstruction(X86.Branch, ConditionCode.UnsignedLessThan, newBlocks[12].BasicBlock);
 			newBlocks[8].AppendInstruction(X86.Jmp, newBlocks[9].BasicBlock);
 			LinkBlocks(newBlocks[8], newBlocks[9], newBlocks[12]);
 
 			newBlocks[9].SetInstruction(X86.Cmp, null, edx, op1H);
-			newBlocks[9].AppendInstruction(X86.Branch, IR.ConditionCode.UnsignedGreaterThan, newBlocks[12].BasicBlock);
+			newBlocks[9].AppendInstruction(X86.Branch, ConditionCode.UnsignedGreaterThan, newBlocks[12].BasicBlock);
 			newBlocks[9].AppendInstruction(X86.Jmp, newBlocks[10].BasicBlock);
 			LinkBlocks(newBlocks[9], newBlocks[10], newBlocks[12]);
 
-			newBlocks[10].SetInstruction(X86.Branch, IR.ConditionCode.UnsignedLessThan, newBlocks[13].BasicBlock);
+			newBlocks[10].SetInstruction(X86.Branch, ConditionCode.UnsignedLessThan, newBlocks[13].BasicBlock);
 			newBlocks[10].AppendInstruction(X86.Jmp, newBlocks[11].BasicBlock);
 			LinkBlocks(newBlocks[10], newBlocks[11], newBlocks[13]);
 
 			newBlocks[11].SetInstruction(X86.Cmp, null, ueax, op1L);
-			newBlocks[11].AppendInstruction(X86.Branch, IR.ConditionCode.UnsignedLessOrEqual, newBlocks[13].BasicBlock);
+			newBlocks[11].AppendInstruction(X86.Branch, ConditionCode.UnsignedLessOrEqual, newBlocks[13].BasicBlock);
 			newBlocks[11].AppendInstruction(X86.Jmp, newBlocks[12].BasicBlock);
 			LinkBlocks(newBlocks[11], newBlocks[12], newBlocks[13]);
 
@@ -454,7 +454,7 @@ namespace Mosa.Platform.x86.Stages
 			//        neg     eax
 			//        sbb     edx,0
 			newBlocks[14].SetInstruction(X86.Dec, edi);
-			newBlocks[14].AppendInstruction(X86.Branch, IR.ConditionCode.NotEqual, newBlocks[16].BasicBlock);
+			newBlocks[14].AppendInstruction(X86.Branch, ConditionCode.NotEqual, newBlocks[16].BasicBlock);
 			newBlocks[14].AppendInstruction(X86.Jmp, newBlocks[15].BasicBlock);
 			LinkBlocks(newBlocks[14], newBlocks[15], newBlocks[16]);
 
@@ -513,7 +513,7 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[0].AppendInstruction(X86.Xor, edi, edi);
 			newBlocks[0].AppendInstruction(X86.Mov, eax, op1H);
 			newBlocks[0].AppendInstruction(X86.Or, eax, eax);
-			newBlocks[0].AppendInstruction(X86.Branch, IR.ConditionCode.GreaterOrEqual, newBlocks[2].BasicBlock);
+			newBlocks[0].AppendInstruction(X86.Branch, ConditionCode.GreaterOrEqual, newBlocks[2].BasicBlock);
 			newBlocks[0].AppendInstruction(X86.Jmp, newBlocks[1].BasicBlock);
 			LinkBlocks(newBlocks[0], newBlocks[2], newBlocks[1]);
 
@@ -540,7 +540,7 @@ namespace Mosa.Platform.x86.Stages
 			// mov     LOWORD(DVSR),edx
 			newBlocks[2].AppendInstruction(X86.Mov, eax, op2H);
 			newBlocks[2].AppendInstruction(X86.Or, eax, eax);
-			newBlocks[2].AppendInstruction(X86.Branch, IR.ConditionCode.GreaterOrEqual, newBlocks[4].BasicBlock);
+			newBlocks[2].AppendInstruction(X86.Branch, ConditionCode.GreaterOrEqual, newBlocks[4].BasicBlock);
 			newBlocks[2].AppendInstruction(X86.Jmp, newBlocks[3].BasicBlock);
 			LinkBlocks(newBlocks[2], newBlocks[4], newBlocks[3]);
 
@@ -574,7 +574,7 @@ namespace Mosa.Platform.x86.Stages
 			// mov     edx,ebx         ; edx:eax <- quotient
 			// jmp     short L4        ; set sign, restore stack and return
 			newBlocks[4].AppendInstruction(X86.Or, eax, eax);
-			newBlocks[4].AppendInstruction(X86.Branch, IR.ConditionCode.NotEqual, newBlocks[6].BasicBlock);
+			newBlocks[4].AppendInstruction(X86.Branch, ConditionCode.NotEqual, newBlocks[6].BasicBlock);
 			newBlocks[4].AppendInstruction(X86.Jmp, newBlocks[5].BasicBlock);
 			LinkBlocks(newBlocks[4], newBlocks[6], newBlocks[5]);
 
@@ -587,7 +587,7 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[5].AppendInstruction(X86.Mov, eax, edx);
 			newBlocks[5].AppendInstruction(X86.Xor, edx, edx);
 			newBlocks[5].AppendInstruction(X86.Dec, edi);
-			newBlocks[5].AppendInstruction(X86.Branch, IR.ConditionCode.NotSigned, newBlocks[14].BasicBlock);
+			newBlocks[5].AppendInstruction(X86.Branch, ConditionCode.NotSigned, newBlocks[14].BasicBlock);
 			newBlocks[5].AppendInstruction(X86.Jmp, newBlocks[15].BasicBlock);
 			LinkBlocks(newBlocks[5], newBlocks[14], newBlocks[15]);
 
@@ -646,7 +646,7 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[7].AppendInstruction(X86.Shr, edx, new ConstantOperand(BuiltInSigType.Byte, 1));
 			newBlocks[7].AppendInstruction(X86.Rcr, eax, new ConstantOperand(BuiltInSigType.Byte, 1));
 			newBlocks[7].AppendInstruction(X86.Or, ebx, ebx);
-			newBlocks[7].AppendInstruction(X86.Branch, IR.ConditionCode.NotEqual, newBlocks[7].BasicBlock);
+			newBlocks[7].AppendInstruction(X86.Branch, ConditionCode.NotEqual, newBlocks[7].BasicBlock);
 			newBlocks[7].AppendInstruction(X86.Jmp, newBlocks[8].BasicBlock);
 			LinkBlocks(newBlocks[7], newBlocks[7], newBlocks[8]);
 
@@ -656,21 +656,21 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[8].AppendInstruction(X86.Xchg, ecx, eax);
 			newBlocks[8].AppendInstruction(X86.Mul, eax, op2L);
 			newBlocks[8].AppendInstruction(X86.Add, edx, ecx);
-			newBlocks[8].AppendInstruction(X86.Branch, IR.ConditionCode.UnsignedLessThan, newBlocks[12].BasicBlock);
+			newBlocks[8].AppendInstruction(X86.Branch, ConditionCode.UnsignedLessThan, newBlocks[12].BasicBlock);
 			newBlocks[8].AppendInstruction(X86.Jmp, newBlocks[9].BasicBlock);
 			LinkBlocks(newBlocks[8], newBlocks[12], newBlocks[9]);
 
 			newBlocks[9].AppendInstruction(X86.Cmp, null, edx, op1H);
-			newBlocks[9].AppendInstruction(X86.Branch, IR.ConditionCode.UnsignedGreaterThan, newBlocks[12].BasicBlock);
+			newBlocks[9].AppendInstruction(X86.Branch, ConditionCode.UnsignedGreaterThan, newBlocks[12].BasicBlock);
 			newBlocks[9].AppendInstruction(X86.Jmp, newBlocks[10].BasicBlock);
 			LinkBlocks(newBlocks[9], newBlocks[12], newBlocks[10]);
 
-			newBlocks[10].AppendInstruction(X86.Branch, IR.ConditionCode.UnsignedLessThan, newBlocks[13].BasicBlock);
+			newBlocks[10].AppendInstruction(X86.Branch, ConditionCode.UnsignedLessThan, newBlocks[13].BasicBlock);
 			newBlocks[10].AppendInstruction(X86.Jmp, newBlocks[11].BasicBlock);
 			LinkBlocks(newBlocks[10], newBlocks[13], newBlocks[11]);
 
 			newBlocks[11].AppendInstruction(X86.Cmp, null, eax, op1L);
-			newBlocks[11].AppendInstruction(X86.Branch, IR.ConditionCode.UnsignedLessOrEqual, newBlocks[13].BasicBlock);
+			newBlocks[11].AppendInstruction(X86.Branch, ConditionCode.UnsignedLessOrEqual, newBlocks[13].BasicBlock);
 			newBlocks[11].AppendInstruction(X86.Jmp, newBlocks[12].BasicBlock);
 			LinkBlocks(newBlocks[11], newBlocks[13], newBlocks[12]);
 
@@ -689,7 +689,7 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[13].AppendInstruction(X86.Sub, eax, op1L);
 			newBlocks[13].AppendInstruction(X86.Sbb, edx, op1H);
 			newBlocks[13].AppendInstruction(X86.Dec, edi);
-			newBlocks[13].AppendInstruction(X86.Branch, IR.ConditionCode.NotSigned, newBlocks[15].BasicBlock);
+			newBlocks[13].AppendInstruction(X86.Branch, ConditionCode.NotSigned, newBlocks[15].BasicBlock);
 			newBlocks[13].AppendInstruction(X86.Jmp, newBlocks[14].BasicBlock);
 			LinkBlocks(newBlocks[13], newBlocks[14], newBlocks[15]);
 
@@ -737,7 +737,7 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[0].AppendInstruction(X86.Push, null, ebx);
 			newBlocks[0].AppendInstruction(X86.Mov, eax, op2H);
 			newBlocks[0].AppendInstruction(X86.Or, eax, eax);
-			newBlocks[0].AppendInstruction(X86.Branch, IR.ConditionCode.NotEqual, newBlocks[2].BasicBlock); // JNZ
+			newBlocks[0].AppendInstruction(X86.Branch, ConditionCode.NotEqual, newBlocks[2].BasicBlock); // JNZ
 			newBlocks[0].AppendInstruction(X86.Jmp, newBlocks[1].BasicBlock);
 			LinkBlocks(newBlocks[0], newBlocks[2], newBlocks[1]);
 
@@ -766,7 +766,7 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[3].AppendInstruction(X86.Shr, edx, new ConstantOperand(BuiltInSigType.Byte, 1));
 			newBlocks[3].AppendInstruction(X86.Rcr, eax, new ConstantOperand(BuiltInSigType.Byte, 1));
 			newBlocks[3].AppendInstruction(X86.Or, ecx, ecx);
-			newBlocks[3].AppendInstruction(X86.Branch, IR.ConditionCode.NotEqual, newBlocks[3].BasicBlock); // JNZ
+			newBlocks[3].AppendInstruction(X86.Branch, ConditionCode.NotEqual, newBlocks[3].BasicBlock); // JNZ
 			newBlocks[3].AppendInstruction(X86.Jmp, newBlocks[4].BasicBlock);
 			LinkBlocks(newBlocks[3], newBlocks[3], newBlocks[4]);
 
@@ -777,21 +777,21 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[4].AppendInstruction(X86.Mov, eax, op2L);
 			newBlocks[4].AppendInstruction(X86.Mul, eax, esi);
 			newBlocks[4].AppendInstruction(X86.Add, edx, ecx);
-			newBlocks[4].AppendInstruction(X86.Branch, IR.ConditionCode.UnsignedLessThan, newBlocks[8].BasicBlock);
+			newBlocks[4].AppendInstruction(X86.Branch, ConditionCode.UnsignedLessThan, newBlocks[8].BasicBlock);
 			newBlocks[4].AppendInstruction(X86.Jmp, newBlocks[5].BasicBlock);
 			LinkBlocks(newBlocks[4], newBlocks[8], newBlocks[5]);
 
 			newBlocks[5].AppendInstruction(X86.Cmp, null, edx, op1H);
-			newBlocks[5].AppendInstruction(X86.Branch, IR.ConditionCode.UnsignedGreaterThan, newBlocks[8].BasicBlock);
+			newBlocks[5].AppendInstruction(X86.Branch, ConditionCode.UnsignedGreaterThan, newBlocks[8].BasicBlock);
 			newBlocks[5].AppendInstruction(X86.Jmp, newBlocks[6].BasicBlock);
 			LinkBlocks(newBlocks[5], newBlocks[8], newBlocks[6]);
 
-			newBlocks[6].AppendInstruction(X86.Branch, IR.ConditionCode.UnsignedLessThan, newBlocks[9].BasicBlock);
+			newBlocks[6].AppendInstruction(X86.Branch, ConditionCode.UnsignedLessThan, newBlocks[9].BasicBlock);
 			newBlocks[6].AppendInstruction(X86.Jmp, newBlocks[7].BasicBlock);
 			LinkBlocks(newBlocks[6], newBlocks[9], newBlocks[7]);
 
 			newBlocks[7].AppendInstruction(X86.Cmp, null, eax, op1L);
-			newBlocks[7].AppendInstruction(X86.Branch, IR.ConditionCode.UnsignedLessOrEqual, newBlocks[9].BasicBlock);
+			newBlocks[7].AppendInstruction(X86.Branch, ConditionCode.UnsignedLessOrEqual, newBlocks[9].BasicBlock);
 			newBlocks[7].AppendInstruction(X86.Jmp, newBlocks[8].BasicBlock);
 			LinkBlocks(newBlocks[7], newBlocks[9], newBlocks[8]);
 
@@ -855,7 +855,7 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[0].AppendInstruction(X86.Push, null, ebx);
 			newBlocks[0].AppendInstruction(X86.Mov, eax, op2H);
 			newBlocks[0].AppendInstruction(X86.Or, eax, eax);
-			newBlocks[0].AppendInstruction(X86.Branch, IR.ConditionCode.NotEqual, newBlocks[2].BasicBlock);
+			newBlocks[0].AppendInstruction(X86.Branch, ConditionCode.NotEqual, newBlocks[2].BasicBlock);
 			newBlocks[0].AppendInstruction(X86.Jmp, newBlocks[1].BasicBlock);
 			LinkBlocks(newBlocks[0], newBlocks[2], newBlocks[1]);
 
@@ -884,7 +884,7 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[3].AppendInstruction(X86.Shr, edx, new ConstantOperand(BuiltInSigType.Byte, 1));
 			newBlocks[3].AppendInstruction(X86.Rcr, eax, new ConstantOperand(BuiltInSigType.Byte, 1));
 			newBlocks[3].AppendInstruction(X86.Or, ecx, ecx);
-			newBlocks[3].AppendInstruction(X86.Branch, IR.ConditionCode.NotEqual, newBlocks[3].BasicBlock);
+			newBlocks[3].AppendInstruction(X86.Branch, ConditionCode.NotEqual, newBlocks[3].BasicBlock);
 			newBlocks[3].AppendInstruction(X86.Jmp, newBlocks[4].BasicBlock);
 			LinkBlocks(newBlocks[3], newBlocks[3], newBlocks[4]);
 
@@ -894,21 +894,21 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[4].AppendInstruction(X86.Xchg, ecx, eax);
 			newBlocks[4].AppendInstruction(X86.Mul, eax, op2L);
 			newBlocks[4].AppendInstruction(X86.Add, edx, ecx);
-			newBlocks[4].AppendInstruction(X86.Branch, IR.ConditionCode.UnsignedLessThan, newBlocks[8].BasicBlock);
+			newBlocks[4].AppendInstruction(X86.Branch, ConditionCode.UnsignedLessThan, newBlocks[8].BasicBlock);
 			newBlocks[4].AppendInstruction(X86.Jmp, newBlocks[5].BasicBlock);
 			LinkBlocks(newBlocks[4], newBlocks[8], newBlocks[5]);
 
 			newBlocks[5].AppendInstruction(X86.Cmp, null, edx, op1H);
-			newBlocks[5].AppendInstruction(X86.Branch, IR.ConditionCode.UnsignedGreaterThan, newBlocks[8].BasicBlock);
+			newBlocks[5].AppendInstruction(X86.Branch, ConditionCode.UnsignedGreaterThan, newBlocks[8].BasicBlock);
 			newBlocks[5].AppendInstruction(X86.Jmp, newBlocks[6].BasicBlock);
 			LinkBlocks(newBlocks[5], newBlocks[8], newBlocks[6]);
 
-			newBlocks[6].AppendInstruction(X86.Branch, IR.ConditionCode.UnsignedLessThan, newBlocks[9].BasicBlock);
+			newBlocks[6].AppendInstruction(X86.Branch, ConditionCode.UnsignedLessThan, newBlocks[9].BasicBlock);
 			newBlocks[6].AppendInstruction(X86.Jmp, newBlocks[7].BasicBlock);
 			LinkBlocks(newBlocks[6], newBlocks[6], newBlocks[7]);
 
 			newBlocks[7].AppendInstruction(X86.Cmp, null, eax, op1L);
-			newBlocks[7].AppendInstruction(X86.Branch, IR.ConditionCode.UnsignedLessOrEqual, newBlocks[9].BasicBlock);
+			newBlocks[7].AppendInstruction(X86.Branch, ConditionCode.UnsignedLessOrEqual, newBlocks[9].BasicBlock);
 			newBlocks[7].AppendInstruction(X86.Jmp, newBlocks[3].BasicBlock);
 			LinkBlocks(newBlocks[7], newBlocks[9], newBlocks[3]);
 
@@ -958,17 +958,17 @@ namespace Mosa.Platform.x86.Stages
 			// depends only on the high order bit of edx).
 			context.SetInstruction(X86.Jmp, newBlocks[0].BasicBlock);
 			newBlocks[0].AppendInstruction(X86.Push, null, ecx);
-			newBlocks[0].AppendInstruction(IR.Instruction.LogicalAndInstruction, count, count, new ConstantOperand(BuiltInSigType.Int32, 0x3F));
+			newBlocks[0].AppendInstruction(Instruction.LogicalAndInstruction, count, count, new ConstantOperand(BuiltInSigType.Int32, 0x3F));
 			newBlocks[0].AppendInstruction(X86.Mov, ecx, count);
 			newBlocks[0].AppendInstruction(X86.Mov, edx, op1H);
 			newBlocks[0].AppendInstruction(X86.Mov, eax, op1L);
 			newBlocks[0].AppendInstruction(X86.Cmp, null, ecx, new ConstantOperand(BuiltInSigType.Int32, 64));
-			newBlocks[0].AppendInstruction(X86.Branch, IR.ConditionCode.UnsignedGreaterOrEqual, newBlocks[4].BasicBlock);
+			newBlocks[0].AppendInstruction(X86.Branch, ConditionCode.UnsignedGreaterOrEqual, newBlocks[4].BasicBlock);
 			newBlocks[0].AppendInstruction(X86.Jmp, newBlocks[1].BasicBlock);
 			LinkBlocks(newBlocks[0], newBlocks[4], newBlocks[1]);
 
 			newBlocks[1].AppendInstruction(X86.Cmp, null, ecx, new ConstantOperand(BuiltInSigType.Byte, 32));
-			newBlocks[1].AppendInstruction(X86.Branch, IR.ConditionCode.UnsignedGreaterOrEqual, newBlocks[3].BasicBlock);
+			newBlocks[1].AppendInstruction(X86.Branch, ConditionCode.UnsignedGreaterOrEqual, newBlocks[3].BasicBlock);
 			newBlocks[1].AppendInstruction(X86.Jmp, newBlocks[2].BasicBlock);
 			LinkBlocks(newBlocks[1], newBlocks[3], newBlocks[2]);
 
@@ -1026,17 +1026,17 @@ namespace Mosa.Platform.x86.Stages
 			// depends only on the high order bit of edx).
 			context.SetInstruction(X86.Jmp, newBlocks[0].BasicBlock);
 			newBlocks[0].AppendInstruction(X86.Push, null, ecx);
-			newBlocks[0].AppendInstruction(IR.Instruction.LogicalAndInstruction, count, count, new ConstantOperand(BuiltInSigType.Int32, 0x3F));
+			newBlocks[0].AppendInstruction(Instruction.LogicalAndInstruction, count, count, new ConstantOperand(BuiltInSigType.Int32, 0x3F));
 			newBlocks[0].AppendInstruction(X86.Mov, ecx, count);
 			newBlocks[0].AppendInstruction(X86.Mov, edx, op1H);
 			newBlocks[0].AppendInstruction(X86.Mov, eax, op1L);
 			newBlocks[0].AppendInstruction(X86.Cmp, null, ecx, new ConstantOperand(BuiltInSigType.Int32, 64));
-			newBlocks[0].AppendInstruction(X86.Branch, IR.ConditionCode.UnsignedGreaterOrEqual, newBlocks[4].BasicBlock);
+			newBlocks[0].AppendInstruction(X86.Branch, ConditionCode.UnsignedGreaterOrEqual, newBlocks[4].BasicBlock);
 			newBlocks[0].AppendInstruction(X86.Jmp, newBlocks[1].BasicBlock);
 			LinkBlocks(newBlocks[0], newBlocks[4], newBlocks[1]);
 
 			newBlocks[1].AppendInstruction(X86.Cmp, null, ecx, new ConstantOperand(BuiltInSigType.Int32, 32));
-			newBlocks[1].AppendInstruction(X86.Branch, IR.ConditionCode.UnsignedGreaterOrEqual, newBlocks[3].BasicBlock);
+			newBlocks[1].AppendInstruction(X86.Branch, ConditionCode.UnsignedGreaterOrEqual, newBlocks[3].BasicBlock);
 			newBlocks[1].AppendInstruction(X86.Jmp, newBlocks[2].BasicBlock);
 			LinkBlocks(newBlocks[1], newBlocks[3], newBlocks[2]);
 
@@ -1092,17 +1092,17 @@ namespace Mosa.Platform.x86.Stages
 			// depends only on the high order bit of edx).
 			context.SetInstruction(X86.Jmp, newBlocks[0].BasicBlock);
 			newBlocks[0].AppendInstruction(X86.Push, null, ecx);
-			newBlocks[0].AppendInstruction(IR.Instruction.LogicalAndInstruction, count, count, new ConstantOperand(BuiltInSigType.Int32, 0x3F));
+			newBlocks[0].AppendInstruction(Instruction.LogicalAndInstruction, count, count, new ConstantOperand(BuiltInSigType.Int32, 0x3F));
 			newBlocks[0].AppendInstruction(X86.Mov, ecx, count);
 			newBlocks[0].AppendInstruction(X86.Mov, edx, op1H);
 			newBlocks[0].AppendInstruction(X86.Mov, eax, op1L);
 			newBlocks[0].AppendInstruction(X86.Cmp, null, ecx, new ConstantOperand(BuiltInSigType.Int32, 64));
-			newBlocks[0].AppendInstruction(X86.Branch, IR.ConditionCode.UnsignedGreaterOrEqual, newBlocks[4].BasicBlock);
+			newBlocks[0].AppendInstruction(X86.Branch, ConditionCode.UnsignedGreaterOrEqual, newBlocks[4].BasicBlock);
 			newBlocks[0].AppendInstruction(X86.Jmp, newBlocks[1].BasicBlock);
 			LinkBlocks(newBlocks[0], newBlocks[4], newBlocks[1]);
 
 			newBlocks[1].AppendInstruction(X86.Cmp, null, ecx, new ConstantOperand(BuiltInSigType.Int32, 32));
-			newBlocks[1].AppendInstruction(X86.Branch, IR.ConditionCode.UnsignedGreaterOrEqual, newBlocks[3].BasicBlock);
+			newBlocks[1].AppendInstruction(X86.Branch, ConditionCode.UnsignedGreaterOrEqual, newBlocks[3].BasicBlock);
 			newBlocks[1].AppendInstruction(X86.Jmp, newBlocks[2].BasicBlock);
 			LinkBlocks(newBlocks[3], newBlocks[2], newBlocks[1]);
 
@@ -1161,8 +1161,8 @@ namespace Mosa.Platform.x86.Stages
 			SplitLongOperand(context.Result, out op0L, out op0H);
 			SplitLongOperand(context.Operand1, out op1L, out op1H);
 
-			context.SetInstruction(IR.Instruction.LogicalNotInstruction, op0H, op1H);
-			context.AppendInstruction(IR.Instruction.LogicalNotInstruction, op0L, op1L);
+			context.SetInstruction(Instruction.LogicalNotInstruction, op0H, op1H);
+			context.AppendInstruction(Instruction.LogicalNotInstruction, op0L, op1L);
 		}
 
 		/// <summary>
@@ -1266,35 +1266,35 @@ namespace Mosa.Platform.x86.Stages
 			switch (op1.Type.Type)
 			{
 				case CilElementType.Boolean:
-					context.SetInstruction(IR.Instruction.ZeroExtendedMoveInstruction, op0L, op1L);
-					context.AppendInstruction(IR.Instruction.LogicalXorInstruction, op0H, op0H, op0H);
+					context.SetInstruction(Instruction.ZeroExtendedMoveInstruction, op0L, op1L);
+					context.AppendInstruction(Instruction.LogicalXorInstruction, op0H, op0H, op0H);
 					break;
 
 				case CilElementType.U1:
-					context.SetInstruction(IR.Instruction.ZeroExtendedMoveInstruction, eax, op1L);
+					context.SetInstruction(Instruction.ZeroExtendedMoveInstruction, eax, op1L);
 					context.AppendInstruction(X86.Cdq);
 					context.AppendInstruction(X86.Mov, op0L, eax);
-					context.AppendInstruction(IR.Instruction.LogicalXorInstruction, op0H, op0H, op0H);
+					context.AppendInstruction(Instruction.LogicalXorInstruction, op0H, op0H, op0H);
 					break;
 
 				case CilElementType.U2: goto case CilElementType.U1;
 
 				case CilElementType.I4:
-					context.SetInstruction(IR.Instruction.ZeroExtendedMoveInstruction, eax, op1L);
+					context.SetInstruction(Instruction.ZeroExtendedMoveInstruction, eax, op1L);
 					context.AppendInstruction(X86.Xor, edx, edx);
 					context.AppendInstruction(X86.Mov, op0L, eax);
 					context.AppendInstruction(X86.Mov, op0H, edx);
 					break;
 				case CilElementType.U4:
-					context.SetInstruction(IR.Instruction.ZeroExtendedMoveInstruction, eax, op1L);
+					context.SetInstruction(Instruction.ZeroExtendedMoveInstruction, eax, op1L);
 					context.AppendInstruction(X86.Cdq);
 					context.AppendInstruction(X86.Mov, op0L, eax);
 					context.AppendInstruction(X86.Mov, op0H, edx);
 					break;
 
 				case CilElementType.U8:
-					context.SetInstruction(IR.Instruction.ZeroExtendedMoveInstruction, op0L, op1L);
-					context.SetInstruction(IR.Instruction.ZeroExtendedMoveInstruction, op0H, op1H);
+					context.SetInstruction(Instruction.ZeroExtendedMoveInstruction, op0L, op1L);
+					context.SetInstruction(Instruction.ZeroExtendedMoveInstruction, op0H, op1H);
 					break;
 
 				case CilElementType.R4:
@@ -1327,12 +1327,12 @@ namespace Mosa.Platform.x86.Stages
 			switch (op1.Type.Type)
 			{
 				case CilElementType.Boolean:
-					context.SetInstruction(IR.Instruction.ZeroExtendedMoveInstruction, op0L, op1);
-					context.AppendInstruction(IR.Instruction.LogicalXorInstruction, op0H, op0H, op0H);
+					context.SetInstruction(Instruction.ZeroExtendedMoveInstruction, op0L, op1);
+					context.AppendInstruction(Instruction.LogicalXorInstruction, op0H, op0H, op0H);
 					break;
 
 				case CilElementType.I1:
-					context.SetInstruction(IR.Instruction.SignExtendedMoveInstruction, eax, op1);
+					context.SetInstruction(Instruction.SignExtendedMoveInstruction, eax, op1);
 					context.AppendInstruction(X86.Cdq);
 					context.AppendInstruction(X86.Mov, op0L, eax);
 					context.AppendInstruction(X86.Mov, op0H, edx);
@@ -1352,10 +1352,10 @@ namespace Mosa.Platform.x86.Stages
 					break;
 
 				case CilElementType.U1:
-					context.SetInstruction(IR.Instruction.ZeroExtendedMoveInstruction, eax, op1);
+					context.SetInstruction(Instruction.ZeroExtendedMoveInstruction, eax, op1);
 					context.AppendInstruction(X86.Cdq);
 					context.AppendInstruction(X86.Mov, op0L, eax);
-					context.AppendInstruction(IR.Instruction.LogicalXorInstruction, op0H, op0H, op0H);
+					context.AppendInstruction(Instruction.LogicalXorInstruction, op0H, op0H, op0H);
 					break;
 
 				case CilElementType.U2: goto case CilElementType.U1;
@@ -1461,25 +1461,25 @@ namespace Mosa.Platform.x86.Stages
 			Operand zero = new ConstantOperand(BuiltInSigType.Int32, (int)0);
 			SplitLongOperand(context.Operand1, out op1L, out op1H);
 			SplitLongOperand(zero, out op2L, out op2H);
-			IR.ConditionCode code;
+			ConditionCode code;
 
 			switch (((context.Instruction) as CIL.ICILInstruction).OpCode)
 			{
 				// Signed
-				case CIL.OpCode.Brtrue: code = IR.ConditionCode.NotEqual; break;
-				case CIL.OpCode.Brfalse: code = IR.ConditionCode.Equal; break;
-				case CIL.OpCode.Beq_s: code = IR.ConditionCode.Equal; break;
-				case CIL.OpCode.Bge_s: code = IR.ConditionCode.GreaterOrEqual; break;
-				case CIL.OpCode.Bgt_s: code = IR.ConditionCode.GreaterThan; break;
-				case CIL.OpCode.Ble_s: code = IR.ConditionCode.LessOrEqual; break;
-				case CIL.OpCode.Blt_s: code = IR.ConditionCode.LessThan; break;
+				case CIL.OpCode.Brtrue: code = ConditionCode.NotEqual; break;
+				case CIL.OpCode.Brfalse: code = ConditionCode.Equal; break;
+				case CIL.OpCode.Beq_s: code = ConditionCode.Equal; break;
+				case CIL.OpCode.Bge_s: code = ConditionCode.GreaterOrEqual; break;
+				case CIL.OpCode.Bgt_s: code = ConditionCode.GreaterThan; break;
+				case CIL.OpCode.Ble_s: code = ConditionCode.LessOrEqual; break;
+				case CIL.OpCode.Blt_s: code = ConditionCode.LessThan; break;
 
 				// Unsigned
-				case CIL.OpCode.Bne_un_s: code = IR.ConditionCode.NotEqual; break;
-				case CIL.OpCode.Bge_un_s: code = IR.ConditionCode.UnsignedGreaterOrEqual; break;
-				case CIL.OpCode.Bgt_un_s: code = IR.ConditionCode.UnsignedGreaterThan; break;
-				case CIL.OpCode.Ble_un_s: code = IR.ConditionCode.UnsignedLessOrEqual; break;
-				case CIL.OpCode.Blt_un_s: code = IR.ConditionCode.UnsignedLessThan; break;
+				case CIL.OpCode.Bne_un_s: code = ConditionCode.NotEqual; break;
+				case CIL.OpCode.Bge_un_s: code = ConditionCode.UnsignedGreaterOrEqual; break;
+				case CIL.OpCode.Bgt_un_s: code = ConditionCode.UnsignedGreaterThan; break;
+				case CIL.OpCode.Ble_un_s: code = ConditionCode.UnsignedLessOrEqual; break;
+				case CIL.OpCode.Blt_un_s: code = ConditionCode.UnsignedLessThan; break;
 
 				// Long form signed
 				case CIL.OpCode.Beq: goto case CIL.OpCode.Beq_s;
@@ -1505,7 +1505,7 @@ namespace Mosa.Platform.x86.Stages
 			// Compare high dwords
 			newBlocks[0].AppendInstruction(X86.Cmp, null, op1H, op2H);
 			// Branch if check already gave results
-			newBlocks[0].AppendInstruction(X86.Branch, IR.ConditionCode.Equal, newBlocks[2].BasicBlock);
+			newBlocks[0].AppendInstruction(X86.Branch, ConditionCode.Equal, newBlocks[2].BasicBlock);
 			newBlocks[0].AppendInstruction(X86.Jmp, newBlocks[1].BasicBlock);
 			LinkBlocks(newBlocks[0], newBlocks[1], newBlocks[2]);
 
@@ -1540,12 +1540,12 @@ namespace Mosa.Platform.x86.Stages
 			SplitLongOperand(context.Operand2, out op2L, out op2H);
 
 			Context[] newBlocks = CreateEmptyBlockContexts(context.Label, 2);
-			IR.ConditionCode conditionCode = context.ConditionCode;
+			ConditionCode conditionCode = context.ConditionCode;
 			Context nextBlock = SplitContext(context, false);
 
 			// Compare high dwords
 			context.SetInstruction(X86.Cmp, null, op1H, op2H);
-			context.AppendInstruction(X86.Branch, IR.ConditionCode.Equal, newBlocks[1].BasicBlock);
+			context.AppendInstruction(X86.Branch, ConditionCode.Equal, newBlocks[1].BasicBlock);
 			context.AppendInstruction(X86.Jmp, newBlocks[0].BasicBlock);
 			LinkBlocks(context, newBlocks[0], newBlocks[1]);
 
@@ -1569,16 +1569,16 @@ namespace Mosa.Platform.x86.Stages
 		/// </summary>
 		/// <param name="code">The code.</param>
 		/// <returns></returns>
-		private static IR.ConditionCode GetHighCondition(IR.ConditionCode code)
+		private static ConditionCode GetHighCondition(ConditionCode code)
 		{
 			switch (code)
 			{
-				case IR.ConditionCode.Equal: return IR.ConditionCode.NotEqual;
-				case IR.ConditionCode.GreaterOrEqual: return IR.ConditionCode.LessThan;
-				case IR.ConditionCode.GreaterThan: return IR.ConditionCode.LessThan;
-				case IR.ConditionCode.LessOrEqual: return IR.ConditionCode.GreaterThan;
-				case IR.ConditionCode.LessThan: return IR.ConditionCode.GreaterThan;
-				case IR.ConditionCode.NotEqual: return IR.ConditionCode.Equal;
+				case ConditionCode.Equal: return ConditionCode.NotEqual;
+				case ConditionCode.GreaterOrEqual: return ConditionCode.LessThan;
+				case ConditionCode.GreaterThan: return ConditionCode.LessThan;
+				case ConditionCode.LessOrEqual: return ConditionCode.GreaterThan;
+				case ConditionCode.LessThan: return ConditionCode.GreaterThan;
+				case ConditionCode.NotEqual: return ConditionCode.Equal;
 				default: return code;
 			}
 		}
@@ -1601,12 +1601,12 @@ namespace Mosa.Platform.x86.Stages
 			SplitLongOperand(op2, out op2L, out op2H);
 
 			Context[] newBlocks = CreateEmptyBlockContexts(context.Label, 4);
-			IR.ConditionCode conditionCode = context.ConditionCode;
+			ConditionCode conditionCode = context.ConditionCode;
 			Context nextBlock = SplitContext(context, false);
 
 			// Compare high dwords
 			context.SetInstruction(X86.Cmp, null, op1H, op2H);
-			context.AppendInstruction(X86.Branch, IR.ConditionCode.Equal, newBlocks[1].BasicBlock);
+			context.AppendInstruction(X86.Branch, ConditionCode.Equal, newBlocks[1].BasicBlock);
 			context.AppendInstruction(X86.Jmp, newBlocks[0].BasicBlock);
 			LinkBlocks(context, newBlocks[0], newBlocks[1]);
 
@@ -1677,7 +1677,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Arithmetics the shift right instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.ArithmeticShiftRightInstruction(Context context)
+		void IIRVisitor.ArithmeticShiftRightInstruction(Context context)
 		{
 			if (IsInt64(context.Operand1))
 			{
@@ -1689,7 +1689,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Integers the compare instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.IntegerCompareBranchInstruction(Context context)
+		void IIRVisitor.IntegerCompareBranchInstruction(Context context)
 		{
 			if (IsInt64(context.Operand1) || IsInt64(context.Operand2))
 			{
@@ -1701,7 +1701,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Integers the compare instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.IntegerCompareInstruction(Context context)
+		void IIRVisitor.IntegerCompareInstruction(Context context)
 		{
 			if (IsInt64(context.Operand1))
 			{
@@ -1713,7 +1713,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Loads the instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.LoadInstruction(Context context)
+		void IIRVisitor.LoadInstruction(Context context)
 		{
 			if (IsInt64(context.Operand1) || IsInt64(context.Result))
 			{
@@ -1725,7 +1725,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Logicals the and instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.LogicalAndInstruction(Context context)
+		void IIRVisitor.LogicalAndInstruction(Context context)
 		{
 			if (IsInt64(context.Operand1))
 			{
@@ -1737,7 +1737,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Logicals the or instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.LogicalOrInstruction(Context context)
+		void IIRVisitor.LogicalOrInstruction(Context context)
 		{
 			if (IsInt64(context.Operand1))
 			{
@@ -1749,7 +1749,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Logicals the xor instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.LogicalXorInstruction(Context context)
+		void IIRVisitor.LogicalXorInstruction(Context context)
 		{
 			if (IsInt64(context.Operand1))
 			{
@@ -1761,7 +1761,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Logicals the not instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.LogicalNotInstruction(Context context)
+		void IIRVisitor.LogicalNotInstruction(Context context)
 		{
 			if (IsInt64(context.Operand1))
 			{
@@ -1773,7 +1773,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Moves the instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.MoveInstruction(Context context)
+		void IIRVisitor.MoveInstruction(Context context)
 		{
 			// FIXME: Why aren't we doing an SSE2 move for int64?
 			if (IsInt64(context.Operand1))
@@ -1786,7 +1786,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Shifts the left instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.ShiftLeftInstruction(Context context)
+		void IIRVisitor.ShiftLeftInstruction(Context context)
 		{
 			if (IsInt64(context.Operand1))
 			{
@@ -1798,7 +1798,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Shifts the right instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.ShiftRightInstruction(Context context)
+		void IIRVisitor.ShiftRightInstruction(Context context)
 		{
 			if (IsInt64(context.Operand1))
 			{
@@ -1810,7 +1810,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Signs the extended move instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.SignExtendedMoveInstruction(Context context)
+		void IIRVisitor.SignExtendedMoveInstruction(Context context)
 		{
 			if (IsInt64(context.Operand1) || IsInt64(context.Result))
 			{
@@ -1822,7 +1822,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Stores the instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.StoreInstruction(Context context)
+		void IIRVisitor.StoreInstruction(Context context)
 		{
 			if (IsInt64(context.Operand2))
 			{
@@ -1834,7 +1834,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for DivSInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.DivSInstruction(Context context)
+		void IIRVisitor.DivSInstruction(Context context)
 		{
 			if (IsInt64(context.Operand1))
 			{
@@ -1842,7 +1842,7 @@ namespace Mosa.Platform.x86.Stages
 			}
 		}
 
-		void IR.IIRVisitor.DivUInstruction(Context context)
+		void IIRVisitor.DivUInstruction(Context context)
 		{
 			if (IsInt64(context.Operand1))
 			{
@@ -1854,7 +1854,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for MulSInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.MulSInstruction(Context context)
+		void IIRVisitor.MulSInstruction(Context context)
 		{
 			if (IsInt64(context.Operand1))
 			{
@@ -1866,7 +1866,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for MulFInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.MulFInstruction(Context context)
+		void IIRVisitor.MulFInstruction(Context context)
 		{
 		}
 
@@ -1874,7 +1874,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for MulUInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.MulUInstruction(Context context)
+		void IIRVisitor.MulUInstruction(Context context)
 		{
 			if (IsInt64(context.Operand1))
 			{
@@ -1886,7 +1886,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for SubFInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.SubFInstruction(Context context)
+		void IIRVisitor.SubFInstruction(Context context)
 		{
 		}
 
@@ -1894,7 +1894,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for SubSInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.SubSInstruction(Context context)
+		void IIRVisitor.SubSInstruction(Context context)
 		{
 			if (IsInt64(context.Operand1))
 			{
@@ -1915,7 +1915,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for SubUInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.SubUInstruction(Context context)
+		void IIRVisitor.SubUInstruction(Context context)
 		{
 			if (IsInt64(context.Operand1))
 			{
@@ -1927,7 +1927,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for RemFInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.RemFInstruction(Context context)
+		void IIRVisitor.RemFInstruction(Context context)
 		{
 		}
 
@@ -1935,7 +1935,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for RemSInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.RemSInstruction(Context context)
+		void IIRVisitor.RemSInstruction(Context context)
 		{
 			if (IsInt64(context.Operand1))
 			{
@@ -1947,7 +1947,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for RemUInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.RemUInstruction(Context context)
+		void IIRVisitor.RemUInstruction(Context context)
 		{
 			if (IsInt64(context.Operand1))
 			{
@@ -1959,7 +1959,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for SwitchInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.SwitchInstruction(Context context)
+		void IIRVisitor.SwitchInstruction(Context context)
 		{
 		}
 
@@ -1967,7 +1967,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Zeroes the extended move instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.ZeroExtendedMoveInstruction(Context context)
+		void IIRVisitor.ZeroExtendedMoveInstruction(Context context)
 		{
 			if (IsInt64(context.Result))
 			{
@@ -1979,7 +1979,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for AddSInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.AddSInstruction(Context context)
+		void IIRVisitor.AddSInstruction(Context context)
 		{
 			if (IsInt64(context.Operand1))
 			{
@@ -1991,7 +1991,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for AddUInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.AddUInstruction(Context context)
+		void IIRVisitor.AddUInstruction(Context context)
 		{
 			if (IsInt64(context.Operand1))
 			{
@@ -2003,7 +2003,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for AddFInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.AddFInstruction(Context context)
+		void IIRVisitor.AddFInstruction(Context context)
 		{
 		}
 
@@ -2011,7 +2011,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for DivFInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.DivFInstruction(Context context)
+		void IIRVisitor.DivFInstruction(Context context)
 		{
 		}
 
@@ -2023,85 +2023,85 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for BreakInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.BreakInstruction(Context context) { }
+		void IIRVisitor.BreakInstruction(Context context) { }
 
 		/// <summary>
 		/// Visitation function for AddressOfInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.AddressOfInstruction(Context context) { }
+		void IIRVisitor.AddressOfInstruction(Context context) { }
 
 		/// <summary>
 		/// Visitation function for CallInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.CallInstruction(Context context) { }
+		void IIRVisitor.CallInstruction(Context context) { }
 
 		/// <summary>
 		/// Visitation function for EpilogueInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.EpilogueInstruction(Context context) { }
+		void IIRVisitor.EpilogueInstruction(Context context) { }
 
 		/// <summary>
 		/// Visitation function for FloatingPointCompareInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.FloatingPointCompareInstruction(Context context) { }
+		void IIRVisitor.FloatingPointCompareInstruction(Context context) { }
 
 		/// <summary>
 		/// Visitation function for FloatingPointToIntegerConversionInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.FloatingPointToIntegerConversionInstruction(Context context) { }
+		void IIRVisitor.FloatingPointToIntegerConversionInstruction(Context context) { }
 
 		/// <summary>
 		/// Visitation function for IntegerToFloatingPointConversionInstruction instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.IntegerToFloatingPointConversionInstruction(Context context) { }
+		void IIRVisitor.IntegerToFloatingPointConversionInstruction(Context context) { }
 
 		/// <summary>
 		/// Visitation function for JmpInstruction"/&gt; instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.JmpInstruction(Context context) { }
+		void IIRVisitor.JmpInstruction(Context context) { }
 
 		/// <summary>
 		/// Visitation function for PhiInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.PhiInstruction(Context context) { }
+		void IIRVisitor.PhiInstruction(Context context) { }
 
 		/// <summary>
 		/// Visitation function for PrologueInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.PrologueInstruction(Context context) { }
+		void IIRVisitor.PrologueInstruction(Context context) { }
 
 		/// <summary>
 		/// Visitation function for ReturnInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.ReturnInstruction(Context context) { }
+		void IIRVisitor.ReturnInstruction(Context context) { }
 
 		/// <summary>
 		/// Visitation function for NopInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.NopInstruction(Context context) { }
+		void IIRVisitor.NopInstruction(Context context) { }
 
 		/// <summary>
 		/// Visitation function for ThrowInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.ThrowInstruction(Context context) { }
+		void IIRVisitor.ThrowInstruction(Context context) { }
 
 		/// <summary>
 		/// Visitation function for ExceptionPrologueInstruction"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.ExceptionPrologueInstruction(Context context) { }
+		void IIRVisitor.ExceptionPrologueInstruction(Context context) { }
 
 		#endregion // IIRVisitor - Unused
 

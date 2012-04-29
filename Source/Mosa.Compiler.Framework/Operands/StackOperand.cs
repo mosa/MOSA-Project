@@ -22,7 +22,7 @@ namespace Mosa.Compiler.Framework.Operands
 		/// <summary>
 		/// Holds the SSA version of the stack operand.
 		/// </summary>
-		private int _ssaVersion;
+		private int ssaVersion;
 
 		#endregion // Data members
 
@@ -55,8 +55,8 @@ namespace Mosa.Compiler.Framework.Operands
 		/// <value>The version of the stack operand.</value>
 		public int Version
 		{
-			get { return _ssaVersion; }
-			set { _ssaVersion = value; }
+			get { return ssaVersion; }
+			set { ssaVersion = value; }
 		}
 
 		#endregion // Properties
@@ -81,11 +81,11 @@ namespace Mosa.Compiler.Framework.Operands
 		public sealed override string ToString()
 		{
 			string tmp = base.ToString();
-			//return String.Format(@"{0} {1}", this.Name, tmp.Insert(tmp.Length - 1, String.Format(", SSA Version: {0}", _ssaVersion)));
-			if (_ssaVersion == 0)
+
+			if (ssaVersion == 0)
 				return String.Format(@"{0} {1}", this.Name, tmp);
 			else
-				return String.Format(@"{0} {1}", this.Name, tmp.Insert(tmp.Length - 1, String.Format(" #{0}", _ssaVersion)));
+				return String.Format(@"{0} {1}", this.Name, tmp.Insert(tmp.Length - 1, String.Format(" #{0}", ssaVersion)));
 		}
 
 		#endregion // Operand Overrides

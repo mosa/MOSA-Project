@@ -18,7 +18,7 @@ using Mosa.Compiler.Framework.Platform;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
-using IR = Mosa.Compiler.Framework.IR;
+using Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Platform.x86.Stages
 {
@@ -28,7 +28,7 @@ namespace Mosa.Platform.x86.Stages
 	/// <remarks>
 	/// This transformation stage transforms IR instructions into their equivalent X86 sequences.
 	/// </remarks>
-	public sealed class IRTransformationStage : BaseTransformationStage, IR.IIRVisitor, IMethodCompilerStage, IPlatformStage
+	public sealed class IRTransformationStage : BaseTransformationStage, IIRVisitor, IMethodCompilerStage, IPlatformStage
 	{
 
 		private int stackSize;
@@ -58,7 +58,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for AddSInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.AddSInstruction(Context context)
+		void IIRVisitor.AddSInstruction(Context context)
 		{
 			HandleCommutativeOperation(context, X86.Add);
 		}
@@ -67,7 +67,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for AddUInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.AddUInstruction(Context context)
+		void IIRVisitor.AddUInstruction(Context context)
 		{
 			HandleCommutativeOperation(context, X86.Add);
 		}
@@ -76,7 +76,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for AddFInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.AddFInstruction(Context context)
+		void IIRVisitor.AddFInstruction(Context context)
 		{
 			if (context.Result.Type.Type == CilElementType.R4)
 				HandleCommutativeOperation(context, X86.AddSS);
@@ -90,7 +90,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for DivFInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.DivFInstruction(Context context)
+		void IIRVisitor.DivFInstruction(Context context)
 		{
 			if (context.Result.Type.Type == CilElementType.R4)
 				HandleCommutativeOperation(context, X86.DivSS);
@@ -104,7 +104,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for DivSInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.DivSInstruction(Context context)
+		void IIRVisitor.DivSInstruction(Context context)
 		{
 			HandleNonCommutativeOperation(context, X86.IDiv);
 		}
@@ -113,7 +113,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Addresses the of instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.AddressOfInstruction(Context context)
+		void IIRVisitor.AddressOfInstruction(Context context)
 		{
 			var opRes = context.Result;
 
@@ -128,7 +128,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Arithmetic the shift right instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.ArithmeticShiftRightInstruction(Context context)
+		void IIRVisitor.ArithmeticShiftRightInstruction(Context context)
 		{
 			HandleShiftOperation(context, X86.Sar);
 		}
@@ -137,7 +137,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Floating point compare instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.FloatingPointCompareInstruction(Context context)
+		void IIRVisitor.FloatingPointCompareInstruction(Context context)
 		{
 			Operand resultOperand = context.Result;
 			Operand left = EmitConstant(context.Operand1);
@@ -154,24 +154,24 @@ namespace Mosa.Platform.x86.Stages
 				right = context.Operand2;
 			}
 
-			IR.ConditionCode setnp = IR.ConditionCode.NoParity;
-			IR.ConditionCode setnc = IR.ConditionCode.NoCarry;
-			IR.ConditionCode setc = IR.ConditionCode.Carry;
-			IR.ConditionCode setnz = IR.ConditionCode.NoZero;
-			IR.ConditionCode setz = IR.ConditionCode.Zero;
-			IR.ConditionCode code = context.ConditionCode;
+			ConditionCode setnp = ConditionCode.NoParity;
+			ConditionCode setnc = ConditionCode.NoCarry;
+			ConditionCode setc = ConditionCode.Carry;
+			ConditionCode setnz = ConditionCode.NoZero;
+			ConditionCode setz = ConditionCode.Zero;
+			ConditionCode code = context.ConditionCode;
 
 			context.SetInstruction(X86.Nop);
 
 			// x86 is messed up :(
 			switch (code)
 			{
-				case IR.ConditionCode.Equal: break;
-				case IR.ConditionCode.NotEqual: break;
-				case IR.ConditionCode.UnsignedGreaterOrEqual: code = IR.ConditionCode.GreaterOrEqual; break;
-				case IR.ConditionCode.UnsignedGreaterThan: code = IR.ConditionCode.GreaterThan; break;
-				case IR.ConditionCode.UnsignedLessOrEqual: code = IR.ConditionCode.LessOrEqual; break;
-				case IR.ConditionCode.UnsignedLessThan: code = IR.ConditionCode.LessThan; break;
+				case ConditionCode.Equal: break;
+				case ConditionCode.NotEqual: break;
+				case ConditionCode.UnsignedGreaterOrEqual: code = ConditionCode.GreaterOrEqual; break;
+				case ConditionCode.UnsignedGreaterThan: code = ConditionCode.GreaterThan; break;
+				case ConditionCode.UnsignedLessOrEqual: code = ConditionCode.LessOrEqual; break;
+				case ConditionCode.UnsignedLessThan: code = ConditionCode.LessThan; break;
 			}
 
 			if (!(left is RegisterOperand))
@@ -202,40 +202,40 @@ namespace Mosa.Platform.x86.Stages
 			{
 				switch (code)
 				{
-					case IR.ConditionCode.Equal:
+					case ConditionCode.Equal:
 						context.AppendInstruction(X86.Comiss, null, left, right);
 						break;
-					case IR.ConditionCode.NotEqual: goto case IR.ConditionCode.Equal;
-					case IR.ConditionCode.UnsignedGreaterOrEqual: goto case IR.ConditionCode.Equal;
-					case IR.ConditionCode.UnsignedGreaterThan: goto case IR.ConditionCode.Equal;
-					case IR.ConditionCode.UnsignedLessOrEqual: goto case IR.ConditionCode.Equal;
-					case IR.ConditionCode.UnsignedLessThan: goto case IR.ConditionCode.Equal;
-					case IR.ConditionCode.GreaterOrEqual:
+					case ConditionCode.NotEqual: goto case ConditionCode.Equal;
+					case ConditionCode.UnsignedGreaterOrEqual: goto case ConditionCode.Equal;
+					case ConditionCode.UnsignedGreaterThan: goto case ConditionCode.Equal;
+					case ConditionCode.UnsignedLessOrEqual: goto case ConditionCode.Equal;
+					case ConditionCode.UnsignedLessThan: goto case ConditionCode.Equal;
+					case ConditionCode.GreaterOrEqual:
 						context.AppendInstruction(X86.Comiss, null, left, right);
 						break;
-					case IR.ConditionCode.GreaterThan: goto case IR.ConditionCode.GreaterOrEqual;
-					case IR.ConditionCode.LessOrEqual: goto case IR.ConditionCode.GreaterOrEqual;
-					case IR.ConditionCode.LessThan: goto case IR.ConditionCode.GreaterOrEqual;
+					case ConditionCode.GreaterThan: goto case ConditionCode.GreaterOrEqual;
+					case ConditionCode.LessOrEqual: goto case ConditionCode.GreaterOrEqual;
+					case ConditionCode.LessThan: goto case ConditionCode.GreaterOrEqual;
 				}
 			}
 			else
 			{
 				switch (code)
 				{
-					case IR.ConditionCode.Equal:
+					case ConditionCode.Equal:
 						context.AppendInstruction(X86.Comisd, null, left, right);
 						break;
-					case IR.ConditionCode.NotEqual: goto case IR.ConditionCode.Equal;
-					case IR.ConditionCode.UnsignedGreaterOrEqual: goto case IR.ConditionCode.Equal;
-					case IR.ConditionCode.UnsignedGreaterThan: goto case IR.ConditionCode.Equal;
-					case IR.ConditionCode.UnsignedLessOrEqual: goto case IR.ConditionCode.Equal;
-					case IR.ConditionCode.UnsignedLessThan: goto case IR.ConditionCode.Equal;
-					case IR.ConditionCode.GreaterOrEqual:
+					case ConditionCode.NotEqual: goto case ConditionCode.Equal;
+					case ConditionCode.UnsignedGreaterOrEqual: goto case ConditionCode.Equal;
+					case ConditionCode.UnsignedGreaterThan: goto case ConditionCode.Equal;
+					case ConditionCode.UnsignedLessOrEqual: goto case ConditionCode.Equal;
+					case ConditionCode.UnsignedLessThan: goto case ConditionCode.Equal;
+					case ConditionCode.GreaterOrEqual:
 						context.AppendInstruction(X86.Comisd, null, left, right);
 						break;
-					case IR.ConditionCode.GreaterThan: goto case IR.ConditionCode.GreaterOrEqual;
-					case IR.ConditionCode.LessOrEqual: goto case IR.ConditionCode.GreaterOrEqual;
-					case IR.ConditionCode.LessThan: goto case IR.ConditionCode.GreaterOrEqual;
+					case ConditionCode.GreaterThan: goto case ConditionCode.GreaterOrEqual;
+					case ConditionCode.LessOrEqual: goto case ConditionCode.GreaterOrEqual;
+					case ConditionCode.LessThan: goto case ConditionCode.GreaterOrEqual;
 				}
 			}
 
@@ -247,7 +247,7 @@ namespace Mosa.Platform.x86.Stages
 
 			context.AppendInstruction(X86.Pushfd);
 
-			if (code == IR.ConditionCode.Equal)
+			if (code == ConditionCode.Equal)
 			{
 				context.AppendInstruction(X86.Setcc, setz, eax);
 				context.AppendInstruction(X86.Setcc, setnp, ebx);
@@ -260,7 +260,7 @@ namespace Mosa.Platform.x86.Stages
 				context.AppendInstruction(X86.And, eax, ebx);
 				context.AppendInstruction(X86.And, eax, new ConstantOperand(BuiltInSigType.Int32, (int)1));
 			}
-			else if (code == IR.ConditionCode.NotEqual)
+			else if (code == ConditionCode.NotEqual)
 			{
 				context.AppendInstruction(X86.Setcc, setz, eax);
 				context.AppendInstruction(X86.Setcc, setnp, ebx);
@@ -274,7 +274,7 @@ namespace Mosa.Platform.x86.Stages
 				context.AppendInstruction(X86.Or, eax, ebx);
 				context.AppendInstruction(X86.And, eax, new ConstantOperand(BuiltInSigType.Int32, (int)1));
 			}
-			else if (code == IR.ConditionCode.GreaterThan)
+			else if (code == ConditionCode.GreaterThan)
 			{
 				context.AppendInstruction(X86.Setcc, setnz, eax);
 				context.AppendInstruction(X86.Setcc, setnp, ebx);
@@ -282,7 +282,7 @@ namespace Mosa.Platform.x86.Stages
 				context.AppendInstruction(X86.And, eax, ebx);
 				context.AppendInstruction(X86.And, eax, ecx);
 			}
-			else if (code == IR.ConditionCode.LessThan)
+			else if (code == ConditionCode.LessThan)
 			{
 				context.AppendInstruction(X86.Setcc, setnz, eax);
 				context.AppendInstruction(X86.Setcc, setnp, ebx);
@@ -290,7 +290,7 @@ namespace Mosa.Platform.x86.Stages
 				context.AppendInstruction(X86.And, eax, ebx);
 				context.AppendInstruction(X86.And, eax, ecx);
 			}
-			else if (code == IR.ConditionCode.GreaterOrEqual)
+			else if (code == ConditionCode.GreaterOrEqual)
 			{
 				context.AppendInstruction(X86.Setcc, setnz, eax);
 				context.AppendInstruction(X86.Setcc, setnp, ebx);
@@ -300,7 +300,7 @@ namespace Mosa.Platform.x86.Stages
 				context.AppendInstruction(X86.And, eax, ecx);
 				context.AppendInstruction(X86.Or, eax, edx);
 			}
-			else if (code == IR.ConditionCode.LessOrEqual)
+			else if (code == ConditionCode.LessOrEqual)
 			{
 				context.AppendInstruction(X86.Setcc, setnz, eax);
 				context.AppendInstruction(X86.Setcc, setnp, ebx);
@@ -318,7 +318,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for IntegerCompareBranchInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.IntegerCompareBranchInstruction(Context context)
+		void IIRVisitor.IntegerCompareBranchInstruction(Context context)
 		{
 			EmitOperandConstants(context);
 
@@ -336,7 +336,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for IntegerCompareInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.IntegerCompareInstruction(Context context)
+		void IIRVisitor.IntegerCompareInstruction(Context context)
 		{
 			EmitOperandConstants(context);
 
@@ -364,7 +364,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for JmpInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.JmpInstruction(Context context)
+		void IIRVisitor.JmpInstruction(Context context)
 		{
 			context.ReplaceInstructionOnly(X86.Jmp);
 		}
@@ -373,7 +373,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for LoadInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.LoadInstruction(Context context)
+		void IIRVisitor.LoadInstruction(Context context)
 		{
 			RegisterOperand eax = new RegisterOperand(context.Operand1.Type, GeneralPurposeRegister.EAX);
 			Operand result = context.Result;
@@ -399,7 +399,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for LogicalAndInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.LogicalAndInstruction(Context context)
+		void IIRVisitor.LogicalAndInstruction(Context context)
 		{
 			context.ReplaceInstructionOnly(X86.And);
 		}
@@ -408,7 +408,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for LogicalOrInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.LogicalOrInstruction(Context context)
+		void IIRVisitor.LogicalOrInstruction(Context context)
 		{
 			context.ReplaceInstructionOnly(X86.Or);
 		}
@@ -417,7 +417,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for LogicalXorInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.LogicalXorInstruction(Context context)
+		void IIRVisitor.LogicalXorInstruction(Context context)
 		{
 			context.ReplaceInstructionOnly(X86.Xor);
 		}
@@ -426,7 +426,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for LogicalNotInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.LogicalNotInstruction(Context context)
+		void IIRVisitor.LogicalNotInstruction(Context context)
 		{
 			Operand dest = context.Result;
 
@@ -443,7 +443,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for MoveInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.MoveInstruction(Context context)
+		void IIRVisitor.MoveInstruction(Context context)
 		{
 			Operand result = context.Result;
 			Operand operand = context.Operand1;
@@ -502,7 +502,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for PrologueInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.PrologueInstruction(Context context)
+		void IIRVisitor.PrologueInstruction(Context context)
 		{
 			RegisterOperand eax = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.EAX);
 			RegisterOperand ebx = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.EBX);
@@ -510,6 +510,7 @@ namespace Mosa.Platform.x86.Stages
 			RegisterOperand ebp = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.EBP);
 			RegisterOperand esp = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.ESP);
 			RegisterOperand edi = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.EDI);
+			RegisterOperand edx = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.EDX);
 
 			/* 
 			 * If you want to stop at the header of an emitted function, just set breakFlag 
@@ -541,22 +542,20 @@ namespace Mosa.Platform.x86.Stages
 
 			// Initialize all locals to zero
 			context.AppendInstruction(X86.Push, null, edi);
-			context.AppendInstruction(X86.Mov, edi, esp);
 			context.AppendInstruction(X86.Push, null, ecx);
-			context.AppendInstruction(X86.Add, edi, new ConstantOperand(BuiltInSigType.Int32, 8));
+			context.AppendInstruction(X86.Mov, edi, esp);
+			context.AppendInstruction(X86.Add, edi, new ConstantOperand(BuiltInSigType.Int32, 3 * 4)); // 4 bytes per push above
 			context.AppendInstruction(X86.Mov, ecx, new ConstantOperand(BuiltInSigType.Int32, -(int)(stackSize >> 2)));
 			context.AppendInstruction(X86.Xor, eax, eax);
 			context.AppendInstruction(X86.Rep);
 			context.AppendInstruction(X86.Stos);
-			context.AppendInstruction(X86.Pop, ecx);
-			context.AppendInstruction(X86.Pop, edi);
 
 			// Save EDX for int32 return values (or do not save EDX for non-int64 return values)
 			if (methodCompiler.Method.Signature.ReturnType.Type != CilElementType.I8 &&
 				methodCompiler.Method.Signature.ReturnType.Type != CilElementType.U8)
 			{
 				// push edx
-				context.AppendInstruction(X86.Push, null, new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.EDX));
+				context.AppendInstruction(X86.Push, null, edx);
 			}
 
 		}
@@ -565,12 +564,14 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for EpilogueInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.EpilogueInstruction(Context context)
+		void IIRVisitor.EpilogueInstruction(Context context)
 		{
-			RegisterOperand ebx = new RegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.EBX);
-			RegisterOperand edx = new RegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.EDX);
-			RegisterOperand ebp = new RegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.EBP);
-			RegisterOperand esp = new RegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.ESP);
+			RegisterOperand ebx = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.EBX);
+			RegisterOperand edx = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.EDX);
+			RegisterOperand ebp = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.EBP);
+			RegisterOperand esp = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.ESP);
+			RegisterOperand ecx = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.ECX);
+			RegisterOperand edi = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.EDI);
 
 			// Load EDX for int32 return values
 			if (methodCompiler.Method.Signature.ReturnType.Type != CilElementType.I8 &&
@@ -581,8 +582,12 @@ namespace Mosa.Platform.x86.Stages
 				context.AppendInstruction(X86.Nop);
 			}
 
+			// pop ecx
+			context.SetInstruction(X86.Pop, ecx);
+			// pop edi
+			context.AppendInstruction(X86.Pop, edi);
 			// pop ebx
-			context.SetInstruction(X86.Pop, ebx);
+			context.AppendInstruction(X86.Pop, ebx);
 			// add esp, -localsSize
 			context.AppendInstruction(X86.Add, esp, new ConstantOperand(BuiltInSigType.IntPtr, -stackSize));
 			// pop ebp
@@ -595,7 +600,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for ReturnInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.ReturnInstruction(Context context)
+		void IIRVisitor.ReturnInstruction(Context context)
 		{
 			if (context.Branch == null)
 			{
@@ -621,7 +626,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for ShiftLeftInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.ShiftLeftInstruction(Context context)
+		void IIRVisitor.ShiftLeftInstruction(Context context)
 		{
 			HandleShiftOperation(context, X86.Shl);
 		}
@@ -630,7 +635,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for ShiftRightInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.ShiftRightInstruction(Context context)
+		void IIRVisitor.ShiftRightInstruction(Context context)
 		{
 			HandleShiftOperation(context, X86.Shr);
 		}
@@ -639,7 +644,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for StoreInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.StoreInstruction(Context context)
+		void IIRVisitor.StoreInstruction(Context context)
 		{
 			Operand destination = context.Result;
 			Operand offset = context.Operand1;
@@ -670,7 +675,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for DivUInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.DivUInstruction(Context context)
+		void IIRVisitor.DivUInstruction(Context context)
 		{
 			context.ReplaceInstructionOnly(X86.Div);
 
@@ -690,7 +695,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for MulSInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.MulSInstruction(Context context)
+		void IIRVisitor.MulSInstruction(Context context)
 		{
 			HandleCommutativeOperation(context, X86.Mul);
 		}
@@ -699,7 +704,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for MulFInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.MulFInstruction(Context context)
+		void IIRVisitor.MulFInstruction(Context context)
 		{
 			if (context.Result.Type.Type == CilElementType.R4)
 				HandleCommutativeOperation(context, X86.MulSS);
@@ -713,7 +718,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for MulUInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.MulUInstruction(Context context)
+		void IIRVisitor.MulUInstruction(Context context)
 		{
 			HandleCommutativeOperation(context, X86.Mul);
 		}
@@ -722,7 +727,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for SubFInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.SubFInstruction(Context context)
+		void IIRVisitor.SubFInstruction(Context context)
 		{
 			if (context.Result.Type.Type == CilElementType.R4)
 				HandleCommutativeOperation(context, X86.SubSS);
@@ -736,7 +741,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for SubSInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.SubSInstruction(Context context)
+		void IIRVisitor.SubSInstruction(Context context)
 		{
 			HandleNonCommutativeOperation(context, X86.Sub);
 		}
@@ -745,7 +750,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for SubUInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.SubUInstruction(Context context)
+		void IIRVisitor.SubUInstruction(Context context)
 		{
 			HandleNonCommutativeOperation(context, X86.Sub);
 		}
@@ -754,7 +759,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for RemFInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.RemFInstruction(Context context)
+		void IIRVisitor.RemFInstruction(Context context)
 		{
 			if (context.Result.Type.Type == CilElementType.R4)
 				HandleCommutativeOperation(context, X86.DivSS);
@@ -787,7 +792,7 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[0].AppendInstruction(X86.Cvttsd2si, edx, destination);
 
 			newBlocks[0].AppendInstruction(X86.Cmp, null, edx, new ConstantOperand(BuiltInSigType.Int32, 0));
-			newBlocks[0].AppendInstruction(X86.Branch, IR.ConditionCode.Equal, newBlocks[2].BasicBlock);
+			newBlocks[0].AppendInstruction(X86.Branch, ConditionCode.Equal, newBlocks[2].BasicBlock);
 			newBlocks[0].AppendInstruction(X86.Jmp, newBlocks[1].BasicBlock);
 			LinkBlocks(newBlocks[0], newBlocks[1], newBlocks[2]);
 
@@ -816,7 +821,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for RemSInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.RemSInstruction(Context context)
+		void IIRVisitor.RemSInstruction(Context context)
 		{
 			Operand result = context.Result;
 			Operand operand = context.Operand1;
@@ -827,9 +832,9 @@ namespace Mosa.Platform.x86.Stages
 			RegisterOperand ecxSource = new RegisterOperand(operand.Type, GeneralPurposeRegister.ECX);
 
 			context.SetInstruction(X86.Mov, eaxSource, result);
-			context.AppendInstruction(IR.Instruction.SignExtendedMoveInstruction, eax, eaxSource);
+			context.AppendInstruction(Instruction.SignExtendedMoveInstruction, eax, eaxSource);
 			context.AppendInstruction(X86.Mov, ecxSource, operand);
-			context.AppendInstruction(IR.Instruction.SignExtendedMoveInstruction, ecx, ecxSource);
+			context.AppendInstruction(Instruction.SignExtendedMoveInstruction, ecx, ecxSource);
 			context.AppendInstruction(X86.IDiv, eax, ecx);
 			context.AppendInstruction(X86.Mov, result, edx);
 		}
@@ -838,7 +843,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for RemUInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.RemUInstruction(Context context)
+		void IIRVisitor.RemUInstruction(Context context)
 		{
 			Operand result = context.Result;
 			Operand operand = context.Operand1;
@@ -849,9 +854,9 @@ namespace Mosa.Platform.x86.Stages
 			RegisterOperand ecxSource = new RegisterOperand(operand.Type, GeneralPurposeRegister.ECX);
 
 			context.SetInstruction(X86.Mov, eaxSource, result);
-			context.AppendInstruction(IR.Instruction.ZeroExtendedMoveInstruction, eax, eaxSource);
+			context.AppendInstruction(Instruction.ZeroExtendedMoveInstruction, eax, eaxSource);
 			context.AppendInstruction(X86.Mov, ecxSource, operand);
-			context.AppendInstruction(IR.Instruction.ZeroExtendedMoveInstruction, ecx, ecxSource);
+			context.AppendInstruction(Instruction.ZeroExtendedMoveInstruction, ecx, ecxSource);
 
 			context.AppendInstruction(X86.Xor, edx, edx);
 			context.AppendInstruction(X86.Div, eax, ecx);
@@ -863,7 +868,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for SwitchInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.SwitchInstruction(Context context)
+		void IIRVisitor.SwitchInstruction(Context context)
 		{
 			IBranch branch = context.Branch;
 			Operand operand = context.Operand1;
@@ -873,7 +878,7 @@ namespace Mosa.Platform.x86.Stages
 			for (int i = 0; i < branch.Targets.Length - 1; ++i)
 			{
 				context.AppendInstruction(X86.Cmp, null, operand, new ConstantOperand(BuiltInSigType.IntPtr, i));
-				context.AppendInstruction(X86.Branch, IR.ConditionCode.Equal);
+				context.AppendInstruction(X86.Branch, ConditionCode.Equal);
 				context.SetBranch(branch.Targets[i]);
 			}
 		}
@@ -882,7 +887,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for BreakInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.BreakInstruction(Context context)
+		void IIRVisitor.BreakInstruction(Context context)
 		{
 			context.SetInstruction(X86.Break);
 		}
@@ -891,7 +896,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for NopInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.NopInstruction(Context context)
+		void IIRVisitor.NopInstruction(Context context)
 		{
 			context.SetInstruction(X86.Nop);
 		}
@@ -900,7 +905,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for SignExtendedMoveInstruction"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.SignExtendedMoveInstruction(Context context)
+		void IIRVisitor.SignExtendedMoveInstruction(Context context)
 		{
 			var offset = context.Operand2;
 			var type = context.Other as SigType;
@@ -953,7 +958,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for CallInstruction"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.CallInstruction(Context context)
+		void IIRVisitor.CallInstruction(Context context)
 		{
 			if (context.OperandCount == 0 && context.Branch != null)
 			{
@@ -970,7 +975,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for ZeroExtendedMoveInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.ZeroExtendedMoveInstruction(Context context)
+		void IIRVisitor.ZeroExtendedMoveInstruction(Context context)
 		{
 			Operand offset = context.Operand2;
 			if (offset != null)
@@ -1006,7 +1011,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for FloatingPointToIntegerConversionInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.FloatingPointToIntegerConversionInstruction(Context context)
+		void IIRVisitor.FloatingPointToIntegerConversionInstruction(Context context)
 		{
 			Operand source = context.Operand1;
 			Operand destination = context.Result;
@@ -1034,7 +1039,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for ThrowInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.ThrowInstruction(Context context)
+		void IIRVisitor.ThrowInstruction(Context context)
 		{
 			RuntimeType runtimeType = typeSystem.GetType(@"Mosa.Internal.ExceptionEngine");
 			RuntimeMethod runtimeMethod = runtimeType.FindMethod(@"ThrowException");
@@ -1052,7 +1057,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for ExceptionPrologueInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.ExceptionPrologueInstruction(Context context)
+		void IIRVisitor.ExceptionPrologueInstruction(Context context)
 		{
 			// Exception Handler will pass the exception object in the register - EDX was choosen
 			context.SetInstruction(X86.Mov, context.Result, new RegisterOperand(BuiltInSigType.Object, GeneralPurposeRegister.EDX));
@@ -1069,13 +1074,13 @@ namespace Mosa.Platform.x86.Stages
 		/// Visitation function for IntegerToFloatingPointConversionInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.IntegerToFloatingPointConversionInstruction(Context context) { }
+		void IIRVisitor.IntegerToFloatingPointConversionInstruction(Context context) { }
 
 		/// <summary>
 		/// Visitation function for PhiInstruction"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.PhiInstruction(Context context) { }
+		void IIRVisitor.PhiInstruction(Context context) { }
 
 		#endregion // IIRVisitor - Unused
 
@@ -1156,16 +1161,16 @@ namespace Mosa.Platform.x86.Stages
 			// Negate the condition code if necessary.
 			switch (context.ConditionCode)
 			{
-				case IR.ConditionCode.Equal: break;
-				case IR.ConditionCode.GreaterOrEqual: context.ConditionCode = IR.ConditionCode.LessThan; break;
-				case IR.ConditionCode.GreaterThan: context.ConditionCode = IR.ConditionCode.LessOrEqual; break;
-				case IR.ConditionCode.LessOrEqual: context.ConditionCode = IR.ConditionCode.GreaterThan; break;
-				case IR.ConditionCode.LessThan: context.ConditionCode = IR.ConditionCode.GreaterOrEqual; break;
-				case IR.ConditionCode.NotEqual: break;
-				case IR.ConditionCode.UnsignedGreaterOrEqual: context.ConditionCode = IR.ConditionCode.UnsignedLessThan; break;
-				case IR.ConditionCode.UnsignedGreaterThan: context.ConditionCode = IR.ConditionCode.UnsignedLessOrEqual; break;
-				case IR.ConditionCode.UnsignedLessOrEqual: context.ConditionCode = IR.ConditionCode.UnsignedGreaterThan; break;
-				case IR.ConditionCode.UnsignedLessThan: context.ConditionCode = IR.ConditionCode.UnsignedGreaterOrEqual; break;
+				case ConditionCode.Equal: break;
+				case ConditionCode.GreaterOrEqual: context.ConditionCode = ConditionCode.LessThan; break;
+				case ConditionCode.GreaterThan: context.ConditionCode = ConditionCode.LessOrEqual; break;
+				case ConditionCode.LessOrEqual: context.ConditionCode = ConditionCode.GreaterThan; break;
+				case ConditionCode.LessThan: context.ConditionCode = ConditionCode.GreaterOrEqual; break;
+				case ConditionCode.NotEqual: break;
+				case ConditionCode.UnsignedGreaterOrEqual: context.ConditionCode = ConditionCode.UnsignedLessThan; break;
+				case ConditionCode.UnsignedGreaterThan: context.ConditionCode = ConditionCode.UnsignedLessOrEqual; break;
+				case ConditionCode.UnsignedLessOrEqual: context.ConditionCode = ConditionCode.UnsignedGreaterThan; break;
+				case ConditionCode.UnsignedLessThan: context.ConditionCode = ConditionCode.UnsignedGreaterOrEqual; break;
 			}
 		}
 

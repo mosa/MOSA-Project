@@ -31,10 +31,11 @@ namespace Mosa.Platform.AVR32
 		/// </summary>
 		private IArchitecture architecture;
 
-		private static readonly Register[] ReturnRegistersVoid = new Register[] { };
-		private static readonly Register[] ReturnRegisters32Bit = new Register[] { GeneralPurposeRegister.R8 };
-		private static readonly Register[] ReturnRegisters64Bit = new Register[] { GeneralPurposeRegister.R8, GeneralPurposeRegister.R9 };
-		private static readonly Register[] ReturnRegistersFP = new Register[] { /* TODO */ };
+		private static readonly Register[] ReturnVoidRegisters = new Register[] { };
+		private static readonly Register[] Return32BitRegisters = new Register[] { GeneralPurposeRegister.R8 };
+		private static readonly Register[] Return64BitRegisters = new Register[] { GeneralPurposeRegister.R8, GeneralPurposeRegister.R9 };
+		private static readonly Register[] ReturnFPRegisters = new Register[] { /* TODO */ };
+		private static readonly Register[] CalleeSavedRegisters = new Register[] { /* TODO */ };
 
 		#endregion // Data members
 
@@ -386,6 +387,14 @@ namespace Mosa.Platform.AVR32
 		}
 
 		/// <summary>
+		/// Gets the callee saved registers.
+		/// </summary>
+		Register[] ICallingConvention.CalleeSavedRegisters
+		{
+			get { return CalleeSavedRegisters; }
+		}
+
+		/// <summary>
 		/// Gets the return registers.
 		/// </summary>
 		/// <param name="returnType">Type of the return.</param>
@@ -393,15 +402,15 @@ namespace Mosa.Platform.AVR32
 		Register[] ICallingConvention.GetReturnRegisters(CilElementType returnType)
 		{
 			if (returnType == CilElementType.Void)
-				return ReturnRegistersVoid;
+				return ReturnVoidRegisters;
 
 			if (returnType == CilElementType.R4 || returnType == CilElementType.R8)
-				return ReturnRegistersFP;
+				return ReturnFPRegisters;
 
 			if (returnType == CilElementType.I8 || returnType == CilElementType.U8)
-				return ReturnRegisters64Bit;
+				return Return64BitRegisters;
 
-			return ReturnRegisters32Bit;
+			return Return32BitRegisters;
 		}
 		#endregion // ICallingConvention Members
 	}

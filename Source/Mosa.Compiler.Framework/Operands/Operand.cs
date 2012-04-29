@@ -33,17 +33,17 @@ namespace Mosa.Compiler.Framework.Operands
 		/// <summary>
 		/// The namespace of the operand.
 		/// </summary>
-		protected SigType _type;
+		protected SigType type;
 
 		/// <summary>
 		/// Holds a list of instructions, which define this operand.
 		/// </summary>
-		private List<int> _definitions;
+		private List<int> definitions;
 
 		/// <summary>
 		/// Holds a list of instructions, which use this operand.
 		/// </summary>
-		private List<int> _uses;
+		private List<int> uses;
 
 		#endregion // Data members
 
@@ -55,7 +55,7 @@ namespace Mosa.Compiler.Framework.Operands
 		/// <param name="type">The type of the operand.</param>
 		protected Operand(SigType type)
 		{
-			_type = type;
+			this.type = type;
 		}
 
 		#endregion // Construction
@@ -69,10 +69,10 @@ namespace Mosa.Compiler.Framework.Operands
 		{
 			get
 			{
-				if (_definitions == null)
-					_definitions = new List<int>();
+				if (definitions == null)
+					definitions = new List<int>();
 
-				return _definitions;
+				return definitions;
 			}
 		}
 
@@ -89,7 +89,7 @@ namespace Mosa.Compiler.Framework.Operands
 		/// <summary>
 		/// Returns the stack type of the operand.
 		/// </summary>
-		public StackTypeCode StackType { get { return StackTypeFromSigType(_type); } }
+		public StackTypeCode StackType { get { return StackTypeFromSigType(type); } }
 
 		/// <summary>
 		/// Retrieves the stack type From a sig type.
@@ -209,7 +209,7 @@ namespace Mosa.Compiler.Framework.Operands
 		/// <summary>
 		/// Returns the type of the operand.
 		/// </summary>
-		public SigType Type { get { return _type; } }
+		public SigType Type { get { return type; } }
 
 		/// <summary>
 		/// Returns a list of instructions, which use this operand.
@@ -218,10 +218,10 @@ namespace Mosa.Compiler.Framework.Operands
 		{
 			get
 			{
-				if (_uses == null)
-					_uses = new List<int>();
+				if (uses == null)
+					uses = new List<int>();
 
-				return _uses;
+				return uses;
 			}
 		}
 
@@ -245,11 +245,11 @@ namespace Mosa.Compiler.Framework.Operands
 				if (def.Result != null)
 				{
 					// Is this the operand?
-					if (ReferenceEquals(def.Result, this)) 
+					if (ReferenceEquals(def.Result, this))
 					{
 						def.Result = replacement;
 					}
-			
+
 				}
 			}
 
@@ -264,7 +264,7 @@ namespace Mosa.Compiler.Framework.Operands
 					// Is this the operand?
 					if (ReferenceEquals(r, this))
 					{
-						instr.SetOperand(opIdx, replacement); 
+						instr.SetOperand(opIdx, replacement);
 					}
 
 					opIdx++;
@@ -282,7 +282,7 @@ namespace Mosa.Compiler.Framework.Operands
 		/// <returns>A string representation of the operand.</returns>
 		public override string ToString()
 		{
-			return String.Format("[{0}]", _type);
+			return String.Format("[{0}]", type);
 		}
 
 		#endregion // Object Overrides

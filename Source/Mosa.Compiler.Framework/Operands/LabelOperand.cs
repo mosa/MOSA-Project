@@ -22,12 +22,12 @@ namespace Mosa.Compiler.Framework.Operands
 		/// <summary>
 		/// Holds the label.
 		/// </summary>
-		private int _label;
+		private int label;
 
 		/// <summary>
 		/// Holds the name
 		/// </summary>
-		private string _name;
+		private string name;
 
 		#endregion // Data members
 
@@ -43,7 +43,7 @@ namespace Mosa.Compiler.Framework.Operands
 		public LabelOperand(SigType type, Register baseRegister, int offset, int label) :
 			base(type, baseRegister, new IntPtr(offset))
 		{
-			_label = label;
+			this.label = label;
 		}
 
 		/// <summary>
@@ -54,7 +54,7 @@ namespace Mosa.Compiler.Framework.Operands
 		public LabelOperand(SigType type, string name) :
 			base(type, null, IntPtr.Zero)
 		{
-			this._name = name;
+			this.name = name;
 		}
 
 		#endregion // Construction
@@ -67,7 +67,7 @@ namespace Mosa.Compiler.Framework.Operands
 		/// <value>The label.</value>
 		public string Name
 		{
-			get { return _name; }
+			get { return name; }
 		}
 
 		/// <summary>
@@ -76,7 +76,7 @@ namespace Mosa.Compiler.Framework.Operands
 		/// <value>The label.</value>
 		public int Label
 		{
-			get { return _label; }
+			get { return label; }
 		}
 
 		#endregion // Properties
@@ -89,10 +89,10 @@ namespace Mosa.Compiler.Framework.Operands
 		/// <returns>A string representation of the operand.</returns>
 		public override string ToString()
 		{
-			if (_name == null)
-				return String.Format("[L_{0}, ", _label) + " " + base.ToString();
+			if (name == null)
+				return String.Format("[L_{0}, ", label) + " " + base.ToString();
 			else
-				return _name + " " + base.ToString();
+				return name + " " + base.ToString();
 		}
 
 		#endregion // Object Overrides

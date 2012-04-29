@@ -98,8 +98,8 @@ namespace Mosa.Compiler.Framework.Operands
 		public override string ToString()
 		{
 			if (value == null)
-				return String.Format("const null [{0}]", _type);
-			return String.Format("const {0} [{1}]", value, _type);
+				return String.Format("const null [{0}]", type);
+			return String.Format("const {0} [{1}]", value, type);
 		}
 
 		#endregion // Operand Overrides

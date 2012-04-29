@@ -19,8 +19,7 @@ namespace Mosa.Compiler.Framework.Operands
 	{
 		#region Data members
 
-		private int _index;
-		private static int globalIndex;
+		private int index;
 
 		#endregion // Data members
 
@@ -34,17 +33,7 @@ namespace Mosa.Compiler.Framework.Operands
 		public VirtualRegisterOperand(SigType type, int index) :
 			base(type)
 		{
-			_index = index;
-		}
-
-		public VirtualRegisterOperand(SigType type) : this(type, globalIndex++)
-		{
-
-		}
-
-		public VirtualRegisterOperand(SigType type, VirtualRegisterOperand register) :
-			this(type, register._index)
-		{
+			this.index = index;
 		}
 
 		#endregion // Construction
@@ -71,7 +60,7 @@ namespace Mosa.Compiler.Framework.Operands
 		public override bool Equals(Operand other)
 		{
 			VirtualRegisterOperand vop = other as VirtualRegisterOperand;
-			return (null != vop && (vop._index == this._index));
+			return (null != vop && (vop.index == this.index));
 		}
 
 		/// <summary>
@@ -80,7 +69,7 @@ namespace Mosa.Compiler.Framework.Operands
 		/// <returns>A string representation of the operand.</returns>
 		public override string ToString()
 		{
-			return String.Format("V{0} {1}", _index, base.ToString());
+			return String.Format("V{0} {1}", index, base.ToString());
 		}
 
 		#endregion // Operand Overrides

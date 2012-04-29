@@ -25,7 +25,7 @@ namespace Mosa.Compiler.Framework.Operands
 		/// <summary>
 		/// Stores the label of the instruction, that created the temporary operand.
 		/// </summary>
-		private readonly int _label;
+		private readonly int label;
 
 		#endregion // Data members
 
@@ -41,7 +41,7 @@ namespace Mosa.Compiler.Framework.Operands
 		public TemporaryOperand(int label, SigType typeRef, Register register, int offset)
 			: base(typeRef, register, offset)
 		{
-			_label = label;
+			this.label = label;
 		}
 
 		#endregion // Construction
@@ -51,7 +51,7 @@ namespace Mosa.Compiler.Framework.Operands
 		/// <summary>
 		/// Retrieves the id of the virtual register.
 		/// </summary>
-		public int Id { get { return _label; } }
+		public int Id { get { return label; } }
 
 		#endregion // Properties
 
@@ -63,7 +63,7 @@ namespace Mosa.Compiler.Framework.Operands
 		/// <value>The name of the stack operand.</value>
 		public override string Name
 		{
-			get { return _label.ToString(); }
+			get { return label.ToString(); }
 		}
 
 		#endregion // StackOperand Overrides

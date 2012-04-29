@@ -17,12 +17,13 @@ namespace Mosa.Compiler.Framework.Operands
 	/// </summary>
 	public sealed class ParameterOperand : StackOperand
 	{
+
 		#region Data members
 
 		/// <summary>
 		/// The parameter object of the operand.
 		/// </summary>
-		private RuntimeParameter _parameter;
+		private RuntimeParameter parameter;
 
 		#endregion // Data members
 
@@ -37,7 +38,7 @@ namespace Mosa.Compiler.Framework.Operands
 		public ParameterOperand(Register register, RuntimeParameter param, SigType type)
 			: base(type, register, param.Position)
 		{
-			_parameter = param;
+			this.parameter = param;
 		}
 
 		#endregion // Construction
@@ -49,7 +50,7 @@ namespace Mosa.Compiler.Framework.Operands
 		/// </summary>
 		public RuntimeParameter Parameter
 		{
-			get { return _parameter; }
+			get { return parameter; }
 		}
 
 		#endregion // Properties
@@ -62,7 +63,7 @@ namespace Mosa.Compiler.Framework.Operands
 		/// <value>The name of the stack operand.</value>
 		public override string Name
 		{
-			get { return _parameter.Name; }
+			get { return parameter.Name; }
 		}
 
 		#endregion // StackOperand overrides

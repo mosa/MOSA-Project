@@ -117,6 +117,7 @@ namespace Mosa.Compiler.Framework.Stages
 					used.Set(architecture.StackPointerRegister);
 
 					used.Set(architecture.CallingConvention.GetReturnRegisters(methodCompiler.Method.Signature.ReturnType.Type));
+					used.Set(architecture.CallingConvention.CalleeSavedRegisters);
 				}
 			}
 			else
@@ -159,21 +160,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 			top[block.Sequence] = used;
 			analyzed.Set(block.Sequence, true);
-		}
-
-		protected RegisterBitmap GetRegisterInputUsage(Context context)
-		{
-			BasePlatformInstruction instruction = context.Instruction as BasePlatformInstruction;
-
-			if (instruction == null)
-				return new RegisterBitmap();
-
-			IRegisterUsage usage = instruction as IRegisterUsage;
-
-			if (usage == null)
-				return new RegisterBitmap();
-
-			return usage.GetInputRegisters(context);
 		}
 
 		protected void GetRegisterUsage(Context context, ref RegisterBitmap inputRegisters, ref RegisterBitmap outputRegisters)

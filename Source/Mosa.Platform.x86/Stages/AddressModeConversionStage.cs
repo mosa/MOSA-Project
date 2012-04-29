@@ -12,8 +12,8 @@
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Operands;
 using Mosa.Compiler.Metadata;
+using Mosa.Compiler.Framework.IR;
 using CIL = Mosa.Compiler.Framework.CIL;
-using IR = Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Platform.x86.Stages
 {
@@ -34,7 +34,7 @@ namespace Mosa.Platform.x86.Stages
 				for (Context ctx = CreateContext(block); !ctx.EndOfInstruction; ctx.GotoNext())
 					if (ctx.Instruction != null)
 						if (!ctx.Ignore && ctx.OperandCount == 2 && ctx.ResultCount == 1)
-							if (ctx.Instruction is CIL.ArithmeticInstruction || ctx.Instruction is IR.ThreeOperandInstruction)
+							if (ctx.Instruction is CIL.ArithmeticInstruction || ctx.Instruction is ThreeOperandInstruction)
 								ThreeTwoAddressConversion(ctx);
 		}
 
@@ -50,10 +50,10 @@ namespace Mosa.Platform.x86.Stages
 			Operand op1 = ctx.Operand1;
 			Operand op2 = ctx.Operand2;
 
-			if (ctx.Instruction is IR.IntegerCompareInstruction
-				|| ctx.Instruction is IR.FloatingPointCompareInstruction
-				|| ctx.Instruction is IR.LoadInstruction
-				|| ctx.Instruction is IR.StoreInstruction)
+			if (ctx.Instruction is IntegerCompareInstruction
+				|| ctx.Instruction is FloatingPointCompareInstruction
+				|| ctx.Instruction is LoadInstruction
+				|| ctx.Instruction is StoreInstruction)
 			{
 				return;
 			}
@@ -81,9 +81,9 @@ namespace Mosa.Platform.x86.Stages
 			if (op1.StackType != StackTypeCode.F)
 			{
 				if (IsSigned(op1) && !(op1 is ConstantOperand))
-					ctx.InsertBefore().SetInstruction(IR.Instruction.SignExtendedMoveInstruction, eax, op1);
+					ctx.InsertBefore().SetInstruction(Instruction.SignExtendedMoveInstruction, eax, op1);
 				else if (IsUnsigned(op1) && !(op1 is ConstantOperand))
-					ctx.InsertBefore().SetInstruction(IR.Instruction.ZeroExtendedMoveInstruction, eax, op1);
+					ctx.InsertBefore().SetInstruction(Instruction.ZeroExtendedMoveInstruction, eax, op1);
 				else
 					ctx.InsertBefore().SetInstruction(X86.Mov, eax, op1);
 			}

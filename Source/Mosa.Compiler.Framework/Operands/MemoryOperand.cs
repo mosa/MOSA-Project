@@ -27,7 +27,7 @@ namespace Mosa.Compiler.Framework.Operands
 		/// <summary>
 		/// Holds the address offset if used together with a base register or the absolute address, if register is null.
 		/// </summary>
-		private IntPtr _offset;
+		private IntPtr offset;
 
 		#endregion // Data members
 
@@ -42,8 +42,8 @@ namespace Mosa.Compiler.Framework.Operands
 		public MemoryOperand(SigType type, Register @base, IntPtr offset) :
 			base(type)
 		{
-			_base = @base;
-			_offset = offset;
+			this._base = @base;
+			this.offset = offset;
 		}
 
 		#endregion // Construction
@@ -63,8 +63,8 @@ namespace Mosa.Compiler.Framework.Operands
 		/// </summary>
 		public IntPtr Offset
 		{
-			get { return _offset; }
-			set { _offset = value; }
+			get { return offset; }
+			set { offset = value; }
 		}
 
 		#endregion // Properties
@@ -92,14 +92,14 @@ namespace Mosa.Compiler.Framework.Operands
 		{
 			if (_base == null)
 			{
-				if (_offset.ToInt32() > 0)
-					return String.Format("[{0:X}h] {1}", _offset.ToInt32(), base.ToString());
-				return String.Format("[-{0:X}h] {1}", -_offset.ToInt32(), base.ToString());
+				if (offset.ToInt32() > 0)
+					return String.Format("[{0:X}h] {1}", offset.ToInt32(), base.ToString());
+				return String.Format("[-{0:X}h] {1}", -offset.ToInt32(), base.ToString());
 			}
 			{
-				if (_offset.ToInt32() > 0)
-					return String.Format("[{0}+{1:X}h] {2}", _base, _offset.ToInt32(), base.ToString());
-				return String.Format("[{0}-{1:X}h] {2}", _base, -_offset.ToInt32(), base.ToString());
+				if (offset.ToInt32() > 0)
+					return String.Format("[{0}+{1:X}h] {2}", _base, offset.ToInt32(), base.ToString());
+				return String.Format("[{0}-{1:X}h] {2}", _base, -offset.ToInt32(), base.ToString());
 			}
 		}
 
