@@ -140,6 +140,11 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		private StackLayout stackLayout;
 
+		/// <summary>
+		/// Holds the virtual register layout
+		/// </summary>
+		private VirtualRegisterLayout virtualRegisterLayout;
+
 		#endregion // Data Members
 
 		#region Construction
@@ -179,6 +184,8 @@ namespace Mosa.Compiler.Framework
 			this.pipeline = new CompilerPipeline();
 
 			this.stackLayout = new StackLayout(architecture, method.Parameters.Count + (method.Signature.HasThis || method.Signature.HasExplicitThis ? 1 : 0));
+
+			this.virtualRegisterLayout = new VirtualRegisterLayout(architecture, stackLayout);
 
 			EvaluateParameterOperands();
 		}
@@ -357,25 +364,23 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Creates a result operand for an instruction.
+		/// Creates a new temporary local variable operand.
 		/// </summary>
-		/// <param name="type">The signature type of the operand to be created.</param>
-		/// <returns>A new temporary result operand.</returns>
-		public Operand CreateResultOperand(SigType type)
+		/// <param name="type">The signature type of the temporary.</param>
+		/// <returns>
+		/// An operand, which represents the temporary.
+		/// </returns>
+		public Operand CreateTemporary(SigType type)
 		{
-			if (type.Type != CilElementType.I8 && type.Type != CilElementType.U8)
-			{
-				return architecture.CreateResultOperand(type);
-			}
-			return CreateTemporary(type);
+			return stackLayout.AllocateStackOperand(type);
 		}
 
 		/// <summary>
-		/// Creates a new temporary local variable operand.
+		/// Creates the virtual register.
 		/// </summary>
-		/// <param name="type">The signature _type of the temporary.</param>
-		/// <returns>An operand, which represents the temporary.</returns>
-		public Operand CreateTemporary(SigType type)
+		/// <param name="type">The signature type.</param>
+		/// <returns></returns>
+		public Operand CreateVirtualRegister(SigType type)
 		{
 			return stackLayout.AllocateStackOperand(type);
 		}

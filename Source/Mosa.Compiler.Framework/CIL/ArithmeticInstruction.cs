@@ -23,7 +23,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// Generic operand validation table. Not used for add and sub.
 		/// </summary>
-		private static StackTypeCode[][] _operandTable = new StackTypeCode[][] {
+		private static StackTypeCode[][] operandTable = new StackTypeCode[][] {
 			new StackTypeCode[] { StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown },
 			new StackTypeCode[] { StackTypeCode.Unknown, StackTypeCode.Int32,   StackTypeCode.Unknown, StackTypeCode.N,       StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown },
 			new StackTypeCode[] { StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Int64,   StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown },
@@ -36,7 +36,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// Operand validation table for the add instruction.
 		/// </summary>
-		private static StackTypeCode[][] _addTable = new StackTypeCode[][] {
+		private static StackTypeCode[][] addTable = new StackTypeCode[][] {
 			new StackTypeCode[] { StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown },
 			new StackTypeCode[] { StackTypeCode.Unknown, StackTypeCode.Int32,   StackTypeCode.Unknown, StackTypeCode.N,       StackTypeCode.Unknown, StackTypeCode.Ptr,     StackTypeCode.Unknown },
 			new StackTypeCode[] { StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Int64,   StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown },
@@ -49,7 +49,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <summary>
 		/// Operand validation table for the sub instruction.
 		/// </summary>
-		private static StackTypeCode[][] _subTable = new StackTypeCode[][] {
+		private static StackTypeCode[][] subTable = new StackTypeCode[][] {
 			new StackTypeCode[] { StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown },
 			new StackTypeCode[] { StackTypeCode.Unknown, StackTypeCode.Int32,   StackTypeCode.Unknown, StackTypeCode.N,       StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown },
 			new StackTypeCode[] { StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Int64,   StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown, StackTypeCode.Unknown },
@@ -88,15 +88,15 @@ namespace Mosa.Compiler.Framework.CIL
 			switch (opcode)
 			{
 				case OpCode.Add:
-					result = _addTable[(int)ctx.Operand1.StackType][(int)ctx.Operand2.StackType];
+					result = addTable[(int)ctx.Operand1.StackType][(int)ctx.Operand2.StackType];
 					break;
 
 				case OpCode.Sub:
-					result = _subTable[(int)ctx.Operand1.StackType][(int)ctx.Operand2.StackType];
+					result = subTable[(int)ctx.Operand1.StackType][(int)ctx.Operand2.StackType];
 					break;
 
 				default:
-					result = _operandTable[(int)ctx.Operand1.StackType][(int)ctx.Operand2.StackType];
+					result = operandTable[(int)ctx.Operand1.StackType][(int)ctx.Operand2.StackType];
 					break;
 			}
 
