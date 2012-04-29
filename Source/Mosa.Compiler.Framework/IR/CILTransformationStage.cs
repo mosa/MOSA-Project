@@ -59,7 +59,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// <param name="context">The context.</param>
 		public void Ldarga(Context context)
 		{
-			context.ReplaceInstructionOnly(Instruction.AddressOfInstruction);
+			context.ReplaceInstructionOnly(IRInstruction.AddressOf);
 		}
 
 		/// <summary>
@@ -84,7 +84,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// <param name="context">The context.</param>
 		public void Ldloca(Context context)
 		{
-			context.ReplaceInstructionOnly(Instruction.AddressOfInstruction);
+			context.ReplaceInstructionOnly(IRInstruction.AddressOf);
 		}
 
 		/// <summary>
@@ -102,7 +102,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// <param name="context">The context.</param>
 		public void Ldobj(Context context)
 		{
-			IInstruction loadInstruction = Instruction.LoadInstruction;
+			IInstruction loadInstruction = IRInstruction.Load;
 			Operand destination = context.Result;
 			Operand source = context.Operand1;
 
@@ -117,11 +117,11 @@ namespace Mosa.Compiler.Framework.IR
 			// This is actually ldind.* and ldobj - the opcodes have the same meanings
 			if (MustSignExtendOnLoad(elementType.Type))
 			{
-				loadInstruction = Instruction.SignExtendedMoveInstruction;
+				loadInstruction = IRInstruction.SignExtendedMove;
 			}
 			else if (MustZeroExtendOnLoad(elementType.Type))
 			{
-				loadInstruction = Instruction.ZeroExtendedMoveInstruction;
+				loadInstruction = IRInstruction.ZeroExtendedMove;
 			}
 
 			context.SetInstruction(loadInstruction, destination, source, ConstantOperand.FromValue(0));
@@ -151,14 +151,14 @@ namespace Mosa.Compiler.Framework.IR
 			Operand source = new MemberOperand(context.RuntimeField);
 			Operand destination = context.Result;
 
-			IInstruction loadInstruction = Instruction.MoveInstruction;
+			IInstruction loadInstruction = IRInstruction.Move;
 			if (MustSignExtendOnLoad(sigType.Type))
 			{
-				loadInstruction = Instruction.SignExtendedMoveInstruction;
+				loadInstruction = IRInstruction.SignExtendedMove;
 			}
 			else if (MustZeroExtendOnLoad(sigType.Type))
 			{
-				loadInstruction = Instruction.ZeroExtendedMoveInstruction;
+				loadInstruction = IRInstruction.ZeroExtendedMove;
 			}
 
 			context.SetInstruction(loadInstruction, destination, source);
@@ -170,8 +170,8 @@ namespace Mosa.Compiler.Framework.IR
 		/// <param name="context">The context.</param>
 		public void Ldsflda(Context context)
 		{
-			context.SetInstruction(Instruction.AddressOfInstruction, context.Result, new MemberOperand(context.RuntimeField));
-			context.SetInstruction(Instruction.MoveInstruction, context.Result, context.Operand1);
+			context.SetInstruction(IRInstruction.AddressOf, context.Result, new MemberOperand(context.RuntimeField));
+			context.SetInstruction(IRInstruction.Move, context.Result, context.Operand1);
 		}
 
 		/// <summary>
@@ -180,7 +180,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Ldftn(Context context)
 		{
-			context.SetInstruction(Instruction.MoveInstruction, context.Result, SymbolOperand.FromMethod(context.InvokeTarget));
+			context.SetInstruction(IRInstruction.Move, context.Result, SymbolOperand.FromMethod(context.InvokeTarget));
 		}
 
 		/// <summary>
@@ -226,7 +226,7 @@ namespace Mosa.Compiler.Framework.IR
 		void CIL.ICILVisitor.Stobj(Context context)
 		{
 			// This is actually stind.* and stobj - the opcodes have the same meanings
-			context.SetInstruction(Instruction.StoreInstruction, context.Operand1, ConstantOperand.FromValue(0), context.Operand2);
+			context.SetInstruction(IRInstruction.Store, context.Operand1, ConstantOperand.FromValue(0), context.Operand2);
 		}
 
 		/// <summary>
@@ -235,7 +235,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Stsfld(Context context)
 		{
-			context.SetInstruction(Instruction.MoveInstruction, new MemberOperand(context.RuntimeField), context.Operand1);
+			context.SetInstruction(IRInstruction.Move, new MemberOperand(context.RuntimeField), context.Operand1);
 		}
 
 		/// <summary>
@@ -288,7 +288,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Ret(Context context)
 		{
-			context.ReplaceInstructionOnly(Instruction.ReturnInstruction);
+			context.ReplaceInstructionOnly(IRInstruction.Return);
 		}
 
 		/// <summary>
@@ -314,19 +314,19 @@ namespace Mosa.Compiler.Framework.IR
 			switch ((context.Instruction as CIL.BaseInstruction).OpCode)
 			{
 				case CIL.OpCode.And:
-					context.SetInstruction(Instruction.LogicalAndInstruction, context.Result, context.Operand1, context.Operand2);
+					context.SetInstruction(IRInstruction.LogicalAnd, context.Result, context.Operand1, context.Operand2);
 					break;
 				case CIL.OpCode.Or:
-					context.SetInstruction(Instruction.LogicalOrInstruction, context.Result, context.Operand1, context.Operand2);
+					context.SetInstruction(IRInstruction.LogicalOr, context.Result, context.Operand1, context.Operand2);
 					break;
 				case CIL.OpCode.Xor:
-					context.SetInstruction(Instruction.LogicalXorInstruction, context.Result, context.Operand1, context.Operand2);
+					context.SetInstruction(IRInstruction.LogicalXor, context.Result, context.Operand1, context.Operand2);
 					break;
 				case CIL.OpCode.Div_un:
-					context.SetInstruction(Instruction.DivUInstruction, context.Result, context.Operand1, context.Operand2);
+					context.SetInstruction(IRInstruction.DivU, context.Result, context.Operand1, context.Operand2);
 					break;
 				case CIL.OpCode.Rem_un:
-					context.SetInstruction(Instruction.RemUInstruction, context.Result, context.Operand1, context.Operand2);
+					context.SetInstruction(IRInstruction.RemU, context.Result, context.Operand1, context.Operand2);
 					break;
 				default:
 					throw new NotSupportedException();
@@ -343,13 +343,13 @@ namespace Mosa.Compiler.Framework.IR
 			switch ((context.Instruction as CIL.BaseInstruction).OpCode)
 			{
 				case CIL.OpCode.Shl:
-					context.SetInstruction(Instruction.ShiftLeftInstruction, context.Result, context.Operand1, context.Operand2);
+					context.SetInstruction(IRInstruction.ShiftLeft, context.Result, context.Operand1, context.Operand2);
 					break;
 				case CIL.OpCode.Shr:
-					context.SetInstruction(Instruction.ArithmeticShiftRightInstruction, context.Result, context.Operand1, context.Operand2);
+					context.SetInstruction(IRInstruction.ArithmeticShiftRight, context.Result, context.Operand1, context.Operand2);
 					break;
 				case CIL.OpCode.Shr_un:
-					context.SetInstruction(Instruction.ShiftRightInstruction, context.Result, context.Operand1, context.Operand2);
+					context.SetInstruction(IRInstruction.ShiftRight, context.Result, context.Operand1, context.Operand2);
 					break;
 				default:
 					throw new NotSupportedException();
@@ -365,22 +365,22 @@ namespace Mosa.Compiler.Framework.IR
 			if (IsUnsigned(context.Operand1))
 			{
 				ConstantOperand zero = new ConstantOperand(context.Operand1.Type, 0UL);
-				context.SetInstruction(Instruction.SubUInstruction, context.Result, zero, context.Operand1);
+				context.SetInstruction(IRInstruction.SubU, context.Result, zero, context.Operand1);
 			}
 			else if (context.Operand1.Type.Type == CilElementType.R4)
 			{
 				ConstantOperand minusOne = new ConstantOperand(context.Operand1.Type, -1.0f);
-				context.SetInstruction(Instruction.MulFInstruction, context.Result, minusOne, context.Operand1);
+				context.SetInstruction(IRInstruction.MulF, context.Result, minusOne, context.Operand1);
 			}
 			else if (context.Operand1.Type.Type == CilElementType.R8)
 			{
 				ConstantOperand minusOne = new ConstantOperand(context.Operand1.Type, -1.0);
-				context.SetInstruction(Instruction.MulFInstruction, context.Result, minusOne, context.Operand1);
+				context.SetInstruction(IRInstruction.MulF, context.Result, minusOne, context.Operand1);
 			}
 			else
 			{
 				ConstantOperand minusOne = new ConstantOperand(context.Operand1.Type, -1L);
-				context.SetInstruction(Instruction.MulSInstruction, context.Result, minusOne, context.Operand1);
+				context.SetInstruction(IRInstruction.MulS, context.Result, minusOne, context.Operand1);
 			}
 		}
 
@@ -390,7 +390,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Not(Context context)
 		{
-			context.SetInstruction(Instruction.LogicalNotInstruction, context.Result, context.Operand1);
+			context.SetInstruction(IRInstruction.LogicalNot, context.Result, context.Operand1);
 		}
 
 		/// <summary>
@@ -441,7 +441,7 @@ namespace Mosa.Compiler.Framework.IR
 					}
 				}
 
-				context.Previous.ReplaceInstructionOnly(Instruction.NopInstruction);
+				context.Previous.ReplaceInstructionOnly(IRInstruction.Nop);
 
 				SymbolOperand symbolOperand = SymbolOperand.FromMethod(invokeTarget);
 				ProcessInvokeInstruction(context, symbolOperand, resultOperand, operands);
@@ -459,8 +459,8 @@ namespace Mosa.Compiler.Framework.IR
 				if (!invokeTarget.DeclaringType.IsInterface)
 				{
 					int methodTableOffset = CalculateMethodTableOffset(invokeTarget) + (nativePointerSize * 5);
-					context.SetInstruction(Instruction.LoadInstruction, methodTable, thisPtr, ConstantOperand.FromValue(0));
-					context.AppendInstruction(Instruction.LoadInstruction, methodPtr, methodTable, new ConstantOperand(BuiltInSigType.Int32, methodTableOffset));
+					context.SetInstruction(IRInstruction.Load, methodTable, thisPtr, ConstantOperand.FromValue(0));
+					context.AppendInstruction(IRInstruction.Load, methodPtr, methodTable, new ConstantOperand(BuiltInSigType.Int32, methodTableOffset));
 				}
 				else
 				{
@@ -470,13 +470,13 @@ namespace Mosa.Compiler.Framework.IR
 					Operand interfaceSlotPtr = methodCompiler.CreateTemporary(BuiltInSigType.IntPtr);
 					Operand interfaceMethodTablePtr = methodCompiler.CreateTemporary(BuiltInSigType.IntPtr);
 
-					context.SetInstruction(Instruction.LoadInstruction, methodTable, thisPtr, ConstantOperand.FromValue(0));
-					context.AppendInstruction(Instruction.LoadInstruction, interfaceSlotPtr, methodTable, ConstantOperand.FromValue(0));
-					context.AppendInstruction(Instruction.LoadInstruction, interfaceMethodTablePtr, interfaceSlotPtr, new ConstantOperand(BuiltInSigType.Int32, slotOffset));
-					context.AppendInstruction(Instruction.LoadInstruction, methodPtr, interfaceMethodTablePtr, new ConstantOperand(BuiltInSigType.Int32, methodTableOffset));
+					context.SetInstruction(IRInstruction.Load, methodTable, thisPtr, ConstantOperand.FromValue(0));
+					context.AppendInstruction(IRInstruction.Load, interfaceSlotPtr, methodTable, ConstantOperand.FromValue(0));
+					context.AppendInstruction(IRInstruction.Load, interfaceMethodTablePtr, interfaceSlotPtr, new ConstantOperand(BuiltInSigType.Int32, slotOffset));
+					context.AppendInstruction(IRInstruction.Load, methodPtr, interfaceMethodTablePtr, new ConstantOperand(BuiltInSigType.Int32, methodTableOffset));
 				}
 
-				context.AppendInstruction(Instruction.NopInstruction);
+				context.AppendInstruction(IRInstruction.Nop);
 				ProcessInvokeInstruction(context, methodPtr, resultOperand, operands);
 			}
 			else
@@ -589,7 +589,7 @@ namespace Mosa.Compiler.Framework.IR
 			if (!ReplaceWithInternalCall(context, ctorMethod))
 			{
 				Context before = context.InsertBefore();
-				before.SetInstruction(Instruction.NopInstruction);
+				before.SetInstruction(IRInstruction.Nop);
 
 				ReplaceWithVmCall(before, VmCall.AllocateObject);
 
@@ -652,7 +652,7 @@ namespace Mosa.Compiler.Framework.IR
 		{
 			// We don't need to check the result, if the icall fails, it'll happily throw
 			// the InvalidCastException.
-			context.ReplaceInstructionOnly(Instruction.NopInstruction);
+			context.ReplaceInstructionOnly(IRInstruction.Nop);
 			//ReplaceWithVmCall(context, VmCall.Castclass);
 		}
 
@@ -707,7 +707,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Throw(Context context)
 		{
-			context.SetInstruction(Instruction.ThrowInstruction, context.Result, context.Operand1);
+			context.SetInstruction(IRInstruction.Throw, context.Result, context.Operand1);
 		}
 
 		/// <summary>
@@ -784,11 +784,11 @@ namespace Mosa.Compiler.Framework.IR
 			}
 			else
 			{
-				context.ReplaceInstructionOnly(Instruction.MoveInstruction);
+				context.ReplaceInstructionOnly(IRInstruction.Move);
 				return;
 			}
 
-			context.SetInstruction(Instruction.NopInstruction);
+			context.SetInstruction(IRInstruction.Nop);
 			ReplaceWithVmCall(context, vmCall);
 
 			var methodTableSymbol = GetMethodTableSymbol(type);
@@ -811,9 +811,9 @@ namespace Mosa.Compiler.Framework.IR
 			IR.ConditionCode code = ConvertCondition((context.Instruction as CIL.BaseInstruction).OpCode);
 
 			if (context.Operand1.StackType == StackTypeCode.F)
-				context.SetInstruction(Instruction.FloatingPointCompareInstruction, context.Result, context.Operand1, context.Operand2);
+				context.SetInstruction(IRInstruction.FloatingPointCompare, context.Result, context.Operand1, context.Operand2);
 			else
-				context.SetInstruction(Instruction.IntegerCompareInstruction, context.Result, context.Operand1, context.Operand2);
+				context.SetInstruction(IRInstruction.IntegerCompare, context.Result, context.Operand1, context.Operand2);
 
 			context.ConditionCode = code;
 		}
@@ -851,7 +851,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Nop(Context context)
 		{
-			context.SetInstruction(Instruction.NopInstruction);
+			context.SetInstruction(IRInstruction.Nop);
 		}
 
 		/// <summary>
@@ -873,7 +873,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// <param name="context">The context.</param>
 		public void Break(Context context)
 		{
-			context.SetInstruction(Instruction.BreakInstruction);
+			context.SetInstruction(IRInstruction.Break);
 		}
 
 		/// <summary>
@@ -920,7 +920,7 @@ namespace Mosa.Compiler.Framework.IR
 			Operand source = new SymbolOperand(BuiltInSigType.String, symbolName);
 			Operand destination = context.Result;
 
-			context.SetInstruction(Instruction.MoveInstruction, destination, source);
+			context.SetInstruction(IRInstruction.Move, destination, source);
 		}
 
 		/// <summary>
@@ -937,18 +937,18 @@ namespace Mosa.Compiler.Framework.IR
 			int offset = typeLayout.GetFieldOffset(field);
 			ConstantOperand offsetOperand = new ConstantOperand(BuiltInSigType.IntPtr, offset);
 
-			IInstruction loadInstruction = Instruction.LoadInstruction;
+			IInstruction loadInstruction = IRInstruction.Load;
 			if (MustSignExtendOnLoad(field.SignatureType.Type))
 			{
-				loadInstruction = Instruction.SignExtendedMoveInstruction;
+				loadInstruction = IRInstruction.SignExtendedMove;
 			}
 			else if (MustZeroExtendOnLoad(field.SignatureType.Type))
 			{
-				loadInstruction = Instruction.ZeroExtendedMoveInstruction;
+				loadInstruction = IRInstruction.ZeroExtendedMove;
 			}
 
 			context.SetInstruction(loadInstruction, temp, objectOperand, offsetOperand);
-			context.AppendInstruction(Instruction.MoveInstruction, resultOperand, temp);
+			context.AppendInstruction(IRInstruction.Move, resultOperand, temp);
 		}
 
 		/// <summary>
@@ -963,7 +963,7 @@ namespace Mosa.Compiler.Framework.IR
 			int offset = typeLayout.GetFieldOffset(context.RuntimeField);
 			Operand fixedOffset = new ConstantOperand(BuiltInSigType.Int32, offset);
 
-			context.SetInstruction(Instruction.AddUInstruction, fieldAddress, objectOperand, fixedOffset);
+			context.SetInstruction(IRInstruction.AddU, fieldAddress, objectOperand, fixedOffset);
 		}
 
 		/// <summary>
@@ -979,8 +979,8 @@ namespace Mosa.Compiler.Framework.IR
 			int offset = typeLayout.GetFieldOffset(context.RuntimeField);
 			ConstantOperand offsetOperand = new ConstantOperand(BuiltInSigType.IntPtr, offset);
 
-			context.SetInstruction(Instruction.MoveInstruction, temp, valueOperand);
-			context.AppendInstruction(Instruction.StoreInstruction, objectOperand, offsetOperand, temp);
+			context.SetInstruction(IRInstruction.Move, temp, valueOperand);
+			context.AppendInstruction(IRInstruction.Store, objectOperand, offsetOperand, temp);
 		}
 
 		/// <summary>
@@ -998,7 +998,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// <param name="context">The context.</param>
 		public void Branch(Context context)
 		{
-			context.ReplaceInstructionOnly(Instruction.JmpInstruction);
+			context.ReplaceInstructionOnly(IRInstruction.Jmp);
 		}
 
 		/// <summary>
@@ -1027,7 +1027,7 @@ namespace Mosa.Compiler.Framework.IR
 				throw new NotSupportedException(@"CILTransformationStage.UnaryBranch doesn't support CIL opcode " + opcode);
 			}
 
-			context.SetInstruction(Instruction.IntegerCompareBranchInstruction, null, first, second);
+			context.SetInstruction(IRInstruction.IntegerCompareBranch, null, first, second);
 			context.ConditionCode = cc;
 			context.SetBranch(branch.Targets[0]);
 		}
@@ -1047,15 +1047,15 @@ namespace Mosa.Compiler.Framework.IR
 			if (first.StackType == StackTypeCode.F)
 			{
 				Operand comparisonResult = methodCompiler.CreateTemporary(BuiltInSigType.Int32);
-				context.SetInstruction(Instruction.FloatingPointCompareInstruction, comparisonResult, first, second);
+				context.SetInstruction(IRInstruction.FloatingPointCompare, comparisonResult, first, second);
 				context.ConditionCode = cc;
-				context.SetInstruction(Instruction.IntegerCompareBranchInstruction, null, comparisonResult, new ConstantOperand(BuiltInSigType.IntPtr, 1));
+				context.SetInstruction(IRInstruction.IntegerCompareBranch, null, comparisonResult, new ConstantOperand(BuiltInSigType.IntPtr, 1));
 				context.ConditionCode = ConditionCode.Equal;
 				context.SetBranch(branch.Targets[0]);
 			}
 			else
 			{
-				context.SetInstruction(Instruction.IntegerCompareBranchInstruction, null, first, second);
+				context.SetInstruction(IRInstruction.IntegerCompareBranch, null, first, second);
 				context.ConditionCode = cc;
 				context.SetBranch(branch.Targets[0]);
 			}
@@ -1067,7 +1067,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// <param name="context">The context.</param>
 		public void Switch(Context context)
 		{
-			context.ReplaceInstructionOnly(Instruction.SwitchInstruction);
+			context.ReplaceInstructionOnly(IRInstruction.Switch);
 		}
 
 		/// <summary>
@@ -1090,8 +1090,8 @@ namespace Mosa.Compiler.Framework.IR
 			ConstantOperand constantOffset = ConstantOperand.FromValue(8);
 
 			Operand arrayAddress = methodCompiler.CreateTemporary(new PtrSigType(BuiltInSigType.Int32));
-			context.SetInstruction(Instruction.MoveInstruction, arrayAddress, arrayOperand);
-			context.AppendInstruction(Instruction.LoadInstruction, arrayLength, arrayAddress, constantOffset);
+			context.SetInstruction(IRInstruction.Move, arrayAddress, arrayOperand);
+			context.AppendInstruction(IRInstruction.Load, arrayLength, arrayAddress, constantOffset);
 		}
 
 		/// <summary>
@@ -1112,7 +1112,7 @@ namespace Mosa.Compiler.Framework.IR
 
 			Operand arrayAddress = this.LoadArrayBaseAddress(context, arraySigType, arrayOperand);
 			Operand elementOffset = this.CalculateArrayElementOffset(context, arraySigType, arrayIndexOperand);
-			context.AppendInstruction(Instruction.AddSInstruction, result, arrayAddress, elementOffset);
+			context.AppendInstruction(IRInstruction.AddS, result, arrayAddress, elementOffset);
 		}
 
 		private Operand CalculateArrayElementOffset(Context context, SZArraySigType arraySignatureType, Operand arrayIndexOperand)
@@ -1133,7 +1133,7 @@ namespace Mosa.Compiler.Framework.IR
 
 			Operand elementOffset = methodCompiler.CreateTemporary(BuiltInSigType.Int32);
 			Operand elementSizeOperand = new ConstantOperand(BuiltInSigType.Int32, elementSizeInBytes);
-			context.AppendInstruction(Instruction.MulSInstruction, elementOffset, arrayIndexOperand, elementSizeOperand);
+			context.AppendInstruction(IRInstruction.MulS, elementOffset, arrayIndexOperand, elementSizeOperand);
 
 			return elementOffset;
 		}
@@ -1142,7 +1142,7 @@ namespace Mosa.Compiler.Framework.IR
 		{
 			Operand arrayAddress = methodCompiler.CreateTemporary(new PtrSigType(arraySignatureType.ElementType));
 			Operand fixedOffset = new ConstantOperand(BuiltInSigType.Int32, 12);
-			context.SetInstruction(Instruction.AddSInstruction, arrayAddress, arrayOperand, fixedOffset);
+			context.SetInstruction(IRInstruction.AddS, arrayAddress, arrayOperand, fixedOffset);
 			return arrayAddress;
 		}
 
@@ -1152,7 +1152,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// <param name="context">The context.</param>
 		public void Ldelem(Context context)
 		{
-			IInstruction loadInstruction = Instruction.LoadInstruction;
+			IInstruction loadInstruction = IRInstruction.Load;
 			Operand result = context.Result;
 			MemoryOperand arrayOperand = (MemoryOperand)context.Operand1;
 			Operand arrayIndexOperand = context.Operand2;
@@ -1165,11 +1165,11 @@ namespace Mosa.Compiler.Framework.IR
 
 			if (MustSignExtendOnLoad(arraySigType.ElementType.Type))
 			{
-				loadInstruction = Instruction.SignExtendedMoveInstruction;
+				loadInstruction = IRInstruction.SignExtendedMove;
 			}
 			else if (MustZeroExtendOnLoad(arraySigType.ElementType.Type))
 			{
-				loadInstruction = Instruction.ZeroExtendedMoveInstruction;
+				loadInstruction = IRInstruction.ZeroExtendedMove;
 			}
 
 			Operand arrayAddress = this.LoadArrayBaseAddress(context, arraySigType, arrayOperand);
@@ -1194,7 +1194,7 @@ namespace Mosa.Compiler.Framework.IR
 
 			Operand arrayAddress = this.LoadArrayBaseAddress(context, arraySigType, arrayOperand);
 			Operand elementOffset = this.CalculateArrayElementOffset(context, arraySigType, arrayIndexOperand);
-			context.AppendInstruction(Instruction.StoreInstruction, arrayAddress, elementOffset, value);
+			context.AppendInstruction(IRInstruction.Store, arrayAddress, elementOffset, value);
 		}
 
 		/// <summary>
@@ -1258,7 +1258,7 @@ namespace Mosa.Compiler.Framework.IR
 			}
 			else
 			{
-				context.ReplaceInstructionOnly(Instruction.MoveInstruction);
+				context.ReplaceInstructionOnly(IRInstruction.Move);
 				return;
 			}
 
@@ -1308,7 +1308,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Endfinally(Context context)
 		{
-			context.SetInstruction(Instruction.ReturnInstruction);
+			context.SetInstruction(IRInstruction.Return);
 		}
 
 
@@ -1345,7 +1345,7 @@ namespace Mosa.Compiler.Framework.IR
 					BasicBlock finallyBlock = this.FindBlock(clause.HandlerOffset);
 
 					Context before = context.InsertBefore();
-					before.SetInstruction(Instruction.CallInstruction, finallyBlock);
+					before.SetInstruction(IRInstruction.Call, finallyBlock);
 				}
 			}
 			else if (clause.IsLabelWithinHandler(context.Label))
@@ -1357,7 +1357,7 @@ namespace Mosa.Compiler.Framework.IR
 				throw new Exception("can not find leave clause");
 			}
 
-			context.ReplaceInstructionOnly(Instruction.JmpInstruction);
+			context.ReplaceInstructionOnly(IRInstruction.Jmp);
 		}
 
 		/// <summary>
@@ -1429,7 +1429,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// <param name="context">The context.</param>
 		public void Add(Context context)
 		{
-			Replace(context, Instruction.AddFInstruction, Instruction.AddSInstruction, Instruction.AddUInstruction);
+			Replace(context, IRInstruction.AddF, IRInstruction.AddS, IRInstruction.AddU);
 		}
 
 		/// <summary>
@@ -1438,7 +1438,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// <param name="context">The context.</param>
 		public void Sub(Context context)
 		{
-			Replace(context, Instruction.SubFInstruction, Instruction.SubSInstruction, Instruction.SubUInstruction);
+			Replace(context, IRInstruction.SubF, IRInstruction.SubS, IRInstruction.SubU);
 		}
 		/// <summary>
 		/// Visitation function for Mul instruction.
@@ -1446,7 +1446,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// <param name="context">The context.</param>
 		public void Mul(Context context)
 		{
-			Replace(context, Instruction.MulFInstruction, Instruction.MulSInstruction, Instruction.MulUInstruction);
+			Replace(context, IRInstruction.MulF, IRInstruction.MulS, IRInstruction.MulU);
 		}
 
 		/// <summary>
@@ -1455,7 +1455,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// <param name="context">The context.</param>
 		public void Div(Context context)
 		{
-			Replace(context, Instruction.DivFInstruction, Instruction.DivSInstruction, Instruction.DivUInstruction);
+			Replace(context, IRInstruction.DivF, IRInstruction.DivS, IRInstruction.DivU);
 		}
 
 		/// <summary>
@@ -1464,7 +1464,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// <param name="context">The context.</param>
 		public void Rem(Context context)
 		{
-			Replace(context, Instruction.RemFInstruction, Instruction.RemSInstruction, Instruction.RemUInstruction);
+			Replace(context, IRInstruction.RemF, IRInstruction.RemS, IRInstruction.RemU);
 		}
 
 		#endregion // ICILVisitor
@@ -1655,199 +1655,199 @@ namespace Mosa.Compiler.Framework.IR
 
 		private static readonly BaseInstruction[][] s_convTable = new BaseInstruction[13][] {
 			/* I1 */ new BaseInstruction[13] { 
-				/* I1 */ Instruction.MoveInstruction,
-				/* I2 */ Instruction.LogicalAndInstruction,
-				/* I4 */ Instruction.LogicalAndInstruction,
-				/* I8 */ Instruction.LogicalAndInstruction,
-				/* U1 */ Instruction.MoveInstruction,
-				/* U2 */ Instruction.LogicalAndInstruction,
-				/* U4 */ Instruction.LogicalAndInstruction,
-				/* U8 */ Instruction.LogicalAndInstruction,
-				/* R4 */ Instruction.FloatingPointToIntegerConversionInstruction,
-				/* R8 */ Instruction.FloatingPointToIntegerConversionInstruction,
-				/* I  */ Instruction.LogicalAndInstruction,
-				/* U  */ Instruction.LogicalAndInstruction,
-				/* Ptr*/ Instruction.LogicalAndInstruction,
+				/* I1 */ IRInstruction.Move,
+				/* I2 */ IRInstruction.LogicalAnd,
+				/* I4 */ IRInstruction.LogicalAnd,
+				/* I8 */ IRInstruction.LogicalAnd,
+				/* U1 */ IRInstruction.Move,
+				/* U2 */ IRInstruction.LogicalAnd,
+				/* U4 */ IRInstruction.LogicalAnd,
+				/* U8 */ IRInstruction.LogicalAnd,
+				/* R4 */ IRInstruction.FloatingPointToIntegerConversion,
+				/* R8 */ IRInstruction.FloatingPointToIntegerConversion,
+				/* I  */ IRInstruction.LogicalAnd,
+				/* U  */ IRInstruction.LogicalAnd,
+				/* Ptr*/ IRInstruction.LogicalAnd,
 			},
 			/* I2 */ new BaseInstruction[13] { 
-				/* I1 */ Instruction.SignExtendedMoveInstruction,
-				/* I2 */ Instruction.MoveInstruction,
-				/* I4 */ Instruction.LogicalAndInstruction,
-				/* I8 */ Instruction.LogicalAndInstruction,
-				/* U1 */ Instruction.ZeroExtendedMoveInstruction,
-				/* U2 */ Instruction.MoveInstruction,
-				/* U4 */ Instruction.LogicalAndInstruction,
-				/* U8 */ Instruction.LogicalAndInstruction,
-				/* R4 */ Instruction.FloatingPointToIntegerConversionInstruction,
-				/* R8 */ Instruction.FloatingPointToIntegerConversionInstruction,
-				/* I  */ Instruction.LogicalAndInstruction,
-				/* U  */ Instruction.LogicalAndInstruction,
-				/* Ptr*/ Instruction.LogicalAndInstruction,
+				/* I1 */ IRInstruction.SignExtendedMove,
+				/* I2 */ IRInstruction.Move,
+				/* I4 */ IRInstruction.LogicalAnd,
+				/* I8 */ IRInstruction.LogicalAnd,
+				/* U1 */ IRInstruction.ZeroExtendedMove,
+				/* U2 */ IRInstruction.Move,
+				/* U4 */ IRInstruction.LogicalAnd,
+				/* U8 */ IRInstruction.LogicalAnd,
+				/* R4 */ IRInstruction.FloatingPointToIntegerConversion,
+				/* R8 */ IRInstruction.FloatingPointToIntegerConversion,
+				/* I  */ IRInstruction.LogicalAnd,
+				/* U  */ IRInstruction.LogicalAnd,
+				/* Ptr*/ IRInstruction.LogicalAnd,
 			},
 			/* I4 */ new BaseInstruction[13] { 
-				/* I1 */ Instruction.SignExtendedMoveInstruction,
-				/* I2 */ Instruction.SignExtendedMoveInstruction,
-				/* I4 */ Instruction.MoveInstruction,
-				/* I8 */ Instruction.LogicalAndInstruction,
-				/* U1 */ Instruction.ZeroExtendedMoveInstruction,
-				/* U2 */ Instruction.ZeroExtendedMoveInstruction,
-				/* U4 */ Instruction.MoveInstruction,
-				/* U8 */ Instruction.LogicalAndInstruction,
-				/* R4 */ Instruction.FloatingPointToIntegerConversionInstruction,
-				/* R8 */ Instruction.FloatingPointToIntegerConversionInstruction,
-				/* I  */ Instruction.LogicalAndInstruction,
-				/* U  */ Instruction.LogicalAndInstruction,
-				/* Ptr*/ Instruction.LogicalAndInstruction,
+				/* I1 */ IRInstruction.SignExtendedMove,
+				/* I2 */ IRInstruction.SignExtendedMove,
+				/* I4 */ IRInstruction.Move,
+				/* I8 */ IRInstruction.LogicalAnd,
+				/* U1 */ IRInstruction.ZeroExtendedMove,
+				/* U2 */ IRInstruction.ZeroExtendedMove,
+				/* U4 */ IRInstruction.Move,
+				/* U8 */ IRInstruction.LogicalAnd,
+				/* R4 */ IRInstruction.FloatingPointToIntegerConversion,
+				/* R8 */ IRInstruction.FloatingPointToIntegerConversion,
+				/* I  */ IRInstruction.LogicalAnd,
+				/* U  */ IRInstruction.LogicalAnd,
+				/* Ptr*/ IRInstruction.LogicalAnd,
 			},
 			/* I8 */ new BaseInstruction[13] {
-				/* I1 */ Instruction.SignExtendedMoveInstruction,
-				/* I2 */ Instruction.SignExtendedMoveInstruction,
-				/* I4 */ Instruction.SignExtendedMoveInstruction,
-				/* I8 */ Instruction.MoveInstruction,
-				/* U1 */ Instruction.ZeroExtendedMoveInstruction,
-				/* U2 */ Instruction.ZeroExtendedMoveInstruction,
-				/* U4 */ Instruction.ZeroExtendedMoveInstruction,
-				/* U8 */ Instruction.MoveInstruction,
-				/* R4 */ Instruction.FloatingPointToIntegerConversionInstruction,
-				/* R8 */ Instruction.FloatingPointToIntegerConversionInstruction,
-				/* I  */ Instruction.LogicalAndInstruction,
-				/* U  */ Instruction.LogicalAndInstruction,
-				/* Ptr*/ Instruction.LogicalAndInstruction,
+				/* I1 */ IRInstruction.SignExtendedMove,
+				/* I2 */ IRInstruction.SignExtendedMove,
+				/* I4 */ IRInstruction.SignExtendedMove,
+				/* I8 */ IRInstruction.Move,
+				/* U1 */ IRInstruction.ZeroExtendedMove,
+				/* U2 */ IRInstruction.ZeroExtendedMove,
+				/* U4 */ IRInstruction.ZeroExtendedMove,
+				/* U8 */ IRInstruction.Move,
+				/* R4 */ IRInstruction.FloatingPointToIntegerConversion,
+				/* R8 */ IRInstruction.FloatingPointToIntegerConversion,
+				/* I  */ IRInstruction.LogicalAnd,
+				/* U  */ IRInstruction.LogicalAnd,
+				/* Ptr*/ IRInstruction.LogicalAnd,
 			},
 			/* U1 */ new BaseInstruction[13] {
-				/* I1 */ Instruction.MoveInstruction,
-				/* I2 */ Instruction.LogicalAndInstruction,
-				/* I4 */ Instruction.LogicalAndInstruction,
-				/* I8 */ Instruction.LogicalAndInstruction,
-				/* U1 */ Instruction.MoveInstruction,
-				/* U2 */ Instruction.LogicalAndInstruction,
-				/* U4 */ Instruction.LogicalAndInstruction,
-				/* U8 */ Instruction.LogicalAndInstruction,
-				/* R4 */ Instruction.FloatingPointToIntegerConversionInstruction,
-				/* R8 */ Instruction.FloatingPointToIntegerConversionInstruction,
-				/* I  */ Instruction.LogicalAndInstruction,
-				/* U  */ Instruction.LogicalAndInstruction,
-				/* Ptr*/ Instruction.LogicalAndInstruction,
+				/* I1 */ IRInstruction.Move,
+				/* I2 */ IRInstruction.LogicalAnd,
+				/* I4 */ IRInstruction.LogicalAnd,
+				/* I8 */ IRInstruction.LogicalAnd,
+				/* U1 */ IRInstruction.Move,
+				/* U2 */ IRInstruction.LogicalAnd,
+				/* U4 */ IRInstruction.LogicalAnd,
+				/* U8 */ IRInstruction.LogicalAnd,
+				/* R4 */ IRInstruction.FloatingPointToIntegerConversion,
+				/* R8 */ IRInstruction.FloatingPointToIntegerConversion,
+				/* I  */ IRInstruction.LogicalAnd,
+				/* U  */ IRInstruction.LogicalAnd,
+				/* Ptr*/ IRInstruction.LogicalAnd,
 			},
 			/* U2 */ new BaseInstruction[13] {
-				/* I1 */ Instruction.ZeroExtendedMoveInstruction,
-				/* I2 */ Instruction.MoveInstruction,
-				/* I4 */ Instruction.LogicalAndInstruction,
-				/* I8 */ Instruction.LogicalAndInstruction,
-				/* U1 */ Instruction.ZeroExtendedMoveInstruction,
-				/* U2 */ Instruction.MoveInstruction,
-				/* U4 */ Instruction.LogicalAndInstruction,
-				/* U8 */ Instruction.LogicalAndInstruction,
-				/* R4 */ Instruction.FloatingPointToIntegerConversionInstruction,
-				/* R8 */ Instruction.FloatingPointToIntegerConversionInstruction,
-				/* I  */ Instruction.LogicalAndInstruction,
-				/* U  */ Instruction.LogicalAndInstruction,
-				/* Ptr*/ Instruction.LogicalAndInstruction,
+				/* I1 */ IRInstruction.ZeroExtendedMove,
+				/* I2 */ IRInstruction.Move,
+				/* I4 */ IRInstruction.LogicalAnd,
+				/* I8 */ IRInstruction.LogicalAnd,
+				/* U1 */ IRInstruction.ZeroExtendedMove,
+				/* U2 */ IRInstruction.Move,
+				/* U4 */ IRInstruction.LogicalAnd,
+				/* U8 */ IRInstruction.LogicalAnd,
+				/* R4 */ IRInstruction.FloatingPointToIntegerConversion,
+				/* R8 */ IRInstruction.FloatingPointToIntegerConversion,
+				/* I  */ IRInstruction.LogicalAnd,
+				/* U  */ IRInstruction.LogicalAnd,
+				/* Ptr*/ IRInstruction.LogicalAnd,
 			},
 			/* U4 */ new BaseInstruction[13] {
-				/* I1 */ Instruction.ZeroExtendedMoveInstruction,
-				/* I2 */ Instruction.ZeroExtendedMoveInstruction,
-				/* I4 */ Instruction.MoveInstruction,
-				/* I8 */ Instruction.LogicalAndInstruction,
-				/* U1 */ Instruction.ZeroExtendedMoveInstruction,
-				/* U2 */ Instruction.ZeroExtendedMoveInstruction,
-				/* U4 */ Instruction.MoveInstruction,
-				/* U8 */ Instruction.LogicalAndInstruction,
-				/* R4 */ Instruction.FloatingPointToIntegerConversionInstruction,
-				/* R8 */ Instruction.FloatingPointToIntegerConversionInstruction,
-				/* I  */ Instruction.LogicalAndInstruction,
-				/* U  */ Instruction.LogicalAndInstruction,
-				/* Ptr*/ Instruction.LogicalAndInstruction,
+				/* I1 */ IRInstruction.ZeroExtendedMove,
+				/* I2 */ IRInstruction.ZeroExtendedMove,
+				/* I4 */ IRInstruction.Move,
+				/* I8 */ IRInstruction.LogicalAnd,
+				/* U1 */ IRInstruction.ZeroExtendedMove,
+				/* U2 */ IRInstruction.ZeroExtendedMove,
+				/* U4 */ IRInstruction.Move,
+				/* U8 */ IRInstruction.LogicalAnd,
+				/* R4 */ IRInstruction.FloatingPointToIntegerConversion,
+				/* R8 */ IRInstruction.FloatingPointToIntegerConversion,
+				/* I  */ IRInstruction.LogicalAnd,
+				/* U  */ IRInstruction.LogicalAnd,
+				/* Ptr*/ IRInstruction.LogicalAnd,
 			},
 			/* U8 */ new BaseInstruction[13] {
-				/* I1 */ Instruction.ZeroExtendedMoveInstruction,
-				/* I2 */ Instruction.ZeroExtendedMoveInstruction,
-				/* I4 */ Instruction.ZeroExtendedMoveInstruction,
-				/* I8 */ Instruction.MoveInstruction,
-				/* U1 */ Instruction.ZeroExtendedMoveInstruction,
-				/* U2 */ Instruction.ZeroExtendedMoveInstruction,
-				/* U4 */ Instruction.ZeroExtendedMoveInstruction,
-				/* U8 */ Instruction.MoveInstruction,
-				/* R4 */ Instruction.FloatingPointToIntegerConversionInstruction,
-				/* R8 */ Instruction.FloatingPointToIntegerConversionInstruction,
-				/* I  */ Instruction.LogicalAndInstruction,
-				/* U  */ Instruction.LogicalAndInstruction,
-				/* Ptr*/ Instruction.LogicalAndInstruction,
+				/* I1 */ IRInstruction.ZeroExtendedMove,
+				/* I2 */ IRInstruction.ZeroExtendedMove,
+				/* I4 */ IRInstruction.ZeroExtendedMove,
+				/* I8 */ IRInstruction.Move,
+				/* U1 */ IRInstruction.ZeroExtendedMove,
+				/* U2 */ IRInstruction.ZeroExtendedMove,
+				/* U4 */ IRInstruction.ZeroExtendedMove,
+				/* U8 */ IRInstruction.Move,
+				/* R4 */ IRInstruction.FloatingPointToIntegerConversion,
+				/* R8 */ IRInstruction.FloatingPointToIntegerConversion,
+				/* I  */ IRInstruction.LogicalAnd,
+				/* U  */ IRInstruction.LogicalAnd,
+				/* Ptr*/ IRInstruction.LogicalAnd,
 			},
 			/* R4 */ new BaseInstruction[13] {
-				/* I1 */ Instruction.IntegerToFloatingPointConversionInstruction,
-				/* I2 */ Instruction.IntegerToFloatingPointConversionInstruction,
-				/* I4 */ Instruction.IntegerToFloatingPointConversionInstruction,
-				/* I8 */ Instruction.IntegerToFloatingPointConversionInstruction,
-				/* U1 */ Instruction.IntegerToFloatingPointConversionInstruction,
-				/* U2 */ Instruction.IntegerToFloatingPointConversionInstruction,
-				/* U4 */ Instruction.IntegerToFloatingPointConversionInstruction,
-				/* U8 */ Instruction.IntegerToFloatingPointConversionInstruction,
-				/* R4 */ Instruction.MoveInstruction,
-				/* R8 */ Instruction.MoveInstruction,
-				/* I  */ Instruction.IntegerToFloatingPointConversionInstruction,
-				/* U  */ Instruction.IntegerToFloatingPointConversionInstruction,
+				/* I1 */ IRInstruction.IntegerToFloatingPointConversion,
+				/* I2 */ IRInstruction.IntegerToFloatingPointConversion,
+				/* I4 */ IRInstruction.IntegerToFloatingPointConversion,
+				/* I8 */ IRInstruction.IntegerToFloatingPointConversion,
+				/* U1 */ IRInstruction.IntegerToFloatingPointConversion,
+				/* U2 */ IRInstruction.IntegerToFloatingPointConversion,
+				/* U4 */ IRInstruction.IntegerToFloatingPointConversion,
+				/* U8 */ IRInstruction.IntegerToFloatingPointConversion,
+				/* R4 */ IRInstruction.Move,
+				/* R8 */ IRInstruction.Move,
+				/* I  */ IRInstruction.IntegerToFloatingPointConversion,
+				/* U  */ IRInstruction.IntegerToFloatingPointConversion,
 				/* Ptr*/ null,
 			},
 			/* R8 */ new BaseInstruction[13] {
-				/* I1 */ Instruction.IntegerToFloatingPointConversionInstruction,
-				/* I2 */ Instruction.IntegerToFloatingPointConversionInstruction,
-				/* I4 */ Instruction.IntegerToFloatingPointConversionInstruction,
-				/* I8 */ Instruction.IntegerToFloatingPointConversionInstruction,
-				/* U1 */ Instruction.IntegerToFloatingPointConversionInstruction,
-				/* U2 */ Instruction.IntegerToFloatingPointConversionInstruction,
-				/* U4 */ Instruction.IntegerToFloatingPointConversionInstruction,
-				/* U8 */ Instruction.IntegerToFloatingPointConversionInstruction,
-				/* R4 */ Instruction.MoveInstruction,
-				/* R8 */ Instruction.MoveInstruction,
-				/* I  */ Instruction.IntegerToFloatingPointConversionInstruction,
-				/* U  */ Instruction.IntegerToFloatingPointConversionInstruction,
+				/* I1 */ IRInstruction.IntegerToFloatingPointConversion,
+				/* I2 */ IRInstruction.IntegerToFloatingPointConversion,
+				/* I4 */ IRInstruction.IntegerToFloatingPointConversion,
+				/* I8 */ IRInstruction.IntegerToFloatingPointConversion,
+				/* U1 */ IRInstruction.IntegerToFloatingPointConversion,
+				/* U2 */ IRInstruction.IntegerToFloatingPointConversion,
+				/* U4 */ IRInstruction.IntegerToFloatingPointConversion,
+				/* U8 */ IRInstruction.IntegerToFloatingPointConversion,
+				/* R4 */ IRInstruction.Move,
+				/* R8 */ IRInstruction.Move,
+				/* I  */ IRInstruction.IntegerToFloatingPointConversion,
+				/* U  */ IRInstruction.IntegerToFloatingPointConversion,
 				/* Ptr*/ null,
 			},
 			/* I  */ new BaseInstruction[13] {
-				/* I1 */ Instruction.SignExtendedMoveInstruction,
-				/* I2 */ Instruction.SignExtendedMoveInstruction,
-				/* I4 */ Instruction.SignExtendedMoveInstruction,
-				/* I8 */ Instruction.SignExtendedMoveInstruction,
-				/* U1 */ Instruction.ZeroExtendedMoveInstruction,
-				/* U2 */ Instruction.ZeroExtendedMoveInstruction,
-				/* U4 */ Instruction.ZeroExtendedMoveInstruction,
-				/* U8 */ Instruction.ZeroExtendedMoveInstruction,
-				/* R4 */ Instruction.FloatingPointToIntegerConversionInstruction,
-				/* R8 */ Instruction.FloatingPointToIntegerConversionInstruction,
-				/* I  */ Instruction.MoveInstruction,
-				/* U  */ Instruction.MoveInstruction,
-				/* Ptr*/ Instruction.MoveInstruction,
+				/* I1 */ IRInstruction.SignExtendedMove,
+				/* I2 */ IRInstruction.SignExtendedMove,
+				/* I4 */ IRInstruction.SignExtendedMove,
+				/* I8 */ IRInstruction.SignExtendedMove,
+				/* U1 */ IRInstruction.ZeroExtendedMove,
+				/* U2 */ IRInstruction.ZeroExtendedMove,
+				/* U4 */ IRInstruction.ZeroExtendedMove,
+				/* U8 */ IRInstruction.ZeroExtendedMove,
+				/* R4 */ IRInstruction.FloatingPointToIntegerConversion,
+				/* R8 */ IRInstruction.FloatingPointToIntegerConversion,
+				/* I  */ IRInstruction.Move,
+				/* U  */ IRInstruction.Move,
+				/* Ptr*/ IRInstruction.Move,
 			},
 			/* U  */ new BaseInstruction[13] {
-				/* I1 */ Instruction.ZeroExtendedMoveInstruction,
-				/* I2 */ Instruction.ZeroExtendedMoveInstruction,
-				/* I4 */ Instruction.ZeroExtendedMoveInstruction,
-				/* I8 */ Instruction.ZeroExtendedMoveInstruction,
-				/* U1 */ Instruction.ZeroExtendedMoveInstruction,
-				/* U2 */ Instruction.ZeroExtendedMoveInstruction,
-				/* U4 */ Instruction.ZeroExtendedMoveInstruction,
-				/* U8 */ Instruction.ZeroExtendedMoveInstruction,
-				/* R4 */ Instruction.FloatingPointToIntegerConversionInstruction,
-				/* R8 */ Instruction.FloatingPointToIntegerConversionInstruction,
-				/* I  */ Instruction.MoveInstruction,
-				/* U  */ Instruction.MoveInstruction,
-				/* Ptr*/ Instruction.MoveInstruction,
+				/* I1 */ IRInstruction.ZeroExtendedMove,
+				/* I2 */ IRInstruction.ZeroExtendedMove,
+				/* I4 */ IRInstruction.ZeroExtendedMove,
+				/* I8 */ IRInstruction.ZeroExtendedMove,
+				/* U1 */ IRInstruction.ZeroExtendedMove,
+				/* U2 */ IRInstruction.ZeroExtendedMove,
+				/* U4 */ IRInstruction.ZeroExtendedMove,
+				/* U8 */ IRInstruction.ZeroExtendedMove,
+				/* R4 */ IRInstruction.FloatingPointToIntegerConversion,
+				/* R8 */ IRInstruction.FloatingPointToIntegerConversion,
+				/* I  */ IRInstruction.Move,
+				/* U  */ IRInstruction.Move,
+				/* Ptr*/ IRInstruction.Move,
 			},
 			/* Ptr*/ new BaseInstruction[13] {
-				/* I1 */ Instruction.ZeroExtendedMoveInstruction,
-				/* I2 */ Instruction.ZeroExtendedMoveInstruction,
-				/* I4 */ Instruction.ZeroExtendedMoveInstruction,
-				/* I8 */ Instruction.ZeroExtendedMoveInstruction,
-				/* U1 */ Instruction.ZeroExtendedMoveInstruction,
-				/* U2 */ Instruction.ZeroExtendedMoveInstruction,
-				/* U4 */ Instruction.ZeroExtendedMoveInstruction,
-				/* U8 */ Instruction.ZeroExtendedMoveInstruction,
+				/* I1 */ IRInstruction.ZeroExtendedMove,
+				/* I2 */ IRInstruction.ZeroExtendedMove,
+				/* I4 */ IRInstruction.ZeroExtendedMove,
+				/* I8 */ IRInstruction.ZeroExtendedMove,
+				/* U1 */ IRInstruction.ZeroExtendedMove,
+				/* U2 */ IRInstruction.ZeroExtendedMove,
+				/* U4 */ IRInstruction.ZeroExtendedMove,
+				/* U8 */ IRInstruction.ZeroExtendedMove,
 				/* R4 */ null,
 				/* R8 */ null,
-				/* I  */ Instruction.MoveInstruction,
-				/* U  */ Instruction.MoveInstruction,
-				/* Ptr*/ Instruction.MoveInstruction,
+				/* I  */ IRInstruction.Move,
+				/* U  */ IRInstruction.Move,
+				/* Ptr*/ IRInstruction.Move,
 			},
 		};
 
@@ -1875,11 +1875,11 @@ namespace Mosa.Compiler.Framework.IR
 			uint mask = 0xFFFFFFFF;
 			IInstruction instruction = ComputeExtensionTypeAndMask(ctDest, ref mask);
 
-			if (type == Instruction.LogicalAndInstruction || mask != 0)
+			if (type == IRInstruction.LogicalAnd || mask != 0)
 			{
 				Debug.Assert(mask != 0, @"Conversion is an AND, but no mask given.");
 
-				if (type != Instruction.LogicalAndInstruction)
+				if (type != IRInstruction.LogicalAnd)
 					ProcessMixedTypeConversion(context, type, mask, destinationOperand, sourceOperand);
 				else
 					ProcessSingleTypeTruncation(context, type, mask, destinationOperand, sourceOperand);
@@ -1896,10 +1896,10 @@ namespace Mosa.Compiler.Framework.IR
 			{
 				case ConvType.I1:
 					mask = 0xFF;
-					return Instruction.SignExtendedMoveInstruction;
+					return IRInstruction.SignExtendedMove;
 				case ConvType.I2:
 					mask = 0xFFFF;
-					return Instruction.SignExtendedMoveInstruction;
+					return IRInstruction.SignExtendedMove;
 				case ConvType.I4:
 					mask = 0xFFFFFFFF;
 					break;
@@ -1907,10 +1907,10 @@ namespace Mosa.Compiler.Framework.IR
 					break;
 				case ConvType.U1:
 					mask = 0xFF;
-					return Instruction.ZeroExtendedMoveInstruction;
+					return IRInstruction.ZeroExtendedMove;
 				case ConvType.U2:
 					mask = 0xFFFF;
-					return Instruction.ZeroExtendedMoveInstruction;
+					return IRInstruction.ZeroExtendedMove;
 				case ConvType.U4:
 					mask = 0xFFFFFFFF;
 					break;
@@ -1937,14 +1937,14 @@ namespace Mosa.Compiler.Framework.IR
 		private void ProcessMixedTypeConversion(Context context, IInstruction instruction, uint mask, Operand destinationOperand, Operand sourceOperand)
 		{
 			context.SetInstruction(instruction, destinationOperand, sourceOperand);
-			context.AppendInstruction(Instruction.LogicalAndInstruction, destinationOperand, /*sourceOperand,*/ new ConstantOperand(BuiltInSigType.UInt32, mask));
+			context.AppendInstruction(IRInstruction.LogicalAnd, destinationOperand, /*sourceOperand,*/ new ConstantOperand(BuiltInSigType.UInt32, mask));
 		}
 
 		private void ProcessSingleTypeTruncation(Context context, IInstruction instruction, uint mask, Operand destinationOperand, Operand sourceOperand)
 		{
 			if (sourceOperand.Type.Type == CilElementType.I8 || sourceOperand.Type.Type == CilElementType.U8)
 			{
-				context.SetInstruction(Instruction.MoveInstruction, destinationOperand, sourceOperand);
+				context.SetInstruction(IRInstruction.Move, destinationOperand, sourceOperand);
 				context.AppendInstruction(instruction, destinationOperand, sourceOperand, new ConstantOperand(BuiltInSigType.UInt32, mask));
 			}
 			else
@@ -2006,7 +2006,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// <param name="operands"></param>
 		private void ProcessInvokeInstruction(Context context, Operand destinationOperand, Operand resultOperand, List<Operand> operands)
 		{
-			context.SetInstruction(Instruction.CallInstruction, (byte)(operands.Count + 1), (byte)(resultOperand == null ? 0 : 1));
+			context.SetInstruction(IRInstruction.Call, (byte)(operands.Count + 1), (byte)(resultOperand == null ? 0 : 1));
 
 			if (resultOperand != null)
 				context.SetResult(resultOperand);
@@ -2053,12 +2053,12 @@ namespace Mosa.Compiler.Framework.IR
 			{
 				if (IsSignExtending(source))
 				{
-					extension = Instruction.SignExtendedMoveInstruction;
+					extension = IRInstruction.SignExtendedMove;
 					extendedType = BuiltInSigType.Int32;
 				}
 				else if (IsZeroExtending(source))
 				{
-					extension = Instruction.ZeroExtendedMoveInstruction;
+					extension = IRInstruction.ZeroExtendedMove;
 					extendedType = BuiltInSigType.UInt32;
 				}
 			}
@@ -2071,7 +2071,7 @@ namespace Mosa.Compiler.Framework.IR
 			}
 			else
 			{
-				context.ReplaceInstructionOnly(Instruction.MoveInstruction);
+				context.ReplaceInstructionOnly(IRInstruction.Move);
 			}
 		}
 
@@ -2081,7 +2081,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// <param name="context">Provides the transformation context.</param>
 		private void ProcessStoreInstruction(Context context)
 		{
-			context.SetInstruction(Instruction.MoveInstruction, context.Result, context.Operand1);
+			context.SetInstruction(IRInstruction.Move, context.Result, context.Operand1);
 		}
 
 		/// <summary>
@@ -2097,7 +2097,7 @@ namespace Mosa.Compiler.Framework.IR
 			RuntimeMethod method = type.FindMethod(internalCallTarget.ToString());
 			Debug.Assert(method != null, "Cannot find method: " + internalCallTarget.ToString());
 
-			context.ReplaceInstructionOnly(Instruction.CallInstruction);
+			context.ReplaceInstructionOnly(IRInstruction.Call);
 			context.SetOperand(0, SymbolOperand.FromMethod(method));
 			context.OperandCount = 1;
 		}

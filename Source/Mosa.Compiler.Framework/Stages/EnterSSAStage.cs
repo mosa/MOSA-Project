@@ -108,7 +108,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			for (var context = new Context(this.instructionSet, block); !context.EndOfInstruction; context.GotoNext())
 			{
-				if (!(context.Instruction is PhiInstruction))
+				if (!(context.Instruction is Phi))
 				{
 					for (var i = 0; i < context.OperandCount; ++i)
 					{
@@ -138,7 +138,7 @@ namespace Mosa.Compiler.Framework.Stages
 				var j = this.WhichPredecessor(s, block);
 				for (var context = new Context(this.instructionSet, s); !context.EndOfInstruction; context.GotoNext())
 				{
-					if (!(context.Instruction is PhiInstruction))
+					if (!(context.Instruction is Phi))
 						continue;
 					var name = NameForOperand(context.GetOperand(j));
 					if (this.variableInformation[name].Stack.Count > 0)

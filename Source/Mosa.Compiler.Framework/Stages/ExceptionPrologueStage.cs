@@ -45,7 +45,7 @@ namespace Mosa.Compiler.Framework.Stages
 					SigType sigType = new ClassSigType(typeToken);
 					Operand exceptionObject = methodCompiler.CreateTemporary(sigType);
 
-					context.SetInstruction(IR.Instruction.ExceptionPrologueInstruction, exceptionObject);
+					context.SetInstruction(IR.IRInstruction.ExceptionPrologue, exceptionObject);
 				}	
 			}
 		}

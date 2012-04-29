@@ -73,7 +73,7 @@ namespace Mosa.Compiler.Framework.Stages
 			// Change the newobj to a call and increase the operand count to include the this ptr.
 			allocation.OperandCount++;
 			allocation.ResultCount = 0;
-			allocation.ReplaceInstructionOnly(Instruction.Get(OpCode.Call));
+			allocation.ReplaceInstructionOnly(CILInstruction.Get(OpCode.Call));
 		}
 
 		private string GetMethodTableForType(RuntimeType allocatedType)
@@ -92,7 +92,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Operand result = methodCompiler.CreateTemporary(type);
 			Operand op = new SymbolOperand(type, symbolName);
 
-			before.SetInstruction(Instruction.Get(OpCode.Ldc_i4), result, op);
+			before.SetInstruction(CILInstruction.Get(OpCode.Ldc_i4), result, op);
 
 			return result;
 		}

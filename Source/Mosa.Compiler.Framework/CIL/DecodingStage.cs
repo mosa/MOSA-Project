@@ -73,7 +73,7 @@ namespace Mosa.Compiler.Framework.CIL
 					SymbolOperand plugSymbol = SymbolOperand.FromMethod(plugMethod);
 
 					Context ctx = new Context(instructionSet);
-					ctx.AppendInstruction(IR.Instruction.JmpInstruction, null, plugSymbol);
+					ctx.AppendInstruction(IR.IRInstruction.Jmp, null, plugSymbol);
 					ctx.Label = -1;
 					CreateBlock(-1, ctx.Index);
 
@@ -248,7 +248,7 @@ namespace Mosa.Compiler.Framework.CIL
 				if (OpCode.Extop == op)
 					op = (OpCode)(0x100 | codeReader.ReadByte());
 
-				ICILInstruction instruction = Instruction.Get(op);
+				ICILInstruction instruction = CILInstruction.Get(op);
 
 				if (instruction == null)
 					throw new Exception("CIL " + op + " is not yet supported");

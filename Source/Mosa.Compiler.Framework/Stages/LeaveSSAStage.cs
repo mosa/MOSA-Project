@@ -34,7 +34,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				for (var context = new Context(this.instructionSet, block); !context.EndOfInstruction; context.GotoNext())
 				{
-					if (context.Instruction is PhiInstruction)
+					if (context.Instruction is Phi)
 						this.ProcessPhiInstruction(block, context);
 
 					for (var i = 0; i < context.OperandCount; ++i)
@@ -91,7 +91,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Debug.Assert(!(source is SsaOperand));
 			Debug.Assert(!(destination is SsaOperand));
 
-			context.SetInstruction(IR.Instruction.MoveInstruction, destination, source);
+			context.SetInstruction(IR.IRInstruction.Move, destination, source);
 		}
 
 		/// <summary>
@@ -103,7 +103,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </returns>
 		private bool IsBranchInstruction(Context context)
 		{
-			return context.Instruction is JmpInstruction || context.Instruction is IntegerCompareBranchInstruction;
+			return context.Instruction is Jmp || context.Instruction is IntegerCompareBranch;
 		}
 
 	}

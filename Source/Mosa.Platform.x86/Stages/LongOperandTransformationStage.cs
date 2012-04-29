@@ -958,7 +958,7 @@ namespace Mosa.Platform.x86.Stages
 			// depends only on the high order bit of edx).
 			context.SetInstruction(X86.Jmp, newBlocks[0].BasicBlock);
 			newBlocks[0].AppendInstruction(X86.Push, null, ecx);
-			newBlocks[0].AppendInstruction(Instruction.LogicalAndInstruction, count, count, new ConstantOperand(BuiltInSigType.Int32, 0x3F));
+			newBlocks[0].AppendInstruction(IRInstruction.LogicalAnd, count, count, new ConstantOperand(BuiltInSigType.Int32, 0x3F));
 			newBlocks[0].AppendInstruction(X86.Mov, ecx, count);
 			newBlocks[0].AppendInstruction(X86.Mov, edx, op1H);
 			newBlocks[0].AppendInstruction(X86.Mov, eax, op1L);
@@ -1026,7 +1026,7 @@ namespace Mosa.Platform.x86.Stages
 			// depends only on the high order bit of edx).
 			context.SetInstruction(X86.Jmp, newBlocks[0].BasicBlock);
 			newBlocks[0].AppendInstruction(X86.Push, null, ecx);
-			newBlocks[0].AppendInstruction(Instruction.LogicalAndInstruction, count, count, new ConstantOperand(BuiltInSigType.Int32, 0x3F));
+			newBlocks[0].AppendInstruction(IRInstruction.LogicalAnd, count, count, new ConstantOperand(BuiltInSigType.Int32, 0x3F));
 			newBlocks[0].AppendInstruction(X86.Mov, ecx, count);
 			newBlocks[0].AppendInstruction(X86.Mov, edx, op1H);
 			newBlocks[0].AppendInstruction(X86.Mov, eax, op1L);
@@ -1092,7 +1092,7 @@ namespace Mosa.Platform.x86.Stages
 			// depends only on the high order bit of edx).
 			context.SetInstruction(X86.Jmp, newBlocks[0].BasicBlock);
 			newBlocks[0].AppendInstruction(X86.Push, null, ecx);
-			newBlocks[0].AppendInstruction(Instruction.LogicalAndInstruction, count, count, new ConstantOperand(BuiltInSigType.Int32, 0x3F));
+			newBlocks[0].AppendInstruction(IRInstruction.LogicalAnd, count, count, new ConstantOperand(BuiltInSigType.Int32, 0x3F));
 			newBlocks[0].AppendInstruction(X86.Mov, ecx, count);
 			newBlocks[0].AppendInstruction(X86.Mov, edx, op1H);
 			newBlocks[0].AppendInstruction(X86.Mov, eax, op1L);
@@ -1161,8 +1161,8 @@ namespace Mosa.Platform.x86.Stages
 			SplitLongOperand(context.Result, out op0L, out op0H);
 			SplitLongOperand(context.Operand1, out op1L, out op1H);
 
-			context.SetInstruction(Instruction.LogicalNotInstruction, op0H, op1H);
-			context.AppendInstruction(Instruction.LogicalNotInstruction, op0L, op1L);
+			context.SetInstruction(IRInstruction.LogicalNot, op0H, op1H);
+			context.AppendInstruction(IRInstruction.LogicalNot, op0L, op1L);
 		}
 
 		/// <summary>
@@ -1266,35 +1266,35 @@ namespace Mosa.Platform.x86.Stages
 			switch (op1.Type.Type)
 			{
 				case CilElementType.Boolean:
-					context.SetInstruction(Instruction.ZeroExtendedMoveInstruction, op0L, op1L);
-					context.AppendInstruction(Instruction.LogicalXorInstruction, op0H, op0H, op0H);
+					context.SetInstruction(IRInstruction.ZeroExtendedMove, op0L, op1L);
+					context.AppendInstruction(IRInstruction.LogicalXor, op0H, op0H, op0H);
 					break;
 
 				case CilElementType.U1:
-					context.SetInstruction(Instruction.ZeroExtendedMoveInstruction, eax, op1L);
+					context.SetInstruction(IRInstruction.ZeroExtendedMove, eax, op1L);
 					context.AppendInstruction(X86.Cdq);
 					context.AppendInstruction(X86.Mov, op0L, eax);
-					context.AppendInstruction(Instruction.LogicalXorInstruction, op0H, op0H, op0H);
+					context.AppendInstruction(IRInstruction.LogicalXor, op0H, op0H, op0H);
 					break;
 
 				case CilElementType.U2: goto case CilElementType.U1;
 
 				case CilElementType.I4:
-					context.SetInstruction(Instruction.ZeroExtendedMoveInstruction, eax, op1L);
+					context.SetInstruction(IRInstruction.ZeroExtendedMove, eax, op1L);
 					context.AppendInstruction(X86.Xor, edx, edx);
 					context.AppendInstruction(X86.Mov, op0L, eax);
 					context.AppendInstruction(X86.Mov, op0H, edx);
 					break;
 				case CilElementType.U4:
-					context.SetInstruction(Instruction.ZeroExtendedMoveInstruction, eax, op1L);
+					context.SetInstruction(IRInstruction.ZeroExtendedMove, eax, op1L);
 					context.AppendInstruction(X86.Cdq);
 					context.AppendInstruction(X86.Mov, op0L, eax);
 					context.AppendInstruction(X86.Mov, op0H, edx);
 					break;
 
 				case CilElementType.U8:
-					context.SetInstruction(Instruction.ZeroExtendedMoveInstruction, op0L, op1L);
-					context.SetInstruction(Instruction.ZeroExtendedMoveInstruction, op0H, op1H);
+					context.SetInstruction(IRInstruction.ZeroExtendedMove, op0L, op1L);
+					context.SetInstruction(IRInstruction.ZeroExtendedMove, op0H, op1H);
 					break;
 
 				case CilElementType.R4:
@@ -1327,12 +1327,12 @@ namespace Mosa.Platform.x86.Stages
 			switch (op1.Type.Type)
 			{
 				case CilElementType.Boolean:
-					context.SetInstruction(Instruction.ZeroExtendedMoveInstruction, op0L, op1);
-					context.AppendInstruction(Instruction.LogicalXorInstruction, op0H, op0H, op0H);
+					context.SetInstruction(IRInstruction.ZeroExtendedMove, op0L, op1);
+					context.AppendInstruction(IRInstruction.LogicalXor, op0H, op0H, op0H);
 					break;
 
 				case CilElementType.I1:
-					context.SetInstruction(Instruction.SignExtendedMoveInstruction, eax, op1);
+					context.SetInstruction(IRInstruction.SignExtendedMove, eax, op1);
 					context.AppendInstruction(X86.Cdq);
 					context.AppendInstruction(X86.Mov, op0L, eax);
 					context.AppendInstruction(X86.Mov, op0H, edx);
@@ -1352,10 +1352,10 @@ namespace Mosa.Platform.x86.Stages
 					break;
 
 				case CilElementType.U1:
-					context.SetInstruction(Instruction.ZeroExtendedMoveInstruction, eax, op1);
+					context.SetInstruction(IRInstruction.ZeroExtendedMove, eax, op1);
 					context.AppendInstruction(X86.Cdq);
 					context.AppendInstruction(X86.Mov, op0L, eax);
-					context.AppendInstruction(Instruction.LogicalXorInstruction, op0H, op0H, op0H);
+					context.AppendInstruction(IRInstruction.LogicalXor, op0H, op0H, op0H);
 					break;
 
 				case CilElementType.U2: goto case CilElementType.U1;

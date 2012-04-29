@@ -10,6 +10,7 @@
 using System;
 using System.Collections.Generic;
 using Mosa.Compiler.Framework.Operands;
+using Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -56,12 +57,12 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// Create a prologue instruction
 			Context prologueCtx = new Context(instructionSet, FindBlock(-1)).InsertBefore();
-			prologueCtx.SetInstruction(IR.Instruction.PrologueInstruction);
+			prologueCtx.SetInstruction(IRInstruction.Prologue);
 			prologueCtx.Label = -1;
 
 			// Create an epilogue instruction
 			Context epilogueCtx = new Context(instructionSet, FindBlock(Int32.MaxValue));
-			epilogueCtx.AppendInstruction(IR.Instruction.EpilogueInstruction);
+			epilogueCtx.AppendInstruction(IRInstruction.Epilogue);
 			epilogueCtx.Label = Int32.MaxValue;
 		}
 

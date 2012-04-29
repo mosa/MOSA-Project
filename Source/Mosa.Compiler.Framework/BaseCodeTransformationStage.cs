@@ -179,7 +179,7 @@ namespace Mosa.Compiler.Framework
 			}
 
 			if (addJump)
-				current.AppendInstruction(IR.Instruction.JmpInstruction, nextBlock);
+				current.AppendInstruction(IR.IRInstruction.Jmp, nextBlock);
 
 			return CreateContext(nextBlock);
 		}

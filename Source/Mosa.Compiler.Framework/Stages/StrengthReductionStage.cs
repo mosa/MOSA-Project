@@ -39,21 +39,21 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (multiplyByZero)
 			{
-				context.SetInstruction(IR.Instruction.MoveInstruction, context.Result, new ConstantOperand(context.Result.Type, 0));
+				context.SetInstruction(IR.IRInstruction.Move, context.Result, new ConstantOperand(context.Result.Type, 0));
 				return;
 			}
 
 			if (context.Operand1 is ConstantOperand)
 				if (IsValueOne(context.Result.Type.Type, context.Operand1 as ConstantOperand))
 				{
-					context.SetInstruction(IR.Instruction.MoveInstruction, context.Result, context.Operand2);
+					context.SetInstruction(IR.IRInstruction.Move, context.Result, context.Operand2);
 					return;
 				}
 
 			if (context.Operand2 is ConstantOperand)
 				if (IsValueOne(context.Result.Type.Type, context.Operand2 as ConstantOperand))
 				{
-					context.SetInstruction(IR.Instruction.MoveInstruction, context.Result, context.Operand1);
+					context.SetInstruction(IR.IRInstruction.Move, context.Result, context.Operand1);
 					return;
 				}
 		}

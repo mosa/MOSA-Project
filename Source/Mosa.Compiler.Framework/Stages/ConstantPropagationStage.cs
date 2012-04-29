@@ -101,7 +101,7 @@ namespace Mosa.Compiler.Framework.Stages
 					//if (this.propagated.Contains(ctx.Index))
 					//	continue;
 
-					if (!(ctx.Instruction is IR.MoveInstruction || ctx.Instruction is CIL.StlocInstruction))
+					if (!(ctx.Instruction is IR.Move || ctx.Instruction is CIL.StlocInstruction))
 						continue;
 
 					if (!(ctx.Operand1 is ConstantOperand))
@@ -115,7 +115,7 @@ namespace Mosa.Compiler.Framework.Stages
 						continue;
 
 					this.ReplaceUses(sop, ctx.Operand1 as ConstantOperand);
-					ctx.SetInstruction(Instruction.NopInstruction);
+					ctx.SetInstruction(IRInstruction.Nop);
 				}
 			}
 		}
@@ -139,7 +139,7 @@ namespace Mosa.Compiler.Framework.Stages
 					if (ctx.Result == null)
 						continue;
 
-					if (ctx.Instruction is IR.MoveInstruction)
+					if (ctx.Instruction is IR.Move)
 						return false;
 
 					var result = ctx.Result is SsaOperand ? (ctx.Result as SsaOperand).Operand : ctx.Result;

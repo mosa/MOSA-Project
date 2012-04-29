@@ -151,16 +151,16 @@ namespace Mosa.Compiler.Framework.Stages
 								switch (aeb.Operator)
 								{
 									case Operation.Add:
-										inserted.SetInstruction(CIL.Instruction.Get(CIL.OpCode.Add), temp, aeb.Operand1, aeb.Operand2);
+										inserted.SetInstruction(CIL.CILInstruction.Get(CIL.OpCode.Add), temp, aeb.Operand1, aeb.Operand2);
 										break;
 									case Operation.Mul:
-										inserted.SetInstruction(CIL.Instruction.Get(CIL.OpCode.Mul), temp, aeb.Operand1, aeb.Operand2);
+										inserted.SetInstruction(CIL.CILInstruction.Get(CIL.OpCode.Mul), temp, aeb.Operand1, aeb.Operand2);
 										break;
 									case Operation.Or:
-										inserted.SetInstruction(CIL.Instruction.Get(CIL.OpCode.Or), temp, aeb.Operand1, aeb.Operand2);
+										inserted.SetInstruction(CIL.CILInstruction.Get(CIL.OpCode.Or), temp, aeb.Operand1, aeb.Operand2);
 										break;
 									case Operation.Xor:
-										inserted.SetInstruction(CIL.Instruction.Get(CIL.OpCode.Xor), temp, aeb.Operand1, aeb.Operand2);
+										inserted.SetInstruction(CIL.CILInstruction.Get(CIL.OpCode.Xor), temp, aeb.Operand1, aeb.Operand2);
 										break;
 									default:
 										break;
@@ -197,7 +197,7 @@ namespace Mosa.Compiler.Framework.Stages
 							opr = Operation.Add;
 						else if (instruction is CIL.MulInstruction)
 							opr = Operation.Mul;
-						else if (instruction is IR.LogicalAndInstruction)
+						else if (instruction is IR.LogicalAnd)
 							opr = Operation.And;
 						// Insert new tuple
 						AEB.Add(new AEBinExp(ctx.Index, ctx.Operand1, opr, ctx.Operand2, null));
@@ -230,9 +230,9 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			return (instruction is CIL.AddInstruction) ||
 				   (instruction is CIL.MulInstruction) ||
-				   (instruction is IR.LogicalAndInstruction) ||
-				   (instruction is IR.LogicalOrInstruction) ||
-				   (instruction is IR.LogicalXorInstruction);
+				   (instruction is IR.LogicalAnd) ||
+				   (instruction is IR.LogicalOr) ||
+				   (instruction is IR.LogicalXor);
 		}
 	}
 }

@@ -31,7 +31,7 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// <param name="typeSystem">The type system.</param>
 		void IIntrinsicMethod.ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
 		{
-			context.SetInstruction(IR.Instruction.MoveInstruction, context.Result, new SymbolOperand(BuiltInSigType.Ptr, @"<$>methodLookupTable"));
+			context.SetInstruction(IR.IRInstruction.Move, context.Result, new SymbolOperand(BuiltInSigType.Ptr, @"<$>methodLookupTable"));
 		}
 
 		#endregion // Methods

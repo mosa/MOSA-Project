@@ -49,8 +49,8 @@ namespace Mosa.Platform.x86.Intrinsic
 			RegisterOperand eax = new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.EAX);
 			RegisterOperand cr = new RegisterOperand(BuiltInSigType.UInt32, control);
 
-			context.SetInstruction(IR.Instruction.MoveInstruction, eax, operand1);
-			context.AppendInstruction(IR.Instruction.MoveInstruction, cr, eax);
+			context.SetInstruction(IR.IRInstruction.Move, eax, operand1);
+			context.AppendInstruction(IR.IRInstruction.Move, cr, eax);
 		}
 
 		#endregion // Methods

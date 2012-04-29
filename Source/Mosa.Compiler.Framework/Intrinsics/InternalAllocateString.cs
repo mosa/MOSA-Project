@@ -31,7 +31,7 @@ namespace Mosa.Compiler.Framework.Intrinsics
 			Operand lengthOperand = context.Operand1;
 			Operand result = context.Result;
 
-			context.SetInstruction(IR.Instruction.CallInstruction, result, callTargetOperand, methodTableOperand, lengthOperand);
+			context.SetInstruction(IR.IRInstruction.Call, result, callTargetOperand, methodTableOperand, lengthOperand);
 		}
 
 		private SymbolOperand GetInternalAllocateStringCallTarget(ITypeSystem typeSystem)

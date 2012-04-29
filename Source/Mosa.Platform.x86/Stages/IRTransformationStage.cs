@@ -832,9 +832,9 @@ namespace Mosa.Platform.x86.Stages
 			RegisterOperand ecxSource = new RegisterOperand(operand.Type, GeneralPurposeRegister.ECX);
 
 			context.SetInstruction(X86.Mov, eaxSource, result);
-			context.AppendInstruction(Instruction.SignExtendedMoveInstruction, eax, eaxSource);
+			context.AppendInstruction(IRInstruction.SignExtendedMove, eax, eaxSource);
 			context.AppendInstruction(X86.Mov, ecxSource, operand);
-			context.AppendInstruction(Instruction.SignExtendedMoveInstruction, ecx, ecxSource);
+			context.AppendInstruction(IRInstruction.SignExtendedMove, ecx, ecxSource);
 			context.AppendInstruction(X86.IDiv, eax, ecx);
 			context.AppendInstruction(X86.Mov, result, edx);
 		}
@@ -854,9 +854,9 @@ namespace Mosa.Platform.x86.Stages
 			RegisterOperand ecxSource = new RegisterOperand(operand.Type, GeneralPurposeRegister.ECX);
 
 			context.SetInstruction(X86.Mov, eaxSource, result);
-			context.AppendInstruction(Instruction.ZeroExtendedMoveInstruction, eax, eaxSource);
+			context.AppendInstruction(IRInstruction.ZeroExtendedMove, eax, eaxSource);
 			context.AppendInstruction(X86.Mov, ecxSource, operand);
-			context.AppendInstruction(Instruction.ZeroExtendedMoveInstruction, ecx, ecxSource);
+			context.AppendInstruction(IRInstruction.ZeroExtendedMove, ecx, ecxSource);
 
 			context.AppendInstruction(X86.Xor, edx, edx);
 			context.AppendInstruction(X86.Div, eax, ecx);

@@ -47,7 +47,7 @@ namespace Mosa.Compiler.Framework.Stages
 			// Create the prologue block
 			Context ctx = new Context(instructionSet);
 			// Add a jump instruction to the first block from the prologue
-			ctx.AppendInstruction(IR.Instruction.JmpInstruction);
+			ctx.AppendInstruction(IR.IRInstruction.Jmp);
 			ctx.SetBranch(0);
 			ctx.Label = -1;
 			prologue = CreateBlock(-1, ctx.Index);
@@ -159,7 +159,7 @@ namespace Mosa.Compiler.Framework.Stages
 						if (flow == FlowControl.Next || flow == FlowControl.Call || flow == FlowControl.ConditionalBranch || flow == FlowControl.Switch)
 						{
 							// This jump joins fall-through blocks, by giving them a proper end.
-							prev.AppendInstruction(CIL.Instruction.Get(CIL.OpCode.Br));
+							prev.AppendInstruction(CIL.CILInstruction.Get(CIL.OpCode.Br));
 							prev.SetBranch(ctx.Label);
 
 							prev.SliceAfter();

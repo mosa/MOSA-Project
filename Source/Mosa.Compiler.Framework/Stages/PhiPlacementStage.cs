@@ -173,7 +173,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private void InsertPhiInstruction(BasicBlock block, Operand variable)
 		{
 			var context = new Context(this.instructionSet, block).InsertBefore();
-			context.SetInstruction(IR.Instruction.PhiInstruction);
+			context.SetInstruction(IR.IRInstruction.Phi);
 			context.SetResult(variable);
 			for (var i = 0; i < block.PreviousBlocks.Count; ++i)
 				context.SetOperand(i, variable);

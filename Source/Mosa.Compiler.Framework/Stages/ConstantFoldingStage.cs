@@ -46,9 +46,9 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		private void FoldInstruction(Context context)
 		{
-			if (context.Instruction is AddSInstruction)
+			if (context.Instruction is AddS)
 				this.FoldAddSInstruction(context);
-			else if (context.Instruction is MulSInstruction)
+			else if (context.Instruction is MulS)
 				this.FoldMulSInstruction(context);
 		}
 
@@ -61,7 +61,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var cA = this.LoadSignedInteger(context.Operand1);
 			var cB = this.LoadSignedInteger(context.Operand2);
 
-			context.SetInstruction(Instruction.MoveInstruction, context.Result, new ConstantOperand(context.Result.Type, cA + cB));
+			context.SetInstruction(IRInstruction.Move, context.Result, new ConstantOperand(context.Result.Type, cA + cB));
 		}
 
 		/// <summary>
@@ -73,7 +73,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var cA = this.LoadSignedInteger(context.Operand1);
 			var cB = this.LoadSignedInteger(context.Operand2);
 
-			context.SetInstruction(Instruction.MoveInstruction, context.Result, new ConstantOperand(context.Result.Type, cA * cB));
+			context.SetInstruction(IRInstruction.Move, context.Result, new ConstantOperand(context.Result.Type, cA * cB));
 		}
 
 		/// <summary>
@@ -98,10 +98,10 @@ namespace Mosa.Compiler.Framework.Stages
 		private bool IsFoldableInstruction(Context context)
 		{
 			var instruction = context.Instruction;
-			return instruction is AddSInstruction ||
-				instruction is AddUInstruction ||
-				instruction is MulSInstruction ||
-				instruction is MulUInstruction;
+			return instruction is AddS ||
+				instruction is AddU ||
+				instruction is MulS ||
+				instruction is MulU;
 		}
 
 		/// <summary>

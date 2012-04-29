@@ -11,8 +11,8 @@
 
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Operands;
-using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Framework.IR;
+using Mosa.Compiler.Metadata;
 using CIL = Mosa.Compiler.Framework.CIL;
 
 namespace Mosa.Platform.x86.Stages
@@ -50,10 +50,10 @@ namespace Mosa.Platform.x86.Stages
 			Operand op1 = ctx.Operand1;
 			Operand op2 = ctx.Operand2;
 
-			if (ctx.Instruction is IntegerCompareInstruction
-				|| ctx.Instruction is FloatingPointCompareInstruction
-				|| ctx.Instruction is LoadInstruction
-				|| ctx.Instruction is StoreInstruction)
+			if (ctx.Instruction is IntegerCompare
+				|| ctx.Instruction is FloatingPointCompare
+				|| ctx.Instruction is Load
+				|| ctx.Instruction is Store)
 			{
 				return;
 			}
@@ -71,7 +71,6 @@ namespace Mosa.Platform.x86.Stages
 			// Create registers for different data types
 			RegisterOperand eax = new RegisterOperand(op1.Type, op1.StackType == StackTypeCode.F ? (Register)SSE2Register.XMM0 : GeneralPurposeRegister.EAX);
 			RegisterOperand storeOperand = new RegisterOperand(result.Type, result.StackType == StackTypeCode.F ? (Register)SSE2Register.XMM0 : GeneralPurposeRegister.EAX);
-			//    RegisterOperand eaxL = new RegisterOperand(op1.Type, GeneralPurposeRegister.EAX);
 
 			ctx.Result = storeOperand;
 			ctx.Operand1 = op2;
@@ -81,9 +80,9 @@ namespace Mosa.Platform.x86.Stages
 			if (op1.StackType != StackTypeCode.F)
 			{
 				if (IsSigned(op1) && !(op1 is ConstantOperand))
-					ctx.InsertBefore().SetInstruction(Instruction.SignExtendedMoveInstruction, eax, op1);
+					ctx.InsertBefore().SetInstruction(IRInstruction.SignExtendedMove, eax, op1);
 				else if (IsUnsigned(op1) && !(op1 is ConstantOperand))
-					ctx.InsertBefore().SetInstruction(Instruction.ZeroExtendedMoveInstruction, eax, op1);
+					ctx.InsertBefore().SetInstruction(IRInstruction.ZeroExtendedMove, eax, op1);
 				else
 					ctx.InsertBefore().SetInstruction(X86.Mov, eax, op1);
 			}
