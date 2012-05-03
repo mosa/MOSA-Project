@@ -234,8 +234,8 @@
     <Compile Include="Instructions\Ucomisd.cs" />
     <Compile Include="Instructions\Ucomiss.cs" />
     <Compile Include="OpCode.cs" />
-    <Compile Include="Instructions\X86Instruction.cs" />
-    <Compile Include="Instructions\IX86Visitor.cs" />
+    <Compile Include="X86Instruction.cs" />
+    <Compile Include="IX86Visitor.cs" />
     <Compile Include="Instructions\Nop.cs" />
     <Compile Include="DefaultCallingConvention.cs">
       <SubType>Code</SubType>

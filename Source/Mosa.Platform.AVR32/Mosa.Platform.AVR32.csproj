@@ -123,7 +123,7 @@
     <Compile Include="Instructions\Cpse.cs" />
     <Compile Include="Instructions\Dec.cs" />
     <Compile Include="Instructions\Eor.cs" />
-    <Compile Include="Instructions\IAVR32Visitor.cs" />
+    <Compile Include="IAVR32Visitor.cs" />
     <Compile Include="Instructions\Icall.cs" />
     <Compile Include="Instructions\Ijmp.cs" />
     <Compile Include="Instructions\Inc.cs" />
@@ -141,7 +141,7 @@
     <Compile Include="Instructions\Mul.cs" />
     <Compile Include="Instructions\Neg.cs" />
     <Compile Include="Instructions\Nop.cs" />
-    <Compile Include="Instructions\AVR32Instruction.cs" />
+    <Compile Include="AVR32Instruction.cs" />
     <Compile Include="Instructions\Or.cs" />
     <Compile Include="Instructions\Out.cs" />
     <Compile Include="Instructions\Pop.cs" />

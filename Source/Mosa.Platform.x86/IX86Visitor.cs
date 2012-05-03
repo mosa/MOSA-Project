@@ -5,521 +5,441 @@
  *
  * Authors:
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
- *  Pascal Delprat (pdelprat) <pascal.delprat@online.fr>    
  */
 
 using Mosa.Compiler.Framework;
 
-namespace Mosa.Platform.AVR32.Instructions
+namespace Mosa.Platform.x86
 {
 	/// <summary>
 	/// 
 	/// </summary>
-	public interface IAVR32Visitor : IVisitor
+	public interface IX86Visitor : IVisitor
 	{
 		/// <summary>
-		/// Adc instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Adc(Context context);
-
-		/// <summary>
-		/// Add instruction
+		/// Adds instruction
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Add(Context context);
-
 		/// <summary>
-		/// Adiw instruction
+		/// Adcs instruction
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void Adiw(Context context);
-
+		void Adc(Context context);
 		/// <summary>
-		/// And instruction
+		/// Ands instruction
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void And(Context context);
-
 		/// <summary>
-		/// Andi instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Andi(Context context);
-
-		/// <summary>
-		/// Asr instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Asr(Context context);
-
-		/// <summary>
-		/// Bclr instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Bclr(Context context);
-
-		/// <summary>
-		/// Bld instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Bld(Context context);
-
-		/// <summary>
-		/// Branch instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Branch(Context context);
-
-		/// <summary>
-		/// Bset instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Bset(Context context);
-
-		/// <summary>
-		/// Bst instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Bst(Context context);
-
-		/// <summary>
-		/// Call instruction
+		/// Cmp instruction
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Call(Context context);
-
 		/// <summary>
-		/// Cbi instruction
+		/// Directs the compare.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void Cbi(Context context);
-
+		void DirectCompare(Context context);
 		/// <summary>
-		/// Cbr instruction
+		/// Or instruction
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void Cbr(Context context);
-
-		/// <summary>
-		/// Clc instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Clc(Context context);
-
-		/// <summary>
-		/// Clh instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Clh(Context context);
-
-		/// <summary>
-		/// Cli instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Cli(Context context);
-
-		/// <summary>
-		/// Cln instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Cln(Context context);
-
-		/// <summary>
-		/// Clr instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Clr(Context context);
-
-		/// <summary>
-		/// Cls instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Cls(Context context);
-
-		/// <summary>
-		/// Clt instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Clt(Context context);
-
-		/// <summary>
-		/// Clv instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Clv(Context context);
-
-		/// <summary>
-		/// Clz instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Clz(Context context);
-
-		/// <summary>
-		/// Com instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Com(Context context);
-
-		/// <summary>
-		/// Cp instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Cp(Context context);
-
-		/// <summary>
-		/// Cpc instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Cpc(Context context);
-
-		/// <summary>
-		/// Cpi instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Cpi(Context context);
-
-		/// <summary>
-		/// Cpse instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Cpse(Context context);
-
-		/// <summary>
-		/// Dec instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Dec(Context context);
-
-		/// <summary>
-		/// Eor instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Eor(Context context);
-
-		/// <summary>
-		/// Icall instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Icall(Context context);
-
-		/// <summary>
-		/// Ijmp instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Ijmp(Context context);
-
-		/// <summary>
-		/// In instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void In(Context context);
-
-		/// <summary>
-		/// Inc instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Inc(Context context);
-
-		/// <summary>
-		/// Jmp instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Jmp(Context context);
-
-		/// <summary>
-		/// Ld instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Ld(Context context);
-
-		/// <summary>
-		/// Ldd instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Ldd(Context context);
-
-		/// <summary>
-		/// Ldi instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Ldi(Context context);
-
-		/// <summary>
-		/// Lds instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Lds(Context context);
-
-		/// <summary>
-		/// Lpm instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Lpm(Context context);
-
-		/// <summary>
-		/// Lsl instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Lsl(Context context);
-
-		/// <summary>
-		/// Lsr instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Lsr(Context context);
-
-		/// <summary>
-		/// Mov instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Mov(Context context);
-
-		/// <summary>
-		/// Mul instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Mul(Context context);
-
-		/// <summary>
-		/// Neg instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Neg(Context context);
-
-		/// <summary>
-		/// Nop instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Nop(Context context);
-
+		void Cmp(Context context);
 		/// <summary>
 		/// Or instruction
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Or(Context context);
-
 		/// <summary>
-		/// Orh instruction
+		/// Xor instruction
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void Orh(Context context);
-
+		void Xor(Context context);
+		/// <summary>
+		/// Subs instruction
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Sub(Context context);
+		/// <summary>
+		/// Sbb instruction
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Sbb(Context context);
+		/// <summary>
+		/// Mul instruction
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Mul(Context context);
+		/// <summary>
+		/// Directs the multiplication.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void DirectMultiplication(Context context);
+		/// <summary>
+		/// Directs the division.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Div(Context context);
+		/// <summary>
+		/// IDiv instruction
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IDiv(Context context);
+		/// <summary>
+		/// AddSs instruction
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void AddSs(Context context);
+		/// <summary>
+		/// SubSS instruction
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void SubSS(Context context);
+		/// <summary>
+		/// SubSD instruction
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void SubSD(Context context);
+		/// <summary>
+		/// MulSS instruction
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void MulSS(Context context);
+		/// <summary>
+		/// MulSD instruction
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void MulSD(Context context);
+		/// <summary>
+		/// DivSS instruction
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void DivSS(Context context);
+		/// <summary>
+		/// DivSD instruction
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void DivSD(Context context);
+		/// <summary>
+		/// Sars instruction
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Sar(Context context);
+		/// <summary>
+		/// Sals instruction
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Sal(Context context);
+		/// <summary>
+		/// SHLs instruction
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Shl(Context context);
+		/// <summary>
+		/// SHRs instruction
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Shr(Context context);
+		/// <summary>
+		/// RCRs instruction
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Rcr(Context context);
+		/// <summary>
+		/// Cvtsi2sses instruction
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Cvtsi2ss(Context context);
+		/// <summary>
+		/// Cvtsi2sds instruction
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Cvtsi2sd(Context context);
+		/// <summary>
+		/// Cvtsd2ss instruction
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Cvtsd2ss(Context context);
+		/// <summary>
+		/// Cvtss2sd instruction
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Cvtss2sd(Context context);
+		/// <summary>
+		/// Cvttsd2si instruction
+		/// </summary>
+		/// <param name="context"></param>
+		void Cvttsd2si(Context context);
+		/// <summary>
+		/// Cvttss2si instruction
+		/// </summary>
+		/// <param name="context"></param>
+		void Cvttss2si(Context context);
+		/// <summary>
+		/// Setccs instruction
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Setcc(Context context);
+		/// <summary>
+		/// CDQs instruction
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Cdq(Context context);
+		/// <summary>
+		/// SHLDs instruction
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Shld(Context context);
+		/// <summary>
+		/// SHRDs instruction
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Shrd(Context context);
+		/// <summary>
+		/// Comisds instruction
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Comisd(Context context);
+		/// <summary>
+		/// Comisses instruction
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Comiss(Context context);
+		/// <summary>
+		/// Ucomisds instruction
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Ucomisd(Context context);
+		/// <summary>
+		/// Ucomisses instruction
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Ucomiss(Context context);
+		/// <summary>
+		/// JNSs instruction
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Jns(Context context);
+		/// <summary>
+		/// X86 branch instruction
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Branch(Context context);
+		/// <summary>
+		/// Jumps instruction
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Jump(Context context);
+		/// <summary>
+		/// Emits xchg bx, bx to force bochs into debug mode
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void BochsDebug(Context context);
+		/// <summary>
+		/// Disable interrupts
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Cli(Context context);
+		/// <summary>
+		/// Clear Direction Flag
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Cld(Context context);
+		/// <summary>
+		/// Compare and exchange register - memory
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CmpXchg(Context context);
+		/// <summary>
+		/// Retrieves the CPU ID
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void CpuId(Context context);
+		/// <summary>
+		/// Halts the machine
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Hlt(Context context);
+		/// <summary>
+		/// Invlpgs instruction
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Invlpg(Context context);
+		/// <summary>
+		/// Read in from port
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void In(Context context);
+		/// <summary>
+		/// Incs instruction
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Inc(Context context);
+		/// <summary>
+		/// Decs instruction
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Dec(Context context);
+		/// <summary>
+		/// Call interrupt
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Int(Context context);
+		/// <summary>
+		/// Return from interrupt
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Iretd(Context context);
+		/// <summary>
+		/// 
+		/// </summary>
+		/// <param name="context"></param>
+		void Lea(Context context);
+		/// <summary>
+		/// Load global descriptor table
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Lgdt(Context context);
+		/// <summary>
+		/// Load interrupt descriptor table
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Lidt(Context context);
+		/// <summary>
+		/// Locks
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Lock(Context context);
+		/// <summary>
+		/// Negate with Two-Complement
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Neg(Context context);
+		/// <summary>
+		/// Move 
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Mov(Context context);
+		/// <summary>
+		/// Move with Sign-Extension
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Movsx(Context context);
+		/// <summary>
+		/// Movsses instruction
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Movss(Context context);
+		/// <summary>
+		/// Movsds instruction
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Movsd(Context context);
+		/// <summary>
+		/// Move with Zero-Extension
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Movzx(Context context);
+		/// <summary>
+		/// NOP instruction
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Nop(Context context);
 		/// <summary>
 		/// Out instruction
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Out(Context context);
-
 		/// <summary>
-		/// Pop instruction
+		/// Pause
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Pause(Context context);
+		/// <summary>
+		/// Pop from the stack
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Pop(Context context);
-
 		/// <summary>
-		/// Push instruction
+		/// Pops All General-Purpose Registers
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Popad(Context context);
+		/// <summary>
+		/// Pop Stack into EFLAGS Register
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void Popfd(Context context);
+		/// <summary>
+		/// Push on the stack
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Push(Context context);
-
 		/// <summary>
-		/// Rcall instruction
+		/// Push All General-Purpose Registers
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void Rcall(Context context);
-
+		void Pushad(Context context);
 		/// <summary>
-		/// Ret instruction
+		/// Push EFLAGS Register onto the Stack
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void Ret(Context context);
-
+		void Pushfd(Context context);
 		/// <summary>
-		/// Reti instruction
+		/// Read time stamp counter
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void Reti(Context context);
-
+		void Rdmsr(Context context);
 		/// <summary>
-		/// Rjmp instruction
+		/// Read from model specific register
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void Rjmp(Context context);
-
+		void Rdpmc(Context context);
 		/// <summary>
-		/// Rol instruction
+		/// Read time stamp counter
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void Rol(Context context);
-
+		void Rdtsc(Context context);
 		/// <summary>
-		/// Ror instruction
+		/// Repeat String Operation Prefix
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void Ror(Context context);
-
+		void Rep(Context context);
 		/// <summary>
-		/// Sbc instruction
+		/// Enable interrupts
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void Sbc(Context context);
-
+		void Sti(Context context);
 		/// <summary>
-		/// Sbci instruction
+		/// Store String
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void Sbci(Context context);
-
+		void Stosb(Context context);
 		/// <summary>
-		/// Sbi instruction
+		/// Store String
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void Sbi(Context context);
-
+		void Stosd(Context context);
 		/// <summary>
-		/// Sbic instruction
+		/// Exchanges register/memory
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void Sbic(Context context);
-
+		void Xchg(Context context);
 		/// <summary>
-		/// Sbis instruction
+		/// Not operation
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void Sbis(Context context);
-
+		void Not(Context context);
 		/// <summary>
-		/// Sbiw instruction
+		/// RoundSS instruction
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void Sbiw(Context context);
-
+		void RoundSS(Context context);
 		/// <summary>
-		/// Sbr instruction
+		/// RoundSD instruction
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void Sbr(Context context);
-
-		/// <summary>
-		/// Sbrc instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Sbrc(Context context);
-
-		/// <summary>
-		/// Sbrs instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Sbrs(Context context);
-
-		/// <summary>
-		/// Sec instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Sec(Context context);
-
-		/// <summary>
-		/// Seh instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Seh(Context context);
-
-		/// <summary>
-		/// Sei instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Sei(Context context);
-
-		/// <summary>
-		/// Sen instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Sen(Context context);
-
-		/// <summary>
-		/// Ser instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Ser(Context context);
-
-		/// <summary>
-		/// Ses instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Ses(Context context);
-
-		/// <summary>
-		/// Set instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Set(Context context);
-
-		/// <summary>
-		/// Sev instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Sev(Context context);
-
-		/// <summary>
-		/// Sez instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Sez(Context context);
-
-		/// <summary>
-		/// Sleep instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Sleep(Context context);
-
-		/// <summary>
-		/// St instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void St(Context context);
-
-		/// <summary>
-		/// Std instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Std(Context context);
-
-		/// <summary>
-		/// Sts instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Sts(Context context);
-
-		/// <summary>
-		/// Sub instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Sub(Context context);
-
-		/// <summary>
-		/// Subi instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Subi(Context context);
-
-		/// <summary>
-		/// Swap instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Swap(Context context);
-
-		/// <summary>
-		/// Tst instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Tst(Context context);
-
-		/// <summary>
-		/// Wdr instruction
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void Wdr(Context context);
-
+		void RoundSD(Context context);
 	}
 }

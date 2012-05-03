@@ -12,8 +12,9 @@ using System;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Operands;
 using Mosa.Compiler.Metadata;
+using Mosa.Platform.AVR32.Instructions;
 
-namespace Mosa.Platform.AVR32.Instructions
+namespace Mosa.Platform.AVR32
 {
 	/// <summary>
 	/// 

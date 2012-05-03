@@ -38,7 +38,7 @@ namespace Mosa.Platform.x86.Stages
 				{
 					if (ctx.Instruction != null)
 					{
-						if (!ctx.Ignore && ctx.Instruction is Instructions.X86Instruction)
+						if (!ctx.Ignore && ctx.Instruction is X86Instruction)
 						{
 							if (ctx.Operand1 is MemoryOperand)
 							{
