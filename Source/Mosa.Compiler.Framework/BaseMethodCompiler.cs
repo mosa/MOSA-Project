@@ -286,6 +286,11 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public StackLayout StackLayout { get { return stackLayout; } }
 
+		/// <summary>
+		/// Gets the virtual register layout.
+		/// </summary>
+		public VirtualRegisterLayout VirtualRegisterLayout { get { return virtualRegisterLayout; } }
+
 		#endregion // Properties
 
 		#region Methods

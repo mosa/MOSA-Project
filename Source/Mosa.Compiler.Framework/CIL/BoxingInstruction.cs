@@ -13,7 +13,7 @@ namespace Mosa.Compiler.Framework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public class BoxingInstruction : BaseInstruction
+	public class BoxingInstruction : BaseCILInstruction
 	{
 		#region Construction
 

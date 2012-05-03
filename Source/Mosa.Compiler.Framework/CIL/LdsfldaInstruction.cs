@@ -15,7 +15,7 @@ namespace Mosa.Compiler.Framework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public sealed class LdsfldaInstruction : BaseInstruction
+	public sealed class LdsfldaInstruction : BaseCILInstruction
 	{
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LdsfldaInstruction"/> class.

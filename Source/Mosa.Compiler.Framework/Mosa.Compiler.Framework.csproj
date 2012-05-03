@@ -235,12 +235,11 @@
     <Compile Include="IR\Epilogue.cs" />
     <Compile Include="IR\FloatingPointCompare.cs" />
     <Compile Include="IR\FloatingPointToIntegerConversion.cs" />
-    <Compile Include="IR\IIRInstruction.cs" />
     <Compile Include="IR\IIRVisitor.cs" />
     <Compile Include="IR\IntegerCompareBranch.cs" />
     <Compile Include="IR\IntegerCompare.cs" />
     <Compile Include="IR\IntegerToFloatingPointConversion.cs" />
-    <Compile Include="IR\BaseInstruction.cs" />
+    <Compile Include="IR\BaseIRInstruction.cs" />
     <Compile Include="IR\Jmp.cs" />
     <Compile Include="IR\Load.cs" />
     <Compile Include="IR\LogicalAnd.cs" />
@@ -270,7 +269,7 @@
     <Compile Include="CIL\NopInstruction.cs" />
     <Compile Include="InstructionSet.cs" />
     <Compile Include="InstructionData.cs" />
-    <Compile Include="CIL\BaseInstruction.cs" />
+    <Compile Include="CIL\BaseCILInstruction.cs" />
     <Compile Include="Operands\StringOperand.cs" />
     <Compile Include="Stages\ReverseBlockOrderStage.cs" />
     <Compile Include="RuntimeMethodData.cs" />

@@ -49,10 +49,10 @@ namespace Mosa.Tool.TypeExplorer
 				(compilerOptions.EnableSSA) ? new LeaveSSA() : null,
 				
 				new StrengthReductionStage(),
-
 				new StackLayoutStage(),
 				new PlatformStubStage(),
 				new LoopAwareBlockOrderStage(),
+				new SimpleRegisterAllocatorStage(),
 				new CodeGenerationStage(),
 			});
 		}

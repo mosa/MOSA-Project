@@ -80,7 +80,7 @@ namespace Mosa.Platform.AVR32
 
 			int stackSize = CalculateStackSizeForParameters(operands);
 
-			ctx.SetInstruction(Instruction.NopInstruction);
+			ctx.SetInstruction(AVR32.Nop);
 
 			ReserveStackSizeForCall(ctx, stackSize);
 
@@ -89,7 +89,7 @@ namespace Mosa.Platform.AVR32
 				PushOperands(ctx, operands, stackSize);
 			}
 
-			ctx.AppendInstruction(Instruction.CallInstruction, null, invokeTarget);
+			ctx.AppendInstruction(AVR32.Call, null, invokeTarget);
 
 			if (stackSize != 0)
 			{
@@ -121,8 +121,8 @@ namespace Mosa.Platform.AVR32
 			{
 				RegisterOperand sp = new RegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.SP);
 
-				ctx.AppendInstruction(Instruction.SubInstruction, sp, new ConstantOperand(sp.Type, stackSize));
-				ctx.AppendInstruction(Instruction.MovInstruction, new RegisterOperand(architecture.NativeType, GeneralPurposeRegister.R9), sp);
+				ctx.AppendInstruction(AVR32.Sub, sp, new ConstantOperand(sp.Type, stackSize));
+				ctx.AppendInstruction(AVR32.Mov, new RegisterOperand(architecture.NativeType, GeneralPurposeRegister.R9), sp);
 			}
 		}
 
@@ -132,8 +132,8 @@ namespace Mosa.Platform.AVR32
 			RegisterOperand r7 = new RegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.R7);
 			if (stackSize != 0)
 			{
-				ctx.AppendInstruction(Instruction.MovInstruction, r7, new ConstantOperand(BuiltInSigType.IntPtr, stackSize));
-				ctx.AppendInstruction(Instruction.AddInstruction, sp, r7);
+				ctx.AppendInstruction(AVR32.Mov, r7, new ConstantOperand(BuiltInSigType.IntPtr, stackSize));
+				ctx.AppendInstruction(AVR32.Add, sp, r7);
 			}
 		}
 
@@ -177,7 +177,7 @@ namespace Mosa.Platform.AVR32
 		private void MoveReturnValueTo32Bit(Operand resultOperand, Context ctx)
 		{
 			RegisterOperand r8 = new RegisterOperand(resultOperand.Type, GeneralPurposeRegister.R8);
-			ctx.AppendInstruction(Instruction.MovInstruction, resultOperand, r8);
+			ctx.AppendInstruction(AVR32.Mov, resultOperand, r8);
 		}
 
 		/// <summary>
@@ -198,8 +198,8 @@ namespace Mosa.Platform.AVR32
 			//RegisterOperand r8 = new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.R8);
 			//RegisterOperand r9 = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.R9);
 
-			//ctx.AppendInstruction(Instruction.MovInstruction, opL, r8);
-			//ctx.AppendInstruction(Instruction.MovInstruction, opH, r9);
+			//ctx.AppendInstruction(Instruction.Mov, opL, r8);
+			//ctx.AppendInstruction(Instruction.Mov, opH, r9);
 		}
 
 		/// <summary>
@@ -216,7 +216,7 @@ namespace Mosa.Platform.AVR32
 				if (op.Type.Type == CilElementType.ValueType)
 				{
 					for (int i = 0; i < parameterSize; i += 4)
-						ctx.AppendInstruction(Instruction.MovInstruction, new MemoryOperand(op.Type, GeneralPurposeRegister.R9, new IntPtr(stackSize + i)), new MemoryOperand(op.Type, (op as MemoryOperand).Base, new IntPtr((op as MemoryOperand).Offset.ToInt64() + i)));
+						ctx.AppendInstruction(AVR32.Mov, new MemoryOperand(op.Type, GeneralPurposeRegister.R9, new IntPtr(stackSize + i)), new MemoryOperand(op.Type, (op as MemoryOperand).Base, new IntPtr((op as MemoryOperand).Offset.ToInt64() + i)));
 
 					return;
 				}
@@ -246,10 +246,10 @@ namespace Mosa.Platform.AVR32
 							//Operand opL, opH;
 							//LongOperandTransformationStage.SplitLongOperand(mop, out opL, out opH);
 
-							//ctx.AppendInstruction(Instruction.MovInstruction, r8, opL);
-							//ctx.AppendInstruction(Instruction.MovInstruction, new MemoryOperand(op.Type, GeneralPurposeRegister.R9, new IntPtr(stackSize)), r8);
-							//ctx.AppendInstruction(Instruction.MovInstruction, r8, opH);
-							//ctx.AppendInstruction(Instruction.MovInstruction, new MemoryOperand(op.Type, GeneralPurposeRegister.R9, new IntPtr(stackSize + 4)), r8);
+							//ctx.AppendInstruction(Instruction.Mov, r8, opL);
+							//ctx.AppendInstruction(Instruction.Mov, new MemoryOperand(op.Type, GeneralPurposeRegister.R9, new IntPtr(stackSize)), r8);
+							//ctx.AppendInstruction(Instruction.Mov, r8, opH);
+							//ctx.AppendInstruction(Instruction.Mov, new MemoryOperand(op.Type, GeneralPurposeRegister.R9, new IntPtr(stackSize + 4)), r8);
 						}
 						return;
 
@@ -257,7 +257,7 @@ namespace Mosa.Platform.AVR32
 						throw new NotSupportedException();
 				}
 
-				ctx.AppendInstruction(Instruction.MovInstruction, rop, op);
+				ctx.AppendInstruction(AVR32.Mov, rop, op);
 				op = rop;
 			}
 			else if (op is ConstantOperand && op.StackType == StackTypeCode.Int64)
@@ -266,15 +266,15 @@ namespace Mosa.Platform.AVR32
 				//RegisterOperand r8 = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.R8);
 				//LongOperandTransformationStage.SplitLongOperand(op, out opL, out opH);
 
-				//ctx.AppendInstruction(Instruction.MovInstruction, r8, opL);
-				//ctx.AppendInstruction(Instruction.MovInstruction, new MemoryOperand(BuiltInSigType.Int32, GeneralPurposeRegister.R9, new IntPtr(stackSize)), r8);
-				//ctx.AppendInstruction(Instruction.MovInstruction, r8, opH);
-				//ctx.AppendInstruction(Instruction.MovInstruction, new MemoryOperand(BuiltInSigType.Int32, GeneralPurposeRegister.R9, new IntPtr(stackSize + 4)), r8);
+				//ctx.AppendInstruction(Instruction.Mov, r8, opL);
+				//ctx.AppendInstruction(Instruction.Mov, new MemoryOperand(BuiltInSigType.Int32, GeneralPurposeRegister.R9, new IntPtr(stackSize)), r8);
+				//ctx.AppendInstruction(Instruction.Mov, r8, opH);
+				//ctx.AppendInstruction(Instruction.Mov, new MemoryOperand(BuiltInSigType.Int32, GeneralPurposeRegister.R9, new IntPtr(stackSize + 4)), r8);
 
 				return;
 			}
 
-			ctx.AppendInstruction(Instruction.MovInstruction, new MemoryOperand(op.Type, GeneralPurposeRegister.R9, new IntPtr(stackSize)), op);
+			ctx.AppendInstruction(AVR32.Mov, new MemoryOperand(op.Type, GeneralPurposeRegister.R9, new IntPtr(stackSize)), op);
 		}
 
 		/// <summary>
@@ -310,7 +310,7 @@ namespace Mosa.Platform.AVR32
 			// FIXME: Do not issue a move, if the operand is already the destination register
 			if (size == 4 || size == 2 || size == 1)
 			{
-				ctx.SetInstruction(Instruction.MovInstruction, new RegisterOperand(operand.Type, GeneralPurposeRegister.R8), operand);
+				ctx.SetInstruction(AVR32.Mov, new RegisterOperand(operand.Type, GeneralPurposeRegister.R8), operand);
 				return;
 			}
 			else if (size == 8 && (operand.Type.Type == CilElementType.R4 || operand.Type.Type == CilElementType.R8))
@@ -323,7 +323,7 @@ namespace Mosa.Platform.AVR32
 
 				// BUG: Return values are in FP0, not XMM#0
 				// TODO:
-				//ctx.SetInstruction(Instruction.MovInstruction, new RegisterOperand(operand.Type, SSE2Register.XMM0), operand);
+				//ctx.SetInstruction(Instruction.Mov, new RegisterOperand(operand.Type, SSE2Register.XMM0), operand);
 				return;
 			}
 			else if (size == 8 && (operand.Type.Type == CilElementType.I8 || operand.Type.Type == CilElementType.U8))
@@ -334,8 +334,8 @@ namespace Mosa.Platform.AVR32
 				//LongOperandTransformationStage.SplitLongOperand(operand, out opL, out opH);
 
 				//// Like Win32: EDX:EAX
-				//ctx.SetInstruction(Instruction.MovInstruction, new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.R8), opL);
-				//ctx.AppendInstruction(Instruction.MovInstruction, new RegisterOperand(HighType, GeneralPurposeRegister.R9), opH);
+				//ctx.SetInstruction(Instruction.Mov, new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.R8), opL);
+				//ctx.AppendInstruction(Instruction.Mov, new RegisterOperand(HighType, GeneralPurposeRegister.R9), opH);
 
 				return;
 			}

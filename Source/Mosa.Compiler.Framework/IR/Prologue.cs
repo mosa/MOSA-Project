@@ -17,7 +17,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// This instruction is usually derived by the architecture and expanded appropriately
 	/// for the calling convention of the method.
 	/// </remarks>
-	public sealed class Prologue : BaseInstruction
+	public sealed class Prologue : BaseIRInstruction
 	{
 		#region Construction
 

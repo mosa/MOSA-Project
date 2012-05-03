@@ -311,7 +311,7 @@ namespace Mosa.Compiler.Framework.IR
 				context.SetOperand(1, operand);
 			}
 
-			switch ((context.Instruction as CIL.BaseInstruction).OpCode)
+			switch ((context.Instruction as CIL.BaseCILInstruction).OpCode)
 			{
 				case CIL.OpCode.And:
 					context.SetInstruction(IRInstruction.LogicalAnd, context.Result, context.Operand1, context.Operand2);
@@ -340,7 +340,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Shift(Context context)
 		{
-			switch ((context.Instruction as CIL.BaseInstruction).OpCode)
+			switch ((context.Instruction as CIL.BaseCILInstruction).OpCode)
 			{
 				case CIL.OpCode.Shl:
 					context.SetInstruction(IRInstruction.ShiftLeft, context.Result, context.Operand1, context.Operand2);
@@ -808,7 +808,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// <param name="context">The context.</param>
 		public void BinaryComparison(Context context)
 		{
-			IR.ConditionCode code = ConvertCondition((context.Instruction as CIL.BaseInstruction).OpCode);
+			IR.ConditionCode code = ConvertCondition((context.Instruction as CIL.BaseCILInstruction).OpCode);
 
 			if (context.Operand1.StackType == StackTypeCode.F)
 				context.SetInstruction(IRInstruction.FloatingPointCompare, context.Result, context.Operand1, context.Operand2);
@@ -1471,7 +1471,7 @@ namespace Mosa.Compiler.Framework.IR
 
 		#region Internals
 
-		private static void Replace(Context context, IIRInstruction floatingPointInstruction, IIRInstruction signedInstruction, IIRInstruction unsignedInstruction)
+		private static void Replace(Context context, IInstruction floatingPointInstruction, IInstruction signedInstruction, IInstruction unsignedInstruction)
 		{
 			if (IsFloatingPoint(context))
 			{
@@ -1653,8 +1653,8 @@ namespace Mosa.Compiler.Framework.IR
 			throw new NotSupportedException();
 		}
 
-		private static readonly BaseInstruction[][] s_convTable = new BaseInstruction[13][] {
-			/* I1 */ new BaseInstruction[13] { 
+		private static readonly BaseIRInstruction[][] s_convTable = new BaseIRInstruction[13][] {
+			/* I1 */ new BaseIRInstruction[13] { 
 				/* I1 */ IRInstruction.Move,
 				/* I2 */ IRInstruction.LogicalAnd,
 				/* I4 */ IRInstruction.LogicalAnd,
@@ -1669,7 +1669,7 @@ namespace Mosa.Compiler.Framework.IR
 				/* U  */ IRInstruction.LogicalAnd,
 				/* Ptr*/ IRInstruction.LogicalAnd,
 			},
-			/* I2 */ new BaseInstruction[13] { 
+			/* I2 */ new BaseIRInstruction[13] { 
 				/* I1 */ IRInstruction.SignExtendedMove,
 				/* I2 */ IRInstruction.Move,
 				/* I4 */ IRInstruction.LogicalAnd,
@@ -1684,7 +1684,7 @@ namespace Mosa.Compiler.Framework.IR
 				/* U  */ IRInstruction.LogicalAnd,
 				/* Ptr*/ IRInstruction.LogicalAnd,
 			},
-			/* I4 */ new BaseInstruction[13] { 
+			/* I4 */ new BaseIRInstruction[13] { 
 				/* I1 */ IRInstruction.SignExtendedMove,
 				/* I2 */ IRInstruction.SignExtendedMove,
 				/* I4 */ IRInstruction.Move,
@@ -1699,7 +1699,7 @@ namespace Mosa.Compiler.Framework.IR
 				/* U  */ IRInstruction.LogicalAnd,
 				/* Ptr*/ IRInstruction.LogicalAnd,
 			},
-			/* I8 */ new BaseInstruction[13] {
+			/* I8 */ new BaseIRInstruction[13] {
 				/* I1 */ IRInstruction.SignExtendedMove,
 				/* I2 */ IRInstruction.SignExtendedMove,
 				/* I4 */ IRInstruction.SignExtendedMove,
@@ -1714,7 +1714,7 @@ namespace Mosa.Compiler.Framework.IR
 				/* U  */ IRInstruction.LogicalAnd,
 				/* Ptr*/ IRInstruction.LogicalAnd,
 			},
-			/* U1 */ new BaseInstruction[13] {
+			/* U1 */ new BaseIRInstruction[13] {
 				/* I1 */ IRInstruction.Move,
 				/* I2 */ IRInstruction.LogicalAnd,
 				/* I4 */ IRInstruction.LogicalAnd,
@@ -1729,7 +1729,7 @@ namespace Mosa.Compiler.Framework.IR
 				/* U  */ IRInstruction.LogicalAnd,
 				/* Ptr*/ IRInstruction.LogicalAnd,
 			},
-			/* U2 */ new BaseInstruction[13] {
+			/* U2 */ new BaseIRInstruction[13] {
 				/* I1 */ IRInstruction.ZeroExtendedMove,
 				/* I2 */ IRInstruction.Move,
 				/* I4 */ IRInstruction.LogicalAnd,
@@ -1744,7 +1744,7 @@ namespace Mosa.Compiler.Framework.IR
 				/* U  */ IRInstruction.LogicalAnd,
 				/* Ptr*/ IRInstruction.LogicalAnd,
 			},
-			/* U4 */ new BaseInstruction[13] {
+			/* U4 */ new BaseIRInstruction[13] {
 				/* I1 */ IRInstruction.ZeroExtendedMove,
 				/* I2 */ IRInstruction.ZeroExtendedMove,
 				/* I4 */ IRInstruction.Move,
@@ -1759,7 +1759,7 @@ namespace Mosa.Compiler.Framework.IR
 				/* U  */ IRInstruction.LogicalAnd,
 				/* Ptr*/ IRInstruction.LogicalAnd,
 			},
-			/* U8 */ new BaseInstruction[13] {
+			/* U8 */ new BaseIRInstruction[13] {
 				/* I1 */ IRInstruction.ZeroExtendedMove,
 				/* I2 */ IRInstruction.ZeroExtendedMove,
 				/* I4 */ IRInstruction.ZeroExtendedMove,
@@ -1774,7 +1774,7 @@ namespace Mosa.Compiler.Framework.IR
 				/* U  */ IRInstruction.LogicalAnd,
 				/* Ptr*/ IRInstruction.LogicalAnd,
 			},
-			/* R4 */ new BaseInstruction[13] {
+			/* R4 */ new BaseIRInstruction[13] {
 				/* I1 */ IRInstruction.IntegerToFloatingPointConversion,
 				/* I2 */ IRInstruction.IntegerToFloatingPointConversion,
 				/* I4 */ IRInstruction.IntegerToFloatingPointConversion,
@@ -1789,7 +1789,7 @@ namespace Mosa.Compiler.Framework.IR
 				/* U  */ IRInstruction.IntegerToFloatingPointConversion,
 				/* Ptr*/ null,
 			},
-			/* R8 */ new BaseInstruction[13] {
+			/* R8 */ new BaseIRInstruction[13] {
 				/* I1 */ IRInstruction.IntegerToFloatingPointConversion,
 				/* I2 */ IRInstruction.IntegerToFloatingPointConversion,
 				/* I4 */ IRInstruction.IntegerToFloatingPointConversion,
@@ -1804,7 +1804,7 @@ namespace Mosa.Compiler.Framework.IR
 				/* U  */ IRInstruction.IntegerToFloatingPointConversion,
 				/* Ptr*/ null,
 			},
-			/* I  */ new BaseInstruction[13] {
+			/* I  */ new BaseIRInstruction[13] {
 				/* I1 */ IRInstruction.SignExtendedMove,
 				/* I2 */ IRInstruction.SignExtendedMove,
 				/* I4 */ IRInstruction.SignExtendedMove,
@@ -1819,7 +1819,7 @@ namespace Mosa.Compiler.Framework.IR
 				/* U  */ IRInstruction.Move,
 				/* Ptr*/ IRInstruction.Move,
 			},
-			/* U  */ new BaseInstruction[13] {
+			/* U  */ new BaseIRInstruction[13] {
 				/* I1 */ IRInstruction.ZeroExtendedMove,
 				/* I2 */ IRInstruction.ZeroExtendedMove,
 				/* I4 */ IRInstruction.ZeroExtendedMove,
@@ -1834,7 +1834,7 @@ namespace Mosa.Compiler.Framework.IR
 				/* U  */ IRInstruction.Move,
 				/* Ptr*/ IRInstruction.Move,
 			},
-			/* Ptr*/ new BaseInstruction[13] {
+			/* Ptr*/ new BaseIRInstruction[13] {
 				/* I1 */ IRInstruction.ZeroExtendedMove,
 				/* I2 */ IRInstruction.ZeroExtendedMove,
 				/* I4 */ IRInstruction.ZeroExtendedMove,
@@ -1868,7 +1868,7 @@ namespace Mosa.Compiler.Framework.IR
 			ConvType ctDest = ConvTypeFromCilType(destinationOperand.Type.Type);
 			ConvType ctSrc = ConvTypeFromCilType(sourceOperand.Type.Type);
 
-			BaseInstruction type = s_convTable[(int)ctDest][(int)ctSrc];
+			BaseIRInstruction type = s_convTable[(int)ctDest][(int)ctSrc];
 			if (type == null)
 				throw new NotSupportedException();
 

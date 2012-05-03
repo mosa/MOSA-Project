@@ -57,15 +57,13 @@ namespace Mosa.Tool.Compiler
 					(compilerOptions.EnableSSA) ? new LeaveSSA() : null,
 					
 					new StrengthReductionStage(),
-
 					new StackLayoutStage(),
 					new PlatformStubStage(),
-					//new OperandUsageAnalyzerStage(),
-
 					new LoopAwareBlockOrderStage(),
 					//new SimpleTraceBlockOrderStage(),
 					//new ReverseBlockOrderStage(),	
-					new LocalCSE(),
+					//new LocalCSE(),
+					new SimpleRegisterAllocatorStage(),
 					new CodeGenerationStage(),
 					//new RegisterUsageAnalyzerStage(),
 				});

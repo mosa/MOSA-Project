@@ -14,7 +14,7 @@ namespace Mosa.Compiler.Framework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public class BranchInstruction : BaseInstruction, IBranchInstruction
+	public class BranchInstruction : BaseCILInstruction, IBranchInstruction
 	{
 		#region Construction
 

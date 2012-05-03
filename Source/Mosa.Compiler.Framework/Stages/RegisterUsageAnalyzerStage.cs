@@ -49,7 +49,6 @@ namespace Mosa.Compiler.Framework.Stages
 				AnalyzeBlock(block);
 			}
 
-
 			Debug.WriteLine("METHOD: " + this.methodCompiler.Method.ToString());
 			Debug.WriteLine(string.Empty);
 

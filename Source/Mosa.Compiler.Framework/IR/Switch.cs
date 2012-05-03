@@ -9,7 +9,7 @@
 
 namespace Mosa.Compiler.Framework.IR
 {
-	public class Switch : BaseInstruction
+	public class Switch : BaseIRInstruction
 	{
 		public override void Visit(IIRVisitor visitor, Context context)
 		{

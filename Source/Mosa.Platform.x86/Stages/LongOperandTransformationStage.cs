@@ -120,13 +120,14 @@ namespace Mosa.Platform.x86.Stages
 			// This only works for memory operands (can't store I8/U8 in a register.)
 			// This fails for constant operands right now, which need to be extracted into memory
 			// with a literal/literal operand first - TODO
-			RegisterOperand eaxH = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.EAX);
-			RegisterOperand eaxL = new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.EAX);
 
 			Operand op1H, op1L, op2H, op2L, resH, resL;
 			SplitLongOperand(context.Operand1, out op1L, out op1H);
 			SplitLongOperand(context.Operand2, out op2L, out op2H);
 			SplitLongOperand(context.Result, out resL, out resH);
+
+			RegisterOperand eaxH = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.EAX);
+			RegisterOperand eaxL = new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.EAX);
 
 			context.SetInstruction(X86.Mov, eaxL, op1L);
 			context.AppendInstruction(X86.Add, eaxL, op2L);
@@ -1430,102 +1431,6 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Expands the pop instruction for 64-bits.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void ExpandPop(Context context)
-		{
-			throw new NotSupportedException();
-		}
-
-		/// <summary>
-		/// Expands the push instruction for 64-bits.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void ExpandPush(Context context)
-		{
-			throw new NotSupportedException();
-		}
-
-		/// <summary>
-		/// Expands the unary branch instruction for 64-bits.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		private void ExpandUnaryBranch(Context context)
-		{
-			Debug.Assert(context.Branch.Targets.Length == 2);
-
-			BasicBlock targetBlock = FindBlock(context.Branch.Targets[0]);
-
-			Operand op1H, op1L, op2H, op2L;
-			Operand zero = new ConstantOperand(BuiltInSigType.Int32, (int)0);
-			SplitLongOperand(context.Operand1, out op1L, out op1H);
-			SplitLongOperand(zero, out op2L, out op2H);
-			ConditionCode code;
-
-			switch (((context.Instruction) as CIL.ICILInstruction).OpCode)
-			{
-				// Signed
-				case CIL.OpCode.Brtrue: code = ConditionCode.NotEqual; break;
-				case CIL.OpCode.Brfalse: code = ConditionCode.Equal; break;
-				case CIL.OpCode.Beq_s: code = ConditionCode.Equal; break;
-				case CIL.OpCode.Bge_s: code = ConditionCode.GreaterOrEqual; break;
-				case CIL.OpCode.Bgt_s: code = ConditionCode.GreaterThan; break;
-				case CIL.OpCode.Ble_s: code = ConditionCode.LessOrEqual; break;
-				case CIL.OpCode.Blt_s: code = ConditionCode.LessThan; break;
-
-				// Unsigned
-				case CIL.OpCode.Bne_un_s: code = ConditionCode.NotEqual; break;
-				case CIL.OpCode.Bge_un_s: code = ConditionCode.UnsignedGreaterOrEqual; break;
-				case CIL.OpCode.Bgt_un_s: code = ConditionCode.UnsignedGreaterThan; break;
-				case CIL.OpCode.Ble_un_s: code = ConditionCode.UnsignedLessOrEqual; break;
-				case CIL.OpCode.Blt_un_s: code = ConditionCode.UnsignedLessThan; break;
-
-				// Long form signed
-				case CIL.OpCode.Beq: goto case CIL.OpCode.Beq_s;
-				case CIL.OpCode.Bge: goto case CIL.OpCode.Bge_s;
-				case CIL.OpCode.Bgt: goto case CIL.OpCode.Bgt_s;
-				case CIL.OpCode.Ble: goto case CIL.OpCode.Ble_s;
-				case CIL.OpCode.Blt: goto case CIL.OpCode.Blt_s;
-
-				// Long form unsigned
-				case CIL.OpCode.Bne_un: goto case CIL.OpCode.Bne_un_s;
-				case CIL.OpCode.Bge_un: goto case CIL.OpCode.Bge_un_s;
-				case CIL.OpCode.Bgt_un: goto case CIL.OpCode.Bgt_un_s;
-				case CIL.OpCode.Ble_un: goto case CIL.OpCode.Ble_un_s;
-				case CIL.OpCode.Blt_un: goto case CIL.OpCode.Blt_un_s;
-				default: throw new NotImplementedException();
-			}
-
-			Context[] newBlocks = CreateEmptyBlockContexts(context.Label, 3);
-			Context nextBlock = SplitContext(context, false);
-
-			context.SetInstruction(X86.Jmp, newBlocks[0].BasicBlock);
-			LinkBlocks(context, newBlocks[0]);
-			// Compare high dwords
-			newBlocks[0].AppendInstruction(X86.Cmp, null, op1H, op2H);
-			// Branch if check already gave results
-			newBlocks[0].AppendInstruction(X86.Branch, ConditionCode.Equal, newBlocks[2].BasicBlock);
-			newBlocks[0].AppendInstruction(X86.Jmp, newBlocks[1].BasicBlock);
-			LinkBlocks(newBlocks[0], newBlocks[1], newBlocks[2]);
-
-			newBlocks[1].AppendInstruction(X86.Branch, code, targetBlock);
-			newBlocks[1].AppendInstruction(X86.Jmp);
-			newBlocks[1].SetBranch(nextBlock.BasicBlock);
-			LinkBlocks(newBlocks[1], targetBlock);
-			LinkBlocks(newBlocks[1], nextBlock);
-
-			// Compare low dwords
-			newBlocks[2].SetInstruction(X86.Cmp, null, op1L, op2L);
-			// Set the unsigned result...
-			newBlocks[2].AppendInstruction(X86.Branch, code, targetBlock);
-			newBlocks[2].AppendInstruction(X86.Jmp);
-			newBlocks[2].SetBranch(nextBlock.BasicBlock);
-			LinkBlocks(newBlocks[2], targetBlock);
-			LinkBlocks(newBlocks[2], nextBlock);
-		}
-
-		/// <summary>
 		/// Expands the binary branch instruction for 64-bits.
 		/// </summary>
 		/// <param name="context">The context.</param>
@@ -1562,25 +1467,6 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[1].AppendInstruction(X86.Jmp, nextBlock.BasicBlock);
 			LinkBlocks(newBlocks[1], target);
 			LinkBlocks(newBlocks[1], nextBlock);
-		}
-
-		/// <summary>
-		/// Gets the high condition.
-		/// </summary>
-		/// <param name="code">The code.</param>
-		/// <returns></returns>
-		private static ConditionCode GetHighCondition(ConditionCode code)
-		{
-			switch (code)
-			{
-				case ConditionCode.Equal: return ConditionCode.NotEqual;
-				case ConditionCode.GreaterOrEqual: return ConditionCode.LessThan;
-				case ConditionCode.GreaterThan: return ConditionCode.LessThan;
-				case ConditionCode.LessOrEqual: return ConditionCode.GreaterThan;
-				case ConditionCode.LessThan: return ConditionCode.GreaterThan;
-				case ConditionCode.NotEqual: return ConditionCode.Equal;
-				default: return code;
-			}
 		}
 
 		/// <summary>
@@ -1674,7 +1560,7 @@ namespace Mosa.Platform.x86.Stages
 		#region IIRVisitor
 
 		/// <summary>
-		/// Arithmetics the shift right instruction.
+		/// Visitation function for ArithmeticShiftRightInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IIRVisitor.ArithmeticShiftRightInstruction(Context context)
@@ -1686,7 +1572,7 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Integers the compare instruction.
+		/// Visitation function for IntegerCompareInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IIRVisitor.IntegerCompareBranchInstruction(Context context)
@@ -1698,7 +1584,7 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Integers the compare instruction.
+		/// Visitation function for IntegerCompareInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IIRVisitor.IntegerCompareInstruction(Context context)
@@ -1710,7 +1596,7 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Loads the instruction.
+		/// Visitation function for LoadInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IIRVisitor.LoadInstruction(Context context)
@@ -1722,7 +1608,7 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Logicals the and instruction.
+		/// Visitation function for LogicalAndInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IIRVisitor.LogicalAndInstruction(Context context)
@@ -1734,7 +1620,7 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Logicals the or instruction.
+		/// Visitation function for LogicalOrInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IIRVisitor.LogicalOrInstruction(Context context)
@@ -1746,7 +1632,7 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Logicals the xor instruction.
+		/// Visitation function for LogicalXorInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IIRVisitor.LogicalXorInstruction(Context context)
@@ -1758,7 +1644,7 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Logicals the not instruction.
+		/// Visitation function for LogicalNotInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IIRVisitor.LogicalNotInstruction(Context context)
@@ -1770,7 +1656,7 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Moves the instruction.
+		/// Visitation function for MoveInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IIRVisitor.MoveInstruction(Context context)
@@ -1783,7 +1669,7 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Shifts the left instruction.
+		/// Visitation function for ShiftLeftInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IIRVisitor.ShiftLeftInstruction(Context context)
@@ -1795,7 +1681,7 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Shifts the right instruction.
+		/// Visitation function for ShiftRightInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IIRVisitor.ShiftRightInstruction(Context context)
@@ -1807,7 +1693,7 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Signs the extended move instruction.
+		/// Visitation function for SignExtendedMoveInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IIRVisitor.SignExtendedMoveInstruction(Context context)
@@ -1819,7 +1705,7 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Stores the instruction.
+		/// Visitation function for StoreInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IIRVisitor.StoreInstruction(Context context)
@@ -1842,6 +1728,10 @@ namespace Mosa.Platform.x86.Stages
 			}
 		}
 
+		/// <summary>
+		/// Visitation function for DivUInstruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
 		void IIRVisitor.DivUInstruction(Context context)
 		{
 			if (IsInt64(context.Operand1))
@@ -1883,14 +1773,6 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Visitation function for SubFInstruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.SubFInstruction(Context context)
-		{
-		}
-
-		/// <summary>
 		/// Visitation function for SubSInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
@@ -1902,6 +1784,7 @@ namespace Mosa.Platform.x86.Stages
 			}
 			else
 			{
+				//FIXME: Move to IRTransformationStage
 				if (context.Operand2 is ConstantOperand && context.Operand1.Type.Type == CilElementType.Char)
 				{
 					RegisterOperand ecx = new RegisterOperand(context.Operand1.Type, GeneralPurposeRegister.ECX);
@@ -1921,14 +1804,6 @@ namespace Mosa.Platform.x86.Stages
 			{
 				ExpandSub(context);
 			}
-		}
-
-		/// <summary>
-		/// Visitation function for RemFInstruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.RemFInstruction(Context context)
-		{
 		}
 
 		/// <summary>
@@ -1953,14 +1828,6 @@ namespace Mosa.Platform.x86.Stages
 			{
 				ExpandURem(context);
 			}
-		}
-
-		/// <summary>
-		/// Visitation function for SwitchInstruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.SwitchInstruction(Context context)
-		{
 		}
 
 		/// <summary>
@@ -1999,26 +1866,39 @@ namespace Mosa.Platform.x86.Stages
 			}
 		}
 
+		#endregion // IIRVisitor
+
+		#region IIRVisitor - Unused
+
+		/// <summary>
+		/// Visitation function for RemFInstruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IIRVisitor.RemFInstruction(Context context) { }
+
+		/// <summary>
+		/// Visitation function for SubFInstruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IIRVisitor.SubFInstruction(Context context) { }
+
+		/// <summary>
+		/// Visitation function for SwitchInstruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IIRVisitor.SwitchInstruction(Context context) { }
+
 		/// <summary>
 		/// Visitation function for AddFInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.AddFInstruction(Context context)
-		{
-		}
+		void IIRVisitor.AddFInstruction(Context context) { }
 
 		/// <summary>
 		/// Visitation function for DivFInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.DivFInstruction(Context context)
-		{
-		}
-
-		#endregion // IIRVisitor
-
-		#region IIRVisitor - Unused
-
+		void IIRVisitor.DivFInstruction(Context context) { }
 		/// <summary>
 		/// Visitation function for BreakInstruction.
 		/// </summary>

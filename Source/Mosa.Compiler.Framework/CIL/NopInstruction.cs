@@ -13,7 +13,7 @@ namespace Mosa.Compiler.Framework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public sealed class NopInstruction : BaseInstruction
+	public sealed class NopInstruction : BaseCILInstruction
 	{
 		#region Construction
 

@@ -4,7 +4,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// <summary>
 	/// Intermediate representation of call context.
 	/// </summary>
-	public sealed class Call : BaseInstruction
+	public sealed class Call : BaseIRInstruction
 	{
 		#region Construction
 

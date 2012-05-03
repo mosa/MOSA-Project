@@ -16,7 +16,7 @@ namespace Mosa.Compiler.Framework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public sealed class LdstrInstruction : BaseInstruction
+	public sealed class LdstrInstruction : BaseCILInstruction
 	{
 		#region Construction
 

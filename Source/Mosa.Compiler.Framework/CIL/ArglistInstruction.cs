@@ -15,7 +15,7 @@ namespace Mosa.Compiler.Framework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public sealed class ArglistInstruction : BaseInstruction
+	public sealed class ArglistInstruction : BaseCILInstruction
 	{
 		#region Construction
 

@@ -13,7 +13,7 @@ namespace Mosa.Compiler.Framework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public sealed class EndFinallyInstruction : BaseInstruction
+	public sealed class EndFinallyInstruction : BaseCILInstruction
 	{
 		#region Construction
 

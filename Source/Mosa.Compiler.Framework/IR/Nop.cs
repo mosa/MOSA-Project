@@ -13,7 +13,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// <summary>
 	/// 
 	/// </summary>
-	public sealed class Nop : BaseInstruction
+	public sealed class Nop : BaseIRInstruction
 	{
 		#region Construction
 

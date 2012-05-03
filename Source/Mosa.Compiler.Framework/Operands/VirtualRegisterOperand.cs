@@ -64,12 +64,14 @@ namespace Mosa.Compiler.Framework.Operands
 		}
 
 		/// <summary>
-		/// Returns a string representation of <see cref="RegisterOperand"/>.
+		/// Returns a <see cref="System.String"/> that represents this instance.
 		/// </summary>
-		/// <returns>A string representation of the operand.</returns>
+		/// <returns>
+		/// A string representation of the operand.
+		/// </returns>
 		public override string ToString()
 		{
-			return String.Format("V{0} {1}", index, base.ToString());
+			return String.Format("V_{0} {1}", index, base.ToString());
 		}
 
 		#endregion // Operand Overrides

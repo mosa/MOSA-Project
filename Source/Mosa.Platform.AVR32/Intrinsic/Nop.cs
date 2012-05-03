@@ -28,7 +28,7 @@ namespace Mosa.Platform.AVR32.Intrinsic
 		/// <param name="typeSystem">The type system.</param>
 		void IIntrinsicMethod.ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
 		{
-			context.SetInstruction(Instruction.NopInstruction);
+			context.SetInstruction(AVR32.Nop);
 		}
 
 		#endregion // Methods

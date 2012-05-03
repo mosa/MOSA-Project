@@ -286,6 +286,13 @@ namespace Mosa.Compiler.Framework.Stages
 			return _domFrontierOfBlock[block.Sequence];
 		}
 
+		BasicBlock[] IDominanceProvider.GetChildren(BasicBlock block)
+		{
+			if (this._children[block.Sequence] == null)
+				return new BasicBlock[0];
+			return this._children[block.Sequence].ToArray();
+		}
+		
 		#endregion // IDominanceProvider Members
 
 		#region Internals
@@ -338,12 +345,5 @@ namespace Mosa.Compiler.Framework.Stages
 
 		#endregion // Internals
 
-
-		public BasicBlock[] GetChildren(BasicBlock block)
-		{
-			if (this._children[block.Sequence] == null)
-				return new BasicBlock[0];
-			return this._children[block.Sequence].ToArray();
-		}
 	}
 }

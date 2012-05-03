@@ -118,9 +118,10 @@ namespace Mosa.Platform.x86.Stages
 			var opRes = context.Result;
 
 			RegisterOperand register = new RegisterOperand(opRes.Type, GeneralPurposeRegister.EAX);
+			//VirtualRegisterOperand register = methodCompiler.VirtualRegisterLayout.AllocateVirtualRegister(opRes.Type);
+
 			context.Result = register;
 			context.ReplaceInstructionOnly(X86.Lea);
-			//context.Ignore = true;
 			context.AppendInstruction(X86.Mov, opRes, register);
 		}
 

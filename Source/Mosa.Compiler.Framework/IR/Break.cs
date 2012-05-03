@@ -12,7 +12,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// <summary>
 	/// 
 	/// </summary>
-	public sealed class Break : BaseInstruction
+	public sealed class Break : BaseIRInstruction
 	{
 		#region Construction
 

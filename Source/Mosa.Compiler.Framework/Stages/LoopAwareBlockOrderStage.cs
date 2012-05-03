@@ -63,7 +63,7 @@ namespace Mosa.Compiler.Framework.Stages
 			/// </summary>
 			public BasicBlock to;
 			/// <summary>
-			/// Succssor Block
+			/// Successor Block
 			/// </summary>
 			public BasicBlock From;
 

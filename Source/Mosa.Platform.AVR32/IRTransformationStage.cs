@@ -72,7 +72,7 @@ namespace Mosa.Platform.AVR32
 
 			if ((result is RegisterOperand) && (operand is ConstantOperand))
 			{
-				context.SetInstruction(Instruction.AddInstruction, result, operand);
+				context.SetInstruction(AVR32.Add, result, operand);
 			}
 			else
 				if ((result is MemoryOperand) && (operand is ConstantOperand))
@@ -100,10 +100,10 @@ namespace Mosa.Platform.AVR32
 								RegisterOperand r8 = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.R8);
 								RegisterOperand r9 = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.R9);
 
-								context.SetInstruction(Instruction.LdInstruction, r8, result);
-								context.AppendInstruction(Instruction.LdInstruction, r9, operand);
-								context.AppendInstruction(Instruction.AddInstruction, r8, r9);
-								context.AppendInstruction(Instruction.StInstruction, result, r8);
+								context.SetInstruction(AVR32.Ld, r8, result);
+								context.AppendInstruction(AVR32.Ld, r9, operand);
+								context.AppendInstruction(AVR32.Add, r8, r9);
+								context.AppendInstruction(AVR32.St, result, r8);
 							}
 		}
 
@@ -166,8 +166,8 @@ namespace Mosa.Platform.AVR32
 			var operand1 = context.Operand1;
 			var operand2 = context.Operand2;
 
-			context.SetInstruction(Instruction.CpInstruction, operand1, operand2);
-			context.AppendInstruction(Instruction.BranchInstruction, condition);
+			context.SetInstruction(AVR32.Cp, operand1, operand2);
+			context.AppendInstruction(AVR32.Branch, condition);
 			context.SetBranch(branch.Targets[0]);
 		}
 
@@ -182,18 +182,18 @@ namespace Mosa.Platform.AVR32
 			var operand1 = context.Operand1;
 			var operand2 = context.Operand2;
 
-			context.SetInstruction(Instruction.CpInstruction, operand1, operand2);
+			context.SetInstruction(AVR32.Cp, operand1, operand2);
 
 			if (resultOperand != null)
 			{
 				RegisterOperand r8 = new RegisterOperand(BuiltInSigType.Byte, GeneralPurposeRegister.R8);
 
 				//if (IsUnsigned(resultOperand))
-					//context.AppendInstruction(Instruction.SetccInstruction, GetUnsignedConditionCode(condition), r8);
+					//context.AppendInstruction(Instruction.Setcc, GetUnsignedConditionCode(condition), r8);
 				//else
-				  //  context.AppendInstruction(Instruction.SetccInstruction, condition, r8);
+				  //  context.AppendInstruction(Instruction.Setcc, condition, r8);
 
-				//context.AppendInstruction(Instruction.MovzxInstruction, resultOperand, r8);
+				//context.AppendInstruction(Instruction.Movzx, resultOperand, r8);
 			}
 		}
 
@@ -203,7 +203,7 @@ namespace Mosa.Platform.AVR32
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.JmpInstruction(Context context)
 		{
-			context.ReplaceInstructionOnly(Instruction.RjmpInstruction);
+			context.ReplaceInstructionOnly(AVR32.Rjmp);
 		}
 
 		/// <summary>
@@ -219,18 +219,18 @@ namespace Mosa.Platform.AVR32
 			ConstantOperand constantOffset = offset as ConstantOperand;
 			IntPtr offsetPtr = IntPtr.Zero;
 
-			context.SetInstruction(Instruction.LdInstruction, r8, operand);
+			context.SetInstruction(AVR32.Ld, r8, operand);
 			if (constantOffset != null)
 			{
 				offsetPtr = new IntPtr(Convert.ToInt64(constantOffset.Value));
 			}
 			else
 			{
-				context.AppendInstruction(Instruction.MovInstruction, r8, offset);
-				context.AppendInstruction(Instruction.AddInstruction, r8, r8);
+				context.AppendInstruction(AVR32.Mov, r8, offset);
+				context.AppendInstruction(AVR32.Add, r8, r8);
 			}
 
-			context.AppendInstruction(Instruction.LdInstruction, result, new MemoryOperand(r8.Type, GeneralPurposeRegister.R8, offsetPtr));
+			context.AppendInstruction(AVR32.Ld, result, new MemoryOperand(r8.Type, GeneralPurposeRegister.R8, offsetPtr));
 		}
 
 		/// <summary>
@@ -245,7 +245,7 @@ namespace Mosa.Platform.AVR32
 
 			if ((result is RegisterOperand) && (operand is ConstantOperand))
 			{
-				context.SetInstruction(Instruction.AndInstruction, result, operand);
+				context.SetInstruction(AVR32.And, result, operand);
 			}
 			else
 				if ((result is MemoryOperand) && (operand is ConstantOperand))
@@ -253,10 +253,10 @@ namespace Mosa.Platform.AVR32
 					RegisterOperand r8 = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.R8);
 					RegisterOperand r9 = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.R9);
 
-					context.SetInstruction(Instruction.LdInstruction, r8, result);
-					context.SetInstruction(Instruction.MovInstruction, r9, operand);
-					context.AppendInstruction(Instruction.AndInstruction, r8, r9);
-					context.AppendInstruction(Instruction.StInstruction, result, r8);
+					context.SetInstruction(AVR32.Ld, r8, result);
+					context.SetInstruction(AVR32.Mov, r9, operand);
+					context.AppendInstruction(AVR32.And, r8, r9);
+					context.AppendInstruction(AVR32.St, result, r8);
 				}
 				else
 					if ((result is RegisterOperand) && (operand is MemoryOperand))
@@ -279,10 +279,10 @@ namespace Mosa.Platform.AVR32
 									RegisterOperand r8 = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.R8);
 									RegisterOperand r9 = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.R9);
 
-									context.SetInstruction(Instruction.LdInstruction, r8, result);
-									context.AppendInstruction(Instruction.LdInstruction, r9, operand);
-									context.AppendInstruction(Instruction.AndInstruction, r8, r9);
-									context.AppendInstruction(Instruction.StInstruction, result, r8);
+									context.SetInstruction(AVR32.Ld, r8, result);
+									context.AppendInstruction(AVR32.Ld, r9, operand);
+									context.AppendInstruction(AVR32.And, r8, r9);
+									context.AppendInstruction(AVR32.St, result, r8);
 								}
 		}
 
@@ -330,50 +330,50 @@ namespace Mosa.Platform.AVR32
 				{
 					RegisterOperand load = new RegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.R9);
 
-					context.SetInstruction(Instruction.LdInstruction, load, operand);
-					context.AppendInstruction(Instruction.StInstruction, result, load);
+					context.SetInstruction(AVR32.Ld, load, operand);
+					context.AppendInstruction(AVR32.St, result, load);
 
 					//if (!Is32Bit(operand) && IsSigned(operand))
-					//    context.SetInstruction(Instruction.MovsxInstruction, load, operand);
+					//    context.SetInstruction(Instruction.Movsx, load, operand);
 					//else if (!Is32Bit(operand) && IsUnsigned(operand))
-					//    context.SetInstruction(Instruction.MovzxInstruction, load, operand);
+					//    context.SetInstruction(Instruction.Movzx, load, operand);
 					//else
-					//    context.SetInstruction(Instruction.MovInstruction, load, operand);
+					//    context.SetInstruction(Instruction.Mov, load, operand);
 
-					//context.AppendInstruction(Instruction.MovInstruction, result, store);
+					//context.AppendInstruction(Instruction.Mov, result, store);
 				}
 				else
 					if (context.Result is RegisterOperand && context.Operand1 is MemoryOperand)
 					{
-						context.ReplaceInstructionOnly(Instruction.LdInstruction);
+						context.ReplaceInstructionOnly(AVR32.Ld);
 					}
 					else
 						if (context.Result is MemoryOperand && context.Operand1 is RegisterOperand)
 						{
-							context.SetInstruction(Instruction.StInstruction, result, operand);
+							context.SetInstruction(AVR32.St, result, operand);
 						}
 						else
 							if (context.Result is RegisterOperand && context.Operand1 is RegisterOperand)
 							{
-								context.ReplaceInstructionOnly(Instruction.MovInstruction);
+								context.ReplaceInstructionOnly(AVR32.Mov);
 							}
 							else
 								if (context.Result is MemoryOperand && context.Operand1 is ConstantOperand)
 								{
 									RegisterOperand load = new RegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.R9);
 
-									context.SetInstruction(Instruction.MovInstruction, load, operand);
-									context.AppendInstruction(Instruction.StInstruction, result, load);
+									context.SetInstruction(AVR32.Mov, load, operand);
+									context.AppendInstruction(AVR32.St, result, load);
 								}
 								else
 									if (context.Result is MemoryOperand && context.Operand1 is SymbolOperand)
 									{
-										//context.SetInstruction(Instruction.StInstruction, result, operand);
+										//context.SetInstruction(Instruction.St, result, operand);
 									}
 									else
 										if (context.Result is MemoryOperand && context.Operand1 is LabelOperand)
 										{
-											//context.SetInstruction(Instruction.StInstruction, result, operand);
+											//context.SetInstruction(Instruction.St, result, operand);
 										}
 
 			}
@@ -407,44 +407,44 @@ namespace Mosa.Platform.AVR32
 			{
 				// int 3
 				// TODO:
-				//context.SetInstruction(Instruction.BreakInstruction);
-				context.AppendInstruction(Instruction.NopInstruction);
+				//context.SetInstruction(Instruction.Break);
+				context.AppendInstruction(AVR32.Nop);
 
 				// Uncomment this line to enable breakpoints within Bochs
 				//context.AppendInstruction(CPUx86.Instruction.BochsDebug);
 			}
 
 			// push ebp
-			context.SetInstruction(Instruction.PushInstruction, null, r11);
+			context.SetInstruction(AVR32.Push, null, r11);
 			// mov ebp, esp
-			context.AppendInstruction(Instruction.MovInstruction, r11, sp);
+			context.AppendInstruction(AVR32.Mov, r11, sp);
 			// sub esp, localsSize
-			context.AppendInstruction(Instruction.SubInstruction, sp, new ConstantOperand(I, -stackSize));
+			context.AppendInstruction(AVR32.Sub, sp, new ConstantOperand(I, -stackSize));
 			// push ebx
-			context.AppendInstruction(Instruction.PushInstruction, null, r12);
+			context.AppendInstruction(AVR32.Push, null, r12);
 
 			// Initialize all locals to zero
-			context.AppendInstruction(Instruction.PushInstruction, null, r7);
-			context.AppendInstruction(Instruction.MovInstruction, r7, sp);
-			context.AppendInstruction(Instruction.PushInstruction, null, r10);
+			context.AppendInstruction(AVR32.Push, null, r7);
+			context.AppendInstruction(AVR32.Mov, r7, sp);
+			context.AppendInstruction(AVR32.Push, null, r10);
 
-			//context.AppendInstruction(Instruction.AddInstruction, r7, new ConstantOperand(I, 8));
-			context.AppendInstruction(Instruction.MovInstruction, r6, new ConstantOperand(I, 8));
-			context.AppendInstruction(Instruction.AddInstruction, r7, r6);
-			context.AppendInstruction(Instruction.MovInstruction, r10, new ConstantOperand(I, -(int)(stackSize >> 2)));
-			context.AppendInstruction(Instruction.EorInstruction, r8, r8);
+			//context.AppendInstruction(Instruction.Add, r7, new ConstantOperand(I, 8));
+			context.AppendInstruction(AVR32.Mov, r6, new ConstantOperand(I, 8));
+			context.AppendInstruction(AVR32.Add, r7, r6);
+			context.AppendInstruction(AVR32.Mov, r10, new ConstantOperand(I, -(int)(stackSize >> 2)));
+			context.AppendInstruction(AVR32.Eor, r8, r8);
 			// TODO:
-			//context.AppendInstruction(Instruction.RepInstruction);
-			//context.AppendInstruction(Instruction.StosdInstruction);
-			context.AppendInstruction(Instruction.PopInstruction, r10);
-			context.AppendInstruction(Instruction.PopInstruction, r7);
+			//context.AppendInstruction(Instruction.Rep);
+			//context.AppendInstruction(Instruction.Stosd);
+			context.AppendInstruction(AVR32.Pop, r10);
+			context.AppendInstruction(AVR32.Pop, r7);
 
 			// Save EDX for int32 return values (or do not save EDX for non-int64 return values)
 			if (methodCompiler.Method.Signature.ReturnType.Type != CilElementType.I8 &&
 				methodCompiler.Method.Signature.ReturnType.Type != CilElementType.U8)
 			{
 				// push edx
-				context.AppendInstruction(Instruction.PushInstruction, null, new RegisterOperand(I, GeneralPurposeRegister.R9));
+				context.AppendInstruction(AVR32.Push, null, new RegisterOperand(I, GeneralPurposeRegister.R9));
 			}
 		}
 
@@ -466,19 +466,19 @@ namespace Mosa.Platform.AVR32
 				methodCompiler.Method.Signature.ReturnType.Type != CilElementType.U8)
 			{
 				// pop edx
-				context.SetInstruction(Instruction.PopInstruction, r9);
-				context.AppendInstruction(Instruction.NopInstruction);
+				context.SetInstruction(AVR32.Pop, r9);
+				context.AppendInstruction(AVR32.Nop);
 			}
 
 			// pop ebx
-			context.SetInstruction(Instruction.PopInstruction, r12);
+			context.SetInstruction(AVR32.Pop, r12);
 			// add esp, -localsSize
-			context.AppendInstruction(Instruction.MovInstruction, r7, new ConstantOperand(I, -stackSize));
-			context.AppendInstruction(Instruction.AddInstruction, sp, r7);
+			context.AppendInstruction(AVR32.Mov, r7, new ConstantOperand(I, -stackSize));
+			context.AppendInstruction(AVR32.Add, sp, r7);
 			// pop ebp
-			context.AppendInstruction(Instruction.PopInstruction, r11);
+			context.AppendInstruction(AVR32.Pop, r11);
 			// ret
-			context.AppendInstruction(Instruction.RetInstruction);
+			context.AppendInstruction(AVR32.Ret);
 		}
 
 		/// <summary>
@@ -490,19 +490,19 @@ namespace Mosa.Platform.AVR32
 			if (context.Branch == null)
 			{
 				// To return from an internal method call (usually from within a finally or exception clause)
-				context.SetInstruction(Instruction.RetInstruction);
+				context.SetInstruction(AVR32.Ret);
 				return;
 			}
 
 			if (context.Operand1 != null)
 			{
 				callingConvention.MoveReturnValue(context, context.Operand1);
-				context.AppendInstruction(Instruction.RjmpInstruction);
+				context.AppendInstruction(AVR32.Rjmp);
 				context.SetBranch(Int32.MaxValue);
 			}
 			else
 			{
-				context.SetInstruction(Instruction.JmpInstruction);
+				context.SetInstruction(AVR32.Jmp);
 				context.SetBranch(Int32.MaxValue);
 			}
 		}
@@ -538,8 +538,8 @@ namespace Mosa.Platform.AVR32
 			RegisterOperand r8 = new RegisterOperand(destination.Type, GeneralPurposeRegister.R8);
 			RegisterOperand r9 = new RegisterOperand(value.Type, GeneralPurposeRegister.R9);
 
-			context.SetInstruction(Instruction.LdInstruction, r8, destination);
-			context.AppendInstruction(Instruction.LdInstruction, r9, value);
+			context.SetInstruction(AVR32.Ld, r8, destination);
+			context.AppendInstruction(AVR32.Ld, r9, value);
 
 			IntPtr offsetPtr = IntPtr.Zero;
 			if (constantOffset != null)
@@ -548,11 +548,11 @@ namespace Mosa.Platform.AVR32
 			}
 			else
 			{
-				context.AppendInstruction(Instruction.MovInstruction, r8, offset);
-				context.AppendInstruction(Instruction.AddInstruction, r8, r8);
+				context.AppendInstruction(AVR32.Mov, r8, offset);
+				context.AppendInstruction(AVR32.Add, r8, r8);
 			}
 
-			context.AppendInstruction(Instruction.LdInstruction, new MemoryOperand(value.Type, GeneralPurposeRegister.R8, offsetPtr), r9);
+			context.AppendInstruction(AVR32.Ld, new MemoryOperand(value.Type, GeneralPurposeRegister.R8, offsetPtr), r9);
 		}
 
 		/// <summary>
@@ -657,7 +657,7 @@ namespace Mosa.Platform.AVR32
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.NopInstruction(Context context)
 		{
-			context.SetInstruction(Instruction.NopInstruction);
+			context.SetInstruction(AVR32.Nop);
 		}
 
 		/// <summary>
@@ -678,22 +678,22 @@ namespace Mosa.Platform.AVR32
 				var constantOffset = offset as ConstantOperand;
 				var offsetPtr = IntPtr.Zero;
 
-				context.SetInstruction(Instruction.LdInstruction, r8, source);
+				context.SetInstruction(AVR32.Ld, r8, source);
 				if (constantOffset != null)
 				{
 					offsetPtr = new IntPtr(Convert.ToInt64(constantOffset.Value));
 				}
 				else
 				{
-					context.AppendInstruction(Instruction.MovInstruction, r8, offset);
-					context.AppendInstruction(Instruction.AddInstruction, r8, r8);
+					context.AppendInstruction(AVR32.Mov, r8, offset);
+					context.AppendInstruction(AVR32.Add, r8, r8);
 				}
 
-				context.AppendInstruction(Instruction.LdsInstruction, destination, new MemoryOperand(elementType, GeneralPurposeRegister.R8, offsetPtr));
+				context.AppendInstruction(AVR32.Lds, destination, new MemoryOperand(elementType, GeneralPurposeRegister.R8, offsetPtr));
 			}
 			else
 			{
-				context.ReplaceInstructionOnly(Instruction.LdsInstruction);
+				context.ReplaceInstructionOnly(AVR32.Lds);
 			}
 		}
 
@@ -723,7 +723,7 @@ namespace Mosa.Platform.AVR32
 			if (context.OperandCount == 0 && context.Branch != null)
 			{
 				// inter-method call; usually for exception processing
-				context.ReplaceInstructionOnly(Instruction.RcallInstruction);
+				context.ReplaceInstructionOnly(AVR32.Rcall);
 			}
 			else
 			{
@@ -747,7 +747,7 @@ namespace Mosa.Platform.AVR32
 				ConstantOperand constantOffset = offset as ConstantOperand;
 				IntPtr offsetPtr = IntPtr.Zero;
 
-				context.SetInstruction(Instruction.MovInstruction, r8, source);
+				context.SetInstruction(AVR32.Mov, r8, source);
 				if (constantOffset != null)
 				{
 					offsetPtr = new IntPtr(Convert.ToInt64(constantOffset.Value));
@@ -757,14 +757,14 @@ namespace Mosa.Platform.AVR32
 					elementType.Type == CilElementType.U1 ||
 					elementType.Type == CilElementType.U2)
 				{
-					context.AppendInstruction(Instruction.LdInstruction, r8, offset);
-					context.AppendInstruction(Instruction.AddInstruction, r8, r8);
+					context.AppendInstruction(AVR32.Ld, r8, offset);
+					context.AppendInstruction(AVR32.Add, r8, r8);
 				}
-				//context.AppendInstruction(Instruction.MovzxInstruction, result, new MemoryOperand(elementType, GeneralPurposeRegister.R8, offsetPtr));
+				//context.AppendInstruction(Instruction.Movzx, result, new MemoryOperand(elementType, GeneralPurposeRegister.R8, offsetPtr));
 			}
 			else
 			{
-				//context.ReplaceInstructionOnly(Instruction.MovzxInstruction);
+				//context.ReplaceInstructionOnly(Instruction.Movzx);
 			}
 		}
 

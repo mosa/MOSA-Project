@@ -6,7 +6,7 @@
 
 namespace Mosa.Compiler.Framework.IR
 {
-	public sealed class IntegerCompareBranch : BaseInstruction
+	public sealed class IntegerCompareBranch : BaseIRInstruction
 	{
 		#region Construction
 	

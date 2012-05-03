@@ -12,7 +12,7 @@ namespace Mosa.Compiler.Framework.IR
 	/// <summary>
 	/// Intermediate representation of an unconditional branch context.
 	/// </summary>
-	public sealed class Jmp : BaseInstruction
+	public sealed class Jmp : BaseIRInstruction
 	{
 		#region Construction
 

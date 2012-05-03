@@ -17,7 +17,7 @@ namespace Mosa.Compiler.Framework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public class LoadInstruction : BaseInstruction
+	public class LoadInstruction : BaseCILInstruction
 	{
 		#region Construction
 

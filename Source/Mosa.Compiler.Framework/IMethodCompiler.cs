@@ -185,5 +185,10 @@ namespace Mosa.Compiler.Framework
 		/// Gets the stack layout.
 		/// </summary>
 		StackLayout StackLayout { get; }
+
+		/// <summary>
+		/// Gets the virtual register layout.
+		/// </summary>
+		VirtualRegisterLayout VirtualRegisterLayout { get; }
 	}
 }

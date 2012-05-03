@@ -14,7 +14,7 @@ namespace Mosa.Compiler.Framework.CIL
 	/// <summary>
 	/// 
 	/// </summary>
-	public class PrefixInstruction : BaseInstruction
+	public class PrefixInstruction : BaseCILInstruction
 	{
 		#region Properties
 
