@@ -56,7 +56,7 @@ namespace Mosa.Platform.AVR32
 		/// Visitation function for AddSInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.AddSInstruction(Context context)
+		void IR.IIRVisitor.AddSigned(Context context)
 		{
 		}
 
@@ -64,7 +64,7 @@ namespace Mosa.Platform.AVR32
 		/// Visitation function for AddUInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.AddUInstruction(Context context)
+		void IR.IIRVisitor.AddUnsigned(Context context)
 		{
 			// FIXME: Float or Int64 not supported
 			Operand result = context.Result;
@@ -111,7 +111,7 @@ namespace Mosa.Platform.AVR32
 		/// Visitation function for AddFInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.AddFInstruction(Context context)
+		void IR.IIRVisitor.AddFloat(Context context)
 		{
 		}
 
@@ -119,7 +119,7 @@ namespace Mosa.Platform.AVR32
 		/// Visitation function for DivFInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.DivFInstruction(Context context)
+		void IR.IIRVisitor.DivFloat(Context context)
 		{
 		}
 
@@ -127,7 +127,7 @@ namespace Mosa.Platform.AVR32
 		/// Visitation function for DivSInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.DivSInstruction(Context context)
+		void IR.IIRVisitor.DivSigned(Context context)
 		{
 		}
 
@@ -135,7 +135,7 @@ namespace Mosa.Platform.AVR32
 		/// Addresses the of instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.AddressOfInstruction(Context context)
+		void IR.IIRVisitor.AddressOf(Context context)
 		{
 		}
 
@@ -143,7 +143,7 @@ namespace Mosa.Platform.AVR32
 		/// Arithmetic the shift right instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.ArithmeticShiftRightInstruction(Context context)
+		void IR.IIRVisitor.ArithmeticShiftRight(Context context)
 		{
 		}
 
@@ -151,7 +151,7 @@ namespace Mosa.Platform.AVR32
 		/// Floating point compare instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.FloatingPointCompareInstruction(Context context)
+		void IR.IIRVisitor.FloatCompare(Context context)
 		{
 		}
 
@@ -159,7 +159,7 @@ namespace Mosa.Platform.AVR32
 		/// Visitation function for IntegerCompareBranchInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.IntegerCompareBranchInstruction(Context context)
+		void IR.IIRVisitor.IntegerCompareBranch(Context context)
 		{
 			IBranch branch = context.Branch;
 			var condition = context.ConditionCode;
@@ -175,7 +175,7 @@ namespace Mosa.Platform.AVR32
 		/// Visitation function for IntegerCompareInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.IntegerCompareInstruction(Context context)
+		void IR.IIRVisitor.IntegerCompare(Context context)
 		{
 			var condition = context.ConditionCode;
 			var resultOperand = context.Result;
@@ -201,7 +201,7 @@ namespace Mosa.Platform.AVR32
 		/// Visitation function for JmpInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.JmpInstruction(Context context)
+		void IR.IIRVisitor.Jmp(Context context)
 		{
 			context.ReplaceInstructionOnly(AVR32.Rjmp);
 		}
@@ -210,7 +210,7 @@ namespace Mosa.Platform.AVR32
 		/// Visitation function for LoadInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.LoadInstruction(Context context)
+		void IR.IIRVisitor.Load(Context context)
 		{
 			RegisterOperand r8 = new RegisterOperand(context.Operand1.Type, GeneralPurposeRegister.R8);
 			Operand result = context.Result;
@@ -237,7 +237,7 @@ namespace Mosa.Platform.AVR32
 		/// Visitation function for LogicalAndInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.LogicalAndInstruction(Context context)
+		void IR.IIRVisitor.LogicalAnd(Context context)
 		{
 			// FIXME: Float or Int64 not supported
 			Operand result = context.Result;
@@ -290,7 +290,7 @@ namespace Mosa.Platform.AVR32
 		/// Visitation function for LogicalOrInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.LogicalOrInstruction(Context context)
+		void IR.IIRVisitor.LogicalOr(Context context)
 		{
 		}
 
@@ -298,7 +298,7 @@ namespace Mosa.Platform.AVR32
 		/// Visitation function for LogicalXorInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.LogicalXorInstruction(Context context)
+		void IR.IIRVisitor.LogicalXor(Context context)
 		{
 		}
 
@@ -306,7 +306,7 @@ namespace Mosa.Platform.AVR32
 		/// Visitation function for LogicalNotInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.LogicalNotInstruction(Context context)
+		void IR.IIRVisitor.LogicalNot(Context context)
 		{
 		}
 
@@ -314,7 +314,7 @@ namespace Mosa.Platform.AVR32
 		/// Visitation function for MoveInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.MoveInstruction(Context context)
+		void IR.IIRVisitor.Move(Context context)
 		{
 			Operand result = context.Result;
 			Operand operand = context.Operand1;
@@ -383,7 +383,7 @@ namespace Mosa.Platform.AVR32
 		/// Visitation function for PrologueInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.PrologueInstruction(Context context)
+		void IR.IIRVisitor.Prologue(Context context)
 		{
 			SigType I = BuiltInSigType.Int32;
 			RegisterOperand r8 = new RegisterOperand(I, GeneralPurposeRegister.R8);
@@ -452,7 +452,7 @@ namespace Mosa.Platform.AVR32
 		/// Visitation function for EpilogueInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.EpilogueInstruction(Context context)
+		void IR.IIRVisitor.Epilogue(Context context)
 		{
 			SigType I = BuiltInSigType.IntPtr;
 			RegisterOperand r12 = new RegisterOperand(I, GeneralPurposeRegister.R12);
@@ -485,7 +485,7 @@ namespace Mosa.Platform.AVR32
 		/// Visitation function for ReturnInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.ReturnInstruction(Context context)
+		void IR.IIRVisitor.Return(Context context)
 		{
 			if (context.Branch == null)
 			{
@@ -511,7 +511,7 @@ namespace Mosa.Platform.AVR32
 		/// Visitation function for ShiftLeftInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.ShiftLeftInstruction(Context context)
+		void IR.IIRVisitor.ShiftLeft(Context context)
 		{
 		}
 
@@ -519,7 +519,7 @@ namespace Mosa.Platform.AVR32
 		/// Visitation function for ShiftRightInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.ShiftRightInstruction(Context context)
+		void IR.IIRVisitor.ShiftRight(Context context)
 		{
 		}
 
@@ -527,7 +527,7 @@ namespace Mosa.Platform.AVR32
 		/// Visitation function for StoreInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.StoreInstruction(Context context)
+		void IR.IIRVisitor.Store(Context context)
 		{
 			Operand destination = context.Result;
 			Operand offset = context.Operand1;
@@ -559,7 +559,7 @@ namespace Mosa.Platform.AVR32
 		/// Visitation function for DivUInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.DivUInstruction(Context context)
+		void IR.IIRVisitor.DivUnsigned(Context context)
 		{
 		}
 
@@ -567,7 +567,7 @@ namespace Mosa.Platform.AVR32
 		/// Visitation function for MulSInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.MulSInstruction(Context context)
+		void IR.IIRVisitor.MulSigned(Context context)
 		{
 		}
 
@@ -575,7 +575,7 @@ namespace Mosa.Platform.AVR32
 		/// Visitation function for MulFInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.MulFInstruction(Context context)
+		void IR.IIRVisitor.MulFloat(Context context)
 		{
 		}
 
@@ -583,7 +583,7 @@ namespace Mosa.Platform.AVR32
 		/// Visitation function for MulUInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.MulUInstruction(Context context)
+		void IR.IIRVisitor.MulUnsigned(Context context)
 		{
 		}
 
@@ -591,7 +591,7 @@ namespace Mosa.Platform.AVR32
 		/// Visitation function for SubFInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.SubFInstruction(Context context)
+		void IR.IIRVisitor.SubFloat(Context context)
 		{
 		}
 
@@ -599,7 +599,7 @@ namespace Mosa.Platform.AVR32
 		/// Visitation function for SubSInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.SubSInstruction(Context context)
+		void IR.IIRVisitor.SubSigned(Context context)
 		{
 		}
 
@@ -607,7 +607,7 @@ namespace Mosa.Platform.AVR32
 		/// Visitation function for SubUInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.SubUInstruction(Context context)
+		void IR.IIRVisitor.SubUnsigned(Context context)
 		{
 		}
 
@@ -615,7 +615,7 @@ namespace Mosa.Platform.AVR32
 		/// Visitation function for RemFInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.RemFInstruction(Context context)
+		void IR.IIRVisitor.RemFloat(Context context)
 		{
 		}
 
@@ -623,7 +623,7 @@ namespace Mosa.Platform.AVR32
 		/// Visitation function for RemSInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.RemSInstruction(Context context)
+		void IR.IIRVisitor.RemSigned(Context context)
 		{
 		}
 
@@ -631,7 +631,7 @@ namespace Mosa.Platform.AVR32
 		/// Visitation function for RemUInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.RemUInstruction(Context context)
+		void IR.IIRVisitor.RemUnsigned(Context context)
 		{
 		}
 
@@ -639,7 +639,7 @@ namespace Mosa.Platform.AVR32
 		/// Visitation function for SwitchInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.SwitchInstruction(Context context)
+		void IR.IIRVisitor.Switch(Context context)
 		{
 		}
 
@@ -647,7 +647,7 @@ namespace Mosa.Platform.AVR32
 		/// Visitation function for BreakInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.BreakInstruction(Context context)
+		void IR.IIRVisitor.Break(Context context)
 		{
 		}
 
@@ -655,7 +655,7 @@ namespace Mosa.Platform.AVR32
 		/// Visitation function for NopInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.NopInstruction(Context context)
+		void IR.IIRVisitor.Nop(Context context)
 		{
 			context.SetInstruction(AVR32.Nop);
 		}
@@ -664,7 +664,7 @@ namespace Mosa.Platform.AVR32
 		/// Visitation function for SignExtendedMoveInstruction"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.SignExtendedMoveInstruction(Context context)
+		void IR.IIRVisitor.SignExtendedMove(Context context)
 		{            
 			var offset = context.Operand2;
 			var type = context.Other as SigType;
@@ -718,7 +718,7 @@ namespace Mosa.Platform.AVR32
 		/// Visitation function for CallInstruction"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.CallInstruction(Context context)
+		void IR.IIRVisitor.Call(Context context)
 		{
 			if (context.OperandCount == 0 && context.Branch != null)
 			{
@@ -735,7 +735,7 @@ namespace Mosa.Platform.AVR32
 		/// Visitation function for ZeroExtendedMoveInstruction"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.ZeroExtendedMoveInstruction(Context context)
+		void IR.IIRVisitor.ZeroExtendedMove(Context context)
 		{
 			Operand offset = context.Operand2;
 			if (offset != null)
@@ -772,7 +772,7 @@ namespace Mosa.Platform.AVR32
 		/// Visitation function for FloatingPointToIntegerConversionInstruction"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.FloatingPointToIntegerConversionInstruction(Context context)
+		void IR.IIRVisitor.FloatToIntegerConversion(Context context)
 		{
 		}
 
@@ -780,7 +780,7 @@ namespace Mosa.Platform.AVR32
 		/// Visitation function for ThrowInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.ThrowInstruction(Context context)
+		void IR.IIRVisitor.Throw(Context context)
 		{
 		}
 
@@ -788,7 +788,7 @@ namespace Mosa.Platform.AVR32
 		/// Visitation function for ExceptionPrologueInstruction"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.ExceptionPrologueInstruction(Context context)
+		void IR.IIRVisitor.ExceptionPrologue(Context context)
 		{
 		}
 
@@ -797,16 +797,16 @@ namespace Mosa.Platform.AVR32
 		#region IIRVisitor - Unused
 
 		/// <summary>
-		/// Visitation function for IntegerToFloatingPointConversionInstruction.
+		/// Visitation function for IntegerToFloatingPointConversion.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.IntegerToFloatingPointConversionInstruction(Context context) { }
+		void IR.IIRVisitor.IntegerToFloatConversion(Context context) { }
 
 		/// <summary>
-		/// Visitation function for PhiInstruction"/> instructions.
+		/// Visitation function for Phi.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IR.IIRVisitor.PhiInstruction(Context context) { }
+		void IR.IIRVisitor.Phi(Context context) { }
 
 		#endregion // IIRVisitor - Unused
 

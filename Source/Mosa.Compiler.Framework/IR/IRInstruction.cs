@@ -18,15 +18,15 @@ namespace Mosa.Compiler.Framework.IR
 		/// <summary>
 		/// 
 		/// </summary>
-		public static readonly AddF AddF = new AddF();
+		public static readonly AddFloat AddF = new AddFloat();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static readonly AddS AddS = new AddS();
+		public static readonly AddSigned AddS = new AddSigned();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static readonly AddU AddU = new AddU();
+		public static readonly AddUnsigned AddU = new AddUnsigned();
 		/// <summary>
 		/// 
 		/// </summary>
@@ -42,15 +42,15 @@ namespace Mosa.Compiler.Framework.IR
 		/// <summary>
 		/// 
 		/// </summary>
-		public static readonly DivF DivF = new DivF();
+		public static readonly DivFloat DivF = new DivFloat();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static readonly DivS DivS = new DivS();
+		public static readonly DivSigned DivS = new DivSigned();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static readonly DivU DivU = new DivU();
+		public static readonly DivUnsigned DivU = new DivUnsigned();
 		/// <summary>
 		/// 
 		/// </summary>
@@ -58,11 +58,11 @@ namespace Mosa.Compiler.Framework.IR
 		/// <summary>
 		/// 
 		/// </summary>
-		public static FloatingPointCompare FloatingPointCompare = new FloatingPointCompare();
+		public static FloatCompare FloatingPointCompare = new FloatCompare();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static FloatingPointToIntegerConversion FloatingPointToIntegerConversion = new FloatingPointToIntegerConversion();
+		public static FloatToIntegerConversion FloatingPointToIntegerConversion = new FloatToIntegerConversion();
 		/// <summary>
 		/// 
 		/// </summary>
@@ -74,7 +74,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// <summary>
 		/// 
 		/// </summary>
-		public static IntegerToFloatingPointConversion IntegerToFloatingPointConversion = new IntegerToFloatingPointConversion();
+		public static IntegerToFloatConversion IntegerToFloatingPointConversion = new IntegerToFloatConversion();
 		/// <summary>
 		/// 
 		/// </summary>
@@ -106,15 +106,15 @@ namespace Mosa.Compiler.Framework.IR
 		/// <summary>
 		/// 
 		/// </summary>
-		public static MulF MulF = new MulF();
+		public static MulFloat MulF = new MulFloat();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static MulS MulS = new MulS();
+		public static MulSigned MulS = new MulSigned();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static MulU MulU = new MulU();
+		public static MulUnsigned MulU = new MulUnsigned();
 		/// <summary>
 		/// 
 		/// </summary>
@@ -126,15 +126,15 @@ namespace Mosa.Compiler.Framework.IR
 		/// <summary>
 		/// 
 		/// </summary>
-		public static readonly RemF RemF = new RemF();
+		public static readonly RemFloat RemF = new RemFloat();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static readonly RemS RemS = new RemS();
+		public static readonly RemSigned RemS = new RemSigned();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static readonly RemU RemU = new RemU();
+		public static readonly RemUnsigned RemU = new RemUnsigned();
 		/// <summary>
 		/// 
 		/// </summary>
@@ -158,15 +158,15 @@ namespace Mosa.Compiler.Framework.IR
 		/// <summary>
 		/// 
 		/// </summary>
-		public static readonly SubF SubF = new SubF();
+		public static readonly SubFloat SubF = new SubFloat();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static readonly SubS SubS = new SubS();
+		public static readonly SubSigned SubS = new SubSigned();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static readonly SubU SubU = new SubU();
+		public static readonly SubUnsigned SubU = new SubUnsigned();
 		/// <summary>
 		/// 
 		/// </summary>

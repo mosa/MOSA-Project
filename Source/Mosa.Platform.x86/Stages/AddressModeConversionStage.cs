@@ -51,7 +51,7 @@ namespace Mosa.Platform.x86.Stages
 			Operand op2 = ctx.Operand2;
 
 			if (ctx.Instruction is IntegerCompare
-				|| ctx.Instruction is FloatingPointCompare
+				|| ctx.Instruction is FloatCompare
 				|| ctx.Instruction is Load
 				|| ctx.Instruction is Store)
 			{

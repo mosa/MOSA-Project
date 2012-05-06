@@ -42,7 +42,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// <param name="context">The context.</param>
 		public override void Visit(IIRVisitor visitor, Context context)
 		{
-			visitor.JmpInstruction(context);
+			visitor.Jmp(context);
 		}
 
 		#endregion // IRInstruction Overrides

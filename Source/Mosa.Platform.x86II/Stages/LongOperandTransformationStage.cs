@@ -1562,7 +1562,7 @@ namespace Mosa.Platform.x86II.Stages
 		/// Visitation function for ArithmeticShiftRightInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.ArithmeticShiftRightInstruction(Context context)
+		void IIRVisitor.ArithmeticShiftRight(Context context)
 		{
 			if (IsInt64(context.Operand1))
 			{
@@ -1574,7 +1574,7 @@ namespace Mosa.Platform.x86II.Stages
 		/// Visitation function for IntegerCompareInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.IntegerCompareBranchInstruction(Context context)
+		void IIRVisitor.IntegerCompareBranch(Context context)
 		{
 			if (IsInt64(context.Operand1) || IsInt64(context.Operand2))
 			{
@@ -1586,7 +1586,7 @@ namespace Mosa.Platform.x86II.Stages
 		/// Visitation function for IntegerCompareInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.IntegerCompareInstruction(Context context)
+		void IIRVisitor.IntegerCompare(Context context)
 		{
 			if (IsInt64(context.Operand1))
 			{
@@ -1598,7 +1598,7 @@ namespace Mosa.Platform.x86II.Stages
 		/// Visitation function for LoadInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.LoadInstruction(Context context)
+		void IIRVisitor.Load(Context context)
 		{
 			if (IsInt64(context.Operand1) || IsInt64(context.Result))
 			{
@@ -1610,7 +1610,7 @@ namespace Mosa.Platform.x86II.Stages
 		/// Visitation function for LogicalAndInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.LogicalAndInstruction(Context context)
+		void IIRVisitor.LogicalAnd(Context context)
 		{
 			if (IsInt64(context.Operand1))
 			{
@@ -1622,7 +1622,7 @@ namespace Mosa.Platform.x86II.Stages
 		/// Visitation function for LogicalOrInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.LogicalOrInstruction(Context context)
+		void IIRVisitor.LogicalOr(Context context)
 		{
 			if (IsInt64(context.Operand1))
 			{
@@ -1634,7 +1634,7 @@ namespace Mosa.Platform.x86II.Stages
 		/// Visitation function for LogicalXorInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.LogicalXorInstruction(Context context)
+		void IIRVisitor.LogicalXor(Context context)
 		{
 			if (IsInt64(context.Operand1))
 			{
@@ -1646,7 +1646,7 @@ namespace Mosa.Platform.x86II.Stages
 		/// Visitation function for LogicalNotInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.LogicalNotInstruction(Context context)
+		void IIRVisitor.LogicalNot(Context context)
 		{
 			if (IsInt64(context.Operand1))
 			{
@@ -1658,7 +1658,7 @@ namespace Mosa.Platform.x86II.Stages
 		/// Visitation function for MoveInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.MoveInstruction(Context context)
+		void IIRVisitor.Move(Context context)
 		{
 			// FIXME: Why aren't we doing an SSE2 move for int64?
 			if (IsInt64(context.Operand1))
@@ -1671,7 +1671,7 @@ namespace Mosa.Platform.x86II.Stages
 		/// Visitation function for ShiftLeftInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.ShiftLeftInstruction(Context context)
+		void IIRVisitor.ShiftLeft(Context context)
 		{
 			if (IsInt64(context.Operand1))
 			{
@@ -1683,7 +1683,7 @@ namespace Mosa.Platform.x86II.Stages
 		/// Visitation function for ShiftRightInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.ShiftRightInstruction(Context context)
+		void IIRVisitor.ShiftRight(Context context)
 		{
 			if (IsInt64(context.Operand1))
 			{
@@ -1695,7 +1695,7 @@ namespace Mosa.Platform.x86II.Stages
 		/// Visitation function for SignExtendedMoveInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.SignExtendedMoveInstruction(Context context)
+		void IIRVisitor.SignExtendedMove(Context context)
 		{
 			if (IsInt64(context.Operand1) || IsInt64(context.Result))
 			{
@@ -1707,7 +1707,7 @@ namespace Mosa.Platform.x86II.Stages
 		/// Visitation function for StoreInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.StoreInstruction(Context context)
+		void IIRVisitor.Store(Context context)
 		{
 			if (IsInt64(context.Operand2))
 			{
@@ -1719,7 +1719,7 @@ namespace Mosa.Platform.x86II.Stages
 		/// Visitation function for DivSInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.DivSInstruction(Context context)
+		void IIRVisitor.DivSigned(Context context)
 		{
 			if (IsInt64(context.Operand1))
 			{
@@ -1731,7 +1731,7 @@ namespace Mosa.Platform.x86II.Stages
 		/// Visitation function for DivUInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.DivUInstruction(Context context)
+		void IIRVisitor.DivUnsigned(Context context)
 		{
 			if (IsInt64(context.Operand1))
 			{
@@ -1743,7 +1743,7 @@ namespace Mosa.Platform.x86II.Stages
 		/// Visitation function for MulSInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.MulSInstruction(Context context)
+		void IIRVisitor.MulSigned(Context context)
 		{
 			if (IsInt64(context.Operand1))
 			{
@@ -1755,7 +1755,7 @@ namespace Mosa.Platform.x86II.Stages
 		/// Visitation function for MulFInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.MulFInstruction(Context context)
+		void IIRVisitor.MulFloat(Context context)
 		{
 		}
 
@@ -1763,7 +1763,7 @@ namespace Mosa.Platform.x86II.Stages
 		/// Visitation function for MulUInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.MulUInstruction(Context context)
+		void IIRVisitor.MulUnsigned(Context context)
 		{
 			if (IsInt64(context.Operand1))
 			{
@@ -1775,7 +1775,7 @@ namespace Mosa.Platform.x86II.Stages
 		/// Visitation function for SubSInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.SubSInstruction(Context context)
+		void IIRVisitor.SubSigned(Context context)
 		{
 			if (IsInt64(context.Operand1))
 			{
@@ -1797,7 +1797,7 @@ namespace Mosa.Platform.x86II.Stages
 		/// Visitation function for SubUInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.SubUInstruction(Context context)
+		void IIRVisitor.SubUnsigned(Context context)
 		{
 			if (IsInt64(context.Operand1))
 			{
@@ -1809,7 +1809,7 @@ namespace Mosa.Platform.x86II.Stages
 		/// Visitation function for RemSInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.RemSInstruction(Context context)
+		void IIRVisitor.RemSigned(Context context)
 		{
 			if (IsInt64(context.Operand1))
 			{
@@ -1821,7 +1821,7 @@ namespace Mosa.Platform.x86II.Stages
 		/// Visitation function for RemUInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.RemUInstruction(Context context)
+		void IIRVisitor.RemUnsigned(Context context)
 		{
 			if (IsInt64(context.Operand1))
 			{
@@ -1833,7 +1833,7 @@ namespace Mosa.Platform.x86II.Stages
 		/// Zeroes the extended move instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.ZeroExtendedMoveInstruction(Context context)
+		void IIRVisitor.ZeroExtendedMove(Context context)
 		{
 			if (IsInt64(context.Result))
 			{
@@ -1845,7 +1845,7 @@ namespace Mosa.Platform.x86II.Stages
 		/// Visitation function for AddSInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.AddSInstruction(Context context)
+		void IIRVisitor.AddSigned(Context context)
 		{
 			if (IsInt64(context.Operand1))
 			{
@@ -1857,7 +1857,7 @@ namespace Mosa.Platform.x86II.Stages
 		/// Visitation function for AddUInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.AddUInstruction(Context context)
+		void IIRVisitor.AddUnsigned(Context context)
 		{
 			if (IsInt64(context.Operand1))
 			{
@@ -1873,114 +1873,114 @@ namespace Mosa.Platform.x86II.Stages
 		/// Visitation function for RemFInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.RemFInstruction(Context context) { }
+		void IIRVisitor.RemFloat(Context context) { }
 
 		/// <summary>
 		/// Visitation function for SubFInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.SubFInstruction(Context context) { }
+		void IIRVisitor.SubFloat(Context context) { }
 
 		/// <summary>
 		/// Visitation function for SwitchInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.SwitchInstruction(Context context) { }
+		void IIRVisitor.Switch(Context context) { }
 
 		/// <summary>
 		/// Visitation function for AddFInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.AddFInstruction(Context context) { }
+		void IIRVisitor.AddFloat(Context context) { }
 
 		/// <summary>
 		/// Visitation function for DivFInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.DivFInstruction(Context context) { }
+		void IIRVisitor.DivFloat(Context context) { }
 		/// <summary>
 		/// Visitation function for BreakInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.BreakInstruction(Context context) { }
+		void IIRVisitor.Break(Context context) { }
 
 		/// <summary>
 		/// Visitation function for AddressOfInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.AddressOfInstruction(Context context) { }
+		void IIRVisitor.AddressOf(Context context) { }
 
 		/// <summary>
 		/// Visitation function for CallInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.CallInstruction(Context context) { }
+		void IIRVisitor.Call(Context context) { }
 
 		/// <summary>
 		/// Visitation function for EpilogueInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.EpilogueInstruction(Context context) { }
+		void IIRVisitor.Epilogue(Context context) { }
 
 		/// <summary>
 		/// Visitation function for FloatingPointCompareInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.FloatingPointCompareInstruction(Context context) { }
+		void IIRVisitor.FloatCompare(Context context) { }
 
 		/// <summary>
 		/// Visitation function for FloatingPointToIntegerConversionInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.FloatingPointToIntegerConversionInstruction(Context context) { }
+		void IIRVisitor.FloatToIntegerConversion(Context context) { }
 
 		/// <summary>
 		/// Visitation function for IntegerToFloatingPointConversionInstruction instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.IntegerToFloatingPointConversionInstruction(Context context) { }
+		void IIRVisitor.IntegerToFloatConversion(Context context) { }
 
 		/// <summary>
 		/// Visitation function for JmpInstruction"/&gt; instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.JmpInstruction(Context context) { }
+		void IIRVisitor.Jmp(Context context) { }
 
 		/// <summary>
 		/// Visitation function for PhiInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.PhiInstruction(Context context) { }
+		void IIRVisitor.Phi(Context context) { }
 
 		/// <summary>
 		/// Visitation function for PrologueInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.PrologueInstruction(Context context) { }
+		void IIRVisitor.Prologue(Context context) { }
 
 		/// <summary>
 		/// Visitation function for ReturnInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.ReturnInstruction(Context context) { }
+		void IIRVisitor.Return(Context context) { }
 
 		/// <summary>
 		/// Visitation function for NopInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.NopInstruction(Context context) { }
+		void IIRVisitor.Nop(Context context) { }
 
 		/// <summary>
 		/// Visitation function for ThrowInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.ThrowInstruction(Context context) { }
+		void IIRVisitor.Throw(Context context) { }
 
 		/// <summary>
 		/// Visitation function for ExceptionPrologueInstruction"/> instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IIRVisitor.ExceptionPrologueInstruction(Context context) { }
+		void IIRVisitor.ExceptionPrologue(Context context) { }
 
 		#endregion // IIRVisitor - Unused
 
