@@ -57,7 +57,7 @@ namespace Mosa.Compiler.Framework.CIL
 
 			Operand localVariableOperand = decoder.Compiler.GetLocalOperand(locIdx);
 			ctx.Operand1 = localVariableOperand;
-			ctx.Result = decoder.Compiler.CreateTemporary(new RefSigType(localVariableOperand.Type));
+			ctx.Result = decoder.Compiler.CreateVirtualRegister(new RefSigType(localVariableOperand.Type));
 		}
 
 		/// <summary>

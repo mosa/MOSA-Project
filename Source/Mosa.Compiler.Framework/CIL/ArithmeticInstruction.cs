@@ -121,7 +121,7 @@ namespace Mosa.Compiler.Framework.CIL
 					throw new InvalidOperationException();
 			}
 
-			ctx.Result = compiler.CreateTemporary(resultType);
+			ctx.Result = compiler.CreateVirtualRegister(resultType);
 		}
 
 		#endregion Methods

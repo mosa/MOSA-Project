@@ -48,7 +48,7 @@ namespace Mosa.Compiler.Framework.CIL
 
 			//RuntimeType type = decoder.TypeModule.GetType(token);
 
-			ctx.Result = decoder.Compiler.CreateTemporary(new ClassSigType(token));
+			ctx.Result = decoder.Compiler.CreateVirtualRegister(new ClassSigType(token));
 		}
 
 		/// <summary>

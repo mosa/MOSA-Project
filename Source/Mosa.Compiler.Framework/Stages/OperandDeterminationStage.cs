@@ -193,7 +193,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			foreach (var operand in operandStack)
 			{
-				joinStack.Push(methodCompiler.CreateTemporary(operand.Type));
+				joinStack.Push(methodCompiler.CreateVirtualRegister(operand.Type));
 			}
 
 			foreach (var b in block.PreviousBlocks)

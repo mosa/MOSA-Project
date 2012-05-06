@@ -126,7 +126,7 @@ namespace Mosa.Compiler.Framework.CIL
 				if (rst != null && rst.ElementType.Type == CilElementType.U8
 					|| ptr != null && ptr.ElementType.Type == CilElementType.U8)
 				{
-					ctx.Result = compiler.CreateTemporary(BuiltInSigType.UInt64);
+					ctx.Result = compiler.CreateVirtualRegister(BuiltInSigType.UInt64);
 				}
 			}
 		}

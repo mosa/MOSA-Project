@@ -107,7 +107,7 @@ namespace Mosa.Compiler.Framework.CIL
 			decoder.Compiler.Scheduler.ScheduleTypeForCompilation(ctx.InvokeTarget.DeclaringType);
 
 			// Set a return value according to the type of the object allocated
-			ctx.Result = decoder.Compiler.CreateTemporary(sigType);
+			ctx.Result = decoder.Compiler.CreateVirtualRegister(sigType);
 			ctx.ResultCount = 1;
 		}
 

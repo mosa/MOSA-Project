@@ -89,7 +89,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private Operand InsertLoadBeforeInstruction(Context context, string symbolName, SigType type)
 		{
 			Context before = context.InsertBefore();
-			Operand result = methodCompiler.CreateTemporary(type);
+			Operand result = methodCompiler.CreateVirtualRegister(type);
 			Operand op = new SymbolOperand(type, symbolName);
 
 			before.SetInstruction(CILInstruction.Get(OpCode.Ldc_i4), result, op);

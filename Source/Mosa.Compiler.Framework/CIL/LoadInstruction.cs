@@ -48,11 +48,11 @@ namespace Mosa.Compiler.Framework.CIL
 
 			if (operandType == StackTypeCode.O || operandType == StackTypeCode.Ptr || operandType == StackTypeCode.F)
 			{
-				result = decoder.Compiler.CreateTemporary(operandSigType);
+				result = decoder.Compiler.CreateVirtualRegister(operandSigType);
 			}
 			else
 			{
-				result = decoder.Compiler.CreateTemporary(Operand.SigTypeFromStackType(operandType));
+				result = decoder.Compiler.CreateVirtualRegister(Operand.SigTypeFromStackType(operandType));
 			}
 
 			return result;

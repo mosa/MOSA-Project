@@ -130,7 +130,7 @@ namespace Mosa.Compiler.Framework.CIL
 			}
 
 			ctx.Operand1 = constantValueOperand;
-			ctx.Result = decoder.Compiler.CreateTemporary(constantValueOperand.Type);
+			ctx.Result = decoder.Compiler.CreateVirtualRegister(constantValueOperand.Type);
 		}
 
 		/// <summary>

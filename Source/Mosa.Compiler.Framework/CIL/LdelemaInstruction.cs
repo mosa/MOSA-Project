@@ -46,7 +46,7 @@ namespace Mosa.Compiler.Framework.CIL
 			// Retrieve the provider token to check against
 			Token token = decoder.DecodeTokenType();
 
-			ctx.Result = decoder.Compiler.CreateTemporary(new ClassSigType(token));
+			ctx.Result = decoder.Compiler.CreateVirtualRegister(new ClassSigType(token));
 		}
 
 		/// <summary>

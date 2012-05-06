@@ -111,7 +111,7 @@ namespace Mosa.Compiler.Framework.CIL
 					throw new NotSupportedException(@"Overflow checking conversions not supported.");
 			}
 
-			ctx.Result = compiler.CreateTemporary(resultType);
+			ctx.Result = compiler.CreateVirtualRegister(resultType);
 		}
 
 		/// <summary>

@@ -64,7 +64,7 @@ namespace Mosa.Compiler.Framework.CIL
 			if (StackTypeCode.Unknown == result)
 				throw new InvalidOperationException(@"Invalid stack state for pairing (" + ctx.Operand1.StackType + ", " + ctx.Operand2.StackType + ")");
 
-			ctx.Result = compiler.CreateTemporary(Operand.SigTypeFromStackType(result));
+			ctx.Result = compiler.CreateVirtualRegister(Operand.SigTypeFromStackType(result));
 		}
 
 		/// <summary>

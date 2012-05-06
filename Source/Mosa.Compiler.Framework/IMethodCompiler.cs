@@ -54,16 +54,16 @@ namespace Mosa.Compiler.Framework
 		ICompilationSchedulerStage Scheduler { get; }
 
 		/// <summary>
-		/// Creates a new temporary variable operand.
+		/// Creates a new virtual register operand.
 		/// </summary>
-		/// <param name="type">The signature type of the temporary.</param>
-		/// <returns>An operand, which represents the temporary.</returns>
+		/// <param name="type">The signature type of the virtual register.</param>
+		/// <returns>An operand, which represents the virtual register.</returns>
 		/// <remarks>
 		/// Later optimization stages attempt to optimize, reduce or remove the usage
-		/// of temporaries in a program. Temporaries may be allocated to physical
+		/// of virtual registers in a program. Virtual register may be allocated to physical
 		/// registers as part of register allocation strategies.
 		/// </remarks>
-		Operand CreateTemporary(SigType type);
+		Operand CreateVirtualRegister(SigType type);
 
 		/// <summary>
 		/// Provides access to the instructions of the method.

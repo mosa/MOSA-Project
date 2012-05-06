@@ -369,25 +369,16 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Creates a new temporary local variable operand.
+		/// Creates a new virtual register operand.
 		/// </summary>
-		/// <param name="type">The signature type of the temporary.</param>
+		/// <param name="type">The signature type of the virtual register.</param>
 		/// <returns>
-		/// An operand, which represents the temporary.
+		/// An operand, which represents the virtual register.
 		/// </returns>
-		public Operand CreateTemporary(SigType type)
-		{
-			return stackLayout.AllocateStackOperand(type);
-		}
-
-		/// <summary>
-		/// Creates the virtual register.
-		/// </summary>
-		/// <param name="type">The signature type.</param>
-		/// <returns></returns>
 		public Operand CreateVirtualRegister(SigType type)
 		{
-			return stackLayout.AllocateStackOperand(type);
+			return virtualRegisterLayout.AllocateVirtualRegister(type);
+			//return stackLayout.AllocateStackOperand(type);
 		}
 
 		/// <summary>

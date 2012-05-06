@@ -44,7 +44,7 @@ namespace Mosa.Compiler.Framework.CIL
 			base.Decode(ctx, decoder);
 
 			// Set the result
-			ctx.Result = decoder.Compiler.CreateTemporary(BuiltInSigType.Int32);
+			ctx.Result = decoder.Compiler.CreateVirtualRegister(BuiltInSigType.Int32);
 		}
 
 		/// <summary>

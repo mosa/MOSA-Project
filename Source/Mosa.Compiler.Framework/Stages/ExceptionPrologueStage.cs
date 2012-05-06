@@ -43,7 +43,7 @@ namespace Mosa.Compiler.Framework.Stages
 					var context = new Context(instructionSet, block).InsertBefore();
 
 					SigType sigType = new ClassSigType(typeToken);
-					Operand exceptionObject = methodCompiler.CreateTemporary(sigType);
+					Operand exceptionObject = methodCompiler.CreateVirtualRegister(sigType);
 
 					context.SetInstruction(IR.IRInstruction.ExceptionPrologue, exceptionObject);
 				}	

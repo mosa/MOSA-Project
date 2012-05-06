@@ -42,29 +42,29 @@ namespace Mosa.Compiler.Framework.CIL
 			var type = decoder.TypeModule.GetType(token);
 
 			if (type.FullName == "System.Boolean")
-				ctx.Result = decoder.Compiler.CreateTemporary(BuiltInSigType.Boolean);
+				ctx.Result = decoder.Compiler.CreateVirtualRegister(BuiltInSigType.Boolean);
 			else if (type.FullName == "System.SByte")
-				ctx.Result = decoder.Compiler.CreateTemporary(BuiltInSigType.SByte);
+				ctx.Result = decoder.Compiler.CreateVirtualRegister(BuiltInSigType.SByte);
 			else if (type.FullName == "System.Int16")
-				ctx.Result = decoder.Compiler.CreateTemporary(BuiltInSigType.Int16);
+				ctx.Result = decoder.Compiler.CreateVirtualRegister(BuiltInSigType.Int16);
 			else if (type.FullName == "System.Int32")
-				ctx.Result = decoder.Compiler.CreateTemporary(BuiltInSigType.Int32);
+				ctx.Result = decoder.Compiler.CreateVirtualRegister(BuiltInSigType.Int32);
 			else if (type.FullName == "System.Int64")
-				ctx.Result = decoder.Compiler.CreateTemporary(BuiltInSigType.Int64);
+				ctx.Result = decoder.Compiler.CreateVirtualRegister(BuiltInSigType.Int64);
 			else if (type.FullName == "System.Byte")
-				ctx.Result = decoder.Compiler.CreateTemporary(BuiltInSigType.Byte);
+				ctx.Result = decoder.Compiler.CreateVirtualRegister(BuiltInSigType.Byte);
 			else if (type.FullName == "System.UInt16")
-				ctx.Result = decoder.Compiler.CreateTemporary(BuiltInSigType.UInt16);
+				ctx.Result = decoder.Compiler.CreateVirtualRegister(BuiltInSigType.UInt16);
 			else if (type.FullName == "System.UInt32")
-				ctx.Result = decoder.Compiler.CreateTemporary(BuiltInSigType.UInt32);
+				ctx.Result = decoder.Compiler.CreateVirtualRegister(BuiltInSigType.UInt32);
 			else if (type.FullName == "System.UInt64")
-				ctx.Result = decoder.Compiler.CreateTemporary(BuiltInSigType.UInt64);
+				ctx.Result = decoder.Compiler.CreateVirtualRegister(BuiltInSigType.UInt64);
 			else if (type.FullName == "System.Single")
-				ctx.Result = decoder.Compiler.CreateTemporary(BuiltInSigType.Single);
+				ctx.Result = decoder.Compiler.CreateVirtualRegister(BuiltInSigType.Single);
 			else if (type.FullName == "System.Double")
-				ctx.Result = decoder.Compiler.CreateTemporary(BuiltInSigType.Double);
+				ctx.Result = decoder.Compiler.CreateVirtualRegister(BuiltInSigType.Double);
 			else if (type.FullName == "System.Char")
-				ctx.Result = decoder.Compiler.CreateTemporary(BuiltInSigType.Char);
+				ctx.Result = decoder.Compiler.CreateVirtualRegister(BuiltInSigType.Char);
 			else
 				Console.WriteLine();
 
