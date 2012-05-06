@@ -370,7 +370,8 @@
 			this.cbPlatform.FormattingEnabled = true;
 			this.cbPlatform.Items.AddRange(new object[] {
             "x86",
-            "AVR32"});
+            "AVR32",
+            "Null"});
 			this.cbPlatform.Location = new System.Drawing.Point(213, 26);
 			this.cbPlatform.Name = "cbPlatform";
 			this.cbPlatform.Size = new System.Drawing.Size(58, 21);

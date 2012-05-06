@@ -124,15 +124,6 @@ namespace Mosa.Compiler.Framework
 		public abstract void GetTypeRequirements(SigType type, out int size, out int alignment);
 
 		/// <summary>
-		/// Factory method for result operands of instructions.
-		/// </summary>
-		/// <param name="type">The data type held in the result operand.</param>
-		/// <returns>
-		/// The operand, which holds the instruction result.
-		/// </returns>
-		public abstract Operand CreateResultOperand(SigType type);
-
-		/// <summary>
 		/// Gets the intrinsic instruction by type
 		/// </summary>
 		/// <param name="type">The type.</param>

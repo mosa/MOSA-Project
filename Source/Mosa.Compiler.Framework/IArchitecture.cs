@@ -102,15 +102,6 @@ namespace Mosa.Compiler.Framework
 		void ExtendMethodCompilerPipeline(CompilerPipeline methodPipeline);
 
 		/// <summary>
-		/// Factory method for result operands of instructions.
-		/// </summary>
-		/// <param name="type">The data type held in the result operand.</param>
-		/// <returns>
-		/// The operand, which holds the instruction result.
-		/// </returns>
-		Operand CreateResultOperand(SigType type);
-
-		/// <summary>
 		/// Gets the type memory requirements.
 		/// </summary>
 		/// <param name="type">The signature type.</param>

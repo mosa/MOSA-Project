@@ -34,7 +34,7 @@ namespace Mosa.Platform.x86.Stages
 				for (Context ctx = CreateContext(block); !ctx.EndOfInstruction; ctx.GotoNext())
 					if (ctx.Instruction != null)
 						if (!ctx.Ignore && ctx.OperandCount == 2 && ctx.ResultCount == 1)
-							if (ctx.Instruction is CIL.ArithmeticInstruction || ctx.Instruction is ThreeOperandInstruction)
+							if (ctx.Instruction is ThreeOperandInstruction)
 								ThreeTwoAddressConversion(ctx);
 		}
 

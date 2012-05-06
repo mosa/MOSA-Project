@@ -121,20 +121,6 @@ namespace Mosa.Platform.ARM
 		}
 
 		/// <summary>
-		/// Creates a new result operand of the requested type.
-		/// </summary>
-		/// <param name="signatureType">The type requested.</param>
-		/// <param name="instructionLabel">The label of the instruction requesting the operand.</param>
-		/// <param name="operandStackIndex">The stack index of the operand.</param>
-		/// <returns>A new operand usable as a result operand.</returns>
-		public override Operand CreateResultOperand(SigType signatureType)
-		{
-			// TODO
-			return null;
-			//return new RegisterOperand(signatureType, GeneralPurposeRegister.EAX);
-		}
-
-		/// <summary>
 		/// Extends the assembly compiler pipeline with ARM specific stages.
 		/// </summary>
 		/// <param name="assemblyCompilerPipeline">The assembly compiler pipeline to extend.</param>

@@ -42,7 +42,6 @@ namespace Mosa.Tool.Compiler
 					new BasicBlockBuilderStage(),
 					new ExceptionPrologueStage(),
 					new OperandDeterminationStage(),
-					//new SingleUseMarkerStage(),
 					new StaticAllocationResolutionStage(),
 					new CILTransformationStage(),
 
@@ -63,7 +62,7 @@ namespace Mosa.Tool.Compiler
 					//new SimpleTraceBlockOrderStage(),
 					//new ReverseBlockOrderStage(),	
 					//new LocalCSE(),
-					new SimpleRegisterAllocatorStage(),
+					//new SimpleRegisterAllocatorStage(),
 					new CodeGenerationStage(),
 					//new RegisterUsageAnalyzerStage(),
 				});

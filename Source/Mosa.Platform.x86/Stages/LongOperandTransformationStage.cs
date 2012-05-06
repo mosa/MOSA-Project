@@ -239,8 +239,7 @@ namespace Mosa.Platform.x86.Stages
 		private void ExpandDiv(Context context)
 		{
 			Operand op0H, op1H, op2H, op0L, op1L, op2L;
-			//Operand op1 = EmitConstant(context.Operand1);
-			//Operand op2 = EmitConstant(context.Operand2);
+
 			SplitLongOperand(context.Result, out op0L, out op0H);
 			SplitLongOperand(context.Operand1, out op1L, out op1H);
 			SplitLongOperand(context.Operand2, out op2L, out op2H);
@@ -400,7 +399,7 @@ namespace Mosa.Platform.x86.Stages
 			// add     edx,ecx         ; EDX:EAX = QUOT * DVSR
 			// jc      short L6        ; carry means Quotient is off by 1
 			newBlocks[7].SetInstruction(X86.Shr, ebx, new ConstantOperand(BuiltInSigType.Byte, 1));
-			newBlocks[7].AppendInstruction(X86.Rcr, ecx, new ConstantOperand(BuiltInSigType.Byte, 1)); // RCR
+			newBlocks[7].AppendInstruction(X86.Rcr, ecx, new ConstantOperand(BuiltInSigType.Byte, 1));
 			newBlocks[7].AppendInstruction(X86.Shr, edx, new ConstantOperand(BuiltInSigType.Byte, 1));
 			newBlocks[7].AppendInstruction(X86.Rcr, eax, new ConstantOperand(BuiltInSigType.Byte, 1));
 			newBlocks[7].AppendInstruction(X86.Or, ebx, ebx);

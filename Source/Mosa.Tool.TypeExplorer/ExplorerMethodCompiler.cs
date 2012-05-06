@@ -52,7 +52,7 @@ namespace Mosa.Tool.TypeExplorer
 				new StackLayoutStage(),
 				new PlatformStubStage(),
 				new LoopAwareBlockOrderStage(),
-				new SimpleRegisterAllocatorStage(),
+				//new SimpleRegisterAllocatorStage(),
 				new CodeGenerationStage(),
 			});
 		}
