@@ -1154,7 +1154,7 @@ namespace Mosa.Compiler.Framework.IR
 		{
 			IInstruction loadInstruction = IRInstruction.Load;
 			Operand result = context.Result;
-			MemoryOperand arrayOperand = (MemoryOperand)context.Operand1;
+			Operand arrayOperand = context.Operand1;
 			Operand arrayIndexOperand = context.Operand2;
 
 			SZArraySigType arraySigType = arrayOperand.Type as SZArraySigType;
@@ -1172,8 +1172,8 @@ namespace Mosa.Compiler.Framework.IR
 				loadInstruction = IRInstruction.ZeroExtendedMove;
 			}
 
-			Operand arrayAddress = this.LoadArrayBaseAddress(context, arraySigType, arrayOperand);
-			Operand elementOffset = this.CalculateArrayElementOffset(context, arraySigType, arrayIndexOperand);
+			Operand arrayAddress = LoadArrayBaseAddress(context, arraySigType, arrayOperand);
+			Operand elementOffset = CalculateArrayElementOffset(context, arraySigType, arrayIndexOperand);
 			context.AppendInstruction(loadInstruction, result, arrayAddress, elementOffset);
 		}
 

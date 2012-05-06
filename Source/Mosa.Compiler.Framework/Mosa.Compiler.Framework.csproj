@@ -385,9 +385,6 @@
     <Compile Include="Operands\StaticFieldOperand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Operands\TemporaryOperand.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Operands\LocalVariableOperand.cs">
       <SubType>Code</SubType>
     </Compile>
