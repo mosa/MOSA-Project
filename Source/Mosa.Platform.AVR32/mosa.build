@@ -1,126 +1,124 @@
-<?xml version="1.0"?>
-<project name="Mosa" default="build" basedir=".">
-	
-	<!-- Comma-separated list of warnings that should be surpressed in all modules. Warning: no spaces allowed! -->
-	<property name="suppresswarnings" value="0414,0219,0169,0162,0168"/>
-	
-	<!-- Toggle debug output by setting this to true (nant -D:debug=true) -->
-	<property name="debug" value="none" overwrite="false"/>
-	
-	<!-- Speaks for itself, I should hope -->
-	<property name="outputDirectory" value="../bin" overwrite="false"/>
-	
-	<!-- Main build target -->
-	<target name="build">
-	    <csc target="library" output="${outputDirectory}/Mosa.Platform.AVR32.dll" debug="${debug}" unsafe="true" nostdlib="false">
-		<sources>
+<?xml version="1.0"?>
+<project name="Mosa" default="build" basedir=".">
+	
+	<!-- Comma-separated list of warnings that should be surpressed in all modules. Warning: no spaces allowed! -->
+	<property name="suppresswarnings" value="0414,0219,0169,0162,0168"/>
+	
+	<!-- Toggle debug output by setting this to true (nant -D:debug=true) -->
+	<property name="debug" value="none" overwrite="false"/>
+	
+	<!-- Speaks for itself, I should hope -->
+	<property name="outputDirectory" value="../bin" overwrite="false"/>
+	
+	<!-- Main build target -->
+	<target name="build">
+	    <csc target="library" output="${outputDirectory}/Mosa.Platform.AVR32.dll" debug="${debug}" unsafe="true" nostdlib="false">
+		<sources>
                     <include name="Architecture.cs"/>
                     <include name="ArchitectureFeatureFlags.cs"/>
                     <include name="BaseTransformationStage.cs"/>
                     <include name="DefaultCallingConvention.cs"/>
                     <include name="GeneralPurposeRegister.cs"/>
-                    <include name="GenericAVR32Register.cs"/>
-                    <include name="Instructions/BranchInstruction.cs"/>
+                    <include name="Instructions/Branch.cs"/>
                     <include name="Intrinsic/Nop.cs"/>
                     <include name="IRTransformationStage.cs"/>
                     <include name="MachineCodeEmitter.cs"/>
-                    <include name="Instructions/AdcInstruction.cs"/>
-                    <include name="Instructions/AddInstruction.cs"/>
-                    <include name="Instructions/AdiwInstruction.cs"/>
-                    <include name="Instructions/AndiInstruction.cs"/>
-                    <include name="Instructions/AndInstruction.cs"/>
-                    <include name="Instructions/AsrInstruction.cs"/>
-                    <include name="Instructions/BclrInstruction.cs"/>
-                    <include name="Instructions/BldInstruction.cs"/>
-                    <include name="Instructions/BsetInstruction.cs"/>
-                    <include name="Instructions/BstInstruction.cs"/>
-                    <include name="Instructions/CallInstruction.cs"/>
-                    <include name="Instructions/CbiInstruction.cs"/>
-                    <include name="Instructions/CbrInstruction.cs"/>
-                    <include name="Instructions/ClcInstruction.cs"/>
-                    <include name="Instructions/ClhInstruction.cs"/>
-                    <include name="Instructions/CliInstruction.cs"/>
-                    <include name="Instructions/ClnInstruction.cs"/>
-                    <include name="Instructions/ClrInstruction.cs"/>
-                    <include name="Instructions/ClsInstruction.cs"/>
-                    <include name="Instructions/CltInstruction.cs"/>
-                    <include name="Instructions/ClvInstruction.cs"/>
-                    <include name="Instructions/ClzInstruction.cs"/>
-                    <include name="Instructions/ComInstruction.cs"/>
-                    <include name="Instructions/CpcInstruction.cs"/>
-                    <include name="Instructions/CpiInstruction.cs"/>
-                    <include name="Instructions/CpInstruction.cs"/>
-                    <include name="Instructions/CpseInstruction.cs"/>
-                    <include name="Instructions/DecInstruction.cs"/>
-                    <include name="Instructions/EorInstruction.cs"/>
-                    <include name="Instructions/IAVR32Instruction.cs"/>
-                    <include name="Instructions/IAVR32Visitor.cs"/>
-                    <include name="Instructions/IcallInstruction.cs"/>
-                    <include name="Instructions/IjmpInstruction.cs"/>
-                    <include name="Instructions/IncInstruction.cs"/>
-                    <include name="Instructions/InInstruction.cs"/>
-                    <include name="Instruction.cs"/>
-                    <include name="Instructions/JmpInstruction.cs"/>
-                    <include name="Instructions/LddInstruction.cs"/>
-                    <include name="Instructions/LdiInstruction.cs"/>
-                    <include name="Instructions/LdInstruction.cs"/>
-                    <include name="Instructions/LdsInstruction.cs"/>
-                    <include name="Instructions/LpmInstruction.cs"/>
-                    <include name="Instructions/LslInstruction.cs"/>
-                    <include name="Instructions/LsrInstruction.cs"/>
-                    <include name="Instructions/MovInstruction.cs"/>
-                    <include name="Instructions/MulInstruction.cs"/>
-                    <include name="Instructions/NegInstruction.cs"/>
-                    <include name="Instructions/NopInstruction.cs"/>
-                    <include name="Instructions/BaseInstruction.cs"/>
-                    <include name="Instructions/OrInstruction.cs"/>
-                    <include name="Instructions/OutInstruction.cs"/>
-                    <include name="Instructions/PopInstruction.cs"/>
-                    <include name="Instructions/PushInstruction.cs"/>
-                    <include name="Instructions/RcallInstruction.cs"/>
-                    <include name="Instructions/RetiInstruction.cs"/>
-                    <include name="Instructions/RetInstruction.cs"/>
-                    <include name="Instructions/RjmpInstruction.cs"/>
-                    <include name="Instructions/RolInstruction.cs"/>
-                    <include name="Instructions/RorInstruction.cs"/>
-                    <include name="Instructions/SbciInstruction.cs"/>
-                    <include name="Instructions/SbcInstruction.cs"/>
-                    <include name="Instructions/SbicInstruction.cs"/>
-                    <include name="Instructions/SbiInstruction.cs"/>
-                    <include name="Instructions/SbisInstruction.cs"/>
-                    <include name="Instructions/SbiwInstruction.cs"/>
-                    <include name="Instructions/SbrcInstruction.cs"/>
-                    <include name="Instructions/SbrInstruction.cs"/>
-                    <include name="Instructions/SbrsInstruction.cs"/>
-                    <include name="Instructions/SecInstruction.cs"/>
-                    <include name="Instructions/SehInstruction.cs"/>
-                    <include name="Instructions/SeiInstruction.cs"/>
-                    <include name="Instructions/SenInstruction.cs"/>
-                    <include name="Instructions/SerInstruction.cs"/>
-                    <include name="Instructions/SesInstruction.cs"/>
-                    <include name="Instructions/SetInstruction.cs"/>
-                    <include name="Instructions/SevInstruction.cs"/>
-                    <include name="Instructions/SezInstruction.cs"/>
-                    <include name="Instructions/SleepInstruction.cs"/>
-                    <include name="Instructions/StdInstruction.cs"/>
-                    <include name="Instructions/StInstruction.cs"/>
-                    <include name="Instructions/StsInstruction.cs"/>
-                    <include name="Instructions/SubiInstruction.cs"/>
-                    <include name="Instructions/SubInstruction.cs"/>
-                    <include name="Instructions/SwapInstruction.cs"/>
-                    <include name="Instructions/TstInstruction.cs"/>
-                    <include name="Instructions/WdrInstruction.cs"/>
-		</sources>
-		<references>
+                    <include name="Instructions/Adc.cs"/>
+                    <include name="Instructions/Add.cs"/>
+                    <include name="Instructions/Adiw.cs"/>
+                    <include name="Instructions/Andi.cs"/>
+                    <include name="Instructions/And.cs"/>
+                    <include name="Instructions/Asr.cs"/>
+                    <include name="Instructions/Bclr.cs"/>
+                    <include name="Instructions/Bld.cs"/>
+                    <include name="Instructions/Bset.cs"/>
+                    <include name="Instructions/Bst.cs"/>
+                    <include name="Instructions/Call.cs"/>
+                    <include name="Instructions/Cbi.cs"/>
+                    <include name="Instructions/Cbr.cs"/>
+                    <include name="Instructions/Clc.cs"/>
+                    <include name="Instructions/Clh.cs"/>
+                    <include name="Instructions/Cli.cs"/>
+                    <include name="Instructions/Cln.cs"/>
+                    <include name="Instructions/Clr.cs"/>
+                    <include name="Instructions/Cls.cs"/>
+                    <include name="Instructions/Clt.cs"/>
+                    <include name="Instructions/Clv.cs"/>
+                    <include name="Instructions/Clz.cs"/>
+                    <include name="Instructions/Com.cs"/>
+                    <include name="Instructions/Cpc.cs"/>
+                    <include name="Instructions/Cpi.cs"/>
+                    <include name="Instructions/Cp.cs"/>
+                    <include name="Instructions/Cpse.cs"/>
+                    <include name="Instructions/Dec.cs"/>
+                    <include name="Instructions/Eor.cs"/>
+                    <include name="IAVR32Visitor.cs"/>
+                    <include name="Instructions/Icall.cs"/>
+                    <include name="Instructions/Ijmp.cs"/>
+                    <include name="Instructions/Inc.cs"/>
+                    <include name="Instructions/In.cs"/>
+                    <include name="AVR32.cs"/>
+                    <include name="Instructions/Jmp.cs"/>
+                    <include name="Instructions/Ldd.cs"/>
+                    <include name="Instructions/Ldi.cs"/>
+                    <include name="Instructions/Ld.cs"/>
+                    <include name="Instructions/Lds.cs"/>
+                    <include name="Instructions/Lpm.cs"/>
+                    <include name="Instructions/Lsl.cs"/>
+                    <include name="Instructions/Lsr.cs"/>
+                    <include name="Instructions/Mov.cs"/>
+                    <include name="Instructions/Mul.cs"/>
+                    <include name="Instructions/Neg.cs"/>
+                    <include name="Instructions/Nop.cs"/>
+                    <include name="AVR32Instruction.cs"/>
+                    <include name="Instructions/Or.cs"/>
+                    <include name="Instructions/Out.cs"/>
+                    <include name="Instructions/Pop.cs"/>
+                    <include name="Instructions/Push.cs"/>
+                    <include name="Instructions/Rcall.cs"/>
+                    <include name="Instructions/Reti.cs"/>
+                    <include name="Instructions/Ret.cs"/>
+                    <include name="Instructions/Rjmp.cs"/>
+                    <include name="Instructions/Rol.cs"/>
+                    <include name="Instructions/Ror.cs"/>
+                    <include name="Instructions/Sbci.cs"/>
+                    <include name="Instructions/Sbc.cs"/>
+                    <include name="Instructions/Sbic.cs"/>
+                    <include name="Instructions/Sbi.cs"/>
+                    <include name="Instructions/Sbis.cs"/>
+                    <include name="Instructions/Sbiw.cs"/>
+                    <include name="Instructions/Sbrc.cs"/>
+                    <include name="Instructions/Sbr.cs"/>
+                    <include name="Instructions/Sbrs.cs"/>
+                    <include name="Instructions/Sec.cs"/>
+                    <include name="Instructions/Seh.cs"/>
+                    <include name="Instructions/Sei.cs"/>
+                    <include name="Instructions/Sen.cs"/>
+                    <include name="Instructions/Ser.cs"/>
+                    <include name="Instructions/Ses.cs"/>
+                    <include name="Instructions/Set.cs"/>
+                    <include name="Instructions/Sev.cs"/>
+                    <include name="Instructions/Sez.cs"/>
+                    <include name="Instructions/Sleep.cs"/>
+                    <include name="Instructions/Std.cs"/>
+                    <include name="Instructions/St.cs"/>
+                    <include name="Instructions/Sts.cs"/>
+                    <include name="Instructions/Subi.cs"/>
+                    <include name="Instructions/Sub.cs"/>
+                    <include name="Instructions/Swap.cs"/>
+                    <include name="Instructions/Tst.cs"/>
+                    <include name="Instructions/Wdr.cs"/>
+		</sources>
+		<references>
                     <include name="System.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Common.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Linker.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Metadata.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Framework.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.TypeSystem.dll"/>
-		</references>
-		<!-- supress warnings -->
-		<nowarn><warning number="${suppresswarnings}"/></nowarn>
-        </csc>
-	</target>
-</project>
+		</references>
+		<!-- supress warnings -->
+		<nowarn><warning number="${suppresswarnings}"/></nowarn>
+        </csc>
+	</target>
+</project>

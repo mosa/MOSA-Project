@@ -1,19 +1,19 @@
-<?xml version="1.0"?>
-<project name="Mosa" default="build" basedir=".">
-	
-	<!-- Comma-separated list of warnings that should be surpressed in all modules. Warning: no spaces allowed! -->
-	<property name="suppresswarnings" value="0414,0219,0169,0162,0168"/>
-	
-	<!-- Toggle debug output by setting this to true (nant -D:debug=true) -->
-	<property name="debug" value="none" overwrite="false"/>
-	
-	<!-- Speaks for itself, I should hope -->
-	<property name="outputDirectory" value="../bin" overwrite="false"/>
-	
-	<!-- Main build target -->
-	<target name="build">
-	    <csc target="library" output="${outputDirectory}/mscorlib.dll" debug="${debug}" unsafe="true" nostdlib="true">
-		<sources>
+<?xml version="1.0"?>
+<project name="Mosa" default="build" basedir=".">
+	
+	<!-- Comma-separated list of warnings that should be surpressed in all modules. Warning: no spaces allowed! -->
+	<property name="suppresswarnings" value="0414,0219,0169,0162,0168"/>
+	
+	<!-- Toggle debug output by setting this to true (nant -D:debug=true) -->
+	<property name="debug" value="none" overwrite="false"/>
+	
+	<!-- Speaks for itself, I should hope -->
+	<property name="outputDirectory" value="../bin" overwrite="false"/>
+	
+	<!-- Main build target -->
+	<target name="build">
+	    <csc target="library" output="${outputDirectory}/mscorlib.dll" debug="${debug}" unsafe="true" nostdlib="true">
+		<sources>
                     <include name="System.Diagnostics/DebuggerHiddenAttribute.cs"/>
                     <include name="System.Reflection/Assembly.cs"/>
                     <include name="System.Reflection/MemberInfo.cs"/>
@@ -102,11 +102,11 @@
                     <include name="System.Runtime.CompilerServices/CompilerGeneratedAttribute.cs"/>
                     <include name="System.Runtime.InteropServices/ComVisible.cs"/>
                     <include name="System.Runtime.InteropServices/OutAttribute.cs"/>
-		</sources>
-		<references>
-		</references>
-		<!-- supress warnings -->
-		<nowarn><warning number="${suppresswarnings}"/></nowarn>
-        </csc>
-	</target>
-</project>
+		</sources>
+		<references>
+		</references>
+		<!-- supress warnings -->
+		<nowarn><warning number="${suppresswarnings}"/></nowarn>
+        </csc>
+	</target>
+</project>
