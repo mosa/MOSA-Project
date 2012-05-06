@@ -45,7 +45,7 @@ namespace Mosa.Platform.x86II.Stages
 			if (operand.Type.Type != CilElementType.I8 && operand.Type.Type != CilElementType.U8)
 			{
 				operandLow = operand;
-				operandHigh = new ConstantOperand(BuiltInSigType.Int32, (int)0);
+				operandHigh = ConstantOperand.I4_0;
 				return;
 			}
 

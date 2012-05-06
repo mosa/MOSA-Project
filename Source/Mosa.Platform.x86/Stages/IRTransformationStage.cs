@@ -258,7 +258,7 @@ namespace Mosa.Platform.x86.Stages
 				context.AppendInstruction(X86.Or, ebx, ecx);
 				context.AppendInstruction(X86.Or, ebx, edx);
 				context.AppendInstruction(X86.And, eax, ebx);
-				context.AppendInstruction(X86.And, eax, new ConstantOperand(BuiltInSigType.Int32, (int)1));
+				context.AppendInstruction(X86.And, eax, ConstantOperand.I4_1);
 			}
 			else if (code == ConditionCode.NotEqual)
 			{
@@ -272,7 +272,7 @@ namespace Mosa.Platform.x86.Stages
 				context.AppendInstruction(X86.Or, ebx, edx);
 				context.AppendInstruction(X86.Not, ebx, ebx);
 				context.AppendInstruction(X86.Or, eax, ebx);
-				context.AppendInstruction(X86.And, eax, new ConstantOperand(BuiltInSigType.Int32, (int)1));
+				context.AppendInstruction(X86.And, eax, ConstantOperand.I4_1);
 			}
 			else if (code == ConditionCode.GreaterThan)
 			{
@@ -791,7 +791,7 @@ namespace Mosa.Platform.x86.Stages
 
 			newBlocks[0].AppendInstruction(X86.Cvttsd2si, edx, destination);
 
-			newBlocks[0].AppendInstruction(X86.Cmp, null, edx, new ConstantOperand(BuiltInSigType.Int32, 0));
+			newBlocks[0].AppendInstruction(X86.Cmp, null, edx, ConstantOperand.I4_0);
 			newBlocks[0].AppendInstruction(X86.Branch, ConditionCode.Equal, newBlocks[2].BasicBlock);
 			newBlocks[0].AppendInstruction(X86.Jmp, newBlocks[1].BasicBlock);
 			LinkBlocks(newBlocks[0], newBlocks[1], newBlocks[2]);

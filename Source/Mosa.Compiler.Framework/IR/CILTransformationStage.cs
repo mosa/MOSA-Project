@@ -1011,7 +1011,7 @@ namespace Mosa.Compiler.Framework.IR
 
 			ConditionCode cc;
 			Operand first = context.Operand1;
-			Operand second = new ConstantOperand(BuiltInSigType.Int32, 0UL);
+			Operand second = ConstantOperand.I4_0;
 
 			CIL.OpCode opcode = ((CIL.ICILInstruction)context.Instruction).OpCode;
 			if (opcode == CIL.OpCode.Brtrue || opcode == CIL.OpCode.Brtrue_s)

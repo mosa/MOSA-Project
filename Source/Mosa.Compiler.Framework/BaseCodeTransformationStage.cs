@@ -8,6 +8,8 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
+using Mosa.Compiler.Metadata.Signatures;
+using Mosa.Compiler.Framework.Operands;
 
 namespace Mosa.Compiler.Framework
 {
@@ -16,6 +18,7 @@ namespace Mosa.Compiler.Framework
 	/// </summary>
 	public abstract class BaseCodeTransformationStage : BaseMethodCompilerStage, IMethodCompilerStage, IVisitor
 	{
+
 
 		#region IMethodCompilerStage Members
 

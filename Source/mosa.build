@@ -20,7 +20,7 @@
 	<target name="init">
 		<mkdir dir="${outputDirectory}"/>
 	</target>
-        <target name="Mosa.Tool.Compiler" depends="init,Mosa.Compiler.Common,Mosa.Compiler.LinkerFormat,Mosa.Compiler.Linker,Mosa.Compiler.Pdb,Mosa.Compiler.TypeSystem,Mosa.Platform.AVR32,Mosa.Compiler.InternalTrace,Mosa.Compiler.Metadata,Mosa.Compiler.Framework,Mosa.Platform.x86,"><nant buildfile="Mosa.Tool.Compiler/mosa.build"/></target>
+        <target name="Mosa.Tool.Compiler" depends="init,Mosa.Compiler.Common,Mosa.Compiler.LinkerFormat,Mosa.Compiler.Linker,Mosa.Compiler.Pdb,Mosa.Compiler.TypeSystem,Mosa.Platform.AVR32,Mosa.Compiler.InternalTrace,Mosa.Compiler.Metadata,Mosa.Compiler.Framework,Mosa.Platform.x86II,Mosa.Platform.x86,"><nant buildfile="Mosa.Tool.Compiler/mosa.build"/></target>
         <target name="Mosa.HelloWorld.x86" depends="init,Mosa.ClassLib,Mosa.Internal.Plug,Mosa.Kernel.x86,Korlib,"><nant buildfile="Mosa.HelloWorld.x86/mosa.build"/></target>
         <target name="Mosa.Compiler.Framework" depends="init,Mosa.Compiler.Common,Mosa.Compiler.Linker,Mosa.Compiler.InternalTrace,Mosa.Compiler.Metadata,Mosa.Compiler.TypeSystem,"><nant buildfile="Mosa.Compiler.Framework/mosa.build"/></target>
         <target name="Mosa.ClassLib" depends="init,Mosa.Kernel.x86,Mosa.Platform.x86.Intrinsic,"><nant buildfile="Mosa.ClassLib/mosa.build"/></target>
@@ -44,7 +44,7 @@
         <target name="Mosa.Compiler.Linker" depends="init,Mosa.Compiler.Common,Mosa.Compiler.LinkerFormat,"><nant buildfile="Mosa.Compiler.Linker/mosa.build"/></target>
         <target name="Mosa.Compiler.Common" depends="init,"><nant buildfile="Mosa.Compiler.Common/mosa.build"/></target>
         <target name="Mosa.Compiler.TypeSystem" depends="init,Mosa.Compiler.Metadata,"><nant buildfile="Mosa.Compiler.TypeSystem/mosa.build"/></target>
-        <target name="Mosa.Tool.TypeExplorer" depends="init,Mosa.Compiler.Framework,Mosa.Compiler.Linker,Mosa.Compiler.Metadata,Mosa.Compiler.Pdb,Mosa.Compiler.TypeSystem,Mosa.Compiler.Verifier,Mosa.Platform.AVR32,Mosa.Compiler.InternalTrace,Mosa.Platform.Null,Mosa.Platform.x86,Mosa.Test.CodeDomCompiler,"><nant buildfile="Mosa.Tool.TypeExplorer/mosa.build"/></target>
+        <target name="Mosa.Tool.TypeExplorer" depends="init,Mosa.Compiler.Framework,Mosa.Compiler.Linker,Mosa.Compiler.Metadata,Mosa.Compiler.Pdb,Mosa.Compiler.TypeSystem,Mosa.Compiler.Verifier,Mosa.Platform.AVR32,Mosa.Compiler.InternalTrace,Mosa.Platform.Null,Mosa.Platform.x86II,Mosa.Platform.x86,Mosa.Test.CodeDomCompiler,"><nant buildfile="Mosa.Tool.TypeExplorer/mosa.build"/></target>
         <target name="Mosa.Tool.MetadataExplorer" depends="init,Mosa.Compiler.Metadata,Mosa.Compiler.TypeSystem,"><nant buildfile="Mosa.Tool.MetadataExplorer/mosa.build"/></target>
         <target name="Mosa.Test.CodeDomCompiler" depends="init,"><nant buildfile="Mosa.Test.CodeDomCompiler/mosa.build"/></target>
         <target name="Mosa.Compiler.InternalTrace" depends="init,Mosa.Compiler.TypeSystem,"><nant buildfile="Mosa.Compiler.InternalTrace/mosa.build"/></target>

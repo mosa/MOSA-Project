@@ -79,6 +79,7 @@
                     <include name="Instructions/Div.cs"/>
                     <include name="Instructions/Jmp.cs"/>
                     <include name="Instructions/Lea.cs"/>
+                    <include name="Stages/Multiboot0695AssemblyStage.cs"/>
                     <include name="Stages/SimplePeepholeOptimizationStage.cs"/>
                     <include name="Stages/MemToMemConversionStage.cs"/>
                     <include name="Instructions/Call.cs"/>
@@ -112,7 +113,6 @@
                     <include name="Instructions/CpuId.cs"/>
                     <include name="Instructions/Hlt.cs"/>
                     <include name="Instructions/In.cs"/>
-                    <include name="Intrinsic/Method.cs"/>
                     <include name="Instructions/Invlpg.cs"/>
                     <include name="Instructions/IRetd.cs"/>
                     <include name="Instructions/Lgdt.cs"/>
