@@ -17,7 +17,7 @@ using Mosa.Compiler.Linker;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Platform.x86;
 
-namespace Mosa.Tool.Compiler.Stages
+namespace Mosa.Platform.x86.Stages
 {
 
 	/*
@@ -232,7 +232,7 @@ namespace Mosa.Tool.Compiler.Stages
 
 					// entry_point the load virtualAddress of the entry point to invoke
 					// Are we linking an ELF binary?
-					if (!(linker is Elf32LinkerStage || linker is Elf64LinkerStage))
+					if (!(linker is Mosa.Compiler.Linker.Elf32.Linker || linker is Mosa.Compiler.Linker.Elf64.Linker))
 					{
 						// Check the linker layout settings
 						if (linker.LoadSectionAlignment != linker.VirtualSectionAlignment)

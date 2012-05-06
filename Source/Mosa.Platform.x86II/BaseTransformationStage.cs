@@ -37,7 +37,7 @@ namespace Mosa.Platform.x86II
 		/// Retrieves the name of the compilation stage.
 		/// </summary>
 		/// <value>The name of the compilation stage.</value>
-		public override string Name { get { return "x86." + this.GetType().Name; } }
+		public override string Name { get { return "x86ii." + this.GetType().Name; } }
 
 		#endregion // IPipelineStage Members
 

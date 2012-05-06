@@ -96,8 +96,14 @@ namespace Mosa.Compiler.TypeSystem
 
 			foreach (var t in typeSystem.GetAllTypes())
 			{
-				// FIXME: This is not platform independent
 				if (t.FullName == "Mosa.Platform." + platform + ".Intrinsic.DelegateStub")
+				{
+					delegateStub = t;
+					return;
+				}
+
+				// FIXME: Remove this!
+				if (t.FullName == "Mosa.Platform." + platform.Trim('i') + ".Intrinsic.DelegateStub")
 				{
 					delegateStub = t;
 					return;

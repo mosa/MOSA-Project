@@ -154,6 +154,7 @@
     <Compile Include="Instructions\Div.cs" />
     <Compile Include="Instructions\Jmp.cs" />
     <Compile Include="Instructions\Lea.cs" />
+    <Compile Include="Stages\Multiboot0695AssemblyStage.cs" />
     <Compile Include="Stages\SimplePeepholeOptimizationStage.cs" />
     <Compile Include="Stages\MemToMemConversionStage.cs" />
     <Compile Include="Instructions\Call.cs" />
@@ -187,7 +188,6 @@
     <Compile Include="Instructions\CpuId.cs" />
     <Compile Include="Instructions\Hlt.cs" />
     <Compile Include="Instructions\In.cs" />
-    <Compile Include="Intrinsic\Method.cs" />
     <Compile Include="Instructions\Invlpg.cs" />
     <Compile Include="Instructions\IRetd.cs" />
     <Compile Include="Instructions\Lgdt.cs" />

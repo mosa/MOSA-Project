@@ -205,18 +205,6 @@ namespace Mosa.Platform.ARM
 		}
 
 		/// <summary>
-		/// Gets the intrinsic instruction by type
-		/// </summary>
-		/// <param name="type">The type.</param>
-		/// <returns></returns>
-		public override IIntrinsicMethod GetIntrinsicMethod(Type type)
-		{
-			// TODO
-			return null;
-			//return Intrinsic.Method.Get(type);
-		}
-
-		/// <summary>
 		/// Gets the code emitter.
 		/// </summary>
 		/// <returns></returns>

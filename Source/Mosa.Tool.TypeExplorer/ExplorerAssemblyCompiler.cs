@@ -14,6 +14,7 @@ using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.TypeSystem;
 using AVR32 = Mosa.Platform.AVR32;
 using x86 = Mosa.Platform.x86;
+using x86II = Mosa.Platform.x86II;
 using Null = Mosa.Platform.Null;
 
 namespace Mosa.Tool.TypeExplorer
@@ -52,6 +53,7 @@ namespace Mosa.Tool.TypeExplorer
 			{
 				case "null": architecture = Null.Architecture.CreateArchitecture(Null.ArchitectureFeatureFlags.AutoDetect); break;
 				case "x86": architecture = x86.Architecture.CreateArchitecture(x86.ArchitectureFeatureFlags.AutoDetect); break;
+				case "x86ii": architecture = x86II.Architecture.CreateArchitecture(x86II.ArchitectureFeatureFlags.AutoDetect); break;
 				case "avr32": architecture = AVR32.Architecture.CreateArchitecture(AVR32.ArchitectureFeatureFlags.AutoDetect); break;
 				default:
 					architecture = x86.Architecture.CreateArchitecture(x86.ArchitectureFeatureFlags.AutoDetect); break;

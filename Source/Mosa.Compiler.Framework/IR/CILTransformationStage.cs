@@ -1981,6 +1981,10 @@ namespace Mosa.Compiler.Framework.IR
 
 			//TODO: Verify!
 
+			// HACK
+			if (architecture.PlatformName == "x86ii") // && !external.Contains("Delegate"))
+				external = external.Replace(".x86", ".x86II").Replace(".x86", ".x86II").Replace(".x86IIII", ".x86II").Replace(".x86IIII", ".x86II");
+
 			Type intrinsicType = Type.GetType(external);
 
 			if (intrinsicType == null)

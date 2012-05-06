@@ -124,13 +124,6 @@ namespace Mosa.Compiler.Framework
 		public abstract void GetTypeRequirements(SigType type, out int size, out int alignment);
 
 		/// <summary>
-		/// Gets the intrinsic instruction by type
-		/// </summary>
-		/// <param name="type">The type.</param>
-		/// <returns></returns>
-		public abstract IIntrinsicMethod GetIntrinsicMethod(Type type);
-
-		/// <summary>
 		/// Gets the code emitter.
 		/// </summary>
 		/// <returns></returns>

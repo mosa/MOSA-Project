@@ -377,8 +377,8 @@ namespace Mosa.Compiler.Framework
 		/// </returns>
 		public Operand CreateVirtualRegister(SigType type)
 		{
-			return virtualRegisterLayout.AllocateVirtualRegister(type);
-			//return stackLayout.AllocateStackOperand(type);
+			//return virtualRegisterLayout.AllocateVirtualRegister(type);
+			return stackLayout.AllocateStackOperand(type);
 		}
 
 		/// <summary>

@@ -150,7 +150,7 @@ namespace Mosa.Platform.x86II
 		/// <value>
 		/// The name of the platform.
 		/// </value>
-		public override string PlatformName { get { return "x86"; } }
+		public override string PlatformName { get { return "x86ii"; } }
 
 		/// <summary>
 		/// Factory method for the Architecture class.
@@ -253,16 +253,6 @@ namespace Mosa.Platform.x86II
 
 				default: memorySize = alignment = 4; break;
 			}
-		}
-
-		/// <summary>
-		/// Gets the intrinsic instruction by type
-		/// </summary>
-		/// <param name="type">The type.</param>
-		/// <returns></returns>
-		public override IIntrinsicMethod GetIntrinsicMethod(Type type)
-		{
-			return Intrinsic.Method.Get(type);
 		}
 
 		/// <summary>

@@ -87,9 +87,6 @@
     <Compile Include="Program.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Stages\Multiboot0695AssemblyStage.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Stages\TypeInitializerSchedulerStage.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -128,6 +125,10 @@
     <ProjectReference Include="..\Mosa.Compiler.Framework\Mosa.Compiler.Framework.csproj">
       <Project>{75A12A8A-8C8F-4D1E-801B-689D8F781BF4}</Project>
       <Name>Mosa.Compiler.Framework</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Platform.x86II\Mosa.Platform.x86II.csproj">
+      <Project>{56CA38E7-0883-4461-A10E-386D0C58DBF9}</Project>
+      <Name>Mosa.Platform.x86II</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mosa.Platform.x86\Mosa.Platform.x86.csproj">
       <Project>{DE30CBE9-50F3-4A3E-BCC9-A8A36348530E}</Project>
