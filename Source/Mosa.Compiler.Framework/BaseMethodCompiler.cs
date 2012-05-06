@@ -10,9 +10,7 @@
 
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using Mosa.Compiler.Framework.CIL;
 using Mosa.Compiler.Framework.Operands;
 using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.Linker;

@@ -16,7 +16,6 @@ using System.Diagnostics;
 using System.IO;
 
 using Mosa.Compiler.Linker;
-using Mosa.Compiler.Common;
 
 namespace Mosa.Compiler.Framework
 {

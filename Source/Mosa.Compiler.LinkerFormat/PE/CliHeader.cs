@@ -8,7 +8,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System.IO;
 using Mosa.Compiler.Common;
 
 namespace Mosa.Compiler.LinkerFormat.PE

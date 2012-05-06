@@ -8,7 +8,6 @@
  */
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Platform;
 using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.TypeSystem;
 

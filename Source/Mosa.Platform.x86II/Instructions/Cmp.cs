@@ -9,7 +9,6 @@
 
 using System;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Platform;
 using Mosa.Compiler.Framework.Operands;
 
 namespace Mosa.Platform.x86II.Instructions

@@ -13,12 +13,11 @@
 using System;
 using System.Diagnostics;
 using Mosa.Compiler.Framework;
+using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Operands;
 using Mosa.Compiler.Framework.Platform;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Compiler.Framework.IR;
-using CIL = Mosa.Compiler.Framework.CIL;
 
 namespace Mosa.Platform.x86.Stages
 {

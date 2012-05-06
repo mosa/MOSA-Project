@@ -7,12 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
  */
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.Framework.Operands;
 using Mosa.Compiler.Framework.Platform;
 
 namespace Mosa.Compiler.Framework.Stages

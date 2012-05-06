@@ -7,13 +7,10 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
 */
 
-using System.Collections;
-using System.Collections.Generic;
 using Mosa.Compiler.Framework.Operands;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
-using Mosa.Compiler.Framework;
 
 namespace Mosa.Compiler.Framework.Stages
 {

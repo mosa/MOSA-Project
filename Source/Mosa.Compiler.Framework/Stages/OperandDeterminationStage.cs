@@ -12,8 +12,6 @@ using System.Collections;
 using System.Collections.Generic;
 using Mosa.Compiler.Framework.CIL;
 using Mosa.Compiler.Framework.Operands;
-using Mosa.Compiler.Metadata;
-using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.Compiler.Framework.Stages
 {

@@ -10,12 +10,9 @@
  */
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Stages;
-using Mosa.Compiler.Framework.Platform;
 using Mosa.Compiler.Framework.CIL;
 using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.InternalTrace;
-using Mosa.Compiler.Linker;
+using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.TypeSystem;
 

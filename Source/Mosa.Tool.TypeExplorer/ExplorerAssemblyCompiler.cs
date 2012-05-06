@@ -13,9 +13,9 @@ using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.TypeSystem;
 using AVR32 = Mosa.Platform.AVR32;
+using Null = Mosa.Platform.Null;
 using x86 = Mosa.Platform.x86;
 using x86II = Mosa.Platform.x86II;
-using Null = Mosa.Platform.Null;
 
 namespace Mosa.Tool.TypeExplorer
 {

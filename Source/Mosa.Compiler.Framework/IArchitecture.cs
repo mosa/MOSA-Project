@@ -7,8 +7,6 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-using System;
-using Mosa.Compiler.Framework.Operands;
 using Mosa.Compiler.Metadata.Signatures;
 
 namespace Mosa.Compiler.Framework

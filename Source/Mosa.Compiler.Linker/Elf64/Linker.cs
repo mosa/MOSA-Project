@@ -11,7 +11,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using Mosa.Compiler.Common;
-using Mosa.Compiler.LinkerFormat.Elf;
 using Mosa.Compiler.LinkerFormat.Elf64;
 
 namespace Mosa.Compiler.Linker.Elf64

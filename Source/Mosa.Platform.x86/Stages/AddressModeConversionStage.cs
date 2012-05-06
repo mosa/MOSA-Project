@@ -10,8 +10,8 @@
  */
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Operands;
 using Mosa.Compiler.Framework.IR;
+using Mosa.Compiler.Framework.Operands;
 using Mosa.Compiler.Metadata;
 using CIL = Mosa.Compiler.Framework.CIL;
 
