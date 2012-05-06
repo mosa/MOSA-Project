@@ -1,19 +1,19 @@
-<?xml version="1.0"?>
-<project name="Mosa" default="build" basedir=".">
-	
-	<!-- Comma-separated list of warnings that should be surpressed in all modules. Warning: no spaces allowed! -->
-	<property name="suppresswarnings" value="0414,0219,0169,0162,0168"/>
-	
-	<!-- Toggle debug output by setting this to true (nant -D:debug=true) -->
-	<property name="debug" value="none" overwrite="false"/>
-	
-	<!-- Speaks for itself, I should hope -->
-	<property name="outputDirectory" value="../bin" overwrite="false"/>
-	
-	<!-- Main build target -->
-	<target name="build">
-	    <csc target="library" output="${outputDirectory}/Mosa.EmulatedDevices.dll" debug="${debug}" unsafe="true" nostdlib="false">
-		<sources>
+<?xml version="1.0"?>
+<project name="Mosa" default="build" basedir=".">
+	
+	<!-- Comma-separated list of warnings that should be surpressed in all modules. Warning: no spaces allowed! -->
+	<property name="suppresswarnings" value="0414,0219,0169,0162,0168"/>
+	
+	<!-- Toggle debug output by setting this to true (nant -D:debug=true) -->
+	<property name="debug" value="none" overwrite="false"/>
+	
+	<!-- Speaks for itself, I should hope -->
+	<property name="outputDirectory" value="../bin" overwrite="false"/>
+	
+	<!-- Main build target -->
+	<target name="build">
+	    <csc target="library" output="${outputDirectory}/Mosa.EmulatedDevices.dll" debug="${debug}" unsafe="true" nostdlib="false">
+		<sources>
                     <include name="Emulated/VGAConsole.cs"/>
                     <include name="Emulated/RAMChip.cs"/>
                     <include name="Multiboot.cs"/>
@@ -27,17 +27,17 @@
                     <include name="Synthetic/DisplayForm.Designer.cs"/>
                     <include name="Synthetic/Keyboard.cs"/>
                     <include name="Synthetic/PixelGraphicDevice.cs"/>
-		</sources>
-		<references>
+		</sources>
+		<references>
                     <include name="System.dll"/>
                     <include name="System.Drawing.dll"/>
                     <include name="System.Windows.Forms.dll"/>
                     <include name="${outputDirectory}/Mosa.DeviceSystem.dll"/>
                     <include name="${outputDirectory}/Mosa.ClassLib.dll"/>
                     <include name="${outputDirectory}/Mosa.EmulatedKernel.dll"/>
-		</references>
-		<!-- supress warnings -->
-		<nowarn><warning number="${suppresswarnings}"/></nowarn>
-        </csc>
-	</target>
-</project>
+		</references>
+		<!-- supress warnings -->
+		<nowarn><warning number="${suppresswarnings}"/></nowarn>
+        </csc>
+	</target>
+</project>

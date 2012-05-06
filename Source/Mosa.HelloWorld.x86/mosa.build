@@ -1,19 +1,19 @@
-<?xml version="1.0"?>
-<project name="Mosa" default="build" basedir=".">
-	
-	<!-- Comma-separated list of warnings that should be surpressed in all modules. Warning: no spaces allowed! -->
-	<property name="suppresswarnings" value="0414,0219,0169,0162,0168"/>
-	
-	<!-- Toggle debug output by setting this to true (nant -D:debug=true) -->
-	<property name="debug" value="none" overwrite="false"/>
-	
-	<!-- Speaks for itself, I should hope -->
-	<property name="outputDirectory" value="../bin" overwrite="false"/>
-	
-	<!-- Main build target -->
-	<target name="build">
-	    <csc target="exe" main="Mosa.HelloWorld.x86.Boot" output="${outputDirectory}/Mosa.HelloWorld.x86.exe" debug="${debug}" unsafe="true" nostdlib="true">
-		<sources>
+<?xml version="1.0"?>
+<project name="Mosa" default="build" basedir=".">
+	
+	<!-- Comma-separated list of warnings that should be surpressed in all modules. Warning: no spaces allowed! -->
+	<property name="suppresswarnings" value="0414,0219,0169,0162,0168"/>
+	
+	<!-- Toggle debug output by setting this to true (nant -D:debug=true) -->
+	<property name="debug" value="none" overwrite="false"/>
+	
+	<!-- Speaks for itself, I should hope -->
+	<property name="outputDirectory" value="../bin" overwrite="false"/>
+	
+	<!-- Main build target -->
+	<target name="build">
+	    <csc target="exe" main="Mosa.HelloWorld.x86.Boot" output="${outputDirectory}/Mosa.HelloWorld.x86.exe" debug="${debug}" unsafe="true" nostdlib="true">
+		<sources>
                     <include name="Boot.cs"/>
                     <include name="Tests/ExceptionTest.cs"/>
                     <include name="Tests/Generic2Test.cs"/>
@@ -23,15 +23,15 @@
                     <include name="Tests/StringTest.cs"/>
                     <include name="Tests/InterfaceTest.cs"/>
                     <include name="Tests/GenericTest.cs"/>
-		</sources>
-		<references>
+		</sources>
+		<references>
                     <include name="${outputDirectory}/Mosa.ClassLib.dll"/>
                     <include name="${outputDirectory}/Mosa.Internal.Plug.dll"/>
                     <include name="${outputDirectory}/Mosa.Kernel.x86.dll"/>
                     <include name="${outputDirectory}/mscorlib.dll"/>
-		</references>
-		<!-- supress warnings -->
-		<nowarn><warning number="${suppresswarnings}"/></nowarn>
-        </csc>
-	</target>
-</project>
+		</references>
+		<!-- supress warnings -->
+		<nowarn><warning number="${suppresswarnings}"/></nowarn>
+        </csc>
+	</target>
+</project>

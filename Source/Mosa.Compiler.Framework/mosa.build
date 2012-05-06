@@ -1,19 +1,21 @@
-<?xml version="1.0"?>
-<project name="Mosa" default="build" basedir=".">
-	
-	<!-- Comma-separated list of warnings that should be surpressed in all modules. Warning: no spaces allowed! -->
-	<property name="suppresswarnings" value="0414,0219,0169,0162,0168"/>
-	
-	<!-- Toggle debug output by setting this to true (nant -D:debug=true) -->
-	<property name="debug" value="none" overwrite="false"/>
-	
-	<!-- Speaks for itself, I should hope -->
-	<property name="outputDirectory" value="../bin" overwrite="false"/>
-	
-	<!-- Main build target -->
-	<target name="build">
-	    <csc target="library" output="${outputDirectory}/Mosa.Compiler.Framework.dll" debug="${debug}" unsafe="true" nostdlib="false">
-		<sources>
+<?xml version="1.0"?>
+<project name="Mosa" default="build" basedir=".">
+	
+	<!-- Comma-separated list of warnings that should be surpressed in all modules. Warning: no spaces allowed! -->
+	<property name="suppresswarnings" value="0414,0219,0169,0162,0168"/>
+	
+	<!-- Toggle debug output by setting this to true (nant -D:debug=true) -->
+	<property name="debug" value="none" overwrite="false"/>
+	
+	<!-- Speaks for itself, I should hope -->
+	<property name="outputDirectory" value="../bin" overwrite="false"/>
+	
+	<!-- Main build target -->
+	<target name="build">
+	    <csc target="library" output="${outputDirectory}/Mosa.Compiler.Framework.dll" debug="${debug}" unsafe="true" nostdlib="false">
+		<sources>
+                    <include name="Stages/SimpleRegisterAllocatorStage.cs"/>
+                    <include name="VirtualRegisterLayout.cs"/>
                     <include name="Stages/AssemblyMemberCompilationSchedulerStage.cs"/>
                     <include name="BaseCodeEmitter.cs"/>
                     <include name="BaseInstruction.cs"/>
@@ -48,6 +50,7 @@
                     <include name="Operands/StackSizeOperand.cs"/>
                     <include name="StackLayout.cs"/>
                     <include name="RegisterMap.cs"/>
+                    <include name="Stages/RegisterUsageAnalyzerStage.cs"/>
                     <include name="Stages/OperandUsageAnalyzerStage.cs"/>
                     <include name="Stages/SingleUseMarkerStage.cs"/>
                     <include name="IPlugSystem.cs"/>
@@ -55,7 +58,7 @@
                     <include name="Stages/PlugStage.cs"/>
                     <include name="Stages/ExceptionPrologueStage.cs"/>
                     <include name="Stages/DelegateTypePatchStage.cs"/>
-                    <include name="IR/ExceptionPrologueInstruction.cs"/>
+                    <include name="IR/ExceptionPrologue.cs"/>
                     <include name="Stages/MetadataStage.cs"/>
                     <include name="Stages/EnterSSAStage.cs"/>
                     <include name="ExceptionClauseHeader.cs"/>
@@ -68,27 +71,27 @@
                     <include name="Stages/PhiPlacementStage.cs"/>
                     <include name="Stages/StaticAllocationResolutionStage.cs"/>
                     <include name="Stages/TypeLayoutStage.cs"/>
-                    <include name="IR/ThrowInstruction.cs"/>
+                    <include name="IR/Throw.cs"/>
                     <include name="Stages/GenericsResolverStage.cs"/>
                     <include name="ICompilationSchedulerStage.cs"/>
                     <include name="Intrinsics/InternalAllocateString.cs"/>
-                    <include name="IR/AddFInstruction.cs"/>
-                    <include name="IR/AddSInstruction.cs"/>
-                    <include name="IR/AddUInstruction.cs"/>
-                    <include name="IR/BreakInstruction.cs"/>
-                    <include name="IR/DivFInstruction.cs"/>
-                    <include name="IR/DivSInstruction.cs"/>
-                    <include name="IR/DivUInstruction.cs"/>
-                    <include name="IR/MulFInstruction.cs"/>
-                    <include name="IR/MulSInstruction.cs"/>
-                    <include name="IR/MulUInstruction.cs"/>
-                    <include name="IR/RemFInstruction.cs"/>
-                    <include name="IR/RemSInstruction.cs"/>
-                    <include name="IR/RemUInstruction.cs"/>
-                    <include name="IR/SubFInstruction.cs"/>
-                    <include name="IR/SubSInstruction.cs"/>
-                    <include name="IR/SubUInstruction.cs"/>
-                    <include name="IR/SwitchInstruction.cs"/>
+                    <include name="IR/AddF.cs"/>
+                    <include name="IR/AddS.cs"/>
+                    <include name="IR/AddU.cs"/>
+                    <include name="IR/Break.cs"/>
+                    <include name="IR/DivF.cs"/>
+                    <include name="IR/DivS.cs"/>
+                    <include name="IR/DivU.cs"/>
+                    <include name="IR/MulF.cs"/>
+                    <include name="IR/MulS.cs"/>
+                    <include name="IR/MulU.cs"/>
+                    <include name="IR/RemF.cs"/>
+                    <include name="IR/RemS.cs"/>
+                    <include name="IR/RemU.cs"/>
+                    <include name="IR/SubF.cs"/>
+                    <include name="IR/SubS.cs"/>
+                    <include name="IR/SubU.cs"/>
+                    <include name="IR/Switch.cs"/>
                     <include name="Stages/MethodCompilerSchedulerStage.cs"/>
                     <include name="Operands/SymbolOperand.cs"/>
                     <include name="Stages/PlatformStubStage.cs"/>
@@ -98,7 +101,7 @@
                     <include name="IR/CILTransformationStage.cs"/>
                     <include name="CIL/ConstrainedPrefixInstruction.cs"/>
                     <include name="CIL/ConversionInstruction.cs"/>
-                    <include name="CIL/Instruction.cs"/>
+                    <include name="CIL/CILInstruction.cs"/>
                     <include name="CIL/MethodFlags.cs"/>
                     <include name="CIL/MethodHeader.cs"/>
                     <include name="CIL/StoreInstruction.cs"/>
@@ -174,42 +177,40 @@
                     <include name="Context.cs"/>
                     <include name="BaseMethodCompilerStage.cs"/>
                     <include name="ICodeEmitter.cs"/>
-                    <include name="IR/AddressOfInstruction.cs"/>
-                    <include name="IR/ArithmeticShiftRightInstruction.cs"/>
-                    <include name="IR/CallInstruction.cs"/>
+                    <include name="IR/AddressOf.cs"/>
+                    <include name="IR/ArithmeticShiftRight.cs"/>
+                    <include name="IR/Call.cs"/>
                     <include name="IR/ConditionCode.cs"/>
-                    <include name="IR/NopInstruction.cs"/>
-                    <include name="IR/IConditionalInstruction.cs"/>
+                    <include name="IR/Nop.cs"/>
                     <include name="IR/LiteralData.cs"/>
-                    <include name="IR/Instruction.cs"/>
-                    <include name="IR/EpilogueInstruction.cs"/>
-                    <include name="IR/FloatingPointCompareInstruction.cs"/>
-                    <include name="IR/FloatingPointToIntegerConversionInstruction.cs"/>
-                    <include name="IR/IIRInstruction.cs"/>
+                    <include name="IR/IRInstruction.cs"/>
+                    <include name="IR/Epilogue.cs"/>
+                    <include name="IR/FloatingPointCompare.cs"/>
+                    <include name="IR/FloatingPointToIntegerConversion.cs"/>
                     <include name="IR/IIRVisitor.cs"/>
-                    <include name="IR/IntegerCompareBranchInstruction.cs"/>
-                    <include name="IR/IntegerCompareInstruction.cs"/>
-                    <include name="IR/IntegerToFloatingPointConversionInstruction.cs"/>
-                    <include name="IR/BaseInstruction.cs"/>
-                    <include name="IR/JmpInstruction.cs"/>
-                    <include name="IR/LoadInstruction.cs"/>
-                    <include name="IR/LogicalAndInstruction.cs"/>
-                    <include name="IR/LogicalNotInstruction.cs"/>
-                    <include name="IR/LogicalOrInstruction.cs"/>
-                    <include name="IR/LogicalXorInstruction.cs"/>
-                    <include name="IR/MoveInstruction.cs"/>
+                    <include name="IR/IntegerCompareBranch.cs"/>
+                    <include name="IR/IntegerCompare.cs"/>
+                    <include name="IR/IntegerToFloatingPointConversion.cs"/>
+                    <include name="IR/BaseIRInstruction.cs"/>
+                    <include name="IR/Jmp.cs"/>
+                    <include name="IR/Load.cs"/>
+                    <include name="IR/LogicalAnd.cs"/>
+                    <include name="IR/LogicalNot.cs"/>
+                    <include name="IR/LogicalOr.cs"/>
+                    <include name="IR/LogicalXor.cs"/>
+                    <include name="IR/Move.cs"/>
                     <include name="IR/OneOperandInstruction.cs"/>
                     <include name="IR/PhiData.cs"/>
-                    <include name="IR/PhiInstruction.cs"/>
-                    <include name="IR/PrologueInstruction.cs"/>
-                    <include name="IR/ReturnInstruction.cs"/>
-                    <include name="IR/ShiftLeftInstruction.cs"/>
-                    <include name="IR/ShiftRightInstruction.cs"/>
-                    <include name="IR/SignExtendedMoveInstruction.cs"/>
-                    <include name="IR/StoreInstruction.cs"/>
+                    <include name="IR/Phi.cs"/>
+                    <include name="IR/Prologue.cs"/>
+                    <include name="IR/Return.cs"/>
+                    <include name="IR/ShiftLeft.cs"/>
+                    <include name="IR/ShiftRight.cs"/>
+                    <include name="IR/SignExtendedMove.cs"/>
+                    <include name="IR/Store.cs"/>
                     <include name="IR/ThreeOperandInstruction.cs"/>
                     <include name="IR/TwoOperandInstruction.cs"/>
-                    <include name="IR/ZeroExtendedMoveInstruction.cs"/>
+                    <include name="IR/ZeroExtendedMove.cs"/>
                     <include name="IVisitor.cs"/>
                     <include name="IBranch.cs"/>
                     <include name="IIRInstruction.cs"/>
@@ -220,7 +221,7 @@
                     <include name="CIL/NopInstruction.cs"/>
                     <include name="InstructionSet.cs"/>
                     <include name="InstructionData.cs"/>
-                    <include name="CIL/BaseInstruction.cs"/>
+                    <include name="CIL/BaseCILInstruction.cs"/>
                     <include name="Operands/StringOperand.cs"/>
                     <include name="Stages/ReverseBlockOrderStage.cs"/>
                     <include name="RuntimeMethodData.cs"/>
@@ -271,17 +272,17 @@
                     <include name="Operands/TemporaryOperand.cs"/>
                     <include name="Operands/LocalVariableOperand.cs"/>
                     <include name="IR/VmCall.cs"/>
-		</sources>
-		<references>
+		</sources>
+		<references>
                     <include name="System.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Common.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Linker.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.InternalTrace.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Metadata.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.TypeSystem.dll"/>
-		</references>
-		<!-- supress warnings -->
-		<nowarn><warning number="${suppresswarnings}"/></nowarn>
-        </csc>
-	</target>
-</project>
+		</references>
+		<!-- supress warnings -->
+		<nowarn><warning number="${suppresswarnings}"/></nowarn>
+        </csc>
+	</target>
+</project>
