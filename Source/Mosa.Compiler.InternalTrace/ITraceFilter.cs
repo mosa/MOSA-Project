@@ -12,9 +12,8 @@ using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.Compiler.InternalTrace
 {
-
-	public interface IInstructionTraceListener
+	public interface ITraceFilter
 	{
-		void NotifyNewInstructionTrace(RuntimeMethod method, string stage, string log);
+		bool IsMatch(RuntimeMethod method, string stage);
 	}
 }

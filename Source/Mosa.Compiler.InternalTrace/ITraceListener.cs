@@ -12,9 +12,10 @@ using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.Compiler.InternalTrace
 {
-	public interface IInstructionTraceFilter
+
+	public interface ITraceListener
 	{
-		//bool IsMatch(RuntimeMethod method, IPipelineStage stage);
-		bool IsMatch(RuntimeMethod method, string stage);
+		void NotifyNewInstructionTrace(RuntimeMethod method, string stage, string log);
+		//void NotifyAdditionalStageInformation(RuntimeMethod method, string stage, string line);
 	}
 }

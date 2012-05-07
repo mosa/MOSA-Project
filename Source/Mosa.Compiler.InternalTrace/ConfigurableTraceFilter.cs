@@ -15,7 +15,7 @@ namespace Mosa.Compiler.InternalTrace
 {
 	public enum MatchType { Exact, Contains, StartsWith, Any, Except, NotContains, NotStartsWith, Exclude };
 
-	public class ConfigurableInstructionTraceFilter : IInstructionTraceFilter
+	public class ConfigurableTraceFilter : ITraceFilter
 	{
 		public bool IsLogging = false;
 		public bool ExcludeInternalMethods = true;
@@ -28,7 +28,7 @@ namespace Mosa.Compiler.InternalTrace
 		public MatchType MethodMatch = MatchType.Contains;
 		public MatchType StageMatch = MatchType.Any;
 
-		bool IInstructionTraceFilter.IsMatch(RuntimeMethod method, string stage)
+		bool ITraceFilter.IsMatch(RuntimeMethod method, string stage)
 		{
 			return IsMatch(method.DeclaringType.Name, method.Name, stage);
 		}

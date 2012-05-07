@@ -292,9 +292,6 @@
     <Compile Include="BasicBlock.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Stages\BlockReductionStage.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Stages\CodeGenerationStage.cs">
       <SubType>Code</SubType>
     </Compile>

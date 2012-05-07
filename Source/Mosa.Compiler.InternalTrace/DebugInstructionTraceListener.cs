@@ -13,9 +13,9 @@ using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.Compiler.InternalTrace
 {
-	public class DebugInstructionTraceListener : IInstructionTraceListener 
+	public class DebugInstructionTraceListener : ITraceListener 
 	{
-		void IInstructionTraceListener.NotifyNewInstructionTrace(RuntimeMethod method, string stage, string log)
+		void ITraceListener.NotifyNewInstructionTrace(RuntimeMethod method, string stage, string log)
 		{
 //			Debug.WriteLine(String.Format("IR representation of method {0} after stage {1}", method.FullName, stage));
 			Debug.WriteLine(log);

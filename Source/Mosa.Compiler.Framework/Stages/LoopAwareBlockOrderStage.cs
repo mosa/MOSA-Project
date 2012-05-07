@@ -25,10 +25,6 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <summary>
 		/// 
 		/// </summary>
-		private BasicBlock first;
-		/// <summary>
-		/// 
-		/// </summary>
 		private List<ConnectedBlocks> loops;
 		/// <summary>
 		/// 
@@ -136,7 +132,7 @@ namespace Mosa.Compiler.Framework.Stages
 		void IMethodCompilerStage.Run()
 		{
 			// Retrieve the first block
-			first = FindBlock(-1);
+			BasicBlock first = FindBlock(-1);
 
 			// Create list for loops
 			loops = new List<ConnectedBlocks>();
@@ -145,10 +141,10 @@ namespace Mosa.Compiler.Framework.Stages
 			depths = new Dictionary<BasicBlock, int>(basicBlocks.Count);
 
 			// Determine Loop Depths
-			DetermineLoopDepths();
+			DetermineLoopDepths(first);
 
 			// Order the Blocks based on loop depth
-			DetermineBlockOrder();
+			DetermineBlockOrder(first);
 
 			loops = null;
 			depths = null;
@@ -159,11 +155,11 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <summary>
 		/// Determines the loop depths.
 		/// </summary>
-		private void DetermineLoopDepths()
+		private void DetermineLoopDepths(BasicBlock start)
 		{
 			// Create queue for first iteration 
 			Queue<ConnectedBlocks> queue = new Queue<ConnectedBlocks>();
-			queue.Enqueue(new ConnectedBlocks(null, first));
+			queue.Enqueue(new ConnectedBlocks(null, start));
 
 			// Flag per basic block
 			Dictionary<BasicBlock, int> visited = new Dictionary<BasicBlock, int>(basicBlocks.Count);
@@ -276,7 +272,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <summary>
 		/// Determines the block order.
 		/// </summary>
-		private void DetermineBlockOrder()
+		private void DetermineBlockOrder(BasicBlock start)
 		{
 			// Create an array to hold the forward branch count
 			int[] forward = new int[basicBlocks.Count];
@@ -299,7 +295,7 @@ namespace Mosa.Compiler.Framework.Stages
 			SortedList<Priority, BasicBlock> workList = new SortedList<Priority, BasicBlock>();
 
 			// Start worklist with first block
-			workList.Add(new Priority(0, 0, true), first);
+			workList.Add(new Priority(0, 0, true), start);
 
 			// Order value helps sorted the worklist
 			int order = 0;
