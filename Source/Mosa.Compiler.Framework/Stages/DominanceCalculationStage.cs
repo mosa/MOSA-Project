@@ -59,8 +59,8 @@ namespace Mosa.Compiler.Framework.Stages
 			if (AreExceptions)
 				return;
 
-			var entryBlock = basicBlocks.FindBlock(-1);
-			var exitBlock = basicBlocks.FindBlock(int.MaxValue);
+			var entryBlock = basicBlocks.GetByLabel(BasicBlock.PrologueLabel);
+			var exitBlock = basicBlocks.GetByLabel(BasicBlock.EpilogueLabel);
 
 			entryBlock.NextBlocks.Add(exitBlock);
 			exitBlock.PreviousBlocks.Add(entryBlock);
@@ -87,7 +87,7 @@ namespace Mosa.Compiler.Framework.Stages
 			// Allocate a dominance array
 			_doms = new BasicBlock[basicBlocks.Count];
 			_children = new List<BasicBlock>[basicBlocks.Count];
-			_doms[0] = basicBlocks.FindBlock(-1);
+			_doms[0] = basicBlocks.GetByLabel(BasicBlock.PrologueLabel);
 
 			// Calculate the dominance
 			while (changed)

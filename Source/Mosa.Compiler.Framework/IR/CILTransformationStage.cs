@@ -1342,7 +1342,7 @@ namespace Mosa.Compiler.Framework.IR
 				if (clause != null)
 				{
 					// Find finally block
-					BasicBlock finallyBlock = basicBlocks.FindBlock(clause.HandlerOffset);
+					BasicBlock finallyBlock = basicBlocks.GetByLabel(clause.HandlerOffset);
 
 					Context before = context.InsertBefore();
 					before.SetInstruction(IRInstruction.Call, finallyBlock);

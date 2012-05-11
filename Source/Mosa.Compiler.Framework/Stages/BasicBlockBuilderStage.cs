@@ -69,11 +69,11 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				if (exceptionClause.HandlerOffset != 0)
 				{
-					BuildBlockLinks(basicBlocks.FindBlock(exceptionClause.HandlerOffset));
+					BuildBlockLinks(basicBlocks.GetByLabel(exceptionClause.HandlerOffset));
 				}
 				if (exceptionClause.FilterOffset != 0)
 				{
-					BuildBlockLinks(basicBlocks.FindBlock(exceptionClause.FilterOffset));
+					BuildBlockLinks(basicBlocks.GetByLabel(exceptionClause.FilterOffset));
 				}
 			}
 
@@ -227,7 +227,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void FindAndLinkBlock(BasicBlock block, int target)
 		{
-			BasicBlock next = basicBlocks.FindBlock(target);
+			BasicBlock next = basicBlocks.GetByLabel(target);
 			if (!block.NextBlocks.Contains(next))
 			{
 				LinkBlocks(block, next);

@@ -93,7 +93,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			foreach (BasicBlock block in basicBlocks)
 			{
-				if (block == basicBlocks.FindBlock(-1) || block == basicBlocks.FindBlock(int.MaxValue))
+				if (block == basicBlocks.GetByLabel(BasicBlock.PrologueLabel) || block == basicBlocks.GetByLabel(BasicBlock.EpilogueLabel))
 					continue;
 
 				for (Context ctx = new Context(instructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
@@ -128,7 +128,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			foreach (BasicBlock block in basicBlocks)
 			{
-				if (block == basicBlocks.FindBlock(-1) || block == basicBlocks.FindBlock(int.MaxValue))
+				if (block == basicBlocks.GetByLabel(BasicBlock.PrologueLabel) || block == basicBlocks.GetByLabel(BasicBlock.EpilogueLabel))
 					continue;
 
 				for (Context ctx = new Context(instructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
@@ -193,7 +193,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			foreach (BasicBlock block in basicBlocks)
 			{
-				if (block == basicBlocks.FindBlock(-1) || block == basicBlocks.FindBlock(int.MaxValue))
+				if (block == basicBlocks.GetByLabel(BasicBlock.PrologueLabel) || block == basicBlocks.GetByLabel(BasicBlock.EpilogueLabel))
 					continue;
 
 				for (Context ctx = new Context(instructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())

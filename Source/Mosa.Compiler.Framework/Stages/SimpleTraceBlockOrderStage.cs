@@ -32,7 +32,7 @@ namespace Mosa.Compiler.Framework.Stages
 		void IMethodCompilerStage.Run()
 		{
 			// Retrieve the first block
-			BasicBlock first = basicBlocks.FindBlock(-1);
+			BasicBlock first = basicBlocks.GetByLabel(BasicBlock.PrologueLabel);
 
 			// Create dictionary of referenced blocks
 			Dictionary<BasicBlock, int> referenced = new Dictionary<BasicBlock, int>(basicBlocks.Count);

@@ -117,12 +117,10 @@ namespace Mosa.Compiler.Framework
 		/// <returns>
 		/// The basic block with the given label.
 		/// </returns>
-		public BasicBlock FindBlock/*GetByLabel*/(int label)
+		public BasicBlock GetByLabel(int label)
 		{
 			BasicBlock basicBlock = null;
-
 			basicBlocksByLabel.TryGetValue(label, out basicBlock);
-
 			return basicBlock;
 		}
 
