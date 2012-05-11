@@ -14,6 +14,9 @@
 	<target name="build">
 	    <csc target="library" output="${outputDirectory}/Mosa.Compiler.Framework.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
+                    <include name="BasicBlocks.cs"/>
+                    <include name="LoopEdge.cs"/>
+                    <include name="LoopAwareBlockOrder.cs"/>
                     <include name="Stages/SimpleRegisterAllocatorStage.cs"/>
                     <include name="VirtualRegisterLayout.cs"/>
                     <include name="Stages/AssemblyMemberCompilationSchedulerStage.cs"/>
@@ -238,7 +241,6 @@
                     <include name="AssemblyCompiler.cs"/>
                     <include name="BasicArchitecture.cs"/>
                     <include name="BasicBlock.cs"/>
-                    <include name="Stages/BlockReductionStage.cs"/>
                     <include name="Stages/CodeGenerationStage.cs"/>
                     <include name="BaseCodeTransformationStage.cs"/>
                     <include name="CompilationException.cs"/>

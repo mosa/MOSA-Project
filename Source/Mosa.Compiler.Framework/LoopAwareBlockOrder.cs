@@ -26,7 +26,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// 
 		/// </summary>
-		protected List<BasicBlock> basicBlocks;
+		protected BasicBlocks basicBlocks;
 		/// <summary>
 		/// 
 		/// </summary>
@@ -107,7 +107,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Runs the specified compiler.
 		/// </summary>
-		public LoopAwareBlockOrder(List<BasicBlock> basicBlocks)
+		public LoopAwareBlockOrder(BasicBlocks basicBlocks)
 		{
 			this.basicBlocks = basicBlocks;
 

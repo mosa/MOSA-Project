@@ -42,22 +42,9 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="source">The source.</param>
 		/// <param name="destination">The destination.</param>
-		protected void LinkBlocks(BasicBlock source, BasicBlock destination)
-		{
-			if (!source.NextBlocks.Contains(destination))
-				source.NextBlocks.Add(destination);
-
-			if (!destination.PreviousBlocks.Contains(source))
-				destination.PreviousBlocks.Add(source);
-		}
-		/// <summary>
-		/// Links the blocks.
-		/// </summary>
-		/// <param name="source">The source.</param>
-		/// <param name="destination">The destination.</param>
 		protected void LinkBlocks(Context source, BasicBlock destination)
 		{
-			LinkBlocks(source.BasicBlock, destination);
+			basicBlocks.LinkBlocks(source.BasicBlock, destination);
 		}
 
 		/// <summary>
@@ -67,7 +54,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="destination">The destination.</param>
 		protected void LinkBlocks(Context source, Context destination)
 		{
-			LinkBlocks(source.BasicBlock, destination.BasicBlock);
+			basicBlocks.LinkBlocks(source.BasicBlock, destination.BasicBlock);
 		}
 
 		/// <summary>
@@ -78,8 +65,8 @@ namespace Mosa.Compiler.Framework
 		/// <param name="destination2">The destination2.</param>
 		protected void LinkBlocks(Context source, Context destination, Context destination2)
 		{
-			LinkBlocks(source.BasicBlock, destination.BasicBlock);
-			LinkBlocks(source.BasicBlock, destination2.BasicBlock);
+			basicBlocks.LinkBlocks(source.BasicBlock, destination.BasicBlock);
+			basicBlocks.LinkBlocks(source.BasicBlock, destination2.BasicBlock);
 		}
 
 		/// <summary>
@@ -90,8 +77,8 @@ namespace Mosa.Compiler.Framework
 		/// <param name="destination2">The destination2.</param>
 		protected void LinkBlocks(Context source, Context destination, BasicBlock destination2)
 		{
-			LinkBlocks(source.BasicBlock, destination.BasicBlock);
-			LinkBlocks(source.BasicBlock, destination2);
+			basicBlocks.LinkBlocks(source.BasicBlock, destination.BasicBlock);
+			basicBlocks.LinkBlocks(source.BasicBlock, destination2);
 		}
 
 		/// <summary>
@@ -102,8 +89,8 @@ namespace Mosa.Compiler.Framework
 		/// <param name="destination2">The destination2.</param>
 		protected void LinkBlocks(Context source, BasicBlock destination, BasicBlock destination2)
 		{
-			LinkBlocks(source.BasicBlock, destination);
-			LinkBlocks(source.BasicBlock, destination2);
+			basicBlocks.LinkBlocks(source.BasicBlock, destination);
+			basicBlocks.LinkBlocks(source.BasicBlock, destination2);
 		}
 
 		/// <summary>
@@ -127,7 +114,7 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Creates empty Blocks.
+		/// Creates empty blocks.
 		/// </summary>
 		/// <param name="blocks">The Blocks.</param>
 		/// <param name="label">The label.</param>

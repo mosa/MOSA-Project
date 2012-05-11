@@ -128,6 +128,20 @@ namespace Mosa.Compiler.Framework
 			return basicBlock;
 		}
 
+		/// <summary>
+		/// Links the blocks.
+		/// </summary>
+		/// <param name="source">The source.</param>
+		/// <param name="destination">The destination.</param>
+		public void LinkBlocks(BasicBlock source, BasicBlock destination)
+		{
+			if (!source.NextBlocks.Contains(destination))
+				source.NextBlocks.Add(destination);
+
+			if (!destination.PreviousBlocks.Contains(source))
+				destination.PreviousBlocks.Add(source);
+		}
+
 		#endregion
 	}
 }

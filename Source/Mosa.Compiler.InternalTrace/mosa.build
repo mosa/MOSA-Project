@@ -17,12 +17,12 @@
                     <include name="BasicCompilerEventListener.cs"/>
                     <include name="BasicInternalTrace.cs"/>
                     <include name="CompilerEvent.cs"/>
-                    <include name="ConfigurableInstructionTraceFilter.cs"/>
+                    <include name="ConfigurableTraceFilter.cs"/>
                     <include name="DebugCompilerEventListener.cs"/>
                     <include name="DebugInstructionTraceListener.cs"/>
                     <include name="ICompilerEventListener.cs"/>
-                    <include name="IInstructionTraceFilter.cs"/>
-                    <include name="IInstructionTraceListener.cs"/>
+                    <include name="ITraceFilter.cs"/>
+                    <include name="ITraceListener.cs"/>
                     <include name="IInternalTrace.cs"/>
 		</sources>
 		<references>
