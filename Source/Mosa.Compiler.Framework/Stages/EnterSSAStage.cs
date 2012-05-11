@@ -54,7 +54,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <summary>
 		/// 
 		/// </summary>
-		private IDominanceProvider dominanceCalculationStage;
+		private IDominanceProvider dominanceCalculation;
 		/// <summary>
 		/// 
 		/// </summary>
@@ -72,7 +72,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (block.NextBlocks.Count == 0 && block.PreviousBlocks.Count == 0)
 					return;
 
-			this.dominanceCalculationStage = this.methodCompiler.Pipeline.FindFirst<DominanceCalculationStage>() as IDominanceProvider;
+			this.dominanceCalculation = this.methodCompiler.Pipeline.FindFirst<DominanceCalculationStage>().DominanceProvider;
 			this.phiPlacementStage = this.methodCompiler.Pipeline.FindFirst<PhiPlacementStage>();
 
 			var numberOfParameters = this.methodCompiler.Method.Parameters.Count;
@@ -152,7 +152,7 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 			}
 
-			foreach (var s in this.dominanceCalculationStage.GetChildren(block))
+			foreach (var s in this.dominanceCalculation.GetChildren(block))
 			{
 				this.RenameVariables(s);
 			}

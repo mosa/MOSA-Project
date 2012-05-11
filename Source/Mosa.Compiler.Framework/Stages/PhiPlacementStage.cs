@@ -13,7 +13,7 @@ using Mosa.Compiler.Framework.Operands;
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
-	///		Places phi instructions for the SSA transformation
+	///	Places phi instructions for the SSA transformation
 	/// </summary>
 	public class PhiPlacementStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
 	{
@@ -72,7 +72,8 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PhiPlacementStage"/> class.
 		/// </summary>
-		public PhiPlacementStage() : this(PhiPlacementStrategy.Minimal)
+		public PhiPlacementStage()
+			: this(PhiPlacementStrategy.Minimal)
 		{
 		}
 
@@ -185,7 +186,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private void PlacePhiFunctionsMinimal()
 		{
 			var firstBlock = basicBlocks.PrologueBlock;
-			var dominanceCalculationStage = this.methodCompiler.Pipeline.FindFirst<DominanceCalculationStage>() as IDominanceProvider;
+			var dominanceCalculation = this.methodCompiler.Pipeline.FindFirst<DominanceCalculationStage>().DominanceProvider;
 
 			foreach (var t in assignments.Keys)
 			{
@@ -193,7 +194,7 @@ namespace Mosa.Compiler.Framework.Stages
 					continue;
 				var S = new List<BasicBlock>(assignments[t].AssigningBlocks);
 				S.Add(firstBlock);
-				var idf = dominanceCalculationStage.IteratedDominanceFrontier(S);
+				var idf = dominanceCalculation.IteratedDominanceFrontier(S);
 
 				foreach (var n in idf)
 					this.InsertPhiInstruction(n, assignments[t].Operand);
