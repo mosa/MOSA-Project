@@ -132,7 +132,7 @@ namespace Mosa.Compiler.Framework.Stages
 		void IMethodCompilerStage.Run()
 		{
 			// Retrieve the first block
-			BasicBlock first = basicBlocks.GetByLabel(BasicBlock.PrologueLabel);
+			BasicBlock first = basicBlocks.PrologueBlock;
 
 			// Create list for loops
 			loops = new List<ConnectedBlocks>();

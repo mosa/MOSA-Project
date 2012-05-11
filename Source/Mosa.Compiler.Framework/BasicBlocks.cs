@@ -79,6 +79,16 @@ namespace Mosa.Compiler.Framework
 			set { basicBlocks[index] = value; }
 		}
 
+		/// <summary>
+		/// Gets the prologue block.
+		/// </summary>
+		public BasicBlock PrologueBlock { get { return this.PrologueBlock; } }
+
+		/// <summary>
+		/// Gets the epilogue block.
+		/// </summary>
+		public BasicBlock EpilogueBlock { get { return this.EpilogueBlock; } }
+
 		#endregion
 
 		#region Methods

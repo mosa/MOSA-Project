@@ -93,7 +93,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			foreach (BasicBlock block in basicBlocks)
 			{
-				if (block == basicBlocks.GetByLabel(BasicBlock.PrologueLabel) || block == basicBlocks.GetByLabel(BasicBlock.EpilogueLabel))
+				if (block == basicBlocks.PrologueBlock || block == basicBlocks.EpilogueBlock)
 					continue;
 
 				for (Context ctx = new Context(instructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
@@ -128,7 +128,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			foreach (BasicBlock block in basicBlocks)
 			{
-				if (block == basicBlocks.GetByLabel(BasicBlock.PrologueLabel) || block == basicBlocks.GetByLabel(BasicBlock.EpilogueLabel))
+				if (block == basicBlocks.PrologueBlock || block == basicBlocks.EpilogueBlock)
 					continue;
 
 				for (Context ctx = new Context(instructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
@@ -193,7 +193,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			foreach (BasicBlock block in basicBlocks)
 			{
-				if (block == basicBlocks.GetByLabel(BasicBlock.PrologueLabel) || block == basicBlocks.GetByLabel(BasicBlock.EpilogueLabel))
+				if (block == basicBlocks.PrologueBlock || block == basicBlocks.EpilogueBlock)
 					continue;
 
 				for (Context ctx = new Context(instructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())

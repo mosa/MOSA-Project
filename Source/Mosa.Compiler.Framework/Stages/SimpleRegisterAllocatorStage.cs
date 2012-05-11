@@ -55,7 +55,7 @@ namespace Mosa.Compiler.Framework.Stages
 			start.Set(architecture.StackPointerRegister);
 			start.Set(architecture.CallingConvention.CalleeSavedRegisters);
 
-			ProcesBlockChain(basicBlocks.GetByLabel(BasicBlock.PrologueLabel), start);
+			ProcesBlockChain(basicBlocks.PrologueBlock, start);
 
 			// Handler Code
 			foreach (ExceptionHandlingClause clause in methodCompiler.ExceptionClauseHeader.Clauses)

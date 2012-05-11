@@ -145,7 +145,7 @@ namespace Mosa.Compiler.Framework.Stages
 				++numberOfParameters;
 
 			for (var i = 0; i < numberOfParameters; ++i)
-				AddToAssignments(methodCompiler.GetParameterOperand(i), basicBlocks.GetByLabel(BasicBlock.PrologueLabel));
+				AddToAssignments(methodCompiler.GetParameterOperand(i), basicBlocks.PrologueBlock);
 		}
 
 		/// <summary>
@@ -184,7 +184,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		private void PlacePhiFunctionsMinimal()
 		{
-			var firstBlock = basicBlocks.GetByLabel(-1);
+			var firstBlock = basicBlocks.PrologueBlock;
 			var dominanceCalculationStage = this.methodCompiler.Pipeline.FindFirst<DominanceCalculationStage>() as IDominanceProvider;
 
 			foreach (var t in assignments.Keys)
