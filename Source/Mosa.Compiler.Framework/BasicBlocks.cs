@@ -14,6 +14,7 @@ using System.Collections.Generic;
 namespace Mosa.Compiler.Framework
 {
 	/// <summary>
+	/// 
 	/// </summary>
 	public sealed class BasicBlocks : IEnumerable<BasicBlock>
 	{
@@ -34,11 +35,8 @@ namespace Mosa.Compiler.Framework
 		#region Construction
 
 		/// <summary>
-		/// Initializes common fields of the BasicBlock.
+		/// Initializes a new instance of the <see cref="BasicBlocks"/> class.
 		/// </summary>
-		/// <param name="sequence">The sequence.</param>
-		/// <param name="label">The label.</param>
-		/// <param name="index">The index.</param>
 		public BasicBlocks()
 		{
 			basicBlocks = new List<BasicBlock>();

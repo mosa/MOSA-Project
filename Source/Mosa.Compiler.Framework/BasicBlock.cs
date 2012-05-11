@@ -17,6 +17,9 @@ namespace Mosa.Compiler.Framework
 	/// </summary>
 	public class BasicBlock
 	{
+		public static readonly int PrologueLabel = -1;
+		public static readonly int EpilogueLabel = Int32.MaxValue;
+
 		#region Data members
 
 		/// <summary>

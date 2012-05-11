@@ -49,8 +49,8 @@ namespace Mosa.Compiler.Framework.Stages
 			// Add a jump instruction to the first block from the prologue
 			ctx.AppendInstruction(IR.IRInstruction.Jmp);
 			ctx.SetBranch(0);
-			ctx.Label = -1;
-			prologue = basicBlocks.CreateBlock(-1, ctx.Index);
+			ctx.Label = BasicBlock.PrologueLabel;
+			prologue = basicBlocks.CreateBlock(BasicBlock.PrologueLabel, ctx.Index);
 
 			SplitIntoBlocks(0);
 
@@ -59,8 +59,8 @@ namespace Mosa.Compiler.Framework.Stages
 			// Add null instruction, necessary to generate a block index
 			ctx.AppendInstruction(null);
 			ctx.Ignore = true;
-			ctx.Label = Int32.MaxValue;
-			epilogue = basicBlocks.CreateBlock(Int32.MaxValue, ctx.Index);
+			ctx.Label = BasicBlock.EpilogueLabel;
+			epilogue = basicBlocks.CreateBlock(BasicBlock.EpilogueLabel, ctx.Index);
 
 			// Link all the blocks together
 			BuildBlockLinks(prologue);
@@ -179,8 +179,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 			Debug.Assert(targets.Count <= 1);
 
-			if (basicBlocks.FindBlock(0) == null)
-				basicBlocks.CreateBlock(0, index);
+			//if (basicBlocks.FindBlock(0) == null)
+			//	basicBlocks.CreateBlock(0, index);
 		}
 
 		/// <summary>
