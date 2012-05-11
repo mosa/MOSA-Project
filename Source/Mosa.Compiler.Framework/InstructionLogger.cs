@@ -31,7 +31,7 @@ namespace Mosa.Compiler.InternalTrace
 			);
 		}
 
-		public static void Run(IInternalTrace internalLog, IPipelineStage stage, RuntimeMethod method, InstructionSet instructionSet, IList<BasicBlock> basicBlocks)
+		public static void Run(IInternalTrace internalLog, IPipelineStage stage, RuntimeMethod method, InstructionSet instructionSet, BasicBlocks basicBlocks)
 		{
 			if (internalLog == null)
 				return;

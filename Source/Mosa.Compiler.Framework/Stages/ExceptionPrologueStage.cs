@@ -35,7 +35,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 					RuntimeType type = methodCompiler.Method.Module.GetType(typeToken);
 
-					var block = FindBlock(clause.HandlerOffset);
+					var block = basicBlocks.FindBlock(clause.HandlerOffset);
 
 					var context = new Context(instructionSet, block).InsertBefore();
 

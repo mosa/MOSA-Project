@@ -96,7 +96,7 @@ namespace Mosa.Compiler.Framework.Stages
 				this.variableInformation[name].Stack.Push(0);
 				this.variableInformation[name].Count = 1;
 			}
-			this.RenameVariables(this.FindBlock(-1).NextBlocks[0]);
+			this.RenameVariables(basicBlocks.FindBlock(-1).NextBlocks[0]);
 			Debug.WriteLine("ESSA: " + this.methodCompiler.Method.FullName);
 		}
 

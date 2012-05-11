@@ -56,12 +56,12 @@ namespace Mosa.Compiler.Framework.Stages
 			LayoutParameters(methodCompiler);
 
 			// Create a prologue instruction
-			Context prologueCtx = new Context(instructionSet, FindBlock(-1)).InsertBefore();
+			Context prologueCtx = new Context(instructionSet, basicBlocks.FindBlock(-1)).InsertBefore();
 			prologueCtx.SetInstruction(IRInstruction.Prologue);
 			prologueCtx.Label = -1;
 
 			// Create an epilogue instruction
-			Context epilogueCtx = new Context(instructionSet, FindBlock(Int32.MaxValue));
+			Context epilogueCtx = new Context(instructionSet, basicBlocks.FindBlock(Int32.MaxValue));
 			epilogueCtx.AppendInstruction(IRInstruction.Epilogue);
 			epilogueCtx.Label = Int32.MaxValue;
 		}

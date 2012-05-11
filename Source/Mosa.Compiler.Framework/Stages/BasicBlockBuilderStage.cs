@@ -50,7 +50,7 @@ namespace Mosa.Compiler.Framework.Stages
 			ctx.AppendInstruction(IR.IRInstruction.Jmp);
 			ctx.SetBranch(0);
 			ctx.Label = -1;
-			prologue = CreateBlock(-1, ctx.Index);
+			prologue = basicBlocks.CreateBlock(-1, ctx.Index);
 
 			SplitIntoBlocks(0);
 
@@ -60,7 +60,7 @@ namespace Mosa.Compiler.Framework.Stages
 			ctx.AppendInstruction(null);
 			ctx.Ignore = true;
 			ctx.Label = Int32.MaxValue;
-			epilogue = CreateBlock(Int32.MaxValue, ctx.Index);
+			epilogue = basicBlocks.CreateBlock(Int32.MaxValue, ctx.Index);
 
 			// Link all the blocks together
 			BuildBlockLinks(prologue);
@@ -69,11 +69,11 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				if (exceptionClause.HandlerOffset != 0)
 				{
-					BuildBlockLinks(FindBlock(exceptionClause.HandlerOffset));
+					BuildBlockLinks(basicBlocks.FindBlock(exceptionClause.HandlerOffset));
 				}
 				if (exceptionClause.FilterOffset != 0)
 				{
-					BuildBlockLinks(FindBlock(exceptionClause.FilterOffset));
+					BuildBlockLinks(basicBlocks.FindBlock(exceptionClause.FilterOffset));
 				}
 			}
 
@@ -150,7 +150,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				if (targets.ContainsKey(ctx.Label))
 				{
-					CreateBlock(ctx.Label, ctx.Index);
+					basicBlocks.CreateBlock(ctx.Label, ctx.Index);
 
 					if (!ctx.IsFirstInstruction)
 					{
@@ -179,8 +179,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 			Debug.Assert(targets.Count <= 1);
 
-			if (FindBlock(0) == null)
-				CreateBlock(0, index);
+			if (basicBlocks.FindBlock(0) == null)
+				basicBlocks.CreateBlock(0, index);
 		}
 
 		/// <summary>
@@ -227,7 +227,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void FindAndLinkBlock(BasicBlock block, int target)
 		{
-			BasicBlock next = this.FindBlock(target);
+			BasicBlock next = basicBlocks.FindBlock(target);
 			if (!block.NextBlocks.Contains(next))
 			{
 				LinkBlocks(block, next);

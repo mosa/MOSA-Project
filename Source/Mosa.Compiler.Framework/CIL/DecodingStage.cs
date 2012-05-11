@@ -74,7 +74,7 @@ namespace Mosa.Compiler.Framework.CIL
 					Context ctx = new Context(instructionSet);
 					ctx.AppendInstruction(IR.IRInstruction.Jmp, null, plugSymbol);
 					ctx.Label = -1;
-					CreateBlock(-1, ctx.Index);
+					basicBlocks.CreateBlock(-1, ctx.Index);
 
 					return;
 				}

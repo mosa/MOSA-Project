@@ -37,6 +37,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ListExtension.cs" />
     <Compile Include="EndianAwareBinaryWriter.cs" />
     <Compile Include="EndianAwareBinaryReader.cs" />
     <Compile Include="Endian.cs" />

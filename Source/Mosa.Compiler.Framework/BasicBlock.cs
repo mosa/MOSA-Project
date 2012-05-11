@@ -10,12 +10,10 @@
 using System;
 using System.Collections.Generic;
 
-
 namespace Mosa.Compiler.Framework
 {
 	/// <summary>
-	/// Represents a block of instructions with no internal jumps and only one
-	/// entry and exit.
+	/// Represents a block of instructions with no internal jumps and only one entry and exit.
 	/// </summary>
 	public class BasicBlock
 	{

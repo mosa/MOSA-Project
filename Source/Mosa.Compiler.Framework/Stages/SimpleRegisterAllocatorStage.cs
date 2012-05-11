@@ -55,7 +55,7 @@ namespace Mosa.Compiler.Framework.Stages
 			start.Set(architecture.StackPointerRegister);
 			start.Set(architecture.CallingConvention.CalleeSavedRegisters);
 
-			ProcesBlockChain(FindBlock(-1), start);
+			ProcesBlockChain(basicBlocks.FindBlock(-1), start);
 
 			// Handler Code
 			foreach (ExceptionHandlingClause clause in methodCompiler.ExceptionClauseHeader.Clauses)
@@ -66,7 +66,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				// TODO: Set the exception register
 
-				ProcesBlockChain(FindBlock(clause.HandlerOffset), exceptionStart);
+				ProcesBlockChain(basicBlocks.FindBlock(clause.HandlerOffset), exceptionStart);
 			}
 		}
 

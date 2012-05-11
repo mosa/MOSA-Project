@@ -95,7 +95,7 @@ namespace Mosa.Compiler.Framework.Stages
 			enqueued = new BitArray(basicBlocks.Count);
 			enqueued.SetAll(false);
 
-			var firstBlock = FindBlock(label);
+			var firstBlock = basicBlocks.FindBlock(label);
 			processed.Set(firstBlock.Sequence, true);
 			workList.Enqueue(new WorkItem(firstBlock, new Stack<Operand>()));
 

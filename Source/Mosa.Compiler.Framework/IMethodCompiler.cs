@@ -115,22 +115,7 @@ namespace Mosa.Compiler.Framework
 		/// Gets the basic Blocks.
 		/// </summary>
 		/// <value>The basic Blocks.</value>
-		IList<BasicBlock> BasicBlocks { get; }
-
-		/// <summary>
-		/// Retrieves a basic block from its label.
-		/// </summary>
-		/// <param name="label">The label of the basic block.</param>
-		/// <returns>The basic block with the given label or null.</returns>
-		BasicBlock FromLabel(int label);
-
-		/// <summary>
-		/// Creates the block.
-		/// </summary>
-		/// <param name="label">The label.</param>
-		/// <param name="index">The index.</param>
-		/// <returns></returns>
-		BasicBlock CreateBlock(int label, int index);
+		BasicBlocks BasicBlocks { get; }
 
 		/// <summary>
 		/// Provides access to the pipeline of this compiler.

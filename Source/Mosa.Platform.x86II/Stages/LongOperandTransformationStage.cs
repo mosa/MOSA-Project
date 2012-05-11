@@ -1437,7 +1437,7 @@ namespace Mosa.Platform.x86II.Stages
 		{
 			Debug.Assert(context.Branch.Targets.Length == 1);
 
-			BasicBlock target = FindBlock(context.Branch.Targets[0]);
+			BasicBlock target = basicBlocks.FindBlock(context.Branch.Targets[0]);
 
 			Operand op1L, op1H, op2L, op2H;
 			SplitLongOperand(context.Operand1, out op1L, out op1H);

@@ -43,16 +43,16 @@ namespace Mosa.Compiler.Framework
 		BasicBlock[] GetDominanceFrontierOfBlock(BasicBlock block);
 
 		/// <summary>
-		/// 
+		/// Gets the children.
 		/// </summary>
-		/// <param name="block"></param>
+		/// <param name="block">The block.</param>
 		/// <returns></returns>
 		BasicBlock[] GetChildren(BasicBlock block);
 
 		/// <summary>
-		/// 
+		/// Iterateds the dominance frontier.
 		/// </summary>
-		/// <param name="s"></param>
+		/// <param name="s">The s.</param>
 		/// <returns></returns>
 		List<BasicBlock> IteratedDominanceFrontier(List<BasicBlock> s);
 	}

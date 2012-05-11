@@ -27,7 +27,7 @@ namespace Mosa.Compiler.Linker
 		public LinkerMethodCompiler(AssemblyCompiler assemblyCompiler, ICompilationSchedulerStage compilationScheduler, RuntimeMethod method, InstructionSet instructionSet)
 			: base(assemblyCompiler, method.DeclaringType, method,  instructionSet, compilationScheduler)
 		{
-			this.CreateBlock(-1, 0);
+			BasicBlocks.CreateBlock(-1, 0);
 
 			this.Pipeline.AddRange(new IMethodCompilerStage[] {
 				new SimpleTraceBlockOrderStage(),

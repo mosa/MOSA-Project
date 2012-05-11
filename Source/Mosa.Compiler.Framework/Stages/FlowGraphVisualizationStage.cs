@@ -64,7 +64,7 @@ namespace Mosa.Compiler.Framework.Stages
 			++methodCount[methodCompiler.Method.Name];
 
 			// Retreive the first block
-			firstBlock = FindBlock(-1);
+			firstBlock = basicBlocks.FindBlock(-1);
 
 			workList = new Stack<BasicBlock>();
 			workList.Push(firstBlock);

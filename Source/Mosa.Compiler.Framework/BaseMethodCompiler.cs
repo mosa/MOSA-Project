@@ -91,7 +91,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Holds the basic blocks
 		/// </summary>
-		private List<BasicBlock> basicBlocks;
+		private BasicBlocks basicBlocks;
 
 		/// <summary>
 		/// Holds the type system during compilation
@@ -112,11 +112,6 @@ namespace Mosa.Compiler.Framework
 		/// Holds the internal logging interface
 		/// </summary>
 		protected IInternalTrace internalTrace;
-
-		/// <summary>
-		/// Holds the blocks indexed by label
-		/// </summary>
-		private Dictionary<int, BasicBlock> basicBlocksByLabel = new Dictionary<int, BasicBlock>();
 
 		/// <summary>
 		/// Holds the exception clauses
@@ -175,7 +170,7 @@ namespace Mosa.Compiler.Framework
 			this.plugSystem = assemblyCompiler.Pipeline.FindFirst<IPlugSystem>();
 
 			this.parameters = new List<Operand>(new Operand[method.Parameters.Count]);
-			this.basicBlocks = new List<BasicBlock>();
+			this.basicBlocks = new BasicBlocks();
 
 			this.instructionSet = instructionSet ?? new InstructionSet(256);
 
@@ -227,7 +222,7 @@ namespace Mosa.Compiler.Framework
 		/// Gets the basic blocks.
 		/// </summary>
 		/// <value>The basic blocks.</value>
-		public IList<BasicBlock> BasicBlocks { get { return basicBlocks; } }
+		public BasicBlocks BasicBlocks { get { return basicBlocks; } }
 
 		/// <summary>
 		/// Retrieves the compilation scheduler.
@@ -480,36 +475,6 @@ namespace Mosa.Compiler.Framework
 			}
 
 			return null;
-		}
-
-		/// <summary>
-		/// Retrieves a basic block from its label.
-		/// </summary>
-		/// <param name="label">The label of the basic block.</param>
-		/// <returns>
-		/// The basic block with the given label.
-		/// </returns>
-		public BasicBlock FromLabel(int label)
-		{
-			BasicBlock basicBlock = null;
-
-			basicBlocksByLabel.TryGetValue(label, out basicBlock);
-
-			return basicBlock;
-		}
-
-		/// <summary>
-		/// Creates the block.
-		/// </summary>
-		/// <param name="label">The label.</param>
-		/// <param name="index">The index.</param>
-		/// <returns></returns>
-		public BasicBlock CreateBlock(int label, int index)
-		{
-			BasicBlock basicBlock = new BasicBlock(basicBlocks.Count, label, index);
-			basicBlocks.Add(basicBlock);
-			basicBlocksByLabel.Add(label, basicBlock);
-			return basicBlock;
 		}
 
 		#endregion // Methods

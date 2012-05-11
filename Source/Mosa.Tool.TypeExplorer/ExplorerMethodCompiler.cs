@@ -48,7 +48,8 @@ namespace Mosa.Tool.TypeExplorer
 				new StrengthReductionStage(),
 				new StackLayoutStage(),
 				new PlatformStubStage(),
-				new LoopAwareBlockOrderStage(),
+				//new LoopAwareBlockOrderStage(),
+				new SimpleTraceBlockOrderStage(),
 				//new SimpleRegisterAllocatorStage(),
 				new CodeGenerationStage(),
 			});
