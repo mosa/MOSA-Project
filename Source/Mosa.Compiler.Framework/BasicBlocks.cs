@@ -82,12 +82,12 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the prologue block.
 		/// </summary>
-		public BasicBlock PrologueBlock { get { return this.PrologueBlock; } }
+		public BasicBlock PrologueBlock { get { return this.GetByLabel(BasicBlock.PrologueLabel); } }
 
 		/// <summary>
 		/// Gets the epilogue block.
 		/// </summary>
-		public BasicBlock EpilogueBlock { get { return this.EpilogueBlock; } }
+		public BasicBlock EpilogueBlock { get { return this.GetByLabel(BasicBlock.EpilogueLabel); } }
 
 		#endregion
 
@@ -149,5 +149,57 @@ namespace Mosa.Compiler.Framework
 		}
 
 		#endregion
+
+		public List<BasicBlock> GetConnectedBlocksStartingAtHead(BasicBlock start)
+		{
+			List<BasicBlock> connected = new List<BasicBlock>();
+			BitArray visited = new BitArray(Count, false);
+
+			Stack<BasicBlock> stack = new Stack<BasicBlock>();
+			stack.Push(start);
+
+			while (stack.Count != 0)
+			{
+				BasicBlock at = stack.Pop();
+				if (!visited.Get(at.Sequence))
+				{
+					visited.Set(at.Sequence, true);
+					connected.Add(at);
+
+					foreach (BasicBlock next in at.NextBlocks)
+						if (!visited.Get(next.Sequence))
+							stack.Push(next);
+				}
+			}
+
+			return connected;
+		}
+
+		public BasicBlock GetFooterBlock(BasicBlock start)
+		{
+			BitArray visited = new BitArray(Count, false);
+
+			Stack<BasicBlock> stack = new Stack<BasicBlock>();
+			stack.Push(start);
+
+			while (stack.Count != 0)
+			{
+				BasicBlock at = stack.Pop();
+				if (!visited.Get(at.Sequence))
+				{
+					visited.Set(at.Sequence, true);
+					
+					if (at.NextBlocks.Count == 0)
+						return at;
+
+					foreach (BasicBlock next in at.NextBlocks)
+						if (!visited.Get(next.Sequence))
+							stack.Push(next);
+				}
+			}
+
+			return null;
+
+		}
 	}
 }

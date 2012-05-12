@@ -146,7 +146,7 @@ namespace Mosa.Compiler.Framework.Stages
 				++numberOfParameters;
 
 			for (var i = 0; i < numberOfParameters; ++i)
-				AddToAssignments(methodCompiler.GetParameterOperand(i), basicBlocks.PrologueBlock);
+				AddToAssignments(methodCompiler.GetParameterOperand(i), basicBlocks.GetByLabel(BasicBlock.PrologueLabel));
 		}
 
 		/// <summary>
