@@ -259,9 +259,6 @@ namespace Mosa.Compiler.Framework.Stages
 				if (!(ctx.Instruction as ICILInstruction).PushResult)
 					return;
 
-			//if (ctx.Result != null && ctx.ResultCount == 0)
-			//    return;
-
 			if (ctx.ResultCount == 0)
 				return;
 

@@ -100,7 +100,7 @@ namespace Mosa.Compiler.Framework.Stages
 				this.variableInformation[name].Count = 1;
 			}
 			this.RenameVariables(basicBlocks.PrologueBlock.NextBlocks[0]);
-			Debug.WriteLine("ESSA: " + this.methodCompiler.Method.FullName);
+			//Debug.WriteLine("ESSA: " + this.methodCompiler.Method.FullName);
 		}
 
 		/// <summary>
@@ -170,7 +170,7 @@ namespace Mosa.Compiler.Framework.Stages
 		}
 
 		/// <summary>
-		/// Whiches the predecessor.
+		/// Which the predecessor.
 		/// </summary>
 		/// <param name="y">The y.</param>
 		/// <param name="x">The x.</param>

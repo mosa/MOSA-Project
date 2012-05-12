@@ -14,7 +14,7 @@ using System.Diagnostics;
 namespace Mosa.Compiler.Framework
 {
 	/// <summary>
-	/// Performs dominance calculations on basic Blocks built by a previous compilation stage.
+	/// Performs dominance calculations on basic blocks.
 	/// </summary>
 	/// <remarks>
 	/// The stage exposes the IDominanceProvider interface for other compilation stages to allow
@@ -197,7 +197,7 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Iterateds the dominance frontier.
+		/// Iterated dominance frontier.
 		/// </summary>
 		/// <param name="s">The s.</param>
 		/// <returns></returns>
