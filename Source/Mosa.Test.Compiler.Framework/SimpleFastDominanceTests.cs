@@ -1,4 +1,13 @@
-﻿using System;
+﻿/*
+ * (c) 2012 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ */
+
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,7 +19,7 @@ using Mosa.Compiler.Framework;
 namespace Mosa.Test.Compiler.Framework
 {
 	[TestFixture]
-	public class FastDominanceTests
+	public class SimpleFastDominanceTests
 	{
 
 		[Test]
@@ -18,7 +27,7 @@ namespace Mosa.Test.Compiler.Framework
 		{
 			var basicBlocks = BlockTests.Scenario3;
 
-			FastDominance dominance = new FastDominance(basicBlocks, basicBlocks[0]);
+			SimpleFastDominance dominance = new SimpleFastDominance(basicBlocks, basicBlocks[0]);
 
 			IDominanceProvider provider = dominance as IDominanceProvider;
 

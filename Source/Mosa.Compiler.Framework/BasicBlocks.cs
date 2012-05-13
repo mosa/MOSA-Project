@@ -201,7 +201,6 @@ namespace Mosa.Compiler.Framework
 			return null;
 		}
 
-
 		public static List<BasicBlock> ReversePostorder(BasicBlock head)
 		{
 			List<BasicBlock> result = new List<BasicBlock>();

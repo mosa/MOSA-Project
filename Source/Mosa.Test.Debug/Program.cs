@@ -9,7 +9,7 @@ namespace Mosa.Test.Debug
 		public static void Main()
 		{
 
-			FastDominanceTests.DominanceCalculation();
+			SimpleFastDominanceTests.DominanceCalculation();
 
 			//ConditionalOperator s = new ConditionalOperator();
 			//s.CompareEqualI1((sbyte)0x02, (sbyte)0x02, (sbyte)0x05, (sbyte)0x01);

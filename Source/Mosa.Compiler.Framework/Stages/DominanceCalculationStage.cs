@@ -14,15 +14,8 @@ using System.Diagnostics;
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
-	/// Performs dominance calculations on basic Blocks built by a previous compilation stage.
+	/// Performs dominance calculations on basic blocks built by a previous compilation stage.
 	/// </summary>
-	/// <remarks>
-	/// The stage exposes the IDominanceProvider interface for other compilation stages to allow
-	/// them to use the calculated dominance properties.
-	/// <para/>
-	/// The implementation is based on "A Simple, Fast Dominance Algorithm" by Keith D. Cooper, 
-	/// Timothy J. Harvey, and Ken Kennedy, Rice University in Houston, Texas, USA.
-	/// </remarks>
 	public sealed class DominanceCalculationStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
 	{
 		#region Data members
@@ -47,12 +40,10 @@ namespace Mosa.Compiler.Framework.Stages
 			if (AreExceptions)
 				return;
 
-			this.dominanceProvider = new FastDominance(basicBlocks, basicBlocks.PrologueBlock);
+			this.dominanceProvider = new SimpleFastDominance(basicBlocks, basicBlocks.PrologueBlock);
 		}
 
 		#endregion // IMethodCompilerStage Members
-
-
 
 	}
 }

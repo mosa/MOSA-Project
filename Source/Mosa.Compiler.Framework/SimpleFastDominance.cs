@@ -5,6 +5,7 @@
  *
  * Authors:
  *  Simon Wollwage (rootnode) <rootnode@mosa-project.org>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using System;
@@ -23,23 +24,9 @@ namespace Mosa.Compiler.Framework
 	/// The implementation is based on "A Simple, Fast Dominance Algorithm" by Keith D. Cooper, 
 	/// Timothy J. Harvey, and Ken Kennedy, Rice University in Houston, Texas, USA.
 	/// </remarks>
-	public sealed class FastDominance : IDominanceProvider
+	public sealed class SimpleFastDominance : IDominanceProvider
 	{
 		#region Data members
-
-		/// <summary>
-		/// 
-		/// </summary>
-		private List<BasicBlock> basicBlocks;
-
-		/// <summary>
-		/// 
-		/// </summary>
-		private BasicBlock entryBlock;
-		/// <summary>
-		/// 
-		/// </summary>
-		private BasicBlock exitBlock;
 
 		/// <summary>
 		/// Holds the dominance information of a block.
@@ -66,35 +53,25 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		public FastDominance(BasicBlocks basicBlocks, BasicBlock entryBlock)
+		public SimpleFastDominance(BasicBlocks basicBlocks, BasicBlock entryBlock)
 		{
-			this.basicBlocks = basicBlocks.GetConnectedBlocksStartingAtHead(entryBlock);
-			this.entryBlock = entryBlock;
-			this.exitBlock = basicBlocks.GetExitBlock(entryBlock);
+			List<BasicBlock> blocks = basicBlocks.GetConnectedBlocksStartingAtHead(entryBlock);
 
-			//entryBlock.NextBlocks.Add(exitBlock);
-			//exitBlock.PreviousBlocks.Add(entryBlock);
-
-			CalculateDominance();
-			CalculateChildren();
-			CalculateDominanceFrontier();
-
-			//entryBlock.NextBlocks.Remove(exitBlock);
-			//exitBlock.PreviousBlocks.Remove(entryBlock);
+			CalculateDominance(entryBlock);
+			CalculateChildren(blocks);
+			CalculateDominanceFrontier(blocks);
 		}
 
 		/// <summary>
 		/// Calculates the immediate dominance of all Blocks in the block provider.
 		/// </summary>
-		private void CalculateDominance()
+		private void CalculateDominance(BasicBlock entryBlock)
 		{
-			// Changed flag
-			bool changed = true;
-
 			// Blocks in reverse post order topology
 			var revPostOrder = BasicBlocks.ReversePostorder(entryBlock);
 
-			//doms.Add(entryBlock, entryBlock);
+			// Changed flag
+			bool changed = true;
 
 			// Calculate the dominance
 			while (changed)
@@ -102,15 +79,17 @@ namespace Mosa.Compiler.Framework
 				changed = false;
 				foreach (BasicBlock b in revPostOrder)
 				{
-					BasicBlock idom = b.PreviousBlocks[0];
+					BasicBlock idom = null;
 
-					for (int idx = 1; idx < b.PreviousBlocks.Count; idx++)
+					foreach (var block in b.PreviousBlocks)
 					{
-						BasicBlock p = b.PreviousBlocks[idx];
-
-						if (doms.ContainsKey(p))
+						if (idom == null)
 						{
-							idom = Intersect(p, idom);
+							idom = block;
+						}
+						else
+						{
+							idom = Intersect(block, idom);
 						}
 					}
 
@@ -132,11 +111,11 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
-		private void CalculateChildren()
+		private void CalculateChildren(List<BasicBlock> basicBlocks)
 		{
-			foreach (var x in basicBlocks)
+			foreach (var block in basicBlocks)
 			{
-				var immediateDominator = (this as IDominanceProvider).GetImmediateDominator(x);
+				var immediateDominator = (this as IDominanceProvider).GetImmediateDominator(block);
 
 				if (immediateDominator == null)
 					continue;
@@ -149,15 +128,17 @@ namespace Mosa.Compiler.Framework
 					children.Add(immediateDominator, child);
 				}
 
-				if (!child.Contains(x) && x != immediateDominator)
-					child.Add(x);
+				if (!child.Contains(block) && block != immediateDominator)
+				{
+					child.Add(block);
+				}
 			}
 		}
 
 		/// <summary>
-		/// Calculates the dominance frontier of all Blocks in the block list.
+		/// Calculates the dominance frontier of all blocks.
 		/// </summary>
-		private void CalculateDominanceFrontier()
+		private void CalculateDominanceFrontier(List<BasicBlock> basicBlocks)
 		{
 			foreach (BasicBlock b in basicBlocks)
 			{
@@ -198,7 +179,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Retrieves blocks of the iterated dominance frontier.
 		/// </summary>
-		/// <param name="block">The block.</param>
+		/// <param name="blocks">The blocks.</param>
 		/// <returns></returns>
 		List<BasicBlock> IDominanceProvider.IteratedDominanceFrontier(List<BasicBlock> blocks)
 		{
@@ -251,7 +232,7 @@ namespace Mosa.Compiler.Framework
 
 			BasicBlock b = block;
 
-			while(true)
+			while (true)
 			{
 				result.Add(b);
 
@@ -304,7 +285,6 @@ namespace Mosa.Compiler.Framework
 			{
 				while (f1 != null && f1.Sequence > f2.Sequence)
 				{
-					//f1 = doms[f1];
 					BasicBlock f = null;
 					doms.TryGetValue(f1, out f);
 					f1 = f;
@@ -312,7 +292,6 @@ namespace Mosa.Compiler.Framework
 
 				while (f2 != null && f1 != null && f2.Sequence > f1.Sequence)
 				{
-					//f2 = doms[f2];
 					BasicBlock f = null;
 					doms.TryGetValue(f2, out f);
 					f2 = f;
