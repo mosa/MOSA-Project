@@ -17,9 +17,8 @@ namespace Mosa.Compiler.Common
 
 		public static void AddIfNew<T>(this List<T> list, T item)
 		{
-			foreach (var value in list)
-				if (object.ReferenceEquals(value, item))
-					return;
+			if (list.Contains(item))
+				return;
 
 			list.Add(item);
 		}

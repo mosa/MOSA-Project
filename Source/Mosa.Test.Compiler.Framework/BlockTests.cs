@@ -53,7 +53,7 @@ namespace Mosa.Test.Compiler.Framework
 		}
 
 		[Test]
-		public void BlockTest1()
+		public void GetConnectedBlocksStartingAtHead()
 		{
 			var basicBlocks = Scenario1;
 
@@ -63,11 +63,11 @@ namespace Mosa.Test.Compiler.Framework
 		}
 
 		[Test]
-		public void BlockTest2()
+		public void GetExitBlock()
 		{
 			var basicBlocks = Scenario1;
 
-			var block = basicBlocks.GetFooterBlock(basicBlocks[0]);
+			var block = basicBlocks.GetExitBlock(basicBlocks[0]);
 
 			Assert.AreSame<BasicBlock>(basicBlocks[5], block);
 		}

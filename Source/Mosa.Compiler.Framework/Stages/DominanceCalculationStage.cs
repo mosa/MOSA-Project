@@ -47,7 +47,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (AreExceptions)
 				return;
 
-			this.dominanceProvider = new DominanceCalculation(basicBlocks);
+			this.dominanceProvider = new DominanceCalculation(basicBlocks, basicBlocks.PrologueBlock);
 		}
 
 		#endregion // IMethodCompilerStage Members

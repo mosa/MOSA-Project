@@ -175,7 +175,7 @@ namespace Mosa.Compiler.Framework
 			return connected;
 		}
 
-		public BasicBlock GetFooterBlock(BasicBlock start)
+		public BasicBlock GetExitBlock(BasicBlock start)
 		{
 			BitArray visited = new BitArray(Count, false);
 
@@ -199,7 +199,32 @@ namespace Mosa.Compiler.Framework
 			}
 
 			return null;
+		}
 
+
+		public static List<BasicBlock> ReversePostorder(BasicBlock head)
+		{
+			List<BasicBlock> result = new List<BasicBlock>();
+			Queue<BasicBlock> workList = new Queue<BasicBlock>();
+
+			// Add next blocks
+			foreach (BasicBlock next in head.NextBlocks)
+				workList.Enqueue(next);
+
+			int idx = 0;
+
+			while (workList.Count != 0)
+			{
+				BasicBlock current = workList.Dequeue();
+				if (!result.Contains(current))
+				{
+					result.Add(current);
+					foreach (BasicBlock next in current.NextBlocks)
+						workList.Enqueue(next);
+				}
+			}
+
+			return result;
 		}
 	}
 }

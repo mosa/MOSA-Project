@@ -30,41 +30,47 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// 
 		/// </summary>
-		private BasicBlocks basicBlocks;
-
-		/// <summary>
-		/// Holds the dominance information of a block.
-		/// </summary>
-		private BasicBlock[] doms;
-
-		/// <summary>
-		/// Holds the dominance frontier Blocks.
-		/// </summary>
-		private BasicBlock[] domFrontier;
-
-		/// <summary>
-		/// Holds the dominance frontier of individual Blocks.
-		/// </summary>
-		private BasicBlock[][] domFrontierOfBlock;
+		private List<BasicBlock> basicBlocks;
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private List<BasicBlock>[] children;
+		private BasicBlock entryBlock;
+		/// <summary>
+		/// 
+		/// </summary>
+		private BasicBlock exitBlock;
+
+		/// <summary>
+		/// Holds the dominance information of a block.
+		/// </summary>
+		private Dictionary<BasicBlock, BasicBlock> doms = new Dictionary<BasicBlock, BasicBlock>();
+
+		/// <summary>
+		/// Holds the dominance frontier blocks.
+		/// </summary>
+		private List<BasicBlock> domFrontier = new List<BasicBlock>();
+
+		/// <summary>
+		/// Holds the dominance frontier of individual blocks.
+		/// </summary>
+		Dictionary<BasicBlock, List<BasicBlock>> domFrontierOfBlock = new Dictionary<BasicBlock, List<BasicBlock>>();
+
+		/// <summary>
+		/// 
+		/// </summary>
+		private Dictionary<BasicBlock, List<BasicBlock>> children = new Dictionary<BasicBlock, List<BasicBlock>>();
 
 		#endregion // Data members
-
-		#region IMethodCompilerStage Members
 
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		public DominanceCalculation(BasicBlocks basicBlocks)
+		public DominanceCalculation(BasicBlocks basicBlocks, BasicBlock entryBlock)
 		{
-			this.basicBlocks = basicBlocks;
-
-			var entryBlock = basicBlocks.PrologueBlock;
-			var exitBlock = basicBlocks.EpilogueBlock;
+			this.basicBlocks = basicBlocks.GetConnectedBlocksStartingAtHead(entryBlock);
+			this.entryBlock = entryBlock;
+			this.exitBlock = basicBlocks.GetExitBlock(entryBlock);
 
 			entryBlock.NextBlocks.Add(exitBlock);
 			exitBlock.PreviousBlocks.Add(entryBlock);
@@ -86,12 +92,9 @@ namespace Mosa.Compiler.Framework
 			bool changed = true;
 
 			// Blocks in reverse post order topology
-			BasicBlock[] revPostOrder = ReversePostorder(basicBlocks);
+			var revPostOrder = BasicBlocks.ReversePostorder(entryBlock);
 
-			// Allocate a dominance array
-			doms = new BasicBlock[basicBlocks.Count];
-			children = new List<BasicBlock>[basicBlocks.Count];
-			doms[0] = basicBlocks.PrologueBlock;
+			doms.Add(entryBlock, entryBlock);
 
 			// Calculate the dominance
 			while (changed)
@@ -99,23 +102,19 @@ namespace Mosa.Compiler.Framework
 				changed = false;
 				foreach (BasicBlock b in revPostOrder)
 				{
-					if (b != null)
+					BasicBlock idom = b.PreviousBlocks[0];
+
+					for (int idx = 1; idx < b.PreviousBlocks.Count; idx++)
 					{
-						BasicBlock idom = b.PreviousBlocks[0];
-						//Debug.Assert(-1 !=  Array.IndexOf(_doms, idom));
+						BasicBlock p = b.PreviousBlocks[idx];
+						if (doms[p] != null)
+							idom = Intersect(p, idom);
+					}
 
-						for (int idx = 1; idx < b.PreviousBlocks.Count; idx++)
-						{
-							BasicBlock p = b.PreviousBlocks[idx];
-							if (null != doms[p.Sequence])
-								idom = Intersect(p, idom);
-						}
-
-						if (!ReferenceEquals(doms[b.Sequence], idom))
-						{
-							doms[b.Sequence] = idom;
-							changed = true;
-						}
+					if (!ReferenceEquals(doms[b], idom))
+					{
+						doms[b] = idom;
+						changed = true;
 					}
 				}
 			}
@@ -123,17 +122,23 @@ namespace Mosa.Compiler.Framework
 
 		private void CalculateChildren()
 		{
-			foreach (var x in this.basicBlocks)
+			foreach (var x in basicBlocks)
 			{
 				var immediateDominator = (this as IDominanceProvider).GetImmediateDominator(x);
+
 				if (immediateDominator == null)
 					continue;
 
-				if (this.children[immediateDominator.Sequence] == null)
-					this.children[immediateDominator.Sequence] = new List<BasicBlock>();
+				List<BasicBlock> child = null;
 
-				if (!this.children[immediateDominator.Sequence].Contains(x) && x != immediateDominator)
-					this.children[immediateDominator.Sequence].Add(x);
+				if (children.TryGetValue(immediateDominator, out child))
+				{
+					child = new List<BasicBlock>();
+					children.Add(immediateDominator, child);
+				}
+
+				if (!child.Contains(x) && x != immediateDominator)
+					child.Add(x);
 			}
 		}
 
@@ -142,9 +147,6 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		private void CalculateDominanceFrontier()
 		{
-			List<BasicBlock> domFrontierList = new List<BasicBlock>();
-			List<BasicBlock>[] domFrontiers = new List<BasicBlock>[basicBlocks.Count];
-
 			foreach (BasicBlock b in basicBlocks)
 			{
 				if (b.PreviousBlocks.Count > 1)
@@ -152,65 +154,47 @@ namespace Mosa.Compiler.Framework
 					foreach (BasicBlock p in b.PreviousBlocks)
 					{
 						BasicBlock runner = p;
-						while (runner != null && !ReferenceEquals(runner, doms[b.Sequence]))
-						{
-							List<BasicBlock> runnerFrontier = domFrontiers[runner.Sequence];
-							if (runnerFrontier == null)
-								runnerFrontier = domFrontiers[runner.Sequence] = new List<BasicBlock>();
 
-							if (!domFrontierList.Contains(b))
-								domFrontierList.Add(b);
+						while (runner != null && !ReferenceEquals(runner, doms[b]))
+						{
+							List<BasicBlock> runnerFrontier = domFrontierOfBlock[runner];
+
+							if (runnerFrontier == null)
+							{
+								runnerFrontier = new List<BasicBlock>();
+								domFrontierOfBlock[runner] = runnerFrontier;
+							}
+
+							if (!domFrontier.Contains(b))
+							{
+								domFrontier.Add(b);
+							}
 							if (!runnerFrontier.Contains(b))
+							{
 								runnerFrontier.Add(b);
-							runner = doms[runner.Sequence];
+							}
+
+							runner = doms[runner];
 						}
+
 					}
 				}
 			}
 
-			int idx = 0;
-			domFrontierOfBlock = new BasicBlock[basicBlocks.Count][];
-			foreach (List<BasicBlock> frontier in domFrontiers)
-			{
-				if (frontier != null)
-					domFrontierOfBlock[idx++] = frontier.ToArray();
-				else
-					domFrontierOfBlock[idx++] = new BasicBlock[0];
-			}
-
-			domFrontier = domFrontierList.ToArray();
-
-			/*_domFrontierOfBlock = new BasicBlock[basicBlocks.Count][];
-			foreach (var block in this.basicBlocks)
-			{
-				var result = new List<BasicBlock>();
-				var dominatorChildren = this._children[block.Sequence];
-				if (dominatorChildren != null)
-				foreach (var child in dominatorChildren)
-				{
-					if (this._children[child.Sequence] != null)
-						result.AddRange(this._children[child.Sequence]);
-				}
-				_domFrontierOfBlock[block.Sequence] = result.ToArray();
-			}
-			_domFrontier = null;*/
 		}
 
 		/// <summary>
-		/// Iterated dominance frontier.
+		/// Retrieves blocks of the iterated dominance frontier.
 		/// </summary>
-		/// <param name="s">The s.</param>
+		/// <param name="block">The block.</param>
 		/// <returns></returns>
-		List<BasicBlock> IDominanceProvider.IteratedDominanceFrontier(List<BasicBlock> s)
+		List<BasicBlock> IDominanceProvider.IteratedDominanceFrontier(List<BasicBlock> blocks)
 		{
 			var result = new List<BasicBlock>();
 			var workList = new Queue<BasicBlock>();
 
-			foreach (var block in s)
-			{
-				//result.Add(block);
+			foreach (var block in blocks)
 				workList.Enqueue(block);
-			}
 
 			while (workList.Count > 0)
 			{
@@ -231,8 +215,6 @@ namespace Mosa.Compiler.Framework
 			return result;
 		}
 
-		#endregion // IMethodCompilerStage Members
-
 		#region IDominanceProvider Members
 
 		BasicBlock IDominanceProvider.GetImmediateDominator(BasicBlock block)
@@ -240,69 +222,59 @@ namespace Mosa.Compiler.Framework
 			if (block == null)
 				throw new ArgumentNullException(@"block");
 
-			Debug.Assert(block.Sequence < doms.Length, @"Invalid block index.");
-
-			if (block.Sequence >= doms.Length)
-				throw new ArgumentException(@"Invalid block index.", @"block");
-
-			return doms[block.Sequence];
+			return doms[block];
 		}
 
-		BasicBlock[] IDominanceProvider.GetDominators(BasicBlock block)
+		List<BasicBlock> IDominanceProvider.GetDominators(BasicBlock block)
 		{
 			if (block == null)
 				throw new ArgumentNullException(@"block");
 
-			Debug.Assert(block.Sequence < doms.Length, @"Invalid block index.");
-
-			if (block.Sequence >= doms.Length)
-				throw new ArgumentException(@"Invalid block index.", @"block");
-
 			// Return value
-			BasicBlock[] result;
-			// Counter
-			int count, idx = block.Sequence;
+			var result = new List<BasicBlock>();
 
-			// Count the dominators first
-			for (count = 1; 0 != idx; count++)
-				idx = doms[idx].Sequence;
+			result.Add(block);
 
-			// Allocate a dominator array
-			result = new BasicBlock[count + 1];
-			result[0] = block;
-			for (idx = block.Sequence, count = 1; 0 != idx; idx = doms[idx].Sequence)
-				result[count++] = doms[idx];
-			result[count] = doms[0];
+			for (BasicBlock b = block; b != null; block = doms[b])
+				result.Add(doms[b]);
+
+			//for (int idx = block.Sequence; 0 != idx; idx = doms[idx].Sequence)
+			//    result.Add(doms[idx]);
+
+			result.Add(entryBlock);
 
 			return result;
 		}
 
-		BasicBlock[] IDominanceProvider.GetDominanceFrontier()
+		List<BasicBlock> IDominanceProvider.GetDominanceFrontier()
 		{
 			return domFrontier;
 		}
 
-		BasicBlock[] IDominanceProvider.GetDominanceFrontierOfBlock(BasicBlock block)
+		List<BasicBlock> IDominanceProvider.GetDominanceFrontierOfBlock(BasicBlock block)
 		{
 			if (block == null)
 				throw new ArgumentNullException(@"block");
 
-			return domFrontierOfBlock[block.Sequence];
+			return domFrontierOfBlock[block];
 		}
 
-		BasicBlock[] IDominanceProvider.GetChildren(BasicBlock block)
+		List<BasicBlock> IDominanceProvider.GetChildren(BasicBlock block)
 		{
-			if (this.children[block.Sequence] == null)
-				return new BasicBlock[0];
-			return this.children[block.Sequence].ToArray();
+			List<BasicBlock> child;
+
+			if (children.TryGetValue(block, out child))
+				return child;
+			else
+				return new List<BasicBlock>(); // Empty List
 		}
-		
+
 		#endregion // IDominanceProvider Members
 
 		#region Internals
 
 		/// <summary>
-		/// Retrieves the highest common immediate dominator of the two given Blocks.
+		/// Retrieves the highest common immediate dominator of the two given blocks.
 		/// </summary>
 		/// <param name="b1">The first basic block.</param>
 		/// <param name="b2">The second basic block.</param>
@@ -311,40 +283,16 @@ namespace Mosa.Compiler.Framework
 		{
 			BasicBlock f1 = b1, f2 = b2;
 
-			while (f2 != null && f1 != null && f1.Sequence != f2.Sequence)
+			while (f2 != null && f1 != null && f1 != f2)
 			{
 				while (f1 != null && f1.Sequence > f2.Sequence)
-					f1 = doms[f1.Sequence];
+					f1 = doms[f1];
 
 				while (f2 != null && f1 != null && f2.Sequence > f1.Sequence)
-					f2 = doms[f2.Sequence];
+					f2 = doms[f2];
 			}
 
 			return f1;
-		}
-
-		private BasicBlock[] ReversePostorder(BasicBlocks blocks)
-		{
-			BasicBlock[] result = new BasicBlock[blocks.Count - 1];
-			int idx = 0;
-			Queue<BasicBlock> workList = new Queue<BasicBlock>(blocks.Count);
-
-			// Add next blocks
-			foreach (BasicBlock next in blocks[0].NextBlocks)
-				workList.Enqueue(next);
-
-			while (workList.Count != 0)
-			{
-				BasicBlock current = workList.Dequeue();
-				if (Array.IndexOf(result, current) == -1)
-				{
-					result[idx++] = current;
-					foreach (BasicBlock next in current.NextBlocks)
-						workList.Enqueue(next);
-				}
-			}
-
-			return result;
 		}
 
 		#endregion // Internals
