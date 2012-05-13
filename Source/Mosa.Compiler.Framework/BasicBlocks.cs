@@ -211,8 +211,6 @@ namespace Mosa.Compiler.Framework
 			foreach (BasicBlock next in head.NextBlocks)
 				workList.Enqueue(next);
 
-			int idx = 0;
-
 			while (workList.Count != 0)
 			{
 				BasicBlock current = workList.Dequeue();

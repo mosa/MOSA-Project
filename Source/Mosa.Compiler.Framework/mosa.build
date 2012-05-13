@@ -15,7 +15,7 @@
 	    <csc target="library" output="${outputDirectory}/Mosa.Compiler.Framework.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
                     <include name="BasicBlocks.cs"/>
-                    <include name="DominanceCalculation.cs"/>
+                    <include name="FastDominance.cs"/>
                     <include name="LoopEdge.cs"/>
                     <include name="LoopAwareBlockOrder.cs"/>
                     <include name="Stages/SimpleRegisterAllocatorStage.cs"/>

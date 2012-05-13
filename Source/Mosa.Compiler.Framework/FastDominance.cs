@@ -23,7 +23,7 @@ namespace Mosa.Compiler.Framework
 	/// The implementation is based on "A Simple, Fast Dominance Algorithm" by Keith D. Cooper, 
 	/// Timothy J. Harvey, and Ken Kennedy, Rice University in Houston, Texas, USA.
 	/// </remarks>
-	public sealed class DominanceCalculation : IDominanceProvider
+	public sealed class FastDominance : IDominanceProvider
 	{
 		#region Data members
 
@@ -66,21 +66,21 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		public DominanceCalculation(BasicBlocks basicBlocks, BasicBlock entryBlock)
+		public FastDominance(BasicBlocks basicBlocks, BasicBlock entryBlock)
 		{
 			this.basicBlocks = basicBlocks.GetConnectedBlocksStartingAtHead(entryBlock);
 			this.entryBlock = entryBlock;
 			this.exitBlock = basicBlocks.GetExitBlock(entryBlock);
 
-			entryBlock.NextBlocks.Add(exitBlock);
-			exitBlock.PreviousBlocks.Add(entryBlock);
+			//entryBlock.NextBlocks.Add(exitBlock);
+			//exitBlock.PreviousBlocks.Add(entryBlock);
 
 			CalculateDominance();
 			CalculateChildren();
 			CalculateDominanceFrontier();
 
-			entryBlock.NextBlocks.Remove(exitBlock);
-			exitBlock.PreviousBlocks.Remove(entryBlock);
+			//entryBlock.NextBlocks.Remove(exitBlock);
+			//exitBlock.PreviousBlocks.Remove(entryBlock);
 		}
 
 		/// <summary>
@@ -94,7 +94,7 @@ namespace Mosa.Compiler.Framework
 			// Blocks in reverse post order topology
 			var revPostOrder = BasicBlocks.ReversePostorder(entryBlock);
 
-			doms.Add(entryBlock, entryBlock);
+			//doms.Add(entryBlock, entryBlock);
 
 			// Calculate the dominance
 			while (changed)
@@ -107,14 +107,26 @@ namespace Mosa.Compiler.Framework
 					for (int idx = 1; idx < b.PreviousBlocks.Count; idx++)
 					{
 						BasicBlock p = b.PreviousBlocks[idx];
-						if (doms[p] != null)
+
+						if (doms.ContainsKey(p))
+						{
 							idom = Intersect(p, idom);
+						}
 					}
 
-					if (!ReferenceEquals(doms[b], idom))
+					BasicBlock dom = null;
+					if (!doms.TryGetValue(b, out dom))
 					{
-						doms[b] = idom;
+						doms.Add(b, idom);
 						changed = true;
+					}
+					else
+					{
+						if (!ReferenceEquals(dom, idom))
+						{
+							doms[b] = idom;
+							changed = true;
+						}
 					}
 				}
 			}
@@ -131,7 +143,7 @@ namespace Mosa.Compiler.Framework
 
 				List<BasicBlock> child = null;
 
-				if (children.TryGetValue(immediateDominator, out child))
+				if (!children.TryGetValue(immediateDominator, out child))
 				{
 					child = new List<BasicBlock>();
 					children.Add(immediateDominator, child);
@@ -157,12 +169,12 @@ namespace Mosa.Compiler.Framework
 
 						while (runner != null && !ReferenceEquals(runner, doms[b]))
 						{
-							List<BasicBlock> runnerFrontier = domFrontierOfBlock[runner];
+							List<BasicBlock> runnerFrontier = null;
 
-							if (runnerFrontier == null)
+							if (!domFrontierOfBlock.TryGetValue(runner, out runnerFrontier))
 							{
 								runnerFrontier = new List<BasicBlock>();
-								domFrontierOfBlock[runner] = runnerFrontier;
+								domFrontierOfBlock.Add(runner, runnerFrontier);
 							}
 
 							if (!domFrontier.Contains(b))
@@ -222,7 +234,11 @@ namespace Mosa.Compiler.Framework
 			if (block == null)
 				throw new ArgumentNullException(@"block");
 
-			return doms[block];
+			BasicBlock idom = null;
+
+			doms.TryGetValue(block, out idom);
+
+			return idom;
 		}
 
 		List<BasicBlock> IDominanceProvider.GetDominators(BasicBlock block)
@@ -233,17 +249,18 @@ namespace Mosa.Compiler.Framework
 			// Return value
 			var result = new List<BasicBlock>();
 
-			result.Add(block);
+			BasicBlock b = block;
 
-			for (BasicBlock b = block; b != null; block = doms[b])
-				result.Add(doms[b]);
+			while(true)
+			{
+				result.Add(b);
 
-			//for (int idx = block.Sequence; 0 != idx; idx = doms[idx].Sequence)
-			//    result.Add(doms[idx]);
+				if (!doms.TryGetValue(b, out b))
+				{
+					return result;
+				}
+			}
 
-			result.Add(entryBlock);
-
-			return result;
 		}
 
 		List<BasicBlock> IDominanceProvider.GetDominanceFrontier()
@@ -286,10 +303,20 @@ namespace Mosa.Compiler.Framework
 			while (f2 != null && f1 != null && f1 != f2)
 			{
 				while (f1 != null && f1.Sequence > f2.Sequence)
-					f1 = doms[f1];
+				{
+					//f1 = doms[f1];
+					BasicBlock f = null;
+					doms.TryGetValue(f1, out f);
+					f1 = f;
+				}
 
 				while (f2 != null && f1 != null && f2.Sequence > f1.Sequence)
-					f2 = doms[f2];
+				{
+					//f2 = doms[f2];
+					BasicBlock f = null;
+					doms.TryGetValue(f2, out f);
+					f2 = f;
+				}
 			}
 
 			return f1;

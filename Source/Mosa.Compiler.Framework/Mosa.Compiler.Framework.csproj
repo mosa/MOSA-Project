@@ -78,7 +78,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BasicBlocks.cs" />
-    <Compile Include="DominanceCalculation.cs" />
+    <Compile Include="FastDominance.cs" />
     <Compile Include="LoopEdge.cs" />
     <Compile Include="LoopAwareBlockOrder.cs" />
     <Compile Include="Stages\SimpleRegisterAllocatorStage.cs" />
