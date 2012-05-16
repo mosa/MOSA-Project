@@ -33,7 +33,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Retrieves the blocks which are in the dominance frontier of any other block.
 		/// </summary>
-		/// <returns>All Blocks which are in a dominance frontier of another block.</returns>
+		/// <returns>All blocks which are in a dominance frontier of another block.</returns>
 		List<BasicBlock> GetDominanceFrontier();
 
 		/// <summary>
@@ -41,7 +41,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="block">The block to return the dominance frontier of.</param>
 		/// <returns>An array of Blocks, which represent the dominance frontier.</returns>
-		List<BasicBlock> GetDominanceFrontierOfBlock(BasicBlock block);
+		List<BasicBlock> GetDominanceFrontier(BasicBlock block);
 
 		/// <summary>
 		/// Gets the children.

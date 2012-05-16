@@ -55,9 +55,10 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public SimpleFastDominance(BasicBlocks basicBlocks, BasicBlock entryBlock)
 		{
-			List<BasicBlock> blocks = basicBlocks.GetConnectedBlocksStartingAtHead(entryBlock);
+			// Blocks in reverse post order topology
+			List<BasicBlock> blocks = BasicBlocks.ReversePostorder(entryBlock); //basicBlocks.GetConnectedBlocksStartingAtHead(entryBlock);
 
-			CalculateDominance(entryBlock);
+			CalculateDominance(blocks);
 			CalculateChildren(blocks);
 			CalculateDominanceFrontier(blocks);
 		}
@@ -65,31 +66,34 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Calculates the immediate dominance of all Blocks in the block provider.
 		/// </summary>
-		private void CalculateDominance(BasicBlock entryBlock)
+		/// <param name="reversePostOrder">The rev post order.</param>
+		private void CalculateDominance(List<BasicBlock> reversePostOrder)
 		{
-			// Blocks in reverse post order topology
-			var revPostOrder = BasicBlocks.ReversePostorder(entryBlock);
-
 			// Changed flag
 			bool changed = true;
+
+			doms.Add(reversePostOrder[0], reversePostOrder[0]);
 
 			// Calculate the dominance
 			while (changed)
 			{
 				changed = false;
-				foreach (BasicBlock b in revPostOrder)
+				foreach (BasicBlock b in reversePostOrder)
 				{
 					BasicBlock idom = null;
 
-					foreach (var block in b.PreviousBlocks)
+					foreach (var previous in b.PreviousBlocks)
 					{
 						if (idom == null)
 						{
-							idom = block;
+							idom = previous;
 						}
 						else
 						{
-							idom = Intersect(block, idom);
+							if (doms.ContainsKey(previous))
+							{
+								idom = Intersect(previous, idom);
+							}
 						}
 					}
 
@@ -111,6 +115,10 @@ namespace Mosa.Compiler.Framework
 			}
 		}
 
+		/// <summary>
+		/// Calculates the children.
+		/// </summary>
+		/// <param name="basicBlocks">The basic blocks.</param>
 		private void CalculateChildren(List<BasicBlock> basicBlocks)
 		{
 			foreach (var block in basicBlocks)
@@ -167,7 +175,9 @@ namespace Mosa.Compiler.Framework
 								runnerFrontier.Add(b);
 							}
 
-							runner = doms[runner];
+							BasicBlock newrunner = null;
+							doms.TryGetValue(runner, out newrunner);
+							runner = newrunner;
 						}
 
 					}
@@ -192,7 +202,7 @@ namespace Mosa.Compiler.Framework
 			while (workList.Count > 0)
 			{
 				var n = workList.Dequeue();
-				var dominanceFrontier = (this as IDominanceProvider).GetDominanceFrontierOfBlock(n);
+				var dominanceFrontier = (this as IDominanceProvider).GetDominanceFrontier(n);
 				if (dominanceFrontier == null)
 					continue;
 
@@ -232,7 +242,7 @@ namespace Mosa.Compiler.Framework
 
 			BasicBlock b = block;
 
-			while (true)
+			while (b != null)
 			{
 				result.Add(b);
 
@@ -242,6 +252,7 @@ namespace Mosa.Compiler.Framework
 				}
 			}
 
+			return result;
 		}
 
 		List<BasicBlock> IDominanceProvider.GetDominanceFrontier()
@@ -249,12 +260,17 @@ namespace Mosa.Compiler.Framework
 			return domFrontier;
 		}
 
-		List<BasicBlock> IDominanceProvider.GetDominanceFrontierOfBlock(BasicBlock block)
+		List<BasicBlock> IDominanceProvider.GetDominanceFrontier(BasicBlock block)
 		{
 			if (block == null)
 				throw new ArgumentNullException(@"block");
 
-			return domFrontierOfBlock[block];
+			List<BasicBlock> domofBlock;
+
+			if (domFrontierOfBlock.TryGetValue(block, out domofBlock))
+				return domofBlock;
+			else
+				return new List<BasicBlock>(); // Empty List
 		}
 
 		List<BasicBlock> IDominanceProvider.GetChildren(BasicBlock block)

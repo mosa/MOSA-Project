@@ -148,6 +148,23 @@ namespace Mosa.Compiler.Framework
 				destination.PreviousBlocks.Add(source);
 		}
 
+		/// <summary>
+		/// Links the blocks.
+		/// </summary>
+		/// <param name="source">The source.</param>
+		/// <param name="destinations">The destinations.</param>
+		public void LinkBlocks(BasicBlock source, IList<BasicBlock> destinations)
+		{
+			foreach (var destination in destinations)
+			{
+				if (!source.NextBlocks.Contains(destination))
+					source.NextBlocks.Add(destination);
+
+				if (!destination.PreviousBlocks.Contains(source))
+					destination.PreviousBlocks.Add(source);
+			}
+		}
+
 		#endregion
 
 		public List<BasicBlock> GetConnectedBlocksStartingAtHead(BasicBlock start)
@@ -206,9 +223,8 @@ namespace Mosa.Compiler.Framework
 			List<BasicBlock> result = new List<BasicBlock>();
 			Queue<BasicBlock> workList = new Queue<BasicBlock>();
 
-			// Add next blocks
-			foreach (BasicBlock next in head.NextBlocks)
-				workList.Enqueue(next);
+			// Add next block
+			workList.Enqueue(head);
 
 			while (workList.Count != 0)
 			{

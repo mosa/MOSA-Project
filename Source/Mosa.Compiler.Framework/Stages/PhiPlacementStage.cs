@@ -139,11 +139,11 @@ namespace Mosa.Compiler.Framework.Stages
 			foreach (var block in basicBlocks)
 				for (var context = new Context(instructionSet, block); !context.EndOfInstruction; context.GotoNext())
 					if (IsAssignmentToStackVariable(context))
-						this.AddToAssignments(context.Result, block);
+						AddToAssignments(context.Result, block);
 
 			var numberOfParameters = methodCompiler.Method.Parameters.Count;
 			if (methodCompiler.Method.Signature.HasThis)
-				++numberOfParameters;
+				numberOfParameters++;
 
 			for (var i = 0; i < numberOfParameters; ++i)
 				AddToAssignments(methodCompiler.GetParameterOperand(i), basicBlocks.GetByLabel(BasicBlock.PrologueLabel));

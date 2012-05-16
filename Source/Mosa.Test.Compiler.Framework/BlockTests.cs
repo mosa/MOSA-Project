@@ -18,9 +18,25 @@ using Mosa.Compiler.Framework;
 
 namespace Mosa.Test.Compiler.Framework
 {
+
+	#region Extension Helper
+
+	internal static class BasicBlocksHelp
+	{
+
+		public static void CreateBlock(this BasicBlocks basicBlocks, int index)
+		{
+			basicBlocks.CreateBlock(index);
+		}
+
+	}
+
+	#endregion
+
 	[TestFixture]
 	public class BlockTests
 	{
+
 
 		public static BasicBlocks Scenario1
 		{
@@ -28,14 +44,14 @@ namespace Mosa.Test.Compiler.Framework
 			{
 				BasicBlocks basicBlocks = new BasicBlocks();
 
-				BasicBlock B0 = basicBlocks.CreateBlock(0, 0);
-				BasicBlock B1 = basicBlocks.CreateBlock(1, 1);
-				BasicBlock B2 = basicBlocks.CreateBlock(2, 2);
-				BasicBlock B3 = basicBlocks.CreateBlock(3, 3);
-				BasicBlock B4 = basicBlocks.CreateBlock(4, 4);
-				BasicBlock B5 = basicBlocks.CreateBlock(5, 5);
-				BasicBlock B6 = basicBlocks.CreateBlock(6, 6);
-				BasicBlock B7 = basicBlocks.CreateBlock(7, 7);
+				BasicBlock B0 = basicBlocks.CreateBlock(0);
+				BasicBlock B1 = basicBlocks.CreateBlock(1);
+				BasicBlock B2 = basicBlocks.CreateBlock(2);
+				BasicBlock B3 = basicBlocks.CreateBlock(3);
+				BasicBlock B4 = basicBlocks.CreateBlock(4);
+				BasicBlock B5 = basicBlocks.CreateBlock(5);
+				BasicBlock B6 = basicBlocks.CreateBlock(6);
+				BasicBlock B7 = basicBlocks.CreateBlock(7);
 
 				basicBlocks.LinkBlocks(B0, B1);
 				basicBlocks.LinkBlocks(B1, B2);
@@ -70,10 +86,10 @@ namespace Mosa.Test.Compiler.Framework
 			{
 				BasicBlocks basicBlocks = new BasicBlocks();
 
-				BasicBlock B1 = basicBlocks.CreateBlock(1, 1);
-				BasicBlock B2 = basicBlocks.CreateBlock(2, 2);
-				BasicBlock B3 = basicBlocks.CreateBlock(3, 3);
-				BasicBlock B4 = basicBlocks.CreateBlock(4, 4);
+				BasicBlock B1 = basicBlocks.CreateBlock(1);
+				BasicBlock B2 = basicBlocks.CreateBlock(2);
+				BasicBlock B3 = basicBlocks.CreateBlock(3);
+				BasicBlock B4 = basicBlocks.CreateBlock(4);
 
 				basicBlocks.LinkBlocks(B1, B2);
 				basicBlocks.LinkBlocks(B1, B3);
@@ -94,19 +110,17 @@ namespace Mosa.Test.Compiler.Framework
 
 				BasicBlocks basicBlocks = new BasicBlocks();
 
-				BasicBlock A = basicBlocks.CreateBlock(1, 1);
-				BasicBlock B = basicBlocks.CreateBlock(2, 2);
-				BasicBlock C = basicBlocks.CreateBlock(3, 3);
-				BasicBlock D = basicBlocks.CreateBlock(4, 4);
-				BasicBlock E = basicBlocks.CreateBlock(5, 5);
-				BasicBlock F = basicBlocks.CreateBlock(6, 6);
-				BasicBlock G = basicBlocks.CreateBlock(7, 7);
+				BasicBlock A = basicBlocks.CreateBlock(1);
+				BasicBlock B = basicBlocks.CreateBlock(2);
+				BasicBlock C = basicBlocks.CreateBlock(3);
+				BasicBlock D = basicBlocks.CreateBlock(4);
+				BasicBlock E = basicBlocks.CreateBlock(5);
+				BasicBlock F = basicBlocks.CreateBlock(6);
+				BasicBlock G = basicBlocks.CreateBlock(7);
 
-				basicBlocks.LinkBlocks(A, B);
-				basicBlocks.LinkBlocks(A, C);
+				basicBlocks.LinkBlocks(A, new[] { B, C });
 				basicBlocks.LinkBlocks(B, G);
-				basicBlocks.LinkBlocks(C, D);
-				basicBlocks.LinkBlocks(C, E);
+				basicBlocks.LinkBlocks(C, new[] { D, E });
 				basicBlocks.LinkBlocks(D, F);
 				basicBlocks.LinkBlocks(E, F);
 				basicBlocks.LinkBlocks(F, G);
@@ -115,10 +129,44 @@ namespace Mosa.Test.Compiler.Framework
 			}
 		}
 
-		protected static void LinkBlocks(BasicBlock from, BasicBlock to)
+		public static BasicBlocks Scenario4
 		{
-			from.NextBlocks.Add(to);
-			to.PreviousBlocks.Add(from);
+			get
+			{
+				/* Example from webdocs.cs.ualberta.ca/~amaral/courses/680/.../TG-SSA/TG-SSA.ppt (Page 26) */
+
+				BasicBlocks basicBlocks = new BasicBlocks();
+
+				BasicBlock B1 = basicBlocks.CreateBlock(1);
+				BasicBlock B2 = basicBlocks.CreateBlock(2);
+				BasicBlock B3 = basicBlocks.CreateBlock(3);
+				BasicBlock B4 = basicBlocks.CreateBlock(4);
+				BasicBlock B5 = basicBlocks.CreateBlock(5);
+				BasicBlock B6 = basicBlocks.CreateBlock(6);
+				BasicBlock B7 = basicBlocks.CreateBlock(7);
+				BasicBlock B8 = basicBlocks.CreateBlock(8);
+				BasicBlock B9 = basicBlocks.CreateBlock(9);
+				BasicBlock B10 = basicBlocks.CreateBlock(10);
+				BasicBlock B11 = basicBlocks.CreateBlock(11);
+				BasicBlock B12 = basicBlocks.CreateBlock(12);
+				BasicBlock B13 = basicBlocks.CreateBlock(13);
+
+				basicBlocks.LinkBlocks(B1, new[] { B2, B5, B9 });
+				basicBlocks.LinkBlocks(B2, B3);
+				basicBlocks.LinkBlocks(B3, new[] { B3, B4 });
+				basicBlocks.LinkBlocks(B4, B13);
+				basicBlocks.LinkBlocks(B5, new[] { B6, B7 });
+				basicBlocks.LinkBlocks(B6, new[] { B4, B8 });
+				basicBlocks.LinkBlocks(B7, new[] { B8, B12 });
+				basicBlocks.LinkBlocks(B8, new[] { B5, B13 });
+
+				basicBlocks.LinkBlocks(B9, new[] { B10, B11 });
+				basicBlocks.LinkBlocks(B10, B12);
+				basicBlocks.LinkBlocks(B11, B12);
+				basicBlocks.LinkBlocks(B12, B13);
+
+				return basicBlocks;
+			}
 		}
 
 		[Test]
