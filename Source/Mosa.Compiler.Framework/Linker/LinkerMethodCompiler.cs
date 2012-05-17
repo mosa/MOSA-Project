@@ -8,7 +8,6 @@
  */
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Platform;
 using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.TypeSystem;
 
@@ -28,7 +27,7 @@ namespace Mosa.Compiler.Linker
 		public LinkerMethodCompiler(AssemblyCompiler assemblyCompiler, ICompilationSchedulerStage compilationScheduler, RuntimeMethod method, InstructionSet instructionSet)
 			: base(assemblyCompiler, method.DeclaringType, method,  instructionSet, compilationScheduler)
 		{
-			this.CreateBlock(-1, 0);
+			BasicBlocks.CreateBlock(BasicBlock.PrologueLabel, 0);
 
 			this.Pipeline.AddRange(new IMethodCompilerStage[] {
 				new SimpleTraceBlockOrderStage(),

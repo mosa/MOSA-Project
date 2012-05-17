@@ -25,31 +25,17 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <summary>
 		/// 
 		/// </summary>
-		private BasicBlock _first;
+		private List<ConnectedBlocks> loops;
 		/// <summary>
 		/// 
 		/// </summary>
-		private List<ConnectedBlocks> _loops;
+		private Dictionary<BasicBlock, int> depths;
 		/// <summary>
 		/// 
 		/// </summary>
-		private Dictionary<BasicBlock, int> _depths;
-		/// <summary>
-		/// 
-		/// </summary>
-		private BasicBlock[] _ordered;
+		private BasicBlock[] ordered;
 
 		#endregion // Data members
-
-		#region Properties
-
-		/// <summary>
-		/// Gets the ordered Blocks.
-		/// </summary>
-		/// <value>The ordered Blocks.</value>
-		public BasicBlock[] OrderedBlocks { get { return _ordered; } }
-
-		#endregion // Properties
 
 		#region ConnectedBlocks class
 
@@ -61,7 +47,7 @@ namespace Mosa.Compiler.Framework.Stages
 			/// <summary>
 			/// Current Block
 			/// </summary>
-			public BasicBlock to;
+			public BasicBlock To;
 			/// <summary>
 			/// Successor Block
 			/// </summary>
@@ -74,7 +60,7 @@ namespace Mosa.Compiler.Framework.Stages
 			/// <param name="to">To block.</param>
 			public ConnectedBlocks(BasicBlock from, BasicBlock to)
 			{
-				this.to = to;
+				this.To = to;
 				this.From = from;
 			}
 		}
@@ -146,22 +132,22 @@ namespace Mosa.Compiler.Framework.Stages
 		void IMethodCompilerStage.Run()
 		{
 			// Retrieve the first block
-			_first = FindBlock(-1);
+			BasicBlock first = basicBlocks.PrologueBlock;
 
 			// Create list for loops
-			_loops = new List<ConnectedBlocks>();
+			loops = new List<ConnectedBlocks>();
 
 			// Create dictionary for the depth of basic Blocks
-			_depths = new Dictionary<BasicBlock, int>(basicBlocks.Count);
+			depths = new Dictionary<BasicBlock, int>(basicBlocks.Count);
 
 			// Determine Loop Depths
-			DetermineLoopDepths();
+			DetermineLoopDepths(first);
 
 			// Order the Blocks based on loop depth
-			DetermineBlockOrder();
+			DetermineBlockOrder(first);
 
-			_loops = null;
-			_depths = null;
+			loops = null;
+			depths = null;
 
 			OrderBlocks();
 		}
@@ -169,11 +155,13 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <summary>
 		/// Determines the loop depths.
 		/// </summary>
-		private void DetermineLoopDepths()
+		private void DetermineLoopDepths(BasicBlock start)
 		{
+			// Create a list of loops ends
+
 			// Create queue for first iteration 
 			Queue<ConnectedBlocks> queue = new Queue<ConnectedBlocks>();
-			queue.Enqueue(new ConnectedBlocks(null, _first));
+			queue.Enqueue(new ConnectedBlocks(null, start));
 
 			// Flag per basic block
 			Dictionary<BasicBlock, int> visited = new Dictionary<BasicBlock, int>(basicBlocks.Count);
@@ -181,65 +169,72 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// Create dictionary for loop header index assignments
 			Dictionary<BasicBlock, int> loopHeaderIndexes = new Dictionary<BasicBlock, int>();
+			Dictionary<BasicBlock, BasicBlock> loopFooters = new Dictionary<BasicBlock, BasicBlock>();
 
 			while (queue.Count != 0)
 			{
-				ConnectedBlocks at = queue.Dequeue();
+				ConnectedBlocks current = queue.Dequeue();
 
-				if (active.ContainsKey(at.to))
+				if (active.ContainsKey(current.To))
 				{
-					// Found a loop -
-					//     the loop-header block is in at.to 
-					// and the loop-end is in at.From
+					// Found a loop - the loop-header block is in at.To and the loop-end is in at.From
 
-					// Add loop-end to list
-					_loops.Add(at);
+					// Add to loop list
+					loops.Add(current);
+
+					// Add to loop footers list
+					if (!loopFooters.ContainsKey(current.To))
+						loopFooters.Add(current.To, current.To);
 
 					// Assign unique loop index (if not already set)
-					if (!loopHeaderIndexes.ContainsKey(at.to))
-						loopHeaderIndexes.Add(at.to, loopHeaderIndexes.Count);
+					if (!loopHeaderIndexes.ContainsKey(current.From))
+						loopHeaderIndexes.Add(current.From, loopHeaderIndexes.Count);
 
 					// and continue iteration
 					continue;
 				}
 
 				// Mark as active
-				active.Add(at.to, 0);
+				active.Add(current.To, 0);
 
 				// Mark as visited
-				visited.Add(at.to, 0);
+				visited.Add(current.To, 0);
 
 				// Add successors to queue
-				foreach (BasicBlock successor in at.to.NextBlocks)
-					queue.Enqueue(new ConnectedBlocks(at.to, successor));
+				foreach (BasicBlock successor in current.To.NextBlocks)
+					queue.Enqueue(new ConnectedBlocks(current.To, successor));
 			}
+
+
+
+
 
 			// Create two-dimensional bit set of blocks belonging to loops
 			//BitArray bitSet = new BitArray(loopHeaderIndexes.Count * BasicBlocks.Count, false);
 
 			Dictionary<BasicBlock, List<BasicBlock>> count = new Dictionary<BasicBlock, List<BasicBlock>>();
 
-			// Create stack of Blocks for next step of iterations
+			// Create stack of blocks for next step of iterations
 			Stack<BasicBlock> stack = new Stack<BasicBlock>();
 
 			// Second set of iterations
-			foreach (ConnectedBlocks loop in _loops)
+			foreach (ConnectedBlocks loop in loops)
 			{
 
 				// Add loop-tail to list
 				List<BasicBlock> current;
 
-				if (!count.ContainsKey(loop.to))
+				if (!count.ContainsKey(loop.To))
 				{
 					current = new List<BasicBlock>();
-					current.Add(loop.to);
-					count.Add(loop.to, current);
+					current.Add(loop.To);
+					count.Add(loop.To, current);
 				}
 				else
 				{
-					current = count[loop.to];
-					if (!current.Contains(loop.to))
-						current.Add(loop.to);
+					current = count[loop.To];
+					if (!current.Contains(loop.To))
+						current.Add(loop.To);
 				}
 
 				//Console.WriteLine(index.ToString() + " : B" + loop.to.Index.ToString());
@@ -270,7 +265,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 					// Add predecessors to queue
 					foreach (BasicBlock predecessor in at.PreviousBlocks)
-						if (predecessor != loop.to) // Exclude if Loop-Header
+						if (predecessor != loop.To) // Exclude if Loop-Header
 							stack.Push(predecessor);
 				}
 			}
@@ -278,15 +273,15 @@ namespace Mosa.Compiler.Framework.Stages
 			// Last step, assign LoopIndex and LoopDepth to each basic block
 			foreach (BasicBlock block in basicBlocks)
 				if (count.ContainsKey(block))
-					_depths.Add(block, count[block].Count);
+					depths.Add(block, count[block].Count);
 				else
-					_depths.Add(block, 0);
+					depths.Add(block, 0);
 		}
 
 		/// <summary>
 		/// Determines the block order.
 		/// </summary>
-		private void DetermineBlockOrder()
+		private void DetermineBlockOrder(BasicBlock start)
 		{
 			// Create an array to hold the forward branch count
 			int[] forward = new int[basicBlocks.Count];
@@ -298,18 +293,18 @@ namespace Mosa.Compiler.Framework.Stages
 				forward[i] = basicBlocks[i].PreviousBlocks.Count;
 
 			// Calculate forward branch count (PreviousBlock.Count minus loops to head)
-			foreach (ConnectedBlocks connecterBlock in _loops)
-				forward[connecterBlock.to.Sequence]--;
+			foreach (ConnectedBlocks connecterBlock in loops)
+				forward[connecterBlock.To.Sequence]--;
 
 			// Allocate list of ordered Blocks
-			_ordered = new BasicBlock[basicBlocks.Count];
+			ordered = new BasicBlock[basicBlocks.Count];
 			int orderBlockCnt = 0;
 
 			// Create sorted worklist
 			SortedList<Priority, BasicBlock> workList = new SortedList<Priority, BasicBlock>();
 
 			// Start worklist with first block
-			workList.Add(new Priority(0, 0, true), _first);
+			workList.Add(new Priority(0, 0, true), start);
 
 			// Order value helps sorted the worklist
 			int order = 0;
@@ -320,21 +315,21 @@ namespace Mosa.Compiler.Framework.Stages
 				workList.RemoveAt(workList.Count - 1);
 
 				referenced.Add(block, 0);
-				_ordered[orderBlockCnt++] = block;
+				ordered[orderBlockCnt++] = block;
 
 				foreach (BasicBlock successor in block.NextBlocks)
 				{
 					forward[successor.Sequence]--;
 
 					if (forward[successor.Sequence] == 0)
-						workList.Add(new Priority(_depths[successor], order++, block.HintTarget != -1 && block.HintTarget == successor.Label), successor);
+						workList.Add(new Priority(depths[successor], order++, block.HintTarget != -1 && block.HintTarget == successor.Label), successor);
 				}
 			}
 
 			// Place unreferenced blocks at the end of the list
 			foreach (BasicBlock block in basicBlocks)
 				if (!referenced.ContainsKey(block))
-					_ordered[orderBlockCnt++] = block;
+					ordered[orderBlockCnt++] = block;
 		}
 
 		/// <summary>
@@ -343,7 +338,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private void OrderBlocks()
 		{
 			for (int i = 0; i < basicBlocks.Count; i++)
-				basicBlocks[i] = _ordered[i];
+				basicBlocks[i] = ordered[i];
 		}
 
 		#endregion // Methods

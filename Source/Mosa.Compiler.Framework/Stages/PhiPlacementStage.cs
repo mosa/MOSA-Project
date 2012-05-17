@@ -9,12 +9,11 @@
 
 using System.Collections.Generic;
 using Mosa.Compiler.Framework.Operands;
-using Mosa.Compiler.Framework.Stages;
 
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
-	///		Places phi instructions for the SSA transformation
+	///	Places phi instructions for the SSA transformation
 	/// </summary>
 	public class PhiPlacementStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
 	{
@@ -73,7 +72,8 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PhiPlacementStage"/> class.
 		/// </summary>
-		public PhiPlacementStage() : this(PhiPlacementStrategy.Minimal)
+		public PhiPlacementStage()
+			: this(PhiPlacementStrategy.Minimal)
 		{
 		}
 
@@ -96,15 +96,9 @@ namespace Mosa.Compiler.Framework.Stages
 			this.CollectAssignments();
 			switch (this.strategy)
 			{
-				case PhiPlacementStrategy.Minimal:
-					this.PlacePhiFunctionsMinimal();
-					return;
-				case PhiPlacementStrategy.SemiPruned:
-					this.PlacePhiFunctionsSemiPruned();
-					return;
-				case PhiPlacementStrategy.Pruned:
-					this.PlacePhiFunctionsPruned();
-					return;
+				case PhiPlacementStrategy.Minimal: PlacePhiFunctionsMinimal(); return;
+				case PhiPlacementStrategy.SemiPruned: PlacePhiFunctionsSemiPruned(); return;
+				case PhiPlacementStrategy.Pruned: PlacePhiFunctionsPruned(); return;
 			}
 		}
 
@@ -139,14 +133,14 @@ namespace Mosa.Compiler.Framework.Stages
 			foreach (var block in basicBlocks)
 				for (var context = new Context(instructionSet, block); !context.EndOfInstruction; context.GotoNext())
 					if (IsAssignmentToStackVariable(context))
-						this.AddToAssignments(context.Result, block);
+						AddToAssignments(context.Result, block);
 
 			var numberOfParameters = methodCompiler.Method.Parameters.Count;
 			if (methodCompiler.Method.Signature.HasThis)
-				++numberOfParameters;
+				numberOfParameters++;
 
 			for (var i = 0; i < numberOfParameters; ++i)
-				AddToAssignments(methodCompiler.GetParameterOperand(i), this.FindBlock(-1));
+				AddToAssignments(methodCompiler.GetParameterOperand(i), basicBlocks.GetByLabel(BasicBlock.PrologueLabel));
 		}
 
 		/// <summary>
@@ -185,8 +179,8 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		private void PlacePhiFunctionsMinimal()
 		{
-			var firstBlock = this.FindBlock(-1);
-			var dominanceCalculationStage = this.methodCompiler.Pipeline.FindFirst<DominanceCalculationStage>() as IDominanceProvider;
+			var firstBlock = basicBlocks.PrologueBlock;
+			var dominanceCalculation = this.methodCompiler.Pipeline.FindFirst<DominanceCalculationStage>().DominanceProvider;
 
 			foreach (var t in assignments.Keys)
 			{
@@ -194,7 +188,7 @@ namespace Mosa.Compiler.Framework.Stages
 					continue;
 				var S = new List<BasicBlock>(assignments[t].AssigningBlocks);
 				S.Add(firstBlock);
-				var idf = dominanceCalculationStage.IteratedDominanceFrontier(S);
+				var idf = dominanceCalculation.IteratedDominanceFrontier(S);
 
 				foreach (var n in idf)
 					this.InsertPhiInstruction(n, assignments[t].Operand);

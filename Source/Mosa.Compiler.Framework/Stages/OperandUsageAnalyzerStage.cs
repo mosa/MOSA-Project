@@ -8,11 +8,9 @@
  */
 
 using System;
-using System.Text;
-using System.Diagnostics;
 using System.Collections.Generic;
-using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.Framework.Operands;
+using System.Diagnostics;
+using System.Text;
 using Mosa.Compiler.Framework.Platform;
 
 namespace Mosa.Compiler.Framework.Stages

@@ -9,13 +9,12 @@
  */
 
 using System;
-using Mosa.Compiler.TypeSystem;
+using System.Collections.Generic;
+using System.Diagnostics;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Operands;
-using System.Collections.Generic;
-using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.Metadata;
-using System.Diagnostics;
+using Mosa.Compiler.Metadata.Signatures;
 
 namespace Mosa.Platform.AVR32
 {

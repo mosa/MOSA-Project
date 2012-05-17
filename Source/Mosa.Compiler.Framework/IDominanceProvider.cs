@@ -8,6 +8,7 @@
  */
 
 using System.Collections.Generic;
+
 namespace Mosa.Compiler.Framework
 {
 	/// <summary>
@@ -27,33 +28,33 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="block">The block to retrieve dominators for.</param>
 		/// <returns>An array of dominators of a block. The first element (at index zero) is the block itself.</returns>
-		BasicBlock[] GetDominators(BasicBlock block);
+		List<BasicBlock> GetDominators(BasicBlock block);
 
 		/// <summary>
-		/// Retrieves the Blocks which are in the dominance frontier of any other block.
+		/// Retrieves the blocks which are in the dominance frontier of any other block.
 		/// </summary>
-		/// <returns>All Blocks which are in a dominance frontier of another block.</returns>
-		BasicBlock[] GetDominanceFrontier();
+		/// <returns>All blocks which are in a dominance frontier of another block.</returns>
+		List<BasicBlock> GetDominanceFrontier();
 
 		/// <summary>
 		/// Retrieves the dominance frontier of the given block.
 		/// </summary>
 		/// <param name="block">The block to return the dominance frontier of.</param>
 		/// <returns>An array of Blocks, which represent the dominance frontier.</returns>
-		BasicBlock[] GetDominanceFrontierOfBlock(BasicBlock block);
+		List<BasicBlock> GetDominanceFrontier(BasicBlock block);
 
 		/// <summary>
-		/// 
+		/// Gets the children.
 		/// </summary>
-		/// <param name="block"></param>
+		/// <param name="block">The block.</param>
 		/// <returns></returns>
-		BasicBlock[] GetChildren(BasicBlock block);
+		List<BasicBlock> GetChildren(BasicBlock block);
 
 		/// <summary>
-		/// 
+		/// Retrieves blocks of the iterated dominance frontier.
 		/// </summary>
-		/// <param name="s"></param>
+		/// <param name="blocks">The blocks.</param>
 		/// <returns></returns>
-		List<BasicBlock> IteratedDominanceFrontier(List<BasicBlock> s);
+		List<BasicBlock> IteratedDominanceFrontier(List<BasicBlock> blocks);
 	}
 }

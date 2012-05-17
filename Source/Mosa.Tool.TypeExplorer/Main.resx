@@ -117,13 +117,16 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <metadata name="stageLabel.GenerateMember" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+  <metadata name="label2.GenerateMember" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>False</value>
   </metadata>
   <metadata name="label1.GenerateMember" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>False</value>
   </metadata>
-  <metadata name="label2.GenerateMember" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+  <metadata name="stageLabel.GenerateMember" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
+    <value>False</value>
+  </metadata>
+  <metadata name="label3.GenerateMember" type="System.Boolean, mscorlib, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089">
     <value>False</value>
   </metadata>
   <metadata name="statusStrip1.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
@@ -160,13 +163,13 @@
     <value>
         iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAAXNSR0IArs4c6QAAAARnQU1BAACxjwv8
         YQUAAAAJcEhZcwAADsMAAA7DAcdvqGQAAAGfSURBVDhPjZJNSwJRFIaHoJW0ahv0A1q1qE3UvnLTumX9
-        CSHoB+SmQiGtCDPQAiENQiErKsgsJPxA0xLxC/PbNHVmnLc76lwNS71wOJc7933OPe8ZhmmvTGa1xnEr
-        fmgZwM2A45bD8biclb73zQ2/zMwqiBAq4IJkX2vfPCvPnw6E8H7ZCxUcEdE50xITSCEwB5PdA6PVBb3F
-        gWOLY6sHyCrJZRWJbVEkLkPrJRoSBukM2D+7wezSei8k5mO42PO4gJ1W//gYBa5Jrk0D0Yk2lNTQW2F7
-        8DQhOvOjkr6E5+VO2oJYkVSnnmCTAnZ1l02xFB1AeeGWCg4IIDTSMRF7FMDxDYgQCfTLCyEztdEIjqlh
-        IoDYJJBVkAloqVgQBFSqLFLZShMws7iGP6dzaLqjou5NneWRK1YRSRb7AzRGew+AbwgoVepIpMt4i+T6
-        A9Qnth5AtcYhnf9GOF6AO5juDxD7616icYWvGqKpEvzhLJze5PCAbuNC0TxeA5+4d8WGB3Qb533PwOFO
-        4OopMhxAmvd/+d8xSjMWLwwK8T/4AXapN1619Oa8AAAAAElFTkSuQmCC
+        CSHoB+SmQiGtCDPQAiENQiErKsgkJPxA0xLxC/PbNHVmnLc76lwN8+PC4Vzu3Pc597xnGKa9Mpn1Gset
+        +aFlADcDjlsNx+NyVvo+MDf8MjOrIEKogCuSfa1986y8eD4Uwvtlr1RwQkSXTEtMIIXAAkx2D4xWF/QW
+        B04tjp0eIKskl1UkdkWRuAytl2hIGKQz4PDiDvMrm72QsI/hQo+TAvZa/eNzHLgluTYLRKfaUFJDb4Xt
+        ydOE6MzPSvoSnpc7aQtiRVKdeoJtCtjXXTfFUnQA5aV7KjgigNBYx0QcUADHNyBCJNAfL4TMzFYjOKGG
+        iQBi00BWQSagpWJBEFCpskhlK03A3PIG/p3OsemBiro3dZZHrlhFJFkcDNAY7T0AviGgVKkjkS7jPZIb
+        DFCf2XoA1RqHdP4H4XgB7mB6MEDsr3uJxhW+a4imSvCHs3B6k6MDuo0LRfN4C3zh0RUbHdBtnPcjA4c7
+        gZuXyGgAad79ct8xSjMWLwwL8T/4BTdeN0k5XxdNAAAAAElFTkSuQmCC
 </value>
   </data>
   <data name="toolStripButton4.Image" type="System.Drawing.Bitmap, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">

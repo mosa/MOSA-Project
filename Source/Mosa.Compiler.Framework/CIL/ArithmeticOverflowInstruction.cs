@@ -110,7 +110,7 @@ namespace Mosa.Compiler.Framework.CIL
 			if (StackTypeCode.Unknown == result)
 				throw new InvalidOperationException(@"Invalid operand types passed to " + opcode);
 
-			ctx.Result = compiler.CreateTemporary(Operand.SigTypeFromStackType(result));
+			ctx.Result = compiler.CreateVirtualRegister(Operand.SigTypeFromStackType(result));
 		}
 
 		#endregion Methods

@@ -9,12 +9,10 @@
  */
 
 using System;
-using Mosa.Compiler.Metadata;
-using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Stages;
-using Mosa.Compiler.Framework.Operands;
-using Mosa.Compiler.Framework.Platform;
+using Mosa.Compiler.Metadata;
+using Mosa.Compiler.Metadata.Signatures;
 
 namespace Mosa.Platform.AVR32
 {
@@ -138,18 +136,6 @@ namespace Mosa.Platform.AVR32
 		}
 
 		/// <summary>
-		/// Creates a new result operand of the requested type.
-		/// </summary>
-		/// <param name="signatureType">The type requested.</param>
-		/// <param name="instructionLabel">The label of the instruction requesting the operand.</param>
-		/// <param name="operandStackIndex">The stack index of the operand.</param>
-		/// <returns>A new operand usable as a result operand.</returns>
-		public override Operand CreateResultOperand(SigType signatureType)
-		{
-			return new RegisterOperand(signatureType, GeneralPurposeRegister.R9);
-		}
-
-		/// <summary>
 		/// Extends the assembly compiler pipeline with AVR32 specific stages.
 		/// </summary>
 		/// <param name="assemblyCompilerPipeline">The assembly compiler pipeline to extend.</param>
@@ -231,18 +217,6 @@ namespace Mosa.Platform.AVR32
 
 				default: memorySize = alignment = 4; break;
 			}
-		}
-
-		/// <summary>
-		/// Gets the intrinsic instruction by type
-		/// </summary>
-		/// <param name="type">The type.</param>
-		/// <returns></returns>
-		public override IIntrinsicMethod GetIntrinsicMethod(Type type)
-		{
-			// TODO
-			return null;
-			//return Intrinsic.Method.Get(type);
 		}
 
 		/// <summary>

@@ -41,7 +41,7 @@ namespace Mosa.Compiler.Framework.CIL
 			base.Validate(ctx, compiler);
 
 			// Simple result is the same type as the unary argument
-			ctx.Result = compiler.CreateTemporary(ctx.Operand1.Type);
+			ctx.Result = compiler.CreateVirtualRegister(ctx.Operand1.Type);
 		}
 
 

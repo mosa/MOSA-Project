@@ -26,7 +26,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// <param name="context">The context.</param>
 		public override void Visit(IIRVisitor visitor, Context context)
 		{
-			visitor.CallInstruction(context);
+			visitor.Call(context);
 		}
 
 		#endregion // IRInstruction Overrides

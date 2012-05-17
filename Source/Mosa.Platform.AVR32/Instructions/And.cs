@@ -8,9 +8,9 @@
  *  Pascal Delprat (pdelprat) <pascal.delprat@online.fr>
  */
 
+using System;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Operands;
-using System;
 
 namespace Mosa.Platform.AVR32.Instructions
 {

@@ -10,8 +10,8 @@
  */
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Operands;
 using Mosa.Compiler.Framework.IR;
+using Mosa.Compiler.Framework.Operands;
 using Mosa.Compiler.Metadata;
 using CIL = Mosa.Compiler.Framework.CIL;
 
@@ -34,7 +34,7 @@ namespace Mosa.Platform.x86.Stages
 				for (Context ctx = CreateContext(block); !ctx.EndOfInstruction; ctx.GotoNext())
 					if (ctx.Instruction != null)
 						if (!ctx.Ignore && ctx.OperandCount == 2 && ctx.ResultCount == 1)
-							if (ctx.Instruction is CIL.ArithmeticInstruction || ctx.Instruction is ThreeOperandInstruction)
+							if (ctx.Instruction is ThreeOperandInstruction)
 								ThreeTwoAddressConversion(ctx);
 		}
 
@@ -51,7 +51,7 @@ namespace Mosa.Platform.x86.Stages
 			Operand op2 = ctx.Operand2;
 
 			if (ctx.Instruction is IntegerCompare
-				|| ctx.Instruction is FloatingPointCompare
+				|| ctx.Instruction is FloatCompare
 				|| ctx.Instruction is Load
 				|| ctx.Instruction is Store)
 			{

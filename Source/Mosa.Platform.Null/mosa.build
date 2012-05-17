@@ -1,0 +1,35 @@
+<?xml version="1.0"?>
+<project name="Mosa" default="build" basedir=".">
+	
+	<!-- Comma-separated list of warnings that should be surpressed in all modules. Warning: no spaces allowed! -->
+	<property name="suppresswarnings" value="0414,0219,0169,0162,0168"/>
+	
+	<!-- Toggle debug output by setting this to true (nant -D:debug=true) -->
+	<property name="debug" value="none" overwrite="false"/>
+	
+	<!-- Speaks for itself, I should hope -->
+	<property name="outputDirectory" value="../bin" overwrite="false"/>
+	
+	<!-- Main build target -->
+	<target name="build">
+	    <csc target="library" output="${outputDirectory}/Mosa.Platform.Null.dll" debug="${debug}" unsafe="true" nostdlib="false">
+		<sources>
+                    <include name="Architecture.cs"/>
+                    <include name="ArchitectureFeatureFlags.cs"/>
+                    <include name="DefaultCallingConvention.cs"/>
+                    <include name="GeneralPurposeRegister.cs"/>
+                    <include name="MachineCodeEmitter.cs"/>
+		</sources>
+		<references>
+                    <include name="System.dll"/>
+                    <include name="${outputDirectory}/Mosa.Compiler.Common.dll"/>
+                    <include name="${outputDirectory}/Mosa.Compiler.Linker.dll"/>
+                    <include name="${outputDirectory}/Mosa.Compiler.Metadata.dll"/>
+                    <include name="${outputDirectory}/Mosa.Compiler.Framework.dll"/>
+                    <include name="${outputDirectory}/Mosa.Compiler.TypeSystem.dll"/>
+		</references>
+		<!-- supress warnings -->
+		<nowarn><warning number="${suppresswarnings}"/></nowarn>
+        </csc>
+	</target>
+</project>

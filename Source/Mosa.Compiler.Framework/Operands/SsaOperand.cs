@@ -56,7 +56,7 @@ namespace Mosa.Compiler.Framework.Operands
 		/// </returns>
 		public override string ToString()
 		{
-			return "<" + this.SsaVersion + "> " + this.Operand.ToString();
+			return this.Operand.ToString() + "<" + this.SsaVersion + ">";
 		}
 	}
 }

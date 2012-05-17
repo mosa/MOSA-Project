@@ -12,8 +12,6 @@ using System;
 
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Stages;
-using Mosa.Compiler.Framework.Operands;
-using Mosa.Compiler.Framework.Platform;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Platform.x86.Stages;
@@ -170,18 +168,6 @@ namespace Mosa.Platform.x86
 		}
 
 		/// <summary>
-		/// Creates a new result operand of the requested type.
-		/// </summary>
-		/// <param name="signatureType">The type requested.</param>
-		/// <param name="instructionLabel">The label of the instruction requesting the operand.</param>
-		/// <param name="operandStackIndex">The stack index of the operand.</param>
-		/// <returns>A new operand usable as a result operand.</returns>
-		public override Operand CreateResultOperand(SigType signatureType)
-		{
-			return new RegisterOperand(signatureType, GeneralPurposeRegister.EAX);
-		}
-
-		/// <summary>
 		/// Extends the assembly compiler pipeline with x86 specific stages.
 		/// </summary>
 		/// <param name="assemblyCompilerPipeline">The assembly compiler pipeline to extend.</param>
@@ -265,16 +251,6 @@ namespace Mosa.Platform.x86
 
 				default: memorySize = alignment = 4; break;
 			}
-		}
-
-		/// <summary>
-		/// Gets the intrinsic instruction by type
-		/// </summary>
-		/// <param name="type">The type.</param>
-		/// <returns></returns>
-		public override IIntrinsicMethod GetIntrinsicMethod(Type type)
-		{
-			return Intrinsic.Method.Get(type);
 		}
 
 		/// <summary>

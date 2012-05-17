@@ -8,7 +8,6 @@
  */
 
 using System;
-using System.Text;
 
 namespace Mosa.Platform.x86.XSharp
 {

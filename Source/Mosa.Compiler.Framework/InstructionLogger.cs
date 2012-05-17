@@ -31,15 +31,15 @@ namespace Mosa.Compiler.InternalTrace
 			);
 		}
 
-		public static void Run(IInternalTrace internalLog, IPipelineStage stage, RuntimeMethod method, InstructionSet instructionSet, IList<BasicBlock> basicBlocks)
+		public static void Run(IInternalTrace internalLog, IPipelineStage stage, RuntimeMethod method, InstructionSet instructionSet, BasicBlocks basicBlocks)
 		{
 			if (internalLog == null)
 				return;
 
-			if (internalLog.InstructionTraceListener == null)
+			if (internalLog.TraceListener == null)
 				return;
 
-			if (!internalLog.InstructionTraceFilter.IsMatch(method, stage.Name))
+			if (!internalLog.TraceFilter.IsMatch(method, stage.Name))
 				return;
 
 			StringBuilder text = new StringBuilder();
@@ -74,7 +74,7 @@ namespace Mosa.Compiler.InternalTrace
 				LogInstructions(text, new Context(instructionSet, 0));
 			}
 
-			internalLog.InstructionTraceListener.NotifyNewInstructionTrace(method, stage.Name, text.ToString());
+			internalLog.TraceListener.NotifyNewInstructionTrace(method, stage.Name, text.ToString());
 		}
 
 		private static string ListBlocks(IList<BasicBlock> blocks)

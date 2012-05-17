@@ -42,7 +42,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// List of basic blocks found during decoding
 		/// </summary>
-		protected IList<BasicBlock> basicBlocks;
+		protected BasicBlocks basicBlocks;
 
 		/// <summary>
 		/// Holds the type system
@@ -133,16 +133,6 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Gets block by label
-		/// </summary>
-		/// <param name="label">The label.</param>
-		/// <returns></returns>
-		protected BasicBlock FindBlock(int label)
-		{
-			return methodCompiler.FromLabel(label);
-		}
-
-		/// <summary>
 		/// Creates the context.
 		/// </summary>
 		/// <param name="block">The block.</param>
@@ -160,27 +150,6 @@ namespace Mosa.Compiler.Framework
 		protected Context CreateContext(int index)
 		{
 			return new Context(instructionSet, index);
-		}
-
-		/// <summary>
-		/// Creates the block.
-		/// </summary>
-		/// <param name="label">The label.</param>
-		/// <param name="index">The index.</param>
-		/// <returns></returns>
-		protected BasicBlock CreateBlock(int label, int index)
-		{
-			return methodCompiler.CreateBlock(label, index);
-		}
-
-		/// <summary>
-		/// Creates the block.
-		/// </summary>
-		/// <param name="label">The label.</param>
-		/// <returns></returns>
-		protected BasicBlock CreateBlock(int label)
-		{
-			return methodCompiler.CreateBlock(label, -1);
 		}
 
 		#endregion

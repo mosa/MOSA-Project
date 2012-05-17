@@ -54,16 +54,16 @@ namespace Mosa.Compiler.Framework
 		ICompilationSchedulerStage Scheduler { get; }
 
 		/// <summary>
-		/// Creates a new temporary variable operand.
+		/// Creates a new virtual register operand.
 		/// </summary>
-		/// <param name="type">The signature type of the temporary.</param>
-		/// <returns>An operand, which represents the temporary.</returns>
+		/// <param name="type">The signature type of the virtual register.</param>
+		/// <returns>An operand, which represents the virtual register.</returns>
 		/// <remarks>
 		/// Later optimization stages attempt to optimize, reduce or remove the usage
-		/// of temporaries in a program. Temporaries may be allocated to physical
+		/// of virtual registers in a program. Virtual register may be allocated to physical
 		/// registers as part of register allocation strategies.
 		/// </remarks>
-		Operand CreateTemporary(SigType type);
+		Operand CreateVirtualRegister(SigType type);
 
 		/// <summary>
 		/// Provides access to the instructions of the method.
@@ -115,22 +115,7 @@ namespace Mosa.Compiler.Framework
 		/// Gets the basic Blocks.
 		/// </summary>
 		/// <value>The basic Blocks.</value>
-		IList<BasicBlock> BasicBlocks { get; }
-
-		/// <summary>
-		/// Retrieves a basic block from its label.
-		/// </summary>
-		/// <param name="label">The label of the basic block.</param>
-		/// <returns>The basic block with the given label or null.</returns>
-		BasicBlock FromLabel(int label);
-
-		/// <summary>
-		/// Creates the block.
-		/// </summary>
-		/// <param name="label">The label.</param>
-		/// <param name="index">The index.</param>
-		/// <returns></returns>
-		BasicBlock CreateBlock(int label, int index);
+		BasicBlocks BasicBlocks { get; }
 
 		/// <summary>
 		/// Provides access to the pipeline of this compiler.

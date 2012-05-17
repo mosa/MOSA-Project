@@ -13,7 +13,7 @@ namespace Mosa.Compiler.Framework.IR
 	{
 		public override void Visit(IIRVisitor visitor, Context context)
 		{
-			visitor.SwitchInstruction(context);
+			visitor.Switch(context);
 		}
 	}
 }

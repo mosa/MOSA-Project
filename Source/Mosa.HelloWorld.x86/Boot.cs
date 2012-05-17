@@ -7,7 +7,6 @@
 
 using System;
 using Mosa.HelloWorld.x86.Tests;
-using Mosa.Kernel;
 using Mosa.Kernel.x86;
 using Mosa.Kernel.x86.Smbios;
 

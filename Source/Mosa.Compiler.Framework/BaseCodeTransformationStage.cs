@@ -8,6 +8,8 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
+using Mosa.Compiler.Metadata.Signatures;
+using Mosa.Compiler.Framework.Operands;
 
 namespace Mosa.Compiler.Framework
 {
@@ -16,6 +18,7 @@ namespace Mosa.Compiler.Framework
 	/// </summary>
 	public abstract class BaseCodeTransformationStage : BaseMethodCompilerStage, IMethodCompilerStage, IVisitor
 	{
+
 
 		#region IMethodCompilerStage Members
 
@@ -39,22 +42,9 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="source">The source.</param>
 		/// <param name="destination">The destination.</param>
-		protected void LinkBlocks(BasicBlock source, BasicBlock destination)
-		{
-			if (!source.NextBlocks.Contains(destination))
-				source.NextBlocks.Add(destination);
-
-			if (!destination.PreviousBlocks.Contains(source))
-				destination.PreviousBlocks.Add(source);
-		}
-		/// <summary>
-		/// Links the blocks.
-		/// </summary>
-		/// <param name="source">The source.</param>
-		/// <param name="destination">The destination.</param>
 		protected void LinkBlocks(Context source, BasicBlock destination)
 		{
-			LinkBlocks(source.BasicBlock, destination);
+			basicBlocks.LinkBlocks(source.BasicBlock, destination);
 		}
 
 		/// <summary>
@@ -64,7 +54,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="destination">The destination.</param>
 		protected void LinkBlocks(Context source, Context destination)
 		{
-			LinkBlocks(source.BasicBlock, destination.BasicBlock);
+			basicBlocks.LinkBlocks(source.BasicBlock, destination.BasicBlock);
 		}
 
 		/// <summary>
@@ -75,8 +65,8 @@ namespace Mosa.Compiler.Framework
 		/// <param name="destination2">The destination2.</param>
 		protected void LinkBlocks(Context source, Context destination, Context destination2)
 		{
-			LinkBlocks(source.BasicBlock, destination.BasicBlock);
-			LinkBlocks(source.BasicBlock, destination2.BasicBlock);
+			basicBlocks.LinkBlocks(source.BasicBlock, destination.BasicBlock);
+			basicBlocks.LinkBlocks(source.BasicBlock, destination2.BasicBlock);
 		}
 
 		/// <summary>
@@ -87,8 +77,8 @@ namespace Mosa.Compiler.Framework
 		/// <param name="destination2">The destination2.</param>
 		protected void LinkBlocks(Context source, Context destination, BasicBlock destination2)
 		{
-			LinkBlocks(source.BasicBlock, destination.BasicBlock);
-			LinkBlocks(source.BasicBlock, destination2);
+			basicBlocks.LinkBlocks(source.BasicBlock, destination.BasicBlock);
+			basicBlocks.LinkBlocks(source.BasicBlock, destination2);
 		}
 
 		/// <summary>
@@ -99,8 +89,8 @@ namespace Mosa.Compiler.Framework
 		/// <param name="destination2">The destination2.</param>
 		protected void LinkBlocks(Context source, BasicBlock destination, BasicBlock destination2)
 		{
-			LinkBlocks(source.BasicBlock, destination);
-			LinkBlocks(source.BasicBlock, destination2);
+			basicBlocks.LinkBlocks(source.BasicBlock, destination);
+			basicBlocks.LinkBlocks(source.BasicBlock, destination2);
 		}
 
 		/// <summary>
@@ -111,7 +101,7 @@ namespace Mosa.Compiler.Framework
 		protected Context CreateEmptyBlockContext(int label)
 		{
 			Context ctx = new Context(instructionSet);
-			BasicBlock block = CreateBlock(basicBlocks.Count + 0x10000000);
+			BasicBlock block = basicBlocks.CreateBlock(basicBlocks.Count + 0x10000000);
 			ctx.BasicBlock = block;
 
 			// Need a dummy instruction at the start of each block to establish a starting point of the block
@@ -124,7 +114,7 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Creates empty Blocks.
+		/// Creates empty blocks.
 		/// </summary>
 		/// <param name="blocks">The Blocks.</param>
 		/// <param name="label">The label.</param>
@@ -152,7 +142,7 @@ namespace Mosa.Compiler.Framework
 
 			int label = basicBlocks.Count + 0x10000000;
 
-			BasicBlock nextBlock = CreateBlock(label);
+			BasicBlock nextBlock = basicBlocks.CreateBlock(label);
 
 			foreach (BasicBlock block in current.BasicBlock.NextBlocks)
 				nextBlock.NextBlocks.Add(block);

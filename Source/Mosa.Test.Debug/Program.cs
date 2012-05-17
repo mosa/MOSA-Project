@@ -1,5 +1,6 @@
 ﻿
 using Mosa.Test.Cases.IL;
+using Mosa.Test.Compiler.Framework;
 
 namespace Mosa.Test.Debug
 {
@@ -7,6 +8,10 @@ namespace Mosa.Test.Debug
 	{
 		public static void Main()
 		{
+
+			//SimpleFastDominanceTests.DominanceCalculation1();
+			SimpleFastDominanceTests.DominanceCalculation2();
+
 			//ConditionalOperator s = new ConditionalOperator();
 			//s.CompareEqualI1((sbyte)0x02, (sbyte)0x02, (sbyte)0x05, (sbyte)0x01);
 			//s.CompareEqualI1((sbyte)0x60, (sbyte)0x00, (sbyte)0x60, (sbyte)0x06);
@@ -18,8 +23,8 @@ namespace Mosa.Test.Debug
 			//add.AddConstantCLeft('a', 'Z');
 			//add.AddConstantCLeft('a', 'Z');
 
-			Call call = new Call();
-			call.CallU1((byte)1);
+			//Call call = new Call();
+			//call.CallU1((byte)1);
 
 			//Int32Fixture int32Fixture = new Int32Fixture();
 			//BooleanFixture booleanFixture = new BooleanFixture();

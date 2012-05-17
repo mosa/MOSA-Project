@@ -7,8 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Operands;
 
 namespace Mosa.Compiler.Framework.Platform
 {

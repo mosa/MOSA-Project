@@ -10,7 +10,6 @@
 
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.Compiler.Framework.CIL
 {
@@ -48,7 +47,7 @@ namespace Mosa.Compiler.Framework.CIL
 
 			//RuntimeType type = decoder.TypeModule.GetType(token);
 
-			ctx.Result = decoder.Compiler.CreateTemporary(new ClassSigType(token));
+			ctx.Result = decoder.Compiler.CreateVirtualRegister(new ClassSigType(token));
 		}
 
 		/// <summary>

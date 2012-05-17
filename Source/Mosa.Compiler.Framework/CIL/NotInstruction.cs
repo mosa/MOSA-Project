@@ -62,7 +62,7 @@ namespace Mosa.Compiler.Framework.CIL
 			if (StackTypeCode.Unknown == result)
 				throw new InvalidOperationException(@"Invalid operand to Not instruction.");
 
-			ctx.Result = compiler.CreateTemporary(ctx.Operand1.Type);
+			ctx.Result = compiler.CreateVirtualRegister(ctx.Operand1.Type);
 		}
 
 		/// <summary>

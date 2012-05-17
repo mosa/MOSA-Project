@@ -47,7 +47,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// <param name="context">The context.</param>
 		public override void Visit(IIRVisitor visitor, Context context)
 		{
-			visitor.ArithmeticShiftRightInstruction(context);
+			visitor.ArithmeticShiftRight(context);
 		}
 
 		#endregion // ThreeOperandInstruction Overrides

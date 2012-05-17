@@ -225,7 +225,7 @@ namespace Mosa.Compiler.Framework.CIL
 			if (signature.ReturnType.Type != CilElementType.Void)
 			{
 				ctx.ResultCount = 1;
-				ctx.Result = compiler.CreateTemporary(signature.ReturnType);
+				ctx.Result = compiler.CreateVirtualRegister(signature.ReturnType);
 			}
 			else
 				ctx.ResultCount = 0;

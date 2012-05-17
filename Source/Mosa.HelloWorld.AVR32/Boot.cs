@@ -5,8 +5,6 @@
  *
  */
 
-using System;
-using Mosa.Kernel.AVR32;
 
 namespace Mosa.HelloWorld.AVR32
 {

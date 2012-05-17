@@ -12,9 +12,6 @@ using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.CIL;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Stages;
-using Mosa.Compiler.Framework.Platform;
-using Mosa.Compiler.InternalTrace;
-using Mosa.Compiler.Linker;
 using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.Tool.TypeExplorer
@@ -51,8 +48,9 @@ namespace Mosa.Tool.TypeExplorer
 				new StrengthReductionStage(),
 				new StackLayoutStage(),
 				new PlatformStubStage(),
-				new LoopAwareBlockOrderStage(),
-				new SimpleRegisterAllocatorStage(),
+				//new LoopAwareBlockOrderStage(),
+				new SimpleTraceBlockOrderStage(),
+				//new SimpleRegisterAllocatorStage(),
 				new CodeGenerationStage(),
 			});
 		}

@@ -11,13 +11,12 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using Mosa.Compiler.Common;
+using Mosa.Compiler.Framework.Operands;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.Metadata.Tables;
 using Mosa.Compiler.TypeSystem;
 using Mosa.Compiler.TypeSystem.Generic;
-using Mosa.Compiler.Framework.Operands;
-using IR = Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Compiler.Framework.CIL
 {
@@ -75,7 +74,7 @@ namespace Mosa.Compiler.Framework.CIL
 					Context ctx = new Context(instructionSet);
 					ctx.AppendInstruction(IR.IRInstruction.Jmp, null, plugSymbol);
 					ctx.Label = -1;
-					CreateBlock(-1, ctx.Index);
+					basicBlocks.CreateBlock(BasicBlock.PrologueLabel, ctx.Index);
 
 					return;
 				}

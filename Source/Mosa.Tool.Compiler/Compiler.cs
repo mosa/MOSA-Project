@@ -516,6 +516,9 @@ namespace Mosa.Tool.Compiler
 				case "avr32":
 					return Mosa.Platform.AVR32.Architecture.CreateArchitecture(Mosa.Platform.AVR32.ArchitectureFeatureFlags.AutoDetect);
 
+				case "x86ii":
+					return Mosa.Platform.x86II.Architecture.CreateArchitecture(Mosa.Platform.x86II.ArchitectureFeatureFlags.AutoDetect);
+
 				case "x64":
 
 				default:
@@ -534,8 +537,9 @@ namespace Mosa.Tool.Compiler
 			{
 				case "multiboot-0.7":
 				case "mb0.7":
-					return new Multiboot0695AssemblyStage();
-
+					return new Mosa.Platform.x86.Stages.Multiboot0695AssemblyStage();
+				case "mb0.7ii":
+					return new Mosa.Platform.x86II.Stages.Multiboot0695AssemblyStage();
 				default:
 					throw new OptionException(String.Format("Unknown or unsupported boot format {0}.", format), "boot");
 			}

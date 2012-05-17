@@ -7,12 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
  */
 
-using System;
 using System.Collections;
-using System.Collections.Generic;
-using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.Framework.Operands;
 using Mosa.Compiler.Framework.Platform;
 
 namespace Mosa.Compiler.Framework.Stages
@@ -60,7 +55,7 @@ namespace Mosa.Compiler.Framework.Stages
 			start.Set(architecture.StackPointerRegister);
 			start.Set(architecture.CallingConvention.CalleeSavedRegisters);
 
-			ProcesBlockChain(FindBlock(-1), start);
+			ProcesBlockChain(basicBlocks.PrologueBlock, start);
 
 			// Handler Code
 			foreach (ExceptionHandlingClause clause in methodCompiler.ExceptionClauseHeader.Clauses)
@@ -71,7 +66,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				// TODO: Set the exception register
 
-				ProcesBlockChain(FindBlock(clause.HandlerOffset), exceptionStart);
+				ProcesBlockChain(basicBlocks.GetByLabel(clause.HandlerOffset), exceptionStart);
 			}
 		}
 

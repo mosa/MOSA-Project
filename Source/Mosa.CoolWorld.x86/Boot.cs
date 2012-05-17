@@ -5,7 +5,6 @@
  *
  */
 
-using Mosa.Kernel;
 using Mosa.Kernel.x86;
 using Mosa.Platform.x86.Intrinsic;
 

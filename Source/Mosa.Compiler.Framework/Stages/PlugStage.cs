@@ -9,11 +9,9 @@
 
 using System;
 using System.Collections.Generic;
-
-using Mosa.Compiler.Common;
 using Mosa.Compiler.Linker;
-using Mosa.Compiler.TypeSystem;
 using Mosa.Compiler.Metadata.Signatures;
+using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.Compiler.Framework.Stages
 {

@@ -7,8 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using System.Text;
 
 namespace Mosa.Compiler.Framework.Platform
 {

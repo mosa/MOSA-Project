@@ -46,9 +46,9 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		private void FoldInstruction(Context context)
 		{
-			if (context.Instruction is AddS)
+			if (context.Instruction is AddSigned)
 				this.FoldAddSInstruction(context);
-			else if (context.Instruction is MulS)
+			else if (context.Instruction is MulSigned)
 				this.FoldMulSInstruction(context);
 		}
 
@@ -98,10 +98,10 @@ namespace Mosa.Compiler.Framework.Stages
 		private bool IsFoldableInstruction(Context context)
 		{
 			var instruction = context.Instruction;
-			return instruction is AddS ||
-				instruction is AddU ||
-				instruction is MulS ||
-				instruction is MulU;
+			return instruction is AddSigned ||
+				instruction is AddUnsigned ||
+				instruction is MulSigned ||
+				instruction is MulUnsigned;
 		}
 
 		/// <summary>

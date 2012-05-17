@@ -11,12 +11,12 @@ using Mosa.Compiler.TypeSystem.Generic;
 
 namespace Mosa.Tool.TypeExplorer
 {
-	public partial class Main : Form, ICompilerEventListener, IInstructionTraceListener
+	public partial class Main : Form, ICompilerEventListener, ITraceListener
 	{
 		private CodeForm form = new CodeForm();
 		private IInternalTrace internalTrace = new BasicInternalTrace();
 		private ITypeSystem typeSystem = new TypeSystem();
-		private ConfigurableInstructionTraceFilter filter = new ConfigurableInstructionTraceFilter();
+		private ConfigurableTraceFilter filter = new ConfigurableTraceFilter();
 		private ITypeLayout typeLayout;
 		private DateTime compileStartTime;
 		private string currentStageLog;
@@ -34,8 +34,8 @@ namespace Mosa.Tool.TypeExplorer
 		{
 			InitializeComponent();
 			internalTrace.CompilerEventListener = this;
-			internalTrace.InstructionTraceListener = this;
-			internalTrace.InstructionTraceFilter = filter;
+			internalTrace.TraceListener = this;
+			internalTrace.TraceFilter = filter;
 		}
 
 		private void Main_Load(object sender, EventArgs e)
@@ -257,10 +257,10 @@ namespace Mosa.Tool.TypeExplorer
 				toolStripStatusLabel1.GetCurrentParent().Refresh();
 			}
 
-			tbResult.AppendText(String.Format("{0:0.00}", (DateTime.Now - compileStartTime).TotalSeconds) + " secs: " + compilerStage.ToText() + ": " + info + "\n");
+			rbOtherResult.AppendText(String.Format("{0:0.00}", (DateTime.Now - compileStartTime).TotalSeconds) + " secs: " + compilerStage.ToText() + ": " + info + "\n");
 		}
 
-		void IInstructionTraceListener.NotifyNewInstructionTrace(RuntimeMethod method, string stage, string log)
+		void ITraceListener.NotifyNewInstructionTrace(RuntimeMethod method, string stage, string log)
 		{
 			MethodStages methodStage;
 
@@ -276,6 +276,9 @@ namespace Mosa.Tool.TypeExplorer
 
 		void Compile()
 		{
+			tabControl1.SelectedTab = tabPage2;
+			rbOtherResult.Clear();
+
 			compileStartTime = DateTime.Now;
 			methodStages.Clear();
 
@@ -283,6 +286,7 @@ namespace Mosa.Tool.TypeExplorer
 			filter.MethodMatch = MatchType.Any;
 
 			ExplorerAssemblyCompiler.Compile(typeSystem, typeLayout, internalTrace, cbPlatform.Text, enableSSAToolStripMenuItem.Checked);
+			tabControl1.SelectedTab = tabPage1;
 		}
 
 		private void nowToolStripMenuItem_Click(object sender, EventArgs e)

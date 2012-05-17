@@ -8,10 +8,8 @@
  */
 
 using System;
-using System.Text;
 
 using Mosa.Compiler.Framework;
-using Mosa.Platform.x86;
 
 namespace Mosa.Platform.x86.XSharp
 {

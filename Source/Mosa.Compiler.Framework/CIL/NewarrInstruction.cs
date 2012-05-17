@@ -55,7 +55,7 @@ namespace Mosa.Compiler.Framework.CIL
 			// checks in an optimization stage later on, if we find that a value never exceeds the array 
 			// bounds.
 			var resultType = new SZArraySigType(null, signatureType);
-			ctx.Result = decoder.Compiler.CreateTemporary(resultType);
+			ctx.Result = decoder.Compiler.CreateVirtualRegister(resultType);
 		}
 
 		/// <summary>

@@ -22,6 +22,21 @@
     <OldToolsVersion>3.5</OldToolsVersion>
     <UpgradeBackupLocation />
     <TargetFrameworkProfile />
+    <PublishUrl>publish\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <AllowUnsafeBlocks>true</AllowUnsafeBlocks>
@@ -62,6 +77,10 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BasicBlocks.cs" />
+    <Compile Include="SimpleFastDominance.cs" />
+    <Compile Include="LoopEdge.cs" />
+    <Compile Include="LoopAwareBlockOrder.cs" />
     <Compile Include="Stages\SimpleRegisterAllocatorStage.cs" />
     <Compile Include="VirtualRegisterLayout.cs" />
     <Compile Include="Stages\AssemblyMemberCompilationSchedulerStage.cs" />
@@ -123,22 +142,22 @@
     <Compile Include="Stages\GenericsResolverStage.cs" />
     <Compile Include="ICompilationSchedulerStage.cs" />
     <Compile Include="Intrinsics\InternalAllocateString.cs" />
-    <Compile Include="IR\AddF.cs" />
-    <Compile Include="IR\AddS.cs" />
-    <Compile Include="IR\AddU.cs" />
+    <Compile Include="IR\AddFloat.cs" />
+    <Compile Include="IR\AddSigned.cs" />
+    <Compile Include="IR\AddUnsigned.cs" />
     <Compile Include="IR\Break.cs" />
-    <Compile Include="IR\DivF.cs" />
-    <Compile Include="IR\DivS.cs" />
-    <Compile Include="IR\DivU.cs" />
-    <Compile Include="IR\MulF.cs" />
-    <Compile Include="IR\MulS.cs" />
-    <Compile Include="IR\MulU.cs" />
-    <Compile Include="IR\RemF.cs" />
-    <Compile Include="IR\RemS.cs" />
-    <Compile Include="IR\RemU.cs" />
-    <Compile Include="IR\SubF.cs" />
-    <Compile Include="IR\SubS.cs" />
-    <Compile Include="IR\SubU.cs" />
+    <Compile Include="IR\DivFloat.cs" />
+    <Compile Include="IR\DivSigned.cs" />
+    <Compile Include="IR\DivUnsigned.cs" />
+    <Compile Include="IR\MulFloat.cs" />
+    <Compile Include="IR\MulSigned.cs" />
+    <Compile Include="IR\MulUnsigned.cs" />
+    <Compile Include="IR\RemFloat.cs" />
+    <Compile Include="IR\RemSigned.cs" />
+    <Compile Include="IR\RemUnsigned.cs" />
+    <Compile Include="IR\SubFloat.cs" />
+    <Compile Include="IR\SubSigned.cs" />
+    <Compile Include="IR\SubUnsigned.cs" />
     <Compile Include="IR\Switch.cs" />
     <Compile Include="Stages\MethodCompilerSchedulerStage.cs" />
     <Compile Include="Operands\SymbolOperand.cs" />
@@ -233,12 +252,12 @@
     <Compile Include="IR\LiteralData.cs" />
     <Compile Include="IR\IRInstruction.cs" />
     <Compile Include="IR\Epilogue.cs" />
-    <Compile Include="IR\FloatingPointCompare.cs" />
-    <Compile Include="IR\FloatingPointToIntegerConversion.cs" />
+    <Compile Include="IR\FloatCompare.cs" />
+    <Compile Include="IR\FloatToIntegerConversion.cs" />
     <Compile Include="IR\IIRVisitor.cs" />
     <Compile Include="IR\IntegerCompareBranch.cs" />
     <Compile Include="IR\IntegerCompare.cs" />
-    <Compile Include="IR\IntegerToFloatingPointConversion.cs" />
+    <Compile Include="IR\IntegerToFloatConversion.cs" />
     <Compile Include="IR\BaseIRInstruction.cs" />
     <Compile Include="IR\Jmp.cs" />
     <Compile Include="IR\Load.cs" />
@@ -290,9 +309,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BasicBlock.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Stages\BlockReductionStage.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Stages\CodeGenerationStage.cs">
@@ -385,9 +401,6 @@
     <Compile Include="Operands\StaticFieldOperand.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Operands\TemporaryOperand.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Operands\LocalVariableOperand.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -415,6 +428,22 @@
       <Name>Mosa.Compiler.TypeSystem</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Windows.Installer.3.1">
+      <Visible>False</Visible>
+      <ProductName>Windows Installer 3.1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>

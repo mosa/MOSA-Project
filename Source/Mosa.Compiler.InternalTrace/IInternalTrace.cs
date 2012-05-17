@@ -13,8 +13,8 @@ namespace Mosa.Compiler.InternalTrace
 {
 	public interface IInternalTrace
 	{
-		IInstructionTraceListener InstructionTraceListener { get; set; }
-		IInstructionTraceFilter InstructionTraceFilter { get; set; }
+		ITraceListener TraceListener { get; set; }
+		ITraceFilter TraceFilter { get; set; }
 		ICompilerEventListener CompilerEventListener { get; set; }
 	}
 }

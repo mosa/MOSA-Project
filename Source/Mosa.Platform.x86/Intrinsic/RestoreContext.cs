@@ -7,7 +7,6 @@
  *  Simon Wollwage (rootnode) <rootnode@mosa-project.org>
  */
 
-using System;
 using System.Collections.Generic;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Operands;

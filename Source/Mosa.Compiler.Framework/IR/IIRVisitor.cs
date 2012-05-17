@@ -10,272 +10,272 @@
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
-	/// Visitor interface for instructions of the intermediate representation.
+	/// Visitor interface for s of the intermediate representation.
 	/// </summary>
 	public interface IIRVisitor : IVisitor
 	{
 		/// <summary>
-		/// Visitation function for AddressOfInstruction.
+		/// Visitation function for AddressOf.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void AddressOfInstruction(Context context);
+		void AddressOf(Context context);
 
 		/// <summary>
-		/// Visitation function for ArithmeticShiftRightInstruction.
+		/// Visitation function for ArithmeticShiftRight.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void ArithmeticShiftRightInstruction(Context context);
+		void ArithmeticShiftRight(Context context);
 
 		/// <summary>
-		/// Visitation function for CallInstruction.
+		/// Visitation function for Call.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void CallInstruction(Context context);
+		void Call(Context context);
 
 		/// <summary>
-		/// Visitation function for EpilogueInstruction.
+		/// Visitation function for Epilogue.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void EpilogueInstruction(Context context);
+		void Epilogue(Context context);
 
 		/// <summary>
-		/// Visitation function for FloatingPointCompareInstruction.
+		/// Visitation function for FloatingPointCompare.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void FloatingPointCompareInstruction(Context context);
+		void FloatCompare(Context context);
 
 		/// <summary>
-		/// Visitation function for FloatingPointToIntegerConversionInstruction.
+		/// Visitation function for FloatingPointToIntegerConversion.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void FloatingPointToIntegerConversionInstruction(Context context);
+		void FloatToIntegerConversion(Context context);
 
 		/// <summary>
-		/// Visitation function for IntegerCompareInstruction.
+		/// Visitation function for IntegerCompare.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IntegerCompareBranchInstruction(Context context);
+		void IntegerCompareBranch(Context context);
 
 		/// <summary>
-		/// Visitation function for IntegerCompareInstruction.
+		/// Visitation function for IntegerCompare.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IntegerCompareInstruction(Context context);
+		void IntegerCompare(Context context);
 
 		/// <summary>
-		/// Visitation function for IntegerToFloatingPointConversionInstruction.
+		/// Visitation function for IntegerToFloatingPointConversion.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void IntegerToFloatingPointConversionInstruction(Context context);
+		void IntegerToFloatConversion(Context context);
 
 		/// <summary>
-		/// Visitation function for JmpInstruction"/> instruction.
+		/// Visitation function for Jmp"/> .
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void JmpInstruction(Context context);
+		void Jmp(Context context);
 
 		/// <summary>
-		/// Visitation function for LoadInstruction.
+		/// Visitation function for Load.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void LoadInstruction(Context context);
+		void Load(Context context);
 
 		/// <summary>
-		/// Visitation function for LogicalAndInstruction.
+		/// Visitation function for LogicalAnd.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void LogicalAndInstruction(Context context);
+		void LogicalAnd(Context context);
 
 		/// <summary>
-		/// Visitation function for LogicalOrInstruction.
+		/// Visitation function for LogicalOr.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void LogicalOrInstruction(Context context);
+		void LogicalOr(Context context);
 
 		/// <summary>
-		/// Visitation function for LogicalXorInstruction.
+		/// Visitation function for LogicalXor.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void LogicalXorInstruction(Context context);
+		void LogicalXor(Context context);
 
 		/// <summary>
-		/// Visitation function for LogicalNotInstruction.
+		/// Visitation function for LogicalNot.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void LogicalNotInstruction(Context context);
+		void LogicalNot(Context context);
 
 		/// <summary>
-		/// Visitation function for MoveInstruction.
+		/// Visitation function for Move.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void MoveInstruction(Context context);
+		void Move(Context context);
 
 		/// <summary>
-		/// Visitation function for PhiInstruction.
+		/// Visitation function for Phi.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void PhiInstruction(Context context);
+		void Phi(Context context);
 
 		/// <summary>
-		/// Visitation function for PrologueInstruction.
+		/// Visitation function for Prologue.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void PrologueInstruction(Context context);
+		void Prologue(Context context);
 
 		/// <summary>
-		/// Visitation function for ReturnInstruction.
+		/// Visitation function for Return.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void ReturnInstruction(Context context);
+		void Return(Context context);
 
 		/// <summary>
-		/// Visitation function for ShiftLeftInstruction.
+		/// Visitation function for ShiftLeft.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void ShiftLeftInstruction(Context context);
+		void ShiftLeft(Context context);
 
 		/// <summary>
-		/// Visitation function for ShiftRightInstruction.
+		/// Visitation function for ShiftRight.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void ShiftRightInstruction(Context context);
+		void ShiftRight(Context context);
 
 		/// <summary>
-		/// Visitation function for SignExtendedMoveInstruction.
+		/// Visitation function for SignExtendedMove.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void SignExtendedMoveInstruction(Context context);
+		void SignExtendedMove(Context context);
 
 		/// <summary>
-		/// Visitation function for StoreInstruction.
+		/// Visitation function for Store.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void StoreInstruction(Context context);
+		void Store(Context context);
 
 		/// <summary>
-		/// Visitation function for ZeroExtendedMoveInstruction.
+		/// Visitation function for ZeroExtendedMove.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void ZeroExtendedMoveInstruction(Context context);
+		void ZeroExtendedMove(Context context);
 
 		/// <summary>
-		/// Visitation function for NopInstruction.
+		/// Visitation function for Nop.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void NopInstruction(Context context);
+		void Nop(Context context);
 
 		/// <summary>
-		/// Visitation function for AddSInstruction.
+		/// Visitation function for AddSigned.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void AddSInstruction(Context context);
+		void AddSigned(Context context);
 
 		/// <summary>
-		/// Visitation function for AddUInstruction.
+		/// Visitation function for AddUnsigned.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void AddUInstruction(Context context);
+		void AddUnsigned(Context context);
 
 		/// <summary>
-		/// Visitation function for AddFInstruction.
+		/// Visitation function for AddF.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void AddFInstruction(Context context);
+		void AddFloat(Context context);
 
 		/// <summary>
-		/// Visitation function for DivFInstruction.
+		/// Visitation function for DivF.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void DivFInstruction(Context context);
+		void DivFloat(Context context);
 
 		/// <summary>
-		/// Visitation function for DivSInstruction.
+		/// Visitation function for DivS.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void DivSInstruction(Context context);
+		void DivSigned(Context context);
 
 		/// <summary>
-		/// Visitation function for DivUInstruction.
+		/// Visitation function for DivU.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void DivUInstruction(Context context);
+		void DivUnsigned(Context context);
 
 		/// <summary>
-		/// Visitation function for MulSInstruction.
+		/// Visitation function for MulS.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void MulSInstruction(Context context);
+		void MulSigned(Context context);
 
 		/// <summary>
-		/// Visitation function for MulFInstruction.
+		/// Visitation function for MulF.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void MulFInstruction(Context context);
+		void MulFloat(Context context);
 
 		/// <summary>
-		/// Visitation function for MulUInstruction.
+		/// Visitation function for MulU.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void MulUInstruction(Context context);
+		void MulUnsigned(Context context);
 
 		/// <summary>
-		/// Visitation function for SubFInstruction.
+		/// Visitation function for SubF.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void SubFInstruction(Context context);
+		void SubFloat(Context context);
 
 		/// <summary>
-		/// Visitation function for SubSInstruction.
+		/// Visitation function for SubS.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void SubSInstruction(Context context);
+		void SubSigned(Context context);
 
 		/// <summary>
-		/// Visitation function for SubUInstruction.
+		/// Visitation function for SubU.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void SubUInstruction(Context context);
+		void SubUnsigned(Context context);
 
 		/// <summary>
-		/// Visitation function for RemFInstruction.
+		/// Visitation function for RemF.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void RemFInstruction(Context context);
+		void RemFloat(Context context);
 
 		/// <summary>
-		/// Visitation function for RemSInstruction.
+		/// Visitation function for RemS.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void RemSInstruction(Context context);
+		void RemSigned(Context context);
 
 		/// <summary>
-		/// Visitation function for RemUInstruction.
+		/// Visitation function for RemU.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void RemUInstruction(Context context);
+		void RemUnsigned(Context context);
 
 		/// <summary>
-		/// Visitation function for SwitchInstruction.
+		/// Visitation function for Switch.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void SwitchInstruction(Context context);
+		void Switch(Context context);
 
 		/// <summary>
-		/// Visitation function for BreakInstruction.
+		/// Visitation function for Break.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void BreakInstruction(Context context);
+		void Break(Context context);
 
 		/// <summary>
-		/// Visitation function for ThrowInstruction.
+		/// Visitation function for Throw.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void ThrowInstruction(Context context);
+		void Throw(Context context);
 
 		/// <summary>
-		/// Visitation function for ExceptionPrologueInstruction.
+		/// Visitation function for ExceptionPrologue.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		void ExceptionPrologueInstruction(Context context);
+		void ExceptionPrologue(Context context);
 	}
 }

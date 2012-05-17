@@ -8,7 +8,6 @@
  */
 
 using System;
-using Mosa.Compiler.Framework.Operands;
 using Mosa.Compiler.Metadata.Signatures;
 
 namespace Mosa.Compiler.Framework
@@ -122,22 +121,6 @@ namespace Mosa.Compiler.Framework
 		/// <param name="size">Receives the memory size of the type.</param>
 		/// <param name="alignment">Receives alignment requirements of the type.</param>
 		public abstract void GetTypeRequirements(SigType type, out int size, out int alignment);
-
-		/// <summary>
-		/// Factory method for result operands of instructions.
-		/// </summary>
-		/// <param name="type">The data type held in the result operand.</param>
-		/// <returns>
-		/// The operand, which holds the instruction result.
-		/// </returns>
-		public abstract Operand CreateResultOperand(SigType type);
-
-		/// <summary>
-		/// Gets the intrinsic instruction by type
-		/// </summary>
-		/// <param name="type">The type.</param>
-		/// <returns></returns>
-		public abstract IIntrinsicMethod GetIntrinsicMethod(Type type);
 
 		/// <summary>
 		/// Gets the code emitter.

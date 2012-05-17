@@ -46,7 +46,7 @@ namespace Mosa.Compiler.Framework.CIL
 			if (arrayType == null)
 				throw new InvalidProgramException(@"Operand to ldlen is not a vector.");
 
-			ctx.Result = compiler.CreateTemporary(BuiltInSigType.IntPtr);
+			ctx.Result = compiler.CreateVirtualRegister(BuiltInSigType.IntPtr);
 		}
 
 		/// <summary>

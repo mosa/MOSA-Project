@@ -12,8 +12,6 @@ using System.Collections;
 using System.Collections.Generic;
 using Mosa.Compiler.Framework.CIL;
 using Mosa.Compiler.Framework.Operands;
-using Mosa.Compiler.Metadata;
-using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -97,7 +95,7 @@ namespace Mosa.Compiler.Framework.Stages
 			enqueued = new BitArray(basicBlocks.Count);
 			enqueued.SetAll(false);
 
-			var firstBlock = FindBlock(label);
+			var firstBlock = basicBlocks.GetByLabel(label);
 			processed.Set(firstBlock.Sequence, true);
 			workList.Enqueue(new WorkItem(firstBlock, new Stack<Operand>()));
 
@@ -193,7 +191,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			foreach (var operand in operandStack)
 			{
-				joinStack.Push(methodCompiler.CreateTemporary(operand.Type));
+				joinStack.Push(methodCompiler.CreateVirtualRegister(operand.Type));
 			}
 
 			foreach (var b in block.PreviousBlocks)
@@ -260,9 +258,6 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!(ctx.Instruction is IR.ExceptionPrologue))
 				if (!(ctx.Instruction as ICILInstruction).PushResult)
 					return;
-
-			//if (ctx.Result != null && ctx.ResultCount == 0)
-			//    return;
 
 			if (ctx.ResultCount == 0)
 				return;

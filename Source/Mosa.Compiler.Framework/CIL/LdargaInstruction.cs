@@ -56,7 +56,7 @@ namespace Mosa.Compiler.Framework.CIL
 
 			Operand parameterOperand = decoder.Compiler.GetParameterOperand(argIdx);
 			ctx.Operand1 = parameterOperand;
-			ctx.Result = decoder.Compiler.CreateTemporary(new RefSigType(parameterOperand.Type));
+			ctx.Result = decoder.Compiler.CreateVirtualRegister(new RefSigType(parameterOperand.Type));
 		}
 
 		/// <summary>

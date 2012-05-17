@@ -13,8 +13,8 @@ namespace Mosa.Compiler.InternalTrace
 {
 	public class BasicInternalTrace : IInternalTrace
 	{
-		protected IInstructionTraceListener instructionLogListener;
-		protected IInstructionTraceFilter instructionLogFilter = new ConfigurableInstructionTraceFilter();
+		protected ITraceListener instructionLogListener;
+		protected ITraceFilter instructionLogFilter = new ConfigurableTraceFilter();
 		protected ICompilerEventListener compilerStatusListener;
 
 		public BasicInternalTrace()
@@ -23,19 +23,19 @@ namespace Mosa.Compiler.InternalTrace
 			compilerStatusListener = new BasicCompilerEventListener();
 		}
 
-		public BasicInternalTrace(IInstructionTraceListener instructionLogListener, ICompilerEventListener compilerStatusListener)
+		public BasicInternalTrace(ITraceListener instructionLogListener, ICompilerEventListener compilerStatusListener)
 		{
 			this.instructionLogListener = instructionLogListener;
 			this.compilerStatusListener = compilerStatusListener;
 		}
 
-		IInstructionTraceFilter IInternalTrace.InstructionTraceFilter
+		ITraceFilter IInternalTrace.TraceFilter
 		{
 			get { return instructionLogFilter; }
 			set { instructionLogFilter = value; }
 		}
 
-		IInstructionTraceListener IInternalTrace.InstructionTraceListener
+		ITraceListener IInternalTrace.TraceListener
 		{
 			get { return instructionLogListener; }
 			set { instructionLogListener = value; }

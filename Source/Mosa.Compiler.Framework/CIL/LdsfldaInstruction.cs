@@ -45,7 +45,7 @@ namespace Mosa.Compiler.Framework.CIL
 				//TODO
 			}
 
-			ctx.Result = decoder.Compiler.CreateTemporary(BuiltInSigType.Ptr);
+			ctx.Result = decoder.Compiler.CreateVirtualRegister(BuiltInSigType.Ptr);
 		}
 
 		/// <summary>

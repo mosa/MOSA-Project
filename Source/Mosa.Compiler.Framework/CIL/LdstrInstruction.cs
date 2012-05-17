@@ -47,7 +47,7 @@ namespace Mosa.Compiler.Framework.CIL
 			// Set the result
 			ctx.TokenType = ((HeapIndexToken)decoder.DecodeInt()) | HeapIndexToken.UserString;
 
-			ctx.Result = decoder.Compiler.CreateTemporary(BuiltInSigType.String);
+			ctx.Result = decoder.Compiler.CreateVirtualRegister(BuiltInSigType.String);
 		}
 
 		/// <summary>

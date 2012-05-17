@@ -8,7 +8,6 @@
  */
 
 using System;
-using System.IO;
 using Mosa.Utility.IsoImage;
 
 namespace Mosa.Tool.MakeIsoImage

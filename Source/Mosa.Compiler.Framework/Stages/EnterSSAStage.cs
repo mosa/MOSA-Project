@@ -54,12 +54,15 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <summary>
 		/// 
 		/// </summary>
-		private IDominanceProvider dominanceCalculationStage;
+		private IDominanceProvider dominanceCalculation;
 		/// <summary>
 		/// 
 		/// </summary>
 		private PhiPlacementStage phiPlacementStage;
 
+		/// <summary>
+		/// Performs stage specific processing on the compiler context.
+		/// </summary>
 		void IMethodCompilerStage.Run()
 		{
 			if (AreExceptions)
@@ -69,7 +72,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (block.NextBlocks.Count == 0 && block.PreviousBlocks.Count == 0)
 					return;
 
-			this.dominanceCalculationStage = this.methodCompiler.Pipeline.FindFirst<DominanceCalculationStage>() as IDominanceProvider;
+			this.dominanceCalculation = this.methodCompiler.Pipeline.FindFirst<DominanceCalculationStage>().DominanceProvider;
 			this.phiPlacementStage = this.methodCompiler.Pipeline.FindFirst<PhiPlacementStage>();
 
 			var numberOfParameters = this.methodCompiler.Method.Parameters.Count;
@@ -96,14 +99,14 @@ namespace Mosa.Compiler.Framework.Stages
 				this.variableInformation[name].Stack.Push(0);
 				this.variableInformation[name].Count = 1;
 			}
-			this.RenameVariables(this.FindBlock(-1).NextBlocks[0]);
-			Debug.WriteLine("ESSA: " + this.methodCompiler.Method.FullName);
+			this.RenameVariables(basicBlocks.PrologueBlock.NextBlocks[0]);
+			//Debug.WriteLine("ESSA: " + this.methodCompiler.Method.FullName);
 		}
 
 		/// <summary>
-		/// 
+		/// Renames the variables.
 		/// </summary>
-		/// <param name="block"></param>
+		/// <param name="block">The block.</param>
 		private void RenameVariables(BasicBlock block)
 		{
 			for (var context = new Context(this.instructionSet, block); !context.EndOfInstruction; context.GotoNext())
@@ -149,7 +152,7 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 			}
 
-			foreach (var s in this.dominanceCalculationStage.GetChildren(block))
+			foreach (var s in this.dominanceCalculation.GetChildren(block))
 			{
 				this.RenameVariables(s);
 			}
@@ -166,6 +169,12 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
+		/// <summary>
+		/// Which the predecessor.
+		/// </summary>
+		/// <param name="y">The y.</param>
+		/// <param name="x">The x.</param>
+		/// <returns></returns>
 		private int WhichPredecessor(BasicBlock y, BasicBlock x)
 		{
 			for (var i = 0; i < y.PreviousBlocks.Count; ++i)
@@ -175,10 +184,12 @@ namespace Mosa.Compiler.Framework.Stages
 		}
 
 		/// <summary>
-		/// 
+		/// Determines whether the specified context is assignment.
 		/// </summary>
-		/// <param name="context"></param>
-		/// <returns></returns>
+		/// <param name="context">The context.</param>
+		/// <returns>
+		///   <c>true</c> if the specified context is assignment; otherwise, <c>false</c>.
+		/// </returns>
 		private bool IsAssignment(Context context)
 		{
 			var op = context.Result;
@@ -189,9 +200,9 @@ namespace Mosa.Compiler.Framework.Stages
 		}
 
 		/// <summary>
-		/// 
+		/// Names for operand.
 		/// </summary>
-		/// <param name="operand"></param>
+		/// <param name="operand">The operand.</param>
 		/// <returns></returns>
 		private string NameForOperand(Operand operand)
 		{

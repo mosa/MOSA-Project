@@ -14,7 +14,6 @@ using Mosa.Compiler.Framework.Operands;
 using Mosa.Compiler.Framework.Platform;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Platform.x86.Instructions;
 
 namespace Mosa.Platform.x86.Stages
 {

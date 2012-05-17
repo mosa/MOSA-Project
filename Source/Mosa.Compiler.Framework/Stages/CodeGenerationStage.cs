@@ -85,7 +85,8 @@ namespace Mosa.Compiler.Framework.Stages
 							if (instruction != null)
 								instruction.Emit(context, codeEmitter);
 							else
-								Trace(InternalTrace.CompilerEvent.Error, "Missing Code Transformation: " + context.ToString());
+								if (architecture.PlatformName != "Null")
+									Trace(InternalTrace.CompilerEvent.Error, "Missing Code Transformation: " + context.ToString());
 						}
 
 				BlockEnd(block);

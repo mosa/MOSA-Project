@@ -45,7 +45,7 @@ namespace Mosa.Compiler.Framework.CIL
 
 			// Read the fn token
 			Token token = decoder.DecodeTokenType();
-			ctx.Result = decoder.Compiler.CreateTemporary(BuiltInSigType.IntPtr);
+			ctx.Result = decoder.Compiler.CreateVirtualRegister(BuiltInSigType.IntPtr);
 			ctx.InvokeTarget = decoder.TypeModule.GetMethod(token);
 			/*
 				_function = MetadataMemberReference.FromToken(decoder.Metadata, token);

@@ -453,8 +453,8 @@ namespace Mosa.Compiler.Framework.IR
 			{
 				Operand thisPtr = context.Operand1;
 
-				Operand methodTable = methodCompiler.CreateTemporary(BuiltInSigType.IntPtr);
-				Operand methodPtr = methodCompiler.CreateTemporary(BuiltInSigType.IntPtr);
+				Operand methodTable = methodCompiler.CreateVirtualRegister(BuiltInSigType.IntPtr);
+				Operand methodPtr = methodCompiler.CreateVirtualRegister(BuiltInSigType.IntPtr);
 
 				if (!invokeTarget.DeclaringType.IsInterface)
 				{
@@ -467,8 +467,8 @@ namespace Mosa.Compiler.Framework.IR
 					int methodTableOffset = CalculateMethodTableOffset(invokeTarget);
 					int slotOffset = CalculateInterfaceSlotOffset(invokeTarget);
 
-					Operand interfaceSlotPtr = methodCompiler.CreateTemporary(BuiltInSigType.IntPtr);
-					Operand interfaceMethodTablePtr = methodCompiler.CreateTemporary(BuiltInSigType.IntPtr);
+					Operand interfaceSlotPtr = methodCompiler.CreateVirtualRegister(BuiltInSigType.IntPtr);
+					Operand interfaceMethodTablePtr = methodCompiler.CreateVirtualRegister(BuiltInSigType.IntPtr);
 
 					context.SetInstruction(IRInstruction.Load, methodTable, thisPtr, ConstantOperand.FromValue(0));
 					context.AppendInstruction(IRInstruction.Load, interfaceSlotPtr, methodTable, ConstantOperand.FromValue(0));
@@ -931,7 +931,7 @@ namespace Mosa.Compiler.Framework.IR
 		{
 			Operand resultOperand = context.Result;
 			Operand objectOperand = context.Operand1;
-			Operand temp = methodCompiler.CreateTemporary(context.RuntimeField.SignatureType);
+			Operand temp = methodCompiler.CreateVirtualRegister(context.RuntimeField.SignatureType);
 			RuntimeField field = context.RuntimeField;
 
 			int offset = typeLayout.GetFieldOffset(field);
@@ -974,7 +974,7 @@ namespace Mosa.Compiler.Framework.IR
 		{
 			Operand objectOperand = context.Operand1;
 			Operand valueOperand = context.Operand2;
-			Operand temp = methodCompiler.CreateTemporary(context.RuntimeField.SignatureType);
+			Operand temp = methodCompiler.CreateVirtualRegister(context.RuntimeField.SignatureType);
 
 			int offset = typeLayout.GetFieldOffset(context.RuntimeField);
 			ConstantOperand offsetOperand = new ConstantOperand(BuiltInSigType.IntPtr, offset);
@@ -1011,7 +1011,7 @@ namespace Mosa.Compiler.Framework.IR
 
 			ConditionCode cc;
 			Operand first = context.Operand1;
-			Operand second = new ConstantOperand(BuiltInSigType.Int32, 0UL);
+			Operand second = ConstantOperand.I4_0;
 
 			CIL.OpCode opcode = ((CIL.ICILInstruction)context.Instruction).OpCode;
 			if (opcode == CIL.OpCode.Brtrue || opcode == CIL.OpCode.Brtrue_s)
@@ -1046,10 +1046,10 @@ namespace Mosa.Compiler.Framework.IR
 
 			if (first.StackType == StackTypeCode.F)
 			{
-				Operand comparisonResult = methodCompiler.CreateTemporary(BuiltInSigType.Int32);
+				Operand comparisonResult = methodCompiler.CreateVirtualRegister(BuiltInSigType.Int32);
 				context.SetInstruction(IRInstruction.FloatingPointCompare, comparisonResult, first, second);
 				context.ConditionCode = cc;
-				context.SetInstruction(IRInstruction.IntegerCompareBranch, null, comparisonResult, new ConstantOperand(BuiltInSigType.IntPtr, 1));
+				context.AppendInstruction(IRInstruction.IntegerCompareBranch, null, comparisonResult, new ConstantOperand(BuiltInSigType.IntPtr, 1));
 				context.ConditionCode = ConditionCode.Equal;
 				context.SetBranch(branch.Targets[0]);
 			}
@@ -1089,7 +1089,7 @@ namespace Mosa.Compiler.Framework.IR
 			Operand arrayLength = context.Result;
 			ConstantOperand constantOffset = ConstantOperand.FromValue(8);
 
-			Operand arrayAddress = methodCompiler.CreateTemporary(new PtrSigType(BuiltInSigType.Int32));
+			Operand arrayAddress = methodCompiler.CreateVirtualRegister(new PtrSigType(BuiltInSigType.Int32));
 			context.SetInstruction(IRInstruction.Move, arrayAddress, arrayOperand);
 			context.AppendInstruction(IRInstruction.Load, arrayLength, arrayAddress, constantOffset);
 		}
@@ -1131,7 +1131,7 @@ namespace Mosa.Compiler.Framework.IR
 			// of x86, which might change for other platforms. We need to refactor this into some helper classes.
 			//
 
-			Operand elementOffset = methodCompiler.CreateTemporary(BuiltInSigType.Int32);
+			Operand elementOffset = methodCompiler.CreateVirtualRegister(BuiltInSigType.Int32);
 			Operand elementSizeOperand = new ConstantOperand(BuiltInSigType.Int32, elementSizeInBytes);
 			context.AppendInstruction(IRInstruction.MulS, elementOffset, arrayIndexOperand, elementSizeOperand);
 
@@ -1140,7 +1140,7 @@ namespace Mosa.Compiler.Framework.IR
 
 		private Operand LoadArrayBaseAddress(Context context, SZArraySigType arraySignatureType, Operand arrayOperand)
 		{
-			Operand arrayAddress = methodCompiler.CreateTemporary(new PtrSigType(arraySignatureType.ElementType));
+			Operand arrayAddress = methodCompiler.CreateVirtualRegister(new PtrSigType(arraySignatureType.ElementType));
 			Operand fixedOffset = new ConstantOperand(BuiltInSigType.Int32, 12);
 			context.SetInstruction(IRInstruction.AddS, arrayAddress, arrayOperand, fixedOffset);
 			return arrayAddress;
@@ -1154,7 +1154,7 @@ namespace Mosa.Compiler.Framework.IR
 		{
 			IInstruction loadInstruction = IRInstruction.Load;
 			Operand result = context.Result;
-			MemoryOperand arrayOperand = (MemoryOperand)context.Operand1;
+			Operand arrayOperand = context.Operand1;
 			Operand arrayIndexOperand = context.Operand2;
 
 			SZArraySigType arraySigType = arrayOperand.Type as SZArraySigType;
@@ -1172,8 +1172,8 @@ namespace Mosa.Compiler.Framework.IR
 				loadInstruction = IRInstruction.ZeroExtendedMove;
 			}
 
-			Operand arrayAddress = this.LoadArrayBaseAddress(context, arraySigType, arrayOperand);
-			Operand elementOffset = this.CalculateArrayElementOffset(context, arraySigType, arrayIndexOperand);
+			Operand arrayAddress = LoadArrayBaseAddress(context, arraySigType, arrayOperand);
+			Operand elementOffset = CalculateArrayElementOffset(context, arraySigType, arrayIndexOperand);
 			context.AppendInstruction(loadInstruction, result, arrayAddress, elementOffset);
 		}
 
@@ -1342,7 +1342,7 @@ namespace Mosa.Compiler.Framework.IR
 				if (clause != null)
 				{
 					// Find finally block
-					BasicBlock finallyBlock = this.FindBlock(clause.HandlerOffset);
+					BasicBlock finallyBlock = basicBlocks.GetByLabel(clause.HandlerOffset);
 
 					Context before = context.InsertBefore();
 					before.SetInstruction(IRInstruction.Call, finallyBlock);
@@ -1981,6 +1981,10 @@ namespace Mosa.Compiler.Framework.IR
 
 			//TODO: Verify!
 
+			// HACK
+			if (architecture.PlatformName == "x86ii") // && !external.Contains("Delegate"))
+				external = external.Replace(".x86", ".x86II").Replace(".x86", ".x86II").Replace(".x86IIII", ".x86II").Replace(".x86IIII", ".x86II");
+
 			Type intrinsicType = Type.GetType(external);
 
 			if (intrinsicType == null)
@@ -2065,7 +2069,7 @@ namespace Mosa.Compiler.Framework.IR
 
 			if (extension != null)
 			{
-				Operand temp = methodCompiler.CreateTemporary(extendedType);
+				Operand temp = methodCompiler.CreateVirtualRegister(extendedType);
 				destination.Replace(temp, context.InstructionSet);
 				context.SetInstruction(extension, temp, source);
 			}
