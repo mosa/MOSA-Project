@@ -242,6 +242,9 @@
 			// 
 			// enableSSAToolStripMenuItem
 			// 
+			this.enableSSAToolStripMenuItem.Checked = true;
+			this.enableSSAToolStripMenuItem.CheckOnClick = true;
+			this.enableSSAToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
 			this.enableSSAToolStripMenuItem.Name = "enableSSAToolStripMenuItem";
 			this.enableSSAToolStripMenuItem.Size = new System.Drawing.Size(210, 22);
 			this.enableSSAToolStripMenuItem.Text = "Enable SSA";

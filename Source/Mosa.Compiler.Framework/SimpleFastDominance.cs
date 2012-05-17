@@ -295,26 +295,26 @@ namespace Mosa.Compiler.Framework
 		/// <returns>The highest common dominator.</returns>
 		private BasicBlock Intersect(BasicBlock b1, BasicBlock b2)
 		{
-			BasicBlock f1 = b1, f2 = b2;
+			BasicBlock finger1 = b1, finger2 = b2;
 
-			while (f2 != null && f1 != null && f1 != f2)
+			while (finger2 != null && finger1 != null && finger1 != finger2)
 			{
-				while (f1 != null && f1.Sequence > f2.Sequence)
+				while (finger1 != null && finger1.Sequence > finger2.Sequence)
 				{
 					BasicBlock f = null;
-					doms.TryGetValue(f1, out f);
-					f1 = f;
+					doms.TryGetValue(finger1, out f);
+					finger1 = f;
 				}
 
-				while (f2 != null && f1 != null && f2.Sequence > f1.Sequence)
+				while (finger2 != null && finger1 != null && finger2.Sequence > finger1.Sequence)
 				{
 					BasicBlock f = null;
-					doms.TryGetValue(f2, out f);
-					f2 = f;
+					doms.TryGetValue(finger2, out f);
+					finger2 = f;
 				}
 			}
 
-			return f1;
+			return finger1;
 		}
 
 		#endregion // Internals

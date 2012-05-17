@@ -1049,7 +1049,7 @@ namespace Mosa.Compiler.Framework.IR
 				Operand comparisonResult = methodCompiler.CreateVirtualRegister(BuiltInSigType.Int32);
 				context.SetInstruction(IRInstruction.FloatingPointCompare, comparisonResult, first, second);
 				context.ConditionCode = cc;
-				context.SetInstruction(IRInstruction.IntegerCompareBranch, null, comparisonResult, new ConstantOperand(BuiltInSigType.IntPtr, 1));
+				context.AppendInstruction(IRInstruction.IntegerCompareBranch, null, comparisonResult, new ConstantOperand(BuiltInSigType.IntPtr, 1));
 				context.ConditionCode = ConditionCode.Equal;
 				context.SetBranch(branch.Targets[0]);
 			}

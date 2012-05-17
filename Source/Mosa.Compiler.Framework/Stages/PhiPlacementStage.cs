@@ -96,15 +96,9 @@ namespace Mosa.Compiler.Framework.Stages
 			this.CollectAssignments();
 			switch (this.strategy)
 			{
-				case PhiPlacementStrategy.Minimal:
-					this.PlacePhiFunctionsMinimal();
-					return;
-				case PhiPlacementStrategy.SemiPruned:
-					this.PlacePhiFunctionsSemiPruned();
-					return;
-				case PhiPlacementStrategy.Pruned:
-					this.PlacePhiFunctionsPruned();
-					return;
+				case PhiPlacementStrategy.Minimal: PlacePhiFunctionsMinimal(); return;
+				case PhiPlacementStrategy.SemiPruned: PlacePhiFunctionsSemiPruned(); return;
+				case PhiPlacementStrategy.Pruned: PlacePhiFunctionsPruned(); return;
 			}
 		}
 
