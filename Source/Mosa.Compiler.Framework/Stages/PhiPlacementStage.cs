@@ -7,7 +7,9 @@
  *  Simon Wollwage (rootnode) <rootnode@mosa-project.org>
  */
 
+using System;
 using System.Collections.Generic;
+using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Operands;
 
 namespace Mosa.Compiler.Framework.Stages
@@ -82,7 +84,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		public Dictionary<string, AssignmentInformation> Assignments
 		{
-			get { return this.assignments; }
+			get { return assignments; }
 		}
 
 		/// <summary>
@@ -93,7 +95,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (AreExceptions)
 				return;
 
-			this.CollectAssignments();
+			CollectAssignments();
 			switch (this.strategy)
 			{
 				case PhiPlacementStrategy.Minimal: PlacePhiFunctionsMinimal(); return;
@@ -155,8 +157,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!assignments.ContainsKey(name))
 				assignments[name] = new AssignmentInformation(operand);
 
-			if (!assignments[name].AssigningBlocks.Contains(block))
-				assignments[name].AssigningBlocks.Add(block);
+			assignments[name].AssigningBlocks.AddIfNew(block);
 		}
 
 		/// <summary>
@@ -166,9 +167,9 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="variable">The variable.</param>
 		private void InsertPhiInstruction(BasicBlock block, Operand variable)
 		{
-			var context = new Context(this.instructionSet, block).InsertBefore();
-			context.SetInstruction(IR.IRInstruction.Phi);
-			context.SetResult(variable);
+			var context = new Context(instructionSet, block).InsertBefore();
+			context.SetInstruction(IR.IRInstruction.Phi, variable);
+
 			for (var i = 0; i < block.PreviousBlocks.Count; ++i)
 				context.SetOperand(i, variable);
 			context.OperandCount = (byte)block.PreviousBlocks.Count;
@@ -180,18 +181,20 @@ namespace Mosa.Compiler.Framework.Stages
 		private void PlacePhiFunctionsMinimal()
 		{
 			var firstBlock = basicBlocks.PrologueBlock;
-			var dominanceCalculation = this.methodCompiler.Pipeline.FindFirst<DominanceCalculationStage>().DominanceProvider;
+			var dominanceCalculation = methodCompiler.Pipeline.FindFirst<DominanceCalculationStage>().DominanceProvider;
 
 			foreach (var t in assignments.Keys)
 			{
 				if (assignments[t].AssigningBlocks.Count < 2)
 					continue;
-				var S = new List<BasicBlock>(assignments[t].AssigningBlocks);
-				S.Add(firstBlock);
-				var idf = dominanceCalculation.IteratedDominanceFrontier(S);
+
+				var blocks = new List<BasicBlock>(assignments[t].AssigningBlocks);
+				blocks.Add(firstBlock);
+	
+				var idf = dominanceCalculation.IteratedDominanceFrontier(blocks);
 
 				foreach (var n in idf)
-					this.InsertPhiInstruction(n, assignments[t].Operand);
+					InsertPhiInstruction(n, assignments[t].Operand);
 			}
 		}
 
@@ -199,12 +202,16 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Places the phi functions semi pruned.
 		/// </summary>
 		private void PlacePhiFunctionsSemiPruned()
-		{ }
+		{
+			throw new NotImplementedException("PhiPlacementStage.PlacePhiFunctionsSemiPruned");
+		}
 
 		/// <summary>
 		/// Places the phi functions pruned.
 		/// </summary>
 		private void PlacePhiFunctionsPruned()
-		{ }
+		{
+			throw new NotImplementedException("PhiPlacementStage.PlacePhiFunctionsSemiPruned");
+		}
 	}
 }

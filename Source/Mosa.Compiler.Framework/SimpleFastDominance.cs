@@ -11,6 +11,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using Mosa.Compiler.Common;
 
 namespace Mosa.Compiler.Framework
 {
@@ -136,9 +137,9 @@ namespace Mosa.Compiler.Framework
 					children.Add(immediateDominator, child);
 				}
 
-				if (!child.Contains(block) && block != immediateDominator)
+				if (block != immediateDominator)
 				{
-					child.Add(block);
+					child.AddIfNew(block);
 				}
 			}
 		}
@@ -166,14 +167,8 @@ namespace Mosa.Compiler.Framework
 								domFrontierOfBlock.Add(runner, runnerFrontier);
 							}
 
-							if (!domFrontier.Contains(b))
-							{
-								domFrontier.Add(b);
-							}
-							if (!runnerFrontier.Contains(b))
-							{
-								runnerFrontier.Add(b);
-							}
+							domFrontier.AddIfNew(b);
+							runnerFrontier.AddIfNew(b);
 
 							BasicBlock newrunner = null;
 							doms.TryGetValue(runner, out newrunner);

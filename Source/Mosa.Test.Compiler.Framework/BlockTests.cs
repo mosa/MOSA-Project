@@ -54,36 +54,31 @@ namespace Mosa.Test.Compiler.Framework
 				BasicBlock B7 = basicBlocks.CreateBlock(7);
 
 				basicBlocks.LinkBlocks(B0, B1);
-				basicBlocks.LinkBlocks(B1, B2);
-				basicBlocks.LinkBlocks(B1, B3);
+				basicBlocks.LinkBlocks(B1, new[] { B2, B3 });
 				basicBlocks.LinkBlocks(B3, B1);
-
-				basicBlocks.LinkBlocks(B2, B4);
-				basicBlocks.LinkBlocks(B2, B5);
-
-				basicBlocks.LinkBlocks(B4, B6);
-				basicBlocks.LinkBlocks(B4, B7);
+				basicBlocks.LinkBlocks(B2, new[] { B4, B5 });
+				basicBlocks.LinkBlocks(B4, new[] { B6, B7 });
 				basicBlocks.LinkBlocks(B6, B4);
-
 				basicBlocks.LinkBlocks(B7, B1);
 
 				return basicBlocks;
 			}
 		}
 
-		//#       1 -----+
-		//#       |      |
-		//#       2 <--+ |
-		//#       2    | |
-		//#  +--- 2 ---+ |
-		//#  |    |      |
-		//#  |    3 <----+
-		//#  |    |
-		//#  +--> 4
 		public static BasicBlocks Scenario2
 		{
 			get
 			{
+				//#       1 -----+
+				//#       |      |
+				//#       2 <--+ |
+				//#       2    | |
+				//#  +--- 2 ---+ |
+				//#  |    |      |
+				//#  |    3 <----+
+				//#  |    |
+				//#  +--> 4			
+
 				BasicBlocks basicBlocks = new BasicBlocks();
 
 				BasicBlock B1 = basicBlocks.CreateBlock(1);
@@ -91,11 +86,8 @@ namespace Mosa.Test.Compiler.Framework
 				BasicBlock B3 = basicBlocks.CreateBlock(3);
 				BasicBlock B4 = basicBlocks.CreateBlock(4);
 
-				basicBlocks.LinkBlocks(B1, B2);
-				basicBlocks.LinkBlocks(B1, B3);
-				basicBlocks.LinkBlocks(B2, B2);
-				basicBlocks.LinkBlocks(B2, B3);
-				basicBlocks.LinkBlocks(B2, B4);
+				basicBlocks.LinkBlocks(B1, new[] { B2, B3 });
+				basicBlocks.LinkBlocks(B2, new[] { B2, B3, B4 });
 				basicBlocks.LinkBlocks(B3, B4);
 
 				return basicBlocks;
@@ -180,13 +172,43 @@ namespace Mosa.Test.Compiler.Framework
 		}
 
 		[Test]
-		public void GetExitBlock()
+		public void GetExitBlock1()
 		{
 			var basicBlocks = Scenario1;
 
 			var block = basicBlocks.GetExitBlock(basicBlocks[0]);
 
 			Assert.AreSame<BasicBlock>(basicBlocks[5], block);
+		}
+
+		[Test]
+		public void GetExitBlock2()
+		{
+			var basicBlocks = Scenario2;
+
+			var block = basicBlocks.GetExitBlock(basicBlocks[0]);
+
+			Assert.AreSame<BasicBlock>(basicBlocks[3], block);
+		}
+
+		[Test]
+		public void GetExitBlock3()
+		{
+			var basicBlocks = Scenario3;
+
+			var block = basicBlocks.GetExitBlock(basicBlocks[0]);
+
+			Assert.AreSame<BasicBlock>(basicBlocks[6], block);
+		}
+
+		[Test]
+		public void GetExitBlock4()
+		{
+			var basicBlocks = Scenario4;
+
+			var block = basicBlocks.GetExitBlock(basicBlocks[0]);
+
+			Assert.AreSame<BasicBlock>(basicBlocks[12], block);
 		}
 	}
 }

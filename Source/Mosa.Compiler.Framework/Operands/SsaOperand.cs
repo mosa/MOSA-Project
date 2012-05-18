@@ -56,7 +56,13 @@ namespace Mosa.Compiler.Framework.Operands
 		/// </returns>
 		public override string ToString()
 		{
-			return this.Operand.ToString() + "<" + this.SsaVersion + ">";
+			string name = Operand.ToString();
+			int pos = name.IndexOf(' ');
+
+			if (pos < 0)
+				return name + "<" + SsaVersion + ">";
+			else
+				return name.Substring(0, pos) + "<" + SsaVersion + ">" + name.Substring(pos);
 		}
 	}
 }

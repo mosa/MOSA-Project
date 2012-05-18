@@ -15,6 +15,13 @@ namespace Mosa.Compiler.Common
 	public static class ListExtension
 	{
 
+		/// <summary>
+		/// Adds if new.
+		/// </summary>
+		/// <typeparam name="T"></typeparam>
+		/// <param name="list">The list.</param>
+		/// <param name="item">The item.</param>
+		/// <returns></returns>
 		public static void AddIfNew<T>(this List<T> list, T item)
 		{
 			if (list.Contains(item))
