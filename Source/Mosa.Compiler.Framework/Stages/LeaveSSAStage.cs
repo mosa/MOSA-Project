@@ -24,18 +24,15 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		void IMethodCompilerStage.Run()
 		{
-			if (AreExceptions)
-				return;
-
-			foreach (var block in this.basicBlocks)
+			foreach (var block in basicBlocks)
 			{
-				if (block.Label == Int32.MaxValue)
+				if (block.Label == BasicBlock.EpilogueLabel)
 					continue;
 
-				for (var context = new Context(this.instructionSet, block); !context.EndOfInstruction; context.GotoNext())
+				for (var context = new Context(instructionSet, block); !context.EndOfInstruction; context.GotoNext())
 				{
 					if (context.Instruction is Phi)
-						this.ProcessPhiInstruction(block, context);
+						ProcessPhiInstruction(block, context);
 
 					for (var i = 0; i < context.OperandCount; ++i)
 					{
@@ -65,7 +62,7 @@ namespace Mosa.Compiler.Framework.Stages
 				var predecessor = block.PreviousBlocks[predecessorIndex];
 				var operand = context.GetOperand(predecessorIndex);
 
-				this.InsertCopyStatement(predecessor, context.Result, operand);
+				InsertCopyStatement(predecessor, context.Result, operand);
 			}
 			context.Remove();
 		}
@@ -78,7 +75,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="operand">The operand.</param>
 		private void InsertCopyStatement(BasicBlock predecessor, Operand result, Operand operand)
 		{
-			var context = new Context(this.instructionSet, predecessor);
+			var context = new Context(instructionSet, predecessor);
 			while (!context.EndOfInstruction && IsBranchInstruction(context))
 				context.GotoNext();
 
@@ -91,6 +88,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Debug.Assert(!(source is SsaOperand));
 			Debug.Assert(!(destination is SsaOperand));
 
+			//if (destination != source)
 			context.SetInstruction(IR.IRInstruction.Move, destination, source);
 		}
 
