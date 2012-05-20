@@ -82,10 +82,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		void IMethodCompilerStage.Run()
 		{
-			if (AreExceptions)
-				return;
-
-			foreach (var block in this.basicBlocks)
+			foreach (var block in basicBlocks)
 				if (block.NextBlocks.Count == 0 && block.PreviousBlocks.Count == 0)
 					return;
 
@@ -111,10 +108,10 @@ namespace Mosa.Compiler.Framework.Stages
 					if (sop == null || !(sop.Operand is StackOperand))
 						continue;
 
-					if (!this.CheckResultsAreBuiltin(sop))
+					if (!CheckResultsAreBuiltin(sop))
 						continue;
 
-					this.ReplaceUses(sop, ctx.Operand1 as ConstantOperand);
+					ReplaceUses(sop, ctx.Operand1 as ConstantOperand);
 					ctx.SetInstruction(IRInstruction.Nop);
 				}
 			}
@@ -133,7 +130,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				for (Context ctx = new Context(instructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
 				{
-					if (!this.InstructionUsesOperand(ctx, sop))
+					if (!InstructionUsesOperand(ctx, sop))
 						continue;
 
 					if (ctx.Result == null)
@@ -144,8 +141,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 					var result = ctx.Result is SsaOperand ? (ctx.Result as SsaOperand).Operand : ctx.Result;
 
-					if (this.CheckOperand(result))
+					if (CheckOperand(result))
 						continue;
+
 					return false;
 				}
 			}
@@ -169,12 +167,12 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <summary>
 		/// Instructions the uses operand.
 		/// </summary>
-		/// <param name="ctx">The CTX.</param>
+		/// <param name="context">The context.</param>
 		/// <param name="sop">The sop.</param>
 		/// <returns></returns>
-		private bool InstructionUsesOperand(Context ctx, SsaOperand sop)
+		private bool InstructionUsesOperand(Context context, SsaOperand sop)
 		{
-			foreach (var operand in ctx.Operands)
+			foreach (var operand in context.Operands)
 			{
 				if (!(operand is SsaOperand))
 					continue;
@@ -206,7 +204,7 @@ namespace Mosa.Compiler.Framework.Stages
 						if (op.Operand == sop.Operand && op.SsaVersion == sop.SsaVersion)
 						{
 							ctx.SetOperand(i, constantOperand);
-							this.propagated.Add(ctx.Index);
+							propagated.Add(ctx.Index);
 						}
 					}
 				}

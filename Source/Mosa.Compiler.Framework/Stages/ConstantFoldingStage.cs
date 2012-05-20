@@ -20,22 +20,19 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		void IMethodCompilerStage.Run()
 		{
-			if (AreExceptions)
-				return;
-
 			foreach (var block in this.basicBlocks)
 				if (block.NextBlocks.Count == 0 && block.PreviousBlocks.Count == 0)
 					return;
 
-			foreach (var block in this.basicBlocks)
+			foreach (var block in basicBlocks)
 			{
-				for (var context = new Context(this.instructionSet, block); !context.EndOfInstruction; context.GotoNext())
+				for (var context = new Context(instructionSet, block); !context.EndOfInstruction; context.GotoNext())
 				{
-					if (!this.IsFoldableInstruction(context))
+					if (!IsFoldableInstruction(context))
 						continue;
-					if (!this.HasFoldableArguments(context))
+					if (!HasFoldableArguments(context))
 						continue;
-					this.FoldInstruction(context);
+					FoldInstruction(context);
 				}
 			}
 		}
@@ -47,31 +44,31 @@ namespace Mosa.Compiler.Framework.Stages
 		private void FoldInstruction(Context context)
 		{
 			if (context.Instruction is AddSigned)
-				this.FoldAddSInstruction(context);
+				FoldAddSInstruction(context);
 			else if (context.Instruction is MulSigned)
-				this.FoldMulSInstruction(context);
+				FoldMulSInstruction(context);
 		}
 
 		/// <summary>
-		/// Folds the add instruction.
+		/// Folds the addition instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		private void FoldAddSInstruction(Context context)
 		{
-			var cA = this.LoadSignedInteger(context.Operand1);
-			var cB = this.LoadSignedInteger(context.Operand2);
+			var cA = LoadSignedInteger(context.Operand1);
+			var cB = LoadSignedInteger(context.Operand2);
 
 			context.SetInstruction(IRInstruction.Move, context.Result, new ConstantOperand(context.Result.Type, cA + cB));
 		}
 
 		/// <summary>
-		/// Folds the mul S instruction.
+		/// Folds the multiply instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		private void FoldMulSInstruction(Context context)
 		{
-			var cA = this.LoadSignedInteger(context.Operand1);
-			var cB = this.LoadSignedInteger(context.Operand2);
+			var cA = LoadSignedInteger(context.Operand1);
+			var cB = LoadSignedInteger(context.Operand2);
 
 			context.SetInstruction(IRInstruction.Move, context.Result, new ConstantOperand(context.Result.Type, cA * cB));
 		}
