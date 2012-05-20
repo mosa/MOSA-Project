@@ -40,16 +40,18 @@ namespace Mosa.Test.System
 				//new ConstantFoldingStage(),
 				new CILTransformationStage(),
 				//new CILLeakGuardStage() { MustThrowCompilationException = true },
-				//InstructionStatisticsStage.Instance,
-				//new DominanceCalculationStage(),
-				//new PhiPlacementStage(),
-				//new EnterSSA(),
 				
-				//new ConstantPropagationStage(ConstantPropagationStage.PropagationStage.PreFolding),
-				//new ConstantFoldingStage(),
-				//new ConstantPropagationStage(ConstantPropagationStage.PropagationStage.PostFolding),
+				new DominanceCalculationStage(),
+				new PhiPlacementStage(),
+				new EnterSSAStage(),
 
-				//new LeaveSSA(),
+				new ConstantPropagationStage(ConstantPropagationStage.PropagationStage.PreFolding),
+				new ConstantFoldingStage() ,
+				new ConstantPropagationStage(ConstantPropagationStage.PropagationStage.PostFolding),
+
+				new LeaveSSA(),
+				
+				new StrengthReductionStage(),
 				new StackLayoutStage(),
 				new PlatformStubStage(),
 				//new BlockReductionStage(),

@@ -1,5 +1,7 @@
 ﻿
+using Mosa.Test.Cases;
 using Mosa.Test.Cases.IL;
+using Mosa.Test.Cases.CIL;
 using Mosa.Test.Compiler.Framework;
 
 namespace Mosa.Test.Debug
@@ -23,8 +25,8 @@ namespace Mosa.Test.Debug
 			//add.AddConstantCLeft('a', 'Z');
 			//add.AddConstantCLeft('a', 'Z');
 
-			//Call call = new Call();
-			//call.CallU1((byte)1);
+			Call call = new Call();
+			call.CallU1((byte)1);
 
 			//Int32Fixture int32Fixture = new Int32Fixture();
 			//BooleanFixture booleanFixture = new BooleanFixture();

@@ -106,7 +106,6 @@
     <Compile Include="CIL\UInt8Fixture.cs" />
     <Compile Include="CIL\DoubleFixture.cs" />
     <Compile Include="CIL\EnumFixture.cs" />
-    <Compile Include="CIL\ExceptionHandlingFixture.cs" />
     <None Include="IL\Initobj.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Initobj.cs</LastGenOutput>

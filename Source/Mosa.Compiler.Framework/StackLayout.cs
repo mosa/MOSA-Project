@@ -50,6 +50,11 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public StackSizeOperand StackSizeOperand { get { return stackSizeOperand; } }
 
+		/// <summary>
+		/// Gets the parameters.
+		/// </summary>
+		public ParameterOperand[] Parameters { get { return parameters; } }
+
 		#endregion // Properties
 
 		/// <summary>

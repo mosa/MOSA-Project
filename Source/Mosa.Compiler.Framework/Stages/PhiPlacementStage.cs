@@ -32,35 +32,11 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <summary>
 		/// 
 		/// </summary>
-		public class AssignmentInformation
-		{
-			/// <summary>
-			/// 
-			/// </summary>
-			public List<BasicBlock> AssigningBlocks = new List<BasicBlock>();
-			/// <summary>
-			/// 
-			/// </summary>
-			public Operand Operand;
-
-			/// <summary>
-			/// Initializes a new instance of the <see cref="AssignmentInformation"/> class.
-			/// </summary>
-			/// <param name="operand">The operand.</param>
-			public AssignmentInformation(Operand operand)
-			{
-				this.Operand = operand;
-			}
-		}
-
-		/// <summary>
-		/// 
-		/// </summary>
 		private PhiPlacementStrategy strategy;
 		/// <summary>
 		/// 
 		/// </summary>
-		private Dictionary<string, AssignmentInformation> assignments = new Dictionary<string, AssignmentInformation>();
+		private Dictionary<Operand, List<BasicBlock>> assignments = new Dictionary<Operand, List<BasicBlock>>();
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="PhiPlacementStage"/> class.
@@ -82,7 +58,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <summary>
 		/// Gets the assignments.
 		/// </summary>
-		public Dictionary<string, AssignmentInformation> Assignments
+		public Dictionary<Operand, List<BasicBlock>> Assignments
 		{
 			get { return assignments; }
 		}
@@ -96,7 +72,8 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 
 			CollectAssignments();
-			switch (this.strategy)
+
+			switch (strategy)
 			{
 				case PhiPlacementStrategy.Minimal: PlacePhiFunctionsMinimal(); return;
 				case PhiPlacementStrategy.SemiPruned: PlacePhiFunctionsSemiPruned(); return;
@@ -117,17 +94,6 @@ namespace Mosa.Compiler.Framework.Stages
 		}
 
 		/// <summary>
-		/// Names for operand.
-		/// </summary>
-		/// <param name="operand">The operand.</param>
-		/// <returns></returns>
-		public static string NameForOperand(Operand operand)
-		{
-			var sop = operand as StackOperand;
-			return sop.Name;
-		}
-
-		/// <summary>
 		/// Collects the assignments.
 		/// </summary>
 		private void CollectAssignments()
@@ -137,12 +103,11 @@ namespace Mosa.Compiler.Framework.Stages
 					if (IsAssignmentToStackVariable(context))
 						AddToAssignments(context.Result, block);
 
-			var numberOfParameters = methodCompiler.Method.Parameters.Count;
-			if (methodCompiler.Method.Signature.HasThis)
-				numberOfParameters++;
+			foreach (var op in methodCompiler.Parameters)
+			{
+				AddToAssignments(op, basicBlocks.GetByLabel(BasicBlock.PrologueLabel));
+			}
 
-			for (var i = 0; i < numberOfParameters; ++i)
-				AddToAssignments(methodCompiler.GetParameterOperand(i), basicBlocks.GetByLabel(BasicBlock.PrologueLabel));
 		}
 
 		/// <summary>
@@ -152,12 +117,15 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="block">The block.</param>
 		private void AddToAssignments(Operand operand, BasicBlock block)
 		{
-			var name = NameForOperand(operand);
+			List<BasicBlock> blocks;
 
-			if (!assignments.ContainsKey(name))
-				assignments[name] = new AssignmentInformation(operand);
+			if (!assignments.TryGetValue(operand, out blocks))
+			{
+				blocks = new List<BasicBlock>();
+				assignments.Add(operand, blocks);
+			}
 
-			assignments[name].AssigningBlocks.AddIfNew(block);
+			blocks.AddIfNew(block);
 		}
 
 		/// <summary>
@@ -172,6 +140,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			for (var i = 0; i < block.PreviousBlocks.Count; ++i)
 				context.SetOperand(i, variable);
+
 			context.OperandCount = (byte)block.PreviousBlocks.Count;
 		}
 
@@ -183,18 +152,21 @@ namespace Mosa.Compiler.Framework.Stages
 			var firstBlock = basicBlocks.PrologueBlock;
 			var dominanceCalculation = methodCompiler.Pipeline.FindFirst<DominanceCalculationStage>().DominanceProvider;
 
-			foreach (var t in assignments.Keys)
+			foreach (var t in assignments)
 			{
-				if (assignments[t].AssigningBlocks.Count < 2)
+				var blocks = t.Value;
+
+				if (blocks.Count < 2)
 					continue;
 
-				var blocks = new List<BasicBlock>(assignments[t].AssigningBlocks);
 				blocks.Add(firstBlock);
-	
+
 				var idf = dominanceCalculation.IteratedDominanceFrontier(blocks);
 
 				foreach (var n in idf)
-					InsertPhiInstruction(n, assignments[t].Operand);
+				{
+					InsertPhiInstruction(n, t.Key);
+				}
 			}
 		}
 

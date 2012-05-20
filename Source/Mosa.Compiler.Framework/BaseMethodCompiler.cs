@@ -432,6 +432,11 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
+		/// Gets the parameters.
+		/// </summary>
+		public ParameterOperand[] Parameters { get { return stackLayout.Parameters; } }
+
+		/// <summary>
 		/// Sets the signature of local variables in the method.
 		/// </summary>
 		/// <param name="localVariableSignature">The local variable signature of the _method.</param>

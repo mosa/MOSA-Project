@@ -20,37 +20,15 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public class EnterSSAStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
 	{
-		/// <summary>
-		/// 
-		/// </summary>
-		private class AssignmentInformation
-		{
-			public List<BasicBlock> AssigningBlocks = new List<BasicBlock>();
-			public Operand Operand;
-
-			public AssignmentInformation(Operand operand)
-			{
-				this.Operand = operand;
-			}
-		}
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private class VariableInformation
-		{
-			public int Count = 0;
-			public Stack<int> Stack = new Stack<int>();
-		}
-
+		private Dictionary<string, Operand> oldLefHandSide = new Dictionary<string, Operand>();
 		/// <summary>
 		/// 
 		/// </summary>
-		private Dictionary<string, Operand> oldLefHandSide = new Dictionary<string,Operand>();
-		/// <summary>
-		/// 
-		/// </summary>
-		private Dictionary<string, VariableInformation> variableInformation = new Dictionary<string, VariableInformation>();
+		private Dictionary<Operand, Stack<int>> variables = new Dictionary<Operand, Stack<int>>();
 		/// <summary>
 		/// 
 		/// </summary>
@@ -75,33 +53,26 @@ namespace Mosa.Compiler.Framework.Stages
 			dominanceCalculation = methodCompiler.Pipeline.FindFirst<DominanceCalculationStage>().DominanceProvider;
 			phiPlacementStage = methodCompiler.Pipeline.FindFirst<PhiPlacementStage>();
 
-			var numberOfParameters = methodCompiler.Method.Parameters.Count;
-			if (methodCompiler.Method.Signature.HasThis)
-				++numberOfParameters;
-
-			foreach (var name in phiPlacementStage.Assignments.Keys)
-				variableInformation[name] = new VariableInformation();
-
-			for (var i = 0; i < numberOfParameters; ++i)
+			foreach (var op in phiPlacementStage.Assignments.Keys)
 			{
-				var op = methodCompiler.GetParameterOperand(i);
-				var name = NameForOperand(op);
-				variableInformation[name].Stack.Push(0);
-				variableInformation[name].Count = 1;
+				variables[op] = new Stack<int>();
 			}
 
-			for (var i = 0; methodCompiler.LocalVariables != null && i < methodCompiler.LocalVariables.Length; ++i)
+			foreach (var op in methodCompiler.Parameters)
 			{
-				var op = methodCompiler.LocalVariables[i];
-				var name = NameForOperand(op);
-				if (!variableInformation.ContainsKey(name))
-					variableInformation[name] = new VariableInformation();
-				variableInformation[name].Stack.Push(0);
-				variableInformation[name].Count = 1;
+				variables[op].Push(0);
 			}
+
+			if (methodCompiler.LocalVariables != null)
+				foreach (var op in methodCompiler.LocalVariables)
+				{
+					if (!variables.ContainsKey(op))
+						variables[op] = new Stack<int>();
+
+					variables[op].Push(0);
+				}
 
 			RenameVariables(basicBlocks.PrologueBlock.NextBlocks[0]);
-			//Debug.WriteLine("ESSA: " + this.methodCompiler.Method.FullName);
 		}
 
 		/// <summary>
@@ -117,25 +88,24 @@ namespace Mosa.Compiler.Framework.Stages
 					for (var i = 0; i < context.OperandCount; ++i)
 					{
 						var op = context.GetOperand(i);
+
 						if (!(op is StackOperand))
 							continue;
-						var name = NameForOperand(context.GetOperand(i));
 
-						if (!variableInformation.ContainsKey(name))
-							throw new Exception(name + " is not in dictionary [block = " + block + "]");
+						if (!variables.ContainsKey(op))
+							throw new Exception(op.ToString() + " is not in dictionary [block = " + block + "]");
 
-						var index = variableInformation[name].Stack.Peek();
+						var index = variables[op].Peek();
 						context.SetOperand(i, new SsaOperand(context.GetOperand(i), index));
 					}
 				}
 
 				if (PhiPlacementStage.IsAssignmentToStackVariable(context))
 				{
-					var name = NameForOperand(context.Result);
-					var index = variableInformation[name].Count;
-					context.SetResult(new SsaOperand(context.Result, index));
-					variableInformation[name].Stack.Push(index);
-					variableInformation[name].Count++;
+					var op = context.Result;
+					var index = variables[op].Count;
+					context.SetResult(new SsaOperand(op, index));
+					variables[op].Push(index);
 				}
 			}
 
@@ -146,10 +116,12 @@ namespace Mosa.Compiler.Framework.Stages
 				{
 					if (!(context.Instruction is Phi))
 						continue;
-					var name = NameForOperand(context.GetOperand(j));
-					if (variableInformation[name].Stack.Count > 0)
+
+					var op = context.GetOperand(j);
+
+					if (variables[op].Count > 0)
 					{
-						var index = this.variableInformation[name].Stack.Peek();
+						var index = variables[op].Peek();
 						context.SetOperand(j, new SsaOperand(context.GetOperand(j), index));
 					}
 				}
@@ -166,8 +138,7 @@ namespace Mosa.Compiler.Framework.Stages
 				{
 					var instName = context.Label + "." + context.Index;
 					var op = oldLefHandSide[instName];
-					var name = NameForOperand(op);
-					variableInformation[name].Stack.Pop();
+					variables[op].Pop();
 				}
 			}
 		}
@@ -201,14 +172,5 @@ namespace Mosa.Compiler.Framework.Stages
 			return (context.Result is StackOperand);
 		}
 
-		/// <summary>
-		/// Names for operand.
-		/// </summary>
-		/// <param name="operand">The operand.</param>
-		/// <returns></returns>
-		private string NameForOperand(Operand operand)
-		{
-			return PhiPlacementStage.NameForOperand(operand);
-		}
 	}
 }

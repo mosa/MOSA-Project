@@ -71,7 +71,7 @@ namespace Mosa.Compiler.Framework.Operands
 		public override bool Equals(Operand other)
 		{
 			StackOperand sop = other as StackOperand;
-			return (null != sop && sop.Type == this.Type && sop.Offset == this.Offset && sop.Base == this.Base && sop.Version == this.Version);
+			return (sop != null && sop.Type == this.Type && sop.Offset == this.Offset && sop.Base == this.Base && sop.Version == this.Version);
 		}
 
 		/// <summary>
