@@ -46,14 +46,14 @@ namespace Mosa.Compiler.Framework.IR
 		/// <summary>
 		/// Determines whether [contains] [the specified CTX].
 		/// </summary>
-		/// <param name="ctx">The context.</param>
+		/// <param name="context">The context.</param>
 		/// <param name="operand">The operand.</param>
 		/// <returns>
-		/// 	<c>true</c> if [contains] [the specified CTX]; otherwise, <c>false</c>.
+		///   <c>true</c> if [contains] [the specified CTX]; otherwise, <c>false</c>.
 		/// </returns>
-		public static bool Contains(Context ctx, Operand operand)
+		public static bool Contains(Context context, Operand operand)
 		{
-			PhiData phiData = ctx.Other as PhiData;
+			PhiData phiData = context.Other as PhiData;
 
 			if (phiData == null)
 				return false;
