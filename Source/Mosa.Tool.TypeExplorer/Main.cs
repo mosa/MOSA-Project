@@ -328,6 +328,8 @@ namespace Mosa.Tool.TypeExplorer
 
 		private void cbStages_SelectedIndexChanged(object sender, EventArgs e)
 		{
+			var previousItemLabel = cbLabels.SelectedItem;
+
 			currentStageLog = string.Empty;
 
 			var node = GetCurrentNode<ViewNode<RuntimeMethod>>();
@@ -359,7 +361,11 @@ namespace Mosa.Tool.TypeExplorer
 					}
 				}
 
-				cbLabels.SelectedIndex = 0;
+				if (previousItemLabel != null && cbLabels.Items.Contains(previousItemLabel))
+					cbLabels.SelectedItem = previousItemLabel;
+				else
+					cbLabels.SelectedIndex = 0;
+
 				cbLabels_SelectedIndexChanged(null, null);
 			}
 		}
