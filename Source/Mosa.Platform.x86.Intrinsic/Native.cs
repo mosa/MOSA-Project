@@ -284,8 +284,8 @@ namespace Mosa.Platform.x86.Intrinsic
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.SwitchTask, Mosa.Platform.x86")]
 		public extern static void SwitchTask(uint esp);
 
-		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.RestoreContext, Mosa.Platform.x86")]
-		public extern static void RestoreContext(uint ebp, uint esp, uint eip);
+		//[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.RestoreContext, Mosa.Platform.x86")]
+		//public extern static void RestoreContext(uint ebp, uint esp, uint eip);
 		//public extern static void RestoreContext(uint edi, uint esi, uint ebp, uint esp, uint ebx, uint edx, uint ecx, uint eax);
 
 		[DllImportAttribute(@"Mosa.Platform.x86.Intrinsic.GetEIP, Mosa.Platform.x86")]

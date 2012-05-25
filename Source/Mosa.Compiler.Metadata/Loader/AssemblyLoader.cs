@@ -149,8 +149,9 @@ namespace Mosa.Compiler.Metadata.Loader
 
 			file = Path.GetFileName(file);
 
-			if (!file.EndsWith(".dll"))
-				file = file + ".dll";
+			if (!file.ToLower().EndsWith(".exe"))
+				if (!file.ToLower().EndsWith(".dll"))
+					file = file + ".dll";
 
 			return TryAssemblyLoadFromPaths(file, privatePaths);
 		}

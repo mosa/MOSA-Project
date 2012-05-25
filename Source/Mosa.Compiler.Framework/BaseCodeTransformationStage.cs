@@ -101,7 +101,7 @@ namespace Mosa.Compiler.Framework
 		protected Context CreateEmptyBlockContext(int label)
 		{
 			Context ctx = new Context(instructionSet);
-			BasicBlock block = basicBlocks.CreateBlock(basicBlocks.Count + 0x10000000);
+			BasicBlock block = basicBlocks.CreateBlock();
 			ctx.BasicBlock = block;
 
 			// Need a dummy instruction at the start of each block to establish a starting point of the block
@@ -140,9 +140,7 @@ namespace Mosa.Compiler.Framework
 		{
 			Context current = ctx.Clone();
 
-			int label = basicBlocks.Count + 0x10000000;
-
-			BasicBlock nextBlock = basicBlocks.CreateBlock(label);
+			BasicBlock nextBlock = basicBlocks.CreateBlock();
 
 			foreach (BasicBlock block in current.BasicBlock.NextBlocks)
 				nextBlock.NextBlocks.Add(block);

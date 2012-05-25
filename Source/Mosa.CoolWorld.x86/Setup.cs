@@ -81,7 +81,7 @@ namespace Mosa.CoolWorld.x86
 			// Start drivers for PCI devices
 			StartPCIDevices();
 		}
-		
+
 		/// <summary>
 		/// Starts the PCI devices.
 		/// </summary>

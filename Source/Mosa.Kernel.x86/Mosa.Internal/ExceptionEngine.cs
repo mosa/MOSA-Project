@@ -59,7 +59,7 @@ namespace Mosa.Internal
 		/// <param name="context">The register context to restore the state from</param>
 		private static void RestoreContext(RegisterContext context)
 		{
-			Native.RestoreContext(context.Ebp, context.Esp, context.Eip);
+			//Native.RestoreContext(context.Ebp, context.Esp, context.Eip);
 			//Native.RestoreContext(context.edi, context.esi, context.ebp, context.esp, context.ebx, context.edx, context.ecx, context.eax);
 		}
 

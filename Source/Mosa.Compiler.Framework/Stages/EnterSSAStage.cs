@@ -60,6 +60,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 			foreach (var op in methodCompiler.Parameters)
 			{
+				if (!variables.ContainsKey(op))
+					variables[op] = new Stack<int>();
+
 				variables[op].Push(0);
 			}
 
@@ -81,7 +84,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="block">The block.</param>
 		private void RenameVariables(BasicBlock block)
 		{
-			for (var context = new Context(this.instructionSet, block); !context.EndOfInstruction; context.GotoNext())
+			for (var context = new Context(instructionSet, block); !context.EndOfInstruction; context.GotoNext())
 			{
 				if (!(context.Instruction is Phi))
 				{
