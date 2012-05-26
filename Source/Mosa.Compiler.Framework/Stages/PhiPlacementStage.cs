@@ -68,6 +68,10 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		void IMethodCompilerStage.Run()
 		{
+			// Method is empty - must be a plugged method
+			if (basicBlocks.HeadBlocks.Count == 0)
+				return;
+
 			if (HasExceptionOrFinally)
 				return;
 
@@ -150,7 +154,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private void PlacePhiFunctionsMinimal()
 		{
 			var firstBlock = basicBlocks.PrologueBlock;
-			var dominanceCalculation = methodCompiler.Pipeline.FindFirst<DominanceCalculationStage>().DominanceProvider;
+			var dominanceCalculation = methodCompiler.Pipeline.FindFirst<DominanceCalculationStage>().GetDominanceProvider(firstBlock);
 
 			foreach (var t in assignments)
 			{

@@ -50,7 +50,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (methodCompiler.PlugSystem.GetPlugMethod(methodCompiler.Method) != null)
 					return;
 
-			dominanceCalculation = methodCompiler.Pipeline.FindFirst<DominanceCalculationStage>().DominanceProvider;
+			dominanceCalculation = methodCompiler.Pipeline.FindFirst<DominanceCalculationStage>().GetDominanceProvider(basicBlocks.PrologueBlock);
 			phiPlacementStage = methodCompiler.Pipeline.FindFirst<PhiPlacementStage>();
 
 			foreach (var op in phiPlacementStage.Assignments.Keys)

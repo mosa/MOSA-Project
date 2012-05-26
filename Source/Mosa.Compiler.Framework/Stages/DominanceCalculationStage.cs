@@ -20,13 +20,13 @@ namespace Mosa.Compiler.Framework.Stages
 	{
 		#region Data members
 
-		private IDominanceProvider dominanceProvider;
+		private Dictionary<BasicBlock, IDominanceProvider> dominanceProviders = new Dictionary<BasicBlock, IDominanceProvider>();
 
 		#endregion // Data members
 
 		#region Properties
 
-		public IDominanceProvider DominanceProvider { get { return dominanceProvider; } }
+		public IDominanceProvider GetDominanceProvider(BasicBlock basicBlock) { return dominanceProviders[basicBlock]; }
 
 		#endregion // Properties
 
@@ -37,10 +37,8 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		void IMethodCompilerStage.Run()
 		{
-			if (HasExceptionOrFinally)
-				return;
-
-			this.dominanceProvider = new SimpleFastDominance(basicBlocks, basicBlocks.PrologueBlock);
+			foreach (var headBlock in basicBlocks.HeadBlocks)
+				dominanceProviders.Add(headBlock, new SimpleFastDominance(basicBlocks, headBlock));
 		}
 
 		#endregion // IMethodCompilerStage Members
