@@ -72,21 +72,15 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		void IMethodCompilerStage.Run()
 		{
-			// Main Code
-			Trace(-1, null);
-
-			// Handler Code
-			foreach (ExceptionHandlingClause clause in methodCompiler.ExceptionClauseHeader.Clauses)
-			{
-				Trace(clause.HandlerOffset, clause);
-			}
+			foreach (BasicBlock headBlock in basicBlocks.HeadBlocks)
+				Trace(headBlock);
 		}
 
 		/// <summary>
 		/// Traces the specified label.
 		/// </summary>
-		/// <param name="label">The label.</param>
-		private void Trace(int label, ExceptionHandlingClause clause)
+		/// <param name="headBlock">The head block.</param>
+		private void Trace(BasicBlock headBlock)
 		{
 			outgoingStack = new Stack<Operand>[basicBlocks.Count];
 			scheduledMoves = new Stack<Operand>[basicBlocks.Count];
@@ -95,9 +89,8 @@ namespace Mosa.Compiler.Framework.Stages
 			enqueued = new BitArray(basicBlocks.Count);
 			enqueued.SetAll(false);
 
-			var firstBlock = basicBlocks.GetByLabel(label);
-			processed.Set(firstBlock.Sequence, true);
-			workList.Enqueue(new WorkItem(firstBlock, new Stack<Operand>()));
+			processed.Set(headBlock.Sequence, true);
+			workList.Enqueue(new WorkItem(headBlock, new Stack<Operand>()));
 
 			while (workList.Count > 0)
 			{

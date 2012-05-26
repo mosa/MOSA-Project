@@ -64,16 +64,21 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// Link all the blocks together
 			BuildBlockLinks(prologue);
+			basicBlocks.AddHeaderBlock(prologue);
 
 			foreach (ExceptionHandlingClause exceptionClause in methodCompiler.ExceptionClauseHeader.Clauses)
 			{
 				if (exceptionClause.HandlerOffset != 0)
 				{
-					BuildBlockLinks(basicBlocks.GetByLabel(exceptionClause.HandlerOffset));
+					BasicBlock basicBlock = basicBlocks.GetByLabel(exceptionClause.HandlerOffset);
+					BuildBlockLinks(basicBlock);
+					basicBlocks.AddHeaderBlock(basicBlock);
 				}
 				if (exceptionClause.FilterOffset != 0)
 				{
-					BuildBlockLinks(basicBlocks.GetByLabel(exceptionClause.FilterOffset));
+					BasicBlock basicBlock = basicBlocks.GetByLabel(exceptionClause.FilterOffset);
+					BuildBlockLinks(basicBlock);
+					basicBlocks.AddHeaderBlock(basicBlock);
 				}
 			}
 

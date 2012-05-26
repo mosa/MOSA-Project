@@ -55,6 +55,8 @@ namespace Mosa.Compiler.InternalTrace
 				foreach (BasicBlock block in basicBlocks)
 				{
 					text.AppendFormat("Block #{0} - Label L_{1:X4}", index, block.Label);
+					if (basicBlocks.IsHeaderBlock(block))
+						text.Append(" [Header]");
 					text.AppendLine();
 
 					text.AppendFormat("  Prev: ");

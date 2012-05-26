@@ -119,12 +119,12 @@ namespace Mosa.Compiler.Framework
 		#region Methods
 
 		/// <summary>
-		/// Gets a value indicating whether [are exceptions].
+		/// Gets a value indicating whether this instance has exception or finally.
 		/// </summary>
 		/// <value>
-		///   <c>true</c> if [are exceptions]; otherwise, <c>false</c>.
+		/// 	<c>true</c> if this instance has exception or finally; otherwise, <c>false</c>.
 		/// </value>
-		protected bool AreExceptions
+		protected bool HasExceptionOrFinally
 		{
 			get
 			{

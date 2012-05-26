@@ -68,7 +68,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		void IMethodCompilerStage.Run()
 		{
-			if (AreExceptions)
+			if (HasExceptionOrFinally)
 				return;
 
 			CollectAssignments();

@@ -23,12 +23,17 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// 
 		/// </summary>
-		private List<BasicBlock> basicBlocks;
+		private readonly List<BasicBlock> basicBlocks = new List<BasicBlock>();
 
 		/// <summary>
 		/// Holds the blocks indexed by label
 		/// </summary>
-		private Dictionary<int, BasicBlock> basicBlocksByLabel = new Dictionary<int, BasicBlock>();
+		private readonly Dictionary<int, BasicBlock> basicBlocksByLabel = new Dictionary<int, BasicBlock>();
+
+		/// <summary>
+		/// 
+		/// </summary>
+		private readonly List<BasicBlock> headBlocks = new List<BasicBlock>();
 
 		#endregion
 
@@ -39,7 +44,6 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public BasicBlocks()
 		{
-			basicBlocks = new List<BasicBlock>();
 		}
 
 		#endregion
@@ -78,6 +82,11 @@ namespace Mosa.Compiler.Framework
 			get { return basicBlocks[index]; }
 			set { basicBlocks[index] = value; }
 		}
+
+		/// <summary>
+		/// Gets the head blocks.
+		/// </summary>
+		public IList<BasicBlock> HeadBlocks { get { return headBlocks.AsReadOnly(); } }
 
 		/// <summary>
 		/// Gets the prologue block.
@@ -176,6 +185,27 @@ namespace Mosa.Compiler.Framework
 				if (!destination.PreviousBlocks.Contains(source))
 					destination.PreviousBlocks.Add(source);
 			}
+		}
+
+		/// <summary>
+		/// Adds the header block.
+		/// </summary>
+		/// <param name="basicBlock">The basic block.</param>
+		public void AddHeaderBlock(BasicBlock basicBlock)
+		{
+			headBlocks.Add(basicBlock);
+		}
+
+		/// <summary>
+		/// Determines whether [is header block] [the specified basic block].
+		/// </summary>
+		/// <param name="basicBlock">The basic block.</param>
+		/// <returns>
+		///   <c>true</c> if [is header block] [the specified basic block]; otherwise, <c>false</c>.
+		/// </returns>
+		public bool IsHeaderBlock(BasicBlock basicBlock)
+		{
+			return headBlocks.Contains(basicBlock);
 		}
 
 		#endregion

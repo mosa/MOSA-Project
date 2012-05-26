@@ -142,7 +142,6 @@ namespace Mosa.Platform.x86.Stages
 					uint filter = 0;
 					RuntimeType type = null;
 
-
 					handler = (uint)codeEmitter.GetPosition(clause.HandlerOffset);
 
 					if (kind == ExceptionHandlerType.Exception)
@@ -155,7 +154,7 @@ namespace Mosa.Platform.x86.Stages
 						filter = (uint)codeEmitter.GetPosition(clause.FilterOffset);
 					}
 
-					// TODO: Optimization - Search for existing exception protected region  (before or after) to merge the current block
+					// TODO: Optimization - Search for existing exception protected region (before or after) to merge the current block
 
 					// Simple optimization assuming blocks are somewhat sorted by position
 					if (prev.End == start && prev.Kind == kind && prev.Handler == handler && prev.Filter == filter && prev.Type == type)
