@@ -24,34 +24,31 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <summary>
 		/// 
 		/// </summary>
-		private Dictionary<string, Operand> oldLefHandSide = new Dictionary<string, Operand>();
-		/// <summary>
-		/// 
-		/// </summary>
-		private Dictionary<Operand, Stack<int>> variables = new Dictionary<Operand, Stack<int>>();
-		/// <summary>
-		/// 
-		/// </summary>
-		private IDominanceProvider dominanceCalculation;
-		/// <summary>
-		/// 
-		/// </summary>
-		private PhiPlacementStage phiPlacementStage;
+		protected PhiPlacementStage phiPlacementStage;
 
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
 		void IMethodCompilerStage.Run()
 		{
-			if (HasExceptionOrFinally)
+			// Method is empty - must be a plugged method
+			if (basicBlocks.HeadBlocks.Count == 0)
 				return;
 
-			if (methodCompiler.PlugSystem != null)
-				if (methodCompiler.PlugSystem.GetPlugMethod(methodCompiler.Method) != null)
-					return;
-
-			dominanceCalculation = methodCompiler.Pipeline.FindFirst<DominanceCalculationStage>().GetDominanceProvider(basicBlocks.PrologueBlock);
 			phiPlacementStage = methodCompiler.Pipeline.FindFirst<PhiPlacementStage>();
+
+			foreach (var headBlock in basicBlocks.HeadBlocks)
+				EnterSSA(headBlock);
+		}
+
+		/// <summary>
+		/// Enters the SSA.
+		/// </summary>
+		/// <param name="headBlock">The head block.</param>
+		protected void EnterSSA(BasicBlock headBlock)
+		{
+			var dominanceCalculation = methodCompiler.Pipeline.FindFirst<DominanceCalculationStage>().GetDominanceProvider(headBlock);
+			var variables = new Dictionary<Operand, Stack<int>>();
 
 			foreach (var op in phiPlacementStage.Assignments.Keys)
 			{
@@ -67,6 +64,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			if (methodCompiler.LocalVariables != null)
+			{
 				foreach (var op in methodCompiler.LocalVariables)
 				{
 					if (!variables.ContainsKey(op))
@@ -74,15 +72,19 @@ namespace Mosa.Compiler.Framework.Stages
 
 					variables[op].Push(0);
 				}
+			}
 
-			RenameVariables(basicBlocks.PrologueBlock.NextBlocks[0]);
+			if (headBlock.NextBlocks.Count > 0)
+				RenameVariables(headBlock.NextBlocks[0], dominanceCalculation, variables);
 		}
 
 		/// <summary>
 		/// Renames the variables.
 		/// </summary>
 		/// <param name="block">The block.</param>
-		private void RenameVariables(BasicBlock block)
+		/// <param name="dominanceCalculation">The dominance calculation.</param>
+		/// <param name="variables">The variables.</param>
+		private void RenameVariables(BasicBlock block, IDominanceProvider dominanceCalculation, Dictionary<Operand, Stack<int>> variables)
 		{
 			for (var context = new Context(instructionSet, block); !context.EndOfInstruction; context.GotoNext())
 			{
@@ -115,6 +117,7 @@ namespace Mosa.Compiler.Framework.Stages
 			foreach (var s in block.NextBlocks)
 			{
 				var j = WhichPredecessor(s, block);
+
 				for (var context = new Context(instructionSet, s); !context.EndOfInstruction; context.GotoNext())
 				{
 					if (!(context.Instruction is Phi))
@@ -132,18 +135,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 			foreach (var s in dominanceCalculation.GetChildren(block))
 			{
-				RenameVariables(s);
+				RenameVariables(s, dominanceCalculation, variables);
 			}
 
-			for (var context = new Context(instructionSet, block); !context.EndOfInstruction; context.GotoNext())
-			{
-				if (PhiPlacementStage.IsAssignmentToStackVariable(context))
-				{
-					var instName = context.Label + "." + context.Index;
-					var op = oldLefHandSide[instName];
-					variables[op].Pop();
-				}
-			}
 		}
 
 		/// <summary>
@@ -169,10 +163,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </returns>
 		private bool IsAssignment(Context context)
 		{
-			if (context.Result == null)
-				return false;
-
-			return (context.Result is StackOperand);
+			return (context.Result != null && context.Result is StackOperand);
 		}
 
 	}

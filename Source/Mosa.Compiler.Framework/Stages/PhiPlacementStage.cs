@@ -72,9 +72,6 @@ namespace Mosa.Compiler.Framework.Stages
 			if (basicBlocks.HeadBlocks.Count == 0)
 				return;
 
-			if (HasExceptionOrFinally)
-				return;
-
 			CollectAssignments();
 
 			switch (strategy)
@@ -107,11 +104,9 @@ namespace Mosa.Compiler.Framework.Stages
 					if (IsAssignmentToStackVariable(context))
 						AddToAssignments(context.Result, block);
 
-			foreach (var op in methodCompiler.Parameters)
-			{
-				AddToAssignments(op, basicBlocks.GetByLabel(BasicBlock.PrologueLabel));
-			}
-
+			foreach (var headBlock in basicBlocks)
+				foreach (var op in methodCompiler.Parameters)
+					AddToAssignments(op, headBlock);
 		}
 
 		/// <summary>
@@ -148,13 +143,22 @@ namespace Mosa.Compiler.Framework.Stages
 			context.OperandCount = (byte)block.PreviousBlocks.Count;
 		}
 
+
 		/// <summary>
 		/// Places the phi functions minimal.
 		/// </summary>
 		private void PlacePhiFunctionsMinimal()
 		{
-			var firstBlock = basicBlocks.PrologueBlock;
-			var dominanceCalculation = methodCompiler.Pipeline.FindFirst<DominanceCalculationStage>().GetDominanceProvider(firstBlock);
+			foreach (var headBlock in basicBlocks.HeadBlocks)
+				PlacePhiFunctionsMinimal(headBlock);
+		}
+
+		/// <summary>
+		/// Places the phi functions minimal.
+		/// </summary>
+		private void PlacePhiFunctionsMinimal(BasicBlock headBlock)
+		{
+			var dominanceCalculation = methodCompiler.Pipeline.FindFirst<DominanceCalculationStage>().GetDominanceProvider(headBlock);
 
 			foreach (var t in assignments)
 			{
@@ -163,7 +167,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (blocks.Count < 2)
 					continue;
 
-				blocks.Add(firstBlock);
+				blocks.Add(headBlock);
 
 				var idf = dominanceCalculation.IteratedDominanceFrontier(blocks);
 
