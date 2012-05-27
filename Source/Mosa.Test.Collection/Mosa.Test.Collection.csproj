@@ -94,6 +94,7 @@
       <LastGenOutput>StructTests.cs</LastGenOutput>
     </None>
     <Compile Include="DelegateTests.cs" />
+    <Compile Include="ExceptionHandlingTests.cs" />
     <Compile Include="GenericCallTests.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

@@ -83,6 +83,7 @@
     <Compile Include="CIL\CallVirtualFixture.cs" />
     <Compile Include="CIL\CharFixture.cs" />
     <Compile Include="CIL\DelegateFixture.cs" />
+    <Compile Include="CIL\ExceptionHandlingFixture.cs" />
     <Compile Include="CIL\FibonacciFixture.cs" />
     <Compile Include="IL\Boxing.cs">
       <AutoGen>True</AutoGen>
