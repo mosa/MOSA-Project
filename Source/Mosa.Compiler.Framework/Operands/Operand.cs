@@ -238,33 +238,33 @@ namespace Mosa.Compiler.Framework.Operands
 		{
 
 			// Iterate all definition sites first
-			foreach (int instructionIndex in this.Definitions.ToArray())
+			foreach (int index in Definitions.ToArray())
 			{
-				Context def = new Context(instructionSet, instructionIndex);
+				Context ctx = new Context(instructionSet, index);
 
-				if (def.Result != null)
+				if (ctx.Result != null)
 				{
 					// Is this the operand?
-					if (ReferenceEquals(def.Result, this))
+					if (ReferenceEquals(ctx.Result, this))
 					{
-						def.Result = replacement;
+						ctx.Result = replacement;
 					}
 
 				}
 			}
 
 			// Iterate all use sites
-			foreach (int instructionIndex in this.Uses.ToArray())
+			foreach (int index in Uses.ToArray())
 			{
-				Context instr = new Context(instructionSet, instructionIndex);
+				Context ctx = new Context(instructionSet, index);
 
 				int opIdx = 0;
-				foreach (Operand r in instr.Operands)
+				foreach (Operand r in ctx.Operands)
 				{
 					// Is this the operand?
 					if (ReferenceEquals(r, this))
 					{
-						instr.SetOperand(opIdx, replacement);
+						ctx.SetOperand(opIdx, replacement);
 					}
 
 					opIdx++;

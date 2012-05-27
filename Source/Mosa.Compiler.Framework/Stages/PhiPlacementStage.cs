@@ -105,6 +105,7 @@ namespace Mosa.Compiler.Framework.Stages
 					if (IsAssignmentToStackVariable(context))
 						AddToAssignments(context.Result, block);
 
+			// FUTURE: Only include is parameter operand if reachable from the given headblock
 			foreach (var headBlock in basicBlocks.HeadBlocks)
 				foreach (var op in methodCompiler.Parameters)
 					AddToAssignments(op, headBlock);

@@ -92,109 +92,48 @@ namespace Mosa.Compiler.Framework.Stages
 					if (sop == null || !(sop.Operand is StackOperand))
 						continue;
 
-					if (!CheckResultsAreBuiltIn(sop))
+					if (!AreResultsBuiltIn(sop))
 						continue;
 
-					ReplaceUses(sop, ctx.Operand1 as ConstantOperand);
+					// Replace all operand uses with constant
+					sop.Replace(ctx.Operand1, instructionSet);
+
 					ctx.Remove();
 				}
 			}
 		}
 
 		/// <summary>
-		/// Checks for by ref.
+		/// Checks the results are built in.
 		/// </summary>
 		/// <param name="sop">The sop.</param>
-		private bool CheckResultsAreBuiltIn(SsaOperand sop)
+		/// <returns></returns>
+		private bool AreResultsBuiltIn(SsaOperand sop)
 		{
-			foreach (BasicBlock block in basicBlocks)
+			foreach (int index in sop.Uses)
 			{
-				for (Context ctx = new Context(instructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
-				{
-					if (!InstructionUsesOperand(ctx, sop))
-						continue;
+				Context ctx = new Context(instructionSet, index);
 
-					if (ctx.Result == null)
-						continue;
+				if (ctx.Result == null)
+					continue;
 
-					if (ctx.Instruction is IR.Move)
-						return false;
-
-					var result = ctx.Result is SsaOperand ? (ctx.Result as SsaOperand).Operand : ctx.Result;
-
-					if (CheckOperand(result))
-						continue;
-
+				if (ctx.Instruction is IR.Move)
 					return false;
-				}
-			}
-			return true;
-		}
+				
+				var result = ctx.Result is SsaOperand ? (ctx.Result as SsaOperand).Operand : ctx.Result;
 
-		/// <summary>
-		/// Checks the operand.
-		/// </summary>
-		/// <param name="operand">The operand.</param>
-		/// <returns></returns>
-		private bool CheckOperand(Operand operand)
-		{
-			if (operand.Type.GetType() == typeof(SigType))
-				return IsBuiltinType(operand.Type);
-			if (operand.Type is BuiltInSigType)
-				return IsBuiltinType(operand.Type);
-			return false;
-		}
+				if (!(result.Type is BuiltInSigType))
+					continue;
 
-		/// <summary>
-		/// Instructions the uses operand.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="sop">The sop.</param>
-		/// <returns></returns>
-		private bool InstructionUsesOperand(Context context, SsaOperand sop)
-		{
-			foreach (var operand in context.Operands)
-			{
-				var ssaOp = operand as SsaOperand;
+				if (!IsBuiltinType(result.Type))
+					continue;
 
-				if (ssaOp != null)
-				{
-					return sop.Operand == ssaOp.Operand && sop.SsaVersion == ssaOp.SsaVersion;
-				}
+				return false;
 			}
 
 			return false;
 		}
-
-		/// <summary>
-		/// Replaces the uses.
-		/// </summary>
-		/// <param name="sop">The sop.</param>
-		/// <param name="constantOperand">The constant operand.</param>
-		private void ReplaceUses(SsaOperand sop, ConstantOperand constantOperand)
-		{
-			//sop.Replace(constantOperand, instructionSet);
-
-			foreach (BasicBlock block in basicBlocks)
-			{
-				for (Context ctx = new Context(instructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
-				{
-					for (var i = 0; i < ctx.OperandCount; i++)
-					{
-						var op = ctx.GetOperand(i) as SsaOperand;
-
-						if (op == null)
-							continue;
-
-						if (op.Operand == sop.Operand && op.SsaVersion == sop.SsaVersion)
-						{
-							ctx.SetOperand(i, constantOperand);
-						}
-					}
-				}
-			}
-		}
-
+		
 		/// <summary>
 		/// Determines whether [is builtin type] [the specified type].
 		/// </summary>
