@@ -173,14 +173,16 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="constantOperand">The constant operand.</param>
 		private void ReplaceUses(SsaOperand sop, ConstantOperand constantOperand)
 		{
+			//sop.Replace(constantOperand, instructionSet);
+
 			foreach (BasicBlock block in basicBlocks)
 			{
 				for (Context ctx = new Context(instructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
 				{
-					for (var i = 0; i < ctx.OperandCount; ++i)
+					for (var i = 0; i < ctx.OperandCount; i++)
 					{
 						var op = ctx.GetOperand(i) as SsaOperand;
-						
+
 						if (op == null)
 							continue;
 

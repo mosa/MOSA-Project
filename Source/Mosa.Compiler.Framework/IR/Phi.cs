@@ -86,13 +86,13 @@ namespace Mosa.Compiler.Framework.IR
 			phiData.Operands.Add(op);
 		}
 
-		public override string ToString(Context context)
-		{
-			var result = context.Result + "<- phi (";
-			foreach (var op in context.Operands)
-				result += " " + op + ", ";
-			return result + ")";
-		}
+		//public override string ToString(Context context)
+		//{
+		//    var result = context.Result + "<- phi (";
+		//    foreach (var op in context.Operands)
+		//        result += " " + op + ", ";
+		//    return result + ")";
+		//}
 
 		#endregion // Methods
 	}

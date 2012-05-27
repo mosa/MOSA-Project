@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.Operands;
+using Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -104,7 +105,7 @@ namespace Mosa.Compiler.Framework.Stages
 					if (IsAssignmentToStackVariable(context))
 						AddToAssignments(context.Result, block);
 
-			foreach (var headBlock in basicBlocks)
+			foreach (var headBlock in basicBlocks.HeadBlocks)
 				foreach (var op in methodCompiler.Parameters)
 					AddToAssignments(op, headBlock);
 		}
@@ -135,7 +136,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private void InsertPhiInstruction(BasicBlock block, Operand variable)
 		{
 			var context = new Context(instructionSet, block).InsertBefore();
-			context.SetInstruction(IR.IRInstruction.Phi, variable);
+			context.SetInstruction(IRInstruction.Phi, variable);
 
 			for (var i = 0; i < block.PreviousBlocks.Count; ++i)
 				context.SetOperand(i, variable);
