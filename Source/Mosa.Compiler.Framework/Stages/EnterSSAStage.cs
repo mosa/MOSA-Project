@@ -26,6 +26,8 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		protected PhiPlacementStage phiPlacementStage;
 
+		private Dictionary<Operand, SsaOperand[]> ssaOperands = new Dictionary<Operand, SsaOperand[]>();
+
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
@@ -39,6 +41,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 			foreach (var headBlock in basicBlocks.HeadBlocks)
 				EnterSSA(headBlock);
+
+			ssaOperands = null;
 		}
 
 		/// <summary>
@@ -78,6 +82,44 @@ namespace Mosa.Compiler.Framework.Stages
 				RenameVariables(headBlock.NextBlocks[0], dominanceCalculation, variables);
 		}
 
+		public SsaOperand CreateSsaOperand(Operand operand, int version)
+		{
+			SsaOperand[] ssaArray;
+			SsaOperand ssaOperand;
+
+			if (!ssaOperands.TryGetValue(operand, out ssaArray))
+			{
+				ssaArray = new SsaOperand[Math.Max(4, version + 1)];
+				ssaOperand = new SsaOperand(operand, version);
+				ssaArray[version] = ssaOperand;
+				ssaOperands.Add(operand, ssaArray);
+			}
+			else
+			{
+				if (version >= ssaArray.Length)
+				{
+					ssaOperand = new SsaOperand(operand, version);
+
+					SsaOperand[] newSsaArray = new SsaOperand[ssaArray.Length * ssaArray.Length];
+					ssaArray.CopyTo(newSsaArray, 0);
+					newSsaArray[version] = ssaOperand;
+					ssaOperands.Remove(operand);
+					ssaOperands.Add(operand, newSsaArray);
+				}
+				else
+				{
+					ssaOperand = ssaArray[version];
+					if (ssaOperand == null)
+					{
+						ssaOperand = new SsaOperand(operand, version);
+						ssaArray[version] = ssaOperand;
+					}
+				}
+			}
+
+			return ssaOperand;
+		}
+
 		/// <summary>
 		/// Renames the variables.
 		/// </summary>
@@ -101,7 +143,7 @@ namespace Mosa.Compiler.Framework.Stages
 							throw new Exception(op.ToString() + " is not in dictionary [block = " + block + "]");
 
 						var index = variables[op].Peek();
-						context.SetOperand(i, new SsaOperand(context.GetOperand(i), index));
+						context.SetOperand(i, CreateSsaOperand(context.GetOperand(i), index));
 					}
 				}
 
@@ -109,7 +151,7 @@ namespace Mosa.Compiler.Framework.Stages
 				{
 					var op = context.Result;
 					var index = variables[op].Count;
-					context.SetResult(new SsaOperand(op, index));
+					context.SetResult(CreateSsaOperand(op, index));
 					variables[op].Push(index);
 				}
 			}
@@ -128,7 +170,7 @@ namespace Mosa.Compiler.Framework.Stages
 					if (variables[op].Count > 0)
 					{
 						var index = variables[op].Peek();
-						context.SetOperand(j, new SsaOperand(context.GetOperand(j), index));
+						context.SetOperand(j, CreateSsaOperand(context.GetOperand(j), index));
 					}
 				}
 			}
