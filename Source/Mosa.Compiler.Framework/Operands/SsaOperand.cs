@@ -11,8 +11,18 @@ namespace Mosa.Compiler.Framework.Operands
 {
 	public sealed class SsaOperand : Operand
 	{
-		public Operand Operand = null;
-		public int SsaVersion = 0;
+		private int ssaVersion;
+		private Operand operand;
+
+		/// <summary>
+		/// Gets the operand.
+		/// </summary>
+		public Operand Operand { get { return operand; } }
+
+		/// <summary>
+		/// Gets the ssa version.
+		/// </summary>
+		public int SsaVersion { get { return ssaVersion; } }
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="SsaOperand"/> class.
@@ -22,8 +32,8 @@ namespace Mosa.Compiler.Framework.Operands
 		public SsaOperand(Operand operand, int ssaVersion)
 			: base(operand.Type)
 		{
-			this.Operand = operand;
-			this.SsaVersion = ssaVersion;
+			this.operand = operand;
+			this.ssaVersion = ssaVersion;
 		}
 
 		/// <summary>
@@ -35,18 +45,18 @@ namespace Mosa.Compiler.Framework.Operands
 		/// </returns>
 		public override bool Equals(Operand other)
 		{
-			return this.Operand.Equals(other);
+			return operand.Equals(other);
 		}
 
 		/// <summary>
 		/// Determines if the operand is a register.
 		/// </summary>
-		public override bool IsRegister { get { return this.Operand.IsRegister; } }
+		public override bool IsRegister { get { return operand.IsRegister; } }
 
 		/// <summary>
 		/// Determines if the operand is a stack local variable.
 		/// </summary>
-		public override bool IsStackLocal { get { return this.Operand.IsStackLocal; } }
+		public override bool IsStackLocal { get { return operand.IsStackLocal; } }
 
 		/// <summary>
 		/// Returns a <see cref="System.String"/> that represents this instance.
@@ -56,13 +66,13 @@ namespace Mosa.Compiler.Framework.Operands
 		/// </returns>
 		public override string ToString()
 		{
-			string name = Operand.ToString();
+			string name = operand.ToString();
 			int pos = name.IndexOf(' ');
 
 			if (pos < 0)
-				return name + "<" + SsaVersion + ">";
+				return name + "<" + ssaVersion + ">";
 			else
-				return name.Substring(0, pos) + "<" + SsaVersion + ">" + name.Substring(pos);
+				return name.Substring(0, pos) + "<" + ssaVersion + ">" + name.Substring(pos);
 		}
 	}
 }

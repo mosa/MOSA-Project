@@ -158,7 +158,9 @@ namespace Mosa.Compiler.Framework.Stages
 				var ssaOp = operand as SsaOperand;
 
 				if (ssaOp != null)
+				{
 					return sop.Operand == ssaOp.Operand && sop.SsaVersion == ssaOp.SsaVersion;
+				}
 			}
 
 			return false;

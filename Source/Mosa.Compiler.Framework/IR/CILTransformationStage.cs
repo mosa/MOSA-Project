@@ -74,7 +74,7 @@ namespace Mosa.Compiler.Framework.IR
 			}
 			else
 			{
-				this.ProcessLoadInstruction(context);
+				ProcessLoadInstruction(context);
 			}
 		}
 
@@ -2047,14 +2047,16 @@ namespace Mosa.Compiler.Framework.IR
 		/// <param name="context">Provides the transformation context.</param>
 		private void ProcessLoadInstruction(Context context)
 		{
-			IInstruction extension = null;
-			SigType extendedType = null;
+
 			Operand source = context.Operand1;
 			Operand destination = context.Result;
 
 			// Is this a sign or zero-extending move?
 			if (source != null)
 			{
+				IInstruction extension = null;
+				SigType extendedType = null;
+
 				if (IsSignExtending(source))
 				{
 					extension = IRInstruction.SignExtendedMove;
@@ -2065,18 +2067,17 @@ namespace Mosa.Compiler.Framework.IR
 					extension = IRInstruction.ZeroExtendedMove;
 					extendedType = BuiltInSigType.UInt32;
 				}
+
+				if (extension != null)
+				{
+					Operand temp = methodCompiler.CreateVirtualRegister(extendedType);
+					destination.Replace(temp, context.InstructionSet);
+					context.SetInstruction(extension, temp, source);
+					return;
+				}
 			}
 
-			if (extension != null)
-			{
-				Operand temp = methodCompiler.CreateVirtualRegister(extendedType);
-				destination.Replace(temp, context.InstructionSet);
-				context.SetInstruction(extension, temp, source);
-			}
-			else
-			{
-				context.ReplaceInstructionOnly(IRInstruction.Move);
-			}
+			context.ReplaceInstructionOnly(IRInstruction.Move);
 		}
 
 		/// <summary>
