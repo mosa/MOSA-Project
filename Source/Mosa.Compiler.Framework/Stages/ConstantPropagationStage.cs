@@ -46,11 +46,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <summary>
 		/// 
 		/// </summary>
-		private PropagationStage stage = PropagationStage.PreFolding;
-		/// <summary>
-		/// 
-		/// </summary>
-		private HashSet<int> propagated = new HashSet<int>();
+		private PropagationStage stage;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ConstantPropagationStage"/> class.
@@ -82,23 +78,11 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		void IMethodCompilerStage.Run()
 		{
-			foreach (var block in basicBlocks)
-				if (block.NextBlocks.Count == 0 && block.PreviousBlocks.Count == 0)
-					return;
-
-			bool remove = false;
-
 			foreach (BasicBlock block in basicBlocks)
 			{
-				if (block == basicBlocks.PrologueBlock || block == basicBlocks.EpilogueBlock)
-					continue;
-
 				for (Context ctx = new Context(instructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
 				{
-					//if (this.propagated.Contains(ctx.Index))
-					//	continue;
-
-					if (!(ctx.Instruction is IR.Move || ctx.Instruction is CIL.StlocInstruction))
+					if (!(ctx.Instruction is IR.Move))
 						continue;
 
 					if (!(ctx.Operand1 is ConstantOperand))
@@ -108,11 +92,11 @@ namespace Mosa.Compiler.Framework.Stages
 					if (sop == null || !(sop.Operand is StackOperand))
 						continue;
 
-					if (!CheckResultsAreBuiltin(sop))
+					if (!CheckResultsAreBuiltIn(sop))
 						continue;
 
 					ReplaceUses(sop, ctx.Operand1 as ConstantOperand);
-					ctx.SetInstruction(IRInstruction.Nop);
+					ctx.Remove();
 				}
 			}
 		}
@@ -121,13 +105,10 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Checks for by ref.
 		/// </summary>
 		/// <param name="sop">The sop.</param>
-		private bool CheckResultsAreBuiltin(SsaOperand sop)
+		private bool CheckResultsAreBuiltIn(SsaOperand sop)
 		{
 			foreach (BasicBlock block in basicBlocks)
 			{
-				if (block == basicBlocks.GetByLabel(BasicBlock.PrologueLabel) || block == basicBlocks.EpilogueBlock)
-					continue;
-
 				for (Context ctx = new Context(instructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
 				{
 					if (!InstructionUsesOperand(ctx, sop))
@@ -174,11 +155,12 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			foreach (var operand in context.Operands)
 			{
-				if (!(operand is SsaOperand))
-					continue;
 				var ssaOp = operand as SsaOperand;
-				return sop.Operand == ssaOp.Operand && sop.SsaVersion == ssaOp.SsaVersion;
+
+				if (ssaOp != null)
+					return sop.Operand == ssaOp.Operand && sop.SsaVersion == ssaOp.SsaVersion;
 			}
+
 			return false;
 		}
 
@@ -191,20 +173,18 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			foreach (BasicBlock block in basicBlocks)
 			{
-				if (block == basicBlocks.PrologueBlock || block == basicBlocks.EpilogueBlock)
-					continue;
-
 				for (Context ctx = new Context(instructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
 				{
 					for (var i = 0; i < ctx.OperandCount; ++i)
 					{
 						var op = ctx.GetOperand(i) as SsaOperand;
+						
 						if (op == null)
 							continue;
+
 						if (op.Operand == sop.Operand && op.SsaVersion == sop.SsaVersion)
 						{
 							ctx.SetOperand(i, constantOperand);
-							propagated.Add(ctx.Index);
 						}
 					}
 				}

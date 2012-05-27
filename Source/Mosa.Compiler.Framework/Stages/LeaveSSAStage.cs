@@ -88,8 +88,8 @@ namespace Mosa.Compiler.Framework.Stages
 			Debug.Assert(!(source is SsaOperand));
 			Debug.Assert(!(destination is SsaOperand));
 
-			//if (destination != source)
-			context.SetInstruction(IR.IRInstruction.Move, destination, source);
+			if (destination != source)
+				context.SetInstruction(IR.IRInstruction.Move, destination, source);
 		}
 
 		/// <summary>

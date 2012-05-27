@@ -35,6 +35,15 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		private readonly List<BasicBlock> headBlocks = new List<BasicBlock>();
 
+		/// <summary>
+		/// 
+		/// </summary>
+		private BasicBlock prologueBlock = null;
+		/// <summary>
+		/// 
+		/// </summary>
+		private BasicBlock epilogueBlock = null;
+
 		#endregion
 
 		#region Construction
@@ -91,12 +100,28 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the prologue block.
 		/// </summary>
-		public BasicBlock PrologueBlock { get { return this.GetByLabel(BasicBlock.PrologueLabel); } }
+		public BasicBlock PrologueBlock
+		{
+			get
+			{
+				if (prologueBlock == null)
+					prologueBlock = GetByLabel(BasicBlock.PrologueLabel);
+				return prologueBlock;
+			}
+		}
 
 		/// <summary>
 		/// Gets the epilogue block.
 		/// </summary>
-		public BasicBlock EpilogueBlock { get { return this.GetByLabel(BasicBlock.EpilogueLabel); } }
+		public BasicBlock EpilogueBlock
+		{
+			get
+			{
+				if (epilogueBlock == null)
+					epilogueBlock = GetByLabel(BasicBlock.EpilogueLabel);
+				return epilogueBlock;
+			}
+		}
 
 		#endregion
 
