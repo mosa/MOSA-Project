@@ -58,17 +58,6 @@ namespace Mosa.Compiler.Framework
 		public Branch Branch;
 
 		/// <summary>
-		/// Gets or sets the offset of the instruction.
-		/// </summary>
-		/// <remarks>
-		/// Offsets are used by branch instructions to define their target. During basic block
-		/// building these offsets are used to insert labels at appropriate positions and the
-		/// jumps or modified to target one of these labels. During code generation, the offset
-		/// can be used to indicate native code offsets.
-		/// </remarks>
-		public int Offset;
-
-		/// <summary>
 		/// Holds the "other" object
 		/// </summary>
 		public object Other;
@@ -217,7 +206,6 @@ namespace Mosa.Compiler.Framework
 		public void Clear()
 		{
 			this.Label = -1;
-			this.Offset = 0;
 			this.Instruction = null;
 			this.Operand1 = null;
 			this.Operand2 = null;
@@ -235,7 +223,6 @@ namespace Mosa.Compiler.Framework
 		public void ClearAbbreviated()
 		{
 			this.Label = -1;
-			this.Offset = 0;
 			this.Instruction = null;
 			this.Ignore = true;
 			this.OperandCount = 0;

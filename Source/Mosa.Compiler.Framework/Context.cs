@@ -111,16 +111,6 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Gets or sets the offset.
-		/// </summary>
-		/// <value>The offset.</value>
-		public int Offset
-		{
-			get { return instructionSet.Data[index].Offset; }
-			set { instructionSet.Data[index].Offset = value; }
-		}
-
-		/// <summary>
 		/// Gets or sets the result operand.
 		/// </summary>
 		/// <value>The result operand.</value>
