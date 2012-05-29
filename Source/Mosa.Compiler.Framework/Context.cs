@@ -111,13 +111,23 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Gets or sets the result operand.
+		/// Gets or sets the branch.
 		/// </summary>
-		/// <value>The result operand.</value>
-		public Branch Branch
+		/// <value>
+		/// The branch.
+		/// </value>
+		public int[] BranchTargets
 		{
-			get { return instructionSet.Data[index].Branch; }
-			set { instructionSet.Data[index].Branch = value; }
+			get { return instructionSet.Data[index].BranchTargets; }
+		}
+
+		/// <summary>
+		/// Allocates the branch targets.
+		/// </summary>
+		/// <param name="targets">The targets.</param>
+		public void AllocateBranchTargets(uint targets)
+		{
+			instructionSet.Data[index].AllocateBranchTargets(targets);
 		}
 
 		/// <summary>
@@ -257,12 +267,11 @@ namespace Mosa.Compiler.Framework
 			set
 			{
 				instructionSet.Data[index].BranchHint = value;
-				if (block != null && Branch != null)
-					if (Branch.Targets.Length == 1)
-						if (value)
-							block.HintTarget = Branch.Targets[0];
-						else
-							block.HintTarget = -1;
+				if (block != null && BranchTargets != null && BranchTargets.Length == 1)
+					if (value)
+						block.HintTarget = BranchTargets[0];
+					else
+						block.HintTarget = -1;
 			}
 		}
 
@@ -879,7 +888,7 @@ namespace Mosa.Compiler.Framework
 			Result = result;
 			ResultCount = 1;
 		}
-		
+
 		/// <summary>
 		/// Sets the operands.
 		/// </summary>
@@ -940,10 +949,10 @@ namespace Mosa.Compiler.Framework
 		/// <param name="target1">The first target.</param>
 		public void SetBranch(int target1)
 		{
-			if (Branch == null)
-				Branch = new Branch(1);
+			if (BranchTargets == null)
+				AllocateBranchTargets(1);
 
-			Branch.Targets[0] = target1;
+			BranchTargets[0] = target1;
 		}
 
 		/// <summary>
@@ -953,18 +962,14 @@ namespace Mosa.Compiler.Framework
 		/// <param name="target2">The second target.</param>
 		public void SetBranch(int target1, int target2)
 		{
-			if (Branch == null)
-				Branch = new Branch(2);
+			if (BranchTargets == null)
+				AllocateBranchTargets(2);
 			else
-				if (Branch.Targets.Length < 2)
-				{
-					Branch newBranch = new Branch(2);
-					newBranch.Targets[0] = Branch.Targets[0];
-					Branch = newBranch;
-				}
+				if (BranchTargets.Length < 2)
+					AllocateBranchTargets(2);
 
-			Branch.Targets[0] = target1;
-			Branch.Targets[1] = target2;
+			BranchTargets[0] = target1;
+			BranchTargets[1] = target2;
 		}
 
 		/// <summary>

@@ -33,16 +33,16 @@ namespace Mosa.Platform.AVR32.Instructions
 		{
 			if (context.OperandCount == 0)
 			{
-				int displacement = context.Branch.Targets[0];
+				int displacement = context.BranchTargets[0];
 
 				if (IsBetween(displacement, -1024, 1022))
 				{
-					emitter.EmitRelativeJumpAndCall(0x01, context.Branch.Targets[0]);
+					emitter.EmitRelativeJumpAndCall(0x01, context.BranchTargets[0]);
 				}
 				else
 					if (IsBetween(displacement, -2097151, 2097150))
 					{
-						emitter.EmitNoRegisterAndK21(0x50, context.Branch.Targets[0]);
+						emitter.EmitNoRegisterAndK21(0x50, context.BranchTargets[0]);
 					}
 					else
 						throw new OverflowException();

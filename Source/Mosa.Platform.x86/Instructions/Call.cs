@@ -41,7 +41,7 @@ namespace Mosa.Platform.x86.Instructions
 		{
 			if (context.OperandCount == 0)
 			{
-				emitter.EmitBranch(LabelCall, context.Branch.Targets[0]);
+				emitter.EmitBranch(LabelCall, context.BranchTargets[0]);
 				return;
 			}
 

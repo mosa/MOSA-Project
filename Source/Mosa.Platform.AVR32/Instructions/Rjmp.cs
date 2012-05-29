@@ -32,7 +32,7 @@ namespace Mosa.Platform.AVR32.Instructions
 		{
 			if (context.OperandCount == 0)
 			{
-				emitter.EmitRelativeJumpAndCall(0x00, context.Branch.Targets[0]);
+				emitter.EmitRelativeJumpAndCall(0x00, context.BranchTargets[0]);
 			}
 			else
 				throw new Exception("Not supported combination of operands");

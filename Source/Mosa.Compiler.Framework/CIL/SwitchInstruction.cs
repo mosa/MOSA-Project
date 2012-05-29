@@ -62,11 +62,11 @@ namespace Mosa.Compiler.Framework.CIL
 			// Retrieve the number of branch targets
 			uint count = decoder.DecodeUInt();
 
-			ctx.Branch = new Branch(count + 1);
+			ctx.AllocateBranchTargets(count + 1);
 
 			// Populate the array
 			for (uint i = 0; i < count; i++)
-				ctx.Branch.Targets[i] = decoder.DecodeInt();
+				ctx.BranchTargets[i] = decoder.DecodeInt();
 		}
 
 		/// <summary>

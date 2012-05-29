@@ -265,8 +265,8 @@ namespace Mosa.Compiler.Framework.CIL
 				{
 					int pc = (int)(codeReader.BaseStream.Position - codeStart);
 
-					for (int i = 0; i < ctx.Branch.Targets.Length; i++)
-						ctx.Branch.Targets[i] += pc;
+					for (int i = 0; i < ctx.BranchTargets.Length; i++)
+						ctx.BranchTargets[i] += pc;
 				}
 
 				prefix = (instruction is PrefixInstruction);

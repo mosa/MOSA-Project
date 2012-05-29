@@ -237,7 +237,7 @@ namespace Mosa.Platform.x86II.Stages
 			if (window.Current.BasicBlock == window.Previous.BasicBlock)
 				return false;
 
-			if (window.Previous.Branch.Targets[0] != window.Current.BasicBlock.Label)
+			if (window.Previous.BranchTargets[0] != window.Current.BasicBlock.Label)
 				return false;
 
 			window.DeletePrevious();
@@ -267,16 +267,16 @@ namespace Mosa.Platform.x86II.Stages
 			if (window.Current.BasicBlock == window.Previous.BasicBlock)
 				return false;
 
-			if (window.PreviousPrevious.Branch.Targets[0] != window.Current.BasicBlock.Label)
+			if (window.PreviousPrevious.BranchTargets[0] != window.Current.BasicBlock.Label)
 				return false;
 
-			Debug.Assert(window.PreviousPrevious.Branch.Targets.Length == 1);
+			Debug.Assert(window.PreviousPrevious.BranchTargets.Length == 1);
 
 			// Negate branch condition
 			window.PreviousPrevious.ConditionCode = GetOppositeConditionCode(window.PreviousPrevious.ConditionCode);
 
 			// Change branch target
-			window.PreviousPrevious.Branch.Targets[0] = window.Previous.Branch.Targets[0];
+			window.PreviousPrevious.BranchTargets[0] = window.Previous.BranchTargets[0];
 
 			// Delete jump
 			window.DeletePrevious();

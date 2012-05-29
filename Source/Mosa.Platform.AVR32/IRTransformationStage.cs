@@ -161,14 +161,14 @@ namespace Mosa.Platform.AVR32
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.IntegerCompareBranch(Context context)
 		{
-			Branch branch = context.Branch;
+			int target = context.BranchTargets[0];
 			var condition = context.ConditionCode;
 			var operand1 = context.Operand1;
 			var operand2 = context.Operand2;
 
 			context.SetInstruction(AVR32.Cp, operand1, operand2);
 			context.AppendInstruction(AVR32.Branch, condition);
-			context.SetBranch(branch.Targets[0]);
+			context.SetBranch(target);
 		}
 
 		/// <summary>
@@ -487,7 +487,7 @@ namespace Mosa.Platform.AVR32
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.Return(Context context)
 		{
-			if (context.Branch == null)
+			if (context.BranchTargets == null)
 			{
 				// To return from an internal method call (usually from within a finally or exception clause)
 				context.SetInstruction(AVR32.Ret);
@@ -720,7 +720,7 @@ namespace Mosa.Platform.AVR32
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.Call(Context context)
 		{
-			if (context.OperandCount == 0 && context.Branch != null)
+			if (context.OperandCount == 0 && context.BranchTargets != null)
 			{
 				// inter-method call; usually for exception processing
 				context.ReplaceInstructionOnly(AVR32.Rcall);

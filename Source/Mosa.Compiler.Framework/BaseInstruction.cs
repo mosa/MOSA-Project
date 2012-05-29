@@ -182,18 +182,18 @@ namespace Mosa.Compiler.Framework
 				s.Length = s.Length - 1;
 			}
 
-			if (context.Branch != null)
+			if (context.BranchTargets != null)
 			{
-				for (int i = 0; (i < 2) && (i < context.Branch.Targets.Length); i++)
+				for (int i = 0; (i < 2) && (i < context.BranchTargets.Length); i++)
 				{
-					s.Append(String.Format(@" L_{0:X4},", context.Branch.Targets[i]));
+					s.Append(String.Format(@" L_{0:X4},", context.BranchTargets[i]));
 				}
 
-				if (context.Branch.Targets.Length > 2)
+				if (context.BranchTargets.Length > 2)
 				{
 					s.Append(" [more]");
 				}
-				else if (context.Branch.Targets.Length > 0)
+				else if (context.BranchTargets.Length > 0)
 				{
 					s.Length = s.Length - 1;
 				}

@@ -322,14 +322,14 @@ namespace Mosa.Platform.x86II.Stages
 		{
 			EmitOperandConstants(context);
 
-			Branch branch = context.Branch;
+			int target = context.BranchTargets[0];
 			var condition = context.ConditionCode;
 			var operand1 = context.Operand1;
 			var operand2 = context.Operand2;
 
 			context.SetInstruction(X86.Cmp, null, operand1, operand2);
 			context.AppendInstruction(X86.Branch, condition);
-			context.SetBranch(branch.Targets[0]);
+			context.SetBranch(target);
 		}
 
 		/// <summary>
@@ -602,7 +602,7 @@ namespace Mosa.Platform.x86II.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.Return(Context context)
 		{
-			if (context.Branch == null)
+			if (context.BranchTargets == null)
 			{
 				// To return from an internal method call (usually from within a finally or exception clause)
 				context.SetInstruction(X86.Ret);
@@ -870,16 +870,16 @@ namespace Mosa.Platform.x86II.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.Switch(Context context)
 		{
-			Branch branch = context.Branch;
+			int[] targets = context.BranchTargets;
 			Operand operand = context.Operand1;
 
 			context.Remove();
 
-			for (int i = 0; i < branch.Targets.Length - 1; ++i)
+			for (int i = 0; i < targets.Length - 1; ++i)
 			{
 				context.AppendInstruction(X86.Cmp, null, operand, new ConstantOperand(BuiltInSigType.IntPtr, i));
 				context.AppendInstruction(X86.Branch, ConditionCode.Equal);
-				context.SetBranch(branch.Targets[i]);
+				context.SetBranch(targets[i]);
 			}
 		}
 
@@ -960,7 +960,7 @@ namespace Mosa.Platform.x86II.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.Call(Context context)
 		{
-			if (context.OperandCount == 0 && context.Branch != null)
+			if (context.OperandCount == 0 && context.BranchTargets != null)
 			{
 				// inter-method call; usually for exception processing
 				context.ReplaceInstructionOnly(X86.Call);

@@ -1007,7 +1007,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// <param name="context">The context.</param>
 		public void UnaryBranch(Context context)
 		{
-			Branch branch = context.Branch;
+			int target = context.BranchTargets[0];
 
 			ConditionCode cc;
 			Operand first = context.Operand1;
@@ -1029,7 +1029,7 @@ namespace Mosa.Compiler.Framework.IR
 
 			context.SetInstruction(IRInstruction.IntegerCompareBranch, null, first, second);
 			context.ConditionCode = cc;
-			context.SetBranch(branch.Targets[0]);
+			context.SetBranch(target);
 		}
 
 		/// <summary>
@@ -1038,7 +1038,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// <param name="context">The context.</param>
 		public void BinaryBranch(Context context)
 		{
-			Branch branch = context.Branch;
+			int target = context.BranchTargets[0];
 
 			ConditionCode cc = ConvertCondition(((CIL.ICILInstruction)context.Instruction).OpCode);
 			Operand first = context.Operand1;
@@ -1051,13 +1051,13 @@ namespace Mosa.Compiler.Framework.IR
 				context.ConditionCode = cc;
 				context.AppendInstruction(IRInstruction.IntegerCompareBranch, null, comparisonResult, new ConstantOperand(BuiltInSigType.IntPtr, 1));
 				context.ConditionCode = ConditionCode.Equal;
-				context.SetBranch(branch.Targets[0]);
+				context.SetBranch(target);
 			}
 			else
 			{
 				context.SetInstruction(IRInstruction.IntegerCompareBranch, null, first, second);
 				context.ConditionCode = cc;
-				context.SetBranch(branch.Targets[0]);
+				context.SetBranch(target);
 			}
 		}
 

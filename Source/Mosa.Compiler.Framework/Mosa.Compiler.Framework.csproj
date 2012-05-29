@@ -241,7 +241,6 @@
     <Compile Include="CIL\UnaryInstruction.cs" />
     <Compile Include="CIL\UnboxAnyInstruction.cs" />
     <Compile Include="CIL\UnboxInstruction.cs" />
-    <Compile Include="Branch.cs" />
     <Compile Include="Context.cs" />
     <Compile Include="BaseMethodCompilerStage.cs" />
     <Compile Include="ICodeEmitter.cs" />

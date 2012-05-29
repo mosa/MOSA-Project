@@ -83,9 +83,9 @@ namespace Mosa.Compiler.Framework.Stages
 			ctx.GotoLast();
 
 			// Find branch or jump to b and replace it with z
-			while (ctx.Branch != null)
+			while (ctx.BranchTargets != null)
 			{
-				int[] targets = ctx.Branch.Targets;
+				int[] targets = ctx.BranchTargets;
 				for (int index = 0; index < targets.Length; index++)
 				{
 					if (targets[index] == b.Label)

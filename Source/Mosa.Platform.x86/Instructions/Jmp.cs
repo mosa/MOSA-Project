@@ -59,7 +59,7 @@ namespace Mosa.Platform.x86.Instructions
 				if (context.Operand1 is RegisterOperand)
 					emitter.Emit(JmpReg, context.Operand1);
 				else
-					emitter.EmitBranch(JMP, context.Branch.Targets[0]);
+					emitter.EmitBranch(JMP, context.BranchTargets[0]);
 		}
 
 		/// <summary>

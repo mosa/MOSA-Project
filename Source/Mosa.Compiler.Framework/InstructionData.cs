@@ -53,9 +53,9 @@ namespace Mosa.Compiler.Framework
 		public Operand Result;
 
 		/// <summary>
-		///  Holds the branch target information
+		///  Holds the branch targets
 		/// </summary>
-		public Branch Branch;
+		public int[] BranchTargets;
 
 		/// <summary>
 		/// Holds the "other" object
@@ -212,7 +212,7 @@ namespace Mosa.Compiler.Framework
 			this.Operand3 = null;
 			this.Result = null;
 			this.packed = 0;
-			this.Branch = null;
+			this.BranchTargets = null;
 			this.Other = null;
 			this.BranchHint = false;
 		}
@@ -227,7 +227,7 @@ namespace Mosa.Compiler.Framework
 			this.Ignore = true;
 			this.OperandCount = 0;
 			this.ResultCount = 0;
-			this.Branch = null;
+			this.BranchTargets = null;
 			this.Other = null;
 		}
 
@@ -262,6 +262,15 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
+		/// Allocates the branch targets.
+		/// </summary>
+		/// <param name="targets">The targets.</param>
+		public void AllocateBranchTargets(uint targets)
+		{
+			BranchTargets = new int[targets];
+		}
+
+		/// <summary>
 		/// Returns a <see cref="System.String"/> that represents this instance.
 		/// </summary>
 		/// <returns>
@@ -277,10 +286,10 @@ namespace Mosa.Compiler.Framework
 			if (Label >= 0)
 				str = Label.ToString() + ": " + str;
 
-			if (Branch != null)
+			if (BranchTargets != null)
 			{
 				str = str + " (";
-				foreach (int branch in Branch.Targets)
+				foreach (int branch in BranchTargets)
 					str = str + branch.ToString() + ",";
 
 				str = str.Trim(',') + ")";

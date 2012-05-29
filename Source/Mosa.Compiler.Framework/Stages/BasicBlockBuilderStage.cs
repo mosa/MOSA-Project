@@ -108,14 +108,14 @@ namespace Mosa.Compiler.Framework.Stages
 					case FlowControl.Throw: continue;
 					case FlowControl.Branch:
 						// Unconditional branch 
-						Debug.Assert(ctx.Branch.Targets.Length == 1);
-						if (!targets.ContainsKey(ctx.Branch.Targets[0]))
-							targets.Add(ctx.Branch.Targets[0], -1);
+						Debug.Assert(ctx.BranchTargets.Length == 1);
+						if (!targets.ContainsKey(ctx.BranchTargets[0]))
+							targets.Add(ctx.BranchTargets[0], -1);
 						continue;
 					case FlowControl.Switch: goto case FlowControl.ConditionalBranch;
 					case FlowControl.ConditionalBranch:
 						// Conditional branch with multiple targets
-						foreach (int target in ctx.Branch.Targets)
+						foreach (int target in ctx.BranchTargets)
 							if (!targets.ContainsKey(target))
 								targets.Add(target, -1);
 						int next = ctx.Next.Label;
@@ -124,9 +124,9 @@ namespace Mosa.Compiler.Framework.Stages
 						continue;
 					case FlowControl.EndFinally: continue;
 					case FlowControl.Leave:
-						Debug.Assert(ctx.Branch.Targets.Length == 1);
-						if (!targets.ContainsKey(ctx.Branch.Targets[0]))
-							targets.Add(ctx.Branch.Targets[0], -1);
+						Debug.Assert(ctx.BranchTargets.Length == 1);
+						if (!targets.ContainsKey(ctx.BranchTargets[0]))
+							targets.Add(ctx.BranchTargets[0], -1);
 						continue;
 					default:
 						Debug.Assert(false);
@@ -208,10 +208,10 @@ namespace Mosa.Compiler.Framework.Stages
 					case FlowControl.Throw: continue;
 					case FlowControl.Switch: goto case FlowControl.ConditionalBranch;
 					case FlowControl.Branch:
-						FindAndLinkBlock(block, ctx.Branch.Targets[0]);
+						FindAndLinkBlock(block, ctx.BranchTargets[0]);
 						return;
 					case FlowControl.ConditionalBranch:
-						foreach (int target in ctx.Branch.Targets)
+						foreach (int target in ctx.BranchTargets)
 							FindAndLinkBlock(block, target);
 
 						int nextIndex = ctx.Index + 1;
@@ -221,7 +221,7 @@ namespace Mosa.Compiler.Framework.Stages
 						continue;
 					case FlowControl.EndFinally: return;
 					case FlowControl.Leave:
-						FindAndLinkBlock(block, ctx.Branch.Targets[0]);
+						FindAndLinkBlock(block, ctx.BranchTargets[0]);
 						return;
 					default:
 						Debug.Assert(false);

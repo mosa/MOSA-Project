@@ -49,51 +49,51 @@ namespace Mosa.Platform.x86.Instructions
 			switch (context.ConditionCode)
 			{
 				case IR.ConditionCode.Equal:
-					emitter.EmitBranch(JE, context.Branch.Targets[0]);
+					emitter.EmitBranch(JE, context.BranchTargets[0]);
 					break;
 
 				case IR.ConditionCode.GreaterOrEqual:
-					emitter.EmitBranch(JGE, context.Branch.Targets[0]);
+					emitter.EmitBranch(JGE, context.BranchTargets[0]);
 					break;
 
 				case IR.ConditionCode.GreaterThan:
-					emitter.EmitBranch(JG, context.Branch.Targets[0]);
+					emitter.EmitBranch(JG, context.BranchTargets[0]);
 					break;
 
 				case IR.ConditionCode.LessOrEqual:
-					emitter.EmitBranch(JLE, context.Branch.Targets[0]);
+					emitter.EmitBranch(JLE, context.BranchTargets[0]);
 					break;
 
 				case IR.ConditionCode.LessThan:
-					emitter.EmitBranch(JL, context.Branch.Targets[0]);
+					emitter.EmitBranch(JL, context.BranchTargets[0]);
 					break;
 
 				case IR.ConditionCode.NotEqual:
-					emitter.EmitBranch(JNE, context.Branch.Targets[0]);
+					emitter.EmitBranch(JNE, context.BranchTargets[0]);
 					break;
 
 				case IR.ConditionCode.UnsignedGreaterOrEqual:
-					emitter.EmitBranch(JAE, context.Branch.Targets[0]);
+					emitter.EmitBranch(JAE, context.BranchTargets[0]);
 					break;
 
 				case IR.ConditionCode.UnsignedGreaterThan:
-					emitter.EmitBranch(JA, context.Branch.Targets[0]);
+					emitter.EmitBranch(JA, context.BranchTargets[0]);
 					break;
 
 				case IR.ConditionCode.UnsignedLessOrEqual:
-					emitter.EmitBranch(JBE, context.Branch.Targets[0]);
+					emitter.EmitBranch(JBE, context.BranchTargets[0]);
 					break;
 
 				case IR.ConditionCode.UnsignedLessThan:
-					emitter.EmitBranch(JB, context.Branch.Targets[0]);
+					emitter.EmitBranch(JB, context.BranchTargets[0]);
 					break;
 
 				case IR.ConditionCode.NotSigned:
-					emitter.EmitBranch(JNS, context.Branch.Targets[0]);
+					emitter.EmitBranch(JNS, context.BranchTargets[0]);
 					break;
 
 				case IR.ConditionCode.Signed:
-					emitter.EmitBranch(JS, context.Branch.Targets[0]);
+					emitter.EmitBranch(JS, context.BranchTargets[0]);
 					break;
 
 				default:
