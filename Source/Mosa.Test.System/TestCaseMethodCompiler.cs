@@ -37,10 +37,10 @@ namespace Mosa.Test.System
 				new ExceptionPrologueStage(),
 				new OperandDeterminationStage(),
 				new StaticAllocationResolutionStage(),
-				//new ConstantFoldingStage(),
 				new CILTransformationStage(),
 				//new CILLeakGuardStage() { MustThrowCompilationException = true },
 				
+				new	EdgeSplitStage(),
 				new DominanceCalculationStage(),
 				new PhiPlacementStage(),
 				new EnterSSAStage(),

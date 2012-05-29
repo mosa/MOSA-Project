@@ -31,7 +31,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				for (var context = new Context(instructionSet, block); !context.EndOfInstruction; context.GotoNext())
 				{
-					if (context.Instruction is Phi)
+					if (context.Instruction is IR.Phi)
 						ProcessPhiInstruction(block, context);
 
 					for (var i = 0; i < context.OperandCount; ++i)
@@ -57,10 +57,10 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		private void ProcessPhiInstruction(BasicBlock block, Context context)
 		{
-			for (var predecessorIndex = 0; predecessorIndex < block.PreviousBlocks.Count; ++predecessorIndex)
+			for (var index = 0; index < block.PreviousBlocks.Count; index++)
 			{
-				var predecessor = block.PreviousBlocks[predecessorIndex];
-				var operand = context.GetOperand(predecessorIndex);
+				var predecessor = block.PreviousBlocks[index];
+				var operand = context.GetOperand(index);
 
 				InsertCopyStatement(predecessor, context.Result, operand);
 			}
@@ -89,7 +89,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Debug.Assert(!(destination is SsaOperand));
 
 			if (destination != source)
-				context.SetInstruction(IR.IRInstruction.Move, destination, source);
+				 context.SetInstruction(IR.IRInstruction.Move, destination, source);
 		}
 
 		/// <summary>

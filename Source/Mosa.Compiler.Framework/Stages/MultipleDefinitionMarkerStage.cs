@@ -15,7 +15,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <summary>
 	/// 
 	/// </summary>
-	public class SingleUseMarkerStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
+	public class MultipleDefinitionMarkerStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
 	{
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
