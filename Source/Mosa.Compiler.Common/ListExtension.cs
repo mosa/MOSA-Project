@@ -7,7 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System.IO;
 using System.Collections.Generic;
 
 namespace Mosa.Compiler.Common

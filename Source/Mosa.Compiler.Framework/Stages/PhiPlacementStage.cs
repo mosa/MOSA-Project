@@ -10,8 +10,8 @@
 using System;
 using System.Collections.Generic;
 using Mosa.Compiler.Common;
-using Mosa.Compiler.Framework.Operands;
 using Mosa.Compiler.Framework.IR;
+using Mosa.Compiler.Framework.Operands;
 
 namespace Mosa.Compiler.Framework.Stages
 {

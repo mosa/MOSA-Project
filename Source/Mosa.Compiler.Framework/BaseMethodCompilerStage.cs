@@ -9,7 +9,6 @@
  */
 
 using System;
-using System.Collections.Generic;
 using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.Metadata.Loader;
 using Mosa.Compiler.Metadata.Signatures;

@@ -12,7 +12,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using Mosa.Compiler.Common;
 
 namespace Mosa.Compiler.Framework
 {

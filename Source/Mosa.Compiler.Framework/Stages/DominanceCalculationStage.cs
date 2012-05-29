@@ -7,9 +7,7 @@
  *  Simon Wollwage (rootnode) <rootnode@mosa-project.org>
  */
 
-using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 
 namespace Mosa.Compiler.Framework.Stages
 {

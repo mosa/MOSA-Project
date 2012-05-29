@@ -8,8 +8,6 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-using Mosa.Compiler.Metadata.Signatures;
-using Mosa.Compiler.Framework.Operands;
 
 namespace Mosa.Compiler.Framework
 {

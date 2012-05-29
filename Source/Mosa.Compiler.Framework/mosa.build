@@ -18,6 +18,7 @@
                     <include name="SimpleFastDominance.cs"/>
                     <include name="LoopEdge.cs"/>
                     <include name="LoopAwareBlockOrder.cs"/>
+                    <include name="Stages/EdgeSplitStage.cs"/>
                     <include name="Stages/SimpleRegisterAllocatorStage.cs"/>
                     <include name="VirtualRegisterLayout.cs"/>
                     <include name="Stages/AssemblyMemberCompilationSchedulerStage.cs"/>
@@ -56,7 +57,7 @@
                     <include name="RegisterMap.cs"/>
                     <include name="Stages/RegisterUsageAnalyzerStage.cs"/>
                     <include name="Stages/OperandUsageAnalyzerStage.cs"/>
-                    <include name="Stages/SingleUseMarkerStage.cs"/>
+                    <include name="Stages/MultipleDefinitionMarkerStage.cs"/>
                     <include name="IPlugSystem.cs"/>
                     <include name="ITypeInitializerSchedulerStage.cs"/>
                     <include name="Stages/PlugStage.cs"/>
@@ -177,7 +178,6 @@
                     <include name="CIL/UnaryInstruction.cs"/>
                     <include name="CIL/UnboxAnyInstruction.cs"/>
                     <include name="CIL/UnboxInstruction.cs"/>
-                    <include name="Branch.cs"/>
                     <include name="Context.cs"/>
                     <include name="BaseMethodCompilerStage.cs"/>
                     <include name="ICodeEmitter.cs"/>
@@ -216,7 +216,6 @@
                     <include name="IR/TwoOperandInstruction.cs"/>
                     <include name="IR/ZeroExtendedMove.cs"/>
                     <include name="IVisitor.cs"/>
-                    <include name="IBranch.cs"/>
                     <include name="IIRInstruction.cs"/>
                     <include name="Platform/IPlatformInstruction.cs"/>
                     <include name="CIL/ICILInstruction.cs"/>

@@ -8,7 +8,6 @@
  */
 
 using System;
-using System.Collections.Generic;
 using System.IO;
 using Mosa.Compiler.Framework.Operands;
 using Mosa.Compiler.InternalTrace;

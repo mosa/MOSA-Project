@@ -1,7 +1,5 @@
 ﻿
-using Mosa.Test.Cases;
 using Mosa.Test.Cases.IL;
-using Mosa.Test.Cases.CIL;
 using Mosa.Test.Compiler.Framework;
 
 namespace Mosa.Test.Debug
