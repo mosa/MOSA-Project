@@ -55,7 +55,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		///  Holds the branch target information
 		/// </summary>
-		public IBranch Branch;
+		public Branch Branch;
 
 		/// <summary>
 		/// Gets or sets the offset of the instruction.

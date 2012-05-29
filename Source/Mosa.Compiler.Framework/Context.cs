@@ -124,7 +124,7 @@ namespace Mosa.Compiler.Framework
 		/// Gets or sets the result operand.
 		/// </summary>
 		/// <value>The result operand.</value>
-		public IBranch Branch
+		public Branch Branch
 		{
 			get { return instructionSet.Data[index].Branch; }
 			set { instructionSet.Data[index].Branch = value; }

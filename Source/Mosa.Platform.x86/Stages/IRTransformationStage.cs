@@ -322,7 +322,7 @@ namespace Mosa.Platform.x86.Stages
 		{
 			EmitOperandConstants(context);
 
-			IBranch branch = context.Branch;
+			Branch branch = context.Branch;
 			var condition = context.ConditionCode;
 			var operand1 = context.Operand1;
 			var operand2 = context.Operand2;
@@ -870,7 +870,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.Switch(Context context)
 		{
-			IBranch branch = context.Branch;
+			Branch branch = context.Branch;
 			Operand operand = context.Operand1;
 
 			context.Remove();

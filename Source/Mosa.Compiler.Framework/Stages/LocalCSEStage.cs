@@ -10,6 +10,8 @@
 using System.Collections.Generic;
 using Mosa.Compiler.Framework.Operands;
 
+// FIXME: This stage has not been updated and does not work as-is.
+
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
@@ -116,7 +118,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			for (; !ctx.EndOfInstruction; ctx.GotoNext())
 			{
-				IInstruction instruction = ctx.Instruction; // block.Instructions[i];
+				IInstruction instruction = ctx.Instruction; 
 				RegisterOperand temp = null;
 				bool found = false;
 

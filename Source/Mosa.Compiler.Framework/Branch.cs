@@ -12,33 +12,23 @@ namespace Mosa.Compiler.Framework
 	/// <summary>
 	/// Holds the branch target information
 	/// </summary>
-	public class Branch : IBranch
+	public sealed class Branch
 	{
 		#region Data members
 
 		/// <summary>
-		/// Holds the instruction offset.
-		/// </summary>
-		private int _offset = 0;
-
-		/// <summary>
 		/// Holds the branch targets instruction index.
 		/// </summary>
-		private int[] _branchTargets = null;
+		private int[] targets = null;
 
 		#endregion
 
 		#region Properties
 
 		/// <summary>
-		/// Retrieves the instruction offset.
-		/// </summary>
-		public int Offset { get { return _offset; } }
-
-		/// <summary>
 		/// Returns the branch targets instruction index.
 		/// </summary>
-		public int[] Targets { get { return _branchTargets; } set { _branchTargets = value; } }
+		public int[] Targets { get { return targets; } set { targets = value; } }
 
 		#endregion // Properties
 
@@ -50,7 +40,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="targets">The targets.</param>
 		public Branch(uint targets)
 		{
-			_branchTargets = new int[targets];
+			this.targets = new int[targets];
 		}
 
 		#endregion // Construction

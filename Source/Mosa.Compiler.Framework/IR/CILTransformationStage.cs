@@ -1007,7 +1007,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// <param name="context">The context.</param>
 		public void UnaryBranch(Context context)
 		{
-			IBranch branch = context.Branch;
+			Branch branch = context.Branch;
 
 			ConditionCode cc;
 			Operand first = context.Operand1;
@@ -1038,7 +1038,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// <param name="context">The context.</param>
 		public void BinaryBranch(Context context)
 		{
-			IBranch branch = context.Branch;
+			Branch branch = context.Branch;
 
 			ConditionCode cc = ConvertCondition(((CIL.ICILInstruction)context.Instruction).OpCode);
 			Operand first = context.Operand1;

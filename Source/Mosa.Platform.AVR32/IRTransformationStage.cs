@@ -161,7 +161,7 @@ namespace Mosa.Platform.AVR32
 		/// <param name="context">The context.</param>
 		void IR.IIRVisitor.IntegerCompareBranch(Context context)
 		{
-			IBranch branch = context.Branch;
+			Branch branch = context.Branch;
 			var condition = context.ConditionCode;
 			var operand1 = context.Operand1;
 			var operand2 = context.Operand2;

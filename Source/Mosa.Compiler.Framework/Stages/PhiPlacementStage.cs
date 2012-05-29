@@ -169,7 +169,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (blocks.Count < 2)
 					continue;
 
-				blocks.Add(headBlock);
+				blocks.AddIfNew(headBlock);
 
 				var idf = dominanceCalculation.IteratedDominanceFrontier(blocks);
 
