@@ -956,23 +956,6 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Sets the branch target.
-		/// </summary>
-		/// <param name="target1">The first target.</param>
-		/// <param name="target2">The second target.</param>
-		public void SetBranch(int target1, int target2)
-		{
-			if (BranchTargets == null)
-				AllocateBranchTargets(2);
-			else
-				if (BranchTargets.Length < 2)
-					AllocateBranchTargets(2);
-
-			BranchTargets[0] = target1;
-			BranchTargets[1] = target2;
-		}
-
-		/// <summary>
 		/// Gets the operand by index.
 		/// </summary>
 		/// <param name="opIndex">The index.</param>

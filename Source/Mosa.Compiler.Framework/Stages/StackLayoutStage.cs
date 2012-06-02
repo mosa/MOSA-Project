@@ -82,12 +82,10 @@ namespace Mosa.Compiler.Framework.Stages
 			// Allocate a list of locals
 			List<StackOperand> locals = new List<StackOperand>();
 
-			var localVariables = methodCompiler.LocalVariables;
-
-			if (localVariables == null)
+			if (methodCompiler.LocalVariables == null)
 				return locals;
 
-			foreach (var localVariable in localVariables)
+			foreach (var localVariable in methodCompiler.LocalVariables)
 				locals.Add(localVariable as StackOperand);
 
 			return locals;

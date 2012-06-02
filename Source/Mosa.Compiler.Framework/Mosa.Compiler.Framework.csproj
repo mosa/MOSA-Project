@@ -81,6 +81,7 @@
     <Compile Include="SimpleFastDominance.cs" />
     <Compile Include="LoopEdge.cs" />
     <Compile Include="LoopAwareBlockOrder.cs" />
+    <Compile Include="Stages\SSAOptimizations.cs" />
     <Compile Include="Stages\EdgeSplitStage.cs" />
     <Compile Include="Stages\SimpleRegisterAllocatorStage.cs" />
     <Compile Include="VirtualRegisterLayout.cs" />

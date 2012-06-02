@@ -43,8 +43,7 @@ namespace Mosa.Platform.x86
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DefaultCallingConvention"/>.
 		/// </summary>
-		/// <param name="architecture">The architecture of the calling convention.</param>
-		/// <param name="typeLayout">The type layout.</param>
+		/// <param name="architecture">The architecture of the calling convention.</param>		
 		public DefaultCallingConvention(IArchitecture architecture)
 		{
 			if (architecture == null)

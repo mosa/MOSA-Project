@@ -955,7 +955,7 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Visitation function for CallInstruction"/> instructions.
+		/// Visitation function for Call.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IIRVisitor.Call(Context context)

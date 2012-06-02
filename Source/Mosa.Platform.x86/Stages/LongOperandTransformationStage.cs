@@ -45,7 +45,7 @@ namespace Mosa.Platform.x86.Stages
 			if (operand.Type.Type != CilElementType.I8 && operand.Type.Type != CilElementType.U8)
 			{
 				operandLow = operand;
-				operandHigh = new ConstantOperand(BuiltInSigType.Int32, (int)0);
+				operandHigh = ConstantOperand.I4_0;
 				return;
 			}
 
@@ -1177,7 +1177,7 @@ namespace Mosa.Platform.x86.Stages
 
 			if (context.Result.StackType != StackTypeCode.Int64)
 			{
-				context.AppendInstruction(X86.Mov, op0L, op1L);
+				context.SetInstruction(X86.Mov, op0L, op1L);
 				context.AppendInstruction(X86.And, op0L, op2L);
 			}
 			else

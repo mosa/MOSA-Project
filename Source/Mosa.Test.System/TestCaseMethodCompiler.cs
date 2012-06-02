@@ -45,9 +45,10 @@ namespace Mosa.Test.System
 				new PhiPlacementStage(),
 				new EnterSSAStage(),
 
-				new ConstantPropagationStage(ConstantPropagationStage.PropagationStage.PreFolding),
-				new ConstantFoldingStage() ,
-				new ConstantPropagationStage(ConstantPropagationStage.PropagationStage.PostFolding),
+				new SSAOptimizations(),
+				//new ConstantPropagationStage(ConstantPropagationStage.PropagationStage.PreFolding),
+				//new ConstantFoldingStage() ,
+				//new ConstantPropagationStage(ConstantPropagationStage.PropagationStage.PostFolding),
 
 				new LeaveSSA(),
 				

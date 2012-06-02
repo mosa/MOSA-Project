@@ -76,8 +76,8 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public bool Ignore
 		{
-			get { return (packed & 0x01) == 0x01; }
-			set { if (value) packed = packed | 0x01; else packed = (uint)(packed & ~0x1); }
+			get { return (packed & 0x01) != 0x01; }
+			set { if (value) packed = (uint)(packed & ~0x1); else packed = packed | 0x01; }
 		}
 
 		/// <summary>
@@ -109,7 +109,7 @@ namespace Mosa.Compiler.Framework
 			get { return (packed & 0x08) == 0x08; }
 			set { if (value) packed = packed | 0x08; else packed = (uint)(packed & ~0x08); }
 		}
-		
+
 		/// <summary>
 		/// Gets or sets the number of operand results
 		/// </summary>

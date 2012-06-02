@@ -10,7 +10,7 @@ namespace Mosa.Test.Debug
 		{
 
 			//SimpleFastDominanceTests.DominanceCalculation1();
-			SimpleFastDominanceTests.DominanceCalculation2();
+			//SimpleFastDominanceTests.DominanceCalculation2();
 
 			//ConditionalOperator s = new ConditionalOperator();
 			//s.CompareEqualI1((sbyte)0x02, (sbyte)0x02, (sbyte)0x05, (sbyte)0x01);
@@ -47,6 +47,9 @@ namespace Mosa.Test.Debug
 			//    callVirtualFixture.TestBaseCall();
 			//    callVirtualFixture.TestVirtualCall();
 			//}
+
+			Comparison Comparison = new Cases.IL.Comparison();
+			Comparison.CompareEqualI2I8(-1, -1);
 
 			return;
 		}

@@ -1875,7 +1875,7 @@ namespace Mosa.Compiler.Framework.IR
 			uint mask = 0xFFFFFFFF;
 			IInstruction instruction = ComputeExtensionTypeAndMask(ctDest, ref mask);
 
-			if (type == IRInstruction.LogicalAnd || mask != 0)
+			if (type == IRInstruction.LogicalAnd && mask != 0)
 			{
 				Debug.Assert(mask != 0, @"Conversion is an AND, but no mask given.");
 
@@ -1883,8 +1883,6 @@ namespace Mosa.Compiler.Framework.IR
 					ProcessMixedTypeConversion(context, type, mask, destinationOperand, sourceOperand);
 				else
 					ProcessSingleTypeTruncation(context, type, mask, destinationOperand, sourceOperand);
-
-				ExtendAndTruncateResult(context, instruction, destinationOperand);
 			}
 			else
 				context.SetInstruction(type, destinationOperand, sourceOperand);
@@ -1904,6 +1902,7 @@ namespace Mosa.Compiler.Framework.IR
 					mask = 0xFFFFFFFF;
 					break;
 				case ConvType.I8:
+					mask = 0x0;
 					break;
 				case ConvType.U1:
 					mask = 0xFF;
@@ -1915,6 +1914,7 @@ namespace Mosa.Compiler.Framework.IR
 					mask = 0xFFFFFFFF;
 					break;
 				case ConvType.U8:
+					mask = 0x0;
 					break;
 				case ConvType.R4:
 					break;
@@ -1937,7 +1937,7 @@ namespace Mosa.Compiler.Framework.IR
 		private void ProcessMixedTypeConversion(Context context, IInstruction instruction, uint mask, Operand destinationOperand, Operand sourceOperand)
 		{
 			context.SetInstruction(instruction, destinationOperand, sourceOperand);
-			context.AppendInstruction(IRInstruction.LogicalAnd, destinationOperand, /*sourceOperand,*/ new ConstantOperand(BuiltInSigType.UInt32, mask));
+			context.AppendInstruction(IRInstruction.LogicalAnd, destinationOperand, destinationOperand, new ConstantOperand(BuiltInSigType.UInt32, mask));
 		}
 
 		private void ProcessSingleTypeTruncation(Context context, IInstruction instruction, uint mask, Operand destinationOperand, Operand sourceOperand)
@@ -1949,15 +1949,6 @@ namespace Mosa.Compiler.Framework.IR
 			}
 			else
 				context.SetInstruction(instruction, destinationOperand, sourceOperand, new ConstantOperand(BuiltInSigType.UInt32, mask));
-		}
-
-		private void ExtendAndTruncateResult(Context context, IInstruction instruction, Operand destinationOperand)
-		{
-			if (instruction != null && destinationOperand is RegisterOperand)
-			{
-				RegisterOperand resultOperand = new RegisterOperand(BuiltInSigType.Int32, ((RegisterOperand)destinationOperand).Register);
-				context.AppendInstruction(instruction, resultOperand, destinationOperand);
-			}
 		}
 
 		/// <summary>

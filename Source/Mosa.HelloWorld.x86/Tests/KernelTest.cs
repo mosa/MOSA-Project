@@ -76,6 +76,7 @@ namespace Mosa.HelloWorld.x86.Tests
 			var isInstanceTest = new IsInstTest();
 			var exceptionTest = new ExceptionTest();
 			var plugTestTest = new PlugTestTest();
+			var compareTest = new ComparisonTest();
 
 			stringTest.Test();
 			interfaceTest.Test();
@@ -84,6 +85,7 @@ namespace Mosa.HelloWorld.x86.Tests
 			isInstanceTest.Test();
 			exceptionTest.Test();
 			plugTestTest.Test();
+			compareTest.Test();
 		}
 
 		public void Test()
