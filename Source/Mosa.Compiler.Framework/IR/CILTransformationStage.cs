@@ -1877,15 +1877,20 @@ namespace Mosa.Compiler.Framework.IR
 
 			if (type == IRInstruction.LogicalAnd && mask != 0)
 			{
-				Debug.Assert(mask != 0, @"Conversion is an AND, but no mask given.");
-
-				if (type != IRInstruction.LogicalAnd)
-					ProcessMixedTypeConversion(context, type, mask, destinationOperand, sourceOperand);
+				if (sourceOperand.Type.Type == CilElementType.I8 || sourceOperand.Type.Type == CilElementType.U8)
+				{
+					context.SetInstruction(IRInstruction.Move, destinationOperand, sourceOperand);
+					context.AppendInstruction(type, destinationOperand, sourceOperand, new ConstantOperand(BuiltInSigType.UInt32, mask));
+				}
 				else
-					ProcessSingleTypeTruncation(context, type, mask, destinationOperand, sourceOperand);
+				{
+					context.SetInstruction(type, destinationOperand, sourceOperand, new ConstantOperand(BuiltInSigType.UInt32, mask));
+				}
 			}
 			else
+			{
 				context.SetInstruction(type, destinationOperand, sourceOperand);
+			}
 		}
 
 		private IInstruction ComputeExtensionTypeAndMask(ConvType destinationType, ref uint mask)
@@ -1932,23 +1937,6 @@ namespace Mosa.Compiler.Framework.IR
 			}
 
 			return null;
-		}
-
-		private void ProcessMixedTypeConversion(Context context, IInstruction instruction, uint mask, Operand destinationOperand, Operand sourceOperand)
-		{
-			context.SetInstruction(instruction, destinationOperand, sourceOperand);
-			context.AppendInstruction(IRInstruction.LogicalAnd, destinationOperand, destinationOperand, new ConstantOperand(BuiltInSigType.UInt32, mask));
-		}
-
-		private void ProcessSingleTypeTruncation(Context context, IInstruction instruction, uint mask, Operand destinationOperand, Operand sourceOperand)
-		{
-			if (sourceOperand.Type.Type == CilElementType.I8 || sourceOperand.Type.Type == CilElementType.U8)
-			{
-				context.SetInstruction(IRInstruction.Move, destinationOperand, sourceOperand);
-				context.AppendInstruction(instruction, destinationOperand, sourceOperand, new ConstantOperand(BuiltInSigType.UInt32, mask));
-			}
-			else
-				context.SetInstruction(instruction, destinationOperand, sourceOperand, new ConstantOperand(BuiltInSigType.UInt32, mask));
 		}
 
 		/// <summary>
