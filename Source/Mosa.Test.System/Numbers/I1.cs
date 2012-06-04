@@ -40,7 +40,7 @@ namespace Mosa.Test.System.Numbers
 			list.Add(sbyte.MaxValue - 1);
 
 			// Get negatives
-			list.AddIfNew<sbyte>(GetNegatives(list));
+			list.AddIfNew(GetNegatives(list));
 
 			list.Sort();
 

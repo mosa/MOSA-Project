@@ -46,7 +46,7 @@ namespace Mosa.Test.System.Numbers
 			list.Add(short.MaxValue - 1);
 
 			// Get negatives
-			list.AddIfNew<short>(GetNegatives(list));
+			list.AddIfNew(GetNegatives(list));
 
 			list.Sort();
 

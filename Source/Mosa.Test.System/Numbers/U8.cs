@@ -31,25 +31,25 @@ namespace Mosa.Test.System.Numbers
 		{
 			List<ulong> list = new List<ulong>();
 
-			list.Add(0);
-			list.Add(1);
-			list.Add(2);
-			list.Add(byte.MinValue);
-			list.Add(byte.MaxValue);
-			list.Add(byte.MinValue + 1);
-			list.Add(byte.MaxValue - 1);
-			list.Add(ushort.MinValue);
-			list.Add(ushort.MaxValue);
-			list.Add(ushort.MinValue + 1);
-			list.Add(ushort.MaxValue - 1);
-			list.Add(uint.MinValue);
-			list.Add(uint.MaxValue);
-			list.Add(uint.MinValue + 1);
-			list.Add(uint.MaxValue - 1);
-			list.Add(ulong.MinValue);
-			list.Add(ulong.MaxValue);
-			list.Add(ulong.MinValue + 1);
-			list.Add(ulong.MaxValue - 1);
+			list.AddIfNew<ulong>(0);
+			list.AddIfNew<ulong>(1);
+			list.AddIfNew<ulong>(2);
+			list.AddIfNew<ulong>(byte.MinValue);
+			list.AddIfNew<ulong>(byte.MaxValue);
+			list.AddIfNew<ulong>(byte.MinValue + 1);
+			list.AddIfNew<ulong>(byte.MaxValue - 1);
+			list.AddIfNew<ulong>(ushort.MinValue);
+			list.AddIfNew<ulong>(ushort.MaxValue);
+			list.AddIfNew<ulong>(ushort.MinValue + 1);
+			list.AddIfNew<ulong>(ushort.MaxValue - 1);
+			list.AddIfNew<ulong>(uint.MinValue);
+			list.AddIfNew<ulong>(uint.MaxValue);
+			list.AddIfNew<ulong>(uint.MinValue + 1);
+			list.AddIfNew<ulong>(uint.MaxValue - 1);
+			list.AddIfNew<ulong>(ulong.MinValue);
+			list.AddIfNew<ulong>(ulong.MaxValue);
+			list.AddIfNew<ulong>(ulong.MinValue + 1);
+			list.AddIfNew<ulong>(ulong.MaxValue - 1);
 
 			list.Sort();
 

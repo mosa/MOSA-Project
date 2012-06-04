@@ -50,7 +50,7 @@ namespace Mosa.Test.System.Numbers
 			list.Add(int.MaxValue - 1);
 
 			// Get negatives
-			list.AddIfNew<int>(GetNegatives(list));
+			list.AddIfNew(GetNegatives(list));
 
 			list.Sort();
 
@@ -64,7 +64,7 @@ namespace Mosa.Test.System.Numbers
 			foreach (int value in list)
 			{
 				if (value > 0)
-					negs.AddIfNew<int>((int)-value);
+					negs.AddIfNew((int)-value);
 			}
 
 			return negs;

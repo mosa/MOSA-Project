@@ -31,21 +31,21 @@ namespace Mosa.Test.System.Numbers
 		{
 			List<uint> list = new List<uint>();
 
-			list.Add(0);
-			list.Add(1);
-			list.Add(2);
-			list.Add(byte.MinValue);
-			list.Add(byte.MaxValue);
-			list.Add(byte.MinValue + 1);
-			list.Add(byte.MaxValue - 1);
-			list.Add(ushort.MinValue);
-			list.Add(ushort.MaxValue);
-			list.Add(ushort.MinValue + 1);
-			list.Add(ushort.MaxValue - 1);
-			list.Add(uint.MinValue);
-			list.Add(uint.MaxValue);
-			list.Add(uint.MinValue + 1);
-			list.Add(uint.MaxValue - 1);
+			list.AddIfNew<uint>(0);
+			list.AddIfNew<uint>(1);
+			list.AddIfNew<uint>(2);
+			list.AddIfNew<uint>(byte.MinValue);
+			list.AddIfNew<uint>(byte.MaxValue);
+			list.AddIfNew<uint>(byte.MinValue + 1);
+			list.AddIfNew<uint>(byte.MaxValue - 1);
+			list.AddIfNew<uint>(ushort.MinValue);
+			list.AddIfNew<uint>(ushort.MaxValue);
+			list.AddIfNew<uint>(ushort.MinValue + 1);
+			list.AddIfNew<uint>(ushort.MaxValue - 1);
+			list.AddIfNew<uint>(uint.MinValue);
+			list.AddIfNew<uint>(uint.MaxValue);
+			list.AddIfNew<uint>(uint.MinValue + 1);
+			list.AddIfNew<uint>(uint.MaxValue - 1);
 
 			list.Sort();
 

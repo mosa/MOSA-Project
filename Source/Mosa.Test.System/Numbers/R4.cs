@@ -40,14 +40,12 @@ namespace Mosa.Test.System.Numbers
 			list.Add(float.PositiveInfinity);
 			list.Add(float.NegativeInfinity);
 			list.Add(1.00012f);
-			list.Add(1.1497f);
-			list.Add(1.2f);
 			list.Add(17.0002501f);
 			list.Add(23f);
 			list.Add(12321452132.561f);
 
 			// Get negatives
-			list.AddIfNew<float>(GetNegatives(list));
+			list.AddIfNew(GetNegatives(list));
 
 			list.Sort();
 

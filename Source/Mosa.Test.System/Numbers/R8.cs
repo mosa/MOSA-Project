@@ -39,16 +39,13 @@ namespace Mosa.Test.System.Numbers
 			list.Add(double.NaN);
 			list.Add(double.PositiveInfinity);
 			list.Add(double.NegativeInfinity);
-
 			list.Add(1.00012);
-			list.Add(1.1497);
-			list.Add(1.2);
 			list.Add(17.0002501);
 			list.Add(23);
 			list.Add(12321452132.561);
 
 			// Get negatives
-			list.AddIfNew<double>(GetNegatives(list));
+			list.AddIfNew(GetNegatives(list));
 
 			list.Sort();
 

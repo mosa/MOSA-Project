@@ -31,13 +31,13 @@ namespace Mosa.Test.System.Numbers
 		{
 			List<byte> list = new List<byte>();
 
-			list.Add(0);
-			list.Add(1);
-			list.Add(2);
-			list.Add(byte.MinValue);
-			list.Add(byte.MaxValue);
-			list.Add(byte.MinValue + 1);
-			list.Add(byte.MaxValue - 1);
+			list.AddIfNew<byte>(0);
+			list.AddIfNew<byte>(1);
+			list.AddIfNew<byte>(2);
+			list.AddIfNew<byte>(byte.MinValue);
+			list.AddIfNew<byte>(byte.MaxValue);
+			list.AddIfNew<byte>(byte.MinValue + 1);
+			list.AddIfNew<byte>(byte.MaxValue - 1);
 
 			list.Sort();
 
