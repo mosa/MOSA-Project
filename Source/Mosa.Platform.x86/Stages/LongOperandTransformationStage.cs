@@ -1408,8 +1408,8 @@ namespace Mosa.Platform.x86.Stages
 		private void ExpandStore(Context context)
 		{
 			MemoryOperand op0 = context.Result as MemoryOperand;
-			Operand offsetOperand = context.Operand1;
-			MemoryOperand op2 = context.Operand2 as MemoryOperand;
+			Operand offsetOperand = context.Operand2;
+			MemoryOperand op2 = context.Operand3 as MemoryOperand;
 			Debug.Assert(op0 != null && op2 != null, @"Operands to I8 LoadInstruction are not MemoryOperand.");
 
 			Operand op1L, op1H;
@@ -1708,7 +1708,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.Store(Context context)
 		{
-			if (IsInt64(context.Operand2))
+			if (IsInt64(context.Operand3))
 			{
 				ExpandStore(context);
 			}

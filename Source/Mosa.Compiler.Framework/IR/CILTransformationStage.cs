@@ -226,7 +226,7 @@ namespace Mosa.Compiler.Framework.IR
 		void CIL.ICILVisitor.Stobj(Context context)
 		{
 			// This is actually stind.* and stobj - the opcodes have the same meanings
-			context.SetInstruction(IRInstruction.Store, context.Operand1, ConstantOperand.FromValue(0), context.Operand2);
+			context.SetInstruction(IRInstruction.Store, context.Operand1, context.Operand1, ConstantOperand.FromValue(0), context.Operand2);
 		}
 
 		/// <summary>
@@ -980,7 +980,7 @@ namespace Mosa.Compiler.Framework.IR
 			ConstantOperand offsetOperand = new ConstantOperand(BuiltInSigType.IntPtr, offset);
 
 			context.SetInstruction(IRInstruction.Move, temp, valueOperand);
-			context.AppendInstruction(IRInstruction.Store, objectOperand, offsetOperand, temp);
+			context.AppendInstruction(IRInstruction.Store, objectOperand, objectOperand, offsetOperand, temp);
 		}
 
 		/// <summary>
@@ -1194,7 +1194,7 @@ namespace Mosa.Compiler.Framework.IR
 
 			Operand arrayAddress = this.LoadArrayBaseAddress(context, arraySigType, arrayOperand);
 			Operand elementOffset = this.CalculateArrayElementOffset(context, arraySigType, arrayIndexOperand);
-			context.AppendInstruction(IRInstruction.Store, arrayAddress, elementOffset, value);
+			context.AppendInstruction(IRInstruction.Store, arrayAddress, arrayAddress, elementOffset, value);
 		}
 
 		/// <summary>
@@ -1960,10 +1960,6 @@ namespace Mosa.Compiler.Framework.IR
 
 			//TODO: Verify!
 
-			// HACK
-			if (architecture.PlatformName == "x86ii") // && !external.Contains("Delegate"))
-				external = external.Replace(".x86", ".x86II").Replace(".x86", ".x86II").Replace(".x86IIII", ".x86II").Replace(".x86IIII", ".x86II");
-
 			Type intrinsicType = Type.GetType(external);
 
 			if (intrinsicType == null)
@@ -2026,7 +2022,6 @@ namespace Mosa.Compiler.Framework.IR
 		/// <param name="context">Provides the transformation context.</param>
 		private void ProcessLoadInstruction(Context context)
 		{
-
 			Operand source = context.Operand1;
 			Operand destination = context.Result;
 

@@ -8,7 +8,6 @@
  *  
  */
 
-
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>

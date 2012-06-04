@@ -530,8 +530,8 @@ namespace Mosa.Platform.AVR32
 		void IR.IIRVisitor.Store(Context context)
 		{
 			Operand destination = context.Result;
-			Operand offset = context.Operand1;
-			Operand value = context.Operand2;
+			Operand offset = context.Operand2;
+			Operand value = context.Operand3;
 
 			ConstantOperand constantOffset = offset as ConstantOperand;
 

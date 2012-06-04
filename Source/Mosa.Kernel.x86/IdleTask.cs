@@ -5,8 +5,9 @@
  *
  */
 
+using Mosa.Platform.x86.Intrinsic;
 
-namespace Mosa.Platform.x86.Intrinsic
+namespace Mosa.Kernel.x86
 {
 
 	/// <summary>
@@ -14,7 +15,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// </summary>
 	public static class IdleTask
 	{
-		public static uint _counter = 0;
+		private static uint counter = 0;
 
 		/// <summary>
 		/// Mains this instance.
@@ -23,7 +24,7 @@ namespace Mosa.Platform.x86.Intrinsic
 		{
 			while (true)
 			{
-				_counter++;
+				counter++;
 				Native.Hlt();	// wait for interrupt
 			}
 		}

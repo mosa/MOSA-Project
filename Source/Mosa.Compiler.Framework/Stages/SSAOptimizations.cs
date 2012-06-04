@@ -34,9 +34,9 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		void IMethodCompilerStage.Run()
 		{
-			// dummy to comment out rest of code
-			if (worklist != null)
-				return;
+			// Unable to optimize SSA w/ exceptions present
+			if (basicBlocks.Count != 1)
+				return; 
 
 			worklistbitmap = new BitArray(instructionSet.Size);
 
@@ -100,12 +100,9 @@ namespace Mosa.Compiler.Framework.Stages
 			if (constantOperand == null)
 				return;
 
-			if (!IsBuiltinType(constantOperand.Type))
-				return;
-
 			// propagate constant
 
-			// foreach statement T that uses operand, substituted c in statement T
+			// for each statement T that uses operand, substituted c in statement T
 			foreach (int index in context.Result.Uses.ToArray())
 			{
 				Context ctx = new Context(instructionSet, index);
@@ -113,8 +110,8 @@ namespace Mosa.Compiler.Framework.Stages
 				if (ctx.Instruction is IR.AddressOf)
 					continue;
 
-				//if (!(ctx.Instruction is IR.Move))
-				//    continue;
+				if (!(ctx.Instruction is IR.Move))
+					continue;
 
 				for (int i = 0; i < ctx.OperandCount; i++)
 				{
@@ -137,26 +134,6 @@ namespace Mosa.Compiler.Framework.Stages
 				//context.SetInstruction(IRInstruction.Nop);
 				context.Remove();
 			}
-		}
-
-		/// <summary>
-		/// Determines whether [is builtin type] [the specified type].
-		/// </summary>
-		/// <param name="type">The type.</param>
-		/// <returns>
-		///   <c>true</c> if [is builtin type] [the specified type]; otherwise, <c>false</c>.
-		/// </returns>
-		private bool IsBuiltinType(SigType type)
-		{
-			return type.Type == CilElementType.Boolean ||
-				type.Type == CilElementType.Char ||
-				type.Type == CilElementType.I ||
-				type.Type == CilElementType.I1 ||
-				type.Type == CilElementType.I2 ||
-				type.Type == CilElementType.I4 ||
-				type.Type == CilElementType.U1 ||
-				type.Type == CilElementType.U2 ||
-				type.Type == CilElementType.U4;
 		}
 
 		#endregion // IMethodCompilerStage Members
