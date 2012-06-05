@@ -206,7 +206,7 @@ namespace Mosa.Platform.x86
 		private void WriteImmediate(Operand op)
 		{
 
-			if (op is LocalVariableOperand)
+			if (op is LocalVariableOperand || op is StackTemporaryOperand)
 			{
 				// Add the displacement
 				codeStream.Write((op as StackOperand).Offset.ToInt32(), true);
@@ -345,7 +345,7 @@ namespace Mosa.Platform.x86
 		/// <param name="op">The immediate operand to emit.</param>
 		public void EmitImmediate(Operand op)
 		{
-			if (op is LocalVariableOperand)
+			if (op is LocalVariableOperand || op is StackTemporaryOperand)
 			{
 				// Add the displacement
 				codeStream.Write((op as StackOperand).Offset.ToInt32(), true);

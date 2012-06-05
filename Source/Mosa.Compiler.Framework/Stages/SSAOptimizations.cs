@@ -39,7 +39,10 @@ namespace Mosa.Compiler.Framework.Stages
 			//if (basicBlocks.HeadBlocks.Count != 1)
 			//    return;
 
-			if (methodCompiler.Method.ToString().Contains("Mosa.Kernel.x86"))
+			//if (methodCompiler.Method.ToString().Contains("Mosa.Kernel.x86"))
+			//    return;
+
+			if (basicBlocks.HeadBlocks.Count >= 0)
 				return;
 
 			worklistbitmap = new BitArray(instructionSet.Size);

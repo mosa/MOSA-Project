@@ -107,6 +107,11 @@ namespace Mosa.Compiler.Framework.Stages
 					LocalVariableOperand lvop = ctx.Result as LocalVariableOperand;
 					if (lvop != null && !locals.Contains(lvop))
 						locals.Add(lvop);
+
+					StackTemporaryOperand stop = ctx.Result as StackTemporaryOperand;
+					if (stop != null && !locals.Contains(stop))
+						locals.Add(stop);
+
 				}
 			}
 		}
