@@ -31,11 +31,11 @@ namespace Mosa.Compiler.Framework.Operands
 		/// <summary>
 		/// Initializes a new instance of <see cref="StackOperand"/>.
 		/// </summary>
-		/// <param name="type">Holds the type of data held in this operand.</param>
 		/// <param name="register">Holds the stack frame register.</param>
+		/// <param name="type">Holds the type of data held in this operand.</param>
 		/// <param name="offset">The offset of the variable on stack. A positive value reflects the current function stack, a negative offset indicates a parameter.</param>
-		protected StackOperand(SigType type, Register register, int offset) :
-			base(type, register, new IntPtr(offset * 4))
+		protected StackOperand(Register register, SigType type, int offset) :
+			base(register, type, new IntPtr(offset * 4))
 		{
 		}
 

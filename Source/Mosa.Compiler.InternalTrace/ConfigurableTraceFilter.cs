@@ -28,6 +28,8 @@ namespace Mosa.Compiler.InternalTrace
 		public MatchType MethodMatch = MatchType.Contains;
 		public MatchType StageMatch = MatchType.Any;
 
+		bool ITraceFilter.IsLogging { get { return IsLogging; } }
+
 		bool ITraceFilter.IsMatch(RuntimeMethod method, string stage)
 		{
 			return IsMatch(method.DeclaringType.Name, method.Name, stage);

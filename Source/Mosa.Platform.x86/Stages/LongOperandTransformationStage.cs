@@ -94,8 +94,8 @@ namespace Mosa.Platform.x86.Stages
 			{
 				// Plain memory, we can handle it here
 				MemoryOperand memoryOperand = (MemoryOperand)operand;
-				operandLow = new MemoryOperand(BuiltInSigType.UInt32, memoryOperand.Base, memoryOperand.Offset);
-				operandHigh = new MemoryOperand(HighType, memoryOperand.Base, new IntPtr(memoryOperand.Offset.ToInt64() + 4));
+				operandLow = new MemoryOperand(memoryOperand.Base, BuiltInSigType.UInt32, memoryOperand.Offset);
+				operandHigh = new MemoryOperand(memoryOperand.Base, HighType, new IntPtr(memoryOperand.Offset.ToInt64() + 4));
 			}
 		}
 
@@ -1395,9 +1395,9 @@ namespace Mosa.Platform.x86.Stages
 
 			context.SetInstruction(X86.Mov, eax, op1);
 			context.AppendInstruction(X86.Add, eax, offsetOperand);
-			context.AppendInstruction(X86.Mov, edx, new MemoryOperand(op0L.Type, GeneralPurposeRegister.EAX, IntPtr.Zero));
+			context.AppendInstruction(X86.Mov, edx, new MemoryOperand(GeneralPurposeRegister.EAX, op0L.Type, IntPtr.Zero));
 			context.AppendInstruction(X86.Mov, op0L, edx);
-			context.AppendInstruction(X86.Mov, edx, new MemoryOperand(op0H.Type, GeneralPurposeRegister.EAX, new IntPtr(4)));
+			context.AppendInstruction(X86.Mov, edx, new MemoryOperand(GeneralPurposeRegister.EAX, op0H.Type, new IntPtr(4)));
 			context.AppendInstruction(X86.Mov, op0H, edx);
 		}
 
@@ -1423,9 +1423,9 @@ namespace Mosa.Platform.x86.Stages
 			context.AppendInstruction(X86.Add, edx, offsetOperand);
 
 			context.AppendInstruction(X86.Mov, eax, op1L);
-			context.AppendInstruction(X86.Mov, new MemoryOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.EDX, IntPtr.Zero), eax);
+			context.AppendInstruction(X86.Mov, new MemoryOperand(GeneralPurposeRegister.EDX, BuiltInSigType.UInt32, IntPtr.Zero), eax);
 			context.AppendInstruction(X86.Mov, eax, op1H);
-			context.AppendInstruction(X86.Mov, new MemoryOperand(BuiltInSigType.Int32, GeneralPurposeRegister.EDX, new IntPtr(4)), eax);
+			context.AppendInstruction(X86.Mov, new MemoryOperand(GeneralPurposeRegister.EDX, BuiltInSigType.Int32, new IntPtr(4)), eax);
 		}
 
 		/// <summary>

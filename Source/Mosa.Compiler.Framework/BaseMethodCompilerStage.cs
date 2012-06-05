@@ -157,8 +157,15 @@ namespace Mosa.Compiler.Framework
 
 		protected void Trace(CompilerEvent compilerEvent, string message)
 		{
-			methodCompiler.InternalLog.CompilerEventListener.SubmitTraceEvent(compilerEvent, message);
+			methodCompiler.InternalTrace.CompilerEventListener.SubmitTraceEvent(compilerEvent, message);
 		}
+
+		protected void Trace(string line)
+		{
+			methodCompiler.InternalTrace.TraceListener.SubmitDebugStageInformation(methodCompiler.Method, Name, line);
+		}
+
+		protected bool IsLogging { get { return methodCompiler.InternalTrace.TraceFilter.IsLogging; } }
 
 		#endregion
 

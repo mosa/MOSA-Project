@@ -36,7 +36,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="field">The runtime field to reference.</param>
 		/// <exception cref="System.ArgumentNullException"><paramref name="field"/> is null.</exception>
 		public MemberOperand(RuntimeField field) :
-			base(field.SignatureType, null, IntPtr.Zero)
+			base(null, field.SignatureType, IntPtr.Zero)
 		{
 			if (field == null)
 				throw new ArgumentNullException(@"field");
@@ -50,7 +50,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="method">The method to reference.</param>
 		/// <exception cref="System.ArgumentNullException"><paramref name="method"/> is null.</exception>
 		public MemberOperand(RuntimeMethod method) :
-			base(BuiltInSigType.IntPtr, null, IntPtr.Zero)
+			base(null, BuiltInSigType.IntPtr, IntPtr.Zero)
 		{
 			if (method == null)
 				throw new ArgumentNullException(@"method");
@@ -65,7 +65,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="type">The type of data held in the operand.</param>
 		/// <param name="offset">The offset from the base register or absolute address to retrieve.</param>
 		public MemberOperand(RuntimeMember member, SigType type, IntPtr offset) :
-			base(type, null, offset)
+			base(null, type, offset)
 		{
 			if (member == null)
 				throw new ArgumentNullException(@"member");

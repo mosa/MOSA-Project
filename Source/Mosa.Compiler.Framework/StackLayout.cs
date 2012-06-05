@@ -74,15 +74,24 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="type">The type.</param>
 		/// <returns></returns>
-		public StackOperand AllocateStackOperand(SigType type)
+		public StackOperand AllocateStackOperand(SigType type, bool localVariable)
 		{
 			int stackSlot = stack.Count + 1;
 
-			LocalVariableOperand local = new LocalVariableOperand(architecture.StackFrameRegister, String.Format("L_{0}", stackSlot), stackSlot, type);
+			StackOperand stackOperand;
 
-			stack.Add(local);
+			if (localVariable)
+			{
+				stackOperand = new LocalVariableOperand(architecture.StackFrameRegister, String.Format("V_{0}", stackSlot), stackSlot, type);
+			}
+			else
+			{
+				stackOperand = new StackTemporaryOperand(architecture.StackFrameRegister, String.Format("T_{0}", stackSlot), stackSlot, type);
+			}
 
-			return local;
+			stack.Add(stackOperand);
+
+			return stackOperand;
 		}
 
 		/// <summary>

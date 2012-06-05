@@ -230,7 +230,7 @@ namespace Mosa.Platform.AVR32
 				context.AppendInstruction(AVR32.Add, r8, r8);
 			}
 
-			context.AppendInstruction(AVR32.Ld, result, new MemoryOperand(r8.Type, GeneralPurposeRegister.R8, offsetPtr));
+			context.AppendInstruction(AVR32.Ld, result, new MemoryOperand(GeneralPurposeRegister.R8, r8.Type, offsetPtr));
 		}
 
 		/// <summary>
@@ -552,7 +552,7 @@ namespace Mosa.Platform.AVR32
 				context.AppendInstruction(AVR32.Add, r8, r8);
 			}
 
-			context.AppendInstruction(AVR32.Ld, new MemoryOperand(value.Type, GeneralPurposeRegister.R8, offsetPtr), r9);
+			context.AppendInstruction(AVR32.Ld, new MemoryOperand(GeneralPurposeRegister.R8, value.Type, offsetPtr), r9);
 		}
 
 		/// <summary>
@@ -689,7 +689,7 @@ namespace Mosa.Platform.AVR32
 					context.AppendInstruction(AVR32.Add, r8, r8);
 				}
 
-				context.AppendInstruction(AVR32.Lds, destination, new MemoryOperand(elementType, GeneralPurposeRegister.R8, offsetPtr));
+				context.AppendInstruction(AVR32.Lds, destination, new MemoryOperand(GeneralPurposeRegister.R8, elementType, offsetPtr));
 			}
 			else
 			{

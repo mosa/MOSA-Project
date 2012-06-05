@@ -20,7 +20,7 @@ namespace Mosa.Compiler.Framework.Operands
 	/// of the variable is managed by this class. Negative stack indices represent method parameters 
 	/// and are only supported for those.
 	/// </remarks>
-	public class LocalVariableOperand : StackOperand
+	public class StackTemporaryOperand : StackOperand
 	{
 		#region Data members
 
@@ -40,7 +40,7 @@ namespace Mosa.Compiler.Framework.Operands
 		/// <param name="name">The name of the variable.</param>
 		/// <param name="index">Holds the variable index.</param>
 		/// <param name="type">The type of the variable.</param>
-		public LocalVariableOperand(Register register, string name, int index, SigType type)
+		public StackTemporaryOperand(Register register, string name, int index, SigType type)
 			: base(register, type, -index) // HACK: Redo this with Architecture support!
 		{
 			this.name = name;

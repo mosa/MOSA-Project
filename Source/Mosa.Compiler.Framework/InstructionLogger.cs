@@ -23,7 +23,7 @@ namespace Mosa.Compiler.InternalTrace
 		public static void Run(IMethodCompiler methodCompiler, IPipelineStage stage)
 		{
 			Run(
-				methodCompiler.InternalLog,
+				methodCompiler.InternalTrace,
 				stage,
 				methodCompiler.Method,
 				methodCompiler.InstructionSet,
@@ -76,7 +76,7 @@ namespace Mosa.Compiler.InternalTrace
 				LogInstructions(text, new Context(instructionSet, 0));
 			}
 
-			internalLog.TraceListener.NotifyNewInstructionTrace(method, stage.Name, text.ToString());
+			internalLog.TraceListener.SubmitInstructionTraceInformation(method, stage.Name, text.ToString());
 		}
 
 		private static string ListBlocks(IList<BasicBlock> blocks)

@@ -7,6 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -35,8 +36,11 @@ namespace Mosa.Compiler.Framework.Stages
 		void IMethodCompilerStage.Run()
 		{
 			// Unable to optimize SSA w/ exceptions present
-			if (basicBlocks.Count != 1)
-				return; 
+			//if (basicBlocks.HeadBlocks.Count != 1)
+			//    return;
+
+			if (methodCompiler.Method.ToString().Contains("Mosa.Kernel.x86"))
+				return;
 
 			worklistbitmap = new BitArray(instructionSet.Size);
 
@@ -57,23 +61,63 @@ namespace Mosa.Compiler.Framework.Stages
 			while (worklist.Count != 0)
 			{
 				int index = worklist.Dequeue();
+				worklistbitmap.Set(index, false);
 				Context ctx = new Context(instructionSet, index);
 
-				RemoveUselessMove(ctx);
 				SimpleConstantPropagation(ctx);
+				RemoveUselessMove(ctx);
+				//FoldAddSigned(ctx);
 			}
 		}
 
+		/// <summary>
+		/// Adds to work list.
+		/// </summary>
+		/// <param name="index">The index.</param>
 		void AddToWorkList(int index)
 		{
 			if (!worklistbitmap.Get(index))
 			{
 				worklist.Enqueue(index);
 				worklistbitmap.Set(index, true);
+				if (IsLogging) Trace("QUEUED:\t" + String.Format("L_{0:X4}", index));
 			}
 		}
 
-		void RemoveUselessMove(Context context)
+		/// <summary>
+		/// Adds the context result to work list.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void AddContextResultToWorkList(Context context)
+		{
+			foreach (int index in context.Result.Uses)
+			{
+				AddToWorkList(index);
+			}
+		}
+
+		/// <summary>
+		/// Adds the context result to work list.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void AddOperandUsageToWorkList(Operand operand)
+		{
+			foreach (int index in operand.Uses)
+			{
+				AddToWorkList(index);
+			}
+
+			foreach (int index in operand.Definitions)
+			{
+				AddToWorkList(index);
+			}
+		}
+
+		/// <summary>
+		/// Removes the useless move.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void RemoveUselessMove(Context context)
 		{
 			if (context.Ignore)
 				return;
@@ -81,13 +125,28 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!(context.Instruction is IR.Move))
 				return;
 
-			if (context.Operand1 != context.Result)
+			if (context.Operand1 == context.Result)
+			{
+				if (IsLogging) Trace("REMOVED:\t" + context.ToString());
+				context.SetInstruction(IRInstruction.Nop);
+				//context.Remove();
 				return;
+			}
 
-			context.Remove();
+			if (context.Result.Uses.Count == 0 && context.Result is StackTemporaryOperand)
+			{
+				if (IsLogging) Trace("REMOVED:\t" + context.ToString());
+				context.SetInstruction(IRInstruction.Nop);
+				//context.Remove();
+				return;
+			}
 		}
 
-		void SimpleConstantPropagation(Context context)
+		/// <summary>
+		/// Simples the constant propagation.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void SimpleConstantPropagation(Context context)
 		{
 			if (context.Ignore)
 				return;
@@ -102,6 +161,8 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// propagate constant
 
+			if (IsLogging) Trace("REVIEWING:\t" + context.ToString());
+
 			// for each statement T that uses operand, substituted c in statement T
 			foreach (int index in context.Result.Uses.ToArray())
 			{
@@ -110,8 +171,8 @@ namespace Mosa.Compiler.Framework.Stages
 				if (ctx.Instruction is IR.AddressOf)
 					continue;
 
-				if (!(ctx.Instruction is IR.Move))
-					continue;
+				//if (!(ctx.Instruction is IR.Move))
+				//    continue;
 
 				for (int i = 0; i < ctx.OperandCount; i++)
 				{
@@ -119,7 +180,14 @@ namespace Mosa.Compiler.Framework.Stages
 
 					if (operand == context.Result)
 					{
+						if (IsLogging) Trace("UPDATING:\t" + ctx.ToString());
+						if (IsLogging) Trace("REPLACED:\t" + operand.ToString() + " with " + constantOperand.ToString());
+
 						ctx.SetOperand(i, constantOperand);
+
+						if (IsLogging) Trace("RESULT:\t" + ctx.ToString());
+
+						AddOperandUsageToWorkList(operand);
 					}
 
 				}
@@ -128,12 +196,54 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 
 			// if constant has no uses, delete S
-
-			if (context.Result.Uses.Count == 0)
+			// and use is not a local or memory variable (only temp. stack-based operands can be removed)
+			if (context.Result.Uses.Count == 0 && context.Result is StackTemporaryOperand)
 			{
-				//context.SetInstruction(IRInstruction.Nop);
-				context.Remove();
+				if (IsLogging) Trace("REMOVED:\t" + context.ToString());
+
+				context.SetInstruction(IRInstruction.Nop);
+				//context.Remove();
 			}
+		}
+
+		/// <summary>
+		/// Folds the add signed.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void FoldAddSigned(Context context)
+		{
+			if (context.Ignore)
+				return;
+
+			if (!(context.Instruction is IR.AddSigned))
+				return;
+
+			Operand result = context.Result;
+			ConstantOperand op1 = context.Operand1 as ConstantOperand;
+			ConstantOperand op2 = context.Operand2 as ConstantOperand;
+
+			if (op1 == null || op2 == null)
+				return;
+
+			if (result.Type.Type != op1.Type.Type || op1.Type.Type != op2.Type.Type)
+				return;
+
+			ConstantOperand constant = null;
+
+			switch (result.Type.Type)
+			{
+				case CilElementType.U1: constant = new ConstantOperand(result.Type, (byte)(op1.Value) + (byte)(op2.Value)); break;
+				case CilElementType.I4: constant = new ConstantOperand(result.Type, (int)(op1.Value) + (int)(op2.Value)); break;
+				default: break;
+			}
+
+			if (constant != null)
+			{
+				AddContextResultToWorkList(context);
+
+				context.SetInstruction(IRInstruction.Move, context.Result, constant);
+			}
+
 		}
 
 		#endregion // IMethodCompilerStage Members

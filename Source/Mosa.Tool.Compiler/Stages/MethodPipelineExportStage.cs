@@ -78,9 +78,9 @@ namespace Mosa.Tool.Compiler.Stages
 
 		#endregion // IAssemblyCompilerStage Members
 
-		#region IInstructionTraceListener Members
+		#region ITraceListener Members
 
-		void ITraceListener.NotifyNewInstructionTrace(RuntimeMethod method, string stage, string log)
+		void ITraceListener.SubmitInstructionTraceInformation(RuntimeMethod method, string stage, string log)
 		{
 			if (string.IsNullOrEmpty(MethodPipelineExportDirectory))
 				return;
@@ -93,6 +93,11 @@ namespace Mosa.Tool.Compiler.Stages
 			string fullname = Path.Combine(MethodPipelineExportDirectory, filename);
 
 			File.AppendAllText(fullname, "[" + stage + "]" + Environment.NewLine + Environment.NewLine + log + Environment.NewLine);
+		}
+
+		void ITraceListener.SubmitDebugStageInformation(RuntimeMethod method, string stage, string line)
+		{
+			// nothing
 		}
 
 		#endregion // IInstructionTraceListener Members

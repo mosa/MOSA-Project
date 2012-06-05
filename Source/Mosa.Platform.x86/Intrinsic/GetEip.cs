@@ -36,7 +36,7 @@ namespace Mosa.Platform.x86.Intrinsic
 
 			context.SetInstruction(X86.Pop, eax);
 			context.AppendInstruction(X86.Add, eax, new RegisterOperand(u4, GeneralPurposeRegister.ESP));
-			context.AppendInstruction(X86.Mov, eax, new MemoryOperand(u4, GeneralPurposeRegister.EAX, new IntPtr(0)));
+			context.AppendInstruction(X86.Mov, eax, new MemoryOperand(GeneralPurposeRegister.EAX, u4, new IntPtr(0)));
 			context.AppendInstruction(X86.Mov, result, eax);
 			context.AppendInstruction(X86.Push, null, eax);
 		}

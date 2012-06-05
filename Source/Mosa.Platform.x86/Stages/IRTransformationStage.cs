@@ -392,7 +392,7 @@ namespace Mosa.Platform.x86.Stages
 				context.AppendInstruction(X86.Add, eax, offset);
 			}
 
-			context.AppendInstruction(X86.Mov, result, new MemoryOperand(eax.Type, GeneralPurposeRegister.EAX, offsetPtr));
+			context.AppendInstruction(X86.Mov, result, new MemoryOperand(GeneralPurposeRegister.EAX, eax.Type, offsetPtr));
 		}
 
 		/// <summary>
@@ -668,7 +668,7 @@ namespace Mosa.Platform.x86.Stages
 				context.AppendInstruction(X86.Add, eax, offset);
 			}
 
-			context.AppendInstruction(X86.Mov, new MemoryOperand(value.Type, GeneralPurposeRegister.EAX, offsetPtr), edx);
+			context.AppendInstruction(X86.Mov, new MemoryOperand(GeneralPurposeRegister.EAX, value.Type, offsetPtr), edx);
 		}
 
 		/// <summary>
@@ -929,7 +929,7 @@ namespace Mosa.Platform.x86.Stages
 					context.AppendInstruction(X86.Add, eax, offset);
 				}
 
-				context.AppendInstruction(X86.Movsx, destination, new MemoryOperand(elementType, GeneralPurposeRegister.EAX, offsetPtr));
+				context.AppendInstruction(X86.Movsx, destination, new MemoryOperand(GeneralPurposeRegister.EAX, elementType, offsetPtr));
 			}
 			else
 			{
@@ -999,7 +999,7 @@ namespace Mosa.Platform.x86.Stages
 				{
 					context.AppendInstruction(X86.Add, eax, offset);
 				}
-				context.AppendInstruction(X86.Movzx, result, new MemoryOperand(elementType, GeneralPurposeRegister.EAX, offsetPtr));
+				context.AppendInstruction(X86.Movzx, result, new MemoryOperand(GeneralPurposeRegister.EAX, elementType, offsetPtr));
 			}
 			else
 			{

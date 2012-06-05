@@ -81,9 +81,9 @@ namespace Mosa.Tool.Compiler
 
 			TypeLayout typeLayout = new TypeLayout(typeSystem, nativePointerSize, nativePointerAlignment);
 
-			IInternalTrace internalLog = new BasicInternalTrace();
+			IInternalTrace internalTrace = new BasicInternalTrace();
 
-			using (AotAssemblyCompiler aot = new AotAssemblyCompiler(compilerOptions.Architecture, compilerOptions.Linker, typeSystem, typeLayout, internalLog, compilerOptions))
+			using (AotAssemblyCompiler aot = new AotAssemblyCompiler(compilerOptions.Architecture, compilerOptions.Linker, typeSystem, typeLayout, internalTrace, compilerOptions))
 			{
 				aot.Pipeline.AddRange(new IAssemblyCompilerStage[] 
 				{

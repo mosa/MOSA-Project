@@ -90,6 +90,11 @@ namespace Mosa.Compiler.Framework
 			compiler.InternalTrace.CompilerEventListener.SubmitTraceEvent(compilerEvent, message);
 		}
 
+		protected void Trace(RuntimeMethod method, string stage, string line)
+		{
+			compiler.InternalTrace.TraceListener.SubmitDebugStageInformation(method, stage, line);
+		}
+
 		#endregion
 
 	}

@@ -36,7 +36,7 @@ namespace Mosa.Compiler.Framework.Operands
 		/// <param name="param">The runtime parameter object, that represents this parameter.</param>
 		/// <param name="type">The parameter type.</param>
 		public ParameterOperand(Register register, RuntimeParameter param, SigType type)
-			: base(type, register, param.Position)
+			: base(register, type, param.Position)
 		{
 			this.parameter = param;
 		}

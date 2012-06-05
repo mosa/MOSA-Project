@@ -7,7 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.Compiler.InternalTrace
@@ -15,5 +14,6 @@ namespace Mosa.Compiler.InternalTrace
 	public interface ITraceFilter
 	{
 		bool IsMatch(RuntimeMethod method, string stage);
+		bool IsLogging { get; }
 	}
 }

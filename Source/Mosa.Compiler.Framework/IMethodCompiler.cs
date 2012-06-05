@@ -139,10 +139,10 @@ namespace Mosa.Compiler.Framework
 		ITypeLayout TypeLayout { get; }
 
 		/// <summary>
-		/// Gets the internal logging interface
+		/// Gets the internal trace logging interface
 		/// </summary>
 		/// <value>The log.</value>
-		IInternalTrace InternalLog { get; }
+		IInternalTrace InternalTrace { get; }
 
 		/// <summary>
 		/// Gets the exception clause header.

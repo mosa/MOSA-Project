@@ -251,7 +251,7 @@ namespace Mosa.Compiler.Framework
 		/// Gets the internal logging interface
 		/// </summary>
 		/// <value>The log.</value>
-		public IInternalTrace InternalLog { get { return internalTrace; } }
+		public IInternalTrace InternalTrace { get { return internalTrace; } }
 
 		/// <summary>
 		/// Gets the exception clause header.
@@ -298,7 +298,7 @@ namespace Mosa.Compiler.Framework
 
 			foreach (var localVariable in localsSig.Locals)
 			{
-				locals[index++] = stackLayout.AllocateStackOperand(localVariable.Type);
+				locals[index++] = stackLayout.AllocateStackOperand(localVariable.Type, true);
 				//Scheduler.ScheduleTypeForCompilation(localVariable.Type); // TODO
 			}
 
@@ -371,7 +371,7 @@ namespace Mosa.Compiler.Framework
 		public Operand CreateVirtualRegister(SigType type)
 		{
 			//return virtualRegisterLayout.AllocateVirtualRegister(type);
-			return stackLayout.AllocateStackOperand(type);
+			return stackLayout.AllocateStackOperand(type, false);
 		}
 
 		/// <summary>

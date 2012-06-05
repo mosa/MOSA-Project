@@ -7,7 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.Compiler.InternalTrace
@@ -15,7 +14,7 @@ namespace Mosa.Compiler.InternalTrace
 
 	public interface ITraceListener
 	{
-		void NotifyNewInstructionTrace(RuntimeMethod method, string stage, string log);
-		//void NotifyAdditionalStageInformation(RuntimeMethod method, string stage, string line);
+		void SubmitInstructionTraceInformation(RuntimeMethod method, string stage, string log);
+		void SubmitDebugStageInformation(RuntimeMethod method, string stage, string line);
 	}
 }

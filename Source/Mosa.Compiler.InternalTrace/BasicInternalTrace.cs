@@ -13,38 +13,38 @@ namespace Mosa.Compiler.InternalTrace
 {
 	public class BasicInternalTrace : IInternalTrace
 	{
-		protected ITraceListener instructionLogListener;
-		protected ITraceFilter instructionLogFilter = new ConfigurableTraceFilter();
-		protected ICompilerEventListener compilerStatusListener;
+		protected ITraceListener traceListener;
+		protected ITraceFilter traceFilter = new ConfigurableTraceFilter();
+		protected ICompilerEventListener compilerEventListener;
 
 		public BasicInternalTrace()
 		{
-			instructionLogListener = new DebugInstructionTraceListener();
-			compilerStatusListener = new BasicCompilerEventListener();
+			traceListener = new DebugTraceListener();
+			compilerEventListener = new BasicCompilerEventListener();
 		}
 
-		public BasicInternalTrace(ITraceListener instructionLogListener, ICompilerEventListener compilerStatusListener)
+		public BasicInternalTrace(ITraceListener traceListener, ICompilerEventListener compilerEventListener)
 		{
-			this.instructionLogListener = instructionLogListener;
-			this.compilerStatusListener = compilerStatusListener;
+			this.traceListener = traceListener;
+			this.compilerEventListener = compilerEventListener;
 		}
 
 		ITraceFilter IInternalTrace.TraceFilter
 		{
-			get { return instructionLogFilter; }
-			set { instructionLogFilter = value; }
+			get { return traceFilter; }
+			set { traceFilter = value; }
 		}
 
 		ITraceListener IInternalTrace.TraceListener
 		{
-			get { return instructionLogListener; }
-			set { instructionLogListener = value; }
+			get { return traceListener; }
+			set { traceListener = value; }
 		}
 
 		ICompilerEventListener IInternalTrace.CompilerEventListener
 		{
-			get { return compilerStatusListener; }
-			set { compilerStatusListener = value; }
+			get { return compilerEventListener; }
+			set { compilerEventListener = value; }
 		}
 	}
 }

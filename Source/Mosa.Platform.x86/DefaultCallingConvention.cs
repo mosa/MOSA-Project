@@ -211,7 +211,7 @@ namespace Mosa.Platform.x86
 				if (op.Type.Type == CilElementType.ValueType)
 				{
 					for (int i = 0; i < parameterSize; i += 4)
-						ctx.AppendInstruction(X86.Mov, new MemoryOperand(op.Type, GeneralPurposeRegister.EDX, new IntPtr(stackSize + i)), new MemoryOperand(op.Type, (op as MemoryOperand).Base, new IntPtr((op as MemoryOperand).Offset.ToInt64() + i)));
+						ctx.AppendInstruction(X86.Mov, new MemoryOperand(GeneralPurposeRegister.EDX, op.Type, new IntPtr(stackSize + i)), new MemoryOperand((op as MemoryOperand).Base, op.Type, new IntPtr((op as MemoryOperand).Offset.ToInt64() + i)));
 
 					return;
 				}
@@ -240,9 +240,9 @@ namespace Mosa.Platform.x86
 							LongOperandTransformationStage.SplitLongOperand(mop, out opL, out opH);
 
 							ctx.AppendInstruction(X86.Mov, eax, opL);
-							ctx.AppendInstruction(X86.Mov, new MemoryOperand(op.Type, GeneralPurposeRegister.EDX, new IntPtr(stackSize)), eax);
+							ctx.AppendInstruction(X86.Mov, new MemoryOperand(GeneralPurposeRegister.EDX, op.Type, new IntPtr(stackSize)), eax);
 							ctx.AppendInstruction(X86.Mov, eax, opH);
-							ctx.AppendInstruction(X86.Mov, new MemoryOperand(op.Type, GeneralPurposeRegister.EDX, new IntPtr(stackSize + 4)), eax);
+							ctx.AppendInstruction(X86.Mov, new MemoryOperand(GeneralPurposeRegister.EDX, op.Type, new IntPtr(stackSize + 4)), eax);
 						}
 						return;
 
@@ -260,14 +260,14 @@ namespace Mosa.Platform.x86
 				LongOperandTransformationStage.SplitLongOperand(op, out opL, out opH);
 
 				ctx.AppendInstruction(X86.Mov, eax, opL);
-				ctx.AppendInstruction(X86.Mov, new MemoryOperand(BuiltInSigType.Int32, GeneralPurposeRegister.EDX, new IntPtr(stackSize)), eax);
+				ctx.AppendInstruction(X86.Mov, new MemoryOperand(GeneralPurposeRegister.EDX, BuiltInSigType.Int32, new IntPtr(stackSize)), eax);
 				ctx.AppendInstruction(X86.Mov, eax, opH);
-				ctx.AppendInstruction(X86.Mov, new MemoryOperand(BuiltInSigType.Int32, GeneralPurposeRegister.EDX, new IntPtr(stackSize + 4)), eax);
+				ctx.AppendInstruction(X86.Mov, new MemoryOperand(GeneralPurposeRegister.EDX, BuiltInSigType.Int32, new IntPtr(stackSize + 4)), eax);
 
 				return;
 			}
 
-			ctx.AppendInstruction(X86.Mov, new MemoryOperand(op.Type, GeneralPurposeRegister.EDX, new IntPtr(stackSize)), op);
+			ctx.AppendInstruction(X86.Mov, new MemoryOperand(GeneralPurposeRegister.EDX, op.Type, new IntPtr(stackSize)), op);
 		}
 
 		/// <summary>

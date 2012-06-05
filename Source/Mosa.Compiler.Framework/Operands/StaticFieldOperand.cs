@@ -28,7 +28,7 @@ namespace Mosa.Compiler.Framework.Operands
 		/// </summary>
 		/// <param name="field">The field.</param>
 		public StaticFieldOperand(RuntimeField field, IntPtr offset) :
-			base(field.SignatureType, null, offset) /* field.Address */
+			base(null, field.SignatureType, offset) /* field.Address */
 		{
 		}
 

@@ -163,8 +163,8 @@ namespace Mosa.Platform.x86.Stages
 				Context ctx = new Context(instructionSet);
 
 				ctx.AppendInstruction(X86.Mov, ecx, new ConstantOperand(I4, 0x200000));
-				ctx.AppendInstruction(X86.Mov, new MemoryOperand(I4, ecx.Register, new IntPtr(0x0)), eax);
-				ctx.AppendInstruction(X86.Mov, new MemoryOperand(I4, ecx.Register, new IntPtr(0x4)), ebx);
+				ctx.AppendInstruction(X86.Mov, new MemoryOperand(ecx.Register, I4, new IntPtr(0x0)), eax);
+				ctx.AppendInstruction(X86.Mov, new MemoryOperand(ecx.Register, I4, new IntPtr(0x4)), ebx);
 
 				SymbolOperand entryPoint = SymbolOperand.FromMethod(typeInitializerSchedulerStage.TypeInitializerMethod);
 

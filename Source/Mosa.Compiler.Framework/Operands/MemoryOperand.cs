@@ -36,10 +36,10 @@ namespace Mosa.Compiler.Framework.Operands
 		/// <summary>
 		/// Initializes a new instance of <see cref="MemoryOperand"/>.
 		/// </summary>
-		/// <param name="type">The type of data held in the operand.</param>
 		/// <param name="base">The base register, if this is an indirect access.</param>
+		/// <param name="type">The type of data held in the operand.</param>
 		/// <param name="offset">The offset from the base register or absolute address to retrieve.</param>
-		public MemoryOperand(SigType type, Register @base, IntPtr offset) :
+		public MemoryOperand(Register @base, SigType type, IntPtr offset) :
 			base(type)
 		{
 			this._base = @base;

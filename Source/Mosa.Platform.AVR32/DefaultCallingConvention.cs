@@ -215,7 +215,7 @@ namespace Mosa.Platform.AVR32
 				if (op.Type.Type == CilElementType.ValueType)
 				{
 					for (int i = 0; i < parameterSize; i += 4)
-						ctx.AppendInstruction(AVR32.Mov, new MemoryOperand(op.Type, GeneralPurposeRegister.R9, new IntPtr(stackSize + i)), new MemoryOperand(op.Type, (op as MemoryOperand).Base, new IntPtr((op as MemoryOperand).Offset.ToInt64() + i)));
+						ctx.AppendInstruction(AVR32.Mov, new MemoryOperand(GeneralPurposeRegister.R9, op.Type, new IntPtr(stackSize + i)), new MemoryOperand((op as MemoryOperand).Base, op.Type, new IntPtr((op as MemoryOperand).Offset.ToInt64() + i)));
 
 					return;
 				}
@@ -273,7 +273,7 @@ namespace Mosa.Platform.AVR32
 				return;
 			}
 
-			ctx.AppendInstruction(AVR32.Mov, new MemoryOperand(op.Type, GeneralPurposeRegister.R9, new IntPtr(stackSize)), op);
+			ctx.AppendInstruction(AVR32.Mov, new MemoryOperand(GeneralPurposeRegister.R9, op.Type, new IntPtr(stackSize)), op);
 		}
 
 		/// <summary>

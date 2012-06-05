@@ -179,7 +179,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			int methodTableSize = ((headerlinks == null ? 0 : headerlinks.Count) + (methodTable == null ? 0 : methodTable.Count)) * typeLayout.NativePointerSize;
 
-			Trace(CompilerEvent.DebugInfo, "Method Table: " + methodTableName);
+			//Trace(CompilerEvent.DebugInfo, "Method Table: " + methodTableName);
 
 			using (Stream stream = linker.Allocate(methodTableName, SectionKind.ROData, methodTableSize, typeLayout.NativePointerAlignment))
 			{
@@ -194,13 +194,13 @@ namespace Mosa.Compiler.Framework.Stages
 				{
 					if (!string.IsNullOrEmpty(link))
 					{
-						Trace(CompilerEvent.DebugInfo, "  # " + (offset / typeLayout.NativePointerSize).ToString() + " " + link);
+						//Trace(CompilerEvent.DebugInfo, "  # " + (offset / typeLayout.NativePointerSize).ToString() + " " + link);
 
 						linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, methodTableName, offset, 0, link, IntPtr.Zero);
 					}
 					else
 					{
-						Trace(CompilerEvent.DebugInfo, "  # " + (offset / typeLayout.NativePointerSize).ToString() + " [null]");
+						//Trace(CompilerEvent.DebugInfo, "  # " + (offset / typeLayout.NativePointerSize).ToString() + " [null]");
 					}
 					offset += typeLayout.NativePointerSize;
 				}
@@ -212,12 +212,12 @@ namespace Mosa.Compiler.Framework.Stages
 				{
 					if (!method.IsAbstract)
 					{
-						Trace(CompilerEvent.DebugInfo, "  # " + (offset / typeLayout.NativePointerSize).ToString() + " " + method.ToString());
+						//Trace(CompilerEvent.DebugInfo, "  # " + (offset / typeLayout.NativePointerSize).ToString() + " " + method.ToString());
 						linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, methodTableName, offset, 0, method.ToString(), IntPtr.Zero);
 					}
 					else
 					{
-						Trace(CompilerEvent.DebugInfo, "  # " + (offset / typeLayout.NativePointerSize).ToString() + " [null]");
+						//Trace(CompilerEvent.DebugInfo, "  # " + (offset / typeLayout.NativePointerSize).ToString() + " [null]");
 					}
 					offset += typeLayout.NativePointerSize;
 				}

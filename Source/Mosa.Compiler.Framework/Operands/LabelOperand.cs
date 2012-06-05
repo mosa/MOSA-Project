@@ -41,7 +41,7 @@ namespace Mosa.Compiler.Framework.Operands
 		/// <param name="offset">The default offset from the base register.</param>
 		/// <param name="label">The additional offset as indicated by a label.</param>
 		public LabelOperand(SigType type, Register baseRegister, int offset, int label) :
-			base(type, baseRegister, new IntPtr(offset))
+			base(baseRegister, type, new IntPtr(offset))
 		{
 			this.label = label;
 		}
@@ -52,7 +52,7 @@ namespace Mosa.Compiler.Framework.Operands
 		/// <param name="type">The type.</param>
 		/// <param name="name">The name.</param>
 		public LabelOperand(SigType type, string name) :
-			base(type, null, IntPtr.Zero)
+			base(null, type, IntPtr.Zero)
 		{
 			this.name = name;
 		}

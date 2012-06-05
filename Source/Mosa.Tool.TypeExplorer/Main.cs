@@ -29,7 +29,9 @@ namespace Mosa.Tool.TypeExplorer
 		private class MethodStages
 		{
 			public List<string> OrderedStageNames = new List<string>();
+			public List<string> OrderedDebugStageNames = new List<string>();
 			public Dictionary<string, StringBuilder> InstructionLogs = new Dictionary<string, StringBuilder>();
+			public Dictionary<string, StringBuilder> DebugLogs = new Dictionary<string, StringBuilder>();
 		}
 
 		private StringBuilder compileLog = new StringBuilder();
@@ -264,7 +266,7 @@ namespace Mosa.Tool.TypeExplorer
 			compileLog.Append(String.Format("{0:0.00}", (DateTime.Now - compileStartTime).TotalSeconds) + " secs: " + compilerStage.ToText() + ": " + info + "\n");
 		}
 
-		void ITraceListener.NotifyNewInstructionTrace(RuntimeMethod method, string stage, string log)
+		void ITraceListener.SubmitInstructionTraceInformation(RuntimeMethod method, string stage, string log)
 		{
 			MethodStages methodStage;
 
@@ -287,6 +289,28 @@ namespace Mosa.Tool.TypeExplorer
 				stringbuilder = new StringBuilder(log);
 				methodStage.InstructionLogs.Add(stage, stringbuilder);
 			}
+		}
+
+		void ITraceListener.SubmitDebugStageInformation(RuntimeMethod method, string stage, string line)
+		{
+			MethodStages methodStage;
+
+			if (!methodStages.TryGetValue(method, out methodStage))
+			{
+				methodStage = new MethodStages();
+				methodStages.Add(method, methodStage);
+			}
+
+			methodStage.OrderedDebugStageNames.AddIfNew(stage);
+
+			StringBuilder stringbuilder;
+
+			if (!methodStage.DebugLogs.TryGetValue(stage, out stringbuilder))
+			{
+				stringbuilder = new StringBuilder(line.Length + 2);
+				methodStage.DebugLogs.Add(stage, stringbuilder);
+			}
+			stringbuilder.AppendLine(line);
 		}
 
 		void Compile()
@@ -340,12 +364,17 @@ namespace Mosa.Tool.TypeExplorer
 				cbStages.Items.Add(stage);
 
 			cbStages.SelectedIndex = 0;
+
+			cbDebugStages.Items.Clear();
+
+			foreach (string stage in methodStage.OrderedDebugStageNames)
+				cbDebugStages.Items.Add(stage);
+
+			cbDebugStages.SelectedIndex = 0;
 		}
 
 		private void cbStages_SelectedIndexChanged(object sender, EventArgs e)
 		{
-			var previousItemLabel = cbLabels.SelectedItem;
-
 			currentInstructionLog = null;
 
 			var node = GetCurrentNode<ViewNode<RuntimeMethod>>();
@@ -365,6 +394,8 @@ namespace Mosa.Tool.TypeExplorer
 				currentInstructionLog = methodStage.InstructionLogs[stage];
 
 				currentInstructionLogLines = currentInstructionLog.ToString().Split('\n');
+				
+				var previousItemLabel = cbLabels.SelectedItem;
 
 				cbLabels.Items.Clear();
 				cbLabels.Items.Add("All");
@@ -383,6 +414,26 @@ namespace Mosa.Tool.TypeExplorer
 					cbLabels.SelectedIndex = 0;
 
 				cbLabels_SelectedIndexChanged(null, null);
+			}
+		}
+
+		private void cbDebugStages_SelectedIndexChanged(object sender, EventArgs e)
+		{
+			var node = GetCurrentNode<ViewNode<RuntimeMethod>>();
+
+			if (node == null)
+				return;
+
+			MethodStages methodStage;
+
+			if (methodStages.TryGetValue(node.Type, out methodStage))
+			{
+				string stage = cbDebugStages.SelectedItem.ToString();
+
+				if (methodStage.DebugLogs.ContainsKey(stage))
+					rbOtherResult.Text = methodStage.DebugLogs[stage].ToString();
+				else
+					rbOtherResult.Text = string.Empty;
 			}
 		}
 

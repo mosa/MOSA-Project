@@ -46,7 +46,7 @@ namespace Mosa.Platform.x86.Intrinsic
 			var size = parameters.Count * 4;
 			foreach (var parameter in parameters)
 			{
-				context.AppendInstruction(X86.Mov, new MemoryOperand(BuiltInSigType.IntPtr, edx.Register, new IntPtr(size - 4)), new MemoryOperand(BuiltInSigType.IntPtr, ebp.Register, new IntPtr(size + 8)));
+				context.AppendInstruction(X86.Mov, new MemoryOperand(edx.Register, BuiltInSigType.IntPtr, new IntPtr(size - 4)), new MemoryOperand(ebp.Register, BuiltInSigType.IntPtr, new IntPtr(size + 8)));
 				size -= 4;
 			}	
 
