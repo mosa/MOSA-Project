@@ -72,17 +72,6 @@ namespace Mosa.Compiler.Framework.Operands
 		#region Operand Overrides
 
 		/// <summary>
-		/// Compares with the given operand for equality.
-		/// </summary>
-		/// <param name="other">The other operand to compare with.</param>
-		/// <returns>The return value is true if the operands are equal; false if not.</returns>
-		public override bool Equals(Operand other)
-		{
-			MemoryOperand mop = other as MemoryOperand;
-			return (null != mop && mop.Type == Type && mop.Offset == Offset && mop.Base == Base);
-		}
-
-		/// <summary>
 		/// Returns a <see cref="System.String"/> that represents this instance.
 		/// </summary>
 		/// <returns>

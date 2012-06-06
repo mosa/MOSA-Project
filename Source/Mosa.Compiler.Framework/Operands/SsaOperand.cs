@@ -37,18 +37,6 @@ namespace Mosa.Compiler.Framework.Operands
 		}
 
 		/// <summary>
-		/// Compares with the given operand for equality.
-		/// </summary>
-		/// <param name="other">The other operand to compare with.</param>
-		/// <returns>
-		/// The return value is true if the operands are equal; false if not.
-		/// </returns>
-		public override bool Equals(Operand other)
-		{
-			return operand.Equals(other);
-		}
-
-		/// <summary>
 		/// Determines if the operand is a register.
 		/// </summary>
 		public override bool IsRegister { get { return operand.IsRegister; } }

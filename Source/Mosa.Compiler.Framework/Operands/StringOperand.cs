@@ -34,21 +34,7 @@ namespace Mosa.Compiler.Framework.Operands
 			String = value;
 		}
 
-		/// <summary>
-		/// Compares with the given operand for equality.
-		/// </summary>
-		/// <param name="other">The other operand to compare with.</param>
-		/// <returns>
-		/// The return value is true if the operands are equal; false if not.
-		/// </returns>
-		public override bool Equals(Operand other)
-		{
-			if (!(other is StringOperand))
-				return false;
-
-			var stringOp = other as StringOperand;
-			return String.Equals(stringOp.String);
-		}
+		
 	}
 }
 

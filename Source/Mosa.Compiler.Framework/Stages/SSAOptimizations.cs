@@ -35,14 +35,11 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		void IMethodCompilerStage.Run()
 		{
-			// Unable to optimize SSA w/ exceptions present
-			//if (basicBlocks.HeadBlocks.Count != 1)
-			//    return;
+			// Unable to optimize SSA w/ exceptions or finally handlers present
+			if (basicBlocks.HeadBlocks.Count != 1)
+				return;
 
-			//if (methodCompiler.Method.ToString().Contains("Mosa.Kernel.x86"))
-			//    return;
-
-			if (basicBlocks.HeadBlocks.Count >= 0)
+			if (methodCompiler.Method.ToString().StartsWith("Mosa.Kernel.x86.VirtualPageAllocator.Reserve"))
 				return;
 
 			worklistbitmap = new BitArray(instructionSet.Size);
@@ -117,6 +114,19 @@ namespace Mosa.Compiler.Framework.Stages
 		}
 
 		/// <summary>
+		/// Gets the base operand.
+		/// </summary>
+		/// <param name="operand">The operand.</param>
+		/// <returns></returns>
+		private Operand GetBaseOperand(Operand operand)
+		{
+			if (operand is SsaOperand)
+				return (operand as SsaOperand).Operand;
+			else
+				return operand;
+		}
+
+		/// <summary>
 		/// Removes the useless move.
 		/// </summary>
 		/// <param name="context">The context.</param>
@@ -136,7 +146,7 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 			}
 
-			if (context.Result.Uses.Count == 0 && context.Result is StackTemporaryOperand)
+			if (context.Result.Uses.Count == 0 && GetBaseOperand(context.Result) is StackTemporaryOperand)
 			{
 				if (IsLogging) Trace("REMOVED:\t" + context.ToString());
 				context.SetInstruction(IRInstruction.Nop);
@@ -174,6 +184,9 @@ namespace Mosa.Compiler.Framework.Stages
 				if (ctx.Instruction is IR.AddressOf)
 					continue;
 
+				if (ctx.Instruction is IR.Phi)
+					continue;
+
 				//if (!(ctx.Instruction is IR.Move))
 				//    continue;
 
@@ -200,7 +213,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// if constant has no uses, delete S
 			// and use is not a local or memory variable (only temp. stack-based operands can be removed)
-			if (context.Result.Uses.Count == 0 && context.Result is StackTemporaryOperand)
+			if (context.Result.Uses.Count == 0 && GetBaseOperand(context.Result) is StackTemporaryOperand)
 			{
 				if (IsLogging) Trace("REMOVED:\t" + context.ToString());
 

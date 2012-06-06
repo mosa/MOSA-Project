@@ -43,24 +43,6 @@ namespace Mosa.Compiler.Framework.Operands
 		}
 
 		/// <summary>
-		/// Compares with the given operand for equality.
-		/// </summary>
-		/// <param name="other">The other operand to compare with.</param>
-		/// <returns>The return value is true if the operands are equal; false if not.</returns>
-		public override bool Equals(Operand other)
-		{
-			SymbolOperand lop = other as SymbolOperand;
-
-			if (lop == null || lop.Type != Type)
-				return false;
-
-			if (this.name == null && lop.name == null)
-				return true;
-
-			return this.name == lop.name;
-		}
-
-		/// <summary>
 		/// Returns a string representation of <see cref="Operand"/>.
 		/// </summary>
 		/// <returns>A string representation of the operand.</returns>

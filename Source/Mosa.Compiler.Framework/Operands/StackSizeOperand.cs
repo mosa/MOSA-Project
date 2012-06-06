@@ -57,16 +57,6 @@ namespace Mosa.Compiler.Framework.Operands
 		#region Operand Overrides
 
 		/// <summary>
-		/// Compares with the given operand for equality.
-		/// </summary>
-		/// <param name="other">The other operand to compare with.</param>
-		/// <returns>The return value is true if the operands are equal; false if not.</returns>
-		public override bool Equals(Operand other)
-		{
-			return (other is StackSizeOperand);
-		}
-
-		/// <summary>
 		/// Returns a string representation of <see cref="ConstantOperand"/>.
 		/// </summary>
 		/// <returns>A string representation of the operand.</returns>

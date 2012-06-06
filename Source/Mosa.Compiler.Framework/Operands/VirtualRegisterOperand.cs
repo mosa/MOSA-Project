@@ -53,17 +53,6 @@ namespace Mosa.Compiler.Framework.Operands
 		#region Operand Overrides
 
 		/// <summary>
-		/// Compares with the given operand for equality.
-		/// </summary>
-		/// <param name="other">The other operand to compare with.</param>
-		/// <returns>The return value is true if the operands are equal; false if not.</returns>
-		public override bool Equals(Operand other)
-		{
-			VirtualRegisterOperand vop = other as VirtualRegisterOperand;
-			return (null != vop && (vop.index == this.index));
-		}
-
-		/// <summary>
 		/// Returns a <see cref="System.String"/> that represents this instance.
 		/// </summary>
 		/// <returns>

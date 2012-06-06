@@ -17,7 +17,7 @@ namespace Mosa.Compiler.Framework.Operands
 	/// <summary>
 	/// Abstract base class for IR instruction operands.
 	/// </summary>
-	public abstract class Operand : IEquatable<Operand>
+	public abstract class Operand
 	{
 		#region Static data members
 
@@ -287,16 +287,6 @@ namespace Mosa.Compiler.Framework.Operands
 
 		#endregion // Object Overrides
 
-		#region IEquatable<Operand> Members
-
-		/// <summary>
-		/// Compares with the given operand for equality.
-		/// </summary>
-		/// <param name="other">The other operand to compare with.</param>
-		/// <returns>The return value is true if the operands are equal; false if not.</returns>
-		public abstract bool Equals(Operand other);
-
-		#endregion // IEquatable<Operand> Members
 	}
 }
 
