@@ -18,7 +18,7 @@ def sln2nant(solutionFile)
         if values[1].end_with?(".csproj\"")
           cleaned = values[1].strip.tr('\"', '').tr('\\', '/').tr('//', '/')
           projectFile = @baseDir + cleaned
-          if (not projectFile.include? 'Test') or (projectFile.include? 'CodeDom')
+          if (not projectFile.include? 'Test') or (projectFile.include? 'CodeDom') or (projectFile.include? 'Mosa.Test.Collection')
             projectFiles << projectFile
             @buildfiles << cleaned[0..cleaned.rindex('/')] + 'mosa.build'
           end

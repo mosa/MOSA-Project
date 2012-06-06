@@ -8,7 +8,6 @@
  */
 
 using System.Diagnostics;
-
 using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.Compiler.InternalTrace

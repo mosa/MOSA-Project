@@ -1,36 +1,45 @@
-<?xml version="1.0"?>
-<project name="Mosa" default="build" basedir=".">
-	
-	<!-- Comma-separated list of warnings that should be surpressed in all modules. Warning: no spaces allowed! -->
-	<property name="suppresswarnings" value="0414,0219,0169,0162,0168"/>
-	
-	<!-- Toggle debug output by setting this to true (nant -D:debug=true) -->
-	<property name="debug" value="none" overwrite="false"/>
-	
-	<!-- Speaks for itself, I should hope -->
-	<property name="outputDirectory" value="../bin" overwrite="false"/>
-	
-	<!-- Main build target -->
-	<target name="build">
-	    <csc target="library" output="${outputDirectory}/Mosa.Test.Collection.dll" debug="${debug}" unsafe="true" nostdlib="false">
-		<sources>
+<?xml version="1.0"?>
+<project name="Mosa" default="build" basedir=".">
+	
+	<!-- Comma-separated list of warnings that should be surpressed in all modules. Warning: no spaces allowed! -->
+	<property name="suppresswarnings" value="0414,0219,0169,0162,0168"/>
+	
+	<!-- Toggle debug output by setting this to true (nant -D:debug=true) -->
+	<property name="debug" value="none" overwrite="false"/>
+	
+	<!-- Speaks for itself, I should hope -->
+	<property name="outputDirectory" value="../bin" overwrite="false"/>
+	
+	<!-- Main build target -->
+	<target name="build">
+	    <csc target="library" output="${outputDirectory}/Mosa.Test.Collection.dll" debug="${debug}" unsafe="true" nostdlib="false">
+		<sources>
                     <include name="CharTests.cs"/>
+                    <include name="ComparisonTests.cs"/>
                     <include name="ConvI2Tests.cs"/>
                     <include name="ConvI1Tests.cs"/>
                     <include name="ConvI4Tests.cs"/>
                     <include name="ConvI8Tests.cs"/>
+                    <include name="BoxingTests.cs"/>
                     <include name="BooleanTests.cs"/>
                     <include name="ConditionalOperatorTests.cs"/>
                     <include name="CallOrderTests.cs"/>
                     <include name="CallTests.cs"/>
                     <include name="ConvTests.cs"/>
+                    <include name="CallVirtualTests.cs"/>
+                    <include name="DelegateTests.cs"/>
+                    <include name="ExceptionHandlingTests.cs"/>
+                    <include name="GenericCallTests.cs"/>
+                    <include name="InitobjTests.cs"/>
+                    <include name="StructTests.cs"/>
+                    <include name="IsInstTests.cs"/>
+                    <include name="FibonacciTests.cs"/>
                     <include name="GenericInterfaceTests.cs"/>
                     <include name="SwitchTests.cs"/>
                     <include name="LdlocaTests.cs"/>
                     <include name="LdargaTests.cs"/>
                     <include name="WhileTests.cs"/>
                     <include name="StringTests.cs"/>
-                    <include name="ExceptionHandlingTests.cs"/>
                     <include name="SingleTests.cs"/>
                     <include name="DoubleTests.cs"/>
                     <include name="Int16Tests.cs"/>
@@ -43,17 +52,13 @@
                     <include name="UInt8Tests.cs"/>
                     <include name="InterfaceTests.cs"/>
                     <include name="EnumTests.cs"/>
-                    <include name="ObjectTests.cs"/>
-		</sources>
-		<references>
+                    <include name="NewobjTests.cs"/>
+		</sources>
+		<references>
                     <include name="System.dll"/>
-                    <include name="System.Data.dll"/>
-                    <include name="System.Xml.dll"/>
-                    <include name="../../3rdParty/Gallio.dll"/>
-                    <include name="../../3rdParty/MbUnit.dll"/>
-		</references>
-		<!-- supress warnings -->
-		<nowarn><warning number="${suppresswarnings}"/></nowarn>
-        </csc>
-	</target>
-</project>
+		</references>
+		<!-- supress warnings -->
+		<nowarn><warning number="${suppresswarnings}"/></nowarn>
+        </csc>
+	</target>
+</project>

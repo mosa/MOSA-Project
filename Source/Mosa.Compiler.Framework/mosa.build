@@ -15,9 +15,11 @@
 	    <csc target="library" output="${outputDirectory}/Mosa.Compiler.Framework.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
                     <include name="BasicBlocks.cs"/>
+                    <include name="Operands/StackTemporaryOperand.cs"/>
                     <include name="SimpleFastDominance.cs"/>
                     <include name="LoopEdge.cs"/>
                     <include name="LoopAwareBlockOrder.cs"/>
+                    <include name="Stages/SSAOptimizations.cs"/>
                     <include name="Stages/EdgeSplitStage.cs"/>
                     <include name="Stages/SimpleRegisterAllocatorStage.cs"/>
                     <include name="VirtualRegisterLayout.cs"/>
