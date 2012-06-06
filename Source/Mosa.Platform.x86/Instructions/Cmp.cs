@@ -51,6 +51,8 @@ namespace Mosa.Platform.x86.Instructions
 					return M_R_8;
 				if (IsChar(source) || IsChar(third))
 					return M_R_16;
+				if (IsShort(source) || IsShort(third))
+					return M_R_16;
 				return M_R;
 			}
 
@@ -58,7 +60,9 @@ namespace Mosa.Platform.x86.Instructions
 			{
 				if (IsByte(third) || IsByte(source))
 					return R_M_8;
-				if (IsChar(third) || IsShort(third))
+				if (IsChar(third) || IsChar(source))
+					return R_M_16;
+				if (IsShort(third) || IsShort(source))
 					return R_M_16;
 				return R_M;
 			}
@@ -69,7 +73,9 @@ namespace Mosa.Platform.x86.Instructions
 			{
 				if (IsByte(third) || IsByte(source))
 					return R_C_8;
-				if (IsChar(third) || IsShort(third))
+				if (IsChar(third) || IsChar(source))
+					return R_C_16;
+				if (IsShort(third) || IsShort(source))
 					return R_C_16;
 				return R_C;
 			}
