@@ -39,7 +39,6 @@
                     <include name="${outputDirectory}/Mosa.Compiler.InternalTrace.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Metadata.dll"/>
                     <include name="${outputDirectory}/Mosa.Compiler.Framework.dll"/>
-                    <include name="${outputDirectory}/Mosa.Platform.x86II.dll"/>
                     <include name="${outputDirectory}/Mosa.Platform.x86.dll"/>
 		</references>
 		<!-- supress warnings -->
