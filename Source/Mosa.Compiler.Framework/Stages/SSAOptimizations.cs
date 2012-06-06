@@ -104,7 +104,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <summary>
 		/// Adds the context result to work list.
 		/// </summary>
-		/// <param name="context">The context.</param>
+		/// <param name="operand">The operand.</param>
 		void AddOperandUsageToWorkList(Operand operand)
 		{
 			foreach (int index in operand.Uses)

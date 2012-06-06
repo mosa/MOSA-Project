@@ -69,7 +69,6 @@ namespace Mosa.Platform.x86.Instructions
 					if ((destination is RegisterOperand) && (source is MemoryOperand)) return R_X16;
 					break;
 				default:
-					//Emit(destination, source, X86.Move(destination, source));
 					break;
 			}
 

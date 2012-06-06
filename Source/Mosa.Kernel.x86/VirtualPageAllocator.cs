@@ -100,7 +100,6 @@ namespace Mosa.Kernel.x86
 
 					if (at - first == pages)
 					{
-
 						for (uint index = 0; index < pages; index++)
 							SetPageStatus(first + index, false);
 
