@@ -1,4 +1,7 @@
-﻿<#@ include file="TemplateLibrary.txt" #>
+﻿// Remove conditional statement after Mono 2.11 is released
+#ifndef __MonoCS__
+
+<#@ include file="TemplateLibrary.txt" #>
 using System;
 
 namespace Mosa.Test.Collection
@@ -56,3 +59,5 @@ namespace Mosa.Test.Collection
 	<# } #>
 	}
 }
+
+#endif
