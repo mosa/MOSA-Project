@@ -1940,7 +1940,7 @@ namespace Mosa.Platform.x86.Stages
 		void IIRVisitor.IntegerToFloatConversion(Context context) { }
 
 		/// <summary>
-		/// Visitation function for JmpInstruction"/&gt; instruction.
+		/// Visitation function for JmpInstruction instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IIRVisitor.Jmp(Context context) { }

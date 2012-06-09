@@ -60,8 +60,31 @@ namespace Mosa.CoolWorld.x86
 			Screen.Write("          Copyright (C) 2008-2001 [Managed Operating System Alliance]");
 			FillLine();
 
+			Screen.BackgroundColor = Colors.Black;
+			Screen.Goto(15, 0);
+			Screen.Color = Colors.Green;
+			Screen.Write("> ");
+			Screen.Color = Colors.Yellow;
+
+			Mosa.DeviceDrivers.ScanCodeMap.US KBDMAP = new DeviceDrivers.ScanCodeMap.US();
+
 			while (true)
 			{
+				byte scancode = Setup.Keyboard.GetScanCode();
+
+				if (scancode != 0)
+				{
+					Mosa.Kernel.x86.Debug.Trace("Main.Main Key Scan Code: " + scancode.ToString());
+
+					DeviceSystem.KeyEvent keyevent = KBDMAP.ConvertScanCode(scancode);
+
+					Mosa.Kernel.x86.Debug.Trace("Main.Main Key Character: " + keyevent.Character.ToString());
+
+					if (keyevent.KeyPress == DeviceSystem.KeyEvent.Press.Make)
+						if (keyevent.Character != 0)
+							Screen.Write(keyevent.Character);
+				}
+
 				Native.Hlt();
 			}
 		}
@@ -94,7 +117,6 @@ namespace Mosa.CoolWorld.x86
 			Console.Write("]");
 		}
 
-
 		private static uint counter = 0;
 
 		public static void ProcessInterrupt(byte interrupt, byte errorCode)
@@ -108,7 +130,7 @@ namespace Mosa.CoolWorld.x86
 			Screen.Row = 23;
 			Screen.Color = Colors.Cyan;
 			Screen.BackgroundColor = Colors.Black;
-			Screen.Write(new string(' ', 13));
+			Screen.Write("        ");
 			Screen.Column = 55;
 			Screen.Row = 23;
 
@@ -135,7 +157,8 @@ namespace Mosa.CoolWorld.x86
 				Screen.Write(':');
 				Screen.Write(interrupt, 16, 2);
 
-				//Mosa.DeviceSystem.HAL.ProcessInterrupt((byte)(interrupt - 0x20), errorCode);
+				Mosa.DeviceSystem.HAL.ProcessInterrupt((byte)(interrupt - 0x20), errorCode);
+				//Mosa.Kernel.x86.Debug.Trace("Returned from HAL.ProcessInterrupt");
 			}
 
 			Screen.Column = c;

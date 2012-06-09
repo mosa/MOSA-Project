@@ -50,7 +50,9 @@ namespace Mosa.DeviceSystem
 		/// <param name="irq">The irq.</param>
 		public static void ProcessInterrupt(byte irq, byte error)
 		{
+			//Mosa.Kernel.x86.Debug.Trace("Enter HAL.ProcessInterrupt");
 			handleInterrupt(irq, error);
+			//Mosa.Kernel.x86.Debug.Trace("Exit HAL.ProcessInterrupt");
 		}
 
 		/// <summary>

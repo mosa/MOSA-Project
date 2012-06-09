@@ -67,7 +67,7 @@ namespace Mosa.DeviceDrivers.ISA
 			this.fifoBuffer = new byte[fifoSize];
 			this.fifoStart = 0;
 			this.fifoEnd = 0;
-			
+
 			return true;
 		}
 
@@ -157,11 +157,15 @@ namespace Mosa.DeviceDrivers.ISA
 		/// </summary>
 		protected void ReadScanCode()
 		{
+			//Mosa.Kernel.x86.Debug.Trace("Enter StandardKeyboard.ReadScanCode");
 			spinLock.Enter();
 
-			AddToFIFO(dataPort.Read8());
+			byte scancode = commandPort.Read8();
+			Mosa.Kernel.x86.Debug.Trace("Keyboard read: " + scancode.ToString() + " from port: " + dataPort.Address.ToString());
+			AddToFIFO(scancode);
 
 			spinLock.Exit();
+			//Mosa.Kernel.x86.Debug.Trace("Exit StandardKeyboard.ReadScanCode");
 		}
 
 		/// <summary>

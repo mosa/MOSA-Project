@@ -12,7 +12,7 @@ using Mosa.ClassLib;
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
-	/// The Interrupt Manager dispatches interrupts to the approporate hardware device drivers
+	/// The Interrupt Manager dispatches interrupts to the appropriate hardware device drivers
 	/// </summary>
 	public class InterruptManager
 	{
@@ -48,16 +48,32 @@ namespace Mosa.DeviceSystem
 		/// <param name="irq">The irq.</param>
 		public void ProcessInterrupt(byte irq, byte error)
 		{
-			try
-			{
+			//Mosa.Kernel.x86.Debug.Trace("Enter InterruptManager.ProcessInterrupt");
+			//try
+			//{
 				spinLock.Enter();
-				foreach (IHardwareDevice hardwareDevice in interruptHandlers[irq])
-					hardwareDevice.OnInterrupt();
-			}
-			finally
-			{
-				spinLock.Exit();
-			}
+				var handlers = interruptHandlers[irq];
+				var hardwareDevice = handlers.First.value;
+				hardwareDevice.OnInterrupt();
+					
+				//foreach (IHardwareDevice hardwareDevice in interruptHandlers[irq])
+				//for(int i = 0; i<handlers.Count;i++)
+				//{
+				//    Mosa.Kernel.x86.Debug.Trace("+");
+				//    var hardwareDevice = handlers.First.value;
+				//    Mosa.Kernel.x86.Debug.Trace("-");
+				//    hardwareDevice.OnInterrupt();
+				//    Mosa.Kernel.x86.Debug.Trace("*");
+				//}
+				
+			//}
+			//finally
+			//{
+			//    Mosa.Kernel.x86.Debug.Trace("4");
+			//    spinLock.Exit();
+			//    Mosa.Kernel.x86.Debug.Trace("5");
+			//}
+			//Mosa.Kernel.x86.Debug.Trace("Exit InterruptManager.ProcessInterrupt");
 		}
 
 		/// <summary>

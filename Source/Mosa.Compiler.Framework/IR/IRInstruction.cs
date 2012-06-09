@@ -74,7 +74,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// <summary>
 		/// 
 		/// </summary>
-		public static IntegerToFloatConversion IntegerToFloatingPointConversion = new IntegerToFloatConversion();
+		public static IntegerToFloatConversion IntegerToFloatConversion = new IntegerToFloatConversion();
 		/// <summary>
 		/// 
 		/// </summary>
