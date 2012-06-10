@@ -31,3 +31,7 @@ JPC
 peter-bochs
 - GNU License
 - http://code.google.com/p/peter-bochs/
+
+ndisasm
+- Simplified BSD License
+- http://www.nasm.us/
