@@ -17,41 +17,22 @@ namespace Mosa.Kernel.x86
 	public static class Debug
 	{
 
-		private static uint line = 0;
-		private static uint totallines = 3;
-		private static uint startline = 18;
-
-		public static uint Count = 0;
+		private static uint Count = 0;
 
 		public static void Trace(string location)
 		{
-			// Save Position
-			uint x = Screen.Column;
-			uint y = Screen.row;
-			byte c = Screen.Color;
-			byte b = Screen.BackgroundColor;
+			ConsoleSession Console = ConsoleManager.Controller.Debug;
 
-			Screen.Column = 0;
-			Screen.Row = startline + line;
-			Screen.Color = 0x0C;
-			Screen.BackgroundColor = 0;
+			Console.Color = 0x0C;
+			Console.BackgroundColor = 0;
 
 			Count++;
-			Screen.Write("#");
-			Screen.Write(Count, 10, 8);
-			Screen.Write(" - Trace: ");
-			Screen.Write(location);
+			Console.Write("#");
+			Console.Write(Count, 10, 8);
+			Console.Write(" - Trace: ");
+			Console.Write(location);
+			Console.WriteLine();
 
-			for (int left = 80 - (location.Length + 19); left > 0; left--)
-				Screen.Write(' ');
-
-			if (++line > totallines) line = 0;
-
-			// Restore Position
-			Screen.Column = x;
-			Screen.Row = y;
-			Screen.Color = c;
-			Screen.BackgroundColor = b;
 		}
 	}
 }

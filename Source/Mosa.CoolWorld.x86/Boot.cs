@@ -5,8 +5,10 @@
  *
  */
 
+using Mosa.Kernel.x86;
+using Mosa.Kernel.x86.Smbios;
 using Mosa.Platform.x86.Intrinsic;
-using Colors = Mosa.Kernel.x86.Colors;
+using Mosa.DeviceSystem;
 
 namespace Mosa.CoolWorld.x86
 {
@@ -15,8 +17,8 @@ namespace Mosa.CoolWorld.x86
 	/// </summary>
 	public static class Boot
 	{
-		public static Console Console;
-		public static Screen Screen;
+		public static ConsoleSession Console;
+
 		/// <summary>
 		/// Main
 		/// </summary>
@@ -24,13 +26,11 @@ namespace Mosa.CoolWorld.x86
 		{
 			Mosa.Kernel.x86.Kernel.Setup();
 
-			Mosa.Kernel.x86.IDT.SetInterruptHandler(ProcessInterrupt);
+			IDT.SetInterruptHandler(ProcessInterrupt);
 
-			Screen = new Screen();
-			Console = Screen.Boot;
-			Console.Screen = Screen;
-
-			Console.GotoTop();
+			Console = ConsoleManager.Controller.Boot;
+			
+			Console.Clear();
 			Console.Color = Colors.White;
 			Console.BackgroundColor = Colors.Green;
 
@@ -39,8 +39,8 @@ namespace Mosa.CoolWorld.x86
 			Console.Color = Colors.White;
 			Console.BackgroundColor = Colors.Black;
 
-			Mosa.Kernel.x86.Smbios.BiosInformationStructure biosInfo = new Kernel.x86.Smbios.BiosInformationStructure();
-			Mosa.Kernel.x86.Smbios.CpuStructure cpuInfo = new Kernel.x86.Smbios.CpuStructure();
+			BiosInformationStructure biosInfo = new BiosInformationStructure();
+			CpuStructure cpuInfo = new CpuStructure();
 
 			Console.WriteLine("> Checking BIOS...");
 			BulletPoint(); Console.Write("Vendor  "); InBrackets(biosInfo.BiosVendor, Colors.White, Colors.LightBlue); Console.WriteLine();
@@ -78,24 +78,24 @@ namespace Mosa.CoolWorld.x86
 
 				if (scancode != 0)
 				{
-					Mosa.Kernel.x86.Debug.Trace("Main.Main Key Scan Code: " + scancode.ToString());
+					Debug.Trace("Main.Main Key Scan Code: " + scancode.ToString());
 
-					DeviceSystem.KeyEvent keyevent = KBDMAP.ConvertScanCode(scancode);
+					KeyEvent keyevent = KBDMAP.ConvertScanCode(scancode);
 
-					Mosa.Kernel.x86.Debug.Trace("Main.Main Key Character: " + keyevent.Character.ToString());
+					Debug.Trace("Main.Main Key Character: " + keyevent.Character.ToString());
 
-					if (keyevent.KeyPress == DeviceSystem.KeyEvent.Press.Make)
+					if (keyevent.KeyPress == KeyEvent.Press.Make)
 					{
 						if (keyevent.Character != 0)
 							Console.Write(keyevent.Character);
-					
-						if (keyevent.KeyType == DeviceSystem.KeyType.F1)
-							Screen.Active = Screen.Boot;
-						else if (keyevent.KeyType == DeviceSystem.KeyType.F2)
-							Screen.Active = Screen.Debug;
+
+						if (keyevent.KeyType == KeyType.F1)
+							ConsoleManager.Controller.Active = ConsoleManager.Controller.Boot;
+						else if (keyevent.KeyType == KeyType.F2)
+							ConsoleManager.Controller.Active = ConsoleManager.Controller.Debug;
 
 					}
-					Mosa.Kernel.x86.Debug.Trace("Main.Main Key Character: " + ((uint)keyevent.Character).ToString());
+					Debug.Trace("Main.Main Key Character: " + ((uint)keyevent.Character).ToString());
 				}
 
 				Native.Hlt();
@@ -157,7 +157,7 @@ namespace Mosa.CoolWorld.x86
 			if (interrupt == 14)
 			{
 				// Page Fault!
-				Mosa.Kernel.x86.PageFaultHandler.Fault(errorCode);
+				PageFaultHandler.Fault(errorCode);
 			}
 			else if (interrupt == 0x20)
 			{
@@ -171,7 +171,7 @@ namespace Mosa.CoolWorld.x86
 				Console.Write(interrupt, 16, 2);
 
 				Mosa.DeviceSystem.HAL.ProcessInterrupt((byte)(interrupt - 0x20), errorCode);
-				//Mosa.Kernel.x86.Debug.Trace("Returned from HAL.ProcessInterrupt");
+				//Debug.Trace("Returned from HAL.ProcessInterrupt");
 			}
 
 			Console.Column = c;

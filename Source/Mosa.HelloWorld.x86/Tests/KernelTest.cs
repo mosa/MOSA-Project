@@ -13,6 +13,8 @@ namespace Mosa.HelloWorld.x86.Tests
 {
 	public class KernelTest
 	{
+		private static ConsoleSession Console;
+
 		/// <summary>
 		/// 
 		/// </summary>
@@ -42,18 +44,18 @@ namespace Mosa.HelloWorld.x86.Tests
 		/// <param name="flag"></param>
 		public void PrintResult(bool flag)
 		{
-			byte color = Screen.Color;
+			byte color = Console.Color;
 			if (flag)
 			{
-				Screen.Color = Colors.Green;
-				Screen.Write("+");
+				Console.Color = Colors.Green;
+				Console.Write("+");
 			}
 			else
 			{
-				Screen.Color = Colors.Red;
-				Screen.Write("X");
+				Console.Color = Colors.Red;
+				Console.Write("X");
 			}
-			Screen.Color = color;
+			Console.Color = color;
 		}
 
 		/// <summary>
@@ -61,13 +63,15 @@ namespace Mosa.HelloWorld.x86.Tests
 		/// </summary>
 		public static void RunTests()
 		{
-			Screen.Goto(23, 0);
-			Screen.Color = Colors.Yellow;
-			Screen.Write("[");
-			Screen.Color = Colors.White;
-			Screen.Write("Tests");
-			Screen.Color = Colors.Yellow;
-			Screen.Write("]");
+			Console = Boot.Console;
+
+			Console.Goto(23, 0);
+			Console.Color = Colors.Yellow;
+			Console.Write("[");
+			Console.Color = Colors.White;
+			Console.Write("Tests");
+			Console.Color = Colors.Yellow;
+			Console.Write("]");
 
 			var stringTest = new StringTest();
 			var interfaceTest = new InterfaceTest();
@@ -90,10 +94,10 @@ namespace Mosa.HelloWorld.x86.Tests
 
 		public void Test()
 		{
-			Screen.Color = Colors.Gray;
-			Screen.Write(" ");
-			Screen.Write(this.testName);
-			Screen.Write(": ");
+			Console.Color = Colors.Gray;
+			Console.Write(" ");
+			Console.Write(this.testName);
+			Console.Write(": ");
 
 			//foreach (TestMethod node in testMethods)
 			//{

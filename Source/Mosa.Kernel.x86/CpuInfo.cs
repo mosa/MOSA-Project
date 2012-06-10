@@ -11,16 +11,7 @@ namespace Mosa.Kernel.x86
 {
 	public class CpuInfo
 	{
-		public CpuInfo()
-		{
-			Setup();
-		}
-
-		public void Setup()
-		{
-
-		}
-
+	
 		public ulong NumberOfCores
 		{
 			get
@@ -79,60 +70,59 @@ namespace Mosa.Kernel.x86
 			}
 		}
 
-		public void PrintVendorString()
+		public void PrintVendorString(ConsoleSession console)
 		{
 			int identifier = Native.CpuIdEbx(0);
 			for (int i = 0; i < 4; ++i)
-				Screen.Write((char)((identifier >> (i * 8)) & 0xFF));
+				console.Write((char)((identifier >> (i * 8)) & 0xFF));
 
 			identifier = Native.CpuIdEdx(0);
 			for (int i = 0; i < 4; ++i)
-				Screen.Write((char)((identifier >> (i * 8)) & 0xFF));
+				console.Write((char)((identifier >> (i * 8)) & 0xFF));
 
 			identifier = Native.CpuIdEcx(0);
 			for (int i = 0; i < 4; ++i)
-				Screen.Write((char)((identifier >> (i * 8)) & 0xFF));
+				console.Write((char)((identifier >> (i * 8)) & 0xFF));
 		}
 
-		public void PrintBrandString()
+		public void PrintBrandString(ConsoleSession console)
 		{
 			if (SupportsBrandString)
 			{
-				PrintBrand((uint)0x80000002);
-				PrintBrand((uint)0x80000003);
-				PrintBrand((uint)0x80000004);
+				PrintBrand(console,(uint)0x80000002);
+				PrintBrand(console, (uint)0x80000003);
+				PrintBrand(console, (uint)0x80000004);
 				return;
 			}
 
-			Screen.Write(@"Unknown (Generic x86)");
+			console.Write(@"Unknown (Generic x86)");
 		}
 
-		private void PrintBrand(uint param)
+		private void PrintBrand(ConsoleSession console, uint param)
 		{
 			int identifier = Native.CpuIdEax(param);
 			bool whitespace = true;
 			if (identifier != 0x20202020)
 				for (int i = 0; i < 4; ++i)
-					PrintBrandPart(identifier, i, ref whitespace);
-
+					PrintBrandPart(console, identifier, i, ref whitespace);
 
 			identifier = Native.CpuIdEbx(param);
 			if (identifier != 0x20202020)
 				for (int i = 0; i < 4; ++i)
-					PrintBrandPart(identifier, i, ref whitespace);
+					PrintBrandPart(console, identifier, i, ref whitespace);
 
 			identifier = Native.CpuIdEcx(param);
 			if (identifier != 0x20202020)
 				for (int i = 0; i < 4; ++i)
-					PrintBrandPart(identifier, i, ref whitespace);
+					PrintBrandPart(console, identifier, i, ref whitespace);
 
 			identifier = Native.CpuIdEdx(param);
 			if (identifier != 0x20202020)
 				for (int i = 0; i < 4; ++i)
-					PrintBrandPart(identifier, i, ref whitespace);
+					PrintBrandPart(console, identifier, i, ref whitespace);
 		}
 
-		private void PrintBrandPart(int identifier, int i, ref bool whitespace)
+		private void PrintBrandPart(ConsoleSession console, int identifier, int i, ref bool whitespace)
 		{
 			char character = (char)((identifier >> (i * 8)) & 0xFF);
 
@@ -140,13 +130,13 @@ namespace Mosa.Kernel.x86
 				return;
 			if (whitespace && character != ' ')
 			{
-				Screen.Write(character);
+				console.Write(character);
 				whitespace = false;
 				return;
 			}
 			if (character == ' ')
 				whitespace = true;
-			Screen.Write(character);
+			console.Write(character);
 		}
 	}
 }

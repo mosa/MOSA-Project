@@ -5,30 +5,36 @@
  *
  */
 
-namespace Mosa.CoolWorld.x86
+namespace Mosa.Kernel.x86
 {
 
 	/// <summary>
 	/// 
 	/// </summary>
-	public class Screen
+	public class ConsoleManager
 	{
-		protected Console active;
+		public static ConsoleManager Controller;
 
-		public Console Boot;
-		public Console Debug;
+		protected ConsoleSession active;
 
-		public Console Active { get { return active; } set { Change(value); } }
+		public ConsoleSession Boot;
+		public ConsoleSession Debug;
 
-		public Screen()
+		public ConsoleSession Active { get { return active; } set { Change(value); } }
+
+		public static void Setup()
 		{
-			Boot = new Console();
-			Debug = new Console();
+			Controller = new ConsoleManager();
+		}
 
+		public ConsoleManager()
+		{
+			Boot = new ConsoleSession(this);
+			Debug = new ConsoleSession(this);
 			active = Boot;
 		}
 
-		public void Change(Console console)
+		public void Change(ConsoleSession console)
 		{
 			if (console == active)
 				return;
@@ -49,7 +55,7 @@ namespace Mosa.CoolWorld.x86
 			active = console;
 		}
 
-		public void RawWrite(Console console, uint row, uint column, char chr, byte color)
+		public void RawWrite(ConsoleSession console, uint row, uint column, char chr, byte color)
 		{
 			if (console != active)
 				return;

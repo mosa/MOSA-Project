@@ -48,53 +48,7 @@ namespace Mosa.Kernel.x86
 			MultibootStructure = 0x0;
 			SetMultibootLocation(Native.Get32(_multibootptr), Native.Get32(_multibootsignature));
 		}
-
-		/// <summary>
-		/// Dumps multiboot info.
-		/// </summary>
-		public static void Dump(uint row, uint col)
-		{
-			uint location = MultibootStructure;
-
-			Screen.Row = row;
-			Screen.Column = col;
-			Screen.Color = 0x0A;
-			Screen.Write(@"Memory Dump");
-			Screen.NextLine();
-			Screen.NextLine();
-
-			for (uint i = 0; i < 80; i = i + 8)
-			{
-				Screen.Column = col;
-				Screen.Color = 0x0F;
-				Screen.Write(i, 10, 2);
-				Screen.Write(':');
-				Screen.Write(' ');
-				Screen.Color = 0x07;
-				Screen.Write(Native.Get32(location + i), 16, 16);
-				Screen.NextLine();
-			}
-		}
-
-		/// <summary>
-		/// Dumps this instance.
-		/// </summary>
-		public static void Dump2(uint row, uint col)
-		{
-			uint location = MemoryMapStart;
-
-			Screen.Row = row;
-			for (uint i = 0; i < 80; i = i + 4)
-			{
-				Screen.Column = col;
-				Screen.Write(i, 10, 2);
-				Screen.Write(':');
-				Screen.Write(' ');
-				Screen.Write(Native.Get32(location + i), 16, 8);
-				Screen.NextLine();
-			}
-		}
-
+		
 		/// <summary>
 		/// Sets the multiboot location, if given the proper magic value
 		/// </summary>

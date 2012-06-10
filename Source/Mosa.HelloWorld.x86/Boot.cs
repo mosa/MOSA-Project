@@ -17,6 +17,7 @@ namespace Mosa.HelloWorld.x86
 	/// </summary>
 	public static class Boot
 	{
+		public static ConsoleSession Console;
 
 		/// <summary>
 		/// Mains this instance.
@@ -27,241 +28,242 @@ namespace Mosa.HelloWorld.x86
 
 			IDT.SetInterruptHandler(ProcessInterrupt);
 
-			Screen.GotoTop();
-			Screen.Color = Colors.Yellow;
+			Console = ConsoleManager.Controller.Boot;
 
-			Screen.Write(@"MOSA OS Version 1.0 '");
-			Screen.Color = Colors.Red;
-			Screen.Write(@"Zaphod");
-			Screen.Color = Colors.Yellow;
-			Screen.Write(@"'                                Copyright 2008-2012");
-			Screen.NextLine();
+			Console.Clear();
+			Console.Color = Colors.Yellow;
+			Console.BackgroundColor = Colors.Black;
 
-			Screen.Color = 0x0F;
-			Screen.Write(new String((char)205, 60));
-			Screen.Write((char)203);
-			Screen.Write(new String((char)205, 19));
-			Screen.NextLine();
+			Console.Write(@"MOSA OS Version 1.0 '");
+			Console.Color = Colors.Red;
+			Console.Write(@"Zaphod");
+			Console.Color = Colors.Yellow;
+			Console.Write(@"'                                Copyright 2008-2012");
+			Console.WriteLine();
 
-			Screen.Goto(2, 0);
-			Screen.Color = Colors.Green;
-			Screen.Write(@"Multibootaddress: ");
-			Screen.Color = Colors.Gray;
-			Screen.Write(Multiboot.MultibootStructure, 16, 8);
+			Console.Color = 0x0F;
+			Console.Write(new String((char)205, 60));
+			Console.Write((char)203);
+			Console.Write(new String((char)205, 19));
+			Console.WriteLine();
 
-			Screen.NextLine();
-			Screen.Color = Colors.Green;
-			Screen.Write(@"Multiboot-Flags:  ");
-			Screen.Color = Colors.Gray;
-			Screen.Write(Multiboot.Flags, 2, 32);
-			Screen.NextLine();
-			Screen.NextLine();
+			Console.Goto(2, 0);
+			Console.Color = Colors.Green;
+			Console.Write(@"Multibootaddress: ");
+			Console.Color = Colors.Gray;
+			Console.Write(Multiboot.MultibootStructure, 16, 8);
 
-			Screen.Color = Colors.Green;
-			Screen.Write(@"Size of Memory:   ");
-			Screen.Color = Colors.Gray;
-			Screen.Write((Multiboot.MemoryLower + Multiboot.MemoryUpper) / 1024, 10, -1);
-			Screen.Write(@" MB (");
-			Screen.Write(Multiboot.MemoryLower + Multiboot.MemoryUpper, 10, -1);
-			Screen.Write(@" KB)");
-			Screen.NextLine();
+			Console.WriteLine();
+			Console.Color = Colors.Green;
+			Console.Write(@"Multiboot-Flags:  ");
+			Console.Color = Colors.Gray;
+			Console.Write(Multiboot.Flags, 2, 32);
+			Console.WriteLine();
+			Console.WriteLine();
 
-			Screen.Color = Colors.White;
+			Console.Color = Colors.Green;
+			Console.Write(@"Size of Memory:   ");
+			Console.Color = Colors.Gray;
+			Console.Write((Multiboot.MemoryLower + Multiboot.MemoryUpper) / 1024, 10, -1);
+			Console.Write(@" MB (");
+			Console.Write(Multiboot.MemoryLower + Multiboot.MemoryUpper, 10, -1);
+			Console.Write(@" KB)");
+			Console.WriteLine();
+
+			Console.Color = Colors.White;
 			for (uint index = 0; index < 60; index++)
-				Screen.Write((char)205);
+				Console.Write((char)205);
 
-			Screen.NextLine();
+			Console.WriteLine();
 
-			/*Screen.Color = Colors.Green;
-			Screen.Write(@"Memory-Map:");
-			Screen.NextLine();
+			/*Console.Color = Colors.Green;
+			Console.Write(@"Memory-Map:");
+			Console.WriteLine();
 
 			for (uint index = 0; index < Multiboot.MemoryMapCount; index++)
 			{
-				Screen.Color = Colors.White;
-				Screen.Write(Multiboot.GetMemoryMapBase(index), 16, 10);
-				Screen.Write(@" - ");
-				Screen.Write(Multiboot.GetMemoryMapBase(index) + Multiboot.GetMemoryMapLength(index) - 1, 16, 10);
-				Screen.Write(@" (");
-				Screen.Color = Colors.Gray;
-				Screen.Write(Multiboot.GetMemoryMapLength(index), 16, 10);
-				Screen.Color = Colors.White;
-				Screen.Write(@") ");
-				Screen.Color = Colors.Gray;
-				Screen.Write(@"Type: ");
-				Screen.Write(Multiboot.GetMemoryMapType(index), 16, 1);
-				Screen.NextLine();
+				Console.Color = Colors.White;
+				Console.Write(Multiboot.GetMemoryMapBase(index), 16, 10);
+				Console.Write(@" - ");
+				Console.Write(Multiboot.GetMemoryMapBase(index) + Multiboot.GetMemoryMapLength(index) - 1, 16, 10);
+				Console.Write(@" (");
+				Console.Color = Colors.Gray;
+				Console.Write(Multiboot.GetMemoryMapLength(index), 16, 10);
+				Console.Color = Colors.White;
+				Console.Write(@") ");
+				Console.Color = Colors.Gray;
+				Console.Write(@"Type: ");
+				Console.Write(Multiboot.GetMemoryMapType(index), 16, 1);
+				Console.WriteLine();
 			}*/
 
-			Screen.Color = Colors.Green;
-			Screen.Write(@"Smbios Info: ");
+			Console.Color = Colors.Green;
+			Console.Write(@"Smbios Info: ");
 			if (SmbiosManager.IsAvailable)
 			{
-				Screen.Color = Colors.White;
-				Screen.Write(@"[");
-				Screen.Color = Colors.Gray;
-				Screen.Write(@"Version ");
-				Screen.Write(SmbiosManager.MajorVersion, 10, -1);
-				Screen.Write(@".");
-				Screen.Write(SmbiosManager.MinorVersion, 10, -1);
-				Screen.Color = Colors.White;
-				Screen.Write(@"]");
-				Screen.NextLine();
+				Console.Color = Colors.White;
+				Console.Write(@"[");
+				Console.Color = Colors.Gray;
+				Console.Write(@"Version ");
+				Console.Write(SmbiosManager.MajorVersion, 10, -1);
+				Console.Write(@".");
+				Console.Write(SmbiosManager.MinorVersion, 10, -1);
+				Console.Color = Colors.White;
+				Console.Write(@"]");
+				Console.WriteLine();
 
-				Screen.Color = Colors.Yellow;
-				Screen.Write(@"[Bios]");
-				Screen.Color = Colors.White;
-				Screen.NextLine();
+				Console.Color = Colors.Yellow;
+				Console.Write(@"[Bios]");
+				Console.Color = Colors.White;
+				Console.WriteLine();
 
 				BiosInformationStructure biosInformation = new BiosInformationStructure();
-				Screen.Color = Colors.White;
-				Screen.Write(@"Vendor: ");
-				Screen.Color = Colors.Gray;
-				Screen.Write(biosInformation.BiosVendor);
-				Screen.NextLine();
-				Screen.Color = Colors.White;
-				Screen.Write(@"Version: ");
-				Screen.Color = Colors.Gray;
-				Screen.Write(biosInformation.BiosVersion);
-				Screen.NextLine();
-				Screen.Color = Colors.White;
-				Screen.Write(@"Date: ");
-				Screen.Color = Colors.Gray;
-				Screen.Write(biosInformation.BiosDate);
+				Console.Color = Colors.White;
+				Console.Write(@"Vendor: ");
+				Console.Color = Colors.Gray;
+				Console.Write(biosInformation.BiosVendor);
+				Console.WriteLine();
+				Console.Color = Colors.White;
+				Console.Write(@"Version: ");
+				Console.Color = Colors.Gray;
+				Console.Write(biosInformation.BiosVersion);
+				Console.WriteLine();
+				Console.Color = Colors.White;
+				Console.Write(@"Date: ");
+				Console.Color = Colors.Gray;
+				Console.Write(biosInformation.BiosDate);
 
-				Screen.Color = Colors.Yellow;
-				Screen.Row = 8;
-				Screen.Column = 35;
-				Screen.Write(@"[Cpu]");
-				Screen.Color = Colors.White;
-				Screen.NextLine();
-				Screen.Column = 35;
+				Console.Color = Colors.Yellow;
+				Console.Row = 8;
+				Console.Column = 35;
+				Console.Write(@"[Cpu]");
+				Console.Color = Colors.White;
+				Console.WriteLine();
+				Console.Column = 35;
 
 				CpuStructure cpuStructure = new CpuStructure();
-				Screen.Color = Colors.White;
-				Screen.Write(@"Vendor: ");
-				Screen.Color = Colors.Gray;
-				Screen.Write(cpuStructure.Vendor);
-				Screen.NextLine();
-				Screen.Column = 35;
-				Screen.Color = Colors.White;
-				Screen.Write(@"Version: ");
-				Screen.Color = Colors.Gray;
-				Screen.Write(cpuStructure.Version);
-				Screen.NextLine();
-				Screen.Column = 35;
-				Screen.Color = Colors.White;
-				Screen.Write(@"Socket: ");
-				Screen.Color = Colors.Gray;
-				Screen.Write(cpuStructure.Socket);
-				Screen.Write(@" MHz");
-				Screen.NextLine();
-				Screen.Column = 35;
-				Screen.Color = Colors.White;
-				Screen.Write(@"Cur. Speed: ");
-				Screen.Color = Colors.Gray;
-				Screen.Write(cpuStructure.MaxSpeed, 10, -1);
-				Screen.Write(@" MHz");
-				Screen.NextLine();
-				Screen.Column = 35;
+				Console.Color = Colors.White;
+				Console.Write(@"Vendor: ");
+				Console.Color = Colors.Gray;
+				Console.Write(cpuStructure.Vendor);
+				Console.WriteLine();
+				Console.Column = 35;
+				Console.Color = Colors.White;
+				Console.Write(@"Version: ");
+				Console.Color = Colors.Gray;
+				Console.Write(cpuStructure.Version);
+				Console.WriteLine();
+				Console.Column = 35;
+				Console.Color = Colors.White;
+				Console.Write(@"Socket: ");
+				Console.Color = Colors.Gray;
+				Console.Write(cpuStructure.Socket);
+				Console.Write(@" MHz");
+				Console.WriteLine();
+				Console.Column = 35;
+				Console.Color = Colors.White;
+				Console.Write(@"Cur. Speed: ");
+				Console.Color = Colors.Gray;
+				Console.Write(cpuStructure.MaxSpeed, 10, -1);
+				Console.Write(@" MHz");
+				Console.WriteLine();
+				Console.Column = 35;
 			}
 			else
 			{
-				Screen.Color = Colors.Red;
-				Screen.Write(@"No SMBIOS available on this system!");
+				Console.Color = Colors.Red;
+				Console.Write(@"No SMBIOS available on this system!");
 			}
 
-			Screen.Goto(17, 0);
+			Console.Goto(17, 0);
 
-			Screen.Color = 0x0F;
+			Console.Color = 0x0F;
 			for (uint index = 0; index < 60; index++)
-				Screen.Write((char)205);
+				Console.Write((char)205);
 
-			Screen.NextLine();
+			Console.WriteLine();
 
 			CpuInfo cpuInfo = new CpuInfo();
 
 			#region Vendor
-			Screen.Color = Colors.Green;
-			Screen.Write(@"Vendor:   ");
-			Screen.Color = Colors.White;
+			Console.Color = Colors.Green;
+			Console.Write(@"Vendor:   ");
+			Console.Color = Colors.White;
 
-			cpuInfo.PrintVendorString();
+			cpuInfo.PrintVendorString(Console);
 
-			Screen.NextLine();
+			Console.WriteLine();
 			#endregion
 
 			#region Brand
-			Screen.Color = Colors.Green;
-			Screen.Write(@"Brand:    ");
-			Screen.Color = Colors.White;
-			cpuInfo.PrintBrandString();
-			Screen.NextLine();
+			Console.Color = Colors.Green;
+			Console.Write(@"Brand:    ");
+			Console.Color = Colors.White;
+			cpuInfo.PrintBrandString(Console);
+			Console.WriteLine();
 			#endregion
 
 			#region Stepping
-			Screen.Color = Colors.Green;
-			Screen.Write(@"Stepping: ");
-			Screen.Color = Colors.White;
-			Screen.Write(cpuInfo.Stepping, 16, 2);
+			Console.Color = Colors.Green;
+			Console.Write(@"Stepping: ");
+			Console.Color = Colors.White;
+			Console.Write(cpuInfo.Stepping, 16, 2);
 			#endregion
 
 			#region Model
-			Screen.Color = Colors.Green;
-			Screen.Write(@" Model: ");
-			Screen.Color = Colors.White;
-			Screen.Write(cpuInfo.Model, 16, 2);
+			Console.Color = Colors.Green;
+			Console.Write(@" Model: ");
+			Console.Color = Colors.White;
+			Console.Write(cpuInfo.Model, 16, 2);
 			#endregion
 
 			#region Family
-			Screen.Color = Colors.Green;
-			Screen.Write(@" Family: ");
-			Screen.Color = Colors.White;
-			Screen.Write(cpuInfo.Family, 16, 2);
+			Console.Color = Colors.Green;
+			Console.Write(@" Family: ");
+			Console.Color = Colors.White;
+			Console.Write(cpuInfo.Family, 16, 2);
 			#endregion
 
 			#region Type
-			Screen.Color = Colors.Green;
-			Screen.Write(@" Type: ");
-			Screen.Color = Colors.White;
+			Console.Color = Colors.Green;
+			Console.Write(@" Type: ");
+			Console.Color = Colors.White;
 
-			Screen.Write(cpuInfo.Type, 16, 2);
-			Screen.NextLine();
-			Screen.Color = Colors.Green;
-			Screen.Write(@"Cores:    ");
-			Screen.Color = Colors.White;
-			Screen.Write(cpuInfo.NumberOfCores, 16, 2);
+			Console.Write(cpuInfo.Type, 16, 2);
+			Console.WriteLine();
+			Console.Color = Colors.Green;
+			Console.Write(@"Cores:    ");
+			Console.Color = Colors.White;
+			Console.Write(cpuInfo.NumberOfCores, 16, 2);
 			#endregion
-
-			//Multiboot.Dump(4,53);
-
-			Screen.Row = 22;
+			
+			Console.Row = 22;
 			for (uint index = 0; index < 80; index++)
 			{
-				Screen.Column = index;
-				Screen.Write((char)205);
+				Console.Column = index;
+				Console.Write((char)205);
 			}
 
 			for (uint index = 2; index < 23; index++)
 			{
-				Screen.Column = 60;
-				Screen.Row = index;
+				Console.Column = 60;
+				Console.Row = index;
 
-				Screen.Color = Colors.White;
+				Console.Color = Colors.White;
 				if (index == 6)
-					Screen.Write((char)185);
+					Console.Write((char)185);
 				else if (index == 17)
-					Screen.Write((char)185);
+					Console.Write((char)185);
 				else if (index == 22)
-					Screen.Write((char)202);
+					Console.Write((char)202);
 				else
-					Screen.Write((char)186);
+					Console.Write((char)186);
 			}
 
-			Screen.Goto(24, 29);
-			Screen.Color = Colors.Yellow;
+			Console.Goto(24, 29);
+			Console.Color = Colors.Yellow;
 
-			Screen.Write(@"www.mosa-project.org");
+			Console.Write(@"www.mosa-project.org");
 
 			CMOS cmos = new CMOS();
 
@@ -269,8 +271,34 @@ namespace Mosa.HelloWorld.x86
 
 			while (true)
 			{
-				cmos.Dump(2, 65);
+				DisplayCMOS(cmos);
 				DisplayTime(cmos);
+			}
+		}
+		
+		/// <summary>
+		/// Displays the seconds.
+		/// </summary>
+		private static void DisplayCMOS(CMOS cmos)
+		{
+			Console.Row = 2;
+			Console.Column = 65;
+			Console.Color = 0x0A;
+			Console.Write(@"CMOS:");
+			Console.WriteLine();
+
+			for (byte i = 0; i < 19; i++)
+			{
+				Console.Column = 65;
+				Console.Color = 0x0F;
+				Console.Write(i, 16, 2);
+				Console.Write(':');
+				Console.Write(' ');
+				Console.Write(cmos.Get(i), 16, 2);
+				Console.Write(' ');
+				Console.Color = 0x07;
+				Console.Write(cmos.Get(i), 10, 3);
+				Console.WriteLine();
 			}
 		}
 
@@ -279,64 +307,64 @@ namespace Mosa.HelloWorld.x86
 		/// </summary>
 		private static void DisplayTime(CMOS cmos)
 		{
-			Screen.Goto(24, 52);
-			Screen.Color = Colors.Green;
-			Screen.Write(@"Time: ");
+			Console.Goto(24, 52);
+			Console.Color = Colors.Green;
+			Console.Write(@"Time: ");
 
 			byte bcd = 10;
 
 			if (cmos.BCD)
 				bcd = 16;
 
-			Screen.Color = Colors.White;
-			Screen.Write(cmos.Hour, bcd, 2);
-			Screen.Color = Colors.Gray;
-			Screen.Write(':');
-			Screen.Color = Colors.White;
-			Screen.Write(cmos.Minute, bcd, 2);
-			Screen.Color = Colors.Gray;
-			Screen.Write(':');
-			Screen.Color = Colors.White;
-			Screen.Write(cmos.Second, bcd, 2);
-			Screen.Write(' ');
-			Screen.Color = Colors.Gray;
-			Screen.Write('(');
-			Screen.Color = Colors.White;
-			Screen.Write(cmos.Month, bcd, 2);
-			Screen.Color = Colors.Gray;
-			Screen.Write('/');
-			Screen.Color = Colors.White;
-			Screen.Write(cmos.Day, bcd, 2);
-			Screen.Color = Colors.Gray;
-			Screen.Write('/');
-			Screen.Color = Colors.White;
-			Screen.Write('2');
-			Screen.Write('0');
-			Screen.Write(cmos.Year, bcd, 2);
-			Screen.Color = Colors.Gray;
-			Screen.Write(')');
+			Console.Color = Colors.White;
+			Console.Write(cmos.Hour, bcd, 2);
+			Console.Color = Colors.Gray;
+			Console.Write(':');
+			Console.Color = Colors.White;
+			Console.Write(cmos.Minute, bcd, 2);
+			Console.Color = Colors.Gray;
+			Console.Write(':');
+			Console.Color = Colors.White;
+			Console.Write(cmos.Second, bcd, 2);
+			Console.Write(' ');
+			Console.Color = Colors.Gray;
+			Console.Write('(');
+			Console.Color = Colors.White;
+			Console.Write(cmos.Month, bcd, 2);
+			Console.Color = Colors.Gray;
+			Console.Write('/');
+			Console.Color = Colors.White;
+			Console.Write(cmos.Day, bcd, 2);
+			Console.Color = Colors.Gray;
+			Console.Write('/');
+			Console.Color = Colors.White;
+			Console.Write('2');
+			Console.Write('0');
+			Console.Write(cmos.Year, bcd, 2);
+			Console.Color = Colors.Gray;
+			Console.Write(')');
 		}
 
 		private static uint counter = 0;
 
 		public static void ProcessInterrupt(byte interrupt, byte errorCode)
 		{
-			uint c = Screen.Column;
-			uint r = Screen.Row;
-			byte col = Screen.Color;
-			byte back = Screen.BackgroundColor;
+			uint c = Console.Column;
+			uint r = Console.Row;
+			byte col = Console.Color;
+			byte back = Console.BackgroundColor;
 
-			Screen.Column = 31;
-			Screen.Row = 0;
-			Screen.Color = Colors.Cyan;
-			Screen.BackgroundColor = Colors.Black;
+			Console.Column = 31;
+			Console.Row = 0;
+			Console.Color = Colors.Cyan;
+			Console.BackgroundColor = Colors.Black;
 
 			counter++;
-			Screen.Write(counter, 10, 7);
-			Screen.Write(':');
-			Screen.Write(interrupt, 16, 2);
-			Screen.Write(':');
-			Screen.Write(errorCode, 16, 2);
+			Console.Write(counter, 10, 7);
+			Console.Write(':');
+			Console.Write(interrupt, 16, 2);
+			Console.Write(':');
+			Console.Write(errorCode, 16, 2);
 
 			if (interrupt == 14)
 			{
@@ -349,23 +377,23 @@ namespace Mosa.HelloWorld.x86
 			}
 			else
 			{
-				Screen.Write('-');
-				Screen.Write(counter, 10, 7);
-				Screen.Write(':');
-				Screen.Write(interrupt, 16, 2);
+				Console.Write('-');
+				Console.Write(counter, 10, 7);
+				Console.Write(':');
+				Console.Write(interrupt, 16, 2);
 
 				if (interrupt == 0x21)
 				{
 					byte scancode = Keyboard.ReadScanCode();
-					Screen.Write('-');
-					Screen.Write(scancode, 16, 2);
+					Console.Write('-');
+					Console.Write(scancode, 16, 2);
 				}
 			}
 
-			Screen.Column = c;
-			Screen.Row = r;
-			Screen.Color = col;
-			Screen.BackgroundColor = back;
+			Console.Column = c;
+			Console.Row = r;
+			Console.Color = col;
+			Console.BackgroundColor = back;
 		}
 	}
 }

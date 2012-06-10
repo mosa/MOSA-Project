@@ -202,7 +202,6 @@ namespace Mosa.CoolWorld.x86
 
 			hardwareDevice.Setup(hardwareResources);
 
-			Mosa.Kernel.x86.Screen.NextLine();
 			Mosa.CoolWorld.x86.Boot.BulletPoint();
 			Boot.Console.Write("Adding device ");
 			Boot.InBrackets(hardwareDevice.Name, Colors.White, Colors.LightGreen);

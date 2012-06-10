@@ -144,26 +144,26 @@ namespace Mosa.Kernel.x86
 		/// <summary>
 		/// Dump multiboot info.
 		/// </summary>
-		public void Dump(uint row, uint col)
+		public void Dump(ConsoleSession console, uint row, uint col)
 		{
-			Screen.Row = row;
-			Screen.Column = col;
-			Screen.Color = 0x0A;
-			Screen.Write(@"CMOS:");
-			Screen.NextLine();
+			console.Row = row;
+			console.Column = col;
+			console.Color = 0x0A;
+			console.Write(@"CMOS:");
+			console.WriteLine();
 
 			for (byte i = 0; i < 19; i++)
 			{
-				Screen.Column = col;
-				Screen.Color = 0x0F;
-				Screen.Write(i, 16, 2);
-				Screen.Write(':');
-				Screen.Write(' ');
-				Screen.Write(Get(i), 16, 2);
-				Screen.Write(' ');
-				Screen.Color = 0x07;
-				Screen.Write(Get(i), 10, 3);
-				Screen.NextLine();
+				console.Column = col;
+				console.Color = 0x0F;
+				console.Write(i, 16, 2);
+				console.Write(':');
+				console.Write(' ');
+				console.Write(Get(i), 16, 2);
+				console.Write(' ');
+				console.Color = 0x07;
+				console.Write(Get(i), 10, 3);
+				console.WriteLine();
 			}
 		}
 	}

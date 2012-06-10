@@ -5,20 +5,20 @@
  *
  */
 
-namespace Mosa.CoolWorld.x86
+namespace Mosa.Kernel.x86
 {
 
 	/// <summary>
 	/// 
 	/// </summary>
-	public class Console
+	public class ConsoleSession
 	{
 		protected readonly byte[] text;
 		protected readonly byte[] textcolor;
 		protected uint column = 0;
 		protected uint row = 0;
 		protected byte color = 0;
-		protected Screen screen;
+		protected ConsoleManager consoleManager;
 
 		/// <summary>
 		/// 
@@ -60,25 +60,26 @@ namespace Mosa.CoolWorld.x86
 			set { color &= 0x0F; color |= (byte)((value & 0x0F) << 4); }
 		}
 
-		public Screen Screen
+		public ConsoleManager ConsoleManager
 		{
-			get { return screen; }
-			set { screen = value; }
+			get { return consoleManager; }
+			set { consoleManager = value; }
 		}
 
-		public Console(byte columns, byte rows)
+		public ConsoleSession(byte columns, byte rows, ConsoleManager consoleManager)
 		{
 			Columns = columns;
 			Rows = rows;
+			ConsoleManager = consoleManager;
 			text = new byte[Columns * Rows];
 			textcolor = new byte[Columns * Rows];
 		}
 
 		/// <summary>
-		/// Initializes a new instance of the <see cref="Console"/> class.
+		/// Initializes a new instance of the <see cref="ConsoleSession"/> class.
 		/// </summary>
-		public Console()
-			: this(80, 40)
+		public ConsoleSession(ConsoleManager consoleManager)
+			: this(80, 40, consoleManager)
 		{
 		}
 
@@ -94,6 +95,7 @@ namespace Mosa.CoolWorld.x86
 				Column = 0;
 				Row++;
 			}
+
 		}
 
 		/// <summary>
@@ -102,13 +104,19 @@ namespace Mosa.CoolWorld.x86
 		/// <param name="chr">The character.</param>
 		public void Write(char chr)
 		{
+			if (Row >= Rows)
+			{
+				Row--;
+				ScrollUp();
+			}
+
 			uint address = Row * Columns + Column;
 
 			text[address] = (byte)chr;
 			textcolor[address] = (byte)color;
 
-			if (screen != null)
-				screen.RawWrite(this, Row, Column, chr, (byte)color);
+			if (consoleManager != null)
+				consoleManager.RawWrite(this, Row, Column, chr, (byte)color);
 
 			Next();
 		}
@@ -181,6 +189,34 @@ namespace Mosa.CoolWorld.x86
 			Column = col;
 		}
 
+		/// <summary>
+		/// Scrolls up.
+		/// </summary>
+		protected void ScrollUp()
+		{
+			for (uint row = 0; row < Rows - 1; row++)
+			{
+				for (uint column = 0; column < Columns; column++)
+				{
+					uint address = row * Columns + column;
+
+					if (row != Rows - 1)
+					{
+						text[address] = text[address + Columns];
+						textcolor[address] = textcolor[address + Columns];
+					}
+					else
+					{
+						text[address] = 0;
+						textcolor[address] = BackgroundColor;
+					}
+
+					if (consoleManager != null)
+						consoleManager.RawWrite(this, row, column, (char)text[address], textcolor[address]);
+				}
+			}
+		}
+
 		public char GetText(byte column, byte row)
 		{
 			uint address = (row * Columns + column);
@@ -202,16 +238,7 @@ namespace Mosa.CoolWorld.x86
 			for (uint i = 0; i < skip; i++)
 				Next();
 		}
-
-		/// <summary>
-		/// Writes the specified value.
-		/// </summary>
-		/// <param name="val">The val.</param>
-		public void Write(uint val)
-		{
-			Write(val, 10, -1);
-		}
-
+		
 		/// <summary>
 		/// Writes the specified value.
 		/// </summary>
