@@ -67,6 +67,7 @@
   <ItemGroup>
     <Compile Include="Boot.cs" />
     <Compile Include="Console.cs" />
+    <Compile Include="Screen.cs" />
     <Compile Include="DeviceDrivers\ISA\CMOS.cs" />
     <Compile Include="DeviceDrivers\ISA\PCIController.cs" />
     <Compile Include="DeviceDrivers\ISA\PIC.cs" />

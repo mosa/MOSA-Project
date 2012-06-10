@@ -60,16 +60,7 @@ namespace Mosa.Kernel.x86
 		}
 
 		/// <summary>
-		/// Gets the address.
-		/// </summary>
-		/// <returns></returns>
-		private static uint GetAddress()
-		{
-			return (0x0B8000 + ((Row * Columns + Column) * 2));
-		}
-
-		/// <summary>
-		/// Nexts 
+		/// Next Column
 		/// </summary>
 		private static void Next()
 		{
@@ -96,9 +87,21 @@ namespace Mosa.Kernel.x86
 		/// Writes the character.
 		/// </summary>
 		/// <param name="chr">The character.</param>
+		public static void RawWrite(uint row, uint column, char chr, byte color)
+		{
+			uint address = (0x0B8000 + ((row * Columns + column) * 2));
+
+			Native.Set8(address, (byte)chr);
+			Native.Set8(address + 1, color);
+		}
+
+		/// <summary>
+		/// Writes the character.
+		/// </summary>
+		/// <param name="chr">The character.</param>
 		public static void Write(char chr)
 		{
-			uint address = GetAddress();
+			uint address = (0x0B8000 + ((Row * Columns + Column) * 2));
 
 			Native.Set8(address, (byte)chr);
 			Native.Set8(address + 1, color);

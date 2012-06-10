@@ -12,7 +12,7 @@
 namespace Mosa.DeviceSystem
 {
 	/// <summary>
-	/// Stub class for a SpinLock object
+	/// Stub struct for a SpinLock object
 	/// </summary>
 	public struct SpinLock
 	{

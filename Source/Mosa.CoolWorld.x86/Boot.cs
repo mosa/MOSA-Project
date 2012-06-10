@@ -1,12 +1,12 @@
 ﻿/*
- * (c) 2008 MOSA - The Managed Operating System Alliance
+ * (c) 2012 MOSA - The Managed Operating System Alliance
  *
  * Licensed under the terms of the New BSD License.
  *
  */
 
-using Mosa.Kernel.x86;
 using Mosa.Platform.x86.Intrinsic;
+using Colors = Mosa.Kernel.x86.Colors;
 
 namespace Mosa.CoolWorld.x86
 {
@@ -15,6 +15,8 @@ namespace Mosa.CoolWorld.x86
 	/// </summary>
 	public static class Boot
 	{
+		public static Console Console;
+		public static Screen Screen;
 		/// <summary>
 		/// Main
 		/// </summary>
@@ -22,18 +24,20 @@ namespace Mosa.CoolWorld.x86
 		{
 			Mosa.Kernel.x86.Kernel.Setup();
 
-			IDT.SetInterruptHandler(ProcessInterrupt);
+			Mosa.Kernel.x86.IDT.SetInterruptHandler(ProcessInterrupt);
 
-			Console.Initialize();
+			Screen = new Screen();
+			Console = Screen.Boot;
+			Console.Screen = Screen;
 
-			Screen.GotoTop();
-			Screen.Color = Colors.White;
-			Screen.BackgroundColor = Colors.Green;
+			Console.GotoTop();
+			Console.Color = Colors.White;
+			Console.BackgroundColor = Colors.Green;
 
-			Screen.Write(@"                   MOSA OS Version 0.1 - Compiler Version 1.0");
+			Console.Write(@"                   MOSA OS Version 0.1 - Compiler Version 1.0");
 			FillLine();
-			Screen.Color = Colors.White;
-			Screen.BackgroundColor = Colors.Black;
+			Console.Color = Colors.White;
+			Console.BackgroundColor = Colors.Black;
 
 			Mosa.Kernel.x86.Smbios.BiosInformationStructure biosInfo = new Kernel.x86.Smbios.BiosInformationStructure();
 			Mosa.Kernel.x86.Smbios.CpuStructure cpuInfo = new Kernel.x86.Smbios.CpuStructure();
@@ -54,17 +58,17 @@ namespace Mosa.CoolWorld.x86
 
 			Console.WriteLine("> System ready");
 			Console.WriteLine();
-			Screen.Goto(24, 0);
-			Screen.Color = Colors.White;
-			Screen.BackgroundColor = Colors.Green;
-			Screen.Write("          Copyright (C) 2008-2001 [Managed Operating System Alliance]");
+			Console.Goto(24, 0);
+			Console.Color = Colors.White;
+			Console.BackgroundColor = Colors.Green;
+			Console.Write("          Copyright (C) 2008-2001 [Managed Operating System Alliance]");
 			FillLine();
 
-			Screen.BackgroundColor = Colors.Black;
-			Screen.Goto(15, 0);
-			Screen.Color = Colors.Green;
-			Screen.Write("> ");
-			Screen.Color = Colors.Yellow;
+			Console.BackgroundColor = Colors.Black;
+			Console.Goto(15, 0);
+			Console.Color = Colors.Green;
+			Console.Write("> ");
+			Console.Color = Colors.Yellow;
 
 			Mosa.DeviceDrivers.ScanCodeMap.US KBDMAP = new DeviceDrivers.ScanCodeMap.US();
 
@@ -81,8 +85,17 @@ namespace Mosa.CoolWorld.x86
 					Mosa.Kernel.x86.Debug.Trace("Main.Main Key Character: " + keyevent.Character.ToString());
 
 					if (keyevent.KeyPress == DeviceSystem.KeyEvent.Press.Make)
+					{
 						if (keyevent.Character != 0)
-							Screen.Write(keyevent.Character);
+							Console.Write(keyevent.Character);
+					
+						if (keyevent.KeyType == DeviceSystem.KeyType.F1)
+							Screen.Active = Screen.Boot;
+						else if (keyevent.KeyType == DeviceSystem.KeyType.F2)
+							Screen.Active = Screen.Debug;
+
+					}
+					Mosa.Kernel.x86.Debug.Trace("Main.Main Key Character: " + ((uint)keyevent.Character).ToString());
 				}
 
 				Native.Hlt();
@@ -91,8 +104,8 @@ namespace Mosa.CoolWorld.x86
 
 		public static void FillLine()
 		{
-			for (uint c = 80 - Screen.Column + 1; c != 0; c--)
-				Screen.Write(' ');
+			for (uint c = 80 - Console.Column; c != 0; c--)
+				Console.Write(' ');
 		}
 
 		public static void PrintDone()
@@ -102,18 +115,18 @@ namespace Mosa.CoolWorld.x86
 
 		public static void BulletPoint()
 		{
-			Screen.Color = Colors.Yellow;
+			Console.Color = Colors.Yellow;
 			Console.Write("  * ");
-			Screen.Color = Colors.White;
+			Console.Color = Colors.White;
 		}
 
 		public static void InBrackets(string message, byte outerColor, byte innerColor)
 		{
-			Screen.Color = outerColor;
+			Console.Color = outerColor;
 			Console.Write("[");
-			Screen.Color = innerColor;
+			Console.Color = innerColor;
 			Console.Write(message);
-			Screen.Color = outerColor;
+			Console.Color = outerColor;
 			Console.Write("]");
 		}
 
@@ -121,30 +134,30 @@ namespace Mosa.CoolWorld.x86
 
 		public static void ProcessInterrupt(byte interrupt, byte errorCode)
 		{
-			uint c = Screen.Column;
-			uint r = Screen.Row;
-			byte col = Screen.Color;
-			byte back = Screen.BackgroundColor;
+			uint c = Console.Column;
+			uint r = Console.Row;
+			byte col = Console.Color;
+			byte back = Console.BackgroundColor;
 
-			Screen.Column = 55;
-			Screen.Row = 23;
-			Screen.Color = Colors.Cyan;
-			Screen.BackgroundColor = Colors.Black;
-			Screen.Write("        ");
-			Screen.Column = 55;
-			Screen.Row = 23;
+			Console.Column = 55;
+			Console.Row = 23;
+			Console.Color = Colors.Cyan;
+			Console.BackgroundColor = Colors.Black;
+			Console.Write("        ");
+			Console.Column = 55;
+			Console.Row = 23;
 
 			counter++;
-			Screen.Write(counter, 10, 7);
-			Screen.Write(':');
-			Screen.Write(interrupt, 16, 2);
-			Screen.Write(':');
-			Screen.Write(errorCode, 16, 2);
+			Console.Write(counter, 10, 7);
+			Console.Write(':');
+			Console.Write(interrupt, 16, 2);
+			Console.Write(':');
+			Console.Write(errorCode, 16, 2);
 
 			if (interrupt == 14)
 			{
 				// Page Fault!
-				PageFaultHandler.Fault(errorCode);
+				Mosa.Kernel.x86.PageFaultHandler.Fault(errorCode);
 			}
 			else if (interrupt == 0x20)
 			{
@@ -152,19 +165,19 @@ namespace Mosa.CoolWorld.x86
 			}
 			else if (interrupt >= 0x20 && interrupt < 0x30)
 			{
-				Screen.Write('-');
-				Screen.Write(counter, 10, 7);
-				Screen.Write(':');
-				Screen.Write(interrupt, 16, 2);
+				Console.Write('-');
+				Console.Write(counter, 10, 7);
+				Console.Write(':');
+				Console.Write(interrupt, 16, 2);
 
 				Mosa.DeviceSystem.HAL.ProcessInterrupt((byte)(interrupt - 0x20), errorCode);
 				//Mosa.Kernel.x86.Debug.Trace("Returned from HAL.ProcessInterrupt");
 			}
 
-			Screen.Column = c;
-			Screen.Row = r;
-			Screen.Color = col;
-			Screen.BackgroundColor = back;
+			Console.Column = c;
+			Console.Row = r;
+			Console.Color = col;
+			Console.BackgroundColor = back;
 		}
 
 	}

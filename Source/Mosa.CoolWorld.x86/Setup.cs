@@ -45,6 +45,7 @@ namespace Mosa.CoolWorld.x86
 		static public PCIController PCI = null;
 		static public PIC PIC = null;
 		static public PIT PIT = null;
+		static public VGAText VGAText = null;
 
 		/// <summary>
 		/// Initializes the Device Driver System.
@@ -136,21 +137,33 @@ namespace Mosa.CoolWorld.x86
 			pitAttributes.IRQ = 0;
 			pitAttributes.Platforms = PlatformArchitecture.X86AndX64;
 
+			//[ISADeviceDriver(AutoLoad = true, BasePort = 0x03B0, PortRange = 0x1F, BaseAddress = 0xB0000, AddressRange = 0x10000, Platforms = PlatformArchitecture.X86AndX64)]
+			ISADeviceDriverAttribute vgaTextAttributes = new ISADeviceDriverAttribute();
+			vgaTextAttributes.AutoLoad = true;
+			vgaTextAttributes.BasePort = 0x03B0;
+			vgaTextAttributes.PortRange = 0x1F;
+			vgaTextAttributes.BaseAddress = 0xB0000;
+			vgaTextAttributes.AddressRange = 0x10000;
+			vgaTextAttributes.IRQ = 0;
+			vgaTextAttributes.Platforms = PlatformArchitecture.X86AndX64;
+
 			Keyboard = new StandardKeyboard();
 			PCI = new PCIController();
 			PIC = new PIC();
 			PIT = new PIT();
+			VGAText = new VGAText();
 
 			//StartDevice(picAttributes, PIC);
 			StartDevice(pitAttributes, PIT);
 			StartDevice(pciAttributes, PCI);
 			StartDevice(keyboardDeviceAttributes, Keyboard);
+			//StartDevice(vgaTextAttributes, VGAText);
 
 			PCIControllerManager pciController = new PCIControllerManager(deviceManager);
 
-			Console.Write("Probing PCI devices...");
+			Boot.Console.Write("Probing PCI devices...");
 			//pciController.CreatePCIDevices();
-			Console.WriteLine("[Completed]");
+			Boot.Console.WriteLine("[Completed]");
 		}
 
 		/// <summary>
@@ -191,9 +204,9 @@ namespace Mosa.CoolWorld.x86
 
 			Mosa.Kernel.x86.Screen.NextLine();
 			Mosa.CoolWorld.x86.Boot.BulletPoint();
-			Console.Write("Adding device ");
+			Boot.Console.Write("Adding device ");
 			Boot.InBrackets(hardwareDevice.Name, Colors.White, Colors.LightGreen);
-			Console.WriteLine();
+			Boot.Console.WriteLine();
 
 			if (resourceManager.ClaimResources(hardwareResources))
 			{
