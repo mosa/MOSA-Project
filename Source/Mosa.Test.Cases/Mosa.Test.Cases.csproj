@@ -223,7 +223,6 @@
     <Compile Include="OLD\Shr.cs" />
     <Compile Include="OLD\StaticFieldInit.cs" />
     <Compile Include="OLD\Stind.cs" />
-    <Compile Include="OLD\Stsfld.cs" />
     <Compile Include="OLD\Sub.cs" />
     <Compile Include="IL\Switch.cs">
       <AutoGen>True</AutoGen>
