@@ -14,6 +14,8 @@
 	<target name="build">
 	    <csc target="library" output="${outputDirectory}/Mosa.Kernel.x86.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
+                    <include name="ConsoleManager.cs"/>
+                    <include name="ConsoleSession.cs"/>
                     <include name="Debug.cs"/>
                     <include name="Mosa.Internal/ExceptionEngine.cs"/>
                     <include name="KernelMemory.cs"/>

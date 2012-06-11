@@ -15,7 +15,6 @@
 	    <csc target="exe" main="Mosa.CoolWorld.x86.Boot" output="${outputDirectory}/Mosa.CoolWorld.x86.exe" debug="${debug}" unsafe="true" nostdlib="true">
 		<sources>
                     <include name="Boot.cs"/>
-                    <include name="Console.cs"/>
                     <include name="DeviceDrivers/ISA/CMOS.cs"/>
                     <include name="DeviceDrivers/ISA/PCIController.cs"/>
                     <include name="DeviceDrivers/ISA/PIC.cs"/>
