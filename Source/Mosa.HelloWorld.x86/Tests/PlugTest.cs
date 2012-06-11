@@ -32,7 +32,7 @@ namespace Mosa.HelloWorld.x86.Tests
 	public class PlugTestTest : KernelTest
 	{
 		public PlugTestTest()
-			: base("PlugTest")
+			: base("Plug")
 		{
 			testMethods.Add(PlugTestTest1);
 			testMethods.Add(PlugTestTest2);

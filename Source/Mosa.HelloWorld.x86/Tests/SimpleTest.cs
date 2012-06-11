@@ -14,9 +14,10 @@ namespace Mosa.HelloWorld.x86.Tests
 	public class SimpleTest : KernelTest
 	{
 		public SimpleTest()
-			: base("SimpleTest") 
+			: base("Simple")
 		{
 			testMethods.Add(SimpleTest1);
+			testMethods.Add(SimpleTest2);
 		}
 
 		public static bool SimpleTest1()
@@ -27,6 +28,20 @@ namespace Mosa.HelloWorld.x86.Tests
 			int c = a + b;
 
 			return c == 30;
+		}
+
+		public static bool SimpleTest2()
+		{
+			int[] a = new int[5];
+			for (int i = 0; i < 5; i++)
+				a[i] = i * 2;
+
+			int total = 0;
+
+			foreach (int v in a)
+				total = total + v;
+
+			return (0 + 2 + 6 + 8 + 10) == total;
 		}
 
 	}

@@ -65,7 +65,7 @@ namespace Mosa.HelloWorld.x86.Tests
 		{
 			Console = Boot.Console;
 
-			Console.Goto(23, 0);
+			Console.Goto(20, 0);
 			Console.Color = Colors.Yellow;
 			Console.Write("[");
 			Console.Color = Colors.White;
@@ -81,6 +81,7 @@ namespace Mosa.HelloWorld.x86.Tests
 			var exceptionTest = new ExceptionTest();
 			var plugTestTest = new PlugTestTest();
 			var compareTest = new ComparisonTest();
+			var simpleTest = new SimpleTest();
 
 			stringTest.Test();
 			interfaceTest.Test();
@@ -90,6 +91,7 @@ namespace Mosa.HelloWorld.x86.Tests
 			exceptionTest.Test();
 			plugTestTest.Test();
 			compareTest.Test();
+			simpleTest.Test();
 		}
 
 		public void Test()

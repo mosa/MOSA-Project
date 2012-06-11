@@ -14,7 +14,7 @@ namespace Mosa.HelloWorld.x86.Tests
 	public class ComparisonTest : KernelTest
 	{
 		public ComparisonTest()
-			: base("ComparisonTests") 
+			: base("Comparison") 
 		{
 			testMethods.Add(CompareTest1);
 			testMethods.Add(CompareTest2);

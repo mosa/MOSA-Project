@@ -175,7 +175,7 @@ namespace Mosa.HelloWorld.x86
 				Console.Write(@"No SMBIOS available on this system!");
 			}
 
-			Console.Goto(17, 0);
+			Console.Goto(14, 0);
 
 			Console.Color = 0x0F;
 			for (uint index = 0; index < 60; index++)
@@ -236,15 +236,22 @@ namespace Mosa.HelloWorld.x86
 			Console.Color = Colors.White;
 			Console.Write(cpuInfo.NumberOfCores, 16, 2);
 			#endregion
-			
-			Console.Row = 22;
+
+			Console.Row = 19;
 			for (uint index = 0; index < 80; index++)
 			{
 				Console.Column = index;
 				Console.Write((char)205);
 			}
 
-			for (uint index = 2; index < 23; index++)
+			Console.Row = 23;
+			for (uint index = 0; index < 80; index++)
+			{
+				Console.Column = index;
+				Console.Write((char)205);
+			}
+
+			for (uint index = 2; index < 20; index++)
 			{
 				Console.Column = 60;
 				Console.Row = index;
@@ -252,9 +259,9 @@ namespace Mosa.HelloWorld.x86
 				Console.Color = Colors.White;
 				if (index == 6)
 					Console.Write((char)185);
-				else if (index == 17)
+				else if (index == 14)
 					Console.Write((char)185);
-				else if (index == 22)
+				else if (index == 19)
 					Console.Write((char)202);
 				else
 					Console.Write((char)186);
@@ -275,29 +282,29 @@ namespace Mosa.HelloWorld.x86
 				DisplayTime(cmos);
 			}
 		}
-		
+
 		/// <summary>
 		/// Displays the seconds.
 		/// </summary>
 		private static void DisplayCMOS(CMOS cmos)
 		{
 			Console.Row = 2;
-			Console.Column = 65;
+			Console.Column = 65; 
 			Console.Color = 0x0A;
 			Console.Write(@"CMOS:");
 			Console.WriteLine();
+			Console.Color = 0x0F;
 
-			for (byte i = 0; i < 19; i++)
+			byte i = 0;
+			for (byte x = 0; x < 5; x++)
 			{
 				Console.Column = 65;
-				Console.Color = 0x0F;
-				Console.Write(i, 16, 2);
-				Console.Write(':');
-				Console.Write(' ');
-				Console.Write(cmos.Get(i), 16, 2);
-				Console.Write(' ');
-				Console.Color = 0x07;
-				Console.Write(cmos.Get(i), 10, 3);
+				for (byte y = 0; y < 4; y++)
+				{
+					Console.Write(cmos.Get(i), 16, 2);
+					Console.Write(' ');
+					i++;
+				}
 				Console.WriteLine();
 			}
 		}
