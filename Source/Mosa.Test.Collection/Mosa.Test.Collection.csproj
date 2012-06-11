@@ -85,6 +85,10 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>ComparisonTests.cs</LastGenOutput>
     </None>
+    <None Include="StaticFieldTests.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>StaticFieldTests.cs</LastGenOutput>
+    </None>
     <None Include="GenericCallTests.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>GenericCallTests.cs</LastGenOutput>
@@ -117,6 +121,11 @@
     <Compile Include="IsInstTests.cs" />
     <Compile Include="FibonacciTests.cs" />
     <Compile Include="GenericInterfaceTests.cs" />
+    <Compile Include="StaticFieldTests.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>StaticFieldTests.tt</DependentUpon>
+    </Compile>
     <Compile Include="SwitchTests.cs">
       <DependentUpon>SwitchTests.tt</DependentUpon>
       <AutoGen>True</AutoGen>

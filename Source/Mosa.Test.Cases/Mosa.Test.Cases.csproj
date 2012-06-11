@@ -107,6 +107,10 @@
     <Compile Include="CIL\UInt8Fixture.cs" />
     <Compile Include="CIL\DoubleFixture.cs" />
     <Compile Include="CIL\EnumFixture.cs" />
+    <None Include="IL\StaticField.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>StaticField.cs</LastGenOutput>
+    </None>
     <None Include="IL\Initobj.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Initobj.cs</LastGenOutput>
@@ -115,6 +119,11 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Initobj.tt</DependentUpon>
+    </Compile>
+    <Compile Include="IL\StaticField.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>StaticField.tt</DependentUpon>
     </Compile>
     <Compile Include="IL\Structure.cs">
       <DependentUpon>Structure.tt</DependentUpon>
@@ -152,7 +161,7 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>GenericCall.cs</LastGenOutput>
     </None>
-    <None Include="OLD\ConditionalOperator.tt">
+    <None Include="Extra\ConditionalOperator.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>ConditionalOperator.cs</LastGenOutput>
     </None>
@@ -180,7 +189,7 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>Ldarga.cs</LastGenOutput>
     </None>
-    <Compile Include="OLD\ConditionalOperator.cs">
+    <Compile Include="Extra\ConditionalOperator.cs">
       <DependentUpon>ConditionalOperator.tt</DependentUpon>
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
