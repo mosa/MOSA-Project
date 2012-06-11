@@ -41,7 +41,7 @@ namespace Mosa.HelloWorld.x86.Tests
 			foreach (int v in a)
 				total = total + v;
 
-			return (0 + 2 + 6 + 8 + 10) == total;
+			return (0 + 2 + 4 + 6 + 8) == total;
 		}
 
 	}
