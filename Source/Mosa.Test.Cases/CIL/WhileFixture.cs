@@ -11,13 +11,13 @@ using MbUnit.Framework;
 
 using Mosa.Test.System;
 
-namespace Mosa.Test.Cases.IL
+namespace Mosa.Test.Cases.CIL
 {
 	[TestFixture]
-	public class While : TestCompilerAdapter
+	public class WhileFixture : TestCompilerAdapter
 	{
 
-		public While()
+		public WhileFixture()
 		{
 			settings.AddReference("Mosa.Test.Collection.dll");
 		}

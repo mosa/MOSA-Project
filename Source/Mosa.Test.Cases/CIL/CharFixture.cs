@@ -7,6 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
  */
 
+using System;
 using MbUnit.Framework;
 using Mosa.Test.Collection;
 using Mosa.Test.System;
@@ -48,12 +49,13 @@ namespace Mosa.Test.Cases.CIL
 			Assert.AreEqual(CharTests.DivCC(a, b), Run<int>("Mosa.Test.Collection", "CharTests", "DivCC", a, b));
 		}
 
-		//[Test]
-		//[ExpectedException(typeof(DivideByZeroException))]
-		//public void DivCCDivideByZeroException([C]char a)
-		//{
-		//    Assert.AreEqual(CharTests.DivCC(a, (char)0), Run<int>("Mosa.Test.Collection", "CharTests", "DivCC", a, (char)0));
-		//}
+		[Test]
+		[Pending]
+		[ExpectedException(typeof(DivideByZeroException))]
+		public void DivCCDivideByZeroException([C]char a)
+		{
+			Assert.AreEqual(CharTests.DivCC(a, (char)0), Run<int>("Mosa.Test.Collection", "CharTests", "DivCC", a, (char)0));
+		}
 
 		[Test]
 		public void RemCC([C]char a, [CNotZero]char b)
@@ -61,12 +63,13 @@ namespace Mosa.Test.Cases.CIL
 			Assert.AreEqual(CharTests.RemCC(a, b), Run<int>("Mosa.Test.Collection", "CharTests", "RemCC", a, b));
 		}
 
-		//[Test]
-		//[ExpectedException(typeof(DivideByZeroException))]
-		//public void RemCCDivideByZeroException([C]char a, [C]char b)
-		//{
-		//    Assert.AreEqual(CharTests.RemCC(a, (char)0), Run<int>("Mosa.Test.Collection", "CharTests", "RemCC", a, (char)0));
-		//}
+		[Test]
+		[Pending]
+		[ExpectedException(typeof(DivideByZeroException))]
+		public void RemCCDivideByZeroException([C]char a, [C]char b)
+		{
+			Assert.AreEqual(CharTests.RemCC(a, (char)0), Run<int>("Mosa.Test.Collection", "CharTests", "RemCC", a, (char)0));
+		}
 
 		[Test]
 		public void RetC([C]char a)

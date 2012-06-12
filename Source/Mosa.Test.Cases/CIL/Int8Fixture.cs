@@ -7,6 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
  */
 
+using System;
 using MbUnit.Framework;
 using Mosa.Test.Collection;
 using Mosa.Test.System;
@@ -51,12 +52,13 @@ namespace Mosa.Test.Cases.CIL
 			Assert.AreEqual(Int8Tests.DivI1I1(a, b), Run<int>("Mosa.Test.Collection", "Int8Tests", "DivI1I1", a, b));
 		}
 
-		//[Test]
-		//[ExpectedException(typeof(DivideByZeroException))]
-		//public void DivI1I1DivideByZeroException([I1]sbyte a)
-		//{
-		//    Assert.AreEqual(Int8Tests.DivI1I1(a, (sbyte)0), Run<int>("Mosa.Test.Collection", "Int8Tests", "DivI1I1", a, (sbyte)0));
-		//}
+		[Test]
+		[Pending]
+		[ExpectedException(typeof(DivideByZeroException))]
+		public void DivI1I1DivideByZeroException([I1]sbyte a)
+		{
+			Assert.AreEqual(Int8Tests.DivI1I1(a, (sbyte)0), Run<int>("Mosa.Test.Collection", "Int8Tests", "DivI1I1", a, (sbyte)0));
+		}
 
 		[Test]
 		public void RemI1I1([I1]sbyte a, [I1NotZero]sbyte b)
@@ -64,12 +66,13 @@ namespace Mosa.Test.Cases.CIL
 			Assert.AreEqual(Int8Tests.RemI1I1(a, b), Run<int>("Mosa.Test.Collection", "Int8Tests", "RemI1I1", a, b));
 		}
 
-		//[Test]
-		//[ExpectedException(typeof(DivideByZeroException))]
-		//public void RemI1I1DivideByZeroException([I1]sbyte a)
-		//{
-		//    Assert.AreEqual(Int8Tests.RemI1I1(a, (sbyte)0), Run<int>("Mosa.Test.Collection", "Int8Tests", "RemI1I1", a, (sbyte)0));
-		//}
+		[Test]
+		[Pending]
+		[ExpectedException(typeof(DivideByZeroException))]
+		public void RemI1I1DivideByZeroException([I1]sbyte a)
+		{
+			Assert.AreEqual(Int8Tests.RemI1I1(a, (sbyte)0), Run<int>("Mosa.Test.Collection", "Int8Tests", "RemI1I1", a, (sbyte)0));
+		}
 
 		[Test]
 		public void RetI1([I1]sbyte a)

@@ -1,20 +1,11 @@
-﻿/*
- * (c) 2011 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
- *
- */
- 
+﻿ 
 
 using MbUnit.Framework;
 
 using Mosa.Test.System;
 using Mosa.Test.System.Numbers;
 
-namespace Mosa.Test.Cases.IL
+namespace Mosa.Test.Cases.CIL
 {
 	[TestFixture]
 	public class Structures : TestCompilerAdapter

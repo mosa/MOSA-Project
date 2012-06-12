@@ -80,57 +80,96 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="CIL\BooleanFixture.cs" />
+    <Compile Include="CIL\BoxingFixture.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>BoxingFixture.tt</DependentUpon>
+    </Compile>
     <Compile Include="CIL\CallVirtualFixture.cs" />
     <Compile Include="CIL\CharFixture.cs" />
     <Compile Include="CIL\DelegateFixture.cs" />
     <Compile Include="CIL\ExceptionHandlingFixture.cs" />
     <Compile Include="CIL\FibonacciFixture.cs" />
-    <Compile Include="IL\Boxing.cs">
+    <Compile Include="CIL\CallFixture.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Boxing.tt</DependentUpon>
+      <DependentUpon>CallFixture.tt</DependentUpon>
     </Compile>
-    <Compile Include="IL\Comparison.cs">
+    <Compile Include="CIL\ComparisonFixture.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Comparison.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IL\GenericCall.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>GenericCall.tt</DependentUpon>
+      <DependentUpon>ComparisonFixture.tt</DependentUpon>
     </Compile>
     <Compile Include="CIL\GenericInterfaceFixture.cs" />
     <Compile Include="CIL\Int16Fixture.cs" />
     <Compile Include="CIL\Int8Fixture.cs" />
+    <Compile Include="CIL\ForeachFixture.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ForeachFixture.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CIL\SwitchFixture.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>SwitchFixture.tt</DependentUpon>
+    </Compile>
     <Compile Include="CIL\UInt16Fixture.cs" />
     <Compile Include="CIL\UInt8Fixture.cs" />
     <Compile Include="CIL\DoubleFixture.cs" />
     <Compile Include="CIL\EnumFixture.cs" />
-    <None Include="IL\StaticField.tt">
+    <None Include="CIL\ForeachFixture.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>StaticField.cs</LastGenOutput>
+      <LastGenOutput>ForeachFixture.cs</LastGenOutput>
     </None>
-    <None Include="IL\Initobj.tt">
+    <None Include="CIL\StaticFieldFixture.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Initobj.cs</LastGenOutput>
+      <LastGenOutput>StaticFieldFixture.cs</LastGenOutput>
     </None>
-    <Compile Include="IL\Initobj.cs">
+    <None Include="CIL\InitobjFixture.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>InitobjFixture.cs</LastGenOutput>
+    </None>
+    <Compile Include="CIL\IsInstFixture.cs" />
+    <Compile Include="CIL\ConvFixture.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>Initobj.tt</DependentUpon>
+      <DependentUpon>ConvFixture.tt</DependentUpon>
     </Compile>
-    <Compile Include="IL\StaticField.cs">
+    <Compile Include="CIL\GenericCallFixture.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
-      <DependentUpon>StaticField.tt</DependentUpon>
+      <DependentUpon>GenericCallFixture.tt</DependentUpon>
     </Compile>
-    <Compile Include="IL\Structure.cs">
-      <DependentUpon>Structure.tt</DependentUpon>
+    <Compile Include="CIL\InitobjFixture.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
+      <DependentUpon>InitobjFixture.tt</DependentUpon>
     </Compile>
-    <Compile Include="IL\IsInst.cs" />
+    <Compile Include="CIL\LdargaFixture.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LdargaFixture.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CIL\LdlocaFixture.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>LdlocaFixture.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CIL\StaticFieldFixture.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>StaticFieldFixture.tt</DependentUpon>
+    </Compile>
+    <Compile Include="CIL\StructureFixture.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>StructureFixture.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Extra\ConditionalOperatorFixture.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ConditionalOperatorFixture.tt</DependentUpon>
+    </Compile>
     <Compile Include="OLD\GenericMethodMemberFixture.cs" />
     <Compile Include="OLD\GenericTypeFixture.cs" />
     <Compile Include="CIL\Int32Fixture.cs" />
@@ -149,73 +188,48 @@
     <Compile Include="OLD\Ceq.cs" />
     <Compile Include="OLD\Cgt.cs" />
     <Compile Include="OLD\Clt.cs" />
-    <None Include="IL\Comparison.tt">
+    <None Include="CIL\ComparisonFixture.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Comparison.cs</LastGenOutput>
+      <LastGenOutput>ComparisonFixture.cs</LastGenOutput>
     </None>
-    <None Include="IL\Boxing.tt">
+    <None Include="CIL\BoxingFixture.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Boxing.cs</LastGenOutput>
+      <LastGenOutput>BoxingFixture.cs</LastGenOutput>
     </None>
-    <None Include="IL\GenericCall.tt">
+    <None Include="CIL\GenericCallFixture.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>GenericCall.cs</LastGenOutput>
+      <LastGenOutput>GenericCallFixture.cs</LastGenOutput>
     </None>
-    <None Include="Extra\ConditionalOperator.tt">
+    <None Include="Extra\ConditionalOperatorFixture.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>ConditionalOperator.cs</LastGenOutput>
+      <LastGenOutput>ConditionalOperatorFixture.cs</LastGenOutput>
     </None>
-    <None Include="IL\Call.tt">
+    <None Include="CIL\CallFixture.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Call.cs</LastGenOutput>
+      <LastGenOutput>CallFixture.cs</LastGenOutput>
     </None>
-    <None Include="IL\Conv.tt">
+    <None Include="CIL\ConvFixture.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Conv.cs</LastGenOutput>
+      <LastGenOutput>ConvFixture.cs</LastGenOutput>
     </None>
-    <None Include="IL\Structure.tt">
+    <None Include="CIL\StructureFixture.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Structure.cs</LastGenOutput>
+      <LastGenOutput>StructureFixture.cs</LastGenOutput>
     </None>
-    <None Include="IL\Switch.tt">
+    <None Include="CIL\SwitchFixture.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Switch.cs</LastGenOutput>
+      <LastGenOutput>SwitchFixture.cs</LastGenOutput>
     </None>
-    <None Include="IL\Ldloca.tt">
+    <None Include="CIL\LdlocaFixture.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Ldloca.cs</LastGenOutput>
+      <LastGenOutput>LdlocaFixture.cs</LastGenOutput>
     </None>
-    <None Include="IL\Ldarga.tt">
+    <None Include="CIL\LdargaFixture.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
-      <LastGenOutput>Ldarga.cs</LastGenOutput>
+      <LastGenOutput>LdargaFixture.cs</LastGenOutput>
     </None>
-    <Compile Include="Extra\ConditionalOperator.cs">
-      <DependentUpon>ConditionalOperator.tt</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="IL\CallOrder.cs" />
-    <Compile Include="IL\Call.cs">
-      <DependentUpon>Call.tt</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="IL\Conv.cs">
-      <DependentUpon>Conv.tt</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
-    <Compile Include="IL\Ldloca.cs">
-      <DependentUpon>Ldloca.tt</DependentUpon>
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-    </Compile>
+    <Compile Include="CIL\CallOrderFixture.cs" />
     <Compile Include="OLD\Div.cs" />
-    <Compile Include="IL\Ldarga.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Ldarga.tt</DependentUpon>
-    </Compile>
     <Compile Include="OLD\Mul.cs" />
     <Compile Include="OLD\Or.cs" />
     <Compile Include="OLD\Rem.cs" />
@@ -224,12 +238,7 @@
     <Compile Include="OLD\StaticFieldInit.cs" />
     <Compile Include="OLD\Stind.cs" />
     <Compile Include="OLD\Sub.cs" />
-    <Compile Include="IL\Switch.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Switch.tt</DependentUpon>
-    </Compile>
-    <Compile Include="IL\While.cs" />
+    <Compile Include="CIL\WhileFixture.cs" />
     <Compile Include="OLD\Xor.cs" />
   </ItemGroup>
   <ItemGroup>

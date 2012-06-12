@@ -7,6 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
  */
 
+using System;
 using MbUnit.Framework;
 using Mosa.Test.Collection;
 using Mosa.Test.System;
@@ -47,12 +48,13 @@ namespace Mosa.Test.Cases.CIL
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "SingleTests", "DivR4R4", SingleTests.DivR4R4(a, b), a, b));
 		}
 
-		//[Test]
-		//[ExpectedException(typeof(DivideByZeroException))]
-		//public void DivR4R4DivideByZeroException([R4Number]float a)
-		//{
-		//    Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "SingleTests", "DivR4R4", SingleTests.DivR4R4(a, (float)0), a, (float)0));
-		//}
+		[Test]
+		[Pending]
+		[ExpectedException(typeof(DivideByZeroException))]
+		public void DivR4R4DivideByZeroException([R4Number]float a)
+		{
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "SingleTests", "DivR4R4", SingleTests.DivR4R4(a, (float)0), a, (float)0));
+		}
 
 		[Test]
 		[Pending]
@@ -61,12 +63,13 @@ namespace Mosa.Test.Cases.CIL
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "SingleTests", "RemR4R4", SingleTests.RemR4R4(a, b), a, b));
 		}
 
-		//[Test]
-		//[ExpectedException(typeof(DivideByZeroException))]
-		//public void RemR4R4DivideByZeroException([R4Number]float a)
-		//{
-		//    Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "SingleTests", "RemR4R4", SingleTests.RemR4R4(a, (float)0), a, (float)0));
-		//}
+		[Test]
+		[Pending]
+		[ExpectedException(typeof(DivideByZeroException))]
+		public void RemR4R4DivideByZeroException([R4Number]float a)
+		{
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "SingleTests", "RemR4R4", SingleTests.RemR4R4(a, (float)0), a, (float)0));
+		}
 
 		[Test]
 		public void CeqR4R4([R4Number]float a, [R4Number]float b)

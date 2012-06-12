@@ -7,6 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
  */
 
+using System;
 using MbUnit.Framework;
 using Mosa.Test.Collection;
 using Mosa.Test.System;
@@ -47,12 +48,13 @@ namespace Mosa.Test.Cases.CIL
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "DoubleTests", "DivR8R8", DoubleTests.DivR8R8(a, b), a, b));
 		}
 
-		//[Test]
-		//[ExpectedException(typeof(DivideByZeroException))]
-		//public void DivR8R8DivideByZeroException([R8Number]double a)
-		//{
-		//    Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "DoubleTests", "DivR8R8", DoubleTests.DivR8R8(a, (double)0), a, (double)0));
-		//}
+		[Test]
+		[Pending]
+		[ExpectedException(typeof(DivideByZeroException))]
+		public void DivR8R8DivideByZeroException([R8Number]double a)
+		{
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "DoubleTests", "DivR8R8", DoubleTests.DivR8R8(a, (double)0), a, (double)0));
+		}
 
 		[Test]
 		[Pending]
@@ -61,12 +63,13 @@ namespace Mosa.Test.Cases.CIL
 			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "DoubleTests", "RemR8R8", DoubleTests.RemR8R8(a, b), a, b));
 		}
 
-		//[Test]
-		//[ExpectedException(typeof(DivideByZeroException))]
-		//public void RemR8R8DivideByZeroException([R8Number]double a)
-		//{
-		//    Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "DoubleTests", "RemR8R8", DoubleTests.RemR8R8(a, (double)0), a, (double)0));
-		//}
+		[Test]
+		[Pending]
+		[ExpectedException(typeof(DivideByZeroException))]
+		public void RemR8R8DivideByZeroException([R8Number]double a)
+		{
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "DoubleTests", "RemR8R8", DoubleTests.RemR8R8(a, (double)0), a, (double)0));
+		}
 
 		[Test]
 		public void CeqR8R8([R8Number]double a, [R8Number]double b)

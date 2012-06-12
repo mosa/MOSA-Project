@@ -15,13 +15,13 @@ using MbUnit.Framework;
 using Mosa.Test.Collection;
 using Mosa.Test.System;
 
-namespace Mosa.Test.Cases.IL
+namespace Mosa.Test.Cases.CIL
 {
 	[TestFixture]
-	public class CallOrder : TestCompilerAdapter
+	public class CallOrderFixture : TestCompilerAdapter
 	{
 
-		public CallOrder()
+		public CallOrderFixture()
 		{
 			settings.AddReference("Mosa.Test.Collection.dll");
 		}

@@ -7,10 +7,10 @@ using MbUnit.Framework;
 
 using Mosa.Test.Runtime.CompilerFramework;
 using Mosa.Test.Runtime.CompilerFramework.Numbers;
-namespace Mosa.Test.Cases.IL
+namespace Mosa.Test.Cases.CIL
 {
 	[TestFixture]
-	public class Call : TestCompilerAdapter
+	public class CallFixture : TestCompilerAdapter
 	{
 		public Call()
 		{

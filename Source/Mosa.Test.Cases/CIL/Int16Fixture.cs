@@ -52,12 +52,13 @@ namespace Mosa.Test.Cases.CIL
 			Assert.AreEqual(Int16Tests.DivI2I2(a, b), Run<int>("Mosa.Test.Collection", "Int16Tests", "DivI2I2", a, b));
 		}
 
-		//[Test]
-		//[ExpectedException(typeof(DivideByZeroException))]
-		//public void DivI2_I2DivideByZeroException([I2]short a)
-		//{
-		//    Assert.AreEqual(Int16Tests.DivI2I2(a, (short)0), Run<int>("Mosa.Test.Collection", "Int16Tests", "DivI2I2", a, (short)0));
-		//}
+		[Test]
+		[Pending]
+		[ExpectedException(typeof(DivideByZeroException))]
+		public void DivI2_I2DivideByZeroException([I2]short a)
+		{
+			Assert.AreEqual(Int16Tests.DivI2I2(a, (short)0), Run<int>("Mosa.Test.Collection", "Int16Tests", "DivI2I2", a, (short)0));
+		}
 
 		[Test]
 		public void RemI2_I2([I2]short a, [I2NotZero]short b)

@@ -1,5 +1,5 @@
 ﻿
-using Mosa.Test.Cases.IL;
+using Mosa.Test.Cases.CIL;
 using Mosa.Test.Compiler.Framework;
 
 namespace Mosa.Test.Debug
@@ -23,7 +23,7 @@ namespace Mosa.Test.Debug
 			//add.AddConstantCLeft('a', 'Z');
 			//add.AddConstantCLeft('a', 'Z');
 
-			Call call = new Call();
+			CallFixture call = new CallFixture();
 			call.CallU1((byte)1);
 
 			//Int32Fixture int32Fixture = new Int32Fixture();
@@ -47,8 +47,8 @@ namespace Mosa.Test.Debug
 			//    callVirtualFixture.TestBaseCall();
 			//    callVirtualFixture.TestVirtualCall();
 			//}
-
-			Comparison Comparison = new Cases.IL.Comparison();
+			
+			ComparisonFixture Comparison = new ComparisonFixture();
 			Comparison.CompareEqualI2I8(-1, -1);
 
 			return;

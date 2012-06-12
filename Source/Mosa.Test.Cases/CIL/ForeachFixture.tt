@@ -1,0 +1,30 @@
+﻿<#@ include file="../TemplateLibrary.txt" #>
+using System;
+using System.Collections.Generic;
+using System.Text;
+using MbUnit.Framework;
+
+using Mosa.Test.System;
+using Mosa.Test.System.Numbers;
+using Mosa.Test.Collection;
+
+namespace Mosa.Test.Cases.CIL
+{
+	[TestFixture]
+	public class ForeachFixture : TestCompilerAdapter
+	{
+		public ForeachFixture()
+		{
+			settings.AddReference("Mosa.Test.Collection.dll");
+		}
+		<# foreach (KeyValuePair<string, string> number in Integers) { #>
+
+		[Test]
+		public void Foreach<#= number.Value #>()
+		{
+			Assert.AreEqual(ForeachTests.Foreach<#= number.Value #>(), Run<<#= number.Key #>>("Mosa.Test.Collection", "ForeachTests", "Foreach<#= number.Value #>"));
+		}
+		<# } #>
+
+	}
+}

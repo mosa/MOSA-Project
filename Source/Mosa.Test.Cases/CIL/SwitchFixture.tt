@@ -8,12 +8,12 @@ using Mosa.Test.System;
 using Mosa.Test.System.Numbers;
 using Mosa.Test.Collection;
 
-namespace Mosa.Test.Cases.IL
+namespace Mosa.Test.Cases.CIL
 {
 	[TestFixture]
-	public class Switch : TestCompilerAdapter
+	public class SwitchFixture : TestCompilerAdapter
 	{
-		public Switch()
+		public SwitchFixture()
 		{
 			settings.AddReference("Mosa.Test.Collection.dll");
 		}

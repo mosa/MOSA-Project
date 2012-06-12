@@ -10,7 +10,7 @@ IF NOT EXIST reports MKDIR reports
 
 CD ..\bin
 
-%GALLIO% /rnf:Tests /rt:Xml-Inline /report-directory:..\Tests\reports Mosa.Test.Cases.dll "/filter:Namespace:Mosa.Test.Cases.CIL or Namespace:Mosa.Test.Cases.IL"
+%GALLIO% /rnf:Tests /rt:Xml-Inline /report-directory:..\Tests\reports Mosa.Test.Cases.dll "/filter:Namespace:Mosa.Test.Cases.CIL"
 
 CD ..\Tests
 

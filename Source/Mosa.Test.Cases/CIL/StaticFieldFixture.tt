@@ -5,7 +5,7 @@ using MbUnit.Framework;
 using Mosa.Test.System;
 using Mosa.Test.Collection;
 
-namespace Mosa.Test.Cases.IL
+namespace Mosa.Test.Cases.CIL
 {
 	[TestFixture]
 	public class StaticField : TestCompilerAdapter

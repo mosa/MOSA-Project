@@ -8,21 +8,20 @@ using MbUnit.Framework;
 using Mosa.Test.System;
 using Mosa.Test.System.Numbers;
 
-namespace Mosa.Test.Cases.IL
+namespace Mosa.Test.Cases.CIL
 {
 	[TestFixture]
-	public class Boxing : TestCompilerAdapter
+	public class Ldloca : TestCompilerAdapter
 	{
-		public Boxing()
+		public Ldloca()
 		{
 			settings.AddReference("Mosa.Test.Collection.dll");
 		}
 		<# foreach (KeyValuePair<string, string> number in NumbersWithChar) { #>
-		
 		[Test]
-		public void Box<#= number.Value #>([<#= number.Value #>]<#= number.Key #> value)
+		public void LdlocaCheckValue<#= number.Value #>([<#= number.Value #>]<#= number.Key #> a)
 		{
-			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "BoxingTests", "Box<#= number.Value #>", value));
+			Assert.IsTrue(Run<bool>("Mosa.Test.Collection", "LdlocaTests", "LdlocaCheckValue<#= number.Value #>", a, a));
 		}
 		<# } #>
 	}

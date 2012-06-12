@@ -85,6 +85,10 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>ComparisonTests.cs</LastGenOutput>
     </None>
+    <None Include="ForeachTests.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>ForeachTests.cs</LastGenOutput>
+    </None>
     <None Include="StaticFieldTests.tt">
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>StaticFieldTests.cs</LastGenOutput>
@@ -97,6 +101,11 @@
       <Generator>TextTemplatingFileGenerator</Generator>
       <LastGenOutput>StructTests.cs</LastGenOutput>
     </None>
+    <Compile Include="ForeachTests.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ForeachTests.tt</DependentUpon>
+    </Compile>
     <Compile Include="DelegateTests.cs" />
     <Compile Include="ExceptionHandlingTests.cs" />
     <Compile Include="GenericCallTests.cs">

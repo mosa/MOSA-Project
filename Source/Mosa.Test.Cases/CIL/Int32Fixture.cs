@@ -7,6 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
  */
 
+using System;
 using MbUnit.Framework;
 using Mosa.Test.Collection;
 using Mosa.Test.System;
@@ -51,12 +52,13 @@ namespace Mosa.Test.Cases.CIL
 			Assert.AreEqual(Int32Tests.DivI4I4(a, b), Run<int>("Mosa.Test.Collection", "Int32Tests", "DivI4I4", a, b));
 		}
 
-		//[Test]
-		//[ExpectedException(typeof(DivideByZeroException))]
-		//public void DivI4I4DivideByZeroException([I4]int a)
-		//{
-		//    Assert.AreEqual(Int32Tests.DivI4I4(a, (int)0), Run<int>("Mosa.Test.Collection", "Int32Tests", "DivI4I4", a, (int)0));
-		//}
+		[Test]
+		[Pending]
+		[ExpectedException(typeof(DivideByZeroException))]
+		public void DivI4I4DivideByZeroException([I4]int a)
+		{
+			Assert.AreEqual(Int32Tests.DivI4I4(a, (int)0), Run<int>("Mosa.Test.Collection", "Int32Tests", "DivI4I4", a, (int)0));
+		}
 
 		[Test]
 		public void RemI4I4([I4]int a, [I4NotZero]int b)
@@ -67,12 +69,13 @@ namespace Mosa.Test.Cases.CIL
 			Assert.AreEqual(Int32Tests.RemI4I4(a, b), Run<int>("Mosa.Test.Collection", "Int32Tests", "RemI4I4", a, b));
 		}
 
-		//[Test]
-		//[ExpectedException(typeof(DivideByZeroException))]
-		//public void RemI4I4DivideByZeroException([I4]int a)
-		//{
-		//    Assert.AreEqual(Int32Tests.RemI4I4(a, (int)0), Run<int>("Mosa.Test.Collection", "Int32Tests", "RemI4I4", a, (int)0));
-		//}
+		[Test]
+		[Pending]
+		[ExpectedException(typeof(DivideByZeroException))]
+		public void RemI4I4DivideByZeroException([I4]int a)
+		{
+			Assert.AreEqual(Int32Tests.RemI4I4(a, (int)0), Run<int>("Mosa.Test.Collection", "Int32Tests", "RemI4I4", a, (int)0));
+		}
 
 		[Test]
 		public void RetI4([I4]int a)

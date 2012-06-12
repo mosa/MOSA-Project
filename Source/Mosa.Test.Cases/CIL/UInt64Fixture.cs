@@ -49,12 +49,13 @@ namespace Mosa.Test.Cases.CIL
 			Assert.AreEqual(UInt64Tests.DivU8U8(a, b), Run<ulong>("Mosa.Test.Collection", "UInt64Tests", "DivU8U8", a, b));
 		}
 
-		//[Test]
-		//[ExpectedException(typeof(DivideByZeroException))]
-		//public void DivU8U8DivideByZeroException([U8]ulong a)
-		//{
-		//    Assert.AreEqual(UInt64Tests.DivU8U8(a, (ulong)0), Run<ulong>("Mosa.Test.Collection", "UInt64Tests", "DivU8U8", a, (ulong)0));
-		//}
+		[Test]
+		[Pending]
+		[ExpectedException(typeof(DivideByZeroException))]
+		public void DivU8U8DivideByZeroException([U8]ulong a)
+		{
+			Assert.AreEqual(UInt64Tests.DivU8U8(a, (ulong)0), Run<ulong>("Mosa.Test.Collection", "UInt64Tests", "DivU8U8", a, (ulong)0));
+		}
 
 		[Test]
 		public void RemU8U8([U8]ulong a, [U8NotZero]ulong b)
@@ -66,12 +67,13 @@ namespace Mosa.Test.Cases.CIL
 			Assert.AreEqual(UInt64Tests.RemU8U8(a, b), Run<ulong>("Mosa.Test.Collection", "UInt64Tests", "RemU8U8", a, b));
 		}
 
-		//[Test]
-		//[ExpectedException(typeof(DivideByZeroException))]
-		//public void RemU8U8DivideByZeroException([U8]ulong a)
-		//{
-		//    Assert.AreEqual(UInt64Tests.RemU8U8(a, (ulong)0), Run<ulong>("Mosa.Test.Collection", "UInt64Tests", "RemU8U8", a, (ulong)0));
-		//}
+		[Test]
+		[Pending]
+		[ExpectedException(typeof(DivideByZeroException))]
+		public void RemU8U8DivideByZeroException([U8]ulong a)
+		{
+			Assert.AreEqual(UInt64Tests.RemU8U8(a, (ulong)0), Run<ulong>("Mosa.Test.Collection", "UInt64Tests", "RemU8U8", a, (ulong)0));
+		}
 
 		[Test]
 		public void RetU8([U8]ulong a)

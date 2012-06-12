@@ -1,18 +1,13 @@
-﻿/*
- * (c) 2011 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
- *
- */
+﻿ 
 
-
+using System;
+using System.Collections.Generic;
+using System.Text;
 using MbUnit.Framework;
 
 using Mosa.Test.System;
 using Mosa.Test.System.Numbers;
+using Mosa.Test.Collection;
 
 namespace Mosa.Test.Cases.FIX.IL
 {

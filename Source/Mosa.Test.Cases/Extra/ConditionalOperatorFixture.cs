@@ -12,9 +12,9 @@ using Mosa.Test.Collection;
 namespace Mosa.Test.Cases.Extra
 {
 	[TestFixture]
-	public class ConditionalOperator : TestCompilerAdapter
+	public class ConditionalOperatorFixture : TestCompilerAdapter
 	{
-		public ConditionalOperator()
+		public ConditionalOperatorFixture()
 		{
 			settings.AddReference("Mosa.Test.Collection.dll");
 		}

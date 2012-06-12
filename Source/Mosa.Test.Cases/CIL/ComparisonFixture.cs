@@ -1,25 +1,20 @@
-﻿/*
- * (c) 2011 MOSA - The Managed Operating System Alliance
- *
- * Licensed under the terms of the New BSD License.
- *
- * Authors:
- *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
- *
- */
+﻿ 
 
-
+using System;
+using System.Collections.Generic;
+using System.Text;
 using MbUnit.Framework;
-using Mosa.Test.Collection;
+
 using Mosa.Test.System;
 using Mosa.Test.System.Numbers;
+using Mosa.Test.Collection;
 
-namespace Mosa.Test.Cases.IL
+namespace Mosa.Test.Cases.CIL
 {
 	[TestFixture]
-	public class Comparison : TestCompilerAdapter
+	public class ComparisonFixture : TestCompilerAdapter
 	{
-		public Comparison()
+		public ComparisonFixture()
 		{
 			settings.AddReference("Mosa.Test.Collection.dll");
 		}
