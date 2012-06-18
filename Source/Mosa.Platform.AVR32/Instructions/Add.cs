@@ -31,10 +31,10 @@ namespace Mosa.Platform.AVR32.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
-			if (context.Result is RegisterOperand && context.Operand1 is RegisterOperand)
+			if (context.Result is DefinedRegisterOperand && context.Operand1 is DefinedRegisterOperand)
 			{
-				RegisterOperand destinationRegister = context.Result as RegisterOperand;
-				RegisterOperand sourceRegiter = context.Operand1 as RegisterOperand;
+				DefinedRegisterOperand destinationRegister = context.Result as DefinedRegisterOperand;
+				DefinedRegisterOperand sourceRegiter = context.Operand1 as DefinedRegisterOperand;
 				emitter.EmitTwoRegisterInstructions((byte)0x00, (byte)sourceRegiter.Register.RegisterCode, (byte)destinationRegister.Register.RegisterCode);
 			}
 			else

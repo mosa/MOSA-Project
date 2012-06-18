@@ -55,7 +55,7 @@ namespace Mosa.Platform.x86.Instructions
 			}
 			else
 			{
-				RegisterOperand registerOperand = destinationOperand as RegisterOperand;
+				DefinedRegisterOperand registerOperand = destinationOperand as DefinedRegisterOperand;
 				emitter.Emit(RegCall, registerOperand);
 			}
 		}

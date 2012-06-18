@@ -78,6 +78,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BasicBlocks.cs" />
+    <Compile Include="Operands\RegisterOperand.cs" />
     <Compile Include="Operands\StackTemporaryOperand.cs" />
     <Compile Include="SimpleFastDominance.cs" />
     <Compile Include="LoopEdge.cs" />
@@ -387,7 +388,7 @@
     <Compile Include="Register.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Operands\RegisterOperand.cs">
+    <Compile Include="Operands\DefinedRegisterOperand.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Stages\StackLayoutStage.cs">

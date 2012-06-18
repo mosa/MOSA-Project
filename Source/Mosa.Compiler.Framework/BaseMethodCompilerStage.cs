@@ -13,6 +13,7 @@ using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.Metadata.Loader;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.Framework.Operands;
 
 namespace Mosa.Compiler.Framework
 {
@@ -151,9 +152,19 @@ namespace Mosa.Compiler.Framework
 			return new Context(instructionSet, index);
 		}
 
+		/// <summary>
+		/// Allocates the virtual register.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <returns></returns>
+		protected VirtualRegisterOperand AllocateVirtualRegister(SigType type)
+		{
+			return methodCompiler.VirtualRegisterLayout.AllocateVirtualRegister(type);
+		}
+
 		#endregion
 
-		#region Helper Methods
+		#region Trace Helper Methods
 
 		protected void Trace(CompilerEvent compilerEvent, string message)
 		{

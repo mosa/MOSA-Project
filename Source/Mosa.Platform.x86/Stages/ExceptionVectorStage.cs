@@ -59,7 +59,7 @@ namespace Mosa.Platform.x86.Stages
 
 			SymbolOperand exceptionMethod = SymbolOperand.FromMethod(runtimeMethod);
 
-			RegisterOperand esp = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.ESP);
+			DefinedRegisterOperand esp = new DefinedRegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.ESP);
 
 			InstructionSet instructionSet = new InstructionSet(100);
 			Context ctx = new Context(instructionSet);

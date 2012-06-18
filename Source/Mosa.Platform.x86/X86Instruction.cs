@@ -271,7 +271,7 @@ namespace Mosa.Platform.x86
 		{
 			RegisterBitmap registers = new RegisterBitmap();
 
-			RegisterOperand regOperand = context.Result as RegisterOperand;
+			DefinedRegisterOperand regOperand = context.Result as DefinedRegisterOperand;
 
 			if (regOperand != null)
 				registers.Set(regOperand.Register);
@@ -332,7 +332,7 @@ namespace Mosa.Platform.x86
 
 			if (includeRegister)
 			{
-				RegisterOperand regOperand = operand as RegisterOperand;
+				DefinedRegisterOperand regOperand = operand as DefinedRegisterOperand;
 
 				if (regOperand != null)
 					return regOperand.Register;

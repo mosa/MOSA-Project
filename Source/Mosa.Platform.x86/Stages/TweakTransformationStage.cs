@@ -56,7 +56,7 @@ namespace Mosa.Platform.x86.Stages
 		{
 			if (ctx.Operand1 is ConstantOperand)
 			{
-				RegisterOperand ecx = new RegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.ECX);
+				DefinedRegisterOperand ecx = new DefinedRegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.ECX);
 				Context before = ctx.InsertBefore();
 				before.SetInstruction(X86.Push, null, ecx);
 				before.AppendInstruction(X86.Mov, ecx, ctx.Operand1);
@@ -85,9 +85,9 @@ namespace Mosa.Platform.x86.Stages
 		{
 			Operand result = ctx.Result;
 
-			if (!(result is RegisterOperand))
+			if (!(result is DefinedRegisterOperand))
 			{
-				RegisterOperand register = new RegisterOperand(result.Type, GeneralPurposeRegister.EAX);
+				DefinedRegisterOperand register = new DefinedRegisterOperand(result.Type, GeneralPurposeRegister.EAX);
 				ctx.Result = register;
 				ctx.AppendInstruction(X86.Mov, result, register);
 			}
@@ -100,9 +100,9 @@ namespace Mosa.Platform.x86.Stages
 		void IX86Visitor.Cvttss2si(Context ctx)
 		{
 			Operand result = ctx.Result;
-			RegisterOperand register = new RegisterOperand(result.Type, GeneralPurposeRegister.EAX);
+			DefinedRegisterOperand register = new DefinedRegisterOperand(result.Type, GeneralPurposeRegister.EAX);
 
-			if (!(result is RegisterOperand))
+			if (!(result is DefinedRegisterOperand))
 			{
 				ctx.Result = register;
 				ctx.AppendInstruction(X86.Mov, result, register);
@@ -122,9 +122,9 @@ namespace Mosa.Platform.x86.Stages
 			else
 			{
 				Operand result = context.Result;
-				if (!(result is RegisterOperand))
+				if (!(result is DefinedRegisterOperand))
 				{
-					RegisterOperand ecx = new RegisterOperand(context.Result.Type, GeneralPurposeRegister.ECX);
+					DefinedRegisterOperand ecx = new DefinedRegisterOperand(context.Result.Type, GeneralPurposeRegister.ECX);
 					context.Result = ecx;
 					context.AppendInstruction(X86.Mov, result, ecx);
 				}
@@ -144,9 +144,9 @@ namespace Mosa.Platform.x86.Stages
 			else
 			{
 				Operand result = context.Result;
-				if (!(result is RegisterOperand))
+				if (!(result is DefinedRegisterOperand))
 				{
-					RegisterOperand ecx = new RegisterOperand(context.Result.Type, GeneralPurposeRegister.ECX);
+					DefinedRegisterOperand ecx = new DefinedRegisterOperand(context.Result.Type, GeneralPurposeRegister.ECX);
 					context.SetInstruction(X86.Movzx, ecx, context.Operand1);
 					context.AppendInstruction(X86.Mov, result, ecx);
 				}
@@ -163,7 +163,7 @@ namespace Mosa.Platform.x86.Stages
 
 			if (op is ConstantOperand)
 			{
-				RegisterOperand ebx = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.EBX);
+				DefinedRegisterOperand ebx = new DefinedRegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.EBX);
 				ctx.SetInstruction(X86.Push, null, ebx);
 				ctx.AppendInstruction(X86.Mov, ebx, op);
 				ctx.AppendInstruction(X86.IDiv, ebx);
@@ -186,7 +186,7 @@ namespace Mosa.Platform.x86.Stages
 
 			if (left is ConstantOperand)
 			{
-				RegisterOperand ecx = new RegisterOperand(left.Type, GeneralPurposeRegister.ECX);
+				DefinedRegisterOperand ecx = new DefinedRegisterOperand(left.Type, GeneralPurposeRegister.ECX);
 				Context before = ctx.InsertBefore();
 				before.SetInstruction(X86.Push, null, ecx);
 				before.AppendInstruction(X86.Mov, ecx, left);
@@ -195,7 +195,7 @@ namespace Mosa.Platform.x86.Stages
 			}
 			if (right is ConstantOperand && !Is32Bit(left))
 			{
-				RegisterOperand edx = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.EBX);
+				DefinedRegisterOperand edx = new DefinedRegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.EBX);
 				Context before = ctx.InsertBefore();
 				before.SetInstruction(X86.Push, null, edx);
 				if (IsSigned(left))
@@ -218,7 +218,7 @@ namespace Mosa.Platform.x86.Stages
 
 			if (context.Operand1 is ConstantOperand)
 			{
-				RegisterOperand ecx = new RegisterOperand(context.Operand1.Type, GeneralPurposeRegister.ECX);
+				DefinedRegisterOperand ecx = new DefinedRegisterOperand(context.Operand1.Type, GeneralPurposeRegister.ECX);
 				before.AppendInstruction(X86.Mov, ecx, context.Operand1);
 				context.Operand1 = ecx;
 			}
@@ -233,7 +233,7 @@ namespace Mosa.Platform.x86.Stages
 			if (context.Operand1 is ConstantOperand)
 				return;
 			
-			RegisterOperand ecx = new RegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.ECX);
+			DefinedRegisterOperand ecx = new DefinedRegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.ECX);
 			Context before = context.InsertBefore();
 			before.SetInstruction(X86.Mov, ecx, context.Operand1);
 			context.Operand1 = context.Result;
@@ -248,7 +248,7 @@ namespace Mosa.Platform.x86.Stages
 			if (context.Operand1 is ConstantOperand)
 				return;
 			
-			RegisterOperand ecx = new RegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.ECX);
+			DefinedRegisterOperand ecx = new DefinedRegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.ECX);
 			Context before = context.InsertBefore();
 			before.SetInstruction(X86.Mov, ecx, context.Operand1);
 			context.Operand1 = context.Result;
@@ -263,7 +263,7 @@ namespace Mosa.Platform.x86.Stages
 			if (context.Operand1 is ConstantOperand)
 				return;
 
-			RegisterOperand ecx = new RegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.ECX);
+			DefinedRegisterOperand ecx = new DefinedRegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.ECX);
 			Context before = context.InsertBefore();
 			before.SetInstruction(X86.Mov, ecx, context.Operand1);
 			context.Operand1 = context.Result;
@@ -283,10 +283,10 @@ namespace Mosa.Platform.x86.Stages
 			if (destinationOperand is SymbolOperand)
 				return;
 
-			if (!(destinationOperand is RegisterOperand))
+			if (!(destinationOperand is DefinedRegisterOperand))
 			{
 				Context before = context.InsertBefore();
-				RegisterOperand eax = new RegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.EAX);
+				DefinedRegisterOperand eax = new DefinedRegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.EAX);
 
 				before.SetInstruction(X86.Mov, eax, destinationOperand);
 				context.Operand1 = eax;

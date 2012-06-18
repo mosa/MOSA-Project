@@ -65,10 +65,10 @@ namespace Mosa.Platform.x86.Instructions
 					emitter.Emit(CONST32, context.Operand1, null);
 				return;
 			}
-			if (context.Operand1 is RegisterOperand)
+			if (context.Operand1 is DefinedRegisterOperand)
 			{
-				if ((context.Operand1 as RegisterOperand).Register is SegmentRegister)
-					switch (((context.Operand1 as RegisterOperand).Register as SegmentRegister).Segment)
+				if ((context.Operand1 as DefinedRegisterOperand).Register is SegmentRegister)
+					switch (((context.Operand1 as DefinedRegisterOperand).Register as SegmentRegister).Segment)
 					{
 						case SegmentRegister.SegmentType.CS: emitter.Emit(PUSH_CS, null, null); return;
 						case SegmentRegister.SegmentType.SS: emitter.Emit(PUSH_SS, null, null); return;

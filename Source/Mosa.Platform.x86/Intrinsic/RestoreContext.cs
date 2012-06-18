@@ -43,12 +43,12 @@ namespace Mosa.Platform.x86.Intrinsic
 
 			//uint ebp, uint esp, int eip
 
-			RegisterOperand edx = new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.EDX);
-			RegisterOperand ebp = new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.EBP);
-			RegisterOperand esp = new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.ESP);
+			DefinedRegisterOperand edx = new DefinedRegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.EDX);
+			DefinedRegisterOperand ebp = new DefinedRegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.EBP);
+			DefinedRegisterOperand esp = new DefinedRegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.ESP);
 
 			// Restore registers
-			context.SetInstruction(X86.Mov, new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.ESP), context.Operand1);
+			context.SetInstruction(X86.Mov, new DefinedRegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.ESP), context.Operand1);
 
 
 			// Jmp to EIP (stored in EDX)

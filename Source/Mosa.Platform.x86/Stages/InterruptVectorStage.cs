@@ -58,7 +58,7 @@ namespace Mosa.Platform.x86.Stages
 
 			SymbolOperand interruptMethod = SymbolOperand.FromMethod(runtimeMethod);
 
-			RegisterOperand esp = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.ESP);
+			DefinedRegisterOperand esp = new DefinedRegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.ESP);
 
 			for (int i = 0; i <= 255; i++)
 			{

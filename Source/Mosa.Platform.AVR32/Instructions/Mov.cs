@@ -33,9 +33,9 @@ namespace Mosa.Platform.AVR32.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
-            if (context.Result is RegisterOperand && context.Operand1 is ConstantOperand)
+            if (context.Result is DefinedRegisterOperand && context.Operand1 is ConstantOperand)
             {
-                RegisterOperand reg = context.Result as RegisterOperand;
+                DefinedRegisterOperand reg = context.Result as DefinedRegisterOperand;
                 ConstantOperand op = context.Operand1 as ConstantOperand;
 
                 int value = 0;
@@ -53,10 +53,10 @@ namespace Mosa.Platform.AVR32.Instructions
                         throw new OverflowException();
             }
             else
-                if ((context.Result is RegisterOperand) && (context.Operand1 is RegisterOperand))
+                if ((context.Result is DefinedRegisterOperand) && (context.Operand1 is DefinedRegisterOperand))
                 {
-                    RegisterOperand destination = context.Result as RegisterOperand;
-                    RegisterOperand source = context.Operand1 as RegisterOperand;
+                    DefinedRegisterOperand destination = context.Result as DefinedRegisterOperand;
+                    DefinedRegisterOperand source = context.Operand1 as DefinedRegisterOperand;
 
                     emitter.EmitTwoRegisterInstructions(0x09, (byte)source.Register.RegisterCode, (byte)destination.Register.RegisterCode); // mov Rd, Rs
                 }

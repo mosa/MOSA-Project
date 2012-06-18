@@ -282,7 +282,7 @@ namespace Mosa.Platform.x86
 						throw new NotSupportedException(String.Format(@"CilElementType.{0} is not supported.", op.Type.Type));
 				}
 			}
-			else if (op is RegisterOperand)
+			else if (op is DefinedRegisterOperand)
 			{
 				// Nothing to do...
 			}
@@ -411,7 +411,7 @@ namespace Mosa.Platform.x86
 						throw new NotSupportedException();
 				}
 			}
-			else if (op is RegisterOperand)
+			else if (op is DefinedRegisterOperand)
 			{
 				// Nothing to do...
 			}
@@ -439,7 +439,7 @@ namespace Mosa.Platform.x86
 			// FIXME: Handle the SIB byte
 			sib = null;
 
-			RegisterOperand rop1 = op1 as RegisterOperand, rop2 = op2 as RegisterOperand;
+			DefinedRegisterOperand rop1 = op1 as DefinedRegisterOperand, rop2 = op2 as DefinedRegisterOperand;
 			MemoryOperand mop1 = op1 as MemoryOperand, mop2 = op2 as MemoryOperand;
 
 			// Normalize the operand order

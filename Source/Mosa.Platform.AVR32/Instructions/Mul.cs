@@ -33,18 +33,18 @@ namespace Mosa.Platform.AVR32.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
-			if (context.Result is RegisterOperand && context.Operand1 is RegisterOperand && context.Operand2 is RegisterOperand)
+			if (context.Result is DefinedRegisterOperand && context.Operand1 is DefinedRegisterOperand && context.Operand2 is DefinedRegisterOperand)
 			{
-				RegisterOperand destination = context.Result as RegisterOperand;
-				RegisterOperand firstSource = context.Operand1 as RegisterOperand;
-				RegisterOperand secondSource = context.Operand2 as RegisterOperand;
+				DefinedRegisterOperand destination = context.Result as DefinedRegisterOperand;
+				DefinedRegisterOperand firstSource = context.Operand1 as DefinedRegisterOperand;
+				DefinedRegisterOperand secondSource = context.Operand2 as DefinedRegisterOperand;
 				emitter.EmitThreeRegistersUnshifted(0x24, (byte)firstSource.Register.RegisterCode, (byte)secondSource.Register.RegisterCode, (byte)destination.Register.RegisterCode);
 			}
 			else
-				if (context.Result is RegisterOperand && context.Operand1 is RegisterOperand && context.Operand2 is ConstantOperand)
+				if (context.Result is DefinedRegisterOperand && context.Operand1 is DefinedRegisterOperand && context.Operand2 is ConstantOperand)
 				{
-					RegisterOperand destination = context.Result as RegisterOperand;
-					RegisterOperand source = context.Operand1 as RegisterOperand;
+					DefinedRegisterOperand destination = context.Result as DefinedRegisterOperand;
+					DefinedRegisterOperand source = context.Operand1 as DefinedRegisterOperand;
 					ConstantOperand immediate = context.Operand2 as ConstantOperand;
 					int value = 0;
 					if (IsConstantBetween(immediate, -128, 127, out value))
@@ -55,10 +55,10 @@ namespace Mosa.Platform.AVR32.Instructions
 						throw new OverflowException();
 				}
 				else
-					if (context.Result is RegisterOperand && context.Operand1 is RegisterOperand)
+					if (context.Result is DefinedRegisterOperand && context.Operand1 is DefinedRegisterOperand)
 					{
-						RegisterOperand destination = context.Result as RegisterOperand;
-						RegisterOperand source = context.Operand1 as RegisterOperand;
+						DefinedRegisterOperand destination = context.Result as DefinedRegisterOperand;
+						DefinedRegisterOperand source = context.Operand1 as DefinedRegisterOperand;
 						emitter.EmitTwoRegisterInstructions(0x13, (byte)source.Register.RegisterCode, (byte)destination.Register.RegisterCode);
 					}
 					else

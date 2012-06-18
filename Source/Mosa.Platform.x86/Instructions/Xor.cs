@@ -34,8 +34,8 @@ namespace Mosa.Platform.x86.Instructions
 		public override RegisterBitmap GetInputRegisters(Context context)
 		{
 			// Special case when the input register does not matter, example: XOR EAX, EAX. 
-			RegisterOperand result = context.Result as RegisterOperand;
-			RegisterOperand operand = context.Operand1 as RegisterOperand;
+			DefinedRegisterOperand result = context.Result as DefinedRegisterOperand;
+			DefinedRegisterOperand operand = context.Operand1 as DefinedRegisterOperand;
 
 			if (result != null && operand != null && result.Register == operand.Register)
 				return NoRegisters;
@@ -52,10 +52,10 @@ namespace Mosa.Platform.x86.Instructions
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-			if ((destination is RegisterOperand) && (source is ConstantOperand)) return R_C;
-			if ((destination is RegisterOperand) && (source is MemoryOperand)) return R_M;
-			if ((destination is RegisterOperand) && (source is RegisterOperand)) return R_R;
-			if ((destination is MemoryOperand) && (source is RegisterOperand)) return M_R;
+			if ((destination is DefinedRegisterOperand) && (source is ConstantOperand)) return R_C;
+			if ((destination is DefinedRegisterOperand) && (source is MemoryOperand)) return R_M;
+			if ((destination is DefinedRegisterOperand) && (source is DefinedRegisterOperand)) return R_R;
+			if ((destination is MemoryOperand) && (source is DefinedRegisterOperand)) return M_R;
 			if ((destination is MemoryOperand) && (source is ConstantOperand)) return M_C;
 
 			throw new ArgumentException(@"No opcode for operand type.");

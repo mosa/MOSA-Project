@@ -70,7 +70,7 @@ namespace Mosa.Platform.AVR32
 			Operand result = context.Result;
 			Operand operand = context.Operand1;
 
-			if ((result is RegisterOperand) && (operand is ConstantOperand))
+			if ((result is DefinedRegisterOperand) && (operand is ConstantOperand))
 			{
 				context.SetInstruction(AVR32.Add, result, operand);
 			}
@@ -80,25 +80,25 @@ namespace Mosa.Platform.AVR32
 
 				}
 				else
-					if ((result is RegisterOperand) && (operand is MemoryOperand))
+					if ((result is DefinedRegisterOperand) && (operand is MemoryOperand))
 					{
 
 					}
 					else
-						if ((result is RegisterOperand) && (operand is RegisterOperand))
+						if ((result is DefinedRegisterOperand) && (operand is DefinedRegisterOperand))
 						{
 
 						}
 						else
-							if ((result is MemoryOperand) && (operand is RegisterOperand))
+							if ((result is MemoryOperand) && (operand is DefinedRegisterOperand))
 							{
 
 							}
 							else
 							if ((result is MemoryOperand) && (context.Operand1 is MemoryOperand))
 							{
-								RegisterOperand r8 = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.R8);
-								RegisterOperand r9 = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.R9);
+								DefinedRegisterOperand r8 = new DefinedRegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.R8);
+								DefinedRegisterOperand r9 = new DefinedRegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.R9);
 
 								context.SetInstruction(AVR32.Ld, r8, result);
 								context.AppendInstruction(AVR32.Ld, r9, operand);
@@ -186,7 +186,7 @@ namespace Mosa.Platform.AVR32
 
 			if (resultOperand != null)
 			{
-				RegisterOperand r8 = new RegisterOperand(BuiltInSigType.Byte, GeneralPurposeRegister.R8);
+				DefinedRegisterOperand r8 = new DefinedRegisterOperand(BuiltInSigType.Byte, GeneralPurposeRegister.R8);
 
 				//if (IsUnsigned(resultOperand))
 					//context.AppendInstruction(Instruction.Setcc, GetUnsignedConditionCode(condition), r8);
@@ -212,7 +212,7 @@ namespace Mosa.Platform.AVR32
 		/// <param name="context">The context.</param>
 		void IIRVisitor.Load(Context context)
 		{
-			RegisterOperand r8 = new RegisterOperand(context.Operand1.Type, GeneralPurposeRegister.R8);
+			DefinedRegisterOperand r8 = new DefinedRegisterOperand(context.Operand1.Type, GeneralPurposeRegister.R8);
 			Operand result = context.Result;
 			Operand operand = context.Operand1;
 			Operand offset = context.Operand2;
@@ -243,15 +243,15 @@ namespace Mosa.Platform.AVR32
 			Operand result = context.Result;
 			Operand operand = context.Operand1;
 
-			if ((result is RegisterOperand) && (operand is ConstantOperand))
+			if ((result is DefinedRegisterOperand) && (operand is ConstantOperand))
 			{
 				context.SetInstruction(AVR32.And, result, operand);
 			}
 			else
 				if ((result is MemoryOperand) && (operand is ConstantOperand))
 				{
-					RegisterOperand r8 = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.R8);
-					RegisterOperand r9 = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.R9);
+					DefinedRegisterOperand r8 = new DefinedRegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.R8);
+					DefinedRegisterOperand r9 = new DefinedRegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.R9);
 
 					context.SetInstruction(AVR32.Ld, r8, result);
 					context.SetInstruction(AVR32.Mov, r9, operand);
@@ -259,25 +259,25 @@ namespace Mosa.Platform.AVR32
 					context.AppendInstruction(AVR32.St, result, r8);
 				}
 				else
-					if ((result is RegisterOperand) && (operand is MemoryOperand))
+					if ((result is DefinedRegisterOperand) && (operand is MemoryOperand))
 					{
 
 					}
 					else
-						if ((result is RegisterOperand) && (operand is RegisterOperand))
+						if ((result is DefinedRegisterOperand) && (operand is DefinedRegisterOperand))
 						{
 
 						}
 						else
-							if ((result is MemoryOperand) && (operand is RegisterOperand))
+							if ((result is MemoryOperand) && (operand is DefinedRegisterOperand))
 							{
 
 							}
 							else
 								if ((result is MemoryOperand) && (context.Operand1 is MemoryOperand))
 								{
-									RegisterOperand r8 = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.R8);
-									RegisterOperand r9 = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.R9);
+									DefinedRegisterOperand r8 = new DefinedRegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.R8);
+									DefinedRegisterOperand r9 = new DefinedRegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.R9);
 
 									context.SetInstruction(AVR32.Ld, r8, result);
 									context.AppendInstruction(AVR32.Ld, r9, operand);
@@ -328,7 +328,7 @@ namespace Mosa.Platform.AVR32
 			{
 				if (context.Result is MemoryOperand && context.Operand1 is MemoryOperand)
 				{
-					RegisterOperand load = new RegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.R9);
+					DefinedRegisterOperand load = new DefinedRegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.R9);
 
 					context.SetInstruction(AVR32.Ld, load, operand);
 					context.AppendInstruction(AVR32.St, result, load);
@@ -343,24 +343,24 @@ namespace Mosa.Platform.AVR32
 					//context.AppendInstruction(Instruction.Mov, result, store);
 				}
 				else
-					if (context.Result is RegisterOperand && context.Operand1 is MemoryOperand)
+					if (context.Result is DefinedRegisterOperand && context.Operand1 is MemoryOperand)
 					{
 						context.ReplaceInstructionOnly(AVR32.Ld);
 					}
 					else
-						if (context.Result is MemoryOperand && context.Operand1 is RegisterOperand)
+						if (context.Result is MemoryOperand && context.Operand1 is DefinedRegisterOperand)
 						{
 							context.SetInstruction(AVR32.St, result, operand);
 						}
 						else
-							if (context.Result is RegisterOperand && context.Operand1 is RegisterOperand)
+							if (context.Result is DefinedRegisterOperand && context.Operand1 is DefinedRegisterOperand)
 							{
 								context.ReplaceInstructionOnly(AVR32.Mov);
 							}
 							else
 								if (context.Result is MemoryOperand && context.Operand1 is ConstantOperand)
 								{
-									RegisterOperand load = new RegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.R9);
+									DefinedRegisterOperand load = new DefinedRegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.R9);
 
 									context.SetInstruction(AVR32.Mov, load, operand);
 									context.AppendInstruction(AVR32.St, result, load);
@@ -386,13 +386,13 @@ namespace Mosa.Platform.AVR32
 		void IIRVisitor.Prologue(Context context)
 		{
 			SigType I = BuiltInSigType.Int32;
-			RegisterOperand r8 = new RegisterOperand(I, GeneralPurposeRegister.R8);
-			RegisterOperand r12 = new RegisterOperand(I, GeneralPurposeRegister.R12);
-			RegisterOperand r10 = new RegisterOperand(I, GeneralPurposeRegister.R10);
-			RegisterOperand r11 = new RegisterOperand(I, GeneralPurposeRegister.R11);
-			RegisterOperand sp = new RegisterOperand(I, GeneralPurposeRegister.SP);
-			RegisterOperand r7 = new RegisterOperand(I, GeneralPurposeRegister.R7);
-			RegisterOperand r6 = new RegisterOperand(I, GeneralPurposeRegister.R6);
+			DefinedRegisterOperand r8 = new DefinedRegisterOperand(I, GeneralPurposeRegister.R8);
+			DefinedRegisterOperand r12 = new DefinedRegisterOperand(I, GeneralPurposeRegister.R12);
+			DefinedRegisterOperand r10 = new DefinedRegisterOperand(I, GeneralPurposeRegister.R10);
+			DefinedRegisterOperand r11 = new DefinedRegisterOperand(I, GeneralPurposeRegister.R11);
+			DefinedRegisterOperand sp = new DefinedRegisterOperand(I, GeneralPurposeRegister.SP);
+			DefinedRegisterOperand r7 = new DefinedRegisterOperand(I, GeneralPurposeRegister.R7);
+			DefinedRegisterOperand r6 = new DefinedRegisterOperand(I, GeneralPurposeRegister.R6);
 
 			/* 
 			 * If you want to stop at the header of an emitted function, just set breakFlag 
@@ -444,7 +444,7 @@ namespace Mosa.Platform.AVR32
 				methodCompiler.Method.Signature.ReturnType.Type != CilElementType.U8)
 			{
 				// push edx
-				context.AppendInstruction(AVR32.Push, null, new RegisterOperand(I, GeneralPurposeRegister.R9));
+				context.AppendInstruction(AVR32.Push, null, new DefinedRegisterOperand(I, GeneralPurposeRegister.R9));
 			}
 		}
 
@@ -455,11 +455,11 @@ namespace Mosa.Platform.AVR32
 		void IIRVisitor.Epilogue(Context context)
 		{
 			SigType I = BuiltInSigType.IntPtr;
-			RegisterOperand r12 = new RegisterOperand(I, GeneralPurposeRegister.R12);
-			RegisterOperand r9 = new RegisterOperand(I, GeneralPurposeRegister.R9);
-			RegisterOperand r11 = new RegisterOperand(I, GeneralPurposeRegister.R11);
-			RegisterOperand sp = new RegisterOperand(I, GeneralPurposeRegister.SP);
-			RegisterOperand r7 = new RegisterOperand(I, GeneralPurposeRegister.R7);
+			DefinedRegisterOperand r12 = new DefinedRegisterOperand(I, GeneralPurposeRegister.R12);
+			DefinedRegisterOperand r9 = new DefinedRegisterOperand(I, GeneralPurposeRegister.R9);
+			DefinedRegisterOperand r11 = new DefinedRegisterOperand(I, GeneralPurposeRegister.R11);
+			DefinedRegisterOperand sp = new DefinedRegisterOperand(I, GeneralPurposeRegister.SP);
+			DefinedRegisterOperand r7 = new DefinedRegisterOperand(I, GeneralPurposeRegister.R7);
 
 			// Load EDX for int32 return values
 			if (methodCompiler.Method.Signature.ReturnType.Type != CilElementType.I8 &&
@@ -535,8 +535,8 @@ namespace Mosa.Platform.AVR32
 
 			ConstantOperand constantOffset = offset as ConstantOperand;
 
-			RegisterOperand r8 = new RegisterOperand(destination.Type, GeneralPurposeRegister.R8);
-			RegisterOperand r9 = new RegisterOperand(value.Type, GeneralPurposeRegister.R9);
+			DefinedRegisterOperand r8 = new DefinedRegisterOperand(destination.Type, GeneralPurposeRegister.R8);
+			DefinedRegisterOperand r9 = new DefinedRegisterOperand(value.Type, GeneralPurposeRegister.R9);
 
 			context.SetInstruction(AVR32.Ld, r8, destination);
 			context.AppendInstruction(AVR32.Ld, r9, value);
@@ -671,7 +671,7 @@ namespace Mosa.Platform.AVR32
 
 			if (offset != null)
 			{
-				var r8 = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.R8);
+				var r8 = new DefinedRegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.R8);
 				var destination = context.Result;
 				var source = context.Operand1 as MemoryOperand;
 				var elementType = type == null ? GetElementType(source.Type) : GetElementType(type);
@@ -740,7 +740,7 @@ namespace Mosa.Platform.AVR32
 			Operand offset = context.Operand2;
 			if (offset != null)
 			{
-				RegisterOperand r8 = new RegisterOperand(context.Operand1.Type, GeneralPurposeRegister.R8);
+				DefinedRegisterOperand r8 = new DefinedRegisterOperand(context.Operand1.Type, GeneralPurposeRegister.R8);
 				Operand result = context.Result;
 				Operand source = context.Operand1;
 				SigType elementType = GetElementType(source.Type);

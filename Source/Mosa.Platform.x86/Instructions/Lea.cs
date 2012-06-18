@@ -25,7 +25,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="emitter"></param>
 		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
-			RegisterOperand rop = (RegisterOperand)context.Result;
+			DefinedRegisterOperand rop = (DefinedRegisterOperand)context.Result;
 			MemoryOperand mop = (MemoryOperand)context.Operand1;
 			byte[] code;
 

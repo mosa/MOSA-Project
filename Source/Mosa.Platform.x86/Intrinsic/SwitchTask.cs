@@ -32,7 +32,7 @@ namespace Mosa.Platform.x86.Intrinsic
 		void IIntrinsicMethod.ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
 		{
 			SigType I4 = BuiltInSigType.Int32;
-			RegisterOperand esp = new RegisterOperand(I4, GeneralPurposeRegister.ESP);
+			DefinedRegisterOperand esp = new DefinedRegisterOperand(I4, GeneralPurposeRegister.ESP);
 
 			context.SetInstruction(X86.Mov, esp, context.Operand1);
 			context.AppendInstruction(X86.Popad);

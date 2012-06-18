@@ -119,7 +119,7 @@ namespace Mosa.Compiler.Framework.Stages
 			for (; !ctx.EndOfInstruction; ctx.GotoNext())
 			{
 				IInstruction instruction = ctx.Instruction; 
-				RegisterOperand temp = null;
+				DefinedRegisterOperand temp = null;
 				bool found = false;
 
 				if ((instruction is CIL.ArithmeticInstruction) && (instruction is CIL.BinaryInstruction))
@@ -183,7 +183,7 @@ namespace Mosa.Compiler.Framework.Stages
 							}
 							else
 							{
-								temp = (RegisterOperand)aeb.Var;
+								temp = (DefinedRegisterOperand)aeb.Var;
 							}
 
 							// FIXME PG

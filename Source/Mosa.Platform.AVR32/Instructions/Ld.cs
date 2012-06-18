@@ -31,9 +31,9 @@ namespace Mosa.Platform.AVR32.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
-			if (context.Result is RegisterOperand && context.Operand1 is MemoryOperand)
+			if (context.Result is DefinedRegisterOperand && context.Operand1 is MemoryOperand)
 			{
-				RegisterOperand result = context.Result as RegisterOperand;
+				DefinedRegisterOperand result = context.Result as DefinedRegisterOperand;
 				MemoryOperand operand = context.Operand1 as MemoryOperand;
 
 				int displacement = operand.Offset.ToInt32();

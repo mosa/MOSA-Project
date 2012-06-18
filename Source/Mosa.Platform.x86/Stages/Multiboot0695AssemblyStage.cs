@@ -155,9 +155,9 @@ namespace Mosa.Platform.x86.Stages
 				ITypeInitializerSchedulerStage typeInitializerSchedulerStage = this.compiler.Pipeline.FindFirst<ITypeInitializerSchedulerStage>();
 
 				SigType I4 = BuiltInSigType.Int32;
-				RegisterOperand ecx = new RegisterOperand(I4, GeneralPurposeRegister.ECX);
-				RegisterOperand eax = new RegisterOperand(I4, GeneralPurposeRegister.EAX);
-				RegisterOperand ebx = new RegisterOperand(I4, GeneralPurposeRegister.EBX);
+				DefinedRegisterOperand ecx = new DefinedRegisterOperand(I4, GeneralPurposeRegister.ECX);
+				DefinedRegisterOperand eax = new DefinedRegisterOperand(I4, GeneralPurposeRegister.EAX);
+				DefinedRegisterOperand ebx = new DefinedRegisterOperand(I4, GeneralPurposeRegister.EBX);
 
 				InstructionSet instructionSet = new InstructionSet(16);
 				Context ctx = new Context(instructionSet);
