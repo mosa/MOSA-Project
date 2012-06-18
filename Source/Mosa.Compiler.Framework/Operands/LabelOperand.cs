@@ -20,11 +20,6 @@ namespace Mosa.Compiler.Framework.Operands
 		#region Data members
 
 		/// <summary>
-		/// Holds the label.
-		/// </summary>
-		private int label;
-
-		/// <summary>
 		/// Holds the name
 		/// </summary>
 		private string name;
@@ -32,19 +27,6 @@ namespace Mosa.Compiler.Framework.Operands
 		#endregion // Data members
 
 		#region Construction
-
-		/// <summary>
-		/// Initializes a new instance of <see cref="LabelOperand"/>.
-		/// </summary>
-		/// <param name="type">The signature type of the operand data.</param>
-		/// <param name="baseRegister">The base register for label offsets.</param>
-		/// <param name="offset">The default offset from the base register.</param>
-		/// <param name="label">The additional offset as indicated by a label.</param>
-		public LabelOperand(SigType type, Register baseRegister, int offset, int label) :
-			base(baseRegister, type, new IntPtr(offset))
-		{
-			this.label = label;
-		}
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="LabelOperand"/> class.
@@ -70,15 +52,6 @@ namespace Mosa.Compiler.Framework.Operands
 			get { return name; }
 		}
 
-		/// <summary>
-		/// Gets the label of the operand.
-		/// </summary>
-		/// <value>The label.</value>
-		public int Label
-		{
-			get { return label; }
-		}
-
 		#endregion // Properties
 
 		#region Object Overrides
@@ -89,10 +62,7 @@ namespace Mosa.Compiler.Framework.Operands
 		/// <returns>A string representation of the operand.</returns>
 		public override string ToString()
 		{
-			if (name == null)
-				return String.Format("[L_{0}, ", label) + " " + base.ToString();
-			else
-				return name + " " + base.ToString();
+			return name + " " + base.ToString();
 		}
 
 		#endregion // Object Overrides

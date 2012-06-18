@@ -211,11 +211,6 @@ namespace Mosa.Platform.x86
 				// Add the displacement
 				codeStream.Write((op as StackOperand).Offset.ToInt32(), true);
 			}
-			else if (op is LabelOperand)
-			{
-				literals.Add(new Patch((op as LabelOperand).Label, codeStream.Position));
-				codeStream.WriteZeroBytes(4); // or codeStream.Position += 4;
-			}
 			else if (op is MemoryOperand)
 			{
 				// Add the displacement
@@ -349,12 +344,7 @@ namespace Mosa.Platform.x86
 			{
 				// Add the displacement
 				codeStream.Write((op as StackOperand).Offset.ToInt32(), true);
-			}
-			else if (op is LabelOperand)
-			{
-				literals.Add(new Patch((op as LabelOperand).Label, codeStream.Position));
-				codeStream.WriteZeroBytes(4);
-			}
+			}			
 			else if (op is MemoryOperand)
 			{
 				// Add the displacement

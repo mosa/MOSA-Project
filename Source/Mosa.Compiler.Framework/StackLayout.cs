@@ -31,7 +31,7 @@ namespace Mosa.Compiler.Framework
 		
 		private ParameterOperand[] parameters;
 
-		private StackSizeOperand stackSizeOperand;
+		//private StackSizeOperand stackSizeOperand;
 
 		#endregion // Data members
 
@@ -48,7 +48,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the stack size operand.
 		/// </summary>
-		public StackSizeOperand StackSizeOperand { get { return stackSizeOperand; } }
+		//public StackSizeOperand StackSizeOperand { get { return stackSizeOperand; } }
 
 		/// <summary>
 		/// Gets the parameters.
@@ -65,7 +65,7 @@ namespace Mosa.Compiler.Framework
 		public StackLayout(IArchitecture architecture, int parameters)
 		{
 			this.architecture = architecture;
-			this.stackSizeOperand = new StackSizeOperand(this);
+			//this.stackSizeOperand = new StackSizeOperand(this);
 			this.parameters = new ParameterOperand[parameters];
 		}
 

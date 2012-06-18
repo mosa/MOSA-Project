@@ -118,7 +118,6 @@
     <Compile Include="Platform\BasePlatformTransformationStage.cs" />
     <Compile Include="Platform\IRegisterUsage.cs" />
     <Compile Include="RegisterBitmap.cs" />
-    <Compile Include="Operands\StackSizeOperand.cs" />
     <Compile Include="StackLayout.cs" />
     <Compile Include="RegisterMap.cs" />
     <Compile Include="Stages\RegisterUsageAnalyzerStage.cs" />
@@ -291,7 +290,6 @@
     <Compile Include="InstructionSet.cs" />
     <Compile Include="InstructionData.cs" />
     <Compile Include="CIL\BaseCILInstruction.cs" />
-    <Compile Include="Operands\StringOperand.cs" />
     <Compile Include="Stages\ReverseBlockOrderStage.cs" />
     <Compile Include="RuntimeMethodData.cs" />
     <Compile Include="Stages\StrengthReductionStage.cs" />
@@ -376,9 +374,6 @@
     <Compile Include="BaseMethodCompiler.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Operands\ObjectFieldOperand.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Operands\Operand.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -398,9 +393,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="StackTypeCode.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Operands\StaticFieldOperand.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Operands\LocalVariableOperand.cs">
