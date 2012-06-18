@@ -41,9 +41,9 @@ namespace Mosa.Platform.x86.Instructions
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-			if ((destination is DefinedRegisterOperand) && (source is ConstantOperand)) return R_C;
+			if ((destination is RegisterOperand) && (source is ConstantOperand)) return R_C;
 			if ((destination is MemoryOperand) && (source is ConstantOperand)) return M_C;
-			if (destination is DefinedRegisterOperand) return R;
+			if (destination is RegisterOperand) return R;
 			if (destination is MemoryOperand) return M;
 
 			throw new ArgumentException(@"No opcode for operand type.");

@@ -70,7 +70,7 @@ namespace Mosa.Platform.AVR32
 			Operand result = context.Result;
 			Operand operand = context.Operand1;
 
-			if ((result is DefinedRegisterOperand) && (operand is ConstantOperand))
+			if ((result is RegisterOperand) && (operand is ConstantOperand))
 			{
 				context.SetInstruction(AVR32.Add, result, operand);
 			}
@@ -80,17 +80,17 @@ namespace Mosa.Platform.AVR32
 
 				}
 				else
-					if ((result is DefinedRegisterOperand) && (operand is MemoryOperand))
+					if ((result is RegisterOperand) && (operand is MemoryOperand))
 					{
 
 					}
 					else
-						if ((result is DefinedRegisterOperand) && (operand is DefinedRegisterOperand))
+						if ((result is RegisterOperand) && (operand is RegisterOperand))
 						{
 
 						}
 						else
-							if ((result is MemoryOperand) && (operand is DefinedRegisterOperand))
+							if ((result is MemoryOperand) && (operand is RegisterOperand))
 							{
 
 							}
@@ -243,7 +243,7 @@ namespace Mosa.Platform.AVR32
 			Operand result = context.Result;
 			Operand operand = context.Operand1;
 
-			if ((result is DefinedRegisterOperand) && (operand is ConstantOperand))
+			if ((result is RegisterOperand) && (operand is ConstantOperand))
 			{
 				context.SetInstruction(AVR32.And, result, operand);
 			}
@@ -259,17 +259,17 @@ namespace Mosa.Platform.AVR32
 					context.AppendInstruction(AVR32.St, result, r8);
 				}
 				else
-					if ((result is DefinedRegisterOperand) && (operand is MemoryOperand))
+					if ((result is RegisterOperand) && (operand is MemoryOperand))
 					{
 
 					}
 					else
-						if ((result is DefinedRegisterOperand) && (operand is DefinedRegisterOperand))
+						if ((result is RegisterOperand) && (operand is RegisterOperand))
 						{
 
 						}
 						else
-							if ((result is MemoryOperand) && (operand is DefinedRegisterOperand))
+							if ((result is MemoryOperand) && (operand is RegisterOperand))
 							{
 
 							}
@@ -343,17 +343,17 @@ namespace Mosa.Platform.AVR32
 					//context.AppendInstruction(Instruction.Mov, result, store);
 				}
 				else
-					if (context.Result is DefinedRegisterOperand && context.Operand1 is MemoryOperand)
+					if (context.Result is RegisterOperand && context.Operand1 is MemoryOperand)
 					{
 						context.ReplaceInstructionOnly(AVR32.Ld);
 					}
 					else
-						if (context.Result is MemoryOperand && context.Operand1 is DefinedRegisterOperand)
+						if (context.Result is MemoryOperand && context.Operand1 is RegisterOperand)
 						{
 							context.SetInstruction(AVR32.St, result, operand);
 						}
 						else
-							if (context.Result is DefinedRegisterOperand && context.Operand1 is DefinedRegisterOperand)
+							if (context.Result is RegisterOperand && context.Operand1 is RegisterOperand)
 							{
 								context.ReplaceInstructionOnly(AVR32.Mov);
 							}

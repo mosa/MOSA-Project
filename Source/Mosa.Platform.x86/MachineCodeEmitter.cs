@@ -282,7 +282,7 @@ namespace Mosa.Platform.x86
 						throw new NotSupportedException(String.Format(@"CilElementType.{0} is not supported.", op.Type.Type));
 				}
 			}
-			else if (op is DefinedRegisterOperand)
+			else if (op is RegisterOperand)
 			{
 				// Nothing to do...
 			}
@@ -411,7 +411,7 @@ namespace Mosa.Platform.x86
 						throw new NotSupportedException();
 				}
 			}
-			else if (op is DefinedRegisterOperand)
+			else if (op is RegisterOperand)
 			{
 				// Nothing to do...
 			}

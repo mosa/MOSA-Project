@@ -52,14 +52,14 @@ namespace Mosa.Platform.x86.Instructions
 			if (source is ConstantOperand)
 				return O_C;
 
-			if (destination is DefinedRegisterOperand)
+			if (destination is RegisterOperand)
 			{
 				if (IsChar(source))
 					return R_O_16;
 				else
 					return R_O;
 			}
-			if ((destination is MemoryOperand) && (source is DefinedRegisterOperand)) return M_R;
+			if ((destination is MemoryOperand) && (source is RegisterOperand)) return M_R;
 
 			throw new ArgumentException(@"No opcode for operand type.");
 		}

@@ -85,7 +85,7 @@ namespace Mosa.Platform.x86.Stages
 		{
 			Operand result = ctx.Result;
 
-			if (!(result is DefinedRegisterOperand))
+			if (!(result is RegisterOperand))
 			{
 				DefinedRegisterOperand register = new DefinedRegisterOperand(result.Type, GeneralPurposeRegister.EAX);
 				ctx.Result = register;
@@ -102,7 +102,7 @@ namespace Mosa.Platform.x86.Stages
 			Operand result = ctx.Result;
 			DefinedRegisterOperand register = new DefinedRegisterOperand(result.Type, GeneralPurposeRegister.EAX);
 
-			if (!(result is DefinedRegisterOperand))
+			if (!(result is RegisterOperand))
 			{
 				ctx.Result = register;
 				ctx.AppendInstruction(X86.Mov, result, register);
@@ -122,7 +122,7 @@ namespace Mosa.Platform.x86.Stages
 			else
 			{
 				Operand result = context.Result;
-				if (!(result is DefinedRegisterOperand))
+				if (!(result is RegisterOperand))
 				{
 					DefinedRegisterOperand ecx = new DefinedRegisterOperand(context.Result.Type, GeneralPurposeRegister.ECX);
 					context.Result = ecx;
@@ -144,7 +144,7 @@ namespace Mosa.Platform.x86.Stages
 			else
 			{
 				Operand result = context.Result;
-				if (!(result is DefinedRegisterOperand))
+				if (!(result is RegisterOperand))
 				{
 					DefinedRegisterOperand ecx = new DefinedRegisterOperand(context.Result.Type, GeneralPurposeRegister.ECX);
 					context.SetInstruction(X86.Movzx, ecx, context.Operand1);
@@ -283,7 +283,7 @@ namespace Mosa.Platform.x86.Stages
 			if (destinationOperand is SymbolOperand)
 				return;
 
-			if (!(destinationOperand is DefinedRegisterOperand))
+			if (!(destinationOperand is RegisterOperand))
 			{
 				Context before = context.InsertBefore();
 				DefinedRegisterOperand eax = new DefinedRegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.EAX);

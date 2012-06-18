@@ -15,7 +15,7 @@ namespace Mosa.Compiler.Framework.Operands
 	/// <summary>
 	/// Represents an operand stored in a machine specific register.
 	/// </summary>
-	public class DefinedRegisterOperand : Operand
+	public class DefinedRegisterOperand : RegisterOperand
 	{
 		#region Data members
 

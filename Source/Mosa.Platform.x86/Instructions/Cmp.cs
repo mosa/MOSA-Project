@@ -45,7 +45,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-			if ((source is MemoryOperand) && (third is DefinedRegisterOperand))
+			if ((source is MemoryOperand) && (third is RegisterOperand))
 			{
 				if (IsByte(source) || IsByte(third))
 					return M_R_8;
@@ -56,7 +56,7 @@ namespace Mosa.Platform.x86.Instructions
 				return M_R;
 			}
 
-			if ((source is DefinedRegisterOperand) && (third is MemoryOperand))
+			if ((source is RegisterOperand) && (third is MemoryOperand))
 			{
 				if (IsByte(third) || IsByte(source))
 					return R_M_8;
@@ -67,9 +67,9 @@ namespace Mosa.Platform.x86.Instructions
 				return R_M;
 			}
 
-			if ((source is DefinedRegisterOperand) && (third is DefinedRegisterOperand)) return R_R;
+			if ((source is RegisterOperand) && (third is RegisterOperand)) return R_R;
 			if ((source is MemoryOperand) && (third is ConstantOperand)) return M_C;
-			if ((source is DefinedRegisterOperand) && (third is ConstantOperand))
+			if ((source is RegisterOperand) && (third is ConstantOperand))
 			{
 				if (IsByte(third) || IsByte(source))
 					return R_C_8;

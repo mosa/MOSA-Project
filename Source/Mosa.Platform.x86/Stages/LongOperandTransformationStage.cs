@@ -1478,7 +1478,7 @@ namespace Mosa.Platform.x86.Stages
 			Operand op2 = context.Operand2;
 
 			Debug.Assert(op1 != null && op2 != null, @"IntegerCompareInstruction operand not memory!");
-			Debug.Assert(op0 is MemoryOperand || op0 is DefinedRegisterOperand, @"IntegerCompareInstruction result not memory and not register!");
+			Debug.Assert(op0 is MemoryOperand || op0 is RegisterOperand, @"IntegerCompareInstruction result not memory and not register!");
 
 			Operand op1L, op1H, op2L, op2H;
 			SplitLongOperand(op1, out op1L, out op1H);

@@ -47,7 +47,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-			if (!(destination is DefinedRegisterOperand))
+			if (!(destination is RegisterOperand))
 				throw new ArgumentException(@"Destination must be RegisterOperand.", @"destination");
 			if (source is ConstantOperand)
 				throw new ArgumentException(@"Source must not be ConstantOperand.", @"source");
@@ -57,15 +57,15 @@ namespace Mosa.Platform.x86.Instructions
 				case CilElementType.U1: goto case CilElementType.I1;
 				case CilElementType.I1:
 					{
-						if ((destination is DefinedRegisterOperand) && (source is DefinedRegisterOperand)) return R_X8;
-						if ((destination is DefinedRegisterOperand) && (source is MemoryOperand)) return R_X8;
+						if ((destination is RegisterOperand) && (source is RegisterOperand)) return R_X8;
+						if ((destination is RegisterOperand) && (source is MemoryOperand)) return R_X8;
 					}
 					break;
 				case CilElementType.Char: goto case CilElementType.U2;
 				case CilElementType.U2: goto case CilElementType.I2;
 				case CilElementType.I2:
-					if ((destination is DefinedRegisterOperand) && (source is DefinedRegisterOperand)) return R_X16;
-					if ((destination is DefinedRegisterOperand) && (source is MemoryOperand)) return R_X16;
+					if ((destination is RegisterOperand) && (source is RegisterOperand)) return R_X16;
+					if ((destination is RegisterOperand) && (source is MemoryOperand)) return R_X16;
 					break;
 				case CilElementType.Boolean: goto case CilElementType.I1;
 				default:

@@ -58,7 +58,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
-			if (context.Result is DefinedRegisterOperand)
+			if (context.Result is RegisterOperand)
 			{
 				if ((context.Result as DefinedRegisterOperand).Register is SegmentRegister)
 					switch (((context.Result as DefinedRegisterOperand).Register as SegmentRegister).Segment)

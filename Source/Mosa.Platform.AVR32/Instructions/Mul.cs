@@ -33,7 +33,7 @@ namespace Mosa.Platform.AVR32.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
-			if (context.Result is DefinedRegisterOperand && context.Operand1 is DefinedRegisterOperand && context.Operand2 is DefinedRegisterOperand)
+			if (context.Result is RegisterOperand && context.Operand1 is RegisterOperand && context.Operand2 is RegisterOperand)
 			{
 				DefinedRegisterOperand destination = context.Result as DefinedRegisterOperand;
 				DefinedRegisterOperand firstSource = context.Operand1 as DefinedRegisterOperand;
@@ -41,7 +41,7 @@ namespace Mosa.Platform.AVR32.Instructions
 				emitter.EmitThreeRegistersUnshifted(0x24, (byte)firstSource.Register.RegisterCode, (byte)secondSource.Register.RegisterCode, (byte)destination.Register.RegisterCode);
 			}
 			else
-				if (context.Result is DefinedRegisterOperand && context.Operand1 is DefinedRegisterOperand && context.Operand2 is ConstantOperand)
+				if (context.Result is RegisterOperand && context.Operand1 is RegisterOperand && context.Operand2 is ConstantOperand)
 				{
 					DefinedRegisterOperand destination = context.Result as DefinedRegisterOperand;
 					DefinedRegisterOperand source = context.Operand1 as DefinedRegisterOperand;
@@ -55,7 +55,7 @@ namespace Mosa.Platform.AVR32.Instructions
 						throw new OverflowException();
 				}
 				else
-					if (context.Result is DefinedRegisterOperand && context.Operand1 is DefinedRegisterOperand)
+					if (context.Result is RegisterOperand && context.Operand1 is RegisterOperand)
 					{
 						DefinedRegisterOperand destination = context.Result as DefinedRegisterOperand;
 						DefinedRegisterOperand source = context.Operand1 as DefinedRegisterOperand;

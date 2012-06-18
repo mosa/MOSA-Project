@@ -65,7 +65,7 @@ namespace Mosa.Platform.x86.Instructions
 					emitter.Emit(CONST32, context.Operand1, null);
 				return;
 			}
-			if (context.Operand1 is DefinedRegisterOperand)
+			if (context.Operand1 is RegisterOperand)
 			{
 				if ((context.Operand1 as DefinedRegisterOperand).Register is SegmentRegister)
 					switch (((context.Operand1 as DefinedRegisterOperand).Register as SegmentRegister).Segment)

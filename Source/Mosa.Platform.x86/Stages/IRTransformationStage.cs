@@ -147,7 +147,7 @@ namespace Mosa.Platform.x86.Stages
 			context.Operand2 = right;
 
 			// Swap the operands if necessary...
-			if (left is MemoryOperand && right is DefinedRegisterOperand)
+			if (left is MemoryOperand && right is RegisterOperand)
 			{
 				SwapComparisonOperands(context);
 				left = context.Operand1;
@@ -174,7 +174,7 @@ namespace Mosa.Platform.x86.Stages
 				case ConditionCode.UnsignedLessThan: code = ConditionCode.LessThan; break;
 			}
 
-			if (!(left is DefinedRegisterOperand))
+			if (!(left is RegisterOperand))
 			{
 				DefinedRegisterOperand xmm2 = new DefinedRegisterOperand(left.Type, SSE2Register.XMM2);
 				if (left.Type.Type == CilElementType.R4)

@@ -56,7 +56,7 @@ namespace Mosa.Platform.x86.Instructions
 				emitter.Call(destinationSymbol);
 			}
 			else
-				if (context.Operand1 is DefinedRegisterOperand)
+				if (context.Operand1 is RegisterOperand)
 					emitter.Emit(JmpReg, context.Operand1);
 				else
 					emitter.EmitBranch(JMP, context.BranchTargets[0]);
