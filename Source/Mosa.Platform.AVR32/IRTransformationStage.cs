@@ -70,12 +70,12 @@ namespace Mosa.Platform.AVR32
 			Operand result = context.Result;
 			Operand operand = context.Operand1;
 
-			if ((result is RegisterOperand) && (operand is ConstantOperand))
+			if ((result is RegisterOperand) && (operand.IsConstant))
 			{
 				context.SetInstruction(AVR32.Add, result, operand);
 			}
 			else
-				if ((result is MemoryOperand) && (operand is ConstantOperand))
+				if ((result is MemoryOperand) && (operand.IsConstant))
 				{
 
 				}
@@ -243,12 +243,12 @@ namespace Mosa.Platform.AVR32
 			Operand result = context.Result;
 			Operand operand = context.Operand1;
 
-			if ((result is RegisterOperand) && (operand is ConstantOperand))
+			if ((result is RegisterOperand) && (operand.IsConstant))
 			{
 				context.SetInstruction(AVR32.And, result, operand);
 			}
 			else
-				if ((result is MemoryOperand) && (operand is ConstantOperand))
+				if ((result is MemoryOperand) && (operand.IsConstant))
 				{
 					DefinedRegisterOperand r8 = new DefinedRegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.R8);
 					DefinedRegisterOperand r9 = new DefinedRegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.R9);
@@ -358,7 +358,7 @@ namespace Mosa.Platform.AVR32
 								context.ReplaceInstructionOnly(AVR32.Mov);
 							}
 							else
-								if (context.Result is MemoryOperand && context.Operand1 is ConstantOperand)
+								if (context.Result is MemoryOperand && context.Operand1.IsConstant)
 								{
 									DefinedRegisterOperand load = new DefinedRegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.R9);
 

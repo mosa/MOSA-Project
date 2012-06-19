@@ -71,9 +71,9 @@ namespace Mosa.Platform.x86.Stages
 
 			if (op1.StackType != StackTypeCode.F)
 			{
-				if (IsSigned(op1) && !(op1 is ConstantOperand))
+				if (IsSigned(op1) && !(op1.IsConstant))
 					ctx.InsertBefore().SetInstruction(IRInstruction.SignExtendedMove, eax, op1);
-				else if (IsUnsigned(op1) && !(op1 is ConstantOperand))
+				else if (IsUnsigned(op1) && !(op1.IsConstant))
 					ctx.InsertBefore().SetInstruction(IRInstruction.ZeroExtendedMove, eax, op1);
 				else
 					ctx.InsertBefore().SetInstruction(X86.Mov, eax, op1);
@@ -82,7 +82,7 @@ namespace Mosa.Platform.x86.Stages
 			{
 				if (op1.Type.Type == CilElementType.R4)
 				{
-					if (op1 is ConstantOperand)
+					if (op1.IsConstant)
 					{
 						Context before = ctx.InsertBefore();
 						before.SetInstruction(X86.Mov, eax, op1);

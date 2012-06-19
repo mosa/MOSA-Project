@@ -85,7 +85,7 @@ namespace Mosa.Compiler.Framework.Stages
 					if (!(ctx.Instruction is IR.Move))
 						continue;
 
-					if (!(ctx.Operand1 is ConstantOperand))
+					if (!(ctx.Operand1.IsConstant))
 						continue;
 
 					var sop = ctx.Result as SsaOperand;

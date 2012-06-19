@@ -49,9 +49,9 @@ namespace Mosa.Platform.x86.Stages
 				return;
 			}
 
-			Debug.Assert(operand is MemoryOperand || operand is ConstantOperand, @"Long operand not memory or constant.");
+			Debug.Assert(operand is MemoryOperand || operand.IsConstant, @"Long operand not memory or constant.");
 
-			if (operand is ConstantOperand)
+			if (operand.IsConstant)
 				SplitFromConstantOperand(operand, out operandLow, out operandHigh);
 			else
 				SplitFromNonConstantOperand(operand, out operandLow, out operandHigh);
@@ -1783,7 +1783,7 @@ namespace Mosa.Platform.x86.Stages
 			else
 			{
 				//FIXME: Move to IRTransformationStage
-				if (context.Operand2 is ConstantOperand && context.Operand1.Type.Type == CilElementType.Char)
+				if (context.Operand2.IsConstant && context.Operand1.Type.Type == CilElementType.Char)
 				{
 					DefinedRegisterOperand ecx = new DefinedRegisterOperand(context.Operand1.Type, GeneralPurposeRegister.ECX);
 					context.InsertBefore().SetInstruction(X86.Mov, ecx, context.Operand2);

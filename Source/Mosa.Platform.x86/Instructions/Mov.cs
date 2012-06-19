@@ -66,8 +66,8 @@ namespace Mosa.Platform.x86.Instructions
 				else if ((source as DefinedRegisterOperand).Register is SegmentRegister)
 					throw new ArgumentException(@"TODO: No opcode for move from segment register");
 
-			if ((destination is RegisterOperand) && (source is ConstantOperand)) return R_C;
-			if ((destination is MemoryOperand) && (source is ConstantOperand)) return M_C;
+			if ((destination is RegisterOperand) && (source.IsConstant)) return R_C;
+			if ((destination is MemoryOperand) && (source.IsConstant)) return M_C;
 			if ((destination is RegisterOperand) && (source is LabelOperand)) return R_C;
 			if ((destination is MemoryOperand) && (source is LabelOperand)) return M_C;
 			if ((destination is RegisterOperand) && (source is SymbolOperand)) return R_C;

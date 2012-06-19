@@ -29,11 +29,11 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			bool multiplyByZero = false;
 
-			if (context.Operand1 is ConstantOperand)
+			if (context.Operand1.IsConstant)
 				if (IsValueZero(context.Result.Type.Type, context.Operand1 as ConstantOperand))
 					multiplyByZero = true;
 
-			if (context.Operand2 is ConstantOperand)
+			if (context.Operand2.IsConstant)
 				if (IsValueZero(context.Result.Type.Type, context.Operand2 as ConstantOperand))
 					multiplyByZero = true;
 
@@ -43,14 +43,14 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 			}
 
-			if (context.Operand1 is ConstantOperand)
+			if (context.Operand1.IsConstant)
 				if (IsValueOne(context.Result.Type.Type, context.Operand1 as ConstantOperand))
 				{
 					context.SetInstruction(IR.IRInstruction.Move, context.Result, context.Operand2);
 					return;
 				}
 
-			if (context.Operand2 is ConstantOperand)
+			if (context.Operand2.IsConstant)
 				if (IsValueOne(context.Result.Type.Type, context.Operand2 as ConstantOperand))
 				{
 					context.SetInstruction(IR.IRInstruction.Move, context.Result, context.Operand1);

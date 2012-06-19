@@ -70,11 +70,11 @@ namespace Mosa.Platform.x86
 		/// <param name="dest">The dest.</param>
 		public void Emit(OpCode opCode, Operand dest)
 		{
-			byte? sib, modRM;
-			Operand displacement;
-
 			// Write the opcode
 			codeStream.Write(opCode.Code, 0, opCode.Code.Length);
+
+			byte? sib = null, modRM = null;
+			Operand displacement = null;
 
 			// Write the mod R/M byte
 			modRM = CalculateModRM(opCode.RegField, dest, null, out sib, out displacement);
@@ -98,14 +98,14 @@ namespace Mosa.Platform.x86
 		/// <param name="src">The source operand.</param>
 		public void Emit(OpCode opCode, Operand dest, Operand src)
 		{
-			byte? sib, modRM;
-			Operand displacement;
-
 			// Write the opcode
 			codeStream.Write(opCode.Code, 0, opCode.Code.Length);
 
 			if (dest == null && src == null)
 				return;
+
+			byte? sib = null, modRM = null;
+			Operand displacement = null;
 
 			// Write the mod R/M byte
 			modRM = CalculateModRM(opCode.RegField, dest, src, out sib, out displacement);
@@ -121,11 +121,11 @@ namespace Mosa.Platform.x86
 				WriteDisplacement(displacement);
 
 			// Add immediate bytes
-			if (dest is ConstantOperand)
+			if (dest.IsConstant)
 				WriteImmediate(dest);
-			if (src is ConstantOperand)
+			if (src != null && src.IsConstant)
 				WriteImmediate(src);
-			if (src is SymbolOperand)
+			if (src != null && src is SymbolOperand)
 				WriteDisplacement(src);
 		}
 
@@ -138,14 +138,14 @@ namespace Mosa.Platform.x86
 		/// <param name="third">The third.</param>
 		public void Emit(OpCode opCode, Operand dest, Operand src, Operand third)
 		{
-			byte? sib = null, modRM = null;
-			Operand displacement = null;
-
 			// Write the opcode
 			codeStream.Write(opCode.Code, 0, opCode.Code.Length);
 
 			if (dest == null && src == null)
 				return;
+
+			byte? sib = null, modRM = null;
+			Operand displacement = null;
 
 			// Write the mod R/M byte
 			modRM = CalculateModRM(opCode.RegField, dest, src, out sib, out displacement);
@@ -161,7 +161,7 @@ namespace Mosa.Platform.x86
 				WriteDisplacement(displacement);
 
 			// Add immediate bytes
-			if (third is ConstantOperand)
+			if (third != null && third.IsConstant)
 				WriteImmediate(third);
 		}
 
@@ -216,7 +216,7 @@ namespace Mosa.Platform.x86
 				// Add the displacement
 				codeStream.Write((op as MemoryOperand).Offset.ToInt32(), true);
 			}
-			else if (op is ConstantOperand)
+			else if (op.IsConstant)
 			{
 				// Add the immediate
 				ConstantOperand co = (ConstantOperand)op;
@@ -350,7 +350,7 @@ namespace Mosa.Platform.x86
 				// Add the displacement
 				codeStream.Write((op as MemoryOperand).Offset.ToInt32(), true);
 			}
-			else if (op is ConstantOperand)
+			else if (op.IsConstant)
 			{
 				// Add the immediate
 				ConstantOperand co = (ConstantOperand)op;

@@ -40,7 +40,7 @@ namespace Mosa.Platform.x86.Instructions
 			if ((source is RegisterOperand) && (third is RegisterOperand)) return opcode;
 			if ((source is RegisterOperand) && (third is MemoryOperand)) return opcode;
 			if ((source is RegisterOperand) && (third is LabelOperand)) return opcode;
-			if ((source is RegisterOperand) && (third is ConstantOperand)) return opcode;
+			if ((source is RegisterOperand) && (third.IsConstant)) return opcode;
 			throw new ArgumentException(@"No opcode for operand type.");
 		}
 

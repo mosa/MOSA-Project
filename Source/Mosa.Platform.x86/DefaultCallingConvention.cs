@@ -253,7 +253,7 @@ namespace Mosa.Platform.x86
 				ctx.AppendInstruction(X86.Mov, rop, op);
 				op = rop;
 			}
-			else if (op is ConstantOperand && op.StackType == StackTypeCode.Int64)
+			else if (op.IsConstant && op.StackType == StackTypeCode.Int64)
 			{
 				Operand opL, opH;
 				DefinedRegisterOperand eax = new DefinedRegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.EAX);

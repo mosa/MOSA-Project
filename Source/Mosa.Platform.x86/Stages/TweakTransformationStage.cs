@@ -31,13 +31,13 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="ctx">The context.</param>
 		void IX86Visitor.Mov(Context ctx)
 		{
-			if (ctx.Result is ConstantOperand)
+			if (ctx.Result.IsConstant)
 			{
 				ctx.SetInstruction(X86.Nop);
 				return;
 			}
 
-			if (ctx.Operand1 is ConstantOperand && ctx.Operand1.StackType == StackTypeCode.F)
+			if (ctx.Operand1.IsConstant && ctx.Operand1.StackType == StackTypeCode.F)
 				ctx.Operand1 = EmitConstant(ctx.Operand1);
 
 			// Check that we're not dealing with floating point values
@@ -54,7 +54,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="ctx">The context.</param>
 		void IX86Visitor.Mul(Context ctx)
 		{
-			if (ctx.Operand1 is ConstantOperand)
+			if (ctx.Operand1.IsConstant)
 			{
 				DefinedRegisterOperand ecx = new DefinedRegisterOperand(ctx.Operand1.Type, GeneralPurposeRegister.ECX);
 				Context before = ctx.InsertBefore();
@@ -73,7 +73,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="ctx">The context.</param>
 		void IX86Visitor.Cvtss2sd(Context ctx)
 		{
-			if (ctx.Operand2 is ConstantOperand)
+			if (ctx.Operand2 != null && ctx.Operand2.IsConstant)	// FIXME: shouldn't there always be a second operand?
 				ctx.SetInstruction(X86.Cvtss2sd, ctx.Operand1, EmitConstant(ctx.Operand2));
 		}
 
@@ -161,7 +161,7 @@ namespace Mosa.Platform.x86.Stages
 		{
 			Operand op = ctx.Operand1;
 
-			if (op is ConstantOperand)
+			if (op.IsConstant)
 			{
 				DefinedRegisterOperand ebx = new DefinedRegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.EBX);
 				ctx.SetInstruction(X86.Push, null, ebx);
@@ -184,7 +184,7 @@ namespace Mosa.Platform.x86.Stages
 			Operand left = ctx.Operand1;
 			Operand right = ctx.Operand2;
 
-			if (left is ConstantOperand)
+			if (left.IsConstant)
 			{
 				DefinedRegisterOperand ecx = new DefinedRegisterOperand(left.Type, GeneralPurposeRegister.ECX);
 				Context before = ctx.InsertBefore();
@@ -193,7 +193,7 @@ namespace Mosa.Platform.x86.Stages
 				ctx.Operand1 = ecx;
 				ctx.AppendInstruction(X86.Pop, ecx);
 			}
-			if (right is ConstantOperand && !Is32Bit(left))
+			if (right.IsConstant && !Is32Bit(left))
 			{
 				DefinedRegisterOperand edx = new DefinedRegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.EBX);
 				Context before = ctx.InsertBefore();
@@ -216,7 +216,7 @@ namespace Mosa.Platform.x86.Stages
 			Context before = context.InsertBefore();
 			before.SetInstruction(X86.Cdq);
 
-			if (context.Operand1 is ConstantOperand)
+			if (context.Operand1.IsConstant)
 			{
 				DefinedRegisterOperand ecx = new DefinedRegisterOperand(context.Operand1.Type, GeneralPurposeRegister.ECX);
 				before.AppendInstruction(X86.Mov, ecx, context.Operand1);
@@ -230,7 +230,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IX86Visitor.Sar(Context context)
 		{
-			if (context.Operand1 is ConstantOperand)
+			if (context.Operand1.IsConstant)
 				return;
 			
 			DefinedRegisterOperand ecx = new DefinedRegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.ECX);
@@ -245,7 +245,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IX86Visitor.Shl(Context context)
 		{
-			if (context.Operand1 is ConstantOperand)
+			if (context.Operand1.IsConstant)
 				return;
 			
 			DefinedRegisterOperand ecx = new DefinedRegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.ECX);
@@ -260,7 +260,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IX86Visitor.Shr(Context context)
 		{
-			if (context.Operand1 is ConstantOperand)
+			if (context.Operand1.IsConstant)
 				return;
 
 			DefinedRegisterOperand ecx = new DefinedRegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.ECX);

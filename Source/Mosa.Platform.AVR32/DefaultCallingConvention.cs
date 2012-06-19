@@ -259,7 +259,7 @@ namespace Mosa.Platform.AVR32
 				ctx.AppendInstruction(AVR32.Mov, rop, op);
 				op = rop;
 			}
-			else if (op is ConstantOperand && op.StackType == StackTypeCode.Int64)
+			else if (op.IsConstant && op.StackType == StackTypeCode.Int64)
 			{
 				//Operand opL, opH;
 				//RegisterOperand r8 = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.R8);

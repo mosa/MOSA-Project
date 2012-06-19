@@ -22,6 +22,9 @@ namespace Mosa.Compiler.Framework.Operands
 
 		#region Data members
 
+		[Flags]
+		private enum OperandType { Constant = 1, StackLocal = 2, Parameter = 4, LocalVariable = 8, Symbol = 16, Register = 32, PhysicalRegister = 64, SSA = 128, RuntimeMember = 256, Memory = 512, Virtual = 1024 };
+
 		/// <summary>
 		/// The namespace of the operand.
 		/// </summary>
@@ -36,6 +39,11 @@ namespace Mosa.Compiler.Framework.Operands
 		/// Holds a list of instructions, which use this operand.
 		/// </summary>
 		private List<int> uses;
+		
+		/// <summary>
+		/// Constant value.
+		/// </summary>
+		protected object value;
 
 		#endregion // Data members
 
@@ -48,25 +56,42 @@ namespace Mosa.Compiler.Framework.Operands
 		protected Operand(SigType type)
 		{
 			this.type = type;
+			definitions = new List<int>();
+			uses = new List<int>();
 		}
 
 		#endregion // Construction
 
+		#region Static Factory Constructors
+
+		//public Operand CreateConstantOperand(SigType type, object value)
+		//{
+		//    return new Operand(type);
+		//}
+
+		#endregion // Static Factory Constructors
+
 		#region Properties
+
+		/// <summary>
+		/// Returns the type of the operand.
+		/// </summary>
+		public SigType Type { get { return type; } }
 
 		/// <summary>
 		/// Returns a list of instructions, which use this operand.
 		/// </summary>
-		public List<int> Definitions
-		{
-			get
-			{
-				if (definitions == null)
-					definitions = new List<int>();
+		public List<int> Definitions { get { return definitions; } }
 
-				return definitions;
-			}
-		}
+		/// <summary>
+		/// Returns the value of the constant.
+		/// </summary>
+		public object Value { get { return value; } }
+
+		/// <summary>
+		/// Returns a list of instructions, which use this operand.
+		/// </summary>
+		public List<int> Uses { get { return uses; } }
 
 		/// <summary>
 		/// Determines if the operand is a register.
@@ -79,12 +104,81 @@ namespace Mosa.Compiler.Framework.Operands
 		public virtual bool IsStackLocal { get { return false; } }
 
 		/// <summary>
+		/// Determines if the operand is a constant variable.
+		/// </summary>
+		public virtual bool IsConstant { get { return false; } }
+
+		/// <summary>
 		/// Returns the stack type of the operand.
 		/// </summary>
 		public StackTypeCode StackType { get { return StackTypeFromSigType(type); } }
 
+		#endregion // Properties
+
+		#region Methods
+
 		/// <summary>
-		/// Retrieves the stack type From a sig type.
+		/// Replaces this operand in all uses and defs with the given operand.
+		/// </summary>
+		/// <param name="replacement">The replacement operand.</param>
+		/// <param name="instructionSet">The instruction set.</param>
+		public void Replace(Operand replacement, InstructionSet instructionSet)
+		{
+
+			// Iterate all definition sites first
+			foreach (int index in Definitions.ToArray())
+			{
+				Context ctx = new Context(instructionSet, index);
+
+				if (ctx.Result != null)
+				{
+					// Is this the operand?
+					if (ReferenceEquals(ctx.Result, this))
+					{
+						ctx.Result = replacement;
+					}
+
+				}
+			}
+
+			// Iterate all use sites
+			foreach (int index in Uses.ToArray())
+			{
+				Context ctx = new Context(instructionSet, index);
+
+				int opIdx = 0;
+				foreach (Operand r in ctx.Operands)
+				{
+					// Is this the operand?
+					if (ReferenceEquals(r, this))
+					{
+						ctx.SetOperand(opIdx, replacement);
+					}
+
+					opIdx++;
+				}
+			}
+		}
+
+		#endregion // Methods
+
+		#region Object Overrides
+
+		/// <summary>
+		/// Returns a string representation of <see cref="Operand"/>.
+		/// </summary>
+		/// <returns>A string representation of the operand.</returns>
+		public override string ToString()
+		{
+			return String.Format("[{0}]", type);
+		}
+
+		#endregion // Object Overrides
+
+		#region Static Methods
+
+		/// <summary>
+		/// Retrieves the stack type from a sig type.
 		/// </summary>
 		/// <param name="type">The signature type to convert to a stack type code.</param>
 		/// <returns>The equivalent stack type code.</returns>
@@ -150,86 +244,7 @@ namespace Mosa.Compiler.Framework.Operands
 			return result;
 		}
 
-		/// <summary>
-		/// Returns the type of the operand.
-		/// </summary>
-		public SigType Type { get { return type; } }
-
-		/// <summary>
-		/// Returns a list of instructions, which use this operand.
-		/// </summary>
-		public List<int> Uses
-		{
-			get
-			{
-				if (uses == null)
-					uses = new List<int>();
-
-				return uses;
-			}
-		}
-
-		#endregion // Properties
-
-		#region Methods
-
-		/// <summary>
-		/// Replaces this operand in all uses and defs with the given operand.
-		/// </summary>
-		/// <param name="replacement">The replacement operand.</param>
-		/// <param name="instructionSet">The instruction set.</param>
-		public void Replace(Operand replacement, InstructionSet instructionSet)
-		{
-
-			// Iterate all definition sites first
-			foreach (int index in Definitions.ToArray())
-			{
-				Context ctx = new Context(instructionSet, index);
-
-				if (ctx.Result != null)
-				{
-					// Is this the operand?
-					if (ReferenceEquals(ctx.Result, this))
-					{
-						ctx.Result = replacement;
-					}
-
-				}
-			}
-
-			// Iterate all use sites
-			foreach (int index in Uses.ToArray())
-			{
-				Context ctx = new Context(instructionSet, index);
-
-				int opIdx = 0;
-				foreach (Operand r in ctx.Operands)
-				{
-					// Is this the operand?
-					if (ReferenceEquals(r, this))
-					{
-						ctx.SetOperand(opIdx, replacement);
-					}
-
-					opIdx++;
-				}
-			}
-		}
-
-		#endregion // Methods
-
-		#region Object Overrides
-
-		/// <summary>
-		/// Returns a string representation of <see cref="Operand"/>.
-		/// </summary>
-		/// <returns>A string representation of the operand.</returns>
-		public override string ToString()
-		{
-			return String.Format("[{0}]", type);
-		}
-
-		#endregion // Object Overrides
+		#endregion // Static Methods
 
 	}
 }

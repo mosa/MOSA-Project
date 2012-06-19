@@ -68,8 +68,8 @@ namespace Mosa.Platform.x86.Instructions
 			}
 
 			if ((source is RegisterOperand) && (third is RegisterOperand)) return R_R;
-			if ((source is MemoryOperand) && (third is ConstantOperand)) return M_C;
-			if ((source is RegisterOperand) && (third is ConstantOperand))
+			if ((source is MemoryOperand) && (third.IsConstant)) return M_C;
+			if ((source is RegisterOperand) && (third.IsConstant))
 			{
 				if (IsByte(third) || IsByte(source))
 					return R_C_8;

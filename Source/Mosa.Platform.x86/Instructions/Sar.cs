@@ -20,14 +20,14 @@ namespace Mosa.Platform.x86.Instructions
 	/// </summary>
 	public sealed class Sar : TwoOperandInstruction
 	{
-		
+
 		#region  Data Members
 
 		private static readonly OpCode R = new OpCode(new byte[] { 0xD3 }, 7);
 		private static readonly OpCode M = new OpCode(new byte[] { 0xD3 }, 7);
 		private static readonly OpCode R_C = new OpCode(new byte[] { 0xC1 }, 7);
 		private static readonly OpCode M_C = new OpCode(new byte[] { 0xC1 }, 7);
-		
+
 		#endregion
 
 		#region Methods
@@ -40,25 +40,25 @@ namespace Mosa.Platform.x86.Instructions
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-			if ((destination is RegisterOperand) && (source is ConstantOperand)) return R_C;
-			if ((destination is MemoryOperand) && (source is ConstantOperand)) return M_C;
+			if ((destination is RegisterOperand) && (source.IsConstant)) return R_C;
+			if ((destination is MemoryOperand) && (source.IsConstant)) return M_C;
 			if (destination is RegisterOperand) return R;
 			if (destination is MemoryOperand) return M;
 			throw new ArgumentException(@"No opcode for operand type.");
 		}
 
 		/// <summary>
-		/// 
+		/// Emits the specified platform instruction.
 		/// </summary>
-		/// <param name="context"></param>
-		/// <param name="emitter"></param>
+		/// <param name="context">The context.</param>
+		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
 			OpCode opCode = ComputeOpCode(context.Result, context.Operand1, context.Operand2);
-			if (context.Operand1 is ConstantOperand)
+			if (context.Operand1.IsConstant)
 			{
-				ConstantOperand op = context.Operand1 as ConstantOperand;
-				op = new ConstantOperand(BuiltInSigType.Byte, op.Value);
+				// FIXME: Conversion not necessary constant already byte.
+				ConstantOperand op = new ConstantOperand(BuiltInSigType.Byte, context.Operand1.Value);
 				emitter.Emit(opCode, context.Result, op);
 			}
 			else

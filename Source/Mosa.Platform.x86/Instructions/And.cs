@@ -44,12 +44,12 @@ namespace Mosa.Platform.x86.Instructions
 			{
 				if (source is MemoryOperand) return R_M;
 				if (source is RegisterOperand) return R_R;
-				if (source is ConstantOperand) return R_C;
+				if (source.IsConstant) return R_C;
 			}
 			else if (destination is MemoryOperand)
 			{
 				if (source is RegisterOperand) return M_R;
-				if (source is ConstantOperand) return M_C;
+				if (source.IsConstant) return M_C;
 			}
 
 			throw new ArgumentException(@"No opcode for operand type.");

@@ -45,10 +45,6 @@ namespace Mosa.Compiler.Framework.Operands
 
 		#region Data members
 
-		/// <summary>
-		/// Constant value.
-		/// </summary>
-		private object value;
 
 		#endregion // Data members
 
@@ -69,13 +65,7 @@ namespace Mosa.Compiler.Framework.Operands
 
 		#region Properties
 
-		/// <summary>
-		/// Returns the value of the constant.
-		/// </summary>
-		public object Value
-		{
-			get { return value; }
-		}
+		public override bool IsConstant { get { return true; } }
 
 		#endregion // Properties
 

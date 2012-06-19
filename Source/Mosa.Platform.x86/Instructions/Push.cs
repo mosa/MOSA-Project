@@ -55,7 +55,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
-			if (context.Operand1 is ConstantOperand)
+			if (context.Operand1.IsConstant)
 			{
 				if (IsByte(context.Operand1))
 					emitter.Emit(CONST8, context.Operand1, null);

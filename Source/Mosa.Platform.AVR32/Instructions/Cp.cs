@@ -41,7 +41,7 @@ namespace Mosa.Platform.AVR32.Instructions
 				emitter.EmitTwoRegisterInstructions(0x03, (byte)source.Register.RegisterCode, (byte)destination.Register.RegisterCode); // cp.w Rd, Rs
 			}
 			else
-				if (context.Result is RegisterOperand && context.Operand1 is ConstantOperand)
+				if (context.Result is RegisterOperand && context.Operand1.IsConstant)
 				{
 					DefinedRegisterOperand destination = context.Result as DefinedRegisterOperand;
 					ConstantOperand immediate = context.Operand1 as ConstantOperand;

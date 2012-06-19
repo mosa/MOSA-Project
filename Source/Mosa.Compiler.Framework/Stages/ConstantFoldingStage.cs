@@ -80,7 +80,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </returns>
 		private bool HasFoldableArguments(Context context)
 		{
-			return context.Operand1 is ConstantOperand && context.Operand2 is ConstantOperand;
+			return context.Operand1.IsConstant && context.Operand2.IsConstant;
 		}
 
 		/// <summary>

@@ -690,7 +690,7 @@ namespace Mosa.Platform.x86.Stages
 			Context before = context.InsertBefore();
 			before.SetInstruction(X86.Xor, edx, edx);
 
-			if (context.Operand1 is ConstantOperand)
+			if (context.Operand1.IsConstant)
 			{
 				DefinedRegisterOperand ecx = new DefinedRegisterOperand(context.Operand1.Type, GeneralPurposeRegister.ECX);
 				before.AppendInstruction(X86.Mov, ecx, context.Operand1);

@@ -41,7 +41,7 @@ namespace Mosa.Platform.AVR32.Instructions
 				emitter.EmitThreeRegistersUnshifted(0x24, (byte)firstSource.Register.RegisterCode, (byte)secondSource.Register.RegisterCode, (byte)destination.Register.RegisterCode);
 			}
 			else
-				if (context.Result is RegisterOperand && context.Operand1 is RegisterOperand && context.Operand2 is ConstantOperand)
+				if (context.Result is RegisterOperand && context.Operand1 is RegisterOperand && context.Operand2.IsConstant)
 				{
 					DefinedRegisterOperand destination = context.Result as DefinedRegisterOperand;
 					DefinedRegisterOperand source = context.Operand1 as DefinedRegisterOperand;

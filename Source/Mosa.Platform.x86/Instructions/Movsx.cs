@@ -49,7 +49,7 @@ namespace Mosa.Platform.x86.Instructions
 		{
 			if (!(destination is RegisterOperand))
 				throw new ArgumentException(@"Destination must be RegisterOperand.", @"destination");
-			if (source is ConstantOperand)
+			if (source.IsConstant)
 				throw new ArgumentException(@"Source must not be ConstantOperand.", @"source");
 
 			switch (source.Type.Type)
