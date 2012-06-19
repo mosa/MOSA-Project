@@ -47,20 +47,6 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MemberOperand"/> class.
 		/// </summary>
-		/// <param name="method">The method to reference.</param>
-		/// <exception cref="System.ArgumentNullException"><paramref name="method"/> is null.</exception>
-		public MemberOperand(RuntimeMethod method) :
-			base(null, BuiltInSigType.IntPtr, IntPtr.Zero)
-		{
-			if (method == null)
-				throw new ArgumentNullException(@"method");
-
-			this.member = method;
-		}
-
-		/// <summary>
-		/// Initializes a new instance of the <see cref="MemberOperand"/> class.
-		/// </summary>
 		/// <param name="member">The member to reference.</param>
 		/// <param name="type">The type of data held in the operand.</param>
 		/// <param name="offset">The offset from the base register or absolute address to retrieve.</param>

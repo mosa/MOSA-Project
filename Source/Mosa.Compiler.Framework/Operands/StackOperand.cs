@@ -17,14 +17,6 @@ namespace Mosa.Compiler.Framework.Operands
 	/// </summary>
 	public abstract class StackOperand : MemoryOperand
 	{
-		#region Data members
-
-		/// <summary>
-		/// Holds the SSA version of the stack operand.
-		/// </summary>
-		private int ssaVersion;
-
-		#endregion // Data members
 
 		#region Construction
 
@@ -49,16 +41,6 @@ namespace Mosa.Compiler.Framework.Operands
 		/// <value>The name of the stack operand.</value>
 		public abstract string Name { get; }
 
-		/// <summary>
-		/// Gets or sets the SSA version of the operand.
-		/// </summary>
-		/// <value>The version of the stack operand.</value>
-		public int Version
-		{
-			get { return ssaVersion; }
-			set { ssaVersion = value; }
-		}
-
 		#endregion // Properties
 
 		#region Operand Overrides
@@ -69,12 +51,7 @@ namespace Mosa.Compiler.Framework.Operands
 		/// <returns>A string representation of the operand.</returns>
 		public sealed override string ToString()
 		{
-			string tmp = base.ToString();
-
-			if (ssaVersion == 0)
-				return String.Format(@"{0} {1}", this.Name, tmp);
-			else
-				return String.Format(@"{0} {1}", this.Name, tmp.Insert(tmp.Length - 1, String.Format(" #{0}", ssaVersion)));
+			return String.Format(@"{0} {1}", Name, base.ToString());
 		}
 
 		#endregion // Operand Overrides

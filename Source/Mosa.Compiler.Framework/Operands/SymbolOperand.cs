@@ -58,9 +58,7 @@ namespace Mosa.Compiler.Framework.Operands
 		/// <returns>The created symbol operand.</returns>
 		public static SymbolOperand FromMethod(RuntimeMethod method)
 		{
-			string symbolName = method.ToString();
-
-			return new SymbolOperand(BuiltInSigType.IntPtr, symbolName);
+			return new SymbolOperand(BuiltInSigType.IntPtr, method.ToString());
 		}
 
 		/// <summary>

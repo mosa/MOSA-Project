@@ -19,14 +19,6 @@ namespace Mosa.Compiler.Framework.Operands
 	/// </summary>
 	public abstract class Operand
 	{
-		#region Static data members
-
-		/// <summary>
-		/// Undefined operand constant.
-		/// </summary>
-		public static readonly Operand Undefined = null;
-
-		#endregion // Static data members
 
 		#region Data members
 
@@ -156,54 +148,6 @@ namespace Mosa.Compiler.Framework.Operands
 					throw new NotSupportedException(@"Can't convert stack type code to SigType.");
 			}
 			return result;
-		}
-
-		public int Precision
-		{
-			get
-			{
-				switch (this.Type.Type)
-				{
-					case CilElementType.I1:
-						return 8;
-
-					case CilElementType.U1:
-						return 8;
-
-					case CilElementType.I2:
-						return 16;
-
-					case CilElementType.U2:
-						return 16;
-
-					case CilElementType.I4:
-						return 32;
-
-					case CilElementType.U4:
-						return 32;
-
-					case CilElementType.I8:
-						return 64;
-
-					case CilElementType.U8:
-						return 64;
-
-					case CilElementType.R4:
-						return 32;
-
-					case CilElementType.R8:
-						return 64;
-
-					case CilElementType.Boolean:
-						return 32;
-
-					case CilElementType.Char:
-						return 16;
-
-					default:
-						return 32;
-				}
-			}
 		}
 
 		/// <summary>
