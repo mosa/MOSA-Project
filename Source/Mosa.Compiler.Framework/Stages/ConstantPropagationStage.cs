@@ -7,6 +7,8 @@
  *  Simon Wollwage (rootnode) <rootnode@mosa-project.org>
  */
 
+//TODO: Remove this class - replaced by SSAOptimizations
+
 using Mosa.Compiler.Framework.Operands;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;

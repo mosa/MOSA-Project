@@ -7,6 +7,8 @@
  *  Simon Wollwage (rootnode) <rootnode@mosa-project.org>
  */
 
+//TODO: Remove this class - replaced by SSAOptimizations
+
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Operands;
 
