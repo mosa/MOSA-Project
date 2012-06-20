@@ -157,7 +157,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="type">The type.</param>
 		/// <returns></returns>
-		protected VirtualRegisterOperand AllocateVirtualRegister(SigType type)
+		protected Operand AllocateVirtualRegister(SigType type)
 		{
 			return methodCompiler.VirtualRegisterLayout.AllocateVirtualRegister(type);
 		}

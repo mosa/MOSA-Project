@@ -8,6 +8,7 @@
  *  Simon Wollwage (rootnode) <simon_wollwage@yahoo.co.jp>
  */
 
+using System.Diagnostics;
 using Mosa.Compiler.Framework.Operands;
 
 namespace Mosa.Compiler.Framework.Stages
@@ -30,28 +31,28 @@ namespace Mosa.Compiler.Framework.Stages
 			bool multiplyByZero = false;
 
 			if (context.Operand1.IsConstant)
-				if (IsValueZero(context.Result.Type.Type, context.Operand1 as ConstantOperand))
+				if (IsValueZero(context.Result.Type.Type, context.Operand1))
 					multiplyByZero = true;
 
 			if (context.Operand2.IsConstant)
-				if (IsValueZero(context.Result.Type.Type, context.Operand2 as ConstantOperand))
+				if (IsValueZero(context.Result.Type.Type, context.Operand2))
 					multiplyByZero = true;
 
 			if (multiplyByZero)
 			{
-				context.SetInstruction(IR.IRInstruction.Move, context.Result, new ConstantOperand(context.Result.Type, 0));
+				context.SetInstruction(IR.IRInstruction.Move, context.Result, Operand.CreateConstant(context.Result.Type, 0));
 				return;
 			}
 
 			if (context.Operand1.IsConstant)
-				if (IsValueOne(context.Result.Type.Type, context.Operand1 as ConstantOperand))
+				if (IsValueOne(context.Result.Type.Type, context.Operand1))
 				{
 					context.SetInstruction(IR.IRInstruction.Move, context.Result, context.Operand2);
 					return;
 				}
 
 			if (context.Operand2.IsConstant)
-				if (IsValueOne(context.Result.Type.Type, context.Operand2 as ConstantOperand))
+				if (IsValueOne(context.Result.Type.Type, context.Operand2))
 				{
 					context.SetInstruction(IR.IRInstruction.Move, context.Result, context.Operand1);
 					return;
@@ -66,8 +67,9 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <returns>
 		/// 	<c>true</c> if the value is zero; otherwise, <c>false</c>.
 		/// </returns>
-		private static bool IsValueZero(Metadata.CilElementType cilElementType, ConstantOperand constantOperand)
+		private static bool IsValueZero(Metadata.CilElementType cilElementType, Operand constantOperand)
 		{
+			Debug.Assert(constantOperand.IsConstant);
 			switch (cilElementType)
 			{
 				case Metadata.CilElementType.Char: goto case Metadata.CilElementType.U2;
@@ -93,8 +95,9 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <returns>
 		/// 	<c>true</c> if the value is one; otherwise, <c>false</c>.
 		/// </returns>
-		private static bool IsValueOne(Metadata.CilElementType cilElementType, ConstantOperand constantOperand)
+		private static bool IsValueOne(Metadata.CilElementType cilElementType, Operand constantOperand)
 		{
+			Debug.Assert(constantOperand.IsConstant);
 			switch (cilElementType)
 			{
 				case Metadata.CilElementType.Char: goto case Metadata.CilElementType.U2;

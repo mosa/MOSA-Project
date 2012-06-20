@@ -40,15 +40,15 @@ namespace Mosa.Platform.x86.Instructions
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-			if (destination is RegisterOperand)
+			if (destination.IsRegister)
 			{
 				if (source is MemoryOperand) return R_M;
-				if (source is RegisterOperand) return R_R;
+				if (source.IsRegister) return R_R;
 				if (source.IsConstant) return R_C;
 			}
 			else if (destination is MemoryOperand)
 			{
-				if (source is RegisterOperand) return M_R;
+				if (source.IsRegister) return M_R;
 				if (source.IsConstant) return M_C;
 			}
 

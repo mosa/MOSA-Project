@@ -61,8 +61,8 @@ namespace Mosa.Platform.x86.Stages
 			Operand op2 = ctx.Operand2;
 
 			// Create registers for different data types
-			DefinedRegisterOperand eax = new DefinedRegisterOperand(op1.Type, op1.StackType == StackTypeCode.F ? (Register)SSE2Register.XMM0 : GeneralPurposeRegister.EAX);
-			DefinedRegisterOperand storeOperand = new DefinedRegisterOperand(result.Type, result.StackType == StackTypeCode.F ? (Register)SSE2Register.XMM0 : GeneralPurposeRegister.EAX);
+			Operand eax = Operand.CreateCPURegister(op1.Type, op1.StackType == StackTypeCode.F ? (Register)SSE2Register.XMM0 : GeneralPurposeRegister.EAX);
+			Operand storeOperand = Operand.CreateCPURegister(result.Type, result.StackType == StackTypeCode.F ? (Register)SSE2Register.XMM0 : GeneralPurposeRegister.EAX);
 
 			ctx.Result = storeOperand;
 			ctx.Operand1 = op2;

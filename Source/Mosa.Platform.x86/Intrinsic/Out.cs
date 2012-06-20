@@ -33,8 +33,8 @@ namespace Mosa.Platform.x86.Intrinsic
 			Operand operand1 = context.Operand1;
 			Operand operand2 = context.Operand2;
 
-			DefinedRegisterOperand edx = new DefinedRegisterOperand(operand1.Type, GeneralPurposeRegister.EDX);
-			DefinedRegisterOperand eax = new DefinedRegisterOperand(operand2.Type, GeneralPurposeRegister.EAX);
+			Operand edx = Operand.CreateCPURegister(operand1.Type, GeneralPurposeRegister.EDX);
+			Operand eax = Operand.CreateCPURegister(operand2.Type, GeneralPurposeRegister.EAX);
 
 			context.SetInstruction(X86.Mov, edx, operand1);
 			context.AppendInstruction(X86.Mov, eax, operand2);

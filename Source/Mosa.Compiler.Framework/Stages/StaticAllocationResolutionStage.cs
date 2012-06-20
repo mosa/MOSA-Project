@@ -90,7 +90,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			Context before = context.InsertBefore();
 			Operand result = methodCompiler.CreateVirtualRegister(type);
-			Operand op = new SymbolOperand(type, symbolName);
+			Operand op = Operand.CreateSymbol(type, symbolName);
 
 			before.SetInstruction(CILInstruction.Get(OpCode.Ldc_i4), result, op);
 

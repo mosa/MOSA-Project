@@ -49,13 +49,13 @@ namespace Mosa.Platform.x86.Instructions
 			// FIXME: This method is not called. 
 			if (IsByte(third))
 			{
-				if ((source.IsConstant) && (third is RegisterOperand)) return C_R_8;
-				if ((source is RegisterOperand) && (third is RegisterOperand)) return R_R_8;
+				if ((source.IsConstant) && (third.IsRegister)) return C_R_8;
+				if ((source.IsRegister) && (third.IsRegister)) return R_R_8;
 			}
 			else
 			{
-				if ((source.IsConstant) && (third is RegisterOperand)) return C_R_32;
-				if ((source is RegisterOperand) && (third is RegisterOperand)) return R_R_32;
+				if ((source.IsConstant) && (third.IsRegister)) return C_R_32;
+				if ((source.IsRegister) && (third.IsRegister)) return R_R_32;
 			}
 
 			throw new ArgumentException(@"No opcode for operand type.");

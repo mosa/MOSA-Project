@@ -172,10 +172,11 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!(context.Instruction is IR.Move))
 				return;
 
-			ConstantOperand constantOperand = context.Operand1 as ConstantOperand;
 
-			if (constantOperand == null)
+			if (!context.Operand1.IsConstant)
 				return;
+
+			Operand constantOperand = context.Operand1;
 
 			// propagate constant
 
@@ -240,21 +241,21 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 
 			Operand result = context.Result;
-			ConstantOperand op1 = context.Operand1 as ConstantOperand;
-			ConstantOperand op2 = context.Operand2 as ConstantOperand;
+			Operand op1 = context.Operand1;
+			Operand op2 = context.Operand2;
 
-			if (op1 == null || op2 == null)
+			if (!op1.IsConstant || !op2.IsConstant)
 				return;
 
 			if (result.Type.Type != op1.Type.Type || op1.Type.Type != op2.Type.Type)
 				return;
 
-			ConstantOperand constant = null;
+			Operand constant = null;
 
 			switch (result.Type.Type)
 			{
-				case CilElementType.U1: constant = new ConstantOperand(result.Type, (byte)(op1.Value) + (byte)(op2.Value)); break;
-				case CilElementType.I4: constant = new ConstantOperand(result.Type, (int)(op1.Value) + (int)(op2.Value)); break;
+				case CilElementType.U1: constant = Operand.CreateConstant(result.Type, (byte)(op1.Value) + (byte)(op2.Value)); break;
+				case CilElementType.I4: constant = Operand.CreateConstant(result.Type, (int)(op1.Value) + (int)(op2.Value)); break;
 				default: break;
 			}
 

@@ -71,7 +71,7 @@ namespace Mosa.Platform.x86.Stages
 			if (RequiresSseOperation(destinationSigType))
 			{
 				IInstruction moveInstruction = GetMoveInstruction(destinationSigType);
-				DefinedRegisterOperand destinationRegister = AllocateRegister(destinationSigType);
+				Operand destinationRegister = AllocateRegister(destinationSigType);
 
 				ctx.Result = destinationRegister;
 				ctx.AppendInstruction(moveInstruction, destination, destinationRegister);
@@ -80,7 +80,7 @@ namespace Mosa.Platform.x86.Stages
 			{
 				SigType sourceSigType = source.Type;
 				IInstruction moveInstruction = GetMoveInstruction(sourceSigType);
-				DefinedRegisterOperand sourceRegister = AllocateRegister(sourceSigType);
+				Operand sourceRegister = AllocateRegister(sourceSigType);
 
 				ctx.Operand1 = sourceRegister;
 
@@ -100,7 +100,7 @@ namespace Mosa.Platform.x86.Stages
 			if (RequiresSseOperation(destinationSigType))
 			{
 				IInstruction moveInstruction = GetMoveInstruction(destinationSigType);
-				DefinedRegisterOperand destinationRegister = AllocateRegister(destinationSigType);
+				Operand destinationRegister = AllocateRegister(destinationSigType);
 
 				ctx.Operand1 = destinationRegister;
 				ctx.AppendInstruction(moveInstruction, destination, destinationRegister);
@@ -109,7 +109,7 @@ namespace Mosa.Platform.x86.Stages
 			{
 				SigType sourceSigType = source.Type;
 				IInstruction moveInstruction = GetMoveInstruction(sourceSigType);
-				DefinedRegisterOperand sourceRegister = AllocateRegister(sourceSigType);
+				Operand sourceRegister = AllocateRegister(sourceSigType);
 
 				ctx.Operand2 = sourceRegister;
 				ctx.InsertBefore().SetInstruction(moveInstruction, sourceRegister, source);
@@ -146,19 +146,16 @@ namespace Mosa.Platform.x86.Stages
 			return moveInstruction;
 		}
 
-		private DefinedRegisterOperand AllocateRegister(SigType sigType)
+		private Operand AllocateRegister(SigType sigType)
 		{
-			DefinedRegisterOperand result;
 			if (RequiresSseOperation(sigType))
 			{
-				result = new DefinedRegisterOperand(sigType, SSE2Register.XMM6);
+				return Operand.CreateCPURegister(sigType, SSE2Register.XMM6);
 			}
 			else
 			{
-				result = new DefinedRegisterOperand(sigType, GeneralPurposeRegister.EAX);
+				return Operand.CreateCPURegister(sigType, GeneralPurposeRegister.EAX);
 			}
-
-			return result;
 		}
 
 		private bool RequiresSseOperation(SigType sigType)

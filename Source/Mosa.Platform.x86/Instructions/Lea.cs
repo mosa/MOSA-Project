@@ -25,19 +25,18 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="emitter"></param>
 		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
-			DefinedRegisterOperand rop = (DefinedRegisterOperand)context.Result;
 			MemoryOperand mop = (MemoryOperand)context.Operand1;
 			byte[] code;
 
 			if (mop.Base != null)
 			{
 				code = new byte[] { 0x8D, 0x84, (4 << 3) };
-				code[1] |= (byte)((rop.Register.RegisterCode & 0x07));
+				code[1] |= (byte)((context.Result.Register.RegisterCode & 0x07));
 				code[2] |= (byte)((mop.Base.RegisterCode & 0x07));
 			}
 			else
 			{
-				code = new byte[] { 0xB8 };
+				code = new byte[] { 0xB8 }; //FIXME:
 			}
 
 			emitter.Write(code, 0, code.Length);

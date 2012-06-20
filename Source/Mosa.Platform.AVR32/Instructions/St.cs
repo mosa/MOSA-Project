@@ -32,18 +32,17 @@ namespace Mosa.Platform.AVR32.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
-			if (context.Result is MemoryOperand && context.Operand1 is RegisterOperand)
+			if (context.Result is MemoryOperand && context.Operand1.IsRegister)
 			{
 				MemoryOperand destination = context.Result as MemoryOperand;
-				DefinedRegisterOperand source = context.Operand1 as DefinedRegisterOperand;
 
 				if (IsBetween(destination.Offset.ToInt32(), 0, 60))
 				{
-					emitter.EmitTwoRegistersWithK4((byte)destination.Base.RegisterCode, (byte)source.Register.RegisterCode, (sbyte)destination.Offset.ToInt32());
+					emitter.EmitTwoRegistersWithK4((byte)destination.Base.RegisterCode, (byte)context.Operand1.Register.RegisterCode, (sbyte)destination.Offset.ToInt32());
 				}
 				else if (IsBetween(destination.Offset.ToInt32(), -32768, 32767))
 				{
-					emitter.EmitTwoRegistersAndK16(0x14, (byte)destination.Base.RegisterCode, (byte)source.Register.RegisterCode, (short)destination.Offset.ToInt32());
+					emitter.EmitTwoRegistersAndK16(0x14, (byte)destination.Base.RegisterCode, (byte)context.Operand1.Register.RegisterCode, (short)destination.Offset.ToInt32());
 				}
 				else
 					throw new OverflowException();

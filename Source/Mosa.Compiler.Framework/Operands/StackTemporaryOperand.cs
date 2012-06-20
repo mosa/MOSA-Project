@@ -22,15 +22,6 @@ namespace Mosa.Compiler.Framework.Operands
 	/// </remarks>
 	public class StackTemporaryOperand : StackOperand
 	{
-		#region Data members
-
-		/// <summary>
-		/// The name of the variable.
-		/// </summary>
-		private string name;
-
-		#endregion // Data members
-
 		#region Construction
 
 		/// <summary>
@@ -48,16 +39,5 @@ namespace Mosa.Compiler.Framework.Operands
 
 		#endregion // Construction
 
-		#region StackOperand overrides
-
-		/// <summary>
-		/// Returns the name of the variable if it is available.
-		/// </summary>
-		public override string Name
-		{
-			get { return name; }
-		}
-
-		#endregion // StackOperand overrides
 	}
 }

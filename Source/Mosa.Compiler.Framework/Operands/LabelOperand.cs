@@ -17,14 +17,6 @@ namespace Mosa.Compiler.Framework.Operands
 	/// </summary>
 	public sealed class LabelOperand : MemoryOperand
 	{
-		#region Data members
-
-		/// <summary>
-		/// Holds the name
-		/// </summary>
-		private string name;
-
-		#endregion // Data members
 
 		#region Construction
 
@@ -40,19 +32,6 @@ namespace Mosa.Compiler.Framework.Operands
 		}
 
 		#endregion // Construction
-
-		#region Properties
-
-		/// <summary>
-		/// Gets the label of the operand.
-		/// </summary>
-		/// <value>The label.</value>
-		public string Name
-		{
-			get { return name; }
-		}
-
-		#endregion // Properties
 
 		#region Object Overrides
 

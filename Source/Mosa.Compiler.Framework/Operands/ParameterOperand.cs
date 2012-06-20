@@ -55,18 +55,6 @@ namespace Mosa.Compiler.Framework.Operands
 
 		#endregion // Properties
 
-		#region StackOperand overrides
-
-		/// <summary>
-		/// Retrieves the name of the stack operand.
-		/// </summary>
-		/// <value>The name of the stack operand.</value>
-		public override string Name
-		{
-			get { return parameter.Name; }
-		}
-
-		#endregion // StackOperand overrides
 	}
 }
 

@@ -66,7 +66,7 @@ namespace Mosa.Platform.AVR32
 		/// Calls the specified target.
 		/// </summary>
 		/// <param name="symbolOperand">The symbol operand.</param>
-		public void Call(SymbolOperand symbolOperand)
+		public void Call(Operand symbolOperand)
 		{
 			linker.Link(
 				LinkType.RelativeOffset | LinkType.NativeI4,

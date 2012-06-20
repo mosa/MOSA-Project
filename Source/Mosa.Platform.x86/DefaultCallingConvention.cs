@@ -117,19 +117,19 @@ namespace Mosa.Platform.x86
 		{
 			if (stackSize != 0)
 			{
-				DefinedRegisterOperand esp = new DefinedRegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.ESP);
+				Operand esp = Operand.CreateCPURegister(BuiltInSigType.IntPtr, GeneralPurposeRegister.ESP);
 
-				ctx.AppendInstruction(X86.Sub, esp, new ConstantOperand(esp.Type, stackSize));
-				ctx.AppendInstruction(X86.Mov, new DefinedRegisterOperand(architecture.NativeType, GeneralPurposeRegister.EDX), esp);
+				ctx.AppendInstruction(X86.Sub, esp, Operand.CreateConstant(esp.Type, stackSize));
+				ctx.AppendInstruction(X86.Mov, Operand.CreateCPURegister(architecture.NativeType, GeneralPurposeRegister.EDX), esp);
 			}
 		}
 
 		private void FreeStackAfterCall(Context ctx, int stackSize)
 		{
-			DefinedRegisterOperand esp = new DefinedRegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.ESP);
+			Operand esp = Operand.CreateCPURegister(BuiltInSigType.IntPtr, GeneralPurposeRegister.ESP);
 			if (stackSize != 0)
 			{
-				ctx.AppendInstruction(X86.Add, esp, new ConstantOperand(BuiltInSigType.IntPtr, stackSize));
+				ctx.AppendInstruction(X86.Add, esp, Operand.CreateConstant(BuiltInSigType.IntPtr, stackSize));
 			}
 		}
 
@@ -171,7 +171,7 @@ namespace Mosa.Platform.x86
 		/// <param name="ctx">The context.</param>
 		private void MoveReturnValueTo32Bit(Operand resultOperand, Context ctx)
 		{
-			DefinedRegisterOperand eax = new DefinedRegisterOperand(resultOperand.Type, GeneralPurposeRegister.EAX);
+			Operand eax = Operand.CreateCPURegister(resultOperand.Type, GeneralPurposeRegister.EAX);
 			ctx.AppendInstruction(X86.Mov, resultOperand, eax);
 		}
 
@@ -190,8 +190,8 @@ namespace Mosa.Platform.x86
 			Operand opL, opH;
 			LongOperandTransformationStage.SplitLongOperand(memoryOperand, out opL, out opH);
 
-			DefinedRegisterOperand eax = new DefinedRegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.EAX);
-			DefinedRegisterOperand edx = new DefinedRegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.EDX);
+			Operand eax = Operand.CreateCPURegister(BuiltInSigType.UInt32, GeneralPurposeRegister.EAX);
+			Operand edx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EDX);
 
 			ctx.AppendInstruction(X86.Mov, opL, eax);
 			ctx.AppendInstruction(X86.Mov, opH, edx);
@@ -216,25 +216,25 @@ namespace Mosa.Platform.x86
 					return;
 				}
 
-				DefinedRegisterOperand rop;
+				Operand rop;
 				switch (op.StackType)
 				{
 					case StackTypeCode.O: goto case StackTypeCode.N;
 					case StackTypeCode.Ptr: goto case StackTypeCode.N;
 					case StackTypeCode.Int32: goto case StackTypeCode.N;
 					case StackTypeCode.N:
-						rop = new DefinedRegisterOperand(op.Type, GeneralPurposeRegister.EAX);
+						rop = Operand.CreateCPURegister(op.Type, GeneralPurposeRegister.EAX);
 						break;
 
 					case StackTypeCode.F:
-						rop = new DefinedRegisterOperand(op.Type, SSE2Register.XMM0);
+						rop = Operand.CreateCPURegister(op.Type, SSE2Register.XMM0);
 						break;
 
 					case StackTypeCode.Int64:
 						{
 							MemoryOperand mop = op as MemoryOperand;
 							Debug.Assert(null != mop, @"I8/U8 arg is not in a memory operand.");
-							DefinedRegisterOperand eax = new DefinedRegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.EAX);
+							Operand eax = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EAX);
 
 							Operand opL, opH;
 							LongOperandTransformationStage.SplitLongOperand(mop, out opL, out opH);
@@ -256,7 +256,7 @@ namespace Mosa.Platform.x86
 			else if (op.IsConstant && op.StackType == StackTypeCode.Int64)
 			{
 				Operand opL, opH;
-				DefinedRegisterOperand eax = new DefinedRegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.EAX);
+				Operand eax = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EAX);
 				LongOperandTransformationStage.SplitLongOperand(op, out opL, out opH);
 
 				ctx.AppendInstruction(X86.Mov, eax, opL);
@@ -303,12 +303,12 @@ namespace Mosa.Platform.x86
 			// FIXME: Do not issue a move, if the operand is already the destination register
 			if (size == 4 || size == 2 || size == 1)
 			{
-				context.SetInstruction(X86.Mov, new DefinedRegisterOperand(operand.Type, GeneralPurposeRegister.EAX), operand);
+				context.SetInstruction(X86.Mov, Operand.CreateCPURegister(operand.Type, GeneralPurposeRegister.EAX), operand);
 				return;
 			}
 			else if (size == 8 && (operand.Type.Type == CilElementType.R4 || operand.Type.Type == CilElementType.R8))
 			{
-				context.SetInstruction(X86.Mov, new DefinedRegisterOperand(operand.Type, SSE2Register.XMM0), operand);
+				context.SetInstruction(X86.Mov, Operand.CreateCPURegister(operand.Type, SSE2Register.XMM0), operand);
 				return;
 			}
 			else if (size == 8 && (operand.Type.Type == CilElementType.I8 || operand.Type.Type == CilElementType.U8))
@@ -319,8 +319,8 @@ namespace Mosa.Platform.x86
 				LongOperandTransformationStage.SplitLongOperand(operand, out opL, out opH);
 
 				// Like Win32: EDX:EAX
-				context.SetInstruction(X86.Mov, new DefinedRegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.EAX), opL);
-				context.AppendInstruction(X86.Mov, new DefinedRegisterOperand(HighType, GeneralPurposeRegister.EDX), opH);
+				context.SetInstruction(X86.Mov, Operand.CreateCPURegister(BuiltInSigType.UInt32, GeneralPurposeRegister.EAX), opL);
+				context.AppendInstruction(X86.Mov, Operand.CreateCPURegister(HighType, GeneralPurposeRegister.EDX), opH);
 
 				return;
 			}

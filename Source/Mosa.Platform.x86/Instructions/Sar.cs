@@ -40,9 +40,9 @@ namespace Mosa.Platform.x86.Instructions
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-			if ((destination is RegisterOperand) && (source.IsConstant)) return R_C;
+			if ((destination.IsRegister) && (source.IsConstant)) return R_C;
 			if ((destination is MemoryOperand) && (source.IsConstant)) return M_C;
-			if (destination is RegisterOperand) return R;
+			if (destination.IsRegister) return R;
 			if (destination is MemoryOperand) return M;
 			throw new ArgumentException(@"No opcode for operand type.");
 		}
@@ -57,8 +57,8 @@ namespace Mosa.Platform.x86.Instructions
 			OpCode opCode = ComputeOpCode(context.Result, context.Operand1, context.Operand2);
 			if (context.Operand1.IsConstant)
 			{
-				// FIXME: Conversion not necessary constant already byte.
-				ConstantOperand op = new ConstantOperand(BuiltInSigType.Byte, context.Operand1.Value);
+				// FIXME: Conversion not necessary if constant already byte.
+				Operand op = Operand.CreateConstant(BuiltInSigType.Byte, context.Operand1.Value);
 				emitter.Emit(opCode, context.Result, op);
 			}
 			else

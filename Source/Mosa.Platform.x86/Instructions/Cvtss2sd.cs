@@ -38,9 +38,9 @@ namespace Mosa.Platform.x86.Instructions
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-			if ((destination is RegisterOperand) && (source is LabelOperand)) return opcode;
-			if ((destination is RegisterOperand) && (source is RegisterOperand)) return opcode;
-			if ((destination is RegisterOperand) && (source is MemoryOperand)) return opcode;
+			if ((destination.IsRegister) && (source is LabelOperand)) return opcode;
+			if ((destination.IsRegister) && (source.IsRegister)) return opcode;
+			if ((destination.IsRegister) && (source is MemoryOperand)) return opcode;
 			
 			throw new ArgumentException(@"No opcode for operand type.");
 		}

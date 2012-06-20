@@ -34,20 +34,17 @@ namespace Mosa.Platform.AVR32.Instructions
 				return;
 			}
 
-			Operand destinationOperand = context.Operand1;
-			SymbolOperand destinationSymbol = destinationOperand as SymbolOperand;
-
-			if (destinationSymbol != null)
+			if (context.Operand1.IsSymbol)
 			{
-				emitter.Call(destinationSymbol);
+				emitter.Call(context.Operand1);
 			}
 			else
 			{
-				if (destinationOperand is MemoryOperand)
+				if (context.Operand1 is MemoryOperand)
 				{
 					//RegisterOperand register = destinationOperand as RegisterOperand;
 					//emitter.EmitSingleRegisterInstructions(0x11, (byte)register.Register.RegisterCode);
-					MemoryOperand memory = destinationOperand as MemoryOperand;
+					MemoryOperand memory = context.Operand1 as MemoryOperand;
 					emitter.EmitRegisterOperandWithK16(0x101, (byte)memory.Base.RegisterCode, (ushort)memory.Offset);
 				}
 			}

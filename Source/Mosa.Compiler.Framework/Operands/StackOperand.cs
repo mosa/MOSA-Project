@@ -33,16 +33,6 @@ namespace Mosa.Compiler.Framework.Operands
 
 		#endregion // Construction
 
-		#region Properties
-
-		/// <summary>
-		/// Retrieves the name of the stack operand.
-		/// </summary>
-		/// <value>The name of the stack operand.</value>
-		public abstract string Name { get; }
-
-		#endregion // Properties
-
 		#region Operand Overrides
 
 		/// <summary>

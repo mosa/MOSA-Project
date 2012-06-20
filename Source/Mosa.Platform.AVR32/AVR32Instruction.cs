@@ -9,6 +9,7 @@
  */
 
 using System;
+using System.Diagnostics;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Operands;
 using Mosa.Compiler.Metadata;
@@ -136,8 +137,10 @@ namespace Mosa.Platform.AVR32
 			return value >= lo && value <= hi;
 		}
 
-		protected bool IsConstantBetween(ConstantOperand op, int lo, int hi, out int value)
+		protected bool IsConstantBetween(Operand op, int lo, int hi, out int value)
 		{
+			Debug.Assert(op.IsConstant);
+
 			value = 0;
 			switch (op.Type.Type)
 			{

@@ -25,7 +25,7 @@ namespace Mosa.Platform.x86.Instructions
 		private static readonly OpCode JmpReg = new OpCode(new byte[] { 0xFF }, 4);
 
 		#endregion
-		
+
 		#region Construction
 
 		/// <summary>
@@ -47,16 +47,13 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
-			Operand destinationOperand = context.Operand1;
-			SymbolOperand destinationSymbol = destinationOperand as SymbolOperand;
-
-			if (destinationSymbol != null)
+			if (context.Operand1 != null && context.Operand1.IsSymbol)
 			{
 				emitter.WriteByte(0xE9);
-				emitter.Call(destinationSymbol);
+				emitter.Call(context.Operand1);
 			}
 			else
-				if (context.Operand1 is RegisterOperand)
+				if (context.Operand1 != null && context.Operand1.IsRegister)
 					emitter.Emit(JmpReg, context.Operand1);
 				else
 					emitter.EmitBranch(JMP, context.BranchTargets[0]);

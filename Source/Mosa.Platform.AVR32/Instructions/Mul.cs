@@ -33,38 +33,28 @@ namespace Mosa.Platform.AVR32.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
-			if (context.Result is RegisterOperand && context.Operand1 is RegisterOperand && context.Operand2 is RegisterOperand)
+			if (context.Result.IsRegister && context.Operand1.IsRegister && context.Operand2.IsRegister)
 			{
-				DefinedRegisterOperand destination = context.Result as DefinedRegisterOperand;
-				DefinedRegisterOperand firstSource = context.Operand1 as DefinedRegisterOperand;
-				DefinedRegisterOperand secondSource = context.Operand2 as DefinedRegisterOperand;
-				emitter.EmitThreeRegistersUnshifted(0x24, (byte)firstSource.Register.RegisterCode, (byte)secondSource.Register.RegisterCode, (byte)destination.Register.RegisterCode);
+				emitter.EmitThreeRegistersUnshifted(0x24, (byte)context.Operand1.Register.RegisterCode, (byte)context.Operand2.Register.RegisterCode, (byte)context.Result.Register.RegisterCode);
 			}
-			else
-				if (context.Result is RegisterOperand && context.Operand1 is RegisterOperand && context.Operand2.IsConstant)
+			else if (context.Result.IsRegister && context.Operand1.IsRegister && context.Operand2.IsConstant)
+			{
+				int value = 0;
+				if (IsConstantBetween(context.Operand2, -128, 127, out value))
 				{
-					DefinedRegisterOperand destination = context.Result as DefinedRegisterOperand;
-					DefinedRegisterOperand source = context.Operand1 as DefinedRegisterOperand;
-					ConstantOperand immediate = context.Operand2 as ConstantOperand;
-					int value = 0;
-					if (IsConstantBetween(immediate, -128, 127, out value))
-					{
-						emitter.EmitTwoRegisterOperandsWithK8Immediate(0x00, (byte)source.Register.RegisterCode, (byte)destination.Register.RegisterCode, (sbyte)value);
-					}
-					else
-						throw new OverflowException();
+					emitter.EmitTwoRegisterOperandsWithK8Immediate(0x00, (byte)context.Operand1.Register.RegisterCode, (byte)context.Result.Register.RegisterCode, (sbyte)value);
 				}
 				else
-					if (context.Result is RegisterOperand && context.Operand1 is RegisterOperand)
-					{
-						DefinedRegisterOperand destination = context.Result as DefinedRegisterOperand;
-						DefinedRegisterOperand source = context.Operand1 as DefinedRegisterOperand;
-						emitter.EmitTwoRegisterInstructions(0x13, (byte)source.Register.RegisterCode, (byte)destination.Register.RegisterCode);
-					}
-					else
-					{
-						throw new Exception("Not supported combination of operands");
-					}
+					throw new OverflowException();
+			}
+			else if (context.Result.IsRegister && context.Operand1.IsRegister)
+			{
+				emitter.EmitTwoRegisterInstructions(0x13, (byte)context.Operand1.Register.RegisterCode, (byte)context.Result.Register.RegisterCode);
+			}
+			else
+			{
+				throw new Exception("Not supported combination of operands");
+			}
 		}
 
 		/// <summary>

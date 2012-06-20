@@ -26,20 +26,20 @@ namespace Mosa.Compiler.Framework.Intrinsics
 		/// <param name="typeSystem">The type system.</param>
 		void IIntrinsicMethod.ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
 		{
-			SymbolOperand callTargetOperand = this.GetInternalAllocateStringCallTarget(typeSystem);
-			SymbolOperand methodTableOperand = new SymbolOperand(BuiltInSigType.IntPtr, StringClassMethodTableSymbolName);
+			Operand callTargetOperand = this.GetInternalAllocateStringCallTarget(typeSystem);
+			Operand methodTableOperand = Operand.CreateSymbol(BuiltInSigType.IntPtr, StringClassMethodTableSymbolName);
 			Operand lengthOperand = context.Operand1;
 			Operand result = context.Result;
 
 			context.SetInstruction(IR.IRInstruction.Call, result, callTargetOperand, methodTableOperand, lengthOperand);
 		}
 
-		private SymbolOperand GetInternalAllocateStringCallTarget(ITypeSystem typeSystem)
+		private Operand GetInternalAllocateStringCallTarget(ITypeSystem typeSystem)
 		{
 			RuntimeType runtimeType = typeSystem.GetType(@"Mosa.Internal.Runtime");
 			RuntimeMethod callTarget = runtimeType.FindMethod(@"AllocateString");
 
-			return SymbolOperand.FromMethod(callTarget);
+			return Operand.CreateSymbolFromMethod(callTarget);
 		}
 	}
 }

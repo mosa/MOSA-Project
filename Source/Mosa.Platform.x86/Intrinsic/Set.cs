@@ -36,8 +36,8 @@ namespace Mosa.Platform.x86.Intrinsic
 			Operand dest = context.Operand1;
 			Operand value = context.Operand2;
 
-			DefinedRegisterOperand edx = new DefinedRegisterOperand(dest.Type, GeneralPurposeRegister.EDX);
-			DefinedRegisterOperand eax = new DefinedRegisterOperand(value.Type, GeneralPurposeRegister.EAX);
+			Operand edx = Operand.CreateCPURegister(dest.Type, GeneralPurposeRegister.EDX);
+			Operand eax = Operand.CreateCPURegister(value.Type, GeneralPurposeRegister.EAX);
 			MemoryOperand memory = new MemoryOperand(GeneralPurposeRegister.EDX, new SigType(context.InvokeTarget.Signature.Parameters[1].Type), new IntPtr(0));
 
 			context.SetInstruction(X86.Mov, edx, dest);

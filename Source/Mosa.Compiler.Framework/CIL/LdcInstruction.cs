@@ -41,7 +41,7 @@ namespace Mosa.Compiler.Framework.CIL
 			// Decode base classes first
 			base.Decode(ctx, decoder);
 
-			ConstantOperand constantValueOperand;
+			Operand constantValueOperand;
 
 			// Opcode specific handling
 			switch (opcode)
@@ -49,80 +49,80 @@ namespace Mosa.Compiler.Framework.CIL
 				case OpCode.Ldc_i4:
 					{
 						int i = decoder.DecodeInt();
-						constantValueOperand = new ConstantOperand(BuiltInSigType.Int32, i);
+						constantValueOperand = Operand.CreateConstant(BuiltInSigType.Int32, i);
 					}
 					break;
 
 				case OpCode.Ldc_i4_s:
 					{
 						sbyte sb = decoder.DecodeSByte();
-						constantValueOperand = new ConstantOperand(BuiltInSigType.Int32, sb);
+						constantValueOperand = Operand.CreateConstant(BuiltInSigType.Int32, sb);
 					}
 					break;
 
 				case OpCode.Ldc_i8:
 					{
 						long l = decoder.DecodeLong();
-						constantValueOperand = new ConstantOperand(BuiltInSigType.Int64, l);
+						constantValueOperand = Operand.CreateConstant(BuiltInSigType.Int64, l);
 					}
 					break;
 
 				case OpCode.Ldc_r4:
 					{
 						float f = decoder.DecodeFloat();
-						constantValueOperand = new ConstantOperand(BuiltInSigType.Single, f);
+						constantValueOperand = Operand.CreateConstant(BuiltInSigType.Single, f);
 					}
 					break;
 
 				case OpCode.Ldc_r8:
 					{
 						double d = decoder.DecodeDouble();
-						constantValueOperand = new ConstantOperand(BuiltInSigType.Double, d);
+						constantValueOperand = Operand.CreateConstant(BuiltInSigType.Double, d);
 					}
 					break;
 
 				case OpCode.Ldnull:
-					constantValueOperand = ConstantOperand.GetNull();
+					constantValueOperand = Operand.GetNull();
 					break;
 
 				case OpCode.Ldc_i4_0:
-					constantValueOperand = ConstantOperand.FromValue(0);
+					constantValueOperand = Operand.CreateConstant(0);
 					break;
 
 				case OpCode.Ldc_i4_1:
-					constantValueOperand = ConstantOperand.FromValue(1);
+					constantValueOperand = Operand.CreateConstant(1);
 					break;
 
 				case OpCode.Ldc_i4_2:
-					constantValueOperand = ConstantOperand.FromValue(2);
+					constantValueOperand = Operand.CreateConstant(2);
 					break;
 
 				case OpCode.Ldc_i4_3:
-					constantValueOperand = ConstantOperand.FromValue(3);
+					constantValueOperand = Operand.CreateConstant(3);
 					break;
 
 				case OpCode.Ldc_i4_4:
-					constantValueOperand = ConstantOperand.FromValue(4);
+					constantValueOperand = Operand.CreateConstant(4);
 					break;
 
 				case OpCode.Ldc_i4_5:
-					constantValueOperand = ConstantOperand.FromValue(5);
+					constantValueOperand = Operand.CreateConstant(5);
 					break;
 
 				case OpCode.Ldc_i4_6:
-					constantValueOperand = ConstantOperand.FromValue(6);
+					constantValueOperand = Operand.CreateConstant(6);
 					break;
 
 				case OpCode.Ldc_i4_7:
-					constantValueOperand = ConstantOperand.FromValue(7);
+					constantValueOperand = Operand.CreateConstant(7);
 					break;
 
 				case OpCode.Ldc_i4_8:
-					constantValueOperand = ConstantOperand.FromValue(8);
+					constantValueOperand = Operand.CreateConstant(8);
 					break;
 
 				case OpCode.Ldc_i4_m1:
-					constantValueOperand = ConstantOperand.FromValue(-1);
+					constantValueOperand = Operand.CreateConstant(-1);
 					break;
 
 				default:

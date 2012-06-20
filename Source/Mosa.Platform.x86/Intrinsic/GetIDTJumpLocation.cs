@@ -8,6 +8,7 @@
  */
 
 using System;
+using System.Diagnostics;
 using System.Collections.Generic;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Operands;
@@ -32,14 +33,12 @@ namespace Mosa.Platform.x86.Intrinsic
 		void IIntrinsicMethod.ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
 		{
 			Context loadContext = new Context(context.InstructionSet, context.Operand1.Definitions[0]);
-			ConstantOperand op1 = loadContext.Operand1 as ConstantOperand;
 
-			if (op1 == null)
-				throw new InvalidOperationException();
+			Debug.Assert(loadContext.Operand1.IsConstant);
 
 			int irq = -1;
 
-			object obj = op1.Value;
+			object obj = loadContext.Operand1.Value;
 
 			if ((obj is int) || (obj is uint))
 				irq = (int)obj;
@@ -49,7 +48,7 @@ namespace Mosa.Platform.x86.Intrinsic
 			if ((irq > 256) || (irq < 0))
 				throw new InvalidOperationException();
 
-			context.SetInstruction(IR.IRInstruction.Move, context.Result, new SymbolOperand(BuiltInSigType.Ptr, @"Mosa.Tools.Compiler.LinkerGenerated.<$>InterruptISR" + irq.ToString() + "()"));
+			context.SetInstruction(IR.IRInstruction.Move, context.Result, Operand.CreateSymbol(BuiltInSigType.Ptr, @"Mosa.Tools.Compiler.LinkerGenerated.<$>InterruptISR" + irq.ToString() + "()"));
 		}
 
 		#endregion // Methods

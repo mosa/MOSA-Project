@@ -32,10 +32,10 @@ namespace Mosa.Platform.x86.Intrinsic
 		{
 			Operand result = context.Result;
 			SigType u4 = BuiltInSigType.UInt32;
-			DefinedRegisterOperand eax = new DefinedRegisterOperand(u4, GeneralPurposeRegister.EAX);
+			Operand eax = Operand.CreateCPURegister(u4, GeneralPurposeRegister.EAX);
 
 			context.SetInstruction(X86.Pop, eax);
-			context.AppendInstruction(X86.Add, eax, new DefinedRegisterOperand(u4, GeneralPurposeRegister.ESP));
+			context.AppendInstruction(X86.Add, eax, Operand.CreateCPURegister(u4, GeneralPurposeRegister.ESP));
 			context.AppendInstruction(X86.Mov, eax, new MemoryOperand(GeneralPurposeRegister.EAX, u4, new IntPtr(0)));
 			context.AppendInstruction(X86.Mov, result, eax);
 			context.AppendInstruction(X86.Push, null, eax);

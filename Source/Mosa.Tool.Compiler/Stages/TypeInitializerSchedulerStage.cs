@@ -109,7 +109,7 @@ namespace Mosa.Tool.Compiler.Stages
 		/// <param name="method">The method.</param>
 		public void Schedule(RuntimeMethod method)
 		{
-			SymbolOperand symbolOperand = SymbolOperand.FromMethod(method);
+			Operand symbolOperand = Operand.CreateSymbolFromMethod(method);
 			ctx.AppendInstruction(IR.IRInstruction.Call, null, symbolOperand);
 		}
 

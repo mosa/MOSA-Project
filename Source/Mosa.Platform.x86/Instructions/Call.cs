@@ -45,18 +45,14 @@ namespace Mosa.Platform.x86.Instructions
 				return;
 			}
 
-			Operand destinationOperand = context.Operand1;
-			SymbolOperand destinationSymbol = destinationOperand as SymbolOperand;
-
-			if (destinationSymbol != null)
+			if (context.Operand1.IsSymbol)
 			{
 				emitter.WriteByte(0xE8);
-				emitter.Call(destinationSymbol);
+				emitter.Call(context.Operand1);
 			}
 			else
 			{
-				DefinedRegisterOperand registerOperand = destinationOperand as DefinedRegisterOperand;
-				emitter.Emit(RegCall, registerOperand);
+				emitter.Emit(RegCall, context.Operand1);
 			}
 		}
 

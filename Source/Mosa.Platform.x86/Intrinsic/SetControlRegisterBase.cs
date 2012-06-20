@@ -46,8 +46,8 @@ namespace Mosa.Platform.x86.Intrinsic
 		{
 			Operand operand1 = context.Operand1;
 
-			DefinedRegisterOperand eax = new DefinedRegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.EAX);
-			DefinedRegisterOperand cr = new DefinedRegisterOperand(BuiltInSigType.UInt32, control);
+			Operand eax = Operand.CreateCPURegister(BuiltInSigType.UInt32, GeneralPurposeRegister.EAX);
+			Operand cr = Operand.CreateCPURegister(BuiltInSigType.UInt32, control);
 
 			context.SetInstruction(IR.IRInstruction.Move, eax, operand1);
 			context.AppendInstruction(IR.IRInstruction.Move, cr, eax);

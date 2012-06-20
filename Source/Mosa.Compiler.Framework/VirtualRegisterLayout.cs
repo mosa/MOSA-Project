@@ -23,7 +23,7 @@ namespace Mosa.Compiler.Framework
 
 		private IArchitecture architecture;
 
-		private List<VirtualRegisterOperand> virtualRegisters = new List<VirtualRegisterOperand>();
+		private List<Operand> virtualRegisters = new List<Operand>();
 
 		private StackLayout stackLayout;
 
@@ -49,11 +49,9 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="type">The type.</param>
 		/// <returns></returns>
-		public VirtualRegisterOperand AllocateVirtualRegister(SigType type)
+		public Operand AllocateVirtualRegister(SigType type)
 		{
-			int index = virtualRegisters.Count + 1;
-
-			VirtualRegisterOperand virtualRegister = new VirtualRegisterOperand(type, index);
+			Operand virtualRegister = Operand.CreateVirtualRegister(type, virtualRegisters.Count + 1);
 
 			virtualRegisters.Add(virtualRegister);
 

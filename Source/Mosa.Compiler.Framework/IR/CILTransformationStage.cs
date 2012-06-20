@@ -124,7 +124,7 @@ namespace Mosa.Compiler.Framework.IR
 				loadInstruction = IRInstruction.ZeroExtendedMove;
 			}
 
-			context.SetInstruction(loadInstruction, destination, source, ConstantOperand.FromValue(0));
+			context.SetInstruction(loadInstruction, destination, source, Operand.CreateConstant(0));
 			context.Other = elementType;
 		}
 
@@ -180,7 +180,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Ldftn(Context context)
 		{
-			context.SetInstruction(IRInstruction.Move, context.Result, SymbolOperand.FromMethod(context.InvokeTarget));
+			context.SetInstruction(IRInstruction.Move, context.Result, Operand.CreateSymbolFromMethod(context.InvokeTarget));
 		}
 
 		/// <summary>
@@ -226,7 +226,7 @@ namespace Mosa.Compiler.Framework.IR
 		void CIL.ICILVisitor.Stobj(Context context)
 		{
 			// This is actually stind.* and stobj - the opcodes have the same meanings
-			context.SetInstruction(IRInstruction.Store, context.Operand1, context.Operand1, ConstantOperand.FromValue(0), context.Operand2);
+			context.SetInstruction(IRInstruction.Store, context.Operand1, context.Operand1, Operand.CreateConstant(0), context.Operand2);
 		}
 
 		/// <summary>
@@ -265,7 +265,7 @@ namespace Mosa.Compiler.Framework.IR
 
 			// Create a symbol operand for the invocation target
 			RuntimeMethod invokeTarget = context.InvokeTarget;
-			SymbolOperand symbolOperand = SymbolOperand.FromMethod(invokeTarget);
+			Operand symbolOperand = Operand.CreateSymbolFromMethod(invokeTarget);
 
 			ProcessInvokeInstruction(context, symbolOperand, context.Result, new List<Operand>(context.Operands));
 		}
@@ -364,22 +364,22 @@ namespace Mosa.Compiler.Framework.IR
 		{
 			if (IsUnsigned(context.Operand1))
 			{
-				ConstantOperand zero = new ConstantOperand(context.Operand1.Type, 0UL);
+				Operand zero = Operand.CreateConstant(context.Operand1.Type, 0UL);
 				context.SetInstruction(IRInstruction.SubU, context.Result, zero, context.Operand1);
 			}
 			else if (context.Operand1.Type.Type == CilElementType.R4)
 			{
-				ConstantOperand minusOne = new ConstantOperand(context.Operand1.Type, -1.0f);
+				Operand minusOne = Operand.CreateConstant(context.Operand1.Type, -1.0f);
 				context.SetInstruction(IRInstruction.MulF, context.Result, minusOne, context.Operand1);
 			}
 			else if (context.Operand1.Type.Type == CilElementType.R8)
 			{
-				ConstantOperand minusOne = new ConstantOperand(context.Operand1.Type, -1.0);
+				Operand minusOne = Operand.CreateConstant(context.Operand1.Type, -1.0);
 				context.SetInstruction(IRInstruction.MulF, context.Result, minusOne, context.Operand1);
 			}
 			else
 			{
-				ConstantOperand minusOne = new ConstantOperand(context.Operand1.Type, -1L);
+				Operand minusOne = Operand.CreateConstant(context.Operand1.Type, -1L);
 				context.SetInstruction(IRInstruction.MulS, context.Result, minusOne, context.Operand1);
 			}
 		}
@@ -443,7 +443,7 @@ namespace Mosa.Compiler.Framework.IR
 
 				context.Previous.ReplaceInstructionOnly(IRInstruction.Nop);
 
-				SymbolOperand symbolOperand = SymbolOperand.FromMethod(invokeTarget);
+				Operand symbolOperand = Operand.CreateSymbolFromMethod(invokeTarget);
 				ProcessInvokeInstruction(context, symbolOperand, resultOperand, operands);
 
 				return;
@@ -459,8 +459,8 @@ namespace Mosa.Compiler.Framework.IR
 				if (!invokeTarget.DeclaringType.IsInterface)
 				{
 					int methodTableOffset = CalculateMethodTableOffset(invokeTarget) + (nativePointerSize * 5);
-					context.SetInstruction(IRInstruction.Load, methodTable, thisPtr, ConstantOperand.FromValue(0));
-					context.AppendInstruction(IRInstruction.Load, methodPtr, methodTable, new ConstantOperand(BuiltInSigType.Int32, methodTableOffset));
+					context.SetInstruction(IRInstruction.Load, methodTable, thisPtr, Operand.CreateConstant(0));
+					context.AppendInstruction(IRInstruction.Load, methodPtr, methodTable, Operand.CreateConstant(BuiltInSigType.Int32, methodTableOffset));
 				}
 				else
 				{
@@ -470,10 +470,10 @@ namespace Mosa.Compiler.Framework.IR
 					Operand interfaceSlotPtr = methodCompiler.CreateVirtualRegister(BuiltInSigType.IntPtr);
 					Operand interfaceMethodTablePtr = methodCompiler.CreateVirtualRegister(BuiltInSigType.IntPtr);
 
-					context.SetInstruction(IRInstruction.Load, methodTable, thisPtr, ConstantOperand.FromValue(0));
-					context.AppendInstruction(IRInstruction.Load, interfaceSlotPtr, methodTable, ConstantOperand.FromValue(0));
-					context.AppendInstruction(IRInstruction.Load, interfaceMethodTablePtr, interfaceSlotPtr, new ConstantOperand(BuiltInSigType.Int32, slotOffset));
-					context.AppendInstruction(IRInstruction.Load, methodPtr, interfaceMethodTablePtr, new ConstantOperand(BuiltInSigType.Int32, methodTableOffset));
+					context.SetInstruction(IRInstruction.Load, methodTable, thisPtr, Operand.CreateConstant(0));
+					context.AppendInstruction(IRInstruction.Load, interfaceSlotPtr, methodTable, Operand.CreateConstant(0));
+					context.AppendInstruction(IRInstruction.Load, interfaceMethodTablePtr, interfaceSlotPtr, Operand.CreateConstant(BuiltInSigType.Int32, slotOffset));
+					context.AppendInstruction(IRInstruction.Load, methodPtr, interfaceMethodTablePtr, Operand.CreateConstant(BuiltInSigType.Int32, methodTableOffset));
 				}
 
 				context.AppendInstruction(IRInstruction.Nop);
@@ -485,7 +485,7 @@ namespace Mosa.Compiler.Framework.IR
 				// we have to make this explicitly somehow.
 
 				// Create a symbol operand for the invocation target
-				SymbolOperand symbolOperand = SymbolOperand.FromMethod(invokeTarget);
+				Operand symbolOperand = Operand.CreateSymbolFromMethod(invokeTarget);
 				ProcessInvokeInstruction(context, symbolOperand, resultOperand, operands);
 			}
 		}
@@ -548,8 +548,8 @@ namespace Mosa.Compiler.Framework.IR
 
 			ReplaceWithVmCall(context, VmCall.AllocateArray);
 
-			context.SetOperand(1, new ConstantOperand(BuiltInSigType.IntPtr, 0));
-			context.SetOperand(2, new ConstantOperand(BuiltInSigType.Int32, elementSize));
+			context.SetOperand(1, Operand.CreateConstant(BuiltInSigType.IntPtr, 0));
+			context.SetOperand(2, Operand.CreateConstant(BuiltInSigType.Int32, elementSize));
 			context.SetOperand(3, lengthOperand);
 			context.OperandCount = 4;
 		}
@@ -593,24 +593,24 @@ namespace Mosa.Compiler.Framework.IR
 
 				ReplaceWithVmCall(before, VmCall.AllocateObject);
 
-				SymbolOperand methodTableSymbol = GetMethodTableSymbol(classType);
+				Operand methodTableSymbol = GetMethodTableSymbol(classType);
 
 				before.SetOperand(1, methodTableSymbol);
-				before.SetOperand(2, new ConstantOperand(BuiltInSigType.Int32, typeLayout.GetTypeSize(classType)));
+				before.SetOperand(2, Operand.CreateConstant(BuiltInSigType.Int32, typeLayout.GetTypeSize(classType)));
 				before.OperandCount = 2;
 				before.Result = thisReference;
 
 				// Result is the this pointer, now invoke the real constructor
-				SymbolOperand symbolOperand = SymbolOperand.FromMethod(ctorMethod);
+				Operand symbolOperand = Operand.CreateSymbolFromMethod(ctorMethod);
 
 				ctorOperands.Insert(0, thisReference);
 				ProcessInvokeInstruction(context, symbolOperand, null, ctorOperands);
 			}
 		}
 
-		private SymbolOperand GetMethodTableSymbol(RuntimeType runtimeType)
+		private Operand GetMethodTableSymbol(RuntimeType runtimeType)
 		{
-			return new SymbolOperand(BuiltInSigType.IntPtr, runtimeType.FullName + @"$mtable");
+			return Operand.CreateSymbol(BuiltInSigType.IntPtr, runtimeType.FullName + @"$mtable");
 		}
 
 		private RuntimeMethod FindConstructor(RuntimeType classType, List<Operand> ctorOperands)
@@ -667,7 +667,7 @@ namespace Mosa.Compiler.Framework.IR
 
 			ClassSigType classSigType = (ClassSigType)result.Type;
 			RuntimeType classType = typeModule.GetType(classSigType.Token);
-			SymbolOperand methodTableSymbol = GetMethodTableSymbol(classType);
+			Operand methodTableSymbol = GetMethodTableSymbol(classType);
 
 			if (!classType.IsInterface)
 			{
@@ -684,7 +684,7 @@ namespace Mosa.Compiler.Framework.IR
 
 				ReplaceWithVmCall(context, VmCall.IsInstanceOfInterfaceType);
 
-				context.SetOperand(1, new ConstantOperand(BuiltInSigType.UInt32, slot));
+				context.SetOperand(1, Operand.CreateConstant(BuiltInSigType.UInt32, slot));
 				context.SetOperand(2, reference);
 				context.OperandCount = 3;
 				context.ResultCount = 1;
@@ -795,7 +795,7 @@ namespace Mosa.Compiler.Framework.IR
 			var classSize = typeLayout.GetTypeSize(type);
 
 			context.SetOperand(1, methodTableSymbol);
-			context.SetOperand(2, new ConstantOperand(BuiltInSigType.UInt32, classSize));
+			context.SetOperand(2, Operand.CreateConstant(BuiltInSigType.UInt32, classSize));
 			context.SetOperand(3, value);
 			context.OperandCount = 4;
 			context.Result = result;
@@ -917,7 +917,7 @@ namespace Mosa.Compiler.Framework.IR
 
 			}
 
-			Operand source = new SymbolOperand(BuiltInSigType.String, symbolName);
+			Operand source = Operand.CreateSymbol(BuiltInSigType.String, symbolName);
 			Operand destination = context.Result;
 
 			context.SetInstruction(IRInstruction.Move, destination, source);
@@ -935,7 +935,7 @@ namespace Mosa.Compiler.Framework.IR
 			RuntimeField field = context.RuntimeField;
 
 			int offset = typeLayout.GetFieldOffset(field);
-			ConstantOperand offsetOperand = new ConstantOperand(BuiltInSigType.IntPtr, offset);
+			Operand offsetOperand = Operand.CreateConstant(BuiltInSigType.IntPtr, offset);
 
 			IInstruction loadInstruction = IRInstruction.Load;
 			if (MustSignExtendOnLoad(field.SignatureType.Type))
@@ -961,7 +961,7 @@ namespace Mosa.Compiler.Framework.IR
 			Operand objectOperand = context.Operand1;
 
 			int offset = typeLayout.GetFieldOffset(context.RuntimeField);
-			Operand fixedOffset = new ConstantOperand(BuiltInSigType.Int32, offset);
+			Operand fixedOffset = Operand.CreateConstant(BuiltInSigType.Int32, offset);
 
 			context.SetInstruction(IRInstruction.AddU, fieldAddress, objectOperand, fixedOffset);
 		}
@@ -977,7 +977,7 @@ namespace Mosa.Compiler.Framework.IR
 			Operand temp = methodCompiler.CreateVirtualRegister(context.RuntimeField.SignatureType);
 
 			int offset = typeLayout.GetFieldOffset(context.RuntimeField);
-			ConstantOperand offsetOperand = new ConstantOperand(BuiltInSigType.IntPtr, offset);
+			Operand offsetOperand = Operand.CreateConstant(BuiltInSigType.IntPtr, offset);
 
 			context.SetInstruction(IRInstruction.Move, temp, valueOperand);
 			context.AppendInstruction(IRInstruction.Store, objectOperand, objectOperand, offsetOperand, temp);
@@ -1011,7 +1011,7 @@ namespace Mosa.Compiler.Framework.IR
 
 			ConditionCode cc;
 			Operand first = context.Operand1;
-			Operand second = ConstantOperand.I4_0;
+			Operand second = Operand.I4_0;
 
 			CIL.OpCode opcode = ((CIL.ICILInstruction)context.Instruction).OpCode;
 			if (opcode == CIL.OpCode.Brtrue || opcode == CIL.OpCode.Brtrue_s)
@@ -1049,7 +1049,7 @@ namespace Mosa.Compiler.Framework.IR
 				Operand comparisonResult = methodCompiler.CreateVirtualRegister(BuiltInSigType.Int32);
 				context.SetInstruction(IRInstruction.FloatingPointCompare, comparisonResult, first, second);
 				context.ConditionCode = cc;
-				context.AppendInstruction(IRInstruction.IntegerCompareBranch, null, comparisonResult, new ConstantOperand(BuiltInSigType.IntPtr, 1));
+				context.AppendInstruction(IRInstruction.IntegerCompareBranch, null, comparisonResult, Operand.CreateConstant(BuiltInSigType.IntPtr, 1));
 				context.ConditionCode = ConditionCode.Equal;
 				context.SetBranch(target);
 			}
@@ -1087,7 +1087,7 @@ namespace Mosa.Compiler.Framework.IR
 		{
 			Operand arrayOperand = context.Operand1;
 			Operand arrayLength = context.Result;
-			ConstantOperand constantOffset = ConstantOperand.FromValue(8);
+			Operand constantOffset = Operand.CreateConstant(8);
 
 			Operand arrayAddress = methodCompiler.CreateVirtualRegister(new PtrSigType(BuiltInSigType.Int32));
 			context.SetInstruction(IRInstruction.Move, arrayAddress, arrayOperand);
@@ -1132,7 +1132,7 @@ namespace Mosa.Compiler.Framework.IR
 			//
 
 			Operand elementOffset = methodCompiler.CreateVirtualRegister(BuiltInSigType.Int32);
-			Operand elementSizeOperand = new ConstantOperand(BuiltInSigType.Int32, elementSizeInBytes);
+			Operand elementSizeOperand = Operand.CreateConstant(BuiltInSigType.Int32, elementSizeInBytes);
 			context.AppendInstruction(IRInstruction.MulS, elementOffset, arrayIndexOperand, elementSizeOperand);
 
 			return elementOffset;
@@ -1141,7 +1141,7 @@ namespace Mosa.Compiler.Framework.IR
 		private Operand LoadArrayBaseAddress(Context context, SZArraySigType arraySignatureType, Operand arrayOperand)
 		{
 			Operand arrayAddress = methodCompiler.CreateVirtualRegister(new PtrSigType(arraySignatureType.ElementType));
-			Operand fixedOffset = new ConstantOperand(BuiltInSigType.Int32, 12);
+			Operand fixedOffset = Operand.CreateConstant(BuiltInSigType.Int32, 12);
 			context.SetInstruction(IRInstruction.AddS, arrayAddress, arrayOperand, fixedOffset);
 			return arrayAddress;
 		}
@@ -1880,11 +1880,11 @@ namespace Mosa.Compiler.Framework.IR
 				if (sourceOperand.Type.Type == CilElementType.I8 || sourceOperand.Type.Type == CilElementType.U8)
 				{
 					context.SetInstruction(IRInstruction.Move, destinationOperand, sourceOperand);
-					context.AppendInstruction(type, destinationOperand, sourceOperand, new ConstantOperand(BuiltInSigType.UInt32, mask));
+					context.AppendInstruction(type, destinationOperand, sourceOperand, Operand.CreateConstant(BuiltInSigType.UInt32, mask));
 				}
 				else
 				{
-					context.SetInstruction(type, destinationOperand, sourceOperand, new ConstantOperand(BuiltInSigType.UInt32, mask));
+					context.SetInstruction(type, destinationOperand, sourceOperand, Operand.CreateConstant(BuiltInSigType.UInt32, mask));
 				}
 			}
 			else
@@ -2077,7 +2077,7 @@ namespace Mosa.Compiler.Framework.IR
 			Debug.Assert(method != null, "Cannot find method: " + internalCallTarget.ToString());
 
 			context.ReplaceInstructionOnly(IRInstruction.Call);
-			context.SetOperand(0, SymbolOperand.FromMethod(method));
+			context.SetOperand(0, Operand.CreateSymbolFromMethod(method));
 			context.OperandCount = 1;
 		}
 
@@ -2095,7 +2095,7 @@ namespace Mosa.Compiler.Framework.IR
 				Operand result = context.Result;
 				List<Operand> operands = new List<Operand>(context.Operands);
 
-				ProcessInvokeInstruction(context, SymbolOperand.FromMethod(method), result, operands);
+				ProcessInvokeInstruction(context, Operand.CreateSymbolFromMethod(method), result, operands);
 			}
 
 			return internalCall;

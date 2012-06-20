@@ -56,7 +56,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var cA = LoadSignedInteger(context.Operand1);
 			var cB = LoadSignedInteger(context.Operand2);
 
-			context.SetInstruction(IRInstruction.Move, context.Result, new ConstantOperand(context.Result.Type, cA + cB));
+			context.SetInstruction(IRInstruction.Move, context.Result, Operand.CreateConstant(context.Result.Type, cA + cB));
 		}
 
 		/// <summary>
@@ -68,7 +68,7 @@ namespace Mosa.Compiler.Framework.Stages
 			var cA = LoadSignedInteger(context.Operand1);
 			var cB = LoadSignedInteger(context.Operand2);
 
-			context.SetInstruction(IRInstruction.Move, context.Result, new ConstantOperand(context.Result.Type, cA * cB));
+			context.SetInstruction(IRInstruction.Move, context.Result, Operand.CreateConstant(context.Result.Type, cA * cB));
 		}
 
 		/// <summary>
@@ -106,13 +106,12 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <returns></returns>
 		private int LoadSignedInteger(Operand operand)
 		{
-			var cop = operand as ConstantOperand;
-			if (cop.Value is int)
-				return (int)(operand as ConstantOperand).Value;
-			if (cop.Value is short)
-				return (int)(short)(operand as ConstantOperand).Value;
-			if (cop.Value is sbyte)
-				return (int)(sbyte)(operand as ConstantOperand).Value;
+			if (operand.Value is int)
+				return (int)(operand.Value);
+			if (operand.Value is short)
+				return (int)(short)(operand.Value);
+			if (operand.Value is sbyte)
+				return (int)(sbyte)(operand.Value);
 			return 0;
 		}
 

@@ -118,20 +118,20 @@ namespace Mosa.Platform.AVR32
 		{
 			if (stackSize != 0)
 			{
-				DefinedRegisterOperand sp = new DefinedRegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.SP);
+				Operand sp = Operand.CreateCPURegister(BuiltInSigType.IntPtr, GeneralPurposeRegister.SP);
 
-				ctx.AppendInstruction(AVR32.Sub, sp, new ConstantOperand(sp.Type, stackSize));
-				ctx.AppendInstruction(AVR32.Mov, new DefinedRegisterOperand(architecture.NativeType, GeneralPurposeRegister.R9), sp);
+				ctx.AppendInstruction(AVR32.Sub, sp, Operand.CreateConstant(sp.Type, stackSize));
+				ctx.AppendInstruction(AVR32.Mov, Operand.CreateCPURegister(architecture.NativeType, GeneralPurposeRegister.R9), sp);
 			}
 		}
 
 		private void FreeStackAfterCall(Context ctx, int stackSize)
 		{
-			DefinedRegisterOperand sp = new DefinedRegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.SP);
-			DefinedRegisterOperand r7 = new DefinedRegisterOperand(BuiltInSigType.IntPtr, GeneralPurposeRegister.R7);
+			Operand sp = Operand.CreateCPURegister(BuiltInSigType.IntPtr, GeneralPurposeRegister.SP);
+			Operand r7 = Operand.CreateCPURegister(BuiltInSigType.IntPtr, GeneralPurposeRegister.R7);
 			if (stackSize != 0)
 			{
-				ctx.AppendInstruction(AVR32.Mov, r7, new ConstantOperand(BuiltInSigType.IntPtr, stackSize));
+				ctx.AppendInstruction(AVR32.Mov, r7, Operand.CreateConstant(BuiltInSigType.IntPtr, stackSize));
 				ctx.AppendInstruction(AVR32.Add, sp, r7);
 			}
 		}
@@ -175,7 +175,7 @@ namespace Mosa.Platform.AVR32
 		/// <param name="ctx">The context.</param>
 		private void MoveReturnValueTo32Bit(Operand resultOperand, Context ctx)
 		{
-			DefinedRegisterOperand r8 = new DefinedRegisterOperand(resultOperand.Type, GeneralPurposeRegister.R8);
+			Operand r8 = Operand.CreateCPURegister(resultOperand.Type, GeneralPurposeRegister.R8);
 			ctx.AppendInstruction(AVR32.Mov, resultOperand, r8);
 		}
 
@@ -220,14 +220,14 @@ namespace Mosa.Platform.AVR32
 					return;
 				}
 
-				DefinedRegisterOperand rop;
+				Operand rop;
 				switch (op.StackType)
 				{
 					case StackTypeCode.O: goto case StackTypeCode.N;
 					case StackTypeCode.Ptr: goto case StackTypeCode.N;
 					case StackTypeCode.Int32: goto case StackTypeCode.N;
 					case StackTypeCode.N:
-						rop = new DefinedRegisterOperand(op.Type, GeneralPurposeRegister.R8);
+						rop = Operand.CreateCPURegister(op.Type, GeneralPurposeRegister.R8);
 						break;
 
 					case StackTypeCode.F:
@@ -240,7 +240,7 @@ namespace Mosa.Platform.AVR32
 						{
 							MemoryOperand mop = op as MemoryOperand;
 							Debug.Assert(null != mop, @"I8/U8 arg is not in a memory operand.");
-							DefinedRegisterOperand r8 = new DefinedRegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.R8);
+							Operand r8 = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.R8);
 
 							//Operand opL, opH;
 							//LongOperandTransformationStage.SplitLongOperand(mop, out opL, out opH);
@@ -309,7 +309,7 @@ namespace Mosa.Platform.AVR32
 			// FIXME: Do not issue a move, if the operand is already the destination register
 			if (size == 4 || size == 2 || size == 1)
 			{
-				ctx.SetInstruction(AVR32.Mov, new DefinedRegisterOperand(operand.Type, GeneralPurposeRegister.R8), operand);
+				ctx.SetInstruction(AVR32.Mov, Operand.CreateCPURegister(operand.Type, GeneralPurposeRegister.R8), operand);
 				return;
 			}
 			else if (size == 8 && (operand.Type.Type == CilElementType.R4 || operand.Type.Type == CilElementType.R8))

@@ -56,36 +56,35 @@ namespace Mosa.Platform.x86.Instructions
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-			if (destination is RegisterOperand)
-				if ((destination as DefinedRegisterOperand).Register is ControlRegister) return CR_R;
-				else if ((destination as DefinedRegisterOperand).Register is SegmentRegister)
-					return SR_R;
+			if (destination.IsRegister)
+				if (destination.Register is ControlRegister) return CR_R;
+				else if (destination.Register is SegmentRegister) return SR_R;
 
-			if (source is RegisterOperand)
-				if ((source as DefinedRegisterOperand).Register is ControlRegister) return R_CR;
-				else if ((source as DefinedRegisterOperand).Register is SegmentRegister)
+			if (source.IsRegister)
+				if (source.Register is ControlRegister) return R_CR;
+				else if (source.Register is SegmentRegister)
 					throw new ArgumentException(@"TODO: No opcode for move from segment register");
 
-			if ((destination is RegisterOperand) && (source.IsConstant)) return R_C;
+			if ((destination.IsRegister) && (source.IsConstant)) return R_C;
 			if ((destination is MemoryOperand) && (source.IsConstant)) return M_C;
-			if ((destination is RegisterOperand) && (source is LabelOperand)) return R_C;
+			if ((destination.IsRegister) && (source is LabelOperand)) return R_C;
 			if ((destination is MemoryOperand) && (source is LabelOperand)) return M_C;
-			if ((destination is RegisterOperand) && (source is SymbolOperand)) return R_C;
-			if ((destination is MemoryOperand) && (source is SymbolOperand)) return M_C;
+			if ((destination.IsRegister) && (source.IsSymbol)) return R_C;
+			if ((destination is MemoryOperand) && (source.IsSymbol)) return M_C;
 
-			if ((destination is RegisterOperand) && (source is RegisterOperand))
+			if ((destination.IsRegister) && (source.IsRegister))
 			{
 				if (IsByte(source) || IsByte(destination)) return R_R_U8;
 				if (IsChar(source) || IsChar(destination) || IsShort(source) || IsShort(destination)) return R_R_16;
 				return R_R;
 			}
-			if ((destination is RegisterOperand) && (source is MemoryOperand))
+			if ((destination.IsRegister) && (source is MemoryOperand))
 			{
 				if (IsByte(destination)) return R_M_U8;
 				if (IsChar(destination) || IsShort(destination)) return R_M_16;
 				return R_M;
 			}
-			if ((destination is MemoryOperand) && (source is RegisterOperand))
+			if ((destination is MemoryOperand) && (source.IsRegister))
 			{
 				if (IsByte(destination)) return M_R_U8;
 				if (IsChar(destination) || IsShort(destination)) return M_R_16;

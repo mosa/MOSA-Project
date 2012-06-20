@@ -155,18 +155,18 @@ namespace Mosa.Platform.x86.Stages
 				ITypeInitializerSchedulerStage typeInitializerSchedulerStage = this.compiler.Pipeline.FindFirst<ITypeInitializerSchedulerStage>();
 
 				SigType I4 = BuiltInSigType.Int32;
-				DefinedRegisterOperand ecx = new DefinedRegisterOperand(I4, GeneralPurposeRegister.ECX);
-				DefinedRegisterOperand eax = new DefinedRegisterOperand(I4, GeneralPurposeRegister.EAX);
-				DefinedRegisterOperand ebx = new DefinedRegisterOperand(I4, GeneralPurposeRegister.EBX);
+				Operand ecx = Operand.CreateCPURegister(I4, GeneralPurposeRegister.ECX);
+				Operand eax = Operand.CreateCPURegister(I4, GeneralPurposeRegister.EAX);
+				Operand ebx = Operand.CreateCPURegister(I4, GeneralPurposeRegister.EBX);
 
 				InstructionSet instructionSet = new InstructionSet(16);
 				Context ctx = new Context(instructionSet);
 
-				ctx.AppendInstruction(X86.Mov, ecx, new ConstantOperand(I4, 0x200000));
+				ctx.AppendInstruction(X86.Mov, ecx, Operand.CreateConstant(I4, 0x200000));
 				ctx.AppendInstruction(X86.Mov, new MemoryOperand(ecx.Register, I4, new IntPtr(0x0)), eax);
 				ctx.AppendInstruction(X86.Mov, new MemoryOperand(ecx.Register, I4, new IntPtr(0x4)), ebx);
 
-				SymbolOperand entryPoint = SymbolOperand.FromMethod(typeInitializerSchedulerStage.TypeInitializerMethod);
+				Operand entryPoint = Operand.CreateSymbolFromMethod(typeInitializerSchedulerStage.TypeInitializerMethod);
 
 				ctx.AppendInstruction(X86.Call, null, entryPoint);
 				ctx.AppendInstruction(X86.Ret);

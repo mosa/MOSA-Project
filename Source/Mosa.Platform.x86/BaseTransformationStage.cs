@@ -78,15 +78,13 @@ namespace Mosa.Platform.x86
 		/// This function checks if the given operand needs to be moved and rewires the operand, if
 		/// it must be moved.
 		/// </remarks>
-		protected Operand EmitConstant(Operand op)
+		protected Operand EmitConstant(Operand cop)
 		{
-			ConstantOperand cop = op as ConstantOperand;
-
-			if (cop == null)
-				return op;
+			if (!cop.IsConstant)
+				return cop;
 
 			if (!(cop.StackType == StackTypeCode.F || cop.StackType == StackTypeCode.Int64))
-				return op;
+				return cop;
 
 			int size, alignment;
 			architecture.GetTypeRequirements(cop.Type, out size, out alignment);
@@ -98,23 +96,11 @@ namespace Mosa.Platform.x86
 				{
 					switch (cop.Type.Type)
 					{
-						case CilElementType.R4:
-							writer.Write((float)cop.Value);
-							break;
-
-						case CilElementType.R8:
-							writer.Write((double)cop.Value);
-							break;
-
-						case CilElementType.I8:
-							writer.Write((long)cop.Value);
-							break;
-
-						case CilElementType.U8:
-							writer.Write((ulong)cop.Value);
-							break;
-						default:
-							throw new NotSupportedException();
+						case CilElementType.R4: writer.Write((float)cop.Value); break;
+						case CilElementType.R8: writer.Write((double)cop.Value); break;
+						case CilElementType.I8: writer.Write((long)cop.Value); break;
+						case CilElementType.U8: writer.Write((ulong)cop.Value); break;
+						default: throw new NotSupportedException();
 					}
 				}
 			}

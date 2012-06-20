@@ -69,7 +69,7 @@ namespace Mosa.Compiler.Framework.CIL
 
 				if (plugMethod != null)
 				{
-					SymbolOperand plugSymbol = SymbolOperand.FromMethod(plugMethod);
+					Operand plugSymbol = Operand.CreateSymbolFromMethod(plugMethod);
 
 					Context ctx = new Context(instructionSet);
 					ctx.AppendInstruction(IR.IRInstruction.Jmp, null, plugSymbol);
