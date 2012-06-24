@@ -37,19 +37,8 @@ namespace Mosa.Compiler.Framework.Stages
 				if (methodCompiler.PlugSystem.GetPlugMethod(methodCompiler.Method) != null)
 					return;
 
-			List<Operand> locals = CollectLocalVariablesFromIL();
-
-			// Iterate and collect locals from all blocks
-			foreach (BasicBlock block in basicBlocks)
-			{
-				CollectLocalVariables(locals, block);
-			}
-
-			// Sort all found locals
-			OrderVariables(locals, callingConvention);
-
-			// Now we assign increasing stack offsets to each variable
-			localsSize = LayoutVariables(locals, callingConvention, callingConvention.OffsetOfFirstLocal, 1);
+			// Layout stack variables
+			LayoutStackVariables();
 
 			// Layout parameters
 			LayoutParameters(methodCompiler);
@@ -76,36 +65,34 @@ namespace Mosa.Compiler.Framework.Stages
 
 		#region Internals
 
-		private List<Operand> CollectLocalVariablesFromIL()
+		/// <summary>
+		/// Layouts the stack variables.
+		/// </summary>
+		private void LayoutStackVariables()
+		{
+			List<Operand> locals = GetActiveStackVariables();
+
+			// Sort all found locals
+			OrderVariables(locals, callingConvention);
+
+			// Now we assign increasing stack offsets to each variable
+			localsSize = LayoutVariables(locals, callingConvention, callingConvention.OffsetOfFirstLocal, 1);
+		}
+
+		/// <summary>
+		/// Gets the active stack variables.
+		/// </summary>
+		/// <returns></returns>
+		private List<Operand> GetActiveStackVariables()
 		{
 			// Allocate a list of locals
 			List<Operand> locals = new List<Operand>();
 
-			if (methodCompiler.LocalVariables == null)
-				return locals;
-
-			foreach (var localVariable in methodCompiler.LocalVariables)
-				locals.Add(localVariable);
+			foreach (var operand in methodCompiler.StackLayout.Stack)
+				if (operand.IsLocalVariable || operand.Uses.Count != 0 || operand.Definitions.Count != 0)
+					locals.Add(operand);
 
 			return locals;
-		}
-
-		/// <summary>
-		/// Collects all local variables assignments into a list.
-		/// </summary>
-		/// <param name="locals">Holds all locals found by the stage.</param>
-		/// <param name="block">The block.</param>
-		private void CollectLocalVariables(List<Operand> locals, BasicBlock block)
-		{
-			for (Context ctx = new Context(instructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
-			{
-				if (ctx.Result != null)
-				{
-					if (ctx.Result.IsLocalVariable || ctx.Result.IsStackTemp)
-						if (!locals.Contains(ctx.Result))
-							locals.Add(ctx.Result);
-				}
-			}
 		}
 
 		/// <summary>
@@ -131,15 +118,15 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Performs a stack layout of all local variables in the list.
 		/// </summary>
 		/// <param name="locals">The enumerable holding all locals.</param>
-		/// <param name="cc">The cc.</param>
+		/// <param name="callingConvention">The cc.</param>
 		/// <param name="offsetOfFirst">Specifies the offset of the first stack operand in the list.</param>
 		/// <param name="direction">The direction.</param>
 		/// <returns></returns>
-		private static int LayoutVariables(IEnumerable<Operand> locals, ICallingConvention cc, int offsetOfFirst, int direction)
+		private static int LayoutVariables(List<Operand> locals, ICallingConvention callingConvention, int offsetOfFirst, int direction)
 		{
 			int offset = offsetOfFirst;
 
-			foreach (Operand lvo in locals)
+			foreach (Operand operand in locals)
 			{
 				// Does the offset fit the alignment requirement?
 				int alignment;
@@ -147,7 +134,7 @@ namespace Mosa.Compiler.Framework.Stages
 				int padding;
 				int thisOffset;
 
-				cc.GetStackRequirements(lvo, out size, out alignment);
+				callingConvention.GetStackRequirements(operand, out size, out alignment);
 				if (direction == 1)
 				{
 					padding = (offset % alignment);
@@ -164,7 +151,7 @@ namespace Mosa.Compiler.Framework.Stages
 					offset += (padding + size);
 				}
 
-				lvo.Offset = new IntPtr(thisOffset);
+				operand.Offset = new IntPtr(thisOffset);
 			}
 
 			return offset;
@@ -174,16 +161,16 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Sorts all local variables by their size requirements.
 		/// </summary>
 		/// <param name="locals">Holds all local variables to sort..</param>
-		/// <param name="cc">The calling convention used to determine size and alignment requirements.</param>
-		private static void OrderVariables(List<Operand> locals, ICallingConvention cc)
+		/// <param name="callingConvention">The calling convention used to determine size and alignment requirements.</param>
+		private static void OrderVariables(List<Operand> locals, ICallingConvention callingConvention)
 		{
 			// Sort the list by stack size requirements - this moves equally sized operands closer together,
 			// in the hope that this reduces padding on the stack to enforce HW alignment requirements.			 
 			locals.Sort(delegate(Operand op1, Operand op2)
 			{
 				int size1, size2, alignment;
-				cc.GetStackRequirements(op1, out size1, out alignment);
-				cc.GetStackRequirements(op2, out size2, out alignment);
+				callingConvention.GetStackRequirements(op1, out size1, out alignment);
+				callingConvention.GetStackRequirements(op2, out size2, out alignment);
 				return size2 - size1;
 			});
 		}

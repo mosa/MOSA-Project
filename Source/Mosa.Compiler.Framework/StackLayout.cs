@@ -29,8 +29,6 @@ namespace Mosa.Compiler.Framework
 
 		private Operand[] parameters;
 
-		//private StackSizeOperand stackSizeOperand;
-
 		#endregion // Data members
 
 		#region Properties
@@ -44,14 +42,14 @@ namespace Mosa.Compiler.Framework
 		public int StackMemorySize { get { return stackMemorySize; } set { stackMemorySize = value; } }
 
 		/// <summary>
-		/// Gets the stack size operand.
-		/// </summary>
-		//public StackSizeOperand StackSizeOperand { get { return stackSizeOperand; } }
-
-		/// <summary>
 		/// Gets the parameters.
 		/// </summary>
 		public Operand[] Parameters { get { return parameters; } }
+
+		/// <summary>
+		/// Gets the stack.
+		/// </summary>
+		public IList<Operand> Stack { get { return stack.AsReadOnly(); } }
 
 		#endregion // Properties
 
@@ -63,7 +61,6 @@ namespace Mosa.Compiler.Framework
 		public StackLayout(IArchitecture architecture, int parameters)
 		{
 			this.architecture = architecture;
-			//this.stackSizeOperand = new StackSizeOperand(this);
 			this.parameters = new Operand[parameters];
 		}
 
