@@ -134,7 +134,7 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						var op = context.GetOperand(i);
 
-						if (!op.IsStackLocal)
+						if (op == null || !op.IsStackLocal)
 							continue;
 
 						if (!variables.ContainsKey(op))
