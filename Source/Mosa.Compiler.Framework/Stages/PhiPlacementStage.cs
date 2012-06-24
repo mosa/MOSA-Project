@@ -11,7 +11,6 @@ using System;
 using System.Collections.Generic;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.Framework.Operands;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -92,7 +91,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </returns>
 		public static bool IsAssignmentToStackVariable(Context instruction)
 		{
-			return instruction.Result != null && instruction.Result is StackOperand;
+			return instruction.Result != null && instruction.Result.IsStackLocal;
 		}
 
 		/// <summary>

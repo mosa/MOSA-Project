@@ -8,9 +8,7 @@
  */
 
 using System;
-
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Operands;
 
 namespace Mosa.Platform.x86.Instructions
 {
@@ -42,11 +40,11 @@ namespace Mosa.Platform.x86.Instructions
 		{
 			if (destination.IsRegister)
 			{
-				if (source is MemoryOperand) return R_M;
+				if (source.IsMemoryAddress) return R_M;
 				if (source.IsRegister) return R_R;
 				if (source.IsConstant) return R_C;
 			}
-			else if (destination is MemoryOperand)
+			else if (destination.IsMemoryAddress)
 			{
 				if (source.IsRegister) return M_R;
 				if (source.IsConstant) return M_C;

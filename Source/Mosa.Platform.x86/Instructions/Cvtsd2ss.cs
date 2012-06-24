@@ -11,7 +11,6 @@
 using System;
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Operands;
 
 namespace Mosa.Platform.x86.Instructions
 {
@@ -38,7 +37,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-			if ((destination.IsRegister) && (source.IsRegister || source is MemoryOperand)) return opcode;
+			if ((destination.IsRegister) && (source.IsRegister || source.IsMemoryAddress)) return opcode;
 
 			throw new ArgumentException(@"No opcode for operand type.");
 		}

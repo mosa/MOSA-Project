@@ -7,7 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using Mosa.Compiler.Framework.Operands;
 
 namespace Mosa.Compiler.Framework.CIL
 {

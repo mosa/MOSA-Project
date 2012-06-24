@@ -13,7 +13,6 @@ using System;
 using System.Diagnostics;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.Framework.Operands;
 using Mosa.Compiler.Framework.Platform;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
@@ -147,7 +146,7 @@ namespace Mosa.Platform.x86.Stages
 			context.Operand2 = right;
 
 			// Swap the operands if necessary...
-			if (left is MemoryOperand && right.IsRegister)
+			if (left.IsMemoryAddress && right.IsRegister)
 			{
 				SwapComparisonOperands(context);
 				left = context.Operand1;
@@ -398,7 +397,7 @@ namespace Mosa.Platform.x86.Stages
 				context.AppendInstruction(X86.Add, eax, offset);
 			}
 
-			context.AppendInstruction(X86.Mov, result, new MemoryOperand(GeneralPurposeRegister.EAX, eax.Type, offsetPtr));
+			context.AppendInstruction(X86.Mov, result, Operand.CreateMemoryAddress(eax.Type, GeneralPurposeRegister.EAX, offsetPtr));
 		}
 
 		/// <summary>
@@ -476,7 +475,7 @@ namespace Mosa.Platform.x86.Stages
 			}
 			else
 			{
-				if (context.Result is MemoryOperand && context.Operand1 is MemoryOperand)
+				if (context.Result.IsMemoryAddress && context.Operand1.IsMemoryAddress)
 				{
 					Operand load = Operand.CreateCPURegister(BuiltInSigType.IntPtr, GeneralPurposeRegister.EDX);
 					Operand store = Operand.CreateCPURegister(operand.Type, GeneralPurposeRegister.EDX);
@@ -672,7 +671,7 @@ namespace Mosa.Platform.x86.Stages
 				context.AppendInstruction(X86.Add, eax, offset);
 			}
 
-			context.AppendInstruction(X86.Mov, new MemoryOperand(GeneralPurposeRegister.EAX, value.Type, offsetPtr), edx);
+			context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(value.Type, GeneralPurposeRegister.EAX, offsetPtr), edx);
 		}
 
 		/// <summary>
@@ -918,11 +917,12 @@ namespace Mosa.Platform.x86.Stages
 			{
 				var eax = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EAX);
 				var destination = context.Result;
-				var source = context.Operand1 as MemoryOperand;
+				var source = context.Operand1;
 				var elementType = type == null ? GetElementType(source.Type) : GetElementType(type);
 				var offsetPtr = IntPtr.Zero;
 
 				context.SetInstruction(X86.Mov, eax, source);
+
 				if (offset.IsConstant)
 				{
 					offsetPtr = new IntPtr(Convert.ToInt64(offset.Value));
@@ -932,7 +932,7 @@ namespace Mosa.Platform.x86.Stages
 					context.AppendInstruction(X86.Add, eax, offset);
 				}
 
-				context.AppendInstruction(X86.Movsx, destination, new MemoryOperand(GeneralPurposeRegister.EAX, elementType, offsetPtr));
+				context.AppendInstruction(X86.Movsx, destination, Operand.CreateMemoryAddress(elementType, GeneralPurposeRegister.EAX, offsetPtr));
 			}
 			else
 			{
@@ -1003,7 +1003,7 @@ namespace Mosa.Platform.x86.Stages
 				{
 					context.AppendInstruction(X86.Add, eax, offset);
 				}
-				context.AppendInstruction(X86.Movzx, result, new MemoryOperand(GeneralPurposeRegister.EAX, elementType, offsetPtr));
+				context.AppendInstruction(X86.Movzx, result, Operand.CreateMemoryAddress(elementType, GeneralPurposeRegister.EAX, offsetPtr));
 			}
 			else
 			{

@@ -15,7 +15,6 @@ using System.IO;
 using System.Text;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework.CIL;
-using Mosa.Compiler.Framework.Operands;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Loader;
@@ -148,7 +147,7 @@ namespace Mosa.Compiler.Framework.IR
 		public void Ldsfld(Context context)
 		{
 			SigType sigType = context.RuntimeField.SignatureType;
-			Operand source = new MemberOperand(context.RuntimeField);
+			Operand source = Operand.CreateRuntimeMember(context.RuntimeField);
 			Operand destination = context.Result;
 
 			IInstruction loadInstruction = IRInstruction.Move;
@@ -170,7 +169,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// <param name="context">The context.</param>
 		public void Ldsflda(Context context)
 		{
-			context.SetInstruction(IRInstruction.AddressOf, context.Result, new MemberOperand(context.RuntimeField));
+			context.SetInstruction(IRInstruction.AddressOf, context.Result, Operand.CreateRuntimeMember(context.RuntimeField));
 			context.SetInstruction(IRInstruction.Move, context.Result, context.Operand1);
 		}
 
@@ -235,7 +234,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Stsfld(Context context)
 		{
-			context.SetInstruction(IRInstruction.Move, new MemberOperand(context.RuntimeField), context.Operand1);
+			context.SetInstruction(IRInstruction.Move, Operand.CreateRuntimeMember(context.RuntimeField), context.Operand1);
 		}
 
 		/// <summary>
@@ -300,14 +299,14 @@ namespace Mosa.Compiler.Framework.IR
 			if (context.Operand1.Type is ValueTypeSigType)
 			{
 				var type = methodCompiler.Method.Module.GetType((context.Operand1.Type as ValueTypeSigType).Token);
-				var operand = new MemberOperand(type.Fields[0], type.Fields[0].SignatureType, new IntPtr(0));
+				var operand = Operand.CreateRuntimeMember(type.Fields[0].SignatureType, type.Fields[0], new IntPtr(0));
 				context.SetOperand(0, operand);
 			}
 
 			if (context.Operand2.Type is ValueTypeSigType)
 			{
 				var type = methodCompiler.Method.Module.GetType((context.Operand2.Type as ValueTypeSigType).Token);
-				var operand = new MemberOperand(type.Fields[0], type.Fields[0].SignatureType, new IntPtr(0));
+				var operand = Operand.CreateRuntimeMember(type.Fields[0].SignatureType, type.Fields[0], new IntPtr(0));
 				context.SetOperand(1, operand);
 			}
 

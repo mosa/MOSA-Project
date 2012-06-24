@@ -6,8 +6,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using Mosa.Test.Collection;
 
 namespace Mosa.HelloWorld.x86.Tests
 {

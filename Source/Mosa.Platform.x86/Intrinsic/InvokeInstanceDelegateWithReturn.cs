@@ -11,7 +11,6 @@
 using System;
 using System.Collections.Generic;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Operands;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
 
@@ -46,10 +45,10 @@ namespace Mosa.Platform.x86.Intrinsic
 			var size = parameters.Count * 4 + 4;
 			foreach (var parameter in parameters)
 			{
-				context.AppendInstruction(X86.Mov, new MemoryOperand(edx.Register, BuiltInSigType.IntPtr, new IntPtr(size - 4)), new MemoryOperand(ebp.Register, BuiltInSigType.IntPtr, new IntPtr(size + 4)));
+				context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(BuiltInSigType.IntPtr, edx.Register, new IntPtr(size - 4)), Operand.CreateMemoryAddress(BuiltInSigType.IntPtr, ebp.Register, new IntPtr(size + 4)));
 				size -= 4;
 			}
-			context.AppendInstruction(X86.Mov, new MemoryOperand(edx.Register, BuiltInSigType.IntPtr, new IntPtr(size - 4)), op1);
+			context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(BuiltInSigType.IntPtr, edx.Register, new IntPtr(size - 4)), op1);
 
 			context.AppendInstruction(X86.Mov, eax, op2);
 			context.AppendInstruction(X86.Call, null, Operand.CreateCPURegister(BuiltInSigType.IntPtr, GeneralPurposeRegister.EAX));

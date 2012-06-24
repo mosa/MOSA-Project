@@ -12,7 +12,6 @@
 using System.Diagnostics;
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Operands;
 using Mosa.Compiler.Framework.Platform;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
@@ -36,22 +35,25 @@ namespace Mosa.Platform.x86.Stages
 			{
 				for (Context ctx = CreateContext(block); !ctx.EndOfInstruction; ctx.GotoNext())
 				{
-					if (ctx.Instruction != null)
+					if (ctx.Instruction == null || ctx.Ignore || !(ctx.Instruction is X86Instruction))
+						continue;
+
+					if (ctx.Operand1 == null)
+						continue;
+
+					if (!ctx.Operand1.IsMemoryAddress)
+						continue;
+
+					if (ctx.Result != null)
 					{
-						if (!ctx.Ignore && ctx.Instruction is X86Instruction)
+						if (ctx.Result.IsMemoryAddress)
 						{
-							if (ctx.Operand1 is MemoryOperand)
-							{
-								if (ctx.Result is MemoryOperand)
-								{
-									HandleMemoryToMemoryOperation(ctx);
-								}
-								if (ctx.Result == null && ctx.Operand2 is MemoryOperand)
-								{
-									HandleMemoryToMemoryOperation2(ctx);
-								}
-							}
+							HandleMemoryToMemoryOperation(ctx);
 						}
+					}
+					else if (ctx.Operand2 != null && ctx.Operand2.IsMemoryAddress)
+					{
+						HandleMemoryToMemoryOperation2(ctx);
 					}
 				}
 			}
@@ -64,7 +66,7 @@ namespace Mosa.Platform.x86.Stages
 			Operand destination = ctx.Result;
 			Operand source = ctx.Operand1;
 
-			Debug.Assert(destination is MemoryOperand && source is MemoryOperand);
+			Debug.Assert(destination.IsMemoryAddress && source.IsMemoryAddress);
 
 			SigType destinationSigType = destination.Type;
 
@@ -93,7 +95,7 @@ namespace Mosa.Platform.x86.Stages
 			Operand destination = ctx.Operand1;
 			Operand source = ctx.Operand2;
 
-			Debug.Assert(destination is MemoryOperand && source is MemoryOperand);
+			Debug.Assert(destination.IsMemoryAddress && source.IsMemoryAddress);
 
 			SigType destinationSigType = destination.Type;
 

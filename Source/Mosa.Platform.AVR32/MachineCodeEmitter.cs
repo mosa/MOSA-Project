@@ -10,7 +10,6 @@
 
 using System;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Operands;
 using Mosa.Compiler.Linker;
 
 namespace Mosa.Platform.AVR32

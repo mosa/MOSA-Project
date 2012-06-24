@@ -31,7 +31,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="source"></param>
 		/// <param name="third"></param>
 		/// <returns></returns>
-		protected override OpCode ComputeOpCode(Compiler.Framework.Operands.Operand destination, Compiler.Framework.Operands.Operand source, Compiler.Framework.Operands.Operand third)
+		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
 			return opcode;
 		}

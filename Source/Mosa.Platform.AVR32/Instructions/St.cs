@@ -10,7 +10,6 @@
 
 using System;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Operands;
 
 namespace Mosa.Platform.AVR32.Instructions
 {
@@ -32,9 +31,9 @@ namespace Mosa.Platform.AVR32.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
-			if (context.Result is MemoryOperand && context.Operand1.IsRegister)
+			if (context.Result.IsMemoryAddress && context.Operand1.IsRegister)
 			{
-				MemoryOperand destination = context.Result as MemoryOperand;
+				Operand destination = context.Result;
 
 				if (IsBetween(destination.Offset.ToInt32(), 0, 60))
 				{

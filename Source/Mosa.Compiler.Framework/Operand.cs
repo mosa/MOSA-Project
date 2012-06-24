@@ -10,16 +10,17 @@
 
 using System;
 using System.Collections.Generic;
-using Mosa.Compiler.Metadata.Signatures;
+using System.Text;
 using Mosa.Compiler.Metadata;
+using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
 
-namespace Mosa.Compiler.Framework.Operands
+namespace Mosa.Compiler.Framework
 {
 	/// <summary>
 	/// Operand class
 	/// </summary>
-	public class Operand
+	public sealed class Operand
 	{
 
 		#region Constants
@@ -50,7 +51,7 @@ namespace Mosa.Compiler.Framework.Operands
 		#region Data members
 
 		[Flags]
-		protected enum OperandType { Undefined = 0, Constant = 1, StackLocal = 2, Parameter = 4, LocalVariable = 8, Symbol = 16, Register = 32, CPURegister = 64, SSA = 128, RuntimeMember = 256, Memory = 512, VirtualRegister = 1024 };
+		private enum OperandType { Undefined = 0, Constant = 1, StackLocal = 2, Parameter = 4, LocalVariable = 8, Symbol = 16, Register = 32, CPURegister = 64, SSA = 128, RuntimeMember = 256, MemoryAddress = 512, VirtualRegister = 1024, Label = 2048 };
 
 		/// <summary>
 		/// 
@@ -60,7 +61,7 @@ namespace Mosa.Compiler.Framework.Operands
 		/// <summary>
 		/// The namespace of the operand.
 		/// </summary>
-		protected readonly SigType sigType;
+		private readonly SigType sigType;
 
 		/// <summary>
 		/// Holds a list of instructions, which define this operand.
@@ -80,7 +81,7 @@ namespace Mosa.Compiler.Framework.Operands
 		/// <summary>
 		/// Holds the name 
 		/// </summary>
-		protected string name;
+		private string name;
 
 		/// <summary>
 		/// Holds the index
@@ -91,6 +92,26 @@ namespace Mosa.Compiler.Framework.Operands
 		/// The register, where the operand is stored.
 		/// </summary>
 		private Register register;
+
+		/// <summary>
+		/// Holds the address offset if used together with a base register or the absolute address, if register is null.
+		/// </summary>
+		private IntPtr offset;
+
+		/// <summary>
+		/// Holds the runtime member.
+		/// </summary>
+		private RuntimeMember runtimeMember;
+
+		/// <summary>
+		/// Holds the base operand
+		/// </summary>
+		private Operand ssaOperand;
+
+		/// <summary>
+		/// 
+		/// </summary>
+		private int ssaVersion;
 
 		#endregion // Data members
 
@@ -122,34 +143,94 @@ namespace Mosa.Compiler.Framework.Operands
 		public Register Register { get { return register; } }
 
 		/// <summary>
-		/// Determines if the operand is a register.
+		/// Retrieves the base register, where the operand is located.
 		/// </summary>
-		public virtual bool IsRegister { get { return (operandType & OperandType.Register) == OperandType.Register; } }
+		public Register Base { get { return register; } }
 
 		/// <summary>
-		/// Determines if the operand is a stack local variable.
+		/// Retrieves the runtime member.
 		/// </summary>
-		public virtual bool IsStackLocal { get { return false; } }
+		public RuntimeMember RuntimeMember { get { return runtimeMember; } }
+
+		/// <summary>
+		/// Gets the operand.
+		/// </summary>
+		public Operand SsaOperand { get { return ssaOperand; } }
+
+		/// <summary>
+		/// Gets the ssa version.
+		/// </summary>
+		public int SsaVersion { get { return ssaVersion; } }
+
+		/// <summary>
+		/// Gets the offset.
+		/// </summary>
+		public IntPtr Offset { get { return offset; } set { offset = value; } }
+
+		/// <summary>
+		/// Determines if the operand is a register.
+		/// </summary>
+		public bool IsRegister { get { return (operandType & OperandType.Register) == OperandType.Register; } }
 
 		/// <summary>
 		/// Determines if the operand is a constant variable.
 		/// </summary>
-		public virtual bool IsConstant { get { return (operandType & OperandType.Constant) == OperandType.Constant; } }
+		public bool IsConstant { get { return (operandType & OperandType.Constant) == OperandType.Constant; } }
 
 		/// <summary>
 		/// Determines if the operand is a symbol operand.
 		/// </summary>
-		public virtual bool IsSymbol { get { return (operandType & OperandType.Symbol) == OperandType.Symbol; } }
+		public bool IsSymbol { get { return (operandType & OperandType.Symbol) == OperandType.Symbol; } }
+
+		/// <summary>
+		/// Determines if the operand is a label operand.
+		/// </summary>
+		public bool IsLabel { get { return (operandType & OperandType.Label) == OperandType.Label; } }
 
 		/// <summary>
 		/// Determines if the operand is a virtual register operand.
 		/// </summary>
-		public virtual bool IsVirtualRegister { get { return (operandType & OperandType.VirtualRegister) == OperandType.VirtualRegister; } }
+		public bool IsVirtualRegister { get { return (operandType & OperandType.VirtualRegister) == OperandType.VirtualRegister; } }
 
 		/// <summary>
 		/// Determines if the operand is a cpu register operand.
 		/// </summary>
-		public virtual bool IsCPURegister { get { return (operandType & OperandType.CPURegister) == OperandType.CPURegister; } }
+		public bool IsCPURegister { get { return (operandType & OperandType.CPURegister) == OperandType.CPURegister; } }
+
+		/// <summary>
+		/// Determines if the operand is a memory operand.
+		/// </summary>
+		public bool IsMemoryAddress { get { return (operandType & OperandType.MemoryAddress) == OperandType.MemoryAddress; } }
+
+		/// <summary>
+		/// Determines if the operand is a stack local operand.
+		/// </summary>
+		public bool IsStackLocal { get { return (operandType & OperandType.StackLocal) == OperandType.StackLocal; } }
+
+		/// <summary>
+		/// Determines if the operand is a runtime member operand.
+		/// </summary>
+		public bool IsRuntimeMember { get { return (operandType & OperandType.RuntimeMember) == OperandType.RuntimeMember; } }
+
+		/// <summary>
+		/// Determines if the operand is a local variable operand.
+		/// </summary>
+		public bool IsLocalVariable { get { return (operandType & OperandType.LocalVariable) == OperandType.LocalVariable; } }
+
+		/// <summary>
+		/// Determines if the operand is a local variable operand.
+		/// </summary>
+		public bool IsParameter { get { return (operandType & OperandType.Parameter) == OperandType.Parameter; } }
+
+		/// <summary>
+		/// Determines if the operand is a stack temp operand. 
+		/// </summary>
+		public bool IsStackTemp { get { return IsStackLocal && !IsLocalVariable && !IsParameter; } }
+
+		/// <summary>
+		/// Determines if the operand is a ssa operand.
+		/// </summary>
+		public bool IsSSA { get { return (operandType & OperandType.SSA) == OperandType.SSA; } }
 
 		/// <summary>
 		/// Gets the name.
@@ -173,7 +254,7 @@ namespace Mosa.Compiler.Framework.Operands
 		/// Initializes a new instance of <see cref="Operand"/>.
 		/// </summary>
 		/// <param name="type">The type of the operand.</param>
-		protected Operand(SigType type)
+		private Operand(SigType type)
 		{
 			this.sigType = type;
 			definitions = new List<int>();
@@ -184,7 +265,7 @@ namespace Mosa.Compiler.Framework.Operands
 		/// Initializes a new instance of <see cref="Operand"/>.
 		/// </summary>
 		/// <param name="type">The type of the operand.</param>
-		protected Operand(SigType type, OperandType operandType)
+		private Operand(SigType type, OperandType operandType)
 		{
 			this.sigType = type;
 			this.operandType = operandType;
@@ -293,6 +374,141 @@ namespace Mosa.Compiler.Framework.Operands
 			return operand;
 		}
 
+		/// <summary>
+		/// Creates a new memory address <see cref="Operand"/>.
+		/// </summary>
+		/// <param name="sigType">Type of the sig.</param>
+		/// <param name="baseRegister">The base register.</param>
+		/// <param name="offset">The offset.</param>
+		/// <returns></returns>
+		public static Operand CreateMemoryAddress(SigType sigType, Register baseRegister, IntPtr offset)
+		{
+			Operand operand = new Operand(sigType, OperandType.MemoryAddress);
+			operand.register = baseRegister;
+			operand.offset = offset;
+			return operand;
+		}
+
+		/// <summary>
+		/// Creates a new symbol <see cref="Operand"/> for the given symbol name.
+		/// </summary>
+		/// <param name="sigType">Type of the sig.</param>
+		/// <param name="name">The name.</param>
+		/// <returns></returns>
+		public static Operand CreateLabel(SigType sigType, string label)
+		{
+			Operand operand = new Operand(sigType, OperandType.MemoryAddress | OperandType.Label);
+			operand.name = label;
+			operand.offset = IntPtr.Zero;
+			return operand;
+		}
+
+		/// <summary>
+		/// Creates a new stack address <see cref="Operand"/>.
+		/// </summary>
+		/// <param name="sigType">Type of the sig.</param>
+		/// <param name="baseRegister">The base register.</param>
+		/// <param name="offset">The offset.</param>
+		/// <returns></returns>
+		public static Operand CreateStackLocal(SigType sigType, Register baseRegister, int index)
+		{
+			Operand operand = new Operand(sigType, OperandType.MemoryAddress | OperandType.StackLocal);
+			operand.register = baseRegister;
+			operand.index = index;
+			operand.offset = new IntPtr(-index * 4);
+			return operand;
+		}
+
+		/// <summary>
+		/// Creates a new stack address <see cref="Operand"/>.
+		/// </summary>
+		/// <param name="sigType">Type of the sig.</param>
+		/// <param name="baseRegister">The base register.</param>
+		/// <param name="offset">The offset.</param>
+		/// <returns></returns>
+		public static Operand CreateStackLocalTemp(SigType sigType, Register baseRegister, int index)
+		{
+			Operand operand = new Operand(sigType, OperandType.MemoryAddress | OperandType.StackLocal | OperandType.VirtualRegister);
+			operand.register = baseRegister;
+			operand.index = index;
+			operand.offset = new IntPtr(-index * 4);
+			return operand;
+		}
+		/// <summary>
+		/// Creates a new runtime member <see cref="Operand"/>.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <param name="member">The member.</param>
+		/// <param name="offset">The offset.</param>
+		/// <returns></returns>
+		public static Operand CreateRuntimeMember(SigType type, RuntimeMember member, IntPtr offset)
+		{
+			Operand operand = new Operand(type, OperandType.MemoryAddress | OperandType.RuntimeMember);
+			operand.offset = offset;
+			operand.runtimeMember = member;
+			return operand;
+		}
+
+		/// <summary>
+		/// Creates a new runtime member <see cref="Operand"/>.
+		/// </summary>
+		/// <param name="field">The field.</param>
+		/// <returns></returns>
+		public static Operand CreateRuntimeMember(RuntimeField field)
+		{
+			Operand operand = new Operand(field.SignatureType, OperandType.MemoryAddress | OperandType.RuntimeMember);
+			operand.offset = IntPtr.Zero;
+			operand.runtimeMember = field;
+			return operand;
+		}
+
+		/// <summary>
+		/// Creates a new local variable <see cref="Operand"/>.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <param name="member">The member.</param>
+		/// <param name="offset">The offset.</param>
+		/// <returns></returns>
+		public static Operand CreateLocalVariable(SigType type, Register register, int index, string name)
+		{
+			Operand operand = new Operand(type, OperandType.MemoryAddress | OperandType.StackLocal | OperandType.LocalVariable);
+			operand.name = name;
+			operand.register = register;
+			operand.index = index;
+			operand.offset = new IntPtr(-index * 4);
+			return operand;
+		}
+
+		/// <summary>
+		/// Creates a new local variable <see cref="Operand"/>.
+		/// </summary>
+		/// <param name="type">The type.</param>
+		/// <param name="member">The member.</param>
+		/// <param name="offset">The offset.</param>
+		/// <returns></returns>
+		public static Operand CreateParameter(SigType type, Register register, RuntimeParameter param)
+		{
+			Operand operand = new Operand(type, OperandType.MemoryAddress | OperandType.Parameter);
+			operand.register = register;
+			//operand.index = param.Position;
+			operand.offset = new IntPtr(param.Position * 4);
+			return operand;
+		}
+
+		/// <summary>
+		/// Creates the SSA <see cref="Operand"/>.
+		/// </summary>
+		/// <param name="baseOperand">The base operand.</param>
+		/// <param name="ssaVersion">The ssa version.</param>
+		/// <returns></returns>
+		public static Operand CreateSSA(Operand baseOperand, int ssaVersion)
+		{
+			Operand operand = new Operand(baseOperand.sigType, baseOperand.operandType | OperandType.SSA);
+			operand.ssaOperand = baseOperand;
+			operand.ssaVersion = ssaVersion;
+			return operand;
+		}
+
 		#endregion // Static Factory Constructors
 
 		#region Methods
@@ -350,27 +566,76 @@ namespace Mosa.Compiler.Framework.Operands
 		/// <returns>A string representation of the operand.</returns>
 		public override string ToString()
 		{
+			if (IsSSA)
+			{
+				string ssa = ssaOperand.ToString();
+				int pos = ssa.IndexOf(' ');
+
+				if (pos < 0)
+					return ssa + "<" + ssaVersion + ">";
+				else
+					return ssa.Substring(0, pos) + "<" + ssaVersion + ">" + ssa.Substring(pos);
+			}
+
+			StringBuilder s = new StringBuilder();
+
+			if (name != null)
+			{
+				s.Append(name);
+			}
+
+			if (IsVirtualRegister)
+			{
+				s.AppendFormat("V_{0}", index);
+			}
+			else if (IsLocalVariable && name == null)
+			{
+				s.AppendFormat("L_{0}", index);
+			}
+			else if (IsStackLocal && name == null)
+			{
+				s.AppendFormat("T_{0}", index);
+			}
+			if (IsRuntimeMember)
+			{
+				s.Append(runtimeMember.ToString());
+			}
+
+			if (s.Length != 0)
+				s.Append(' ');
+
 			if (IsConstant)
 			{
 				if (value == null)
-					return String.Format("const null [{0}]", sigType);
+					s.Append("const null");
 				else
-					return String.Format("const {0} [{1}]", value, sigType);
+					s.AppendFormat("const {0}", value);
 			}
-			if (IsSymbol)
+			else if (IsCPURegister)
 			{
-				return String.Format("{0} [{1}]", name, sigType);
+				s.AppendFormat("{0}", register);
 			}
-			if (IsVirtualRegister)
+			else if (IsMemoryAddress)
 			{
-				return String.Format("V_{0} [{1}]", index, sigType);
-			}
-			if (IsCPURegister)
-			{
-				return String.Format("{0} [{1}]", register, sigType);
+				if (register == null)
+				{
+					s.AppendFormat("[{0:X}h]", offset.ToInt32());
+				}
+				else
+				{
+					if (offset.ToInt32() > 0)
+						s.AppendFormat("[{0}+{1:X}h]", register, offset.ToInt32());
+					else
+						s.AppendFormat("[{0}-{1:X}h]", register, -offset.ToInt32());
+				}
 			}
 
-			return String.Format("[{0}]", sigType);
+			if (s.Length != 0)
+				if (s[s.Length - 1] != ' ')
+					s.Append(' ');
+
+			s.AppendFormat("[{0}]", sigType);
+			return s.ToString();
 		}
 
 		#endregion // Object Overrides

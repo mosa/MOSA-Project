@@ -9,7 +9,6 @@
 
 using System;
 using System.Diagnostics;
-using Mosa.Compiler.Framework.Operands;
 
 namespace Mosa.Compiler.Framework.CIL
 {

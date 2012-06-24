@@ -10,7 +10,6 @@
 using System;
 using System.Collections.Generic;
 using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.Framework.Operands;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -25,7 +24,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		protected PhiPlacementStage phiPlacementStage;
 
-		private Dictionary<Operand, SsaOperand[]> ssaOperands = new Dictionary<Operand, SsaOperand[]>();
+		private Dictionary<Operand, Operand[]> ssaOperands = new Dictionary<Operand, Operand[]>();
 
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
@@ -81,15 +80,15 @@ namespace Mosa.Compiler.Framework.Stages
 				RenameVariables(headBlock.NextBlocks[0], dominanceCalculation, variables);
 		}
 
-		public SsaOperand CreateSsaOperand(Operand operand, int version)
+		public Operand CreateSsaOperand(Operand operand, int version)
 		{
-			SsaOperand[] ssaArray;
-			SsaOperand ssaOperand;
+			Operand[] ssaArray;
+			Operand ssaOperand;
 
 			if (!ssaOperands.TryGetValue(operand, out ssaArray))
 			{
-				ssaArray = new SsaOperand[Math.Max(4, version + 1)];
-				ssaOperand = new SsaOperand(operand, version);
+				ssaArray = new Operand[Math.Max(4, version + 1)];
+				ssaOperand = Operand.CreateSSA(operand, version);
 				ssaArray[version] = ssaOperand;
 				ssaOperands.Add(operand, ssaArray);
 			}
@@ -97,9 +96,9 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				if (version >= ssaArray.Length)
 				{
-					ssaOperand = new SsaOperand(operand, version);
+					ssaOperand = Operand.CreateSSA(operand, version);
 
-					SsaOperand[] newSsaArray = new SsaOperand[ssaArray.Length * ssaArray.Length];
+					Operand[] newSsaArray = new Operand[ssaArray.Length * ssaArray.Length];
 					ssaArray.CopyTo(newSsaArray, 0);
 					newSsaArray[version] = ssaOperand;
 					ssaOperands.Remove(operand);
@@ -110,7 +109,7 @@ namespace Mosa.Compiler.Framework.Stages
 					ssaOperand = ssaArray[version];
 					if (ssaOperand == null)
 					{
-						ssaOperand = new SsaOperand(operand, version);
+						ssaOperand = Operand.CreateSSA(operand, version);
 						ssaArray[version] = ssaOperand;
 					}
 				}
@@ -135,7 +134,7 @@ namespace Mosa.Compiler.Framework.Stages
 					{
 						var op = context.GetOperand(i);
 
-						if (!(op is StackOperand))
+						if (!op.IsStackLocal)
 							continue;
 
 						if (!variables.ContainsKey(op))
@@ -204,7 +203,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </returns>
 		private bool IsAssignment(Context context)
 		{
-			return (context.Result != null && context.Result is StackOperand);
+			return (context.Result != null && context.Result.IsStackLocal);
 		}
 
 	}

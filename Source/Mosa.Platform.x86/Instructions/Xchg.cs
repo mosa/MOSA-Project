@@ -9,7 +9,6 @@
 
 using System;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Operands;
 
 namespace Mosa.Platform.x86.Instructions
 {
@@ -40,9 +39,9 @@ namespace Mosa.Platform.x86.Instructions
 		{
 			if (IsShort(destination) && IsShort(source))
 				if ((destination.IsRegister) && (source.IsRegister)) return R_R_16;
-			if ((destination.IsRegister) && (source is MemoryOperand)) return R_M;
+			if ((destination.IsRegister) && (source.IsMemoryAddress)) return R_M;
 			if ((destination.IsRegister) && (source.IsRegister)) return R_R;
-			if ((destination is MemoryOperand) && (source.IsRegister)) return M_R;
+			if ((destination.IsMemoryAddress) && (source.IsRegister)) return M_R;
 
 			throw new ArgumentException(@"No opcode for operand type.");
 		}

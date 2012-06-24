@@ -9,7 +9,6 @@
 
 using System;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Operands;
 
 namespace Mosa.Platform.x86.Instructions
 {
@@ -66,11 +65,11 @@ namespace Mosa.Platform.x86.Instructions
 					throw new ArgumentException(@"TODO: No opcode for move from segment register");
 
 			if ((destination.IsRegister) && (source.IsConstant)) return R_C;
-			if ((destination is MemoryOperand) && (source.IsConstant)) return M_C;
-			if ((destination.IsRegister) && (source is LabelOperand)) return R_C;
-			if ((destination is MemoryOperand) && (source is LabelOperand)) return M_C;
+			if ((destination.IsMemoryAddress) && (source.IsConstant)) return M_C;
+			if ((destination.IsRegister) && (source.IsLabel)) return R_C;
+			if ((destination.IsMemoryAddress) && (source.IsLabel)) return M_C;
 			if ((destination.IsRegister) && (source.IsSymbol)) return R_C;
-			if ((destination is MemoryOperand) && (source.IsSymbol)) return M_C;
+			if ((destination.IsMemoryAddress) && (source.IsSymbol)) return M_C;
 
 			if ((destination.IsRegister) && (source.IsRegister))
 			{
@@ -78,20 +77,20 @@ namespace Mosa.Platform.x86.Instructions
 				if (IsChar(source) || IsChar(destination) || IsShort(source) || IsShort(destination)) return R_R_16;
 				return R_R;
 			}
-			if ((destination.IsRegister) && (source is MemoryOperand))
+			if ((destination.IsRegister) && (source.IsMemoryAddress))
 			{
 				if (IsByte(destination)) return R_M_U8;
 				if (IsChar(destination) || IsShort(destination)) return R_M_16;
 				return R_M;
 			}
-			if ((destination is MemoryOperand) && (source.IsRegister))
+			if ((destination.IsMemoryAddress) && (source.IsRegister))
 			{
 				if (IsByte(destination)) return M_R_U8;
 				if (IsChar(destination) || IsShort(destination)) return M_R_16;
 				return M_R;
 			}
 
-			throw new ArgumentException(@"No opcode for operand type. [" + destination.GetType() + ", " + source.GetType() + ")");
+			throw new ArgumentException(@"No opcode for operand type. [" + destination + ", " + source + ")");
 		}
 
 		/// <summary>

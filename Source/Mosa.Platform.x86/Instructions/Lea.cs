@@ -8,7 +8,6 @@
  */
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Operands;
 
 namespace Mosa.Platform.x86.Instructions
 {
@@ -25,7 +24,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="emitter"></param>
 		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
-			MemoryOperand mop = (MemoryOperand)context.Operand1;
+			Operand mop = context.Operand1;
 			byte[] code;
 
 			if (mop.Base != null)

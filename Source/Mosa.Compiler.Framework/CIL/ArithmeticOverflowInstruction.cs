@@ -8,7 +8,6 @@
  */
 
 using System;
-using Mosa.Compiler.Framework.Operands;
 
 namespace Mosa.Compiler.Framework.CIL
 {

@@ -7,9 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com> 
  */
 
-using System;
 using System.Collections.Generic;
-using Mosa.Compiler.Framework.Operands;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
 
@@ -27,9 +25,9 @@ namespace Mosa.Compiler.Framework
 
 		private int stackMemorySize = 0;
 
-		private List<StackOperand> stack = new List<StackOperand>();
-		
-		private ParameterOperand[] parameters;
+		private List<Operand> stack = new List<Operand>();
+
+		private Operand[] parameters;
 
 		//private StackSizeOperand stackSizeOperand;
 
@@ -53,7 +51,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the parameters.
 		/// </summary>
-		public ParameterOperand[] Parameters { get { return parameters; } }
+		public Operand[] Parameters { get { return parameters; } }
 
 		#endregion // Properties
 
@@ -66,7 +64,7 @@ namespace Mosa.Compiler.Framework
 		{
 			this.architecture = architecture;
 			//this.stackSizeOperand = new StackSizeOperand(this);
-			this.parameters = new ParameterOperand[parameters];
+			this.parameters = new Operand[parameters];
 		}
 
 		/// <summary>
@@ -74,19 +72,19 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="type">The type.</param>
 		/// <returns></returns>
-		public StackOperand AllocateStackOperand(SigType type, bool localVariable)
+		public Operand AllocateStackOperand(SigType type, bool localVariable)
 		{
 			int stackSlot = stack.Count + 1;
 
-			StackOperand stackOperand;
+			Operand stackOperand;
 
 			if (localVariable)
 			{
-				stackOperand = new LocalVariableOperand(architecture.StackFrameRegister, String.Format("V_{0}", stackSlot), stackSlot, type);
+				stackOperand = Operand.CreateLocalVariable(type, architecture.StackFrameRegister, stackSlot, null);
 			}
 			else
 			{
-				stackOperand = new StackTemporaryOperand(architecture.StackFrameRegister, String.Format("T_{0}", stackSlot), stackSlot, type);
+				stackOperand = Operand.CreateStackLocalTemp(type, architecture.StackFrameRegister, stackSlot);
 			}
 
 			stack.Add(stackOperand);
@@ -99,7 +97,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="slot">The slot.</param>
 		/// <returns></returns>
-		public StackOperand GetStackOperand(int slot)
+		public Operand GetStackOperand(int slot)
 		{
 			return stack[slot];
 		}
@@ -111,9 +109,9 @@ namespace Mosa.Compiler.Framework
 		/// <param name="param">The param.</param>
 		/// <param name="type">The type.</param>
 		/// <returns></returns>
-		public ParameterOperand SetStackParameter(int index, RuntimeParameter param, SigType type)
+		public Operand SetStackParameter(int index, RuntimeParameter param, SigType type)
 		{
-			parameters[index] = new ParameterOperand(architecture.StackFrameRegister, param, type);
+			parameters[index] = Operand.CreateParameter(type, architecture.StackFrameRegister, param);
 			return parameters[index];
 		}
 
@@ -122,7 +120,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="index">The index.</param>
 		/// <returns></returns>
-		public StackOperand GetStackParameter(int index)
+		public Operand GetStackParameter(int index)
 		{
 			return parameters[index];
 		}

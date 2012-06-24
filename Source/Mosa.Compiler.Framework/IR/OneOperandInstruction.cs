@@ -7,7 +7,6 @@
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  */
 
-using Mosa.Compiler.Framework.Operands;
 
 namespace Mosa.Compiler.Framework.IR
 {

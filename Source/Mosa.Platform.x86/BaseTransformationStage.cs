@@ -12,7 +12,6 @@
 using System;
 using System.IO;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Operands;
 using Mosa.Compiler.Framework.Platform;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.Metadata;
@@ -107,7 +106,7 @@ namespace Mosa.Platform.x86
 			// FIXME: Attach the label operand to the linker symbol
 			// FIXME: Rename the operand to SymbolOperand
 			// FIXME: Use the provided name to link
-			return new LabelOperand(cop.Type, name);
+			return Operand.CreateLabel(cop.Type, name);
 		}
 
 		#endregion // Emit Methods

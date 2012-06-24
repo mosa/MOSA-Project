@@ -14,7 +14,6 @@ using System;
 using System.Diagnostics;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.Framework.Operands;
 using Mosa.Compiler.Framework.Platform;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
@@ -49,7 +48,7 @@ namespace Mosa.Platform.x86.Stages
 				return;
 			}
 
-			Debug.Assert(operand is MemoryOperand || operand.IsConstant, @"Long operand not memory or constant.");
+			Debug.Assert(operand.IsMemoryAddress || operand.IsConstant, @"Long operand not memory or constant.");
 
 			if (operand.IsConstant)
 				SplitFromConstantOperand(operand, out operandLow, out operandHigh);
@@ -80,20 +79,18 @@ namespace Mosa.Platform.x86.Stages
 			SigType HighType = (operand.Type.Type == CilElementType.I8) ? BuiltInSigType.Int32 : BuiltInSigType.UInt32;
 
 			// No, could be a member or a plain memory operand
-			MemberOperand memberOperand = operand as MemberOperand;
-			if (memberOperand != null)
+			if (operand.IsRuntimeMember)
 			{
 				// We need to keep the member reference, otherwise the linker can't fixup
 				// the member address.
-				operandLow = new MemberOperand(memberOperand.Member, BuiltInSigType.UInt32, memberOperand.Offset);
-				operandHigh = new MemberOperand(memberOperand.Member, HighType, new IntPtr(memberOperand.Offset.ToInt64() + 4));
+				operandLow = Operand.CreateRuntimeMember(BuiltInSigType.UInt32, operand.RuntimeMember, operand.Offset);
+				operandHigh = Operand.CreateRuntimeMember(HighType, operand.RuntimeMember, new IntPtr(operand.Offset.ToInt64() + 4));
 			}
 			else
 			{
 				// Plain memory, we can handle it here
-				MemoryOperand memoryOperand = (MemoryOperand)operand;
-				operandLow = new MemoryOperand(memoryOperand.Base, BuiltInSigType.UInt32, memoryOperand.Offset);
-				operandHigh = new MemoryOperand(memoryOperand.Base, HighType, new IntPtr(memoryOperand.Offset.ToInt64() + 4));
+				operandLow = Operand.CreateMemoryAddress(BuiltInSigType.UInt32, operand.Base, operand.Offset);
+				operandHigh = Operand.CreateMemoryAddress(HighType, operand.Base, new IntPtr(operand.Offset.ToInt64() + 4));
 			}
 		}
 
@@ -1250,9 +1247,9 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void ExpandUnsignedMove(Context context)
 		{
-			MemoryOperand op0 = context.Result as MemoryOperand;
+			Operand op0 = context.Result;
 			Operand op1 = context.Operand1;
-			Debug.Assert(op0 != null, @"I8 not in a memory operand!");
+			Debug.Assert(op0.IsMemoryAddress, @"I8 not in a memory operand!");
 
 			Operand op0L, op0H, op1L, op1H;
 			SplitLongOperand(op0, out op0L, out op0H);
@@ -1393,9 +1390,9 @@ namespace Mosa.Platform.x86.Stages
 
 			context.SetInstruction(X86.Mov, eax, op1);
 			context.AppendInstruction(X86.Add, eax, offsetOperand);
-			context.AppendInstruction(X86.Mov, edx, new MemoryOperand(GeneralPurposeRegister.EAX, op0L.Type, IntPtr.Zero));
+			context.AppendInstruction(X86.Mov, edx, Operand.CreateMemoryAddress(op0L.Type, GeneralPurposeRegister.EAX, IntPtr.Zero));
 			context.AppendInstruction(X86.Mov, op0L, edx);
-			context.AppendInstruction(X86.Mov, edx, new MemoryOperand(GeneralPurposeRegister.EAX, op0H.Type, new IntPtr(4)));
+			context.AppendInstruction(X86.Mov, edx, Operand.CreateMemoryAddress(op0H.Type, GeneralPurposeRegister.EAX, new IntPtr(4)));
 			context.AppendInstruction(X86.Mov, op0H, edx);
 		}
 
@@ -1405,10 +1402,11 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void ExpandStore(Context context)
 		{
-			MemoryOperand op0 = context.Result as MemoryOperand;
+			Debug.Assert(context.Result.IsMemoryAddress && context.Operand3.IsMemoryAddress, @"Operands to I8 LoadInstruction are not MemoryOperand.");
+
+			Operand op0 = context.Result;
+			Operand op2 = context.Operand3;
 			Operand offsetOperand = context.Operand2;
-			MemoryOperand op2 = context.Operand3 as MemoryOperand;
-			Debug.Assert(op0 != null && op2 != null, @"Operands to I8 LoadInstruction are not MemoryOperand.");
 
 			Operand op1L, op1H;
 			SplitLongOperand(op2, out op1L, out op1H);
@@ -1421,9 +1419,9 @@ namespace Mosa.Platform.x86.Stages
 			context.AppendInstruction(X86.Add, edx, offsetOperand);
 
 			context.AppendInstruction(X86.Mov, eax, op1L);
-			context.AppendInstruction(X86.Mov, new MemoryOperand(GeneralPurposeRegister.EDX, BuiltInSigType.UInt32, IntPtr.Zero), eax);
+			context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(BuiltInSigType.UInt32, GeneralPurposeRegister.EDX, IntPtr.Zero), eax);
 			context.AppendInstruction(X86.Mov, eax, op1H);
-			context.AppendInstruction(X86.Mov, new MemoryOperand(GeneralPurposeRegister.EDX, BuiltInSigType.Int32, new IntPtr(4)), eax);
+			context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(BuiltInSigType.Int32, GeneralPurposeRegister.EDX, new IntPtr(4)), eax);
 		}
 
 		/// <summary>
@@ -1476,7 +1474,7 @@ namespace Mosa.Platform.x86.Stages
 			Operand op2 = context.Operand2;
 
 			Debug.Assert(op1 != null && op2 != null, @"IntegerCompareInstruction operand not memory!");
-			Debug.Assert(op0 is MemoryOperand || op0.IsRegister, @"IntegerCompareInstruction result not memory and not register!");
+			Debug.Assert(op0.IsMemoryAddress || op0.IsRegister, @"IntegerCompareInstruction result not memory and not register!");
 
 			Operand op1L, op1H, op2L, op2H;
 			SplitLongOperand(op1, out op1L, out op1H);

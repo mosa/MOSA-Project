@@ -10,7 +10,6 @@
 using System;
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Operands;
 using Mosa.Compiler.Metadata;
 
 namespace Mosa.Platform.x86.Instructions
@@ -58,14 +57,14 @@ namespace Mosa.Platform.x86.Instructions
 				case CilElementType.I1:
 					{
 						if ((destination.IsRegister) && (source.IsRegister)) return R_X8;
-						if ((destination.IsRegister) && (source is MemoryOperand)) return R_X8;
+						if ((destination.IsRegister) && (source.IsMemoryAddress)) return R_X8;
 					}
 					break;
 				case CilElementType.Char: goto case CilElementType.U2;
 				case CilElementType.U2: goto case CilElementType.I2;
 				case CilElementType.I2:
 					if ((destination.IsRegister) && (source.IsRegister)) return R_X16;
-					if ((destination.IsRegister) && (source is MemoryOperand)) return R_X16;
+					if ((destination.IsRegister) && (source.IsMemoryAddress)) return R_X16;
 					break;
 				case CilElementType.Boolean: goto case CilElementType.I1;
 				default:

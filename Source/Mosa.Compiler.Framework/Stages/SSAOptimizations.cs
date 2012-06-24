@@ -10,12 +10,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
-using Mosa.Compiler.Common;
-using Mosa.Compiler.Framework.Operands;
-using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.Metadata.Signatures;
+using Mosa.Compiler.Metadata;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -125,8 +121,8 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <returns></returns>
 		private Operand GetBaseOperand(Operand operand)
 		{
-			if (operand is SsaOperand)
-				return (operand as SsaOperand).Operand;
+			if (operand.IsSSA)
+				return operand.SsaOperand;
 			else
 				return operand;
 		}
@@ -151,7 +147,7 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 			}
 
-			if (context.Result.Uses.Count == 0 && GetBaseOperand(context.Result) is StackTemporaryOperand)
+			if (context.Result.Uses.Count == 0 && GetBaseOperand(context.Result).IsStackTemp)
 			{
 				if (IsLogging) Trace("REMOVED:\t" + context.ToString());
 				context.SetInstruction(IRInstruction.Nop);
@@ -219,7 +215,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// if constant has no uses, delete S
 			// and use is not a local or memory variable (only temp. stack-based operands can be removed)
-			if (context.Result.Uses.Count == 0 && GetBaseOperand(context.Result) is StackTemporaryOperand)
+			if (context.Result.Uses.Count == 0 && GetBaseOperand(context.Result).IsStackTemp)
 			{
 				if (IsLogging) Trace("REMOVED:\t" + context.ToString());
 

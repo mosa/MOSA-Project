@@ -78,7 +78,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BasicBlocks.cs" />
-    <Compile Include="Operands\StackTemporaryOperand.cs" />
     <Compile Include="SimpleFastDominance.cs" />
     <Compile Include="LoopEdge.cs" />
     <Compile Include="LoopAwareBlockOrder.cs" />
@@ -112,7 +111,6 @@
     <Compile Include="CIL\DecodingStage.cs" />
     <Compile Include="CIL\BreakInstruction.cs" />
     <Compile Include="BaseAssemblyCompilerStage.cs" />
-    <Compile Include="Stages\ConstantFoldingStage.cs" />
     <Compile Include="Platform\BasePlatformInstruction.cs" />
     <Compile Include="Platform\BasePlatformTransformationStage.cs" />
     <Compile Include="Platform\IRegisterUsage.cs" />
@@ -134,7 +132,6 @@
     <Compile Include="InstructionLogger.cs" />
     <Compile Include="Stages\LeaveSSAStage.cs" />
     <Compile Include="Stages\OperandDeterminationStage.cs" />
-    <Compile Include="Operands\SsaOperand.cs" />
     <Compile Include="CompilerOptions.cs" />
     <Compile Include="Stages\PhiPlacementStage.cs" />
     <Compile Include="Stages\StaticAllocationResolutionStage.cs" />
@@ -320,9 +317,6 @@
     <Compile Include="CompilerPipeline.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Stages\ConstantPropagationStage.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="Stages\DominanceCalculationStage.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -356,22 +350,10 @@
     <Compile Include="IStackLayoutProvider.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Operands\LabelOperand.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Operands\MemberOperand.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Operands\MemoryOperand.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="BaseMethodCompiler.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Operands\Operand.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Operands\ParameterOperand.cs">
+    <Compile Include="Operand.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="Register.cs">
@@ -380,13 +362,7 @@
     <Compile Include="Stages\StackLayoutStage.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="Operands\StackOperand.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="StackTypeCode.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="Operands\LocalVariableOperand.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IR\VmCall.cs" />

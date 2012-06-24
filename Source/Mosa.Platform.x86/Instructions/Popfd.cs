@@ -27,17 +27,17 @@ namespace Mosa.Platform.x86.Instructions
 
 		#region Methods
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="destination"></param>
-        /// <param name="source"></param>
-        /// <param name="third"></param>
-        /// <returns></returns>
-        protected override OpCode ComputeOpCode(Compiler.Framework.Operands.Operand destination, Compiler.Framework.Operands.Operand source, Compiler.Framework.Operands.Operand third)
-        {
+		/// <summary>
+		/// Computes the opcode.
+		/// </summary>
+		/// <param name="destination">The destination operand.</param>
+		/// <param name="source">The source operand.</param>
+		/// <param name="third">The third operand.</param>
+		/// <returns></returns>
+		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
+		{
 			return opcode;
-        }
+		}
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.

@@ -12,7 +12,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Operands;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 
@@ -186,13 +185,8 @@ namespace Mosa.Platform.AVR32
 		/// <param name="ctx">The context.</param>
 		private void MoveReturnValueTo64Bit(Operand resultOperand, Context ctx)
 		{
-			MemoryOperand memoryOperand = resultOperand as MemoryOperand;
-
-			if (memoryOperand == null)
-				return;
-
 			//Operand opL, opH;
-			//LongOperandTransformationStage.SplitLongOperand(memoryOperand, out opL, out opH);
+			//LongOperandTransformationStage.SplitLongOperand(resultOperand, out opL, out opH);
 
 			//RegisterOperand r8 = new RegisterOperand(BuiltInSigType.UInt32, GeneralPurposeRegister.R8);
 			//RegisterOperand r9 = new RegisterOperand(BuiltInSigType.Int32, GeneralPurposeRegister.R9);
@@ -210,12 +204,12 @@ namespace Mosa.Platform.AVR32
 		/// <param name="parameterSize">Size of the parameter.</param>
 		private void Push(Context ctx, Operand op, int stackSize, int parameterSize)
 		{
-			if (op is MemoryOperand)
+			if (op.IsMemoryAddress)
 			{
 				if (op.Type.Type == CilElementType.ValueType)
 				{
 					for (int i = 0; i < parameterSize; i += 4)
-						ctx.AppendInstruction(AVR32.Mov, new MemoryOperand(GeneralPurposeRegister.R9, op.Type, new IntPtr(stackSize + i)), new MemoryOperand((op as MemoryOperand).Base, op.Type, new IntPtr((op as MemoryOperand).Offset.ToInt64() + i)));
+						ctx.AppendInstruction(AVR32.Mov, Operand.CreateMemoryAddress(op.Type, GeneralPurposeRegister.R9, new IntPtr(stackSize + i)), Operand.CreateMemoryAddress(op.Type, op.Base, new IntPtr(op.Offset.ToInt64() + i)));
 
 					return;
 				}
@@ -238,17 +232,16 @@ namespace Mosa.Platform.AVR32
 
 					case StackTypeCode.Int64:
 						{
-							MemoryOperand mop = op as MemoryOperand;
-							Debug.Assert(null != mop, @"I8/U8 arg is not in a memory operand.");
-							Operand r8 = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.R8);
+							Debug.Assert(op.IsMemoryAddress, @"I8/U8 arg is not in a memory operand.");
+							//Operand r8 = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.R8);
 
 							//Operand opL, opH;
-							//LongOperandTransformationStage.SplitLongOperand(mop, out opL, out opH);
+							//LongOperandTransformationStage.SplitLongOperand(op, out opL, out opH);
 
 							//ctx.AppendInstruction(Instruction.Mov, r8, opL);
-							//ctx.AppendInstruction(Instruction.Mov, new MemoryOperand(op.Type, GeneralPurposeRegister.R9, new IntPtr(stackSize)), r8);
+							//ctx.AppendInstruction(Instruction.Mov, Operand.CreateMemoryAddress(op.Type, GeneralPurposeRegister.R9, new IntPtr(stackSize)), r8);
 							//ctx.AppendInstruction(Instruction.Mov, r8, opH);
-							//ctx.AppendInstruction(Instruction.Mov, new MemoryOperand(op.Type, GeneralPurposeRegister.R9, new IntPtr(stackSize + 4)), r8);
+							//ctx.AppendInstruction(Instruction.Mov, Operand.CreateMemoryAddress(op.Type, GeneralPurposeRegister.R9, new IntPtr(stackSize + 4)), r8);
 						}
 						return;
 
@@ -266,14 +259,14 @@ namespace Mosa.Platform.AVR32
 				//LongOperandTransformationStage.SplitLongOperand(op, out opL, out opH);
 
 				//ctx.AppendInstruction(Instruction.Mov, r8, opL);
-				//ctx.AppendInstruction(Instruction.Mov, new MemoryOperand(BuiltInSigType.Int32, GeneralPurposeRegister.R9, new IntPtr(stackSize)), r8);
+				//ctx.AppendInstruction(Instruction.Mov, Operand.CreateMemoryAddress(BuiltInSigType.Int32, GeneralPurposeRegister.R9, new IntPtr(stackSize)), r8);
 				//ctx.AppendInstruction(Instruction.Mov, r8, opH);
-				//ctx.AppendInstruction(Instruction.Mov, new MemoryOperand(BuiltInSigType.Int32, GeneralPurposeRegister.R9, new IntPtr(stackSize + 4)), r8);
+				//ctx.AppendInstruction(Instruction.Mov, Operand.CreateMemoryAddress(BuiltInSigType.Int32, GeneralPurposeRegister.R9, new IntPtr(stackSize + 4)), r8);
 
 				return;
 			}
 
-			ctx.AppendInstruction(AVR32.Mov, new MemoryOperand(GeneralPurposeRegister.R9, op.Type, new IntPtr(stackSize)), op);
+			ctx.AppendInstruction(AVR32.Mov, Operand.CreateMemoryAddress(op.Type, GeneralPurposeRegister.R9, new IntPtr(stackSize)), op);
 		}
 
 		/// <summary>
@@ -315,7 +308,7 @@ namespace Mosa.Platform.AVR32
 			else if (size == 8 && (operand.Type.Type == CilElementType.R4 || operand.Type.Type == CilElementType.R8))
 			{
 
-				if (!(operand is MemoryOperand))
+				if (!(operand.IsMemoryAddress))
 				{
 					// Move the operand to memory by prepending an instruction
 				}
@@ -344,7 +337,7 @@ namespace Mosa.Platform.AVR32
 			}
 		}
 
-		void ICallingConvention.GetStackRequirements(StackOperand stackOperand, out int size, out int alignment)
+		void ICallingConvention.GetStackRequirements(Operand stackOperand, out int size, out int alignment)
 		{
 			// Special treatment for some stack types
 			// FIXME: Handle the size and alignment requirements of value types

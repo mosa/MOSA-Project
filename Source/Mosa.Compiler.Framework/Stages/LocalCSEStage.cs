@@ -8,7 +8,6 @@
  */
 
 using System.Collections.Generic;
-using Mosa.Compiler.Framework.Operands;
 
 // FIXME: This stage has not been updated and does not work as-is.
 

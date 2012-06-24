@@ -11,7 +11,6 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using Mosa.Compiler.Common;
-using Mosa.Compiler.Framework.Operands;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.Metadata.Tables;

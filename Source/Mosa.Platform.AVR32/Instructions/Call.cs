@@ -9,7 +9,6 @@
  */
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Operands;
 
 namespace Mosa.Platform.AVR32.Instructions
 {
@@ -40,12 +39,9 @@ namespace Mosa.Platform.AVR32.Instructions
 			}
 			else
 			{
-				if (context.Operand1 is MemoryOperand)
+				if (context.Operand1.IsMemoryAddress)
 				{
-					//RegisterOperand register = destinationOperand as RegisterOperand;
-					//emitter.EmitSingleRegisterInstructions(0x11, (byte)register.Register.RegisterCode);
-					MemoryOperand memory = context.Operand1 as MemoryOperand;
-					emitter.EmitRegisterOperandWithK16(0x101, (byte)memory.Base.RegisterCode, (ushort)memory.Offset);
+					emitter.EmitRegisterOperandWithK16(0x101, (byte)context.Operand1.Base.RegisterCode, (ushort)context.Operand1.Offset);
 				}
 			}
 		}

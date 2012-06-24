@@ -11,7 +11,6 @@
 using System;
 using System.Diagnostics;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Operands;
 using Mosa.Compiler.Metadata;
 
 namespace Mosa.Platform.AVR32

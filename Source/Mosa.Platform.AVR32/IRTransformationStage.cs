@@ -12,7 +12,6 @@ using System;
 using System.Diagnostics;
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Operands;
 using Mosa.Compiler.Framework.Platform;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
@@ -75,12 +74,12 @@ namespace Mosa.Platform.AVR32
 				context.SetInstruction(AVR32.Add, result, operand);
 			}
 			else
-				if ((result is MemoryOperand) && (operand.IsConstant))
+				if ((result.IsMemoryAddress) && (operand.IsConstant))
 				{
 
 				}
 				else
-					if ((result.IsRegister) && (operand is MemoryOperand))
+					if ((result.IsRegister) && (operand.IsMemoryAddress))
 					{
 
 					}
@@ -90,12 +89,12 @@ namespace Mosa.Platform.AVR32
 
 						}
 						else
-							if ((result is MemoryOperand) && (operand.IsRegister))
+							if ((result.IsMemoryAddress) && (operand.IsRegister))
 							{
 
 							}
 							else
-								if ((result is MemoryOperand) && (context.Operand1 is MemoryOperand))
+								if ((result.IsMemoryAddress) && (context.Operand1.IsMemoryAddress))
 								{
 									Operand r8 = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.R8);
 									Operand r9 = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.R9);
@@ -229,7 +228,7 @@ namespace Mosa.Platform.AVR32
 				context.AppendInstruction(AVR32.Add, r8, r8);
 			}
 
-			context.AppendInstruction(AVR32.Ld, result, new MemoryOperand(GeneralPurposeRegister.R8, r8.Type, offsetPtr));
+			context.AppendInstruction(AVR32.Ld, result, Operand.CreateMemoryAddress(r8.Type, GeneralPurposeRegister.R8, offsetPtr));
 		}
 
 		/// <summary>
@@ -247,7 +246,7 @@ namespace Mosa.Platform.AVR32
 				context.SetInstruction(AVR32.And, result, operand);
 			}
 			else
-				if ((result is MemoryOperand) && (operand.IsConstant))
+				if ((result.IsMemoryAddress) && (operand.IsConstant))
 				{
 					Operand r8 = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.R8);
 					Operand r9 = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.R9);
@@ -258,7 +257,7 @@ namespace Mosa.Platform.AVR32
 					context.AppendInstruction(AVR32.St, result, r8);
 				}
 				else
-					if ((result.IsRegister) && (operand is MemoryOperand))
+					if ((result.IsRegister) && (operand.IsMemoryAddress))
 					{
 
 					}
@@ -268,12 +267,12 @@ namespace Mosa.Platform.AVR32
 
 						}
 						else
-							if ((result is MemoryOperand) && (operand.IsRegister))
+							if ((result.IsMemoryAddress) && (operand.IsRegister))
 							{
 
 							}
 							else
-								if ((result is MemoryOperand) && (context.Operand1 is MemoryOperand))
+								if ((result.IsMemoryAddress) && (context.Operand1.IsMemoryAddress))
 								{
 									Operand r8 = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.R8);
 									Operand r9 = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.R9);
@@ -323,7 +322,7 @@ namespace Mosa.Platform.AVR32
 			{
 				// TODO:
 			}
-			else if (context.Result is MemoryOperand && context.Operand1 is MemoryOperand)
+			else if (context.Result.IsMemoryAddress && context.Operand1.IsMemoryAddress)
 			{
 				Operand load = Operand.CreateCPURegister(BuiltInSigType.IntPtr, GeneralPurposeRegister.R9);
 
@@ -339,11 +338,11 @@ namespace Mosa.Platform.AVR32
 
 				//context.AppendInstruction(Instruction.Mov, result, store);
 			}
-			else if (context.Result.IsRegister && context.Operand1 is MemoryOperand)
+			else if (context.Result.IsRegister && context.Operand1.IsMemoryAddress)
 			{
 				context.ReplaceInstructionOnly(AVR32.Ld);
 			}
-			else if (context.Result is MemoryOperand && context.Operand1.IsRegister)
+			else if (context.Result.IsMemoryAddress && context.Operand1.IsRegister)
 			{
 				context.SetInstruction(AVR32.St, result, operand);
 			}
@@ -351,18 +350,18 @@ namespace Mosa.Platform.AVR32
 			{
 				context.ReplaceInstructionOnly(AVR32.Mov);
 			}
-			else if (context.Result is MemoryOperand && context.Operand1.IsConstant)
+			else if (context.Result.IsMemoryAddress && context.Operand1.IsConstant)
 			{
 				Operand load = Operand.CreateCPURegister(BuiltInSigType.IntPtr, GeneralPurposeRegister.R9);
 
 				context.SetInstruction(AVR32.Mov, load, operand);
 				context.AppendInstruction(AVR32.St, result, load);
 			}
-			else if (context.Result is MemoryOperand && context.Operand1.IsSymbol)
+			else if (context.Result.IsMemoryAddress && context.Operand1.IsSymbol)
 			{
 				//context.SetInstruction(Instruction.St, result, operand);
 			}
-			else if (context.Result is MemoryOperand && context.Operand1 is LabelOperand)
+			else if (context.Result.IsMemoryAddress && context.Operand1.IsLabel)
 			{
 				//context.SetInstruction(Instruction.St, result, operand);
 			}
@@ -540,7 +539,7 @@ namespace Mosa.Platform.AVR32
 				context.AppendInstruction(AVR32.Add, r8, r8);
 			}
 
-			context.AppendInstruction(AVR32.Ld, new MemoryOperand(GeneralPurposeRegister.R8, value.Type, offsetPtr), r9);
+			context.AppendInstruction(AVR32.Ld, Operand.CreateMemoryAddress(value.Type, GeneralPurposeRegister.R8, offsetPtr), r9);
 		}
 
 		/// <summary>
@@ -661,7 +660,7 @@ namespace Mosa.Platform.AVR32
 			{
 				var r8 = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.R8);
 				var destination = context.Result;
-				var source = context.Operand1 as MemoryOperand;
+				var source = context.Operand1;
 				var elementType = type == null ? GetElementType(source.Type) : GetElementType(type);
 				var offsetPtr = IntPtr.Zero;
 
@@ -676,7 +675,7 @@ namespace Mosa.Platform.AVR32
 					context.AppendInstruction(AVR32.Add, r8, r8);
 				}
 
-				context.AppendInstruction(AVR32.Lds, destination, new MemoryOperand(GeneralPurposeRegister.R8, elementType, offsetPtr));
+				context.AppendInstruction(AVR32.Lds, destination, Operand.CreateMemoryAddress(elementType, GeneralPurposeRegister.R8, offsetPtr));
 			}
 			else
 			{
@@ -746,7 +745,7 @@ namespace Mosa.Platform.AVR32
 					context.AppendInstruction(AVR32.Ld, r8, offset);
 					context.AppendInstruction(AVR32.Add, r8, r8);
 				}
-				//context.AppendInstruction(Instruction.Movzx, result, new MemoryOperand(elementType, GeneralPurposeRegister.R8, offsetPtr));
+				//context.AppendInstruction(Instruction.Movzx, result, Operand.CreateMemoryAddress(elementType, GeneralPurposeRegister.R8, offsetPtr));
 			}
 			else
 			{

@@ -9,7 +9,6 @@
 
 using System;
 using System.IO;
-using Mosa.Compiler.Framework.Operands;
 using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.Metadata.Loader;
@@ -158,7 +157,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the parameters.
 		/// </summary>
-		ParameterOperand[] Parameters { get; }
+		Operand[] Parameters { get; }
 
 		/// <summary>
 		/// Gets the assembly compiler.

@@ -13,7 +13,6 @@ using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.Metadata.Loader;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
-using Mosa.Compiler.Framework.Operands;
 
 namespace Mosa.Compiler.Framework
 {

@@ -10,7 +10,6 @@
 using System;
 using System.Collections.Generic;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Operands;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
 
@@ -36,7 +35,7 @@ namespace Mosa.Platform.x86.Intrinsic
 
 			context.SetInstruction(X86.Pop, eax);
 			context.AppendInstruction(X86.Add, eax, Operand.CreateCPURegister(u4, GeneralPurposeRegister.ESP));
-			context.AppendInstruction(X86.Mov, eax, new MemoryOperand(GeneralPurposeRegister.EAX, u4, new IntPtr(0)));
+			context.AppendInstruction(X86.Mov, eax, Operand.CreateMemoryAddress(u4, GeneralPurposeRegister.EAX, new IntPtr(0)));
 			context.AppendInstruction(X86.Mov, result, eax);
 			context.AppendInstruction(X86.Push, null, eax);
 		}

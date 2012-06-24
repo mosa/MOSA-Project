@@ -8,7 +8,6 @@
  */
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Operands;
 using Mosa.Compiler.Framework.Platform;
 
 namespace Mosa.Platform.x86
@@ -334,15 +333,10 @@ namespace Mosa.Platform.x86
 					return operand.Register;
 			}
 
-			MemoryOperand memOperand = operand as MemoryOperand;
-
-			if (memOperand != null)
-				return memOperand.Base;
-
-			ParameterOperand paramOperand = operand as ParameterOperand;
-
-			if (paramOperand != null)
-				return paramOperand.Base;
+			if (operand.IsMemoryAddress || operand.IsParameter)
+			{
+				return operand.Register;
+			}
 
 			return null;
 		}

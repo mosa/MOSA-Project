@@ -10,7 +10,6 @@
 using System;
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Operands;
 
 namespace Mosa.Platform.x86.Instructions
 {
@@ -50,7 +49,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-			if ((destination.IsRegister) || (destination is MemoryOperand))
+			if ((destination.IsRegister) || (destination.IsMemoryAddress))
 			{
 				if (IsByte(destination)) return MR_8;
 				if (IsChar(destination)) return MR_16;

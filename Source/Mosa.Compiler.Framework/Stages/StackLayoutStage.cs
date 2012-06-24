@@ -10,7 +10,6 @@
 using System;
 using System.Collections.Generic;
 using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.Framework.Operands;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -38,7 +37,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (methodCompiler.PlugSystem.GetPlugMethod(methodCompiler.Method) != null)
 					return;
 
-			List<StackOperand> locals = CollectLocalVariablesFromIL();
+			List<Operand> locals = CollectLocalVariablesFromIL();
 
 			// Iterate and collect locals from all blocks
 			foreach (BasicBlock block in basicBlocks)
@@ -77,16 +76,16 @@ namespace Mosa.Compiler.Framework.Stages
 
 		#region Internals
 
-		private List<StackOperand> CollectLocalVariablesFromIL()
+		private List<Operand> CollectLocalVariablesFromIL()
 		{
 			// Allocate a list of locals
-			List<StackOperand> locals = new List<StackOperand>();
+			List<Operand> locals = new List<Operand>();
 
 			if (methodCompiler.LocalVariables == null)
 				return locals;
 
 			foreach (var localVariable in methodCompiler.LocalVariables)
-				locals.Add(localVariable as StackOperand);
+				locals.Add(localVariable);
 
 			return locals;
 		}
@@ -96,22 +95,15 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		/// <param name="locals">Holds all locals found by the stage.</param>
 		/// <param name="block">The block.</param>
-		private void CollectLocalVariables(List<StackOperand> locals, BasicBlock block)
+		private void CollectLocalVariables(List<Operand> locals, BasicBlock block)
 		{
 			for (Context ctx = new Context(instructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
 			{
 				if (ctx.Result != null)
 				{
-					// The instruction list may not be in SSA form, so we have to check existence again here unfortunately.
-					// FIXME: Allow us to detect the state of blocks
-					LocalVariableOperand lvop = ctx.Result as LocalVariableOperand;
-					if (lvop != null && !locals.Contains(lvop))
-						locals.Add(lvop);
-
-					StackTemporaryOperand stop = ctx.Result as StackTemporaryOperand;
-					if (stop != null && !locals.Contains(stop))
-						locals.Add(stop);
-
+					if (ctx.Result.IsLocalVariable || ctx.Result.IsStackTemp)
+						if (!locals.Contains(ctx.Result))
+							locals.Add(ctx.Result);
 				}
 			}
 		}
@@ -122,7 +114,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="compiler">The method compiler providing the parameters.</param>
 		private void LayoutParameters(IMethodCompiler compiler)
 		{
-			List<StackOperand> paramOps = new List<StackOperand>();
+			List<Operand> paramOps = new List<Operand>();
 
 			int offset = 0;
 
@@ -130,7 +122,7 @@ namespace Mosa.Compiler.Framework.Stages
 				++offset;
 
 			for (int i = 0; i < compiler.Method.Parameters.Count + offset; ++i)
-				paramOps.Add((StackOperand)compiler.GetParameterOperand(i));
+				paramOps.Add(compiler.GetParameterOperand(i));
 
 			LayoutVariables(paramOps, callingConvention, callingConvention.OffsetOfFirstParameter, -1);
 		}
@@ -143,11 +135,11 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="offsetOfFirst">Specifies the offset of the first stack operand in the list.</param>
 		/// <param name="direction">The direction.</param>
 		/// <returns></returns>
-		private static int LayoutVariables(IEnumerable<StackOperand> locals, ICallingConvention cc, int offsetOfFirst, int direction)
+		private static int LayoutVariables(IEnumerable<Operand> locals, ICallingConvention cc, int offsetOfFirst, int direction)
 		{
 			int offset = offsetOfFirst;
 
-			foreach (StackOperand lvo in locals)
+			foreach (Operand lvo in locals)
 			{
 				// Does the offset fit the alignment requirement?
 				int alignment;
@@ -183,11 +175,11 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		/// <param name="locals">Holds all local variables to sort..</param>
 		/// <param name="cc">The calling convention used to determine size and alignment requirements.</param>
-		private static void OrderVariables(List<StackOperand> locals, ICallingConvention cc)
+		private static void OrderVariables(List<Operand> locals, ICallingConvention cc)
 		{
 			// Sort the list by stack size requirements - this moves equally sized operands closer together,
 			// in the hope that this reduces padding on the stack to enforce HW alignment requirements.			 
-			locals.Sort(delegate(StackOperand op1, StackOperand op2)
+			locals.Sort(delegate(Operand op1, Operand op2)
 			{
 				int size1, size2, alignment;
 				cc.GetStackRequirements(op1, out size1, out alignment);

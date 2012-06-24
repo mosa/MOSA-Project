@@ -1,5 +1,4 @@
-﻿using Mosa.Compiler.Framework.Operands;
-using Mosa.Compiler.TypeSystem;
+﻿using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.Compiler.Framework
 {

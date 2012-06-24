@@ -9,7 +9,6 @@
 
 using System;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Operands;
 
 namespace Mosa.Platform.x86.Instructions
 {
@@ -45,7 +44,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-			if ((source is MemoryOperand) && (third.IsRegister))
+			if ((source.IsMemoryAddress) && (third.IsRegister))
 			{
 				if (IsByte(source) || IsByte(third))
 					return M_R_8;
@@ -56,7 +55,7 @@ namespace Mosa.Platform.x86.Instructions
 				return M_R;
 			}
 
-			if ((source.IsRegister) && (third is MemoryOperand))
+			if ((source.IsRegister) && (third.IsMemoryAddress))
 			{
 				if (IsByte(third) || IsByte(source))
 					return R_M_8;
@@ -68,7 +67,7 @@ namespace Mosa.Platform.x86.Instructions
 			}
 
 			if ((source.IsRegister) && (third.IsRegister)) return R_R;
-			if ((source is MemoryOperand) && (third.IsConstant)) return M_C;
+			if ((source.IsMemoryAddress) && (third.IsConstant)) return M_C;
 			if ((source.IsRegister) && (third.IsConstant))
 			{
 				if (IsByte(third) || IsByte(source))

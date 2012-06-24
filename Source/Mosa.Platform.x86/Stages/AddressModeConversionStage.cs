@@ -11,7 +11,6 @@
 
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.Framework.Operands;
 using Mosa.Compiler.Metadata;
 
 namespace Mosa.Platform.x86.Stages

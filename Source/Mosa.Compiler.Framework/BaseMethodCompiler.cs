@@ -11,7 +11,6 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
-using Mosa.Compiler.Framework.Operands;
 using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.Metadata;
@@ -434,7 +433,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the parameters.
 		/// </summary>
-		public ParameterOperand[] Parameters { get { return stackLayout.Parameters; } }
+		public Operand[] Parameters { get { return stackLayout.Parameters; } }
 
 		/// <summary>
 		/// Sets the signature of local variables in the method.

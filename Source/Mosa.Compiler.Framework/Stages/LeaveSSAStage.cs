@@ -9,7 +9,6 @@
 
 using System.Diagnostics;
 using Mosa.Compiler.Framework.IR;
-using Mosa.Compiler.Framework.Operands;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -33,14 +32,14 @@ namespace Mosa.Compiler.Framework.Stages
 					for (var i = 0; i < context.OperandCount; ++i)
 					{
 						var op = context.GetOperand(i);
-						if (op is SsaOperand)
-							context.SetOperand(i, (op as SsaOperand).Operand);
+						if (op != null && op.IsSSA)
+							context.SetOperand(i, op.SsaOperand);
 					}
 
 					if (context.Result != null)
 					{
-						if (context.Result is SsaOperand)
-							context.Result = (context.Result as SsaOperand).Operand;
+						if (context.Result.IsSSA)
+							context.Result = context.Result.SsaOperand;
 					}
 				}
 			}
@@ -78,14 +77,14 @@ namespace Mosa.Compiler.Framework.Stages
 			if (context.Index != -1)
 				context = context.InsertBefore();
 
-			var source = operand is SsaOperand ? (operand as SsaOperand).Operand : operand;
-			var destination = result is SsaOperand ? (result as SsaOperand).Operand : result;
+			var source = operand.IsSSA ? operand.SsaOperand : operand;
+			var destination = result.IsSSA ? result.SsaOperand : result;
 
-			Debug.Assert(!(source is SsaOperand));
-			Debug.Assert(!(destination is SsaOperand));
+			Debug.Assert(!source.IsSSA);
+			Debug.Assert(!destination.IsSSA);
 
 			if (destination != source)
-				 context.SetInstruction(IR.IRInstruction.Move, destination, source);
+				context.SetInstruction(IR.IRInstruction.Move, destination, source);
 		}
 
 		/// <summary>

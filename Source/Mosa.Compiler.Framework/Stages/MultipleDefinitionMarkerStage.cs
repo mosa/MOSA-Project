@@ -8,7 +8,6 @@
  */
 
 using System.Collections.Generic;
-using Mosa.Compiler.Framework.Operands;
 
 namespace Mosa.Compiler.Framework.Stages
 {

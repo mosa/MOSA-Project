@@ -13,7 +13,6 @@
 using System;
 using Mosa.Compiler.Common;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Operands;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.Metadata;
 
@@ -171,19 +170,16 @@ namespace Mosa.Platform.x86
 		/// <param name="displacement">The displacement operand.</param>
 		public void WriteDisplacement(Operand displacement)
 		{
-			MemberOperand member = displacement as MemberOperand;
-			LabelOperand label = displacement as LabelOperand;
-
 			int pos = (int)(codeStream.Position - codeStreamBasePosition);
 
-			if (label != null)
+			if (displacement.IsLabel)
 			{
-				linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, compiler.Method.ToString(), pos, 0, label.Name, IntPtr.Zero);
+				linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, compiler.Method.ToString(), pos, 0, displacement.Name, IntPtr.Zero);
 				codeStream.Position += 4;
 			}
-			else if (member != null)
+			else if (displacement.IsRuntimeMember)
 			{
-				linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, compiler.Method.ToString(), pos, 0, member.Member.ToString(), member.Offset);
+				linker.Link(LinkType.AbsoluteAddress | LinkType.NativeI4, compiler.Method.ToString(), pos, 0, displacement.RuntimeMember.ToString(), displacement.Offset);
 				codeStream.Position += 4;
 			}
 			else if (displacement.IsSymbol)
@@ -193,7 +189,7 @@ namespace Mosa.Platform.x86
 			}
 			else
 			{
-				codeStream.Write((displacement as MemoryOperand).Offset.ToInt32(), true);
+				codeStream.Write(displacement.Offset.ToInt32(), true);
 			}
 
 		}
@@ -205,15 +201,10 @@ namespace Mosa.Platform.x86
 		private void WriteImmediate(Operand op)
 		{
 
-			if (op is LocalVariableOperand || op is StackTemporaryOperand)
+			if (op.IsLocalVariable || op.IsStackTemp || op.IsMemoryAddress)
 			{
 				// Add the displacement
-				codeStream.Write((op as StackOperand).Offset.ToInt32(), true);
-			}
-			else if (op is MemoryOperand)
-			{
-				// Add the displacement
-				codeStream.Write((op as MemoryOperand).Offset.ToInt32(), true);
+				codeStream.Write(op .Offset.ToInt32(), true);
 			}
 			else if (op.IsConstant)
 			{
@@ -338,15 +329,10 @@ namespace Mosa.Platform.x86
 		/// <param name="op">The immediate operand to emit.</param>
 		public void EmitImmediate(Operand op)
 		{
-			if (op is LocalVariableOperand || op is StackTemporaryOperand)
+			if (op.IsLocalVariable || op.IsStackTemp || op.IsMemoryAddress)
 			{
 				// Add the displacement
-				codeStream.Write((op as StackOperand).Offset.ToInt32(), true);
-			}
-			else if (op is MemoryOperand)
-			{
-				// Add the displacement
-				codeStream.Write((op as MemoryOperand).Offset.ToInt32(), true);
+				codeStream.Write(op.Offset.ToInt32(), true);
 			}
 			else if (op.IsConstant)
 			{
@@ -425,8 +411,8 @@ namespace Mosa.Platform.x86
 			// FIXME: Handle the SIB byte
 			sib = null;
 
-			MemoryOperand mop1 = op1 as MemoryOperand;
-			MemoryOperand mop2 = op2 as MemoryOperand;
+			Operand mop1 = op1 != null && op1.IsMemoryAddress ? op1 : null;
+			Operand mop2 = op2 != null && op2.IsMemoryAddress ? op2 : null;
 
 			bool op1IsRegister = (op1 != null) && op1.IsRegister;
 			bool op2IsRegister = (op2 != null) && op2.IsRegister;

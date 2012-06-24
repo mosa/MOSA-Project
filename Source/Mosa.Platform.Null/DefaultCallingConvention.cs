@@ -9,7 +9,6 @@
 
 using System;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Operands;
 using Mosa.Compiler.Metadata;
 
 namespace Mosa.Platform.Null
@@ -70,7 +69,7 @@ namespace Mosa.Platform.Null
 			return;
 		}
 
-		void ICallingConvention.GetStackRequirements(StackOperand stackOperand, out int size, out int alignment)
+		void ICallingConvention.GetStackRequirements(Operand stackOperand, out int size, out int alignment)
 		{
 			// Special treatment for some stack types
 			// FIXME: Handle the size and alignment requirements of value types

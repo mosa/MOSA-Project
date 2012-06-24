@@ -11,7 +11,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Operands;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Platform.x86.Stages;
@@ -182,13 +181,11 @@ namespace Mosa.Platform.x86
 		/// <param name="ctx">The context.</param>
 		private void MoveReturnValueTo64Bit(Operand resultOperand, Context ctx)
 		{
-			MemoryOperand memoryOperand = resultOperand as MemoryOperand;
-
-			if (memoryOperand == null)
+			if (!resultOperand.IsMemoryAddress)
 				return;
 
 			Operand opL, opH;
-			LongOperandTransformationStage.SplitLongOperand(memoryOperand, out opL, out opH);
+			LongOperandTransformationStage.SplitLongOperand(resultOperand, out opL, out opH);
 
 			Operand eax = Operand.CreateCPURegister(BuiltInSigType.UInt32, GeneralPurposeRegister.EAX);
 			Operand edx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EDX);
@@ -206,12 +203,12 @@ namespace Mosa.Platform.x86
 		/// <param name="parameterSize">Size of the parameter.</param>
 		private void Push(Context ctx, Operand op, int stackSize, int parameterSize)
 		{
-			if (op is MemoryOperand)
+			if (op.IsMemoryAddress)
 			{
 				if (op.Type.Type == CilElementType.ValueType)
 				{
 					for (int i = 0; i < parameterSize; i += 4)
-						ctx.AppendInstruction(X86.Mov, new MemoryOperand(GeneralPurposeRegister.EDX, op.Type, new IntPtr(stackSize + i)), new MemoryOperand((op as MemoryOperand).Base, op.Type, new IntPtr((op as MemoryOperand).Offset.ToInt64() + i)));
+						ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(op.Type, GeneralPurposeRegister.EDX, new IntPtr(stackSize + i)), Operand.CreateMemoryAddress(op.Type, op.Base, new IntPtr(op.Offset.ToInt64() + i)));
 
 					return;
 				}
@@ -232,17 +229,16 @@ namespace Mosa.Platform.x86
 
 					case StackTypeCode.Int64:
 						{
-							MemoryOperand mop = op as MemoryOperand;
-							Debug.Assert(null != mop, @"I8/U8 arg is not in a memory operand.");
+							Debug.Assert(op.IsMemoryAddress, @"I8/U8 arg is not in a memory operand.");
 							Operand eax = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EAX);
 
 							Operand opL, opH;
-							LongOperandTransformationStage.SplitLongOperand(mop, out opL, out opH);
+							LongOperandTransformationStage.SplitLongOperand(op, out opL, out opH);
 
 							ctx.AppendInstruction(X86.Mov, eax, opL);
-							ctx.AppendInstruction(X86.Mov, new MemoryOperand(GeneralPurposeRegister.EDX, op.Type, new IntPtr(stackSize)), eax);
+							ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(op.Type, GeneralPurposeRegister.EDX, new IntPtr(stackSize)), eax);
 							ctx.AppendInstruction(X86.Mov, eax, opH);
-							ctx.AppendInstruction(X86.Mov, new MemoryOperand(GeneralPurposeRegister.EDX, op.Type, new IntPtr(stackSize + 4)), eax);
+							ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(op.Type, GeneralPurposeRegister.EDX, new IntPtr(stackSize + 4)), eax);
 						}
 						return;
 
@@ -260,14 +256,14 @@ namespace Mosa.Platform.x86
 				LongOperandTransformationStage.SplitLongOperand(op, out opL, out opH);
 
 				ctx.AppendInstruction(X86.Mov, eax, opL);
-				ctx.AppendInstruction(X86.Mov, new MemoryOperand(GeneralPurposeRegister.EDX, BuiltInSigType.Int32, new IntPtr(stackSize)), eax);
+				ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(BuiltInSigType.Int32, GeneralPurposeRegister.EDX, new IntPtr(stackSize)), eax);
 				ctx.AppendInstruction(X86.Mov, eax, opH);
-				ctx.AppendInstruction(X86.Mov, new MemoryOperand(GeneralPurposeRegister.EDX, BuiltInSigType.Int32, new IntPtr(stackSize + 4)), eax);
+				ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(BuiltInSigType.Int32, GeneralPurposeRegister.EDX, new IntPtr(stackSize + 4)), eax);
 
 				return;
 			}
 
-			ctx.AppendInstruction(X86.Mov, new MemoryOperand(GeneralPurposeRegister.EDX, op.Type, new IntPtr(stackSize)), op);
+			ctx.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(op.Type, GeneralPurposeRegister.EDX, new IntPtr(stackSize)), op);
 		}
 
 		/// <summary>
@@ -330,7 +326,7 @@ namespace Mosa.Platform.x86
 			}
 		}
 
-		void ICallingConvention.GetStackRequirements(StackOperand stackOperand, out int size, out int alignment)
+		void ICallingConvention.GetStackRequirements(Operand stackOperand, out int size, out int alignment)
 		{
 			// Special treatment for some stack types
 			// FIXME: Handle the size and alignment requirements of value types

@@ -10,7 +10,6 @@
 using System;
 
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Operands;
 
 namespace Mosa.Platform.x86.Instructions
 {
@@ -46,10 +45,10 @@ namespace Mosa.Platform.x86.Instructions
 		/// <returns></returns>
 		protected override OpCode ComputeOpCode(Operand destination, Operand source, Operand third)
 		{
-			if ((destination is MemoryOperand) && (source.IsRegister)) return M_R;
-			if ((destination.IsRegister) && (source is MemoryOperand)) return R;
+			if ((destination.IsMemoryAddress) && (source.IsRegister)) return M_R;
+			if ((destination.IsRegister) && (source.IsMemoryAddress)) return R;
 			if ((destination.IsRegister) && (source.IsRegister)) return R;
-			if ((destination.IsRegister) && (source is LabelOperand)) return R;
+			if ((destination.IsRegister) && (source.IsLabel)) return R;
 
 			throw new ArgumentException(@"No opcode for operand type. [" + destination.GetType() + ", " + source.GetType() + ")");
 		}

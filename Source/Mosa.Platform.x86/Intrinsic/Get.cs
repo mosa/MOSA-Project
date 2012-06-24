@@ -9,7 +9,6 @@
 
 using System.Collections.Generic;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Operands;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
 
@@ -33,7 +32,7 @@ namespace Mosa.Platform.x86.Intrinsic
 			Operand result = context.Result;
 
 			Operand tmp = Operand.CreateCPURegister(BuiltInSigType.Ptr, GeneralPurposeRegister.EDX);
-			MemoryOperand operand = new MemoryOperand(GeneralPurposeRegister.EDX, context.Operand1.Type, new System.IntPtr(0));
+			Operand operand = Operand.CreateMemoryAddress(context.Operand1.Type, GeneralPurposeRegister.EDX, new System.IntPtr(0));
 
 			context.SetInstruction(X86.Mov, tmp, context.Operand1);
 			context.AppendInstruction(X86.Mov, result, operand);

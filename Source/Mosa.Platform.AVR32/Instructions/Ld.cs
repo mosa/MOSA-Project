@@ -10,7 +10,6 @@
 
 using System;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.Operands;
 
 namespace Mosa.Platform.AVR32.Instructions
 {
@@ -31,20 +30,18 @@ namespace Mosa.Platform.AVR32.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
-			if (context.Result.IsRegister && context.Operand1 is MemoryOperand)
+			if (context.Result.IsRegister && context.Operand1.IsMemoryAddress)
 			{
-				MemoryOperand operand = context.Operand1 as MemoryOperand;
-
-				int displacement = operand.Offset.ToInt32();
+				int displacement = context.Operand1.Offset.ToInt32();
 
 				if (IsBetween(displacement, 0, 124))
 				{
-					emitter.EmitDisplacementLoadWithK5Immediate((byte)context.Result.Register.RegisterCode, (sbyte)displacement, (byte)operand.Base.RegisterCode);
+					emitter.EmitDisplacementLoadWithK5Immediate((byte)context.Result.Register.RegisterCode, (sbyte)displacement, (byte)context.Operand1.Base.RegisterCode);
 				}
 				else
 					if (IsBetween(displacement, -32768, 32767))
 					{
-						emitter.EmitTwoRegistersAndK16(0x0F, (byte)operand.Base.RegisterCode, (byte)context.Result.Register.RegisterCode, (short)displacement);
+						emitter.EmitTwoRegistersAndK16(0x0F, (byte)context.Operand1.Base.RegisterCode, (byte)context.Result.Register.RegisterCode, (short)displacement);
 					}
 					else
 						throw new OverflowException();
