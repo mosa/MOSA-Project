@@ -38,7 +38,6 @@ namespace Mosa.Platform.x86.Instructions
 		{
 			if ((source.IsRegister) && (third.IsRegister)) return opcode;
 			if ((source.IsRegister) && (third.IsMemoryAddress)) return opcode;
-			if ((source.IsRegister) && (third.IsLabel)) return opcode;
 			if ((source.IsRegister) && (third.IsConstant)) return opcode;
 			throw new ArgumentException(@"No opcode for operand type.");
 		}

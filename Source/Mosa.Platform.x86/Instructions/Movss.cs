@@ -48,7 +48,6 @@ namespace Mosa.Platform.x86.Instructions
 			if ((destination.IsMemoryAddress) && (source.IsRegister)) return M_R;
 			if ((destination.IsRegister) && (source.IsMemoryAddress)) return R;
 			if ((destination.IsRegister) && (source.IsRegister)) return R;
-			if ((destination.IsRegister) && (source.IsLabel)) return R;
 
 			throw new ArgumentException(@"No opcode for operand type. [" + destination.GetType() + ", " + source.GetType() + ")");
 		}

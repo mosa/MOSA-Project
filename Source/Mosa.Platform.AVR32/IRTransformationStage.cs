@@ -361,10 +361,7 @@ namespace Mosa.Platform.AVR32
 			{
 				//context.SetInstruction(Instruction.St, result, operand);
 			}
-			else if (context.Result.IsMemoryAddress && context.Operand1.IsLabel)
-			{
-				//context.SetInstruction(Instruction.St, result, operand);
-			}
+			
 
 		}
 

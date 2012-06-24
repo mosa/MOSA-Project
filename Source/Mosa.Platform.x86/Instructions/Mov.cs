@@ -66,8 +66,6 @@ namespace Mosa.Platform.x86.Instructions
 
 			if ((destination.IsRegister) && (source.IsConstant)) return R_C;
 			if ((destination.IsMemoryAddress) && (source.IsConstant)) return M_C;
-			if ((destination.IsRegister) && (source.IsLabel)) return R_C;
-			if ((destination.IsMemoryAddress) && (source.IsLabel)) return M_C;
 			if ((destination.IsRegister) && (source.IsSymbol)) return R_C;
 			if ((destination.IsMemoryAddress) && (source.IsSymbol)) return M_C;
 
