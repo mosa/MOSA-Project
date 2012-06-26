@@ -30,7 +30,8 @@ namespace Mosa.Compiler.Linker
 			BasicBlocks.CreateBlock(BasicBlock.PrologueLabel, 0);
 
 			this.Pipeline.AddRange(new IMethodCompilerStage[] {
-				new SimpleTraceBlockOrderStage(),
+				//new SimpleTraceBlockOrderStage(),
+				new LoopAwareBlockOrderStage(),
 				new PlatformStubStage(),
 				new CodeGenerationStage(),
 			});

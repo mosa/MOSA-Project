@@ -106,6 +106,7 @@ namespace Mosa.Compiler.Framework
 		public int Sequence
 		{
 			get { return sequence; }
+			internal set { sequence = value; }
 		}
 
 		/// <summary>

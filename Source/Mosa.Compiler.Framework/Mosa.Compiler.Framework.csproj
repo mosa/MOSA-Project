@@ -81,6 +81,7 @@
     <Compile Include="SimpleFastDominance.cs" />
     <Compile Include="LoopEdge.cs" />
     <Compile Include="LoopAwareBlockOrder.cs" />
+    <Compile Include="Stages\LoopAwareBlockOrderStage.cs" />
     <Compile Include="Stages\SSAOptimizations.cs" />
     <Compile Include="Stages\EdgeSplitStage.cs" />
     <Compile Include="Stages\SimpleRegisterAllocatorStage.cs" />
@@ -288,7 +289,6 @@
     <Compile Include="RuntimeMethodData.cs" />
     <Compile Include="Stages\StrengthReductionStage.cs" />
     <Compile Include="Stages\SimpleTraceBlockOrderStage.cs" />
-    <Compile Include="Stages\LoopAwareBlockOrderStage.cs" />
     <Compile Include="Stages\LocalCSEStage.cs" />
     <Compile Include="IMethodCompiler.cs" />
     <Compile Include="Linker\BaseAssemblyLinkerStage.cs" />

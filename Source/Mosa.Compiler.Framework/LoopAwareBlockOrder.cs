@@ -7,37 +7,36 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-// FIXME PG
-
 using System;
+using System.Diagnostics;
 using System.Collections;
 using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework
 {
 	/// <summary>
-	/// 
+	/// The Loop Aware Block Ordering reorders blocks to optimize loops and reduce the distance of jumps and branches.
 	/// </summary>
-	public class LoopAwareBlockOrder
+	public sealed class LoopAwareBlockOrder
 	{
 		#region Data members
 
-		/// <summary>
-		/// 
-		/// </summary>
-		protected BasicBlocks basicBlocks;
-		/// <summary>
-		/// 
-		/// </summary>
-		private List<LoopEdge> loopEdges;
-		/// <summary>
-		/// 
-		/// </summary>
-		private Dictionary<BasicBlock, int> depths;
-		/// <summary>
-		/// 
-		/// </summary>
-		private BasicBlock[] ordered;
+		private BasicBlocks basicBlocks;
+		private BitArray active;
+		private BitArray visited;
+		private BitArray loopHeader;
+		private List<BasicBlock> loopEnds;
+		private int loopCount;
+		private int[] forwardBranchesCount;
+		private int[] loopBlockIndex;
+		private BitArray loopMap;
+		private int blockCount;
+
+		private int[] loopDepth;
+		private int[] loopIndex;
+		private BasicBlock[] blockOrder;
+
+		private int orderIndex;
 
 		#endregion // Data members
 
@@ -98,227 +97,220 @@ namespace Mosa.Compiler.Framework
 
 		#endregion
 
-		/// <summary>
-		/// Gets the loop edges.
-		/// </summary>
-		public List<LoopEdge> LoopEdges { get { return loopEdges; } }
+		#region Properties
+
+		public BasicBlock[] NewBlockOrder { get { return blockOrder; } }
+		public int GetLoopDepth(BasicBlock block) { return loopDepth[block.Sequence]; }
+		public int GetLoopIndex(BasicBlock block) { return loopIndex[block.Sequence]; }
+
+		#endregion // Properties
 
 		/// <summary>
-		/// Runs the specified compiler.
+		/// Initializes a new instance of the <see cref="LoopAwareBlockOrder"/> class.
 		/// </summary>
+		/// <param name="basicBlocks">The basic blocks.</param>
 		public LoopAwareBlockOrder(BasicBlocks basicBlocks)
 		{
 			this.basicBlocks = basicBlocks;
+			this.blockCount = basicBlocks.Count;
+			this.loopEnds = new List<BasicBlock>();
+			this.loopCount = 0;
+			this.loopHeader = new BitArray(blockCount, false);
+			this.forwardBranchesCount = new int[blockCount];
+			this.loopBlockIndex = new int[blockCount];
+			this.loopDepth = new int[blockCount];
+			this.loopIndex = new int[blockCount];
+			this.blockOrder = new BasicBlock[blockCount];
+			this.orderIndex = 0;
 
-			// Create list for loops
-			loopEdges = new List<LoopEdge>();
+			foreach (var head in basicBlocks.HeadBlocks)
+				Start(head);
 
-			// Create dictionary for the depth of basic Blocks
-			depths = new Dictionary<BasicBlock, int>(basicBlocks.Count);
-
-			OrderBlock();
+			//if (orderIndex != blockCount)
+			//{
+			//    this.blockOrder[orderIndex++] = basicBlocks.EpilogueBlock;
+			//}
 		}
 
-		protected void OrderBlock()
-		{
-			// Retrieve the first block
-			BasicBlock first = FindBlock(-1);
-
-			// Determine Loop Depths
-			FindLoops(first);
-
-			DetermineLoopDepths();
-
-			// Order the Blocks based on loop depth
-			DetermineBlockOrder(first);
-		}
-
-		/// <summary>
-		/// Finds the block.
-		/// </summary>
-		/// <param name="index">The index.</param>
-		/// <returns></returns>
-		protected BasicBlock FindBlock(int index)
-		{
-			foreach (var block in basicBlocks)
-				if (block.Index == index)
-					return block;
-
-			return null;
-		}
+		#region Members
 
 		/// <summary>
 		/// Determines the loop depths.
 		/// </summary>
-		protected void FindLoops(BasicBlock start)
+		private void Start(BasicBlock start)
 		{
-			// Create a list of loops ends
-
-			// Create queue for first iteration 
-			Queue<LoopEdge> queue = new Queue<LoopEdge>();
-			queue.Enqueue(new LoopEdge(null, start));
-
-			// Flag per basic block
-			BitArray visited = new BitArray(basicBlocks.Count, false);
-			BitArray active = new BitArray(basicBlocks.Count, false);
-
-			while (queue.Count != 0)
-			{
-				LoopEdge state = queue.Dequeue();
-				BasicBlock current = state.Tail;
-
-				// Mark as visited
-				visited.Set(current.Sequence, true);
-
-				if (active.Get(current.Sequence))
-				{
-					// Found a loop
-
-					// Add to loop list
-					loopEdges.Add(state);
-
-					// and continue iteration
-					continue;
-				}
-
-				// Mark as active
-				active.Set(current.Sequence, true);
-
-				// Add successors to queue
-				foreach (BasicBlock successor in current.NextBlocks)
-					queue.Enqueue(new LoopEdge(current, successor));
-			}
-
+			StartCountEdges(start);
+			loopMap = new BitArray(loopCount * blockCount, false);
+			MarkLoops();
+			AssignLoopDepth(start);
+			ComputeOrder(start);
 		}
 
-		protected void DetermineLoopDepths()
+		private void StartCountEdges(BasicBlock start)
 		{
+			active = new BitArray(blockCount, false);
+			visited = new BitArray(blockCount, false);
 
-			// Create two-dimensional bit set of blocks belonging to loops
-			//BitArray bitSet = new BitArray(loopHeaderIndexes.Count * BasicBlocks.Count, false);
+			CountEdges(start, null);
+		}
 
-			Dictionary<BasicBlock, int> visited = new Dictionary<BasicBlock, int>(basicBlocks.Count);
-			Dictionary<BasicBlock, List<BasicBlock>> count = new Dictionary<BasicBlock, List<BasicBlock>>();
+		private void CountEdges(BasicBlock current, BasicBlock parent)
+		{
+			int blockId = current.Sequence;
 
-			// Create stack of blocks 
-			Stack<BasicBlock> stack = new Stack<BasicBlock>();
-
-			// Second set of iterations
-			foreach (LoopEdge loop in loopEdges)
+			if (active.Get(blockId))
 			{
+				Debug.Assert(visited.Get(blockId));
+				Debug.Assert(parent != null);
 
-				// Add loop-tail to list
-				List<BasicBlock> current;
+				loopHeader.Set(blockId, true);
+				loopEnds.Add(parent);
 
-				if (!count.ContainsKey(loop.Tail))
+				return;
+			}
+
+			forwardBranchesCount[blockId]++;
+
+			if (visited.Get(blockId))
+				return;
+
+			visited.Set(blockId, true);
+			active.Set(blockId, true);
+
+			foreach (var next in current.NextBlocks)
+			{
+				CountEdges(next, current);
+			}
+
+			Debug.Assert(active.Get(blockId));
+			active.Set(blockId, false);
+
+			if (loopHeader.Get(blockId))
+			{
+				loopBlockIndex[blockId] = loopCount;
+				loopCount++;
+			}
+		}
+
+		#region Helpers
+
+		private void SetLoopMap(int l, BasicBlock b)
+		{
+			loopMap.Set((l * blockCount) + b.Sequence, true);
+		}
+
+		private bool GetLoopMap(int l, BasicBlock b)
+		{
+			return loopMap.Get((l * blockCount) + b.Sequence);
+		}
+
+		#endregion //Helpers
+
+		private void MarkLoops()
+		{
+			if (loopCount == 0)
+				return;
+
+			Stack<BasicBlock> worklist = new Stack<BasicBlock>();
+
+			foreach (var loopEnd in loopEnds)
+			{
+				var loopStart = loopEnd.NextBlocks[0]; // assuming the first one?
+				int loopStartIndex = loopBlockIndex[loopStart.Sequence];
+
+				worklist.Push(loopEnd);
+
+				SetLoopMap(loopStartIndex, loopEnd);
+
+				while (worklist.Count != 0)
 				{
-					current = new List<BasicBlock>();
-					current.Add(loop.Tail);
-					count.Add(loop.Tail, current);
-				}
-				else
-				{
-					current = count[loop.Tail];
-					if (!current.Contains(loop.Tail))
-						current.Add(loop.Tail);
-				}
+					var current = worklist.Pop();
 
-				//Console.WriteLine(index.ToString() + " : B" + loop.to.Index.ToString());
-
-				// Add loop-end to stack
-				stack.Push(loop.Head);
-
-				// Clear visit flag
-				visited.Clear();
-				//visited = new Dictionary<BasicBlock, int>(basicBlocks.Count);
-
-				while (stack.Count != 0)
-				{
-					BasicBlock at = stack.Pop();
-
-					// Already visited, continue loop
-					if (visited.ContainsKey(at))
+					if (current == loopStart)
 						continue;
 
-					// Mark as visited
-					if (!visited.ContainsKey(at))
-						visited.Add(at, 0);
-
-					// Add predecessor to list (needed for count)
-					if (!current.Contains(at))
-						current.Add(at);
-
-					//Console.WriteLine(index.ToString() + " : B" + at.Index.ToString());
-
-					// Add predecessors to queue
-					foreach (BasicBlock predecessor in at.PreviousBlocks)
-						if (predecessor != loop.Tail) // Exclude if Loop-Header
-							stack.Push(predecessor);
+					foreach (var previous in current.PreviousBlocks)
+					{
+						if (!GetLoopMap(loopStartIndex, previous))
+						{
+							worklist.Push(previous);
+							SetLoopMap(loopStartIndex, previous);
+						}
+					}
 				}
 			}
-
-			// Last step, assign LoopIndex and LoopDepth to each basic block
-			foreach (BasicBlock block in basicBlocks)
-				if (count.ContainsKey(block))
-					depths.Add(block, count[block].Count);
-				else
-					depths.Add(block, 0);
 		}
 
-		/// <summary>
-		/// Determines the block order.
-		/// </summary>
-		protected void DetermineBlockOrder(BasicBlock start)
+		private void AssignLoopDepth(BasicBlock start)
 		{
-			// Create an array to hold the forward branch count
-			int[] forward = new int[basicBlocks.Count];
+			visited = new BitArray(blockCount, false);
 
-			Dictionary<BasicBlock, int> referenced = new Dictionary<BasicBlock, int>(basicBlocks.Count);
+			Stack<BasicBlock> worklist = new Stack<BasicBlock>();
 
-			// Copy previous branch count to array
-			for (int i = 0; i < basicBlocks.Count; i++)
-				forward[i] = basicBlocks[i].PreviousBlocks.Count;
+			worklist.Push(start);
 
-			// Calculate forward branch count (PreviousBlock.Count minus loops to head)
-			foreach (LoopEdge connecterBlock in loopEdges)
-				forward[connecterBlock.Tail.Sequence]--;
+			while (worklist.Count != 0)
+			{
+				var current = worklist.Pop();
 
-			// Allocate list of ordered Blocks
-			ordered = new BasicBlock[basicBlocks.Count];
-			int orderBlockCnt = 0;
+				if (!visited.Get(current.Sequence))
+				{
+					visited.Set(current.Sequence, true);
 
+					int currentLoopDepth = 0;
+					int minLoopIndex = -1;
+					for (int i = loopCount - 1; i >= 0; i--)
+					{
+						if (GetLoopMap(i, current))
+						{
+							currentLoopDepth++;
+							minLoopIndex = i;
+						}
+					}
+
+					loopDepth[current.Sequence] = currentLoopDepth;
+					loopIndex[current.Sequence] = minLoopIndex;
+
+					foreach (var next in current.NextBlocks)
+					{
+						worklist.Push(next);
+					}
+				}
+			}
+		}
+
+		private void ComputeOrder(BasicBlock start)
+		{
 			// Create sorted worklist
 			SortedList<Priority, BasicBlock> workList = new SortedList<Priority, BasicBlock>();
 
 			// Start worklist with first block
 			workList.Add(new Priority(0, 0, true), start);
 
-			// Order value helps sorted the worklist
-			int order = 0;
+			// the sequence value assists with sorting the worklist by being the tie breaker
+			int sequence = 0;
 
 			while (workList.Count != 0)
 			{
 				BasicBlock block = workList.Values[workList.Count - 1];
 				workList.RemoveAt(workList.Count - 1);
 
-				referenced.Add(block, 0);
-				ordered[orderBlockCnt++] = block;
+				blockOrder[orderIndex++] = block;
 
 				foreach (BasicBlock successor in block.NextBlocks)
 				{
-					forward[successor.Sequence]--;
+					forwardBranchesCount[successor.Sequence]--;
 
-					if (forward[successor.Sequence] == 0)
-						workList.Add(new Priority(depths[successor], order++, block.HintTarget != -1 && block.HintTarget == successor.Label), successor);
+					if (forwardBranchesCount[successor.Sequence] == 0)
+					{
+						workList.Add(new Priority(loopDepth[successor.Sequence], sequence++, block.HintTarget != -1 && block.HintTarget == successor.Label), successor);
+					}
 				}
 			}
 
-			// Place unreferenced blocks at the end of the list
-			foreach (BasicBlock block in basicBlocks)
-				if (!referenced.ContainsKey(block))
-					ordered[orderBlockCnt++] = block;
+
 		}
 
+		#endregion // Methods
 	}
 }
-

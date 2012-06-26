@@ -31,7 +31,6 @@ namespace Mosa.Test.Compiler.Framework
 	public class BlockTests
 	{
 
-
 		public static BasicBlocks Scenario1
 		{
 			get
@@ -54,6 +53,8 @@ namespace Mosa.Test.Compiler.Framework
 				basicBlocks.LinkBlocks(B4, new[] { B6, B7 });
 				basicBlocks.LinkBlocks(B6, B4);
 				basicBlocks.LinkBlocks(B7, B1);
+
+				basicBlocks.AddHeaderBlock(B0);
 
 				return basicBlocks;
 			}
@@ -84,6 +85,8 @@ namespace Mosa.Test.Compiler.Framework
 				basicBlocks.LinkBlocks(B2, new[] { B2, B3, B4 });
 				basicBlocks.LinkBlocks(B3, B4);
 
+				basicBlocks.AddHeaderBlock(B1);
+
 				return basicBlocks;
 			}
 		}
@@ -110,6 +113,8 @@ namespace Mosa.Test.Compiler.Framework
 				basicBlocks.LinkBlocks(D, F);
 				basicBlocks.LinkBlocks(E, F);
 				basicBlocks.LinkBlocks(F, G);
+
+				basicBlocks.AddHeaderBlock(A);
 
 				return basicBlocks;
 			}
@@ -150,6 +155,8 @@ namespace Mosa.Test.Compiler.Framework
 				basicBlocks.LinkBlocks(B10, B12);
 				basicBlocks.LinkBlocks(B11, B12);
 				basicBlocks.LinkBlocks(B12, B13);
+
+				basicBlocks.AddHeaderBlock(B1);
 
 				return basicBlocks;
 			}

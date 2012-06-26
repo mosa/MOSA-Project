@@ -46,19 +46,14 @@ namespace Mosa.Tool.Compiler
 					(compilerOptions.EnableSSA) ? new DominanceCalculationStage() : null,
 					(compilerOptions.EnableSSA) ? new PhiPlacementStage() : null,
 					(compilerOptions.EnableSSA) ? new EnterSSAStage() : null,
-
 					(compilerOptions.EnableSSA) ? new SSAOptimizations() : null,
-					//(compilerOptions.EnableSSA) ? new ConstantPropagationStage(ConstantPropagationStage.PropagationStage.PreFolding) : null,
-					//(compilerOptions.EnableSSA) ? new ConstantFoldingStage() : null,
-					//(compilerOptions.EnableSSA) ? new ConstantPropagationStage(ConstantPropagationStage.PropagationStage.PostFolding) : null,
-
 					(compilerOptions.EnableSSA) ? new LeaveSSA() : null,
 					
-					new StrengthReductionStage(),
+					//new StrengthReductionStage(),
 					new StackLayoutStage(),
 					new PlatformStubStage(),
-					//new LoopAwareBlockOrderStage(),
-					new SimpleTraceBlockOrderStage(),
+					new LoopAwareBlockOrderStage(),
+					//new SimpleTraceBlockOrderStage(),
 					//new ReverseBlockOrderStage(),	
 					//new LocalCSE(),
 					//new SimpleRegisterAllocatorStage(),

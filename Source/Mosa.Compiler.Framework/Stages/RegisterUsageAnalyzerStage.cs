@@ -10,7 +10,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
+using System.Text;
 using Mosa.Compiler.Framework.Platform;
 
 namespace Mosa.Compiler.Framework.Stages
@@ -32,7 +32,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		void IMethodCompilerStage.Run()
 		{
-			//Debug.WriteLine("METHOD: " + this.methodCompiler.Method.ToString());
+			//Trace("METHOD: " + this.methodCompiler.Method.ToString());
 
 			// Initialize arrays
 			top = new RegisterBitmap[basicBlocks.Count];
@@ -46,41 +46,42 @@ namespace Mosa.Compiler.Framework.Stages
 				AnalyzeBlock(block);
 			}
 
-			Debug.WriteLine("METHOD: " + this.methodCompiler.Method.ToString());
-			Debug.WriteLine(string.Empty);
+			Trace("METHOD: " + this.methodCompiler.Method.ToString());
+			Trace(string.Empty);
 
 			var registers = new Dictionary<int, Register>();
 			foreach (var register in architecture.RegisterSet)
 				registers.Add(register.Index, register);
 
+			StringBuilder line = new StringBuilder();
 			for (int l = 0; l < 3; l++)
 			{
-				Debug.Write("[");
+				line.Append("[");
 				for (int r = 15; r >= 0; r--)
 				{
-					Debug.Write(registers[r].ToString()[l]);
+					line.Append(registers[r].ToString()[l]);
 				}
 
-				Debug.WriteLine("]");
+				line.Append("]");
 			}
+			Trace(line.ToString());
 
 			foreach (var block in this.basicBlocks)
 			{
-				Debug.WriteLine(String.Format("Block #{0} - Label L_{1:X4}", block.Index, block.Label));
+				Trace(String.Format("Block #{0} - Label L_{1:X4}", block.Index, block.Label));
 
-				Debug.WriteLine("[" + top[block.Sequence].ToString().Substring(64 - 16, 16) + "] Top");
+				Trace("[" + top[block.Sequence].ToString().Substring(64 - 16, 16) + "] Top");
 
 				for (var ctx = new Context(instructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
 				{
 					if (ctx.Ignore || ctx.Instruction == null)
 						continue;
 
-					Debug.Write("[" + usage[ctx.Index].ToString().Substring(64 - 16, 16) + "] ");
-					Debug.WriteLine(String.Format("L_{0:X4}: {1}", ctx.Label, ctx.Instruction.ToString(ctx)));
+					Trace("[" + usage[ctx.Index].ToString().Substring(64 - 16, 16) + "] " + String.Format("L_{0:X4}: {1}", ctx.Label, ctx.Instruction.ToString(ctx)));
 				}
 
-				Debug.WriteLine("[" + bottom[block.Sequence].ToString().Substring(64 - 16, 16) + "] Bottom");
-				Debug.WriteLine(string.Empty);
+				Trace("[" + bottom[block.Sequence].ToString().Substring(64 - 16, 16) + "] Bottom");
+				Trace(string.Empty);
 			}
 
 			return;
@@ -90,7 +91,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (analyzed.Get(block.Sequence))
 				return;
 
-			//Debug.WriteLine(String.Format("Analyzing Block #{0} - Label L_{1:X4}", block.Index, block.Label));
+			//Trace(String.Format("Analyzing Block #{0} - Label L_{1:X4}", block.Index, block.Label));
 
 			traversed.Set(block.Sequence, true);
 
@@ -101,7 +102,7 @@ namespace Mosa.Compiler.Framework.Stages
 					AnalyzeBlock(nextBlock);
 			}
 
-			//Debug.WriteLine(String.Format("Working Block #{0} - Label L_{1:X4}", block.Index, block.Label));
+			//Trace(String.Format("Working Block #{0} - Label L_{1:X4}", block.Index, block.Label));
 
 			RegisterBitmap used = new RegisterBitmap();
 

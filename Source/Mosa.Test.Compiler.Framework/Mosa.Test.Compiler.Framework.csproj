@@ -94,6 +94,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="LoopAwareBlockOrderTests.cs" />
     <Compile Include="SimpleFastDominanceTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs">
       <SubType>Code</SubType>

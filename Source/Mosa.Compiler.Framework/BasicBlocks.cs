@@ -231,6 +231,23 @@ namespace Mosa.Compiler.Framework
 			return headBlocks.Contains(basicBlock);
 		}
 
+		public void ReorderBlocks(IList<BasicBlock> newBlockOrder)
+		{
+			basicBlocks.Clear();
+
+			int sequence = 0;
+			foreach (var block in newBlockOrder)
+			{
+				if (block != null)
+				{
+					basicBlocks.Add(block);
+					block.Sequence = sequence++;
+				}
+			}
+
+			epilogueBlock = null;
+		}
+
 		#endregion
 
 		public List<BasicBlock> GetConnectedBlocksStartingAtHead(BasicBlock start)

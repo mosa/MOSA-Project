@@ -44,9 +44,6 @@ namespace Mosa.Compiler.InternalTrace
 
 			StringBuilder text = new StringBuilder();
 
-			// Line number
-			int index = 1;
-
 			text.AppendLine(String.Format("IR representation of method {0} after stage {1}:", method, stage.Name));
 			text.AppendLine();
 
@@ -54,7 +51,7 @@ namespace Mosa.Compiler.InternalTrace
 			{
 				foreach (BasicBlock block in basicBlocks)
 				{
-					text.AppendFormat("Block #{0} - Label L_{1:X4}", index, block.Label);
+					text.AppendFormat("Block #{0} - Label L_{1:X4}", block.Sequence, block.Label);
 					if (basicBlocks.IsHeaderBlock(block))
 						text.Append(" [Header]");
 					text.AppendLine();
@@ -68,7 +65,6 @@ namespace Mosa.Compiler.InternalTrace
 					text.AppendLine(ListBlocks(block.NextBlocks));
 
 					text.AppendLine();
-					index++;
 				}
 			}
 			else

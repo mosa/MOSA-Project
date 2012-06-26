@@ -8,6 +8,7 @@ namespace Mosa.Test.Debug
 	{
 		public static void Main()
 		{
+			LoopAwareBlockOrderTests.LoopAwareBlockOrder();
 
 			//SimpleFastDominanceTests.DominanceCalculation1();
 			//SimpleFastDominanceTests.DominanceCalculation2();
