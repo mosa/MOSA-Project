@@ -15,11 +15,9 @@
 	    <csc target="library" output="${outputDirectory}/Mosa.Compiler.Framework.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
                     <include name="BasicBlocks.cs"/>
-                    <include name="Operands/RegisterOperand.cs"/>
-                    <include name="Operands/StackTemporaryOperand.cs"/>
                     <include name="SimpleFastDominance.cs"/>
-                    <include name="LoopEdge.cs"/>
                     <include name="LoopAwareBlockOrder.cs"/>
+                    <include name="Stages/LoopAwareBlockOrderStage.cs"/>
                     <include name="Stages/SSAOptimizations.cs"/>
                     <include name="Stages/EdgeSplitStage.cs"/>
                     <include name="Stages/SimpleRegisterAllocatorStage.cs"/>
@@ -50,7 +48,6 @@
                     <include name="CIL/DecodingStage.cs"/>
                     <include name="CIL/BreakInstruction.cs"/>
                     <include name="BaseAssemblyCompilerStage.cs"/>
-                    <include name="Stages/ConstantFoldingStage.cs"/>
                     <include name="Platform/BasePlatformInstruction.cs"/>
                     <include name="Platform/BasePlatformTransformationStage.cs"/>
                     <include name="Platform/IRegisterUsage.cs"/>
@@ -72,8 +69,6 @@
                     <include name="InstructionLogger.cs"/>
                     <include name="Stages/LeaveSSAStage.cs"/>
                     <include name="Stages/OperandDeterminationStage.cs"/>
-                    <include name="Operands/SsaOperand.cs"/>
-                    <include name="Operands/VirtualRegisterOperand.cs"/>
                     <include name="CompilerOptions.cs"/>
                     <include name="Stages/PhiPlacementStage.cs"/>
                     <include name="Stages/StaticAllocationResolutionStage.cs"/>
@@ -100,7 +95,6 @@
                     <include name="IR/SubUnsigned.cs"/>
                     <include name="IR/Switch.cs"/>
                     <include name="Stages/MethodCompilerSchedulerStage.cs"/>
-                    <include name="Operands/SymbolOperand.cs"/>
                     <include name="Stages/PlatformStubStage.cs"/>
                     <include name="IIntrinsicMethod.cs"/>
                     <include name="IBlockOrderStage.cs"/>
@@ -231,7 +225,6 @@
                     <include name="RuntimeMethodData.cs"/>
                     <include name="Stages/StrengthReductionStage.cs"/>
                     <include name="Stages/SimpleTraceBlockOrderStage.cs"/>
-                    <include name="Stages/LoopAwareBlockOrderStage.cs"/>
                     <include name="Stages/LocalCSEStage.cs"/>
                     <include name="IMethodCompiler.cs"/>
                     <include name="Linker/BaseAssemblyLinkerStage.cs"/>
@@ -246,8 +239,6 @@
                     <include name="BaseCodeTransformationStage.cs"/>
                     <include name="CompilationException.cs"/>
                     <include name="CompilerPipeline.cs"/>
-                    <include name="Operands/ConstantOperand.cs"/>
-                    <include name="Stages/ConstantPropagationStage.cs"/>
                     <include name="Stages/DominanceCalculationStage.cs"/>
                     <include name="FlowControl.cs"/>
                     <include name="IArchitecture.cs"/>
@@ -259,18 +250,11 @@
                     <include name="IMethodCompilerStage.cs"/>
                     <include name="Platform/IPlatformStage.cs"/>
                     <include name="IStackLayoutProvider.cs"/>
-                    <include name="Operands/LabelOperand.cs"/>
-                    <include name="Operands/MemberOperand.cs"/>
-                    <include name="Operands/MemoryOperand.cs"/>
                     <include name="BaseMethodCompiler.cs"/>
-                    <include name="Operands/Operand.cs"/>
-                    <include name="Operands/ParameterOperand.cs"/>
+                    <include name="Operand.cs"/>
                     <include name="Register.cs"/>
-                    <include name="Operands/DefinedRegisterOperand.cs"/>
                     <include name="Stages/StackLayoutStage.cs"/>
-                    <include name="Operands/StackOperand.cs"/>
                     <include name="StackTypeCode.cs"/>
-                    <include name="Operands/LocalVariableOperand.cs"/>
                     <include name="IR/VmCall.cs"/>
 		</sources>
 		<references>
