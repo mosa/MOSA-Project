@@ -235,13 +235,14 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Gets or sets the ignored attribute.
+		/// Gets a value indicating whether this instance is empty.
 		/// </summary>
-		/// <value>The ignored attribute.</value>
-		public bool Ignore
+		/// <value>
+		///   <c>true</c> if this instance is empty; otherwise, <c>false</c>.
+		/// </value>
+		public bool IsEmpty
 		{
-			get { return instructionSet.Data[index].Ignore; }
-			set { instructionSet.Data[index].Ignore = value; }
+			get { return instructionSet.Data[index].Instruction == null; }
 		}
 
 		/// <summary>
@@ -556,7 +557,6 @@ namespace Mosa.Compiler.Framework
 			Clear();
 
 			Instruction = null;
-			Ignore = true;
 			Label = label;
 		}
 
@@ -590,7 +590,6 @@ namespace Mosa.Compiler.Framework
 			Instruction = instruction;
 			OperandCount = operandCount;
 			ResultCount = resultCount;
-			Ignore = false;
 			Label = label;
 			Operand1 = null;
 			Operand2 = null;

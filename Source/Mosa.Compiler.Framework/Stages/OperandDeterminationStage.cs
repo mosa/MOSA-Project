@@ -149,7 +149,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			for (var ctx = new Context(instructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
 			{
-				if (ctx.Instruction == null)
+				if (ctx.IsEmpty)
 					continue;
 
 				if (ctx.Instruction is IR.Jmp)

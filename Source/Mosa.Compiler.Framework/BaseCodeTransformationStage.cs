@@ -106,7 +106,6 @@ namespace Mosa.Compiler.Framework
 			ctx.AppendInstruction(null);
 			ctx.Label = label;
 			block.Index = ctx.Index;
-			ctx.Ignore = true;
 
 			return ctx;
 		}
@@ -154,7 +153,6 @@ namespace Mosa.Compiler.Framework
 			if (current.IsLastInstruction)
 			{
 				current.AppendInstruction(null);
-				current.Ignore = true;
 				nextBlock.Index = current.Index;
 				current.SliceBefore();
 			}

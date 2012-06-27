@@ -30,8 +30,8 @@ namespace Mosa.Platform.x86.Stages
 		{
 			foreach (BasicBlock block in basicBlocks)
 				for (Context ctx = CreateContext(block); !ctx.EndOfInstruction; ctx.GotoNext())
-					if (ctx.Instruction != null)
-						if (!ctx.Ignore && ctx.OperandCount == 2 && ctx.ResultCount == 1)
+					if (!ctx.IsEmpty)
+						if (ctx.OperandCount == 2 && ctx.ResultCount == 1)
 							ThreeTwoAddressConversion(ctx);
 		}
 

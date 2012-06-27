@@ -267,6 +267,7 @@ namespace Mosa.Platform.x86.Stages
 			// mov     LOWORD(DVND),edx
 			context.SetInstruction(X86.Jmp, newBlocks[0].BasicBlock);
 			LinkBlocks(context, newBlocks[0]);
+
 			newBlocks[0].SetInstruction(X86.Push, null, edi);
 			newBlocks[0].AppendInstruction(X86.Push, null, esi);
 			newBlocks[0].AppendInstruction(X86.Push, null, ebx);
@@ -501,6 +502,8 @@ namespace Mosa.Platform.x86.Stages
 			//mov     HIWORD(DVND),eax ; save positive value
 			//mov     LOWORD(DVND),edx
 			context.SetInstruction(X86.Jmp, newBlocks[0].BasicBlock);
+			LinkBlocks(context, newBlocks[0]);
+
 			newBlocks[0].AppendInstruction(X86.Push, null, edi);
 			newBlocks[0].AppendInstruction(X86.Push, null, esi);
 			newBlocks[0].AppendInstruction(X86.Push, null, ebx);
@@ -725,7 +728,10 @@ namespace Mosa.Platform.x86.Stages
 
 			Context[] newBlocks = CreateEmptyBlockContexts(context.Label, 12);
 			Context nextBlock = SplitContext(context, false);
+			
 			context.SetInstruction(X86.Jmp, newBlocks[0].BasicBlock);
+			LinkBlocks(context, newBlocks[0]);
+
 			newBlocks[0].AppendInstruction(X86.Push, null, edi);
 			newBlocks[0].AppendInstruction(X86.Push, null, esi);
 			newBlocks[0].AppendInstruction(X86.Push, null, ebx);
@@ -744,7 +750,7 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[1].AppendInstruction(X86.Div, eax, ecx);
 			newBlocks[1].AppendInstruction(X86.Mov, edx, ebx);
 			newBlocks[1].AppendInstruction(X86.Jmp, newBlocks[10].BasicBlock);
-			LinkBlocks(newBlocks[0], newBlocks[10]);
+			LinkBlocks(newBlocks[1], newBlocks[10]);
 
 			// L1
 			newBlocks[2].AppendInstruction(X86.Mov, ecx, eax);
@@ -844,6 +850,8 @@ namespace Mosa.Platform.x86.Stages
 			//mov     HIWORD(DVND),eax ; save positive value
 			//mov     LOWORD(DVND),edx
 			context.SetInstruction(X86.Jmp, newBlocks[0].BasicBlock);
+			LinkBlocks(context, newBlocks[0]);
+
 			newBlocks[0].AppendInstruction(X86.Push, null, edi);
 			newBlocks[0].AppendInstruction(X86.Push, null, esi);
 			newBlocks[0].AppendInstruction(X86.Push, null, ebx);
@@ -946,11 +954,13 @@ namespace Mosa.Platform.x86.Stages
 			Operand ecx = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.ECX);
 
 			Context[] newBlocks = CreateEmptyBlockContexts(context.Label, 6);
-			Context nextBlock = SplitContext(context, true);
+			Context nextBlock = SplitContext(context, false);
 
 			// Handle shifts of 64 bits or more (if shifting 64 bits or more, the result
 			// depends only on the high order bit of edx).
 			context.SetInstruction(X86.Jmp, newBlocks[0].BasicBlock);
+			LinkBlocks(context, newBlocks[0]);
+
 			newBlocks[0].AppendInstruction(X86.Push, null, ecx);
 			newBlocks[0].AppendInstruction(IRInstruction.LogicalAnd, count, count, Operand.CreateConstant(BuiltInSigType.Int32, 0x3F));
 			newBlocks[0].AppendInstruction(X86.Mov, ecx, count);
@@ -989,7 +999,7 @@ namespace Mosa.Platform.x86.Stages
 
 			// done:
 			// ; remaining code from current basic block
-			newBlocks[5].SetInstruction(X86.Mov, op0H, edx);
+			newBlocks[5].AppendInstruction(X86.Mov, op0H, edx);
 			newBlocks[5].AppendInstruction(X86.Mov, op0L, eax);
 			newBlocks[5].AppendInstruction(X86.Pop, ecx);
 			newBlocks[5].AppendInstruction(X86.Jmp, nextBlock.BasicBlock);
@@ -1013,12 +1023,14 @@ namespace Mosa.Platform.x86.Stages
 
 			Operand cl = Operand.CreateCPURegister(BuiltInSigType.Byte, GeneralPurposeRegister.ECX);
 
-			Context nextBlock = SplitContext(context, true);
+			Context nextBlock = SplitContext(context, false);
 			Context[] newBlocks = CreateEmptyBlockContexts(context.Label, 6);
 
 			// Handle shifts of 64 bits or more (if shifting 64 bits or more, the result
 			// depends only on the high order bit of edx).
 			context.SetInstruction(X86.Jmp, newBlocks[0].BasicBlock);
+			LinkBlocks(context, newBlocks[0]);
+
 			newBlocks[0].AppendInstruction(X86.Push, null, ecx);
 			newBlocks[0].AppendInstruction(IRInstruction.LogicalAnd, count, count, Operand.CreateConstant(BuiltInSigType.Int32, 0x3F));
 			newBlocks[0].AppendInstruction(X86.Mov, ecx, count);
@@ -1080,11 +1092,13 @@ namespace Mosa.Platform.x86.Stages
 			Operand ecx = Operand.CreateCPURegister(BuiltInSigType.Byte, GeneralPurposeRegister.ECX);
 
 			Context[] newBlocks = CreateEmptyBlockContexts(context.Label, 6);
-			Context nextBlock = SplitContext(context, true);
+			Context nextBlock = SplitContext(context, false);
 
 			// Handle shifts of 64 bits or more (if shifting 64 bits or more, the result
 			// depends only on the high order bit of edx).
 			context.SetInstruction(X86.Jmp, newBlocks[0].BasicBlock);
+			LinkBlocks(context, newBlocks[0]);
+
 			newBlocks[0].AppendInstruction(X86.Push, null, ecx);
 			newBlocks[0].AppendInstruction(IRInstruction.LogicalAnd, count, count, Operand.CreateConstant(BuiltInSigType.Int32, 0x3F));
 			newBlocks[0].AppendInstruction(X86.Mov, ecx, count);
@@ -1098,7 +1112,7 @@ namespace Mosa.Platform.x86.Stages
 			newBlocks[1].AppendInstruction(X86.Cmp, null, ecx, Operand.CreateConstant(BuiltInSigType.Int32, 32));
 			newBlocks[1].AppendInstruction(X86.Branch, ConditionCode.UnsignedGreaterOrEqual, newBlocks[3].BasicBlock);
 			newBlocks[1].AppendInstruction(X86.Jmp, newBlocks[2].BasicBlock);
-			LinkBlocks(newBlocks[3], newBlocks[2], newBlocks[1]);
+			LinkBlocks(newBlocks[1], newBlocks[3], newBlocks[2]);
 
 			newBlocks[2].AppendInstruction(X86.Shrd, eax, edx, ecx);
 			newBlocks[2].AppendInstruction(X86.Sar, edx, ecx);
@@ -1129,7 +1143,7 @@ namespace Mosa.Platform.x86.Stages
 
 			// done:
 			// ; remaining code from current basic block
-			newBlocks[5].SetInstruction(X86.Mov, op0H, edx);
+			newBlocks[5].AppendInstruction(X86.Mov, op0H, edx);
 			newBlocks[5].AppendInstruction(X86.Mov, op0L, eax);
 			newBlocks[5].AppendInstruction(X86.Pop, ecx);
 			newBlocks[5].AppendInstruction(X86.Jmp, nextBlock.BasicBlock);

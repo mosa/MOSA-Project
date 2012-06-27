@@ -29,7 +29,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				for (var ctx = new Context(instructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
 				{
-					if (ctx.Ignore || ctx.Instruction == null)
+					if (ctx.IsEmpty)
 						continue;
 
 					RegisterBitmap inputRegisters = new RegisterBitmap();

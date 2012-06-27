@@ -78,16 +78,17 @@ namespace Mosa.Compiler.Framework.Stages
 				BlockStart(block);
 
 				for (Context context = new Context(instructionSet, block); !context.EndOfInstruction; context.GotoNext())
-					if (context.Instruction != null)
-						if (!context.Ignore)
-						{
-							IPlatformInstruction instruction = context.Instruction as IPlatformInstruction;
-							if (instruction != null)
-								instruction.Emit(context, codeEmitter);
-							else
-								if (architecture.PlatformName != "Null")
-									Trace(InternalTrace.CompilerEvent.Error, "Missing Code Transformation: " + context.ToString());
-						}
+				{
+					if (!context.IsEmpty)
+					{
+						IPlatformInstruction instruction = context.Instruction as IPlatformInstruction;
+						if (instruction != null)
+							instruction.Emit(context, codeEmitter);
+						else
+							if (architecture.PlatformName != "Null")
+								Trace(InternalTrace.CompilerEvent.Error, "Missing Code Transformation: " + context.ToString());
+					}
+				}
 
 				BlockEnd(block);
 			}

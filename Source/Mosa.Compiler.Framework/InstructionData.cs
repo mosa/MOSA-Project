@@ -71,15 +71,6 @@ namespace Mosa.Compiler.Framework
 		#region Properties
 
 		/// <summary>
-		/// Gets or sets the ignored attribute
-		/// </summary>
-		public bool Ignore
-		{
-			get { return (packed & 0x01) != 0x01; }
-			set { if (value) packed = (uint)(packed & ~0x1); else packed = packed | 0x01; }
-		}
-
-		/// <summary>
 		/// Gets or sets a value indicating whether this instance has a prefix.
 		/// </summary>
 		/// <value>
@@ -223,7 +214,6 @@ namespace Mosa.Compiler.Framework
 		{
 			this.Label = -1;
 			this.Instruction = null;
-			this.Ignore = true;
 			this.OperandCount = 0;
 			this.ResultCount = 0;
 			this.BranchTargets = null;

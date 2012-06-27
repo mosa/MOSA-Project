@@ -50,8 +50,9 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				for (Context ctx = new Context(instructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
 				{
-					if (ctx.Ignore)
+					if (ctx.IsEmpty)
 						continue;
+
 					if (ctx.ResultCount == 0 && ctx.OperandCount == 0)
 						continue;
 
@@ -133,7 +134,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		private void RemoveUselessMove(Context context)
 		{
-			if (context.Ignore)
+			if (context.IsEmpty)
 				return;
 
 			if (!(context.Instruction is IR.Move))
@@ -162,7 +163,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		private void SimpleConstantPropagation(Context context)
 		{
-			if (context.Ignore)
+			if (context.IsEmpty)
 				return;
 
 			if (!(context.Instruction is IR.Move))
@@ -230,7 +231,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		private void FoldAddSigned(Context context)
 		{
-			if (context.Ignore)
+			if (context.IsEmpty)
 				return;
 
 			if (!(context.Instruction is IR.AddSigned))

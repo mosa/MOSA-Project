@@ -74,7 +74,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				for (var ctx = new Context(instructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
 				{
-					if (ctx.Ignore || ctx.Instruction == null)
+					if (ctx.IsEmpty)
 						continue;
 
 					Trace("[" + usage[ctx.Index].ToString().Substring(64 - 16, 16) + "] " + String.Format("L_{0:X4}: {1}", ctx.Label, ctx.Instruction.ToString(ctx)));
@@ -130,7 +130,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			for (; ; ctx.GotoPrevious())
 			{
-				if (ctx.Ignore || ctx.Instruction == null)
+				if (ctx.IsEmpty)
 					if (ctx.IsFirstInstruction)
 						break;
 					else

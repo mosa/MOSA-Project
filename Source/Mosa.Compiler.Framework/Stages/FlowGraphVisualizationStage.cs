@@ -103,7 +103,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 				for (Context ctx = new Context(instructionSet, block); !ctx.EndOfInstruction; ctx.GotoNext())
 				{
-					if (ctx.Instruction == null)
+					if (ctx.IsEmpty)
 						continue;
 
 					string color;

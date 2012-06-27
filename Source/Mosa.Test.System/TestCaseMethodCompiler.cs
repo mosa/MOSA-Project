@@ -44,18 +44,12 @@ namespace Mosa.Test.System
 				new DominanceCalculationStage(),
 				new PhiPlacementStage(),
 				new EnterSSAStage(),
-
 				new SSAOptimizations(),
-				//new ConstantPropagationStage(ConstantPropagationStage.PropagationStage.PreFolding),
-				//new ConstantFoldingStage() ,
-				//new ConstantPropagationStage(ConstantPropagationStage.PropagationStage.PostFolding),
-
 				new LeaveSSA(),
 				
-				new StrengthReductionStage(),
+				//new StrengthReductionStage(),
 				new StackLayoutStage(),
 				new PlatformStubStage(),
-				//new BlockReductionStage(),
 				new LoopAwareBlockOrderStage(),
 				//new SimpleTraceBlockOrderStage(),
 				//new ReverseBlockOrderStage(),  // reverse all the basic blocks and see if it breaks anything

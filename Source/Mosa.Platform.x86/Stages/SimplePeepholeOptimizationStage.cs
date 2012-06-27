@@ -18,7 +18,7 @@ namespace Mosa.Platform.x86.Stages
 	/// <summary>
 	/// 
 	/// </summary>
-	public sealed class SimplePeepholeOptimizationStage : BaseTransformationStage, IMethodCompilerStage, IPlatformStage 
+	public sealed class SimplePeepholeOptimizationStage : BaseTransformationStage, IMethodCompilerStage, IPlatformStage
 	{
 
 		#region Window Class
@@ -158,7 +158,7 @@ namespace Mosa.Platform.x86.Stages
 
 			foreach (BasicBlock block in basicBlocks)
 				for (Context ctx = CreateContext(block); !ctx.EndOfInstruction; ctx.GotoNext())
-					if (ctx.Instruction != null && !ctx.Ignore)
+					if (!ctx.IsEmpty)
 					{
 						window.Add(ctx);
 

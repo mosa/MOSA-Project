@@ -28,13 +28,14 @@ namespace Mosa.Compiler.Linker
 			: base(assemblyCompiler, method.DeclaringType, method,  instructionSet, compilationScheduler)
 		{
 			BasicBlocks.CreateBlock(BasicBlock.PrologueLabel, 0);
+			BasicBlocks.AddHeaderBlock(BasicBlocks.PrologueBlock);
 
 			this.Pipeline.AddRange(new IMethodCompilerStage[] {
-				//new SimpleTraceBlockOrderStage(),
 				new LoopAwareBlockOrderStage(),
 				new PlatformStubStage(),
 				new CodeGenerationStage(),
 			});
+
 
 			assemblyCompiler.Architecture.ExtendMethodCompilerPipeline(this.Pipeline);
 		}

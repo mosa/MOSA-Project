@@ -42,7 +42,7 @@ namespace Mosa.Test.Compiler.Framework
 		}
 
 		[Test]
-		public static void LoopAwareBlockOrder()
+		public static void LoopAwareBlockOrder1()
 		{
 			var basicBlocks = BlockTests.Scenario1;
 
@@ -65,6 +65,14 @@ namespace Mosa.Test.Compiler.Framework
 			Assert.AreEqual(loopAwareBlockOrder.GetLoopIndex(basicBlocks[5]), -1);
 			Assert.AreEqual(loopAwareBlockOrder.GetLoopIndex(basicBlocks[6]), 0);
 			Assert.AreEqual(loopAwareBlockOrder.GetLoopIndex(basicBlocks[7]), 1);
+
+			Assert.AreSame(loopAwareBlockOrder.NewBlockOrder[0], basicBlocks[0]);
+			Assert.AreSame(loopAwareBlockOrder.NewBlockOrder[1], basicBlocks[1]);
+			Assert.AreSame(loopAwareBlockOrder.NewBlockOrder[2], basicBlocks[2]);
+			Assert.AreSame(loopAwareBlockOrder.NewBlockOrder[3], basicBlocks[4]);
+			Assert.AreSame(loopAwareBlockOrder.NewBlockOrder[4], basicBlocks[6]);
+
+			Assert.AreSame(loopAwareBlockOrder.NewBlockOrder[7], basicBlocks[5]);
 
 			Dump(basicBlocks, loopAwareBlockOrder);
 		}

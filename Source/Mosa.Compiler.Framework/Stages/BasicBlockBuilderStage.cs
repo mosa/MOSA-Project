@@ -57,7 +57,6 @@ namespace Mosa.Compiler.Framework.Stages
 			ctx = new Context(instructionSet);
 			// Add null instruction, necessary to generate a block index
 			ctx.AppendInstruction(null);
-			ctx.Ignore = true;
 			ctx.Label = BasicBlock.EpilogueLabel;
 			epilogue = basicBlocks.CreateBlock(BasicBlock.EpilogueLabel, ctx.Index);
 

@@ -17,14 +17,6 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public class SimpleTraceBlockOrderStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage, IBlockOrderStage
 	{
-		#region Data members
-
-		/// <summary>
-		/// 
-		/// </summary>
-		protected BasicBlock[] _ordered;
-
-		#endregion // Data members
 
 		/// <summary>
 		/// Runs the specified compiler.
@@ -38,46 +30,35 @@ namespace Mosa.Compiler.Framework.Stages
 			Dictionary<BasicBlock, int> referenced = new Dictionary<BasicBlock, int>(basicBlocks.Count);
 
 			// Allocate list of ordered Blocks
-			_ordered = new BasicBlock[basicBlocks.Count];
+			BasicBlock[] ordered = new BasicBlock[basicBlocks.Count];
 			int orderBlockCnt = 0;
 
 			// Create sorted worklist
 			Stack<BasicBlock> workList = new Stack<BasicBlock>();
 
-			// Start worklist with first block
-			workList.Push(first);
-
-			while (workList.Count != 0)
+			foreach (var head in basicBlocks.HeadBlocks)
 			{
-				BasicBlock block = workList.Pop();
+				workList.Push(head);
 
-				if (!referenced.ContainsKey(block))
+				while (workList.Count != 0)
 				{
-					referenced.Add(block, 0);
-					_ordered[orderBlockCnt++] = block;
+					BasicBlock block = workList.Pop();
 
-					foreach (BasicBlock successor in block.NextBlocks)
-						if (!referenced.ContainsKey(successor))
-							workList.Push(successor);
+					if (!referenced.ContainsKey(block))
+					{
+						referenced.Add(block, 0);
+						ordered[orderBlockCnt++] = block;
+
+						foreach (BasicBlock successor in block.NextBlocks)
+							if (!referenced.ContainsKey(successor))
+								workList.Push(successor);
+					}
 				}
 			}
 
-			// Place unreferenced blocks at the end of the list
-			foreach (BasicBlock block in basicBlocks)
-				if (!referenced.ContainsKey(block))
-					_ordered[orderBlockCnt++] = block;
-
-			OrderBlocks();
+			basicBlocks.ReorderBlocks(ordered);
 		}
 
-		/// <summary>
-		/// Orders the blocks.
-		/// </summary>
-		private void OrderBlocks()
-		{
-			for (int i = 0; i < basicBlocks.Count; i++)
-				basicBlocks[i] = _ordered[i];
-		}
 
 	}
 }

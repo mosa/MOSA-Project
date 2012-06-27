@@ -67,7 +67,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// <param name="context">The context.</param>
 		public void Ldloc(Context context)
 		{
-			if (context.Ignore)
+			if (context.IsEmpty)
 			{
 				context.Remove();
 			}

@@ -85,9 +85,9 @@ namespace Mosa.Compiler.Framework
 					return 1;
 				if (Depth < other.Depth)
 					return -1;
-				if (Order > other.Order)
-					return 1;
 				if (Order < other.Order)
+					return 1;
+				if (Order > other.Order)
 					return -1;
 				if (Hinted)
 					return 1;
@@ -125,11 +125,6 @@ namespace Mosa.Compiler.Framework
 
 			foreach (var head in basicBlocks.HeadBlocks)
 				Start(head);
-
-			//if (orderIndex != blockCount)
-			//{
-			//    this.blockOrder[orderIndex++] = basicBlocks.EpilogueBlock;
-			//}
 		}
 
 		#region Members
@@ -287,9 +282,6 @@ namespace Mosa.Compiler.Framework
 			// Start worklist with first block
 			workList.Add(new Priority(0, 0, true), start);
 
-			// the sequence value assists with sorting the worklist by being the tie breaker
-			int sequence = 0;
-
 			while (workList.Count != 0)
 			{
 				BasicBlock block = workList.Values[workList.Count - 1];
@@ -303,7 +295,7 @@ namespace Mosa.Compiler.Framework
 
 					if (forwardBranchesCount[successor.Sequence] == 0)
 					{
-						workList.Add(new Priority(loopDepth[successor.Sequence], sequence++, block.HintTarget != -1 && block.HintTarget == successor.Label), successor);
+						workList.Add(new Priority(loopDepth[successor.Sequence], successor.Sequence, block.HintTarget != -1 && block.HintTarget == successor.Label), successor);
 					}
 				}
 			}

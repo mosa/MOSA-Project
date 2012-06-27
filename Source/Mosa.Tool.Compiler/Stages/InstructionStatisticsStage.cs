@@ -55,7 +55,7 @@ namespace Mosa.Tool.Compiler.Stages
 		/// <param name="ctx">The context.</param>
 		public void Visit(Context ctx)
 		{
-			if (ctx.Instruction == null)
+			if (ctx.IsEmpty)
 				return;
 
 			// Count disjoint instructions

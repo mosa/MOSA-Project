@@ -35,7 +35,10 @@ namespace Mosa.Platform.x86.Stages
 			{
 				for (Context ctx = CreateContext(block); !ctx.EndOfInstruction; ctx.GotoNext())
 				{
-					if (ctx.Instruction == null || ctx.Ignore || !(ctx.Instruction is X86Instruction))
+					if (ctx.IsEmpty) 
+						continue;
+
+					if (!(ctx.Instruction is X86Instruction))
 						continue;
 
 					if (ctx.Operand1 == null)

@@ -35,7 +35,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			loopAwareBlockOrder = new LoopAwareBlockOrder(this.basicBlocks);
 
-			//basicBlocks.ReorderBlocks(loopAwareBlockOrder.NewBlockOrder);
+			basicBlocks.ReorderBlocks(loopAwareBlockOrder.NewBlockOrder);
 
 			if (IsLogging)
 				DumpTrace();

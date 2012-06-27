@@ -7,6 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using System.Collections.Generic;
+
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
@@ -19,12 +21,17 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		void IMethodCompilerStage.Run()
 		{
-			for (int i = 1; i <= basicBlocks.Count / 2; i++)
+			List<BasicBlock> reversed = new List<BasicBlock>(basicBlocks.Count);
+			var prologueBlock = basicBlocks.PrologueBlock;
+			reversed.Add(prologueBlock);
+
+			for (int i = 0; i < basicBlocks.Count; i++)
 			{
-				BasicBlock temp = basicBlocks[i];
-				basicBlocks[i] = basicBlocks[basicBlocks.Count - i];
-				basicBlocks[basicBlocks.Count - i] = temp;
+				if (basicBlocks[i] != prologueBlock)
+					reversed.Add(basicBlocks[i]);
 			}
+
+			basicBlocks.ReorderBlocks(reversed);
 		}
 	}
 }

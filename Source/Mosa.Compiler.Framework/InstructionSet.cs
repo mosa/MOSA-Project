@@ -180,7 +180,7 @@ namespace Mosa.Compiler.Framework
 
 			free = next[beforeFree];
 			//_prev[_free] = -1;
-			Data[beforeFree].Ignore = true;
+			Data[beforeFree].Instruction = null;
 			used++;
 
 			return beforeFree;

@@ -98,12 +98,9 @@ namespace Mosa.Compiler.InternalTrace
 		{
 			for (; !ctx.EndOfInstruction; ctx.GotoNext())
 			{
-				if (ctx.Instruction == null)
+				if (ctx.IsEmpty)
 					continue;
-
-				if (ctx.Ignore)
-					text.Append("; ");
-
+				
 				if (ctx.Marked)
 					text.AppendFormat("L_{0:X4}* {1}", ctx.Label, ctx.Instruction.ToString(ctx));
 				else
