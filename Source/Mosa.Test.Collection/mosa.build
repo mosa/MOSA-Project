@@ -27,6 +27,7 @@
                     <include name="CallTests.cs"/>
                     <include name="ConvTests.cs"/>
                     <include name="CallVirtualTests.cs"/>
+                    <include name="SpecificTests.cs"/>
                     <include name="ForeachTests.cs"/>
                     <include name="DelegateTests.cs"/>
                     <include name="ExceptionHandlingTests.cs"/>
