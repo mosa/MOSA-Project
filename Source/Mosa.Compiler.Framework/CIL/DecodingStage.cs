@@ -73,8 +73,8 @@ namespace Mosa.Compiler.Framework.CIL
 					Context ctx = new Context(instructionSet);
 					ctx.AppendInstruction(IR.IRInstruction.Jmp, null, plugSymbol);
 					ctx.Label = -1;
-					basicBlocks.CreateBlock(BasicBlock.PrologueLabel, ctx.Index);
-
+					var prologue = basicBlocks.CreateBlock(BasicBlock.PrologueLabel, ctx.Index);
+					basicBlocks.AddHeaderBlock(prologue);
 					return;
 				}
 			}
