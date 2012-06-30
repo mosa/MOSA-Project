@@ -34,7 +34,7 @@ namespace Mosa.Tool.TypeExplorer
 				//new OperandUsageAnalyzerStage(),
 				new StaticAllocationResolutionStage(),
 				new CILTransformationStage(),
-
+				
 				(compilerOptions.EnableSSA) ? new EdgeSplitStage() : null,
 				(compilerOptions.EnableSSA) ? new DominanceCalculationStage() : null,
 				(compilerOptions.EnableSSA) ? new PhiPlacementStage() : null,

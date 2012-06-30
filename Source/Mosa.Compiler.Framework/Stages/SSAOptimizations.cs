@@ -35,10 +35,6 @@ namespace Mosa.Compiler.Framework.Stages
 			if (basicBlocks.HeadBlocks.Count != 1)
 				return;
 
-			// The Mosa.Kernel.x86.VirtualPageAllocator.Reserve method can not be optimized correctly
-			if (methodCompiler.Method.ToString().StartsWith("Mosa.Kernel.x86.VirtualPageAllocator.Reserve"))
-				return;
-
 			// The Mosa.Kernel.KernelMemory method can not be optimized correctly
 			if (methodCompiler.Method.ToString().StartsWith("Mosa.Kernel.KernelMemory"))
 				return;
