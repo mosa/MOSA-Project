@@ -651,7 +651,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.Store(Context context)
 		{
-			Operand destination = context.Result;
+			Operand destination = context.Operand1;
 			Operand offset = context.Operand2;
 			Operand value = context.Operand3;
 

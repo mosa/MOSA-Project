@@ -28,7 +28,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// Initializes a new instance of <see cref="Store"/>.
 		/// </summary>
 		public Store() :
-			base(3, 1)
+			base(3, 0)
 		{
 		}
 

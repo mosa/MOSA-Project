@@ -1416,9 +1416,9 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		private void ExpandStore(Context context)
 		{
-			Debug.Assert(context.Result.IsMemoryAddress && context.Operand3.IsMemoryAddress, @"Operands to I8 LoadInstruction are not MemoryOperand.");
+			Debug.Assert(context.Operand1.IsMemoryAddress && context.Operand3.IsMemoryAddress, @"Operands to I8 LoadInstruction are not MemoryOperand.");
 
-			Operand op0 = context.Result;
+			Operand op0 = context.Operand1;
 			Operand op2 = context.Operand3;
 			Operand offsetOperand = context.Operand2;
 

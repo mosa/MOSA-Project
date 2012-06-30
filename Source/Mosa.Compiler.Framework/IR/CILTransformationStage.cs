@@ -225,7 +225,7 @@ namespace Mosa.Compiler.Framework.IR
 		void CIL.ICILVisitor.Stobj(Context context)
 		{
 			// This is actually stind.* and stobj - the opcodes have the same meanings
-			context.SetInstruction(IRInstruction.Store, context.Operand1, context.Operand1, Operand.CreateConstant(0), context.Operand2);
+			context.SetInstruction(IRInstruction.Store, null, context.Operand1, Operand.CreateConstant(0), context.Operand2);
 		}
 
 		/// <summary>
@@ -979,7 +979,7 @@ namespace Mosa.Compiler.Framework.IR
 			Operand offsetOperand = Operand.CreateConstant(BuiltInSigType.IntPtr, offset);
 
 			context.SetInstruction(IRInstruction.Move, temp, valueOperand);
-			context.AppendInstruction(IRInstruction.Store, objectOperand, objectOperand, offsetOperand, temp);
+			context.AppendInstruction(IRInstruction.Store, null, objectOperand, offsetOperand, temp);
 		}
 
 		/// <summary>
@@ -1193,7 +1193,7 @@ namespace Mosa.Compiler.Framework.IR
 
 			Operand arrayAddress = this.LoadArrayBaseAddress(context, arraySigType, arrayOperand);
 			Operand elementOffset = this.CalculateArrayElementOffset(context, arraySigType, arrayIndexOperand);
-			context.AppendInstruction(IRInstruction.Store, arrayAddress, arrayAddress, elementOffset, value);
+			context.AppendInstruction(IRInstruction.Store, null, arrayAddress, elementOffset, value);
 		}
 
 		/// <summary>

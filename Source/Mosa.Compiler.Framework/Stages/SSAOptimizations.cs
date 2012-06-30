@@ -36,8 +36,8 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 
 			// The Mosa.Kernel.KernelMemory method can not be optimized correctly
-			if (methodCompiler.Method.ToString().StartsWith("Mosa.Kernel.KernelMemory"))
-				return;
+			//if (methodCompiler.Method.ToString().StartsWith("Mosa.Kernel.KernelMemory"))
+			//    return;
 
 			worklistbitmap = new BitArray(instructionSet.Size);
 
