@@ -596,6 +596,10 @@ namespace Mosa.Compiler.Framework
 			{
 				s.AppendFormat("T_{0}", index);
 			}
+			else if (IsParameter && name == null)
+			{
+				s.AppendFormat("P_{0}", index);
+			}
 			if (IsRuntimeMember)
 			{
 				s.Append(runtimeMember.ToString());

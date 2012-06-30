@@ -17,13 +17,13 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <summary>
 	/// 
 	/// </summary>
-	public class EnterSSAStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
+	public sealed class EnterSSAStage : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
 	{
 
-		/// <summary>
-		/// 
-		/// </summary>
-		protected PhiPlacementStage phiPlacementStage;
+		private PhiPlacementStage phiPlacementStage;
+		private Dictionary<Operand, Stack<int>> variables;
+		private Dictionary<Operand, int> counts;
+		private IDominanceProvider dominanceCalculation;
 
 		private Dictionary<Operand, Operand[]> ssaOperands = new Dictionary<Operand, Operand[]>();
 
@@ -48,82 +48,74 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Enters the SSA.
 		/// </summary>
 		/// <param name="headBlock">The head block.</param>
-		protected void EnterSSA(BasicBlock headBlock)
+		private void EnterSSA(BasicBlock headBlock)
 		{
-			var dominanceCalculation = methodCompiler.Pipeline.FindFirst<DominanceCalculationStage>().GetDominanceProvider(headBlock);
-			var variables = new Dictionary<Operand, Stack<int>>();
-			var counts = new Dictionary<Operand, int>();
+			dominanceCalculation = methodCompiler.Pipeline.FindFirst<DominanceCalculationStage>().GetDominanceProvider(headBlock);
+			variables = new Dictionary<Operand, Stack<int>>();
+			counts = new Dictionary<Operand, int>();
 
 			foreach (var op in phiPlacementStage.Assignments.Keys)
 			{
-				variables[op] = new Stack<int>();
-				counts.Add(op, 0);
+				AddToAssignments(op);
 			}
 
 			foreach (var op in methodCompiler.Parameters)
 			{
-				if (!variables.ContainsKey(op))
-				{
-					variables[op] = new Stack<int>();
-					counts.Add(op, 0);
-				}
-
-				variables[op].Push(0);
-				//if (IsLogging) Trace("[EnterSSA] Push 0 OpStack: " + op.ToString());
+				AddToAssignments(op);
 			}
 
 			if (methodCompiler.LocalVariables != null)
 			{
 				foreach (var op in methodCompiler.LocalVariables)
 				{
-					if (!variables.ContainsKey(op))
-					{
-						variables[op] = new Stack<int>();
-						counts.Add(op, 0);
-					}
-
-					variables[op].Push(0);
-					//if (IsLogging) Trace("[EnterSSA] Push 0 OpStack: " + op.ToString());
+					AddToAssignments(op);
 				}
 			}
 
 			if (headBlock.NextBlocks.Count > 0)
-				RenameVariables(headBlock.NextBlocks[0], dominanceCalculation, variables, counts);
+			{
+				RenameVariables(headBlock.NextBlocks[0]);
+			}
+
+			// Clean up
+			dominanceCalculation = null;
+			variables = null;
+			counts = null;
 		}
 
-		public Operand CreateSsaOperand(Operand operand, int version, int maxversion)
+		/// <summary>
+		/// Adds to assignments.
+		/// </summary>
+		/// <param name="operand">The operand.</param>
+		private void AddToAssignments(Operand operand)
 		{
-			Operand[] ssaArray;
-			Operand ssaOperand;
-
-			if (!ssaOperands.TryGetValue(operand, out ssaArray))
+			if (!variables.ContainsKey(operand))
 			{
-				ssaArray = new Operand[Math.Max(maxversion, version + 1)];
+				variables[operand] = new Stack<int>();
+				counts.Add(operand, 0);
+				variables[operand].Push(0);
+
+				if (!ssaOperands.ContainsKey(operand))
+					ssaOperands.Add(operand, new Operand[operand.Definitions.Count + 1]);
+			}
+		}
+
+		/// <summary>
+		/// Gets the SSA operand.
+		/// </summary>
+		/// <param name="operand">The operand.</param>
+		/// <param name="version">The version.</param>
+		/// <param name="maxversion">The maxversion.</param>
+		/// <returns></returns>
+		private Operand GetSSAOperand(Operand operand, int version, int maxversion)
+		{
+			var ssaArray = ssaOperands[operand];
+			var ssaOperand = ssaArray[version];
+
+			if (ssaOperand == null)
+			{
 				ssaOperand = Operand.CreateSSA(operand, version);
 				ssaArray[version] = ssaOperand;
-				ssaOperands.Add(operand, ssaArray);
-			}
-			else
-			{
-				if (version >= ssaArray.Length)
-				{
-					ssaOperand = Operand.CreateSSA(operand, version);
-
-					Operand[] newSsaArray = new Operand[ssaArray.Length * 2];
-					ssaArray.CopyTo(newSsaArray, 0);
-					newSsaArray[version] = ssaOperand;
-					ssaOperands.Remove(operand);
-					ssaOperands.Add(operand, newSsaArray);
-				}
-				else
-				{
-					ssaOperand = ssaArray[version];
-					if (ssaOperand == null)
-					{
-						ssaOperand = Operand.CreateSSA(operand, version);
-						ssaArray[version] = ssaOperand;
-					}
-				}
 			}
 
 			return ssaOperand;
@@ -133,12 +125,8 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Renames the variables.
 		/// </summary>
 		/// <param name="block">The block.</param>
-		/// <param name="dominanceCalculation">The dominance calculation.</param>
-		/// <param name="variables">The variables.</param>
-		private void RenameVariables(BasicBlock block, IDominanceProvider dominanceCalculation, Dictionary<Operand, Stack<int>> variables, Dictionary<Operand, int> counts)
+		private void RenameVariables(BasicBlock block)
 		{
-			//if (IsLogging) Trace("[RenameVariables] Block " + block.ToString());
-
 			for (var context = new Context(instructionSet, block); !context.EndOfInstruction; context.GotoNext())
 			{
 				if (!(context.Instruction is Phi))
@@ -153,7 +141,7 @@ namespace Mosa.Compiler.Framework.Stages
 						Debug.Assert(variables.ContainsKey(op), op.ToString() + " is not in dictionary [block = " + block + "]");
 
 						var index = variables[op].Peek();
-						context.SetOperand(i, CreateSsaOperand(op, index, 0));
+						context.SetOperand(i, GetSSAOperand(op, index, 0));
 					}
 				}
 
@@ -161,10 +149,9 @@ namespace Mosa.Compiler.Framework.Stages
 				{
 					var op = context.Result;
 					var index = counts[op];
-					context.SetResult(CreateSsaOperand(op, index, op.Definitions.Count));
+					context.SetResult(GetSSAOperand(op, index, op.Definitions.Count));
 					variables[op].Push(index);
 					counts[op] = index + 1;
-					//if (IsLogging) Trace("[RenameVariables] Push " + index.ToString() + " OpStack: " + op.ToString());
 				}
 			}
 
@@ -182,14 +169,14 @@ namespace Mosa.Compiler.Framework.Stages
 					if (variables[op].Count > 0)
 					{
 						var index = variables[op].Peek();
-						context.SetOperand(j, CreateSsaOperand(context.GetOperand(j), index, 0));
+						context.SetOperand(j, GetSSAOperand(context.GetOperand(j), index, 0));
 					}
 				}
 			}
 
 			foreach (var s in dominanceCalculation.GetChildren(block))
 			{
-				RenameVariables(s, dominanceCalculation, variables, counts);
+				RenameVariables(s);
 			}
 
 			for (var context = new Context(instructionSet, block); !context.EndOfInstruction; context.GotoNext())
@@ -198,7 +185,6 @@ namespace Mosa.Compiler.Framework.Stages
 				{
 					var op = context.Result.SsaOperand;
 					var index = variables[op].Pop();
-					//if (IsLogging) Trace("[RenameVariables] Pop " + index.ToString() + " OpStack: " + op.ToString());
 				}
 			}
 
