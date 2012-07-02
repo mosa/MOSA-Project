@@ -16,6 +16,15 @@ namespace Mosa.HelloWorld.x86.Tests
 		{
 			testMethods.Add(SimpleTest1);
 			testMethods.Add(SimpleTest2);
+			testMethods.Add(SimpleTest3);
+			testMethods.Add(SimpleTest4);
+			testMethods.Add(SimpleTest5);
+			testMethods.Add(SimpleTest6);
+			testMethods.Add(SimpleTest7);
+			testMethods.Add(SimpleTest8);
+			testMethods.Add(SimpleTest9);
+			testMethods.Add(SimpleTest10);
+			testMethods.Add(SimpleTest99);
 		}
 
 		public static bool SimpleTest1()
@@ -29,6 +38,95 @@ namespace Mosa.HelloWorld.x86.Tests
 		}
 
 		public static bool SimpleTest2()
+		{
+			uint a = 10;
+			uint b = 20;
+
+			uint c = a + b;
+
+			return c == 30;
+		}
+
+		public static bool SimpleTest3()
+		{
+			byte a = 10;
+			uint b = 20;
+
+			uint c = a + b;
+
+			return c == 30;
+		}
+
+		public static bool SimpleTest4()
+		{
+			ulong a = 10;
+			ulong b = 20;
+
+			ulong c = a + b;
+
+			return c == 30;
+		}
+
+		public static bool SimpleTest5()
+		{
+			ulong a = ulong.MaxValue;
+			ulong b = 20;
+
+			ulong c = a + b;
+
+			return c == unchecked(ulong.MaxValue + 20);
+		}
+
+		public static bool SimpleTest6()
+		{
+			char a = (char)10;
+			char b = (char)20;
+
+			char c = (char)(a + b);
+
+			return c == 30;
+		}
+
+		public static bool SimpleTest7()
+		{
+			ulong a = 10;
+			ulong b = 0;
+
+			ulong c = a * b;
+
+			return c == 0;
+		}
+
+		public static bool SimpleTest8()
+		{
+			int a = 10;
+			int b = 0;
+
+			int c = a * b;
+
+			return c == 0;
+		}
+
+		public static bool SimpleTest9()
+		{
+			ulong a = 10;
+			ulong b = 1;
+
+			ulong c = a * b;
+
+			return c == 10;
+		}
+
+		public static bool SimpleTest10()
+		{
+			int a = 1;
+			int b = 10;
+
+			int c = a * b;
+
+			return c == 10;
+		}
+		public static bool SimpleTest99()
 		{
 			int[] a = new int[5];
 			for (int i = 0; i < 5; i++)

@@ -53,7 +53,6 @@
                     <include name="Platform/IRegisterUsage.cs"/>
                     <include name="RegisterBitmap.cs"/>
                     <include name="StackLayout.cs"/>
-                    <include name="RegisterMap.cs"/>
                     <include name="Stages/RegisterUsageAnalyzerStage.cs"/>
                     <include name="Stages/OperandUsageAnalyzerStage.cs"/>
                     <include name="Stages/MultipleDefinitionMarkerStage.cs"/>
@@ -223,7 +222,6 @@
                     <include name="CIL/BaseCILInstruction.cs"/>
                     <include name="Stages/ReverseBlockOrderStage.cs"/>
                     <include name="RuntimeMethodData.cs"/>
-                    <include name="Stages/StrengthReductionStage.cs"/>
                     <include name="Stages/SimpleTraceBlockOrderStage.cs"/>
                     <include name="Stages/LocalCSEStage.cs"/>
                     <include name="IMethodCompiler.cs"/>

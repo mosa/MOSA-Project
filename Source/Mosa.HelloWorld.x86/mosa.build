@@ -15,7 +15,6 @@
 	    <csc target="exe" main="Mosa.HelloWorld.x86.Boot" output="${outputDirectory}/Mosa.HelloWorld.x86.exe" debug="${debug}" unsafe="true" nostdlib="true">
 		<sources>
                     <include name="Boot.cs"/>
-                    <include name="KernelMemory.cs"/>
                     <include name="Tests/ComparisonTest.cs"/>
                     <include name="Tests/ExceptionTest.cs"/>
                     <include name="Tests/Generic2Test.cs"/>
