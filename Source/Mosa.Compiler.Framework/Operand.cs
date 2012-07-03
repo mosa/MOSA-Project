@@ -324,7 +324,7 @@ namespace Mosa.Compiler.Framework
 		/// Creates a new physical register <see cref="Operand"/>.
 		/// </summary>
 		/// <param name="sigType">Type of the sig.</param>
-		/// <param name="index">The index.</param>
+		/// <param name="register">The register.</param>
 		/// <returns></returns>
 		public static Operand CreateCPURegister(SigType sigType, Register register)
 		{
@@ -352,7 +352,7 @@ namespace Mosa.Compiler.Framework
 		/// Creates a new symbol <see cref="Operand"/> for the given symbol name.
 		/// </summary>
 		/// <param name="sigType">Type of the sig.</param>
-		/// <param name="name">The name.</param>
+		/// <param name="label">The label.</param>
 		/// <returns></returns>
 		public static Operand CreateLabel(SigType sigType, string label)
 		{
@@ -367,7 +367,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="sigType">Type of the sig.</param>
 		/// <param name="baseRegister">The base register.</param>
-		/// <param name="offset">The offset.</param>
+		/// <param name="index">The index.</param>
 		/// <returns></returns>
 		public static Operand CreateStackLocal(SigType sigType, Register baseRegister, int index)
 		{
@@ -383,7 +383,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="sigType">Type of the sig.</param>
 		/// <param name="baseRegister">The base register.</param>
-		/// <param name="offset">The offset.</param>
+		/// <param name="index">The index.</param>
 		/// <returns></returns>
 		public static Operand CreateStackLocalTemp(SigType sigType, Register baseRegister, int index)
 		{
@@ -425,8 +425,9 @@ namespace Mosa.Compiler.Framework
 		/// Creates a new local variable <see cref="Operand"/>.
 		/// </summary>
 		/// <param name="type">The type.</param>
-		/// <param name="member">The member.</param>
-		/// <param name="offset">The offset.</param>
+		/// <param name="register">The register.</param>
+		/// <param name="index">The index.</param>
+		/// <param name="name">The name.</param>
 		/// <returns></returns>
 		public static Operand CreateLocalVariable(SigType type, Register register, int index, string name)
 		{
@@ -442,8 +443,8 @@ namespace Mosa.Compiler.Framework
 		/// Creates a new local variable <see cref="Operand"/>.
 		/// </summary>
 		/// <param name="type">The type.</param>
-		/// <param name="member">The member.</param>
-		/// <param name="offset">The offset.</param>
+		/// <param name="register">The register.</param>
+		/// <param name="param">The param.</param>
 		/// <returns></returns>
 		public static Operand CreateParameter(SigType type, Register register, RuntimeParameter param)
 		{

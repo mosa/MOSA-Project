@@ -113,9 +113,11 @@ namespace Mosa.Compiler.Framework.CIL
 		}
 
 		/// <summary>
-		/// Returns a string representation of <see cref="ConstantOperand"/>.
+		/// Returns a <see cref="System.String"/> that represents this instance.
 		/// </summary>
-		/// <returns>A string representation of the operand.</returns>
+		/// <returns>
+		/// A string representation of the operand.
+		/// </returns>
 		public override string ToString()
 		{
 			string code = opcode.ToString();

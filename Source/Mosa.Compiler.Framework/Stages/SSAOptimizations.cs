@@ -108,7 +108,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <summary>
 		/// Adds the all the operands usage and definitions to work list.
 		/// </summary>
-		/// <param name="operand">The operand.</param>
+		/// <param name="context">The context.</param>
 		void AddOperandUsageToWorkList(Context context)
 		{
 			if (context.Result != null)
