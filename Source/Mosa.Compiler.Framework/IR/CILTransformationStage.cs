@@ -47,7 +47,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// Visitation function for Ldarg instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public void Ldarg(Context context)
+		void CIL.ICILVisitor.Ldarg(Context context)
 		{
 			ProcessLoadInstruction(context);
 		}
@@ -56,7 +56,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// Visitation function for Ldarga instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public void Ldarga(Context context)
+		void CIL.ICILVisitor.Ldarga(Context context)
 		{
 			context.ReplaceInstructionOnly(IRInstruction.AddressOf);
 		}
@@ -65,23 +65,16 @@ namespace Mosa.Compiler.Framework.IR
 		/// Visitation function for Ldloc instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public void Ldloc(Context context)
+		void CIL.ICILVisitor.Ldloc(Context context)
 		{
-			if (context.IsEmpty)
-			{
-				context.Remove();
-			}
-			else
-			{
-				ProcessLoadInstruction(context);
-			}
+			ProcessLoadInstruction(context);
 		}
 
 		/// <summary>
 		/// Visitation function for Ldloca instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public void Ldloca(Context context)
+		void CIL.ICILVisitor.Ldloca(Context context)
 		{
 			context.ReplaceInstructionOnly(IRInstruction.AddressOf);
 		}
@@ -90,7 +83,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// Visitation function for Ldc instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public void Ldc(Context context)
+		void CIL.ICILVisitor.Ldc(Context context)
 		{
 			ProcessLoadInstruction(context);
 		}
@@ -99,7 +92,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// Visitation function for Ldobj instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public void Ldobj(Context context)
+		void CIL.ICILVisitor.Ldobj(Context context)
 		{
 			IInstruction loadInstruction = IRInstruction.Load;
 			Operand destination = context.Result;
@@ -144,7 +137,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// Visitation function for Ldsfld instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public void Ldsfld(Context context)
+		void CIL.ICILVisitor.Ldsfld(Context context)
 		{
 			SigType sigType = context.RuntimeField.SignatureType;
 			Operand source = Operand.CreateRuntimeMember(context.RuntimeField);
@@ -204,7 +197,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// Visitation function for Stloc instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public void Stloc(Context context)
+		void CIL.ICILVisitor.Stloc(Context context)
 		{
 			ProcessStoreInstruction(context);
 		}
@@ -1424,7 +1417,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// Visitation function for Add instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public void Add(Context context)
+		void CIL.ICILVisitor.Add(Context context)
 		{
 			Replace(context, IRInstruction.AddF, IRInstruction.AddS, IRInstruction.AddU);
 		}
@@ -1433,7 +1426,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// Visitation function for Sub instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public void Sub(Context context)
+		void CIL.ICILVisitor.Sub(Context context)
 		{
 			Replace(context, IRInstruction.SubF, IRInstruction.SubS, IRInstruction.SubU);
 		}
@@ -1441,7 +1434,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// Visitation function for Mul instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public void Mul(Context context)
+		void CIL.ICILVisitor.Mul(Context context)
 		{
 			Replace(context, IRInstruction.MulF, IRInstruction.MulS, IRInstruction.MulU);
 		}
@@ -1450,7 +1443,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// Visitation function for Div instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public void Div(Context context)
+		void CIL.ICILVisitor.Div(Context context)
 		{
 			Replace(context, IRInstruction.DivF, IRInstruction.DivS, IRInstruction.DivU);
 		}
@@ -1459,7 +1452,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// Visitation function for Rem instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public void Rem(Context context)
+		void CIL.ICILVisitor.Rem(Context context)
 		{
 			Replace(context, IRInstruction.RemF, IRInstruction.RemS, IRInstruction.RemU);
 		}
@@ -1486,8 +1479,7 @@ namespace Mosa.Compiler.Framework.IR
 
 		private static bool IsUnsigned(Context context)
 		{
-			Operand operand = context.Result;
-			return IsUnsigned(operand);
+			return IsUnsigned(context.Result);
 		}
 
 		private static bool IsUnsigned(Operand operand)

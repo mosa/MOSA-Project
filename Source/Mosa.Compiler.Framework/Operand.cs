@@ -231,12 +231,12 @@ namespace Mosa.Compiler.Framework
 					return (long)(sbyte)value;
 				else if (value is long)
 					return (long)value;
-				else if (value is int)
-					return (long)(int)value;
-				else if (value is short)
-					return (long)(short)value;
-				else if (value is sbyte)
-					return (long)(sbyte)value;
+				else if (value is uint)
+					return (long)(uint)value;
+				else if (value is byte)
+					return (long)(byte)value;
+				else if (value is ushort)
+					return (long)(ushort)value;
 				else if (value is ulong)
 					return (long)(ulong)value;
 
@@ -308,7 +308,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand GetNull()
 		{
-			return CreateConstant(BuiltInSigType.Object, null);;
+			return CreateConstant(BuiltInSigType.Object, null);
 		}
 
 		/// <summary>

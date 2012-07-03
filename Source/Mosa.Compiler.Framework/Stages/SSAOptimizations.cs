@@ -68,7 +68,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (IsLogging) Trace("@REVIEW:\t" + context.ToString());
 
 			SimplifyExtendedMove(context);
-			FoldIntegerAdditionAndSubstraction(context);
+			FoldIntegerOperations(context);
 			StrengthReductionMultiplication(context);
 			StrengthReductionDivision(context);
 			StrengthReductionIntegerAdditionAndSubstraction(context);
@@ -228,12 +228,14 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Folds an integer addition or subtraction on constants
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void FoldIntegerAdditionAndSubstraction(Context context)
+		private void FoldIntegerOperations(Context context)
 		{
 			if (context.IsEmpty)
 				return;
 
-			if (!(context.Instruction is IR.AddSigned || context.Instruction is IR.AddUnsigned || context.Instruction is IR.SubSigned || context.Instruction is IR.SubUnsigned))
+			if (!(context.Instruction is IR.AddSigned || context.Instruction is IR.AddUnsigned ||
+				  context.Instruction is IR.SubSigned || context.Instruction is IR.SubUnsigned ||
+				  context.Instruction is IR.LogicalAnd))
 				return;
 
 			Operand result = context.Result;
@@ -243,11 +245,8 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!op1.IsConstant || !op2.IsConstant)
 				return;
 
-			//if (result.Type.Type != op1.Type.Type || op1.Type.Type != op2.Type.Type)
-			//    return;
-
 			Operand constant = null;
-			
+
 			if (context.Instruction is IR.AddSigned || context.Instruction is IR.AddUnsigned)
 			{
 				switch (result.Type.Type)
@@ -256,7 +255,6 @@ namespace Mosa.Compiler.Framework.Stages
 					case CilElementType.U2: constant = Operand.CreateConstant(result.Type, (ushort)(op1.ValueAsLongInteger + op2.ValueAsLongInteger)); break;
 					case CilElementType.U4: constant = Operand.CreateConstant(result.Type, (uint)(op1.ValueAsLongInteger + op2.ValueAsLongInteger)); break;
 					case CilElementType.U8: constant = Operand.CreateConstant(result.Type, (ulong)(op1.ValueAsLongInteger + op2.ValueAsLongInteger)); break;
-
 					case CilElementType.I1: constant = Operand.CreateConstant(result.Type, (sbyte)(op1.ValueAsLongInteger + op2.ValueAsLongInteger)); break;
 					case CilElementType.I2: constant = Operand.CreateConstant(result.Type, (short)(op1.ValueAsLongInteger + op2.ValueAsLongInteger)); break;
 					case CilElementType.I4: constant = Operand.CreateConstant(result.Type, (int)(op1.ValueAsLongInteger + op2.ValueAsLongInteger)); break;
@@ -273,11 +271,26 @@ namespace Mosa.Compiler.Framework.Stages
 					case CilElementType.U2: constant = Operand.CreateConstant(result.Type, (ushort)(op1.ValueAsLongInteger - op2.ValueAsLongInteger)); break;
 					case CilElementType.U4: constant = Operand.CreateConstant(result.Type, (uint)(op1.ValueAsLongInteger - op2.ValueAsLongInteger)); break;
 					case CilElementType.U8: constant = Operand.CreateConstant(result.Type, (ulong)(op1.ValueAsLongInteger - op2.ValueAsLongInteger)); break;
-
 					case CilElementType.I1: constant = Operand.CreateConstant(result.Type, (sbyte)(op1.ValueAsLongInteger - op2.ValueAsLongInteger)); break;
 					case CilElementType.I2: constant = Operand.CreateConstant(result.Type, (short)(op1.ValueAsLongInteger - op2.ValueAsLongInteger)); break;
 					case CilElementType.I4: constant = Operand.CreateConstant(result.Type, (int)(op1.ValueAsLongInteger - op2.ValueAsLongInteger)); break;
 					case CilElementType.I8: constant = Operand.CreateConstant(result.Type, (long)(op1.ValueAsLongInteger - op2.ValueAsLongInteger)); break;
+
+					default: throw new CompilationException("Not an integer");
+				}
+			}
+			else if (context.Instruction is IR.LogicalAnd)
+			{
+				switch (result.Type.Type)
+				{
+					case CilElementType.U1: constant = Operand.CreateConstant(result.Type, (byte)(op1.ValueAsLongInteger & op2.ValueAsLongInteger)); break;
+					case CilElementType.U2: constant = Operand.CreateConstant(result.Type, (ushort)(op1.ValueAsLongInteger & op2.ValueAsLongInteger)); break;
+					case CilElementType.U4: constant = Operand.CreateConstant(result.Type, (uint)(op1.ValueAsLongInteger & op2.ValueAsLongInteger)); break;
+					case CilElementType.U8: constant = Operand.CreateConstant(result.Type, (ulong)(op1.ValueAsLongInteger & op2.ValueAsLongInteger)); break;
+					case CilElementType.I1: constant = Operand.CreateConstant(result.Type, (sbyte)(op1.ValueAsLongInteger & op2.ValueAsLongInteger)); break;
+					case CilElementType.I2: constant = Operand.CreateConstant(result.Type, (short)(op1.ValueAsLongInteger & op2.ValueAsLongInteger)); break;
+					case CilElementType.I4: constant = Operand.CreateConstant(result.Type, (int)(op1.ValueAsLongInteger & op2.ValueAsLongInteger)); break;
+					case CilElementType.I8: constant = Operand.CreateConstant(result.Type, (long)(op1.ValueAsLongInteger & op2.ValueAsLongInteger)); break;
 
 					default: throw new CompilationException("Not an integer");
 				}
@@ -314,9 +327,6 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 
 			if (op1.Type.Type == CilElementType.Object || op2.Type.Type == CilElementType.Object)
-				return;
-
-			if (op1.Type != op2.Type)
 				return;
 
 			bool compareResult = true;
@@ -507,14 +517,14 @@ namespace Mosa.Compiler.Framework.Stages
 				return (int)value == 0;
 			else if (value is short)
 				return (short)value == 0;
-			else if (value is sbyte)
-				return (sbyte)value == 0;
+			else if (value is byte)
+				return (byte)value == 0;
 			else if (value is long)
 				return (long)value == 0;
 			else if (value is int)
 				return (int)value == 0;
-			else if (value is short)
-				return (short)value == 0;
+			else if (value is ushort)
+				return (ushort)value == 0;
 			else if (value is sbyte)
 				return (sbyte)value == 0;
 			else if (value is ulong)
@@ -543,14 +553,14 @@ namespace Mosa.Compiler.Framework.Stages
 				return (int)value == 1;
 			else if (value is short)
 				return (short)value == 1;
-			else if (value is sbyte)
-				return (sbyte)value == 1;
+			else if (value is byte)
+				return (byte)value == 1;
 			else if (value is long)
 				return (long)value == 1;
 			else if (value is int)
 				return (int)value == 1;
-			else if (value is short)
-				return (short)value == 1;
+			else if (value is ushort)
+				return (ushort)value == 1;
 			else if (value is sbyte)
 				return (sbyte)value == 1;
 			else if (value is ulong)

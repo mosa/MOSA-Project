@@ -154,7 +154,7 @@ namespace Mosa.CoolWorld.x86
 			VGAText = new VGAText();
 
 			//StartDevice(picAttributes, PIC);
-			StartDevice(pitAttributes, PIT);
+			//StartDevice(pitAttributes, PIT);
 			StartDevice(pciAttributes, PCI);
 			StartDevice(keyboardDeviceAttributes, Keyboard);
 			//StartDevice(vgaTextAttributes, VGAText);
