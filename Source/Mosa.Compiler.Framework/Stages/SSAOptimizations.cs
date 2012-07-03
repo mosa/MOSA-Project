@@ -247,20 +247,20 @@ namespace Mosa.Compiler.Framework.Stages
 			//    return;
 
 			Operand constant = null;
-
+			
 			if (context.Instruction is IR.AddSigned || context.Instruction is IR.AddUnsigned)
 			{
 				switch (result.Type.Type)
 				{
-					case CilElementType.U1: constant = Operand.CreateConstant(result.Type, (byte)(LoadInteger(op1) + LoadInteger(op2))); break;
-					case CilElementType.U2: constant = Operand.CreateConstant(result.Type, (ushort)(LoadInteger(op1) + LoadInteger(op2))); break;
-					case CilElementType.U4: constant = Operand.CreateConstant(result.Type, (uint)(LoadInteger(op1) + LoadInteger(op2))); break;
-					case CilElementType.U8: constant = Operand.CreateConstant(result.Type, (ulong)(LoadInteger(op1) + LoadInteger(op2))); break;
+					case CilElementType.U1: constant = Operand.CreateConstant(result.Type, (byte)(op1.ValueAsLongInteger + op2.ValueAsLongInteger)); break;
+					case CilElementType.U2: constant = Operand.CreateConstant(result.Type, (ushort)(op1.ValueAsLongInteger + op2.ValueAsLongInteger)); break;
+					case CilElementType.U4: constant = Operand.CreateConstant(result.Type, (uint)(op1.ValueAsLongInteger + op2.ValueAsLongInteger)); break;
+					case CilElementType.U8: constant = Operand.CreateConstant(result.Type, (ulong)(op1.ValueAsLongInteger + op2.ValueAsLongInteger)); break;
 
-					case CilElementType.I1: constant = Operand.CreateConstant(result.Type, (sbyte)(LoadInteger(op1) + LoadInteger(op2))); break;
-					case CilElementType.I2: constant = Operand.CreateConstant(result.Type, (short)(LoadInteger(op1) + LoadInteger(op2))); break;
-					case CilElementType.I4: constant = Operand.CreateConstant(result.Type, (int)(LoadInteger(op1) + LoadInteger(op2))); break;
-					case CilElementType.I8: constant = Operand.CreateConstant(result.Type, (long)(LoadInteger(op1) + LoadInteger(op2))); break;
+					case CilElementType.I1: constant = Operand.CreateConstant(result.Type, (sbyte)(op1.ValueAsLongInteger + op2.ValueAsLongInteger)); break;
+					case CilElementType.I2: constant = Operand.CreateConstant(result.Type, (short)(op1.ValueAsLongInteger + op2.ValueAsLongInteger)); break;
+					case CilElementType.I4: constant = Operand.CreateConstant(result.Type, (int)(op1.ValueAsLongInteger + op2.ValueAsLongInteger)); break;
+					case CilElementType.I8: constant = Operand.CreateConstant(result.Type, (long)(op1.ValueAsLongInteger + op2.ValueAsLongInteger)); break;
 
 					default: throw new CompilationException("Not an integer");
 				}
@@ -269,15 +269,15 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				switch (result.Type.Type)
 				{
-					case CilElementType.U1: constant = Operand.CreateConstant(result.Type, (byte)(LoadInteger(op1) - LoadInteger(op2))); break;
-					case CilElementType.U2: constant = Operand.CreateConstant(result.Type, (ushort)(LoadInteger(op1) - LoadInteger(op2))); break;
-					case CilElementType.U4: constant = Operand.CreateConstant(result.Type, (uint)(LoadInteger(op1) - LoadInteger(op2))); break;
-					case CilElementType.U8: constant = Operand.CreateConstant(result.Type, (ulong)(LoadInteger(op1) - LoadInteger(op2))); break;
+					case CilElementType.U1: constant = Operand.CreateConstant(result.Type, (byte)(op1.ValueAsLongInteger - op2.ValueAsLongInteger)); break;
+					case CilElementType.U2: constant = Operand.CreateConstant(result.Type, (ushort)(op1.ValueAsLongInteger - op2.ValueAsLongInteger)); break;
+					case CilElementType.U4: constant = Operand.CreateConstant(result.Type, (uint)(op1.ValueAsLongInteger - op2.ValueAsLongInteger)); break;
+					case CilElementType.U8: constant = Operand.CreateConstant(result.Type, (ulong)(op1.ValueAsLongInteger - op2.ValueAsLongInteger)); break;
 
-					case CilElementType.I1: constant = Operand.CreateConstant(result.Type, (sbyte)(LoadInteger(op1) - LoadInteger(op2))); break;
-					case CilElementType.I2: constant = Operand.CreateConstant(result.Type, (short)(LoadInteger(op1) - LoadInteger(op2))); break;
-					case CilElementType.I4: constant = Operand.CreateConstant(result.Type, (int)(LoadInteger(op1) - LoadInteger(op2))); break;
-					case CilElementType.I8: constant = Operand.CreateConstant(result.Type, (long)(LoadInteger(op1) - LoadInteger(op2))); break;
+					case CilElementType.I1: constant = Operand.CreateConstant(result.Type, (sbyte)(op1.ValueAsLongInteger - op2.ValueAsLongInteger)); break;
+					case CilElementType.I2: constant = Operand.CreateConstant(result.Type, (short)(op1.ValueAsLongInteger - op2.ValueAsLongInteger)); break;
+					case CilElementType.I4: constant = Operand.CreateConstant(result.Type, (int)(op1.ValueAsLongInteger - op2.ValueAsLongInteger)); break;
+					case CilElementType.I8: constant = Operand.CreateConstant(result.Type, (long)(op1.ValueAsLongInteger - op2.ValueAsLongInteger)); break;
 
 					default: throw new CompilationException("Not an integer");
 				}
@@ -492,35 +492,6 @@ namespace Mosa.Compiler.Framework.Stages
 		#region Helpers
 
 		/// <summary>
-		/// Loads the integer.
-		/// </summary>
-		/// <param name="operand">The operand.</param>
-		/// <returns></returns>
-		private static long LoadInteger(Operand operand)
-		{
-			object value = operand.Value;
-
-			if (value is int)
-				return (long)(int)value;
-			else if (value is short)
-				return (long)(short)value;
-			else if (value is sbyte)
-				return (long)(sbyte)value;
-			else if (value is long)
-				return (long)value;
-			else if (value is int)
-				return (long)(int)value;
-			else if (value is short)
-				return (long)(short)value;
-			else if (value is sbyte)
-				return (long)(sbyte)value;
-			else if (value is ulong)
-				return (long)(ulong)value;
-
-			throw new CompilationException("Not an integer");
-		}
-
-		/// <summary>
 		/// Determines whether the value is zero.
 		/// </summary>
 		/// <param name="operand">The constant operand.</param>
@@ -602,7 +573,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </returns>
 		private static bool IsSameIntegerConstant(Operand op1, Operand op2)
 		{
-			return (LoadInteger(op1) == LoadInteger(op2));
+			return (op1.ValueAsLongInteger == op2.ValueAsLongInteger);
 		}
 
 		#endregion //Helpers

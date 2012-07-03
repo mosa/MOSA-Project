@@ -217,6 +217,33 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
+		/// Gets the value as long integer.
+		/// </summary>
+		public long ValueAsLongInteger
+		{
+			get
+			{
+				if (value is int)
+					return (long)(int)value;
+				else if (value is short)
+					return (long)(short)value;
+				else if (value is sbyte)
+					return (long)(sbyte)value;
+				else if (value is long)
+					return (long)value;
+				else if (value is int)
+					return (long)(int)value;
+				else if (value is short)
+					return (long)(short)value;
+				else if (value is sbyte)
+					return (long)(sbyte)value;
+				else if (value is ulong)
+					return (long)(ulong)value;
+
+				throw new CompilationException("Not an integer");
+			}
+		}
+		/// <summary>
 		/// Returns the stack type of the operand.
 		/// </summary>
 		public StackTypeCode StackType { get { return StackTypeFromSigType(sigType); } }

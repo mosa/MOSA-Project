@@ -51,38 +51,13 @@ namespace Mosa.Platform.x86.Stages
 			Debug.Assert(operand.IsMemoryAddress || operand.IsConstant, @"Long operand not memory or constant.");
 
 			if (operand.IsConstant)
+			{
 				SplitFromConstantOperand(operand, out operandLow, out operandHigh);
+			}
 			else
+			{
 				SplitFromNonConstantOperand(operand, out operandLow, out operandHigh);
-		}
-
-		/// <summary>
-		/// Loads the integer.
-		/// </summary>
-		/// <param name="operand">The operand.</param>
-		/// <returns></returns>
-		private static long LoadInteger(Operand operand)
-		{
-			object value = operand.Value;
-
-			if (value is int)
-				return (long)(int)value;
-			else if (value is short)
-				return (long)(short)value;
-			else if (value is sbyte)
-				return (long)(sbyte)value;
-			else if (value is long)
-				return (long)value;
-			else if (value is int)
-				return (long)(int)value;
-			else if (value is short)
-				return (long)(short)value;
-			else if (value is sbyte)
-				return (long)(sbyte)value;
-			else if (value is ulong)
-				return (long)(ulong)value;
-
-			throw new CompilationException("Not an integer");
+			}
 		}
 
 		private static void SplitFromConstantOperand(Operand operand, out Operand operandLow, out Operand operandHigh)
@@ -91,13 +66,13 @@ namespace Mosa.Platform.x86.Stages
 
 			if (HighType.Type == CilElementType.I4)
 			{
-				long value = LoadInteger(operand);
+				long value = operand.ValueAsLongInteger;
 				operandLow = Operand.CreateConstant(BuiltInSigType.UInt32, (uint)(value & 0xFFFFFFFF));
 				operandHigh = Operand.CreateConstant(HighType, (int)(value >> 32));
 			}
 			else
 			{
-				ulong value = (ulong)LoadInteger(operand);
+				ulong value = (ulong)operand.ValueAsLongInteger; ;
 				operandLow = Operand.CreateConstant(BuiltInSigType.UInt32, (uint)(value & 0xFFFFFFFF));
 				operandHigh = Operand.CreateConstant(HighType, (uint)(value >> 32));
 			}
