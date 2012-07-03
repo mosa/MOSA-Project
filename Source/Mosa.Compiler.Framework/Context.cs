@@ -580,7 +580,9 @@ namespace Mosa.Compiler.Framework
 			int label = -1;
 
 			if (index == -1)
+			{
 				index = instructionSet.CreateRoot();
+			}
 			else
 			{
 				label = Label;
@@ -705,6 +707,22 @@ namespace Mosa.Compiler.Framework
 			Result = result;
 			Operand1 = operand1;
 			Operand2 = operand2;
+		}
+
+		/// <summary>
+		/// Sets the instruction.
+		/// </summary>
+		/// <param name="instruction">The instruction.</param>
+		/// <param name="result">The result.</param>
+		/// <param name="operand1">The operand1.</param>
+		/// <param name="operand2">The operand2.</param>
+		public void SetInstruction(IInstruction instruction, IR.ConditionCode condition, Operand result, Operand operand1, Operand operand2)
+		{
+			SetInstruction(instruction, 2, (byte)((result == null) ? 0 : 1));
+			Result = result;
+			Operand1 = operand1;
+			Operand2 = operand2;
+			ConditionCode = condition;
 		}
 
 		/// <summary>
@@ -848,6 +866,21 @@ namespace Mosa.Compiler.Framework
 		{
 			AppendInstruction();
 			SetInstruction(instruction, result, operand1);
+		}
+
+
+		/// <summary>
+		/// Appends an instruction after the current index.
+		/// </summary>
+		/// <param name="instruction">The instruction to append.</param>
+		/// <param name="condition">The condition.</param>
+		/// <param name="result">The result operand.</param>
+		/// <param name="operand1">The first operand.</param>
+		/// <param name="operand2">The second operand.</param>
+		public void AppendInstruction(IInstruction instruction, IR.ConditionCode condition, Operand result, Operand operand1, Operand operand2)
+		{
+			AppendInstruction();
+			SetInstruction(instruction, condition, result, operand1, operand2);
 		}
 
 		/// <summary>

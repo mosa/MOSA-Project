@@ -23,31 +23,6 @@ namespace Mosa.Compiler.Framework
 	public sealed class Operand
 	{
 
-		#region Constants
-
-		public static Operand I4_0 = CreateConstant(BuiltInSigType.Int32, (int)0);
-		public static Operand I4_1 = CreateConstant(BuiltInSigType.Int32, (int)1);
-		public static Operand I4_2 = CreateConstant(BuiltInSigType.Int32, (int)2);
-		public static Operand I4_3 = CreateConstant(BuiltInSigType.Int32, (int)3);
-		public static Operand I4_4 = CreateConstant(BuiltInSigType.Int32, (int)4);
-		public static Operand I4_5 = CreateConstant(BuiltInSigType.Int32, (int)5);
-		public static Operand I4_6 = CreateConstant(BuiltInSigType.Int32, (int)6);
-		public static Operand I4_7 = CreateConstant(BuiltInSigType.Int32, (int)7);
-		public static Operand I4_8 = CreateConstant(BuiltInSigType.Int32, (int)8);
-		public static Operand I4_16 = CreateConstant(BuiltInSigType.Int32, (int)16);
-		public static Operand I4_32 = CreateConstant(BuiltInSigType.Int32, (int)32);
-		public static Operand I4_64 = CreateConstant(BuiltInSigType.Int32, (int)64);
-		public static Operand I4_N1 = CreateConstant(BuiltInSigType.Int32, (int)-1);
-
-		public static Operand U1_0 = CreateConstant(BuiltInSigType.Byte, 0);
-		public static Operand U1_1 = CreateConstant(BuiltInSigType.Byte, 1);
-
-		public static Operand U4_0 = CreateConstant(BuiltInSigType.UInt32, (int)0);
-		public static Operand U4_0xFFFFFFFF = CreateConstant(BuiltInSigType.UInt32, (uint)(0xFFFFFFFF));
-		public static Operand Obj_Null = CreateConstant(BuiltInSigType.Object, null);
-
-		#endregion
-
 		#region Data members
 
 		[Flags]
@@ -297,23 +272,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns>A new Operand representing the value <paramref name="value"/>.</returns>
 		public static Operand CreateConstant(int value)
 		{
-			switch (value)
-			{
-				case 0: return I4_0;
-				case 1: return I4_1;
-				case 2: return I4_2;
-				case 3: return I4_3;
-				case 4: return I4_4;
-				case 5: return I4_5;
-				case 6: return I4_6;
-				case 7: return I4_7;
-				case 8: return I4_8;
-				case 16: return I4_16;
-				case 32: return I4_32;
-				case 64: return I4_64;
-				case -1: return I4_N1;
-				default: return CreateConstant(BuiltInSigType.Int32, value);
-			}
+			return CreateConstant(BuiltInSigType.Int32, value);
 		}
 
 		/// <summary>
@@ -322,7 +281,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand GetNull()
 		{
-			return Obj_Null;
+			return CreateConstant(BuiltInSigType.Object, null);;
 		}
 
 		/// <summary>

@@ -810,11 +810,14 @@ namespace Mosa.Compiler.Framework.IR
 			IR.ConditionCode code = ConvertCondition((context.Instruction as CIL.BaseCILInstruction).OpCode);
 
 			if (context.Operand1.StackType == StackTypeCode.F)
-				context.SetInstruction(IRInstruction.FloatingPointCompare, context.Result, context.Operand1, context.Operand2);
+			{
+				context.SetInstruction(IRInstruction.FloatingPointCompare, code, context.Result, context.Operand1, context.Operand2);
+			}
 			else
-				context.SetInstruction(IRInstruction.IntegerCompare, context.Result, context.Operand1, context.Operand2);
+			{
+				context.SetInstruction(IRInstruction.IntegerCompare, code, context.Result, context.Operand1, context.Operand2);
+			}
 
-			context.ConditionCode = code;
 		}
 
 		/// <summary>
@@ -1008,27 +1011,25 @@ namespace Mosa.Compiler.Framework.IR
 		{
 			int target = context.BranchTargets[0];
 
-			ConditionCode cc;
 			Operand first = context.Operand1;
-			Operand second = Operand.I4_0;
+			Operand second = Operand.CreateConstant(BuiltInSigType.Int32, (int)0);
 
 			CIL.OpCode opcode = ((CIL.ICILInstruction)context.Instruction).OpCode;
+
 			if (opcode == CIL.OpCode.Brtrue || opcode == CIL.OpCode.Brtrue_s)
 			{
-				cc = ConditionCode.NotEqual;
+				context.SetInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.NotEqual, null, first, second);
+				context.SetBranch(target);
+				return;
 			}
 			else if (opcode == CIL.OpCode.Brfalse || opcode == CIL.OpCode.Brfalse_s)
 			{
-				cc = ConditionCode.Equal;
-			}
-			else
-			{
-				throw new NotSupportedException(@"CILTransformationStage.UnaryBranch doesn't support CIL opcode " + opcode);
+				context.SetInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.Equal, null, first, second);
+				context.SetBranch(target);
+				return;
 			}
 
-			context.SetInstruction(IRInstruction.IntegerCompareBranch, null, first, second);
-			context.ConditionCode = cc;
-			context.SetBranch(target);
+			throw new NotSupportedException(@"CILTransformationStage.UnaryBranch doesn't support CIL opcode " + opcode);
 		}
 
 		/// <summary>
@@ -1046,16 +1047,13 @@ namespace Mosa.Compiler.Framework.IR
 			if (first.StackType == StackTypeCode.F)
 			{
 				Operand comparisonResult = methodCompiler.CreateVirtualRegister(BuiltInSigType.Int32);
-				context.SetInstruction(IRInstruction.FloatingPointCompare, comparisonResult, first, second);
-				context.ConditionCode = cc;
-				context.AppendInstruction(IRInstruction.IntegerCompareBranch, null, comparisonResult, Operand.CreateConstant(BuiltInSigType.IntPtr, 1));
-				context.ConditionCode = ConditionCode.Equal;
+				context.SetInstruction(IRInstruction.FloatingPointCompare, cc, comparisonResult, first, second);
+				context.AppendInstruction(IRInstruction.IntegerCompareBranch, ConditionCode.Equal, null, comparisonResult, Operand.CreateConstant(BuiltInSigType.IntPtr, 1));
 				context.SetBranch(target);
 			}
 			else
 			{
-				context.SetInstruction(IRInstruction.IntegerCompareBranch, null, first, second);
-				context.ConditionCode = cc;
+				context.SetInstruction(IRInstruction.IntegerCompareBranch, cc, null, first, second);
 				context.SetBranch(target);
 			}
 		}

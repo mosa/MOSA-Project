@@ -247,6 +247,12 @@ namespace Mosa.Tool.Compiler
 			);
 
 			optionSet.Add(
+				@"ssa-optimize|enable-single-static-assignment-optimizations",
+				@"Performs single static assignments optimizations.",
+				enable => compilerOptions.EnableSSAOptimizations = enable != null
+			);
+
+			optionSet.Add(
 				"stats=",
 				"Generate instruction statistics {file} of the produced binary.",
 				delegate(string file)
@@ -515,9 +521,6 @@ namespace Mosa.Tool.Compiler
 
 				case "avr32":
 					return Mosa.Platform.AVR32.Architecture.CreateArchitecture(Mosa.Platform.AVR32.ArchitectureFeatureFlags.AutoDetect);
-
-				//case "x86ii":
-				//	return Mosa.Platform.x86II.Architecture.CreateArchitecture(Mosa.Platform.x86II.ArchitectureFeatureFlags.AutoDetect);
 
 				case "x64":
 

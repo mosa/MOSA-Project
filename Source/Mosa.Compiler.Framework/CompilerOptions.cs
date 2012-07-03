@@ -92,6 +92,14 @@ namespace Mosa.Compiler.Framework
 		public bool EnableSSA { get; set; }
 
 		/// <summary>
+		/// Gets or sets a value indicating whether [enable SSA optimizations].
+		/// </summary>
+		/// <value>
+		/// 	<c>true</c> if [enable SSA optimizations]; otherwise, <c>false</c>.
+		/// </value>
+		public bool EnableSSAOptimizations { get; set; }
+
+		/// <summary>
 		/// Gets or sets a value indicating whether static allocations are enabled.
 		/// </summary>
 		/// <value>
@@ -130,6 +138,7 @@ namespace Mosa.Compiler.Framework
 		public CompilerOptions()
 		{
 			EnableSSA = false;
+			EnableSSAOptimizations = true;
 		}
 	}
 }

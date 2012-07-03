@@ -47,13 +47,11 @@ namespace Mosa.Test.System
 				new SSAOptimizations(),
 				new LeaveSSA(),
 				
-				//new StrengthReductionStage(),
 				new StackLayoutStage(),
 				new PlatformStubStage(),
 				new LoopAwareBlockOrderStage(),
 				//new SimpleTraceBlockOrderStage(),
 				//new ReverseBlockOrderStage(),  // reverse all the basic blocks and see if it breaks anything
-				//new BasicBlockOrderStage()	
 				new CodeGenerationStage(),				
 			});
 		}

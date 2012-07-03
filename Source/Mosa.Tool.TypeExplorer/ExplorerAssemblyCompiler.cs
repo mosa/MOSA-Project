@@ -53,7 +53,6 @@ namespace Mosa.Tool.TypeExplorer
 			{
 				case "null": architecture = Null.Architecture.CreateArchitecture(Null.ArchitectureFeatureFlags.AutoDetect); break;
 				case "x86": architecture = x86.Architecture.CreateArchitecture(x86.ArchitectureFeatureFlags.AutoDetect); break;
-				//case "x86ii": architecture = x86II.Architecture.CreateArchitecture(x86II.ArchitectureFeatureFlags.AutoDetect); break;
 				case "avr32": architecture = AVR32.Architecture.CreateArchitecture(AVR32.ArchitectureFeatureFlags.AutoDetect); break;
 				default:
 					architecture = x86.Architecture.CreateArchitecture(x86.ArchitectureFeatureFlags.AutoDetect); break;
@@ -61,6 +60,7 @@ namespace Mosa.Tool.TypeExplorer
 
 			CompilerOptions compilerOptions = new CompilerOptions();
 			compilerOptions.EnableSSA = enabledSSA;
+			compilerOptions.EnableSSAOptimizations = enabledSSA && enabledSSA;
 
 			ExplorerAssemblyCompiler compiler = new ExplorerAssemblyCompiler(architecture, typeSystem, typeLayout, internalTrace, compilerOptions);
 
