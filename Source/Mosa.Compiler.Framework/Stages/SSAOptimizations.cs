@@ -65,16 +65,18 @@ namespace Mosa.Compiler.Framework.Stages
 			if (context.IsEmpty)
 				return;
 
-			if (IsLogging) Trace("@REVIEW:\t" + context.ToString());
+			//if (IsLogging) Trace("@REVIEW:\t" + context.ToString());
 
 			SimplifyExtendedMove(context);
-			FoldIntegerOperations(context);
+			SimplifySubtraction(context);
+			ConstantFoldingIntegerOperations(context);
 			StrengthReductionMultiplication(context);
 			StrengthReductionDivision(context);
 			StrengthReductionIntegerAdditionAndSubstraction(context);
+			StrengthReductionLogicalOperators(context);
 			SimpleConstantPropagation(context);
-			RemoveUselessMove(context);
-			FolderIntegerCompare(context);
+			DeadCodeEliminationRemoveUselessMove(context);
+			ConstantFoldingIntegerCompare(context);
 		}
 
 		/// <summary>
@@ -83,7 +85,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="index">The index.</param>
 		void AddToWorkList(int index)
 		{
-			// work list never gets very large, so a the check is inexpensive
+			// work list never gets very large, so the check is inexpensive
 			if (!worklist.Contains(index))
 				worklist.Push(index);
 		}
@@ -138,7 +140,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Removes the useless move.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void RemoveUselessMove(Context context)
+		private void DeadCodeEliminationRemoveUselessMove(Context context)
 		{
 			if (context.IsEmpty)
 				return;
@@ -225,17 +227,18 @@ namespace Mosa.Compiler.Framework.Stages
 		}
 
 		/// <summary>
-		/// Folds an integer addition or subtraction on constants
+		/// Folds an integer operation on constants
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void FoldIntegerOperations(Context context)
+		private void ConstantFoldingIntegerOperations(Context context)
 		{
 			if (context.IsEmpty)
 				return;
 
 			if (!(context.Instruction is IR.AddSigned || context.Instruction is IR.AddUnsigned ||
 				  context.Instruction is IR.SubSigned || context.Instruction is IR.SubUnsigned ||
-				  context.Instruction is IR.LogicalAnd))
+				  context.Instruction is IR.LogicalAnd || context.Instruction is IR.LogicalOr ||
+				  context.Instruction is IR.LogicalXor))
 				return;
 
 			Operand result = context.Result;
@@ -295,7 +298,38 @@ namespace Mosa.Compiler.Framework.Stages
 					default: throw new CompilationException("Not an integer");
 				}
 			}
+			else if (context.Instruction is IR.LogicalOr)
+			{
+				switch (result.Type.Type)
+				{
+					case CilElementType.U1: constant = Operand.CreateConstant(result.Type, (byte)(op1.ValueAsLongInteger | op2.ValueAsLongInteger)); break;
+					case CilElementType.U2: constant = Operand.CreateConstant(result.Type, (ushort)(op1.ValueAsLongInteger | op2.ValueAsLongInteger)); break;
+					case CilElementType.U4: constant = Operand.CreateConstant(result.Type, (uint)(op1.ValueAsLongInteger | op2.ValueAsLongInteger)); break;
+					case CilElementType.U8: constant = Operand.CreateConstant(result.Type, (ulong)(op1.ValueAsLongInteger | op2.ValueAsLongInteger)); break;
+					case CilElementType.I1: constant = Operand.CreateConstant(result.Type, (sbyte)(op1.ValueAsLongInteger | op2.ValueAsLongInteger)); break;
+					case CilElementType.I2: constant = Operand.CreateConstant(result.Type, (short)(op1.ValueAsLongInteger | op2.ValueAsLongInteger)); break;
+					case CilElementType.I4: constant = Operand.CreateConstant(result.Type, (int)(op1.ValueAsLongInteger | op2.ValueAsLongInteger)); break;
+					case CilElementType.I8: constant = Operand.CreateConstant(result.Type, (long)(op1.ValueAsLongInteger | op2.ValueAsLongInteger)); break;
 
+					default: throw new CompilationException("Not an integer");
+				}
+			}
+			else if (context.Instruction is IR.LogicalXor)
+			{
+				switch (result.Type.Type)
+				{
+					case CilElementType.U1: constant = Operand.CreateConstant(result.Type, (byte)(op1.ValueAsLongInteger ^ op2.ValueAsLongInteger)); break;
+					case CilElementType.U2: constant = Operand.CreateConstant(result.Type, (ushort)(op1.ValueAsLongInteger ^ op2.ValueAsLongInteger)); break;
+					case CilElementType.U4: constant = Operand.CreateConstant(result.Type, (uint)(op1.ValueAsLongInteger ^ op2.ValueAsLongInteger)); break;
+					case CilElementType.U8: constant = Operand.CreateConstant(result.Type, (ulong)(op1.ValueAsLongInteger ^ op2.ValueAsLongInteger)); break;
+					case CilElementType.I1: constant = Operand.CreateConstant(result.Type, (sbyte)(op1.ValueAsLongInteger ^ op2.ValueAsLongInteger)); break;
+					case CilElementType.I2: constant = Operand.CreateConstant(result.Type, (short)(op1.ValueAsLongInteger ^ op2.ValueAsLongInteger)); break;
+					case CilElementType.I4: constant = Operand.CreateConstant(result.Type, (int)(op1.ValueAsLongInteger ^ op2.ValueAsLongInteger)); break;
+					case CilElementType.I8: constant = Operand.CreateConstant(result.Type, (long)(op1.ValueAsLongInteger ^ op2.ValueAsLongInteger)); break;
+
+					default: throw new CompilationException("Not an integer");
+				}
+			}
 			if (constant != null)
 			{
 				AddOperandUsageToWorkList(context);
@@ -311,7 +345,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Folds the integer compare on constants
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void FolderIntegerCompare(Context context)
+		private void ConstantFoldingIntegerCompare(Context context)
 		{
 			if (context.IsEmpty)
 				return;
@@ -498,6 +532,81 @@ namespace Mosa.Compiler.Framework.Stages
 			context.SetInstruction(IR.IRInstruction.Move, result, Operand.CreateConstant(context.Result.Type, op1.Value));
 			if (IsLogging) Trace("AFTER: \t" + context.ToString());
 		}
+		/// <summary>
+		/// Simplifies an subtraction with both operands are the same
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void SimplifySubtraction(Context context)
+		{
+			if (context.IsEmpty)
+				return;
+
+			if (!(context.Instruction is IR.SubSigned || context.Instruction is IR.SubUnsigned))
+				return;
+
+			Operand result = context.Result;
+			Operand op1 = context.Operand1;
+			Operand op2 = context.Operand2;
+
+			if (op1 != op2)
+				return;
+
+			AddOperandUsageToWorkList(context);
+			if (IsLogging) Trace("BEFORE:\t" + context.ToString());
+			context.SetInstruction(IR.IRInstruction.Nop);
+			//context.Clear();
+		}
+
+		/// <summary>
+		/// Strength reduction for logical operators
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void StrengthReductionLogicalOperators(Context context)
+		{
+			if (context.IsEmpty)
+				return;
+
+			if (!(context.Instruction is IR.LogicalAnd || context.Instruction is IR.LogicalOr))
+				return;
+
+			Operand result = context.Result;
+			Operand op1 = context.Operand1;
+			Operand op2 = context.Operand2;
+
+			if (context.Instruction is IR.LogicalOr && op1.IsConstant && !op2.IsConstant && IsValueZero(op1))
+			{
+				AddOperandUsageToWorkList(context);
+				if (IsLogging) Trace("BEFORE:\t" + context.ToString());
+				context.SetInstruction(IR.IRInstruction.Move, result, Operand.CreateConstant(context.Result.Type, op2.Value));
+				if (IsLogging) Trace("AFTER: \t" + context.ToString());
+			}
+
+			if (context.Instruction is IR.LogicalOr && op2.IsConstant && !op1.IsConstant && IsValueZero(op2))
+			{
+				AddOperandUsageToWorkList(context);
+				if (IsLogging) Trace("BEFORE:\t" + context.ToString());
+				context.SetInstruction(IR.IRInstruction.Move, result, Operand.CreateConstant(context.Result.Type, op1.Value));
+				if (IsLogging) Trace("AFTER: \t" + context.ToString());
+			}
+
+			if (context.Instruction is IR.LogicalAnd && op1.IsConstant && !op1.IsConstant && IsValueZero(op1))
+			{
+				AddOperandUsageToWorkList(context);
+				if (IsLogging) Trace("BEFORE:\t" + context.ToString());
+				context.SetInstruction(IR.IRInstruction.Move, result, Operand.CreateConstant(context.Result.Type, 0));
+				if (IsLogging) Trace("AFTER: \t" + context.ToString());
+			}
+
+			if (context.Instruction is IR.LogicalAnd && op2.IsConstant && !op1.IsConstant && IsValueZero(op2))
+			{
+				AddOperandUsageToWorkList(context);
+				if (IsLogging) Trace("BEFORE:\t" + context.ToString());
+				context.SetInstruction(IR.IRInstruction.Move, result, Operand.CreateConstant(context.Result.Type, 0));
+				if (IsLogging) Trace("AFTER: \t" + context.ToString());
+			}
+
+			// TODO: Add more strength reductions especially for AND w/ 0xFF, 0xFFFF, 0xFFFFFFFF, etc when source or destination are same or smaller
+		}
 
 		#region Helpers
 
@@ -521,8 +630,8 @@ namespace Mosa.Compiler.Framework.Stages
 				return (byte)value == 0;
 			else if (value is long)
 				return (long)value == 0;
-			else if (value is int)
-				return (int)value == 0;
+			else if (value is uint)
+				return (uint)value == 0;
 			else if (value is ushort)
 				return (ushort)value == 0;
 			else if (value is sbyte)
@@ -557,8 +666,8 @@ namespace Mosa.Compiler.Framework.Stages
 				return (byte)value == 1;
 			else if (value is long)
 				return (long)value == 1;
-			else if (value is int)
-				return (int)value == 1;
+			else if (value is uint)
+				return (uint)value == 1;
 			else if (value is ushort)
 				return (ushort)value == 1;
 			else if (value is sbyte)

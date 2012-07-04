@@ -391,7 +391,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Conversion(Context context)
 		{
-			ProcessConversionInstruction(context);
+			CheckAndConvertInstruction(context);
 		}
 
 		/// <summary>
@@ -1840,20 +1840,11 @@ namespace Mosa.Compiler.Framework.IR
 			},
 		};
 
-		/// <summary>
-		/// Selects the appropriate IR conversion  instruction.
-		/// </summary>
-		/// <param name="context">The transformation context.</param>
-		private void ProcessConversionInstruction(Context context)
+		private void CheckAndConvertInstruction(Context context)
 		{
-			Operand dest = context.Result;
-			Operand src = context.Operand1;
+			Operand destinationOperand = context.Result;
+			Operand sourceOperand = context.Operand1;
 
-			CheckAndConvertInstruction(context, dest, src);
-		}
-
-		private void CheckAndConvertInstruction(Context context, Operand destinationOperand, Operand sourceOperand)
-		{
 			ConvType ctDest = ConvTypeFromCilType(destinationOperand.Type.Type);
 			ConvType ctSrc = ConvTypeFromCilType(sourceOperand.Type.Type);
 
@@ -1864,16 +1855,24 @@ namespace Mosa.Compiler.Framework.IR
 			uint mask = 0xFFFFFFFF;
 			IInstruction instruction = ComputeExtensionTypeAndMask(ctDest, ref mask);
 
-			if (type == IRInstruction.LogicalAnd && mask != 0)
+			if (type == IRInstruction.LogicalAnd)
 			{
-				if (sourceOperand.Type.Type == CilElementType.I8 || sourceOperand.Type.Type == CilElementType.U8)
+				if (mask == 0)
 				{
+					// TODO: May not be correct
 					context.SetInstruction(IRInstruction.Move, destinationOperand, sourceOperand);
-					context.AppendInstruction(type, destinationOperand, sourceOperand, Operand.CreateConstant(BuiltInSigType.UInt32, mask));
 				}
 				else
 				{
-					context.SetInstruction(type, destinationOperand, sourceOperand, Operand.CreateConstant(BuiltInSigType.UInt32, mask));
+					if (sourceOperand.Type.Type == CilElementType.I8 || sourceOperand.Type.Type == CilElementType.U8)
+					{
+						context.SetInstruction(IRInstruction.Move, destinationOperand, sourceOperand);
+						context.AppendInstruction(type, destinationOperand, sourceOperand, Operand.CreateConstant(BuiltInSigType.UInt32, mask));
+					}
+					else
+					{
+						context.SetInstruction(type, destinationOperand, sourceOperand, Operand.CreateConstant(BuiltInSigType.UInt32, mask));
+					}
 				}
 			}
 			else
@@ -2014,30 +2013,26 @@ namespace Mosa.Compiler.Framework.IR
 			Operand source = context.Operand1;
 			Operand destination = context.Result;
 
-			// Is this a sign or zero-extending move?
-			if (source != null)
+			IInstruction extension = null;
+			SigType extendedType = null;
+
+			if (IsSignExtending(source))
 			{
-				IInstruction extension = null;
-				SigType extendedType = null;
+				extension = IRInstruction.SignExtendedMove;
+				extendedType = BuiltInSigType.Int32;
+			}
+			else if (IsZeroExtending(source))
+			{
+				extension = IRInstruction.ZeroExtendedMove;
+				extendedType = BuiltInSigType.UInt32;
+			}
 
-				if (IsSignExtending(source))
-				{
-					extension = IRInstruction.SignExtendedMove;
-					extendedType = BuiltInSigType.Int32;
-				}
-				else if (IsZeroExtending(source))
-				{
-					extension = IRInstruction.ZeroExtendedMove;
-					extendedType = BuiltInSigType.UInt32;
-				}
-
-				if (extension != null)
-				{
-					Operand temp = methodCompiler.CreateVirtualRegister(extendedType);
-					destination.Replace(temp, context.InstructionSet);
-					context.SetInstruction(extension, temp, source);
-					return;
-				}
+			if (extension != null)
+			{
+				Operand temp = methodCompiler.CreateVirtualRegister(extendedType);
+				destination.Replace(temp, context.InstructionSet);
+				context.SetInstruction(extension, temp, source);
+				return;
 			}
 
 			context.ReplaceInstructionOnly(IRInstruction.Move);

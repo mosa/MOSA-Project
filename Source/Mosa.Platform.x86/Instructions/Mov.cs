@@ -20,7 +20,9 @@ namespace Mosa.Platform.x86.Instructions
 		#region Data Members
 
 		private static readonly OpCode R_C = new OpCode(new byte[] { 0xC7 }, 0); // Move imm32 to r/m32
+		private static readonly OpCode R_C_U8 = new OpCode(new byte[] { 0xC6 }, 0); // Move imm8 to r/m8
 		private static readonly OpCode M_C = R_C;
+		private static readonly OpCode M_C_U8 = R_C_U8;
 		private static readonly OpCode R_R = new OpCode(new byte[] { 0x8B });
 		private static readonly OpCode R_R_16 = new OpCode(new byte[] { 0x66, 0x8B });
 		private static readonly OpCode R_R_U8 = new OpCode(new byte[] { 0x88 });
@@ -65,7 +67,11 @@ namespace Mosa.Platform.x86.Instructions
 					throw new ArgumentException(@"TODO: No opcode for move from segment register");
 
 			if ((destination.IsRegister) && (source.IsConstant)) return R_C;
-			if ((destination.IsMemoryAddress) && (source.IsConstant)) return M_C;
+			if ((destination.IsMemoryAddress) && (source.IsConstant))
+			{
+				if (IsByte(source)) return M_C_U8;
+				return M_C;
+			}
 			if ((destination.IsRegister) && (source.IsSymbol)) return R_C;
 			if ((destination.IsMemoryAddress) && (source.IsSymbol)) return M_C;
 
