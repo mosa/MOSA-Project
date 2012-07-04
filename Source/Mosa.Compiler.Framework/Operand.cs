@@ -477,7 +477,7 @@ namespace Mosa.Compiler.Framework
 		{
 			Operand operand = new Operand(type, OperandType.MemoryAddress | OperandType.Parameter);
 			operand.register = register;
-			//operand.index = param.Position;
+			operand.index = param.Position;
 			operand.offset = new IntPtr(param.Position * 4);
 			return operand;
 		}
