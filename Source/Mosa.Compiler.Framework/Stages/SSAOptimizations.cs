@@ -75,6 +75,7 @@ namespace Mosa.Compiler.Framework.Stages
 			StrengthReductionIntegerAdditionAndSubstraction(context);
 			StrengthReductionLogicalOperators(context);
 			SimpleConstantPropagation(context);
+			SimpleCopyPropagation(context);
 			DeadCodeEliminationRemoveUselessMove(context);
 			ConstantFoldingIntegerCompare(context);
 		}
@@ -183,25 +184,16 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!context.Operand1.IsConstant)
 				return;
 
-			Operand constantOperand = context.Operand1;
-
-			// propagate constant
-
-			//if (IsLogging) Trace("REVIEWING:\t" + context.ToString());
+			Operand destinationOperand = context.Result;
+			Operand sourceOperand = context.Operand1;
 
 			// for each statement T that uses operand, substituted c in statement T
-			foreach (int index in context.Result.Uses.ToArray())
+			foreach (int index in destinationOperand.Uses.ToArray())
 			{
 				Context ctx = new Context(instructionSet, index);
 
-				if (ctx.Instruction is IR.AddressOf)
+				if (ctx.Instruction is IR.AddressOf || ctx.Instruction is IR.Phi)
 					continue;
-
-				if (ctx.Instruction is IR.Phi)
-					continue;
-
-				//if (!(ctx.Instruction is IR.Move))
-				//    continue;
 
 				bool propogated = false;
 
@@ -215,7 +207,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 						if (IsLogging) Trace("BEFORE:\t" + ctx.ToString());
 						AddOperandUsageToWorkList(operand);
-						ctx.SetOperand(i, constantOperand);
+						ctx.SetOperand(i, sourceOperand);
 						if (IsLogging) Trace("AFTER: \t" + ctx.ToString());
 					}
 				}
@@ -224,6 +216,75 @@ namespace Mosa.Compiler.Framework.Stages
 					AddToWorkList(index);
 			}
 
+		}
+
+		private bool CanCopyPropagation(Operand operand)
+		{
+			return !(operand.Type.Type == CilElementType.Ptr || operand.Type.Type == CilElementType.I4);
+		}
+
+		/// <summary>
+		/// Simples the copy propagation.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void SimpleCopyPropagation(Context context)
+		{
+			if (context.IsEmpty)
+				return;
+
+			if (!(context.Instruction is IR.Move))
+				return;
+
+			if (!context.Result.IsStackLocal || context.Operand1.IsConstant)
+				return;
+
+			// FIXME: does not work on ptr or I4 types - probably because of signed extension, or I8/U8 - probably because 64-bit
+			if (!(CanCopyPropagation(context.Result) && CanCopyPropagation(context.Operand1)))
+				return;
+
+			Operand destinationOperand = context.Result;
+			Operand sourceOperand = context.Operand1;
+
+			//if (IsLogging) Trace("REVIEWING:\t" + context.ToString());
+
+			// for each statement T that uses operand, substituted c in statement T
+			foreach (int index in destinationOperand.Uses.ToArray())
+			{
+				Context ctx = new Context(instructionSet, index);
+
+				if (ctx.Instruction is IR.AddressOf || ctx.Instruction is IR.Phi)
+					return;
+			}
+
+			AddOperandUsageToWorkList(context);
+
+			foreach (int index in destinationOperand.Uses.ToArray())
+			{
+				Context ctx = new Context(instructionSet, index);
+
+				if (ctx.Instruction is IR.AddressOf || ctx.Instruction is IR.Phi)
+					continue;
+
+				for (int i = 0; i < ctx.OperandCount; i++)
+				{
+					Operand operand = ctx.GetOperand(i);
+
+					if (destinationOperand == operand)
+					{
+						if (IsLogging) Trace("BEFORE:\t" + ctx.ToString());
+						ctx.SetOperand(i, sourceOperand);
+						if (IsLogging) Trace("AFTER: \t" + ctx.ToString());
+					}
+				}
+
+			}
+
+			Debug.Assert(destinationOperand.Uses.Count == 0);
+
+			if (IsLogging) Trace("REMOVED:\t" + context.ToString());
+			AddOperandUsageToWorkList(context);
+			context.SetInstruction(IRInstruction.Nop);
+			//context.Remove();
 		}
 
 		/// <summary>
@@ -532,6 +593,7 @@ namespace Mosa.Compiler.Framework.Stages
 			context.SetInstruction(IR.IRInstruction.Move, result, Operand.CreateConstant(context.Result.Type, op1.Value));
 			if (IsLogging) Trace("AFTER: \t" + context.ToString());
 		}
+
 		/// <summary>
 		/// Simplifies an subtraction with both operands are the same
 		/// </summary>
@@ -553,7 +615,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			AddOperandUsageToWorkList(context);
 			if (IsLogging) Trace("BEFORE:\t" + context.ToString());
-			context.SetInstruction(IR.IRInstruction.Nop);
+			context.SetInstruction(IR.IRInstruction.Move, result, Operand.CreateConstant(context.Result.Type, 0));
 			//context.Clear();
 		}
 
