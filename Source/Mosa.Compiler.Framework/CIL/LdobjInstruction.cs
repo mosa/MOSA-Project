@@ -74,11 +74,6 @@ namespace Mosa.Compiler.Framework.CIL
 			}
 		}
 
-		public SigType TypeReference
-		{
-			get { return typeRef; }
-		}
-
 		/// <summary>
 		/// Decodes the specified instruction.
 		/// </summary>
@@ -100,7 +95,9 @@ namespace Mosa.Compiler.Framework.CIL
 				ctx.Other = sigType;
 			}
 			else
-				ctx.Other = TypeReference;
+			{
+				ctx.Other = typeRef;
+			}
 
 			// Push the loaded value
 			ctx.Result = LoadInstruction.CreateResultOperand(decoder, Operand.StackTypeFromSigType(sigType), sigType);
