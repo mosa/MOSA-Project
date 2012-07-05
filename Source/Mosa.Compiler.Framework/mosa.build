@@ -198,7 +198,6 @@
                     <include name="IR/LogicalXor.cs"/>
                     <include name="IR/Move.cs"/>
                     <include name="IR/OneOperandInstruction.cs"/>
-                    <include name="IR/PhiData.cs"/>
                     <include name="IR/Phi.cs"/>
                     <include name="IR/Prologue.cs"/>
                     <include name="IR/Return.cs"/>

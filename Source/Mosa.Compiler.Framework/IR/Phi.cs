@@ -42,57 +42,6 @@ namespace Mosa.Compiler.Framework.IR
 			visitor.Phi(context);
 		}
 
-		/// <summary>
-		/// Determines whether [contains] [the specified CTX].
-		/// </summary>
-		/// <param name="context">The context.</param>
-		/// <param name="operand">The operand.</param>
-		/// <returns>
-		///   <c>true</c> if [contains] [the specified CTX]; otherwise, <c>false</c>.
-		/// </returns>
-		public static bool Contains(Context context, Operand operand)
-		{
-			PhiData phiData = context.Other as PhiData;
-
-			if (phiData == null)
-				return false;
-
-			List<Operand> operands = phiData.Operands as List<Operand>;
-			return operands.Contains(operand);
-		}
-
-		/// <summary>
-		/// Adds the value.
-		/// </summary>
-		/// <param name="ctx">The context.</param>
-		/// <param name="edge">The edge.</param>
-		/// <param name="op">The op.</param>
-		public static void AddValue(Context ctx, BasicBlock edge, Operand op)
-		{
-			PhiData phiData = ctx.Other as PhiData;
-
-			if (phiData == null)
-			{
-				phiData = new PhiData();
-				ctx.Other = phiData;
-			}
-
-			List<BasicBlock> blocks = phiData.Blocks as List<BasicBlock>;
-
-			Debug.Assert(blocks.Count < 255, @"Maximum number of operands in PHI exceeded.");
-
-			blocks.Add(edge);
-			phiData.Operands.Add(op);
-		}
-
-		//public override string ToString(Context context)
-		//{
-		//    var result = context.Result + "<- phi (";
-		//    foreach (var op in context.Operands)
-		//        result += " " + op + ", ";
-		//    return result + ")";
-		//}
-
 		#endregion // Methods
 	}
 }

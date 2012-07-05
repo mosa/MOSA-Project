@@ -261,7 +261,6 @@
     <Compile Include="IR\LogicalXor.cs" />
     <Compile Include="IR\Move.cs" />
     <Compile Include="IR\OneOperandInstruction.cs" />
-    <Compile Include="IR\PhiData.cs" />
     <Compile Include="IR\Phi.cs" />
     <Compile Include="IR\Prologue.cs" />
     <Compile Include="IR\Return.cs" />
