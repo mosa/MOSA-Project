@@ -195,6 +195,9 @@ namespace Mosa.Compiler.Framework.Stages
 				if (ctx.Instruction is IR.AddressOf || ctx.Instruction is IR.Phi)
 					continue;
 
+				if (ctx.Instruction is IR.Store) // unless stacktype of sigType matches (example, U4=I4)
+					continue;
+
 				bool propogated = false;
 
 				for (int i = 0; i < ctx.OperandCount; i++)
@@ -235,7 +238,10 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!(context.Instruction is IR.Move))
 				return;
 
-			if (!context.Result.IsStackLocal || context.Operand1.IsConstant)
+			if (context.Operand1.IsConstant)
+				return;
+
+			if (!context.Result.IsStackLocal)
 				return;
 
 			// FIXME: does not work on ptr or I4 types - probably because of signed extension, or I8/U8 - probably because 64-bit
@@ -245,7 +251,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Operand destinationOperand = context.Result;
 			Operand sourceOperand = context.Operand1;
 
-			//if (IsLogging) Trace("REVIEWING:\t" + context.ToString());
+			if (IsLogging) Trace("REVIEWING:\t" + context.ToString());
 
 			// for each statement T that uses operand, substituted c in statement T
 			foreach (int index in destinationOperand.Uses.ToArray())
@@ -254,6 +260,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 				if (ctx.Instruction is IR.AddressOf || ctx.Instruction is IR.Phi)
 					return;
+
+				if (ctx.Instruction is IR.Store) // unless stacktype of sigType matches (example, U4=I4)
+					continue;
 			}
 
 			AddOperandUsageToWorkList(context);
