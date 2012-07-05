@@ -104,11 +104,10 @@
     <Compile Include="CIL\CallInstruction.cs" />
     <Compile Include="CIL\CallvirtInstruction.cs" />
     <Compile Include="CIL\CastclassInstruction.cs" />
-    <Compile Include="CIL\CILLeakGuardStage.cs" />
     <Compile Include="CIL\TailPrefixInstruction.cs" />
     <Compile Include="CIL\VolatilePrefixInstruction.cs" />
     <Compile Include="CIL\ReadOnlyPrefixInstruction.cs" />
-    <Compile Include="CIL\DecodingStage.cs" />
+    <Compile Include="Stages\DecodingStage.cs" />
     <Compile Include="CIL\BreakInstruction.cs" />
     <Compile Include="BaseAssemblyCompilerStage.cs" />
     <Compile Include="Platform\BasePlatformInstruction.cs" />
@@ -161,7 +160,7 @@
     <Compile Include="IIntrinsicMethod.cs" />
     <Compile Include="IBlockOrderStage.cs" />
     <Compile Include="IPipelineStage.cs" />
-    <Compile Include="IR\CILTransformationStage.cs" />
+    <Compile Include="Stages\CILTransformationStage.cs" />
     <Compile Include="CIL\ConstrainedPrefixInstruction.cs" />
     <Compile Include="CIL\ConversionInstruction.cs" />
     <Compile Include="CIL\CILInstruction.cs" />
