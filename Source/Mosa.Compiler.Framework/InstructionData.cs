@@ -25,7 +25,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Holds the instruction type of this instruction
 		/// </summary>
-		public IInstruction Instruction;
+		public BaseInstruction Instruction;
 
 		/// <summary>
 		/// Label of the instruction

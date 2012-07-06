@@ -155,7 +155,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (ctx.Instruction is IR.Jmp)
 					continue;
 
-				if (!(ctx.Instruction is IBranchInstruction) && !(ctx.Instruction is ICILInstruction) && !(ctx.Instruction is IR.ExceptionPrologue))
+				if (!(ctx.Instruction is IBranchInstruction) && !(ctx.Instruction is BaseCILInstruction) && !(ctx.Instruction is IR.ExceptionPrologue))
 					continue;
 
 				if (ctx.Instruction is IR.ExceptionPrologue)
@@ -166,7 +166,7 @@ namespace Mosa.Compiler.Framework.Stages
 				else //if (!(ctx.Instruction is IR.JmpInstruction))
 				{
 					AssignOperandsFromCILStack(ctx, operandStack);
-					(ctx.Instruction as ICILInstruction).Validate(ctx, methodCompiler);
+					(ctx.Instruction as BaseCILInstruction).Validate(ctx, methodCompiler);
 					PushResultOperands(ctx, operandStack);
 				}
 			}
@@ -248,7 +248,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private static void PushResultOperands(Context ctx, Stack<Operand> currentStack)
 		{
 			if (!(ctx.Instruction is IR.ExceptionPrologue))
-				if (!(ctx.Instruction as ICILInstruction).PushResult)
+				if (!(ctx.Instruction as BaseCILInstruction).PushResult)
 					return;
 
 			if (ctx.ResultCount == 0)

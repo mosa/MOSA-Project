@@ -100,7 +100,7 @@ namespace Mosa.Tool.Compiler.Stages
 			// nothing
 		}
 
-		#endregion // IInstructionTraceListener Members
+		#endregion // BaseInstructionTraceListener Members
 
 	}
 }

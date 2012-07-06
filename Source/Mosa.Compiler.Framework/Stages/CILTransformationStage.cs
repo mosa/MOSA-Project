@@ -140,7 +140,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Operand source = Operand.CreateRuntimeMember(context.RuntimeField);
 			Operand destination = context.Result;
 
-			IInstruction loadInstruction = IRInstruction.Move;
+			BaseInstruction loadInstruction = IRInstruction.Move;
 			if (MustSignExtendOnLoad(sigType.Type))
 			{
 				loadInstruction = IRInstruction.SignExtendedMove;
@@ -917,7 +917,7 @@ namespace Mosa.Compiler.Framework.Stages
 			int offset = typeLayout.GetFieldOffset(field);
 			Operand offsetOperand = Operand.CreateConstant(BuiltInSigType.IntPtr, offset);
 
-			IInstruction loadInstruction = IRInstruction.Load;
+			BaseInstruction loadInstruction = IRInstruction.Load;
 			if (MustSignExtendOnLoad(field.SignatureType.Type))
 			{
 				loadInstruction = IRInstruction.SignExtendedMove;
@@ -992,7 +992,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Operand first = context.Operand1;
 			Operand second = Operand.CreateConstant(BuiltInSigType.Int32, (int)0);
 
-			CIL.OpCode opcode = ((CIL.ICILInstruction)context.Instruction).OpCode;
+			CIL.OpCode opcode = ((CIL.BaseCILInstruction)context.Instruction).OpCode;
 
 			if (opcode == CIL.OpCode.Brtrue || opcode == CIL.OpCode.Brtrue_s)
 			{
@@ -1018,7 +1018,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			int target = context.BranchTargets[0];
 
-			ConditionCode cc = ConvertCondition(((CIL.ICILInstruction)context.Instruction).OpCode);
+			ConditionCode cc = ConvertCondition(((CIL.BaseCILInstruction)context.Instruction).OpCode);
 			Operand first = context.Operand1;
 			Operand second = context.Operand2;
 
@@ -1127,7 +1127,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		public void Ldelem(Context context)
 		{
-			IInstruction loadInstruction = IRInstruction.Load;
+			BaseInstruction loadInstruction = IRInstruction.Load;
 			Operand result = context.Result;
 			Operand arrayOperand = context.Operand1;
 			Operand arrayIndexOperand = context.Operand2;
@@ -1446,7 +1446,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		#region Internals
 
-		private static void Replace(Context context, IInstruction floatingPointInstruction, IInstruction signedInstruction, IInstruction unsignedInstruction)
+		private static void Replace(Context context, BaseInstruction floatingPointInstruction, BaseInstruction signedInstruction, BaseInstruction unsignedInstruction)
 		{
 			if (IsFloatingPoint(context))
 			{
@@ -1838,7 +1838,7 @@ namespace Mosa.Compiler.Framework.Stages
 				throw new NotSupportedException();
 
 			uint mask = 0xFFFFFFFF;
-			IInstruction instruction = ComputeExtensionTypeAndMask(ctDest, ref mask);
+			BaseInstruction instruction = ComputeExtensionTypeAndMask(ctDest, ref mask);
 
 			if (type == IRInstruction.LogicalAnd)
 			{
@@ -1866,7 +1866,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		private IInstruction ComputeExtensionTypeAndMask(ConvType destinationType, ref uint mask)
+		private BaseInstruction ComputeExtensionTypeAndMask(ConvType destinationType, ref uint mask)
 		{
 			switch (destinationType)
 			{
@@ -1998,7 +1998,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Operand source = context.Operand1;
 			Operand destination = context.Result;
 
-			IInstruction extension = null;
+			BaseInstruction extension = null;
 			SigType extendedType = null;
 
 			if (IsSignExtending(source))

@@ -117,7 +117,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			for (; !ctx.EndOfInstruction; ctx.GotoNext())
 			{
-				IInstruction instruction = ctx.Instruction; 
+				BaseInstruction instruction = ctx.Instruction; 
 				Operand temp = null;
 				bool found = false;
 
@@ -227,7 +227,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <returns>
 		/// 	<c>true</c> if the specified instruction is commutative; otherwise, <c>false</c>.
 		/// </returns>
-		private static bool IsCommutative(IInstruction instruction)
+		private static bool IsCommutative(BaseInstruction instruction)
 		{
 			return (instruction is CIL.AddInstruction) ||
 				   (instruction is CIL.MulInstruction) ||

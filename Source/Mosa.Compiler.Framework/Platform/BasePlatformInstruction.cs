@@ -53,6 +53,13 @@ namespace Mosa.Compiler.Framework.Platform
 
 		#region Methods
 
+		/// <summary>
+		/// Emits the specified platform instruction.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		/// <param name="emitter">The emitter.</param>
+		public abstract void Emit(Context context, ICodeEmitter emitter);
+
 		#endregion //  Methods
 	}
 }

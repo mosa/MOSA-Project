@@ -1123,7 +1123,7 @@ namespace Mosa.Platform.x86.Stages
 		/// which allows the instruction selection in the code generator to use a instruction
 		/// format with an immediate operand.
 		/// </remarks>
-		private void HandleCommutativeOperation(Context context, IInstruction instruction)
+		private void HandleCommutativeOperation(Context context, BaseInstruction instruction)
 		{
 			EmitOperandConstants(context);
 			context.ReplaceInstructionOnly(instruction);
@@ -1134,7 +1134,7 @@ namespace Mosa.Platform.x86.Stages
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="instruction">The instruction.</param>
-		private void HandleNonCommutativeOperation(Context context, IInstruction instruction)
+		private void HandleNonCommutativeOperation(Context context, BaseInstruction instruction)
 		{
 			EmitResultConstants(context);
 			EmitOperandConstants(context);
@@ -1146,7 +1146,7 @@ namespace Mosa.Platform.x86.Stages
 		/// </summary>
 		/// <param name="context">The transformation context.</param>
 		/// <param name="instruction">The instruction to transform.</param>
-		private void HandleShiftOperation(Context context, IInstruction instruction)
+		private void HandleShiftOperation(Context context, BaseInstruction instruction)
 		{
 			EmitOperandConstants(context);
 			context.ReplaceInstructionOnly(instruction);

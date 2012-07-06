@@ -272,9 +272,6 @@
     <Compile Include="IR\ZeroExtendedMove.cs" />
     <Compile Include="IVisitor.cs" />
     <Compile Include="IIRInstruction.cs" />
-    <Compile Include="Platform\IPlatformInstruction.cs" />
-    <Compile Include="CIL\ICILInstruction.cs" />
-    <Compile Include="IInstruction.cs" />
     <Compile Include="Stages\FlowGraphVisualizationStage.cs" />
     <Compile Include="CIL\NopInstruction.cs" />
     <Compile Include="InstructionSet.cs" />

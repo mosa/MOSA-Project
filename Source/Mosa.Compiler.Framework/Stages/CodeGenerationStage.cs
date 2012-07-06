@@ -81,7 +81,7 @@ namespace Mosa.Compiler.Framework.Stages
 				{
 					if (!context.IsEmpty)
 					{
-						IPlatformInstruction instruction = context.Instruction as IPlatformInstruction;
+						BasePlatformInstruction instruction = context.Instruction as BasePlatformInstruction;
 						if (instruction != null)
 							instruction.Emit(context, codeEmitter);
 						else

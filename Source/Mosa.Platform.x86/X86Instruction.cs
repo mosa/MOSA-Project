@@ -15,7 +15,7 @@ namespace Mosa.Platform.x86
 	/// <summary>
 	/// 
 	/// </summary>
-	public abstract class X86Instruction : BasePlatformInstruction, IRegisterUsage, IPlatformInstruction
+	public abstract class X86Instruction : BasePlatformInstruction, IRegisterUsage
 	{
 
 		static protected RegisterBitmap NoRegisters = new RegisterBitmap();
@@ -57,7 +57,7 @@ namespace Mosa.Platform.x86
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="emitter">The emitter.</param>
-		public void Emit(Context context, ICodeEmitter emitter)
+		public override void Emit(Context context, ICodeEmitter emitter)
 		{
 			Emit(context, emitter as MachineCodeEmitter);
 		}

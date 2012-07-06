@@ -209,9 +209,6 @@
                     <include name="IR/ZeroExtendedMove.cs"/>
                     <include name="IVisitor.cs"/>
                     <include name="IIRInstruction.cs"/>
-                    <include name="Platform/IPlatformInstruction.cs"/>
-                    <include name="CIL/ICILInstruction.cs"/>
-                    <include name="IInstruction.cs"/>
                     <include name="Stages/FlowGraphVisualizationStage.cs"/>
                     <include name="CIL/NopInstruction.cs"/>
                     <include name="InstructionSet.cs"/>

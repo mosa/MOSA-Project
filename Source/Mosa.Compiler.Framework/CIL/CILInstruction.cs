@@ -17,12 +17,12 @@ namespace Mosa.Compiler.Framework.CIL
 	{
 		#region Static Data
 
-		private static ICILInstruction[] opcodeMap = Initialize();
+		private static BaseCILInstruction[] opcodeMap = Initialize();
 
 		/// <summary>
 		/// Gets the instructions.
 		/// </summary>
-		public static ICILInstruction[] Instructions
+		public static BaseCILInstruction[] Instructions
 		{
 			get { return opcodeMap; }
 		}
@@ -33,7 +33,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// Gets the instruction.
 		/// </summary>
 		/// <param name="opcode">The opcode.</param>
-		public static ICILInstruction Get(OpCode opcode)
+		public static BaseCILInstruction Get(OpCode opcode)
 		{
 			return opcodeMap[(int)opcode];
 		}
@@ -42,9 +42,9 @@ namespace Mosa.Compiler.Framework.CIL
 		/// Initializes this instance.
 		/// </summary>
 		/// <returns></returns>
-		public static ICILInstruction[] Initialize()
+		public static BaseCILInstruction[] Initialize()
 		{
-			ICILInstruction[] opcodeMap = new ICILInstruction[0x120];
+			BaseCILInstruction[] opcodeMap = new BaseCILInstruction[0x120];
 
 			/* 0x000 */
 			opcodeMap[(int)OpCode.Nop] = new NopInstruction(OpCode.Nop);

@@ -17,7 +17,6 @@ namespace Mosa.Compiler.Framework
 	public abstract class BaseCodeTransformationStage : BaseMethodCompilerStage, IMethodCompilerStage, IVisitor
 	{
 
-
 		#region IMethodCompilerStage Members
 
 		/// <summary>
