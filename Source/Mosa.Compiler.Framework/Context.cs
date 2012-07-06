@@ -11,6 +11,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Mosa.Compiler.Metadata;
+using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.Compiler.Framework
@@ -77,6 +78,16 @@ namespace Mosa.Compiler.Framework
 		{
 			get { return instructionSet.Data[index].TokenType; }
 			set { instructionSet.Data[index].TokenType = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets the sig type.
+		/// </summary>
+		/// <value>The runtime field.</value>
+		public SigType SigType
+		{
+			get { return instructionSet.Data[index].SigType; }
+			set { instructionSet.Data[index].SigType = value; }
 		}
 
 		/// <summary>
@@ -295,13 +306,13 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Gets or sets the token.
+		/// Gets or sets the runtime field.
 		/// </summary>
-		/// <value>The token.</value>
-		public Token Token
+		/// <value>The runtime field.</value>
+		public RuntimeType RuntimeType
 		{
-			get { return instructionSet.Data[index].Token; }
-			set { instructionSet.Data[index].Token = value; }
+			get { return instructionSet.Data[index].RuntimeType; }
+			set { instructionSet.Data[index].RuntimeType = value; }
 		}
 
 		/// <summary>
@@ -312,16 +323,6 @@ namespace Mosa.Compiler.Framework
 		{
 			get { return instructionSet.Data[index].ConditionCode; }
 			set { instructionSet.Data[index].ConditionCode = value; }
-		}
-
-		/// <summary>
-		/// Gets or sets the literal data.
-		/// </summary>
-		/// <value>The literal data.</value>
-		public IR.LiteralData LiteralData
-		{
-			get { return (IR.LiteralData)Other; }
-			set { Other = value; }
 		}
 
 		/// <summary>

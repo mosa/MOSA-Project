@@ -11,6 +11,7 @@
 using System.Diagnostics;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.Metadata.Signatures;
 
 namespace Mosa.Compiler.Framework
 {
@@ -147,12 +148,22 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
-		/// Gets or sets the token.
+		/// Gets or sets the runtime field.
 		/// </summary>
-		/// <value>The token.</value>
-		public Token Token
+		/// <value>The runtime field.</value>
+		public RuntimeType RuntimeType
 		{
-			get { return (Token)Other; }
+			get { return Other as RuntimeType; }
+			set { Other = value; }
+		}
+
+		/// <summary>
+		/// Gets or sets the sig type.
+		/// </summary>
+		/// <value>The runtime field.</value>
+		public SigType SigType
+		{
+			get { return Other as SigType; }
 			set { Other = value; }
 		}
 
@@ -173,16 +184,6 @@ namespace Mosa.Compiler.Framework
 		public IR.ConditionCode ConditionCode
 		{
 			get { return (IR.ConditionCode)Other; }
-			set { Other = value; }
-		}
-
-		/// <summary>
-		/// Holds the literal data.
-		/// </summary>
-		/// <value>The token.</value>
-		public IR.LiteralData LiteralData
-		{
-			get { return (IR.LiteralData)Other; }
 			set { Other = value; }
 		}
 

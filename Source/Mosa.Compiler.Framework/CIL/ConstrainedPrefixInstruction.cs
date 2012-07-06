@@ -43,9 +43,9 @@ namespace Mosa.Compiler.Framework.CIL
 		public override void Decode(Context ctx, IInstructionDecoder decoder)
 		{
 			Token token = decoder.DecodeTokenType();
-			ctx.Other = decoder.TypeModule.GetType(token);
+			ctx.RuntimeType = decoder.TypeModule.GetType(token);
 
-			if (ctx.Other == null)
+			if (ctx.RuntimeType == null)
 			{
 				var signature = decoder.GenericTypePatcher.PatchSignatureType(decoder.TypeModule, decoder.Method.DeclaringType, token);
 				if (signature is BuiltInSigType)
@@ -56,13 +56,13 @@ namespace Mosa.Compiler.Framework.CIL
 						case CilElementType.I4:
 							{
 								var int32type = decoder.TypeModule.TypeSystem.GetType("mscorlib", "System", "Int32");
-								ctx.Other = int32type;
+								ctx.RuntimeType = int32type;
 								return;
 							}
 						case CilElementType.String:
 							{
 								var stringType = decoder.TypeModule.TypeSystem.GetType("mscorlib", "System", "String");
-								ctx.Other = stringType;
+								ctx.RuntimeType = stringType;
 								return;
 							}
 						default:
@@ -73,7 +73,7 @@ namespace Mosa.Compiler.Framework.CIL
 				{
 					var instantiationModule = (decoder.Method.DeclaringType as CilGenericType).InstantiationModule;
 					var classSigType = signature as ClassSigType;
-					ctx.Other = instantiationModule.GetType(classSigType.Token);
+					ctx.RuntimeType = instantiationModule.GetType(classSigType.Token);
 				}
 			}
 
@@ -81,7 +81,7 @@ namespace Mosa.Compiler.Framework.CIL
 
 		public override string ToString(Context context)
 		{
-			string s = base.ToString(context); 
+			string s = base.ToString(context);
 
 			RuntimeType type = context.Other as RuntimeType;
 

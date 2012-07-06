@@ -911,7 +911,7 @@ namespace Mosa.Platform.x86.Stages
 		void IIRVisitor.SignExtendedMove(Context context)
 		{
 			var offset = context.Operand2;
-			var type = context.Other as SigType;
+			var type = context.SigType;
 
 			if (offset != null)
 			{

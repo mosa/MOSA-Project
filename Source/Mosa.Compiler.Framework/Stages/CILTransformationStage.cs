@@ -95,24 +95,26 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Ldobj(Context context)
 		{
-			IInstruction loadInstruction = IRInstruction.Load;
 			Operand destination = context.Result;
 			Operand source = context.Operand1;
 
-			SigType elementType = context.Other as SigType;
+			SigType elementType = context.SigType as SigType;
 
 			// This is actually ldind.* and ldobj - the opcodes have the same meanings
 			if (MustSignExtendOnLoad(elementType.Type))
 			{
-				loadInstruction = IRInstruction.SignExtendedMove;
+				context.SetInstruction(IRInstruction.SignExtendedMove, destination, source, Operand.CreateConstant(0));
 			}
 			else if (MustZeroExtendOnLoad(elementType.Type))
 			{
-				loadInstruction = IRInstruction.ZeroExtendedMove;
+				context.SetInstruction(IRInstruction.ZeroExtendedMove, destination, source, Operand.CreateConstant(0));
+			}
+			else
+			{
+				context.SetInstruction(IRInstruction.Load, destination, source, Operand.CreateConstant(0));
 			}
 
-			context.SetInstruction(loadInstruction, destination, source, Operand.CreateConstant(0));
-			context.Other = elementType;
+			context.SigType = elementType;
 		}
 
 		private SigType GetElementTypeFromSigType(SigType sigType)
@@ -397,24 +399,12 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			RuntimeMethod invokeTarget = context.InvokeTarget;
 
-			////if (invokeTarget.DeclaringType.BaseType != null && invokeTarget.DeclaringType.BaseType.FullName == "System.MulticastDelegate")
-			//if (invokeTarget.DeclaringType.IsDelegate)
-			//{
-			//    typeSystem.DelegateTypePatcher.PatchType(invokeTarget.DeclaringType);
-
-			//    //InternalTypeModule internalTypeModule = typeSystem.InternalTypeModule as InternalTypeModule;
-
-			//    //internalTypeModule.AddType(invokeTarget.DeclaringType);
-			//    //foreach (var method in invokeTarget.DeclaringType.Methods)
-			//    //    internalTypeModule.AddMethod(method);
-			//}
-
 			Operand resultOperand = context.Result;
 			var operands = new List<Operand>(context.Operands);
 
 			if (context.Previous.Instruction is ConstrainedPrefixInstruction)
 			{
-				var type = context.Previous.Other as RuntimeType;
+				var type = context.Previous.RuntimeType;
 
 				foreach (var method in type.Methods)
 				{
@@ -1189,7 +1179,7 @@ namespace Mosa.Compiler.Framework.Stages
 		void CIL.ICILVisitor.UnboxAny(Context context)
 		{
 			var value = context.Operand1;
-			var type = context.Other as RuntimeType;
+			var type = context.RuntimeType;
 			var result = context.Result;
 
 			if (type.FullName == "System.Boolean")

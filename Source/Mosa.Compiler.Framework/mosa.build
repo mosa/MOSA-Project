@@ -180,7 +180,6 @@
                     <include name="IR/Call.cs"/>
                     <include name="IR/ConditionCode.cs"/>
                     <include name="IR/Nop.cs"/>
-                    <include name="IR/LiteralData.cs"/>
                     <include name="IR/IRInstruction.cs"/>
                     <include name="IR/Epilogue.cs"/>
                     <include name="IR/FloatCompare.cs"/>

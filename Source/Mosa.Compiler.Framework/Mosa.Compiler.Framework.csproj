@@ -243,7 +243,6 @@
     <Compile Include="IR\Call.cs" />
     <Compile Include="IR\ConditionCode.cs" />
     <Compile Include="IR\Nop.cs" />
-    <Compile Include="IR\LiteralData.cs" />
     <Compile Include="IR\IRInstruction.cs" />
     <Compile Include="IR\Epilogue.cs" />
     <Compile Include="IR\FloatCompare.cs" />

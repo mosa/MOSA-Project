@@ -651,7 +651,7 @@ namespace Mosa.Platform.AVR32
 		void IIRVisitor.SignExtendedMove(Context context)
 		{
 			var offset = context.Operand2;
-			var type = context.Other as SigType;
+			var type = context.SigType;
 
 			if (offset != null)
 			{

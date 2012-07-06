@@ -92,15 +92,11 @@ namespace Mosa.Compiler.Framework.CIL
 				// No, retrieve a type reference from the immediate argument
 				Token token = decoder.DecodeTokenType();
 				sigType = new ClassSigType(token);
-				ctx.Other = sigType;
 			}
-			else
-			{
-				ctx.Other = typeRef;
-			}
-
+			
 			// Push the loaded value
 			ctx.Result = LoadInstruction.CreateResultOperand(decoder, Operand.StackTypeFromSigType(sigType), sigType);
+			ctx.SigType = sigType;
 		}
 
 		/// <summary>

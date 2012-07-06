@@ -93,7 +93,7 @@ namespace Mosa.Compiler.Framework.CIL
 				Token token = decoder.DecodeTokenType();
 				RuntimeType type = decoder.TypeModule.GetType(token);
 
-				ctx.Other = type;
+				ctx.RuntimeType = type;
 			}
 
 			// FIXME: Check the value/destinations

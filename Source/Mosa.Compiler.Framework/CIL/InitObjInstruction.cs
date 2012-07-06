@@ -45,9 +45,7 @@ namespace Mosa.Compiler.Framework.CIL
 			// Retrieve the type reference
 			Token token = decoder.DecodeTokenType();
 
-			ctx.Token = token;
-
-			decoder.TypeModule.GetType (token);
+			decoder.TypeModule.GetType(token);
 		}
 
 		/// <summary>

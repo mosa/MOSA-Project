@@ -65,10 +65,8 @@ namespace Mosa.Compiler.Framework.CIL
 				ctx.Result = decoder.Compiler.CreateVirtualRegister(BuiltInSigType.Double);
 			else if (type.FullName == "System.Char")
 				ctx.Result = decoder.Compiler.CreateVirtualRegister(BuiltInSigType.Char);
-			else
-				Console.WriteLine();
-
-			ctx.Other = type;
+		
+			ctx.RuntimeType = type;
 		}
 
 		/// <summary>
