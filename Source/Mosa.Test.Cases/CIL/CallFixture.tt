@@ -4,15 +4,15 @@ using System;
 using System.Collections.Generic;
 using System.Text;
 using MbUnit.Framework;
+using Mosa.Test.System;
+using Mosa.Test.System.Numbers;
 
-using Mosa.Test.Runtime.CompilerFramework;
-using Mosa.Test.Runtime.CompilerFramework.Numbers;
 namespace Mosa.Test.Cases.CIL
 {
 	[TestFixture]
 	public class CallFixture : TestCompilerAdapter
 	{
-		public Call()
+		public CallFixture()
 		{
 			settings.AddReference("Mosa.Test.Collection.dll");
 		}

@@ -10,8 +10,8 @@
 
 using System.Diagnostics;
 using Mosa.Compiler.Metadata;
-using Mosa.Compiler.TypeSystem;
 using Mosa.Compiler.Metadata.Signatures;
+using Mosa.Compiler.TypeSystem;
 
 namespace Mosa.Compiler.Framework
 {

@@ -11,10 +11,10 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using Mosa.Compiler.Common;
+using Mosa.Compiler.Framework.CIL;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.Metadata.Tables;
-using Mosa.Compiler.Framework.CIL;
 using Mosa.Compiler.TypeSystem;
 using Mosa.Compiler.TypeSystem.Generic;
 

@@ -11,8 +11,6 @@ using System;
 using System.IO;
 using System.Runtime.InteropServices;
 using Mosa.Compiler.Framework;
-using Mosa.Compiler.Framework.CIL;
-using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.Linker;
 using Mosa.Compiler.Metadata;

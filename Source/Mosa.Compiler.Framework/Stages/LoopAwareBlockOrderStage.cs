@@ -9,9 +9,6 @@
 
 // FIXME PG
 
-using System;
-using System.Collections;
-using System.Collections.Generic;
 
 namespace Mosa.Compiler.Framework.Stages
 {

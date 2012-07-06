@@ -12,9 +12,9 @@ using Mosa.Test.Collection;
 namespace Mosa.Test.Cases.FIX.IL
 {
 	[TestFixture]
-	public class Conv : TestCompilerAdapter
+	public class ConvFixture : TestCompilerAdapter
 	{
-		public Conv()
+		public ConvFixture()
 		{
 			settings.AddReference("Mosa.Test.Collection.dll");
 		}

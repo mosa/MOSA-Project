@@ -8,7 +8,6 @@
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
  */
 
-
 namespace Mosa.Compiler.Framework
 {
 	/// <summary>

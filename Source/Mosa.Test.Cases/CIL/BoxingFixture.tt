@@ -13,7 +13,7 @@ namespace Mosa.Test.Cases.CIL
 	[TestFixture]
 	public class BoxingFixture : TestCompilerAdapter
 	{
-		public Boxing()
+		public BoxingFixture()
 		{
 			settings.AddReference("Mosa.Test.Collection.dll");
 		}

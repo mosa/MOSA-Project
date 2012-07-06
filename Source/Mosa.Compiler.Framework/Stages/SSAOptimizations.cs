@@ -7,10 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
-using System.Diagnostics;
-using System.Collections;
 using System.Collections.Generic;
+using System.Diagnostics;
 using Mosa.Compiler.Framework.IR;
 using Mosa.Compiler.Metadata;
 

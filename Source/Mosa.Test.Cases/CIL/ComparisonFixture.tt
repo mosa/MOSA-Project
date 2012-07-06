@@ -14,7 +14,7 @@ namespace Mosa.Test.Cases.CIL
 	[TestFixture]
 	public class ComparisonFixture : TestCompilerAdapter
 	{
-		public Comparison()
+		public ComparisonFixture()
 		{
 			settings.AddReference("Mosa.Test.Collection.dll");
 		}
