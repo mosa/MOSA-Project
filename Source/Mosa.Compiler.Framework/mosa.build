@@ -17,6 +17,7 @@
                     <include name="BasicBlocks.cs"/>
                     <include name="SimpleFastDominance.cs"/>
                     <include name="LoopAwareBlockOrder.cs"/>
+                    <include name="Stages/IRCheckStage.cs"/>
                     <include name="Stages/LoopAwareBlockOrderStage.cs"/>
                     <include name="Stages/SSAOptimizations.cs"/>
                     <include name="Stages/EdgeSplitStage.cs"/>
@@ -44,7 +45,7 @@
                     <include name="CIL/TailPrefixInstruction.cs"/>
                     <include name="CIL/VolatilePrefixInstruction.cs"/>
                     <include name="CIL/ReadOnlyPrefixInstruction.cs"/>
-                    <include name="Stages/DecodingStage.cs"/>
+                    <include name="Stages/CILDecodingStage.cs"/>
                     <include name="CIL/BreakInstruction.cs"/>
                     <include name="BaseAssemblyCompilerStage.cs"/>
                     <include name="Platform/BasePlatformInstruction.cs"/>

@@ -30,7 +30,7 @@ namespace Mosa.Test.System
 		{
 			// Populate the pipeline
 			this.Pipeline.AddRange(new IMethodCompilerStage[] {
-				new DecodingStage(),
+				new CILDecodingStage(),
 				new BasicBlockBuilderStage(),
 				new ExceptionPrologueStage(),
 				new OperandDeterminationStage(),

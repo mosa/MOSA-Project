@@ -140,17 +140,18 @@ namespace Mosa.Compiler.Framework.Stages
 			Operand source = Operand.CreateRuntimeMember(context.RuntimeField);
 			Operand destination = context.Result;
 
-			BaseInstruction loadInstruction = IRInstruction.Move;
 			if (MustSignExtendOnLoad(sigType.Type))
 			{
-				loadInstruction = IRInstruction.SignExtendedMove;
+				context.SetInstruction(IRInstruction.SignExtendedMove, destination, source);
 			}
 			else if (MustZeroExtendOnLoad(sigType.Type))
 			{
-				loadInstruction = IRInstruction.ZeroExtendedMove;
+				context.SetInstruction(IRInstruction.ZeroExtendedMove, destination, source);
 			}
-
-			context.SetInstruction(loadInstruction, destination, source);
+			else
+			{
+				context.SetInstruction(IRInstruction.Move, destination, source);
+			}
 		}
 
 		/// <summary>
@@ -418,7 +419,8 @@ namespace Mosa.Compiler.Framework.Stages
 					}
 				}
 
-				context.Previous.ReplaceInstructionOnly(IRInstruction.Nop);
+				//context.Previous.SetInstruction(IRInstruction.Nop);
+				context.Previous.Remove();
 
 				Operand symbolOperand = Operand.CreateSymbolFromMethod(invokeTarget);
 				ProcessInvokeInstruction(context, symbolOperand, resultOperand, operands);
@@ -627,10 +629,11 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <param name="context">The context.</param>
 		void CIL.ICILVisitor.Castclass(Context context)
 		{
+			// TODO!
 			// We don't need to check the result, if the icall fails, it'll happily throw
 			// the InvalidCastException.
-			context.ReplaceInstructionOnly(IRInstruction.Nop);
-			//ReplaceWithVmCall(context, VmCall.Castclass);
+			//context.Remove();
+			ReplaceWithVmCall(context, VmCall.Castclass);
 		}
 
 		/// <summary>

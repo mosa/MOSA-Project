@@ -23,10 +23,7 @@ namespace Mosa.Platform.x86.Instructions
 		/// Gets the flow control.
 		/// </summary>
 		/// <value>The flow control.</value>
-		public override FlowControl FlowControl
-		{
-			get { return FlowControl.Return; }
-		}
+		public override FlowControl FlowControl { get { return FlowControl.Return; } }
 
 		#region Methods
 

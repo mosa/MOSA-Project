@@ -33,12 +33,14 @@ namespace Mosa.Tool.Compiler
 			this.Pipeline.AddRange(
 				new IMethodCompilerStage[] 
 				{
-					new DecodingStage(),
+					new CILDecodingStage(),
 					new BasicBlockBuilderStage(),
 					new ExceptionPrologueStage(),
 					new OperandDeterminationStage(),
 					new StaticAllocationResolutionStage(),
 					new CILTransformationStage(),
+					
+					new IRCheckStage(),
 
 					(compilerOptions.EnableSSA) ? new EdgeSplitStage() : null,
 					(compilerOptions.EnableSSA) ? new DominanceCalculationStage() : null,

@@ -29,10 +29,7 @@ namespace Mosa.Compiler.Framework.CIL
 
 		#endregion // Construction
 
-		public override FlowControl FlowControl
-		{
-			get { return FlowControl.Leave; }
-		}
+		public override FlowControl FlowControl { get { return FlowControl.Leave; } }
 
 		#region Methods
 

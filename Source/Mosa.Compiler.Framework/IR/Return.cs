@@ -37,10 +37,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// building. Any instruction that alters the control flow must override
 		/// this property and correctly identify its control flow modifications.
 		/// </remarks>
-		public override FlowControl FlowControl
-		{
-			get { return FlowControl.Branch; }
-		}
+		public override FlowControl FlowControl { get { return FlowControl.Branch; } }
 
 		/// <summary>
 		/// Allows visitor based dispatch for this instruction object.

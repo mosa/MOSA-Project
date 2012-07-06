@@ -20,6 +20,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// Initializes a new instance of the <see cref="Jmp"/> class.
 		/// </summary>
 		public Jmp()
+			: base(1)
 		{
 		}
 
@@ -27,13 +28,7 @@ namespace Mosa.Compiler.Framework.IR
 
 		#region IRInstruction Overrides
 
-		public override FlowControl FlowControl
-		{
-			get
-			{
-				return FlowControl.Branch;
-			}
-		}
+		public override FlowControl FlowControl { get { return FlowControl.Branch; } }
 
 		/// <summary>
 		/// Visits the specified visitor.

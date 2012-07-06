@@ -495,7 +495,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Clears this context.
 		/// </summary>
-		public void Clear()
+		private void Clear()
 		{
 			Operand1 = null;
 			Operand2 = null;

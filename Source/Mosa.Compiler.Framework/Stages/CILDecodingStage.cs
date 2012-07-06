@@ -29,7 +29,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// representation. The instructions are grouped into basic Blocks
 	/// for easier local optimizations in later compiler stages.
 	/// </remarks>
-	public sealed class DecodingStage : BaseMethodCompilerStage, IMethodCompilerStage, BaseInstructionDecoder, IPipelineStage
+	public sealed class CILDecodingStage : BaseMethodCompilerStage, IMethodCompilerStage, BaseInstructionDecoder, IPipelineStage
 	{
 		#region Data members
 

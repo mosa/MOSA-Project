@@ -87,18 +87,12 @@ namespace Mosa.Compiler.Framework.CIL
 		/// building. Any instruction that alters the control flow must override
 		/// this property and correctly identify its control flow modifications.
 		/// </remarks>
-		public override FlowControl FlowControl
-		{
-			get { return FlowControl.Call; }
-		}
+		public override FlowControl FlowControl { get { return FlowControl.Call; } }
 
 		/// <summary>
 		/// Gets the supported immediate metadata tokens in the instruction.
 		/// </summary>
-		protected abstract InvokeSupportFlags InvokeSupport
-		{
-			get;
-		}
+		protected abstract InvokeSupportFlags InvokeSupport { get; }
 
 		#endregion // Properties
 

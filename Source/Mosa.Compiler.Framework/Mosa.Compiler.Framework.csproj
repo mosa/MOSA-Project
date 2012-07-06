@@ -80,6 +80,7 @@
     <Compile Include="BasicBlocks.cs" />
     <Compile Include="SimpleFastDominance.cs" />
     <Compile Include="LoopAwareBlockOrder.cs" />
+    <Compile Include="Stages\IRCheckStage.cs" />
     <Compile Include="Stages\LoopAwareBlockOrderStage.cs" />
     <Compile Include="Stages\SSAOptimizations.cs" />
     <Compile Include="Stages\EdgeSplitStage.cs" />
@@ -107,7 +108,7 @@
     <Compile Include="CIL\TailPrefixInstruction.cs" />
     <Compile Include="CIL\VolatilePrefixInstruction.cs" />
     <Compile Include="CIL\ReadOnlyPrefixInstruction.cs" />
-    <Compile Include="Stages\DecodingStage.cs" />
+    <Compile Include="Stages\CILDecodingStage.cs" />
     <Compile Include="CIL\BreakInstruction.cs" />
     <Compile Include="BaseAssemblyCompilerStage.cs" />
     <Compile Include="Platform\BasePlatformInstruction.cs" />
