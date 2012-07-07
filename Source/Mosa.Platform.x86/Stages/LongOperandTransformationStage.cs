@@ -1173,8 +1173,18 @@ namespace Mosa.Platform.x86.Stages
 			SplitLongOperand(context.Result, out op0L, out op0H);
 			SplitLongOperand(context.Operand1, out op1L, out op1H);
 
-			context.SetInstruction(IRInstruction.LogicalNot, op0H, op1H);
-			context.AppendInstruction(IRInstruction.LogicalNot, op0L, op1L);
+			Operand eax = Operand.CreateCPURegister(BuiltInSigType.UInt32, GeneralPurposeRegister.EAX);
+
+			context.SetInstruction(X86.Mov, eax, op1H);
+			context.AppendInstruction(X86.Not, eax, eax);
+			context.AppendInstruction(X86.Mov, op0H, eax);
+
+			context.AppendInstruction(X86.Mov, eax, op1L);
+			context.AppendInstruction(X86.Not, eax, eax);
+			context.AppendInstruction(X86.Mov, op0L, eax);
+
+			//context.SetInstruction(IRInstruction.LogicalNot, op0H, op1H);
+			//context.AppendInstruction(IRInstruction.LogicalNot, op0L, op1L);
 		}
 
 		/// <summary>
