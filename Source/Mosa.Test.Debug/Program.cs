@@ -24,6 +24,9 @@ namespace Mosa.Test.Debug
 			//add.AddConstantCLeft('a', 'Z');
 			//add.AddConstantCLeft('a', 'Z');
 
+			Int32Fixture int32Fixture = new Int32Fixture();
+			int32Fixture.AddI4I4(0, 0);
+
 			CallFixture call = new CallFixture();
 			call.CallU1((byte)1);
 

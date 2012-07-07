@@ -932,6 +932,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Debug.Assert(offsetOperand != null);
 
 			context.SetInstruction(loadInstruction, temp, objectOperand, offsetOperand);
+			context.SigType = field.SignatureType;
 			context.AppendInstruction(IRInstruction.Move, resultOperand, temp);
 		}
 
@@ -1136,6 +1137,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Operand arrayIndexOperand = context.Operand2;
 
 			SZArraySigType arraySigType = arrayOperand.Type as SZArraySigType;
+			
 			if (arraySigType == null)
 			{
 				throw new CompilationException(@"Array operation performed on non-array operand.");
@@ -1157,6 +1159,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Debug.Assert(elementOffset != null);
 
 			context.AppendInstruction(loadInstruction, result, arrayAddress, elementOffset);
+			context.SigType = arraySigType.ElementType;
 		}
 
 		/// <summary>

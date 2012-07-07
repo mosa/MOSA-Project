@@ -412,7 +412,7 @@ namespace Mosa.Platform.x86.Stages
 			var offset = context.Operand2;
 
 			var eax = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EAX);
-			var elementType = (type == null) ? GetElementType(source.Type) : GetElementType(type);
+			var elementType = GetElementType(type);
 			var offsetPtr = IntPtr.Zero;
 
 			context.SetInstruction(X86.Mov, eax, source);

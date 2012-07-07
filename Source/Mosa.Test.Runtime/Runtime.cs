@@ -104,6 +104,12 @@ namespace Mosa.Internal
 			return obj;
 		}
 
+		public static uint Castclass(uint methodTable, uint obj)
+		{
+			//TODO: Fake result
+			return obj;
+		}
+
 		public unsafe static void* BoxChar(void* methodTable, uint classSize, char value)
 		{
 			byte* memory = (byte*)AllocateObject(methodTable, classSize);
