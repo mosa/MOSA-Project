@@ -385,9 +385,9 @@ namespace Mosa.Platform.x86.Stages
 			IntPtr offsetPtr = IntPtr.Zero;
 
 			Operand eax = Operand.CreateCPURegister(operand.Type, GeneralPurposeRegister.EAX);
-			//VirtualRegisterOperand eax = AllocateVirtualRegister(operand.Type); 
 
 			context.SetInstruction(X86.Mov, eax, operand);
+
 			if (offset.IsConstant)
 			{
 				offsetPtr = new IntPtr(Convert.ToInt64(offset.Value));
@@ -398,6 +398,68 @@ namespace Mosa.Platform.x86.Stages
 			}
 
 			context.AppendInstruction(X86.Mov, result, Operand.CreateMemoryAddress(eax.Type, GeneralPurposeRegister.EAX, offsetPtr));
+		}
+
+		/// <summary>
+		/// Visitation function for Load Sign Extended.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IIRVisitor.LoadSignExtended(Context context)
+		{
+			var destination = context.Result;
+			var source = context.Operand1;
+			var type = context.SigType;
+			var offset = context.Operand2;
+
+			var eax = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EAX);
+			var elementType = (type == null) ? GetElementType(source.Type) : GetElementType(type);
+			var offsetPtr = IntPtr.Zero;
+
+			context.SetInstruction(X86.Mov, eax, source);
+
+			if (offset.IsConstant)
+			{
+				offsetPtr = new IntPtr(Convert.ToInt64(offset.Value));
+			}
+			else
+			{
+				context.AppendInstruction(X86.Add, eax, offset);
+			}
+
+			context.AppendInstruction(X86.Movsx, destination, Operand.CreateMemoryAddress(elementType, GeneralPurposeRegister.EAX, offsetPtr));
+		}
+
+		/// <summary>
+		/// Visitation function for Load Zero Extended.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IIRVisitor.LoadZeroExtended(Context context)
+		{
+			var destination = context.Result;
+			var source = context.Operand1;
+			var type = context.SigType;
+			var offset = context.Operand2;
+
+			Debug.Assert(offset != null);
+
+			Operand eax = Operand.CreateCPURegister(source.Type, GeneralPurposeRegister.EAX);
+			SigType elementType = GetElementType(source.Type);
+			IntPtr offsetPtr = IntPtr.Zero;
+
+			context.SetInstruction(X86.Mov, eax, source);
+
+			if (offset.IsConstant)
+			{
+				offsetPtr = new IntPtr(Convert.ToInt64(offset.Value));
+			}
+
+			if (elementType.Type == CilElementType.Char ||
+				elementType.Type == CilElementType.U1 ||
+				elementType.Type == CilElementType.U2)
+			{
+				context.AppendInstruction(X86.Add, eax, offset);
+			}
+			context.AppendInstruction(X86.Movzx, destination, Operand.CreateMemoryAddress(elementType, GeneralPurposeRegister.EAX, offsetPtr));
 		}
 
 		/// <summary>
@@ -905,7 +967,7 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Visitation function for SignExtendedMoveInstruction"/> instructions.
+		/// Visitation function for SignExtendedMoveInstruction instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IIRVisitor.SignExtendedMove(Context context)

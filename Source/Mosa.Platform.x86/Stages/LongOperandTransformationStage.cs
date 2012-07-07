@@ -1596,7 +1596,7 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Visitation function for IntegerCompareInstruction.
+		/// Visitation function for IntegerCompare.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IIRVisitor.IntegerCompare(Context context)
@@ -1608,7 +1608,7 @@ namespace Mosa.Platform.x86.Stages
 		}
 
 		/// <summary>
-		/// Visitation function for LoadInstruction.
+		/// Visitation function for Load.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IIRVisitor.Load(Context context)
@@ -1617,6 +1617,24 @@ namespace Mosa.Platform.x86.Stages
 			{
 				ExpandLoad(context);
 			}
+		}
+
+		/// <summary>
+		/// Visitation function for Load Zero Extended.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IIRVisitor.LoadZeroExtended(Context context)
+		{
+			// TODO
+		}
+
+		/// <summary>
+		/// Visitation function for Load Sign Extended.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IIRVisitor.LoadSignExtended(Context context)
+		{
+			// TODO
 		}
 
 		/// <summary>

@@ -27,13 +27,10 @@ namespace Mosa.Compiler.Framework.Stages
 					if (!(context.Instruction is IR.BaseIRInstruction))
 						continue;
 
-					if (context.Instruction is IR.Call || context.Instruction is IR.Return || context.Instruction is IR.Switch)
+					if (context.Instruction is IR.Call || context.Instruction is IR.Switch)
 						continue;
 
-					if (context.Instruction is IR.Jmp && context.OperandCount <= 1)
-						continue;
-
-					if (context.Instruction is IR.ZeroExtendedMove || context.Instruction is IR.SignExtendedMove)
+					if ((context.Instruction is IR.Jmp || context.Instruction is IR.Return) && context.OperandCount <= 1)
 						continue;
 
 					if (context.OperandCount != context.Instruction.DefaultOperandCount ||

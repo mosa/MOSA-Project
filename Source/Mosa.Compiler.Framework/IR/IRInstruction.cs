@@ -7,7 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
 namespace Mosa.Compiler.Framework.IR
 {
 	/// <summary>
@@ -30,15 +29,15 @@ namespace Mosa.Compiler.Framework.IR
 		/// <summary>
 		/// 
 		/// </summary>
-		public static AddressOf AddressOf = new AddressOf();
+		public static readonly AddressOf AddressOf = new AddressOf();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static ArithmeticShiftRight ArithmeticShiftRight = new ArithmeticShiftRight();
+		public static readonly ArithmeticShiftRight ArithmeticShiftRight = new ArithmeticShiftRight();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static Break Break = new Break();
+		public static readonly Break Break = new Break();
 		/// <summary>
 		/// 
 		/// </summary>
@@ -54,15 +53,15 @@ namespace Mosa.Compiler.Framework.IR
 		/// <summary>
 		/// 
 		/// </summary>
-		public static Epilogue Epilogue = new Epilogue();
+		public static readonly Epilogue Epilogue = new Epilogue();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static FloatCompare FloatingPointCompare = new FloatCompare();
+		public static readonly FloatCompare FloatingPointCompare = new FloatCompare();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static FloatToIntegerConversion FloatingPointToIntegerConversion = new FloatToIntegerConversion();
+		public static readonly FloatToIntegerConversion FloatingPointToIntegerConversion = new FloatToIntegerConversion();
 		/// <summary>
 		/// 
 		/// </summary>
@@ -70,59 +69,67 @@ namespace Mosa.Compiler.Framework.IR
 		/// <summary>
 		/// 
 		/// </summary>
-		public static IntegerCompare IntegerCompare = new IntegerCompare();
+		public static readonly IntegerCompare IntegerCompare = new IntegerCompare();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static IntegerToFloatConversion IntegerToFloatConversion = new IntegerToFloatConversion();
+		public static readonly IntegerToFloatConversion IntegerToFloatConversion = new IntegerToFloatConversion();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static Jmp Jmp = new Jmp();
+		public static readonly Jmp Jmp = new Jmp();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static Load Load = new Load();
+		public static readonly Load Load = new Load();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static LogicalAnd LogicalAnd = new LogicalAnd();
+		public static readonly LoadZeroExtended LoadZeroExtended = new LoadZeroExtended();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static LogicalNot LogicalNot = new LogicalNot();
+		public static readonly LoadSignExtended LoadSignExtended = new LoadSignExtended();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static LogicalOr LogicalOr = new LogicalOr();
+		public static readonly LogicalAnd LogicalAnd = new LogicalAnd();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static LogicalXor LogicalXor = new LogicalXor();
+		public static readonly LogicalNot LogicalNot = new LogicalNot();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static Move Move = new Move();
+		public static readonly LogicalOr LogicalOr = new LogicalOr();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static MulFloat MulF = new MulFloat();
+		public static readonly LogicalXor LogicalXor = new LogicalXor();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static MulSigned MulS = new MulSigned();
+		public static readonly Move Move = new Move();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static MulUnsigned MulU = new MulUnsigned();
+		public static readonly MulFloat MulF = new MulFloat();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static Phi Phi = new Phi();
+		public static readonly MulSigned MulS = new MulSigned();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static Prologue Prologue = new Prologue();
+		public static readonly MulUnsigned MulU = new MulUnsigned();
+		/// <summary>
+		/// 
+		/// </summary>
+		public static readonly Phi Phi = new Phi();
+		/// <summary>
+		/// 
+		/// </summary>
+		public static readonly Prologue Prologue = new Prologue();
 		/// <summary>
 		/// 
 		/// </summary>
@@ -138,15 +145,15 @@ namespace Mosa.Compiler.Framework.IR
 		/// <summary>
 		/// 
 		/// </summary>
-		public static Return Return = new Return();
+		public static readonly Return Return = new Return();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static ShiftLeft ShiftLeft = new ShiftLeft();
+		public static readonly ShiftLeft ShiftLeft = new ShiftLeft();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static ShiftRight ShiftRight = new ShiftRight();
+		public static readonly ShiftRight ShiftRight = new ShiftRight();
 		/// <summary>
 		/// 
 		/// </summary>
@@ -154,7 +161,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// <summary>
 		/// 
 		/// </summary>
-		public static Store Store = new Store();
+		public static readonly Store Store = new Store();
 		/// <summary>
 		/// 
 		/// </summary>
@@ -170,15 +177,15 @@ namespace Mosa.Compiler.Framework.IR
 		/// <summary>
 		/// 
 		/// </summary>
-		public static ZeroExtendedMove ZeroExtendedMove = new ZeroExtendedMove();
+		public static readonly ZeroExtendedMove ZeroExtendedMove = new ZeroExtendedMove();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static Call Call = new Call();
+		public static readonly Call Call = new Call();
 		/// <summary>
 		/// 
 		/// </summary>
-		public static Nop Nop = new Nop();
+		public static readonly Nop Nop = new Nop();
 		/// <summary>
 		/// 
 		/// </summary>

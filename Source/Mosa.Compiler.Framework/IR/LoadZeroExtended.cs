@@ -16,14 +16,14 @@ namespace Mosa.Compiler.Framework.IR
 	/// <remarks>
 	/// The load instruction is used to load a value from a memory pointer and an offset. The types must be compatible.
 	/// </remarks>
-	public sealed class Load : ThreeOperandInstruction
+	public sealed class LoadZeroExtended : ThreeOperandInstruction
 	{
 		#region Construction
 
 		/// <summary>
 		/// Initializes a new instance of <see cref="Load"/>.
 		/// </summary>
-		public Load()
+		public LoadZeroExtended()
 		{
 		}
 
@@ -38,7 +38,7 @@ namespace Mosa.Compiler.Framework.IR
 		/// <param name="context">The context.</param>
 		public override void Visit(IIRVisitor visitor, Context context)
 		{
-			visitor.Load(context);
+			visitor.LoadZeroExtended(context);
 		}
 
 		#endregion // TwoOperandInstruction Overrides

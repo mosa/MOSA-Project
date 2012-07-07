@@ -58,6 +58,8 @@ namespace Mosa.Compiler.Framework.Stages
 			worklist = null;
 		}
 
+		#endregion // IMethodCompilerStage Members
+
 		private void Do(Context context)
 		{
 			if (context.IsEmpty)
@@ -196,6 +198,9 @@ namespace Mosa.Compiler.Framework.Stages
 				if (ctx.Instruction is IR.Store) // unless stacktype of sigType matches (example, U4=I4)
 					continue;
 
+				if (ctx.OperandCount >= 3 && !(ctx.Instruction is IR.Call))
+					continue;
+
 				bool propogated = false;
 
 				for (int i = 0; i < ctx.OperandCount; i++)
@@ -260,7 +265,10 @@ namespace Mosa.Compiler.Framework.Stages
 					return;
 
 				if (ctx.Instruction is IR.Store) // unless stacktype of sigType matches (example, U4=I4)
-					continue;
+					return;
+
+				if (ctx.OperandCount >= 3 && !(ctx.Instruction is IR.Call))
+					return;
 			}
 
 			AddOperandUsageToWorkList(context);
@@ -766,6 +774,5 @@ namespace Mosa.Compiler.Framework.Stages
 
 		#endregion //Helpers
 
-		#endregion // IMethodCompilerStage Members
 	}
 }

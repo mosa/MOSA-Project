@@ -27,7 +27,8 @@ namespace Mosa.Platform.x86.XSharp
 			GreaterThanOrEqualTo,
 			LessThan,
 			LessThanOrEqualTo,
-			Above, AboveOrEqual,
+			Above,
+			AboveOrEqual,
 			Below
 		};
 
@@ -48,7 +49,7 @@ namespace Mosa.Platform.x86.XSharp
 		private string label;
 
 		public XSharpMethod()
-		{				
+		{
 			espRegister = new ESPRegister(this);
 			ebpRegister = new EBPRegister(this);
 			edxRegister = new EDXRegister(this);

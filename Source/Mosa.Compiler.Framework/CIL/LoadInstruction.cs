@@ -43,18 +43,14 @@ namespace Mosa.Compiler.Framework.CIL
 
 		public static Operand CreateResultOperand(BaseInstructionDecoder decoder, StackTypeCode operandType, SigType operandSigType)
 		{
-			Operand result;
-
 			if (operandType == StackTypeCode.O || operandType == StackTypeCode.Ptr || operandType == StackTypeCode.F)
 			{
-				result = decoder.Compiler.CreateVirtualRegister(operandSigType);
+				return decoder.Compiler.CreateVirtualRegister(operandSigType);
 			}
 			else
 			{
-				result = decoder.Compiler.CreateVirtualRegister(Operand.SigTypeFromStackType(operandType));
+				return decoder.Compiler.CreateVirtualRegister(Operand.SigTypeFromStackType(operandType));
 			}
-
-			return result;
 		}
 	}
 }

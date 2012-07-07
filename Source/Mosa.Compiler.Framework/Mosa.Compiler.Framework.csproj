@@ -78,6 +78,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BasicBlocks.cs" />
+    <Compile Include="IR\LoadZeroExtended.cs" />
+    <Compile Include="IR\LoadSignExtended.cs" />
     <Compile Include="SimpleFastDominance.cs" />
     <Compile Include="LoopAwareBlockOrder.cs" />
     <Compile Include="Stages\IRCheckStage.cs" />

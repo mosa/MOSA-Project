@@ -231,6 +231,24 @@ namespace Mosa.Platform.AVR32
 		}
 
 		/// <summary>
+		/// Visitation function for Load Zero Extended.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IIRVisitor.LoadZeroExtended(Context context)
+		{
+			// TODO
+		}
+
+		/// <summary>
+		/// Visitation function for Load Sign Extended.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IIRVisitor.LoadSignExtended(Context context)
+		{
+			// TODO
+		}
+
+		/// <summary>
 		/// Visitation function for LogicalAndInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
@@ -697,7 +715,7 @@ namespace Mosa.Platform.AVR32
 		}
 
 		/// <summary>
-		/// Visitation function for CallInstruction"/> instructions.
+		/// Visitation function for CallInstruction instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IIRVisitor.Call(Context context)
@@ -714,7 +732,7 @@ namespace Mosa.Platform.AVR32
 		}
 
 		/// <summary>
-		/// Visitation function for ZeroExtendedMoveInstruction"/> instructions.
+		/// Visitation function for ZeroExtendedMoveInstruction instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IIRVisitor.ZeroExtendedMove(Context context)

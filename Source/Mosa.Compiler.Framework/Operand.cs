@@ -686,18 +686,16 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static SigType SigTypeFromStackType(StackTypeCode typeCode)
 		{
-			SigType result = null;
 			switch (typeCode)
 			{
-				case StackTypeCode.Int32: result = BuiltInSigType.Int32; break;
-				case StackTypeCode.Int64: result = BuiltInSigType.Int64; break;
-				case StackTypeCode.F: result = BuiltInSigType.Double; break;
-				case StackTypeCode.O: result = BuiltInSigType.Object; break;
-				case StackTypeCode.N: result = BuiltInSigType.IntPtr; break;
+				case StackTypeCode.Int32: return BuiltInSigType.Int32;
+				case StackTypeCode.Int64: return BuiltInSigType.Int64;
+				case StackTypeCode.F: return BuiltInSigType.Double;
+				case StackTypeCode.O: return BuiltInSigType.Object;
+				case StackTypeCode.N: return BuiltInSigType.IntPtr;
 				default:
 					throw new NotSupportedException(@"Can't convert stack type code to SigType.");
 			}
-			return result;
 		}
 
 		#endregion // Static Methods

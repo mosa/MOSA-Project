@@ -49,6 +49,8 @@ namespace Mosa.Platform.x86.Stages
 			if (ctx.Instruction is IntegerCompare
 				|| ctx.Instruction is FloatCompare
 				|| ctx.Instruction is Load
+				|| ctx.Instruction is LoadZeroExtended
+				|| ctx.Instruction is LoadSignExtended
 				|| ctx.Instruction is Store
 				|| ctx.Instruction is Call
 				|| ctx.Instruction is ZeroExtendedMove

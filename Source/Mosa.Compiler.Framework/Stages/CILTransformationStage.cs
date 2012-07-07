@@ -101,19 +101,18 @@ namespace Mosa.Compiler.Framework.Stages
 			SigType elementType = context.SigType as SigType;
 
 			// This is actually ldind.* and ldobj - the opcodes have the same meanings
+
+			BaseInstruction loadInstruction = IRInstruction.Load;
 			if (MustSignExtendOnLoad(elementType.Type))
 			{
-				context.SetInstruction(IRInstruction.SignExtendedMove, destination, source, Operand.CreateConstant(0));
+				loadInstruction = IRInstruction.LoadSignExtended;
 			}
 			else if (MustZeroExtendOnLoad(elementType.Type))
 			{
-				context.SetInstruction(IRInstruction.ZeroExtendedMove, destination, source, Operand.CreateConstant(0));
-			}
-			else
-			{
-				context.SetInstruction(IRInstruction.Load, destination, source, Operand.CreateConstant(0));
+				loadInstruction = IRInstruction.LoadZeroExtended;
 			}
 
+			context.SetInstruction(loadInstruction, destination, source, Operand.CreateConstant(0));
 			context.SigType = elementType;
 		}
 
@@ -158,7 +157,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Ldsflda instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public void Ldsflda(Context context)
+		void CIL.ICILVisitor.Ldsflda(Context context)
 		{
 			context.SetInstruction(IRInstruction.AddressOf, context.Result, Operand.CreateRuntimeMember(context.RuntimeField));
 			context.SetInstruction(IRInstruction.Move, context.Result, context.Operand1);
@@ -350,7 +349,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Neg instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public void Neg(Context context)
+		void CIL.ICILVisitor.Neg(Context context)
 		{
 			if (IsUnsigned(context.Operand1))
 			{
@@ -490,7 +489,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Newarr instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public void Newarr(Context context)
+		void CIL.ICILVisitor.Newarr(Context context)
 		{
 			Operand thisReference = context.Result;
 			Debug.Assert(thisReference != null, @"Newobj didn't specify class signature?");
@@ -537,7 +536,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Newobj instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public void Newobj(Context context)
+		void CIL.ICILVisitor.Newobj(Context context)
 		{
 			Operand thisReference = context.Result;
 			Debug.Assert(thisReference != null, @"Newobj didn't specify class signature?");
@@ -786,7 +785,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for BinaryComparison instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public void BinaryComparison(Context context)
+		void CIL.ICILVisitor.BinaryComparison(Context context)
 		{
 			IR.ConditionCode code = ConvertCondition((context.Instruction as CIL.BaseCILInstruction).OpCode);
 
@@ -854,7 +853,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Break instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public void Break(Context context)
+		void CIL.ICILVisitor.Break(Context context)
 		{
 			context.SetInstruction(IRInstruction.Break);
 		}
@@ -863,7 +862,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Ldstr instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public void Ldstr(Context context)
+		void CIL.ICILVisitor.Ldstr(Context context)
 		{
 			/*
 			 * This requires a special memory layout for strings as they are interned by the compiler
@@ -910,7 +909,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Ldfld instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public void Ldfld(Context context)
+		void CIL.ICILVisitor.Ldfld(Context context)
 		{
 			Operand resultOperand = context.Result;
 			Operand objectOperand = context.Operand1;
@@ -923,12 +922,14 @@ namespace Mosa.Compiler.Framework.Stages
 			BaseInstruction loadInstruction = IRInstruction.Load;
 			if (MustSignExtendOnLoad(field.SignatureType.Type))
 			{
-				loadInstruction = IRInstruction.SignExtendedMove;
+				loadInstruction = IRInstruction.LoadSignExtended;
 			}
 			else if (MustZeroExtendOnLoad(field.SignatureType.Type))
 			{
-				loadInstruction = IRInstruction.ZeroExtendedMove;
+				loadInstruction = IRInstruction.LoadZeroExtended;
 			}
+
+			Debug.Assert(offsetOperand != null);
 
 			context.SetInstruction(loadInstruction, temp, objectOperand, offsetOperand);
 			context.AppendInstruction(IRInstruction.Move, resultOperand, temp);
@@ -938,7 +939,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Ldflda instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public void Ldflda(Context context)
+		void CIL.ICILVisitor.Ldflda(Context context)
 		{
 			Operand fieldAddress = context.Result;
 			Operand objectOperand = context.Operand1;
@@ -953,7 +954,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Stfld instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public void Stfld(Context context)
+		void CIL.ICILVisitor.Stfld(Context context)
 		{
 			Operand objectOperand = context.Operand1;
 			Operand valueOperand = context.Operand2;
@@ -979,7 +980,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Branch instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public void Branch(Context context)
+		void CIL.ICILVisitor.Branch(Context context)
 		{
 			context.ReplaceInstructionOnly(IRInstruction.Jmp);
 		}
@@ -988,7 +989,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for UnaryBranch instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public void UnaryBranch(Context context)
+		void CIL.ICILVisitor.UnaryBranch(Context context)
 		{
 			int target = context.BranchTargets[0];
 
@@ -1017,7 +1018,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for BinaryBranch instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public void BinaryBranch(Context context)
+		void CIL.ICILVisitor.BinaryBranch(Context context)
 		{
 			int target = context.BranchTargets[0];
 
@@ -1043,7 +1044,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Switch instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public void Switch(Context context)
+		void CIL.ICILVisitor.Switch(Context context)
 		{
 			context.ReplaceInstructionOnly(IRInstruction.Switch);
 		}
@@ -1061,7 +1062,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Ldlen instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public void Ldlen(Context context)
+		void CIL.ICILVisitor.Ldlen(Context context)
 		{
 			Operand arrayOperand = context.Operand1;
 			Operand arrayLength = context.Result;
@@ -1076,7 +1077,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Ldelema instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public void Ldelema(Context context)
+		void CIL.ICILVisitor.Ldelema(Context context)
 		{
 			Operand result = context.Result;
 			Operand arrayOperand = context.Operand1;
@@ -1128,9 +1129,8 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Ldelem instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public void Ldelem(Context context)
+		void CIL.ICILVisitor.Ldelem(Context context)
 		{
-			BaseInstruction loadInstruction = IRInstruction.Load;
 			Operand result = context.Result;
 			Operand arrayOperand = context.Operand1;
 			Operand arrayIndexOperand = context.Operand2;
@@ -1141,17 +1141,21 @@ namespace Mosa.Compiler.Framework.Stages
 				throw new CompilationException(@"Array operation performed on non-array operand.");
 			}
 
+			BaseInstruction loadInstruction = IRInstruction.Load;
 			if (MustSignExtendOnLoad(arraySigType.ElementType.Type))
 			{
-				loadInstruction = IRInstruction.SignExtendedMove;
+				loadInstruction = IRInstruction.LoadSignExtended;
 			}
 			else if (MustZeroExtendOnLoad(arraySigType.ElementType.Type))
 			{
-				loadInstruction = IRInstruction.ZeroExtendedMove;
+				loadInstruction = IRInstruction.LoadZeroExtended;
 			}
 
 			Operand arrayAddress = LoadArrayBaseAddress(context, arraySigType, arrayOperand);
 			Operand elementOffset = CalculateArrayElementOffset(context, arraySigType, arrayIndexOperand);
+
+			Debug.Assert(elementOffset != null);
+
 			context.AppendInstruction(loadInstruction, result, arrayAddress, elementOffset);
 		}
 
@@ -1159,7 +1163,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Visitation function for Stelem instruction.
 		/// </summary>
 		/// <param name="context">The context.</param>
-		public void Stelem(Context context)
+		void CIL.ICILVisitor.Stelem(Context context)
 		{
 			Operand arrayOperand = context.Operand1;
 			Operand arrayIndexOperand = context.Operand2;

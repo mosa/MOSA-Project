@@ -69,7 +69,7 @@ namespace Mosa.Compiler.Framework.IR
 		void IntegerToFloatConversion(Context context);
 
 		/// <summary>
-		/// Visitation function for Jmp"/> .
+		/// Visitation function for Jmp> .
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Jmp(Context context);
@@ -79,6 +79,18 @@ namespace Mosa.Compiler.Framework.IR
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void Load(Context context);
+
+		/// <summary>
+		/// Visitation function for Load Zero Extended.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void LoadZeroExtended(Context context);
+
+		/// <summary>
+		/// Visitation function for Load Sign Extended.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void LoadSignExtended(Context context);
 
 		/// <summary>
 		/// Visitation function for LogicalAnd.
