@@ -36,7 +36,6 @@ namespace Mosa.Test.System
 				new OperandDeterminationStage(),
 				new StaticAllocationResolutionStage(),
 				new CILTransformationStage(),
-				//new CILLeakGuardStage() { MustThrowCompilationException = true },
 				
 				new	EdgeSplitStage(),
 				new DominanceCalculationStage(),
