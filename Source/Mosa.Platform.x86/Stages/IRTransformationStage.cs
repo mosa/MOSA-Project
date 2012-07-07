@@ -972,34 +972,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.SignExtendedMove(Context context)
 		{
-			var offset = context.Operand2;
-			var type = context.SigType;
-
-			if (offset != null)
-			{
-				var eax = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.EAX);
-				var destination = context.Result;
-				var source = context.Operand1;
-				var elementType = type == null ? GetElementType(source.Type) : GetElementType(type);
-				var offsetPtr = IntPtr.Zero;
-
-				context.SetInstruction(X86.Mov, eax, source);
-
-				if (offset.IsConstant)
-				{
-					offsetPtr = new IntPtr(Convert.ToInt64(offset.Value));
-				}
-				else
-				{
-					context.AppendInstruction(X86.Add, eax, offset);
-				}
-
-				context.AppendInstruction(X86.Movsx, destination, Operand.CreateMemoryAddress(elementType, GeneralPurposeRegister.EAX, offsetPtr));
-			}
-			else
-			{
-				context.ReplaceInstructionOnly(X86.Movsx);
-			}
+			context.ReplaceInstructionOnly(X86.Movsx);
 		}
 
 		private static SigType GetElementType(SigType sigType)
@@ -1042,35 +1015,7 @@ namespace Mosa.Platform.x86.Stages
 		/// <param name="context">The context.</param>
 		void IIRVisitor.ZeroExtendedMove(Context context)
 		{
-			Operand offset = context.Operand2;
-
-			if (offset != null)
-			{
-				Operand eax = Operand.CreateCPURegister(context.Operand1.Type, GeneralPurposeRegister.EAX);
-				Operand result = context.Result;
-				Operand source = context.Operand1;
-				SigType elementType = GetElementType(source.Type);
-				IntPtr offsetPtr = IntPtr.Zero;
-
-				context.SetInstruction(X86.Mov, eax, source);
-
-				if (offset.IsConstant)
-				{
-					offsetPtr = new IntPtr(Convert.ToInt64(offset.Value));
-				}
-
-				if (elementType.Type == CilElementType.Char ||
-					elementType.Type == CilElementType.U1 ||
-					elementType.Type == CilElementType.U2)
-				{
-					context.AppendInstruction(X86.Add, eax, offset);
-				}
-				context.AppendInstruction(X86.Movzx, result, Operand.CreateMemoryAddress(elementType, GeneralPurposeRegister.EAX, offsetPtr));
-			}
-			else
-			{
-				context.ReplaceInstructionOnly(X86.Movzx);
-			}
+			context.ReplaceInstructionOnly(X86.Movzx);
 		}
 
 		/// <summary>

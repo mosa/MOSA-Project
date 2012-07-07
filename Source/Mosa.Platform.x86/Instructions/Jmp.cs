@@ -7,6 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using System.Diagnostics;
 using Mosa.Compiler.Framework;
 
 namespace Mosa.Platform.x86.Instructions
@@ -20,7 +21,7 @@ namespace Mosa.Platform.x86.Instructions
 		#region Data Members
 
 		private static readonly byte[] JMP = new byte[] { 0xE9 };
-		private static readonly OpCode JmpReg = new OpCode(new byte[] { 0xFF }, 4);
+		private static readonly OpCode JMP_R = new OpCode(new byte[] { 0xFF }, 4);
 
 		#endregion
 
@@ -45,16 +46,22 @@ namespace Mosa.Platform.x86.Instructions
 		/// <param name="emitter">The emitter.</param>
 		protected override void Emit(Context context, MachineCodeEmitter emitter)
 		{
-			if (context.Operand1 != null && context.Operand1.IsSymbol)
+			if (context.Operand1 == null)
 			{
-				emitter.WriteByte(0xE9);
-				emitter.Call(context.Operand1);
+				emitter.EmitBranch(JMP, context.BranchTargets[0]);
 			}
 			else
-				if (context.Operand1 != null && context.Operand1.IsRegister)
-					emitter.Emit(JmpReg, context.Operand1);
-				else
-					emitter.EmitBranch(JMP, context.BranchTargets[0]);
+			{
+				if (context.Operand1.IsSymbol)
+				{
+					emitter.WriteByte(0xE9);
+					emitter.Call(context.Operand1);
+				}
+				else if (context.Operand1.IsRegister)
+				{
+					emitter.Emit(JMP_R, context.Operand1);
+				}
+			}
 		}
 
 		/// <summary>

@@ -378,7 +378,7 @@ namespace Mosa.Platform.AVR32
 			{
 				//context.SetInstruction(Instruction.St, result, operand);
 			}
-			
+
 
 		}
 
@@ -667,34 +667,7 @@ namespace Mosa.Platform.AVR32
 		/// <param name="context">The context.</param>
 		void IIRVisitor.SignExtendedMove(Context context)
 		{
-			var offset = context.Operand2;
-			var type = context.SigType;
-
-			if (offset != null)
-			{
-				var r8 = Operand.CreateCPURegister(BuiltInSigType.Int32, GeneralPurposeRegister.R8);
-				var destination = context.Result;
-				var source = context.Operand1;
-				var elementType = type == null ? GetElementType(source.Type) : GetElementType(type);
-				var offsetPtr = IntPtr.Zero;
-
-				context.SetInstruction(AVR32.Ld, r8, source);
-				if (offset.IsConstant)
-				{
-					offsetPtr = new IntPtr(Convert.ToInt64(offset.Value));
-				}
-				else
-				{
-					context.AppendInstruction(AVR32.Mov, r8, offset);
-					context.AppendInstruction(AVR32.Add, r8, r8);
-				}
-
-				context.AppendInstruction(AVR32.Lds, destination, Operand.CreateMemoryAddress(elementType, GeneralPurposeRegister.R8, offsetPtr));
-			}
-			else
-			{
-				context.ReplaceInstructionOnly(AVR32.Lds);
-			}
+			context.ReplaceInstructionOnly(AVR32.Lds);
 		}
 
 		private static SigType GetElementType(SigType sigType)
@@ -737,34 +710,7 @@ namespace Mosa.Platform.AVR32
 		/// <param name="context">The context.</param>
 		void IIRVisitor.ZeroExtendedMove(Context context)
 		{
-			Operand offset = context.Operand2;
-			if (offset != null)
-			{
-				Operand r8 = Operand.CreateCPURegister(context.Operand1.Type, GeneralPurposeRegister.R8);
-				Operand result = context.Result;
-				Operand source = context.Operand1;
-				SigType elementType = GetElementType(source.Type);
-				IntPtr offsetPtr = IntPtr.Zero;
-
-				context.SetInstruction(AVR32.Mov, r8, source);
-				if (offset.IsConstant)
-				{
-					offsetPtr = new IntPtr(Convert.ToInt64(offset.Value));
-				}
-
-				if (elementType.Type == CilElementType.Char ||
-					elementType.Type == CilElementType.U1 ||
-					elementType.Type == CilElementType.U2)
-				{
-					context.AppendInstruction(AVR32.Ld, r8, offset);
-					context.AppendInstruction(AVR32.Add, r8, r8);
-				}
-				//context.AppendInstruction(Instruction.Movzx, result, Operand.CreateMemoryAddress(elementType, GeneralPurposeRegister.R8, offsetPtr));
-			}
-			else
-			{
-				//context.ReplaceInstructionOnly(Instruction.Movzx);
-			}
+			//context.ReplaceInstructionOnly(AVR32.Mov);
 		}
 
 		/// <summary>
