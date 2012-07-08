@@ -8,11 +8,17 @@ IF EXIST "%ProgramFiles%\Gallio\bin\Gallio.Echo.exe" SET GALLIO="%ProgramFiles%\
 
 IF NOT EXIST reports MKDIR reports
 
-CD ..\bin
+IF NOT EXIST bin MKDIR bin
 
-%GALLIO% /rnf:Tests /rt:Xml-Inline /report-directory:..\Tests\reports Mosa.Test.Cases.dll "/filter:Namespace:Mosa.Test.Cases.CIL"
+DELETE bin\*.dll
 
-CD ..\Tests
+COPY ..\bin\*.dll bin
+
+CD bin
+
+%GALLIO% /rnf:Tests /rt:Xml-Inline /report-directory:..\reports Mosa.Test.Cases.dll "/filter:Namespace:Mosa.Test.Cases.CIL"
+
+CD ..
 
 CALL ExtractResults.BAT
 
