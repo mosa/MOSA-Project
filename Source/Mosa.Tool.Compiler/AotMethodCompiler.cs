@@ -27,8 +27,8 @@ namespace Mosa.Tool.Compiler
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AotMethodCompiler"/> class.
 		/// </summary>
-		public AotMethodCompiler(BaseCompiler compiler, ICompilationSchedulerStage compilationScheduler, RuntimeType type, RuntimeMethod method, CompilerOptions compilerOptions)
-			: base(compiler, type, method, null, compilationScheduler)
+		public AotMethodCompiler(BaseCompiler compiler, RuntimeType type, RuntimeMethod method, CompilerOptions compilerOptions)
+			: base(compiler, type, method, null)
 		{
 			this.Pipeline.AddRange(
 				new IMethodCompilerStage[] 

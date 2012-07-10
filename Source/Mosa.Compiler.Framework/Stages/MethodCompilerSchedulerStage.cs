@@ -17,7 +17,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <summary>
 	/// Schedules compilation of types/methods.
 	/// </summary>
-	public class MethodCompilerSchedulerStage : BaseCompilerStage, ICompilerStage, ICompilationSchedulerStage, IPipelineStage
+	public class MethodCompilerSchedulerStage : BaseCompilerStage, ICompilerStage, ICompilationScheduler, IPipelineStage
 	{
 
 		#region Data Members
@@ -58,7 +58,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		#region ICompilationSchedulerStage members
 
-		void ICompilationSchedulerStage.ScheduleMethodForCompilation(RuntimeMethod method)
+		void ICompilationScheduler.ScheduleMethodForCompilation(RuntimeMethod method)
 		{
 			if (method == null)
 				throw new ArgumentNullException(@"method");
@@ -70,7 +70,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		void ICompilationSchedulerStage.ScheduleTypeForCompilation(RuntimeType type)
+		void ICompilationScheduler.ScheduleTypeForCompilation(RuntimeType type)
 		{
 			if (type == null)
 				throw new ArgumentNullException(@"type");
@@ -115,7 +115,7 @@ namespace Mosa.Compiler.Framework.Stages
 					continue;
 				}
 
-				((ICompilationSchedulerStage)this).ScheduleMethodForCompilation(method);
+				((ICompilationScheduler)this).ScheduleMethodForCompilation(method);
 			}
 
 			CompilePendingMethods();
@@ -134,7 +134,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			Trace(CompilerEvent.CompilingMethod, method.ToString());
 
-			using (IMethodCompiler mc = compiler.CreateMethodCompiler(this, method.DeclaringType, method))
+			using (IMethodCompiler mc = compiler.CreateMethodCompiler(method))
 			{
 				mc.Compile();
 

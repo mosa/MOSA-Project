@@ -77,7 +77,7 @@
                     <include name="Stages/TypeLayoutStage.cs"/>
                     <include name="IR/Throw.cs"/>
                     <include name="Stages/GenericsResolverStage.cs"/>
-                    <include name="ICompilationSchedulerStage.cs"/>
+                    <include name="ICompilationScheduler.cs"/>
                     <include name="Intrinsics/InternalAllocateString.cs"/>
                     <include name="IR/AddFloat.cs"/>
                     <include name="IR/AddSigned.cs"/>

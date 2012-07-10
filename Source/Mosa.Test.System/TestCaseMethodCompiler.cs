@@ -25,8 +25,8 @@ namespace Mosa.Test.System
 
 		public IntPtr Address { get { return address; } }
 
-		public TestCaseMethodCompiler(TestCaseCompiler compiler, ICompilationSchedulerStage compilationScheduler, RuntimeType type, RuntimeMethod method)
-			: base(compiler, type, method, null, compilationScheduler)
+		public TestCaseMethodCompiler(TestCaseCompiler compiler, RuntimeType type, RuntimeMethod method)
+			: base(compiler, type, method, null)
 		{
 			// Populate the pipeline
 			this.Pipeline.AddRange(new IMethodCompilerStage[] {

@@ -140,7 +140,7 @@
     <Compile Include="Stages\TypeLayoutStage.cs" />
     <Compile Include="IR\Throw.cs" />
     <Compile Include="Stages\GenericsResolverStage.cs" />
-    <Compile Include="ICompilationSchedulerStage.cs" />
+    <Compile Include="ICompilationScheduler.cs" />
     <Compile Include="Intrinsics\InternalAllocateString.cs" />
     <Compile Include="IR\AddFloat.cs" />
     <Compile Include="IR\AddSigned.cs" />

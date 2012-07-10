@@ -49,7 +49,7 @@ namespace Mosa.Compiler.Framework
 		/// Retrieves the compilation scheduler.
 		/// </summary>
 		/// <value>The compilation scheduler.</value>
-		ICompilationSchedulerStage Scheduler { get; }
+		ICompilationScheduler Scheduler { get; }
 
 		/// <summary>
 		/// Creates a new virtual register operand.

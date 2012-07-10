@@ -28,7 +28,7 @@ namespace Mosa.Compiler.Framework
 	/// A method compiler is responsible for compiling a single function
 	/// of an object. There are various classes derived from BaseMethodCompiler,
 	/// which provide specific features, such as jit compilation, runtime
-	/// optimized jitting and others. MethodCompilerBase instances are usually
+	/// optimized jitting and others. BaseMethodCompiler instances are usually
 	/// created by invoking CreateMethodCompiler on a specific compiler
 	/// instance.
 	/// </remarks>
@@ -50,7 +50,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// 
 		/// </summary>
-		private readonly ICompilationSchedulerStage compilationScheduler;
+		private readonly ICompilationScheduler compilationScheduler;
 
 		/// <summary>
 		/// The Architecture of the compilation target.
@@ -149,15 +149,12 @@ namespace Mosa.Compiler.Framework
 		/// <param name="method">The method to compile by this instance.</param>
 		/// <param name="instructionSet">The instruction set.</param>
 		/// <param name="compilationScheduler">The compilation scheduler.</param>
-		protected BaseMethodCompiler(BaseCompiler compiler, RuntimeType type, RuntimeMethod method, InstructionSet instructionSet, ICompilationSchedulerStage compilationScheduler)
+		protected BaseMethodCompiler(BaseCompiler compiler, RuntimeType type, RuntimeMethod method, InstructionSet instructionSet)
 		{
-			if (compilationScheduler == null)
-				throw new ArgumentNullException(@"compilationScheduler");
-
 			this.compiler = compiler;
 			this.method = method;
 			this.type = type;
-			this.compilationScheduler = compilationScheduler;
+			this.compilationScheduler = compiler.Scheduler;
 			this.moduleTypeSystem = method.Module;
 
 			this.architecture = compiler.Architecture;
@@ -227,7 +224,7 @@ namespace Mosa.Compiler.Framework
 		/// Retrieves the compilation scheduler.
 		/// </summary>
 		/// <value>The compilation scheduler.</value>
-		public ICompilationSchedulerStage Scheduler { get { return compilationScheduler; } }
+		public ICompilationScheduler Scheduler { get { return compilationScheduler; } }
 
 		/// <summary>
 		/// Provides access to the pipeline of this compiler.

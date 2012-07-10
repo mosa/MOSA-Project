@@ -69,7 +69,7 @@ namespace Mosa.Compiler.Linker
 			LinkerGeneratedMethod method = new LinkerGeneratedMethod(typeSystem.InternalTypeModule, "<$>" + methodName, compilerGeneratedType, signature);
 			compilerGeneratedType.AddMethod(method);
 
-			LinkerMethodCompiler methodCompiler = new LinkerMethodCompiler(compiler, compiler.Pipeline.FindFirst<ICompilationSchedulerStage>(), method, instructionSet);
+			LinkerMethodCompiler methodCompiler = new LinkerMethodCompiler(compiler, method, instructionSet);
 			methodCompiler.Compile();
 			return method;
 		}
