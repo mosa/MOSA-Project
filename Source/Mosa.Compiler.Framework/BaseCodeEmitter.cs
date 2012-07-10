@@ -68,7 +68,7 @@ namespace Mosa.Compiler.Framework
 		#endregion // Types
 
 		#region Data members
-		
+
 		/// <summary>
 		/// The compiler that is generating the code.
 		/// </summary>
@@ -127,8 +127,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="compiler">The compiler.</param>
 		/// <param name="codeStream">The stream the machine code is written to.</param>
-		/// <param name="linker">The linker used to resolve external addresses.</param>
-		void ICodeEmitter.Initialize(IMethodCompiler compiler, Stream codeStream, ILinker linker)
+		void ICodeEmitter.Initialize(IMethodCompiler compiler, Stream codeStream)
 		{
 			Debug.Assert(null != compiler, @"MachineCodeEmitter needs a method compiler.");
 			if (compiler == null)
@@ -136,14 +135,11 @@ namespace Mosa.Compiler.Framework
 			Debug.Assert(null != codeStream, @"MachineCodeEmitter needs a code stream.");
 			if (codeStream == null)
 				throw new ArgumentNullException(@"codeStream");
-			Debug.Assert(null != linker, @"MachineCodeEmitter needs a linker.");
-			if (linker == null)
-				throw new ArgumentNullException(@"linker");
 
 			this.compiler = compiler;
 			this.codeStream = codeStream;
 			this.codeStreamBasePosition = codeStream.Position;
-			this.linker = linker;
+			this.linker = compiler.Linker;
 		}
 
 		void ICodeEmitter.ResolvePatches()
@@ -174,7 +170,7 @@ namespace Mosa.Compiler.Framework
 			// Reset the position
 			codeStream.Position = currentPosition;
 		}
-	
+
 		/// <summary>
 		/// Emits a label into the code stream.
 		/// </summary>

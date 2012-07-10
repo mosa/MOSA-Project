@@ -40,7 +40,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Holds the pipeline of the compiler.
 		/// </summary>
-		protected CompilerPipeline pipeline;
+		protected readonly CompilerPipeline pipeline;
 
 		/// <summary>
 		/// 
@@ -50,12 +50,12 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// The Architecture of the compilation target.
 		/// </summary>
-		private IArchitecture architecture;
+		private readonly IArchitecture architecture;
 
 		/// <summary>
 		/// Holds the linker used to resolve external symbols
 		/// </summary>
-		private ILinker linker;
+		private readonly ILinker linker;
 
 		/// <summary>
 		/// Holds a list of operands which represent local variables
@@ -70,67 +70,67 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// The method definition being compiled
 		/// </summary>
-		private RuntimeMethod method;
+		private readonly RuntimeMethod method;
 
 		/// <summary>
 		/// Holds the type, which owns the method
 		/// </summary>
-		private RuntimeType type;
+		private readonly RuntimeType type;
 
 		/// <summary>
 		/// Holds the instruction set
 		/// </summary>
-		private InstructionSet instructionSet;
+		private readonly InstructionSet instructionSet;
 
 		/// <summary>
 		/// Holds the basic blocks
 		/// </summary>
-		private BasicBlocks basicBlocks;
+		private readonly BasicBlocks basicBlocks;
 
 		/// <summary>
 		/// Holds the type system during compilation
 		/// </summary>
-		protected ITypeSystem typeSystem;
+		protected readonly ITypeSystem typeSystem;
 
 		/// <summary>
 		/// Holds the type layout interface
 		/// </summary>
-		protected ITypeLayout typeLayout;
+		protected readonly ITypeLayout typeLayout;
 
 		/// <summary>
 		/// Holds the modules type system
 		/// </summary>
-		protected ITypeModule moduleTypeSystem;
+		protected readonly ITypeModule moduleTypeSystem;
 
 		/// <summary>
 		/// Holds the internal logging interface
 		/// </summary>
-		protected IInternalTrace internalTrace;
+		protected readonly IInternalTrace internalTrace;
 
 		/// <summary>
 		/// Holds the exception clauses
 		/// </summary>
-		private ExceptionClauseHeader exceptionClauseHeader = new ExceptionClauseHeader();
+		private readonly ExceptionClauseHeader exceptionClauseHeader = new ExceptionClauseHeader();
 
 		/// <summary>
 		/// Holds the compiler
 		/// </summary>
-		private BaseCompiler compiler;
+		private readonly BaseCompiler compiler;
 
 		/// <summary>
 		/// Holds the plug system
 		/// </summary>
-		private IPlugSystem plugSystem;
+		private readonly IPlugSystem plugSystem;
 
 		/// <summary>
 		/// Holds the stack layout
 		/// </summary>
-		private StackLayout stackLayout;
+		private readonly StackLayout stackLayout;
 
 		/// <summary>
 		/// Holds the virtual register layout
 		/// </summary>
-		private VirtualRegisterLayout virtualRegisterLayout;
+		private readonly VirtualRegisterLayout virtualRegisterLayout;
 
 		#endregion // Data Members
 
