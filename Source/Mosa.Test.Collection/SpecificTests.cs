@@ -70,5 +70,15 @@ namespace Mosa.Test.Collection
 			return first;
 		}
 
+		public static int R4ToI4(float value)
+		{
+			return (int)value;
+		}
+
+		public static int R8ToI4(double value)
+		{
+			return (int)value;
+		}
+
 	}
 }
