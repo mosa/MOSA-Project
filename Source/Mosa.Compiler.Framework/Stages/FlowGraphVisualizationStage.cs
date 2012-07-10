@@ -76,8 +76,6 @@ namespace Mosa.Compiler.Framework.Stages
 			methodName = methodName.Replace("$", "");
 			methodName = methodName.Replace(".", "");
 			
-			//IPipelineStage previousStage = methodCompiler.GetPreviousStage(typeof(IMethodCompilerStage));
-			//BROKE THIS:
 			IPipelineStage previousStage = methodCompiler.GetStage(typeof(IMethodCompilerStage));
 
 			dotFile.WriteLine("subgraph cluster" + methodName + "_FlowGraph {");

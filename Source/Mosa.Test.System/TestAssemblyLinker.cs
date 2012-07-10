@@ -13,6 +13,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Runtime.InteropServices;
 using Mosa.Compiler.Framework;
+using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Linker;
 
 namespace Mosa.Test.System
@@ -25,7 +26,7 @@ namespace Mosa.Test.System
 	/// It is similar to the Jit linker. TODO: Move most of this code to the Jit linker and reuse 
 	/// the Jit linker.
 	/// </remarks>
-	public class TestAssemblyLinker : BaseAssemblyLinkerStage, IPipelineStage
+	public class TestAssemblyLinker : BaseLinkerStage, IPipelineStage
 	{
 		#region Data members
 
@@ -55,7 +56,7 @@ namespace Mosa.Test.System
 
 		#endregion // Construction
 
-		#region AssemblyLinkerStageBase Overrides
+		#region BaseLinkerStage Overrides
 
 		/// <summary>
 		/// Gets the load alignment of sections.
@@ -207,6 +208,6 @@ namespace Mosa.Test.System
 			base.Run();
 		}
 
-		#endregion // AssemblyLinkerStageBase Overrides
+		#endregion // BaseLinkerStage Overrides
 	}
 }

@@ -149,13 +149,11 @@ namespace Mosa.Compiler.Framework
 			this.type = method.DeclaringType;
 			this.compilationScheduler = compiler.Scheduler;
 			this.moduleTypeSystem = method.Module;
-
 			this.architecture = compiler.Architecture;
 			this.typeSystem = compiler.TypeSystem;
 			this.typeLayout = Compiler.TypeLayout;
 			this.internalTrace = Compiler.InternalTrace;
-
-			this.linker = compiler.Pipeline.FindFirst<ILinker>();
+			this.linker = compiler.Linker;
 			this.plugSystem = compiler.Pipeline.FindFirst<IPlugSystem>();
 
 			this.basicBlocks = new BasicBlocks();

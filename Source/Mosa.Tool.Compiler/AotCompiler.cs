@@ -23,6 +23,15 @@ namespace Mosa.Tool.Compiler
 	public class AotCompiler : BaseCompiler
 	{
 
+		/// <summary>
+		/// Initializes a new instance of the <see cref="AotCompiler"/> class.
+		/// </summary>
+		/// <param name="architecture">The architecture.</param>
+		/// <param name="linker">The linker.</param>
+		/// <param name="typeSystem">The type system.</param>
+		/// <param name="typeLayout">The type layout.</param>
+		/// <param name="internalTrace">The internal trace.</param>
+		/// <param name="compilerOptions">The compiler options.</param>
 		public AotCompiler(IArchitecture architecture, ILinker linker, ITypeSystem typeSystem, ITypeLayout typeLayout, IInternalTrace internalTrace, CompilerOptions compilerOptions)
 			: base(architecture, typeSystem, typeLayout, new MethodCompilerSchedulerStage(), internalTrace, compilerOptions)
 		{
@@ -50,9 +59,7 @@ namespace Mosa.Tool.Compiler
 		/// </returns>
 		public override BaseMethodCompiler CreateMethodCompiler(RuntimeMethod method)
 		{
-			BaseMethodCompiler mc = new AotMethodCompiler(this, method);
-			Architecture.ExtendMethodCompilerPipeline(mc.Pipeline);
-			return mc;
+			return new AotMethodCompiler(this, method);
 		}
 
 		/// <summary>

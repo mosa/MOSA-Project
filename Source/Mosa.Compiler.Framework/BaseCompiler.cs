@@ -11,6 +11,8 @@
 using System;
 using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.TypeSystem;
+using Mosa.Compiler.Linker;
+using Mosa.Compiler.Framework.Linker;
 
 namespace Mosa.Compiler.Framework
 {
@@ -68,6 +70,11 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		private ICompilationScheduler compilationScheduler;
 
+		/// <summary>
+		/// Holds the linker
+		/// </summary>
+		private ILinker linker;
+
 		#endregion // Data members
 
 		#region Construction
@@ -95,6 +102,7 @@ namespace Mosa.Compiler.Framework
 			this.genericTypePatcher = new GenericTypePatcher(typeSystem);
 			this.counters = new Counters();
 			this.compilationScheduler = compilationScheduler;
+			this.linker = compilerOptions.Linker;
 		}
 
 		#endregion // Construction
@@ -151,6 +159,11 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public ICompilationScheduler Scheduler { get { return compilationScheduler; } }
 
+		/// <summary>
+		/// Gets the linker.
+		/// </summary>
+		public ILinker Linker { get { return linker; } }
+
 		#endregion // Properties
 
 		#region Methods
@@ -164,6 +177,7 @@ namespace Mosa.Compiler.Framework
 			Trace(CompilerEvent.CompilingMethod, method.ToString());
 
 			BaseMethodCompiler methodCompiler = CreateMethodCompiler(method);
+			Architecture.ExtendMethodCompilerPipeline(methodCompiler.Pipeline);
 
 			methodCompiler.Compile();
 
@@ -192,7 +206,7 @@ namespace Mosa.Compiler.Framework
 		/// The method iterates the compilation stage chain and runs each 
 		/// stage on the input.
 		/// </remarks>
-		protected void Compile()
+		public void Compile()
 		{
 			BeginCompile();
 

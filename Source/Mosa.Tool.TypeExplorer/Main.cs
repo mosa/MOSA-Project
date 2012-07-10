@@ -1,4 +1,13 @@
-﻿using System;
+﻿/*
+ * (c) 2012 MOSA - The Managed Operating System Alliance
+ *
+ * Licensed under the terms of the New BSD License.
+ *
+ * Authors:
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
+ */
+
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
@@ -315,9 +324,6 @@ namespace Mosa.Tool.TypeExplorer
 
 		void Compile()
 		{
-			//tabControl1.SelectedTab = tabPage2;
-			//rbOtherResult.Clear();
-
 			compileStartTime = DateTime.Now;
 			methodStages.Clear();
 

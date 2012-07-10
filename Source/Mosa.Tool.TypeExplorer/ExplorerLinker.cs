@@ -4,17 +4,18 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Michael Fröhlich (grover) <michael.ruck@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 using System.Collections.Generic;
 using System.IO;
 using Mosa.Compiler.Framework;
+using Mosa.Compiler.Framework.Linker;
 using Mosa.Compiler.Linker;
 
 namespace Mosa.Tool.TypeExplorer
 {
-	class ExplorerLinker : BaseAssemblyLinkerStage, ILinker, IPipelineStage
+	class ExplorerLinker : BaseLinkerStage, ILinker, IPipelineStage
 	{
 		public override void Run()
 		{

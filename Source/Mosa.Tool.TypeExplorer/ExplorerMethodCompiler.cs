@@ -4,10 +4,9 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Michael Fröhlich (grover) <michael.ruck@michaelruck.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-using System;
 using Mosa.Compiler.Framework;
 using Mosa.Compiler.Framework.Stages;
 using Mosa.Compiler.TypeSystem;
@@ -16,8 +15,6 @@ namespace Mosa.Tool.TypeExplorer
 {
 	class ExplorerMethodCompiler : BaseMethodCompiler
 	{
-		private IntPtr address = IntPtr.Zero;
-
 		/// <summary>
 		/// Initializes a new instance of the <see cref="ExplorerMethodCompiler"/> class.
 		/// </summary>

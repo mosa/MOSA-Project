@@ -222,7 +222,7 @@
                     <include name="RuntimeMethodData.cs"/>
                     <include name="Stages/SimpleTraceBlockOrderStage.cs"/>
                     <include name="Stages/LocalCSEStage.cs"/>
-                    <include name="Linker/BaseAssemblyLinkerStage.cs"/>
+                    <include name="Linker/BaseLinkerStage.cs"/>
                     <include name="Linker/LinkerGeneratedMethod.cs"/>
                     <include name="Linker/LinkerGeneratedType.cs"/>
                     <include name="Linker/LinkerMethodCompiler.cs"/>

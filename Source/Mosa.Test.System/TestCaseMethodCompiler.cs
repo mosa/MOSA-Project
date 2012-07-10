@@ -34,7 +34,7 @@ namespace Mosa.Test.System
 			: base(compiler, method, null)
 		{
 			// Populate the pipeline
-			this.Pipeline.AddRange(new IMethodCompilerStage[] {
+			Pipeline.AddRange(new IMethodCompilerStage[] {
 				new CILDecodingStage(),
 				new BasicBlockBuilderStage(),
 				new ExceptionPrologueStage(),
@@ -57,6 +57,8 @@ namespace Mosa.Test.System
 				new CodeGenerationStage(),				
 			});
 		}
+
+		#region BaseMethodCompiler Overrides
 
 		public override Stream RequestCodeStream()
 		{
@@ -84,5 +86,7 @@ namespace Mosa.Test.System
 
 			base.EndCompile();
 		}
+
+		#endregion // BaseMethodCompiler Overrides
 	}
 }

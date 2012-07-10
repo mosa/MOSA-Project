@@ -124,7 +124,7 @@ namespace Mosa.Compiler.Linker
 
 		#endregion // Methods
 
-		#region IAssemblyLinker Members
+		#region ILinker Members
 
 		/// <summary>
 		/// Gets the base virtualAddress.
@@ -303,7 +303,7 @@ namespace Mosa.Compiler.Linker
 			list.Add(new LinkRequest(linkType, symbolName, methodOffset, methodRelativeBase, targetSymbol, offset));
 		}
 
-		#endregion // IAssemblyLinker Members
+		#endregion // ILinker Members
 
 		#region Internals
 

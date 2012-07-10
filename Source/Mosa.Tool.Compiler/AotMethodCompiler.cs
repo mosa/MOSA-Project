@@ -64,7 +64,7 @@ namespace Mosa.Tool.Compiler
 
 		#endregion // Construction
 
-		#region MethodCompilerBase Overrides
+		#region BaseMethodCompiler Overrides
 
 		/// <summary>
 		/// Called after the method compiler has finished compiling the method.
@@ -82,6 +82,6 @@ namespace Mosa.Tool.Compiler
 			base.EndCompile();
 		}
 
-		#endregion // MethodCompilerBase Overrides
+		#endregion // BaseMethodCompiler Overrides
 	}
 }
