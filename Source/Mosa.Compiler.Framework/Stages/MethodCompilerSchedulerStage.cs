@@ -115,7 +115,7 @@ namespace Mosa.Compiler.Framework.Stages
 					continue;
 				}
 
-				((ICompilationScheduler)this).ScheduleMethodForCompilation(method);
+				compiler.Scheduler.ScheduleMethodForCompilation(method);
 			}
 
 			CompilePendingMethods();
@@ -126,27 +126,8 @@ namespace Mosa.Compiler.Framework.Stages
 			while (methodQueue.Count > 0)
 			{
 				RuntimeMethod method = methodQueue.Dequeue();
-				CompileMethod(method);
+				compiler.CompileMethod(method);
 			}
-		}
-
-		private void CompileMethod(RuntimeMethod method)
-		{
-			Trace(CompilerEvent.CompilingMethod, method.ToString());
-
-			IMethodCompiler mc = compiler.CreateMethodCompiler(method);
-
-			mc.Compile();
-
-			//try
-			//{
-			//    mc.Compile();
-			//}
-			//catch (Exception e)
-			//{
-			//    HandleCompilationException(e);
-			//    throw;
-			//}
 		}
 
 		protected virtual void HandleCompilationException(Exception e)
