@@ -134,20 +134,19 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			Trace(CompilerEvent.CompilingMethod, method.ToString());
 
-			using (IMethodCompiler mc = compiler.CreateMethodCompiler(method))
-			{
-				mc.Compile();
+			IMethodCompiler mc = compiler.CreateMethodCompiler(method);
 
-				//try
-				//{
-				//    mc.Compile();
-				//}
-				//catch (Exception e)
-				//{
-				//    HandleCompilationException(e);
-				//    throw;
-				//}
-			}
+			mc.Compile();
+
+			//try
+			//{
+			//    mc.Compile();
+			//}
+			//catch (Exception e)
+			//{
+			//    HandleCompilationException(e);
+			//    throw;
+			//}
 		}
 
 		protected virtual void HandleCompilationException(Exception e)

@@ -20,7 +20,7 @@ namespace Mosa.Compiler.Framework
 	/// <summary>
 	/// Interface provided by method compilers.
 	/// </summary>
-	public interface IMethodCompiler : IDisposable
+	public interface IMethodCompiler
 	{
 		/// <summary>
 		/// Retrieves the architecture to compile for.

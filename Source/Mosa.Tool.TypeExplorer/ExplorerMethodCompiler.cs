@@ -18,12 +18,18 @@ namespace Mosa.Tool.TypeExplorer
 	{
 		private IntPtr address = IntPtr.Zero;
 
-		public ExplorerMethodCompiler(ExplorerCompiler compiler,RuntimeType type, RuntimeMethod method, CompilerOptions compilerOptions)
-			: base(compiler, type, method, null)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="ExplorerMethodCompiler"/> class.
+		/// </summary>
+		/// <param name="compiler">The compiler.</param>
+		/// <param name="method">The method.</param>
+		public ExplorerMethodCompiler(ExplorerCompiler compiler, RuntimeMethod method)
+			: base(compiler, method, null)
 		{
+			var compilerOptions = Compiler.CompilerOptions;
 
 			// Populate the pipeline
-			this.Pipeline.AddRange(new IMethodCompilerStage[] {
+			Pipeline.AddRange(new IMethodCompilerStage[] {
 				new CILDecodingStage(),
 				new BasicBlockBuilderStage(),
 				new ExceptionPrologueStage(),

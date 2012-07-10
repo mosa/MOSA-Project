@@ -25,8 +25,13 @@ namespace Mosa.Test.System
 
 		public IntPtr Address { get { return address; } }
 
-		public TestCaseMethodCompiler(TestCaseCompiler compiler, RuntimeType type, RuntimeMethod method)
-			: base(compiler, type, method, null)
+		/// <summary>
+		/// Initializes a new instance of the <see cref="TestCaseMethodCompiler"/> class.
+		/// </summary>
+		/// <param name="compiler">The compiler.</param>
+		/// <param name="method">The method.</param>
+		public TestCaseMethodCompiler(TestCaseCompiler compiler, RuntimeMethod method)
+			: base(compiler, method, null)
 		{
 			// Populate the pipeline
 			this.Pipeline.AddRange(new IMethodCompilerStage[] {

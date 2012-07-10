@@ -23,9 +23,8 @@ namespace Mosa.Compiler.Linker
 		/// <param name="compiler">The assembly compiler executing this method compiler.</param>
 		/// <param name="method">The metadata of the method to compile.</param>
 		/// <param name="instructionSet">The instruction set.</param>
-		/// <exception cref="System.ArgumentNullException"><paramref name="compiler"/>, <paramref name="method"/> or <paramref name="instructionSet"/> is null.</exception>
 		public LinkerMethodCompiler(BaseCompiler compiler, RuntimeMethod method, InstructionSet instructionSet)
-			: base(compiler, method.DeclaringType, method, instructionSet)
+			: base(compiler, method, instructionSet)
 		{
 			BasicBlocks.CreateBlock(BasicBlock.PrologueLabel, 0);
 			BasicBlocks.AddHeaderBlock(BasicBlocks.PrologueBlock);

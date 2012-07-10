@@ -32,7 +32,7 @@ namespace Mosa.Compiler.Framework
 	/// created by invoking CreateMethodCompiler on a specific compiler
 	/// instance.
 	/// </remarks>
-	public class BaseMethodCompiler : IMethodCompiler, IDisposable
+	public class BaseMethodCompiler : IMethodCompiler
 	{
 
 		#region Data Members
@@ -41,11 +41,6 @@ namespace Mosa.Compiler.Framework
 		/// Holds the pipeline of the compiler.
 		/// </summary>
 		protected CompilerPipeline pipeline;
-
-		/// <summary>
-		/// Holds a list of operands which represent method parameters.
-		/// </summary>
-		private readonly List<Operand> parameters;
 
 		/// <summary>
 		/// 
@@ -145,15 +140,13 @@ namespace Mosa.Compiler.Framework
 		/// Initializes a new instance of the <see cref="BaseMethodCompiler"/> class.
 		/// </summary>
 		/// <param name="compiler">The assembly compiler.</param>
-		/// <param name="type">The type, which owns the method to compile.</param>
 		/// <param name="method">The method to compile by this instance.</param>
 		/// <param name="instructionSet">The instruction set.</param>
-		/// <param name="compilationScheduler">The compilation scheduler.</param>
-		protected BaseMethodCompiler(BaseCompiler compiler, RuntimeType type, RuntimeMethod method, InstructionSet instructionSet)
+		protected BaseMethodCompiler(BaseCompiler compiler, RuntimeMethod method, InstructionSet instructionSet)
 		{
 			this.compiler = compiler;
 			this.method = method;
-			this.type = type;
+			this.type = method.DeclaringType;
 			this.compilationScheduler = compiler.Scheduler;
 			this.moduleTypeSystem = method.Module;
 
@@ -165,7 +158,6 @@ namespace Mosa.Compiler.Framework
 			this.linker = compiler.Pipeline.FindFirst<ILinker>();
 			this.plugSystem = compiler.Pipeline.FindFirst<IPlugSystem>();
 
-			this.parameters = new List<Operand>(new Operand[method.Parameters.Count]);
 			this.basicBlocks = new BasicBlocks();
 
 			this.instructionSet = instructionSet ?? new InstructionSet(256);
@@ -368,32 +360,6 @@ namespace Mosa.Compiler.Framework
 		{
 			//return virtualRegisterLayout.AllocateVirtualRegister(type);
 			return stackLayout.AllocateStackOperand(type, false);
-		}
-
-		/// <summary>
-		/// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged resources.
-		/// </summary>
-		public void Dispose()
-		{
-			if (pipeline == null)
-				throw new ObjectDisposedException(@"MethodCompilerBase");
-
-			foreach (IMethodCompilerStage mcs in pipeline)
-			{
-				IDisposable d = mcs as IDisposable;
-				if (d != null)
-					d.Dispose();
-			}
-
-			pipeline = null;
-			architecture = null;
-			linker = null;
-			method = null;
-			type = null;
-			instructionSet = null;
-			basicBlocks = null;
-			stackLayout = null;
-			locals = null;
 		}
 
 		/// <summary>

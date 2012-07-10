@@ -27,37 +27,39 @@ namespace Mosa.Tool.Compiler
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AotMethodCompiler"/> class.
 		/// </summary>
-		public AotMethodCompiler(BaseCompiler compiler, RuntimeType type, RuntimeMethod method, CompilerOptions compilerOptions)
-			: base(compiler, type, method, null)
+		/// <param name="compiler">The compiler.</param>
+		/// <param name="method">The method.</param>
+		public AotMethodCompiler(BaseCompiler compiler, RuntimeMethod method)
+			: base(compiler, method, null)
 		{
-			this.Pipeline.AddRange(
-				new IMethodCompilerStage[] 
-				{
-					new CILDecodingStage(),
-					new BasicBlockBuilderStage(),
-					new ExceptionPrologueStage(),
-					new OperandDeterminationStage(),
-					new StaticAllocationResolutionStage(),
-					new CILTransformationStage(),
-					
-					new IRCheckStage(),
+			var compilerOptions = compiler.CompilerOptions;
 
-					(compilerOptions.EnableSSA) ? new EdgeSplitStage() : null,
-					(compilerOptions.EnableSSA) ? new DominanceCalculationStage() : null,
-					(compilerOptions.EnableSSA) ? new PhiPlacementStage() : null,
-					(compilerOptions.EnableSSA) ? new EnterSSAStage() : null,
-					(compilerOptions.EnableSSA && compilerOptions.EnableSSAOptimizations) ? new SSAOptimizations() : null,
-					(compilerOptions.EnableSSA) ? new LeaveSSA() : null,
+			Pipeline.AddRange(new IMethodCompilerStage[] {
+				new CILDecodingStage(),
+				new BasicBlockBuilderStage(),
+				new ExceptionPrologueStage(),
+				new OperandDeterminationStage(),
+				new StaticAllocationResolutionStage(),
+				new CILTransformationStage(),
 					
-					new StackLayoutStage(),
-					new PlatformStubStage(),
-					new LoopAwareBlockOrderStage(),
-					//new SimpleTraceBlockOrderStage(),
-					//new ReverseBlockOrderStage(),	
-					//new LocalCSE(),
-					new CodeGenerationStage(),
-					//new RegisterUsageAnalyzerStage(),
-				});
+				new IRCheckStage(),
+
+				(compilerOptions.EnableSSA) ? new EdgeSplitStage() : null,
+				(compilerOptions.EnableSSA) ? new DominanceCalculationStage() : null,
+				(compilerOptions.EnableSSA) ? new PhiPlacementStage() : null,
+				(compilerOptions.EnableSSA) ? new EnterSSAStage() : null,
+				(compilerOptions.EnableSSA && compilerOptions.EnableSSAOptimizations) ? new SSAOptimizations() : null,
+				(compilerOptions.EnableSSA) ? new LeaveSSA() : null,
+					
+				new StackLayoutStage(),
+				new PlatformStubStage(),
+				new LoopAwareBlockOrderStage(),
+				//new SimpleTraceBlockOrderStage(),
+				//new ReverseBlockOrderStage(),	
+				//new LocalCSE(),
+				new CodeGenerationStage(),
+				//new RegisterUsageAnalyzerStage(),
+			});
 		}
 
 		#endregion // Construction
