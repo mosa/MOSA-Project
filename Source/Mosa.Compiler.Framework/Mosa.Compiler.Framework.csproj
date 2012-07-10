@@ -285,7 +285,6 @@
     <Compile Include="RuntimeMethodData.cs" />
     <Compile Include="Stages\SimpleTraceBlockOrderStage.cs" />
     <Compile Include="Stages\LocalCSEStage.cs" />
-    <Compile Include="IMethodCompiler.cs" />
     <Compile Include="Linker\BaseAssemblyLinkerStage.cs" />
     <Compile Include="Linker\LinkerGeneratedMethod.cs" />
     <Compile Include="Linker\LinkerGeneratedType.cs" />
@@ -325,9 +324,6 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ICallingConvention.cs">
-      <SubType>Code</SubType>
-    </Compile>
-    <Compile Include="ICodeGenerationStage.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="IDominanceProvider.cs">

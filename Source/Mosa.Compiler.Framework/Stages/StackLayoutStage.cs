@@ -99,7 +99,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Lays out all parameters of the method.
 		/// </summary>
 		/// <param name="compiler">The method compiler providing the parameters.</param>
-		private void LayoutParameters(IMethodCompiler compiler)
+		private void LayoutParameters(BaseMethodCompiler compiler)
 		{
 			List<Operand> paramOps = new List<Operand>();
 

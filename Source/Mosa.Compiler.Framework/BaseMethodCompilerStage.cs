@@ -26,7 +26,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Hold the method compiler
 		/// </summary>
-		protected IMethodCompiler methodCompiler;
+		protected BaseMethodCompiler methodCompiler;
 
 		/// <summary>
 		/// The architecture of the compilation process
@@ -96,7 +96,7 @@ namespace Mosa.Compiler.Framework
 		/// Setups the specified compiler.
 		/// </summary>
 		/// <param name="compiler">The compiler.</param>
-		public void Setup(IMethodCompiler compiler)
+		public void Setup(BaseMethodCompiler compiler)
 		{
 			if (compiler == null)
 				throw new ArgumentNullException(@"compiler");

@@ -51,7 +51,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Setup stage specific processing on the compiler context.
 		/// </summary>
 		/// <param name="methodCompiler">The compiler context to perform processing in.</param>
-		void IMethodCompilerStage.Setup(IMethodCompiler methodCompiler)
+		void IMethodCompilerStage.Setup(BaseMethodCompiler methodCompiler)
 		{
 			base.Setup(methodCompiler);
 
@@ -223,7 +223,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		/// <param name="compiler">The compiler to populate.</param>
 		/// <param name="header">The method header.</param>
-		private void Decode(IMethodCompiler compiler, MethodHeader header)
+		private void Decode(BaseMethodCompiler compiler, MethodHeader header)
 		{
 			// Start of the code stream
 			long codeStart = codeReader.BaseStream.Position;
@@ -281,7 +281,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Gets the compiler, that is currently executing.
 		/// </summary>
 		/// <value></value>
-		IMethodCompiler BaseInstructionDecoder.Compiler
+		BaseMethodCompiler BaseInstructionDecoder.Compiler
 		{
 			get { return methodCompiler; }
 		}

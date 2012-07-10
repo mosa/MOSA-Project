@@ -147,7 +147,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <param name="compiler">The compiler.</param>
-		public override void Validate(Context ctx, IMethodCompiler compiler)
+		public override void Validate(Context ctx, BaseMethodCompiler compiler)
 		{
 			// Validate the operands...
 			int offset = (ctx.InvokeTarget.Signature.HasExplicitThis ? 1 : 0);

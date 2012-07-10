@@ -113,7 +113,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <param name="compiler">The compiler.</param>
-		public override void Validate(Context ctx, IMethodCompiler compiler)
+		public override void Validate(Context ctx, BaseMethodCompiler compiler)
 		{
 			base.Validate(ctx, compiler);
 
@@ -197,7 +197,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <param name="ctx">The context.</param>
 		/// <param name="compiler">The compiler.</param>
 		/// <param name="method">The method.</param>
-		private static void SetInvokeTarget(Context ctx, IMethodCompiler compiler, RuntimeMethod method)
+		private static void SetInvokeTarget(Context ctx, BaseMethodCompiler compiler, RuntimeMethod method)
 		{
 			if (method == null)
 				throw new ArgumentNullException(@"method");

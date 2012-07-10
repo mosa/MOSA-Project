@@ -72,7 +72,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// The compiler that is generating the code.
 		/// </summary>
-		protected IMethodCompiler compiler;
+		protected BaseMethodCompiler compiler;
 
 		/// <summary>
 		/// The stream used to write machine code bytes to.
@@ -127,7 +127,7 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="compiler">The compiler.</param>
 		/// <param name="codeStream">The stream the machine code is written to.</param>
-		void ICodeEmitter.Initialize(IMethodCompiler compiler, Stream codeStream)
+		void ICodeEmitter.Initialize(BaseMethodCompiler compiler, Stream codeStream)
 		{
 			Debug.Assert(null != compiler, @"MachineCodeEmitter needs a method compiler.");
 			if (compiler == null)

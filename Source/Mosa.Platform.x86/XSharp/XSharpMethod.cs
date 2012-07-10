@@ -32,7 +32,7 @@ namespace Mosa.Platform.x86.XSharp
 			Below
 		};
 
-		private IMethodCompiler methodCompiler;
+		private BaseMethodCompiler methodCompiler;
 		private Context currentContext;
 
 		//private InstructionSet InstructionSet;
@@ -59,7 +59,7 @@ namespace Mosa.Platform.x86.XSharp
 			ediRegister = new EDIRegister(this);
 		}
 
-		public void Execute(IMethodCompiler methodCompiler)
+		public void Execute(BaseMethodCompiler methodCompiler)
 		{
 			this.methodCompiler = methodCompiler;
 			this.Assemble();

@@ -32,7 +32,7 @@ namespace Mosa.Compiler.Framework
 	/// created by invoking CreateMethodCompiler on a specific compiler
 	/// instance.
 	/// </remarks>
-	public class BaseMethodCompiler : IMethodCompiler
+	public class BaseMethodCompiler
 	{
 
 		#region Data Members

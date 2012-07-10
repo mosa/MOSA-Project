@@ -37,7 +37,7 @@ namespace Mosa.Platform.x86.Stages
 		/// Setup stage specific processing on the compiler context.
 		/// </summary>
 		/// <param name="methodCompiler">The compiler context to perform processing in.</param>
-		void IMethodCompilerStage.Setup(IMethodCompiler methodCompiler)
+		void IMethodCompilerStage.Setup(BaseMethodCompiler methodCompiler)
 		{
 			base.Setup(methodCompiler);
 

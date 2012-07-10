@@ -222,7 +222,6 @@
                     <include name="RuntimeMethodData.cs"/>
                     <include name="Stages/SimpleTraceBlockOrderStage.cs"/>
                     <include name="Stages/LocalCSEStage.cs"/>
-                    <include name="IMethodCompiler.cs"/>
                     <include name="Linker/BaseAssemblyLinkerStage.cs"/>
                     <include name="Linker/LinkerGeneratedMethod.cs"/>
                     <include name="Linker/LinkerGeneratedType.cs"/>
@@ -240,7 +239,6 @@
                     <include name="IArchitecture.cs"/>
                     <include name="ICompilerStage.cs"/>
                     <include name="ICallingConvention.cs"/>
-                    <include name="ICodeGenerationStage.cs"/>
                     <include name="IDominanceProvider.cs"/>
                     <include name="CIL/IInstructionDecoder.cs"/>
                     <include name="IMethodCompilerStage.cs"/>
