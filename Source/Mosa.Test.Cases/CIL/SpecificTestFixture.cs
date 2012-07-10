@@ -30,25 +30,15 @@ namespace Mosa.Test.Cases.CIL
 		}
 
 		[Test]
-		[Row(0.0)]
-		[Row(1.1)]
-		[Row(1.333)]
-		[Row(100)]
-		[Row(10323.323)]
-		public void R4ToI4(float value)
+		public void R4ToI4([R4FitsI4] float value)
 		{
 			Assert.AreEqual<int>(SpecificTests.R4ToI4(value), Run<int>("Mosa.Test.Collection", "SpecificTests", "R4ToI4", value));
 		}
 		
 		[Test]
-		[Row(0.0)]
-		[Row(1.1)]
-		[Row(1.333)]
-		[Row(100)]
-		[Row(10323.323)]
-		public void R8ToI4(float value)
+		public void R8ToI4([R8FitsI4] double value)
 		{
-			Assert.AreEqual<int>(SpecificTests.R8ToI4(value), Run<int>("Mosa.Test.Collection", "SpecificTests", "R4ToI4", value));
+			Assert.AreEqual<int>(SpecificTests.R8ToI4(value), Run<int>("Mosa.Test.Collection", "SpecificTests", "R8ToI4", value));
 		}
 
 

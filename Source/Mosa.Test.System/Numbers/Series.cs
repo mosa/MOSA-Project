@@ -7,8 +7,8 @@
 *  Phil Garcia (tgiphil) <phil@thinkedge.com>
 */
 
+using System;
 using System.Collections.Generic;
-
 
 namespace Mosa.Test.System.Numbers
 {
@@ -417,6 +417,11 @@ namespace Mosa.Test.System.Numbers
 			get { foreach (float a in GetUpTo(32)) yield return a; }
 		}
 
+		public static IEnumerable<float> R4FitsI4
+		{
+			get { foreach (float a in R4) if (!float.IsNaN(a) && a <= Int32.MaxValue && a >= Int32.MinValue) yield return a; }
+		}
+
 		#endregion
 
 		#region R8 Types
@@ -466,6 +471,11 @@ namespace Mosa.Test.System.Numbers
 		public static IEnumerable<double> R8UpTo32
 		{
 			get { foreach (double a in GetUpTo(32)) yield return a; }
+		}
+
+		public static IEnumerable<double> R8FitsI4
+		{
+			get { foreach (double a in R8) if (!double.IsNaN(a) && a <= Int32.MaxValue && a >= Int32.MinValue) yield return a; }
 		}
 
 		#endregion

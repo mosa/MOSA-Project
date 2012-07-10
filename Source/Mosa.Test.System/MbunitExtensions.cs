@@ -182,6 +182,24 @@ namespace Mosa.Test.System
 		}
 	}
 
+	[AttributeUsage(PatternAttributeTargets.DataContext, AllowMultiple = false, Inherited = true)]
+	public class R4FitsI4Attribute : DataAttribute
+	{
+		protected override void PopulateDataSource(IPatternScope scope, DataSource dataSource, ICodeElementInfo codeElement)
+		{
+			dataSource.AddDataSet(new ValueSequenceDataSet(Series.R4FitsI4, GetMetadata(), false));
+		}
+	}
+
+	[AttributeUsage(PatternAttributeTargets.DataContext, AllowMultiple = false, Inherited = true)]
+	public class R8FitsI4Attribute : DataAttribute
+	{
+		protected override void PopulateDataSource(IPatternScope scope, DataSource dataSource, ICodeElementInfo codeElement)
+		{
+			dataSource.AddDataSet(new ValueSequenceDataSet(Series.R8FitsI4, GetMetadata(), false));
+		}
+	}
+
 	#region Series Above Zero
 
 	[AttributeUsage(PatternAttributeTargets.DataContext, AllowMultiple = false, Inherited = true)]
@@ -488,7 +506,7 @@ namespace Mosa.Test.System
 			dataSource.AddDataSet(new ValueSequenceDataSet(Series.R8NotZero, GetMetadata(), false));
 		}
 	}
-		
+
 	#endregion
 
 	#region Series Up To 8
