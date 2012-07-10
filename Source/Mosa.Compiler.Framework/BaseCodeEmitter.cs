@@ -92,7 +92,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Holds the linker used to resolve externals.
 		/// </summary>
-		protected IAssemblyLinker linker;
+		protected ILinker linker;
 
 		/// <summary>
 		/// List of literal patches we need to perform.
@@ -128,7 +128,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="compiler">The compiler.</param>
 		/// <param name="codeStream">The stream the machine code is written to.</param>
 		/// <param name="linker">The linker used to resolve external addresses.</param>
-		void ICodeEmitter.Initialize(IMethodCompiler compiler, Stream codeStream, IAssemblyLinker linker)
+		void ICodeEmitter.Initialize(IMethodCompiler compiler, Stream codeStream, ILinker linker)
 		{
 			Debug.Assert(null != compiler, @"MachineCodeEmitter needs a method compiler.");
 			if (compiler == null)

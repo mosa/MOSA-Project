@@ -222,7 +222,7 @@ namespace Mosa.Test.System
 			typeSystem = new TypeSystem();
 			typeSystem.LoadModules(assemblyLoader.Modules);
 
-			TestAssemblyLinker linker = TestCaseAssemblyCompiler.Compile(typeSystem);
+			TestAssemblyLinker linker = TestCaseCompiler.Compile(typeSystem);
 
 			return linker;
 		}

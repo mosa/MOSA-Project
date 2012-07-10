@@ -6,6 +6,7 @@
  * Authors:
  *  Michael Ruck (grover) <sharpos@michaelruck.de>
  *  Simon Wollwage (rootnode) <kintaro@think-in-co.de>
+ *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
 namespace Mosa.Compiler.Framework

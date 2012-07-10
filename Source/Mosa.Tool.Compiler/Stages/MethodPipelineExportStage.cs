@@ -17,9 +17,9 @@ using Mosa.Compiler.TypeSystem;
 namespace Mosa.Tool.Compiler.Stages
 {
 	/// <summary>
-	/// An assembly compilation stage, which exports each method pipeline stage
+	/// An compilation stage, which exports each method pipeline stage
 	/// </summary>
-	public sealed class MethodPipelineExportStage : BaseAssemblyCompilerStage, IAssemblyCompilerStage, IPipelineStage, ITraceListener
+	public sealed class MethodPipelineExportStage : BaseCompilerStage, ICompilerStage, IPipelineStage, ITraceListener
 	{
 		#region Data members
 
@@ -47,9 +47,9 @@ namespace Mosa.Tool.Compiler.Stages
 
 		#endregion // Construction
 
-		#region IAssemblyCompilerStage Members
+		#region ICompilerStage Members
 
-		void IAssemblyCompilerStage.Setup(AssemblyCompiler compiler)
+		void ICompilerStage.Setup(BaseCompiler compiler)
 		{
 			base.Setup(compiler);
 
@@ -59,7 +59,7 @@ namespace Mosa.Tool.Compiler.Stages
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		void IAssemblyCompilerStage.Run()
+		void ICompilerStage.Run()
 		{
 			filter.IsLogging = !string.IsNullOrEmpty(MethodPipelineExportDirectory);
 
@@ -76,7 +76,7 @@ namespace Mosa.Tool.Compiler.Stages
 			}
 		}
 
-		#endregion // IAssemblyCompilerStage Members
+		#endregion // ICompilerStage Members
 
 		#region ITraceListener Members
 

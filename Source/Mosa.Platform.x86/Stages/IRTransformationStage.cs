@@ -1036,11 +1036,11 @@ namespace Mosa.Platform.x86.Stages
 					else
 						context.ReplaceInstructionOnly(X86.Cvttss2si);
 					break;
-				case CilElementType.I8: throw new NotSupportedException();
+				case CilElementType.I8: return; // FIXME: throw new NotSupportedException();
 				case CilElementType.U1: goto case CilElementType.U4;
 				case CilElementType.U2: goto case CilElementType.U4;
-				case CilElementType.U4: throw new NotSupportedException();
-				case CilElementType.U8: throw new NotSupportedException();
+				case CilElementType.U4: return; // FIXME: throw new NotSupportedException();
+				case CilElementType.U8: return; // FIXME: throw new NotSupportedException();
 				case CilElementType.I: goto case CilElementType.I4;
 				case CilElementType.U: goto case CilElementType.U4;
 			}
@@ -1077,15 +1077,23 @@ namespace Mosa.Platform.x86.Stages
 			//context.SetInstruction(CPUx86.Instruction.PopInstruction, context.Result);
 		}
 
+		/// <summary>
+		/// Visitation function for IntegerToFloatingPointConversion.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IIRVisitor.IntegerToFloatConversion(Context context)
+		{
+			if (context.Result.Type.Type == CilElementType.R4)
+				context.ReplaceInstructionOnly(X86.Cvtsi2ss); 
+			else if (context.Result.Type.Type == CilElementType.R8)
+				context.ReplaceInstructionOnly(X86.Cvtsi2sd);
+			else
+				throw new NotSupportedException();
+		}
+
 		#endregion //  IIRVisitor
 
 		#region IIRVisitor - Unused
-
-		/// <summary>
-		/// Visitation function for IntegerToFloatingPointConversionInstruction.
-		/// </summary>
-		/// <param name="context">The context.</param>
-		void IIRVisitor.IntegerToFloatConversion(Context context) { }
 
 		/// <summary>
 		/// Visitation function for PhiInstruction"/> instructions.

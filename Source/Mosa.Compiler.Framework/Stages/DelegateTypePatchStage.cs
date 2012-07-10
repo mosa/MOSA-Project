@@ -17,7 +17,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <summary>
 	/// Emits metadata for assemblies and types
 	/// </summary>
-	public sealed class DelegateTypePatchStage : BaseAssemblyCompilerStage, IAssemblyCompilerStage
+	public sealed class DelegateTypePatchStage : BaseCompilerStage, ICompilerStage
 	{
 		#region Data members
 		/// <summary>
@@ -56,14 +56,14 @@ namespace Mosa.Compiler.Framework.Stages
 
 		#endregion // Data members
 
-		#region IAssemblyCompilerStage members
+		#region ICompilerStage members
 
-		void IAssemblyCompilerStage.Setup(AssemblyCompiler compiler)
+		void ICompilerStage.Setup(BaseCompiler compiler)
 		{
 			base.Setup(compiler);
 		}
 
-		void IAssemblyCompilerStage.Run()
+		void ICompilerStage.Run()
 		{
 			DelegateTypePatcher delegateTypePatcher = new DelegateTypePatcher(typeSystem, architecture.PlatformName);
 
@@ -76,7 +76,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		#endregion // IAssemblyCompilerStage members
+		#endregion // ICompilerStage members
 
 		#region Internal
 

@@ -177,6 +177,16 @@ namespace Mosa.Compiler.Framework
 
 		protected bool IsLogging { get { return methodCompiler.InternalTrace.TraceFilter.IsLogging; } }
 
+		/// <summary>
+		/// Updates the counter.
+		/// </summary>
+		/// <param name="name">The name.</param>
+		/// <param name="count">The count.</param>
+		protected void UpdateCounter(string name, int count)
+		{
+			methodCompiler.Compiler.Counters.UpdateCounter(name, count);
+		}
+
 		#endregion
 
 		#region Utility Methods

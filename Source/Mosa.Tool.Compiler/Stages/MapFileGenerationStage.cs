@@ -16,13 +16,13 @@ using Mosa.Compiler.Linker;
 namespace Mosa.Tool.Compiler.Stages
 {
 	/// <summary>
-	/// An assembly compilation stage, which generates a map file of the built binary file.
+	/// An compilation stage, which generates a map file of the built binary file.
 	/// </summary>
-	public sealed class MapFileGenerationStage : BaseAssemblyCompilerStage, IAssemblyCompilerStage, IPipelineStage
+	public sealed class MapFileGenerationStage : BaseCompilerStage, ICompilerStage, IPipelineStage
 	{
 		#region Data members
 
-		private IAssemblyLinker linker;
+		private ILinker linker;
 
 		public string MapFile { get; set; }
 
@@ -44,19 +44,19 @@ namespace Mosa.Tool.Compiler.Stages
 
 		#endregion // Construction
 
-		#region IAssemblyCompilerStage Members
+		#region ICompilerStage Members
 
-		void IAssemblyCompilerStage.Setup(AssemblyCompiler compiler)
+		void ICompilerStage.Setup(BaseCompiler compiler)
 		{
 			base.Setup(compiler);
-			this.linker = RetrieveAssemblyLinkerFromCompiler();
+			this.linker = RetrieveLinkerFromCompiler();
 			this.MapFile = compiler.CompilerOptions.MapFile;
 		}
 
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		void IAssemblyCompilerStage.Run()
+		void ICompilerStage.Run()
 		{
 			if (string.IsNullOrEmpty(MapFile))
 				return;
@@ -82,15 +82,15 @@ namespace Mosa.Tool.Compiler.Stages
 			}
 		}
 
-		#endregion // IAssemblyCompilerStage Members
+		#endregion // ICompilerStage Members
 
 		#region Internals
 
 		/// <summary>
 		/// Emits all the section created in the binary file.
 		/// </summary>
-		/// <param name="linker">The assembly linker.</param>
-		private void EmitSections(IAssemblyLinker linker)
+		/// <param name="linker">The linker.</param>
+		private void EmitSections(ILinker linker)
 		{
 			writer.WriteLine("Offset           Virtual          Length           Name                             Class");
 			foreach (LinkerSection section in linker.Sections)
@@ -110,8 +110,8 @@ namespace Mosa.Tool.Compiler.Stages
 		/// <summary>
 		/// Emits all symbols emitted in the binary file.
 		/// </summary>
-		/// <param name="linker">The assembly linker.</param>
-		private void EmitSymbols(IAssemblyLinker linker)
+		/// <param name="linker">The linker.</param>
+		private void EmitSymbols(ILinker linker)
 		{
 			List<LinkerSymbol> sorted = new List<LinkerSymbol>();
 

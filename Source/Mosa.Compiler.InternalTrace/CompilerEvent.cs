@@ -7,8 +7,6 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
-
-
 namespace Mosa.Compiler.InternalTrace
 {
 	public enum CompilerEvent
@@ -16,8 +14,8 @@ namespace Mosa.Compiler.InternalTrace
 		CompilingMethod,
 		CompilingType,
 		Linking,
-		AssemblyStageStart,
-		AssemblyStageEnd,
+		CompilerStageStart,
+		CompilerStageEnd,
 		DebugInfo,
 		SchedulingType,
 		SchedulingMethod,
@@ -38,8 +36,8 @@ namespace Mosa.Compiler.InternalTrace
 				case CompilerEvent.SchedulingMethod: return "Scheduling Method";
 				case CompilerEvent.Linking: return "Linking";
 				case CompilerEvent.DebugInfo: return "Debug Info";
-				case CompilerEvent.AssemblyStageStart: return "Assembly Stage Started";
-				case CompilerEvent.AssemblyStageEnd: return "Assembly Stage Ended";
+				case CompilerEvent.CompilerStageStart: return "Stage Started";
+				case CompilerEvent.CompilerStageEnd: return "Stage Ended";
 				case CompilerEvent.Error: return "Error";
 				case CompilerEvent.Warning: return "Warning";
 				default: return stage.ToString();

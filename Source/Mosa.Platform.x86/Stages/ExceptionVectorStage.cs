@@ -18,12 +18,12 @@ namespace Mosa.Platform.x86.Stages
 	/// <summary>
 	/// 
 	/// </summary>
-	public sealed class ExceptionVectorStage : BaseAssemblyCompilerStage, IAssemblyCompilerStage, IPipelineStage
+	public sealed class ExceptionVectorStage : BaseCompilerStage, ICompilerStage, IPipelineStage
 	{
 
-		#region IAssemblyCompilerStage Members
+		#region ICompilerStage Members
 
-		void IAssemblyCompilerStage.Setup(AssemblyCompiler compiler)
+		void ICompilerStage.Setup(BaseCompiler compiler)
 		{
 			base.Setup(compiler);
 		}
@@ -31,12 +31,12 @@ namespace Mosa.Platform.x86.Stages
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		void IAssemblyCompilerStage.Run()
+		void ICompilerStage.Run()
 		{
 			CreateExceptionVector();
 		}
 
-		#endregion // IAssemblyCompilerStage Members
+		#endregion // ICompilerStage Members
 
 		#region Internal
 

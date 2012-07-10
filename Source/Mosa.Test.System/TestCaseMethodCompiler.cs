@@ -25,8 +25,8 @@ namespace Mosa.Test.System
 
 		public IntPtr Address { get { return address; } }
 
-		public TestCaseMethodCompiler(TestCaseAssemblyCompiler assemblyCompiler, ICompilationSchedulerStage compilationScheduler, RuntimeType type, RuntimeMethod method)
-			: base(assemblyCompiler, type, method, null, compilationScheduler)
+		public TestCaseMethodCompiler(TestCaseCompiler compiler, ICompilationSchedulerStage compilationScheduler, RuntimeType type, RuntimeMethod method)
+			: base(compiler, type, method, null, compilationScheduler)
 		{
 			// Populate the pipeline
 			this.Pipeline.AddRange(new IMethodCompilerStage[] {
@@ -74,7 +74,7 @@ namespace Mosa.Test.System
 			if ((Method.Attributes & attrs) == attrs && Method.Name == ".cctor")
 			{
 				CCtor cctor = (CCtor)Marshal.GetDelegateForFunctionPointer(address, typeof(CCtor));
-				(AssemblyCompiler as TestCaseAssemblyCompiler).QueueCCtorForInvocationAfterCompilation(cctor);
+				(Compiler as TestCaseCompiler).QueueCCtorForInvocationAfterCompilation(cctor);
 			}
 
 			base.EndCompile();

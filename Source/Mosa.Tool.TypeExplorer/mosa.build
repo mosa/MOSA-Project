@@ -16,7 +16,7 @@
 		<sources>
                     <include name="CodeForm.cs"/>
                     <include name="CodeForm.Designer.cs"/>
-                    <include name="ExplorerAssemblyCompiler.cs"/>
+                    <include name="ExplorerCompiler.cs"/>
                     <include name="ExplorerLinker.cs"/>
                     <include name="ExplorerMethodCompiler.cs"/>
                     <include name="Main.cs"/>

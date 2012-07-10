@@ -558,7 +558,7 @@ namespace Mosa.Compiler.Framework.Stages
 			{
 				if (!(classType is CilGenericType))
 					classType = new CilGenericType(classType.Module, classType.Token, classType, thisReference.Type as GenericInstSigType);
-				classType = methodCompiler.AssemblyCompiler.GenericTypePatcher.PatchType(this.typeModule, methodCompiler.Method.DeclaringType as CilGenericType, classType as CilGenericType);
+				classType = methodCompiler.Compiler.GenericTypePatcher.PatchType(this.typeModule, methodCompiler.Method.DeclaringType as CilGenericType, classType as CilGenericType);
 			}
 
 			List<Operand> ctorOperands = new List<Operand>(context.Operands);
@@ -872,7 +872,7 @@ namespace Mosa.Compiler.Framework.Stages
 			 * 
 			 */
 
-			IAssemblyLinker linker = methodCompiler.Linker;
+			ILinker linker = methodCompiler.Linker;
 			IMetadataModule assembly = methodCompiler.Assembly;
 
 			string referencedString = assembly.Metadata.ReadUserString(context.TokenType);

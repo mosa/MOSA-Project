@@ -17,7 +17,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <summary>
 	/// Schedules compilation of types/methods.
 	/// </summary>
-	public class MethodCompilerSchedulerStage : BaseAssemblyCompilerStage, IAssemblyCompilerStage, ICompilationSchedulerStage, IPipelineStage
+	public class MethodCompilerSchedulerStage : BaseCompilerStage, ICompilerStage, ICompilationSchedulerStage, IPipelineStage
 	{
 
 		#region Data Members
@@ -28,6 +28,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private readonly Dictionary<RuntimeType, RuntimeType> compiled;
 
+		// FIXME: Hack for catching duplicate generic types - fix should be in  Mosa.Compiler.TypeSystem.GenericTypePatcher class
 		private readonly HashSet<string> alreadyCompiled;
 
 		#endregion // Data Members
@@ -37,12 +38,12 @@ namespace Mosa.Compiler.Framework.Stages
 			methodQueue = new Queue<RuntimeMethod>();
 			typeQueue = new Queue<RuntimeType>();
 			compiled = new Dictionary<RuntimeType, RuntimeType>();
-			alreadyCompiled = new HashSet<string>();
+			alreadyCompiled = new HashSet<string>(); 
 		}
 
-		#region IAssemblyCompilerStage members
+		#region ICompilerStage members
 
-		void IAssemblyCompilerStage.Run()
+		void ICompilerStage.Run()
 		{
 			while (typeQueue.Count != 0)
 			{
@@ -53,7 +54,7 @@ namespace Mosa.Compiler.Framework.Stages
 			CompilePendingMethods();
 		}
 
-		#endregion // IAssemblyCompilerStage members
+		#endregion // ICompilerStage members
 
 		#region ICompilationSchedulerStage members
 
@@ -82,9 +83,9 @@ namespace Mosa.Compiler.Framework.Stages
 				Trace(CompilerEvent.SchedulingType, type.FullName);
 
 				typeQueue.Enqueue(type);
-				if (compiled.ContainsKey(type))
-					compiled.Remove(type);
-				compiled.Add(type, type);
+				if (!compiled.ContainsKey(type))
+					compiled.Add(type, type);
+
 				alreadyCompiled.Add(type.ToString());
 			}
 		}
@@ -97,11 +98,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (type.ContainsOpenGenericParameters)
 				return;
-
-			//if (type.IsDelegate && type.FullName != "System.Delegate" && type.FullName != "System.MulticastDelegate")
-			//{
-			//    typeSystem.DelegateTypePatcher.PatchType(type);
-			//}
 
 			foreach (RuntimeMethod method in type.Methods)
 			{

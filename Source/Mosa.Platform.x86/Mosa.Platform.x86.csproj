@@ -154,7 +154,7 @@
     <Compile Include="Instructions\Div.cs" />
     <Compile Include="Instructions\Jmp.cs" />
     <Compile Include="Instructions\Lea.cs" />
-    <Compile Include="Stages\Multiboot0695AssemblyStage.cs" />
+    <Compile Include="Stages\Multiboot0695Stage.cs" />
     <Compile Include="Stages\SimplePeepholeOptimizationStage.cs" />
     <Compile Include="Stages\MemToMemConversionStage.cs" />
     <Compile Include="Instructions\Call.cs" />

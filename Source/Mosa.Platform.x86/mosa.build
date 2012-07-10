@@ -79,7 +79,7 @@
                     <include name="Instructions/Div.cs"/>
                     <include name="Instructions/Jmp.cs"/>
                     <include name="Instructions/Lea.cs"/>
-                    <include name="Stages/Multiboot0695AssemblyStage.cs"/>
+                    <include name="Stages/Multiboot0695Stage.cs"/>
                     <include name="Stages/SimplePeepholeOptimizationStage.cs"/>
                     <include name="Stages/MemToMemConversionStage.cs"/>
                     <include name="Instructions/Call.cs"/>

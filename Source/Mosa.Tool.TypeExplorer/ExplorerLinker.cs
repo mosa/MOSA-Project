@@ -14,7 +14,7 @@ using Mosa.Compiler.Linker;
 
 namespace Mosa.Tool.TypeExplorer
 {
-	class ExplorerLinker : BaseAssemblyLinkerStage, IAssemblyLinker, IPipelineStage
+	class ExplorerLinker : BaseAssemblyLinkerStage, ILinker, IPipelineStage
 	{
 		public override void Run()
 		{

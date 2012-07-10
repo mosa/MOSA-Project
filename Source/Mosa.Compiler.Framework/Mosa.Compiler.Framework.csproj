@@ -78,6 +78,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BasicBlocks.cs" />
+    <Compile Include="Counters.cs" />
     <Compile Include="IR\LoadZeroExtended.cs" />
     <Compile Include="IR\LoadSignExtended.cs" />
     <Compile Include="SimpleFastDominance.cs" />
@@ -88,7 +89,7 @@
     <Compile Include="Stages\EdgeSplitStage.cs" />
     <Compile Include="Stages\SimpleRegisterAllocatorStage.cs" />
     <Compile Include="VirtualRegisterLayout.cs" />
-    <Compile Include="Stages\AssemblyMemberCompilationSchedulerStage.cs" />
+    <Compile Include="Stages\TypeSchedulerStage.cs" />
     <Compile Include="BaseCodeEmitter.cs" />
     <Compile Include="BaseInstruction.cs" />
     <Compile Include="Stages\BasicBlockBuilderStage.cs" />
@@ -112,7 +113,7 @@
     <Compile Include="CIL\ReadOnlyPrefixInstruction.cs" />
     <Compile Include="Stages\CILDecodingStage.cs" />
     <Compile Include="CIL\BreakInstruction.cs" />
-    <Compile Include="BaseAssemblyCompilerStage.cs" />
+    <Compile Include="BaseCompilerStage.cs" />
     <Compile Include="Platform\BasePlatformInstruction.cs" />
     <Compile Include="Platform\BasePlatformTransformationStage.cs" />
     <Compile Include="Platform\IRegisterUsage.cs" />
@@ -290,7 +291,7 @@
     <Compile Include="Linker\LinkerGeneratedType.cs" />
     <Compile Include="Linker\LinkerMethodCompiler.cs" />
     <Compile Include="Linker\LinkTimeCodeGenerator.cs" />
-    <Compile Include="AssemblyCompiler.cs">
+    <Compile Include="BaseCompiler.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="BasicArchitecture.cs">
@@ -320,7 +321,7 @@
     <Compile Include="IArchitecture.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="IAssemblyCompilerStage.cs">
+    <Compile Include="ICompilerStage.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="ICallingConvention.cs">

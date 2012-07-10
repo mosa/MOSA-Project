@@ -27,28 +27,28 @@ namespace Mosa.Platform.x86.Stages
 	///		4 bytes: Pointer to exception clause table
 	///		4 bytes: GC tracking info
 	/// </summary>
-	public class MethodTableBuilderStage : BaseAssemblyCompilerStage, IAssemblyCompilerStage
+	public class MethodTableBuilderStage : BaseCompilerStage, ICompilerStage
 	{
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private IAssemblyLinker linker;
+		private ILinker linker;
 
 		/// <summary>
 		/// Setups the specified compiler.
 		/// </summary>
 		/// <param name="compiler">The compiler.</param>
-		void IAssemblyCompilerStage.Setup(AssemblyCompiler compiler)
+		void ICompilerStage.Setup(BaseCompiler compiler)
 		{
 			base.Setup(compiler);
-			linker = RetrieveAssemblyLinkerFromCompiler();
+			linker = RetrieveLinkerFromCompiler();
 		}
 
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		void IAssemblyCompilerStage.Run()
+		void ICompilerStage.Run()
 		{
 			CreateTables();
 		}

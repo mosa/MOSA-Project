@@ -18,11 +18,11 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <summary>
 	/// Emits metadata for assemblies and types
 	/// </summary>
-	public class PlugStage : BaseAssemblyCompilerStage, IAssemblyCompilerStage, IPlugSystem
+	public class PlugStage : BaseCompilerStage, ICompilerStage, IPlugSystem
 	{
 		#region Data members
 
-		private IAssemblyLinker linker;
+		private ILinker linker;
 
 		// Method to Plug -> Plug
 		protected Dictionary<RuntimeMethod, RuntimeMethod> plugMethods = new Dictionary<RuntimeMethod, RuntimeMethod>();
@@ -50,18 +50,18 @@ namespace Mosa.Compiler.Framework.Stages
 
 		#endregion // IPlugStage members
 
-		#region IAssemblyCompilerStage members
+		#region ICompilerStage members
 
-		void IAssemblyCompilerStage.Setup(AssemblyCompiler compiler)
+		void ICompilerStage.Setup(BaseCompiler compiler)
 		{
 			base.Setup(compiler);
-			this.linker = RetrieveAssemblyLinkerFromCompiler();
+			this.linker = RetrieveLinkerFromCompiler();
 
 			plugTypeAttribute = typeSystem.GetType("Mosa.Internal.Plug", "Mosa.Internal.Plug", "PlugTypeAttribute");
 			plugMethodAttribute = typeSystem.GetType("Mosa.Internal.Plug", "Mosa.Internal.Plug", "PlugMethodAttribute");
 		}
 
-		void IAssemblyCompilerStage.Run()
+		void ICompilerStage.Run()
 		{
 			if (plugTypeAttribute == null | plugMethodAttribute == null)
 				return;
@@ -275,7 +275,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			return target.Substring(pos + 1);
 		}
-		#endregion // IAssemblyCompilerStage members
+		#endregion // ICompilerStage members
 
 	}
 }

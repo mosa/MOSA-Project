@@ -20,12 +20,12 @@ namespace Mosa.Compiler.Framework.Stages
 	/// For every type instantiation, a new method is created with the
 	/// generic parameter substituted with the corresponding type.
 	/// </summary>
-	public class GenericsResolverStage : BaseAssemblyCompilerStage, IAssemblyCompilerStage, IPipelineStage
+	public class GenericsResolverStage : BaseCompilerStage, ICompilerStage, IPipelineStage
 	{
 
-		#region IAssemblyCompilerStage members
+		#region ICompilerStage members
 
-		void IAssemblyCompilerStage.Run()
+		void ICompilerStage.Run()
 		{
 			foreach (RuntimeType type in typeSystem.GetAllTypes())
 			{
@@ -48,7 +48,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		#endregion IAssemblyCompilerStage members
+		#endregion ICompilerStage members
 
 		/// <summary>
 		/// Determines if the given method is a method 
@@ -82,12 +82,12 @@ namespace Mosa.Compiler.Framework.Stages
 			return parameter.Type == CilElementType.Var;
 		}
 
-		private static List<Token> GetTokenTypesForMethod(AssemblyCompiler compiler, RuntimeType type, RuntimeMethod method)
+		private static List<Token> GetTokenTypesForMethod(BaseCompiler compiler, RuntimeType type, RuntimeMethod method)
 		{
 			throw new NotImplementedException();
 		}
 
-		private static List<RuntimeMethod> RecompileMethods(AssemblyCompiler compiler, List<Token> types, RuntimeMethod method)
+		private static List<RuntimeMethod> RecompileMethods(BaseCompiler compiler, List<Token> types, RuntimeMethod method)
 		{
 			throw new NotImplementedException();
 		}

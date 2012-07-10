@@ -20,6 +20,8 @@ namespace Mosa.Compiler.Framework.Stages
 	public sealed class SSAOptimizations : BaseMethodCompilerStage, IMethodCompilerStage, IPipelineStage
 	{
 
+		private int instructionsRemoved = 0;
+
 		private Stack<int> worklist = new Stack<int>();
 
 		#region IMethodCompilerStage Members
@@ -55,6 +57,7 @@ namespace Mosa.Compiler.Framework.Stages
 				}
 			}
 
+			UpdateCounter("SSAOptimizations.IRInstructionRemoved", instructionsRemoved);
 			worklist = null;
 		}
 
@@ -154,6 +157,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (IsLogging) Trace("REMOVED:\t" + context.ToString());
 				AddOperandUsageToWorkList(context);
 				context.SetInstruction(IRInstruction.Nop);
+				instructionsRemoved++;
 				//context.Remove();
 				return;
 			}
@@ -164,6 +168,7 @@ namespace Mosa.Compiler.Framework.Stages
 				if (IsLogging) Trace("REMOVED:\t" + context.ToString());
 				AddOperandUsageToWorkList(context);
 				context.SetInstruction(IRInstruction.Nop);
+				instructionsRemoved++;
 				//context.Remove();
 				return;
 			}
@@ -196,9 +201,6 @@ namespace Mosa.Compiler.Framework.Stages
 					continue;
 
 				if (ctx.Instruction is IR.Store) // unless stacktype of sigType matches (example, U4=I4)
-					continue;
-
-				if (ctx.OperandCount >= 3 && !(ctx.Instruction is IR.Call))
 					continue;
 
 				bool propogated = false;
@@ -266,9 +268,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 				if (ctx.Instruction is IR.Store) // unless stacktype of sigType matches (example, U4=I4)
 					return;
-
-				if (ctx.OperandCount >= 3 && !(ctx.Instruction is IR.Call))
-					return;
 			}
 
 			AddOperandUsageToWorkList(context);
@@ -299,6 +298,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (IsLogging) Trace("REMOVED:\t" + context.ToString());
 			AddOperandUsageToWorkList(context);
 			context.SetInstruction(IRInstruction.Nop);
+			instructionsRemoved++;
 			//context.Remove();
 		}
 
@@ -443,8 +443,12 @@ namespace Mosa.Compiler.Framework.Stages
 
 			switch (context.ConditionCode)
 			{
-				case ConditionCode.Equal: compareResult = IsSameIntegerConstant(op1, op2); break;
-				case ConditionCode.NotEqual: compareResult = !IsSameIntegerConstant(op1, op2); break;
+				case ConditionCode.Equal: compareResult = (op1.ValueAsLongInteger == op2.ValueAsLongInteger); break;
+				case ConditionCode.NotEqual: compareResult = (op1.ValueAsLongInteger != op2.ValueAsLongInteger); break;
+				case ConditionCode.GreaterOrEqual: compareResult = (op1.ValueAsLongInteger >= op2.ValueAsLongInteger); break;
+				case ConditionCode.GreaterThan: compareResult = (op1.ValueAsLongInteger > op2.ValueAsLongInteger); break;
+				case ConditionCode.LessOrEqual: compareResult = (op1.ValueAsLongInteger <= op2.ValueAsLongInteger); break;
+				case ConditionCode.LessThan: compareResult = (op1.ValueAsLongInteger < op2.ValueAsLongInteger); break;
 				// TODO: Add more
 				default: return;
 			}

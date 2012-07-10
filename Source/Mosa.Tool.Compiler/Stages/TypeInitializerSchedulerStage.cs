@@ -23,7 +23,7 @@ namespace Mosa.Tool.Compiler.Stages
 	/// by the high-level language compiler by placing cctors in some order in
 	/// metadata.
 	/// </remarks>
-	public sealed class TypeInitializerSchedulerStage : BaseAssemblyCompilerStage, IAssemblyCompilerStage, IPipelineStage, ITypeInitializerSchedulerStage
+	public sealed class TypeInitializerSchedulerStage : BaseCompilerStage, ICompilerStage, IPipelineStage, ITypeInitializerSchedulerStage
 	{
 		#region Data Members
 
@@ -70,9 +70,9 @@ namespace Mosa.Tool.Compiler.Stages
 
 		#endregion
 
-		#region IAssemblyCompilerStage Members
+		#region ICompilerStage Members
 
-		void IAssemblyCompilerStage.Setup(AssemblyCompiler compiler)
+		void ICompilerStage.Setup(BaseCompiler compiler)
 		{
 			base.Setup(compiler);
 		}
@@ -80,7 +80,7 @@ namespace Mosa.Tool.Compiler.Stages
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		void IAssemblyCompilerStage.Run()
+		void ICompilerStage.Run()
 		{
 			ITypeModule mainTypeModule = typeSystem.MainTypeModule;
 
@@ -97,7 +97,7 @@ namespace Mosa.Tool.Compiler.Stages
 			method = LinkTimeCodeGenerator.Compile(compiler, @"AssemblyInit", instructionSet, typeSystem);
 		}
 
-		#endregion // IAssemblyCompilerStage Members
+		#endregion // ICompilerStage Members
 
 		#region Methods
 

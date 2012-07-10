@@ -324,7 +324,7 @@ namespace Mosa.Tool.TypeExplorer
 			filter.IsLogging = true;
 			filter.MethodMatch = MatchType.Any;
 
-			ExplorerAssemblyCompiler.Compile(typeSystem, typeLayout, internalTrace, cbPlatform.Text, enableSSAToolStripMenuItem.Checked);
+			ExplorerCompiler.Compile(typeSystem, typeLayout, internalTrace, cbPlatform.Text, enableSSAToolStripMenuItem.Checked);
 			tabControl1.SelectedTab = tabPage1;
 			rbOtherResult.Text = compileLog.ToString();
 		}

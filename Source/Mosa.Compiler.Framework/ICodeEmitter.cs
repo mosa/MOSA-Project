@@ -25,7 +25,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="compiler">The compiler.</param>
 		/// <param name="codeStream">The code stream.</param>
 		/// <param name="linker">The linker.</param>
-		void Initialize(IMethodCompiler compiler, Stream codeStream, IAssemblyLinker linker);
+		void Initialize(IMethodCompiler compiler, Stream codeStream, ILinker linker);
 
 		/// <summary>
 		/// Emits a label into the code stream.

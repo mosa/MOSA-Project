@@ -55,7 +55,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			base.Setup(methodCompiler);
 
-			plugSystem = methodCompiler.AssemblyCompiler.Pipeline.FindFirst<IPlugSystem>();
+			plugSystem = methodCompiler.Compiler.Pipeline.FindFirst<IPlugSystem>();
 		}
 
 		/// <summary>
@@ -109,7 +109,7 @@ namespace Mosa.Compiler.Framework.Stages
 							if (local.Type is GenericInstSigType && declaringType is CilGenericType)
 							{
 								var genericInstSigType = local.Type as GenericInstSigType;
-								var genericArguments = methodCompiler.AssemblyCompiler.GenericTypePatcher.CloseGenericArguments((declaringType as CilGenericType).GenericArguments, genericInstSigType.GenericArguments);
+								var genericArguments = methodCompiler.Compiler.GenericTypePatcher.CloseGenericArguments((declaringType as CilGenericType).GenericArguments, genericInstSigType.GenericArguments);
 								local = new VariableSignature(locals[i], genericArguments);
 							}
 						}
@@ -309,7 +309,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		IGenericTypePatcher BaseInstructionDecoder.GenericTypePatcher
 		{
-			get { return methodCompiler.AssemblyCompiler.GenericTypePatcher; }
+			get { return methodCompiler.Compiler.GenericTypePatcher; }
 		}
 
 		/// <summary>

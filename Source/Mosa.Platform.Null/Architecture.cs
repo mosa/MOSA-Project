@@ -129,8 +129,8 @@ namespace Mosa.Platform.Null
 		/// <summary>
 		/// Extends the assembly compiler pipeline with ARM specific stages.
 		/// </summary>
-		/// <param name="assemblyCompilerPipeline">The assembly compiler pipeline to extend.</param>
-		public override void ExtendAssemblyCompilerPipeline(CompilerPipeline assemblyCompilerPipeline)
+		/// <param name="compilerPipeline">The pipeline to extend.</param>
+		public override void ExtendCompilerPipeline(CompilerPipeline compilerPipeline)
 		{
 
 		}

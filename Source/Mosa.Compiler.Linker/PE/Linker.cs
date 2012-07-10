@@ -21,7 +21,7 @@ namespace Mosa.Compiler.Linker.PE
 	/// <summary>
 	/// A Linker, which creates portable executable files.
 	/// </summary>
-	public class Linker : BaseAssemblyLinker
+	public class Linker : BaseLinker
 	{
 		#region Constants
 

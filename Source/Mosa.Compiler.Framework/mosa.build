@@ -15,6 +15,7 @@
 	    <csc target="library" output="${outputDirectory}/Mosa.Compiler.Framework.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
                     <include name="BasicBlocks.cs"/>
+                    <include name="Counters.cs"/>
                     <include name="IR/LoadZeroExtended.cs"/>
                     <include name="IR/LoadSignExtended.cs"/>
                     <include name="SimpleFastDominance.cs"/>
@@ -25,7 +26,7 @@
                     <include name="Stages/EdgeSplitStage.cs"/>
                     <include name="Stages/SimpleRegisterAllocatorStage.cs"/>
                     <include name="VirtualRegisterLayout.cs"/>
-                    <include name="Stages/AssemblyMemberCompilationSchedulerStage.cs"/>
+                    <include name="Stages/TypeSchedulerStage.cs"/>
                     <include name="BaseCodeEmitter.cs"/>
                     <include name="BaseInstruction.cs"/>
                     <include name="Stages/BasicBlockBuilderStage.cs"/>
@@ -49,7 +50,7 @@
                     <include name="CIL/ReadOnlyPrefixInstruction.cs"/>
                     <include name="Stages/CILDecodingStage.cs"/>
                     <include name="CIL/BreakInstruction.cs"/>
-                    <include name="BaseAssemblyCompilerStage.cs"/>
+                    <include name="BaseCompilerStage.cs"/>
                     <include name="Platform/BasePlatformInstruction.cs"/>
                     <include name="Platform/BasePlatformTransformationStage.cs"/>
                     <include name="Platform/IRegisterUsage.cs"/>
@@ -227,7 +228,7 @@
                     <include name="Linker/LinkerGeneratedType.cs"/>
                     <include name="Linker/LinkerMethodCompiler.cs"/>
                     <include name="Linker/LinkTimeCodeGenerator.cs"/>
-                    <include name="AssemblyCompiler.cs"/>
+                    <include name="BaseCompiler.cs"/>
                     <include name="BasicArchitecture.cs"/>
                     <include name="BasicBlock.cs"/>
                     <include name="Stages/CodeGenerationStage.cs"/>
@@ -237,7 +238,7 @@
                     <include name="Stages/DominanceCalculationStage.cs"/>
                     <include name="FlowControl.cs"/>
                     <include name="IArchitecture.cs"/>
-                    <include name="IAssemblyCompilerStage.cs"/>
+                    <include name="ICompilerStage.cs"/>
                     <include name="ICallingConvention.cs"/>
                     <include name="ICodeGenerationStage.cs"/>
                     <include name="IDominanceProvider.cs"/>

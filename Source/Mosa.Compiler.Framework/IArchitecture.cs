@@ -82,13 +82,11 @@ namespace Mosa.Compiler.Framework
 		ICallingConvention CallingConvention { get; }
 
 		/// <summary>
-		/// Requests the architecture to add architecture specific compilation stages to the assembly compiler 
+		/// Requests the architecture to add architecture specific compilation stages to the assembly compiler
 		/// pipeline. These may depend upon the current state of the pipeline.
 		/// </summary>
-		/// <param name="assemblyPipeline">
-		/// The pipeline of the assembly compiler to add architecture specific compilation stages to.
-		/// </param>
-		void ExtendAssemblyCompilerPipeline(CompilerPipeline assemblyPipeline);
+		/// <param name="compilerPipeline">The compiler pipeline.</param>
+		void ExtendCompilerPipeline(CompilerPipeline compilerPipeline);
 
 		/// <summary>
 		/// Requests the architecture to add architecture specific compilation stages to the pipeline. These

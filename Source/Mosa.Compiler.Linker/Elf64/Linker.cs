@@ -18,7 +18,7 @@ namespace Mosa.Compiler.Linker.Elf64
 	/// <summary>
 	/// 
 	/// </summary>
-	public class Linker : BaseAssemblyLinker
+	public class Linker : BaseLinker
 	{
 		/// <summary>
 		/// 

@@ -45,7 +45,7 @@
     <Compile Include="CodeForm.Designer.cs">
       <DependentUpon>CodeForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="ExplorerAssemblyCompiler.cs" />
+    <Compile Include="ExplorerCompiler.cs" />
     <Compile Include="ExplorerLinker.cs" />
     <Compile Include="ExplorerMethodCompiler.cs" />
     <Compile Include="Main.cs">

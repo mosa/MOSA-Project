@@ -17,9 +17,9 @@ namespace Mosa.Tool.Compiler.Stages
 	/// <summary>
 	/// Lays out sections and symbols sequentially in an object file.
 	/// </summary>
-	public class ObjectFileLayoutStage : BaseAssemblyCompilerStage, IAssemblyCompilerStage, IPipelineStage
+	public class ObjectFileLayoutStage : BaseCompilerStage, ICompilerStage, IPipelineStage
 	{
-		private IAssemblyLinker linker;
+		private ILinker linker;
 
 		#region Methods
 
@@ -83,23 +83,23 @@ namespace Mosa.Tool.Compiler.Stages
 
 		#endregion // Methods
 
-		#region IAssemblyCompilerStage Overrides
+		#region ICompilerStage Overrides
 
-		void IAssemblyCompilerStage.Setup(AssemblyCompiler compiler)
+		void ICompilerStage.Setup(BaseCompiler compiler)
 		{
 			base.Setup(compiler);
-			linker = RetrieveAssemblyLinkerFromCompiler();
+			linker = RetrieveLinkerFromCompiler();
 		}
 
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
-		void IAssemblyCompilerStage.Run()
+		void ICompilerStage.Run()
 		{
 			LayoutSections();
 			LayoutSymbols();
 		}
 
-		#endregion // IAssemblyCompilerStage Overrides
+		#endregion // ICompilerStage Overrides
 	}
 }

@@ -16,7 +16,7 @@ namespace Mosa.Tool.Compiler.Stages
 	/// <summary>
 	/// 
 	/// </summary>
-	public class PortableExecutableLinkerStage : Mosa.Compiler.Linker.PE.Linker, IPipelineStage, IAssemblyCompilerStage, IAssemblyLinker
+	public class PortableExecutableLinkerStage : Mosa.Compiler.Linker.PE.Linker, IPipelineStage, ICompilerStage, ILinker
 	{
 
 		#region IPipelineStage
@@ -30,9 +30,9 @@ namespace Mosa.Tool.Compiler.Stages
 
 		#endregion // IPipelineStage Members
 
-		#region IAssemblyCompilerStage members
+		#region ICompilerStage members
 
-		public void Setup(AssemblyCompiler compiler)
+		public void Setup(BaseCompiler compiler)
 		{
 			this.OutputFile = compiler.CompilerOptions.OutputFile;
 			this.IsLittleEndian = compiler.Architecture.IsLittleEndian;
@@ -47,6 +47,6 @@ namespace Mosa.Tool.Compiler.Stages
 				this.SetChecksum = compiler.CompilerOptions.PortableExecutable.SetChecksum.Value;
 		}
 
-		#endregion // IAssemblyCompilerStage members
+		#endregion // ICompilerStage members
 	}
 }

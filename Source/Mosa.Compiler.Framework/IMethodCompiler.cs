@@ -37,7 +37,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Retrieves the linker used to resolve external symbols.
 		/// </summary>
-		IAssemblyLinker Linker { get; }
+		ILinker Linker { get; }
 
 		/// <summary>
 		/// Retrieves the method being compiled.
@@ -162,7 +162,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the assembly compiler.
 		/// </summary>
-		AssemblyCompiler AssemblyCompiler { get; }
+		BaseCompiler Compiler { get; }
 
 		/// <summary>
 		/// Gets the plug.

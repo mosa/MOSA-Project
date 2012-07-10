@@ -27,8 +27,8 @@ namespace Mosa.Tool.Compiler
 		/// <summary>
 		/// Initializes a new instance of the <see cref="AotMethodCompiler"/> class.
 		/// </summary>
-		public AotMethodCompiler(AssemblyCompiler assemblyCompiler, ICompilationSchedulerStage compilationScheduler, RuntimeType type, RuntimeMethod method, CompilerOptions compilerOptions)
-			: base(assemblyCompiler, type, method, null, compilationScheduler)
+		public AotMethodCompiler(BaseCompiler compiler, ICompilationSchedulerStage compilationScheduler, RuntimeType type, RuntimeMethod method, CompilerOptions compilerOptions)
+			: base(compiler, type, method, null, compilationScheduler)
 		{
 			this.Pipeline.AddRange(
 				new IMethodCompilerStage[] 
@@ -73,7 +73,7 @@ namespace Mosa.Tool.Compiler
 			const MethodAttributes attrs = MethodAttributes.SpecialName | MethodAttributes.RTSpecialName | MethodAttributes.Static;
 			if ((Method.Attributes & attrs) == attrs && Method.Name == ".cctor")
 			{
-				var typeInitializerSchedulerStage = AssemblyCompiler.Pipeline.FindFirst<ITypeInitializerSchedulerStage>();
+				var typeInitializerSchedulerStage = Compiler.Pipeline.FindFirst<ITypeInitializerSchedulerStage>();
 				typeInitializerSchedulerStage.Schedule(Method);
 			}
 

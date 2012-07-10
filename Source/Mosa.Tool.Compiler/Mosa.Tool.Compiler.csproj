@@ -65,7 +65,7 @@
     <Reference Include="System" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="AotAssemblyCompiler.cs" />
+    <Compile Include="AotCompiler.cs" />
     <Compile Include="Stages\MethodPipelineExportStage.cs" />
     <Compile Include="Stages\Elf32LinkerStage.cs" />
     <Compile Include="Stages\Elf64LinkerStage.cs" />

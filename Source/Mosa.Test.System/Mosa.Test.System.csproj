@@ -133,7 +133,7 @@
     <Compile Include="TestAssemblyLinker.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="TestCaseAssemblyCompiler.cs">
+    <Compile Include="TestCaseCompiler.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Include="TestCaseMethodCompiler.cs">

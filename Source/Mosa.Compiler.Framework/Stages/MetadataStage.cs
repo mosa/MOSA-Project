@@ -19,31 +19,31 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <summary>
 	/// Emits metadata for assemblies and types
 	/// </summary>
-	public sealed class MetadataStage : BaseAssemblyCompilerStage, IAssemblyCompilerStage
+	public sealed class MetadataStage : BaseCompilerStage, ICompilerStage
 	{
 		#region Data members
 
 		/// <summary>
 		/// 
 		/// </summary>
-		private IAssemblyLinker linker;
+		private ILinker linker;
 
 		#endregion // Data members
 
-		#region IAssemblyCompilerStage members
+		#region ICompilerStage members
 
-		void IAssemblyCompilerStage.Setup(AssemblyCompiler compiler)
+		void ICompilerStage.Setup(BaseCompiler compiler)
 		{
 			base.Setup(compiler);
-			this.linker = RetrieveAssemblyLinkerFromCompiler();
+			this.linker = RetrieveLinkerFromCompiler();
 		}
 
-		void IAssemblyCompilerStage.Run()
+		void ICompilerStage.Run()
 		{
 			CreateAssemblyListTable();
 		}
 
-		#endregion // IAssemblyCompilerStage members
+		#endregion // ICompilerStage members
 
 		private void EmitStringWithLength(EndianAwareBinaryWriter stream, string value)
 		{

@@ -23,7 +23,7 @@ namespace Mosa.Compiler.Linker
 	/// <summary>
 	/// This compilation stage links all external labels together, which were previously registered.
 	/// </summary>
-	public abstract class BaseAssemblyLinkerStage : BaseAssemblyCompilerStage, IAssemblyCompilerStage, IAssemblyLinker
+	public abstract class BaseAssemblyLinkerStage : BaseCompilerStage, ICompilerStage, ILinker
 	{
 		#region Data members
 
@@ -68,7 +68,7 @@ namespace Mosa.Compiler.Linker
 
 		#endregion // Construction
 
-		#region IAssemblyCompilerStage Members
+		#region ICompilerStage Members
 
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
@@ -107,7 +107,7 @@ namespace Mosa.Compiler.Linker
 			}
 		}
 
-		#endregion // IAssemblyCompilerStage Members
+		#endregion // ICompilerStage Members
 
 		#region Methods
 
@@ -302,7 +302,7 @@ namespace Mosa.Compiler.Linker
 
 		#endregion // IAssemblyLinker Members
 
-		public AssemblyCompiler Compiler
+		public BaseCompiler Compiler
 		{
 			get { return compiler; }
 		}

@@ -455,7 +455,7 @@ namespace Mosa.Tool.Compiler
 
 		private void Compile()
 		{
-			AotAssemblyCompiler.Compile(compilerOptions, inputFiles);
+			AotCompiler.Compile(compilerOptions, inputFiles);
 		}
 
 		/// <summary>
@@ -534,15 +534,13 @@ namespace Mosa.Tool.Compiler
 		/// </summary>
 		/// <param name="format">The format.</param>
 		/// <returns></returns>
-		private static IAssemblyCompilerStage SelectBootStage(string format)
+		private static ICompilerStage SelectBootStage(string format)
 		{
 			switch (format.ToLower())
 			{
 				case "multiboot-0.7":
 				case "mb0.7":
-					return new Mosa.Platform.x86.Stages.Multiboot0695AssemblyStage();
-				//case "mb0.7ii":
-				//	return new Mosa.Platform.x86II.Stages.Multiboot0695AssemblyStage();
+					return new Mosa.Platform.x86.Stages.Multiboot0695Stage();
 				default:
 					throw new OptionException(String.Format("Unknown or unsupported boot format {0}.", format), "boot");
 			}
@@ -553,7 +551,7 @@ namespace Mosa.Tool.Compiler
 		/// </summary>
 		/// <param name="format">The linker format.</param>
 		/// <returns>The implementation of the linker.</returns>
-		private static IAssemblyLinker SelectLinkerStage(string format)
+		private static ILinker SelectLinkerStage(string format)
 		{
 			switch (format.ToLower())
 			{

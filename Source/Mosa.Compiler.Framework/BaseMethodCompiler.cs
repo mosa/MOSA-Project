@@ -60,7 +60,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Holds the linker used to resolve external symbols
 		/// </summary>
-		private IAssemblyLinker linker;
+		private ILinker linker;
 
 		/// <summary>
 		/// Holds a list of operands which represent local variables
@@ -118,9 +118,9 @@ namespace Mosa.Compiler.Framework
 		private ExceptionClauseHeader exceptionClauseHeader = new ExceptionClauseHeader();
 
 		/// <summary>
-		/// Holds the assembly compiler
+		/// Holds the compiler
 		/// </summary>
-		private AssemblyCompiler assemblyCompiler;
+		private BaseCompiler compiler;
 
 		/// <summary>
 		/// Holds the plug system
@@ -144,29 +144,29 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Initializes a new instance of the <see cref="BaseMethodCompiler"/> class.
 		/// </summary>
-		/// <param name="assemblyCompiler">The assembly compiler.</param>
+		/// <param name="compiler">The assembly compiler.</param>
 		/// <param name="type">The type, which owns the method to compile.</param>
 		/// <param name="method">The method to compile by this instance.</param>
 		/// <param name="instructionSet">The instruction set.</param>
 		/// <param name="compilationScheduler">The compilation scheduler.</param>
-		protected BaseMethodCompiler(AssemblyCompiler assemblyCompiler, RuntimeType type, RuntimeMethod method, InstructionSet instructionSet, ICompilationSchedulerStage compilationScheduler)
+		protected BaseMethodCompiler(BaseCompiler compiler, RuntimeType type, RuntimeMethod method, InstructionSet instructionSet, ICompilationSchedulerStage compilationScheduler)
 		{
 			if (compilationScheduler == null)
 				throw new ArgumentNullException(@"compilationScheduler");
 
-			this.assemblyCompiler = assemblyCompiler;
+			this.compiler = compiler;
 			this.method = method;
 			this.type = type;
 			this.compilationScheduler = compilationScheduler;
 			this.moduleTypeSystem = method.Module;
 
-			this.architecture = assemblyCompiler.Architecture;
-			this.typeSystem = assemblyCompiler.TypeSystem;
-			this.typeLayout = AssemblyCompiler.TypeLayout;
-			this.internalTrace = AssemblyCompiler.InternalTrace;
+			this.architecture = compiler.Architecture;
+			this.typeSystem = compiler.TypeSystem;
+			this.typeLayout = Compiler.TypeLayout;
+			this.internalTrace = Compiler.InternalTrace;
 
-			this.linker = assemblyCompiler.Pipeline.FindFirst<IAssemblyLinker>();
-			this.plugSystem = assemblyCompiler.Pipeline.FindFirst<IPlugSystem>();
+			this.linker = compiler.Pipeline.FindFirst<ILinker>();
+			this.plugSystem = compiler.Pipeline.FindFirst<IPlugSystem>();
 
 			this.parameters = new List<Operand>(new Operand[method.Parameters.Count]);
 			this.basicBlocks = new BasicBlocks();
@@ -199,7 +199,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the linker used to resolve external symbols.
 		/// </summary>
-		public IAssemblyLinker Linker { get { return linker; } }
+		public ILinker Linker { get { return linker; } }
 
 		/// <summary>
 		/// Gets the method implementation being compiled.
@@ -266,7 +266,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Gets the assembly compiler.
 		/// </summary>
-		public AssemblyCompiler AssemblyCompiler { get { return assemblyCompiler; } }
+		public BaseCompiler Compiler { get { return compiler; } }
 
 		/// <summary>
 		/// Gets the plug system.
@@ -313,7 +313,7 @@ namespace Mosa.Compiler.Framework
 			if (method.Signature.HasThis || method.Signature.HasExplicitThis)
 			{
 				var signatureType = Method.DeclaringType.ContainsOpenGenericParameters
-					? assemblyCompiler.GenericTypePatcher.PatchSignatureType(Method.Module, Method.DeclaringType as CilGenericType, type.Token)
+					? compiler.GenericTypePatcher.PatchSignatureType(Method.Module, Method.DeclaringType as CilGenericType, type.Token)
 					: new ClassSigType(type.Token);
 
 				stackLayout.SetStackParameter(index++, new RuntimeParameter(@"this", 2, ParameterAttributes.In), signatureType);
@@ -325,7 +325,7 @@ namespace Mosa.Compiler.Framework
 
 				if (parameterType is GenericInstSigType && (parameterType as GenericInstSigType).ContainsGenericParameters)
 				{
-					parameterType = assemblyCompiler.GenericTypePatcher.PatchSignatureType(typeSystem.InternalTypeModule, Method.DeclaringType, (parameterType as GenericInstSigType).BaseType.Token);
+					parameterType = compiler.GenericTypePatcher.PatchSignatureType(typeSystem.InternalTypeModule, Method.DeclaringType, (parameterType as GenericInstSigType).BaseType.Token);
 				}
 
 				stackLayout.SetStackParameter(index++, method.Parameters[paramIndex], parameterType);

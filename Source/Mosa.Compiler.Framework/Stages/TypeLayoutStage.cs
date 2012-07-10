@@ -21,24 +21,24 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <summary>
 	/// Performs memory layout of a type for compilation.
 	/// </summary>
-	public sealed class TypeLayoutStage : BaseAssemblyCompilerStage, IAssemblyCompilerStage
+	public sealed class TypeLayoutStage : BaseCompilerStage, ICompilerStage
 	{
 		#region Data members
 
-		private IAssemblyLinker linker;
+		private ILinker linker;
 		//private HashSet<RuntimeType> processed = new HashSet<RuntimeType>();
 
 		#endregion // Data members
 
-		#region IAssemblyCompilerStage members
+		#region ICompilerStage members
 
-		void IAssemblyCompilerStage.Setup(AssemblyCompiler compiler)
+		void ICompilerStage.Setup(BaseCompiler compiler)
 		{
 			base.Setup(compiler);
-			this.linker = RetrieveAssemblyLinkerFromCompiler();
+			this.linker = RetrieveLinkerFromCompiler();
 		}
 
-		void IAssemblyCompilerStage.Run()
+		void ICompilerStage.Run()
 		{
 			foreach (RuntimeType type in typeSystem.GetAllTypes())
 			{
@@ -64,7 +64,7 @@ namespace Mosa.Compiler.Framework.Stages
 			}
 		}
 
-		#endregion // IAssemblyCompilerStage members
+		#endregion // ICompilerStage members
 
 		public ITypeLayout TypeLayout { get { return typeLayout; } }
 

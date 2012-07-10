@@ -16,7 +16,7 @@ namespace Mosa.Tool.Compiler.Stages
 	/// <summary>
 	/// 
 	/// </summary>
-	public class Elf64LinkerStage : Mosa.Compiler.Linker.Elf64.Linker, IPipelineStage, IAssemblyCompilerStage, IAssemblyLinker
+	public class Elf64LinkerStage : Mosa.Compiler.Linker.Elf64.Linker, IPipelineStage, ICompilerStage, ILinker
 	{
 
 		#region IPipelineStage
@@ -29,9 +29,9 @@ namespace Mosa.Tool.Compiler.Stages
 
 		#endregion // IPipelineStage Members
 
-		#region IAssemblyCompilerStage members
+		#region ICompilerStage members
 
-		public void Setup(AssemblyCompiler compiler)
+		public void Setup(BaseCompiler compiler)
 		{
 			this.OutputFile = compiler.CompilerOptions.OutputFile;
 			//this.FileAlignment = compiler.CompilerOptions.Elf64.FileAlignment;
@@ -39,6 +39,6 @@ namespace Mosa.Tool.Compiler.Stages
 			this.Machine = (MachineType)compiler.Architecture.ElfMachineType;
 		}
 
-		#endregion // IAssemblyCompilerStage members
+		#endregion // ICompilerStage members
 	}
 }

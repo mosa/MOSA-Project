@@ -66,12 +66,12 @@ namespace Mosa.Compiler.Framework
 		/// Gets or sets the linker stage.
 		/// </summary>
 		/// <value>The linker stage.</value>
-		public IAssemblyLinker Linker { get; set; }
+		public ILinker Linker { get; set; }
 
 		/// <summary>
 		/// Gets or sets the compiler stage responsible for booting.
 		/// </summary>
-		public IAssemblyCompilerStage BootCompilerStage { get; set; }
+		public ICompilerStage BootCompilerStage { get; set; }
 
 		/// <summary>
 		/// Gets or sets the statistics file.
