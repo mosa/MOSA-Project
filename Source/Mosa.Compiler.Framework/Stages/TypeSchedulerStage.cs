@@ -17,33 +17,18 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public class TypeSchedulerStage : BaseCompilerStage, ICompilerStage, IPipelineStage
 	{
-		#region Data members
-
-		#endregion // Data members
-
+		
 		#region ICompilerStage members
-
-		void ICompilerStage.Setup(BaseCompiler compiler)
-		{
-			base.Setup(compiler);
-		}
 
 		void ICompilerStage.Run()
 		{
-			foreach (RuntimeType type in typeSystem.GetAllTypes())
-			{
-				if (type.ContainsOpenGenericParameters)
-					continue;
+			//foreach (RuntimeType type in typeSystem.GetAllTypes())
+			//{
+			//    if (type.ContainsOpenGenericParameters)
+			//        continue;
 
-				// Do not schedule generic types, they're scheduled on demand.
-				if (type.IsGeneric)
-					continue;
-
-				if (type.IsModule)
-					continue;
-
-				compiler.Scheduler.ScheduleTypeForCompilation(type);
-			}
+			//    compiler.Scheduler.TrackTypeAllocated(type);
+			//}
 		}
 
 		#endregion ICompilerStage members

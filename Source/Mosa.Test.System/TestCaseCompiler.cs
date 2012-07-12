@@ -31,14 +31,14 @@ namespace Mosa.Test.System
 		/// <param name="internalTrace">The internal trace.</param>
 		/// <param name="compilerOptions">The compiler options.</param>
 		private TestCaseCompiler(IArchitecture architecture, ITypeSystem typeSystem, ITypeLayout typeLayout, IInternalTrace internalTrace, CompilerOptions compilerOptions) :
-			base(architecture, typeSystem, typeLayout, new MethodCompilerSchedulerStage(typeSystem), internalTrace, compilerOptions)
+			base(architecture, typeSystem, typeLayout, new CompilationScheduler(typeSystem, true), internalTrace, compilerOptions)
 		{
 			// Build the assembly compiler pipeline
 			Pipeline.AddRange(new ICompilerStage[] {
 				new DelegateTypePatchStage(),
 				new PlugStage(),
 				new TypeSchedulerStage(),
-				(MethodCompilerSchedulerStage)base.Scheduler, // HACK
+				new MethodCompilerSchedulerStage(),
 				new TypeLayoutStage(),
 				new MetadataStage(),
 				(TestAssemblyLinker)Linker

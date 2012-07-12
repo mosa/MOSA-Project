@@ -15,7 +15,7 @@
 	    <csc target="library" output="${outputDirectory}/Mosa.Compiler.Framework.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
                     <include name="BasicBlocks.cs"/>
-                    <include name="ICompilationScheduler2.cs"/>
+                    <include name="ICompilationScheduler.cs"/>
                     <include name="Counters.cs"/>
                     <include name="IR/LoadZeroExtended.cs"/>
                     <include name="IR/LoadSignExtended.cs"/>
@@ -79,7 +79,6 @@
                     <include name="Stages/TypeLayoutStage.cs"/>
                     <include name="IR/Throw.cs"/>
                     <include name="Stages/GenericsResolverStage.cs"/>
-                    <include name="ICompilationScheduler.cs"/>
                     <include name="Intrinsics/InternalAllocateString.cs"/>
                     <include name="IR/AddFloat.cs"/>
                     <include name="IR/AddSigned.cs"/>

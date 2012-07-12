@@ -4,7 +4,6 @@
  * Licensed under the terms of the New BSD License.
  *
  * Authors:
- *  Michael Fröhlich (aka Michael Ruck or grover) <sharpos@michaelruck.de>
  */
 
 using Mosa.Compiler.TypeSystem;
@@ -15,20 +14,27 @@ namespace Mosa.Compiler.Framework
 	public interface ICompilationScheduler
 	{
 		/// <summary>
-		/// Schedules the type for compilation.
+		/// Tracks the type allocated.
 		/// </summary>
 		/// <param name="type">The type.</param>
-		void ScheduleTypeForCompilation(RuntimeType type);
+		void TrackTypeAllocated(RuntimeType type);
 
 		/// <summary>
-		/// Schedules the method for compilation.
+		/// Tracks the method invoked.
 		/// </summary>
 		/// <param name="method">The method.</param>
-		void ScheduleMethodForCompilation(RuntimeMethod method);
+		void TrackMethodInvoked(RuntimeMethod method);
 
 		/// <summary>
-		/// Gets the new scheduler.
+		/// Tracks the field referenced.
 		/// </summary>
-		ICompilationScheduler2 newScheduler { get; }
+		/// <param name="field">The field.</param>
+		void TrackFieldReferenced(RuntimeField field);
+
+		/// <summary>
+		/// Gets the method to compile.
+		/// </summary>
+		/// <returns></returns>
+		RuntimeMethod GetMethodToCompile();
 	}
 }

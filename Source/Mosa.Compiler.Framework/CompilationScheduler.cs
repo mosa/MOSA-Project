@@ -10,6 +10,7 @@
 using System;
 using System.Diagnostics;
 using System.Collections.Generic;
+using Mosa.Compiler.Common;
 using Mosa.Compiler.InternalTrace;
 using Mosa.Compiler.TypeSystem;
 
@@ -18,7 +19,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <summary>
 	/// Schedules compilation of types/methods.
 	/// </summary>
-	public sealed class CompilationScheduler : ICompilationScheduler2
+	public sealed class CompilationScheduler : ICompilationScheduler
 	{
 
 		#region Data Members
@@ -36,31 +37,43 @@ namespace Mosa.Compiler.Framework.Stages
 
 		#endregion // Data Members
 
-		public CompilationScheduler(ITypeSystem typeSystem)
+		public CompilationScheduler(ITypeSystem typeSystem, bool compileAllMethods)
 		{
 			this.typeSystem = typeSystem;
-			compileAllMethods = true;
+			this.compileAllMethods = compileAllMethods;
+
+			if (compileAllMethods)
+			{
+				// forces all types to get compiled
+				foreach (RuntimeType type in typeSystem.GetAllTypes())
+				{
+					CompileType(type);
+				}
+			}
 		}
 
 		#region ICompilationScheduler members
 
-		void ICompilationScheduler2.TrackTypeAllocated(RuntimeType type)
+		void ICompilationScheduler.TrackTypeAllocated(RuntimeType type)
 		{
-			typesAllocated.Add(type);
+			if (type.IsModule)
+				return;
+
+			typesAllocated.AddIfNew(type);
 
 			if (compileAllMethods)
 				CompileType(type);
 		}
 
-		void ICompilationScheduler2.TrackMethodInvoked(RuntimeMethod method)
+		void ICompilationScheduler.TrackMethodInvoked(RuntimeMethod method)
 		{
-			methodsInvoked.Add(method);
+			methodsInvoked.AddIfNew(method);
 
 			if (compileAllMethods)
 				CompileMethod(method);			
 		}
 
-		void ICompilationScheduler2.TrackFieldReferenced(RuntimeField field)
+		void ICompilationScheduler.TrackFieldReferenced(RuntimeField field)
 		{
 			if (compileAllMethods)
 				CompileType(field.DeclaringType);
@@ -70,6 +83,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void CompileType(RuntimeType type)
 		{
+			if (type.IsModule)
+				return;
+
 			// Can not compile an open generic type
 			if (type.ContainsOpenGenericParameters)
 				return;
@@ -100,7 +116,7 @@ namespace Mosa.Compiler.Framework.Stages
 			methodQueue.Enqueue(method);
 		}
 
-		RuntimeMethod ICompilationScheduler2.GetMethodToCompile()
+		RuntimeMethod ICompilationScheduler.GetMethodToCompile()
 		{
 			if (methodQueue.Count == 0)
 				return null;

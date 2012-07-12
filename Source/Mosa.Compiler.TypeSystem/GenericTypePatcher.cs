@@ -109,7 +109,7 @@ namespace Mosa.Compiler.TypeSystem
 		private void AddPatchedType(CilGenericType openType, SigType[] signature, CilGenericType patchedType)
 		{
 			(typeSystem.InternalTypeModule as InternalTypeModule).AddType(patchedType);
-
+			
 			GenericEntry genericEntry = new GenericEntry(openType, signature, patchedType);
 
 			patchedTypes.Add(genericEntry);

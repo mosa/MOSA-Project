@@ -48,32 +48,19 @@ namespace Mosa.DeviceSystem
 		/// <param name="irq">The irq.</param>
 		public void ProcessInterrupt(byte irq, byte error)
 		{
-			//Mosa.Kernel.x86.Debug.Trace("Enter InterruptManager.ProcessInterrupt");
-			//try
+			//Mosa.Kernel.x86.Debug.Trace("Enter InterruptManager.ProcessInterrupt");		
+
+			//spinLock.Enter();
+			var handlers = interruptHandlers[irq];
+			var hardwareDevice = handlers.First.value;
+			hardwareDevice.OnInterrupt();
+
+			//foreach (IHardwareDevice hardwareDevice in interruptHandlers[irq])
 			//{
-				spinLock.Enter();
-				var handlers = interruptHandlers[irq];
-				var hardwareDevice = handlers.First.value;
-				hardwareDevice.OnInterrupt();
-					
-				//foreach (IHardwareDevice hardwareDevice in interruptHandlers[irq])
-				//for(int i = 0; i<handlers.Count;i++)
-				//{
-				//    Mosa.Kernel.x86.Debug.Trace("+");
-				//    var hardwareDevice = handlers.First.value;
-				//    Mosa.Kernel.x86.Debug.Trace("-");
-				//    hardwareDevice.OnInterrupt();
-				//    Mosa.Kernel.x86.Debug.Trace("*");
-				//}
-				
+			//    hardwareDevice.OnInterrupt();
 			//}
-			//finally
-			//{
-			//    Mosa.Kernel.x86.Debug.Trace("4");
-			//    spinLock.Exit();
-			//    Mosa.Kernel.x86.Debug.Trace("5");
-			//}
-			//Mosa.Kernel.x86.Debug.Trace("Exit InterruptManager.ProcessInterrupt");
+
+			//spinLock.Exit();	
 		}
 
 		/// <summary>

@@ -60,6 +60,8 @@ namespace Mosa.Compiler.Linker
 			{
 				compilerGeneratedType = new LinkerGeneratedType(typeSystem.InternalTypeModule, @"Mosa.Tools.Compiler", @"LinkerGenerated", null);
 				typeSystem.AddInternalType(compilerGeneratedType);
+
+				//compiler.Scheduler.TrackTypeAllocated(compilerGeneratedType);
 			}
 
 			MethodSignature signature = new MethodSignature(BuiltInSigType.Void, new SigType[0]);
@@ -69,8 +71,11 @@ namespace Mosa.Compiler.Linker
 			LinkerGeneratedMethod method = new LinkerGeneratedMethod(typeSystem.InternalTypeModule, "<$>" + methodName, compilerGeneratedType, signature);
 			compilerGeneratedType.AddMethod(method);
 
+			//compiler.Scheduler.TrackMethodInvoked(method);
+
 			LinkerMethodCompiler methodCompiler = new LinkerMethodCompiler(compiler, method, instructionSet);
 			methodCompiler.Compile();
+
 			return method;
 		}
 

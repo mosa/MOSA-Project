@@ -162,20 +162,18 @@ namespace Mosa.Compiler.Framework.CIL
 			{
 				case TableType.MethodDef:
 					method = module.GetMethod(callTarget);
-					decoder.Compiler.Scheduler.newScheduler.TrackMethodInvoked(method);
+					decoder.Compiler.Scheduler.TrackMethodInvoked(method);
 					break;
 
 				case TableType.MemberRef:
 					method = module.GetMethod(callTarget, decoder.Method.DeclaringType);
 					if (method.DeclaringType.IsGeneric)
-						decoder.Compiler.Scheduler.ScheduleTypeForCompilation(method.DeclaringType);					
-					decoder.Compiler.Scheduler.newScheduler.TrackMethodInvoked(method);
+					decoder.Compiler.Scheduler.TrackMethodInvoked(method);
 					break;
 
 				case TableType.MethodSpec:
 					method = module.GetMethod(callTarget);
-					decoder.Compiler.Scheduler.ScheduleTypeForCompilation(method.DeclaringType);
-					decoder.Compiler.Scheduler.newScheduler.TrackMethodInvoked(method);
+					decoder.Compiler.Scheduler.TrackMethodInvoked(method);
 					break;
 
 				default:
@@ -186,8 +184,7 @@ namespace Mosa.Compiler.Framework.CIL
 			if (method.DeclaringType.ContainsOpenGenericParameters)
 			{
 				method = decoder.GenericTypePatcher.PatchMethod(method.DeclaringType.Module, decoder.Method.DeclaringType as CilGenericType, method);
-				decoder.Compiler.Scheduler.ScheduleTypeForCompilation(method.DeclaringType);
-				decoder.Compiler.Scheduler.newScheduler.TrackMethodInvoked(method);
+				decoder.Compiler.Scheduler.TrackMethodInvoked(method);
 			}
 
 			SetInvokeTarget(ctx, decoder.Compiler, method);

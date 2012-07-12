@@ -52,10 +52,6 @@ namespace Mosa.Compiler.TypeSystem
 		/// <summary>
 		/// 
 		/// </summary>
-		private ITypeSystem typeSystem = null;
-		/// <summary>
-		/// 
-		/// </summary>
 		private RuntimeType delegateStub = null;
 
 		private string platform;
@@ -64,10 +60,12 @@ namespace Mosa.Compiler.TypeSystem
 		/// Initializes a new instance of the <see cref="DelegateTypePatcher"/> class.
 		/// </summary>
 		/// <param name="typeSystem">The type system.</param>
+		/// <param name="platform">The platform.</param>
 		public DelegateTypePatcher(ITypeSystem typeSystem, string platform)
 		{
-			this.typeSystem = typeSystem;
 			this.platform = platform;
+
+			delegateStub = LoadDelegateStub(typeSystem, platform);
 		}
 
 		/// <summary>
@@ -79,9 +77,6 @@ namespace Mosa.Compiler.TypeSystem
 			if (alreadyPatched.Contains(type))
 				return;
 
-			if (delegateStub == null)
-				LoadDelegateStub();
-
 			GenerateAndInsertFields(type);
 			GenerateAndReplaceMethods(type);
 
@@ -91,24 +86,19 @@ namespace Mosa.Compiler.TypeSystem
 		/// <summary>
 		/// Loads the delegate stub.
 		/// </summary>
-		private void LoadDelegateStub()
+		/// <param name="typeSystem">The type system.</param>
+		/// <param name="platform">The platform.</param>
+		/// <returns></returns>
+		private static RuntimeType LoadDelegateStub(ITypeSystem typeSystem, string platform)
 		{
-
 			foreach (var t in typeSystem.GetAllTypes())
 			{
 				if (t.FullName == "Mosa.Platform." + platform + ".Intrinsic.DelegateStub")
 				{
-					delegateStub = t;
-					return;
-				}
-
-				// FIXME: Remove this!
-				if (t.FullName == "Mosa.Platform." + platform.Trim('i') + ".Intrinsic.DelegateStub")
-				{
-					delegateStub = t;
-					return;
+					return t;
 				}
 			}
+			return null;
 		}
 
 		/// <summary>

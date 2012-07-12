@@ -104,10 +104,9 @@ namespace Mosa.Compiler.Framework.CIL
 
 			// Get the type to allocate
 			SigType sigType = CreateSignatureTypeFor(decoder.Compiler.Assembly, ctor, ctx.InvokeTarget.DeclaringType);
-			decoder.Compiler.Scheduler.ScheduleTypeForCompilation(ctx.InvokeTarget.DeclaringType);
 
-			decoder.Compiler.Scheduler.newScheduler.TrackMethodInvoked(ctx.InvokeTarget);
-			decoder.Compiler.Scheduler.newScheduler.TrackTypeAllocated(ctx.InvokeTarget.DeclaringType);
+			decoder.Compiler.Scheduler.TrackMethodInvoked(ctx.InvokeTarget);
+			decoder.Compiler.Scheduler.TrackTypeAllocated(ctx.InvokeTarget.DeclaringType);
 
 			// Set a return value according to the type of the object allocated
 			ctx.Result = decoder.Compiler.CreateVirtualRegister(sigType);

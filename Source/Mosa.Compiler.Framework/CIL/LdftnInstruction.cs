@@ -48,7 +48,7 @@ namespace Mosa.Compiler.Framework.CIL
 			ctx.Result = decoder.Compiler.CreateVirtualRegister(BuiltInSigType.IntPtr);
 			ctx.InvokeTarget = decoder.TypeModule.GetMethod(token);
 			
-			decoder.Compiler.Scheduler.newScheduler.TrackMethodInvoked(ctx.InvokeTarget);
+			decoder.Compiler.Scheduler.TrackMethodInvoked(ctx.InvokeTarget);
 		}
 
 		/// <summary>

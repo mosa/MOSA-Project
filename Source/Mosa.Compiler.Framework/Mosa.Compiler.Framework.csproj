@@ -78,7 +78,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BasicBlocks.cs" />
-    <Compile Include="ICompilationScheduler2.cs" />
+    <Compile Include="ICompilationScheduler.cs" />
     <Compile Include="Counters.cs" />
     <Compile Include="IR\LoadZeroExtended.cs" />
     <Compile Include="IR\LoadSignExtended.cs" />
@@ -142,7 +142,6 @@
     <Compile Include="Stages\TypeLayoutStage.cs" />
     <Compile Include="IR\Throw.cs" />
     <Compile Include="Stages\GenericsResolverStage.cs" />
-    <Compile Include="ICompilationScheduler.cs" />
     <Compile Include="Intrinsics\InternalAllocateString.cs" />
     <Compile Include="IR\AddFloat.cs" />
     <Compile Include="IR\AddSigned.cs" />

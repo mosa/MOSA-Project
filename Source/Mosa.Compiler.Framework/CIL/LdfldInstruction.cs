@@ -49,8 +49,7 @@ namespace Mosa.Compiler.Framework.CIL
 			if (ctx.RuntimeField.ContainsGenericParameter || ctx.RuntimeField.DeclaringType.ContainsOpenGenericParameters)
 			{
 				ctx.RuntimeField = decoder.GenericTypePatcher.PatchField(decoder.TypeModule, decoder.Method.DeclaringType as CilGenericType, ctx.RuntimeField);
-				decoder.Compiler.Scheduler.ScheduleTypeForCompilation(ctx.RuntimeField.DeclaringType);
-				decoder.Compiler.Scheduler.newScheduler.TrackFieldReferenced(ctx.RuntimeField);
+				decoder.Compiler.Scheduler.TrackFieldReferenced(ctx.RuntimeField);
 				Debug.Assert(!ctx.RuntimeField.ContainsGenericParameter);
 			}
 
