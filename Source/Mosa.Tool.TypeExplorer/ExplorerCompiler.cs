@@ -26,7 +26,7 @@ namespace Mosa.Tool.TypeExplorer
 		/// <param name="internalTrace">The internal trace.</param>
 		/// <param name="compilerOptions">The compiler options.</param>
 		public ExplorerCompiler(IArchitecture architecture, ITypeSystem typeSystem, ITypeLayout typeLayout, IInternalTrace internalTrace, CompilerOptions compilerOptions) :
-			base(architecture, typeSystem, typeLayout, new MethodCompilerSchedulerStage(), internalTrace, compilerOptions)
+			base(architecture, typeSystem, typeLayout, new MethodCompilerSchedulerStage(typeSystem), internalTrace, compilerOptions)
 		{
 			// Build the assembly compiler pipeline
 			Pipeline.AddRange(new ICompilerStage[] {

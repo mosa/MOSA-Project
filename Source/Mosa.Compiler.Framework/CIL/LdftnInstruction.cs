@@ -47,12 +47,8 @@ namespace Mosa.Compiler.Framework.CIL
 			Token token = decoder.DecodeTokenType();
 			ctx.Result = decoder.Compiler.CreateVirtualRegister(BuiltInSigType.IntPtr);
 			ctx.InvokeTarget = decoder.TypeModule.GetMethod(token);
-			/*
-				_function = MetadataMemberReference.FromToken(decoder.Metadata, token);
-
-				// Setup the result
-				_results[0] = CreateResultOperand(NativeTypeReference.NativeInt);
-			 */
+			
+			decoder.Compiler.Scheduler.newScheduler.TrackMethodInvoked(ctx.InvokeTarget);
 		}
 
 		/// <summary>

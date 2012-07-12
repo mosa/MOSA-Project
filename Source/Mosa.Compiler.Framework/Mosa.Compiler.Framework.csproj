@@ -78,11 +78,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BasicBlocks.cs" />
+    <Compile Include="ICompilationScheduler2.cs" />
     <Compile Include="Counters.cs" />
     <Compile Include="IR\LoadZeroExtended.cs" />
     <Compile Include="IR\LoadSignExtended.cs" />
     <Compile Include="SimpleFastDominance.cs" />
     <Compile Include="LoopAwareBlockOrder.cs" />
+    <Compile Include="CompilationScheduler.cs" />
     <Compile Include="Stages\IRCheckStage.cs" />
     <Compile Include="Stages\LoopAwareBlockOrderStage.cs" />
     <Compile Include="Stages\SSAOptimizations.cs" />

@@ -31,14 +31,18 @@ namespace Mosa.Compiler.Framework.Stages
 		// FIXME: Hack for catching duplicate generic types - fix should be in  Mosa.Compiler.TypeSystem.GenericTypePatcher class
 		private readonly HashSet<string> alreadyCompiled;
 
+		public ICompilationScheduler2 newScheduler { get; private set; }
+
 		#endregion // Data Members
 
-		public MethodCompilerSchedulerStage()
+		public MethodCompilerSchedulerStage(ITypeSystem typeSystem)
 		{
 			methodQueue = new Queue<RuntimeMethod>();
 			typeQueue = new Queue<RuntimeType>();
 			compiled = new Dictionary<RuntimeType, RuntimeType>();
-			alreadyCompiled = new HashSet<string>(); 
+			alreadyCompiled = new HashSet<string>();
+
+			newScheduler = new CompilationScheduler(typeSystem);
 		}
 
 		#region ICompilerStage members
@@ -65,7 +69,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (!method.IsGeneric)
 			{
-				Trace(CompilerEvent.SchedulingMethod, method.ToString());
+				//Trace(CompilerEvent.SchedulingMethod, method.ToString());
 				methodQueue.Enqueue(method);
 			}
 		}

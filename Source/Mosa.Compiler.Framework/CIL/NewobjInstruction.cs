@@ -106,6 +106,9 @@ namespace Mosa.Compiler.Framework.CIL
 			SigType sigType = CreateSignatureTypeFor(decoder.Compiler.Assembly, ctor, ctx.InvokeTarget.DeclaringType);
 			decoder.Compiler.Scheduler.ScheduleTypeForCompilation(ctx.InvokeTarget.DeclaringType);
 
+			decoder.Compiler.Scheduler.newScheduler.TrackMethodInvoked(ctx.InvokeTarget);
+			decoder.Compiler.Scheduler.newScheduler.TrackTypeAllocated(ctx.InvokeTarget.DeclaringType);
+
 			// Set a return value according to the type of the object allocated
 			ctx.Result = decoder.Compiler.CreateVirtualRegister(sigType);
 			ctx.ResultCount = 1;
@@ -114,9 +117,10 @@ namespace Mosa.Compiler.Framework.CIL
 		private SigType CreateSignatureTypeFor(IMetadataModule module, Token ctorToken, RuntimeType declaringType)
 		{
 			Token typeToken = declaringType.Token;
-			if (IsMemberRef(ctorToken) == true)
+
+			if (ctorToken.Table == TableType.MemberRef)
 			{
-				typeToken = GetLocalTypeRefToken(module, ctorToken);
+				typeToken = module.Metadata.ReadMemberRefRow(ctorToken).Class;
 			}
 
 			//if (declaringType.IsValueType)
@@ -129,17 +133,6 @@ namespace Mosa.Compiler.Framework.CIL
 			//}
 
 			return new ClassSigType(typeToken);
-		}
-
-		private static Token GetLocalTypeRefToken(IMetadataModule module, Token ctorToken)
-		{
-			MemberRefRow memberRef = module.Metadata.ReadMemberRefRow(ctorToken);
-			return memberRef.Class;
-		}
-
-		private static bool IsMemberRef(Token ctorToken)
-		{
-			return ctorToken.Table == TableType.MemberRef;
 		}
 
 		/// <summary>

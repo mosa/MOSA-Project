@@ -25,5 +25,10 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <param name="method">The method.</param>
 		void ScheduleMethodForCompilation(RuntimeMethod method);
+
+		/// <summary>
+		/// Gets the new scheduler.
+		/// </summary>
+		ICompilationScheduler2 newScheduler { get; }
 	}
 }

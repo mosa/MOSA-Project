@@ -33,7 +33,7 @@ namespace Mosa.Tool.Compiler
 		/// <param name="internalTrace">The internal trace.</param>
 		/// <param name="compilerOptions">The compiler options.</param>
 		public AotCompiler(IArchitecture architecture, ILinker linker, ITypeSystem typeSystem, ITypeLayout typeLayout, IInternalTrace internalTrace, CompilerOptions compilerOptions)
-			: base(architecture, typeSystem, typeLayout, new MethodCompilerSchedulerStage(), internalTrace, compilerOptions)
+			: base(architecture, typeSystem, typeLayout, new MethodCompilerSchedulerStage(typeSystem), internalTrace, compilerOptions)
 		{
 
 		}

@@ -15,11 +15,13 @@
 	    <csc target="library" output="${outputDirectory}/Mosa.Compiler.Framework.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
                     <include name="BasicBlocks.cs"/>
+                    <include name="ICompilationScheduler2.cs"/>
                     <include name="Counters.cs"/>
                     <include name="IR/LoadZeroExtended.cs"/>
                     <include name="IR/LoadSignExtended.cs"/>
                     <include name="SimpleFastDominance.cs"/>
                     <include name="LoopAwareBlockOrder.cs"/>
+                    <include name="CompilationScheduler.cs"/>
                     <include name="Stages/IRCheckStage.cs"/>
                     <include name="Stages/LoopAwareBlockOrderStage.cs"/>
                     <include name="Stages/SSAOptimizations.cs"/>
