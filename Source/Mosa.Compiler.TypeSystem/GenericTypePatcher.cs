@@ -126,7 +126,7 @@ namespace Mosa.Compiler.TypeSystem
 		RuntimeType IGenericTypePatcher.PatchType(ITypeModule typeModule, CilGenericType enclosingType, CilGenericType openType)
 		{
 			var genericArguments = CloseGenericArguments(enclosingType, openType);
-			
+
 			var patchedType = GetPatchedType(openType, genericArguments);
 			if (patchedType == null)
 			{
@@ -190,27 +190,8 @@ namespace Mosa.Compiler.TypeSystem
 				var sigtype = new TypeSigType(signatureToken, CilElementType.Var);
 				var signature = new GenericInstSigType(sigtype, genericArguments);
 
-				// FIXME: There has got to be a better way to do this...
-				try
-				{
-					patchedType = new CilGenericType(enclosingType.Module, typeToken, openType.BaseGenericType, signature);
-				}
-				catch (Exception)
-				{
-					foreach (var module in typeModule.TypeSystem.TypeModules)
-					{
-						try
-						{
-							patchedType = new CilGenericType(module, typeToken, openType.BaseGenericType, signature);
-							break;
-						}
-						catch (Exception)
-						{
-							;
-						}
-					}
-				}
-
+				patchedType = new CilGenericType(enclosingType.InstantiationModule, typeToken, openType.BaseGenericType, signature);
+				
 				AddPatchedType(openType, genericArguments, patchedType);
 			}
 

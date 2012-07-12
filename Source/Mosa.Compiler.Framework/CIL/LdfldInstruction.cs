@@ -45,7 +45,6 @@ namespace Mosa.Compiler.Framework.CIL
 
 			var token = decoder.DecodeTokenType();
 			ctx.RuntimeField = decoder.Method.Module.GetField(token);
-			var fieldName = ctx.RuntimeField.Name;
 
 			if (ctx.RuntimeField.ContainsGenericParameter || ctx.RuntimeField.DeclaringType.ContainsOpenGenericParameters)
 			{
