@@ -23,7 +23,7 @@ namespace Mosa.Compiler.TypeSystem
 		/// <summary>
 		/// 
 		/// </summary>
-		private HashSet<RuntimeType> alreadyPatched = new HashSet<RuntimeType>();
+		private HashSet<RuntimeType> atched = new HashSet<RuntimeType>();
 		/// <summary>
 		/// 
 		/// </summary>
@@ -54,16 +54,19 @@ namespace Mosa.Compiler.TypeSystem
 		/// </summary>
 		private RuntimeType delegateStub = null;
 
-		private string platform;
+		/// <summary>
+		/// 
+		/// </summary>
+		private ITypeLayout typeLayout;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="DelegateTypePatcher"/> class.
 		/// </summary>
 		/// <param name="typeSystem">The type system.</param>
 		/// <param name="platform">The platform.</param>
-		public DelegateTypePatcher(ITypeSystem typeSystem, string platform)
+		public DelegateTypePatcher(ITypeSystem typeSystem, ITypeLayout typeLayout, string platform)
 		{
-			this.platform = platform;
+			this.typeLayout = typeLayout;
 
 			delegateStub = LoadDelegateStub(typeSystem, platform);
 		}
@@ -74,13 +77,13 @@ namespace Mosa.Compiler.TypeSystem
 		/// <param name="type">The type.</param>
 		public void PatchType(RuntimeType type)
 		{
-			if (alreadyPatched.Contains(type))
+			if (atched.Contains(type))
 				return;
 
 			GenerateAndInsertFields(type);
 			GenerateAndReplaceMethods(type);
 
-			alreadyPatched.Add(type);
+			atched.Add(type);
 		}
 
 		/// <summary>
@@ -250,12 +253,22 @@ namespace Mosa.Compiler.TypeSystem
 		/// </summary>
 		/// <param name="type">The type.</param>
 		/// <param name="methodName">Name of the method.</param>
-		/// <param name="methodToReplace">The method to replace.</param>
-		private void SearchAndReplaceMethod(RuntimeType type, string methodName, RuntimeMethod methodToReplace)
+		/// <param name="patchedMethod">The method to replace.</param>
+		private void SearchAndReplaceMethod(RuntimeType type, string methodName, RuntimeMethod patchedMethod)
 		{
 			for (int i = 0; i < type.Methods.Count; ++i)
+			{
 				if (type.Methods[i].Name == methodName)
-					type.Methods[i] = methodToReplace;
+				{
+					var oldMethod = type.Methods[i];
+
+					type.Methods[i] = patchedMethod;
+
+					//typeLayout.ReplaceWithPatchedMethod(oldMethod, patchedMethod);
+
+					return;
+				}
+			}
 		}
 	}
 }

@@ -158,7 +158,7 @@ namespace Mosa.Compiler.Framework.Stages
 					break;
 
 				default:
-					throw new InvalidDataException(@"Invalid method header while trying to decode " + this.methodCompiler.Method.ToString() + ". (Flags = " + header.Flags.ToString("X") + ", Rva = " + this.methodCompiler.Method.Rva + ")");
+					throw new InvalidDataException(@"Invalid method header while trying to decode " + this.methodCompiler.Method.FullName + ". (Flags = " + header.Flags.ToString("X") + ", Rva = " + this.methodCompiler.Method.Rva + ")");
 			}
 
 			// Are there sections following the code?

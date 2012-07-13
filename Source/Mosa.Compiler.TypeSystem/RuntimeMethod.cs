@@ -126,14 +126,14 @@ namespace Mosa.Compiler.TypeSystem
 		}
 
 		/// <summary>
-		/// Gets a value indicating whether this instance is native.
+		/// Gets a value indicating whether this instance has code.
 		/// </summary>
 		/// <value>
 		///   <c>true</c> if this instance is native; otherwise, <c>false</c>.
 		/// </value>
-		public bool IsNative
+		public bool HasCode
 		{
-			get { return Rva == 0; }
+			get { return (Rva != 0); }
 		}
 
 		/// <summary>
@@ -143,10 +143,10 @@ namespace Mosa.Compiler.TypeSystem
 		{
 			get
 			{
-				if (this.Rva == 0)
+				if (Rva == 0)
 					return null;
 
-				return new InstructionStream(this.Module.MetadataModule.GetInstructionStream(this.Rva), 0);
+				return new InstructionStream(Module.MetadataModule.GetInstructionStream(this.Rva), 0);
 			}
 		}
 
@@ -166,7 +166,7 @@ namespace Mosa.Compiler.TypeSystem
 		/// <value>The parameters.</value>
 		public IList<RuntimeParameter> Parameters
 		{
-			get { this.methodName = null; return parameters; }
+			get { return parameters; }
 			protected set { parameters = value; }
 		}
 

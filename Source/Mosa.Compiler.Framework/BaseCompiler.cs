@@ -174,7 +174,7 @@ namespace Mosa.Compiler.Framework
 		/// <param name="method">The method.</param>
 		public void CompileMethod(RuntimeMethod method)
 		{
-			Trace(CompilerEvent.CompilingMethod, method.ToString());
+			Trace(CompilerEvent.CompilingMethod, method.FullName);
 
 			BaseMethodCompiler methodCompiler = CreateMethodCompiler(method);
 			Architecture.ExtendMethodCompilerPipeline(methodCompiler.Pipeline);

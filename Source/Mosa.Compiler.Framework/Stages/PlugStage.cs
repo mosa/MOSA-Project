@@ -181,7 +181,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 		private void Patch(RuntimeMethod targetMethod, RuntimeMethod method)
 		{
-			Trace(InternalTrace.CompilerEvent.Plug, targetMethod.ToString() + " with " + method.ToString());
+			Trace(InternalTrace.CompilerEvent.Plug, targetMethod.FullName + " with " + method.FullName);
 			plugMethods.Add(targetMethod, method);
 		}
 

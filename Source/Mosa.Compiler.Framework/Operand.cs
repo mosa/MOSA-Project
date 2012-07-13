@@ -331,7 +331,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public static Operand CreateSymbolFromMethod(RuntimeMethod method)
 		{
-			return CreateSymbol(BuiltInSigType.IntPtr, method.ToString());
+			return CreateSymbol(BuiltInSigType.IntPtr, method.FullName);
 		}
 
 		/// <summary>

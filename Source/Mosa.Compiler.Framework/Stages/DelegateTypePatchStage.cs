@@ -19,12 +19,12 @@ namespace Mosa.Compiler.Framework.Stages
 	/// </summary>
 	public sealed class DelegateTypePatchStage : BaseCompilerStage, ICompilerStage
 	{
-		
+
 		#region ICompilerStage members
-		
+
 		void ICompilerStage.Run()
 		{
-			DelegateTypePatcher delegateTypePatcher = new DelegateTypePatcher(typeSystem, architecture.PlatformName);
+			DelegateTypePatcher delegateTypePatcher = new DelegateTypePatcher(typeSystem, typeLayout, architecture.PlatformName);
 
 			foreach (var type in typeSystem.GetAllTypes())
 			{
@@ -33,6 +33,8 @@ namespace Mosa.Compiler.Framework.Stages
 					delegateTypePatcher.PatchType(type);
 
 					//compiler.Scheduler.TrackTypeAllocated(type);
+
+					// This is necessary since the new methods were added by the patching!
 					foreach (var method in type.Methods)
 					{
 						compiler.Scheduler.TrackMethodInvoked(method);

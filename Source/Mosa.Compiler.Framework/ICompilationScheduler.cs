@@ -36,5 +36,14 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		/// <returns></returns>
 		RuntimeMethod GetMethodToCompile();
+
+		/// <summary>
+		/// Determines whether the method scheduled to be compiled.
+		/// </summary>
+		/// <param name="method">The method.</param>
+		/// <returns>
+		///   <c>true</c> if method is scheduled to be compiled; otherwise, <c>false</c>.
+		/// </returns>
+		bool IsMethodScheduled(RuntimeMethod method);
 	}
 }

@@ -39,9 +39,9 @@ namespace Mosa.Compiler.TypeSystem
 		private int nativePointerAlignment;
 
 		/// <summary>
-		/// Holds the global id for each type
+		/// Holds a set of types
 		/// </summary>
-		private Dictionary<RuntimeType, int> typeIDs = new Dictionary<RuntimeType, int>();
+		private HashSet<RuntimeType> typeSet = new HashSet<RuntimeType>();
 
 		/// <summary>
 		/// Holds a list of interfaces
@@ -76,7 +76,7 @@ namespace Mosa.Compiler.TypeSystem
 		/// <summary>
 		/// Holds a list of methods for each type
 		/// </summary>
-		private Dictionary<RuntimeType, IList<RuntimeMethod>> typeMethodTables = new Dictionary<RuntimeType, IList<RuntimeMethod>>();
+		private Dictionary<RuntimeType, List<RuntimeMethod>> typeMethodTables = new Dictionary<RuntimeType, List<RuntimeMethod>>();
 
 		#endregion // Data members
 
@@ -250,23 +250,36 @@ namespace Mosa.Compiler.TypeSystem
 		IList<RuntimeType> ITypeLayout.Interfaces { get { return interfaces.AsReadOnly(); } }
 
 		/// <summary>
-		/// Gets the type ID.
+		/// Replace an existing method with a new patched method
 		/// </summary>
-		/// <param name="type">The type.</param>
-		/// <returns></returns>
-		int ITypeLayout.GetTypeID(RuntimeType type)
+		/// <param name="oldMethod"></param>
+		/// <param name="newMethod"></param>
+		void ITypeLayout.ReplaceWithPatchedMethod(RuntimeMethod oldMethod, RuntimeMethod newMethod)
 		{
-			int id;
+			ResolveType(oldMethod.DeclaringType);
 
-			if (typeIDs.TryGetValue(type, out id))
-				return id;
+			if (methodTableOffsets.ContainsKey(oldMethod))
+			{
+				int offset = methodTableOffsets[oldMethod];
+				methodTableOffsets.Remove(oldMethod);
+				methodTableOffsets.Add(newMethod, offset);
+			}
 
-			ResolveType(type);
+			RuntimeType type = oldMethod.DeclaringType;
 
-			if (!typeIDs.TryGetValue(type, out id))
-				Debug.Assert(false, "Expected type id");
+			while (type != null)
+			{
+				var methodTable = typeMethodTables[type];
 
-			return id;
+				int index = methodTable.IndexOf(oldMethod);
+
+				if (index > 0)
+				{
+					methodTable[index] = newMethod;
+				}
+
+				type = type.BaseType;
+			}
 		}
 
 		#endregion // ITypeLayout
@@ -290,13 +303,10 @@ namespace Mosa.Compiler.TypeSystem
 			if (type.IsModule || type.IsGeneric)
 				return;
 
-			if (typeIDs.ContainsKey(type))
+			if (typeSet.Contains(type))
 				return;
 
-			typeIDs.Add(type, typeIDs.Count);
-
-			//if (typeSizes.ContainsKey(type))
-			//    return;
+			typeSet.Add(type);
 
 			if (type.BaseType != null)
 				ResolveType(type.BaseType);
@@ -486,9 +496,9 @@ namespace Mosa.Compiler.TypeSystem
 
 		#region Internal
 
-		private IList<RuntimeMethod> CreateMethodTable(RuntimeType type)
+		private List<RuntimeMethod> CreateMethodTable(RuntimeType type)
 		{
-			IList<RuntimeMethod> methodTable;
+			List<RuntimeMethod> methodTable;
 
 			if (typeMethodTables.TryGetValue(type, out methodTable))
 			{
@@ -537,7 +547,7 @@ namespace Mosa.Compiler.TypeSystem
 
 			if (type.BaseType != null)
 			{
-				IList<RuntimeMethod> baseMethodTable;
+				List<RuntimeMethod> baseMethodTable;
 
 				if (!typeMethodTables.TryGetValue(type, out baseMethodTable))
 				{

@@ -32,7 +32,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		void IMethodCompilerStage.Run()
 		{
-			//Trace("METHOD: " + this.methodCompiler.Method.ToString());
+			//Trace("METHOD: " + this.methodCompiler.FullName);
 
 			// Initialize arrays
 			top = new RegisterBitmap[basicBlocks.Count];
@@ -46,7 +46,7 @@ namespace Mosa.Compiler.Framework.Stages
 				AnalyzeBlock(block);
 			}
 
-			Trace("METHOD: " + this.methodCompiler.Method.ToString());
+			Trace("METHOD: " + this.methodCompiler.Method.FullName);
 			Trace(string.Empty);
 
 			var registers = new Dictionary<int, Register>();

@@ -70,13 +70,25 @@ namespace Mosa.Compiler.Framework.Stages
 			methodsInvoked.AddIfNew(method);
 
 			if (compileAllMethods)
-				CompileMethod(method);			
+				CompileMethod(method);
 		}
 
 		void ICompilationScheduler.TrackFieldReferenced(RuntimeField field)
 		{
 			if (compileAllMethods)
 				CompileType(field.DeclaringType);
+		}
+
+		/// <summary>
+		/// Determines whether the method scheduled to be compiled.
+		/// </summary>
+		/// <param name="method">The method.</param>
+		/// <returns>
+		///   <c>true</c> if method is scheduled to be compiled; otherwise, <c>false</c>.
+		/// </returns>
+		bool ICompilationScheduler.IsMethodScheduled(RuntimeMethod method)
+		{
+			return methodScheduled.Contains(method);
 		}
 
 		#endregion // ICompilationSchedulerStage members
@@ -105,8 +117,8 @@ namespace Mosa.Compiler.Framework.Stages
 			if (method.IsGeneric)
 				return;
 
-			// can not compile a native method
-			if (method.IsNative)
+			// can not compile a method without code
+			if (!method.HasCode)
 				return;
 
 			if (methodScheduled.Contains(method))
