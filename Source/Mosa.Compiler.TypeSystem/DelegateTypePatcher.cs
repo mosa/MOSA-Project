@@ -80,7 +80,7 @@ namespace Mosa.Compiler.TypeSystem
 			if (atched.Contains(type))
 				return;
 
-			GenerateAndInsertFields(type);
+			//GenerateAndInsertFields(type);
 			GenerateAndReplaceMethods(type);
 
 			atched.Add(type);
@@ -260,12 +260,7 @@ namespace Mosa.Compiler.TypeSystem
 			{
 				if (type.Methods[i].Name == methodName)
 				{
-					var oldMethod = type.Methods[i];
-
 					type.Methods[i] = patchedMethod;
-
-					//typeLayout.ReplaceWithPatchedMethod(oldMethod, patchedMethod);
-
 					return;
 				}
 			}

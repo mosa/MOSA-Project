@@ -89,11 +89,6 @@ namespace Mosa.Compiler.TypeSystem
 		/// </summary>
 		IList<RuntimeType> Interfaces { get; }
 
-		/// <summary>
-		/// Replace an existing method with a new patched method
-		/// </summary>
-		/// <param name="type">The type.</param>
-		void ReplaceWithPatchedMethod(RuntimeMethod oldMethod, RuntimeMethod newMethod);
 
 	}
 }

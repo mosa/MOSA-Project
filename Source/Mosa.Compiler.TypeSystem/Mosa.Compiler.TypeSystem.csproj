@@ -89,7 +89,6 @@
     <Compile Include="Generic\CilGenericType.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Include="IRuntimeAttributable.cs" />
     <Compile Include="ITypeModule.cs" />
     <Compile Include="TypeModule.cs" />
     <Compile Include="RuntimeAttribute.cs" />

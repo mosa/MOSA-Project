@@ -15,7 +15,7 @@ namespace Mosa.Compiler.Framework.CIL
 	/// <summary>
 	/// Interface of instruction decoders.
 	/// </summary>
-	public interface BaseInstructionDecoder
+	public interface IInstructionDecoder
 	{
 		/// <summary>
 		/// Gets the method compiler that is currently executing.

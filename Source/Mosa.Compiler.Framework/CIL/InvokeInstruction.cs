@@ -103,7 +103,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(Context ctx, BaseInstructionDecoder decoder)
+		public override void Decode(Context ctx, IInstructionDecoder decoder)
 		{
 			DecodeInvocationTarget(ctx, decoder, InvokeSupport);
 		}
@@ -146,7 +146,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// <param name="decoder">The IL decoder, which provides decoding functionality.</param>
 		/// <param name="flags">Flags, which control the</param>
 		/// <returns></returns>
-		protected static Token DecodeInvocationTarget(Context ctx, BaseInstructionDecoder decoder, InvokeSupportFlags flags)
+		protected static Token DecodeInvocationTarget(Context ctx, IInstructionDecoder decoder, InvokeSupportFlags flags)
 		{
 			// Retrieve the immediate argument - it contains the token
 			// of the methoddef, methodref, methodspec or callsite to call.

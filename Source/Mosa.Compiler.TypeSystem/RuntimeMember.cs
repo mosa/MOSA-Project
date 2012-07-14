@@ -9,7 +9,6 @@
 
 using System;
 using System.Collections.Generic;
-
 using Mosa.Compiler.Metadata;
 
 namespace Mosa.Compiler.TypeSystem
@@ -17,7 +16,7 @@ namespace Mosa.Compiler.TypeSystem
 	/// <summary>
 	/// 
 	/// </summary>
-	public abstract class RuntimeMember : RuntimeObject, IRuntimeAttributable
+	public abstract class RuntimeMember : RuntimeObject
 	{
 		#region Data members
 

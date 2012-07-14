@@ -30,7 +30,6 @@
                     <include name="Generic/CilGenericField.cs"/>
                     <include name="Generic/CilGenericMethod.cs"/>
                     <include name="Generic/CilGenericType.cs"/>
-                    <include name="IRuntimeAttributable.cs"/>
                     <include name="ITypeModule.cs"/>
                     <include name="TypeModule.cs"/>
                     <include name="RuntimeAttribute.cs"/>

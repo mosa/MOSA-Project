@@ -7,6 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using System.Runtime.InteropServices;
+
 namespace System
 {
 	/// <summary>
@@ -14,5 +16,7 @@ namespace System
 	/// </summary>
 	public class Delegate
 	{
+		protected object instance = null;
+		protected uint methodPointer = 0;
 	}
 }

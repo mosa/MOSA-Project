@@ -86,7 +86,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public override void Decode(Context ctx, BaseInstructionDecoder decoder)
+		public override void Decode(Context ctx, IInstructionDecoder decoder)
 		{
 			Token ctor = DecodeInvocationTarget(ctx, decoder, InvokeSupport);
 

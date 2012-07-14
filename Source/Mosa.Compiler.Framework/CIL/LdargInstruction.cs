@@ -38,7 +38,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// This method is used by instructions to retrieve immediate operands
 		/// From the instruction stream.
 		/// </remarks>
-		public override void Decode(Context ctx, BaseInstructionDecoder decoder)
+		public override void Decode(Context ctx, IInstructionDecoder decoder)
 		{
 			// Decode base classes first
 			base.Decode(ctx, decoder);

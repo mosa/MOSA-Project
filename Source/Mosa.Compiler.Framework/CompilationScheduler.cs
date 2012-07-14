@@ -98,6 +98,9 @@ namespace Mosa.Compiler.Framework.Stages
 			if (type.IsModule)
 				return;
 
+			if (type.IsInterface)
+				return;
+
 			// Can not compile an open generic type
 			if (type.ContainsOpenGenericParameters)
 				return;
@@ -117,8 +120,10 @@ namespace Mosa.Compiler.Framework.Stages
 			if (method.IsGeneric)
 				return;
 
-			// can not compile a method without code
-			if (!method.HasCode)
+			if (method.DeclaringType.IsInterface)
+				return;
+
+			if (method.IsAbstract)
 				return;
 
 			if (methodScheduled.Contains(method))

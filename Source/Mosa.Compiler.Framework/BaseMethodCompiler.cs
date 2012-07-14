@@ -132,6 +132,8 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		private readonly VirtualRegisterLayout virtualRegisterLayout;
 
+		private bool stopMethodCompiler;
+
 		#endregion // Data Members
 
 		#region Construction
@@ -167,6 +169,8 @@ namespace Mosa.Compiler.Framework
 			this.virtualRegisterLayout = new VirtualRegisterLayout(architecture, stackLayout);
 
 			EvaluateParameterOperands();
+
+			this.stopMethodCompiler = false;
 		}
 
 		#endregion // Construction
@@ -342,10 +346,19 @@ namespace Mosa.Compiler.Framework
 				stage.Run();
 
 				Mosa.Compiler.InternalTrace.InstructionLogger.Run(this, stage);
+
+				if (stopMethodCompiler)
+					break;
 			}
 
 			EndCompile();
 		}
+
+		/// <summary>
+		/// Stops the method compiler.
+		/// </summary>
+		/// <returns></returns>
+		public void StopMethodCompiler() { stopMethodCompiler = true; } 
 
 		/// <summary>
 		/// Creates a new virtual register operand.

@@ -78,7 +78,7 @@ namespace Mosa.Compiler.Framework.CIL
 		/// </summary>
 		/// <param name="ctx">The context.</param>
 		/// <param name="decoder">The instruction decoder, which holds the code stream.</param>
-		public virtual void Decode(Context ctx, BaseInstructionDecoder decoder)
+		public virtual void Decode(Context ctx, IInstructionDecoder decoder)
 		{
 			ctx.SetInstruction(this, DefaultOperandCount, DefaultResultCount);
 		}

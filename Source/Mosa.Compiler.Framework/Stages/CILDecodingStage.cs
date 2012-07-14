@@ -29,7 +29,7 @@ namespace Mosa.Compiler.Framework.Stages
 	/// representation. The instructions are grouped into basic Blocks
 	/// for easier local optimizations in later compiler stages.
 	/// </remarks>
-	public sealed class CILDecodingStage : BaseMethodCompilerStage, IMethodCompilerStage, BaseInstructionDecoder, IPipelineStage
+	public sealed class CILDecodingStage : BaseMethodCompilerStage, IMethodCompilerStage, IInstructionDecoder, IPipelineStage
 	{
 		#region Data members
 
@@ -38,34 +38,18 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		private EndianAwareBinaryReader codeReader;
 
-		/// <summary>
-		/// 
-		/// </summary>
-		private IPlugSystem plugSystem;
-
 		#endregion // Data members
 
 		#region IMethodCompilerStage Members
-
-		/// <summary>
-		/// Setup stage specific processing on the compiler context.
-		/// </summary>
-		/// <param name="methodCompiler">The compiler context to perform processing in.</param>
-		void IMethodCompilerStage.Setup(BaseMethodCompiler methodCompiler)
-		{
-			base.Setup(methodCompiler);
-
-			plugSystem = methodCompiler.Compiler.Pipeline.FindFirst<IPlugSystem>();
-		}
 
 		/// <summary>
 		/// Performs stage specific processing on the compiler context.
 		/// </summary>
 		void IMethodCompilerStage.Run()
 		{
-			if (plugSystem != null)
+			if (methodCompiler.PlugSystem != null)
 			{
-				RuntimeMethod plugMethod = plugSystem.GetPlugMethod(this.methodCompiler.Method);
+				RuntimeMethod plugMethod = methodCompiler.PlugSystem.GetPlugMethod(this.methodCompiler.Method);
 
 				if (plugMethod != null)
 				{
@@ -78,6 +62,12 @@ namespace Mosa.Compiler.Framework.Stages
 					basicBlocks.AddHeaderBlock(prologue);
 					return;
 				}
+			}
+
+			if (methodCompiler.Method.Rva == 0)
+			{
+				methodCompiler.StopMethodCompiler();
+				return;
 			}
 
 			using (Stream code = methodCompiler.GetInstructionStream())
@@ -281,7 +271,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Gets the compiler, that is currently executing.
 		/// </summary>
 		/// <value></value>
-		BaseMethodCompiler BaseInstructionDecoder.Compiler
+		BaseMethodCompiler IInstructionDecoder.Compiler
 		{
 			get { return methodCompiler; }
 		}
@@ -290,7 +280,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Gets the RuntimeMethod being compiled.
 		/// </summary>
 		/// <value></value>
-		RuntimeMethod BaseInstructionDecoder.Method
+		RuntimeMethod IInstructionDecoder.Method
 		{
 			get { return methodCompiler.Method; }
 		}
@@ -299,7 +289,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Gets the type system.
 		/// </summary>
 		/// <value>The type system.</value>
-		ITypeModule BaseInstructionDecoder.TypeModule
+		ITypeModule IInstructionDecoder.TypeModule
 		{
 			get { return typeModule; }
 		}
@@ -307,7 +297,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// <summary>
 		/// Gets the generic type patcher.
 		/// </summary>
-		IGenericTypePatcher BaseInstructionDecoder.GenericTypePatcher
+		IGenericTypePatcher IInstructionDecoder.GenericTypePatcher
 		{
 			get { return methodCompiler.Compiler.GenericTypePatcher; }
 		}
@@ -316,7 +306,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Decodes the byte value from the instruction stream
 		/// </summary>
 		/// <returns></returns>
-		byte BaseInstructionDecoder.DecodeByte()
+		byte IInstructionDecoder.DecodeByte()
 		{
 			return codeReader.ReadByte();
 		}
@@ -325,7 +315,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Decodes the sbyte value from the instruction stream
 		/// </summary>
 		/// <returns></returns>
-		sbyte BaseInstructionDecoder.DecodeSByte()
+		sbyte IInstructionDecoder.DecodeSByte()
 		{
 			return codeReader.ReadSByte();
 		}
@@ -334,7 +324,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Decodes the short value from the instruction stream
 		/// </summary>
 		/// <returns></returns>
-		short BaseInstructionDecoder.DecodeShort()
+		short IInstructionDecoder.DecodeShort()
 		{
 			return codeReader.ReadInt16();
 		}
@@ -343,7 +333,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Decodes the ushort value from the instruction stream
 		/// </summary>
 		/// <returns></returns>
-		ushort BaseInstructionDecoder.DecodeUShort()
+		ushort IInstructionDecoder.DecodeUShort()
 		{
 			return codeReader.ReadUInt16();
 		}
@@ -352,7 +342,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Decodes the int value from the instruction stream
 		/// </summary>
 		/// <returns></returns>
-		int BaseInstructionDecoder.DecodeInt()
+		int IInstructionDecoder.DecodeInt()
 		{
 			return codeReader.ReadInt32();
 		}
@@ -361,7 +351,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Decodes the uint value from the instruction stream
 		/// </summary>
 		/// <returns></returns>
-		uint BaseInstructionDecoder.DecodeUInt()
+		uint IInstructionDecoder.DecodeUInt()
 		{
 			return codeReader.ReadUInt32();
 		}
@@ -370,7 +360,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Decodes the long value from the instruction stream
 		/// </summary>
 		/// <returns></returns>
-		long BaseInstructionDecoder.DecodeLong()
+		long IInstructionDecoder.DecodeLong()
 		{
 			return codeReader.ReadInt64();
 		}
@@ -379,7 +369,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Decodes the float value from the instruction stream
 		/// </summary>
 		/// <returns></returns>
-		float BaseInstructionDecoder.DecodeFloat()
+		float IInstructionDecoder.DecodeFloat()
 		{
 			return codeReader.ReadSingle();
 		}
@@ -388,7 +378,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Decodes the double value from the instruction stream
 		/// </summary>
 		/// <returns></returns>
-		double BaseInstructionDecoder.DecodeDouble()
+		double IInstructionDecoder.DecodeDouble()
 		{
 			return codeReader.ReadDouble();
 		}
@@ -397,7 +387,7 @@ namespace Mosa.Compiler.Framework.Stages
 		/// Decodes the tokentype from the instruction stream
 		/// </summary>
 		/// <returns></returns>
-		Token BaseInstructionDecoder.DecodeTokenType()
+		Token IInstructionDecoder.DecodeTokenType()
 		{
 			return new Token((uint)codeReader.ReadInt32());
 		}

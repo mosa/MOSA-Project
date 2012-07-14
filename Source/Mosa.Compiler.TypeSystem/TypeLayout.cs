@@ -249,39 +249,6 @@ namespace Mosa.Compiler.TypeSystem
 		/// </summary>
 		IList<RuntimeType> ITypeLayout.Interfaces { get { return interfaces.AsReadOnly(); } }
 
-		/// <summary>
-		/// Replace an existing method with a new patched method
-		/// </summary>
-		/// <param name="oldMethod"></param>
-		/// <param name="newMethod"></param>
-		void ITypeLayout.ReplaceWithPatchedMethod(RuntimeMethod oldMethod, RuntimeMethod newMethod)
-		{
-			ResolveType(oldMethod.DeclaringType);
-
-			if (methodTableOffsets.ContainsKey(oldMethod))
-			{
-				int offset = methodTableOffsets[oldMethod];
-				methodTableOffsets.Remove(oldMethod);
-				methodTableOffsets.Add(newMethod, offset);
-			}
-
-			RuntimeType type = oldMethod.DeclaringType;
-
-			while (type != null)
-			{
-				var methodTable = typeMethodTables[type];
-
-				int index = methodTable.IndexOf(oldMethod);
-
-				if (index > 0)
-				{
-					methodTable[index] = newMethod;
-				}
-
-				type = type.BaseType;
-			}
-		}
-
 		#endregion // ITypeLayout
 
 		#region Internal - Layout
