@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003" ToolsVersion="4.0">
   <PropertyGroup>
     <ProjectType>Local</ProjectType>
@@ -65,12 +65,15 @@
   <ItemGroup>
     <Compile Include="Kernel.cs" />
     <Compile Include="KernelMemory.cs" />
-    <Compile Include="Mosa.Internal\Runtime.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Korlib\Korlib.csproj">
       <Project>{631BC4F3-E2D8-4319-814C-13904CAA17CE}</Project>
       <Name>Korlib</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\Mosa.Internal.Plug\Mosa.Internal.Plug.csproj">
+      <Project>{77961864-DB33-4189-804F-D774022C96E2}</Project>
+      <Name>Mosa.Internal.Plug</Name>
     </ProjectReference>
     <ProjectReference Include="..\Mosa.Platform.AVR32.Intrinsic\Mosa.Platform.AVR32.Intrinsic.csproj">
       <Project>{599D1C00-7C78-4801-A958-1285C4CB76C9}</Project>

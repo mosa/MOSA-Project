@@ -49,7 +49,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			if (methodCompiler.PlugSystem != null)
 			{
-				RuntimeMethod plugMethod = methodCompiler.PlugSystem.GetPlugMethod(this.methodCompiler.Method);
+				RuntimeMethod plugMethod = methodCompiler.PlugSystem.GetPlugMethod(methodCompiler.Method);
 
 				if (plugMethod != null)
 				{
@@ -91,7 +91,7 @@ namespace Mosa.Compiler.Framework.Stages
 							localsSignature = new LocalVariableSignature(methodCompiler.Method.Module.MetadataModule.Metadata, row.SignatureBlobIdx);
 						}
 
-						var declaringType = this.methodCompiler.Method.DeclaringType;
+						var declaringType = methodCompiler.Method.DeclaringType;
 						var locals = localsSignature.Locals;
 						for (var i = 0; i < locals.Length; ++i)
 						{

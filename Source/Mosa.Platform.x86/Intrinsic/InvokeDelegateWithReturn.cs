@@ -32,7 +32,6 @@ namespace Mosa.Platform.x86.Intrinsic
 		void IIntrinsicMethod.ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
 		{
 			var result = context.Result;
-			//var op1 = context.Operand1;
 			var op2 = context.Operand2;
 
 			var eax = Operand.CreateCPURegister(BuiltInSigType.IntPtr, GeneralPurposeRegister.EAX);

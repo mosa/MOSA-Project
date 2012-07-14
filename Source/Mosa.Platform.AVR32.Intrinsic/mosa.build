@@ -16,6 +16,7 @@
 		<sources>
                     <include name="DelegateStub.cs"/>
                     <include name="Native.cs"/>
+                    <include name="Runtime.cs"/>
 		</sources>
 		<references>
                     <include name="${outputDirectory}/mscorlib.dll"/>

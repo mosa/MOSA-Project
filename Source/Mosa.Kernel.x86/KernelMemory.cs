@@ -7,6 +7,8 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Internal.Plug;
+
 namespace Mosa.Kernel.x86
 {
 	/// <summary>
@@ -18,6 +20,7 @@ namespace Mosa.Kernel.x86
 		static private uint _size = 0;
 		static private uint _used = 0;
 
+		[PlugMethod("Mosa.Internal.Runtime.AllocateMemory")]
 		static public uint AllocateMemory(uint size)
 		{
 			if ((_heap == 0) || (size > (_size - _used)))

@@ -17,10 +17,7 @@
                     <include name="ConsoleManager.cs"/>
                     <include name="ConsoleSession.cs"/>
                     <include name="Debug.cs"/>
-                    <include name="Mosa.Internal/ExceptionEngine.cs"/>
                     <include name="KernelMemory.cs"/>
-                    <include name="Mosa.Internal/RegisterContext.cs"/>
-                    <include name="Mosa.Internal/Runtime.cs"/>
                     <include name="CMOS.cs"/>
                     <include name="Colors.cs"/>
                     <include name="CpuInfo.cs"/>
@@ -47,6 +44,7 @@
 		</sources>
 		<references>
                     <include name="${outputDirectory}/mscorlib.dll"/>
+                    <include name="${outputDirectory}/Mosa.Internal.Plug.dll"/>
                     <include name="${outputDirectory}/Mosa.Platform.x86.Intrinsic.dll"/>
 		</references>
 		<!-- supress warnings -->

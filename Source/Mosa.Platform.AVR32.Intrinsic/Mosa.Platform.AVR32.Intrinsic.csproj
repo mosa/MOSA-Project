@@ -64,6 +64,7 @@
   <ItemGroup>
     <Compile Include="DelegateStub.cs" />
     <Compile Include="Native.cs" />
+    <Compile Include="Runtime.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Korlib\Korlib.csproj">

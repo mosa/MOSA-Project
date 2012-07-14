@@ -35,8 +35,8 @@
         <target name="Mosa.Tool.MakeIsoImage" depends="init,Mosa.Utility.IsoImage,"><nant buildfile="Mosa.Tool.MakeIsoImage/mosa.build"/></target>
         <target name="Mosa.Tool.CreateBootImage" depends="init,Mosa.Utility.BootImage,"><nant buildfile="Mosa.Tool.CreateBootImage/mosa.build"/></target>
         <target name="Korlib" depends="init,"><nant buildfile="Korlib/mosa.build"/></target>
-        <target name="Mosa.Kernel.x86" depends="init,Korlib,Mosa.Platform.x86.Intrinsic,"><nant buildfile="Mosa.Kernel.x86/mosa.build"/></target>
-        <target name="Mosa.Platform.x86.Intrinsic" depends="init,Korlib,"><nant buildfile="Mosa.Platform.x86.Intrinsic/mosa.build"/></target>
+        <target name="Mosa.Kernel.x86" depends="init,Korlib,Mosa.Internal.Plug,Mosa.Platform.x86.Intrinsic,"><nant buildfile="Mosa.Kernel.x86/mosa.build"/></target>
+        <target name="Mosa.Platform.x86.Intrinsic" depends="init,Korlib,Mosa.Internal.Plug,"><nant buildfile="Mosa.Platform.x86.Intrinsic/mosa.build"/></target>
         <target name="Mosa.Compiler.Metadata" depends="init,Mosa.Compiler.Common,Mosa.Compiler.LinkerFormat,"><nant buildfile="Mosa.Compiler.Metadata/mosa.build"/></target>
         <target name="Mosa.Compiler.Pdb" depends="init,"><nant buildfile="Mosa.Compiler.Pdb/mosa.build"/></target>
         <target name="Mosa.Compiler.LinkerFormat" depends="init,Mosa.Compiler.Common,"><nant buildfile="Mosa.Compiler.LinkerFormat/mosa.build"/></target>
@@ -58,7 +58,7 @@
         <target name="Mosa.Platform.ARM" depends="init,Mosa.Compiler.Common,Mosa.Compiler.Linker,Mosa.Compiler.Metadata,Mosa.Compiler.Framework,Mosa.Compiler.TypeSystem,"><nant buildfile="Mosa.Platform.ARM/mosa.build"/></target>
         <target name="Mosa.Platform.x64" depends="init,Mosa.Compiler.Common,Mosa.Compiler.Linker,Mosa.Compiler.Metadata,Mosa.Compiler.Framework,Mosa.Compiler.TypeSystem,"><nant buildfile="Mosa.Platform.x64/mosa.build"/></target>
         <target name="Mosa.Internal.Plug" depends="init,Korlib,"><nant buildfile="Mosa.Internal.Plug/mosa.build"/></target>
-        <target name="Mosa.Kernel.AVR32" depends="init,Korlib,Mosa.Platform.AVR32.Intrinsic,"><nant buildfile="Mosa.Kernel.AVR32/mosa.build"/></target>
+        <target name="Mosa.Kernel.AVR32" depends="init,Korlib,Mosa.Internal.Plug,Mosa.Platform.AVR32.Intrinsic,"><nant buildfile="Mosa.Kernel.AVR32/mosa.build"/></target>
         <target name="Mosa.Platform.AVR32.Intrinsic" depends="init,Korlib,"><nant buildfile="Mosa.Platform.AVR32.Intrinsic/mosa.build"/></target>
         <target name="Mosa.HelloWorld.AVR32" depends="init,Mosa.ClassLib,Mosa.Internal.Plug,Korlib,Mosa.Kernel.AVR32,"><nant buildfile="Mosa.HelloWorld.AVR32/mosa.build"/></target>
         <target name="Mosa.Platform.x86" depends="init,Mosa.Compiler.Common,Mosa.Compiler.Linker,Mosa.Compiler.Metadata,Mosa.Compiler.Framework,Mosa.Compiler.TypeSystem,"><nant buildfile="Mosa.Platform.x86/mosa.build"/></target>

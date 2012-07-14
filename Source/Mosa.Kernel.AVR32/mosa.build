@@ -16,10 +16,10 @@
 		<sources>
                     <include name="Kernel.cs"/>
                     <include name="KernelMemory.cs"/>
-                    <include name="Mosa.Internal/Runtime.cs"/>
 		</sources>
 		<references>
                     <include name="${outputDirectory}/mscorlib.dll"/>
+                    <include name="${outputDirectory}/Mosa.Internal.Plug.dll"/>
                     <include name="${outputDirectory}/Mosa.Platform.AVR32.Intrinsic.dll"/>
 		</references>
 		<!-- supress warnings -->
