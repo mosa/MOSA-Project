@@ -7,6 +7,7 @@
  *  Phil Garcia (tgiphil) <phil@thinkedge.com>
  */
 
+using Mosa.Internal.Plug;
 
 namespace Mosa.Kernel
 {
@@ -14,6 +15,7 @@ namespace Mosa.Kernel
 	{
 		const uint memoryPtr = 0x21700000;	// Location for pointer to allocated memory!
 
+		[PlugMethod("Mosa.Internal.Runtime.AllocateMemory")]
 		static unsafe public uint AllocateMemory(uint size)
 		{
 			uint alloc = ((uint*)memoryPtr)[0];
