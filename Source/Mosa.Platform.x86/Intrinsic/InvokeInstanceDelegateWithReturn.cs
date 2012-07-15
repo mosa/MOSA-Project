@@ -34,12 +34,13 @@ namespace Mosa.Platform.x86.Intrinsic
 			var result = context.Result;
 			var op1 = context.Operand1;
 			var op2 = context.Operand2;
+			var constant = Operand.CreateConstant(BuiltInSigType.IntPtr, parameters.Count * 4);
 
 			var eax = Operand.CreateCPURegister(BuiltInSigType.IntPtr, GeneralPurposeRegister.EAX);
 			var edx = Operand.CreateCPURegister(BuiltInSigType.IntPtr, GeneralPurposeRegister.EDX);
 			var esp = Operand.CreateCPURegister(BuiltInSigType.IntPtr, GeneralPurposeRegister.ESP);
 			var ebp = Operand.CreateCPURegister(BuiltInSigType.IntPtr, GeneralPurposeRegister.EBP);
-			context.SetInstruction(X86.Sub, esp, Operand.CreateConstant(BuiltInSigType.IntPtr, parameters.Count * 4 + 4));
+			context.SetInstruction(X86.Sub, esp, constant);
 			context.AppendInstruction(X86.Mov, edx, esp);
 
 			var size = parameters.Count * 4 + 4;
@@ -51,8 +52,8 @@ namespace Mosa.Platform.x86.Intrinsic
 			context.AppendInstruction(X86.Mov, Operand.CreateMemoryAddress(BuiltInSigType.IntPtr, edx.Register, new IntPtr(size - 4)), op1);
 
 			context.AppendInstruction(X86.Mov, eax, op2);
-			context.AppendInstruction(X86.Call, null, Operand.CreateCPURegister(BuiltInSigType.IntPtr, GeneralPurposeRegister.EAX));
-			context.AppendInstruction(X86.Add, esp, Operand.CreateConstant(BuiltInSigType.IntPtr, parameters.Count * 4 + 4));
+			context.AppendInstruction(X86.Call, null, eax);
+			context.AppendInstruction(X86.Add, esp, constant);
 			context.AppendInstruction(X86.Mov, result, Operand.CreateCPURegister(result.Type, GeneralPurposeRegister.EAX));
 		}
 
