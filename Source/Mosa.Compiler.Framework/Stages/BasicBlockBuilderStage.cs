@@ -10,6 +10,7 @@
 
 using System.Collections.Generic;
 using System.Diagnostics;
+using Mosa.Compiler.Framework.IR;
 
 namespace Mosa.Compiler.Framework.Stages
 {
@@ -39,29 +40,32 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		void IMethodCompilerStage.Run()
 		{
-			if (methodCompiler.Compiler.PlugSystem.GetPlugMethod(this.methodCompiler.Method) != null)
+			if (methodCompiler.Compiler.PlugSystem.GetPlugMethod(methodCompiler.Method) != null)
+				return;
+
+			if (!methodCompiler.Method.HasCode)
 				return;
 
 			// Create the prologue block
-			Context ctx = new Context(instructionSet);
+			Context context = new Context(instructionSet);
 			// Add a jump instruction to the first block from the prologue
-			ctx.AppendInstruction(IR.IRInstruction.Jmp);
-			ctx.SetBranch(0);
-			ctx.Label = BasicBlock.PrologueLabel;
-			prologue = basicBlocks.CreateBlock(BasicBlock.PrologueLabel, ctx.Index);
+			context.AppendInstruction(IRInstruction.Jmp);
+			context.SetBranch(0);
+			context.Label = BasicBlock.PrologueLabel;
+			prologue = basicBlocks.CreateBlock(BasicBlock.PrologueLabel, context.Index);
+			basicBlocks.AddHeaderBlock(prologue);
 
 			SplitIntoBlocks(0);
 
 			// Create the epilogue block
-			ctx = new Context(instructionSet);
+			context = new Context(instructionSet);
 			// Add null instruction, necessary to generate a block index
-			ctx.AppendInstruction(null);
-			ctx.Label = BasicBlock.EpilogueLabel;
-			epilogue = basicBlocks.CreateBlock(BasicBlock.EpilogueLabel, ctx.Index);
+			context.AppendInstruction(null);
+			context.Label = BasicBlock.EpilogueLabel;
+			epilogue = basicBlocks.CreateBlock(BasicBlock.EpilogueLabel, context.Index);
 
 			// Link all the blocks together
 			BuildBlockLinks(prologue);
-			basicBlocks.AddHeaderBlock(prologue);
 
 			foreach (ExceptionHandlingClause exceptionClause in methodCompiler.ExceptionClauseHeader.Clauses)
 			{
@@ -78,7 +82,6 @@ namespace Mosa.Compiler.Framework.Stages
 					basicBlocks.AddHeaderBlock(basicBlock);
 				}
 			}
-
 		}
 
 		#endregion // IMethodCompilerStage members

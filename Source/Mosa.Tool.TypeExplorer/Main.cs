@@ -376,7 +376,8 @@ namespace Mosa.Tool.TypeExplorer
 			foreach (string stage in methodStage.OrderedDebugStageNames)
 				cbDebugStages.Items.Add(stage);
 
-			cbDebugStages.SelectedIndex = 0;
+			if (cbDebugStages.Items.Count > 0)
+				cbDebugStages.SelectedIndex = 0;
 		}
 
 		private void cbStages_SelectedIndexChanged(object sender, EventArgs e)
@@ -400,7 +401,7 @@ namespace Mosa.Tool.TypeExplorer
 				currentInstructionLog = methodStage.InstructionLogs[stage];
 
 				currentInstructionLogLines = currentInstructionLog.ToString().Split('\n');
-				
+
 				var previousItemLabel = cbLabels.SelectedItem;
 
 				cbLabels.Items.Clear();

@@ -44,14 +44,6 @@ namespace Mosa.Compiler.TypeSystem
 		/// <summary>
 		/// 
 		/// </summary>
-		private readonly string InstanceFieldName = "instance";
-		/// <summary>
-		/// 
-		/// </summary>
-		private readonly string MethodPtrFieldName = "methodPtr";
-		/// <summary>
-		/// 
-		/// </summary>
 		private RuntimeType delegateStub = null;
 
 		/// <summary>
@@ -117,7 +109,7 @@ namespace Mosa.Compiler.TypeSystem
 				GenerateAndReplaceInvokeWithReturnMethod(type);
 
 			GenerateAndReplaceBeginInvokeMethod(type);
-			GenerateAndReplaceEndInvokeMethod(type);
+			//GenerateAndReplaceEndInvokeMethod(type);
 		}
 
 		/// <summary>
