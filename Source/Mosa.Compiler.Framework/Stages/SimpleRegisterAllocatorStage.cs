@@ -41,9 +41,8 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		void IMethodCompilerStage.Run()
 		{
-			if (methodCompiler.PlugSystem != null)
-				if (methodCompiler.PlugSystem.GetPlugMethod(methodCompiler.Method) != null)
-					return;
+			if (methodCompiler.Compiler.PlugSystem.GetPlugMethod(methodCompiler.Method) != null)
+				return;
 
 			traversed = new BitArray(basicBlocks.Count);
 			analyzed = new BitArray(basicBlocks.Count);
@@ -59,7 +58,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// Handler Code
 			foreach (ExceptionHandlingClause clause in methodCompiler.ExceptionClauseHeader.Clauses)
-			{	
+			{
 				RegisterBitmap exceptionStart = new RegisterBitmap();
 				start.Set(architecture.StackFrameRegister);
 				start.Set(architecture.StackPointerRegister);

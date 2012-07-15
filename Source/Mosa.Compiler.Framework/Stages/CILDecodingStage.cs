@@ -47,21 +47,18 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		void IMethodCompilerStage.Run()
 		{
-			if (methodCompiler.PlugSystem != null)
+			RuntimeMethod plugMethod = methodCompiler.Compiler.PlugSystem.GetPlugMethod(methodCompiler.Method);
+
+			if (plugMethod != null)
 			{
-				RuntimeMethod plugMethod = methodCompiler.PlugSystem.GetPlugMethod(methodCompiler.Method);
+				Operand plugSymbol = Operand.CreateSymbolFromMethod(plugMethod);
 
-				if (plugMethod != null)
-				{
-					Operand plugSymbol = Operand.CreateSymbolFromMethod(plugMethod);
-
-					Context ctx = new Context(instructionSet);
-					ctx.AppendInstruction(IR.IRInstruction.Jmp, null, plugSymbol);
-					ctx.Label = -1;
-					var prologue = basicBlocks.CreateBlock(BasicBlock.PrologueLabel, ctx.Index);
-					basicBlocks.AddHeaderBlock(prologue);
-					return;
-				}
+				Context ctx = new Context(instructionSet);
+				ctx.AppendInstruction(IR.IRInstruction.Jmp, null, plugSymbol);
+				ctx.Label = -1;
+				var prologue = basicBlocks.CreateBlock(BasicBlock.PrologueLabel, ctx.Index);
+				basicBlocks.AddHeaderBlock(prologue);
+				return;
 			}
 
 			if (methodCompiler.Method.Rva == 0)

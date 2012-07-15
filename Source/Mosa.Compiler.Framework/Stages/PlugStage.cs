@@ -16,46 +16,22 @@ using Mosa.Compiler.TypeSystem;
 namespace Mosa.Compiler.Framework.Stages
 {
 	/// <summary>
-	/// Emits metadata for assemblies and types
+	/// Searches for plug declarations
 	/// </summary>
-	public class PlugStage : BaseCompilerStage, ICompilerStage, IPlugSystem
+	public class PlugStage : BaseCompilerStage, ICompilerStage
 	{
 		#region Data members
-
-		private ILinker linker;
-
-		// Method to Plug -> Plug
-		protected Dictionary<RuntimeMethod, RuntimeMethod> plugMethods = new Dictionary<RuntimeMethod, RuntimeMethod>();
 
 		protected RuntimeType plugTypeAttribute;
 		protected RuntimeType plugMethodAttribute;
 
 		#endregion // Data members
 
-		#region IPlugStage members
-
-		/// <summary>
-		/// Gets the plug.
-		/// </summary>
-		/// <param name="method">The method.</param>
-		/// <returns></returns>
-		RuntimeMethod IPlugSystem.GetPlugMethod(RuntimeMethod method)
-		{
-			RuntimeMethod plug = null;
-
-			plugMethods.TryGetValue(method, out plug);
-
-			return plug;
-		}
-
-		#endregion // IPlugStage members
-
 		#region ICompilerStage members
 
 		void ICompilerStage.Setup(BaseCompiler compiler)
 		{
 			base.Setup(compiler);
-			this.linker = RetrieveLinkerFromCompiler();
 
 			plugTypeAttribute = typeSystem.GetType("Mosa.Internal.Plug", "Mosa.Internal.Plug", "PlugTypeAttribute");
 			plugMethodAttribute = typeSystem.GetType("Mosa.Internal.Plug", "Mosa.Internal.Plug", "PlugMethodAttribute");
@@ -134,8 +110,8 @@ namespace Mosa.Compiler.Framework.Stages
 						if (targetType == null)
 						{
 							Trace(InternalTrace.CompilerEvent.Warning,
-								String.Format("Plug target type {0} not found. Ignoring plug.", 
-								targetAssemblyName != null ? (targetFullTypeName + "(in "+targetAssemblyName+")") : targetFullTypeName));
+								String.Format("Plug target type {0} not found. Ignoring plug.",
+								targetAssemblyName != null ? (targetFullTypeName + "(in " + targetAssemblyName + ")") : targetFullTypeName));
 							continue;
 						}
 
@@ -182,7 +158,7 @@ namespace Mosa.Compiler.Framework.Stages
 		private void Patch(RuntimeMethod targetMethod, RuntimeMethod method)
 		{
 			Trace(InternalTrace.CompilerEvent.Plug, targetMethod.FullName + " with " + method.FullName);
-			plugMethods.Add(targetMethod, method);
+			compiler.PlugSystem.CreatePlug(method, targetMethod);
 		}
 
 		private RuntimeAttribute GetAttribute(List<RuntimeAttribute> attributes, RuntimeType plugAttribute)

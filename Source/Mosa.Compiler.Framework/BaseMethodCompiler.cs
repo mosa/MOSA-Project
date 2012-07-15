@@ -118,11 +118,6 @@ namespace Mosa.Compiler.Framework
 		private readonly BaseCompiler compiler;
 
 		/// <summary>
-		/// Holds the plug system
-		/// </summary>
-		private readonly IPlugSystem plugSystem;
-
-		/// <summary>
 		/// Holds the stack layout
 		/// </summary>
 		private readonly StackLayout stackLayout;
@@ -156,7 +151,6 @@ namespace Mosa.Compiler.Framework
 			this.typeLayout = Compiler.TypeLayout;
 			this.internalTrace = Compiler.InternalTrace;
 			this.linker = compiler.Linker;
-			this.plugSystem = compiler.Pipeline.FindFirst<IPlugSystem>();
 
 			this.basicBlocks = new BasicBlocks();
 
@@ -258,11 +252,6 @@ namespace Mosa.Compiler.Framework
 		/// Gets the assembly compiler.
 		/// </summary>
 		public BaseCompiler Compiler { get { return compiler; } }
-
-		/// <summary>
-		/// Gets the plug system.
-		/// </summary>
-		public IPlugSystem PlugSystem { get { return plugSystem; } }
 
 		/// <summary>
 		/// Gets the stack layout.

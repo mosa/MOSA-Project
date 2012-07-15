@@ -75,6 +75,11 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		private ILinker linker;
 
+		/// <summary>
+		/// Holds the plug system
+		/// </summary>
+		private readonly PlugSystem plugSystem;
+
 		#endregion // Data members
 
 		#region Construction
@@ -103,6 +108,7 @@ namespace Mosa.Compiler.Framework
 			this.counters = new Counters();
 			this.compilationScheduler = compilationScheduler;
 			this.linker = compilerOptions.Linker;
+			this.plugSystem = new PlugSystem();
 		}
 
 		#endregion // Construction
@@ -163,6 +169,11 @@ namespace Mosa.Compiler.Framework
 		/// Gets the linker.
 		/// </summary>
 		public ILinker Linker { get { return linker; } }
+
+		/// <summary>
+		/// Gets the plug system.
+		/// </summary>
+		public PlugSystem PlugSystem { get { return plugSystem; } }
 
 		#endregion // Properties
 

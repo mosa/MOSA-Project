@@ -33,9 +33,8 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		void IMethodCompilerStage.Run()
 		{
-			if (methodCompiler.PlugSystem != null)
-				if (methodCompiler.PlugSystem.GetPlugMethod(methodCompiler.Method) != null)
-					return;
+			if (methodCompiler.Compiler.PlugSystem.GetPlugMethod(methodCompiler.Method) != null)
+				return;
 
 			// Layout stack variables
 			LayoutStackVariables();

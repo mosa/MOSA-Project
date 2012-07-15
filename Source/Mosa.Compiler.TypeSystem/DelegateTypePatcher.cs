@@ -23,7 +23,7 @@ namespace Mosa.Compiler.TypeSystem
 		/// <summary>
 		/// 
 		/// </summary>
-		private HashSet<RuntimeType> atched = new HashSet<RuntimeType>();
+		private HashSet<RuntimeType> patched = new HashSet<RuntimeType>();
 		/// <summary>
 		/// 
 		/// </summary>
@@ -77,13 +77,12 @@ namespace Mosa.Compiler.TypeSystem
 		/// <param name="type">The type.</param>
 		public void PatchType(RuntimeType type)
 		{
-			if (atched.Contains(type))
+			if (patched.Contains(type))
 				return;
 
-			//GenerateAndInsertFields(type);
 			GenerateAndReplaceMethods(type);
 
-			atched.Add(type);
+			patched.Add(type);
 		}
 
 		/// <summary>
@@ -102,40 +101,6 @@ namespace Mosa.Compiler.TypeSystem
 				}
 			}
 			return null;
-		}
-
-		/// <summary>
-		/// Generates and inserts fields.
-		/// </summary>
-		/// <param name="type">The type.</param>
-		private void GenerateAndInsertFields(RuntimeType type)
-		{
-			GenerateAndInsertInstanceField(type);
-			GenerateAndInsertMethodPtrField(type);
-		}
-
-		/// <summary>
-		/// Generates and inserts the instance field.
-		/// </summary>
-		/// <param name="type">The type.</param>
-		private void GenerateAndInsertInstanceField(RuntimeType type)
-		{
-			var stubObjectField = delegateStub.Fields[0];
-			var objectField = new CilRuntimeField(type.Module, InstanceFieldName,
-				stubObjectField.Signature, stubObjectField.Token, 0, 0, type, stubObjectField.Attributes);
-			type.Fields.Add(objectField);
-		}
-
-		/// <summary>
-		/// Generates and inserts the method pointer field.
-		/// </summary>
-		/// <param name="type">The type.</param>
-		private void GenerateAndInsertMethodPtrField(RuntimeType type)
-		{
-			var stubObjectField = delegateStub.Fields[1];
-			var objectField = new CilRuntimeField(type.Module, MethodPtrFieldName,
-				stubObjectField.Signature, stubObjectField.Token, 0, 0, type, stubObjectField.Attributes);
-			type.Fields.Add(objectField);
 		}
 
 		/// <summary>

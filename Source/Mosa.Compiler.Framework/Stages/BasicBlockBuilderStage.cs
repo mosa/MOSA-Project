@@ -39,9 +39,8 @@ namespace Mosa.Compiler.Framework.Stages
 		/// </summary>
 		void IMethodCompilerStage.Run()
 		{
-			if (methodCompiler.PlugSystem != null)
-				if (methodCompiler.PlugSystem.GetPlugMethod(this.methodCompiler.Method) != null)
-					return;
+			if (methodCompiler.Compiler.PlugSystem.GetPlugMethod(this.methodCompiler.Method) != null)
+				return;
 
 			// Create the prologue block
 			Context ctx = new Context(instructionSet);
