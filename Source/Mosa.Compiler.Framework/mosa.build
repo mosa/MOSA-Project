@@ -15,6 +15,7 @@
 	    <csc target="library" output="${outputDirectory}/Mosa.Compiler.Framework.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
                     <include name="BasicBlocks.cs"/>
+                    <include name="DelegatePatcher.cs"/>
                     <include name="ICompilationScheduler.cs"/>
                     <include name="Counters.cs"/>
                     <include name="IR/LoadZeroExtended.cs"/>

@@ -32,23 +32,7 @@ namespace Mosa.Compiler.TypeSystem
 		/// 
 		/// </summary>
 		private readonly string InvokeMethodName = "Invoke";
-		/// <summary>
-		/// 
-		/// </summary>
-		private readonly string BeginInvokeMethodName = "BeginInvoke";
-		/// <summary>
-		/// 
-		/// </summary>
-		private readonly string EndInvokeMethodName = "EndInvoke";
 
-		/// <summary>
-		/// 
-		/// </summary>
-		private readonly string InstanceFieldName = "instance";
-		/// <summary>
-		/// 
-		/// </summary>
-		private readonly string MethodPtrFieldName = "methodPtr";
 		/// <summary>
 		/// 
 		/// </summary>
@@ -115,9 +99,6 @@ namespace Mosa.Compiler.TypeSystem
 				GenerateAndReplaceInvokeMethod(type);
 			else
 				GenerateAndReplaceInvokeWithReturnMethod(type);
-
-			GenerateAndReplaceBeginInvokeMethod(type);
-			GenerateAndReplaceEndInvokeMethod(type);
 		}
 
 		/// <summary>
@@ -174,45 +155,7 @@ namespace Mosa.Compiler.TypeSystem
 
 			SearchAndReplaceMethod(type, InvokeMethodName, invokeMethod);
 		}
-
-		/// <summary>
-		/// Generates the and replace begin invoke method.
-		/// </summary>
-		/// <param name="type">The type.</param>
-		private void GenerateAndReplaceBeginInvokeMethod(RuntimeType type)
-		{
-			RuntimeParameter[] parameters = new RuntimeParameter[type.Methods[2].Parameters.Count];
-			type.Methods[2].Parameters.CopyTo(parameters, 0);
-			var stubMethod = delegateStub.Methods[2];
-
-			var method = new CilRuntimeMethod(delegateStub.Module, BeginInvokeMethodName,
-				type.Methods[2].Signature, stubMethod.Token, type, stubMethod.Attributes, stubMethod.ImplAttributes, stubMethod.Rva);
-
-			foreach (var parameter in parameters)
-				method.Parameters.Add(parameter);
-
-			SearchAndReplaceMethod(type, BeginInvokeMethodName, method);
-		}
-
-		/// <summary>
-		/// Generates the and replace end invoke method.
-		/// </summary>
-		/// <param name="type">The type.</param>
-		private void GenerateAndReplaceEndInvokeMethod(RuntimeType type)
-		{
-			RuntimeParameter[] parameters = new RuntimeParameter[type.Methods[3].Parameters.Count];
-			type.Methods[3].Parameters.CopyTo(parameters, 0);
-			var stubMethod = delegateStub.Methods[3];
-
-			var method = new CilRuntimeMethod(delegateStub.Module, EndInvokeMethodName,
-				type.Methods[3].Signature, stubMethod.Token, type, stubMethod.Attributes, stubMethod.ImplAttributes, stubMethod.Rva);
-
-			foreach (var parameter in parameters)
-				method.Parameters.Add(parameter);
-
-			SearchAndReplaceMethod(type, EndInvokeMethodName, method);
-		}
-
+		
 		/// <summary>
 		/// Searches and replaces the method.
 		/// </summary>

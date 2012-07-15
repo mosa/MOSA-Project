@@ -15,6 +15,7 @@ using Mosa.Compiler.Framework.CIL;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.Metadata.Tables;
+using Mosa.Compiler.Framework;
 using Mosa.Compiler.TypeSystem;
 using Mosa.Compiler.TypeSystem.Generic;
 
@@ -52,17 +53,21 @@ namespace Mosa.Compiler.Framework.Stages
 			if (plugMethod != null)
 			{
 				Operand plugSymbol = Operand.CreateSymbolFromMethod(plugMethod);
-
-				Context ctx = new Context(instructionSet);
-				ctx.AppendInstruction(IR.IRInstruction.Jmp, null, plugSymbol);
-				ctx.Label = -1;
-				var prologue = basicBlocks.CreateBlock(BasicBlock.PrologueLabel, ctx.Index);
+				Context context = new Context(instructionSet);
+				context.AppendInstruction(IR.IRInstruction.Jmp, null, plugSymbol);
+				context.Label = -1;
+				var prologue = basicBlocks.CreateBlock(BasicBlock.PrologueLabel, context.Index);
 				basicBlocks.AddHeaderBlock(prologue);
 				return;
 			}
 
-			if (methodCompiler.Method.Rva == 0)
+			if (!methodCompiler.Method.HasCode)
 			{
+				if (DelegatePatcher.PatchDelegate(methodCompiler.Method, instructionSet, basicBlocks))
+				{
+					return;
+				}
+
 				methodCompiler.StopMethodCompiler();
 				return;
 			}
@@ -218,11 +223,11 @@ namespace Mosa.Compiler.Framework.Stages
 			// End of the code stream
 			long codeEnd = codeReader.BaseStream.Position + header.CodeSize;
 
+			// Create context
+			Context context = new Context(instructionSet);
+
 			// Prefix instruction
 			bool prefix = false;
-
-			// Setup context
-			Context ctx = new Context(instructionSet);
 
 			while (codeEnd != codeReader.BaseStream.Position)
 			{
@@ -240,20 +245,20 @@ namespace Mosa.Compiler.Framework.Stages
 					throw new Exception("CIL " + op + " is not yet supported");
 
 				// Create and initialize the corresponding instruction
-				ctx.AppendInstruction(instruction);
-				ctx.Label = instOffset;
-				instruction.Decode(ctx, this);
-				ctx.HasPrefix = prefix;
+				context.AppendInstruction(instruction);
+				context.Label = instOffset;
+				instruction.Decode(context, this);
+				context.HasPrefix = prefix;
 
-				Debug.Assert(ctx.Instruction != null);
+				Debug.Assert(context.Instruction != null);
 
 				// Do we need to patch branch targets?
 				if (instruction is IBranchInstruction && instruction.FlowControl != FlowControl.Return)
 				{
 					int pc = (int)(codeReader.BaseStream.Position - codeStart);
 
-					for (int i = 0; i < ctx.BranchTargets.Length; i++)
-						ctx.BranchTargets[i] += pc;
+					for (int i = 0; i < context.BranchTargets.Length; i++)
+						context.BranchTargets[i] += pc;
 				}
 
 				prefix = (instruction is PrefixInstruction);
