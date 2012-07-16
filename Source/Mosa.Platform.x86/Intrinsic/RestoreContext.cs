@@ -17,7 +17,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// <summary>
 	/// 
 	/// </summary>
-	public sealed class RestoreContext : IIntrinsicMethod
+	public sealed class RestoreContext : IIntrinsicPlatformMethod
 	{
 		#region Methods
 
@@ -26,7 +26,7 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="typeSystem">The type system.</param>
-		void IIntrinsicMethod.ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
+		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
 		{
 			
 			// Retrieve register context

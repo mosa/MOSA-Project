@@ -50,6 +50,7 @@ namespace Mosa.Test.System
 				new LeaveSSA(),
 				
 				new StackLayoutStage(),
+				new PlatformIntrinsicTransformationStage(),
 				new PlatformStubStage(),
 				new LoopAwareBlockOrderStage(),
 				//new SimpleTraceBlockOrderStage(),

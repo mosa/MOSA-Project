@@ -44,6 +44,7 @@ namespace Mosa.Tool.TypeExplorer
 				(compilerOptions.EnableSSA) ? new LeaveSSA() : null,
 				
 				new StackLayoutStage(),
+				new PlatformIntrinsicTransformationStage(),
 				new PlatformStubStage(),
 				new LoopAwareBlockOrderStage(),
 				//new SimpleTraceBlockOrderStage(),

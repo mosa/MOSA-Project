@@ -18,7 +18,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// <summary>
 	/// 
 	/// </summary>
-	public sealed class GetEIP : IIntrinsicMethod
+	public sealed class GetEIP : IIntrinsicPlatformMethod
 	{
 		#region Methods
 
@@ -27,7 +27,7 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="typeSystem">The type system.</param>
-		void IIntrinsicMethod.ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
+		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
 		{
 			Operand result = context.Result;
 			SigType u4 = BuiltInSigType.UInt32;

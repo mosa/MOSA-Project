@@ -17,7 +17,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// <summary>
 	/// Representations a spin lock
 	/// </summary>
-	public sealed class SpinLock : IIntrinsicMethod
+	public sealed class SpinLock : IIntrinsicPlatformMethod
 	{
 		#region Methods
 
@@ -26,7 +26,7 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="typeSystem">The type system.</param>
-		void IIntrinsicMethod.ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
+		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
 		{
 			// TODO
 			context.Remove();

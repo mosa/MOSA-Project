@@ -289,5 +289,11 @@ namespace Mosa.Compiler.Framework.IR
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void ExceptionPrologue(Context context);
+
+		/// <summary>
+		/// Visitation function for intrinsic the method call.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IntrinsicMethodCall(Context context);
 	}
 }

@@ -78,14 +78,17 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BasicBlocks.cs" />
+    <Compile Include="IIntrinsicInternalMethod.cs" />
     <Compile Include="DelegatePatcher.cs" />
     <Compile Include="ICompilationScheduler.cs" />
     <Compile Include="Counters.cs" />
+    <Compile Include="IR\IntrinsicMethodCall.cs" />
     <Compile Include="IR\LoadZeroExtended.cs" />
     <Compile Include="IR\LoadSignExtended.cs" />
     <Compile Include="SimpleFastDominance.cs" />
     <Compile Include="LoopAwareBlockOrder.cs" />
     <Compile Include="CompilationScheduler.cs" />
+    <Compile Include="Stages\PlatformIntrinsicTransformationStage.cs" />
     <Compile Include="Stages\PlugSystem.cs" />
     <Compile Include="Stages\IRCheckStage.cs" />
     <Compile Include="Stages\LoopAwareBlockOrderStage.cs" />
@@ -163,7 +166,7 @@
     <Compile Include="IR\Switch.cs" />
     <Compile Include="Stages\MethodCompilerSchedulerStage.cs" />
     <Compile Include="Stages\PlatformStubStage.cs" />
-    <Compile Include="IIntrinsicMethod.cs" />
+    <Compile Include="IIntrinsicPlatformMethod.cs" />
     <Compile Include="IBlockOrderStage.cs" />
     <Compile Include="IPipelineStage.cs" />
     <Compile Include="Stages\CILTransformationStage.cs" />

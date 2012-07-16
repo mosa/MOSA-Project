@@ -198,5 +198,9 @@ namespace Mosa.Compiler.Framework.IR
 		/// 
 		/// </summary>
 		public static readonly ExceptionPrologue ExceptionPrologue = new ExceptionPrologue();
+		/// <summary>
+		/// 
+		/// </summary>
+		public static readonly IntrinsicMethodCall IntrinsicMethodCall = new IntrinsicMethodCall();
 	}
 }

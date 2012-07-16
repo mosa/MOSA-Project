@@ -18,7 +18,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// <summary>
 	/// Representations the x86 BochsDebug instruction.
 	/// </summary>
-	public sealed class BochsDebug : IIntrinsicMethod
+	public sealed class BochsDebug : IIntrinsicPlatformMethod
 	{
 
 		#region Methods
@@ -28,7 +28,7 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="typeSystem">The type system.</param>
-		void IIntrinsicMethod.ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
+		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
 		{
 			// xchg	bx, bx 
 			context.SetInstruction(X86.Xchg, Operand.CreateCPURegister(BuiltInSigType.UInt16, GeneralPurposeRegister.EBX), Operand.CreateCPURegister(BuiltInSigType.UInt16, GeneralPurposeRegister.EBX));

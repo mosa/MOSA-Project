@@ -20,7 +20,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// <summary>
 	/// 
 	/// </summary>
-	public class SetControlRegisterBase : IIntrinsicMethod
+	public class SetControlRegisterBase : IIntrinsicPlatformMethod
 	{
 
 		private ControlRegister control;
@@ -41,7 +41,7 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="typeSystem">The type system.</param>
-		void IIntrinsicMethod.ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
+		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
 		{
 			Operand operand1 = context.Operand1;
 

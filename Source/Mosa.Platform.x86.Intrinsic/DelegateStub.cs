@@ -27,7 +27,7 @@ namespace Mosa.Platform.x86.Intrinsic
 		{
 			if (instance == null)
 			{
-				Native.InvokeDelegate(instance, methodPointer);
+				Native.InvokeDelegate(methodPointer);
 			}
 			else
 			{
@@ -39,7 +39,7 @@ namespace Mosa.Platform.x86.Intrinsic
 		{
 			if (instance == null)
 			{
-				return Native.InvokeDelegateWithReturn(instance, methodPointer);
+				return Native.InvokeDelegateWithReturn(methodPointer);
 			}
 			else
 			{
@@ -47,12 +47,5 @@ namespace Mosa.Platform.x86.Intrinsic
 			}
 		}
 
-		public IAsyncResult BeginInvoke(AsyncCallback callback, object arg)
-		{
-			return null;
-		}
-
-		public void EndInvoke(AsyncCallback result)
-		{ }
 	}
 }

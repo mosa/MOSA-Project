@@ -18,7 +18,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// <summary>
 	/// Representations the x86 in instruction.
 	/// </summary>
-	public sealed class In : IIntrinsicMethod
+	public sealed class In : IIntrinsicPlatformMethod
 	{
 
 		#region Methods
@@ -28,7 +28,7 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="typeSystem">The type system.</param>
-		void IIntrinsicMethod.ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
+		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
 		{
 			Operand result = context.Result;
 			Operand operand1 = context.Operand1;

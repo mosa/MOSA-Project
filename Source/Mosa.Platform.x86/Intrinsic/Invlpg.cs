@@ -16,7 +16,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// <summary>
 	/// Representations the x86 Invlpg instruction.
 	/// </summary>
-	public sealed class Invlpg : IIntrinsicMethod
+	public sealed class Invlpg : IIntrinsicPlatformMethod
 	{
 
 		#region Methods
@@ -26,7 +26,7 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="typeSystem">The type system.</param>
-		void IIntrinsicMethod.ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
+		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
 		{
 			context.SetInstruction(X86.Invlpg, null, context.Operand1);
 		}

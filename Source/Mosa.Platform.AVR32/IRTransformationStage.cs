@@ -705,6 +705,15 @@ namespace Mosa.Platform.AVR32
 		}
 
 		/// <summary>
+		/// Visitation function for intrinsic the method call.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IIRVisitor.IntrinsicMethodCall(Context context)
+		{
+			// TODO
+		}
+
+		/// <summary>
 		/// Visitation function for ZeroExtendedMoveInstruction instructions.
 		/// </summary>
 		/// <param name="context">The context.</param>

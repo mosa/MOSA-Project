@@ -1958,6 +1958,12 @@ namespace Mosa.Platform.x86.Stages
 		void IIRVisitor.Call(Context context) { }
 
 		/// <summary>
+		/// Visitation function for intrinsic the method call.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IIRVisitor.IntrinsicMethodCall(Context context) {}
+
+		/// <summary>
 		/// Visitation function for EpilogueInstruction.
 		/// </summary>
 		/// <param name="context">The context.</param>

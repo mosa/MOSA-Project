@@ -1084,7 +1084,7 @@ namespace Mosa.Platform.x86.Stages
 		void IIRVisitor.IntegerToFloatConversion(Context context)
 		{
 			if (context.Result.Type.Type == CilElementType.R4)
-				context.ReplaceInstructionOnly(X86.Cvtsi2ss); 
+				context.ReplaceInstructionOnly(X86.Cvtsi2ss);
 			else if (context.Result.Type.Type == CilElementType.R8)
 				context.ReplaceInstructionOnly(X86.Cvtsi2sd);
 			else
@@ -1100,6 +1100,12 @@ namespace Mosa.Platform.x86.Stages
 		/// </summary>
 		/// <param name="context">The context.</param>
 		void IIRVisitor.Phi(Context context) { }
+
+		/// <summary>
+		/// Visitation function for intrinsic the method call.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		void IIRVisitor.IntrinsicMethodCall(Context context) { }
 
 		#endregion // IIRVisitor - Unused
 

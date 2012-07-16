@@ -1137,7 +1137,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Operand arrayIndexOperand = context.Operand2;
 
 			SZArraySigType arraySigType = arrayOperand.Type as SZArraySigType;
-			
+
 			if (arraySigType == null)
 			{
 				throw new CompilationException(@"Array operation performed on non-array operand.");
@@ -1950,9 +1950,15 @@ namespace Mosa.Compiler.Framework.Stages
 
 			var instance = Activator.CreateInstance(intrinsicType);
 
-			if (instance is IIntrinsicMethod)
+			var instanceMethod = instance as IIntrinsicInternalMethod;
+			if (instanceMethod != null)
 			{
-				(instance as IIntrinsicMethod).ReplaceIntrinsicCall(context, typeSystem, methodCompiler.Method.Parameters);
+				instanceMethod.ReplaceIntrinsicCall(context, typeSystem, methodCompiler.Method.Parameters);
+				return true;
+			}
+			else if (instance is IIntrinsicPlatformMethod)
+			{
+				context.ReplaceInstructionOnly(IRInstruction.IntrinsicMethodCall);
 				return true;
 			}
 

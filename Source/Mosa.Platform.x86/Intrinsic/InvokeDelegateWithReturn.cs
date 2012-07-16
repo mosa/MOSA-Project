@@ -19,7 +19,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// <summary>
 	///
 	/// </summary>
-	public sealed class InvokeDelegateWithReturn : IIntrinsicMethod
+	public sealed class InvokeDelegateWithReturn : IIntrinsicPlatformMethod
 	{
 
 		#region Methods
@@ -29,10 +29,10 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="typeSystem">The type system.</param>
-		void IIntrinsicMethod.ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
+		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
 		{
 			var result = context.Result;
-			var op2 = context.Operand2;
+			var op2 = context.Operand1;
 			var constant = Operand.CreateConstant(BuiltInSigType.IntPtr, parameters.Count * 4);
 
 			var eax = Operand.CreateCPURegister(BuiltInSigType.IntPtr, GeneralPurposeRegister.EAX);

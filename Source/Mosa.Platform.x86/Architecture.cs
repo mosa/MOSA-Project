@@ -199,6 +199,7 @@ namespace Mosa.Platform.x86
 			methodCompilerPipeline.InsertAfterLast<PlatformStubStage>(
 				new IMethodCompilerStage[]
 				{
+					//new IntrinsicTransformationStage(),
 					new LongOperandTransformationStage(),
 					new AddressModeConversionStage(),
 					new IRTransformationStage(),

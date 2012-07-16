@@ -20,7 +20,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// <summary>
 	/// Representations a jump to the global interrupt handler.
 	/// </summary>
-	public sealed class GetIDTJumpLocation : IIntrinsicMethod
+	public sealed class GetIDTJumpLocation : IIntrinsicPlatformMethod
 	{
 		#region Methods
 
@@ -29,20 +29,11 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="typeSystem">The type system.</param>
-		void IIntrinsicMethod.ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
+		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
 		{
-			Context loadContext = new Context(context.InstructionSet, context.Operand1.Definitions[0]);
+			Debug.Assert(context.Operand1.IsConstant);
 
-			Debug.Assert(loadContext.Operand1.IsConstant);
-
-			int irq = -1;
-
-			object obj = loadContext.Operand1.Value;
-
-			if ((obj is int) || (obj is uint))
-				irq = (int)obj;
-			else if (obj is sbyte)
-				irq = (sbyte)obj;
+			int irq = (int)context.Operand1.ValueAsLongInteger;
 
 			if ((irq > 256) || (irq < 0))
 				throw new InvalidOperationException();

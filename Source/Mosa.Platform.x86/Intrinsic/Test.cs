@@ -17,7 +17,7 @@ namespace Mosa.Platform.x86.Intrinsic
 	/// <summary>
 	/// This instruction is used to test intrinsic calls.
 	/// </summary>
-	public sealed class Test : IIntrinsicMethod
+	public sealed class Test : IIntrinsicPlatformMethod
 	{
 
 		#region Methods
@@ -27,7 +27,7 @@ namespace Mosa.Platform.x86.Intrinsic
 		/// </summary>
 		/// <param name="context">The context.</param>
 		/// <param name="typeSystem">The type system.</param>
-		void IIntrinsicMethod.ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
+		void IIntrinsicPlatformMethod.ReplaceIntrinsicCall(Context context, ITypeSystem typeSystem, IList<RuntimeParameter> parameters)
 		{
 			context.SetInstruction(X86.Mov, context.Result, context.Operand1);
 		}
