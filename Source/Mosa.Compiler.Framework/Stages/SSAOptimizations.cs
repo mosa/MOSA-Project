@@ -200,8 +200,8 @@ namespace Mosa.Compiler.Framework.Stages
 				if (ctx.Instruction is IR.AddressOf || ctx.Instruction is IR.Phi)
 					continue;
 
-				if (ctx.Instruction is IR.Store) // unless stacktype of sigType matches (example, U4=I4)
-					continue;
+				//if (ctx.Instruction is IR.Store) // unless stacktype of sigType matches (example, U4=I4)
+				//	continue;
 
 				bool propogated = false;
 
@@ -256,7 +256,7 @@ namespace Mosa.Compiler.Framework.Stages
 			Operand destinationOperand = context.Result;
 			Operand sourceOperand = context.Operand1;
 
-			if (IsLogging) Trace("REVIEWING:\t" + context.ToString());
+			//if (IsLogging) Trace("REVIEWING:\t" + context.ToString());
 
 			// for each statement T that uses operand, substituted c in statement T
 			foreach (int index in destinationOperand.Uses.ToArray())
@@ -264,9 +264,6 @@ namespace Mosa.Compiler.Framework.Stages
 				Context ctx = new Context(instructionSet, index);
 
 				if (ctx.Instruction is IR.AddressOf || ctx.Instruction is IR.Phi)
-					return;
-
-				if (ctx.Instruction is IR.Store) // unless stacktype of sigType matches (example, U4=I4)
 					return;
 			}
 
