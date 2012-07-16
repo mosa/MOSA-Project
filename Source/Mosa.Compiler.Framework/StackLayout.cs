@@ -108,7 +108,7 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public Operand SetStackParameter(int index, RuntimeParameter param, SigType type)
 		{
-			parameters[index] = Operand.CreateParameter(type, architecture.StackFrameRegister, param);
+			parameters[index] = Operand.CreateParameter(type, architecture.StackFrameRegister, param, index);
 			return parameters[index];
 		}
 

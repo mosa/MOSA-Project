@@ -63,7 +63,7 @@ namespace Mosa.Compiler.Framework.Stages
 
 			if (!methodCompiler.Method.HasCode)
 			{
-				if (DelegatePatcher.PatchDelegate(methodCompiler.Method, instructionSet, basicBlocks))
+				if (DelegatePatcher.PatchDelegate(methodCompiler))
 				{
 					return;
 				}

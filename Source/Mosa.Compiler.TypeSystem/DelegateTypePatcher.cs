@@ -27,10 +27,6 @@ namespace Mosa.Compiler.TypeSystem
 		/// <summary>
 		/// 
 		/// </summary>
-		private readonly string ConstructorName = ".ctor";
-		/// <summary>
-		/// 
-		/// </summary>
 		private readonly string InvokeMethodName = "Invoke";
 
 		/// <summary>
@@ -93,31 +89,10 @@ namespace Mosa.Compiler.TypeSystem
 		/// <param name="type">The type.</param>
 		private void GenerateAndReplaceMethods(RuntimeType type)
 		{
-			GenerateAndReplaceConstructor(type);
-
 			if (type.Methods[1].Signature.ReturnType.Type == CilElementType.Void)
 				GenerateAndReplaceInvokeMethod(type);
 			else
 				GenerateAndReplaceInvokeWithReturnMethod(type);
-		}
-
-		/// <summary>
-		/// Generates and replace constructor.
-		/// </summary>
-		/// <param name="type">The type.</param>
-		private void GenerateAndReplaceConstructor(RuntimeType type)
-		{
-			RuntimeParameter[] parameters = new RuntimeParameter[type.Methods[0].Parameters.Count];
-			type.Methods[0].Parameters.CopyTo(parameters, 0);
-			var stubConstructor = delegateStub.Methods[0];
-
-			var constructor = new CilRuntimeMethod(delegateStub.Module, ConstructorName,
-				type.Methods[0].Signature, stubConstructor.Token, type, stubConstructor.Attributes, stubConstructor.ImplAttributes, stubConstructor.Rva);
-
-			foreach (var parameter in parameters)
-				constructor.Parameters.Add(parameter);
-
-			SearchAndReplaceMethod(type, ConstructorName, constructor);
 		}
 
 		/// <summary>

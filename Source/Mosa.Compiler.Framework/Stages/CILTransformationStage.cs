@@ -913,7 +913,7 @@ namespace Mosa.Compiler.Framework.Stages
 		{
 			Operand resultOperand = context.Result;
 			Operand objectOperand = context.Operand1;
-			Operand temp = methodCompiler.CreateVirtualRegister(context.RuntimeField.SignatureType);
+			Operand result = methodCompiler.CreateVirtualRegister(context.RuntimeField.SignatureType);
 			RuntimeField field = context.RuntimeField;
 
 			int offset = typeLayout.GetFieldOffset(field);
@@ -931,9 +931,9 @@ namespace Mosa.Compiler.Framework.Stages
 
 			Debug.Assert(offsetOperand != null);
 
-			context.SetInstruction(loadInstruction, temp, objectOperand, offsetOperand);
+			context.SetInstruction(loadInstruction, result, objectOperand, offsetOperand);
 			context.SigType = field.SignatureType;
-			context.AppendInstruction(IRInstruction.Move, resultOperand, temp);
+			context.AppendInstruction(IRInstruction.Move, resultOperand, result);
 		}
 
 		/// <summary>

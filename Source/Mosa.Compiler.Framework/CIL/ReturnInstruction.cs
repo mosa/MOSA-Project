@@ -67,7 +67,7 @@ namespace Mosa.Compiler.Framework.CIL
 			else
 				ctx.OperandCount = 1;
 
-			ctx.SetBranch(Int32.MaxValue);
+			ctx.SetBranch(BasicBlock.EpilogueLabel);
 		}
 
 		/// <summary>

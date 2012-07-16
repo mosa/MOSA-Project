@@ -473,11 +473,11 @@ namespace Mosa.Compiler.Framework
 		/// <param name="register">The register.</param>
 		/// <param name="param">The param.</param>
 		/// <returns></returns>
-		public static Operand CreateParameter(SigType type, Register register, RuntimeParameter param)
+		public static Operand CreateParameter(SigType type, Register register, RuntimeParameter param, int index)
 		{
 			Operand operand = new Operand(type, OperandType.MemoryAddress | OperandType.Parameter);
 			operand.register = register;
-			operand.index = param.Position;
+			operand.index = index; // param.Position;
 			operand.offset = new IntPtr(param.Position * 4);
 			return operand;
 		}

@@ -12,6 +12,7 @@ using System.Collections.Generic;
 using Mosa.Compiler.Metadata;
 using Mosa.Compiler.TypeSystem;
 using Mosa.Compiler.Framework.IR;
+using Mosa.Compiler.Metadata.Signatures;
 
 namespace Mosa.Compiler.Framework
 {
@@ -27,44 +28,87 @@ namespace Mosa.Compiler.Framework
 		/// <param name="method">The method.</param>
 		/// <param name="context">The context.</param>
 		/// <returns></returns>
-		public static bool PatchDelegate(RuntimeMethod method, InstructionSet instructionSet, BasicBlocks basicBlocks)
+		public static bool PatchDelegate(BaseMethodCompiler methodCompiler)
 		{
-			if (!method.DeclaringType.IsDelegate)
+			if (!methodCompiler.Method.DeclaringType.IsDelegate)
 				return false;
 
-			switch (method.Name)
+			switch (methodCompiler.Method.Name)
 			{
-				case ".ctor": PatchConstructor(instructionSet, basicBlocks); return false;
-				case "Invoke": PatchInvoke(instructionSet, basicBlocks); return false;
-				case "BeginInvoke": PatchBeginInvoke(instructionSet, basicBlocks); return true;
-				case "EndInvoke": PatchEndInvoke(instructionSet, basicBlocks); return true;
+				case ".ctor": PatchConstructor(methodCompiler); return true;
+				case "Invoke": PatchInvoke(methodCompiler); return false;
+				case "BeginInvoke": PatchBeginInvoke(methodCompiler); return true;
+				case "EndInvoke": PatchEndInvoke(methodCompiler); return true;
 				default: return false;
 			}
 		}
 
-		private static void PatchConstructor(InstructionSet instructionSet, BasicBlocks basicBlocks)
-		{ }
-
-		private static void PatchInvoke(InstructionSet instructionSet, BasicBlocks basicBlocks)
-		{ }
-
-		private static void PatchBeginInvoke(InstructionSet instructionSet, BasicBlocks basicBlocks)
+		private static void PatchConstructor(BaseMethodCompiler methodCompiler)
 		{
-			Context context = CreateMethodStructure(instructionSet, basicBlocks);
+			Context context = CreateMethodStructure(methodCompiler);
+
+			Operand thisOperand = methodCompiler.Parameters[0];
+			Operand instanceOperand = methodCompiler.Parameters[1];
+			Operand methodPointerOperand = methodCompiler.Parameters[2];
+
+			RuntimeField instanceField = GetField(methodCompiler.Method.DeclaringType, "instance");
+			int instanceOffset = methodCompiler.TypeLayout.GetFieldOffset(instanceField);
+			Operand instanceOffsetOperand = Operand.CreateConstant(BuiltInSigType.IntPtr, instanceOffset);
+
+			RuntimeField methodPointerField = GetField(methodCompiler.Method.DeclaringType, "methodPointer");
+			int methodPointerOffset = methodCompiler.TypeLayout.GetFieldOffset(methodPointerField);
+			Operand methodPointerOffsetOperand = Operand.CreateConstant(BuiltInSigType.IntPtr, methodPointerOffset);
+
+			context.AppendInstruction(IRInstruction.Store, null, thisOperand, instanceOffsetOperand, instanceOperand);
+			context.AppendInstruction(IRInstruction.Store, null, thisOperand, methodPointerOffsetOperand, methodPointerOperand);
+			context.AppendInstruction(IRInstruction.Return);
+			context.SetBranch(BasicBlock.EpilogueLabel);
+		}
+
+		private static void PatchInvoke(BaseMethodCompiler methodCompiler)
+		{
+			// check if instance is null (if so, it's a static call to the methodPointer)
+
+			// let's get the field
+			RuntimeField instanceField = GetField(methodCompiler.Method.DeclaringType, "instance");
+			var instanceOperand = methodCompiler.CreateVirtualRegister(instanceField.SignatureType);
+			int instanceOffset = methodCompiler.TypeLayout.GetFieldOffset(instanceField);
+			Operand instanceOffsetOperand = Operand.CreateConstant(BuiltInSigType.IntPtr, instanceOffset);
+
+			RuntimeField methodPointerField = GetField(methodCompiler.Method.DeclaringType, "methodPointer");
+			var methodPointerOperand = methodCompiler.CreateVirtualRegister(methodPointerField.SignatureType);
+
+			//Context context = CreateMethodStructure(methodCompiler);
+
+			//context.AppendInstruction(IRInstruction.Load, result, objectOperand, instanceOffsetOperand);
+			//context.SigType = instanceField.SignatureType;
+			//context.AppendInstruction(IRInstruction.Move, resultOperand, result);
+
+			//Operand target = methodCompiler.CreateVirtualRegister(BuiltInSigType.Ptr);
+			//Operand result = methodCompiler.CreateVirtualRegister(BuiltInSigType.Ptr);
+
+			return;
+		}
+
+
+		private static void PatchBeginInvoke(BaseMethodCompiler methodCompiler)
+		{
+			Context context = CreateMethodStructure(methodCompiler);
 			context.AppendInstruction(IRInstruction.Return, Operand.GetNull());
 		}
 
-		private static void PatchEndInvoke(InstructionSet instructionSet, BasicBlocks basicBlocks)
+		private static void PatchEndInvoke(BaseMethodCompiler methodCompiler)
 		{
-			Context context = CreateMethodStructure(instructionSet, basicBlocks);
-			context.AppendInstruction(IRInstruction.Jmp, basicBlocks.EpilogueBlock);
+			Context context = CreateMethodStructure(methodCompiler);
+			context.AppendInstruction(IRInstruction.Jmp, methodCompiler.BasicBlocks.EpilogueBlock);
 		}
 
-		private static Context CreateMethodStructure(InstructionSet instructionSet, BasicBlocks basicBlocks)
+		private static Context CreateMethodStructure(BaseMethodCompiler methodCompiler)
 		{
-			CreatePrologueAndEpilogueBlocks(instructionSet, basicBlocks);
+			var basicBlocks = methodCompiler.BasicBlocks;
+			CreatePrologueAndEpilogueBlocks(methodCompiler.InstructionSet, basicBlocks);
 
-			Context context = new Context(instructionSet);
+			Context context = new Context(methodCompiler.InstructionSet);
 			context.AppendInstruction(null);
 			context.Label = 0;
 
@@ -92,6 +136,17 @@ namespace Mosa.Compiler.Framework
 			context.AppendInstruction(null);
 			context.Label = BasicBlock.EpilogueLabel;
 			var epilogue = basicBlocks.CreateBlock(BasicBlock.EpilogueLabel, context.Index);
+		}
+
+		private static RuntimeField GetField(RuntimeType type, string name)
+		{
+			foreach (var field in type.Fields)
+			{
+				if (field.Name == name)
+					return field;
+			}
+
+			return GetField(type.BaseType, name);
 		}
 
 	}
