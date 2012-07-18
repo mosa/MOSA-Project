@@ -11,4 +11,4 @@ copy build\main.exe build\iso
 
 ..\bin\Mosa.Tool.MakeIsoImage.exe -label mosa -boot ..\Tools\syslinux\isolinux.bin -boot-info-table -boot-load-size 4 build\bootimage.iso build\iso
 
-pause
+

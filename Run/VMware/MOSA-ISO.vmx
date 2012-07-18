@@ -24,8 +24,9 @@ vmotion.checkpointFBSize = "16777216"
 floppy0.present = "FALSE"
 
 serial0.present = "TRUE"
-serial0.yieldOnMsrRead = "TRUE"
+serial0.yieldOnMsrRead = "FALSE"
 serial0.fileType = "pipe"
-serial0.fileName = "\\.\pipe\MOSA\Serial"
-serial0.pipe.endPoint = "client"
-serial0.tryNoRxLoss = "TRUE"
+serial0.fileName = "\\.\pipe\MOSA"
+serial0.pipe.endPoint = "server"
+serial0.tryNoRxLoss = "FALSE"
+

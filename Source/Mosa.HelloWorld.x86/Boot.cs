@@ -276,10 +276,18 @@ namespace Mosa.HelloWorld.x86
 
 			KernelTest.RunTests();
 
+			byte last = 0;
+
 			while (true)
 			{
 				DisplayCMOS(cmos);
 				DisplayTime(cmos);
+
+				if (cmos.Second != last)
+				{
+					Serial.Write(Serial.COM1, 43);
+					last = cmos.Second;
+				}
 			}
 		}
 

@@ -16,6 +16,7 @@
 		<sources>
                     <include name="ConsoleManager.cs"/>
                     <include name="ConsoleSession.cs"/>
+                    <include name="Serial.cs"/>
                     <include name="Debug.cs"/>
                     <include name="KernelMemory.cs"/>
                     <include name="CMOS.cs"/>

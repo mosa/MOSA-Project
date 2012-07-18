@@ -51,6 +51,10 @@ namespace Mosa.Tool.TypeExplorer
 			internalTrace.CompilerEventListener = this;
 			internalTrace.TraceListener = this;
 			internalTrace.TraceFilter = filter;
+
+			filter.MethodMatch = MatchType.Any;
+			filter.StageMatch = MatchType.Exclude;
+			filter.Stage = "PlatformStubStage|ExceptionLayoutStage|DominanceCalculationStage|CodeGenerationStage";
 		}
 
 		private void Main_Load(object sender, EventArgs e)

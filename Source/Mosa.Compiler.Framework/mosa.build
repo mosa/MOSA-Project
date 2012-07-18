@@ -15,7 +15,7 @@
 	    <csc target="library" output="${outputDirectory}/Mosa.Compiler.Framework.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
                     <include name="BasicBlocks.cs"/>
-                    <include name="IIntrinsicIRMethod.cs"/>
+                    <include name="IIntrinsicInternalMethod.cs"/>
                     <include name="DelegatePatcher.cs"/>
                     <include name="ICompilationScheduler.cs"/>
                     <include name="Counters.cs"/>
@@ -103,7 +103,7 @@
                     <include name="IR/Switch.cs"/>
                     <include name="Stages/MethodCompilerSchedulerStage.cs"/>
                     <include name="Stages/PlatformStubStage.cs"/>
-                    <include name="IIntrinsicMethod.cs"/>
+                    <include name="IIntrinsicPlatformMethod.cs"/>
                     <include name="IBlockOrderStage.cs"/>
                     <include name="IPipelineStage.cs"/>
                     <include name="Stages/CILTransformationStage.cs"/>
