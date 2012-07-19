@@ -1,3 +1,1 @@
-start ..\..\Tools\qemu\qemu.exe -hda ..\build\bootimage.img -L ..\..\Tools\qemu
-
-
+start ..\..\Tools\qemu\qemu-system-i386w.exe -hda ..\build\bootimage.img -L ..\..\Tools\qemu\bios
