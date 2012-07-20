@@ -8,5 +8,3 @@ copy VirtualPC\MOSA.vmc build\MOSA.vmc
 copy VMware\MOSA.vmx build\MOSA.vmx
 
 CALL MakeISOImage.bat
-
-pause

@@ -25,6 +25,7 @@ namespace Mosa.HelloWorld.x86
 		public static void Main()
 		{
 			Mosa.Kernel.x86.Kernel.Setup();
+			Debugger.Setup(Serial.COM1);
 
 			IDT.SetInterruptHandler(ProcessInterrupt);
 
@@ -285,9 +286,11 @@ namespace Mosa.HelloWorld.x86
 
 				if (cmos.Second != last)
 				{
-					Serial.Write(Serial.COM1, 43);
 					last = cmos.Second;
+					Debugger.SendAlive();
 				}
+
+				Debugger.GetCommand();
 			}
 		}
 
@@ -297,7 +300,7 @@ namespace Mosa.HelloWorld.x86
 		private static void DisplayCMOS(CMOS cmos)
 		{
 			Console.Row = 2;
-			Console.Column = 65; 
+			Console.Column = 65;
 			Console.Color = 0x0A;
 			Console.Write(@"CMOS:");
 			Console.WriteLine();

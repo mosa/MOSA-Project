@@ -29,7 +29,7 @@ namespace Mosa.Kernel.x86
 		private const byte COM_ModemStatus = 0x05;
 		private const byte COM_Scratch = 0x06;
 
-		public static void Setup(ushort com)
+		public static void SetupPort(ushort com)
 		{
 			// Disable all interrupts
 			Native.Out8((ushort)(com + COM_Interrupt), 0x00);
@@ -49,9 +49,14 @@ namespace Mosa.Kernel.x86
 			Native.Out8((ushort)(com + COM_Interrupt), 0x0F);
 		}
 
+		public static bool IsDataReady(ushort com)
+		{
+			return ((Native.In8((ushort)(com + COM_ModemStatus)) & 0x01) == 0x01);
+		}
+
 		public static byte Read(ushort com)
 		{
-			while ((Native.In8((ushort)(com + COM_ModemStatus)) & 0x01) == 0x0)
+			while (!IsDataReady(com))
 			{
 				Native.Hlt();
 			}
@@ -63,7 +68,7 @@ namespace Mosa.Kernel.x86
 		{
 			while ((Native.In8((ushort)(com + COM_ModemStatus)) & 0x20) == 0x0)
 			{
-				//Native.Hlt();
+				Native.Hlt();
 			}
 		}
 
@@ -73,6 +78,13 @@ namespace Mosa.Kernel.x86
 
 			Native.Out8(com, c);
 		}
+
+		public static void Write(ushort com, string message)
+		{
+			foreach (var c in message)
+				Write(com, (byte)c);
+		}
+
 
 	}
 }

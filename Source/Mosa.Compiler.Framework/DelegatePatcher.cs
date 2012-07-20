@@ -25,8 +25,7 @@ namespace Mosa.Compiler.Framework
 		/// <summary>
 		/// Patches the delegate.
 		/// </summary>
-		/// <param name="method">The method.</param>
-		/// <param name="context">The context.</param>
+		/// <param name="methodCompiler">The method compiler.</param>
 		/// <returns></returns>
 		public static bool PatchDelegate(BaseMethodCompiler methodCompiler)
 		{

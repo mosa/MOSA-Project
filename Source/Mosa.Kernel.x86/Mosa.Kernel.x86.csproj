@@ -65,6 +65,7 @@
   <ItemGroup>
     <Compile Include="ConsoleManager.cs" />
     <Compile Include="ConsoleSession.cs" />
+    <Compile Include="Debugger.cs" />
     <Compile Include="Serial.cs" />
     <Compile Include="Debug.cs" />
     <Compile Include="KernelMemory.cs" />

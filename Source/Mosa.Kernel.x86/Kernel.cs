@@ -31,7 +31,7 @@ namespace Mosa.Kernel.x86
 			TaskManager.Setup();
 			SmbiosManager.Setup();
 			ConsoleManager.Setup();
-			Serial.Setup(Serial.COM1);
+			//Serial.Setup();
 		}
 	}
 }
