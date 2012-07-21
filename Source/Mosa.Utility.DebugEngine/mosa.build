@@ -15,13 +15,14 @@
 	    <csc target="library" output="${outputDirectory}/Mosa.Utility.DebugEngine.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
                     <include name="Codes.cs"/>
-                    <include name="Message.cs"/>
+                    <include name="DebugMessage.cs"/>
                     <include name="DebugEngine.cs"/>
                     <include name="Properties/AssemblyInfo.cs"/>
 		</sources>
 		<references>
                     <include name="System.dll"/>
                     <include name="System.Core.dll"/>
+                    <include name="System.Windows.Forms.dll"/>
                     <include name="System.Xml.Linq.dll"/>
                     <include name="System.Data.DataSetExtensions.dll"/>
                     <include name="Microsoft.CSharp.dll"/>
