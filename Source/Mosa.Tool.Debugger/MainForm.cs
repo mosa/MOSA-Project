@@ -24,12 +24,12 @@ namespace Mosa.Tool.Debugger
 {
 	public partial class MainForm : Form
 	{
-		private DebugEngine debugEngine = new DebugEngine();
+		private DebugServerEngine debugEngine = new DebugServerEngine();
 
 		private string[] events;
 		private int eventIndex;
 
-		public MainForm(DebugEngine debugEngine)
+		public MainForm(DebugServerEngine debugEngine)
 		{
 			this.debugEngine = debugEngine;
 			InitializeComponent();
@@ -41,6 +41,7 @@ namespace Mosa.Tool.Debugger
 		private void Form1_Load(object sender, EventArgs e)
 		{
 			toolStripStatusLabel1.Text = string.Empty;
+			debugEngine.SetMirrorReceiver(this, ProcessResponses);
 		}
 
 		private string FormatResponseMessage(Mosa.Utility.DebugEngine.DebugMessage response)
@@ -54,8 +55,10 @@ namespace Mosa.Tool.Debugger
 				case Codes.InformationalMessage: return "Informational Message: " + System.Text.Encoding.UTF8.GetString(response.ResponseData);
 				case Codes.ErrorMessage: return "Error Message: " + System.Text.Encoding.UTF8.GetString(response.ResponseData);
 				case Codes.WarningMessage: return "Warning Message: " + System.Text.Encoding.UTF8.GetString(response.ResponseData);
-				case Codes.Ping: return "PONG";
+				case Codes.Ping: return "Pong";
 				case Codes.Alive: return "Alive";
+				case Codes.ReadCR3: return "ReadCR3";
+				case Codes.ReadMemory: return "ReadMemory";
 				case Codes.SendNumber: return "#: " + ((response.ResponseData[0] << 24) | (response.ResponseData[1] << 16) | (response.ResponseData[2] << 8) | response.ResponseData[3]).ToString();
 				default: return "Code: " + response.Code.ToString();
 			}
@@ -90,15 +93,11 @@ namespace Mosa.Tool.Debugger
 			}
 		}
 
-		private void timer1_Tick(object sender, EventArgs e)
-		{
-			//ProcessResponses();
-		}
-
 		private void button1_Click(object sender, EventArgs e)
 		{
 			toolStripStatusLabel1.Text = "Ping";
-			debugEngine.SendCommand(new DebugMessage(Codes.Ping, (byte[])null, this, ProcessResponses));
+			//debugEngine.SendCommand(new DebugMessage(Codes.Ping, (byte[])null, this, ProcessResponses));
+			debugEngine.SendCommand(new DebugMessage(Codes.Ping, (byte[])null));
 		}
 
 		private void button2_Click(object sender, EventArgs e)

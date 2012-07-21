@@ -14,7 +14,7 @@ namespace Mosa.Kernel.x86
 	/// <summary>
 	/// Debugger
 	/// </summary>
-	public static class Debugger
+	public static class DebugClient
 	{
 
 		#region Codes
@@ -33,8 +33,9 @@ namespace Mosa.Kernel.x86
 			public const int WarningMessage = 1003;
 			public const int ErrorMessage = 1004;
 			public const int SendNumber = 1005;
-			public const int ReadPhysicalMemory = 1010;
-			public const int WritePhysicalMemory = 1011;
+			public const int ReadMemory = 1010;
+			public const int WriteMemory = 1011;
+			public const int ReadCR3 = 1012;
 		}
 
 		#endregion // Codes
@@ -48,7 +49,7 @@ namespace Mosa.Kernel.x86
 		public static void Setup(ushort com)
 		{
 			Serial.SetupPort(com);
-			Debugger.com = com;
+			DebugClient.com = com;
 		}
 
 		private static void SendByte(int i)
@@ -176,25 +177,27 @@ namespace Mosa.Kernel.x86
 			switch (code)
 			{
 				case Codes.Ping: SendResponse(id, Codes.Ping); return;
-				case Codes.ReadPhysicalMemory: ReadPhysicalMemory(); return;
+				case Codes.ReadMemory: ReadMemory(); return;
+				case Codes.ReadCR3: SendResponse(id, Codes.ReadCR3, (int)Native.GetCR3()); return;
 				default: return;
 			}
 
 		}
 
-		private static void ReadPhysicalMemory()
+		private static void ReadMemory()
 		{
 			int id = GetInteger(4);
 			uint startingAddress = (uint)GetInteger(20);
 			uint bytes = (uint)GetInteger(24);
 
-			SendResponse(id, Codes.ReadPhysicalMemory, (int)(bytes + 8), 0);
+			SendResponse(id, Codes.ReadMemory, (int)(bytes + 8), 0);
 
 			SendInteger((int)startingAddress); // starting address
 			SendInteger((int)bytes); // bytes
 
 			for (uint i = 0; i < bytes; i++)
-				SendByte(Native.Get8(startingAddress + i));
+				SendByte((Native.Get8(startingAddress + i)));
 		}
+
 	}
 }

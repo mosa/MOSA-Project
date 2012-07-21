@@ -87,6 +87,7 @@ namespace Mosa.Tool.Debugger
 			this.cbSelect.Name = "cbSelect";
 			this.cbSelect.Size = new System.Drawing.Size(160, 25);
 			this.cbSelect.SelectedIndexChanged += new System.EventHandler(this.cbSelect_SelectedIndexChanged);
+			this.cbSelect.Click += new System.EventHandler(this.cbSelect_Click);
 			// 
 			// toolStripSeparator2
 			// 

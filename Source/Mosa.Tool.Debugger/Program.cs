@@ -18,7 +18,7 @@ namespace Mosa.Tool.Debugger
 {
 	static class Program
 	{
-		private static DebugEngine debugEngine = new DebugEngine();
+		private static DebugServerEngine debugEngine = new DebugServerEngine();
 
 		/// <summary>
 		/// The main entry point for the application.

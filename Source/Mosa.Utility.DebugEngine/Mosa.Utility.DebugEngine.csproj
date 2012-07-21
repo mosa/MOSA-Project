@@ -46,7 +46,7 @@
   <ItemGroup>
     <Compile Include="Codes.cs" />
     <Compile Include="DebugMessage.cs" />
-    <Compile Include="DebugEngine.cs" />
+    <Compile Include="DebugServerEngine.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

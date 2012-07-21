@@ -16,7 +16,7 @@
 		<sources>
                     <include name="Codes.cs"/>
                     <include name="DebugMessage.cs"/>
-                    <include name="DebugEngine.cs"/>
+                    <include name="DebugServerEngine.cs"/>
                     <include name="Properties/AssemblyInfo.cs"/>
 		</sources>
 		<references>

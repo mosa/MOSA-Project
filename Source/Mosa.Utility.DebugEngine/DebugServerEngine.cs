@@ -15,27 +15,30 @@ using System.Text;
 
 namespace Mosa.Utility.DebugEngine
 {
-	public sealed class DebugEngine
+	public sealed class DebugServerEngine
 	{
 		private object sync = new object();
-		private int lastID = 0;
+		private int nextID = 0;
 
 		private Queue<DebugMessage> commands = new Queue<DebugMessage>();
 		private Dictionary<int, DebugMessage> pending = new Dictionary<int, DebugMessage>();
 
 		private NamedPipeClientStream pipeClient;
 
-		//public DebugMessage SendCommand(int code, byte[] data)
-		//{
-		//    DebugMessage message = new DebugMessage(code, data);
-		//    return SendCommand(message);
-		//}
+		public object receiver;
+		public SenderMesseageDelegate receiverMethod;
+
+		public void SetMirrorReceiver(object receiver, SenderMesseageDelegate receiverMethod)
+		{
+			this.receiver = receiver;
+			this.receiverMethod = receiverMethod;
+		}
 
 		public DebugMessage SendCommand(DebugMessage message)
 		{
 			lock (sync)
 			{
-				message.ID = ++lastID;
+				message.ID = ++nextID;
 				pending.Add(message.ID, message);
 				commands.Enqueue(message);
 				return message;
@@ -109,7 +112,7 @@ namespace Mosa.Utility.DebugEngine
 				{
 					// message without command
 					message = new DebugMessage(code, data);
-					message.ID = ++lastID;
+					message.ID = id;
 
 					// need to set a default notifier for this
 				}
@@ -119,6 +122,7 @@ namespace Mosa.Utility.DebugEngine
 				}
 
 				message.ResponseData = data;
+				message.Notify(receiver, receiverMethod);
 				message.NotifySender();
 			}
 		}

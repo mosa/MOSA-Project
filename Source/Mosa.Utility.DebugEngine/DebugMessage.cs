@@ -83,7 +83,16 @@ namespace Mosa.Utility.DebugEngine
 			{
 				form.BeginInvoke(SenderMethod, new object[] { this });
 			}
+		}
 
+		public void Notify(object sender, SenderMesseageDelegate senderMethod)
+		{
+			Form form = sender as Form;
+
+			if (form != null)
+			{
+				form.BeginInvoke(senderMethod, new object[] { this });
+			}
 		}
 	}
 }

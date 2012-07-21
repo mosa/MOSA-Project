@@ -19,8 +19,9 @@ namespace Mosa.Utility.DebugEngine
 		public const int WarningMessage = 1003;
 		public const int ErrorMessage = 1004;
 		public const int SendNumber = 1005;
-		public const int ReadPhysicalMemory = 1010;
-		public const int WritePhysicalMemory = 1011;
+		public const int ReadMemory = 1010;
+		public const int WriteMemory = 1011;
+		public const int ReadCR3 = 1012;
 
 	}
 }

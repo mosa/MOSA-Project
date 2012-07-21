@@ -25,7 +25,7 @@ namespace Mosa.HelloWorld.x86
 		public static void Main()
 		{
 			Mosa.Kernel.x86.Kernel.Setup();
-			Debugger.Setup(Serial.COM1);
+			DebugClient.Setup(Serial.COM1);
 
 			IDT.SetInterruptHandler(ProcessInterrupt);
 
@@ -287,10 +287,10 @@ namespace Mosa.HelloWorld.x86
 				if (cmos.Second != last)
 				{
 					last = cmos.Second;
-					Debugger.SendAlive();
+					DebugClient.SendAlive();
 				}
 
-				Debugger.GetCommand();
+				DebugClient.GetCommand();
 			}
 		}
 

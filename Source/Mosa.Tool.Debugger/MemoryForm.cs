@@ -19,22 +19,24 @@ namespace Mosa.Tool.Debugger
 	/// </summary>
 	public partial class MemoryForm : Form
 	{
-		private DebugEngine debugEngine;
+		private DebugServerEngine debugEngine;
 		private bool updating = false;
 
 		private uint multibootStructure = 0;
 		private uint physicalPageFreeList = 0;
+		private uint cr3;
 
 		/// <summary>
 		/// Initializes a new instance of the <see cref="MemoryForm"/> class.
 		/// </summary>
-		public MemoryForm(DebugEngine debugEngine)
+		public MemoryForm(DebugServerEngine debugEngine)
 		{
 			this.debugEngine = debugEngine;
 			InitializeComponent();
 
-			debugEngine.SendCommand(new DebugMessage(Codes.ReadPhysicalMemory, new int[] { (int)0x200004, 4 }, this, UpdateMultibootStructurePointer));
-			debugEngine.SendCommand(new DebugMessage(Codes.ReadPhysicalMemory, new int[] { (int)(1024 * 1024 * 28), 4 }, this, UpdatePhysicalPageFreeListPointer));
+			debugEngine.SendCommand(new DebugMessage(Codes.ReadMemory, new int[] { (int)0x200004, 4 }, this, UpdateMultibootStructurePointer));
+			debugEngine.SendCommand(new DebugMessage(Codes.ReadMemory, new int[] { (int)(1024 * 1024 * 28), 4 }, this, UpdatePhysicalPageFreeListPointer));
+			debugEngine.SendCommand(new DebugMessage(Codes.ReadCR3, (byte[])null, this, ReadCR3));
 
 			UpdateForm();
 		}
@@ -60,7 +62,7 @@ namespace Mosa.Tool.Debugger
 				int lines = lbMemory.Height / (lbMemory.Font.Height + 2);
 
 				toolStripStatusLabel1.Text = "Updating...";
-				debugEngine.SendCommand(new DebugMessage(Codes.ReadPhysicalMemory, new int[] { (int)at, 16 * lines }, this, DisplayMemory));
+				debugEngine.SendCommand(new DebugMessage(Codes.ReadMemory, new int[] { (int)at, 16 * lines }, this, DisplayMemory));
 				updating = true;
 			}
 			catch
@@ -78,6 +80,11 @@ namespace Mosa.Tool.Debugger
 		private void UpdatePhysicalPageFreeListPointer(DebugMessage message)
 		{
 			physicalPageFreeList = (uint)message.GetUInt32(8);
+		}
+
+		private void ReadCR3(DebugMessage message)
+		{
+			cr3 = (uint)message.GetUInt32(0);
 		}
 
 		private void DisplayMemory(DebugMessage message)
@@ -132,9 +139,8 @@ namespace Mosa.Tool.Debugger
 			switch (cbSelect.SelectedIndex)
 			{
 				case 0: tbMemory.Text = "0xB8000"; break;
-				// TODO:
 				case 1: tbMemory.Text = "0x" + multibootStructure.ToString("X"); break;
-				//case 2: tbMemory.Text = "0x" + Mosa.EmulatedKernel.MemoryDispatch.CR3.ToString("X"); break;
+				case 2: tbMemory.Text = "0x" + cr3.ToString("X"); break;
 				case 3: tbMemory.Text = "0x" + physicalPageFreeList.ToString("X"); break;
 				case 4: tbMemory.Text = "0x" + (1024 * 1024 * 21).ToString("X"); break;
 				default: break;
@@ -146,6 +152,11 @@ namespace Mosa.Tool.Debugger
 		private void MemoryForm_ResizeEnd(object sender, EventArgs e)
 		{
 			UpdateForm();
+		}
+
+		private void cbSelect_Click(object sender, EventArgs e)
+		{
+
 		}
 
 
