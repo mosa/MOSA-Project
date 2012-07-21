@@ -17,47 +17,27 @@ namespace Mosa.Utility.DebugEngine
 {
 	public sealed class DebugEngine
 	{
-
 		private object sync = new object();
 		private int lastID = 0;
 
-		private Queue<Message> commands = new Queue<Message>();
-		private Queue<Message> responses = new Queue<Message>();
-		private Dictionary<int, Message> pending = new Dictionary<int, Message>();
+		private Queue<DebugMessage> commands = new Queue<DebugMessage>();
+		private Dictionary<int, DebugMessage> pending = new Dictionary<int, DebugMessage>();
 
 		private NamedPipeClientStream pipeClient;
 
-		public Message SendCommand(int code, byte[] data)
-		{
-			Message message = new Message(code, data);
-			return SendCommand(message);
-		}
+		//public DebugMessage SendCommand(int code, byte[] data)
+		//{
+		//    DebugMessage message = new DebugMessage(code, data);
+		//    return SendCommand(message);
+		//}
 
-		public Message SendCommand(Message message)
+		public DebugMessage SendCommand(DebugMessage message)
 		{
 			lock (sync)
 			{
 				message.ID = ++lastID;
 				pending.Add(message.ID, message);
 				commands.Enqueue(message);
-				return message;
-			}
-
-			ProcessCommandQueue(); // HACK
-		}
-
-		public Message GetResponse()
-		{
-			lock (sync)
-			{
-				if (responses.Count == 0)
-					return null;
-
-				Message message = responses.Dequeue();
-
-				if (message.ID > 0)
-					pending.Remove(message.ID);
-
 				return message;
 			}
 
@@ -97,7 +77,7 @@ namespace Mosa.Utility.DebugEngine
 					if (commands.Count == 0)
 						return;
 
-					Message message = commands.Dequeue();
+					DebugMessage message = commands.Dequeue();
 
 					SendMagic();
 					SendInteger(message.ID);
@@ -105,14 +85,16 @@ namespace Mosa.Utility.DebugEngine
 					if (message.CommandData == null)
 					{
 						SendInteger(0);
+						SendInteger(message.Checksum);
 					}
 					else
 					{
 						SendInteger(message.CommandData.Length);
+						SendInteger(message.Checksum);
 						foreach (var b in message.CommandData)
 							SendByte(b);
 					}
-					SendInteger(message.Checksum);
+
 				}
 			}
 		}
@@ -121,13 +103,15 @@ namespace Mosa.Utility.DebugEngine
 		{
 			lock (sync)
 			{
-				Message message;
+				DebugMessage message;
 
 				if (id == 0 || !pending.TryGetValue(id, out message))
 				{
 					// message without command
-					message = new Message(code, data);
+					message = new DebugMessage(code, data);
 					message.ID = ++lastID;
+
+					// need to set a default notifier for this
 				}
 				else
 				{
@@ -135,7 +119,7 @@ namespace Mosa.Utility.DebugEngine
 				}
 
 				message.ResponseData = data;
-				responses.Enqueue(message);
+				message.NotifySender();
 			}
 		}
 

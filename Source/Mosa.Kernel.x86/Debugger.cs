@@ -93,15 +93,13 @@ namespace Mosa.Kernel.x86
 			SendInteger(data);
 		}
 
-		public static void SendResponse(int id, int code, int data, int data2)
+		public static void SendResponse(int id, int code, int len, int magic)
 		{
 			SendMagic();
 			SendInteger(id);
 			SendInteger(code);
-			SendInteger(8);
-			SendInteger(0); // TODO: not implemented
-			SendInteger(data);
-			SendInteger(data2);
+			SendInteger(len);
+			SendInteger(magic);
 		}
 
 		public static void SendAlive()
@@ -172,17 +170,31 @@ namespace Mosa.Kernel.x86
 			int code = GetInteger(8);
 			int len = GetInteger(12);
 			int checksum = GetInteger(16);
-			uint datastart = _buffer + 20;
-			uint firstdata = Native.Get32(datastart);
+
+			// TODO: validate checksum
 
 			switch (code)
 			{
 				case Codes.Ping: SendResponse(id, Codes.Ping); return;
-				case Codes.ReadPhysicalMemory: SendResponse(id, Codes.ReadPhysicalMemory, (int)datastart, (int)firstdata); return;
+				case Codes.ReadPhysicalMemory: ReadPhysicalMemory(); return;
 				default: return;
 			}
 
 		}
 
+		private static void ReadPhysicalMemory()
+		{
+			int id = GetInteger(4);
+			uint startingAddress = (uint)GetInteger(20);
+			uint bytes = (uint)GetInteger(24);
+
+			SendResponse(id, Codes.ReadPhysicalMemory, (int)(bytes + 8), 0);
+
+			SendInteger((int)startingAddress); // starting address
+			SendInteger((int)bytes); // bytes
+
+			for (uint i = 0; i < bytes; i++)
+				SendByte(Native.Get8(startingAddress + i));
+		}
 	}
 }

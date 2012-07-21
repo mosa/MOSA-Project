@@ -24,29 +24,26 @@ namespace Mosa.Tool.Debugger
 {
 	public partial class MainForm : Form
 	{
-		public DebugEngine debugEngine = new DebugEngine();
+		private DebugEngine debugEngine = new DebugEngine();
 
 		private string[] events;
 		private int eventIndex;
 
-		public MainForm()
+		public MainForm(DebugEngine debugEngine)
 		{
+			this.debugEngine = debugEngine;
 			InitializeComponent();
 
-			events = new string[100];
+			events = new string[50];
 			eventIndex = 0;
-
-			Thread t = new Thread(new ThreadStart(debugEngine.ThreadStart));
-			t.IsBackground = true;
-			t.Start();
 		}
 
 		private void Form1_Load(object sender, EventArgs e)
 		{
-
+			toolStripStatusLabel1.Text = string.Empty;
 		}
 
-		private string FormatResponseMessage(Mosa.Utility.DebugEngine.Message response)
+		private string FormatResponseMessage(Mosa.Utility.DebugEngine.DebugMessage response)
 		{
 			switch (response.Code)
 			{
@@ -60,50 +57,54 @@ namespace Mosa.Tool.Debugger
 				case Codes.Ping: return "PONG";
 				case Codes.Alive: return "Alive";
 				case Codes.SendNumber: return "#: " + ((response.ResponseData[0] << 24) | (response.ResponseData[1] << 16) | (response.ResponseData[2] << 8) | response.ResponseData[3]).ToString();
-				default: return "Bad Code:" + response.Code.ToString();
+				default: return "Code: " + response.Code.ToString();
+			}
+		}
+
+		public void ProcessResponses(DebugMessage response)
+		{
+			string formatted = "RECEIVED: #" + response.ID.ToString() + " -> " + FormatResponseMessage(response);
+
+			toolStripStatusLabel1.Text = formatted;
+
+			events[eventIndex++] = formatted;
+
+			if (eventIndex == events.Length)
+				eventIndex = 0;
+
+			listBox1.Items.Clear();
+
+			int start = eventIndex;
+			for (int i = 0; i < events.Length; i++)
+			{
+				start--;
+
+				if (start < 0)
+					start = events.Length - 1;
+
+				if (events[start] == null)
+					return;
+
+				listBox1.Items.Add(events[start]);
+
 			}
 		}
 
 		private void timer1_Tick(object sender, EventArgs e)
 		{
-			while (true)
-			{
-				var response = debugEngine.GetResponse();
-
-				if (response == null)
-					return;
-
-				string formatted = "RECEIVED: #" + response.ID.ToString() + " -> " + FormatResponseMessage(response);
-
-				toolStripStatusLabel1.Text = formatted;
-
-				events[eventIndex++] = formatted;
-
-				if (eventIndex == events.Length)
-					eventIndex = 0;
-
-				listBox1.Items.Clear();
-
-				int start = eventIndex;
-				for (int i = 0; i < events.Length; i++)
-				{
-					start--;
-
-					if (start < 0)
-						start = events.Length - 1;
-
-					if (events[start] == null)
-						return;
-
-					listBox1.Items.Add(events[start]);
-
-				}
-			}
+			//ProcessResponses();
 		}
 
 		private void button1_Click(object sender, EventArgs e)
 		{
-			debugEngine.SendCommand(Codes.Ping, null);
+			toolStripStatusLabel1.Text = "Ping";
+			debugEngine.SendCommand(new DebugMessage(Codes.Ping, (byte[])null, this, ProcessResponses));
+		}
+
+		private void button2_Click(object sender, EventArgs e)
+		{
+			var memoryForm = new MemoryForm(debugEngine);
+			memoryForm.Show();
 		}
 	}
 }
