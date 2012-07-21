@@ -25,8 +25,21 @@ namespace Mosa.Utility.DebugEngine
 
 		private NamedPipeClientStream pipeClient;
 
-		public object receiver;
-		public SenderMesseageDelegate receiverMethod;
+		private object receiver;
+		private SenderMesseageDelegate receiverMethod;
+
+		public void ThreadStart()
+		{
+			while (true)
+			{
+				using (pipeClient = new NamedPipeClientStream(".", @"MOSA", PipeDirection.InOut))
+				{
+					PostResponse(0, Codes.Connecting, null);
+					pipeClient.Connect();
+					ReceiveLoop();
+				}
+			}
+		}
 
 		public void SetMirrorReceiver(object receiver, SenderMesseageDelegate receiverMethod)
 		{
@@ -45,6 +58,25 @@ namespace Mosa.Utility.DebugEngine
 			}
 
 			ProcessCommandQueue(); // HACK
+		}
+
+		public void ProcessCommandQueue()
+		{
+			while (true)
+			{
+				lock (sync)
+				{
+					if (!pipeClient.IsConnected)
+						return;
+
+					if (commands.Count == 0)
+						return;
+
+					DebugMessage message = commands.Dequeue();
+
+					SendCommandMessage(message);
+				}
+			}
 		}
 
 		private void SendByte(int b)
@@ -68,37 +100,23 @@ namespace Mosa.Utility.DebugEngine
 			SendByte('A');
 		}
 
-		public void ProcessCommandQueue()
+		private void SendCommandMessage(DebugMessage message)
 		{
-			while (true)
+
+			SendMagic();
+			SendInteger(message.ID);
+			SendInteger(message.Code);
+			if (message.CommandData == null)
 			{
-				lock (sync)
-				{
-					if (!pipeClient.IsConnected)
-						return;
-
-					if (commands.Count == 0)
-						return;
-
-					DebugMessage message = commands.Dequeue();
-
-					SendMagic();
-					SendInteger(message.ID);
-					SendInteger(message.Code);
-					if (message.CommandData == null)
-					{
-						SendInteger(0);
-						SendInteger(message.Checksum);
-					}
-					else
-					{
-						SendInteger(message.CommandData.Length);
-						SendInteger(message.Checksum);
-						foreach (var b in message.CommandData)
-							SendByte(b);
-					}
-
-				}
+				SendInteger(0);
+				SendInteger(message.Checksum);
+			}
+			else
+			{
+				SendInteger(message.CommandData.Length);
+				SendInteger(message.Checksum);
+				foreach (var b in message.CommandData)
+					SendByte(b);
 			}
 		}
 
@@ -219,20 +237,6 @@ namespace Mosa.Utility.DebugEngine
 			}
 
 			PostResponse(0, Codes.Disconnected, null);
-		}
-
-		public void ThreadStart()
-		{
-			while (true)
-			{
-				using (pipeClient = new NamedPipeClientStream(".", @"MOSA", PipeDirection.InOut))
-				{
-					PostResponse(0, Codes.Connecting, null);
-					pipeClient.Connect();
-
-					ReceiveLoop();
-				}
-			}
 		}
 
 	}
