@@ -10,7 +10,7 @@
 using Mosa.DeviceDrivers.ISA;
 using Mosa.DeviceSystem;
 using Mosa.DeviceSystem.PCI;
-using Mosa.Kernel.x86;
+//using Mosa.Kernel.x86;
 
 namespace Mosa.CoolWorld.x86
 {
@@ -46,6 +46,7 @@ namespace Mosa.CoolWorld.x86
 		static public PIC PIC = null;
 		static public PIT PIT = null;
 		static public VGAText VGAText = null;
+		static public CMOS CMOS = null;
 
 		/// <summary>
 		/// Initializes the Device Driver System.
@@ -147,16 +148,25 @@ namespace Mosa.CoolWorld.x86
 			vgaTextAttributes.IRQ = 0;
 			vgaTextAttributes.Platforms = PlatformArchitecture.X86AndX64;
 
+			//[ISADeviceDriver(AutoLoad = true, BasePort = 0x0070, PortRange = 2, Platforms = PlatformArchitecture.X86)]
+			ISADeviceDriverAttribute cmosAttributes = new ISADeviceDriverAttribute();
+			cmosAttributes.AutoLoad = true;
+			cmosAttributes.BasePort = 0x0070;
+			cmosAttributes.PortRange = 0x02;
+			cmosAttributes.Platforms = PlatformArchitecture.X86AndX64;
+
 			Keyboard = new StandardKeyboard();
 			PCI = new PCIController();
 			PIC = new PIC();
 			PIT = new PIT();
 			VGAText = new VGAText();
+			CMOS = new CMOS();
 
 			//StartDevice(picAttributes, PIC);
 			StartDevice(pitAttributes, PIT);
 			StartDevice(pciAttributes, PCI);
 			StartDevice(keyboardDeviceAttributes, Keyboard);
+			StartDevice(cmosAttributes, CMOS);
 			//StartDevice(vgaTextAttributes, VGAText);
 
 			PCIControllerManager pciController = new PCIControllerManager(deviceManager);
@@ -204,7 +214,7 @@ namespace Mosa.CoolWorld.x86
 
 			Mosa.CoolWorld.x86.Boot.BulletPoint();
 			Boot.Console.Write("Adding device ");
-			Boot.InBrackets(hardwareDevice.Name, Colors.White, Colors.LightGreen);
+			Boot.InBrackets(hardwareDevice.Name, Mosa.Kernel.x86.Colors.White, Mosa.Kernel.x86.Colors.LightGreen);
 			Boot.Console.WriteLine();
 
 			if (resourceManager.ClaimResources(hardwareResources))

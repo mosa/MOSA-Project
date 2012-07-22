@@ -25,7 +25,7 @@ namespace Mosa.CoolWorld.x86
 		public static void Main()
 		{
 			Mosa.Kernel.x86.Kernel.Setup();
-
+			DebugClient.Setup(Serial.COM1);
 			IDT.SetInterruptHandler(ProcessInterrupt);
 
 			Console = ConsoleManager.Controller.Boot;
@@ -71,6 +71,7 @@ namespace Mosa.CoolWorld.x86
 			Console.Color = Colors.Yellow;
 
 			Mosa.DeviceDrivers.ScanCodeMap.US KBDMAP = new DeviceDrivers.ScanCodeMap.US();
+			int lastSecond = -1;
 
 			while (true)
 			{
@@ -98,6 +99,14 @@ namespace Mosa.CoolWorld.x86
 					Debug.Trace("Main.Main Key Character: " + ((uint)keyevent.Character).ToString());
 				}
 
+				if (Setup.CMOS.Second != lastSecond)
+				{
+					DebugClient.SendAlive();
+					lastSecond = Setup.CMOS.Second;
+					Debug.Trace("Main.Main Ping Alive");
+				}
+
+				DebugClient.Process();
 				Native.Hlt();
 			}
 		}
@@ -110,7 +119,8 @@ namespace Mosa.CoolWorld.x86
 
 		public static void PrintDone()
 		{
-			InBrackets("Done", Colors.White, Colors.LightGreen); Console.WriteLine();
+			InBrackets("Done", Colors.White, Colors.LightGreen); 
+			Console.WriteLine();
 		}
 
 		public static void BulletPoint()

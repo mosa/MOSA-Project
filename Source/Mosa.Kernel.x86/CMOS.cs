@@ -61,85 +61,43 @@ namespace Mosa.Kernel.x86
 		/// Gets the second.
 		/// </summary>
 		/// <value>The second.</value>
-		public byte Second
-		{
-			get
-			{
-				return Get(0);
-			}
-		}
+		public byte Second { get { return Get(0); } }
 
 		/// <summary>
 		/// Gets the minute.
 		/// </summary>
 		/// <value>The minute.</value>
-		public byte Minute
-		{
-			get
-			{
-				return Get(2);
-			}
-		}
+		public byte Minute { get { return Get(2); } }
 
 		/// <summary>
 		/// Gets the hour.
 		/// </summary>
 		/// <value>The hour.</value>
-		public byte Hour
-		{
-			get
-			{
-				return Get(4);
-			}
-		}
+		public byte Hour { get { return Get(4); } }
 
 		/// <summary>
 		/// Gets the year.
 		/// </summary>
 		/// <value>The year.</value>
-		public byte Year
-		{
-			get
-			{
-				return Get(9);
-			}
-		}
+		public byte Year { get { return Get(9); } }
 
 		/// <summary>
 		/// Gets the month.
 		/// </summary>
 		/// <value>The month.</value>
-		public byte Month
-		{
-			get
-			{
-				return Get(8);
-			}
-		}
+		public byte Month { get { return Get(8); } }
 
 		/// <summary>
 		/// Gets the day.
 		/// </summary>
 		/// <value>The day.</value>
-		public byte Day
-		{
-			get
-			{
-				return Get(7);
-			}
-		}
+		public byte Day { get { return Get(7); } }
 
 		/// <summary>
 		/// Gets the BCD.
 		/// </summary>
 		/// <value>The BCD.</value>
-		public bool BCD
-		{
-			get
-			{
-				return (Get(0x0B) & 0x04) == 0x00;
-			}
-		}
+		public bool BCD { get { return (Get(0x0B) & 0x04) == 0x00; } }
 
 		/// <summary>
 		/// Dump multiboot info.

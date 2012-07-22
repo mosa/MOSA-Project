@@ -36,6 +36,7 @@ namespace Mosa.Kernel.x86
 			public const int ReadMemory = 1010;
 			public const int WriteMemory = 1011;
 			public const int ReadCR3 = 1012;
+			public const int Scattered32BitReadMemory = 1013;
 		}
 
 		#endregion // Codes
@@ -63,6 +64,11 @@ namespace Mosa.Kernel.x86
 			SendByte(i >> 16 & 0xFF);
 			SendByte(i >> 8 & 0xFF);
 			SendByte(i & 0xFF);
+		}
+
+		private static void SendInteger(uint i)
+		{
+			SendInteger((int)i);
 		}
 
 		private static void SendMagic()
@@ -119,12 +125,17 @@ namespace Mosa.Kernel.x86
 			_length = -1;
 		}
 
-		private static int GetInteger(uint index)
+		private static int GetInt32(uint index)
 		{
 			return (Native.Get8(_buffer + index) << 24) | (Native.Get8(_buffer + index + 1) << 16) | (Native.Get8(_buffer + index + 2) << 8) | Native.Get8(_buffer + index + 3);
 		}
 
-		public static void GetCommand()
+		private static uint GetUInt32(uint index)
+		{
+			return (uint)GetInt32(index);
+		}
+
+		public static void Process()
 		{
 			if (Serial.IsDataReady(com))
 			{
@@ -146,7 +157,7 @@ namespace Mosa.Kernel.x86
 
 				if (_index >= 16 && _length == -1)
 				{
-					_length = (int)GetInteger(12);
+					_length = (int)GetInt32(12);
 				}
 
 				if (_length > 4096 || _index > 4096)
@@ -167,10 +178,10 @@ namespace Mosa.Kernel.x86
 
 		private static void ProcessCommand()
 		{
-			int id = GetInteger(4);
-			int code = GetInteger(8);
-			int len = GetInteger(12);
-			int checksum = GetInteger(16);
+			int id = GetInt32(4);
+			int code = GetInt32(8);
+			int len = GetInt32(12);
+			int checksum = GetInt32(16);
 
 			// TODO: validate checksum
 
@@ -179,6 +190,7 @@ namespace Mosa.Kernel.x86
 				case Codes.Ping: SendResponse(id, Codes.Ping); return;
 				case Codes.ReadMemory: ReadMemory(); return;
 				case Codes.ReadCR3: SendResponse(id, Codes.ReadCR3, (int)Native.GetCR3()); return;
+				case Codes.Scattered32BitReadMemory: Scattered32BitReadMemory(); return;
 				default: return;
 			}
 
@@ -186,18 +198,33 @@ namespace Mosa.Kernel.x86
 
 		private static void ReadMemory()
 		{
-			int id = GetInteger(4);
-			uint startingAddress = (uint)GetInteger(20);
-			uint bytes = (uint)GetInteger(24);
+			int id = GetInt32(4);
+			uint startingAddress = (uint)GetInt32(20);
+			uint bytes = (uint)GetInt32(24);
 
 			SendResponse(id, Codes.ReadMemory, (int)(bytes + 8), 0);
 
-			SendInteger((int)startingAddress); // starting address
-			SendInteger((int)bytes); // bytes
+			SendInteger(startingAddress); // starting address
+			SendInteger(bytes); // bytes
 
 			for (uint i = 0; i < bytes; i++)
 				SendByte((Native.Get8(startingAddress + i)));
 		}
 
+		private static void Scattered32BitReadMemory()
+		{
+			int id = GetInt32(4);
+			int count = GetInt32(12) / 4;
+
+			SendResponse(id, Codes.Scattered32BitReadMemory, (int)(count * 8), 0);
+
+			for (uint i = 0; i < count; i++)
+			{
+				uint address = GetUInt32((uint)((i * 4) + 20));
+				SendInteger(address);
+				SendInteger(Native.Get32(address));
+			}
+
+		}
 	}
 }

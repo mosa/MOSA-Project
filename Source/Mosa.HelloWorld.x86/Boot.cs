@@ -9,6 +9,7 @@ using System;
 using Mosa.HelloWorld.x86.Tests;
 using Mosa.Kernel.x86;
 using Mosa.Kernel.x86.Smbios;
+using Mosa.Platform.x86.Intrinsic;
 
 namespace Mosa.HelloWorld.x86
 {
@@ -26,7 +27,6 @@ namespace Mosa.HelloWorld.x86
 		{
 			Mosa.Kernel.x86.Kernel.Setup();
 			DebugClient.Setup(Serial.COM1);
-
 			IDT.SetInterruptHandler(ProcessInterrupt);
 
 			Console = ConsoleManager.Controller.Boot;
@@ -290,7 +290,8 @@ namespace Mosa.HelloWorld.x86
 					DebugClient.SendAlive();
 				}
 
-				DebugClient.GetCommand();
+				DebugClient.Process();
+				Native.Hlt();
 			}
 		}
 

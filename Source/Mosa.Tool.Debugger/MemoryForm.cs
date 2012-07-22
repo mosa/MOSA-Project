@@ -33,53 +33,17 @@ namespace Mosa.Tool.Debugger
 		{
 			this.debugEngine = debugEngine;
 			InitializeComponent();
-
-			debugEngine.SendCommand(new DebugMessage(Codes.ReadMemory, new int[] { (int)0x200004, 4 }, this, UpdateMultibootStructurePointer));
-			debugEngine.SendCommand(new DebugMessage(Codes.ReadMemory, new int[] { (int)(1024 * 1024 * 28), 4 }, this, UpdatePhysicalPageFreeListPointer));
+			debugEngine.SendCommand(new DebugMessage(Codes.Scattered32BitReadMemory, new int[] { (int)0x200004, (int)(1024 * 1024 * 28) }, this, UpdatePointers));
 			debugEngine.SendCommand(new DebugMessage(Codes.ReadCR3, (byte[])null, this, ReadCR3));
 
+			cbSelect.SelectedIndex = 0;
 			UpdateForm();
 		}
 
-		private void UpdateForm()
+		private void UpdatePointers(DebugMessage message)
 		{
-			if (updating)
-				return;
-
-			try
-			{
-				string nbr = tbMemory.Text.ToUpper().Trim();
-				int digits = 10;
-				int where = nbr.IndexOf('X');
-
-				if (where >= 0)
-				{
-					digits = 16;
-					nbr = nbr.Substring(where + 1);
-				}
-
-				uint at = Convert.ToUInt32(nbr, digits);
-				int lines = lbMemory.Height / (lbMemory.Font.Height + 2);
-
-				toolStripStatusLabel1.Text = "Updating...";
-				debugEngine.SendCommand(new DebugMessage(Codes.ReadMemory, new int[] { (int)at, 16 * lines }, this, DisplayMemory));
-				updating = true;
-			}
-			catch
-			{
-				toolStripStatusLabel1.Text = "Invalid memory location";
-			}
-
-		}
-
-		private void UpdateMultibootStructurePointer(DebugMessage message)
-		{
-			multibootStructure = (uint)message.GetUInt32(8);
-		}
-
-		private void UpdatePhysicalPageFreeListPointer(DebugMessage message)
-		{
-			physicalPageFreeList = (uint)message.GetUInt32(8);
+			multibootStructure = (uint)message.GetUInt32(4);
+			physicalPageFreeList = (uint)message.GetUInt32(12);
 		}
 
 		private void ReadCR3(DebugMessage message)
@@ -122,6 +86,37 @@ namespace Mosa.Tool.Debugger
 			{
 				toolStripStatusLabel1.Text = "Error: " + e.ToString();
 			}
+		}
+
+		private void UpdateForm()
+		{
+			if (updating)
+				return;
+
+			try
+			{
+				string nbr = tbMemory.Text.ToUpper().Trim();
+				int digits = 10;
+				int where = nbr.IndexOf('X');
+
+				if (where >= 0)
+				{
+					digits = 16;
+					nbr = nbr.Substring(where + 1);
+				}
+
+				uint at = Convert.ToUInt32(nbr, digits);
+				int lines = lbMemory.Height / (lbMemory.Font.Height + 2);
+
+				toolStripStatusLabel1.Text = "Updating...";
+				debugEngine.SendCommand(new DebugMessage(Codes.ReadMemory, new int[] { (int)at, 16 * lines }, this, DisplayMemory));
+				updating = true;
+			}
+			catch
+			{
+				toolStripStatusLabel1.Text = "Invalid memory location";
+			}
+
 		}
 
 		private void tbMemory_TextChanged(object sender, EventArgs e)
