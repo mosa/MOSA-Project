@@ -79,7 +79,7 @@ namespace Mosa.Compiler.Framework.Stages
 			StrengthReductionLogicalOperators(context);
 			SimpleConstantPropagation(context);
 			SimpleCopyPropagation(context);
-			DeadCodeEliminationRemoveUselessMove(context);
+			DeadCodeElimination(context);
 			ConstantFoldingIntegerCompare(context);
 		}
 
@@ -141,18 +141,18 @@ namespace Mosa.Compiler.Framework.Stages
 		}
 
 		/// <summary>
-		/// Removes the useless move.
+		/// Removes the useless move and dead code
 		/// </summary>
 		/// <param name="context">The context.</param>
-		private void DeadCodeEliminationRemoveUselessMove(Context context)
+		private void DeadCodeElimination(Context context)
 		{
 			if (context.IsEmpty)
 				return;
 
-			if (!(context.Instruction is IR.Move))
+			if (context.ResultCount != 1)
 				return;
 
-			if (context.Operand1 == context.Result)
+			if (context.Instruction is IR.Move && context.Operand1 == context.Result)
 			{
 				if (IsLogging) Trace("REMOVED:\t" + context.ToString());
 				AddOperandUsageToWorkList(context);
@@ -162,16 +162,21 @@ namespace Mosa.Compiler.Framework.Stages
 				return;
 			}
 
-			//if (context.Result.Uses.Count == 0 && GetBaseOperand(context.Result).IsStackTemp)
-			if (context.Result.Uses.Count == 0 && GetBaseOperand(context.Result).IsStackLocal)
-			{
-				if (IsLogging) Trace("REMOVED:\t" + context.ToString());
-				AddOperandUsageToWorkList(context);
-				context.SetInstruction(IRInstruction.Nop);
-				instructionsRemoved++;
-				//context.Remove();
+			if (context.Result.Uses.Count != 0 || context.Instruction is IR.Call || context.Instruction is IR.IntrinsicMethodCall)
 				return;
-			}
+
+			if (!GetBaseOperand(context.Result).IsStackLocal)
+				return;
+
+			//if (context.Instruction is IR.Phi)
+			//    return;
+
+			if (IsLogging) Trace("REMOVED:\t" + context.ToString());
+			AddOperandUsageToWorkList(context);
+			context.SetInstruction(IRInstruction.Nop);
+			instructionsRemoved++;
+			//context.Remove();
+			return;
 		}
 
 		/// <summary>
