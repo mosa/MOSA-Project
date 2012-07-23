@@ -78,6 +78,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="BasicBlocks.cs" />
+    <Compile Include="LiveRangeAnalysis.cs" />
     <Compile Include="IIntrinsicInternalMethod.cs" />
     <Compile Include="DelegatePatcher.cs" />
     <Compile Include="ICompilationScheduler.cs" />
@@ -139,7 +140,7 @@
     <Compile Include="ExceptionClauseHeader.cs" />
     <Compile Include="InstructionLogger.cs" />
     <Compile Include="Stages\LeaveSSAStage.cs" />
-    <Compile Include="Stages\OperandDeterminationStage.cs" />
+    <Compile Include="Stages\OperandAssignmentStage.cs" />
     <Compile Include="CompilerOptions.cs" />
     <Compile Include="Stages\PhiPlacementStage.cs" />
     <Compile Include="Stages\StaticAllocationResolutionStage.cs" />

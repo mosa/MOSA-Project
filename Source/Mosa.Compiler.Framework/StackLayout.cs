@@ -11,6 +11,9 @@ using System.Collections.Generic;
 using Mosa.Compiler.Metadata.Signatures;
 using Mosa.Compiler.TypeSystem;
 
+// NOTE: Eventually all temporary stack locals will be converted to virtual registers and 
+//       removed from this StackLayout class except for spill slots
+
 namespace Mosa.Compiler.Framework
 {
 	/// <summary>
@@ -28,6 +31,10 @@ namespace Mosa.Compiler.Framework
 		private List<Operand> stack = new List<Operand>();
 
 		private Operand[] parameters;
+
+		private int localVariableCount = 0;
+
+		private int stackLocalTempCount = 0;	
 
 		#endregion // Data members
 
@@ -51,6 +58,16 @@ namespace Mosa.Compiler.Framework
 		/// </summary>
 		public IList<Operand> Stack { get { return stack.AsReadOnly(); } }
 
+		/// <summary>
+		/// Gets the local variable count.
+		/// </summary>
+		public int LocalVariableCount { get { return localVariableCount; } }
+
+		/// <summary>
+		/// Gets the stack local temp count.
+		/// </summary>
+		public int StackLocalTempCount { get { return stackLocalTempCount; } }
+
 		#endregion // Properties
 
 		/// <summary>
@@ -71,17 +88,15 @@ namespace Mosa.Compiler.Framework
 		/// <returns></returns>
 		public Operand AllocateStackOperand(SigType type, bool localVariable)
 		{
-			int stackSlot = stack.Count + 1;
-
 			Operand stackOperand;
 
 			if (localVariable)
 			{
-				stackOperand = Operand.CreateLocalVariable(type, architecture.StackFrameRegister, stackSlot, null);
+				stackOperand = Operand.CreateLocalVariable(type, architecture.StackFrameRegister, ++localVariableCount, null);
 			}
 			else
 			{
-				stackOperand = Operand.CreateStackLocalTemp(type, architecture.StackFrameRegister, stackSlot);
+				stackOperand = Operand.CreateStackLocalTemp(type, architecture.StackFrameRegister, ++stackLocalTempCount);
 			}
 
 			stack.Add(stackOperand);
