@@ -38,7 +38,7 @@ namespace Mosa.Test.System
 				new CILDecodingStage(),
 				new BasicBlockBuilderStage(),
 				new ExceptionPrologueStage(),
-				new OperandDeterminationStage(),
+				new OperandAssignmentStage(),
 				new StaticAllocationResolutionStage(),
 				new CILTransformationStage(),
 				

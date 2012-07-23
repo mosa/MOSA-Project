@@ -229,7 +229,6 @@ namespace Mosa.CoolWorld.x86
 					hardwareResources.DisableIRQ();
 					resourceManager.ReleaseResources(hardwareResources);
 				}
-
 			}
 		}
 

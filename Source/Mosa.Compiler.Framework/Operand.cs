@@ -211,10 +211,15 @@ namespace Mosa.Compiler.Framework
 		/// Gets the name.
 		/// </summary>
 		/// <value>The name.</value>
-		public string Name
-		{
-			get { return this.name; }
-		}
+		public string Name { get { return this.name; } }
+
+		/// <summary>
+		/// Gets the sequence.
+		/// </summary>
+		/// <value>
+		/// The name.
+		/// </value>
+		public int Sequence { get { return this.index; } }
 
 		/// <summary>
 		/// Gets the value as long integer.

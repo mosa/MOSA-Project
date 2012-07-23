@@ -30,7 +30,7 @@ namespace Mosa.Tool.TypeExplorer
 				new CILDecodingStage(),
 				new BasicBlockBuilderStage(),
 				new ExceptionPrologueStage(),
-				new OperandDeterminationStage(),
+				new OperandAssignmentStage(),
 				//new SingleUseMarkerStage(),
 				//new OperandUsageAnalyzerStage(),
 				new StaticAllocationResolutionStage(),

@@ -15,6 +15,7 @@
 	    <csc target="library" output="${outputDirectory}/Mosa.Compiler.Framework.dll" debug="${debug}" unsafe="true" nostdlib="false">
 		<sources>
                     <include name="BasicBlocks.cs"/>
+                    <include name="LiveRangeAnalysis.cs"/>
                     <include name="IIntrinsicInternalMethod.cs"/>
                     <include name="DelegatePatcher.cs"/>
                     <include name="ICompilationScheduler.cs"/>
@@ -76,7 +77,7 @@
                     <include name="ExceptionClauseHeader.cs"/>
                     <include name="InstructionLogger.cs"/>
                     <include name="Stages/LeaveSSAStage.cs"/>
-                    <include name="Stages/OperandDeterminationStage.cs"/>
+                    <include name="Stages/OperandAssignmentStage.cs"/>
                     <include name="CompilerOptions.cs"/>
                     <include name="Stages/PhiPlacementStage.cs"/>
                     <include name="Stages/StaticAllocationResolutionStage.cs"/>

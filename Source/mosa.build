@@ -66,7 +66,7 @@
         <target name="Mosa.HelloWorld.Null" depends="init,Mosa.ClassLib,Mosa.Internal.Plug,Korlib,Mosa.Kernel.AVR32,"><nant buildfile="Mosa.HelloWorld.Null/mosa.build"/></target>
         <target name="Mosa.CoolWorld.x86" depends="init,Mosa.ClassLib,Mosa.Kernel.x86,Korlib,Mosa.Platform.x86.Intrinsic,"><nant buildfile="Mosa.CoolWorld.x86/mosa.build"/></target>
         <target name="Mosa.Test.Collection" depends="init,"><nant buildfile="Mosa.Test.Collection/mosa.build"/></target>
-        <target name="Mosa.HelloWorld.x86" depends="init,Mosa.ClassLib,Mosa.Internal.Plug,Mosa.Kernel.x86,Korlib,Mosa.Test.Collection,"><nant buildfile="Mosa.HelloWorld.x86/mosa.build"/></target>
+        <target name="Mosa.HelloWorld.x86" depends="init,Mosa.ClassLib,Mosa.Internal.Plug,Mosa.Kernel.x86,Korlib,Mosa.Platform.x86.Intrinsic,Mosa.Test.Collection,"><nant buildfile="Mosa.HelloWorld.x86/mosa.build"/></target>
         <target name="Mosa.Utility.DebugEngine" depends="init,"><nant buildfile="Mosa.Utility.DebugEngine/mosa.build"/></target>
         <target name="Mosa.Tool.Debugger" depends="init,Mosa.Utility.DebugEngine,"><nant buildfile="Mosa.Tool.Debugger/mosa.build"/></target>
 

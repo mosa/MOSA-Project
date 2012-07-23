@@ -17,12 +17,12 @@ namespace Mosa.Compiler.Framework.Stages
 	/// <summary>
 	/// 
 	/// </summary>
-	public class OperandDeterminationStage : BaseMethodCompilerStage, IMethodCompilerStage
+	public sealed class OperandAssignmentStage : BaseMethodCompilerStage, IMethodCompilerStage
 	{
 		/// <summary>
 		/// 
 		/// </summary>
-		private class WorkItem
+		private sealed class WorkItem
 		{
 			/// <summary>
 			/// 
