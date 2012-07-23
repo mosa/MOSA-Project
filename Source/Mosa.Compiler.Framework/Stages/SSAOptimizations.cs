@@ -81,6 +81,8 @@ namespace Mosa.Compiler.Framework.Stages
 			SimpleCopyPropagation(context);
 			DeadCodeElimination(context);
 			ConstantFoldingIntegerCompare(context);
+			FoldIntegerCompareBranch(context);
+			//CheckForMore(context);
 		}
 
 		/// <summary>
@@ -168,9 +170,6 @@ namespace Mosa.Compiler.Framework.Stages
 			if (!GetBaseOperand(context.Result).IsStackLocal)
 				return;
 
-			//if (context.Instruction is IR.Phi)
-			//    return;
-
 			if (IsLogging) Trace("REMOVED:\t" + context.ToString());
 			AddOperandUsageToWorkList(context);
 			context.SetInstruction(IRInstruction.Nop);
@@ -180,7 +179,7 @@ namespace Mosa.Compiler.Framework.Stages
 		}
 
 		/// <summary>
-		/// Simples the constant propagation.
+		/// Simple constant propagation.
 		/// </summary>
 		/// <param name="context">The context.</param>
 		private void SimpleConstantPropagation(Context context)
@@ -204,9 +203,6 @@ namespace Mosa.Compiler.Framework.Stages
 
 				if (ctx.Instruction is IR.AddressOf || ctx.Instruction is IR.Phi)
 					continue;
-
-				//if (ctx.Instruction is IR.Store) // unless stacktype of sigType matches (example, U4=I4)
-				//	continue;
 
 				bool propogated = false;
 
@@ -637,7 +633,6 @@ namespace Mosa.Compiler.Framework.Stages
 			AddOperandUsageToWorkList(context);
 			if (IsLogging) Trace("BEFORE:\t" + context.ToString());
 			context.SetInstruction(IR.IRInstruction.Move, result, Operand.CreateConstant(context.Result.Type, 0));
-			//context.Clear();
 		}
 
 		/// <summary>
@@ -690,6 +685,131 @@ namespace Mosa.Compiler.Framework.Stages
 
 			// TODO: Add more strength reductions especially for AND w/ 0xFF, 0xFFFF, 0xFFFFFFFF, etc when source or destination are same or smaller
 		}
+
+
+		/// <summary>
+		/// Folds the integer compare branch.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void FoldIntegerCompareBranch(Context context)
+		{
+			if (context.IsEmpty)
+				return;
+
+			if (context.OperandCount != 2)
+				return;
+
+			if (!(context.Instruction is IR.IntegerCompareBranch))
+				return;
+
+			Operand result = context.Result;
+			Operand op1 = context.Operand1;
+			Operand op2 = context.Operand2;
+
+			if (!op1.IsConstant || !op2.IsConstant)
+				return;
+
+			if (!(context.Next.Instruction is IR.Jmp))
+				return;
+
+			if (context.BranchTargets[0] == context.Next.BranchTargets[0])
+			{
+				if (IsLogging) Trace("REMOVED:\t" + context.ToString());
+				AddOperandUsageToWorkList(context);
+				context.SetInstruction(IRInstruction.Nop);
+				instructionsRemoved++;
+				return;
+			}
+
+			bool compareResult = true;
+
+			switch (context.ConditionCode)
+			{
+				case ConditionCode.Equal: compareResult = (op1.ValueAsLongInteger == op2.ValueAsLongInteger); break;
+				case ConditionCode.NotEqual: compareResult = (op1.ValueAsLongInteger != op2.ValueAsLongInteger); break;
+				case ConditionCode.GreaterOrEqual: compareResult = (op1.ValueAsLongInteger >= op2.ValueAsLongInteger); break;
+				case ConditionCode.GreaterThan: compareResult = (op1.ValueAsLongInteger > op2.ValueAsLongInteger); break;
+				case ConditionCode.LessOrEqual: compareResult = (op1.ValueAsLongInteger <= op2.ValueAsLongInteger); break;
+				case ConditionCode.LessThan: compareResult = (op1.ValueAsLongInteger < op2.ValueAsLongInteger); break;
+				// TODO: Add more
+				default: return;
+			}
+
+			Debug.Assert(context.Next.Instruction is IR.Jmp);
+
+			BasicBlock target;
+
+			if (compareResult)
+			{
+				target = basicBlocks.GetByLabel(context.Next.BranchTargets[0]);
+
+				if (IsLogging) Trace("BEFORE:\t" + context.ToString());
+
+				// change to JMP
+				context.SetInstruction(IRInstruction.Jmp, basicBlocks.GetByLabel(context.BranchTargets[0]));
+				if (IsLogging) Trace("AFTER:\t" + context.ToString());
+
+				// goto next instruction and prepare to remove it
+				context.GotoNext();
+			}
+			else
+			{
+				target = basicBlocks.GetByLabel(context.BranchTargets[0]);
+			}
+
+			if (IsLogging) Trace("REMOVED:\t" + context.ToString());
+			AddOperandUsageToWorkList(context);
+			context.SetInstruction(IRInstruction.Nop);
+			instructionsRemoved++;
+
+			// Goto the beginning of the block, to get to the first index of the block
+			Context first = context.Clone();
+			first.GotoFirst();
+
+			// Find block based on first index
+			BasicBlock currentBlock = null;
+			foreach (var block in basicBlocks)
+			{
+				if (block.Index == first.Index)
+				{
+					currentBlock = block;
+					break;
+				}
+			}
+
+			currentBlock.NextBlocks.Remove(target);
+			target.PreviousBlocks.Remove(currentBlock);
+
+			// TODO: if target block no longer has any predecessors (or the only predecessor is itself), remove all instructions from it.
+
+
+		}
+		/// <summary>
+		/// Checks for more.
+		/// </summary>
+		/// <param name="context">The context.</param>
+		private void CheckForMore(Context context)
+		{
+			if (context.IsEmpty)
+				return;
+
+			if (context.OperandCount != 2)
+				return;
+
+			if (context.Instruction is IR.Call || context.Instruction is IR.IntrinsicMethodCall)
+				return;
+
+			Operand result = context.Result;
+			Operand op1 = context.Operand1;
+			Operand op2 = context.Operand2;
+
+			if (op1.IsConstant && op2.IsConstant)
+			{
+				return;
+			}
+
+		}
+
 
 		#region Helpers
 

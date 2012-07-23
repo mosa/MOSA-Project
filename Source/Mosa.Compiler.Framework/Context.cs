@@ -493,6 +493,20 @@ namespace Mosa.Compiler.Framework
 		}
 
 		/// <summary>
+		/// Gotoes the first.
+		/// </summary>
+		public void GotoFirst()
+		{
+			while (true)
+			{
+				if (IsFirstInstruction)
+					break;
+
+				GotoPrevious();
+			}
+		}
+
+		/// <summary>
 		/// Clears this context.
 		/// </summary>
 		private void Clear()
