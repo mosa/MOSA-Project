@@ -167,7 +167,7 @@ namespace Mosa.Compiler.Framework.Stages
 			if (context.Result.Uses.Count != 0 || context.Instruction is IR.Call || context.Instruction is IR.IntrinsicMethodCall)
 				return;
 
-			if (!GetBaseOperand(context.Result).IsStackLocal)
+			if (!context.Result.IsStackLocal)
 				return;
 
 			if (IsLogging) Trace("REMOVED:\t" + context.ToString());

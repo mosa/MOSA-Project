@@ -515,11 +515,11 @@ namespace Mosa.Compiler.Framework
 			Operand2 = null;
 			Operand3 = null;
 			Result = null;
-			instructionSet.Data[index].Clear();
-
 			if (OperandCount >= 3)
 				for (int i = 3; i < OperandCount; i++)
 					SetOperand(i, null);
+
+			instructionSet.Data[index].Clear();
 		}
 
 		/// <summary>
